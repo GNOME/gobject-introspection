@@ -1,0 +1,30 @@
+XML format
+----------
+- Document the format
+- Write a tool to create XML from annotated headers
+- Add attributes to connect signals to their default handlers
+  and wrappers to their vfuncs
+
+Binary format
+-------------
+- Add hashes to lookup interfaces and functions in interfaces
+- Write a validator
+
+Compiler
+--------
+- Cleanup, maybe turn the nodes in to objects to avoid the horrific 
+  type switches
+- Add thorough error checking
+
+Repository
+----------
+- Reconsider the current clunky API, maybe an iterator approach is better
+- Add thorough error checking
+- Use hashes 
+- Implement g_function_info_invoke()
+- Maybe allow populating repositories at runtime
+
+General
+-------
+- More tests
+- Check how the format scales to something of GTK+ size

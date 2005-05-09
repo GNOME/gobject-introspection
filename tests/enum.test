@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<api version="1.0">
+  <namespace name="Foo">
+    <enum name="Foo.Enum1" cname="FooEnum" get-type="foo_enum_get_type">
+      <member name="value1" cname="v1" value="0"  />
+      <member name="value2" cname="v1" value="1"  />
+      <member name="value3" cname="v1" value="2"  />
+    </enum>
+    <flags name="Foo.Flags1" cname="FooFlags" get-type="foo_flags_get_type">
+      <member name="value1" cname="v1" value="1"  />
+      <member name="value2" cname="v1" value="2"  />
+      <member name="value3" cname="v1" value="4"  />
+    </flags>
+    <enum name="Foo.Enum2" cname="FooEnum2">
+      <member name="value1" cname="v1" value="0"  />
+      <member name="value2" cname="v1" value="1"  />
+      <member name="value3" cname="v1" value="2"  />
+    </enum>
+  </namespace>
+</api>

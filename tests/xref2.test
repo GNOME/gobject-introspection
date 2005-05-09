@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<api version="1.0">
+  <namespace name="Bar">
+    <boxed name="Bar.Boxed" cname="BarBoxed" get-type="bar_boxed_get_type">
+    </boxed>
+    <function name="Bar.test" cname="bar_test">
+      <return-type type="void"/>
+      <parameters>
+        <parameter name="p1" type="Foo.Boxed*" direction="in"/>
+      </parameters>
+    </function>
+  </namespace>
+</api>

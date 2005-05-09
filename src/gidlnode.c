@@ -1,0 +1,1749 @@
+/* GObject introspection: Metadata creation
+ *
+ * Copyright (C) 2005 Matthias Clasen
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ * Boston, MA 02111-1307, USA.
+ */
+
+#include <stdio.h>
+
+#include "gidlmodule.h"
+#include "gidlnode.h"
+#include "gmetadata.h"
+
+#define ALIGN_VALUE(this, boundary) \
+  (( ((unsigned long)(this)) + (((unsigned long)(boundary)) -1)) & (~(((unsigned long)(boundary))-1)))
+
+
+GIdlNode *
+g_idl_node_new (GIdlNodeTypeId type)
+{
+  GIdlNode *node = NULL;
+
+  switch (type)
+    {
+   case G_IDL_NODE_FUNCTION:
+      node = g_malloc0 (sizeof (GIdlNodeFunction));
+      break;
+
+   case G_IDL_NODE_PARAM:
+      node = g_malloc0 (sizeof (GIdlNodeParam));
+      break;
+
+   case G_IDL_NODE_TYPE:
+      node = g_malloc0 (sizeof (GIdlNodeType));
+      break;
+
+    case G_IDL_NODE_OBJECT:
+    case G_IDL_NODE_INTERFACE:
+      node = g_malloc0 (sizeof (GIdlNodeInterface));
+      break;
+
+    case G_IDL_NODE_SIGNAL:
+      node = g_malloc0 (sizeof (GIdlNodeSignal));
+      break;
+
+    case G_IDL_NODE_PROPERTY:
+      node = g_malloc0 (sizeof (GIdlNodeProperty));
+      break;
+
+    case G_IDL_NODE_VFUNC:
+      node = g_malloc0 (sizeof (GIdlNodeFunction));
+      break;
+
+    case G_IDL_NODE_FIELD:
+      node = g_malloc0 (sizeof (GIdlNodeField));
+      break;
+
+    case G_IDL_NODE_ENUM:
+    case G_IDL_NODE_FLAGS:
+      node = g_malloc0 (sizeof (GIdlNodeEnum));
+      break;
+
+    case G_IDL_NODE_BOXED:
+      node = g_malloc0 (sizeof (GIdlNodeBoxed));
+      break;
+
+    case G_IDL_NODE_STRUCT:
+      node = g_malloc0 (sizeof (GIdlNodeStruct));
+      break;
+
+    case G_IDL_NODE_VALUE:
+      node = g_malloc0 (sizeof (GIdlNodeValue));
+      break;
+
+    case G_IDL_NODE_CONSTANT:
+      node = g_malloc0 (sizeof (GIdlNodeConstant));
+      break;
+
+    case G_IDL_NODE_ERROR_DOMAIN:
+      node = g_malloc0 (sizeof (GIdlNodeErrorDomain));
+      break;
+
+    case G_IDL_NODE_XREF:
+      node = g_malloc0 (sizeof (GIdlNodeXRef));
+      break;
+
+    default:
+      g_error ("Unhandled node type %d\n", type);
+      break;
+    }
+
+  node->type = type;
+
+  return node;
+}
+
+void
+g_idl_node_free (GIdlNode *node)
+{
+  GList *l;
+
+  switch (node->type)
+    {
+    case G_IDL_NODE_FUNCTION:
+      {
+	GIdlNodeFunction *function = (GIdlNodeFunction *)node;
+	
+	g_free (node->name);
+	g_free (function->c_name);
+	g_idl_node_free ((GIdlNode *)function->result);
+	for (l = function->parameters; l; l = l->next)
+	  g_idl_node_free ((GIdlNode *)l->data);
+	g_list_free (function->parameters);
+      }
+      break;
+
+    case G_IDL_NODE_TYPE:
+      {
+	GIdlNodeType *type = (GIdlNodeType *)node;
+	
+	g_free (node->name);
+	if (type->parameter_type1)
+	  g_idl_node_free ((GIdlNode *)type->parameter_type1);
+	if (type->parameter_type2)
+	  g_idl_node_free ((GIdlNode *)type->parameter_type2);
+
+	g_free (type->interface);
+	g_strfreev (type->errors);
+
+      }
+      break;
+
+    case G_IDL_NODE_PARAM:
+      {
+	GIdlNodeParam *param = (GIdlNodeParam *)node;
+	
+	g_free (node->name);
+	g_idl_node_free ((GIdlNode *)param->type);
+      }
+      break;
+
+    case G_IDL_NODE_PROPERTY:
+      {
+	GIdlNodeProperty *property = (GIdlNodeProperty *)node;
+	
+	g_free (node->name);
+	g_idl_node_free ((GIdlNode *)property->type);
+      }
+      break;
+
+    case G_IDL_NODE_SIGNAL:
+      {
+	GIdlNodeSignal *signal = (GIdlNodeSignal *)node;
+	
+	g_free (node->name);
+	for (l = signal->parameters; l; l = l->next)
+	  g_idl_node_free ((GIdlNode *)l->data);
+	g_list_free (signal->parameters);
+	g_idl_node_free ((GIdlNode *)signal->result);
+      }
+      break;
+
+    case G_IDL_NODE_VFUNC:
+      {
+	GIdlNodeVFunc *vfunc = (GIdlNodeVFunc *)node;
+	
+	g_free (node->name);
+	for (l = vfunc->parameters; l; l = l->next)
+	  g_idl_node_free ((GIdlNode *)l->data);
+	g_list_free (vfunc->parameters);
+	g_idl_node_free ((GIdlNode *)vfunc->result);
+      }
+      break;
+
+    case G_IDL_NODE_FIELD:
+      {
+	GIdlNodeField *field = (GIdlNodeField *)node;
+	
+	g_free (node->name);
+	g_free (field->c_name);
+	g_idl_node_free ((GIdlNode *)field->type);
+      }
+      break;
+
+    case G_IDL_NODE_OBJECT:
+    case G_IDL_NODE_INTERFACE:
+      {
+	GIdlNodeInterface *iface = (GIdlNodeInterface *)node;
+	
+	g_free (node->name);
+	g_free (iface->c_name);
+	g_free (iface->init_func);
+	
+	g_free (iface->parent);
+
+	for (l = iface->interfaces; l; l = l->next)
+	  g_free ((GIdlNode *)l->data);
+	g_list_free (iface->interfaces);
+
+	for (l = iface->members; l; l = l->next)
+	  g_idl_node_free ((GIdlNode *)l->data);
+	g_list_free (iface->members);
+
+      }
+      break;
+ 
+    case G_IDL_NODE_VALUE:
+      {
+	GIdlNodeValue *value = (GIdlNodeValue *)node;
+	
+	g_free (node->name);
+	g_free (value->c_name);
+      }
+      break;
+
+    case G_IDL_NODE_ENUM:
+    case G_IDL_NODE_FLAGS:
+      {
+	GIdlNodeEnum *enum_ = (GIdlNodeEnum *)node;
+	
+	g_free (node->name);
+	for (l = enum_->values; l; l = l->next)
+	  g_idl_node_free ((GIdlNode *)l->data);
+	g_list_free (enum_->values);
+      }
+      break;
+
+    case G_IDL_NODE_BOXED:
+      {
+	GIdlNodeBoxed *boxed = (GIdlNodeBoxed *)node;
+	
+	g_free (node->name);
+	g_free (boxed->c_name);
+	g_free (boxed->init_func);
+
+	for (l = boxed->members; l; l = l->next)
+	  g_idl_node_free ((GIdlNode *)l->data);
+	g_list_free (boxed->members);
+      }
+      break;
+
+    case G_IDL_NODE_STRUCT:
+      {
+	GIdlNodeStruct *struct_ = (GIdlNodeStruct *)node;
+
+	g_free (node->name);
+	for (l = struct_->members; l; l = l->next)
+	  g_idl_node_free ((GIdlNode *)l->data);
+	g_list_free (struct_->members);
+      }
+      break;
+
+    case G_IDL_NODE_CONSTANT:
+      {
+	GIdlNodeConstant *constant = (GIdlNodeConstant *)node;
+	
+	g_free (node->name);
+	g_free (constant->value);
+	g_idl_node_free ((GIdlNode *)constant->type);
+      }
+      break;
+
+    case G_IDL_NODE_ERROR_DOMAIN:
+      {
+	GIdlNodeErrorDomain *domain = (GIdlNodeErrorDomain *)node;
+	
+	g_free (node->name);
+	g_free (domain->getquark);
+	g_free (domain->codes);
+      }
+      break;
+
+    case G_IDL_NODE_XREF:
+      {
+	GIdlNodeXRef *xref = (GIdlNodeXRef *)node;
+	
+	g_free (node->name);
+	g_free (xref->namespace);
+      }
+      break;
+
+    default:
+      g_error ("Unhandled node type %d\n", node->type);
+      break;
+    } 
+
+  g_free (node);
+}
+
+/* returns the fixed size of the blob */
+guint32
+g_idl_node_get_size (GIdlNode *node)
+{
+  GList *l;
+  gint size, n;
+
+  switch (node->type)
+    {
+    case G_IDL_NODE_CALLBACK:
+      size = 12; 
+      break;
+
+    case G_IDL_NODE_FUNCTION:
+      size = 16; 
+      break;
+
+    case G_IDL_NODE_PARAM:
+      size = 12;
+      break;
+
+    case G_IDL_NODE_TYPE:
+      size = 4;
+      break;
+
+    case G_IDL_NODE_OBJECT:
+      {
+	GIdlNodeInterface *iface = (GIdlNodeInterface *)node;
+
+	n = g_list_length (iface->interfaces);
+	size = 32 + 2 * (n + (n % 2));
+
+	for (l = iface->members; l; l = l->next)
+	  size += g_idl_node_get_size ((GIdlNode *)l->data);
+      }
+      break;
+
+    case G_IDL_NODE_INTERFACE:
+      {
+	GIdlNodeInterface *iface = (GIdlNodeInterface *)node;
+
+	n = g_list_length (iface->prerequisites);
+	size = 28 + 2 * (n + (n % 2));
+
+	for (l = iface->members; l; l = l->next)
+	  size += g_idl_node_get_size ((GIdlNode *)l->data);
+      }
+      break;
+
+    case G_IDL_NODE_ENUM:
+    case G_IDL_NODE_FLAGS:
+      {
+	GIdlNodeEnum *enum_ = (GIdlNodeEnum *)node;
+	
+	n = g_list_length (enum_->values);
+	size = 20 + n * 16;
+      }
+      break;
+
+    case G_IDL_NODE_VALUE:
+      size = 16;
+      break;
+
+    case G_IDL_NODE_STRUCT:
+    case G_IDL_NODE_BOXED:
+      {
+	GIdlNodeBoxed *boxed = (GIdlNodeBoxed *)node;
+
+	size = 20;
+	for (l = boxed->members; l; l = l->next)
+	  size += g_idl_node_get_size ((GIdlNode *)l->data);
+      }
+      break;
+
+    case G_IDL_NODE_PROPERTY:
+      size = 12;
+      break;
+
+    case G_IDL_NODE_SIGNAL:
+      size = 12;
+      break;
+
+    case G_IDL_NODE_VFUNC:
+      size = 16;
+      break;
+
+    case G_IDL_NODE_FIELD:
+      size = 12;
+      break;
+
+    case G_IDL_NODE_CONSTANT:
+      size = 20;
+      break;
+
+    case G_IDL_NODE_ERROR_DOMAIN:
+      size = 16;
+      break;
+
+    case G_IDL_NODE_XREF:
+      size = 0;
+      break;
+
+    default: 
+      g_error ("Unhandled node type %d\n", node->type);
+      size = 0;
+    }
+
+  return size;
+}
+
+/* returns the full size of the blob including variable-size parts */
+guint32
+g_idl_node_get_full_size (GIdlNode *node)
+{
+  GList *l;
+  gint size, n;
+
+  switch (node->type)
+    {
+    case G_IDL_NODE_CALLBACK:
+      {
+	GIdlNodeFunction *function = (GIdlNodeFunction *)node;
+	size = 12; 
+	size += ALIGN_VALUE (strlen (node->name) + 1, 4);
+	for (l = function->parameters; l; l = l->next)
+	  size += g_idl_node_get_full_size ((GIdlNode *)l->data);
+	size += g_idl_node_get_full_size ((GIdlNode *)function->result);
+      }
+      break;
+
+    case G_IDL_NODE_FUNCTION:
+      {
+	GIdlNodeFunction *function = (GIdlNodeFunction *)node;
+	size = 16;
+	size += ALIGN_VALUE (strlen (node->name) + 1, 4);
+	size += ALIGN_VALUE (strlen (function->c_name) + 1, 4);
+	for (l = function->parameters; l; l = l->next)
+	  size += g_idl_node_get_full_size ((GIdlNode *)l->data);
+	size += g_idl_node_get_full_size ((GIdlNode *)function->result);
+      }
+      break;
+
+    case G_IDL_NODE_PARAM:
+      {
+	GIdlNodeParam *param = (GIdlNodeParam *)node;
+	
+	size = 12;
+	if (node->name)
+	  size += ALIGN_VALUE (strlen (node->name) + 1, 4);
+	size += g_idl_node_get_full_size ((GIdlNode *)param->type);	
+      }
+      break;
+
+    case G_IDL_NODE_TYPE:
+      {
+	GIdlNodeType *type = (GIdlNodeType *)node;
+	if (type->tag < 20) 
+	  size = 4;
+	else
+	  {
+	    switch (type->tag)
+	      {
+	      case 20:
+		size = 4 + 4 + g_idl_node_get_full_size ((GIdlNode *)type->parameter_type1);
+		break;
+	      case 21:
+		size = 4 + 4;
+		break;
+	      case 22:
+	      case 23:
+		size = 4 + 4 + g_idl_node_get_full_size ((GIdlNode *)type->parameter_type1);
+		break;
+	      case 24:
+		size = 4 + 4
+		  + g_idl_node_get_full_size ((GIdlNode *)type->parameter_type1)
+		  + g_idl_node_get_full_size ((GIdlNode *)type->parameter_type2);
+		break;
+	      case 25:
+		{
+		  gint n = g_strv_length (type->errors);
+		  size = 4 + 4 + 2 * (n + n % 2);
+		}
+		break;
+	      default:
+		g_error ("Unknown type tag %d\n", type->tag);
+		break;
+	      }
+	  }
+      }
+      break;
+
+    case G_IDL_NODE_OBJECT:
+      {
+	GIdlNodeInterface *iface = (GIdlNodeInterface *)node;
+
+	n = g_list_length (iface->interfaces);
+	size = 32;
+	size += ALIGN_VALUE (strlen (node->name) + 1, 4);
+	size += ALIGN_VALUE (strlen (iface->c_name) + 1, 4);
+	size += ALIGN_VALUE (strlen (iface->init_func) + 1, 4);
+	size += 2 * (n + (n % 2));
+
+	for (l = iface->members; l; l = l->next)
+	  size += g_idl_node_get_full_size ((GIdlNode *)l->data);
+      }
+      break;
+
+    case G_IDL_NODE_INTERFACE:
+      {
+	GIdlNodeInterface *iface = (GIdlNodeInterface *)node;
+
+	n = g_list_length (iface->prerequisites);
+	size = 28;
+	size += ALIGN_VALUE (strlen (node->name) + 1, 4);
+	size += ALIGN_VALUE (strlen (iface->c_name) + 1, 4);
+	size += ALIGN_VALUE (strlen (iface->init_func) + 1, 4);
+	size += 2 * (n + (n % 2));
+
+	for (l = iface->members; l; l = l->next)
+	  size += g_idl_node_get_full_size ((GIdlNode *)l->data);
+      }
+      break;
+
+    case G_IDL_NODE_ENUM:
+    case G_IDL_NODE_FLAGS:
+      {
+	GIdlNodeEnum *enum_ = (GIdlNodeEnum *)node;
+	
+	size = 20;
+	size += ALIGN_VALUE (strlen (node->name) + 1, 4);
+	size += ALIGN_VALUE (strlen (enum_->c_name) + 1, 4);
+	if (enum_->init_func)
+	  size += ALIGN_VALUE (strlen (enum_->init_func) + 1, 4);
+
+	for (l = enum_->values; l; l = l->next)
+	  size += g_idl_node_get_full_size ((GIdlNode *)l->data);	
+      }
+      break;
+
+    case G_IDL_NODE_VALUE:
+      {
+	GIdlNodeValue *value = (GIdlNodeValue *)node;
+	
+	size = 16;
+	size += ALIGN_VALUE (strlen (node->name) + 1, 4);
+	size += ALIGN_VALUE (strlen (value->c_name) + 1, 4);
+      }
+      break;
+
+    case G_IDL_NODE_STRUCT:
+      {
+	GIdlNodeStruct *struct_ = (GIdlNodeStruct *)node;
+
+	size = 20;
+	size += ALIGN_VALUE (strlen (node->name) + 1, 4);
+	for (l = struct_->members; l; l = l->next)
+	  size += g_idl_node_get_full_size ((GIdlNode *)l->data);
+      }
+      break;
+
+    case G_IDL_NODE_BOXED:
+      {
+	GIdlNodeBoxed *boxed = (GIdlNodeBoxed *)node;
+
+	size = 20;
+	size += ALIGN_VALUE (strlen (node->name) + 1, 4);
+	if (boxed->c_name)
+	  size += ALIGN_VALUE (strlen (boxed->c_name) + 1, 4);
+	if (boxed->init_func)
+	  size += ALIGN_VALUE (strlen (boxed->init_func) + 1, 4);
+	for (l = boxed->members; l; l = l->next)
+	  size += g_idl_node_get_full_size ((GIdlNode *)l->data);
+      }
+      break;
+
+    case G_IDL_NODE_PROPERTY:
+      {
+	GIdlNodeProperty *prop = (GIdlNodeProperty *)node;
+	
+	size = 12;
+	size += ALIGN_VALUE (strlen (node->name) + 1, 4);
+	size += g_idl_node_get_full_size ((GIdlNode *)prop->type);	
+      }
+      break;
+
+    case G_IDL_NODE_SIGNAL:
+      {
+	GIdlNodeSignal *signal = (GIdlNodeSignal *)node;
+
+	size = 12;
+	size += ALIGN_VALUE (strlen (node->name) + 1, 4);
+	for (l = signal->parameters; l; l = l->next)
+	  size += g_idl_node_get_full_size ((GIdlNode *)l->data);
+	size += g_idl_node_get_full_size ((GIdlNode *)signal->result);
+      }
+      break;
+
+    case G_IDL_NODE_VFUNC:
+      {
+	GIdlNodeVFunc *vfunc = (GIdlNodeVFunc *)node;
+
+	size = 16;
+	size += ALIGN_VALUE (strlen (node->name) + 1, 4);
+	for (l = vfunc->parameters; l; l = l->next)
+	  size += g_idl_node_get_full_size ((GIdlNode *)l->data);
+	size += g_idl_node_get_full_size ((GIdlNode *)vfunc->result);
+      }
+      break;
+
+    case G_IDL_NODE_FIELD:
+      {
+	GIdlNodeField *field = (GIdlNodeField *)node;
+
+	size = 12;
+	size += ALIGN_VALUE (strlen (field->c_name) + 1, 4);
+	size += g_idl_node_get_full_size ((GIdlNode *)field->type);	
+      }
+      break;
+
+    case G_IDL_NODE_CONSTANT:
+      {
+	GIdlNodeConstant *constant = (GIdlNodeConstant *)node;
+
+	size = 20;
+	size += ALIGN_VALUE (strlen (node->name) + 1, 4);
+	/* FIXME non-string values */
+	size += ALIGN_VALUE (strlen (constant->value) + 1, 4);
+	size += g_idl_node_get_full_size ((GIdlNode *)constant->type);	
+      }
+      break;
+
+    case G_IDL_NODE_ERROR_DOMAIN:
+      {
+	GIdlNodeErrorDomain *domain = (GIdlNodeErrorDomain *)node;
+
+	size = 16;
+	size += ALIGN_VALUE (strlen (node->name) + 1, 4);
+	size += ALIGN_VALUE (strlen (domain->getquark) + 1, 4);
+      }
+      break;
+
+    case G_IDL_NODE_XREF:
+      {
+	GIdlNodeXRef *xref = (GIdlNodeXRef *)node;
+	
+	size = 0;
+	size += ALIGN_VALUE (strlen (node->name) + 1, 4);
+	size += ALIGN_VALUE (strlen (xref->namespace) + 1, 4);
+      }
+      break;
+
+    default: 
+      g_error ("Unknown type tag %d\n", node->type);
+      size = 0;
+    }
+
+  return size;
+}
+
+static gint64
+parse_int_value (const gchar *str)
+{
+  return strtoll (str, NULL, 0);
+}
+
+static guint64
+parse_uint_value (const gchar *str)
+{
+  return strtoull (str, NULL, 0);
+}
+
+static gdouble
+parse_float_value (const gchar *str)
+{
+  return strtod (str, NULL);
+}
+
+static gboolean
+parse_boolean_value (const gchar *str)
+{
+  if (strcmp (str, "TRUE") == 0)
+    return TRUE;
+  
+  if (strcmp (str, "FALSE") == 0)
+    return FALSE;
+
+  return parse_int_value (str) ? TRUE : FALSE;
+}
+
+static GIdlNode *
+find_entry_node (GIdlModule  *module,
+		 GList       *modules,
+		 const gchar *name,
+		 guint16     *idx)
+{
+  GList *l, *m;
+  gint i;
+
+  for (l = module->entries, i = 0; l; l = l->next, i++)
+    {
+      GIdlNode *node = (GIdlNode *)l->data;
+      
+      if (strcmp (node->name, name) == 0)
+	{
+	  if (idx)
+	    *idx = i;
+	  return node;
+	}
+    }
+
+  for (m = modules; m; m = m->next)
+    {
+      GIdlModule *foreign = (GIdlModule *)m->data;
+
+      if (foreign == module)
+	continue;
+      
+      for (l = foreign->entries; l; l = l->next)
+	{
+	  GIdlNode *node = (GIdlNode *)l->data;
+	  
+	  if (node->type == G_IDL_NODE_XREF)
+	    continue;
+
+	  if (strcmp (node->name, name) == 0)
+	    {
+	      GIdlNode *xref = g_idl_node_new (G_IDL_NODE_XREF);
+	      xref->name = g_strdup (name);
+	      ((GIdlNodeXRef *)xref)->namespace = g_strdup (foreign->name);
+
+	      module->entries = g_list_append (module->entries, xref);
+	      
+	      if (idx)
+		*idx = g_list_length (module->entries) - 1;
+
+	      return xref;
+	    }
+	}
+    }
+
+  g_warning ("No such entry: '%s'\n", name);
+
+  return NULL;
+}
+
+static guint16
+find_entry (GIdlModule  *module,
+	    GList       *modules,
+	    const gchar *name)
+{
+  guint16 idx;
+
+  find_entry_node (module, modules, name, &idx);
+
+  return idx;
+}
+
+static void
+serialize_type (GIdlModule   *module, 
+		GList        *modules,
+		GIdlNodeType *node, 
+		GString      *str)
+{
+  gint i;
+  
+  const gchar* basic[] = {
+    "void", 
+    "gboolean", 
+    "gint8", 
+    "guint8", 
+    "gint16", 
+    "guint16", 
+    "gint32", 
+    "guint32", 
+    "gint64", 
+    "guint64", 
+    "gfloat", 
+    "gdouble", 
+    "gchar", 
+    "GString", 
+    "gint", 
+    "guint", 
+    "glong", 
+    "gulong"
+  };
+
+  if (node->tag < 20)
+    {
+      g_string_append_printf (str, "%s%s", 
+			      basic[node->tag], node->is_pointer ? "*" : "");
+    }
+  else if (node->tag == 20)
+    {
+      serialize_type (module, modules, node->parameter_type1, str);
+      g_string_append (str, "[");
+
+      if (node->has_length)
+	g_string_append_printf (str, "length=%d", node->length);
+      
+      if (node->zero_terminated)
+	g_string_append_printf (str, "%szero-terminated=1", 
+				node->has_length ? "," : "");
+      
+      g_string_append (str, "]");
+    }
+  else if (node->tag == 21)
+    {
+      GIdlNode *iface;
+
+      iface = find_entry_node (module, modules, node->interface, NULL);
+      g_string_append_printf (str, "%s%s", 
+			      iface->name, node->is_pointer ? "*" : "");
+    }
+  else if (node->tag == 22)
+    {
+      g_string_append (str, "GList<");
+      serialize_type (module, modules, node->parameter_type1, str);
+      g_string_append (str, ">"); 
+    }
+  else if (node->tag == 23)
+    {
+      g_string_append (str, "GSList<");
+      serialize_type (module, modules, node->parameter_type1, str);
+      g_string_append (str, ">"); 
+    }
+  else if (node->tag == 24)
+    {
+      g_string_append (str, "GHashTable<");
+      serialize_type (module, modules, node->parameter_type1, str);
+      g_string_append (str, ","); 
+      serialize_type (module, modules, node->parameter_type2, str);
+      g_string_append (str, ">"); 
+    }
+  else if (node->tag == 25) 
+    {
+      g_string_append (str, "GError<");
+      for (i = 0; node->errors[i]; i++)
+	{
+	  if (i > 0)
+	    g_string_append (str, ",");
+	  g_string_append (str, node->errors[i]);
+	}
+      g_string_append (str, ">"); 
+    }
+}
+
+void
+g_idl_node_build_metadata (GIdlNode   *node,
+			   GIdlModule *module,
+			   GList      *modules,
+			   GHashTable *strings,
+			   GHashTable *types,
+			   guchar     *data,
+			   guint32    *offset,
+                           guint32    *offset2)
+{
+  GList *l;
+
+  switch (node->type)
+    {
+    case G_IDL_NODE_TYPE:
+      {
+	GIdlNodeType *type = (GIdlNodeType *)node;
+	SimpleTypeBlob *blob = (SimpleTypeBlob *)&data[*offset];
+
+	*offset += 4;
+	
+	if (type->tag < 20)
+	  {
+	    blob->reserved = 0;
+	    blob->reserved2 = 0;
+	    blob->pointer = type->is_pointer;
+	    blob->reserved3 = 0;
+	    blob->tag = type->tag;
+	  }
+	else 
+	  {
+	    GString *str;
+	    gchar *s;
+	    gpointer value;
+	    
+	    str = g_string_new (0);
+	    serialize_type (module, modules, type, str);
+	    s = g_string_free (str, FALSE);
+	    
+	    value = g_hash_table_lookup (types, s);
+	    if (value)
+	      {
+		blob->offset = GPOINTER_TO_INT (value);
+		g_free (s);
+	      }
+	    else
+	      {
+		g_hash_table_insert (types, s, GINT_TO_POINTER(*offset2));
+				     
+		blob->offset = *offset2;
+		switch (type->tag)
+		  {
+		  case 20:
+		    {
+		      ArrayTypeBlob *array = (ArrayTypeBlob *)&data[*offset2];
+		      guint32 pos;
+		      
+		      array->pointer = 1;
+		      array->reserved = 0;
+		      array->tag = type->tag;
+		      array->zero_terminated = type->zero_terminated;
+		      array->has_length = type->has_length;
+		      array->reserved2 = 0;
+		      array->length = type->length;
+		      
+		      pos = *offset2 + 4;
+		      *offset2 += 8;
+		      
+		      g_idl_node_build_metadata ((GIdlNode *)type->parameter_type1, 
+						 module, modules, strings, types, 
+						 data, &pos, offset2);
+		    }
+		    break;
+		    
+		  case 21:
+		    {
+		      InterfaceTypeBlob *iface = (InterfaceTypeBlob *)&data[*offset2];
+		      gint i, interface;
+		      
+		      *offset2 += 4;
+		      
+		      iface->pointer = 1;
+		      iface->reserved = 0;
+		      iface->tag = type->tag;
+		      iface->reserved2 = 0;
+		      iface->interface = 0;
+		      iface->interface = find_entry (module, modules, type->interface);
+		    }
+		    break;
+		    
+		  case 22:
+		  case 23:
+		    {
+		      ParamTypeBlob *param = (ParamTypeBlob *)&data[*offset2];
+		      guint32 pos;
+		      
+		      param->pointer = 1;
+		      param->reserved = 0;
+		      param->tag = type->tag;
+		      param->reserved2 = 0;
+		      param->n_types = 1;
+		      
+		      pos = *offset2 + 4;
+		      *offset2 += 8;
+		      
+		      g_idl_node_build_metadata ((GIdlNode *)type->parameter_type1, 
+						 module, modules, strings, types,
+						 data, &pos, offset2);
+		    }
+		    break;
+		    
+		  case 24:
+		    {
+		      ParamTypeBlob *param = (ParamTypeBlob *)&data[*offset2];
+		      guint32 pos;
+		      
+		      param->pointer = 1;
+		      param->reserved = 0;
+		      param->tag = type->tag;
+		      param->reserved2 = 0;
+		      param->n_types = 2;
+		      
+		      pos = *offset2 + 4;
+		      *offset2 += 12;
+		      
+		      g_idl_node_build_metadata ((GIdlNode *)type->parameter_type1, 
+						 module, modules, strings, types, 
+						 data, &pos, offset2);
+		      g_idl_node_build_metadata ((GIdlNode *)type->parameter_type2, 
+						 module, modules, strings, types, 
+						 data, &pos, offset2);
+		    }
+		    break;
+		    
+		  case 25:
+		    {
+		      ErrorTypeBlob *blob = (ErrorTypeBlob *)&data[*offset2];
+		      gint i, domain;
+		      
+		      blob->pointer = 1;
+		      blob->reserved = 0;
+		      blob->tag = type->tag;
+		      blob->reserved2 = 0;
+		      blob->n_domains = g_strv_length (type->errors);
+		      
+		      *offset2 = ALIGN_VALUE (*offset2 + 4 + 2 * blob->n_domains, 4);
+		      for (i = 0; type->errors[i]; i++)
+			blob->domains[i] = find_entry (module, modules, type->errors[i]);
+		    }
+		    break;
+		    
+		  default:
+		    g_error ("Unknown type tag %d\n", type->tag);
+		    break;
+		  }
+	      }
+	  }
+      }
+      break;
+
+    case G_IDL_NODE_FIELD:
+      {
+	GIdlNodeField *field = (GIdlNodeField *)node;
+	FieldBlob *blob;
+
+	blob = (FieldBlob *)&data[*offset];
+	*offset += 8;
+
+	blob->name = write_string (field->c_name, strings, data, offset2);
+	blob->readable = field->readable;
+	blob->writable = field->writable;
+	blob->reserved = 0;
+	blob->bits = 0;
+	blob->struct_offset = 0;
+
+        g_idl_node_build_metadata ((GIdlNode *)field->type, 
+				   module, modules, strings, types,
+				   data, offset, offset2);
+      }
+      break;
+
+    case G_IDL_NODE_PROPERTY:
+      {
+	GIdlNodeProperty *prop = (GIdlNodeProperty *)node;
+	PropertyBlob *blob = (PropertyBlob *)&data[*offset];
+	*offset += 8;
+
+	blob->name = write_string (node->name, strings, data, offset2);
+	blob->deprecated = prop->deprecated;
+	blob->readable = prop->readable;
+ 	blob->writable = prop->writable;
+ 	blob->construct = prop->construct;
+ 	blob->construct_only = prop->construct_only;
+	blob->reserved = 0;
+
+        g_idl_node_build_metadata ((GIdlNode *)prop->type, 
+				   module, modules, strings, types,
+				   data, offset, offset2);
+      }
+      break;
+
+    case G_IDL_NODE_FUNCTION:
+      {
+	FunctionBlob *blob = (FunctionBlob *)&data[*offset];
+	SignatureBlob *blob2 = (SignatureBlob *)&data[*offset2];
+	GIdlNodeFunction *function = (GIdlNodeFunction *)node;
+	guint32 signature, res;
+	gint n;
+
+	signature = *offset2;
+	n = g_list_length (function->parameters);
+
+	*offset += 16;
+	*offset2 += 8 + n * 12;
+
+	blob->blob_type = BLOB_TYPE_FUNCTION;
+	blob->deprecated = function->deprecated;
+	blob->setter = function->is_setter;
+	blob->getter = function->is_getter;
+	blob->constructor = function->is_constructor;
+	blob->wraps_vfunc = function->wraps_vfunc;
+	blob->reserved = 0;
+	blob->index = 0;
+	blob->name = write_string (node->name, strings, data, offset2);
+	blob->c_name = write_string (function->c_name, strings, data, offset2);
+	blob->signature = signature;
+	
+        g_idl_node_build_metadata ((GIdlNode *)function->result->type, 
+				   module, modules, strings, types,
+				   data, &signature, offset2);
+
+	blob2->may_return_null = function->result->null_ok;
+	blob2->caller_owns_return_value = function->result->transfer;
+	blob2->caller_owns_return_container = function->result->shallow_transfer;
+	blob2->reserved = 0;
+	blob2->n_arguments = n;
+
+	signature += 4;
+	
+	for (l = function->parameters; l; l = l->next)
+	  {
+	    GIdlNode *param = (GIdlNode *)l->data;
+
+	    g_idl_node_build_metadata (param, 
+				       module, modules, strings, types,
+				       data, &signature, offset2);
+	  }
+      }
+      break;
+
+    case G_IDL_NODE_CALLBACK:
+      {
+	CallbackBlob *blob = (CallbackBlob *)&data[*offset];
+	SignatureBlob *blob2 = (SignatureBlob *)&data[*offset2];
+	GIdlNodeFunction *function = (GIdlNodeFunction *)node;
+	guint32 signature, res;
+	gint n;
+
+	signature = *offset2;
+	n = g_list_length (function->parameters);
+
+	*offset += 12;
+	*offset2 += 8 + n * 12;
+
+	blob->blob_type = BLOB_TYPE_CALLBACK;
+	blob->deprecated = function->deprecated;
+	blob->reserved = 0;
+	blob->name = write_string (node->name, strings, data, offset2);
+	blob->signature = signature;
+	
+        g_idl_node_build_metadata ((GIdlNode *)function->result->type, 
+				   module, modules, strings, types,
+				   data, &signature, offset2);
+
+	blob2->may_return_null = function->result->null_ok;
+	blob2->caller_owns_return_value = function->result->transfer;
+	blob2->caller_owns_return_container = function->result->shallow_transfer;
+	blob2->reserved = 0;
+	blob2->n_arguments = n;
+
+	signature += 4;
+	
+	for (l = function->parameters; l; l = l->next)
+	  {
+	    GIdlNode *param = (GIdlNode *)l->data;
+
+	    g_idl_node_build_metadata (param, 
+				       module, modules, strings, types,
+				       data, &signature, offset2);
+	  }
+      }
+      break;
+
+    case G_IDL_NODE_SIGNAL:
+      {
+	SignalBlob *blob = (SignalBlob *)&data[*offset];
+	SignatureBlob *blob2 = (SignatureBlob *)&data[*offset2];
+	GIdlNodeSignal *signal = (GIdlNodeSignal *)node;
+	guint32 signature, res;
+	gint n;
+
+	signature = *offset2;
+	n = g_list_length (signal->parameters);
+
+	*offset += 12;
+	*offset2 += 8 + n * 12;
+
+	blob->deprecated = signal->deprecated;
+	blob->run_first = signal->run_first;
+	blob->run_last = signal->run_last;
+	blob->run_cleanup = signal->run_cleanup;
+	blob->no_recurse = signal->no_recurse;
+	blob->detailed = signal->detailed;
+	blob->action = signal->action;
+	blob->no_hooks = signal->no_hooks;
+	blob->has_class_closure = 0; /* FIXME */
+	blob->true_stops_emit = 0; /* FIXME */
+	blob->reserved = 0;
+	blob->class_closure = 0; /* FIXME */
+	blob->name = write_string (node->name, strings, data, offset2);
+	blob->signature = signature;
+	
+        g_idl_node_build_metadata ((GIdlNode *)signal->result->type, 
+				   module, modules, strings, types,
+				   data, &signature, offset2);
+
+	blob2->may_return_null = signal->result->null_ok;
+	blob2->caller_owns_return_value = signal->result->transfer;
+	blob2->caller_owns_return_container = signal->result->shallow_transfer;
+	blob2->reserved = 0;
+	blob2->n_arguments = n;
+
+	signature += 4;
+	
+	for (l = signal->parameters; l; l = l->next)
+	  {
+	    GIdlNode *param = (GIdlNode *)l->data;
+
+	    g_idl_node_build_metadata (param, module, modules, strings, types,
+				       data, &signature, offset2);
+	  }
+      }
+      break;
+
+    case G_IDL_NODE_VFUNC:
+      {
+	VFuncBlob *blob = (VFuncBlob *)&data[*offset];
+	SignatureBlob *blob2 = (SignatureBlob *)&data[*offset2];
+	GIdlNodeVFunc *vfunc = (GIdlNodeVFunc *)node;
+	guint32 signature, res;
+	gint n;
+
+	signature = *offset2;
+	n = g_list_length (vfunc->parameters);
+
+	*offset += 16;
+	*offset2 += 8 + n * 12;
+
+	blob->name = write_string (node->name, strings, data, offset2);
+	blob->must_chain_up = 0; /* FIXME */
+	blob->must_be_implemented = 0; /* FIXME */
+	blob->must_not_be_implemented = 0; /* FIXME */
+	blob->class_closure = 0; /* FIXME */
+	blob->reserved = 0;
+
+	blob->struct_offset = 0; /* FIXME */
+	blob->reserved2 = 0;
+	blob->signature = signature;
+	
+        g_idl_node_build_metadata ((GIdlNode *)vfunc->result->type, 
+				   module, modules, strings, types,
+				   data, &signature, offset2);
+
+	blob2->may_return_null = vfunc->result->null_ok;
+	blob2->caller_owns_return_value = vfunc->result->transfer;
+	blob2->caller_owns_return_container = vfunc->result->shallow_transfer;
+	blob2->reserved = 0;
+	blob2->n_arguments = n;
+
+	signature += 4;
+	
+	for (l = vfunc->parameters; l; l = l->next)
+	  {
+	    GIdlNode *param = (GIdlNode *)l->data;
+
+	    g_idl_node_build_metadata (param, module, modules, strings, 
+				       types, data, &signature, offset2);
+	  }
+      }
+      break;
+
+    case G_IDL_NODE_PARAM:
+      {
+	ArgBlob *blob = (ArgBlob *)&data[*offset];
+	GIdlNodeParam *param = (GIdlNodeParam *)node;
+	guint32 res;
+
+	*offset += 8;
+
+ 	blob->name = write_string (node->name, strings, data, offset2);
+ 	blob->in = param->in;
+ 	blob->out = param->out;
+ 	blob->dipper = param->dipper;
+	blob->null_ok = param->null_ok;
+	blob->optional = param->optional;
+	blob->transfer_ownership = param->transfer;
+	blob->transfer_container_ownership = param->shallow_transfer;
+	blob->return_value = param->retval;
+	blob->reserved = 0;
+
+        g_idl_node_build_metadata ((GIdlNode *)param->type, module, modules, 
+				   types, strings, data, offset, offset2);
+      }
+      break;
+
+    case G_IDL_NODE_STRUCT:
+      {
+	StructBlob *blob = (StructBlob *)&data[*offset];
+	GIdlNodeStruct *struct_ = (GIdlNodeStruct *)node;
+	guint32 pos;
+	
+	blob->blob_type = BLOB_TYPE_STRUCT;
+	blob->deprecated = struct_->deprecated;
+	blob->unregistered = TRUE;
+	blob->reserved = 0;
+	blob->name = write_string (node->name, strings, data, offset2);
+	blob->gtype_name = 0;
+	blob->gtype_init = 0;
+
+	blob->n_fields = 0;
+	blob->n_methods = 0;
+
+	*offset += 20; 
+	for (l = struct_->members; l; l = l->next)
+	  {
+	    GIdlNode *member = (GIdlNode *)l->data;
+
+	    if (member->type == G_IDL_NODE_FIELD)
+	      {
+		blob->n_fields++;
+		g_idl_node_build_metadata (member, module, modules, strings, 
+					   types, data, offset, offset2);
+	      }
+	  }
+
+	for (l = struct_->members; l; l = l->next)
+	  {
+	    GIdlNode *member = (GIdlNode *)l->data;
+	    
+	    if (member->type == G_IDL_NODE_FUNCTION)
+	      {
+		blob->n_methods++;
+		g_idl_node_build_metadata (member, module, modules, strings, 
+					   types, data, offset, offset2);
+	      }
+	  }
+      }
+      break;
+
+    case G_IDL_NODE_BOXED:
+      {
+	StructBlob *blob = (StructBlob *)&data[*offset];
+	GIdlNodeBoxed *boxed = (GIdlNodeBoxed *)node;
+
+	blob->blob_type = BLOB_TYPE_BOXED;
+	blob->deprecated = boxed->deprecated;
+	blob->unregistered = FALSE;
+	blob->reserved = 0;
+	blob->name = write_string (node->name, strings, data, offset2);
+	blob->gtype_name = write_string (boxed->c_name, strings, data, offset2);
+	blob->gtype_init = write_string (boxed->init_func, strings, data, offset2);
+
+	blob->n_fields = 0;
+	blob->n_methods = 0;
+
+	*offset += 20; 
+	for (l = boxed->members; l; l = l->next)
+	  {
+	    GIdlNode *member = (GIdlNode *)l->data;
+
+	    if (member->type == G_IDL_NODE_FIELD)
+	      {
+		blob->n_fields++;
+		g_idl_node_build_metadata (member, module, modules, strings, 
+					   types, data, offset, offset2);
+	      }
+	  }
+
+	for (l = boxed->members; l; l = l->next)
+	  {
+	    GIdlNode *member = (GIdlNode *)l->data;
+
+	    if (member->type == G_IDL_NODE_FUNCTION)
+	      {
+		blob->n_methods++;
+		g_idl_node_build_metadata (member, module, modules, strings, 
+					   types, data, offset, offset2);
+	      }
+	  }
+      }
+      break;
+
+    case G_IDL_NODE_ENUM:
+    case G_IDL_NODE_FLAGS:
+      {
+	EnumBlob *blob = (EnumBlob *)&data[*offset];
+	GIdlNodeEnum *enum_ = (GIdlNodeEnum *)node;
+
+	*offset += 20; 
+	
+	if (node->type == G_IDL_NODE_ENUM)
+	  blob->blob_type = BLOB_TYPE_ENUM;
+	else
+	  blob->blob_type = BLOB_TYPE_FLAGS;
+	  
+	blob->deprecated = enum_->deprecated;
+	blob->reserved = 0;
+	blob->name = write_string (node->name, strings, data, offset2);
+	blob->gtype_name = write_string (enum_->c_name, strings, data, offset2);
+	if (enum_->init_func)
+	  {
+	    blob->unregistered = FALSE;
+	    blob->gtype_init = write_string (enum_->init_func, strings, data, offset2);
+	  }
+	else
+	  {
+	    blob->unregistered = TRUE;
+	    blob->gtype_init = 0;
+	  }
+
+	blob->n_values = 0;
+	blob->reserved2 = 0;
+
+	for (l = enum_->values; l; l = l->next)
+	  {
+	    GIdlNode *value = (GIdlNode *)l->data;
+
+	    blob->n_values++;
+	    g_idl_node_build_metadata (value, module, modules, strings, types,
+				       data, offset, offset2);
+	  }
+      }
+      break;
+      
+    case G_IDL_NODE_OBJECT:
+      {
+	ObjectBlob *blob = (ObjectBlob *)&data[*offset];
+	GIdlNodeInterface *object = (GIdlNodeInterface *)node;
+	gint parent;
+
+	blob->blob_type = BLOB_TYPE_OBJECT;
+	blob->deprecated = object->deprecated;
+	blob->reserved = 0;
+	blob->name = write_string (node->name, strings, data, offset2);
+	blob->gtype_name = write_string (object->c_name, strings, data, offset2);
+	blob->gtype_init = write_string (object->init_func, strings, data, offset2);
+	if (object->parent)
+	  blob->parent = find_entry (module, modules, object->parent);
+	else
+	  blob->parent = 0;
+
+	blob->n_interfaces = 0;
+	blob->n_fields = 0;
+	blob->n_properties = 0;
+	blob->n_methods = 0;
+	blob->n_signals = 0;
+	blob->n_vfuncs = 0;
+	blob->n_constants = 0;
+	
+	*offset += 32;
+	for (l = object->interfaces; l; l = l->next)
+	  {
+	    blob->n_interfaces++;
+	    *(guint16*)&data[*offset] = find_entry (module, modules, (gchar *)l->data);
+	    *offset += 2;
+	  }
+	
+	*offset = ALIGN_VALUE (*offset, 4);
+	for (l = object->members; l; l = l->next)
+	  {
+	    GIdlNode *member = (GIdlNode *)l->data;
+
+	    if (member->type == G_IDL_NODE_FIELD)
+	      {
+		blob->n_fields++;
+		g_idl_node_build_metadata (member, module, modules, strings, 
+					   types, data, offset, offset2);
+	      }
+	  }
+
+	*offset = ALIGN_VALUE (*offset, 4);
+	for (l = object->members; l; l = l->next)
+	  {
+	    GIdlNode *member = (GIdlNode *)l->data;
+
+	    if (member->type == G_IDL_NODE_PROPERTY)
+	      {
+		blob->n_properties++;
+		g_idl_node_build_metadata (member, module, modules, strings, 
+					   types, data, offset, offset2);
+	      }
+	  }
+
+	*offset = ALIGN_VALUE (*offset, 4);
+	for (l = object->members; l; l = l->next)
+	  {
+	    GIdlNode *member = (GIdlNode *)l->data;
+
+	    if (member->type == G_IDL_NODE_FUNCTION)
+	      {
+		blob->n_methods++;
+		g_idl_node_build_metadata (member, module, modules, strings, 
+					   types, data, offset, offset2);
+	      }
+	  }
+
+	*offset = ALIGN_VALUE (*offset, 4);
+	for (l = object->members; l; l = l->next)
+	  {
+	    GIdlNode *member = (GIdlNode *)l->data;
+
+	    if (member->type == G_IDL_NODE_SIGNAL)
+	      {
+		blob->n_signals++;
+		g_idl_node_build_metadata (member, module, modules, strings, 
+					   types, data, offset, offset2);
+	      }
+	  }
+
+	*offset = ALIGN_VALUE (*offset, 4);
+	for (l = object->members; l; l = l->next)
+	  {
+	    GIdlNode *member = (GIdlNode *)l->data;
+
+	    if (member->type == G_IDL_NODE_VFUNC)
+	      {
+		blob->n_vfuncs++;
+		g_idl_node_build_metadata (member, module, modules, strings, 
+					   types, data, offset, offset2);
+	      }
+	  }
+
+	*offset = ALIGN_VALUE (*offset, 4);
+	for (l = object->members; l; l = l->next)
+	  {
+	    GIdlNode *member = (GIdlNode *)l->data;
+
+	    if (member->type == G_IDL_NODE_CONSTANT)
+	      {
+		blob->n_constants++;
+		g_idl_node_build_metadata (member, module, modules, strings, 
+					   types, data, offset, offset2);
+	      }
+	  }
+      }
+      break;
+
+    case G_IDL_NODE_INTERFACE:
+      {
+	InterfaceBlob *blob = (InterfaceBlob *)&data[*offset];
+	GIdlNodeInterface *iface = (GIdlNodeInterface *)node;
+	gint parent;
+
+	blob->blob_type = BLOB_TYPE_INTERFACE;
+	blob->deprecated = iface->deprecated;
+	blob->reserved = 0;
+	blob->name = write_string (node->name, strings, data, offset2);
+	blob->gtype_name = write_string (iface->c_name, strings, data, offset2);
+	blob->gtype_init = write_string (iface->init_func, strings, data, offset2);
+	blob->n_prerequisites = 0;
+	blob->n_properties = 0;
+	blob->n_methods = 0;
+	blob->n_signals = 0;
+	blob->n_vfuncs = 0;
+	blob->n_constants = 0;
+	
+	*offset += 28;
+	for (l = iface->prerequisites; l; l = l->next)
+	  {
+	    blob->n_prerequisites++;
+	    *(guint16*)&data[*offset] = find_entry (module, modules, (gchar *)l->data);
+	    *offset += 2;
+	  }
+	
+	*offset = ALIGN_VALUE (*offset, 4);
+	for (l = iface->members; l; l = l->next)
+	  {
+	    GIdlNode *member = (GIdlNode *)l->data;
+
+	    if (member->type == G_IDL_NODE_PROPERTY)
+	      {
+		blob->n_properties++;
+		g_idl_node_build_metadata (member, module, modules, strings, 
+					   types, data, offset, offset2);
+	      }
+	  }
+
+	*offset = ALIGN_VALUE (*offset, 4);
+	for (l = iface->members; l; l = l->next)
+	  {
+	    GIdlNode *member = (GIdlNode *)l->data;
+
+	    if (member->type == G_IDL_NODE_FUNCTION)
+	      {
+		blob->n_methods++;
+		g_idl_node_build_metadata (member, module, modules, strings, 
+					   types, data, offset, offset2);
+	      }
+	  }
+
+	*offset = ALIGN_VALUE (*offset, 4);
+	for (l = iface->members; l; l = l->next)
+	  {
+	    GIdlNode *member = (GIdlNode *)l->data;
+
+	    if (member->type == G_IDL_NODE_SIGNAL)
+	      {
+		blob->n_signals++;
+		g_idl_node_build_metadata (member, module, modules, strings, 
+					   types, data, offset, offset2);
+	      }
+	  }
+
+	*offset = ALIGN_VALUE (*offset, 4);
+	for (l = iface->members; l; l = l->next)
+	  {
+	    GIdlNode *member = (GIdlNode *)l->data;
+
+	    if (member->type == G_IDL_NODE_VFUNC)
+	      {
+		blob->n_vfuncs++;
+		g_idl_node_build_metadata (member, module, modules, strings, 
+					   types, data, offset, offset2);
+	      }
+	  }
+
+	*offset = ALIGN_VALUE (*offset, 4);
+	for (l = iface->members; l; l = l->next)
+	  {
+	    GIdlNode *member = (GIdlNode *)l->data;
+
+	    if (member->type == G_IDL_NODE_CONSTANT)
+	      {
+		blob->n_constants++;
+		g_idl_node_build_metadata (member, module, modules, strings, 
+					   types, data, offset, offset2);
+	      }
+	  }
+      }
+      break;
+
+
+    case G_IDL_NODE_VALUE:
+      {
+	GIdlNodeValue *value = (GIdlNodeValue *)node;
+	ValueBlob *blob = (ValueBlob *)&data[*offset];
+	*offset += 16;
+
+	blob->deprecated = value->deprecated;
+	blob->reserved = 0;
+	blob->name = write_string (node->name, strings, data, offset2);
+	blob->short_name = write_string (value->c_name, strings, data, offset2);
+	blob->value = value->value;
+      }
+      break;
+
+    case G_IDL_NODE_ERROR_DOMAIN:
+      {
+	GIdlNodeErrorDomain *domain = (GIdlNodeErrorDomain *)node;
+	ErrorDomainBlob *blob = (ErrorDomainBlob *)&data[*offset];
+	*offset += 16;
+
+	blob->blob_type = BLOB_TYPE_ERROR_DOMAIN;
+	blob->deprecated = domain->deprecated;
+	blob->reserved = 0;
+	blob->name = write_string (node->name, strings, data, offset2);
+	blob->get_quark = write_string (domain->getquark, strings, data, offset2);
+	blob->error_codes = find_entry (module, modules, domain->codes);
+	blob->reserved2 = 0;
+      }
+      break;
+
+    case G_IDL_NODE_CONSTANT:
+      {
+	GIdlNodeConstant *constant = (GIdlNodeConstant *)node;
+	ConstantBlob *blob = (ConstantBlob *)&data[*offset];
+	gint pos;
+
+	pos = *offset + 8;
+	*offset += 20;
+
+	blob->blob_type = BLOB_TYPE_CONSTANT;
+	blob->deprecated = constant->deprecated;
+	blob->reserved = 0;
+	blob->name = write_string (node->name, strings, data, offset2);
+
+	blob->offset = *offset2;
+	switch (constant->type->tag)
+	  {
+	  case 1:
+	    blob->size = 4;
+	    *(gboolean*)&data[blob->offset] = parse_boolean_value (constant->value);
+	    break;
+	    case 2:
+	    blob->size = 1;
+	      *(gint8*)&data[blob->offset] = (gint8) parse_int_value (constant->value);
+	    break;
+	  case 3:
+	    blob->size = 1;
+	    *(guint8*)&data[blob->offset] = (guint8) parse_uint_value (constant->value);
+	    break;
+	  case 4:
+	    blob->size = 2;
+	    *(gint16*)&data[blob->offset] = (gint16) parse_int_value (constant->value);
+	    break;
+	  case 5:
+	    blob->size = 2;
+	    *(guint16*)&data[blob->offset] = (guint16) parse_uint_value (constant->value);
+	    break;
+	  case 6:
+	    blob->size = 4;
+	    *(gint32*)&data[blob->offset] = (gint32) parse_int_value (constant->value);
+	    break;
+	  case 7:
+	    blob->size = 4;
+	    *(guint32*)&data[blob->offset] = (guint32) parse_uint_value (constant->value);
+	    break;
+	  case 8:
+	    blob->size = 8;
+	    *(gint32*)&data[blob->offset] = (gint64) parse_int_value (constant->value);
+	    break;
+	  case 9:
+	    blob->size = 8;
+	    *(guint32*)&data[blob->offset] = (guint64) parse_uint_value (constant->value);
+	    break;
+	  case 10:
+	    blob->size = sizeof (gfloat);
+	    *(gfloat*)&data[blob->offset] = (gfloat) parse_float_value (constant->value);
+	    break;
+	  case 11:
+	    blob->size = sizeof (gdouble);
+	    *(gdouble*)&data[blob->offset] = (gdouble) parse_float_value (constant->value);
+	    break;
+	  case 12:
+	    blob->size = strlen (constant->value) + 1;
+	    memcpy (&data[blob->offset], constant->value, blob->size);
+	    break;
+	  case 14:
+	    blob->size = sizeof (gint);
+	    *(gint*)&data[blob->offset] = (gint) parse_int_value (constant->value);
+	    break;
+	  case 15:
+	    blob->size = sizeof (guint);
+	    *(gint*)&data[blob->offset] = (guint) parse_uint_value (constant->value);
+	    break;
+	  case 16:
+	    blob->size = sizeof (glong);
+	    *(glong*)&data[blob->offset] = (glong) parse_int_value (constant->value);
+	    break;
+	  case 17:
+	    blob->size = sizeof (gulong);
+	    *(gulong*)&data[blob->offset] = (gulong) parse_uint_value (constant->value);
+	    break;
+	  }
+	*offset2 += ALIGN_VALUE (blob->size, 4);
+	
+	g_idl_node_build_metadata ((GIdlNode *)constant->type, module, modules, 
+				   strings, types, data, &pos, offset2);
+      }
+      break;
+    }
+}
+
+
+/* if str is already in the pool, return previous location, otherwise write str
+ * to the metadata at offset, put it in the pool and update offset. If the 
+ * metadata is not large enough to hold the string, reallocate it.
+ */
+guint32 
+write_string (const gchar *str,
+	      GHashTable  *strings, 
+	      guchar      *data,
+	      guint32     *offset)
+{
+  gpointer value;
+  guint32 start;
+
+  value = g_hash_table_lookup (strings, str);
+  
+  if (value)
+      return GPOINTER_TO_INT (value);
+  
+  g_hash_table_insert (strings, (gpointer)str, GINT_TO_POINTER (*offset));
+
+  start = *offset;
+  *offset = ALIGN_VALUE (start + strlen (str) + 1, 4);
+
+  strcpy (&data[start], str);
+  
+  return start;
+}

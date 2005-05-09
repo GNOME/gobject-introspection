@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<api version="1.0">
+  <namespace name="GObject">
+    <object name="GObject.GObject" cname="GObject" get-type="g_object_get_type">
+    </object>
+  </namespace>
+</api>

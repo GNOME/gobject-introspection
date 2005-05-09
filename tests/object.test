@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<api version="1.0">
+  <namespace name="Foo">
+    <object name="Foo.Object1" parent="Foo.Object2" cname="Object1" get-type="object1_get_type">
+      <implements>
+      <interface name="Foo.Iface1" />
+      </implements>
+      <property name="prop1" readable="0" writable="0" type="gint"/>
+      <signal name="signal1" when="LAST">
+        <return-type type="gboolean"/>
+        <parameters>
+          <parameter name="obj" type="Foo.Object1*" direction="in"/>
+        </parameters>
+      </signal>
+      <signal name="signal2" when="FIRST" no-recurse="1" detailed="1" action="1" no-hooks="1">
+        <return-type type="void"/>
+        <parameters>
+          <parameter name="obj" type="Foo.Object1*" direction="in"/>
+        </parameters>
+      </signal>
+      <vfunc name="Foo.Object1.vfunc1">
+        <return-type type="Foo.Object2*"/>
+        <parameters>
+          <parameter name="param1" type="Foo.Object1*" direction="in"/>
+        </parameters>
+      </vfunc>
+      <constant name="constant1" type="gint" value="42" />
+    </object>
+    <interface name="Foo.Iface1" cname="Iface1" get-type="iface1_get_type">
+    </interface>
+    <object name="Foo.Object2" parent="GObject.GObject" cname="Object2" get-type="object2_get_type">
+    </object>
+  </namespace>
+</api>

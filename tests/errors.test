@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<api version="1.0">
+  <namespace name="Foo">
+    <enum name="Foo.ErrorCodes1" cname="ErrorCodes1" get-type="foo_error_codes1_get_type">
+      <member name="Foo.ErrorCodes1.e1" cname="e1" value="0"  />
+      <member name="Foo.ErrorCodes1.e2" cname="e2" value="1"  deprecated="1" />
+      <member name="Foo.ErrorCodes1.e3" cname="e3" value="2"  />
+    </enum>
+    <enum name="Foo.ErrorCodes2" cname="ErrorCodes2" get-type="foo_error_codes2_get_type">
+      <member name="Foo.ErrorCodes2.e1" cname="e1" value="0"  />
+    </enum>
+    <errordomain name="Foo.Errors1" get-quark="foo_errors1_get_quark" codes="Foo.ErrorCodes1" />
+    <errordomain name="Foo.Errors2" get-quark="foo_errors2_get_quark" codes="Foo.ErrorCodes2" />
+    <function name="Foo.test1" cname="test1">
+      <return-type type="gboolean"/>
+      <parameters>
+        <parameter name="p1" type="gint" direction="in" null-ok="1"/>
+        <parameter name="p2" type="GError<Foo.Errors1,Foo.Errors2>" direction="out"/>
+      </parameters>
+    </function>
+  </namespace>
+</api>

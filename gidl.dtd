@@ -1,0 +1,132 @@
+<!ELEMENT api (namespace+) >
+
+<!ATTLIST api version CDATA #REQUIRED >
+
+<!ELEMENT namespace (function|callback|object|interface|enum|flags|boxed|struct|constant|errordomain)* >
+<!ATTLIST namespace name CDATA #REQUIRED >
+
+<!ELEMENT function (return-type,parameters?) >
+<!ATTLIST function name CDATA #REQUIRED
+                   cname CDATA #REQUIRED
+                   deprecated (0|1) #IMPLIED >
+<!ELEMENT parameters (parameter+) >
+<!ELEMENT return-type EMPTY >                   
+<!ATTLIST return-type type CDATA #REQUIRED
+                      null-ok (0|1) #IMPLIED
+                      transfer (full|shallow|none) #IMPLIED >
+
+
+<!ELEMENT parameter EMPTY >
+<!ATTLIST parameter type CDATA #REQUIRED
+                    name CDATA #REQUIRED
+                    direction (in|out|inout) #IMPLIED
+                    retval (0|1) #IMPLIED
+		    dipper (0|1) #IMPLIED
+		    optional (0|1) #IMPLIED
+                    null-ok (0|1) #IMPLIED
+                    transfer (full|shallow|none) #IMPLIED >
+                                
+<!ELEMENT callback (return-type,parameters?) >
+<!ATTLIST callback name CDATA #REQUIRED
+                   cname CDATA #IMPLIED
+                   deprecated (0|1) #IMPLIED >
+
+<!ELEMENT object (implements|field|signal|method|property|vfunc|constructor|constant)* >
+<!ATTLIST object name CDATA #IMPLIED
+                 cname CDATA #REQUIRED
+                 parent CDATA #REQUIRED
+                 get-type CDATA #IMPLIED
+                 deprecated (0|1) #IMPLIED >
+
+<!ELEMENT implements (interface+) >
+
+<!ELEMENT method (return-type,parameters?) >
+<!ATTLIST method name CDATA #REQUIRED
+                 cname CDATA #REQUIRED
+                 deprecated (0|1) #IMPLIED 
+                 type (setter|getter) #IMPLIED >
+
+<!ELEMENT constructor (parameters?) >
+<!ATTLIST constructor name CDATA #REQUIRED
+                      cname CDATA #REQUIRED
+                      deprecated (0|1) #IMPLIED >
+
+<!ELEMENT interface ((requires|signal|method|property|vfunc|constant)*) >
+<!ATTLIST interface name CDATA #REQUIRED
+                    cname CDATA #REQUIRED
+                    get-type CDATA #IMPLIED
+                    deprecated (0|1) #IMPLIED >
+
+<!ELEMENT requires ((interface|object)*) >
+
+<!ELEMENT property EMPTY >
+<!ATTLIST property name CDATA #REQUIRED
+                   cname CDATA #REQUIRED
+                   type CDATA #REQUIRED
+                   readable (0|1) #IMPLIED
+                   writable (0|1) #IMPLIED
+                   construct (0|1) #IMPLIED
+                   construct-only (0|1) #IMPLIED >
+
+<!ELEMENT signal (return-type,parameters) >
+<!ATTLIST signal name CDATA #REQUIRED 
+                 cname CDATA #REQUIRED
+                 when (FIRST|LAST|CLEANUP) #REQUIRED
+                 no-recurse (0|1) #IMPLIED
+                 detailed (0|1) #IMPLIED
+                 action (0|1) #IMPLIED
+                 no-hooks (0|1) #IMPLIED 
+                 has-class-closure (0|1) #IMPLIED > 
+
+<!ELEMENT vfunc (return-type,parameters?) >
+<!ATTLIST vfunc name CDATA #REQUIRED 
+                cname CDATA #REQUIRED
+                must-chain-up (0|1) #IMPLIED
+                override (always|never|maybe) #IMPLIED
+                is-class-closure (0|1) #IMPLIED > 
+
+<!ELEMENT field EMPTY >
+<!ATTLIST field cname CDATA #REQUIRED 
+                type CDATA #REQUIRED
+                bits CDATA #IMPLIED >
+
+<!ELEMENT enum (member+) >
+<!ATTLIST enum name CDATA #REQUIRED 
+               cname CDATA #REQUIRED
+               get-type CDATA #IMPLIED
+               deprecated (0|1) #IMPLIED >
+
+
+<!ELEMENT flags (member+) >
+<!ATTLIST flags name CDATA #REQUIRED 
+                cname CDATA #REQUIRED
+                get-type CDATA #IMPLIED
+                deprecated (0|1) #IMPLIED >
+
+<!ELEMENT member EMPTY >
+<!ATTLIST member name CDATA #REQUIRED
+                 cname CDATA #REQUIRED
+                 value CDATA #IMPLIED
+                 deprecated (0|1) #IMPLIED >
+
+<!ELEMENT boxed ((field|method)*) >
+<!ATTLIST boxed name CDATA #REQUIRED 
+                cname CDATA #REQUIRED
+                get-type CDATA #IMPLIED
+                deprecated (0|1) #IMPLIED >
+
+<!ELEMENT struct ((field|method)*) >
+<!ATTLIST struct name CDATA #REQUIRED 
+                 cname CDATA #REQUIRED
+                 deprecated (0|1) #IMPLIED >
+
+<!ELEMENT constant EMPTY >
+<!ATTLIST constant name CDATA #REQUIRED 
+                   type CDATA #REQUIRED
+                   value CDATA #REQUIRED
+                   deprecated (0|1) #IMPLIED >
+
+<!ELEMENT errordomain EMPTY >
+<!ATTLIST errordomain name CDATA #REQUIRED 
+                      get-quark CDATA #REQUIRED
+                      codes CDATA #REQUIRED >
