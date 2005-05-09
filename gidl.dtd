@@ -7,7 +7,7 @@
 
 <!ELEMENT function (return-type,parameters?) >
 <!ATTLIST function name CDATA #REQUIRED
-                   cname CDATA #REQUIRED
+                   symbol CDATA #REQUIRED
                    deprecated (0|1) #IMPLIED >
 <!ELEMENT parameters (parameter+) >
 <!ELEMENT return-type EMPTY >                   
@@ -28,40 +28,38 @@
                                 
 <!ELEMENT callback (return-type,parameters?) >
 <!ATTLIST callback name CDATA #REQUIRED
-                   cname CDATA #IMPLIED
                    deprecated (0|1) #IMPLIED >
 
 <!ELEMENT object (implements|field|signal|method|property|vfunc|constructor|constant)* >
-<!ATTLIST object name CDATA #IMPLIED
-                 cname CDATA #REQUIRED
+<!ATTLIST object name CDATA #REQUIRED
                  parent CDATA #REQUIRED
-                 get-type CDATA #IMPLIED
+                 type-name CDATA #REQUIRED
+                 get-type CDATA #REQUIRED
                  deprecated (0|1) #IMPLIED >
 
 <!ELEMENT implements (interface+) >
 
 <!ELEMENT method (return-type,parameters?) >
 <!ATTLIST method name CDATA #REQUIRED
-                 cname CDATA #REQUIRED
+                 symbol CDATA #REQUIRED
                  deprecated (0|1) #IMPLIED 
                  type (setter|getter) #IMPLIED >
 
-<!ELEMENT constructor (parameters?) >
+<!ELEMENT constructor (return-type,parameters?) >
 <!ATTLIST constructor name CDATA #REQUIRED
-                      cname CDATA #REQUIRED
+                      symbol CDATA #REQUIRED
                       deprecated (0|1) #IMPLIED >
 
 <!ELEMENT interface ((requires|signal|method|property|vfunc|constant)*) >
 <!ATTLIST interface name CDATA #REQUIRED
-                    cname CDATA #REQUIRED
-                    get-type CDATA #IMPLIED
+                    type-name CDATA #REQUIRED
+                    get-type CDATA #REQUIRED
                     deprecated (0|1) #IMPLIED >
 
 <!ELEMENT requires ((interface|object)*) >
 
 <!ELEMENT property EMPTY >
 <!ATTLIST property name CDATA #REQUIRED
-                   cname CDATA #REQUIRED
                    type CDATA #REQUIRED
                    readable (0|1) #IMPLIED
                    writable (0|1) #IMPLIED
@@ -70,7 +68,6 @@
 
 <!ELEMENT signal (return-type,parameters) >
 <!ATTLIST signal name CDATA #REQUIRED 
-                 cname CDATA #REQUIRED
                  when (FIRST|LAST|CLEANUP) #REQUIRED
                  no-recurse (0|1) #IMPLIED
                  detailed (0|1) #IMPLIED
@@ -80,44 +77,41 @@
 
 <!ELEMENT vfunc (return-type,parameters?) >
 <!ATTLIST vfunc name CDATA #REQUIRED 
-                cname CDATA #REQUIRED
                 must-chain-up (0|1) #IMPLIED
                 override (always|never|maybe) #IMPLIED
                 is-class-closure (0|1) #IMPLIED > 
 
 <!ELEMENT field EMPTY >
-<!ATTLIST field cname CDATA #REQUIRED 
+<!ATTLIST field name CDATA #REQUIRED 
                 type CDATA #REQUIRED
                 bits CDATA #IMPLIED >
 
 <!ELEMENT enum (member+) >
 <!ATTLIST enum name CDATA #REQUIRED 
-               cname CDATA #REQUIRED
+               type-name CDATA #IMPLIED
                get-type CDATA #IMPLIED
                deprecated (0|1) #IMPLIED >
 
 
 <!ELEMENT flags (member+) >
 <!ATTLIST flags name CDATA #REQUIRED 
-                cname CDATA #REQUIRED
+                type-name CDATA #IMPLIED
                 get-type CDATA #IMPLIED
                 deprecated (0|1) #IMPLIED >
 
 <!ELEMENT member EMPTY >
 <!ATTLIST member name CDATA #REQUIRED
-                 cname CDATA #REQUIRED
                  value CDATA #IMPLIED
                  deprecated (0|1) #IMPLIED >
 
 <!ELEMENT boxed ((constructor|field|method)*) >
 <!ATTLIST boxed name CDATA #REQUIRED 
-                cname CDATA #REQUIRED
+                type-name CDATA #IMPLIED
                 get-type CDATA #IMPLIED
                 deprecated (0|1) #IMPLIED >
 
 <!ELEMENT struct ((field|method)*) >
 <!ATTLIST struct name CDATA #REQUIRED 
-                 cname CDATA #REQUIRED
                  deprecated (0|1) #IMPLIED >
 
 <!ELEMENT constant EMPTY >

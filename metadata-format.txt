@@ -1,7 +1,10 @@
 GObject binary metadata for introspection
 -----------------------------------------
 
-Version 0.3
+Version 0.4
+
+Changes since 0.3:
+- drop short_name for ValueBlob. 
 
 Changes since 0.2:
 - make inline types 4 bytes after all, remove header->types and allow
@@ -724,10 +727,9 @@ struct_offset:
 type:     The type of the field.
 
 
-ValueBlob (16 bytes)
+ValueBlob (12 bytes)
 
-Values commonly occur in enums and flags, but we also allow them to occur
-in interfaces or freestanding, to describe constants.
+Values commonly occur in enums and flags.
 
 struct ValueBlob
 {
@@ -735,12 +737,8 @@ struct ValueBlob
   guint   reserved   :31;
   guint32 name;
 
-  guint32 short_name;
   guint32 value;
 }
-
-short_name: 
-          A short name for the value;
 
 value:    The numerical value;
 

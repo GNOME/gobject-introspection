@@ -118,7 +118,7 @@ g_idl_module_build_metadata (GIdlModule  *module,
   header->arg_blob_size = 12;
   header->property_blob_size = 12;
   header->field_blob_size = 12;
-  header->value_blob_size = 16;
+  header->value_blob_size = 12;
   header->constant_blob_size = 20;
   header->error_domain_blob_size = 16;
   header->annotation_blob_size = 12;

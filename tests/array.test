@@ -1,21 +1,21 @@
 <?xml version="1.0"?>
 <api version="1.0">
   <namespace name="Foo">
-    <function name="Foo.test1" cname="test1">
+    <function name="Foo.test1" symbol="test1">
       <return-type type="gboolean"/>
       <parameters>
         <parameter name="p1" type="gchar*[length=1,zero-terminated=1]" direction="in"/>
         <parameter name="p2" type="gint" direction="in"/>
       </parameters>
     </function>
-    <function name="Foo.test2" cname="test2">
+    <function name="Foo.test2" symbol="test2">
       <return-type type="gboolean"/>
       <parameters>
         <parameter name="p2" type="gint" direction="out"/>
         <parameter name="p1" type="gchar*[length=0]" direction="out"/>
       </parameters>
     </function>
-    <function name="Foo.test3" cname="test3">
+    <function name="Foo.test3" symbol="test3">
       <return-type type="gboolean"/>
       <parameters>
         <parameter name="p1" type="gchar*[zero-terminated=1]" direction="in"/>

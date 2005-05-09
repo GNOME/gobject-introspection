@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <api version="1.0">
   <namespace name="Foo">
-    <object name="Foo.Object1" parent="Foo.Object2" cname="Object1" get-type="object1_get_type">
+    <object name="Foo.Object1" parent="Foo.Object2" type-name="Object1" get-type="object1_get_type">
       <implements>
       <interface name="Foo.Iface1" />
       </implements>
@@ -26,9 +26,9 @@
       </vfunc>
       <constant name="constant1" type="gint" value="42" />
     </object>
-    <interface name="Foo.Iface1" cname="Iface1" get-type="iface1_get_type">
+    <interface name="Foo.Iface1" type-name="Iface1" get-type="iface1_get_type">
     </interface>
-    <object name="Foo.Object2" parent="GObject.GObject" cname="Object2" get-type="object2_get_type">
+    <object name="Foo.Object2" parent="GObject.GObject" type-name="Object2" get-type="object2_get_type">
     </object>
   </namespace>
 </api>

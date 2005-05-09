@@ -90,7 +90,7 @@ struct _GIdlNodeFunction
   gboolean is_constructor;
   gboolean wraps_vfunc;
 
-  gchar *c_name;
+  gchar *symbol;
 
   GIdlNodeParam *result;
   GList *parameters;
@@ -145,7 +145,7 @@ struct _GIdlNodeProperty
 
   gboolean deprecated;
 
-  gchar *c_name;
+  gchar *name;
   gboolean readable;
   gboolean writable;
   gboolean construct;
@@ -160,7 +160,6 @@ struct _GIdlNodeSignal
 
   gboolean deprecated;
 
-  gchar *c_name;
   gboolean run_first;
   gboolean run_last;
   gboolean run_cleanup;
@@ -182,7 +181,6 @@ struct _GIdlNodeVFunc
 {
   GIdlNode node;
 
-  gchar *c_name;
   gboolean must_chain_up;
   gboolean must_be_implemented;
   gboolean must_not_be_implemented;
@@ -196,7 +194,6 @@ struct _GIdlNodeField
 {
   GIdlNode node;
 
-  gchar *c_name;
   gboolean readable;
   gboolean writable;
   gint bits;
@@ -210,8 +207,8 @@ struct _GIdlNodeInterface
 
   gboolean deprecated;
 
-  gchar *c_name;
-  gchar *init_func;
+  gchar *gtype_name;
+  gchar *gtype_init;
 
   gchar *parent;
   
@@ -226,8 +223,6 @@ struct _GIdlNodeValue
   GIdlNode node;
 
   gboolean deprecated;
-
-  gchar *c_name;
 
   guint32 value;
 };
@@ -249,8 +244,8 @@ struct _GIdlNodeEnum
 
   gboolean deprecated;
 
-  gchar *c_name;
-  gchar *init_func;
+  gchar *gtype_name;
+  gchar *gtype_init;
 
   GList *values;
 };
@@ -261,8 +256,8 @@ struct _GIdlNodeBoxed
 
   gboolean deprecated;
 
-  gchar *c_name;
-  gchar *init_func;
+  gchar *gtype_name;
+  gchar *gtype_init;
   
   GList *members;
 };
@@ -272,8 +267,6 @@ struct _GIdlNodeStruct
   GIdlNode node;
 
   gboolean deprecated;
-  
-  gchar *c_name;
   
   GList *members;
 };

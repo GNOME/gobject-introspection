@@ -48,7 +48,7 @@ g_metadata_check_sanity (void)
   g_assert (sizeof (ParamTypeBlob) == 4);
   g_assert (sizeof (ErrorTypeBlob) == 4);
   g_assert (sizeof (ErrorDomainBlob) == 16);
-  g_assert (sizeof (ValueBlob) == 16);
+  g_assert (sizeof (ValueBlob) == 12);
   g_assert (sizeof (FieldBlob) == 12);
   g_assert (sizeof (RegisteredTypeBlob) == 16);
   g_assert (sizeof (StructBlob) == 20);

@@ -256,7 +256,6 @@ GIInterfaceInfo *           g_error_domain_info_get_codes (GIErrorDomainInfo *in
 
 /* GIValueInfo */
  
-const gchar *          g_value_info_get_short_name (GIValueInfo *info);
 glong                  g_value_info_get_value      (GIValueInfo *info);
 
 

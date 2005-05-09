@@ -159,7 +159,7 @@ typedef struct
   guint   index          :10;
 
   guint32 name;
-  guint32 c_name;
+  guint32 symbol;
   guint32 signature;
 } FunctionBlob;
 
@@ -241,7 +241,6 @@ typedef struct
   guint   deprecated : 1;
   guint   reserved   :31;
   guint32 name;
-  guint32 short_name;
   guint32 value;
 } ValueBlob;
 

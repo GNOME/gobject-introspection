@@ -450,7 +450,7 @@ g_function_info_get_symbol (GIFunctionInfo *info)
   GIBaseInfo *base = (GIBaseInfo *)info;
   FunctionBlob *blob = (FunctionBlob *)&base->metadata[base->offset];
 
-  return g_metadata_get_string (base->metadata, blob->c_name);
+  return g_metadata_get_string (base->metadata, blob->symbol);
 }
 
 GIFunctionInfoFlags
@@ -826,18 +826,7 @@ g_error_domain_info_get_codes (GIErrorDomainInfo *info)
 }
 
 
-
-
 /* GIValueInfo functions */ 
-const gchar *
-g_value_info_get_short_name (GIValueInfo *info)
-{
-  GIBaseInfo *base = (GIBaseInfo *)info;
-  ValueBlob *blob = (ValueBlob *)&base->metadata[base->offset];
-
-  return g_metadata_get_string (base->metadata, blob->short_name);
-}
-
 glong
 g_value_info_get_value (GIValueInfo *info)
 {
