@@ -417,6 +417,8 @@ g_idl_node_get_full_size (GIdlNode *node)
   GList *l;
   gint size, n;
 
+  g_assert (node != NULL);
+
   switch (node->type)
     {
     case G_IDL_NODE_CALLBACK:

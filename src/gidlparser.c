@@ -412,7 +412,8 @@ start_function (GMarkupParseContext *context,
 	ctx->state == STATE_BOXED ||
 	ctx->state == STATE_STRUCT) &&
        strcmp (element_name, "method") == 0) ||
-      (ctx->state == STATE_OBJECT &&
+      ((ctx->state == STATE_OBJECT ||
+	ctx->state == STATE_BOXED) &&
        strcmp (element_name, "constructor") == 0))
     {
       const gchar *name;

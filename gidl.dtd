@@ -109,7 +109,7 @@
                  value CDATA #IMPLIED
                  deprecated (0|1) #IMPLIED >
 
-<!ELEMENT boxed ((field|method)*) >
+<!ELEMENT boxed ((constructor|field|method)*) >
 <!ATTLIST boxed name CDATA #REQUIRED 
                 cname CDATA #REQUIRED
                 get-type CDATA #IMPLIED

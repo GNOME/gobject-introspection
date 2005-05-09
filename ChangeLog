@@ -1,0 +1,9 @@
+2005-05-09  Matthias Clasen  <mclasen@redhat.com>
+
+	* gidl.dtd: Allow constructors for boxed types,
+	patch by Jonathan Blandford.
+
+	* 
+2005-05-09  Matthias Clasen  <mclasen@redhat.com>
+
+	* --- Initial import ---
