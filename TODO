@@ -4,14 +4,17 @@ XML format
 - Write a tool to create XML from annotated headers
 - Add attributes to connect signals to their default handlers
   and wrappers to their vfuncs
+- Add attributes for struct offsets
 
 Binary format
 -------------
 - Add hashes to lookup interfaces and functions in interfaces
+- Do we need (at least limited) handling of unions ? E.g. GdkEvent
 - Write a validator
 
 Compiler
 --------
+- Parse qualified names like NAMESPACE.INTERFACE.FUNCTION
 - Cleanup, maybe turn the nodes in to objects to avoid the horrific 
   type switches
 - Add thorough error checking
@@ -27,4 +30,4 @@ Repository
 General
 -------
 - More tests
-- Check how the format scales to something of GTK+ size
+- Check how the format scales to something the size of GTK+
