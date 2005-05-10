@@ -83,10 +83,12 @@ g_idl_module_build_metadata (GIdlModule  *module,
   types = g_hash_table_new (g_str_hash, g_str_equal);
   n_entries = g_list_length (module->entries);
 
-  g_fprintf (stderr, "%d entries (%d local)\n", n_entries, n_local_entries);
+  g_debug ("%d entries (%d local)\n", n_entries, n_local_entries);
   
   dir_size = n_entries * 12;  
   size = header_size + dir_size;
+
+  size += ALIGN_VALUE (strlen (module->name) + 1, 4);
 
   for (e = module->entries; e; e = e->next)
     {
@@ -94,6 +96,9 @@ g_idl_module_build_metadata (GIdlModule  *module,
       
       size += g_idl_node_get_full_size (node);
     }
+
+  g_debug ("allocating %d bytes (%d header, %d directory, %d entries)\n", 
+	   size, header_size, dir_size, size - header_size - dir_size);
 
   data = g_malloc (size);
 

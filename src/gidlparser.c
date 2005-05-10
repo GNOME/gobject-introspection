@@ -17,6 +17,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
+#include <string.h>
 
 #include <glib.h>
 #include "gidlmodule.h"
@@ -1853,7 +1854,7 @@ g_idl_parse_file (const gchar  *filename,
 		  GError      **error)
 {
   gchar *buffer;
-  gssize length;
+  gsize length;
   GList *modules;
 
   if (!g_file_get_contents (filename, &buffer, &length, error))

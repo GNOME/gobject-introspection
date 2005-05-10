@@ -1,3 +1,12 @@
+2005-05-10  Matthias Clasen  <mclasen@redhat.com>
+
+	* src/gidlmodule.c (g_idl_module_build_metadata): Don't
+	forget to count the module name when calculating the
+	required size for the metadata.
+
+	* src/gidlnode.c: 
+	* src/gidlparser.c: Fix compiler warnings.
+
 2005-05-09  Matthias Clasen  <mclasen@redhat.com>
 
 	* src/compiler.c (main): Free the option context.

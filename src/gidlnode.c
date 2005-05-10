@@ -19,6 +19,7 @@
  */
 
 #include <stdio.h>
+#include <string.h>
 
 #include "gidlmodule.h"
 #include "gidlnode.h"
@@ -862,6 +863,8 @@ g_idl_node_build_metadata (GIdlNode   *node,
                            guint32    *offset2)
 {
   GList *l;
+  guint32 old_offset = *offset;
+  guint32 old_offset2 = *offset2;
 
   switch (node->type)
     {
@@ -1637,7 +1640,7 @@ g_idl_node_build_metadata (GIdlNode   *node,
       {
 	GIdlNodeConstant *constant = (GIdlNodeConstant *)node;
 	ConstantBlob *blob = (ConstantBlob *)&data[*offset];
-	gint pos;
+	guint32 pos;
 
 	pos = *offset + 8;
 	*offset += 20;
@@ -1748,7 +1751,7 @@ write_string (const gchar *str,
   start = *offset;
   *offset = ALIGN_VALUE (start + strlen (str) + 1, 4);
 
-  strcpy (&data[start], str);
+  strcpy ((gchar*)&data[start], str);
   
   return start;
 }
