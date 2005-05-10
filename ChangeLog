@@ -1,5 +1,7 @@
 2005-05-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* src/compiler.c (main): Free the option context.
+
 	* gidl.dtd: Clean up handling of names. All elements
 	have a "name", only the elements corresponding to
 	actual callable functions (function, method, constructor),
