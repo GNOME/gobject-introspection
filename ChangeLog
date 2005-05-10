@@ -1,5 +1,12 @@
 2005-05-10  Matthias Clasen  <mclasen@redhat.com>
 
+	* src/gidlnode.c (g_idl_node_get_full_size): Correct the 
+	size calculation for 2-parameter types and for objects.
+
+	* src/compiler.c: Add a cmdline option for debug output
+	and install a log handler to implement it.
+	* src/gidlnode.c: Add some debug spew.
+	
 	* TODO: Updates
 
 	* src/gidlmodule.c (g_idl_module_build_metadata): Don't

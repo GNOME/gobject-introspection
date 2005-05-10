@@ -409,6 +409,8 @@ g_idl_node_get_size (GIdlNode *node)
       size = 0;
     }
 
+  g_debug ("node %d type %d size %d", node, node->type, size);
+
   return size;
 }
 
@@ -477,7 +479,7 @@ g_idl_node_get_full_size (GIdlNode *node)
 		size = 4 + 4 + g_idl_node_get_full_size ((GIdlNode *)type->parameter_type1);
 		break;
 	      case 24:
-		size = 4 + 4
+		size = 4 + 4 + 4
 		  + g_idl_node_get_full_size ((GIdlNode *)type->parameter_type1)
 		  + g_idl_node_get_full_size ((GIdlNode *)type->parameter_type2);
 		break;
@@ -501,6 +503,7 @@ g_idl_node_get_full_size (GIdlNode *node)
 
 	n = g_list_length (iface->interfaces);
 	size = 32;
+	size += ALIGN_VALUE (strlen (iface->parent) + 1, 4);
 	size += ALIGN_VALUE (strlen (node->name) + 1, 4);
 	size += ALIGN_VALUE (strlen (iface->gtype_name) + 1, 4);
 	size += ALIGN_VALUE (strlen (iface->gtype_init) + 1, 4);
@@ -661,6 +664,8 @@ g_idl_node_get_full_size (GIdlNode *node)
       g_error ("Unknown type tag %d\n", node->type);
       size = 0;
     }
+
+  g_debug ("node %d type %d full size %d", node, node->type, size);
 
   return size;
 }
@@ -1725,8 +1730,13 @@ g_idl_node_build_metadata (GIdlNode   *node,
       }
       break;
     }
-}
+  
+  g_debug ("node %p type %d, offset %d -> %d, offset2 %d -> %d",
+	   node, node->type, old_offset, *offset, old_offset2, *offset2);
 
+  if (*offset2 - old_offset2 + *offset - old_offset > g_idl_node_get_full_size (node))
+    g_error ("exceeding space reservation !!");
+}
 
 /* if str is already in the pool, return previous location, otherwise write str
  * to the metadata at offset, put it in the pool and update offset. If the 
