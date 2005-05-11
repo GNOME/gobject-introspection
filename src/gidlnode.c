@@ -25,6 +25,33 @@
 #include "gidlnode.h"
 #include "gmetadata.h"
 
+static gulong string_count = 0;
+static gulong unique_string_count = 0;
+static gulong string_size = 0;
+static gulong unique_string_size = 0;
+static gulong types_count = 0;
+static gulong unique_types_count = 0;
+
+void
+init_stats (void)
+{
+  string_count = 0;
+  unique_string_count = 0;
+  string_size = 0;
+  unique_string_size = 0;
+  types_count = 0;
+  unique_types_count = 0;
+}
+
+void
+dump_stats (void)
+{
+  g_message ("%d strings (%d before sharing), %d bytes (%d before sharing)",
+	     unique_string_count, string_count, unique_string_size, string_size);
+  g_message ("%d types (%d before sharing)", unique_types_count, types_count);
+}
+
+
 #define ALIGN_VALUE(this, boundary) \
   (( ((unsigned long)(this)) + (((unsigned long)(boundary)) -1)) & (~(((unsigned long)(boundary))-1)))
 
@@ -113,9 +140,13 @@ g_idl_node_free (GIdlNode *node)
 {
   GList *l;
 
+  if (node == NULL)
+    return;
+
   switch (node->type)
     {
     case G_IDL_NODE_FUNCTION:
+    case G_IDL_NODE_CALLBACK:
       {
 	GIdlNodeFunction *function = (GIdlNodeFunction *)node;
 	
@@ -133,10 +164,8 @@ g_idl_node_free (GIdlNode *node)
 	GIdlNodeType *type = (GIdlNodeType *)node;
 	
 	g_free (node->name);
-	if (type->parameter_type1)
-	  g_idl_node_free ((GIdlNode *)type->parameter_type1);
-	if (type->parameter_type2)
-	  g_idl_node_free ((GIdlNode *)type->parameter_type2);
+	g_idl_node_free ((GIdlNode *)type->parameter_type1);
+	g_idl_node_free ((GIdlNode *)type->parameter_type2);
 
 	g_free (type->interface);
 	g_strfreev (type->errors);
@@ -366,6 +395,15 @@ g_idl_node_get_size (GIdlNode *node)
       break;
 
     case G_IDL_NODE_STRUCT:
+      {
+	GIdlNodeStruct *struct_ = (GIdlNodeStruct *)node;
+
+	size = 20;
+	for (l = struct_->members; l; l = l->next)
+	  size += g_idl_node_get_size ((GIdlNode *)l->data);
+      }
+      break;
+
     case G_IDL_NODE_BOXED:
       {
 	GIdlNodeBoxed *boxed = (GIdlNodeBoxed *)node;
@@ -503,7 +541,8 @@ g_idl_node_get_full_size (GIdlNode *node)
 
 	n = g_list_length (iface->interfaces);
 	size = 32;
-	size += ALIGN_VALUE (strlen (iface->parent) + 1, 4);
+	if (iface->parent)
+	  size += ALIGN_VALUE (strlen (iface->parent) + 1, 4);
 	size += ALIGN_VALUE (strlen (node->name) + 1, 4);
 	size += ALIGN_VALUE (strlen (iface->gtype_name) + 1, 4);
 	size += ALIGN_VALUE (strlen (iface->gtype_init) + 1, 4);
@@ -819,10 +858,18 @@ serialize_type (GIdlModule   *module,
   else if (node->tag == 21)
     {
       GIdlNode *iface;
+      gchar *name;
 
       iface = find_entry_node (module, modules, node->interface, NULL);
-      g_string_append_printf (str, "%s%s", 
-			      iface->name, node->is_pointer ? "*" : "");
+      if (iface)
+	name = iface->name;
+      else
+	{
+	  g_warning ("Interface for type reference %s not found", node->interface);
+	  name = node->interface;
+	}
+
+      g_string_append_printf (str, "%s%s", name, node->is_pointer ? "*" : "");
     }
   else if (node->tag == 22)
     {
@@ -898,6 +945,7 @@ g_idl_node_build_metadata (GIdlNode   *node,
 	    serialize_type (module, modules, type, str);
 	    s = g_string_free (str, FALSE);
 	    
+	    types_count += 1;
 	    value = g_hash_table_lookup (types, s);
 	    if (value)
 	      {
@@ -906,6 +954,7 @@ g_idl_node_build_metadata (GIdlNode   *node,
 	      }
 	    else
 	      {
+		unique_types_count += 1;
 		g_hash_table_insert (types, s, GINT_TO_POINTER(*offset2));
 				     
 		blob->offset = *offset2;
@@ -1521,7 +1570,6 @@ g_idl_node_build_metadata (GIdlNode   *node,
       {
 	InterfaceBlob *blob = (InterfaceBlob *)&data[*offset];
 	GIdlNodeInterface *iface = (GIdlNodeInterface *)node;
-	gint parent;
 
 	blob->blob_type = BLOB_TYPE_INTERFACE;
 	blob->deprecated = iface->deprecated;
@@ -1751,11 +1799,17 @@ write_string (const gchar *str,
   gpointer value;
   guint32 start;
 
+  string_count += 1;
+  string_size += strlen (str);
+
   value = g_hash_table_lookup (strings, str);
   
   if (value)
-      return GPOINTER_TO_INT (value);
-  
+    return GPOINTER_TO_INT (value);
+
+  unique_string_count += 1;
+  unique_string_size += strlen (str);
+
   g_hash_table_insert (strings, (gpointer)str, GINT_TO_POINTER (*offset));
 
   start = *offset;
@@ -1765,3 +1819,4 @@ write_string (const gchar *str,
   
   return start;
 }
+

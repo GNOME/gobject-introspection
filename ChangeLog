@@ -1,3 +1,20 @@
+2005-05-11  Matthias Clasen  <mclasen@redhat.com>
+
+	* src/compiler.c (main): Add a --verbose cmdline option
+	and only log messages if it is specified.
+
+	* src/gidlnode.h: 
+	* src/gidlnode.c (init_stats, dump_stats): Collect some 
+	statistics on string and type sharing.
+
+	* src/gidlmodule.c (g_idl_module_build_metadata): Use
+	g_message() instead of fprintf().
+
+	* src/gidlnode.c (g_idl_node_free): Make this more robust.
+	(g_idl_node_get_size): Implement for structs.
+	(g_idl_node_get_full_size): Handle parent being NULL.
+	(serialize_type): Handle lookup failures more gracefully.
+
 2005-05-10  Matthias Clasen  <mclasen@redhat.com>
 
 	* src/gidlnode.c (g_idl_node_get_full_size): Correct the 

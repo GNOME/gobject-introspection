@@ -79,11 +79,12 @@ g_idl_module_build_metadata (GIdlModule  *module,
   n_local_entries = g_list_length (module->entries);
 
  restart:
+  init_stats ();
   strings = g_hash_table_new (g_str_hash, g_str_equal);
   types = g_hash_table_new (g_str_hash, g_str_equal);
   n_entries = g_list_length (module->entries);
 
-  g_debug ("%d entries (%d local)\n", n_entries, n_local_entries);
+  g_message ("%d entries (%d local)\n", n_entries, n_local_entries);
   
   dir_size = n_entries * 12;  
   size = header_size + dir_size;
@@ -97,8 +98,8 @@ g_idl_module_build_metadata (GIdlModule  *module,
       size += g_idl_node_get_full_size (node);
     }
 
-  g_debug ("allocating %d bytes (%d header, %d directory, %d entries)\n", 
-	   size, header_size, dir_size, size - header_size - dir_size);
+  g_message ("allocating %d bytes (%d header, %d directory, %d entries)\n", 
+	  size, header_size, dir_size, size - header_size - dir_size);
 
   data = g_malloc (size);
 
@@ -145,7 +146,8 @@ g_idl_module_build_metadata (GIdlModule  *module,
       /* we picked up implicit xref nodes, start over */
       if (i == n_entries)
 	{
-	  g_fprintf (stderr, "Found implicit cross references, starting over\n");
+	  g_message ("Found implicit cross references, starting over");
+
 	  g_hash_table_destroy (strings);
 	  g_hash_table_destroy (types);
 	  strings = NULL;
@@ -181,11 +183,14 @@ g_idl_module_build_metadata (GIdlModule  *module,
       entry++;
     }
 
+  dump_stats ();
   g_hash_table_destroy (strings);
   g_hash_table_destroy (types);
 
   header->annotations = offset2;
   
+  g_message ("reallocating to %d bytes", offset2);
+
   *metadata = g_realloc (data, offset2);
   *length = header->size = offset2;
 }

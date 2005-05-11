@@ -301,6 +301,9 @@ guint32   write_string               (const gchar *str,
 				      guchar      *data,
 				      guint32     *offset);
 
+void      init_stats                 (void);
+void      dump_stats                 (void);
+
 G_END_DECLS
 
 #endif  /* __G_IDL_NODE_H__ */
