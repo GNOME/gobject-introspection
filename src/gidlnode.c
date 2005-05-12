@@ -744,53 +744,57 @@ find_entry_node (GIdlModule  *module,
 		 GList       *modules,
 		 const gchar *name,
 		 guint16     *idx)
-{
-  GList *l, *m;
-  gint i;
 
+{
+  GList *l;
+  gint i;
+  gchar **names;
+  gint n_names;
+  
+  names = g_strsplit (name, ".", 0);
+  n_names = g_strv_length (names);
+  if (n_names > 2)
+    g_error ("Too many name parts");
+  
   for (l = module->entries, i = 0; l; l = l->next, i++)
     {
       GIdlNode *node = (GIdlNode *)l->data;
       
-      if (strcmp (node->name, name) == 0)
+      if (n_names > 1)
+	{
+	  if (node->type != G_IDL_NODE_XREF)
+	    continue;
+	  
+	  if (((GIdlNodeXRef *)node)->namespace == NULL ||
+	      strcmp (((GIdlNodeXRef *)node)->namespace, names[0]) != 0)
+	    continue;
+	}
+	 
+      if (strcmp (node->name, names[n_names - 1]) == 0)
 	{
 	  if (idx)
 	    *idx = i;
+	  
 	  return node;
 	}
     }
 
-  for (m = modules; m; m = m->next)
+  if (n_names > 1)
     {
-      GIdlModule *foreign = (GIdlModule *)m->data;
+      GIdlNode *xref = g_idl_node_new (G_IDL_NODE_XREF);
 
-      if (foreign == module)
-	continue;
-      
-      for (l = foreign->entries; l; l = l->next)
-	{
-	  GIdlNode *node = (GIdlNode *)l->data;
-	  
-	  if (node->type == G_IDL_NODE_XREF)
-	    continue;
+      ((GIdlNodeXRef *)xref)->namespace = g_strdup (names[0]);
+      xref->name = g_strdup (names[1]);
+  
+      module->entries = g_list_append (module->entries, xref);
+  
+      if (idx)
+	*idx = g_list_length (module->entries) - 1;
 
-	  if (strcmp (node->name, name) == 0)
-	    {
-	      GIdlNode *xref = g_idl_node_new (G_IDL_NODE_XREF);
-	      xref->name = g_strdup (name);
-	      ((GIdlNodeXRef *)xref)->namespace = g_strdup (foreign->name);
-
-	      module->entries = g_list_append (module->entries, xref);
-	      
-	      if (idx)
-		*idx = g_list_length (module->entries) - 1;
-
-	      return xref;
-	    }
-	}
+      return xref;
     }
 
-  g_warning ("No such entry: '%s'\n", name);
+  g_warning ("Entry %s not found", name);
 
   return NULL;
 }
@@ -800,7 +804,7 @@ find_entry (GIdlModule  *module,
 	    GList       *modules,
 	    const gchar *name)
 {
-  guint16 idx;
+  guint16 idx = 0;
 
   find_entry_node (module, modules, name, &idx);
 

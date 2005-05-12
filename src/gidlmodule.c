@@ -143,6 +143,11 @@ g_idl_module_build_metadata (GIdlModule  *module,
     {
       GIdlNode *node = e->data;
 
+      if (strchr (node->name, '.'))
+        {
+	  g_error ("Names may not contain '.'");
+	}
+
       /* we picked up implicit xref nodes, start over */
       if (i == n_entries)
 	{

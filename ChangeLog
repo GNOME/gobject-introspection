@@ -1,3 +1,23 @@
+2005-05-12  Matthias Clasen  <mclasen@redhat.com>
+
+	* src/gidlnode.c (find_entry_node): Parse qualified
+	names and generate xref nodes for them if needed. Don't
+	require all modules to be loaded any more.
+
+	* src/gidlmodule.c (g_idl_module_build_metadata): Choke
+	on '.' in names.
+
+	* src/ginfo.c (g_object_info_get_parent): Return NULL
+	if blob->parent is 0. Still need to make sure index
+	0 is not used.
+
+	* src/generate.c: Generate qualified names when
+	referring to non-local types. Emit transfer attribute
+	for return types.
+
+	* src/compiler.c (format_output): Put the function 
+	attributes where gcc accepts them.
+
 2005-05-11  Matthias Clasen  <mclasen@redhat.com>
 
 	* src/compiler.c (main): Add a --verbose cmdline option

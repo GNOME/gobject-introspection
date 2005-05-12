@@ -1025,7 +1025,10 @@ g_object_info_get_parent (GIObjectInfo *info)
   GIBaseInfo *base = (GIBaseInfo *)info;
   ObjectBlob *blob = (ObjectBlob *)&base->metadata[base->offset];
 
-  return (GIObjectInfo *) g_info_from_entry (base->metadata, blob->parent);
+  if (blob->parent)
+    return (GIObjectInfo *) g_info_from_entry (base->metadata, blob->parent);
+  else
+    return NULL;
 }
 
 gint
