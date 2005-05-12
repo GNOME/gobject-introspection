@@ -1,5 +1,8 @@
 2005-05-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* tests/*: Make tests work with the changes in name
+	handling.
+	
 	* src/gidlnode.c (find_entry_node): Parse qualified
 	names and generate xref nodes for them if needed. Don't
 	require all modules to be loaded any more.

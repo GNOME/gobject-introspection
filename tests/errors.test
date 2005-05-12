@@ -1,21 +1,21 @@
 <?xml version="1.0"?>
 <api version="1.0">
   <namespace name="Foo">
-    <enum name="Foo.ErrorCodes1" type-name="ErrorCodes1" get-type="foo_error_codes1_get_type">
-      <member name="Foo.ErrorCodes1.e1" value="0" />
-      <member name="Foo.ErrorCodes1.e2" value="1" deprecated="1" />
-      <member name="Foo.ErrorCodes1.e3" value="2" />
+    <enum name="ErrorCodes1" type-name="ErrorCodes1" get-type="foo_error_codes1_get_type">
+      <member name="e1" value="0" />
+      <member name="e2" value="1" deprecated="1" />
+      <member name="e3" value="2" />
     </enum>
-    <enum name="Foo.ErrorCodes2" type-name="ErrorCodes2" get-type="foo_error_codes2_get_type">
-      <member name="Foo.ErrorCodes2.e1" value="0" />
+    <enum name="ErrorCodes2" type-name="ErrorCodes2" get-type="foo_error_codes2_get_type">
+      <member name="e1" value="0" />
     </enum>
-    <errordomain name="Foo.Errors1" get-quark="foo_errors1_get_quark" codes="Foo.ErrorCodes1" />
-    <errordomain name="Foo.Errors2" get-quark="foo_errors2_get_quark" codes="Foo.ErrorCodes2" />
-    <function name="Foo.test1" symbol="test1">
+    <errordomain name="Errors1" get-quark="foo_errors1_get_quark" codes="ErrorCodes1" />
+    <errordomain name="Errors2" get-quark="foo_errors2_get_quark" codes="ErrorCodes2" />
+    <function name="test1" symbol="test1">
       <return-type type="gboolean"/>
       <parameters>
         <parameter name="p1" type="gint" direction="in" null-ok="1"/>
-        <parameter name="p2" type="GError<Foo.Errors1,Foo.Errors2>" direction="out"/>
+        <parameter name="p2" type="GError<Errors1,Errors2>" direction="out"/>
       </parameters>
     </function>
   </namespace>

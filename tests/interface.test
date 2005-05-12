@@ -1,38 +1,38 @@
 <?xml version="1.0"?>
 <api version="1.0">
   <namespace name="Foo">
-    <interface name="Foo.Iface1" type-name="Iface1" get-type="iface1_get_type">
+    <interface name="Iface1" type-name="Iface1" get-type="iface1_get_type">
       <requires>
-      <interface name="Foo.Iface2" />
+      <interface name="Iface2" />
       </requires>
-      <method name="Foo.Iface1.method1" symbol="method1">
-        <return-type type="Foo.Iface2*"/>
+      <method name="method1" symbol="method1">
+        <return-type type="Iface2*" transfer="full"/>
         <parameters>
-          <parameter name="param1" type="Foo.Iface2*" direction="in"/>
+          <parameter name="param1" type="Iface2*" direction="in"/>
         </parameters>
       </method>
       <property name="prop1" readable="0" writable="0" type="gint"/>
       <signal name="signal1" when="LAST">
         <return-type type="gboolean"/>
         <parameters>
-          <parameter name="obj" type="Foo.Iface1*" direction="in"/>
+          <parameter name="obj" type="Iface1*" direction="in"/>
         </parameters>
       </signal>
       <signal name="signal2" when="FIRST" no-recurse="1" detailed="1" action="1" no-hooks="1">
         <return-type type="void"/>
         <parameters>
-          <parameter name="obj" type="Foo.Iface1*" direction="in"/>
+          <parameter name="obj" type="Iface1*" direction="in"/>
         </parameters>
       </signal>
-      <vfunc name="Foo.Iface1.vfunc1">
-        <return-type type="Foo.Iface2*"/>
+      <vfunc name="vfunc1">
+        <return-type type="Iface2*" transfer="full"/>
         <parameters>
-          <parameter name="param1" type="Foo.Iface2*" direction="in"/>
+          <parameter name="param1" type="Iface2*" direction="in"/>
         </parameters>
       </vfunc>
       <constant name="constant1" type="gint" value="42" />
     </interface>
-    <interface name="Foo.Iface2" type-name="Iface2" get-type="iface2_get_type">
+    <interface name="Iface2" type-name="Iface2" get-type="iface2_get_type">
     </interface>
   </namespace>
 </api>

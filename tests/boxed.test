@@ -1,33 +1,33 @@
 <?xml version="1.0"?>
 <api version="1.0">
   <namespace name="Foo">
-    <boxed name="Foo.boxed1" type-name="BoxedType1" get-type="boxed1_get_type" deprecated="1">
+    <boxed name="boxed1" type-name="BoxedType1" get-type="boxed1_get_type" deprecated="1">
       <field name="field1" readable="1" writable="1" offset="0" type="guint32" />
-      <method name="Foo.boxed1.frob_boxed1" symbol="frob_boxed1">
+      <method name="frob_boxed1" symbol="frob_boxed1">
         <return-type type="void"/>
         <parameters>
-          <parameter name="box" type="Foo.boxed1*" direction="in"/>
-          <parameter name="w" type="GList<Foo.boxed2*>" direction="in"/>
+          <parameter name="box" type="boxed1*" direction="in"/>
+          <parameter name="w" type="GList<boxed2*>" direction="in"/>
           <parameter name="t" type="GHashTable<gchar*,gint64>" direction="in"/>
           <parameter name="e" type="GError<>" direction="out"/>
         </parameters>
       </method>
-      <method name="Foo.boxed1.lart" symbol="lart">
+      <method name="lart" symbol="lart">
         <return-type type="gboolean"/>
         <parameters>
-          <parameter name="box" type="Foo.boxed2*" direction="in"/>
+          <parameter name="box" type="boxed2*" direction="in"/>
           <parameter name="val" type="gint*" direction="inout"/>
         </parameters>
       </method>
     </boxed>
-    <function name="Foo.freefunc" symbol="freefunc" deprecated="1">
+    <function name="freefunc" symbol="freefunc" deprecated="1">
       <return-type type="gint"/>
       <parameters>
         <parameter name="v1" type="gint" direction="in"/>
         <parameter name="val2" type="gint" direction="in"/>
       </parameters>
     </function>
-    <boxed name="Foo.boxed2" type-name="BoxedType2" get-type="boxed2_get_type" deprecated="1">
+    <boxed name="boxed2" type-name="BoxedType2" get-type="boxed2_get_type" deprecated="1">
     </boxed>
   </namespace>
 </api>
