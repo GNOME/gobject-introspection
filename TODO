@@ -1,7 +1,7 @@
 XML format
 ----------
 - Document the format
-- Write a tool to create XML from annotated headers
+- Write a scanner to create XML from annotated headers
 - Add attributes to connect signals to their default handlers
   and wrappers to their vfuncs
 - Add attributes for struct offsets
@@ -14,7 +14,6 @@ Binary format
 
 Compiler
 --------
-- Parse qualified names like NAMESPACE.INTERFACE.FUNCTION
 - Cleanup, maybe turn the nodes in to objects to avoid the horrific 
   type switches
 - Add thorough error checking
@@ -26,6 +25,7 @@ Repository
 - Use hashes 
 - Implement g_function_info_invoke()
 - Maybe allow populating repositories at runtime
+- need a method to access may-be-null for the return type of a function
 
 General
 -------
