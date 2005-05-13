@@ -1,5 +1,9 @@
 2005-05-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* src/girepository.h: 
+	* src/ginfo.c: Rename Transfer and Direction to
+	GITransfer and GIDirection. (Torsten Schoenfeld)
+
 	* tests/*: Make tests work with the changes in name
 	handling.
 	

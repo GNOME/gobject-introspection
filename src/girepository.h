@@ -182,10 +182,10 @@ typedef enum {
   GI_TRANSFER_NOTHING,
   GI_TRANSFER_CONTAINER,
   GI_TRANSFER_EVERYTHING
-} Transfer;
+} GITransfer;
 
 GITypeInfo *           g_callable_info_get_return_type (GICallableInfo *info);
-Transfer               g_callable_info_get_caller_owns (GICallableInfo *info);
+GITransfer             g_callable_info_get_caller_owns (GICallableInfo *info);
 gint                   g_callable_info_get_n_args      (GICallableInfo *info);
 GIArgInfo *            g_callable_info_get_arg         (GICallableInfo *info,
 							gint           n);
@@ -196,14 +196,14 @@ typedef enum {
   GI_DIRECTION_IN,
   GI_DIRECTION_OUT,
   GI_DIRECTION_INOUT
-} Direction;
+} GIDirection;
 
-Direction              g_arg_info_get_direction          (GIArgInfo *info);
+GIDirection            g_arg_info_get_direction          (GIArgInfo *info);
 gboolean               g_arg_info_is_dipper              (GIArgInfo *info);
 gboolean               g_arg_info_is_return_value        (GIArgInfo *info);
 gboolean               g_arg_info_is_optional            (GIArgInfo *info);
 gboolean               g_arg_info_may_be_null            (GIArgInfo *info);
-Transfer               g_arg_info_get_ownership_transfer (GIArgInfo *info);
+GITransfer             g_arg_info_get_ownership_transfer (GIArgInfo *info);
 GITypeInfo *           g_arg_info_get_type               (GIArgInfo *info);
 
 

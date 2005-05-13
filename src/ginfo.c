@@ -541,7 +541,7 @@ g_callable_info_get_return_type (GICallableInfo *info)
   return g_type_info_new (base, base->metadata, offset);
 }
 
-Transfer 
+GITransfer 
 g_callable_info_get_caller_owns (GICallableInfo *info)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
@@ -583,7 +583,7 @@ g_callable_info_get_arg (GICallableInfo *info,
 }
 
 /* GIArgInfo function */
-Direction
+GIDirection
 g_arg_info_get_direction (GIArgInfo *info)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
@@ -633,7 +633,7 @@ g_arg_info_may_be_null (GIArgInfo *info)
   return blob->null_ok;
 }
 
-Transfer
+GITransfer
 g_arg_info_get_ownership_transfer (GIArgInfo *info)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
