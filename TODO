@@ -11,6 +11,7 @@ Binary format
 - Add hashes to lookup interfaces and functions in interfaces
 - Do we need (at least limited) handling of unions ? E.g. GdkEvent
 - Write a validator
+- Handle parent being 0
 
 Compiler
 --------
@@ -23,9 +24,7 @@ Repository
 - Reconsider the current clunky API, maybe an iterator approach is better
 - Add thorough error checking
 - Use hashes 
-- Implement g_function_info_invoke()
 - Maybe allow populating repositories at runtime
-- need a method to access may-be-null for the return type of a function
 
 General
 -------
