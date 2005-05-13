@@ -750,7 +750,8 @@ find_entry_node (GIdlModule  *module,
   gint i;
   gchar **names;
   gint n_names;
-  
+  GIdlNode *result = NULL;
+
   names = g_strsplit (name, ".", 0);
   n_names = g_strv_length (names);
   if (n_names > 2)
@@ -775,28 +776,35 @@ find_entry_node (GIdlModule  *module,
 	  if (idx)
 	    *idx = i;
 	  
-	  return node;
+	  result = node;
+	  goto out;
 	}
     }
 
   if (n_names > 1)
     {
-      GIdlNode *xref = g_idl_node_new (G_IDL_NODE_XREF);
+      GIdlNode *node = g_idl_node_new (G_IDL_NODE_XREF);
 
-      ((GIdlNodeXRef *)xref)->namespace = g_strdup (names[0]);
-      xref->name = g_strdup (names[1]);
+      ((GIdlNodeXRef *)node)->namespace = g_strdup (names[0]);
+      node->name = g_strdup (names[1]);
   
-      module->entries = g_list_append (module->entries, xref);
+      module->entries = g_list_append (module->entries, node);
   
       if (idx)
 	*idx = g_list_length (module->entries) - 1;
 
-      return xref;
+      result = node;
+
+      goto out;
     }
 
   g_warning ("Entry %s not found", name);
 
-  return NULL;
+ out:
+
+  g_strfreev (names);
+
+  return result;
 }
 
 static guint16
