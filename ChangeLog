@@ -1,3 +1,9 @@
+2005-05-13  Matthias Clasen  <mclasen@redhat.com>
+
+	* src/gidlnode.c (g_idl_node_build_metadata): Pass the
+	strings and types hash tables in the right order when 
+	recursing.
+
 2005-05-12  Johan Dahlin  <johan@gnome.org>
 
 	* src/generate.c: Generate consistent end tags.

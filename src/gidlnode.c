@@ -989,15 +989,12 @@ g_idl_node_build_metadata (GIdlNode   *node,
 		  case 21:
 		    {
 		      InterfaceTypeBlob *iface = (InterfaceTypeBlob *)&data[*offset2];
-		      gint i, interface;
-		      
 		      *offset2 += 4;
 		      
 		      iface->pointer = 1;
 		      iface->reserved = 0;
 		      iface->tag = type->tag;
 		      iface->reserved2 = 0;
-		      iface->interface = 0;
 		      iface->interface = find_entry (module, modules, type->interface);
 		    }
 		    break;
@@ -1323,7 +1320,7 @@ g_idl_node_build_metadata (GIdlNode   *node,
 	blob->reserved = 0;
 
         g_idl_node_build_metadata ((GIdlNode *)param->type, module, modules, 
-				   types, strings, data, offset, offset2);
+				   strings, types, data, offset, offset2);
       }
       break;
 
