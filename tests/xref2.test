@@ -4,9 +4,9 @@
     <boxed name="Boxed" type-name="BarBoxed" get-type="bar_boxed_get_type">
     </boxed>
     <function name="test" symbol="bar_test">
-      <return-type type="void"/>
+      <return-type type="void" />
       <parameters>
-        <parameter name="p1" type="Foo.Boxed*" direction="in"/>
+        <parameter name="p1" type="Foo.Boxed*" direction="in" />
       </parameters>
     </function>
   </namespace>

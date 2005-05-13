@@ -2,23 +2,23 @@
 <api version="1.0">
   <namespace name="Foo">
     <function name="test1" symbol="test1">
-      <return-type type="gboolean"/>
+      <return-type type="gboolean" />
       <parameters>
-        <parameter name="p1" type="gchar*[length=1,zero-terminated=1]" direction="in"/>
-        <parameter name="p2" type="gint" direction="in"/>
+        <parameter name="p1" type="gchar*[length=1,zero-terminated=1]" direction="in" />
+        <parameter name="p2" type="gint" direction="in" />
       </parameters>
     </function>
     <function name="test2" symbol="test2">
-      <return-type type="gboolean"/>
+      <return-type type="gboolean" />
       <parameters>
-        <parameter name="p2" type="gint" direction="out"/>
-        <parameter name="p1" type="gchar*[length=0]" direction="out"/>
+        <parameter name="p2" type="gint" direction="out" />
+        <parameter name="p1" type="gchar*[length=0]" direction="out" />
       </parameters>
     </function>
     <function name="test3" symbol="test3">
-      <return-type type="gboolean"/>
+      <return-type type="gboolean" />
       <parameters>
-        <parameter name="p1" type="gchar*[zero-terminated=1]" direction="in"/>
+        <parameter name="p1" type="gchar*[zero-terminated=1]" direction="in" />
       </parameters>
     </function>
   </namespace>

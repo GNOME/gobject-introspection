@@ -4,17 +4,17 @@
     <boxed name="Boxed1" type-name="Boxed1" get-type="boxed1_get_type">
     </boxed>
     <function name="test1" symbol="test1" deprecated="1">
-      <return-type type="gboolean"/>
+      <return-type type="gboolean" />
       <parameters>
-        <parameter name="p1" type="Boxed1*" direction="in" null-ok="1"/>
-        <parameter name="p2" type="gboolean" direction="out"/>
+        <parameter name="p1" type="Boxed1*" direction="in" null-ok="1" />
+        <parameter name="p2" type="gboolean" direction="out" />
       </parameters>
     </function>
     <callback name="callback1" deprecated="1">
-      <return-type type="gboolean"/>
+      <return-type type="gboolean" />
       <parameters>
-        <parameter name="p1" type="Boxed1*" direction="in" null-ok="1"/>
-        <parameter name="p2" type="gboolean" direction="out"/>
+        <parameter name="p1" type="Boxed1*" direction="in" null-ok="1" />
+        <parameter name="p2" type="gboolean" direction="out" />
       </parameters>
     </callback>
   </namespace>

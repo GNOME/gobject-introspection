@@ -12,10 +12,10 @@
     <errordomain name="Errors1" get-quark="foo_errors1_get_quark" codes="ErrorCodes1" />
     <errordomain name="Errors2" get-quark="foo_errors2_get_quark" codes="ErrorCodes2" />
     <function name="test1" symbol="test1">
-      <return-type type="gboolean"/>
+      <return-type type="gboolean" />
       <parameters>
-        <parameter name="p1" type="gint" direction="in" null-ok="1"/>
-        <parameter name="p2" type="GError<Errors1,Errors2>" direction="out"/>
+        <parameter name="p1" type="gint" direction="in" null-ok="1" />
+        <parameter name="p2" type="GError<Errors1,Errors2>" direction="out" />
       </parameters>
     </function>
   </namespace>
