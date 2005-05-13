@@ -541,6 +541,15 @@ g_callable_info_get_return_type (GICallableInfo *info)
   return g_type_info_new (base, base->metadata, offset);
 }
 
+gboolean
+g_callable_info_may_return_null (GICallableInfo *info)
+{
+  GIBaseInfo *base = (GIBaseInfo *)info;
+  SignatureBlob *blob = (SignatureBlob *)&base->metadata[signature_offset (info)];
+
+  return blob->may_return_null;
+}
+
 GITransfer 
 g_callable_info_get_caller_owns (GICallableInfo *info)
 {

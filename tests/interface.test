@@ -8,26 +8,26 @@
       <method name="method1" symbol="method1">
         <return-type type="Iface2*" transfer="full" />
         <parameters>
-          <parameter name="param1" type="Iface2*" direction="in" />
+          <parameter name="param1" type="Iface2*" transfer="full" direction="in" />
         </parameters>
       </method>
       <property name="prop1" readable="0" writable="0" type="gint" />
       <signal name="signal1" when="LAST">
         <return-type type="gboolean" />
         <parameters>
-          <parameter name="obj" type="Iface1*" direction="in" />
+          <parameter name="obj" type="Iface1*" transfer="full" direction="in" />
         </parameters>
       </signal>
       <signal name="signal2" when="FIRST" no-recurse="1" detailed="1" action="1" no-hooks="1">
         <return-type type="void" />
         <parameters>
-          <parameter name="obj" type="Iface1*" direction="in" />
+          <parameter name="obj" type="Iface1*" transfer="full" direction="in" />
         </parameters>
       </signal>
       <vfunc name="vfunc1">
         <return-type type="Iface2*" transfer="full" />
         <parameters>
-          <parameter name="param1" type="Iface2*" direction="in" />
+          <parameter name="param1" type="Iface2*" transfer="full" direction="in" />
         </parameters>
       </vfunc>
       <constant name="constant1" type="gint" value="42" />

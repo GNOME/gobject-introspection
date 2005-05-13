@@ -6,7 +6,7 @@
     <function name="test" symbol="bar_test">
       <return-type type="void" />
       <parameters>
-        <parameter name="p1" type="Foo.Boxed*" direction="in" />
+        <parameter name="p1" type="Foo.Boxed*" transfer="full" direction="in" />
       </parameters>
     </function>
   </namespace>

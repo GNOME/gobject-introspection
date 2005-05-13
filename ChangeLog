@@ -1,5 +1,15 @@
 2005-05-13  Matthias Clasen  <mclasen@redhat.com>
 
+	* tests/*: Update testcases. 
+
+	* src/generate.c (write_callable_info): Don't forget to
+	write transfer and null-ok attributes for return types
+	and parameters.
+
+	* src/girepository.h: 
+	* src/ginfo.c (g_callable_info_may_return_null): 
+	New function to find out if a function may return NULL.
+
 	* src/compiler.c (format_output): Make the generated
 	C code compile.
 

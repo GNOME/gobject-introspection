@@ -196,13 +196,14 @@ typedef enum {
 
 GITypeInfo *           g_callable_info_get_return_type (GICallableInfo *info);
 GITransfer             g_callable_info_get_caller_owns (GICallableInfo *info);
+gboolean               g_callable_info_may_return_null (GICallableInfo *info);
 gint                   g_callable_info_get_n_args      (GICallableInfo *info);
 GIArgInfo *            g_callable_info_get_arg         (GICallableInfo *info,
 							gint           n);
 
 /* GIArgInfo */
 
-typedef enum {
+typedef enum  {
   GI_DIRECTION_IN,
   GI_DIRECTION_OUT,
   GI_DIRECTION_INOUT

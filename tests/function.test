@@ -6,14 +6,14 @@
     <function name="test1" symbol="test1" deprecated="1">
       <return-type type="gboolean" />
       <parameters>
-        <parameter name="p1" type="Boxed1*" direction="in" null-ok="1" />
+        <parameter name="p1" type="Boxed1*" transfer="full" direction="in" null-ok="1" />
         <parameter name="p2" type="gboolean" direction="out" />
       </parameters>
     </function>
     <callback name="callback1" deprecated="1">
       <return-type type="gboolean" />
       <parameters>
-        <parameter name="p1" type="Boxed1*" direction="in" null-ok="1" />
+        <parameter name="p1" type="Boxed1*" transfer="full" direction="in" null-ok="1" />
         <parameter name="p2" type="gboolean" direction="out" />
       </parameters>
     </callback>
