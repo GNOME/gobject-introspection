@@ -481,6 +481,7 @@ start_function (GMarkupParseContext *context,
 	    switch (ctx->current_node->type)
 	      {
 	      case G_IDL_NODE_INTERFACE:
+	      case G_IDL_NODE_OBJECT:
 		{
 		  GIdlNodeInterface *iface;
 		  

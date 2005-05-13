@@ -1,5 +1,8 @@
 2005-05-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* src/gidlparser.c (start_function): Actually add
+	methods to objects.  (Steven Walter)
+
 	* src/girepository.h: 
 	* src/ginfo.c: Rename Transfer and Direction to
 	GITransfer and GIDirection. (Torsten Schoenfeld)
