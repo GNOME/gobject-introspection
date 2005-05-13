@@ -3,7 +3,7 @@ This is a very first prototype of an introspection framework for GObject.
 The metadata format is described in metadata-format.txt, the XML IDL format 
 follows the DTD in gidl.dtd. Look at the files in tests/ for IDL examples. 
 
-The code in src/ currently produces three things:
+The code in src/ currently produces four things:
 - g-idl-compile, a metadata compiler. It converts one or more IDL files 
   into one or more metadata blobs. It can either emit the raw metadata 
   blob (--raw) or C code (--code). 
@@ -11,6 +11,9 @@ The code in src/ currently produces three things:
 - g-idl-generate, an IDL generator, using the repository API. It generates
   IDL files from binary metadata which can be in a shared object, or a raw
   metadata blob (--raw). 
+- a function to invoke functions, given the function info object. The 
+  implementation is based on libffi (a recent snapshot of libffi can
+  be found at http://spindazzle.org/libffi-green.tar.gz).
 
 There are a number of IDL test files in test/, and a script to do
 roundtrip tests (IDL -> binary -> IDL).

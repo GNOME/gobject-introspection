@@ -1,12 +1,20 @@
 AR=ar
 CC=gcc -g
-CFLAGS=`pkg-config --cflags glib-2.0 gobject-2.0`
-LIBS=`pkg-config --libs glib-2.0 gobject-2.0`
+
+GLIB_CFLAGS=`pkg-config --cflags glib-2.0 gobject-2.0`
+GLIB_LIBS=`pkg-config --libs glib-2.0 gobject-2.0`
+
+LIBFFI_CFLAGS=-I../libffi/include -DHAVE_LIBFFI
+LIBFFI_LIBS=../libffi/.libs/libffi.a
+
+CFLAGS= $(GLIB_CFLAGS) $(LIBFFI_CFLAGS) 
+LIBS= $(GLIB_LIBS) $(LIBFFI_LIBS)
 
 LIBIREPOSITORY_OBJS = 	\
 	girepository.o 	\
 	gmetadata.o	\
-	ginfo.o
+	ginfo.o		\
+	ginvoke.o
 
 COMPILER_OBJS = 	\
 	gidlparser.o	\
@@ -17,7 +25,7 @@ COMPILER_OBJS = 	\
 
 GENERATE_OBJS = generate.o
 
-all: libirepository.so g-idl-generate g-idl-compiler
+all: libirepository.a libirepository.so g-idl-generate g-idl-compiler
 
 libirepository.so: $(LIBIREPOSITORY_OBJS)
 	$(CC) -shared -o $@ $(LIBIREPOSITORY_OBJS) $(LIBS)

@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<api version="1.0">
+  <namespace name="test">
+
+    <function name="test1" symbol="test1">
+      <return-type type="gint"/>
+      <parameters>
+        <parameter name="in" type="gint" direction="in"/>
+      </parameters>
+    </function>
+
+    <function name="test2" symbol="test2">
+      <return-type type="void"/>
+      <parameters>
+        <parameter name="in" type="gint" direction="in"/>
+        <parameter name="out" type="gint" direction="out"/>
+      </parameters>
+    </function>
+
+    <function name="test3" symbol="test3">
+      <return-type type="void"/>
+      <parameters>
+        <parameter name="inout" type="gint" direction="inout"/>
+      </parameters>
+    </function>
+
+    <function name="test4" symbol="test4">
+      <return-type type="void"/>
+      <parameters>
+        <parameter name="blurb" type="gchar*" direction="in"/>
+      </parameters>
+    </function>
+
+    <function name="test5" symbol="test5">
+      <return-type type="void"/>
+      <parameters>
+        <parameter name="blurb" type="gchar*" direction="out" transfer="full"/>
+        <parameter name="len" type="gint" direction="out"/>
+      </parameters>
+    </function>
+
+    <function name="test6" symbol="test6">
+      <return-type type="void"/>
+    </function>
+
+  </namespace>
+</api>

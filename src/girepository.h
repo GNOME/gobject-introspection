@@ -168,12 +168,22 @@ typedef union
   gpointer v_pointer;
 } GArgument;
 
+#define G_INVOKE_ERROR (g_invoke_error_quark ())
+
+typedef enum
+{
+  G_INVOKE_ERROR_FAILED,
+  G_INVOKE_ERROR_SYMBOL_NOT_FOUND,
+  G_INVOKE_ERROR_ARGUMENT_MISMATCH
+} GInvokeError;
+
 gboolean              g_function_info_invoke         (GIFunctionInfo *info, 
 						      const GArgument  *in_args,
 						      int               n_in_args,
 						      const GArgument  *out_args,
 						      int               n_out_args,
-						      GArgument        *return_value);
+						      GArgument        *return_value,
+						      GError          **error);
 
 
 /* GICallableInfo */

@@ -1,5 +1,21 @@
 2005-05-13  Matthias Clasen  <mclasen@redhat.com>
 
+	* src/compiler.c (format_output): Make the generated
+	C code compile.
+
+	* README: Point to a recent libffi snapshot.
+
+	* tests/invoke/*: Some invoke tests.
+
+	* src/Makefile: Add ginvoke.c and the necessary
+	libffi information.
+
+	* src/girepository.h (g_function_info_invoke): Add 
+	a GError argument.
+
+	* src/ginvoke.c (g_function_info_invoke): Initial 
+	implementation of invoke functionality based on libffi.
+
 	* src/gidlnode.c (g_idl_node_build_metadata): Pass the
 	strings and types hash tables in the right order when 
 	recursing.
