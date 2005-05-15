@@ -29,7 +29,7 @@ g_metadata_get_dir_entry (const guchar *metadata,
 {
   Header *header = (Header *)metadata;
 
-  return (DirEntry *)&metadata[header->directory + index * header->entry_blob_size];
+  return (DirEntry *)&metadata[header->directory + (index - 1) * header->entry_blob_size];
 }
 
 void    

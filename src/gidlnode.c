@@ -802,7 +802,7 @@ find_entry_node (GIdlModule  *module,
   if (n_names > 2)
     g_error ("Too many name parts");
   
-  for (l = module->entries, i = 0; l; l = l->next, i++)
+  for (l = module->entries, i = 1; l; l = l->next, i++)
     {
       GIdlNode *node = (GIdlNode *)l->data;
       
@@ -836,7 +836,7 @@ find_entry_node (GIdlModule  *module,
       module->entries = g_list_append (module->entries, node);
   
       if (idx)
-	*idx = g_list_length (module->entries) - 1;
+	*idx = g_list_length (module->entries);
 
       result = node;
 

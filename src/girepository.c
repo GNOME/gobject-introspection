@@ -190,12 +190,12 @@ find_interface (gpointer key,
   const gchar *type;
   DirEntry *entry;    
 
-  index = -1;
+  index = 0;
   n_entries = ((Header *)metadata)->n_local_entries;
 
   if (iface_data->name)
     {
-      for (i = 0; i < n_entries; i++)
+      for (i = 1; i <= n_entries; i++)
 	{
 	  entry = g_metadata_get_dir_entry (metadata, i);
 	  name = g_metadata_get_string (metadata, entry->name);
@@ -208,7 +208,7 @@ find_interface (gpointer key,
     }
   else if (iface_data->type)
     {
-      for (i = 0; i < n_entries; i++)
+      for (i = 1; i <= n_entries; i++)
 	{
 	  entry = g_metadata_get_dir_entry (metadata, i);
 	  if (entry->blob_type < 4)
@@ -223,15 +223,15 @@ find_interface (gpointer key,
 	    }
 	}
     }
-  else if (iface_data->index >= n_entries)
+  else if (iface_data->index > n_entries)
     iface_data->index -= n_entries;
-  else if (iface_data->index >= 0)
+  else if (iface_data->index > 0)
     {
       index = iface_data->index;
-      iface_data->index = -1;
+      iface_data->index = 0;
     }
 
-  if (index != -1)
+  if (index != 0)
     {
       entry = g_metadata_get_dir_entry (metadata, index);
       iface_data->iface = g_info_new (entry->blob_type, NULL,
@@ -248,7 +248,7 @@ g_irepository_get_info (GIRepository *repository,
 
   data.name = NULL;
   data.type = NULL;
-  data.index = index;
+  data.index = index + 1;
   data.iface = NULL;
 
   if (namespace)
