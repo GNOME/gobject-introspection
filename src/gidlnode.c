@@ -125,6 +125,10 @@ g_idl_node_new (GIdlNodeTypeId type)
       node = g_malloc0 (sizeof (GIdlNodeXRef));
       break;
 
+    case G_IDL_NODE_UNION:
+      node = g_malloc0 (sizeof (GIdlNodeUnion));
+      break;
+
     default:
       g_error ("Unhandled node type %d\n", type);
       break;
@@ -323,6 +327,22 @@ g_idl_node_free (GIdlNode *node)
       }
       break;
 
+    case G_IDL_NODE_UNION:
+      {
+	GIdlNodeUnion *union_ = (GIdlNodeUnion *)node;
+	
+	g_free (node->name);
+	g_free (union_->gtype_name);
+	g_free (union_->gtype_init);
+
+	g_idl_node_free ((GIdlNode *)union_->discriminator_type);
+	for (l = union_->members; l; l = l->next)
+	  g_idl_node_free ((GIdlNode *)l->data);
+	for (l = union_->discriminators; l; l = l->next)
+	  g_idl_node_free ((GIdlNode *)l->data);
+      }
+      break;
+
     default:
       g_error ("Unhandled node type %d\n", node->type);
       break;
@@ -440,6 +460,18 @@ g_idl_node_get_size (GIdlNode *node)
 
     case G_IDL_NODE_XREF:
       size = 0;
+      break;
+
+    case G_IDL_NODE_UNION:
+      {
+	GIdlNodeUnion *union_ = (GIdlNodeUnion *)node;
+
+	size = 28;
+	for (l = union_->members; l; l = l->next)
+	  size += g_idl_node_get_size ((GIdlNode *)l->data);
+	for (l = union_->discriminators; l; l = l->next)
+	  size += g_idl_node_get_size ((GIdlNode *)l->data);
+      }
       break;
 
     default: 
@@ -696,6 +728,19 @@ g_idl_node_get_full_size (GIdlNode *node)
 	size = 0;
 	size += ALIGN_VALUE (strlen (node->name) + 1, 4);
 	size += ALIGN_VALUE (strlen (xref->namespace) + 1, 4);
+      }
+      break;
+
+    case G_IDL_NODE_UNION:
+      {
+	GIdlNodeUnion *union_ = (GIdlNodeUnion *)node;
+
+	size = 28;
+	size += ALIGN_VALUE (strlen (node->name) + 1, 4);
+	for (l = union_->members; l; l = l->next)
+	  size += g_idl_node_get_full_size ((GIdlNode *)l->data);
+	for (l = union_->discriminators; l; l = l->next)
+	  size += g_idl_node_get_full_size ((GIdlNode *)l->data);
       }
       break;
 
@@ -1412,6 +1457,86 @@ g_idl_node_build_metadata (GIdlNode   *node,
 	    if (member->type == G_IDL_NODE_FUNCTION)
 	      {
 		blob->n_methods++;
+		g_idl_node_build_metadata (member, module, modules, strings, 
+					   types, data, offset, offset2);
+	      }
+	  }
+      }
+      break;
+
+    case G_IDL_NODE_UNION:
+      {
+	UnionBlob *blob = (UnionBlob *)&data[*offset];
+	GIdlNodeUnion *union_ = (GIdlNodeUnion *)node;
+
+	blob->blob_type = BLOB_TYPE_UNION;
+	blob->deprecated = union_->deprecated;
+ 	blob->reserved = 0;
+	blob->name = write_string (node->name, strings, data, offset2);
+	if (union_->gtype_name)
+	  {
+	    blob->unregistered = FALSE;
+	    blob->gtype_name = write_string (union_->gtype_name, strings, data, offset2);
+	    blob->gtype_init = write_string (union_->gtype_init, strings, data, offset2);
+	  }
+	else
+	  {
+	    blob->unregistered = TRUE;
+	    blob->gtype_name = 0;
+	    blob->gtype_init = 0;
+	  }
+
+	blob->n_fields = 0;
+	blob->n_functions = 0;
+
+	blob->discriminator_offset = union_->discriminator_offset;
+
+	if (union_->discriminator_type)
+	  {
+	    *offset += 24;
+	    blob->discriminated = TRUE;
+	    g_idl_node_build_metadata ((GIdlNode *)union_->discriminator_type, 
+				       module, modules, strings, types,
+				       data, offset, offset2);
+	  }
+	else 
+	  {
+	    *offset += 28;
+	    blob->discriminated = FALSE;
+	    blob->discriminator_type.offset = 0;
+	  }
+	
+	
+	for (l = union_->members; l; l = l->next)
+	  {
+	    GIdlNode *member = (GIdlNode *)l->data;
+
+	    if (member->type == G_IDL_NODE_FIELD)
+	      {
+		blob->n_fields++;
+		g_idl_node_build_metadata (member, module, modules, strings, 
+					   types, data, offset, offset2);
+	      }
+	  }
+
+	for (l = union_->members; l; l = l->next)
+	  {
+	    GIdlNode *member = (GIdlNode *)l->data;
+
+	    if (member->type == G_IDL_NODE_FUNCTION)
+	      {
+		blob->n_functions++;
+		g_idl_node_build_metadata (member, module, modules, strings, 
+					   types, data, offset, offset2);
+	      }
+	  }
+
+	if (union_->discriminator_type)
+	  {
+	    for (l = union_->discriminators; l; l = l->next)
+	      {
+		GIdlNode *member = (GIdlNode *)l->data;
+		
 		g_idl_node_build_metadata (member, module, modules, strings, 
 					   types, data, offset, offset2);
 	      }

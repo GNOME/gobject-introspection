@@ -37,6 +37,7 @@ typedef struct _GIFunctionInfo       GIFunctionInfo;
 typedef struct _GICallbackInfo       GICallbackInfo;
 typedef struct _GIRegisteredTypeInfo GIRegisteredTypeInfo;
 typedef struct _GIStructInfo         GIStructInfo;
+typedef struct _GIUnionInfo          GIUnionInfo;
 typedef struct _GIEnumInfo           GIEnumInfo;
 typedef struct _GIObjectInfo         GIObjectInfo;
 typedef struct _GIInterfaceInfo      GIInterfaceInfo;
@@ -102,6 +103,7 @@ typedef enum
   GI_INFO_TYPE_INTERFACE,
   GI_INFO_TYPE_CONSTANT,
   GI_INFO_TYPE_ERROR_DOMAIN,
+  GI_INFO_TYPE_UNION,
   GI_INFO_TYPE_VALUE,
   GI_INFO_TYPE_SIGNAL,
   GI_INFO_TYPE_VFUNC,
@@ -282,6 +284,20 @@ GIFieldInfoFlags       g_field_info_get_flags      (GIFieldInfo *info);
 gint                   g_field_info_get_size       (GIFieldInfo *info);
 gint                   g_field_info_get_offset     (GIFieldInfo *info);
 GITypeInfo *           g_field_info_get_type       (GIFieldInfo *info);
+
+
+/* GIUnionInfo */
+gint                   g_union_info_get_n_fields  (GIUnionInfo *info);
+GIFieldInfo *          g_union_info_get_field     (GIUnionInfo *info,
+					           gint         n);
+gint                   g_union_info_get_n_methods (GIUnionInfo *info);
+GIFunctionInfo *       g_union_info_get_method    (GIUnionInfo *info,
+						   gint         n);
+gboolean               g_union_info_is_discriminated (GIUnionInfo *info);
+gint                   g_union_info_get_discriminator_offset (GIUnionInfo *info);
+GITypeInfo *           g_union_info_get_discriminator_type (GIUnionInfo *info);
+GIConstantInfo *       g_union_info_get_discriminator      (GIUnionInfo *info,
+					                    gint         n);
 
 
 /* GIStructInfo */

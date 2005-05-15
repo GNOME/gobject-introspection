@@ -9,7 +9,6 @@ XML format
 Binary format
 -------------
 - Add hashes to lookup interfaces and functions in interfaces
-- Do we need (at least limited) handling of unions ? E.g. GdkEvent
 - Write a validator
 - Handle parent being 0
 
@@ -25,6 +24,8 @@ Repository
 - Add thorough error checking
 - Use hashes 
 - Maybe allow populating repositories at runtime
+- Think about a system-wide repository mapping namespace ids to 
+  libraries/metadata files
 
 General
 -------

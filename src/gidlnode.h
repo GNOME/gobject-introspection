@@ -41,6 +41,7 @@ typedef struct _GIdlNodeStruct GIdlNodeStruct;
 typedef struct _GIdlNodeConstant GIdlNodeConstant;
 typedef struct _GIdlNodeErrorDomain GIdlNodeErrorDomain;
 typedef struct _GIdlNodeXRef GIdlNodeXRef;
+typedef struct _GIdlNodeUnion GIdlNodeUnion;
 
 typedef enum 
 {
@@ -55,6 +56,7 @@ typedef enum
   G_IDL_NODE_INTERFACE,
   G_IDL_NODE_CONSTANT,
   G_IDL_NODE_ERROR_DOMAIN,
+  G_IDL_NODE_UNION,
   G_IDL_NODE_PARAM,
   G_IDL_NODE_TYPE,
   G_IDL_NODE_PROPERTY,
@@ -270,6 +272,23 @@ struct _GIdlNodeStruct
   
   GList *members;
 };
+
+struct _GIdlNodeUnion
+{
+  GIdlNode node;
+
+  gboolean deprecated;
+  
+  GList *members;
+  GList *discriminators;
+
+  gchar *gtype_name;
+  gchar *gtype_init;
+
+  gint discriminator_offset;
+  GIdlNodeType *discriminator_type;
+};
+
 
 struct _GIdlNodeErrorDomain
 {

@@ -1,3 +1,30 @@
+2005-05-15  Matthias Clasen  <mclasen@redhat.com>
+
+	* tests/roundtrips.sh (SIMPLE_TESTS): Add union.test.
+
+	* tests/union.test: Add a union test.
+
+	* src/generate.c: Handle unions.
+
+	* src/girepository.h: 
+	* src/ginfo.c: Add GIUnionInfo and functions to access it.
+
+	* src/gidlnode.c: Handle GIdlNodeUnion nodes. 
+
+	* src/gidlparser.c (start_union): Parse <union> elements.
+
+	* src/gidlnode.h: Add a GIdlNodeUnion.
+
+	* gidl.dtd: Add a <union> element.
+
+	* src/gmetadata.c (g_metadata_check_sanity): Check
+	union_blob_size.
+
+	* src/gmetadata.h: Add union_blob_size to Header,
+	add a UnionBlob.
+
+	* metadata-format.txt: Add a UnionBlob.
+
 2005-05-13  Matthias Clasen  <mclasen@redhat.com>
 
 	* tests/*: Update testcases. 

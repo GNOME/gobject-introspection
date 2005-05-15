@@ -36,7 +36,7 @@ void
 g_metadata_check_sanity (void)
 {
   /* Check that struct layout is as we expect */
-  g_assert (sizeof (Header) == 80);
+  g_assert (sizeof (Header) == 84);
   g_assert (sizeof (DirEntry) == 12);
   g_assert (sizeof (SimpleTypeBlob) == 4);
   g_assert (sizeof (ArgBlob) == 12);
@@ -60,6 +60,7 @@ g_metadata_check_sanity (void)
   g_assert (sizeof (InterfaceBlob) == 28);
   g_assert (sizeof (ConstantBlob) == 20);
   g_assert (sizeof (AnnotationBlob) == 12);
+  g_assert (sizeof (UnionBlob) == 28);
 }
 
 

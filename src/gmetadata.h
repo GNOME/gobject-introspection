@@ -38,7 +38,8 @@ enum
   BLOB_TYPE_OBJECT,
   BLOB_TYPE_INTERFACE,
   BLOB_TYPE_CONSTANT,
-  BLOB_TYPE_ERROR_DOMAIN
+  BLOB_TYPE_ERROR_DOMAIN,
+  BLOB_TYPE_UNION
 };
 
 typedef struct
@@ -74,6 +75,9 @@ typedef struct
   guint16 struct_blob_size;
   guint16 object_blob_size;
   guint16 interface_blob_size;
+  guint16 union_blob_size;
+  
+  guint16 padding;
 } Header;
 
 typedef struct
@@ -291,6 +295,31 @@ typedef struct
   FunctionBlob methods[];
 #endif
 } StructBlob;
+
+typedef struct 
+{  
+  guint16      blob_type; 
+  guint        deprecated    : 1;
+  guint        unregistered  : 1;
+  guint        discriminated : 1;
+  guint        reserved      :13;
+  guint32      name;
+
+  guint32      gtype_name;
+  guint32      gtype_init;
+
+  guint16      n_fields;
+  guint16      n_functions;
+
+  gint32       discriminator_offset; 
+  SimpleTypeBlob discriminator_type;
+
+#if 0
+  FieldBlob    fields[];   
+  FunctionBlob functions[];  
+  ConstantBlob discriminator_values[]
+#endif
+} UnionBlob;
 
 typedef struct
 {

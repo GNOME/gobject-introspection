@@ -133,6 +133,7 @@ g_idl_module_build_metadata (GIdlModule  *module,
   header->struct_blob_size = 20;
   header->object_blob_size = 32;
   header->interface_blob_size = 28;
+  header->union_blob_size = 28;
 
   /* fill in directory and content */
   entry = (DirEntry *)&data[header->directory];

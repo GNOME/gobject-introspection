@@ -1,7 +1,10 @@
 GObject binary metadata for introspection
 -----------------------------------------
 
-Version 0.4
+Version 0.5
+
+Changes since 0.4:
+- add a UnionBlob
 
 Changes since 0.3:
 - drop short_name for ValueBlob. 
@@ -63,7 +66,7 @@ directory ::= list of entries
 
 entry ::= blob type, name, namespace, offset
 
-blob ::= function|callback|struct|boxed|enum|flags|object|interface|constant|errordomain
+blob ::= function|callback|struct|boxed|enum|flags|object|interface|constant|errordomain|union
 
 annotations ::= list of annotations, sorted by offset 
 
@@ -112,6 +115,7 @@ struct Header
   guint16   struct_blob_size;       /* 20 */
   guint16   object_blob_size;       /* 32 */
   guint16   interface_blob_size;    /* 28 */
+  guint16   union_blob_size;        /* 28 */
 }
 
 magic:    The string "GOBJ\nMETADATA\r\n\032". This was inspired by XPCOM, 
@@ -989,5 +993,50 @@ name:     The name of the annotation, a string.
 value:    The value of the annotation (also a string)
 
 
+UnionBlob (28 + x bytes)
 
+struct UnionBlob 
+{  
+  guint16      blob_type;  /* 11 */
+  guint        deprecated    : 1;
+  guint        unregistered  : 1;
+  guint        discriminated : 1;
+  guint        reserved      :13;
+  guint32      name;
 
+  GTypeBlob    gtype;
+
+  guint16      n_fields;
+  guint16      n_functions;
+
+  gint32       discriminator_offset; 
+  SimpleTypeBlob discriminator_type;
+
+  FieldBlob    fields[];   
+  FunctionBlob functions[];  
+  ConstantBlob discriminator_values[]
+}
+
+unregistered: 
+          If this is set, the type is not registered with GType.
+
+discriminated: 
+          Is set if the union is discriminated
+
+gtype:    For types which are registered with GType, contains the 
+          information about the GType. Otherwise unused.
+
+n_fields: Length of the arrays
+
+discriminator_offset: 
+          Offset from the beginning of the blob where the
+	  discriminator of a discriminated union is located
+
+discriminator_type: 
+          Type of the discriminator 
+
+discriminator_values:
+          On discriminator value per field
+
+fields:   Array of FieldBlobs describing the alternative
+          branches of the union

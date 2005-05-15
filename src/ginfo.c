@@ -121,10 +121,14 @@ struct _GIArgInfo
   GIBaseInfo base;
 };
 
-
 struct _GITypeInfo
 {
   GIBaseInfo base;
+};
+
+struct _GIUnionInfo
+{
+  GIRegisteredTypeInfo registered;
 };
 
 
@@ -232,6 +236,7 @@ g_base_info_get_name (GIBaseInfo *info)
     case GI_INFO_TYPE_INTERFACE:
     case GI_INFO_TYPE_CONSTANT:
     case GI_INFO_TYPE_ERROR_DOMAIN:
+    case GI_INFO_TYPE_UNION:
       {
 	CommonBlob *blob = (CommonBlob *)&info->metadata[info->offset];
 
@@ -1637,4 +1642,101 @@ g_constant_info_get_value (GIConstantInfo *info,
     }
 
   return blob->size;
+}
+
+/* GIUnionInfo functions */
+gint
+g_union_info_get_n_fields  (GIUnionInfo *info)
+{
+  GIBaseInfo *base = (GIBaseInfo *)info;
+  UnionBlob *blob = (UnionBlob *)&base->metadata[base->offset];
+  
+  return blob->n_fields;
+}
+
+GIFieldInfo *
+g_union_info_get_field (GIUnionInfo *info,
+			gint         n)
+{
+  GIBaseInfo *base = (GIBaseInfo *)info;
+  Header *header = (Header *)base->metadata;  
+ 
+  return (GIFieldInfo *) g_info_new (GI_INFO_TYPE_FIELD, base, base->metadata, 
+				     base->offset + header->union_blob_size + 
+				     n * header->field_blob_size);
+}
+
+gint
+g_union_info_get_n_methods (GIUnionInfo *info)
+{
+  GIBaseInfo *base = (GIBaseInfo *)info;
+  UnionBlob *blob = (UnionBlob *)&base->metadata[base->offset];
+  
+  return blob->n_functions;
+}
+
+GIFunctionInfo *
+g_union_info_get_method (GIUnionInfo *info,
+			 gint         n)
+{
+  GIBaseInfo *base = (GIBaseInfo *)info;
+  UnionBlob *blob = (UnionBlob *)&base->metadata[base->offset];
+  Header *header = (Header *)base->metadata;  
+  gint offset;
+
+  offset = base->offset + header->union_blob_size 
+    + blob->n_fields * header->field_blob_size 
+    + n * header->function_blob_size;
+  return (GIFunctionInfo *) g_info_new (GI_INFO_TYPE_FUNCTION, base, 
+					base->metadata, offset);
+}
+
+gboolean
+g_union_info_is_discriminated (GIUnionInfo *info)
+{
+  GIBaseInfo *base = (GIBaseInfo *)info;
+  UnionBlob *blob = (UnionBlob *)&base->metadata[base->offset];
+  
+  return blob->discriminated;
+}
+
+gint
+g_union_info_get_discriminator_offset (GIUnionInfo *info)
+{
+  GIBaseInfo *base = (GIBaseInfo *)info;
+  UnionBlob *blob = (UnionBlob *)&base->metadata[base->offset];
+  
+  return blob->discriminator_offset;
+}
+
+GITypeInfo *
+g_union_info_get_discriminator_type (GIUnionInfo *info)
+{
+  GIBaseInfo *base = (GIBaseInfo *)info;
+ 
+  return g_type_info_new (base, base->metadata, base->offset + 24);
+}
+
+GIConstantInfo *
+g_union_info_get_discriminator (GIUnionInfo *info,
+				gint         n)
+{
+  GIBaseInfo *base = (GIBaseInfo *)info;
+  UnionBlob *blob = (UnionBlob *)&base->metadata[base->offset];
+  
+  if (blob->discriminated)
+    {
+      Header *header = (Header *)base->metadata;  
+      gint offset;
+
+      offset = base->offset + header->union_blob_size 
+	+ blob->n_fields * header->field_blob_size 
+	+ blob->n_functions * header->function_blob_size
+	+ n * header->constant_blob_size;
+      
+      return (GIConstantInfo *) g_info_new (GI_INFO_TYPE_CONSTANT, base, 
+					    base->metadata, offset);  
+    }
+
+  return NULL;
 }

@@ -2,7 +2,7 @@
 
 <!ATTLIST api version CDATA #REQUIRED >
 
-<!ELEMENT namespace (function|callback|object|interface|enum|flags|boxed|struct|constant|errordomain)* >
+<!ELEMENT namespace (function|callback|object|interface|enum|flags|boxed|struct|constant|errordomain|union)* >
 <!ATTLIST namespace name CDATA #REQUIRED >
 
 <!ELEMENT function (return-type,parameters?) >
@@ -14,7 +14,6 @@
 <!ATTLIST return-type type CDATA #REQUIRED
                       null-ok (0|1) #IMPLIED
                       transfer (full|shallow|none) #IMPLIED >
-
 
 <!ELEMENT parameter EMPTY >
 <!ATTLIST parameter type CDATA #REQUIRED
@@ -82,9 +81,10 @@
                 is-class-closure (0|1) #IMPLIED > 
 
 <!ELEMENT field EMPTY >
-<!ATTLIST field name CDATA #REQUIRED 
-                type CDATA #REQUIRED
-                bits CDATA #IMPLIED >
+<!ATTLIST field name   CDATA #REQUIRED 
+                type   CDATA #REQUIRED
+                bits   CDATA #IMPLIED 
+                branch CDATA #IMPLIED>
 
 <!ELEMENT enum (member+) >
 <!ATTLIST enum name CDATA #REQUIRED 
@@ -113,6 +113,16 @@
 <!ELEMENT struct ((field|method)*) >
 <!ATTLIST struct name CDATA #REQUIRED 
                  deprecated (0|1) #IMPLIED >
+
+<!ELEMENT union (discriminator?,(constructor|field|method)*) >
+<!ATTLIST union name CDATA #REQUIRED 
+                type-name CDATA #IMPLIED
+                get-type CDATA #IMPLIED
+                deprecated (0|1) #IMPLIED >
+
+<!ELEMENT discriminator EMPTY >
+<!ATTLIST discriminator offset CDATA #REQUIRED
+                        type   CDATA #REQUIRED >
 
 <!ELEMENT constant EMPTY >
 <!ATTLIST constant name CDATA #REQUIRED 
