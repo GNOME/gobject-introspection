@@ -5,12 +5,16 @@ XML format
 - Add attributes to connect signals to their default handlers
   and wrappers to their vfuncs
 - Add attributes for struct offsets
+- Add a way to specify default values
+- Add a way to specify annotations
 
 Binary format
 -------------
-- Add hashes to lookup interfaces and functions in interfaces
+- Sort arrays so that we can use bsearch for lookup
+- Maybe add hashes to lookup interfaces and functions in interfaces
+- Add default values
 - Write a validator
-- Handle parent being 0
+- Make annotations more flexible (and typed)
 
 Compiler
 --------
