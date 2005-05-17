@@ -51,9 +51,10 @@ Some of the differences to XPCOM include:
   16 bits of type information for each parameter, which is enough to encode 
   simple types inline. Complex (e.g. recursive) types are stored out of line 
   in a separate list of types.
-- String and complex type data is stored outside of interface blobs, references 
-  are stored as offsets relative to the start of the metadata. One possibility
-  is to store the strings and types in a pools at the end of the metadata.
+- String and complex type data is stored outside of metadata entry blobs, 
+  references are stored as offsets relative to the start of the metadata. 
+  One possibility is to store the strings and types in a pools at the end 
+  of the metadata.
 
 Overview
 --------
@@ -171,7 +172,10 @@ interface_blob_size:
           adding new fields before the first flexible array member in 
           variable-size blobs.
 
+
 Directory entry (12 bytes)
+
+References to directory entries are stored as 1-based 16-bit indexes.
 
 struct DirectoryEntry 
 {
@@ -207,7 +211,7 @@ offset:   If is_local is set, this is the offset of the blob in the metadata.
 
 
 All blobs pointed to by a directory entry start with the same layout for 
-the first 8 bytes (the reserved flags may be used by some interface types)
+the first 8 bytes (the reserved flags may be used by some blob types)
 
 struct InterfacePrefix 
 {
@@ -649,7 +653,7 @@ true_stops_emit:
 
 class_closure: 
           The index of the class closure in the list of virtual functions
-          of the interface on which the signal is defined.
+          of the object or interface on which the signal is defined.
 
 signature: 
           Offset of the SignatureBlob describing the parameter types and the 
@@ -690,8 +694,8 @@ is_class_closure:
           Set if this virtual function is the class closure of a signal.
 
 signal: 
-          The index of the signal in the list of signals of the interface 
-          to which this virtual function belongs.
+          The index of the signal in the list of signals of the object or 
+	  interface to which this virtual function belongs.
 
 struct_offset:
           The offset of the function pointer in the class struct.
@@ -756,7 +760,7 @@ struct GTypeBlob
 }
 
 gtype_name: 
-          The name under which the interface is registered with GType.
+          The name under which the type is registered with GType.
 
 gtype_init:
           The symbol name of the get_type() function which registers the type.
@@ -861,8 +865,8 @@ struct ObjectBlob
 
 gtype:    Contains the information about the GType.
 
-parent:   The directory index of the parent interface. This is only set for 
-          objects.
+parent:   The directory index of the parent type. This is only set for 
+          objects. If an object does not have a parent, it is zero.
 
 n_interfaces:
 n_fields: 
@@ -984,9 +988,9 @@ struct AnnotationBlob
   guint32 value;
 }
 
-offset:   The offset of the interface to which this annotation refers. 
+offset:   The offset of the metadata entry to which this annotation refers. 
           Annotations are kept sorted by offset, so that the annotations 
-          of an interface can be found by a binary search.
+          of an entry can be found by a binary search.
 
 name:     The name of the annotation, a string.
 
