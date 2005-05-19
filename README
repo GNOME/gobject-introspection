@@ -1,7 +1,8 @@
 This is a very first prototype of an introspection framework for GObject. 
 
 The metadata format is described in metadata-format.txt, the XML IDL format 
-follows the DTD in gidl.dtd. Look at the files in tests/ for IDL examples. 
+follows the DTD in gidl.dtd. Look at the files in tests/ for testcases, 
+and at examples/ for bigger examples. 
 
 The code in src/ currently produces four things:
 - g-idl-compile, a metadata compiler. It converts one or more IDL files 

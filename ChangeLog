@@ -1,5 +1,13 @@
 2005-05-19  Matthias Clasen  <mclasen@redhat.com>
 
+	* src/gidlnode.c (g_idl_node_build_metadata): Correctly handle
+	interface types for which is_pointer is FALSE, e.g. enums.
+	
+	* src/gidlnode.c (g_idl_node_get_full_size) 
+	* src/gidlparser.c (parse_type_internal):
+	* src/generate.c (write_type_info): Support unspecialized
+	lists, hashtables and errors. Also emit a '*' after these.
+
 	* TODO: Updates
 
 2005-05-17  Matthias Clasen  <mclasen@redhat.com>

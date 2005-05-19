@@ -119,7 +119,7 @@ parse_type_internal (gchar *str, gchar **rest)
     { "gdouble", 11, 0 },
     { "gchar",   12, 0 },  
     { "char",    12, 0 },
-    { "GString", 13, 0 },
+    { "GString", 13, 1 },
     { "int",     14, 0 },
     { "gint",    14, 0 },
     { "uint",    15, 0 },
@@ -184,19 +184,20 @@ parse_type_internal (gchar *str, gchar **rest)
       
       *rest = g_strchug (*rest);
       
-      if (**rest != '<')
-	goto error;
-      (*rest)++;
-      
-      type->parameter_type1 = parse_type_internal (*rest, rest);
-      if (type->parameter_type1 == NULL)
-	goto error;
-      
-      *rest = g_strchug (*rest);
-      
-      if ((*rest)[0] != '>')
-	goto error;
-      (*rest)++;
+      if (**rest == '<')
+	{
+	  (*rest)++;
+	  
+	  type->parameter_type1 = parse_type_internal (*rest, rest);
+	  if (type->parameter_type1 == NULL)
+	    goto error;
+	  
+	  *rest = g_strchug (*rest);
+	  
+	  if ((*rest)[0] != '>')
+	    goto error;
+	  (*rest)++;
+	}
     }
   else if (g_str_has_prefix (*rest, "GHashTable"))
     {
@@ -207,27 +208,28 @@ parse_type_internal (gchar *str, gchar **rest)
       
       *rest = g_strchug (*rest);
       
-      if (**rest != '<')
-	goto error;
-      (*rest)++;
+      if (**rest == '<')
+	{
+	  (*rest)++;
       
-      type->parameter_type1 = parse_type_internal (*rest, rest);
-      if (type->parameter_type1 == NULL)
-	goto error;
+	  type->parameter_type1 = parse_type_internal (*rest, rest);
+	  if (type->parameter_type1 == NULL)
+	    goto error;
       
-      *rest = g_strchug (*rest);
+	  *rest = g_strchug (*rest);
+	  
+	  if ((*rest)[0] != ',')
+	    goto error;
+	  (*rest)++;
+	  
+	  type->parameter_type2 = parse_type_internal (*rest, rest);
+	  if (type->parameter_type2 == NULL)
+	    goto error;
       
-      if ((*rest)[0] != ',')
-	goto error;
-      (*rest)++;
-      
-      type->parameter_type2 = parse_type_internal (*rest, rest);
-      if (type->parameter_type2 == NULL)
-	goto error;
-      
-      if ((*rest)[0] != '>')
-	goto error;
-      (*rest)++;
+	  if ((*rest)[0] != '>')
+	    goto error;
+	  (*rest)++;
+	}
     }
   else if (g_str_has_prefix (*rest, "GError"))
     {
@@ -238,21 +240,29 @@ parse_type_internal (gchar *str, gchar **rest)
       
       *rest = g_strchug (*rest);
       
-      if (**rest != '<')
-	goto error;
-      (*rest)++;
-      
-      end = strchr (*rest, '>');
-      str = g_strndup (*rest, end - *rest);
-      type->errors = g_strsplit (str, ",", 0);
-      g_free (str);
+      g_print ("parsing GError\n");
+      if (**rest == '<')
+	{
+	  gint i;
 
-      *rest = end + 1;
+	  (*rest)++;
+	  
+	  end = strchr (*rest, '>');
+	  str = g_strndup (*rest, end - *rest);
+	  type->errors = g_strsplit (str, ",", 0);
+	  g_free (str);
+	  
+	  *rest = end + 1;
+	  g_print ("\t");
+	  for (i = 0; type->errors[i]; i++)
+	    g_print ("%s ", type->errors[i]);
+	  g_print ("\n");
+	}
     }
   else 
     {
       type->tag = 21;
-      type->is_interface = TRUE;
+      type->is_interface = TRUE; 
       start = *rest;
 
       /* must be an interface type */
@@ -266,11 +276,11 @@ parse_type_internal (gchar *str, gchar **rest)
       type->interface = g_strndup (start, *rest - start);
 
       *rest = g_strchug (*rest);
-	  if (**rest == '*')
-	    {
-	      type->is_pointer = TRUE;
-	      (*rest)++;
-	    }
+      if (**rest == '*')
+	{
+	  type->is_pointer = TRUE;
+	  (*rest)++;
+	}
     }
   
   *rest = g_strchug (*rest);

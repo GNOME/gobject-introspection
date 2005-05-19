@@ -539,23 +539,35 @@ g_idl_node_get_full_size (GIdlNode *node)
 	    switch (type->tag)
 	      {
 	      case 20:
-		size = 4 + 4 + g_idl_node_get_full_size ((GIdlNode *)type->parameter_type1);
+		size = 4 + 4;
+		if (type->parameter_type1)
+		  size += g_idl_node_get_full_size ((GIdlNode *)type->parameter_type1);
 		break;
 	      case 21:
 		size = 4 + 4;
 		break;
 	      case 22:
 	      case 23:
-		size = 4 + 4 + g_idl_node_get_full_size ((GIdlNode *)type->parameter_type1);
+		size = 4 + 4;
+		if (type->parameter_type1)
+		  size += g_idl_node_get_full_size ((GIdlNode *)type->parameter_type1);
 		break;
 	      case 24:
-		size = 4 + 4 + 4
-		  + g_idl_node_get_full_size ((GIdlNode *)type->parameter_type1)
-		  + g_idl_node_get_full_size ((GIdlNode *)type->parameter_type2);
+		size = 4 + 4 + 4;
+		if (type->parameter_type1)
+		  size += g_idl_node_get_full_size ((GIdlNode *)type->parameter_type1);
+		if (type->parameter_type2)
+		  size += g_idl_node_get_full_size ((GIdlNode *)type->parameter_type2);
 		break;
 	      case 25:
 		{
-		  gint n = g_strv_length (type->errors);
+		  gint n;
+		  
+		  if (type->errors)
+		    n = g_strv_length (type->errors);
+		  else
+		    n = 0;
+
 		  size = 4 + 4 + 2 * (n + n % 2);
 		}
 		break;
@@ -930,34 +942,50 @@ serialize_type (GIdlModule   *module,
     }
   else if (node->tag == 22)
     {
-      g_string_append (str, "GList<");
-      serialize_type (module, modules, node->parameter_type1, str);
-      g_string_append (str, ">"); 
+      g_string_append (str, "GList");
+      if (node->parameter_type1)
+	{
+	  g_string_append (str, "<"); 
+	  serialize_type (module, modules, node->parameter_type1, str);
+	  g_string_append (str, ">"); 
+	}
     }
   else if (node->tag == 23)
     {
-      g_string_append (str, "GSList<");
-      serialize_type (module, modules, node->parameter_type1, str);
-      g_string_append (str, ">"); 
+      g_string_append (str, "GSList");
+      if (node->parameter_type1)
+	{
+	  g_string_append (str, "<"); 
+	  serialize_type (module, modules, node->parameter_type1, str);
+	  g_string_append (str, ">"); 
+	}
     }
   else if (node->tag == 24)
     {
       g_string_append (str, "GHashTable<");
-      serialize_type (module, modules, node->parameter_type1, str);
-      g_string_append (str, ","); 
-      serialize_type (module, modules, node->parameter_type2, str);
-      g_string_append (str, ">"); 
+      if (node->parameter_type1)
+	{
+	  g_string_append (str, "<"); 
+	  serialize_type (module, modules, node->parameter_type1, str);
+	  g_string_append (str, ","); 
+	  serialize_type (module, modules, node->parameter_type2, str);
+	  g_string_append (str, ">"); 
+	}
     }
   else if (node->tag == 25) 
     {
-      g_string_append (str, "GError<");
-      for (i = 0; node->errors[i]; i++)
+      g_string_append (str, "GError");
+      if (node->errors)
 	{
-	  if (i > 0)
-	    g_string_append (str, ",");
-	  g_string_append (str, node->errors[i]);
+	  g_string_append (str, "<"); 
+	  for (i = 0; node->errors[i]; i++)
+	    {
+	      if (i > 0)
+		g_string_append (str, ",");
+	      g_string_append (str, node->errors[i]);
+	    }
+	  g_string_append (str, ">"); 
 	}
-      g_string_append (str, ">"); 
     }
 }
 
@@ -1044,7 +1072,7 @@ g_idl_node_build_metadata (GIdlNode   *node,
 		      InterfaceTypeBlob *iface = (InterfaceTypeBlob *)&data[*offset2];
 		      *offset2 += 4;
 		      
-		      iface->pointer = 1;
+		      iface->pointer = type->is_pointer;
 		      iface->reserved = 0;
 		      iface->tag = type->tag;
 		      iface->reserved2 = 0;
@@ -1105,11 +1133,17 @@ g_idl_node_build_metadata (GIdlNode   *node,
 		      blob->reserved = 0;
 		      blob->tag = type->tag;
 		      blob->reserved2 = 0;
-		      blob->n_domains = g_strv_length (type->errors);
+		      if (type->errors) 
+			blob->n_domains = g_strv_length (type->errors);
+		      else
+			blob->n_domains = 0;
 		      
 		      *offset2 = ALIGN_VALUE (*offset2 + 4 + 2 * blob->n_domains, 4);
-		      for (i = 0; type->errors[i]; i++)
+		      for (i = 0; i < blob->n_domains; i++)
 			blob->domains[i] = find_entry (module, modules, type->errors[i]);
+		      g_print ("%s: %d error domains: ", type->unparsed, blob->n_domains);
+		      for (i = 0; i < blob->n_domains; i++)
+			g_print ("%s(%d) ", type->errors[i], blob->domains[i]);
 		    }
 		    break;
 		    
