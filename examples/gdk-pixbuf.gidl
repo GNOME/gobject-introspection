@@ -487,7 +487,7 @@
           <parameter name="error" type="GError*" transfer="full" direction="out" null-ok="1" />
         </parameters>
       </constructor>
-      <constructor name="new_with_mime+type" symbol="gdk_pixbuf_loader_new_with_type">
+      <constructor name="new_with_mime_type" symbol="gdk_pixbuf_loader_new_with_type">
         <return-type type="GdkPixbufLoader*" transfer="full" />
         <parameters>
           <parameter name="mime_type" type="guint8*" transfer="none" direction="in" />
