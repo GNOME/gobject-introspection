@@ -1141,9 +1141,6 @@ g_idl_node_build_metadata (GIdlNode   *node,
 		      *offset2 = ALIGN_VALUE (*offset2 + 4 + 2 * blob->n_domains, 4);
 		      for (i = 0; i < blob->n_domains; i++)
 			blob->domains[i] = find_entry (module, modules, type->errors[i]);
-		      g_print ("%s: %d error domains: ", type->unparsed, blob->n_domains);
-		      for (i = 0; i < blob->n_domains; i++)
-			g_print ("%s(%d) ", type->errors[i], blob->domains[i]);
 		    }
 		    break;
 		    

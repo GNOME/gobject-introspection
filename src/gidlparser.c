@@ -240,11 +240,8 @@ parse_type_internal (gchar *str, gchar **rest)
       
       *rest = g_strchug (*rest);
       
-      g_print ("parsing GError\n");
       if (**rest == '<')
 	{
-	  gint i;
-
 	  (*rest)++;
 	  
 	  end = strchr (*rest, '>');
@@ -253,10 +250,6 @@ parse_type_internal (gchar *str, gchar **rest)
 	  g_free (str);
 	  
 	  *rest = end + 1;
-	  g_print ("\t");
-	  for (i = 0; type->errors[i]; i++)
-	    g_print ("%s ", type->errors[i]);
-	  g_print ("\n");
 	}
     }
   else 
