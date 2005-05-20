@@ -7,6 +7,7 @@ XML format
 - Add attributes for struct offsets
 - Add a way to specify default values
 - Add a way to specify annotations
+- Add a way to mark init functions like gtk_init
 
 Binary format
 -------------
