@@ -51,7 +51,6 @@ dump_stats (void)
   g_message ("%d types (%d before sharing)", unique_types_count, types_count);
 }
 
-
 #define ALIGN_VALUE(this, boundary) \
   (( ((unsigned long)(this)) + (((unsigned long)(boundary)) -1)) & (~(((unsigned long)(boundary))-1)))
 
@@ -405,8 +404,9 @@ g_idl_node_get_size (GIdlNode *node)
       {
 	GIdlNodeEnum *enum_ = (GIdlNodeEnum *)node;
 	
-	n = g_list_length (enum_->values);
-	size = 20 + n * 16;
+	size = 20;
+	for (l = enum_->values; l; l = l->next)
+	  size += g_idl_node_get_size ((GIdlNode *)l->data);
       }
       break;
 
@@ -509,7 +509,7 @@ g_idl_node_get_full_size (GIdlNode *node)
     case G_IDL_NODE_FUNCTION:
       {
 	GIdlNodeFunction *function = (GIdlNodeFunction *)node;
-	size = 16;
+	size = 24;
 	size += ALIGN_VALUE (strlen (node->name) + 1, 4);
 	size += ALIGN_VALUE (strlen (function->symbol) + 1, 4);
 	for (l = function->parameters; l; l = l->next)
@@ -1071,12 +1071,13 @@ g_idl_node_build_metadata (GIdlNode   *node,
 		    {
 		      InterfaceTypeBlob *iface = (InterfaceTypeBlob *)&data[*offset2];
 		      *offset2 += 4;
-		      
+
 		      iface->pointer = type->is_pointer;
 		      iface->reserved = 0;
 		      iface->tag = type->tag;
 		      iface->reserved2 = 0;
 		      iface->interface = find_entry (module, modules, type->interface);
+
 		    }
 		    break;
 		    

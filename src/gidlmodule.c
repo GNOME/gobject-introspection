@@ -70,7 +70,7 @@ g_idl_module_build_metadata (GIdlModule  *module,
   guint32 dir_size;
   guint32 n_entries;
   guint32 n_local_entries;
-  guint32 size, offset, offset2;
+  guint32 size, offset, offset2, old_offset;
   GHashTable *strings;
   GHashTable *types;
   guchar *data;
@@ -101,7 +101,7 @@ g_idl_module_build_metadata (GIdlModule  *module,
   g_message ("allocating %d bytes (%d header, %d directory, %d entries)\n", 
 	  size, header_size, dir_size, size - header_size - dir_size);
 
-  data = g_malloc (size);
+  data = g_malloc0 (size);
 
   /* fill in header */
   header = (Header *)data;
@@ -175,6 +175,7 @@ g_idl_module_build_metadata (GIdlModule  *module,
 	}
       else
 	{
+	  old_offset = offset;
 	  offset2 = offset + g_idl_node_get_size (node);
 
 	  entry->blob_type = node->type;
@@ -184,6 +185,9 @@ g_idl_module_build_metadata (GIdlModule  *module,
 
 	  g_idl_node_build_metadata (node, module, modules, 
 				     strings, types, data, &offset, &offset2);
+
+	  if (offset2 > old_offset + g_idl_node_get_full_size (node))
+	    g_error ("left a hole of %d bytes\n", offset2 - old_offset - g_idl_node_get_full_size (node));
 	}
 
       entry++;

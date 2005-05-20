@@ -1,3 +1,13 @@
+2005-05-20  Matthias Clasen  <mclasen@redhat.com>
+
+	* src/gidlnode.c (g_idl_node_get_size): Report the correct
+	size for enum blobs.
+	(g_idl_node_get_full_size): Report the correct size for
+	function blobs.
+
+	* src/gidlmodule.c (g_idl_module_build_metadata): Add some
+	error checking for blob sizes.
+
 2005-05-19  Matthias Clasen  <mclasen@redhat.com>
 
 	* src/gidlnode.c (g_idl_node_build_metadata): Correctly handle
