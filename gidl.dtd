@@ -34,7 +34,9 @@
                  parent CDATA #REQUIRED
                  type-name CDATA #REQUIRED
                  get-type CDATA #REQUIRED
-                 deprecated (0|1) #IMPLIED >
+                 deprecated (0|1) #IMPLIED
+                 cname CDATA #IMPLIED
+                 class CDATA #IMLIED >
 
 <!ELEMENT implements (interface+) >
 
@@ -53,7 +55,9 @@
 <!ATTLIST interface name CDATA #REQUIRED
                     type-name CDATA #REQUIRED
                     get-type CDATA #REQUIRED
-                    deprecated (0|1) #IMPLIED >
+                    deprecated (0|1) #IMPLIED
+                    cname CDATA #IMPLIED
+                    class CDATA #IMLIED >
 
 <!ELEMENT requires ((interface|object)*) >
 
@@ -78,13 +82,19 @@
 <!ATTLIST vfunc name CDATA #REQUIRED 
                 must-chain-up (0|1) #IMPLIED
                 override (always|never|maybe) #IMPLIED
-                is-class-closure (0|1) #IMPLIED > 
+                is-class-closure (0|1) #IMPLIED
+                cname #IMPLIED
+                offset #IMPLIED  >
 
 <!ELEMENT field EMPTY >
 <!ATTLIST field name   CDATA #REQUIRED 
                 type   CDATA #REQUIRED
                 bits   CDATA #IMPLIED 
-                branch CDATA #IMPLIED>
+                readable (0|1) #IMPLIED
+                writable (0|1) #IMPLIED
+                branch CDATA #IMPLIED 
+                cname  CDATA #IMPLIED 
+                offset CDATA #IMPLIED >
 
 <!ELEMENT enum (member+) >
 <!ATTLIST enum name CDATA #REQUIRED 
@@ -108,17 +118,20 @@
 <!ATTLIST boxed name CDATA #REQUIRED 
                 type-name CDATA #IMPLIED
                 get-type CDATA #IMPLIED
-                deprecated (0|1) #IMPLIED >
+                deprecated (0|1) #IMPLIED 
+                cname CDATA #IMPLIED >
 
 <!ELEMENT struct ((field|method)*) >
 <!ATTLIST struct name CDATA #REQUIRED 
-                 deprecated (0|1) #IMPLIED >
+                 deprecated (0|1) #IMPLIED 
+                 cname CDATA #IMPLIED >
 
 <!ELEMENT union (discriminator?,(constructor|field|method)*) >
 <!ATTLIST union name CDATA #REQUIRED 
                 type-name CDATA #IMPLIED
                 get-type CDATA #IMPLIED
-                deprecated (0|1) #IMPLIED >
+                deprecated (0|1) #IMPLIED 
+                cname CDATA #IMPLIED >
 
 <!ELEMENT discriminator EMPTY >
 <!ATTLIST discriminator offset CDATA #REQUIRED

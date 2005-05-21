@@ -4,7 +4,6 @@ XML format
 - Write a scanner to create XML from annotated headers
 - Add attributes to connect signals to their default handlers
   and wrappers to their vfuncs
-- Add attributes for struct offsets
 - Add a way to specify default values
 - Add a way to specify annotations
 - Add a way to mark init functions like gtk_init
