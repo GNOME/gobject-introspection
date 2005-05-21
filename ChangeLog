@@ -1,5 +1,7 @@
 2005-05-20  Matthias Clasen  <mclasen@redhat.com>
 
+	* src/gidlmodule.c: Include string.h
+
 	* TODO: Updates.
 
 	* metadata-format.txt: Cleanup basic types.
