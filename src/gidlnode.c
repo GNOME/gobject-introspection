@@ -532,34 +532,34 @@ g_idl_node_get_full_size (GIdlNode *node)
     case G_IDL_NODE_TYPE:
       {
 	GIdlNodeType *type = (GIdlNodeType *)node;
-	if (type->tag < 20) 
+	if (type->tag < TYPE_TAG_ARRAY) 
 	  size = 4;
 	else
 	  {
 	    switch (type->tag)
 	      {
-	      case 20:
+	      case TYPE_TAG_ARRAY:
 		size = 4 + 4;
 		if (type->parameter_type1)
 		  size += g_idl_node_get_full_size ((GIdlNode *)type->parameter_type1);
 		break;
-	      case 21:
+	      case TYPE_TAG_INTERFACE:
 		size = 4 + 4;
 		break;
-	      case 22:
-	      case 23:
+	      case TYPE_TAG_LIST:
+	      case TYPE_TAG_SLIST:
 		size = 4 + 4;
 		if (type->parameter_type1)
 		  size += g_idl_node_get_full_size ((GIdlNode *)type->parameter_type1);
 		break;
-	      case 24:
+	      case TYPE_TAG_HASH:
 		size = 4 + 4 + 4;
 		if (type->parameter_type1)
 		  size += g_idl_node_get_full_size ((GIdlNode *)type->parameter_type1);
 		if (type->parameter_type2)
 		  size += g_idl_node_get_full_size ((GIdlNode *)type->parameter_type2);
 		break;
-	      case 25:
+	      case TYPE_TAG_ERROR:
 		{
 		  gint n;
 		  
@@ -883,7 +883,6 @@ serialize_type (GIdlModule   *module,
 		GString      *str)
 {
   gint i;
-  
   const gchar* basic[] = {
     "void", 
     "gboolean", 
@@ -895,16 +894,18 @@ serialize_type (GIdlModule   *module,
     "guint32", 
     "gint64", 
     "guint64", 
+    "gint",
+    "guint",
+    "glong",
+    "gulong",
+    "gssize",
+    "gsize",
     "gfloat", 
     "gdouble", 
-    "gchar", 
-    "GString", 
-    "gint", 
-    "guint", 
-    "glong", 
-    "gulong"
+    "utf8", 
+    "filename"
   };
-
+  
   if (node->tag < 20)
     {
       g_string_append_printf (str, "%s%s", 
@@ -1012,7 +1013,7 @@ g_idl_node_build_metadata (GIdlNode   *node,
 
 	*offset += 4;
 	
-	if (type->tag < 20)
+	if (type->tag < TYPE_TAG_ARRAY)
 	  {
 	    blob->reserved = 0;
 	    blob->reserved2 = 0;
@@ -1045,7 +1046,7 @@ g_idl_node_build_metadata (GIdlNode   *node,
 		blob->offset = *offset2;
 		switch (type->tag)
 		  {
-		  case 20:
+		  case TYPE_TAG_ARRAY:
 		    {
 		      ArrayTypeBlob *array = (ArrayTypeBlob *)&data[*offset2];
 		      guint32 pos;
@@ -1067,7 +1068,7 @@ g_idl_node_build_metadata (GIdlNode   *node,
 		    }
 		    break;
 		    
-		  case 21:
+		  case TYPE_TAG_INTERFACE:
 		    {
 		      InterfaceTypeBlob *iface = (InterfaceTypeBlob *)&data[*offset2];
 		      *offset2 += 4;
@@ -1081,8 +1082,8 @@ g_idl_node_build_metadata (GIdlNode   *node,
 		    }
 		    break;
 		    
-		  case 22:
-		  case 23:
+		  case TYPE_TAG_LIST:
+		  case TYPE_TAG_SLIST:
 		    {
 		      ParamTypeBlob *param = (ParamTypeBlob *)&data[*offset2];
 		      guint32 pos;
@@ -1102,7 +1103,7 @@ g_idl_node_build_metadata (GIdlNode   *node,
 		    }
 		    break;
 		    
-		  case 24:
+		  case TYPE_TAG_HASH:
 		    {
 		      ParamTypeBlob *param = (ParamTypeBlob *)&data[*offset2];
 		      guint32 pos;
@@ -1125,7 +1126,7 @@ g_idl_node_build_metadata (GIdlNode   *node,
 		    }
 		    break;
 		    
-		  case 25:
+		  case TYPE_TAG_ERROR:
 		    {
 		      ErrorTypeBlob *blob = (ErrorTypeBlob *)&data[*offset2];
 		      gint i, domain;
@@ -1872,69 +1873,72 @@ g_idl_node_build_metadata (GIdlNode   *node,
 	blob->offset = *offset2;
 	switch (constant->type->tag)
 	  {
-	  case 1:
+	  case TYPE_TAG_BOOLEAN:
 	    blob->size = 4;
 	    *(gboolean*)&data[blob->offset] = parse_boolean_value (constant->value);
 	    break;
-	    case 2:
+	    case TYPE_TAG_INT8:
 	    blob->size = 1;
 	      *(gint8*)&data[blob->offset] = (gint8) parse_int_value (constant->value);
 	    break;
-	  case 3:
+	  case TYPE_TAG_UINT8:
 	    blob->size = 1;
 	    *(guint8*)&data[blob->offset] = (guint8) parse_uint_value (constant->value);
 	    break;
-	  case 4:
+	  case TYPE_TAG_INT16:
 	    blob->size = 2;
 	    *(gint16*)&data[blob->offset] = (gint16) parse_int_value (constant->value);
 	    break;
-	  case 5:
+	  case TYPE_TAG_UINT16:
 	    blob->size = 2;
 	    *(guint16*)&data[blob->offset] = (guint16) parse_uint_value (constant->value);
 	    break;
-	  case 6:
+	  case TYPE_TAG_INT32:
 	    blob->size = 4;
 	    *(gint32*)&data[blob->offset] = (gint32) parse_int_value (constant->value);
 	    break;
-	  case 7:
+	  case TYPE_TAG_UINT32:
 	    blob->size = 4;
 	    *(guint32*)&data[blob->offset] = (guint32) parse_uint_value (constant->value);
 	    break;
-	  case 8:
+	  case TYPE_TAG_INT64:
 	    blob->size = 8;
-	    *(gint32*)&data[blob->offset] = (gint64) parse_int_value (constant->value);
+	    *(gint64*)&data[blob->offset] = (gint64) parse_int_value (constant->value);
 	    break;
-	  case 9:
+	  case TYPE_TAG_UINT64:
 	    blob->size = 8;
-	    *(guint32*)&data[blob->offset] = (guint64) parse_uint_value (constant->value);
+	    *(guint64*)&data[blob->offset] = (guint64) parse_uint_value (constant->value);
 	    break;
-	  case 10:
-	    blob->size = sizeof (gfloat);
-	    *(gfloat*)&data[blob->offset] = (gfloat) parse_float_value (constant->value);
-	    break;
-	  case 11:
-	    blob->size = sizeof (gdouble);
-	    *(gdouble*)&data[blob->offset] = (gdouble) parse_float_value (constant->value);
-	    break;
-	  case 12:
-	    blob->size = strlen (constant->value) + 1;
-	    memcpy (&data[blob->offset], constant->value, blob->size);
-	    break;
-	  case 14:
+	  case TYPE_TAG_INT:
 	    blob->size = sizeof (gint);
 	    *(gint*)&data[blob->offset] = (gint) parse_int_value (constant->value);
 	    break;
-	  case 15:
+	  case TYPE_TAG_UINT:
 	    blob->size = sizeof (guint);
 	    *(gint*)&data[blob->offset] = (guint) parse_uint_value (constant->value);
 	    break;
-	  case 16:
+	  case TYPE_TAG_SSIZE: /* FIXME */
+	  case TYPE_TAG_LONG:
 	    blob->size = sizeof (glong);
 	    *(glong*)&data[blob->offset] = (glong) parse_int_value (constant->value);
 	    break;
-	  case 17:
+	  case TYPE_TAG_SIZE: /* FIXME */
+	  case TYPE_TAG_ULONG:
 	    blob->size = sizeof (gulong);
 	    *(gulong*)&data[blob->offset] = (gulong) parse_uint_value (constant->value);
+	    break;
+	  case TYPE_TAG_FLOAT:
+	    blob->size = sizeof (gfloat);
+	    *(gfloat*)&data[blob->offset] = (gfloat) parse_float_value (constant->value);
+	    break;
+	  case TYPE_TAG_DOUBLE:
+	    blob->size = sizeof (gdouble);
+	    *(gdouble*)&data[blob->offset] = (gdouble) parse_float_value (constant->value);
+	    break;
+	  case TYPE_TAG_UTF8:
+	  case TYPE_TAG_FILENAME:
+	    blob->size = strlen (constant->value) + 1;
+	    memcpy (&data[blob->offset], constant->value, blob->size);
 	    break;
 	  }
 	*offset2 += ALIGN_VALUE (blob->size, 4);

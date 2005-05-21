@@ -7,9 +7,9 @@
         <return-type type="void" />
         <parameters>
           <parameter name="box" type="boxed1*" transfer="full" direction="in" />
-          <parameter name="w" type="GList<boxed2*>" transfer="full" direction="in" />
-          <parameter name="t" type="GHashTable<gchar*,gint64>" transfer="full" direction="in" />
-          <parameter name="e" type="GError<>" transfer="full" direction="out" />
+          <parameter name="w" type="GList<boxed2*>*" transfer="full" direction="in" />
+          <parameter name="t" type="GHashTable<utf8,gint64>*" transfer="full" direction="in" />
+          <parameter name="e" type="GError*" transfer="full" direction="out" />
         </parameters>
       </method>
       <method name="lart" symbol="lart">

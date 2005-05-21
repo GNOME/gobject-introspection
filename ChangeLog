@@ -1,5 +1,12 @@
 2005-05-20  Matthias Clasen  <mclasen@redhat.com>
 
+	* TODO: Updates.
+
+	* metadata-format.txt: Cleanup basic types.
+	* src/*: Adapt to the changes.
+	* tests/*: Adapt to the changes.
+	* examples/gdk-pixbuf.gidl: Adapt to the changes.
+
 	* src/gidlnode.c (g_idl_node_get_size): Report the correct
 	size for enum blobs.
 	(g_idl_node_get_full_size): Report the correct size for

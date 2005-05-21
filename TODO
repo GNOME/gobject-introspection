@@ -11,14 +11,6 @@ XML format
 
 Binary format
 -------------
-- Type cleanup:
-  + for integral types, we just need to discriminate types by width
-    and signedness, but keep separate types for platform-dependent types
-    like short, int, long, size_t. We should not try to capture different
-    type names like guchar vs guint8 vs int8_t.
-  + there should probably not be a char type
-  + for strings, we need "UTF-8-encoded 0-terminated string and 
-    "0-terminated byte array", possibly with annotation for encoding
 - Sort arrays so that we can use bsearch for lookup
 - Maybe add hashes to lookup interfaces and functions in interfaces
 - Add default values

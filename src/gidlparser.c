@@ -22,6 +22,7 @@
 #include <glib.h>
 #include "gidlmodule.h"
 #include "gidlnode.h"
+#include "gmetadata.h"
 
 typedef enum
 {
@@ -86,48 +87,52 @@ parse_type_internal (gchar *str, gchar **rest)
     gint tag;
     gboolean pointer;
   } basic[] = {
-    { "void",     0, 0 },
-    { "gpointer", 0, 1 },
-    { "gboolean", 1, 0 },
-    { "int8_t",   2, 0 },
-    { "int8",     2, 0 },
-    { "gint8",    2, 0 },
-    { "uint8_t",  3, 0 },
-    { "uint8",    3, 0 },
-    { "guint8",   3, 0 },
-    { "int16_t",  4, 0 },
-    { "int16",    4, 0 },
-    { "gint16",   4, 0 },
-    { "uint16_t", 5, 0 },
-    { "uint16",   5, 0 },
-    { "guint16",  5, 0 },
-    { "int32_t",  6, 0 },
-    { "int32",    6, 0 },
-    { "gint32",   6, 0 },
-    { "uint32_t", 7, 0 },
-    { "uint32",   7, 0 },
-    { "guint32",  7, 0 },
-    { "int64_t",  8, 0 },
-    { "int64",    8, 0 },
-    { "gint64",   8, 0 },
-    { "uint64_t", 9, 0 },
-    { "uint64",   9, 0 },
-    { "guint64",  9, 0 },
-    { "float",   10, 0 },
-    { "gfloat",  10, 0 },
-    { "double",  11, 0 },
-    { "gdouble", 11, 0 },
-    { "gchar",   12, 0 },  
-    { "char",    12, 0 },
-    { "GString", 13, 1 },
-    { "int",     14, 0 },
-    { "gint",    14, 0 },
-    { "uint",    15, 0 },
-    { "guint",   15, 0 },
-    { "long",    16, 0 },
-    { "glong",   16, 0 },
-    { "ulong",   17, 0 },
-    { "gulong",  17, 0 }
+    { "void",     TYPE_TAG_VOID,    0 },
+    { "gpointer", TYPE_TAG_VOID,    1 },
+    { "gboolean", TYPE_TAG_BOOLEAN, 0 },
+    { "int8_t",   TYPE_TAG_INT8,    0 },
+    { "int8",     TYPE_TAG_INT8,    0 },
+    { "gint8",    TYPE_TAG_INT8,    0 },
+    { "uint8_t",  TYPE_TAG_UINT8,   0 },
+    { "uint8",    TYPE_TAG_UINT8,   0 },
+    { "guint8",   TYPE_TAG_UINT8,   0 },
+    { "int16_t",  TYPE_TAG_INT16,   0 },
+    { "int16",    TYPE_TAG_INT16,   0 },
+    { "gint16",   TYPE_TAG_INT16,   0 },
+    { "uint16_t", TYPE_TAG_UINT16,  0 },
+    { "uint16",   TYPE_TAG_UINT16,  0 },
+    { "guint16",  TYPE_TAG_UINT16,  0 },
+    { "int32_t",  TYPE_TAG_INT32,   0 },
+    { "int32",    TYPE_TAG_INT32,   0 },
+    { "gint32",   TYPE_TAG_INT32,   0 },
+    { "uint32_t", TYPE_TAG_UINT32,  0 },
+    { "uint32",   TYPE_TAG_UINT32,  0 },
+    { "guint32",  TYPE_TAG_UINT32,  0 },
+    { "int64_t",  TYPE_TAG_INT64,   0 },
+    { "int64",    TYPE_TAG_INT64,   0 },
+    { "gint64",   TYPE_TAG_INT64,   0 },
+    { "uint64_t", TYPE_TAG_UINT64,  0 },
+    { "uint64",   TYPE_TAG_UINT64,  0 },
+    { "guint64",  TYPE_TAG_UINT64,  0 },
+    { "int",      TYPE_TAG_INT,     0 },
+    { "gint",     TYPE_TAG_INT,     0 },
+    { "uint",     TYPE_TAG_UINT,    0 },
+    { "guint",    TYPE_TAG_UINT,    0 },
+    { "long",     TYPE_TAG_LONG,    0 },
+    { "glong",    TYPE_TAG_LONG,    0 },
+    { "ulong",    TYPE_TAG_ULONG,   0 },
+    { "gulong",   TYPE_TAG_ULONG,   0 },
+    { "ssize_t",  TYPE_TAG_SSIZE,   0 },
+    { "gssize",   TYPE_TAG_SSIZE,   0 },
+    { "size_t",   TYPE_TAG_SIZE,    0 },
+    { "gsize",    TYPE_TAG_SIZE,    0 },
+    { "float",    TYPE_TAG_FLOAT,   0 },
+    { "gfloat",   TYPE_TAG_FLOAT,   0 },
+    { "double",   TYPE_TAG_DOUBLE,  0 },
+    { "gdouble",  TYPE_TAG_DOUBLE,  0 },
+    { "utf8",     TYPE_TAG_UTF8,    1 },  
+    { "gchar*",   TYPE_TAG_UTF8,    1 },  
+    { "filename", TYPE_TAG_FILENAME,1 }
   };  
 
   gint n_basic = G_N_ELEMENTS (basic);
@@ -152,7 +157,7 @@ parse_type_internal (gchar *str, gchar **rest)
 
 	  *rest += strlen(basic[i].str);
 	  *rest = g_strchug (*rest);
-	  if (**rest == '*')
+	  if (**rest == '*' && !type->is_pointer)
 	    {
 	      type->is_pointer = TRUE;
 	      (*rest)++;
@@ -169,14 +174,14 @@ parse_type_internal (gchar *str, gchar **rest)
     {
       if (g_str_has_prefix (*rest, "GList"))
 	{
-	  type->tag = 22;
+	  type->tag = TYPE_TAG_LIST;
 	  type->is_glist = TRUE;
 	  type->is_pointer = TRUE;
 	  *rest += strlen ("GList");
 	}
       else
 	{
-	  type->tag = 23;
+	  type->tag = TYPE_TAG_SLIST;
 	  type->is_gslist = TRUE;
 	  type->is_pointer = TRUE;
 	  *rest += strlen ("GSList");
@@ -201,7 +206,7 @@ parse_type_internal (gchar *str, gchar **rest)
     }
   else if (g_str_has_prefix (*rest, "GHashTable"))
     {
-      type->tag = 24;
+      type->tag = TYPE_TAG_HASH;
       type->is_ghashtable = TRUE;
       type->is_pointer = TRUE;
       *rest += strlen ("GHashTable");
@@ -233,7 +238,7 @@ parse_type_internal (gchar *str, gchar **rest)
     }
   else if (g_str_has_prefix (*rest, "GError"))
     {
-      type->tag = 25;
+      type->tag = TYPE_TAG_ERROR;
       type->is_error = TRUE;
       type->is_pointer = TRUE;
       *rest += strlen ("GError");
@@ -254,7 +259,7 @@ parse_type_internal (gchar *str, gchar **rest)
     }
   else 
     {
-      type->tag = 21;
+      type->tag = TYPE_TAG_INTERFACE;
       type->is_interface = TRUE; 
       start = *rest;
 
@@ -283,7 +288,7 @@ parse_type_internal (gchar *str, gchar **rest)
 
       array = (GIdlNodeType *)g_idl_node_new (G_IDL_NODE_TYPE);
 
-      array->tag = 20;
+      array->tag = TYPE_TAG_ARRAY;
       array->is_pointer = TRUE;
       array->is_array = TRUE;
       

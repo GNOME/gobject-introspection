@@ -166,6 +166,8 @@ typedef union
   guint    v_uint;
   glong    v_long;
   gulong   v_ulong;
+  gssize   v_ssize;
+  gsize    v_size;
   gchar *  v_string;
   gpointer v_pointer;
 } GArgument;
@@ -233,14 +235,16 @@ typedef enum {
   GI_TYPE_TAG_UINT32    =  7,
   GI_TYPE_TAG_INT64     =  8,
   GI_TYPE_TAG_UINT64    =  9,
-  GI_TYPE_TAG_FLOAT     = 10,
-  GI_TYPE_TAG_DOUBLE    = 11,
-  GI_TYPE_TAG_STRING    = 12,
-  GI_TYPE_TAG_GSTRING   = 13,
-  GI_TYPE_TAG_INT       = 14,
-  GI_TYPE_TAG_UINT      = 15,
-  GI_TYPE_TAG_LONG      = 16,
-  GI_TYPE_TAG_ULONG     = 17,
+  GI_TYPE_TAG_INT       = 10,
+  GI_TYPE_TAG_UINT      = 11,
+  GI_TYPE_TAG_LONG      = 12,
+  GI_TYPE_TAG_ULONG     = 13,
+  GI_TYPE_TAG_SSIZE     = 14,
+  GI_TYPE_TAG_SIZE      = 15,
+  GI_TYPE_TAG_FLOAT     = 16,
+  GI_TYPE_TAG_DOUBLE    = 17,
+  GI_TYPE_TAG_UTF8      = 18,
+  GI_TYPE_TAG_FILENAME  = 19,
   GI_TYPE_TAG_ARRAY     = 20,
   GI_TYPE_TAG_INTERFACE = 21,
   GI_TYPE_TAG_GLIST     = 22,

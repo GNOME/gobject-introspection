@@ -80,30 +80,28 @@ get_ffi_type (GITypeInfo *info)
       case GI_TYPE_TAG_UINT64:
 	rettype = &ffi_type_uint64;
 	break;
-      case GI_TYPE_TAG_FLOAT:
-	rettype = &ffi_type_float;
-	break;
-      case GI_TYPE_TAG_DOUBLE:
-	rettype = &ffi_type_double;
-	break;
-      case GI_TYPE_TAG_STRING:
-	rettype = &ffi_type_pointer;
-	break;
-      case GI_TYPE_TAG_GSTRING:
-	rettype = &ffi_type_pointer;
-	break;
       case GI_TYPE_TAG_INT:
 	rettype = &ffi_type_sint;
 	break;
       case GI_TYPE_TAG_UINT:
 	rettype = &ffi_type_uint;
 	break;
+      case GI_TYPE_TAG_SSIZE: /* FIXME */
       case GI_TYPE_TAG_LONG:
 	rettype = &ffi_type_slong;
 	break;
+      case GI_TYPE_TAG_SIZE: /* FIXME */
       case GI_TYPE_TAG_ULONG:
 	rettype = &ffi_type_ulong;
 	break;
+      case GI_TYPE_TAG_FLOAT:
+	rettype = &ffi_type_float;
+	break;
+      case GI_TYPE_TAG_DOUBLE:
+	rettype = &ffi_type_double;
+	break;
+      case GI_TYPE_TAG_UTF8:
+      case GI_TYPE_TAG_FILENAME:
       case GI_TYPE_TAG_ARRAY:
       case GI_TYPE_TAG_INTERFACE:
       case GI_TYPE_TAG_GLIST:

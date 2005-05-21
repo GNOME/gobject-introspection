@@ -1,13 +1,19 @@
 GObject binary metadata for introspection
 -----------------------------------------
 
-Version 0.5
+Version 0.6
+
+Changes since 0.5:
+- basic type cleanup:
+  + remove GString
+  + add [u]int, [u]long, [s]size_t
+  + rename string to utf8, add filename
 
 Changes since 0.4:
 - add a UnionBlob
 
 Changes since 0.3:
-- drop short_name for ValueBlob. 
+- drop short_name for ValueBlob
 
 Changes since 0.2:
 - make inline types 4 bytes after all, remove header->types and allow
@@ -441,13 +447,20 @@ tag:      specifies what kind of type is described, as follows:
           7  uint32
           8  int64
           9  uint64
-         10  float
-         11  double
-         12  string  (these are zero-terminated char* and assumed to be 
-                      in UTF-8, for other data, use uint8[])
-         13 GString 
+         10  int
+         11  uint 
+         12  long
+         13  ulong
+         14  ssize_t
+         15  size_t
+         16  float
+         17  double
+         18  utf8     (these are zero-terminated char[] and assumed to be 
+                       in UTF-8)
+         19  filename (these are zero-terminated char[] and assumed to be
+                       in the GLib filename encoding)
 
-         For string and GString, is_pointer will always be set.
+         For utf8 and filename is_pointer will always be set.
 
 offset:  Offset relative to header->types that points to a TypeBlob. 
          Unlike other offsets, this is in words (ie 32bit units) rather
