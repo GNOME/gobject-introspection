@@ -24,7 +24,7 @@
           <parameter name="obj" type="Iface1*" transfer="full" direction="in" />
         </parameters>
       </signal>
-      <vfunc name="vfunc1">
+      <vfunc name="vfunc1" offset="10">
         <return-type type="Iface2*" transfer="full" />
         <parameters>
           <parameter name="param1" type="Iface2*" transfer="full" direction="in" />

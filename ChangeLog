@@ -1,3 +1,20 @@
+2005-05-22  Matthias Clasen  <mclasen@redhat.com>
+
+	* tests/*: Add struct offsets to field and vfunc
+	elements.
+
+	* src/generate.c (write_vfunc_info): Write offset
+	information for vfuncs. 
+
+	* src/gidlnode.c (g_idl_node_build_metadata): Write
+	the struct offsets into the metadata.
+
+	* src/gidlparser.c: Parse the offset attributes of
+	field and vfunc elements.
+
+	* src/gidlnode.h: Add offset members to field and
+	vfunc nodes.
+
 2005-05-21  Matthias Clasen  <mclasen@redhat.com>
 
 	* TODO: Updates.

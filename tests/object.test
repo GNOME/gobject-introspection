@@ -18,7 +18,13 @@
           <parameter name="obj" type="Object1*" transfer="full" direction="in" />
         </parameters>
       </signal>
-      <vfunc name="vfunc1">
+      <vfunc name="vfunc1" offset="20">
+        <return-type type="Object2*" transfer="full" />
+        <parameters>
+          <parameter name="param1" type="Object1*" transfer="full" direction="in" />
+        </parameters>
+      </vfunc>
+      <vfunc name="vfunc2" offset="24">
         <return-type type="Object2*" transfer="full" />
         <parameters>
           <parameter name="param1" type="Object1*" transfer="full" direction="in" />

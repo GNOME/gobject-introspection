@@ -1168,7 +1168,7 @@ g_idl_node_build_metadata (GIdlNode   *node,
 	blob->writable = field->writable;
 	blob->reserved = 0;
 	blob->bits = 0;
-	blob->struct_offset = 0;
+	blob->struct_offset = field->offset;
 
         g_idl_node_build_metadata ((GIdlNode *)field->type, 
 				   module, modules, strings, types,
@@ -1360,7 +1360,7 @@ g_idl_node_build_metadata (GIdlNode   *node,
 	blob->class_closure = 0; /* FIXME */
 	blob->reserved = 0;
 
-	blob->struct_offset = 0; /* FIXME */
+	blob->struct_offset = vfunc->offset;
 	blob->reserved2 = 0;
 	blob->signature = signature;
 	

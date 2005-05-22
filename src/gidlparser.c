@@ -684,6 +684,7 @@ start_field (GMarkupParseContext *context,
       const gchar *writable;
       const gchar *bits;
       const gchar *branch;
+      const gchar *offset;
       
       name = find_attribute ("name", attribute_names, attribute_values);
       type = find_attribute ("type", attribute_names, attribute_values);
@@ -691,6 +692,7 @@ start_field (GMarkupParseContext *context,
       writable = find_attribute ("writable", attribute_names, attribute_values);
       bits = find_attribute ("bits", attribute_names, attribute_values);
       branch = find_attribute ("branch", attribute_names, attribute_values);
+      offset = find_attribute ("offset", attribute_names, attribute_values);
       
       if (name == NULL)
 	MISSING_ATTRIBUTE (error, element_name, "name");
@@ -716,6 +718,11 @@ start_field (GMarkupParseContext *context,
 	    field->bits = atoi (bits);
 	  else
 	    field->bits = 0;
+
+	  if (offset)
+	    field->offset = atoi (offset);
+	  else
+	    field->offset = 0;
 	  
 	  field->type = parse_type (type);
 	  
@@ -1367,11 +1374,13 @@ start_vfunc (GMarkupParseContext *context,
       const gchar *must_chain_up;
       const gchar *override;
       const gchar *is_class_closure;
+      const gchar *offset;
       
       name = find_attribute ("name", attribute_names, attribute_values);
       must_chain_up = find_attribute ("must-chain-up", attribute_names, attribute_values);	  
       override = find_attribute ("override", attribute_names, attribute_values);
       is_class_closure = find_attribute ("is-class-closure", attribute_names, attribute_values);
+      offset = find_attribute ("offset", attribute_names, attribute_values);
       
       if (name == NULL)
 	MISSING_ATTRIBUTE (error, element_name, "name");
@@ -1410,6 +1419,11 @@ start_vfunc (GMarkupParseContext *context,
 	  else
 	    vfunc->is_class_closure = FALSE;
 	  
+	  if (offset)
+	    vfunc->offset = atoi (offset);
+	  else
+	    vfunc->offset = 0;
+
 	  iface = (GIdlNodeInterface *)ctx->current_node;
 	  iface->members = g_list_append (iface->members, vfunc);
 

@@ -190,6 +190,8 @@ struct _GIdlNodeVFunc
   
   GList *parameters;
   GIdlNodeParam *result;      
+
+  gint offset;
 };
 
 struct _GIdlNodeField
@@ -199,6 +201,7 @@ struct _GIdlNodeField
   gboolean readable;
   gboolean writable;
   gint bits;
+  gint offset;
   
   GIdlNodeType *type;
 };
