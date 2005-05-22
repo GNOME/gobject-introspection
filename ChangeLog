@@ -1,5 +1,9 @@
 2005-05-21  Matthias Clasen  <mclasen@redhat.com>
 
+	* TODO: Updates.
+
+	* gidl.dtd: Updates.
+
 	* src/g-idl-offsets.pl: A perl script which reads a .gidl 
 	file, creates, compiles and runs a C file, and folds the
 	resulting struct offsets back into the .gidl file.

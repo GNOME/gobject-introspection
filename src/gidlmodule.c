@@ -19,6 +19,7 @@
  */
 
 #include <stdio.h>
+#include <string.h>
 
 #include "gidlmodule.h"
 #include "gidlnode.h"
