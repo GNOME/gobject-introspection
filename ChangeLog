@@ -1,5 +1,11 @@
 2005-05-24  Matthias Clasen  <mclasen@redhat.com>
 
+	* src/compiler.c (main): Use it here to validate
+	the generated metadata.
+
+	* src/gmetadata.[hc]: Add code to validate a 
+	metadata blob.
+
 	* metadata-format.txt: Updates
 
 2005-05-22  Matthias Clasen  <mclasen@redhat.com>
