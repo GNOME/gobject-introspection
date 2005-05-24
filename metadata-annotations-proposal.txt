@@ -7,6 +7,15 @@ requirement, and add offset to annotations to each annotatable entry,
 this however means 4*n more bytes used :\
 ***FIXME****
 
+		mclasen: Incremental generation of metadata is already
+                problematic without annotations, since you have to grow the
+		directory, and we currently assume that local entries
+                are before remote entries in the directory. 
+                Adding 4 bytes to each type, value and arg blob is certainly
+                going to blow the size of the metadata up unreasonably,
+                since these are the most common blob types.
+                
+
 Typed annotations:
 
 struct AnnotationBlob
@@ -24,6 +33,12 @@ type:		offset of AttributeBlob describing type of this annotation
 values_offset:	offset to n_fields (read from corresponding AttributeBlob)
 		values of appropriate types, specifying value of this
 		annotation
+       
+
+		mclasen: What type of blob is being pointed to here ?
+		ValueBlob only holds integer types (for use in enums).
+		For general types, you will probably have to use 
+		ConstantBlobs.
 
 
 typedef enum
@@ -37,6 +52,15 @@ typedef enum
 
   all 	   = 0x3F,
 } AttributeTargets;
+
+
+		mclasen: Does "all" mean just all of the above, or
+		any blob ? Whats the rationale for not allowing annotations
+		on some blob types ? Wouldn't it be better to specify
+		the attribut target using the blob type enum (no way to 
+		specify a subset of targets then, but we could still 
+		indicate "all", e.g. as 0)
+
 
 struct AttributeBlob
 {
@@ -70,11 +94,27 @@ name:		name of this attribute.
 
 gtype:		GType under which is the attribute registered.
 
+		
+		mclasen: This is unclear. Why would attributes be registered
+		in GType ? Do we have a special base type for them ? Do
+		they need to conform to some interface ?
+
+
 constructor:	offset to constructor function for this attribute, or 0 if
 		default is used.
 
+		
+		mclasen: This is unclear. Who uses this constructor, and 
+		what is it used for ?
+		
+
 n_fields:	number of fields this attribute has
 
+		
+		mclasen: it seems to me that, since we have struct support,
+		a single field would be sufficient.
+
+		
 fields:		array of SimpleTypeBlobs describing fields this attribute has.
 		Only allowed are types for which valid literals exist. Currently
 		that's the following types:
@@ -111,6 +151,14 @@ fields:		array of SimpleTypeBlobs describing fields this attribute has.
 		Implementation is responsible for reading such type name and
 		converting it to correct guint32 value.
 		
+		
+		mclasen: I would be pragmatic and specify types just be
+		a qualified name, as you already do in your C example below.
+		But I think there is a case for allowing arrays of basic
+		types. I could imagine storing the "Since: 2.6" annotation 
+		as { 2, 6 }
+
+
 		For example, Python might use the following syntax:
 
 		gobject.annotation(my_container, ContainerTypeAttribute, 
