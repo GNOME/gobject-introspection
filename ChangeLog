@@ -1,3 +1,7 @@
+2005-05-24  Matthias Clasen  <mclasen@redhat.com>
+
+	* metadata-format.txt: Updates
+
 2005-05-22  Matthias Clasen  <mclasen@redhat.com>
 
 	* tests/*: Add struct offsets to field and vfunc
@@ -33,6 +37,7 @@
 	* src/gidlmodule.c: Include string.h
 
 	* TODO: Updates.
+	:
 
 	* metadata-format.txt: Cleanup basic types.
 	* src/*: Adapt to the changes.

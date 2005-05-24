@@ -8,6 +8,7 @@ Changes since 0.5:
   + remove GString
   + add [u]int, [u]long, [s]size_t
   + rename string to utf8, add filename
+- allow blob_type to be zero for non-local entries
 
 Changes since 0.4:
 - add a UnionBlob
@@ -196,6 +197,7 @@ struct DirectoryEntry
 
 blob_type:
           The type of blob this entry points to:
+	  0 unknown (allowed only for non-local entries)
           1 function
           2 callback
           3 struct
@@ -206,6 +208,7 @@ blob_type:
           8 interface
           9 constant
 	 10 errordomain
+	 	 
 
 is_local: Wether this entry refers to a blob in this metadata.
 
@@ -414,9 +417,9 @@ arg_type:
           Describes the type of the parameter. See details below.
 
 
-Types are specified by two bytes. If the high bytes are zero, the low byte 
-describes a basic type, otherwise the 32bit number is an offset which points 
-to a TypeBlob. 
+Types are specified by four bytes. If the three high bytes are zero,
+the low byte describes a basic type, otherwise the 32bit number is an
+offset which points to a TypeBlob.
 
 
 SimpleTypeBlob (4 bytes)
