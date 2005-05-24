@@ -1,5 +1,5 @@
 /* GObject introspection: struct definitions for the binary
- * metadata format
+ * metadata format, validation
  *
  * Copyright (C) 2005 Matthias Clasen
  *
@@ -506,12 +506,31 @@ typedef struct
 } AnnotationBlob;
 
 
+
 DirEntry *g_metadata_get_dir_entry (const guchar *metadata,
 				    guint16       index);
 
 void      g_metadata_check_sanity (void);
 
 #define   g_metadata_get_string(metadata,offset) ((const gchar*)&(metadata)[(offset)])
+
+
+typedef enum
+{
+  G_METADATA_ERROR_INVALID,
+  G_METADATA_ERROR_INVALID_HEADER,
+  G_METADATA_ERROR_INVALID_DIRECTORY,
+  G_METADATA_ERROR_INVALID_ENTRY,
+  G_METADATA_ERROR_INVALID_BLOB
+} GMetadataError;
+
+#define G_METADATA_ERROR (g_metadata_error_quark ())
+
+GQuark g_metadata_error_quark (void);
+
+gboolean g_metadata_validate (const guchar  *data,
+			      guint          len,
+			      GError       **error);
 
 
 G_END_DECLS
