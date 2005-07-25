@@ -1,5 +1,10 @@
 2005-07-25  Matthias Clasen  <mclasen@redhat.com>
 
+	* src/gmetadata.c (validate_iface_type_blob): Don't
+	complain if blob->pointer is not set, since that
+	happens for enum and flag types.  (#308935, Gustavo
+	Carneiro)
+
 	* Commit an autoconf-conversion patch by
 	Gustavo Carneiro (#308708)
 

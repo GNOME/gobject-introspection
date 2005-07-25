@@ -270,15 +270,6 @@ validate_iface_type_blob (const guchar  *data,
 
   blob = (InterfaceTypeBlob*)&data[offset];
 
-  if (!blob->pointer)
-    {
-      g_set_error (error,
-		   G_METADATA_ERROR,
-		   G_METADATA_ERROR_INVALID_BLOB,
-		   "Pointer type exected for tag %d", blob->tag);
-      return FALSE;	  
-    }
-  
   if (blob->interface == 0 || blob->interface > header->n_entries)
     {
       g_set_error (error,
