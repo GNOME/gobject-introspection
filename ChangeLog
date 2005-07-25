@@ -1,5 +1,8 @@
 2005-07-25  Matthias Clasen  <mclasen@redhat.com>
 
+	* src/Makefile, tests/Makefile, tests/invoke/Makefile:
+	Remove these files from cvs, as they are now generated.
+
 	* src/gmetadata.c (validate_iface_type_blob): Don't
 	complain if blob->pointer is not set, since that
 	happens for enum and flag types.  (#308935, Gustavo
