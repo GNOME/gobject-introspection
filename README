@@ -14,7 +14,10 @@ The code in src/ currently produces four things:
   metadata blob (--raw). 
 - a function to invoke functions, given the function info object. The 
   implementation is based on libffi (a recent snapshot of libffi can
-  be found at http://spindazzle.org/libffi-green.tar.gz).
+  be found at http://spindazzle.org/libffi-green.tar.gz). After the 
+  autoconfiscation, configure expects to find a ffi.pc file. The 
+  ffi.pc.in file in this directory may be helpful in construction 
+  such a file.
 
 There are a number of IDL test files in test/, and a script to do
 roundtrip tests (IDL -> binary -> IDL).

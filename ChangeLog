@@ -1,3 +1,8 @@
+2005-07-25  Matthias Clasen  <mclasen@redhat.com>
+
+	* Commit an autoconf-conversion patch by
+	Gustavo Carneiro (#308708)
+
 2005-05-24  Matthias Clasen  <mclasen@redhat.com>
 
 	* src/compiler.c (main): Use it here to validate
