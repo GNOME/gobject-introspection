@@ -173,6 +173,7 @@ typedef union
 } GArgument;
 
 #define G_INVOKE_ERROR (g_invoke_error_quark ())
+GQuark g_invoke_error_quark (void);
 
 typedef enum
 {

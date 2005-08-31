@@ -1,5 +1,9 @@
 2005-08-31  Torsten Schoenfeld  <tsch@cvs.gnome.org>
 
+	* src/girepository.h: Export g_invoke_error_quark.
+
+2005-08-31  Torsten Schoenfeld  <tsch@cvs.gnome.org>
+
 	* src/ginvoke.c: Remove the fallback implementation of
 	g_function_info_invoke since we now formally depend on libffi.
 
