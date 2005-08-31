@@ -35,9 +35,6 @@ g_invoke_error_quark (void)
   return quark;
 }
 
-
-#ifdef HAVE_LIBFFI
-
 #include "ffi.h"
 
 static ffi_type *
@@ -288,25 +285,3 @@ g_function_info_invoke (GIFunctionInfo *info,
   
   return success;
 }
-
-#else /* !HAVE_LIBFFI */
-
-gboolean 
-g_function_info_invoke (GIFunctionInfo   *info, 
-			const GArgument  *in_args,
-			int               n_in_args,
-			const GArgument  *out_args,
-			int               n_out_args,
-			GArgument        *return_value,
-			GError          **error)
-{
-  g_set_error (error,
-	       G_INVOKE_ERROR,
-	       G_INVOKE_ERROR_FAILED,
-	       "g_function_info_invoke() is not available");	      
-
-  return FALSE;
-}
-
-#endif
-
