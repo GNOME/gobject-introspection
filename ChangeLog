@@ -1,3 +1,14 @@
+2006-10-03  Torsten Schoenfeld  <tsch@cvs.gnome.org>
+
+	* src/compiler.c, src/generate.c, src/gidlnode.c,
+	src/gidlparser.c, src/ginfo.c, src/girepository.c,
+	tests/invoke/invoke.c, test/invoke/testfns.c: Hush compiler
+	warnings about return values, signedness mismatches, unused
+	variables, and unhandles enum values in switch statements.
+
+	* tests/invoke/Makefile.am: Don't install the invoke test program.
+	Add -I ../../src to the cflags used for the test functions files.
+
 2005-08-31  Torsten Schoenfeld  <tsch@cvs.gnome.org>
 
 	* src/girepository.h: Export g_invoke_error_quark.

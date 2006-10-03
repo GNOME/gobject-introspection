@@ -19,6 +19,7 @@
  */
 
 #include <stdlib.h>
+#include <string.h>
 
 #include <glib.h>
 #include <glib-object.h>
@@ -444,7 +445,7 @@ g_base_info_get_annotation (GIBaseInfo   *info,
 GIBaseInfo *
 g_base_info_get_container (GIBaseInfo *info)
 {
-  info->container;
+  return info->container;
 }
 
 
@@ -528,7 +529,6 @@ g_type_info_new (GIBaseInfo    *container,
 		 const guchar *metadata,
 		 guint32       offset)
 {
-  Header *header = (Header *)metadata;  
   SimpleTypeBlob *type = (SimpleTypeBlob *)&metadata[offset];
 
   return (GITypeInfo *) g_info_new (GI_INFO_TYPE_TYPE, container, metadata, 
@@ -1024,7 +1024,6 @@ g_enum_info_get_value (GIEnumInfo *info,
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
   Header *header = (Header *)base->metadata;  
-  EnumBlob *blob = (EnumBlob *)&base->metadata[base->offset];
   gint offset;
 
   offset = base->offset + header->enum_blob_size 
@@ -1174,7 +1173,7 @@ GISignalInfo *
 g_object_info_get_signal (GIObjectInfo *info,
 			  gint          n)
 {
-  gint i, offset;
+  gint offset;
   GIBaseInfo *base = (GIBaseInfo *)info;
   Header *header = (Header *)base->metadata;  
   ObjectBlob *blob = (ObjectBlob *)&base->metadata[base->offset];
@@ -1203,7 +1202,7 @@ GIVFuncInfo *
 g_object_info_get_vfunc (GIObjectInfo *info,
 			 gint          n)
 {
-  gint i, offset;
+  gint offset;
   GIBaseInfo *base = (GIBaseInfo *)info;
   Header *header = (Header *)base->metadata;  
   ObjectBlob *blob = (ObjectBlob *)&base->metadata[base->offset];
@@ -1233,7 +1232,7 @@ GIConstantInfo *
 g_object_info_get_constant (GIObjectInfo *info,
 			    gint          n)
 {
-  gint i, offset;
+  gint offset;
   GIBaseInfo *base = (GIBaseInfo *)info;
   Header *header = (Header *)base->metadata;  
   ObjectBlob *blob = (ObjectBlob *)&base->metadata[base->offset];
@@ -1312,7 +1311,7 @@ GIFunctionInfo *
 g_interface_info_get_method (GIInterfaceInfo *info,
 			     gint            n)
 {
-  gint i, offset;
+  gint offset;
   GIBaseInfo *base = (GIBaseInfo *)info;
   Header *header = (Header *)base->metadata;  
   InterfaceBlob *blob = (InterfaceBlob *)&base->metadata[base->offset];
@@ -1355,7 +1354,7 @@ GISignalInfo *
 g_interface_info_get_signal (GIInterfaceInfo *info,
 			     gint            n)
 {
-  gint i, offset;
+  gint offset;
   GIBaseInfo *base = (GIBaseInfo *)info;
   Header *header = (Header *)base->metadata;  
   InterfaceBlob *blob = (InterfaceBlob *)&base->metadata[base->offset];
@@ -1383,7 +1382,7 @@ GIVFuncInfo *
 g_interface_info_get_vfunc (GIInterfaceInfo *info,
 			    gint            n)
 {
-  gint i, offset;
+  gint offset;
   GIBaseInfo *base = (GIBaseInfo *)info;
   Header *header = (Header *)base->metadata;  
   InterfaceBlob *blob = (InterfaceBlob *)&base->metadata[base->offset];

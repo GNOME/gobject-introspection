@@ -19,6 +19,7 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "gidlmodule.h"
@@ -46,9 +47,9 @@ init_stats (void)
 void
 dump_stats (void)
 {
-  g_message ("%d strings (%d before sharing), %d bytes (%d before sharing)",
+  g_message ("%lu strings (%lu before sharing), %lu bytes (%lu before sharing)",
 	     unique_string_count, string_count, unique_string_size, string_size);
-  g_message ("%d types (%d before sharing)", unique_types_count, types_count);
+  g_message ("%lu types (%lu before sharing)", unique_types_count, types_count);
 }
 
 #define ALIGN_VALUE(this, boundary) \
@@ -251,8 +252,6 @@ g_idl_node_free (GIdlNode *node)
  
     case G_IDL_NODE_VALUE:
       {
-	GIdlNodeValue *value = (GIdlNodeValue *)node;
-	
 	g_free (node->name);
       }
       break;
@@ -479,7 +478,7 @@ g_idl_node_get_size (GIdlNode *node)
       size = 0;
     }
 
-  g_debug ("node %d type %d size %d", node, node->type, size);
+  g_debug ("node %p type %d size %d", node, node->type, size);
 
   return size;
 }
@@ -633,8 +632,6 @@ g_idl_node_get_full_size (GIdlNode *node)
 
     case G_IDL_NODE_VALUE:
       {
-	GIdlNodeValue *value = (GIdlNodeValue *)node;
-	
 	size = 12;
 	size += ALIGN_VALUE (strlen (node->name) + 1, 4);
       }
@@ -761,7 +758,7 @@ g_idl_node_get_full_size (GIdlNode *node)
       size = 0;
     }
 
-  g_debug ("node %d type %d full size %d", node, node->type, size);
+  g_debug ("node %p type %d full size %d", node, node->type, size);
 
   return size;
 }
@@ -1129,7 +1126,7 @@ g_idl_node_build_metadata (GIdlNode   *node,
 		  case TYPE_TAG_ERROR:
 		    {
 		      ErrorTypeBlob *blob = (ErrorTypeBlob *)&data[*offset2];
-		      gint i, domain;
+		      gint i;
 		      
 		      blob->pointer = 1;
 		      blob->reserved = 0;
@@ -1201,7 +1198,7 @@ g_idl_node_build_metadata (GIdlNode   *node,
 	FunctionBlob *blob = (FunctionBlob *)&data[*offset];
 	SignatureBlob *blob2 = (SignatureBlob *)&data[*offset2];
 	GIdlNodeFunction *function = (GIdlNodeFunction *)node;
-	guint32 signature, res;
+	guint32 signature;
 	gint n;
 
 	signature = *offset2;
@@ -1250,7 +1247,7 @@ g_idl_node_build_metadata (GIdlNode   *node,
 	CallbackBlob *blob = (CallbackBlob *)&data[*offset];
 	SignatureBlob *blob2 = (SignatureBlob *)&data[*offset2];
 	GIdlNodeFunction *function = (GIdlNodeFunction *)node;
-	guint32 signature, res;
+	guint32 signature;
 	gint n;
 
 	signature = *offset2;
@@ -1293,7 +1290,7 @@ g_idl_node_build_metadata (GIdlNode   *node,
 	SignalBlob *blob = (SignalBlob *)&data[*offset];
 	SignatureBlob *blob2 = (SignatureBlob *)&data[*offset2];
 	GIdlNodeSignal *signal = (GIdlNodeSignal *)node;
-	guint32 signature, res;
+	guint32 signature;
 	gint n;
 
 	signature = *offset2;
@@ -1344,7 +1341,7 @@ g_idl_node_build_metadata (GIdlNode   *node,
 	VFuncBlob *blob = (VFuncBlob *)&data[*offset];
 	SignatureBlob *blob2 = (SignatureBlob *)&data[*offset2];
 	GIdlNodeVFunc *vfunc = (GIdlNodeVFunc *)node;
-	guint32 signature, res;
+	guint32 signature;
 	gint n;
 
 	signature = *offset2;
@@ -1390,7 +1387,6 @@ g_idl_node_build_metadata (GIdlNode   *node,
       {
 	ArgBlob *blob = (ArgBlob *)&data[*offset];
 	GIdlNodeParam *param = (GIdlNodeParam *)node;
-	guint32 res;
 
 	*offset += 8;
 
@@ -1414,7 +1410,6 @@ g_idl_node_build_metadata (GIdlNode   *node,
       {
 	StructBlob *blob = (StructBlob *)&data[*offset];
 	GIdlNodeStruct *struct_ = (GIdlNodeStruct *)node;
-	guint32 pos;
 	
 	blob->blob_type = BLOB_TYPE_STRUCT;
 	blob->deprecated = struct_->deprecated;
@@ -1624,7 +1619,6 @@ g_idl_node_build_metadata (GIdlNode   *node,
       {
 	ObjectBlob *blob = (ObjectBlob *)&data[*offset];
 	GIdlNodeInterface *object = (GIdlNodeInterface *)node;
-	gint parent;
 
 	blob->blob_type = BLOB_TYPE_OBJECT;
 	blob->deprecated = object->deprecated;
@@ -1947,6 +1941,8 @@ g_idl_node_build_metadata (GIdlNode   *node,
 				   strings, types, data, &pos, offset2);
       }
       break;
+    default:
+      g_assert_not_reached ();
     }
   
   g_debug ("node %p type %d, offset %d -> %d, offset2 %d -> %d",

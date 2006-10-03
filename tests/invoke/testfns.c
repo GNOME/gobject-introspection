@@ -1,4 +1,7 @@
+#include <string.h>
+
 #include <glib.h>
+#include <glib/gprintf.h>
 
 gint test1 (gint in)
 {

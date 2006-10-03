@@ -19,8 +19,10 @@
  */
 
 #include <stdio.h>
+#include <string.h>
 
 #include <glib.h>
+#include <glib/gprintf.h>
 #include "girepository.h"
 #include "gmetadata.h"
 

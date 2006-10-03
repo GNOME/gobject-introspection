@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <dlfcn.h>
+#include <string.h>
 
 #include <glib.h>
 #include <girepository.h>
