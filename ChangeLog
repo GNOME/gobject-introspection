@@ -1,3 +1,9 @@
+2006-08-14  Jürg Billeter  <j@bitron.ch>
+
+      * src/gidlparser.c: (end_element_handler): Don't leave
+        namespace and implements states too early.
+	Fixes #351264
+
 2007-11-26  Johan Dahlin  <johan@gnome.org>
 
 	* src/gmetadata.c (validate_struct_blob): 

@@ -1862,8 +1862,11 @@ end_element_handler (GMarkupParseContext *context,
       break;
 
     case STATE_NAMESPACE:
-      ctx->current_module = NULL;
-      ctx->state = STATE_ROOT;
+      if (strcmp (element_name, "namespace") == 0)
+	{
+          ctx->current_module = NULL;
+          ctx->state = STATE_ROOT;
+        }
       break;
 
     case STATE_FUNCTION:
@@ -1948,7 +1951,8 @@ end_element_handler (GMarkupParseContext *context,
       break;
 
     case STATE_IMPLEMENTS:
-      ctx->state = STATE_OBJECT;
+      if (strcmp (element_name, "implements") == 0)
+        ctx->state = STATE_OBJECT;
       break;
     case STATE_REQUIRES:
       ctx->state = STATE_INTERFACE;
