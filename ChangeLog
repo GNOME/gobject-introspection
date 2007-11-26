@@ -1,3 +1,11 @@
+2007-11-26  Johan Dahlin  <johan@gnome.org>
+
+	* src/gmetadata.c (validate_struct_blob): 
+	pass blob_type to validate_function_blob instead of 
+	hard-coding BLOB_TYPE_STRUCT.
+
+	Patch by Torsten Schoenfeld, fixes #314190
+
 2006-10-03  Torsten Schoenfeld  <tsch@cvs.gnome.org>
 
 	* src/compiler.c, src/generate.c, src/gidlnode.c,

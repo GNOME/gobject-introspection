@@ -1120,7 +1120,7 @@ validate_struct_blob (const guchar  *data,
 				   offset + sizeof (StructBlob) + 
 				   blob->n_fields * sizeof (FieldBlob) + 
 				   i * sizeof (FunctionBlob), 
-				   BLOB_TYPE_STRUCT,
+				   blob_type,
 				   error))
 	return FALSE;
     }
