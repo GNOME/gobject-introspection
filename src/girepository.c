@@ -121,6 +121,20 @@ g_irepository_unregister (GIRepository *repository,
     }
 }
 
+gboolean
+g_irepository_is_registered (GIRepository *repository, 
+			     const gchar *namespace)
+{
+  GHashTable *table;
+
+  if (repository != NULL)
+    table = repository->priv->metadata;
+  else
+    table = default_metadata;
+
+  return g_hash_table_lookup (table, namespace) != NULL;
+}
+
 GIRepository * 
 g_irepository_get_default (void)
 {

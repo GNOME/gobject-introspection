@@ -1,3 +1,13 @@
+2007-11-26  Johan Dahlin  <johan@gnome.org>
+
+	* src/ginfo.c: (g_object_info_get_type_name),
+	(g_object_info_get_type_init):
+	* src/girepository.c: (g_irepository_is_registered):
+	* src/girepository.h:
+
+	Add g_object_info_get_type_name, g_object_info_get_type_init and
+	g_irepository_is_registered.
+
 2006-08-14  Jürg Billeter  <j@bitron.ch>
 
       * src/gidlparser.c: (end_element_handler): Don't leave

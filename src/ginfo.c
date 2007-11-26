@@ -1044,6 +1044,24 @@ g_object_info_get_parent (GIObjectInfo *info)
     return NULL;
 }
 
+const gchar *
+g_object_info_get_type_name (GIObjectInfo *info)
+{
+  GIBaseInfo *base = (GIBaseInfo *)info;
+  ObjectBlob *blob = (ObjectBlob *)&base->metadata[base->offset];
+
+  return g_metadata_get_string (base->metadata, blob->gtype_name);
+}
+
+const gchar *
+g_object_info_get_type_init (GIObjectInfo *info)
+{
+  GIBaseInfo *base = (GIBaseInfo *)info;
+  ObjectBlob *blob = (ObjectBlob *)&base->metadata[base->offset];
+
+  return g_metadata_get_string (base->metadata, blob->gtype_init);
+}
+
 gint
 g_object_info_get_n_interfaces (GIObjectInfo *info)
 {

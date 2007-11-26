@@ -75,6 +75,8 @@ void          g_irepository_register      (GIRepository *repository,
 					   const guchar *metadata);
 void          g_irepository_unregister    (GIRepository *repository,
 					   const guchar *metadata);
+gboolean      g_irepository_is_registered (GIRepository *repository, 
+					   const gchar  *namespace);
 GIBaseInfo *  g_irepository_find_by_name  (GIRepository *repository,
 					   const gchar  *namespace,
 					   const gchar  *name);
@@ -329,6 +331,8 @@ GIValueInfo  *         g_enum_info_get_value                (GIEnumInfo      *in
 
 /* GIObjectInfo */
 
+const gchar *          g_object_info_get_type_name 	    (GIObjectInfo    *info);
+const gchar *          g_object_info_get_type_init 	    (GIObjectInfo    *info);
 GIObjectInfo *         g_object_info_get_parent             (GIObjectInfo    *info);
 gint                   g_object_info_get_n_interfaces       (GIObjectInfo    *info);
 GIInterfaceInfo *      g_object_info_get_interface          (GIObjectInfo    *info,
