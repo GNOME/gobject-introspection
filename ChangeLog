@@ -1,3 +1,8 @@
+2007-11-29  Johan Dahlin  <johan@gnome.org>
+
+	* src/gidlparser.c (parse_type_internal): Add char, 
+	gchar and guchar to the builtin types.
+
 2007-11-26  Johan Dahlin  <johan@gnome.org>
 
 	* src/ginfo.c: (g_object_info_get_type_name),
