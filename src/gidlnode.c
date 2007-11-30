@@ -64,6 +64,7 @@ g_idl_node_new (GIdlNodeTypeId type)
   switch (type)
     {
    case G_IDL_NODE_FUNCTION:
+   case G_IDL_NODE_CALLBACK:
       node = g_malloc0 (sizeof (GIdlNodeFunction));
       break;
 

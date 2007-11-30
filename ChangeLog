@@ -1,5 +1,9 @@
 2007-11-30  Jürg Billeter  <j@bitron.ch>
 
+	* src/gidlnode.c: (g_idl_node_new): support creating callback nodes
+
+2007-11-30  Jürg Billeter  <j@bitron.ch>
+
 	* src/gidlparser.c: (end_element_handler): Don't leave requires
 	state too early.
 
