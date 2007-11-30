@@ -1,5 +1,40 @@
 2007-11-30  Jürg Billeter  <j@bitron.ch>
 
+	* configure.ac:
+	* src/Makefile.am:
+	* src/clexer.l:
+	* src/cparser.y:
+	* src/gen-introspect.c: (g_idl_node_cmp), (g_igenerator_new),
+	(g_igenerator_write_inline), (g_igenerator_write),
+	(g_igenerator_write_indent), (g_igenerator_write_unindent),
+	(field_generate), (value_generate), (constant_generate),
+	(property_generate), (function_generate), (vfunc_generate),
+	(signal_generate), (interface_generate), (struct_generate),
+	(union_generate), (boxed_generate), (enum_generate),
+	(node_generate), (module_generate), (get_type_from_type_id),
+	(str_replace), (g_igenerator_process_properties),
+	(g_igenerator_process_signals), (g_igenerator_process_types),
+	(get_type_from_ctype), (g_igenerator_process_function_symbol),
+	(g_igenerator_process_unregistered_struct_typedef),
+	(g_igenerator_process_struct_typedef),
+	(g_igenerator_process_union_typedef),
+	(g_igenerator_process_enum_typedef),
+	(g_igenerator_process_function_typedef),
+	(g_igenerator_process_constant), (g_igenerator_process_symbols),
+	(g_igenerator_add_symbol), (g_igenerator_is_typedef),
+	(g_igenerator_generate), (main), (csymbol_new),
+	(csymbol_get_const_boolean), (ctype_new), (ctype_copy),
+	(cbasic_type_new), (ctypedef_new), (cstruct_new), (cunion_new),
+	(cenum_new), (cpointer_new), (carray_new), (cfunction_new),
+	(eat_hspace), (eat_line), (read_identifier),
+	(g_igenerator_parse_macros):
+	* src/gen-introspect.h:
+
+	Import gen-introspect to generate introspection information by
+	parsing C headers.
+
+2007-11-30  Jürg Billeter  <j@bitron.ch>
+
 	* src/gidlnode.c: (g_idl_node_new): support creating callback nodes
 
 2007-11-30  Jürg Billeter  <j@bitron.ch>

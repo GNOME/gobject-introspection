@@ -10,12 +10,23 @@ AC_CONFIG_HEADER([config.h])
 
 # Checks for programs.
 AC_PROG_CC
+AM_PROG_CC_C_O
 AC_PROG_LIBTOOL
+
+AC_PROG_LEX
+if test "$LEX" = :; then
+	AC_MSG_ERROR([flex not found but required])
+fi
+
+AC_CHECK_PROGS(YACC, 'bison -y' byacc yacc, :)
+if test "$YACC" = :; then
+	AC_MSG_ERROR([bison not found but required])
+fi
 
 # Checks for libraries.
 AC_CHECK_LIB([dl], [dlopen])
 
-PKG_CHECK_MODULES(GIREPO, glib-2.0 gobject-2.0 gmodule-2.0 libffi)
+PKG_CHECK_MODULES(GIREPO, glib-2.0 gobject-2.0 gmodule-2.0 gthread-2.0 libffi)
 
 
 # Checks for header files.
