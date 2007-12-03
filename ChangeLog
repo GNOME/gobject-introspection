@@ -1,3 +1,8 @@
+2007-12-03  Johan Dahlin  <johan@gnome.org>
+
+	* src/gidlparser.c (parse_type_internal): Disable char/gchar and
+	guchar for now.
+
 2007-11-30  Jürg Billeter  <j@bitron.ch>
 
 	* configure.ac:

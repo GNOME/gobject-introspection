@@ -92,9 +92,11 @@ parse_type_internal (gchar *str, gchar **rest)
     { "void",     TYPE_TAG_VOID,    0 },
     { "gpointer", TYPE_TAG_VOID,    1 },
     { "gboolean", TYPE_TAG_BOOLEAN, 0 },
+#if 0
     { "char",     TYPE_TAG_INT8,    0 },
     { "gchar",    TYPE_TAG_INT8,    0 },
     { "guchar",   TYPE_TAG_UINT8,   0 },
+#endif
     { "int8_t",   TYPE_TAG_INT8,    0 },
     { "int8",     TYPE_TAG_INT8,    0 },
     { "gint8",    TYPE_TAG_INT8,    0 },
