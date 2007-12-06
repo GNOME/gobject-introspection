@@ -22,6 +22,7 @@
 #define __G_IREPOSITORY_H__
 
 #include <glib-object.h>
+#include <gmodule.h>
 
 G_BEGIN_DECLS
 
@@ -51,7 +52,7 @@ typedef struct _GIArgInfo            GIArgInfo;
 typedef struct _GITypeInfo           GITypeInfo;
 typedef struct _GIErrorDomainInfo    GIErrorDomainInfo;
 typedef struct _GIUnresolvedInfo     GIUnresolvedInfo;
-
+typedef struct _GMetadata            GMetadata;
 
 struct _GIRepository 
 { 
@@ -71,10 +72,13 @@ struct _GIRepositoryClass
 
 GType         g_irepository_get_type      (void) G_GNUC_CONST;
 GIRepository *g_irepository_get_default   (void);
-void          g_irepository_register      (GIRepository *repository,
-					   const guchar *metadata);
+const gchar * g_irepository_register      (GIRepository *repository,
+					   GMetadata    *metadata);
 void          g_irepository_unregister    (GIRepository *repository,
-					   const guchar *metadata);
+					   const gchar  *namespace);
+const gchar * g_irepository_register_file (GIRepository *repository,
+					   const gchar  *filename,
+					   GError      **error);
 gboolean      g_irepository_is_registered (GIRepository *repository, 
 					   const gchar  *namespace);
 GIBaseInfo *  g_irepository_find_by_name  (GIRepository *repository,
@@ -88,6 +92,30 @@ gint          g_irepository_get_n_infos   (GIRepository *repository,
 GIBaseInfo *  g_irepository_get_info      (GIRepository *repository,
 					   const gchar  *namespace,
 					   gint          index);
+const gchar * g_irepository_get_shared_library (GIRepository *repository,
+						const gchar  *namespace);
+/* Metadata */
+
+GMetadata *   g_metadata_new_from_memory       (guchar       *memory,
+                                                gsize         len);
+GMetadata *   g_metadata_new_from_const_memory (const guchar *memory,
+                                                gsize         len);
+GMetadata *   g_metadata_new_from_mapped_file  (GMappedFile  *mfile);
+void          g_metadata_free                  (GMetadata    *metadata);
+void          g_metadata_set_module            (GMetadata    *metadata,
+                                                GModule      *module);
+const gchar * g_metadata_get_namespace         (GMetadata    *metadata);
+
+typedef enum
+{
+  G_IREPOSITORY_ERROR_METADATA_NOT_FOUND,
+  G_IREPOSITORY_ERROR_NAMESPACE_MISMATCH,
+  G_IREPOSITORY_ERROR_LIBRARY_NOT_FOUND
+} GIRepositoryError;
+
+#define G_IREPOSITORY_ERROR (g_irepository_error_quark ())
+
+GQuark g_irepository_error_quark (void);
 
 
 /* Types of objects registered in the repository */
@@ -128,10 +156,11 @@ gboolean               g_base_info_is_deprecated    (GIBaseInfo   *info);
 const gchar *          g_base_info_get_annotation   (GIBaseInfo   *info,
                                                      const gchar  *name);
 GIBaseInfo *           g_base_info_get_container    (GIBaseInfo   *info);
+GMetadata *            g_base_info_get_metadata     (GIBaseInfo   *info);
 
 GIBaseInfo *           g_info_new                   (GIInfoType     type,
 						     GIBaseInfo    *container,
-						     const guchar *metadata, 
+						     GMetadata     *metadata, 
 						     guint32       offset);
 
 

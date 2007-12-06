@@ -1,3 +1,4 @@
-SUBDIRS = invoke
+SUBDIRS = . invoke
 
 TESTS = roundtrips.sh
+

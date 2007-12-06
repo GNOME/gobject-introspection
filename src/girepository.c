@@ -1,3 +1,4 @@
+/* -*- Mode: C; c-file-style: "gnu"; -*- */
 /* GObject introspection: Repository implementation
  *
  * Copyright (C) 2005 Matthias Clasen
@@ -23,15 +24,17 @@
 
 #include <glib.h>
 #include <glib/gprintf.h>
+#include <gmodule.h>
 #include "girepository.h"
 #include "gmetadata.h"
 
 static GIRepository *default_repository = NULL;
 static GHashTable *default_metadata = NULL;
+static GSList *search_path = NULL;
 
 struct _GIRepositoryPrivate 
 {
-  GHashTable *metadata;
+  GHashTable *metadata; /* (string) namespace -> GMetadata */
 };
 
 G_DEFINE_TYPE (GIRepository, g_irepository, G_TYPE_OBJECT);
@@ -65,24 +68,35 @@ g_irepository_class_init (GIRepositoryClass *class)
   g_type_class_add_private (class, sizeof (GIRepositoryPrivate)); 
 }
 
-void
-g_irepository_register (GIRepository *repository, 
-			const guchar *metadata)
+const gchar *
+g_irepository_register (GIRepository *repository,
+                        GMetadata    *metadata)
 {
-  Header *header = (Header *)metadata;
+  Header *header;
   const gchar *name;
   GHashTable *table;
+  GError *error = NULL;
+  
+  g_return_val_if_fail (metadata != NULL, NULL);
+  
+  header = (Header *)metadata->data;
+
+  g_return_val_if_fail (header != NULL, NULL);
 
   if (repository != NULL)
     {
       if (repository->priv->metadata == NULL)
-	repository->priv->metadata = g_hash_table_new (g_str_hash, g_str_equal);
+	repository->priv->metadata = g_hash_table_new_full (g_str_hash, g_str_equal,
+                                                            (GDestroyNotify) NULL,
+                                                            (GDestroyNotify) g_metadata_free);
       table = repository->priv->metadata;
     }
   else 
     {
       if (default_metadata == NULL)
-	default_metadata = g_hash_table_new (g_str_hash, g_str_equal);
+	default_metadata = g_hash_table_new_full (g_str_hash, g_str_equal,
+                                                  (GDestroyNotify) NULL,
+                                                  (GDestroyNotify) g_metadata_free);
       table = default_metadata;
     }
 
@@ -90,34 +104,34 @@ g_irepository_register (GIRepository *repository,
 
   if (g_hash_table_lookup (table, name))
     {
-      g_fprintf (stderr, "metadata (%p) for '%s' already registered\n",
+      g_printerr ("metadata (%p) for '%s' already registered\n",
 		 metadata, name);
 
-      return;
+      return NULL;
     }
+  g_hash_table_insert (table, g_strdup(name), (void *)metadata);
 
-  g_hash_table_insert (table, (void *)name, (void *)metadata);
+  if (metadata->module == NULL)
+      metadata->module = g_module_open (NULL, 0); 
+
+  return name;
 }
 
+
 void
-g_irepository_unregister (GIRepository *repository, 
-			  const guchar *metadata)
+g_irepository_unregister (GIRepository *repository,
+                          const gchar  *namespace)
 {
-  Header *header = (Header *)metadata;
-  const gchar *name;
   GHashTable *table;
 
   if (repository != NULL)
     table = repository->priv->metadata;
   else
     table = default_metadata;
-  
-  name = g_metadata_get_string (metadata, header->namespace);
 
-  if (!g_hash_table_remove (table, name))
+  if (!g_hash_table_remove (table, namespace))
     {
-      g_fprintf (stderr, "metadata (%p) for '%s' not registered\n",
-		 metadata, name);
+      g_printerr ("namespace '%s' not registered\n", namespace);
     }
 }
 
@@ -142,7 +156,9 @@ g_irepository_get_default (void)
     { 
       default_repository = g_object_new (G_TYPE_IREPOSITORY, NULL);
       if (default_metadata == NULL)
-	default_metadata = g_hash_table_new (g_str_hash, g_str_equal);
+	default_metadata = g_hash_table_new_full (g_str_hash, g_str_equal,
+                                                  (GDestroyNotify) NULL,
+                                                  (GDestroyNotify) g_metadata_free);
       default_repository->priv->metadata = default_metadata;
     }
 
@@ -154,7 +170,7 @@ count_interfaces (gpointer key,
 		  gpointer value,
 		  gpointer data)
 {
-  guchar *metadata = (guchar *)value;
+  guchar *metadata = ((GMetadata *) value)->data;
   gint *n_interfaces = (gint *)data;
   
   *n_interfaces += ((Header *)metadata)->n_local_entries;
@@ -165,14 +181,15 @@ g_irepository_get_n_infos (GIRepository *repository,
 			   const gchar  *namespace)
 {
   gint n_interfaces = 0;
+  
   if (namespace)
     {
-      guchar *metadata;
+      GMetadata *metadata;
 
       metadata = g_hash_table_lookup (repository->priv->metadata, namespace);
 
       if (metadata)
-	n_interfaces = ((Header *)metadata)->n_local_entries;
+	n_interfaces = ((Header *)metadata->data)->n_local_entries;
     }
   else
     {
@@ -197,7 +214,7 @@ find_interface (gpointer key,
 		gpointer data)
 {
   gint i;
-  guchar *metadata = (guchar *)value;
+  GMetadata *metadata = (GMetadata *)value;
   IfaceData *iface_data = (IfaceData *)data;
   gint index;
   gint n_entries;
@@ -207,7 +224,7 @@ find_interface (gpointer key,
   DirEntry *entry;    
 
   index = 0;
-  n_entries = ((Header *)metadata)->n_local_entries;
+  n_entries = ((Header *)metadata->data)->n_local_entries;
 
   if (iface_data->name)
     {
@@ -230,7 +247,7 @@ find_interface (gpointer key,
 	  if (entry->blob_type < 4)
 	    continue;
 	  
-	  offset = *(guint32*)&metadata[entry->offset + 8];
+	  offset = *(guint32*)&metadata->data[entry->offset + 8];
 	  type = g_metadata_get_string (metadata, offset);
 	  if (strcmp (type, iface_data->type) == 0)
 	    {
@@ -269,7 +286,7 @@ g_irepository_get_info (GIRepository *repository,
 
   if (namespace)
     {
-      guchar *metadata;
+      GMetadata *metadata;
       
       metadata = g_hash_table_lookup (repository->priv->metadata, namespace);
       
@@ -312,7 +329,7 @@ g_irepository_find_by_name (GIRepository *repository,
 
   if (namespace)
     {
-      guchar *metadata;
+      GMetadata *metadata;
       
       metadata = g_hash_table_lookup (repository->priv->metadata, namespace);
       
@@ -351,4 +368,132 @@ g_irepository_get_namespaces (GIRepository *repository)
   g_list_free (list);
 
   return names;
+}
+
+const gchar *
+g_irepository_get_shared_library (GIRepository *repository,
+                                   const gchar  *namespace)
+{
+  GMetadata *metadata;
+  Header *header;
+
+  metadata = g_hash_table_lookup (repository->priv->metadata, namespace);
+  if (!metadata)
+    return NULL;
+  header = (Header *) metadata->data;
+  if (header->shared_library)
+    return g_metadata_get_string (metadata, header->shared_library);
+  else
+    return NULL;
+}
+
+static inline void
+g_irepository_build_search_path (void)
+{
+  gchar **dir;
+  gchar **tokens;
+
+  if (g_getenv ("GIREPOPATH")) {
+    gchar *path;
+    path = g_strconcat (g_getenv ("GIREPOPATH"), ":", GIREPO_DEFAULT_SEARCH_PATH, NULL);
+    tokens = g_strsplit (path, ":", 0);
+    g_free (path);
+  } else
+    tokens = g_strsplit (GIREPO_DEFAULT_SEARCH_PATH, ":", 0);
+
+  search_path = g_slist_prepend (search_path, ".");
+  for (dir = tokens; *dir; ++dir)
+    search_path = g_slist_prepend (search_path, *dir);
+  search_path = g_slist_reverse (search_path);
+  g_free (tokens);
+}
+
+const gchar *
+g_irepository_register_file (GIRepository  *repository,
+			     const gchar   *namespace,
+			     GError       **error)
+{
+  GSList *ldir;
+  const char *dir;
+  gchar *fname, *full_path;
+  GMappedFile *mfile;
+  GError *error1 = NULL;
+  GMetadata *metadata = NULL;
+  const gchar *metadata_namespace, *shlib_fname;
+  GModule *module;
+  guint32 shlib;
+  GHashTable *table;
+
+  if (repository != NULL)
+    table = repository->priv->metadata;
+  else
+    table = default_metadata;
+
+  /* don't bother loading a namespace if already registered */
+  if (g_hash_table_lookup (table, namespace))
+    return NULL;
+
+  if (search_path == NULL)
+    g_irepository_build_search_path ();
+
+  fname = g_strconcat (namespace, ".repo", NULL);
+
+  for (ldir = search_path; ldir; ldir = ldir->next) {
+    dir = ldir->data;
+    full_path = g_build_filename (dir, fname, NULL);
+    mfile = g_mapped_file_new (full_path, FALSE, &error1);
+    if (error1) {
+      g_debug ("Failed to mmap \"%s\"", full_path);
+      g_clear_error (&error1);
+      g_free (full_path);
+      continue;
+    }
+    g_free (full_path);
+    metadata = g_metadata_new_from_mapped_file (mfile);
+    metadata_namespace = g_metadata_get_string (metadata, ((Header *) metadata->data)->namespace);
+    if (strcmp (metadata_namespace, namespace) != 0) {
+      g_set_error (error, G_IREPOSITORY_ERROR,
+                   G_IREPOSITORY_ERROR_NAMESPACE_MISMATCH,
+                   "Metadata file %s for namespace '%s' contains namespace '%s'"
+                   " which doesn't match the file name",
+                   full_path, namespace, metadata_namespace);
+      return NULL; 
+    }
+    break;
+  }
+  g_free (fname);
+  if (metadata == NULL) {
+    g_set_error (error, G_IREPOSITORY_ERROR,
+                 G_IREPOSITORY_ERROR_METADATA_NOT_FOUND,
+                 "Metadata file for namespace '%s' was not found in search"
+                 " path or could not be openened", namespace);
+    return NULL;
+  }
+  /* optionally load shared library and attach it to the metadata */
+  shlib = ((Header *) metadata->data)->shared_library;
+  if (shlib) {
+    shlib_fname = g_metadata_get_string (metadata, shlib);
+    module = g_module_open (shlib_fname, G_MODULE_BIND_LAZY|G_MODULE_BIND_LOCAL);
+    if (module == NULL) {
+      g_set_error (error, G_IREPOSITORY_ERROR,
+                   G_IREPOSITORY_ERROR_METADATA_NOT_FOUND,
+                   "Metadata for namespace '%s' references shared library %s,"
+                   " but it could not be openened (%s)",
+                   namespace, shlib_fname, g_module_error ());
+      return NULL;
+    }
+  }
+
+  g_hash_table_remove (table, namespace);
+  return g_irepository_register (repository, metadata);
+}
+
+
+GQuark
+g_irepository_error_quark (void)
+{
+  static GQuark quark = 0;
+  if (quark == 0)
+    quark = g_quark_from_static_string ("g-irepository-error-quark");
+  return quark;
 }

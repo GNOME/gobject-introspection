@@ -32,19 +32,19 @@
 
 
 DirEntry *
-g_metadata_get_dir_entry (const guchar *metadata,
-			  guint16       index)
+g_metadata_get_dir_entry (GMetadata *metadata,
+			  guint16    index)
 {
-  Header *header = (Header *)metadata;
+  Header *header = (Header *)metadata->data;
 
-  return (DirEntry *)&metadata[header->directory + (index - 1) * header->entry_blob_size];
+  return (DirEntry *)&metadata->data[header->directory + (index - 1) * header->entry_blob_size];
 }
 
 void    
 g_metadata_check_sanity (void)
 {
   /* Check that struct layout is as we expect */
-  g_assert (sizeof (Header) == 84);
+  g_assert (sizeof (Header) == 100);
   g_assert (sizeof (DirEntry) == 12);
   g_assert (sizeof (SimpleTypeBlob) == 4);
   g_assert (sizeof (ArgBlob) == 12);
@@ -97,13 +97,12 @@ is_name (const guchar *data, guint32 offset)
 }
 
 static gboolean 
-validate_header (const guchar  *data,
-		 gint           len,
-		 GError       **error)
+validate_header (GMetadata  *metadata,
+		 GError    **error)
 {
   Header *header;
 
-  if (len < sizeof (Header))
+  if (metadata->len < sizeof (Header))
     {
       g_set_error (error,
 		   G_METADATA_ERROR,
@@ -112,7 +111,7 @@ validate_header (const guchar  *data,
       return FALSE;
     }
 
-  header = (Header *)data;
+  header = (Header *)metadata->data;
 
   if (strncmp (header->magic, G_IDL_MAGIC, 16) != 0)
     {
@@ -143,7 +142,7 @@ validate_header (const guchar  *data,
       return FALSE; 
     }
 
-  if (header->size != len)
+  if (header->size != metadata->len)
     {
       g_set_error (error,
 		   G_METADATA_ERROR,
@@ -205,7 +204,7 @@ validate_header (const guchar  *data,
       return FALSE; 
     }
 
-  if (!is_name (data, header->namespace))
+  if (!is_name (metadata->data, header->namespace))
     {
       g_set_error (error,
 		   G_METADATA_ERROR,
@@ -217,16 +216,14 @@ validate_header (const guchar  *data,
   return TRUE;
 }
 
-static gboolean validate_type_blob (const guchar  *data,
-				    guint          len,
+static gboolean validate_type_blob (GMetadata     *metadata,
 				    guint32        offset,
 				    guint32        signature_offset,
 				    gboolean       return_type,
 				    GError       **error);
 
 static gboolean
-validate_array_type_blob (const guchar  *data,
-			  guint          len,
+validate_array_type_blob (GMetadata     *metadata,
 			  guint32        offset,
 			  guint32        signature_offset,
 			  gboolean       return_type,
@@ -234,7 +231,7 @@ validate_array_type_blob (const guchar  *data,
 {
   ArrayTypeBlob *blob;
 
-  blob = (ArrayTypeBlob*)&data[offset];
+  blob = (ArrayTypeBlob*)&metadata->data[offset];
 
   if (!blob->pointer)
     {
@@ -247,7 +244,7 @@ validate_array_type_blob (const guchar  *data,
 
   /* FIXME validate length */
 
-  if (!validate_type_blob (data, len,
+  if (!validate_type_blob (metadata,
 			   offset + G_STRUCT_OFFSET (ArrayTypeBlob, type),
 			   0, FALSE, error))
     return FALSE;
@@ -256,8 +253,7 @@ validate_array_type_blob (const guchar  *data,
 }
 
 static gboolean
-validate_iface_type_blob (const guchar  *data,
-			  guint          len,
+validate_iface_type_blob (GMetadata     *metadata,
 			  guint32        offset,
 			  guint32        signature_offset,
 			  gboolean       return_type,
@@ -266,9 +262,9 @@ validate_iface_type_blob (const guchar  *data,
   InterfaceTypeBlob *blob;
   Header *header;
 
-  header = (Header *)data;
+  header = (Header *)metadata->data;
 
-  blob = (InterfaceTypeBlob*)&data[offset];
+  blob = (InterfaceTypeBlob*)&metadata->data[offset];
 
   if (blob->interface == 0 || blob->interface > header->n_entries)
     {
@@ -283,8 +279,7 @@ validate_iface_type_blob (const guchar  *data,
 }
 
 static gboolean
-validate_param_type_blob (const guchar  *data,
-			  guint          len,
+validate_param_type_blob (GMetadata     *metadata,
 			  guint32        offset,
 			  guint32        signature_offset,
 			  gboolean       return_type,
@@ -294,7 +289,7 @@ validate_param_type_blob (const guchar  *data,
   ParamTypeBlob *blob;
   gint i;
 
-  blob = (ParamTypeBlob*)&data[offset];
+  blob = (ParamTypeBlob*)&metadata->data[offset];
 
   if (!blob->pointer)
     {
@@ -316,7 +311,7 @@ validate_param_type_blob (const guchar  *data,
   
   for (i = 0; i < n_params; i++)
     {
-      if (!validate_type_blob (data, len,
+      if (!validate_type_blob (metadata,
 			       offset + sizeof (ParamTypeBlob) +
 			       i * sizeof (SimpleTypeBlob),
 			       0, FALSE, error))
@@ -327,8 +322,7 @@ validate_param_type_blob (const guchar  *data,
 }
 
 static gboolean
-validate_error_type_blob (const guchar  *data,
-			  guint          len,
+validate_error_type_blob (GMetadata     *metadata,
 			  guint32        offset,
 			  guint32        signature_offset,
 			  gboolean       return_type,
@@ -339,9 +333,9 @@ validate_error_type_blob (const guchar  *data,
   gint i;
   DirEntry *entry;
 
-  blob = (ErrorTypeBlob*)&data[offset];
+  blob = (ErrorTypeBlob*)&metadata->data[offset];
 
-  header = (Header *)data;
+  header = (Header *)metadata->data;
 
   if (!blob->pointer)
     {
@@ -363,7 +357,7 @@ validate_error_type_blob (const guchar  *data,
 	  return FALSE;	        
 	}
 
-      entry = g_metadata_get_dir_entry (data, blob->domains[i]);
+      entry = g_metadata_get_dir_entry (metadata, blob->domains[i]);
 
       if (entry->blob_type != BLOB_TYPE_ERROR_DOMAIN &&
 	  (entry->local || entry->blob_type != BLOB_TYPE_INVALID))
@@ -380,8 +374,7 @@ validate_error_type_blob (const guchar  *data,
 }
 
 static gboolean
-validate_type_blob (const guchar  *data,
-		    guint          len,
+validate_type_blob (GMetadata     *metadata,
 		    guint32        offset,
 		    guint32        signature_offset,
 		    gboolean       return_type,
@@ -390,7 +383,7 @@ validate_type_blob (const guchar  *data,
   SimpleTypeBlob *simple;
   InterfaceTypeBlob *iface;
   
-  simple = (SimpleTypeBlob *)&data[offset];
+  simple = (SimpleTypeBlob *)&metadata->data[offset];
 
   if (simple->reserved == 0 && 
       simple->reserved2 == 0)
@@ -417,33 +410,33 @@ validate_type_blob (const guchar  *data,
       return TRUE;
     }
 
-  iface = (InterfaceTypeBlob*)&data[simple->offset];
+  iface = (InterfaceTypeBlob*)&metadata->data[simple->offset];
 
   switch (iface->tag)
     {
     case TYPE_TAG_ARRAY:
-      if (!validate_array_type_blob (data, len, simple->offset, 
+      if (!validate_array_type_blob (metadata, simple->offset, 
 				     signature_offset, return_type, error))
 	return FALSE;
       break;
     case TYPE_TAG_INTERFACE:
-      if (!validate_iface_type_blob (data, len, simple->offset, 
+      if (!validate_iface_type_blob (metadata, simple->offset, 
 				     signature_offset, return_type, error))
 	return FALSE;
       break;
     case TYPE_TAG_LIST:
     case TYPE_TAG_SLIST:
-      if (!validate_param_type_blob (data, len, simple->offset, 
+      if (!validate_param_type_blob (metadata, simple->offset, 
 				     signature_offset, return_type, 1, error))
 	return FALSE;
       break;
     case TYPE_TAG_HASH:
-      if (!validate_param_type_blob (data, len, simple->offset, 
+      if (!validate_param_type_blob (metadata, simple->offset, 
 				     signature_offset, return_type, 2, error))
 	return FALSE;
       break;
     case TYPE_TAG_ERROR:
-      if (!validate_error_type_blob (data, len, simple->offset, 
+      if (!validate_error_type_blob (metadata, simple->offset, 
 				     signature_offset, return_type, error))
 	return FALSE;
       break;
@@ -459,15 +452,14 @@ validate_type_blob (const guchar  *data,
 }
 
 static gboolean
-validate_arg_blob (const guchar  *data,
-		   guint          len,
+validate_arg_blob (GMetadata     *metadata,
 		   guint32        offset,
 		   guint32        signature_offset,
 		   GError       **error)
 {
   ArgBlob *blob;
 
-  if (len < offset + sizeof (ArgBlob))
+  if (metadata->len < offset + sizeof (ArgBlob))
     {
       g_set_error (error,
 		   G_METADATA_ERROR,
@@ -476,9 +468,9 @@ validate_arg_blob (const guchar  *data,
       return FALSE;
     }
 
-  blob = (ArgBlob*) &data[offset];
+  blob = (ArgBlob*) &metadata->data[offset];
 
-  if (!is_name (data, blob->name))
+  if (!is_name (metadata->data, blob->name))
     {
       g_set_error (error,
 		   G_METADATA_ERROR,
@@ -487,7 +479,7 @@ validate_arg_blob (const guchar  *data,
       return FALSE; 
     }
  
-  if (!validate_type_blob (data, len, 
+  if (!validate_type_blob (metadata, 
 			   offset + G_STRUCT_OFFSET (ArgBlob, arg_type), 
 			   signature_offset, FALSE, error))
     return FALSE;
@@ -496,15 +488,14 @@ validate_arg_blob (const guchar  *data,
 }
 
 static gboolean
-validate_signature_blob (const guchar  *data,
-			 guint          len,
+validate_signature_blob (GMetadata     *metadata,
 			 guint32        offset,
 			 GError       **error)
 {
   SignatureBlob *blob;
   gint i;
 
-  if (len < offset + sizeof (SignatureBlob))
+  if (metadata->len < offset + sizeof (SignatureBlob))
     {
       g_set_error (error,
 		   G_METADATA_ERROR,
@@ -513,11 +504,11 @@ validate_signature_blob (const guchar  *data,
       return FALSE;
     }
 
-  blob = (SignatureBlob*) &data[offset];
+  blob = (SignatureBlob*) &metadata->data[offset];
 
   if (blob->return_type.offset != 0)
     {
-      if (!validate_type_blob (data, len, 
+      if (!validate_type_blob (metadata, 
 			       offset + G_STRUCT_OFFSET (SignatureBlob, return_type), 
 			       offset, TRUE, error))
 	return FALSE;
@@ -525,7 +516,7 @@ validate_signature_blob (const guchar  *data,
 
   for (i = 0; i < blob->n_arguments; i++)
     {
-      if (!validate_arg_blob (data, len, 
+      if (!validate_arg_blob (metadata, 
 			      offset + sizeof (SignatureBlob) + 
 			      i * sizeof (ArgBlob), 
 			      offset, 
@@ -539,15 +530,14 @@ validate_signature_blob (const guchar  *data,
 }
 
 static gboolean
-validate_function_blob (const guchar  *data,
-			guint          len,
+validate_function_blob (GMetadata     *metadata,
 			guint32        offset,
 			guint16        container_type,
 			GError       **error)
 {
   FunctionBlob *blob;
 
-  if (len < offset + sizeof (FunctionBlob))
+  if (metadata->len < offset + sizeof (FunctionBlob))
     {
       g_set_error (error,
 		   G_METADATA_ERROR,
@@ -556,7 +546,7 @@ validate_function_blob (const guchar  *data,
       return FALSE;
     }
 
-  blob = (FunctionBlob*) &data[offset];
+  blob = (FunctionBlob*) &metadata->data[offset];
 
   if (blob->blob_type != BLOB_TYPE_FUNCTION)
     {
@@ -567,7 +557,7 @@ validate_function_blob (const guchar  *data,
       return FALSE;
     }
 
-  if (!is_name (data, blob->name))
+  if (!is_name (metadata->data, blob->name))
     {
       g_set_error (error,
 		   G_METADATA_ERROR,
@@ -576,7 +566,7 @@ validate_function_blob (const guchar  *data,
       return FALSE; 
     }
   
-  if (!is_name (data, blob->symbol))
+  if (!is_name (metadata->data, blob->symbol))
     {
       g_set_error (error,
 		   G_METADATA_ERROR,
@@ -634,21 +624,20 @@ validate_function_blob (const guchar  *data,
   /* FIXME: validate "this" argument for methods */
   /* FIXME: validate return type for constructors */
 
-  if (!validate_signature_blob (data, len, blob->signature, error))
+  if (!validate_signature_blob (metadata, blob->signature, error))
     return FALSE;
 	
   return TRUE;
 }
 
 static gboolean
-validate_callback_blob (const guchar  *data,
-			guint          len,
+validate_callback_blob (GMetadata     *metadata,
 			guint32        offset,
 			GError       **error)
 {
   CallbackBlob *blob;
 
-  if (len < offset + sizeof (CallbackBlob))
+  if (metadata->len < offset + sizeof (CallbackBlob))
     {
       g_set_error (error,
 		   G_METADATA_ERROR,
@@ -657,7 +646,7 @@ validate_callback_blob (const guchar  *data,
       return FALSE;
     }
 
-  blob = (CallbackBlob*) &data[offset];
+  blob = (CallbackBlob*) &metadata->data[offset];
 
   if (blob->blob_type != BLOB_TYPE_CALLBACK)
     {
@@ -668,7 +657,7 @@ validate_callback_blob (const guchar  *data,
       return FALSE;
     }
 
-  if (!is_name (data, blob->name))
+  if (!is_name (metadata->data, blob->name))
     {
       g_set_error (error,
 		   G_METADATA_ERROR,
@@ -677,15 +666,14 @@ validate_callback_blob (const guchar  *data,
       return FALSE; 
     }
   
-  if (!validate_signature_blob (data, len, blob->signature, error))
+  if (!validate_signature_blob (metadata, blob->signature, error))
     return FALSE;
 	
   return TRUE;
 }
 
 static gboolean
-validate_constant_blob (const guchar  *data,
-			guint          len,
+validate_constant_blob (GMetadata     *metadata,
 			guint32        offset,
 			GError       **error)
 {
@@ -700,7 +688,7 @@ validate_constant_blob (const guchar  *data,
   ConstantBlob *blob;
   SimpleTypeBlob *type;
 
-  if (len < offset + sizeof (ConstantBlob))
+  if (metadata->len < offset + sizeof (ConstantBlob))
     {
       g_set_error (error,
 		   G_METADATA_ERROR,
@@ -709,7 +697,7 @@ validate_constant_blob (const guchar  *data,
       return FALSE;
     }
 
-  blob = (ConstantBlob*) &data[offset];
+  blob = (ConstantBlob*) &metadata->data[offset];
 
   if (blob->blob_type != BLOB_TYPE_CONSTANT)
     {
@@ -720,7 +708,7 @@ validate_constant_blob (const guchar  *data,
       return FALSE;
     }
 
-  if (!is_name (data, blob->name))
+  if (!is_name (metadata->data, blob->name))
     {
       g_set_error (error,
 		   G_METADATA_ERROR,
@@ -729,7 +717,7 @@ validate_constant_blob (const guchar  *data,
       return FALSE; 
     }
   
-  if (!validate_type_blob (data, len, offset + G_STRUCT_OFFSET (ConstantBlob, type), 
+  if (!validate_type_blob (metadata, offset + G_STRUCT_OFFSET (ConstantBlob, type), 
 			   0, FALSE, error))
     return FALSE;
 
@@ -742,7 +730,7 @@ validate_constant_blob (const guchar  *data,
       return FALSE;
     }
   
-  type = (SimpleTypeBlob *)&data[offset + G_STRUCT_OFFSET (ConstantBlob, type)];
+  type = (SimpleTypeBlob *)&metadata->data[offset + G_STRUCT_OFFSET (ConstantBlob, type)];
   if (type->reserved == 0)
     {
       if (type->tag == 0)
@@ -770,14 +758,13 @@ validate_constant_blob (const guchar  *data,
 }
 
 static gboolean
-validate_value_blob (const guchar  *data,
-		     guint          len,
+validate_value_blob (GMetadata     *metadata,
 		     guint32        offset,
 		     GError       **error)
 {
   ValueBlob *blob;
 
-  if (len < offset + sizeof (ValueBlob))
+  if (metadata->len < offset + sizeof (ValueBlob))
     {
       g_set_error (error,
 		   G_METADATA_ERROR,
@@ -786,9 +773,9 @@ validate_value_blob (const guchar  *data,
       return FALSE;
     }
 
-  blob = (ValueBlob*) &data[offset];
+  blob = (ValueBlob*) &metadata->data[offset];
 
-  if (!is_name (data, blob->name))
+  if (!is_name (metadata->data, blob->name))
     {
       g_set_error (error,
 		   G_METADATA_ERROR,
@@ -801,14 +788,13 @@ validate_value_blob (const guchar  *data,
 }
 
 static gboolean
-validate_field_blob (const guchar  *data,
-		     guint          len,
+validate_field_blob (GMetadata     *metadata,
 		     guint32        offset,
 		     GError       **error)
 {
   FieldBlob *blob;
 
-  if (len < offset + sizeof (FieldBlob))
+  if (metadata->len < offset + sizeof (FieldBlob))
     {
       g_set_error (error,
 		   G_METADATA_ERROR,
@@ -817,9 +803,9 @@ validate_field_blob (const guchar  *data,
       return FALSE;
     }
 
-  blob = (FieldBlob*) &data[offset];
+  blob = (FieldBlob*) &metadata->data[offset];
   
-  if (!is_name (data, blob->name))
+  if (!is_name (metadata->data, blob->name))
     {
       g_set_error (error,
 		   G_METADATA_ERROR,
@@ -828,7 +814,7 @@ validate_field_blob (const guchar  *data,
       return FALSE; 
     }
     
-  if (!validate_type_blob (data, len, 
+  if (!validate_type_blob (metadata,
 			   offset + G_STRUCT_OFFSET (FieldBlob, type), 
 			   0, FALSE, error))
     return FALSE;
@@ -837,14 +823,13 @@ validate_field_blob (const guchar  *data,
 }
 
 static gboolean
-validate_property_blob (const guchar  *data,
-			guint          len,
+validate_property_blob (GMetadata     *metadata,
 			guint32        offset,
 			GError       **error)
 {
   PropertyBlob *blob;
 
-  if (len < offset + sizeof (PropertyBlob))
+  if (metadata->len < offset + sizeof (PropertyBlob))
     {
       g_set_error (error,
 		   G_METADATA_ERROR,
@@ -853,9 +838,9 @@ validate_property_blob (const guchar  *data,
       return FALSE;
     }
 
-  blob = (PropertyBlob*) &data[offset];
+  blob = (PropertyBlob*) &metadata->data[offset];
   
-  if (!is_name (data, blob->name))
+  if (!is_name (metadata->data, blob->name))
     {
       g_set_error (error,
 		   G_METADATA_ERROR,
@@ -864,7 +849,7 @@ validate_property_blob (const guchar  *data,
       return FALSE; 
     }
     
-  if (!validate_type_blob (data, len, 
+  if (!validate_type_blob (metadata,
 			   offset + G_STRUCT_OFFSET (PropertyBlob, type), 
 			   0, FALSE, error))
     return FALSE;
@@ -873,8 +858,7 @@ validate_property_blob (const guchar  *data,
 }
 
 static gboolean
-validate_signal_blob (const guchar  *data,
-		      guint          len,
+validate_signal_blob (GMetadata     *metadata,
 		      guint32        offset,
 		      guint32        container_offset,
 		      GError       **error)
@@ -882,7 +866,7 @@ validate_signal_blob (const guchar  *data,
   SignalBlob *blob;
   gint n_signals;
 
-  if (len < offset + sizeof (SignalBlob))
+  if (metadata->len < offset + sizeof (SignalBlob))
     {
       g_set_error (error,
 		   G_METADATA_ERROR,
@@ -891,9 +875,9 @@ validate_signal_blob (const guchar  *data,
       return FALSE;
     }
 
-  blob = (SignalBlob*) &data[offset];
+  blob = (SignalBlob*) &metadata->data[offset];
 
-  if (!is_name (data, blob->name))
+  if (!is_name (metadata->data, blob->name))
     {
       g_set_error (error,
 		   G_METADATA_ERROR,
@@ -915,11 +899,11 @@ validate_signal_blob (const guchar  *data,
 
   if (blob->has_class_closure)
     {
-      if (((CommonBlob*)&data[container_offset])->blob_type == BLOB_TYPE_OBJECT)
+      if (((CommonBlob*)&metadata->data[container_offset])->blob_type == BLOB_TYPE_OBJECT)
 	{
 	  ObjectBlob *object;
 
-	  object = (ObjectBlob*)&data[container_offset];
+	  object = (ObjectBlob*)&metadata->data[container_offset];
 	  
 	  n_signals = object->n_signals;
 	}
@@ -927,7 +911,7 @@ validate_signal_blob (const guchar  *data,
 	{
 	  InterfaceBlob *iface;
 	  
-	  iface = (InterfaceBlob*)&data[container_offset];
+	  iface = (InterfaceBlob*)&metadata->data[container_offset];
 	  
 	  n_signals = iface->n_signals;
 	}
@@ -942,15 +926,14 @@ validate_signal_blob (const guchar  *data,
 	}
     }
 
-  if (!validate_signature_blob (data, len, blob->signature, error))
+  if (!validate_signature_blob (metadata, blob->signature, error))
     return FALSE;
   
   return TRUE;
 }
 
 static gboolean
-validate_vfunc_blob (const guchar  *data,
-		     guint          len,
+validate_vfunc_blob (GMetadata     *metadata,
 		     guint32        offset,
 		     guint32        container_offset,
 		     GError       **error)
@@ -958,7 +941,7 @@ validate_vfunc_blob (const guchar  *data,
   VFuncBlob *blob;
   gint n_vfuncs;
 
-  if (len < offset + sizeof (VFuncBlob))
+  if (metadata->len < offset + sizeof (VFuncBlob))
     {
       g_set_error (error,
 		   G_METADATA_ERROR,
@@ -967,9 +950,9 @@ validate_vfunc_blob (const guchar  *data,
       return FALSE;
     }
 
-  blob = (VFuncBlob*) &data[offset];
+  blob = (VFuncBlob*) &metadata->data[offset];
 
-  if (!is_name (data, blob->name))
+  if (!is_name (metadata->data, blob->name))
     {
       g_set_error (error,
 		   G_METADATA_ERROR,
@@ -980,11 +963,11 @@ validate_vfunc_blob (const guchar  *data,
   
   if (blob->class_closure)
     {
-      if (((CommonBlob*)&data[container_offset])->blob_type == BLOB_TYPE_OBJECT)
+      if (((CommonBlob*)&metadata->data[container_offset])->blob_type == BLOB_TYPE_OBJECT)
 	{
 	  ObjectBlob *object;
 
-	  object = (ObjectBlob*)&data[container_offset];
+	  object = (ObjectBlob*)&metadata->data[container_offset];
 	  
 	  n_vfuncs = object->n_vfuncs;
 	}
@@ -992,7 +975,7 @@ validate_vfunc_blob (const guchar  *data,
 	{
 	  InterfaceBlob *iface;
 	  
-	  iface = (InterfaceBlob*)&data[container_offset];
+	  iface = (InterfaceBlob*)&metadata->data[container_offset];
 	  
 	  n_vfuncs = iface->n_vfuncs;
 	}
@@ -1007,15 +990,14 @@ validate_vfunc_blob (const guchar  *data,
 	}
     }
 
-  if (!validate_signature_blob (data, len, blob->signature, error))
+  if (!validate_signature_blob (metadata, blob->signature, error))
     return FALSE;
   
   return TRUE;
 }
 
 static gboolean
-validate_struct_blob (const guchar  *data,
-		      guint          len,
+validate_struct_blob (GMetadata     *metadata,
 		      guint32        offset,
 		      guint16        blob_type,
 		      GError       **error)
@@ -1023,7 +1005,7 @@ validate_struct_blob (const guchar  *data,
   StructBlob *blob;
   gint i;
 
-  if (len < offset + sizeof (StructBlob))
+  if (metadata->len < offset + sizeof (StructBlob))
     {
       g_set_error (error,
 		   G_METADATA_ERROR,
@@ -1032,7 +1014,7 @@ validate_struct_blob (const guchar  *data,
       return FALSE;
     }
 
-  blob = (StructBlob*) &data[offset];
+  blob = (StructBlob*) &metadata->data[offset];
 
   if (blob->blob_type != blob_type)
     {
@@ -1053,7 +1035,7 @@ validate_struct_blob (const guchar  *data,
       return FALSE;
     }
 
-  if (!is_name (data, blob->name))
+  if (!is_name (metadata->data, blob->name))
     {
       g_set_error (error,
 		   G_METADATA_ERROR,
@@ -1064,7 +1046,7 @@ validate_struct_blob (const guchar  *data,
   
   if (blob_type == BLOB_TYPE_BOXED)
     {
-      if (!is_name (data, blob->gtype_name))
+      if (!is_name (metadata->data, blob->gtype_name))
 	{
 	  g_set_error (error,
 		       G_METADATA_ERROR,
@@ -1073,7 +1055,7 @@ validate_struct_blob (const guchar  *data,
 	  return FALSE; 
 	}
 
-      if (!is_name (data, blob->gtype_init))
+      if (!is_name (metadata->data, blob->gtype_init))
 	{
 	  g_set_error (error,
 		       G_METADATA_ERROR,
@@ -1094,7 +1076,7 @@ validate_struct_blob (const guchar  *data,
 	}
     }
 
-  if (len < offset + sizeof (StructBlob) + 
+  if (metadata->len < offset + sizeof (StructBlob) + 
             blob->n_fields * sizeof (FieldBlob) +
             blob->n_methods * sizeof (FunctionBlob))
     {
@@ -1107,7 +1089,7 @@ validate_struct_blob (const guchar  *data,
 
   for (i = 0; i < blob->n_fields; i++)
     {
-      if (!validate_field_blob (data, len, 
+      if (!validate_field_blob (metadata, 
 				offset + sizeof (StructBlob) + 
 				i * sizeof (FieldBlob), 
 				error))
@@ -1116,7 +1098,7 @@ validate_struct_blob (const guchar  *data,
 
   for (i = 0; i < blob->n_methods; i++)
     {
-      if (!validate_function_blob (data, len, 
+      if (!validate_function_blob (metadata, 
 				   offset + sizeof (StructBlob) + 
 				   blob->n_fields * sizeof (FieldBlob) + 
 				   i * sizeof (FunctionBlob), 
@@ -1129,8 +1111,7 @@ validate_struct_blob (const guchar  *data,
 }
 
 static gboolean
-validate_enum_blob (const guchar  *data,
-		    guint          len,
+validate_enum_blob (GMetadata     *metadata,
 		    guint32        offset,
 		    guint16        blob_type,
 		    GError       **error)
@@ -1139,7 +1120,7 @@ validate_enum_blob (const guchar  *data,
   ValueBlob *v1, *v2;
   gint i, j; 
 
-  if (len < offset + sizeof (EnumBlob))
+  if (metadata->len < offset + sizeof (EnumBlob))
     {
       g_set_error (error,
 		   G_METADATA_ERROR,
@@ -1148,7 +1129,7 @@ validate_enum_blob (const guchar  *data,
       return FALSE;
     }
 
-  blob = (EnumBlob*) &data[offset];
+  blob = (EnumBlob*) &metadata->data[offset];
 
   if (blob->blob_type != blob_type)
     {
@@ -1161,7 +1142,7 @@ validate_enum_blob (const guchar  *data,
   
   if (!blob->unregistered)
     {
-      if (!is_name (data, blob->gtype_name))
+      if (!is_name (metadata->data, blob->gtype_name))
 	{
 	  g_set_error (error,
 		       G_METADATA_ERROR,
@@ -1170,7 +1151,7 @@ validate_enum_blob (const guchar  *data,
 	  return FALSE; 
 	}
 
-      if (!is_name (data, blob->gtype_init))
+      if (!is_name (metadata->data, blob->gtype_init))
 	{
 	  g_set_error (error,
 		       G_METADATA_ERROR,
@@ -1191,7 +1172,7 @@ validate_enum_blob (const guchar  *data,
 	}
     }
 
-  if (!is_name (data, blob->name))
+  if (!is_name (metadata->data, blob->name))
     {
       g_set_error (error,
 		   G_METADATA_ERROR,
@@ -1200,7 +1181,7 @@ validate_enum_blob (const guchar  *data,
       return FALSE; 
     }
   
-  if (len < offset + sizeof (EnumBlob) + 
+  if (metadata->len < offset + sizeof (EnumBlob) + 
       blob->n_values * sizeof (ValueBlob))
     {
       g_set_error (error,
@@ -1212,18 +1193,18 @@ validate_enum_blob (const guchar  *data,
   
   for (i = 0; i < blob->n_values; i++)
     {
-      if (!validate_value_blob (data, len, 
+      if (!validate_value_blob (metadata, 
 				offset + sizeof (EnumBlob) + 
 				i * sizeof (ValueBlob), 
 				error))
 	return FALSE;
 
-      v1 = (ValueBlob *)&data[offset + sizeof (EnumBlob) + 
-			      i * sizeof (ValueBlob)];
+      v1 = (ValueBlob *)&metadata->data[offset + sizeof (EnumBlob) + 
+                                        i * sizeof (ValueBlob)];
       for (j = 0; j < i; j++) 
 	{
-	  v2 = (ValueBlob *)&data[offset + sizeof (EnumBlob) + 
-				  j * sizeof (ValueBlob)];
+	  v2 = (ValueBlob *)&metadata->data[offset + sizeof (EnumBlob) + 
+                                            j * sizeof (ValueBlob)];
 
 	  if (v1->value == v2->value)
 	    {
@@ -1241,8 +1222,7 @@ validate_enum_blob (const guchar  *data,
 }
 
 static gboolean
-validate_object_blob (const guchar  *data,
-		      guint          len,
+validate_object_blob (GMetadata     *metadata,
 		      guint32        offset,
 		      GError       **error)
 {
@@ -1251,9 +1231,9 @@ validate_object_blob (const guchar  *data,
   gint i;
   guint32 offset2;
 
-  header = (Header *)data;
+  header = (Header *)metadata->data;
 
-  if (len < offset + sizeof (ObjectBlob))
+  if (metadata->len < offset + sizeof (ObjectBlob))
     {
       g_set_error (error,
 		   G_METADATA_ERROR,
@@ -1262,7 +1242,7 @@ validate_object_blob (const guchar  *data,
       return FALSE;
     }
 
-  blob = (ObjectBlob*) &data[offset];
+  blob = (ObjectBlob*) &metadata->data[offset];
 
   if (blob->blob_type != BLOB_TYPE_OBJECT)
     {
@@ -1273,7 +1253,7 @@ validate_object_blob (const guchar  *data,
       return FALSE;
     }
   
-  if (!is_name (data, blob->gtype_name))
+  if (!is_name (metadata->data, blob->gtype_name))
     {
       g_set_error (error,
 		   G_METADATA_ERROR,
@@ -1282,7 +1262,7 @@ validate_object_blob (const guchar  *data,
       return FALSE; 
     }
   
-  if (!is_name (data, blob->gtype_init))
+  if (!is_name (metadata->data, blob->gtype_init))
     {
       g_set_error (error,
 		   G_METADATA_ERROR,
@@ -1291,7 +1271,7 @@ validate_object_blob (const guchar  *data,
       return FALSE; 
     }
   
-  if (!is_name (data, blob->name))
+  if (!is_name (metadata->data, blob->name))
     {
       g_set_error (error,
 		   G_METADATA_ERROR,
@@ -1313,7 +1293,7 @@ validate_object_blob (const guchar  *data,
     {
       DirEntry *entry;
 
-      entry = g_metadata_get_dir_entry (data, blob->parent);
+      entry = g_metadata_get_dir_entry (metadata, blob->parent);
       if (entry->blob_type != BLOB_TYPE_OBJECT &&
 	  (entry->local || entry->blob_type != 0))
 	{
@@ -1325,7 +1305,7 @@ validate_object_blob (const guchar  *data,
 	}
     }
   
-  if (len < offset + sizeof (ObjectBlob) + 
+  if (metadata->len < offset + sizeof (ObjectBlob) + 
             (blob->n_interfaces + blob->n_interfaces % 2) * 2 +
             blob->n_fields * sizeof (FieldBlob) +
             blob->n_properties * sizeof (PropertyBlob) +
@@ -1349,7 +1329,7 @@ validate_object_blob (const guchar  *data,
       guint16 iface;
       DirEntry *entry;
 
-      iface = *(guint16*)&data[offset2];
+      iface = *(guint16*)&metadata->data[offset2];
       if (iface == 0 || iface > header->n_entries)
 	{
 	  g_set_error (error,
@@ -1359,7 +1339,7 @@ validate_object_blob (const guchar  *data,
 	  return FALSE; 
 	}
       
-      entry = g_metadata_get_dir_entry (data, iface);
+      entry = g_metadata_get_dir_entry (metadata, iface);
 
       if (entry->blob_type != BLOB_TYPE_INTERFACE &&
 	  (entry->local || entry->blob_type != 0))
@@ -1376,37 +1356,37 @@ validate_object_blob (const guchar  *data,
 
   for (i = 0; i < blob->n_fields; i++, offset2 += sizeof (FieldBlob))
     {
-      if (!validate_field_blob (data, len, offset2, error))
+      if (!validate_field_blob (metadata, offset2, error))
 	return FALSE;
     }
 
   for (i = 0; i < blob->n_properties; i++, offset2 += sizeof (PropertyBlob))
     {
-      if (!validate_property_blob (data, len, offset2, error))
+      if (!validate_property_blob (metadata, offset2, error))
 	return FALSE;
     }
 
   for (i = 0; i < blob->n_methods; i++, offset2 += sizeof (FunctionBlob))
     {
-      if (!validate_function_blob (data, len, offset2, BLOB_TYPE_OBJECT, error))
+      if (!validate_function_blob (metadata, offset2, BLOB_TYPE_OBJECT, error))
 	return FALSE;
     }
 
   for (i = 0; i < blob->n_signals; i++, offset2 += sizeof (SignalBlob))
     {
-      if (!validate_signal_blob (data, len, offset2, offset, error))
+      if (!validate_signal_blob (metadata, offset2, offset, error))
 	return FALSE;
     }
 
   for (i = 0; i < blob->n_vfuncs; i++, offset2 += sizeof (VFuncBlob))
     {
-      if (!validate_vfunc_blob (data, len, offset2, offset, error))
+      if (!validate_vfunc_blob (metadata, offset2, offset, error))
 	return FALSE;
     }
 
   for (i = 0; i < blob->n_constants; i++, offset2 += sizeof (ConstantBlob))
     {
-      if (!validate_constant_blob (data, len, offset2, error))
+      if (!validate_constant_blob (metadata, offset2, error))
 	return FALSE;
     }
 
@@ -1414,8 +1394,7 @@ validate_object_blob (const guchar  *data,
 }
 
 static gboolean
-validate_interface_blob (const guchar  *data,
-			 guint          len,
+validate_interface_blob (GMetadata     *metadata,
 			 guint32        offset,
 			 GError       **error)
 {
@@ -1424,9 +1403,9 @@ validate_interface_blob (const guchar  *data,
   gint i;
   guint32 offset2;
   
-  header = (Header *)data;
+  header = (Header *)metadata->data;
 
-  if (len < offset + sizeof (InterfaceBlob))
+  if (metadata->len < offset + sizeof (InterfaceBlob))
     {
       g_set_error (error,
 		   G_METADATA_ERROR,
@@ -1435,7 +1414,7 @@ validate_interface_blob (const guchar  *data,
       return FALSE;
     }
 
-  blob = (InterfaceBlob*) &data[offset];
+  blob = (InterfaceBlob*) &metadata->data[offset];
 
   if (blob->blob_type != BLOB_TYPE_INTERFACE)
     {
@@ -1446,7 +1425,7 @@ validate_interface_blob (const guchar  *data,
       return FALSE;
     }
   
-  if (!is_name (data, blob->gtype_name))
+  if (!is_name (metadata->data, blob->gtype_name))
     {
       g_set_error (error,
 		   G_METADATA_ERROR,
@@ -1455,7 +1434,7 @@ validate_interface_blob (const guchar  *data,
       return FALSE; 
     }
   
-  if (!is_name (data, blob->gtype_init))
+  if (!is_name (metadata->data, blob->gtype_init))
     {
       g_set_error (error,
 		   G_METADATA_ERROR,
@@ -1464,7 +1443,7 @@ validate_interface_blob (const guchar  *data,
       return FALSE; 
     }
   
-  if (!is_name (data, blob->name))
+  if (!is_name (metadata->data, blob->name))
     {
       g_set_error (error,
 		   G_METADATA_ERROR,
@@ -1473,7 +1452,7 @@ validate_interface_blob (const guchar  *data,
       return FALSE; 
     }
   
-  if (len < offset + sizeof (InterfaceBlob) + 
+  if (metadata->len < offset + sizeof (InterfaceBlob) + 
             (blob->n_prerequisites + blob->n_prerequisites % 2) * 2 +
             blob->n_properties * sizeof (PropertyBlob) +
             blob->n_methods * sizeof (FunctionBlob) +
@@ -1496,7 +1475,7 @@ validate_interface_blob (const guchar  *data,
       DirEntry *entry;
       guint16 req;
 
-      req = *(guint16*)&data[offset2];
+      req = *(guint16*)&metadata->data[offset2];
       if (req == 0 || req > header->n_entries)
 	{
 	  g_set_error (error,
@@ -1506,7 +1485,7 @@ validate_interface_blob (const guchar  *data,
 	  return FALSE; 
 	}
 
-      entry = g_metadata_get_dir_entry (data, req);
+      entry = g_metadata_get_dir_entry (metadata, req);
       if (entry->blob_type != BLOB_TYPE_INTERFACE &&
 	  entry->blob_type != BLOB_TYPE_OBJECT &&
 	  (entry->local || entry->blob_type != 0))
@@ -1523,31 +1502,31 @@ validate_interface_blob (const guchar  *data,
 
   for (i = 0; i < blob->n_properties; i++, offset2 += sizeof (PropertyBlob))
     {
-      if (!validate_property_blob (data, len, offset2, error))
+      if (!validate_property_blob (metadata, offset2, error))
 	return FALSE;
     }
 
   for (i = 0; i < blob->n_methods; i++, offset2 += sizeof (FunctionBlob))
     {
-      if (!validate_function_blob (data, len, offset2, BLOB_TYPE_INTERFACE, error))
+      if (!validate_function_blob (metadata, offset2, BLOB_TYPE_INTERFACE, error))
 	return FALSE;
     }
   
   for (i = 0; i < blob->n_signals; i++, offset2 += sizeof (SignalBlob))
     {
-      if (!validate_signal_blob (data, len, offset2, offset, error))
+      if (!validate_signal_blob (metadata, offset2, offset, error))
 	return FALSE;
     }
   
   for (i = 0; i < blob->n_vfuncs; i++, offset2 += sizeof (VFuncBlob))
     {
-      if (!validate_vfunc_blob (data, len, offset2, offset, error))
+      if (!validate_vfunc_blob (metadata, offset2, offset, error))
 	return FALSE;
     }
 
   for (i = 0; i < blob->n_constants; i++, offset2 += sizeof (ConstantBlob))
     {
-      if (!validate_constant_blob (data, len, offset2, error))
+      if (!validate_constant_blob (metadata, offset2, error))
 	return FALSE;
     }
 
@@ -1555,8 +1534,7 @@ validate_interface_blob (const guchar  *data,
 }
 
 static gboolean
-validate_errordomain_blob (const guchar  *data,
-			   guint          len,
+validate_errordomain_blob (GMetadata     *metadata,
 			   guint32        offset,
 			   GError       **error)
 {
@@ -1564,8 +1542,7 @@ validate_errordomain_blob (const guchar  *data,
 }
 
 static gboolean
-validate_union_blob (const guchar  *data,
-		     guint          len,
+validate_union_blob (GMetadata     *metadata,
 		     guint32        offset,
 		     GError       **error)
 {
@@ -1573,14 +1550,13 @@ validate_union_blob (const guchar  *data,
 }
 
 static gboolean
-validate_blob (const guchar  *data,
-	       guint          len,
+validate_blob (GMetadata     *metadata,
 	       guint32        offset,
 	       GError       **error)
 {
   CommonBlob *common;
 
-  if (len < offset + sizeof (CommonBlob))
+  if (metadata->len < offset + sizeof (CommonBlob))
     {
       g_set_error (error,
 		   G_METADATA_ERROR,
@@ -1589,46 +1565,46 @@ validate_blob (const guchar  *data,
       return FALSE;
     }
 
-  common = (CommonBlob*)&data[offset];
+  common = (CommonBlob*)&metadata->data[offset];
   
   switch (common->blob_type)
     {
     case BLOB_TYPE_FUNCTION:
-      if (!validate_function_blob (data, len, offset, 0, error))
+      if (!validate_function_blob (metadata, offset, 0, error))
 	return FALSE;
       break;
     case BLOB_TYPE_CALLBACK:
-      if (!validate_callback_blob (data, len, offset, error))
+      if (!validate_callback_blob (metadata, offset, error))
 	return FALSE;
       break;
     case BLOB_TYPE_STRUCT:
     case BLOB_TYPE_BOXED:
-      if (!validate_struct_blob (data, len, offset, common->blob_type, error))
+      if (!validate_struct_blob (metadata, offset, common->blob_type, error))
 	return FALSE;
       break;
     case BLOB_TYPE_ENUM:
     case BLOB_TYPE_FLAGS:
-      if (!validate_enum_blob (data, len, offset, common->blob_type, error))
+      if (!validate_enum_blob (metadata, offset, common->blob_type, error))
 	return FALSE;
       break;
     case BLOB_TYPE_OBJECT:
-      if (!validate_object_blob (data, len, offset, error))
+      if (!validate_object_blob (metadata, offset, error))
 	return FALSE;
       break;
     case BLOB_TYPE_INTERFACE:
-      if (!validate_interface_blob (data, len, offset, error))
+      if (!validate_interface_blob (metadata, offset, error))
 	return FALSE;
       break;
     case BLOB_TYPE_CONSTANT:
-      if (!validate_constant_blob (data, len, offset, error))
+      if (!validate_constant_blob (metadata, offset, error))
 	return FALSE;
       break;
     case BLOB_TYPE_ERROR_DOMAIN:
-      if (!validate_errordomain_blob (data, len, offset, error))
+      if (!validate_errordomain_blob (metadata, offset, error))
 	return FALSE;
       break;
     case BLOB_TYPE_UNION:
-      if (!validate_union_blob (data, len, offset, error))
+      if (!validate_union_blob (metadata, offset, error))
 	return FALSE;
       break;
     default:
@@ -1643,15 +1619,14 @@ validate_blob (const guchar  *data,
 }
 
 static gboolean 
-validate_directory (const guchar  *data,
-		    guint          len,
+validate_directory (GMetadata     *metadata,
 		    GError       **error)
 {
-  Header *header = (Header *)data;
+  Header *header = (Header *)metadata->data;
   DirEntry *entry;
   gint i;
   
-  if (len < header->directory + header->n_entries * sizeof (DirEntry))
+  if (metadata->len < header->directory + header->n_entries * sizeof (DirEntry))
     {
       g_set_error (error,
 		   G_METADATA_ERROR,
@@ -1662,9 +1637,9 @@ validate_directory (const guchar  *data,
 
   for (i = 0; i < header->n_entries; i++)
     {
-      entry = g_metadata_get_dir_entry (data, i + 1);
+      entry = g_metadata_get_dir_entry (metadata, i + 1);
 
-      if (!is_name (data, entry->name))
+      if (!is_name (metadata->data, entry->name))
 	{
 	  g_set_error (error,
 		       G_METADATA_ERROR,
@@ -1703,7 +1678,7 @@ validate_directory (const guchar  *data,
 	      return FALSE;
 	    }
 
-	  if (!validate_blob (data, len, entry->offset, error))
+	  if (!validate_blob (metadata, entry->offset, error))
 	    return FALSE;
 	}
       else
@@ -1717,7 +1692,7 @@ validate_directory (const guchar  *data,
 	      return FALSE;
 	    }
 
-	  if (!is_name (data, entry->offset))
+	  if (!is_name (metadata->data, entry->offset))
 	    {
 	      g_set_error (error,
 			   G_METADATA_ERROR,
@@ -1732,11 +1707,10 @@ validate_directory (const guchar  *data,
 }
 
 static gboolean
-validate_annotations (const guchar  *data, 
-		      guint          len, 
+validate_annotations (GMetadata     *metadata, 
 		      GError       **error)
 {
-  Header *header = (Header *)data;
+  Header *header = (Header *)metadata->data;
 
   if (header->size < header->annotations + header->n_annotations * sizeof (AnnotationBlob))
     {
@@ -1751,17 +1725,16 @@ validate_annotations (const guchar  *data,
 }
 
 gboolean 
-g_metadata_validate (const guchar  *data,
-		     guint          len,
+g_metadata_validate (GMetadata     *metadata,
 		     GError       **error)
 {
-  if (!validate_header (data, len, error))
+  if (!validate_header (metadata, error))
     return FALSE;
 
-  if (!validate_directory (data, len, error))
+  if (!validate_directory (metadata, error))
     return FALSE;
 
-  if (!validate_annotations (data, len, error))
+  if (!validate_annotations (metadata, error))
     return FALSE;
 
   return TRUE;
@@ -1776,3 +1749,128 @@ g_metadata_error_quark (void)
   return quark;
 }
 
+
+static inline void
+_g_metadata_init (GMetadata *metadata)
+{
+  Header *header;
+
+  header = (Header *) metadata->data;
+  if (header->shared_library)
+    {
+      const gchar *shlib;
+      shlib = g_metadata_get_string (metadata, header->shared_library);
+      metadata->module = g_module_open (shlib, G_MODULE_BIND_LAZY|G_MODULE_BIND_LOCAL);
+      if (metadata->module == NULL)
+        g_warning ("Failed to load shared library referenced by the metadata: %s",
+                   g_module_error ());
+    }
+}
+
+/**
+ * g_metadata_new_from_memory:
+ * @memory: address of memory chunk containing the metadata
+ * @len: length of memory chunk containing the metadata
+ * 
+ * Creates a new #GMetadata from a memory location.  The memory block
+ * pointed to by @metadata will be automatically g_free()d when the
+ * repository is destroyed.
+ * 
+ * Return value: the new #GMetadata
+ **/
+GMetadata *
+g_metadata_new_from_memory (guchar *memory, gsize len)
+{
+  GMetadata *meta;
+
+  meta = g_new0 (GMetadata, 1);
+  meta->data = memory;
+  meta->len = len;
+  meta->owns_memory = TRUE;
+  _g_metadata_init (meta);
+  return meta;
+}
+
+/**
+ * g_metadata_new_from_const_memory:
+ * @memory: address of memory chunk containing the metadata
+ * @len: length of memory chunk containing the metadata
+ * 
+ * Creates a new #GMetadata from a memory location.
+ * 
+ * Return value: the new #GMetadata
+ **/
+GMetadata *
+g_metadata_new_from_const_memory (const guchar *memory, gsize len)
+{
+  GMetadata *meta;
+
+  meta = g_new0 (GMetadata, 1);
+  meta->data = (guchar *) memory;
+  meta->len = len;
+  meta->owns_memory = FALSE;
+  _g_metadata_init (meta);
+  return meta;
+}
+
+/**
+ * g_metadata_new_from_mapped_file:
+ * @mfile: a #GMappedFile, that will be free'd when the repository is destroyed
+ * 
+ * Creates a new #GMetadata from a #GMappedFile.
+ * 
+ * Return value: the new #GMetadata
+ **/
+GMetadata *
+g_metadata_new_from_mapped_file (GMappedFile *mfile)
+{
+  GMetadata *meta;
+
+  meta = g_new0 (GMetadata, 1);
+  meta->mfile = mfile;
+  meta->owns_memory = FALSE;
+  meta->data = (guchar *) g_mapped_file_get_contents (mfile);
+  meta->len = g_mapped_file_get_length (mfile);
+  _g_metadata_init (meta);
+  return meta;
+}
+
+/**
+ * g_metadata_free:
+ * @metadata: a #GMetadata
+ * 
+ * Free a #GMetadata.
+ **/
+void
+g_metadata_free (GMetadata *metadata)
+{
+  if (metadata->mfile)
+    g_mapped_file_free (metadata->mfile);
+  else
+    if (metadata->owns_memory)
+      g_free (metadata->data);
+  if (metadata->module)
+    g_module_close (metadata->module);
+  g_free (metadata);
+}
+
+/**
+ * g_metadata_set_module:
+ * @metadata: a #GMetadata instance
+ * @module: a #GModule; takes ownership of this module
+ * 
+ * Sets the target module for all symbols referenced by the metadata.
+ **/
+void
+g_metadata_set_module (GMetadata *metadata, GModule *module)
+{
+  if (metadata->module)
+    g_module_close (metadata->module);
+  metadata->module = module;
+}
+
+const gchar *
+g_metadata_get_namespace(GMetadata *metadata)
+{
+  return g_metadata_get_string (metadata, ((Header *) metadata->data)->namespace);
+}

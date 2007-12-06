@@ -34,6 +34,7 @@ typedef struct _CType CType;
 struct _GIGenerator
 {
   const char *namespace;
+  const char *shared_library;
   char *lower_case_namespace;
   /* specified files to be parsed */
   GList *filenames;

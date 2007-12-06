@@ -6,6 +6,6 @@ includedir=@includedir@
 Name: gobject-introspection
 Description: GObject Introspection
 Version: @VERSION@
-Requires: glib-2.0 gobject-2.0 gmodule-2.0 libffi
+Requires: glib-2.0 gobject-2.0 gmodule-2.0 gthread-2.0 @LIBFFI_DEP@
 Libs: -L${libdir} -lgirepository
 Cflags: -I${includedir}/glib-2.0/gobject-introspection

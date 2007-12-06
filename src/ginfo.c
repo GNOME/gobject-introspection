@@ -19,7 +19,6 @@
  */
 
 #include <stdlib.h>
-#include <string.h>
 
 #include <glib.h>
 #include <glib-object.h>
@@ -33,7 +32,7 @@ struct _GIBaseInfo
   gint ref_count;
   GIBaseInfo *container;
 
-  const guchar *metadata;
+  GMetadata *metadata;
   guint32 offset;
 };
 
@@ -137,8 +136,8 @@ struct _GIUnionInfo
 GIBaseInfo *
 g_info_new (GIInfoType     type,
 	    GIBaseInfo    *container,
-	    const guchar *metadata, 
-	    guint32       offset)
+	    GMetadata     *metadata, 
+	    guint32        offset)
 {
   GIBaseInfo *info;
 
@@ -157,8 +156,8 @@ g_info_new (GIInfoType     type,
 }
 
 static GIBaseInfo *
-g_info_from_entry (const guchar *metadata,
-		   guint16       index)
+g_info_from_entry (GMetadata *metadata,
+		   guint16    index)
 {
   GIBaseInfo *result;
   DirEntry *entry = g_metadata_get_dir_entry (metadata, index);
@@ -239,7 +238,7 @@ g_base_info_get_name (GIBaseInfo *info)
     case GI_INFO_TYPE_ERROR_DOMAIN:
     case GI_INFO_TYPE_UNION:
       {
-	CommonBlob *blob = (CommonBlob *)&info->metadata[info->offset];
+	CommonBlob *blob = (CommonBlob *)&info->metadata->data[info->offset];
 
 	return g_metadata_get_string (info->metadata, blob->name);
       }
@@ -247,7 +246,7 @@ g_base_info_get_name (GIBaseInfo *info)
 
     case GI_INFO_TYPE_VALUE:
       {
-	ValueBlob *blob = (ValueBlob *)&info->metadata[info->offset];
+	ValueBlob *blob = (ValueBlob *)&info->metadata->data[info->offset];
 
 	return g_metadata_get_string (info->metadata, blob->name);
       }
@@ -255,7 +254,7 @@ g_base_info_get_name (GIBaseInfo *info)
 
     case GI_INFO_TYPE_SIGNAL:
       {
-	SignalBlob *blob = (SignalBlob *)&info->metadata[info->offset];
+	SignalBlob *blob = (SignalBlob *)&info->metadata->data[info->offset];
 
 	return g_metadata_get_string (info->metadata, blob->name);
       }
@@ -263,7 +262,7 @@ g_base_info_get_name (GIBaseInfo *info)
 
     case GI_INFO_TYPE_PROPERTY:
       {
-	PropertyBlob *blob = (PropertyBlob *)&info->metadata[info->offset];
+	PropertyBlob *blob = (PropertyBlob *)&info->metadata->data[info->offset];
 
 	return g_metadata_get_string (info->metadata, blob->name);
       }
@@ -271,7 +270,7 @@ g_base_info_get_name (GIBaseInfo *info)
 
     case GI_INFO_TYPE_VFUNC:
       {
-	VFuncBlob *blob = (VFuncBlob *)&info->metadata[info->offset];
+	VFuncBlob *blob = (VFuncBlob *)&info->metadata->data[info->offset];
 
 	return g_metadata_get_string (info->metadata, blob->name);
       }
@@ -279,7 +278,7 @@ g_base_info_get_name (GIBaseInfo *info)
 
     case GI_INFO_TYPE_FIELD:
       {
-	FieldBlob *blob = (FieldBlob *)&info->metadata[info->offset];
+	FieldBlob *blob = (FieldBlob *)&info->metadata->data[info->offset];
 	
 	return g_metadata_get_string (info->metadata, blob->name);
       }
@@ -287,7 +286,7 @@ g_base_info_get_name (GIBaseInfo *info)
 
     case GI_INFO_TYPE_ARG:
       {
-	ArgBlob *blob = (ArgBlob *)&info->metadata[info->offset];
+	ArgBlob *blob = (ArgBlob *)&info->metadata->data[info->offset];
 	
 	return g_metadata_get_string (info->metadata, blob->name);
       }
@@ -312,7 +311,7 @@ g_base_info_get_name (GIBaseInfo *info)
 const gchar *
 g_base_info_get_namespace (GIBaseInfo *info)
 {
-  Header *header = (Header *)info->metadata;  
+  Header *header = (Header *)info->metadata->data;  
 
   if (info->type == GI_INFO_TYPE_UNRESOLVED)
     {
@@ -340,7 +339,7 @@ g_base_info_is_deprecated (GIBaseInfo *info)
     case GI_INFO_TYPE_CONSTANT:
     case GI_INFO_TYPE_ERROR_DOMAIN:
       {
-	CommonBlob *blob = (CommonBlob *)&info->metadata[info->offset];
+	CommonBlob *blob = (CommonBlob *)&info->metadata->data[info->offset];
 
 	return blob->deprecated;
       }
@@ -348,7 +347,7 @@ g_base_info_is_deprecated (GIBaseInfo *info)
 
     case GI_INFO_TYPE_VALUE:
       {
-	ValueBlob *blob = (ValueBlob *)&info->metadata[info->offset];
+	ValueBlob *blob = (ValueBlob *)&info->metadata->data[info->offset];
 
 	return blob->deprecated;
       }
@@ -356,7 +355,7 @@ g_base_info_is_deprecated (GIBaseInfo *info)
 
     case GI_INFO_TYPE_SIGNAL:
       {
-	SignalBlob *blob = (SignalBlob *)&info->metadata[info->offset];
+	SignalBlob *blob = (SignalBlob *)&info->metadata->data[info->offset];
 
 	return blob->deprecated;
       }
@@ -364,7 +363,7 @@ g_base_info_is_deprecated (GIBaseInfo *info)
 
     case GI_INFO_TYPE_PROPERTY:
       {
-	PropertyBlob *blob = (PropertyBlob *)&info->metadata[info->offset];
+	PropertyBlob *blob = (PropertyBlob *)&info->metadata->data[info->offset];
 
 	return blob->deprecated;
       }
@@ -402,14 +401,14 @@ g_base_info_get_annotation (GIBaseInfo   *info,
 			    const gchar *name)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  Header *header = (Header *)base->metadata;
+  Header *header = (Header *)base->metadata->data;
   AnnotationBlob blob, *first, *after, *res, *next;
   const gchar *rname;
 
   blob.offset = base->offset;
   
-  first = (AnnotationBlob *) &base->metadata[header->annotations];
-  after = (AnnotationBlob *) &base->metadata[header->annotations + 
+  first = (AnnotationBlob *) &base->metadata->data[header->annotations];
+  after = (AnnotationBlob *) &base->metadata->data[header->annotations + 
 					     header->n_annotations * header->annotation_blob_size];
 
   res = bsearch (&blob, first, header->n_annotations,
@@ -448,13 +447,18 @@ g_base_info_get_container (GIBaseInfo *info)
   return info->container;
 }
 
+GMetadata *
+g_base_info_get_metadata (GIBaseInfo *info)
+{
+  return info->metadata;
+}
 
 /* GIFunctionInfo functions */
 const gchar *
 g_function_info_get_symbol (GIFunctionInfo *info)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  FunctionBlob *blob = (FunctionBlob *)&base->metadata[base->offset];
+  FunctionBlob *blob = (FunctionBlob *)&base->metadata->data[base->offset];
 
   return g_metadata_get_string (base->metadata, blob->symbol);
 }
@@ -464,7 +468,7 @@ g_function_info_get_flags (GIFunctionInfo *info)
 {
   GIFunctionInfoFlags flags;
   GIBaseInfo *base = (GIBaseInfo *)info;
-  FunctionBlob *blob = (FunctionBlob *)&base->metadata[base->offset];
+  FunctionBlob *blob = (FunctionBlob *)&base->metadata->data[base->offset];
   
   flags = 0;
 
@@ -490,7 +494,7 @@ GIPropertyInfo *
 g_function_info_get_property (GIFunctionInfo *info)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  FunctionBlob *blob = (FunctionBlob *)&base->metadata[base->offset];
+  FunctionBlob *blob = (FunctionBlob *)&base->metadata->data[base->offset];
   GIInterfaceInfo *container = (GIInterfaceInfo *)base->container;
   
   return g_interface_info_get_property (container, blob->index);  
@@ -500,7 +504,7 @@ GIVFuncInfo *
 g_function_info_get_vfunc (GIFunctionInfo *info)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  FunctionBlob *blob = (FunctionBlob *)&base->metadata[base->offset];
+  FunctionBlob *blob = (FunctionBlob *)&base->metadata->data[base->offset];
   GIInterfaceInfo *container = (GIInterfaceInfo *)base->container;
   
   return g_interface_info_get_vfunc (container, blob->index);  
@@ -515,10 +519,10 @@ signature_offset (GICallableInfo *info)
     {
     case GI_INFO_TYPE_FUNCTION:
     case GI_INFO_TYPE_VFUNC:
-      return *(guint32 *)&info->base.metadata[info->base.offset + 12];
+      return *(guint32 *)&info->base.metadata->data[info->base.offset + 12];
     case GI_INFO_TYPE_CALLBACK:
     case GI_INFO_TYPE_SIGNAL:
-      return *(guint32 *)&info->base.metadata[info->base.offset + 8];
+      return *(guint32 *)&info->base.metadata->data[info->base.offset + 8];
     }
   
   return 0;
@@ -526,10 +530,10 @@ signature_offset (GICallableInfo *info)
 
 GITypeInfo *
 g_type_info_new (GIBaseInfo    *container,
-		 const guchar *metadata,
-		 guint32       offset)
+		 GMetadata     *metadata,
+		 guint32        offset)
 {
-  SimpleTypeBlob *type = (SimpleTypeBlob *)&metadata[offset];
+  SimpleTypeBlob *type = (SimpleTypeBlob *)&metadata->data[offset];
 
   return (GITypeInfo *) g_info_new (GI_INFO_TYPE_TYPE, container, metadata, 
 				    type->reserved == 0 ? offset : type->offset);
@@ -550,7 +554,7 @@ gboolean
 g_callable_info_may_return_null (GICallableInfo *info)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  SignatureBlob *blob = (SignatureBlob *)&base->metadata[signature_offset (info)];
+  SignatureBlob *blob = (SignatureBlob *)&base->metadata->data[signature_offset (info)];
 
   return blob->may_return_null;
 }
@@ -559,7 +563,7 @@ GITransfer
 g_callable_info_get_caller_owns (GICallableInfo *info)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  SignatureBlob *blob = (SignatureBlob *)&base->metadata[signature_offset (info)];
+  SignatureBlob *blob = (SignatureBlob *)&base->metadata->data[signature_offset (info)];
 
   if (blob->caller_owns_return_value)
     return GI_TRANSFER_EVERYTHING;
@@ -577,7 +581,7 @@ g_callable_info_get_n_args (GICallableInfo *info)
   SignatureBlob *blob;
 
   offset = signature_offset (info);
-  blob = (SignatureBlob *)&base->metadata[offset];
+  blob = (SignatureBlob *)&base->metadata->data[offset];
 
   return blob->n_arguments;
 }
@@ -587,7 +591,7 @@ g_callable_info_get_arg (GICallableInfo *info,
 			 gint           n)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  Header *header = (Header *)base->metadata;
+  Header *header = (Header *)base->metadata->data;
   gint offset;
 
   offset = signature_offset (info);
@@ -601,7 +605,7 @@ GIDirection
 g_arg_info_get_direction (GIArgInfo *info)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  ArgBlob *blob = (ArgBlob *)&base->metadata[base->offset];
+  ArgBlob *blob = (ArgBlob *)&base->metadata->data[base->offset];
   
   if (blob->in && blob->out)
     return GI_DIRECTION_INOUT;
@@ -615,7 +619,7 @@ gboolean
 g_arg_info_is_return_value (GIArgInfo *info)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  ArgBlob *blob = (ArgBlob *)&base->metadata[base->offset];
+  ArgBlob *blob = (ArgBlob *)&base->metadata->data[base->offset];
   
   return blob->return_value;
 }
@@ -624,7 +628,7 @@ gboolean
 g_arg_info_is_dipper (GIArgInfo *info)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  ArgBlob *blob = (ArgBlob *)&base->metadata[base->offset];
+  ArgBlob *blob = (ArgBlob *)&base->metadata->data[base->offset];
   
   return blob->dipper;
 }
@@ -633,7 +637,7 @@ gboolean
 g_arg_info_is_optional (GIArgInfo *info)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  ArgBlob *blob = (ArgBlob *)&base->metadata[base->offset];
+  ArgBlob *blob = (ArgBlob *)&base->metadata->data[base->offset];
   
   return blob->optional;
 }
@@ -642,7 +646,7 @@ gboolean
 g_arg_info_may_be_null (GIArgInfo *info)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  ArgBlob *blob = (ArgBlob *)&base->metadata[base->offset];
+  ArgBlob *blob = (ArgBlob *)&base->metadata->data[base->offset];
   
   return blob->null_ok;
 }
@@ -651,7 +655,7 @@ GITransfer
 g_arg_info_get_ownership_transfer (GIArgInfo *info)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  ArgBlob *blob = (ArgBlob *)&base->metadata[base->offset];
+  ArgBlob *blob = (ArgBlob *)&base->metadata->data[base->offset];
 
   if (blob->transfer_ownership)
     return GI_TRANSFER_EVERYTHING;
@@ -674,13 +678,13 @@ gboolean
 g_type_info_is_pointer (GITypeInfo *info)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  SimpleTypeBlob *type = (SimpleTypeBlob *)&base->metadata[base->offset];
+  SimpleTypeBlob *type = (SimpleTypeBlob *)&base->metadata->data[base->offset];
   
   if (type->reserved == 0)
     return type->pointer;
   else
     {
-      InterfaceTypeBlob *iface = (InterfaceTypeBlob *)&base->metadata[base->offset];
+      InterfaceTypeBlob *iface = (InterfaceTypeBlob *)&base->metadata->data[base->offset];
       
       return iface->pointer;
     }
@@ -690,13 +694,13 @@ GITypeTag
 g_type_info_get_tag (GITypeInfo *info)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  SimpleTypeBlob *type = (SimpleTypeBlob *)&base->metadata[base->offset];
+  SimpleTypeBlob *type = (SimpleTypeBlob *)&base->metadata->data[base->offset];
 
   if (type->reserved == 0)
     return type->tag;
   else
     {
-      InterfaceTypeBlob *iface = (InterfaceTypeBlob *)&base->metadata[base->offset];
+      InterfaceTypeBlob *iface = (InterfaceTypeBlob *)&base->metadata->data[base->offset];
 
       return iface->tag;
     }
@@ -707,11 +711,11 @@ g_type_info_get_param_type (GITypeInfo *info,
 			    gint       n)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  SimpleTypeBlob *type = (SimpleTypeBlob *)&base->metadata[base->offset];
+  SimpleTypeBlob *type = (SimpleTypeBlob *)&base->metadata->data[base->offset];
   
   if (type->reserved != 0)
     {
-      ParamTypeBlob *param = (ParamTypeBlob *)&base->metadata[base->offset];
+      ParamTypeBlob *param = (ParamTypeBlob *)&base->metadata->data[base->offset];
 
       switch (param->tag)
 	{
@@ -733,11 +737,11 @@ GIBaseInfo *
 g_type_info_get_interface (GITypeInfo *info)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  SimpleTypeBlob *type = (SimpleTypeBlob *)&base->metadata[base->offset];
+  SimpleTypeBlob *type = (SimpleTypeBlob *)&base->metadata->data[base->offset];
   
   if (type->reserved != 0)
     {
-      InterfaceTypeBlob *blob = (InterfaceTypeBlob *)&base->metadata[base->offset];
+      InterfaceTypeBlob *blob = (InterfaceTypeBlob *)&base->metadata->data[base->offset];
       
       if (blob->tag == GI_TYPE_TAG_INTERFACE)
 	return g_info_from_entry (base->metadata, blob->interface);
@@ -750,11 +754,11 @@ gint
 g_type_info_get_array_length (GITypeInfo *info)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  SimpleTypeBlob *type = (SimpleTypeBlob *)&base->metadata[base->offset];
+  SimpleTypeBlob *type = (SimpleTypeBlob *)&base->metadata->data[base->offset];
   
   if (type->reserved != 0)
     {
-      ArrayTypeBlob *blob = (ArrayTypeBlob *)&base->metadata[base->offset];
+      ArrayTypeBlob *blob = (ArrayTypeBlob *)&base->metadata->data[base->offset];
 
       if (blob->tag == GI_TYPE_TAG_ARRAY)
 	{
@@ -770,11 +774,11 @@ gboolean
 g_type_info_is_zero_terminated (GITypeInfo *info)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  SimpleTypeBlob *type = (SimpleTypeBlob *)&base->metadata[base->offset];
+  SimpleTypeBlob *type = (SimpleTypeBlob *)&base->metadata->data[base->offset];
   
   if (type->reserved != 0)
     {
-      ArrayTypeBlob *blob = (ArrayTypeBlob *)&base->metadata[base->offset];
+      ArrayTypeBlob *blob = (ArrayTypeBlob *)&base->metadata->data[base->offset];
 
       if (blob->tag == GI_TYPE_TAG_ARRAY)
 	return blob->zero_terminated;
@@ -787,11 +791,11 @@ gint
 g_type_info_get_n_error_domains (GITypeInfo *info)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  SimpleTypeBlob *type = (SimpleTypeBlob *)&base->metadata[base->offset];
+  SimpleTypeBlob *type = (SimpleTypeBlob *)&base->metadata->data[base->offset];
   
   if (type->reserved != 0)
     {
-      ErrorTypeBlob *blob = (ErrorTypeBlob *)&base->metadata[base->offset];
+      ErrorTypeBlob *blob = (ErrorTypeBlob *)&base->metadata->data[base->offset];
 
       if (blob->tag == GI_TYPE_TAG_ERROR)
 	return blob->n_domains;
@@ -805,11 +809,11 @@ g_type_info_get_error_domain (GITypeInfo *info,
 			      gint       n)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  SimpleTypeBlob *type = (SimpleTypeBlob *)&base->metadata[base->offset];
+  SimpleTypeBlob *type = (SimpleTypeBlob *)&base->metadata->data[base->offset];
   
   if (type->reserved != 0)
     {
-      ErrorTypeBlob *blob = (ErrorTypeBlob *)&base->metadata[base->offset];
+      ErrorTypeBlob *blob = (ErrorTypeBlob *)&base->metadata->data[base->offset];
 
       if (blob->tag == GI_TYPE_TAG_ERROR)
 	return (GIErrorDomainInfo *) g_info_from_entry (base->metadata, 
@@ -825,7 +829,7 @@ const gchar *
 g_error_domain_info_get_quark (GIErrorDomainInfo *info)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  ErrorDomainBlob *blob = (ErrorDomainBlob *)&base->metadata[base->offset];
+  ErrorDomainBlob *blob = (ErrorDomainBlob *)&base->metadata->data[base->offset];
 
   return g_metadata_get_string (base->metadata, blob->get_quark);
 }
@@ -834,7 +838,7 @@ GIInterfaceInfo *
 g_error_domain_info_get_codes (GIErrorDomainInfo *info)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  ErrorDomainBlob *blob = (ErrorDomainBlob *)&base->metadata[base->offset];
+  ErrorDomainBlob *blob = (ErrorDomainBlob *)&base->metadata->data[base->offset];
   
   return (GIInterfaceInfo *) g_info_from_entry (base->metadata, blob->error_codes);
 }
@@ -845,7 +849,7 @@ glong
 g_value_info_get_value (GIValueInfo *info)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  ValueBlob *blob = (ValueBlob *)&base->metadata[base->offset];
+  ValueBlob *blob = (ValueBlob *)&base->metadata->data[base->offset];
 
   return (glong)blob->value;
 }
@@ -857,7 +861,7 @@ g_field_info_get_flags (GIFieldInfo *info)
   GIFieldInfoFlags flags;
 
   GIBaseInfo *base = (GIBaseInfo *)info;
-  FieldBlob *blob = (FieldBlob *)&base->metadata[base->offset];
+  FieldBlob *blob = (FieldBlob *)&base->metadata->data[base->offset];
 
   flags = 0;
 
@@ -874,7 +878,7 @@ gint
 g_field_info_get_size (GIFieldInfo *info)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  FieldBlob *blob = (FieldBlob *)&base->metadata[base->offset];
+  FieldBlob *blob = (FieldBlob *)&base->metadata->data[base->offset];
   
   return blob->bits;
 }
@@ -883,7 +887,7 @@ gint
 g_field_info_get_offset (GIFieldInfo *info)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  FieldBlob *blob = (FieldBlob *)&base->metadata[base->offset];
+  FieldBlob *blob = (FieldBlob *)&base->metadata->data[base->offset];
   
   return blob->struct_offset;
 }
@@ -901,7 +905,7 @@ const gchar *
 g_registered_type_info_get_type_name (GIRegisteredTypeInfo *info)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  RegisteredTypeBlob *blob = (RegisteredTypeBlob *)&base->metadata[base->offset];
+  RegisteredTypeBlob *blob = (RegisteredTypeBlob *)&base->metadata->data[base->offset];
 
   if (blob->gtype_name)
     return g_metadata_get_string (base->metadata, blob->gtype_name);
@@ -913,7 +917,7 @@ const gchar *
 g_registered_type_info_get_type_init (GIRegisteredTypeInfo *info)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  RegisteredTypeBlob *blob = (RegisteredTypeBlob *)&base->metadata[base->offset];
+  RegisteredTypeBlob *blob = (RegisteredTypeBlob *)&base->metadata->data[base->offset];
 
   if (blob->gtype_init)
     return g_metadata_get_string (base->metadata, blob->gtype_init);
@@ -927,7 +931,7 @@ gint
 g_struct_info_get_n_fields (GIStructInfo *info)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  StructBlob *blob = (StructBlob *)&base->metadata[base->offset];
+  StructBlob *blob = (StructBlob *)&base->metadata->data[base->offset];
   
   return blob->n_fields;
 }
@@ -937,7 +941,7 @@ g_struct_info_get_field (GIStructInfo *info,
 			 gint         n)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  Header *header = (Header *)base->metadata;  
+  Header *header = (Header *)base->metadata->data;  
  
   return (GIFieldInfo *) g_info_new (GI_INFO_TYPE_FIELD, base, base->metadata, 
 				     base->offset + header->struct_blob_size + 
@@ -948,7 +952,7 @@ gint
 g_struct_info_get_n_methods (GIStructInfo *info)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  StructBlob *blob = (StructBlob *)&base->metadata[base->offset];
+  StructBlob *blob = (StructBlob *)&base->metadata->data[base->offset];
   
   return blob->n_methods;
 }
@@ -958,8 +962,8 @@ g_struct_info_get_method (GIStructInfo *info,
 			  gint         n)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  StructBlob *blob = (StructBlob *)&base->metadata[base->offset];
-  Header *header = (Header *)base->metadata;  
+  StructBlob *blob = (StructBlob *)&base->metadata->data[base->offset];
+  Header *header = (Header *)base->metadata->data;  
   gint offset;
 
   offset = base->offset + header->struct_blob_size 
@@ -976,13 +980,13 @@ find_method (GIBaseInfo   *base,
 	     const gchar  *name)
 {
   /* FIXME hash */
-  Header *header = (Header *)base->metadata;  
+  Header *header = (Header *)base->metadata->data;  
   gint i;
 
   for (i = 0; i < n_methods; i++)
     {
-      FunctionBlob *fblob = (FunctionBlob *)&base->metadata[offset];
-      const gchar *fname = (const gchar *)&base->metadata[fblob->name];
+      FunctionBlob *fblob = (FunctionBlob *)&base->metadata->data[offset];
+      const gchar *fname = (const gchar *)&base->metadata->data[fblob->name];
 
       if (strcmp (name, fname) == 0)
 	return (GIFunctionInfo *) g_info_new (GI_INFO_TYPE_FUNCTION, base, 
@@ -1000,8 +1004,8 @@ g_struct_info_find_method (GIStructInfo *info,
 {
   gint offset;
   GIBaseInfo *base = (GIBaseInfo *)info;
-  Header *header = (Header *)base->metadata;  
-  StructBlob *blob = (StructBlob *)&base->metadata[base->offset];
+  Header *header = (Header *)base->metadata->data;  
+  StructBlob *blob = (StructBlob *)&base->metadata->data[base->offset];
 
   offset = base->offset + header->struct_blob_size
     + blob->n_fields * header->field_blob_size;
@@ -1013,7 +1017,7 @@ gint
 g_enum_info_get_n_values (GIEnumInfo *info)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  EnumBlob *blob = (EnumBlob *)&base->metadata[base->offset];
+  EnumBlob *blob = (EnumBlob *)&base->metadata->data[base->offset];
 
   return blob->n_values;
 }
@@ -1023,7 +1027,7 @@ g_enum_info_get_value (GIEnumInfo *info,
 		       gint            n)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  Header *header = (Header *)base->metadata;  
+  Header *header = (Header *)base->metadata->data;  
   gint offset;
 
   offset = base->offset + header->enum_blob_size 
@@ -1036,7 +1040,7 @@ GIObjectInfo *
 g_object_info_get_parent (GIObjectInfo *info)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  ObjectBlob *blob = (ObjectBlob *)&base->metadata[base->offset];
+  ObjectBlob *blob = (ObjectBlob *)&base->metadata->data[base->offset];
 
   if (blob->parent)
     return (GIObjectInfo *) g_info_from_entry (base->metadata, blob->parent);
@@ -1048,7 +1052,7 @@ const gchar *
 g_object_info_get_type_name (GIObjectInfo *info)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  ObjectBlob *blob = (ObjectBlob *)&base->metadata[base->offset];
+  ObjectBlob *blob = (ObjectBlob *)&base->metadata->data[base->offset];
 
   return g_metadata_get_string (base->metadata, blob->gtype_name);
 }
@@ -1057,7 +1061,7 @@ const gchar *
 g_object_info_get_type_init (GIObjectInfo *info)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  ObjectBlob *blob = (ObjectBlob *)&base->metadata[base->offset];
+  ObjectBlob *blob = (ObjectBlob *)&base->metadata->data[base->offset];
 
   return g_metadata_get_string (base->metadata, blob->gtype_init);
 }
@@ -1066,7 +1070,7 @@ gint
 g_object_info_get_n_interfaces (GIObjectInfo *info)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  ObjectBlob *blob = (ObjectBlob *)&base->metadata[base->offset];
+  ObjectBlob *blob = (ObjectBlob *)&base->metadata->data[base->offset];
 
   return blob->n_interfaces;
 }
@@ -1076,7 +1080,7 @@ g_object_info_get_interface (GIObjectInfo *info,
 			     gint          n)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  ObjectBlob *blob = (ObjectBlob *)&base->metadata[base->offset];
+  ObjectBlob *blob = (ObjectBlob *)&base->metadata->data[base->offset];
 
   return (GIInterfaceInfo *) g_info_from_entry (base->metadata, blob->interfaces[n]);
 }
@@ -1085,7 +1089,7 @@ gint
 g_object_info_get_n_fields (GIObjectInfo *info)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  ObjectBlob *blob = (ObjectBlob *)&base->metadata[base->offset];
+  ObjectBlob *blob = (ObjectBlob *)&base->metadata->data[base->offset];
 
   return blob->n_fields;
 }
@@ -1096,8 +1100,8 @@ g_object_info_get_field (GIObjectInfo *info,
 {
   gint offset;
   GIBaseInfo *base = (GIBaseInfo *)info;
-  Header *header = (Header *)base->metadata;  
-  ObjectBlob *blob = (ObjectBlob *)&base->metadata[base->offset];
+  Header *header = (Header *)base->metadata->data;  
+  ObjectBlob *blob = (ObjectBlob *)&base->metadata->data[base->offset];
   
   offset = base->offset + header->object_blob_size
     + (blob->n_interfaces + blob->n_interfaces % 2) * 2
@@ -1110,7 +1114,7 @@ gint
 g_object_info_get_n_properties (GIObjectInfo *info)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  ObjectBlob *blob = (ObjectBlob *)&base->metadata[base->offset];
+  ObjectBlob *blob = (ObjectBlob *)&base->metadata->data[base->offset];
 
   return blob->n_properties;  
 }
@@ -1121,8 +1125,8 @@ g_object_info_get_property (GIObjectInfo *info,
 {
   gint offset;
   GIBaseInfo *base = (GIBaseInfo *)info;
-  Header *header = (Header *)base->metadata;  
-  ObjectBlob *blob = (ObjectBlob *)&base->metadata[base->offset];
+  Header *header = (Header *)base->metadata->data;  
+  ObjectBlob *blob = (ObjectBlob *)&base->metadata->data[base->offset];
   
   offset = base->offset + header->object_blob_size
     + (blob->n_interfaces + blob->n_interfaces % 2) * 2
@@ -1137,7 +1141,7 @@ gint
 g_object_info_get_n_methods (GIObjectInfo *info)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  ObjectBlob *blob = (ObjectBlob *)&base->metadata[base->offset];
+  ObjectBlob *blob = (ObjectBlob *)&base->metadata->data[base->offset];
 
   return blob->n_methods;
 }
@@ -1148,8 +1152,8 @@ g_object_info_get_method (GIObjectInfo *info,
 {
   gint offset;
   GIBaseInfo *base = (GIBaseInfo *)info;
-  Header *header = (Header *)base->metadata;  
-  ObjectBlob *blob = (ObjectBlob *)&base->metadata[base->offset];
+  Header *header = (Header *)base->metadata->data;  
+  ObjectBlob *blob = (ObjectBlob *)&base->metadata->data[base->offset];
   
   offset = base->offset + header->object_blob_size
     + (blob->n_interfaces + blob->n_interfaces % 2) * 2
@@ -1167,8 +1171,8 @@ g_object_info_find_method (GIObjectInfo *info,
 {
   gint offset;
   GIBaseInfo *base = (GIBaseInfo *)info;
-  Header *header = (Header *)base->metadata;  
-  ObjectBlob *blob = (ObjectBlob *)&base->metadata[base->offset];
+  Header *header = (Header *)base->metadata->data;  
+  ObjectBlob *blob = (ObjectBlob *)&base->metadata->data[base->offset];
 
   offset = base->offset + header->object_blob_size
     + (blob->n_interfaces + blob->n_interfaces % 2) * 2
@@ -1182,7 +1186,7 @@ gint
 g_object_info_get_n_signals (GIObjectInfo *info)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  ObjectBlob *blob = (ObjectBlob *)&base->metadata[base->offset];
+  ObjectBlob *blob = (ObjectBlob *)&base->metadata->data[base->offset];
 
   return blob->n_signals;
 }
@@ -1193,8 +1197,8 @@ g_object_info_get_signal (GIObjectInfo *info,
 {
   gint offset;
   GIBaseInfo *base = (GIBaseInfo *)info;
-  Header *header = (Header *)base->metadata;  
-  ObjectBlob *blob = (ObjectBlob *)&base->metadata[base->offset];
+  Header *header = (Header *)base->metadata->data;  
+  ObjectBlob *blob = (ObjectBlob *)&base->metadata->data[base->offset];
   
   offset = base->offset + header->object_blob_size
     + (blob->n_interfaces + blob->n_interfaces % 2) * 2
@@ -1211,7 +1215,7 @@ gint
 g_object_info_get_n_vfuncs (GIObjectInfo *info)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  ObjectBlob *blob = (ObjectBlob *)&base->metadata[base->offset];
+  ObjectBlob *blob = (ObjectBlob *)&base->metadata->data[base->offset];
   
   return blob->n_vfuncs;
 }
@@ -1222,8 +1226,8 @@ g_object_info_get_vfunc (GIObjectInfo *info,
 {
   gint offset;
   GIBaseInfo *base = (GIBaseInfo *)info;
-  Header *header = (Header *)base->metadata;  
-  ObjectBlob *blob = (ObjectBlob *)&base->metadata[base->offset];
+  Header *header = (Header *)base->metadata->data;  
+  ObjectBlob *blob = (ObjectBlob *)&base->metadata->data[base->offset];
   
   offset = base->offset + header->object_blob_size
     + (blob->n_interfaces + blob->n_interfaces % 2) * 2
@@ -1241,7 +1245,7 @@ gint
 g_object_info_get_n_constants (GIObjectInfo *info)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  ObjectBlob *blob = (ObjectBlob *)&base->metadata[base->offset];
+  ObjectBlob *blob = (ObjectBlob *)&base->metadata->data[base->offset];
   
   return blob->n_constants;
 }
@@ -1252,8 +1256,8 @@ g_object_info_get_constant (GIObjectInfo *info,
 {
   gint offset;
   GIBaseInfo *base = (GIBaseInfo *)info;
-  Header *header = (Header *)base->metadata;  
-  ObjectBlob *blob = (ObjectBlob *)&base->metadata[base->offset];
+  Header *header = (Header *)base->metadata->data;  
+  ObjectBlob *blob = (ObjectBlob *)&base->metadata->data[base->offset];
   
   offset = base->offset + header->object_blob_size
     + (blob->n_interfaces + blob->n_interfaces % 2) * 2
@@ -1274,7 +1278,7 @@ gint
 g_interface_info_get_n_prerequisites (GIInterfaceInfo *info)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  InterfaceBlob *blob = (InterfaceBlob *)&base->metadata[base->offset];
+  InterfaceBlob *blob = (InterfaceBlob *)&base->metadata->data[base->offset];
 
   return blob->n_prerequisites;
 }
@@ -1284,7 +1288,7 @@ g_interface_info_get_prerequisite (GIInterfaceInfo *info,
 				   gint            n)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  InterfaceBlob *blob = (InterfaceBlob *)&base->metadata[base->offset];
+  InterfaceBlob *blob = (InterfaceBlob *)&base->metadata->data[base->offset];
 
   return g_info_from_entry (base->metadata, blob->prerequisites[n]);
 }
@@ -1294,7 +1298,7 @@ gint
 g_interface_info_get_n_properties (GIInterfaceInfo *info)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  InterfaceBlob *blob = (InterfaceBlob *)&base->metadata[base->offset];
+  InterfaceBlob *blob = (InterfaceBlob *)&base->metadata->data[base->offset];
 
   return blob->n_properties;  
 }
@@ -1305,8 +1309,8 @@ g_interface_info_get_property (GIInterfaceInfo *info,
 {
   gint offset;
   GIBaseInfo *base = (GIBaseInfo *)info;
-  Header *header = (Header *)base->metadata;  
-  InterfaceBlob *blob = (InterfaceBlob *)&base->metadata[base->offset];
+  Header *header = (Header *)base->metadata->data;  
+  InterfaceBlob *blob = (InterfaceBlob *)&base->metadata->data[base->offset];
   
   offset = base->offset + header->interface_blob_size
     + (blob->n_prerequisites + (blob->n_prerequisites % 2)) * 2
@@ -1320,7 +1324,7 @@ gint
 g_interface_info_get_n_methods (GIInterfaceInfo *info)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  InterfaceBlob *blob = (InterfaceBlob *)&base->metadata[base->offset];
+  InterfaceBlob *blob = (InterfaceBlob *)&base->metadata->data[base->offset];
 
   return blob->n_methods;
 }
@@ -1331,8 +1335,8 @@ g_interface_info_get_method (GIInterfaceInfo *info,
 {
   gint offset;
   GIBaseInfo *base = (GIBaseInfo *)info;
-  Header *header = (Header *)base->metadata;  
-  InterfaceBlob *blob = (InterfaceBlob *)&base->metadata[base->offset];
+  Header *header = (Header *)base->metadata->data;  
+  InterfaceBlob *blob = (InterfaceBlob *)&base->metadata->data[base->offset];
   
   offset = base->offset + header->interface_blob_size
     + (blob->n_prerequisites + (blob->n_prerequisites % 2)) * 2
@@ -1349,8 +1353,8 @@ g_interface_info_find_method (GIInterfaceInfo *info,
 {
   gint offset;
   GIBaseInfo *base = (GIBaseInfo *)info;
-  Header *header = (Header *)base->metadata;  
-  InterfaceBlob *blob = (InterfaceBlob *)&base->metadata[base->offset];
+  Header *header = (Header *)base->metadata->data;  
+  InterfaceBlob *blob = (InterfaceBlob *)&base->metadata->data[base->offset];
 
   offset = base->offset + header->object_blob_size
     + (blob->n_prerequisites + (blob->n_prerequisites % 2)) * 2
@@ -1363,7 +1367,7 @@ gint
 g_interface_info_get_n_signals (GIInterfaceInfo *info)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  InterfaceBlob *blob = (InterfaceBlob *)&base->metadata[base->offset];
+  InterfaceBlob *blob = (InterfaceBlob *)&base->metadata->data[base->offset];
 
   return blob->n_signals;
 }
@@ -1374,8 +1378,8 @@ g_interface_info_get_signal (GIInterfaceInfo *info,
 {
   gint offset;
   GIBaseInfo *base = (GIBaseInfo *)info;
-  Header *header = (Header *)base->metadata;  
-  InterfaceBlob *blob = (InterfaceBlob *)&base->metadata[base->offset];
+  Header *header = (Header *)base->metadata->data;  
+  InterfaceBlob *blob = (InterfaceBlob *)&base->metadata->data[base->offset];
   
   offset = base->offset + header->interface_blob_size 
     + (blob->n_prerequisites + (blob->n_prerequisites % 2)) * 2
@@ -1391,7 +1395,7 @@ gint
 g_interface_info_get_n_vfuncs (GIInterfaceInfo *info)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  InterfaceBlob *blob = (InterfaceBlob *)&base->metadata[base->offset];
+  InterfaceBlob *blob = (InterfaceBlob *)&base->metadata->data[base->offset];
 
   return blob->n_vfuncs;
 }
@@ -1402,8 +1406,8 @@ g_interface_info_get_vfunc (GIInterfaceInfo *info,
 {
   gint offset;
   GIBaseInfo *base = (GIBaseInfo *)info;
-  Header *header = (Header *)base->metadata;  
-  InterfaceBlob *blob = (InterfaceBlob *)&base->metadata[base->offset];
+  Header *header = (Header *)base->metadata->data;  
+  InterfaceBlob *blob = (InterfaceBlob *)&base->metadata->data[base->offset];
   
   offset = base->offset + header->interface_blob_size 
     + (blob->n_prerequisites + (blob->n_prerequisites % 2)) * 2
@@ -1420,7 +1424,7 @@ gint
 g_interface_info_get_n_constants (GIInterfaceInfo *info)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  InterfaceBlob *blob = (InterfaceBlob *)&base->metadata[base->offset];
+  InterfaceBlob *blob = (InterfaceBlob *)&base->metadata->data[base->offset];
   
   return blob->n_constants;
 }
@@ -1431,8 +1435,8 @@ g_interface_info_get_constant (GIInterfaceInfo *info,
 {
   gint offset;
   GIBaseInfo *base = (GIBaseInfo *)info;
-  Header *header = (Header *)base->metadata;  
-  InterfaceBlob *blob = (InterfaceBlob *)&base->metadata[base->offset];
+  Header *header = (Header *)base->metadata->data;  
+  InterfaceBlob *blob = (InterfaceBlob *)&base->metadata->data[base->offset];
   
   offset = base->offset + header->interface_blob_size
     + (blob->n_prerequisites + (blob->n_prerequisites % 2)) * 2
@@ -1455,7 +1459,7 @@ g_property_info_get_flags (GIPropertyInfo *info)
 {
   GParamFlags flags;
   GIBaseInfo *base = (GIBaseInfo *)info;
-  PropertyBlob *blob = (PropertyBlob *)&base->metadata[base->offset];
+  PropertyBlob *blob = (PropertyBlob *)&base->metadata->data[base->offset];
   
   flags = 0;
 
@@ -1490,7 +1494,7 @@ g_signal_info_get_flags (GISignalInfo *info)
   GSignalFlags flags;
 
   GIBaseInfo *base = (GIBaseInfo *)info;
-  SignalBlob *blob = (SignalBlob *)&base->metadata[base->offset];
+  SignalBlob *blob = (SignalBlob *)&base->metadata->data[base->offset];
 
   flags = 0;
 
@@ -1522,7 +1526,7 @@ GIVFuncInfo *
 g_signal_info_get_class_closure (GISignalInfo *info)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  SignalBlob *blob = (SignalBlob *)&base->metadata[base->offset];
+  SignalBlob *blob = (SignalBlob *)&base->metadata->data[base->offset];
 
   if (blob->has_class_closure)
     return g_interface_info_get_vfunc ((GIInterfaceInfo *)base->container, blob->class_closure);
@@ -1534,7 +1538,7 @@ gboolean
 g_signal_info_true_stops_emit (GISignalInfo *info)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  SignalBlob *blob = (SignalBlob *)&base->metadata[base->offset];
+  SignalBlob *blob = (SignalBlob *)&base->metadata->data[base->offset];
 
   return blob->true_stops_emit;
 }
@@ -1546,7 +1550,7 @@ g_vfunc_info_get_flags (GIVFuncInfo *info)
   GIVFuncInfoFlags flags;
 
   GIBaseInfo *base = (GIBaseInfo *)info;
-  VFuncBlob *blob = (VFuncBlob *)&base->metadata[base->offset];
+  VFuncBlob *blob = (VFuncBlob *)&base->metadata->data[base->offset];
 
   flags = 0;
 
@@ -1566,7 +1570,7 @@ gint
 g_vfunc_info_get_offset (GIVFuncInfo *info)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  VFuncBlob *blob = (VFuncBlob *)&base->metadata[base->offset];
+  VFuncBlob *blob = (VFuncBlob *)&base->metadata->data[base->offset];
   
   return blob->struct_offset;
 }
@@ -1575,7 +1579,7 @@ GISignalInfo *
 g_vfunc_info_get_signal (GIVFuncInfo *info)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  VFuncBlob *blob = (VFuncBlob *)&base->metadata[base->offset];
+  VFuncBlob *blob = (VFuncBlob *)&base->metadata->data[base->offset];
 
   if (blob->class_closure)
     return g_interface_info_get_signal ((GIInterfaceInfo *)base->container, blob->signal);
@@ -1598,61 +1602,61 @@ g_constant_info_get_value (GIConstantInfo *info,
 			   GArgument      *value)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  ConstantBlob *blob = (ConstantBlob *)&base->metadata[base->offset];
+  ConstantBlob *blob = (ConstantBlob *)&base->metadata->data[base->offset];
 
   /* FIXME non-basic types ? */
   if (blob->type.reserved == 0)
     {
       if (blob->type.pointer)
-	value->v_pointer = g_memdup (&base->metadata[blob->offset], blob->size);
+	value->v_pointer = g_memdup (&base->metadata->data[blob->offset], blob->size);
       else
 	{
 	  switch (blob->type.tag)
 	    {
 	    case GI_TYPE_TAG_BOOLEAN:
-	      value->v_boolean = *(gboolean*)&base->metadata[blob->offset];
+	      value->v_boolean = *(gboolean*)&base->metadata->data[blob->offset];
 	      break;
 	    case GI_TYPE_TAG_INT8:
-	      value->v_int8 = *(gint8*)&base->metadata[blob->offset];
+	      value->v_int8 = *(gint8*)&base->metadata->data[blob->offset];
 	      break;
 	    case GI_TYPE_TAG_UINT8:
-	      value->v_uint8 = *(guint8*)&base->metadata[blob->offset];
+	      value->v_uint8 = *(guint8*)&base->metadata->data[blob->offset];
 	      break;
 	    case GI_TYPE_TAG_INT16:
-	      value->v_int16 = *(gint16*)&base->metadata[blob->offset];
+	      value->v_int16 = *(gint16*)&base->metadata->data[blob->offset];
 	      break;
 	    case GI_TYPE_TAG_UINT16:
-	      value->v_uint16 = *(guint16*)&base->metadata[blob->offset];
+	      value->v_uint16 = *(guint16*)&base->metadata->data[blob->offset];
 	      break;
 	    case GI_TYPE_TAG_INT32:
-	      value->v_int32 = *(gint32*)&base->metadata[blob->offset];
+	      value->v_int32 = *(gint32*)&base->metadata->data[blob->offset];
 	      break;
 	    case GI_TYPE_TAG_UINT32:
-	      value->v_uint32 = *(guint32*)&base->metadata[blob->offset];
+	      value->v_uint32 = *(guint32*)&base->metadata->data[blob->offset];
 	      break;
 	    case GI_TYPE_TAG_INT64:
-	      value->v_int64 = *(gint64*)&base->metadata[blob->offset];
+	      value->v_int64 = *(gint64*)&base->metadata->data[blob->offset];
 	      break;
 	    case GI_TYPE_TAG_UINT64:
-	      value->v_uint64 = *(guint64*)&base->metadata[blob->offset];
+	      value->v_uint64 = *(guint64*)&base->metadata->data[blob->offset];
 	      break;
 	    case GI_TYPE_TAG_FLOAT:
-	      value->v_float = *(gfloat*)&base->metadata[blob->offset];
+	      value->v_float = *(gfloat*)&base->metadata->data[blob->offset];
 	      break;
 	    case GI_TYPE_TAG_DOUBLE:
-	      value->v_double = *(gdouble*)&base->metadata[blob->offset];
+	      value->v_double = *(gdouble*)&base->metadata->data[blob->offset];
 	      break;
 	    case GI_TYPE_TAG_INT:
-	      value->v_int = *(gint*)&base->metadata[blob->offset];
+	      value->v_int = *(gint*)&base->metadata->data[blob->offset];
 	      break;
 	    case GI_TYPE_TAG_UINT:
-	      value->v_uint = *(guint*)&base->metadata[blob->offset];
+	      value->v_uint = *(guint*)&base->metadata->data[blob->offset];
 	      break;
 	    case GI_TYPE_TAG_LONG:
-	      value->v_long = *(glong*)&base->metadata[blob->offset];
+	      value->v_long = *(glong*)&base->metadata->data[blob->offset];
 	      break;
 	    case GI_TYPE_TAG_ULONG:
-	      value->v_ulong = *(gulong*)&base->metadata[blob->offset];
+	      value->v_ulong = *(gulong*)&base->metadata->data[blob->offset];
 	      break;
 	    }
 	}
@@ -1666,7 +1670,7 @@ gint
 g_union_info_get_n_fields  (GIUnionInfo *info)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  UnionBlob *blob = (UnionBlob *)&base->metadata[base->offset];
+  UnionBlob *blob = (UnionBlob *)&base->metadata->data[base->offset];
   
   return blob->n_fields;
 }
@@ -1676,7 +1680,7 @@ g_union_info_get_field (GIUnionInfo *info,
 			gint         n)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  Header *header = (Header *)base->metadata;  
+  Header *header = (Header *)base->metadata->data;  
  
   return (GIFieldInfo *) g_info_new (GI_INFO_TYPE_FIELD, base, base->metadata, 
 				     base->offset + header->union_blob_size + 
@@ -1687,7 +1691,7 @@ gint
 g_union_info_get_n_methods (GIUnionInfo *info)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  UnionBlob *blob = (UnionBlob *)&base->metadata[base->offset];
+  UnionBlob *blob = (UnionBlob *)&base->metadata->data[base->offset];
   
   return blob->n_functions;
 }
@@ -1697,8 +1701,8 @@ g_union_info_get_method (GIUnionInfo *info,
 			 gint         n)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  UnionBlob *blob = (UnionBlob *)&base->metadata[base->offset];
-  Header *header = (Header *)base->metadata;  
+  UnionBlob *blob = (UnionBlob *)&base->metadata->data[base->offset];
+  Header *header = (Header *)base->metadata->data;  
   gint offset;
 
   offset = base->offset + header->union_blob_size 
@@ -1712,7 +1716,7 @@ gboolean
 g_union_info_is_discriminated (GIUnionInfo *info)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  UnionBlob *blob = (UnionBlob *)&base->metadata[base->offset];
+  UnionBlob *blob = (UnionBlob *)&base->metadata->data[base->offset];
   
   return blob->discriminated;
 }
@@ -1721,7 +1725,7 @@ gint
 g_union_info_get_discriminator_offset (GIUnionInfo *info)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  UnionBlob *blob = (UnionBlob *)&base->metadata[base->offset];
+  UnionBlob *blob = (UnionBlob *)&base->metadata->data[base->offset];
   
   return blob->discriminator_offset;
 }
@@ -1739,11 +1743,11 @@ g_union_info_get_discriminator (GIUnionInfo *info,
 				gint         n)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
-  UnionBlob *blob = (UnionBlob *)&base->metadata[base->offset];
+  UnionBlob *blob = (UnionBlob *)&base->metadata->data[base->offset];
   
   if (blob->discriminated)
     {
-      Header *header = (Header *)base->metadata;  
+      Header *header = (Header *)base->metadata->data;  
       gint offset;
 
       offset = base->offset + header->union_blob_size 

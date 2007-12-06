@@ -1581,6 +1581,10 @@ main (int argc, char **argv)
 		  igenerator->lower_case_namespace =
 		    g_ascii_strdown (igenerator->namespace, -1);
 		}
+	      else if (g_str_has_prefix (argv[i], "--shared-library="))
+		{
+		  igenerator->shared_library = argv[i] + strlen ("--shared-library=");
+		}
 	      break;
 	    case 'I':
 	    case 'D':
@@ -1638,7 +1642,7 @@ main (int argc, char **argv)
 
   g_igenerator_parse_macros (igenerator);
 
-  igenerator->module = g_idl_module_new (igenerator->namespace);
+  igenerator->module = g_idl_module_new (igenerator->namespace, igenerator->shared_library);
   g_igenerator_generate (igenerator);
 
   return 0;

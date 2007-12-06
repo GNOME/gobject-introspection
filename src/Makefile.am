@@ -1,5 +1,7 @@
 ## Process this file with automake to produce Makefile.in
 
+INCLUDES = -DGIREPO_DEFAULT_SEARCH_PATH="\"$(libdir)\""
+
 lib_LTLIBRARIES = libgirepository.la
 bin_PROGRAMS = g-idl-compiler g-idl-generate gen-introspect
 
@@ -19,12 +21,12 @@ g_idl_compiler_SOURCES =			\
 	gmetadata.c				\
 	compiler.c	
 g_idl_compiler_CFLAGS = $(GIREPO_CFLAGS)
-g_idl_compiler_LDADD = -ldl $(GIREPO_LIBS)
+g_idl_compiler_LDADD = $(GIREPO_LIBS)
 
 
 g_idl_generate_SOURCES = generate.c
 g_idl_generate_CFLAGS = $(GIREPO_CFLAGS)
-g_idl_generate_LDADD = -ldl $(GIREPO_LIBS) libgirepository.la
+g_idl_generate_LDADD = $(GIREPO_LIBS) libgirepository.la
 
 girepodir = $(includedir)/glib-2.0/gobject-introspection
 girepo_HEADERS = girepository.h
@@ -40,5 +42,5 @@ gen_introspect_SOURCES =			\
 	gen-introspect.c			\
 	gen-introspect.h
 gen_introspect_CFLAGS = $(GIREPO_CFLAGS)
-gen_introspect_LDADD = -ldl $(GIREPO_LIBS)
+gen_introspect_LDADD = $(GIREPO_LIBS) libgirepository.la
 

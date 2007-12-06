@@ -20,6 +20,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <stdlib.h>
 
 #include <glib.h>
 #include "gidlmodule.h"
@@ -1729,15 +1730,16 @@ start_element_handler (GMarkupParseContext *context,
     case 'n':
       if (strcmp (element_name, "namespace") == 0 && ctx->state == STATE_ROOT)
 	{
-	  const gchar *name;
+	  const gchar *name, *shared_library;
 	  
 	  name = find_attribute ("name", attribute_names, attribute_values);
+	  shared_library = find_attribute ("shared-library", attribute_names, attribute_values);
 
 	  if (name == NULL)
 	    MISSING_ATTRIBUTE (error, element_name, "name");
 	  else
 	    {
-	      ctx->current_module = g_idl_module_new (name);
+	      ctx->current_module = g_idl_module_new (name, shared_library);
 	      ctx->modules = g_list_append (ctx->modules, ctx->current_module);
 
 	      ctx->state = STATE_NAMESPACE;

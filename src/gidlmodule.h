@@ -22,6 +22,7 @@
 #define __G_IDL_MODULE_H__
 
 #include <glib.h>
+#include "gmetadata.h"
 
 G_BEGIN_DECLS
 
@@ -31,16 +32,16 @@ typedef struct _GIdlModule GIdlModule;
 struct _GIdlModule
 { 
   gchar *name;
+  gchar *shared_library;
   GList *entries;
 };
 
-GIdlModule *g_idl_module_new            (const gchar *name);
+GIdlModule *g_idl_module_new            (const gchar *name,
+                                         const gchar *module_filename);
 void        g_idl_module_free           (GIdlModule  *module);
 
-void        g_idl_module_build_metadata (GIdlModule  *module,
-					 GList       *modules,
-					 guchar     **metadata,
-					 gsize       *length);
+GMetadata * g_idl_module_build_metadata (GIdlModule  *module,
+					 GList       *modules);
 
 G_END_DECLS
 

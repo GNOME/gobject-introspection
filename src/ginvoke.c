@@ -19,12 +19,13 @@
  */
 
 #include <stdlib.h>
-#include <dlfcn.h>
 
 #include <glib.h>
 #include <glib-object.h>
 
 #include "girepository.h"
+#include "gmetadata.h"
+#include "config.h"
 
 GQuark
 g_invoke_error_quark (void)
@@ -162,17 +163,13 @@ g_function_info_invoke (GIFunctionInfo *info,
   
   symbol = g_function_info_get_symbol (info);
 
-  func = dlsym (NULL, symbol);
-
-  if (func == NULL)
+  if (!g_module_symbol (g_base_info_get_metadata((GIBaseInfo *) info)->module,
+                        symbol, &func))
     {
-      gchar *msg;
-
-      msg = dlerror ();
       g_set_error (error,
 		   G_INVOKE_ERROR,
 		   G_INVOKE_ERROR_SYMBOL_NOT_FOUND,
-		   "Could not locate %s: %s", symbol, msg ? msg : "dlsym() failed");
+		   "Could not locate %s: %s", symbol, g_module_error ());
 		   
       return FALSE;
     }
