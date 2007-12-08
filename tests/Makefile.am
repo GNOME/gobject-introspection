@@ -1,4 +1,4 @@
-SUBDIRS = . invoke
+SUBDIRS = . invoke parser
 
 TESTS = roundtrips.sh
 

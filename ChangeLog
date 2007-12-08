@@ -1,3 +1,10 @@
+2007-12-08  Johan Dahlin  <johan@gnome.org>
+
+	* tests/parser/:
+	* configure.ac:
+
+	Add a simple gen-introspect parser test
+
 2007-12-06  Gustavo J. A. M. Carneiro  <gjc@gnome.org>
 
 	reviewed by: Johan Dahlin  <johan@gnome.org>

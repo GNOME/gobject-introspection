@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<api version="1.0">
+	<namespace name="Foo">
+		<function name="init" symbol="foo_init">
+			<return-type type="gint"/>
+		</function>
+		<object name="FooObject" parent="GObject" type-name="FooObject" get-type="foo_object_get_type">
+			<method name="method" symbol="foo_object_method">
+				<return-type type="gint"/>
+				<parameters>
+					<parameter name="object" type="FooObject*"/>
+				</parameters>
+			</method>
+			<constructor name="new" symbol="foo_object_new">
+				<return-type type="FooObject*"/>
+			</constructor>
+		</object>
+	</namespace>
+</api>

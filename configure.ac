@@ -27,6 +27,8 @@ fi
 # Checks for libraries.
 AC_CHECK_LIB([dl], [dlopen])
 
+PKG_CHECK_MODULES(GOBJECT, [gobject-2.0])
+
 LIBFFI_DEP=""
 AC_SUBST(LIBFFI_DEP)
 PKG_CHECK_MODULES(GIREPO, [glib-2.0 gobject-2.0 gmodule-2.0 gthread-2.0 libffi],
@@ -56,5 +58,6 @@ AC_CONFIG_FILES([Makefile
                  src/Makefile
                  tests/Makefile
                  tests/invoke/Makefile
+                 tests/parser/Makefile
                  gobject-introspection.pc])
 AC_OUTPUT
