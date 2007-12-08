@@ -33,6 +33,7 @@ typedef struct _CType CType;
 
 struct _GIGenerator
 {
+  /* parameters */
   const char *namespace;
   const char *shared_library;
   char *lower_case_namespace;
@@ -51,6 +52,8 @@ struct _GIGenerator
   GList *get_type_symbols;
   GHashTable *type_map;
   GHashTable *type_by_lower_case_prefix;
+
+  GHashTable *symbols; /* typename -> module.name */
 
   int indent;
 };

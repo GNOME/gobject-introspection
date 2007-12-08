@@ -13,8 +13,9 @@ CLEANFILES = Foo.gidl
 
 Foo.gidl: libfoo.la foo-object.h
 	$(top_builddir)/src/gen-introspect --namespace=Foo \
+	--include-idl=$(top_srcdir)/gidl/GLib.gidl \
 	`pwd`/foo-object.h -I. -U__GNUC__ $(GOBJECT_CFLAGS) \
 	libfoo.la > $@
 
 check-local:
-	diff -u Foo.gidl Foo-expected.gidl
+	diff -u Foo-expected.gidl Foo.gidl

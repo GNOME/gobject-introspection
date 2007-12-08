@@ -1,5 +1,22 @@
 2007-12-08  Johan Dahlin  <johan@gnome.org>
 
+	* gidl/GLib.gidl:
+	* src/Makefile.am:
+	* src/gen-introspect.c: (g_igenerator_new), (lookup_symbol),
+	(g_igenerator_process_types), (g_igenerator_add_module),
+	(g_igenerator_add_include_idl), (main):
+	* src/gen-introspect.h:
+	* tests/parser/Makefile.am:
+	* tests/parser/Foo-expected.gidl:
+
+	Change the gen-introspect to generate namespaced module names,
+	such as GLib.Object instead of GObject.
+	Add a GLib.gidl which introduces GLib.Object and GLib.InitiallyUnowned, 
+	add a --include-idl parameter to gen-introspect,
+	and update the parser test.
+
+2007-12-08  Johan Dahlin  <johan@gnome.org>
+
 	* src/gen-introspect.c:
 	Move main to the end of the file and attempt to make it valid
 	ansi c.

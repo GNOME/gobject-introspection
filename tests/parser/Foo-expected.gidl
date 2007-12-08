@@ -4,7 +4,7 @@
 		<function name="init" symbol="foo_init">
 			<return-type type="gint"/>
 		</function>
-		<object name="FooObject" parent="GObject" type-name="FooObject" get-type="foo_object_get_type">
+		<object name="FooObject" parent="GLib.Object" type-name="FooObject" get-type="foo_object_get_type">
 			<method name="method" symbol="foo_object_method">
 				<return-type type="gint"/>
 				<parameters>

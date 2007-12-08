@@ -29,6 +29,7 @@
 #include <glib-object.h>
 #include <gmodule.h>
 #include "gen-introspect.h"
+#include "gidlparser.h"
 #include "gidlmodule.h"
 #include "gidlnode.h"
 
@@ -67,6 +68,7 @@ g_igenerator_new (void)
   igenerator->type_map = g_hash_table_new (g_str_hash, g_str_equal);
   igenerator->type_by_lower_case_prefix =
     g_hash_table_new (g_str_hash, g_str_equal);
+  igenerator->symbols = g_hash_table_new (g_str_hash, g_str_equal);
 
   the_igenerator = igenerator;
 
@@ -633,6 +635,21 @@ g_igenerator_process_signals (GIGenerator * igenerator,
     }
 }
 
+static const gchar *
+lookup_symbol (GIGenerator *igenerator, const gchar *typename)
+{
+  const gchar *name =
+    g_hash_table_lookup (igenerator->symbols, typename);
+
+  if (!name)
+    {
+      g_printerr ("Unknown symbol: %s\n", typename);
+      return NULL;
+    }
+
+  return name;
+}
+
 static void
 g_igenerator_process_types (GIGenerator * igenerator)
 {
@@ -713,8 +730,8 @@ g_igenerator_process_types (GIGenerator * igenerator)
 		}
 	      ginode->gtype_name = ginode->node.name;
 	      ginode->gtype_init = get_type_symbol;
-	      ginode->parent =
-		g_strdup (g_type_name (g_type_parent (type_id)));
+	      ginode->parent = g_strdup (lookup_symbol (igenerator,
+							g_type_name (g_type_parent (type_id))));
 
 	      type_interfaces =
 		g_type_interfaces (type_id, &n_type_interfaces);
@@ -1852,6 +1869,55 @@ g_igenerator_parse_macros (GIGenerator * igenerator)
   igenerator->macro_scan = FALSE;
 }
 
+static void
+g_igenerator_add_module (GIGenerator *igenerator,
+			 GIdlModule *module)
+{
+  GList *l;
+
+  for (l = module->entries; l; l = l->next)
+    {
+      GIdlNode *node = (GIdlNode*)l->data;
+      
+      if (node->type == G_IDL_NODE_OBJECT)
+	{
+	  GIdlNodeInterface *object = (GIdlNodeInterface*)node;
+
+	  g_hash_table_insert (igenerator->symbols,
+			       g_strdup (object->gtype_name),
+			       g_strdup_printf ("%s.%s", module->name,
+						node->name));
+	}
+    }
+}
+
+static void
+g_igenerator_add_include_idl (GIGenerator *igenerator,
+			      const gchar *filename)
+{
+  GList *l;
+  GList *modules;
+  
+  GError *error = NULL;
+
+  modules = g_idl_parse_file (filename, &error);
+  if (error)
+    {
+      g_printerr ("An error occured while parsing %s: %s\n",
+		  filename, error->message);
+      return;
+    }
+  
+  g_printerr ("** Parsed included IDL: %s\n", filename);
+
+  for (l = modules; l; l = l->next)
+    {
+      GIdlModule *module = (GIdlModule*)l->data;
+      g_igenerator_add_module (igenerator, module);
+    }
+
+}		     
+
 int
 main (int argc, char **argv)
 {
@@ -1864,6 +1930,7 @@ main (int argc, char **argv)
   GList *l;
   int cpp_out = -1;
   FILE *f;
+  GList *includes;
   
   g_type_init ();
 
@@ -1891,6 +1958,11 @@ main (int argc, char **argv)
 		  g_free (igenerator->lower_case_namespace);
 		  igenerator->lower_case_namespace =
 		    g_ascii_strdown (igenerator->namespace, -1);
+		}
+	      else if (g_str_has_prefix (argv[i], "--include-idl="))
+		{
+		  includes = g_list_prepend (includes,
+					     argv[i] + strlen ("--include-idl="));
 		}
 	      else if (g_str_has_prefix (argv[i], "--shared-library="))
 		{
@@ -1941,6 +2013,12 @@ main (int argc, char **argv)
       g_error ("%s", error->message);
     }
 
+  for (l = includes; l; l = l->next)
+    {
+      const gchar *filename = (const char*)l->data;
+      g_igenerator_add_include_idl (igenerator, filename);
+    }
+  
   g_igenerator_parse (igenerator, fdopen (cpp_out, "r"));
 
   g_unlink (tmp_name);

@@ -39,6 +39,7 @@ gen_introspect_SOURCES =			\
 	cparser.y				\
 	gidlmodule.c				\
 	gidlnode.c				\
+	gidlparser.c				\
 	gen-introspect.c			\
 	gen-introspect.h
 gen_introspect_CFLAGS = $(GIREPO_CFLAGS)
