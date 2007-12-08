@@ -15,5 +15,10 @@
 				<return-type type="FooObject*"/>
 			</constructor>
 		</object>
+		<object name="FooSubobject" parent="FooObject" type-name="FooSubobject" get-type="foo_subobject_get_type">
+			<constructor name="new" symbol="foo_subobject_new">
+				<return-type type="FooSubobject*"/>
+			</constructor>
+		</object>
 	</namespace>
 </api>

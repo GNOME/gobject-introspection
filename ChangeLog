@@ -1,5 +1,17 @@
 2007-12-08  Johan Dahlin  <johan@gnome.org>
 
+	* src/gen-introspect.c: (g_igenerator_process_types),
+	(g_igenerator_add_module):
+	* tests/parser/Foo-expected.gidl:
+	* tests/parser/foo-object.h:
+	* tests/parser/foo.c: (foo_subobject_class_init),
+	(foo_subobject_init):
+
+	Add a subobject test and make sure to register defined classes
+	in the lookup symbol hash table.
+
+2007-12-08  Johan Dahlin  <johan@gnome.org>
+
 	* gidl/GLib.gidl:
 	* src/Makefile.am:
 	* src/gen-introspect.c: (g_igenerator_new), (lookup_symbol),

@@ -749,6 +749,11 @@ g_igenerator_process_types (GIGenerator * igenerator)
 		    g_list_append (ginode->interfaces, iface_name);
 		}
 
+	      g_hash_table_insert (igenerator->symbols,
+				   g_strdup (ginode->gtype_name),
+				   /* FIXME: Strip igenerator->namespace */
+				   g_strdup (ginode->node.name));
+
 	      g_igenerator_process_properties (igenerator, ginode, type_id);
 	      g_igenerator_process_signals (igenerator, ginode, type_id);
 	    }
@@ -1882,11 +1887,14 @@ g_igenerator_add_module (GIGenerator *igenerator,
       if (node->type == G_IDL_NODE_OBJECT)
 	{
 	  GIdlNodeInterface *object = (GIdlNodeInterface*)node;
-
+	  gchar *name;
+	  if (strcmp(module->name, igenerator->namespace) == 0)
+	    name = g_strdup (node->name);
+	  else
+	    name = g_strdup_printf ("%s.%s", module->name, node->name);
 	  g_hash_table_insert (igenerator->symbols,
 			       g_strdup (object->gtype_name),
-			       g_strdup_printf ("%s.%s", module->name,
-						node->name));
+			       name);
 	}
     }
 }

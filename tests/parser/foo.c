@@ -16,6 +16,20 @@ foo_object_init (FooObject *object)
 
 }
 
+G_DEFINE_TYPE (FooSubobject, foo_subobject, FOO_TYPE_OBJECT);
+
+static void
+foo_subobject_class_init (FooSubobjectClass *klass)
+{
+
+}
+
+static void
+foo_subobject_init (FooSubobject *object)
+{
+
+}
+
 int foo_init (void)
 {
   return FOO_SUCCESS_INT;
