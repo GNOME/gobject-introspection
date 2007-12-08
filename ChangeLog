@@ -1,5 +1,12 @@
 2007-12-08  Johan Dahlin  <johan@gnome.org>
 
+	* src/gen-introspect.c:
+	Move main to the end of the file and attempt to make it valid
+	ansi c.
+
+	* tests/parser/Makefile.am (BUILT_SOURCES): Remove .repo here,
+	we're not quite ready to generate metadata yet.
+
 	* tests/parser/:
 	* configure.ac:
 

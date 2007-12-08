@@ -8,8 +8,8 @@ libfoo_la_CFLAGS = $(GOBJECT_CFLAGS)
 libfoo_la_LDFLAGS = -module -avoid-version
 libfoo_la_LIBADD = $(GOBJECT_LIBS)
 
-BUILT_SOURCES = Foo.gidl Foo.repo
-CLEANFILES = Foo.gidl Foo.repo
+BUILT_SOURCES = Foo.gidl
+CLEANFILES = Foo.gidl
 
 Foo.gidl: libfoo.la foo-object.h
 	$(top_builddir)/src/gen-introspect --namespace=Foo \
