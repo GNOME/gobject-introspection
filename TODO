@@ -1,7 +1,6 @@
 XML format
 ----------
 - Document the format
-- Write a scanner to create XML from annotated headers
 - Add attributes to connect signals to their default handlers
   and wrappers to their vfuncs
 - Add a way to specify default values
@@ -30,6 +29,11 @@ Repository
 - Think about a system-wide repository mapping namespace ids to 
   libraries/metadata files
 - Fix extra indirection for out parameters in invoke
+
+Scanner
+-------
+- Annotations
+- More tests
 
 General
 -------

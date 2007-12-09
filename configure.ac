@@ -29,9 +29,11 @@ AC_CHECK_LIB([dl], [dlopen])
 
 PKG_CHECK_MODULES(GOBJECT, [gobject-2.0])
 
+PKG_CHECK_MODULES(SCANNER, [gobject-2.0 gthread-2.0])
+
 LIBFFI_DEP=""
 AC_SUBST(LIBFFI_DEP)
-PKG_CHECK_MODULES(GIREPO, [glib-2.0 gobject-2.0 gmodule-2.0 gthread-2.0 libffi],
+PKG_CHECK_MODULES(GIREPO, [glib-2.0 gobject-2.0 gmodule-2.0 libffi],
                   [have_libffi=true], [have_libffi=false])
 
 if $have_libffi; then
@@ -40,7 +42,7 @@ if $have_libffi; then
 else
    dnl if libffi is not found, g_function_info_invoke is not available,
    dnl but everything else still works
-   PKG_CHECK_MODULES(GIREPO, [glib-2.0 gobject-2.0 gmodule-2.0 gthread-2.0])
+   PKG_CHECK_MODULES(GIREPO, [glib-2.0 gobject-2.0 gmodule-2.0])
 fi
 
 # Checks for header files.
