@@ -1,4 +1,4 @@
-/* GObject introspection: gen-introspect
+/* GObject introspection: scanner
  *
  * Copyright (C) 2007  Jürg Billeter
  *
@@ -28,7 +28,7 @@
 #include <glib/gstdio.h>
 #include <glib-object.h>
 #include <gmodule.h>
-#include "gen-introspect.h"
+#include "scanner.h"
 #include "gidlparser.h"
 #include "gidlmodule.h"
 #include "gidlnode.h"

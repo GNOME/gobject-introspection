@@ -1,5 +1,22 @@
 2007-12-09  Johan Dahlin  <johan@gnome.org>
 
+	* src/cparser.y: 
+	* src/Makefile.am:
+	* src/clexer.l:
+	* src/cparser.y:
+	* src/gen-introspect.c:
+	* src/gen-introspect.h:
+	* src/scanner.c:
+	Rename gen-introspect.[ch] to scanner.[ch]
+
+2007-12-09  Johan Dahlin  <johan@gnome.org>
+
+	* TODO: Update
+
+	* src/Makefile.am: Rename gen-introspect to g-idl-scanner,
+	don't make the repository library and the other utilites link against
+	gthread-2.0
+
 	* src/gen-introspect.c: (g_igenerator_create_object),
 	(g_igenerator_create_interface), (g_igenerator_create_boxed),
 	(g_igenerator_create_enum), (g_igenerator_create_flags),

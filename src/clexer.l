@@ -30,7 +30,7 @@
 #include <ctype.h>
 #include <stdio.h>
 
-#include "gen-introspect.h"
+#include "scanner.h"
 #include "cparser.h"
 
 int lineno;

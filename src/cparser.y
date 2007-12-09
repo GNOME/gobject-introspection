@@ -30,7 +30,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "gen-introspect.h"
+#include "scanner.h"
 
 extern FILE *yyin;
 extern int lineno;

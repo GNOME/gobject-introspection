@@ -32,8 +32,8 @@ g_idl_generate_LDADD = $(GIREPO_LIBS) libgirepository.la
 g_idl_scanner_SOURCES =				\
 	clexer.l				\
 	cparser.y				\
-	gen-introspect.c			\
-	gen-introspect.h
+	scanner.c				\
+	scanner.h
 g_idl_scanner_CFLAGS = $(GIREPO_CFLAGS) $(SCANNER_CFLAGS)
 g_idl_scanner_LDADD = $(GIREPO_LIBS) $(SCANNER_LIBS) libgirepository.la libgirepository-parser.la
 
