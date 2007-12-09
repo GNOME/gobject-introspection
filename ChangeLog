@@ -2,7 +2,9 @@
 
 	* src/scanner.c:
 	Use GOption for command line options.
-	
+	(g_igenerator_new, main): Simplify constructor and they way
+	parameters are passed into it.
+
 	* src/cparser.y: 
 	* src/Makefile.am:
 	* src/clexer.l:

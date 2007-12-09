@@ -55,12 +55,17 @@ g_idl_node_cmp (GIdlNode * a, GIdlNode * b)
     }
 }
 
-GIGenerator *
-g_igenerator_new (void)
+static GIGenerator *
+g_igenerator_new (const gchar *namespace,
+		  const gchar *shared_library)
 {
   GIGenerator *igenerator = g_new0 (GIGenerator, 1);
-  igenerator->namespace = "";
-  igenerator->lower_case_namespace = g_strdup ("");
+  igenerator->namespace = namespace; 
+  igenerator->shared_library = shared_library;
+  igenerator->lower_case_namespace =
+	g_ascii_strdown (igenerator->namespace, -1);
+  igenerator->module = g_idl_module_new (namespace, shared_library);
+
   igenerator->typedef_table = g_hash_table_new (g_str_hash, g_str_equal);
   igenerator->struct_or_union_or_enum_table =
     g_hash_table_new (g_str_hash, g_str_equal);
@@ -2009,7 +2014,6 @@ main (int argc, char **argv)
   GList *l, *libraries = NULL;
   int cpp_out = -1;
   FILE *f;
-
   GOptionEntry entries[] = 
     {
       { "namespace", 0, 0, G_OPTION_ARG_STRING, &namespace,
@@ -2030,9 +2034,10 @@ main (int argc, char **argv)
       g_printerr ("Parsing error: %s\n", error->message);
       return 1;
     }
+
   g_option_context_free (ctx);
 
-  igenerator = g_igenerator_new ();
+  igenerator = g_igenerator_new (namespace, shared_library);
 
   cpp_argv = g_new0 (char *, argc + 2);
   cpp_argv[cpp_argc++] = "cc";
@@ -2087,11 +2092,12 @@ main (int argc, char **argv)
 
   g_spawn_async_with_pipes (NULL, cpp_argv, NULL, G_SPAWN_SEARCH_PATH, NULL,
 			    NULL, NULL, NULL, &cpp_out, NULL, &error);
+
   if (error != NULL)
     {
       g_error ("%s", error->message);
+      return 1;
     }
-
 
   g_type_init ();
 
@@ -2099,17 +2105,6 @@ main (int argc, char **argv)
    * libsoup-2.2 is an example of that.
    */
   g_thread_init (NULL);
-
-  if (namespace)
-    {
-      igenerator->namespace = namespace;
-      g_free (igenerator->lower_case_namespace);
-      igenerator->lower_case_namespace =
-	g_ascii_strdown (igenerator->namespace, -1);
-    }
-
-  if (shared_library)
-    igenerator->shared_library = shared_library;
 
   if (include_idls)
     {
@@ -2123,8 +2118,6 @@ main (int argc, char **argv)
 
   g_igenerator_parse_macros (igenerator);
 
-  igenerator->module = g_idl_module_new (igenerator->namespace,
-					 igenerator->shared_library);
   g_igenerator_generate (igenerator, libraries);
 
   return 0;
