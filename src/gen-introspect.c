@@ -652,7 +652,7 @@ lookup_symbol (GIGenerator *igenerator, const gchar *typename)
 
 static void
 g_igenerator_create_object (GIGenerator *igenerator,
-			    char *symbol,
+			    const char *symbol_name,
 			    GType type_id,
 			    char *lower_case_prefix)
 
@@ -688,7 +688,7 @@ g_igenerator_create_object (GIGenerator *igenerator,
     }
 
   ginode->gtype_name = ginode->node.name;
-  ginode->gtype_init = symbol;
+  ginode->gtype_init = g_strdup (symbol_name);
   ginode->parent = g_strdup (lookup_symbol (igenerator,
 					    g_type_name (g_type_parent (type_id))));
   
@@ -718,7 +718,7 @@ g_igenerator_create_object (GIGenerator *igenerator,
 
 static void
 g_igenerator_create_interface (GIGenerator *igenerator,
-			       char *symbol,
+			       const char *symbol_name,
 			       GType type_id,
 			       char *lower_case_prefix)
 
@@ -746,7 +746,7 @@ g_igenerator_create_interface (GIGenerator *igenerator,
   g_hash_table_insert (igenerator->type_by_lower_case_prefix,
 		       lower_case_prefix, ginode);
   ginode->gtype_name = ginode->node.name;
-  ginode->gtype_init = symbol;
+  ginode->gtype_init = g_strdup (symbol_name);
   
   iface_prereqs =
     g_type_interface_prerequisites (type_id, &n_iface_prereqs);
@@ -772,7 +772,7 @@ g_igenerator_create_interface (GIGenerator *igenerator,
 
 static void
 g_igenerator_create_boxed (GIGenerator *igenerator,
-			   char *symbol,
+			   const char *symbol_name,
 			   GType type_id,
 			   char *lower_case_prefix)
 {
@@ -787,12 +787,12 @@ g_igenerator_create_boxed (GIGenerator *igenerator,
   g_hash_table_insert (igenerator->type_by_lower_case_prefix,
 		       lower_case_prefix, ginode);
   ginode->gtype_name = ginode->node.name;
-  ginode->gtype_init = symbol;
+  ginode->gtype_init = g_strdup (symbol_name);
 }
 
 static void
 g_igenerator_create_enum (GIGenerator *igenerator,
-			  char *symbol,
+			  const char *symbol_name,
 			  GType type_id,
 			  char *lower_case_prefix)
 {
@@ -810,7 +810,7 @@ g_igenerator_create_enum (GIGenerator *igenerator,
   g_hash_table_insert (igenerator->type_by_lower_case_prefix,
 		       lower_case_prefix, ginode);
   ginode->gtype_name = ginode->node.name;
-  ginode->gtype_init = symbol;
+  ginode->gtype_init = g_strdup (symbol_name);
   
   type_class = g_type_class_ref (type_id);
 
@@ -827,7 +827,7 @@ g_igenerator_create_enum (GIGenerator *igenerator,
 
 static void
 g_igenerator_create_flags (GIGenerator *igenerator,
-			   char *symbol,
+			   const char *symbol_name,
 			   GType type_id,
 			   char *lower_case_prefix)
 {
@@ -845,7 +845,7 @@ g_igenerator_create_flags (GIGenerator *igenerator,
   g_hash_table_insert (igenerator->type_by_lower_case_prefix,
 		       lower_case_prefix, ginode);
   ginode->gtype_name = ginode->node.name;
-  ginode->gtype_init = symbol;
+  ginode->gtype_init = g_strdup (symbol_name);
   
   type_class = g_type_class_ref (type_id);
   
@@ -860,82 +860,83 @@ g_igenerator_create_flags (GIGenerator *igenerator,
     }
 }
 
-static void
-g_igenerator_process_types (GIGenerator * igenerator)
+static gboolean
+g_igenerator_process_module_symbol (GIGenerator *igenerator,
+				    GModule *module,
+				    const gchar *symbol_name)
 {
-  GList *lib_l;
+  TypeFunction type_fun;
+  GType type_id;
+  GType type_fundamental;
+  char *lower_case_prefix;
+      
+  /* ignore already processed functions */
+  if (symbol_name == NULL)
+    return FALSE;
+      
+  if (!g_module_symbol (module,
+			symbol_name,
+			(gpointer *) & type_fun))
+    return FALSE;
+      
+  type_id = type_fun ();
+  type_fundamental = g_type_fundamental (type_id);
+  lower_case_prefix =
+    str_replace (g_strndup
+		 (symbol_name,
+		  strlen (symbol_name) - strlen ("_get_type")),
+		 "_", "");
 
-  /* ensure to initialize GObject */
-  g_type_class_ref (G_TYPE_OBJECT);
-
-  for (lib_l = igenerator->libraries; lib_l != NULL; lib_l = lib_l->next)
+  switch (type_fundamental)
     {
-      GList *l;
-      GModule *module;
+    case G_TYPE_OBJECT:
+      g_igenerator_create_object (igenerator, symbol_name, type_id,
+				  lower_case_prefix);
+      break;
+    case G_TYPE_INTERFACE:
+      g_igenerator_create_interface (igenerator, symbol_name, type_id,
+				     lower_case_prefix);
+      break;
+    case G_TYPE_BOXED:
+      g_igenerator_create_boxed (igenerator, symbol_name, type_id,
+				 lower_case_prefix);
+      break;
+    case G_TYPE_ENUM:
+      g_igenerator_create_enum (igenerator, symbol_name, type_id,
+				lower_case_prefix);
+      break;
+    case G_TYPE_FLAGS:
+      g_igenerator_create_flags (igenerator, symbol_name, type_id,
+				 lower_case_prefix);
+      break;
+    default:
+      break;
+    }
+  return TRUE;
+}
 
-      module = g_module_open (lib_l->data,
-			      G_MODULE_BIND_LAZY | G_MODULE_BIND_LOCAL);
+static void
+g_igenerator_process_module (GIGenerator * igenerator,
+			     const gchar *filename)
+{
+  GModule *module;
+  GList *l;
+  
+  module = g_module_open (filename,
+			  G_MODULE_BIND_LAZY | G_MODULE_BIND_LOCAL);
+  
+  if (module == NULL)
+    {
+      g_critical ("Couldn't open module: %s", filename);
+      return;
+    }
 
-      if (module == NULL)
-	{
-	  g_critical ("Couldn't open module: %s", (char *) lib_l->data);
-	  continue;
-	}
-
-      for (l = igenerator->get_type_symbols; l != NULL; l = l->next)
-	{
-	  char *get_type_symbol = l->data;
-	  TypeFunction type_fun;
-	  GType type_id;
-	  GType type_fundamental;
-	  char *lower_case_prefix;
-
-	  /* ignore already processed functions */
-	  if (get_type_symbol == NULL)
-	    continue;
-
-	  if (!g_module_symbol (module,
-				get_type_symbol,
-				(gpointer *) & type_fun))
-	    continue;
-
-	  /* symbol found, ignore in future iterations */
-	  l->data = NULL;
-
-	  type_id = type_fun ();
-	  type_fundamental = g_type_fundamental (type_id);
-	  lower_case_prefix =
-	    str_replace (g_strndup
-			 (get_type_symbol,
-			  strlen (get_type_symbol) - strlen ("_get_type")),
-			 "_", "");
-
-	  if (type_fundamental == G_TYPE_OBJECT)
-	    {
-	      g_igenerator_create_object (igenerator, get_type_symbol,
-					  type_id, lower_case_prefix);
-	    }
-	  else if (type_fundamental == G_TYPE_INTERFACE)
-	    {
-	      g_igenerator_create_interface (igenerator, get_type_symbol,
-					     type_id, lower_case_prefix);
-	    }
-	  else if (type_fundamental == G_TYPE_BOXED)
-	    {
-	      g_igenerator_create_boxed (igenerator, get_type_symbol,
-					 type_id, lower_case_prefix);
-	    }
-	  else if (type_fundamental == G_TYPE_ENUM)
-	    {
-	      g_igenerator_create_enum (igenerator, get_type_symbol,
-					type_id, lower_case_prefix);
-	    }
-	  else if (type_fundamental == G_TYPE_FLAGS)
-	    {
-	      g_igenerator_create_flags (igenerator, get_type_symbol,
-					 type_id, lower_case_prefix);
-	    }
-	}
+  for (l = igenerator->get_type_symbols; l != NULL; l = l->next)
+    {
+      if (g_igenerator_process_module_symbol (igenerator,
+					      module, (const char *)l->data))
+	/* symbol found, ignore in future iterations */
+	l->data = NULL;
     }
 }
 
@@ -1641,9 +1642,10 @@ g_igenerator_is_typedef (GIGenerator * igenerator, const char *name)
 }
 
 void
-g_igenerator_generate (GIGenerator * igenerator)
+g_igenerator_generate (GIGenerator * igenerator, GList *libraries)
 {
   GList *l;
+  
   for (l = igenerator->symbol_list; l != NULL; l = l->next)
     {
       CSymbol *sym = l->data;
@@ -1658,7 +1660,10 @@ g_igenerator_generate (GIGenerator * igenerator)
 	    }
 	}
     }
-  g_igenerator_process_types (igenerator);
+
+  for (l = libraries; l; l = l->next)
+      g_igenerator_process_module (igenerator, (const gchar*)l->data);
+
   g_igenerator_process_symbols (igenerator);
 
   g_igenerator_write (igenerator, "<?xml version=\"1.0\"?>\n");
@@ -1994,7 +1999,7 @@ main (int argc, char **argv)
   int i;
   GError *error = NULL;
   char *tmp_name = NULL;
-  GList *l;
+  GList *l, *libraries;
   int cpp_out = -1;
   FILE *f;
   GList *includes;
@@ -2028,8 +2033,8 @@ main (int argc, char **argv)
 		}
 	      else if (g_str_has_prefix (argv[i], "--include-idl="))
 		{
-		  includes = g_list_prepend (includes,
-					     argv[i] + strlen ("--include-idl="));
+		  g_igenerator_add_include_idl (igenerator,
+						argv[i] + strlen ("--include-idl="));
 		}
 	      else if (g_str_has_prefix (argv[i], "--shared-library="))
 		{
@@ -2053,8 +2058,7 @@ main (int argc, char **argv)
 	       g_str_has_suffix (argv[i], ".so") ||
 	       g_str_has_suffix (argv[i], ".dll"))
 	{
-	  igenerator->libraries =
-	    g_list_append (igenerator->libraries, argv[i]);
+	  libraries = g_list_append (libraries, argv[i]);
 	}
     }
 
@@ -2066,7 +2070,6 @@ main (int argc, char **argv)
     {
       fprintf (f, "#include <%s>\n", (char *) l->data);
     }
-
 
   fclose (f);
 
@@ -2083,7 +2086,6 @@ main (int argc, char **argv)
   for (l = includes; l; l = l->next)
     {
       const gchar *filename = (const char*)l->data;
-      g_igenerator_add_include_idl (igenerator, filename);
     }
   
   g_igenerator_parse (igenerator, fdopen (cpp_out, "r"));
@@ -2094,7 +2096,7 @@ main (int argc, char **argv)
 
   igenerator->module = g_idl_module_new (igenerator->namespace,
 					 igenerator->shared_library);
-  g_igenerator_generate (igenerator);
+  g_igenerator_generate (igenerator, libraries);
 
   return 0;
 }

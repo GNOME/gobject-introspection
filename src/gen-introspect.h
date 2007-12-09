@@ -39,7 +39,6 @@ struct _GIGenerator
   char *lower_case_namespace;
   /* specified files to be parsed */
   GList *filenames;
-  GList *libraries;
   /* source reference of current lexer position */
   char *current_filename;
   GList *symbol_list;
@@ -62,7 +61,6 @@ GIGenerator *g_igenerator_new (void);
 void g_igenerator_parse (GIGenerator * igenerator, FILE * f);
 void g_igenerator_add_symbol (GIGenerator * igenerator, CSymbol * symbol);
 gboolean g_igenerator_is_typedef (GIGenerator * igenerator, const char *name);
-void g_igenerator_generate (GIGenerator * igenerator);
 
 GIGenerator *the_igenerator;
 

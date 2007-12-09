@@ -1,5 +1,18 @@
 2007-12-09  Johan Dahlin  <johan@gnome.org>
 
+	* src/gen-introspect.c: (g_igenerator_create_object),
+	(g_igenerator_create_interface), (g_igenerator_create_boxed),
+	(g_igenerator_create_enum), (g_igenerator_create_flags),
+	(g_igenerator_process_module_symbol),
+	(g_igenerator_process_module), (g_igenerator_generate), (main):
+	* src/gen-introspect.h:
+	Refactor g_igenerator_process_types into smaller pieces.
+	
+	* tests/parser/Makefile.am:
+	Depend on the gen-introspect binary
+
+2007-12-09  Johan Dahlin  <johan@gnome.org>
+
 	* src/gen-introspect.c (g_igenerator_process_types): 
 	Break into smaller pieces, one for each generated node type.
 
