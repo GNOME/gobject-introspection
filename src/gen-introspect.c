@@ -651,9 +651,218 @@ lookup_symbol (GIGenerator *igenerator, const gchar *typename)
 }
 
 static void
+g_igenerator_create_object (GIGenerator *igenerator,
+			    char *symbol,
+			    GType type_id,
+			    char *lower_case_prefix)
+
+{
+  char *alt_lower_case_prefix;
+  GIdlNodeInterface *ginode;
+  guint n_type_interfaces;
+  GType *type_interfaces;
+  int i;
+
+  ginode = (GIdlNodeInterface *) g_idl_node_new (G_IDL_NODE_OBJECT);
+  ginode->node.name = g_strdup (g_type_name (type_id));
+  igenerator->module->entries =
+    g_list_insert_sorted (igenerator->module->entries, ginode,
+			  (GCompareFunc) g_idl_node_cmp);
+  g_hash_table_insert (igenerator->type_map, ginode->node.name,
+		       ginode);
+  g_hash_table_insert (igenerator->type_by_lower_case_prefix,
+		       lower_case_prefix, ginode);
+  alt_lower_case_prefix = g_ascii_strdown (ginode->node.name, -1);
+  
+  if (strcmp (alt_lower_case_prefix, lower_case_prefix) != 0)
+    {
+      /* alternative prefix sometimes necessary, for example
+       * for GdkWindow
+       */
+      g_hash_table_insert (igenerator->type_by_lower_case_prefix,
+			   alt_lower_case_prefix, ginode);
+    }
+  else
+    {
+      g_free (alt_lower_case_prefix);
+    }
+
+  ginode->gtype_name = ginode->node.name;
+  ginode->gtype_init = symbol;
+  ginode->parent = g_strdup (lookup_symbol (igenerator,
+					    g_type_name (g_type_parent (type_id))));
+  
+  type_interfaces = g_type_interfaces (type_id, &n_type_interfaces);
+  for (i = 0; i < n_type_interfaces; i++)
+    {
+      char *iface_name =
+	g_strdup (g_type_name (type_interfaces[i]));
+      /* workaround for AtkImplementorIface */
+      if (g_str_has_suffix (iface_name, "Iface"))
+	{
+	  iface_name[strlen (iface_name) - strlen ("Iface")] =
+	    '\0';
+	}
+      ginode->interfaces =
+	g_list_append (ginode->interfaces, iface_name);
+    }
+  
+  g_hash_table_insert (igenerator->symbols,
+		       g_strdup (ginode->gtype_name),
+		       /* FIXME: Strip igenerator->namespace */
+		       g_strdup (ginode->node.name));
+  
+  g_igenerator_process_properties (igenerator, ginode, type_id);
+  g_igenerator_process_signals (igenerator, ginode, type_id);
+}
+
+static void
+g_igenerator_create_interface (GIGenerator *igenerator,
+			       char *symbol,
+			       GType type_id,
+			       char *lower_case_prefix)
+
+{
+  GIdlNodeInterface *ginode;
+  gboolean is_gobject = FALSE;
+  guint n_iface_prereqs;
+  GType *iface_prereqs;
+  int i;
+
+  ginode = (GIdlNodeInterface *) g_idl_node_new (G_IDL_NODE_INTERFACE);
+  ginode->node.name = g_strdup (g_type_name (type_id));
+  
+  /* workaround for AtkImplementorIface */
+  if (g_str_has_suffix (ginode->node.name, "Iface"))
+    {
+      ginode->node.name[strlen (ginode->node.name) -
+			strlen ("Iface")] = '\0';
+    }
+  igenerator->module->entries =
+    g_list_insert_sorted (igenerator->module->entries, ginode,
+			  (GCompareFunc) g_idl_node_cmp);
+  g_hash_table_insert (igenerator->type_map, ginode->node.name,
+		       ginode);
+  g_hash_table_insert (igenerator->type_by_lower_case_prefix,
+		       lower_case_prefix, ginode);
+  ginode->gtype_name = ginode->node.name;
+  ginode->gtype_init = symbol;
+  
+  iface_prereqs =
+    g_type_interface_prerequisites (type_id, &n_iface_prereqs);
+
+  for (i = 0; i < n_iface_prereqs; i++)
+    {
+      if (g_type_fundamental (iface_prereqs[i]) == G_TYPE_OBJECT)
+	{
+	  is_gobject = TRUE;
+	}
+      ginode->prerequisites =
+	g_list_append (ginode->prerequisites,
+		       g_strdup (g_type_name (iface_prereqs[i])));
+    }
+  
+  if (is_gobject)
+    g_igenerator_process_properties (igenerator, ginode, type_id);
+  else
+    g_type_default_interface_ref (type_id);
+
+  g_igenerator_process_signals (igenerator, ginode, type_id);
+}
+
+static void
+g_igenerator_create_boxed (GIGenerator *igenerator,
+			   char *symbol,
+			   GType type_id,
+			   char *lower_case_prefix)
+{
+  GIdlNodeBoxed *ginode =
+    (GIdlNodeBoxed *) g_idl_node_new (G_IDL_NODE_BOXED);
+  ginode->node.name = g_strdup (g_type_name (type_id));
+  igenerator->module->entries =
+    g_list_insert_sorted (igenerator->module->entries, ginode,
+			  (GCompareFunc) g_idl_node_cmp);
+  g_hash_table_insert (igenerator->type_map, ginode->node.name,
+		       ginode);
+  g_hash_table_insert (igenerator->type_by_lower_case_prefix,
+		       lower_case_prefix, ginode);
+  ginode->gtype_name = ginode->node.name;
+  ginode->gtype_init = symbol;
+}
+
+static void
+g_igenerator_create_enum (GIGenerator *igenerator,
+			  char *symbol,
+			  GType type_id,
+			  char *lower_case_prefix)
+{
+  GIdlNodeEnum *ginode;
+  int i;
+  GEnumClass *type_class;
+  
+  ginode = (GIdlNodeEnum *) g_idl_node_new (G_IDL_NODE_ENUM);
+  ginode->node.name = g_strdup (g_type_name (type_id));
+  igenerator->module->entries =
+    g_list_insert_sorted (igenerator->module->entries, ginode,
+			  (GCompareFunc) g_idl_node_cmp);
+  g_hash_table_insert (igenerator->type_map, ginode->node.name,
+		       ginode);
+  g_hash_table_insert (igenerator->type_by_lower_case_prefix,
+		       lower_case_prefix, ginode);
+  ginode->gtype_name = ginode->node.name;
+  ginode->gtype_init = symbol;
+  
+  type_class = g_type_class_ref (type_id);
+
+  for (i = 0; i < type_class->n_values; i++)
+    {
+      GIdlNodeValue *gival =
+	(GIdlNodeValue *) g_idl_node_new (G_IDL_NODE_VALUE);
+      ginode->values = g_list_append (ginode->values, gival);
+      gival->node.name =
+	g_strdup (type_class->values[i].value_name);
+      gival->value = type_class->values[i].value;
+    }
+}
+
+static void
+g_igenerator_create_flags (GIGenerator *igenerator,
+			   char *symbol,
+			   GType type_id,
+			   char *lower_case_prefix)
+{
+  GIdlNodeEnum *ginode;
+  GFlagsClass *type_class;
+  int i;
+  
+  ginode = (GIdlNodeEnum *) g_idl_node_new (G_IDL_NODE_FLAGS);
+  ginode->node.name = g_strdup (g_type_name (type_id));
+  igenerator->module->entries =
+    g_list_insert_sorted (igenerator->module->entries, ginode,
+			  (GCompareFunc) g_idl_node_cmp);
+  g_hash_table_insert (igenerator->type_map, ginode->node.name,
+		       ginode);
+  g_hash_table_insert (igenerator->type_by_lower_case_prefix,
+		       lower_case_prefix, ginode);
+  ginode->gtype_name = ginode->node.name;
+  ginode->gtype_init = symbol;
+  
+  type_class = g_type_class_ref (type_id);
+  
+  for (i = 0; i < type_class->n_values; i++)
+    {
+      GIdlNodeValue *gival =
+	(GIdlNodeValue *) g_idl_node_new (G_IDL_NODE_VALUE);
+      ginode->values = g_list_append (ginode->values, gival);
+      gival->node.name =
+	g_strdup (type_class->values[i].value_name);
+      gival->value = type_class->values[i].value;
+    }
+}
+
+static void
 g_igenerator_process_types (GIGenerator * igenerator)
 {
-  int i;
   GList *lib_l;
 
   /* ensure to initialize GObject */
@@ -662,13 +871,17 @@ g_igenerator_process_types (GIGenerator * igenerator)
   for (lib_l = igenerator->libraries; lib_l != NULL; lib_l = lib_l->next)
     {
       GList *l;
-      GModule *module =
-	g_module_open (lib_l->data, G_MODULE_BIND_LAZY | G_MODULE_BIND_LOCAL);
+      GModule *module;
+
+      module = g_module_open (lib_l->data,
+			      G_MODULE_BIND_LAZY | G_MODULE_BIND_LOCAL);
+
       if (module == NULL)
 	{
 	  g_critical ("Couldn't open module: %s", (char *) lib_l->data);
 	  continue;
 	}
+
       for (l = igenerator->get_type_symbols; l != NULL; l = l->next)
 	{
 	  char *get_type_symbol = l->data;
@@ -677,17 +890,14 @@ g_igenerator_process_types (GIGenerator * igenerator)
 	  GType type_fundamental;
 	  char *lower_case_prefix;
 
+	  /* ignore already processed functions */
 	  if (get_type_symbol == NULL)
-	    {
-	      /* ignore already processed functions */
-	      continue;
-	    }
+	    continue;
 
-	  if (!g_module_symbol
-	      (module, get_type_symbol, (gpointer *) & type_fun))
-	    {
-	      continue;
-	    }
+	  if (!g_module_symbol (module,
+				get_type_symbol,
+				(gpointer *) & type_fun))
+	    continue;
 
 	  /* symbol found, ignore in future iterations */
 	  l->data = NULL;
@@ -699,179 +909,31 @@ g_igenerator_process_types (GIGenerator * igenerator)
 			 (get_type_symbol,
 			  strlen (get_type_symbol) - strlen ("_get_type")),
 			 "_", "");
+
 	  if (type_fundamental == G_TYPE_OBJECT)
 	    {
-	      char *alt_lower_case_prefix;
-	      GIdlNodeInterface *ginode =
-		(GIdlNodeInterface *) g_idl_node_new (G_IDL_NODE_OBJECT);
-	      guint n_type_interfaces;
-	      GType *type_interfaces;
-
-	      ginode->node.name = g_strdup (g_type_name (type_id));
-	      igenerator->module->entries =
-		g_list_insert_sorted (igenerator->module->entries, ginode,
-				      (GCompareFunc) g_idl_node_cmp);
-	      g_hash_table_insert (igenerator->type_map, ginode->node.name,
-				   ginode);
-	      g_hash_table_insert (igenerator->type_by_lower_case_prefix,
-				   lower_case_prefix, ginode);
-	      alt_lower_case_prefix = g_ascii_strdown (ginode->node.name, -1);
-	      if (strcmp (alt_lower_case_prefix, lower_case_prefix) != 0)
-		{
-		  /* alternative prefix sometimes necessary, for example
-		   * for GdkWindow
-		   */
-		  g_hash_table_insert (igenerator->type_by_lower_case_prefix,
-				       alt_lower_case_prefix, ginode);
-		}
-	      else
-		{
-		  g_free (alt_lower_case_prefix);
-		}
-	      ginode->gtype_name = ginode->node.name;
-	      ginode->gtype_init = get_type_symbol;
-	      ginode->parent = g_strdup (lookup_symbol (igenerator,
-							g_type_name (g_type_parent (type_id))));
-
-	      type_interfaces =
-		g_type_interfaces (type_id, &n_type_interfaces);
-	      for (i = 0; i < n_type_interfaces; i++)
-		{
-		  char *iface_name =
-		    g_strdup (g_type_name (type_interfaces[i]));
-		  /* workaround for AtkImplementorIface */
-		  if (g_str_has_suffix (iface_name, "Iface"))
-		    {
-		      iface_name[strlen (iface_name) - strlen ("Iface")] =
-			'\0';
-		    }
-		  ginode->interfaces =
-		    g_list_append (ginode->interfaces, iface_name);
-		}
-
-	      g_hash_table_insert (igenerator->symbols,
-				   g_strdup (ginode->gtype_name),
-				   /* FIXME: Strip igenerator->namespace */
-				   g_strdup (ginode->node.name));
-
-	      g_igenerator_process_properties (igenerator, ginode, type_id);
-	      g_igenerator_process_signals (igenerator, ginode, type_id);
+	      g_igenerator_create_object (igenerator, get_type_symbol,
+					  type_id, lower_case_prefix);
 	    }
 	  else if (type_fundamental == G_TYPE_INTERFACE)
 	    {
-	      GIdlNodeInterface *ginode =
-		(GIdlNodeInterface *) g_idl_node_new (G_IDL_NODE_INTERFACE);
-	      gboolean is_gobject = FALSE;
-	      guint n_iface_prereqs;
-	      GType *iface_prereqs;
-
-		ginode->node.name = g_strdup (g_type_name (type_id));
-	      /* workaround for AtkImplementorIface */
-	      if (g_str_has_suffix (ginode->node.name, "Iface"))
-		{
-		  ginode->node.name[strlen (ginode->node.name) -
-				    strlen ("Iface")] = '\0';
-		}
-	      igenerator->module->entries =
-		g_list_insert_sorted (igenerator->module->entries, ginode,
-				      (GCompareFunc) g_idl_node_cmp);
-	      g_hash_table_insert (igenerator->type_map, ginode->node.name,
-				   ginode);
-	      g_hash_table_insert (igenerator->type_by_lower_case_prefix,
-				   lower_case_prefix, ginode);
-	      ginode->gtype_name = ginode->node.name;
-	      ginode->gtype_init = get_type_symbol;
-
-	      iface_prereqs =
-		g_type_interface_prerequisites (type_id, &n_iface_prereqs);
-	      for (i = 0; i < n_iface_prereqs; i++)
-		{
-		  if (g_type_fundamental (iface_prereqs[i]) == G_TYPE_OBJECT)
-		    {
-		      is_gobject = TRUE;
-		    }
-		  ginode->prerequisites =
-		    g_list_append (ginode->prerequisites,
-				   g_strdup (g_type_name (iface_prereqs[i])));
-		}
-
-	      if (is_gobject)
-		{
-		  g_igenerator_process_properties (igenerator, ginode,
-						   type_id);
-		}
-	      else
-		{
-		  g_type_default_interface_ref (type_id);
-		}
-	      g_igenerator_process_signals (igenerator, ginode, type_id);
+	      g_igenerator_create_interface (igenerator, get_type_symbol,
+					     type_id, lower_case_prefix);
 	    }
 	  else if (type_fundamental == G_TYPE_BOXED)
 	    {
-	      GIdlNodeBoxed *ginode =
-		(GIdlNodeBoxed *) g_idl_node_new (G_IDL_NODE_BOXED);
-	      ginode->node.name = g_strdup (g_type_name (type_id));
-	      igenerator->module->entries =
-		g_list_insert_sorted (igenerator->module->entries, ginode,
-				      (GCompareFunc) g_idl_node_cmp);
-	      g_hash_table_insert (igenerator->type_map, ginode->node.name,
-				   ginode);
-	      g_hash_table_insert (igenerator->type_by_lower_case_prefix,
-				   lower_case_prefix, ginode);
-	      ginode->gtype_name = ginode->node.name;
-	      ginode->gtype_init = get_type_symbol;
+	      g_igenerator_create_boxed (igenerator, get_type_symbol,
+					 type_id, lower_case_prefix);
 	    }
 	  else if (type_fundamental == G_TYPE_ENUM)
 	    {
-	      GIdlNodeEnum *ginode =
-		(GIdlNodeEnum *) g_idl_node_new (G_IDL_NODE_ENUM);
-	      ginode->node.name = g_strdup (g_type_name (type_id));
-	      igenerator->module->entries =
-		g_list_insert_sorted (igenerator->module->entries, ginode,
-				      (GCompareFunc) g_idl_node_cmp);
-	      g_hash_table_insert (igenerator->type_map, ginode->node.name,
-				   ginode);
-	      g_hash_table_insert (igenerator->type_by_lower_case_prefix,
-				   lower_case_prefix, ginode);
-	      ginode->gtype_name = ginode->node.name;
-	      ginode->gtype_init = get_type_symbol;
-
-	      GEnumClass *type_class = g_type_class_ref (type_id);
-	      for (i = 0; i < type_class->n_values; i++)
-		{
-		  GIdlNodeValue *gival =
-		    (GIdlNodeValue *) g_idl_node_new (G_IDL_NODE_VALUE);
-		  ginode->values = g_list_append (ginode->values, gival);
-		  gival->node.name =
-		    g_strdup (type_class->values[i].value_name);
-		  gival->value = type_class->values[i].value;
-		}
+	      g_igenerator_create_enum (igenerator, get_type_symbol,
+					type_id, lower_case_prefix);
 	    }
 	  else if (type_fundamental == G_TYPE_FLAGS)
 	    {
-	      GIdlNodeEnum *ginode =
-		(GIdlNodeEnum *) g_idl_node_new (G_IDL_NODE_FLAGS);
-	      ginode->node.name = g_strdup (g_type_name (type_id));
-	      igenerator->module->entries =
-		g_list_insert_sorted (igenerator->module->entries, ginode,
-				      (GCompareFunc) g_idl_node_cmp);
-	      g_hash_table_insert (igenerator->type_map, ginode->node.name,
-				   ginode);
-	      g_hash_table_insert (igenerator->type_by_lower_case_prefix,
-				   lower_case_prefix, ginode);
-	      ginode->gtype_name = ginode->node.name;
-	      ginode->gtype_init = get_type_symbol;
-
-	      GFlagsClass *type_class = g_type_class_ref (type_id);
-	      for (i = 0; i < type_class->n_values; i++)
-		{
-		  GIdlNodeValue *gival =
-		    (GIdlNodeValue *) g_idl_node_new (G_IDL_NODE_VALUE);
-		  ginode->values = g_list_append (ginode->values, gival);
-		  gival->node.name =
-		    g_strdup (type_class->values[i].value_name);
-		  gival->value = type_class->values[i].value;
-		}
+	      g_igenerator_create_flags (igenerator, get_type_symbol,
+					 type_id, lower_case_prefix);
 	    }
 	}
     }
@@ -1916,14 +1978,11 @@ g_igenerator_add_include_idl (GIGenerator *igenerator,
       return;
     }
   
-  g_printerr ("** Parsed included IDL: %s\n", filename);
-
   for (l = modules; l; l = l->next)
     {
       GIdlModule *module = (GIdlModule*)l->data;
       g_igenerator_add_module (igenerator, module);
     }
-
 }		     
 
 int
