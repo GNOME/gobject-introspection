@@ -1,5 +1,8 @@
 2007-12-09  Johan Dahlin  <johan@gnome.org>
 
+	* src/scanner.c:
+	Use GOption for command line options.
+	
 	* src/cparser.y: 
 	* src/Makefile.am:
 	* src/clexer.l:

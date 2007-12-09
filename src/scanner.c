@@ -1993,23 +1993,44 @@ g_igenerator_add_include_idl (GIGenerator *igenerator,
 int
 main (int argc, char **argv)
 {
+  GOptionContext *ctx;
+  gchar *namespace = NULL;
+  gchar *shared_library = NULL;
+  gchar **include_idls = NULL;
+  gchar **cpp_defines = NULL;
+  gchar **cpp_undefines = NULL;
+  gchar **cpp_includes = NULL;
   GIGenerator *igenerator;
   int cpp_argc = 0;
   char **cpp_argv;
   int i;
   GError *error = NULL;
   char *tmp_name = NULL;
-  GList *l, *libraries;
+  GList *l, *libraries = NULL;
   int cpp_out = -1;
   FILE *f;
-  GList *includes;
-  
-  g_type_init ();
 
-  /* initialize threading as this may be required by libraries that we'll use
-   * libsoup-2.2 is an example of that.
-   */
-  g_thread_init (NULL);
+  GOptionEntry entries[] = 
+    {
+      { "namespace", 0, 0, G_OPTION_ARG_STRING, &namespace,
+	"Namespace of the module, like 'Gtk'", "NAMESPACE" },
+      { "shared-library", 0, 0, G_OPTION_ARG_FILENAME, &shared_library,
+	"Shared library which contains the symbols", "FILE" }, 
+      { "include-idl", 0, 0, G_OPTION_ARG_STRING_ARRAY, &include_idls,
+	"Other gidls to include", "IDL" },
+      { NULL }
+    };
+
+  ctx = g_option_context_new ("");
+  g_option_context_add_main_entries (ctx, entries, NULL);
+  g_option_context_set_ignore_unknown_options (ctx, TRUE);
+
+  if (!g_option_context_parse (ctx, &argc, &argv, &error))
+    {
+      g_printerr ("Parsing error: %s\n", error->message);
+      return 1;
+    }
+  g_option_context_free (ctx);
 
   igenerator = g_igenerator_new ();
 
@@ -2019,40 +2040,24 @@ main (int argc, char **argv)
 
   for (i = 1; i < argc; i++)
     {
+
       if (argv[i][0] == '-')
 	{
 	  switch (argv[i][1])
 	    {
-	    case '-':
-	      if (g_str_has_prefix (argv[i], "--namespace="))
-		{
-		  igenerator->namespace = argv[i] + strlen ("--namespace=");
-		  g_free (igenerator->lower_case_namespace);
-		  igenerator->lower_case_namespace =
-		    g_ascii_strdown (igenerator->namespace, -1);
-		}
-	      else if (g_str_has_prefix (argv[i], "--include-idl="))
-		{
-		  g_igenerator_add_include_idl (igenerator,
-						argv[i] + strlen ("--include-idl="));
-		}
-	      else if (g_str_has_prefix (argv[i], "--shared-library="))
-		{
-		  igenerator->shared_library =
-		    argv[i] + strlen ("--shared-library=");
-		}
-	      break;
 	    case 'I':
 	    case 'D':
 	    case 'U':
 	      cpp_argv[cpp_argc++] = argv[i];
 	      break;
+	    default:
+	      break;
 	    }
 	}
       else if (g_str_has_suffix (argv[i], ".h"))
 	{
-	  igenerator->filenames =
-	    g_list_append (igenerator->filenames, argv[i]);
+	  igenerator->filenames = g_list_append (igenerator->filenames,
+						 argv[i]);
 	}
       else if (g_str_has_suffix (argv[i], ".la") ||
 	       g_str_has_suffix (argv[i], ".so") ||
@@ -2060,8 +2065,12 @@ main (int argc, char **argv)
 	{
 	  libraries = g_list_append (libraries, argv[i]);
 	}
+      else
+	{
+	  g_printerr ("Unknown option: %s\n", argv[i]);
+	  return 1;
+	}
     }
-
 
   f = fdopen (g_file_open_tmp ("gen-introspect-XXXXXX.h", &tmp_name, &error),
 	      "w");
@@ -2083,11 +2092,31 @@ main (int argc, char **argv)
       g_error ("%s", error->message);
     }
 
-  for (l = includes; l; l = l->next)
+
+  g_type_init ();
+
+  /* initialize threading as this may be required by libraries that we'll use
+   * libsoup-2.2 is an example of that.
+   */
+  g_thread_init (NULL);
+
+  if (namespace)
     {
-      const gchar *filename = (const char*)l->data;
+      igenerator->namespace = namespace;
+      g_free (igenerator->lower_case_namespace);
+      igenerator->lower_case_namespace =
+	g_ascii_strdown (igenerator->namespace, -1);
     }
-  
+
+  if (shared_library)
+    igenerator->shared_library = shared_library;
+
+  if (include_idls)
+    {
+      for (i = 0; i < g_strv_length (include_idls); i++)
+	g_igenerator_add_include_idl (igenerator, include_idls[i]);
+    }
+
   g_igenerator_parse (igenerator, fdopen (cpp_out, "r"));
 
   g_unlink (tmp_name);
