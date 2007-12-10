@@ -1,8 +1,12 @@
 ## Process this file with automake to produce Makefile.in
 
 INCLUDES = -DGIREPO_DEFAULT_SEARCH_PATH="\"$(libdir)\""
-BUILT_SOURCES = cparser.h
+BUILT_SOURCES = cparser.c cparser.h clexer.c clexer.h
+CLEANFILES = cparser.c cparser.h clexer.c clexer.h
 AM_YFLAGS = -d
+
+# Why do I have to do this automake?
+clexer.h: clexer.c
 
 noinst_LTLIBRARIES = libgirepository-parser.la
 lib_LTLIBRARIES = libgirepository.la

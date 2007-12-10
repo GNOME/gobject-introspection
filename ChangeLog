@@ -1,6 +1,8 @@
 2007-12-10  Johan Dahlin  <johan@gnome.org>
 
 	* src/Makefile.am:
+	set BUILD_SOURCES and CLEANFILES properly
+
 	* src/gidlwriter.c: (g_writer_write_inline), (g_writer_write),
 	(g_writer_write_indent), (g_writer_write_unindent),
 	(field_generate), (value_generate), (constant_generate),
