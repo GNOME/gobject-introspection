@@ -24,6 +24,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
+#include <errno.h>
 #include <glib.h>
 #include <glib/gstdio.h>
 #include <glib-object.h>
@@ -1995,6 +1996,48 @@ g_igenerator_add_include_idl (GIGenerator *igenerator,
     }
 }		     
 
+static FILE *
+g_igenerator_start_preprocessor (GIGenerator *igenerator,
+				 GList       *cpp_options)
+{
+  int cpp_out = -1, cpp_in = -1;
+  int cpp_argc = 0;
+  char **cpp_argv;
+  GList *l;
+  GError *error = NULL;
+  FILE *f;
+  
+  cpp_argv = g_new0 (char *, g_list_length (cpp_options) + 2);
+  cpp_argv[cpp_argc++] = "cpp";
+  
+  /* Disable GCC extensions as we cannot parse them yet */
+  cpp_argv[cpp_argc++] = "-U__GNUC__";
+
+  for (l = cpp_options; l; l = l->next)
+    cpp_argv[cpp_argc++] = (char*)l->data;
+
+  cpp_argv[cpp_argc++] = NULL;
+
+  g_spawn_async_with_pipes (NULL, cpp_argv, NULL, G_SPAWN_SEARCH_PATH, NULL,
+			    NULL, NULL, &cpp_in, &cpp_out, NULL, &error);
+
+  if (error != NULL)
+    {
+      g_error ("%s", error->message);
+      return NULL;
+    }
+
+  f = fdopen (cpp_in, "w");
+
+  for (l = igenerator->filenames; l != NULL; l = l->next)
+    fprintf (f, "#include <%s>\n", (char *) l->data);
+
+  fclose (f);
+
+  return fdopen (cpp_out, "r");
+}
+
+
 int
 main (int argc, char **argv)
 {
@@ -2002,17 +2045,12 @@ main (int argc, char **argv)
   gchar *namespace = NULL;
   gchar *shared_library = NULL;
   gchar **include_idls = NULL;
-  gchar **cpp_defines = NULL;
-  gchar **cpp_undefines = NULL;
-  gchar **cpp_includes = NULL;
   GIGenerator *igenerator;
-  int cpp_argc = 0;
-  char **cpp_argv;
   int i;
   GError *error = NULL;
   char *tmp_name = NULL;
   GList *l, *libraries = NULL;
-  int cpp_out = -1;
+  GList *cpp_options = NULL;
   FILE *f;
   GOptionEntry entries[] = 
     {
@@ -2039,10 +2077,6 @@ main (int argc, char **argv)
 
   igenerator = g_igenerator_new (namespace, shared_library);
 
-  cpp_argv = g_new0 (char *, argc + 2);
-  cpp_argv[cpp_argc++] = "cc";
-  cpp_argv[cpp_argc++] = "-E";
-
   for (i = 1; i < argc; i++)
     {
 
@@ -2053,7 +2087,7 @@ main (int argc, char **argv)
 	    case 'I':
 	    case 'D':
 	    case 'U':
-	      cpp_argv[cpp_argc++] = argv[i];
+	      cpp_options = g_list_prepend (cpp_options, argv[i]);
 	      break;
 	    default:
 	      break;
@@ -2068,7 +2102,7 @@ main (int argc, char **argv)
 	       g_str_has_suffix (argv[i], ".so") ||
 	       g_str_has_suffix (argv[i], ".dll"))
 	{
-	  libraries = g_list_append (libraries, argv[i]);
+	  libraries = g_list_prepend (libraries, argv[i]);
 	}
       else
 	{
@@ -2077,27 +2111,8 @@ main (int argc, char **argv)
 	}
     }
 
-  f = fdopen (g_file_open_tmp ("gen-introspect-XXXXXX.h", &tmp_name, &error),
-	      "w");
-
-  for (l = igenerator->filenames; l != NULL; l = l->next)
-    {
-      fprintf (f, "#include <%s>\n", (char *) l->data);
-    }
-
-  fclose (f);
-
-  cpp_argv[cpp_argc++] = tmp_name;
-  cpp_argv[cpp_argc++] = NULL;
-
-  g_spawn_async_with_pipes (NULL, cpp_argv, NULL, G_SPAWN_SEARCH_PATH, NULL,
-			    NULL, NULL, NULL, &cpp_out, NULL, &error);
-
-  if (error != NULL)
-    {
-      g_error ("%s", error->message);
-      return 1;
-    }
+  cpp_options = g_list_reverse (cpp_options);
+  libraries = g_list_reverse (libraries);
 
   g_type_init ();
 
@@ -2112,9 +2127,11 @@ main (int argc, char **argv)
 	g_igenerator_add_include_idl (igenerator, include_idls[i]);
     }
 
-  g_igenerator_parse (igenerator, fdopen (cpp_out, "r"));
-
-  g_unlink (tmp_name);
+  f = g_igenerator_start_preprocessor (igenerator, cpp_options);
+  if (!f)
+    return 1;
+ 
+  g_igenerator_parse (igenerator, f);
 
   g_igenerator_parse_macros (igenerator);
 

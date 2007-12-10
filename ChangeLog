@@ -1,3 +1,20 @@
+2007-12-10  Johan Dahlin  <johan@gnome.org>
+
+	* src/scanner.c (g_igenerator_start_preprocessor): Refactor
+	preprocessor handling to here. Start cpp insteado of cc -E,
+	always include -U__GNUC__, since it's specific to the preprocessor
+	we use.
+
+	* tests/parser/Makefile.am (check-local): Silent diff and skip
+	-U__GNUC__ which is always defined now
+
+2007-12-10  Johan Dahlin,,,  <jdahlin@plasttroll>
+
+	reviewed by: <delete if not using a buddy>
+
+	* src/scanner.c: (g_igenerator_start_preprocessor), (main):
+	* tests/parser/Makefile.am:
+
 2007-12-09  Johan Dahlin  <johan@gnome.org>
 
 	* src/scanner.c:
