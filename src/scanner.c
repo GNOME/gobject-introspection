@@ -1,6 +1,7 @@
 /* GObject introspection: scanner
  *
  * Copyright (C) 2007  Jürg Billeter
+ * Copyright (C) 2007  Johan Dahlin
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -1676,96 +1677,6 @@ g_igenerator_generate (GIGenerator * igenerator, GList *libraries)
   g_igenerator_write_indent (igenerator, "<api version=\"1.0\">\n");
   module_generate (igenerator, igenerator->module);
   g_igenerator_write_unindent (igenerator, "</api>\n");
-}
-
-CSymbol *
-csymbol_new (CSymbolType type)
-{
-  CSymbol *s = g_new0 (CSymbol, 1);
-  s->type = type;
-  return s;
-}
-
-gboolean
-csymbol_get_const_boolean (CSymbol * symbol)
-{
-  return (symbol->const_int_set && symbol->const_int) || symbol->const_string;
-}
-
-CType *
-ctype_new (CTypeType type)
-{
-  CType *t = g_new0 (CType, 1);
-  t->type = type;
-  return t;
-}
-
-CType *
-ctype_copy (CType * type)
-{
-  return g_memdup (type, sizeof (CType));
-}
-
-CType *
-cbasic_type_new (const char *name)
-{
-  CType *basic_type = ctype_new (CTYPE_BASIC_TYPE);
-  basic_type->name = g_strdup (name);
-  return basic_type;
-}
-
-CType *
-ctypedef_new (const char *name)
-{
-  CType *typedef_ = ctype_new (CTYPE_TYPEDEF);
-  typedef_->name = g_strdup (name);
-  return typedef_;
-}
-
-CType *
-cstruct_new (const char *name)
-{
-  CType *struct_ = ctype_new (CTYPE_STRUCT);
-  struct_->name = g_strdup (name);
-  return struct_;
-}
-
-CType *
-cunion_new (const char *name)
-{
-  CType *union_ = ctype_new (CTYPE_UNION);
-  union_->name = g_strdup (name);
-  return union_;
-}
-
-CType *
-cenum_new (const char *name)
-{
-  CType *enum_ = ctype_new (CTYPE_ENUM);
-  enum_->name = g_strdup (name);
-  return enum_;
-}
-
-CType *
-cpointer_new (CType * base_type)
-{
-  CType *pointer = ctype_new (CTYPE_POINTER);
-  pointer->base_type = base_type;
-  return pointer;
-}
-
-CType *
-carray_new (void)
-{
-  CType *array = ctype_new (CTYPE_ARRAY);
-  return array;
-}
-
-CType *
-cfunction_new (void)
-{
-  CType *func = ctype_new (CTYPE_FUNCTION);
-  return func;
 }
 
 static int

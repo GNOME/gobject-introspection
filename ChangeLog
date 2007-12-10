@@ -1,5 +1,15 @@
 2007-12-10  Johan Dahlin  <johan@gnome.org>
 
+	* src/cparser.y:
+	* src/scanner.c:
+	* src/scanner.h:
+	Move over all CType construction functions.
+	
+	* tests/parser/Makefile.am:
+	Be verbose when printing parsing tests results.
+
+2007-12-10  Johan Dahlin  <johan@gnome.org>
+
 	* src/scanner.c (g_igenerator_start_preprocessor): Refactor
 	preprocessor handling to here. Start cpp insteado of cc -E,
 	always include -U__GNUC__, since it's specific to the preprocessor

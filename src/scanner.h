@@ -57,12 +57,6 @@ struct _GIGenerator
   int indent;
 };
 
-void g_igenerator_parse (GIGenerator * igenerator, FILE * f);
-void g_igenerator_add_symbol (GIGenerator * igenerator, CSymbol * symbol);
-gboolean g_igenerator_is_typedef (GIGenerator * igenerator, const char *name);
-
-GIGenerator *the_igenerator;
-
 typedef enum
 {
   CSYMBOL_TYPE_INVALID,
@@ -85,9 +79,6 @@ struct _CSymbol
   int const_int;
   char *const_string;
 };
-
-CSymbol *csymbol_new (CSymbolType type);
-gboolean csymbol_get_const_boolean (CSymbol * symbol);
 
 typedef enum
 {
@@ -148,16 +139,15 @@ struct _CType
   GList *child_list;
 };
 
-CType *ctype_new (CTypeType type);
-CType *ctype_copy (CType * type);
-CType *cbasic_type_new (const char *name);
-CType *ctypedef_new (const char *name);
-CType *cstruct_new (const char *name);
-CType *cunion_new (const char *name);
-CType *cenum_new (const char *name);
-CType *cpointer_new (CType * base_type);
-CType *carray_new (void);
-CType *cfunction_new (void);
+CSymbol *csymbol_new (CSymbolType type);
+gboolean csymbol_get_const_boolean (CSymbol * symbol);
+
+void g_igenerator_parse (GIGenerator * igenerator, FILE * f);
+void g_igenerator_add_symbol (GIGenerator * igenerator, CSymbol * symbol);
+gboolean g_igenerator_is_typedef (GIGenerator * igenerator, const char *name);
+
+GIGenerator *the_igenerator;
+
 
 G_END_DECLS
 #endif
