@@ -2007,7 +2007,7 @@ g_igenerator_start_preprocessor (GIGenerator *igenerator,
   GError *error = NULL;
   FILE *f;
   
-  cpp_argv = g_new0 (char *, g_list_length (cpp_options) + 2);
+  cpp_argv = g_new0 (char *, g_list_length (cpp_options) + 3);
   cpp_argv[cpp_argc++] = "cpp";
   
   /* Disable GCC extensions as we cannot parse them yet */
