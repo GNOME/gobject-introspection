@@ -33,6 +33,7 @@
 #include "gidlparser.h"
 #include "gidlmodule.h"
 #include "gidlnode.h"
+#include "gidlwriter.h"
 
 typedef GType (*TypeFunction) (void);
 
@@ -1244,7 +1245,7 @@ g_igenerator_generate (GIGenerator * igenerator, GList *libraries)
 
   g_igenerator_process_symbols (igenerator);
 
-  g_scanner_write_file (igenerator);
+  g_idl_writer_save_file (igenerator->module, NULL);
 }
 
 static int

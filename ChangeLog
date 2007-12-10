@@ -1,6 +1,25 @@
 2007-12-10  Johan Dahlin  <johan@gnome.org>
 
 	* src/Makefile.am:
+	* src/gidlwriter.c: (g_writer_write_inline), (g_writer_write),
+	(g_writer_write_indent), (g_writer_write_unindent),
+	(field_generate), (value_generate), (constant_generate),
+	(property_generate), (function_generate), (vfunc_generate),
+	(signal_generate), (interface_generate), (struct_generate),
+	(union_generate), (boxed_generate), (enum_generate),
+	(node_generate), (g_writer_write_module), (g_idl_writer_save_file):
+	* src/gidlwriter.h:
+	* src/scanner.c: (g_igenerator_generate):
+	* src/scanner.h:
+	* src/scannerwriter.c:
+
+	Refactor scannerwriter to only be tied to a GIdlModule and move
+	it (again!) to gidlwriter.c. Change the writer function to take
+	a filename.
+
+2007-12-10  Johan Dahlin  <johan@gnome.org>
+
+	* src/Makefile.am:
 	* src/scanner.c: (g_igenerator_generate):
 	* src/scanner.h:
 	* src/scannerwriter.c: (g_igenerator_write_inline),
