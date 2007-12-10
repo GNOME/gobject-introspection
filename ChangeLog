@@ -1,5 +1,8 @@
 2007-12-10  Johan Dahlin  <johan@gnome.org>
 
+	* src/scanner.c (main): Add an output option,
+	add checks for required parameters
+
 	* src/Makefile.am:
 	set BUILD_SOURCES and CLEANFILES properly
 

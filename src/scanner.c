@@ -1221,7 +1221,9 @@ g_igenerator_is_typedef (GIGenerator * igenerator, const char *name)
 }
 
 void
-g_igenerator_generate (GIGenerator * igenerator, GList *libraries)
+g_igenerator_generate (GIGenerator * igenerator,
+		       const gchar * filename,
+		       GList *libraries)
 {
   GList *l;
   
@@ -1245,7 +1247,7 @@ g_igenerator_generate (GIGenerator * igenerator, GList *libraries)
 
   g_igenerator_process_symbols (igenerator);
 
-  g_idl_writer_save_file (igenerator->module, NULL);
+  g_idl_writer_save_file (igenerator->module, filename);
 }
 
 static int
@@ -1513,7 +1515,7 @@ g_igenerator_start_preprocessor (GIGenerator *igenerator,
     fprintf (f, "#include <%s>\n", (char *) l->data);
 
   fclose (f);
-
+  
   return fdopen (cpp_out, "r");
 }
 
@@ -1525,15 +1527,17 @@ main (int argc, char **argv)
   gchar *namespace = NULL;
   gchar *shared_library = NULL;
   gchar **include_idls = NULL;
+  gchar *output = NULL;
   GIGenerator *igenerator;
   int i;
   GError *error = NULL;
-  char *tmp_name = NULL;
   GList *l, *libraries = NULL;
   GList *cpp_options = NULL;
   FILE *f;
   GOptionEntry entries[] = 
     {
+      { "output", 'o', 0, G_OPTION_ARG_STRING, &output,
+	"write output here instead of stdout", "FILE" },
       { "namespace", 0, 0, G_OPTION_ARG_STRING, &namespace,
 	"Namespace of the module, like 'Gtk'", "NAMESPACE" },
       { "shared-library", 0, 0, G_OPTION_ARG_FILENAME, &shared_library,
@@ -1555,6 +1559,12 @@ main (int argc, char **argv)
 
   g_option_context_free (ctx);
 
+  if (!namespace)
+    {
+      g_printerr ("ERROR: namespace must be specified\n");
+      return 1;
+    }
+
   igenerator = g_igenerator_new (namespace, shared_library);
 
   for (i = 1; i < argc; i++)
@@ -1575,8 +1585,16 @@ main (int argc, char **argv)
 	}
       else if (g_str_has_suffix (argv[i], ".h"))
 	{
+	  const gchar* filename;
+
+	  if (!g_path_is_absolute (argv[i]))
+	    filename = g_strdup_printf ("%s/%s", g_get_current_dir (),
+					argv[i]);
+	  else
+	    filename = g_strdup (argv[i]);
+		
 	  igenerator->filenames = g_list_append (igenerator->filenames,
-						 argv[i]);
+						 filename);
 	}
       else if (g_str_has_suffix (argv[i], ".la") ||
 	       g_str_has_suffix (argv[i], ".so") ||
@@ -1591,6 +1609,11 @@ main (int argc, char **argv)
 	}
     }
 
+  if (!igenerator->filenames)
+    {
+      g_printerr ("ERROR: Need at least one header file.\n");
+      return 0;
+    }
   cpp_options = g_list_reverse (cpp_options);
   libraries = g_list_reverse (libraries);
 
@@ -1615,7 +1638,7 @@ main (int argc, char **argv)
 
   g_igenerator_parse_macros (igenerator);
 
-  g_igenerator_generate (igenerator, libraries);
+  g_igenerator_generate (igenerator, output, libraries);
 
   return 0;
 }
