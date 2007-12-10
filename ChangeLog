@@ -1,5 +1,21 @@
 2007-12-10  Johan Dahlin  <johan@gnome.org>
 
+	* src/Makefile.am:
+	* src/scanner.c: (g_igenerator_generate):
+	* src/scanner.h:
+	* src/scannerwriter.c: (g_igenerator_write_inline),
+	(g_igenerator_write), (g_igenerator_write_indent),
+	(g_igenerator_write_unindent), (field_generate), (value_generate),
+	(constant_generate), (property_generate), (function_generate),
+	(vfunc_generate), (signal_generate), (interface_generate),
+	(struct_generate), (union_generate), (boxed_generate),
+	(enum_generate), (node_generate), (module_generate),
+	(g_scanner_write_file):
+
+	Move the scanner gidl writing to a separate source file.
+
+2007-12-10  Johan Dahlin  <johan@gnome.org>
+
 	* src/cparser.y:
 	* src/scanner.c:
 	* src/scanner.h:

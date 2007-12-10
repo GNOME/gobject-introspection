@@ -146,6 +146,8 @@ void g_igenerator_parse (GIGenerator * igenerator, FILE * f);
 void g_igenerator_add_symbol (GIGenerator * igenerator, CSymbol * symbol);
 gboolean g_igenerator_is_typedef (GIGenerator * igenerator, const char *name);
 
+void g_scanner_write_file (GIGenerator *generator);
+
 GIGenerator *the_igenerator;
 
 
