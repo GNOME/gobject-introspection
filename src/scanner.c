@@ -76,8 +76,6 @@ g_igenerator_new (const gchar *namespace,
     g_hash_table_new (g_str_hash, g_str_equal);
   igenerator->symbols = g_hash_table_new (g_str_hash, g_str_equal);
 
-  the_igenerator = igenerator;
-
   return igenerator;
 }
 

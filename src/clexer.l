@@ -35,10 +35,12 @@
 
 int lineno;
 
+extern int yylex (GIGenerator *igenerator);
+#define YY_DECL int yylex (GIGenerator *igenerator)
 static int yywrap (void);
 static void skip_comment (void);
-static void process_directive (void);
-static int check_identifier (const char *);
+static void process_directive (GIGenerator *igenerator);
+static int check_identifier (GIGenerator *igenerator, const char *);
 %}
 
 intsuffix				([uU][lL]?)|([lL][uU]?)
@@ -59,7 +61,7 @@ stringtext				([^"])|(\\.)
 "#define "[a-zA-Z_][a-zA-Z_0-9]*"("	{ yyless (yyleng - 1); return FUNCTION_MACRO; }
 "#define "[a-zA-Z_][a-zA-Z_0-9]*	{ return OBJECT_MACRO; }
 
-"#"					{ process_directive(); }
+"#"					{ process_directive(igenerator); }
 
 "{"					{ return '{'; }
 "<%"					{ return '{'; }
@@ -112,7 +114,7 @@ stringtext				([^"])|(\\.)
 ","					{ return ','; }
 "->"					{ return ARROW; }
 
-[a-zA-Z_][a-zA-Z_0-9]*			{ if (the_igenerator->macro_scan) return IDENTIFIER; else REJECT; }
+[a-zA-Z_][a-zA-Z_0-9]*			{ if (igenerator->macro_scan) return IDENTIFIER; else REJECT; }
 
 "auto"					{ return AUTO; }
 "break"					{ return BREAK; }
@@ -149,7 +151,7 @@ stringtext				([^"])|(\\.)
 "volatile"				{ return VOLATILE; }
 "while"					{ return WHILE; }
 
-[a-zA-Z_][a-zA-Z_0-9]*			{ return check_identifier(yytext); }
+[a-zA-Z_][a-zA-Z_0-9]*			{ return check_identifier(igenerator, yytext); }
 
 "0"[xX][0-9a-fA-F]+{intsuffix}?		{ return INTEGER; }
 "0"[0-7]+{intsuffix}?			{ return INTEGER; }
@@ -164,7 +166,7 @@ stringtext				([^"])|(\\.)
 "\""{stringtext}*"\""			{ return STRING; }
 "L\""{stringtext}*"\""			{ return STRING; }
 
-.					{ fprintf(stderr, "%s:%d: unexpected character `%c'\n", the_igenerator->current_filename, lineno, yytext[0]); }
+.					{ fprintf(stderr, "%s:%d: unexpected character `%c'\n", igenerator->current_filename, lineno, yytext[0]); }
 
 %%
 
@@ -188,14 +190,14 @@ static void skip_comment (void)
 	}
 }
 
-static int check_identifier (const char *s)
+static int check_identifier (GIGenerator *igenerator, const char *s)
 {
 	/*
 	 * This function checks if `s' is a type name or an
 	 * identifier.
 	 */
 
-	if (g_igenerator_is_typedef (the_igenerator, s)) {
+	if (g_igenerator_is_typedef (igenerator, s)) {
 		return TYPEDEF_NAME;
 	} else if (strcmp (s, "__builtin_va_list") == 0) {
 		return TYPEDEF_NAME;
@@ -204,7 +206,7 @@ static int check_identifier (const char *s)
 	return IDENTIFIER;
 }
 
-static void process_directive (void)
+static void process_directive (GIGenerator *igenerator)
 {
 	/* extract current filename from #line directives */
 	GString *filename_builder;
@@ -242,8 +244,8 @@ static void process_directive (void)
 
 	if (filename_builder->len > 0) {
 		char *filename = g_strcompress (filename_builder->str);
-		g_free (the_igenerator->current_filename);
-		the_igenerator->current_filename = filename;
+		g_free (igenerator->current_filename);
+		igenerator->current_filename = filename;
 	}
 
 	g_string_free (filename_builder, TRUE);

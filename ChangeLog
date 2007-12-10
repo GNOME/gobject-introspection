@@ -1,3 +1,11 @@
+2007-12-11  Johan Dahlin  <johan@gnome.org>
+
+	* src/clexer.l:
+	* src/cparser.y:
+	* src/scanner.c: (g_igenerator_new):
+	* src/scanner.h:
+	Get rid of the global the_generator variable.
+
 2007-12-10  Johan Dahlin  <johan@gnome.org>
 
 	* src/scanner.c (main): Add an output option,

@@ -36,8 +36,8 @@ extern FILE *yyin;
 extern int lineno;
 extern char *yytext;
 
-extern int yylex (void);
-static void yyerror(const char *s);
+extern int yylex (GIGenerator *igenerator);
+static void yyerror(GIGenerator *igenerator, const char *s);
 
 static int last_enum_value = -1;
 static GHashTable *const_table = NULL;
@@ -154,6 +154,9 @@ static void csymbol_merge_type (CSymbol *symbol, CType *type)
 	FunctionSpecifier function_specifier;
 	UnaryOperator unary_operator;
 }
+
+%parse-param { GIGenerator* igenerator }
+%lex-param { GIGenerator* igenerator }
 
 %token <str> IDENTIFIER "identifier"
 %token <str> TYPEDEF_NAME "typedef-name"
@@ -620,7 +623,7 @@ declaration
 			} else {
 				sym->type = CSYMBOL_TYPE_OBJECT;
 			}
-			g_igenerator_add_symbol (the_igenerator, sym);
+			g_igenerator_add_symbol (igenerator, sym);
 		}
 	  }
 	| declaration_specifiers ';'
@@ -766,7 +769,7 @@ struct_or_union_specifier
 		}
 		sym->ident = g_strdup ($$->name);
 		sym->base_type = ctype_copy ($$);
-		g_igenerator_add_symbol (the_igenerator, sym);
+		g_igenerator_add_symbol (igenerator, sym);
 	  }
 	| struct_or_union '{' struct_declaration_list '}'
 	  {
@@ -1282,7 +1285,7 @@ object_macro_define
 	  {
 		if ($2->const_int_set || $2->const_string != NULL) {
 			$2->ident = $1;
-			g_igenerator_add_symbol (the_igenerator, $2);
+			g_igenerator_add_symbol (igenerator, $2);
 		}
 	  }
 	;
@@ -1296,12 +1299,13 @@ macro
 %%
 
 static void
-yyerror(const char *s)
+yyerror(GIGenerator *igenerator, const char *s)
 {
 	/* ignore errors while doing a macro scan as not all object macros
 	 * have valid expressions */
-	if (!the_igenerator->macro_scan) {
-		fprintf(stderr, "%s:%d: %s\n", the_igenerator->current_filename, lineno, s);
+	if (!igenerator->macro_scan) {
+		fprintf(stderr, "%s:%d: %s\n",
+			igenerator->current_filename, lineno, s);
 	}
 }
 
@@ -1315,7 +1319,7 @@ void g_igenerator_parse (GIGenerator *igenerator, FILE *f)
 	const_table = g_hash_table_new (g_str_hash, g_str_equal);
 
 	lineno = 1;
-	yyparse();
+	yyparse(igenerator);
 
 	g_hash_table_unref (const_table);
 	const_table = NULL;
