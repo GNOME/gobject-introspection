@@ -14,8 +14,8 @@ CLEANFILES = Foo.gidl
 Foo.gidl: libfoo.la foo-object.h $(top_builddir)/src/g-idl-scanner
 	$(top_builddir)/src/g-idl-scanner --namespace=Foo \
 	--include-idl=$(top_srcdir)/gidl/GLib.gidl \
-	`pwd`/foo-object.h -I. $(GOBJECT_CFLAGS) \
-	libfoo.la > $@
+	foo-object.h -I. $(GOBJECT_CFLAGS) \
+	libfoo.la --output $@
 
 check-local:
 	@diff -u Foo-expected.gidl Foo.gidl && echo "Foo.gidl"
