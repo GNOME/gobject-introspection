@@ -465,7 +465,6 @@ void
 g_idl_writer_save_file (GIdlModule *module,
 			const gchar *filename)
 {
-  FILE * file;
   GIdlWriter *writer;
 
   writer = g_new0 (GIdlWriter, 1);

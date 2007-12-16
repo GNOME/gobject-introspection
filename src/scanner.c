@@ -1199,6 +1199,7 @@ g_igenerator_add_symbol (GIGenerator * igenerator, CSymbol * symbol)
     }
 
   if (symbol->type == CSYMBOL_TYPE_TYPEDEF)
+
     {
       g_hash_table_insert (igenerator->typedef_table, symbol->ident, symbol);
     }
@@ -1583,7 +1584,7 @@ main (int argc, char **argv)
 	}
       else if (g_str_has_suffix (argv[i], ".h"))
 	{
-	  const gchar* filename;
+	  gchar* filename;
 
 	  if (!g_path_is_absolute (argv[i]))
 	    filename = g_strdup_printf ("%s/%s", g_get_current_dir (),
