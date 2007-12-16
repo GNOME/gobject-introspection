@@ -1,3 +1,8 @@
+2007-12-16  Johan Dahlin  <jdahlin@async.com.br>
+
+	* src/Makefile.am: Rename clexer.l to scannerlexer.l and
+	cparser.y to scannerparser.y
+
 2007-12-11  Johan Dahlin  <johan@gnome.org>
 
 	* src/clexer.l:

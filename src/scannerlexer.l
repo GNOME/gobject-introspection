@@ -31,7 +31,7 @@
 #include <stdio.h>
 
 #include "scanner.h"
-#include "cparser.h"
+#include "scannerparser.h"
 
 int lineno;
 

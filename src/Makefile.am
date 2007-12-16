@@ -1,12 +1,12 @@
 ## Process this file with automake to produce Makefile.in
 
 INCLUDES = -DGIREPO_DEFAULT_SEARCH_PATH="\"$(libdir)\""
-BUILT_SOURCES = cparser.c cparser.h clexer.c clexer.h
-CLEANFILES = cparser.c cparser.h clexer.c clexer.h
+BUILT_SOURCES = scannerparser.c scannerparser.h scannerlexer.c scannerlexer.h
+CLEANFILES = scannerparser.c scannerparser.h scannerlexer.c scannerlexer.h
 AM_YFLAGS = -d
 
 # Why do I have to do this automake?
-clexer.h: clexer.c
+scannerlexer.h: scannerlexer.c
 
 noinst_LTLIBRARIES = libgirepository-parser.la
 lib_LTLIBRARIES = libgirepository.la
@@ -34,10 +34,10 @@ g_idl_generate_CFLAGS = $(GIREPO_CFLAGS)
 g_idl_generate_LDADD = $(GIREPO_LIBS) libgirepository.la
 
 g_idl_scanner_SOURCES =				\
-	clexer.l				\
-	cparser.y				\
 	scanner.c				\
 	scanner.h				\
+	scannerlexer.l				\
+	scannerparser.y				\
 	gidlwriter.c
 g_idl_scanner_CFLAGS = $(GIREPO_CFLAGS) $(SCANNER_CFLAGS)
 g_idl_scanner_LDADD = $(GIREPO_LIBS) $(SCANNER_LIBS) libgirepository.la libgirepository-parser.la
