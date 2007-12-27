@@ -1,3 +1,4 @@
+/* -*- Mode: C -*-
 /* GObject introspection: C lexer
  *
  * Copyright (c) 1997 Sandro Sigala  <ssigala@globalnet.it>
@@ -47,12 +48,12 @@ intsuffix				([uU][lL]?)|([lL][uU]?)
 fracconst				([0-9]*\.[0-9]+)|([0-9]+\.)
 exppart					[eE][-+]?[0-9]+
 floatsuffix				[fFlL]
-chartext				([^'])|(\\.)
-stringtext				([^"])|(\\.)
+chartext				([^\'])|(\\.)
+stringtext				([^\"])|(\\.)
 
 %%
 
-"\n"					{ ++lineno; }
+"\n"					{ ++lineno; } /* " */
 [\t\f\v\r ]+				{ /* Ignore whitespace. */ }
 
 "/*"					{ skip_comment(); }

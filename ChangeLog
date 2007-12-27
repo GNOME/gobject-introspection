@@ -1,5 +1,8 @@
 2007-12-27  Johan Dahlin  <johan@gnome.org>
 
+	* src/scannerlexer.l (intsuffix): Add emacs mode line and
+	escape ' and " so it looks more like C.
+
 	* src/scanner.c:
 	Unlink temporary file used.
 
