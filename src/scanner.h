@@ -37,6 +37,8 @@ struct _GIGenerator
   const char *namespace;
   const char *shared_library;
   char *lower_case_namespace;
+  gboolean verbose;
+
   /* specified files to be parsed */
   GList *filenames;
   /* source reference of current lexer position */
@@ -138,11 +140,16 @@ struct _CType
 };
 
 CSymbol *csymbol_new (CSymbolType type);
-gboolean csymbol_get_const_boolean (CSymbol * symbol);
+gboolean csymbol_get_const_boolean (CSymbol *symbol);
 
-void g_igenerator_parse (GIGenerator * igenerator, FILE * f);
-void g_igenerator_add_symbol (GIGenerator * igenerator, CSymbol * symbol);
-gboolean g_igenerator_is_typedef (GIGenerator * igenerator, const char *name);
+gboolean g_igenerator_parse_file   (GIGenerator *igenerator,
+				    FILE        *file);
+void     g_igenerator_set_verbose  (GIGenerator *igenerator,
+				    gboolean     verbose);
+void     g_igenerator_add_symbol   (GIGenerator *igenerator,
+				    CSymbol     *symbol);
+gboolean g_igenerator_is_typedef   (GIGenerator *igenerator,
+				    const char  *name);
 
 G_END_DECLS
 #endif

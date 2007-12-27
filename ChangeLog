@@ -1,3 +1,18 @@
+2007-12-27  Johan Dahlin  <johan@gnome.org>
+
+	* src/scanner.c: (g_igenerator_parse_macros),
+	(g_igenerator_start_preprocessor), (g_igenerator_set_verbose),
+	(main):
+	* src/scanner.h:
+	* src/scannerparser.y:
+	* tests/parser/Makefile.am:
+
+	Improve error reporting, return when the preprocessor fails.
+	Add a verbose parameter, to aid debugging.
+	Revert to using a temporary file to communicate between the
+	preprocessor and the parser, because we need to wait for
+	the exit code from the pre-processor before starting to parse.
+	
 2007-12-16  Johan Dahlin  <jdahlin@async.com.br>
 
 	* src/Makefile.am: Rename clexer.l to scannerlexer.l and

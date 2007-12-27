@@ -28,6 +28,7 @@
 #include <glib.h>
 #include <glib/gstdio.h>
 #include <glib-object.h>
+#include <sys/wait.h> /* waitpid */
 #include <gmodule.h>
 #include "scanner.h"
 #include "gidlparser.h"
@@ -1424,7 +1425,10 @@ g_igenerator_parse_macros (GIGenerator * igenerator)
 
   igenerator->macro_scan = TRUE;
   rewind (fmacros);
-  g_igenerator_parse (igenerator, fmacros);
+
+  g_igenerator_parse_file (igenerator, fmacros);
+  fclose (fmacros);
+
   igenerator->macro_scan = FALSE;
 }
 
@@ -1486,11 +1490,17 @@ g_igenerator_start_preprocessor (GIGenerator *igenerator,
   char **cpp_argv;
   GList *l;
   GError *error = NULL;
-  FILE *f;
-  
+  FILE *f, *out;
+  GPid pid;
+  int status = 0;
+  int read_bytes;
+  int i;
+  char **buffer;
+  int tmp;
+ 
   cpp_argv = g_new0 (char *, g_list_length (cpp_options) + 3);
   cpp_argv[cpp_argc++] = "cpp";
-  
+
   /* Disable GCC extensions as we cannot parse them yet */
   cpp_argv[cpp_argc++] = "-U__GNUC__";
 
@@ -1499,8 +1509,23 @@ g_igenerator_start_preprocessor (GIGenerator *igenerator,
 
   cpp_argv[cpp_argc++] = NULL;
 
-  g_spawn_async_with_pipes (NULL, cpp_argv, NULL, G_SPAWN_SEARCH_PATH, NULL,
-			    NULL, NULL, &cpp_in, &cpp_out, NULL, &error);
+  if (igenerator->verbose)
+    {
+      GString *args = g_string_new ("");
+      
+      for (i = 0; i < cpp_argc - 1; i++)
+	{
+	  g_string_append (args, cpp_argv[i]);
+	  if (i < cpp_argc - 2)
+	    g_string_append_c (args, ' ');
+	}
+
+      g_printf ("Executing '%s'\n", args->str);
+      g_string_free (args, FALSE);
+    }
+  g_spawn_async_with_pipes (NULL, cpp_argv, NULL,
+			    G_SPAWN_SEARCH_PATH | G_SPAWN_DO_NOT_REAP_CHILD,
+			    NULL, NULL, &pid, &cpp_in, &cpp_out, NULL, &error);
 
   if (error != NULL)
     {
@@ -1511,13 +1536,65 @@ g_igenerator_start_preprocessor (GIGenerator *igenerator,
   f = fdopen (cpp_in, "w");
 
   for (l = igenerator->filenames; l != NULL; l = l->next)
-    fprintf (f, "#include <%s>\n", (char *) l->data);
+    {
+      if (igenerator->verbose)
+	g_printf ("Pre-processing %s\n", (char*)l->data);
+
+      fprintf (f, "#include <%s>\n", (char *) l->data);
+
+    }
 
   fclose (f);
+
+  tmp = g_file_open_tmp (NULL, NULL, &error);
+  if (error != NULL)
+    {
+      g_error (error->message);
+      return NULL;
+    }
   
-  return fdopen (cpp_out, "r");
+  buffer = g_malloc0 (4096 * sizeof (char));
+
+  while (1)
+    {
+      read_bytes = read (cpp_out, buffer, 4096);
+      if (read_bytes == 0)
+	break;
+      write (tmp, buffer, read_bytes);
+    }
+
+  close (cpp_out);
+
+  if (waitpid (pid, &status, 0) > 0)
+    {
+      if (status != 0)
+	{
+	  g_spawn_close_pid (pid);
+	  kill (pid, SIGKILL);
+
+	  g_error ("cpp returned error code: %d\n", status);
+	  return NULL;
+	}
+    }
+
+  f = fdopen (tmp, "r");
+  if (!f)
+    {
+      g_error (strerror (errno));
+      return NULL;
+    }
+
+  rewind (f);
+  return f;
 }
 
+
+void
+g_igenerator_set_verbose (GIGenerator *igenerator,
+			  gboolean     verbose)
+{
+  igenerator->verbose = verbose;
+}
 
 int
 main (int argc, char **argv)
@@ -1527,17 +1604,25 @@ main (int argc, char **argv)
   gchar *shared_library = NULL;
   gchar **include_idls = NULL;
   gchar *output = NULL;
+  gboolean verbose = FALSE;
+
   GIGenerator *igenerator;
-  int i;
+  int gopt_argc, i;
+  char **gopt_argv;
+  GList *filenames = NULL;
   GError *error = NULL;
   GList *l, *libraries = NULL;
   GList *cpp_options = NULL;
-  FILE *f;
+  char *buffer;
+  size_t size;
+  FILE *tmp;
   GOptionEntry entries[] = 
     {
+      { "verbose", 'v', 0, G_OPTION_ARG_NONE, &verbose,
+	"Be verbose" },
       { "output", 'o', 0, G_OPTION_ARG_STRING, &output,
 	"write output here instead of stdout", "FILE" },
-      { "namespace", 0, 0, G_OPTION_ARG_STRING, &namespace,
+      { "namespace", 'n', 0, G_OPTION_ARG_STRING, &namespace,
 	"Namespace of the module, like 'Gtk'", "NAMESPACE" },
       { "shared-library", 0, 0, G_OPTION_ARG_FILENAME, &shared_library,
 	"Shared library which contains the symbols", "FILE" }, 
@@ -1546,29 +1631,12 @@ main (int argc, char **argv)
       { NULL }
     };
 
-  ctx = g_option_context_new ("");
-  g_option_context_add_main_entries (ctx, entries, NULL);
-  g_option_context_set_ignore_unknown_options (ctx, TRUE);
-
-  if (!g_option_context_parse (ctx, &argc, &argv, &error))
-    {
-      g_printerr ("Parsing error: %s\n", error->message);
-      return 1;
-    }
-
-  g_option_context_free (ctx);
-
-  if (!namespace)
-    {
-      g_printerr ("ERROR: namespace must be specified\n");
-      return 1;
-    }
-
-  igenerator = g_igenerator_new (namespace, shared_library);
+  gopt_argc = 1;
+  gopt_argv = (char**)g_malloc (argc * sizeof (char*));
+  gopt_argv[0] = argv[0];
 
   for (i = 1; i < argc; i++)
     {
-
       if (argv[i][0] == '-')
 	{
 	  switch (argv[i][1])
@@ -1576,9 +1644,10 @@ main (int argc, char **argv)
 	    case 'I':
 	    case 'D':
 	    case 'U':
-	      cpp_options = g_list_prepend (cpp_options, argv[i]);
+	      cpp_options = g_list_prepend (cpp_options, g_strdup (argv[i]));
 	      break;
 	    default:
+	      gopt_argv[gopt_argc++] = argv[i];
 	      break;
 	    }
 	}
@@ -1592,27 +1661,49 @@ main (int argc, char **argv)
 	  else
 	    filename = g_strdup (argv[i]);
 		
-	  igenerator->filenames = g_list_append (igenerator->filenames,
-						 filename);
+	  filenames = g_list_append (filenames, filename);
 	}
       else if (g_str_has_suffix (argv[i], ".la") ||
 	       g_str_has_suffix (argv[i], ".so") ||
 	       g_str_has_suffix (argv[i], ".dll"))
 	{
-	  libraries = g_list_prepend (libraries, argv[i]);
+	  libraries = g_list_prepend (libraries, g_strdup (argv[i]));
 	}
       else
 	{
-	  g_printerr ("Unknown option: %s\n", argv[i]);
-	  return 1;
+	  gopt_argv[gopt_argc++] = argv[i];
 	}
     }
 
-  if (!igenerator->filenames)
+  ctx = g_option_context_new ("");
+  g_option_context_add_main_entries (ctx, entries, NULL);
+
+  if (!g_option_context_parse (ctx, &gopt_argc, &gopt_argv, &error))
+    {
+      g_printerr ("Parsing error: %s\n", error->message);
+      return 1;
+    }
+
+  g_free (gopt_argv);
+  g_option_context_free (ctx);
+  
+  if (!namespace)
+    {
+      g_printerr ("ERROR: namespace must be specified\n");
+      return 1;
+    }
+
+  igenerator = g_igenerator_new (namespace, shared_library);
+
+  if (verbose)
+    g_igenerator_set_verbose (igenerator, TRUE);
+
+  if (!filenames)
     {
       g_printerr ("ERROR: Need at least one header file.\n");
       return 0;
     }
+  igenerator->filenames = filenames;
   cpp_options = g_list_reverse (cpp_options);
   libraries = g_list_reverse (libraries);
 
@@ -1629,16 +1720,25 @@ main (int argc, char **argv)
 	g_igenerator_add_include_idl (igenerator, include_idls[i]);
     }
 
-  f = g_igenerator_start_preprocessor (igenerator, cpp_options);
-  if (!f)
-    return 1;
- 
-  g_igenerator_parse (igenerator, f);
+  tmp = g_igenerator_start_preprocessor (igenerator, cpp_options);
+  if (!tmp)
+    {
+      g_error ("ERROR in pre-processor.\n");
+      return 1;
+    }
+
+  if (!g_igenerator_parse_file (igenerator, tmp))
+    {
+      fclose (tmp);
+      return 1;
+    }
 
   g_igenerator_parse_macros (igenerator);
 
   g_igenerator_generate (igenerator, output, libraries);
 
+  fclose (tmp);
+  
   return 0;
 }
 

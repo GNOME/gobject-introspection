@@ -30,6 +30,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
 #include "scanner.h"
 
 extern FILE *yyin;
@@ -38,7 +39,7 @@ extern char *yytext;
 
 extern int yylex (GIGenerator *igenerator);
 static void yyerror(GIGenerator *igenerator, const char *s);
-
+ 
 static int last_enum_value = -1;
 static GHashTable *const_table = NULL;
 
@@ -133,26 +134,27 @@ cfunction_new (void)
 }
 
 /* use specified type as base type of symbol */
-static void csymbol_merge_type (CSymbol *symbol, CType *type)
+static void
+csymbol_merge_type (CSymbol *symbol, CType *type)
 {
-	CType **foundation_type = &(symbol->base_type);
-	while (*foundation_type != NULL) {
-		foundation_type = &((*foundation_type)->base_type);
-	}
-	*foundation_type = ctype_copy (type);
+  CType **foundation_type = &(symbol->base_type);
+  while (*foundation_type != NULL) {
+    foundation_type = &((*foundation_type)->base_type);
+  }
+  *foundation_type = ctype_copy (type);
 }
 %}
 
 %error-verbose
 %union {
-	char *str;
-	GList *list;
-	CSymbol *symbol;
-	CType *ctype;
-	StorageClassSpecifier storage_class_specifier;
-	TypeQualifier type_qualifier;
-	FunctionSpecifier function_specifier;
-	UnaryOperator unary_operator;
+  char *str;
+  GList *list;
+  CSymbol *symbol;
+  CType *ctype;
+  StorageClassSpecifier storage_class_specifier;
+  TypeQualifier type_qualifier;
+  FunctionSpecifier function_specifier;
+  UnaryOperator unary_operator;
 }
 
 %parse-param { GIGenerator* igenerator }
@@ -1299,32 +1301,34 @@ macro
 %%
 
 static void
-yyerror(GIGenerator *igenerator, const char *s)
+yyerror (GIGenerator *igenerator, const char *s)
 {
-	/* ignore errors while doing a macro scan as not all object macros
-	 * have valid expressions */
-	if (!igenerator->macro_scan) {
-		fprintf(stderr, "%s:%d: %s\n",
-			igenerator->current_filename, lineno, s);
-	}
+  /* ignore errors while doing a macro scan as not all object macros
+   * have valid expressions */
+  if (!igenerator->macro_scan)
+    {
+      fprintf(stderr, "%s:%d: %s\n",
+	      igenerator->current_filename, lineno, s);
+    }
 }
 
-void g_igenerator_parse (GIGenerator *igenerator, FILE *f)
+gboolean
+g_igenerator_parse_file (GIGenerator *igenerator, FILE *file)
 {
-	yyin = f;
-	if (yyin == NULL) {
-		return;
-	}
+  g_return_val_if_fail (file != NULL, FALSE);
+  
+  const_table = g_hash_table_new (g_str_hash, g_str_equal);
+  
+  lineno = 1;
+  yyin = file;
+  yyparse (igenerator);
+  
+  g_hash_table_unref (const_table);
+  const_table = NULL;
+  
+  yyin = NULL;
 
-	const_table = g_hash_table_new (g_str_hash, g_str_equal);
-
-	lineno = 1;
-	yyparse(igenerator);
-
-	g_hash_table_unref (const_table);
-	const_table = NULL;
-
-	fclose (yyin);
-	yyin = NULL;
+  return TRUE;
 }
+
 

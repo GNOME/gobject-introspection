@@ -11,10 +11,12 @@ libfoo_la_LIBADD = $(GOBJECT_LIBS)
 BUILT_SOURCES = Foo.gidl
 CLEANFILES = Foo.gidl
 
+SCAN_SOURCES = foo-object.h
+
 Foo.gidl: libfoo.la foo-object.h $(top_builddir)/src/g-idl-scanner
-	$(top_builddir)/src/g-idl-scanner --namespace=Foo \
+	$(top_builddir)/src/g-idl-scanner -v --namespace=Foo \
 	--include-idl=$(top_srcdir)/gidl/GLib.gidl \
-	foo-object.h -I. $(GOBJECT_CFLAGS) \
+	$(SCAN_SOURCES) -I. $(GOBJECT_CFLAGS) \
 	libfoo.la --output $@
 
 check-local:
@@ -22,3 +24,5 @@ check-local:
 	@echo "======================="
 	@echo "All parser tests passed"
 	@echo "======================="
+
+.PHONY: Foo.gidl
