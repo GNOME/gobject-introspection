@@ -1,5 +1,10 @@
 2007-12-27  Johan Dahlin  <johan@gnome.org>
 
+	* src/scanner.c:
+	Unlink temporary file used.
+
+2007-12-27  Johan Dahlin  <johan@gnome.org>
+
 	* src/scanner.c: (g_igenerator_new), (g_igenerator_free),
 	(g_igenerator_start_preprocessor), (main):
 	* src/scanner.h:

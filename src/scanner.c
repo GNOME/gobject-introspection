@@ -1520,7 +1520,8 @@ g_igenerator_start_preprocessor (GIGenerator *igenerator,
   int i;
   char **buffer;
   int tmp;
- 
+  char *tmpname;
+
   cpp_argv = g_new0 (char *, g_list_length (cpp_options) + 3);
   cpp_argv[cpp_argc++] = "cpp";
 
@@ -1569,14 +1570,15 @@ g_igenerator_start_preprocessor (GIGenerator *igenerator,
     }
 
   fclose (f);
+  close (cpp_in);
 
-  tmp = g_file_open_tmp (NULL, NULL, &error);
+  tmp = g_file_open_tmp (NULL, &tmpname, &error);
   if (error != NULL)
     {
       g_error (error->message);
       return NULL;
     }
-  
+
   buffer = g_malloc0 (4096 * sizeof (char));
 
   while (1)
@@ -1599,6 +1601,8 @@ g_igenerator_start_preprocessor (GIGenerator *igenerator,
 	  kill (pid, SIGKILL);
 
 	  g_error ("cpp returned error code: %d\n", status);
+	  unlink (tmpname);
+	  g_free (tmpname);
 	  return NULL;
 	}
     }
@@ -1607,10 +1611,14 @@ g_igenerator_start_preprocessor (GIGenerator *igenerator,
   if (!f)
     {
       g_error (strerror (errno));
+      unlink (tmpname);
+      g_free (tmpname);
       return NULL;
     }
-
   rewind (f);
+  unlink (tmpname);
+  g_free (tmpname);
+
   return f;
 }
 
@@ -1772,7 +1780,8 @@ main (int argc, char **argv)
   g_igenerator_generate (igenerator, output, libraries);
 
   fclose (tmp);
-  g_igenerator_free (igenerator);  
+  g_igenerator_free (igenerator);
+  
   return 0;
 }
 
