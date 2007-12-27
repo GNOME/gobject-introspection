@@ -1,5 +1,13 @@
 2007-12-27  Johan Dahlin  <johan@gnome.org>
 
+	* src/scanner.c: (g_igenerator_new), (g_igenerator_free),
+	(g_igenerator_start_preprocessor), (main):
+	* src/scanner.h:
+	* src/scannerparser.y:
+	Plug a couple of simple memory leaks.
+
+2007-12-27  Johan Dahlin  <johan@gnome.org>
+
 	* src/scanner.c: (g_igenerator_parse_macros),
 	(g_igenerator_start_preprocessor), (g_igenerator_set_verbose),
 	(main):

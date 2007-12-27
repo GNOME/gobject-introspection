@@ -51,6 +51,24 @@ csymbol_new (CSymbolType type)
   return s;
 }
 
+static void
+ctype_free (CType * type)
+{
+  g_free (type);
+  g_free (type->name);
+  g_list_foreach (type->child_list, (GFunc)ctype_free, NULL);
+  g_list_free (type->child_list);
+}
+
+void
+csymbol_free (CSymbol * symbol)
+{
+  g_free (symbol->ident);
+  ctype_free (symbol->base_type);
+  g_free (symbol->const_string);
+  g_free (symbol);
+}
+ 
 gboolean
 csymbol_get_const_boolean (CSymbol * symbol)
 {
@@ -115,7 +133,7 @@ CType *
 cpointer_new (CType * base_type)
 {
   CType *pointer = ctype_new (CTYPE_POINTER);
-  pointer->base_type = base_type;
+  pointer->base_type = ctype_copy (base_type);
   return pointer;
 }
 
@@ -912,7 +930,7 @@ enumerator
 		$$->ident = $1;
 		$$->const_int_set = TRUE;
 		$$->const_int = ++last_enum_value;
-		g_hash_table_insert (const_table, $$->ident, $$);
+		g_hash_table_insert (const_table, g_strdup ($$->ident), $$);
 	  }
 	| identifier '=' constant_expression
 	  {
@@ -921,7 +939,7 @@ enumerator
 		$$->const_int_set = TRUE;
 		$$->const_int = $3->const_int;
 		last_enum_value = $$->const_int;
-		g_hash_table_insert (const_table, $$->ident, $$);
+		g_hash_table_insert (const_table, g_strdup ($$->ident), $$);
 	  }
 	;
 
@@ -1317,13 +1335,14 @@ g_igenerator_parse_file (GIGenerator *igenerator, FILE *file)
 {
   g_return_val_if_fail (file != NULL, FALSE);
   
-  const_table = g_hash_table_new (g_str_hash, g_str_equal);
+  const_table = g_hash_table_new_full (g_str_hash, g_str_equal,
+				       g_free, NULL);
   
   lineno = 1;
   yyin = file;
   yyparse (igenerator);
   
-  g_hash_table_unref (const_table);
+  g_hash_table_destroy (const_table);
   const_table = NULL;
   
   yyin = NULL;

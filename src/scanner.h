@@ -34,8 +34,8 @@ typedef struct _CType CType;
 struct _GIGenerator
 {
   /* parameters */
-  const char *namespace;
-  const char *shared_library;
+  char *namespace;
+  char *shared_library;
   char *lower_case_namespace;
   gboolean verbose;
 
@@ -141,6 +141,7 @@ struct _CType
 
 CSymbol *csymbol_new (CSymbolType type);
 gboolean csymbol_get_const_boolean (CSymbol *symbol);
+void     csymbol_free (CSymbol * symbol);
 
 gboolean g_igenerator_parse_file   (GIGenerator *igenerator,
 				    FILE        *file);

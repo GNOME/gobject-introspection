@@ -62,10 +62,10 @@ g_igenerator_new (const gchar *namespace,
 		  const gchar *shared_library)
 {
   GIGenerator *igenerator = g_new0 (GIGenerator, 1);
-  igenerator->namespace = namespace; 
-  igenerator->shared_library = shared_library;
+  igenerator->namespace = g_strdup (namespace); 
+  igenerator->shared_library = g_strdup (shared_library);
   igenerator->lower_case_namespace =
-	g_ascii_strdown (igenerator->namespace, -1);
+    g_ascii_strdown (igenerator->namespace, -1);
   igenerator->module = g_idl_module_new (namespace, shared_library);
 
   igenerator->typedef_table = g_hash_table_new (g_str_hash, g_str_equal);
@@ -78,6 +78,29 @@ g_igenerator_new (const gchar *namespace,
   igenerator->symbols = g_hash_table_new (g_str_hash, g_str_equal);
 
   return igenerator;
+}
+
+static void
+g_igenerator_free (GIGenerator *generator)
+{
+  g_free (generator->namespace);
+  g_free (generator->shared_library);
+  g_free (generator->lower_case_namespace);
+#if 0
+  g_idl_module_free (generator->module);
+#endif  
+  g_hash_table_destroy (generator->typedef_table);
+  g_hash_table_destroy (generator->struct_or_union_or_enum_table);
+  g_hash_table_destroy (generator->type_map);
+  g_hash_table_destroy (generator->type_by_lower_case_prefix);
+  g_hash_table_destroy (generator->symbols);
+  g_list_foreach (generator->filenames, (GFunc)g_free, NULL);
+  g_list_free (generator->filenames);
+#if 0
+  g_list_foreach (generator->symbol_list, (GFunc)csymbol_free, NULL);
+  g_list_free (generator->symbol_list);
+#endif
+  g_free (generator);
 }
 
 static GIdlNodeType *
@@ -1527,6 +1550,7 @@ g_igenerator_start_preprocessor (GIGenerator *igenerator,
 			    G_SPAWN_SEARCH_PATH | G_SPAWN_DO_NOT_REAP_CHILD,
 			    NULL, NULL, &pid, &cpp_in, &cpp_out, NULL, &error);
 
+  g_free (cpp_argv);
   if (error != NULL)
     {
       g_error ("%s", error->message);
@@ -1562,6 +1586,8 @@ g_igenerator_start_preprocessor (GIGenerator *igenerator,
 	break;
       write (tmp, buffer, read_bytes);
     }
+
+  g_free (buffer);
 
   close (cpp_out);
 
@@ -1656,8 +1682,12 @@ main (int argc, char **argv)
 	  gchar* filename;
 
 	  if (!g_path_is_absolute (argv[i]))
-	    filename = g_strdup_printf ("%s/%s", g_get_current_dir (),
-					argv[i]);
+	    {
+	      gchar *dir = g_get_current_dir ();
+	      filename = g_strdup_printf ("%s/%s", dir,
+					    argv[i]);
+	      g_free (dir);
+	    }
 	  else
 	    filename = g_strdup (argv[i]);
 		
@@ -1681,6 +1711,7 @@ main (int argc, char **argv)
   if (!g_option_context_parse (ctx, &gopt_argc, &gopt_argv, &error))
     {
       g_printerr ("Parsing error: %s\n", error->message);
+      g_option_context_free (ctx);
       return 1;
     }
 
@@ -1701,6 +1732,7 @@ main (int argc, char **argv)
   if (!filenames)
     {
       g_printerr ("ERROR: Need at least one header file.\n");
+      g_igenerator_free (igenerator);  
       return 0;
     }
   igenerator->filenames = filenames;
@@ -1724,12 +1756,14 @@ main (int argc, char **argv)
   if (!tmp)
     {
       g_error ("ERROR in pre-processor.\n");
+      g_igenerator_free (igenerator);  
       return 1;
     }
 
   if (!g_igenerator_parse_file (igenerator, tmp))
     {
       fclose (tmp);
+      g_igenerator_free (igenerator);  
       return 1;
     }
 
@@ -1738,7 +1772,7 @@ main (int argc, char **argv)
   g_igenerator_generate (igenerator, output, libraries);
 
   fclose (tmp);
-  
+  g_igenerator_free (igenerator);  
   return 0;
 }
 
