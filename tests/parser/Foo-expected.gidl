@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <api version="1.0">
 	<namespace name="Foo">
-		<function name="init" symbol="foo_init">
+		<function name="init" symbol="foo_init" deprecated="1">
 			<return-type type="gint"/>
 		</function>
 		<object name="FooObject" parent="GLib.Object" type-name="FooObject" get-type="foo_object_get_type">

@@ -39,7 +39,7 @@ int lineno;
 extern int yylex (GIGenerator *igenerator);
 #define YY_DECL int yylex (GIGenerator *igenerator)
 static int yywrap (void);
-static void skip_comment (void);
+static void parse_comment (GIGenerator *igenerator);
 static void process_directive (GIGenerator *igenerator);
 static int check_identifier (GIGenerator *igenerator, const char *);
 %}
@@ -48,7 +48,7 @@ intsuffix				([uU][lL]?)|([lL][uU]?)
 fracconst				([0-9]*\.[0-9]+)|([0-9]+\.)
 exppart					[eE][-+]?[0-9]+
 floatsuffix				[fFlL]
-chartext				([^\'])|(\\.)
+chartext				([^\'])|(\\.) 
 stringtext				([^\"])|(\\.)
 
 %%
@@ -56,7 +56,7 @@ stringtext				([^\"])|(\\.)
 "\n"					{ ++lineno; } /* " */
 [\t\f\v\r ]+				{ /* Ignore whitespace. */ }
 
-"/*"					{ skip_comment(); }
+"/*"					{ parse_comment(igenerator); }
 "//".*					{ }
 
 "#define "[a-zA-Z_][a-zA-Z_0-9]*"("	{ yyless (yyleng - 1); return FUNCTION_MACRO; }
@@ -173,22 +173,80 @@ stringtext				([^\"])|(\\.)
 
 static int yywrap (void)
 {
-	return 1;
+  return 1;
 }
 
-static void skip_comment (void)
+static void parse_gtkdoc (GIGenerator *igenerator, int c2)
 {
-	int c1, c2;
+  int c1;
+  gboolean isline = FALSE;
+  gchar line[256];
+  int i;
+  gchar **parts;
+  CDirective *directive;
+  char *name, *value;
 
-	c1 = input();
-	c2 = input();
-
-	while (c2 != EOF && !(c1 == '*' && c2 == '/')) {
-		if (c1 == '\n')
-			++lineno;
-		c1 = c2;
-		c2 = input();
+  i = 0;
+  do {
+      c1 = c2;
+      if (c1 == '\n')
+	{
+	  isline = TRUE;
+	  break;
 	}
+      if (i >= 256)
+	break;
+      line[i++] = c1;
+      c2 = input();
+
+  } while (c2 != EOF && !(c1 == '*' && c2 == '/'));
+  
+  if (!isline)
+    return;
+
+  line[i] = '\0';
+
+  parts = g_strsplit (line, ": ", 2);
+
+  if (g_strv_length (parts) == 2)
+    {
+      name = parts[0];
+      value = parts[1];
+    }
+  else /* parts == 1 */
+    {
+      name = parts[0];
+      value = "1";
+    }
+  
+  directive = cdirective_new (name, value);
+  igenerator->directives = g_slist_prepend (igenerator->directives,
+					    directive);
+
+  g_strfreev (parts);
+}
+
+static void parse_comment (GIGenerator *igenerator)
+{
+  int c1, c2;
+  
+  c1 = input();
+  c2 = input();
+
+  while (c2 != EOF && !(c1 == '*' && c2 == '/'))
+    {
+      if (c1 == '\n')
+	++lineno;
+      c1 = c2;
+      c2 = input();
+
+      if (c1 == ' ' && c2 == '@')
+	{
+	  c1 = c2;
+	  c2 = input();
+	  parse_gtkdoc (igenerator, c2);
+	}
+    }
 }
 
 static int check_identifier (GIGenerator *igenerator, const char *s)

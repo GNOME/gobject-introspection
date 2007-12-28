@@ -67,6 +67,8 @@ csymbol_free (CSymbol * symbol)
   ctype_free (symbol->base_type);
   g_free (symbol->const_string);
   g_free (symbol);
+  g_slist_foreach (symbol->directives, (GFunc)cdirective_free, NULL);
+  g_slist_free (symbol->directives);
 }
  
 gboolean
@@ -161,6 +163,27 @@ csymbol_merge_type (CSymbol *symbol, CType *type)
   }
   *foundation_type = ctype_copy (type);
 }
+
+CDirective *
+cdirective_new (const gchar *name,
+		const gchar *value)
+{
+  CDirective *directive;
+    
+  directive = g_slice_new (CDirective);
+  directive->name = g_strdup (name);
+  directive->value = g_strdup (value);
+  return directive;
+}
+
+void
+cdirective_free (CDirective *directive)
+{
+  g_free (directive->name);
+  g_free (directive->value);
+  g_slice_free (CDirective, directive);
+}
+
 %}
 
 %error-verbose

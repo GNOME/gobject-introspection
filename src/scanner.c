@@ -627,6 +627,7 @@ g_igenerator_process_function_symbol (GIGenerator * igenerator, CSymbol * sym)
   char *last_underscore = strrchr (sym->ident, '_');
   GList *param_l;
   int i;
+  GSList *l;
 
   while (last_underscore != NULL)
     {
@@ -733,6 +734,17 @@ g_igenerator_process_function_symbol (GIGenerator * igenerator, CSymbol * sym)
       param->type = get_type_from_ctype (param_sym->base_type);
       gifunc->parameters = g_list_append (gifunc->parameters, param);
     }
+
+  for (l = sym->directives; l; l = l->next)
+    {
+      CDirective *directive = (CDirective*)l->data;
+
+      if (!strcmp (directive->name, "deprecated"))
+	gifunc->deprecated = strcmp (directive->value, "1") == 0;
+      else
+	g_printerr ("Unknown function directive: %s\n",
+		    directive->name);
+    }
 }
 
 static void
@@ -742,22 +754,25 @@ g_igenerator_process_unregistered_struct_typedef (GIGenerator * igenerator,
 {
   GIdlNodeStruct *ginode =
     (GIdlNodeStruct *) g_idl_node_new (G_IDL_NODE_STRUCT);
+  GList *member_l;
+  char *lower_case_prefix;
+
   ginode->node.name = sym->ident;
   igenerator->module->entries =
     g_list_insert_sorted (igenerator->module->entries, ginode,
 			  (GCompareFunc) g_idl_node_cmp);
-  char *lower_case_prefix = g_ascii_strdown (sym->ident, -1);
+  lower_case_prefix = g_ascii_strdown (sym->ident, -1);
   g_hash_table_insert (igenerator->type_map, sym->ident, ginode);
   g_hash_table_insert (igenerator->type_by_lower_case_prefix,
 		       lower_case_prefix, ginode);
 
-  GList *member_l;
   for (member_l = struct_type->child_list; member_l != NULL;
        member_l = member_l->next)
     {
       CSymbol *member = member_l->data;
       GIdlNodeField *gifield =
 	(GIdlNodeField *) g_idl_node_new (G_IDL_NODE_FIELD);
+
       ginode->members = g_list_append (ginode->members, gifield);
       gifield->node.name = member->ident;
       gifield->type = get_type_from_ctype (member->base_type);
@@ -769,10 +784,13 @@ g_igenerator_process_struct_typedef (GIGenerator * igenerator, CSymbol * sym)
 {
   CType *struct_type = sym->base_type;
   gboolean opaque_type = FALSE;
+  GIdlNode *gitype;
+  
   if (struct_type->child_list == NULL)
     {
+      CSymbol *struct_symbol;
       g_assert (struct_type->name != NULL);
-      CSymbol *struct_symbol =
+      struct_symbol =
 	g_hash_table_lookup (igenerator->struct_or_union_or_enum_table,
 			     struct_type->name);
       if (struct_symbol != NULL)
@@ -780,11 +798,13 @@ g_igenerator_process_struct_typedef (GIGenerator * igenerator, CSymbol * sym)
 	  struct_type = struct_symbol->base_type;
 	}
     }
+
   if (struct_type->child_list == NULL)
     {
       opaque_type = TRUE;
     }
-  GIdlNode *gitype = g_hash_table_lookup (igenerator->type_map, sym->ident);
+  
+  gitype = g_hash_table_lookup (igenerator->type_map, sym->ident);
   if (gitype != NULL)
     {
       /* struct of a GTypeInstance */
@@ -963,6 +983,8 @@ g_igenerator_process_union_typedef (GIGenerator * igenerator, CSymbol * sym)
 {
   CType *union_type = sym->base_type;
   gboolean opaque_type = FALSE;
+  GIdlNode *gitype;
+  
   if (union_type->child_list == NULL)
     {
       g_assert (union_type->name != NULL);
@@ -978,7 +1000,8 @@ g_igenerator_process_union_typedef (GIGenerator * igenerator, CSymbol * sym)
     {
       opaque_type = TRUE;
     }
-  GIdlNode *gitype = g_hash_table_lookup (igenerator->type_map, sym->ident);
+
+  gitype = g_hash_table_lookup (igenerator->type_map, sym->ident);
   if (gitype != NULL)
     {
       g_assert (gitype->type == G_IDL_NODE_BOXED);
@@ -1028,11 +1051,16 @@ g_igenerator_process_union_typedef (GIGenerator * igenerator, CSymbol * sym)
 static void
 g_igenerator_process_enum_typedef (GIGenerator * igenerator, CSymbol * sym)
 {
-  CType *enum_type = sym->base_type;
+  CType *enum_type;
+  GList *member_l;
+  GIdlNodeEnum *ginode;
+  CSymbol *enum_symbol;
+
+  enum_type = sym->base_type;
   if (enum_type->child_list == NULL)
     {
       g_assert (enum_type->name != NULL);
-      CSymbol *enum_symbol =
+      enum_symbol =
 	g_hash_table_lookup (igenerator->struct_or_union_or_enum_table,
 			     enum_type->name);
       if (enum_symbol != NULL)
@@ -1045,8 +1073,8 @@ g_igenerator_process_enum_typedef (GIGenerator * igenerator, CSymbol * sym)
       /* opaque type */
       return;
     }
-  GIdlNodeEnum *ginode =
-    g_hash_table_lookup (igenerator->type_map, sym->ident);
+  
+  ginode = g_hash_table_lookup (igenerator->type_map, sym->ident);
   if (ginode != NULL)
     {
       return;
@@ -1058,7 +1086,6 @@ g_igenerator_process_enum_typedef (GIGenerator * igenerator, CSymbol * sym)
     g_list_insert_sorted (igenerator->module->entries, ginode,
 			  (GCompareFunc) g_idl_node_cmp);
 
-  GList *member_l;
   for (member_l = enum_type->child_list; member_l != NULL;
        member_l = member_l->next)
     {
@@ -1075,6 +1102,9 @@ static void
 g_igenerator_process_function_typedef (GIGenerator * igenerator,
 				       CSymbol * sym)
 {
+  GList *param_l;
+  int i;
+
   /* handle callback types */
   GIdlNodeFunction *gifunc =
     (GIdlNodeFunction *) g_idl_node_new (G_IDL_NODE_CALLBACK);
@@ -1088,8 +1118,7 @@ g_igenerator_process_function_typedef (GIGenerator * igenerator,
   gifunc->result = (GIdlNodeParam *) g_idl_node_new (G_IDL_NODE_PARAM);
   gifunc->result->type =
     get_type_from_ctype (sym->base_type->base_type->base_type);
-  GList *param_l;
-  int i;
+
   for (param_l = sym->base_type->base_type->child_list, i = 1;
        param_l != NULL; param_l = param_l->next, i++)
     {
@@ -1216,6 +1245,10 @@ g_igenerator_add_symbol (GIGenerator * igenerator, CSymbol * symbol)
 	  break;
 	}
     }
+
+  symbol->directives = g_slist_reverse (igenerator->directives);
+  igenerator->directives = NULL;
+
   if (found_filename || igenerator->macro_scan)
     {
       igenerator->symbol_list =
@@ -1522,8 +1555,9 @@ g_igenerator_start_preprocessor (GIGenerator *igenerator,
   int tmp;
   char *tmpname;
 
-  cpp_argv = g_new0 (char *, g_list_length (cpp_options) + 3);
+  cpp_argv = g_new0 (char *, g_list_length (cpp_options) + 4);
   cpp_argv[cpp_argc++] = "cpp";
+  cpp_argv[cpp_argc++] = "-C";
 
   /* Disable GCC extensions as we cannot parse them yet */
   cpp_argv[cpp_argc++] = "-U__GNUC__";

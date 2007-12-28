@@ -26,6 +26,9 @@ struct _FooObjectClass
   GObjectClass parent_class;
 };
 
+/*
+ * @deprecated
+ */
 gint                  foo_init                     (void);
 
 GType                 foo_object_get_type          (void) G_GNUC_CONST;

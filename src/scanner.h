@@ -30,6 +30,7 @@
 G_BEGIN_DECLS typedef struct _GIGenerator GIGenerator;
 typedef struct _CSymbol CSymbol;
 typedef struct _CType CType;
+typedef struct _CDirective CDirective;
 
 struct _GIGenerator
 {
@@ -47,14 +48,16 @@ struct _GIGenerator
   GHashTable *typedef_table;
   GHashTable *struct_or_union_or_enum_table;
 
-  gboolean macro_scan;
-
   GIdlModule *module;
   GList *get_type_symbols;
   GHashTable *type_map;
   GHashTable *type_by_lower_case_prefix;
 
   GHashTable *symbols; /* typename -> module.name */
+
+  /* scanner variables */
+  gboolean macro_scan;
+  GSList *directives; /* list of CDirective for the current symbol */
 };
 
 typedef enum
@@ -78,6 +81,7 @@ struct _CSymbol
   gboolean const_int_set;
   int const_int;
   char *const_string;
+  GSList *directives; /* list of CDirective */
 };
 
 typedef enum
@@ -139,18 +143,25 @@ struct _CType
   GList *child_list;
 };
 
-CSymbol *csymbol_new (CSymbolType type);
-gboolean csymbol_get_const_boolean (CSymbol *symbol);
-void     csymbol_free (CSymbol * symbol);
+struct _CDirective {
+  char *name;
+  char *value;
+};
 
-gboolean g_igenerator_parse_file   (GIGenerator *igenerator,
-				    FILE        *file);
-void     g_igenerator_set_verbose  (GIGenerator *igenerator,
-				    gboolean     verbose);
-void     g_igenerator_add_symbol   (GIGenerator *igenerator,
-				    CSymbol     *symbol);
-gboolean g_igenerator_is_typedef   (GIGenerator *igenerator,
-				    const char  *name);
+CSymbol *    csymbol_new               (CSymbolType  type);
+gboolean     csymbol_get_const_boolean (CSymbol     *symbol);
+void         csymbol_free              (CSymbol     *symbol);
+CDirective * cdirective_new            (const gchar *name,
+					const gchar *value);
+void         cdirective_free           (CDirective  *directive);
 
+gboolean g_igenerator_parse_file    (GIGenerator *igenerator,
+				     FILE        *file);
+void     g_igenerator_set_verbose   (GIGenerator *igenerator,
+				     gboolean     verbose);
+void     g_igenerator_add_symbol    (GIGenerator *igenerator,
+				     CSymbol     *symbol);
+gboolean g_igenerator_is_typedef    (GIGenerator *igenerator,
+				     const char  *name);
 G_END_DECLS
 #endif

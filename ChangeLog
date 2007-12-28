@@ -1,5 +1,33 @@
 2007-12-27  Johan Dahlin  <johan@gnome.org>
 
+	* src/scannerlexer.l:
+	Parse gtk-doc comments.
+
+	* src/gidlwriter.c: (function_generate):
+	Reorganize, avoid duplication and add support for
+	writing deprecated functions.
+
+	* src/scannerparser.y:
+	* src/scanner.h:
+	Add new structure CDirective and functions to create/free them.
+	
+	* src/scanner.c: (g_igenerator_process_function_symbol),
+	(g_igenerator_process_unregistered_struct_typedef),
+	(g_igenerator_process_struct_typedef),
+	(g_igenerator_process_union_typedef),
+	(g_igenerator_process_enum_typedef),
+	(g_igenerator_process_function_typedef), (g_igenerator_add_symbol),
+	(g_igenerator_start_preprocessor):
+	Parse @deprecated directive for functions.
+	Remove some more C99isms.
+	Send in -C to cpp to avoid stripping comments.
+	
+	* tests/parser/foo-object.h:
+	* tests/parser/Foo-expected.gidl:
+	Add deprecated directive
+	
+2007-12-27  Johan Dahlin  <johan@gnome.org>
+
 	* src/scannerlexer.l (intsuffix): Add emacs mode line and
 	escape ' and " so it looks more like C.
 

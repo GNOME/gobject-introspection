@@ -120,43 +120,42 @@ property_generate (GIdlWriter * writer, GIdlNodeProperty * node)
 static void
 function_generate (GIdlWriter * writer, GIdlNodeFunction * node)
 {
-  char *markup;
   const char *tag_name;
+  GString *markup_s;
+  gchar *markup;
+  
   if (node->node.type == G_IDL_NODE_CALLBACK)
-    {
-      tag_name = "callback";
-      markup =
-	g_markup_printf_escaped ("<callback name=\"%s\">\n", node->node.name);
-    }
+    tag_name = "callback";
   else if (node->is_constructor)
-    {
-      tag_name = "constructor";
-      markup =
-	g_markup_printf_escaped ("<constructor name=\"%s\" symbol=\"%s\">\n",
-				 node->node.name, node->symbol);
-    }
+    tag_name = "constructor";
   else if (node->is_method)
-    {
-      tag_name = "method";
-      markup =
-	g_markup_printf_escaped ("<method name=\"%s\" symbol=\"%s\">\n",
-				 node->node.name, node->symbol);
-    }
+    tag_name = "method";
   else
-    {
-      tag_name = "function";
-      markup =
-	g_markup_printf_escaped ("<function name=\"%s\" symbol=\"%s\">\n",
-				 node->node.name, node->symbol);
-    }
+    tag_name = "function";
 
-  g_writer_write_indent (writer, markup);
-  g_free (markup);
+  markup_s = g_string_new ("<");
+  g_string_append_printf (markup_s,
+			  "%s name=\"%s\"",
+			  tag_name, node->node.name);
+
+  if (node->node.type != G_IDL_NODE_CALLBACK)
+    g_string_append_printf (markup_s,
+			    g_markup_printf_escaped (" symbol=\"%s\"", node->symbol));
+
+  if (node->deprecated)
+    g_string_append_printf (markup_s, " deprecated=\"1\"");
+
+  g_string_append (markup_s, ">\n");
+  
+  g_writer_write_indent (writer, markup_s->str);
+  g_string_free (markup_s, TRUE);
+
   markup =
     g_markup_printf_escaped ("<return-type type=\"%s\"/>\n",
 			     node->result->type->unparsed);
   g_writer_write (writer, markup);
   g_free (markup);
+
   if (node->parameters != NULL)
     {
       GList *l;
