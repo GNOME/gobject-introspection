@@ -61,4 +61,9 @@ struct _FooSubobjectClass
 GType                 foo_subobject_get_type       (void) G_GNUC_CONST;
 FooSubobject*         foo_subobject_new            ();
 
+/* Invalid comments, should be ignored */
+
+/* @ */
+/* @: */
+
 #endif /* __FOO_OBJECT_H__ */
