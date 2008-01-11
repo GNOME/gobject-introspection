@@ -31,19 +31,49 @@ PKG_CHECK_MODULES(GOBJECT, [gobject-2.0])
 
 PKG_CHECK_MODULES(SCANNER, [gobject-2.0 gthread-2.0])
 
-LIBFFI_DEP=""
-AC_SUBST(LIBFFI_DEP)
-PKG_CHECK_MODULES(GIREPO, [glib-2.0 gobject-2.0 gmodule-2.0 libffi],
-                  [have_libffi=true], [have_libffi=false])
-
-if $have_libffi; then
-   AC_DEFINE(HAVE_LIBFFI,[],[Defined if libffi was found])
-   LIBFFI_DEP=libffi
+dnl libffi
+AC_MSG_CHECKING(for ffi.h)
+AC_ARG_WITH(libffi,
+  AC_HELP_STRING([--without-ffi], [Disable libffi support]),
+  with_ffi=$withval,
+  with_ffi=auto)
+if test x"$with_ffi" = xno ; then
+  have_ffi_h=disabled
 else
-   dnl if libffi is not found, g_function_info_invoke is not available,
-   dnl but everything else still works
-   PKG_CHECK_MODULES(GIREPO, [glib-2.0 gobject-2.0 gmodule-2.0])
+  AC_TRY_CPP([#include <ffi.h>], have_ffi_h=yes, have_ffi_h=no)
+  if test $have_ffi_h = yes; then
+    AC_DEFINE(HAVE_FFI_H,1,[Have ffi.h include file])
+    save_LIBS=$LIBS
+    if test x"$with_ffi" = xyes || test x"$with_ffi" = xauto; then
+      other_LIBS=
+    else
+      other_LIBS=$with_ffi
+    fi
+    AC_SEARCH_LIBS(ffi_call,ffi,,AC_MSG_ERROR([libffi not found]),$other_LIBS)
+    if test x$"ac_cv_search_ffi_call" = x"none required" ; then
+      FFI_LIBS=$other_LIBS
+    else
+      FFI_LIBS="$ac_cv_search_ffi_call $other_LIBS"
+    fi
+    LIBS=$save_LIBS
+  fi
 fi
+if test x"$with_ffi" != xauto && test x"$have_ffi_h" != xyes ; then
+  AC_MSG_ERROR([libffi requested, but ffi.h not found])
+fi
+AC_MSG_RESULT([$have_ffi_h])
+AM_CONDITIONAL(HAVE_LIBFFI, test "$have_ffi_h" = "yes")
+AC_SUBST(FFI_LIBS)
+
+dnl if libffi is not found, g_function_info_invoke is not available,
+dnl but everything else still works
+
+PKG_CHECK_MODULES(GIREPO, [glib-2.0 gobject-2.0 gmodule-2.0])
+
+if test "$have_ffi_h" = "yes"; then
+   GIREPO_LIBS="$GIREPO_LIBS $FFI_LIBS"
+fi
+
 
 # Checks for header files.
 AC_HEADER_STDC
