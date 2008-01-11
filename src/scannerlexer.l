@@ -215,7 +215,7 @@ static void parse_gtkdoc (GIGenerator *igenerator, int *c1, int *c2)
   else /* parts == 1 */
     {
       name = parts[0];
-      value = "1";
+      value = NULL;
     }
   
   directive = cdirective_new (name, value);

@@ -740,7 +740,7 @@ g_igenerator_process_function_symbol (GIGenerator * igenerator, CSymbol * sym)
       CDirective *directive = (CDirective*)l->data;
 
       if (!strcmp (directive->name, "deprecated"))
-	gifunc->deprecated = strcmp (directive->value, "1") == 0;
+	gifunc->deprecated = TRUE;
       else
 	g_printerr ("Unknown function directive: %s\n",
 		    directive->name);
