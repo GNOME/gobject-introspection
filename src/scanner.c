@@ -1,6 +1,6 @@
 /* GObject introspection: scanner
  *
- * Copyright (C) 2007  Jürg Billeter
+ * Copyright (C) 2007-2008  Jürg Billeter
  * Copyright (C) 2007  Johan Dahlin
  *
  * This library is free software; you can redistribute it and/or
@@ -1297,6 +1297,9 @@ g_igenerator_generate (GIGenerator * igenerator,
 	    }
 	}
     }
+
+  /* ensure to initialize GObject */
+  g_type_class_ref (G_TYPE_OBJECT);
 
   for (l = libraries; l; l = l->next)
       g_igenerator_process_module (igenerator, (const gchar*)l->data);

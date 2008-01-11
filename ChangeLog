@@ -1,3 +1,16 @@
+2008-01-11  Jürg Billeter  <j@bitron.ch>
+
+	* src/scanner.c: (g_igenerator_generate):
+	Initialize GObject to fix scanning interface properties.
+
+	* tests/parser/Foo-expected.gidl:
+	* tests/parser/foo-object.h:
+	* tests/parser/foo.c: (foo_interface_get_type):
+	Test interfaces with GObject prerequisite.
+
+	* tests/parser/Makefile.am:
+	Set G_DEBUG=fatal_warnings to abort test on warnings and criticals.
+
 2007-12-27  Johan Dahlin  <johan@gnome.org>
 
 	* src/scannerlexer.l:

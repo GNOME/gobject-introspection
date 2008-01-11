@@ -3,6 +3,10 @@
 
 #include <glib-object.h>
 
+#define FOO_TYPE_INTERFACE           (foo_interface_get_type ())
+#define FOO_INTERFACE(object)        (G_TYPE_CHECK_INSTANCE_CAST ((object), FOO_TYPE_INTERFACE, FooInterface))
+#define FOO_IS_INTERFACE(object)     (G_TYPE_CHECK_INSTANCE_TYPE ((object), FOO_TYPE_INTERFACE))
+
 #define FOO_TYPE_OBJECT              (foo_object_get_type ())
 #define FOO_OBJECT(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), FOO_TYPE_OBJECT, FooObject))
 #define FOO_IS_OBJECT(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), FOO_TYPE_OBJECT))
@@ -11,10 +15,19 @@
 #define FOO_SUBOBJECT(subobject)     (G_TYPE_CHECK_INSTANCE_CAST ((subobject), FOO_TYPE_SUBOBJECT, FooSubobject))
 #define FOO_IS_SUBOBJECT(subobject)  (G_TYPE_CHECK_INSTANCE_TYPE ((subobject), FOO_TYPE_SUBOBJECT))
 
+typedef struct _FooInterface       FooInterface;
+typedef struct _FooInterfaceIface  FooInterfaceIface;
 typedef struct _FooObject          FooObject;
 typedef struct _FooObjectClass     FooObjectClass;
 typedef struct _FooSubobject       FooSubobject;
 typedef struct _FooSubobjectClass  FooSubobjectClass;
+
+struct _FooInterfaceIface
+{
+  GTypeInterface parent_iface;
+};
+
+GType                 foo_interface_get_type       (void) G_GNUC_CONST;
 
 struct _FooObject
 {

@@ -2,6 +2,24 @@
 
 #include "foo-object.h"
 
+GType
+foo_interface_get_type (void)
+{
+  static GType object_type = 0;
+
+  if (!object_type)
+    {
+      object_type = g_type_register_static_simple (G_TYPE_INTERFACE,
+                                                   "FooInterface",
+                                                   sizeof (FooInterfaceIface),
+                                                   NULL, 0, NULL, 0);
+
+      g_type_interface_add_prerequisite (object_type, G_TYPE_OBJECT);
+    }
+
+  return object_type;
+}
+
 G_DEFINE_TYPE (FooObject, foo_object, G_TYPE_OBJECT);
 
 static void

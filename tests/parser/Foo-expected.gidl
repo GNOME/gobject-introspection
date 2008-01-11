@@ -20,5 +20,10 @@
 				<return-type type="FooSubobject*"/>
 			</constructor>
 		</object>
+		<interface name="FooInterface" type-name="FooInterface" get-type="foo_interface_get_type">
+			<requires>
+				<interface name="GObject"/>
+			</requires>
+		</interface>
 	</namespace>
 </api>
