@@ -1,5 +1,19 @@
 2008-01-11  Johan Dahlin  <johan@gnome.org>
 
+	* src/scanner.c (g_igenerator_process_function_symbol): 
+	Refactor out g_idle_node_add_member.
+	(create_node_from_gtype, create_node_from_ctype): 
+	Use case instead of if...else
+	(get_type_from_type_id):
+	Rename to create_node_from_gtype
+	(get_type_from_ctype):
+	Rename to create_node_from_ctype
+
+	Rename ginode -> node, gitype -> type, gifunc -> func.
+	
+	* src/gidlnode.c (g_idl_node_add_member, g_idl_node_cmp): 
+	Two new functions, refactor out of scanner.c
+
 	* src/scanner.c: (g_igenerator_process_function_symbol):
 	* src/scannerlexer.l:
 	Do not save the content of the deprecated variable, only

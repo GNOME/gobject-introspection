@@ -317,7 +317,10 @@ void      g_idl_node_build_metadata  (GIdlNode    *node,
 				      guchar      *data,
 				      guint32     *offset,
                                       guint32     *offset2);
-
+int       g_idl_node_cmp             (GIdlNode    *node,
+				      GIdlNode    *other);
+void      g_idl_node_add_member      (GIdlNode         *node,
+				      GIdlNodeFunction *member);
 guint32   write_string               (const gchar *str,
 				      GHashTable  *strings, 
 				      guchar      *data,
