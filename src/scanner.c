@@ -245,7 +245,7 @@ lookup_symbol (GIGenerator *igenerator, const gchar *typename)
   if (!name)
     {
       g_printerr ("Unknown symbol: %s\n", typename);
-      return NULL;
+      return typename;
     }
 
   return name;

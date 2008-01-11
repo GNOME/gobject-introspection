@@ -1,5 +1,10 @@
 2008-01-11  Jürg Billeter  <j@bitron.ch>
 
+	* src/scanner.c: (lookup_symbol):
+	Return unresolved name if we find unknown symbol.
+
+2008-01-11  Jürg Billeter  <j@bitron.ch>
+
 	* src/scanner.c: (g_igenerator_generate):
 	Initialize GObject to fix scanning interface properties.
 
