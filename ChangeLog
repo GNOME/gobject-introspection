@@ -1,5 +1,10 @@
 2008-01-11  Jürg Billeter  <j@bitron.ch>
 
+	* src/scannerlexer.l:
+	Fix GTK-Doc parsing.
+
+2008-01-11  Jürg Billeter  <j@bitron.ch>
+
 	* src/scanner.c: (lookup_symbol):
 	Return unresolved name if we find unknown symbol.
 

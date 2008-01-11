@@ -2,7 +2,7 @@
 /* GObject introspection: C lexer
  *
  * Copyright (c) 1997 Sandro Sigala  <ssigala@globalnet.it>
- * Copyright (c) 2007 Jürg Billeter  <j@bitron.ch>
+ * Copyright (c) 2007-2008 Jürg Billeter  <j@bitron.ch>
  *
  * All rights reserved.
  *
@@ -176,9 +176,8 @@ static int yywrap (void)
   return 1;
 }
 
-static void parse_gtkdoc (GIGenerator *igenerator, int c2)
+static void parse_gtkdoc (GIGenerator *igenerator, int *c1, int *c2)
 {
-  int c1;
   gboolean isline = FALSE;
   gchar line[256];
   int i;
@@ -188,18 +187,18 @@ static void parse_gtkdoc (GIGenerator *igenerator, int c2)
 
   i = 0;
   do {
-      c1 = c2;
-      if (c1 == '\n')
+      *c1 = *c2;
+      if (*c1 == '\n')
 	{
 	  isline = TRUE;
 	  break;
 	}
       if (i >= 256)
 	break;
-      line[i++] = c1;
-      c2 = input();
+      line[i++] = *c1;
+      *c2 = input();
 
-  } while (c2 != EOF && !(c1 == '*' && c2 == '/'));
+  } while (*c2 != EOF && !(*c1 == '*' && *c2 == '/'));
   
   if (!isline)
     return;
@@ -244,7 +243,7 @@ static void parse_comment (GIGenerator *igenerator)
 	{
 	  c1 = c2;
 	  c2 = input();
-	  parse_gtkdoc (igenerator, c2);
+	  parse_gtkdoc (igenerator, &c1, &c2);
 	}
     }
 }
