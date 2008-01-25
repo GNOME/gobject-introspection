@@ -1,6 +1,6 @@
 #! /bin/sh
 
-SIMPLE_TESTS="array.test boxed.test enum.test errors.test function.test interface.test union.test"
+SIMPLE_TESTS="array.test boxed.test enum.test errors.test function.test interface.test struct.test union.test"
 
 for i in $SIMPLE_TESTS; do
 	echo $i

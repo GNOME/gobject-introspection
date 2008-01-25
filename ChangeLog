@@ -1,3 +1,9 @@
+2008-01-25  Rob Taylor  <robtaylor@floopily.org>
+
+	* tests/roundtrips.sh:
+	* tests/struct.test:
+	Add roundtrip tests for structs.
+
 2008-01-11  Johan Dahlin  <johan@gnome.org>
 
 	* src/scanner.c (g_igenerator_process_function_symbol): 
@@ -22,6 +28,11 @@
 2008-01-11  Johan Dahlin  <johan@gnome.org>
 
 	* tests/parser/foo-object.h: Add a couple of comment parser tests.
+
+2008-01-11  Jürg Billeter  <j@bitron.ch>
+
+	* src/scannerlexer.l:
+	Fix GTK-Doc parsing.
 
 2008-01-11  Jürg Billeter  <j@bitron.ch>
 
