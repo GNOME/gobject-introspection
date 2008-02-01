@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0">
+
+	<!-- TYPES -->
+
+	<define name="errordomain">
+		<element name="errordomain">
+			<attribute name="name"/>
+			<attribute name="get-quark"/>
+			<attribute name="codes"/>
+		</element>
+	</define>
+
+	<define name="flags">
+		<element name="flags">
+			<attribute name="name"/>
+			<optional>
+				<attribute name="type-name"/>
+			</optional>
+			<optional>
+				<attribute name="get-type"/>
+			</optional>
+			<ref name="deprecated"/>
+			<oneOrMore>
+				<ref name="member"/>
+			</oneOrMore>
+		</element>
+	</define>
+
+	<define name="boxed">
+		<element name="boxed">
+			<attribute name="name"/>
+			<optional>
+				<attribute name="type-name"/>
+			</optional>
+			<optional>
+				<attribute name="get-type"/>
+			</optional>
+			<ref name="deprecated"/>
+			<optional>
+				<attribute name="cname"/>
+			</optional>
+			<interleave>
+				<zeroOrMore>
+					<ref name="constructor"/>
+				</zeroOrMore>
+				<zeroOrMore>
+					<ref name="field"/>
+				</zeroOrMore>
+				<zeroOrMore>
+					<ref name="method"/>
+				</zeroOrMore>
+			</interleave>
+		</element>
+	</define>
+
+	<define name="object">
+		<element name="object">
+			<attribute name="name"/>
+			<attribute name="parent"/>
+			<optional>
+				<attribute name="type-name"/>
+			</optional>
+			<optional>
+				<attribute name="get-type"/>
+			</optional>
+			<optional>
+				<attribute name="cname"/>
+			</optional>
+			<optional>
+				<attribute name="class"/>
+			</optional>
+			<ref name="deprecated"/>
+			<interleave>
+				<oneOrMore>
+					<ref name="constructor"/>
+				</oneOrMore>
+				<zeroOrMore>
+					<element name="implements">
+						<attribute name="name"/>
+					</element>
+				</zeroOrMore>
+				<zeroOrMore>
+					<ref name="field"/>
+				</zeroOrMore>
+				<zeroOrMore>
+					<ref name="method"/>
+				</zeroOrMore>
+				<zeroOrMore>
+					<ref name="vfunc"/>
+				</zeroOrMore>
+				<zeroOrMore>
+					<ref name="signal"/>
+				</zeroOrMore>
+				<zeroOrMore>
+					<ref name="property"/>
+				</zeroOrMore>
+				<zeroOrMore>
+					<ref name="constant"/>
+				</zeroOrMore>
+			</interleave>
+		</element>
+	</define>
+
+	<define name="interface">
+		<element name="interface">
+			<attribute name="name"/>
+			<optional>
+				<attribute name="type-name"/>
+			</optional>
+			<optional>
+				<attribute name="get-type"/>
+			</optional>
+			<optional>
+				<attribute name="cname"/>
+			</optional>
+			<optional>
+				<attribute name="class"/>
+			</optional>
+			<ref name="deprecated"/>
+			<interleave>
+				<zeroOrMore>
+					<element name="requires">
+						<attribute name="name"/>
+					</element>
+				</zeroOrMore>
+				<zeroOrMore>
+					<ref name="method"/>
+				</zeroOrMore>
+				<zeroOrMore>
+					<ref name="vfunc"/>
+				</zeroOrMore>
+				<zeroOrMore>
+					<ref name="signal"/>
+				</zeroOrMore>
+				<zeroOrMore>
+					<ref name="property"/>
+				</zeroOrMore>
+				<zeroOrMore>
+					<ref name="constant"/>
+				</zeroOrMore>
+			</interleave>
+		</element>
+	</define>
+
+	<!-- ATTRIBUTES -->
+	<define name="property">
+		<element name="property">
+			<attribute name="name"/>
+			<attribute name="readable">
+				<ref name="zero-one"/>
+			</attribute>
+			<attribute name="writable">
+				<ref name="zero-one"/>
+			</attribute>
+			<optional>
+				<attribute name="construct">
+					<ref name="zero-one"/>
+				</attribute>
+			</optional>
+			<optional>
+				<attribute name="construct-only">
+					<ref name="zero-one"/>
+				</attribute>
+			</optional>
+			<ref name="type"/>
+		</element>
+	</define>
+
+	<define name="signal">
+		<element name="signal">
+			<attribute name="name"/>
+			<attribute name="when">
+				<choice>
+					<value>FIRST</value>
+					<value>LAST</value>
+					<value>CLEANUP</value>
+				</choice>
+			</attribute>
+			<optional>
+				<attribute name="no-recurse">
+					<ref name="zero-one"/>
+				</attribute>
+			</optional>
+			<optional>
+				<attribute name="detailed">
+					<ref name="zero-one"/>
+				</attribute>
+			</optional>
+			<optional>
+				<attribute name="action">
+					<ref name="zero-one"/>
+				</attribute>
+			</optional>
+			<optional>
+				<attribute name="no-hooks">
+					<ref name="zero-one"/>
+				</attribute>
+			</optional>
+			<optional>
+				<attribute name="has-class-closure">
+					<ref name="zero-one"/>
+				</attribute>
+			</optional>
+			<ref name="signature"/>
+		</element>
+	</define>
+
+	<define name="method">
+		<element name="method">
+			<attribute name="name"/>
+			<attribute name="symbol"/>
+			<optional>
+				<attribute name="type">
+					<choice>
+						<value>getter</value>
+						<value>setter</value>
+					</choice>
+				</attribute>
+			</optional>
+			<ref name="deprecated"/>
+			<ref name="signature"/>
+		</element>
+	</define>
+
+	<define name="constructor">
+		<element name="constructor">
+			<attribute name="name"/>
+			<attribute name="symbol"/>
+			<ref name="signature"/>
+		</element>
+	</define>
+
+	<define name="vfunc">
+		<element name="vfunc">
+			<attribute name="name"/>
+			<optional>
+				<attribute name="cname"/>
+			</optional>
+			<optional>
+				<attribute name="offset"/>
+			</optional>
+			<optional>
+				<attribute name="must-chain-up">
+					<ref name="zero-one"/>
+				</attribute>
+			</optional>
+			<optional>
+				<attribute name="override">
+					<choice>
+						<value>always</value>
+						<value>never</value>
+						<value>maybe</value>
+					</choice>
+				</attribute>
+			</optional>
+			<optional>
+				<attribute name="is-class-closure">
+					<ref name="zero-one"/>
+				</attribute>
+			</optional>
+			<ref name="deprecated"/>
+			<ref name="signature"/>
+		</element>
+	</define>
+
+</grammar>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0">
+
+	<define name="deprecated">
+		<optional>
+			<attribute name="deprecated">
+				<ref name="zero-one"/>
+			</attribute>
+		</optional>
+	</define>
+
+	<define name="zero-one">
+		<choice>
+			<value>0</value>
+			<value>1</value>
+		</choice>
+	</define>
+
+</grammar>

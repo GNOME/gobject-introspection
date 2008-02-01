@@ -36,7 +36,7 @@
                  get-type CDATA #REQUIRED
                  deprecated (0|1) #IMPLIED
                  cname CDATA #IMPLIED
-                 class CDATA #IMLIED >
+                 class CDATA #IMPLIED >
 
 <!ELEMENT implements (interface+) >
 
@@ -57,7 +57,7 @@
                     get-type CDATA #REQUIRED
                     deprecated (0|1) #IMPLIED
                     cname CDATA #IMPLIED
-                    class CDATA #IMLIED >
+                    class CDATA #IMPLIED >
 
 <!ELEMENT requires ((interface|object)*) >
 

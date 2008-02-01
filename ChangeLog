@@ -1,3 +1,14 @@
+2008-02-01  Mark Doffman  <mark.doffman@codethink.co.uk>
+
+	* gidl.dtd:
+	Correct syntax errors in the DTD file.
+	* relaxng/api.xml:
+	* relaxng/c-types.xml:
+	* relaxng/g-types.xml:
+	* relaxng/util.xml:
+	Add a RelaxNG specification for the GObject Introspection XML data.
+	The Specification has validated all of the test files.
+
 2008-01-25  Rob Taylor  <robtaylor@floopily.org>
 
 	* tests/roundtrips.sh:
