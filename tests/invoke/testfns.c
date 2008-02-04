@@ -28,3 +28,20 @@ void test5 (gchar **blurb, gint *len)
   *blurb = g_strdup ("hey there");
   *len = strlen (*blurb);
 }
+
+gint test6 (GList *list)
+{
+  return g_list_length(list);
+}
+
+char *test7 (GList *list)
+{
+  GList *lp;
+  GString *string = g_string_new("");
+
+  for (lp=list; lp ; lp=lp->next)
+    {
+      g_string_append(string, (const char *)lp->data);
+    }
+  return g_string_free (string, FALSE);
+}

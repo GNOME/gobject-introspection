@@ -142,11 +142,66 @@ main (int argc, char *argv[])
   g_assert (len == strlen (blurb));
   g_base_info_unref (info);
   
+
+  /* test GList*/
+  g_print ("Test 6");
+  info = g_irepository_find_by_name (rep, "test", "test6");
+  g_assert (g_base_info_get_type (info) == GI_INFO_TYPE_FUNCTION);
+  function = (GIFunctionInfo *)info;
+
+  {
+    GList *list = NULL;
+    list = g_list_prepend (list, GINT_TO_POINTER(1));
+    list = g_list_prepend (list, GINT_TO_POINTER(2));
+    retval.v_int = 0;
+    in_args[0].v_pointer = out_args[0].v_pointer = list;
+    if (!g_function_info_invoke (function, in_args, 1, NULL, 0, &retval, &error))
+      g_print ("Invokation of %s failed: %s\n",
+	       g_base_info_get_name (info),
+	       error->message);
+
+    g_print("returned %d", retval.v_int);
+    g_assert (retval.v_int == 2);
+    g_list_free (list);
+  }
+
+  g_base_info_unref (info);
+  g_clear_error (&error);
+
+  /* test GList more, transfer ownership*/
+  g_print ("Test 7");
+  info = g_irepository_find_by_name (rep, "test", "test7");
+  g_assert (g_base_info_get_type (info) == GI_INFO_TYPE_FUNCTION);
+  function = (GIFunctionInfo *)info;
+
+  {
+    GList *list = NULL;
+    list = g_list_prepend (list, g_strdup("there..."));
+    list = g_list_prepend (list, g_strdup("Hey "));
+    retval.v_pointer = NULL;
+    in_args[0].v_pointer = out_args[0].v_pointer = list;
+    if (!g_function_info_invoke (function, in_args, 1, NULL, 0, &retval, &error))
+      g_print ("Invokation of %s failed: %s\n",
+	       g_base_info_get_name (info),
+	       error->message);
+
+    g_print("returned %s", retval.v_pointer);
+    g_assert (strcmp(retval.v_pointer, "Hey there...")==0);
+    g_list_foreach (list, (GFunc) g_free, NULL);
+    g_list_free (list);
+    g_assert (g_callable_info_get_caller_owns ((GICallableInfo *)function) ==
+	      GI_TRANSFER_EVERYTHING);
+    g_free (retval.v_pointer);
+  }
+
+  g_base_info_unref (info);
+  g_clear_error (&error);
+
   /* test error handling */
 
 #if 0
-  /* test6 is not implemented */
-  info = g_irepository_find_by_name (rep, "test", "test6");  
+  /* "broken" is in the metadata but not in the .so*/
+  info = g_irepository_find_by_name (rep, "test", "broken");  
   g_assert (g_base_info_get_type (info) == GI_INFO_TYPE_FUNCTION);
   function = (GIFunctionInfo *)info;
 

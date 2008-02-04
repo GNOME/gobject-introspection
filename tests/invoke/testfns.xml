@@ -40,6 +40,21 @@
     </function>
 
     <function name="test6" symbol="test6">
+      <return-type type="gint"/>
+      <parameters>
+        <parameter name="list" type="GList<gint>*" direction="in"/>
+      </parameters>
+    </function>
+
+
+    <function name="test7" symbol="test7">
+      <return-type type="utf8" transfer="full"/>
+      <parameters>
+        <parameter name="list" type="GList<utf8>*" direction="in"/>
+      </parameters>
+    </function>
+
+    <function name="broken" symbol="broken">
       <return-type type="void"/>
     </function>
 

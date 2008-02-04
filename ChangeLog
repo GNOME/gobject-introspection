@@ -1,3 +1,11 @@
+2008-02-04  Rob Taylor  <rob.taylor@codethink.co.uk>
+
+	* tests/invoke/invoke.c: (main):
+	* tests/invoke/testfns.c: (test6), (test7):
+	* tests/invoke/testfns.xml:
+	Add tests for invokation with a GList argument.
+	Also tests caller-owns return values.
+
 2008-02-04  Rob Taylor  <robtaylor@floopily.org>
 
 	* src/ginfo.c:
