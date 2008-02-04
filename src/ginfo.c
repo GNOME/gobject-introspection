@@ -539,6 +539,16 @@ g_type_info_new (GIBaseInfo    *container,
 				    type->reserved == 0 ? offset : type->offset);
 }
 
+/**
+ * g_callable_info_get_return_type:
+ * @info: a #GICallableInfo
+ *
+ * Get the return type of a callable item as
+ * a #GITypeInfo
+ *
+ * Returns: a #GITypeInfo idexing the TypeBlob for the
+ * return type of #info
+ */
 GITypeInfo *
 g_callable_info_get_return_type (GICallableInfo *info)
 {
@@ -550,6 +560,14 @@ g_callable_info_get_return_type (GICallableInfo *info)
   return g_type_info_new (base, base->metadata, offset);
 }
 
+/**
+ * g_callable_info_may_return_null:
+ * @info: a #GICallableInfo
+ *
+ * See if a callable could return NULL.
+ *
+ * Returns: TRUE if callable could return NULL
+ */
 gboolean
 g_callable_info_may_return_null (GICallableInfo *info)
 {
@@ -559,7 +577,16 @@ g_callable_info_may_return_null (GICallableInfo *info)
   return blob->may_return_null;
 }
 
-GITransfer 
+/**
+ * g_callable_info_get_caller_owns:
+ * @info: a #GICallableInfo
+ *
+ * See whether the caller owns the return value
+ * of this callable.
+ *
+ * Returns: TRUE if the caller owns the return value, FALSE otherwise.
+ */
+GITransfer
 g_callable_info_get_caller_owns (GICallableInfo *info)
 {
   GIBaseInfo *base = (GIBaseInfo *)info;
@@ -573,6 +600,14 @@ g_callable_info_get_caller_owns (GICallableInfo *info)
     return GI_TRANSFER_NOTHING;
 }
 
+/**
+ * g_callable_info_get_n_args:
+ * @info: a #GICallableInfo
+ *
+ * Get the number of arguments (both IN and OUT) for this callable.
+ *
+ * Returns: The number of arguments this callable expects.
+ */
 gint 
 g_callable_info_get_n_args (GICallableInfo *info)
 {
@@ -586,6 +621,14 @@ g_callable_info_get_n_args (GICallableInfo *info)
   return blob->n_arguments;
 }
 
+/**
+ * g_callable_info_get_arg:
+ * @info: a #GICallableInfo
+ *
+ * Get information about a particular argument of this callable.
+ *
+ * Returns: A #GIArgInfo indexing the metadata on the given argument.
+ */
 GIArgInfo *
 g_callable_info_get_arg (GICallableInfo *info,
 			 gint           n)

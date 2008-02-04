@@ -1,3 +1,8 @@
+2008-02-04  Rob Taylor  <robtaylor@floopily.org>
+
+	* src/ginfo.c:
+	Add some documentation for GICallableInfo
+
 2008-02-01  Mark Doffman  <mark.doffman@codethink.co.uk>
 
 	* gidl.dtd:
