@@ -8,6 +8,8 @@ AM_MAINTAINER_MODE
 AC_CONFIG_SRCDIR([girepository/ginvoke.c])
 AC_CONFIG_HEADER([config.h])
 
+AC_CONFIG_MACRO_DIR([m4])
+
 # Checks for programs.
 AC_PROG_CC
 AM_PROG_CC_C_O
@@ -25,6 +27,8 @@ if test "$YACC" = :; then
 fi
 
 # Checks for libraries.
+GI_ENABLE_GCOV
+
 AC_CHECK_LIB([dl], [dlopen])
 
 PKG_CHECK_MODULES(GOBJECT, [gobject-2.0])
@@ -74,6 +78,7 @@ if test "$have_ffi_h" = "yes"; then
    GIREPO_LIBS="$GIREPO_LIBS $FFI_LIBS"
 fi
 
+GIREPO_CFLAGS="$GIREPO_CFLAGS $GCOV_CFLAGS"
 
 # Checks for header files.
 AC_HEADER_STDC
@@ -86,9 +91,11 @@ AC_C_CONST
 AC_FUNC_STRTOD
 AC_CHECK_FUNCS([memchr strchr strspn strstr strtol strtoull])
 
+
 AC_CONFIG_FILES([Makefile
-		 gidl/Makefile
+                 gidl/Makefile
                  girepository/Makefile
+                 m4/Makefile
                  tools/Makefile
                  tests/Makefile
                  tests/invoke/Makefile

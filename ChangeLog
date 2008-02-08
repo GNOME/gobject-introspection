@@ -2,6 +2,19 @@
 
 	* Makefile.am:
 	* configure.ac:
+	* gcov.mak: Added:
+	* girepository/Makefile.am:
+	* m4/Makefile.am: Added:
+	* m4/as-compiler-flag.m4: Added:
+	* m4/gcov.m4: Added:
+	* tools/Makefile.am:
+	Add ability to generate a coverage report.
+	Adds configure option --enable-gcov and make rule 'check-coverage'.
+
+2008-02-08  Rob Taylor  <rob.taylor@codethink.co.uk>
+
+	* Makefile.am:
+	* configure.ac:
 	* gidl/Makefile.am: Added:
 	* girepository/Makefile.am: Added:
 	* src/Makefile.am: Renamed to tools/Makefile.am:
