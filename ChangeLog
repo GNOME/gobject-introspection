@@ -1,3 +1,44 @@
+2008-02-08  Rob Taylor  <rob.taylor@codethink.co.uk>
+
+	* Makefile.am:
+	* configure.ac:
+	* gidl/Makefile.am: Added:
+	* girepository/Makefile.am: Added:
+	* src/Makefile.am: Renamed to tools/Makefile.am:
+	* src/compiler.c: Renamed to tools/compiler.c:
+	* src/g-idl-offsets.pl: Renamed to tools/g-idl-offsets.pl:
+	* src/generate.c: Renamed to tools/generate.c:
+	* src/gidlmodule.c: Renamed to tools/gidlmodule.c:
+	* src/gidlmodule.h: Renamed to tools/gidlmodule.h:
+	* src/gidlnode.c: Renamed to tools/gidlnode.c:
+	* src/gidlnode.h: Renamed to tools/gidlnode.h:
+	* src/gidlparser.c: Renamed to tools/gidlparser.c:
+	* src/gidlparser.h: Renamed to tools/gidlparser.h:
+	* src/gidlwriter.c: Renamed to tools/gidlwriter.c:
+	* src/gidlwriter.h: Renamed to tools/gidlwriter.h:
+	* src/ginfo.c: Renamed to girepository/ginfo.c:
+	* src/ginvoke.c: Renamed to girepository/ginvoke.c:
+	* src/girepository.c: Renamed to girepository/girepository.c:
+	* src/girepository.h: Renamed to girepository/girepository.h:
+	* src/gmetadata.c: Renamed to girepository/gmetadata.c:
+	* src/gmetadata.h: Renamed to girepository/gmetadata.h:
+	* src/scanner.c: Renamed to tools/scanner.c:
+	* src/scanner.h: Renamed to tools/scanner.h:
+	* src/scannerlexer.l: Renamed to tools/scannerlexer.l:
+	* src/scannerparser.y: Renamed to tools/scannerparser.y:
+	* tests/invoke/Makefile.am:
+	Split src/ into girepository/ and tools/
+
+	* Makefile.am:
+	* configure.ac:
+	* girepository/Makefile.am:
+	* tests/Makefile.am:
+	* tests/invoke/Makefile.am:
+	* tests/parser/Makefile.am:
+	* tests/roundtrips.sh:
+	* tools/Makefile.am:
+	Make distcheck work.
+
 2008-02-04  Rob Taylor  <rob.taylor@codethink.co.uk>
 
 	* tests/invoke/invoke.c: (main):

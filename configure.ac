@@ -5,7 +5,7 @@ AC_PREREQ(2.59)
 AC_INIT(gobject-introspection, 0.1, http://bugzilla.gnome.org/enter_bug.cgi?product=glib)
 AM_INIT_AUTOMAKE([1.7])
 AM_MAINTAINER_MODE
-AC_CONFIG_SRCDIR([src/ginvoke.c])
+AC_CONFIG_SRCDIR([girepository/ginvoke.c])
 AC_CONFIG_HEADER([config.h])
 
 # Checks for programs.
@@ -87,7 +87,9 @@ AC_FUNC_STRTOD
 AC_CHECK_FUNCS([memchr strchr strspn strstr strtol strtoull])
 
 AC_CONFIG_FILES([Makefile
-                 src/Makefile
+		 gidl/Makefile
+                 girepository/Makefile
+                 tools/Makefile
                  tests/Makefile
                  tests/invoke/Makefile
                  tests/parser/Makefile

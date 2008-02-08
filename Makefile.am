@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 
-SUBDIRS = src tests
+SUBDIRS = gidl girepository tools tests
 
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = gobject-introspection.pc
