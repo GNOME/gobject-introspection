@@ -1,3 +1,8 @@
+2008-02-10  Johan Dahlin  <johan@gnome.org>
+
+	* tests/parser/Makefile.am: Only create Foo.gidl when running make
+	check, eg exclude it from BUILT_SOURCES.
+
 2008-02-08  Rob Taylor  <rob.taylor@codethink.co.uk>
 
 	* Makefile.am:
