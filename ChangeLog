@@ -1,5 +1,8 @@
 2008-02-10  Johan Dahlin  <johan@gnome.org>
 
+	* m4/Makefile.am (EXTRA_DIST): its called as-compiler-flag.m4, 
+	not as-compiler.m4.
+
 	* tests/parser/Makefile.am: Only create Foo.gidl when running make
 	check, eg exclude it from BUILT_SOURCES.
 
