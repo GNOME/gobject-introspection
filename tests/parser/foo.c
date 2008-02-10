@@ -95,3 +95,45 @@ foo_flags_get_type (void)
     return etype;
 }
 
+struct _FooBoxed
+{
+  int private;
+};
+
+
+FooBoxed *
+foo_boxed_copy (const FooBoxed *boxed)
+{
+  return (FooBoxed *)g_memdup (boxed, sizeof (FooBoxed));
+}
+
+void
+foo_boxed_free (FooBoxed *boxed)
+{
+  g_slice_free (FooBoxed, boxed);
+}
+
+
+GType
+foo_boxed_get_type (void)
+{
+  static GType our_type = 0;
+  
+  if (our_type == 0)
+    our_type = g_boxed_type_register_static ("FooBoxed",
+					     (GBoxedCopyFunc) foo_boxed_copy,
+					     (GBoxedFreeFunc) foo_boxed_free);
+  return our_type;
+}
+
+FooBoxed *
+foo_boxed_new (void)
+{
+  return g_slice_new0 (FooBoxed);
+}
+
+void
+foo_boxed_method (FooBoxed *boxed)
+{
+
+}

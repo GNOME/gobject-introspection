@@ -79,6 +79,12 @@ typedef enum
 
 GType foo_flags_get_type (void);
 
+typedef struct _FooBoxed FooBoxed;
+
+GType                 foo_boxed_get_type       (void) G_GNUC_CONST;
+FooBoxed*             foo_boxed_new            (void);
+void                  foo_boxed_method         (FooBoxed* boxed);
+
 /* Invalid comments, should be ignored */
 
 /* @ */

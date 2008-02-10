@@ -2,6 +2,14 @@
 
 	* tests/parser/Foo-expected.gidl:
 	* tests/parser/foo-object.h:
+	* tests/parser/foo.c: (foo_boxed_copy), (foo_boxed_free),
+	(foo_boxed_get_type), (foo_boxed_new), (foo_boxed_method):
+	Add boxed test.
+	
+2008-02-10  Johan Dahlin  <johan@gnome.org>
+
+	* tests/parser/Foo-expected.gidl:
+	* tests/parser/foo-object.h:
 	* tests/parser/foo.c: (foo_enum_get_type), (foo_flags_get_type):
 	Add enum and flags test.
 

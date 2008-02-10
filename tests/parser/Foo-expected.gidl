@@ -4,6 +4,17 @@
 		<function name="init" symbol="foo_init" deprecated="1">
 			<return-type type="gint"/>
 		</function>
+		<boxed name="FooBoxed" type-name="FooBoxed" get-type="foo_boxed_get_type">
+			<method name="method" symbol="foo_boxed_method">
+				<return-type type="void"/>
+				<parameters>
+					<parameter name="boxed" type="FooBoxed*"/>
+				</parameters>
+			</method>
+			<constructor name="new" symbol="foo_boxed_new">
+				<return-type type="FooBoxed*"/>
+			</constructor>
+		</boxed>
 		<enum name="FooEnumType">
 			<member name="FOO_ENUM_ALPHA" value="0"/>
 			<member name="FOO_ENUM_BETA" value="1"/>
