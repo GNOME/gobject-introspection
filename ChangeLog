@@ -1,5 +1,12 @@
 2008-02-10  Johan Dahlin  <johan@gnome.org>
 
+	* Makefile.am:
+	* configure.ac:
+	* girepository/Makefile.am:
+	Make 'make distcheck' work again.
+
+2008-02-10  Johan Dahlin  <johan@gnome.org>
+
 	* m4/Makefile.am (EXTRA_DIST): its called as-compiler-flag.m4, 
 	not as-compiler.m4.
 

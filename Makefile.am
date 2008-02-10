@@ -1,7 +1,8 @@
 ## Process this file with automake to produce Makefile.in
-DIST_SUBDIRS = m4
-SUBDIRS = gidl girepository tools tests
 ACLOCAL_AMFLAGS = -I m4
+
+SUBDIRS = gidl girepository tools tests
+DIST_SUBDIRS = m4 $(SUBDIRS)
 
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = gobject-introspection.pc
@@ -16,7 +17,6 @@ clean-gcov:
 clean-gcno:
 	find  -name "*.gcno" -delete
 
-.PHONEY: gcov-all
 gcov-all:
 	@for dir in $(GCOV_DIRS); do \
 		cd $(abs_srcdir)/$$dir && \
@@ -24,8 +24,7 @@ gcov-all:
 			gcov -f -p -o `find $(abs_builddir)/$$dir -newer $$file -name "*-$${file/.c/.gcda}" -print0 | sed -e 's/\.gcda/\.o/'` $$file > /dev/null; \
 		done \
 	done
-	
-.PHONEY: coverage-report.txt
+
 coverage-report.txt: clean clean-gcov all check gcov-all
 	@rm  -f $(top_builddir)/coverage-report.txt
 	@echo -e "=== Coverage Report ===\n" >> $(top_builddir)/coverage-report.txt
@@ -36,6 +35,8 @@ coverage-report.txt: clean clean-gcov all check gcov-all
 
 check-coverage: coverage-report.txt
 	@cat $(top_builddir)/coverage-report.txt
+
+.PHONEY: gcov-all coverage-report.txt
 
 else
 
