@@ -4,6 +4,16 @@
 		<function name="init" symbol="foo_init" deprecated="1">
 			<return-type type="gint"/>
 		</function>
+		<enum name="FooEnumType">
+			<member name="FOO_ENUM_ALPHA" value="0"/>
+			<member name="FOO_ENUM_BETA" value="1"/>
+			<member name="FOO_ENUM_DELTA" value="2"/>
+		</enum>
+		<flags name="FooFlagsType">
+			<member name="FOO_FLAGS_FIRST" value="1"/>
+			<member name="FOO_FLAGS_SECOND" value="2"/>
+			<member name="FOO_FLAGS_THIRD" value="4"/>
+		</flags>
 		<object name="FooObject" parent="GLib.Object" type-name="FooObject" get-type="foo_object_get_type">
 			<method name="method" symbol="foo_object_method">
 				<return-type type="gint"/>

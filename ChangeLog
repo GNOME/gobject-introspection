@@ -1,5 +1,12 @@
 2008-02-10  Johan Dahlin  <johan@gnome.org>
 
+	* tests/parser/Foo-expected.gidl:
+	* tests/parser/foo-object.h:
+	* tests/parser/foo.c: (foo_enum_get_type), (foo_flags_get_type):
+	Add enum and flags test.
+
+2008-02-10  Johan Dahlin  <johan@gnome.org>
+
 	* Makefile.am:
 	* configure.ac:
 	* girepository/Makefile.am:

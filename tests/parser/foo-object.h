@@ -61,6 +61,24 @@ struct _FooSubobjectClass
 GType                 foo_subobject_get_type       (void) G_GNUC_CONST;
 FooSubobject*         foo_subobject_new            ();
 
+typedef enum
+{
+  FOO_ENUM_ALPHA,
+  FOO_ENUM_BETA,
+  FOO_ENUM_DELTA
+} FooEnumType;
+
+GType foo_enum_get_type (void);
+
+typedef enum
+{
+  FOO_FLAGS_FIRST  = 1 << 0,
+  FOO_FLAGS_SECOND = 1 << 1,
+  FOO_FLAGS_THIRD  = 1 << 2
+} FooFlagsType;
+
+GType foo_flags_get_type (void);
+
 /* Invalid comments, should be ignored */
 
 /* @ */

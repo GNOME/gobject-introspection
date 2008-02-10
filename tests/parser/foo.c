@@ -62,3 +62,36 @@ int foo_init_argv_address (int *argc, char ***argv)
 {
   return FOO_SUCCESS_INT;
 }
+
+GType
+foo_enum_get_type (void)
+{
+    static GType etype = 0;
+    if (G_UNLIKELY(etype == 0)) {
+        static const GEnumValue values[] = {
+            { FOO_ENUM_ALPHA, "FOO_ENUM_ALPHA", "alpha" },
+            { FOO_ENUM_BETA, "FOO_ENUM_BETA", "beta" },
+            { FOO_ENUM_DELTA, "FOO_ENUM_DELTA", "delta" },
+            { 0, NULL, NULL }
+        };
+        etype = g_enum_register_static (g_intern_static_string ("FooEnumType"), values);
+    }
+    return etype;
+}
+
+GType
+foo_flags_get_type (void)
+{
+    static GType etype = 0;
+    if (G_UNLIKELY(etype == 0)) {
+        static const GFlagsValue values[] = {
+            { FOO_FLAGS_FIRST, "FOO_FLAGS_FIRST", "first" },
+            { FOO_FLAGS_SECOND, "FOO_FLAGS_SECOND", "second" },
+            { FOO_FLAGS_THIRD, "FOO_FLAGS_THIRD", "third" },
+            { 0, NULL, NULL }
+        };
+        etype = g_flags_register_static (g_intern_static_string ("FooFlagsType"), values);
+    }
+    return etype;
+}
+
