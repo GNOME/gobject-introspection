@@ -1,3 +1,10 @@
+2008-02-13  Rob Taylor  <rob.taylor@codethink.co.uk>
+
+	* gcov.mak:
+	* girepository/Makefile.am:
+	* tools/Makefile.am:
+	Rename GCOV_SOURCES to GCOVSOURCES to top automake complaining.
+
 2008-02-10  Johan Dahlin  <johan@gnome.org>
 
 	* tests/parser/Foo-expected.gidl:

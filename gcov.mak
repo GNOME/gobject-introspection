@@ -3,7 +3,7 @@ if GI_GCOV_ENABLED
 .PHONEY: coverage-report
 coverage-report:
 	@total_covered=0; total_lines=0; \
-	for file in $(GCOV_SOURCES); do \
+	for file in $(GCOVSOURCES); do \
 		if test -f $$file.gcov; then \
 			covered=`grep -e '[0-9]\+:' $$file.gcov | wc -l` ; \
 			uncovered=`grep '#####:' $$file.gcov | wc -l`; \

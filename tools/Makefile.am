@@ -38,7 +38,7 @@ g_idl_scanner_SOURCES =				\
 g_idl_scanner_CFLAGS = $(GIREPO_CFLAGS) $(SCANNER_CFLAGS) -I$(top_srcdir)/girepository
 g_idl_scanner_LDADD = $(GIREPO_LIBS) $(SCANNER_LIBS) $(top_builddir)/girepository/libgirepository.la libgirepository-parser.la
 
-GCOV_SOURCES =					\
+GCOVSOURCES =					\
 	$(libgirepository_la_SOURCES)		\
 	$(g_idl_compiler_SOURCES)		\
 	$(g_idl_generate_SOURCES)		\
