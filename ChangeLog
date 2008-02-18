@@ -1,5 +1,10 @@
 2008-02-18  Rob Taylor  <rob.taylor@codethink.co.uk>
 
+	* tools/scanner.c: (main):
+	Ignore -pthread when passed to g-idl-scanner.
+
+2008-02-18  Rob Taylor  <rob.taylor@codethink.co.uk>
+
 	* tools/grealpath.h: Added:
 	* tools/scanner.c: (main):
 	* tools/scannerlexer.l:

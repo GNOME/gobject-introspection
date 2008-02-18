@@ -1657,6 +1657,10 @@ main (int argc, char **argv)
 	    case 'U':
 	      cpp_options = g_list_prepend (cpp_options, g_strdup (argv[i]));
 	      break;
+	    case 'p':
+	      /*ignore -pthread*/
+	      if (0==strcmp("-pthread", argv[i]))
+		break;
 	    default:
 	      gopt_argv[gopt_argc++] = argv[i];
 	      break;
