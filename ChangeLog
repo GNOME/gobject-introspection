@@ -1,5 +1,12 @@
 2008-02-18  Rob Taylor  <rob.taylor@codethink.co.uk>
 
+	* gidl/GLib.gidl: Renamed to gidl/gobject-2.0.gidl:
+	* gidl/Makefile.am:
+	* tests/parser/Makefile.am:
+	Rename GLib.gidl to gobject-2.0.gidl and install in /usr/share/gidl.
+
+2008-02-18  Rob Taylor  <rob.taylor@codethink.co.uk>
+
 	* tools/scanner.c: (main):
 	Ignore -pthread when passed to g-idl-scanner.
 

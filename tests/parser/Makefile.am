@@ -16,7 +16,7 @@ SCANSOURCES = $(srcdir)/foo-object.h
 Foo.gidl: libfoo.la foo-object.h $(top_builddir)/tools/g-idl-scanner
 	G_DEBUG=fatal_warnings $(top_builddir)/tools/g-idl-scanner -v \
 	--namespace=Foo \
-	--include-idl=$(top_srcdir)/gidl/GLib.gidl \
+	--include-idl=$(top_srcdir)/gidl/gobject-2.0.gidl \
 	$(SCANSOURCES) -I$(srcdir) $(GOBJECT_CFLAGS) \
 	libfoo.la --output $@
 
