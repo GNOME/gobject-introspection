@@ -1,5 +1,14 @@
 2008-02-18  Rob Taylor  <rob.taylor@codethink.co.uk>
 
+	* tools/grealpath.h: Added:
+	* tools/scanner.c: (main):
+	* tools/scannerlexer.l:
+	* tools/Makefile.am:
+	Always use absolute paths with symbolic links resolved when
+	comparing filenames.
+
+2008-02-18  Rob Taylor  <rob.taylor@codethink.co.uk>
+
 	* gobject-introspection.pc.in:
 	Provide variables for g-idl-parser, scanner and compiler in the 
 	pkgconfig file.

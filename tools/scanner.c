@@ -35,6 +35,8 @@
 #include "gidlmodule.h"
 #include "gidlnode.h"
 #include "gidlwriter.h"
+#include "grealpath.h"
+
 
 typedef GType (*TypeFunction) (void);
 
@@ -1674,7 +1676,8 @@ main (int argc, char **argv)
 	  else
 	    filename = g_strdup (argv[i]);
 		
-	  filenames = g_list_append (filenames, filename);
+	  filenames = g_list_append (filenames, g_realpath(filename));
+	  g_free(filename);
 	}
       else if (g_str_has_suffix (argv[i], ".la") ||
 	       g_str_has_suffix (argv[i], ".so") ||

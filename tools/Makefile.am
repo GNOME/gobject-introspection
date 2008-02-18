@@ -34,7 +34,8 @@ g_idl_scanner_SOURCES =				\
 	scannerlexer.l				\
 	scannerparser.y				\
 	gidlwriter.c				\
-	gidlwriter.h
+	gidlwriter.h				\
+	grealpath.h
 g_idl_scanner_CFLAGS = $(GIREPO_CFLAGS) $(SCANNER_CFLAGS) -I$(top_srcdir)/girepository
 g_idl_scanner_LDADD = $(GIREPO_LIBS) $(SCANNER_LIBS) $(top_builddir)/girepository/libgirepository.la libgirepository-parser.la
 
