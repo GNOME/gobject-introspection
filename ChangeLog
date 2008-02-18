@@ -1,3 +1,9 @@
+2008-02-18  Rob Taylor  <rob.taylor@codethink.co.uk>
+
+	* gobject-introspection.pc.in:
+	Provide variables for g-idl-parser, scanner and compiler in the 
+	pkgconfig file.
+
 2008-02-13  Rob Taylor  <rob.taylor@codethink.co.uk>
 
 	* gcov.mak:
