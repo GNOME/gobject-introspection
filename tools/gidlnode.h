@@ -319,6 +319,7 @@ void      g_idl_node_build_metadata  (GIdlNode    *node,
                                       guint32     *offset2);
 int       g_idl_node_cmp             (GIdlNode    *node,
 				      GIdlNode    *other);
+gboolean  g_idl_node_can_have_member (GIdlNode    *node);
 void      g_idl_node_add_member      (GIdlNode         *node,
 				      GIdlNodeFunction *member);
 guint32   write_string               (const gchar *str,

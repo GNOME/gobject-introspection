@@ -1,5 +1,15 @@
 2008-02-18  Rob Taylor  <rob.taylor@codethink.co.uk>
 
+	* tools/gidlnode.h:
+	* tools/gidlnode.c: (g_idl_node_can_have_member):
+	Add g_idl_node_can_have_member.
+
+	* tools/scanner.c: (g_igenerator_process_function_symbol):
+	Use g_idl_node_can_have_member to test if we should add a function
+	as a member of the type node.
+
+2008-02-18  Rob Taylor  <rob.taylor@codethink.co.uk>
+
 	* gidl/GLib.gidl: Renamed to gidl/gobject-2.0.gidl:
 	* gidl/Makefile.am:
 	* tests/parser/Makefile.am:

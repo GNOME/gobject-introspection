@@ -776,6 +776,21 @@ g_idl_node_cmp (GIdlNode *node,
     return strcmp (node->name, other->name);
 }
 
+gboolean
+g_idl_node_can_have_member (GIdlNode    *node)
+{
+  switch (node->type)
+    {
+    case G_IDL_NODE_OBJECT:
+    case G_IDL_NODE_INTERFACE:
+    case G_IDL_NODE_BOXED:
+    case G_IDL_NODE_STRUCT:
+    case G_IDL_NODE_UNION:
+      return TRUE;
+    };
+  return FALSE;
+}
+
 void
 g_idl_node_add_member (GIdlNode         *node,
 		       GIdlNodeFunction *member)

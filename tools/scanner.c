@@ -613,7 +613,7 @@ g_igenerator_process_function_symbol (GIGenerator * igenerator, CSymbol * sym)
 
       node = g_hash_table_lookup (igenerator->type_by_lower_case_prefix,
 				  prefix);
-      if (node != NULL)
+      if (node != NULL && g_idl_node_can_have_member (node))
 	{
 	  func->node.name = g_strdup (last_underscore + 1);
 
