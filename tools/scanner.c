@@ -613,7 +613,7 @@ g_igenerator_process_function_symbol (GIGenerator * igenerator, CSymbol * sym)
 
       node = g_hash_table_lookup (igenerator->type_by_lower_case_prefix,
 				  prefix);
-      if (node != NULL && g_idl_node_can_have_member (node))
+      if (node != NULL )
 	{
 	  func->node.name = g_strdup (last_underscore + 1);
 
@@ -627,8 +627,8 @@ g_igenerator_process_function_symbol (GIGenerator * igenerator, CSymbol * sym)
 	    func->is_constructor = TRUE;
 	  else
 	    func->is_method = TRUE;
-
-	  g_idl_node_add_member (node, func);
+	  if (g_idl_node_can_have_member (node))
+		g_idl_node_add_member (node, func);
 	  break;
 	}
       else if (strcmp (igenerator->lower_case_namespace, prefix) == 0)

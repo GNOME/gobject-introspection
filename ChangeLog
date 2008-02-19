@@ -1,3 +1,9 @@
+2008-02-19  Rob Taylor  <rob.taylor@codethink.co.uk>
+
+	* tools/scanner.c: (g_igenerator_process_function_symbol):
+	Move g_idl_node_can_have_member test later, as it broke spotting
+	get_type's for nodes that can't have members.
+
 2008-02-18  Rob Taylor  <rob.taylor@codethink.co.uk>
 
 	* tools/gidlnode.h:
