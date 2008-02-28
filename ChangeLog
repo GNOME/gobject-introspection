@@ -1,3 +1,22 @@
+2008-02-21  Mark Doffman  <mark.doffman@codethink.co.uk>
+    
+	reviewed by: Rob Taylor  <rob.taylor@codethink.co.uk>
+	reviewed by: Johan Dahlin  <johan@gnome.org>
+
+	* tests/Makefile.am:
+	* tests/roundtrips.sh:
+	Modify the roundtrips test so that they do not use the 
+	--raw option of the gidl compiler but instead compile a
+	shared library to use with g_module.
+    
+	* tests/invoke/Makefile.am:
+	* tests/invoke/invoke.c:
+	Modify the invoke tests to build a shared library rather
+	than use the --raw option.
+
+	* tests/invoke/invoke-namespace-find.sh: Removed:
+	Noone knows why this was here, so removed.
+
 2008-02-19  Rob Taylor  <rob.taylor@codethink.co.uk>
 
 	* tools/scanner.c: (g_igenerator_process_function_symbol):
