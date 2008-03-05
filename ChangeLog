@@ -1,3 +1,10 @@
+2008-03-05  Havoc Pennington  <hp@redhat.com>
+
+	* configure.ac: Take advantage of a libffi.pc if one exists, as it
+	does on Fedora 8. Make libffi a hard requirement, since it was in
+	practice anyway (was not really conditional in the code or
+	makefile, only in configure).
+
 2008-02-21  Mark Doffman  <mark.doffman@codethink.co.uk>
     
 	reviewed by: Rob Taylor  <rob.taylor@codethink.co.uk>
