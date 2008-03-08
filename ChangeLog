@@ -1,3 +1,10 @@
+2008-03-08  Marc-Andre Lureau  <marcandre.lureau@gmail.com>
+
+	* tools/gidlwriter.c (enum_generate): added "type-name",
+	"get-type" and "deprecated" missing arguments.
+	* tests/parser/Foo-expected.gidl:
+	* tests/parser/foo-object.h: test enum type, and no type.
+
 2008-03-06  Johan Dahlin  <jdahlin@async.com.br>
 
 	* configure.ac:
@@ -11,16 +18,16 @@
 	makefile, only in configure).
 
 2008-02-21  Mark Doffman  <mark.doffman@codethink.co.uk>
-    
+
 	reviewed by: Rob Taylor  <rob.taylor@codethink.co.uk>
 	reviewed by: Johan Dahlin  <johan@gnome.org>
 
 	* tests/Makefile.am:
 	* tests/roundtrips.sh:
-	Modify the roundtrips test so that they do not use the 
+	Modify the roundtrips test so that they do not use the
 	--raw option of the gidl compiler but instead compile a
 	shared library to use with g_module.
-    
+
 	* tests/invoke/Makefile.am:
 	* tests/invoke/invoke.c:
 	Modify the invoke tests to build a shared library rather
@@ -69,7 +76,7 @@
 2008-02-18  Rob Taylor  <rob.taylor@codethink.co.uk>
 
 	* gobject-introspection.pc.in:
-	Provide variables for g-idl-parser, scanner and compiler in the 
+	Provide variables for g-idl-parser, scanner and compiler in the
 	pkgconfig file.
 
 2008-02-13  Rob Taylor  <rob.taylor@codethink.co.uk>
@@ -86,7 +93,7 @@
 	* tests/parser/foo.c: (foo_boxed_copy), (foo_boxed_free),
 	(foo_boxed_get_type), (foo_boxed_new), (foo_boxed_method):
 	Add boxed test.
-	
+
 2008-02-10  Johan Dahlin  <johan@gnome.org>
 
 	* tests/parser/Foo-expected.gidl:
@@ -103,7 +110,7 @@
 
 2008-02-10  Johan Dahlin  <johan@gnome.org>
 
-	* m4/Makefile.am (EXTRA_DIST): its called as-compiler-flag.m4, 
+	* m4/Makefile.am (EXTRA_DIST): its called as-compiler-flag.m4,
 	not as-compiler.m4.
 
 	* tests/parser/Makefile.am: Only create Foo.gidl when running make
@@ -195,9 +202,9 @@
 
 2008-01-11  Johan Dahlin  <johan@gnome.org>
 
-	* src/scanner.c (g_igenerator_process_function_symbol): 
+	* src/scanner.c (g_igenerator_process_function_symbol):
 	Refactor out g_idle_node_add_member.
-	(create_node_from_gtype, create_node_from_ctype): 
+	(create_node_from_gtype, create_node_from_ctype):
 	Use case instead of if...else
 	(get_type_from_type_id):
 	Rename to create_node_from_gtype
@@ -205,8 +212,8 @@
 	Rename to create_node_from_ctype
 
 	Rename ginode -> node, gitype -> type, gifunc -> func.
-	
-	* src/gidlnode.c (g_idl_node_add_member, g_idl_node_cmp): 
+
+	* src/gidlnode.c (g_idl_node_add_member, g_idl_node_cmp):
 	Two new functions, refactor out of scanner.c
 
 	* src/scanner.c: (g_igenerator_process_function_symbol):
@@ -258,7 +265,7 @@
 	* src/scannerparser.y:
 	* src/scanner.h:
 	Add new structure CDirective and functions to create/free them.
-	
+
 	* src/scanner.c: (g_igenerator_process_function_symbol),
 	(g_igenerator_process_unregistered_struct_typedef),
 	(g_igenerator_process_struct_typedef),
@@ -269,11 +276,11 @@
 	Parse @deprecated directive for functions.
 	Remove some more C99isms.
 	Send in -C to cpp to avoid stripping comments.
-	
+
 	* tests/parser/foo-object.h:
 	* tests/parser/Foo-expected.gidl:
 	Add deprecated directive
-	
+
 2007-12-27  Johan Dahlin  <johan@gnome.org>
 
 	* src/scannerlexer.l (intsuffix): Add emacs mode line and
@@ -304,7 +311,7 @@
 	Revert to using a temporary file to communicate between the
 	preprocessor and the parser, because we need to wait for
 	the exit code from the pre-processor before starting to parse.
-	
+
 2007-12-16  Johan Dahlin  <jdahlin@async.com.br>
 
 	* src/Makefile.am: Rename clexer.l to scannerlexer.l and
@@ -364,7 +371,7 @@
 	* src/scanner.c:
 	* src/scanner.h:
 	Move over all CType construction functions.
-	
+
 	* tests/parser/Makefile.am:
 	Be verbose when printing parsing tests results.
 
@@ -392,7 +399,7 @@
 	(g_igenerator_new, main): Simplify constructor and they way
 	parameters are passed into it.
 
-	* src/cparser.y: 
+	* src/cparser.y:
 	* src/Makefile.am:
 	* src/clexer.l:
 	* src/cparser.y:
@@ -416,13 +423,13 @@
 	(g_igenerator_process_module), (g_igenerator_generate), (main):
 	* src/gen-introspect.h:
 	Refactor g_igenerator_process_types into smaller pieces.
-	
+
 	* tests/parser/Makefile.am:
 	Depend on the gen-introspect binary
 
 2007-12-09  Johan Dahlin  <johan@gnome.org>
 
-	* src/gen-introspect.c (g_igenerator_process_types): 
+	* src/gen-introspect.c (g_igenerator_process_types):
 	Break into smaller pieces, one for each generated node type.
 
 2007-12-08  Johan Dahlin  <johan@gnome.org>
@@ -450,7 +457,7 @@
 
 	Change the gen-introspect to generate namespaced module names,
 	such as GLib.Object instead of GObject.
-	Add a GLib.gidl which introduces GLib.Object and GLib.InitiallyUnowned, 
+	Add a GLib.gidl which introduces GLib.Object and GLib.InitiallyUnowned,
 	add a --include-idl parameter to gen-introspect,
 	and update the parser test.
 
@@ -620,7 +627,7 @@
 
 2007-11-29  Johan Dahlin  <johan@gnome.org>
 
-	* src/gidlparser.c (parse_type_internal): Add char, 
+	* src/gidlparser.c (parse_type_internal): Add char,
 	gchar and guchar to the builtin types.
 
 2007-11-26  Johan Dahlin  <johan@gnome.org>
@@ -641,8 +648,8 @@
 
 2007-11-26  Johan Dahlin  <johan@gnome.org>
 
-	* src/gmetadata.c (validate_struct_blob): 
-	pass blob_type to validate_function_blob instead of 
+	* src/gmetadata.c (validate_struct_blob):
+	pass blob_type to validate_function_blob instead of
 	hard-coding BLOB_TYPE_STRUCT.
 
 	Patch by Torsten Schoenfeld, fixes #314190
@@ -685,7 +692,7 @@
 	* src/compiler.c (main): Use it here to validate
 	the generated metadata.
 
-	* src/gmetadata.[hc]: Add code to validate a 
+	* src/gmetadata.[hc]: Add code to validate a
 	metadata blob.
 
 	* metadata-format.txt: Updates
@@ -696,7 +703,7 @@
 	elements.
 
 	* src/generate.c (write_vfunc_info): Write offset
-	information for vfuncs. 
+	information for vfuncs.
 
 	* src/gidlnode.c (g_idl_node_build_metadata): Write
 	the struct offsets into the metadata.
@@ -713,7 +720,7 @@
 
 	* gidl.dtd: Updates.
 
-	* src/g-idl-offsets.pl: A perl script which reads a .gidl 
+	* src/g-idl-offsets.pl: A perl script which reads a .gidl
 	file, creates, compiles and runs a C file, and folds the
 	resulting struct offsets back into the .gidl file.
 
@@ -744,8 +751,8 @@
 
 	* src/gidlnode.c (g_idl_node_build_metadata): Correctly handle
 	interface types for which is_pointer is FALSE, e.g. enums.
-	
-	* src/gidlnode.c (g_idl_node_get_full_size) 
+
+	* src/gidlnode.c (g_idl_node_get_full_size)
 	* src/gidlparser.c (parse_type_internal):
 	* src/generate.c (write_type_info): Support unspecialized
 	lists, hashtables and errors. Also emit a '*' after these.
@@ -772,10 +779,10 @@
 
 	* src/generate.c: Handle unions.
 
-	* src/girepository.h: 
+	* src/girepository.h:
 	* src/ginfo.c: Add GIUnionInfo and functions to access it.
 
-	* src/gidlnode.c: Handle GIdlNodeUnion nodes. 
+	* src/gidlnode.c: Handle GIdlNodeUnion nodes.
 
 	* src/gidlparser.c (start_union): Parse <union> elements.
 
@@ -793,14 +800,14 @@
 
 2005-05-13  Matthias Clasen  <mclasen@redhat.com>
 
-	* tests/*: Update testcases. 
+	* tests/*: Update testcases.
 
 	* src/generate.c (write_callable_info): Don't forget to
 	write transfer and null-ok attributes for return types
 	and parameters.
 
-	* src/girepository.h: 
-	* src/ginfo.c (g_callable_info_may_return_null): 
+	* src/girepository.h:
+	* src/ginfo.c (g_callable_info_may_return_null):
 	New function to find out if a function may return NULL.
 
 	* src/compiler.c (format_output): Make the generated
@@ -813,21 +820,21 @@
 	* src/Makefile: Add ginvoke.c and the necessary
 	libffi information.
 
-	* src/girepository.h (g_function_info_invoke): Add 
+	* src/girepository.h (g_function_info_invoke): Add
 	a GError argument.
 
-	* src/ginvoke.c (g_function_info_invoke): Initial 
+	* src/ginvoke.c (g_function_info_invoke): Initial
 	implementation of invoke functionality based on libffi.
 
 	* src/gidlnode.c (g_idl_node_build_metadata): Pass the
-	strings and types hash tables in the right order when 
+	strings and types hash tables in the right order when
 	recursing.
 	(find_entry_node): Free the name parts.
 
 2005-05-12  Johan Dahlin  <johan@gnome.org>
 
 	* src/generate.c: Generate consistent end tags.
-	
+
 	* tests/*: Update
 
 2005-05-12  Matthias Clasen  <mclasen@redhat.com>
@@ -837,13 +844,13 @@
 	* src/gidlparser.c (start_function): Actually add
 	methods to objects.  (Steven Walter)
 
-	* src/girepository.h: 
+	* src/girepository.h:
 	* src/ginfo.c: Rename Transfer and Direction to
 	GITransfer and GIDirection. (Torsten Schoenfeld)
 
 	* tests/*: Make tests work with the changes in name
 	handling.
-	
+
 	* src/gidlnode.c (find_entry_node): Parse qualified
 	names and generate xref nodes for them if needed. Don't
 	require all modules to be loaded any more.
@@ -859,7 +866,7 @@
 	referring to non-local types. Emit transfer attribute
 	for return types.
 
-	* src/compiler.c (format_output): Put the function 
+	* src/compiler.c (format_output): Put the function
 	attributes where gcc accepts them.
 
 2005-05-11  Matthias Clasen  <mclasen@redhat.com>
@@ -867,8 +874,8 @@
 	* src/compiler.c (main): Add a --verbose cmdline option
 	and only log messages if it is specified.
 
-	* src/gidlnode.h: 
-	* src/gidlnode.c (init_stats, dump_stats): Collect some 
+	* src/gidlnode.h:
+	* src/gidlnode.c (init_stats, dump_stats): Collect some
 	statistics on string and type sharing.
 
 	* src/gidlmodule.c (g_idl_module_build_metadata): Use
@@ -881,20 +888,20 @@
 
 2005-05-10  Matthias Clasen  <mclasen@redhat.com>
 
-	* src/gidlnode.c (g_idl_node_get_full_size): Correct the 
+	* src/gidlnode.c (g_idl_node_get_full_size): Correct the
 	size calculation for 2-parameter types and for objects.
 
 	* src/compiler.c: Add a cmdline option for debug output
 	and install a log handler to implement it.
 	* src/gidlnode.c: Add some debug spew.
-	
+
 	* TODO: Updates
 
 	* src/gidlmodule.c (g_idl_module_build_metadata): Don't
 	forget to count the module name when calculating the
 	required size for the metadata.
 
-	* src/gidlnode.c: 
+	* src/gidlnode.c:
 	* src/gidlparser.c: Fix compiler warnings.
 
 2005-05-09  Matthias Clasen  <mclasen@redhat.com>
@@ -914,14 +921,14 @@
 	* src/gidlnode.c: Adapt to parse the new dtd.
 
 	* tests/*.test: Adjust to the new dtd.
-	
+
 	* metadata-format.txt:
 	* src/gmetadata.h: Remove the short_name field
 	from the ValueBlob.
 	* src/gmetadata.c: Shrink size of ValueBlob to 12.
 	* src/girepository.h:
-	* src/ginfo.c (g_value_info_get_short_name): Removed 
-	
+	* src/ginfo.c (g_value_info_get_short_name): Removed
+
 2005-05-09  Matthias Clasen  <mclasen@redhat.com>
 
 	* gidl.dtd: Allow constructors for boxed types,

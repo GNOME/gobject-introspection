@@ -15,12 +15,17 @@
 				<return-type type="FooBoxed*"/>
 			</constructor>
 		</boxed>
-		<enum name="FooEnumType">
+		<enum name="FooEnumNoType">
+			<member name="FOO_ENUM_UN" value="1"/>
+			<member name="FOO_ENUM_DEUX" value="2"/>
+			<member name="FOO_ENUM_TROIS" value="3"/>
+		</enum>
+		<enum name="FooEnumType" type-name="FooEnumType" get-type="foo_enum_get_type">
 			<member name="FOO_ENUM_ALPHA" value="0"/>
 			<member name="FOO_ENUM_BETA" value="1"/>
 			<member name="FOO_ENUM_DELTA" value="2"/>
 		</enum>
-		<flags name="FooFlagsType">
+		<flags name="FooFlagsType" type-name="FooFlagsType" get-type="foo_flags_get_type">
 			<member name="FOO_FLAGS_FIRST" value="1"/>
 			<member name="FOO_FLAGS_SECOND" value="2"/>
 			<member name="FOO_FLAGS_THIRD" value="4"/>

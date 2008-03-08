@@ -77,6 +77,13 @@ typedef enum
   FOO_FLAGS_THIRD  = 1 << 2
 } FooFlagsType;
 
+typedef enum
+{
+  FOO_ENUM_UN = 1,
+  FOO_ENUM_DEUX = 2,
+  FOO_ENUM_TROIS = 3,
+} FooEnumNoType;
+
 GType foo_flags_get_type (void);
 
 typedef struct _FooBoxed FooBoxed;
