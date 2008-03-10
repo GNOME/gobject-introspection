@@ -1,3 +1,10 @@
+2008-03-10  Johan Dahlin  <johan@gnome.org>
+
+	* tests/parser/Foo-expected.gidl:
+	* tests/parser/foo-object.h:
+	* tests/parser/foo.c:
+	Rename the enum/flags get_type functions to include the whole type.
+
 2008-03-08  Marc-Andre Lureau  <marcandre.lureau@gmail.com>
 
 	* tools/gidlwriter.c (enum_generate): added "type-name",

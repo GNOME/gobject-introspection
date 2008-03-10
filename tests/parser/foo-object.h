@@ -68,7 +68,7 @@ typedef enum
   FOO_ENUM_DELTA
 } FooEnumType;
 
-GType foo_enum_get_type (void);
+GType foo_enum_type_get_type (void);
 
 typedef enum
 {
@@ -84,7 +84,7 @@ typedef enum
   FOO_ENUM_TROIS = 3,
 } FooEnumNoType;
 
-GType foo_flags_get_type (void);
+GType foo_flags_type_get_type (void);
 
 typedef struct _FooBoxed FooBoxed;
 

@@ -64,7 +64,7 @@ int foo_init_argv_address (int *argc, char ***argv)
 }
 
 GType
-foo_enum_get_type (void)
+foo_enum_type_get_type (void)
 {
     static GType etype = 0;
     if (G_UNLIKELY(etype == 0)) {
@@ -80,7 +80,7 @@ foo_enum_get_type (void)
 }
 
 GType
-foo_flags_get_type (void)
+foo_flags_type_get_type (void)
 {
     static GType etype = 0;
     if (G_UNLIKELY(etype == 0)) {
