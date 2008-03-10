@@ -79,6 +79,12 @@ foo_enum_type_get_type (void)
     return etype;
 }
 
+int foo_enum_method (FooEnumType foo_enum)
+{
+  return 0;
+}
+
+
 GType
 foo_flags_type_get_type (void)
 {

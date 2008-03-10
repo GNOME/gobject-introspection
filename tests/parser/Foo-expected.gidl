@@ -1,6 +1,12 @@
 <?xml version="1.0"?>
 <api version="1.0">
 	<namespace name="Foo">
+		<function name="enum_type_method" symbol="foo_enum_type_method">
+			<return-type type="int"/>
+			<parameters>
+				<parameter name="foo_enum" type="FooEnumType"/>
+			</parameters>
+		</function>
 		<function name="init" symbol="foo_init" deprecated="1">
 			<return-type type="gint"/>
 		</function>

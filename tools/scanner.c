@@ -628,8 +628,18 @@ g_igenerator_process_function_symbol (GIGenerator * igenerator, CSymbol * sym)
 	  else
 	    func->is_method = TRUE;
 	  if (g_idl_node_can_have_member (node))
-		g_idl_node_add_member (node, func);
-	  break;
+	    {
+	      g_idl_node_add_member (node, func);
+	      break;
+	    }
+	  else
+	    {
+	      /* reset function attributes */
+	      g_free (func->node.name);
+	      func->node.name = NULL;
+	      func->is_constructor = FALSE;
+	      func->is_method = FALSE;
+	    }
 	}
       else if (strcmp (igenerator->lower_case_namespace, prefix) == 0)
 	{
