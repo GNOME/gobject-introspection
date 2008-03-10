@@ -307,28 +307,13 @@ struct _GIdlNodeErrorDomain
 
 GIdlNode *g_idl_node_new             (GIdlNodeTypeId type);
 void      g_idl_node_free            (GIdlNode    *node);
-guint32   g_idl_node_get_size        (GIdlNode    *node);
-guint32   g_idl_node_get_full_size   (GIdlNode    *node);
-void      g_idl_node_build_metadata  (GIdlNode    *node,
-				      GIdlModule  *module,
-				      GList       *modules,
-                                      GHashTable  *strings,
-                                      GHashTable  *types,
-				      guchar      *data,
-				      guint32     *offset,
-                                      guint32     *offset2);
+
 int       g_idl_node_cmp             (GIdlNode    *node,
 				      GIdlNode    *other);
 gboolean  g_idl_node_can_have_member (GIdlNode    *node);
 void      g_idl_node_add_member      (GIdlNode         *node,
 				      GIdlNodeFunction *member);
-guint32   write_string               (const gchar *str,
-				      GHashTable  *strings, 
-				      guchar      *data,
-				      guint32     *offset);
 
-void      init_stats                 (void);
-void      dump_stats                 (void);
 
 G_END_DECLS
 
