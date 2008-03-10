@@ -50,7 +50,7 @@
 				<return-type type="gint"/>
 				<parameters>
 					<parameter name="object" type="FooObject*"/>
-					<parameter name="outarg" type="int*" null-ok="1"/>
+					<parameter name="outarg" type="int*" direction="out"/>
 				</parameters>
 			</method>
 		</object>

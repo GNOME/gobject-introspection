@@ -53,7 +53,7 @@ foo_object_method (FooObject *object)
 /**
  * foo_object_out:
  * This is a test for out arguments
- * @outarg: (null-ok): This is an argument test
+ * @outarg: (out): This is an argument test
  */
 gint
 foo_object_out (FooObject *object, int *outarg)
