@@ -1,9 +1,12 @@
 ## Process this file with automake to produce Makefile.in
 
 INCLUDES = -DGIREPO_DEFAULT_SEARCH_PATH="\"$(libdir)\""
-BUILT_SOURCES = scannerparser.c scannerparser.h scannerlexer.c scannerlexer.h
-CLEANFILES = scannerparser.c scannerparser.h scannerlexer.c scannerlexer.h
+BUILT_SOURCES = scannerparser.c scannerparser.h scannerlexer.c scannerlexer.h \
+		gmetadata-header.c
+
+CLEANFILES = scannerparser.c scannerparser.h scannerlexer.c scannerlexer.h gmetadata-header.c
 AM_YFLAGS = -d
+EXTRA_DIST = quote-file.sh
 
 # Why do I have to do this automake?
 scannerlexer.h: scannerlexer.c
@@ -11,13 +14,24 @@ scannerlexer.h: scannerlexer.c
 noinst_LTLIBRARIES = libgirepository-parser.la
 bin_PROGRAMS = g-idl-compiler g-idl-generate g-idl-scanner
 
+gmetadata-header.c: $(top_srcdir)/girepository/gmetadata.h
+	$(srcdir)/quote-file.sh $^ $@
+
 libgirepository_parser_la_SOURCES =		\
 	gidlmodule.c				\
 	gidlmodule.h				\
 	gidlnode.c				\
 	gidlnode.h				\
 	gidlparser.c				\
-	gidlparser.h
+	gidlparser.h				\
+	gidlcompilercontext.c			\
+	gidlcompilercontext.h			\
+	gidlcompilerentrynode.c			\
+	gidlcompilerentrynode.h			\
+	gidlcompilertypenode.c 			\
+	gidlcompilertypenode.h			\
+	gmetadata-header.c
+
 libgirepository_parser_la_CFLAGS = $(GIREPO_CFLAGS) -I$(top_srcdir)/girepository
 
 g_idl_compiler_SOURCES = compiler.c	
