@@ -396,6 +396,19 @@ g_idl_node_add_member (GIdlNode         *node,
     }
 }
 
+const gchar *
+g_idl_node_param_direction_string (GIdlNodeParam * node)
+{
+  if (node->out)
+    {
+      if (node->in)
+	return "in-out";
+      else
+	return "out";
+    }
+  return "in";
+}
+
 static gint64
 parse_int_value (const gchar *str)
 {

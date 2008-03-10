@@ -166,13 +166,15 @@ csymbol_merge_type (CSymbol *symbol, CType *type)
 
 CDirective *
 cdirective_new (const gchar *name,
-		const gchar *value)
+		const gchar *value,
+		GSList *options)
 {
   CDirective *directive;
     
   directive = g_slice_new (CDirective);
   directive->name = g_strdup (name);
   directive->value = g_strdup (value);
+  directive->options = options;
   return directive;
 }
 

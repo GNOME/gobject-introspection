@@ -47,6 +47,8 @@ gint                  foo_init                     (void);
 GType                 foo_object_get_type          (void) G_GNUC_CONST;
 FooObject*            foo_object_new               ();
 gint                  foo_object_method            (FooObject *object);
+gint                  foo_object_out               (FooObject *object,
+						    int       *outarg);
 
 struct _FooSubobject
 {

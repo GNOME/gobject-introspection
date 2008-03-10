@@ -46,6 +46,13 @@
 			<constructor name="new" symbol="foo_object_new">
 				<return-type type="FooObject*"/>
 			</constructor>
+			<method name="out" symbol="foo_object_out">
+				<return-type type="gint"/>
+				<parameters>
+					<parameter name="object" type="FooObject*"/>
+					<parameter name="outarg" type="int*" null-ok="1"/>
+				</parameters>
+			</method>
 		</object>
 		<object name="FooSubobject" parent="FooObject" type-name="FooSubobject" get-type="foo_subobject_get_type">
 			<constructor name="new" symbol="foo_subobject_new">

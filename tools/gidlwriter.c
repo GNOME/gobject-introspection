@@ -163,11 +163,29 @@ function_generate (GIdlWriter * writer, GIdlNodeFunction * node)
       for (l = node->parameters; l != NULL; l = l->next)
 	{
 	  GIdlNodeParam *param = l->data;
-	  markup =
-	    g_markup_printf_escaped ("<parameter name=\"%s\" type=\"%s\"/>\n",
-				     param->node.name, param->type->unparsed);
-	  g_writer_write (writer, markup);
-	  g_free (markup);
+	  const gchar *direction = g_idl_node_param_direction_string (param);
+	  
+	  markup_s = g_string_new ("<parameter");
+
+	  g_string_append_printf (markup_s, " name=\"%s\"", param->node.name);
+
+	  g_string_append (markup_s,
+			   g_markup_printf_escaped (" type=\"%s\"",
+						    param->type->unparsed));
+
+	  if (param->null_ok)
+	    g_string_append (markup_s,
+			     g_markup_printf_escaped (" null-ok=\"1\""));
+	  
+	  if (strcmp (direction, "in") != 0)
+	    g_string_append (markup_s,
+			     g_markup_printf_escaped (" direction=\"%s\"",
+						      direction));
+
+	  g_string_append (markup_s, "/>\n");
+
+	  g_writer_write (writer, markup_s->str);
+	  g_string_free (markup_s, TRUE);
 	}
       g_writer_write_unindent (writer, "</parameters>\n");
     }

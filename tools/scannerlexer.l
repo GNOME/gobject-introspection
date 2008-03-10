@@ -178,57 +178,95 @@ static int yywrap (void)
   return 1;
 }
 
-static void parse_gtkdoc (GIGenerator *igenerator, int *c1, int *c2)
+static void parse_gtkdoc (GIGenerator *igenerator, gchar *symbol, int *c1, int *c2)
 {
   gboolean isline = FALSE;
   gchar line[256];
   int i;
   gchar **parts;
   CDirective *directive;
-  char *name, *value;
+  char *name,*value;
+  GSList *directives;
+  GSList *options = NULL;
 
   i = 0;
-  do {
+  do 
+    {
       *c1 = *c2;
       if (*c1 == '\n')
-	{
-	  isline = TRUE;
-	  break;
-	}
+        {
+          isline = TRUE;
+          break;
+        }
       if (i >= 256)
-	break;
+        break;
       line[i++] = *c1;
       *c2 = input();
-
-  } while (*c2 != EOF && !(*c1 == '*' && *c2 == '/'));
+    } while (*c2 != EOF && !(*c1 == '*' && *c2 == '/'));
   
   if (!isline)
     return;
 
   line[i] = '\0';
 
-  parts = g_strsplit (line, ": ", 2);
+  parts = g_strsplit (line, ": ", 3);
 
-  if (g_strv_length (parts) == 2)
+  if (g_strv_length (parts) >= 2)
     {
       name = parts[0];
-      value = parts[1];
+
+      if (g_strv_length (parts) == 3) 
+        {
+          char *ptr = parts[1];
+          GString *current = NULL;
+          gboolean open = FALSE;
+
+          current = g_string_new ("");
+          value = parts[2];
+
+          while (*ptr++) 
+            {
+              if (*ptr != ')')
+                g_string_append_c (current, *ptr);
+              else if (*ptr == ')')
+                options = g_slist_prepend (options, g_strdup (current->str));
+            }
+          g_string_free (current, TRUE);
+        } 
+      else
+        value = parts[1];
     }
   else /* parts == 1 */
     {
       name = parts[0];
       value = NULL;
     }
-  
-  directive = cdirective_new (name, value);
-  igenerator->directives = g_slist_prepend (igenerator->directives,
-					    directive);
+ 
+  directive = cdirective_new (name, value, options);
+ 
+  if (symbol == NULL)
+    {
+      igenerator->directives = g_slist_prepend (igenerator->directives,
+						directive);
+    }
+  else
+    {
+      directives = g_hash_table_lookup (igenerator->directives_map, symbol);
+      directives = g_slist_prepend (directives, directive);
 
+      g_hash_table_replace (igenerator->directives_map, 
+			    g_strdup (symbol), directives);
+    }
+  
   g_strfreev (parts);
+  
 }
+    
 
 static void parse_comment (GIGenerator *igenerator)
 {
+  GString *symbol = NULL;
+  gboolean startofline = FALSE, have_symbol = FALSE, start1 = FALSE, start_symbol = FALSE;
   int c1, c2;
   
   c1 = input();
@@ -236,18 +274,43 @@ static void parse_comment (GIGenerator *igenerator)
 
   while (c2 != EOF && !(c1 == '*' && c2 == '/'))
     {
-      if (c1 == '\n')
-	++lineno;
+      if (c1 == ':')
+        have_symbol = TRUE;
+      else if (c1 == '\n')
+         start1 = TRUE;
+      else if (c1 == '*' && start1)
+         start_symbol = TRUE;
+      else if (!have_symbol && start_symbol) 
+        {
+          if (!symbol)
+            symbol = g_string_new ("");
+          if (c1 != ' ')
+            g_string_append_c (symbol, c1);
+        }
+
+      if (c1 == '\n') 
+        {
+          ++lineno;
+          startofline = TRUE;
+        }
+
       c1 = c2;
       c2 = input();
 
-      if (c1 == ' ' && c2 == '@')
-	{
-	  c1 = c2;
-	  c2 = input();
-	  parse_gtkdoc (igenerator, &c1, &c2);
+      if ((c1 != '*' && c1 != ' '))
+          startofline = FALSE;
+
+      if (startofline && c1 == ' ' && c2 == '@')
+        {
+           c1 = c2;
+           c2 = input();
+	   parse_gtkdoc (igenerator, symbol ? symbol->str : NULL, &c1, &c2);
+	   
 	}
     }
+  if (symbol)
+    g_string_free (symbol, TRUE);
+  
 }
 
 static int check_identifier (GIGenerator *igenerator, const char *s)

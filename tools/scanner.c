@@ -61,6 +61,7 @@ g_igenerator_new (const gchar *namespace,
   igenerator->type_by_lower_case_prefix =
     g_hash_table_new (g_str_hash, g_str_equal);
   igenerator->symbols = g_hash_table_new (g_str_hash, g_str_equal);
+  igenerator->directives_map = g_hash_table_new (g_str_hash, g_str_equal);
 
   return igenerator;
 }
@@ -80,6 +81,8 @@ g_igenerator_free (GIGenerator *generator)
   g_hash_table_destroy (generator->type_by_lower_case_prefix);
   g_hash_table_destroy (generator->symbols);
   g_list_foreach (generator->filenames, (GFunc)g_free, NULL);
+  g_hash_table_destroy (generator->directives_map);
+
   g_list_free (generator->filenames);
 #if 0
   g_list_foreach (generator->symbol_list, (GFunc)csymbol_free, NULL);
@@ -596,8 +599,9 @@ g_igenerator_process_function_symbol (GIGenerator * igenerator, CSymbol * sym)
   char *last_underscore;
   GList *param_l;
   int i;
-  GSList *l;
-
+  GList *l;
+  GSList *j, *directives;
+  
   func = (GIdlNodeFunction *) g_idl_node_new (G_IDL_NODE_FUNCTION);
   
   /* check whether this is a type method */
@@ -668,6 +672,8 @@ g_igenerator_process_function_symbol (GIGenerator * igenerator, CSymbol * sym)
   func->result = (GIdlNodeParam *) g_idl_node_new (G_IDL_NODE_PARAM);
   func->result->type = create_node_from_ctype (sym->base_type->base_type);
 
+  directives = g_hash_table_lookup (igenerator->directives_map, func->symbol);
+
   for (param_l = sym->base_type->child_list, i = 1; param_l != NULL;
        param_l = param_l->next, i++)
     {
@@ -677,6 +683,29 @@ g_igenerator_process_function_symbol (GIGenerator * igenerator, CSymbol * sym)
       param = (GIdlNodeParam *) g_idl_node_new (G_IDL_NODE_PARAM);
       param->type = create_node_from_ctype (param_sym->base_type);
 
+      for (j = directives; j; j = j->next) 
+       {
+          CDirective *directive = j->data;
+
+          if (g_ascii_strcasecmp (param_sym->ident, directive->name) == 0) 
+	    {
+	      
+	      GSList *options;
+
+              for (options = directive->options; options; options = options->next)
+               {
+                  gchar *stringy_data = options->data;
+
+                  if (g_ascii_strcasecmp (stringy_data, "null-ok") == 0)
+                      param->null_ok = TRUE;
+                  if (g_ascii_strcasecmp (stringy_data, "in") == 0)
+                      param->in = TRUE;
+                  if (g_ascii_strcasecmp (stringy_data, "out") == 0)
+                      param->out = TRUE;
+               }
+          }
+       }
+
       if (param_sym->ident == NULL)
 	param->node.name = g_strdup_printf ("p%d", i);
       else
@@ -685,9 +714,13 @@ g_igenerator_process_function_symbol (GIGenerator * igenerator, CSymbol * sym)
       func->parameters = g_list_append (func->parameters, param);
     }
 
-  for (l = sym->directives; l; l = l->next)
+ /* By removing it here, we mark it as handled, memory will be freed by
+  * the cleanup for sym */
+  g_hash_table_remove (igenerator->directives_map, func->symbol);
+
+  for (j = sym->directives; j; j = j->next)
     {
-      CDirective *directive = (CDirective*)l->data;
+      CDirective *directive = (CDirective*)j->data;
 
       if (!strcmp (directive->name, "deprecated"))
 	func->deprecated = TRUE;

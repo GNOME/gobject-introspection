@@ -55,6 +55,9 @@ struct _GIGenerator
 
   GHashTable *symbols; /* typename -> module.name */
 
+  /* symbol -> GList of CDirective */
+  GHashTable *directives_map;
+  
   /* scanner variables */
   gboolean macro_scan;
   GSList *directives; /* list of CDirective for the current symbol */
@@ -146,13 +149,15 @@ struct _CType
 struct _CDirective {
   char *name;
   char *value;
+  GSList *options;
 };
 
 CSymbol *    csymbol_new               (CSymbolType  type);
 gboolean     csymbol_get_const_boolean (CSymbol     *symbol);
 void         csymbol_free              (CSymbol     *symbol);
 CDirective * cdirective_new            (const gchar *name,
-					const gchar *value);
+					const gchar *value,
+					GSList *options);
 void         cdirective_free           (CDirective  *directive);
 
 gboolean g_igenerator_lex_filename  (GIGenerator *igenerator,

@@ -314,6 +314,7 @@ gboolean  g_idl_node_can_have_member (GIdlNode    *node);
 void      g_idl_node_add_member      (GIdlNode         *node,
 				      GIdlNodeFunction *member);
 
+const gchar * g_idl_node_param_direction_string (GIdlNodeParam * node);
 
 G_END_DECLS
 

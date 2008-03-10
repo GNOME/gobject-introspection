@@ -44,6 +44,23 @@ foo_object_init (FooObject *object)
 
 }
 
+gint
+foo_object_method (FooObject *object)
+{
+
+}
+
+/**
+ * foo_object_out:
+ * This is a test for out arguments
+ * @outarg: (null-ok): This is an argument test
+ */
+gint
+foo_object_out (FooObject *object, int *outarg)
+{
+
+}
+
 G_DEFINE_TYPE (FooSubobject, foo_subobject, FOO_TYPE_OBJECT);
 
 static void
