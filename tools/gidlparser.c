@@ -268,7 +268,7 @@ parse_type_internal (gchar *str, gchar **rest)
     }
   else 
     {
-      type->tag = TYPE_TAG_INTERFACE;
+      type->tag = TYPE_TAG_SYMBOL;
       type->is_interface = TRUE; 
       start = *rest;
 
