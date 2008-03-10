@@ -1,3 +1,111 @@
+2008-02-21  Mark Doffman  <mark.doffman@codethink.co.uk>
+
+	* tools/gidlmodule.c
+	* tools/gidlmodule.h
+	* tools/gidlnode.c
+	* tools/gidlnode.h
+	Remove the old g-idl-compiler code.
+
+
+2008-02-22  Mark Doffman  <mark.doffman@codethink.co.uk>
+
+	* tools/quote-file.sh
+	* tools/compiler.c
+	* tools/generate.c
+	Move to using the 'C' struct compiler code.
+
+2008-02-21  Mark Doffman  <mark.doffman@codethink.co.uk>
+
+	* girepository/ginfo.c
+	* tools/generate.c
+	Change the way that external references with no namespace
+	are dealt with. External references with no namespace
+	are placed into the XML as-if they are a local reference.
+	This is temporary, but helps with roundtrip tests.
+
+2008-02-21  Mark Doffman  <mark.doffman@codethink.co.uk>
+
+	* girepository/ginfo.c
+	Add the ability to get the value of a constant of
+	type TYPE_TAG_SYMBOL. In the case of a symbol the value
+	is provided as a string.
+
+	This would deal properly with:
+	typedef char* random;
+	const random = "A string";
+
+2008-02-21  Mark Doffman  <mark.doffman@codethink.co.uk>
+
+	* girepository/ginfo.c
+	* girepository/girepository.h
+	* tools/generate.c
+	Add a function to check if an enum is registered or not.
+	Previously anything testing this relied on the g-type
+	string offset having a value of 0.
+
+	* girepository/gmetadata.c
+	* girepository/gmetadata.h
+	* tools/generate.c
+	Remove unneccesary or erroneous checks. There were two
+	metadata validation checks which made sure that the blob
+	sizes were the same as some magic numbers compiled into the code.
+	This is wrong as it breaks any forwards compatibility that may
+	be possible.
+
+	Checks were also present that made sure that unregistered type
+	blobs had a value of 0 in the g-type offset field. This is
+	unneccessary. If a type blob is unregistered then any value
+	in its g-type field is simply invalid.
+
+2008-02-21  Mark Doffman  <mark.doffman@codethink.co.uk>
+
+        * girepository/ginfo.c
+        * girepository/gmetadata.c
+        * girepository/gmetadata.h
+
+          Change the metadata format to have a standard header
+          for all the type blobs. Merge the SimpleTypeBlob
+          and InterfaceTypeBlob into a union. A union of these
+          two blobs existed previously but was not explicit
+          in the metadata format.
+
+2008-02-21  Mark Doffman  <mark.doffman@codethink.co.uk>
+
+	* tools/gidlcompilercontext.c
+	* tools/gidlcompilercontext.h
+	* tools/gidlcompilerentrynode.c
+	* tools/gidlcompilerentrynode.h
+	* tools/gidlcompilertypenode.c
+	* tools/gidlcompilertypenode.h
+
+	Add code to compile a tree of GIdlNodes to
+	a 'C' struct representing the metadata.
+	This is to aid cross-compiling. Previously
+	the g-idl-compiler created a binary blob with
+	data written in the byte order and alignment
+	of the tool rather than the intended target.
+
+	Cleaned up and improved by Johan and Robert :-)
+
+2008-02-21  Mark Doffman  <mark.doffman@codethink.co.uk>
+
+	* girepository/ginvoke.c
+	* girepository/girepository.h
+	* girepository/gmetadata.c
+	* girepository/gmetadata.h
+	* tools/generate.c
+	* tools/gidlparser.c
+	Modify TYPE_TAG_INTERFACE to TYPE_TAG_SYMBOL
+	to avoid confusion with the interface blob.
+
+	* tools/generate.c
+	* tools/gidlparser.c
+	Remove magic numbers and replace with type-tag
+	enumeration symbols.
+
+	* girepository/gmetadata.c
+	Add validate declaration.
+
 2008-03-10  Jürg Billeter  <j@bitron.ch>
 
 	* tools/gidlparser.c: (parse_type_internal):
