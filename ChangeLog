@@ -1,5 +1,12 @@
 2008-03-10  Jürg Billeter  <j@bitron.ch>
 
+	* tools/gidlparser.c: (parse_type_internal):
+	* tools/scannerlexer.l:
+	* tools/scannerparser.y:
+	Support C99 _Bool type in scanner.
+
+2008-03-10  Jürg Billeter  <j@bitron.ch>
+
 	* tests/parser/Foo-expected.gidl:
 	* tests/parser/foo-object.h:
 	* tests/parser/foo.c: (foo_enum_method):

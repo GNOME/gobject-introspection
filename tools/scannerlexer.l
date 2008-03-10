@@ -119,6 +119,7 @@ stringtext				([^\"])|(\\.)
 [a-zA-Z_][a-zA-Z_0-9]*			{ if (igenerator->macro_scan) return IDENTIFIER; else REJECT; }
 
 "auto"					{ return AUTO; }
+"_Bool"					{ return BOOL; }
 "break"					{ return BREAK; }
 "case"					{ return CASE; }
 "char"					{ return CHAR; }
