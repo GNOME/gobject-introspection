@@ -1187,6 +1187,7 @@ g_igenerator_add_symbol (GIGenerator * igenerator, CSymbol * symbol)
   /* only add symbols of main file */
   gboolean found_filename = FALSE;
   GList *l;
+  
   for (l = igenerator->filenames; l != NULL; l = l->next)
     {
       if (strcmp (l->data, igenerator->current_filename) == 0)
@@ -1631,6 +1632,7 @@ main (int argc, char **argv)
   int gopt_argc, i;
   char **gopt_argv;
   GList *filenames = NULL;
+  GList *sources = NULL;
   GError *error = NULL;
   GList *l, *libraries = NULL;
   GList *cpp_options = NULL;
@@ -1676,7 +1678,8 @@ main (int argc, char **argv)
 	      break;
 	    }
 	}
-      else if (g_str_has_suffix (argv[i], ".h"))
+      else if (g_str_has_suffix (argv[i], ".h") ||
+	       g_str_has_suffix (argv[i], ".c"))
 	{
 	  gchar* filename;
 
@@ -1690,7 +1693,10 @@ main (int argc, char **argv)
 	  else
 	    filename = g_strdup (argv[i]);
 		
-	  filenames = g_list_append (filenames, g_realpath(filename));
+	  if (g_str_has_suffix (argv[i], ".h"))
+	    filenames = g_list_append (filenames, g_realpath (filename));
+	  else if(g_str_has_suffix (argv[i], ".c"))
+	    sources = g_list_append (sources, g_realpath (filename));
 	  g_free(filename);
 	}
       else if (g_str_has_suffix (argv[i], ".la") ||
@@ -1752,6 +1758,12 @@ main (int argc, char **argv)
 	g_igenerator_add_include_idl (igenerator, include_idls[i]);
     }
 
+  for (l = sources; l; l = l->next)
+    g_igenerator_lex_filename (igenerator, l->data);
+
+  g_list_foreach (sources, (GFunc)g_free, NULL);
+  g_list_free (sources);
+  
   tmp = g_igenerator_start_preprocessor (igenerator, cpp_options);
   if (!tmp)
     {

@@ -1,5 +1,17 @@
 2008-03-10  Johan Dahlin  <johan@gnome.org>
 
+	* tests/parser/Makefile.am:
+	* tests/parser/foo.c:
+	* tools/scanner.c:
+	* tools/scanner.h:
+	* tools/scannerparser.y:
+	Add an api to lex filenames.
+	Lex all source .c files passed in on the command line.
+	Scan sources in a test and a couple of private structures
+	which should not be included in the generated gidl
+
+2008-03-10  Johan Dahlin  <johan@gnome.org>
+
 	* tests/invoke/Makefile.am: Make the generated metadata 
 	depend on the g-idl-compiler
 

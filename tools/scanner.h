@@ -155,6 +155,8 @@ CDirective * cdirective_new            (const gchar *name,
 					const gchar *value);
 void         cdirective_free           (CDirective  *directive);
 
+gboolean g_igenerator_lex_filename  (GIGenerator *igenerator,
+				     const gchar *filename);
 gboolean g_igenerator_parse_file    (GIGenerator *igenerator,
 				     FILE        *file);
 void     g_igenerator_set_verbose   (GIGenerator *igenerator,

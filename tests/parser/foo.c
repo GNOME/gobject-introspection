@@ -2,6 +2,16 @@
 
 #include "foo-object.h"
 
+typedef struct
+{
+  int i;
+} PrivateStruct;
+
+void foo_private_function (FooObject *foo)
+{
+
+}
+
 GType
 foo_interface_get_type (void)
 {

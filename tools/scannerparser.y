@@ -1377,4 +1377,16 @@ g_igenerator_parse_file (GIGenerator *igenerator, FILE *file)
   return TRUE;
 }
 
+gboolean
+g_igenerator_lex_filename (GIGenerator *igenerator, const gchar *filename)
+{
+  yyin = fopen (filename, "r");
+
+  while (yylex (igenerator) != YYEOF)
+    ;
+
+  fclose (yyin);
+  
+  return TRUE;
+}
 

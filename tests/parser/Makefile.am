@@ -11,7 +11,7 @@ libfoo_la_LIBADD = $(GOBJECT_LIBS)
 CLEANFILES = Foo.gidl
 EXTRA_DIST = Foo-expected.gidl
 
-SCANSOURCES = $(srcdir)/foo-object.h
+SCANSOURCES = $(srcdir)/foo.c $(srcdir)/foo-object.h
 
 Foo.gidl: libfoo.la foo-object.h $(top_builddir)/tools/g-idl-scanner
 	G_DEBUG=fatal_warnings $(top_builddir)/tools/g-idl-scanner -v \
