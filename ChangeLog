@@ -1,7 +1,5 @@
 2008-03-10  Johan Dahlin  <johan@gnome.org>
 
-	* autogen.sh:
-	Require automake 1.10
 	* configure.ac:
 	Add GCOV_LIBS to GILIBS
 
