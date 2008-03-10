@@ -15,7 +15,7 @@ testfns_la_LIBADD = $(GIREPO_LIBS) $(top_builddir)/girepository/libgirepository.
 BUILT_SOURCES = testfns-metadata.c
 CLEANFILES = testfns-metadata.c
 
-testfns-metadata.c: testfns.xml
+testfns-metadata.c: testfns.xml $(top_builddir)/tools/g-idl-compiler
 	$(top_builddir)/tools/g-idl-compiler $(srcdir)/testfns.xml -o testfns-metadata.c
 
 invoke_SOURCES = invoke.c
