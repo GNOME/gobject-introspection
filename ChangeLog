@@ -1,5 +1,7 @@
 2008-03-10  Johan Dahlin  <johan@gnome.org>
 
+	* gidl.dtd: Remove, we're using relaxng for now
+
 	* tests/parser/Foo-expected.gidl:
 	* tests/parser/foo-object.h:
 	* tests/parser/foo.c:
