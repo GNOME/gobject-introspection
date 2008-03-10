@@ -6,7 +6,7 @@ test -z "$srcdir" && srcdir=.
 
 PKG_NAME="gobject-introspection"
 REQUIRED_AUTOCONF_VERSION=2.53
-REQUIRED_AUTOMAKE_VERSION=1.7.2
+REQUIRED_AUTOMAKE_VERSION=1.10.1
 
 (test -f $srcdir/configure.ac \
   && test -f $srcdir/autogen.sh) || {

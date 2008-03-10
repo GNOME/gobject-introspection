@@ -74,7 +74,7 @@ PKG_CHECK_MODULES(GIREPO, [glib-2.0 gobject-2.0 gmodule-2.0])
 
 # if we ever remove manual check for ffi and require .pc file, then 
 # just put libffi in the PKG_CHECK_MODULES(GIREPO) deps
-GIREPO_LIBS="$GIREPO_LIBS $FFI_LIBS"
+GIREPO_LIBS="$GIREPO_LIBS $GCOV_LIBS $FFI_LIBS"
 GIREPO_CFLAGS="$GIREPO_CFLAGS $FFI_CFLAGS"
 
 GIREPO_CFLAGS="$GIREPO_CFLAGS $GCOV_CFLAGS"

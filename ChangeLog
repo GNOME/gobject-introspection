@@ -1,5 +1,12 @@
 2008-03-10  Johan Dahlin  <johan@gnome.org>
 
+	* autogen.sh:
+	Require automake 1.10
+	* configure.ac:
+	Add GCOV_LIBS to GILIBS
+
+2008-03-10  Johan Dahlin  <johan@gnome.org>
+
 	* tests/parser/Foo-expected.gidl:
 	* tests/parser/foo.c:
 	Rename null-ok to direction=out
