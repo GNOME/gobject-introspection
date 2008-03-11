@@ -173,12 +173,18 @@ stringtext				([^\"])|(\\.)
 
 %%
 
-static int yywrap (void)
+static int
+yywrap (void)
 {
   return 1;
 }
 
-static void parse_gtkdoc (GIGenerator *igenerator, gchar *symbol, int *c1, int *c2)
+
+static void
+parse_gtkdoc (GIGenerator *igenerator,
+	      gchar       *symbol,
+	      int         *c1,
+	      int         *c2)
 {
   gboolean isline = FALSE;
   gchar line[256];
@@ -188,6 +194,7 @@ static void parse_gtkdoc (GIGenerator *igenerator, gchar *symbol, int *c1, int *
   char *name,*value;
   GSList *directives;
   GSList *options = NULL;
+  char *rname;
 
   i = 0;
   do 
@@ -241,25 +248,35 @@ static void parse_gtkdoc (GIGenerator *igenerator, gchar *symbol, int *c1, int *
       name = parts[0];
       value = NULL;
     }
- 
-  directive = cdirective_new (name, value, options);
- 
+
+  /*
+   * This is a special case for return values, name will only be
+   * 'eturn' or a valid name, check the call site.
+   * Context-sensitive parsing would probably be the right way to go
+   */
+  if (g_ascii_strncasecmp ("eturn", name, 5) == 0)
+    rname = "return";
+  else
+    rname = name;
+
+  directive = cdirective_new (rname, value, options);
   directives = g_hash_table_lookup (igenerator->directives_map, symbol);
   directives = g_slist_prepend (directives, directive);
-
   g_hash_table_replace (igenerator->directives_map, 
 			g_strdup (symbol), directives);
+
   g_strfreev (parts);
   
 }
-    
 
-static void parse_comment (GIGenerator *igenerator)
+
+static void
+parse_comment (GIGenerator *igenerator)
 {
   GString *symbol = NULL;
   gboolean startofline = FALSE, have_symbol = FALSE, start1 = FALSE, start_symbol = FALSE;
   int c1, c2;
-  
+
   c1 = input();
   c2 = input();
 
@@ -291,20 +308,23 @@ static void parse_comment (GIGenerator *igenerator)
       if ((c1 != '*' && c1 != ' '))
           startofline = FALSE;
 
-      if (startofline && c1 == ' ' && c2 == '@')
+      if (startofline && (c1 == ' ') && (c2 == '@' || (c2 == 'r') || (c2 == 'R')))
         {
            c1 = c2;
            c2 = input();
-	   parse_gtkdoc (igenerator, symbol ? symbol->str : NULL, &c1, &c2);
-	   
-	}
+           if (symbol)
+             parse_gtkdoc (igenerator, symbol->str, &c1, &c2);
+        }
     }
+
   if (symbol)
     g_string_free (symbol, TRUE);
   
 }
 
-static int check_identifier (GIGenerator *igenerator, const char *s)
+static int
+check_identifier (GIGenerator *igenerator,
+		  const char  *s)
 {
 	/*
 	 * This function checks if `s' is a type name or an
@@ -320,7 +340,8 @@ static int check_identifier (GIGenerator *igenerator, const char *s)
 	return IDENTIFIER;
 }
 
-static void process_directive (GIGenerator *igenerator)
+static void
+process_directive (GIGenerator *igenerator)
 {
 	/* extract current filename from #line directives */
 	GString *filename_builder;

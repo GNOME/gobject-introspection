@@ -52,13 +52,31 @@ foo_object_method (FooObject *object)
 
 /**
  * foo_object_out:
+ * @object: a #GObject
+ *
  * This is a test for out arguments
+ *
  * @outarg: (out): This is an argument test
+ * Return value: an int
  */
 gint
 foo_object_out (FooObject *object, int *outarg)
 {
+	return 1;
+}
 
+/**
+ * foo_object_create_object:
+ * @object: a #GObject
+ *
+ * Test returning a caller-owned object
+ *
+ * Return value: (caller-owns): The object
+ **/
+GObject*
+foo_object_create_object (FooObject *object)
+{
+	return g_object_ref (object);
 }
 
 G_DEFINE_TYPE (FooSubobject, foo_subobject, FOO_TYPE_OBJECT);

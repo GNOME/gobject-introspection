@@ -674,6 +674,21 @@ g_igenerator_process_function_symbol (GIGenerator * igenerator, CSymbol * sym)
 
   directives = g_hash_table_lookup (igenerator->directives_map, func->symbol);
 
+  for (j = directives; j; j = j->next) 
+    {
+       CDirective *directive = j->data;
+       if (g_ascii_strncasecmp ("return", directive->name, 6) == 0) 
+          {
+             GSList *options;
+             for (options = directive->options; options; options = options->next)
+               {
+                  gchar *stringy_data = options->data;
+                  if (g_ascii_strcasecmp (stringy_data, "caller-owns") == 0)
+                       func->result->transfer = TRUE;
+               }
+          }
+    }
+
   for (param_l = sym->base_type->child_list, i = 1; param_l != NULL;
        param_l = param_l->next, i++)
     {
@@ -688,14 +703,16 @@ g_igenerator_process_function_symbol (GIGenerator * igenerator, CSymbol * sym)
           CDirective *directive = j->data;
 
           if (g_ascii_strcasecmp (param_sym->ident, directive->name) == 0) 
-	    {
-	      
-	      GSList *options;
+            {
+              
+              GSList *options;
 
               for (options = directive->options; options; options = options->next)
                {
                   gchar *stringy_data = options->data;
 
+                  if (g_ascii_strcasecmp (stringy_data, "callee-owns") == 0)
+                      param->transfer = TRUE;
                   if (g_ascii_strcasecmp (stringy_data, "null-ok") == 0)
                       param->null_ok = TRUE;
                   if (g_ascii_strcasecmp (stringy_data, "in") == 0)

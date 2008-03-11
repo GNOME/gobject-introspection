@@ -37,6 +37,12 @@
 			<member name="FOO_FLAGS_THIRD" value="4"/>
 		</flags>
 		<object name="FooObject" parent="GLib.Object" type-name="FooObject" get-type="foo_object_get_type">
+			<method name="create_object" symbol="foo_object_create_object">
+				<return-type type="GObject*" transfer="full"/>
+				<parameters>
+					<parameter name="object" type="FooObject*"/>
+				</parameters>
+			</method>
 			<method name="method" symbol="foo_object_method">
 				<return-type type="gint"/>
 				<parameters>

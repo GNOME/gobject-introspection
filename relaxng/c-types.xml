@@ -147,7 +147,7 @@
 						<choice>
 							<value>full</value>
 							<value>shallow</value>
-							<value>transfer</value>
+							<value>none</value>
 						</choice>
 					</attribute>
 				</optional>

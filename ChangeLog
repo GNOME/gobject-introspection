@@ -5,6 +5,10 @@
 	* tools/scanner.c:
 	* tools/scanner.h:
 	* tools/scannerlexer.l:
+	Add support for parsing return arguments. Add support for
+	caller-owns return types.
+	Patch by Philip Van Hoof.
+	
 	* tools/scannerparser.y:
 	Remove parsing of the @deprecated syntax used in headers.
 	We will support gtk-doc deprecation in the future instead.

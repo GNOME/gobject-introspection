@@ -46,6 +46,8 @@ FooObject*            foo_object_new               ();
 gint                  foo_object_method            (FooObject *object);
 gint                  foo_object_out               (FooObject *object,
 						    int       *outarg);
+GObject*              foo_object_create_object     (FooObject *object);
+
 
 struct _FooSubobject
 {

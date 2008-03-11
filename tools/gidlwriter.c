@@ -150,11 +150,17 @@ function_generate (GIdlWriter * writer, GIdlNodeFunction * node)
   g_writer_write_indent (writer, markup_s->str);
   g_string_free (markup_s, TRUE);
 
-  markup =
-    g_markup_printf_escaped ("<return-type type=\"%s\"/>\n",
-			     node->result->type->unparsed);
-  g_writer_write (writer, markup);
-  g_free (markup);
+  markup_s =
+    g_string_new (g_markup_printf_escaped ("<return-type type=\"%s\"",
+			     node->result->type->unparsed));
+
+  if (node->result->transfer)
+    g_string_append (markup_s, g_markup_printf_escaped (" transfer=\"full\"/>\n"));
+  else
+    g_string_append (markup_s, "/>\n");
+
+  g_writer_write (writer, markup_s->str);
+  g_string_free (markup_s, TRUE);
 
   if (node->parameters != NULL)
     {
@@ -172,6 +178,10 @@ function_generate (GIdlWriter * writer, GIdlNodeFunction * node)
 	  g_string_append (markup_s,
 			   g_markup_printf_escaped (" type=\"%s\"",
 						    param->type->unparsed));
+
+	  if (param->transfer)
+	    g_string_append (markup_s,
+			   g_markup_printf_escaped (" transfer=\"full"));
 
 	  if (param->null_ok)
 	    g_string_append (markup_s,
