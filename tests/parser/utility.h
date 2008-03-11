@@ -20,4 +20,6 @@ struct _UtilityObjectClass
   GObjectClass parent_class;
 };
 
+GType                 utility_object_get_type          (void) G_GNUC_CONST;
+
 #endif /* __UTILITY_H__ */

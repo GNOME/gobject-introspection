@@ -1,5 +1,12 @@
 2008-03-12  Johan Dahlin  <johan@gnome.org>
 
+	* tests/parser/utility-expected.gidl:
+	* tests/parser/utility.h:
+	Add a get_type-function, so the scanner actually
+	parses it as an object.
+	
+2008-03-12  Johan Dahlin  <johan@gnome.org>
+
 	* tools/gidlwriter.c (function_generate): Add missing trailing quote.
 	Bad Philip!
 
