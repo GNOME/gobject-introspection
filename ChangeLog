@@ -1,3 +1,7 @@
+2008-03-11  Johan Dahlin  <johan@gnome.org>
+
+	* tools/compiler.c (main): Coding style fixes
+
 2008-03-10  Johan Dahlin  <johan@gnome.org>
 
 	* configure.ac:
