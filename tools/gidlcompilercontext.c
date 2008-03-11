@@ -422,7 +422,7 @@ g_idl_compiler_write_dir_entry (GIdlCompilerContext *ctx,
     "  {\n" "   %d,\n"
     "   %d,\n"
     "   0,\n"
-    "   " STRING_POINTER ",\n"
+    "   " STRING_POINTER ", /* %s */\n"
     "   " TYPE_POINTER ",\n"
     "  },\n";
   guint orig = ctx->directory_entries;
@@ -430,7 +430,7 @@ g_idl_compiler_write_dir_entry (GIdlCompilerContext *ctx,
   fprintf (ctx->mdata_directory, entry_prototype,
            blob_type,
            TRUE,
-           ctx->struct_name, g_idl_compiler_write_string (ctx, name),
+           ctx->struct_name, g_idl_compiler_write_string (ctx, name), name,
            ctx->struct_name, entry_id);
 
   ctx->directory_local_entries += 1;
@@ -448,16 +448,16 @@ g_idl_compiler_write_xref_entry (GIdlCompilerContext *ctx,
     "  {\n" "   %d,\n"
     "   %d,\n"
     "   0,\n"
-    "   " STRING_POINTER ",\n"
-    "   " STRING_POINTER ",\n"
+    "   " STRING_POINTER ", /* %s */\n"
+    "   " STRING_POINTER ", /* %s */\n"
     "  },\n";
   guint dir_id_res = ctx->directory_entries;
 
   fprintf (ctx->mdata_directory, entry_prototype,
            blob_type,
            FALSE,
-           ctx->struct_name, g_idl_compiler_write_string (ctx, name),
-           ctx->struct_name, g_idl_compiler_write_string (ctx, namespace));
+           ctx->struct_name, g_idl_compiler_write_string (ctx, name), name,
+           ctx->struct_name, g_idl_compiler_write_string (ctx, namespace), name);
 
   ctx->directory_entries += 1;
   return dir_id_res;
@@ -525,13 +525,14 @@ g_idl_compiler_add_xref (GIdlCompilerContext *ctx,
 	   "   0,\n"
 	   "   0,\n"
 	   "   0,\n"
-	   "   " STRING_POINTER ",\n",
+	   "   " STRING_POINTER ", /* %s */\n",
 	   ctx->struct_name,
-	   g_idl_compiler_write_string (ctx, symbol));
+	   g_idl_compiler_write_string (ctx, symbol), name);
   
   if (namespace)
-    fprintf (ctx->mdata_directory, "   " STRING_POINTER ",\n",
-	     ctx->struct_name, g_idl_compiler_write_string (ctx, namespace));
+    fprintf (ctx->mdata_directory, "   " STRING_POINTER ", /* %s */\n",
+	     ctx->struct_name, g_idl_compiler_write_string (ctx, namespace),
+	     name);
   else
       fprintf (ctx->mdata_directory, "   0,\n");
   fprintf (ctx->mdata_directory, "  },\n");

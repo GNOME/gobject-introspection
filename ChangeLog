@@ -1,5 +1,12 @@
 2008-03-11  Rob Taylor  <rob.taylor@codethink.co.uk>
 
+	* tools/gidlcompilercontext.c: (g_idl_compiler_write_dir_entry),
+	(g_idl_compiler_write_xref_entry), (g_idl_compiler_add_xref):
+	Add some comments for strings into generated output for
+	easier debugging.
+
+2008-03-11  Rob Taylor  <rob.taylor@codethink.co.uk>
+
 	* tools/gidlcompilercontext.c: (write_compiled):
 	Write out the shlibs variable before writing out the strings
 	length. Fixes compiler warning when using '-l' flag with
