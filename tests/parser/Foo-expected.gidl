@@ -7,7 +7,7 @@
 				<parameter name="foo_enum" type="FooEnumType"/>
 			</parameters>
 		</function>
-		<function name="init" symbol="foo_init" deprecated="1">
+		<function name="init" symbol="foo_init">
 			<return-type type="gint"/>
 		</function>
 		<boxed name="FooBoxed" type-name="FooBoxed" get-type="foo_boxed_get_type">

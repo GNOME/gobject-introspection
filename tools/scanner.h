@@ -60,7 +60,6 @@ struct _GIGenerator
   
   /* scanner variables */
   gboolean macro_scan;
-  GSList *directives; /* list of CDirective for the current symbol */
 };
 
 typedef enum

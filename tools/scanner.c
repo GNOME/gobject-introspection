@@ -718,16 +718,6 @@ g_igenerator_process_function_symbol (GIGenerator * igenerator, CSymbol * sym)
   * the cleanup for sym */
   g_hash_table_remove (igenerator->directives_map, func->symbol);
 
-  for (j = sym->directives; j; j = j->next)
-    {
-      CDirective *directive = (CDirective*)j->data;
-
-      if (!strcmp (directive->name, "deprecated"))
-	func->deprecated = TRUE;
-      else
-	g_printerr ("Unknown function directive: %s\n",
-		    directive->name);
-    }
 }
 
 static void
@@ -1229,9 +1219,6 @@ g_igenerator_add_symbol (GIGenerator * igenerator, CSymbol * symbol)
 	  break;
 	}
     }
-
-  symbol->directives = g_slist_reverse (igenerator->directives);
-  igenerator->directives = NULL;
 
   if (found_filename || igenerator->macro_scan)
     {

@@ -244,20 +244,11 @@ static void parse_gtkdoc (GIGenerator *igenerator, gchar *symbol, int *c1, int *
  
   directive = cdirective_new (name, value, options);
  
-  if (symbol == NULL)
-    {
-      igenerator->directives = g_slist_prepend (igenerator->directives,
-						directive);
-    }
-  else
-    {
-      directives = g_hash_table_lookup (igenerator->directives_map, symbol);
-      directives = g_slist_prepend (directives, directive);
+  directives = g_hash_table_lookup (igenerator->directives_map, symbol);
+  directives = g_slist_prepend (directives, directive);
 
-      g_hash_table_replace (igenerator->directives_map, 
-			    g_strdup (symbol), directives);
-    }
-  
+  g_hash_table_replace (igenerator->directives_map, 
+			g_strdup (symbol), directives);
   g_strfreev (parts);
   
 }

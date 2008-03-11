@@ -1,5 +1,16 @@
 2008-03-11  Johan Dahlin  <johan@gnome.org>
 
+	* tests/parser/Foo-expected.gidl:
+	* tests/parser/foo-object.h:
+	* tools/scanner.c:
+	* tools/scanner.h:
+	* tools/scannerlexer.l:
+	* tools/scannerparser.y:
+	Remove parsing of the @deprecated syntax used in headers.
+	We will support gtk-doc deprecation in the future instead.
+
+2008-03-11  Johan Dahlin  <johan@gnome.org>
+
 	* tools/compiler.c (main): Coding style fixes
 
 2008-03-10  Johan Dahlin  <johan@gnome.org>

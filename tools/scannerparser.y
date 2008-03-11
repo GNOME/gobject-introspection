@@ -67,8 +67,6 @@ csymbol_free (CSymbol * symbol)
   ctype_free (symbol->base_type);
   g_free (symbol->const_string);
   g_free (symbol);
-  g_slist_foreach (symbol->directives, (GFunc)cdirective_free, NULL);
-  g_slist_free (symbol->directives);
 }
  
 gboolean
