@@ -58,6 +58,12 @@
 					<parameter name="object" type="FooObject*"/>
 				</parameters>
 			</method>
+			<method name="external_type" symbol="foo_object_external_type">
+				<return-type type="UtilityObject*"/>
+				<parameters>
+					<parameter name="object" type="FooObject*"/>
+				</parameters>
+			</method>
 			<method name="in" symbol="foo_object_in">
 				<return-type type="gint"/>
 				<parameters>

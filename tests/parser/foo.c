@@ -56,6 +56,12 @@ foo_object_method (FooObject *object)
 	return 1;
 }
 
+UtilityObject*
+foo_object_external_type (FooObject *object)
+{
+
+}
+
 /**
  * foo_object_out:
  * @object: a #GObject

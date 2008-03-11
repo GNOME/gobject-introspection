@@ -2,6 +2,7 @@
 #define __FOO_OBJECT_H__
 
 #include <glib-object.h>
+#include "utility.h"
 
 #define FOO_TYPE_INTERFACE           (foo_interface_get_type ())
 #define FOO_INTERFACE(object)        (G_TYPE_CHECK_INSTANCE_CAST ((object), FOO_TYPE_INTERFACE, FooInterface))
@@ -44,6 +45,7 @@ gint                  foo_init                     (void);
 GType                 foo_object_get_type          (void) G_GNUC_CONST;
 FooObject*            foo_object_new               ();
 gint                  foo_object_method            (FooObject *object);
+UtilityObject*        foo_object_external_type     (FooObject *object);
 gint                  foo_object_out               (FooObject *object,
 						    int       *outarg);
 GObject*              foo_object_create_object     (FooObject *object);

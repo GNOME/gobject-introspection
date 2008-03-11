@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<api version="1.0">
+	<namespace name="utility">
+		<struct name="UtilityObject">
+			<field name="parent_instance" type="GObject"/>
+		</struct>
+		<struct name="UtilityObjectClass">
+			<field name="parent_class" type="GObjectClass"/>
+		</struct>
+	</namespace>
+</api>

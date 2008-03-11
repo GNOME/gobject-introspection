@@ -1,3 +1,17 @@
+2008-03-12  Johan Dahlin  <johan@gnome.org>
+
+	* tests/parser/Foo-expected.gidl:
+	* tests/parser/Makefile.am:
+	* tests/parser/foo-object.h:
+	* tests/parser/foo.c:
+	* tests/parser/utility-expected.gidl:
+	* tests/parser/utility.c:
+	* tests/parser/utility.h:
+
+	Add a new gidl test. 'utility.gidl', which is used to be able
+	to test external type references. Add a reference to UtilityObject*
+	in the idl file.
+
 2008-03-11  Johan Dahlin  <johan@gnome.org>
 
 	* tools/compiler.c:
