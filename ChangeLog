@@ -1,5 +1,8 @@
 2008-03-12  Johan Dahlin  <johan@gnome.org>
 
+	* tools/gidlwriter.c (function_generate): Add missing trailing quote.
+	Bad Philip!
+
 	* tests/parser/Foo-expected.gidl:
 	* tests/parser/Makefile.am:
 	* tests/parser/foo-object.h:

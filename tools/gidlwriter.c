@@ -181,7 +181,7 @@ function_generate (GIdlWriter * writer, GIdlNodeFunction * node)
 
 	  if (param->transfer)
 	    g_string_append (markup_s,
-			   g_markup_printf_escaped (" transfer=\"full"));
+			   g_markup_printf_escaped (" transfer=\"full\""));
 
 	  if (param->null_ok)
 	    g_string_append (markup_s,

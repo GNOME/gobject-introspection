@@ -41,15 +41,15 @@
 				<return-type type="gint"/>
 				<parameters>
 					<parameter name="object" type="FooObject*"/>
-					<parameter name="toown" type="GObject*" transfer="full/>
+					<parameter name="toown" type="GObject*" transfer="full"/>
 				</parameters>
 			</method>
 			<method name="calleesowns" symbol="foo_object_calleesowns">
 				<return-type type="gint"/>
 				<parameters>
 					<parameter name="object" type="FooObject*"/>
-					<parameter name="toown1" type="GObject*" transfer="full/>
-					<parameter name="toown2" type="GObject*" transfer="full/>
+					<parameter name="toown1" type="GObject*" transfer="full"/>
+					<parameter name="toown2" type="GObject*" transfer="full"/>
 				</parameters>
 			</method>
 			<method name="create_object" symbol="foo_object_create_object">
