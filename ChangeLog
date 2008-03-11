@@ -1,3 +1,10 @@
+2008-03-11  Rob Taylor  <rob.taylor@codethink.co.uk>
+
+	* tools/gidlcompilercontext.c: (write_compiled):
+	Write out the shlibs variable before writing out the strings
+	length. Fixes compiler warning when using '-l' flag with
+	g-idl-compiler
+
 2008-03-11  Johan Dahlin  <johan@gnome.org>
 
 	* tests/parser/Foo-expected.gidl:
