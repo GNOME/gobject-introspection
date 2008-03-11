@@ -1,3 +1,9 @@
+2008-03-11  Johan Dahlin  <johan@gnome.org>
+
+	* tools/compiler.c:
+	* tools/generate.c:
+	Remove most global variables
+
 2008-03-11  Philip Van Hoof  <me@pvanhoof.be>
  
  	* tools/scannerlexer.l:
