@@ -21,7 +21,7 @@ Foo.gidl: libfoo.la foo-object.h $(top_builddir)/tools/g-idl-scanner
 	libfoo.la --output $@
 
 check-local: Foo.gidl
-	@diff -u $(srcdir)/Foo-expected.gidl Foo.gidl && echo "Foo.gidl"
+	@diff -u -U 10 $(srcdir)/Foo-expected.gidl Foo.gidl && echo "Foo.gidl"
 	@echo "======================="
 	@echo "All parser tests passed"
 	@echo "======================="

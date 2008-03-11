@@ -226,17 +226,21 @@ parse_gtkdoc (GIGenerator *igenerator,
         {
           char *ptr = parts[1];
           GString *current = NULL;
-          gboolean open = FALSE;
+          gboolean open = (*ptr == '(');
 
           current = g_string_new ("");
           value = parts[2];
 
           while (*ptr++) 
             {
-              if (*ptr != ')')
+              if (*ptr == '(')
+                 open = TRUE;
+              else if (*ptr != ')' && open)
                 g_string_append_c (current, *ptr);
-              else if (*ptr == ')')
+              else if (*ptr == ')') {
                 options = g_slist_prepend (options, g_strdup (current->str));
+                open = FALSE;
+              }
             }
           g_string_free (current, TRUE);
         } 

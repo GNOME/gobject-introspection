@@ -715,6 +715,14 @@ g_igenerator_process_function_symbol (GIGenerator * igenerator, CSymbol * sym)
                       param->transfer = TRUE;
                   if (g_ascii_strcasecmp (stringy_data, "null-ok") == 0)
                       param->null_ok = TRUE;
+                  if (g_ascii_strcasecmp (stringy_data, "inout") == 0) {
+                      param->in = TRUE;
+                      param->out = TRUE;
+                  }
+                  if (g_ascii_strcasecmp (stringy_data, "in-out") == 0) {
+                      param->in = TRUE;
+                      param->out = TRUE;
+                  }
                   if (g_ascii_strcasecmp (stringy_data, "in") == 0)
                       param->in = TRUE;
                   if (g_ascii_strcasecmp (stringy_data, "out") == 0)

@@ -44,10 +44,16 @@ foo_object_init (FooObject *object)
 
 }
 
+/**
+ * foo_object_method:
+ * @object: a #GObject
+ *
+ * Return value: an int
+ **/
 gint
 foo_object_method (FooObject *object)
 {
-
+	return 1;
 }
 
 /**
@@ -60,10 +66,105 @@ foo_object_method (FooObject *object)
  * Return value: an int
  */
 gint
+foo_object_in (FooObject *object, int *outarg)
+{
+	return 1;
+}
+
+/**
+ * foo_object_in:
+ * @object: a #GObject
+ *
+ * This is a test for out arguments
+ *
+ * @outarg: (in): This is an argument test
+ * Return value: an int
+ */
+gint
 foo_object_out (FooObject *object, int *outarg)
 {
 	return 1;
 }
+
+
+/**
+ * foo_object_inout:
+ * @object: a #GObject
+ *
+ * This is a test for out arguments
+ *
+ * @inoutarg: (inout): This is an argument test
+ * Return value: an int
+ */
+gint
+foo_object_inout (FooObject *object, int *inoutarg)
+{
+	return 1;
+}
+
+/**
+ * foo_object_inout2:
+ * @object: a #GObject
+ *
+ * This is a second test for out arguments
+ *
+ * @inoutarg: (in) (out): This is an argument test
+ * Return value: an int
+ */
+gint
+foo_object_inout2 (FooObject *object, int *inoutarg)
+{
+	return 1;
+}
+
+
+/**
+ * foo_object_inout3:
+ * @object: a #GObject
+ *
+ * This is a 3th test for out arguments
+ *
+ * @inoutarg: (in-out): This is an argument test
+ * Return value: an int
+ */
+gint
+foo_object_inout3 (FooObject *object, int *inoutarg)
+{
+	return 1;
+}
+
+/**
+ * foo_object_calleeowns:
+ * @object: a #GObject
+ *
+ * This is a test for out arguments
+ *
+ * @toown: (callee-owns): a #GObject
+ * Return value: an int
+ */
+gint
+foo_object_calleeowns (FooObject *object, GObject *toown)
+{
+	return 1;
+}
+
+
+/**
+ * foo_object_calleesowns:
+ * @object: a #GObject
+ *
+ * This is a test for out arguments
+ *
+ * @toown1: (callee-owns): a #GObject
+ * @toown2: (callee-owns): a #GObject
+ * Return value: an int
+ */
+gint
+foo_object_calleesowns (FooObject *object, GObject *toown1, GObject *toown2)
+{
+	return 1;
+}
+
 
 /**
  * foo_object_create_object:

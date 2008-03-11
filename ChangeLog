@@ -1,3 +1,15 @@
+2008-03-11  Philip Van Hoof  <me@pvanhoof.be>
+ 
+ 	* tools/scannerlexer.l:
+ 	* tools/scanner.c:
+ 	* tests/parser/Foo-expected.gidl:
+ 	* tests/parser/foo.c:
+ 	* tests/parser/Makefile.am:
+ 	* tests/parser/foo-object.h:
+ 
+ 	Added a few extra tests. Which resulted in finding a few
+ 	bugs. Which resulted in me fixing those bugs
+
 2008-03-11  Rob Taylor  <rob.taylor@codethink.co.uk>
 
 	* tools/gidlcompilercontext.c: (g_idl_compiler_write_dir_entry),
