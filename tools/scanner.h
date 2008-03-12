@@ -76,6 +76,7 @@ typedef enum
 
 struct _CSymbol
 {
+  int ref_count;
   CSymbolType type;
   int id;
   char *ident;
@@ -153,7 +154,8 @@ struct _CDirective {
 
 CSymbol *    csymbol_new               (CSymbolType  type);
 gboolean     csymbol_get_const_boolean (CSymbol     *symbol);
-void         csymbol_free              (CSymbol     *symbol);
+CSymbol *    csymbol_ref               (CSymbol     *symbol);
+void         csymbol_unref             (CSymbol     *symbol);
 CDirective * cdirective_new            (const gchar *name,
 					const gchar *value,
 					GSList *options);

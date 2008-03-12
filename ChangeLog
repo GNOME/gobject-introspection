@@ -1,3 +1,10 @@
+2008-03-12  Jürg Billeter  <j@bitron.ch>
+
+	* tools/scanner.c:
+	* tools/scanner.h:
+	* tools/scannerparser.y:
+	Start fixing memory management in g-idl-scanner.
+
 2008-03-12  Rob Taylor  <rob.taylor@codethink.co.uk>
 
 	* tools/gidlcompilercontext.c: (write_compiled):

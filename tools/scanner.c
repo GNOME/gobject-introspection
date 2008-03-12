@@ -53,14 +53,14 @@ g_igenerator_new (const gchar *namespace,
     g_ascii_strdown (igenerator->namespace, -1);
   igenerator->module = g_idl_module_new (namespace, shared_library);
 
-  igenerator->typedef_table = g_hash_table_new (g_str_hash, g_str_equal);
+  igenerator->typedef_table = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
   igenerator->struct_or_union_or_enum_table =
-    g_hash_table_new (g_str_hash, g_str_equal);
+    g_hash_table_new_full (g_str_hash, g_str_equal, g_free, csymbol_unref);
 
   igenerator->type_map = g_hash_table_new (g_str_hash, g_str_equal);
   igenerator->type_by_lower_case_prefix =
-    g_hash_table_new (g_str_hash, g_str_equal);
-  igenerator->symbols = g_hash_table_new (g_str_hash, g_str_equal);
+    g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+  igenerator->symbols = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
   igenerator->directives_map = g_hash_table_new (g_str_hash, g_str_equal);
 
   return igenerator;
@@ -72,22 +72,30 @@ g_igenerator_free (GIGenerator *generator)
   g_free (generator->namespace);
   g_free (generator->shared_library);
   g_free (generator->lower_case_namespace);
-#if 0
-  g_idl_module_free (generator->module);
-#endif  
+  
+  g_list_foreach (generator->filenames, (GFunc)g_free, NULL);
+  g_list_free (generator->filenames);
+
+  g_free (generator->current_filename);
+
+  g_list_foreach (generator->symbol_list, (GFunc)csymbol_unref, NULL);
+  g_list_free (generator->symbol_list);
+
   g_hash_table_destroy (generator->typedef_table);
   g_hash_table_destroy (generator->struct_or_union_or_enum_table);
+
+  g_idl_module_free (generator->module);
+
+  g_list_foreach (generator->get_type_symbols, (GFunc)g_free, NULL);
+  g_list_free (generator->get_type_symbols);
+
   g_hash_table_destroy (generator->type_map);
   g_hash_table_destroy (generator->type_by_lower_case_prefix);
+
   g_hash_table_destroy (generator->symbols);
-  g_list_foreach (generator->filenames, (GFunc)g_free, NULL);
+
   g_hash_table_destroy (generator->directives_map);
 
-  g_list_free (generator->filenames);
-#if 0
-  g_list_foreach (generator->symbol_list, (GFunc)csymbol_free, NULL);
-  g_list_free (generator->symbol_list);
-#endif
   g_free (generator);
 }
 
@@ -229,7 +237,7 @@ g_igenerator_process_properties (GIGenerator * igenerator,
 	  continue;
 	}
       giprop = (GIdlNodeProperty *) g_idl_node_new (G_IDL_NODE_PROPERTY);
-      giprop->node.name = properties[i]->name;
+      giprop->node.name = g_strdup (properties[i]->name);
       node->members =
 	g_list_insert_sorted (node->members, giprop,
 			      (GCompareFunc) g_idl_node_cmp);
@@ -339,7 +347,7 @@ g_igenerator_create_object (GIGenerator *igenerator,
       g_free (alt_lower_case_prefix);
     }
 
-  node->gtype_name = node->node.name;
+  node->gtype_name = g_strdup (node->node.name);
   node->gtype_init = g_strdup (symbol_name);
   node->parent = g_strdup (lookup_symbol (igenerator,
 					    g_type_name (g_type_parent (type_id))));
@@ -397,7 +405,7 @@ g_igenerator_create_interface (GIGenerator *igenerator,
 		       node);
   g_hash_table_insert (igenerator->type_by_lower_case_prefix,
 		       lower_case_prefix, node);
-  node->gtype_name = node->node.name;
+  node->gtype_name = g_strdup (node->node.name);
   node->gtype_init = g_strdup (symbol_name);
   
   iface_prereqs =
@@ -438,7 +446,7 @@ g_igenerator_create_boxed (GIGenerator *igenerator,
 		       node);
   g_hash_table_insert (igenerator->type_by_lower_case_prefix,
 		       lower_case_prefix, node);
-  node->gtype_name = node->node.name;
+  node->gtype_name = g_strdup (node->node.name);
   node->gtype_init = g_strdup (symbol_name);
 }
 
@@ -461,7 +469,7 @@ g_igenerator_create_enum (GIGenerator *igenerator,
 		       node);
   g_hash_table_insert (igenerator->type_by_lower_case_prefix,
 		       lower_case_prefix, node);
-  node->gtype_name = node->node.name;
+  node->gtype_name = g_strdup (node->node.name);
   node->gtype_init = g_strdup (symbol_name);
   
   type_class = g_type_class_ref (type_id);
@@ -496,7 +504,7 @@ g_igenerator_create_flags (GIGenerator *igenerator,
 		       node);
   g_hash_table_insert (igenerator->type_by_lower_case_prefix,
 		       lower_case_prefix, node);
-  node->gtype_name = node->node.name;
+  node->gtype_name = g_strdup (node->node.name);
   node->gtype_init = g_strdup (symbol_name);
   
   type_class = g_type_class_ref (type_id);
@@ -660,7 +668,7 @@ g_igenerator_process_function_symbol (GIGenerator * igenerator, CSymbol * sym)
   /* create a namespace function if no prefix matches */
   if (func->node.name == NULL)
     {
-      func->node.name = sym->ident;
+      func->node.name = g_strdup (sym->ident);
       func->is_constructor = FALSE;
       func->is_method = FALSE;
       igenerator->module->entries =
@@ -668,7 +676,7 @@ g_igenerator_process_function_symbol (GIGenerator * igenerator, CSymbol * sym)
 			      (GCompareFunc) g_idl_node_cmp);
     }
 
-  func->symbol = sym->ident;
+  func->symbol = g_strdup (sym->ident);
   func->result = (GIdlNodeParam *) g_idl_node_new (G_IDL_NODE_PARAM);
   func->result->type = create_node_from_ctype (sym->base_type->base_type);
 
@@ -734,7 +742,7 @@ g_igenerator_process_function_symbol (GIGenerator * igenerator, CSymbol * sym)
       if (param_sym->ident == NULL)
 	param->node.name = g_strdup_printf ("p%d", i);
       else
-	param->node.name = param_sym->ident;
+	param->node.name = g_strdup (param_sym->ident);
 
       func->parameters = g_list_append (func->parameters, param);
     }
@@ -755,7 +763,7 @@ g_igenerator_process_unregistered_struct_typedef (GIGenerator * igenerator,
   GList *member_l;
   char *lower_case_prefix;
 
-  node->node.name = sym->ident;
+  node->node.name = g_strdup (sym->ident);
   igenerator->module->entries =
     g_list_insert_sorted (igenerator->module->entries, node,
 			  (GCompareFunc) g_idl_node_cmp);
@@ -772,7 +780,7 @@ g_igenerator_process_unregistered_struct_typedef (GIGenerator * igenerator,
 	(GIdlNodeField *) g_idl_node_new (G_IDL_NODE_FIELD);
 
       node->members = g_list_append (node->members, gifield);
-      gifield->node.name = member->ident;
+      gifield->node.name = g_strdup (member->ident);
       gifield->type = create_node_from_ctype (member->base_type);
     }
 }
@@ -826,7 +834,7 @@ g_igenerator_process_struct_typedef (GIGenerator * igenerator, CSymbol * sym)
 	      GIdlNodeField *gifield =
 		(GIdlNodeField *) g_idl_node_new (G_IDL_NODE_FIELD);
 	      node->members = g_list_append (node->members, gifield);
-	      gifield->node.name = member->ident;
+	      gifield->node.name = g_strdup (member->ident);
 	      gifield->type = create_node_from_ctype (member->base_type);
 	    }
 	}
@@ -841,7 +849,7 @@ g_igenerator_process_struct_typedef (GIGenerator * igenerator, CSymbol * sym)
 	      GIdlNodeField *gifield =
 		(GIdlNodeField *) g_idl_node_new (G_IDL_NODE_FIELD);
 	      node->members = g_list_append (node->members, gifield);
-	      gifield->node.name = member->ident;
+	      gifield->node.name = g_strdup (member->ident);
 	      gifield->type = create_node_from_ctype (member->base_type);
 	    }
 	}
@@ -936,7 +944,7 @@ g_igenerator_process_struct_typedef (GIGenerator * igenerator, CSymbol * sym)
 		}
 
 	      givfunc = (GIdlNodeVFunc *) g_idl_node_new (G_IDL_NODE_VFUNC);
-	      givfunc->node.name = member->ident;
+	      givfunc->node.name = g_strdup (member->ident);
 	      node->members =
 		g_list_insert_sorted (node->members, givfunc,
 				      (GCompareFunc) g_idl_node_cmp);
@@ -956,7 +964,7 @@ g_igenerator_process_struct_typedef (GIGenerator * igenerator, CSymbol * sym)
 		    }
 		  else
 		    {
-		      param->node.name = param_sym->ident;
+		      param->node.name = g_strdup (param_sym->ident);
 		    }
 		  param->type = create_node_from_ctype (param_sym->base_type);
 		  givfunc->parameters =
@@ -1012,7 +1020,7 @@ g_igenerator_process_union_typedef (GIGenerator * igenerator, CSymbol * sym)
 	  GIdlNodeField *gifield =
 	    (GIdlNodeField *) g_idl_node_new (G_IDL_NODE_FIELD);
 	  node->members = g_list_append (node->members, gifield);
-	  gifield->node.name = member->ident;
+	  gifield->node.name = g_strdup (member->ident);
 	  gifield->type = create_node_from_ctype (member->base_type);
 	}
     }
@@ -1023,7 +1031,7 @@ g_igenerator_process_union_typedef (GIGenerator * igenerator, CSymbol * sym)
       char *lower_case_prefix;
       GList *member_l;
       
-      node->node.name = sym->ident;
+      node->node.name = g_strdup (sym->ident);
       igenerator->module->entries =
 	g_list_insert_sorted (igenerator->module->entries, node,
 			      (GCompareFunc) g_idl_node_cmp);
@@ -1032,7 +1040,7 @@ g_igenerator_process_union_typedef (GIGenerator * igenerator, CSymbol * sym)
       g_hash_table_insert (igenerator->type_by_lower_case_prefix,
 			   lower_case_prefix, node);
 
-      node->node.name = sym->ident;
+      node->node.name = g_strdup (sym->ident);
       for (member_l = union_type->child_list; member_l != NULL;
 	   member_l = member_l->next)
 	{
@@ -1040,7 +1048,7 @@ g_igenerator_process_union_typedef (GIGenerator * igenerator, CSymbol * sym)
 	  GIdlNodeField *gifield =
 	    (GIdlNodeField *) g_idl_node_new (G_IDL_NODE_FIELD);
 	  node->members = g_list_append (node->members, gifield);
-	  gifield->node.name = member->ident;
+	  gifield->node.name = g_strdup (member->ident);
 	  gifield->type = create_node_from_ctype (member->base_type);
 	}
     }
@@ -1079,7 +1087,7 @@ g_igenerator_process_enum_typedef (GIGenerator * igenerator, CSymbol * sym)
     }
 
   node = (GIdlNodeEnum *) g_idl_node_new (G_IDL_NODE_ENUM);
-  node->node.name = sym->ident;
+  node->node.name = g_strdup (sym->ident);
   igenerator->module->entries =
     g_list_insert_sorted (igenerator->module->entries, node,
 			  (GCompareFunc) g_idl_node_cmp);
@@ -1091,7 +1099,7 @@ g_igenerator_process_enum_typedef (GIGenerator * igenerator, CSymbol * sym)
       GIdlNodeValue *gival =
 	(GIdlNodeValue *) g_idl_node_new (G_IDL_NODE_VALUE);
       node->values = g_list_append (node->values, gival);
-      gival->node.name = member->ident;
+      gival->node.name = g_strdup (member->ident);
       gival->value = member->const_int;
     }
 }
@@ -1107,12 +1115,12 @@ g_igenerator_process_function_typedef (GIGenerator * igenerator,
   GIdlNodeFunction *gifunc =
     (GIdlNodeFunction *) g_idl_node_new (G_IDL_NODE_CALLBACK);
 
-  gifunc->node.name = sym->ident;
+  gifunc->node.name = g_strdup (sym->ident);
   igenerator->module->entries =
     g_list_insert_sorted (igenerator->module->entries, gifunc,
 			  (GCompareFunc) g_idl_node_cmp);
 
-  gifunc->symbol = sym->ident;
+  gifunc->symbol = g_strdup (sym->ident);
   gifunc->result = (GIdlNodeParam *) g_idl_node_new (G_IDL_NODE_PARAM);
   gifunc->result->type =
     create_node_from_ctype (sym->base_type->base_type->base_type);
@@ -1129,7 +1137,7 @@ g_igenerator_process_function_typedef (GIGenerator * igenerator,
 	}
       else
 	{
-	  param->node.name = param_sym->ident;
+	  param->node.name = g_strdup (param_sym->ident);
 	}
       param->type = create_node_from_ctype (param_sym->base_type);
       gifunc->parameters = g_list_append (gifunc->parameters, param);
@@ -1141,7 +1149,7 @@ g_igenerator_process_constant (GIGenerator * igenerator, CSymbol * sym)
 {
   GIdlNodeConstant *giconst =
     (GIdlNodeConstant *) g_idl_node_new (G_IDL_NODE_CONSTANT);
-  giconst->node.name = sym->ident;
+  giconst->node.name = g_strdup (sym->ident);
   igenerator->module->entries =
     g_list_insert_sorted (igenerator->module->entries, giconst,
 			  (GCompareFunc) g_idl_node_cmp);
@@ -1198,7 +1206,7 @@ g_igenerator_process_symbols (GIGenerator * igenerator)
 		(GIdlNodeStruct *) g_idl_node_new (G_IDL_NODE_STRUCT);
 	      char *lower_case_prefix;
 	      
-	      node->node.name = sym->ident;
+	      node->node.name = g_strdup (sym->ident);
 	      igenerator->module->entries =
 		g_list_insert_sorted (igenerator->module->entries, node,
 				      (GCompareFunc) g_idl_node_cmp);
@@ -1248,20 +1256,20 @@ g_igenerator_add_symbol (GIGenerator * igenerator, CSymbol * symbol)
   if (found_filename || igenerator->macro_scan)
     {
       igenerator->symbol_list =
-	g_list_prepend (igenerator->symbol_list, symbol);
+	g_list_prepend (igenerator->symbol_list, csymbol_ref (symbol));
     }
 
   if (symbol->type == CSYMBOL_TYPE_TYPEDEF)
 
     {
-      g_hash_table_insert (igenerator->typedef_table, symbol->ident, symbol);
+      g_hash_table_insert (igenerator->typedef_table, g_strdup (symbol->ident), GINT_TO_POINTER (TRUE));
     }
   else if (symbol->type == CSYMBOL_TYPE_STRUCT
 	   || symbol->type == CSYMBOL_TYPE_UNION
 	   || symbol->type == CSYMBOL_TYPE_ENUM)
     {
       g_hash_table_insert (igenerator->struct_or_union_or_enum_table,
-			   symbol->ident, symbol);
+			   g_strdup (symbol->ident), csymbol_ref (symbol));
     }
 }
 
@@ -1289,7 +1297,7 @@ g_igenerator_generate (GIGenerator * igenerator,
 	    {
 	      // ignore get_type functions with parameters
 	      igenerator->get_type_symbols =
-		g_list_prepend (igenerator->get_type_symbols, sym->ident);
+		g_list_prepend (igenerator->get_type_symbols, g_strdup (sym->ident));
 	    }
 	}
     }

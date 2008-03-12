@@ -46,7 +46,8 @@ static GHashTable *const_table = NULL;
 CSymbol *
 csymbol_new (CSymbolType type)
 {
-  CSymbol *s = g_new0 (CSymbol, 1);
+  CSymbol *s = g_slice_new0 (CSymbol);
+  s->ref_count = 1;
   s->type = type;
   return s;
 }
@@ -54,19 +55,32 @@ csymbol_new (CSymbolType type)
 static void
 ctype_free (CType * type)
 {
-  g_free (type);
   g_free (type->name);
-  g_list_foreach (type->child_list, (GFunc)ctype_free, NULL);
+  g_list_foreach (type->child_list, (GFunc)csymbol_unref, NULL);
   g_list_free (type->child_list);
+  g_slice_free (CType, type);
+}
+
+CSymbol *
+csymbol_ref (CSymbol * symbol)
+{
+  symbol->ref_count++;
 }
 
 void
-csymbol_free (CSymbol * symbol)
+csymbol_unref (CSymbol * symbol)
 {
-  g_free (symbol->ident);
-  ctype_free (symbol->base_type);
-  g_free (symbol->const_string);
-  g_free (symbol);
+  symbol->ref_count--;
+  if (symbol->ref_count == 0)
+    {
+      g_free (symbol->ident);
+      if (symbol->base_type)
+        ctype_free (symbol->base_type);
+      g_free (symbol->const_string);
+      g_slist_foreach (symbol->directives, (GFunc)cdirective_free, NULL);
+      g_slist_free (symbol->directives);
+      g_slice_free (CSymbol, symbol);
+    }
 }
  
 gboolean
@@ -78,7 +92,7 @@ csymbol_get_const_boolean (CSymbol * symbol)
 CType *
 ctype_new (CTypeType type)
 {
-  CType *t = g_new0 (CType, 1);
+  CType *t = g_slice_new0 (CType);
   t->type = type;
   return t;
 }
@@ -86,7 +100,19 @@ ctype_new (CTypeType type)
 CType *
 ctype_copy (CType * type)
 {
-  return g_memdup (type, sizeof (CType));
+  GList *l;
+  CType *result = g_slice_new0 (CType);
+  result->type = type->type;
+  result->storage_class_specifier = type->storage_class_specifier;
+  result->type_qualifier = type->type_qualifier;
+  result->function_specifier = type->function_specifier;
+  if (type->name)
+    result->name = g_strdup (type->name);
+  if (type->base_type)
+    result->base_type = ctype_copy (type->base_type);
+  for (l = type->child_list; l; l = l->next)
+    result->child_list = g_list_append (result->child_list, csymbol_ref (l->data));
+  return result;
 }
 
 CType *
@@ -133,7 +159,8 @@ CType *
 cpointer_new (CType * base_type)
 {
   CType *pointer = ctype_new (CTYPE_POINTER);
-  pointer->base_type = ctype_copy (base_type);
+  if (base_type != NULL)
+    pointer->base_type = ctype_copy (base_type);
   return pointer;
 }
 
@@ -159,7 +186,7 @@ csymbol_merge_type (CSymbol *symbol, CType *type)
   while (*foundation_type != NULL) {
     foundation_type = &((*foundation_type)->base_type);
   }
-  *foundation_type = ctype_copy (type);
+  *foundation_type = type;
 }
 
 CDirective *
@@ -222,6 +249,7 @@ cdirective_free (CDirective *directive)
 %type <ctype> enum_specifier
 %type <ctype> pointer
 %type <ctype> specifier_qualifier_list
+%type <ctype> type_name
 %type <ctype> struct_or_union
 %type <ctype> struct_or_union_specifier
 %type <ctype> type_specifier
@@ -281,6 +309,8 @@ primary_expression
 		$$ = g_hash_table_lookup (const_table, $1);
 		if ($$ == NULL) {
 			$$ = csymbol_new (CSYMBOL_TYPE_INVALID);
+		} else {
+			$$ = csymbol_ref ($$);
 		}
 	  }
 	| INTEGER
@@ -419,6 +449,7 @@ unary_expression
 	  }
 	| SIZEOF '(' type_name ')'
 	  {
+		ctype_free ($3);
 		$$ = csymbol_new (CSYMBOL_TYPE_INVALID);
 	  }
 	;
@@ -454,6 +485,7 @@ cast_expression
 	: unary_expression
 	| '(' type_name ')' cast_expression
 	  {
+		ctype_free ($2);
 		$$ = $4;
 	  }
 	;
@@ -658,7 +690,7 @@ declaration
 		GList *l;
 		for (l = $2; l != NULL; l = l->next) {
 			CSymbol *sym = l->data;
-			csymbol_merge_type (sym, $1);
+			csymbol_merge_type (sym, ctype_copy ($1));
 			if ($1->storage_class_specifier & STORAGE_CLASS_TYPEDEF) {
 				sym->type = CSYMBOL_TYPE_TYPEDEF;
 			} else if (sym->base_type->type == CTYPE_FUNCTION) {
@@ -667,9 +699,14 @@ declaration
 				sym->type = CSYMBOL_TYPE_OBJECT;
 			}
 			g_igenerator_add_symbol (igenerator, sym);
+			csymbol_unref (sym);
 		}
+		ctype_free ($1);
 	  }
 	| declaration_specifiers ';'
+	  {
+		ctype_free ($1);
+	  }
 	;
 
 declaration_specifiers
@@ -796,6 +833,7 @@ type_specifier
 	| typedef_name
 	  {
 		$$ = ctypedef_new ($1);
+		g_free ($1);
 	  }
 	;
 
@@ -817,6 +855,7 @@ struct_or_union_specifier
 		sym->ident = g_strdup ($$->name);
 		sym->base_type = ctype_copy ($$);
 		g_igenerator_add_symbol (igenerator, sym);
+		csymbol_unref (sym);
 	  }
 	| struct_or_union '{' struct_declaration_list '}'
 	  {
@@ -859,9 +898,10 @@ struct_declaration
 			if ($1->storage_class_specifier & STORAGE_CLASS_TYPEDEF) {
 				sym->type = CSYMBOL_TYPE_TYPEDEF;
 			}
-			csymbol_merge_type (sym, $1);
+			csymbol_merge_type (sym, ctype_copy ($1));
 			$$ = g_list_append ($$, sym);
 		}
+		ctype_free ($1);
 	  }
 	;
 
@@ -957,7 +997,7 @@ enumerator
 		$$->ident = $1;
 		$$->const_int_set = TRUE;
 		$$->const_int = ++last_enum_value;
-		g_hash_table_insert (const_table, g_strdup ($$->ident), $$);
+		g_hash_table_insert (const_table, g_strdup ($$->ident), csymbol_ref ($$));
 	  }
 	| identifier '=' constant_expression
 	  {
@@ -966,7 +1006,7 @@ enumerator
 		$$->const_int_set = TRUE;
 		$$->const_int = $3->const_int;
 		last_enum_value = $$->const_int;
-		g_hash_table_insert (const_table, g_strdup ($$->ident), $$);
+		g_hash_table_insert (const_table, g_strdup ($$->ident), csymbol_ref ($$));
 	  }
 	;
 
@@ -1333,6 +1373,7 @@ object_macro_define
 		if ($2->const_int_set || $2->const_string != NULL) {
 			$2->ident = $1;
 			g_igenerator_add_symbol (igenerator, $2);
+			csymbol_unref ($2);
 		}
 	  }
 	;
@@ -1363,7 +1404,7 @@ g_igenerator_parse_file (GIGenerator *igenerator, FILE *file)
   g_return_val_if_fail (file != NULL, FALSE);
   
   const_table = g_hash_table_new_full (g_str_hash, g_str_equal,
-				       g_free, NULL);
+				       g_free, csymbol_unref);
   
   lineno = 1;
   yyin = file;
