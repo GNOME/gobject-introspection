@@ -220,7 +220,8 @@ write_compiled (GIdlCompilerContext *ctx, FILE *compiled,
   fprintf (compiled, gmetadata_header);
 
   /* write the shlibs string before we write out the whole string length */
-  g_idl_compiler_write_string (ctx, shlib);
+  if (shlib)
+    g_idl_compiler_write_string (ctx, shlib);
 
   /* +1 is for the null byte right at the end of the strings section */
   fprintf (compiled, struct_header, ctx->struct_name,

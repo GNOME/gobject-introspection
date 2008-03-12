@@ -1,3 +1,8 @@
+2008-03-12  Rob Taylor  <rob.taylor@codethink.co.uk>
+
+	* tools/gidlcompilercontext.c: (write_compiled):
+	Fix critical warning when no shlib passed to g-idl-compiler.
+
 2008-03-12  Johan Dahlin  <johan@gnome.org>
 
 	* tests/parser/utility-expected.gidl:
