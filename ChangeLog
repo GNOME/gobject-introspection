@@ -1,3 +1,9 @@
+2008-03-12  Johan Dahlin  <johan@gnome.org>
+
+	* relaxng/relaxng.rng:
+	Add a releaxng in relaxng we can use to validate the relaxngs
+	schemas
+
 2008-03-12  Jürg Billeter  <j@bitron.ch>
 
 	* tools/scanner.c: (g_igenerator_new):
