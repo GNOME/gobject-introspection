@@ -55,7 +55,7 @@ g_igenerator_new (const gchar *namespace,
 
   igenerator->typedef_table = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
   igenerator->struct_or_union_or_enum_table =
-    g_hash_table_new_full (g_str_hash, g_str_equal, g_free, csymbol_unref);
+    g_hash_table_new_full (g_str_hash, g_str_equal, g_free, (GDestroyNotify)csymbol_unref);
 
   igenerator->type_map = g_hash_table_new (g_str_hash, g_str_equal);
   igenerator->type_by_lower_case_prefix =

@@ -1,5 +1,11 @@
 2008-03-12  Jürg Billeter  <j@bitron.ch>
 
+	* tools/scanner.c: (g_igenerator_new):
+	* tools/scannerparser.y:
+	Fix compiler warnings.
+
+2008-03-12  Jürg Billeter  <j@bitron.ch>
+
 	* tools/scanner.c:
 	* tools/scanner.h:
 	* tools/scannerparser.y:
