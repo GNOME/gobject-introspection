@@ -1,0 +1,177 @@
+/* GObject introspectaion: public scanner api
+ *
+ * Copyright (C) 2007 Jürg Billeter
+ * Copyright (C) 2008 Johan Dahlin
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ * Boston, MA 02111-1307, USA.
+ *
+ */
+
+#ifndef __SOURCE_SCANNER_H__
+#define __SOURCE_SCANNER_H__
+
+#include <glib.h>
+#include <stdio.h>
+
+G_BEGIN_DECLS
+
+typedef struct _GISourceScanner GISourceScanner;
+typedef struct _GISourceSymbol GISourceSymbol;
+typedef struct _GISourceType GISourceType;
+typedef struct _GISourceDirective GISourceDirective;
+
+typedef enum
+{
+  CSYMBOL_TYPE_INVALID,
+  CSYMBOL_TYPE_CONST,
+  CSYMBOL_TYPE_OBJECT,
+  CSYMBOL_TYPE_FUNCTION,
+  CSYMBOL_TYPE_STRUCT,
+  CSYMBOL_TYPE_UNION,
+  CSYMBOL_TYPE_ENUM,
+  CSYMBOL_TYPE_TYPEDEF
+} GISourceSymbolType;
+
+typedef enum
+{
+  CTYPE_INVALID,
+  CTYPE_VOID,
+  CTYPE_BASIC_TYPE,
+  CTYPE_TYPEDEF,
+  CTYPE_STRUCT,
+  CTYPE_UNION,
+  CTYPE_ENUM,
+  CTYPE_POINTER,
+  CTYPE_ARRAY,
+  CTYPE_FUNCTION
+} GISourceTypeType;
+
+typedef enum
+{
+  STORAGE_CLASS_NONE = 0,
+  STORAGE_CLASS_TYPEDEF = 1 << 1,
+  STORAGE_CLASS_EXTERN = 1 << 2,
+  STORAGE_CLASS_STATIC = 1 << 3,
+  STORAGE_CLASS_AUTO = 1 << 4,
+  STORAGE_CLASS_REGISTER = 1 << 5
+} StorageClassSpecifier;
+
+typedef enum
+{
+  TYPE_QUALIFIER_NONE = 0,
+  TYPE_QUALIFIER_CONST = 1 << 1,
+  TYPE_QUALIFIER_RESTRICT = 1 << 2,
+  TYPE_QUALIFIER_VOLATILE = 1 << 3
+} TypeQualifier;
+
+typedef enum
+{
+  FUNCTION_NONE = 0,
+  FUNCTION_INLINE = 1 << 1
+} FunctionSpecifier;
+
+typedef enum
+{
+  UNARY_ADDRESS_OF,
+  UNARY_POINTER_INDIRECTION,
+  UNARY_PLUS,
+  UNARY_MINUS,
+  UNARY_BITWISE_COMPLEMENT,
+  UNARY_LOGICAL_NEGATION
+} UnaryOperator;
+
+struct _GISourceScanner
+{
+  char *current_filename;
+  gboolean macro_scan;
+  GSList *symbols;
+  GList *filenames;
+  GHashTable *directives_map;
+  GHashTable *typedef_table;
+  GHashTable *struct_or_union_or_enum_table;
+};
+
+struct _GISourceSymbol
+{
+  int ref_count;
+  GISourceSymbolType type;
+  int id;
+  char *ident;
+  GISourceType *base_type;
+  gboolean const_int_set;
+  int const_int;
+  char *const_string;
+  GSList *directives; /* list of GISourceDirective */
+};
+
+struct _GISourceType
+{
+  GISourceTypeType type;
+  StorageClassSpecifier storage_class_specifier;
+  TypeQualifier type_qualifier;
+  FunctionSpecifier function_specifier;
+  char *name;
+  GISourceType *base_type;
+  GList *child_list;
+};
+
+struct _GISourceDirective
+{
+  char *name;
+  char *value;
+  GSList *options;
+};
+
+GISourceScanner *   gi_source_scanner_new              (void);
+gboolean            gi_source_scanner_lex_filename     (GISourceScanner  *igenerator,
+						        const gchar      *filename);
+gboolean            gi_source_scanner_parse_file       (GISourceScanner  *igenerator,
+						        FILE             *file);
+GSList *            gi_source_scanner_get_symbols      (GISourceScanner  *scanner);
+void                gi_source_scanner_free             (GISourceScanner  *scanner);
+
+GISourceSymbol *    gi_source_symbol_new               (GISourceSymbolType  type);
+gboolean            gi_source_symbol_get_const_boolean (GISourceSymbol     *symbol);
+GISourceSymbol *    gi_source_symbol_ref               (GISourceSymbol     *symbol);
+void                gi_source_symbol_unref             (GISourceSymbol     *symbol);
+
+GISourceDirective * gi_source_directive_new            (const gchar 	   *name,
+							const gchar 	   *value,
+							GSList             *options);
+void                gi_source_directive_free           (GISourceDirective  *directive);
+
+/* Private */
+GISourceType *      gi_source_array_new                (void);
+void                gi_source_scanner_add_symbol       (GISourceScanner  *scanner,
+							GISourceSymbol   *symbol);
+gboolean            gi_source_scanner_is_typedef       (GISourceScanner  *scanner,
+							const char       *name);
+void                gi_source_symbol_merge_type        (GISourceSymbol   *symbol,
+							GISourceType     *type);
+GISourceType *      gi_source_type_new                 (GISourceTypeType  type);
+GISourceType *      gi_source_type_copy                (GISourceType     *type);
+GISourceType *      gi_source_basic_type_new           (const char       *name);
+GISourceType *      gi_source_typedef_new              (const char       *name);
+GISourceType * 	    gi_source_struct_new               (const char 	 *name);
+GISourceType * 	    gi_source_union_new 	       (const char 	 *name);
+GISourceType * 	    gi_source_enum_new 		       (const char 	 *name);
+GISourceType * 	    gi_source_pointer_new 	       (GISourceType     *base_type);
+GISourceType * 	    gi_source_array_new                (void);
+GISourceType * 	    gi_source_function_new             (void);
+
+G_END_DECLS
+
+#endif /* __SOURCE_SCANNER_H__ */

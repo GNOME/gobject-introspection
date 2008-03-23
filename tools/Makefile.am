@@ -5,7 +5,7 @@ BUILT_SOURCES = scannerparser.c scannerparser.h scannerlexer.c scannerlexer.h \
 		gmetadata-header.c
 
 CLEANFILES = scannerparser.c scannerparser.h scannerlexer.c scannerlexer.h gmetadata-header.c
-AM_YFLAGS = -d
+AM_YFLAGS = -d -t
 EXTRA_DIST = quote-file.sh
 
 # Why do I have to do this automake?
@@ -43,6 +43,8 @@ g_idl_generate_CFLAGS = $(GIREPO_CFLAGS) -I$(top_srcdir)/girepository
 g_idl_generate_LDADD = $(GIREPO_LIBS) $(top_builddir)/girepository/libgirepository.la
 
 g_idl_scanner_SOURCES =				\
+	sourcescanner.c				\
+	sourcescanner.h				\
 	scanner.c				\
 	scanner.h				\
 	scannerlexer.l				\

@@ -1,5 +1,19 @@
 2008-03-23  Johan Dahlin  <johan@gnome.org>
 
+	* tools/Makefile.am:
+	* tools/scanner.c:
+	* tools/scanner.h:
+	* tools/scannerlexer.l:
+	* tools/scannerparser.y:
+	* tools/sourcescanner.c:
+	* tools/sourcescanner.h:
+	Split out the source scanner from the generator.
+	Rename the symbols used in the scanner to use the gi_ prefix.
+	This should make it possible to use the raw C parser from
+	other programs.
+
+2008-03-23  Johan Dahlin  <johan@gnome.org>
+
 	* tests/parser/Makefile.am (utility.gidl): 
 	* tests/parser/utility-expected.gidl: 
 	Pass in the gobject.gidl since we're defining a GObject.

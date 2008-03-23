@@ -30,6 +30,7 @@
 #include <glib-object.h>
 #include <sys/wait.h> /* waitpid */
 #include <gmodule.h>
+#include "sourcescanner.h"
 #include "scanner.h"
 #include "gidlparser.h"
 #include "gidlmodule.h"
@@ -53,16 +54,12 @@ g_igenerator_new (const gchar *namespace,
     g_ascii_strdown (igenerator->namespace, -1);
   igenerator->module = g_idl_module_new (namespace, shared_library);
 
-  igenerator->typedef_table = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
-  igenerator->struct_or_union_or_enum_table =
-    g_hash_table_new_full (g_str_hash, g_str_equal, g_free, (GDestroyNotify)csymbol_unref);
-
   igenerator->type_map = g_hash_table_new (g_str_hash, g_str_equal);
   igenerator->type_by_lower_case_prefix =
     g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
   igenerator->symbols = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
-  igenerator->directives_map = g_hash_table_new (g_str_hash, g_str_equal);
-
+  igenerator->scanner = gi_source_scanner_new ();
+  
   return igenerator;
 }
 
@@ -73,28 +70,14 @@ g_igenerator_free (GIGenerator *generator)
   g_free (generator->shared_library);
   g_free (generator->lower_case_namespace);
   
-  g_list_foreach (generator->filenames, (GFunc)g_free, NULL);
-  g_list_free (generator->filenames);
-
-  g_free (generator->current_filename);
-
-  g_list_foreach (generator->symbol_list, (GFunc)csymbol_unref, NULL);
-  g_list_free (generator->symbol_list);
-
-  g_hash_table_destroy (generator->typedef_table);
-  g_hash_table_destroy (generator->struct_or_union_or_enum_table);
-
   g_idl_module_free (generator->module);
 
   g_list_foreach (generator->get_type_symbols, (GFunc)g_free, NULL);
   g_list_free (generator->get_type_symbols);
 
-  g_hash_table_destroy (generator->type_map);
   g_hash_table_destroy (generator->type_by_lower_case_prefix);
 
   g_hash_table_destroy (generator->symbols);
-
-  g_hash_table_destroy (generator->directives_map);
 
   g_free (generator);
 }
@@ -133,7 +116,7 @@ create_node_from_gtype (GType type_id)
 }
 
 static GIdlNodeType *
-create_node_from_ctype (CType * ctype)
+create_node_from_ctype (GISourceType * ctype)
 {
   GIdlNodeType *node;
 
@@ -298,9 +281,9 @@ g_igenerator_process_signals (GIGenerator * igenerator,
 static const gchar *
 lookup_symbol (GIGenerator *igenerator, const gchar *typename)
 {
-  const gchar *name =
-    g_hash_table_lookup (igenerator->symbols, typename);
+  const gchar *name;
 
+  name = g_hash_table_lookup (igenerator->symbols, typename);
   if (!name)
     {
       g_printerr ("Unknown symbol: %s\n", typename);
@@ -340,12 +323,11 @@ g_igenerator_create_object (GIGenerator *igenerator,
        * for GdkWindow
        */
       g_hash_table_insert (igenerator->type_by_lower_case_prefix,
-			   alt_lower_case_prefix, node);
+			   g_strdup (alt_lower_case_prefix),
+			   node);
     }
-  else
-    {
-      g_free (alt_lower_case_prefix);
-    }
+
+  g_free (alt_lower_case_prefix);
 
   node->gtype_name = g_strdup (node->node.name);
   node->gtype_init = g_strdup (symbol_name);
@@ -353,6 +335,7 @@ g_igenerator_create_object (GIGenerator *igenerator,
 					    g_type_name (g_type_parent (type_id))));
   
   type_interfaces = g_type_interfaces (type_id, &n_type_interfaces);
+
   for (i = 0; i < n_type_interfaces; i++)
     {
       char *iface_name =
@@ -407,10 +390,10 @@ g_igenerator_create_interface (GIGenerator *igenerator,
 		       lower_case_prefix, node);
   node->gtype_name = g_strdup (node->node.name);
   node->gtype_init = g_strdup (symbol_name);
-  
+
   iface_prereqs =
     g_type_interface_prerequisites (type_id, &n_iface_prereqs);
-
+  
   for (i = 0; i < n_iface_prereqs; i++)
     {
       if (g_type_fundamental (iface_prereqs[i]) == G_TYPE_OBJECT)
@@ -533,12 +516,15 @@ g_igenerator_process_module_symbol (GIGenerator *igenerator,
   /* ignore already processed functions */
   if (symbol_name == NULL)
     return FALSE;
-      
+  
   if (!g_module_symbol (module,
 			symbol_name,
 			(gpointer *) & type_fun))
     return FALSE;
-      
+
+  if (igenerator->verbose)
+    g_print ("DEBUG: calling %s\n", symbol_name);
+  
   type_id = type_fun ();
   type_fundamental = g_type_fundamental (type_id);
   lower_case_prefix =
@@ -546,6 +532,9 @@ g_igenerator_process_module_symbol (GIGenerator *igenerator,
 		 (symbol_name,
 		  strlen (symbol_name) - strlen ("_get_type")),
 		 "_", "");
+
+  if (igenerator->verbose)
+    g_print ("DEBUG: processing it as a %s\n", g_type_name (type_fundamental));
 
   switch (type_fundamental)
     {
@@ -581,7 +570,7 @@ g_igenerator_process_module (GIGenerator * igenerator,
 {
   GModule *module;
   GList *l;
-  
+
   module = g_module_open (filename,
 			  G_MODULE_BIND_LAZY | G_MODULE_BIND_LOCAL);
   
@@ -590,6 +579,9 @@ g_igenerator_process_module (GIGenerator * igenerator,
       g_critical ("Couldn't open module: %s", filename);
       return;
     }
+
+  if (igenerator->verbose)
+    g_print ("DEBUG: opened library %s\n", filename);
 
   for (l = igenerator->get_type_symbols; l != NULL; l = l->next)
     {
@@ -601,7 +593,7 @@ g_igenerator_process_module (GIGenerator * igenerator,
 }
 
 static void
-g_igenerator_process_function_symbol (GIGenerator * igenerator, CSymbol * sym)
+g_igenerator_process_function_symbol (GIGenerator * igenerator, GISourceSymbol * sym)
 {
   GIdlNodeFunction *func;
   char *last_underscore;
@@ -680,11 +672,11 @@ g_igenerator_process_function_symbol (GIGenerator * igenerator, CSymbol * sym)
   func->result = (GIdlNodeParam *) g_idl_node_new (G_IDL_NODE_PARAM);
   func->result->type = create_node_from_ctype (sym->base_type->base_type);
 
-  directives = g_hash_table_lookup (igenerator->directives_map, func->symbol);
+  directives = g_hash_table_lookup (igenerator->scanner->directives_map, func->symbol);
 
   for (j = directives; j; j = j->next) 
     {
-       CDirective *directive = j->data;
+       GISourceDirective *directive = j->data;
        if (g_ascii_strncasecmp ("return", directive->name, 6) == 0) 
           {
              GSList *options;
@@ -700,7 +692,7 @@ g_igenerator_process_function_symbol (GIGenerator * igenerator, CSymbol * sym)
   for (param_l = sym->base_type->child_list, i = 1; param_l != NULL;
        param_l = param_l->next, i++)
     {
-      CSymbol *param_sym = param_l->data;
+      GISourceSymbol *param_sym = param_l->data;
       GIdlNodeParam *param;
 
       param = (GIdlNodeParam *) g_idl_node_new (G_IDL_NODE_PARAM);
@@ -708,7 +700,7 @@ g_igenerator_process_function_symbol (GIGenerator * igenerator, CSymbol * sym)
 
       for (j = directives; j; j = j->next) 
        {
-          CDirective *directive = j->data;
+          GISourceDirective *directive = j->data;
 
           if (g_ascii_strcasecmp (param_sym->ident, directive->name) == 0) 
             {
@@ -749,14 +741,14 @@ g_igenerator_process_function_symbol (GIGenerator * igenerator, CSymbol * sym)
 
  /* By removing it here, we mark it as handled, memory will be freed by
   * the cleanup for sym */
-  g_hash_table_remove (igenerator->directives_map, func->symbol);
+  g_hash_table_remove (igenerator->scanner->directives_map, func->symbol);
 
 }
 
 static void
 g_igenerator_process_unregistered_struct_typedef (GIGenerator * igenerator,
-						  CSymbol * sym,
-						  CType * struct_type)
+						  GISourceSymbol * sym,
+						  GISourceType * struct_type)
 {
   GIdlNodeStruct *node =
     (GIdlNodeStruct *) g_idl_node_new (G_IDL_NODE_STRUCT);
@@ -775,7 +767,7 @@ g_igenerator_process_unregistered_struct_typedef (GIGenerator * igenerator,
   for (member_l = struct_type->child_list; member_l != NULL;
        member_l = member_l->next)
     {
-      CSymbol *member = member_l->data;
+      GISourceSymbol *member = member_l->data;
       GIdlNodeField *gifield =
 	(GIdlNodeField *) g_idl_node_new (G_IDL_NODE_FIELD);
 
@@ -786,18 +778,18 @@ g_igenerator_process_unregistered_struct_typedef (GIGenerator * igenerator,
 }
 
 static void
-g_igenerator_process_struct_typedef (GIGenerator * igenerator, CSymbol * sym)
+g_igenerator_process_struct_typedef (GIGenerator * igenerator, GISourceSymbol * sym)
 {
-  CType *struct_type = sym->base_type;
+  GISourceType *struct_type = sym->base_type;
   gboolean opaque_type = FALSE;
   GIdlNode *type;
   
   if (struct_type->child_list == NULL)
     {
-      CSymbol *struct_symbol;
+      GISourceSymbol *struct_symbol;
       g_assert (struct_type->name != NULL);
       struct_symbol =
-	g_hash_table_lookup (igenerator->struct_or_union_or_enum_table,
+	g_hash_table_lookup (igenerator->scanner->struct_or_union_or_enum_table,
 			     struct_type->name);
       if (struct_symbol != NULL)
 	{
@@ -809,7 +801,7 @@ g_igenerator_process_struct_typedef (GIGenerator * igenerator, CSymbol * sym)
     {
       opaque_type = TRUE;
     }
-  
+
   type = g_hash_table_lookup (igenerator->type_map, sym->ident);
   if (type != NULL)
     {
@@ -824,7 +816,7 @@ g_igenerator_process_struct_typedef (GIGenerator * igenerator, CSymbol * sym)
 	  for (member_l = struct_type->child_list->next; member_l != NULL;
 	       member_l = member_l->next)
 	    {
-	      CSymbol *member = member_l->data;
+	      GISourceSymbol *member = member_l->data;
 	      /* ignore private / reserved members */
 	      if (member->ident[0] == '_'
 		  || g_str_has_prefix (member->ident, "priv"))
@@ -845,7 +837,7 @@ g_igenerator_process_struct_typedef (GIGenerator * igenerator, CSymbol * sym)
 	  for (member_l = struct_type->child_list; member_l != NULL;
 	       member_l = member_l->next)
 	    {
-	      CSymbol *member = member_l->data;
+	      GISourceSymbol *member = member_l->data;
 	      GIdlNodeField *gifield =
 		(GIdlNodeField *) g_idl_node_new (G_IDL_NODE_FIELD);
 	      node->members = g_list_append (node->members, gifield);
@@ -889,7 +881,7 @@ g_igenerator_process_struct_typedef (GIGenerator * igenerator, CSymbol * sym)
       for (member_l = struct_type->child_list->next; member_l != NULL;
 	   member_l = member_l->next)
 	{
-	  CSymbol *member = member_l->data;
+	  GISourceSymbol *member = member_l->data;
 	  /* ignore private / reserved members */
 	  if (member->ident[0] == '_')
 	    {
@@ -926,7 +918,7 @@ g_igenerator_process_struct_typedef (GIGenerator * igenerator, CSymbol * sym)
 			   vfunc_param_l = vfunc_param_l->next, sig_param_l =
 			   sig_param_l->next)
 			{
-			  CSymbol *vfunc_param = vfunc_param_l->data;
+			  GISourceSymbol *vfunc_param = vfunc_param_l->data;
 			  GIdlNodeParam *sig_param = sig_param_l->data;
 			  if (vfunc_param->ident != NULL)
 			    {
@@ -955,7 +947,7 @@ g_igenerator_process_struct_typedef (GIGenerator * igenerator, CSymbol * sym)
 	      for (param_l = member->base_type->base_type->child_list, i = 1;
 		   param_l != NULL; param_l = param_l->next, i++)
 		{
-		  CSymbol *param_sym = param_l->data;
+		  GISourceSymbol *param_sym = param_l->data;
 		  GIdlNodeParam *param =
 		    (GIdlNodeParam *) g_idl_node_new (G_IDL_NODE_PARAM);
 		  if (param_sym->ident == NULL)
@@ -985,17 +977,17 @@ g_igenerator_process_struct_typedef (GIGenerator * igenerator, CSymbol * sym)
 }
 
 static void
-g_igenerator_process_union_typedef (GIGenerator * igenerator, CSymbol * sym)
+g_igenerator_process_union_typedef (GIGenerator * igenerator, GISourceSymbol * sym)
 {
-  CType *union_type = sym->base_type;
+  GISourceType *union_type = sym->base_type;
   gboolean opaque_type = FALSE;
   GIdlNode *type;
   
   if (union_type->child_list == NULL)
     {
       g_assert (union_type->name != NULL);
-      CSymbol *union_symbol =
-	g_hash_table_lookup (igenerator->struct_or_union_or_enum_table,
+      GISourceSymbol *union_symbol =
+	g_hash_table_lookup (igenerator->scanner->struct_or_union_or_enum_table,
 			     union_type->name);
       if (union_symbol != NULL)
 	{
@@ -1016,7 +1008,7 @@ g_igenerator_process_union_typedef (GIGenerator * igenerator, CSymbol * sym)
       for (member_l = union_type->child_list; member_l != NULL;
 	   member_l = member_l->next)
 	{
-	  CSymbol *member = member_l->data;
+	  GISourceSymbol *member = member_l->data;
 	  GIdlNodeField *gifield =
 	    (GIdlNodeField *) g_idl_node_new (G_IDL_NODE_FIELD);
 	  node->members = g_list_append (node->members, gifield);
@@ -1044,7 +1036,7 @@ g_igenerator_process_union_typedef (GIGenerator * igenerator, CSymbol * sym)
       for (member_l = union_type->child_list; member_l != NULL;
 	   member_l = member_l->next)
 	{
-	  CSymbol *member = member_l->data;
+	  GISourceSymbol *member = member_l->data;
 	  GIdlNodeField *gifield =
 	    (GIdlNodeField *) g_idl_node_new (G_IDL_NODE_FIELD);
 	  node->members = g_list_append (node->members, gifield);
@@ -1055,19 +1047,19 @@ g_igenerator_process_union_typedef (GIGenerator * igenerator, CSymbol * sym)
 }
 
 static void
-g_igenerator_process_enum_typedef (GIGenerator * igenerator, CSymbol * sym)
+g_igenerator_process_enum_typedef (GIGenerator * igenerator, GISourceSymbol * sym)
 {
-  CType *enum_type;
+  GISourceType *enum_type;
   GList *member_l;
   GIdlNodeEnum *node;
-  CSymbol *enum_symbol;
+  GISourceSymbol *enum_symbol;
 
   enum_type = sym->base_type;
   if (enum_type->child_list == NULL)
     {
       g_assert (enum_type->name != NULL);
       enum_symbol =
-	g_hash_table_lookup (igenerator->struct_or_union_or_enum_table,
+	g_hash_table_lookup (igenerator->scanner->struct_or_union_or_enum_table,
 			     enum_type->name);
       if (enum_symbol != NULL)
 	{
@@ -1095,7 +1087,7 @@ g_igenerator_process_enum_typedef (GIGenerator * igenerator, CSymbol * sym)
   for (member_l = enum_type->child_list; member_l != NULL;
        member_l = member_l->next)
     {
-      CSymbol *member = member_l->data;
+      GISourceSymbol *member = member_l->data;
       GIdlNodeValue *gival =
 	(GIdlNodeValue *) g_idl_node_new (G_IDL_NODE_VALUE);
       node->values = g_list_append (node->values, gival);
@@ -1106,7 +1098,7 @@ g_igenerator_process_enum_typedef (GIGenerator * igenerator, CSymbol * sym)
 
 static void
 g_igenerator_process_function_typedef (GIGenerator * igenerator,
-				       CSymbol * sym)
+				       GISourceSymbol * sym)
 {
   GList *param_l;
   int i;
@@ -1128,7 +1120,7 @@ g_igenerator_process_function_typedef (GIGenerator * igenerator,
   for (param_l = sym->base_type->base_type->child_list, i = 1;
        param_l != NULL; param_l = param_l->next, i++)
     {
-      CSymbol *param_sym = param_l->data;
+      GISourceSymbol *param_sym = param_l->data;
       GIdlNodeParam *param =
 	(GIdlNodeParam *) g_idl_node_new (G_IDL_NODE_PARAM);
       if (param_sym->ident == NULL)
@@ -1145,7 +1137,7 @@ g_igenerator_process_function_typedef (GIGenerator * igenerator,
 }
 
 static void
-g_igenerator_process_constant (GIGenerator * igenerator, CSymbol * sym)
+g_igenerator_process_constant (GIGenerator * igenerator, GISourceSymbol * sym)
 {
   GIdlNodeConstant *giconst =
     (GIdlNodeConstant *) g_idl_node_new (G_IDL_NODE_CONSTANT);
@@ -1170,12 +1162,12 @@ g_igenerator_process_constant (GIGenerator * igenerator, CSymbol * sym)
 static void
 g_igenerator_process_symbols (GIGenerator * igenerator)
 {
-  GList *l;
+  GSList *l;
   /* process type symbols first to ensure complete type hashtables */
   /* type symbols */
-  for (l = igenerator->symbol_list; l != NULL; l = l->next)
+  for (l = igenerator->scanner->symbols; l != NULL; l = l->next)
     {
-      CSymbol *sym = l->data;
+      GISourceSymbol *sym = l->data;
       if (sym->ident[0] == '_')
 	{
 	  /* ignore private / reserved symbols */
@@ -1218,9 +1210,9 @@ g_igenerator_process_symbols (GIGenerator * igenerator)
 	}
     }
   /* other symbols */
-  for (l = igenerator->symbol_list; l != NULL; l = l->next)
+  for (l = igenerator->scanner->symbols; l != NULL; l = l->next)
     {
-      CSymbol *sym = l->data;
+      GISourceSymbol *sym = l->data;
       if (sym->ident[0] == '_')
 	{
 	  /* ignore private / reserved symbols */
@@ -1238,58 +1230,16 @@ g_igenerator_process_symbols (GIGenerator * igenerator)
 }
 
 void
-g_igenerator_add_symbol (GIGenerator * igenerator, CSymbol * symbol)
-{
-  /* only add symbols of main file */
-  gboolean found_filename = FALSE;
-  GList *l;
-  
-  for (l = igenerator->filenames; l != NULL; l = l->next)
-    {
-      if (strcmp (l->data, igenerator->current_filename) == 0)
-	{
-	  found_filename = TRUE;
-	  break;
-	}
-    }
-
-  if (found_filename || igenerator->macro_scan)
-    {
-      igenerator->symbol_list =
-	g_list_prepend (igenerator->symbol_list, csymbol_ref (symbol));
-    }
-
-  if (symbol->type == CSYMBOL_TYPE_TYPEDEF)
-
-    {
-      g_hash_table_insert (igenerator->typedef_table, g_strdup (symbol->ident), GINT_TO_POINTER (TRUE));
-    }
-  else if (symbol->type == CSYMBOL_TYPE_STRUCT
-	   || symbol->type == CSYMBOL_TYPE_UNION
-	   || symbol->type == CSYMBOL_TYPE_ENUM)
-    {
-      g_hash_table_insert (igenerator->struct_or_union_or_enum_table,
-			   g_strdup (symbol->ident), csymbol_ref (symbol));
-    }
-}
-
-gboolean
-g_igenerator_is_typedef (GIGenerator * igenerator, const char *name)
-{
-  gboolean b = g_hash_table_lookup (igenerator->typedef_table, name) != NULL;
-  return b;
-}
-
-void
 g_igenerator_generate (GIGenerator * igenerator,
 		       const gchar * filename,
 		       GList *libraries)
 {
-  GList *l;
+  GSList *l;
+  GList *k;
   
-  for (l = igenerator->symbol_list; l != NULL; l = l->next)
+  for (l = igenerator->scanner->symbols; l != NULL; l = l->next)
     {
-      CSymbol *sym = l->data;
+      GISourceSymbol *sym = l->data;
       if (sym->type == CSYMBOL_TYPE_FUNCTION
 	  && g_str_has_suffix (sym->ident, "_get_type"))
 	{
@@ -1305,8 +1255,8 @@ g_igenerator_generate (GIGenerator * igenerator,
   /* ensure to initialize GObject */
   g_type_class_ref (G_TYPE_OBJECT);
 
-  for (l = libraries; l; l = l->next)
-      g_igenerator_process_module (igenerator, (const gchar*)l->data);
+  for (k = libraries; k; k = k->next)
+      g_igenerator_process_module (igenerator, (const gchar*)k->data);
 
   g_igenerator_process_symbols (igenerator);
 
@@ -1361,13 +1311,15 @@ g_igenerator_parse_macros (GIGenerator * igenerator)
 {
   GError *error = NULL;
   char *tmp_name = NULL;
-  FILE *fmacros =
-    fdopen (g_file_open_tmp ("gen-introspect-XXXXXX.h", &tmp_name, &error),
+  FILE *fmacros;
+  GSList *k, *symbols;
+  GList *l;
+  
+  fmacros = fdopen (g_file_open_tmp ("gen-introspect-XXXXXX.h", &tmp_name, &error),
 	    "w+");
   g_unlink (tmp_name);
 
-  GList *l;
-  for (l = igenerator->filenames; l != NULL; l = l->next)
+  for (l = igenerator->scanner->filenames; l != NULL; l = l->next)
     {
       FILE *f = fopen (l->data, "r");
       int line = 1;
@@ -1486,13 +1438,13 @@ g_igenerator_parse_macros (GIGenerator * igenerator)
       fclose (f);
     }
 
-  igenerator->macro_scan = TRUE;
+  igenerator->scanner->macro_scan = TRUE;
   rewind (fmacros);
 
-  g_igenerator_parse_file (igenerator, fmacros);
+  gi_source_scanner_parse_file (igenerator->scanner, fmacros);
   fclose (fmacros);
 
-  igenerator->macro_scan = FALSE;
+  igenerator->scanner->macro_scan = FALSE;
 }
 
 static void
@@ -1601,10 +1553,10 @@ g_igenerator_start_preprocessor (GIGenerator *igenerator,
 
   f = fdopen (cpp_in, "w");
 
-  for (l = igenerator->filenames; l != NULL; l = l->next)
+  for (l = igenerator->scanner->filenames; l != NULL; l = l->next)
     {
       if (igenerator->verbose)
-	g_printf ("Pre-processing %s\n", (char*)l->data);
+	g_printf ("DEBUG: Pre-processing %s\n", (char*)l->data);
 
       fprintf (f, "#include <%s>\n", (char *) l->data);
 
@@ -1689,6 +1641,7 @@ main (int argc, char **argv)
   GError *error = NULL;
   GList *l, *libraries = NULL;
   GList *cpp_options = NULL;
+  GSList *k, *symbols;
   char *buffer;
   size_t size;
   FILE *tmp;
@@ -1783,6 +1736,13 @@ main (int argc, char **argv)
       return 1;
     }
 
+  g_type_init ();
+
+  /* initialize threading as this may be required by libraries that we'll use
+   * libsoup-2.2 is an example of that.
+   */
+  g_thread_init (NULL);
+
   igenerator = g_igenerator_new (namespace, shared_library);
 
   if (verbose)
@@ -1794,16 +1754,9 @@ main (int argc, char **argv)
       g_igenerator_free (igenerator);  
       return 0;
     }
-  igenerator->filenames = filenames;
+  igenerator->scanner->filenames = filenames;
   cpp_options = g_list_reverse (cpp_options);
   libraries = g_list_reverse (libraries);
-
-  g_type_init ();
-
-  /* initialize threading as this may be required by libraries that we'll use
-   * libsoup-2.2 is an example of that.
-   */
-  g_thread_init (NULL);
 
   if (include_idls)
     {
@@ -1812,7 +1765,7 @@ main (int argc, char **argv)
     }
 
   for (l = sources; l; l = l->next)
-    g_igenerator_lex_filename (igenerator, l->data);
+    gi_source_scanner_lex_filename (igenerator->scanner, l->data);
 
   g_list_foreach (sources, (GFunc)g_free, NULL);
   g_list_free (sources);
@@ -1825,7 +1778,7 @@ main (int argc, char **argv)
       return 1;
     }
 
-  if (!g_igenerator_parse_file (igenerator, tmp))
+  if (!gi_source_scanner_parse_file (igenerator->scanner, tmp))
     {
       fclose (tmp);
       g_igenerator_free (igenerator);  
@@ -1833,11 +1786,13 @@ main (int argc, char **argv)
     }
 
   g_igenerator_parse_macros (igenerator);
-
+  
   g_igenerator_generate (igenerator, output, libraries);
 
   fclose (tmp);
+#if 0
   g_igenerator_free (igenerator);
+#endif
   
   return 0;
 }

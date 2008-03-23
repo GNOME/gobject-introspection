@@ -26,11 +26,10 @@
 
 #include <glib.h>
 #include "gidlmodule.h"
+#include "sourcescanner.h"
 
-G_BEGIN_DECLS typedef struct _GIGenerator GIGenerator;
-typedef struct _CSymbol CSymbol;
-typedef struct _CType CType;
-typedef struct _CDirective CDirective;
+G_BEGIN_DECLS
+typedef struct _GIGenerator GIGenerator;
 
 struct _GIGenerator
 {
@@ -40,14 +39,6 @@ struct _GIGenerator
   char *lower_case_namespace;
   gboolean verbose;
 
-  /* specified files to be parsed */
-  GList *filenames;
-  /* source reference of current lexer position */
-  char *current_filename;
-  GList *symbol_list;
-  GHashTable *typedef_table;
-  GHashTable *struct_or_union_or_enum_table;
-
   GIdlModule *module;
   GList *get_type_symbols;
   GHashTable *type_map;
@@ -55,121 +46,12 @@ struct _GIGenerator
 
   GHashTable *symbols; /* typename -> module.name */
 
-  /* symbol -> GList of CDirective */
-  GHashTable *directives_map;
-  
-  /* scanner variables */
-  gboolean macro_scan;
+  GISourceScanner *scanner;
 };
 
-typedef enum
-{
-  CSYMBOL_TYPE_INVALID,
-  CSYMBOL_TYPE_CONST,
-  CSYMBOL_TYPE_OBJECT,
-  CSYMBOL_TYPE_FUNCTION,
-  CSYMBOL_TYPE_STRUCT,
-  CSYMBOL_TYPE_UNION,
-  CSYMBOL_TYPE_ENUM,
-  CSYMBOL_TYPE_TYPEDEF
-} CSymbolType;
-
-struct _CSymbol
-{
-  int ref_count;
-  CSymbolType type;
-  int id;
-  char *ident;
-  CType *base_type;
-  gboolean const_int_set;
-  int const_int;
-  char *const_string;
-  GSList *directives; /* list of CDirective */
-};
-
-typedef enum
-{
-  CTYPE_INVALID,
-  CTYPE_VOID,
-  CTYPE_BASIC_TYPE,
-  CTYPE_TYPEDEF,
-  CTYPE_STRUCT,
-  CTYPE_UNION,
-  CTYPE_ENUM,
-  CTYPE_POINTER,
-  CTYPE_ARRAY,
-  CTYPE_FUNCTION
-} CTypeType;
-
-typedef enum
-{
-  STORAGE_CLASS_NONE = 0,
-  STORAGE_CLASS_TYPEDEF = 1 << 1,
-  STORAGE_CLASS_EXTERN = 1 << 2,
-  STORAGE_CLASS_STATIC = 1 << 3,
-  STORAGE_CLASS_AUTO = 1 << 4,
-  STORAGE_CLASS_REGISTER = 1 << 5
-} StorageClassSpecifier;
-
-typedef enum
-{
-  TYPE_QUALIFIER_NONE = 0,
-  TYPE_QUALIFIER_CONST = 1 << 1,
-  TYPE_QUALIFIER_RESTRICT = 1 << 2,
-  TYPE_QUALIFIER_VOLATILE = 1 << 3
-} TypeQualifier;
-
-typedef enum
-{
-  FUNCTION_NONE = 0,
-  FUNCTION_INLINE = 1 << 1
-} FunctionSpecifier;
-
-typedef enum
-{
-  UNARY_ADDRESS_OF,
-  UNARY_POINTER_INDIRECTION,
-  UNARY_PLUS,
-  UNARY_MINUS,
-  UNARY_BITWISE_COMPLEMENT,
-  UNARY_LOGICAL_NEGATION
-} UnaryOperator;
-
-struct _CType
-{
-  CTypeType type;
-  StorageClassSpecifier storage_class_specifier;
-  TypeQualifier type_qualifier;
-  FunctionSpecifier function_specifier;
-  char *name;
-  CType *base_type;
-  GList *child_list;
-};
-
-struct _CDirective {
-  char *name;
-  char *value;
-  GSList *options;
-};
-
-CSymbol *    csymbol_new               (CSymbolType  type);
-gboolean     csymbol_get_const_boolean (CSymbol     *symbol);
-CSymbol *    csymbol_ref               (CSymbol     *symbol);
-void         csymbol_unref             (CSymbol     *symbol);
-CDirective * cdirective_new            (const gchar *name,
-					const gchar *value,
-					GSList *options);
-void         cdirective_free           (CDirective  *directive);
-
-gboolean g_igenerator_lex_filename  (GIGenerator *igenerator,
-				     const gchar *filename);
-gboolean g_igenerator_parse_file    (GIGenerator *igenerator,
-				     FILE        *file);
 void     g_igenerator_set_verbose   (GIGenerator *igenerator,
 				     gboolean     verbose);
-void     g_igenerator_add_symbol    (GIGenerator *igenerator,
-				     CSymbol     *symbol);
-gboolean g_igenerator_is_typedef    (GIGenerator *igenerator,
-				     const char  *name);
+
 G_END_DECLS
-#endif
+
+#endif /* __SCANNER_H__ */

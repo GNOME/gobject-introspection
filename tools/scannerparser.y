@@ -31,202 +31,35 @@
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
-#include "scanner.h"
+#include <glib.h>
+#include "sourcescanner.h"
+#include "scannerparser.h"
 
 extern FILE *yyin;
 extern int lineno;
 extern char *yytext;
 
-extern int yylex (GIGenerator *igenerator);
-static void yyerror(GIGenerator *igenerator, const char *s);
+extern int yylex (GISourceScanner *scanner);
+static void yyerror (GISourceScanner *scanner, const char *str);
  
 static int last_enum_value = -1;
 static GHashTable *const_table = NULL;
-
-CSymbol *
-csymbol_new (CSymbolType type)
-{
-  CSymbol *s = g_slice_new0 (CSymbol);
-  s->ref_count = 1;
-  s->type = type;
-  return s;
-}
-
-static void
-ctype_free (CType * type)
-{
-  g_free (type->name);
-  g_list_foreach (type->child_list, (GFunc)csymbol_unref, NULL);
-  g_list_free (type->child_list);
-  g_slice_free (CType, type);
-}
-
-CSymbol *
-csymbol_ref (CSymbol * symbol)
-{
-  symbol->ref_count++;
-}
-
-void
-csymbol_unref (CSymbol * symbol)
-{
-  symbol->ref_count--;
-  if (symbol->ref_count == 0)
-    {
-      g_free (symbol->ident);
-      if (symbol->base_type)
-        ctype_free (symbol->base_type);
-      g_free (symbol->const_string);
-      g_slist_foreach (symbol->directives, (GFunc)cdirective_free, NULL);
-      g_slist_free (symbol->directives);
-      g_slice_free (CSymbol, symbol);
-    }
-}
- 
-gboolean
-csymbol_get_const_boolean (CSymbol * symbol)
-{
-  return (symbol->const_int_set && symbol->const_int) || symbol->const_string;
-}
-
-CType *
-ctype_new (CTypeType type)
-{
-  CType *t = g_slice_new0 (CType);
-  t->type = type;
-  return t;
-}
-
-CType *
-ctype_copy (CType * type)
-{
-  GList *l;
-  CType *result = g_slice_new0 (CType);
-  result->type = type->type;
-  result->storage_class_specifier = type->storage_class_specifier;
-  result->type_qualifier = type->type_qualifier;
-  result->function_specifier = type->function_specifier;
-  if (type->name)
-    result->name = g_strdup (type->name);
-  if (type->base_type)
-    result->base_type = ctype_copy (type->base_type);
-  for (l = type->child_list; l; l = l->next)
-    result->child_list = g_list_append (result->child_list, csymbol_ref (l->data));
-  return result;
-}
-
-CType *
-cbasic_type_new (const char *name)
-{
-  CType *basic_type = ctype_new (CTYPE_BASIC_TYPE);
-  basic_type->name = g_strdup (name);
-  return basic_type;
-}
-
-CType *
-ctypedef_new (const char *name)
-{
-  CType *typedef_ = ctype_new (CTYPE_TYPEDEF);
-  typedef_->name = g_strdup (name);
-  return typedef_;
-}
-
-CType *
-cstruct_new (const char *name)
-{
-  CType *struct_ = ctype_new (CTYPE_STRUCT);
-  struct_->name = g_strdup (name);
-  return struct_;
-}
-
-CType *
-cunion_new (const char *name)
-{
-  CType *union_ = ctype_new (CTYPE_UNION);
-  union_->name = g_strdup (name);
-  return union_;
-}
-
-CType *
-cenum_new (const char *name)
-{
-  CType *enum_ = ctype_new (CTYPE_ENUM);
-  enum_->name = g_strdup (name);
-  return enum_;
-}
-
-CType *
-cpointer_new (CType * base_type)
-{
-  CType *pointer = ctype_new (CTYPE_POINTER);
-  if (base_type != NULL)
-    pointer->base_type = ctype_copy (base_type);
-  return pointer;
-}
-
-CType *
-carray_new (void)
-{
-  CType *array = ctype_new (CTYPE_ARRAY);
-  return array;
-}
-
-CType *
-cfunction_new (void)
-{
-  CType *func = ctype_new (CTYPE_FUNCTION);
-  return func;
-}
-
-/* use specified type as base type of symbol */
-static void
-csymbol_merge_type (CSymbol *symbol, CType *type)
-{
-  CType **foundation_type = &(symbol->base_type);
-  while (*foundation_type != NULL) {
-    foundation_type = &((*foundation_type)->base_type);
-  }
-  *foundation_type = type;
-}
-
-CDirective *
-cdirective_new (const gchar *name,
-		const gchar *value,
-		GSList *options)
-{
-  CDirective *directive;
-    
-  directive = g_slice_new (CDirective);
-  directive->name = g_strdup (name);
-  directive->value = g_strdup (value);
-  directive->options = options;
-  return directive;
-}
-
-void
-cdirective_free (CDirective *directive)
-{
-  g_free (directive->name);
-  g_free (directive->value);
-  g_slice_free (CDirective, directive);
-}
-
 %}
 
 %error-verbose
 %union {
   char *str;
   GList *list;
-  CSymbol *symbol;
-  CType *ctype;
+  GISourceSymbol *symbol;
+  GISourceType *ctype;
   StorageClassSpecifier storage_class_specifier;
   TypeQualifier type_qualifier;
   FunctionSpecifier function_specifier;
   UnaryOperator unary_operator;
 }
 
-%parse-param { GIGenerator* igenerator }
-%lex-param { GIGenerator* igenerator }
+%parse-param { GISourceScanner* scanner }
+%lex-param { GISourceScanner* scanner }
 
 %token <str> IDENTIFIER "identifier"
 %token <str> TYPEDEF_NAME "typedef-name"
@@ -308,14 +141,14 @@ primary_expression
 	  {
 		$$ = g_hash_table_lookup (const_table, $1);
 		if ($$ == NULL) {
-			$$ = csymbol_new (CSYMBOL_TYPE_INVALID);
+			$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID);
 		} else {
-			$$ = csymbol_ref ($$);
+			$$ = gi_source_symbol_ref ($$);
 		}
 	  }
 	| INTEGER
 	  {
-		$$ = csymbol_new (CSYMBOL_TYPE_CONST);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST);
 		$$->const_int_set = TRUE;
 		if (g_str_has_prefix (yytext, "0x") && strlen (yytext) > 2) {
 			$$->const_int = strtol (yytext + 2, NULL, 16);
@@ -327,11 +160,11 @@ primary_expression
 	  }
 	| CHARACTER
 	  {
-		$$ = csymbol_new (CSYMBOL_TYPE_INVALID);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID);
 	  }
 	| FLOATING
 	  {
-		$$ = csymbol_new (CSYMBOL_TYPE_INVALID);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID);
 	  }
 	| strings
 	| '(' expression ')'
@@ -344,7 +177,7 @@ primary_expression
 strings
 	: STRING
 	  {
-		$$ = csymbol_new (CSYMBOL_TYPE_CONST);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST);
 		yytext[strlen (yytext) - 1] = '\0';
 		$$->const_string = g_strcompress (yytext + 1);
 	  }
@@ -377,31 +210,31 @@ postfix_expression
 	: primary_expression
 	| postfix_expression '[' expression ']'
 	  {
-		$$ = csymbol_new (CSYMBOL_TYPE_INVALID);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID);
 	  }
 	| postfix_expression '(' argument_expression_list ')'
 	  {
-		$$ = csymbol_new (CSYMBOL_TYPE_INVALID);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID);
 	  }
 	| postfix_expression '(' ')'
 	  {
-		$$ = csymbol_new (CSYMBOL_TYPE_INVALID);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID);
 	  }
 	| postfix_expression '.' identifier_or_typedef_name
 	  {
-		$$ = csymbol_new (CSYMBOL_TYPE_INVALID);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID);
 	  }
 	| postfix_expression ARROW identifier_or_typedef_name
 	  {
-		$$ = csymbol_new (CSYMBOL_TYPE_INVALID);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID);
 	  }
 	| postfix_expression PLUSPLUS
 	  {
-		$$ = csymbol_new (CSYMBOL_TYPE_INVALID);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID);
 	  }
 	| postfix_expression MINUSMINUS
 	  {
-		$$ = csymbol_new (CSYMBOL_TYPE_INVALID);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID);
 	  }
 	;
 
@@ -414,11 +247,11 @@ unary_expression
 	: postfix_expression
 	| PLUSPLUS unary_expression
 	  {
-		$$ = csymbol_new (CSYMBOL_TYPE_INVALID);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID);
 	  }
 	| MINUSMINUS unary_expression
 	  {
-		$$ = csymbol_new (CSYMBOL_TYPE_INVALID);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID);
 	  }
 	| unary_operator cast_expression
 	  {
@@ -436,21 +269,21 @@ unary_expression
 			break;
 		case UNARY_LOGICAL_NEGATION:
 			$$ = $2;
-			$$->const_int = !csymbol_get_const_boolean ($2);
+			$$->const_int = !gi_source_symbol_get_const_boolean ($2);
 			break;
 		default:
-			$$ = csymbol_new (CSYMBOL_TYPE_INVALID);
+			$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID);
 			break;
 		}
 	  }
 	| SIZEOF unary_expression
 	  {
-		$$ = csymbol_new (CSYMBOL_TYPE_INVALID);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID);
 	  }
 	| SIZEOF '(' type_name ')'
 	  {
 		ctype_free ($3);
-		$$ = csymbol_new (CSYMBOL_TYPE_INVALID);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID);
 	  }
 	;
 
@@ -494,13 +327,13 @@ multiplicative_expression
 	: cast_expression
 	| multiplicative_expression '*' cast_expression
 	  {
-		$$ = csymbol_new (CSYMBOL_TYPE_CONST);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST);
 		$$->const_int_set = TRUE;
 		$$->const_int = $1->const_int * $3->const_int;
 	  }
 	| multiplicative_expression '/' cast_expression
 	  {
-		$$ = csymbol_new (CSYMBOL_TYPE_CONST);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST);
 		$$->const_int_set = TRUE;
 		if ($3->const_int != 0) {
 			$$->const_int = $1->const_int / $3->const_int;
@@ -508,7 +341,7 @@ multiplicative_expression
 	  }
 	| multiplicative_expression '%' cast_expression
 	  {
-		$$ = csymbol_new (CSYMBOL_TYPE_CONST);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST);
 		$$->const_int_set = TRUE;
 		$$->const_int = $1->const_int % $3->const_int;
 	  }
@@ -518,13 +351,13 @@ additive_expression
 	: multiplicative_expression
 	| additive_expression '+' multiplicative_expression
 	  {
-		$$ = csymbol_new (CSYMBOL_TYPE_CONST);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST);
 		$$->const_int_set = TRUE;
 		$$->const_int = $1->const_int + $3->const_int;
 	  }
 	| additive_expression '-' multiplicative_expression
 	  {
-		$$ = csymbol_new (CSYMBOL_TYPE_CONST);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST);
 		$$->const_int_set = TRUE;
 		$$->const_int = $1->const_int - $3->const_int;
 	  }
@@ -534,13 +367,13 @@ shift_expression
 	: additive_expression
 	| shift_expression SL additive_expression
 	  {
-		$$ = csymbol_new (CSYMBOL_TYPE_CONST);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST);
 		$$->const_int_set = TRUE;
 		$$->const_int = $1->const_int << $3->const_int;
 	  }
 	| shift_expression SR additive_expression
 	  {
-		$$ = csymbol_new (CSYMBOL_TYPE_CONST);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST);
 		$$->const_int_set = TRUE;
 		$$->const_int = $1->const_int >> $3->const_int;
 	  }
@@ -550,25 +383,25 @@ relational_expression
 	: shift_expression
 	| relational_expression '<' shift_expression
 	  {
-		$$ = csymbol_new (CSYMBOL_TYPE_CONST);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST);
 		$$->const_int_set = TRUE;
 		$$->const_int = $1->const_int < $3->const_int;
 	  }
 	| relational_expression '>' shift_expression
 	  {
-		$$ = csymbol_new (CSYMBOL_TYPE_CONST);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST);
 		$$->const_int_set = TRUE;
 		$$->const_int = $1->const_int > $3->const_int;
 	  }
 	| relational_expression LTEQ shift_expression
 	  {
-		$$ = csymbol_new (CSYMBOL_TYPE_CONST);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST);
 		$$->const_int_set = TRUE;
 		$$->const_int = $1->const_int <= $3->const_int;
 	  }
 	| relational_expression GTEQ shift_expression
 	  {
-		$$ = csymbol_new (CSYMBOL_TYPE_CONST);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST);
 		$$->const_int_set = TRUE;
 		$$->const_int = $1->const_int >= $3->const_int;
 	  }
@@ -578,13 +411,13 @@ equality_expression
 	: relational_expression
 	| equality_expression EQ relational_expression
 	  {
-		$$ = csymbol_new (CSYMBOL_TYPE_CONST);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST);
 		$$->const_int_set = TRUE;
 		$$->const_int = $1->const_int == $3->const_int;
 	  }
 	| equality_expression NOTEQ relational_expression
 	  {
-		$$ = csymbol_new (CSYMBOL_TYPE_CONST);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST);
 		$$->const_int_set = TRUE;
 		$$->const_int = $1->const_int != $3->const_int;
 	  }
@@ -594,7 +427,7 @@ and_expression
 	: equality_expression
 	| and_expression '&' equality_expression
 	  {
-		$$ = csymbol_new (CSYMBOL_TYPE_CONST);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST);
 		$$->const_int_set = TRUE;
 		$$->const_int = $1->const_int & $3->const_int;
 	  }
@@ -604,7 +437,7 @@ exclusive_or_expression
 	: and_expression
 	| exclusive_or_expression '^' and_expression
 	  {
-		$$ = csymbol_new (CSYMBOL_TYPE_CONST);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST);
 		$$->const_int_set = TRUE;
 		$$->const_int = $1->const_int ^ $3->const_int;
 	  }
@@ -614,7 +447,7 @@ inclusive_or_expression
 	: exclusive_or_expression
 	| inclusive_or_expression '|' exclusive_or_expression
 	  {
-		$$ = csymbol_new (CSYMBOL_TYPE_CONST);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST);
 		$$->const_int_set = TRUE;
 		$$->const_int = $1->const_int | $3->const_int;
 	  }
@@ -624,9 +457,11 @@ logical_and_expression
 	: inclusive_or_expression
 	| logical_and_expression ANDAND inclusive_or_expression
 	  {
-		$$ = csymbol_new (CSYMBOL_TYPE_CONST);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST);
 		$$->const_int_set = TRUE;
-		$$->const_int = csymbol_get_const_boolean ($1) && csymbol_get_const_boolean ($3);
+		$$->const_int =
+		  gi_source_symbol_get_const_boolean ($1) &&
+		  gi_source_symbol_get_const_boolean ($3);
 	  }
 	;
 
@@ -634,9 +469,11 @@ logical_or_expression
 	: logical_and_expression
 	| logical_or_expression OROR logical_and_expression
 	  {
-		$$ = csymbol_new (CSYMBOL_TYPE_CONST);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST);
 		$$->const_int_set = TRUE;
-		$$->const_int = csymbol_get_const_boolean ($1) || csymbol_get_const_boolean ($3);
+		$$->const_int =
+		  gi_source_symbol_get_const_boolean ($1) ||
+		  gi_source_symbol_get_const_boolean ($3);
 	  }
 	;
 
@@ -644,7 +481,7 @@ conditional_expression
 	: logical_or_expression
 	| logical_or_expression '?' expression ':' conditional_expression
 	  {
-		$$ = csymbol_get_const_boolean ($1) ? $3 : $5;
+		$$ = gi_source_symbol_get_const_boolean ($1) ? $3 : $5;
 	  }
 	;
 
@@ -652,7 +489,7 @@ assignment_expression
 	: conditional_expression
 	| unary_expression assignment_operator assignment_expression
 	  {
-		$$ = csymbol_new (CSYMBOL_TYPE_INVALID);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID);
 	  }
 	;
 
@@ -674,7 +511,7 @@ expression
 	: assignment_expression
 	| expression ',' assignment_expression
 	  {
-		$$ = csymbol_new (CSYMBOL_TYPE_INVALID);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID);
 	  }
 	;
 
@@ -689,8 +526,8 @@ declaration
 	  {
 		GList *l;
 		for (l = $2; l != NULL; l = l->next) {
-			CSymbol *sym = l->data;
-			csymbol_merge_type (sym, ctype_copy ($1));
+			GISourceSymbol *sym = l->data;
+			gi_source_symbol_merge_type (sym, gi_source_type_copy ($1));
 			if ($1->storage_class_specifier & STORAGE_CLASS_TYPEDEF) {
 				sym->type = CSYMBOL_TYPE_TYPEDEF;
 			} else if (sym->base_type->type == CTYPE_FUNCTION) {
@@ -698,8 +535,8 @@ declaration
 			} else {
 				sym->type = CSYMBOL_TYPE_OBJECT;
 			}
-			g_igenerator_add_symbol (igenerator, sym);
-			csymbol_unref (sym);
+			gi_source_scanner_add_symbol (scanner, sym);
+			gi_source_symbol_unref (sym);
 		}
 		ctype_free ($1);
 	  }
@@ -717,7 +554,7 @@ declaration_specifiers
 	  }
 	| storage_class_specifier
 	  {
-		$$ = ctype_new (CTYPE_INVALID);
+		$$ = gi_source_type_new (CTYPE_INVALID);
 		$$->storage_class_specifier |= $1;
 	  }
 	| type_specifier declaration_specifiers
@@ -733,7 +570,7 @@ declaration_specifiers
 	  }
 	| type_qualifier
 	  {
-		$$ = ctype_new (CTYPE_INVALID);
+		$$ = gi_source_type_new (CTYPE_INVALID);
 		$$->type_qualifier |= $1;
 	  }
 	| function_specifier declaration_specifiers
@@ -743,7 +580,7 @@ declaration_specifiers
 	  }
 	| function_specifier
 	  {
-		$$ = ctype_new (CTYPE_INVALID);
+		$$ = gi_source_type_new (CTYPE_INVALID);
 		$$->function_specifier |= $1;
 	  }
 	;
@@ -790,49 +627,49 @@ storage_class_specifier
 type_specifier
 	: VOID
 	  {
-		$$ = ctype_new (CTYPE_VOID);
+		$$ = gi_source_type_new (CTYPE_VOID);
 	  }
 	| CHAR
 	  {
-		$$ = cbasic_type_new ("char");
+		$$ = gi_source_basic_type_new ("char");
 	  }
 	| SHORT
 	  {
-		$$ = cbasic_type_new ("short");
+		$$ = gi_source_basic_type_new ("short");
 	  }
 	| INT
 	  {
-		$$ = cbasic_type_new ("int");
+		$$ = gi_source_basic_type_new ("int");
 	  }
 	| LONG
 	  {
-		$$ = cbasic_type_new ("long");
+		$$ = gi_source_basic_type_new ("long");
 	  }
 	| FLOAT
 	  {
-		$$ = cbasic_type_new ("float");
+		$$ = gi_source_basic_type_new ("float");
 	  }
 	| DOUBLE
 	  {
-		$$ = cbasic_type_new ("double");
+		$$ = gi_source_basic_type_new ("double");
 	  }
 	| SIGNED
 	  {
-		$$ = cbasic_type_new ("signed");
+		$$ = gi_source_basic_type_new ("signed");
 	  }
 	| UNSIGNED
 	  {
-		$$ = cbasic_type_new ("unsigned");
+		$$ = gi_source_basic_type_new ("unsigned");
 	  }
 	| BOOL
 	  {
-		$$ = cbasic_type_new ("bool");
+		$$ = gi_source_basic_type_new ("bool");
 	  }
 	| struct_or_union_specifier
 	| enum_specifier
 	| typedef_name
 	  {
-		$$ = ctypedef_new ($1);
+		$$ = gi_source_typedef_new ($1);
 		g_free ($1);
 	  }
 	;
@@ -844,7 +681,7 @@ struct_or_union_specifier
 		$$->name = $2;
 		$$->child_list = $4;
 
-		CSymbol *sym = csymbol_new (CSYMBOL_TYPE_INVALID);
+		GISourceSymbol *sym = gi_source_symbol_new (CSYMBOL_TYPE_INVALID);
 		if ($$->type == CTYPE_STRUCT) {
 			sym->type = CSYMBOL_TYPE_STRUCT;
 		} else if ($$->type == CTYPE_UNION) {
@@ -853,9 +690,9 @@ struct_or_union_specifier
 			g_assert_not_reached ();
 		}
 		sym->ident = g_strdup ($$->name);
-		sym->base_type = ctype_copy ($$);
-		g_igenerator_add_symbol (igenerator, sym);
-		csymbol_unref (sym);
+		sym->base_type = gi_source_type_copy ($$);
+		gi_source_scanner_add_symbol (scanner, sym);
+		gi_source_symbol_unref (sym);
 	  }
 	| struct_or_union '{' struct_declaration_list '}'
 	  {
@@ -872,11 +709,11 @@ struct_or_union_specifier
 struct_or_union
 	: STRUCT
 	  {
-		$$ = cstruct_new (NULL);
+		$$ = gi_source_struct_new (NULL);
 	  }
 	| UNION
 	  {
-		$$ = cunion_new (NULL);
+		$$ = gi_source_union_new (NULL);
 	  }
 	;
 
@@ -894,11 +731,11 @@ struct_declaration
 		GList *l;
 		$$ = NULL;
 		for (l = $2; l != NULL; l = l->next) {
-			CSymbol *sym = l->data;
+			GISourceSymbol *sym = l->data;
 			if ($1->storage_class_specifier & STORAGE_CLASS_TYPEDEF) {
 				sym->type = CSYMBOL_TYPE_TYPEDEF;
 			}
-			csymbol_merge_type (sym, ctype_copy ($1));
+			gi_source_symbol_merge_type (sym, gi_source_type_copy ($1));
 			$$ = g_list_append ($$, sym);
 		}
 		ctype_free ($1);
@@ -919,7 +756,7 @@ specifier_qualifier_list
 	  }
 	| type_qualifier
 	  {
-		$$ = ctype_new (CTYPE_INVALID);
+		$$ = gi_source_type_new (CTYPE_INVALID);
 		$$->type_qualifier |= $1;
 	  }
 	;
@@ -938,12 +775,12 @@ struct_declarator_list
 struct_declarator
 	: /* empty, support for anonymous structs and unions */
 	  {
-		$$ = csymbol_new (CSYMBOL_TYPE_INVALID);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID);
 	  }
 	| declarator
 	| ':' constant_expression
 	  {
-		$$ = csymbol_new (CSYMBOL_TYPE_INVALID);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID);
 	  }
 	| declarator ':' constant_expression
 	;
@@ -951,31 +788,31 @@ struct_declarator
 enum_specifier
 	: ENUM identifier_or_typedef_name '{' enumerator_list '}'
 	  {
-		$$ = cenum_new ($2);
+		$$ = gi_source_enum_new ($2);
 		$$->child_list = $4;
 		last_enum_value = -1;
 	  }
 	| ENUM '{' enumerator_list '}'
 	  {
-		$$ = cenum_new (NULL);
+		$$ = gi_source_enum_new (NULL);
 		$$->child_list = $3;
 		last_enum_value = -1;
 	  }
 	| ENUM identifier_or_typedef_name '{' enumerator_list ',' '}'
 	  {
-		$$ = cenum_new ($2);
+		$$ = gi_source_enum_new ($2);
 		$$->child_list = $4;
 		last_enum_value = -1;
 	  }
 	| ENUM '{' enumerator_list ',' '}'
 	  {
-		$$ = cenum_new (NULL);
+		$$ = gi_source_enum_new (NULL);
 		$$->child_list = $3;
 		last_enum_value = -1;
 	  }
 	| ENUM identifier_or_typedef_name
 	  {
-		$$ = cenum_new ($2);
+		$$ = gi_source_enum_new ($2);
 	  }
 	;
 
@@ -993,20 +830,20 @@ enumerator_list
 enumerator
 	: identifier
 	  {
-		$$ = csymbol_new (CSYMBOL_TYPE_OBJECT);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_OBJECT);
 		$$->ident = $1;
 		$$->const_int_set = TRUE;
 		$$->const_int = ++last_enum_value;
-		g_hash_table_insert (const_table, g_strdup ($$->ident), csymbol_ref ($$));
+		g_hash_table_insert (const_table, g_strdup ($$->ident), gi_source_symbol_ref ($$));
 	  }
 	| identifier '=' constant_expression
 	  {
-		$$ = csymbol_new (CSYMBOL_TYPE_OBJECT);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_OBJECT);
 		$$->ident = $1;
 		$$->const_int_set = TRUE;
 		$$->const_int = $3->const_int;
 		last_enum_value = $$->const_int;
-		g_hash_table_insert (const_table, g_strdup ($$->ident), csymbol_ref ($$));
+		g_hash_table_insert (const_table, g_strdup ($$->ident), gi_source_symbol_ref ($$));
 	  }
 	;
 
@@ -1036,7 +873,7 @@ declarator
 	: pointer direct_declarator
 	  {
 		$$ = $2;
-		csymbol_merge_type ($$, $1);
+		gi_source_symbol_merge_type ($$, $1);
 	  }
 	| direct_declarator
 	;
@@ -1044,7 +881,7 @@ declarator
 direct_declarator
 	: identifier
 	  {
-		$$ = csymbol_new (CSYMBOL_TYPE_INVALID);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID);
 		$$->ident = $1;
 	  }
 	| '(' declarator ')'
@@ -1054,56 +891,56 @@ direct_declarator
 	| direct_declarator '[' assignment_expression ']'
 	  {
 		$$ = $1;
-		csymbol_merge_type ($$, carray_new ());
+		gi_source_symbol_merge_type ($$, gi_source_array_new ());
 	  }
 	| direct_declarator '[' ']'
 	  {
 		$$ = $1;
-		csymbol_merge_type ($$, carray_new ());
+		gi_source_symbol_merge_type ($$, gi_source_array_new ());
 	  }
 	| direct_declarator '(' parameter_type_list ')'
 	  {
-		CType *func = cfunction_new ();
+		GISourceType *func = gi_source_function_new ();
 		// ignore (void) parameter list
-		if ($3 != NULL && ($3->next != NULL || ((CSymbol *) $3->data)->base_type->type != CTYPE_VOID)) {
+		if ($3 != NULL && ($3->next != NULL || ((GISourceSymbol *) $3->data)->base_type->type != CTYPE_VOID)) {
 			func->child_list = $3;
 		}
 		$$ = $1;
-		csymbol_merge_type ($$, func);
+		gi_source_symbol_merge_type ($$, func);
 	  }
 	| direct_declarator '(' identifier_list ')'
 	  {
-		CType *func = cfunction_new ();
+		GISourceType *func = gi_source_function_new ();
 		func->child_list = $3;
 		$$ = $1;
-		csymbol_merge_type ($$, func);
+		gi_source_symbol_merge_type ($$, func);
 	  }
 	| direct_declarator '(' ')'
 	  {
-		CType *func = cfunction_new ();
+		GISourceType *func = gi_source_function_new ();
 		$$ = $1;
-		csymbol_merge_type ($$, func);
+		gi_source_symbol_merge_type ($$, func);
 	  }
 	;
 
 pointer
 	: '*' type_qualifier_list
 	  {
-		$$ = cpointer_new (NULL);
+		$$ = gi_source_pointer_new (NULL);
 		$$->type_qualifier = $2;
 	  }
 	| '*'
 	  {
-		$$ = cpointer_new (NULL);
+		$$ = gi_source_pointer_new (NULL);
 	  }
 	| '*' type_qualifier_list pointer
 	  {
-		$$ = cpointer_new ($3);
+		$$ = gi_source_pointer_new ($3);
 		$$->type_qualifier = $2;
 	  }
 	| '*' pointer
 	  {
-		$$ = cpointer_new ($2);
+		$$ = gi_source_pointer_new ($2);
 	  }
 	;
 
@@ -1135,16 +972,16 @@ parameter_declaration
 	: declaration_specifiers declarator
 	  {
 		$$ = $2;
-		csymbol_merge_type ($$, $1);
+		gi_source_symbol_merge_type ($$, $1);
 	  }
 	| declaration_specifiers abstract_declarator
 	  {
 		$$ = $2;
-		csymbol_merge_type ($$, $1);
+		gi_source_symbol_merge_type ($$, $1);
 	  }
 	| declaration_specifiers
 	  {
-		$$ = csymbol_new (CSYMBOL_TYPE_INVALID);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID);
 		$$->base_type = $1;
 	  }
 	;
@@ -1152,13 +989,13 @@ parameter_declaration
 identifier_list
 	: identifier
 	  {
-		CSymbol *sym = csymbol_new (CSYMBOL_TYPE_INVALID);
+		GISourceSymbol *sym = gi_source_symbol_new (CSYMBOL_TYPE_INVALID);
 		sym->ident = $1;
 		$$ = g_list_append (NULL, sym);
 	  }
 	| identifier_list ',' identifier
 	  {
-		CSymbol *sym = csymbol_new (CSYMBOL_TYPE_INVALID);
+		GISourceSymbol *sym = gi_source_symbol_new (CSYMBOL_TYPE_INVALID);
 		sym->ident = $3;
 		$$ = g_list_append ($1, sym);
 	  }
@@ -1172,14 +1009,14 @@ type_name
 abstract_declarator
 	: pointer
 	  {
-		$$ = csymbol_new (CSYMBOL_TYPE_INVALID);
-		csymbol_merge_type ($$, $1);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID);
+		gi_source_symbol_merge_type ($$, $1);
 	  }
 	| direct_abstract_declarator
 	| pointer direct_abstract_declarator
 	  {
 		$$ = $2;
-		csymbol_merge_type ($$, $1);
+		gi_source_symbol_merge_type ($$, $1);
 	  }
 	;
 
@@ -1190,55 +1027,55 @@ direct_abstract_declarator
 	  }
 	| '[' ']'
 	  {
-		$$ = csymbol_new (CSYMBOL_TYPE_INVALID);
-		csymbol_merge_type ($$, carray_new ());
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID);
+		gi_source_symbol_merge_type ($$, gi_source_array_new ());
 	  }
 	| '[' assignment_expression ']'
 	  {
-		$$ = csymbol_new (CSYMBOL_TYPE_INVALID);
-		csymbol_merge_type ($$, carray_new ());
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID);
+		gi_source_symbol_merge_type ($$, gi_source_array_new ());
 	  }
 	| direct_abstract_declarator '[' ']'
 	  {
 		$$ = $1;
-		csymbol_merge_type ($$, carray_new ());
+		gi_source_symbol_merge_type ($$, gi_source_array_new ());
 	  }
 	| direct_abstract_declarator '[' assignment_expression ']'
 	  {
 		$$ = $1;
-		csymbol_merge_type ($$, carray_new ());
+		gi_source_symbol_merge_type ($$, gi_source_array_new ());
 	  }
 	| '(' ')'
 	  {
-		CType *func = cfunction_new ();
-		$$ = csymbol_new (CSYMBOL_TYPE_INVALID);
-		csymbol_merge_type ($$, func);
+		GISourceType *func = gi_source_function_new ();
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID);
+		gi_source_symbol_merge_type ($$, func);
 	  }
 	| '(' parameter_type_list ')'
 	  {
-		CType *func = cfunction_new ();
+		GISourceType *func = gi_source_function_new ();
 		// ignore (void) parameter list
-		if ($2 != NULL && ($2->next != NULL || ((CSymbol *) $2->data)->base_type->type != CTYPE_VOID)) {
+		if ($2 != NULL && ($2->next != NULL || ((GISourceSymbol *) $2->data)->base_type->type != CTYPE_VOID)) {
 			func->child_list = $2;
 		}
-		$$ = csymbol_new (CSYMBOL_TYPE_INVALID);
-		csymbol_merge_type ($$, func);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID);
+		gi_source_symbol_merge_type ($$, func);
 	  }
 	| direct_abstract_declarator '(' ')'
 	  {
-		CType *func = cfunction_new ();
+		GISourceType *func = gi_source_function_new ();
 		$$ = $1;
-		csymbol_merge_type ($$, func);
+		gi_source_symbol_merge_type ($$, func);
 	  }
 	| direct_abstract_declarator '(' parameter_type_list ')'
 	  {
-		CType *func = cfunction_new ();
+		GISourceType *func = gi_source_function_new ();
 		// ignore (void) parameter list
-		if ($3 != NULL && ($3->next != NULL || ((CSymbol *) $3->data)->base_type->type != CTYPE_VOID)) {
+		if ($3 != NULL && ($3->next != NULL || ((GISourceSymbol *) $3->data)->base_type->type != CTYPE_VOID)) {
 			func->child_list = $3;
 		}
 		$$ = $1;
-		csymbol_merge_type ($$, func);
+		gi_source_symbol_merge_type ($$, func);
 	  }
 	;
 
@@ -1372,8 +1209,8 @@ object_macro_define
 	  {
 		if ($2->const_int_set || $2->const_string != NULL) {
 			$2->ident = $1;
-			g_igenerator_add_symbol (igenerator, $2);
-			csymbol_unref ($2);
+			gi_source_scanner_add_symbol (scanner, $2);
+			gi_source_symbol_unref ($2);
 		}
 	  }
 	;
@@ -1385,30 +1222,29 @@ macro
 	;
 
 %%
-
 static void
-yyerror (GIGenerator *igenerator, const char *s)
+yyerror (GISourceScanner *scanner, const char *s)
 {
   /* ignore errors while doing a macro scan as not all object macros
    * have valid expressions */
-  if (!igenerator->macro_scan)
+  if (!scanner->macro_scan)
     {
       fprintf(stderr, "%s:%d: %s\n",
-	      igenerator->current_filename, lineno, s);
+	      scanner->current_filename, lineno, s);
     }
 }
 
 gboolean
-g_igenerator_parse_file (GIGenerator *igenerator, FILE *file)
+gi_source_scanner_parse_file (GISourceScanner *scanner, FILE *file)
 {
   g_return_val_if_fail (file != NULL, FALSE);
   
   const_table = g_hash_table_new_full (g_str_hash, g_str_equal,
-				       g_free, (GDestroyNotify)csymbol_unref);
+				       g_free, (GDestroyNotify)gi_source_symbol_unref);
   
   lineno = 1;
   yyin = file;
-  yyparse (igenerator);
+  yyparse (scanner);
   
   g_hash_table_destroy (const_table);
   const_table = NULL;
@@ -1419,15 +1255,14 @@ g_igenerator_parse_file (GIGenerator *igenerator, FILE *file)
 }
 
 gboolean
-g_igenerator_lex_filename (GIGenerator *igenerator, const gchar *filename)
+gi_source_scanner_lex_filename (GISourceScanner *scanner, const gchar *filename)
 {
   yyin = fopen (filename, "r");
 
-  while (yylex (igenerator) != YYEOF)
+  while (yylex (scanner) != YYEOF)
     ;
 
   fclose (yyin);
   
   return TRUE;
 }
-
