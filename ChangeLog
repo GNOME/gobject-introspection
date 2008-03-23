@@ -1,3 +1,9 @@
+2008-03-23  Johan Dahlin  <johan@gnome.org>
+
+	* tests/parser/Makefile.am (utility.gidl): 
+	* tests/parser/utility-expected.gidl: 
+	Pass in the gobject.gidl since we're defining a GObject.
+
 2008-03-12  Johan Dahlin  <johan@gnome.org>
 
 	* relaxng/relaxng.rng:
