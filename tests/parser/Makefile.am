@@ -18,6 +18,7 @@ EXTRA_DIST = utility-expected.gidl Foo-expected.gidl
 utility.gidl: libutility.la utility.h $(top_builddir)/tools/g-idl-scanner
 	G_DEBUG=fatal_warnings $(top_builddir)/tools/g-idl-scanner -v \
 	--namespace=utility \
+	--include-idl=$(top_srcdir)/gidl/gobject-2.0.gidl \
 	$(libutility_la_SOURCES) -I$(srcdir) $(GOBJECT_CFLAGS) \
 	libutility.la --output $@
 
