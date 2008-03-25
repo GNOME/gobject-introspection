@@ -1,5 +1,13 @@
 2008-03-25  Johan Dahlin  <johan@gnome.org>
 	
+	* giscanner/__init__.py:
+	* giscanner/giscannermodule.c:
+	* giscanner/sourcescanner.c:
+	* giscanner/sourcescanner.h:
+	Add constants and wrap a few more SymbolType fields
+
+2008-03-25  Johan Dahlin  <johan@gnome.org>
+	
 	* configure.ac:
 	* giscanner:
 	* giscanner/__init__.py:

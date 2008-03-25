@@ -100,9 +100,15 @@ symbol_get_base_type(PyGISourceSymbol *self,
 }
 
 static PyGetSetDef _PyGISourceSymbol_getsets[] = {
+  /* int ref_count; */
   { "type", (getter)symbol_get_type, NULL, NULL},
+  /* int id; */
   { "ident", (getter)symbol_get_ident, NULL, NULL},
   { "base_type", (getter)symbol_get_base_type, NULL, NULL},
+  /* gboolean const_int_set; */
+  /* int const_int; */
+  /* char *const_string; */
+  /* GSList *directives; */
   { 0 }
 };
 
@@ -118,6 +124,27 @@ type_get_type(PyGISourceType *self,
 }
 
 static PyObject *
+type_get_storage_class_specifier(PyGISourceType *self,
+				 void           *context)
+{
+  return PyInt_FromLong(self->type->storage_class_specifier);
+}
+
+static PyObject *
+type_get_type_qualifier(PyGISourceType *self,
+			void           *context)
+{
+  return PyInt_FromLong(self->type->type_qualifier);
+}
+
+static PyObject *
+type_get_function_specifier(PyGISourceType *self,
+			    void           *context)
+{
+  return PyInt_FromLong(self->type->function_specifier);
+}
+
+static PyObject *
 type_get_name(PyGISourceType *self,
 	      void           *context)
 {
@@ -130,9 +157,25 @@ type_get_name(PyGISourceType *self,
   return PyString_FromString(self->type->name);
 }
 
+static PyObject *
+type_get_base_type(PyGISourceType *self,
+		   void             *context)
+{
+  PyGISourceType *item;
+  item = (PyGISourceType *)PyObject_GC_New(PyGISourceType,
+					   &PyGISourceType_Type);
+  item->type = self->type->base_type;
+  return (PyObject*)item;
+}
+
 static PyGetSetDef _PyGISourceType_getsets[] = {
   { "type", (getter)type_get_type, NULL, NULL},
+  { "storage_class_specifier", (getter)type_get_storage_class_specifier, NULL, NULL},
+  { "type_qualifier", (getter)type_get_type_qualifier, NULL, NULL},
+  { "function_specifier", (getter)type_get_function_specifier, NULL, NULL},
   { "name", (getter)type_get_name, NULL, NULL},
+  { "base_type", (getter)type_get_base_type, NULL, NULL},
+  /* { "child_list", (getter)type_get_child_list, NULL, NULL}, */
   { 0 }
 };
 

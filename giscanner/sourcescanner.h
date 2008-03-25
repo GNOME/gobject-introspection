@@ -1,4 +1,4 @@
-/* GObject introspectaion: public scanner api
+/* GObject introspection: public scanner api
  *
  * Copyright (C) 2007 Jürg Billeter
  * Copyright (C) 2008 Johan Dahlin
