@@ -1,3 +1,17 @@
+2008-03-25  Johan Dahlin  <johan@gnome.org>
+
+	* Makefile.am:
+	* configure.ac:
+	* giscanner/Makefile.am:
+	* giscanner/sourcescanner.c:
+	* giscanner/sourcescanner.h:
+	* tools/Makefile.am:
+	* tools/grealpath.h:
+	* tools/sourcescanner.c:
+	* tools/sourcescanner.h:
+
+	Move the scanner to a separate library.
+	
 2008-03-23  Johan Dahlin  <johan@gnome.org>
 
 	* tools/Makefile.am:

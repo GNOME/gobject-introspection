@@ -94,6 +94,7 @@ AC_CHECK_FUNCS([memchr strchr strspn strstr strtol strtoull])
 AC_CONFIG_FILES([Makefile
                  gidl/Makefile
                  girepository/Makefile
+                 giscanner/Makefile
                  m4/Makefile
                  tools/Makefile
                  tests/Makefile

@@ -236,6 +236,13 @@ gi_source_scanner_is_typedef (GISourceScanner *scanner,
 }
 
 void
+gi_source_scanner_set_macro_scan (GISourceScanner  *scanner,
+				  gboolean          macro_scan)
+{
+  scanner->macro_scan = macro_scan;
+}
+
+void
 gi_source_scanner_add_symbol (GISourceScanner  *scanner,
 			      GISourceSymbol   *symbol)
 {

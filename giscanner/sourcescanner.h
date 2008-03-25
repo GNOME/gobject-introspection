@@ -125,14 +125,14 @@ struct _GISourceType
   FunctionSpecifier function_specifier;
   char *name;
   GISourceType *base_type;
-  GList *child_list;
+  GList *child_list; /* list of GISourceSymbol */
 };
 
 struct _GISourceDirective
 {
   char *name;
   char *value;
-  GSList *options;
+  GSList *options; /* list of options (key=value) */
 };
 
 GISourceScanner *   gi_source_scanner_new              (void);
@@ -140,6 +140,8 @@ gboolean            gi_source_scanner_lex_filename     (GISourceScanner  *igener
 						        const gchar      *filename);
 gboolean            gi_source_scanner_parse_file       (GISourceScanner  *igenerator,
 						        FILE             *file);
+void                gi_source_scanner_set_macro_scan   (GISourceScanner  *scanner,
+							gboolean          macro_scan);
 GSList *            gi_source_scanner_get_symbols      (GISourceScanner  *scanner);
 void                gi_source_scanner_free             (GISourceScanner  *scanner);
 

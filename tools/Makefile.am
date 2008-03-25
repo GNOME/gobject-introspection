@@ -1,15 +1,13 @@
 ## Process this file with automake to produce Makefile.in
 
-INCLUDES = -DGIREPO_DEFAULT_SEARCH_PATH="\"$(libdir)\""
-BUILT_SOURCES = scannerparser.c scannerparser.h scannerlexer.c scannerlexer.h \
-		gmetadata-header.c
+INCLUDES = \
+	-DGIREPO_DEFAULT_SEARCH_PATH="\"$(libdir)\"" \
+	-I$(top_srcdir)/girepository \
+	-I$(top_srcdir)/giscanner
+BUILT_SOURCES = gmetadata-header.c
 
-CLEANFILES = scannerparser.c scannerparser.h scannerlexer.c scannerlexer.h gmetadata-header.c
-AM_YFLAGS = -d -t
+CLEANFILES = gmetadata-header.c
 EXTRA_DIST = quote-file.sh
-
-# Why do I have to do this automake?
-scannerlexer.h: scannerlexer.c
 
 noinst_LTLIBRARIES = libgirepository-parser.la
 bin_PROGRAMS = g-idl-compiler g-idl-generate g-idl-scanner
@@ -32,28 +30,28 @@ libgirepository_parser_la_SOURCES =		\
 	gidlcompilertypenode.h			\
 	gmetadata-header.c
 
-libgirepository_parser_la_CFLAGS = $(GIREPO_CFLAGS) -I$(top_srcdir)/girepository
+libgirepository_parser_la_CFLAGS = $(GIREPO_CFLAGS)
 
 g_idl_compiler_SOURCES = compiler.c	
-g_idl_compiler_CFLAGS = $(GIREPO_CFLAGS) -I$(top_srcdir)/girepository
+g_idl_compiler_CFLAGS = $(GIREPO_CFLAGS)
 g_idl_compiler_LDADD = $(GIREPO_LIBS) $(top_builddir)/girepository/libgirepository.la libgirepository-parser.la
 
 g_idl_generate_SOURCES = generate.c
-g_idl_generate_CFLAGS = $(GIREPO_CFLAGS) -I$(top_srcdir)/girepository
+g_idl_generate_CFLAGS = $(GIREPO_CFLAGS)
 g_idl_generate_LDADD = $(GIREPO_LIBS) $(top_builddir)/girepository/libgirepository.la
 
 g_idl_scanner_SOURCES =				\
-	sourcescanner.c				\
-	sourcescanner.h				\
 	scanner.c				\
 	scanner.h				\
-	scannerlexer.l				\
-	scannerparser.y				\
 	gidlwriter.c				\
-	gidlwriter.h				\
-	grealpath.h
-g_idl_scanner_CFLAGS = $(GIREPO_CFLAGS) $(SCANNER_CFLAGS) -I$(top_srcdir)/girepository
-g_idl_scanner_LDADD = $(GIREPO_LIBS) $(SCANNER_LIBS) $(top_builddir)/girepository/libgirepository.la libgirepository-parser.la
+	gidlwriter.h
+g_idl_scanner_CFLAGS = $(GIREPO_CFLAGS) $(SCANNER_CFLAGS)
+g_idl_scanner_LDADD = \
+	$(GIREPO_LIBS) \
+	$(SCANNER_LIBS) \
+	$(top_builddir)/girepository/libgirepository.la \
+	$(top_builddir)/giscanner/libgiscanner.la \
+	libgirepository-parser.la
 
 GCOVSOURCES =					\
 	$(libgirepository_la_SOURCES)		\
