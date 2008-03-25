@@ -1,4 +1,10 @@
 2008-03-25  Johan Dahlin  <johan@gnome.org>
+
+	* giscanner/__init__.py:
+	* tools/g-ir-scanner:
+	Fix a typo and add an example python test program.
+
+2008-03-25  Johan Dahlin  <johan@gnome.org>
 	
 	* giscanner/__init__.py:
 	* giscanner/giscannermodule.c:
