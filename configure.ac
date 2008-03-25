@@ -90,6 +90,12 @@ AC_C_CONST
 AC_FUNC_STRTOD
 AC_CHECK_FUNCS([memchr strchr strspn strstr strtol strtoull])
 
+# Python
+
+AC_MSG_CHECKING([whether Python support is requested])
+
+AM_PATH_PYTHON([2.5])
+AM_CHECK_PYTHON_HEADERS
 
 AC_CONFIG_FILES([Makefile
                  gidl/Makefile

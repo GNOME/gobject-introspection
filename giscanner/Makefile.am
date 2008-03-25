@@ -22,4 +22,25 @@ libgiscanner_la_CFLAGS = $(GOBJECT_CFLAGS)
 
 GCOVSOURCES = $(libgiscanner_la_SOURCES)
 
+# Python module
+pyexec_LTLIBRARIES = _giscanner.la
+pyexec_PYTHON = __init__.py
+
+_giscanner_la_CFLAGS = \
+	$(PYTHON_INCLUDES) \
+	$(GOBJECT_CFLAGS) \
+	-I$(top_srcdir)/giscanner
+_giscanner_la_LIBADD = $(GOBJECT_LIBS) libgiscanner.la
+_giscanner_la_LDFLAGS = \
+	-module -avoid-version -export-symbols-regex init_giscanner
+_giscanner_la_SOURCES = giscannermodule.c
+
+BUILT_SOURCES += _giscanner.so
+CLEANFILES += _giscanner.so
+
+# Yuck, ugly but...
+_giscanner.so: _giscanner.la
+	ln -sf .libs/_giscanner.so .
+
+
 include $(top_srcdir)/gcov.mak

@@ -1,4 +1,15 @@
 2008-03-25  Johan Dahlin  <johan@gnome.org>
+	
+	* configure.ac:
+	* giscanner:
+	* giscanner/__init__.py:
+	* giscanner/giscannermodule.c:
+	* giscanner/Makefile.am:
+
+	Add initial python bindings for the scanner and 
+	depend on python 2.5.
+
+2008-03-25  Johan Dahlin  <johan@gnome.org>
 
 	* Makefile.am:
 	* configure.ac:
