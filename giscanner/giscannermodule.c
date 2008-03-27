@@ -200,13 +200,14 @@ static PyObject *
 pygi_source_scanner_parse_file (PyGISourceScanner *self,
 				PyObject          *args)
 {
+  int fd;
   char *filename;
   FILE *fp;
   
-  if (!PyArg_ParseTuple (args, "s:SourceScanner.__init__", &filename))
+  if (!PyArg_ParseTuple (args, "is:SourceScanner.__init__", &fd, &filename))
     return NULL;
 
-  fp = fopen (filename, "r");
+  fp = fdopen (fd, "r");
   if (!fp)
     {
       PyErr_SetFromErrnoWithFilename (PyExc_OSError, filename);
@@ -215,15 +216,13 @@ pygi_source_scanner_parse_file (PyGISourceScanner *self,
 
   self->scanner->filenames =
     g_list_append (self->scanner->filenames, g_strdup (filename));
-  self->scanner->current_filename = self->scanner->filenames->data;
-  
+  self->scanner->current_filename = g_strdup (filename);
+
   if (!gi_source_scanner_parse_file (self->scanner, fp))
     {
       g_print ("Something went wrong..\n");
       return NULL;
     }
-
-  fclose (fp);
 
   Py_INCREF (Py_None);
   return Py_None;

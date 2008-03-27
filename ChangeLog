@@ -1,3 +1,13 @@
+2008-03-27  Johan Dahlin  <johan@gnome.org>
+
+	* giscanner/giscannermodule.c:
+	* giscanner/scannerlexer.l:
+	* giscanner/sourcescanner.c:
+	* tools/g-ir-scanner:
+
+	Add simple pre-processor using subprocess and a PIPE.
+	Change the parse_file apis to accept a file descriptor.
+
 2008-03-25  Johan Dahlin  <johan@gnome.org>
 
 	* giscanner/__init__.py:

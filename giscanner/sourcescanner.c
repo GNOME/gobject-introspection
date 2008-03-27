@@ -249,6 +249,7 @@ gi_source_scanner_add_symbol (GISourceScanner  *scanner,
   gboolean found_filename = FALSE;
   GList *l;
 
+  g_assert (scanner->current_filename);
   for (l = scanner->filenames; l != NULL; l = l->next)
     {
       if (strcmp (l->data, scanner->current_filename) == 0)

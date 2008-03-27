@@ -1,26 +1,57 @@
 #!/usr/bin/env python
 import os
+import subprocess
 import sys
 
 sys.path.insert(0, '.')
 
 import giscanner
 
+
+class Generator(object):
+    def __init__(self):
+        self._scanner = giscanner.SourceScanner()
+
+    def add_header(self, filename):
+        filename = os.path.abspath(filename)
+
+        proc = subprocess.Popen('cpp -U__GNUC__ -I.',
+                                executable='/usr/bin/cpp',
+                                stdin=subprocess.PIPE,
+                                stdout=subprocess.PIPE,
+                                )
+        proc.stdin.write(open(filename).read())
+        proc.stdin.close()
+        retval = proc.wait()
+        if retval != 0:
+            print 'Preprocessing failed'
+            return
+
+        fd = proc.stdout.fileno()
+        self._scanner.parse_file(fd, filename)
+
+    add_source = add_header
+    def dump(self):
+        print '-'*30
+        for symbol in self._scanner.get_symbols():
+            print symbol
+            print symbol.ident, symbol.type
+            print symbol.base_type.name
+            print '-'*30
+
+
 def main(args):
     if len(args) == 1:
         print 'ERROR: Needs at least one filename.'
         return 0
 
-    scan = giscanner.SourceScanner()
+    gen = Generator()
     for arg in args[1:]:
-        filename = os.path.abspath(arg)
-        scan.parse_file(filename)
+        if arg.endswith('.c'):
+            gen.add_source(arg)
+        elif arg.endswith('.h'):
+            gen.add_header(arg)
 
-    print '-'*30
-    for symbol in scan.get_symbols():
-        print symbol
-        print symbol.ident, symbol.type
-        print symbol.base_type.name
-        print '-'*30
+    gen.dump()
 
 sys.exit(main(sys.argv))

@@ -384,9 +384,13 @@ process_directive (GISourceScanner *scanner)
 
 	if (filename_builder->len > 0) {
 		char *filename = g_strcompress (filename_builder->str);
-		g_free (scanner->current_filename);
-		scanner->current_filename = g_realpath(filename);
-		g_free(filename);
+		if (g_realpath (filename))
+		  {
+		    g_free (scanner->current_filename);
+		    scanner->current_filename = g_realpath (filename);
+		    g_assert (scanner->current_filename);
+		    g_free(filename);
+		  }
 	}
 
 	g_string_free (filename_builder, TRUE);
