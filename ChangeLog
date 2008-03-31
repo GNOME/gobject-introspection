@@ -1,3 +1,9 @@
+2008-03-31  Johan Dahlin  <johan@gnome.org>
+
+	* tools/g-ir-scanner:
+	Start to build abstract syntax node of scanned sources.
+	Add support for cpp options.
+
 2008-03-27  Johan Dahlin  <johan@gnome.org>
 
 	* giscanner/giscannermodule.c:
