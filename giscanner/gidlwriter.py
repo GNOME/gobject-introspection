@@ -1,4 +1,4 @@
-from giscanner.treebuilder import Function
+from giscanner.treebuilder import Enum, Function
 from giscanner.xmlwriter import XMLWriter
 
 
@@ -21,6 +21,8 @@ class GIDLWriter(XMLWriter):
     def _write_node(self, node):
         if isinstance(node, Function):
             self._write_function(node)
+        elif isinstance(node, Enum):
+            self._write_enum(node)
         else:
             print 'Unhandled node', node
 
@@ -46,3 +48,13 @@ class GIDLWriter(XMLWriter):
     def _write_parameter(self, parameter):
         self.write_tag('parameter', [('name', parameter.name),
                                      ('type', parameter.type)])
+
+    def _write_enum(self, enum):
+        self.push_tag('enum', [('name', enum.name)])
+        for member in enum.members:
+            self._write_member(member)
+        self.pop_tag()
+
+    def _write_member(self, member):
+        self.write_tag('member', [('name', member.name),
+                                  ('value', str(member.value))])
