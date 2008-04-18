@@ -1,5 +1,12 @@
 2008-04-18  Johan Dahlin  <johan@gnome.org>
 
+	* giscanner/sourcescanner.py:
+	* giscanner/treebuilder.py:
+	* tools/g-ir-scanner:
+	split tree building and source scanning interface to separate files.
+
+2008-04-18  Johan Dahlin  <johan@gnome.org>
+
 	* tools/g-ir-scanner (Parameter.__init__): Start constructing
 	a real node tree.
 	- Add support for struct/parameter/return, start parsing of ctypes
