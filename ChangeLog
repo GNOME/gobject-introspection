@@ -2,6 +2,7 @@
 
 	* tools/g-ir-scanner (Parameter.__init__): Start constructing
 	a real node tree.
+	- Add support for struct/parameter/return, start parsing of ctypes
 
 	* giscanner/giscannermodule.c: wrap GISourceType.child_list and
 	fix the style

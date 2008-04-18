@@ -50,6 +50,22 @@ class Member(Node):
         return 'Member(%r, %r)' % (self.name, self.value)
 
 
+class Struct(Node):
+    def __init__(self, name):
+        self.name = name
+
+    def __repr__(self):
+        return 'Struct(%r)' % (self.name,)
+
+
+class Return(Node):
+    def __init__(self, type):
+        self.type = type
+
+    def __repr__(self):
+        return 'Return(%r)' % (self.type,)
+
+
 class Generator(object):
     def __init__(self):
         self._scanner = giscanner.SourceScanner()
@@ -143,12 +159,12 @@ class TreeBuilder(object):
             return self._create_function(symbol)
         elif stype == giscanner.CSYMBOL_TYPE_TYPEDEF:
             return self._traverse_one(symbol, symbol.base_type.type)
-        #elif stype == giscanner.CSYMBOL_TYPE_STRUCT:
-        #    return Struct(symbol)
+        elif stype == giscanner.CSYMBOL_TYPE_STRUCT:
+            return self._create_struct(symbol)
         elif stype == giscanner.CSYMBOL_TYPE_ENUM:
             return self._create_enum(symbol)
         else:
-            print 'unhandled', symbol.type
+            print 'unhandled symbol', symbol.type
 
     def _create_enum(self, symbol):
         members = []
@@ -160,12 +176,31 @@ class TreeBuilder(object):
 
     def _create_function(self, symbol):
         parameters = []
-        retval = None
         for child in symbol.base_type.child_list:
-            print child.base_type.type
-            parameters.append(Parameter(child.ident, '??'))
+            parameters.append(self._create_parameter(child))
 
+        retval = Return(self._create_source_type(symbol.base_type.base_type))
         return Function(symbol.ident, retval, parameters)
+
+    def _create_source_type(self, source_type):
+        if source_type.type == giscanner.CTYPE_BASIC_TYPE:
+            value = source_type.name
+        elif source_type.type == giscanner.CTYPE_TYPEDEF:
+            value = source_type.name
+        elif source_type.type == giscanner.CTYPE_POINTER:
+            value = self._create_source_type(source_type.base_type) + '*'
+        else:
+            print 'Unhandled source type: %d' % (source_type.type,)
+            value = '???'
+        return value
+
+    def _create_parameter(self, symbol):
+        return Parameter(symbol.ident,
+                         self._create_source_type(symbol.base_type))
+
+    def _create_struct(self, symbol):
+        return Struct(symbol.ident)
+
 
 def main(args):
     parser = optparse.OptionParser('%prog [options] sources')
