@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import optparse
 import os
 import subprocess
 import sys
@@ -7,35 +8,62 @@ sys.path.insert(0, '.')
 
 import giscanner
 
-class Symbol(object):
-    def __init__(self, symbol):
-        self.symbol = symbol
-        self.nodes = []
+
+class Node(object):
+    pass
+
+
+class Function(Node):
+    def __init__(self, name, retval, parameters):
+        self.name = name
+        self.retval = retval
+        self.parameters = parameters
 
     def __repr__(self):
-        return '%s(%s, %s)>' % (self.__class__.__name__,
-                                self.symbol.ident,
-                                self.nodes)
+        return 'Function(%r, %r, %r)' % (self.name, self.retval, self.parameters)
 
-class Function(Symbol):
-    pass
 
-class Struct(Symbol):
-    pass
+class Parameter(Node):
+    def __init__(self, name, type):
+        self.name = name
+        self.type = type
 
-class Typedef(Symbol):
-    pass
+    def __repr__(self):
+        return 'Parameter(%r, %r)' % (self.name, self.type)
+
+
+class Enum(Node):
+    def __init__(self, name, members):
+        self.name = name
+        self.members = members
+
+    def __repr__(self):
+        return 'Enum(%r, %r)' % (self.name, self.members)
+
+
+class Member(Node):
+    def __init__(self, name, value):
+        self.name = name
+        self.value = value
+
+    def __repr__(self):
+        return 'Member(%r, %r)' % (self.name, self.value)
+
 
 class Generator(object):
     def __init__(self):
         self._scanner = giscanner.SourceScanner()
         self._filenames = []
-        self._cpp_options = None
+        self._cpp_options = []
 
     # Public API
 
-    def set_cpp_options(self, cpp_options):
-        self._cpp_options = cpp_options
+    def set_cpp_options(self, includes, defines, undefines):
+        for prefix, args in [('-I', includes),
+                             ('-D', defines),
+                             ('-U', undefines)]:
+            for arg in (args or []):
+                self._cpp_options.append(prefix + arg)
 
     def parse_file(self, filename):
         self._parse_one(filename)
@@ -98,47 +126,85 @@ class TreeBuilder(object):
 
         self._traverse()
 
+    def get_nodes(self):
+        for node in self.nodes:
+            yield node
+
     def _traverse(self):
         for symbol in self.generator.get_symbols():
             node = self._traverse_one(symbol)
             if node is not None:
                 self.nodes.append(node)
 
-    def _traverse_one(self, symbol):
-        if symbol.type == giscanner.CSYMBOL_TYPE_FUNCTION:
-            return Function(symbol)
-        elif symbol.type == giscanner.CSYMBOL_TYPE_TYPEDEF:
-            return Typedef(symbol)
-        elif symbol.type == giscanner.CSYMBOL_TYPE_STRUCT:
-            return Struct(symbol)
+    def _traverse_one(self, symbol, stype=None):
+        if stype is None:
+            stype = symbol.type
+        if stype == giscanner.CSYMBOL_TYPE_FUNCTION:
+            return self._create_function(symbol)
+        elif stype == giscanner.CSYMBOL_TYPE_TYPEDEF:
+            return self._traverse_one(symbol, symbol.base_type.type)
+        #elif stype == giscanner.CSYMBOL_TYPE_STRUCT:
+        #    return Struct(symbol)
+        elif stype == giscanner.CSYMBOL_TYPE_ENUM:
+            return self._create_enum(symbol)
         else:
             print 'unhandled', symbol.type
 
+    def _create_enum(self, symbol):
+        members = []
+        for child in symbol.base_type.child_list:
+            members.append(Member(child.ident,
+                                  child.const_int))
+
+        return Enum(symbol.ident, members)
+
+    def _create_function(self, symbol):
+        parameters = []
+        retval = None
+        for child in symbol.base_type.child_list:
+            print child.base_type.type
+            parameters.append(Parameter(child.ident, '??'))
+
+        return Function(symbol.ident, retval, parameters)
+
 def main(args):
-    if len(args) == 1:
+    parser = optparse.OptionParser('%prog [options] sources')
+    parser.add_option("-v", "--verbose",
+                      action="store_true", dest="verbose",
+                      help="be verbose")
+
+    group = optparse.OptionGroup(parser, "Preprocessor options")
+    group.add_option("-I", help="Pre-processor include file",
+                     action="append", dest="cpp_includes")
+    group.add_option("-D", help="Pre-processor define",
+                     action="append", dest="cpp_defines")
+    group.add_option("-U", help="Pre-processor undefine",
+                     action="append", dest="cpp_undefines")
+    group.add_option("-p", dest="", help="Ignored")
+    parser.add_option_group(group)
+
+    (options, args) = parser.parse_args()
+
+    if not args:
         print 'ERROR: Needs at least one filename.'
         return 0
 
-    filenames = []
-    cpp_options = []
-
     gen = Generator()
-    for arg in args[1:]:
+    gen.set_cpp_options(options.cpp_includes,
+                        options.cpp_defines,
+                        options.cpp_undefines)
+    filenames = []
+    for arg in args:
         if (arg.endswith('.c') or
             arg.endswith('.h')):
             filenames.append(arg)
-        elif arg.startswith('-') and len(arg) >= 2:
-            if arg[1] in ['I', 'U', 'D']:
-                cpp_options.append(arg)
-        else:
-            print 'Unhandled argument:', arg
-    gen.set_cpp_options(cpp_options)
 
     for filename in filenames:
         gen.parse_file(filename)
     gen.parse_macros()
 
     builder = TreeBuilder(gen)
-    print builder.nodes
+    import pprint
+    pprint.pprint(list(builder.get_nodes()))
 
 sys.exit(main(sys.argv))

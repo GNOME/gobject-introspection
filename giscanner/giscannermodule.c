@@ -1,6 +1,6 @@
 /* GObject introspection: scanner
  *
- * Copyright (C) 2008
+ * Copyright (C) 2008  Johan Dahlin <johan@gnome.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -67,36 +67,43 @@ typedef struct {
   GISourceScanner *scanner;
 } PyGISourceScanner;
 
-NEW_CLASS(PyGISourceSymbol, "SourceSymbol", GISourceSymbol);
-NEW_CLASS(PyGISourceType, "SourceType", GISourceType);
-NEW_CLASS(PyGISourceScanner, "SourceScanner", GISourceScanner);
+NEW_CLASS (PyGISourceSymbol, "SourceSymbol", GISourceSymbol);
+NEW_CLASS (PyGISourceType, "SourceType", GISourceType);
+NEW_CLASS (PyGISourceScanner, "SourceScanner", GISourceScanner);
 
 
 /* Symbol */
 
 static PyObject *
-symbol_get_type(PyGISourceSymbol *self,
-		void             *context)
+symbol_get_type (PyGISourceSymbol *self,
+		 void             *context)
 {
-  return PyInt_FromLong(self->symbol->type);
+  return PyInt_FromLong (self->symbol->type);
 }
 
 static PyObject *
-symbol_get_ident(PyGISourceSymbol *self,
+symbol_get_ident (PyGISourceSymbol *self,
 		  void            *context)
 {
-  return PyString_FromString(self->symbol->ident);
+  return PyString_FromString (self->symbol->ident);
 }
 
 static PyObject *
-symbol_get_base_type(PyGISourceSymbol *self,
-		     void             *context)
+symbol_get_base_type (PyGISourceSymbol *self,
+		      void             *context)
 {
   PyGISourceType *item;
-  item = (PyGISourceType *)PyObject_GC_New(PyGISourceType,
-					   &PyGISourceType_Type);
+  item = (PyGISourceType *)PyObject_New (PyGISourceType,
+					 &PyGISourceType_Type);
   item->type = self->symbol->base_type;
   return (PyObject*)item;
+}
+
+static PyObject *
+symbol_get_const_int (PyGISourceSymbol *self,
+		      void             *context)
+{
+  return PyInt_FromLong (self->symbol->const_int);
 }
 
 static PyGetSetDef _PyGISourceSymbol_getsets[] = {
@@ -106,7 +113,7 @@ static PyGetSetDef _PyGISourceSymbol_getsets[] = {
   { "ident", (getter)symbol_get_ident, NULL, NULL},
   { "base_type", (getter)symbol_get_base_type, NULL, NULL},
   /* gboolean const_int_set; */
-  /* int const_int; */
+  { "const_int", (getter)symbol_get_const_int, NULL, NULL},
   /* char *const_string; */
   /* GSList *directives; */
   { 0 }
@@ -117,55 +124,82 @@ static PyGetSetDef _PyGISourceSymbol_getsets[] = {
 /* Type */
 
 static PyObject *
-type_get_type(PyGISourceType *self,
-	      void           *context)
+type_get_type (PyGISourceType *self,
+	       void           *context)
 {
-  return PyInt_FromLong(self->type->type);
+  return PyInt_FromLong (self->type->type);
 }
 
 static PyObject *
-type_get_storage_class_specifier(PyGISourceType *self,
-				 void           *context)
+type_get_storage_class_specifier (PyGISourceType *self,
+				  void           *context)
 {
-  return PyInt_FromLong(self->type->storage_class_specifier);
+  return PyInt_FromLong (self->type->storage_class_specifier);
 }
 
 static PyObject *
-type_get_type_qualifier(PyGISourceType *self,
-			void           *context)
+type_get_type_qualifier (PyGISourceType *self,
+			 void           *context)
 {
-  return PyInt_FromLong(self->type->type_qualifier);
+  return PyInt_FromLong (self->type->type_qualifier);
 }
 
 static PyObject *
-type_get_function_specifier(PyGISourceType *self,
-			    void           *context)
+type_get_function_specifier (PyGISourceType *self,
+			     void           *context)
 {
-  return PyInt_FromLong(self->type->function_specifier);
+  return PyInt_FromLong (self->type->function_specifier);
 }
 
 static PyObject *
-type_get_name(PyGISourceType *self,
-	      void           *context)
+type_get_name (PyGISourceType *self,
+	       void           *context)
 {
   if (!self->type->name)
     {
-      Py_INCREF(Py_None);
+      Py_INCREF (Py_None);
       return Py_None;
     }
     
-  return PyString_FromString(self->type->name);
+  return PyString_FromString (self->type->name);
 }
 
 static PyObject *
-type_get_base_type(PyGISourceType *self,
-		   void             *context)
+type_get_base_type (PyGISourceType *self,
+		    void           *context)
 {
   PyGISourceType *item;
-  item = (PyGISourceType *)PyObject_GC_New(PyGISourceType,
-					   &PyGISourceType_Type);
+  item = (PyGISourceType *)PyObject_New (PyGISourceType,
+					 &PyGISourceType_Type);
   item->type = self->type->base_type;
   return (PyObject*)item;
+}
+
+static PyObject *
+type_get_child_list (PyGISourceType *self,
+		     void           *context)
+{
+  GList *l, *symbols;
+  PyObject *list;
+  int i = 0;
+
+  if (!self->type)
+    return Py_BuildValue("[]");
+  
+  list = PyList_New (g_list_length (self->type->child_list));
+  
+  for (l = self->type->child_list; l; l = l->next)
+    {
+      PyGISourceSymbol *item;
+      item = (PyGISourceSymbol *)PyObject_New (PyGISourceSymbol,
+					       &PyGISourceSymbol_Type);
+      item->symbol = l->data;
+      PyList_SetItem (list, i++, (PyObject*)item);
+      Py_INCREF (item);
+    }
+
+  Py_INCREF (list);
+  return list;
 }
 
 static PyGetSetDef _PyGISourceType_getsets[] = {
@@ -175,7 +209,7 @@ static PyGetSetDef _PyGISourceType_getsets[] = {
   { "function_specifier", (getter)type_get_function_specifier, NULL, NULL},
   { "name", (getter)type_get_name, NULL, NULL},
   { "base_type", (getter)type_get_base_type, NULL, NULL},
-  /* { "child_list", (getter)type_get_child_list, NULL, NULL}, */
+  { "child_list", (getter)type_get_child_list, NULL, NULL},
   { 0 }
 };
 
@@ -256,12 +290,14 @@ pygi_source_scanner_get_symbols (PyGISourceScanner *self)
   for (l = symbols; l; l = l->next)
     {
       PyGISourceSymbol *item;
-      item = (PyGISourceSymbol *)PyObject_GC_New(PyGISourceSymbol,
-						 &PyGISourceSymbol_Type);
+      item = (PyGISourceSymbol *)PyObject_New (PyGISourceSymbol,
+					       &PyGISourceSymbol_Type);
       item->symbol = l->data;
-      PyList_SetItem(list, i++, (PyObject*)item);
+      PyList_SetItem (list, i++, (PyObject*)item);
+      Py_INCREF (item);
     }
-  
+
+  Py_INCREF (list);
   return list;
 }
 
