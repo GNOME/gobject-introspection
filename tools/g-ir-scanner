@@ -4,6 +4,7 @@ import sys
 
 sys.path.insert(0, '.')
 
+from giscanner.gidlwriter import GIDLWriter
 from giscanner.sourcescanner import SourceScanner
 from giscanner.treebuilder import TreeBuilder
 
@@ -44,8 +45,8 @@ def main(args):
     ss.parse_macros()
 
     builder = TreeBuilder(ss)
-    import pprint
-    pprint.pprint(list(builder.get_nodes()))
+    writer = GIDLWriter('Foo', builder.get_nodes())
+    print writer.get_xml()
 
 
 sys.exit(main(sys.argv))
