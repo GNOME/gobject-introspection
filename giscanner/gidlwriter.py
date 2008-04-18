@@ -25,7 +25,7 @@ class GIDLWriter(XMLWriter):
             print 'Unhandled node', node
 
     def _write_function(self, func):
-        self.push_tag('function')
+        self.push_tag('function', [('name', func.name)])
         self._write_return_type(func.retval)
         self._write_parameters(func.parameters)
         self.pop_tag()
