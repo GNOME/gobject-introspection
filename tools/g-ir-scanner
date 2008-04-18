@@ -183,7 +183,9 @@ class TreeBuilder(object):
         return Function(symbol.ident, retval, parameters)
 
     def _create_source_type(self, source_type):
-        if source_type.type == giscanner.CTYPE_BASIC_TYPE:
+        if source_type.type == giscanner.CTYPE_VOID:
+            value = 'void'
+        elif source_type.type == giscanner.CTYPE_BASIC_TYPE:
             value = source_type.name
         elif source_type.type == giscanner.CTYPE_TYPEDEF:
             value = source_type.name
