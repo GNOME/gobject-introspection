@@ -13,6 +13,9 @@ def main(args):
     parser.add_option("-v", "--verbose",
                       action="store_true", dest="verbose",
                       help="be verbose")
+    parser.add_option("-n", "--namespace",
+                      action="store", dest="namespace",
+                      help="namespace of this unit")
 
     group = optparse.OptionGroup(parser, "Preprocessor options")
     group.add_option("-I", help="Pre-processor include file",
@@ -45,7 +48,7 @@ def main(args):
     ss.parse_macros()
 
     builder = TreeBuilder(ss)
-    writer = GIDLWriter('Foo', builder.get_nodes())
+    writer = GIDLWriter(options.namespace, builder.get_nodes())
     print writer.get_xml()
 
 

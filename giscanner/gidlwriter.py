@@ -13,7 +13,7 @@ class GIDLWriter(XMLWriter):
         self.pop_tag()
 
     def _write_namespace(self, namespace, nodes):
-        self.push_tag('namespace')
+        self.push_tag('namespace', [('name', namespace)])
         for node in nodes:
             self._write_node(node)
         self.pop_tag()
