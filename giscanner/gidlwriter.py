@@ -1,6 +1,6 @@
+from giscanner.gobjecttreebuilder import GLibEnum, GLibEnumMember, GLibFlags
 from giscanner.treebuilder import Enum, Function
 from giscanner.xmlwriter import XMLWriter
-
 
 class GIDLWriter(XMLWriter):
     def __init__(self, namespace, nodes):
@@ -50,11 +50,21 @@ class GIDLWriter(XMLWriter):
                                      ('type', parameter.type)])
 
     def _write_enum(self, enum):
-        self.push_tag('enum', [('name', enum.name)])
+        attrs = [('name', enum.name)]
+        tag_name = 'enum'
+        if isinstance(enum, GLibEnum):
+            attrs.append(('get-type', enum.get_type))
+            if isinstance(enum, GLibFlags):
+                tag_name = 'flags'
+
+        self.push_tag(tag_name, attrs)
         for member in enum.members:
             self._write_member(member)
         self.pop_tag()
 
     def _write_member(self, member):
-        self.write_tag('member', [('name', member.name),
-                                  ('value', str(member.value))])
+        attrs = [('name', member.name),
+                 ('value', str(member.value))]
+        if isinstance(member, GLibEnumMember):
+            attrs.append(('nick', member.nick))
+        self.write_tag('member', attrs)

@@ -1,3 +1,13 @@
+2008-04-19  Johan Dahlin  <johan@gnome.org>
+
+	* giscanner/cgobject.py:
+	* giscanner/gidlwriter.py:
+	* giscanner/gobjecttreebuilder.py:
+	* tools/g-ir-scanner:
+	Start introspecting get-type functions.
+	Implement support for GLib/GFlags GTypes.
+	Add a ctype based GObject binding.
+
 2008-04-18  Johan Dahlin  <jdahlin@async.com.br>
 
 	* giscanner/gidlwriter.py:

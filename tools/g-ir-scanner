@@ -5,6 +5,7 @@ import sys
 sys.path.insert(0, '.')
 
 from giscanner.gidlwriter import GIDLWriter
+from giscanner.gobjecttreebuilder import GObjectTreeBuilder
 from giscanner.sourcescanner import SourceScanner
 from giscanner.treebuilder import TreeBuilder
 
@@ -16,6 +17,9 @@ def main(args):
     parser.add_option("-n", "--namespace",
                       action="store", dest="namespace",
                       help="namespace of this unit")
+    parser.add_option("-l", "--library",
+                      action="store", dest="library",
+                      help="library of this unit")
 
     group = optparse.OptionGroup(parser, "Preprocessor options")
     group.add_option("-I", help="Pre-processor include file",
@@ -47,7 +51,10 @@ def main(args):
         ss.parse_file(filename)
     ss.parse_macros()
 
-    builder = TreeBuilder(ss)
+    builder = GObjectTreeBuilder()
+    builder.load_library(options.library)
+    builder.parse(TreeBuilder(ss).get_nodes())
+
     writer = GIDLWriter(options.namespace, builder.get_nodes())
     print writer.get_xml()
 
