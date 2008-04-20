@@ -57,6 +57,16 @@ class Return(Node):
         return 'Return(%r)' % (self.type,)
 
 
+class Class(Node):
+    def __init__(self, name, parent, methods):
+        self.name = name
+        self.parent = parent
+        self.methods = methods
+
+    def __repr__(self):
+        return 'Class(%r, %r)' % (self.name, self.methods)
+
+
 class TreeBuilder(object):
     def __init__(self, generator):
         self.generator = generator

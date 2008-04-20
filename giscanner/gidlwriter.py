@@ -1,6 +1,8 @@
-from giscanner.gobjecttreebuilder import GLibEnum, GLibEnumMember, GLibFlags
-from giscanner.treebuilder import Enum, Function
+from giscanner.gobjecttreebuilder import (GLibEnum, GLibEnumMember, GLibFlags,
+                                          GLibObject)
+from giscanner.treebuilder import Class, Enum, Function
 from giscanner.xmlwriter import XMLWriter
+
 
 class GIDLWriter(XMLWriter):
     def __init__(self, namespace, nodes):
@@ -23,6 +25,8 @@ class GIDLWriter(XMLWriter):
             self._write_function(node)
         elif isinstance(node, Enum):
             self._write_enum(node)
+        elif isinstance(node, Class):
+            self._write_class(node)
         else:
             print 'WRITER: Unhandled node', node
 
@@ -30,6 +34,12 @@ class GIDLWriter(XMLWriter):
         self.push_tag('function', [('name', func.name)])
         self._write_return_type(func.retval)
         self._write_parameters(func.parameters)
+        self.pop_tag()
+
+    def _write_method(self, method):
+        self.push_tag('method', [('name', method.name)])
+        self._write_return_type(method.retval)
+        self._write_parameters(method.parameters)
         self.pop_tag()
 
     def _write_return_type(self, return_):
@@ -68,3 +78,13 @@ class GIDLWriter(XMLWriter):
         if isinstance(member, GLibEnumMember):
             attrs.append(('nick', member.nick))
         self.write_tag('member', attrs)
+
+    def _write_class(self, class_):
+        attrs = [('name', class_.name),
+                 ('parent', class_.parent)]
+        if isinstance(class_, GLibObject):
+            attrs.append(('get-type', class_.get_type))
+        self.push_tag('object', attrs)
+        for method in class_.methods:
+            self._write_method(method)
+        self.pop_tag()

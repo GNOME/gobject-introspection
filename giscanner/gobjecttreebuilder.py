@@ -1,7 +1,7 @@
 import ctypes
 
 from giscanner import cgobject
-from giscanner.treebuilder import Enum, Function, Member, Struct
+from giscanner.treebuilder import Class, Enum, Function, Member, Struct
 from giscanner.odict import odict
 
 
@@ -26,6 +26,12 @@ class GLibEnumMember(Member):
     def __init__(self, name, value, nick):
         Member.__init__(self, name, value)
         self.nick = nick
+
+
+class GLibObject(Class):
+    def __init__(self, name, parent, methods, get_type):
+        Class.__init__(self, name, parent, methods)
+        self.get_type = get_type
 
 
 class GObjectTreeBuilder(object):
@@ -75,15 +81,43 @@ class GObjectTreeBuilder(object):
         self._add_attribute(enum)
 
     def _parse_function(self, func):
-        symbol = func.name
-        # GType *_get_type(void)
-        if (symbol.endswith('_get_type') and
-            func.retval.type == 'GType' and
-            not func.parameters):
-            type_id = self._call_get_type_function(symbol)
-            self._parse_gtype(type_id, symbol)
+        if self._parse_get_type_function(func):
             return
-        self._add_attribute(func)
+        elif self._parse_method(func):
+            return
+        else:
+            self._add_attribute(func)
+
+    def _parse_get_type_function(self, func):
+        # GType *_get_type(void)
+        symbol = func.name
+        if not symbol.endswith('_get_type'):
+            return False
+        if func.retval.type != 'GType':
+            return False
+        if func.parameters:
+            return False
+
+        type_id = self._call_get_type_function(symbol)
+        self._parse_gtype(type_id, symbol)
+        return True
+
+
+    def _parse_method(self, func):
+        if not func.parameters:
+            return False
+
+        first_arg = func.parameters[0].type
+        if first_arg.count('*') != 1:
+            return False
+
+        object_name = first_arg.replace('*', '')
+        class_ = self._namespace.get(object_name, None)
+        if class_ is None or not isinstance(class_, GLibObject):
+            return False
+
+        class_.methods.append(func)
+        return True
 
     def _parse_struct(self, struct):
         if (struct.name.startswith('_') or
@@ -96,9 +130,9 @@ class GObjectTreeBuilder(object):
         fundamental_type_id = cgobject.type_fundamental(type_id)
         if (fundamental_type_id == cgobject.TYPE_ENUM or
             fundamental_type_id == cgobject.TYPE_FLAGS):
-            self._introspect_enum(fundamental_type_id, type_id, symbol)
-        #elif fundamental_type == cgobject.TYPE_OBJECT:
-        #    pass
+            pass #self._introspect_enum(fundamental_type_id, type_id, symbol)
+        elif fundamental_type_id == cgobject.TYPE_OBJECT:
+            self._introspect_object(type_id, symbol)
         else:
             print 'unhandled GType: %s' % (cgobject.type_name(type_id),)
 
@@ -116,3 +150,9 @@ class GObjectTreeBuilder(object):
         klass = (GLibFlags if ftype_id == cgobject.TYPE_FLAGS else GLibEnum)
         cenum = klass(cgobject.type_name(type_id), members, symbol)
         self._add_attribute(cenum, replace=True)
+
+    def _introspect_object(self, type_id, symbol):
+        type_name = cgobject.type_name(type_id)
+        parent_name = cgobject.type_name(cgobject.type_parent(type_id))
+        node = GLibObject(type_name, parent_name, [], symbol)
+        self._add_attribute(node, replace=True)

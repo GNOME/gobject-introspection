@@ -1,3 +1,11 @@
+2008-04-20  Johan Dahlin  <jdahlin@async.com.br>
+
+	* giscanner/cgobject.py:
+	* giscanner/gidlwriter.py:
+	* giscanner/gobjecttreebuilder.py:
+	* giscanner/treebuilder.py:
+	Add support for classes and methods
+
 2008-04-20  Johan Dahlin  <johan@gnome.org>
 
 	* giscanner/gidlwriter.py:

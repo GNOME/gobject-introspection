@@ -102,6 +102,9 @@ def type_from_name(name):
 def type_fundamental(type_id):
     return _gobj.g_type_fundamental(type_id)
 
+def type_parent(type_id):
+    return _gobj.g_type_parent(type_id)
+
 _gobj.g_type_class_ref.restype = ctypes.POINTER(GTypeClass)
 def type_class_ref(type_id):
     fundamental_type = type_fundamental(type_id)
