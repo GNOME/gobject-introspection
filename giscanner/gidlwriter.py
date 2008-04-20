@@ -24,7 +24,7 @@ class GIDLWriter(XMLWriter):
         elif isinstance(node, Enum):
             self._write_enum(node)
         else:
-            print 'Unhandled node', node
+            print 'WRITER: Unhandled node', node
 
     def _write_function(self, func):
         self.push_tag('function', [('name', func.name)])

@@ -1,3 +1,12 @@
+2008-04-20  Johan Dahlin  <johan@gnome.org>
+
+	* giscanner/gidlwriter.py:
+	* giscanner/gobjecttreebuilder.py:
+	* giscanner/odict.py:
+	Avoid conflicts, keep the output ordered similar to
+	the order of the input.
+	Add a simple ordered dictionary implemenation
+
 2008-04-19  Johan Dahlin  <johan@gnome.org>
 
 	* giscanner/cgobject.py:
