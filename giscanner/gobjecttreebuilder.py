@@ -130,7 +130,7 @@ class GObjectTreeBuilder(object):
         fundamental_type_id = cgobject.type_fundamental(type_id)
         if (fundamental_type_id == cgobject.TYPE_ENUM or
             fundamental_type_id == cgobject.TYPE_FLAGS):
-            pass #self._introspect_enum(fundamental_type_id, type_id, symbol)
+            self._introspect_enum(fundamental_type_id, type_id, symbol)
         elif fundamental_type_id == cgobject.TYPE_OBJECT:
             self._introspect_object(type_id, symbol)
         else:
