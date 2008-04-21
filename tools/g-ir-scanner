@@ -19,7 +19,7 @@ def main(args):
                       action="store", dest="namespace",
                       help="namespace of this unit")
     parser.add_option("", "--pkg",
-                      action="append", dest="packages",
+                      action="append", dest="packages", default=[],
                       help="pkg-config packages to get cflags from")
     parser.add_option("-v", "--verbose",
                       action="store_true", dest="verbose",
