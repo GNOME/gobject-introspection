@@ -1,5 +1,11 @@
 2008-04-21  Johan Dahlin  <johan@gnome.org>
 
+	* giscanner/gidlwriter.py:
+	* giscanner/gobjecttreebuilder.py:
+	Add support for boxed types
+
+2008-04-21  Johan Dahlin  <johan@gnome.org>
+
 	* giscanner/giscannermodule.c: Mark structures as const,
 	wrap SourceType.const_string.
 

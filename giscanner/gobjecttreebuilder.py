@@ -60,6 +60,13 @@ class GLibObject(Class):
         self.get_type = get_type
 
 
+class GLibBoxed(Struct):
+    def __init__(self, name, methods, get_type):
+        Struct.__init__(self, name)
+        self.methods = []
+        self.get_type = get_type
+
+
 class GLibInterface(Interface):
     def __init__(self, name, methods, get_type):
         Interface.__init__(self, name, methods)
@@ -158,7 +165,7 @@ class GObjectTreeBuilder(object):
 
         object_name = first_arg.replace('*', '')
         class_ = self._get_attribute(object_name)
-        if class_ is None or not isinstance(class_, GLibObject):
+        if class_ is None or not isinstance(class_, (GLibObject, GLibBoxed)):
             return False
 
         # GtkButton -> gtk_button_, so we can figure out the method name
@@ -190,6 +197,8 @@ class GObjectTreeBuilder(object):
             self._introspect_object(type_id, symbol)
         elif fundamental_type_id == cgobject.TYPE_INTERFACE:
             self._introspect_interface(type_id, symbol)
+        elif fundamental_type_id == cgobject.TYPE_BOXED:
+            self._introspect_boxed(type_id, symbol)
         else:
             print 'unhandled GType: %s' % (cgobject.type_name(type_id),)
 
@@ -217,4 +226,9 @@ class GObjectTreeBuilder(object):
     def _introspect_interface(self, type_id, symbol):
         type_name = cgobject.type_name(type_id)
         node = GLibInterface(type_name, [], symbol)
+        self._add_attribute(node, replace=True)
+
+    def _introspect_boxed(self, type_id, symbol):
+        type_name = cgobject.type_name(type_id)
+        node = GLibBoxed(type_name, [], symbol)
         self._add_attribute(node, replace=True)

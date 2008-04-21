@@ -1,7 +1,7 @@
 from __future__ import with_statement
 
-from .gobjecttreebuilder import (GLibEnum, GLibEnumMember, GLibFlags,
-                                 GLibObject, GLibInterface)
+from .gobjecttreebuilder import (GLibBoxed, GLibEnum, GLibEnumMember,
+                                 GLibFlags, GLibObject, GLibInterface)
 from .treebuilder import Class, Enum, Function, Interface
 from .xmlwriter import XMLWriter
 
@@ -29,6 +29,8 @@ class GIDLWriter(XMLWriter):
             self._write_class(node)
         elif isinstance(node, Interface):
             self._write_interface(node)
+        elif isinstance(node, GLibBoxed):
+            self._write_boxed(node)
         else:
             print 'WRITER: Unhandled node', node
 
@@ -92,4 +94,12 @@ class GIDLWriter(XMLWriter):
             attrs.append(('get-type', interface.get_type))
         with self.tagcontext('interface', attrs):
             for method in interface.methods:
+                self._write_method(method)
+
+    def _write_boxed(self, boxed):
+        attrs = [('name', boxed.name)]
+        if isinstance(boxed, GLibBoxed):
+            attrs.append(('get-type', boxed.get_type))
+        with self.tagcontext('boxed', attrs):
+            for method in boxed.methods:
                 self._write_method(method)
