@@ -1,6 +1,12 @@
 2008-04-21  Johan Dahlin  <johan@gnome.org>
 
 	* giscanner/gobjecttreebuilder.py:
+	After stripping namespaces, remove the original
+	item to avoid duplication (GtkButton struct and Button object)
+
+2008-04-21  Johan Dahlin  <johan@gnome.org>
+
+	* giscanner/gobjecttreebuilder.py:
 	* giscanner/treebuilder.py:
 	Strip namespaces before objects, so we'll export
 	GtkButton as Button in the gtk namespace

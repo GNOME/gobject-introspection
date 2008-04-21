@@ -21,13 +21,13 @@ def to_underscores(name):
     name = _upperstr_pat3.sub(r'\1_\2', name, count=1)
     return name
 
+_libtool_pat = re.compile("dlname='([A-z0-9\.]+)'\n")
+
 def resolve_libtool(libname):
     data = open(libname).read()
-    pos = data.find('dlname=')
-    pos2 = data[pos:].find('\n')
-    real = data[pos:pos+pos2][8:-1]
+    filename = _libtool_pat.search(data).groups()[0]
     libname = os.path.join(os.path.dirname(libname),
-                           '.libs', real)
+                           '.libs', filename)
     return libname
 
 
@@ -101,6 +101,9 @@ class GObjectTreeBuilder(object):
         if node_name in self._output_ns and not replace:
             return
         self._output_ns[node_name] = node
+
+    def _remove_attribute(self, name):
+        del self._output_ns[name]
 
     def _get_attribute(self, name):
         return self._output_ns.get(name)
@@ -244,7 +247,8 @@ class GObjectTreeBuilder(object):
                                           enum_value.value_nick))
 
         klass = (GLibFlags if ftype_id == cgobject.TYPE_FLAGS else GLibEnum)
-        cenum = klass(cgobject.type_name(type_id), members, symbol)
+        type_name = cgobject.type_name(type_id)
+        cenum = klass(type_name, members, symbol)
         self._strip_namespace(cenum)
         self._add_attribute(cenum, replace=True)
 
@@ -253,16 +257,19 @@ class GObjectTreeBuilder(object):
         parent_name = cgobject.type_name(cgobject.type_parent(type_id))
         node = GLibObject(type_name, parent_name, [], symbol)
         self._strip_namespace(node)
-        self._add_attribute(node, replace=True)
+        self._add_attribute(node)
+        self._remove_attribute(type_name)
 
     def _introspect_interface(self, type_id, symbol):
         type_name = cgobject.type_name(type_id)
         node = GLibInterface(type_name, [], symbol)
         self._strip_namespace(node)
-        self._add_attribute(node, replace=True)
+        self._add_attribute(node)
+        self._remove_attribute(type_name)
 
     def _introspect_boxed(self, type_id, symbol):
         type_name = cgobject.type_name(type_id)
         node = GLibBoxed(type_name, [], symbol)
         self._strip_namespace(node)
-        self._add_attribute(node, replace=True)
+        self._add_attribute(node)
+        self._remove_attribute(type_name)
