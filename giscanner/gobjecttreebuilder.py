@@ -99,12 +99,6 @@ class GObjectTreeBuilder(object):
 
         return name
 
-    def _call_get_type_function(self, symbol_name):
-        func = getattr(self._library, symbol_name)
-        func.restype = cgobject.GType
-        func.argtypes = []
-        return func()
-
     def _parse_node(self, node):
         if isinstance(node, Enum):
             self._parse_enum(node)
@@ -137,10 +131,12 @@ class GObjectTreeBuilder(object):
         if func.parameters:
             return False
 
-        type_id = self._call_get_type_function(symbol)
-        self._parse_gtype(type_id, symbol)
+        func = getattr(self._library, symbol)
+        func.restype = cgobject.GType
+        func.argtypes = []
+        type_id = func()
+        self._introspect_type(type_id, symbol)
         return True
-
 
     def _parse_method(self, func):
         if not func.parameters:
@@ -178,7 +174,7 @@ class GObjectTreeBuilder(object):
             return
         self._add_attribute(struct)
 
-    def _parse_gtype(self, type_id, symbol):
+    def _introspect_type(self, type_id, symbol):
         fundamental_type_id = cgobject.type_fundamental(type_id)
         if (fundamental_type_id == cgobject.TYPE_ENUM or
             fundamental_type_id == cgobject.TYPE_FLAGS):
