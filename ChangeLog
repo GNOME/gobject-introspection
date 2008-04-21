@@ -1,5 +1,12 @@
 2008-04-21  Johan Dahlin  <johan@gnome.org>
 
+	* giscanner/gobjecttreebuilder.py:
+	* giscanner/treebuilder.py:
+	Strip namespaces before objects, so we'll export
+	GtkButton as Button in the gtk namespace
+
+2008-04-21  Johan Dahlin  <johan@gnome.org>
+
 	* giscanner/gidlwriter.py:
 	* giscanner/gobjecttreebuilder.py:
 	* giscanner/treebuilder.py:

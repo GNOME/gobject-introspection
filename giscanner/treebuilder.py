@@ -68,7 +68,8 @@ class Class(Node):
         self.constructors = []
 
     def __repr__(self):
-        return 'Class(%r, %r, %r)' % (
+        return '%s(%r, %r, %r)' % (
+            self.__class__.__name__,
             self.name, self.parent, self.methods)
 
 
@@ -78,7 +79,9 @@ class Interface(Node):
         self.methods = methods
 
     def __repr__(self):
-        return 'Interface(%r, %r)' % (self.name, self.methods)
+        return '%s(%r, %r)' % (
+            self.__class__.__name__,
+            self.name, self.methods)
 
 
 class Constant(Node):

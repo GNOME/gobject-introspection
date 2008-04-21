@@ -105,14 +105,23 @@ class GObjectTreeBuilder(object):
     def _get_attribute(self, name):
         return self._output_ns.get(name)
 
-    def _strip_namespace(self, name):
-        # gtk_init_check -> init_check
-        prefix = self._namespace_name.lower() + '_'
-        lower = name.lower()
-        if lower.startswith(prefix):
-            name = name[len(prefix):]
+    def _strip_namespace(self, node):
+        prefix = self._namespace_name.lower()
+        if isinstance(node, Function):
+            # gtk_init_check -> init_check
+            prefix += '_'
+            name = node.name.lower()
+        elif isinstance(node, (Interface, Class, Struct, Enum)):
+            # GtkButton -> Button
+            # GtkTreeModel -> TreeModel
+            # etc
+            name = node.name.lower()
+        else:
+            raise NotImplementedError(node)
 
-        return name
+        if name.startswith(prefix):
+            old = node.name
+            node.name = node.name[len(prefix):]
 
     def _parse_node(self, node):
         if isinstance(node, Enum):
@@ -125,6 +134,7 @@ class GObjectTreeBuilder(object):
             print 'Unhandled node:', node
 
     def _parse_enum(self, enum):
+        self._strip_namespace(enum)
         self._add_attribute(enum)
 
     def _parse_function(self, func):
@@ -135,7 +145,7 @@ class GObjectTreeBuilder(object):
         elif self._parse_method(func):
             return
 
-        func.name = self._strip_namespace(func.name)
+        self._strip_namespace(func)
         self._add_attribute(func)
 
     def _parse_get_type_function(self, func):
@@ -181,12 +191,15 @@ class GObjectTreeBuilder(object):
         return self._parse_method_common(func, object_name, is_method=False)
 
     def _parse_method_common(self, func, object_name, is_method):
+        orig_name = object_name
+        if object_name.lower().startswith(self._namespace_name.lower()):
+            object_name = object_name[len(self._namespace_name):]
         class_ = self._get_attribute(object_name)
         if class_ is None or not isinstance(class_, (GLibObject, GLibBoxed)):
             return False
 
         # GtkButton -> gtk_button_, so we can figure out the method name
-        prefix = to_underscores(object_name).lower() + '_'
+        prefix = to_underscores(orig_name).lower() + '_'
         if not func.name.startswith(prefix):
             return False
 
@@ -232,20 +245,24 @@ class GObjectTreeBuilder(object):
 
         klass = (GLibFlags if ftype_id == cgobject.TYPE_FLAGS else GLibEnum)
         cenum = klass(cgobject.type_name(type_id), members, symbol)
+        self._strip_namespace(cenum)
         self._add_attribute(cenum, replace=True)
 
     def _introspect_object(self, type_id, symbol):
         type_name = cgobject.type_name(type_id)
         parent_name = cgobject.type_name(cgobject.type_parent(type_id))
         node = GLibObject(type_name, parent_name, [], symbol)
+        self._strip_namespace(node)
         self._add_attribute(node, replace=True)
 
     def _introspect_interface(self, type_id, symbol):
         type_name = cgobject.type_name(type_id)
         node = GLibInterface(type_name, [], symbol)
+        self._strip_namespace(node)
         self._add_attribute(node, replace=True)
 
     def _introspect_boxed(self, type_id, symbol):
         type_name = cgobject.type_name(type_id)
         node = GLibBoxed(type_name, [], symbol)
+        self._strip_namespace(node)
         self._add_attribute(node, replace=True)
