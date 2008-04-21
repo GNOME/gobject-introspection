@@ -63,6 +63,7 @@ class GLibObject(Class):
 class GLibBoxed(Struct):
     def __init__(self, name, methods, get_type):
         Struct.__init__(self, name)
+        self.constructors = []
         self.methods = []
         self.get_type = get_type
 
@@ -129,6 +130,8 @@ class GObjectTreeBuilder(object):
     def _parse_function(self, func):
         if self._parse_get_type_function(func):
             return
+        elif self._parse_constructor(func):
+            return
         elif self._parse_method(func):
             return
 
@@ -179,6 +182,32 @@ class GObjectTreeBuilder(object):
         # Strip namespace and object prefix: gtk_button_set_text -> set_text
         method.name = func.name[len(prefix):]
         class_.methods.append(method)
+        return True
+
+    def _parse_constructor(self, func):
+        # FIXME: This is hackish, we should preserve the pointer structures
+        #        here, so we can find pointers to objects and not just
+        #        pointers to anything
+        rtype = func.retval.type
+        if rtype.count('*') != 1:
+            return False
+
+        object_name = rtype.replace('*', '')
+        class_ = self._get_attribute(object_name)
+        if class_ is None or not isinstance(class_, (GLibObject, GLibBoxed)):
+            return False
+
+        # GtkButton -> gtk_button_, so we can figure out the constructor name
+        prefix = to_underscores(object_name).lower() + '_'
+        if not func.name.startswith(prefix):
+            return False
+
+        # Okay, the function is really a method
+        constructor = func
+
+        # Strip namespace and object prefix: gtk_button_set_text -> set_text
+        constructor.name = func.name[len(prefix):]
+        class_.constructors.append(constructor)
         return True
 
     def _parse_struct(self, struct):

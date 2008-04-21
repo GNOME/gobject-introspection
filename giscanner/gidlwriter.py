@@ -44,6 +44,9 @@ class GIDLWriter(XMLWriter):
     def _write_method(self, method):
         self._write_function(method, tag_name='method')
 
+    def _write_constructor(self, method):
+        self._write_function(method, tag_name='constructor')
+
     def _write_return_type(self, return_):
         if not return_:
             return
@@ -85,6 +88,8 @@ class GIDLWriter(XMLWriter):
         if isinstance(class_, GLibObject):
             attrs.append(('get-type', class_.get_type))
         with self.tagcontext('object', attrs):
+            for method in class_.constructors:
+                self._write_constructor(method)
             for method in class_.methods:
                 self._write_method(method)
 
@@ -101,5 +106,7 @@ class GIDLWriter(XMLWriter):
         if isinstance(boxed, GLibBoxed):
             attrs.append(('get-type', boxed.get_type))
         with self.tagcontext('boxed', attrs):
+            for method in boxed.constructors:
+                self._write_constructor(method)
             for method in boxed.methods:
                 self._write_method(method)

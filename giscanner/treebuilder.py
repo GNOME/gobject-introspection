@@ -65,6 +65,7 @@ class Class(Node):
         self.name = name
         self.parent = parent
         self.methods = methods
+        self.constructors = []
 
     def __repr__(self):
         return 'Class(%r, %r, %r)' % (
