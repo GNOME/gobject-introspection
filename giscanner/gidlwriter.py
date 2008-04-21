@@ -1,8 +1,8 @@
 from __future__ import with_statement
 
 from .gobjecttreebuilder import (GLibEnum, GLibEnumMember, GLibFlags,
-                                 GLibObject)
-from .treebuilder import Class, Enum, Function
+                                 GLibObject, GLibInterface)
+from .treebuilder import Class, Enum, Function, Interface
 from .xmlwriter import XMLWriter
 
 
@@ -27,6 +27,8 @@ class GIDLWriter(XMLWriter):
             self._write_enum(node)
         elif isinstance(node, Class):
             self._write_class(node)
+        elif isinstance(node, Interface):
+            self._write_interface(node)
         else:
             print 'WRITER: Unhandled node', node
 
@@ -82,4 +84,12 @@ class GIDLWriter(XMLWriter):
             attrs.append(('get-type', class_.get_type))
         with self.tagcontext('object', attrs):
             for method in class_.methods:
+                self._write_method(method)
+
+    def _write_interface(self, interface):
+        attrs = [('name', interface.name)]
+        if isinstance(interface, GLibInterface):
+            attrs.append(('get-type', interface.get_type))
+        with self.tagcontext('interface', attrs):
+            for method in interface.methods:
                 self._write_method(method)

@@ -67,7 +67,17 @@ class Class(Node):
         self.methods = methods
 
     def __repr__(self):
-        return 'Class(%r, %r)' % (self.name, self.methods)
+        return 'Class(%r, %r, %r)' % (
+            self.name, self.parent, self.methods)
+
+
+class Interface(Node):
+    def __init__(self, name, methods):
+        self.name = name
+        self.methods = methods
+
+    def __repr__(self):
+        return 'Interface(%r, %r)' % (self.name, self.methods)
 
 
 class TreeBuilder(object):

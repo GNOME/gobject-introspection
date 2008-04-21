@@ -3,7 +3,7 @@ import re
 import os
 
 from . import cgobject
-from .treebuilder import Class, Enum, Function, Member, Struct
+from .treebuilder import Class, Enum, Function, Interface, Member, Struct
 from .odict import odict
 
 
@@ -58,6 +58,13 @@ class GLibObject(Class):
     def __init__(self, name, parent, methods, get_type):
         Class.__init__(self, name, parent, methods)
         self.get_type = get_type
+
+
+class GLibInterface(Interface):
+    def __init__(self, name, methods, get_type):
+        Interface.__init__(self, name, methods)
+        self.get_type = get_type
+
 
 class GObjectTreeBuilder(object):
     def __init__(self, namespace_name):
@@ -181,6 +188,8 @@ class GObjectTreeBuilder(object):
             self._introspect_enum(fundamental_type_id, type_id, symbol)
         elif fundamental_type_id == cgobject.TYPE_OBJECT:
             self._introspect_object(type_id, symbol)
+        elif fundamental_type_id == cgobject.TYPE_INTERFACE:
+            self._introspect_interface(type_id, symbol)
         else:
             print 'unhandled GType: %s' % (cgobject.type_name(type_id),)
 
@@ -203,4 +212,9 @@ class GObjectTreeBuilder(object):
         type_name = cgobject.type_name(type_id)
         parent_name = cgobject.type_name(cgobject.type_parent(type_id))
         node = GLibObject(type_name, parent_name, [], symbol)
+        self._add_attribute(node, replace=True)
+
+    def _introspect_interface(self, type_id, symbol):
+        type_name = cgobject.type_name(type_id)
+        node = GLibInterface(type_name, [], symbol)
         self._add_attribute(node, replace=True)

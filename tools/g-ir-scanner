@@ -18,6 +18,9 @@ def main(args):
     parser.add_option("-n", "--namespace",
                       action="store", dest="namespace",
                       help="namespace of this unit")
+    parser.add_option("-o", "--output",
+                      action="store", dest="output",
+                      help="output to writeout, defaults to stdout")
     parser.add_option("", "--pkg",
                       action="append", dest="packages", default=[],
                       help="pkg-config packages to get cflags from")
@@ -70,7 +73,12 @@ def main(args):
     builder.parse(TreeBuilder(ss).get_nodes())
 
     writer = GIDLWriter(options.namespace, builder.get_nodes())
-    print writer.get_xml()
 
+    data = writer.get_xml()
+    if options.output:
+        fd = open(options.output, "w")
+        fd.write(data)
+    else:
+        print data
 
 sys.exit(main(sys.argv))
