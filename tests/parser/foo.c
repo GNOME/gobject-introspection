@@ -32,10 +32,64 @@ foo_interface_get_type (void)
 
 G_DEFINE_TYPE (FooObject, foo_object, G_TYPE_OBJECT);
 
+enum {
+  PROP_0,
+  PROP_STRING
+};
+
+static void
+foo_object_set_property (GObject         *object,
+                         guint            prop_id,
+                         const GValue    *value,
+                         GParamSpec      *pspec)
+{
+  FooObject *foo = FOO_OBJECT (object);
+
+  switch (prop_id)
+    {
+    case PROP_STRING:
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+foo_object_get_property (GObject         *object,
+                         guint            prop_id,
+                         GValue          *value,
+                         GParamSpec      *pspec)
+{
+  FooObject *foo = FOO_OBJECT (object);
+
+  switch (prop_id)
+    {
+    case PROP_STRING:
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
 static void
 foo_object_class_init (FooObjectClass *klass)
 {
+  GObjectClass *gobject_class;
 
+  gobject_class = G_OBJECT_CLASS (klass);
+
+  gobject_class->set_property = foo_object_set_property;
+  gobject_class->get_property = foo_object_get_property;
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_STRING,
+                                   g_param_spec_string ("string",
+                                                        "String nick",
+                                                        "The String Property Blurb",
+                                                        NULL,
+                                                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT));
 }
 
 static void

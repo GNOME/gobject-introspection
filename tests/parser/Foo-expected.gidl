@@ -108,6 +108,7 @@
 					<parameter name="outarg" type="int*" direction="out"/>
 				</parameters>
 			</method>
+			<property name="string" type="char*" readable="1" writable="1" construct="1" construct-only="0"/>
 		</object>
 		<object name="FooSubobject" parent="FooObject" type-name="FooSubobject" get-type="foo_subobject_get_type">
 			<constructor name="new" symbol="foo_subobject_new">

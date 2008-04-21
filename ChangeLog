@@ -1,5 +1,8 @@
 2008-04-21  Johan Dahlin  <johan@gnome.org>
 
+	* tests/parser/Foo-expected.gidl: Update
+	* tests/parser/foo.c: Add a string property
+
 	* giscanner/gobjecttreebuilder.py:
 	After stripping namespaces, remove the original
 	item to avoid duplication (GtkButton struct and Button object)
