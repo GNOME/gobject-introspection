@@ -1,17 +1,20 @@
 import giscanner
 
+
 class Node(object):
     pass
 
 
 class Function(Node):
-    def __init__(self, name, retval, parameters):
+    def __init__(self, name, retval, parameters, symbol):
         self.name = name
         self.retval = retval
         self.parameters = parameters
+        self.symbol = symbol
 
     def __repr__(self):
-        return 'Function(%r, %r, %r)' % (self.name, self.retval, self.parameters)
+        return 'Function(%r, %r, %r)' % (self.name, self.retval,
+                                         self.parameters)
 
 
 class Parameter(Node):
@@ -96,7 +99,7 @@ class TreeBuilder(object):
         elif stype == giscanner.CSYMBOL_TYPE_ENUM:
             return self._create_enum(symbol)
         else:
-            print 'unhandled symbol', symbol.type
+            print 'BUILDER: unhandled symbol', symbol.type
 
     def _create_enum(self, symbol):
         members = []
@@ -112,7 +115,7 @@ class TreeBuilder(object):
             parameters.append(self._create_parameter(child))
 
         retval = Return(self._create_source_type(symbol.base_type.base_type))
-        return Function(symbol.ident, retval, parameters)
+        return Function(symbol.ident, retval, parameters, symbol.ident)
 
     def _create_source_type(self, source_type):
         if source_type.type == giscanner.CTYPE_VOID:
@@ -124,7 +127,7 @@ class TreeBuilder(object):
         elif source_type.type == giscanner.CTYPE_POINTER:
             value = self._create_source_type(source_type.base_type) + '*'
         else:
-            print 'Unhandled source type: %d' % (source_type.type,)
+            print 'BUILDER: Unhandled source type: %d' % (source_type.type,)
             value = '???'
         return value
 

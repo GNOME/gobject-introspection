@@ -1,8 +1,19 @@
 import ctypes
+import os
 
 from giscanner import cgobject
 from giscanner.treebuilder import Class, Enum, Function, Member, Struct
 from giscanner.odict import odict
+
+
+def resolve_libtool(libname):
+    data = open(libname).read()
+    pos = data.find('dlname=')
+    pos2 = data[pos:].find('\n')
+    real = data[pos:pos+pos2][8:-1]
+    libname = os.path.join(os.path.dirname(libname),
+                           '.libs', real)
+    return libname
 
 
 class GLibEnum(Enum):
@@ -35,21 +46,22 @@ class GLibObject(Class):
 
 
 class GObjectTreeBuilder(object):
-    def __init__(self):
-        self.nodes = []
-        self._namespace = odict()
+    def __init__(self, namespace_name):
+        self._namespace_name = namespace_name
+        self._output_ns = odict()
         self._library = None
 
     # Public API
 
     def get_nodes(self):
-        return self._namespace.values()
+        return self._output_ns.values()
 
     def load_library(self, libname):
+        if libname.endswith('.la'):
+            libname = resolve_libtool(libname)
         self._library = ctypes.cdll.LoadLibrary(libname)
 
     def parse(self, nodes):
-        nodes = list(nodes)
         for node in nodes:
             self._parse_node(node)
 
@@ -57,9 +69,21 @@ class GObjectTreeBuilder(object):
 
     def _add_attribute(self, node, replace=False):
         node_name = node.name
-        if node_name in self._namespace and not replace:
+        if node_name in self._output_ns and not replace:
             return
-        self._namespace[node_name] = node
+        self._output_ns[node_name] = node
+
+    def _get_attribute(self, name):
+        return self._output_ns.get(name)
+
+    def _strip_namespace(self, name):
+        # gtk_init_check -> init_check
+        prefix = self._namespace_name.lower() + '_'
+        lower = name.lower()
+        if lower.startswith(prefix):
+            name = name[len(prefix):]
+
+        return name
 
     def _call_get_type_function(self, symbol_name):
         func = getattr(self._library, symbol_name)
@@ -85,8 +109,9 @@ class GObjectTreeBuilder(object):
             return
         elif self._parse_method(func):
             return
-        else:
-            self._add_attribute(func)
+
+        func.name = self._strip_namespace(func.name)
+        self._add_attribute(func)
 
     def _parse_get_type_function(self, func):
         # GType *_get_type(void)
@@ -112,7 +137,7 @@ class GObjectTreeBuilder(object):
             return False
 
         object_name = first_arg.replace('*', '')
-        class_ = self._namespace.get(object_name, None)
+        class_ = self._get_attribute(object_name)
         if class_ is None or not isinstance(class_, GLibObject):
             return False
 

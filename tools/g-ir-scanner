@@ -51,7 +51,7 @@ def main(args):
         ss.parse_file(filename)
     ss.parse_macros()
 
-    builder = GObjectTreeBuilder()
+    builder = GObjectTreeBuilder(options.namespace)
     builder.load_library(options.library)
     builder.parse(TreeBuilder(ss).get_nodes())
 
