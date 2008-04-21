@@ -1,5 +1,10 @@
 2008-04-21  Johan Dahlin  <johan@gnome.org>
 
+	* giscanner/cgobject.py:
+	Add a workaround for a glib bug interface introspection bug
+	(object_interface_list_properties, object_class_list_properties):
+	Cast the return value to GParamSpec.
+
 	* tests/parser/Foo-expected.gidl: Update
 	* tests/parser/foo.c: Add a string property
 

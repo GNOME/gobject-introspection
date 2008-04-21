@@ -13,6 +13,7 @@ import ctypes
 
 # Constants
 
+# FIXME: Are these stable?
 TYPE_INVALID = 0
 TYPE_INTERFACE = 8
 TYPE_ENUM = 48
@@ -88,6 +89,12 @@ class GParamSpec(ctypes.Structure):
 _gobj = ctypes.cdll.LoadLibrary('libgobject-2.0.so')
 _gobj.g_type_init()
 
+# Workaround this error:
+#   GLib-GObject-CRITICAL **: g_param_spec_pool_list:
+#   assertion `pool != NULL' failed
+# which happens when trying to introspect an interface before instantiating
+# a GObject.
+_gobj.g_object_new(TYPE_OBJECT, None)
 
 # Functions
 
@@ -126,7 +133,7 @@ def object_class_list_properties(type_id):
     n = ctypes.c_uint()
     pspecs = _gobj.g_object_class_list_properties(klass, ctypes.byref(n))
     for i in range(n.value):
-        yield pspecs[i]
+        yield ctypes.cast(pspecs[i], ctypes.POINTER(GParamSpec)).contents
 
 _gobj.g_object_interface_list_properties.restype = ctypes.POINTER(
     ctypes.POINTER(GParamSpec))
@@ -135,7 +142,7 @@ def object_interface_list_properties(type_id):
     n = ctypes.c_uint()
     pspecs = _gobj.g_object_interface_list_properties(iface, ctypes.byref(n))
     for i in range(n.value):
-        yield pspecs[i]
+        yield ctypes.cast(pspecs[i], ctypes.POINTER(GParamSpec)).contents
 
 _gobj.g_type_interfaces.restype = ctypes.POINTER(ctypes.c_int)
 def type_interfaces(type_id):
