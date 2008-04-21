@@ -1,10 +1,25 @@
 import ctypes
+import re
 import os
 
 from giscanner import cgobject
 from giscanner.treebuilder import Class, Enum, Function, Member, Struct
 from giscanner.odict import odict
 
+
+# Copied from h2defs.py
+_upperstr_pat1 = re.compile(r'([^A-Z])([A-Z])')
+_upperstr_pat2 = re.compile(r'([A-Z][A-Z])([A-Z][0-9a-z])')
+_upperstr_pat3 = re.compile(r'^([A-Z])([A-Z])')
+
+def to_underscores(name):
+    """Converts a typename to the equivalent underscores name.
+    This is used to form the type conversion macros and enum/flag
+    name variables"""
+    name = _upperstr_pat1.sub(r'\1_\2', name)
+    name = _upperstr_pat2.sub(r'\1_\2', name)
+    name = _upperstr_pat3.sub(r'\1_\2', name, count=1)
+    return name
 
 def resolve_libtool(libname):
     data = open(libname).read()
@@ -43,7 +58,6 @@ class GLibObject(Class):
     def __init__(self, name, parent, methods, get_type):
         Class.__init__(self, name, parent, methods)
         self.get_type = get_type
-
 
 class GObjectTreeBuilder(object):
     def __init__(self, namespace_name):
@@ -132,6 +146,9 @@ class GObjectTreeBuilder(object):
         if not func.parameters:
             return False
 
+        # FIXME: This is hackish, we should preserve the pointer structures
+        #        here, so we can find pointers to objects and not just
+        #        pointers to anything
         first_arg = func.parameters[0].type
         if first_arg.count('*') != 1:
             return False
@@ -141,7 +158,17 @@ class GObjectTreeBuilder(object):
         if class_ is None or not isinstance(class_, GLibObject):
             return False
 
-        class_.methods.append(func)
+        # GtkButton -> gtk_button_, so we can figure out the method name
+        prefix = to_underscores(object_name).lower() + '_'
+        if not func.name.startswith(prefix):
+            return False
+
+        # Okay, the function is really a method
+        method = func
+
+        # Strip namespace and object prefix: gtk_button_set_text -> set_text
+        method.name = func.name[len(prefix):]
+        class_.methods.append(method)
         return True
 
     def _parse_struct(self, struct):

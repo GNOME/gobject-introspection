@@ -1,5 +1,10 @@
 2008-04-21  Johan Dahlin  <johan@gnome.org>
 
+	* giscanner/gobjecttreebuilder.py:
+	Strip namespace and object prefix from method names.
+
+2008-04-21  Johan Dahlin  <johan@gnome.org>
+
 	* tools/g-ir-scanner (main): Add --pkg option to pass in
 	pkg-config modules to get cflags from.
 
