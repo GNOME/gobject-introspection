@@ -39,3 +39,11 @@ General
 -------
 - More tests
 - Check how the format scales to something the size of GTK+
+
+C API
+-------
+- type SYMBOL is kind of inconvenient; would be nicer to go straight to boxed, etc.
+- no way to construct a boxed type
+- no way to access struct fields (should have a way to go field -> GArgument)
+- types namespaced GI, functions namespaced g_
+- no way to get GType given a GIRegisteredTypeInfo
