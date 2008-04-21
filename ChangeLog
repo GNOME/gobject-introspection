@@ -1,3 +1,8 @@
+2008-04-21  Johan Dahlin  <johan@gnome.org>
+
+	* giscanner/gidlwriter.py (GIDLWriter._write_method): 
+	Avoid duplication, reuse function writer for methods.
+
 2008-04-21  Johan Dahlin  <jdahlin@async.com.br>
 
 	* giscanner/gidlwriter.py:
