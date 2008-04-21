@@ -26,7 +26,7 @@
 #include <Python.h>
 
 #define NEW_CLASS(ctype, name, cname)	      \
-static PyMethodDef _Py##cname##_methods[];    \
+static const PyMethodDef _Py##cname##_methods[];    \
 PyTypeObject Py##cname##_Type = {             \
     PyObject_HEAD_INIT(NULL)                  \
     0,			                      \
@@ -106,15 +106,28 @@ symbol_get_const_int (PyGISourceSymbol *self,
   return PyInt_FromLong (self->symbol->const_int);
 }
 
-static PyGetSetDef _PyGISourceSymbol_getsets[] = {
+static PyObject *
+symbol_get_const_string (PyGISourceSymbol *self,
+			 void             *context)
+{
+  if (!self->symbol->const_string)
+    {
+      Py_INCREF(Py_None);
+      return Py_None;
+    }
+    
+  return PyString_FromString (self->symbol->const_string);
+}
+
+static const PyGetSetDef _PyGISourceSymbol_getsets[] = {
   /* int ref_count; */
   { "type", (getter)symbol_get_type, NULL, NULL},
   /* int id; */
   { "ident", (getter)symbol_get_ident, NULL, NULL},
   { "base_type", (getter)symbol_get_base_type, NULL, NULL},
   /* gboolean const_int_set; */
-  { "const_int", (getter)symbol_get_const_int, NULL, NULL},
-  /* char *const_string; */
+  { "const_int", (getter)symbol_get_const_int, NULL, NULL},  
+  { "const_string", (getter)symbol_get_const_string, NULL, NULL},  
   /* GSList *directives; */
   { 0 }
 };
@@ -202,7 +215,7 @@ type_get_child_list (PyGISourceType *self,
   return list;
 }
 
-static PyGetSetDef _PyGISourceType_getsets[] = {
+static const PyGetSetDef _PyGISourceType_getsets[] = {
   { "type", (getter)type_get_type, NULL, NULL},
   { "storage_class_specifier", (getter)type_get_storage_class_specifier, NULL, NULL},
   { "type_qualifier", (getter)type_get_type_qualifier, NULL, NULL},
@@ -301,7 +314,7 @@ pygi_source_scanner_get_symbols (PyGISourceScanner *self)
   return list;
 }
 
-static PyMethodDef _PyGISourceScanner_methods[] = {
+static const PyMethodDef _PyGISourceScanner_methods[] = {
   { "get_symbols", (PyCFunction) pygi_source_scanner_get_symbols, METH_NOARGS },
   { "parse_file", (PyCFunction) pygi_source_scanner_parse_file, METH_VARARGS },
   { "set_macro_scan", (PyCFunction) pygi_source_scanner_set_macro_scan, METH_VARARGS },
@@ -311,7 +324,7 @@ static PyMethodDef _PyGISourceScanner_methods[] = {
 
 /* Module */
 
-PyMethodDef pyscanner_functions[] = {
+static const PyMethodDef pyscanner_functions[] = {
   { NULL, NULL, 0, NULL }
 };
 
@@ -320,16 +333,17 @@ init_giscanner(void)
 {
     PyObject *m, *d;
 
-    m = Py_InitModule ("giscanner._giscanner", pyscanner_functions);
+    m = Py_InitModule ("giscanner._giscanner",
+		       (PyMethodDef*)pyscanner_functions);
     d = PyModule_GetDict (m);
 
     PyGISourceScanner_Type.tp_init = (initproc)pygi_source_scanner_init;
-    PyGISourceScanner_Type.tp_methods = _PyGISourceScanner_methods;
+    PyGISourceScanner_Type.tp_methods = (PyMethodDef*)_PyGISourceScanner_methods;
     REGISTER_TYPE (d, "SourceScanner", PyGISourceScanner_Type);
 
-    PyGISourceSymbol_Type.tp_getset = _PyGISourceSymbol_getsets;
+    PyGISourceSymbol_Type.tp_getset = (PyGetSetDef*)_PyGISourceSymbol_getsets;
     REGISTER_TYPE (d, "SourceSymbol", PyGISourceSymbol_Type);
 
-    PyGISourceType_Type.tp_getset = _PyGISourceType_getsets;
+    PyGISourceType_Type.tp_getset = (PyGetSetDef*)_PyGISourceType_getsets;
     REGISTER_TYPE (d, "SourceType", PyGISourceType_Type);
 }
