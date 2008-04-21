@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import commands
 import optparse
 import sys
 
@@ -11,15 +12,18 @@ from giscanner.treebuilder import TreeBuilder
 
 def main(args):
     parser = optparse.OptionParser('%prog [options] sources')
-    parser.add_option("-v", "--verbose",
-                      action="store_true", dest="verbose",
-                      help="be verbose")
-    parser.add_option("-n", "--namespace",
-                      action="store", dest="namespace",
-                      help="namespace of this unit")
     parser.add_option("-l", "--library",
                       action="store", dest="library",
                       help="library of this unit")
+    parser.add_option("-n", "--namespace",
+                      action="store", dest="namespace",
+                      help="namespace of this unit")
+    parser.add_option("", "--pkg",
+                      action="append", dest="packages",
+                      help="pkg-config packages to get cflags from")
+    parser.add_option("-v", "--verbose",
+                      action="store_true", dest="verbose",
+                      help="be verbose")
 
     group = optparse.OptionGroup(parser, "Preprocessor options")
     group.add_option("-I", help="Pre-processor include file",
@@ -31,11 +35,20 @@ def main(args):
     group.add_option("-p", dest="", help="Ignored")
     parser.add_option_group(group)
 
-    (options, args) = parser.parse_args()
+    (options, args) = parser.parse_args(args)
 
     if not args:
         print 'ERROR: Needs at least one filename.'
         return 0
+
+    for package in options.packages:
+        output = commands.getoutput('pkg-config --cflags %s' % (package,))
+        pkg_options, unused = parser.parse_args(output.split())
+        for attr in ['cpp_includes', 'cpp_defines' 'cpp_undefines']:
+            value = getattr(pkg_options, attr, None)
+            if value is None:
+                continue
+            getattr(options, attr).extend(value)
 
     ss = SourceScanner()
     ss.set_cpp_options(options.cpp_includes,
