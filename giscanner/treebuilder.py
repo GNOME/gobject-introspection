@@ -80,6 +80,17 @@ class Interface(Node):
         return 'Interface(%r, %r)' % (self.name, self.methods)
 
 
+class Constant(Node):
+    def __init__(self, name, type, value):
+        self.name = name
+        self.type = type
+        self.value = value
+
+    def __repr__(self):
+        return 'Constant(%r, %r, %r)' % (
+            self.name, self.type, self.value)
+
+
 class TreeBuilder(object):
     def __init__(self, generator):
         self.generator = generator
@@ -147,3 +158,4 @@ class TreeBuilder(object):
 
     def _create_struct(self, symbol):
         return Struct(symbol.ident)
+
