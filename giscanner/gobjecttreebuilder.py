@@ -167,22 +167,7 @@ class GObjectTreeBuilder(object):
             return False
 
         object_name = first_arg.replace('*', '')
-        class_ = self._get_attribute(object_name)
-        if class_ is None or not isinstance(class_, (GLibObject, GLibBoxed)):
-            return False
-
-        # GtkButton -> gtk_button_, so we can figure out the method name
-        prefix = to_underscores(object_name).lower() + '_'
-        if not func.name.startswith(prefix):
-            return False
-
-        # Okay, the function is really a method
-        method = func
-
-        # Strip namespace and object prefix: gtk_button_set_text -> set_text
-        method.name = func.name[len(prefix):]
-        class_.methods.append(method)
-        return True
+        return self._parse_method_common(func, object_name, is_method=True)
 
     def _parse_constructor(self, func):
         # FIXME: This is hackish, we should preserve the pointer structures
@@ -193,21 +178,24 @@ class GObjectTreeBuilder(object):
             return False
 
         object_name = rtype.replace('*', '')
+        return self._parse_method_common(func, object_name, is_method=False)
+
+    def _parse_method_common(self, func, object_name, is_method):
         class_ = self._get_attribute(object_name)
         if class_ is None or not isinstance(class_, (GLibObject, GLibBoxed)):
             return False
 
-        # GtkButton -> gtk_button_, so we can figure out the constructor name
+        # GtkButton -> gtk_button_, so we can figure out the method name
         prefix = to_underscores(object_name).lower() + '_'
         if not func.name.startswith(prefix):
             return False
 
-        # Okay, the function is really a method
-        constructor = func
-
-        # Strip namespace and object prefix: gtk_button_set_text -> set_text
-        constructor.name = func.name[len(prefix):]
-        class_.constructors.append(constructor)
+        # Strip namespace and object prefix: gtk_window_new -> new
+        func.name = func.name[len(prefix):]
+        if is_method:
+            class_.methods.append(func)
+        else:
+            class_.constructors.append(func)
         return True
 
     def _parse_struct(self, struct):
