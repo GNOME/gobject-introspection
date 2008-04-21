@@ -1,3 +1,5 @@
+from __future__ import with_statement
+
 from giscanner.gobjecttreebuilder import (GLibEnum, GLibEnumMember, GLibFlags,
                                           GLibObject)
 from giscanner.treebuilder import Class, Enum, Function
@@ -10,15 +12,13 @@ class GIDLWriter(XMLWriter):
         self._write_api(namespace, nodes)
 
     def _write_api(self, namespace, nodes):
-        self.push_tag('api', [('version', '1.0')])
-        self._write_namespace(namespace, nodes)
-        self.pop_tag()
+        with self.tagcontext('api', [('version', '1.0')]):
+            self._write_namespace(namespace, nodes)
 
     def _write_namespace(self, namespace, nodes):
-        self.push_tag('namespace', [('name', namespace)])
-        for node in nodes:
-            self._write_node(node)
-        self.pop_tag()
+        with self.tagcontext('namespace', [('name', namespace)]):
+            for node in nodes:
+                self._write_node(node)
 
     def _write_node(self, node):
         if isinstance(node, Function):
@@ -33,10 +33,9 @@ class GIDLWriter(XMLWriter):
     def _write_function(self, func, tag_name='function'):
         attrs = [('name', func.name),
                  ('symbol', func.symbol)]
-        self.push_tag(tag_name, attrs)
-        self._write_return_type(func.retval)
-        self._write_parameters(func.parameters)
-        self.pop_tag()
+        with self.tagcontext(tag_name, attrs):
+            self._write_return_type(func.retval)
+            self._write_parameters(func.parameters)
 
     def _write_method(self, method):
         self._write_function(method, tag_name='method')
@@ -49,10 +48,9 @@ class GIDLWriter(XMLWriter):
     def _write_parameters(self, parameters):
         if not parameters:
             return
-        self.push_tag('parameters')
-        for parameter in parameters:
-            self._write_parameter(parameter)
-        self.pop_tag()
+        with self.tagcontext('parameters'):
+            for parameter in parameters:
+                self._write_parameter(parameter)
 
     def _write_parameter(self, parameter):
         self.write_tag('parameter', [('name', parameter.name),
@@ -66,10 +64,9 @@ class GIDLWriter(XMLWriter):
             if isinstance(enum, GLibFlags):
                 tag_name = 'flags'
 
-        self.push_tag(tag_name, attrs)
-        for member in enum.members:
-            self._write_member(member)
-        self.pop_tag()
+        with self.tagcontext(tag_name, attrs):
+            for member in enum.members:
+                self._write_member(member)
 
     def _write_member(self, member):
         attrs = [('name', member.name),
@@ -83,7 +80,6 @@ class GIDLWriter(XMLWriter):
                  ('parent', class_.parent)]
         if isinstance(class_, GLibObject):
             attrs.append(('get-type', class_.get_type))
-        self.push_tag('object', attrs)
-        for method in class_.methods:
-            self._write_method(method)
-        self.pop_tag()
+        with self.tagcontext('object', attrs):
+            for method in class_.methods:
+                self._write_method(method)

@@ -1,3 +1,5 @@
+from contextlib import contextmanager
+
 from cStringIO import StringIO
 from xml.sax.saxutils import quoteattr
 
@@ -53,3 +55,12 @@ class XMLWriter(object):
         tag_name = self._tag_stack.pop()
         self._close_tag(tag_name)
         return tag_name
+
+    @contextmanager
+    def tagcontext(self, tag_name, attributes=None):
+        self.push_tag(tag_name, attributes)
+        try:
+            yield
+        finally:
+            self.pop_tag()
+

@@ -1,3 +1,10 @@
+2008-04-21  Johan Dahlin  <jdahlin@async.com.br>
+
+	* giscanner/gidlwriter.py:
+	* giscanner/xmlwriter.py:
+	Add a simple api for writing tags which can be used 
+	with the new 'with statement' in python 2.5
+
 2008-04-21  Johan Dahlin  <johan@gnome.org>
 
 	* giscanner/gobjecttreebuilder.py:
