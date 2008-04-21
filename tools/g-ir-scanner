@@ -27,11 +27,14 @@ def main(args):
 
     group = optparse.OptionGroup(parser, "Preprocessor options")
     group.add_option("-I", help="Pre-processor include file",
-                     action="append", dest="cpp_includes")
+                     action="append", dest="cpp_includes",
+                     default=[])
     group.add_option("-D", help="Pre-processor define",
-                     action="append", dest="cpp_defines")
+                     action="append", dest="cpp_defines",
+                     default=[])
     group.add_option("-U", help="Pre-processor undefine",
-                     action="append", dest="cpp_undefines")
+                     action="append", dest="cpp_undefines",
+                     default=[])
     group.add_option("-p", dest="", help="Ignored")
     parser.add_option_group(group)
 
@@ -44,11 +47,9 @@ def main(args):
     for package in options.packages:
         output = commands.getoutput('pkg-config --cflags %s' % (package,))
         pkg_options, unused = parser.parse_args(output.split())
-        for attr in ['cpp_includes', 'cpp_defines' 'cpp_undefines']:
-            value = getattr(pkg_options, attr, None)
-            if value is None:
-                continue
-            getattr(options, attr).extend(value)
+        options.cpp_includes.extend(pkg_options.cpp_includes)
+        options.cpp_defines.extend(pkg_options.cpp_defines)
+        options.cpp_undefines.extend(pkg_options.cpp_undefines)
 
     ss = SourceScanner()
     ss.set_cpp_options(options.cpp_includes,
