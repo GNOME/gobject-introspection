@@ -1,5 +1,7 @@
 2008-04-21  Johan Dahlin  <johan@gnome.org>
 
+	* tests/parser/foo-object.h: Add a couple of constants.
+
 	* giscanner/gidlwriter.py:
 	* giscanner/gobjecttreebuilder.py:
 	* giscanner/treebuilder.py:

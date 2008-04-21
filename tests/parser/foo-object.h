@@ -103,6 +103,10 @@ GType                 foo_boxed_get_type       (void) G_GNUC_CONST;
 FooBoxed*             foo_boxed_new            (void);
 void                  foo_boxed_method         (FooBoxed* boxed);
 
+char *FOO_CONSTANT_STR = "foo-constant-str";
+int FOO_CONSTANT_INT = 10;
+float FOO_CONSTANT_FLOAT = 10;
+
 /* Invalid comments, should be ignored */
 
 /* @ */
