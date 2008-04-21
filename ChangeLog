@@ -1,5 +1,14 @@
 2008-04-21  Johan Dahlin  <johan@gnome.org>
 
+	* giscanner/gidlwriter.py:
+	* giscanner/gobjecttreebuilder.py:
+	* giscanner/treebuilder.py:
+	Add support for properties.
+	Refactor Class/Interface support a bit, to share more code and
+	always initialize their method attribute to an empty list.
+
+2008-04-21  Johan Dahlin  <johan@gnome.org>
+
 	* giscanner/cgobject.py:
 	Add a workaround for a glib bug interface introspection bug
 	(object_interface_list_properties, object_class_list_properties):

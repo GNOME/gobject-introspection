@@ -25,10 +25,8 @@ class GIDLWriter(XMLWriter):
             self._write_function(node)
         elif isinstance(node, Enum):
             self._write_enum(node)
-        elif isinstance(node, Class):
+        elif isinstance(node, (Class, Interface)):
             self._write_class(node)
-        elif isinstance(node, Interface):
-            self._write_interface(node)
         elif isinstance(node, GLibBoxed):
             self._write_boxed(node)
         else:
@@ -82,24 +80,23 @@ class GIDLWriter(XMLWriter):
             attrs.append(('nick', member.nick))
         self.write_tag('member', attrs)
 
-    def _write_class(self, class_):
-        attrs = [('name', class_.name),
-                 ('parent', class_.parent)]
-        if isinstance(class_, GLibObject):
-            attrs.append(('get-type', class_.get_type))
-        with self.tagcontext('object', attrs):
-            for method in class_.constructors:
-                self._write_constructor(method)
-            for method in class_.methods:
+    def _write_class(self, node):
+        attrs = [('name', node.name)]
+        if isinstance(node, Class):
+            tag_name = 'object'
+            attrs.append(('parent', node.parent))
+        else:
+            tag_name = 'interface'
+        if isinstance(node, (GLibObject, GLibInterface)):
+            attrs.append(('get-type', node.get_type))
+        with self.tagcontext(tag_name, attrs):
+            if isinstance(node, Class):
+                for method in node.constructors:
+                    self._write_constructor(method)
+            for method in node.methods:
                 self._write_method(method)
-
-    def _write_interface(self, interface):
-        attrs = [('name', interface.name)]
-        if isinstance(interface, GLibInterface):
-            attrs.append(('get-type', interface.get_type))
-        with self.tagcontext('interface', attrs):
-            for method in interface.methods:
-                self._write_method(method)
+            for prop in node.properties:
+                self._write_property(prop)
 
     def _write_boxed(self, boxed):
         attrs = [('name', boxed.name)]
@@ -110,3 +107,8 @@ class GIDLWriter(XMLWriter):
                 self._write_constructor(method)
             for method in boxed.methods:
                 self._write_method(method)
+
+    def _write_property(self, prop):
+        attrs = [('name', prop.name),
+                 ('prop', prop.type)]
+        self.write_tag('property', attrs)

@@ -61,11 +61,12 @@ class Return(Node):
 
 
 class Class(Node):
-    def __init__(self, name, parent, methods):
+    def __init__(self, name, parent):
         self.name = name
         self.parent = parent
-        self.methods = methods
+        self.methods = []
         self.constructors = []
+        self.properties = []
 
     def __repr__(self):
         return '%s(%r, %r, %r)' % (
@@ -74,9 +75,10 @@ class Class(Node):
 
 
 class Interface(Node):
-    def __init__(self, name, methods):
+    def __init__(self, name):
         self.name = name
-        self.methods = methods
+        self.methods = []
+        self.properties = []
 
     def __repr__(self):
         return '%s(%r, %r)' % (
@@ -92,6 +94,17 @@ class Constant(Node):
 
     def __repr__(self):
         return 'Constant(%r, %r, %r)' % (
+            self.name, self.type, self.value)
+
+
+class Property(Node):
+    def __init__(self, name, type):
+        self.name = name
+        self.type = type
+
+    def __repr__(self):
+        return '%s(%r, %r, %r)' % (
+            self.__class__.__name__,
             self.name, self.type, self.value)
 
 

@@ -3,7 +3,8 @@ import re
 import os
 
 from . import cgobject
-from .treebuilder import Class, Enum, Function, Interface, Member, Struct
+from .treebuilder import (Class, Enum, Function, Interface, Member, Property,
+                          Struct)
 from .odict import odict
 
 
@@ -55,13 +56,13 @@ class GLibEnumMember(Member):
 
 
 class GLibObject(Class):
-    def __init__(self, name, parent, methods, get_type):
-        Class.__init__(self, name, parent, methods)
+    def __init__(self, name, parent, get_type):
+        Class.__init__(self, name, parent)
         self.get_type = get_type
 
 
 class GLibBoxed(Struct):
-    def __init__(self, name, methods, get_type):
+    def __init__(self, name, get_type):
         Struct.__init__(self, name)
         self.constructors = []
         self.methods = []
@@ -69,9 +70,13 @@ class GLibBoxed(Struct):
 
 
 class GLibInterface(Interface):
-    def __init__(self, name, methods, get_type):
-        Interface.__init__(self, name, methods)
+    def __init__(self, name, get_type):
+        Interface.__init__(self, name)
         self.get_type = get_type
+
+
+class GLibProperty(Property):
+    pass
 
 
 class GObjectTreeBuilder(object):
@@ -255,21 +260,39 @@ class GObjectTreeBuilder(object):
     def _introspect_object(self, type_id, symbol):
         type_name = cgobject.type_name(type_id)
         parent_name = cgobject.type_name(cgobject.type_parent(type_id))
-        node = GLibObject(type_name, parent_name, [], symbol)
+        node = GLibObject(type_name, parent_name, symbol)
+        self._introspect_properties(node, type_id)
         self._strip_namespace(node)
         self._add_attribute(node)
         self._remove_attribute(type_name)
 
     def _introspect_interface(self, type_id, symbol):
         type_name = cgobject.type_name(type_id)
-        node = GLibInterface(type_name, [], symbol)
+        node = GLibInterface(type_name, symbol)
         self._strip_namespace(node)
+        self._introspect_properties(node, type_id)
         self._add_attribute(node)
         self._remove_attribute(type_name)
 
     def _introspect_boxed(self, type_id, symbol):
         type_name = cgobject.type_name(type_id)
-        node = GLibBoxed(type_name, [], symbol)
+        node = GLibBoxed(type_name, symbol)
         self._strip_namespace(node)
         self._add_attribute(node)
         self._remove_attribute(type_name)
+
+    def _introspect_properties(self, node, type_id):
+        fundamental_type_id = cgobject.type_fundamental(type_id)
+        if fundamental_type_id == cgobject.TYPE_OBJECT:
+            pspecs = cgobject.object_class_list_properties(type_id)
+        elif fundamental_type_id == cgobject.TYPE_INTERFACE:
+            pspecs = cgobject.object_interface_list_properties(type_id)
+        else:
+            raise AssertionError
+
+        for pspec in pspecs:
+            if pspec.owner_type != type_id:
+                continue
+            node.properties.append(Property(
+                pspec.name,
+                cgobject.type_name(pspec.value_type)))
