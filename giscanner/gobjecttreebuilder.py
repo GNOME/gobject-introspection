@@ -2,9 +2,9 @@ import ctypes
 import re
 import os
 
-from giscanner import cgobject
-from giscanner.treebuilder import Class, Enum, Function, Member, Struct
-from giscanner.odict import odict
+from . import cgobject
+from .treebuilder import Class, Enum, Function, Member, Struct
+from .odict import odict
 
 
 # Copied from h2defs.py

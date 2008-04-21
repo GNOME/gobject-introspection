@@ -1,9 +1,9 @@
 from __future__ import with_statement
 
-from giscanner.gobjecttreebuilder import (GLibEnum, GLibEnumMember, GLibFlags,
-                                          GLibObject)
-from giscanner.treebuilder import Class, Enum, Function
-from giscanner.xmlwriter import XMLWriter
+from .gobjecttreebuilder import (GLibEnum, GLibEnumMember, GLibFlags,
+                                 GLibObject)
+from .treebuilder import Class, Enum, Function
+from .xmlwriter import XMLWriter
 
 
 class GIDLWriter(XMLWriter):
