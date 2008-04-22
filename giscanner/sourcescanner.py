@@ -16,7 +16,9 @@ class SourceScanner(object):
                              ('-D', defines),
                              ('-U', undefines)]:
             for arg in (args or []):
-                self._cpp_options.append(prefix + arg)
+                opt = prefix + arg
+                if not opt in self._cpp_options:
+                    self._cpp_options.append(opt)
 
     def parse_file(self, filename):
         self._parse_one(filename)
