@@ -30,11 +30,24 @@ main (int argc, char *argv[])
 	   testfns,
 	   g_irepository_get_n_infos (rep, "test"));
 
-  handle = g_module_open (testfns, 0);
-  if (!handle)
+  if (argc == 1)
     {
-      g_error ("module open failed: %s\n", g_module_error ());
-      return;
+      handle = g_module_open (testfns, 0);
+      if (!handle)
+	{
+	  g_error ("module open failed: %s\n", g_module_error ());
+	  return;
+	}
+    }
+  else
+    {
+      name = g_irepository_register_file (rep, "test", &error);
+      if (error)
+	{
+	  g_error ("Unable to load metadata 'test': %s", error->message);
+	  return;
+	}
+      g_print ("Loaded %s from test.gmeta\n", name);
     }
 
   g_print ("after dlopening %s: %d infos in the repository\n", 

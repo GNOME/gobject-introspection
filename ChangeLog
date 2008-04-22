@@ -1,3 +1,53 @@
+2008-04-22  Johan Dahlin  <johan@gnome.org>
+
+	* girepository/ginfo.c (g_info_from_entry), (g_type_info_new),
+	(g_type_info_is_pointer), (g_type_info_get_tag),
+	(g_type_info_get_param_type), (g_type_info_get_interface),
+	(g_type_info_get_array_length), (g_type_info_is_zero_terminated),
+	(g_type_info_get_n_error_domains), (g_type_info_get_error_domain),
+	(g_error_domain_info_get_codes), (g_enum_info_get_value),
+	(g_object_info_get_interface), (g_object_info_get_field),
+	(g_interface_info_get_prerequisite),
+	(g_signal_info_get_class_closure), (g_constant_info_get_value):
+	* girepository/ginvoke.c (get_ffi_type):
+	* girepository/girepository.h:
+	* girepository/gmetadata.c (g_metadata_get_dir_entry),
+	(g_metadata_check_sanity), (validate_header),
+	(validate_array_type_blob), (validate_iface_type_blob),
+	(validate_param_type_blob), (validate_error_type_blob),
+	(validate_type_blob), (validate_constant_blob),
+	(validate_struct_blob), (validate_enum_blob):
+	* girepository/gmetadata.h:
+	* tests/Makefile.am:
+	* tests/invoke/Makefile.am:
+	* tests/invoke/invoke.c (main):
+	* tests/roundtrips.sh:
+	* tools/Makefile.am:
+	* tools/compiler.c (format_output), (write_out_metadata), (main):
+	* tools/generate.c (write_type_name), (write_type_info),
+	(write_constant_value), (write_enum_info), (load_metadata), (main):
+	* tools/gidlcompilercontext.c:
+	* tools/gidlcompilercontext.h:
+	* tools/gidlcompilerentrynode.c:
+	* tools/gidlcompilerentrynode.h:
+	* tools/gidlcompilertypenode.c:
+	* tools/gidlcompilertypenode.h:
+	* tools/gidlmodule.c (g_idl_module_build_metadata):
+	* tools/gidlmodule.h:
+	* tools/gidlnode.c (init_stats), (dump_stats),
+	(g_idl_node_get_size), (g_idl_node_get_full_size),
+	(g_idl_node_cmp), (g_idl_node_can_have_member),
+	(g_idl_node_add_member), (g_idl_node_param_direction_string),
+	(parse_int_value), (parse_uint_value), (parse_float_value),
+	(parse_boolean_value), (find_entry_node), (find_entry),
+	(serialize_type), (g_idl_node_build_metadata), (write_string):
+	* tools/gidlnode.h:
+	* tools/gidlparser.c (parse_type_internal):
+	* tools/quote-file.sh:
+	Revert revisions 157,149-148,136-129 and 120.
+	Move back to using g-idl-generate to generate the metadata and
+	avoids dependency on a c compiler.
+
 2008-04-22  Johan Dahlin  <jdahlin@async.com.br>
 
 	* giscanner/girwriter.py:

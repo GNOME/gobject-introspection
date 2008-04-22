@@ -4,16 +4,9 @@ INCLUDES = \
 	-DGIREPO_DEFAULT_SEARCH_PATH="\"$(libdir)\"" \
 	-I$(top_srcdir)/girepository \
 	-I$(top_srcdir)/giscanner
-BUILT_SOURCES = gmetadata-header.c
-
-CLEANFILES = gmetadata-header.c
-EXTRA_DIST = quote-file.sh
 
 noinst_LTLIBRARIES = libgirepository-parser.la
 bin_PROGRAMS = g-idl-compiler g-idl-generate g-idl-scanner
-
-gmetadata-header.c: $(top_srcdir)/girepository/gmetadata.h
-	$(srcdir)/quote-file.sh $^ $@
 
 libgirepository_parser_la_SOURCES =		\
 	gidlmodule.c				\
@@ -21,15 +14,7 @@ libgirepository_parser_la_SOURCES =		\
 	gidlnode.c				\
 	gidlnode.h				\
 	gidlparser.c				\
-	gidlparser.h				\
-	gidlcompilercontext.c			\
-	gidlcompilercontext.h			\
-	gidlcompilerentrynode.c			\
-	gidlcompilerentrynode.h			\
-	gidlcompilertypenode.c 			\
-	gidlcompilertypenode.h			\
-	gmetadata-header.c
-
+	gidlparser.h
 libgirepository_parser_la_CFLAGS = $(GIREPO_CFLAGS)
 
 g_idl_compiler_SOURCES = compiler.c	
