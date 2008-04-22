@@ -1,3 +1,9 @@
+2008-04-22  Johan Dahlin  <jdahlin@async.com.br>
+
+	* giscanner/girwriter.py:
+	* tools/g-ir-scanner:
+	Add an initial GIR writer and a --format option to g-ir-scanner
+
 2008-04-21  Johan Dahlin  <johan@gnome.org>
 
 	* giscanner/cgobject.py: Use ctypes.util.find_library to locate

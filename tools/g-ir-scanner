@@ -5,13 +5,16 @@ import sys
 
 sys.path.insert(0, '.')
 
-from giscanner.gidlwriter import GIDLWriter
 from giscanner.gobjecttreebuilder import GObjectTreeBuilder
 from giscanner.sourcescanner import SourceScanner
 from giscanner.treebuilder import TreeBuilder
 
 def main(args):
     parser = optparse.OptionParser('%prog [options] sources')
+    parser.add_option("", "--format",
+                      action="store", dest="format",
+                      default="gidl",
+                      help="format to use, one of gidl, gir")
     parser.add_option("-i", "--include",
                       action="append", dest="includes", default=[],
                       help="include types for other gidls")
@@ -78,7 +81,14 @@ def main(args):
         builder.register_include(include)
     builder.parse(TreeBuilder(ss).get_nodes())
 
-    writer = GIDLWriter(options.namespace, builder.get_nodes())
+    if options.format == 'gir':
+        from giscanner.girwriter import GIRWriter
+        writer = GIRWriter(options.namespace, builder.get_nodes())
+    elif options.format == 'gidl':
+        from giscanner.gidlwriter import GIDLWriter
+        writer = GIDLWriter(options.namespace, builder.get_nodes())
+    else:
+        raise SystemExit("Unknown format: %s" % (options.format,))
 
     data = writer.get_xml()
     if options.output:
