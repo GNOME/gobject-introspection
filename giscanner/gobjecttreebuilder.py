@@ -3,10 +3,9 @@ import re
 import os
 
 from . import cgobject
+from .odict import odict
 from .treebuilder import (Class, Enum, Function, Interface, Member, Property,
                           Struct)
-from .odict import odict
-
 
 # Copied from h2defs.py
 _upperstr_pat1 = re.compile(r'([^A-Z])([A-Z])')
@@ -33,8 +32,9 @@ def resolve_libtool(libname):
 
 
 class GLibEnum(Enum):
-    def __init__(self, name, members, get_type):
+    def __init__(self, name, members, type_name, get_type):
         Enum.__init__(self, name, members)
+        self.type_name = type_name
         self.get_type = get_type
 
     def __repr__(self):
@@ -56,22 +56,25 @@ class GLibEnumMember(Member):
 
 
 class GLibObject(Class):
-    def __init__(self, name, parent, get_type):
+    def __init__(self, name, parent, type_name, get_type):
         Class.__init__(self, name, parent)
+        self.type_name = type_name
         self.get_type = get_type
 
 
 class GLibBoxed(Struct):
-    def __init__(self, name, get_type):
+    def __init__(self, name, type_name, get_type):
         Struct.__init__(self, name)
         self.constructors = []
         self.methods = []
+        self.type_name = type_name
         self.get_type = get_type
 
 
 class GLibInterface(Interface):
-    def __init__(self, name, get_type):
+    def __init__(self, name, type_name, get_type):
         Interface.__init__(self, name)
+        self.type_name = type_name
         self.get_type = get_type
 
 
@@ -84,6 +87,7 @@ class GObjectTreeBuilder(object):
         self._namespace_name = namespace_name
         self._output_ns = odict()
         self._library = None
+        self._type_names = {}
 
     # Public API
 
@@ -99,6 +103,13 @@ class GObjectTreeBuilder(object):
         for node in nodes:
             self._parse_node(node)
 
+    def register_include(self, filename):
+        from .gidlparser import GIDLParser
+        parser = GIDLParser(filename)
+        nsname = parser.get_namespace_name()
+        for node in parser.get_nodes():
+            self._type_names[node.type_name] = (nsname, node)
+
     # Private
 
     def _add_attribute(self, node, replace=False):
@@ -112,6 +123,9 @@ class GObjectTreeBuilder(object):
 
     def _get_attribute(self, name):
         return self._output_ns.get(name)
+
+    def _register_internal_type(self, type_name, node):
+        self._type_names[type_name] = (None, node)
 
     def _strip_namespace(self, node):
         prefix = self._namespace_name.lower()
@@ -130,6 +144,22 @@ class GObjectTreeBuilder(object):
         if name.startswith(prefix):
             old = node.name
             node.name = node.name[len(prefix):]
+
+    def _resolve_type_name(self, type_name):
+        item = self._type_names.get(type_name)
+        if item is not None:
+            nsname, item = item
+            if nsname is None:
+                return item.name
+            return '%s.%s' % (nsname, item.name)
+        return type_name
+
+    def _resolve_param_type(self, ptype):
+        type_name = ptype.replace('*', '')
+        resolved_type_name = self._resolve_type_name(type_name)
+        if type_name != resolved_type_name:
+            return ptype.replace(type_name, resolved_type_name)
+        return ptype
 
     def _parse_node(self, node):
         if isinstance(node, Enum):
@@ -153,8 +183,15 @@ class GObjectTreeBuilder(object):
         elif self._parse_method(func):
             return
 
+        self._parse_parameters(func.parameters)
+        func.retval.type = self._resolve_param_type(func.retval.type)
+
         self._strip_namespace(func)
         self._add_attribute(func)
+
+    def _parse_parameters(self, parameters):
+        for parameter in parameters:
+            parameter.type = self._resolve_param_type(parameter.type)
 
     def _parse_get_type_function(self, func):
         # GType *_get_type(void)
@@ -217,6 +254,8 @@ class GObjectTreeBuilder(object):
             class_.methods.append(func)
         else:
             class_.constructors.append(func)
+        self._parse_parameters(func.parameters)
+        func.retval.type = self._resolve_param_type(func.retval.type)
         return True
 
     def _parse_struct(self, struct):
@@ -253,33 +292,38 @@ class GObjectTreeBuilder(object):
 
         klass = (GLibFlags if ftype_id == cgobject.TYPE_FLAGS else GLibEnum)
         type_name = cgobject.type_name(type_id)
-        cenum = klass(type_name, members, symbol)
+        cenum = klass(type_name, members, type_name, symbol)
         self._strip_namespace(cenum)
         self._add_attribute(cenum, replace=True)
+        self._register_internal_type(type_name, cenum)
 
     def _introspect_object(self, type_id, symbol):
         type_name = cgobject.type_name(type_id)
-        parent_name = cgobject.type_name(cgobject.type_parent(type_id))
-        node = GLibObject(type_name, parent_name, symbol)
+        parent_type_name = cgobject.type_name(cgobject.type_parent(type_id))
+        parent_name = self._resolve_type_name(parent_type_name)
+        node = GLibObject(type_name, parent_name, type_name, symbol)
         self._introspect_properties(node, type_id)
         self._strip_namespace(node)
         self._add_attribute(node)
         self._remove_attribute(type_name)
+        self._register_internal_type(type_name, node)
 
     def _introspect_interface(self, type_id, symbol):
         type_name = cgobject.type_name(type_id)
-        node = GLibInterface(type_name, symbol)
+        node = GLibInterface(type_name, type_name, symbol)
         self._strip_namespace(node)
         self._introspect_properties(node, type_id)
         self._add_attribute(node)
         self._remove_attribute(type_name)
+        self._register_internal_type(type_name, node)
 
     def _introspect_boxed(self, type_id, symbol):
         type_name = cgobject.type_name(type_id)
-        node = GLibBoxed(type_name, symbol)
+        node = GLibBoxed(type_name, type_name, symbol)
         self._strip_namespace(node)
         self._add_attribute(node)
         self._remove_attribute(type_name)
+        self._register_internal_type(type_name, node)
 
     def _introspect_properties(self, node, type_id):
         fundamental_type_id = cgobject.type_fundamental(type_id)

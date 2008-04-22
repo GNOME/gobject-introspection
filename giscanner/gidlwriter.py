@@ -65,7 +65,8 @@ class GIDLWriter(XMLWriter):
         attrs = [('name', enum.name)]
         tag_name = 'enum'
         if isinstance(enum, GLibEnum):
-            attrs.append(('get-type', enum.get_type))
+            attrs.extend([('type-name', enum.type_name),
+                          ('get-type', enum.get_type)])
             if isinstance(enum, GLibFlags):
                 tag_name = 'flags'
 
@@ -84,10 +85,12 @@ class GIDLWriter(XMLWriter):
         attrs = [('name', node.name)]
         if isinstance(node, Class):
             tag_name = 'object'
-            attrs.append(('parent', node.parent))
+            if node.parent is not None:
+                attrs.append(('parent', node.parent))
         else:
             tag_name = 'interface'
         if isinstance(node, (GLibObject, GLibInterface)):
+            attrs.append(('type-name', node.type_name))
             attrs.append(('get-type', node.get_type))
         with self.tagcontext(tag_name, attrs):
             if isinstance(node, Class):
@@ -99,9 +102,10 @@ class GIDLWriter(XMLWriter):
                 self._write_property(prop)
 
     def _write_boxed(self, boxed):
-        attrs = [('name', boxed.name)]
-        if isinstance(boxed, GLibBoxed):
-            attrs.append(('get-type', boxed.get_type))
+        attrs = [('name', boxed.name),
+                 ('type-name', boxed.type_name),
+                 ('get-type', boxed.get_type)]
+
         with self.tagcontext('boxed', attrs):
             for method in boxed.constructors:
                 self._write_constructor(method)

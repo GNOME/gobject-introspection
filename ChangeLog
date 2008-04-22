@@ -1,5 +1,16 @@
 2008-04-21  Johan Dahlin  <johan@gnome.org>
 
+	* giscanner/gidlparser.py:
+	* giscanner/gidlwriter.py:
+	* giscanner/gobjecttreebuilder.py:
+	* tools/g-ir-scanner:
+	Add a --include argument to include types from other idls.
+	Add a minimalistic GIDL parser (just objects for now)
+	Implement resolving of external type references and use it to
+	resolve parent types, argument types and return types.
+
+2008-04-21  Johan Dahlin  <johan@gnome.org>
+
 	* giscanner/gidlwriter.py:
 	* giscanner/gobjecttreebuilder.py:
 	* giscanner/treebuilder.py:

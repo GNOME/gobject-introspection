@@ -12,6 +12,9 @@ from giscanner.treebuilder import TreeBuilder
 
 def main(args):
     parser = optparse.OptionParser('%prog [options] sources')
+    parser.add_option("-i", "--include",
+                      action="append", dest="includes", default=[],
+                      help="include types for other gidls")
     parser.add_option("-l", "--library",
                       action="store", dest="library",
                       help="library of this unit")
@@ -70,6 +73,8 @@ def main(args):
 
     builder = GObjectTreeBuilder(options.namespace)
     builder.load_library(options.library)
+    for include in options.includes:
+        builder.register_include(include)
     builder.parse(TreeBuilder(ss).get_nodes())
 
     writer = GIDLWriter(options.namespace, builder.get_nodes())
