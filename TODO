@@ -16,7 +16,7 @@ Binary format
 
 Compiler
 --------
-- Cleanup, maybe turn the nodes in to objects to avoid the horrific 
+- Cleanup, maybe turn the nodes in to objects to avoid the horrific
   type switches
 - Add thorough error checking
 
@@ -24,16 +24,20 @@ Repository
 ----------
 - Reconsider the current clunky API, maybe an iterator approach is better
 - Add thorough error checking
-- Use hashes 
+- Use hashes
 - Maybe allow populating repositories at runtime
-- Think about a system-wide repository mapping namespace ids to 
+- Think about a system-wide repository mapping namespace ids to
   libraries/metadata files
 - Fix extra indirection for out parameters in invoke
 
 Scanner
--------
-- Annotations
-- More tests
+------
+- Callbacks
+- Virtual functions
+- Signals
+- Property.readable/writable, GLibProperty.blurb/nick
+- Constants
+- Annotations in external files
 
 General
 -------
