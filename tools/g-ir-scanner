@@ -72,7 +72,8 @@ def main(args):
     ss.parse_macros()
 
     builder = GObjectTreeBuilder(options.namespace)
-    builder.load_library(options.library)
+    if options.library:
+        builder.load_library(options.library)
     for include in options.includes:
         builder.register_include(include)
     builder.parse(TreeBuilder(ss).get_nodes())
