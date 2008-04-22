@@ -126,6 +126,9 @@ class TreeBuilder(object):
                 self.nodes.append(node)
 
     def _traverse_one(self, symbol, stype=None):
+        # Skip private symbols
+        if symbol.ident.startswith('_'):
+            return
         if stype is None:
             stype = symbol.type
         if stype == giscanner.CSYMBOL_TYPE_FUNCTION:
