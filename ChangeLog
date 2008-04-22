@@ -1,5 +1,8 @@
 2008-04-21  Johan Dahlin  <johan@gnome.org>
 
+	* giscanner/cgobject.py: Use ctypes.util.find_library to locate
+	gobject-2.0 and raise ImportError if not found.
+
 	* giscanner/gidlparser.py:
 	* giscanner/gidlwriter.py:
 	* giscanner/gobjecttreebuilder.py:
