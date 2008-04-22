@@ -127,23 +127,21 @@ class GObjectTreeBuilder(object):
     def _register_internal_type(self, type_name, node):
         self._type_names[type_name] = (None, node)
 
-    def _strip_namespace(self, node):
-        prefix = self._namespace_name.lower()
-        if isinstance(node, Function):
-            # gtk_init_check -> init_check
-            prefix += '_'
-            name = node.name.lower()
-        elif isinstance(node, (Interface, Class, Struct, Enum)):
-            # GtkButton -> Button
-            # GtkTreeModel -> TreeModel
-            # etc
-            name = node.name.lower()
-        else:
-            raise NotImplementedError(node)
-
+    def _strip_namespace_func(self, name):
+        orig_name = name
+        prefix = self._namespace_name.lower() + '_'
+        name = name.lower()
         if name.startswith(prefix):
-            old = node.name
-            node.name = node.name[len(prefix):]
+            name = orig_name[len(prefix):]
+        return name
+
+    def _strip_namespace_object(self, name):
+        orig_name = name
+        prefix = self._namespace_name.lower()
+        name = name.lower()
+        if name.startswith(prefix):
+            name = orig_name[len(prefix):]
+        return name
 
     def _resolve_type_name(self, type_name):
         item = self._type_names.get(type_name)
@@ -172,7 +170,7 @@ class GObjectTreeBuilder(object):
             print 'Unhandled node:', node
 
     def _parse_enum(self, enum):
-        self._strip_namespace(enum)
+        enum.name = self._strip_namespace_object(enum.name)
         self._add_attribute(enum)
 
     def _parse_function(self, func):
@@ -186,7 +184,7 @@ class GObjectTreeBuilder(object):
         self._parse_parameters(func.parameters)
         func.retval.type = self._resolve_param_type(func.retval.type)
 
-        self._strip_namespace(func)
+        func.name = self._strip_namespace_func(func.name)
         self._add_attribute(func)
 
     def _parse_parameters(self, parameters):
@@ -292,26 +290,26 @@ class GObjectTreeBuilder(object):
 
         klass = (GLibFlags if ftype_id == cgobject.TYPE_FLAGS else GLibEnum)
         type_name = cgobject.type_name(type_id)
-        cenum = klass(type_name, members, type_name, symbol)
-        self._strip_namespace(cenum)
-        self._add_attribute(cenum, replace=True)
-        self._register_internal_type(type_name, cenum)
+        node = klass(self._strip_namespace_object(type_name),
+                      members, type_name, symbol)
+        self._add_attribute(node, replace=True)
+        self._register_internal_type(type_name, node)
 
     def _introspect_object(self, type_id, symbol):
         type_name = cgobject.type_name(type_id)
         parent_type_name = cgobject.type_name(cgobject.type_parent(type_id))
-        parent_name = self._resolve_type_name(parent_type_name)
-        node = GLibObject(type_name, parent_name, type_name, symbol)
+        node = GLibObject(self._strip_namespace_object(type_name),
+                          self._resolve_type_name(parent_type_name),
+                          type_name, symbol)
         self._introspect_properties(node, type_id)
-        self._strip_namespace(node)
         self._add_attribute(node)
         self._remove_attribute(type_name)
         self._register_internal_type(type_name, node)
 
     def _introspect_interface(self, type_id, symbol):
         type_name = cgobject.type_name(type_id)
-        node = GLibInterface(type_name, type_name, symbol)
-        self._strip_namespace(node)
+        node = GLibInterface(self._strip_namespace_object(type_name),
+                             type_name, symbol)
         self._introspect_properties(node, type_id)
         self._add_attribute(node)
         self._remove_attribute(type_name)
@@ -319,8 +317,8 @@ class GObjectTreeBuilder(object):
 
     def _introspect_boxed(self, type_id, symbol):
         type_name = cgobject.type_name(type_id)
-        node = GLibBoxed(type_name, type_name, symbol)
-        self._strip_namespace(node)
+        node = GLibBoxed(self._strip_namespace_object(type_name),
+                         type_name, symbol)
         self._add_attribute(node)
         self._remove_attribute(type_name)
         self._register_internal_type(type_name, node)
