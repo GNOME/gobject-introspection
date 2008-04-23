@@ -1,5 +1,11 @@
 2008-04-22  Havoc Pennington  <hp@pobox.com>
 
+	* girepository/ginvoke.c (g_function_info_invoke): If a symbol is
+	not in metadata->module, look for it in the global module, in case
+	some other object or the app itself provides the symbol.
+
+2008-04-22  Havoc Pennington  <hp@pobox.com>
+
 	* girepository/gmetadata.c (_g_metadata_init): hack to avoid
  	dlopening a library that is already in the main app, by checking
 	whether one of the lib's symbols is already loaded.
