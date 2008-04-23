@@ -1,3 +1,8 @@
+2008-04-22  Havoc Pennington  <hp@pobox.com>
+
+ 	* girepository/ginfo.c (g_registered_type_info_get_g_type): new
+	function to get the GType given a RegisteredTypeInfo
+
 2008-04-22  Johan Dahlin  <johan@gnome.org>
 
 	* COPYING: Add a LGPL license, to prevent automake to
