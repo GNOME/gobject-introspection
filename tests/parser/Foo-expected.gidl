@@ -10,6 +10,14 @@
 		<function name="init" symbol="foo_init">
 			<return-type type="gint"/>
 		</function>
+		<callback name="FooCallback">
+			<return-type type="gboolean"/>
+			<parameters>
+				<parameter name="foo" type="FooObject*"/>
+				<parameter name="b" type="gboolean"/>
+				<parameter name="data" type="gpointer"/>
+			</parameters>
+		</callback>
 		<boxed name="FooBoxed" type-name="FooBoxed" get-type="foo_boxed_get_type">
 			<method name="method" symbol="foo_boxed_method">
 				<return-type type="void"/>

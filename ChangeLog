@@ -1,3 +1,9 @@
+2008-04-22  Johan Dahlin  <jdahlin@async.com.br>
+
+	* tests/parser/Foo-expected.gidl:
+	* tests/parser/foo-object.h:
+	Add a callback test
+
 2008-04-22  Havoc Pennington  <hp@pobox.com>
 
 	* girepository/ginfo.c (g_interface_info_find_method):

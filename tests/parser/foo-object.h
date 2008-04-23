@@ -109,6 +109,9 @@ const int FOO_CONSTANT_INT = 10;
 const float FOO_CONSTANT_FLOAT = 10;
 */
 
+/* Callback */
+typedef gboolean (* FooCallback) (FooObject *foo, gboolean b, gpointer data);
+
 /* Invalid comments, should be ignored */
 
 /* @ */
