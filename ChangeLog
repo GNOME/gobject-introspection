@@ -1,3 +1,9 @@
+2008-04-22  Havoc Pennington  <hp@pobox.com>
+
+	* girepository/gmetadata.c (_g_metadata_init): hack to avoid
+ 	dlopening a library that is already in the main app, by checking
+	whether one of the lib's symbols is already loaded.
+
 2008-04-22  Johan Dahlin  <jdahlin@async.com.br>
 
 	* tests/parser/Foo-expected.gidl:
