@@ -9,9 +9,9 @@ from .xmlwriter import XMLWriter
 class GIRWriter(XMLWriter):
     def __init__(self, namespace, nodes):
         super(GIRWriter, self).__init__()
-        self._write_api(namespace, nodes)
+        self._write_repository(namespace, nodes)
 
-    def _write_api(self, namespace, nodes):
+    def _write_repository(self, namespace, nodes):
         attrs = [
             ('version', '1.0'),
             ('xmlns', 'http://www.gtk.org/introspection/core/1.0'),
@@ -42,7 +42,7 @@ class GIRWriter(XMLWriter):
 
     def _write_function(self, func, tag_name='function'):
         attrs = [('name', func.name),
-                 ('c:symbol', func.symbol)]
+                 ('c:identifier', func.symbol)]
         with self.tagcontext(tag_name, attrs):
             self._write_return_type(func.retval)
             self._write_parameters(func.parameters)
@@ -79,7 +79,7 @@ class GIRWriter(XMLWriter):
             attrs.extend([('glib:type-name', enum.type_name),
                           ('glib:get-type', enum.get_type)])
             if isinstance(enum, GLibFlags):
-                tag_name = 'bitmask'
+                tag_name = 'bitfield'
 
         with self.tagcontext(tag_name, attrs):
             for member in enum.members:
@@ -127,7 +127,6 @@ class GIRWriter(XMLWriter):
         attrs = [('name', prop.name),
                  ('prop', prop.type)]
         self.write_tag('property', attrs)
-
 
     def _write_callback(self, callback):
         attrs = [('name', callback.name)]
