@@ -1,5 +1,10 @@
 2008-04-22  Havoc Pennington  <hp@pobox.com>
 
+	* girepository/ginfo.c (g_interface_info_find_method):
+	Use interface_blob_size not object_blob_size to compute offset.
+
+2008-04-22  Havoc Pennington  <hp@pobox.com>
+
 	* girepository/gmetadata.c (_g_metadata_init): remove
 	G_MODULE_BIND_LOCAL flag when loading libraries, since some libs
 	(Glade and Clutter for example) rely on being loaded globally.
