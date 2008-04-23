@@ -1,5 +1,11 @@
 2008-04-22  Havoc Pennington  <hp@pobox.com>
 
+	* girepository/gmetadata.c (_g_metadata_init): remove
+	G_MODULE_BIND_LOCAL flag when loading libraries, since some libs
+	(Glade and Clutter for example) rely on being loaded globally.
+
+2008-04-22  Havoc Pennington  <hp@pobox.com>
+
  	* girepository/ginfo.c (g_registered_type_info_get_g_type): new
 	function to get the GType given a RegisteredTypeInfo
 
