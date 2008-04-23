@@ -2,7 +2,7 @@ from __future__ import with_statement
 
 from .gobjecttreebuilder import (GLibBoxed, GLibEnum, GLibEnumMember,
                                  GLibFlags, GLibObject, GLibInterface)
-from .treebuilder import Class, Enum, Function, Interface
+from .treebuilder import Callback, Class, Enum, Function, Interface
 from .xmlwriter import XMLWriter
 
 
@@ -29,6 +29,8 @@ class GIDLWriter(XMLWriter):
             self._write_class(node)
         elif isinstance(node, GLibBoxed):
             self._write_boxed(node)
+        elif isinstance(node, Callback):
+            self._write_callback(node)
         else:
             print 'WRITER: Unhandled node', node
 
@@ -116,3 +118,9 @@ class GIDLWriter(XMLWriter):
         attrs = [('name', prop.name),
                  ('prop', prop.type)]
         self.write_tag('property', attrs)
+
+    def _write_callback(self, func):
+        attrs = [('name', func.name)]
+        with self.tagcontext('callback', attrs):
+            self._write_return_type(func.retval)
+            self._write_parameters(func.parameters)

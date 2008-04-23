@@ -108,6 +108,17 @@ class Property(Node):
             self.name, self.type, self.value)
 
 
+class Callback(Node):
+    def __init__(self, name, retval, parameters):
+        self.name = name
+        self.retval = retval
+        self.parameters = parameters
+
+    def __repr__(self):
+        return 'Callback(%r, %r, %r)' % (
+            self.name, self.retval, self.parameters)
+
+
 class TreeBuilder(object):
     def __init__(self, generator):
         self.generator = generator
@@ -134,7 +145,11 @@ class TreeBuilder(object):
         if stype == giscanner.CSYMBOL_TYPE_FUNCTION:
             return self._create_function(symbol)
         elif stype == giscanner.CSYMBOL_TYPE_TYPEDEF:
-            return self._traverse_one(symbol, symbol.base_type.type)
+            if (symbol.base_type.type == giscanner.CTYPE_POINTER and
+                symbol.base_type.base_type.type == giscanner.CTYPE_FUNCTION):
+                return self._create_callback(symbol)
+            else:
+                return self._traverse_one(symbol, symbol.base_type.type)
         elif stype == giscanner.CSYMBOL_TYPE_STRUCT:
             return self._create_struct(symbol)
         elif stype == giscanner.CSYMBOL_TYPE_ENUM:
@@ -151,12 +166,9 @@ class TreeBuilder(object):
         return Enum(symbol.ident, members)
 
     def _create_function(self, symbol):
-        parameters = []
-        for child in symbol.base_type.child_list:
-            parameters.append(self._create_parameter(child))
-
+        parameters = self._create_parameters(symbol.base_type)
         retval = Return(self._create_source_type(symbol.base_type.base_type))
-        return Function(symbol.ident, retval, parameters, symbol.ident)
+        return Function(symbol.ident, retval, list(parameters), symbol.ident)
 
     def _create_source_type(self, source_type):
         if source_type.type == giscanner.CTYPE_VOID:
@@ -172,6 +184,10 @@ class TreeBuilder(object):
             value = '???'
         return value
 
+    def _create_parameters(self, base_type):
+        for child in base_type.child_list:
+            yield self._create_parameter(child)
+
     def _create_parameter(self, symbol):
         return Parameter(symbol.ident,
                          self._create_source_type(symbol.base_type))
@@ -179,3 +195,7 @@ class TreeBuilder(object):
     def _create_struct(self, symbol):
         return Struct(symbol.ident)
 
+    def _create_callback(self, symbol):
+        parameters = self._create_parameters(symbol.base_type.base_type)
+        retval = Return(self._create_source_type(symbol.base_type.base_type.base_type))
+        return Callback(symbol.ident, retval, list(parameters))

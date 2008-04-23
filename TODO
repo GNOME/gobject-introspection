@@ -32,7 +32,6 @@ Repository
 
 Scanner
 ------
-- Callbacks
 - Virtual functions
 - Signals
 - Property.readable/writable, GLibProperty.blurb/nick

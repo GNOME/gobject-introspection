@@ -4,8 +4,8 @@ import os
 
 from . import cgobject
 from .odict import odict
-from .treebuilder import (Class, Enum, Function, Interface, Member, Property,
-                          Struct)
+from .treebuilder import (Callback, Class, Enum, Function, Interface,
+                          Member, Property, Struct)
 
 # Copied from h2defs.py
 _upperstr_pat1 = re.compile(r'([^A-Z])([A-Z])')
@@ -166,8 +166,10 @@ class GObjectTreeBuilder(object):
             self._parse_function(node)
         elif isinstance(node, Struct):
             self._parse_struct(node)
+        elif isinstance(node, Callback):
+            self._parse_callback(node)
         else:
-            print 'Unhandled node:', node
+            print 'GOBJECT BUILDER: Unhandled node:', node
 
     def _parse_enum(self, enum):
         enum.name = self._strip_namespace_object(enum.name)
@@ -262,6 +264,9 @@ class GObjectTreeBuilder(object):
             struct.name.endswith('Class')):
             return
         self._add_attribute(struct)
+
+    def _parse_callback(self, callback):
+        self._add_attribute(callback)
 
     def _introspect_type(self, type_id, symbol):
         fundamental_type_id = cgobject.type_fundamental(type_id)
