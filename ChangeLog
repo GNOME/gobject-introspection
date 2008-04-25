@@ -1,3 +1,20 @@
+2008-04-24  Johan Dahlin  <jdahlin@async.com.br>
+
+	* giscanner/gidlwriter.py:
+	* giscanner/girwriter.py:
+	* giscanner/giscannermodule.c (directive_get_name),
+	(directive_get_value), (directive_get_options),
+	(symbol_get_directives), (symbol_set_directives),
+	(pygi_source_scanner_parse_file),
+	(pygi_source_scanner_lex_filename),
+	(pygi_source_scanner_get_directives), (init_giscanner):
+	* giscanner/sourcescanner.c (gi_source_scanner_get_directives):
+	* giscanner/sourcescanner.h:
+	* giscanner/sourcescanner.py:
+	* giscanner/treebuilder.py:
+	* tools/g-ir-scanner:
+	Add support for source/header annotations.
+
 2008-04-22  Johan Dahlin  <jdahlin@async.com.br>
 
 	* giscanner/gidlwriter.py:

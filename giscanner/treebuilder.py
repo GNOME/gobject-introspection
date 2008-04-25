@@ -2,12 +2,13 @@ import giscanner
 
 
 class Node(object):
-    pass
+    def __init__(self, name=None):
+        self.name = name
 
 
 class Function(Node):
     def __init__(self, name, retval, parameters, symbol):
-        self.name = name
+        Node.__init__(self, name)
         self.retval = retval
         self.parameters = parameters
         self.symbol = symbol
@@ -19,8 +20,10 @@ class Function(Node):
 
 class Parameter(Node):
     def __init__(self, name, type):
-        self.name = name
+        Node.__init__(self, name)
         self.type = type
+        self.direction = 'in'
+        self.transfer = 'none'
 
     def __repr__(self):
         return 'Parameter(%r, %r)' % (self.name, self.type)
@@ -28,7 +31,7 @@ class Parameter(Node):
 
 class Enum(Node):
     def __init__(self, name, members):
-        self.name = name
+        Node.__init__(self, name)
         self.members = members
 
     def __repr__(self):
@@ -37,7 +40,7 @@ class Enum(Node):
 
 class Member(Node):
     def __init__(self, name, value):
-        self.name = name
+        Node.__init__(self, name)
         self.value = value
 
     def __repr__(self):
@@ -45,16 +48,15 @@ class Member(Node):
 
 
 class Struct(Node):
-    def __init__(self, name):
-        self.name = name
-
     def __repr__(self):
         return 'Struct(%r)' % (self.name,)
 
 
 class Return(Node):
     def __init__(self, type):
+        Node.__init__(self)
         self.type = type
+        self.transfer = 'none'
 
     def __repr__(self):
         return 'Return(%r)' % (self.type,)
@@ -62,7 +64,7 @@ class Return(Node):
 
 class Class(Node):
     def __init__(self, name, parent):
-        self.name = name
+        Node.__init__(self, name)
         self.parent = parent
         self.methods = []
         self.constructors = []
@@ -76,7 +78,7 @@ class Class(Node):
 
 class Interface(Node):
     def __init__(self, name):
-        self.name = name
+        Node.__init__(self, name)
         self.methods = []
         self.properties = []
 
@@ -88,7 +90,7 @@ class Interface(Node):
 
 class Constant(Node):
     def __init__(self, name, type, value):
-        self.name = name
+        Node.__init__(self, name)
         self.type = type
         self.value = value
 
@@ -99,7 +101,7 @@ class Constant(Node):
 
 class Property(Node):
     def __init__(self, name, type):
-        self.name = name
+        Node.__init__(self, name)
         self.type = type
 
     def __repr__(self):
@@ -110,7 +112,7 @@ class Property(Node):
 
 class Callback(Node):
     def __init__(self, name, retval, parameters):
-        self.name = name
+        Node.__init__(self, name)
         self.retval = retval
         self.parameters = parameters
 
@@ -166,9 +168,11 @@ class TreeBuilder(object):
         return Enum(symbol.ident, members)
 
     def _create_function(self, symbol):
-        parameters = self._create_parameters(symbol.base_type)
-        retval = Return(self._create_source_type(symbol.base_type.base_type))
-        return Function(symbol.ident, retval, list(parameters), symbol.ident)
+        directives = symbol.directives()
+        parameters = list(self._create_parameters(symbol.base_type, directives))
+        return_ = self._create_return(symbol.base_type.base_type,
+                                      directives.get('return', []))
+        return Function(symbol.ident, return_, parameters, symbol.ident)
 
     def _create_source_type(self, source_type):
         if source_type.type == giscanner.CTYPE_VOID:
@@ -184,13 +188,39 @@ class TreeBuilder(object):
             value = '???'
         return value
 
-    def _create_parameters(self, base_type):
+    def _create_parameters(self, base_type, options=None):
+        if not options:
+            options = {}
         for child in base_type.child_list:
-            yield self._create_parameter(child)
+            yield self._create_parameter(
+                child, options.get(child.ident, []))
 
-    def _create_parameter(self, symbol):
-        return Parameter(symbol.ident,
-                         self._create_source_type(symbol.base_type))
+    def _create_parameter(self, symbol, options):
+        param = Parameter(symbol.ident,
+                          self._create_source_type(symbol.base_type))
+        for option in options:
+            if option in ['in-out', 'inout']:
+                param.direction = 'inout'
+            elif option == 'in':
+                param.direction = 'in'
+            elif option == 'out':
+                param.direction = 'out'
+            elif option == 'callee-owns':
+                param.transfer = 'full'
+            else:
+                print 'Unhandled parameter annotation option: %s' % (
+                    option,)
+        return param
+
+    def _create_return(self, symbol, options):
+        return_ = Return(self._create_source_type(symbol))
+        for option in options:
+            if option == 'caller-owns':
+                return_.transfer = 'full'
+            else:
+                print 'Unhandled parameter annotation option: %s' % (
+                    option,)
+        return return_
 
     def _create_struct(self, symbol):
         return Struct(symbol.ident)

@@ -50,7 +50,10 @@ class GIDLWriter(XMLWriter):
     def _write_return_type(self, return_):
         if not return_:
             return
-        self.write_tag('return-type', [('type', return_.type)])
+        attrs = [('type', return_.type)]
+        if return_.transfer != 'none':
+            attrs.append(('transfer', return_.transfer))
+        self.write_tag('return-type', attrs)
 
     def _write_parameters(self, parameters):
         if not parameters:
@@ -60,8 +63,13 @@ class GIDLWriter(XMLWriter):
                 self._write_parameter(parameter)
 
     def _write_parameter(self, parameter):
-        self.write_tag('parameter', [('name', parameter.name),
-                                     ('type', parameter.type)])
+        attrs = [('name', parameter.name),
+                 ('type', parameter.type)]
+        if parameter.direction != 'in':
+            attrs.append(('direction', parameter.direction))
+        if parameter.transfer != 'none':
+            attrs.append(('transfer', parameter.transfer))
+        self.write_tag('parameter', attrs)
 
     def _write_enum(self, enum):
         attrs = [('name', enum.name)]

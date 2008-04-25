@@ -70,8 +70,7 @@ def main(args):
             arg.endswith('.h')):
             filenames.append(arg)
 
-    for filename in filenames:
-        ss.parse_file(filename)
+    ss.parse_files(filenames)
     ss.parse_macros()
 
     builder = GObjectTreeBuilder(options.namespace)

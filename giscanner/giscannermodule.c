@@ -54,12 +54,18 @@ PyTypeObject Py##cname##_Type = {             \
 
 typedef struct {
   PyObject_HEAD
+  GISourceDirective *directive;
+} PyGISourceDirective;
+
+typedef struct {
+  PyObject_HEAD
   GISourceType *type;
 } PyGISourceType;
 
 typedef struct {
   PyObject_HEAD
   GISourceSymbol *symbol;
+  PyObject *directives;
 } PyGISourceSymbol;
 
 typedef struct {
@@ -67,10 +73,58 @@ typedef struct {
   GISourceScanner *scanner;
 } PyGISourceScanner;
 
+NEW_CLASS (PyGISourceDirective, "SourceDirective", GISourceDirective);
 NEW_CLASS (PyGISourceSymbol, "SourceSymbol", GISourceSymbol);
 NEW_CLASS (PyGISourceType, "SourceType", GISourceType);
 NEW_CLASS (PyGISourceScanner, "SourceScanner", GISourceScanner);
 
+
+/* Directive */
+
+static PyObject *
+directive_get_name (PyGISourceDirective *self,
+		    void                *context)
+{
+  return PyString_FromString (self->directive->name);
+}
+
+static PyObject *
+directive_get_value (PyGISourceDirective *self,
+		     void                *context)
+{
+  return PyString_FromString (self->directive->value);
+}
+
+static PyObject *
+directive_get_options (PyGISourceDirective *self,
+		       void                *context)
+{
+  GSList *l, *symbols;
+  PyObject *list;
+  int i = 0;
+
+  if (!self->directive)
+    return Py_BuildValue("[]");
+  
+  list = PyList_New (g_slist_length (self->directive->options));
+  
+  for (l = self->directive->options; l; l = l->next)
+    {
+      PyObject *item = PyString_FromString(l->data);
+      PyList_SetItem (list, i++, (PyObject*)item);
+      Py_INCREF (item);
+    }
+
+  Py_INCREF (list);
+  return list;
+}
+
+static const PyGetSetDef _PyGISourceDirective_getsets[] = {
+  { "name", (getter)directive_get_name, NULL, NULL},
+  { "value", (getter)directive_get_value, NULL, NULL},
+  { "options", (getter)directive_get_options, NULL, NULL},
+  { 0 }
+};
 
 /* Symbol */
 
@@ -119,6 +173,26 @@ symbol_get_const_string (PyGISourceSymbol *self,
   return PyString_FromString (self->symbol->const_string);
 }
 
+static PyObject *
+symbol_get_directives (PyGISourceSymbol *self,
+		       void             *context)
+{
+  if (!self->directives)
+    self->directives = Py_BuildValue("[]");
+  Py_INCREF (self->directives);
+  return self->directives;
+}
+
+static int
+symbol_set_directives (PyGISourceSymbol *self,
+		       PyObject         *value,
+		       void             *context)
+{
+  self->directives = value;
+  Py_INCREF(value);
+  return 0;
+}
+
 static const PyGetSetDef _PyGISourceSymbol_getsets[] = {
   /* int ref_count; */
   { "type", (getter)symbol_get_type, NULL, NULL},
@@ -128,7 +202,7 @@ static const PyGetSetDef _PyGISourceSymbol_getsets[] = {
   /* gboolean const_int_set; */
   { "const_int", (getter)symbol_get_const_int, NULL, NULL},  
   { "const_string", (getter)symbol_get_const_string, NULL, NULL},  
-  /* GSList *directives; */
+  { "directives", (getter)symbol_get_directives, symbol_set_directives, NULL},  
   { 0 }
 };
 
@@ -251,7 +325,7 @@ pygi_source_scanner_parse_file (PyGISourceScanner *self,
   char *filename;
   FILE *fp;
   
-  if (!PyArg_ParseTuple (args, "is:SourceScanner.__init__", &fd, &filename))
+  if (!PyArg_ParseTuple (args, "is:SourceScanner.parse_file", &fd, &filename))
     return NULL;
 
   fp = fdopen (fd, "r");
@@ -267,9 +341,31 @@ pygi_source_scanner_parse_file (PyGISourceScanner *self,
 
   if (!gi_source_scanner_parse_file (self->scanner, fp))
     {
-      g_print ("Something went wrong..\n");
+      g_print ("Something went wrong during parsing.\n");
       return NULL;
     }
+
+  Py_INCREF (Py_None);
+  return Py_None;
+}
+
+static PyObject *
+pygi_source_scanner_lex_filename (PyGISourceScanner *self,
+				  PyObject          *args)
+{
+  char *filename;
+  
+  if (!PyArg_ParseTuple (args, "s:SourceScanner.lex_filename", &filename))
+    return NULL;
+
+  if (!gi_source_scanner_lex_filename (self->scanner, filename))
+    {
+      g_print ("Something went wrong during lexing.\n");
+      return NULL;
+    }
+  self->scanner->filenames =
+    g_list_append (self->scanner->filenames, g_strdup (filename));
+  self->scanner->current_filename = g_strdup (filename);
 
   Py_INCREF (Py_None);
   return Py_None;
@@ -314,9 +410,40 @@ pygi_source_scanner_get_symbols (PyGISourceScanner *self)
   return list;
 }
 
+static PyObject *
+pygi_source_scanner_get_directives (PyGISourceScanner *self,
+				    PyObject          *args)
+{
+  GSList *l, *directives;
+  PyObject *list;
+  int i = 0;
+  char *name;
+  
+  if (!PyArg_ParseTuple (args, "s:SourceScanner.get_directives", &name))
+    return NULL;
+  
+  directives = gi_source_scanner_get_directives (self->scanner, name);
+  list = PyList_New (g_slist_length (directives));
+  
+  for (l = directives; l; l = l->next)
+    {
+      PyGISourceDirective *item;
+      item = (PyGISourceDirective *)PyObject_New (PyGISourceDirective,
+						  &PyGISourceDirective_Type);
+      item->directive = l->data;
+      PyList_SetItem (list, i++, (PyObject*)item);
+      Py_INCREF (item);
+    }
+
+  Py_INCREF (list);
+  return list;
+}
+
 static const PyMethodDef _PyGISourceScanner_methods[] = {
+  { "get_directives", (PyCFunction) pygi_source_scanner_get_directives, METH_VARARGS },
   { "get_symbols", (PyCFunction) pygi_source_scanner_get_symbols, METH_NOARGS },
   { "parse_file", (PyCFunction) pygi_source_scanner_parse_file, METH_VARARGS },
+  { "lex_filename", (PyCFunction) pygi_source_scanner_lex_filename, METH_VARARGS },
   { "set_macro_scan", (PyCFunction) pygi_source_scanner_set_macro_scan, METH_VARARGS },
   { NULL, NULL, 0 }
 };
@@ -336,6 +463,9 @@ init_giscanner(void)
     m = Py_InitModule ("giscanner._giscanner",
 		       (PyMethodDef*)pyscanner_functions);
     d = PyModule_GetDict (m);
+
+    PyGISourceDirective_Type.tp_getset = (PyGetSetDef*)_PyGISourceDirective_getsets;
+    REGISTER_TYPE (d, "SourceDirective", PyGISourceDirective_Type);
 
     PyGISourceScanner_Type.tp_init = (initproc)pygi_source_scanner_init;
     PyGISourceScanner_Type.tp_methods = (PyMethodDef*)_PyGISourceScanner_methods;

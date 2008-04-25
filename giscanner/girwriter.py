@@ -58,7 +58,10 @@ class GIRWriter(XMLWriter):
             return
         with self.tagcontext('return-values'):
             with self.tagcontext('return-value'):
-                self.write_tag('type', [('name', return_.type)])
+                attrs = [('name', return_.type)]
+                if return_.transfer != 'none':
+                    attrs.append(('transfer', return_.transfer))
+                self.write_tag('type', attrs)
 
     def _write_parameters(self, parameters):
         if not parameters:
@@ -69,6 +72,10 @@ class GIRWriter(XMLWriter):
 
     def _write_parameter(self, parameter):
         attrs = [('name', parameter.name)]
+        if parameter.direction != 'in':
+            attrs.append(('direction', parameter.direction))
+        if parameter.transfer != 'none':
+            attrs.append(('transfer', parameter.transfer))
         with self.tagcontext('parameters', attrs):
             self.write_tag('type', [('name', parameter.type)])
 

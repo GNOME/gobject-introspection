@@ -3,6 +3,31 @@ import subprocess
 
 import giscanner
 
+
+class SourceSymbol(object):
+    def __init__(self, symbol, directives):
+        self._symbol = symbol
+        self._directives = directives
+
+    def directives(self):
+        mapping = {}
+        for directive in self._directives:
+            mapping[directive.name] = directive.options
+        return mapping
+
+    @property
+    def ident(self):
+        return self._symbol.ident
+
+    @property
+    def type(self):
+        return self._symbol.type
+
+    @property
+    def base_type(self):
+        return self._symbol.base_type
+
+
 class SourceScanner(object):
     def __init__(self):
         self._scanner = giscanner.SourceScanner()
@@ -20,9 +45,18 @@ class SourceScanner(object):
                 if not opt in self._cpp_options:
                     self._cpp_options.append(opt)
 
-    def parse_file(self, filename):
-        self._parse_one(filename)
-        self._filenames.append(filename)
+    def parse_files(self, filenames):
+        headers = []
+        for filename in filenames:
+            if filename.endswith('.c'):
+                filename = os.path.abspath(filename)
+                self._scanner.lex_filename(filename)
+            else:
+                headers.append(filename)
+
+        for filename in headers:
+            self._parse_one(filename)
+            self._filenames.append(filename)
 
     def parse_macros(self):
         self._scanner.set_macro_scan(True)
@@ -32,7 +66,8 @@ class SourceScanner(object):
 
     def get_symbols(self):
         for symbol in self._scanner.get_symbols():
-            yield symbol
+            yield SourceSymbol(
+                symbol, self._scanner.get_directives(symbol.ident))
 
     def dump(self):
         print '-'*30
@@ -42,10 +77,6 @@ class SourceScanner(object):
     # Private
 
     def _parse_one(self, filename):
-        if filename.endswith('.c'):
-            # FIXME lex only
-            return
-
         filename = os.path.abspath(filename)
         proc = self._preprocess(filename)
         fd = proc.stdout.fileno()

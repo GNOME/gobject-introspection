@@ -143,6 +143,8 @@ gboolean            gi_source_scanner_parse_file       (GISourceScanner  *igener
 void                gi_source_scanner_set_macro_scan   (GISourceScanner  *scanner,
 							gboolean          macro_scan);
 GSList *            gi_source_scanner_get_symbols      (GISourceScanner  *scanner);
+GSList *            gi_source_scanner_get_directives   (GISourceScanner  *scanner,
+							const gchar      *name);
 void                gi_source_scanner_free             (GISourceScanner  *scanner);
 
 GISourceSymbol *    gi_source_symbol_new               (GISourceSymbolType  type);

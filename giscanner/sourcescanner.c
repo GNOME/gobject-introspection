@@ -287,3 +287,10 @@ gi_source_scanner_get_symbols (GISourceScanner  *scanner)
 {
   return g_slist_reverse (scanner->symbols);
 }
+
+GSList *
+gi_source_scanner_get_directives(GISourceScanner  *scanner,
+				 const gchar      *name)
+{
+  return g_hash_table_lookup (scanner->directives_map, name);
+}
