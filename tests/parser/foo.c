@@ -30,12 +30,20 @@ foo_interface_get_type (void)
   return object_type;
 }
 
-G_DEFINE_TYPE (FooObject, foo_object, G_TYPE_OBJECT);
 
 enum {
   PROP_0,
   PROP_STRING
 };
+
+enum {
+  SIGNAL,
+  LAST_SIGNAL
+};
+
+static guint foo_object_signals[LAST_SIGNAL] = { 0 };
+
+G_DEFINE_TYPE (FooObject, foo_object, G_TYPE_OBJECT);
 
 static void
 foo_object_set_property (GObject         *object,
@@ -90,6 +98,15 @@ foo_object_class_init (FooObjectClass *klass)
                                                         "The String Property Blurb",
                                                         NULL,
                                                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT));
+  foo_object_signals[SIGNAL] =
+    g_signal_new ("signal",
+		  G_OBJECT_CLASS_TYPE (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  NULL,
+		  NULL, NULL,
+		  (GSignalCMarshaller)g_cclosure_marshal_STRING__OBJECT_POINTER,
+		  G_TYPE_STRING, 2, G_TYPE_OBJECT, G_TYPE_POINTER);
+
 }
 
 static void

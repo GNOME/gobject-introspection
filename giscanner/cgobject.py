@@ -87,6 +87,20 @@ class GParamSpec(ctypes.Structure):
                 ('owner_type', GType)]
 
 
+class GSignalInfo(ctypes.Structure):
+    _fields_ = [('signal_id', ctypes.c_uint),
+                ('signal_name', ctypes.c_char_p),
+                ('itype', GType),
+                ('signal_flags', ctypes.c_uint),
+                ('return_type', GType),
+                ('n_params', ctypes.c_uint),
+                ('param_types', ctypes.POINTER(GType))]
+
+    def get_params(self):
+        for i in range(self.n_params):
+            yield self.param_types[i]
+
+
 _library_path = find_library('gobject-2.0')
 if not _library_path:
     raise ImportError("Could not find gobject-2.0 library")
@@ -161,3 +175,12 @@ def type_interface_prerequisites(type_id):
     type_ids = _gobj.g_type_interface_prerequisites(type_id, ctypes.byref(n))
     for i in range(n.value):
         yield type_ids[i]
+
+_gobj.g_signal_list_ids.restype = ctypes.POINTER(ctypes.c_int)
+def signal_list(type_id):
+    n = ctypes.c_uint()
+    signal_ids = _gobj.g_signal_list_ids(type_id, ctypes.byref(n))
+    for i in range(n.value):
+        info = GSignalInfo()
+        _gobj.g_signal_query(signal_ids[i], ctypes.byref(info))
+        yield info

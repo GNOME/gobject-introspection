@@ -117,6 +117,14 @@
 				</parameters>
 			</method>
 			<property name="string" type="char*" readable="1" writable="1" construct="1" construct-only="0"/>
+			<signal name="signal" when="LAST">
+				<return-type type="char*"/>
+				<parameters>
+					<parameter name="object" type="FooObject*"/>
+					<parameter name="p0" type="GObject*"/>
+					<parameter name="p1" type="gpointer"/>
+				</parameters>
+			</signal>
 		</object>
 		<object name="FooSubobject" parent="FooObject" type-name="FooSubobject" get-type="foo_subobject_get_type">
 			<constructor name="new" symbol="foo_subobject_new">

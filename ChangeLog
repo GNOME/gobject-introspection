@@ -1,3 +1,14 @@
+2008-04-25  Johan Dahlin  <jdahlin@async.com.br>
+
+	* giscanner/cgobject.py:
+	* giscanner/gidlwriter.py:
+	* giscanner/gobjecttreebuilder.py:
+	Add support for signals
+
+	* tests/parser/foo.c (foo_object_class_init):
+	* Foo-expected.gidl:
+	Add a signal and update the expected output.
+
 2008-04-24  Johan Dahlin  <jdahlin@async.com.br>
 
 	* giscanner/gidlwriter.py:

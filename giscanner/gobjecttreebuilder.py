@@ -5,7 +5,7 @@ import os
 from . import cgobject
 from .odict import odict
 from .treebuilder import (Callback, Class, Enum, Function, Interface,
-                          Member, Property, Struct)
+                          Member, Node, Parameter, Property, Return, Struct)
 
 # Copied from h2defs.py
 _upperstr_pat1 = re.compile(r'([^A-Z])([A-Z])')
@@ -60,7 +60,7 @@ class GLibObject(Class):
         Class.__init__(self, name, parent)
         self.type_name = type_name
         self.get_type = get_type
-
+        self.signals = []
 
 class GLibBoxed(Struct):
     def __init__(self, name, type_name, get_type):
@@ -76,10 +76,18 @@ class GLibInterface(Interface):
         Interface.__init__(self, name)
         self.type_name = type_name
         self.get_type = get_type
+        self.signals = []
 
 
 class GLibProperty(Property):
     pass
+
+
+class GLibSignal(Node):
+    def __init__(self, name, retval):
+        Node.__init__(self, name)
+        self.retval = retval
+        self.parameters = []
 
 
 class GObjectTreeBuilder(object):
@@ -307,6 +315,7 @@ class GObjectTreeBuilder(object):
                           self._resolve_type_name(parent_type_name),
                           type_name, symbol)
         self._introspect_properties(node, type_id)
+        self._introspect_signals(node, type_id)
         self._add_attribute(node)
         self._remove_attribute(type_name)
         self._register_internal_type(type_name, node)
@@ -316,6 +325,7 @@ class GObjectTreeBuilder(object):
         node = GLibInterface(self._strip_namespace_object(type_name),
                              type_name, symbol)
         self._introspect_properties(node, type_id)
+        self._introspect_signals(node, type_id)
         self._add_attribute(node)
         self._remove_attribute(type_name)
         self._register_internal_type(type_name, node)
@@ -343,3 +353,16 @@ class GObjectTreeBuilder(object):
             node.properties.append(Property(
                 pspec.name,
                 cgobject.type_name(pspec.value_type)))
+
+    def _introspect_signals(self, node, type_id):
+        for signal_info in cgobject.signal_list(type_id):
+            retval = Return(cgobject.type_name(signal_info.return_type))
+            signal = GLibSignal(signal_info.signal_name, retval)
+            for i, parameter in enumerate(signal_info.get_params()):
+                if i == 0:
+                    name = 'object'
+                else:
+                    name = 'p%s' % (i-1,)
+                signal.parameters.append(
+                    Parameter(name, cgobject.type_name(parameter)))
+            node.signals.append(signal)

@@ -110,6 +110,8 @@ class GIDLWriter(XMLWriter):
                 self._write_method(method)
             for prop in node.properties:
                 self._write_property(prop)
+            for signal in node.signals:
+                self._write_signal(signal)
 
     def _write_boxed(self, boxed):
         attrs = [('name', boxed.name),
@@ -126,6 +128,12 @@ class GIDLWriter(XMLWriter):
         attrs = [('name', prop.name),
                  ('prop', prop.type)]
         self.write_tag('property', attrs)
+
+    def _write_signal(self, signal):
+        attrs = [('name', signal.name)]
+        with self.tagcontext('signal', attrs):
+            self._write_return_type(signal.retval)
+            self._write_parameters(signal.parameters)
 
     def _write_callback(self, func):
         attrs = [('name', func.name)]
