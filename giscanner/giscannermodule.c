@@ -62,6 +62,8 @@ typedef struct {
   GISourceType *type;
 } PyGISourceType;
 
+static PyObject * pygi_source_type_new (GISourceType *type);
+
 typedef struct {
   PyObject_HEAD
   GISourceSymbol *symbol;
@@ -80,6 +82,23 @@ NEW_CLASS (PyGISourceScanner, "SourceScanner", GISourceScanner);
 
 
 /* Directive */
+
+static PyObject *
+pygi_source_directive_new (GISourceDirective *directive)
+{
+  PyGISourceDirective *self;
+
+  if (directive == NULL)
+    {
+      Py_INCREF (Py_None);
+      return Py_None;
+    }
+    
+  self = (PyGISourceDirective *)PyObject_New (PyGISourceDirective,
+					      &PyGISourceDirective_Type);
+  self->directive = directive;
+  return (PyObject*)self;
+}
 
 static PyObject *
 directive_get_name (PyGISourceDirective *self,
@@ -110,8 +129,8 @@ directive_get_options (PyGISourceDirective *self,
   
   for (l = self->directive->options; l; l = l->next)
     {
-      PyObject *item = PyString_FromString(l->data);
-      PyList_SetItem (list, i++, (PyObject*)item);
+      PyObject *item = PyString_FromString (l->data);
+      PyList_SetItem (list, i++, item);
       Py_INCREF (item);
     }
 
@@ -127,6 +146,23 @@ static const PyGetSetDef _PyGISourceDirective_getsets[] = {
 };
 
 /* Symbol */
+
+static PyObject *
+pygi_source_symbol_new (GISourceSymbol *symbol)
+{
+  PyGISourceSymbol *self;
+  
+  if (symbol == NULL)
+    {
+      Py_INCREF (Py_None);
+      return Py_None;
+    }
+    
+  self = (PyGISourceSymbol *)PyObject_New (PyGISourceSymbol,
+					   &PyGISourceSymbol_Type);
+  self->symbol = symbol;
+  return (PyObject*)self;
+}
 
 static PyObject *
 symbol_get_type (PyGISourceSymbol *self,
@@ -146,11 +182,7 @@ static PyObject *
 symbol_get_base_type (PyGISourceSymbol *self,
 		      void             *context)
 {
-  PyGISourceType *item;
-  item = (PyGISourceType *)PyObject_New (PyGISourceType,
-					 &PyGISourceType_Type);
-  item->type = self->symbol->base_type;
-  return (PyObject*)item;
+  return pygi_source_type_new (self->symbol->base_type);
 }
 
 static PyObject *
@@ -211,6 +243,23 @@ static const PyGetSetDef _PyGISourceSymbol_getsets[] = {
 /* Type */
 
 static PyObject *
+pygi_source_type_new (GISourceType *type)
+{
+  PyGISourceType *self;
+  
+  if (type == NULL)
+    {
+      Py_INCREF (Py_None);
+      return Py_None;
+    }
+  
+  self = (PyGISourceType *)PyObject_New (PyGISourceType,
+					 &PyGISourceType_Type);
+  self->type = type;
+  return (PyObject*)self;
+}
+
+static PyObject *
 type_get_type (PyGISourceType *self,
 	       void           *context)
 {
@@ -255,11 +304,7 @@ static PyObject *
 type_get_base_type (PyGISourceType *self,
 		    void           *context)
 {
-  PyGISourceType *item;
-  item = (PyGISourceType *)PyObject_New (PyGISourceType,
-					 &PyGISourceType_Type);
-  item->type = self->type->base_type;
-  return (PyObject*)item;
+  return pygi_source_type_new (self->type->base_type);
 }
 
 static PyObject *
@@ -277,11 +322,8 @@ type_get_child_list (PyGISourceType *self,
   
   for (l = self->type->child_list; l; l = l->next)
     {
-      PyGISourceSymbol *item;
-      item = (PyGISourceSymbol *)PyObject_New (PyGISourceSymbol,
-					       &PyGISourceSymbol_Type);
-      item->symbol = l->data;
-      PyList_SetItem (list, i++, (PyObject*)item);
+      PyObject *item = pygi_source_symbol_new (l->data);
+      PyList_SetItem (list, i++, item);
       Py_INCREF (item);
     }
 
@@ -398,11 +440,8 @@ pygi_source_scanner_get_symbols (PyGISourceScanner *self)
   
   for (l = symbols; l; l = l->next)
     {
-      PyGISourceSymbol *item;
-      item = (PyGISourceSymbol *)PyObject_New (PyGISourceSymbol,
-					       &PyGISourceSymbol_Type);
-      item->symbol = l->data;
-      PyList_SetItem (list, i++, (PyObject*)item);
+      PyObject *item = pygi_source_symbol_new (l->data);
+      PyList_SetItem (list, i++, item);
       Py_INCREF (item);
     }
 
@@ -427,11 +466,8 @@ pygi_source_scanner_get_directives (PyGISourceScanner *self,
   
   for (l = directives; l; l = l->next)
     {
-      PyGISourceDirective *item;
-      item = (PyGISourceDirective *)PyObject_New (PyGISourceDirective,
-						  &PyGISourceDirective_Type);
-      item->directive = l->data;
-      PyList_SetItem (list, i++, (PyObject*)item);
+      PyObject *item = pygi_source_directive_new (l->data);
+      PyList_SetItem (list, i++, item);
       Py_INCREF (item);
     }
 

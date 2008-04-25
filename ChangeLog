@@ -1,5 +1,24 @@
 2008-04-25  Johan Dahlin  <jdahlin@async.com.br>
 
+	* TODO:
+	* giscanner/gidlwriter.py:
+	* giscanner/giscannermodule.c (pygi_source_directive_new),
+	(directive_get_options), (pygi_source_symbol_new),
+	(symbol_get_base_type), (pygi_source_type_new),
+	(type_get_base_type), (type_get_child_list),
+	(pygi_source_scanner_get_symbols),
+	(pygi_source_scanner_get_directives):
+	* giscanner/gobjecttreebuilder.py:
+	* giscanner/sourcescanner.py:
+	* giscanner/treebuilder.py:
+	* tests/parser/foo-object.h:
+	Add support for virtual methods.
+	Pair struct FooClass with struct Foo.
+	Clean up the SourceScanner bindings a bit.
+	Add a testcase for virtual methods.
+
+2008-04-25  Johan Dahlin  <jdahlin@async.com.br>
+
 	* giscanner/cgobject.py:
 	* giscanner/gidlwriter.py:
 	* giscanner/gobjecttreebuilder.py:

@@ -4,16 +4,46 @@ import subprocess
 import giscanner
 
 
+class SourceType(object):
+    def __init__(self, scanner, stype):
+        self._scanner = scanner
+        self._stype = stype
+
+    @property
+    def type(self):
+        return self._stype.type
+
+    @property
+    def base_type(self):
+        if self._stype.base_type is not None:
+            return SourceType(self._scanner, self._stype.base_type)
+
+    @property
+    def name(self):
+        return self._stype.name
+
+    @property
+    def child_list(self):
+        for symbol in self._stype.child_list:
+            if symbol is None:
+                continue
+            yield SourceSymbol(self._scanner, symbol)
+
+
 class SourceSymbol(object):
-    def __init__(self, symbol, directives):
+    def __init__(self, scanner, symbol):
+        self._scanner = scanner
         self._symbol = symbol
-        self._directives = directives
 
     def directives(self):
         mapping = {}
-        for directive in self._directives:
+        for directive in self._scanner.get_directives(self._symbol.ident):
             mapping[directive.name] = directive.options
         return mapping
+
+    @property
+    def const_int(self):
+        return self._symbol.const_int
 
     @property
     def ident(self):
@@ -25,7 +55,8 @@ class SourceSymbol(object):
 
     @property
     def base_type(self):
-        return self._symbol.base_type
+        if self._symbol.base_type is not None:
+            return SourceType(self._scanner, self._symbol.base_type)
 
 
 class SourceScanner(object):
@@ -66,8 +97,7 @@ class SourceScanner(object):
 
     def get_symbols(self):
         for symbol in self._scanner.get_symbols():
-            yield SourceSymbol(
-                symbol, self._scanner.get_directives(symbol.ident))
+            yield SourceSymbol(self._scanner, symbol)
 
     def dump(self):
         print '-'*30

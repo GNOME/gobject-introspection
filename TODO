@@ -32,8 +32,6 @@ Repository
 
 Scanner
 ------
-- Virtual functions
-- Signals
 - Property.readable/writable, GLibProperty.blurb/nick
 - Constants
 - Annotations in external files

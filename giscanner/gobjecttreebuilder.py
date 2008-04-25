@@ -111,6 +111,11 @@ class GObjectTreeBuilder(object):
         for node in nodes:
             self._parse_node(node)
 
+        # Second round, associate GtkButtonClass with GtkButton
+        for node in self._output_ns.values():
+            if isinstance(node, Struct):
+                self._pair_class_struct(node)
+
     def register_include(self, filename):
         from .gidlparser import GIDLParser
         parser = GIDLParser(filename)
@@ -267,14 +272,25 @@ class GObjectTreeBuilder(object):
         return True
 
     def _parse_struct(self, struct):
-        if (struct.name.startswith('_') or
-            struct.name.endswith('Iface') or
-            struct.name.endswith('Class')):
-            return
         self._add_attribute(struct)
 
     def _parse_callback(self, callback):
         self._add_attribute(callback)
+
+    def _pair_class_struct(self, class_node):
+        name = class_node.name
+        if (name.endswith('Class') or
+            name.endswith('Iface')):
+            name = name[:-5]
+        elif name.endswith('Interface'):
+            name = name[:-9]
+        else:
+            return
+
+        node = self._output_ns.get(self._resolve_type_name(name))
+        del self._output_ns[class_node.name]
+        for field in class_node.fields[1:]:
+            node.fields.append(field)
 
     def _introspect_type(self, type_id, symbol):
         fundamental_type_id = cgobject.type_fundamental(type_id)
@@ -327,7 +343,6 @@ class GObjectTreeBuilder(object):
         self._introspect_properties(node, type_id)
         self._introspect_signals(node, type_id)
         self._add_attribute(node)
-        self._remove_attribute(type_name)
         self._register_internal_type(type_name, node)
 
     def _introspect_boxed(self, type_id, symbol):
@@ -335,7 +350,6 @@ class GObjectTreeBuilder(object):
         node = GLibBoxed(self._strip_namespace_object(type_name),
                          type_name, symbol)
         self._add_attribute(node)
-        self._remove_attribute(type_name)
         self._register_internal_type(type_name, node)
 
     def _introspect_properties(self, node, type_id):

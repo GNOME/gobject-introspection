@@ -125,6 +125,13 @@
 					<parameter name="p1" type="gpointer"/>
 				</parameters>
 			</signal>
+			<vfunc name="virtual_method">
+				<return-type type="gboolean"/>
+				<parameters>
+					<parameter name="object" type="FooObject*"/>
+					<parameter name="first_param" type="int"/>
+				</parameters>
+			</vfunc>
 		</object>
 		<object name="FooSubobject" parent="FooObject" type-name="FooSubobject" get-type="foo_subobject_get_type">
 			<constructor name="new" symbol="foo_subobject_new">

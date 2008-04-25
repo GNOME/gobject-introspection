@@ -38,6 +38,8 @@ struct _FooObject
 struct _FooObjectClass
 {
   GObjectClass parent_class;
+
+  gboolean (* virtual_method) (FooObject *object, int first_param);
 };
 
 gint                  foo_init                     (void);

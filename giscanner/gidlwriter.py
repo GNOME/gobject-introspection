@@ -110,6 +110,8 @@ class GIDLWriter(XMLWriter):
                 self._write_method(method)
             for prop in node.properties:
                 self._write_property(prop)
+            for field in node.fields:
+                self._write_field(field)
             for signal in node.signals:
                 self._write_signal(signal)
 
@@ -140,3 +142,12 @@ class GIDLWriter(XMLWriter):
         with self.tagcontext('callback', attrs):
             self._write_return_type(func.retval)
             self._write_parameters(func.parameters)
+
+    def _write_field(self, field):
+        if isinstance(field, Callback):
+            self._write_callback(field)
+            return
+
+        attrs = [('name', field.name),
+                 ('type', str(field.type))]
+        self.write_tag('field', attrs)

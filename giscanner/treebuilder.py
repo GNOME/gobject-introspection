@@ -14,8 +14,13 @@ class Function(Node):
         self.symbol = symbol
 
     def __repr__(self):
-        return 'Function(%r, %r, %r)' % (self.name, self.retval,
-                                         self.parameters)
+        return '%s(%r, %r, %r)' % (self.__class__.__name__,
+                                   self.name, self.retval,
+                                   self.parameters)
+
+
+class VFunction(Function):
+    pass
 
 
 class Parameter(Node):
@@ -48,6 +53,10 @@ class Member(Node):
 
 
 class Struct(Node):
+    def __init__(self, name):
+        Node.__init__(self, name)
+        self.fields = []
+
     def __repr__(self):
         return 'Struct(%r)' % (self.name,)
 
@@ -69,6 +78,7 @@ class Class(Node):
         self.methods = []
         self.constructors = []
         self.properties = []
+        self.fields = []
 
     def __repr__(self):
         return '%s(%r, %r, %r)' % (
@@ -81,6 +91,7 @@ class Interface(Node):
         Node.__init__(self, name)
         self.methods = []
         self.properties = []
+        self.fields = []
 
     def __repr__(self):
         return '%s(%r, %r)' % (
@@ -125,7 +136,8 @@ class TreeBuilder(object):
     def __init__(self, generator):
         self.generator = generator
         self.nodes = []
-
+        self._output_ns = {}
+        self._typedefs_ns = {}
         self._traverse()
 
     def get_nodes(self):
@@ -135,13 +147,14 @@ class TreeBuilder(object):
     def _traverse(self):
         for symbol in self.generator.get_symbols():
             node = self._traverse_one(symbol)
-            if node is not None:
-                self.nodes.append(node)
+            if node is None:
+                continue
+            if node.name.startswith('_'):
+                continue
+            self.nodes.append(node)
+            self._output_ns[node.name] = node
 
     def _traverse_one(self, symbol, stype=None):
-        # Skip private symbols
-        if symbol.ident.startswith('_'):
-            return
         if stype is None:
             stype = symbol.type
         if stype == giscanner.CSYMBOL_TYPE_FUNCTION:
@@ -149,9 +162,12 @@ class TreeBuilder(object):
         elif stype == giscanner.CSYMBOL_TYPE_TYPEDEF:
             if (symbol.base_type.type == giscanner.CTYPE_POINTER and
                 symbol.base_type.base_type.type == giscanner.CTYPE_FUNCTION):
-                return self._create_callback(symbol)
+                node = self._create_callback(symbol)
+            elif symbol.base_type.type == giscanner.CTYPE_STRUCT:
+                node = self._create_typedef_struct(symbol)
             else:
-                return self._traverse_one(symbol, symbol.base_type.type)
+                node = self._traverse_one(symbol, symbol.base_type.type)
+            return node
         elif stype == giscanner.CSYMBOL_TYPE_STRUCT:
             return self._create_struct(symbol)
         elif stype == giscanner.CSYMBOL_TYPE_ENUM:
@@ -175,6 +191,8 @@ class TreeBuilder(object):
         return Function(symbol.ident, return_, parameters, symbol.ident)
 
     def _create_source_type(self, source_type):
+        if source_type is None:
+            return 'None'
         if source_type.type == giscanner.CTYPE_VOID:
             value = 'void'
         elif source_type.type == giscanner.CTYPE_BASIC_TYPE:
@@ -222,8 +240,16 @@ class TreeBuilder(object):
                     option,)
         return return_
 
+    def _create_typedef_struct(self, symbol):
+        self._typedefs_ns[symbol.base_type.name] = symbol.ident
+
     def _create_struct(self, symbol):
-        return Struct(symbol.ident)
+        name = self._typedefs_ns.get(symbol.ident, symbol.ident)
+        struct = Struct(name)
+        for child in symbol.base_type.child_list:
+            struct.fields.append(self._traverse_one(child,
+                                                    child.base_type.type))
+        return struct
 
     def _create_callback(self, symbol):
         parameters = self._create_parameters(symbol.base_type.base_type)
