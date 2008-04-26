@@ -31,10 +31,10 @@ pkgpyexec_PYTHON = 		\
 	gidlparser.py		\
 	gidlwriter.py		\
 	girwriter.py		\
-	gobjecttreebuilder.py 	\
+	glibtransformer.py 	\
 	odict.py		\
 	sourcescanner.py	\
-	treebuilder.py		\
+	transformer.py		\
 	xmlwriter.py
 
 _giscanner_la_CFLAGS = \

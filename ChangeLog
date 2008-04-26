@@ -1,6 +1,20 @@
 2008-04-25  Johan Dahlin  <jdahlin@async.com.br>
 
 	* giscanner/Makefile.am:
+	* giscanner/gidlparser.py:
+	* giscanner/gidlwriter.py:
+	* giscanner/girwriter.py:
+	* giscanner/glibtransformer.py:
+	* giscanner/gobjecttreebuilder.py:
+	* giscanner/transformer.py:
+	* giscanner/treebuilder.py:
+	* tools/g-ir-scanner:
+	Rename treebuilder to transformer and
+	gobjectreebuilder to glibtransformer.
+
+2008-04-25  Johan Dahlin  <jdahlin@async.com.br>
+
+	* giscanner/Makefile.am:
 	* giscanner/__init__.py:
 	* giscanner/cgobject.py:
 	* giscanner/gidlparser.py:

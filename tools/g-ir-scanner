@@ -24,9 +24,10 @@ import sys
 
 sys.path.insert(0, '.')
 
-from giscanner.gobjecttreebuilder import GObjectTreeBuilder
+from giscanner.glibtransformer import GLibTransformer
 from giscanner.sourcescanner import SourceScanner
-from giscanner.treebuilder import TreeBuilder
+from giscanner.transformer import Transformer
+
 
 def main(args):
     parser = optparse.OptionParser('%prog [options] sources')
@@ -92,12 +93,12 @@ def main(args):
     ss.parse_files(filenames)
     ss.parse_macros()
 
-    builder = GObjectTreeBuilder(options.namespace)
+    builder = GLibTransformer(options.namespace)
     if options.library:
         builder.load_library(options.library)
     for include in options.includes:
         builder.register_include(include)
-    builder.parse(TreeBuilder(ss).get_nodes())
+    builder.parse(Transformer(ss).get_nodes())
 
     if options.format == 'gir':
         from giscanner.girwriter import GIRWriter

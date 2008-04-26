@@ -23,7 +23,7 @@ import os
 
 from . import cgobject
 from .odict import odict
-from .treebuilder import (Callback, Class, Enum, Function, Interface,
+from .transformer import (Callback, Class, Enum, Function, Interface,
                           Member, Node, Parameter, Property, Return, Struct)
 
 # Copied from h2defs.py
@@ -109,7 +109,7 @@ class GLibSignal(Node):
         self.parameters = []
 
 
-class GObjectTreeBuilder(object):
+class GLibTransformer(object):
     def __init__(self, namespace_name):
         self._namespace_name = namespace_name
         self._output_ns = odict()

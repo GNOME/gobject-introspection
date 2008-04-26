@@ -151,7 +151,7 @@ class Callback(Node):
             self.name, self.retval, self.parameters)
 
 
-class TreeBuilder(object):
+class Transformer(object):
     def __init__(self, generator):
         self.generator = generator
         self.nodes = []
