@@ -23,8 +23,19 @@ libgiscanner_la_CFLAGS = $(GOBJECT_CFLAGS)
 GCOVSOURCES = $(libgiscanner_la_SOURCES)
 
 # Python module
-pyexec_LTLIBRARIES = _giscanner.la
-pyexec_PYTHON = __init__.py
+pkgpyexecdir = $(pyexecdir)/giscanner
+pkgpyexec_LTLIBRARIES = _giscanner.la
+pkgpyexec_PYTHON = 		\
+	__init__.py		\
+	cgobject.py		\
+	gidlparser.py		\
+	gidlwriter.py		\
+	girwriter.py		\
+	gobjecttreebuilder.py 	\
+	odict.py		\
+	sourcescanner.py	\
+	treebuilder.py		\
+	xmlwriter.py
 
 _giscanner_la_CFLAGS = \
 	$(PYTHON_INCLUDES) \

@@ -1,5 +1,22 @@
 2008-04-25  Johan Dahlin  <jdahlin@async.com.br>
 
+	* giscanner/Makefile.am:
+	* giscanner/__init__.py:
+	* giscanner/cgobject.py:
+	* giscanner/gidlparser.py:
+	* giscanner/gidlwriter.py:
+	* giscanner/girwriter.py:
+	* giscanner/gobjecttreebuilder.py:
+	* giscanner/odict.py:
+	* giscanner/sourcescanner.py:
+	* giscanner/treebuilder.py:
+	* giscanner/xmlwriter.py:
+	* tools/Makefile.am:
+	* tools/g-ir-scanner:
+	Add LGPLv2 license header and install all python files
+
+2008-04-25  Johan Dahlin  <jdahlin@async.com.br>
+
 	* TODO:
 	* giscanner/gidlwriter.py:
 	* giscanner/giscannermodule.c (pygi_source_directive_new),
