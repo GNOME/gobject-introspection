@@ -1,3 +1,15 @@
+2008-04-25  Johan Dahlin  <johan@gnome.org>
+
+	* giscanner/Makefile.am:
+	* giscanner/ast.py:
+	* giscanner/gidlparser.py:
+	* giscanner/gidlwriter.py:
+	* giscanner/girwriter.py:
+	* giscanner/glibast.py:
+	* giscanner/glibtransformer.py:
+	* giscanner/transformer.py:
+	Split out nodes to ast.py and glibast.py
+
 2008-04-25  Johan Dahlin  <jdahlin@async.com.br>
 
 	* giscanner/Makefile.am:

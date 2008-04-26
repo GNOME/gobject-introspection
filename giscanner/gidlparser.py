@@ -19,7 +19,7 @@
 
 from xml.etree.ElementTree import parse
 
-from .glibtransformer import GLibObject
+from .glibast import GLibObject
 
 
 class GIDLParser(object):

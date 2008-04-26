@@ -27,7 +27,9 @@ pkgpyexecdir = $(pyexecdir)/giscanner
 pkgpyexec_LTLIBRARIES = _giscanner.la
 pkgpyexec_PYTHON = 		\
 	__init__.py		\
+	ast.py			\
 	cgobject.py		\
+	gidlast.py		\
 	gidlparser.py		\
 	gidlwriter.py		\
 	girwriter.py		\

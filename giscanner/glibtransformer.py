@@ -23,8 +23,11 @@ import os
 
 from . import cgobject
 from .odict import odict
-from .transformer import (Callback, Class, Enum, Function, Interface,
-                          Member, Node, Parameter, Property, Return, Struct)
+from .ast import (Callback, Enum, Function,
+                  Parameter, Property, Return, Struct)
+from .glibast import (GLibBoxed, GLibEnum, GLibEnumMember, GLibFlags, GLibInterface,
+                      GLibObject, GLibSignal)
+
 
 # Copied from h2defs.py
 _upperstr_pat1 = re.compile(r'([^A-Z])([A-Z])')
@@ -50,63 +53,6 @@ def resolve_libtool(libname):
     return libname
 
 
-class GLibEnum(Enum):
-    def __init__(self, name, members, type_name, get_type):
-        Enum.__init__(self, name, members)
-        self.type_name = type_name
-        self.get_type = get_type
-
-    def __repr__(self):
-        return '%s(%r, %r, %r)' % (
-            self.__class__.__name__,
-            self.name,
-            self.members,
-            self.get_type)
-
-
-class GLibFlags(GLibEnum):
-    pass
-
-
-class GLibEnumMember(Member):
-    def __init__(self, name, value, nick):
-        Member.__init__(self, name, value)
-        self.nick = nick
-
-
-class GLibObject(Class):
-    def __init__(self, name, parent, type_name, get_type):
-        Class.__init__(self, name, parent)
-        self.type_name = type_name
-        self.get_type = get_type
-        self.signals = []
-
-class GLibBoxed(Struct):
-    def __init__(self, name, type_name, get_type):
-        Struct.__init__(self, name)
-        self.constructors = []
-        self.methods = []
-        self.type_name = type_name
-        self.get_type = get_type
-
-
-class GLibInterface(Interface):
-    def __init__(self, name, type_name, get_type):
-        Interface.__init__(self, name)
-        self.type_name = type_name
-        self.get_type = get_type
-        self.signals = []
-
-
-class GLibProperty(Property):
-    pass
-
-
-class GLibSignal(Node):
-    def __init__(self, name, retval):
-        Node.__init__(self, name)
-        self.retval = retval
-        self.parameters = []
 
 
 class GLibTransformer(object):

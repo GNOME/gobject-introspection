@@ -19,9 +19,9 @@
 
 from __future__ import with_statement
 
-from .glibtransformer import (GLibBoxed, GLibEnum, GLibEnumMember,
-                              GLibFlags, GLibObject, GLibInterface)
-from .transformer import Callback, Class, Enum, Function, Interface
+from .ast import Callback, Class, Enum, Function, Interface
+from .glibast import (GLibBoxed, GLibEnum, GLibEnumMember,
+                      GLibFlags, GLibObject, GLibInterface)
 from .xmlwriter import XMLWriter
 
 
