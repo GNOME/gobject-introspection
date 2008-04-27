@@ -1,5 +1,8 @@
 2008-04-27  Johan Dahlin  <johan@gnome.org>
 
+	* giscanner/giscannermodule.c (]): Cast the getter, avoids
+	a compilation warning.
+
 	* tools/Makefile.am (g_ir_scanner_SOURCES):
 	g-ir-scanner has no sources.
 

@@ -234,7 +234,8 @@ static const PyGetSetDef _PyGISourceSymbol_getsets[] = {
   /* gboolean const_int_set; */
   { "const_int", (getter)symbol_get_const_int, NULL, NULL},  
   { "const_string", (getter)symbol_get_const_string, NULL, NULL},  
-  { "directives", (getter)symbol_get_directives, symbol_set_directives, NULL},  
+  { "directives", (getter)symbol_get_directives,
+    (setter)symbol_set_directives, NULL},  
   { 0 }
 };
 
