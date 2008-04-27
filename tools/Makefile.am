@@ -38,6 +38,8 @@ g_idl_scanner_LDADD = \
 	$(top_builddir)/giscanner/libgiscanner.la \
 	libgirepository-parser.la
 
+g_ir_scanner_SOURCES =
+
 GCOVSOURCES =					\
 	$(libgirepository_la_SOURCES)		\
 	$(g_idl_compiler_SOURCES)		\
