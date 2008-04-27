@@ -1,5 +1,18 @@
 2008-04-27  Johan Dahlin  <johan@gnome.org>
 
+	* giscanner/scannerlexer.l:
+	Allow parenthesis in annotations
+
+	* giscanner/ast.py:
+	* giscanner/gidlwriter.py:
+	* giscanner/girwriter.py:
+	* giscanner/glibtransformer.py:
+	* giscanner/transformer.py:
+	Add initial sequence support, including annotation.
+	Refactor type handling a bit.
+
+2008-04-27  Johan Dahlin  <johan@gnome.org>
+
 	* tests/parser/Foo-expected.gidl:
 	* tests/parser/foo-object.h:
 	* tests/parser/foo.c (foo_object_class_init),

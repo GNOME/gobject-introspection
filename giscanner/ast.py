@@ -40,10 +40,18 @@ class VFunction(Function):
     pass
 
 
-class Parameter(Node):
-    def __init__(self, name, type):
+class Type(Node):
+    def __init__(self, name):
         Node.__init__(self, name)
-        self.type = type
+
+    def __repr__(self):
+        return 'Type(%r)' % (self.name,)
+
+
+class Parameter(Node):
+    def __init__(self, name, type_name):
+        Node.__init__(self, name)
+        self.type = Type(type_name)
         self.direction = 'in'
         self.transfer = 'none'
 
@@ -79,10 +87,11 @@ class Struct(Node):
 
 
 class Return(Node):
-    def __init__(self, type):
+    def __init__(self, type_name):
         Node.__init__(self)
-        self.type = type
+        self.type = Type(type_name)
         self.transfer = 'none'
+        self.ctype = self.type
 
     def __repr__(self):
         return 'Return(%r)' % (self.type,)
@@ -117,9 +126,9 @@ class Interface(Node):
 
 
 class Constant(Node):
-    def __init__(self, name, type, value):
+    def __init__(self, name, type_name, value):
         Node.__init__(self, name)
-        self.type = type
+        self.type = Type(type_name)
         self.value = value
 
     def __repr__(self):
@@ -128,9 +137,9 @@ class Constant(Node):
 
 
 class Property(Node):
-    def __init__(self, name, type):
+    def __init__(self, name, type_name):
         Node.__init__(self, name)
-        self.type = type
+        self.type = Type(type_name)
 
     def __repr__(self):
         return '%s(%r, %r, %r)' % (
@@ -147,3 +156,10 @@ class Callback(Node):
     def __repr__(self):
         return 'Callback(%r, %r, %r)' % (
             self.name, self.retval, self.parameters)
+
+
+class Sequence(Type):
+    # Subclass, because a Sequence is a kind of Type
+    def __init__(self, name, element_type):
+        Type.__init__(self, name)
+        self.element_type = element_type

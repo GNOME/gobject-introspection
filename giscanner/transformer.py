@@ -19,7 +19,7 @@
 
 import giscanner
 from giscanner.ast import (Callback, Enum, Function, Member, Parameter,
-                           Return, Struct)
+                           Return, Sequence, Struct)
 
 
 class Transformer(object):
@@ -120,11 +120,20 @@ class Transformer(object):
                     option,)
         return param
 
-    def _create_return(self, symbol, options):
-        return_ = Return(self._create_source_type(symbol))
+    def _create_return(self, source_type, options=None):
+        if not options:
+            options = []
+        return_type = self._create_source_type(source_type)
+        return_ = Return(return_type)
         for option in options:
             if option == 'caller-owns':
                 return_.transfer = 'full'
+            elif option.startswith('seq '):
+                value, element_options = option[3:].split(None, 2)
+                element_type = self._parse_type_annotation(value)
+                seq = Sequence(return_type, element_type)
+                seq.cowner = 'caller'
+                return_.type = seq
             else:
                 print 'Unhandled parameter annotation option: %s' % (
                     option,)
@@ -143,5 +152,11 @@ class Transformer(object):
 
     def _create_callback(self, symbol):
         parameters = self._create_parameters(symbol.base_type.base_type)
-        retval = Return(self._create_source_type(symbol.base_type.base_type.base_type))
+        retval = self._create_return(symbol.base_type.base_type.base_type)
         return Callback(symbol.ident, retval, list(parameters))
+
+    def _parse_type_annotation(self, annotation):
+        if (annotation[0] == "[" and
+            annotation[-1] == "]"):
+            return Sequence(self._parse_type_annotation(annotation[1:-1]))
+        return annotation

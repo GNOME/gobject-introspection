@@ -69,7 +69,7 @@ class GIDLWriter(XMLWriter):
     def _write_return_type(self, return_):
         if not return_:
             return
-        attrs = [('type', return_.type)]
+        attrs = [('type', return_.ctype.name)]
         if return_.transfer != 'none':
             attrs.append(('transfer', return_.transfer))
         self.write_tag('return-type', attrs)
@@ -83,7 +83,7 @@ class GIDLWriter(XMLWriter):
 
     def _write_parameter(self, parameter):
         attrs = [('name', parameter.name),
-                 ('type', parameter.type)]
+                 ('type', parameter.type.name)]
         if parameter.direction != 'in':
             attrs.append(('direction', parameter.direction))
         if parameter.transfer != 'none':
@@ -147,7 +147,7 @@ class GIDLWriter(XMLWriter):
 
     def _write_property(self, prop):
         attrs = [('name', prop.name),
-                 ('prop', prop.type)]
+                 ('prop', prop.type.name)]
         self.write_tag('property', attrs)
 
     def _write_signal(self, signal):

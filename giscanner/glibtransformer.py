@@ -23,10 +23,10 @@ import os
 
 from . import cgobject
 from .odict import odict
-from .ast import (Callback, Enum, Function,
-                  Parameter, Property, Return, Struct)
-from .glibast import (GLibBoxed, GLibEnum, GLibEnumMember, GLibFlags, GLibInterface,
-                      GLibObject, GLibSignal)
+from .ast import (Callback, Enum, Function, Parameter, Property, Return,
+                  Sequence, Struct)
+from .glibast import (GLibBoxed, GLibEnum, GLibEnumMember, GLibFlags,
+                      GLibInterface, GLibObject, GLibSignal)
 
 
 # Copied from h2defs.py
@@ -131,10 +131,9 @@ class GLibTransformer(object):
         return type_name
 
     def _resolve_param_type(self, ptype):
-        type_name = ptype.replace('*', '')
-        resolved_type_name = self._resolve_type_name(type_name)
-        if type_name != resolved_type_name:
-            return ptype.replace(type_name, resolved_type_name)
+        type_name = ptype.name.replace('*', '')
+        ptype.name = ptype.name.replace(type_name,
+                                        self._resolve_type_name(type_name))
         return ptype
 
     def _parse_node(self, node):
@@ -176,7 +175,7 @@ class GLibTransformer(object):
         symbol = func.name
         if not symbol.endswith('_get_type'):
             return False
-        if func.retval.type != 'GType':
+        if func.retval.type.name != 'GType':
             return False
         if func.parameters:
             return False
@@ -195,7 +194,7 @@ class GLibTransformer(object):
         # FIXME: This is hackish, we should preserve the pointer structures
         #        here, so we can find pointers to objects and not just
         #        pointers to anything
-        first_arg = func.parameters[0].type
+        first_arg = func.parameters[0].type.name
         if first_arg.count('*') != 1:
             return False
 
@@ -207,10 +206,10 @@ class GLibTransformer(object):
         #        here, so we can find pointers to objects and not just
         #        pointers to anything
         rtype = func.retval.type
-        if rtype.count('*') != 1:
+        if rtype.name.count('*') != 1:
             return False
 
-        object_name = rtype.replace('*', '')
+        object_name = rtype.name.replace('*', '')
         return self._parse_method_common(func, object_name, is_method=False)
 
     def _parse_method_common(self, func, object_name, is_method):

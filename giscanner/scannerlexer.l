@@ -227,23 +227,32 @@ parse_gtkdoc (GISourceScanner *scanner,
         {
           char *ptr = parts[1];
           GString *current = NULL;
-          gboolean open = (*ptr == '(');
+	  gint8 pstack = 0;
 
           current = g_string_new ("");
           value = parts[2];
 
-          while (*ptr++) 
+          do
             {
               if (*ptr == '(')
-                 open = TRUE;
-              else if (*ptr != ')' && open)
-                g_string_append_c (current, *ptr);
-              else if (*ptr == ')') {
-                options = g_slist_prepend (options, g_strdup (current->str));
-                open = FALSE;
-              }
+		{
+		  pstack++;
+		  if (pstack == 1)
+		    continue;
+		}
+	      else if (*ptr == ')')
+		pstack--;
+		       
+              if (pstack == 0)
+		{
+		  options = g_slist_prepend (options, current->str);
+		  break;
+		}
+	      g_string_append_c (current, *ptr);
             }
-          g_string_free (current, TRUE);
+	  while (*ptr++);
+
+          g_string_free (current, FALSE);
         } 
       else
         value = parts[1];

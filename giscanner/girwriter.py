@@ -19,7 +19,7 @@
 
 from __future__ import with_statement
 
-from .ast import Callback, Class, Enum, Function, Interface
+from .ast import (Callback, Class, Enum, Function, Interface, Sequence)
 from .glibast import (GLibBoxed, GLibEnum, GLibEnumMember,
                       GLibFlags, GLibObject, GLibInterface)
 from .xmlwriter import XMLWriter
@@ -75,12 +75,12 @@ class GIRWriter(XMLWriter):
     def _write_return_type(self, return_):
         if not return_:
             return
-        with self.tagcontext('return-values'):
-            with self.tagcontext('return-value'):
-                attrs = [('name', return_.type)]
-                if return_.transfer != 'none':
-                    attrs.append(('transfer', return_.transfer))
-                self.write_tag('type', attrs)
+        attrs = [('c:identifer', return_.type.name)]
+        with self.tagcontext('return-value', attrs):
+            if isinstance(return_.type, Sequence):
+                self._write_sequence(return_.type)
+            else:
+                self._write_type(return_.type)
 
     def _write_parameters(self, parameters):
         if not parameters:
@@ -95,8 +95,17 @@ class GIRWriter(XMLWriter):
             attrs.append(('direction', parameter.direction))
         if parameter.transfer != 'none':
             attrs.append(('transfer', parameter.transfer))
-        with self.tagcontext('parameters', attrs):
-            self.write_tag('type', [('name', parameter.type)])
+        with self.tagcontext('parameter', attrs):
+            self._write_type(parameter.type)
+
+    def _write_type(self, type):
+        self.write_tag('type', [('name', type.name)])
+
+    def _write_sequence(self, sequence):
+        attrs = [('c:owner', sequence.cowner)]
+        with self.tagcontext('sequence', attrs):
+            attrs = [('c:identifier', sequence.element_type)]
+            self.write_tag('element-type', attrs)
 
     def _write_enum(self, enum):
         attrs = [('name', enum.name)]
@@ -151,7 +160,7 @@ class GIRWriter(XMLWriter):
 
     def _write_property(self, prop):
         attrs = [('name', prop.name),
-                 ('prop', prop.type)]
+                 ('prop', prop.type.name)]
         self.write_tag('property', attrs)
 
     def _write_callback(self, callback):
