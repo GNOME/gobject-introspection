@@ -1,5 +1,14 @@
 2008-04-27  Johan Dahlin  <johan@gnome.org>
 
+	* tests/parser/Foo-expected.gidl:
+	* tests/parser/foo-object.h:
+	* tests/parser/foo.c (foo_object_class_init),
+	(foo_object_get_strings), (foo_object_get_objects):
+	Add two new functions to check sequence return values.
+	Also fixes a compilation warning.
+
+2008-04-27  Johan Dahlin  <johan@gnome.org>
+
 	* giscanner/giscannermodule.c (]): Cast the getter, avoids
 	a compilation warning.
 

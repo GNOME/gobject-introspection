@@ -57,6 +57,8 @@ gint                  foo_object_inout3            (FooObject *object, int *inou
 gint                  foo_object_in                (FooObject *object, int *inarg);
 gint                  foo_object_calleeowns        (FooObject *object, GObject *toown);
 gint                  foo_object_calleesowns       (FooObject *object, GObject *toown1, GObject *toown2);
+GList*                foo_object_get_strings       (FooObject *object);
+GSList*               foo_object_get_objects       (FooObject *object);
 
 
 struct _FooSubobject

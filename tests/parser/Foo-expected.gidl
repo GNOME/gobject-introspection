@@ -72,6 +72,18 @@
 					<parameter name="object" type="FooObject*"/>
 				</parameters>
 			</method>
+			<method name="get_objects" symbol="foo_object_get_objects">
+				<return-type type="GSList*"/>
+				<parameters>
+					<parameter name="object" type="FooObject*"/>
+				</parameters>
+			</method>
+			<method name="get_strings" symbol="foo_object_get_strings">
+				<return-type type="GList*"/>
+				<parameters>
+					<parameter name="object" type="FooObject*"/>
+				</parameters>
+			</method>
 			<method name="in" symbol="foo_object_in">
 				<return-type type="gint"/>
 				<parameters>
@@ -90,7 +102,7 @@
 				<return-type type="gint"/>
 				<parameters>
 					<parameter name="object" type="FooObject*"/>
-					<parameter name="inoutarg" type="int*" direction="in-out"/>
+					<parameter name="inoutarg" type="int*"/>
 				</parameters>
 			</method>
 			<method name="inout3" symbol="foo_object_inout3">

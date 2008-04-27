@@ -102,7 +102,7 @@ foo_object_class_init (FooObjectClass *klass)
     g_signal_new ("signal",
 		  G_OBJECT_CLASS_TYPE (gobject_class),
 		  G_SIGNAL_RUN_LAST,
-		  NULL,
+		  0,
 		  NULL, NULL,
 		  (GSignalCMarshaller)g_cclosure_marshal_STRING__OBJECT_POINTER,
 		  G_TYPE_STRING, 2, G_TYPE_OBJECT, G_TYPE_POINTER);
@@ -242,6 +242,42 @@ foo_object_calleesowns (FooObject *object, GObject *toown1, GObject *toown2)
 	return 1;
 }
 
+
+/**
+ * foo_object_get_strings:
+ * @object: a #GObject
+ *
+ * This is a test for returning a list of strings
+ *
+ * Return value: (seq char* (callee-owns)) (caller-owns): list of strings
+ */
+GList*
+foo_object_get_strings (FooObject *object)
+{
+  GList *list = NULL;
+  list = g_list_prepend (list, "foo");
+  list = g_list_prepend (list, "bar");
+  return list;
+}
+
+/**
+ * foo_object_get_objects:
+ * @object: a #GObject
+ *
+ * This is a test for returning a list of objects.
+ * The list itself should be freed, but not the internal objects,
+ * intentionally similar example to gtk_container_get_children
+ *
+ * Return value: (seq FooObject* (callee-owns)) (caller-owns): a list
+ *               of strings
+ */
+GSList*
+foo_object_get_objects (FooObject *object)
+{
+  GSList *list = NULL;
+  list = g_slist_prepend (list, object);
+  return list;
+}
 
 /**
  * foo_object_create_object:
