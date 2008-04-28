@@ -16,9 +16,10 @@ CLEANFILES = utility.gir Foo.gir
 EXTRA_DIST = utility-expected.gir Foo-expected.gir 
 
 SCANNER = $(top_builddir)/tools/g-ir-scanner
+
 utility.gir: libutility.la utility.h $(SCANNER)
 	@PYTHONPATH=$(top_srcdir) $(SCANNER) -v \
-	--include=$(top_srcdir)/gidl/gobject-2.0.gidl \
+	--include=$(top_srcdir)/gir/gobject-2.0.gir \
 	--library=libutility.la \
 	--namespace=utility \
 	--pkg gobject-2.0 \
@@ -26,10 +27,10 @@ utility.gir: libutility.la utility.h $(SCANNER)
 
 Foo.gir: libfoo.la foo-object.h $(SCANNER)
 	@PYTHONPATH=$(top_srcdir) $(SCANNER) -v \
-	--include=$(top_srcdir)/gidl/gobject-2.0.gidl \
+	--include=$(top_srcdir)/gir/gobject-2.0.gir \
 	--include=$(srcdir)/utility.gir \
-	--namespace=Foo \
 	--library=libfoo.la \
+	--namespace=Foo \
 	--pkg gobject-2.0 \
 	$(libfoo_la_SOURCES) \
 	 --output $@

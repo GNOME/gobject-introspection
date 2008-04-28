@@ -98,7 +98,7 @@ AM_PATH_PYTHON([2.5])
 AM_CHECK_PYTHON_HEADERS
 
 AC_CONFIG_FILES([Makefile
-                 gidl/Makefile
+                 gir/Makefile
                  girepository/Makefile
                  giscanner/Makefile
                  m4/Makefile

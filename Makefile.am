@@ -1,7 +1,7 @@
 ## Process this file with automake to produce Makefile.in
 ACLOCAL_AMFLAGS = -I m4
 
-SUBDIRS = gidl girepository giscanner tools tests
+SUBDIRS = gir girepository giscanner tools tests
 DIST_SUBDIRS = m4 $(SUBDIRS)
 
 pkgconfigdir = $(libdir)/pkgconfig

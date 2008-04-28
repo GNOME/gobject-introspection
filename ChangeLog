@@ -1,5 +1,16 @@
 2008-04-27  Johan Dahlin  <johan@gnome.org>
 
+	* Makefile.am:
+	* configure.ac:
+	* gidl/Makefile.am:
+	* gidl/gobject-2.0.gidl:
+	* gir/Makefile.am:
+	* gir/gobject-2.0.gir:
+	* tests/parser/Makefile.am:
+	Replace the GObject gidl with a GObject gir.
+
+2008-04-27  Johan Dahlin  <johan@gnome.org>
+
 	* tools/Makefile.am (bin_SCRIPTS): g-ir-scanner is a script,
 	not a program.
 

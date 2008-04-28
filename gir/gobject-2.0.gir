@@ -1,0 +1,15 @@
+<repository version="1.0"
+            xmlns="http://www.gtk.org/introspection/core/1.0"
+            xmlns:c="http://www.gtk.org/introspection/c/1.0"
+            xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
+  <namespace name="GLib">
+    <class name="Object"
+           glib:type-name="GObject"
+           glib:get-type="intern">
+    </class>
+    <class name="InitiallyUnowned"
+           glib:type-name="GInitiallyUnowned"
+           glib:get-type="g_initially_unowned_get_type">
+    </class>
+  </namespace>
+</repository>
