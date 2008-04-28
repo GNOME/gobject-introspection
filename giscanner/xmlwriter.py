@@ -38,15 +38,15 @@ class XMLWriter(object):
             return -1
         attr_length = 0
         for attr, value in attributes:
-            attr_length += 1 + len(attr) + len(quoteattr(value))
+            attr_length += 2 + len(attr) + len(quoteattr(value))
         return attr_length + indent
 
-    def _collect_attributes(self, attributes, indent=-1):
+    def _collect_attributes(self, attributes, extra_indent=-1):
         if not attributes:
             return ''
-
-        if self._calc_attrs_length(attributes, indent) > 79:
-            indent_len = self._indent + indent
+        extra_indent += len(self._indent_char) * self._indent
+        if self._calc_attrs_length(attributes, extra_indent) > 79:
+            indent_len = extra_indent
         else:
             indent_len = 0
         first = True
@@ -62,7 +62,7 @@ class XMLWriter(object):
 
     def _open_tag(self, tag_name, attributes=None):
         attrs = self._collect_attributes(
-            attributes, len(tag_name) + 1)
+            attributes, len(tag_name) + 2)
         self.write_line('<%s%s>' % (tag_name, attrs))
 
     def _close_tag(self, tag_name):

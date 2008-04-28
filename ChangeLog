@@ -1,3 +1,8 @@
+2008-04-28  Johan Dahlin  <johan@gnome.org>
+
+	* giscanner/xmlwriter.py: Calculate the line length properly,
+	include the provided extra indentation in the calculation, really.
+
 2008-04-28  Johan Dahlin  <jdahlin@async.com.br>
 
 	* giscanner/ast.py:
