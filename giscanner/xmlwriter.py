@@ -32,12 +32,13 @@ class XMLWriter(object):
     # Private
 
     def _collect_attributes(self, attributes):
-        attrValue = ''
+        attr_value = ''
         if attributes:
             for attr, value in attributes:
                 assert value is not None, attr
-                attrValue += ' %s=%s' % (attr, quoteattr(value))
-        return attrValue
+                attr_value += ' %s=%s' % (attr, quoteattr(value))
+
+        return attr_value
 
     def _open_tag(self, tag_name, attributes=None):
         attrs = self._collect_attributes(attributes)
@@ -45,6 +46,17 @@ class XMLWriter(object):
 
     def _close_tag(self, tag_name):
         self.write_line('</%s>' % (tag_name,))
+
+    def _rewrap_line(self, line, attrs):
+        # assume we have an xml tag here
+        assert line[0] == '<' and line[-1] == '>'
+        if not line.endswith('/>'):
+            tagname = line[1:].split(None, 1)[0]
+            line += "</%s>" % (tagname,)
+        from xml.etree.ElementTree import parse
+        doc = parseString(line)
+        print doc
+        return line
 
     # Public API
 
@@ -54,15 +66,14 @@ class XMLWriter(object):
     def write_line(self, line=''):
         self._data.write('%s%s\n' % (' ' * self._indent, line))
 
-    def write_tag(self, tag_name, attributes):
+    def write_tag(self, tag_name, attributes, data=None):
         attrs = self._collect_attributes(attributes)
-        self.write_line('<%s%s/>' % (tag_name, attrs))
-
-    def write_tag_with_data(self, tag_name, data, attributes=None):
-        if data is None:
-            self.write_tag(tag_name, attributes)
-        attrs = self._collect_attributes(attributes)
-        self.write_line('<%s%s>%s</%s>' % (tag_name, attrs, data, tag_name))
+        output = '<%s%s' % (tag_name, attrs)
+        if data:
+            output = '>%s</%s>' % (data, tag_name)
+        else:
+            output += '/>'
+        self.write_line(output)
 
     def push_tag(self, tag_name, attributes=None):
         self._open_tag(tag_name, attributes)
