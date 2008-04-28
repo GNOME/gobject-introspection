@@ -32,6 +32,7 @@ pkgpyexec_PYTHON = 		\
 	gidlast.py		\
 	gidlparser.py		\
 	gidlwriter.py		\
+	girparser.py		\
 	girwriter.py		\
 	glibtransformer.py 	\
 	odict.py		\

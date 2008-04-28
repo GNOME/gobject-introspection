@@ -1,7 +1,0 @@
-<?xml version="1.0"?>
-<api version="1.0">
-	<namespace name="utility">
-		<object name="UtilityObject" parent="GLib.Object" type-name="UtilityObject" get-type="utility_object_get_type">
-		</object>
-	</namespace>
-</api>

@@ -1,5 +1,22 @@
 2008-04-27  Johan Dahlin  <johan@gnome.org>
 
+	* configure.ac:
+	* giscanner/Makefile.am:
+	* giscanner/girparser.py:
+	* giscanner/glibtransformer.py:
+	* tests/parser/Foo-expected.gidl:
+	* tests/parser/Foo-expected.gir:
+	* tests/parser/Makefile.am:
+	* tests/parser/utility-expected.gidl:
+	* tests/parser/utility-expected.gir:
+	* tools/g-ir-scanner:
+	Switch over to GIR as the default format. Add a simple GIDL
+	parser.
+	Update tests and fix simplify makefiles by depending
+	on GNU make extensions.
+
+2008-04-27  Johan Dahlin  <johan@gnome.org>
+
 	* giscanner/xmlwriter.py:
 	Wrap attributes for lines which are wider than 79 characters
 

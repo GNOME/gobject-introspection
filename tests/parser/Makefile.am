@@ -12,29 +12,37 @@ libutility_la_CFLAGS = $(GOBJECT_CFLAGS)
 libutility_la_LDFLAGS = -module -avoid-version
 libutility_la_LIBADD = $(GOBJECT_LIBS)
 
-CLEANFILES = utility.gidl Foo.gidl 
-EXTRA_DIST = utility-expected.gidl Foo-expected.gidl 
+CLEANFILES = utility.gir Foo.gir 
+EXTRA_DIST = utility-expected.gir Foo-expected.gir 
 
-utility.gidl: libutility.la utility.h $(top_builddir)/tools/g-idl-scanner
-	G_DEBUG=fatal_warnings $(top_builddir)/tools/g-idl-scanner -v \
+SCANNER = $(top_builddir)/tools/g-ir-scanner
+utility.gir: libutility.la utility.h $(SCANNER)
+	@PYTHONPATH=$(top_srcdir) $(SCANNER) -v \
+	--include=$(top_srcdir)/gidl/gobject-2.0.gidl \
+	--library=libutility.la \
 	--namespace=utility \
-	--include-idl=$(top_srcdir)/gidl/gobject-2.0.gidl \
-	$(libutility_la_SOURCES) -I$(srcdir) $(GOBJECT_CFLAGS) \
-	libutility.la --output $@
+	--pkg gobject-2.0 \
+	$(libutility_la_SOURCES) --output $@
 
-Foo.gidl: libfoo.la foo-object.h $(top_builddir)/tools/g-idl-scanner
-	G_DEBUG=fatal_warnings $(top_builddir)/tools/g-idl-scanner -v \
+Foo.gir: libfoo.la foo-object.h $(SCANNER)
+	@PYTHONPATH=$(top_srcdir) $(SCANNER) -v \
+	--include=$(top_srcdir)/gidl/gobject-2.0.gidl \
+	--include=$(srcdir)/utility.gir \
 	--namespace=Foo \
-	--include-idl=$(top_srcdir)/gidl/gobject-2.0.gidl \
-	--include-idl=$(srcdir)/utility.gidl \
-	$(libfoo_la_SOURCES) -I$(srcdir) $(GOBJECT_CFLAGS) \
-	libfoo.la --output $@
+	--library=libfoo.la \
+	--pkg gobject-2.0 \
+	$(libfoo_la_SOURCES) \
+	 --output $@
 
-check-local: utility.gidl Foo.gidl 
-	@diff -u -U 10 $(srcdir)/utility-expected.gidl utility.gidl && echo "utility.gidl"
-	@diff -u -U 10 $(srcdir)/Foo-expected.gidl Foo.gidl && echo "Foo.gidl"
+check-%.gir: %.gir
+	@diff -u -U 10 $(srcdir)/$*-expected.gir $*.gir && echo "* $*.gir"
+
+pre-check:
+	@echo "Running parser checks..."
+
+check-local: pre-check check-utility.gir check-Foo.gir 
 	@echo "======================="
 	@echo "All parser tests passed"
 	@echo "======================="
 
-.PHONY: Foo.gidl
+.PHONY: utility.gir Foo.gir 

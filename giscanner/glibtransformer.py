@@ -82,8 +82,14 @@ class GLibTransformer(object):
                 self._pair_class_struct(node)
 
     def register_include(self, filename):
-        from .gidlparser import GIDLParser
-        parser = GIDLParser(filename)
+        if filename.endswith('.gir'):
+            from .girparser import GIRParser
+            parser = GIRParser(filename)
+        elif filename.endswith('.gidl'):
+            from .gidlparser import GIDLParser
+            parser = GIDLParser(filename)
+        else:
+            raise NotImplementedError(filename)
         nsname = parser.get_namespace_name()
         for node in parser.get_nodes():
             self._type_names[node.type_name] = (nsname, node)

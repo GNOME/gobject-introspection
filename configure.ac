@@ -3,7 +3,7 @@
 
 AC_PREREQ(2.59)
 AC_INIT(gobject-introspection, 0.1, http://bugzilla.gnome.org/enter_bug.cgi?product=glib)
-AM_INIT_AUTOMAKE([1.7])
+AM_INIT_AUTOMAKE([1.7 -Wno-portability])
 AM_MAINTAINER_MODE
 AC_CONFIG_HEADER([config.h])
 

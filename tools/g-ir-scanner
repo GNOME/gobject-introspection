@@ -33,7 +33,7 @@ def main(args):
     parser = optparse.OptionParser('%prog [options] sources')
     parser.add_option("", "--format",
                       action="store", dest="format",
-                      default="gidl",
+                      default="gir",
                       help="format to use, one of gidl, gir")
     parser.add_option("-i", "--include",
                       action="append", dest="includes", default=[],
