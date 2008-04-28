@@ -78,7 +78,7 @@ class XMLWriter(object):
 
     def write_tag(self, tag_name, attributes, data=None):
         prefix = '<%s' % (tag_name,)
-        if data:
+        if data is not None:
             suffix = '>%s</%s>' % (data, tag_name)
         else:
             suffix = '/>'
