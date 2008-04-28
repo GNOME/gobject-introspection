@@ -139,8 +139,7 @@ class GLibTransformer(object):
 
     def _resolve_param_type(self, ptype):
         type_name = ptype.name.replace('*', '')
-        ptype.name = ptype.name.replace(type_name,
-                                        self._resolve_type_name(type_name))
+        ptype.name = self._resolve_type_name(type_name)
         return ptype
 
     def _parse_node(self, node):

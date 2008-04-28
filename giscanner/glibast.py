@@ -24,6 +24,7 @@ from .ast import Class, Enum, Interface, Member, Node, Property, Struct
 class GLibEnum(Enum):
     def __init__(self, name, members, type_name, get_type):
         Enum.__init__(self, name, members)
+        self.ctype = type_name
         self.type_name = type_name
         self.get_type = get_type
 
@@ -48,6 +49,7 @@ class GLibEnumMember(Member):
 class GLibObject(Class):
     def __init__(self, name, parent, type_name, get_type):
         Class.__init__(self, name, parent)
+        self.ctype = type_name
         self.type_name = type_name
         self.get_type = get_type
         self.signals = []
@@ -55,6 +57,7 @@ class GLibObject(Class):
 class GLibBoxed(Struct):
     def __init__(self, name, type_name, get_type):
         Struct.__init__(self, name)
+        self.ctype = name
         self.constructors = []
         self.methods = []
         self.type_name = type_name
@@ -64,6 +67,7 @@ class GLibBoxed(Struct):
 class GLibInterface(Interface):
     def __init__(self, name, type_name, get_type):
         Interface.__init__(self, name)
+        self.ctype = type_name
         self.type_name = type_name
         self.get_type = get_type
         self.signals = []

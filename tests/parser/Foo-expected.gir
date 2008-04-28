@@ -4,144 +4,146 @@
             xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
   <namespace name="Foo">
     <interface name="Interface"
+               c:type="FooInterface"
                glib:type-name="FooInterface"
                glib:get-type="foo_interface_get_type">
     </interface>
     <function name="init" c:identifier="foo_init">
       <return-value>
-        <type name="gint" c:identifier="gint"/>
+        <type name="gint" c:type="gint"/>
       </return-value>
     </function>
     <class name="Object"
+           c:type="FooObject"
            parent="GLib.Object"
            glib:type-name="FooObject"
            glib:get-type="foo_object_get_type">
       <constructor name="new" c:identifier="foo_object_new">
         <return-value>
-          <type name="Object*" c:identifier="FooObject*"/>
+          <type name="Object" c:type="FooObject*"/>
         </return-value>
       </constructor>
       <method name="method" c:identifier="foo_object_method">
         <return-value>
-          <type name="gint" c:identifier="gint"/>
+          <type name="gint" c:type="gint"/>
         </return-value>
         <parameters>
           <parameter name="object">
-            <type name="Object*" c:identifier="FooObject*"/>
+            <type name="Object" c:type="FooObject*"/>
           </parameter>
         </parameters>
       </method>
       <method name="external_type" c:identifier="foo_object_external_type">
         <return-value>
-          <type name="utility.Object*" c:identifier="UtilityObject*"/>
+          <type name="utility.Object" c:type="UtilityObject*"/>
         </return-value>
         <parameters>
           <parameter name="object">
-            <type name="Object*" c:identifier="FooObject*"/>
+            <type name="Object" c:type="FooObject*"/>
           </parameter>
         </parameters>
       </method>
       <method name="out" c:identifier="foo_object_out">
         <return-value>
-          <type name="gint" c:identifier="gint"/>
+          <type name="gint" c:type="gint"/>
         </return-value>
         <parameters>
           <parameter name="object">
-            <type name="Object*" c:identifier="FooObject*"/>
+            <type name="Object" c:type="FooObject*"/>
           </parameter>
           <parameter name="outarg" direction="out">
-            <type name="int*" c:identifier="int*"/>
+            <type name="int" c:type="int*"/>
           </parameter>
         </parameters>
       </method>
       <method name="create_object" c:identifier="foo_object_create_object">
         <return-value>
-          <type name="GLib.Object*" c:identifier="GObject*"/>
+          <type name="GLib.Object" c:type="GObject*"/>
         </return-value>
         <parameters>
           <parameter name="object">
-            <type name="Object*" c:identifier="FooObject*"/>
+            <type name="Object" c:type="FooObject*"/>
           </parameter>
         </parameters>
       </method>
       <method name="inout" c:identifier="foo_object_inout">
         <return-value>
-          <type name="gint" c:identifier="gint"/>
+          <type name="gint" c:type="gint"/>
         </return-value>
         <parameters>
           <parameter name="object">
-            <type name="Object*" c:identifier="FooObject*"/>
+            <type name="Object" c:type="FooObject*"/>
           </parameter>
           <parameter name="inoutarg" direction="inout">
-            <type name="int*" c:identifier="int*"/>
+            <type name="int" c:type="int*"/>
           </parameter>
         </parameters>
       </method>
       <method name="inout2" c:identifier="foo_object_inout2">
         <return-value>
-          <type name="gint" c:identifier="gint"/>
+          <type name="gint" c:type="gint"/>
         </return-value>
         <parameters>
           <parameter name="object">
-            <type name="Object*" c:identifier="FooObject*"/>
+            <type name="Object" c:type="FooObject*"/>
           </parameter>
           <parameter name="inoutarg">
-            <type name="int*" c:identifier="int*"/>
+            <type name="int" c:type="int*"/>
           </parameter>
         </parameters>
       </method>
       <method name="inout3" c:identifier="foo_object_inout3">
         <return-value>
-          <type name="gint" c:identifier="gint"/>
+          <type name="gint" c:type="gint"/>
         </return-value>
         <parameters>
           <parameter name="object">
-            <type name="Object*" c:identifier="FooObject*"/>
+            <type name="Object" c:type="FooObject*"/>
           </parameter>
           <parameter name="inoutarg" direction="inout">
-            <type name="int*" c:identifier="int*"/>
+            <type name="int" c:type="int*"/>
           </parameter>
         </parameters>
       </method>
       <method name="in" c:identifier="foo_object_in">
         <return-value>
-          <type name="gint" c:identifier="gint"/>
+          <type name="gint" c:type="gint"/>
         </return-value>
         <parameters>
           <parameter name="object">
-            <type name="Object*" c:identifier="FooObject*"/>
+            <type name="Object" c:type="FooObject*"/>
           </parameter>
           <parameter name="inarg">
-            <type name="int*" c:identifier="int*"/>
+            <type name="int" c:type="int*"/>
           </parameter>
         </parameters>
       </method>
       <method name="calleeowns" c:identifier="foo_object_calleeowns">
         <return-value>
-          <type name="gint" c:identifier="gint"/>
+          <type name="gint" c:type="gint"/>
         </return-value>
         <parameters>
           <parameter name="object">
-            <type name="Object*" c:identifier="FooObject*"/>
+            <type name="Object" c:type="FooObject*"/>
           </parameter>
           <parameter name="toown" transfer="full">
-            <type name="GLib.Object*" c:identifier="GObject*"/>
+            <type name="GLib.Object" c:type="GObject*"/>
           </parameter>
         </parameters>
       </method>
       <method name="calleesowns" c:identifier="foo_object_calleesowns">
         <return-value>
-          <type name="gint" c:identifier="gint"/>
+          <type name="gint" c:type="gint"/>
         </return-value>
         <parameters>
           <parameter name="object">
-            <type name="Object*" c:identifier="FooObject*"/>
+            <type name="Object" c:type="FooObject*"/>
           </parameter>
           <parameter name="toown1" transfer="full">
-            <type name="GLib.Object*" c:identifier="GObject*"/>
+            <type name="GLib.Object" c:type="GObject*"/>
           </parameter>
           <parameter name="toown2" transfer="full">
-            <type name="GLib.Object*" c:identifier="GObject*"/>
+            <type name="GLib.Object" c:type="GObject*"/>
           </parameter>
         </parameters>
       </method>
@@ -153,7 +155,7 @@
         </return-value>
         <parameters>
           <parameter name="object">
-            <type name="Object*" c:identifier="FooObject*"/>
+            <type name="Object" c:type="FooObject*"/>
           </parameter>
         </parameters>
       </method>
@@ -165,25 +167,27 @@
         </return-value>
         <parameters>
           <parameter name="object">
-            <type name="Object*" c:identifier="FooObject*"/>
+            <type name="Object" c:type="FooObject*"/>
           </parameter>
         </parameters>
       </method>
       <property name="string">
-        <type name="gchararray" c:identifier="gchararray"/>
+        <type name="gchararray" c:type="gchararray"/>
       </property>
     </class>
     <class name="Subobject"
+           c:type="FooSubobject"
            parent="Object"
            glib:type-name="FooSubobject"
            glib:get-type="foo_subobject_get_type">
       <constructor name="new" c:identifier="foo_subobject_new">
         <return-value>
-          <type name="Subobject*" c:identifier="FooSubobject*"/>
+          <type name="Subobject" c:type="FooSubobject*"/>
         </return-value>
       </constructor>
     </class>
     <enumeration name="EnumType"
+                 c:type="FooEnumType"
                  glib:type-name="FooEnumType"
                  glib:get-type="foo_enum_type_get_type">
       <member name="FOO_ENUM_ALPHA" value="0" glib:nick="alpha"/>
@@ -192,58 +196,60 @@
     </enumeration>
     <function name="enum_type_method" c:identifier="foo_enum_type_method">
       <return-value>
-        <type name="int" c:identifier="int"/>
+        <type name="int" c:type="int"/>
       </return-value>
       <parameters>
         <parameter name="foo_enum">
-          <type name="EnumType" c:identifier="FooEnumType"/>
+          <type name="EnumType" c:type="FooEnumType"/>
         </parameter>
       </parameters>
     </function>
     <bitfield name="FlagsType"
+              c:type="FooFlagsType"
               glib:type-name="FooFlagsType"
               glib:get-type="foo_flags_type_get_type">
       <member name="FOO_FLAGS_FIRST" value="1" glib:nick="first"/>
       <member name="FOO_FLAGS_SECOND" value="2" glib:nick="second"/>
       <member name="FOO_FLAGS_THIRD" value="4" glib:nick="third"/>
     </bitfield>
-    <enumeration name="EnumNoType">
+    <enumeration name="EnumNoType" c:type="FooEnumNoType">
       <member name="FOO_ENUM_UN" value="1"/>
       <member name="FOO_ENUM_DEUX" value="2"/>
       <member name="FOO_ENUM_TROIS" value="3"/>
     </enumeration>
-    <glib:boxed glib:name="Boxed"
+    <glib:boxed c:type="Boxed"
+                glib:name="Boxed"
                 glib:type-name="FooBoxed"
                 glib:get-type="foo_boxed_get_type">
       <constructor name="new" c:identifier="foo_boxed_new">
         <return-value>
-          <type name="Boxed*" c:identifier="FooBoxed*"/>
+          <type name="Boxed" c:type="FooBoxed*"/>
         </return-value>
       </constructor>
       <method name="method" c:identifier="foo_boxed_method">
         <return-value>
-          <type name="void" c:identifier="void"/>
+          <type name="void" c:type="void"/>
         </return-value>
         <parameters>
           <parameter name="boxed">
-            <type name="Boxed*" c:identifier="FooBoxed*"/>
+            <type name="Boxed" c:type="FooBoxed*"/>
           </parameter>
         </parameters>
       </method>
     </glib:boxed>
     <callback name="FooCallback">
       <return-value>
-        <type name="gboolean" c:identifier="gboolean"/>
+        <type name="gboolean" c:type="gboolean"/>
       </return-value>
       <parameters>
         <parameter name="foo">
-          <type name="FooObject*" c:identifier="FooObject*"/>
+          <type name="FooObject*" c:type="FooObject*"/>
         </parameter>
         <parameter name="b">
-          <type name="gboolean" c:identifier="gboolean"/>
+          <type name="gboolean" c:type="gboolean"/>
         </parameter>
         <parameter name="data">
-          <type name="gpointer" c:identifier="gpointer"/>
+          <type name="gpointer" c:type="gpointer"/>
         </parameter>
       </parameters>
     </callback>

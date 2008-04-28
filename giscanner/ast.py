@@ -44,7 +44,7 @@ class VFunction(Function):
 class Type(Node):
     def __init__(self, name):
         Node.__init__(self, name)
-        self.cidentifier = name
+        self.ctype = name
 
     def __repr__(self):
         return 'Type(%r)' % (self.name,)
@@ -65,6 +65,7 @@ class Enum(Node):
     def __init__(self, name, members):
         Node.__init__(self, name)
         self.members = members
+        self.ctype = name
 
     def __repr__(self):
         return 'Enum(%r, %r)' % (self.name, self.members)
@@ -101,6 +102,7 @@ class Return(Node):
 class Class(Node):
     def __init__(self, name, parent):
         Node.__init__(self, name)
+        self.ctype = name
         self.parent = parent
         self.methods = []
         self.constructors = []

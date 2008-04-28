@@ -99,8 +99,12 @@ class GIRWriter(XMLWriter):
             self._write_type(parameter.type)
 
     def _write_type(self, type):
-        attrs = [('name', type.name),
-                 ('c:identifier', type.cidentifier)]
+        attrs = [('name', type.name)]
+        # FIXME: figure out if type references a basic type
+        #        or a boxed/class/interface etc. and skip
+        #        writing the ctype if the latter.
+        if 1:
+            attrs.append(('c:type', type.ctype))
         self.write_tag('type', attrs)
 
     def _write_sequence(self, sequence):
@@ -110,7 +114,8 @@ class GIRWriter(XMLWriter):
             self.write_tag('element-type', attrs)
 
     def _write_enum(self, enum):
-        attrs = [('name', enum.name)]
+        attrs = [('name', enum.name),
+                 ('c:type', enum.ctype)]
         tag_name = 'enumeration'
         if isinstance(enum, GLibEnum):
             attrs.extend([('glib:type-name', enum.type_name),
@@ -130,7 +135,8 @@ class GIRWriter(XMLWriter):
         self.write_tag('member', attrs)
 
     def _write_class(self, node):
-        attrs = [('name', node.name)]
+        attrs = [('name', node.name),
+                 ('c:type', node.ctype)]
         if isinstance(node, Class):
             tag_name = 'class'
             if node.parent is not None:
@@ -150,7 +156,8 @@ class GIRWriter(XMLWriter):
                 self._write_property(prop)
 
     def _write_boxed(self, boxed):
-        attrs = [('glib:name', boxed.name),
+        attrs = [('c:type', boxed.ctype),
+                 ('glib:name', boxed.name),
                  ('glib:type-name', boxed.type_name),
                  ('glib:get-type', boxed.get_type)]
 

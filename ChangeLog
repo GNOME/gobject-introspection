@@ -2,6 +2,17 @@
 
 	* giscanner/ast.py:
 	* giscanner/girwriter.py:
+	* giscanner/glibast.py:
+	* giscanner/glibtransformer.py:
+	* tests/parser/Foo-expected.gir:
+	* tests/parser/utility-expected.gir:
+	Rename most c:identifier to c:type. Add new ones to
+	class/interface/enum/boxed.
+
+2008-04-28  Johan Dahlin  <jdahlin@async.com.br>
+
+	* giscanner/ast.py:
+	* giscanner/girwriter.py:
 	* giscanner/glibtransformer.py:
 	* tests/parser/Foo-expected.gidl:
 	* tests/parser/Makefile.am:
