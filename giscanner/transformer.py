@@ -56,6 +56,10 @@ class Transformer(object):
                 node = self._create_callback(symbol)
             elif symbol.base_type.type == giscanner.CTYPE_STRUCT:
                 node = self._create_typedef_struct(symbol)
+            # This prevents an infinite recursion when scanning structures with
+            # private types not exposed in headers.
+            elif symbol.base_type.type == giscanner.CSYMBOL_TYPE_TYPEDEF:
+                return
             else:
                 node = self._traverse_one(symbol, symbol.base_type.type)
             return node

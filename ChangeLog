@@ -1,3 +1,11 @@
+2008-04-28  Johan Dahlin  <johan@gnome.org>
+
+	* giscanner/transformer.py (Transformer._traverse_one): Avoid recursion
+	when scanning girepository.h
+
+	* giscanner/sourcescanner.py (SourceScanner._preprocess): Define
+	a __GI_SCANNER__ when we run.
+
 2008-04-28  Johan Dahlin  <jdahlin@async.com.br>
 
 	* giscanner/ast.py:

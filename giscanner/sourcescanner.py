@@ -140,6 +140,7 @@ class SourceScanner(object):
             'cpp',
             '-C',
             '-U__GNUC__',
+            '-D__GI_SCANNER__',
             '-I.',
             ]
         cpp_args += self._cpp_options
