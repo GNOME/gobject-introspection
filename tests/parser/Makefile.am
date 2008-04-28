@@ -1,4 +1,8 @@
-noinst_LTLIBRARIES = libfoo.la libutility.la
+# We need to build a shared library, which can be dlopened
+# it does not work with noinst_LTLIBRARIES
+testlib_LTLIBRARIES = libfoo.la libutility.la
+testlibdir = $(prefix)/unused
+install-testlibLTLIBRARIES: # prevent it from being installed
 
 libfoo_la_SOURCES = foo.c foo-object.h
 libfoo_la_CFLAGS = $(GOBJECT_CFLAGS)
@@ -16,7 +20,7 @@ EXTRA_DIST = utility-expected.gir Foo-expected.gir
 SCANNER = $(top_srcdir)/tools/g-ir-scanner
 
 utility.gir: libutility.la utility.h $(SCANNER)
-	@PYTHONPATH=$(top_buildir) $(SCANNER) -v \
+	@PYTHONPATH=$(top_builddir) $(SCANNER) -v \
 	--include=$(top_srcdir)/gir/gobject-2.0.gir \
 	--library=libutility.la \
 	--namespace=utility \
@@ -25,7 +29,7 @@ utility.gir: libutility.la utility.h $(SCANNER)
 	--output $@
 
 Foo.gir: libfoo.la foo-object.h $(SCANNER)
-	@PYTHONPATH=$(top_buildir) $(SCANNER) -v \
+	@PYTHONPATH=$(top_builddir) $(SCANNER) -v \
 	--include=$(top_srcdir)/gir/gobject-2.0.gir \
 	--include=$(srcdir)/utility.gir \
 	--library=libfoo.la \
