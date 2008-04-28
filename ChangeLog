@@ -1,5 +1,8 @@
 2008-04-27  Johan Dahlin  <johan@gnome.org>
 
+	* tools/Makefile.am (bin_SCRIPTS): g-ir-scanner is a script,
+	not a program.
+
 	* giscanner/xmlwriter.py:
 	* tests/parser/Foo-expected.gir:
 	Include indentation in line length calculation

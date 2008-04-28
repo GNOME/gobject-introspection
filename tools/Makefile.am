@@ -6,7 +6,8 @@ INCLUDES = \
 	-I$(top_srcdir)/giscanner
 
 noinst_LTLIBRARIES = libgirepository-parser.la
-bin_PROGRAMS = g-idl-compiler g-idl-generate g-idl-scanner g-ir-scanner
+bin_PROGRAMS = g-idl-compiler g-idl-generate g-idl-scanner
+bin_SCRIPTS = g-ir-scanner
 
 libgirepository_parser_la_SOURCES =		\
 	gidlmodule.c				\
@@ -37,8 +38,6 @@ g_idl_scanner_LDADD = \
 	$(top_builddir)/girepository/libgirepository.la \
 	$(top_builddir)/giscanner/libgiscanner.la \
 	libgirepository-parser.la
-
-g_ir_scanner_SOURCES =
 
 GCOVSOURCES =					\
 	$(libgirepository_la_SOURCES)		\
