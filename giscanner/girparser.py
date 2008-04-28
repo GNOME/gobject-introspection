@@ -17,12 +17,18 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #
 
-from xml.etree.ElementTree import parse
+from xml.etree.cElementTree import parse
 
 from .glibast import GLibObject
 
-CORE = "{http://www.gtk.org/introspection/core/1.0}"
-GLIB = "{http://www.gtk.org/introspection/glib/1.0}"
+CORE_NS = "http://www.gtk.org/introspection/core/1.0"
+GLIB_NS = "http://www.gtk.org/introspection/glib/1.0"
+
+def _corens(tag):
+    return '{%s}%s' % (CORE_NS, tag)
+
+def _glibns(tag):
+    return '{%s}%s' % (GLIB_NS, tag)
 
 
 class GIRParser(object):
@@ -34,11 +40,12 @@ class GIRParser(object):
         self._parse_api(tree.getroot())
 
     def _parse_api(self, root):
-        assert root.tag == '%srepository' % (CORE,), root
-        ns = root.find('%snamespace' % (CORE,))
+        assert root.tag == _corens('repository')
+        ns = root.find(_corens('namespace'))
+        assert ns is not None
         self._namespace_name = ns.attrib['name']
         for child in ns.getchildren():
-            if child.tag == '%sclass' % (CORE,):
+            if child.tag == _corens('class'):
                 self._parse_object(child)
             else:
                 print 'PARSER: Unhandled %s' % (child.tag,)
@@ -46,8 +53,8 @@ class GIRParser(object):
     def _parse_object(self, node):
         gobj = GLibObject(node.attrib['name'],
                           node.attrib.get('parent'),
-                          node.attrib['%stype-name' % (GLIB,)],
-                          node.attrib['%sget-type' % (GLIB,)])
+                          node.attrib[_glibns('type-name')],
+                          node.attrib[_glibns('get-type')])
         self._nodes.append(gobj)
 
     def get_namespace_name(self):
