@@ -23,7 +23,8 @@ utility.gir: libutility.la utility.h $(SCANNER)
 	--library=libutility.la \
 	--namespace=utility \
 	--pkg gobject-2.0 \
-	$(libutility_la_SOURCES) --output $@
+	$(libutility_la_SOURCES) \
+	--output $@
 
 Foo.gir: libfoo.la foo-object.h $(SCANNER)
 	@PYTHONPATH=$(top_srcdir) $(SCANNER) -v \
