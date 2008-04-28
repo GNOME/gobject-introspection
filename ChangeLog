@@ -1,5 +1,11 @@
 2008-04-27  Johan Dahlin  <johan@gnome.org>
 
+	* giscanner/xmlwriter.py:
+	* tests/parser/Foo-expected.gir:
+	Include indentation in line length calculation
+
+2008-04-27  Johan Dahlin  <johan@gnome.org>
+
 	* giscanner/girparser.py:
 	Prettify NS parsing using elementtree.
 

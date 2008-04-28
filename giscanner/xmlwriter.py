@@ -32,17 +32,19 @@ class XMLWriter(object):
 
     # Private
 
-    def _calc_attrs_length(self, attributes):
+    def _calc_attrs_length(self, attributes, indent):
+        if indent == -1:
+            return -1
         attr_length = 0
         for attr, value in attributes:
             attr_length += 1 + len(attr) + len(quoteattr(value))
-        return attr_length
+        return attr_length + indent
 
     def _collect_attributes(self, attributes, indent=-1):
         if not attributes:
             return ''
 
-        if indent != -1 and self._calc_attrs_length(attributes) > 79:
+        if self._calc_attrs_length(attributes, indent) > 79:
             indent_len = self._indent + indent
         else:
             indent_len = 0

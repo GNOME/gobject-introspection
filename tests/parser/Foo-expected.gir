@@ -210,7 +210,9 @@
       <member name="FOO_ENUM_DEUX" value="2"/>
       <member name="FOO_ENUM_TROIS" value="3"/>
     </enumeration>
-    <glib:boxed glib:name="Boxed" glib:type-name="FooBoxed" glib:get-type="foo_boxed_get_type">
+    <glib:boxed glib:name="Boxed"
+                glib:type-name="FooBoxed"
+                glib:get-type="foo_boxed_get_type">
       <constructor name="new" c:identifier="foo_boxed_new">
         <return-value c:identifer="Boxed*">
           <type name="Boxed*"/>
