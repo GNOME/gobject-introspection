@@ -159,9 +159,9 @@ class GIRWriter(XMLWriter):
                 self._write_method(method)
 
     def _write_property(self, prop):
-        attrs = [('name', prop.name),
-                 ('prop', prop.type.name)]
-        self.write_tag('property', attrs)
+        attrs = [('name', prop.name)]
+        with self.tagcontext('property', attrs):
+            self._write_type(prop.type)
 
     def _write_callback(self, callback):
         attrs = [('name', callback.name)]

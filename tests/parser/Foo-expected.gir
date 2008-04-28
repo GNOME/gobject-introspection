@@ -169,7 +169,9 @@
           </parameter>
         </parameters>
       </method>
-      <property name="string" prop="gchararray"/>
+      <property name="string">
+        <type name="gchararray"/>
+      </property>
     </class>
     <class name="Subobject"
            parent="Object"
