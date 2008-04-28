@@ -8,6 +8,7 @@
            glib:get-type="intern">
     </class>
     <class name="InitiallyUnowned"
+           parent="Object"
            glib:type-name="GInitiallyUnowned"
            glib:get-type="g_initially_unowned_get_type">
     </class>
