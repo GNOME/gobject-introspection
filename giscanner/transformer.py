@@ -29,13 +29,16 @@ class Transformer(object):
         self.nodes = []
         self._output_ns = {}
         self._typedefs_ns = {}
-        self._traverse()
+        self._strip_prefix = ''
+
+    def set_strip_prefix(self, strip_prefix):
+        self._strip_prefix = strip_prefix
 
     def get_nodes(self):
         for node in self.nodes:
             yield node
 
-    def _traverse(self):
+    def parse(self):
         for symbol in self.generator.get_symbols():
             node = self._traverse_one(symbol)
             if node is None:
@@ -44,6 +47,17 @@ class Transformer(object):
                 continue
             self.nodes.append(node)
             self._output_ns[node.name] = node
+
+    def _remove_prefix(self, name):
+        # when --strip-prefix=g:
+        #   GHashTable -> HashTable
+        #   g_hash_table_new -> hash_table_new
+        if name.lower().startswith(self._strip_prefix.lower()):
+            name = name[len(self._strip_prefix):]
+
+        while name.startswith('_'):
+            name = name[1:]
+        return name
 
     def _traverse_one(self, symbol, stype=None):
         if stype is None:
@@ -67,6 +81,9 @@ class Transformer(object):
             return self._create_struct(symbol)
         elif stype == giscanner.CSYMBOL_TYPE_ENUM:
             return self._create_enum(symbol)
+        elif stype == giscanner.CSYMBOL_TYPE_UNION:
+            # Unions are not supported
+            pass
         else:
             print 'BUILDER: unhandled symbol', symbol.type
 
@@ -83,7 +100,8 @@ class Transformer(object):
         parameters = list(self._create_parameters(symbol.base_type, directives))
         return_ = self._create_return(symbol.base_type.base_type,
                                       directives.get('return', []))
-        return Function(symbol.ident, return_, parameters, symbol.ident)
+        name = self._remove_prefix(symbol.ident)
+        return Function(name, return_, parameters, symbol.ident)
 
     def _create_source_type(self, source_type):
         if source_type is None:
@@ -148,8 +166,10 @@ class Transformer(object):
         self._typedefs_ns[symbol.base_type.name] = symbol.ident
 
     def _create_struct(self, symbol):
-        name = self._typedefs_ns.get(symbol.ident, symbol.ident)
-        struct = Struct(name)
+        name = self._typedefs_ns.get(symbol.ident, None)
+        if name is None:
+            name = self._remove_prefix(symbol.ident)
+        struct = Struct(name, symbol.ident)
         for child in symbol.base_type.child_list:
             struct.fields.append(self._traverse_one(child,
                                                     child.base_type.type))

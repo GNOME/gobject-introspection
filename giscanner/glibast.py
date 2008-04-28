@@ -56,11 +56,12 @@ class GLibObject(Class):
 
 class GLibBoxed(Struct):
     def __init__(self, name, type_name, get_type):
-        Struct.__init__(self, name)
+        Struct.__init__(self, name, get_type)
         self.ctype = name
         self.constructors = []
         self.methods = []
         self.type_name = type_name
+        self.symbol = type_name
         self.get_type = get_type
 
 

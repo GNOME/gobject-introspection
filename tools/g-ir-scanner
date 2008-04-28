@@ -44,6 +44,9 @@ def main(args):
     parser.add_option("-n", "--namespace",
                       action="store", dest="namespace",
                       help="namespace of this unit")
+    parser.add_option("", "--strip-prefix",
+                      action="store", dest="strip_prefix", default="",
+                      help="prefix to strip from functions, like g_")
     parser.add_option("-o", "--output",
                       action="store", dest="output",
                       help="output to writeout, defaults to stdout")
@@ -93,19 +96,25 @@ def main(args):
     ss.parse_files(filenames)
     ss.parse_macros()
 
-    builder = GLibTransformer(options.namespace)
+    transformer = Transformer(ss)
+    transformer.set_strip_prefix(options.strip_prefix)
+
+    glibtransformer = GLibTransformer(options.namespace)
     if options.library:
-        builder.load_library(options.library)
+        glibtransformer.load_library(options.library)
     for include in options.includes:
-        builder.register_include(include)
-    builder.parse(Transformer(ss).get_nodes())
+        glibtransformer.register_include(include)
+
+    transformer.parse()
+    nodes = transformer.get_nodes()
+    glibtransformer.parse(nodes)
 
     if options.format == 'gir':
         from giscanner.girwriter import GIRWriter
-        writer = GIRWriter(options.namespace, builder.get_nodes())
+        writer = GIRWriter(options.namespace, glibtransformer.get_nodes())
     elif options.format == 'gidl':
         from giscanner.gidlwriter import GIDLWriter
-        writer = GIDLWriter(options.namespace, builder.get_nodes())
+        writer = GIDLWriter(options.namespace, glibtransformer.get_nodes())
     else:
         raise SystemExit("Unknown format: %s" % (options.format,))
 

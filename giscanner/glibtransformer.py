@@ -178,7 +178,7 @@ class GLibTransformer(object):
 
     def _parse_get_type_function(self, func):
         # GType *_get_type(void)
-        symbol = func.name
+        symbol = func.symbol
         if not symbol.endswith('_get_type'):
             return False
         if func.retval.type.name != 'GType':

@@ -1,3 +1,15 @@
+2008-04-28  Johan Dahlin  <jdahlin@async.com.br>
+
+	* giscanner/ast.py:
+	* giscanner/glibast.py:
+	* giscanner/glibtransformer.py:
+	* giscanner/transformer.py:
+	* tools/g-ir-scanner:
+	Add a --strip-prefix and sort out confusion between names and symbols
+	for functions and struct + derivaties.
+	Refactor bootstrap of g-ir-scanner, so we can set options on
+	Transformer() before parsing everything.
+
 2008-04-28  Johan Dahlin  <johan@gnome.org>
 
 	* giscanner/transformer.py (Transformer._traverse_one): Avoid recursion
