@@ -5,6 +5,8 @@ INCLUDES = \
 	-I$(top_srcdir)/girepository \
 	-I$(top_srcdir)/giscanner
 
+EXTRA_DIST = g-ir-scanner
+
 noinst_LTLIBRARIES = libgirepository-parser.la
 bin_PROGRAMS = g-idl-compiler g-idl-generate g-idl-scanner
 bin_SCRIPTS = g-ir-scanner

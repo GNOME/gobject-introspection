@@ -1,6 +1,4 @@
-testlib_LTLIBRARIES = libfoo.la libutility.la
-testlibdir = /tmp
-install-testlibLTLIBRARIES: # prevent it from being installed
+noinst_LTLIBRARIES = libfoo.la libutility.la
 
 libfoo_la_SOURCES = foo.c foo-object.h
 libfoo_la_CFLAGS = $(GOBJECT_CFLAGS)
@@ -15,10 +13,10 @@ libutility_la_LIBADD = $(GOBJECT_LIBS)
 CLEANFILES = utility.gir Foo.gir 
 EXTRA_DIST = utility-expected.gir Foo-expected.gir 
 
-SCANNER = $(top_builddir)/tools/g-ir-scanner
+SCANNER = $(top_srcdir)/tools/g-ir-scanner
 
 utility.gir: libutility.la utility.h $(SCANNER)
-	@PYTHONPATH=$(top_srcdir) $(SCANNER) -v \
+	@PYTHONPATH=$(top_buildir) $(SCANNER) -v \
 	--include=$(top_srcdir)/gir/gobject-2.0.gir \
 	--library=libutility.la \
 	--namespace=utility \
@@ -27,7 +25,7 @@ utility.gir: libutility.la utility.h $(SCANNER)
 	--output $@
 
 Foo.gir: libfoo.la foo-object.h $(SCANNER)
-	@PYTHONPATH=$(top_srcdir) $(SCANNER) -v \
+	@PYTHONPATH=$(top_buildir) $(SCANNER) -v \
 	--include=$(top_srcdir)/gir/gobject-2.0.gir \
 	--include=$(srcdir)/utility.gir \
 	--library=libfoo.la \

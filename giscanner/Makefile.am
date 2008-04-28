@@ -29,11 +29,11 @@ pkgpyexec_PYTHON = 		\
 	__init__.py		\
 	ast.py			\
 	cgobject.py		\
-	gidlast.py		\
 	gidlparser.py		\
 	gidlwriter.py		\
 	girparser.py		\
 	girwriter.py		\
+	glibast.py		\
 	glibtransformer.py 	\
 	odict.py		\
 	sourcescanner.py	\
