@@ -18,7 +18,6 @@
 #
 
 from contextlib import contextmanager
-
 from cStringIO import StringIO
 from xml.sax.saxutils import quoteattr
 
@@ -28,52 +27,43 @@ class XMLWriter(object):
         self._data = StringIO()
         self._tag_stack = []
         self._indent = 0
+        self._indent_unit = 2
+        self._indent_char = ' '
 
     # Private
 
-    def _collect_attributes(self, attributes):
-        attr_value = ''
-        if attributes:
-            for attr, value in attributes:
-                assert value is not None, attr
-                attr_value += ' %s=%s' % (attr, quoteattr(value))
-
-        return attr_value
-
-    def _collect_attributes_wrapped(self, tag_name, attributes):
-        assert attributes
-        attr_value = ''
-        indent_len = 0
+    def _calc_attrs_length(self, attributes):
+        attr_length = 0
         for attr, value in attributes:
-            if indent_len:
-                attr_value += '\n%s' % (' ' * indent_len)
+            attr_length += 1 + len(attr) + len(quoteattr(value))
+        return attr_length
+
+    def _collect_attributes(self, attributes, indent=-1):
+        if not attributes:
+            return ''
+
+        if indent != -1 and self._calc_attrs_length(attributes) > 79:
+            indent_len = self._indent + indent
+        else:
+            indent_len = 0
+        first = True
+        attr_value = ''
+        for attr, value in attributes:
+            if indent_len and not first:
+                attr_value += '\n%s' % (self._indent_char * indent_len)
             assert value is not None, attr
             attr_value += ' %s=%s' % (attr, quoteattr(value))
-            if not indent_len:
-                indent_len = (self._indent +
-                              len(tag_name) + 1)
-
+            if first:
+                first = False
         return attr_value
 
     def _open_tag(self, tag_name, attributes=None):
-        attrs = self._collect_attributes(attributes)
-        if (len(attrs) + len(tag_name) + 2) > 79:
-            attrs = self._collect_attributes_wrapped(tag_name, attributes)
+        attrs = self._collect_attributes(
+            attributes, len(tag_name) + 1)
         self.write_line('<%s%s>' % (tag_name, attrs))
 
     def _close_tag(self, tag_name):
         self.write_line('</%s>' % (tag_name,))
-
-    def _rewrap_line(self, line, attrs):
-        # assume we have an xml tag here
-        assert line[0] == '<' and line[-1] == '>'
-        if not line.endswith('/>'):
-            tagname = line[1:].split(None, 1)[0]
-            line += "</%s>" % (tagname,)
-        from xml.etree.ElementTree import parse
-        doc = parseString(line)
-        print doc
-        return line
 
     # Public API
 
@@ -81,24 +71,25 @@ class XMLWriter(object):
         return self._data.getvalue()
 
     def write_line(self, line=''):
-        self._data.write('%s%s\n' % (' ' * self._indent, line))
+        self._data.write('%s%s\n' % (self._indent_char * self._indent, line))
 
     def write_tag(self, tag_name, attributes, data=None):
-        attrs = self._collect_attributes(attributes)
-        output = '<%s%s' % (tag_name, attrs)
+        prefix = '<%s' % (tag_name,)
         if data:
-            output = '>%s</%s>' % (data, tag_name)
+            suffix = '>%s</%s>' % (data, tag_name)
         else:
-            output += '/>'
-        self.write_line(output)
+            suffix = '/>'
+        attrs = self._collect_attributes(
+            attributes, len(prefix) + len(suffix))
+        self.write_line(prefix + attrs + suffix)
 
     def push_tag(self, tag_name, attributes=None):
         self._open_tag(tag_name, attributes)
         self._tag_stack.append(tag_name)
-        self._indent += 2
+        self._indent += self._indent_unit
 
     def pop_tag(self):
-        self._indent -= 2
+        self._indent -= self._indent_unit
         tag_name = self._tag_stack.pop()
         self._close_tag(tag_name)
         return tag_name
