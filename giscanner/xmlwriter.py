@@ -40,8 +40,25 @@ class XMLWriter(object):
 
         return attr_value
 
+    def _collect_attributes_wrapped(self, tag_name, attributes):
+        assert attributes
+        attr_value = ''
+        indent_len = 0
+        for attr, value in attributes:
+            if indent_len:
+                attr_value += '\n%s' % (' ' * indent_len)
+            assert value is not None, attr
+            attr_value += ' %s=%s' % (attr, quoteattr(value))
+            if not indent_len:
+                indent_len = (self._indent +
+                              len(tag_name) + 1)
+
+        return attr_value
+
     def _open_tag(self, tag_name, attributes=None):
         attrs = self._collect_attributes(attributes)
+        if (len(attrs) + len(tag_name) + 2) > 79:
+            attrs = self._collect_attributes_wrapped(tag_name, attributes)
         self.write_line('<%s%s>' % (tag_name, attrs))
 
     def _close_tag(self, tag_name):

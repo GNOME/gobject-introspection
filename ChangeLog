@@ -1,5 +1,8 @@
 2008-04-27  Johan Dahlin  <johan@gnome.org>
 
+	* giscanner/xmlwriter.py:
+	Wrap attributes for lines which are wider than 79 characters
+
 	* giscanner/scannerlexer.l:
 	Allow parenthesis in annotations
 
