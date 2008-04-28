@@ -5,10 +5,10 @@ XML format
   and wrappers to their vfuncs
 - Add a way to specify default values
 - Add a way to mark init functions like gtk_init
-- Strip pointers from Object
 - For argument/return values etc, store only c:identifier in the
-  <class/> definition
-
+  <class/> definition. Requires a link to the references type in the 
+  Type node.
+- c:owner -> ownership-transfer=yes/no
 
 Binary format
 -------------
