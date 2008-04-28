@@ -31,7 +31,7 @@ utility.gir: libutility.la utility.h $(SCANNER)
 Foo.gir: libfoo.la foo-object.h $(SCANNER)
 	@PYTHONPATH=$(top_builddir) $(SCANNER) -v \
 	--include=$(top_srcdir)/gir/gobject-2.0.gir \
-	--include=$(builddir)/utility.gir \
+	--include=$(top_builddir)/tests/parser/utility.gir \
 	--library=libfoo.la \
 	--namespace=Foo \
 	--pkg gobject-2.0 \

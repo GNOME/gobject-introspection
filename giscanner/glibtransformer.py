@@ -341,8 +341,8 @@ class GLibTransformer(object):
 
     def _introspect_signals(self, node, type_id):
         for signal_info in cgobject.signal_list(type_id):
-            retval = Return(cgobject.type_name(signal_info.return_type))
-            signal = GLibSignal(signal_info.signal_name, retval)
+            return_ = Return(cgobject.type_name(signal_info.return_type))
+            signal = GLibSignal(signal_info.signal_name, return_)
             for i, parameter in enumerate(signal_info.get_params()):
                 if i == 0:
                     name = 'object'

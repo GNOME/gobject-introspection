@@ -1,3 +1,13 @@
+2008-04-28  Johan Dahlin  <jdahlin@async.com.br>
+
+	* giscanner/ast.py:
+	* giscanner/girwriter.py:
+	* giscanner/glibtransformer.py:
+	* tests/parser/Foo-expected.gidl:
+	* tests/parser/Makefile.am:
+	Move c:identifier from return-value to subchild type,
+	as per Jürgs suggestion
+
 2008-04-28  Johan Dahlin  <johan@gnome.org>
 
 	* giscanner/girwriter.py:

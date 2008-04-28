@@ -44,6 +44,7 @@ class VFunction(Function):
 class Type(Node):
     def __init__(self, name):
         Node.__init__(self, name)
+        self.cidentifier = name
 
     def __repr__(self):
         return 'Type(%r)' % (self.name,)
@@ -92,7 +93,6 @@ class Return(Node):
         Node.__init__(self)
         self.type = Type(type_name)
         self.transfer = 'none'
-        self.ctype = self.type
 
     def __repr__(self):
         return 'Return(%r)' % (self.type,)

@@ -76,8 +76,7 @@ class GIRWriter(XMLWriter):
     def _write_return_type(self, return_):
         if not return_:
             return
-        attrs = [('c:identifer', return_.type.name)]
-        with self.tagcontext('return-value', attrs):
+        with self.tagcontext('return-value'):
             if isinstance(return_.type, Sequence):
                 self._write_sequence(return_.type)
             else:
@@ -100,7 +99,9 @@ class GIRWriter(XMLWriter):
             self._write_type(parameter.type)
 
     def _write_type(self, type):
-        self.write_tag('type', [('name', type.name)])
+        attrs = [('name', type.name),
+                 ('c:identifier', type.cidentifier)]
+        self.write_tag('type', attrs)
 
     def _write_sequence(self, sequence):
         attrs = [('c:owner', sequence.cowner)]
