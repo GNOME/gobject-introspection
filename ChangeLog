@@ -1,3 +1,14 @@
+2008-04-29  Johan Dahlin  <jdahlin@async.com.br>
+
+	* giscanner/girwriter.py:
+	* giscanner/glibtransformer.py:
+	* giscanner/transformer.py:
+	* giscanner/xmlwriter.py:
+	* tests/parser/Foo-expected.gir:
+	* tests/parser/foo-object.h:
+	Write record/structs to gir file too. Add a couple of tests,
+	fix an off by one error in xmlwriter.py.
+
 2008-04-28  Johan Dahlin  <johan@gnome.org>
 
 	* giscanner/xmlwriter.py: Calculate the line length properly,

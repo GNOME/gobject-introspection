@@ -62,7 +62,7 @@ class XMLWriter(object):
 
     def _open_tag(self, tag_name, attributes=None):
         attrs = self._collect_attributes(
-            attributes, len(tag_name) + 2)
+            attributes, len(tag_name) + 1)
         self.write_line('<%s%s>' % (tag_name, attrs))
 
     def _close_tag(self, tag_name):

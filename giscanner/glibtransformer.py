@@ -320,6 +320,7 @@ class GLibTransformer(object):
         node = GLibBoxed(self._strip_namespace_object(type_name),
                          type_name, symbol)
         self._add_attribute(node)
+        self._remove_attribute(type_name)
         self._register_internal_type(type_name, node)
 
     def _introspect_properties(self, node, type_id):

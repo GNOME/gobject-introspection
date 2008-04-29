@@ -20,7 +20,8 @@
 
 from __future__ import with_statement
 
-from .ast import (Callback, Class, Enum, Function, Interface, Sequence)
+from .ast import (Callback, Class, Enum, Function, Interface, Sequence,
+                  Struct)
 from .glibast import (GLibBoxed, GLibEnum, GLibEnumMember,
                       GLibFlags, GLibObject, GLibInterface)
 from .xmlwriter import XMLWriter
@@ -57,6 +58,8 @@ class GIRWriter(XMLWriter):
             self._write_boxed(node)
         elif isinstance(node, Callback):
             self._write_callback(node)
+        elif isinstance(node, Struct):
+            self._write_record(node)
         else:
             print 'WRITER: Unhandled node', node
 
@@ -154,6 +157,10 @@ class GIRWriter(XMLWriter):
                 self._write_method(method)
             for prop in node.properties:
                 self._write_property(prop)
+            for field in node.fields:
+                self._write_field(field)
+            for signal in node.signals:
+                self._write_signal(signal)
 
     def _write_boxed(self, boxed):
         attrs = [('c:type', boxed.ctype),
@@ -177,3 +184,29 @@ class GIRWriter(XMLWriter):
         with self.tagcontext('callback', attrs):
             self._write_return_type(callback.retval)
             self._write_parameters(callback.parameters)
+
+    def _write_record(self, record):
+        attrs = [('name', record.name),
+                 ('c:type', record.symbol)]
+        if record.fields:
+            with self.tagcontext('record', attrs):
+                for field in record.fields:
+                    self._write_field(field)
+        else:
+            self.write_tag('record', attrs)
+
+    def _write_field(self, field):
+        if isinstance(field, Callback):
+            self._write_callback(field)
+            return
+
+        attrs = [('name', field.name),
+                 ('type', str(field.type))]
+        self.write_tag('field', attrs)
+
+    def _write_signal(self, signal):
+        attrs = [('name', signal.name)]
+        with self.tagcontext('glib:signal', attrs):
+            self._write_return_type(signal.retval)
+            self._write_parameters(signal.parameters)
+

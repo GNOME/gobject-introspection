@@ -174,6 +174,19 @@
       <property name="string">
         <type name="gchararray" c:type="gchararray"/>
       </property>
+      <glib:signal name="signal">
+        <return-value>
+          <type name="gchararray" c:type="gchararray"/>
+        </return-value>
+        <parameters>
+          <parameter name="object">
+            <type name="GObject" c:type="GObject"/>
+          </parameter>
+          <parameter name="p0">
+            <type name="gpointer" c:type="gpointer"/>
+          </parameter>
+        </parameters>
+      </glib:signal>
     </class>
     <class name="Subobject"
            c:type="FooSubobject"
@@ -253,5 +266,7 @@
         </parameter>
       </parameters>
     </callback>
+    <record name="FooStruct" c:type="FooStruct"/>
+    <record name="FooStructPrivate" c:type="FooStructPrivate"/>
   </namespace>
 </repository>

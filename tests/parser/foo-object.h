@@ -121,4 +121,13 @@ typedef gboolean (* FooCallback) (FooObject *foo, gboolean b, gpointer data);
 /* @ */
 /* @: */
 
+typedef struct _FooStruct           FooStruct; 
+typedef struct _FooStructPrivate    FooStructPrivate; 
+
+struct _FooStruct
+{
+  FooStructPrivate *priv;
+  int member;
+};
+  
 #endif /* __FOO_OBJECT_H__ */

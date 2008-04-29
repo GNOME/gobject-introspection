@@ -163,16 +163,20 @@ class Transformer(object):
         return return_
 
     def _create_typedef_struct(self, symbol):
-        self._typedefs_ns[symbol.base_type.name] = symbol.ident
+        name = self._remove_prefix(symbol.ident)
+        struct = Struct(name, symbol.ident)
+        self._typedefs_ns[symbol.ident] = struct
+        return struct
 
     def _create_struct(self, symbol):
-        name = self._typedefs_ns.get(symbol.ident, None)
-        if name is None:
+        struct = self._typedefs_ns.get(symbol.ident, None)
+        if struct is None:
             name = self._remove_prefix(symbol.ident)
-        struct = Struct(name, symbol.ident)
+            struct = Struct(name, symbol.ident)
+
         for child in symbol.base_type.child_list:
-            struct.fields.append(self._traverse_one(child,
-                                                    child.base_type.type))
+            field = self._traverse_one(child, child.base_type.type)
+            struct.fields.append(field)
         return struct
 
     def _create_callback(self, symbol):
