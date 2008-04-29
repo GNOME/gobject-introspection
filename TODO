@@ -9,6 +9,8 @@ XML format
   <class/> definition. Requires a link to the references type in the 
   Type node.
 - c:owner -> ownership-transfer=yes/no
+- replace gidl/gdk-pixbuf.gidl with something generated from headers,
+  verify all information is available, possible to write
 
 Binary format
 -------------
