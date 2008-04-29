@@ -1,5 +1,13 @@
 2008-04-29  Johan Dahlin  <jdahlin@async.com.br>
 
+	* Makefile.am:
+	* docs/g-ir-scanner.1:
+	* metadata-annotations-proposal.txt:
+	* metadata-format.txt:
+	Add a basic, unfinshed man page for g-ir-scanner, move documents into .txt
+
+2008-04-29  Johan Dahlin  <jdahlin@async.com.br>
+
 	* giscanner/girwriter.py:
 	* giscanner/glibtransformer.py:
 	* giscanner/transformer.py:

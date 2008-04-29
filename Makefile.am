@@ -3,6 +3,7 @@ ACLOCAL_AMFLAGS = -I m4
 
 SUBDIRS = gir girepository giscanner tools tests
 DIST_SUBDIRS = m4 $(SUBDIRS)
+man_MANS = docs/g-ir-scanner.1
 
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = gobject-introspection.pc
