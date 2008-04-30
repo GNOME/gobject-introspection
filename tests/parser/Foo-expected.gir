@@ -57,7 +57,7 @@
         </parameters>
       </method>
       <method name="create_object" c:identifier="foo_object_create_object">
-        <return-value>
+        <return-value transfer-ownership="1">
           <type name="GLib.Object" c:type="GObject*"/>
         </return-value>
         <parameters>
@@ -126,7 +126,7 @@
           <parameter name="object">
             <type name="Object" c:type="FooObject*"/>
           </parameter>
-          <parameter name="toown" transfer="full">
+          <parameter name="toown" transfer-ownership="1">
             <type name="GLib.Object" c:type="GObject*"/>
           </parameter>
         </parameters>
@@ -139,17 +139,17 @@
           <parameter name="object">
             <type name="Object" c:type="FooObject*"/>
           </parameter>
-          <parameter name="toown1" transfer="full">
+          <parameter name="toown1" transfer-ownership="1">
             <type name="GLib.Object" c:type="GObject*"/>
           </parameter>
-          <parameter name="toown2" transfer="full">
+          <parameter name="toown2" transfer-ownership="1">
             <type name="GLib.Object" c:type="GObject*"/>
           </parameter>
         </parameters>
       </method>
       <method name="get_strings" c:identifier="foo_object_get_strings">
         <return-value>
-          <sequence c:owner="caller">
+          <sequence transfer-ownership="1">
             <element-type c:identifier="char*"/>
           </sequence>
         </return-value>
@@ -161,7 +161,7 @@
       </method>
       <method name="get_objects" c:identifier="foo_object_get_objects">
         <return-value>
-          <sequence c:owner="caller">
+          <sequence transfer-ownership="1">
             <element-type c:identifier="FooObject*"/>
           </sequence>
         </return-value>

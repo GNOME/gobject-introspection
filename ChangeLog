@@ -1,3 +1,12 @@
+2008-04-29  Johan Dahlin  <johan@gnome.org>
+
+	* giscanner/ast.py:
+	* giscanner/girwriter.py:
+	* giscanner/transformer.py:
+	* tests/parser/Foo-expected.gir:
+	* TODO:
+	Use transfer-ownership everywhere, to mark ownership/calle/caller etc.
+
 2008-04-29  Johan Dahlin  <jdahlin@async.com.br>
 
 	* Makefile.am:

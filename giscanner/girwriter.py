@@ -79,7 +79,12 @@ class GIRWriter(XMLWriter):
     def _write_return_type(self, return_):
         if not return_:
             return
-        with self.tagcontext('return-value'):
+
+        attrs = []
+        if return_.transfer:
+            attrs.append(('transfer-ownership',
+                          str(int(return_.transfer))))
+        with self.tagcontext('return-value', attrs):
             if isinstance(return_.type, Sequence):
                 self._write_sequence(return_.type)
             else:
@@ -96,8 +101,9 @@ class GIRWriter(XMLWriter):
         attrs = [('name', parameter.name)]
         if parameter.direction != 'in':
             attrs.append(('direction', parameter.direction))
-        if parameter.transfer != 'none':
-            attrs.append(('transfer', parameter.transfer))
+        if parameter.transfer:
+            attrs.append(('transfer-ownership',
+                          str(int(parameter.transfer))))
         with self.tagcontext('parameter', attrs):
             self._write_type(parameter.type)
 
@@ -111,7 +117,10 @@ class GIRWriter(XMLWriter):
         self.write_tag('type', attrs)
 
     def _write_sequence(self, sequence):
-        attrs = [('c:owner', sequence.cowner)]
+        attrs = []
+        if sequence.transfer:
+            attrs.append(('transfer-ownership',
+                          str(int(sequence.transfer))))
         with self.tagcontext('sequence', attrs):
             attrs = [('c:identifier', sequence.element_type)]
             self.write_tag('element-type', attrs)

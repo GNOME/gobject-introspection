@@ -55,7 +55,7 @@ class Parameter(Node):
         Node.__init__(self, name)
         self.type = Type(type_name)
         self.direction = 'in'
-        self.transfer = 'none'
+        self.transfer = False
 
     def __repr__(self):
         return 'Parameter(%r, %r)' % (self.name, self.type)
@@ -94,7 +94,7 @@ class Return(Node):
     def __init__(self, type_name):
         Node.__init__(self)
         self.type = Type(type_name)
-        self.transfer = 'none'
+        self.transfer = False
 
     def __repr__(self):
         return 'Return(%r)' % (self.type,)
@@ -167,3 +167,4 @@ class Sequence(Type):
     def __init__(self, name, element_type):
         Type.__init__(self, name)
         self.element_type = element_type
+        self.transfer = False

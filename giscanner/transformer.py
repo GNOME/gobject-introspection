@@ -137,7 +137,7 @@ class Transformer(object):
             elif option == 'out':
                 param.direction = 'out'
             elif option == 'callee-owns':
-                param.transfer = 'full'
+                param.transfer = True
             else:
                 print 'Unhandled parameter annotation option: %s' % (
                     option,)
@@ -150,12 +150,12 @@ class Transformer(object):
         return_ = Return(return_type)
         for option in options:
             if option == 'caller-owns':
-                return_.transfer = 'full'
+                return_.transfer = True
             elif option.startswith('seq '):
                 value, element_options = option[3:].split(None, 2)
                 element_type = self._parse_type_annotation(value)
                 seq = Sequence(return_type, element_type)
-                seq.cowner = 'caller'
+                seq.transfer = True
                 return_.type = seq
             else:
                 print 'Unhandled parameter annotation option: %s' % (
