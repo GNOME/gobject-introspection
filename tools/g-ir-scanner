@@ -30,7 +30,7 @@ from giscanner.sourcescanner import SourceScanner
 from giscanner.transformer import Transformer
 
 
-def main(args):
+def _get_option_parser():
     parser = optparse.OptionParser('%prog [options] sources')
     parser.add_option("", "--format",
                       action="store", dest="format",
@@ -71,15 +71,27 @@ def main(args):
     group.add_option("-p", dest="", help="Ignored")
     parser.add_option_group(group)
 
+    return parser
+
+def _error(msg):
+    raise SystemExit('ERROR: %s' % (msg,))
+
+def main(args):
+    parser = _get_option_parser()
     (options, args) = parser.parse_args(args)
 
     if len(args) <= 1:
-        print 'ERROR: Need at least one filename.'
-        return 1
+        _error('Need at least one filename')
 
     if not options.namespace:
-        print 'ERROR: Namespace missing.'
-        return 1
+        _error('Namespace missing')
+
+    if options.format == 'gir':
+        from giscanner.girwriter import GIRWriter as Writer
+    elif options.format == 'gidl':
+        from giscanner.gidlwriter import GIDLWriter as Writer
+    else:
+        _error("Unknown format: %s" % (options.format,))
 
     for package in options.packages:
         output = commands.getoutput('pkg-config --cflags %s' % (package,))
@@ -88,25 +100,29 @@ def main(args):
         options.cpp_defines.extend(pkg_options.cpp_defines)
         options.cpp_undefines.extend(pkg_options.cpp_undefines)
 
-    ss = SourceScanner()
-    ss.set_cpp_options(options.cpp_includes,
-                       options.cpp_defines,
-                       options.cpp_undefines)
     filenames = []
     for arg in args:
         if (arg.endswith('.c') or
             arg.endswith('.h')):
             if not os.path.exists(arg):
-                print 'ERROR: %s: no such a file or directory' % (arg,)
-                return 1
+                _error('%s: no such a file or directory' % (arg,))
             filenames.append(arg)
 
+    # Run the preprocessor, tokenize and construct simple
+    # objects representing the raw C symbols
+    ss = SourceScanner()
+    ss.set_cpp_options(options.cpp_includes,
+                       options.cpp_defines,
+                       options.cpp_undefines)
     ss.parse_files(filenames)
     ss.parse_macros()
 
+    # Transform the C symbols into AST nodes
     transformer = Transformer(ss)
     transformer.set_strip_prefix(options.strip_prefix)
 
+    # Transform the C AST nodes into higher level
+    # GLib/GObject nodes
     glibtransformer = GLibTransformer(options.namespace)
     if options.library:
         glibtransformer.load_library(options.library)
@@ -117,13 +133,7 @@ def main(args):
     nodes = transformer.get_nodes()
     glibtransformer.parse(nodes)
 
-    if options.format == 'gir':
-        from giscanner.girwriter import GIRWriter as Writer
-    elif options.format == 'gidl':
-        from giscanner.gidlwriter import GIDLWriter as Writer
-    else:
-        raise SystemExit("Unknown format: %s" % (options.format,))
-
+    # Write out AST
     writer = Writer(options.namespace, glibtransformer.get_nodes())
     data = writer.get_xml()
     if options.output:
@@ -131,5 +141,7 @@ def main(args):
         fd.write(data)
     else:
         print data
+
+    return 0
 
 sys.exit(main(sys.argv))
