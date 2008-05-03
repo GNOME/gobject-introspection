@@ -51,9 +51,9 @@ class Type(Node):
 
 
 class Parameter(Node):
-    def __init__(self, name, type_name):
+    def __init__(self, name, typenode):
         Node.__init__(self, name)
-        self.type = Type(type_name)
+        self.type = typenode
         self.direction = 'in'
         self.transfer = False
 

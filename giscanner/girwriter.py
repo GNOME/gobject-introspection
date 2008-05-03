@@ -210,7 +210,7 @@ class GIRWriter(XMLWriter):
             return
 
         attrs = [('name', field.name),
-                 ('type', str(field.type))]
+                 ('value', str(field.value))]
         self.write_tag('field', attrs)
 
     def _write_signal(self, signal):

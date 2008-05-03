@@ -14,7 +14,8 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+# 02110-1301, USA.
 #
 
 (CSYMBOL_TYPE_INVALID,
@@ -58,3 +59,16 @@ FUNCTION_INLINE = 1 << 1
  UNARY_MINUS,
  UNARY_BITWISE_COMPLEMENT,
  UNARY_LOGICAL_NEGATION) = range(6)
+
+def symbol_type_name(symbol_type):
+    return {
+        CSYMBOL_TYPE_INVALID: 'invalid',
+        CSYMBOL_TYPE_CONST: 'const',
+        CSYMBOL_TYPE_OBJECT: 'object',
+        CSYMBOL_TYPE_FUNCTION: 'function',
+        CSYMBOL_TYPE_STRUCT: 'struct',
+        CSYMBOL_TYPE_UNION: 'union',
+        CSYMBOL_TYPE_ENUM: 'enum',
+        CSYMBOL_TYPE_TYPEDEF: 'typedef'
+        }.get(symbol_type)
+

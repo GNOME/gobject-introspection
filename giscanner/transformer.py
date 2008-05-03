@@ -19,8 +19,10 @@
 #
 
 import giscanner
+
 from giscanner.ast import (Callback, Enum, Function, Member, Parameter,
-                           Return, Sequence, Struct)
+                           Return, Sequence, Struct, Type)
+from giscanner.sourcescanner import SourceSymbol
 
 
 class Transformer(object):
@@ -60,6 +62,8 @@ class Transformer(object):
         return name
 
     def _traverse_one(self, symbol, stype=None):
+        assert isinstance(symbol, SourceSymbol), symbol
+
         if stype is None:
             stype = symbol.type
         if stype == giscanner.CSYMBOL_TYPE_FUNCTION:
@@ -81,11 +85,15 @@ class Transformer(object):
             return self._create_struct(symbol)
         elif stype == giscanner.CSYMBOL_TYPE_ENUM:
             return self._create_enum(symbol)
+        elif stype == giscanner.CSYMBOL_TYPE_OBJECT:
+            return self._create_object(symbol)
         elif stype == giscanner.CSYMBOL_TYPE_UNION:
             # Unions are not supported
             pass
         else:
-            print 'BUILDER: unhandled symbol', symbol.type
+            raise NotImplementedError(
+                'Transformer: unhandled symbol: %r of type %r'
+                % (symbol.ident, giscanner.symbol_type_name(stype)))
 
     def _create_enum(self, symbol):
         members = []
@@ -94,6 +102,9 @@ class Transformer(object):
                                   child.const_int))
 
         return Enum(symbol.ident, members)
+
+    def _create_object(self, symbol):
+        return Member(symbol.ident, symbol.base_type.name)
 
     def _create_function(self, symbol):
         directives = symbol.directives()
@@ -126,9 +137,13 @@ class Transformer(object):
             yield self._create_parameter(
                 child, options.get(child.ident, []))
 
+    def _create_type(self, source_type):
+        type_name = self._create_source_type(source_type)
+        return Type(type_name)
+
     def _create_parameter(self, symbol, options):
-        param = Parameter(symbol.ident,
-                          self._create_source_type(symbol.base_type))
+        ptype = self._create_type(symbol.base_type)
+        param = Parameter(symbol.ident, ptype)
         for option in options:
             if option in ['in-out', 'inout']:
                 param.direction = 'inout'
@@ -176,7 +191,8 @@ class Transformer(object):
 
         for child in symbol.base_type.child_list:
             field = self._traverse_one(child, child.base_type.type)
-            struct.fields.append(field)
+            if field:
+                struct.fields.append(field)
         return struct
 
     def _create_callback(self, symbol):

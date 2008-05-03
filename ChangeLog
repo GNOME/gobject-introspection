@@ -1,3 +1,12 @@
+2008-05-03  Johan Dahlin  <johan@gnome.org>
+
+	* giscanner/__init__.py:
+	* giscanner/ast.py:
+	* giscanner/girwriter.py:
+	* giscanner/glibtransformer.py:
+	* giscanner/transformer.py:
+	Parse struct fields properly, improve debugging.
+
 2008-04-29  Johan Dahlin  <johan@gnome.org>
 
 	* giscanner/ast.py:

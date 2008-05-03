@@ -25,7 +25,7 @@ import os
 from . import cgobject
 from .odict import odict
 from .ast import (Callback, Enum, Function, Parameter, Property, Return,
-                  Sequence, Struct)
+                  Sequence, Struct, Type)
 from .glibast import (GLibBoxed, GLibEnum, GLibEnumMember, GLibFlags,
                       GLibInterface, GLibObject, GLibSignal)
 
@@ -54,8 +54,6 @@ def resolve_libtool(libname):
     return libname
 
 
-
-
 class GLibTransformer(object):
     def __init__(self, namespace_name):
         self._namespace_name = namespace_name
@@ -77,8 +75,9 @@ class GLibTransformer(object):
         for node in nodes:
             self._parse_node(node)
 
-        # Second round, associate GtkButtonClass with GtkButton
+        # Second round
         for node in self._output_ns.values():
+            # associate GtkButtonClass with GtkButton
             if isinstance(node, Struct):
                 self._pair_class_struct(node)
 
@@ -242,7 +241,12 @@ class GLibTransformer(object):
         return True
 
     def _parse_struct(self, struct):
-        self._add_attribute(struct)
+        type_name = self._resolve_type_name(struct.name)
+        node = self._output_ns.get(type_name)
+        if node is None:
+            self._add_attribute(struct, replace=True)
+            return
+        node.fields = struct.fields[:]
 
     def _parse_callback(self, callback):
         self._add_attribute(callback)
@@ -259,8 +263,14 @@ class GLibTransformer(object):
 
         node = self._output_ns.get(self._resolve_type_name(name))
         del self._output_ns[class_node.name]
+        if node is None:
+            return
         for field in class_node.fields[1:]:
             node.fields.append(field)
+
+    def _create_type(self, type_id):
+        type_name = cgobject.type_name(type_id)
+        return Type(type_name)
 
     def _introspect_type(self, type_id, symbol):
         fundamental_type_id = cgobject.type_fundamental(type_id)
@@ -348,6 +358,7 @@ class GLibTransformer(object):
                     name = 'object'
                 else:
                     name = 'p%s' % (i-1,)
-                signal.parameters.append(
-                    Parameter(name, cgobject.type_name(parameter)))
+                ptype = self._create_type(parameter)
+                param = Parameter(name, ptype)
+                signal.parameters.append(param)
             node.signals.append(signal)
