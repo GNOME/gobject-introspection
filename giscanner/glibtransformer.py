@@ -44,7 +44,7 @@ def to_underscores(name):
     name = _upperstr_pat3.sub(r'\1_\2', name, count=1)
     return name
 
-_libtool_pat = re.compile("dlname='([A-z0-9\.]+)'\n")
+_libtool_pat = re.compile("dlname='([A-z0-9\.\-\+]+)'\n")
 
 def resolve_libtool(libname):
     data = open(libname).read()
@@ -176,6 +176,8 @@ class GLibTransformer(object):
             parameter.type = self._resolve_param_type(parameter.type)
 
     def _parse_get_type_function(self, func):
+        if self._library is None:
+            return False
         # GType *_get_type(void)
         symbol = func.symbol
         if not symbol.endswith('_get_type'):

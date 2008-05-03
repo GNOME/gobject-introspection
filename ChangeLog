@@ -1,5 +1,12 @@
 2008-05-03  Johan Dahlin  <johan@gnome.org>
 
+	* giscanner/glibtransformer.py:
+	* tools/g-ir-scanner:
+	Handle missing parameters better, allow - and + in .la dlname
+	filenames.
+
+2008-05-03  Johan Dahlin  <johan@gnome.org>
+
 	* giscanner/__init__.py:
 	* giscanner/ast.py:
 	* giscanner/girwriter.py:

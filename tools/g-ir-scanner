@@ -20,6 +20,7 @@
 
 import commands
 import optparse
+import os
 import sys
 
 sys.path.insert(0, '.')
@@ -72,9 +73,13 @@ def main(args):
 
     (options, args) = parser.parse_args(args)
 
-    if not args:
-        print 'ERROR: Needs at least one filename.'
-        return 0
+    if len(args) <= 1:
+        print 'ERROR: Need at least one filename.'
+        return 1
+
+    if not options.namespace:
+        print 'ERROR: Namespace missing.'
+        return 1
 
     for package in options.packages:
         output = commands.getoutput('pkg-config --cflags %s' % (package,))
@@ -91,6 +96,9 @@ def main(args):
     for arg in args:
         if (arg.endswith('.c') or
             arg.endswith('.h')):
+            if not os.path.exists(arg):
+                print 'ERROR: %s: no such a file or directory' % (arg,)
+                return 1
             filenames.append(arg)
 
     ss.parse_files(filenames)
