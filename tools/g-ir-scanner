@@ -118,14 +118,13 @@ def main(args):
     glibtransformer.parse(nodes)
 
     if options.format == 'gir':
-        from giscanner.girwriter import GIRWriter
-        writer = GIRWriter(options.namespace, glibtransformer.get_nodes())
+        from giscanner.girwriter import GIRWriter as Writer
     elif options.format == 'gidl':
-        from giscanner.gidlwriter import GIDLWriter
-        writer = GIDLWriter(options.namespace, glibtransformer.get_nodes())
+        from giscanner.gidlwriter import GIDLWriter as Writer
     else:
         raise SystemExit("Unknown format: %s" % (options.format,))
 
+    writer = Writer(options.namespace, glibtransformer.get_nodes())
     data = writer.get_xml()
     if options.output:
         fd = open(options.output, "w")
