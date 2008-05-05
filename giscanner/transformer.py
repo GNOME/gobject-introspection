@@ -18,11 +18,13 @@
 # 02110-1301, USA.
 #
 
-import giscanner
-
 from giscanner.ast import (Callback, Enum, Function, Member, Parameter,
                            Return, Sequence, Struct, Type)
-from giscanner.sourcescanner import SourceSymbol
+from giscanner.sourcescanner import (
+    SourceSymbol, symbol_type_name, CTYPE_POINTER, CTYPE_TYPEDEF, CTYPE_VOID,
+    CTYPE_BASIC_TYPE, CTYPE_FUNCTION, CTYPE_STRUCT, CSYMBOL_TYPE_FUNCTION,
+    CSYMBOL_TYPE_TYPEDEF, CSYMBOL_TYPE_STRUCT, CSYMBOL_TYPE_ENUM,
+    CSYMBOL_TYPE_UNION, CSYMBOL_TYPE_OBJECT)
 
 
 class Transformer(object):
@@ -66,34 +68,34 @@ class Transformer(object):
 
         if stype is None:
             stype = symbol.type
-        if stype == giscanner.CSYMBOL_TYPE_FUNCTION:
+        if stype == CSYMBOL_TYPE_FUNCTION:
             return self._create_function(symbol)
-        elif stype == giscanner.CSYMBOL_TYPE_TYPEDEF:
-            if (symbol.base_type.type == giscanner.CTYPE_POINTER and
-                symbol.base_type.base_type.type == giscanner.CTYPE_FUNCTION):
+        elif stype == CSYMBOL_TYPE_TYPEDEF:
+            if (symbol.base_type.type == CTYPE_POINTER and
+                symbol.base_type.base_type.type == CTYPE_FUNCTION):
                 node = self._create_callback(symbol)
-            elif symbol.base_type.type == giscanner.CTYPE_STRUCT:
+            elif symbol.base_type.type == CTYPE_STRUCT:
                 node = self._create_typedef_struct(symbol)
             # This prevents an infinite recursion when scanning structures with
             # private types not exposed in headers.
-            elif symbol.base_type.type == giscanner.CSYMBOL_TYPE_TYPEDEF:
+            elif symbol.base_type.type == CSYMBOL_TYPE_TYPEDEF:
                 return
             else:
                 node = self._traverse_one(symbol, symbol.base_type.type)
             return node
-        elif stype == giscanner.CSYMBOL_TYPE_STRUCT:
+        elif stype == CSYMBOL_TYPE_STRUCT:
             return self._create_struct(symbol)
-        elif stype == giscanner.CSYMBOL_TYPE_ENUM:
+        elif stype == CSYMBOL_TYPE_ENUM:
             return self._create_enum(symbol)
-        elif stype == giscanner.CSYMBOL_TYPE_OBJECT:
+        elif stype == CSYMBOL_TYPE_OBJECT:
             return self._create_object(symbol)
-        elif stype == giscanner.CSYMBOL_TYPE_UNION:
+        elif stype == CSYMBOL_TYPE_UNION:
             # Unions are not supported
             pass
         else:
             raise NotImplementedError(
                 'Transformer: unhandled symbol: %r of type %r'
-                % (symbol.ident, giscanner.symbol_type_name(stype)))
+                % (symbol.ident, symbol_type_name(stype)))
 
     def _create_enum(self, symbol):
         members = []
@@ -117,13 +119,13 @@ class Transformer(object):
     def _create_source_type(self, source_type):
         if source_type is None:
             return 'None'
-        if source_type.type == giscanner.CTYPE_VOID:
+        if source_type.type == CTYPE_VOID:
             value = 'void'
-        elif source_type.type == giscanner.CTYPE_BASIC_TYPE:
+        elif source_type.type == CTYPE_BASIC_TYPE:
             value = source_type.name
-        elif source_type.type == giscanner.CTYPE_TYPEDEF:
+        elif source_type.type == CTYPE_TYPEDEF:
             value = source_type.name
-        elif source_type.type == giscanner.CTYPE_POINTER:
+        elif source_type.type == CTYPE_POINTER:
             value = self._create_source_type(source_type.base_type) + '*'
         else:
             print 'BUILDER: Unhandled source type: %d' % (source_type.type,)
