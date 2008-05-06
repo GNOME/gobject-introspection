@@ -18,6 +18,60 @@
 # 02110-1301, USA.
 #
 
+"""AST nodes
+This file descbribes abstract data type nodes independent on the
+implementation language.
+
+These can later on be extended (eg subclassed) with additional information
+which is language/library/domain specific.
+"""
+
+##
+## Types
+##
+
+# Basic types
+TYPE_INT8     = 'int8'
+TYPE_UINT8    = 'uint8'
+TYPE_INT16    = 'int16'
+TYPE_UINT16   = 'uint16'
+TYPE_INT32    = 'int32'
+TYPE_UINT32   = 'uint32'
+TYPE_INT64    = 'int64'
+TYPE_UINT64   = 'uint64'
+TYPE_LONG     = 'long'
+TYPE_ULONG    = 'ulong'
+
+# Floating-point
+TYPE_FLOAT    = 'float'
+TYPE_DOUBLE   = 'double'
+
+# Higher-level data types
+TYPE_NONE     = 'none'
+TYPE_ANY      = 'any'      # CORBA Any/Variant/GValue, holds anything.
+TYPE_BOOLEAN  = 'boolean'  # True/False
+TYPE_STRING   = 'string'   # Sequence of characters
+TYPE_SEQUENCE = 'sequence' # Sequence of something
+TYPE_CHAR     = 'char'     # Character
+TYPE_UCHAR    = 'uchar'    # Unsigned Character
+TYPE_SIZE     = 'size'     # Size type (memory, buffer etc)
+TYPE_SSIZE    = 'ssize'
+
+# Wide/Unicode
+TYPE_UCHAR    = 'uchar'
+TYPE_USTRING  = 'ustring'
+
+# Domain specific, but practically useful
+TYPE_FILENAME = 'filename'
+
+##
+## Parameters
+##
+
+PARAM_DIRECTION_IN = 'in'
+PARAM_DIRECTION_OUT = 'out'
+PARAM_DIRECTION_INOUT = 'inout'
+
 
 class Node(object):
     def __init__(self, name=None):
@@ -54,7 +108,7 @@ class Parameter(Node):
     def __init__(self, name, typenode):
         Node.__init__(self, name)
         self.type = typenode
-        self.direction = 'in'
+        self.direction = PARAM_DIRECTION_IN
         self.transfer = False
 
     def __repr__(self):
