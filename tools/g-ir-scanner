@@ -42,8 +42,8 @@ def _get_option_parser():
                       action="store", dest="library",
                       help="library of this unit")
     parser.add_option("-n", "--namespace",
-                      action="store", dest="namespace",
-                      help="namespace of this unit")
+                      action="store", dest="namespace_name",
+                      help="name of namespace for this unit")
     parser.add_option("", "--strip-prefix",
                       action="store", dest="strip_prefix", default="",
                       help="prefix to strip from functions, like g_")
@@ -82,8 +82,8 @@ def main(args):
     if len(args) <= 1:
         _error('Need at least one filename')
 
-    if not options.namespace:
-        _error('Namespace missing')
+    if not options.namespace_name:
+        _error('Namespace name missing')
 
     if options.format == 'gir':
         from giscanner.girwriter import GIRWriter as Writer
@@ -117,23 +117,22 @@ def main(args):
     ss.parse_macros()
 
     # Transform the C symbols into AST nodes
-    transformer = Transformer(ss)
+    transformer = Transformer(ss, options.namespace_name)
     transformer.set_strip_prefix(options.strip_prefix)
 
     # Transform the C AST nodes into higher level
     # GLib/GObject nodes
-    glibtransformer = GLibTransformer(options.namespace)
+    glibtransformer = GLibTransformer()
     if options.library:
         glibtransformer.load_library(options.library)
     for include in options.includes:
         glibtransformer.register_include(include)
 
-    transformer.parse()
-    nodes = transformer.get_nodes()
-    glibtransformer.parse(nodes)
+    namespace = transformer.parse()
+    namespace = glibtransformer.parse(namespace)
 
     # Write out AST
-    writer = Writer(options.namespace, glibtransformer.get_nodes())
+    writer = Writer(namespace)
     data = writer.get_xml()
     if options.output:
         fd = open(options.output, "w")

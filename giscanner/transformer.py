@@ -18,8 +18,8 @@
 # 02110-1301, USA.
 #
 
-from giscanner.ast import (Callback, Enum, Function, Member, Parameter,
-                           Return, Sequence, Struct, Type)
+from giscanner.ast import (Callback, Enum, Function, Namespace, Member,
+                           Parameter, Return, Sequence, Struct, Type)
 from giscanner.sourcescanner import (
     SourceSymbol, symbol_type_name, CTYPE_POINTER, CTYPE_TYPEDEF, CTYPE_VOID,
     CTYPE_BASIC_TYPE, CTYPE_FUNCTION, CTYPE_STRUCT, CSYMBOL_TYPE_FUNCTION,
@@ -28,9 +28,9 @@ from giscanner.sourcescanner import (
 
 
 class Transformer(object):
-    def __init__(self, generator):
+    def __init__(self, generator, namespace_name):
         self.generator = generator
-        self.nodes = []
+        self._namespace = Namespace(namespace_name)
         self._output_ns = {}
         self._typedefs_ns = {}
         self._strip_prefix = ''
@@ -38,19 +38,17 @@ class Transformer(object):
     def set_strip_prefix(self, strip_prefix):
         self._strip_prefix = strip_prefix
 
-    def get_nodes(self):
-        for node in self.nodes:
-            yield node
-
     def parse(self):
+        nodes = []
         for symbol in self.generator.get_symbols():
             node = self._traverse_one(symbol)
             if node is None:
                 continue
             if node.name.startswith('_'):
                 continue
-            self.nodes.append(node)
+            self._namespace.nodes.append(node)
             self._output_ns[node.name] = node
+        return self._namespace
 
     def _remove_prefix(self, name):
         # when --strip-prefix=g:

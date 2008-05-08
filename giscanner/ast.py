@@ -78,6 +78,12 @@ class Node(object):
         self.name = name
 
 
+class Namespace(Node):
+    def __init__(self, name):
+        Node.__init__(self, name)
+        self.nodes = []
+
+
 class Function(Node):
     def __init__(self, name, retval, parameters, symbol):
         Node.__init__(self, name)

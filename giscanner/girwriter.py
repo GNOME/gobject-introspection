@@ -28,11 +28,11 @@ from .xmlwriter import XMLWriter
 
 
 class GIRWriter(XMLWriter):
-    def __init__(self, namespace, nodes):
+    def __init__(self, namespace):
         super(GIRWriter, self).__init__()
-        self._write_repository(namespace, nodes)
+        self._write_repository(namespace)
 
-    def _write_repository(self, namespace, nodes):
+    def _write_repository(self, namespace):
         attrs = [
             ('version', '1.0'),
             ('xmlns', 'http://www.gtk.org/introspection/core/1.0'),
@@ -40,11 +40,12 @@ class GIRWriter(XMLWriter):
             ('xmlns:glib', 'http://www.gtk.org/introspection/glib/1.0'),
             ]
         with self.tagcontext('repository', attrs):
-            self._write_namespace(namespace, nodes)
+            self._write_namespace(namespace)
 
-    def _write_namespace(self, namespace, nodes):
-        with self.tagcontext('namespace', [('name', namespace)]):
-            for node in nodes:
+    def _write_namespace(self, namespace):
+        attrs = [('name', namespace.name)]
+        with self.tagcontext('namespace', attrs):
+            for node in namespace.nodes:
                 self._write_node(node)
 
     def _write_node(self, node):

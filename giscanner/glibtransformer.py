@@ -24,8 +24,8 @@ import os
 
 from . import cgobject
 from .odict import odict
-from .ast import (Callback, Enum, Function, Parameter, Property, Return,
-                  Sequence, Struct, Type)
+from .ast import (Callback, Enum, Function, Namespace, Parameter, Property,
+                  Return, Sequence, Struct, Type)
 from .glibast import (GLibBoxed, GLibEnum, GLibEnumMember, GLibFlags,
                       GLibInterface, GLibObject, GLibSignal)
 
@@ -55,24 +55,22 @@ def resolve_libtool(libname):
 
 
 class GLibTransformer(object):
-    def __init__(self, namespace_name):
-        self._namespace_name = namespace_name
+    def __init__(self):
+        self._namespace_name = None
         self._output_ns = odict()
         self._library = None
         self._type_names = {}
 
     # Public API
 
-    def get_nodes(self):
-        return self._output_ns.values()
-
     def load_library(self, libname):
         if libname.endswith('.la'):
             libname = resolve_libtool(libname)
         self._library = ctypes.cdll.LoadLibrary(libname)
 
-    def parse(self, nodes):
-        for node in nodes:
+    def parse(self, namespace):
+        self._namespace_name = namespace.name
+        for node in namespace.nodes:
             self._parse_node(node)
 
         # Second round
@@ -80,6 +78,10 @@ class GLibTransformer(object):
             # associate GtkButtonClass with GtkButton
             if isinstance(node, Struct):
                 self._pair_class_struct(node)
+
+        namespace = Namespace(namespace.name)
+        namespace.nodes = self._output_ns.values()
+        return namespace
 
     def register_include(self, filename):
         if filename.endswith('.gir'):
