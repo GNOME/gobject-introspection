@@ -77,12 +77,18 @@ class Node(object):
     def __init__(self, name=None):
         self.name = name
 
+    def __repr__(self):
+        return '%s(%r)' % (self.__class__.__name__, self.name)
+
 
 class Namespace(Node):
     def __init__(self, name):
         Node.__init__(self, name)
         self.nodes = []
 
+    def __repr__(self):
+        return '%s(%r, %r)' % (self.__class__.__name__, self.name,
+                               self.nodes)
 
 class Function(Node):
     def __init__(self, name, retval, parameters, symbol):
@@ -105,9 +111,6 @@ class Type(Node):
     def __init__(self, name):
         Node.__init__(self, name)
         self.ctype = name
-
-    def __repr__(self):
-        return 'Type(%r)' % (self.name,)
 
 
 class Parameter(Node):
@@ -145,9 +148,6 @@ class Struct(Node):
         Node.__init__(self, name)
         self.fields = []
         self.symbol = symbol
-
-    def __repr__(self):
-        return 'Struct(%r)' % (self.name,)
 
 
 class Return(Node):
