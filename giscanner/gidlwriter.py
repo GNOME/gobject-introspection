@@ -27,17 +27,18 @@ from .xmlwriter import XMLWriter
 
 
 class GIDLWriter(XMLWriter):
-    def __init__(self, namespace, nodes):
+    def __init__(self, namespace):
         super(GIDLWriter, self).__init__()
-        self._write_api(namespace, nodes)
+        self._write_api(namespace)
 
-    def _write_api(self, namespace, nodes):
+    def _write_api(self, namespace):
         with self.tagcontext('api', [('version', '1.0')]):
-            self._write_namespace(namespace, nodes)
+            self._write_namespace(namespace)
 
-    def _write_namespace(self, namespace, nodes):
-        with self.tagcontext('namespace', [('name', namespace)]):
-            for node in nodes:
+    def _write_namespace(self, namespace):
+        attrs = [('name', namespace.name)]
+        with self.tagcontext('namespace', attrs):
+            for node in namespace.nodes:
                 self._write_node(node)
 
     def _write_node(self, node):
@@ -70,9 +71,9 @@ class GIDLWriter(XMLWriter):
     def _write_return_type(self, return_):
         if not return_:
             return
-        attrs = [('type', return_.ctype.name)]
+        attrs = [('type', return_.type.name)]
         if return_.transfer != 'none':
-            attrs.append(('transfer', return_.transfer))
+            attrs.append(('transfer', str(int(return_.transfer))))
         self.write_tag('return-type', attrs)
 
     def _write_parameters(self, parameters):
@@ -87,8 +88,8 @@ class GIDLWriter(XMLWriter):
                  ('type', parameter.type.name)]
         if parameter.direction != 'in':
             attrs.append(('direction', parameter.direction))
-        if parameter.transfer != 'none':
-            attrs.append(('transfer', parameter.transfer))
+        if parameter.transfer:
+            attrs.append(('transfer', str(int(parameter.transfer))))
         self.write_tag('parameter', attrs)
 
     def _write_enum(self, enum):
