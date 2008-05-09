@@ -151,9 +151,9 @@ class Struct(Node):
 
 
 class Return(Node):
-    def __init__(self, type_name):
+    def __init__(self, rtype):
         Node.__init__(self)
-        self.type = Type(type_name)
+        self.type = rtype
         self.transfer = False
 
     def __repr__(self):

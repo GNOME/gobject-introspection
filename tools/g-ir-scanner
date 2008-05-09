@@ -119,17 +119,16 @@ def main(args):
     # Transform the C symbols into AST nodes
     transformer = Transformer(ss, options.namespace_name)
     transformer.set_strip_prefix(options.strip_prefix)
+    for include in options.includes:
+        transformer.register_include(include)
 
     # Transform the C AST nodes into higher level
     # GLib/GObject nodes
-    glibtransformer = GLibTransformer()
+    glibtransformer = GLibTransformer(transformer)
     if options.library:
         glibtransformer.load_library(options.library)
-    for include in options.includes:
-        glibtransformer.register_include(include)
 
-    namespace = transformer.parse()
-    namespace = glibtransformer.parse(namespace)
+    namespace = glibtransformer.parse()
 
     # Write out AST
     writer = Writer(namespace)

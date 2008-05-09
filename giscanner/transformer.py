@@ -32,8 +32,12 @@ class Transformer(object):
         self.generator = generator
         self._namespace = Namespace(namespace_name)
         self._output_ns = {}
+        self._type_names = {}
         self._typedefs_ns = {}
         self._strip_prefix = ''
+
+    def get_type_names(self):
+        return self._type_names
 
     def set_strip_prefix(self, strip_prefix):
         self._strip_prefix = strip_prefix
@@ -49,6 +53,19 @@ class Transformer(object):
             self._namespace.nodes.append(node)
             self._output_ns[node.name] = node
         return self._namespace
+
+    def register_include(self, filename):
+        if filename.endswith('.gir'):
+            from .girparser import GIRParser
+            parser = GIRParser(filename)
+        elif filename.endswith('.gidl'):
+            from .gidlparser import GIDLParser
+            parser = GIDLParser(filename)
+        else:
+            raise NotImplementedError(filename)
+        nsname = parser.get_namespace_name()
+        for node in parser.get_nodes():
+            self._type_names[node.type_name] = (nsname, node)
 
     def _remove_prefix(self, name):
         # when --strip-prefix=g:
@@ -112,6 +129,7 @@ class Transformer(object):
         return_ = self._create_return(symbol.base_type.base_type,
                                       directives.get('return', []))
         name = self._remove_prefix(symbol.ident)
+
         return Function(name, return_, parameters, symbol.ident)
 
     def _create_source_type(self, source_type):
@@ -161,15 +179,16 @@ class Transformer(object):
     def _create_return(self, source_type, options=None):
         if not options:
             options = []
-        return_type = self._create_source_type(source_type)
-        return_ = Return(return_type)
+        rtype = Type(self._create_source_type(source_type))
+        rtype = self._resolve_param_type(rtype)
+        return_ = Return(rtype)
         for option in options:
             if option == 'caller-owns':
                 return_.transfer = True
             elif option.startswith('seq '):
                 value, element_options = option[3:].split(None, 2)
                 element_type = self._parse_type_annotation(value)
-                seq = Sequence(return_type, element_type)
+                seq = Sequence(rtype.name, element_type)
                 seq.transfer = True
                 return_.type = seq
             else:
@@ -187,12 +206,14 @@ class Transformer(object):
         struct = self._typedefs_ns.get(symbol.ident, None)
         if struct is None:
             name = self._remove_prefix(symbol.ident)
+            name = self._resolve_type_name(name)
             struct = Struct(name, symbol.ident)
 
         for child in symbol.base_type.child_list:
             field = self._traverse_one(child, child.base_type.type)
             if field:
                 struct.fields.append(field)
+
         return struct
 
     def _create_callback(self, symbol):
@@ -205,3 +226,18 @@ class Transformer(object):
             annotation[-1] == "]"):
             return Sequence(self._parse_type_annotation(annotation[1:-1]))
         return annotation
+
+    def _resolve_type_name(self, type_name):
+        item = self._type_names.get(type_name)
+        if item is not None:
+            nsname, item = item
+            if nsname is None:
+                return item.name
+            return '%s.%s' % (nsname, item.name)
+        return type_name
+
+    def _resolve_param_type(self, ptype):
+        type_name = ptype.name
+        ptype.name = self._resolve_type_name(type_name)
+        return ptype
+

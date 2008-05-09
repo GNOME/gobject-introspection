@@ -55,7 +55,8 @@ def resolve_libtool(libname):
 
 
 class GLibTransformer(object):
-    def __init__(self):
+    def __init__(self, transformer):
+        self._transformer = transformer
         self._namespace_name = None
         self._output_ns = odict()
         self._library = None
@@ -68,8 +69,11 @@ class GLibTransformer(object):
             libname = resolve_libtool(libname)
         self._library = ctypes.cdll.LoadLibrary(libname)
 
-    def parse(self, namespace):
+    def parse(self):
+        namespace = self._transformer.parse()
         self._namespace_name = namespace.name
+        self._type_names = self._transformer.get_type_names()
+
         for node in namespace.nodes:
             self._parse_node(node)
 
@@ -82,19 +86,6 @@ class GLibTransformer(object):
         namespace = Namespace(namespace.name)
         namespace.nodes = self._output_ns.values()
         return namespace
-
-    def register_include(self, filename):
-        if filename.endswith('.gir'):
-            from .girparser import GIRParser
-            parser = GIRParser(filename)
-        elif filename.endswith('.gidl'):
-            from .gidlparser import GIDLParser
-            parser = GIDLParser(filename)
-        else:
-            raise NotImplementedError(filename)
-        nsname = parser.get_namespace_name()
-        for node in parser.get_nodes():
-            self._type_names[node.type_name] = (nsname, node)
 
     # Private
 
@@ -168,7 +159,6 @@ class GLibTransformer(object):
             return
 
         self._parse_parameters(func.parameters)
-        func.retval.type = self._resolve_param_type(func.retval.type)
 
         func.name = self._strip_namespace_func(func.name)
         self._add_attribute(func)
@@ -245,8 +235,7 @@ class GLibTransformer(object):
         return True
 
     def _parse_struct(self, struct):
-        type_name = self._resolve_type_name(struct.name)
-        node = self._output_ns.get(type_name)
+        node = self._output_ns.get(struct.name)
         if node is None:
             self._add_attribute(struct, replace=True)
             return
@@ -355,7 +344,8 @@ class GLibTransformer(object):
 
     def _introspect_signals(self, node, type_id):
         for signal_info in cgobject.signal_list(type_id):
-            return_ = Return(cgobject.type_name(signal_info.return_type))
+            rtype = Type(cgobject.type_name(signal_info.return_type))
+            return_ = Return(rtype)
             signal = GLibSignal(signal_info.signal_name, return_)
             for i, parameter in enumerate(signal_info.get_params()):
                 if i == 0:
