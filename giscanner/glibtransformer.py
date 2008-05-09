@@ -104,14 +104,6 @@ class GLibTransformer(object):
     def _register_internal_type(self, type_name, node):
         self._type_names[type_name] = (None, node)
 
-    def _strip_namespace_func(self, name):
-        orig_name = name
-        prefix = self._namespace_name.lower() + '_'
-        name = name.lower()
-        if name.startswith(prefix):
-            name = orig_name[len(prefix):]
-        return name
-
     def _strip_namespace_object(self, name):
         orig_name = name
         prefix = self._namespace_name.lower()
@@ -160,7 +152,6 @@ class GLibTransformer(object):
 
         self._parse_parameters(func.parameters)
 
-        func.name = self._strip_namespace_func(func.name)
         self._add_attribute(func)
 
     def _parse_parameters(self, parameters):
@@ -221,11 +212,11 @@ class GLibTransformer(object):
 
         # GtkButton -> gtk_button_, so we can figure out the method name
         prefix = to_underscores(orig_name).lower() + '_'
-        if not func.name.startswith(prefix):
+        if not func.symbol.startswith(prefix):
             return False
 
         # Strip namespace and object prefix: gtk_window_new -> new
-        func.name = func.name[len(prefix):]
+        func.name = func.symbol[len(prefix):]
         if is_method:
             class_.methods.append(func)
         else:

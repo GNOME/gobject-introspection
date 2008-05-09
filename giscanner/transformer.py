@@ -67,6 +67,14 @@ class Transformer(object):
         for node in parser.get_nodes():
             self._type_names[node.type_name] = (nsname, node)
 
+    def _strip_namespace_func(self, name):
+        orig_name = name
+        prefix = self._namespace.name.lower() + '_'
+        name = name.lower()
+        if name.startswith(prefix):
+            name = orig_name[len(prefix):]
+        return name
+
     def _remove_prefix(self, name):
         # when --strip-prefix=g:
         #   GHashTable -> HashTable
@@ -129,6 +137,7 @@ class Transformer(object):
         return_ = self._create_return(symbol.base_type.base_type,
                                       directives.get('return', []))
         name = self._remove_prefix(symbol.ident)
+        name = self._strip_namespace_func(name)
 
         return Function(name, return_, parameters, symbol.ident)
 

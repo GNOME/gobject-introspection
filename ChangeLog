@@ -1,5 +1,11 @@
 2008-05-08  Johan Dahlin  <johan@gnome.org>
 
+	* giscanner/glibtransformer.py:
+	* giscanner/transformer.py:
+	Move namespace stripping glibtransformer->transformer
+
+2008-05-08  Johan Dahlin  <johan@gnome.org>
+
 	* giscanner/ast.py:
 	* giscanner/girwriter.py:
 	* giscanner/glibtransformer.py:
