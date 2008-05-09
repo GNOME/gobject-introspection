@@ -128,7 +128,7 @@ class GIRWriter(XMLWriter):
 
     def _write_enum(self, enum):
         attrs = [('name', enum.name),
-                 ('c:type', enum.ctype)]
+                 ('c:type', enum.symbol)]
         tag_name = 'enumeration'
         if isinstance(enum, GLibEnum):
             attrs.extend([('glib:type-name', enum.type_name),

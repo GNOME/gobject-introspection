@@ -23,7 +23,7 @@ from .ast import Class, Enum, Interface, Member, Node, Property, Struct
 
 class GLibEnum(Enum):
     def __init__(self, name, members, type_name, get_type):
-        Enum.__init__(self, name, members)
+        Enum.__init__(self, name, type_name, members)
         self.ctype = type_name
         self.type_name = type_name
         self.get_type = get_type

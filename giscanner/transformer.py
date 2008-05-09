@@ -67,6 +67,16 @@ class Transformer(object):
         for node in parser.get_nodes():
             self._type_names[node.type_name] = (nsname, node)
 
+    def strip_namespace_object(self, name):
+        orig_name = name
+        prefix = self._namespace.name.lower()
+        name = name.lower()
+        if name.startswith(prefix):
+            name = orig_name[len(prefix):]
+        return name
+
+    # Private
+
     def _strip_namespace_func(self, name):
         orig_name = name
         prefix = self._namespace.name.lower() + '_'
@@ -126,7 +136,8 @@ class Transformer(object):
             members.append(Member(child.ident,
                                   child.const_int))
 
-        return Enum(symbol.ident, members)
+        name = self.strip_namespace_object(symbol.ident)
+        return Enum(name, symbol.ident, members)
 
     def _create_object(self, symbol):
         return Member(symbol.ident, symbol.base_type.name)

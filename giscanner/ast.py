@@ -125,10 +125,10 @@ class Parameter(Node):
 
 
 class Enum(Node):
-    def __init__(self, name, members):
+    def __init__(self, name, symbol, members):
         Node.__init__(self, name)
+        self.symbol = symbol
         self.members = members
-        self.ctype = name
 
     def __repr__(self):
         return 'Enum(%r, %r)' % (self.name, self.members)

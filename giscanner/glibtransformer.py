@@ -104,14 +104,6 @@ class GLibTransformer(object):
     def _register_internal_type(self, type_name, node):
         self._type_names[type_name] = (None, node)
 
-    def _strip_namespace_object(self, name):
-        orig_name = name
-        prefix = self._namespace_name.lower()
-        name = name.lower()
-        if name.startswith(prefix):
-            name = orig_name[len(prefix):]
-        return name
-
     def _resolve_type_name(self, type_name):
         item = self._type_names.get(type_name)
         if item is not None:
@@ -139,7 +131,6 @@ class GLibTransformer(object):
             print 'GOBJECT BUILDER: Unhandled node:', node
 
     def _parse_enum(self, enum):
-        enum.name = self._strip_namespace_object(enum.name)
         self._add_attribute(enum)
 
     def _parse_function(self, func):
@@ -283,15 +274,15 @@ class GLibTransformer(object):
 
         klass = (GLibFlags if ftype_id == cgobject.TYPE_FLAGS else GLibEnum)
         type_name = cgobject.type_name(type_id)
-        node = klass(self._strip_namespace_object(type_name),
-                      members, type_name, symbol)
+        node = klass(self._transformer.strip_namespace_object(type_name),
+                     members, type_name, symbol)
         self._add_attribute(node, replace=True)
         self._register_internal_type(type_name, node)
 
     def _introspect_object(self, type_id, symbol):
         type_name = cgobject.type_name(type_id)
         parent_type_name = cgobject.type_name(cgobject.type_parent(type_id))
-        node = GLibObject(self._strip_namespace_object(type_name),
+        node = GLibObject(self._transformer.strip_namespace_object(type_name),
                           self._resolve_type_name(parent_type_name),
                           type_name, symbol)
         self._introspect_properties(node, type_id)
@@ -302,8 +293,9 @@ class GLibTransformer(object):
 
     def _introspect_interface(self, type_id, symbol):
         type_name = cgobject.type_name(type_id)
-        node = GLibInterface(self._strip_namespace_object(type_name),
-                             type_name, symbol)
+        node = GLibInterface(
+            self._transformer.strip_namespace_object(type_name),
+            type_name, symbol)
         self._introspect_properties(node, type_id)
         self._introspect_signals(node, type_id)
         self._add_attribute(node)
@@ -311,7 +303,7 @@ class GLibTransformer(object):
 
     def _introspect_boxed(self, type_id, symbol):
         type_name = cgobject.type_name(type_id)
-        node = GLibBoxed(self._strip_namespace_object(type_name),
+        node = GLibBoxed(self._transformer.strip_namespace_object(type_name),
                          type_name, symbol)
         self._add_attribute(node)
         self._remove_attribute(type_name)
