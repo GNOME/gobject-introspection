@@ -20,6 +20,7 @@
 
 import os
 import subprocess
+import tempfile
 
 from . import _giscanner
 
@@ -151,6 +152,10 @@ class SourceScanner(object):
                     self._cpp_options.append(opt)
 
     def parse_files(self, filenames):
+        for filename in filenames:
+            filename = os.path.abspath(filename)
+            self._scanner.append_filename(filename)
+
         headers = []
         for filename in filenames:
             if filename.endswith('.c'):
@@ -159,14 +164,12 @@ class SourceScanner(object):
             else:
                 headers.append(filename)
 
-        for filename in headers:
-            self._parse_one(filename)
-            self._filenames.append(filename)
+        self._parse(headers)
+        self._filenames.extend(headers)
 
     def parse_macros(self):
         self._scanner.set_macro_scan(True)
-        for filename in self._filenames:
-            self._parse_one(filename)
+        self._parse(self._filenames)
         self._scanner.set_macro_scan(False)
 
     def get_symbols(self):
@@ -180,16 +183,10 @@ class SourceScanner(object):
 
     # Private
 
-    def _parse_one(self, filename):
-        filename = os.path.abspath(filename)
-        proc = self._preprocess(filename)
-        fd = proc.stdout.fileno()
-        if proc is None:
+    def _parse(self, filenames):
+        if not filenames:
             return
-
-        self._scanner.parse_file(fd, filename)
-
-    def _preprocess(self, filename):
+        
         cpp_args = [
             'cpp',
             '-C',
@@ -198,13 +195,25 @@ class SourceScanner(object):
             '-I.',
             ]
         cpp_args += self._cpp_options
-        proc = subprocess.Popen(
-            cpp_args,
-            bufsize=4096,
-            stdin=subprocess.PIPE,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT,
-            )
-        proc.stdin.write('#include <%s>\n' % (filename,))
+        proc = subprocess.Popen(cpp_args,
+                                stdin=subprocess.PIPE,
+                                stdout=subprocess.PIPE)
+                                
+        for filename in filenames:
+            filename = os.path.abspath(filename)
+            proc.stdin.write('#include <%s>\n' % (filename,))
         proc.stdin.close()
-        return proc
+
+        tmp = tempfile.mktemp()
+        fp = open(tmp, 'w+')
+        while True:
+            data = proc.stdout.read(4096)
+            if data is None:
+                break
+            fp.write(data)
+            if len(data) < 4096:
+                break
+        fp.seek(0, 0)
+        assert proc, 'Proc was none'
+        self._scanner.parse_file(fp.fileno())
+        os.unlink(tmp)

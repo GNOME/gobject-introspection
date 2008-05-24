@@ -190,6 +190,7 @@ class GIRWriter(XMLWriter):
             self._write_type(prop.type)
 
     def _write_callback(self, callback):
+        # FIXME: reuse _write_function
         attrs = [('name', callback.name)]
         with self.tagcontext('callback', attrs):
             self._write_return_type(callback.retval)
@@ -206,7 +207,8 @@ class GIRWriter(XMLWriter):
             self.write_tag('record', attrs)
 
     def _write_field(self, field):
-        if isinstance(field, Callback):
+        # FIXME: Just function
+        if isinstance(field, (Callback, Function)):
             self._write_callback(field)
             return
 

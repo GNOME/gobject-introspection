@@ -161,7 +161,11 @@ class GLibTransformer(object):
         if func.parameters:
             return False
 
-        func = getattr(self._library, symbol)
+        try:
+            func = getattr(self._library, symbol)
+        except AttributeError:
+            print 'Warning: could not find symbol: %s' % symbol
+            return False
         func.restype = cgobject.GType
         func.argtypes = []
         type_id = func()
@@ -288,7 +292,11 @@ class GLibTransformer(object):
         self._introspect_properties(node, type_id)
         self._introspect_signals(node, type_id)
         self._add_attribute(node)
-        self._remove_attribute(type_name)
+        try:
+            self._remove_attribute(type_name)
+        except KeyError:
+            print 'Warning: could not remove %s' % type_name
+            pass
         self._register_internal_type(type_name, node)
 
     def _introspect_interface(self, type_id, symbol):

@@ -211,6 +211,7 @@ class Property(Node):
             self.name, self.type, self.value)
 
 
+# FIXME: Inherit from Function
 class Callback(Node):
     def __init__(self, name, retval, parameters):
         Node.__init__(self, name)

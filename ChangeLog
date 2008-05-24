@@ -1,3 +1,17 @@
+2008-05-24  Johan Dahlin  <jdahlin@async.com.br>
+
+	* giscanner/ast.py:
+	* giscanner/girwriter.py:
+	* giscanner/giscannermodule.c
+	(pygi_source_scanner_append_filename),
+	(pygi_source_scanner_parse_file):
+	* giscanner/glibtransformer.py:
+	* giscanner/sourcescanner.py:
+	Revert back to using temporary files to send in headers.
+	Allow Functions to be passed in as callbacks, add a couple
+	of try/excepts missing features.
+	We can now scan pango
+
 2008-05-08  Johan Dahlin  <johan@gnome.org>
 
 	* giscanner/glibtransformer.py:

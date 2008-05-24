@@ -361,26 +361,37 @@ pygi_source_scanner_init (PyGISourceScanner *self,
 }
 
 static PyObject *
+pygi_source_scanner_append_filename (PyGISourceScanner *self,
+				     PyObject          *args)
+{
+  char *filename;
+
+  if (!PyArg_ParseTuple (args, "s:SourceScanner.append_filename", &filename))
+    return NULL;
+
+  self->scanner->filenames = g_list_append (self->scanner->filenames,
+					    g_strdup (filename));
+  
+  Py_INCREF (Py_None);
+  return Py_None;
+}
+
+static PyObject *
 pygi_source_scanner_parse_file (PyGISourceScanner *self,
 				PyObject          *args)
 {
   int fd;
-  char *filename;
   FILE *fp;
   
-  if (!PyArg_ParseTuple (args, "is:SourceScanner.parse_file", &fd, &filename))
+  if (!PyArg_ParseTuple (args, "i:SourceScanner.parse_file", &fd))
     return NULL;
 
   fp = fdopen (fd, "r");
   if (!fp)
     {
-      PyErr_SetFromErrnoWithFilename (PyExc_OSError, filename);
+      PyErr_SetFromErrno (PyExc_OSError);
       return NULL;
     }
-
-  self->scanner->filenames =
-    g_list_append (self->scanner->filenames, g_strdup (filename));
-  self->scanner->current_filename = g_strdup (filename);
 
   if (!gi_source_scanner_parse_file (self->scanner, fp))
     {
@@ -479,6 +490,7 @@ pygi_source_scanner_get_directives (PyGISourceScanner *self,
 static const PyMethodDef _PyGISourceScanner_methods[] = {
   { "get_directives", (PyCFunction) pygi_source_scanner_get_directives, METH_VARARGS },
   { "get_symbols", (PyCFunction) pygi_source_scanner_get_symbols, METH_NOARGS },
+  { "append_filename", (PyCFunction) pygi_source_scanner_append_filename, METH_VARARGS },
   { "parse_file", (PyCFunction) pygi_source_scanner_parse_file, METH_VARARGS },
   { "lex_filename", (PyCFunction) pygi_source_scanner_lex_filename, METH_VARARGS },
   { "set_macro_scan", (PyCFunction) pygi_source_scanner_set_macro_scan, METH_VARARGS },
