@@ -1,5 +1,20 @@
 2008-05-31  Johan Dahlin  <jdahlin@async.com.br>
 
+	* Makefile.am:
+	* configure.ac:
+	* girepository/Makefile.am:
+	* giscanner/transformer.py:
+	* gobject-introspection-1.0.pc.in:
+	* gobject-introspection.pc.in:
+	* tools/Makefile.am:
+
+	Rename pkg-config name to gobject-introspection-1.0,
+	Do not installed anything which is not using the gir format.
+	Disable compililation the old C scanner, but still keep the source
+	until all the remaning functionallity has been ported.
+
+2008-05-31  Johan Dahlin  <jdahlin@async.com.br>
+
 	* giscanner/giscannermodule.c (symbol_get_ident): Prevent
 	a crash when symbol->indent is NULL.
 

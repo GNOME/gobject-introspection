@@ -6,7 +6,7 @@ DIST_SUBDIRS = m4 $(SUBDIRS)
 man_MANS = docs/g-ir-scanner.1
 
 pkgconfigdir = $(libdir)/pkgconfig
-pkgconfig_DATA = gobject-introspection.pc
+pkgconfig_DATA = gobject-introspection-1.0.pc
 EXTRA_DIST = $(pkgconfig_DATA)
 
 if GI_GCOV_ENABLED

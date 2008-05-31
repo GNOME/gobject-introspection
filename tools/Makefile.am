@@ -8,7 +8,7 @@ INCLUDES = \
 EXTRA_DIST = g-ir-scanner
 
 noinst_LTLIBRARIES = libgirepository-parser.la
-bin_PROGRAMS = g-idl-compiler g-idl-generate g-idl-scanner
+noinst_PROGRAMS = g-idl-compiler g-idl-generate
 bin_SCRIPTS = g-ir-scanner
 
 libgirepository_parser_la_SOURCES =		\
@@ -28,23 +28,9 @@ g_idl_generate_SOURCES = generate.c
 g_idl_generate_CFLAGS = $(GIREPO_CFLAGS)
 g_idl_generate_LDADD = $(GIREPO_LIBS) $(top_builddir)/girepository/libgirepository.la
 
-g_idl_scanner_SOURCES =				\
-	scanner.c				\
-	scanner.h				\
-	gidlwriter.c				\
-	gidlwriter.h
-g_idl_scanner_CFLAGS = $(GIREPO_CFLAGS) $(SCANNER_CFLAGS)
-g_idl_scanner_LDADD = \
-	$(GIREPO_LIBS) \
-	$(SCANNER_LIBS) \
-	$(top_builddir)/girepository/libgirepository.la \
-	$(top_builddir)/giscanner/libgiscanner.la \
-	libgirepository-parser.la
-
 GCOVSOURCES =					\
 	$(libgirepository_la_SOURCES)		\
 	$(g_idl_compiler_SOURCES)		\
-	$(g_idl_generate_SOURCES)		\
-	$(g_idl_scanner_SOURCES)
+	$(g_idl_generate_SOURCES)
 
 include $(top_srcdir)/gcov.mak

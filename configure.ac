@@ -106,5 +106,5 @@ AC_CONFIG_FILES([Makefile
                  tests/Makefile
                  tests/invoke/Makefile
                  tests/parser/Makefile
-                 gobject-introspection.pc])
+                 gobject-introspection-1.0.pc])
 AC_OUTPUT

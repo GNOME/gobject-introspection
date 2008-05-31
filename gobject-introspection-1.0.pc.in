@@ -1,0 +1,18 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+bindir=@bindir@
+includedir=@includedir@
+
+g_ir_scanner=${bindir}/g-ir-scanner
+
+# FIXME: These needs to be ported to the GIR format first
+# g_idl_generator=${bindir}/g-idl-generator
+# g_idl_compiler=${bindir}/g-idl-compiler
+# Cflags: -I${includedir}/gobject-introspection-1.0
+# Requires: glib-2.0 gobject-2.0 gmodule-2.0 gthread-2.0
+# Libs: -L${libdir} -lgirepository
+
+Name: gobject-introspection
+Description: GObject Introspection
+Version: @VERSION@
