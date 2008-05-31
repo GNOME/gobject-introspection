@@ -1,3 +1,8 @@
+2008-05-31  Johan Dahlin  <jdahlin@async.com.br>
+
+	* giscanner/sourcescanner.py (ctype_name): Add ctype_name,
+	a function to convert a CTYPE symbol to a string
+
 2008-05-24  Johan Dahlin  <jdahlin@async.com.br>
 
 	* giscanner/ast.py:

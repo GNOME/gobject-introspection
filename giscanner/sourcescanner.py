@@ -78,6 +78,20 @@ def symbol_type_name(symbol_type):
         CSYMBOL_TYPE_TYPEDEF: 'typedef'
         }.get(symbol_type)
 
+def ctype_name(ctype):
+    return {
+        CTYPE_INVALID: 'invalid',
+        CTYPE_VOID: 'void',
+        CTYPE_BASIC_TYPE: 'basic',
+        CTYPE_TYPEDEF: 'typedef',
+        CTYPE_STRUCT: 'struct',
+        CTYPE_UNION: 'union',
+        CTYPE_ENUM: 'enum',
+        CTYPE_POINTER: 'pointer',
+        CTYPE_ARRAY: 'array',
+        CTYPE_FUNCTION: 'function'
+        }.get(ctype)
+
 
 class SourceType(object):
     def __init__(self, scanner, stype):
