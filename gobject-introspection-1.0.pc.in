@@ -5,6 +5,7 @@ bindir=@bindir@
 includedir=@includedir@
 
 g_ir_scanner=${bindir}/g-ir-scanner
+girdir=${prefix}/share/gir
 
 # FIXME: These needs to be ported to the GIR format first
 # g_idl_generator=${bindir}/g-idl-generator

@@ -48,6 +48,10 @@ class GIRParser(object):
         for child in ns.getchildren():
             if child.tag == _corens('class'):
                 self._parse_object(child)
+            elif child.tag in [_corens('callback'),
+                               _corens('function'),
+                               _corens('record')]:
+                continue
             else:
                 print 'PARSER: Unhandled %s' % (child.tag,)
 

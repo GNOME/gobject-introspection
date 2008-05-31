@@ -1,5 +1,21 @@
 2008-05-31  Johan Dahlin  <jdahlin@async.com.br>
 
+	* giscanner/xmlwriter.py:
+	Improve error reporting when trying to quote None.
+	* giscanner/girparser.py:
+	Do not print warnings when including more complete .gir files
+	* giscanner/girwriter.py:
+	Do not require a name for parameters, add a todo for singletons
+	* giscanner/glibtransformer.py:
+	Refactor the way structs are done, add a couple of hacks to allow
+	us to get further.
+	* giscanner/transformer.py:
+	Add enough hacks so cairo, atk and pango.gir can be parsed properly
+	* gobject-introspection-1.0.pc.in:
+	Export girdir, so we can access gobject-2.0.gir from outside
+
+2008-05-31  Johan Dahlin  <jdahlin@async.com.br>
+
 	* tools/g-ir-scanner:
 	* tests/parser/Makefile.am:
 	Update sys.path before running the parser so we don't have

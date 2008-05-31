@@ -24,8 +24,8 @@ import os
 
 from . import cgobject
 from .odict import odict
-from .ast import (Callback, Enum, Function, Namespace, Parameter, Property,
-                  Return, Sequence, Struct, Type)
+from .ast import (Callback, Enum, Function, Member, Namespace, Parameter,
+                  Property, Return, Sequence, Struct, Type)
 from .glibast import (GLibBoxed, GLibEnum, GLibEnumMember, GLibFlags,
                       GLibInterface, GLibObject, GLibSignal)
 
@@ -127,6 +127,9 @@ class GLibTransformer(object):
             self._parse_struct(node)
         elif isinstance(node, Callback):
             self._parse_callback(node)
+        elif isinstance(node, Member):
+            # FIXME: atk_misc_instance singletons
+            pass
         else:
             print 'GOBJECT BUILDER: Unhandled node:', node
 

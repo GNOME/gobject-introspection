@@ -38,6 +38,9 @@ class XMLWriter(object):
             return -1
         attr_length = 0
         for attr, value in attributes:
+            if value is None:
+                raise ValueError(
+                    "value for attribute %r cannot be None" % (attr,))
             attr_length += 2 + len(attr) + len(quoteattr(value))
         return attr_length + indent
 
@@ -54,7 +57,9 @@ class XMLWriter(object):
         for attr, value in attributes:
             if indent_len and not first:
                 attr_value += '\n%s' % (self._indent_char * indent_len)
-            assert value is not None, attr
+            if value is None:
+                raise ValueError(
+                    "value for attribute %r cannot be None" % (attr,))
             attr_value += ' %s=%s' % (attr, quoteattr(value))
             if first:
                 first = False

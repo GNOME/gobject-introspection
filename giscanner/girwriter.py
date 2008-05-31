@@ -20,8 +20,8 @@
 
 from __future__ import with_statement
 
-from .ast import (Callback, Class, Enum, Function, Interface, Sequence,
-                  Struct)
+from .ast import (Callback, Class, Enum, Function, Interface, Member,
+                  Sequence, Struct)
 from .glibast import (GLibBoxed, GLibEnum, GLibEnumMember,
                       GLibFlags, GLibObject, GLibInterface)
 from .xmlwriter import XMLWriter
@@ -61,6 +61,9 @@ class GIRWriter(XMLWriter):
             self._write_callback(node)
         elif isinstance(node, Struct):
             self._write_record(node)
+        elif isinstance(node, Member):
+            # FIXME: atk_misc_instance singleton
+            pass
         else:
             print 'WRITER: Unhandled node', node
 
@@ -99,7 +102,9 @@ class GIRWriter(XMLWriter):
                 self._write_parameter(parameter)
 
     def _write_parameter(self, parameter):
-        attrs = [('name', parameter.name)]
+        attrs = []
+        if parameter.name is not None:
+            attrs.append(('name', parameter.name))
         if parameter.direction != 'in':
             attrs.append(('direction', parameter.direction))
         if parameter.transfer:

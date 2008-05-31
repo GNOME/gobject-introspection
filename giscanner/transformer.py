@@ -21,8 +21,10 @@
 from giscanner.ast import (Callback, Enum, Function, Namespace, Member,
                            Parameter, Return, Sequence, Struct, Type)
 from giscanner.sourcescanner import (
-    SourceSymbol, symbol_type_name, CTYPE_POINTER, CTYPE_TYPEDEF, CTYPE_VOID,
-    CTYPE_BASIC_TYPE, CTYPE_FUNCTION, CTYPE_STRUCT, CSYMBOL_TYPE_FUNCTION,
+    SourceSymbol, ctype_name, symbol_type_name, CTYPE_POINTER,
+    CTYPE_BASIC_TYPE, CTYPE_UNION,
+    CTYPE_TYPEDEF, CTYPE_VOID, CTYPE_BASIC_TYPE, CTYPE_ENUM,
+    CTYPE_FUNCTION, CTYPE_STRUCT, CSYMBOL_TYPE_FUNCTION,
     CSYMBOL_TYPE_TYPEDEF, CSYMBOL_TYPE_STRUCT, CSYMBOL_TYPE_ENUM,
     CSYMBOL_TYPE_UNION, CSYMBOL_TYPE_OBJECT)
 
@@ -104,18 +106,7 @@ class Transformer(object):
         if stype == CSYMBOL_TYPE_FUNCTION:
             return self._create_function(symbol)
         elif stype == CSYMBOL_TYPE_TYPEDEF:
-            if (symbol.base_type.type == CTYPE_POINTER and
-                symbol.base_type.base_type.type == CTYPE_FUNCTION):
-                node = self._create_callback(symbol)
-            elif symbol.base_type.type == CTYPE_STRUCT:
-                node = self._create_typedef_struct(symbol)
-            # This prevents an infinite recursion when scanning structures with
-            # private types not exposed in headers.
-            elif symbol.base_type.type == CSYMBOL_TYPE_TYPEDEF:
-                return
-            else:
-                node = self._traverse_one(symbol, symbol.base_type.type)
-            return node
+            return self._create_typedef(symbol)
         elif stype == CSYMBOL_TYPE_STRUCT:
             return self._create_struct(symbol)
         elif stype == CSYMBOL_TYPE_ENUM:
@@ -127,7 +118,7 @@ class Transformer(object):
             pass
         else:
             raise NotImplementedError(
-                'Transformer: unhandled symbol: %r of type %r'
+                'Transformer: unhandled symbol: %r of type %s'
                 % (symbol.ident, symbol_type_name(stype)))
 
     def _create_enum(self, symbol):
@@ -164,7 +155,8 @@ class Transformer(object):
         elif source_type.type == CTYPE_POINTER:
             value = self._create_source_type(source_type.base_type) + '*'
         else:
-            print 'BUILDER: Unhandled source type: %d' % (source_type.type,)
+            print 'BUILDER: Unhandled source type %s' % (
+                ctype_name(source_type.type),)
             value = '???'
         return value
 
@@ -174,6 +166,25 @@ class Transformer(object):
         for child in base_type.child_list:
             yield self._create_parameter(
                 child, options.get(child.ident, []))
+
+    def _create_typedef(self, symbol):
+        ctype = symbol.base_type.type
+        if (ctype == CTYPE_POINTER and
+            symbol.base_type.base_type.type == CTYPE_FUNCTION):
+            node = self._create_callback(symbol)
+        elif ctype == CTYPE_STRUCT:
+            node = self._create_typedef_struct(symbol)
+        elif ctype == CTYPE_ENUM:
+            return self._create_enum(symbol)
+        elif ctype in (CTYPE_TYPEDEF,
+                       CTYPE_POINTER,
+                       CTYPE_BASIC_TYPE,
+                       CTYPE_UNION):
+            return
+        else:
+            raise NotImplementedError(
+                "symbol %r of type %s" % (symbol.ident, ctype_name(ctype)))
+        return node
 
     def _create_type(self, source_type):
         type_name = self._create_source_type(source_type)
@@ -230,7 +241,13 @@ class Transformer(object):
             struct = Struct(name, symbol.ident)
 
         for child in symbol.base_type.child_list:
-            field = self._traverse_one(child, child.base_type.type)
+            # FIXME: This is obviously wrong, we're sending in data
+            #        of the wrong type to _traverse_one
+            try:
+                field = self._traverse_one(child, child.base_type.type)
+            except NotImplementedError:
+                continue
+            
             if field:
                 struct.fields.append(field)
 
