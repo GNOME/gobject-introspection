@@ -20,7 +20,7 @@ EXTRA_DIST = utility-expected.gir Foo-expected.gir
 SCANNER = $(top_srcdir)/tools/g-ir-scanner
 
 utility.gir: libutility.la utility.h $(SCANNER)
-	@PYTHONPATH=$(top_builddir) $(SCANNER) -v \
+	@$(SCANNER) -v \
 	--include=$(top_srcdir)/gir/gobject-2.0.gir \
 	--library=libutility.la \
 	--namespace=utility \
@@ -29,7 +29,7 @@ utility.gir: libutility.la utility.h $(SCANNER)
 	--output $@
 
 Foo.gir: libfoo.la foo-object.h $(SCANNER)
-	@PYTHONPATH=$(top_builddir) $(SCANNER) -v \
+	@$(SCANNER) -v \
 	--include=$(top_srcdir)/gir/gobject-2.0.gir \
 	--include=$(top_builddir)/tests/parser/utility.gir \
 	--library=libfoo.la \
