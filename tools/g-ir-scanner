@@ -24,6 +24,16 @@ import optparse
 import os
 import sys
 
+# This only works on unix systems
+currentdir = os.path.dirname(os.path.abspath(sys.argv[0]))
+basedir = os.path.abspath(os.path.join(currentdir, '..'))
+if os.path.exists(os.path.join(basedir, '.svn')):
+    path = basedir
+else:
+    path = os.path.join(basedir, 'lib', 'python%d.%d' % sys.version_info[:2],
+                        'site-packages')
+sys.path.insert(0, path)
+
 from giscanner.glibtransformer import GLibTransformer
 from giscanner.sourcescanner import SourceScanner
 from giscanner.transformer import Transformer

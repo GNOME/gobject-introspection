@@ -1,5 +1,10 @@
 2008-05-31  Johan Dahlin  <jdahlin@async.com.br>
 
+	* tools/g-ir-scanner:
+	* tests/parser/Makefile.am:
+	Update sys.path before running the parser so we don't have
+	to setup PYTHONPATH ourselves.
+
 	* Makefile.am:
 	* configure.ac:
 	* girepository/Makefile.am:
