@@ -1,5 +1,19 @@
 2008-05-31  Johan Dahlin  <jdahlin@async.com.br>
 
+	* giscanner/scannerparser.y:
+	* giscanner/sourcescanner.h:
+	* giscanner/sourcescanner.py:
+	Add a new source type enum for member.
+	Use __repr__ for improved debugging
+	* giscanner/girparser.py:
+	Ignore some more
+	* giscanner/transformer.py:
+	Improve parsing of struct members.
+	* tests/parser/foo-object.h:
+	Add a new testcase
+
+2008-05-31  Johan Dahlin  <jdahlin@async.com.br>
+
 	* giscanner/xmlwriter.py:
 	Improve error reporting when trying to quote None.
 	* giscanner/girparser.py:

@@ -129,5 +129,15 @@ struct _FooStruct
   FooStructPrivate *priv;
   int member;
 };
-  
+
+typedef struct _FooRectangle          FooRectangle;
+
+struct _FooRectangle
+{
+  gint x;
+  gint y;
+  gint width;
+  gint height;
+};
+
 #endif /* __FOO_OBJECT_H__ */

@@ -31,7 +31,8 @@ from . import _giscanner
  CSYMBOL_TYPE_STRUCT,
  CSYMBOL_TYPE_UNION,
  CSYMBOL_TYPE_ENUM,
- CSYMBOL_TYPE_TYPEDEF) = range(8)
+ CSYMBOL_TYPE_TYPEDEF,
+ CSYMBOL_TYPE_MEMBER) = range(9)
 
 (CTYPE_INVALID,
  CTYPE_VOID,
@@ -75,7 +76,8 @@ def symbol_type_name(symbol_type):
         CSYMBOL_TYPE_STRUCT: 'struct',
         CSYMBOL_TYPE_UNION: 'union',
         CSYMBOL_TYPE_ENUM: 'enum',
-        CSYMBOL_TYPE_TYPEDEF: 'typedef'
+        CSYMBOL_TYPE_TYPEDEF: 'typedef',
+        CSYMBOL_TYPE_MEMBER: 'member',
         }.get(symbol_type)
 
 def ctype_name(ctype):
@@ -94,10 +96,17 @@ def ctype_name(ctype):
 
 
 class SourceType(object):
+    __members__ = ['type', 'base_type', 'name', 'child_list']
     def __init__(self, scanner, stype):
         self._scanner = scanner
         self._stype = stype
 
+    def __repr__(self):
+        return '<%s type=%r name=%r>' % (
+            self.__class__.__name__,
+            ctype_name(self.type),
+            self.name)
+    
     @property
     def type(self):
         return self._stype.type
@@ -120,9 +129,16 @@ class SourceType(object):
 
 
 class SourceSymbol(object):
+    __members__ = ['const_int', 'ident', 'type', 'base_type']
     def __init__(self, scanner, symbol):
         self._scanner = scanner
         self._symbol = symbol
+
+    def __repr__(self):
+        return '<%s type=%r ident=%r>' % (
+            self.__class__.__name__,
+            symbol_type_name(self.type),
+            self.ident)
 
     def directives(self):
         mapping = {}
@@ -152,7 +168,7 @@ class SourceScanner(object):
     def __init__(self):
         self._scanner = _giscanner.SourceScanner()
         self._filenames = []
-        self._cpp_options = []
+        self._cpp_options = []    
 
     # Public API
 

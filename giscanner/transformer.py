@@ -22,11 +22,11 @@ from giscanner.ast import (Callback, Enum, Function, Namespace, Member,
                            Parameter, Return, Sequence, Struct, Type)
 from giscanner.sourcescanner import (
     SourceSymbol, ctype_name, symbol_type_name, CTYPE_POINTER,
-    CTYPE_BASIC_TYPE, CTYPE_UNION,
+    CTYPE_BASIC_TYPE, CTYPE_UNION, CTYPE_ARRAY,
     CTYPE_TYPEDEF, CTYPE_VOID, CTYPE_BASIC_TYPE, CTYPE_ENUM,
     CTYPE_FUNCTION, CTYPE_STRUCT, CSYMBOL_TYPE_FUNCTION,
     CSYMBOL_TYPE_TYPEDEF, CSYMBOL_TYPE_STRUCT, CSYMBOL_TYPE_ENUM,
-    CSYMBOL_TYPE_UNION, CSYMBOL_TYPE_OBJECT)
+    CSYMBOL_TYPE_UNION, CSYMBOL_TYPE_OBJECT, CSYMBOL_TYPE_MEMBER)
 
 
 class Transformer(object):
@@ -113,13 +113,14 @@ class Transformer(object):
             return self._create_enum(symbol)
         elif stype == CSYMBOL_TYPE_OBJECT:
             return self._create_object(symbol)
+        elif stype == CSYMBOL_TYPE_MEMBER:
+            return self._create_member(symbol)
         elif stype == CSYMBOL_TYPE_UNION:
             # Unions are not supported
             pass
         else:
             raise NotImplementedError(
-                'Transformer: unhandled symbol: %r of type %s'
-                % (symbol.ident, symbol_type_name(stype)))
+                'Transformer: unhandled symbol: %r' % (symbol,))
 
     def _create_enum(self, symbol):
         members = []
@@ -131,7 +132,7 @@ class Transformer(object):
         return Enum(name, symbol.ident, members)
 
     def _create_object(self, symbol):
-        return Member(symbol.ident, symbol.base_type.name)
+        return self._create_member(symbol)
 
     def _create_function(self, symbol):
         directives = symbol.directives()
@@ -140,7 +141,6 @@ class Transformer(object):
                                       directives.get('return', []))
         name = self._remove_prefix(symbol.ident)
         name = self._strip_namespace_func(name)
-
         return Function(name, return_, parameters, symbol.ident)
 
     def _create_source_type(self, source_type):
@@ -152,11 +152,13 @@ class Transformer(object):
             value = source_type.name
         elif source_type.type == CTYPE_TYPEDEF:
             value = source_type.name
+        elif source_type.type == CTYPE_ARRAY:
+            return self._create_source_type(source_type.base_type)
         elif source_type.type == CTYPE_POINTER:
             value = self._create_source_type(source_type.base_type) + '*'
         else:
-            print 'BUILDER: Unhandled source type %s' % (
-                ctype_name(source_type.type),)
+            print 'TRANSFORMER: Unhandled source type %r' % (
+                source_type,)
             value = '???'
         return value
 
@@ -167,6 +169,15 @@ class Transformer(object):
             yield self._create_parameter(
                 child, options.get(child.ident, []))
 
+    def _create_member(self, symbol):
+        ctype = symbol.base_type.type
+        if (ctype == CTYPE_POINTER and
+            symbol.base_type.base_type.type == CTYPE_FUNCTION):
+            node = self._create_callback(symbol)
+        else:
+            node = Member(symbol.ident, self._create_source_type(symbol))
+        return node
+    
     def _create_typedef(self, symbol):
         ctype = symbol.base_type.type
         if (ctype == CTYPE_POINTER and
@@ -179,7 +190,8 @@ class Transformer(object):
         elif ctype in (CTYPE_TYPEDEF,
                        CTYPE_POINTER,
                        CTYPE_BASIC_TYPE,
-                       CTYPE_UNION):
+                       CTYPE_UNION,
+                       CTYPE_VOID):
             return
         else:
             raise NotImplementedError(
@@ -241,13 +253,7 @@ class Transformer(object):
             struct = Struct(name, symbol.ident)
 
         for child in symbol.base_type.child_list:
-            # FIXME: This is obviously wrong, we're sending in data
-            #        of the wrong type to _traverse_one
-            try:
-                field = self._traverse_one(child, child.base_type.type)
-            except NotImplementedError:
-                continue
-            
+            field = self._traverse_one(child)
             if field:
                 struct.fields.append(field)
 

@@ -728,17 +728,19 @@ struct_declaration_list
 struct_declaration
 	: specifier_qualifier_list struct_declarator_list ';'
 	  {
-		GList *l;
-		$$ = NULL;
-		for (l = $2; l != NULL; l = l->next) {
-			GISourceSymbol *sym = l->data;
-			if ($1->storage_class_specifier & STORAGE_CLASS_TYPEDEF) {
-				sym->type = CSYMBOL_TYPE_TYPEDEF;
-			}
-			gi_source_symbol_merge_type (sym, gi_source_type_copy ($1));
-			$$ = g_list_append ($$, sym);
-		}
-		ctype_free ($1);
+	    GList *l;
+	    $$ = NULL;
+	    for (l = $2; l != NULL; l = l->next)
+	      {
+		GISourceSymbol *sym = l->data;
+		if ($1->storage_class_specifier & STORAGE_CLASS_TYPEDEF)
+		    sym->type = CSYMBOL_TYPE_TYPEDEF;
+		else
+		    sym->type = CSYMBOL_TYPE_MEMBER;
+		gi_source_symbol_merge_type (sym, gi_source_type_copy ($1));
+		$$ = g_list_append ($$, sym);
+	      }
+	    ctype_free ($1);
 	  }
 	;
 

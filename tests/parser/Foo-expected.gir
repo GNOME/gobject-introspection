@@ -280,8 +280,15 @@
       </parameters>
     </callback>
     <record name="FooStruct" c:type="FooStruct">
+      <field name="priv" value="FooStructPrivate*"/>
       <field name="member" value="int"/>
     </record>
     <record name="FooStructPrivate" c:type="FooStructPrivate"/>
+    <record name="FooRectangle" c:type="FooRectangle">
+      <field name="x" value="gint"/>
+      <field name="y" value="gint"/>
+      <field name="width" value="gint"/>
+      <field name="height" value="gint"/>
+    </record>
   </namespace>
 </repository>

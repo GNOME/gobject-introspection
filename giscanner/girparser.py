@@ -50,7 +50,9 @@ class GIRParser(object):
                 self._parse_object(child)
             elif child.tag in [_corens('callback'),
                                _corens('function'),
-                               _corens('record')]:
+                               _corens('record'),
+                               _corens('enumeration'),
+                               ]:
                 continue
             else:
                 print 'PARSER: Unhandled %s' % (child.tag,)
