@@ -1,5 +1,8 @@
 2008-05-31  Johan Dahlin  <jdahlin@async.com.br>
 
+	* giscanner/giscannermodule.c (symbol_get_ident): Prevent
+	a crash when symbol->indent is NULL.
+
 	* giscanner/sourcescanner.py (ctype_name): Add ctype_name,
 	a function to convert a CTYPE symbol to a string
 

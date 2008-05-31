@@ -175,6 +175,13 @@ static PyObject *
 symbol_get_ident (PyGISourceSymbol *self,
 		  void            *context)
 {
+  
+  if (!self->symbol->ident)
+    {
+      Py_INCREF(Py_None);
+      return Py_None;
+    }
+    
   return PyString_FromString (self->symbol->ident);
 }
 
