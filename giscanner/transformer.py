@@ -132,7 +132,7 @@ class Transformer(object):
         return Enum(name, symbol.ident, members)
 
     def _create_object(self, symbol):
-        return self._create_member(symbol)
+        return Member(symbol.ident, symbol.base_type.name)
 
     def _create_function(self, symbol):
         directives = symbol.directives()
