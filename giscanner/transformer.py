@@ -27,6 +27,7 @@ from giscanner.sourcescanner import (
     CTYPE_FUNCTION, CTYPE_STRUCT, CSYMBOL_TYPE_FUNCTION,
     CSYMBOL_TYPE_TYPEDEF, CSYMBOL_TYPE_STRUCT, CSYMBOL_TYPE_ENUM,
     CSYMBOL_TYPE_UNION, CSYMBOL_TYPE_OBJECT, CSYMBOL_TYPE_MEMBER)
+from .utils import strip_common_prefix
 
 
 class Transformer(object):
@@ -125,14 +126,17 @@ class Transformer(object):
     def _create_enum(self, symbol):
         members = []
         for child in symbol.base_type.child_list:
-            members.append(Member(child.ident,
-                                  child.const_int))
+            name = strip_common_prefix(symbol.ident, child.ident).lower()
+            members.append(Member(name,
+                                  child.const_int,
+                                  child.ident))
 
-        name = self.strip_namespace_object(symbol.ident)
-        return Enum(name, symbol.ident, members)
+        enum_name = self.strip_namespace_object(symbol.ident)
+        return Enum(enum_name, symbol.ident, members)
 
     def _create_object(self, symbol):
-        return Member(symbol.ident, symbol.base_type.name)
+        return Member(symbol.ident, symbol.base_type.name,
+                      symbol.ident)
 
     def _create_function(self, symbol):
         directives = symbol.directives()
@@ -175,7 +179,8 @@ class Transformer(object):
             symbol.base_type.base_type.type == CTYPE_FUNCTION):
             node = self._create_callback(symbol)
         else:
-            node = Member(symbol.ident, self._create_source_type(symbol))
+            node = Member(symbol.ident, self._create_source_type(symbol),
+                          symbol.ident)
         return node
     
     def _create_typedef(self, symbol):

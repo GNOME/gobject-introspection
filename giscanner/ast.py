@@ -135,9 +135,10 @@ class Enum(Node):
 
 
 class Member(Node):
-    def __init__(self, name, value):
+    def __init__(self, name, value, symbol):
         Node.__init__(self, name)
         self.value = value
+        self.symbol = symbol
 
     def __repr__(self):
         return 'Member(%r, %r)' % (self.name, self.value)

@@ -147,7 +147,8 @@ class GIRWriter(XMLWriter):
 
     def _write_member(self, member):
         attrs = [('name', member.name),
-                 ('value', str(member.value))]
+                 ('value', str(member.value)),
+                 ('c:identifier', member.symbol)]
         if isinstance(member, GLibEnumMember):
             attrs.append(('glib:nick', member.nick))
         self.write_tag('member', attrs)

@@ -19,7 +19,6 @@
 #
 
 import ctypes
-import re
 import os
 
 from . import cgobject
@@ -28,30 +27,7 @@ from .ast import (Callback, Enum, Function, Member, Namespace, Parameter,
                   Property, Return, Sequence, Struct, Type)
 from .glibast import (GLibBoxed, GLibEnum, GLibEnumMember, GLibFlags,
                       GLibInterface, GLibObject, GLibSignal)
-
-
-# Copied from h2defs.py
-_upperstr_pat1 = re.compile(r'([^A-Z])([A-Z])')
-_upperstr_pat2 = re.compile(r'([A-Z][A-Z])([A-Z][0-9a-z])')
-_upperstr_pat3 = re.compile(r'^([A-Z])([A-Z])')
-
-def to_underscores(name):
-    """Converts a typename to the equivalent underscores name.
-    This is used to form the type conversion macros and enum/flag
-    name variables"""
-    name = _upperstr_pat1.sub(r'\1_\2', name)
-    name = _upperstr_pat2.sub(r'\1_\2', name)
-    name = _upperstr_pat3.sub(r'\1_\2', name, count=1)
-    return name
-
-_libtool_pat = re.compile("dlname='([A-z0-9\.\-\+]+)'\n")
-
-def resolve_libtool(libname):
-    data = open(libname).read()
-    filename = _libtool_pat.search(data).groups()[0]
-    libname = os.path.join(os.path.dirname(libname),
-                           '.libs', filename)
-    return libname
+from .utils import resolve_libtool, to_underscores
 
 
 class GLibTransformer(object):
@@ -169,6 +145,7 @@ class GLibTransformer(object):
         except AttributeError:
             print 'Warning: could not find symbol: %s' % symbol
             return False
+
         func.restype = cgobject.GType
         func.argtypes = []
         type_id = func()
@@ -275,8 +252,9 @@ class GLibTransformer(object):
 
         members = []
         for enum_value in type_class.get_values():
-            members.append(GLibEnumMember(enum_value.value_name,
+            members.append(GLibEnumMember(enum_value.value_nick,
                                           enum_value.value,
+                                          enum_value.value_name,
                                           enum_value.value_nick))
 
         klass = (GLibFlags if ftype_id == cgobject.TYPE_FLAGS else GLibEnum)

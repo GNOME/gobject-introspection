@@ -38,6 +38,7 @@ pkgpyexec_PYTHON = 		\
 	odict.py		\
 	sourcescanner.py	\
 	transformer.py		\
+	utils.py		\
 	xmlwriter.py
 
 _giscanner_la_CFLAGS = \

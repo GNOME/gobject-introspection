@@ -41,8 +41,8 @@ class GLibFlags(GLibEnum):
 
 
 class GLibEnumMember(Member):
-    def __init__(self, name, value, nick):
-        Member.__init__(self, name, value)
+    def __init__(self, name, value, symbol, nick):
+        Member.__init__(self, name, value, symbol)
         self.nick = nick
 
 

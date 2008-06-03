@@ -216,9 +216,18 @@
                  c:type="FooEnumType"
                  glib:type-name="FooEnumType"
                  glib:get-type="foo_enum_type_get_type">
-      <member name="FOO_ENUM_ALPHA" value="0" glib:nick="alpha"/>
-      <member name="FOO_ENUM_BETA" value="1" glib:nick="beta"/>
-      <member name="FOO_ENUM_DELTA" value="2" glib:nick="delta"/>
+      <member name="alpha"
+                value="0"
+                c:identifier="FOO_ENUM_ALPHA"
+                glib:nick="alpha"/>
+      <member name="beta"
+                value="1"
+                c:identifier="FOO_ENUM_BETA"
+                glib:nick="beta"/>
+      <member name="delta"
+                value="2"
+                c:identifier="FOO_ENUM_DELTA"
+                glib:nick="delta"/>
     </enumeration>
     <function name="enum_type_method" c:identifier="foo_enum_type_method">
       <return-value>
@@ -234,14 +243,23 @@
               c:type="FooFlagsType"
               glib:type-name="FooFlagsType"
               glib:get-type="foo_flags_type_get_type">
-      <member name="FOO_FLAGS_FIRST" value="1" glib:nick="first"/>
-      <member name="FOO_FLAGS_SECOND" value="2" glib:nick="second"/>
-      <member name="FOO_FLAGS_THIRD" value="4" glib:nick="third"/>
+      <member name="first"
+                value="1"
+                c:identifier="FOO_FLAGS_FIRST"
+                glib:nick="first"/>
+      <member name="second"
+                value="2"
+                c:identifier="FOO_FLAGS_SECOND"
+                glib:nick="second"/>
+      <member name="third"
+                value="4"
+                c:identifier="FOO_FLAGS_THIRD"
+                glib:nick="third"/>
     </bitfield>
     <enumeration name="EnumNoType" c:type="FooEnumNoType">
-      <member name="FOO_ENUM_UN" value="1"/>
-      <member name="FOO_ENUM_DEUX" value="2"/>
-      <member name="FOO_ENUM_TROIS" value="3"/>
+      <member name="un" value="1" c:identifier="FOO_ENUM_UN"/>
+      <member name="deux" value="2" c:identifier="FOO_ENUM_DEUX"/>
+      <member name="trois" value="3" c:identifier="FOO_ENUM_TROIS"/>
     </enumeration>
     <glib:boxed c:type="Boxed"
                 glib:name="Boxed"
