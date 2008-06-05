@@ -151,6 +151,16 @@ class Struct(Node):
         self.symbol = symbol
 
 
+class Field(Node):
+    def __init__(self, name, typenode, symbol):
+        Node.__init__(self, name)
+        self.type = typenode
+        self.symbol = symbol
+
+    def __repr__(self):
+        return 'Field(%r, %r)' % (self.name, self.type)
+
+
 class Return(Node):
     def __init__(self, rtype):
         Node.__init__(self)

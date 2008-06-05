@@ -19,7 +19,8 @@
 #
 
 from giscanner.ast import (Callback, Enum, Function, Namespace, Member,
-                           Parameter, Return, Sequence, Struct, Type)
+                           Parameter, Return, Sequence, Struct, Field,
+                           Type)
 from giscanner.sourcescanner import (
     SourceSymbol, ctype_name, symbol_type_name, CTYPE_POINTER,
     CTYPE_BASIC_TYPE, CTYPE_UNION, CTYPE_ARRAY,
@@ -179,8 +180,8 @@ class Transformer(object):
             symbol.base_type.base_type.type == CTYPE_FUNCTION):
             node = self._create_callback(symbol)
         else:
-            node = Member(symbol.ident, self._create_source_type(symbol),
-                          symbol.ident)
+            ftype = self._create_type(symbol.base_type)
+            node = Field(symbol.ident, ftype, symbol.ident)
         return node
     
     def _create_typedef(self, symbol):

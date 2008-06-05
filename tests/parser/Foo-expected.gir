@@ -298,15 +298,27 @@
       </parameters>
     </callback>
     <record name="FooStruct" c:type="FooStruct">
-      <field name="priv" value="FooStructPrivate*"/>
-      <field name="member" value="int"/>
+      <field name="priv">
+        <type name="FooStructPrivate*" c:type="FooStructPrivate*"/>
+      </field>
+      <field name="member">
+        <type name="int" c:type="int"/>
+      </field>
     </record>
     <record name="FooStructPrivate" c:type="FooStructPrivate"/>
     <record name="FooRectangle" c:type="FooRectangle">
-      <field name="x" value="gint"/>
-      <field name="y" value="gint"/>
-      <field name="width" value="gint"/>
-      <field name="height" value="gint"/>
+      <field name="x">
+        <type name="gint" c:type="gint"/>
+      </field>
+      <field name="y">
+        <type name="gint" c:type="gint"/>
+      </field>
+      <field name="width">
+        <type name="gint" c:type="gint"/>
+      </field>
+      <field name="height">
+        <type name="gint" c:type="gint"/>
+      </field>
     </record>
   </namespace>
 </repository>

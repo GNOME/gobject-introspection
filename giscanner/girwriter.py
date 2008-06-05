@@ -218,9 +218,9 @@ class GIRWriter(XMLWriter):
             self._write_callback(field)
             return
 
-        attrs = [('name', field.name),
-                 ('value', str(field.value))]
-        self.write_tag('field', attrs)
+        attrs = [('name', field.name)]
+        with self.tagcontext('field', attrs):
+            self._write_type(field.type)
 
     def _write_signal(self, signal):
         attrs = [('name', signal.name)]
