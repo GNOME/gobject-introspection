@@ -1,3 +1,8 @@
+2008-06-07  Johan Dahlin  <jdahlin@async.com.br>
+
+	* giscanner/xmlwriter.py:
+	Improve line wrapping when > 79 charaters
+
 2008-06-05  Jürg Billeter  <j@bitron.ch>
 
 	* giscanner/ast.py:

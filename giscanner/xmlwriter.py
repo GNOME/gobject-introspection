@@ -42,14 +42,13 @@ class XMLWriter(object):
                 raise ValueError(
                     "value for attribute %r cannot be None" % (attr,))
             attr_length += 2 + len(attr) + len(quoteattr(value))
-        return attr_length + indent
+        return attr_length + indent + self._indent
 
-    def _collect_attributes(self, attributes, extra_indent=-1):
+    def _collect_attributes(self, tag_name, attributes, indent=-1):
         if not attributes:
             return ''
-        extra_indent += len(self._indent_char) * self._indent
-        if self._calc_attrs_length(attributes, extra_indent) > 79:
-            indent_len = extra_indent
+        if self._calc_attrs_length(attributes, indent) > 79:
+            indent_len = self._indent + len(tag_name) + 1
         else:
             indent_len = 0
         first = True
@@ -67,7 +66,7 @@ class XMLWriter(object):
 
     def _open_tag(self, tag_name, attributes=None):
         attrs = self._collect_attributes(
-            attributes, len(tag_name) + 1)
+            tag_name, attributes, len(tag_name) + 2)
         self.write_line('<%s%s>' % (tag_name, attrs))
 
     def _close_tag(self, tag_name):
@@ -82,13 +81,15 @@ class XMLWriter(object):
         self._data.write('%s%s\n' % (self._indent_char * self._indent, line))
 
     def write_tag(self, tag_name, attributes, data=None):
+        if attributes is None:
+            attributes = []
         prefix = '<%s' % (tag_name,)
         if data is not None:
             suffix = '>%s</%s>' % (data, tag_name)
         else:
             suffix = '/>'
         attrs = self._collect_attributes(
-            attributes, len(prefix) + len(suffix))
+            tag_name, attributes, len(prefix) + len(suffix))
         self.write_line(prefix + attrs + suffix)
 
     def push_tag(self, tag_name, attributes=None):
@@ -110,3 +111,26 @@ class XMLWriter(object):
         finally:
             self.pop_tag()
 
+
+def test():
+    w = XMLWriter()
+    w.push_tag('repository')
+    w.push_tag('namespace')
+    w.push_tag('enumeration')
+    w.push_tag('member',
+               [('name', 'west'),
+                ('value', '7'),
+                ('c:identifier', 'GTK_ANCHOR_WEST'),
+                ('glib:nick', 'west')])
+    
+    w.pop_tag()
+    w.pop_tag()
+    w.pop_tag()
+    x = w.get_xml()
+    lines = x.split('\n')
+    import pprint
+    pprint.pprint(lines)
+    assert len(lines[3]) < 80, len(lines[3])
+
+if __name__ == '__main__':
+    test()
