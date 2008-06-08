@@ -22,7 +22,7 @@
 #define __G_IDL_MODULE_H__
 
 #include <glib.h>
-#include "gmetadata.h"
+#include "gtypelib.h"
 
 G_BEGIN_DECLS
 
@@ -40,7 +40,7 @@ GIdlModule *g_idl_module_new            (const gchar *name,
                                          const gchar *module_filename);
 void        g_idl_module_free           (GIdlModule  *module);
 
-GMetadata * g_idl_module_build_metadata (GIdlModule  *module,
+GTypelib * g_idl_module_build_metadata (GIdlModule  *module,
 					 GList       *modules);
 
 G_END_DECLS

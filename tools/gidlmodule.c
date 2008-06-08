@@ -60,7 +60,7 @@ g_idl_module_free (GIdlModule *module)
   g_free (module);
 }
 
-GMetadata *
+GTypelib *
 g_idl_module_build_metadata (GIdlModule  *module,
 			     GList       *modules)
 {
@@ -210,6 +210,6 @@ g_idl_module_build_metadata (GIdlModule  *module,
 
   metadata = g_realloc (data, offset2);
   length = header->size = offset2;
-  return g_metadata_new_from_memory (metadata, length);
+  return g_typelib_new_from_memory (metadata, length);
 }
 

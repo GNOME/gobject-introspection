@@ -1,3 +1,23 @@
+2008-06-08  Philip Van Hoof  <pvanhoof@gnome.org>
+
+	* girepository/girepository.c:
+	* girepository/gtypelib.c:
+	* girepository/ginfo.c:
+	* girepository/ginvoke.c:
+	* girepository/girepository.h:
+	* girepository/gtypelib.h:
+	* girepository/gmetadata.c:
+	* girepository/Makefile.am:
+	* girepository/gmetadata.h:
+	* tools/compiler.c:
+	* tools/gidlmodule.c:
+	* tools/gidlnode.c
+	* tools/generate.c:
+	* tools/gidlmodule.h:
+	* tools/gidlparser.c:
+
+	Renamed GMetadata to GTypelib
+
 2008-06-07  Johan Dahlin  <jdahlin@async.com.br>
 
 	* giscanner/xmlwriter.py:

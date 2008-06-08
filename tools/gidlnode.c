@@ -24,7 +24,7 @@
 
 #include "gidlmodule.h"
 #include "gidlnode.h"
-#include "gmetadata.h"
+#include "gtypelib.h"
 
 static gulong string_count = 0;
 static gulong unique_string_count = 0;
