@@ -217,17 +217,17 @@
                  glib:type-name="FooEnumType"
                  glib:get-type="foo_enum_type_get_type">
       <member name="alpha"
-                value="0"
-                c:identifier="FOO_ENUM_ALPHA"
-                glib:nick="alpha"/>
+              value="0"
+              c:identifier="FOO_ENUM_ALPHA"
+              glib:nick="alpha"/>
       <member name="beta"
-                value="1"
-                c:identifier="FOO_ENUM_BETA"
-                glib:nick="beta"/>
+              value="1"
+              c:identifier="FOO_ENUM_BETA"
+              glib:nick="beta"/>
       <member name="delta"
-                value="2"
-                c:identifier="FOO_ENUM_DELTA"
-                glib:nick="delta"/>
+              value="2"
+              c:identifier="FOO_ENUM_DELTA"
+              glib:nick="delta"/>
     </enumeration>
     <function name="enum_type_method" c:identifier="foo_enum_type_method">
       <return-value>
@@ -244,17 +244,17 @@
               glib:type-name="FooFlagsType"
               glib:get-type="foo_flags_type_get_type">
       <member name="first"
-                value="1"
-                c:identifier="FOO_FLAGS_FIRST"
-                glib:nick="first"/>
+              value="1"
+              c:identifier="FOO_FLAGS_FIRST"
+              glib:nick="first"/>
       <member name="second"
-                value="2"
-                c:identifier="FOO_FLAGS_SECOND"
-                glib:nick="second"/>
+              value="2"
+              c:identifier="FOO_FLAGS_SECOND"
+              glib:nick="second"/>
       <member name="third"
-                value="4"
-                c:identifier="FOO_FLAGS_THIRD"
-                glib:nick="third"/>
+              value="4"
+              c:identifier="FOO_FLAGS_THIRD"
+              glib:nick="third"/>
     </bitfield>
     <enumeration name="EnumNoType" c:type="FooEnumNoType">
       <member name="un" value="1" c:identifier="FOO_ENUM_UN"/>
