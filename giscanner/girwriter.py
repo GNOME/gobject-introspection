@@ -110,6 +110,8 @@ class GIRWriter(XMLWriter):
         if parameter.transfer:
             attrs.append(('transfer-ownership',
                           str(int(parameter.transfer))))
+        if parameter.allow_none:
+            attrs.append(('allow-none', '1'))
         with self.tagcontext('parameter', attrs):
             self._write_type(parameter.type)
 

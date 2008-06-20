@@ -66,6 +66,19 @@
           </parameter>
         </parameters>
       </method>
+      <method name="allow_none" c:identifier="foo_object_allow_none">
+        <return-value>
+          <type name="GLib.Object" c:type="GObject*"/>
+        </return-value>
+        <parameters>
+          <parameter name="object">
+            <type name="Object" c:type="FooObject*"/>
+          </parameter>
+          <parameter name="allow_none" allow-none="1">
+            <type name="string" c:type="gchar*"/>
+          </parameter>
+        </parameters>
+      </method>
       <method name="inout" c:identifier="foo_object_inout">
         <return-value>
           <type name="int32" c:type="gint"/>

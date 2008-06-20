@@ -142,6 +142,7 @@ class Parameter(Node):
         self.type = typenode
         self.direction = PARAM_DIRECTION_IN
         self.transfer = False
+        self.allow_none = False
 
     def __repr__(self):
         return 'Parameter(%r, %r)' % (self.name, self.type)

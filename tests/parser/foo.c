@@ -201,7 +201,7 @@ foo_object_inout2 (FooObject *object, int *inoutarg)
  *
  * This is a 3th test for out arguments
  *
- * @inoutarg: (in-out): This is an argument test
+ * @inoutarg: (in-out) (allow-none): This is an argument test
  * Return value: an int
  */
 gint
@@ -291,6 +291,16 @@ GObject*
 foo_object_create_object (FooObject *object)
 {
 	return g_object_ref (object);
+}
+
+/**
+ * foo_object_allow_none: 
+ * @object: a #GObject
+ * @allow_none: (allow-none): 
+ **/
+GObject*
+foo_object_allow_none (FooObject *object, gchar *allow_none)
+{
 }
 
 G_DEFINE_TYPE (FooSubobject, foo_subobject, FOO_TYPE_OBJECT);

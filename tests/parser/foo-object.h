@@ -51,6 +51,7 @@ UtilityObject*        foo_object_external_type     (FooObject *object);
 gint                  foo_object_out               (FooObject *object,
 						    int       *outarg);
 GObject*              foo_object_create_object     (FooObject *object);
+GObject*              foo_object_allow_none        (FooObject *object, gchar *allow_none);
 gint                  foo_object_inout             (FooObject *object, int *inoutarg);
 gint                  foo_object_inout2            (FooObject *object, int *inoutarg);
 gint                  foo_object_inout3            (FooObject *object, int *inoutarg);

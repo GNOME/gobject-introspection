@@ -221,6 +221,8 @@ class Transformer(object):
                 param.direction = 'out'
             elif option == 'callee-owns':
                 param.transfer = True
+            elif option == 'allow-none':
+                param.allow_none = True
             else:
                 print 'Unhandled parameter annotation option: %s' % (
                     option,)

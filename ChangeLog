@@ -1,3 +1,14 @@
+2008-06-20  Johan Dahlin  <jdahlin@async.com.br>
+
+	* giscanner/ast.py:
+	* giscanner/girwriter.py:
+	* giscanner/transformer.py:
+	* tests/parser/Foo-expected.gir:
+	* tests/parser/foo-object.h:
+	* tests/parser/foo.c (foo_object_allow_none):
+	Add support for gtk-doc annotations for allow-none.
+	Add test case.
+
 2008-06-19  Johan Dahlin  <jdahlin@async.com.br>
 
 	* giscanner/ast.py:
