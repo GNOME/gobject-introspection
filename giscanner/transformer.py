@@ -20,7 +20,7 @@
 
 from giscanner.ast import (Callback, Enum, Function, Namespace, Member,
                            Parameter, Return, Sequence, Struct, Field,
-                           Type)
+                           Type, type_name_from_ctype)
 from giscanner.sourcescanner import (
     SourceSymbol, ctype_name, symbol_type_name, CTYPE_POINTER,
     CTYPE_BASIC_TYPE, CTYPE_UNION, CTYPE_ARRAY,
@@ -205,8 +205,9 @@ class Transformer(object):
         return node
 
     def _create_type(self, source_type):
-        type_name = self._create_source_type(source_type)
-        return Type(type_name)
+        ctype = self._create_source_type(source_type)
+        type_name = type_name_from_ctype(ctype)
+        return Type(type_name, ctype)
 
     def _create_parameter(self, symbol, options):
         ptype = self._create_type(symbol.base_type)
@@ -228,7 +229,7 @@ class Transformer(object):
     def _create_return(self, source_type, options=None):
         if not options:
             options = []
-        rtype = Type(self._create_source_type(source_type))
+        rtype = self._create_type(source_type)
         rtype = self._resolve_param_type(rtype)
         return_ = Return(rtype)
         for option in options:
@@ -237,7 +238,9 @@ class Transformer(object):
             elif option.startswith('seq '):
                 value, element_options = option[3:].split(None, 2)
                 element_type = self._parse_type_annotation(value)
-                seq = Sequence(rtype.name, element_type)
+                seq = Sequence(rtype.name,
+                               type_name_from_ctype(rtype.name),
+                               element_type)
                 seq.transfer = True
                 return_.type = seq
             else:

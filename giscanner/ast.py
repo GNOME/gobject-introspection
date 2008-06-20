@@ -72,7 +72,30 @@ PARAM_DIRECTION_IN = 'in'
 PARAM_DIRECTION_OUT = 'out'
 PARAM_DIRECTION_INOUT = 'inout'
 
+type_names = {}
 
+# C
+type_names['char'] = TYPE_CHAR
+type_names['unsigned char'] = TYPE_UCHAR
+type_names['short'] = TYPE_INT16
+type_names['unsigned short'] = TYPE_UINT16
+type_names['int'] = TYPE_INT32
+type_names['unsigned int'] = TYPE_UINT32
+type_names['long'] = TYPE_LONG
+type_names['unsigned long'] = TYPE_ULONG
+type_names['float'] = TYPE_FLOAT
+type_names['double'] = TYPE_DOUBLE
+type_names['char*'] = TYPE_STRING
+type_names['void*'] = TYPE_ANY
+type_names['void'] = TYPE_NONE
+type_names['size_t'] = TYPE_SIZE
+type_names['ssize_t'] = TYPE_SSIZE
+
+
+def type_name_from_ctype(ctype):
+    return type_names.get(ctype, ctype)
+    
+    
 class Node(object):
     def __init__(self, name=None):
         self.name = name
@@ -108,9 +131,9 @@ class VFunction(Function):
 
 
 class Type(Node):
-    def __init__(self, name):
+    def __init__(self, name, ctype=None):
         Node.__init__(self, name)
-        self.ctype = name
+        self.ctype = ctype
 
 
 class Parameter(Node):
@@ -212,9 +235,9 @@ class Constant(Node):
 
 
 class Property(Node):
-    def __init__(self, name, type_name):
+    def __init__(self, name, type_name, ctype=None):
         Node.__init__(self, name)
-        self.type = Type(type_name)
+        self.type = Type(type_name, ctype)
 
     def __repr__(self):
         return '%s(%r, %r, %r)' % (
@@ -236,7 +259,8 @@ class Callback(Node):
 
 class Sequence(Type):
     # Subclass, because a Sequence is a kind of Type
-    def __init__(self, name, element_type):
-        Type.__init__(self, name)
+    def __init__(self, name, ctype, element_type):
+        Type.__init__(self, name, ctype)
         self.element_type = element_type
         self.transfer = False
+

@@ -1,3 +1,14 @@
+2008-06-19  Johan Dahlin  <jdahlin@async.com.br>
+
+	* giscanner/ast.py:
+	* giscanner/girwriter.py:
+	* giscanner/glibast.py:
+	* giscanner/glibtransformer.py:
+	* giscanner/transformer.py:
+	* tests/parser/Foo-expected.gir:
+	Start using abstract type instead of the raw C types.
+	Register a bunch of glib types we care about.
+
 2008-06-19  Rob Taylor  <rob.taylor@codethink.co.uk>
 
 	* AUTHORS:

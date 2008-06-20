@@ -24,7 +24,8 @@ import os
 from . import cgobject
 from .odict import odict
 from .ast import (Callback, Enum, Function, Member, Namespace, Parameter,
-                  Property, Return, Sequence, Struct, Type)
+                  Property, Return, Sequence, Struct, Type,
+                  type_name_from_ctype)
 from .glibast import (GLibBoxed, GLibEnum, GLibEnumMember, GLibFlags,
                       GLibInterface, GLibObject, GLibSignal)
 from .utils import resolve_libtool, to_underscores
@@ -228,8 +229,9 @@ class GLibTransformer(object):
             node.fields.append(field)
 
     def _create_type(self, type_id):
-        type_name = cgobject.type_name(type_id)
-        return Type(type_name)
+        ctype = cgobject.type_name(type_id)
+        type_name = type_name_from_ctype(ctype)
+        return Type(type_name, ctype)
 
     def _introspect_type(self, type_id, symbol):
         fundamental_type_id = cgobject.type_fundamental(type_id)
@@ -314,13 +316,16 @@ class GLibTransformer(object):
         for pspec in pspecs:
             if pspec.owner_type != type_id:
                 continue
+            ctype = cgobject.type_name(pspec.value_type)
             node.properties.append(Property(
                 pspec.name,
-                cgobject.type_name(pspec.value_type)))
+                type_name_from_ctype(ctype),
+                ctype,
+                ))
 
     def _introspect_signals(self, node, type_id):
         for signal_info in cgobject.signal_list(type_id):
-            rtype = Type(cgobject.type_name(signal_info.return_type))
+            rtype = self._create_type(signal_info.return_type)
             return_ = Return(rtype)
             signal = GLibSignal(signal_info.signal_name, return_)
             for i, parameter in enumerate(signal_info.get_params()):

@@ -10,7 +10,7 @@
     </interface>
     <function name="init" c:identifier="foo_init">
       <return-value>
-        <type name="gint" c:type="gint"/>
+        <type name="int32" c:type="gint"/>
       </return-value>
     </function>
     <class name="Object"
@@ -25,7 +25,7 @@
       </constructor>
       <method name="method" c:identifier="foo_object_method">
         <return-value>
-          <type name="gint" c:type="gint"/>
+          <type name="int32" c:type="gint"/>
         </return-value>
         <parameters>
           <parameter name="object">
@@ -45,7 +45,7 @@
       </method>
       <method name="out" c:identifier="foo_object_out">
         <return-value>
-          <type name="gint" c:type="gint"/>
+          <type name="int32" c:type="gint"/>
         </return-value>
         <parameters>
           <parameter name="object">
@@ -68,7 +68,7 @@
       </method>
       <method name="inout" c:identifier="foo_object_inout">
         <return-value>
-          <type name="gint" c:type="gint"/>
+          <type name="int32" c:type="gint"/>
         </return-value>
         <parameters>
           <parameter name="object">
@@ -81,7 +81,7 @@
       </method>
       <method name="inout2" c:identifier="foo_object_inout2">
         <return-value>
-          <type name="gint" c:type="gint"/>
+          <type name="int32" c:type="gint"/>
         </return-value>
         <parameters>
           <parameter name="object">
@@ -94,7 +94,7 @@
       </method>
       <method name="inout3" c:identifier="foo_object_inout3">
         <return-value>
-          <type name="gint" c:type="gint"/>
+          <type name="int32" c:type="gint"/>
         </return-value>
         <parameters>
           <parameter name="object">
@@ -107,7 +107,7 @@
       </method>
       <method name="in" c:identifier="foo_object_in">
         <return-value>
-          <type name="gint" c:type="gint"/>
+          <type name="int32" c:type="gint"/>
         </return-value>
         <parameters>
           <parameter name="object">
@@ -120,7 +120,7 @@
       </method>
       <method name="calleeowns" c:identifier="foo_object_calleeowns">
         <return-value>
-          <type name="gint" c:type="gint"/>
+          <type name="int32" c:type="gint"/>
         </return-value>
         <parameters>
           <parameter name="object">
@@ -133,7 +133,7 @@
       </method>
       <method name="calleesowns" c:identifier="foo_object_calleesowns">
         <return-value>
-          <type name="gint" c:type="gint"/>
+          <type name="int32" c:type="gint"/>
         </return-value>
         <parameters>
           <parameter name="object">
@@ -172,31 +172,31 @@
         </parameters>
       </method>
       <property name="string">
-        <type name="gchararray" c:type="gchararray"/>
+        <type name="string" c:type="gchararray"/>
       </property>
       <callback name="virtual_method">
         <return-value>
-          <type name="gboolean" c:type="gboolean"/>
+          <type name="boolean" c:type="gboolean"/>
         </return-value>
         <parameters>
           <parameter name="object">
             <type name="FooObject*" c:type="FooObject*"/>
           </parameter>
           <parameter name="first_param">
-            <type name="int" c:type="int"/>
+            <type name="int32" c:type="int"/>
           </parameter>
         </parameters>
       </callback>
       <glib:signal name="signal">
         <return-value>
-          <type name="gchararray" c:type="gchararray"/>
+          <type name="string" c:type="gchararray"/>
         </return-value>
         <parameters>
           <parameter name="object">
             <type name="GObject" c:type="GObject"/>
           </parameter>
           <parameter name="p0">
-            <type name="gpointer" c:type="gpointer"/>
+            <type name="any" c:type="gpointer"/>
           </parameter>
         </parameters>
       </glib:signal>
@@ -231,7 +231,7 @@
     </enumeration>
     <function name="enum_type_method" c:identifier="foo_enum_type_method">
       <return-value>
-        <type name="int" c:type="int"/>
+        <type name="int32" c:type="int"/>
       </return-value>
       <parameters>
         <parameter name="foo_enum">
@@ -272,7 +272,7 @@
       </constructor>
       <method name="method" c:identifier="foo_boxed_method">
         <return-value>
-          <type name="void" c:type="void"/>
+          <type name="none" c:type="void"/>
         </return-value>
         <parameters>
           <parameter name="boxed">
@@ -283,17 +283,17 @@
     </glib:boxed>
     <callback name="FooCallback">
       <return-value>
-        <type name="gboolean" c:type="gboolean"/>
+        <type name="boolean" c:type="gboolean"/>
       </return-value>
       <parameters>
         <parameter name="foo">
           <type name="FooObject*" c:type="FooObject*"/>
         </parameter>
         <parameter name="b">
-          <type name="gboolean" c:type="gboolean"/>
+          <type name="boolean" c:type="gboolean"/>
         </parameter>
         <parameter name="data">
-          <type name="gpointer" c:type="gpointer"/>
+          <type name="any" c:type="gpointer"/>
         </parameter>
       </parameters>
     </callback>
@@ -302,22 +302,22 @@
         <type name="FooStructPrivate*" c:type="FooStructPrivate*"/>
       </field>
       <field name="member">
-        <type name="int" c:type="int"/>
+        <type name="int32" c:type="int"/>
       </field>
     </record>
     <record name="FooStructPrivate" c:type="FooStructPrivate"/>
     <record name="FooRectangle" c:type="FooRectangle">
       <field name="x">
-        <type name="gint" c:type="gint"/>
+        <type name="int32" c:type="gint"/>
       </field>
       <field name="y">
-        <type name="gint" c:type="gint"/>
+        <type name="int32" c:type="gint"/>
       </field>
       <field name="width">
-        <type name="gint" c:type="gint"/>
+        <type name="int32" c:type="gint"/>
       </field>
       <field name="height">
-        <type name="gint" c:type="gint"/>
+        <type name="int32" c:type="gint"/>
       </field>
     </record>
   </namespace>

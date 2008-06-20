@@ -118,7 +118,7 @@ class GIRWriter(XMLWriter):
         # FIXME: figure out if type references a basic type
         #        or a boxed/class/interface etc. and skip
         #        writing the ctype if the latter.
-        if 1:
+        if type.ctype is not None:
             attrs.append(('c:type', type.ctype))
         self.write_tag('type', attrs)
 
