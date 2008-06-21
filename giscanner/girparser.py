@@ -52,6 +52,9 @@ class GIRParser(object):
                                _corens('function'),
                                _corens('record'),
                                _corens('enumeration'),
+                               _corens('bitfield'),
+                               _corens('interface'),
+                               _glibns('boxed'),
                                ]:
                 continue
             else:

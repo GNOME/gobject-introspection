@@ -1,3 +1,8 @@
+2008-06-21  Johan Dahlin  <jdahlin@async.com.br>
+
+	* giscanner/girparser.py (GIRParser._parse_api): Ignore a few
+	more tags
+
 2008-06-20  Johan Dahlin  <jdahlin@async.com.br>
 
 	* giscanner/ast.py:
