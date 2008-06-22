@@ -1,7 +1,10 @@
-GObject binary metadata for introspection
+GObject binary typelib for introspection
 -----------------------------------------
 
-Version 0.6
+Version 0.7
+
+Changes since 0.6:
+- rename metadata to typelib, to follow xpcom terminology
 
 Changes since 0.5:
 - basic type cleanup:
@@ -46,10 +49,10 @@ Changes since 0.1:
 - change the type offset to be measured in words rather than bytes
 
 
-Metadata
+Typelib
 --------
 
-The format of GObject metadata is strongly influenced by the Mozilla XPCOM 
+The format of GObject typelib is strongly influenced by the Mozilla XPCOM 
 format. 
 
 Some of the differences to XPCOM include:
@@ -58,17 +61,17 @@ Some of the differences to XPCOM include:
   16 bits of type information for each parameter, which is enough to encode 
   simple types inline. Complex (e.g. recursive) types are stored out of line 
   in a separate list of types.
-- String and complex type data is stored outside of metadata entry blobs, 
-  references are stored as offsets relative to the start of the metadata. 
+- String and complex type data is stored outside of typelib entry blobs, 
+  references are stored as offsets relative to the start of the typelib. 
   One possibility is to store the strings and types in a pools at the end 
-  of the metadata.
+  of the typelib.
 
 Overview
 --------
 
-The metadata has the following general format.
+The typelib has the following general format.
 
-metadata ::= header, directory, blobs, annotations
+typelib ::= header, directory, blobs, annotations
 
 directory ::= list of entries
 
@@ -84,7 +87,7 @@ annotation ::= offset, key, value
 Details
 -------
 
-We describe the fragments that make up the metadata in the form of C structs 
+We describe the fragments that make up the typelib in the form of C structs 
 (although some fall short of being valid C structs since they contain multiple
 flexible arrays).
 
@@ -131,28 +134,28 @@ magic:    The string "GOBJ\nMETADATA\r\n\032". This was inspired by XPCOM,
 
 major_version, 
 minor_version: 
-          The version of the metadata format. Minor version changes indicate 
-          compatible changes and should still allow the metadata to be parsed 
+          The version of the typelib format. Minor version changes indicate 
+          compatible changes and should still allow the typelib to be parsed 
           by a parser designed for the same major_version.
       
 n_entries: 
           The number of entries in the directory. 
 
 n_local_entries:
-	  The number of entries referring to blobs in this metadata. The
+	  The number of entries referring to blobs in this typelib. The
 	  local entries must occur before the unresolved entries.
 
 directory: 
-          Offset of the directory in the metadata. 
+          Offset of the directory in the typelib. 
           FIXME: need to specify if and how the directory is sorted
 
 annotations: 
-          Offset of the list of annotations in the metadata.
+          Offset of the list of annotations in the typelib.
 
-size:     The size of the metadata.
+size:     The size of the typelib.
 
 namespace:
-          Offset of the namespace string in the metadata. 
+          Offset of the namespace string in the typelib. 
 
 entry_blob_size:
 function_blob_size:
@@ -210,11 +213,11 @@ blob_type:
 	 10 errordomain
 	 	 
 
-is_local: Wether this entry refers to a blob in this metadata.
+is_local: Wether this entry refers to a blob in this typelib.
 
 name:     The name of the entry.
 
-offset:   If is_local is set, this is the offset of the blob in the metadata.
+offset:   If is_local is set, this is the offset of the blob in the typelib.
           Otherwise, it is the offset of the namespace in which the blob has
           to be looked up by name.
 
@@ -528,7 +531,7 @@ struct InterfaceTypeBlob
   guint16 interface;
 }
 
-Types which are described by an entry in the metadata have a tag value of 21. 
+Types which are described by an entry in the typelib have a tag value of 21. 
 If the interface is an enum of flags type, is_pointer is 0, otherwise it is 1.
 
 interface: 
@@ -992,7 +995,7 @@ type:     The type of the value. In most cases this should be a numeric
 
 size:     The size of the value in bytes.
 
-offset:   The offset of the value in the metadata.
+offset:   The offset of the value in the typelib.
 
 
 AnnotationBlob (12 bytes)
@@ -1004,7 +1007,7 @@ struct AnnotationBlob
   guint32 value;
 }
 
-offset:   The offset of the metadata entry to which this annotation refers. 
+offset:   The offset of the typelib entry to which this annotation refers. 
           Annotations are kept sorted by offset, so that the annotations 
           of an entry can be found by a binary search.
 
