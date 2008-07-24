@@ -1,3 +1,11 @@
+2008-07-24  Colin Walters  <walters@verbum.org>
+
+	* girepository/girepository.c (g_irepository_register): Add
+	environment variable G_IREPOSITORY_VERBOSE so we can print
+	out what we're doing.
+	* girepository/girepository.c (g_irepository_register_file): 
+	Add GError error message to g_debug call.
+
 2008-07-08  Jürg Billeter  <j@bitron.ch>
 
 	* giscanner/glibast.py:
