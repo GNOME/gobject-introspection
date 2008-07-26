@@ -8,7 +8,7 @@ INCLUDES = \
 EXTRA_DIST = g-ir-scanner
 
 noinst_LTLIBRARIES = libgirepository-parser.la
-noinst_PROGRAMS = g-idl-compiler g-idl-generate
+bin_PROGRAMS = g-idl-compiler g-idl-generate
 bin_SCRIPTS = g-ir-scanner
 
 libgirepository_parser_la_SOURCES =		\

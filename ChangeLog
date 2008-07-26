@@ -1,3 +1,10 @@
+2008-07-26  Colin Walters  <walters@verbum.org>
+
+	* tools/Makefile.am (bin_PROGRAMS): Install g-idl-compiler
+	and g-idl-generate to go along with how we're changing this
+	module to be installed.
+	* gobject-introspection-1.0.pc.in: Set up Cflags and Libs.
+
 2008-07-24  Colin Walters  <walters@verbum.org>
 
 	* girepository/girepository.c (g_irepository_register): Add
