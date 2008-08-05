@@ -1,6 +1,6 @@
-/* GObject introspection: A parser for the XML IDL format
+/* GObject introspection: A parser for the XML GIR format
  *
- * Copyright (C) 2005 Matthias Clasen
+ * Copyright (C) 2008 Philip Van Hoof
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -31,15 +31,16 @@ typedef enum
 {
   STATE_START,
   STATE_END,
-  STATE_ROOT,
+  STATE_REPOSITORY,
   STATE_NAMESPACE,
+  STATE_ENUM,
+  STATE_BITFIELD,
   STATE_FUNCTION,
   STATE_PARAMETERS,
   STATE_OBJECT,
   STATE_INTERFACE,
   STATE_IMPLEMENTS,
   STATE_REQUIRES,
-  STATE_ENUM,
   STATE_BOXED,
   STATE_STRUCT,
   STATE_SIGNAL,
@@ -380,16 +381,16 @@ start_boxed (GMarkupParseContext *context,
       const gchar *deprecated;
       
       name = find_attribute ("name", attribute_names, attribute_values);
-      typename = find_attribute ("type-name", attribute_names, attribute_values);
-      typeinit = find_attribute ("get-type", attribute_names, attribute_values);
+      typename = find_attribute ("glib:type-name", attribute_names, attribute_values);
+      typeinit = find_attribute ("glib:get-type", attribute_names, attribute_values);
       deprecated = find_attribute ("deprecated", attribute_names, attribute_values);
       
       if (name == NULL)
 	MISSING_ATTRIBUTE (error, element_name, "name");
       else if (typename == NULL)
-	MISSING_ATTRIBUTE (error, element_name, "type-name");
+	MISSING_ATTRIBUTE (error, element_name, "glib:type-name");
       else if (typeinit == NULL)
-	MISSING_ATTRIBUTE (error, element_name, "get-type");
+	MISSING_ATTRIBUTE (error, element_name, "glib:get-type");
       else
 	{
 	  GIdlNodeBoxed *boxed;
@@ -444,14 +445,14 @@ start_function (GMarkupParseContext *context,
       const gchar *type;
       
       name = find_attribute ("name", attribute_names, attribute_values);
-      symbol = find_attribute ("symbol", attribute_names, attribute_values);
+      symbol = find_attribute ("c:identifier", attribute_names, attribute_values);
       deprecated = find_attribute ("deprecated", attribute_names, attribute_values);
       type = find_attribute ("type", attribute_names, attribute_values);
       
       if (name == NULL)
 	MISSING_ATTRIBUTE (error, element_name, "name");
       else if (strcmp (element_name, "callback") != 0 && symbol == NULL)
-	MISSING_ATTRIBUTE (error, element_name, "symbol");
+	MISSING_ATTRIBUTE (error, element_name, "c:identifier");
       else
 	{
 	  GIdlNodeFunction *function;
@@ -812,8 +813,8 @@ start_enum (GMarkupParseContext *context,
       const gchar *deprecated;
       
       name = find_attribute ("name", attribute_names, attribute_values);
-      typename = find_attribute ("type-name", attribute_names, attribute_values);
-      typeinit = find_attribute ("get-type", attribute_names, attribute_values);
+      typename = find_attribute ("glib:type-name", attribute_names, attribute_values);
+      typeinit = find_attribute ("glib:get-type", attribute_names, attribute_values);
       deprecated = find_attribute ("deprecated", attribute_names, attribute_values);
       
       if (name == NULL)
@@ -1118,16 +1119,16 @@ start_interface (GMarkupParseContext *context,
       const gchar *deprecated;
       
       name = find_attribute ("name", attribute_names, attribute_values);
-      typename = find_attribute ("type-name", attribute_names, attribute_values);
-      typeinit = find_attribute ("get-type", attribute_names, attribute_values);
+      typename = find_attribute ("glib:type-name", attribute_names, attribute_values);
+      typeinit = find_attribute ("glib:get-type", attribute_names, attribute_values);
       deprecated = find_attribute ("deprecated", attribute_names, attribute_values);
       
       if (name == NULL)
 	MISSING_ATTRIBUTE (error, element_name, "name");
       else if (typename == NULL)
-	MISSING_ATTRIBUTE (error, element_name, "type-name");
+	MISSING_ATTRIBUTE (error, element_name, "glib:type-name");
       else if (typeinit == NULL)
-	MISSING_ATTRIBUTE (error, element_name, "get-type");
+	MISSING_ATTRIBUTE (error, element_name, "glib:get-type");
       else
 	{
 	  GIdlNodeInterface *iface;
@@ -1155,14 +1156,14 @@ start_interface (GMarkupParseContext *context,
 }
 
 static gboolean
-start_object (GMarkupParseContext *context,
+start_class (GMarkupParseContext *context,
 	      const gchar         *element_name,
 	      const gchar        **attribute_names,
 	      const gchar        **attribute_values,
 	      ParseContext        *ctx,
 	      GError             **error)
 {
-  if (strcmp (element_name, "object") == 0 &&
+  if (strcmp (element_name, "class") == 0 &&
       ctx->state == STATE_NAMESPACE)
     {
       const gchar *name;
@@ -1173,16 +1174,16 @@ start_object (GMarkupParseContext *context,
       
       name = find_attribute ("name", attribute_names, attribute_values);
       parent = find_attribute ("parent", attribute_names, attribute_values);
-      typename = find_attribute ("type-name", attribute_names, attribute_values);
-      typeinit = find_attribute ("get-type", attribute_names, attribute_values);
+      typename = find_attribute ("glib:type-name", attribute_names, attribute_values);
+      typeinit = find_attribute ("glib:get-type", attribute_names, attribute_values);
       deprecated = find_attribute ("deprecated", attribute_names, attribute_values);
       
       if (name == NULL)
 	MISSING_ATTRIBUTE (error, element_name, "name");
       else if (typename == NULL)
-	MISSING_ATTRIBUTE (error, element_name, "type-name");
+	MISSING_ATTRIBUTE (error, element_name, "glib:type-name");
       else if (typeinit == NULL)
-	MISSING_ATTRIBUTE (error, element_name, "get-type");
+	MISSING_ATTRIBUTE (error, element_name, "glib:get-type");
       else
 	{
 	  GIdlNodeInterface *iface;
@@ -1299,7 +1300,7 @@ start_signal (GMarkupParseContext *context,
 	      ParseContext       *ctx,
 	      GError             **error)
 {
-  if (strcmp (element_name, "signal") == 0 && 
+  if (strcmp (element_name, "glib:signal") == 0 && 
       (ctx->state == STATE_OBJECT ||
        ctx->state == STATE_INTERFACE))
     {
@@ -1515,8 +1516,8 @@ start_union (GMarkupParseContext *context,
       
       name = find_attribute ("name", attribute_names, attribute_values);
       deprecated = find_attribute ("deprecated", attribute_names, attribute_values);
-      typename = find_attribute ("type-name", attribute_names, attribute_values);
-      typeinit = find_attribute ("get-type", attribute_names, attribute_values);
+      typename = find_attribute ("glib:type-name", attribute_names, attribute_values);
+      typeinit = find_attribute ("glib:get-type", attribute_names, attribute_values);
       
       if (name == NULL)
 	MISSING_ATTRIBUTE (error, element_name, "name");
@@ -1589,10 +1590,10 @@ start_element_handler (GMarkupParseContext *context,
   ParseContext *ctx = user_data;
   gint line_number, char_number;
 
-  switch (element_name[0])
+  switch (element_name[0]) 
     {
-    case 'a':
-      if (strcmp (element_name, "api") == 0 && ctx->state == STATE_START)
+    case 'r':
+      if (strcmp (element_name, "repository") == 0 && ctx->state == STATE_START)
 	{
 	  const gchar *version;
 
@@ -1607,7 +1608,7 @@ start_element_handler (GMarkupParseContext *context,
 			 "Unsupported version '%s'",
 			 version);
 	  else
-	    ctx->state = STATE_ROOT;
+	    ctx->state = STATE_NAMESPACE;
 	  
 	  goto out;
 	}
@@ -1750,12 +1751,12 @@ start_element_handler (GMarkupParseContext *context,
 	}
       break;
 
-    case 'o':
-      if (start_object (context, element_name, 
+    case 'c':
+      if (start_class (context, element_name, 
 			attribute_names, attribute_values,
 			ctx, error))
 	goto out;
-      else if (strcmp (element_name, "object") == 0 &&
+      else if (strcmp (element_name, "class") == 0 &&
 	       ctx->state == STATE_REQUIRES)
 	{
 	  const gchar *name;
@@ -1865,7 +1866,7 @@ end_element_handler (GMarkupParseContext *context,
       /* no need to GError here, GMarkup already catches this */
       break;
 
-    case STATE_ROOT:
+    case STATE_REPOSITORY:
       ctx->state = STATE_END;
       break;
 
@@ -1873,7 +1874,7 @@ end_element_handler (GMarkupParseContext *context,
       if (strcmp (element_name, "namespace") == 0)
 	{
           ctx->current_module = NULL;
-          ctx->state = STATE_ROOT;
+          ctx->state = STATE_NAMESPACE;
         }
       break;
 
@@ -1903,7 +1904,7 @@ end_element_handler (GMarkupParseContext *context,
       break;
 
     case STATE_OBJECT:
-      if (strcmp (element_name, "object") == 0)
+      if (strcmp (element_name, "class") == 0)
 	{
 	  ctx->current_node = NULL;
 	  ctx->state = STATE_NAMESPACE;
@@ -2011,9 +2012,9 @@ static GMarkupParser parser =
 };
 
 GList * 
-g_idl_parse_string (const gchar  *buffer, 
-		    gssize        length,
-                    GError      **error)
+g_ir_parse_string (const gchar  *buffer, 
+		   gssize        length,
+		   GError      **error)
 {
   ParseContext ctx = { 0 };
   GMarkupParseContext *context;
@@ -2035,8 +2036,8 @@ g_idl_parse_string (const gchar  *buffer,
 }
 
 GList *
-g_idl_parse_file (const gchar  *filename,
-		  GError      **error)
+g_ir_parse_file (const gchar  *filename,
+		 GError      **error)
 {
   gchar *buffer;
   gsize length;
@@ -2045,7 +2046,7 @@ g_idl_parse_file (const gchar  *filename,
   if (!g_file_get_contents (filename, &buffer, &length, error))
     return NULL;
   
-  modules = g_idl_parse_string (buffer, length, error);
+  modules = g_ir_parse_string (buffer, length, error);
 
   g_free (buffer);
 
