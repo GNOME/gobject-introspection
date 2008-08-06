@@ -36,7 +36,8 @@ typedef enum
   STATE_ENUM,
   STATE_BITFIELD,
   STATE_FUNCTION,
-  STATE_PARAMETERS,
+  STATE_FUNCTION_RETURN,
+  STATE_FUNCTION_PARAMETERS,
   STATE_OBJECT,
   STATE_INTERFACE,
   STATE_IMPLEMENTS,
@@ -58,6 +59,7 @@ struct _ParseContext
 
   GIrModule *current_module;
   GIrNode *current_node;
+  GIrNode *current_parameter;
 };
 
 #define MISSING_ATTRIBUTE(error,element,attribute)                            \
@@ -566,7 +568,7 @@ start_parameter (GMarkupParseContext *context,
       const gchar *nullok;
       const gchar *transfer;
       
-      type = find_attribute ("type", attribute_names, attribute_values);
+      type = find_attribute ("c:type", attribute_names, attribute_values);
       name = find_attribute ("name", attribute_names, attribute_values);
       direction = find_attribute ("direction", attribute_names, attribute_values);
       retval = find_attribute ("retval", attribute_names, attribute_values);
@@ -701,7 +703,7 @@ start_field (GMarkupParseContext *context,
       const gchar *offset;
       
       name = find_attribute ("name", attribute_names, attribute_values);
-      type = find_attribute ("type", attribute_names, attribute_values);
+      type = find_attribute ("c:type", attribute_names, attribute_values);
       readable = find_attribute ("readable", attribute_names, attribute_values);
       writable = find_attribute ("writable", attribute_names, attribute_values);
       bits = find_attribute ("bits", attribute_names, attribute_values);
@@ -711,7 +713,7 @@ start_field (GMarkupParseContext *context,
       if (name == NULL)
 	MISSING_ATTRIBUTE (error, element_name, "name");
       else if (type == NULL)
-	MISSING_ATTRIBUTE (error, element_name, "type");
+	MISSING_ATTRIBUTE (error, element_name, "c:type");
       else
 	{
 	  GIrNodeField *field;
@@ -804,8 +806,8 @@ start_enum (GMarkupParseContext *context,
 	     ParseContext        *ctx,
 	     GError             **error)
 {
-  if ((strcmp (element_name, "enum") == 0 && ctx->state == STATE_NAMESPACE) ||
-      (strcmp (element_name, "flags") == 0 && ctx->state == STATE_NAMESPACE))
+  if ((strcmp (element_name, "enumeration") == 0 && ctx->state == STATE_NAMESPACE) ||
+      (strcmp (element_name, "bitfield") == 0 && ctx->state == STATE_NAMESPACE))
     {
       const gchar *name;
       const gchar *typename;
@@ -823,7 +825,7 @@ start_enum (GMarkupParseContext *context,
 	{	      
 	  GIrNodeEnum *enum_;
 	  
-	  if (strcmp (element_name, "enum") == 0)
+	  if (strcmp (element_name, "enumeration") == 0)
 	    enum_ = (GIrNodeEnum *) g_ir_node_new (G_IR_NODE_ENUM);
 	  else
 	    enum_ = (GIrNodeEnum *) g_ir_node_new (G_IR_NODE_FLAGS);
@@ -867,7 +869,7 @@ start_property (GMarkupParseContext *context,
       const gchar *construct_only;
       
       name = find_attribute ("name", attribute_names, attribute_values);
-      type = find_attribute ("type", attribute_names, attribute_values);
+      type = find_attribute ("c:type", attribute_names, attribute_values);
       readable = find_attribute ("readable", attribute_names, attribute_values);
       writable = find_attribute ("writable", attribute_names, attribute_values);
       construct = find_attribute ("construct", attribute_names, attribute_values);
@@ -876,7 +878,7 @@ start_property (GMarkupParseContext *context,
       if (name == NULL)
 	MISSING_ATTRIBUTE (error, element_name, "name");
       else if (type == NULL)
-	MISSING_ATTRIBUTE (error, element_name, "type");
+	MISSING_ATTRIBUTE (error, element_name, "c:type");
       else 
 	{	      
 	  GIrNodeProperty *property;
@@ -1002,14 +1004,14 @@ start_constant (GMarkupParseContext *context,
       const gchar *deprecated;
       
       name = find_attribute ("name", attribute_names, attribute_values);
-      type = find_attribute ("type", attribute_names, attribute_values);
+      type = find_attribute ("c:type", attribute_names, attribute_values);
       value = find_attribute ("value", attribute_names, attribute_values);
       deprecated = find_attribute ("deprecated", attribute_names, attribute_values);
       
       if (name == NULL)
 	MISSING_ATTRIBUTE (error, element_name, "name");
       else if (type == NULL)
-	MISSING_ATTRIBUTE (error, element_name, "type");
+	MISSING_ATTRIBUTE (error, element_name, "c:type");
       else if (value == NULL)
 	MISSING_ATTRIBUTE (error, element_name, "value");
       else 
@@ -1211,6 +1213,59 @@ start_class (GMarkupParseContext *context,
 }
 
 static gboolean
+start_type (GMarkupParseContext *context,
+	    const gchar         *element_name,
+	    const gchar        **attribute_names,
+	    const gchar        **attribute_values,
+	    ParseContext       *ctx,
+	    GError             **error)
+{
+  const gchar *name;
+  const gchar *ctype;
+
+  if (strcmp (element_name, "type") != 0)
+    return FALSE;
+
+  name = find_attribute ("name", attribute_names, attribute_values);
+  ctype = find_attribute ("c:type", attribute_names, attribute_values);
+
+  if (name == NULL)
+    MISSING_ATTRIBUTE (error, element_name, "name");
+  if (ctype == NULL)
+    MISSING_ATTRIBUTE (error, element_name, "c:type");
+
+  switch (ctx->current_node->type)
+    {
+    case G_IR_NODE_FUNCTION_RETURN:
+      {
+      }
+	if (ctx->current_is_return) 
+	  {
+	    func->result = param;
+	  }
+	else
+	  {
+	  }
+      }
+      break;
+    case G_IR_NODE_SIGNAL:
+      {
+	GIrNodeSignal *signal = (GIrNodeSignal *)ctx->current_node;
+	signal->result = param;
+      }
+      break;
+    case G_IR_NODE_VFUNC:
+      {
+	GIrNodeVFunc *vfunc = (GIrNodeVFunc *)ctx->current_node;
+	vfunc->result = param;
+      }
+      break;
+    default:
+      g_assert_not_reached ();
+    }
+}
+
+static gboolean
 start_return_type (GMarkupParseContext *context,
 		   const gchar         *element_name,
 		   const gchar        **attribute_names,
@@ -1218,18 +1273,18 @@ start_return_type (GMarkupParseContext *context,
 		   ParseContext       *ctx,
 		   GError             **error)
 {
-  if (strcmp (element_name, "return-type") == 0 &&
+  if (strcmp (element_name, "return-value") == 0 &&
       ctx->state == STATE_FUNCTION)
     {
       const gchar *type;
       const gchar *nullok;
       const gchar *transfer;
       
-      type = find_attribute ("type", attribute_names, attribute_values);
+      type = find_attribute ("c:type", attribute_names, attribute_values);
       nullok = find_attribute ("null-ok", attribute_names, attribute_values);
       transfer = find_attribute ("transfer", attribute_names, attribute_values);
       if (type == NULL)
-	MISSING_ATTRIBUTE (error, element_name, "type");
+	MISSING_ATTRIBUTE (error, element_name, "c:type");
       else
 	{
 	  GIrNodeParam *param;
@@ -1260,30 +1315,6 @@ start_return_type (GMarkupParseContext *context,
 	  
 	  param->type = parse_type (type);
 	  
-	  switch (ctx->current_node->type)
-	    {
-	    case G_IR_NODE_FUNCTION:
-	    case G_IR_NODE_CALLBACK:
-	      {
-		GIrNodeFunction *func = (GIrNodeFunction *)ctx->current_node;
-		func->result = param;
-	      }
-	      break;
-	    case G_IR_NODE_SIGNAL:
-	      {
-		GIrNodeSignal *signal = (GIrNodeSignal *)ctx->current_node;
-		signal->result = param;
-	      }
-	      break;
-	    case G_IR_NODE_VFUNC:
-	      {
-		GIrNodeVFunc *vfunc = (GIrNodeVFunc *)ctx->current_node;
-		vfunc->result = param;
-	      }
-	      break;
-	    default:
-	      g_assert_not_reached ();
-	    }
 	}
       
       return TRUE;
@@ -1823,6 +1854,13 @@ start_element_handler (GMarkupParseContext *context,
 	goto out;
       break;
 
+    case 't':
+      if (start_type (context, element_name,
+		      attribute_names, attribute_values,
+		      ctx, error))
+	goto out;
+      break;
+
     case 'v':
       if (start_vfunc (context, element_name,
 		       attribute_names, attribute_values,
@@ -1921,7 +1959,7 @@ end_element_handler (GMarkupParseContext *context,
       break;
 
     case STATE_ENUM:
-      if (strcmp (element_name, "enum") == 0 ||
+      if (strcmp (element_name, "enumeration") == 0 ||
 	  strcmp (element_name, "flags") == 0)
 	{
 	  ctx->current_node = NULL;

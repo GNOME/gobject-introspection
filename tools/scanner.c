@@ -32,12 +32,11 @@
 #include <gmodule.h>
 #include "sourcescanner.h"
 #include "scanner.h"
-#include "gidlparser.h"
-#include "gidlmodule.h"
-#include "gidlnode.h"
-#include "gidlwriter.h"
+#include "girparser.h"
+#include "girmodule.h"
+#include "girnode.h"
+#include "girwriter.h"
 #include "grealpath.h"
-
 
 typedef GType (*TypeFunction) (void);
 
@@ -82,13 +81,13 @@ g_igenerator_free (GIGenerator *generator)
   g_free (generator);
 }
 
-static GIdlNodeType *
+static GIrNodeType *
 create_node_from_gtype (GType type_id)
 {
-  GIdlNodeType *node;
+  GIrNodeType *node;
   GType fundamental;
 
-  node = (GIdlNodeType *) g_idl_node_new (G_IDL_NODE_TYPE);
+  node = (GIrNodeType *) g_idl_node_new (G_IR_NODE_TYPE);
 
   fundamental = g_type_fundamental (type_id);
   switch (fundamental)
@@ -115,12 +114,12 @@ create_node_from_gtype (GType type_id)
   return node;
 }
 
-static GIdlNodeType *
+static GIrNodeType *
 create_node_from_ctype (GISourceType * ctype)
 {
-  GIdlNodeType *node;
+  GIrNodeType *node;
 
-  node = (GIdlNodeType *) g_idl_node_new (G_IDL_NODE_TYPE);
+  node = (GIrNodeType *) g_idl_node_new (G_IR_NODE_TYPE);
 
   switch (ctype->type)
     {
@@ -160,13 +159,13 @@ create_node_from_ctype (GISourceType * ctype)
 	node->unparsed = g_strdup ("GCallback");
       else
 	{
-	  GIdlNodeType *gibasetype = create_node_from_ctype (ctype->base_type);
+	  GIrNodeType *gibasetype = create_node_from_ctype (ctype->base_type);
 	  node->unparsed = g_strdup_printf ("%s*", gibasetype->unparsed);
 	}
       break;
     case CTYPE_ARRAY:
       {
-	GIdlNodeType *gibasetype = create_node_from_ctype (ctype->base_type);
+	GIrNodeType *gibasetype = create_node_from_ctype (ctype->base_type);
 	node->unparsed = g_strdup_printf ("%s[]", gibasetype->unparsed);
 	break;
       }
@@ -189,18 +188,18 @@ str_replace (const char *str, const char *needle, const char *replacement)
 
 static void
 g_igenerator_process_properties (GIGenerator * igenerator,
-				 GIdlNodeInterface * node, GType type_id)
+				 GIrNodeInterface * node, GType type_id)
 {
   int i;
   guint n_properties;
   GParamSpec **properties;
 
-  if (node->node.type == G_IDL_NODE_OBJECT)
+  if (node->node.type == G_IR_NODE_OBJECT)
     {
       GObjectClass *type_class = g_type_class_ref (type_id);
       properties = g_object_class_list_properties (type_class, &n_properties);
     }
-  else if (node->node.type == G_IDL_NODE_INTERFACE)
+  else if (node->node.type == G_IR_NODE_INTERFACE)
     {
       GTypeInterface *iface = g_type_default_interface_ref (type_id);
       properties = g_object_interface_list_properties (iface, &n_properties);
@@ -212,14 +211,14 @@ g_igenerator_process_properties (GIGenerator * igenerator,
 
   for (i = 0; i < n_properties; i++)
     {
-      GIdlNodeProperty *giprop;
+      GIrNodeProperty *giprop;
 
       /* ignore inherited properties */
       if (properties[i]->owner_type != type_id)
 	{
 	  continue;
 	}
-      giprop = (GIdlNodeProperty *) g_idl_node_new (G_IDL_NODE_PROPERTY);
+      giprop = (GIrNodeProperty *) g_idl_node_new (G_IR_NODE_PROPERTY);
       giprop->node.name = g_strdup (properties[i]->name);
       node->members =
 	g_list_insert_sorted (node->members, giprop,
@@ -235,7 +234,7 @@ g_igenerator_process_properties (GIGenerator * igenerator,
 
 static void
 g_igenerator_process_signals (GIGenerator * igenerator,
-			      GIdlNodeInterface * node, GType type_id)
+			      GIrNodeInterface * node, GType type_id)
 {
   int i, j;
   guint n_signal_ids;
@@ -244,11 +243,11 @@ g_igenerator_process_signals (GIGenerator * igenerator,
   for (i = 0; i < n_signal_ids; i++)
     {
       GSignalQuery signal_query;
-      GIdlNodeSignal *gisig;
-      GIdlNodeParam *giparam;
+      GIrNodeSignal *gisig;
+      GIrNodeParam *giparam;
       
       g_signal_query (signal_ids[i], &signal_query);
-      gisig = (GIdlNodeSignal *) g_idl_node_new (G_IDL_NODE_SIGNAL);
+      gisig = (GIrNodeSignal *) g_idl_node_new (G_IR_NODE_SIGNAL);
       gisig->node.name = g_strdup (signal_query.signal_name);
       node->members =
 	g_list_insert_sorted (node->members, gisig,
@@ -261,19 +260,19 @@ g_igenerator_process_signals (GIGenerator * igenerator,
 	(signal_query.signal_flags & G_SIGNAL_RUN_CLEANUP) != 0;
 
       /* add sender parameter */
-      giparam = (GIdlNodeParam *) g_idl_node_new (G_IDL_NODE_PARAM);
+      giparam = (GIrNodeParam *) g_idl_node_new (G_IR_NODE_PARAM);
       gisig->parameters = g_list_append (gisig->parameters, giparam);
       giparam->node.name = g_strdup ("object");
       giparam->type = create_node_from_gtype (type_id);
 
       for (j = 0; j < signal_query.n_params; j++)
 	{
-	  giparam = (GIdlNodeParam *) g_idl_node_new (G_IDL_NODE_PARAM);
+	  giparam = (GIrNodeParam *) g_idl_node_new (G_IR_NODE_PARAM);
 	  gisig->parameters = g_list_append (gisig->parameters, giparam);
 	  giparam->node.name = g_strdup_printf ("p%d", j);
 	  giparam->type = create_node_from_gtype (signal_query.param_types[j]);
 	}
-      gisig->result = (GIdlNodeParam *) g_idl_node_new (G_IDL_NODE_PARAM);
+      gisig->result = (GIrNodeParam *) g_idl_node_new (G_IR_NODE_PARAM);
       gisig->result->type = create_node_from_gtype (signal_query.return_type);
     }
 }
@@ -301,12 +300,12 @@ g_igenerator_create_object (GIGenerator *igenerator,
 
 {
   char *alt_lower_case_prefix;
-  GIdlNodeInterface *node;
+  GIrNodeInterface *node;
   guint n_type_interfaces;
   GType *type_interfaces;
   int i;
 
-  node = (GIdlNodeInterface *) g_idl_node_new (G_IDL_NODE_OBJECT);
+  node = (GIrNodeInterface *) g_idl_node_new (G_IR_NODE_OBJECT);
   node->node.name = g_strdup (g_type_name (type_id));
   igenerator->module->entries =
     g_list_insert_sorted (igenerator->module->entries, node,
@@ -366,13 +365,13 @@ g_igenerator_create_interface (GIGenerator *igenerator,
 			       char *lower_case_prefix)
 
 {
-  GIdlNodeInterface *node;
+  GIrNodeInterface *node;
   gboolean is_gobject = FALSE;
   guint n_iface_prereqs;
   GType *iface_prereqs;
   int i;
 
-  node = (GIdlNodeInterface *) g_idl_node_new (G_IDL_NODE_INTERFACE);
+  node = (GIrNodeInterface *) g_idl_node_new (G_IR_NODE_INTERFACE);
   node->node.name = g_strdup (g_type_name (type_id));
   
   /* workaround for AtkImplementorIface */
@@ -419,8 +418,8 @@ g_igenerator_create_boxed (GIGenerator *igenerator,
 			   GType type_id,
 			   char *lower_case_prefix)
 {
-  GIdlNodeBoxed *node =
-    (GIdlNodeBoxed *) g_idl_node_new (G_IDL_NODE_BOXED);
+  GIrNodeBoxed *node =
+    (GIrNodeBoxed *) g_idl_node_new (G_IR_NODE_BOXED);
   node->node.name = g_strdup (g_type_name (type_id));
   igenerator->module->entries =
     g_list_insert_sorted (igenerator->module->entries, node,
@@ -439,11 +438,11 @@ g_igenerator_create_enum (GIGenerator *igenerator,
 			  GType type_id,
 			  char *lower_case_prefix)
 {
-  GIdlNodeEnum *node;
+  GIrNodeEnum *node;
   int i;
   GEnumClass *type_class;
   
-  node = (GIdlNodeEnum *) g_idl_node_new (G_IDL_NODE_ENUM);
+  node = (GIrNodeEnum *) g_idl_node_new (G_IR_NODE_ENUM);
   node->node.name = g_strdup (g_type_name (type_id));
   igenerator->module->entries =
     g_list_insert_sorted (igenerator->module->entries, node,
@@ -459,8 +458,8 @@ g_igenerator_create_enum (GIGenerator *igenerator,
 
   for (i = 0; i < type_class->n_values; i++)
     {
-      GIdlNodeValue *gival =
-	(GIdlNodeValue *) g_idl_node_new (G_IDL_NODE_VALUE);
+      GIrNodeValue *gival =
+	(GIrNodeValue *) g_idl_node_new (G_IR_NODE_VALUE);
       node->values = g_list_append (node->values, gival);
       gival->node.name =
 	g_strdup (type_class->values[i].value_name);
@@ -474,11 +473,11 @@ g_igenerator_create_flags (GIGenerator *igenerator,
 			   GType type_id,
 			   char *lower_case_prefix)
 {
-  GIdlNodeEnum *node;
+  GIrNodeEnum *node;
   GFlagsClass *type_class;
   int i;
   
-  node = (GIdlNodeEnum *) g_idl_node_new (G_IDL_NODE_FLAGS);
+  node = (GIrNodeEnum *) g_idl_node_new (G_IR_NODE_FLAGS);
   node->node.name = g_strdup (g_type_name (type_id));
   igenerator->module->entries =
     g_list_insert_sorted (igenerator->module->entries, node,
@@ -494,8 +493,8 @@ g_igenerator_create_flags (GIGenerator *igenerator,
   
   for (i = 0; i < type_class->n_values; i++)
     {
-      GIdlNodeValue *gival =
-	(GIdlNodeValue *) g_idl_node_new (G_IDL_NODE_VALUE);
+      GIrNodeValue *gival =
+	(GIrNodeValue *) g_idl_node_new (G_IR_NODE_VALUE);
       node->values = g_list_append (node->values, gival);
       gival->node.name =
 	g_strdup (type_class->values[i].value_name);
@@ -595,14 +594,14 @@ g_igenerator_process_module (GIGenerator * igenerator,
 static void
 g_igenerator_process_function_symbol (GIGenerator * igenerator, GISourceSymbol * sym)
 {
-  GIdlNodeFunction *func;
+  GIrNodeFunction *func;
   char *last_underscore;
   GList *param_l;
   int i;
   GList *l;
   GSList *j, *directives;
   
-  func = (GIdlNodeFunction *) g_idl_node_new (G_IDL_NODE_FUNCTION);
+  func = (GIrNodeFunction *) g_idl_node_new (G_IR_NODE_FUNCTION);
   
   /* check whether this is a type method */
   last_underscore = strrchr (sym->ident, '_');
@@ -610,7 +609,7 @@ g_igenerator_process_function_symbol (GIGenerator * igenerator, GISourceSymbol *
   while (last_underscore != NULL)
     {
       char *prefix;
-      GIdlNode *node;
+      GIrNode *node;
 
       prefix = g_strndup (sym->ident, last_underscore - sym->ident);
       prefix = str_replace (prefix, "_", "");
@@ -625,8 +624,8 @@ g_igenerator_process_function_symbol (GIGenerator * igenerator, GISourceSymbol *
 	  if (strcmp (func->node.name, "get_type") == 0)
 	    return;
 
-	  if ((node->type == G_IDL_NODE_OBJECT ||
-	       node->type == G_IDL_NODE_BOXED) &&
+	  if ((node->type == G_IR_NODE_OBJECT ||
+	       node->type == G_IR_NODE_BOXED) &&
 	      g_str_has_prefix (func->node.name, "new"))
 	    func->is_constructor = TRUE;
 	  else
@@ -669,7 +668,7 @@ g_igenerator_process_function_symbol (GIGenerator * igenerator, GISourceSymbol *
     }
 
   func->symbol = g_strdup (sym->ident);
-  func->result = (GIdlNodeParam *) g_idl_node_new (G_IDL_NODE_PARAM);
+  func->result = (GIrNodeParam *) g_idl_node_new (G_IR_NODE_PARAM);
   func->result->type = create_node_from_ctype (sym->base_type->base_type);
 
   directives = g_hash_table_lookup (igenerator->scanner->directives_map, func->symbol);
@@ -693,9 +692,9 @@ g_igenerator_process_function_symbol (GIGenerator * igenerator, GISourceSymbol *
        param_l = param_l->next, i++)
     {
       GISourceSymbol *param_sym = param_l->data;
-      GIdlNodeParam *param;
+      GIrNodeParam *param;
 
-      param = (GIdlNodeParam *) g_idl_node_new (G_IDL_NODE_PARAM);
+      param = (GIrNodeParam *) g_idl_node_new (G_IR_NODE_PARAM);
       param->type = create_node_from_ctype (param_sym->base_type);
 
       for (j = directives; j; j = j->next) 
@@ -750,8 +749,8 @@ g_igenerator_process_unregistered_struct_typedef (GIGenerator * igenerator,
 						  GISourceSymbol * sym,
 						  GISourceType * struct_type)
 {
-  GIdlNodeStruct *node =
-    (GIdlNodeStruct *) g_idl_node_new (G_IDL_NODE_STRUCT);
+  GIrNodeStruct *node =
+    (GIrNodeStruct *) g_idl_node_new (G_IR_NODE_STRUCT);
   GList *member_l;
   char *lower_case_prefix;
 
@@ -768,8 +767,8 @@ g_igenerator_process_unregistered_struct_typedef (GIGenerator * igenerator,
        member_l = member_l->next)
     {
       GISourceSymbol *member = member_l->data;
-      GIdlNodeField *gifield =
-	(GIdlNodeField *) g_idl_node_new (G_IDL_NODE_FIELD);
+      GIrNodeField *gifield =
+	(GIrNodeField *) g_idl_node_new (G_IR_NODE_FIELD);
 
       node->members = g_list_append (node->members, gifield);
       gifield->node.name = g_strdup (member->ident);
@@ -782,7 +781,7 @@ g_igenerator_process_struct_typedef (GIGenerator * igenerator, GISourceSymbol * 
 {
   GISourceType *struct_type = sym->base_type;
   gboolean opaque_type = FALSE;
-  GIdlNode *type;
+  GIrNode *type;
   
   if (struct_type->child_list == NULL)
     {
@@ -807,10 +806,10 @@ g_igenerator_process_struct_typedef (GIGenerator * igenerator, GISourceSymbol * 
     {
       /* struct of a GTypeInstance */
       if (!opaque_type
-	  && (type->type == G_IDL_NODE_OBJECT
-	      || type->type == G_IDL_NODE_INTERFACE))
+	  && (type->type == G_IR_NODE_OBJECT
+	      || type->type == G_IR_NODE_INTERFACE))
 	{
-	  GIdlNodeInterface *node = (GIdlNodeInterface *) type;
+	  GIrNodeInterface *node = (GIrNodeInterface *) type;
 	  GList *member_l;
 	  /* ignore first field => parent */
 	  for (member_l = struct_type->child_list->next; member_l != NULL;
@@ -823,23 +822,23 @@ g_igenerator_process_struct_typedef (GIGenerator * igenerator, GISourceSymbol * 
 		{
 		  continue;
 		}
-	      GIdlNodeField *gifield =
-		(GIdlNodeField *) g_idl_node_new (G_IDL_NODE_FIELD);
+	      GIrNodeField *gifield =
+		(GIrNodeField *) g_idl_node_new (G_IR_NODE_FIELD);
 	      node->members = g_list_append (node->members, gifield);
 	      gifield->node.name = g_strdup (member->ident);
 	      gifield->type = create_node_from_ctype (member->base_type);
 	    }
 	}
-      else if (type->type == G_IDL_NODE_BOXED)
+      else if (type->type == G_IR_NODE_BOXED)
 	{
-	  GIdlNodeBoxed *node = (GIdlNodeBoxed *) type;
+	  GIrNodeBoxed *node = (GIrNodeBoxed *) type;
 	  GList *member_l;
 	  for (member_l = struct_type->child_list; member_l != NULL;
 	       member_l = member_l->next)
 	    {
 	      GISourceSymbol *member = member_l->data;
-	      GIdlNodeField *gifield =
-		(GIdlNodeField *) g_idl_node_new (G_IDL_NODE_FIELD);
+	      GIrNodeField *gifield =
+		(GIrNodeField *) g_idl_node_new (G_IR_NODE_FIELD);
 	      node->members = g_list_append (node->members, gifield);
 	      gifield->node.name = g_strdup (member->ident);
 	      gifield->type = create_node_from_ctype (member->base_type);
@@ -853,7 +852,7 @@ g_igenerator_process_struct_typedef (GIGenerator * igenerator, GISourceSymbol * 
     {
       char *base_name;
       GList *member_l;
-      GIdlNodeInterface *node;
+      GIrNodeInterface *node;
 
       if (g_str_has_suffix (sym->ident, "Interface"))
 	{
@@ -868,14 +867,14 @@ g_igenerator_process_struct_typedef (GIGenerator * igenerator, GISourceSymbol * 
 	}
       type = g_hash_table_lookup (igenerator->type_map, base_name);
       if (type == NULL
-	  || (type->type != G_IDL_NODE_OBJECT
-	      && type->type != G_IDL_NODE_INTERFACE))
+	  || (type->type != G_IR_NODE_OBJECT
+	      && type->type != G_IR_NODE_INTERFACE))
 	{
 	  g_igenerator_process_unregistered_struct_typedef (igenerator, sym,
 							    struct_type);
 	  return;
 	}
-      node = (GIdlNodeInterface *) type;
+      node = (GIrNodeInterface *) type;
 
       /* ignore first field => parent */
       for (member_l = struct_type->child_list->next; member_l != NULL;
@@ -895,20 +894,20 @@ g_igenerator_process_struct_typedef (GIGenerator * igenerator, GISourceSymbol * 
 	      GList *type_member_l;
 	      GList *param_l;
 	      int i;
-	      GIdlNodeVFunc *givfunc;
+	      GIrNodeVFunc *givfunc;
 	      
 	      for (type_member_l = node->members; type_member_l != NULL;
 		   type_member_l = type_member_l->next)
 		{
-		  GIdlNode *type_member = type_member_l->data;
+		  GIrNode *type_member = type_member_l->data;
 		  char *normalized_name =
 		    str_replace (type_member->name, "-", "_");
-		  if (type_member->type == G_IDL_NODE_SIGNAL
+		  if (type_member->type == G_IR_NODE_SIGNAL
 		      && strcmp (normalized_name, member->ident) == 0)
 		    {
 		      GList *vfunc_param_l;
 		      GList *sig_param_l;
-		      GIdlNodeSignal *sig = (GIdlNodeSignal *) type_member;
+		      GIrNodeSignal *sig = (GIrNodeSignal *) type_member;
 		      found_signal = TRUE;
 		      /* set signal parameter names */
 		      for (vfunc_param_l =
@@ -919,7 +918,7 @@ g_igenerator_process_struct_typedef (GIGenerator * igenerator, GISourceSymbol * 
 			   sig_param_l->next)
 			{
 			  GISourceSymbol *vfunc_param = vfunc_param_l->data;
-			  GIdlNodeParam *sig_param = sig_param_l->data;
+			  GIrNodeParam *sig_param = sig_param_l->data;
 			  if (vfunc_param->ident != NULL)
 			    {
 			      g_free (sig_param->node.name);
@@ -935,21 +934,21 @@ g_igenerator_process_struct_typedef (GIGenerator * igenerator, GISourceSymbol * 
 		  continue;
 		}
 
-	      givfunc = (GIdlNodeVFunc *) g_idl_node_new (G_IDL_NODE_VFUNC);
+	      givfunc = (GIrNodeVFunc *) g_idl_node_new (G_IR_NODE_VFUNC);
 	      givfunc->node.name = g_strdup (member->ident);
 	      node->members =
 		g_list_insert_sorted (node->members, givfunc,
 				      (GCompareFunc) g_idl_node_cmp);
 	      givfunc->result =
-		(GIdlNodeParam *) g_idl_node_new (G_IDL_NODE_PARAM);
+		(GIrNodeParam *) g_idl_node_new (G_IR_NODE_PARAM);
 	      givfunc->result->type =
 		create_node_from_ctype (member->base_type->base_type->base_type);
 	      for (param_l = member->base_type->base_type->child_list, i = 1;
 		   param_l != NULL; param_l = param_l->next, i++)
 		{
 		  GISourceSymbol *param_sym = param_l->data;
-		  GIdlNodeParam *param =
-		    (GIdlNodeParam *) g_idl_node_new (G_IDL_NODE_PARAM);
+		  GIrNodeParam *param =
+		    (GIrNodeParam *) g_idl_node_new (G_IR_NODE_PARAM);
 		  if (param_sym->ident == NULL)
 		    {
 		      param->node.name = g_strdup_printf ("p%d", i);
@@ -981,7 +980,7 @@ g_igenerator_process_union_typedef (GIGenerator * igenerator, GISourceSymbol * s
 {
   GISourceType *union_type = sym->base_type;
   gboolean opaque_type = FALSE;
-  GIdlNode *type;
+  GIrNode *type;
   
   if (union_type->child_list == NULL)
     {
@@ -1002,15 +1001,15 @@ g_igenerator_process_union_typedef (GIGenerator * igenerator, GISourceSymbol * s
   type = g_hash_table_lookup (igenerator->type_map, sym->ident);
   if (type != NULL)
     {
-      g_assert (type->type == G_IDL_NODE_BOXED);
-      GIdlNodeBoxed *node = (GIdlNodeBoxed *) type;
+      g_assert (type->type == G_IR_NODE_BOXED);
+      GIrNodeBoxed *node = (GIrNodeBoxed *) type;
       GList *member_l;
       for (member_l = union_type->child_list; member_l != NULL;
 	   member_l = member_l->next)
 	{
 	  GISourceSymbol *member = member_l->data;
-	  GIdlNodeField *gifield =
-	    (GIdlNodeField *) g_idl_node_new (G_IDL_NODE_FIELD);
+	  GIrNodeField *gifield =
+	    (GIrNodeField *) g_idl_node_new (G_IR_NODE_FIELD);
 	  node->members = g_list_append (node->members, gifield);
 	  gifield->node.name = g_strdup (member->ident);
 	  gifield->type = create_node_from_ctype (member->base_type);
@@ -1018,8 +1017,8 @@ g_igenerator_process_union_typedef (GIGenerator * igenerator, GISourceSymbol * s
     }
   else
     {
-      GIdlNodeUnion *node =
-	(GIdlNodeUnion *) g_idl_node_new (G_IDL_NODE_UNION);
+      GIrNodeUnion *node =
+	(GIrNodeUnion *) g_idl_node_new (G_IR_NODE_UNION);
       char *lower_case_prefix;
       GList *member_l;
       
@@ -1037,8 +1036,8 @@ g_igenerator_process_union_typedef (GIGenerator * igenerator, GISourceSymbol * s
 	   member_l = member_l->next)
 	{
 	  GISourceSymbol *member = member_l->data;
-	  GIdlNodeField *gifield =
-	    (GIdlNodeField *) g_idl_node_new (G_IDL_NODE_FIELD);
+	  GIrNodeField *gifield =
+	    (GIrNodeField *) g_idl_node_new (G_IR_NODE_FIELD);
 	  node->members = g_list_append (node->members, gifield);
 	  gifield->node.name = g_strdup (member->ident);
 	  gifield->type = create_node_from_ctype (member->base_type);
@@ -1051,7 +1050,7 @@ g_igenerator_process_enum_typedef (GIGenerator * igenerator, GISourceSymbol * sy
 {
   GISourceType *enum_type;
   GList *member_l;
-  GIdlNodeEnum *node;
+  GIrNodeEnum *node;
   GISourceSymbol *enum_symbol;
 
   enum_type = sym->base_type;
@@ -1078,7 +1077,7 @@ g_igenerator_process_enum_typedef (GIGenerator * igenerator, GISourceSymbol * sy
       return;
     }
 
-  node = (GIdlNodeEnum *) g_idl_node_new (G_IDL_NODE_ENUM);
+  node = (GIrNodeEnum *) g_idl_node_new (G_IR_NODE_ENUM);
   node->node.name = g_strdup (sym->ident);
   igenerator->module->entries =
     g_list_insert_sorted (igenerator->module->entries, node,
@@ -1088,8 +1087,8 @@ g_igenerator_process_enum_typedef (GIGenerator * igenerator, GISourceSymbol * sy
        member_l = member_l->next)
     {
       GISourceSymbol *member = member_l->data;
-      GIdlNodeValue *gival =
-	(GIdlNodeValue *) g_idl_node_new (G_IDL_NODE_VALUE);
+      GIrNodeValue *gival =
+	(GIrNodeValue *) g_idl_node_new (G_IR_NODE_VALUE);
       node->values = g_list_append (node->values, gival);
       gival->node.name = g_strdup (member->ident);
       gival->value = member->const_int;
@@ -1104,8 +1103,8 @@ g_igenerator_process_function_typedef (GIGenerator * igenerator,
   int i;
 
   /* handle callback types */
-  GIdlNodeFunction *gifunc =
-    (GIdlNodeFunction *) g_idl_node_new (G_IDL_NODE_CALLBACK);
+  GIrNodeFunction *gifunc =
+    (GIrNodeFunction *) g_idl_node_new (G_IR_NODE_CALLBACK);
 
   gifunc->node.name = g_strdup (sym->ident);
   igenerator->module->entries =
@@ -1113,7 +1112,7 @@ g_igenerator_process_function_typedef (GIGenerator * igenerator,
 			  (GCompareFunc) g_idl_node_cmp);
 
   gifunc->symbol = g_strdup (sym->ident);
-  gifunc->result = (GIdlNodeParam *) g_idl_node_new (G_IDL_NODE_PARAM);
+  gifunc->result = (GIrNodeParam *) g_idl_node_new (G_IR_NODE_PARAM);
   gifunc->result->type =
     create_node_from_ctype (sym->base_type->base_type->base_type);
 
@@ -1121,8 +1120,8 @@ g_igenerator_process_function_typedef (GIGenerator * igenerator,
        param_l != NULL; param_l = param_l->next, i++)
     {
       GISourceSymbol *param_sym = param_l->data;
-      GIdlNodeParam *param =
-	(GIdlNodeParam *) g_idl_node_new (G_IDL_NODE_PARAM);
+      GIrNodeParam *param =
+	(GIrNodeParam *) g_idl_node_new (G_IR_NODE_PARAM);
       if (param_sym->ident == NULL)
 	{
 	  param->node.name = g_strdup_printf ("p%d", i);
@@ -1139,14 +1138,14 @@ g_igenerator_process_function_typedef (GIGenerator * igenerator,
 static void
 g_igenerator_process_constant (GIGenerator * igenerator, GISourceSymbol * sym)
 {
-  GIdlNodeConstant *giconst =
-    (GIdlNodeConstant *) g_idl_node_new (G_IDL_NODE_CONSTANT);
+  GIrNodeConstant *giconst =
+    (GIrNodeConstant *) g_idl_node_new (G_IR_NODE_CONSTANT);
   giconst->node.name = g_strdup (sym->ident);
   igenerator->module->entries =
     g_list_insert_sorted (igenerator->module->entries, giconst,
 			  (GCompareFunc) g_idl_node_cmp);
 
-  giconst->type = (GIdlNodeType *) g_idl_node_new (G_IDL_NODE_TYPE);
+  giconst->type = (GIrNodeType *) g_idl_node_new (G_IR_NODE_TYPE);
   if (sym->const_int_set)
     {
       giconst->type->unparsed = g_strdup ("int");
@@ -1194,8 +1193,8 @@ g_igenerator_process_symbols (GIGenerator * igenerator)
 	    }
 	  else
 	    {
-	      GIdlNodeStruct *node =
-		(GIdlNodeStruct *) g_idl_node_new (G_IDL_NODE_STRUCT);
+	      GIrNodeStruct *node =
+		(GIrNodeStruct *) g_idl_node_new (G_IR_NODE_STRUCT);
 	      char *lower_case_prefix;
 	      
 	      node->node.name = g_strdup (sym->ident);
@@ -1449,17 +1448,17 @@ g_igenerator_parse_macros (GIGenerator * igenerator)
 
 static void
 g_igenerator_add_module (GIGenerator *igenerator,
-			 GIdlModule *module)
+			 GIrModule *module)
 {
   GList *l;
 
   for (l = module->entries; l; l = l->next)
     {
-      GIdlNode *node = (GIdlNode*)l->data;
+      GIrNode *node = (GIrNode*)l->data;
       
-      if (node->type == G_IDL_NODE_OBJECT)
+      if (node->type == G_IR_NODE_OBJECT)
 	{
-	  GIdlNodeInterface *object = (GIdlNodeInterface*)node;
+	  GIrNodeInterface *object = (GIrNodeInterface*)node;
 	  gchar *name;
 	  if (strcmp(module->name, igenerator->namespace) == 0)
 	    name = g_strdup (node->name);
@@ -1491,7 +1490,7 @@ g_igenerator_add_include_idl (GIGenerator *igenerator,
   
   for (l = modules; l; l = l->next)
     {
-      GIdlModule *module = (GIdlModule*)l->data;
+      GIrModule *module = (GIrModule*)l->data;
       g_igenerator_add_module (igenerator, module);
     }
 }		     

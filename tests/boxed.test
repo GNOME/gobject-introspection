@@ -4,21 +4,39 @@
             xmlns:c="http://www.gtk.org/introspection/c/1.0"
             xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
   <namespace name="Foo">
-    <boxed name="boxed1" type-name="BoxedType1" get-type="boxed1_get_type" deprecated="1">
-      <field name="field1" readable="1" writable="1" offset="0" c:type="guint32" />
-      <field name="field2" readable="1" writable="1" offset="4" c:type="guint32" />
-      <field name="field3" readable="1" writable="1" offset="8" c:type="guint32" />
+    <glib:boxed glib:name="BoxedType1" c:type="boxed1" glib:get-type="boxed1_get_type" deprecated="1">
+      <field name="field1" readable="1" writable="1" offset="0">
+	<type name="guint32" c:type="guint32"/>
+      </field>
+      <field name="field2" readable="1" writable="1" offset="4">
+	<type name="guint32" c:type="guint32"/>
+      </field>
+      <field name="field3" readable="1" writable="1" offset="8">
+	<type name="guint32" c:type="guint32"/>
+      </field>
       <method name="frob_boxed1" c:identifier="frob_boxed1">
-        <return-type c:type="void" />
+        <return-value>
+	  <type name="none" c:type="void" />
+	</return-value>
         <parameters>
-          <parameter name="box" c:type="boxed1*" transfer="full" direction="in" />
-          <parameter name="w" c:type="GList<boxed2*>*" transfer="full" direction="in" />
-          <parameter name="t" c:type="GHashTable<utf8,gint64>*" transfer="full" direction="in" />
-          <parameter name="e" c:type="GError*" transfer="full" direction="out" />
+          <parameter name="box" transfer="full" direction="in">
+	    <type name="BoxedType1" c:type="boxed1*"/> 
+	  </parameter>
+          <parameter name="w" transfer="full" direction="in">
+	    <type name="GList" c:type="GList*"/>
+	  </parameter>
+          <parameter name="t"transfer="full" direction="in">
+	    <type name="GHashTable" c:type="GHashTable*"/>
+	  </parameter>
+          <parameter name="e" transfer="full" direction="out">
+            <type name="GError" c:type="GError**"/>
+	  </parameter>
         </parameters>
       </method>
       <method name="lart" c:identifier="lart">
-        <return-type c:type="gboolean" />
+        <return-value>
+	  <type name="boolean" c:type="gboolean"/>x
+	</return-value>
         <parameters>
           <parameter name="box" c:type="boxed2*" transfer="full" direction="in" />
           <parameter name="val" c:type="gint*" transfer="full" direction="inout" />
