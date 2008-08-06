@@ -5,23 +5,39 @@
             xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
   <namespace name="Foo">
     <function name="test1" c:identifier="test1">
-      <return-type c:type="gboolean" />
+      <return-value>
+        <type name="boolean" c:type="gboolean"/>
+      </return-value>
       <parameters>
-        <parameter name="p1" c:type="guint8[length=1,zero-terminated=1]" transfer="full" direction="in" />
-        <parameter name="p2" c:type="gint" direction="in" />
+        <parameter name="p1">
+          <type name="uint8" c:type="guint8" length="1" zero-terminated="1" transfer="full"/>
+        </parameter>
+        <parameter name="p2">
+          <type name="int" c:type="gint"/>
+        </parameter>
       </parameters>
     </function>
     <function name="test2" c:identifier="test2">
-      <return-type c:type="gboolean" />
+      <return-value>
+        <type name="boolean" c:type="gboolean"/>
+      </return-value>
       <parameters>
-        <parameter name="p2" c:type="gint" direction="out" />
-        <parameter name="p1" c:type="guint8[length=0]" transfer="full" direction="out" />
+        <parameter name="p2">
+          <type name="uint" c:type="gint" direction="out"/>
+        </parameter>
+        <parameter name="p1">
+          <type name="uint8" c:type="guint8" length="0" direction="out" transfer="full"/>
+        </parameter>
       </parameters>
     </function>
     <function name="test3" c:identifier="test3">
-      <return-type c:type="gboolean" />
+      <return-value>
+        <type name="boolean" c:type="gboolean"/>
+      </return-value>
       <parameters>
-        <parameter name="p1" c:type="guint8[zero-terminated=1]" transfer="full" direction="in" />
+        <parameter name="p1">
+          <type name="uint8" c:type="guint8" length="1" zero-terminated="1" transfer="full"/>
+        </parameter>
       </parameters>
     </function>
   </namespace>

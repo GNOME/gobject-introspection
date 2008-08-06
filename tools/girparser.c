@@ -46,7 +46,8 @@ typedef enum
   STATE_STRUCT,
   STATE_SIGNAL,
   STATE_ERRORDOMAIN,
-  STATE_UNION
+  STATE_UNION,
+  STATE_PARAMETERS
 } ParseState;
 
 typedef struct _ParseContext ParseContext;
@@ -1222,6 +1223,7 @@ start_type (GMarkupParseContext *context,
 {
   const gchar *name;
   const gchar *ctype;
+  GIrNodeParam *param;
 
   if (strcmp (element_name, "type") != 0)
     return FALSE;
@@ -1234,18 +1236,12 @@ start_type (GMarkupParseContext *context,
   if (ctype == NULL)
     MISSING_ATTRIBUTE (error, element_name, "c:type");
 
+  param = (GIrNodeParam *)ctx->current_node;
+ 
   switch (ctx->current_node->type)
     {
-    case G_IR_NODE_FUNCTION_RETURN:
+    case G_IR_NODE_PARAM:
       {
-      }
-	if (ctx->current_is_return) 
-	  {
-	    func->result = param;
-	  }
-	else
-	  {
-	  }
       }
       break;
     case G_IR_NODE_SIGNAL:
@@ -1261,62 +1257,31 @@ start_type (GMarkupParseContext *context,
       }
       break;
     default:
+      g_printerr("current node is %d\n", ctx->current_node->type);
       g_assert_not_reached ();
     }
 }
 
 static gboolean
-start_return_type (GMarkupParseContext *context,
-		   const gchar         *element_name,
-		   const gchar        **attribute_names,
-		   const gchar        **attribute_values,
-		   ParseContext       *ctx,
-		   GError             **error)
+start_return_value (GMarkupParseContext *context,
+		    const gchar         *element_name,
+		    const gchar        **attribute_names,
+		    const gchar        **attribute_values,
+		    ParseContext       *ctx,
+		    GError             **error)
 {
   if (strcmp (element_name, "return-value") == 0 &&
       ctx->state == STATE_FUNCTION)
     {
-      const gchar *type;
-      const gchar *nullok;
-      const gchar *transfer;
-      
-      type = find_attribute ("c:type", attribute_names, attribute_values);
-      nullok = find_attribute ("null-ok", attribute_names, attribute_values);
-      transfer = find_attribute ("transfer", attribute_names, attribute_values);
-      if (type == NULL)
-	MISSING_ATTRIBUTE (error, element_name, "c:type");
-      else
-	{
-	  GIrNodeParam *param;
+      GIrNodeParam *param;
 
-	  param = (GIrNodeParam *)g_ir_node_new (G_IR_NODE_PARAM);
-	  param->in = FALSE;
-	  param->out = FALSE;
-	  param->retval = TRUE;
-	  if (nullok && strcmp (nullok, "1") == 0)
-	    param->null_ok = TRUE;
-	  else
-	    param->null_ok = FALSE;
-	  if (transfer && strcmp (transfer, "none") == 0)
-	    {
-	      param->transfer = FALSE;
-	      param->shallow_transfer = FALSE;
-	    }
-	  else if (transfer && strcmp (transfer, "shallow") == 0)
-	    {
-	      param->transfer = FALSE;
-	      param->shallow_transfer = TRUE;
-	    }
-	  else
-	    {
-	      param->transfer = TRUE;
-	      param->shallow_transfer = FALSE;
-	    }
-	  
-	  param->type = parse_type (type);
-	  
-	}
-      
+      param = (GIrNodeParam *)g_ir_node_new (G_IR_NODE_PARAM);
+      param->in = FALSE;
+      param->out = FALSE;
+      param->retval = TRUE;
+
+      ctx->current_node = (GIrNode *) param;
+
       return TRUE;
     }
 
@@ -1822,9 +1787,9 @@ start_element_handler (GMarkupParseContext *context,
 	  
 	  goto out;
 	}
-      else if (start_return_type (context, element_name,
-			     attribute_names, attribute_values,
-			     ctx, error))
+      else if (start_return_value (context, element_name,
+				   attribute_names, attribute_values,
+				   ctx, error))
 	goto out;      
       else if (strcmp (element_name, "requires") == 0 &&
 	       ctx->state == STATE_INTERFACE)
