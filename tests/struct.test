@@ -1,5 +1,8 @@
 <?xml version="1.0"?>
-<api version="1.0">
+<repository version="1.0"
+            xmlns="http://www.gtk.org/introspection/core/1.0"
+            xmlns:c="http://www.gtk.org/introspection/c/1.0"
+            xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
   <namespace name="Foo">
     <struct name="FooStruct">
       <field name="foo_int" readable="1" writable="1" offset="0" type="gint" />
@@ -13,4 +16,4 @@
       <field name="string" readable="1" writable="1" offset="24" type="utf8" />
     </struct>
   </namespace>
-</api>
+</repository>

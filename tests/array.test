@@ -1,25 +1,28 @@
 <?xml version="1.0"?>
-<api version="1.0">
+<repository version="1.0"
+            xmlns="http://www.gtk.org/introspection/core/1.0"
+            xmlns:c="http://www.gtk.org/introspection/c/1.0"
+            xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
   <namespace name="Foo">
-    <function name="test1" symbol="test1">
-      <return-type type="gboolean" />
+    <function name="test1" c:identifier="test1">
+      <return-type c:type="gboolean" />
       <parameters>
-        <parameter name="p1" type="guint8[length=1,zero-terminated=1]" transfer="full" direction="in" />
-        <parameter name="p2" type="gint" direction="in" />
+        <parameter name="p1" c:type="guint8[length=1,zero-terminated=1]" transfer="full" direction="in" />
+        <parameter name="p2" c:type="gint" direction="in" />
       </parameters>
     </function>
-    <function name="test2" symbol="test2">
-      <return-type type="gboolean" />
+    <function name="test2" c:identifier="test2">
+      <return-type c:type="gboolean" />
       <parameters>
-        <parameter name="p2" type="gint" direction="out" />
-        <parameter name="p1" type="guint8[length=0]" transfer="full" direction="out" />
+        <parameter name="p2" c:type="gint" direction="out" />
+        <parameter name="p1" c:type="guint8[length=0]" transfer="full" direction="out" />
       </parameters>
     </function>
-    <function name="test3" symbol="test3">
-      <return-type type="gboolean" />
+    <function name="test3" c:identifier="test3">
+      <return-type c:type="gboolean" />
       <parameters>
-        <parameter name="p1" type="guint8[zero-terminated=1]" transfer="full" direction="in" />
+        <parameter name="p1" c:type="guint8[zero-terminated=1]" transfer="full" direction="in" />
       </parameters>
     </function>
   </namespace>
-</api>
+</repository>

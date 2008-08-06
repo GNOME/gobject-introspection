@@ -310,7 +310,7 @@ void      g_ir_node_free            (GIrNode    *node);
 guint32   g_ir_node_get_size        (GIrNode    *node);
 guint32   g_ir_node_get_full_size   (GIrNode    *node);
 void      g_ir_node_build_metadata  (GIrNode    *node,
-				      GIdlModule  *module,
+				      GIrModule  *module,
 				      GList       *modules,
                                       GHashTable  *strings,
                                       GHashTable  *types,

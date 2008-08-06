@@ -22,8 +22,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "gidlmodule.h"
-#include "gidlnode.h"
+#include "girmodule.h"
+#include "girnode.h"
 #include "gtypelib.h"
 
 static gulong string_count = 0;
@@ -56,78 +56,78 @@ dump_stats (void)
   (( ((unsigned long)(this)) + (((unsigned long)(boundary)) -1)) & (~(((unsigned long)(boundary))-1)))
 
 
-GIdlNode *
-g_idl_node_new (GIdlNodeTypeId type)
+GIrNode *
+g_ir_node_new (GIrNodeTypeId type)
 {
-  GIdlNode *node = NULL;
+  GIrNode *node = NULL;
 
   switch (type)
     {
-   case G_IDL_NODE_FUNCTION:
-   case G_IDL_NODE_CALLBACK:
-      node = g_malloc0 (sizeof (GIdlNodeFunction));
+   case G_IR_NODE_FUNCTION:
+   case G_IR_NODE_CALLBACK:
+      node = g_malloc0 (sizeof (GIrNodeFunction));
       break;
 
-   case G_IDL_NODE_PARAM:
-      node = g_malloc0 (sizeof (GIdlNodeParam));
+   case G_IR_NODE_PARAM:
+      node = g_malloc0 (sizeof (GIrNodeParam));
       break;
 
-   case G_IDL_NODE_TYPE:
-      node = g_malloc0 (sizeof (GIdlNodeType));
+   case G_IR_NODE_TYPE:
+      node = g_malloc0 (sizeof (GIrNodeType));
       break;
 
-    case G_IDL_NODE_OBJECT:
-    case G_IDL_NODE_INTERFACE:
-      node = g_malloc0 (sizeof (GIdlNodeInterface));
+    case G_IR_NODE_OBJECT:
+    case G_IR_NODE_INTERFACE:
+      node = g_malloc0 (sizeof (GIrNodeInterface));
       break;
 
-    case G_IDL_NODE_SIGNAL:
-      node = g_malloc0 (sizeof (GIdlNodeSignal));
+    case G_IR_NODE_SIGNAL:
+      node = g_malloc0 (sizeof (GIrNodeSignal));
       break;
 
-    case G_IDL_NODE_PROPERTY:
-      node = g_malloc0 (sizeof (GIdlNodeProperty));
+    case G_IR_NODE_PROPERTY:
+      node = g_malloc0 (sizeof (GIrNodeProperty));
       break;
 
-    case G_IDL_NODE_VFUNC:
-      node = g_malloc0 (sizeof (GIdlNodeFunction));
+    case G_IR_NODE_VFUNC:
+      node = g_malloc0 (sizeof (GIrNodeFunction));
       break;
 
-    case G_IDL_NODE_FIELD:
-      node = g_malloc0 (sizeof (GIdlNodeField));
+    case G_IR_NODE_FIELD:
+      node = g_malloc0 (sizeof (GIrNodeField));
       break;
 
-    case G_IDL_NODE_ENUM:
-    case G_IDL_NODE_FLAGS:
-      node = g_malloc0 (sizeof (GIdlNodeEnum));
+    case G_IR_NODE_ENUM:
+    case G_IR_NODE_FLAGS:
+      node = g_malloc0 (sizeof (GIrNodeEnum));
       break;
 
-    case G_IDL_NODE_BOXED:
-      node = g_malloc0 (sizeof (GIdlNodeBoxed));
+    case G_IR_NODE_BOXED:
+      node = g_malloc0 (sizeof (GIrNodeBoxed));
       break;
 
-    case G_IDL_NODE_STRUCT:
-      node = g_malloc0 (sizeof (GIdlNodeStruct));
+    case G_IR_NODE_STRUCT:
+      node = g_malloc0 (sizeof (GIrNodeStruct));
       break;
 
-    case G_IDL_NODE_VALUE:
-      node = g_malloc0 (sizeof (GIdlNodeValue));
+    case G_IR_NODE_VALUE:
+      node = g_malloc0 (sizeof (GIrNodeValue));
       break;
 
-    case G_IDL_NODE_CONSTANT:
-      node = g_malloc0 (sizeof (GIdlNodeConstant));
+    case G_IR_NODE_CONSTANT:
+      node = g_malloc0 (sizeof (GIrNodeConstant));
       break;
 
-    case G_IDL_NODE_ERROR_DOMAIN:
-      node = g_malloc0 (sizeof (GIdlNodeErrorDomain));
+    case G_IR_NODE_ERROR_DOMAIN:
+      node = g_malloc0 (sizeof (GIrNodeErrorDomain));
       break;
 
-    case G_IDL_NODE_XREF:
-      node = g_malloc0 (sizeof (GIdlNodeXRef));
+    case G_IR_NODE_XREF:
+      node = g_malloc0 (sizeof (GIrNodeXRef));
       break;
 
-    case G_IDL_NODE_UNION:
-      node = g_malloc0 (sizeof (GIdlNodeUnion));
+    case G_IR_NODE_UNION:
+      node = g_malloc0 (sizeof (GIrNodeUnion));
       break;
 
     default:
@@ -141,7 +141,7 @@ g_idl_node_new (GIdlNodeTypeId type)
 }
 
 void
-g_idl_node_free (GIdlNode *node)
+g_ir_node_free (GIrNode *node)
 {
   GList *l;
 
@@ -150,27 +150,27 @@ g_idl_node_free (GIdlNode *node)
 
   switch (node->type)
     {
-    case G_IDL_NODE_FUNCTION:
-    case G_IDL_NODE_CALLBACK:
+    case G_IR_NODE_FUNCTION:
+    case G_IR_NODE_CALLBACK:
       {
-	GIdlNodeFunction *function = (GIdlNodeFunction *)node;
+	GIrNodeFunction *function = (GIrNodeFunction *)node;
 	
 	g_free (node->name);
 	g_free (function->symbol);
-	g_idl_node_free ((GIdlNode *)function->result);
+	g_ir_node_free ((GIrNode *)function->result);
 	for (l = function->parameters; l; l = l->next)
-	  g_idl_node_free ((GIdlNode *)l->data);
+	  g_ir_node_free ((GIrNode *)l->data);
 	g_list_free (function->parameters);
       }
       break;
 
-    case G_IDL_NODE_TYPE:
+    case G_IR_NODE_TYPE:
       {
-	GIdlNodeType *type = (GIdlNodeType *)node;
+	GIrNodeType *type = (GIrNodeType *)node;
 	
 	g_free (node->name);
-	g_idl_node_free ((GIdlNode *)type->parameter_type1);
-	g_idl_node_free ((GIdlNode *)type->parameter_type2);
+	g_ir_node_free ((GIrNode *)type->parameter_type1);
+	g_ir_node_free ((GIrNode *)type->parameter_type2);
 
 	g_free (type->interface);
 	g_strfreev (type->errors);
@@ -178,61 +178,61 @@ g_idl_node_free (GIdlNode *node)
       }
       break;
 
-    case G_IDL_NODE_PARAM:
+    case G_IR_NODE_PARAM:
       {
-	GIdlNodeParam *param = (GIdlNodeParam *)node;
+	GIrNodeParam *param = (GIrNodeParam *)node;
 	
 	g_free (node->name);
-	g_idl_node_free ((GIdlNode *)param->type);
+	g_ir_node_free ((GIrNode *)param->type);
       }
       break;
 
-    case G_IDL_NODE_PROPERTY:
+    case G_IR_NODE_PROPERTY:
       {
-	GIdlNodeProperty *property = (GIdlNodeProperty *)node;
+	GIrNodeProperty *property = (GIrNodeProperty *)node;
 	
 	g_free (node->name);
-	g_idl_node_free ((GIdlNode *)property->type);
+	g_ir_node_free ((GIrNode *)property->type);
       }
       break;
 
-    case G_IDL_NODE_SIGNAL:
+    case G_IR_NODE_SIGNAL:
       {
-	GIdlNodeSignal *signal = (GIdlNodeSignal *)node;
+	GIrNodeSignal *signal = (GIrNodeSignal *)node;
 	
 	g_free (node->name);
 	for (l = signal->parameters; l; l = l->next)
-	  g_idl_node_free ((GIdlNode *)l->data);
+	  g_ir_node_free ((GIrNode *)l->data);
 	g_list_free (signal->parameters);
-	g_idl_node_free ((GIdlNode *)signal->result);
+	g_ir_node_free ((GIrNode *)signal->result);
       }
       break;
 
-    case G_IDL_NODE_VFUNC:
+    case G_IR_NODE_VFUNC:
       {
-	GIdlNodeVFunc *vfunc = (GIdlNodeVFunc *)node;
+	GIrNodeVFunc *vfunc = (GIrNodeVFunc *)node;
 	
 	g_free (node->name);
 	for (l = vfunc->parameters; l; l = l->next)
-	  g_idl_node_free ((GIdlNode *)l->data);
+	  g_ir_node_free ((GIrNode *)l->data);
 	g_list_free (vfunc->parameters);
-	g_idl_node_free ((GIdlNode *)vfunc->result);
+	g_ir_node_free ((GIrNode *)vfunc->result);
       }
       break;
 
-    case G_IDL_NODE_FIELD:
+    case G_IR_NODE_FIELD:
       {
-	GIdlNodeField *field = (GIdlNodeField *)node;
+	GIrNodeField *field = (GIrNodeField *)node;
 	
 	g_free (node->name);
-	g_idl_node_free ((GIdlNode *)field->type);
+	g_ir_node_free ((GIrNode *)field->type);
       }
       break;
 
-    case G_IDL_NODE_OBJECT:
-    case G_IDL_NODE_INTERFACE:
+    case G_IR_NODE_OBJECT:
+    case G_IR_NODE_INTERFACE:
       {
-	GIdlNodeInterface *iface = (GIdlNodeInterface *)node;
+	GIrNodeInterface *iface = (GIrNodeInterface *)node;
 	
 	g_free (node->name);
 	g_free (iface->gtype_name);
@@ -241,75 +241,75 @@ g_idl_node_free (GIdlNode *node)
 	g_free (iface->parent);
 
 	for (l = iface->interfaces; l; l = l->next)
-	  g_free ((GIdlNode *)l->data);
+	  g_free ((GIrNode *)l->data);
 	g_list_free (iface->interfaces);
 
 	for (l = iface->members; l; l = l->next)
-	  g_idl_node_free ((GIdlNode *)l->data);
+	  g_ir_node_free ((GIrNode *)l->data);
 	g_list_free (iface->members);
 
       }
       break;
  
-    case G_IDL_NODE_VALUE:
+    case G_IR_NODE_VALUE:
       {
 	g_free (node->name);
       }
       break;
 
-    case G_IDL_NODE_ENUM:
-    case G_IDL_NODE_FLAGS:
+    case G_IR_NODE_ENUM:
+    case G_IR_NODE_FLAGS:
       {
-	GIdlNodeEnum *enum_ = (GIdlNodeEnum *)node;
+	GIrNodeEnum *enum_ = (GIrNodeEnum *)node;
 	
 	g_free (node->name);
 	g_free (enum_->gtype_name);
 	g_free (enum_->gtype_init);
 
 	for (l = enum_->values; l; l = l->next)
-	  g_idl_node_free ((GIdlNode *)l->data);
+	  g_ir_node_free ((GIrNode *)l->data);
 	g_list_free (enum_->values);
       }
       break;
 
-    case G_IDL_NODE_BOXED:
+    case G_IR_NODE_BOXED:
       {
-	GIdlNodeBoxed *boxed = (GIdlNodeBoxed *)node;
+	GIrNodeBoxed *boxed = (GIrNodeBoxed *)node;
 	
 	g_free (node->name);
 	g_free (boxed->gtype_name);
 	g_free (boxed->gtype_init);
 
 	for (l = boxed->members; l; l = l->next)
-	  g_idl_node_free ((GIdlNode *)l->data);
+	  g_ir_node_free ((GIrNode *)l->data);
 	g_list_free (boxed->members);
       }
       break;
 
-    case G_IDL_NODE_STRUCT:
+    case G_IR_NODE_STRUCT:
       {
-	GIdlNodeStruct *struct_ = (GIdlNodeStruct *)node;
+	GIrNodeStruct *struct_ = (GIrNodeStruct *)node;
 
 	g_free (node->name);
 	for (l = struct_->members; l; l = l->next)
-	  g_idl_node_free ((GIdlNode *)l->data);
+	  g_ir_node_free ((GIrNode *)l->data);
 	g_list_free (struct_->members);
       }
       break;
 
-    case G_IDL_NODE_CONSTANT:
+    case G_IR_NODE_CONSTANT:
       {
-	GIdlNodeConstant *constant = (GIdlNodeConstant *)node;
+	GIrNodeConstant *constant = (GIrNodeConstant *)node;
 	
 	g_free (node->name);
 	g_free (constant->value);
-	g_idl_node_free ((GIdlNode *)constant->type);
+	g_ir_node_free ((GIrNode *)constant->type);
       }
       break;
 
-    case G_IDL_NODE_ERROR_DOMAIN:
+    case G_IR_NODE_ERROR_DOMAIN:
       {
-	GIdlNodeErrorDomain *domain = (GIdlNodeErrorDomain *)node;
+	GIrNodeErrorDomain *domain = (GIrNodeErrorDomain *)node;
 	
 	g_free (node->name);
 	g_free (domain->getquark);
@@ -317,28 +317,28 @@ g_idl_node_free (GIdlNode *node)
       }
       break;
 
-    case G_IDL_NODE_XREF:
+    case G_IR_NODE_XREF:
       {
-	GIdlNodeXRef *xref = (GIdlNodeXRef *)node;
+	GIrNodeXRef *xref = (GIrNodeXRef *)node;
 	
 	g_free (node->name);
 	g_free (xref->namespace);
       }
       break;
 
-    case G_IDL_NODE_UNION:
+    case G_IR_NODE_UNION:
       {
-	GIdlNodeUnion *union_ = (GIdlNodeUnion *)node;
+	GIrNodeUnion *union_ = (GIrNodeUnion *)node;
 	
 	g_free (node->name);
 	g_free (union_->gtype_name);
 	g_free (union_->gtype_init);
 
-	g_idl_node_free ((GIdlNode *)union_->discriminator_type);
+	g_ir_node_free ((GIrNode *)union_->discriminator_type);
 	for (l = union_->members; l; l = l->next)
-	  g_idl_node_free ((GIdlNode *)l->data);
+	  g_ir_node_free ((GIrNode *)l->data);
 	for (l = union_->discriminators; l; l = l->next)
-	  g_idl_node_free ((GIdlNode *)l->data);
+	  g_ir_node_free ((GIrNode *)l->data);
       }
       break;
 
@@ -352,125 +352,125 @@ g_idl_node_free (GIdlNode *node)
 
 /* returns the fixed size of the blob */
 guint32
-g_idl_node_get_size (GIdlNode *node)
+g_ir_node_get_size (GIrNode *node)
 {
   GList *l;
   gint size, n;
 
   switch (node->type)
     {
-    case G_IDL_NODE_CALLBACK:
+    case G_IR_NODE_CALLBACK:
       size = 12; 
       break;
 
-    case G_IDL_NODE_FUNCTION:
+    case G_IR_NODE_FUNCTION:
       size = 16; 
       break;
 
-    case G_IDL_NODE_PARAM:
+    case G_IR_NODE_PARAM:
       size = 12;
       break;
 
-    case G_IDL_NODE_TYPE:
+    case G_IR_NODE_TYPE:
       size = 4;
       break;
 
-    case G_IDL_NODE_OBJECT:
+    case G_IR_NODE_OBJECT:
       {
-	GIdlNodeInterface *iface = (GIdlNodeInterface *)node;
+	GIrNodeInterface *iface = (GIrNodeInterface *)node;
 
 	n = g_list_length (iface->interfaces);
 	size = 32 + 2 * (n + (n % 2));
 
 	for (l = iface->members; l; l = l->next)
-	  size += g_idl_node_get_size ((GIdlNode *)l->data);
+	  size += g_ir_node_get_size ((GIrNode *)l->data);
       }
       break;
 
-    case G_IDL_NODE_INTERFACE:
+    case G_IR_NODE_INTERFACE:
       {
-	GIdlNodeInterface *iface = (GIdlNodeInterface *)node;
+	GIrNodeInterface *iface = (GIrNodeInterface *)node;
 
 	n = g_list_length (iface->prerequisites);
 	size = 28 + 2 * (n + (n % 2));
 
 	for (l = iface->members; l; l = l->next)
-	  size += g_idl_node_get_size ((GIdlNode *)l->data);
+	  size += g_ir_node_get_size ((GIrNode *)l->data);
       }
       break;
 
-    case G_IDL_NODE_ENUM:
-    case G_IDL_NODE_FLAGS:
+    case G_IR_NODE_ENUM:
+    case G_IR_NODE_FLAGS:
       {
-	GIdlNodeEnum *enum_ = (GIdlNodeEnum *)node;
+	GIrNodeEnum *enum_ = (GIrNodeEnum *)node;
 	
 	size = 20;
 	for (l = enum_->values; l; l = l->next)
-	  size += g_idl_node_get_size ((GIdlNode *)l->data);
+	  size += g_ir_node_get_size ((GIrNode *)l->data);
       }
       break;
 
-    case G_IDL_NODE_VALUE:
+    case G_IR_NODE_VALUE:
       size = 12;
       break;
 
-    case G_IDL_NODE_STRUCT:
+    case G_IR_NODE_STRUCT:
       {
-	GIdlNodeStruct *struct_ = (GIdlNodeStruct *)node;
+	GIrNodeStruct *struct_ = (GIrNodeStruct *)node;
 
 	size = 20;
 	for (l = struct_->members; l; l = l->next)
-	  size += g_idl_node_get_size ((GIdlNode *)l->data);
+	  size += g_ir_node_get_size ((GIrNode *)l->data);
       }
       break;
 
-    case G_IDL_NODE_BOXED:
+    case G_IR_NODE_BOXED:
       {
-	GIdlNodeBoxed *boxed = (GIdlNodeBoxed *)node;
+	GIrNodeBoxed *boxed = (GIrNodeBoxed *)node;
 
 	size = 20;
 	for (l = boxed->members; l; l = l->next)
-	  size += g_idl_node_get_size ((GIdlNode *)l->data);
+	  size += g_ir_node_get_size ((GIrNode *)l->data);
       }
       break;
 
-    case G_IDL_NODE_PROPERTY:
+    case G_IR_NODE_PROPERTY:
       size = 12;
       break;
 
-    case G_IDL_NODE_SIGNAL:
+    case G_IR_NODE_SIGNAL:
       size = 12;
       break;
 
-    case G_IDL_NODE_VFUNC:
+    case G_IR_NODE_VFUNC:
       size = 16;
       break;
 
-    case G_IDL_NODE_FIELD:
+    case G_IR_NODE_FIELD:
       size = 12;
       break;
 
-    case G_IDL_NODE_CONSTANT:
+    case G_IR_NODE_CONSTANT:
       size = 20;
       break;
 
-    case G_IDL_NODE_ERROR_DOMAIN:
+    case G_IR_NODE_ERROR_DOMAIN:
       size = 16;
       break;
 
-    case G_IDL_NODE_XREF:
+    case G_IR_NODE_XREF:
       size = 0;
       break;
 
-    case G_IDL_NODE_UNION:
+    case G_IR_NODE_UNION:
       {
-	GIdlNodeUnion *union_ = (GIdlNodeUnion *)node;
+	GIrNodeUnion *union_ = (GIrNodeUnion *)node;
 
 	size = 28;
 	for (l = union_->members; l; l = l->next)
-	  size += g_idl_node_get_size ((GIdlNode *)l->data);
+	  size += g_ir_node_get_size ((GIrNode *)l->data);
 	for (l = union_->discriminators; l; l = l->next)
-	  size += g_idl_node_get_size ((GIdlNode *)l->data);
+	  size += g_ir_node_get_size ((GIrNode *)l->data);
       }
       break;
 
@@ -486,7 +486,7 @@ g_idl_node_get_size (GIdlNode *node)
 
 /* returns the full size of the blob including variable-size parts */
 guint32
-g_idl_node_get_full_size (GIdlNode *node)
+g_ir_node_get_full_size (GIrNode *node)
 {
   GList *l;
   gint size, n;
@@ -495,43 +495,43 @@ g_idl_node_get_full_size (GIdlNode *node)
 
   switch (node->type)
     {
-    case G_IDL_NODE_CALLBACK:
+    case G_IR_NODE_CALLBACK:
       {
-	GIdlNodeFunction *function = (GIdlNodeFunction *)node;
+	GIrNodeFunction *function = (GIrNodeFunction *)node;
 	size = 12; 
 	size += ALIGN_VALUE (strlen (node->name) + 1, 4);
 	for (l = function->parameters; l; l = l->next)
-	  size += g_idl_node_get_full_size ((GIdlNode *)l->data);
-	size += g_idl_node_get_full_size ((GIdlNode *)function->result);
+	  size += g_ir_node_get_full_size ((GIrNode *)l->data);
+	size += g_ir_node_get_full_size ((GIrNode *)function->result);
       }
       break;
 
-    case G_IDL_NODE_FUNCTION:
+    case G_IR_NODE_FUNCTION:
       {
-	GIdlNodeFunction *function = (GIdlNodeFunction *)node;
+	GIrNodeFunction *function = (GIrNodeFunction *)node;
 	size = 24;
 	size += ALIGN_VALUE (strlen (node->name) + 1, 4);
 	size += ALIGN_VALUE (strlen (function->symbol) + 1, 4);
 	for (l = function->parameters; l; l = l->next)
-	  size += g_idl_node_get_full_size ((GIdlNode *)l->data);
-	size += g_idl_node_get_full_size ((GIdlNode *)function->result);
+	  size += g_ir_node_get_full_size ((GIrNode *)l->data);
+	size += g_ir_node_get_full_size ((GIrNode *)function->result);
       }
       break;
 
-    case G_IDL_NODE_PARAM:
+    case G_IR_NODE_PARAM:
       {
-	GIdlNodeParam *param = (GIdlNodeParam *)node;
+	GIrNodeParam *param = (GIrNodeParam *)node;
 	
 	size = 12;
 	if (node->name)
 	  size += ALIGN_VALUE (strlen (node->name) + 1, 4);
-	size += g_idl_node_get_full_size ((GIdlNode *)param->type);	
+	size += g_ir_node_get_full_size ((GIrNode *)param->type);	
       }
       break;
 
-    case G_IDL_NODE_TYPE:
+    case G_IR_NODE_TYPE:
       {
-	GIdlNodeType *type = (GIdlNodeType *)node;
+	GIrNodeType *type = (GIrNodeType *)node;
 	if (type->tag < TYPE_TAG_ARRAY) 
 	  size = 4;
 	else
@@ -541,7 +541,7 @@ g_idl_node_get_full_size (GIdlNode *node)
 	      case TYPE_TAG_ARRAY:
 		size = 4 + 4;
 		if (type->parameter_type1)
-		  size += g_idl_node_get_full_size ((GIdlNode *)type->parameter_type1);
+		  size += g_ir_node_get_full_size ((GIrNode *)type->parameter_type1);
 		break;
 	      case TYPE_TAG_INTERFACE:
 		size = 4 + 4;
@@ -550,14 +550,14 @@ g_idl_node_get_full_size (GIdlNode *node)
 	      case TYPE_TAG_SLIST:
 		size = 4 + 4;
 		if (type->parameter_type1)
-		  size += g_idl_node_get_full_size ((GIdlNode *)type->parameter_type1);
+		  size += g_ir_node_get_full_size ((GIrNode *)type->parameter_type1);
 		break;
 	      case TYPE_TAG_HASH:
 		size = 4 + 4 + 4;
 		if (type->parameter_type1)
-		  size += g_idl_node_get_full_size ((GIdlNode *)type->parameter_type1);
+		  size += g_ir_node_get_full_size ((GIrNode *)type->parameter_type1);
 		if (type->parameter_type2)
-		  size += g_idl_node_get_full_size ((GIdlNode *)type->parameter_type2);
+		  size += g_ir_node_get_full_size ((GIrNode *)type->parameter_type2);
 		break;
 	      case TYPE_TAG_ERROR:
 		{
@@ -579,9 +579,9 @@ g_idl_node_get_full_size (GIdlNode *node)
       }
       break;
 
-    case G_IDL_NODE_OBJECT:
+    case G_IR_NODE_OBJECT:
       {
-	GIdlNodeInterface *iface = (GIdlNodeInterface *)node;
+	GIrNodeInterface *iface = (GIrNodeInterface *)node;
 
 	n = g_list_length (iface->interfaces);
 	size = 32;
@@ -593,13 +593,13 @@ g_idl_node_get_full_size (GIdlNode *node)
 	size += 2 * (n + (n % 2));
 
 	for (l = iface->members; l; l = l->next)
-	  size += g_idl_node_get_full_size ((GIdlNode *)l->data);
+	  size += g_ir_node_get_full_size ((GIrNode *)l->data);
       }
       break;
 
-    case G_IDL_NODE_INTERFACE:
+    case G_IR_NODE_INTERFACE:
       {
-	GIdlNodeInterface *iface = (GIdlNodeInterface *)node;
+	GIrNodeInterface *iface = (GIrNodeInterface *)node;
 
 	n = g_list_length (iface->prerequisites);
 	size = 28;
@@ -609,14 +609,14 @@ g_idl_node_get_full_size (GIdlNode *node)
 	size += 2 * (n + (n % 2));
 
 	for (l = iface->members; l; l = l->next)
-	  size += g_idl_node_get_full_size ((GIdlNode *)l->data);
+	  size += g_ir_node_get_full_size ((GIrNode *)l->data);
       }
       break;
 
-    case G_IDL_NODE_ENUM:
-    case G_IDL_NODE_FLAGS:
+    case G_IR_NODE_ENUM:
+    case G_IR_NODE_FLAGS:
       {
-	GIdlNodeEnum *enum_ = (GIdlNodeEnum *)node;
+	GIrNodeEnum *enum_ = (GIrNodeEnum *)node;
 	
 	size = 20;
 	size += ALIGN_VALUE (strlen (node->name) + 1, 4);
@@ -627,31 +627,31 @@ g_idl_node_get_full_size (GIdlNode *node)
 	  }
 
 	for (l = enum_->values; l; l = l->next)
-	  size += g_idl_node_get_full_size ((GIdlNode *)l->data);	
+	  size += g_ir_node_get_full_size ((GIrNode *)l->data);	
       }
       break;
 
-    case G_IDL_NODE_VALUE:
+    case G_IR_NODE_VALUE:
       {
 	size = 12;
 	size += ALIGN_VALUE (strlen (node->name) + 1, 4);
       }
       break;
 
-    case G_IDL_NODE_STRUCT:
+    case G_IR_NODE_STRUCT:
       {
-	GIdlNodeStruct *struct_ = (GIdlNodeStruct *)node;
+	GIrNodeStruct *struct_ = (GIrNodeStruct *)node;
 
 	size = 20;
 	size += ALIGN_VALUE (strlen (node->name) + 1, 4);
 	for (l = struct_->members; l; l = l->next)
-	  size += g_idl_node_get_full_size ((GIdlNode *)l->data);
+	  size += g_ir_node_get_full_size ((GIrNode *)l->data);
       }
       break;
 
-    case G_IDL_NODE_BOXED:
+    case G_IR_NODE_BOXED:
       {
-	GIdlNodeBoxed *boxed = (GIdlNodeBoxed *)node;
+	GIrNodeBoxed *boxed = (GIrNodeBoxed *)node;
 
 	size = 20;
 	size += ALIGN_VALUE (strlen (node->name) + 1, 4);
@@ -661,69 +661,69 @@ g_idl_node_get_full_size (GIdlNode *node)
 	    size += ALIGN_VALUE (strlen (boxed->gtype_init) + 1, 4);
 	  }
 	for (l = boxed->members; l; l = l->next)
-	  size += g_idl_node_get_full_size ((GIdlNode *)l->data);
+	  size += g_ir_node_get_full_size ((GIrNode *)l->data);
       }
       break;
 
-    case G_IDL_NODE_PROPERTY:
+    case G_IR_NODE_PROPERTY:
       {
-	GIdlNodeProperty *prop = (GIdlNodeProperty *)node;
+	GIrNodeProperty *prop = (GIrNodeProperty *)node;
 	
 	size = 12;
 	size += ALIGN_VALUE (strlen (node->name) + 1, 4);
-	size += g_idl_node_get_full_size ((GIdlNode *)prop->type);	
+	size += g_ir_node_get_full_size ((GIrNode *)prop->type);	
       }
       break;
 
-    case G_IDL_NODE_SIGNAL:
+    case G_IR_NODE_SIGNAL:
       {
-	GIdlNodeSignal *signal = (GIdlNodeSignal *)node;
+	GIrNodeSignal *signal = (GIrNodeSignal *)node;
 
 	size = 12;
 	size += ALIGN_VALUE (strlen (node->name) + 1, 4);
 	for (l = signal->parameters; l; l = l->next)
-	  size += g_idl_node_get_full_size ((GIdlNode *)l->data);
-	size += g_idl_node_get_full_size ((GIdlNode *)signal->result);
+	  size += g_ir_node_get_full_size ((GIrNode *)l->data);
+	size += g_ir_node_get_full_size ((GIrNode *)signal->result);
       }
       break;
 
-    case G_IDL_NODE_VFUNC:
+    case G_IR_NODE_VFUNC:
       {
-	GIdlNodeVFunc *vfunc = (GIdlNodeVFunc *)node;
+	GIrNodeVFunc *vfunc = (GIrNodeVFunc *)node;
 
 	size = 16;
 	size += ALIGN_VALUE (strlen (node->name) + 1, 4);
 	for (l = vfunc->parameters; l; l = l->next)
-	  size += g_idl_node_get_full_size ((GIdlNode *)l->data);
-	size += g_idl_node_get_full_size ((GIdlNode *)vfunc->result);
+	  size += g_ir_node_get_full_size ((GIrNode *)l->data);
+	size += g_ir_node_get_full_size ((GIrNode *)vfunc->result);
       }
       break;
 
-    case G_IDL_NODE_FIELD:
+    case G_IR_NODE_FIELD:
       {
-	GIdlNodeField *field = (GIdlNodeField *)node;
+	GIrNodeField *field = (GIrNodeField *)node;
 
 	size = 12;
 	size += ALIGN_VALUE (strlen (node->name) + 1, 4);
-	size += g_idl_node_get_full_size ((GIdlNode *)field->type);	
+	size += g_ir_node_get_full_size ((GIrNode *)field->type);	
       }
       break;
 
-    case G_IDL_NODE_CONSTANT:
+    case G_IR_NODE_CONSTANT:
       {
-	GIdlNodeConstant *constant = (GIdlNodeConstant *)node;
+	GIrNodeConstant *constant = (GIrNodeConstant *)node;
 
 	size = 20;
 	size += ALIGN_VALUE (strlen (node->name) + 1, 4);
 	/* FIXME non-string values */
 	size += ALIGN_VALUE (strlen (constant->value) + 1, 4);
-	size += g_idl_node_get_full_size ((GIdlNode *)constant->type);	
+	size += g_ir_node_get_full_size ((GIrNode *)constant->type);	
       }
       break;
 
-    case G_IDL_NODE_ERROR_DOMAIN:
+    case G_IR_NODE_ERROR_DOMAIN:
       {
-	GIdlNodeErrorDomain *domain = (GIdlNodeErrorDomain *)node;
+	GIrNodeErrorDomain *domain = (GIrNodeErrorDomain *)node;
 
 	size = 16;
 	size += ALIGN_VALUE (strlen (node->name) + 1, 4);
@@ -731,9 +731,9 @@ g_idl_node_get_full_size (GIdlNode *node)
       }
       break;
 
-    case G_IDL_NODE_XREF:
+    case G_IR_NODE_XREF:
       {
-	GIdlNodeXRef *xref = (GIdlNodeXRef *)node;
+	GIrNodeXRef *xref = (GIrNodeXRef *)node;
 	
 	size = 0;
 	size += ALIGN_VALUE (strlen (node->name) + 1, 4);
@@ -741,16 +741,16 @@ g_idl_node_get_full_size (GIdlNode *node)
       }
       break;
 
-    case G_IDL_NODE_UNION:
+    case G_IR_NODE_UNION:
       {
-	GIdlNodeUnion *union_ = (GIdlNodeUnion *)node;
+	GIrNodeUnion *union_ = (GIrNodeUnion *)node;
 
 	size = 28;
 	size += ALIGN_VALUE (strlen (node->name) + 1, 4);
 	for (l = union_->members; l; l = l->next)
-	  size += g_idl_node_get_full_size ((GIdlNode *)l->data);
+	  size += g_ir_node_get_full_size ((GIrNode *)l->data);
 	for (l = union_->discriminators; l; l = l->next)
-	  size += g_idl_node_get_full_size ((GIdlNode *)l->data);
+	  size += g_ir_node_get_full_size ((GIrNode *)l->data);
       }
       break;
 
@@ -765,8 +765,8 @@ g_idl_node_get_full_size (GIdlNode *node)
 }
 
 int
-g_idl_node_cmp (GIdlNode *node,
-		GIdlNode *other)
+g_ir_node_cmp (GIrNode *node,
+		GIrNode *other)
 {
   if (node->type < other->type)
     return -1;
@@ -777,60 +777,60 @@ g_idl_node_cmp (GIdlNode *node,
 }
 
 gboolean
-g_idl_node_can_have_member (GIdlNode    *node)
+g_ir_node_can_have_member (GIrNode    *node)
 {
   switch (node->type)
     {
-    case G_IDL_NODE_OBJECT:
-    case G_IDL_NODE_INTERFACE:
-    case G_IDL_NODE_BOXED:
-    case G_IDL_NODE_STRUCT:
-    case G_IDL_NODE_UNION:
+    case G_IR_NODE_OBJECT:
+    case G_IR_NODE_INTERFACE:
+    case G_IR_NODE_BOXED:
+    case G_IR_NODE_STRUCT:
+    case G_IR_NODE_UNION:
       return TRUE;
     };
   return FALSE;
 }
 
 void
-g_idl_node_add_member (GIdlNode         *node,
-		       GIdlNodeFunction *member)
+g_ir_node_add_member (GIrNode         *node,
+		       GIrNodeFunction *member)
 {
   g_return_if_fail (node != NULL);
   g_return_if_fail (member != NULL);
 		    
   switch (node->type)
     {
-    case G_IDL_NODE_OBJECT:
-    case G_IDL_NODE_INTERFACE:
+    case G_IR_NODE_OBJECT:
+    case G_IR_NODE_INTERFACE:
       {
-	GIdlNodeInterface *iface = (GIdlNodeInterface *)node;
+	GIrNodeInterface *iface = (GIrNodeInterface *)node;
 	iface->members =
 	  g_list_insert_sorted (iface->members, member,
-				(GCompareFunc) g_idl_node_cmp);
+				(GCompareFunc) g_ir_node_cmp);
 	break;
       }
-    case G_IDL_NODE_BOXED:
+    case G_IR_NODE_BOXED:
       {
-	GIdlNodeBoxed *boxed = (GIdlNodeBoxed *)node;
+	GIrNodeBoxed *boxed = (GIrNodeBoxed *)node;
 	boxed->members =
 	  g_list_insert_sorted (boxed->members, member,
-				(GCompareFunc) g_idl_node_cmp);
+				(GCompareFunc) g_ir_node_cmp);
 	break;
       }
-    case G_IDL_NODE_STRUCT:
+    case G_IR_NODE_STRUCT:
       {
-	GIdlNodeStruct *struct_ = (GIdlNodeStruct *)node;
+	GIrNodeStruct *struct_ = (GIrNodeStruct *)node;
 	struct_->members =
 	  g_list_insert_sorted (struct_->members, member,
-				(GCompareFunc) g_idl_node_cmp);
+				(GCompareFunc) g_ir_node_cmp);
 	break;
       }
-    case G_IDL_NODE_UNION:
+    case G_IR_NODE_UNION:
       {
-	GIdlNodeUnion *union_ = (GIdlNodeUnion *)node;
+	GIrNodeUnion *union_ = (GIrNodeUnion *)node;
 	union_->members =
 	  g_list_insert_sorted (union_->members, member,
-				(GCompareFunc) g_idl_node_cmp);
+				(GCompareFunc) g_ir_node_cmp);
 	break;
       }
     default:
@@ -841,7 +841,7 @@ g_idl_node_add_member (GIdlNode         *node,
 }
 
 const gchar *
-g_idl_node_param_direction_string (GIdlNodeParam * node)
+g_ir_node_param_direction_string (GIrNodeParam * node)
 {
   if (node->out)
     {
@@ -883,8 +883,8 @@ parse_boolean_value (const gchar *str)
   return parse_int_value (str) ? TRUE : FALSE;
 }
 
-static GIdlNode *
-find_entry_node (GIdlModule  *module,
+static GIrNode *
+find_entry_node (GIrModule  *module,
 		 GList       *modules,
 		 const gchar *name,
 		 guint16     *idx)
@@ -894,7 +894,7 @@ find_entry_node (GIdlModule  *module,
   gint i;
   gchar **names;
   gint n_names;
-  GIdlNode *result = NULL;
+  GIrNode *result = NULL;
 
   names = g_strsplit (name, ".", 0);
   n_names = g_strv_length (names);
@@ -903,15 +903,15 @@ find_entry_node (GIdlModule  *module,
   
   for (l = module->entries, i = 1; l; l = l->next, i++)
     {
-      GIdlNode *node = (GIdlNode *)l->data;
+      GIrNode *node = (GIrNode *)l->data;
       
       if (n_names > 1)
 	{
-	  if (node->type != G_IDL_NODE_XREF)
+	  if (node->type != G_IR_NODE_XREF)
 	    continue;
 	  
-	  if (((GIdlNodeXRef *)node)->namespace == NULL ||
-	      strcmp (((GIdlNodeXRef *)node)->namespace, names[0]) != 0)
+	  if (((GIrNodeXRef *)node)->namespace == NULL ||
+	      strcmp (((GIrNodeXRef *)node)->namespace, names[0]) != 0)
 	    continue;
 	}
 	 
@@ -927,9 +927,9 @@ find_entry_node (GIdlModule  *module,
 
   if (n_names > 1)
     {
-      GIdlNode *node = g_idl_node_new (G_IDL_NODE_XREF);
+      GIrNode *node = g_ir_node_new (G_IR_NODE_XREF);
 
-      ((GIdlNodeXRef *)node)->namespace = g_strdup (names[0]);
+      ((GIrNodeXRef *)node)->namespace = g_strdup (names[0]);
       node->name = g_strdup (names[1]);
   
       module->entries = g_list_append (module->entries, node);
@@ -952,7 +952,7 @@ find_entry_node (GIdlModule  *module,
 }
 
 static guint16
-find_entry (GIdlModule  *module,
+find_entry (GIrModule  *module,
 	    GList       *modules,
 	    const gchar *name)
 {
@@ -964,9 +964,9 @@ find_entry (GIdlModule  *module,
 }
 
 static void
-serialize_type (GIdlModule   *module, 
+serialize_type (GIrModule   *module, 
 		GList        *modules,
-		GIdlNodeType *node, 
+		GIrNodeType *node, 
 		GString      *str)
 {
   gint i;
@@ -1014,7 +1014,7 @@ serialize_type (GIdlModule   *module,
     }
   else if (node->tag == 21)
     {
-      GIdlNode *iface;
+      GIrNode *iface;
       gchar *name;
 
       iface = find_entry_node (module, modules, node->interface, NULL);
@@ -1078,8 +1078,8 @@ serialize_type (GIdlModule   *module,
 }
 
 void
-g_idl_node_build_metadata (GIdlNode   *node,
-			   GIdlModule *module,
+g_ir_node_build_metadata (GIrNode   *node,
+			   GIrModule *module,
 			   GList      *modules,
 			   GHashTable *strings,
 			   GHashTable *types,
@@ -1093,9 +1093,9 @@ g_idl_node_build_metadata (GIdlNode   *node,
 
   switch (node->type)
     {
-    case G_IDL_NODE_TYPE:
+    case G_IR_NODE_TYPE:
       {
-	GIdlNodeType *type = (GIdlNodeType *)node;
+	GIrNodeType *type = (GIrNodeType *)node;
 	SimpleTypeBlob *blob = (SimpleTypeBlob *)&data[*offset];
 
 	*offset += 4;
@@ -1149,7 +1149,7 @@ g_idl_node_build_metadata (GIdlNode   *node,
 		      pos = *offset2 + 4;
 		      *offset2 += 8;
 		      
-		      g_idl_node_build_metadata ((GIdlNode *)type->parameter_type1, 
+		      g_ir_node_build_metadata ((GIrNode *)type->parameter_type1, 
 						 module, modules, strings, types, 
 						 data, &pos, offset2);
 		    }
@@ -1184,7 +1184,7 @@ g_idl_node_build_metadata (GIdlNode   *node,
 		      pos = *offset2 + 4;
 		      *offset2 += 8;
 		      
-		      g_idl_node_build_metadata ((GIdlNode *)type->parameter_type1, 
+		      g_ir_node_build_metadata ((GIrNode *)type->parameter_type1, 
 						 module, modules, strings, types,
 						 data, &pos, offset2);
 		    }
@@ -1204,10 +1204,10 @@ g_idl_node_build_metadata (GIdlNode   *node,
 		      pos = *offset2 + 4;
 		      *offset2 += 12;
 		      
-		      g_idl_node_build_metadata ((GIdlNode *)type->parameter_type1, 
+		      g_ir_node_build_metadata ((GIrNode *)type->parameter_type1, 
 						 module, modules, strings, types, 
 						 data, &pos, offset2);
-		      g_idl_node_build_metadata ((GIdlNode *)type->parameter_type2, 
+		      g_ir_node_build_metadata ((GIrNode *)type->parameter_type2, 
 						 module, modules, strings, types, 
 						 data, &pos, offset2);
 		    }
@@ -1242,9 +1242,9 @@ g_idl_node_build_metadata (GIdlNode   *node,
       }
       break;
 
-    case G_IDL_NODE_FIELD:
+    case G_IR_NODE_FIELD:
       {
-	GIdlNodeField *field = (GIdlNodeField *)node;
+	GIrNodeField *field = (GIrNodeField *)node;
 	FieldBlob *blob;
 
 	blob = (FieldBlob *)&data[*offset];
@@ -1257,15 +1257,15 @@ g_idl_node_build_metadata (GIdlNode   *node,
 	blob->bits = 0;
 	blob->struct_offset = field->offset;
 
-        g_idl_node_build_metadata ((GIdlNode *)field->type, 
+        g_ir_node_build_metadata ((GIrNode *)field->type, 
 				   module, modules, strings, types,
 				   data, offset, offset2);
       }
       break;
 
-    case G_IDL_NODE_PROPERTY:
+    case G_IR_NODE_PROPERTY:
       {
-	GIdlNodeProperty *prop = (GIdlNodeProperty *)node;
+	GIrNodeProperty *prop = (GIrNodeProperty *)node;
 	PropertyBlob *blob = (PropertyBlob *)&data[*offset];
 	*offset += 8;
 
@@ -1277,17 +1277,17 @@ g_idl_node_build_metadata (GIdlNode   *node,
  	blob->construct_only = prop->construct_only;
 	blob->reserved = 0;
 
-        g_idl_node_build_metadata ((GIdlNode *)prop->type, 
+        g_ir_node_build_metadata ((GIrNode *)prop->type, 
 				   module, modules, strings, types,
 				   data, offset, offset2);
       }
       break;
 
-    case G_IDL_NODE_FUNCTION:
+    case G_IR_NODE_FUNCTION:
       {
 	FunctionBlob *blob = (FunctionBlob *)&data[*offset];
 	SignatureBlob *blob2 = (SignatureBlob *)&data[*offset2];
-	GIdlNodeFunction *function = (GIdlNodeFunction *)node;
+	GIrNodeFunction *function = (GIrNodeFunction *)node;
 	guint32 signature;
 	gint n;
 
@@ -1309,7 +1309,7 @@ g_idl_node_build_metadata (GIdlNode   *node,
 	blob->symbol = write_string (function->symbol, strings, data, offset2);
 	blob->signature = signature;
 	
-        g_idl_node_build_metadata ((GIdlNode *)function->result->type, 
+        g_ir_node_build_metadata ((GIrNode *)function->result->type, 
 				   module, modules, strings, types,
 				   data, &signature, offset2);
 
@@ -1323,20 +1323,20 @@ g_idl_node_build_metadata (GIdlNode   *node,
 	
 	for (l = function->parameters; l; l = l->next)
 	  {
-	    GIdlNode *param = (GIdlNode *)l->data;
+	    GIrNode *param = (GIrNode *)l->data;
 
-	    g_idl_node_build_metadata (param, 
+	    g_ir_node_build_metadata (param, 
 				       module, modules, strings, types,
 				       data, &signature, offset2);
 	  }
       }
       break;
 
-    case G_IDL_NODE_CALLBACK:
+    case G_IR_NODE_CALLBACK:
       {
 	CallbackBlob *blob = (CallbackBlob *)&data[*offset];
 	SignatureBlob *blob2 = (SignatureBlob *)&data[*offset2];
-	GIdlNodeFunction *function = (GIdlNodeFunction *)node;
+	GIrNodeFunction *function = (GIrNodeFunction *)node;
 	guint32 signature;
 	gint n;
 
@@ -1352,7 +1352,7 @@ g_idl_node_build_metadata (GIdlNode   *node,
 	blob->name = write_string (node->name, strings, data, offset2);
 	blob->signature = signature;
 	
-        g_idl_node_build_metadata ((GIdlNode *)function->result->type, 
+        g_ir_node_build_metadata ((GIrNode *)function->result->type, 
 				   module, modules, strings, types,
 				   data, &signature, offset2);
 
@@ -1366,20 +1366,20 @@ g_idl_node_build_metadata (GIdlNode   *node,
 	
 	for (l = function->parameters; l; l = l->next)
 	  {
-	    GIdlNode *param = (GIdlNode *)l->data;
+	    GIrNode *param = (GIrNode *)l->data;
 
-	    g_idl_node_build_metadata (param, 
+	    g_ir_node_build_metadata (param, 
 				       module, modules, strings, types,
 				       data, &signature, offset2);
 	  }
       }
       break;
 
-    case G_IDL_NODE_SIGNAL:
+    case G_IR_NODE_SIGNAL:
       {
 	SignalBlob *blob = (SignalBlob *)&data[*offset];
 	SignatureBlob *blob2 = (SignatureBlob *)&data[*offset2];
-	GIdlNodeSignal *signal = (GIdlNodeSignal *)node;
+	GIrNodeSignal *signal = (GIrNodeSignal *)node;
 	guint32 signature;
 	gint n;
 
@@ -1404,7 +1404,7 @@ g_idl_node_build_metadata (GIdlNode   *node,
 	blob->name = write_string (node->name, strings, data, offset2);
 	blob->signature = signature;
 	
-        g_idl_node_build_metadata ((GIdlNode *)signal->result->type, 
+        g_ir_node_build_metadata ((GIrNode *)signal->result->type, 
 				   module, modules, strings, types,
 				   data, &signature, offset2);
 
@@ -1418,19 +1418,19 @@ g_idl_node_build_metadata (GIdlNode   *node,
 	
 	for (l = signal->parameters; l; l = l->next)
 	  {
-	    GIdlNode *param = (GIdlNode *)l->data;
+	    GIrNode *param = (GIrNode *)l->data;
 
-	    g_idl_node_build_metadata (param, module, modules, strings, types,
+	    g_ir_node_build_metadata (param, module, modules, strings, types,
 				       data, &signature, offset2);
 	  }
       }
       break;
 
-    case G_IDL_NODE_VFUNC:
+    case G_IR_NODE_VFUNC:
       {
 	VFuncBlob *blob = (VFuncBlob *)&data[*offset];
 	SignatureBlob *blob2 = (SignatureBlob *)&data[*offset2];
-	GIdlNodeVFunc *vfunc = (GIdlNodeVFunc *)node;
+	GIrNodeVFunc *vfunc = (GIrNodeVFunc *)node;
 	guint32 signature;
 	gint n;
 
@@ -1451,7 +1451,7 @@ g_idl_node_build_metadata (GIdlNode   *node,
 	blob->reserved2 = 0;
 	blob->signature = signature;
 	
-        g_idl_node_build_metadata ((GIdlNode *)vfunc->result->type, 
+        g_ir_node_build_metadata ((GIrNode *)vfunc->result->type, 
 				   module, modules, strings, types,
 				   data, &signature, offset2);
 
@@ -1465,18 +1465,18 @@ g_idl_node_build_metadata (GIdlNode   *node,
 	
 	for (l = vfunc->parameters; l; l = l->next)
 	  {
-	    GIdlNode *param = (GIdlNode *)l->data;
+	    GIrNode *param = (GIrNode *)l->data;
 
-	    g_idl_node_build_metadata (param, module, modules, strings, 
+	    g_ir_node_build_metadata (param, module, modules, strings, 
 				       types, data, &signature, offset2);
 	  }
       }
       break;
 
-    case G_IDL_NODE_PARAM:
+    case G_IR_NODE_PARAM:
       {
 	ArgBlob *blob = (ArgBlob *)&data[*offset];
-	GIdlNodeParam *param = (GIdlNodeParam *)node;
+	GIrNodeParam *param = (GIrNodeParam *)node;
 
 	*offset += 8;
 
@@ -1491,15 +1491,15 @@ g_idl_node_build_metadata (GIdlNode   *node,
 	blob->return_value = param->retval;
 	blob->reserved = 0;
 
-        g_idl_node_build_metadata ((GIdlNode *)param->type, module, modules, 
+        g_ir_node_build_metadata ((GIrNode *)param->type, module, modules, 
 				   strings, types, data, offset, offset2);
       }
       break;
 
-    case G_IDL_NODE_STRUCT:
+    case G_IR_NODE_STRUCT:
       {
 	StructBlob *blob = (StructBlob *)&data[*offset];
-	GIdlNodeStruct *struct_ = (GIdlNodeStruct *)node;
+	GIrNodeStruct *struct_ = (GIrNodeStruct *)node;
 	
 	blob->blob_type = BLOB_TYPE_STRUCT;
 	blob->deprecated = struct_->deprecated;
@@ -1515,34 +1515,34 @@ g_idl_node_build_metadata (GIdlNode   *node,
 	*offset += 20; 
 	for (l = struct_->members; l; l = l->next)
 	  {
-	    GIdlNode *member = (GIdlNode *)l->data;
+	    GIrNode *member = (GIrNode *)l->data;
 
-	    if (member->type == G_IDL_NODE_FIELD)
+	    if (member->type == G_IR_NODE_FIELD)
 	      {
 		blob->n_fields++;
-		g_idl_node_build_metadata (member, module, modules, strings, 
+		g_ir_node_build_metadata (member, module, modules, strings, 
 					   types, data, offset, offset2);
 	      }
 	  }
 
 	for (l = struct_->members; l; l = l->next)
 	  {
-	    GIdlNode *member = (GIdlNode *)l->data;
+	    GIrNode *member = (GIrNode *)l->data;
 	    
-	    if (member->type == G_IDL_NODE_FUNCTION)
+	    if (member->type == G_IR_NODE_FUNCTION)
 	      {
 		blob->n_methods++;
-		g_idl_node_build_metadata (member, module, modules, strings, 
+		g_ir_node_build_metadata (member, module, modules, strings, 
 					   types, data, offset, offset2);
 	      }
 	  }
       }
       break;
 
-    case G_IDL_NODE_BOXED:
+    case G_IR_NODE_BOXED:
       {
 	StructBlob *blob = (StructBlob *)&data[*offset];
-	GIdlNodeBoxed *boxed = (GIdlNodeBoxed *)node;
+	GIrNodeBoxed *boxed = (GIrNodeBoxed *)node;
 
 	blob->blob_type = BLOB_TYPE_BOXED;
 	blob->deprecated = boxed->deprecated;
@@ -1558,34 +1558,34 @@ g_idl_node_build_metadata (GIdlNode   *node,
 	*offset += 20; 
 	for (l = boxed->members; l; l = l->next)
 	  {
-	    GIdlNode *member = (GIdlNode *)l->data;
+	    GIrNode *member = (GIrNode *)l->data;
 
-	    if (member->type == G_IDL_NODE_FIELD)
+	    if (member->type == G_IR_NODE_FIELD)
 	      {
 		blob->n_fields++;
-		g_idl_node_build_metadata (member, module, modules, strings, 
+		g_ir_node_build_metadata (member, module, modules, strings, 
 					   types, data, offset, offset2);
 	      }
 	  }
 
 	for (l = boxed->members; l; l = l->next)
 	  {
-	    GIdlNode *member = (GIdlNode *)l->data;
+	    GIrNode *member = (GIrNode *)l->data;
 
-	    if (member->type == G_IDL_NODE_FUNCTION)
+	    if (member->type == G_IR_NODE_FUNCTION)
 	      {
 		blob->n_methods++;
-		g_idl_node_build_metadata (member, module, modules, strings, 
+		g_ir_node_build_metadata (member, module, modules, strings, 
 					   types, data, offset, offset2);
 	      }
 	  }
       }
       break;
 
-    case G_IDL_NODE_UNION:
+    case G_IR_NODE_UNION:
       {
 	UnionBlob *blob = (UnionBlob *)&data[*offset];
-	GIdlNodeUnion *union_ = (GIdlNodeUnion *)node;
+	GIrNodeUnion *union_ = (GIrNodeUnion *)node;
 
 	blob->blob_type = BLOB_TYPE_UNION;
 	blob->deprecated = union_->deprecated;
@@ -1613,7 +1613,7 @@ g_idl_node_build_metadata (GIdlNode   *node,
 	  {
 	    *offset += 24;
 	    blob->discriminated = TRUE;
-	    g_idl_node_build_metadata ((GIdlNode *)union_->discriminator_type, 
+	    g_ir_node_build_metadata ((GIrNode *)union_->discriminator_type, 
 				       module, modules, strings, types,
 				       data, offset, offset2);
 	  }
@@ -1627,24 +1627,24 @@ g_idl_node_build_metadata (GIdlNode   *node,
 	
 	for (l = union_->members; l; l = l->next)
 	  {
-	    GIdlNode *member = (GIdlNode *)l->data;
+	    GIrNode *member = (GIrNode *)l->data;
 
-	    if (member->type == G_IDL_NODE_FIELD)
+	    if (member->type == G_IR_NODE_FIELD)
 	      {
 		blob->n_fields++;
-		g_idl_node_build_metadata (member, module, modules, strings, 
+		g_ir_node_build_metadata (member, module, modules, strings, 
 					   types, data, offset, offset2);
 	      }
 	  }
 
 	for (l = union_->members; l; l = l->next)
 	  {
-	    GIdlNode *member = (GIdlNode *)l->data;
+	    GIrNode *member = (GIrNode *)l->data;
 
-	    if (member->type == G_IDL_NODE_FUNCTION)
+	    if (member->type == G_IR_NODE_FUNCTION)
 	      {
 		blob->n_functions++;
-		g_idl_node_build_metadata (member, module, modules, strings, 
+		g_ir_node_build_metadata (member, module, modules, strings, 
 					   types, data, offset, offset2);
 	      }
 	  }
@@ -1653,24 +1653,24 @@ g_idl_node_build_metadata (GIdlNode   *node,
 	  {
 	    for (l = union_->discriminators; l; l = l->next)
 	      {
-		GIdlNode *member = (GIdlNode *)l->data;
+		GIrNode *member = (GIrNode *)l->data;
 		
-		g_idl_node_build_metadata (member, module, modules, strings, 
+		g_ir_node_build_metadata (member, module, modules, strings, 
 					   types, data, offset, offset2);
 	      }
 	  }
       }
       break;
 
-    case G_IDL_NODE_ENUM:
-    case G_IDL_NODE_FLAGS:
+    case G_IR_NODE_ENUM:
+    case G_IR_NODE_FLAGS:
       {
 	EnumBlob *blob = (EnumBlob *)&data[*offset];
-	GIdlNodeEnum *enum_ = (GIdlNodeEnum *)node;
+	GIrNodeEnum *enum_ = (GIrNodeEnum *)node;
 
 	*offset += 20; 
 	
-	if (node->type == G_IDL_NODE_ENUM)
+	if (node->type == G_IR_NODE_ENUM)
 	  blob->blob_type = BLOB_TYPE_ENUM;
 	else
 	  blob->blob_type = BLOB_TYPE_FLAGS;
@@ -1696,19 +1696,19 @@ g_idl_node_build_metadata (GIdlNode   *node,
 
 	for (l = enum_->values; l; l = l->next)
 	  {
-	    GIdlNode *value = (GIdlNode *)l->data;
+	    GIrNode *value = (GIrNode *)l->data;
 
 	    blob->n_values++;
-	    g_idl_node_build_metadata (value, module, modules, strings, types,
+	    g_ir_node_build_metadata (value, module, modules, strings, types,
 				       data, offset, offset2);
 	  }
       }
       break;
       
-    case G_IDL_NODE_OBJECT:
+    case G_IR_NODE_OBJECT:
       {
 	ObjectBlob *blob = (ObjectBlob *)&data[*offset];
-	GIdlNodeInterface *object = (GIdlNodeInterface *)node;
+	GIrNodeInterface *object = (GIrNodeInterface *)node;
 
 	blob->blob_type = BLOB_TYPE_OBJECT;
 	blob->deprecated = object->deprecated;
@@ -1740,12 +1740,12 @@ g_idl_node_build_metadata (GIdlNode   *node,
 	*offset = ALIGN_VALUE (*offset, 4);
 	for (l = object->members; l; l = l->next)
 	  {
-	    GIdlNode *member = (GIdlNode *)l->data;
+	    GIrNode *member = (GIrNode *)l->data;
 
-	    if (member->type == G_IDL_NODE_FIELD)
+	    if (member->type == G_IR_NODE_FIELD)
 	      {
 		blob->n_fields++;
-		g_idl_node_build_metadata (member, module, modules, strings, 
+		g_ir_node_build_metadata (member, module, modules, strings, 
 					   types, data, offset, offset2);
 	      }
 	  }
@@ -1753,12 +1753,12 @@ g_idl_node_build_metadata (GIdlNode   *node,
 	*offset = ALIGN_VALUE (*offset, 4);
 	for (l = object->members; l; l = l->next)
 	  {
-	    GIdlNode *member = (GIdlNode *)l->data;
+	    GIrNode *member = (GIrNode *)l->data;
 
-	    if (member->type == G_IDL_NODE_PROPERTY)
+	    if (member->type == G_IR_NODE_PROPERTY)
 	      {
 		blob->n_properties++;
-		g_idl_node_build_metadata (member, module, modules, strings, 
+		g_ir_node_build_metadata (member, module, modules, strings, 
 					   types, data, offset, offset2);
 	      }
 	  }
@@ -1766,12 +1766,12 @@ g_idl_node_build_metadata (GIdlNode   *node,
 	*offset = ALIGN_VALUE (*offset, 4);
 	for (l = object->members; l; l = l->next)
 	  {
-	    GIdlNode *member = (GIdlNode *)l->data;
+	    GIrNode *member = (GIrNode *)l->data;
 
-	    if (member->type == G_IDL_NODE_FUNCTION)
+	    if (member->type == G_IR_NODE_FUNCTION)
 	      {
 		blob->n_methods++;
-		g_idl_node_build_metadata (member, module, modules, strings, 
+		g_ir_node_build_metadata (member, module, modules, strings, 
 					   types, data, offset, offset2);
 	      }
 	  }
@@ -1779,12 +1779,12 @@ g_idl_node_build_metadata (GIdlNode   *node,
 	*offset = ALIGN_VALUE (*offset, 4);
 	for (l = object->members; l; l = l->next)
 	  {
-	    GIdlNode *member = (GIdlNode *)l->data;
+	    GIrNode *member = (GIrNode *)l->data;
 
-	    if (member->type == G_IDL_NODE_SIGNAL)
+	    if (member->type == G_IR_NODE_SIGNAL)
 	      {
 		blob->n_signals++;
-		g_idl_node_build_metadata (member, module, modules, strings, 
+		g_ir_node_build_metadata (member, module, modules, strings, 
 					   types, data, offset, offset2);
 	      }
 	  }
@@ -1792,12 +1792,12 @@ g_idl_node_build_metadata (GIdlNode   *node,
 	*offset = ALIGN_VALUE (*offset, 4);
 	for (l = object->members; l; l = l->next)
 	  {
-	    GIdlNode *member = (GIdlNode *)l->data;
+	    GIrNode *member = (GIrNode *)l->data;
 
-	    if (member->type == G_IDL_NODE_VFUNC)
+	    if (member->type == G_IR_NODE_VFUNC)
 	      {
 		blob->n_vfuncs++;
-		g_idl_node_build_metadata (member, module, modules, strings, 
+		g_ir_node_build_metadata (member, module, modules, strings, 
 					   types, data, offset, offset2);
 	      }
 	  }
@@ -1805,22 +1805,22 @@ g_idl_node_build_metadata (GIdlNode   *node,
 	*offset = ALIGN_VALUE (*offset, 4);
 	for (l = object->members; l; l = l->next)
 	  {
-	    GIdlNode *member = (GIdlNode *)l->data;
+	    GIrNode *member = (GIrNode *)l->data;
 
-	    if (member->type == G_IDL_NODE_CONSTANT)
+	    if (member->type == G_IR_NODE_CONSTANT)
 	      {
 		blob->n_constants++;
-		g_idl_node_build_metadata (member, module, modules, strings, 
+		g_ir_node_build_metadata (member, module, modules, strings, 
 					   types, data, offset, offset2);
 	      }
 	  }
       }
       break;
 
-    case G_IDL_NODE_INTERFACE:
+    case G_IR_NODE_INTERFACE:
       {
 	InterfaceBlob *blob = (InterfaceBlob *)&data[*offset];
-	GIdlNodeInterface *iface = (GIdlNodeInterface *)node;
+	GIrNodeInterface *iface = (GIrNodeInterface *)node;
 
 	blob->blob_type = BLOB_TYPE_INTERFACE;
 	blob->deprecated = iface->deprecated;
@@ -1846,12 +1846,12 @@ g_idl_node_build_metadata (GIdlNode   *node,
 	*offset = ALIGN_VALUE (*offset, 4);
 	for (l = iface->members; l; l = l->next)
 	  {
-	    GIdlNode *member = (GIdlNode *)l->data;
+	    GIrNode *member = (GIrNode *)l->data;
 
-	    if (member->type == G_IDL_NODE_PROPERTY)
+	    if (member->type == G_IR_NODE_PROPERTY)
 	      {
 		blob->n_properties++;
-		g_idl_node_build_metadata (member, module, modules, strings, 
+		g_ir_node_build_metadata (member, module, modules, strings, 
 					   types, data, offset, offset2);
 	      }
 	  }
@@ -1859,12 +1859,12 @@ g_idl_node_build_metadata (GIdlNode   *node,
 	*offset = ALIGN_VALUE (*offset, 4);
 	for (l = iface->members; l; l = l->next)
 	  {
-	    GIdlNode *member = (GIdlNode *)l->data;
+	    GIrNode *member = (GIrNode *)l->data;
 
-	    if (member->type == G_IDL_NODE_FUNCTION)
+	    if (member->type == G_IR_NODE_FUNCTION)
 	      {
 		blob->n_methods++;
-		g_idl_node_build_metadata (member, module, modules, strings, 
+		g_ir_node_build_metadata (member, module, modules, strings, 
 					   types, data, offset, offset2);
 	      }
 	  }
@@ -1872,12 +1872,12 @@ g_idl_node_build_metadata (GIdlNode   *node,
 	*offset = ALIGN_VALUE (*offset, 4);
 	for (l = iface->members; l; l = l->next)
 	  {
-	    GIdlNode *member = (GIdlNode *)l->data;
+	    GIrNode *member = (GIrNode *)l->data;
 
-	    if (member->type == G_IDL_NODE_SIGNAL)
+	    if (member->type == G_IR_NODE_SIGNAL)
 	      {
 		blob->n_signals++;
-		g_idl_node_build_metadata (member, module, modules, strings, 
+		g_ir_node_build_metadata (member, module, modules, strings, 
 					   types, data, offset, offset2);
 	      }
 	  }
@@ -1885,12 +1885,12 @@ g_idl_node_build_metadata (GIdlNode   *node,
 	*offset = ALIGN_VALUE (*offset, 4);
 	for (l = iface->members; l; l = l->next)
 	  {
-	    GIdlNode *member = (GIdlNode *)l->data;
+	    GIrNode *member = (GIrNode *)l->data;
 
-	    if (member->type == G_IDL_NODE_VFUNC)
+	    if (member->type == G_IR_NODE_VFUNC)
 	      {
 		blob->n_vfuncs++;
-		g_idl_node_build_metadata (member, module, modules, strings, 
+		g_ir_node_build_metadata (member, module, modules, strings, 
 					   types, data, offset, offset2);
 	      }
 	  }
@@ -1898,12 +1898,12 @@ g_idl_node_build_metadata (GIdlNode   *node,
 	*offset = ALIGN_VALUE (*offset, 4);
 	for (l = iface->members; l; l = l->next)
 	  {
-	    GIdlNode *member = (GIdlNode *)l->data;
+	    GIrNode *member = (GIrNode *)l->data;
 
-	    if (member->type == G_IDL_NODE_CONSTANT)
+	    if (member->type == G_IR_NODE_CONSTANT)
 	      {
 		blob->n_constants++;
-		g_idl_node_build_metadata (member, module, modules, strings, 
+		g_ir_node_build_metadata (member, module, modules, strings, 
 					   types, data, offset, offset2);
 	      }
 	  }
@@ -1911,9 +1911,9 @@ g_idl_node_build_metadata (GIdlNode   *node,
       break;
 
 
-    case G_IDL_NODE_VALUE:
+    case G_IR_NODE_VALUE:
       {
-	GIdlNodeValue *value = (GIdlNodeValue *)node;
+	GIrNodeValue *value = (GIrNodeValue *)node;
 	ValueBlob *blob = (ValueBlob *)&data[*offset];
 	*offset += 12;
 
@@ -1924,9 +1924,9 @@ g_idl_node_build_metadata (GIdlNode   *node,
       }
       break;
 
-    case G_IDL_NODE_ERROR_DOMAIN:
+    case G_IR_NODE_ERROR_DOMAIN:
       {
-	GIdlNodeErrorDomain *domain = (GIdlNodeErrorDomain *)node;
+	GIrNodeErrorDomain *domain = (GIrNodeErrorDomain *)node;
 	ErrorDomainBlob *blob = (ErrorDomainBlob *)&data[*offset];
 	*offset += 16;
 
@@ -1940,9 +1940,9 @@ g_idl_node_build_metadata (GIdlNode   *node,
       }
       break;
 
-    case G_IDL_NODE_CONSTANT:
+    case G_IR_NODE_CONSTANT:
       {
-	GIdlNodeConstant *constant = (GIdlNodeConstant *)node;
+	GIrNodeConstant *constant = (GIrNodeConstant *)node;
 	ConstantBlob *blob = (ConstantBlob *)&data[*offset];
 	guint32 pos;
 
@@ -2027,7 +2027,7 @@ g_idl_node_build_metadata (GIdlNode   *node,
 	  }
 	*offset2 += ALIGN_VALUE (blob->size, 4);
 	
-	g_idl_node_build_metadata ((GIdlNode *)constant->type, module, modules, 
+	g_ir_node_build_metadata ((GIrNode *)constant->type, module, modules, 
 				   strings, types, data, &pos, offset2);
       }
       break;
@@ -2038,7 +2038,7 @@ g_idl_node_build_metadata (GIdlNode   *node,
   g_debug ("node %p type %d, offset %d -> %d, offset2 %d -> %d",
 	   node, node->type, old_offset, *offset, old_offset2, *offset2);
 
-  if (*offset2 - old_offset2 + *offset - old_offset > g_idl_node_get_full_size (node))
+  if (*offset2 - old_offset2 + *offset - old_offset > g_ir_node_get_full_size (node))
     g_error ("exceeding space reservation !!");
 }
 

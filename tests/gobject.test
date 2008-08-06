@@ -1,7 +1,10 @@
 <?xml version="1.0"?>
-<api version="1.0">
+<repository version="1.0"
+            xmlns="http://www.gtk.org/introspection/core/1.0"
+            xmlns:c="http://www.gtk.org/introspection/c/1.0"
+            xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
   <namespace name="GObject">
     <object name="GObject" type-name="GObject" get-type="g_object_get_type">
     </object>
   </namespace>
-</api>
+</repository>
