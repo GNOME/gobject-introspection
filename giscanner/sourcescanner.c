@@ -44,11 +44,14 @@ GISourceSymbol *
 gi_source_symbol_ref (GISourceSymbol * symbol)
 {
   symbol->ref_count++;
+  return symbol;
 }
 
 void
 gi_source_symbol_unref (GISourceSymbol * symbol)
 {
+  if (!symbol)
+    return;
   symbol->ref_count--;
   if (symbol->ref_count == 0)
     {
