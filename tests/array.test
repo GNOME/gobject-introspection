@@ -10,7 +10,9 @@
       </return-value>
       <parameters>
         <parameter name="p1">
-          <type name="uint8" c:type="guint8" length="1" zero-terminated="1" transfer="full"/>
+          <type name="sequence" c:type="guint8*" length="1" zero-terminated="1">
+            <type name="uint8" c:type="guint8"/>
+          </type>
         </parameter>
         <parameter name="p2">
           <type name="int" c:type="gint"/>
@@ -26,7 +28,9 @@
           <type name="uint" c:type="gint" direction="out"/>
         </parameter>
         <parameter name="p1">
-          <type name="uint8" c:type="guint8" length="0" direction="out" transfer="full"/>
+          <type name="sequence" c:type="guint8*" length="0" directon="out">
+            <type name="uint8" c:type="guint8"/>
+          </type>
         </parameter>
       </parameters>
     </function>
@@ -36,7 +40,9 @@
       </return-value>
       <parameters>
         <parameter name="p1">
-          <type name="uint8" c:type="guint8" length="1" zero-terminated="1" transfer="full"/>
+          <type name="sequence" c:type="guint8*" length="1" zero-terminated="1">
+            <type name="uint8" c:type="guint8"/>
+          </type>
         </parameter>
       </parameters>
     </function>
