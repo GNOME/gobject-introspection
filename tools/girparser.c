@@ -2035,6 +2035,7 @@ end_element_handler (GMarkupParseContext *context,
     case STATE_OBJECT:
       if (strcmp (element_name, "class") == 0)
 	{
+	  ctx->current_node = NULL;
 	  state_switch (ctx, STATE_NAMESPACE);
 	}
       break;
