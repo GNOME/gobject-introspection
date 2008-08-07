@@ -56,6 +56,116 @@ dump_stats (void)
   (( ((unsigned long)(this)) + (((unsigned long)(boundary)) -1)) & (~(((unsigned long)(boundary))-1)))
 
 
+static const gchar *
+g_ir_node_type_to_string (GIrNodeTypeId type)
+{
+  switch (type)
+    {
+    case G_IR_NODE_FUNCTION:
+      return "function";
+    case G_IR_NODE_CALLBACK:
+      return "callback";
+    case G_IR_NODE_PARAM:
+      return "param";
+    case G_IR_NODE_TYPE:
+      return "type";
+    case G_IR_NODE_OBJECT:
+      return "object";
+    case G_IR_NODE_INTERFACE:
+      return "interface";
+    case G_IR_NODE_SIGNAL:
+      return "signal";
+    case G_IR_NODE_PROPERTY:
+      return "property";
+    case G_IR_NODE_VFUNC:
+      return "vfunc";
+    case G_IR_NODE_FIELD:
+      return "field";
+    case G_IR_NODE_ENUM:
+      return "enum";
+    case G_IR_NODE_FLAGS:
+      return "flags";
+    case G_IR_NODE_BOXED:
+      return "boxed";
+    case G_IR_NODE_STRUCT:
+      return "struct";
+    case G_IR_NODE_VALUE:
+      return "value";
+    case G_IR_NODE_CONSTANT:
+      return "constant";
+    case G_IR_NODE_ERROR_DOMAIN:
+      return "error-domain";
+    case G_IR_NODE_XREF:
+      return "xref";
+    case G_IR_NODE_UNION:
+      return "union";
+    default:
+      return "unknown";
+    }
+}
+
+static const gchar*
+gi_type_tag_to_string (GITypeTag type)
+{
+  switch (type)
+    {
+    case GI_TYPE_TAG_VOID:
+      return "void";
+    case GI_TYPE_TAG_BOOLEAN:
+      return "boolean";
+    case GI_TYPE_TAG_INT8:
+      return "int8";
+    case GI_TYPE_TAG_UINT8:
+      return "uint8";
+    case GI_TYPE_TAG_INT16:
+      return "int16";
+    case GI_TYPE_TAG_UINT16:
+      return "uint16";
+    case GI_TYPE_TAG_INT32:
+      return "int32";
+    case GI_TYPE_TAG_UINT32:
+      return "uint32";
+    case GI_TYPE_TAG_INT64:
+      return "int64";
+    case GI_TYPE_TAG_UINT64:
+      return "uint64";
+    case GI_TYPE_TAG_INT:
+      return "int";
+    case GI_TYPE_TAG_UINT:
+      return "uint";
+    case GI_TYPE_TAG_LONG:
+      return "long";
+    case GI_TYPE_TAG_ULONG:
+      return "ulong";
+    case GI_TYPE_TAG_SSIZE:
+      return "ssize";
+    case GI_TYPE_TAG_SIZE:
+      return "size";
+    case GI_TYPE_TAG_FLOAT:
+      return "float";
+    case GI_TYPE_TAG_DOUBLE:
+      return "double";
+    case GI_TYPE_TAG_UTF8:
+      return "utf8";
+    case GI_TYPE_TAG_FILENAME:
+      return "filename";
+    case GI_TYPE_TAG_ARRAY:
+      return "array";
+    case GI_TYPE_TAG_INTERFACE:
+      return "interface";
+    case GI_TYPE_TAG_GLIST:
+      return "glist";
+    case GI_TYPE_TAG_GSLIST:
+      return "gslist";
+    case GI_TYPE_TAG_GHASH:
+      return "ghash";
+    case GI_TYPE_TAG_ERROR:
+      return "error";
+    default:
+      return "unknown";
+    }
+}
+
 GIrNode *
 g_ir_node_new (GIrNodeTypeId type)
 {
@@ -493,6 +603,9 @@ g_ir_node_get_full_size (GIrNode *node)
 
   g_assert (node != NULL);
 
+  g_printerr ("node %p type %s\n", node,
+	      g_ir_node_type_to_string (node->type));
+
   switch (node->type)
     {
     case G_IR_NODE_CALLBACK:
@@ -536,6 +649,9 @@ g_ir_node_get_full_size (GIrNode *node)
 	  size = 4;
 	else
 	  {
+	    g_printerr ("node %p type tag %s\n", node,
+			gi_type_tag_to_string (type->tag));
+
 	    switch (type->tag)
 	      {
 	      case TYPE_TAG_ARRAY:
