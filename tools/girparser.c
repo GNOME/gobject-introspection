@@ -1297,7 +1297,7 @@ start_type (GMarkupParseContext *context,
     MISSING_ATTRIBUTE (context, error, element_name, "name");
   if (ctype == NULL)
     MISSING_ATTRIBUTE (context, error, element_name, "c:type");
-
+  
   switch (ctx->current_typed->type)
     {
     case G_IR_NODE_PARAM:
@@ -1323,6 +1323,7 @@ start_type (GMarkupParseContext *context,
       g_printerr("current node is %d\n", ctx->current_node->type);
       g_assert_not_reached ();
     }
+
   ctx->current_typed = NULL;
   return TRUE;
 }
@@ -1349,6 +1350,31 @@ start_return_value (GMarkupParseContext *context,
 
       state_switch (ctx, STATE_FUNCTION_RETURN);
 
+      switch (ctx->current_node->type)
+	{
+	case G_IR_NODE_FUNCTION:
+	case G_IR_NODE_CALLBACK:
+	  {
+	    GIrNodeFunction *func = (GIrNodeFunction *)ctx->current_node;
+	    func->result = param;
+	  }
+	  break;
+	case G_IR_NODE_SIGNAL:
+	  {
+	    GIrNodeSignal *signal = (GIrNodeSignal *)ctx->current_node;
+	    signal->result = param;
+	  }
+	  break;
+	case G_IR_NODE_VFUNC:
+	  {
+	    GIrNodeVFunc *vfunc = (GIrNodeVFunc *)ctx->current_node;
+	    vfunc->result = param;
+	  }
+	  break;
+	default:
+	  g_assert_not_reached ();
+	}
+      
       return TRUE;
     }
 
