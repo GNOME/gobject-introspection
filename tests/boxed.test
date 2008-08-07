@@ -16,7 +16,8 @@
       </field>
       <method name="frob_boxed1" c:identifier="frob_boxed1">
         <return-value>
-	  <type name="none" c:type="void" />
+          <!-- FIXME: name=void should be none -->
+	  <type name="void" c:type="void" />
 	</return-value>
         <parameters>
           <parameter name="box" transfer="full" direction="in">
@@ -25,7 +26,7 @@
           <parameter name="w" transfer="full" direction="in">
 	    <type name="GList" c:type="GList*"/>
 	  </parameter>
-          <parameter name="t"transfer="full" direction="in">
+          <parameter name="t" transfer="full" direction="in">
 	    <type name="GHashTable" c:type="GHashTable*"/>
 	  </parameter>
           <parameter name="e" transfer="full" direction="out">
@@ -38,8 +39,12 @@
 	  <type name="boolean" c:type="gboolean"/>
 	</return-value>
         <parameters>
-          <parameter name="box" c:type="boxed2*" transfer="full" direction="in" />
-          <parameter name="val" c:type="gint*" transfer="full" direction="inout" />
+          <parameter name="box" transfer="full" direction="in">
+  	    <type name="object" c:type="boxed*"/>
+	  </parameter>
+          <parameter name="val" transfer="full" direction="inout">
+  	    <type name="uint" c:type="guint*"/>
+	  </parameter>
         </parameters>
       </method>
     </glib:boxed>
@@ -48,8 +53,12 @@
         <type name="boolean" c:type="gboolean"/>
       </return-value>
       <parameters>
-        <parameter name="v1" c:type="gint" direction="in" />
-        <parameter name="val2" c:type="gint" direction="in" />
+        <parameter name="v1" direction="in">
+	  <type name="int" c:type="gint"/>
+	</parameter>
+        <parameter name="val2" direction="in">
+	  <type name="int" c:type="gint"/>
+	</parameter>
       </parameters>
     </function>
     <glib:boxed glib:name="boxed2" glib:type-name="BoxedType2" glib:get-type="boxed2_get_type" deprecated="1">
