@@ -33,24 +33,24 @@ typedef enum
   STATE_END,        
   STATE_REPOSITORY, 
   STATE_NAMESPACE,  
-  STATE_ENUM,       
+  STATE_ENUM,        
   STATE_BITFIELD,  /* 5 */  
   STATE_FUNCTION,   
   STATE_FUNCTION_RETURN, 
   STATE_FUNCTION_PARAMETERS,
-  STATE_FUNCTION_PARAMETER,
+  STATE_FUNCTION_PARAMETER, 
   STATE_OBJECT,   /* 10 */
   STATE_OBJECT_FIELD,
   STATE_OBJECT_PROPERTY,
   STATE_INTERFACE,
-  STATE_INTERFACE_PROPERTY,
-  STATE_INTERFACE_FIELD,
-  STATE_IMPLEMENTS, /* 15 */
+  STATE_INTERFACE_PROPERTY, 
+  STATE_INTERFACE_FIELD,  /* 15 */
+  STATE_IMPLEMENTS, 
   STATE_REQUIRES,
   STATE_BOXED,  
   STATE_BOXED_FIELD,
-  STATE_STRUCT,
-  STATE_STRUCT_FIELD, /* 20 */
+  STATE_STRUCT,   /* 20 */
+  STATE_STRUCT_FIELD,
   STATE_ERRORDOMAIN, 
   STATE_UNION,
 } ParseState;
@@ -83,12 +83,12 @@ static void
 backtrace_stderr (void)
 {
   void *array[50];
-  size_t size;
+  int size;
   char **strings;
   size_t i;
 
   size = backtrace (array, 50);
-  strings = backtrace_symbols (array, size);
+  strings = (char**) backtrace_symbols (array, size);
 
   fprintf (stderr, "--- BACKTRACE (%zd frames) ---\n", size);
 
@@ -926,7 +926,7 @@ start_property (GMarkupParseContext *context,
 	  GIrNodeInterface *iface;
 	  
 	  property = (GIrNodeProperty *) g_ir_node_new (G_IR_NODE_PROPERTY);
-	  ctx->current_typed = property;
+	  ctx->current_typed = (GIrNode*) property;
 
 	  ((GIrNode *)property)->name = g_strdup (name);
 	  
@@ -1948,6 +1948,52 @@ start_element_handler (GMarkupParseContext *context,
     }
 }
 
+static gboolean
+require_one_of_end_elements (GMarkupParseContext *context,
+			     const char          *actual_name,
+			     GError             **error, 
+			     ...)
+{
+  va_list args;
+  int line_number, char_number;
+  const char *expected;
+  gboolean matched = FALSE;
+
+  va_start (args, error);
+
+  while ((expected = va_arg (args, const char*)) != NULL) 
+    {
+      if (strcmp (expected, actual_name) == 0)
+	{
+	  matched = TRUE;
+	  break;
+	}
+    }
+
+  va_end (args);
+
+  if (matched)
+    return TRUE;
+
+  g_markup_parse_context_get_position (context, &line_number, &char_number);
+  g_set_error (error,
+	       G_MARKUP_ERROR,
+	       G_MARKUP_ERROR_INVALID_CONTENT,
+	       "Unexpected end tag '%s' on line %d char %d",
+	       actual_name, 
+	       line_number, char_number);
+  return FALSE;
+}
+
+static gboolean
+require_end_element (GMarkupParseContext *context,
+		     const char          *expected_name,
+		     const char          *actual_name,
+		     GError             **error)
+{
+  return require_one_of_end_elements (context, actual_name, error, expected_name, NULL);
+}
+
 static void
 end_element_handler (GMarkupParseContext *context,
 		     const gchar         *element_name,
@@ -1968,29 +2014,33 @@ end_element_handler (GMarkupParseContext *context,
       break;
 
     case STATE_NAMESPACE:
-      if (strcmp (element_name, "namespace") == 0)
+      if (require_end_element (context, "namespace", element_name, error))
 	{
           ctx->current_module = NULL;
-          state_switch (ctx, STATE_NAMESPACE);
+          state_switch (ctx, STATE_REPOSITORY);
         }
       break;
 
     case STATE_FUNCTION_RETURN:
-      if (strcmp (element_name, "return-value") == 0)
+      if (strcmp ("type", element_name) == 0)
+	break;
+      if (require_end_element (context, "return-value", element_name, error))
 	{
 	  state_switch (ctx, STATE_FUNCTION);
 	}
       break;
 
     case STATE_FUNCTION_PARAMETERS:
-      if (strcmp (element_name, "parameters") == 0)
+      if (require_end_element (context, "parameters", element_name, error))
 	{
 	  state_switch (ctx, STATE_FUNCTION);
 	}
       break;
 
     case STATE_FUNCTION_PARAMETER:
-      if (strcmp (element_name, "parameter") == 0)
+      if (strcmp ("type", element_name) == 0)
+	break;
+      if (require_end_element (context, "parameter", element_name, error))
 	{
 	  state_switch (ctx, STATE_FUNCTION_PARAMETERS);
 	}
@@ -2015,25 +2065,40 @@ end_element_handler (GMarkupParseContext *context,
 	    state_switch (ctx, STATE_STRUCT);
 	  else if (ctx->current_node->type == G_IR_NODE_UNION)
 	    state_switch (ctx, STATE_UNION);
+	  else
+	    {
+	      int line_number, char_number;
+	      g_markup_parse_context_get_position (context, &line_number, &char_number);
+	      g_set_error (error,
+			   G_MARKUP_ERROR,
+			   G_MARKUP_ERROR_INVALID_CONTENT,
+			   "Unexpected end tag '%s' on line %d char %d",
+			   element_name,
+			   line_number, char_number);
+	    }
 	}
       break;
 
     case STATE_OBJECT_FIELD:
-      if (strcmp (element_name, "field") == 0)
+      if (strcmp ("type", element_name) == 0)
+	break;
+      if (require_end_element (context, "field", element_name, error))
 	{
 	  state_switch (ctx, STATE_OBJECT);
 	}
       break;
 
     case STATE_OBJECT_PROPERTY:
-      if (strcmp (element_name, "property") == 0)
+      if (strcmp ("type", element_name) == 0)
+	break;
+      if (require_end_element (context, "property", element_name, error))
 	{
 	  state_switch (ctx, STATE_OBJECT);
 	}
       break;
 
     case STATE_OBJECT:
-      if (strcmp (element_name, "class") == 0)
+      if (require_end_element (context, "class", element_name, error))
 	{
 	  ctx->current_node = NULL;
 	  state_switch (ctx, STATE_NAMESPACE);
@@ -2041,7 +2106,7 @@ end_element_handler (GMarkupParseContext *context,
       break;
 
     case STATE_ERRORDOMAIN:
-      if (strcmp (element_name, "errordomain") == 0)
+      if (require_end_element (context, "errordomain", element_name, error))
 	{
 	  ctx->current_node = NULL;
 	  state_switch (ctx, STATE_NAMESPACE);
@@ -2049,21 +2114,23 @@ end_element_handler (GMarkupParseContext *context,
       break;
 
     case STATE_INTERFACE_PROPERTY:
-      if (strcmp (element_name, "property") == 0)
+      if (require_end_element (context, "property", element_name, error))
 	{
 	  state_switch (ctx, STATE_INTERFACE);
 	}
       break;
 
     case STATE_INTERFACE_FIELD:
-      if (strcmp (element_name, "field") == 0)
+      if (strcmp ("type", element_name) == 0)
+	break;
+      if (require_end_element (context, "field", element_name, error))
 	{
 	  state_switch (ctx, STATE_INTERFACE);
 	}
       break;
 
     case STATE_INTERFACE:
-      if (strcmp (element_name, "interface") == 0)
+      if (require_end_element (context, "interface", element_name, error))
 	{
 	  ctx->current_node = NULL;
 	  state_switch (ctx, STATE_NAMESPACE);
@@ -2071,8 +2138,9 @@ end_element_handler (GMarkupParseContext *context,
       break;
 
     case STATE_ENUM:
-      if (strcmp (element_name, "enumeration") == 0 ||
-	  strcmp (element_name, "bitfield") == 0)
+      if (strcmp ("member", element_name) == 0)
+	break;
+      else if (require_one_of_end_elements (context, element_name, error, "enumeration", "bitfield", NULL))
 	{
 	  ctx->current_node = NULL;
 	  state_switch (ctx, STATE_NAMESPACE);
@@ -2080,7 +2148,7 @@ end_element_handler (GMarkupParseContext *context,
       break;
 
     case STATE_BOXED:
-      if (strcmp (element_name, "glib:boxed") == 0)
+      if (require_end_element (context, "glib:boxed", element_name, error))
 	{
 	  ctx->current_node = NULL;
 	  state_switch (ctx, STATE_NAMESPACE);
@@ -2088,28 +2156,30 @@ end_element_handler (GMarkupParseContext *context,
       break;
 
     case STATE_BOXED_FIELD:
-      if (strcmp (element_name, "field") == 0)
+      if (require_end_element (context, "field", element_name, error))
 	{
 	  state_switch (ctx, STATE_BOXED);
 	}
       break;
 
     case STATE_STRUCT_FIELD:
-      if (strcmp (element_name, "field") == 0)
+      if (strcmp ("type", element_name) == 0)
+	break;
+      if (require_end_element (context, "field", element_name, error))
 	{
 	  state_switch (ctx, STATE_STRUCT);
 	}
       break;
 
     case STATE_STRUCT:
-      if (strcmp (element_name, "record") == 0)
+      if (require_end_element (context, "record", element_name, error))
 	{
 	  ctx->current_node = NULL;
 	  state_switch (ctx, STATE_NAMESPACE);
 	}
       break;
     case STATE_UNION:
-      if (strcmp (element_name, "union") == 0)
+      if (require_end_element (context, "union", element_name, error))
 	{
 	  ctx->current_node = NULL;
 	  state_switch (ctx, STATE_NAMESPACE);
@@ -2117,11 +2187,11 @@ end_element_handler (GMarkupParseContext *context,
       break;
 
     case STATE_IMPLEMENTS:
-      if (strcmp (element_name, "implements") == 0)
+      if (require_end_element (context, "implements", element_name, error))
         state_switch (ctx, STATE_OBJECT);
       break;
     case STATE_REQUIRES:
-      if (strcmp (element_name, "requires") == 0)
+      if (require_end_element (context, "requires", element_name, error))
         state_switch (ctx, STATE_INTERFACE);
       break;
     default:
