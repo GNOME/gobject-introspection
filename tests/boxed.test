@@ -35,7 +35,7 @@
       </method>
       <method name="lart" c:identifier="lart">
         <return-value>
-	  <type name="boolean" c:type="gboolean"/>x
+	  <type name="boolean" c:type="gboolean"/>
 	</return-value>
         <parameters>
           <parameter name="box" c:type="boxed2*" transfer="full" direction="in" />
@@ -44,7 +44,9 @@
       </method>
     </glib:boxed>
     <function name="freefunc" c:identifier="freefunc" deprecated="1">
-      <return-type c:type="gint" />
+      <return-value> 
+        <type name="boolean" c:type="gboolean"/>
+      </return-value>
       <parameters>
         <parameter name="v1" c:type="gint" direction="in" />
         <parameter name="val2" c:type="gint" direction="in" />
