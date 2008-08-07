@@ -427,8 +427,10 @@ start_glib_boxed (GMarkupParseContext *context,
       deprecated = find_attribute ("deprecated", attribute_names, attribute_values);
       
       if (name == NULL)
-	MISSING_ATTRIBUTE (context, error, element_name, "name");
-      else if (typename == NULL || typeinit == NULL)
+	MISSING_ATTRIBUTE (context, error, element_name, "glib:name");
+      else if (typename == NULL)
+	MISSING_ATTRIBUTE (context, error, element_name, "glib:type-name");
+      else if (typeinit == NULL)
 	MISSING_ATTRIBUTE (context, error, element_name, "glib:get-type");
       else
 	{
