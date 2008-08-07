@@ -603,8 +603,8 @@ g_ir_node_get_full_size (GIrNode *node)
 
   g_assert (node != NULL);
 
-  g_printerr ("node %p type %s\n", node,
-	      g_ir_node_type_to_string (node->type));
+  g_debug ("node %p type %s\n", node,
+	   g_ir_node_type_to_string (node->type));
 
   switch (node->type)
     {
@@ -649,8 +649,8 @@ g_ir_node_get_full_size (GIrNode *node)
 	  size = 4;
 	else
 	  {
-	    g_printerr ("node %p type tag %s\n", node,
-			gi_type_tag_to_string (type->tag));
+	    g_debug ("node %p type tag %s\n", node,
+		     gi_type_tag_to_string (type->tag));
 
 	    switch (type->tag)
 	      {
@@ -1058,7 +1058,7 @@ find_entry_node (GIrModule  *module,
       goto out;
     }
 
-  g_warning ("Entry %s not found", name);
+  g_warning ("Entry '%s' not found", name);
 
  out:
 
@@ -1195,17 +1195,21 @@ serialize_type (GIrModule   *module,
 
 void
 g_ir_node_build_metadata (GIrNode   *node,
-			   GIrModule *module,
-			   GList      *modules,
-			   GHashTable *strings,
-			   GHashTable *types,
-			   guchar     *data,
-			   guint32    *offset,
-                           guint32    *offset2)
+			  GIrModule *module,
+			  GList      *modules,
+			  GHashTable *strings,
+			  GHashTable *types,
+			  guchar     *data,
+			  guint32    *offset,
+			  guint32    *offset2)
 {
   GList *l;
   guint32 old_offset = *offset;
   guint32 old_offset2 = *offset2;
+
+  g_assert (node != NULL);
+
+  g_debug ("build_medatadata(%s)\n", g_ir_node_type_to_string (node->type));
 
   switch (node->type)
     {
@@ -1442,8 +1446,8 @@ g_ir_node_build_metadata (GIrNode   *node,
 	    GIrNode *param = (GIrNode *)l->data;
 
 	    g_ir_node_build_metadata (param, 
-				       module, modules, strings, types,
-				       data, &signature, offset2);
+				      module, modules, strings, types,
+				      data, &signature, offset2);
 	  }
       }
       break;
@@ -1593,7 +1597,7 @@ g_ir_node_build_metadata (GIrNode   *node,
       {
 	ArgBlob *blob = (ArgBlob *)&data[*offset];
 	GIrNodeParam *param = (GIrNodeParam *)node;
-
+	
 	*offset += 8;
 
  	blob->name = write_string (node->name, strings, data, offset2);
