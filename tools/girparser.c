@@ -1656,6 +1656,12 @@ start_element_handler (GMarkupParseContext *context,
 
   switch (element_name[0]) 
     {
+    case 'b':
+      if (start_enum (context, element_name, 
+		      attribute_names, attribute_values,
+		      ctx, error))
+	goto out;
+      break;
     case 'c':
       if (start_function (context, element_name, 
 			  attribute_names, attribute_values,
@@ -1717,11 +1723,6 @@ start_element_handler (GMarkupParseContext *context,
 			    attribute_names, attribute_values,
 			    ctx, error))
 	goto out;
-      else if (start_enum (context, element_name, 
-			   attribute_names, attribute_values,
-			   ctx, error))
-	goto out;
-      
       break;
 
     case 'g':
@@ -1729,12 +1730,14 @@ start_element_handler (GMarkupParseContext *context,
 			    attribute_names, attribute_values,
 			    ctx, error))
 	goto out;
-      break;
-
-      if (start_glib_signal (context, element_name,
+      else if (start_glib_signal (context, element_name,
 			     attribute_names, attribute_values,
 			     ctx, error))
-	goto out;      
+	goto out;
+      else if (start_glib_boxed (context, element_name,
+				 attribute_names, attribute_values,
+				 ctx, error))
+	goto out;
       break;
 
     case 'i':
@@ -2042,7 +2045,7 @@ end_element_handler (GMarkupParseContext *context,
 
     case STATE_ENUM:
       if (strcmp (element_name, "enumeration") == 0 ||
-	  strcmp (element_name, "flags") == 0)
+	  strcmp (element_name, "bitfield") == 0)
 	{
 	  ctx->current_node = NULL;
 	  state_switch (ctx, STATE_NAMESPACE);
