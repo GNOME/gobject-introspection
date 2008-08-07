@@ -1107,9 +1107,12 @@ serialize_type (GIrModule   *module,
     "ssize",
     "size",
     "float", 
-    "double", 
+    "double",
     "utf8", 
-    "filename"
+    "filename",
+    "string",
+    "sequence",
+    "any"
   };
   
   if (node->tag < 20)
@@ -1224,8 +1227,10 @@ g_ir_node_build_metadata (GIrNode   *node,
 
 	*offset += 4;
 	
-	if (type->tag < TYPE_TAG_ARRAY)
-	  {
+	if (type->tag < TYPE_TAG_ARRAY ||
+	    type->tag == TYPE_TAG_STRING ||
+	    type->tag == TYPE_TAG_ANY)
+	  { 
 	    blob->reserved = 0;
 	    blob->reserved2 = 0;
 	    blob->pointer = type->is_pointer;

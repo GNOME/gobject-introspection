@@ -184,7 +184,8 @@ parse_type_internal (gchar *str, gchar **rest)
     { "gdouble",  TYPE_TAG_DOUBLE,  0 },
     { "utf8",     TYPE_TAG_UTF8,    1 },  
     { "gchar*",   TYPE_TAG_UTF8,    1 },  
-    { "filename", TYPE_TAG_FILENAME,1 }
+    { "filename", TYPE_TAG_FILENAME,1 },
+    { "string",   TYPE_TAG_STRING,  1 }
   };  
 
   gint n_basic = G_N_ELEMENTS (basic);

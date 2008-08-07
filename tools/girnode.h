@@ -45,26 +45,26 @@ typedef struct _GIrNodeUnion GIrNodeUnion;
 
 typedef enum 
 {
-  G_IR_NODE_INVALID,
-  G_IR_NODE_FUNCTION,
-  G_IR_NODE_CALLBACK,
-  G_IR_NODE_STRUCT,
-  G_IR_NODE_BOXED,
-  G_IR_NODE_ENUM,
-  G_IR_NODE_FLAGS,
-  G_IR_NODE_OBJECT,
-  G_IR_NODE_INTERFACE,
-  G_IR_NODE_CONSTANT,
-  G_IR_NODE_ERROR_DOMAIN,
-  G_IR_NODE_UNION,
-  G_IR_NODE_PARAM,
-  G_IR_NODE_TYPE,
-  G_IR_NODE_PROPERTY,
-  G_IR_NODE_SIGNAL,
-  G_IR_NODE_VALUE,
-  G_IR_NODE_VFUNC,
-  G_IR_NODE_FIELD,
-  G_IR_NODE_XREF
+  G_IR_NODE_INVALID      =  0,
+  G_IR_NODE_FUNCTION     =  1,
+  G_IR_NODE_CALLBACK     =  2,
+  G_IR_NODE_STRUCT       =  3,
+  G_IR_NODE_BOXED        =  4,
+  G_IR_NODE_ENUM         =  5,
+  G_IR_NODE_FLAGS        =  6, 
+  G_IR_NODE_OBJECT       =  7,
+  G_IR_NODE_INTERFACE    =  8,
+  G_IR_NODE_CONSTANT     =  9,
+  G_IR_NODE_ERROR_DOMAIN = 10,
+  G_IR_NODE_UNION        = 11,
+  G_IR_NODE_PARAM        = 12,
+  G_IR_NODE_TYPE         = 13,
+  G_IR_NODE_PROPERTY     = 14,
+  G_IR_NODE_SIGNAL       = 15,
+  G_IR_NODE_VALUE        = 16,
+  G_IR_NODE_VFUNC        = 17,
+  G_IR_NODE_FIELD        = 18,
+  G_IR_NODE_XREF         = 19
 } GIrNodeTypeId;
 
 struct _GIrNode
