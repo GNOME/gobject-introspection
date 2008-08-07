@@ -44,13 +44,12 @@ typedef enum
   STATE_OBJECT_PROPERTY,
   STATE_INTERFACE,
   STATE_INTERFACE_PROPERTY,
-  STATE_IMPLEMENTS,
+  STATE_IMPLEMENTS, /* 15 */
   STATE_REQUIRES,
-  STATE_BOXED,  /* 15 */
+  STATE_BOXED,  
   STATE_STRUCT,
   STATE_STRUCT_FIELD,
-  STATE_SIGNAL,
-  STATE_ERRORDOMAIN,
+  STATE_ERRORDOMAIN, /* 20 */
   STATE_UNION,
 } ParseState;
 
@@ -595,127 +594,122 @@ start_parameter (GMarkupParseContext *context,
 		 ParseContext        *ctx,
 		 GError             **error)
 {
-  if (strcmp (element_name, "parameter") == 0 &&
-      ctx->state == STATE_FUNCTION_PARAMETERS)
-    {
-      const gchar *name;
-      const gchar *direction;
-      const gchar *retval;
-      const gchar *dipper;
-      const gchar *optional;
-      const gchar *nullok;
-      const gchar *transfer;
+  const gchar *name;
+  const gchar *direction;
+  const gchar *retval;
+  const gchar *dipper;
+  const gchar *optional;
+  const gchar *nullok;
+  const gchar *transfer;
+  GIrNodeParam *param;
       
-      name = find_attribute ("name", attribute_names, attribute_values);
-      direction = find_attribute ("direction", attribute_names, attribute_values);
-      retval = find_attribute ("retval", attribute_names, attribute_values);
-      dipper = find_attribute ("dipper", attribute_names, attribute_values);
-      optional = find_attribute ("optional", attribute_names, attribute_values);
-      nullok = find_attribute ("null-ok", attribute_names, attribute_values);
-      transfer = find_attribute ("transfer", attribute_names, attribute_values);
+  if (!(strcmp (element_name, "parameter") == 0 &&
+	ctx->state == STATE_FUNCTION_PARAMETERS))
+    return FALSE;
 
-      if (name == NULL)
-	name = "unknown";
-      else
-	{
-	  GIrNodeParam *param;
+  name = find_attribute ("name", attribute_names, attribute_values);
+  direction = find_attribute ("direction", attribute_names, attribute_values);
+  retval = find_attribute ("retval", attribute_names, attribute_values);
+  dipper = find_attribute ("dipper", attribute_names, attribute_values);
+  optional = find_attribute ("optional", attribute_names, attribute_values);
+  nullok = find_attribute ("null-ok", attribute_names, attribute_values);
+  transfer = find_attribute ("transfer", attribute_names, attribute_values);
 
-	  param = (GIrNodeParam *)g_ir_node_new (G_IR_NODE_PARAM);
+  if (name == NULL)
+    name = "unknown";
 
-	  ctx->current_typed = (GIrNode*) param;
+  param = (GIrNodeParam *)g_ir_node_new (G_IR_NODE_PARAM);
 
-	  state_switch (ctx, STATE_FUNCTION_PARAMETER);
+  ctx->current_typed = (GIrNode*) param;
 
-	  if (direction && strcmp (direction, "out") == 0)
-	    {
-	      param->in = FALSE;
-	      param->out = TRUE;
-	    }
-	  else if (direction && strcmp (direction, "inout") == 0)
-	    {
-	      param->in = TRUE;
-	      param->out = TRUE;
-	    }
-	  else
-	    {
-	      param->in = TRUE;
-	      param->out = FALSE;
-	    }
+  state_switch (ctx, STATE_FUNCTION_PARAMETER);
 
-	  if (retval && strcmp (retval, "1") == 0)
-	    param->retval = TRUE;
-	  else
-	    param->retval = FALSE;
-
-	  if (dipper && strcmp (dipper, "1") == 0)
-	    param->dipper = TRUE;
-	  else
-	    param->dipper = FALSE;
-
-	  if (optional && strcmp (optional, "1") == 0)
-	    param->optional = TRUE;
-	  else
-	    param->optional = FALSE;
-
-	  if (nullok && strcmp (nullok, "1") == 0)
-	    param->null_ok = TRUE;
-	  else
-	    param->null_ok = FALSE;
-
-	  if (transfer && strcmp (transfer, "none") == 0)
-	    {
-	      param->transfer = FALSE;
-	      param->shallow_transfer = FALSE;
-	    }
-	  else if (transfer && strcmp (transfer, "shallow") == 0)
-	    {
-	      param->transfer = FALSE;
-	      param->shallow_transfer = TRUE;
-	    }
-	  else
-	    {
-	      param->transfer = TRUE;
-	      param->shallow_transfer = FALSE;
-	    }
-	  
-	  ((GIrNode *)param)->name = g_strdup (name);
-	  
-	  switch (ctx->current_node->type)
-	    {
-	    case G_IR_NODE_FUNCTION:
-	    case G_IR_NODE_CALLBACK:
-	      {
-		GIrNodeFunction *func;
-
-		func = (GIrNodeFunction *)ctx->current_node;
-		func->parameters = g_list_append (func->parameters, param);
-	      }
-	      break;
-	    case G_IR_NODE_SIGNAL:
-	      {
-		GIrNodeSignal *signal;
-
-		signal = (GIrNodeSignal *)ctx->current_node;
-		signal->parameters = g_list_append (signal->parameters, param);
-	      }
-	      break;
-	    case G_IR_NODE_VFUNC:
-	      {
-		GIrNodeVFunc *vfunc;
-		
-		vfunc = (GIrNodeVFunc *)ctx->current_node;
-		vfunc->parameters = g_list_append (vfunc->parameters, param);
-	      }
-	      break;
-	    default:
-	      g_assert_not_reached ();
-	    }
-	}
-
-      return TRUE;
+  if (direction && strcmp (direction, "out") == 0)
+    {
+      param->in = FALSE;
+      param->out = TRUE;
+    }
+  else if (direction && strcmp (direction, "inout") == 0)
+    {
+      param->in = TRUE;
+      param->out = TRUE;
+    }
+  else
+    {
+      param->in = TRUE;
+      param->out = FALSE;
     }
 
-  return FALSE;
+  if (retval && strcmp (retval, "1") == 0)
+    param->retval = TRUE;
+  else
+    param->retval = FALSE;
+
+  if (dipper && strcmp (dipper, "1") == 0)
+    param->dipper = TRUE;
+  else
+    param->dipper = FALSE;
+
+  if (optional && strcmp (optional, "1") == 0)
+    param->optional = TRUE;
+  else
+    param->optional = FALSE;
+
+  if (nullok && strcmp (nullok, "1") == 0)
+    param->null_ok = TRUE;
+  else
+    param->null_ok = FALSE;
+
+  if (transfer && strcmp (transfer, "none") == 0)
+    {
+      param->transfer = FALSE;
+      param->shallow_transfer = FALSE;
+    }
+  else if (transfer && strcmp (transfer, "shallow") == 0)
+    {
+      param->transfer = FALSE;
+      param->shallow_transfer = TRUE;
+    }
+  else
+    {
+      param->transfer = TRUE;
+      param->shallow_transfer = FALSE;
+    }
+	  
+  ((GIrNode *)param)->name = g_strdup (name);
+	  
+  switch (ctx->current_node->type)
+    {
+    case G_IR_NODE_FUNCTION:
+    case G_IR_NODE_CALLBACK:
+      {
+	GIrNodeFunction *func;
+
+	func = (GIrNodeFunction *)ctx->current_node;
+	func->parameters = g_list_append (func->parameters, param);
+      }
+      break;
+    case G_IR_NODE_SIGNAL:
+      {
+	GIrNodeSignal *signal;
+
+	signal = (GIrNodeSignal *)ctx->current_node;
+	signal->parameters = g_list_append (signal->parameters, param);
+      }
+      break;
+    case G_IR_NODE_VFUNC:
+      {
+	GIrNodeVFunc *vfunc;
+		
+	vfunc = (GIrNodeVFunc *)ctx->current_node;
+	vfunc->parameters = g_list_append (vfunc->parameters, param);
+      }
+      break;
+    default:
+      g_assert_not_reached ();
+    }
+
+  return TRUE;
 }
 
 static gboolean
@@ -785,7 +779,7 @@ start_field (GMarkupParseContext *context,
 
 		iface = (GIrNodeInterface *)ctx->current_node;
 		iface->members = g_list_append (iface->members, field);
-		ctx->state = STATE_OBJECT_FIELD;
+		state_switch (ctx, STATE_OBJECT_FIELD);
 	      }
 	      break;
 	    case G_IR_NODE_BOXED:
@@ -802,7 +796,7 @@ start_field (GMarkupParseContext *context,
 
 		struct_ = (GIrNodeStruct *)ctx->current_node;
 		struct_->members = g_list_append (struct_->members, field);
-		ctx->state = STATE_STRUCT_FIELD;
+		state_switch (ctx, STATE_STRUCT_FIELD);
 	      }
 	      break;
 	    case G_IR_NODE_UNION:
@@ -899,7 +893,6 @@ start_property (GMarkupParseContext *context,
        ctx->state == STATE_INTERFACE))
     {
       const gchar *name;
-      const gchar *type;
       const gchar *readable;
       const gchar *writable;
       const gchar *construct;
@@ -919,6 +912,7 @@ start_property (GMarkupParseContext *context,
 	  GIrNodeInterface *iface;
 	  
 	  property = (GIrNodeProperty *) g_ir_node_new (G_IR_NODE_PROPERTY);
+	  ctx->current_typed = property;
 
 	  ((GIrNode *)property)->name = g_strdup (name);
 	  
@@ -939,8 +933,6 @@ start_property (GMarkupParseContext *context,
 	  else
 	    property->construct_only = FALSE;
 
-	  property->type = parse_type (type);
-	  
 	  iface = (GIrNodeInterface *)ctx->current_node;
 	  iface->members = g_list_append (iface->members, property);
 
@@ -1266,7 +1258,7 @@ start_type (GMarkupParseContext *context,
 
   if (strcmp (element_name, "type") != 0 ||
       !(ctx->state == STATE_FUNCTION_PARAMETER || ctx->state == STATE_FUNCTION_RETURN
-	|| ctx->state == STATE_STRUCT_FIELD))
+	|| ctx->state == STATE_STRUCT_FIELD || ctx->state == STATE_OBJECT_PROPERTY))
     return FALSE;
 
   if (!ctx->current_typed)
@@ -1297,15 +1289,21 @@ start_type (GMarkupParseContext *context,
       break;
     case G_IR_NODE_FIELD:
       {
-	GIrNodeField *field = (GIrNodeField *)ctx->current_node;
+	GIrNodeField *field = (GIrNodeField *)ctx->current_typed;
 	field->type = parse_type (name);
+      }
+      break;
+    case G_IR_NODE_PROPERTY:
+      {
+	GIrNodeProperty *property = (GIrNodeProperty *) ctx->current_typed;
+	property->type = parse_type (name);
       }
       break;
     default:
       g_printerr("current node is %d\n", ctx->current_node->type);
       g_assert_not_reached ();
     }
-
+  ctx->current_typed = NULL;
   return TRUE;
 }
 
@@ -1931,7 +1929,6 @@ end_element_handler (GMarkupParseContext *context,
     case STATE_FUNCTION_RETURN:
       if (strcmp (element_name, "return-value") == 0)
 	{
-	  ctx->current_typed = NULL;
 	  state_switch (ctx, STATE_FUNCTION);
 	}
       break;
@@ -1939,7 +1936,6 @@ end_element_handler (GMarkupParseContext *context,
     case STATE_FUNCTION_PARAMETERS:
       if (strcmp (element_name, "parameters") == 0)
 	{
-	  ctx->current_typed = NULL;
 	  state_switch (ctx, STATE_FUNCTION);
 	}
       break;
@@ -1990,7 +1986,6 @@ end_element_handler (GMarkupParseContext *context,
     case STATE_OBJECT:
       if (strcmp (element_name, "class") == 0)
 	{
-	  ctx->current_node = NULL;
 	  state_switch (ctx, STATE_NAMESPACE);
 	}
       break;
@@ -2006,7 +2001,6 @@ end_element_handler (GMarkupParseContext *context,
     case STATE_INTERFACE_PROPERTY:
       if (strcmp (element_name, "property") == 0)
 	{
-	  ctx->current_node = NULL;
 	  state_switch (ctx, STATE_INTERFACE);
 	}
       break;
