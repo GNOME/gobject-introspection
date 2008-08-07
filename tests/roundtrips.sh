@@ -6,8 +6,8 @@ set -e
 TESTFILES=$(echo "${srcdir}"/../../gir-repository/gir/*.gir)
 
 for i in $TESTFILES; do
-	../tools/g-ir-compiler --raw $i > $i.1; 
-	../tools/g-ir-generate --raw $i.1 > $i.2; 
+	${CHECK_DEBUG} ../tools/g-ir-compiler --raw $i > $i.1; 
+	${CHECK_DEBUG} ../tools/g-ir-generate --raw $i.1 > $i.2; 
 	diff -u $srcdir/$i $i.2 || exit 1; 
 	rm $i.1 $i.2
 done
