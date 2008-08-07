@@ -39,9 +39,9 @@ typedef enum
   STATE_FUNCTION_RETURN, 
   STATE_FUNCTION_PARAMETERS,
   STATE_FUNCTION_PARAMETER, 
-  STATE_OBJECT,   /* 10 */
-  STATE_OBJECT_FIELD,
-  STATE_OBJECT_PROPERTY,
+  STATE_CLASS,   /* 10 */
+  STATE_CLASS_FIELD,
+  STATE_CLASS_PROPERTY,
   STATE_INTERFACE,
   STATE_INTERFACE_PROPERTY, 
   STATE_INTERFACE_FIELD,  /* 15 */
@@ -53,6 +53,7 @@ typedef enum
   STATE_STRUCT_FIELD,
   STATE_ERRORDOMAIN, 
   STATE_UNION,
+  STATE_CONSTANT
 } ParseState;
 
 typedef struct _ParseContext ParseContext;
@@ -471,13 +472,13 @@ start_function (GMarkupParseContext *context,
   if ((ctx->state == STATE_NAMESPACE &&
        (strcmp (element_name, "function") == 0 ||
 	strcmp (element_name, "callback") == 0)) ||
-      ((ctx->state == STATE_OBJECT ||
+      ((ctx->state == STATE_CLASS ||
 	ctx->state == STATE_INTERFACE ||
 	ctx->state == STATE_BOXED ||
         ctx->state == STATE_UNION) &&
        (strcmp (element_name, "method") == 0 || 
 	strcmp (element_name, "callback") == 0)) ||
-      ((ctx->state == STATE_OBJECT ||
+      ((ctx->state == STATE_CLASS ||
 	ctx->state == STATE_BOXED) &&
        (strcmp (element_name, "constructor") == 0)) ||
       (ctx->state == STATE_STRUCT && strcmp (element_name, "callback") == 0))
@@ -724,7 +725,7 @@ start_field (GMarkupParseContext *context,
 	     GError             **error)
 {
   if (strcmp (element_name, "field") == 0 &&
-      (ctx->state == STATE_OBJECT ||
+      (ctx->state == STATE_CLASS ||
        ctx->state == STATE_BOXED ||
        ctx->state == STATE_STRUCT ||
        ctx->state == STATE_UNION ||
@@ -783,7 +784,7 @@ start_field (GMarkupParseContext *context,
 
 		iface = (GIrNodeInterface *)ctx->current_node;
 		iface->members = g_list_append (iface->members, field);
-		state_switch (ctx, STATE_OBJECT_FIELD);
+		state_switch (ctx, STATE_CLASS_FIELD);
 	      }
 	      break;
 	    case G_IR_NODE_INTERFACE:
@@ -903,7 +904,7 @@ start_property (GMarkupParseContext *context,
 		GError             **error)
 {
   if (strcmp (element_name, "property") == 0 &&
-      (ctx->state == STATE_OBJECT ||
+      (ctx->state == STATE_CLASS ||
        ctx->state == STATE_INTERFACE))
     {
       const gchar *name;
@@ -950,8 +951,8 @@ start_property (GMarkupParseContext *context,
 	  iface = (GIrNodeInterface *)ctx->current_node;
 	  iface->members = g_list_append (iface->members, property);
 
-	  if (ctx->state == STATE_OBJECT)
-	    state_switch (ctx, STATE_OBJECT_PROPERTY);
+	  if (ctx->state == STATE_CLASS)
+	    state_switch (ctx, STATE_CLASS_PROPERTY);
 	  else if (ctx->state == STATE_INTERFACE)
 	    state_switch (ctx, STATE_INTERFACE_PROPERTY);
 	  else
@@ -1042,7 +1043,7 @@ start_constant (GMarkupParseContext *context,
 {
   if (strcmp (element_name, "constant") == 0 &&
       (ctx->state == STATE_NAMESPACE ||
-       ctx->state == STATE_OBJECT ||
+       ctx->state == STATE_CLASS ||
        ctx->state == STATE_INTERFACE))
     {
       const gchar *name;
@@ -1090,6 +1091,7 @@ start_constant (GMarkupParseContext *context,
 	      iface = (GIrNodeInterface *)ctx->current_node;
 	      iface->members = g_list_append (iface->members, constant);
 	    }
+	  state_switch (ctx, STATE_CONSTANT);
 	}
       
       return TRUE;
@@ -1251,7 +1253,7 @@ start_class (GMarkupParseContext *context,
 	  ctx->current_module->entries = 
 	    g_list_append (ctx->current_module->entries, iface);	      
 	  
-	  state_switch (ctx, STATE_OBJECT);
+	  state_switch (ctx, STATE_CLASS);
 	}
       
       return TRUE;
@@ -1274,8 +1276,8 @@ start_type (GMarkupParseContext *context,
       !(ctx->state == STATE_FUNCTION_PARAMETER ||
 	ctx->state == STATE_FUNCTION_RETURN || 
 	ctx->state == STATE_STRUCT_FIELD ||
-	ctx->state == STATE_OBJECT_PROPERTY ||
-	ctx->state == STATE_OBJECT_FIELD ||
+	ctx->state == STATE_CLASS_PROPERTY ||
+	ctx->state == STATE_CLASS_FIELD ||
 	ctx->state == STATE_INTERFACE_FIELD ||
 	ctx->state == STATE_BOXED_FIELD
 	))
@@ -1390,7 +1392,7 @@ start_glib_signal (GMarkupParseContext *context,
 		   GError             **error)
 {
   if (strcmp (element_name, "glib:signal") == 0 && 
-      (ctx->state == STATE_OBJECT ||
+      (ctx->state == STATE_CLASS ||
        ctx->state == STATE_INTERFACE))
     {
       const gchar *name;
@@ -1472,7 +1474,7 @@ start_vfunc (GMarkupParseContext *context,
 	     GError             **error)
 {
   if (strcmp (element_name, "vfunc") == 0 && 
-      (ctx->state == STATE_OBJECT ||
+      (ctx->state == STATE_CLASS ||
        ctx->state == STATE_INTERFACE))
     {
       const gchar *name;
@@ -1772,7 +1774,7 @@ start_element_handler (GMarkupParseContext *context,
 			   ctx, error))
 	goto out;
       if (strcmp (element_name, "implements") == 0 &&
-	  ctx->state == STATE_OBJECT)
+	  ctx->state == STATE_CLASS)
 	{
 	  state_switch (ctx, STATE_IMPLEMENTS);
 
@@ -1982,6 +1984,7 @@ require_one_of_end_elements (GMarkupParseContext *context,
 	       "Unexpected end tag '%s' on line %d char %d",
 	       actual_name, 
 	       line_number, char_number);
+  backtrace_stderr();
   return FALSE;
 }
 
@@ -2058,7 +2061,7 @@ end_element_handler (GMarkupParseContext *context,
 	  if (ctx->current_node->type == G_IR_NODE_INTERFACE)
 	    state_switch (ctx, STATE_INTERFACE);
 	  else if (ctx->current_node->type == G_IR_NODE_OBJECT)
-	    state_switch (ctx, STATE_OBJECT);
+	    state_switch (ctx, STATE_CLASS);
 	  else if (ctx->current_node->type == G_IR_NODE_BOXED)
 	    state_switch (ctx, STATE_BOXED);
 	  else if (ctx->current_node->type == G_IR_NODE_STRUCT)
@@ -2079,25 +2082,25 @@ end_element_handler (GMarkupParseContext *context,
 	}
       break;
 
-    case STATE_OBJECT_FIELD:
+    case STATE_CLASS_FIELD:
       if (strcmp ("type", element_name) == 0)
 	break;
       if (require_end_element (context, "field", element_name, error))
 	{
-	  state_switch (ctx, STATE_OBJECT);
+	  state_switch (ctx, STATE_CLASS);
 	}
       break;
 
-    case STATE_OBJECT_PROPERTY:
+    case STATE_CLASS_PROPERTY:
       if (strcmp ("type", element_name) == 0)
 	break;
       if (require_end_element (context, "property", element_name, error))
 	{
-	  state_switch (ctx, STATE_OBJECT);
+	  state_switch (ctx, STATE_CLASS);
 	}
       break;
 
-    case STATE_OBJECT:
+    case STATE_CLASS:
       if (require_end_element (context, "class", element_name, error))
 	{
 	  ctx->current_node = NULL;
@@ -2187,14 +2190,22 @@ end_element_handler (GMarkupParseContext *context,
 	  state_switch (ctx, STATE_NAMESPACE);
 	}
       break;
-
     case STATE_IMPLEMENTS:
+      if (strcmp ("interface", element_name) == 0)
+	break;
       if (require_end_element (context, "implements", element_name, error))
-        state_switch (ctx, STATE_OBJECT);
+        state_switch (ctx, STATE_CLASS);
       break;
     case STATE_REQUIRES:
       if (require_end_element (context, "requires", element_name, error))
         state_switch (ctx, STATE_INTERFACE);
+      break;
+    case STATE_CONSTANT:
+      if (require_end_element (context, "constant", element_name, error))
+	{
+	  ctx->current_node = NULL;
+	  state_switch (ctx, STATE_NAMESPACE);
+	}
       break;
     default:
       g_error ("Unhandled state %d in end_element_handler\n", ctx->state);

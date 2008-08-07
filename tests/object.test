@@ -4,40 +4,58 @@
             xmlns:c="http://www.gtk.org/introspection/c/1.0"
             xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
   <namespace name="Foo">
-    <object name="Object1" parent="Object2" type-name="Object1" get-type="object1_get_type">
+    <class name="Object1" parent="Object2" glib:type-name="Object1" glib:get-type="object1_get_type">
       <implements>
         <interface name="Iface1" />
       </implements>
-      <property name="prop1" readable="0" writable="0" type="gint" />
-      <signal name="signal1" when="LAST">
-        <return-type type="gboolean" />
+      <property name="prop1" readable="0" writable="0">
+        <type name="int" c:type="gint"/>
+      </property>
+      <glib:signal name="signal1" when="LAST">
+        <return-value> 
+          <type name="boolean" c:type="gboolean"/>
+        </return-value>
         <parameters>
-          <parameter name="obj" type="Object1*" transfer="full" direction="in" />
+          <parameter name="obj" transfer="full" direction="in">
+            <type name="Object1" c:type="Object1*"/>
+	  </parameter>
         </parameters>
-      </signal>
-      <signal name="signal2" when="FIRST" no-recurse="1" detailed="1" action="1" no-hooks="1">
-        <return-type type="void" />
+      </glib:signal>
+      <glib:signal name="signal2" when="FIRST" no-recurse="1" detailed="1" action="1" no-hooks="1">
+        <return-value> 
+          <type name="void" c:type="void"/>
+        </return-value>
         <parameters>
-          <parameter name="obj" type="Object1*" transfer="full" direction="in" />
+          <parameter name="obj" transfer="full" direction="in">
+            <type name="Object1" c:type="Object1*"/>
+	  </parameter>
         </parameters>
-      </signal>
+      </glib:signal>
       <vfunc name="vfunc1" offset="20">
-        <return-type type="Object2*" transfer="full" />
+        <return-value> 
+          <type name="Object2" c:type="Object2*"/>
+        </return-value>
         <parameters>
-          <parameter name="param1" type="Object1*" transfer="full" direction="in" />
+          <parameter name="param1" transfer="full" direction="in">
+            <type name="Object1" c:type="Object1*"/>
+	  </parameter>
         </parameters>
       </vfunc>
       <vfunc name="vfunc2" offset="24">
-        <return-type type="Object2*" transfer="full" />
+        <return-value> 
+          <type name="Object2" c:type="Object2*"/>
+        </return-value>
         <parameters>
-          <parameter name="param1" type="Object1*" transfer="full" direction="in" />
+          <parameter name="param1" transfer="full" direction="in">
+            <type name="Object1" c:type="Object1*"/>
+	  </parameter>
         </parameters>
       </vfunc>
-      <constant name="constant1" type="gint" value="42" />
-    </object>
-    <interface name="Iface1" type-name="Iface1" get-type="iface1_get_type">
+    </class>
+    <constant name="constant1" c:type="gint" value="42" />
+    <interface name="Iface1" glib:type-name="Iface1" glib:get-type="iface1_get_type">
     </interface>
-    <object name="Object2" parent="GObject.GObject" type-name="Object2" get-type="object2_get_type">
-    </object>
+    <class name="Object2" parent="GObject.GObject" glib:type-name="Object2" glib:get-type="object2_get_type">
+    </class>
   </namespace>
 </repository>
