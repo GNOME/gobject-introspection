@@ -190,6 +190,8 @@ main (int argc, char ** argv)
       return 1;
     }
 
+  g_debug ("[parsing] start");
+
   modules = NULL;
   for (i = 0; input[i]; i++)
     {
@@ -207,6 +209,10 @@ main (int argc, char ** argv)
       modules = g_list_concat (modules, mods);
     }
 
+  g_debug ("[parsing] done");
+
+  g_debug ("[building] start");
+
   for (m = modules; m; m = m->next)
     {
       GIrModule *module = m->data;
@@ -221,6 +227,9 @@ main (int argc, char ** argv)
 	    g_free (module->shared_library);
           module->shared_library = g_strdup (shlib);
 	}
+
+      g_debug ("[building] module %s", module->name);
+
       metadata = g_ir_module_build_metadata (module, modules);
       if (metadata == NULL)
 	{
@@ -249,6 +258,8 @@ main (int argc, char ** argv)
 	  break;
 	}
     }
-             
+
+  g_debug ("[building] done");
+
   return 0; 
 }

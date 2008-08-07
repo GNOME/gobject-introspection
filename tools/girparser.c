@@ -119,7 +119,6 @@ find_attribute (const gchar  *name,
 static void
 state_switch (ParseContext *ctx, ParseState newstate)
 {
-  fprintf (stderr, "state %d -> %d\n", ctx->state, newstate);
   ctx->prev_state = ctx->state;
   ctx->state = newstate;
 }
@@ -1668,6 +1667,8 @@ start_discriminator (GMarkupParseContext *context,
   return FALSE;
 }
   
+extern GLogLevelFlags logged_levels;
+
 static void
 start_element_handler (GMarkupParseContext *context,
 		       const gchar         *element_name,
@@ -1678,9 +1679,24 @@ start_element_handler (GMarkupParseContext *context,
 {
   ParseContext *ctx = user_data;
   gint line_number, char_number;
-#if 0
-  g_printerr ("element-name: '%s'\n", element_name);
-#endif
+
+  if (logged_levels & G_LOG_LEVEL_DEBUG)
+    {
+      GString *tags = g_string_new ("");
+      int i;
+      for (i = 0; attribute_names[i]; i++)
+        g_string_append_printf (tags, "%s=\"%s\" ",
+				attribute_names[i],
+				attribute_values[i]);
+
+      if (i)
+        {
+          g_string_insert_c (tags, 0, ' ');
+          g_string_truncate (tags, tags->len - 1);
+        }
+      g_debug ("<%s%s>", element_name, tags->str);
+      g_string_free (tags, TRUE);
+    }
 
   switch (element_name[0]) 
     {
@@ -2005,6 +2021,8 @@ end_element_handler (GMarkupParseContext *context,
 {
   ParseContext *ctx = user_data;
 
+  g_debug ("</%s>", element_name);
+
   switch (ctx->state)
     {
     case STATE_START:
@@ -2279,6 +2297,8 @@ g_ir_parse_file (const gchar  *filename,
   gchar *buffer;
   gsize length;
   GList *modules;
+
+  g_debug ("[parsing] filename %s", filename);
 
   if (!g_file_get_contents (filename, &buffer, &length, error))
     return NULL;

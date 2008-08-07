@@ -585,11 +585,13 @@ g_ir_node_get_size (GIrNode *node)
       break;
 
     default: 
-      g_error ("Unhandled node type %d\n", node->type);
+      g_error ("Unhandled node type '%s'\n",
+	       g_ir_node_type_to_string (node->type));
       size = 0;
     }
 
-  g_debug ("node %p type %d size %d", node, node->type, size);
+  g_debug ("node %p type '%s' size %d", node,
+	   g_ir_node_type_to_string (node->type), size);
 
   return size;
 }
@@ -603,7 +605,7 @@ g_ir_node_get_full_size (GIrNode *node)
 
   g_assert (node != NULL);
 
-  g_debug ("node %p type %s\n", node,
+  g_debug ("node %p type '%s'", node,
 	   g_ir_node_type_to_string (node->type));
 
   switch (node->type)
@@ -649,7 +651,7 @@ g_ir_node_get_full_size (GIrNode *node)
 	  size = 4;
 	else
 	  {
-	    g_debug ("node %p type tag %s\n", node,
+	    g_debug ("node %p type tag '%s'", node,
 		     gi_type_tag_to_string (type->tag));
 
 	    switch (type->tag)
@@ -875,7 +877,8 @@ g_ir_node_get_full_size (GIrNode *node)
       size = 0;
     }
 
-  g_debug ("node %p type %d full size %d", node, node->type, size);
+  g_debug ("node %p type '%s' full size %d", node,
+	   g_ir_node_type_to_string (node->type), size);
 
   return size;
 }
@@ -1088,23 +1091,23 @@ serialize_type (GIrModule   *module,
   gint i;
   const gchar* basic[] = {
     "void", 
-    "gboolean", 
-    "gint8", 
-    "guint8", 
-    "gint16", 
-    "guint16", 
-    "gint32", 
-    "guint32", 
-    "gint64", 
-    "guint64", 
-    "gint",
-    "guint",
-    "glong",
-    "gulong",
-    "gssize",
-    "gsize",
-    "gfloat", 
-    "gdouble", 
+    "boolean", 
+    "int8", 
+    "uint8", 
+    "int16", 
+    "uint16", 
+    "int32", 
+    "uint32", 
+    "int64", 
+    "uint64", 
+    "int",
+    "uint",
+    "long",
+    "ulong",
+    "ssize",
+    "size",
+    "float", 
+    "double", 
     "utf8", 
     "filename"
   };
@@ -1209,7 +1212,8 @@ g_ir_node_build_metadata (GIrNode   *node,
 
   g_assert (node != NULL);
 
-  g_debug ("build_medatadata(%s)\n", g_ir_node_type_to_string (node->type));
+  g_debug ("build_metadata (%s)",
+	   g_ir_node_type_to_string (node->type));
 
   switch (node->type)
     {
@@ -2155,8 +2159,9 @@ g_ir_node_build_metadata (GIrNode   *node,
       g_assert_not_reached ();
     }
   
-  g_debug ("node %p type %d, offset %d -> %d, offset2 %d -> %d",
-	   node, node->type, old_offset, *offset, old_offset2, *offset2);
+  g_debug ("node %p type '%s', offset %d -> %d, offset2 %d -> %d",
+	   node, g_ir_node_type_to_string (node->type),
+	   old_offset, *offset, old_offset2, *offset2);
 
   if (*offset2 - old_offset2 + *offset - old_offset > g_ir_node_get_full_size (node))
     g_error ("exceeding space reservation !!");
