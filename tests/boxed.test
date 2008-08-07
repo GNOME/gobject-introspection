@@ -4,7 +4,7 @@
             xmlns:c="http://www.gtk.org/introspection/c/1.0"
             xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
   <namespace name="Foo">
-    <glib:boxed glib:name="BoxedType1" c:type="boxed1" glib:get-type="boxed1_get_type" deprecated="1">
+    <glib:boxed glib:name="BoxedType1" glib:type-name="boxed1" glib:get-type="boxed1_get_type" deprecated="1">
       <field name="field1" readable="1" writable="1" offset="0">
 	<type name="guint32" c:type="guint32"/>
       </field>
@@ -42,7 +42,7 @@
           <parameter name="val" c:type="gint*" transfer="full" direction="inout" />
         </parameters>
       </method>
-    </boxed>
+    </glib:boxed>
     <function name="freefunc" c:identifier="freefunc" deprecated="1">
       <return-type c:type="gint" />
       <parameters>
@@ -50,7 +50,7 @@
         <parameter name="val2" c:type="gint" direction="in" />
       </parameters>
     </function>
-    <boxed name="boxed2" type-name="BoxedType2" get-type="boxed2_get_type" deprecated="1">
-    </boxed>
+    <glib:boxed glib:name="boxed2" glib:type-name="BoxedType2" glib:get-type="boxed2_get_type" deprecated="1">
+    </glib:boxed>
   </namespace>
 </repository>

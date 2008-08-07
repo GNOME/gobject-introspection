@@ -406,14 +406,14 @@ parse_type (const gchar *type)
 }
 
 static gboolean
-start_boxed (GMarkupParseContext *context,
-	     const gchar         *element_name,
-	     const gchar        **attribute_names,
-	     const gchar        **attribute_values,
-	     ParseContext        *ctx,
-	     GError             **error)
+start_glib_boxed (GMarkupParseContext *context,
+		  const gchar         *element_name,
+		  const gchar        **attribute_names,
+		  const gchar        **attribute_values,
+		  ParseContext        *ctx,
+		  GError             **error)
 {
-  if (strcmp (element_name, "boxed") == 0 && 
+  if (strcmp (element_name, "glib:boxed") == 0 && 
       ctx->state == STATE_NAMESPACE)
     {
       const gchar *name;
@@ -421,16 +421,14 @@ start_boxed (GMarkupParseContext *context,
       const gchar *typeinit;
       const gchar *deprecated;
       
-      name = find_attribute ("name", attribute_names, attribute_values);
+      name = find_attribute ("glib:name", attribute_names, attribute_values);
       typename = find_attribute ("glib:type-name", attribute_names, attribute_values);
       typeinit = find_attribute ("glib:get-type", attribute_names, attribute_values);
       deprecated = find_attribute ("deprecated", attribute_names, attribute_values);
       
       if (name == NULL)
 	MISSING_ATTRIBUTE (context, error, element_name, "name");
-      else if (typename == NULL)
-	MISSING_ATTRIBUTE (context, error, element_name, "glib:type-name");
-      else if (typeinit == NULL)
+      else if (typename == NULL || typeinit == NULL)
 	MISSING_ATTRIBUTE (context, error, element_name, "glib:get-type");
       else
 	{
@@ -1349,12 +1347,12 @@ start_return_value (GMarkupParseContext *context,
 }
 
 static gboolean
-start_signal (GMarkupParseContext *context,
-	      const gchar         *element_name,
-	      const gchar        **attribute_names,
-	      const gchar        **attribute_values,
-	      ParseContext       *ctx,
-	      GError             **error)
+start_glib_signal (GMarkupParseContext *context,
+		   const gchar         *element_name,
+		   const gchar        **attribute_names,
+		   const gchar        **attribute_values,
+		   ParseContext       *ctx,
+		   GError             **error)
 {
   if (strcmp (element_name, "glib:signal") == 0 && 
       (ctx->state == STATE_OBJECT ||
@@ -1646,13 +1644,6 @@ start_element_handler (GMarkupParseContext *context,
 
   switch (element_name[0]) 
     {
-    case 'b':
-      if (start_boxed (context, element_name,
-		       attribute_names, attribute_values,
-		       ctx, error))
-	goto out;
-      break;
-
     case 'c':
       if (start_function (context, element_name, 
 			  attribute_names, attribute_values,
@@ -1722,9 +1713,15 @@ start_element_handler (GMarkupParseContext *context,
       break;
 
     case 'g':
-      if (start_signal (context, element_name,
-			attribute_names, attribute_values,
-			ctx, error))
+      if (start_glib_boxed (context, element_name,
+			    attribute_names, attribute_values,
+			    ctx, error))
+	goto out;
+      break;
+
+      if (start_glib_signal (context, element_name,
+			     attribute_names, attribute_values,
+			     ctx, error))
 	goto out;      
       break;
 
