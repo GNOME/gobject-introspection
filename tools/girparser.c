@@ -44,6 +44,7 @@ typedef enum
   STATE_OBJECT_PROPERTY,
   STATE_INTERFACE,
   STATE_INTERFACE_PROPERTY,
+  STATE_INTERFACE_FIELD,
   STATE_IMPLEMENTS, /* 15 */
   STATE_REQUIRES,
   STATE_BOXED,  
@@ -116,7 +117,7 @@ find_attribute (const gchar  *name,
 static void
 state_switch (ParseContext *ctx, ParseState newstate)
 {
-  fprintf (stderr, "switching to state: %d from %d\n", newstate, ctx->state);
+  fprintf (stderr, "state %d -> %d\n", ctx->state, newstate);
   ctx->prev_state = ctx->state;
   ctx->state = newstate;
 }
@@ -473,10 +474,11 @@ start_function (GMarkupParseContext *context,
 	ctx->state == STATE_INTERFACE ||
 	ctx->state == STATE_BOXED ||
         ctx->state == STATE_UNION) &&
-       strcmp (element_name, "method") == 0) ||
+       (strcmp (element_name, "method") == 0 || 
+	strcmp (element_name, "callback") == 0)) ||
       ((ctx->state == STATE_OBJECT ||
 	ctx->state == STATE_BOXED) &&
-       strcmp (element_name, "constructor") == 0) ||
+       (strcmp (element_name, "constructor") == 0)) ||
       (ctx->state == STATE_STRUCT && strcmp (element_name, "callback") == 0))
     {
       const gchar *name;
@@ -724,7 +726,8 @@ start_field (GMarkupParseContext *context,
       (ctx->state == STATE_OBJECT ||
        ctx->state == STATE_BOXED ||
        ctx->state == STATE_STRUCT ||
-       ctx->state == STATE_UNION))
+       ctx->state == STATE_UNION ||
+       ctx->state == STATE_INTERFACE))
     {
       const gchar *name;
       const gchar *type;
@@ -780,6 +783,15 @@ start_field (GMarkupParseContext *context,
 		iface = (GIrNodeInterface *)ctx->current_node;
 		iface->members = g_list_append (iface->members, field);
 		state_switch (ctx, STATE_OBJECT_FIELD);
+	      }
+	      break;
+	    case G_IR_NODE_INTERFACE:
+	      {
+		GIrNodeInterface *iface;
+
+		iface = (GIrNodeInterface *)ctx->current_node;
+		iface->members = g_list_append (iface->members, field);
+		state_switch (ctx, STATE_INTERFACE_FIELD);
 	      }
 	      break;
 	    case G_IR_NODE_BOXED:
@@ -1257,8 +1269,9 @@ start_type (GMarkupParseContext *context,
   const gchar *ctype;
 
   if (strcmp (element_name, "type") != 0 ||
-      !(ctx->state == STATE_FUNCTION_PARAMETER || ctx->state == STATE_FUNCTION_RETURN
-	|| ctx->state == STATE_STRUCT_FIELD || ctx->state == STATE_OBJECT_PROPERTY))
+      !(ctx->state == STATE_FUNCTION_PARAMETER || ctx->state == STATE_FUNCTION_RETURN || 
+	ctx->state == STATE_STRUCT_FIELD || ctx->state == STATE_OBJECT_PROPERTY ||
+	ctx->state == STATE_OBJECT_FIELD || ctx->state == STATE_INTERFACE_FIELD))
     return FALSE;
 
   if (!ctx->current_typed)
@@ -1365,8 +1378,6 @@ start_signal (GMarkupParseContext *context,
       
       if (name == NULL)
 	MISSING_ATTRIBUTE (context, error, element_name, "name");
-      else if (when == NULL)
-	MISSING_ATTRIBUTE (context, error, element_name, "when");
       else
 	{
 	  GIrNodeInterface *iface;
@@ -1379,10 +1390,10 @@ start_signal (GMarkupParseContext *context,
 	  signal->run_first = FALSE;
 	  signal->run_last = FALSE;
 	  signal->run_cleanup = FALSE;
-	  if (strcmp (when, "FIRST") == 0)
-	    signal->run_first = TRUE;
-	  else if (strcmp (when, "LAST") == 0)
+	  if (when == NULL || strcmp (when, "LAST") == 0)
 	    signal->run_last = TRUE;
+	  else if (strcmp (when, "FIRST") == 0)
+	    signal->run_first = TRUE;
 	  else 
 	    signal->run_cleanup = TRUE;
 	  
@@ -1710,6 +1721,13 @@ start_element_handler (GMarkupParseContext *context,
       
       break;
 
+    case 'g':
+      if (start_signal (context, element_name,
+			attribute_names, attribute_values,
+			ctx, error))
+	goto out;      
+      break;
+
     case 'i':
       if (start_interface (context, element_name, 
 			   attribute_names, attribute_values,
@@ -1848,13 +1866,6 @@ start_element_handler (GMarkupParseContext *context,
       else if (start_struct (context, element_name,
 			     attribute_names, attribute_values,
 			     ctx, error))
-	goto out;      
-      break;
-
-    case 's':
-      if (start_signal (context, element_name,
-			attribute_names, attribute_values,
-			ctx, error))
 	goto out;      
       break;
 
@@ -2000,6 +2011,13 @@ end_element_handler (GMarkupParseContext *context,
 
     case STATE_INTERFACE_PROPERTY:
       if (strcmp (element_name, "property") == 0)
+	{
+	  state_switch (ctx, STATE_INTERFACE);
+	}
+      break;
+
+    case STATE_INTERFACE_FIELD:
+      if (strcmp (element_name, "field") == 0)
 	{
 	  state_switch (ctx, STATE_INTERFACE);
 	}
