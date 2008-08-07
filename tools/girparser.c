@@ -2156,6 +2156,8 @@ end_element_handler (GMarkupParseContext *context,
       break;
 
     case STATE_BOXED_FIELD:
+      if (strcmp ("type", element_name) == 0)
+	break;
       if (require_end_element (context, "field", element_name, error))
 	{
 	  state_switch (ctx, STATE_BOXED);
