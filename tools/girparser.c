@@ -48,9 +48,10 @@ typedef enum
   STATE_IMPLEMENTS, /* 15 */
   STATE_REQUIRES,
   STATE_BOXED,  
+  STATE_BOXED_FIELD,
   STATE_STRUCT,
-  STATE_STRUCT_FIELD,
-  STATE_ERRORDOMAIN, /* 20 */
+  STATE_STRUCT_FIELD, /* 20 */
+  STATE_ERRORDOMAIN, 
   STATE_UNION,
 } ParseState;
 
@@ -800,6 +801,7 @@ start_field (GMarkupParseContext *context,
 
 		boxed = (GIrNodeBoxed *)ctx->current_node;
 		boxed->members = g_list_append (boxed->members, field);
+		state_switch (ctx, STATE_BOXED_FIELD);
 	      }
 	      break;
 	    case G_IR_NODE_STRUCT:
@@ -1269,9 +1271,14 @@ start_type (GMarkupParseContext *context,
   const gchar *ctype;
 
   if (strcmp (element_name, "type") != 0 ||
-      !(ctx->state == STATE_FUNCTION_PARAMETER || ctx->state == STATE_FUNCTION_RETURN || 
-	ctx->state == STATE_STRUCT_FIELD || ctx->state == STATE_OBJECT_PROPERTY ||
-	ctx->state == STATE_OBJECT_FIELD || ctx->state == STATE_INTERFACE_FIELD))
+      !(ctx->state == STATE_FUNCTION_PARAMETER ||
+	ctx->state == STATE_FUNCTION_RETURN || 
+	ctx->state == STATE_STRUCT_FIELD ||
+	ctx->state == STATE_OBJECT_PROPERTY ||
+	ctx->state == STATE_OBJECT_FIELD ||
+	ctx->state == STATE_INTERFACE_FIELD ||
+	ctx->state == STATE_BOXED_FIELD
+	))
     return FALSE;
 
   if (!ctx->current_typed)
@@ -1643,6 +1650,9 @@ start_element_handler (GMarkupParseContext *context,
 {
   ParseContext *ctx = user_data;
   gint line_number, char_number;
+#if 0
+  g_printerr ("element-name: '%s'\n", element_name);
+#endif
 
   switch (element_name[0]) 
     {
@@ -2040,10 +2050,17 @@ end_element_handler (GMarkupParseContext *context,
       break;
 
     case STATE_BOXED:
-      if (strcmp (element_name, "boxed") == 0)
+      if (strcmp (element_name, "glib:boxed") == 0)
 	{
 	  ctx->current_node = NULL;
 	  state_switch (ctx, STATE_NAMESPACE);
+	}
+      break;
+
+    case STATE_BOXED_FIELD:
+      if (strcmp (element_name, "field") == 0)
+	{
+	  state_switch (ctx, STATE_BOXED);
 	}
       break;
 
