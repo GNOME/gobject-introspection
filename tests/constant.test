@@ -1,5 +1,8 @@
 <?xml version="1.0"?>
-<api version="1.0">
+<repository version="1.0"
+            xmlns="http://www.gtk.org/introspection/core/1.0"
+            xmlns:c="http://www.gtk.org/introspection/c/1.0"
+            xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
   <namespace name="Foo">
     <constant name="constant1" type="gint" value="42" />
     <constant name="constant2" type="guint" value="42" />
@@ -7,4 +10,4 @@
     <constant name="constant4" type="gint32" value="42" />
     <constant name="constant5" type="gfloat" value="42.000000" />
   </namespace>
-</api>
+</repository>

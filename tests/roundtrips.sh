@@ -1,26 +1,28 @@
 #! /bin/sh
 
-SIMPLE_TESTS="array.test boxed.test enum.test errors.test function.test interface.test struct.test union.test"
+set -x
+set -e
 
-for i in $SIMPLE_TESTS; do
-	echo $i
-	../tools/g-idl-compiler --raw $srcdir/$i > $i.1; 
-	../tools/g-idl-generate --raw $i.1 > $i.2; 
+TESTFILES=$(echo "${srcdir}"/../../gir-repository/gir/*.gir)
+
+for i in $TESTFILES; do
+	${CHECK_DEBUG} ../tools/g-ir-compiler --raw $i > $i.1; 
+	${CHECK_DEBUG} ../tools/g-ir-generate --raw $i.1 > $i.2; 
 	diff -u $srcdir/$i $i.2 || exit 1; 
 	rm $i.1 $i.2
 done
 
-../tools/g-idl-compiler --raw --module=Foo $srcdir/object.test $srcdir/gobject.test > object.test.1
-../tools/g-idl-generate --raw object.test.1 > object.test.2
-diff -u $srcdir/object.test object.test.2 || exit 1
-rm object.test.1 object.test.2
+#../tools/g-ir-compiler --raw --module=Foo $srcdir/object.test $srcdir/gobject.test > object.test.1
+#../tools/g-ir-generate --raw object.test.1 > object.test.2
+#diff -u $srcdir/object.test object.test.2 || exit 1
+#rm object.test.1 object.test.2
 
-../tools/g-idl-compiler --raw --module=Foo $srcdir/xref1.test $srcdir/xref2.test > xref1.test.1
-../tools/g-idl-generate --raw xref1.test.1 > xref1.test.2
-diff -u $srcdir/xref1.test xref1.test.2 || exit 1
-rm xref1.test.1 xref1.test.2
+#../tools/g-ir-compiler --raw --module=Foo $srcdir/xref1.test $srcdir/xref2.test > xref1.test.1
+#../tools/g-ir-generate --raw xref1.test.1 > xref1.test.2
+#diff -u $srcdir/xref1.test xref1.test.2 || exit 1
+#rm xref1.test.1 xref1.test.2
 
-../tools/g-idl-compiler --raw --module=Bar $srcdir/xref1.test $srcdir/xref2.test > xref2.test.1
-../tools/g-idl-generate --raw xref2.test.1 > xref2.test.2
-diff -u $srcdir/xref2.test xref2.test.2 || exit 1
-rm xref2.test.1 xref2.test.2
+#../tools/g-ir-compiler --raw --module=Bar $srcdir/xref1.test $srcdir/xref2.test > xref2.test.1
+#../tools/g-ir-generate --raw xref2.test.1 > xref2.test.2
+#diff -u $srcdir/xref2.test xref2.test.2 || exit 1
+#rm xref2.test.1 xref2.test.2

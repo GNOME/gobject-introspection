@@ -124,7 +124,7 @@ function_generate (GIdlWriter * writer, GIdlNodeFunction * node)
   GString *markup_s;
   gchar *markup;
 
-  if (node->node.type == G_IDL_NODE_CALLBACK)
+  if (node->node.type == G_IR_NODE_CALLBACK)
     tag_name = "callback";
   else if (node->is_constructor)
     tag_name = "constructor";
@@ -138,7 +138,7 @@ function_generate (GIdlWriter * writer, GIdlNodeFunction * node)
 			  "%s name=\"%s\"",
 			  tag_name, node->node.name);
 
-  if (node->node.type != G_IDL_NODE_CALLBACK)
+  if (node->node.type != G_IR_NODE_CALLBACK)
     g_string_append_printf (markup_s,
 			    g_markup_printf_escaped (" symbol=\"%s\"", node->symbol));
 
@@ -280,7 +280,7 @@ interface_generate (GIdlWriter * writer, GIdlNodeInterface * node)
 {
   GList *l;
   char *markup;
-  if (node->node.type == G_IDL_NODE_OBJECT)
+  if (node->node.type == G_IR_NODE_OBJECT)
     {
       markup =
 	g_markup_printf_escaped ("<object name=\"%s\" "
@@ -292,7 +292,7 @@ interface_generate (GIdlWriter * writer, GIdlNodeInterface * node)
 				 node->gtype_name,
 				 node->gtype_init);
     }
-  else if (node->node.type == G_IDL_NODE_INTERFACE)
+  else if (node->node.type == G_IR_NODE_INTERFACE)
     {
       markup =
 	g_markup_printf_escaped
@@ -302,7 +302,7 @@ interface_generate (GIdlWriter * writer, GIdlNodeInterface * node)
 
   g_writer_write_indent (writer, markup);
   g_free (markup);
-  if (node->node.type == G_IDL_NODE_OBJECT && node->interfaces != NULL)
+  if (node->node.type == G_IR_NODE_OBJECT && node->interfaces != NULL)
     {
       GList *l;
       g_writer_write_indent (writer, "<implements>\n");
@@ -316,7 +316,7 @@ interface_generate (GIdlWriter * writer, GIdlNodeInterface * node)
 	}
       g_writer_write_unindent (writer, "</implements>\n");
     }
-  else if (node->node.type == G_IDL_NODE_INTERFACE
+  else if (node->node.type == G_IR_NODE_INTERFACE
 	   && node->prerequisites != NULL)
     {
       GList *l;
@@ -337,11 +337,11 @@ interface_generate (GIdlWriter * writer, GIdlNodeInterface * node)
       node_generate (writer, l->data);
     }
 
-  if (node->node.type == G_IDL_NODE_OBJECT)
+  if (node->node.type == G_IR_NODE_OBJECT)
     {
       g_writer_write_unindent (writer, "</object>\n");
     }
-  else if (node->node.type == G_IDL_NODE_INTERFACE)
+  else if (node->node.type == G_IR_NODE_INTERFACE)
     {
       g_writer_write_unindent (writer, "</interface>\n");
     }
@@ -402,11 +402,11 @@ enum_generate (GIdlWriter * writer, GIdlNodeEnum * node)
   char *markup;
   const char *tag_name = NULL;
 
-  if (node->node.type == G_IDL_NODE_ENUM)
+  if (node->node.type == G_IR_NODE_ENUM)
     {
       tag_name = "enum";
     }
-  else if (node->node.type == G_IDL_NODE_FLAGS)
+  else if (node->node.type == G_IR_NODE_FLAGS)
     {
       tag_name = "flags";
     }
@@ -447,43 +447,43 @@ node_generate (GIdlWriter * writer, GIdlNode * node)
 {
   switch (node->type)
     {
-    case G_IDL_NODE_FUNCTION:
-    case G_IDL_NODE_CALLBACK:
+    case G_IR_NODE_FUNCTION:
+    case G_IR_NODE_CALLBACK:
       function_generate (writer, (GIdlNodeFunction *) node);
       break;
-    case G_IDL_NODE_VFUNC:
+    case G_IR_NODE_VFUNC:
       vfunc_generate (writer, (GIdlNodeVFunc *) node);
       break;
-    case G_IDL_NODE_OBJECT:
-    case G_IDL_NODE_INTERFACE:
+    case G_IR_NODE_OBJECT:
+    case G_IR_NODE_INTERFACE:
       interface_generate (writer, (GIdlNodeInterface *) node);
       break;
-    case G_IDL_NODE_STRUCT:
+    case G_IR_NODE_STRUCT:
       struct_generate (writer, (GIdlNodeStruct *) node);
       break;
-    case G_IDL_NODE_UNION:
+    case G_IR_NODE_UNION:
       union_generate (writer, (GIdlNodeUnion *) node);
       break;
-    case G_IDL_NODE_BOXED:
+    case G_IR_NODE_BOXED:
       boxed_generate (writer, (GIdlNodeBoxed *) node);
       break;
-    case G_IDL_NODE_ENUM:
-    case G_IDL_NODE_FLAGS:
+    case G_IR_NODE_ENUM:
+    case G_IR_NODE_FLAGS:
       enum_generate (writer, (GIdlNodeEnum *) node);
       break;
-    case G_IDL_NODE_PROPERTY:
+    case G_IR_NODE_PROPERTY:
       property_generate (writer, (GIdlNodeProperty *) node);
       break;
-    case G_IDL_NODE_FIELD:
+    case G_IR_NODE_FIELD:
       field_generate (writer, (GIdlNodeField *) node);
       break;
-    case G_IDL_NODE_SIGNAL:
+    case G_IR_NODE_SIGNAL:
       signal_generate (writer, (GIdlNodeSignal *) node);
       break;
-    case G_IDL_NODE_VALUE:
+    case G_IR_NODE_VALUE:
       value_generate (writer, (GIdlNodeValue *) node);
       break;
-    case G_IDL_NODE_CONSTANT:
+    case G_IR_NODE_CONSTANT:
       constant_generate (writer, (GIdlNodeConstant *) node);
       break;
     default:
@@ -520,9 +520,12 @@ g_idl_writer_save_file (GIdlModule *module,
     writer->output = fopen (filename, "w");
 
   g_writer_write (writer, "<?xml version=\"1.0\"?>\n");
-  g_writer_write_indent (writer, "<api version=\"1.0\">\n");
+  g_writer_write_indent (writer, "<repository version=\"1.0\""
+			 "xmlns=\"http://www.gtk.org/introspection/core/1.0\""
+			 "xmlns:c=\"http://www.gtk.org/introspection/c/1.0\""
+			 "xmlns:glib=\"http://www.gtk.org/introspection/glib/1.0\">");
   g_writer_write_module (writer, module);
-  g_writer_write_unindent (writer, "</api>\n");
+  g_writer_write_unindent (writer, "</repository>\n");
 
   if (filename)
     fclose (writer->output);

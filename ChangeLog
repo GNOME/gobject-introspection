@@ -1,3 +1,57 @@
+2008-08-08  Johan Dahlin  <johan@gnome.org>
+
+	* girepository/gtypelib.c (validate_header):
+	* girepository/gtypelib.h:
+	* giscanner/ast.py:
+	* giscanner/girwriter.py:
+	* giscanner/sourcescanner.c (gi_source_symbol_ref),
+	(gi_source_symbol_unref):
+	* tests/array.test:
+	* tests/boxed.test:
+	* tests/constant.test:
+	* tests/enum.test:
+	* tests/errors.test:
+	* tests/function.test:
+	* tests/gobject.test:
+	* tests/interface.test:
+	* tests/invoke/Makefile.am:
+	* tests/invoke/testfns.xml:
+	* tests/object.test:
+	* tests/parser/Makefile.am:
+	* tests/roundtrips.sh:
+	* tests/struct.test:
+	* tests/types.test:
+	* tests/union.test:
+	* tests/xref1.test:
+	* tests/xref2.test:
+	* tools/Makefile.am:
+	* tools/compiler.c (main):
+	* tools/generate.c (write_callable_info), (write_function_info),
+	(write_repository):
+	* tools/gidlmodule.c:
+	* tools/gidlmodule.h:
+	* tools/gidlnode.c:
+	* tools/gidlnode.h:
+	* tools/gidlparser.c:
+	* tools/gidlparser.h:
+	* tools/gidlwriter.c:
+	* tools/gidlwriter.h:
+	* tools/scanner.c (create_node_from_gtype),
+	(create_node_from_ctype), (g_igenerator_process_properties),
+	(g_igenerator_process_signals), (g_igenerator_create_object),
+	(g_igenerator_create_interface), (g_igenerator_create_boxed),
+	(g_igenerator_create_enum), (g_igenerator_create_flags),
+	(g_igenerator_process_function_symbol),
+	(g_igenerator_process_unregistered_struct_typedef),
+	(g_igenerator_process_struct_typedef),
+	(g_igenerator_process_union_typedef),
+	(g_igenerator_process_enum_typedef),
+	(g_igenerator_process_function_typedef),
+	(g_igenerator_process_constant), (g_igenerator_process_symbols),
+	(g_igenerator_add_module), (g_igenerator_add_include_idl):
+	Merge in the gir-compiler branch.
+	Thanks to Philip and Colin for their help.
+
 2008-07-26  Colin Walters  <walters@verbum.org>
 
 	* tools/Makefile.am (bin_PROGRAMS): Install g-idl-compiler

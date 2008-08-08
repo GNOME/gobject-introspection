@@ -1,35 +1,80 @@
 <?xml version="1.0"?>
-<api version="1.0">
+<repository version="1.0"
+            xmlns="http://www.gtk.org/introspection/core/1.0"
+            xmlns:c="http://www.gtk.org/introspection/c/1.0"
+            xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
   <namespace name="Foo">
-    <boxed name="boxed1" type-name="BoxedType1" get-type="boxed1_get_type" deprecated="1">
-      <field name="field1" readable="1" writable="1" offset="0" type="guint32" />
-      <field name="field2" readable="1" writable="1" offset="4" type="guint32" />
-      <field name="field3" readable="1" writable="1" offset="8" type="guint32" />
-      <method name="frob_boxed1" symbol="frob_boxed1">
-        <return-type type="void" />
+    <glib:boxed glib:name="BoxedType1" glib:type-name="boxed1" glib:get-type="boxed1_get_type" deprecated="1">
+      <field name="field1" readable="1" writable="1" offset="0">
+        <type name="guint32" c:type="guint32"/>
+      </field>
+      <field name="field2" readable="1" writable="1" offset="4">
+        <type name="guint32" c:type="guint32"/>
+      </field>
+      <field name="field3" readable="1" writable="1" offset="8">
+        <type name="guint32" c:type="guint32"/>
+      </field>
+      <method name="frob_boxed1" c:identifier="frob_boxed1">
+        <return-value>
+          <!-- FIXME: name=void should be none -->
+          <type name="void" c:type="void" />
+        </return-value>
         <parameters>
-          <parameter name="box" type="boxed1*" transfer="full" direction="in" />
-          <parameter name="w" type="GList<boxed2*>*" transfer="full" direction="in" />
-          <parameter name="t" type="GHashTable<utf8,gint64>*" transfer="full" direction="in" />
-          <parameter name="e" type="GError*" transfer="full" direction="out" />
+          <parameter name="box" transfer="full" direction="in">
+            <type name="BoxedType1" c:type="boxed1*"/> 
+          </parameter>
+          <parameter name="w" transfer="full" direction="in">
+            <!-- FIXME: put this in a sub node -->
+            <!--
+            <type name="sequence" c:type="GList*">
+              <type name="boxed2" c:type="boxed2*"/>
+            </type>
+              -->
+            <type name="GList<boxed2*>*" c:type="GList*"/>
+          </parameter>
+          <parameter name="t" transfer="full" direction="in">
+            <!-- FIXME: put this in a sub node -->
+            <!--
+            <type name="mapping" c:type="GHashTable*">
+              <type name="utf8" c:type="gchar*"/>
+              <type name="int64" c:type="gint64"/>
+            </type>
+              -->
+            <type name="GHashTable<utf8,gint64>*" c:type="GHashTable*"/>
+          </parameter>
+          <parameter name="e" transfer="full" direction="out">
+            <type name="GError" c:type="GError**"/>
+          </parameter>
         </parameters>
       </method>
-      <method name="lart" symbol="lart">
-        <return-type type="gboolean" />
+      <method name="lart" c:identifier="lart">
+        <return-value>
+          <type name="boolean" c:type="gboolean"/>
+        </return-value>
         <parameters>
-          <parameter name="box" type="boxed2*" transfer="full" direction="in" />
-          <parameter name="val" type="gint*" transfer="full" direction="inout" />
+          <parameter name="box" transfer="full" direction="in">
+            <type name="boxed2*" c:type="boxed2*"/>
+          </parameter>
+          <parameter name="val" transfer="full" direction="inout">
+            <type name="uint" c:type="guint*"/>
+          </parameter>
         </parameters>
       </method>
-    </boxed>
-    <function name="freefunc" symbol="freefunc" deprecated="1">
-      <return-type type="gint" />
+    </glib:boxed>
+    <function name="freefunc" c:identifier="freefunc" deprecated="1">
+      <return-value> 
+        <type name="boolean" c:type="gboolean"/>
+      </return-value>
       <parameters>
-        <parameter name="v1" type="gint" direction="in" />
-        <parameter name="val2" type="gint" direction="in" />
+        <parameter name="v1" direction="in">
+          <type name="int" c:type="gint"/>
+        </parameter>
+        <parameter name="val2" direction="in">
+          <type name="int" c:type="gint"/>
+        </parameter>
       </parameters>
     </function>
-    <boxed name="boxed2" type-name="BoxedType2" get-type="boxed2_get_type" deprecated="1">
-    </boxed>
+    <glib:boxed glib:name="boxed2" glib:type-name="BoxedType2" glib:get-type="boxed2_get_type" deprecated="1">
+    </glib:boxed>
   </namespace>
-</api>
+</repository>

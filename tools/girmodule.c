@@ -21,19 +21,19 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "gidlmodule.h"
-#include "gidlnode.h"
+#include "girmodule.h"
+#include "girnode.h"
 
 #define ALIGN_VALUE(this, boundary) \
   (( ((unsigned long)(this)) + (((unsigned long)(boundary)) -1)) & (~(((unsigned long)(boundary))-1)))
 
 
-GIdlModule *
-g_idl_module_new (const gchar *name, const gchar *shared_library)
+GIrModule *
+g_ir_module_new (const gchar *name, const gchar *shared_library)
 {
-  GIdlModule *module;
+  GIrModule *module;
   
-  module = g_new (GIdlModule, 1);
+  module = g_new (GIrModule, 1);
 
   module->name = g_strdup (name);
   if (shared_library)
@@ -46,14 +46,14 @@ g_idl_module_new (const gchar *name, const gchar *shared_library)
 }
 
 void
-g_idl_module_free (GIdlModule *module)
+g_ir_module_free (GIrModule *module)
 {
   GList *e;
 
   g_free (module->name);
 
   for (e = module->entries; e; e = e->next)
-    g_idl_node_free ((GIdlNode *)e->data);
+    g_ir_node_free ((GIrNode *)e->data);
 
   g_list_free (module->entries);
 
@@ -61,7 +61,7 @@ g_idl_module_free (GIdlModule *module)
 }
 
 GTypelib *
-g_idl_module_build_metadata (GIdlModule  *module,
+g_ir_module_build_metadata (GIrModule  *module,
 			     GList       *modules)
 {
   guchar *metadata;
@@ -97,9 +97,9 @@ g_idl_module_build_metadata (GIdlModule  *module,
 
   for (e = module->entries; e; e = e->next)
     {
-      GIdlNode *node = e->data;
+      GIrNode *node = e->data;
       
-      size += g_idl_node_get_full_size (node);
+      size += g_ir_node_get_full_size (node);
     }
 
   g_message ("allocating %d bytes (%d header, %d directory, %d entries)\n", 
@@ -109,7 +109,7 @@ g_idl_module_build_metadata (GIdlModule  *module,
 
   /* fill in header */
   header = (Header *)data;
-  memcpy (header, G_IDL_MAGIC, 16);
+  memcpy (header, G_IR_MAGIC, 16);
   header->major_version = 1;
   header->minor_version = 0;
   header->reserved = 0;
@@ -149,7 +149,7 @@ g_idl_module_build_metadata (GIdlModule  *module,
 
   for (e = module->entries, i = 0; e; e = e->next, i++)
     {
-      GIdlNode *node = e->data;
+      GIrNode *node = e->data;
 
       if (strchr (node->name, '.'))
         {
@@ -173,28 +173,28 @@ g_idl_module_build_metadata (GIdlModule  *module,
 	
       offset = offset2;
 
-      if (node->type == G_IDL_NODE_XREF)
+      if (node->type == G_IR_NODE_XREF)
 	{
 	  entry->blob_type = 0;
 	  entry->local = FALSE;
-	  entry->offset = write_string (((GIdlNodeXRef*)node)->namespace, strings, data, &offset2);
+	  entry->offset = write_string (((GIrNodeXRef*)node)->namespace, strings, data, &offset2);
 	  entry->name = write_string (node->name, strings, data, &offset2);
 	}
       else
 	{
 	  old_offset = offset;
-	  offset2 = offset + g_idl_node_get_size (node);
+	  offset2 = offset + g_ir_node_get_size (node);
 
 	  entry->blob_type = node->type;
 	  entry->local = TRUE;
 	  entry->offset = offset;
 	  entry->name = write_string (node->name, strings, data, &offset2);
 
-	  g_idl_node_build_metadata (node, module, modules, 
+	  g_ir_node_build_metadata (node, module, modules, 
 				     strings, types, data, &offset, &offset2);
 
-	  if (offset2 > old_offset + g_idl_node_get_full_size (node))
-	    g_error ("left a hole of %d bytes\n", offset2 - old_offset - g_idl_node_get_full_size (node));
+	  if (offset2 > old_offset + g_ir_node_get_full_size (node))
+	    g_error ("left a hole of %d bytes\n", offset2 - old_offset - g_ir_node_get_full_size (node));
 	}
 
       entry++;

@@ -1,4 +1,4 @@
-/* GObject introspection: Parsed IDL
+/* GObject introspection: Parsed GIR
  *
  * Copyright (C) 2005 Matthias Clasen
  *
@@ -18,71 +18,71 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#ifndef __G_IDL_NODE_H__
-#define __G_IDL_NODE_H__
+#ifndef __G_IR_NODE_H__
+#define __G_IR_NODE_H__
 
 #include <glib.h>
 
 G_BEGIN_DECLS
 
-typedef struct _GIdlNode GIdlNode; 
-typedef struct _GIdlNodeFunction GIdlNodeFunction;
-typedef struct _GIdlNodeParam GIdlNodeParam;
-typedef struct _GIdlNodeType GIdlNodeType;
-typedef struct _GIdlNodeInterface GIdlNodeInterface;
-typedef struct _GIdlNodeSignal GIdlNodeSignal;
-typedef struct _GIdlNodeProperty GIdlNodeProperty;
-typedef struct _GIdlNodeVFunc GIdlNodeVFunc;
-typedef struct _GIdlNodeField GIdlNodeField;
-typedef struct _GIdlNodeValue GIdlNodeValue;
-typedef struct _GIdlNodeEnum GIdlNodeEnum;
-typedef struct _GIdlNodeBoxed GIdlNodeBoxed;
-typedef struct _GIdlNodeStruct GIdlNodeStruct;
-typedef struct _GIdlNodeConstant GIdlNodeConstant;
-typedef struct _GIdlNodeErrorDomain GIdlNodeErrorDomain;
-typedef struct _GIdlNodeXRef GIdlNodeXRef;
-typedef struct _GIdlNodeUnion GIdlNodeUnion;
+typedef struct _GIrNode GIrNode; 
+typedef struct _GIrNodeFunction GIrNodeFunction;
+typedef struct _GIrNodeParam GIrNodeParam;
+typedef struct _GIrNodeType GIrNodeType;
+typedef struct _GIrNodeInterface GIrNodeInterface;
+typedef struct _GIrNodeSignal GIrNodeSignal;
+typedef struct _GIrNodeProperty GIrNodeProperty;
+typedef struct _GIrNodeVFunc GIrNodeVFunc;
+typedef struct _GIrNodeField GIrNodeField;
+typedef struct _GIrNodeValue GIrNodeValue;
+typedef struct _GIrNodeEnum GIrNodeEnum;
+typedef struct _GIrNodeBoxed GIrNodeBoxed;
+typedef struct _GIrNodeStruct GIrNodeStruct;
+typedef struct _GIrNodeConstant GIrNodeConstant;
+typedef struct _GIrNodeErrorDomain GIrNodeErrorDomain;
+typedef struct _GIrNodeXRef GIrNodeXRef;
+typedef struct _GIrNodeUnion GIrNodeUnion;
 
 typedef enum 
 {
-  G_IDL_NODE_INVALID,
-  G_IDL_NODE_FUNCTION,
-  G_IDL_NODE_CALLBACK,
-  G_IDL_NODE_STRUCT,
-  G_IDL_NODE_BOXED,
-  G_IDL_NODE_ENUM,
-  G_IDL_NODE_FLAGS,
-  G_IDL_NODE_OBJECT,
-  G_IDL_NODE_INTERFACE,
-  G_IDL_NODE_CONSTANT,
-  G_IDL_NODE_ERROR_DOMAIN,
-  G_IDL_NODE_UNION,
-  G_IDL_NODE_PARAM,
-  G_IDL_NODE_TYPE,
-  G_IDL_NODE_PROPERTY,
-  G_IDL_NODE_SIGNAL,
-  G_IDL_NODE_VALUE,
-  G_IDL_NODE_VFUNC,
-  G_IDL_NODE_FIELD,
-  G_IDL_NODE_XREF
-} GIdlNodeTypeId;
+  G_IR_NODE_INVALID      =  0,
+  G_IR_NODE_FUNCTION     =  1,
+  G_IR_NODE_CALLBACK     =  2,
+  G_IR_NODE_STRUCT       =  3,
+  G_IR_NODE_BOXED        =  4,
+  G_IR_NODE_ENUM         =  5,
+  G_IR_NODE_FLAGS        =  6, 
+  G_IR_NODE_OBJECT       =  7,
+  G_IR_NODE_INTERFACE    =  8,
+  G_IR_NODE_CONSTANT     =  9,
+  G_IR_NODE_ERROR_DOMAIN = 10,
+  G_IR_NODE_UNION        = 11,
+  G_IR_NODE_PARAM        = 12,
+  G_IR_NODE_TYPE         = 13,
+  G_IR_NODE_PROPERTY     = 14,
+  G_IR_NODE_SIGNAL       = 15,
+  G_IR_NODE_VALUE        = 16,
+  G_IR_NODE_VFUNC        = 17,
+  G_IR_NODE_FIELD        = 18,
+  G_IR_NODE_XREF         = 19
+} GIrNodeTypeId;
 
-struct _GIdlNode
+struct _GIrNode
 {
-  GIdlNodeTypeId type;
+  GIrNodeTypeId type;
   gchar *name;
 };
 
-struct _GIdlNodeXRef
+struct _GIrNodeXRef
 {
-  GIdlNode node;
+  GIrNode node;
 
   gchar *namespace;
 };
 
-struct _GIdlNodeFunction
+struct _GIrNodeFunction
 {
-  GIdlNode node;
+  GIrNode node;
 
   gboolean deprecated;
 
@@ -94,13 +94,13 @@ struct _GIdlNodeFunction
 
   gchar *symbol;
 
-  GIdlNodeParam *result;
+  GIrNodeParam *result;
   GList *parameters;
 };
 
-struct _GIdlNodeType 
+struct _GIrNodeType 
 {
-  GIdlNode node;
+  GIrNode node;
 
   gboolean is_pointer;
   gboolean is_basic;
@@ -118,16 +118,16 @@ struct _GIdlNodeType
   gboolean has_length;
   gint length;
   
-  GIdlNodeType *parameter_type1;
-  GIdlNodeType *parameter_type2;  
+  GIrNodeType *parameter_type1;
+  GIrNodeType *parameter_type2;  
 
   gchar *interface;
   gchar **errors;
 };
 
-struct _GIdlNodeParam 
+struct _GIrNodeParam 
 {
-  GIdlNode node;
+  GIrNode node;
 
   gboolean in;
   gboolean out;
@@ -138,12 +138,12 @@ struct _GIdlNodeParam
   gboolean transfer;
   gboolean shallow_transfer;
   
-  GIdlNodeType *type;
+  GIrNodeType *type;
 };
 
-struct _GIdlNodeProperty
+struct _GIrNodeProperty
 {
-  GIdlNode node;
+  GIrNode node;
 
   gboolean deprecated;
 
@@ -153,12 +153,12 @@ struct _GIdlNodeProperty
   gboolean construct;
   gboolean construct_only;
   
-  GIdlNodeType *type;
+  GIrNodeType *type;
 };
 
-struct _GIdlNodeSignal 
+struct _GIrNodeSignal 
 {
-  GIdlNode node;
+  GIrNode node;
 
   gboolean deprecated;
 
@@ -176,12 +176,12 @@ struct _GIdlNodeSignal
   gint class_closure;
   
   GList *parameters;
-  GIdlNodeParam *result;    
+  GIrNodeParam *result;    
 };
 
-struct _GIdlNodeVFunc 
+struct _GIrNodeVFunc 
 {
-  GIdlNode node;
+  GIrNode node;
 
   gboolean must_chain_up;
   gboolean must_be_implemented;
@@ -189,26 +189,26 @@ struct _GIdlNodeVFunc
   gboolean is_class_closure;
   
   GList *parameters;
-  GIdlNodeParam *result;      
+  GIrNodeParam *result;      
 
   gint offset;
 };
 
-struct _GIdlNodeField
+struct _GIrNodeField
 {
-  GIdlNode node;
+  GIrNode node;
 
   gboolean readable;
   gboolean writable;
   gint bits;
   gint offset;
   
-  GIdlNodeType *type;
+  GIrNodeType *type;
 };
 
-struct _GIdlNodeInterface
+struct _GIrNodeInterface
 {
-  GIdlNode node;
+  GIrNode node;
 
   gboolean deprecated;
 
@@ -223,29 +223,29 @@ struct _GIdlNodeInterface
   GList *members;
 };
 
-struct _GIdlNodeValue
+struct _GIrNodeValue
 {
-  GIdlNode node;
+  GIrNode node;
 
   gboolean deprecated;
 
   guint32 value;
 };
 
-struct _GIdlNodeConstant
+struct _GIrNodeConstant
 {
-  GIdlNode node;
+  GIrNode node;
 
   gboolean deprecated;
 
-  GIdlNodeType *type;
+  GIrNodeType *type;
   
   gchar *value;
 };
 
-struct _GIdlNodeEnum
+struct _GIrNodeEnum
 {
-  GIdlNode node;
+  GIrNode node;
 
   gboolean deprecated;
 
@@ -255,9 +255,9 @@ struct _GIdlNodeEnum
   GList *values;
 };
 
-struct _GIdlNodeBoxed
+struct _GIrNodeBoxed
 { 
-  GIdlNode node;
+  GIrNode node;
 
   gboolean deprecated;
 
@@ -267,18 +267,18 @@ struct _GIdlNodeBoxed
   GList *members;
 };
 
-struct _GIdlNodeStruct
+struct _GIrNodeStruct
 {
-  GIdlNode node;
+  GIrNode node;
 
   gboolean deprecated;
   
   GList *members;
 };
 
-struct _GIdlNodeUnion
+struct _GIrNodeUnion
 {
-  GIdlNode node;
+  GIrNode node;
 
   gboolean deprecated;
   
@@ -289,13 +289,13 @@ struct _GIdlNodeUnion
   gchar *gtype_init;
 
   gint discriminator_offset;
-  GIdlNodeType *discriminator_type;
+  GIrNodeType *discriminator_type;
 };
 
 
-struct _GIdlNodeErrorDomain
+struct _GIrNodeErrorDomain
 {
-  GIdlNode node;
+  GIrNode node;
 
   gboolean deprecated;
   
@@ -305,30 +305,30 @@ struct _GIdlNodeErrorDomain
 };
 
 
-GIdlNode *g_idl_node_new             (GIdlNodeTypeId type);
-void      g_idl_node_free            (GIdlNode    *node);
-guint32   g_idl_node_get_size        (GIdlNode    *node);
-guint32   g_idl_node_get_full_size   (GIdlNode    *node);
-void      g_idl_node_build_metadata  (GIdlNode    *node,
-				      GIdlModule  *module,
+GIrNode * g_ir_node_new             (GIrNodeTypeId type);
+void      g_ir_node_free            (GIrNode    *node);
+guint32   g_ir_node_get_size        (GIrNode    *node);
+guint32   g_ir_node_get_full_size   (GIrNode    *node);
+void      g_ir_node_build_metadata  (GIrNode    *node,
+				      GIrModule  *module,
 				      GList       *modules,
                                       GHashTable  *strings,
                                       GHashTable  *types,
 				      guchar      *data,
 				      guint32     *offset,
                                       guint32     *offset2);
-int       g_idl_node_cmp             (GIdlNode    *node,
-				      GIdlNode    *other);
-gboolean  g_idl_node_can_have_member (GIdlNode    *node);
-void      g_idl_node_add_member      (GIdlNode         *node,
-				      GIdlNodeFunction *member);
+int       g_ir_node_cmp             (GIrNode    *node,
+				      GIrNode    *other);
+gboolean  g_ir_node_can_have_member (GIrNode    *node);
+void      g_ir_node_add_member      (GIrNode         *node,
+				      GIrNodeFunction *member);
 guint32   write_string               (const gchar *str,
 				      GHashTable  *strings, 
 				      guchar      *data,
 				      guint32     *offset);
 
-const gchar * g_idl_node_param_direction_string (GIdlNodeParam * node);
+const gchar * g_ir_node_param_direction_string (GIrNodeParam * node);
 
 G_END_DECLS
 
-#endif  /* __G_IDL_NODE_H__ */
+#endif  /* __G_IR_NODE_H__ */

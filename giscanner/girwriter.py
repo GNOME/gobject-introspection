@@ -115,13 +115,13 @@ class GIRWriter(XMLWriter):
         with self.tagcontext('parameter', attrs):
             self._write_type(parameter.type)
 
-    def _write_type(self, type):
-        attrs = [('name', type.name)]
+    def _write_type(self, ntype):
+        attrs = [('name', ntype.name)]
         # FIXME: figure out if type references a basic type
         #        or a boxed/class/interface etc. and skip
         #        writing the ctype if the latter.
         if type.ctype is not None:
-            attrs.append(('c:type', type.ctype))
+            attrs.append(('c:type', ntype.ctype))
         self.write_tag('type', attrs)
 
     def _write_sequence(self, sequence):

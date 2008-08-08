@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<repository version="1.0"
+            xmlns="http://www.gtk.org/introspection/core/1.0"
+            xmlns:c="http://www.gtk.org/introspection/c/1.0"
+            xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
+  <namespace name="test">
+    <function name="test1" c:identifier="test1">
+      <return-type c:type="gint"/>
+      <parameters>
+        <parameter name="in" c:type="gint" direction="in"/>
+      </parameters>
+    </function>
+
+    <function name="test2" c:identifier="test2">
+      <return-type c:type="void"/>
+      <parameters>
+        <parameter name="in" c:type="gint" direction="in"/>
+        <parameter name="out" c:type="gint" direction="out"/>
+      </parameters>
+    </function>
+
+    <function name="test3" c:identifier="test3">
+      <return-type c:type="void"/>
+      <parameters>
+        <parameter name="inout" c:type="gint" direction="inout"/>
+      </parameters>
+    </function>
+
+    <function name="test4" c:identifier="test4">
+      <return-type c:type="void"/>
+      <parameters>
+        <parameter name="blurb" c:type="gchar*" direction="in"/>
+      </parameters>
+    </function>
+
+    <function name="test5" c:identifier="test5">
+      <return-type c:type="void"/>
+      <parameters>
+        <parameter name="blurb" c:type="gchar*" direction="out" transfer="full"/>
+        <parameter name="len" c:type="gint" direction="out"/>
+      </parameters>
+    </function>
+
+    <function name="test6" c:identifier="test6">
+      <return-type c:type="gint"/>
+      <parameters>
+        <parameter name="list" c:type="GList<gint>*" direction="in"/>
+      </parameters>
+    </function>
+
+
+    <function name="test7" c:identifier="test7">
+      <return-type c:type="utf8" transfer="full"/>
+      <parameters>
+        <parameter name="list" c:type="GList<utf8>*" direction="in"/>
+      </parameters>
+    </function>
+
+    <function name="broken" c:identifier="broken">
+      <return-type c:type="void"/>
+    </function>
+
+  </namespace>
+</repository>

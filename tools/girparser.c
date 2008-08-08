@@ -1,6 +1,6 @@
-/* GObject introspection: A parser for the XML IDL format
+/* GObject introspection: A parser for the XML GIR format
  *
- * Copyright (C) 2005 Matthias Clasen
+ * Copyright (C) 2008 Philip Van Hoof
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,31 +20,40 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include <stdlib.h>
+#include <stdio.h>
 
 #include <glib.h>
-#include "gidlmodule.h"
-#include "gidlnode.h"
+#include "girmodule.h"
+#include "girnode.h"
 #include "gtypelib.h"
 
 typedef enum
 {
-  STATE_START,
-  STATE_END,
-  STATE_ROOT,
-  STATE_NAMESPACE,
-  STATE_FUNCTION,
-  STATE_PARAMETERS,
-  STATE_OBJECT,
+  STATE_START,    
+  STATE_END,        
+  STATE_REPOSITORY, 
+  STATE_NAMESPACE,  
+  STATE_ENUM,        
+  STATE_BITFIELD,  /* 5 */  
+  STATE_FUNCTION,   
+  STATE_FUNCTION_RETURN, 
+  STATE_FUNCTION_PARAMETERS,
+  STATE_FUNCTION_PARAMETER, 
+  STATE_CLASS,   /* 10 */
+  STATE_CLASS_FIELD,
+  STATE_CLASS_PROPERTY,
   STATE_INTERFACE,
-  STATE_IMPLEMENTS,
+  STATE_INTERFACE_PROPERTY, 
+  STATE_INTERFACE_FIELD,  /* 15 */
+  STATE_IMPLEMENTS, 
   STATE_REQUIRES,
-  STATE_ENUM,
-  STATE_BOXED,
-  STATE_STRUCT,
-  STATE_SIGNAL,
-  STATE_ERRORDOMAIN,
-  STATE_UNION
+  STATE_BOXED,  
+  STATE_BOXED_FIELD,
+  STATE_STRUCT,   /* 20 */
+  STATE_STRUCT_FIELD,
+  STATE_ERRORDOMAIN, 
+  STATE_UNION,
+  STATE_CONSTANT
 } ParseState;
 
 typedef struct _ParseContext ParseContext;
@@ -55,16 +64,43 @@ struct _ParseContext
 
   GList *modules;
 
-  GIdlModule *current_module;
-  GIdlNode *current_node;
+  GIrModule *current_module;
+  GIrNode *current_node;
+  GIrNode *current_typed;
 };
 
-#define MISSING_ATTRIBUTE(error,element,attribute)                            \
-  g_set_error (error,                                                         \
-	       G_MARKUP_ERROR,                                                \
-	       G_MARKUP_ERROR_INVALID_CONTENT,                                \
-	       "The attribute '%s' on the element '%s' must be specified",    \
-	       attribute, element)
+#define MISSING_ATTRIBUTE(ctx,error,element,attribute)			        \
+  do {                                                                          \
+    int line_number, char_number;                                                \
+    g_markup_parse_context_get_position (context, &line_number, &char_number);  \
+    g_set_error (error,                                                         \
+   	         G_MARKUP_ERROR,                                                \
+	         G_MARKUP_ERROR_INVALID_CONTENT,                                \
+	         "Line %d, character %d: The attribute '%s' on the element '%s' must be specified",    \
+	         line_number, char_number, attribute, element);		\
+  } while (0)
+
+static void
+backtrace_stderr (void)
+{
+  void *array[50];
+  int size;
+  char **strings;
+  size_t i;
+
+  size = backtrace (array, 50);
+  strings = (char**) backtrace_symbols (array, size);
+
+  fprintf (stderr, "--- BACKTRACE (%zd frames) ---\n", size);
+
+  for (i = 0; i < size; i++)
+    fprintf (stderr, "%s\n", strings[i]);
+
+  fprintf (stderr, "--- END BACKTRACE ---\n", size);
+
+  free (strings);
+}
+
 
 static const gchar *
 find_attribute (const gchar  *name, 
@@ -80,7 +116,14 @@ find_attribute (const gchar  *name,
   return 0;
 }
 
-static GIdlNodeType *
+static void
+state_switch (ParseContext *ctx, ParseState newstate)
+{
+  ctx->prev_state = ctx->state;
+  ctx->state = newstate;
+}
+
+static GIrNodeType *
 parse_type_internal (gchar *str, gchar **rest)
 {
   gint i;
@@ -141,15 +184,16 @@ parse_type_internal (gchar *str, gchar **rest)
     { "gdouble",  TYPE_TAG_DOUBLE,  0 },
     { "utf8",     TYPE_TAG_UTF8,    1 },  
     { "gchar*",   TYPE_TAG_UTF8,    1 },  
-    { "filename", TYPE_TAG_FILENAME,1 }
+    { "filename", TYPE_TAG_FILENAME,1 },
+    { "string",   TYPE_TAG_STRING,  1 }
   };  
 
   gint n_basic = G_N_ELEMENTS (basic);
   gchar *start, *end;
   
-  GIdlNodeType *type;
+  GIrNodeType *type;
   
-  type = (GIdlNodeType *)g_idl_node_new (G_IDL_NODE_TYPE);
+  type = (GIrNodeType *)g_ir_node_new (G_IR_NODE_TYPE);
   
   str = g_strstrip (str);
 
@@ -293,9 +337,9 @@ parse_type_internal (gchar *str, gchar **rest)
   *rest = g_strchug (*rest);
   if (g_str_has_prefix (*rest, "["))
     {
-      GIdlNodeType *array;
+      GIrNodeType *array;
 
-      array = (GIdlNodeType *)g_idl_node_new (G_IDL_NODE_TYPE);
+      array = (GIrNodeType *)g_ir_node_new (G_IR_NODE_TYPE);
 
       array->tag = TYPE_TAG_ARRAY;
       array->is_pointer = TRUE;
@@ -344,17 +388,17 @@ parse_type_internal (gchar *str, gchar **rest)
   return type;
 
  error:
-  g_idl_node_free ((GIdlNode *)type);
+  g_ir_node_free ((GIrNode *)type);
   
   return NULL;
 }
 
-static GIdlNodeType *
+static GIrNodeType *
 parse_type (const gchar *type)
 {
   gchar *str;
   gchar *rest;
-  GIdlNodeType *node;
+  GIrNodeType *node;
   
   str = g_strdup (type);
   node = parse_type_internal (str, &rest);
@@ -364,14 +408,14 @@ parse_type (const gchar *type)
 }
 
 static gboolean
-start_boxed (GMarkupParseContext *context,
-	     const gchar         *element_name,
-	     const gchar        **attribute_names,
-	     const gchar        **attribute_values,
-	     ParseContext        *ctx,
-	     GError             **error)
+start_glib_boxed (GMarkupParseContext *context,
+		  const gchar         *element_name,
+		  const gchar        **attribute_names,
+		  const gchar        **attribute_values,
+		  ParseContext        *ctx,
+		  GError             **error)
 {
-  if (strcmp (element_name, "boxed") == 0 && 
+  if (strcmp (element_name, "glib:boxed") == 0 && 
       ctx->state == STATE_NAMESPACE)
     {
       const gchar *name;
@@ -379,24 +423,24 @@ start_boxed (GMarkupParseContext *context,
       const gchar *typeinit;
       const gchar *deprecated;
       
-      name = find_attribute ("name", attribute_names, attribute_values);
-      typename = find_attribute ("type-name", attribute_names, attribute_values);
-      typeinit = find_attribute ("get-type", attribute_names, attribute_values);
+      name = find_attribute ("glib:name", attribute_names, attribute_values);
+      typename = find_attribute ("glib:type-name", attribute_names, attribute_values);
+      typeinit = find_attribute ("glib:get-type", attribute_names, attribute_values);
       deprecated = find_attribute ("deprecated", attribute_names, attribute_values);
       
       if (name == NULL)
-	MISSING_ATTRIBUTE (error, element_name, "name");
+	MISSING_ATTRIBUTE (context, error, element_name, "glib:name");
       else if (typename == NULL)
-	MISSING_ATTRIBUTE (error, element_name, "type-name");
+	MISSING_ATTRIBUTE (context, error, element_name, "glib:type-name");
       else if (typeinit == NULL)
-	MISSING_ATTRIBUTE (error, element_name, "get-type");
+	MISSING_ATTRIBUTE (context, error, element_name, "glib:get-type");
       else
 	{
-	  GIdlNodeBoxed *boxed;
+	  GIrNodeBoxed *boxed;
 
-	  boxed = (GIdlNodeBoxed *) g_idl_node_new (G_IDL_NODE_BOXED);
+	  boxed = (GIrNodeBoxed *) g_ir_node_new (G_IR_NODE_BOXED);
 	  
-	  ((GIdlNode *)boxed)->name = g_strdup (name);
+	  ((GIrNode *)boxed)->name = g_strdup (name);
 	  boxed->gtype_name = g_strdup (typename);
 	  boxed->gtype_init = g_strdup (typeinit);
 	  if (deprecated && strcmp (deprecated, "1") == 0)
@@ -404,11 +448,11 @@ start_boxed (GMarkupParseContext *context,
 	  else
 	    boxed->deprecated = FALSE;
 	  
-	  ctx->current_node = (GIdlNode *)boxed;
+	  ctx->current_node = (GIrNode *)boxed;
 	  ctx->current_module->entries = 
 	    g_list_append (ctx->current_module->entries, boxed);
 	  
-	  ctx->state = STATE_BOXED;
+	  state_switch (ctx, STATE_BOXED);
 	}
 	  
       return TRUE;
@@ -428,15 +472,16 @@ start_function (GMarkupParseContext *context,
   if ((ctx->state == STATE_NAMESPACE &&
        (strcmp (element_name, "function") == 0 ||
 	strcmp (element_name, "callback") == 0)) ||
-      ((ctx->state == STATE_OBJECT ||
+      ((ctx->state == STATE_CLASS ||
 	ctx->state == STATE_INTERFACE ||
 	ctx->state == STATE_BOXED ||
-	ctx->state == STATE_STRUCT ||
         ctx->state == STATE_UNION) &&
-       strcmp (element_name, "method") == 0) ||
-      ((ctx->state == STATE_OBJECT ||
+       (strcmp (element_name, "method") == 0 || 
+	strcmp (element_name, "callback") == 0)) ||
+      ((ctx->state == STATE_CLASS ||
 	ctx->state == STATE_BOXED) &&
-       strcmp (element_name, "constructor") == 0))
+       (strcmp (element_name, "constructor") == 0)) ||
+      (ctx->state == STATE_STRUCT && strcmp (element_name, "callback") == 0))
     {
       const gchar *name;
       const gchar *symbol;
@@ -444,21 +489,21 @@ start_function (GMarkupParseContext *context,
       const gchar *type;
       
       name = find_attribute ("name", attribute_names, attribute_values);
-      symbol = find_attribute ("symbol", attribute_names, attribute_values);
+      symbol = find_attribute ("c:identifier", attribute_names, attribute_values);
       deprecated = find_attribute ("deprecated", attribute_names, attribute_values);
       type = find_attribute ("type", attribute_names, attribute_values);
       
       if (name == NULL)
-	MISSING_ATTRIBUTE (error, element_name, "name");
+	MISSING_ATTRIBUTE (context, error, element_name, "name");
       else if (strcmp (element_name, "callback") != 0 && symbol == NULL)
-	MISSING_ATTRIBUTE (error, element_name, "symbol");
+	MISSING_ATTRIBUTE (context, error, element_name, "c:identifier");
       else
 	{
-	  GIdlNodeFunction *function;
+	  GIrNodeFunction *function;
 	  
-	  function = (GIdlNodeFunction *) g_idl_node_new (G_IDL_NODE_FUNCTION);
+	  function = (GIrNodeFunction *) g_ir_node_new (G_IR_NODE_FUNCTION);
 
-	  ((GIdlNode *)function)->name = g_strdup (name);
+	  ((GIrNode *)function)->name = g_strdup (name);
 	  function->symbol = g_strdup (symbol);
 	  function->parameters = NULL;
 	  if (deprecated && strcmp (deprecated, "1") == 0)
@@ -488,7 +533,7 @@ start_function (GMarkupParseContext *context,
 	      function->is_getter = FALSE;
 	      function->is_constructor = FALSE;
 	      if (strcmp (element_name, "callback") == 0)
-		((GIdlNode *)function)->type = G_IDL_NODE_CALLBACK;
+		((GIrNode *)function)->type = G_IR_NODE_CALLBACK;
 	    }
 	  
 	  if (ctx->current_node == NULL)
@@ -499,35 +544,35 @@ start_function (GMarkupParseContext *context,
 	  else
 	    switch (ctx->current_node->type)
 	      {
-	      case G_IDL_NODE_INTERFACE:
-	      case G_IDL_NODE_OBJECT:
+	      case G_IR_NODE_INTERFACE:
+	      case G_IR_NODE_OBJECT:
 		{
-		  GIdlNodeInterface *iface;
+		  GIrNodeInterface *iface;
 		  
-		  iface = (GIdlNodeInterface *)ctx->current_node;
+		  iface = (GIrNodeInterface *)ctx->current_node;
 		  iface->members = g_list_append (iface->members, function);
 		}
 		break;
-	      case G_IDL_NODE_BOXED:
+	      case G_IR_NODE_BOXED:
 		{
-		  GIdlNodeBoxed *boxed;
+		  GIrNodeBoxed *boxed;
 
-		  boxed = (GIdlNodeBoxed *)ctx->current_node;
+		  boxed = (GIrNodeBoxed *)ctx->current_node;
 		  boxed->members = g_list_append (boxed->members, function);
 		}
 		break;
-	      case G_IDL_NODE_STRUCT:
+	      case G_IR_NODE_STRUCT:
 		{
-		  GIdlNodeStruct *struct_;
+		  GIrNodeStruct *struct_;
 		  
-		  struct_ = (GIdlNodeStruct *)ctx->current_node;
+		  struct_ = (GIrNodeStruct *)ctx->current_node;
 		  struct_->members = g_list_append (struct_->members, function);		}
 		break;
-	      case G_IDL_NODE_UNION:
+	      case G_IR_NODE_UNION:
 		{
-		  GIdlNodeUnion *union_;
+		  GIrNodeUnion *union_;
 		  
-		  union_ = (GIdlNodeUnion *)ctx->current_node;
+		  union_ = (GIrNodeUnion *)ctx->current_node;
 		  union_->members = g_list_append (union_->members, function);
 		}
 		break;
@@ -535,8 +580,8 @@ start_function (GMarkupParseContext *context,
 		g_assert_not_reached ();
 	      }
 	  
-	  ctx->current_node = (GIdlNode *)function;
-	  ctx->state = STATE_FUNCTION;
+	  ctx->current_node = (GIrNode *)function;
+	  state_switch (ctx, STATE_FUNCTION);
 
 	  return TRUE;
 	}
@@ -553,128 +598,122 @@ start_parameter (GMarkupParseContext *context,
 		 ParseContext        *ctx,
 		 GError             **error)
 {
-  if (strcmp (element_name, "parameter") == 0 &&
-      ctx->state == STATE_PARAMETERS)
-    {
-      const gchar *type;
-      const gchar *name;
-      const gchar *direction;
-      const gchar *retval;
-      const gchar *dipper;
-      const gchar *optional;
-      const gchar *nullok;
-      const gchar *transfer;
+  const gchar *name;
+  const gchar *direction;
+  const gchar *retval;
+  const gchar *dipper;
+  const gchar *optional;
+  const gchar *nullok;
+  const gchar *transfer;
+  GIrNodeParam *param;
       
-      type = find_attribute ("type", attribute_names, attribute_values);
-      name = find_attribute ("name", attribute_names, attribute_values);
-      direction = find_attribute ("direction", attribute_names, attribute_values);
-      retval = find_attribute ("retval", attribute_names, attribute_values);
-      dipper = find_attribute ("dipper", attribute_names, attribute_values);
-      optional = find_attribute ("optional", attribute_names, attribute_values);
-      nullok = find_attribute ("null-ok", attribute_names, attribute_values);
-      transfer = find_attribute ("transfer", attribute_names, attribute_values);
+  if (!(strcmp (element_name, "parameter") == 0 &&
+	ctx->state == STATE_FUNCTION_PARAMETERS))
+    return FALSE;
 
-      if (type == NULL)
-	MISSING_ATTRIBUTE (error, element_name, "type");
-      else if (name == NULL)
-	MISSING_ATTRIBUTE (error, element_name, "name");
-      else
-	{
-	  GIdlNodeParam *param;
+  name = find_attribute ("name", attribute_names, attribute_values);
+  direction = find_attribute ("direction", attribute_names, attribute_values);
+  retval = find_attribute ("retval", attribute_names, attribute_values);
+  dipper = find_attribute ("dipper", attribute_names, attribute_values);
+  optional = find_attribute ("optional", attribute_names, attribute_values);
+  nullok = find_attribute ("null-ok", attribute_names, attribute_values);
+  transfer = find_attribute ("transfer", attribute_names, attribute_values);
 
-	  param = (GIdlNodeParam *)g_idl_node_new (G_IDL_NODE_PARAM);
-	  
-	  if (direction && strcmp (direction, "out") == 0)
-	    {
-	      param->in = FALSE;
-	      param->out = TRUE;
-	    }
-	  else if (direction && strcmp (direction, "inout") == 0)
-	    {
-	      param->in = TRUE;
-	      param->out = TRUE;
-	    }
-	  else
-	    {
-	      param->in = TRUE;
-	      param->out = FALSE;
-	    }
+  if (name == NULL)
+    name = "unknown";
 
-	  if (retval && strcmp (retval, "1") == 0)
-	    param->retval = TRUE;
-	  else
-	    param->retval = FALSE;
+  param = (GIrNodeParam *)g_ir_node_new (G_IR_NODE_PARAM);
 
-	  if (dipper && strcmp (dipper, "1") == 0)
-	    param->dipper = TRUE;
-	  else
-	    param->dipper = FALSE;
+  ctx->current_typed = (GIrNode*) param;
 
-	  if (optional && strcmp (optional, "1") == 0)
-	    param->optional = TRUE;
-	  else
-	    param->optional = FALSE;
+  state_switch (ctx, STATE_FUNCTION_PARAMETER);
 
-	  if (nullok && strcmp (nullok, "1") == 0)
-	    param->null_ok = TRUE;
-	  else
-	    param->null_ok = FALSE;
-
-	  if (transfer && strcmp (transfer, "none") == 0)
-	    {
-	      param->transfer = FALSE;
-	      param->shallow_transfer = FALSE;
-	    }
-	  else if (transfer && strcmp (transfer, "shallow") == 0)
-	    {
-	      param->transfer = FALSE;
-	      param->shallow_transfer = TRUE;
-	    }
-	  else
-	    {
-	      param->transfer = TRUE;
-	      param->shallow_transfer = FALSE;
-	    }
-	  
-	  ((GIdlNode *)param)->name = g_strdup (name);
-	  param->type = parse_type (type);
-	  
-	  switch (ctx->current_node->type)
-	    {
-	    case G_IDL_NODE_FUNCTION:
-	    case G_IDL_NODE_CALLBACK:
-	      {
-		GIdlNodeFunction *func;
-
-		func = (GIdlNodeFunction *)ctx->current_node;
-		func->parameters = g_list_append (func->parameters, param);
-	      }
-	      break;
-	    case G_IDL_NODE_SIGNAL:
-	      {
-		GIdlNodeSignal *signal;
-
-		signal = (GIdlNodeSignal *)ctx->current_node;
-		signal->parameters = g_list_append (signal->parameters, param);
-	      }
-	      break;
-	    case G_IDL_NODE_VFUNC:
-	      {
-		GIdlNodeVFunc *vfunc;
-		
-		vfunc = (GIdlNodeVFunc *)ctx->current_node;
-		vfunc->parameters = g_list_append (vfunc->parameters, param);
-	      }
-	      break;
-	    default:
-	      g_assert_not_reached ();
-	    }
-	}
-
-      return TRUE;
+  if (direction && strcmp (direction, "out") == 0)
+    {
+      param->in = FALSE;
+      param->out = TRUE;
+    }
+  else if (direction && strcmp (direction, "inout") == 0)
+    {
+      param->in = TRUE;
+      param->out = TRUE;
+    }
+  else
+    {
+      param->in = TRUE;
+      param->out = FALSE;
     }
 
-  return FALSE;
+  if (retval && strcmp (retval, "1") == 0)
+    param->retval = TRUE;
+  else
+    param->retval = FALSE;
+
+  if (dipper && strcmp (dipper, "1") == 0)
+    param->dipper = TRUE;
+  else
+    param->dipper = FALSE;
+
+  if (optional && strcmp (optional, "1") == 0)
+    param->optional = TRUE;
+  else
+    param->optional = FALSE;
+
+  if (nullok && strcmp (nullok, "1") == 0)
+    param->null_ok = TRUE;
+  else
+    param->null_ok = FALSE;
+
+  if (transfer && strcmp (transfer, "none") == 0)
+    {
+      param->transfer = FALSE;
+      param->shallow_transfer = FALSE;
+    }
+  else if (transfer && strcmp (transfer, "shallow") == 0)
+    {
+      param->transfer = FALSE;
+      param->shallow_transfer = TRUE;
+    }
+  else
+    {
+      param->transfer = TRUE;
+      param->shallow_transfer = FALSE;
+    }
+	  
+  ((GIrNode *)param)->name = g_strdup (name);
+	  
+  switch (ctx->current_node->type)
+    {
+    case G_IR_NODE_FUNCTION:
+    case G_IR_NODE_CALLBACK:
+      {
+	GIrNodeFunction *func;
+
+	func = (GIrNodeFunction *)ctx->current_node;
+	func->parameters = g_list_append (func->parameters, param);
+      }
+      break;
+    case G_IR_NODE_SIGNAL:
+      {
+	GIrNodeSignal *signal;
+
+	signal = (GIrNodeSignal *)ctx->current_node;
+	signal->parameters = g_list_append (signal->parameters, param);
+      }
+      break;
+    case G_IR_NODE_VFUNC:
+      {
+	GIrNodeVFunc *vfunc;
+		
+	vfunc = (GIrNodeVFunc *)ctx->current_node;
+	vfunc->parameters = g_list_append (vfunc->parameters, param);
+      }
+      break;
+    default:
+      g_assert_not_reached ();
+    }
+
+  return TRUE;
 }
 
 static gboolean
@@ -686,10 +725,11 @@ start_field (GMarkupParseContext *context,
 	     GError             **error)
 {
   if (strcmp (element_name, "field") == 0 &&
-      (ctx->state == STATE_OBJECT ||
+      (ctx->state == STATE_CLASS ||
        ctx->state == STATE_BOXED ||
        ctx->state == STATE_STRUCT ||
-       ctx->state == STATE_UNION))
+       ctx->state == STATE_UNION ||
+       ctx->state == STATE_INTERFACE))
     {
       const gchar *name;
       const gchar *type;
@@ -700,7 +740,7 @@ start_field (GMarkupParseContext *context,
       const gchar *offset;
       
       name = find_attribute ("name", attribute_names, attribute_values);
-      type = find_attribute ("type", attribute_names, attribute_values);
+      type = find_attribute ("c:type", attribute_names, attribute_values);
       readable = find_attribute ("readable", attribute_names, attribute_values);
       writable = find_attribute ("writable", attribute_names, attribute_values);
       bits = find_attribute ("bits", attribute_names, attribute_values);
@@ -708,15 +748,14 @@ start_field (GMarkupParseContext *context,
       offset = find_attribute ("offset", attribute_names, attribute_values);
       
       if (name == NULL)
-	MISSING_ATTRIBUTE (error, element_name, "name");
-      else if (type == NULL)
-	MISSING_ATTRIBUTE (error, element_name, "type");
+	MISSING_ATTRIBUTE (context, error, element_name, "name");
       else
 	{
-	  GIdlNodeField *field;
+	  GIrNodeField *field;
 
-	  field = (GIdlNodeField *)g_idl_node_new (G_IDL_NODE_FIELD);
-	  ((GIdlNode *)field)->name = g_strdup (name);
+	  field = (GIrNodeField *)g_ir_node_new (G_IR_NODE_FIELD);
+	  ctx->current_typed = (GIrNode*) field;
+	  ((GIrNode *)field)->name = g_strdup (name);
 	  if (readable && strcmp (readable, "1") == 0)
 	    field->readable = TRUE;
 	  else
@@ -737,46 +776,56 @@ start_field (GMarkupParseContext *context,
 	  else
 	    field->offset = 0;
 	  
-	  field->type = parse_type (type);
-	  
 	  switch (ctx->current_node->type)
 	    {
-	    case G_IDL_NODE_OBJECT:
+	    case G_IR_NODE_OBJECT:
 	      {
-		GIdlNodeInterface *iface;
+		GIrNodeInterface *iface;
 
-		iface = (GIdlNodeInterface *)ctx->current_node;
+		iface = (GIrNodeInterface *)ctx->current_node;
 		iface->members = g_list_append (iface->members, field);
+		state_switch (ctx, STATE_CLASS_FIELD);
 	      }
 	      break;
-	    case G_IDL_NODE_BOXED:
+	    case G_IR_NODE_INTERFACE:
 	      {
-		GIdlNodeBoxed *boxed;
+		GIrNodeInterface *iface;
 
-		boxed = (GIdlNodeBoxed *)ctx->current_node;
+		iface = (GIrNodeInterface *)ctx->current_node;
+		iface->members = g_list_append (iface->members, field);
+		state_switch (ctx, STATE_INTERFACE_FIELD);
+	      }
+	      break;
+	    case G_IR_NODE_BOXED:
+	      {
+		GIrNodeBoxed *boxed;
+
+		boxed = (GIrNodeBoxed *)ctx->current_node;
 		boxed->members = g_list_append (boxed->members, field);
+		state_switch (ctx, STATE_BOXED_FIELD);
 	      }
 	      break;
-	    case G_IDL_NODE_STRUCT:
+	    case G_IR_NODE_STRUCT:
 	      {
-		GIdlNodeStruct *struct_;
+		GIrNodeStruct *struct_;
 
-		struct_ = (GIdlNodeStruct *)ctx->current_node;
+		struct_ = (GIrNodeStruct *)ctx->current_node;
 		struct_->members = g_list_append (struct_->members, field);
+		state_switch (ctx, STATE_STRUCT_FIELD);
 	      }
 	      break;
-	    case G_IDL_NODE_UNION:
+	    case G_IR_NODE_UNION:
 	      {
-		GIdlNodeUnion *union_;
+		GIrNodeUnion *union_;
 
-		union_ = (GIdlNodeUnion *)ctx->current_node;
+		union_ = (GIrNodeUnion *)ctx->current_node;
 		union_->members = g_list_append (union_->members, field);
 		if (branch)
 		  {
-		    GIdlNodeConstant *constant;
+		    GIrNodeConstant *constant;
 		    
-		    constant = (GIdlNodeConstant *) g_idl_node_new (G_IDL_NODE_CONSTANT);
-		    ((GIdlNode *)constant)->name = g_strdup (name);
+		    constant = (GIrNodeConstant *) g_ir_node_new (G_IR_NODE_CONSTANT);
+		    ((GIrNode *)constant)->name = g_strdup (name);
 		    constant->value = g_strdup (branch);	  
 		    constant->type = union_->discriminator_type;
 		    constant->deprecated = FALSE;
@@ -803,8 +852,8 @@ start_enum (GMarkupParseContext *context,
 	     ParseContext        *ctx,
 	     GError             **error)
 {
-  if ((strcmp (element_name, "enum") == 0 && ctx->state == STATE_NAMESPACE) ||
-      (strcmp (element_name, "flags") == 0 && ctx->state == STATE_NAMESPACE))
+  if ((strcmp (element_name, "enumeration") == 0 && ctx->state == STATE_NAMESPACE) ||
+      (strcmp (element_name, "bitfield") == 0 && ctx->state == STATE_NAMESPACE))
     {
       const gchar *name;
       const gchar *typename;
@@ -812,21 +861,21 @@ start_enum (GMarkupParseContext *context,
       const gchar *deprecated;
       
       name = find_attribute ("name", attribute_names, attribute_values);
-      typename = find_attribute ("type-name", attribute_names, attribute_values);
-      typeinit = find_attribute ("get-type", attribute_names, attribute_values);
+      typename = find_attribute ("glib:type-name", attribute_names, attribute_values);
+      typeinit = find_attribute ("glib:get-type", attribute_names, attribute_values);
       deprecated = find_attribute ("deprecated", attribute_names, attribute_values);
       
       if (name == NULL)
-	MISSING_ATTRIBUTE (error, element_name, "name");
+	MISSING_ATTRIBUTE (context, error, element_name, "name");
       else 
 	{	      
-	  GIdlNodeEnum *enum_;
+	  GIrNodeEnum *enum_;
 	  
-	  if (strcmp (element_name, "enum") == 0)
-	    enum_ = (GIdlNodeEnum *) g_idl_node_new (G_IDL_NODE_ENUM);
+	  if (strcmp (element_name, "enumeration") == 0)
+	    enum_ = (GIrNodeEnum *) g_ir_node_new (G_IR_NODE_ENUM);
 	  else
-	    enum_ = (GIdlNodeEnum *) g_idl_node_new (G_IDL_NODE_FLAGS);
-	  ((GIdlNode *)enum_)->name = g_strdup (name);
+	    enum_ = (GIrNodeEnum *) g_ir_node_new (G_IR_NODE_FLAGS);
+	  ((GIrNode *)enum_)->name = g_strdup (name);
 	  enum_->gtype_name = g_strdup (typename);
 	  enum_->gtype_init = g_strdup (typeinit);
 	  if (deprecated && strcmp (deprecated, "1") == 0)
@@ -834,11 +883,11 @@ start_enum (GMarkupParseContext *context,
 	  else
 	    enum_->deprecated = FALSE;
 
-	  ctx->current_node = (GIdlNode *) enum_;
+	  ctx->current_node = (GIrNode *) enum_;
 	  ctx->current_module->entries = 
 	    g_list_append (ctx->current_module->entries, enum_);	      
 	  
-	  ctx->state = STATE_ENUM;
+	  state_switch (ctx, STATE_ENUM);
 	}
       
       return TRUE;
@@ -855,35 +904,32 @@ start_property (GMarkupParseContext *context,
 		GError             **error)
 {
   if (strcmp (element_name, "property") == 0 &&
-      (ctx->state == STATE_OBJECT ||
+      (ctx->state == STATE_CLASS ||
        ctx->state == STATE_INTERFACE))
     {
       const gchar *name;
-      const gchar *type;
       const gchar *readable;
       const gchar *writable;
       const gchar *construct;
       const gchar *construct_only;
       
       name = find_attribute ("name", attribute_names, attribute_values);
-      type = find_attribute ("type", attribute_names, attribute_values);
       readable = find_attribute ("readable", attribute_names, attribute_values);
       writable = find_attribute ("writable", attribute_names, attribute_values);
       construct = find_attribute ("construct", attribute_names, attribute_values);
       construct_only = find_attribute ("construct-only", attribute_names, attribute_values);
       
       if (name == NULL)
-	MISSING_ATTRIBUTE (error, element_name, "name");
-      else if (type == NULL)
-	MISSING_ATTRIBUTE (error, element_name, "type");
+	MISSING_ATTRIBUTE (context, error, element_name, "name");
       else 
 	{	      
-	  GIdlNodeProperty *property;
-	  GIdlNodeInterface *iface;
+	  GIrNodeProperty *property;
+	  GIrNodeInterface *iface;
 	  
-	  property = (GIdlNodeProperty *) g_idl_node_new (G_IDL_NODE_PROPERTY);
+	  property = (GIrNodeProperty *) g_ir_node_new (G_IR_NODE_PROPERTY);
+	  ctx->current_typed = (GIrNode*) property;
 
-	  ((GIdlNode *)property)->name = g_strdup (name);
+	  ((GIrNode *)property)->name = g_strdup (name);
 	  
 	  if (readable && strcmp (readable, "1") == 0)
 	    property->readable = TRUE;
@@ -902,10 +948,15 @@ start_property (GMarkupParseContext *context,
 	  else
 	    property->construct_only = FALSE;
 
-	  property->type = parse_type (type);
-	  
-	  iface = (GIdlNodeInterface *)ctx->current_node;
+	  iface = (GIrNodeInterface *)ctx->current_node;
 	  iface->members = g_list_append (iface->members, property);
+
+	  if (ctx->state == STATE_CLASS)
+	    state_switch (ctx, STATE_CLASS_PROPERTY);
+	  else if (ctx->state == STATE_INTERFACE)
+	    state_switch (ctx, STATE_INTERFACE_PROPERTY);
+	  else
+	    g_assert_not_reached ();
 	}
       
       return TRUE;
@@ -956,15 +1007,15 @@ start_member (GMarkupParseContext *context,
       deprecated = find_attribute ("deprecated", attribute_names, attribute_values);
       
       if (name == NULL)
-	MISSING_ATTRIBUTE (error, element_name, "name");
+	MISSING_ATTRIBUTE (context, error, element_name, "name");
       else 
 	{	      
-	  GIdlNodeEnum *enum_;
-	  GIdlNodeValue *value_;
+	  GIrNodeEnum *enum_;
+	  GIrNodeValue *value_;
 
-	  value_ = (GIdlNodeValue *) g_idl_node_new (G_IDL_NODE_VALUE);
+	  value_ = (GIrNodeValue *) g_ir_node_new (G_IR_NODE_VALUE);
 
-	  ((GIdlNode *)value_)->name = g_strdup (name);
+	  ((GIrNode *)value_)->name = g_strdup (name);
 	  
 	  value_->value = parse_value (value);
 	  
@@ -973,7 +1024,7 @@ start_member (GMarkupParseContext *context,
 	  else
 	    value_->deprecated = FALSE;
 
-	  enum_ = (GIdlNodeEnum *)ctx->current_node;
+	  enum_ = (GIrNodeEnum *)ctx->current_node;
 	  enum_->values = g_list_append (enum_->values, value_);
 	}
       
@@ -992,7 +1043,7 @@ start_constant (GMarkupParseContext *context,
 {
   if (strcmp (element_name, "constant") == 0 &&
       (ctx->state == STATE_NAMESPACE ||
-       ctx->state == STATE_OBJECT ||
+       ctx->state == STATE_CLASS ||
        ctx->state == STATE_INTERFACE))
     {
       const gchar *name;
@@ -1001,23 +1052,23 @@ start_constant (GMarkupParseContext *context,
       const gchar *deprecated;
       
       name = find_attribute ("name", attribute_names, attribute_values);
-      type = find_attribute ("type", attribute_names, attribute_values);
+      type = find_attribute ("c:type", attribute_names, attribute_values);
       value = find_attribute ("value", attribute_names, attribute_values);
       deprecated = find_attribute ("deprecated", attribute_names, attribute_values);
       
       if (name == NULL)
-	MISSING_ATTRIBUTE (error, element_name, "name");
+	MISSING_ATTRIBUTE (context, error, element_name, "name");
       else if (type == NULL)
-	MISSING_ATTRIBUTE (error, element_name, "type");
+	MISSING_ATTRIBUTE (context, error, element_name, "c:type");
       else if (value == NULL)
-	MISSING_ATTRIBUTE (error, element_name, "value");
+	MISSING_ATTRIBUTE (context, error, element_name, "value");
       else 
 	{	      
-	  GIdlNodeConstant *constant;
+	  GIrNodeConstant *constant;
 
-	  constant = (GIdlNodeConstant *) g_idl_node_new (G_IDL_NODE_CONSTANT);
+	  constant = (GIrNodeConstant *) g_ir_node_new (G_IR_NODE_CONSTANT);
 
-	  ((GIdlNode *)constant)->name = g_strdup (name);
+	  ((GIrNode *)constant)->name = g_strdup (name);
 	  constant->value = g_strdup (value);
 	  
 	  constant->type = parse_type (type);
@@ -1029,17 +1080,18 @@ start_constant (GMarkupParseContext *context,
 
 	  if (ctx->state == STATE_NAMESPACE)
 	    {
-	      ctx->current_node = (GIdlNode *) constant;
+	      ctx->current_node = (GIrNode *) constant;
 	      ctx->current_module->entries = 
 		g_list_append (ctx->current_module->entries, constant);
 	    }
 	  else
 	    {
-	      GIdlNodeInterface *iface;
+	      GIrNodeInterface *iface;
 
-	      iface = (GIdlNodeInterface *)ctx->current_node;
+	      iface = (GIrNodeInterface *)ctx->current_node;
 	      iface->members = g_list_append (iface->members, constant);
 	    }
+	  state_switch (ctx, STATE_CONSTANT);
 	}
       
       return TRUE;
@@ -1069,18 +1121,18 @@ start_errordomain (GMarkupParseContext *context,
       deprecated = find_attribute ("deprecated", attribute_names, attribute_values);
       
       if (name == NULL)
-	MISSING_ATTRIBUTE (error, element_name, "name");
+	MISSING_ATTRIBUTE (context, error, element_name, "name");
       else if (getquark == NULL)
-	MISSING_ATTRIBUTE (error, element_name, "getquark");
+	MISSING_ATTRIBUTE (context, error, element_name, "getquark");
       else if (codes == NULL)
-	MISSING_ATTRIBUTE (error, element_name, "codes");
+	MISSING_ATTRIBUTE (context, error, element_name, "codes");
       else 
 	{	      
-	  GIdlNodeErrorDomain *domain;
+	  GIrNodeErrorDomain *domain;
 
-	  domain = (GIdlNodeErrorDomain *) g_idl_node_new (G_IDL_NODE_ERROR_DOMAIN);
+	  domain = (GIrNodeErrorDomain *) g_ir_node_new (G_IR_NODE_ERROR_DOMAIN);
 
-	  ((GIdlNode *)domain)->name = g_strdup (name);
+	  ((GIrNode *)domain)->name = g_strdup (name);
 	  domain->getquark = g_strdup (getquark);
 	  domain->codes = g_strdup (codes);
 
@@ -1089,11 +1141,11 @@ start_errordomain (GMarkupParseContext *context,
 	  else
 	    domain->deprecated = FALSE;
 
-	  ctx->current_node = (GIdlNode *) domain;
+	  ctx->current_node = (GIrNode *) domain;
 	  ctx->current_module->entries = 
 	    g_list_append (ctx->current_module->entries, domain);
 
-	  ctx->state = STATE_ERRORDOMAIN;
+	  state_switch (ctx, STATE_ERRORDOMAIN);
 	}
       
       return TRUE;
@@ -1118,22 +1170,22 @@ start_interface (GMarkupParseContext *context,
       const gchar *deprecated;
       
       name = find_attribute ("name", attribute_names, attribute_values);
-      typename = find_attribute ("type-name", attribute_names, attribute_values);
-      typeinit = find_attribute ("get-type", attribute_names, attribute_values);
+      typename = find_attribute ("glib:type-name", attribute_names, attribute_values);
+      typeinit = find_attribute ("glib:get-type", attribute_names, attribute_values);
       deprecated = find_attribute ("deprecated", attribute_names, attribute_values);
       
       if (name == NULL)
-	MISSING_ATTRIBUTE (error, element_name, "name");
+	MISSING_ATTRIBUTE (context, error, element_name, "name");
       else if (typename == NULL)
-	MISSING_ATTRIBUTE (error, element_name, "type-name");
+	MISSING_ATTRIBUTE (context, error, element_name, "glib:type-name");
       else if (typeinit == NULL)
-	MISSING_ATTRIBUTE (error, element_name, "get-type");
+	MISSING_ATTRIBUTE (context, error, element_name, "glib:get-type");
       else
 	{
-	  GIdlNodeInterface *iface;
+	  GIrNodeInterface *iface;
 
-	  iface = (GIdlNodeInterface *) g_idl_node_new (G_IDL_NODE_INTERFACE);
-	  ((GIdlNode *)iface)->name = g_strdup (name);
+	  iface = (GIrNodeInterface *) g_ir_node_new (G_IR_NODE_INTERFACE);
+	  ((GIrNode *)iface)->name = g_strdup (name);
 	  iface->gtype_name = g_strdup (typename);
 	  iface->gtype_init = g_strdup (typeinit);
 	  if (deprecated && strcmp (deprecated, "1") == 0)
@@ -1141,11 +1193,11 @@ start_interface (GMarkupParseContext *context,
 	  else
 	    iface->deprecated = FALSE;
 	  
-	  ctx->current_node = (GIdlNode *) iface;
+	  ctx->current_node = (GIrNode *) iface;
 	  ctx->current_module->entries = 
 	    g_list_append (ctx->current_module->entries, iface);	      
 	  
-	  ctx->state = STATE_INTERFACE;
+	  state_switch (ctx, STATE_INTERFACE);
 	  
 	}
       
@@ -1155,14 +1207,14 @@ start_interface (GMarkupParseContext *context,
 }
 
 static gboolean
-start_object (GMarkupParseContext *context,
+start_class (GMarkupParseContext *context,
 	      const gchar         *element_name,
 	      const gchar        **attribute_names,
 	      const gchar        **attribute_values,
 	      ParseContext        *ctx,
 	      GError             **error)
 {
-  if (strcmp (element_name, "object") == 0 &&
+  if (strcmp (element_name, "class") == 0 &&
       ctx->state == STATE_NAMESPACE)
     {
       const gchar *name;
@@ -1173,22 +1225,22 @@ start_object (GMarkupParseContext *context,
       
       name = find_attribute ("name", attribute_names, attribute_values);
       parent = find_attribute ("parent", attribute_names, attribute_values);
-      typename = find_attribute ("type-name", attribute_names, attribute_values);
-      typeinit = find_attribute ("get-type", attribute_names, attribute_values);
+      typename = find_attribute ("glib:type-name", attribute_names, attribute_values);
+      typeinit = find_attribute ("glib:get-type", attribute_names, attribute_values);
       deprecated = find_attribute ("deprecated", attribute_names, attribute_values);
       
       if (name == NULL)
-	MISSING_ATTRIBUTE (error, element_name, "name");
+	MISSING_ATTRIBUTE (context, error, element_name, "name");
       else if (typename == NULL)
-	MISSING_ATTRIBUTE (error, element_name, "type-name");
+	MISSING_ATTRIBUTE (context, error, element_name, "glib:type-name");
       else if (typeinit == NULL)
-	MISSING_ATTRIBUTE (error, element_name, "get-type");
+	MISSING_ATTRIBUTE (context, error, element_name, "glib:get-type");
       else
 	{
-	  GIdlNodeInterface *iface;
+	  GIrNodeInterface *iface;
 
-	  iface = (GIdlNodeInterface *) g_idl_node_new (G_IDL_NODE_OBJECT);
-	  ((GIdlNode *)iface)->name = g_strdup (name);
+	  iface = (GIrNodeInterface *) g_ir_node_new (G_IR_NODE_OBJECT);
+	  ((GIrNode *)iface)->name = g_strdup (name);
 	  iface->gtype_name = g_strdup (typename);
 	  iface->gtype_init = g_strdup (typeinit);
 	  iface->parent = g_strdup (parent);
@@ -1197,11 +1249,11 @@ start_object (GMarkupParseContext *context,
 	  else
 	    iface->deprecated = FALSE;
 	  
-	  ctx->current_node = (GIdlNode *) iface;
+	  ctx->current_node = (GIrNode *) iface;
 	  ctx->current_module->entries = 
 	    g_list_append (ctx->current_module->entries, iface);	      
 	  
-	  ctx->state = STATE_OBJECT;
+	  state_switch (ctx, STATE_CLASS);
 	}
       
       return TRUE;
@@ -1210,79 +1262,119 @@ start_object (GMarkupParseContext *context,
 }
 
 static gboolean
-start_return_type (GMarkupParseContext *context,
-		   const gchar         *element_name,
-		   const gchar        **attribute_names,
-		   const gchar        **attribute_values,
-		   ParseContext       *ctx,
-		   GError             **error)
+start_type (GMarkupParseContext *context,
+	    const gchar         *element_name,
+	    const gchar        **attribute_names,
+	    const gchar        **attribute_values,
+	    ParseContext       *ctx,
+	    GError             **error)
 {
-  if (strcmp (element_name, "return-type") == 0 &&
+  const gchar *name;
+  const gchar *ctype;
+
+  if (strcmp (element_name, "type") != 0 ||
+      !(ctx->state == STATE_FUNCTION_PARAMETER ||
+	ctx->state == STATE_FUNCTION_RETURN || 
+	ctx->state == STATE_STRUCT_FIELD ||
+	ctx->state == STATE_CLASS_PROPERTY ||
+	ctx->state == STATE_CLASS_FIELD ||
+	ctx->state == STATE_INTERFACE_FIELD ||
+	ctx->state == STATE_BOXED_FIELD
+	))
+    return FALSE;
+
+  if (!ctx->current_typed)
+    {
+      g_set_error (error,
+		   G_MARKUP_ERROR,
+		   G_MARKUP_ERROR_INVALID_CONTENT,
+		   "The element <type> is invalid here");
+      return FALSE;
+    }
+
+  name = find_attribute ("name", attribute_names, attribute_values);
+  ctype = find_attribute ("c:type", attribute_names, attribute_values);
+
+  if (name == NULL)
+    MISSING_ATTRIBUTE (context, error, element_name, "name");
+  if (ctype == NULL)
+    MISSING_ATTRIBUTE (context, error, element_name, "c:type");
+  
+  switch (ctx->current_typed->type)
+    {
+    case G_IR_NODE_PARAM:
+      {
+	GIrNodeParam *param;
+	param = (GIrNodeParam *)ctx->current_typed;
+	param->type = parse_type (name);
+      }
+      break;
+    case G_IR_NODE_FIELD:
+      {
+	GIrNodeField *field = (GIrNodeField *)ctx->current_typed;
+	field->type = parse_type (name);
+      }
+      break;
+    case G_IR_NODE_PROPERTY:
+      {
+	GIrNodeProperty *property = (GIrNodeProperty *) ctx->current_typed;
+	property->type = parse_type (name);
+      }
+      break;
+    default:
+      g_printerr("current node is %d\n", ctx->current_node->type);
+      g_assert_not_reached ();
+    }
+
+  ctx->current_typed = NULL;
+  return TRUE;
+}
+
+static gboolean
+start_return_value (GMarkupParseContext *context,
+		    const gchar         *element_name,
+		    const gchar        **attribute_names,
+		    const gchar        **attribute_values,
+		    ParseContext       *ctx,
+		    GError             **error)
+{
+  if (strcmp (element_name, "return-value") == 0 &&
       ctx->state == STATE_FUNCTION)
     {
-      const gchar *type;
-      const gchar *nullok;
-      const gchar *transfer;
-      
-      type = find_attribute ("type", attribute_names, attribute_values);
-      nullok = find_attribute ("null-ok", attribute_names, attribute_values);
-      transfer = find_attribute ("transfer", attribute_names, attribute_values);
-      if (type == NULL)
-	MISSING_ATTRIBUTE (error, element_name, "type");
-      else
-	{
-	  GIdlNodeParam *param;
+      GIrNodeParam *param;
 
-	  param = (GIdlNodeParam *)g_idl_node_new (G_IDL_NODE_PARAM);
-	  param->in = FALSE;
-	  param->out = FALSE;
-	  param->retval = TRUE;
-	  if (nullok && strcmp (nullok, "1") == 0)
-	    param->null_ok = TRUE;
-	  else
-	    param->null_ok = FALSE;
-	  if (transfer && strcmp (transfer, "none") == 0)
-	    {
-	      param->transfer = FALSE;
-	      param->shallow_transfer = FALSE;
-	    }
-	  else if (transfer && strcmp (transfer, "shallow") == 0)
-	    {
-	      param->transfer = FALSE;
-	      param->shallow_transfer = TRUE;
-	    }
-	  else
-	    {
-	      param->transfer = TRUE;
-	      param->shallow_transfer = FALSE;
-	    }
-	  
-	  param->type = parse_type (type);
-	  
-	  switch (ctx->current_node->type)
-	    {
-	    case G_IDL_NODE_FUNCTION:
-	    case G_IDL_NODE_CALLBACK:
-	      {
-		GIdlNodeFunction *func = (GIdlNodeFunction *)ctx->current_node;
-		func->result = param;
-	      }
-	      break;
-	    case G_IDL_NODE_SIGNAL:
-	      {
-		GIdlNodeSignal *signal = (GIdlNodeSignal *)ctx->current_node;
-		signal->result = param;
-	      }
-	      break;
-	    case G_IDL_NODE_VFUNC:
-	      {
-		GIdlNodeVFunc *vfunc = (GIdlNodeVFunc *)ctx->current_node;
-		vfunc->result = param;
-	      }
-	      break;
-	    default:
-	      g_assert_not_reached ();
-	    }
+      param = (GIrNodeParam *)g_ir_node_new (G_IR_NODE_PARAM);
+      param->in = FALSE;
+      param->out = FALSE;
+      param->retval = TRUE;
+
+      ctx->current_typed = (GIrNode*) param;
+
+      state_switch (ctx, STATE_FUNCTION_RETURN);
+
+      switch (ctx->current_node->type)
+	{
+	case G_IR_NODE_FUNCTION:
+	case G_IR_NODE_CALLBACK:
+	  {
+	    GIrNodeFunction *func = (GIrNodeFunction *)ctx->current_node;
+	    func->result = param;
+	  }
+	  break;
+	case G_IR_NODE_SIGNAL:
+	  {
+	    GIrNodeSignal *signal = (GIrNodeSignal *)ctx->current_node;
+	    signal->result = param;
+	  }
+	  break;
+	case G_IR_NODE_VFUNC:
+	  {
+	    GIrNodeVFunc *vfunc = (GIrNodeVFunc *)ctx->current_node;
+	    vfunc->result = param;
+	  }
+	  break;
+	default:
+	  g_assert_not_reached ();
 	}
       
       return TRUE;
@@ -1292,15 +1384,15 @@ start_return_type (GMarkupParseContext *context,
 }
 
 static gboolean
-start_signal (GMarkupParseContext *context,
-	      const gchar         *element_name,
-	      const gchar        **attribute_names,
-	      const gchar        **attribute_values,
-	      ParseContext       *ctx,
-	      GError             **error)
+start_glib_signal (GMarkupParseContext *context,
+		   const gchar         *element_name,
+		   const gchar        **attribute_names,
+		   const gchar        **attribute_values,
+		   ParseContext       *ctx,
+		   GError             **error)
 {
-  if (strcmp (element_name, "signal") == 0 && 
-      (ctx->state == STATE_OBJECT ||
+  if (strcmp (element_name, "glib:signal") == 0 && 
+      (ctx->state == STATE_CLASS ||
        ctx->state == STATE_INTERFACE))
     {
       const gchar *name;
@@ -1320,25 +1412,23 @@ start_signal (GMarkupParseContext *context,
       has_class_closure = find_attribute ("has-class-closure", attribute_names, attribute_values);
       
       if (name == NULL)
-	MISSING_ATTRIBUTE (error, element_name, "name");
-      else if (when == NULL)
-	MISSING_ATTRIBUTE (error, element_name, "when");
+	MISSING_ATTRIBUTE (context, error, element_name, "name");
       else
 	{
-	  GIdlNodeInterface *iface;
-	  GIdlNodeSignal *signal;
+	  GIrNodeInterface *iface;
+	  GIrNodeSignal *signal;
 
-	  signal = (GIdlNodeSignal *)g_idl_node_new (G_IDL_NODE_SIGNAL);
+	  signal = (GIrNodeSignal *)g_ir_node_new (G_IR_NODE_SIGNAL);
 	  
-	  ((GIdlNode *)signal)->name = g_strdup (name);
+	  ((GIrNode *)signal)->name = g_strdup (name);
 	  
 	  signal->run_first = FALSE;
 	  signal->run_last = FALSE;
 	  signal->run_cleanup = FALSE;
-	  if (strcmp (when, "FIRST") == 0)
-	    signal->run_first = TRUE;
-	  else if (strcmp (when, "LAST") == 0)
+	  if (when == NULL || strcmp (when, "LAST") == 0)
 	    signal->run_last = TRUE;
+	  else if (strcmp (when, "FIRST") == 0)
+	    signal->run_first = TRUE;
 	  else 
 	    signal->run_cleanup = TRUE;
 	  
@@ -1363,11 +1453,11 @@ start_signal (GMarkupParseContext *context,
 	  else
 	    signal->has_class_closure = FALSE;
 
-	  iface = (GIdlNodeInterface *)ctx->current_node;
+	  iface = (GIrNodeInterface *)ctx->current_node;
 	  iface->members = g_list_append (iface->members, signal);
 
-	  ctx->current_node = (GIdlNode *)signal;
-	  ctx->state = STATE_FUNCTION;
+	  ctx->current_node = (GIrNode *)signal;
+	  state_switch (ctx, STATE_FUNCTION);
 	}
       
       return TRUE;
@@ -1384,7 +1474,7 @@ start_vfunc (GMarkupParseContext *context,
 	     GError             **error)
 {
   if (strcmp (element_name, "vfunc") == 0 && 
-      (ctx->state == STATE_OBJECT ||
+      (ctx->state == STATE_CLASS ||
        ctx->state == STATE_INTERFACE))
     {
       const gchar *name;
@@ -1400,15 +1490,15 @@ start_vfunc (GMarkupParseContext *context,
       offset = find_attribute ("offset", attribute_names, attribute_values);
       
       if (name == NULL)
-	MISSING_ATTRIBUTE (error, element_name, "name");
+	MISSING_ATTRIBUTE (context, error, element_name, "name");
       else
 	{
-	  GIdlNodeInterface *iface;
-	  GIdlNodeVFunc *vfunc;
+	  GIrNodeInterface *iface;
+	  GIrNodeVFunc *vfunc;
 
-	  vfunc = (GIdlNodeVFunc *)g_idl_node_new (G_IDL_NODE_VFUNC);
+	  vfunc = (GIrNodeVFunc *)g_ir_node_new (G_IR_NODE_VFUNC);
 	  
-	  ((GIdlNode *)vfunc)->name = g_strdup (name);
+	  ((GIrNode *)vfunc)->name = g_strdup (name);
 
 	  if (must_chain_up && strcmp (must_chain_up, "1") == 0)
 	    vfunc->must_chain_up = TRUE;
@@ -1441,11 +1531,11 @@ start_vfunc (GMarkupParseContext *context,
 	  else
 	    vfunc->offset = 0;
 
-	  iface = (GIdlNodeInterface *)ctx->current_node;
+	  iface = (GIrNodeInterface *)ctx->current_node;
 	  iface->members = g_list_append (iface->members, vfunc);
 
-	  ctx->current_node = (GIdlNode *)vfunc;
-	  ctx->state = STATE_FUNCTION;
+	  ctx->current_node = (GIrNode *)vfunc;
+	  state_switch (ctx, STATE_FUNCTION);
 	}
       
       return TRUE;
@@ -1462,7 +1552,7 @@ start_struct (GMarkupParseContext *context,
 	      ParseContext       *ctx,
 	      GError             **error)
 {
-  if (strcmp (element_name, "struct") == 0 && 
+  if (strcmp (element_name, "record") == 0 && 
       ctx->state == STATE_NAMESPACE)
     {
       const gchar *name;
@@ -1472,25 +1562,25 @@ start_struct (GMarkupParseContext *context,
       deprecated = find_attribute ("deprecated", attribute_names, attribute_values);
       
       if (name == NULL)
-	MISSING_ATTRIBUTE (error, element_name, "name");
+	MISSING_ATTRIBUTE (context, error, element_name, "name");
       else
 	{
-	  GIdlNodeStruct *struct_;
+	  GIrNodeStruct *struct_;
 
-	  struct_ = (GIdlNodeStruct *) g_idl_node_new (G_IDL_NODE_STRUCT);
+	  struct_ = (GIrNodeStruct *) g_ir_node_new (G_IR_NODE_STRUCT);
 	  
-	  ((GIdlNode *)struct_)->name = g_strdup (name);
+	  ((GIrNode *)struct_)->name = g_strdup (name);
 	  if (deprecated && strcmp (deprecated, "1") == 0)
 	    struct_->deprecated = TRUE;
 	  else
 	    struct_->deprecated = FALSE;
 
-	  ctx->current_node = (GIdlNode *)struct_;
+	  ctx->current_node = (GIrNode *)struct_;
 	  ctx->current_module->entries = 
 	    g_list_append (ctx->current_module->entries, struct_);
 	  
-	  ctx->state = STATE_STRUCT;
-	    }
+	  state_switch (ctx, STATE_STRUCT);
+	}
       return TRUE;
     }
   return FALSE;
@@ -1515,18 +1605,18 @@ start_union (GMarkupParseContext *context,
       
       name = find_attribute ("name", attribute_names, attribute_values);
       deprecated = find_attribute ("deprecated", attribute_names, attribute_values);
-      typename = find_attribute ("type-name", attribute_names, attribute_values);
-      typeinit = find_attribute ("get-type", attribute_names, attribute_values);
+      typename = find_attribute ("glib:type-name", attribute_names, attribute_values);
+      typeinit = find_attribute ("glib:get-type", attribute_names, attribute_values);
       
       if (name == NULL)
-	MISSING_ATTRIBUTE (error, element_name, "name");
+	MISSING_ATTRIBUTE (context, error, element_name, "name");
       else
 	{
-	  GIdlNodeUnion *union_;
+	  GIrNodeUnion *union_;
 
-	  union_ = (GIdlNodeUnion *) g_idl_node_new (G_IDL_NODE_UNION);
+	  union_ = (GIrNodeUnion *) g_ir_node_new (G_IR_NODE_UNION);
 	  
-	  ((GIdlNode *)union_)->name = g_strdup (name);
+	  ((GIrNode *)union_)->name = g_strdup (name);
 	  union_->gtype_name = g_strdup (typename);
 	  union_->gtype_init = g_strdup (typeinit);
 	  if (deprecated && strcmp (deprecated, "1") == 0)
@@ -1534,11 +1624,11 @@ start_union (GMarkupParseContext *context,
 	  else
 	    union_->deprecated = FALSE;
 
-	  ctx->current_node = (GIdlNode *)union_;
+	  ctx->current_node = (GIrNode *)union_;
 	  ctx->current_module->entries = 
 	    g_list_append (ctx->current_module->entries, union_);
 	  
-	  ctx->state = STATE_UNION;
+	  state_switch (ctx, STATE_UNION);
 	}
       return TRUE;
     }
@@ -1562,13 +1652,13 @@ start_discriminator (GMarkupParseContext *context,
       type = find_attribute ("type", attribute_names, attribute_values);
       offset = find_attribute ("offset", attribute_names, attribute_values);
       if (type == NULL)
-	MISSING_ATTRIBUTE (error, element_name, "type");
+	MISSING_ATTRIBUTE (context, error, element_name, "type");
       else if (offset == NULL)
-	MISSING_ATTRIBUTE (error, element_name, "offset");
+	MISSING_ATTRIBUTE (context, error, element_name, "offset");
 	{
-	  ((GIdlNodeUnion *)ctx->current_node)->discriminator_type 
+	  ((GIrNodeUnion *)ctx->current_node)->discriminator_type 
 	    = parse_type (type);
-	  ((GIdlNodeUnion *)ctx->current_node)->discriminator_offset 
+	  ((GIrNodeUnion *)ctx->current_node)->discriminator_offset 
 	    = atoi (offset);
 	}
       
@@ -1578,6 +1668,8 @@ start_discriminator (GMarkupParseContext *context,
   return FALSE;
 }
   
+extern GLogLevelFlags logged_levels;
+
 static void
 start_element_handler (GMarkupParseContext *context,
 		       const gchar         *element_name,
@@ -1589,37 +1681,32 @@ start_element_handler (GMarkupParseContext *context,
   ParseContext *ctx = user_data;
   gint line_number, char_number;
 
-  switch (element_name[0])
+  if (logged_levels & G_LOG_LEVEL_DEBUG)
     {
-    case 'a':
-      if (strcmp (element_name, "api") == 0 && ctx->state == STATE_START)
-	{
-	  const gchar *version;
+      GString *tags = g_string_new ("");
+      int i;
+      for (i = 0; attribute_names[i]; i++)
+        g_string_append_printf (tags, "%s=\"%s\" ",
+				attribute_names[i],
+				attribute_values[i]);
 
-	  version = find_attribute ("version", attribute_names, attribute_values);
-	  
-	  if (version == NULL)
-	    MISSING_ATTRIBUTE (error, element_name, "version");
-	  else if (strcmp (version, "1.0") != 0)
-	    g_set_error (error,
-			 G_MARKUP_ERROR,
-			 G_MARKUP_ERROR_INVALID_CONTENT,
-			 "Unsupported version '%s'",
-			 version);
-	  else
-	    ctx->state = STATE_ROOT;
-	  
-	  goto out;
-	}
-      break;
+      if (i)
+        {
+          g_string_insert_c (tags, 0, ' ');
+          g_string_truncate (tags, tags->len - 1);
+        }
+      g_debug ("<%s%s>", element_name, tags->str);
+      g_string_free (tags, TRUE);
+    }
 
+  switch (element_name[0]) 
+    {
     case 'b':
-      if (start_boxed (context, element_name,
-		       attribute_names, attribute_values,
-		       ctx, error))
+      if (start_enum (context, element_name, 
+		      attribute_names, attribute_values,
+		      ctx, error))
 	goto out;
       break;
-
     case 'c':
       if (start_function (context, element_name, 
 			  attribute_names, attribute_values,
@@ -1629,6 +1716,29 @@ start_element_handler (GMarkupParseContext *context,
 			       attribute_names, attribute_values,
 			       ctx, error))
 	goto out;
+      else if (start_class (context, element_name, 
+			    attribute_names, attribute_values,
+			    ctx, error))
+	goto out;
+      else if (strcmp (element_name, "class") == 0 &&
+	       ctx->state == STATE_REQUIRES)
+	{
+	  const gchar *name;
+
+	  name = find_attribute ("name", attribute_names, attribute_values);
+
+	  if (name == NULL)
+	    MISSING_ATTRIBUTE (context, error, element_name, "name");
+	  else
+	    {  
+	      GIrNodeInterface *iface;
+
+	      iface = (GIrNodeInterface *)ctx->current_node;
+	      iface ->prerequisites = g_list_append (iface->prerequisites, g_strdup (name));
+	    }
+
+	  goto out;
+	}
       break;
 
     case 'd':
@@ -1658,11 +1768,21 @@ start_element_handler (GMarkupParseContext *context,
 			    attribute_names, attribute_values,
 			    ctx, error))
 	goto out;
-      else if (start_enum (context, element_name, 
-			   attribute_names, attribute_values,
-			   ctx, error))
+      break;
+
+    case 'g':
+      if (start_glib_boxed (context, element_name,
+			    attribute_names, attribute_values,
+			    ctx, error))
 	goto out;
-      
+      else if (start_glib_signal (context, element_name,
+			     attribute_names, attribute_values,
+			     ctx, error))
+	goto out;
+      else if (start_glib_boxed (context, element_name,
+				 attribute_names, attribute_values,
+				 ctx, error))
+	goto out;
       break;
 
     case 'i':
@@ -1671,9 +1791,9 @@ start_element_handler (GMarkupParseContext *context,
 			   ctx, error))
 	goto out;
       if (strcmp (element_name, "implements") == 0 &&
-	  ctx->state == STATE_OBJECT)
+	  ctx->state == STATE_CLASS)
 	{
-	  ctx->state = STATE_IMPLEMENTS;
+	  state_switch (ctx, STATE_IMPLEMENTS);
 
 	  goto out;
 	}
@@ -1685,12 +1805,12 @@ start_element_handler (GMarkupParseContext *context,
 	  name = find_attribute ("name", attribute_names, attribute_values);
 
 	  if (name == NULL)
-	    MISSING_ATTRIBUTE (error, element_name, "name");
+	    MISSING_ATTRIBUTE (context, error, element_name, "name");
 	  else
 	    {  
-	      GIdlNodeInterface *iface;
+	      GIrNodeInterface *iface;
 
-	      iface = (GIdlNodeInterface *)ctx->current_node;
+	      iface = (GIrNodeInterface *)ctx->current_node;
 	      iface ->interfaces = g_list_append (iface->interfaces, g_strdup (name));
 	    }
 
@@ -1704,12 +1824,12 @@ start_element_handler (GMarkupParseContext *context,
 	  name = find_attribute ("name", attribute_names, attribute_values);
 
 	  if (name == NULL)
-	    MISSING_ATTRIBUTE (error, element_name, "name");
+	    MISSING_ATTRIBUTE (context, error, element_name, "name");
 	  else
 	    {  
-	      GIdlNodeInterface *iface;
+	      GIrNodeInterface *iface;
 
-	      iface = (GIdlNodeInterface *)ctx->current_node;
+	      iface = (GIrNodeInterface *)ctx->current_node;
 	      iface ->prerequisites = g_list_append (iface->prerequisites, g_strdup (name));
 	    }
 
@@ -1729,7 +1849,7 @@ start_element_handler (GMarkupParseContext *context,
       break;
 
     case 'n':
-      if (strcmp (element_name, "namespace") == 0 && ctx->state == STATE_ROOT)
+      if (strcmp (element_name, "namespace") == 0 && ctx->state == STATE_REPOSITORY)
 	{
 	  const gchar *name, *shared_library;
 	  
@@ -1737,39 +1857,13 @@ start_element_handler (GMarkupParseContext *context,
 	  shared_library = find_attribute ("shared-library", attribute_names, attribute_values);
 
 	  if (name == NULL)
-	    MISSING_ATTRIBUTE (error, element_name, "name");
+	    MISSING_ATTRIBUTE (context, error, element_name, "name");
 	  else
 	    {
-	      ctx->current_module = g_idl_module_new (name, shared_library);
+	      ctx->current_module = g_ir_module_new (name, shared_library);
 	      ctx->modules = g_list_append (ctx->modules, ctx->current_module);
 
-	      ctx->state = STATE_NAMESPACE;
-	    }
-
-	  goto out;
-	}
-      break;
-
-    case 'o':
-      if (start_object (context, element_name, 
-			attribute_names, attribute_values,
-			ctx, error))
-	goto out;
-      else if (strcmp (element_name, "object") == 0 &&
-	       ctx->state == STATE_REQUIRES)
-	{
-	  const gchar *name;
-
-	  name = find_attribute ("name", attribute_names, attribute_values);
-
-	  if (name == NULL)
-	    MISSING_ATTRIBUTE (error, element_name, "name");
-	  else
-	    {  
-	      GIdlNodeInterface *iface;
-
-	      iface = (GIdlNodeInterface *)ctx->current_node;
-	      iface ->prerequisites = g_list_append (iface->prerequisites, g_strdup (name));
+	      state_switch (ctx, STATE_NAMESPACE);
 	    }
 
 	  goto out;
@@ -1782,9 +1876,9 @@ start_element_handler (GMarkupParseContext *context,
 			  ctx, error))
 	goto out;
       else if (strcmp (element_name, "parameters") == 0 &&
-	  ctx->state == STATE_FUNCTION)
+	       ctx->state == STATE_FUNCTION)
 	{
-	  ctx->state = STATE_PARAMETERS;
+	  state_switch (ctx, STATE_FUNCTION_PARAMETERS);
 
 	  goto out;
 	}
@@ -1796,36 +1890,53 @@ start_element_handler (GMarkupParseContext *context,
       break;
 
     case 'r':
-      if (start_return_type (context, element_name,
-			     attribute_names, attribute_values,
-			     ctx, error))
+      if (strcmp (element_name, "repository") == 0 && ctx->state == STATE_START)
+	{
+	  const gchar *version;
+
+	  version = find_attribute ("version", attribute_names, attribute_values);
+	  
+	  if (version == NULL)
+	    MISSING_ATTRIBUTE (context, error, element_name, "version");
+	  else if (strcmp (version, "1.0") != 0)
+	    g_set_error (error,
+			 G_MARKUP_ERROR,
+			 G_MARKUP_ERROR_INVALID_CONTENT,
+			 "Unsupported version '%s'",
+			 version);
+	  else
+	    state_switch (ctx, STATE_REPOSITORY);
+	  
+	  goto out;
+	}
+      else if (start_return_value (context, element_name,
+				   attribute_names, attribute_values,
+				   ctx, error))
 	goto out;      
       else if (strcmp (element_name, "requires") == 0 &&
 	       ctx->state == STATE_INTERFACE)
 	{
-	  ctx->state = STATE_REQUIRES;
+	  state_switch (ctx, STATE_REQUIRES);
 	  
 	  goto out;
 	}
-
-      break;
-
-    case 's':
-      if (start_signal (context, element_name,
-			attribute_names, attribute_values,
-			ctx, error))
-	goto out;      
       else if (start_struct (context, element_name,
 			     attribute_names, attribute_values,
 			     ctx, error))
 	goto out;      
-
       break;
 
     case 'u':
       if (start_union (context, element_name,
 		       attribute_names, attribute_values,
 		       ctx, error))
+	goto out;
+      break;
+
+    case 't':
+      if (start_type (context, element_name,
+		      attribute_names, attribute_values,
+		      ctx, error))
 	goto out;
       break;
 
@@ -1847,7 +1958,60 @@ start_element_handler (GMarkupParseContext *context,
 	       line_number, char_number);
   
  out: ;
-      
+  if (*error) 
+    {
+      g_markup_parse_context_get_position (context, &line_number, &char_number);
+
+      fprintf (stderr, "Error at line %d, character %d: %s\n", line_number, char_number, (*error)->message);
+      backtrace_stderr ();
+    }
+}
+
+static gboolean
+require_one_of_end_elements (GMarkupParseContext *context,
+			     const char          *actual_name,
+			     GError             **error, 
+			     ...)
+{
+  va_list args;
+  int line_number, char_number;
+  const char *expected;
+  gboolean matched = FALSE;
+
+  va_start (args, error);
+
+  while ((expected = va_arg (args, const char*)) != NULL) 
+    {
+      if (strcmp (expected, actual_name) == 0)
+	{
+	  matched = TRUE;
+	  break;
+	}
+    }
+
+  va_end (args);
+
+  if (matched)
+    return TRUE;
+
+  g_markup_parse_context_get_position (context, &line_number, &char_number);
+  g_set_error (error,
+	       G_MARKUP_ERROR,
+	       G_MARKUP_ERROR_INVALID_CONTENT,
+	       "Unexpected end tag '%s' on line %d char %d",
+	       actual_name, 
+	       line_number, char_number);
+  backtrace_stderr();
+  return FALSE;
+}
+
+static gboolean
+require_end_element (GMarkupParseContext *context,
+		     const char          *expected_name,
+		     const char          *actual_name,
+		     GError             **error)
+{
+  return require_one_of_end_elements (context, actual_name, error, expected_name, NULL);
 }
 
 static void
@@ -1858,6 +2022,8 @@ end_element_handler (GMarkupParseContext *context,
 {
   ParseContext *ctx = user_data;
 
+  g_debug ("</%s>", element_name);
+
   switch (ctx->state)
     {
     case STATE_START:
@@ -1865,110 +2031,200 @@ end_element_handler (GMarkupParseContext *context,
       /* no need to GError here, GMarkup already catches this */
       break;
 
-    case STATE_ROOT:
-      ctx->state = STATE_END;
+    case STATE_REPOSITORY:
+      state_switch (ctx, STATE_END);
       break;
 
     case STATE_NAMESPACE:
-      if (strcmp (element_name, "namespace") == 0)
+      if (require_end_element (context, "namespace", element_name, error))
 	{
           ctx->current_module = NULL;
-          ctx->state = STATE_ROOT;
+          state_switch (ctx, STATE_REPOSITORY);
         }
       break;
 
+    case STATE_FUNCTION_RETURN:
+      if (strcmp ("type", element_name) == 0)
+	break;
+      if (require_end_element (context, "return-value", element_name, error))
+	{
+	  state_switch (ctx, STATE_FUNCTION);
+	}
+      break;
+
+    case STATE_FUNCTION_PARAMETERS:
+      if (require_end_element (context, "parameters", element_name, error))
+	{
+	  state_switch (ctx, STATE_FUNCTION);
+	}
+      break;
+
+    case STATE_FUNCTION_PARAMETER:
+      if (strcmp ("type", element_name) == 0)
+	break;
+      if (require_end_element (context, "parameter", element_name, error))
+	{
+	  state_switch (ctx, STATE_FUNCTION_PARAMETERS);
+	}
+      break;
+
     case STATE_FUNCTION:
-      if (strcmp (element_name, "return-type") == 0)
-	/* do nothing */ ;
-	
-      else if (ctx->current_node == g_list_last (ctx->current_module->entries)->data)
+       if (ctx->current_node == g_list_last (ctx->current_module->entries)->data)
 	{
 	  ctx->current_node = NULL;
-	  ctx->state = STATE_NAMESPACE;
+	  state_switch (ctx, STATE_NAMESPACE);
 	}
       else 
 	{ 
 	  ctx->current_node = g_list_last (ctx->current_module->entries)->data;
-	  if (ctx->current_node->type == G_IDL_NODE_INTERFACE)
-	    ctx->state = STATE_INTERFACE;
-	  else if (ctx->current_node->type == G_IDL_NODE_OBJECT)
-	    ctx->state = STATE_OBJECT;
-	  else if (ctx->current_node->type == G_IDL_NODE_BOXED)
-	    ctx->state = STATE_BOXED;
-	  else if (ctx->current_node->type == G_IDL_NODE_STRUCT)
-	    ctx->state = STATE_STRUCT;
-	  else if (ctx->current_node->type == G_IDL_NODE_UNION)
-	    ctx->state = STATE_UNION;
+	  if (ctx->current_node->type == G_IR_NODE_INTERFACE)
+	    state_switch (ctx, STATE_INTERFACE);
+	  else if (ctx->current_node->type == G_IR_NODE_OBJECT)
+	    state_switch (ctx, STATE_CLASS);
+	  else if (ctx->current_node->type == G_IR_NODE_BOXED)
+	    state_switch (ctx, STATE_BOXED);
+	  else if (ctx->current_node->type == G_IR_NODE_STRUCT)
+	    state_switch (ctx, STATE_STRUCT);
+	  else if (ctx->current_node->type == G_IR_NODE_UNION)
+	    state_switch (ctx, STATE_UNION);
+	  else
+	    {
+	      int line_number, char_number;
+	      g_markup_parse_context_get_position (context, &line_number, &char_number);
+	      g_set_error (error,
+			   G_MARKUP_ERROR,
+			   G_MARKUP_ERROR_INVALID_CONTENT,
+			   "Unexpected end tag '%s' on line %d char %d",
+			   element_name,
+			   line_number, char_number);
+	    }
 	}
       break;
 
-    case STATE_OBJECT:
-      if (strcmp (element_name, "object") == 0)
+    case STATE_CLASS_FIELD:
+      if (strcmp ("type", element_name) == 0)
+	break;
+      if (require_end_element (context, "field", element_name, error))
+	{
+	  state_switch (ctx, STATE_CLASS);
+	}
+      break;
+
+    case STATE_CLASS_PROPERTY:
+      if (strcmp ("type", element_name) == 0)
+	break;
+      if (require_end_element (context, "property", element_name, error))
+	{
+	  state_switch (ctx, STATE_CLASS);
+	}
+      break;
+
+    case STATE_CLASS:
+      if (require_end_element (context, "class", element_name, error))
 	{
 	  ctx->current_node = NULL;
-	  ctx->state = STATE_NAMESPACE;
+	  state_switch (ctx, STATE_NAMESPACE);
 	}
       break;
 
     case STATE_ERRORDOMAIN:
-      if (strcmp (element_name, "errordomain") == 0)
+      if (require_end_element (context, "errordomain", element_name, error))
 	{
 	  ctx->current_node = NULL;
-	  ctx->state = STATE_NAMESPACE;
+	  state_switch (ctx, STATE_NAMESPACE);
+	}
+      break;
+
+    case STATE_INTERFACE_PROPERTY:
+      if (require_end_element (context, "property", element_name, error))
+	{
+	  state_switch (ctx, STATE_INTERFACE);
+	}
+      break;
+
+    case STATE_INTERFACE_FIELD:
+      if (strcmp ("type", element_name) == 0)
+	break;
+      if (require_end_element (context, "field", element_name, error))
+	{
+	  state_switch (ctx, STATE_INTERFACE);
 	}
       break;
 
     case STATE_INTERFACE:
-      if (strcmp (element_name, "interface") == 0)
+      if (require_end_element (context, "interface", element_name, error))
 	{
 	  ctx->current_node = NULL;
-	  ctx->state = STATE_NAMESPACE;
+	  state_switch (ctx, STATE_NAMESPACE);
 	}
       break;
 
     case STATE_ENUM:
-      if (strcmp (element_name, "enum") == 0 ||
-	  strcmp (element_name, "flags") == 0)
+      if (strcmp ("member", element_name) == 0)
+	break;
+      else if (require_one_of_end_elements (context, element_name, error, "enumeration", "bitfield", NULL))
 	{
 	  ctx->current_node = NULL;
-	  ctx->state = STATE_NAMESPACE;
+	  state_switch (ctx, STATE_NAMESPACE);
 	}
       break;
 
     case STATE_BOXED:
-      if (strcmp (element_name, "boxed") == 0)
+      if (require_end_element (context, "glib:boxed", element_name, error))
 	{
 	  ctx->current_node = NULL;
-	  ctx->state = STATE_NAMESPACE;
+	  state_switch (ctx, STATE_NAMESPACE);
+	}
+      break;
+
+    case STATE_BOXED_FIELD:
+      if (strcmp ("type", element_name) == 0)
+	break;
+      if (require_end_element (context, "field", element_name, error))
+	{
+	  state_switch (ctx, STATE_BOXED);
+	}
+      break;
+
+    case STATE_STRUCT_FIELD:
+      if (strcmp ("type", element_name) == 0)
+	break;
+      if (require_end_element (context, "field", element_name, error))
+	{
+	  state_switch (ctx, STATE_STRUCT);
 	}
       break;
 
     case STATE_STRUCT:
-      if (strcmp (element_name, "struct") == 0)
+      if (require_end_element (context, "record", element_name, error))
 	{
 	  ctx->current_node = NULL;
-	  ctx->state = STATE_NAMESPACE;
+	  state_switch (ctx, STATE_NAMESPACE);
 	}
       break;
     case STATE_UNION:
-      if (strcmp (element_name, "union") == 0)
+      if (require_end_element (context, "union", element_name, error))
 	{
 	  ctx->current_node = NULL;
-	  ctx->state = STATE_NAMESPACE;
+	  state_switch (ctx, STATE_NAMESPACE);
 	}
       break;
-
     case STATE_IMPLEMENTS:
-      if (strcmp (element_name, "implements") == 0)
-        ctx->state = STATE_OBJECT;
+      if (strcmp ("interface", element_name) == 0)
+	break;
+      if (require_end_element (context, "implements", element_name, error))
+        state_switch (ctx, STATE_CLASS);
       break;
     case STATE_REQUIRES:
-      if (strcmp (element_name, "requires") == 0)
-        ctx->state = STATE_INTERFACE;
+      if (require_end_element (context, "requires", element_name, error))
+        state_switch (ctx, STATE_INTERFACE);
       break;
-    case STATE_PARAMETERS:
-      if (strcmp (element_name, "parameters") == 0)
-	ctx->state = STATE_FUNCTION;
+    case STATE_CONSTANT:
+      if (require_end_element (context, "constant", element_name, error))
+	{
+	  ctx->current_node = NULL;
+	  state_switch (ctx, STATE_NAMESPACE);
+	}
       break;
     default:
       g_error ("Unhandled state %d in end_element_handler\n", ctx->state);
@@ -1992,9 +2248,10 @@ cleanup (GMarkupParseContext *context,
 {
   ParseContext *ctx = user_data;
   GList *m;
+  int line_number, char_number;
 
   for (m = ctx->modules; m; m = m->next)
-    g_idl_module_free (m->data);
+    g_ir_module_free (m->data);
   g_list_free (ctx->modules);
   ctx->modules = NULL;
   
@@ -2011,9 +2268,9 @@ static GMarkupParser parser =
 };
 
 GList * 
-g_idl_parse_string (const gchar  *buffer, 
-		    gssize        length,
-                    GError      **error)
+g_ir_parse_string (const gchar  *buffer, 
+		   gssize        length,
+		   GError      **error)
 {
   ParseContext ctx = { 0 };
   GMarkupParseContext *context;
@@ -2035,17 +2292,19 @@ g_idl_parse_string (const gchar  *buffer,
 }
 
 GList *
-g_idl_parse_file (const gchar  *filename,
-		  GError      **error)
+g_ir_parse_file (const gchar  *filename,
+		 GError      **error)
 {
   gchar *buffer;
   gsize length;
   GList *modules;
 
+  g_debug ("[parsing] filename %s", filename);
+
   if (!g_file_get_contents (filename, &buffer, &length, error))
     return NULL;
   
-  modules = g_idl_parse_string (buffer, length, error);
+  modules = g_ir_parse_string (buffer, length, error);
 
   g_free (buffer);
 

@@ -94,9 +94,10 @@ type_names['ssize_t'] = TYPE_SSIZE
 
 def type_name_from_ctype(ctype):
     return type_names.get(ctype, ctype)
-    
-    
+
+
 class Node(object):
+
     def __init__(self, name=None):
         self.name = name
 

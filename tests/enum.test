@@ -1,5 +1,8 @@
 <?xml version="1.0"?>
-<api version="1.0">
+<repository version="1.0"
+            xmlns="http://www.gtk.org/introspection/core/1.0"
+            xmlns:c="http://www.gtk.org/introspection/c/1.0"
+            xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
   <namespace name="Foo">
     <enum name="Enum1" type-name="FooEnum" get-type="foo_enum_get_type">
       <member name="value1" value="0" />
@@ -17,4 +20,4 @@
       <member name="value3" value="2" />
     </enum>
   </namespace>
-</api>
+</repository>
