@@ -47,7 +47,7 @@ type_names['gsize'] = TYPE_SIZE
 type_names['gssize'] = TYPE_SSIZE
 
 class GLibEnum(Enum):
-    def __init__(self, name, members, type_name, get_type):
+    def __init__(self, name, type_name, members, get_type):
         Enum.__init__(self, name, type_name, members)
         self.ctype = type_name
         self.type_name = type_name

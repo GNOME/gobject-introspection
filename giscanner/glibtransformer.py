@@ -261,8 +261,8 @@ class GLibTransformer(object):
 
         klass = (GLibFlags if ftype_id == cgobject.TYPE_FLAGS else GLibEnum)
         type_name = cgobject.type_name(type_id)
-        node = klass(self._transformer.strip_namespace_object(type_name),
-                     members, type_name, symbol)
+        enum_name = self._transformer.strip_namespace_object(type_name)
+        node = klass(enum_name, type_name, members, symbol)
         self._add_attribute(node, replace=True)
         self._register_internal_type(type_name, node)
 

@@ -1,5 +1,14 @@
 2008-08-08  Johan Dahlin  <johan@gnome.org>
 
+	* giscanner/girwriter.py:
+	type -> ntype
+	* giscanner/glibast.py:
+	* giscanner/glibtransformer.py:
+	Swap order of members, to keep it consistent with
+	base enum class
+
+2008-08-08  Johan Dahlin  <johan@gnome.org>
+
 	* girepository/gtypelib.c (validate_header):
 	* girepository/gtypelib.h:
 	* giscanner/ast.py:
