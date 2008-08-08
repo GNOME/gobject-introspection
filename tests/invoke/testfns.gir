@@ -5,59 +5,93 @@
             xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
   <namespace name="test">
     <function name="test1" c:identifier="test1">
-      <return-type c:type="gint"/>
+      <return-value>
+        <type name="int" c:type="gint"/>
+      </return-value>
       <parameters>
-        <parameter name="in" c:type="gint" direction="in"/>
+        <parameter name="in" direction="in">
+          <type name="int" c:type="gint"/>
+        </parameter>
       </parameters>
     </function>
 
     <function name="test2" c:identifier="test2">
-      <return-type c:type="void"/>
+      <return-value>
+        <type name="void" c:type="void"/>
+      </return-value>
       <parameters>
-        <parameter name="in" c:type="gint" direction="in"/>
-        <parameter name="out" c:type="gint" direction="out"/>
+        <parameter name="in" c:type="gint" direction="in">
+          <type name="int" c:type="gint"/>
+        </parameter>
+        <parameter name="out" c:type="gint" direction="out">
+          <type name="int" c:type="gint"/>
+        </parameter>
       </parameters>
     </function>
 
     <function name="test3" c:identifier="test3">
-      <return-type c:type="void"/>
+      <return-value>
+        <type name="void" c:type="void"/>
+      </return-value>
       <parameters>
-        <parameter name="inout" c:type="gint" direction="inout"/>
+        <parameter name="inout" c:type="gint" direction="inout">
+          <type name="int" c:type="gint"/>
+        </parameter>
       </parameters>
     </function>
 
     <function name="test4" c:identifier="test4">
-      <return-type c:type="void"/>
+      <return-value>
+        <type name="void" c:type="void"/>
+      </return-value>
       <parameters>
-        <parameter name="blurb" c:type="gchar*" direction="in"/>
+        <parameter name="blurb" direction="in">
+          <type name="utf8" c:type="gchar*"/>
+        </parameter>
       </parameters>
     </function>
 
     <function name="test5" c:identifier="test5">
-      <return-type c:type="void"/>
+      <return-value>
+        <type name="void" c:type="void"/>
+      </return-value>
       <parameters>
-        <parameter name="blurb" c:type="gchar*" direction="out" transfer="full"/>
-        <parameter name="len" c:type="gint" direction="out"/>
+        <parameter name="blurb" direction="out" transfer="full">
+          <type name="utf8" c:type="gchar*"/>
+        </parameter>
+        <parameter name="len" direction="out">
+          <type name="int" c:type="gint"/>
+        </parameter>
       </parameters>
     </function>
 
     <function name="test6" c:identifier="test6">
-      <return-type c:type="gint"/>
+      <return-value>
+        <type name="int" c:type="gint"/>
+      </return-value>
       <parameters>
-        <parameter name="list" c:type="GList<gint>*" direction="in"/>
+        <parameter name="list" direction="in">
+          <type name="GList<gint>*" c:type="GList*"/>
+        </parameter>
       </parameters>
     </function>
 
 
     <function name="test7" c:identifier="test7">
-      <return-type c:type="utf8" transfer="full"/>
+      <return-value transfer="full">
+         <type name="utf8" c:type="gchar*"/>
+      </return-value>
       <parameters>
-        <parameter name="list" c:type="GList<utf8>*" direction="in"/>
+        <parameter name="list" direction="in">
+          <type name="GList<utf8>*" c:type="GList*"/>
+        </parameter>
       </parameters>
     </function>
 
     <function name="broken" c:identifier="broken">
-      <return-type c:type="void"/>
+      <return-value>
+         <type name="void" c:type="void"/>
+      </return-value>
     </function>
 
   </namespace>

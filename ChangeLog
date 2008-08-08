@@ -1,5 +1,12 @@
 2008-08-08  Johan Dahlin  <johan@gnome.org>
 
+	* tests/Makefile.am:
+	Disable roundtrip tests which are not yet working
+	* tests/invoke/testfns.gir:
+	Rewrite as gir.
+
+2008-08-08  Johan Dahlin  <johan@gnome.org>
+
 	* giscanner/girwriter.py:
 	type -> ntype
 	* giscanner/glibast.py:
