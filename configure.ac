@@ -97,14 +97,15 @@ AC_MSG_CHECKING([whether Python support is requested])
 AM_PATH_PYTHON([2.5])
 AM_CHECK_PYTHON_HEADERS
 
-AC_CONFIG_FILES([Makefile
-                 gir/Makefile
-                 girepository/Makefile
-                 giscanner/Makefile
-                 m4/Makefile
-                 tools/Makefile
-                 tests/Makefile
-                 tests/invoke/Makefile
-                 tests/parser/Makefile
-                 gobject-introspection-1.0.pc])
+AC_CONFIG_FILES([
+Makefile
+gir/Makefile
+girepository/Makefile
+giscanner/Makefile
+m4/Makefile
+tools/Makefile
+tests/Makefile
+tests/invoke/Makefile
+tests/scanner/Makefile
+gobject-introspection-1.0.pc])
 AC_OUTPUT

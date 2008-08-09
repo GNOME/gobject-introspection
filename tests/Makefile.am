@@ -1,4 +1,4 @@
-SUBDIRS = . invoke parser
+SUBDIRS = . invoke scanner
 
 EXTRA_DIST = \
 	roundtrips.sh	\

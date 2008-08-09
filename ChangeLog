@@ -1,3 +1,17 @@
+2008-08-09  Johan Dahlin  <johan@gnome.org>
+
+	* configure.ac:
+	* tests/Makefile.am:
+	* tests/parser/Foo-expected.gir:
+	* tests/parser/Makefile.am:
+	* tests/parser/foo-object.h:
+	* tests/parser/foo.c:
+	* tests/parser/utility-expected.gir:
+	* tests/parser/utility.c:
+	* tests/parser/utility.h:
+	* tests/scanner/Makefile.am:
+	Rename tests/parser to test/scanner
+
 2008-08-08  Colin Walters  <walters@verbum.org>
 
 	* tests/roundtrips.sh: Use local .gir files again.

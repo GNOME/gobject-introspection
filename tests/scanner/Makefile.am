@@ -14,8 +14,8 @@ libutility_la_CFLAGS = $(GOBJECT_CFLAGS)
 libutility_la_LDFLAGS = -module -avoid-version
 libutility_la_LIBADD = $(GOBJECT_LIBS)
 
-CLEANFILES = utility.gir Foo.gir 
-EXTRA_DIST = utility-expected.gir Foo-expected.gir 
+CLEANFILES = utility.gir Foo.gir
+EXTRA_DIST = utility-expected.gir Foo-expected.gir
 
 SCANNER = $(top_srcdir)/tools/g-ir-scanner
 
@@ -31,7 +31,7 @@ utility.gir: libutility.la utility.h $(SCANNER)
 Foo.gir: libfoo.la foo-object.h $(SCANNER)
 	@$(CHECK_DEBUG) $(SCANNER) -v \
 	--include=$(top_srcdir)/gir/gobject-2.0.gir \
-	--include=$(top_builddir)/tests/parser/utility.gir \
+	--include=$(top_builddir)/tests/scanner/utility.gir \
 	--library=libfoo.la \
 	--namespace=Foo \
 	--pkg gobject-2.0 \
@@ -47,7 +47,7 @@ pre-check:
 	fi
 	@echo "Running parser checks..."
 
-check-local: pre-check check-utility.gir check-Foo.gir 
+check-local: pre-check check-utility.gir check-Foo.gir
 	@echo "======================="
 	@echo "All parser tests passed"
 	@echo "======================="
@@ -55,4 +55,4 @@ check-local: pre-check check-utility.gir check-Foo.gir
 	   rm -f $(top_builddir)/giscanner/*.py*; \
 	fi
 
-.PHONY: utility.gir Foo.gir 
+.PHONY: utility.gir Foo.gir
