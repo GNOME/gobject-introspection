@@ -44,7 +44,7 @@ main (int argc, char *argv[])
       name = g_irepository_register_file (rep, "test", &error);
       if (error)
 	{
-	  g_error ("Unable to load metadata 'test': %s", error->message);
+	  g_error ("Unable to load typelib 'test': %s", error->message);
 	  return;
 	}
       g_print ("Loaded %s from test.gmeta\n", name);
@@ -202,7 +202,7 @@ main (int argc, char *argv[])
   /* test error handling */
 
 #if 0
-  /* "broken" is in the metadata but not in the .so*/
+  /* "broken" is in the typelib but not in the .so*/
   info = g_irepository_find_by_name (rep, "test", "broken");  
   g_assert (g_base_info_get_type (info) == GI_INFO_TYPE_FUNCTION);
   function = (GIFunctionInfo *)info;

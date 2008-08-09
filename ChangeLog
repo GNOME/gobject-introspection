@@ -1,5 +1,11 @@
 2008-08-09  Johan Dahlin  <johan@gnome.org>
 
+	* *.[ch]:
+	Rename metadata to typelib in variable names,
+	comments and apis.
+
+2008-08-09  Johan Dahlin  <johan@gnome.org>
+
 	* tools/scanner.c:
 	* tools/scanner.h:
 	Remove old C scanner, which got rewritten in python.
