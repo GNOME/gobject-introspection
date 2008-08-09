@@ -1,5 +1,24 @@
 2008-08-09  Johan Dahlin  <johan@gnome.org>
 
+	* tests/Makefile.am:
+	* tests/array.test:
+	* tests/boxed.test:
+	* tests/constant.test:
+	* tests/enum.test:
+	* tests/errors.test:
+	* tests/function.test:
+	* tests/gobject.test:
+	* tests/interface.test:
+	* tests/object.test:
+	* tests/struct.test:
+	* tests/types.test:
+	* tests/union.test:
+	* tests/xref1.test:
+	* tests/xref2.test:
+	Rename *.test to *.gir
+
+2008-08-09  Johan Dahlin  <johan@gnome.org>
+
 	* configure.ac:
 	* tests/Makefile.am:
 	* tests/parser/Foo-expected.gir:

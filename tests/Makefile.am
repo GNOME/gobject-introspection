@@ -2,19 +2,19 @@ SUBDIRS = . invoke scanner
 
 EXTRA_DIST = \
 	roundtrips.sh	\
-	array.test	\
-	boxed.test	\
-	constant.test	\
-	enum.test	\
-	errors.test	\
-	function.test	\
-	gobject.test	\
-	interface.test	\
-	object.test	\
-	struct.test	\
-	types.test	\
-	union.test	\
-	xref1.test	\
-	xref2.test
+	array.gir	\
+	boxed.gir	\
+	constant.gir	\
+	enum.gir	\
+	errors.gir	\
+	function.gir	\
+	gobject.gir	\
+	interface.gir	\
+	object.gir	\
+	struct.gir	\
+	types.gir	\
+	union.gir	\
+	xref1.gir	\
+	xref2.gir
 
 TESTS = #roundtrips.sh
