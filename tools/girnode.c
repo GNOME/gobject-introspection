@@ -605,7 +605,6 @@ g_ir_node_get_full_size_internal (GIrNode *parent, GIrNode *node)
 
   if (node == NULL && parent != NULL)
     g_error ("Caught NULL node, parent=%s", parent->name);
-  g_printerr ("processing node %s\n", node->name);
 
   g_debug ("node %p type '%s'", node,
 	   g_ir_node_type_to_string (node->type));
