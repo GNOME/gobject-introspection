@@ -1,5 +1,9 @@
 2008-08-08  Colin Walters  <walters@verbum.org>
 
+	* tests/roundtrips.sh: Use local .gir files again.
+
+2008-08-08  Colin Walters  <walters@verbum.org>
+
 	* tests/invoke/Makefile.am: .gir file depends on libtool
 	library.
 

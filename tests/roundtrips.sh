@@ -3,7 +3,7 @@
 set -x
 set -e
 
-TESTFILES=$(echo "${srcdir}"/../../gir-repository/gir/*.gir)
+TESTFILES=$(echo *.test)
 
 for i in $TESTFILES; do
 	${CHECK_DEBUG} ../tools/g-ir-compiler --raw $i > $i.1; 
