@@ -1,5 +1,14 @@
 2008-08-09  Johan Dahlin  <johan@gnome.org>
 
+	* relaxng/api.xml:
+	* relaxng/c-types.xml:
+	* relaxng/g-types.xml:
+	* relaxng/relaxng.rng:
+	* relaxng/util.xml:
+	Remove outdated relaxng schemas.
+
+2008-08-09  Johan Dahlin  <johan@gnome.org>
+
 	* *.[ch]:
 	Rename metadata to typelib in variable names,
 	comments and apis.
