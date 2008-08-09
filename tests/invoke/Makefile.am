@@ -19,7 +19,7 @@ CLEANFILES = testfns-metadata.c test.repo
 testfns-metadata.c: testfns.gir $(top_builddir)/tools/g-ir-compiler
 	$(CHECK_DEBUG) $(top_builddir)/tools/g-ir-compiler $(srcdir)/testfns.gir -o testfns-metadata.c
 
-test.repo: testfns.gir
+test.repo: testfns.gir testfns.la
 	$(CHECK_DEBUG) $(top_builddir)/tools/g-ir-compiler --shared-library testfns.la $< --raw -o $@
 
 invoke_SOURCES = invoke.c

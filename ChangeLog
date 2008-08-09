@@ -1,5 +1,10 @@
 2008-08-08  Colin Walters  <walters@verbum.org>
 
+	* tests/invoke/Makefile.am: .gir file depends on libtool
+	library.
+
+2008-08-08  Colin Walters  <walters@verbum.org>
+
 	* tools/girnode.c: Pass through parent node so we can
 	print the node whose child is NULL, if that occurs.
 
