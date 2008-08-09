@@ -24,6 +24,7 @@ from .glibast import GLibObject
 
 
 class GIDLParser(object):
+
     def __init__(self, filename):
         self._nodes = []
         self._namespace_name = None
@@ -39,7 +40,7 @@ class GIDLParser(object):
             if child.tag == 'object':
                 self._parse_object(child)
             else:
-                print 'PARSER: Unhandled %s' % (child.tag,)
+                print 'PARSER: Unhandled %s' % (child.tag, )
 
     def _parse_object(self, node):
         gobj = GLibObject(node.attrib['name'],

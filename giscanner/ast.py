@@ -31,35 +31,35 @@ which is language/library/domain specific.
 ##
 
 # Basic types
-TYPE_INT8     = 'int8'
-TYPE_UINT8    = 'uint8'
-TYPE_INT16    = 'int16'
-TYPE_UINT16   = 'uint16'
-TYPE_INT32    = 'int32'
-TYPE_UINT32   = 'uint32'
-TYPE_INT64    = 'int64'
-TYPE_UINT64   = 'uint64'
-TYPE_LONG     = 'long'
-TYPE_ULONG    = 'ulong'
+TYPE_INT8 = 'int8'
+TYPE_UINT8 = 'uint8'
+TYPE_INT16 = 'int16'
+TYPE_UINT16 = 'uint16'
+TYPE_INT32 = 'int32'
+TYPE_UINT32 = 'uint32'
+TYPE_INT64 = 'int64'
+TYPE_UINT64 = 'uint64'
+TYPE_LONG = 'long'
+TYPE_ULONG = 'ulong'
 
 # Floating-point
-TYPE_FLOAT    = 'float'
-TYPE_DOUBLE   = 'double'
+TYPE_FLOAT = 'float'
+TYPE_DOUBLE = 'double'
 
 # Higher-level data types
-TYPE_NONE     = 'none'
-TYPE_ANY      = 'any'      # CORBA Any/Variant/GValue, holds anything.
-TYPE_BOOLEAN  = 'boolean'  # True/False
-TYPE_STRING   = 'string'   # Sequence of characters
+TYPE_NONE = 'none'
+TYPE_ANY = 'any'           # CORBA Any/Variant/GValue, holds anything.
+TYPE_BOOLEAN = 'boolean'   # True/False
+TYPE_STRING = 'string'     # Sequence of characters
 TYPE_SEQUENCE = 'sequence' # Sequence of something
-TYPE_CHAR     = 'char'     # Character
-TYPE_UCHAR    = 'uchar'    # Unsigned Character
-TYPE_SIZE     = 'size'     # Size type (memory, buffer etc)
-TYPE_SSIZE    = 'ssize'
+TYPE_CHAR = 'char'         # Character
+TYPE_UCHAR = 'uchar'       # Unsigned Character
+TYPE_SIZE = 'size'         # Size type (memory, buffer etc)
+TYPE_SSIZE = 'ssize'
 
 # Wide/Unicode
-TYPE_UCHAR    = 'uchar'
-TYPE_USTRING  = 'ustring'
+TYPE_UCHAR = 'uchar'
+TYPE_USTRING = 'ustring'
 
 # Domain specific, but practically useful
 TYPE_FILENAME = 'filename'
@@ -106,6 +106,7 @@ class Node(object):
 
 
 class Namespace(Node):
+
     def __init__(self, name):
         Node.__init__(self, name)
         self.nodes = []
@@ -114,7 +115,9 @@ class Namespace(Node):
         return '%s(%r, %r)' % (self.__class__.__name__, self.name,
                                self.nodes)
 
+
 class Function(Node):
+
     def __init__(self, name, retval, parameters, symbol):
         Node.__init__(self, name)
         self.retval = retval
@@ -132,12 +135,14 @@ class VFunction(Function):
 
 
 class Type(Node):
+
     def __init__(self, name, ctype=None):
         Node.__init__(self, name)
         self.ctype = ctype
 
 
 class Parameter(Node):
+
     def __init__(self, name, typenode):
         Node.__init__(self, name)
         self.type = typenode
@@ -150,6 +155,7 @@ class Parameter(Node):
 
 
 class Enum(Node):
+
     def __init__(self, name, symbol, members):
         Node.__init__(self, name)
         self.symbol = symbol
@@ -160,6 +166,7 @@ class Enum(Node):
 
 
 class Member(Node):
+
     def __init__(self, name, value, symbol):
         Node.__init__(self, name)
         self.value = value
@@ -170,6 +177,7 @@ class Member(Node):
 
 
 class Struct(Node):
+
     def __init__(self, name, symbol):
         Node.__init__(self, name)
         self.fields = []
@@ -177,6 +185,7 @@ class Struct(Node):
 
 
 class Field(Node):
+
     def __init__(self, name, typenode, symbol):
         Node.__init__(self, name)
         self.type = typenode
@@ -187,16 +196,18 @@ class Field(Node):
 
 
 class Return(Node):
+
     def __init__(self, rtype):
         Node.__init__(self)
         self.type = rtype
         self.transfer = False
 
     def __repr__(self):
-        return 'Return(%r)' % (self.type,)
+        return 'Return(%r)' % (self.type, )
 
 
 class Class(Node):
+
     def __init__(self, name, parent):
         Node.__init__(self, name)
         self.ctype = name
@@ -213,6 +224,7 @@ class Class(Node):
 
 
 class Interface(Node):
+
     def __init__(self, name):
         Node.__init__(self, name)
         self.methods = []
@@ -226,6 +238,7 @@ class Interface(Node):
 
 
 class Constant(Node):
+
     def __init__(self, name, type_name, value):
         Node.__init__(self, name)
         self.type = Type(type_name)
@@ -237,6 +250,7 @@ class Constant(Node):
 
 
 class Property(Node):
+
     def __init__(self, name, type_name, ctype=None):
         Node.__init__(self, name)
         self.type = Type(type_name, ctype)
@@ -248,7 +262,10 @@ class Property(Node):
 
 
 # FIXME: Inherit from Function
+
+
 class Callback(Node):
+
     def __init__(self, name, retval, parameters):
         Node.__init__(self, name)
         self.retval = retval
@@ -261,8 +278,8 @@ class Callback(Node):
 
 class Sequence(Type):
     # Subclass, because a Sequence is a kind of Type
+
     def __init__(self, name, ctype, element_type):
         Type.__init__(self, name, ctype)
         self.element_type = element_type
         self.transfer = False
-

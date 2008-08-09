@@ -46,7 +46,9 @@ type_names['gpointer'] = TYPE_ANY
 type_names['gsize'] = TYPE_SIZE
 type_names['gssize'] = TYPE_SSIZE
 
+
 class GLibEnum(Enum):
+
     def __init__(self, name, type_name, members, get_type):
         Enum.__init__(self, name, type_name, members)
         self.ctype = type_name
@@ -66,12 +68,14 @@ class GLibFlags(GLibEnum):
 
 
 class GLibEnumMember(Member):
+
     def __init__(self, name, value, symbol, nick):
         Member.__init__(self, name, value, symbol)
         self.nick = nick
 
 
 class GLibObject(Class):
+
     def __init__(self, name, parent, type_name, get_type):
         Class.__init__(self, name, parent)
         self.ctype = type_name
@@ -79,7 +83,9 @@ class GLibObject(Class):
         self.get_type = get_type
         self.signals = []
 
+
 class GLibBoxed(Struct):
+
     def __init__(self, name, type_name, get_type):
         Struct.__init__(self, name, get_type)
         self.ctype = name
@@ -91,6 +97,7 @@ class GLibBoxed(Struct):
 
 
 class GLibInterface(Interface):
+
     def __init__(self, name, type_name, get_type):
         Interface.__init__(self, name)
         self.ctype = type_name
@@ -104,6 +111,7 @@ class GLibProperty(Property):
 
 
 class GLibSignal(Node):
+
     def __init__(self, name, retval):
         Node.__init__(self, name)
         self.retval = retval

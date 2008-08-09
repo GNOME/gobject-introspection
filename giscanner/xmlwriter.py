@@ -24,6 +24,7 @@ from xml.sax.saxutils import quoteattr
 
 
 class XMLWriter(object):
+
     def __init__(self):
         self._data = StringIO()
         self._tag_stack = []
@@ -40,7 +41,7 @@ class XMLWriter(object):
         for attr, value in attributes:
             if value is None:
                 raise ValueError(
-                    "value for attribute %r cannot be None" % (attr,))
+                    "value for attribute %r cannot be None" % (attr, ))
             attr_length += 2 + len(attr) + len(quoteattr(value))
         return attr_length + indent + self._indent
 
@@ -58,7 +59,7 @@ class XMLWriter(object):
                 attr_value += '\n%s' % (self._indent_char * indent_len)
             if value is None:
                 raise ValueError(
-                    "value for attribute %r cannot be None" % (attr,))
+                    "value for attribute %r cannot be None" % (attr, ))
             attr_value += ' %s=%s' % (attr, quoteattr(value))
             if first:
                 first = False
@@ -70,7 +71,7 @@ class XMLWriter(object):
         self.write_line('<%s%s>' % (tag_name, attrs))
 
     def _close_tag(self, tag_name):
-        self.write_line('</%s>' % (tag_name,))
+        self.write_line('</%s>' % (tag_name, ))
 
     # Public API
 
@@ -83,7 +84,7 @@ class XMLWriter(object):
     def write_tag(self, tag_name, attributes, data=None):
         if attributes is None:
             attributes = []
-        prefix = '<%s' % (tag_name,)
+        prefix = '<%s' % (tag_name, )
         if data is not None:
             suffix = '>%s</%s>' % (data, tag_name)
         else:
@@ -122,7 +123,7 @@ def test():
                 ('value', '7'),
                 ('c:identifier', 'GTK_ANCHOR_WEST'),
                 ('glib:nick', 'west')])
-    
+
     w.pop_tag()
     w.pop_tag()
     w.pop_tag()

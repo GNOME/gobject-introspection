@@ -32,6 +32,7 @@ from .utils import resolve_libtool, to_underscores
 
 
 class GLibTransformer(object):
+
     def __init__(self, transformer):
         self._transformer = transformer
         self._namespace_name = None
@@ -245,7 +246,7 @@ class GLibTransformer(object):
         elif fundamental_type_id == cgobject.TYPE_BOXED:
             self._introspect_boxed(type_id, symbol)
         else:
-            print 'unhandled GType: %s' % (cgobject.type_name(type_id),)
+            print 'unhandled GType: %s' % (cgobject.type_name(type_id), )
 
     def _introspect_enum(self, ftype_id, type_id, symbol):
         type_class = cgobject.type_class_ref(type_id)
@@ -332,7 +333,7 @@ class GLibTransformer(object):
                 if i == 0:
                     name = 'object'
                 else:
-                    name = 'p%s' % (i-1,)
+                    name = 'p%s' % (i-1, )
                 ptype = self._create_type(parameter)
                 param = Parameter(name, ptype)
                 signal.parameters.append(param)

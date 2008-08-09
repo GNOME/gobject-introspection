@@ -24,6 +24,7 @@ from UserDict import DictMixin
 
 
 class odict(DictMixin):
+
     def __init__(self):
         self._items = {}
         self._keys = []

@@ -82,8 +82,10 @@ def _get_option_parser():
 
     return parser
 
+
 def _error(msg):
-    raise SystemExit('ERROR: %s' % (msg,))
+    raise SystemExit('ERROR: %s' % (msg, ))
+
 
 def main(args):
     parser = _get_option_parser()
@@ -100,10 +102,10 @@ def main(args):
     elif options.format == 'gidl':
         from giscanner.gidlwriter import GIDLWriter as Writer
     else:
-        _error("Unknown format: %s" % (options.format,))
+        _error("Unknown format: %s" % (options.format, ))
 
     for package in options.packages:
-        output = commands.getoutput('pkg-config --cflags %s' % (package,))
+        output = commands.getoutput('pkg-config --cflags %s' % (package, ))
         pkg_options, unused = parser.parse_args(output.split())
         options.cpp_includes.extend(pkg_options.cpp_includes)
         options.cpp_defines.extend(pkg_options.cpp_defines)
@@ -114,7 +116,7 @@ def main(args):
         if (arg.endswith('.c') or
             arg.endswith('.h')):
             if not os.path.exists(arg):
-                _error('%s: no such a file or directory' % (arg,))
+                _error('%s: no such a file or directory' % (arg, ))
             filenames.append(arg)
 
     # Run the preprocessor, tokenize and construct simple

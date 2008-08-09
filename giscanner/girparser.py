@@ -25,14 +25,17 @@ from .glibast import GLibObject
 CORE_NS = "http://www.gtk.org/introspection/core/1.0"
 GLIB_NS = "http://www.gtk.org/introspection/glib/1.0"
 
+
 def _corens(tag):
     return '{%s}%s' % (CORE_NS, tag)
+
 
 def _glibns(tag):
     return '{%s}%s' % (GLIB_NS, tag)
 
 
 class GIRParser(object):
+
     def __init__(self, filename):
         self._nodes = []
         self._namespace_name = None
@@ -58,7 +61,7 @@ class GIRParser(object):
                                ]:
                 continue
             else:
-                print 'PARSER: Unhandled %s' % (child.tag,)
+                print 'PARSER: Unhandled %s' % (child.tag, )
 
     def _parse_object(self, node):
         gobj = GLibObject(node.attrib['name'],

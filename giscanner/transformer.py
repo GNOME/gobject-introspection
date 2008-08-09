@@ -32,6 +32,7 @@ from .utils import strip_common_prefix
 
 
 class Transformer(object):
+
     def __init__(self, generator, namespace_name):
         self.generator = generator
         self._namespace = Namespace(namespace_name)
@@ -122,7 +123,7 @@ class Transformer(object):
             pass
         else:
             raise NotImplementedError(
-                'Transformer: unhandled symbol: %r' % (symbol,))
+                'Transformer: unhandled symbol: %r' % (symbol, ))
 
     def _create_enum(self, symbol):
         members = []
@@ -141,7 +142,8 @@ class Transformer(object):
 
     def _create_function(self, symbol):
         directives = symbol.directives()
-        parameters = list(self._create_parameters(symbol.base_type, directives))
+        parameters = list(self._create_parameters(
+            symbol.base_type, directives))
         return_ = self._create_return(symbol.base_type.base_type,
                                       directives.get('return', []))
         name = self._remove_prefix(symbol.ident)
@@ -163,7 +165,7 @@ class Transformer(object):
             value = self._create_source_type(source_type.base_type) + '*'
         else:
             print 'TRANSFORMER: Unhandled source type %r' % (
-                source_type,)
+                source_type, )
             value = '???'
         return value
 
@@ -183,7 +185,7 @@ class Transformer(object):
             ftype = self._create_type(symbol.base_type)
             node = Field(symbol.ident, ftype, symbol.ident)
         return node
-    
+
     def _create_typedef(self, symbol):
         ctype = symbol.base_type.type
         if (ctype == CTYPE_POINTER and
@@ -225,7 +227,7 @@ class Transformer(object):
                 param.allow_none = True
             else:
                 print 'Unhandled parameter annotation option: %s' % (
-                    option,)
+                    option, )
         return param
 
     def _create_return(self, source_type, options=None):
@@ -247,7 +249,7 @@ class Transformer(object):
                 return_.type = seq
             else:
                 print 'Unhandled parameter annotation option: %s' % (
-                    option,)
+                    option, )
         return return_
 
     def _create_typedef_struct(self, symbol):
@@ -294,4 +296,3 @@ class Transformer(object):
         type_name = ptype.name
         ptype.name = self._resolve_type_name(type_name)
         return ptype
-

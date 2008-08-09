@@ -67,6 +67,7 @@ FUNCTION_INLINE = 1 << 1
  UNARY_BITWISE_COMPLEMENT,
  UNARY_LOGICAL_NEGATION) = range(6)
 
+
 def symbol_type_name(symbol_type):
     return {
         CSYMBOL_TYPE_INVALID: 'invalid',
@@ -80,6 +81,7 @@ def symbol_type_name(symbol_type):
         CSYMBOL_TYPE_MEMBER: 'member',
         }.get(symbol_type)
 
+
 def ctype_name(ctype):
     return {
         CTYPE_INVALID: 'invalid',
@@ -91,12 +93,13 @@ def ctype_name(ctype):
         CTYPE_ENUM: 'enum',
         CTYPE_POINTER: 'pointer',
         CTYPE_ARRAY: 'array',
-        CTYPE_FUNCTION: 'function'
+        CTYPE_FUNCTION: 'function',
         }.get(ctype)
 
 
 class SourceType(object):
     __members__ = ['type', 'base_type', 'name', 'child_list']
+
     def __init__(self, scanner, stype):
         self._scanner = scanner
         self._stype = stype
@@ -106,7 +109,7 @@ class SourceType(object):
             self.__class__.__name__,
             ctype_name(self.type),
             self.name)
-    
+
     @property
     def type(self):
         return self._stype.type
@@ -130,6 +133,7 @@ class SourceType(object):
 
 class SourceSymbol(object):
     __members__ = ['const_int', 'ident', 'type', 'base_type']
+
     def __init__(self, scanner, symbol):
         self._scanner = scanner
         self._symbol = symbol
@@ -165,10 +169,11 @@ class SourceSymbol(object):
 
 
 class SourceScanner(object):
+
     def __init__(self):
         self._scanner = _giscanner.SourceScanner()
         self._filenames = []
-        self._cpp_options = []    
+        self._cpp_options = []
 
     # Public API
 
@@ -216,7 +221,7 @@ class SourceScanner(object):
     def _parse(self, filenames):
         if not filenames:
             return
-        
+
         cpp_args = [
             'cpp',
             '-C',
@@ -228,10 +233,10 @@ class SourceScanner(object):
         proc = subprocess.Popen(cpp_args,
                                 stdin=subprocess.PIPE,
                                 stdout=subprocess.PIPE)
-                                
+
         for filename in filenames:
             filename = os.path.abspath(filename)
-            proc.stdin.write('#include <%s>\n' % (filename,))
+            proc.stdin.write('#include <%s>\n' % (filename, ))
         proc.stdin.close()
 
         tmp = tempfile.mktemp()

@@ -28,6 +28,7 @@ from .xmlwriter import XMLWriter
 
 
 class GIRWriter(XMLWriter):
+
     def __init__(self, namespace):
         super(GIRWriter, self).__init__()
         self._write_repository(namespace)
@@ -229,4 +230,3 @@ class GIRWriter(XMLWriter):
         with self.tagcontext('glib:signal', attrs):
             self._write_return_type(signal.retval)
             self._write_parameters(signal.parameters)
-

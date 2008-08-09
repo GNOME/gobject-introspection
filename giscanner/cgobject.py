@@ -51,6 +51,7 @@ GType = ctypes.c_ulong
 
 # Structs
 
+
 class GTypeClass(ctypes.Structure):
     _fields_ = [('g_type', GType)]
 
@@ -72,7 +73,7 @@ class GFlagsValue(ctypes.Structure):
 
 
 class GEnumClass(ctypes.Structure):
-    _fields_ = [('g_type_class',  GTypeClass),
+    _fields_ = [('g_type_class', GTypeClass),
                 ('minimum', ctypes.c_int),
                 ('maximum', ctypes.c_int),
                 ('n_values', ctypes.c_uint),
@@ -137,20 +138,28 @@ _gobj.g_object_new(TYPE_OBJECT, None)
 # Functions
 
 _gobj.g_type_name.restype = ctypes.c_char_p
+
+
 def type_name(type_id):
     return _gobj.g_type_name(type_id)
 
 _gobj.g_type_from_name.argtypes = [ctypes.c_char_p]
+
+
 def type_from_name(name):
     return _gobj.g_type_from_name(name)
 
+
 def type_fundamental(type_id):
     return _gobj.g_type_fundamental(type_id)
+
 
 def type_parent(type_id):
     return _gobj.g_type_parent(type_id)
 
 _gobj.g_type_class_ref.restype = ctypes.POINTER(GTypeClass)
+
+
 def type_class_ref(type_id):
     fundamental_type = type_fundamental(type_id)
     if fundamental_type == TYPE_INVALID:
@@ -166,6 +175,8 @@ def type_class_ref(type_id):
 
 _gobj.g_object_class_list_properties.restype = ctypes.POINTER(
     ctypes.POINTER(GParamSpec))
+
+
 def object_class_list_properties(type_id):
     klass = _gobj.g_type_class_ref(type_id)
     n = ctypes.c_uint()
@@ -175,6 +186,8 @@ def object_class_list_properties(type_id):
 
 _gobj.g_object_interface_list_properties.restype = ctypes.POINTER(
     ctypes.POINTER(GParamSpec))
+
+
 def object_interface_list_properties(type_id):
     iface = _gobj.g_type_default_interface_ref(type_id)
     n = ctypes.c_uint()
@@ -183,6 +196,8 @@ def object_interface_list_properties(type_id):
         yield ctypes.cast(pspecs[i], ctypes.POINTER(GParamSpec)).contents
 
 _gobj.g_type_interfaces.restype = ctypes.POINTER(ctypes.c_int)
+
+
 def type_interfaces(type_id):
     n = ctypes.c_uint()
     type_ids = _gobj.g_type_interfaces(type_id, ctypes.byref(n))
@@ -190,6 +205,8 @@ def type_interfaces(type_id):
         yield type_ids[i]
 
 _gobj.g_type_interface_prerequisites.restype = ctypes.POINTER(ctypes.c_int)
+
+
 def type_interface_prerequisites(type_id):
     n = ctypes.c_uint()
     type_ids = _gobj.g_type_interface_prerequisites(type_id, ctypes.byref(n))
@@ -197,6 +214,8 @@ def type_interface_prerequisites(type_id):
         yield type_ids[i]
 
 _gobj.g_signal_list_ids.restype = ctypes.POINTER(ctypes.c_int)
+
+
 def signal_list(type_id):
     n = ctypes.c_uint()
     signal_ids = _gobj.g_signal_list_ids(type_id, ctypes.byref(n))

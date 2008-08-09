@@ -27,6 +27,7 @@ from .xmlwriter import XMLWriter
 
 
 class GIDLWriter(XMLWriter):
+
     def __init__(self, namespace):
         super(GIDLWriter, self).__init__()
         self._write_api(namespace)

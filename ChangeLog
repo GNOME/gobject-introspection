@@ -1,5 +1,25 @@
 2008-08-09  Johan Dahlin  <johan@gnome.org>
 
+	* giscanner/__init__.py:
+	* giscanner/ast.py:
+	* giscanner/cgobject.py:
+	* giscanner/gidlparser.py:
+	* giscanner/gidlwriter.py:
+	* giscanner/girparser.py:
+	* giscanner/girwriter.py:
+	* giscanner/glibast.py:
+	* giscanner/glibtransformer.py:
+	* giscanner/odict.py:
+	* giscanner/sourcescanner.py:
+	* giscanner/transformer.py:
+	* giscanner/utils.py:
+	* giscanner/xmlwriter.py:
+	* tools/g-ir-scanner:
+
+	PEP8ify
+
+2008-08-09  Johan Dahlin  <johan@gnome.org>
+
 	* relaxng/api.xml:
 	* relaxng/c-types.xml:
 	* relaxng/g-types.xml:
