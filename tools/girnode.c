@@ -597,13 +597,15 @@ g_ir_node_get_size (GIrNode *node)
 }
 
 /* returns the full size of the blob including variable-size parts */
-guint32
-g_ir_node_get_full_size (GIrNode *node)
+static guint32
+g_ir_node_get_full_size_internal (GIrNode *parent, GIrNode *node)
 {
   GList *l;
   gint size, n;
 
-  g_assert (node != NULL);
+  if (node == NULL && parent != NULL)
+    g_error ("Caught NULL node, parent=%s", parent->name);
+  g_printerr ("processing node %s\n", node->name);
 
   g_debug ("node %p type '%s'", node,
 	   g_ir_node_type_to_string (node->type));
@@ -616,8 +618,10 @@ g_ir_node_get_full_size (GIrNode *node)
 	size = 12; 
 	size += ALIGN_VALUE (strlen (node->name) + 1, 4);
 	for (l = function->parameters; l; l = l->next)
-	  size += g_ir_node_get_full_size ((GIrNode *)l->data);
-	size += g_ir_node_get_full_size ((GIrNode *)function->result);
+	  {
+	    size += g_ir_node_get_full_size_internal (node, (GIrNode *)l->data);
+	  }
+	size += g_ir_node_get_full_size_internal (node, (GIrNode *)function->result);
       }
       break;
 
@@ -628,8 +632,8 @@ g_ir_node_get_full_size (GIrNode *node)
 	size += ALIGN_VALUE (strlen (node->name) + 1, 4);
 	size += ALIGN_VALUE (strlen (function->symbol) + 1, 4);
 	for (l = function->parameters; l; l = l->next)
-	  size += g_ir_node_get_full_size ((GIrNode *)l->data);
-	size += g_ir_node_get_full_size ((GIrNode *)function->result);
+	  size += g_ir_node_get_full_size_internal (node, (GIrNode *)l->data);
+	size += g_ir_node_get_full_size_internal (node, (GIrNode *)function->result);
       }
       break;
 
@@ -640,7 +644,7 @@ g_ir_node_get_full_size (GIrNode *node)
 	size = 12;
 	if (node->name)
 	  size += ALIGN_VALUE (strlen (node->name) + 1, 4);
-	size += g_ir_node_get_full_size ((GIrNode *)param->type);	
+	size += g_ir_node_get_full_size_internal (node, (GIrNode *)param->type);	
       }
       break;
 
@@ -659,7 +663,7 @@ g_ir_node_get_full_size (GIrNode *node)
 	      case TYPE_TAG_ARRAY:
 		size = 4 + 4;
 		if (type->parameter_type1)
-		  size += g_ir_node_get_full_size ((GIrNode *)type->parameter_type1);
+		  size += g_ir_node_get_full_size_internal (node, (GIrNode *)type->parameter_type1);
 		break;
 	      case TYPE_TAG_INTERFACE:
 		size = 4 + 4;
@@ -668,14 +672,14 @@ g_ir_node_get_full_size (GIrNode *node)
 	      case TYPE_TAG_SLIST:
 		size = 4 + 4;
 		if (type->parameter_type1)
-		  size += g_ir_node_get_full_size ((GIrNode *)type->parameter_type1);
+		  size += g_ir_node_get_full_size_internal (node, (GIrNode *)type->parameter_type1);
 		break;
 	      case TYPE_TAG_HASH:
 		size = 4 + 4 + 4;
 		if (type->parameter_type1)
-		  size += g_ir_node_get_full_size ((GIrNode *)type->parameter_type1);
+		  size += g_ir_node_get_full_size_internal (node, (GIrNode *)type->parameter_type1);
 		if (type->parameter_type2)
-		  size += g_ir_node_get_full_size ((GIrNode *)type->parameter_type2);
+		  size += g_ir_node_get_full_size_internal (node, (GIrNode *)type->parameter_type2);
 		break;
 	      case TYPE_TAG_ERROR:
 		{
@@ -711,7 +715,7 @@ g_ir_node_get_full_size (GIrNode *node)
 	size += 2 * (n + (n % 2));
 
 	for (l = iface->members; l; l = l->next)
-	  size += g_ir_node_get_full_size ((GIrNode *)l->data);
+	  size += g_ir_node_get_full_size_internal (node, (GIrNode *)l->data);
       }
       break;
 
@@ -727,7 +731,7 @@ g_ir_node_get_full_size (GIrNode *node)
 	size += 2 * (n + (n % 2));
 
 	for (l = iface->members; l; l = l->next)
-	  size += g_ir_node_get_full_size ((GIrNode *)l->data);
+	  size += g_ir_node_get_full_size_internal (node, (GIrNode *)l->data);
       }
       break;
 
@@ -745,7 +749,7 @@ g_ir_node_get_full_size (GIrNode *node)
 	  }
 
 	for (l = enum_->values; l; l = l->next)
-	  size += g_ir_node_get_full_size ((GIrNode *)l->data);	
+	  size += g_ir_node_get_full_size_internal (node, (GIrNode *)l->data);	
       }
       break;
 
@@ -763,7 +767,7 @@ g_ir_node_get_full_size (GIrNode *node)
 	size = 20;
 	size += ALIGN_VALUE (strlen (node->name) + 1, 4);
 	for (l = struct_->members; l; l = l->next)
-	  size += g_ir_node_get_full_size ((GIrNode *)l->data);
+	  size += g_ir_node_get_full_size_internal (node, (GIrNode *)l->data);
       }
       break;
 
@@ -779,7 +783,7 @@ g_ir_node_get_full_size (GIrNode *node)
 	    size += ALIGN_VALUE (strlen (boxed->gtype_init) + 1, 4);
 	  }
 	for (l = boxed->members; l; l = l->next)
-	  size += g_ir_node_get_full_size ((GIrNode *)l->data);
+	  size += g_ir_node_get_full_size_internal (node, (GIrNode *)l->data);
       }
       break;
 
@@ -789,7 +793,7 @@ g_ir_node_get_full_size (GIrNode *node)
 	
 	size = 12;
 	size += ALIGN_VALUE (strlen (node->name) + 1, 4);
-	size += g_ir_node_get_full_size ((GIrNode *)prop->type);	
+	size += g_ir_node_get_full_size_internal (node, (GIrNode *)prop->type);	
       }
       break;
 
@@ -800,8 +804,8 @@ g_ir_node_get_full_size (GIrNode *node)
 	size = 12;
 	size += ALIGN_VALUE (strlen (node->name) + 1, 4);
 	for (l = signal->parameters; l; l = l->next)
-	  size += g_ir_node_get_full_size ((GIrNode *)l->data);
-	size += g_ir_node_get_full_size ((GIrNode *)signal->result);
+	  size += g_ir_node_get_full_size_internal (node, (GIrNode *)l->data);
+	size += g_ir_node_get_full_size_internal (node, (GIrNode *)signal->result);
       }
       break;
 
@@ -812,8 +816,8 @@ g_ir_node_get_full_size (GIrNode *node)
 	size = 16;
 	size += ALIGN_VALUE (strlen (node->name) + 1, 4);
 	for (l = vfunc->parameters; l; l = l->next)
-	  size += g_ir_node_get_full_size ((GIrNode *)l->data);
-	size += g_ir_node_get_full_size ((GIrNode *)vfunc->result);
+	  size += g_ir_node_get_full_size_internal (node, (GIrNode *)l->data);
+	size += g_ir_node_get_full_size_internal (node, (GIrNode *)vfunc->result);
       }
       break;
 
@@ -823,7 +827,7 @@ g_ir_node_get_full_size (GIrNode *node)
 
 	size = 12;
 	size += ALIGN_VALUE (strlen (node->name) + 1, 4);
-	size += g_ir_node_get_full_size ((GIrNode *)field->type);	
+	size += g_ir_node_get_full_size_internal (node, (GIrNode *)field->type);	
       }
       break;
 
@@ -835,7 +839,7 @@ g_ir_node_get_full_size (GIrNode *node)
 	size += ALIGN_VALUE (strlen (node->name) + 1, 4);
 	/* FIXME non-string values */
 	size += ALIGN_VALUE (strlen (constant->value) + 1, 4);
-	size += g_ir_node_get_full_size ((GIrNode *)constant->type);	
+	size += g_ir_node_get_full_size_internal (node, (GIrNode *)constant->type);	
       }
       break;
 
@@ -866,9 +870,9 @@ g_ir_node_get_full_size (GIrNode *node)
 	size = 28;
 	size += ALIGN_VALUE (strlen (node->name) + 1, 4);
 	for (l = union_->members; l; l = l->next)
-	  size += g_ir_node_get_full_size ((GIrNode *)l->data);
+	  size += g_ir_node_get_full_size_internal (node, (GIrNode *)l->data);
 	for (l = union_->discriminators; l; l = l->next)
-	  size += g_ir_node_get_full_size ((GIrNode *)l->data);
+	  size += g_ir_node_get_full_size_internal (node, (GIrNode *)l->data);
       }
       break;
 
@@ -881,6 +885,12 @@ g_ir_node_get_full_size (GIrNode *node)
 	   g_ir_node_type_to_string (node->type), size);
 
   return size;
+}
+
+guint32
+g_ir_node_get_full_size (GIrNode *node)
+{
+  return g_ir_node_get_full_size_internal (NULL, node);
 }
 
 int
