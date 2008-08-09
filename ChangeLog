@@ -1,5 +1,11 @@
 2008-08-09  Johan Dahlin  <johan@gnome.org>
 
+	* tools/scanner.c:
+	* tools/scanner.h:
+	Remove old C scanner, which got rewritten in python.
+
+2008-08-09  Johan Dahlin  <johan@gnome.org>
+
 	* girepository/Makefile.am:
 	* tools/Makefile.am:
 	* tools/girmodule.c:
