@@ -34,6 +34,7 @@ from ctypes.util import find_library
 
 
 def gwrap(lib, fname, ret, *argtypes):
+
     def _deco(f):
         f._cfunc = getattr(lib, fname)
         f._cfunc.restype = ret
