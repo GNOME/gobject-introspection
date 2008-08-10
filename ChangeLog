@@ -1,3 +1,10 @@
+2008-08-10  Colin Walters  <walters@verbum.org>
+
+	* giscanner/cgobject.py: Add new decorator @gwrap which forces
+	us to declare types for both return value and parameters.  The
+	ctypes default of 'int' is bad because it hides 32/64 bit
+	problems.  Convert all existing functions to use it.
+
 2008-08-09  Johan Dahlin  <johan@gnome.org>
 
 	* giscanner/__init__.py:
