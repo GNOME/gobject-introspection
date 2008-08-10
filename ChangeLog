@@ -1,5 +1,14 @@
 2008-08-10  Colin Walters  <walters@verbum.org>
 
+	* tests/roundtrips.sh: Use the correct tests.
+
+2008-08-10  Colin Walters  <walters@verbum.org>
+
+	* giscanner/cgobject.py: Declare/wrap a few more functions.
+	Fix parameter types for g_object_new and g_type_fundamental.
+
+2008-08-10  Colin Walters  <walters@verbum.org>
+
 	* giscanner/cgobject.py: Add new decorator @gwrap which forces
 	us to declare types for both return value and parameters.  The
 	ctypes default of 'int' is bad because it hides 32/64 bit
