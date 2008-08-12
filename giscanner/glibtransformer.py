@@ -117,15 +117,18 @@ class GLibTransformer(object):
         ntype = type(node)
         if ntype in (Callback, Function):
             self._resolve_function(node)
-        elif ntype in (GLibObject, GLibBoxed):
+        if ntype in (GLibObject, GLibBoxed):
             for meth in node.methods:
                 self._resolve_function(meth)
             for ctor in node.constructors:
                 self._resolve_function(ctor)
-        elif ntype in (Struct, ):
+        if ntype in (Struct, ):
             for field in node.fields:
                 if isinstance(field, Field):
                     self._resolve_field(field)
+        if ntype in (GLibObject, ):
+            for prop in node.properties:
+                self._resolve_property(prop)
 
     def _parse_enum(self, enum):
         self._add_attribute(enum)
@@ -139,6 +142,9 @@ class GLibTransformer(object):
             return
 
         self._add_attribute(func)
+
+    def _resolve_property(self, prop):
+        prop.type = self._resolve_param_type(prop.type)
 
     def _resolve_function(self, func):
         self._resolve_parameters(func.parameters)

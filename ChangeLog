@@ -1,5 +1,9 @@
 2008-08-12  Colin Walters  <walters@verbum.org>
 
+	* giscanner/glibtransformer.py: Also transform object properties.
+
+2008-08-12  Colin Walters  <walters@verbum.org>
+
 	* giscanner/glibtransformer.py: Also transform callbacks
 	and structure field types.
 	* tests/scanner/Fooe-expected.gir: Update to expect correct
