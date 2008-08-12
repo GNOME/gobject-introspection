@@ -122,7 +122,7 @@ class GLibTransformer(object):
                 self._resolve_function(meth)
             for ctor in node.constructors:
                 self._resolve_function(ctor)
-        elif ntype in (Struct,):
+        elif ntype in (Struct, ):
             for field in node.fields:
                 if isinstance(field, Field):
                     self._resolve_field(field)
@@ -142,7 +142,7 @@ class GLibTransformer(object):
 
     def _resolve_function(self, func):
         self._resolve_parameters(func.parameters)
-        func.retval.type = self._resolve_param_type(func.retval.type)        
+        func.retval.type = self._resolve_param_type(func.retval.type)
 
     def _resolve_parameters(self, parameters):
         for parameter in parameters:
