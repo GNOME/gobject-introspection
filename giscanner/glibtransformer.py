@@ -20,6 +20,7 @@
 
 import ctypes
 import os
+import sys
 
 from . import cgobject
 from .odict import odict
@@ -60,6 +61,7 @@ class GLibTransformer(object):
             # associate GtkButtonClass with GtkButton
             if isinstance(node, Struct):
                 self._pair_class_struct(node)
+            self._resolve_node(node)
 
         namespace = Namespace(namespace.name)
         namespace.nodes = self._output_ns.values()
@@ -111,6 +113,15 @@ class GLibTransformer(object):
         else:
             print 'GOBJECT BUILDER: Unhandled node:', node
 
+    def _resolve_node(self, node):
+        if isinstance(node, Function):
+            self._resolve_function(node)
+        elif type(node) in (GLibObject, GLibBoxed):
+            for meth in node.methods:
+                self._resolve_function(meth)
+            for ctor in node.constructors:
+                self._resolve_function(ctor)
+
     def _parse_enum(self, enum):
         self._add_attribute(enum)
 
@@ -122,12 +133,13 @@ class GLibTransformer(object):
         elif self._parse_method(func):
             return
 
-        self._parse_parameters(func.parameters)
-        func.retval.type = self._resolve_param_type(func.retval.type)
-
         self._add_attribute(func)
 
-    def _parse_parameters(self, parameters):
+    def _resolve_function(self, func):
+        self._resolve_parameters(func.parameters)
+        func.retval.type = self._resolve_param_type(func.retval.type)        
+
+    def _resolve_parameters(self, parameters):
         for parameter in parameters:
             parameter.type = self._resolve_param_type(parameter.type)
 
@@ -199,8 +211,6 @@ class GLibTransformer(object):
             class_.methods.append(func)
         else:
             class_.constructors.append(func)
-        self._parse_parameters(func.parameters)
-        func.retval.type = self._resolve_param_type(func.retval.type)
         return True
 
     def _parse_struct(self, struct):
