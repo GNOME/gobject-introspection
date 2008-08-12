@@ -1,5 +1,10 @@
 2008-08-12  Colin Walters  <walters@verbum.org>
 
+	* tests/scanner/Makefile.am: Dep .gir files on scanner
+	sources too.  Also remove @ so we see scanner invocations.
+
+2008-08-12  Colin Walters  <walters@verbum.org>
+
 	* girepository/girparser.c, girepository/gtypelib.c,
 	girepository/gtypelib.h, girepository/girnode.c:
 	Remove usage of (GAPI-oriented) TypeTag in favor of

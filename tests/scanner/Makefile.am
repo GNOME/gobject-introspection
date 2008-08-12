@@ -18,9 +18,10 @@ CLEANFILES = utility.gir Foo.gir
 EXTRA_DIST = utility-expected.gir Foo-expected.gir
 
 SCANNER = $(top_srcdir)/tools/g-ir-scanner
+SCANNER_LIBS = $(top_srcdir)/giscanner/*.py $(top_builddir)/giscanner/libgiscanner.la
 
-utility.gir: libutility.la utility.h $(SCANNER)
-	@$(CHECK_DEBUG) $(SCANNER) -v \
+utility.gir: libutility.la utility.h $(SCANNER) $(SCANNER_LIBS)
+	$(CHECK_DEBUG) $(SCANNER) -v \
 	--include=$(top_srcdir)/gir/gobject-2.0.gir \
 	--library=libutility.la \
 	--namespace=utility \
@@ -28,8 +29,8 @@ utility.gir: libutility.la utility.h $(SCANNER)
 	$(libutility_la_SOURCES) \
 	--output $@
 
-Foo.gir: libfoo.la foo-object.h $(SCANNER)
-	@$(CHECK_DEBUG) $(SCANNER) -v \
+Foo.gir: libfoo.la foo-object.h $(SCANNER) $(SCANNER_LIBS)
+	$(CHECK_DEBUG) $(SCANNER) -v \
 	--include=$(top_srcdir)/gir/gobject-2.0.gir \
 	--include=$(top_builddir)/tests/scanner/utility.gir \
 	--library=libfoo.la \
