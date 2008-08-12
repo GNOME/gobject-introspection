@@ -123,6 +123,7 @@ class GLibTransformer(object):
             return
 
         self._parse_parameters(func.parameters)
+        func.retval.type = self._resolve_param_type(func.retval.type)
 
         self._add_attribute(func)
 

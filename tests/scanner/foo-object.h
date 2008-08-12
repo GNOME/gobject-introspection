@@ -86,6 +86,8 @@ GType foo_enum_type_get_type (void);
 
 int                   foo_enum_type_method         (FooEnumType foo_enum);
 
+FooEnumType           foo_enum_type_returnv        (int x);
+
 typedef enum
 {
   FOO_FLAGS_FIRST  = 1 << 0,

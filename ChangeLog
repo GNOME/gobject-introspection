@@ -1,5 +1,12 @@
 2008-08-12  Colin Walters  <walters@verbum.org>
 
+	* tests/scanner/Foo-expected.gir, tests/scanner/foo-object.h:
+	Add enum return value.
+	* giscanner/glibtransformer.py: Transform function return types
+	too.
+
+2008-08-12  Colin Walters  <walters@verbum.org>
+
 	* tests/scanner/Makefile.am: Dep .gir files on scanner
 	sources too.  Also remove @ so we see scanner invocations.
 

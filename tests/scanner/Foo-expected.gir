@@ -252,6 +252,16 @@
         </parameter>
       </parameters>
     </function>
+    <function name="enum_type_returnv" c:identifier="foo_enum_type_returnv">
+      <return-value>
+        <type name="EnumType" c:type="FooEnumType"/>
+      </return-value>
+      <parameters>
+        <parameter name="x">
+          <type name="int32" c:type="int"/>
+        </parameter>
+      </parameters>
+    </function>
     <bitfield name="FlagsType"
               c:type="FooFlagsType"
               glib:type-name="FooFlagsType"
