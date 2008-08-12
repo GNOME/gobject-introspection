@@ -323,7 +323,7 @@
       </return-value>
       <parameters>
         <parameter name="foo">
-          <type name="FooObject*" c:type="FooObject*"/>
+          <type name="Object" c:type="FooObject*"/>
         </parameter>
         <parameter name="b">
           <type name="boolean" c:type="gboolean"/>
@@ -335,7 +335,7 @@
     </callback>
     <record name="FooStruct" c:type="FooStruct">
       <field name="priv">
-        <type name="FooStructPrivate*" c:type="FooStructPrivate*"/>
+        <type name="FooStructPrivate" c:type="FooStructPrivate*"/>
       </field>
       <field name="member">
         <type name="int32" c:type="int"/>

@@ -25,7 +25,7 @@ import sys
 from . import cgobject
 from .odict import odict
 from .ast import (Callback, Enum, Function, Member, Namespace, Parameter,
-                  Property, Return, Sequence, Struct, Type,
+                  Property, Return, Sequence, Struct, Field, Type,
                   type_name_from_ctype)
 from .glibast import (GLibBoxed, GLibEnum, GLibEnumMember, GLibFlags,
                       GLibInterface, GLibObject, GLibSignal)
@@ -114,13 +114,18 @@ class GLibTransformer(object):
             print 'GOBJECT BUILDER: Unhandled node:', node
 
     def _resolve_node(self, node):
-        if isinstance(node, Function):
+        ntype = type(node)
+        if ntype in (Callback, Function):
             self._resolve_function(node)
-        elif type(node) in (GLibObject, GLibBoxed):
+        elif ntype in (GLibObject, GLibBoxed):
             for meth in node.methods:
                 self._resolve_function(meth)
             for ctor in node.constructors:
                 self._resolve_function(ctor)
+        elif ntype in (Struct,):
+            for field in node.fields:
+                if isinstance(field, Field):
+                    self._resolve_field(field)
 
     def _parse_enum(self, enum):
         self._add_attribute(enum)
@@ -142,6 +147,9 @@ class GLibTransformer(object):
     def _resolve_parameters(self, parameters):
         for parameter in parameters:
             parameter.type = self._resolve_param_type(parameter.type)
+
+    def _resolve_field(self, field):
+        field.type = self._resolve_param_type(field.type)
 
     def _parse_get_type_function(self, func):
         if self._library is None:
