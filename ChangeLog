@@ -1,5 +1,11 @@
 2008-08-12  Colin Walters  <walters@verbum.org>
 
+	* girepository/girparser.c: Handle 'any'.
+	* tests/scanner/Foo-expected.gir, tests/scanner/foo-object.h:
+	Add test for void *.
+
+2008-08-12  Colin Walters  <walters@verbum.org>
+
 	* giscanner/glibtransformer.py: We need to do type
 	resolution in a second pass after we've seen all the
 	enums, records, etc.

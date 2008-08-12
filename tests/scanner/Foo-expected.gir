@@ -184,6 +184,19 @@
           </parameter>
         </parameters>
       </method>
+      <method name="with_voidp" c:identifier="foo_object_with_voidp">
+        <return-value>
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <parameter name="object">
+            <type name="Object" c:type="FooObject*"/>
+          </parameter>
+          <parameter name="data">
+            <type name="any" c:type="void*"/>
+          </parameter>
+        </parameters>
+      </method>
       <property name="string">
         <type name="string" c:type="gchararray"/>
       </property>

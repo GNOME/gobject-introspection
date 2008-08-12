@@ -61,6 +61,7 @@ gint                  foo_object_calleesowns       (FooObject *object, GObject *
 GList*                foo_object_get_strings       (FooObject *object);
 GSList*               foo_object_get_objects       (FooObject *object);
 
+void                  foo_object_with_voidp        (FooObject *object, void *data);
 
 struct _FooSubobject
 {

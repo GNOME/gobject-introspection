@@ -260,6 +260,17 @@ foo_object_get_strings (FooObject *object)
   return list;
 }
 
+
+/**
+ * foo_object_with_voidp
+ * @data: Opaque pointer handle
+ */
+void
+foo_object_with_voidp (FooObject *object, void *data)
+{
+  
+}
+
 /**
  * foo_object_get_objects:
  * @object: a #GObject
