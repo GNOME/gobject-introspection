@@ -324,10 +324,8 @@ class GLibTransformer(object):
         if type_name == 'GObject':
             parent_type_name = None
         else:
-            print 'lookup', type_name
             type_id = cgobject.type_from_name(type_name)
             parent_type_name = cgobject.type_name(cgobject.type_parent(type_id))
-            print parent_type_name
         node = GLibObject(node.name, parent_type_name, type_name, None)
         type_id = cgobject.TYPE_OBJECT
         self._introspect_properties(node, type_id)
