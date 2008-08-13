@@ -3,6 +3,7 @@
             xmlns:c="http://www.gtk.org/introspection/c/1.0"
             xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
   <namespace name="Foo">
+    <alias name="FooList" target="GSList"/>
     <interface name="Interface"
                c:type="FooInterface"
                glib:type-name="FooInterface"
@@ -243,7 +244,6 @@
         </parameters>
       </glib:signal>
     </class>
-    <alias name="FooList" target="GSList"/>
     <class name="Subobject"
            c:type="FooSubobject"
            parent="Object"

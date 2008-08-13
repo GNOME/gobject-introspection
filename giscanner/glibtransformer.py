@@ -37,6 +37,7 @@ class GLibTransformer(object):
     def __init__(self, transformer):
         self._transformer = transformer
         self._namespace_name = None
+        self._aliases = []
         self._output_ns = odict()
         self._libraries = []
         self._type_names = {}
@@ -64,7 +65,7 @@ class GLibTransformer(object):
             self._resolve_node(node)
 
         namespace = Namespace(namespace.name)
-        namespace.nodes = self._output_ns.values()
+        namespace.nodes = self._aliases + self._output_ns.values()
         return namespace
 
     # Private
@@ -145,7 +146,7 @@ class GLibTransformer(object):
                     self._resolve_function(field)
 
     def _parse_alias(self, alias):
-        self._add_attribute(alias)
+        self._aliases.append(alias)
 
     def _parse_enum(self, enum):
         self._add_attribute(enum)

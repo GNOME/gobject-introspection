@@ -1,3 +1,11 @@
+2008-08-13  Colin Walters  <walters@verbum.org>
+
+	* giscanner/girparser.py: Parse more than just <class.
+	* giscanner/glibtransformer.py: Put aliases in a separate
+	data structure since their name is not canonicall.
+	* giscanner/transformer.py: Handle resolving type names
+	from includes.
+
 2008-08-13  Johan Dahlin  <johan@gnome.org>
 
 	* tools/g-ir-scanner:

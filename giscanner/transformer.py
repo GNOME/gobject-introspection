@@ -24,6 +24,8 @@ import sys
 from giscanner.ast import (Callback, Enum, Function, Namespace, Member,
                            Parameter, Return, Sequence, Struct, Field,
                            Type, Alias, type_name_from_ctype)
+from .glibast import (GLibBoxed, GLibEnum, GLibEnumMember, GLibFlags,
+                      GLibInterface, GLibObject, GLibSignal)
 from giscanner.sourcescanner import (
     SourceSymbol, ctype_name, symbol_type_name, CTYPE_POINTER,
     CTYPE_BASIC_TYPE, CTYPE_UNION, CTYPE_ARRAY,
@@ -41,6 +43,7 @@ class Transformer(object):
         self._namespace = Namespace(namespace_name)
         self._output_ns = {}
         self._type_names = {}
+        self._ctype_names = {}
         self._typedefs_ns = {}
         self._strip_prefix = ''
         self._typedefs = {}
@@ -77,7 +80,13 @@ class Transformer(object):
             raise NotImplementedError(filename)
         nsname = parser.get_namespace_name()
         for node in parser.get_nodes():
-            self._type_names[node.type_name] = (nsname, node)
+            if hasattr(node, 'ctype'):
+                self._ctype_names[node.ctype] = (nsname, node)
+            if isinstance(node, GLibBoxed) or isinstance(node, GLibInterface) \
+                    or isinstance(node, GLibObject):
+                self._type_names[node.type_name] = (nsname, node)
+            else:
+                self._type_names[node.name] = (nsname, node)
 
     def strip_namespace_object(self, name):
         orig_name = name
@@ -207,7 +216,9 @@ class Transformer(object):
                        CTYPE_BASIC_TYPE,
                        CTYPE_UNION,
                        CTYPE_VOID):
-            return Alias(symbol.ident, symbol.base_type.name)
+            if symbol.base_type.name:
+                return Alias(symbol.ident, symbol.base_type.name)
+            return None
         else:
             raise NotImplementedError(
                 "symbol %r of type %s" % (symbol.ident, ctype_name(ctype)))
@@ -291,16 +302,27 @@ class Transformer(object):
             return Sequence(self._parse_type_annotation(annotation[1:-1]))
         return annotation
 
+    def _typepair_to_str(self, item):
+        nsname, item = item
+        if nsname is None:
+            return item.name
+        return '%s.%s' % (nsname, item.name)
+
     def _resolve_type_name(self, type_name):
-        item = self._type_names.get(type_name)
-        if item is not None:
-            nsname, item = item
-            if nsname is None:
-                return item.name
-            return '%s.%s' % (nsname, item.name)
+        resolved = self._type_names.get(type_name)
+        if resolved:
+            return self._typepair_to_str(resolved)
         return type_name
 
     def _resolve_param_type(self, ptype):
         type_name = ptype.name
-        ptype.name = self._resolve_type_name(type_name)
+        resolved = self._type_names.get(type_name)
+        if resolved:
+            ptype.name = self._typepair_to_str(resolved)
+            return ptype
+        if hasattr(ptype, 'ctype'):
+            ctype = ptype.ctype
+            resolved = self._ctype_names.get(ctype)
+            if resolved:
+                ptype.name = self._typepair_to_str(resolved)
         return ptype
