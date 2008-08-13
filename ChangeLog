@@ -1,5 +1,10 @@
 2008-08-13  Colin Walters  <walters@verbum.org>
 
+	* tests/scanner/Foo-expected.gir, tests/scanner/utility-expected.gir:
+	Object is in GObject namespace.
+
+2008-08-13  Colin Walters  <walters@verbum.org>
+
 	* giscanner/girparser.py: Fix processing of functions
 	from last commit.
 

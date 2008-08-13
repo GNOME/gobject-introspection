@@ -5,7 +5,7 @@
   <namespace name="utility">
     <class name="Object"
            c:type="UtilityObject"
-           parent="GLib.Object"
+           parent="GObject.Object"
            glib:type-name="UtilityObject"
            glib:get-type="utility_object_get_type">
     </class>

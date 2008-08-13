@@ -16,7 +16,7 @@
     </function>
     <class name="Object"
            c:type="FooObject"
-           parent="GLib.Object"
+           parent="GObject.Object"
            glib:type-name="FooObject"
            glib:get-type="foo_object_get_type">
       <constructor name="new" c:identifier="foo_object_new">
@@ -59,7 +59,7 @@
       </method>
       <method name="create_object" c:identifier="foo_object_create_object">
         <return-value transfer-ownership="1">
-          <type name="GLib.Object" c:type="GObject*"/>
+          <type name="GObject.Object" c:type="GObject*"/>
         </return-value>
         <parameters>
           <parameter name="object">
@@ -69,7 +69,7 @@
       </method>
       <method name="allow_none" c:identifier="foo_object_allow_none">
         <return-value>
-          <type name="GLib.Object" c:type="GObject*"/>
+          <type name="GObject.Object" c:type="GObject*"/>
         </return-value>
         <parameters>
           <parameter name="object">
@@ -141,7 +141,7 @@
             <type name="Object" c:type="FooObject*"/>
           </parameter>
           <parameter name="toown" transfer-ownership="1">
-            <type name="GLib.Object" c:type="GObject*"/>
+            <type name="GObject.Object" c:type="GObject*"/>
           </parameter>
         </parameters>
       </method>
@@ -154,10 +154,10 @@
             <type name="Object" c:type="FooObject*"/>
           </parameter>
           <parameter name="toown1" transfer-ownership="1">
-            <type name="GLib.Object" c:type="GObject*"/>
+            <type name="GObject.Object" c:type="GObject*"/>
           </parameter>
           <parameter name="toown2" transfer-ownership="1">
-            <type name="GLib.Object" c:type="GObject*"/>
+            <type name="GObject.Object" c:type="GObject*"/>
           </parameter>
         </parameters>
       </method>
@@ -236,7 +236,7 @@
         </return-value>
         <parameters>
           <parameter name="object">
-            <type name="GLib.Object" c:type="GObject"/>
+            <type name="GObject.Object" c:type="GObject"/>
           </parameter>
           <parameter name="p0">
             <type name="any" c:type="gpointer"/>
