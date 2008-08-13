@@ -1,5 +1,10 @@
 2008-08-13  Colin Walters  <walters@verbum.org>
 
+	* gir/Makefile.am: Install again.
+	* gir/gobject-2.0.gir: Add some more bits.
+
+2008-08-13  Colin Walters  <walters@verbum.org>
+
 	* gir/gobject-2.0.gir: Use correct namespace, add GType.
 	* giscanner/girparser.py: Handle aliases.
 	* giscanner/transformer.py: Record aliases.  Make resolver

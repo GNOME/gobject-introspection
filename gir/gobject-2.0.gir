@@ -13,5 +13,36 @@
            glib:type-name="GInitiallyUnowned"
            glib:get-type="g_initially_unowned_get_type">
     </class>
+    <callback name="GSignalEmissionHook">
+      <return-value>
+        <type name="boolean" c:type="gboolean"/>
+      </return-value>
+      <parameters>
+        <parameter name="ihint">
+          <type name="GSignalInvocationHint" c:type="GSignalInvocationHint*"/>
+        </parameter>
+        <parameter name="n_param_values">
+          <type name="uint32" c:type="guint"/>
+        </parameter>
+        <parameter name="param_values">
+          <type name="GValue" c:type="GValue*"/>
+        </parameter>
+        <parameter name="data">
+          <type name="any" c:type="gpointer"/>
+        </parameter>
+      </parameters>
+    </callback>
+    <record name="ValueArray" c:type="GValueArray"/>
+    <record name="GValueArray" c:type="_GValueArray">
+      <field name="n_values">
+        <type name="uint32" c:type="guint"/>
+      </field>
+      <field name="values">
+        <type name="GValue" c:type="GValue*"/>
+      </field>
+      <field name="n_prealloced">
+        <type name="uint32" c:type="guint"/>
+      </field>
+    </record>
   </namespace>
 </repository>
