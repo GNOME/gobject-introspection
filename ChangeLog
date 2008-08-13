@@ -1,3 +1,11 @@
+2008-08-13  Johan Dahlin  <johan@gnome.org>
+
+	* tools/g-ir-scanner:
+	Allow multiple libraries
+	* giscanner/glibtransformer.py:
+	Rename load_library to add_library, traverse over all libraries
+	when trying to resolve a function
+
 2008-08-12  Colin Walters  <walters@verbum.org>
 
 	* giscanner/transformer.py: Record typedefs as <alias> elements.

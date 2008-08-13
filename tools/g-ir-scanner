@@ -49,8 +49,8 @@ def _get_option_parser():
                       action="append", dest="includes", default=[],
                       help="include types for other gidls")
     parser.add_option("-l", "--library",
-                      action="store", dest="library",
-                      help="library of this unit")
+                      action="append", dest="libraries", default=[],
+                      help="libraries of this unit")
     parser.add_option("-n", "--namespace",
                       action="store", dest="namespace_name",
                       help="name of namespace for this unit")
@@ -137,8 +137,9 @@ def main(args):
     # Transform the C AST nodes into higher level
     # GLib/GObject nodes
     glibtransformer = GLibTransformer(transformer)
-    if options.library:
-        glibtransformer.load_library(options.library)
+    if options.libraries:
+        for library in options.libraries:
+            glibtransformer.add_library(library)
 
     namespace = glibtransformer.parse()
 

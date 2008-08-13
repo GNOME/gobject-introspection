@@ -38,15 +38,15 @@ class GLibTransformer(object):
         self._transformer = transformer
         self._namespace_name = None
         self._output_ns = odict()
-        self._library = None
+        self._libraries = []
         self._type_names = {}
 
     # Public API
 
-    def load_library(self, libname):
+    def add_library(self, libname):
         if libname.endswith('.la'):
             libname = resolve_libtool(libname)
-        self._library = ctypes.cdll.LoadLibrary(libname)
+        self._libraries.append(ctypes.cdll.LoadLibrary(libname))
 
     def parse(self):
         namespace = self._transformer.parse()
@@ -175,7 +175,7 @@ class GLibTransformer(object):
         field.type = self._resolve_param_type(field.type)
 
     def _parse_get_type_function(self, func):
-        if self._library is None:
+        if not self._libraries:
             return False
         # GType *_get_type(void)
         symbol = func.symbol
@@ -186,9 +186,13 @@ class GLibTransformer(object):
         if func.parameters:
             return False
 
-        try:
-            func = getattr(self._library, symbol)
-        except AttributeError:
+        for library in self._libraries:
+            try:
+                func = getattr(library, symbol)
+                break
+            except AttributeError:
+                continue
+        else:
             print 'Warning: could not find symbol: %s' % symbol
             return False
 
