@@ -1,5 +1,30 @@
 2008-08-12  Colin Walters  <walters@verbum.org>
 
+	* giscanner/transformer.py: Record typedefs as <alias> elements.
+	  Also attempt to look up types in external namespaces.
+	* giscanner/girwriter.py: Write them.
+	* giscanner/glibtransformer.py: Rework resolver using real instanceof
+	checks.  Resolve interface methods and properties.
+	* tests/scanner/foo-object.h: Add a method with typedef.
+	* tests/scanner/Foo-expected.gir: Update.
+	* girepository/girnode.c: Debug tweaks.
+	* girepository/girparser.c: Make a first pass through the XML where we
+	record all the aliases.  This lets us resolve them as we go through the
+	second pass.
+	* gir/Makefile.am: Don't install gobject-2.0.gir; we want that to come
+	from gir-repository.
+
+2008-08-12  Colin Walters  <walters@verbum.org>
+
+	* giscanner/glibtransformer.py: Resolve typedefs (e.g. AtkAttributeSet -> GSList).
+	Correctly do subclasseing in 2nd pass resolution.  Handle callbacks in structure
+	fields.
+	* giscanner/transformer.py: Record typedefs and expose public API for resolving
+	them.
+	* tests/scanner/Foo-expected.gir: Fix expected callback types.
+
+2008-08-12  Colin Walters  <walters@verbum.org>
+
 	* giscanner/glibtransformer.py: Also transform object properties.
 
 2008-08-12  Colin Walters  <walters@verbum.org>

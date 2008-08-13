@@ -61,7 +61,13 @@ gint                  foo_object_calleesowns       (FooObject *object, GObject *
 GList*                foo_object_get_strings       (FooObject *object);
 GSList*               foo_object_get_objects       (FooObject *object);
 
-void                  foo_object_with_voidp        (FooObject *object, void *data);
+void                  foo_object_various           (FooObject *object, void *data, GType some_type);
+
+/* A random typedef */
+typedef GSList FooList;
+
+void                  foo_object_with_tdef         (FooObject *object, FooList *blah);
+
 
 struct _FooSubobject
 {

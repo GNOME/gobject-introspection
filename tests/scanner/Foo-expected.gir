@@ -184,7 +184,7 @@
           </parameter>
         </parameters>
       </method>
-      <method name="with_voidp" c:identifier="foo_object_with_voidp">
+      <method name="various" c:identifier="foo_object_various">
         <return-value>
           <type name="none" c:type="void"/>
         </return-value>
@@ -194,6 +194,22 @@
           </parameter>
           <parameter name="data">
             <type name="any" c:type="void*"/>
+          </parameter>
+          <parameter name="some_type">
+            <type name="GType" c:type="GType"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="with_tdef" c:identifier="foo_object_with_tdef">
+        <return-value>
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <parameter name="object">
+            <type name="Object" c:type="FooObject*"/>
+          </parameter>
+          <parameter name="blah">
+            <type name="FooList" c:type="FooList*"/>
           </parameter>
         </parameters>
       </method>
@@ -206,7 +222,7 @@
         </return-value>
         <parameters>
           <parameter name="object">
-            <type name="FooObject*" c:type="FooObject*"/>
+            <type name="Object" c:type="FooObject*"/>
           </parameter>
           <parameter name="first_param">
             <type name="int32" c:type="int"/>
@@ -219,7 +235,7 @@
         </return-value>
         <parameters>
           <parameter name="object">
-            <type name="GObject" c:type="GObject"/>
+            <type name="GLib.Object" c:type="GObject"/>
           </parameter>
           <parameter name="p0">
             <type name="any" c:type="gpointer"/>
@@ -227,6 +243,7 @@
         </parameters>
       </glib:signal>
     </class>
+    <alias name="FooList" target="GSList"/>
     <class name="Subobject"
            c:type="FooSubobject"
            parent="Object"

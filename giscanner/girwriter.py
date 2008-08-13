@@ -21,7 +21,7 @@
 from __future__ import with_statement
 
 from .ast import (Callback, Class, Enum, Function, Interface, Member,
-                  Sequence, Struct)
+                  Sequence, Struct, Alias)
 from .glibast import (GLibBoxed, GLibEnum, GLibEnumMember,
                       GLibFlags, GLibObject, GLibInterface)
 from .xmlwriter import XMLWriter
@@ -65,8 +65,16 @@ class GIRWriter(XMLWriter):
         elif isinstance(node, Member):
             # FIXME: atk_misc_instance singleton
             pass
+        elif isinstance(node, Alias):
+            self._write_alias(node)
         else:
             print 'WRITER: Unhandled node', node
+
+    def _write_alias(self, alias):
+        attrs = [('name', alias.name), ('target', alias.target)]
+        if alias.ctype is not None:
+            attrs.append(('c:type', ntype.ctype))
+        self.write_tag('alias', attrs)
 
     def _write_function(self, func, tag_name='function'):
         attrs = [('name', func.name),

@@ -18,9 +18,12 @@
 # 02110-1301, USA.
 #
 
+import os
+import sys
+
 from giscanner.ast import (Callback, Enum, Function, Namespace, Member,
                            Parameter, Return, Sequence, Struct, Field,
-                           Type, type_name_from_ctype)
+                           Type, Alias, type_name_from_ctype)
 from giscanner.sourcescanner import (
     SourceSymbol, ctype_name, symbol_type_name, CTYPE_POINTER,
     CTYPE_BASIC_TYPE, CTYPE_UNION, CTYPE_ARRAY,
@@ -40,12 +43,16 @@ class Transformer(object):
         self._type_names = {}
         self._typedefs_ns = {}
         self._strip_prefix = ''
+        self._typedefs = {}
 
     def get_type_names(self):
         return self._type_names
 
     def set_strip_prefix(self, strip_prefix):
         self._strip_prefix = strip_prefix
+
+    def resolve_possible_typedef(self, tname):
+        return self._typedefs.get(tname, tname)
 
     def parse(self):
         nodes = []
@@ -200,7 +207,7 @@ class Transformer(object):
                        CTYPE_BASIC_TYPE,
                        CTYPE_UNION,
                        CTYPE_VOID):
-            return
+            return Alias(symbol.ident, symbol.base_type.name)
         else:
             raise NotImplementedError(
                 "symbol %r of type %s" % (symbol.ident, ctype_name(ctype)))
@@ -209,7 +216,8 @@ class Transformer(object):
     def _create_type(self, source_type):
         ctype = self._create_source_type(source_type)
         type_name = type_name_from_ctype(ctype)
-        return Type(type_name, ctype)
+        resolved_type_name = self._resolve_type_name(type_name)
+        return Type(resolved_type_name, ctype)
 
     def _create_parameter(self, symbol, options):
         ptype = self._create_type(symbol.base_type)

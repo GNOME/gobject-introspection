@@ -141,6 +141,17 @@ class Type(Node):
         self.ctype = ctype
 
 
+class Alias(Node):
+
+    def __init__(self, name, target,ctype=None):
+        Node.__init__(self, name)
+        self.target = target
+        self.ctype = ctype
+
+    def __repr__(self):
+        return 'Alias(%r, %r)' % (self.name, self.target)
+
+
 class Parameter(Node):
 
     def __init__(self, name, typenode):

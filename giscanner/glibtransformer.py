@@ -25,7 +25,7 @@ import sys
 from . import cgobject
 from .odict import odict
 from .ast import (Callback, Enum, Function, Member, Namespace, Parameter,
-                  Property, Return, Sequence, Struct, Field, Type,
+                  Property, Return, Sequence, Struct, Field, Type, Alias,
                   type_name_from_ctype)
 from .glibast import (GLibBoxed, GLibEnum, GLibEnumMember, GLibFlags,
                       GLibInterface, GLibObject, GLibSignal)
@@ -95,6 +95,7 @@ class GLibTransformer(object):
 
     def _resolve_param_type(self, ptype):
         type_name = ptype.name.replace('*', '')
+        type_name = self._transformer.resolve_possible_typedef(type_name)
         ptype.name = self._resolve_type_name(type_name)
         return ptype
 
@@ -107,6 +108,8 @@ class GLibTransformer(object):
             self._parse_struct(node)
         elif isinstance(node, Callback):
             self._parse_callback(node)
+        elif isinstance(node, Alias):
+            self._parse_alias(node)
         elif isinstance(node, Member):
             # FIXME: atk_misc_instance singletons
             pass
@@ -114,21 +117,35 @@ class GLibTransformer(object):
             print 'GOBJECT BUILDER: Unhandled node:', node
 
     def _resolve_node(self, node):
-        ntype = type(node)
-        if ntype in (Callback, Function):
+
+        def isany(*klasses):
+            for klass in klasses:
+                if isinstance(node, klass):
+                    return True
+            return False
+
+        if isany(Callback, Function):
             self._resolve_function(node)
-        if ntype in (GLibObject, GLibBoxed):
+        if isany(GLibObject, GLibBoxed, GLibInterface):
             for meth in node.methods:
                 self._resolve_function(meth)
+        if isany(GLibObject, GLibBoxed):
             for ctor in node.constructors:
                 self._resolve_function(ctor)
-        if ntype in (Struct, ):
+        if isany(GLibObject, GLibInterface):
+            for prop in node.properties:
+                self._resolve_property(prop)
+            for sig in node.signals:
+                self._resolve_function(sig)
+        if isany(Struct, ):
             for field in node.fields:
                 if isinstance(field, Field):
                     self._resolve_field(field)
-        if ntype in (GLibObject, ):
-            for prop in node.properties:
-                self._resolve_property(prop)
+                elif isinstance(field, Callback):
+                    self._resolve_function(field)
+
+    def _parse_alias(self, alias):
+        self._add_attribute(alias)
 
     def _parse_enum(self, enum):
         self._add_attribute(enum)
