@@ -1,5 +1,10 @@
 2008-08-13  Colin Walters  <walters@verbum.org>
 
+	* giscanner/girparser.py: Fix processing of functions
+	from last commit.
+
+2008-08-13  Colin Walters  <walters@verbum.org>
+
 	* giscanner/girparser.py: Parse more than just <class.
 	* giscanner/glibtransformer.py: Put aliases in a separate
 	data structure since their name is not canonicall.

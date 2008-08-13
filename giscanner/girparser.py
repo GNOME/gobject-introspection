@@ -86,13 +86,14 @@ class GIRParser(object):
                              ]:
                 pass
 
+
     def _parse_functions_props(self, child, obj):
         for meth in child.findall(_corens('method')):
-            obj.methods.append(_parse_function(meth, Function))
+            obj.methods.append(self._parse_function(meth, Function))
         for ctor in child.findall(_corens('constructor')):
-            obj.constructors.append(_parse_function(meth, Function))
+            obj.constructors.append(self._parse_function(ctor, Function))
         for cb in child.findall(_corens('callback')):
-            obj.fields.append(_parse_function(meth, Callback))
+            obj.fields.append(self._parse_function(cb, Callback))
 
 
     def _parse_function(self, child, klass):
@@ -101,9 +102,12 @@ class GIRParser(object):
         for paramnode in child.findall('parameter'):
             paramtype = self._parse_type(paramnode)
             params.append(Parameter(paramnode.attrib['name'], paramtype))
-        try:
-            ident = child.attrib[_cns('identifier')]
-        except KeyError, e:
+        if klass is not Callback:
+            try:
+                ident = child.attrib[_cns('identifier')]
+            except KeyError, e:
+                ident = None
+        else:
             ident = None
         args = [child.attrib['name'], retval, params]
         if ident:
