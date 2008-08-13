@@ -1,5 +1,9 @@
 2008-08-13  Colin Walters  <walters@verbum.org>
 
+	* giscanner/girparser.py: Parse records.
+
+2008-08-13  Colin Walters  <walters@verbum.org>
+
 	* gir/Makefile.am: Install again.
 	* gir/gobject-2.0.gir: Add some more bits.
 

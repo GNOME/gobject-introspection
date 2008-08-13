@@ -81,7 +81,10 @@ class GIRParser(object):
                 c = GLibInterface(child.attrib['name'], child.attrib[_glibns('type-name')], child.attrib[_glibns('get-type')])
                 self._parse_functions_props(child, c)
                 self._add_node(c)
-            if child.tag in [_corens('record'), _corens('interface'),
+            if child.tag == _corens('record'):
+                s = Struct(child.attrib['name'], child.attrib[_cns('type')])
+                self._add_node(s)
+            if child.tag in [_corens('interface'),
                              _glibns('boxed'),
                              _corens('enumeration'),
                              _corens('bitfield'),
