@@ -145,6 +145,7 @@ _gobj.g_type_init()
 # which happens when trying to introspect an interface before instantiating
 # a GObject.
 _gobj.g_object_new(TYPE_OBJECT, None)
+_gobj.g_initially_unowned_get_type()
 
 # Functions
 

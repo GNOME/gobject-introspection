@@ -250,6 +250,11 @@ class GLibTransformer(object):
         return True
 
     def _parse_struct(self, struct):
+        # This is a hack, but GObject is a rather fundamental piece so.
+        if (self._namespace_name == 'GObject' and
+            struct.name in ["Object", 'InitiallyUnowned']):
+            self._create_gobject(struct)
+            return
         node = self._output_ns.get(struct.name)
         if node is None:
             self._add_attribute(struct, replace=True)
@@ -312,6 +317,22 @@ class GLibTransformer(object):
         enum_name = self._transformer.strip_namespace_object(type_name)
         node = klass(enum_name, type_name, members, symbol)
         self._add_attribute(node, replace=True)
+        self._register_internal_type(type_name, node)
+
+    def _create_gobject(self, node):
+        type_name = 'G' + node.name
+        if type_name == 'GObject':
+            parent_type_name = None
+        else:
+            print 'lookup', type_name
+            type_id = cgobject.type_from_name(type_name)
+            parent_type_name = cgobject.type_name(cgobject.type_parent(type_id))
+            print parent_type_name
+        node = GLibObject(node.name, parent_type_name, type_name, None)
+        type_id = cgobject.TYPE_OBJECT
+        self._introspect_properties(node, type_id)
+        self._introspect_signals(node, type_id)
+        self._add_attribute(node)
         self._register_internal_type(type_name, node)
 
     def _introspect_object(self, type_id, symbol):

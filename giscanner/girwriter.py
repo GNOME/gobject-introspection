@@ -175,7 +175,8 @@ class GIRWriter(XMLWriter):
             tag_name = 'interface'
         if isinstance(node, (GLibObject, GLibInterface)):
             attrs.append(('glib:type-name', node.type_name))
-            attrs.append(('glib:get-type', node.get_type))
+            if node.get_type:
+                attrs.append(('glib:get-type', node.get_type))
         with self.tagcontext(tag_name, attrs):
             if isinstance(node, Class):
                 for method in node.constructors:

@@ -1,3 +1,11 @@
+2008-08-13  Johan Dahlin  <johan@gnome.org>
+
+	* giscanner/cgobject.py:
+	Register GInitiallyUnowned
+	* giscanner/girwriter.py:
+	* giscanner/glibtransformer.py:
+	Special case GObject/GInitially owned as they are a bit special to use.
+
 2008-08-13  Colin Walters  <walters@verbum.org>
 
 	* tests/scanner/Foo-expected.gir, tests/scanner/utility-expected.gir:
