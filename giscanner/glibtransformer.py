@@ -40,7 +40,7 @@ class GLibTransformer(object):
         self._aliases = []
         self._output_ns = odict()
         self._libraries = []
-        self._type_names = {}
+        self._internal_types = {}
 
     # Public API
 
@@ -52,7 +52,6 @@ class GLibTransformer(object):
     def parse(self):
         namespace = self._transformer.parse()
         self._namespace_name = namespace.name
-        self._type_names = self._transformer.get_type_names()
 
         for node in namespace.nodes:
             self._parse_node(node)
@@ -83,21 +82,27 @@ class GLibTransformer(object):
         return self._output_ns.get(name)
 
     def _register_internal_type(self, type_name, node):
-        self._type_names[type_name] = (None, node)
+        self._internal_types[type_name] = node
 
     def _resolve_type_name(self, type_name):
-        item = self._type_names.get(type_name)
-        if item is not None:
-            nsname, item = item
-            if nsname is None:
-                return item.name
-            return '%s.%s' % (nsname, item.name)
+        type_name = type_name.replace('*', '')
+        possible_name = self._transformer.resolve_type_name(type_name)
+        if possible_name != type_name:
+            return possible_name
+        possible_node = self._internal_types.get(type_name)
+        if possible_node:
+            return possible_node.name
         return type_name
 
     def _resolve_param_type(self, ptype):
-        type_name = ptype.name.replace('*', '')
+        ptype.name = ptype.name.replace('*', '')
+        type_name = ptype.name
         type_name = self._transformer.resolve_possible_typedef(type_name)
-        ptype.name = self._resolve_type_name(type_name)
+        possible_node = self._internal_types.get(type_name)
+        if possible_node:
+            ptype.name = possible_node.name
+        else:
+            ptype = self._transformer.resolve_param_type(ptype)
         return ptype
 
     def _parse_node(self, node):
@@ -182,7 +187,7 @@ class GLibTransformer(object):
         symbol = func.symbol
         if not symbol.endswith('_get_type'):
             return False
-        if func.retval.type.name != 'GType':
+        if func.retval.type.name != 'GObject.GType':
             return False
         if func.parameters:
             return False

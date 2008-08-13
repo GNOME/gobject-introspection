@@ -64,6 +64,8 @@ class GIRParser(object):
         assert ns is not None
         self._namespace_name = ns.attrib['name']
         for child in ns.getchildren():
+            if child.tag == _corens('alias'):
+                self._add_node(self._parse_alias(child))
             if child.tag in (_corens('callback'), ):
                 self._add_node(self._parse_function(child, Callback))
             if child.tag in (_corens('function'), ):
@@ -72,7 +74,7 @@ class GIRParser(object):
                 c = GLibObject(child.attrib['name'],
                                child.attrib.get('parent'),
                                child.attrib[_glibns('type-name')],
-                               child.attrib[_glibns('get-type')])
+                               child.attrib.get(_glibns('get-type')))
                 self._parse_functions_props(child, c)
                 self._add_node(c)
             if child.tag == _corens('interface'):
@@ -85,6 +87,10 @@ class GIRParser(object):
                              _corens('bitfield'),
                              ]:
                 pass
+
+
+    def _parse_alias(self, child):
+        return Alias(child.attrib['name'], child.attrib['target'])
 
 
     def _parse_functions_props(self, child, obj):

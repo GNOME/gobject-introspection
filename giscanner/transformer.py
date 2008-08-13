@@ -42,6 +42,7 @@ class Transformer(object):
         self.generator = generator
         self._namespace = Namespace(namespace_name)
         self._output_ns = {}
+        self._alias_names = {}
         self._type_names = {}
         self._ctype_names = {}
         self._typedefs_ns = {}
@@ -50,6 +51,9 @@ class Transformer(object):
 
     def get_type_names(self):
         return self._type_names
+
+    def get_alias_names(self):
+        return self._alias_names
 
     def set_strip_prefix(self, strip_prefix):
         self._strip_prefix = strip_prefix
@@ -85,6 +89,8 @@ class Transformer(object):
             if isinstance(node, GLibBoxed) or isinstance(node, GLibInterface) \
                     or isinstance(node, GLibObject):
                 self._type_names[node.type_name] = (nsname, node)
+            elif isinstance(node, Alias):
+                self._alias_names[node.name] = (nsname, node)
             else:
                 self._type_names[node.name] = (nsname, node)
 
@@ -227,7 +233,7 @@ class Transformer(object):
     def _create_type(self, source_type):
         ctype = self._create_source_type(source_type)
         type_name = type_name_from_ctype(ctype)
-        resolved_type_name = self._resolve_type_name(type_name)
+        resolved_type_name = self.resolve_type_name(type_name)
         return Type(resolved_type_name, ctype)
 
     def _create_parameter(self, symbol, options):
@@ -253,7 +259,7 @@ class Transformer(object):
         if not options:
             options = []
         rtype = self._create_type(source_type)
-        rtype = self._resolve_param_type(rtype)
+        rtype = self.resolve_param_type(rtype)
         return_ = Return(rtype)
         for option in options:
             if option == 'caller-owns':
@@ -281,7 +287,7 @@ class Transformer(object):
         struct = self._typedefs_ns.get(symbol.ident, None)
         if struct is None:
             name = self._remove_prefix(symbol.ident)
-            name = self._resolve_type_name(name)
+            name = self.resolve_type_name(name)
             struct = Struct(name, symbol.ident)
 
         for child in symbol.base_type.child_list:
@@ -308,14 +314,17 @@ class Transformer(object):
             return item.name
         return '%s.%s' % (nsname, item.name)
 
-    def _resolve_type_name(self, type_name):
+    def resolve_type_name(self, type_name):
         resolved = self._type_names.get(type_name)
+        if resolved:
+            return self._typepair_to_str(resolved)
+        resolved = self._alias_names.get(type_name)
         if resolved:
             return self._typepair_to_str(resolved)
         return type_name
 
-    def _resolve_param_type(self, ptype):
-        type_name = ptype.name
+    def resolve_param_type(self, ptype):
+        type_name = ptype.name.replace('*', '')
         resolved = self._type_names.get(type_name)
         if resolved:
             ptype.name = self._typepair_to_str(resolved)
@@ -325,4 +334,9 @@ class Transformer(object):
             resolved = self._ctype_names.get(ctype)
             if resolved:
                 ptype.name = self._typepair_to_str(resolved)
+                return ptype
+        resolved = self._alias_names.get(type_name)
+        if resolved:
+            ptype.name = self._typepair_to_str(resolved)
+            return ptype
         return ptype

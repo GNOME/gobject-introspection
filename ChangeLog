@@ -1,3 +1,13 @@
+2008-08-13  Colin Walters  <walters@verbum.org>
+
+	* gir/gobject-2.0.gir: Use correct namespace, add GType.
+	* giscanner/girparser.py: Handle aliases.
+	* giscanner/transformer.py: Record aliases.  Make resolver
+	functions public; we now call into these explicitly from
+	glibtransformer.  Handle resolving aliases.
+	* giscanner/glibtransformer.py: Separate our internal namespace
+	from included ones.  Call up into transformer's resolver functions.
+
 2008-08-13  Johan Dahlin  <johan@gnome.org>
 
 	* girepository/girnode.c (g_ir_node_get_full_size_internal):

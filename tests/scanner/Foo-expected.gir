@@ -197,7 +197,7 @@
             <type name="any" c:type="void*"/>
           </parameter>
           <parameter name="some_type">
-            <type name="GType" c:type="GType"/>
+            <type name="GObject.GType" c:type="GType"/>
           </parameter>
         </parameters>
       </method>
