@@ -12,6 +12,7 @@ glib-2.0.gir: $(G_IR_SCANNER)
 	    -I$(GLIB_INCLUDEDIR) \
 	    -I$(GLIB_LIBDIR)/glib-2.0/include \
 	    -DGETTEXT_PACKAGE=Dummy \
+	    -D__G_I18N_LIB_H__ \
 	    $(GLIB_INCLUDEDIR)/glib/*.h
 BUILT_SOURCES += glib-2.0.gir
 

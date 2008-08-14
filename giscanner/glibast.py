@@ -42,6 +42,7 @@ type_names['gdouble'] = TYPE_DOUBLE
 type_names['gchar*'] = TYPE_STRING
 type_names['gboolean'] = TYPE_BOOLEAN
 type_names['gpointer'] = TYPE_ANY
+type_names['gconstpointer'] = TYPE_ANY
 type_names['gsize'] = TYPE_SIZE
 type_names['gssize'] = TYPE_SSIZE
 

@@ -1,3 +1,16 @@
+2008-08-14  Johan Dahlin  <johan@gnome.org>
+
+	* gir/Makefile.am:
+	Define an internal _H_ variable so we skip parsing both
+	i18n headers, only one is needed.
+	* gir/glib-2.0.gir:
+	Add the glib-2.0.gir too.
+	* giscanner/glibast.py:
+	Add gconstpointer as an alias for ANY
+	* giscanner/transformer.py:
+	Do not lower case enumeration names per se.
+	Skip functions which has parameters called 'va_list'
+
 2008-08-14  Colin Walters  <walters@verbum.org>
 
 	* giscanner/transformer.py: Comment data structures.

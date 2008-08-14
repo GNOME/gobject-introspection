@@ -33,6 +33,10 @@ from giscanner.sourcescanner import (
 from .utils import strip_common_prefix
 
 
+class SkipError(Exception):
+    pass
+
+
 class Transformer(object):
 
     def __init__(self, generator, namespace_name):
@@ -125,7 +129,10 @@ class Transformer(object):
         if stype is None:
             stype = symbol.type
         if stype == CSYMBOL_TYPE_FUNCTION:
-            return self._create_function(symbol)
+            try:
+                return self._create_function(symbol)
+            except SkipError:
+                return
         elif stype == CSYMBOL_TYPE_TYPEDEF:
             return self._create_typedef(symbol)
         elif stype == CSYMBOL_TYPE_STRUCT:
@@ -152,6 +159,7 @@ class Transformer(object):
                                   child.ident))
 
         enum_name = self.strip_namespace_object(symbol.ident)
+        enum_name = symbol.ident[-len(enum_name):]
         return Enum(enum_name, symbol.ident, members)
 
     def _create_object(self, symbol):
@@ -228,6 +236,8 @@ class Transformer(object):
 
     def _create_type(self, source_type):
         ctype = self._create_source_type(source_type)
+        if ctype == 'va_list':
+            raise SkipError
         type_name = type_name_from_ctype(ctype)
         resolved_type_name = self.resolve_type_name(type_name)
         return Type(resolved_type_name, ctype)
