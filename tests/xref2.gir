@@ -4,12 +4,16 @@
             xmlns:c="http://www.gtk.org/introspection/c/1.0"
             xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
   <namespace name="Bar">
-    <boxed name="Boxed" type-name="BarBoxed" get-type="bar_boxed_get_type">
-    </boxed>
+    <glib:boxed glib:name="Boxed" glib:type-name="BarBoxed" glib:get-type="bar_boxed_get_type">
+    </glib:boxed>
     <function name="test" symbol="bar_test">
-      <return-type type="void" />
+      <return-value>
+	<type name="none"/>
+      </return-value>
       <parameters>
-        <parameter name="p1" type="Foo.Boxed*" transfer="full" direction="in" />
+        <parameter name="p1" transfer="full" direction="in">
+	  <type name="Foo.Boxed*"/>
+        </parameter>
       </parameters>
     </function>
   </namespace>
