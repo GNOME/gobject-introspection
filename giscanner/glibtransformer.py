@@ -19,14 +19,11 @@
 #
 
 import ctypes
-import os
-import sys
 
 from . import cgobject
 from .odict import odict
 from .ast import (Callback, Enum, Function, Member, Namespace, Parameter,
-                  Property, Return, Sequence, Struct, Field, Type, Alias,
-                  type_name_from_ctype)
+                  Property, Return, Struct, Type, Alias, type_name_from_ctype)
 from .glibast import (GLibBoxed, GLibEnum, GLibEnumMember, GLibFlags,
                       GLibInterface, GLibObject, GLibSignal)
 from .utils import extract_libtool, to_underscores

@@ -1,5 +1,17 @@
 2008-08-14  Johan Dahlin  <johan@gnome.org>
 
+	* giscanner/girwriter.py:
+	* giscanner/glibast.py:
+	* giscanner/glibtransformer.py:
+	* giscanner/transformer.py:
+	* misc/pyflakes.py:
+	* tests/Makefile.am:
+	Add pyflakes.py and run it in make check.
+	Update the source code to fix the errors reported by
+	pyflakes.
+
+2008-08-14  Johan Dahlin  <johan@gnome.org>
+
 	* giscanner/ast.py:
 	* giscanner/girparser.py:
 	* giscanner/glibast.py:

@@ -18,21 +18,17 @@
 # 02110-1301, USA.
 #
 
-import os
-import sys
-
 from giscanner.ast import (Callback, Enum, Function, Namespace, Member,
                            Parameter, Return, Sequence, Struct, Field,
                            Type, Alias, type_name_from_ctype)
-from .glibast import (GLibBoxed, GLibEnum, GLibEnumMember, GLibFlags,
-                      GLibInterface, GLibObject, GLibSignal)
+from .glibast import GLibBoxed, GLibInterface, GLibObject
 from giscanner.sourcescanner import (
-    SourceSymbol, ctype_name, symbol_type_name, CTYPE_POINTER,
-    CTYPE_BASIC_TYPE, CTYPE_UNION, CTYPE_ARRAY,
-    CTYPE_TYPEDEF, CTYPE_VOID, CTYPE_BASIC_TYPE, CTYPE_ENUM,
-    CTYPE_FUNCTION, CTYPE_STRUCT, CSYMBOL_TYPE_FUNCTION,
-    CSYMBOL_TYPE_TYPEDEF, CSYMBOL_TYPE_STRUCT, CSYMBOL_TYPE_ENUM,
-    CSYMBOL_TYPE_UNION, CSYMBOL_TYPE_OBJECT, CSYMBOL_TYPE_MEMBER)
+    SourceSymbol, ctype_name, CTYPE_POINTER,
+    CTYPE_BASIC_TYPE, CTYPE_UNION, CTYPE_ARRAY, CTYPE_TYPEDEF,
+    CTYPE_VOID, CTYPE_ENUM, CTYPE_FUNCTION, CTYPE_STRUCT,
+    CSYMBOL_TYPE_FUNCTION, CSYMBOL_TYPE_TYPEDEF, CSYMBOL_TYPE_STRUCT,
+    CSYMBOL_TYPE_ENUM, CSYMBOL_TYPE_UNION, CSYMBOL_TYPE_OBJECT,
+    CSYMBOL_TYPE_MEMBER)
 from .utils import strip_common_prefix
 
 
@@ -86,8 +82,7 @@ class Transformer(object):
         for node in parser.get_nodes():
             if hasattr(node, 'ctype'):
                 self._ctype_names[node.ctype] = (nsname, node)
-            if isinstance(node, GLibBoxed) or isinstance(node, GLibInterface) \
-                    or isinstance(node, GLibObject):
+            if isinstance(node, (GLibBoxed, GLibInterface, GLibObject)):
                 self._type_names[node.type_name] = (nsname, node)
             elif isinstance(node, Alias):
                 self._alias_names[node.name] = (nsname, node)

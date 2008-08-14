@@ -20,4 +20,7 @@ EXTRA_DIST = \
 TESTS = #roundtrips.sh
 
 check-local:
-	find $(top_srcdir)/giscanner -name \*.py | sort | uniq | xargs $(PYTHON) $(top_srcdir)/misc/pep8.py --repeat
+	@echo Running PEP8 on Python sources
+	@find $(top_srcdir)/giscanner -name \*.py | sort | uniq | xargs $(PYTHON) $(top_srcdir)/misc/pep8.py --repeat
+	@echo Running Pyflakes on Python sources
+	@find $(top_srcdir)/giscanner -name \*.py | sort | uniq | xargs $(PYTHON) $(top_srcdir)/misc/pyflakes.py

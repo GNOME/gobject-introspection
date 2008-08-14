@@ -73,7 +73,7 @@ class GIRWriter(XMLWriter):
     def _write_alias(self, alias):
         attrs = [('name', alias.name), ('target', alias.target)]
         if alias.ctype is not None:
-            attrs.append(('c:type', ntype.ctype))
+            attrs.append(('c:type', alias.ctype))
         self.write_tag('alias', attrs)
 
     def _write_function(self, func, tag_name='function'):
