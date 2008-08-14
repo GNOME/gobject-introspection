@@ -236,8 +236,9 @@ class Class(Node):
 
 class Interface(Node):
 
-    def __init__(self, name):
+    def __init__(self, name, parent):
         Node.__init__(self, name)
+        self.parent = parent
         self.methods = []
         self.properties = []
         self.fields = []

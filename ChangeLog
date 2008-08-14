@@ -1,5 +1,14 @@
 2008-08-14  Johan Dahlin  <johan@gnome.org>
 
+	* giscanner/ast.py:
+	* giscanner/girparser.py:
+	* giscanner/glibast.py:
+	* giscanner/glibtransformer.py:
+	Refactor the parser a bit.
+	Add parent type to interfaces and update callsites.
+
+2008-08-14  Johan Dahlin  <johan@gnome.org>
+
 	* giscanner/glibtransformer.py:
 	* giscanner/utils.py:
 	Refactor a bit, avoid isinstance and add a method

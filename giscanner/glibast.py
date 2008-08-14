@@ -98,8 +98,8 @@ class GLibBoxed(Struct):
 
 class GLibInterface(Interface):
 
-    def __init__(self, name, type_name, get_type):
-        Interface.__init__(self, name)
+    def __init__(self, name, parent, type_name, get_type):
+        Interface.__init__(self, name, parent)
         self.ctype = type_name
         self.type_name = type_name
         self.get_type = get_type

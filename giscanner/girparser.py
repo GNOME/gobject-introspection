@@ -18,20 +18,14 @@
 # 02110-1301, USA.
 #
 
-import os
-import sys
-
 from xml.etree.cElementTree import parse
 
-from .ast import (Callback, Enum, Function, Member, Namespace, Parameter,
-                  Property, Return, Sequence, Struct, Field, Type, Alias,
-                  type_name_from_ctype)
-from .glibast import (GLibBoxed, GLibEnum, GLibEnumMember, GLibFlags,
-                      GLibInterface, GLibObject, GLibSignal)
+from .ast import Alias, Callback, Function, Parameter, Return, Struct, Type
+from .glibast import GLibInterface, GLibObject
 
 CORE_NS = "http://www.gtk.org/introspection/core/1.0"
-GLIB_NS = "http://www.gtk.org/introspection/glib/1.0"
 C_NS = "http://www.gtk.org/introspection/c/1.0"
+GLIB_NS = "http://www.gtk.org/introspection/glib/1.0"
 
 
 def _corens(tag):
@@ -55,6 +49,16 @@ class GIRParser(object):
         tree = parse(filename)
         self._parse_api(tree.getroot())
 
+    # Public API
+
+    def get_namespace_name(self):
+        return self._namespace_name
+
+    def get_nodes(self):
+        return self._nodes
+
+    # Private
+
     def _add_node(self, node):
         self._nodes.append(node)
 
@@ -64,72 +68,69 @@ class GIRParser(object):
         assert ns is not None
         self._namespace_name = ns.attrib['name']
         for child in ns.getchildren():
-            if child.tag == _corens('alias'):
-                self._add_node(self._parse_alias(child))
-            if child.tag in (_corens('callback'), ):
-                self._add_node(self._parse_function(child, Callback))
-            if child.tag in (_corens('function'), ):
-                self._add_node(self._parse_function(child, Function))
-            if child.tag == _corens('class'):
-                c = GLibObject(child.attrib['name'],
-                               child.attrib.get('parent'),
-                               child.attrib[_glibns('type-name')],
-                               child.attrib.get(_glibns('get-type')))
-                self._parse_functions_props(child, c)
-                self._add_node(c)
-            if child.tag == _corens('interface'):
-                c = GLibInterface(child.attrib['name'],
-                                  child.attrib[_glibns('type-name')],
-                                  child.attrib[_glibns('get-type')])
-                self._parse_functions_props(child, c)
-                self._add_node(c)
-            if child.tag == _corens('record'):
-                s = Struct(child.attrib['name'], child.attrib[_cns('type')])
-                self._add_node(s)
-            if child.tag in [_corens('interface'),
-                             _glibns('boxed'),
-                             _corens('enumeration'),
-                             _corens('bitfield'),
-                             ]:
-                pass
+            self._parse_node(child)
 
-    def _parse_alias(self, child):
-        return Alias(child.attrib['name'], child.attrib['target'])
+    def _parse_node(self, node):
+        if node.tag == _corens('alias'):
+            self._add_node(self._parse_alias(node))
+        elif node.tag in [_corens('callback')]:
+            self._add_node(self._parse_function(node, Callback))
+        elif node.tag in [_corens('function')]:
+            self._add_node(self._parse_function(node, Function))
+        elif node.tag in [_corens('class'),
+                          _corens('interface')]:
+            self._parse_object_interface(node)
+        elif node.tag == _corens('record'):
+            struct = Struct(node.attrib['name'],
+                            node.attrib[_cns('type')])
+            self._add_node(struct)
+        elif node.tag in [_corens('interface'),
+                          _corens('enumeration'),
+                          _corens('bitfield'),
+                          _glibns('boxed'),
+                          ]:
+            pass
 
-    def _parse_functions_props(self, child, obj):
-        for meth in child.findall(_corens('method')):
-            obj.methods.append(self._parse_function(meth, Function))
-        for ctor in child.findall(_corens('constructor')):
-            obj.constructors.append(self._parse_function(ctor, Function))
-        for cb in child.findall(_corens('callback')):
-            obj.fields.append(self._parse_function(cb, Callback))
+    def _parse_alias(self, node):
+        return Alias(node.attrib['name'],
+                     node.attrib['target'])
 
-    def _parse_function(self, child, klass):
-        retval = Return(self._parse_type(child.find(_corens('return-value'))))
-        params = []
-        for paramnode in child.findall('parameter'):
-            paramtype = self._parse_type(paramnode)
-            params.append(Parameter(paramnode.attrib['name'], paramtype))
-        if klass is not Callback:
-            try:
-                ident = child.attrib[_cns('identifier')]
-            except KeyError, e:
-                ident = None
+    def _parse_object_interface(self, node):
+        if node.tag == _corens('interface'):
+            klass = GLibInterface
+        elif node.tag == _corens('class'):
+            klass = GLibObject
         else:
-            ident = None
-        args = [child.attrib['name'], retval, params]
-        if ident:
-            args.append(ident)
-        return klass(*args)
+            raise AssertionError(node)
+
+        obj = klass(node.attrib['name'],
+                    node.attrib.get('parent'),
+                    node.attrib[_glibns('type-name')],
+                    node.attrib[_glibns('get-type')])
+        for method in node.findall(_corens('method')):
+            obj.methods.append(self._parse_function(method, Function))
+        for ctor in node.findall(_corens('constructor')):
+            obj.constructors.append(self._parse_function(ctor, Function))
+        for callback in node.findall(_corens('callback')):
+            obj.fields.append(self._parse_function(callback, Callback))
+        self._add_node(obj)
+
+    def _parse_function(self, node, klass):
+        name = node.attrib['name']
+        retval = Return(self._parse_type(node.find(_corens('return-value'))))
+        parameters = []
+        for paramnode in node.findall('parameter'):
+            parameters.append(Parameter(paramnode.attrib['name'],
+                                        self._parse_type(paramnode)))
+        if klass is Callback:
+            return klass(name, retval, parameters)
+        else:
+            identifier = node.attrib.get(_cns('identifier'))
+            return klass(name, retval, parameters, identifier)
 
     def _parse_type(self, node):
         typenode = node.find(_corens('type'))
         if node is None:
             raise ValueError("failed to find type")
-        return Type(typenode.attrib['name'], typenode.attrib[_cns('type')])
-
-    def get_namespace_name(self):
-        return self._namespace_name
-
-    def get_nodes(self):
-        return self._nodes
+        return Type(typenode.attrib['name'],
+                    typenode.attrib[_cns('type')])

@@ -291,9 +291,10 @@ class GLibTransformer(object):
     def _introspect_object(self, type_id, symbol):
         type_name = cgobject.type_name(type_id)
         parent_type_name = cgobject.type_name(cgobject.type_parent(type_id))
-        node = GLibObject(self._transformer.strip_namespace_object(type_name),
-                          self._resolve_type_name(parent_type_name),
-                          type_name, symbol)
+        node = GLibObject(
+            self._transformer.strip_namespace_object(type_name),
+            self._resolve_type_name(parent_type_name),
+            type_name, symbol)
         self._introspect_properties(node, type_id)
         self._introspect_signals(node, type_id)
         self._add_attribute(node)
@@ -306,8 +307,10 @@ class GLibTransformer(object):
 
     def _introspect_interface(self, type_id, symbol):
         type_name = cgobject.type_name(type_id)
+        parent_type_name = cgobject.type_name(cgobject.type_parent(type_id))
         node = GLibInterface(
             self._transformer.strip_namespace_object(type_name),
+            self._resolve_type_name(parent_type_name),
             type_name, symbol)
         self._introspect_properties(node, type_id)
         self._introspect_signals(node, type_id)
