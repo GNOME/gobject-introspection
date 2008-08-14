@@ -3,7 +3,6 @@ SUBDIRS = . invoke scanner
 EXTRA_DIST = \
 	array.gir	\
 	boxed.gir	\
-	constant.gir	\
 	enum.gir	\
 	errors.gir	\
 	function.gir	\
@@ -16,10 +15,13 @@ EXTRA_DIST = \
 	xref1.gir	\
 	xref2.gir
 
-GIRTESTS = 		\
-	boxed.gir.test  \
-	enum.gir.test  \
-	object.gir.test
+GIRTESTS = 			\
+	boxed.gir.test  	\
+	constant.gir.test	\
+	enum.gir.test  		\
+	gobject.gir.test	\
+	object.gir.test		\
+	struct.gir.test
 
 %.gir.test: %.gir
 	@echo Testing $<:

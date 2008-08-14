@@ -4,16 +4,30 @@
             xmlns:c="http://www.gtk.org/introspection/c/1.0"
             xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
   <namespace name="Foo">
-    <struct name="FooStruct">
-      <field name="foo_int" readable="1" writable="1" offset="0" type="gint" />
-      <field name="foo_int64" readable="1" writable="1" offset="4" type="gint64" />
-      <field name="foo_uint" readable="1" writable="1" offset="12" type="gint" />
-      <field name="foo_uint64" readable="1" writable="1" offset="16" type="gint64" />
-      <field name="string" readable="1" writable="1" offset="24" type="utf8" />
-    </struct>
-    <struct name="FooStruct2">
-      <field name="sub" readable="1" writable="1" offset="0" type="FooStruct" />
-      <field name="string" readable="1" writable="1" offset="24" type="utf8" />
-    </struct>
+    <record name="FooStruct">
+      <field name="foo_int" readable="1" writable="1" offset="0">
+        <type name="int"/>
+      </field>
+      <field name="foo_int64" readable="1" writable="1" offset="4">
+        <type name="int64"/>
+      </field>
+      <field name="foo_uint" readable="1" writable="1" offset="12">
+        <type name="uint"/>
+      </field>
+      <field name="foo_uint64" readable="1" writable="1" offset="16">
+        <type name="uint64"/>
+      </field>
+      <field name="string" readable="1" writable="1" offset="24">
+        <type name="utf8"/>
+      </field>
+    </record>
+    <record name="FooStruct2">
+      <field name="sub" readable="1" writable="1" offset="0">
+        <type name="FooStruct"/>
+      </field>
+      <field name="string" readable="1" writable="1" offset="24">
+        <type name="utf8"/>
+      </field>
+    </record>
   </namespace>
 </repository>

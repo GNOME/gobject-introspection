@@ -1,6 +1,15 @@
 2008-08-14  Johan Dahlin  <johan@gnome.org>
 
 	* tests/Makefile.am:
+	* tests/constant.gir:
+	* tests/gobject.gir:
+	* tests/struct.gir:
+	* tools/generate.c (write_struct_info):
+	Fix generator for constant/gobject/struct
+
+2008-08-14  Johan Dahlin  <johan@gnome.org>
+
+	* tests/Makefile.am:
 	* tests/enum.gir:
 	* tools/generate.c (write_enum_info):
 	Fix generation of enum/bitfields
