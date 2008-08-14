@@ -33,15 +33,6 @@ import ctypes
 from ctypes.util import find_library
 
 
-def gwrap(lib, fname, ret, *argtypes):
-
-    def _deco(f):
-        f._cfunc = getattr(lib, fname)
-        f._cfunc.restype = ret
-        f._cfunc.argtypes = argtypes
-        return f
-    return _deco
-
 # Constants
 
 # FIXME: Are these stable?
@@ -150,27 +141,37 @@ _gobj.g_initially_unowned_get_type()
 # Functions
 
 
-@gwrap(_gobj, 'g_type_name', ctypes.c_char_p, GType)
+def _gwrap(fname, ret, *argtypes):
+
+    def _deco(f):
+        f._cfunc = getattr(_gobj, fname)
+        f._cfunc.restype = ret
+        f._cfunc.argtypes = argtypes
+        return f
+    return _deco
+
+
+@_gwrap('g_type_name', ctypes.c_char_p, GType)
 def type_name(type_id):
     return _gobj.g_type_name(type_id)
 
 
-@gwrap(_gobj, 'g_type_from_name', GType, ctypes.c_char_p)
+@_gwrap('g_type_from_name', GType, ctypes.c_char_p)
 def type_from_name(name):
     return _gobj.g_type_from_name(name)
 
 
-@gwrap(_gobj, 'g_type_fundamental', GType)
+@_gwrap('g_type_fundamental', GType)
 def type_fundamental(type_id):
     return _gobj.g_type_fundamental(type_id)
 
 
-@gwrap(_gobj, 'g_type_parent', GType, GType)
+@_gwrap('g_type_parent', GType, GType)
 def type_parent(type_id):
     return _gobj.g_type_parent(type_id)
 
 
-@gwrap(_gobj, 'g_type_class_ref', ctypes.POINTER(GTypeClass), GType)
+@_gwrap('g_type_class_ref', ctypes.POINTER(GTypeClass), GType)
 def type_class_ref(type_id):
     fundamental_type = type_fundamental(type_id)
     if fundamental_type == TYPE_INVALID:
@@ -185,7 +186,7 @@ def type_class_ref(type_id):
     return ctypes.cast(ptr, ctypes.POINTER(typeclass)).contents
 
 
-@gwrap(_gobj, 'g_object_class_list_properties',
+@_gwrap('g_object_class_list_properties',
        ctypes.POINTER(ctypes.POINTER(GParamSpec)),
        ctypes.POINTER(GTypeClass), ctypes.POINTER(ctypes.c_uint))
 def object_class_list_properties(type_id):
@@ -196,7 +197,7 @@ def object_class_list_properties(type_id):
         yield ctypes.cast(pspecs[i], ctypes.POINTER(GParamSpec)).contents
 
 
-@gwrap(_gobj, 'g_object_interface_list_properties',
+@_gwrap('g_object_interface_list_properties',
        ctypes.POINTER(ctypes.POINTER(GParamSpec)),
        ctypes.c_void_p, ctypes.POINTER(ctypes.c_uint))
 def object_interface_list_properties(type_id):
@@ -207,7 +208,7 @@ def object_interface_list_properties(type_id):
         yield ctypes.cast(pspecs[i], ctypes.POINTER(GParamSpec)).contents
 
 
-@gwrap(_gobj, 'g_type_interfaces', ctypes.POINTER(GType), GType,
+@_gwrap('g_type_interfaces', ctypes.POINTER(GType), GType,
        ctypes.POINTER(ctypes.c_uint))
 def type_interfaces(type_id):
     n = ctypes.c_uint()
@@ -216,7 +217,7 @@ def type_interfaces(type_id):
         yield type_ids[i]
 
 
-@gwrap(_gobj, 'g_type_interface_prerequisites', ctypes.POINTER(GType), GType,
+@_gwrap('g_type_interface_prerequisites', ctypes.POINTER(GType), GType,
        ctypes.POINTER(ctypes.c_uint))
 def type_interface_prerequisites(type_id):
     n = ctypes.c_uint()
@@ -225,7 +226,7 @@ def type_interface_prerequisites(type_id):
         yield type_ids[i]
 
 
-@gwrap(_gobj, 'g_signal_list_ids', ctypes.POINTER(ctypes.c_uint),
+@_gwrap('g_signal_list_ids', ctypes.POINTER(ctypes.c_uint),
        GType, ctypes.POINTER(ctypes.c_uint))
 def signal_list(type_id):
     n = ctypes.c_uint()

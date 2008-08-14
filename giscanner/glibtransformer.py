@@ -446,4 +446,3 @@ class GLibTransformer(object):
             self._resolve_function(field)
             return
         field.type = self._resolve_param_type(field.type)
-
