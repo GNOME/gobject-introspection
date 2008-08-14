@@ -1,5 +1,19 @@
 2008-08-14  Johan Dahlin  <johan@gnome.org>
 
+	* girepository/girparser.c (start_type):
+	Don't require c:type.
+	* tests/Makefile.am:
+	Test boxed.gir
+	* tests/boxed.gir:
+	Update, remove parts we don't support yet
+	* tests/roundtrips.sh:
+	Remove
+	* tools/generate.c (write_type_info), (write_field_info),
+	(write_callable_info), (write_struct_info):
+	Make it emit proper gir.
+
+2008-08-14  Johan Dahlin  <johan@gnome.org>
+
 	* giscanner/transformer.py:
 	New internal function for adding a new node.
 

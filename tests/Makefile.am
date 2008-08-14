@@ -1,7 +1,6 @@
 SUBDIRS = . invoke scanner
 
 EXTRA_DIST = \
-	roundtrips.sh	\
 	array.gir	\
 	boxed.gir	\
 	constant.gir	\
@@ -17,9 +16,16 @@ EXTRA_DIST = \
 	xref1.gir	\
 	xref2.gir
 
-TESTS = #roundtrips.sh
+GIRTESTS = 		\
+	boxed.gir.test
 
-check-local:
+%.gir.test: %.gir
+	@echo Testing $<:
+	$(top_builddir)/tools/g-ir-compiler --raw $< > $<.1; \
+	$(top_builddir)/tools/g-ir-generate --raw $<.1 > $<.2; \ 
+	diff -u $< $<.2; rm $<.1 $<.2
+
+check-local: $(GIRTESTS)
 	@echo Running PEP8 on Python sources
 	@find $(top_srcdir)/giscanner -name \*.py | sort | uniq | xargs $(PYTHON) $(top_srcdir)/misc/pep8.py --repeat
 	@echo Running Pyflakes on Python sources
