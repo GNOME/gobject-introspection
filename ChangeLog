@@ -1,5 +1,20 @@
 2008-08-14  Johan Dahlin  <johan@gnome.org>
 
+	* girepository/girparser.c (start_field), (start_constant),
+	(start_type), (end_element_handler):
+	Clear up constant parsing
+
+	* tests/object.gir:
+	Update
+
+	* tools/generate.c (write_callable_info), (write_function_info),
+	(write_callback_info), (write_constant_info), (write_signal_info),
+	(write_vfunc_info), (write_property_info), (write_object_info),
+	(write_interface_info):
+	Constants/Signals are handled now.
+
+2008-08-14  Johan Dahlin  <johan@gnome.org>
+
 	* girepository/girparser.c (start_type):
 	Don't require c:type.
 	* tests/Makefile.am:

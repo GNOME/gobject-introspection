@@ -17,7 +17,8 @@ EXTRA_DIST = \
 	xref2.gir
 
 GIRTESTS = 		\
-	boxed.gir.test
+	boxed.gir.test  \
+	object.gir.test
 
 %.gir.test: %.gir
 	@echo Testing $<:
