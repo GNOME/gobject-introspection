@@ -20,8 +20,9 @@
 
 from giscanner.ast import (Callback, Enum, Function, Namespace, Member,
                            Parameter, Return, Sequence, Struct, Field,
-                           Type, Alias, type_name_from_ctype)
-from .glibast import GLibBoxed, GLibInterface, GLibObject
+                           Type, Alias, Interface, Class,
+                           type_name_from_ctype)
+from .glibast import GLibBoxed
 from giscanner.sourcescanner import (
     SourceSymbol, ctype_name, CTYPE_POINTER,
     CTYPE_BASIC_TYPE, CTYPE_UNION, CTYPE_ARRAY, CTYPE_TYPEDEF,
@@ -82,7 +83,7 @@ class Transformer(object):
         for node in parser.get_nodes():
             if hasattr(node, 'ctype'):
                 self._ctype_names[node.ctype] = (nsname, node)
-            if isinstance(node, (GLibBoxed, GLibInterface, GLibObject)):
+            if isinstance(node, (GLibBoxed, Interface, Class)):
                 self._type_names[node.type_name] = (nsname, node)
             elif isinstance(node, Alias):
                 self._alias_names[node.name] = (nsname, node)
