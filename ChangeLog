@@ -1,3 +1,11 @@
+2008-08-14  Johan Dahlin  <johan@gnome.org>
+
+	* giscanner/ast.py:
+	* giscanner/girparser.py:
+	* giscanner/glibtransformer.py:
+	* tests/Makefile.am:
+	Run pep8.py in make check, fix old errors.
+
 2008-08-13  Colin Walters  <walters@verbum.org>
 
 	* giscanner/girparser.py: Parse records.

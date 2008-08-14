@@ -328,10 +328,11 @@ class GLibTransformer(object):
         type_name = 'G' + node.name
         if type_name == 'GObject':
             parent_type_name = None
-            symbol = None
+            symbol = 'intern'
         else:
             type_id = cgobject.type_from_name(type_name)
-            parent_type_name = cgobject.type_name(cgobject.type_parent(type_id))
+            parent_type_name = cgobject.type_name(
+                cgobject.type_parent(type_id))
             symbol = to_underscores(type_name).lower() + '_get_type'
         node = GLibObject(node.name, parent_type_name, type_name, symbol)
         type_id = cgobject.TYPE_OBJECT

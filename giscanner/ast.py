@@ -143,7 +143,7 @@ class Type(Node):
 
 class Alias(Node):
 
-    def __init__(self, name, target,ctype=None):
+    def __init__(self, name, target, ctype=None):
         Node.__init__(self, name)
         self.target = target
         self.ctype = ctype
