@@ -66,12 +66,7 @@ class Transformer(object):
         nodes = []
         for symbol in self.generator.get_symbols():
             node = self._traverse_one(symbol)
-            if node is None:
-                continue
-            if node.name.startswith('_'):
-                continue
-            self._namespace.nodes.append(node)
-            self._output_ns[node.name] = node
+            self._add_node(node)
         return self._namespace
 
     def register_include(self, filename):
@@ -103,6 +98,14 @@ class Transformer(object):
         return name
 
     # Private
+
+    def _add_node(self, node):
+        if node is None:
+            return
+        if node.name.startswith('_'):
+            return
+        self._namespace.nodes.append(node)
+        self._output_ns[node.name] = node
 
     def _strip_namespace_func(self, name):
         orig_name = name

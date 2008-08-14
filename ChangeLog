@@ -1,5 +1,10 @@
 2008-08-14  Johan Dahlin  <johan@gnome.org>
 
+	* giscanner/transformer.py:
+	New internal function for adding a new node.
+
+2008-08-14  Johan Dahlin  <johan@gnome.org>
+
 	* gir/Makefile.am:
 	Define an internal _H_ variable so we skip parsing both
 	i18n headers, only one is needed.
