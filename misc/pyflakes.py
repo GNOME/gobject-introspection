@@ -13,22 +13,28 @@ from compiler import ast
 class Message(object):
     message = ''
     message_args = ()
+
     def __init__(self, filename, lineno):
         self.filename = filename
         self.lineno = lineno
+
     def __str__(self):
-        return '%s:%s: %s' % (self.filename, self.lineno, self.message % self.message_args)
+        return '%s:%s: %s' % (self.filename,
+                              self.lineno,
+                              self.message % self.message_args)
 
 
 class UnusedImport(Message):
     message = '%r imported but unused'
+
     def __init__(self, filename, lineno, name):
         Message.__init__(self, filename, lineno)
-        self.message_args = (name,)
+        self.message_args = (name, )
 
 
 class RedefinedWhileUnused(Message):
     message = 'redefinition of unused %r from line %r'
+
     def __init__(self, filename, lineno, name, orig_lineno):
         Message.__init__(self, filename, lineno)
         self.message_args = (name, orig_lineno)
@@ -36,6 +42,7 @@ class RedefinedWhileUnused(Message):
 
 class ImportShadowedByLoopVar(Message):
     message = 'import %r from line %r shadowed by loop variable'
+
     def __init__(self, filename, lineno, name, orig_lineno):
         Message.__init__(self, filename, lineno)
         self.message_args = (name, orig_lineno)
@@ -43,20 +50,24 @@ class ImportShadowedByLoopVar(Message):
 
 class ImportStarUsed(Message):
     message = "'from %s import *' used; unable to detect undefined names"
+
     def __init__(self, filename, lineno, modname):
         Message.__init__(self, filename, lineno)
-        self.message_args = (modname,)
+        self.message_args = (modname, )
 
 
 class UndefinedName(Message):
     message = 'undefined name %r'
+
     def __init__(self, filename, lineno, name):
         Message.__init__(self, filename, lineno)
-        self.message_args = (name,)
+        self.message_args = (name, )
 
 
 class UndefinedLocal(Message):
-    message = "local variable %r (defined in enclosing scope on line %r) referenced before assignment"
+    message = ("local variable %r (defined in enclosing scope on line %r) "
+               "referenced before assignment")
+
     def __init__(self, filename, lineno, name, orig_lineno):
         Message.__init__(self, filename, lineno)
         self.message_args = (name, orig_lineno)
@@ -64,13 +75,15 @@ class UndefinedLocal(Message):
 
 class DuplicateArgument(Message):
     message = 'duplicate argument %r in function definition'
+
     def __init__(self, filename, lineno, name):
         Message.__init__(self, filename, lineno)
-        self.message_args = (name,)
+        self.message_args = (name, )
 
 
 class RedefinedFunction(Message):
     message = 'redefinition of function %r from line %r'
+
     def __init__(self, filename, lineno, name, orig_lineno):
         Message.__init__(self, filename, lineno)
         self.message_args = (name, orig_lineno)
@@ -78,9 +91,10 @@ class RedefinedFunction(Message):
 
 class LateFutureImport(Message):
     message = 'future import(s) %r after other statements'
+
     def __init__(self, filename, lineno, names):
         Message.__init__(self, filename, lineno)
-        self.message_args = (names,)
+        self.message_args = (names, )
 
 
 class Binding(object):
@@ -88,6 +102,7 @@ class Binding(object):
     @ivar used: pair of (L{Scope}, line-number) indicating the scope and
                 line number that this binding was last used
     """
+
     def __init__(self, name, source):
         self.name = name
         self.source = source
@@ -97,21 +112,27 @@ class Binding(object):
         return self.name
 
     def __repr__(self):
-        return '<%s object %r from line %r at 0x%x>' % (self.__class__.__name__,
-                                                        self.name,
-                                                        self.source.lineno,
-                                                        id(self))
+        return '<%s object %r from line %r at 0x%x>' % (
+            self.__class__.__name__,
+            self.name,
+            self.source.lineno,
+            id(self))
+
 
 class UnBinding(Binding):
     '''Created by the 'del' operator.'''
 
+
 class Importation(Binding):
+
     def __init__(self, name, source):
         name = name.split('.')[0]
         super(Importation, self).__init__(name, source)
 
+
 class Assignment(Binding):
     pass
+
 
 class FunctionDefinition(Binding):
     pass
@@ -121,14 +142,15 @@ class Scope(dict):
     importStarred = False       # set to True when import * is found
 
     def __repr__(self):
-        return '<%s at 0x%x %s>' % (self.__class__.__name__, id(self), dict.__repr__(self))
+        return '<%s at 0x%x %s>' % (self.__class__.__name__, id(self),
+                                    dict.__repr__(self))
 
     def __init__(self):
         super(Scope, self).__init__()
 
+
 class ClassScope(Scope):
     pass
-
 
 
 class FunctionScope(Scope):
@@ -137,10 +159,10 @@ class FunctionScope(Scope):
 
     @ivar globals: Names declared 'global' in this function.
     """
+
     def __init__(self):
         super(FunctionScope, self).__init__()
         self.globals = {}
-
 
 
 class ModuleScope(Scope):
@@ -175,7 +197,7 @@ class Checker(object):
         `callable` is called, the scope at the time this is called will be
         restored, however it will contain any new bindings added to it.
         '''
-        self.deferred.append( (callable, self.scopeStack[:]) )
+        self.deferred.append((callable, self.scopeStack[:]))
 
     def scope(self):
         return self.scopeStack[-1]
@@ -187,8 +209,10 @@ class Checker(object):
     def check_dead_scopes(self):
         for scope in self.dead_scopes:
             for importation in scope.itervalues():
-                if isinstance(importation, Importation) and not importation.used:
-                    self.report(UnusedImport, importation.source.lineno, importation.name)
+                if (isinstance(importation, Importation) and
+                    not importation.used):
+                    self.report(UnusedImport,
+                                importation.source.lineno, importation.name)
 
     def pushFunctionScope(self):
         self.scopeStack.append(FunctionScope())
@@ -244,7 +268,8 @@ class Checker(object):
         if (isinstance(self.scope.get(value.name), FunctionDefinition)
                     and isinstance(value, FunctionDefinition)):
             self.report(RedefinedFunction,
-                        lineno, value.name, self.scope[value.name].source.lineno)
+                        lineno, value.name,
+                        self.scope[value.name].source.lineno)
 
         if not isinstance(self.scope, ClassScope):
             for scope in self.scopeStack[::-1]:
@@ -253,7 +278,8 @@ class Checker(object):
                         and reportRedef):
 
                     self.report(RedefinedWhileUnused,
-                                lineno, value.name, scope[value.name].source.lineno)
+                                lineno, value.name,
+                                scope[value.name].source.lineno)
 
         if isinstance(value, UnBinding):
             try:
@@ -262,7 +288,6 @@ class Checker(object):
                 self.report(UndefinedName, lineno, value.name)
         else:
             self.scope[value.name] = value
-
 
     def WITH(self, node):
         """
@@ -291,7 +316,6 @@ class Checker(object):
 
         self.handleChildren(node.body)
 
-
     def GLOBAL(self, node):
         """
         Keep track of globals declarations.
@@ -311,6 +335,7 @@ class Checker(object):
         Process bindings for loop variables.
         """
         vars = []
+
         def collectLoopVars(n):
             if hasattr(n, 'name'):
                 vars.append(n.name)
@@ -365,7 +390,6 @@ class Checker(object):
                     and not importStarred):
                 self.report(UndefinedName, node.lineno, node.name)
 
-
     def FUNCTION(self, node):
         if getattr(node, "decorators", None) is not None:
             self.handleChildren(node.decorators)
@@ -391,7 +415,8 @@ class Checker(object):
             self.pushFunctionScope()
             addArgs(node.argnames)
             for name in args:
-                self.addBinding(node.lineno, Assignment(name, node), reportRedef=False)
+                self.addBinding(node.lineno, Assignment(name, node),
+                                reportRedef=False)
             self.handleNode(node.code)
             self.popScope()
 
@@ -407,13 +432,15 @@ class Checker(object):
 
     def ASSNAME(self, node):
         if node.flags == 'OP_DELETE':
-            if isinstance(self.scope, FunctionScope) and node.name in self.scope.globals:
+            if (isinstance(self.scope, FunctionScope) and
+                node.name in self.scope.globals):
                 del self.scope.globals[node.name]
             else:
                 self.addBinding(node.lineno, UnBinding(node.name, node))
         else:
             # if the name hasn't already been defined in the current scope
-            if isinstance(self.scope, FunctionScope) and node.name not in self.scope:
+            if (isinstance(self.scope, FunctionScope) and
+                node.name not in self.scope):
                 # for each function or module scope above us
                 for scope in self.scopeStack[:-1]:
                     if not isinstance(scope, (FunctionScope, ModuleScope)):
@@ -448,7 +475,8 @@ class Checker(object):
     def FROM(self, node):
         if node.modname == '__future__':
             if not self.futuresAllowed:
-                self.report(LateFutureImport, node.lineno, [n[0] for n in node.names])
+                self.report(LateFutureImport,
+                            node.lineno, [n[0] for n in node.names])
         else:
             self.futuresAllowed = False
 
@@ -463,6 +491,7 @@ class Checker(object):
                 importation.used = (self.scope, node.lineno)
             self.addBinding(node.lineno, importation)
 
+
 def check(codeString, filename):
     try:
         tree = compiler.parse(codeString)
@@ -471,7 +500,7 @@ def check(codeString, filename):
         try:
             (lineno, offset, line) = value[1][1:]
         except IndexError:
-            print >> sys.stderr, 'could not compile %r' % (filename,)
+            print >> sys.stderr, 'could not compile %r' % (filename, )
             return 1
         if line.endswith("\n"):
             line = line[:-1]
