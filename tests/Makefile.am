@@ -18,6 +18,7 @@ EXTRA_DIST = \
 
 GIRTESTS = 		\
 	boxed.gir.test  \
+	enum.gir.test  \
 	object.gir.test
 
 %.gir.test: %.gir

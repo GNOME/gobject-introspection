@@ -1,5 +1,12 @@
 2008-08-14  Johan Dahlin  <johan@gnome.org>
 
+	* tests/Makefile.am:
+	* tests/enum.gir:
+	* tools/generate.c (write_enum_info):
+	Fix generation of enum/bitfields
+
+2008-08-14  Johan Dahlin  <johan@gnome.org>
+
 	* girepository/girparser.c (start_field), (start_constant),
 	(start_type), (end_element_handler):
 	Clear up constant parsing

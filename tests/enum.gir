@@ -4,20 +4,20 @@
             xmlns:c="http://www.gtk.org/introspection/c/1.0"
             xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
   <namespace name="Foo">
-    <enum name="Enum1" type-name="FooEnum" get-type="foo_enum_get_type">
+    <enumeration name="Enum1" glib:type-name="FooEnum" glib:get-type="foo_enum_get_type">
       <member name="value1" value="0" />
       <member name="value2" value="1" />
       <member name="value3" value="2" />
-    </enum>
-    <flags name="Flags1" type-name="FooFlags" get-type="foo_flags_get_type">
+    </enumeration>
+    <bitfield name="Flags1" glib:type-name="FooFlags" glib:get-type="foo_flags_get_type">
       <member name="value1" value="1" />
       <member name="value2" value="2" />
       <member name="value3" value="4" />
-    </flags>
-    <enum name="Enum2">
+    </bitfield>
+    <enumeration name="Enum2">
       <member name="value1" value="0" />
       <member name="value2" value="1" />
       <member name="value3" value="2" />
-    </enum>
+    </enumeration>
   </namespace>
 </repository>
