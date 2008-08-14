@@ -29,7 +29,7 @@ from .ast import (Callback, Enum, Function, Member, Namespace, Parameter,
                   type_name_from_ctype)
 from .glibast import (GLibBoxed, GLibEnum, GLibEnumMember, GLibFlags,
                       GLibInterface, GLibObject, GLibSignal)
-from .utils import resolve_libtool, to_underscores
+from .utils import extract_libtool, to_underscores
 
 
 class GLibTransformer(object):
@@ -46,23 +46,27 @@ class GLibTransformer(object):
 
     def add_library(self, libname):
         if libname.endswith('.la'):
-            libname = resolve_libtool(libname)
+            libname = extract_libtool(libname)
         self._libraries.append(ctypes.cdll.LoadLibrary(libname))
 
     def parse(self):
         namespace = self._transformer.parse()
         self._namespace_name = namespace.name
 
+        # First pass, parsing
         for node in namespace.nodes:
             self._parse_node(node)
 
-        # Second round
+        # Introspection is done from within parsing
+
+        # Second pass, resolving types
         for node in self._output_ns.values():
             # associate GtkButtonClass with GtkButton
             if isinstance(node, Struct):
                 self._pair_class_struct(node)
             self._resolve_node(node)
 
+        # Create a new namespace with what we found
         namespace = Namespace(namespace.name)
         namespace.nodes = self._aliases + self._output_ns.values()
         return namespace
@@ -84,26 +88,31 @@ class GLibTransformer(object):
     def _register_internal_type(self, type_name, node):
         self._internal_types[type_name] = node
 
-    def _resolve_type_name(self, type_name):
-        type_name = type_name.replace('*', '')
-        possible_name = self._transformer.resolve_type_name(type_name)
-        if possible_name != type_name:
-            return possible_name
-        possible_node = self._internal_types.get(type_name)
-        if possible_node:
-            return possible_node.name
-        return type_name
+    # Helper functions
 
-    def _resolve_param_type(self, ptype):
-        ptype.name = ptype.name.replace('*', '')
-        type_name = ptype.name
-        type_name = self._transformer.resolve_possible_typedef(type_name)
-        possible_node = self._internal_types.get(type_name)
-        if possible_node:
-            ptype.name = possible_node.name
+    def _create_type(self, type_id):
+        ctype = cgobject.type_name(type_id)
+        type_name = type_name_from_ctype(ctype)
+        return Type(type_name, ctype)
+
+    def _create_gobject(self, node):
+        type_name = 'G' + node.name
+        if type_name == 'GObject':
+            parent_type_name = None
+            symbol = 'intern'
         else:
-            ptype = self._transformer.resolve_param_type(ptype)
-        return ptype
+            type_id = cgobject.type_from_name(type_name)
+            parent_type_name = cgobject.type_name(
+                cgobject.type_parent(type_id))
+            symbol = to_underscores(type_name).lower() + '_get_type'
+        node = GLibObject(node.name, parent_type_name, type_name, symbol)
+        type_id = cgobject.TYPE_OBJECT
+        self._introspect_properties(node, type_id)
+        self._introspect_signals(node, type_id)
+        self._add_attribute(node)
+        self._register_internal_type(type_name, node)
+
+    # Parser
 
     def _parse_node(self, node):
         if isinstance(node, Enum):
@@ -122,34 +131,6 @@ class GLibTransformer(object):
         else:
             print 'GOBJECT BUILDER: Unhandled node:', node
 
-    def _resolve_node(self, node):
-
-        def isany(*klasses):
-            for klass in klasses:
-                if isinstance(node, klass):
-                    return True
-            return False
-
-        if isany(Callback, Function):
-            self._resolve_function(node)
-        if isany(GLibObject, GLibBoxed, GLibInterface):
-            for meth in node.methods:
-                self._resolve_function(meth)
-        if isany(GLibObject, GLibBoxed):
-            for ctor in node.constructors:
-                self._resolve_function(ctor)
-        if isany(GLibObject, GLibInterface):
-            for prop in node.properties:
-                self._resolve_property(prop)
-            for sig in node.signals:
-                self._resolve_function(sig)
-        if isany(Struct, ):
-            for field in node.fields:
-                if isinstance(field, Field):
-                    self._resolve_field(field)
-                elif isinstance(field, Callback):
-                    self._resolve_function(field)
-
     def _parse_alias(self, alias):
         self._aliases.append(alias)
 
@@ -165,20 +146,6 @@ class GLibTransformer(object):
             return
 
         self._add_attribute(func)
-
-    def _resolve_property(self, prop):
-        prop.type = self._resolve_param_type(prop.type)
-
-    def _resolve_function(self, func):
-        self._resolve_parameters(func.parameters)
-        func.retval.type = self._resolve_param_type(func.retval.type)
-
-    def _resolve_parameters(self, parameters):
-        for parameter in parameters:
-            parameter.type = self._resolve_param_type(parameter.type)
-
-    def _resolve_field(self, field):
-        field.type = self._resolve_param_type(field.type)
 
     def _parse_get_type_function(self, func):
         if not self._libraries:
@@ -286,10 +253,7 @@ class GLibTransformer(object):
         for field in class_node.fields[1:]:
             node.fields.append(field)
 
-    def _create_type(self, type_id):
-        ctype = cgobject.type_name(type_id)
-        type_name = type_name_from_ctype(ctype)
-        return Type(type_name, ctype)
+    # Introspection
 
     def _introspect_type(self, type_id, symbol):
         fundamental_type_id = cgobject.type_fundamental(type_id)
@@ -322,23 +286,6 @@ class GLibTransformer(object):
         enum_name = self._transformer.strip_namespace_object(type_name)
         node = klass(enum_name, type_name, members, symbol)
         self._add_attribute(node, replace=True)
-        self._register_internal_type(type_name, node)
-
-    def _create_gobject(self, node):
-        type_name = 'G' + node.name
-        if type_name == 'GObject':
-            parent_type_name = None
-            symbol = 'intern'
-        else:
-            type_id = cgobject.type_from_name(type_name)
-            parent_type_name = cgobject.type_name(
-                cgobject.type_parent(type_id))
-            symbol = to_underscores(type_name).lower() + '_get_type'
-        node = GLibObject(node.name, parent_type_name, type_name, symbol)
-        type_id = cgobject.TYPE_OBJECT
-        self._introspect_properties(node, type_id)
-        self._introspect_signals(node, type_id)
-        self._add_attribute(node)
         self._register_internal_type(type_name, node)
 
     def _introspect_object(self, type_id, symbol):
@@ -412,3 +359,91 @@ class GLibTransformer(object):
                 param = Parameter(name, ptype)
                 signal.parameters.append(param)
             node.signals.append(signal)
+
+    # Resolver
+
+    def _resolve_type_name(self, type_name):
+        type_name = type_name.replace('*', '')
+        possible_name = self._transformer.resolve_type_name(type_name)
+        if possible_name != type_name:
+            return possible_name
+        possible_node = self._internal_types.get(type_name)
+        if possible_node:
+            return possible_node.name
+        return type_name
+
+    def _resolve_param_type(self, ptype):
+        ptype.name = ptype.name.replace('*', '')
+        type_name = ptype.name
+        type_name = self._transformer.resolve_possible_typedef(type_name)
+        possible_node = self._internal_types.get(type_name)
+        if possible_node:
+            ptype.name = possible_node.name
+        else:
+            ptype = self._transformer.resolve_param_type(ptype)
+        return ptype
+
+    def _resolve_node(self, node):
+        if isinstance(node, (Callback, Function)):
+            self._resolve_function(node)
+        elif isinstance(node, GLibObject):
+            self._resolve_glib_object(node)
+        elif isinstance(node, GLibInterface):
+            self._resolve_glib_interface(node)
+        elif isinstance(node, GLibBoxed):
+            self._resolve_glib_boxed(node)
+        elif isinstance(node, Struct):
+            self._resolve_struct(node)
+
+    def _resolve_struct(self, node):
+        for field in node.fields:
+            self._resolve_field(field)
+
+    def _resolve_glib_interface(self, node):
+        self._resolve_methods(node.methods)
+        self._resolve_properties(node.properties)
+        self._resolve_signals(node.signals)
+
+    def _resolve_glib_object(self, node):
+        self._resolve_constructors(node.constructors)
+        self._resolve_methods(node.methods)
+        self._resolve_properties(node.properties)
+        self._resolve_signals(node.signals)
+
+    def _resolve_glib_boxed(self, node):
+        self._resolve_constructors(node.constructors)
+        self._resolve_methods(node.methods)
+
+    def _resolve_constructors(self, constructors):
+        for ctor in constructors:
+            self._resolve_function(ctor)
+
+    def _resolve_methods(self, methods):
+        for method in methods:
+            self._resolve_function(method)
+
+    def _resolve_signals(self, signals):
+        for signal in signals:
+            self._resolve_function(signal)
+
+    def _resolve_properties(self, properties):
+        for prop in properties:
+            self._resolve_property(prop)
+
+    def _resolve_property(self, prop):
+        prop.type = self._resolve_param_type(prop.type)
+
+    def _resolve_function(self, func):
+        self._resolve_parameters(func.parameters)
+        func.retval.type = self._resolve_param_type(func.retval.type)
+
+    def _resolve_parameters(self, parameters):
+        for parameter in parameters:
+            parameter.type = self._resolve_param_type(parameter.type)
+
+    def _resolve_field(self, field):
+        if isinstance(field, Callback):
+            self._resolve_function(field)
+            return
+        field.type = self._resolve_param_type(field.type)
+

@@ -39,7 +39,7 @@ def to_underscores(name):
 _libtool_pat = re.compile("dlname='([A-z0-9\.\-\+]+)'\n")
 
 
-def resolve_libtool(libname):
+def extract_libtool(libname):
     data = open(libname).read()
     filename = _libtool_pat.search(data).groups()[0]
     libname = os.path.join(os.path.dirname(libname),

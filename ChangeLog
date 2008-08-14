@@ -1,5 +1,12 @@
 2008-08-14  Johan Dahlin  <johan@gnome.org>
 
+	* giscanner/glibtransformer.py:
+	* giscanner/utils.py:
+	Refactor a bit, avoid isinstance and add a method
+	for each type we parse.
+
+2008-08-14  Johan Dahlin  <johan@gnome.org>
+
 	* giscanner/ast.py:
 	* giscanner/girparser.py:
 	* giscanner/glibtransformer.py:
