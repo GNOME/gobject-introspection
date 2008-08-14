@@ -39,9 +39,9 @@ class Transformer(object):
         self.generator = generator
         self._namespace = Namespace(namespace_name)
         self._output_ns = {}
-        self._alias_names = {}
-        self._type_names = {}
-        self._ctype_names = {}
+        self._alias_names = {} # Maps from GIName -> GIName
+        self._type_names = {} # Maps from GTName -> (namespace, node)
+        self._ctype_names = {} # Maps from CType -> (namespace, node)
         self._typedefs_ns = {}
         self._strip_prefix = ''
         self._typedefs = {}
@@ -311,6 +311,7 @@ class Transformer(object):
         return '%s.%s' % (nsname, item.name)
 
     def resolve_type_name(self, type_name):
+        type_name = type_name.replace('*', '')
         resolved = self._type_names.get(type_name)
         if resolved:
             return self._typepair_to_str(resolved)

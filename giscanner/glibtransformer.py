@@ -145,13 +145,16 @@ class GLibTransformer(object):
         self._add_attribute(func)
 
     def _parse_get_type_function(self, func):
-        if not self._libraries:
-            return False
-        # GType *_get_type(void)
         symbol = func.symbol
         if not symbol.endswith('_get_type'):
             return False
+        if not self._libraries:
+            print "Warning: No libraries loaded, parsing _get_type function"
+            return False
+        # GType *_get_type(void)
         if func.retval.type.name != 'GObject.GType':
+            print "Warning: *_get_type function returns '%r'" + \
+                ", not GObject.GType"
             return False
         if func.parameters:
             return False
@@ -172,6 +175,13 @@ class GLibTransformer(object):
         self._introspect_type(type_id, symbol)
         return True
 
+    def _name_is_internal_gtype(self, giname):
+        try:
+            node = self._internal_types[giname]
+            return isinstance(node, (GLibObject, GLibInterface, GLibBoxed))
+        except KeyError, e:
+            return False
+
     def _parse_method(self, func):
         if not func.parameters:
             return False
@@ -180,7 +190,7 @@ class GLibTransformer(object):
         #        here, so we can find pointers to objects and not just
         #        pointers to anything
         first_arg = func.parameters[0].type.name
-        if first_arg.count('*') != 1:
+        if not self._name_is_internal_gtype(first_arg):
             return False
 
         object_name = first_arg.replace('*', '')
@@ -190,11 +200,11 @@ class GLibTransformer(object):
         # FIXME: This is hackish, we should preserve the pointer structures
         #        here, so we can find pointers to objects and not just
         #        pointers to anything
-        rtype = func.retval.type
-        if rtype.name.count('*') != 1:
+        rtype = func.retval.type.name
+        if not self._name_is_internal_gtype(rtype):
             return False
 
-        object_name = rtype.name.replace('*', '')
+        object_name = rtype.replace('*', '')
         return self._parse_method_common(func, object_name, is_method=False)
 
     def _parse_method_common(self, func, object_name, is_method):
@@ -220,9 +230,14 @@ class GLibTransformer(object):
 
     def _parse_struct(self, struct):
         # This is a hack, but GObject is a rather fundamental piece so.
+        internal_names = ["Object", 'InitiallyUnowned']
+        g_internal_names = ["G" + x for x in internal_names]
         if (self._namespace_name == 'GObject' and
-            struct.name in ["Object", 'InitiallyUnowned']):
+            struct.name in internal_names):
             self._create_gobject(struct)
+            return
+        elif struct.name in g_internal_names:
+            # Avoid duplicates
             return
         node = self._output_ns.get(struct.name)
         if node is None:

@@ -1,3 +1,16 @@
+2008-08-14  Colin Walters  <walters@verbum.org>
+
+	* giscanner/transformer.py: Comment data structures.
+	Also squash pointers in resolve_type_name to correspond
+	with what we do for params.
+	* giscanner/glibtransformer.py: Print warnings in more
+	situations.  Rework checks for method/constructor to
+	look up in our GType database instead of just checking
+	for *.   Avoid generating <record> for GObject which
+	duplicate the <class>.
+	* gir/Makefile.am: Generate glib-2.0.gir and gobject-2.0.gir
+	in here.
+
 2008-08-14  Johan Dahlin  <johan@gnome.org>
 
 	* giscanner/girwriter.py:
