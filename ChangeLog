@@ -1,3 +1,8 @@
+2008-08-15  Colin Walters  <walters@verbum.org>
+
+	* giscanner/cgobject.py: Define yet more argument
+	prototypes; fix prototype for g_type_fundamental.
+
 2008-08-14  Johan Dahlin  <johan@gnome.org>
 
 	* tests/Makefile.am:

@@ -130,13 +130,6 @@ if not _library_path:
 _gobj = ctypes.cdll.LoadLibrary(_library_path)
 _gobj.g_type_init()
 
-# Workaround this error:
-#   GLib-GObject-CRITICAL **: g_param_spec_pool_list:
-#   assertion `pool != NULL' failed
-# which happens when trying to introspect an interface before instantiating
-# a GObject.
-_gobj.g_object_new(TYPE_OBJECT, None)
-_gobj.g_initially_unowned_get_type()
 
 # Functions
 
@@ -151,6 +144,21 @@ def _gwrap(fname, ret, *argtypes):
     return _deco
 
 
+@_gwrap('g_object_new', ctypes.c_void_p, GType)
+def object_new(type_id):
+    return _gobj.g_object_new(type_id, None)
+
+
+# Workaround this error:
+#   GLib-GObject-CRITICAL **: g_param_spec_pool_list:
+#   assertion `pool != NULL' failed
+# which happens when trying to introspect an interface before instantiating
+# a GObject.
+
+object_new(TYPE_OBJECT)
+_gobj.g_initially_unowned_get_type()
+
+
 @_gwrap('g_type_name', ctypes.c_char_p, GType)
 def type_name(type_id):
     return _gobj.g_type_name(type_id)
@@ -161,7 +169,7 @@ def type_from_name(name):
     return _gobj.g_type_from_name(name)
 
 
-@_gwrap('g_type_fundamental', GType)
+@_gwrap('g_type_fundamental', GType, GType)
 def type_fundamental(type_id):
     return _gobj.g_type_fundamental(type_id)
 
@@ -197,11 +205,16 @@ def object_class_list_properties(type_id):
         yield ctypes.cast(pspecs[i], ctypes.POINTER(GParamSpec)).contents
 
 
+@_gwrap('g_type_default_interface_ref', ctypes.c_void_p, GType)
+def type_default_interface_ref(type_id):
+    return _gobj.g_type_default_interface_ref(type_id)
+
+
 @_gwrap('g_object_interface_list_properties',
        ctypes.POINTER(ctypes.POINTER(GParamSpec)),
        ctypes.c_void_p, ctypes.POINTER(ctypes.c_uint))
 def object_interface_list_properties(type_id):
-    iface = _gobj.g_type_default_interface_ref(type_id)
+    iface = type_default_interface_ref(type_id)
     n = ctypes.c_uint()
     pspecs = _gobj.g_object_interface_list_properties(iface, ctypes.byref(n))
     for i in range(n.value):
@@ -226,6 +239,11 @@ def type_interface_prerequisites(type_id):
         yield type_ids[i]
 
 
+@_gwrap('g_signal_query', None, ctypes.c_uint, ctypes.POINTER(GSignalInfo))
+def signal_query(sigid, qptr):
+    _gobj.g_signal_query(sigid, qptr)
+
+
 @_gwrap('g_signal_list_ids', ctypes.POINTER(ctypes.c_uint),
        GType, ctypes.POINTER(ctypes.c_uint))
 def signal_list(type_id):
@@ -233,5 +251,5 @@ def signal_list(type_id):
     signal_ids = _gobj.g_signal_list_ids(type_id, ctypes.byref(n))
     for i in range(n.value):
         info = GSignalInfo()
-        _gobj.g_signal_query(signal_ids[i], ctypes.byref(info))
+        signal_query(signal_ids[i], ctypes.byref(info))
         yield info
