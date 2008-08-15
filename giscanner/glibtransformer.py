@@ -56,8 +56,10 @@ class GLibTransformer(object):
 
         # Introspection is done from within parsing
 
-        # Second pass, resolving types
-        for node in self._output_ns.values():
+        # Second pass, resolving types; we need to create
+        # a new list here because we're removing things
+        # as we iterate.
+        for node in list(self._output_ns.itervalues()):
             # associate GtkButtonClass with GtkButton
             if isinstance(node, Struct):
                 self._pair_class_struct(node)
@@ -65,14 +67,14 @@ class GLibTransformer(object):
 
         # Create a new namespace with what we found
         namespace = Namespace(namespace.name)
-        namespace.nodes = self._aliases + self._output_ns.values()
+        namespace.nodes = self._aliases + list(self._output_ns.itervalues())
         return namespace
 
     # Private
 
     def _add_attribute(self, node, replace=False):
         node_name = node.name
-        if node_name in self._output_ns and not replace:
+        if (not replace) and node_name in self._output_ns:
             return
         self._output_ns[node_name] = node
 
@@ -153,8 +155,8 @@ class GLibTransformer(object):
             return False
         # GType *_get_type(void)
         if func.retval.type.name != 'GObject.GType':
-            print "Warning: *_get_type function returns '%r'" + \
-                ", not GObject.GType"
+            print ("Warning: *_get_type function returns '%r'" + \
+                ", not GObject.GType") % (func.retval.type.name, )
             return False
         if func.parameters:
             return False
@@ -248,8 +250,8 @@ class GLibTransformer(object):
     def _parse_callback(self, callback):
         self._add_attribute(callback)
 
-    def _pair_class_struct(self, class_node):
-        name = class_node.name
+    def _pair_class_struct(self, maybe_class):
+        name = maybe_class.name
         if (name.endswith('Class') or
             name.endswith('Iface')):
             name = name[:-5]
@@ -257,13 +259,18 @@ class GLibTransformer(object):
             name = name[:-9]
         else:
             return
-
-        node = self._output_ns.get(self._resolve_type_name(name))
-        del self._output_ns[class_node.name]
-        if node is None:
+        name = self._resolve_type_name(name)
+        resolved = self._transformer.strip_namespace_object(name)
+        pair_class = self._output_ns.get(resolved)
+        if pair_class:
+            del self._output_ns[maybe_class.name]
+            for field in maybe_class.fields[1:]:
+                pair_class.fields.append(field)
             return
-        for field in class_node.fields[1:]:
-            node.fields.append(field)
+        name = self._transformer.strip_namespace_object(maybe_class.name)
+        pair_class = self._output_ns.get(name)
+        if pair_class:
+            del self._output_ns[maybe_class.name]
 
     # Introspection
 

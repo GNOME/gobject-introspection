@@ -1,5 +1,16 @@
 2008-08-15  Colin Walters  <walters@verbum.org>
 
+	* giscanner/glibtransformer.py: Explicitly construct
+	new list, since we're deleting as we iterate.
+	Don't delete all structures which end in Class; just
+	ones which have a paired GObject.
+	Fix printing of type warning.
+	* giscanner/transformer.py: Make strip_namespace_object
+	be the identity function if it doesn't match the 
+	namespace.
+
+2008-08-15  Colin Walters  <walters@verbum.org>
+
 	* giscanner/cgobject.py: Define yet more argument
 	prototypes; fix prototype for g_type_fundamental.
 

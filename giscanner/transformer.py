@@ -90,11 +90,9 @@ class Transformer(object):
                 self._type_names[node.name] = (nsname, node)
 
     def strip_namespace_object(self, name):
-        orig_name = name
         prefix = self._namespace.name.lower()
-        name = name.lower()
-        if name.startswith(prefix):
-            name = orig_name[len(prefix):]
+        if len(name) > len(prefix) and name.lower().startswith(prefix):
+            return name[len(prefix):]
         return name
 
     # Private
