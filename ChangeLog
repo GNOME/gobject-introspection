@@ -1,3 +1,13 @@
+2008-08-17  Johan Dahlin  <johan@gnome.org>
+
+	* girepository/gtypelib.c (validate_enum_blob):
+	* giscanner/glibtransformer.py:
+	* giscanner/transformer.py:
+	Remove resolve_possible_typedefs, it was unused.
+	Allow multiple enum values of the sample value in an enum,
+	since it's actually pretty common.
+	Register enums so they can be resolved too.
+
 2008-08-16  Johan Dahlin  <johan@gnome.org>
 
 	* giscanner/girparser.py:

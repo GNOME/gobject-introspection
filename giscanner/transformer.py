@@ -48,7 +48,6 @@ class Transformer(object):
         self._ctype_names = {} # Maps from CType -> (namespace, node)
         self._typedefs_ns = {}
         self._strip_prefix = ''
-        self._typedefs = {}
 
     def get_type_names(self):
         return self._type_names
@@ -58,9 +57,6 @@ class Transformer(object):
 
     def set_strip_prefix(self, strip_prefix):
         self._strip_prefix = strip_prefix
-
-    def resolve_possible_typedef(self, tname):
-        return self._typedefs.get(tname, tname)
 
     def parse(self):
         nodes = []
@@ -161,7 +157,9 @@ class Transformer(object):
 
         enum_name = self.strip_namespace_object(symbol.ident)
         enum_name = symbol.ident[-len(enum_name):]
-        return Enum(enum_name, symbol.ident, members)
+        enum = Enum(enum_name, symbol.ident, members)
+        self._type_names[symbol.ident] = (None, enum)
+        return enum
 
     def _create_object(self, symbol):
         return Member(symbol.ident, symbol.base_type.name,

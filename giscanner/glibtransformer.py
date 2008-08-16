@@ -182,7 +182,8 @@ class GLibTransformer(object):
     def _name_is_internal_gtype(self, giname):
         try:
             node = self._internal_types[giname]
-            return isinstance(node, (GLibObject, GLibInterface, GLibBoxed))
+            return isinstance(node, (GLibObject, GLibInterface, GLibBoxed,
+                                     GLibEnum, GLibFlags))
         except KeyError, e:
             return False
 
@@ -399,7 +400,6 @@ class GLibTransformer(object):
     def _resolve_param_type(self, ptype):
         ptype.name = ptype.name.replace('*', '')
         type_name = ptype.name
-        type_name = self._transformer.resolve_possible_typedef(type_name)
         possible_node = self._internal_types.get(type_name)
         if possible_node:
             ptype.name = possible_node.name
