@@ -33,7 +33,7 @@
         <type name="uint32" c:type="guint"/>
       </field>
     </record>
-    <enumeration name="gtypedebugflags" c:type="GTypeDebugFlags">
+    <enumeration name="GTypeDebugFlags" c:type="GTypeDebugFlags">
       <member name="none" value="0" c:identifier="G_TYPE_DEBUG_NONE"/>
       <member name="objects" value="1" c:identifier="G_TYPE_DEBUG_OBJECTS"/>
       <member name="signals" value="2" c:identifier="G_TYPE_DEBUG_SIGNALS"/>
@@ -419,7 +419,7 @@
         </parameter>
       </parameters>
     </callback>
-    <enumeration name="gtypefundamentalflags" c:type="GTypeFundamentalFlags">
+    <enumeration name="GTypeFundamentalFlags" c:type="GTypeFundamentalFlags">
       <member name="lag_classed" value="1" c:identifier="G_TYPE_FLAG_CLASSED"/>
       <member name="lag_instantiatable"
               value="2"
@@ -431,7 +431,7 @@
               value="8"
               c:identifier="G_TYPE_FLAG_DEEP_DERIVABLE"/>
     </enumeration>
-    <enumeration name="gtypeflags" c:type="GTypeFlags">
+    <enumeration name="GTypeFlags" c:type="GTypeFlags">
       <member name="_abstract" value="16" c:identifier="G_TYPE_FLAG_ABSTRACT"/>
       <member name="_value_abstract"
               value="32"
@@ -454,7 +454,7 @@
         <type name="GClassFinalizeFunc" c:type="GClassFinalizeFunc"/>
       </field>
       <field name="class_data">
-        <type name="gconstpointer" c:type="gconstpointer"/>
+        <type name="any" c:type="gconstpointer"/>
       </field>
       <field name="instance_size">
         <type name="uint16" c:type="guint16"/>
@@ -1109,7 +1109,7 @@
           <type name="GType" c:type="GType"/>
         </parameter>
         <parameter name="src_boxed">
-          <type name="gconstpointer" c:type="gconstpointer"/>
+          <type name="any" c:type="gconstpointer"/>
         </parameter>
       </parameters>
     </function>
@@ -1135,7 +1135,7 @@
           <type name="GValue" c:type="GValue*"/>
         </parameter>
         <parameter name="v_boxed">
-          <type name="gconstpointer" c:type="gconstpointer"/>
+          <type name="any" c:type="gconstpointer"/>
         </parameter>
       </parameters>
     </function>
@@ -1149,7 +1149,7 @@
           <type name="GValue" c:type="GValue*"/>
         </parameter>
         <parameter name="v_boxed">
-          <type name="gconstpointer" c:type="gconstpointer"/>
+          <type name="any" c:type="gconstpointer"/>
         </parameter>
       </parameters>
     </function>
@@ -1199,7 +1199,7 @@
           <type name="GValue" c:type="GValue*"/>
         </parameter>
         <parameter name="v_boxed">
-          <type name="gconstpointer" c:type="gconstpointer"/>
+          <type name="any" c:type="gconstpointer"/>
         </parameter>
       </parameters>
     </function>
@@ -1213,7 +1213,7 @@
           <type name="GValue" c:type="GValue*"/>
         </parameter>
         <parameter name="v_boxed">
-          <type name="gconstpointer" c:type="gconstpointer"/>
+          <type name="any" c:type="gconstpointer"/>
         </parameter>
       </parameters>
     </function>
@@ -2518,7 +2518,7 @@
         </parameter>
       </parameters>
     </function>
-    <enumeration name="gparamflags" c:type="GParamFlags">
+    <enumeration name="GParamFlags" c:type="GParamFlags">
       <member name="readable" value="1" c:identifier="G_PARAM_READABLE"/>
       <member name="writable" value="2" c:identifier="G_PARAM_WRITABLE"/>
       <member name="construct" value="4" c:identifier="G_PARAM_CONSTRUCT"/>
@@ -3183,7 +3183,7 @@
         </parameter>
       </parameters>
     </callback>
-    <enumeration name="gsignalflags" c:type="GSignalFlags">
+    <enumeration name="GSignalFlags" c:type="GSignalFlags">
       <member name="run_first" value="1" c:identifier="G_SIGNAL_RUN_FIRST"/>
       <member name="run_last" value="2" c:identifier="G_SIGNAL_RUN_LAST"/>
       <member name="run_cleanup"
@@ -3194,11 +3194,11 @@
       <member name="action" value="32" c:identifier="G_SIGNAL_ACTION"/>
       <member name="no_hooks" value="64" c:identifier="G_SIGNAL_NO_HOOKS"/>
     </enumeration>
-    <enumeration name="gconnectflags" c:type="GConnectFlags">
+    <enumeration name="GConnectFlags" c:type="GConnectFlags">
       <member name="after" value="1" c:identifier="G_CONNECT_AFTER"/>
       <member name="swapped" value="2" c:identifier="G_CONNECT_SWAPPED"/>
     </enumeration>
-    <enumeration name="gsignalmatchtype" c:type="GSignalMatchType">
+    <enumeration name="GSignalMatchType" c:type="GSignalMatchType">
       <member name="id" value="1" c:identifier="G_SIGNAL_MATCH_ID"/>
       <member name="detail" value="2" c:identifier="G_SIGNAL_MATCH_DETAIL"/>
       <member name="closure" value="4" c:identifier="G_SIGNAL_MATCH_CLOSURE"/>
@@ -3279,43 +3279,6 @@
         </parameter>
       </parameters>
     </function>
-    <function name="signal_new_valist" c:identifier="g_signal_new_valist">
-      <return-value>
-        <type name="uint32" c:type="guint"/>
-      </return-value>
-      <parameters>
-        <parameter name="signal_name">
-          <type name="string" c:type="gchar*"/>
-        </parameter>
-        <parameter name="itype">
-          <type name="GType" c:type="GType"/>
-        </parameter>
-        <parameter name="signal_flags">
-          <type name="GSignalFlags" c:type="GSignalFlags"/>
-        </parameter>
-        <parameter name="class_closure">
-          <type name="GClosure" c:type="GClosure*"/>
-        </parameter>
-        <parameter name="accumulator">
-          <type name="GSignalAccumulator" c:type="GSignalAccumulator"/>
-        </parameter>
-        <parameter name="accu_data">
-          <type name="any" c:type="gpointer"/>
-        </parameter>
-        <parameter name="c_marshaller">
-          <type name="GSignalCMarshaller" c:type="GSignalCMarshaller"/>
-        </parameter>
-        <parameter name="return_type">
-          <type name="GType" c:type="GType"/>
-        </parameter>
-        <parameter name="n_params">
-          <type name="uint32" c:type="guint"/>
-        </parameter>
-        <parameter name="args">
-          <type name="va_list" c:type="va_list"/>
-        </parameter>
-      </parameters>
-    </function>
     <function name="signal_new" c:identifier="g_signal_new">
       <return-value>
         <type name="uint32" c:type="guint"/>
@@ -3366,25 +3329,6 @@
         </parameter>
         <parameter name="return_value">
           <type name="GValue" c:type="GValue*"/>
-        </parameter>
-      </parameters>
-    </function>
-    <function name="signal_emit_valist" c:identifier="g_signal_emit_valist">
-      <return-value>
-        <type name="none" c:type="void"/>
-      </return-value>
-      <parameters>
-        <parameter name="instance">
-          <type name="any" c:type="gpointer"/>
-        </parameter>
-        <parameter name="signal_id">
-          <type name="uint32" c:type="guint"/>
-        </parameter>
-        <parameter name="detail">
-          <type name="GLib.GQuark" c:type="GQuark"/>
-        </parameter>
-        <parameter name="var_args">
-          <type name="va_list" c:type="va_list"/>
         </parameter>
       </parameters>
     </function>
@@ -4258,22 +4202,6 @@
         </parameter>
       </parameters>
     </function>
-    <function name="object_new_valist" c:identifier="g_object_new_valist">
-      <return-value>
-        <type name="Object" c:type="GObject*"/>
-      </return-value>
-      <parameters>
-        <parameter name="object_type">
-          <type name="GType" c:type="GType"/>
-        </parameter>
-        <parameter name="first_property_name">
-          <type name="string" c:type="gchar*"/>
-        </parameter>
-        <parameter name="var_args">
-          <type name="va_list" c:type="va_list"/>
-        </parameter>
-      </parameters>
-    </function>
     <function name="object_set" c:identifier="g_object_set">
       <return-value>
         <type name="none" c:type="void"/>
@@ -4323,38 +4251,6 @@
         </parameter>
         <parameter name="signal_spec">
           <type name="string" c:type="gchar*"/>
-        </parameter>
-      </parameters>
-    </function>
-    <function name="object_set_valist" c:identifier="g_object_set_valist">
-      <return-value>
-        <type name="none" c:type="void"/>
-      </return-value>
-      <parameters>
-        <parameter name="object">
-          <type name="Object" c:type="GObject*"/>
-        </parameter>
-        <parameter name="first_property_name">
-          <type name="string" c:type="gchar*"/>
-        </parameter>
-        <parameter name="var_args">
-          <type name="va_list" c:type="va_list"/>
-        </parameter>
-      </parameters>
-    </function>
-    <function name="object_get_valist" c:identifier="g_object_get_valist">
-      <return-value>
-        <type name="none" c:type="void"/>
-      </return-value>
-      <parameters>
-        <parameter name="object">
-          <type name="Object" c:type="GObject*"/>
-        </parameter>
-        <parameter name="first_property_name">
-          <type name="string" c:type="gchar*"/>
-        </parameter>
-        <parameter name="var_args">
-          <type name="va_list" c:type="va_list"/>
         </parameter>
       </parameters>
     </function>

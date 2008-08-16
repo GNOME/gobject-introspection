@@ -46,7 +46,7 @@ pre-check:
 	@if test "$(top_builddir)" != "$(top_srcdir)"; then \
 	   cp $(top_srcdir)/giscanner/*.py $(top_builddir)/giscanner; \
 	fi
-	@echo "Running parser checks..."
+	@echo "Running scanner checks..."
 
 check-local: pre-check check-utility.gir check-Foo.gir
 	@echo "======================="

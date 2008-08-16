@@ -1,3 +1,12 @@
+2008-08-16  Johan Dahlin  <johan@gnome.org>
+
+	* gir/glib-2.0.gir:
+	* gir/gobject-2.0.gir:
+	Regenerate
+
+	* tests/scanner/Makefile.am:
+	parser -> scanner
+
 2008-08-15  Colin Walters  <walters@verbum.org>
 
 	* giscanner/glibtransformer.py: Explicitly construct
