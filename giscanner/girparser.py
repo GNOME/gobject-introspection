@@ -21,7 +21,7 @@
 from xml.etree.cElementTree import parse
 
 from .ast import Alias, Callback, Function, Parameter, Return, Struct, Type
-from .glibast import GLibInterface, GLibObject
+from .glibast import GLibBoxed, GLibInterface, GLibObject
 
 CORE_NS = "http://www.gtk.org/introspection/core/1.0"
 C_NS = "http://www.gtk.org/introspection/c/1.0"
@@ -84,10 +84,11 @@ class GIRParser(object):
             struct = Struct(node.attrib['name'],
                             node.attrib[_cns('type')])
             self._add_node(struct)
+        elif node.tag == _glibns('boxed'):
+            self._parse_boxed(node)
         elif node.tag in [_corens('interface'),
                           _corens('enumeration'),
                           _corens('bitfield'),
-                          _glibns('boxed'),
                           ]:
             pass
 
@@ -134,3 +135,16 @@ class GIRParser(object):
             raise ValueError("failed to find type")
         return Type(typenode.attrib['name'],
                     typenode.attrib[_cns('type')])
+
+    def _parse_boxed(self, node):
+        obj = GLibBoxed(node.attrib[_glibns('name')],
+                        node.attrib[_glibns('type-name')],
+                        node.attrib[_glibns('get-type')])
+        for method in node.findall(_corens('method')):
+            obj.methods.append(self._parse_function(method, Function))
+        for ctor in node.findall(_corens('constructor')):
+            obj.constructors.append(self._parse_function(ctor, Function))
+        for callback in node.findall(_corens('callback')):
+            obj.fields.append(self._parse_function(callback, Callback))
+        self._add_node(obj)
+

@@ -1,5 +1,10 @@
 2008-08-16  Johan Dahlin  <johan@gnome.org>
 
+	* giscanner/girparser.py:
+	Parse boxed types.
+
+2008-08-16  Johan Dahlin  <johan@gnome.org>
+
 	* giscanner/glibtransformer.py:
 	Resolve type names for alias targets
 	* giscanner/transformer.py:
