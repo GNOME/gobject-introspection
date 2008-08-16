@@ -64,6 +64,8 @@ class GLibTransformer(object):
             if isinstance(node, Struct):
                 self._pair_class_struct(node)
             self._resolve_node(node)
+        for alias in self._aliases:
+            self._resolve_alias(alias)
 
         # Create a new namespace with what we found
         namespace = Namespace(namespace.name)
@@ -416,6 +418,8 @@ class GLibTransformer(object):
             self._resolve_glib_boxed(node)
         elif isinstance(node, Struct):
             self._resolve_struct(node)
+        elif isinstance(node, Alias):
+            self._resolve_alias(node)
 
     def _resolve_struct(self, node):
         for field in node.fields:
@@ -468,3 +472,6 @@ class GLibTransformer(object):
             self._resolve_function(field)
             return
         field.type = self._resolve_param_type(field.type)
+
+    def _resolve_alias(self, field):
+        field.target = self._resolve_type_name(field.target)

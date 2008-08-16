@@ -239,6 +239,10 @@ class Transformer(object):
         ctype = self._create_source_type(source_type)
         if ctype == 'va_list':
             raise SkipError
+        # FIXME: FILE* should not be skipped, it should be handled
+        #        properly instead
+        elif ctype == 'FILE*':
+            raise SkipError
         type_name = type_name_from_ctype(ctype)
         resolved_type_name = self.resolve_type_name(type_name)
         return Type(resolved_type_name, ctype)
