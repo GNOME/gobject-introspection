@@ -1,6 +1,11 @@
 2008-08-16  Johan Dahlin  <johan@gnome.org>
 
 	* giscanner/girparser.py:
+	Parse enumeration/bitfield.
+
+2008-08-16  Johan Dahlin  <johan@gnome.org>
+
+	* giscanner/girparser.py:
 	Parse boxed types.
 
 2008-08-16  Johan Dahlin  <johan@gnome.org>

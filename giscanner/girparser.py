@@ -21,7 +21,8 @@
 from xml.etree.cElementTree import parse
 
 from .ast import Alias, Callback, Function, Parameter, Return, Struct, Type
-from .glibast import GLibBoxed, GLibInterface, GLibObject
+from .glibast import (GLibBoxed, GLibEnum, GLibEnumMember, GLibFlags,
+                      GLibInterface, GLibObject)
 
 CORE_NS = "http://www.gtk.org/introspection/core/1.0"
 C_NS = "http://www.gtk.org/introspection/c/1.0"
@@ -81,16 +82,12 @@ class GIRParser(object):
                           _corens('interface')]:
             self._parse_object_interface(node)
         elif node.tag == _corens('record'):
-            struct = Struct(node.attrib['name'],
-                            node.attrib[_cns('type')])
-            self._add_node(struct)
+            self._parse_struct(node)
         elif node.tag == _glibns('boxed'):
             self._parse_boxed(node)
-        elif node.tag in [_corens('interface'),
-                          _corens('enumeration'),
-                          _corens('bitfield'),
-                          ]:
-            pass
+        elif node.tag in [_corens('enumeration'),
+                          _corens('bitfield')]:
+            self._parse_enumeration_bitfield(node)
 
     def _parse_alias(self, node):
         return Alias(node.attrib['name'],
@@ -129,6 +126,11 @@ class GIRParser(object):
             identifier = node.attrib.get(_cns('identifier'))
             return klass(name, retval, parameters, identifier)
 
+    def _parse_struct(self, node):
+        struct = Struct(node.attrib['name'],
+                        node.attrib[_cns('type')])
+        self._add_node(struct)
+
     def _parse_type(self, node):
         typenode = node.find(_corens('type'))
         if node is None:
@@ -148,3 +150,21 @@ class GIRParser(object):
             obj.fields.append(self._parse_function(callback, Callback))
         self._add_node(obj)
 
+    def _parse_member(self, node):
+        return GLibEnumMember(node.attrib['name'],
+                              node.attrib['value'],
+                              node.attrib[_cns('identifier')],
+                              node.attrib.get(_glibns('get-type')))
+
+    def _parse_enumeration_bitfield(self, node):
+        klass = (GLibFlags if node.tag == _corens('bitfield') else GLibEnum)
+
+        members = []
+        for member in node.findall(_corens('member')):
+            members.append(self._parse_member(member))
+        obj = klass(node.attrib.get(_corens('name')),
+                    node.attrib.get(_glibns('type-name')),
+                    members,
+                    node.attrib.get(_glibns('get-type')))
+
+        self._add_node(obj)
