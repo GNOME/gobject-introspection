@@ -1,11 +1,13 @@
 BUILT_SOURCES = 
 
 G_IR_SCANNER = $(top_srcdir)/tools/g-ir-scanner
+G_IR_SCANNER_FILES = $(top_srcdir)/giscanner/*.py \
+	$(top_builddir)/giscanner/libgiscanner.la
 
 # glib
 GLIB_INCLUDEDIR=`pkg-config --variable=includedir glib-2.0`/glib-2.0
 GLIB_LIBDIR=`pkg-config --variable=libdir glib-2.0`
-glib-2.0.gir: $(G_IR_SCANNER)
+glib-2.0.gir: $(G_IR_SCANNER) $(G_IR_SCANNER_FILES)
 	$(G_IR_SCANNER) -v --namespace GLib \
 	    --output $@ \
 	    --strip-prefix=g \
@@ -18,7 +20,7 @@ BUILT_SOURCES += glib-2.0.gir
 
 # gobject
 GOBJECT_LIBDIR=`pkg-config --variable=libdir gobject-2.0`
-gobject-2.0.gir: $(G_IR_SCANNER)
+gobject-2.0.gir: $(G_IR_SCANNER) $(G_IR_SCANNER_FILES)
 	$(G_IR_SCANNER) -v --namespace GObject \
 	    --output $@ \
 	    --strip-prefix=g \
@@ -32,3 +34,5 @@ BUILT_SOURCES += gobject-2.0.gir
 
 girdir=$(datadir)/gir
 dist_gir_DATA = $(BUILT_SOURCES)
+
+EXTRA_DIST = glib-2.0-good.gir gobject-2.0-good.gir

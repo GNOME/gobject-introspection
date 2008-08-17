@@ -1,3 +1,13 @@
+2008-08-17  Colin Walters  <walters@verbum.org>
+
+	* gir/glib-2.0.gir, gir/gobject-2.0.gir:
+	Rename to -good, always generate during build.
+	* gir/Makefile.am: Ensure .gir files dep on
+	all scanner sources.
+	* Makefile.am: Switch build order to ensure
+	the scanner is ready before we do gir/.
+	* tools/g-ir-scanner: Look for .git too.
+
 2008-08-17  Johan Dahlin  <johan@gnome.org>
 
 	* girepository/gtypelib.c (validate_enum_blob):

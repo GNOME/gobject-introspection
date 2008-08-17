@@ -27,7 +27,8 @@ import sys
 # This only works on unix systems
 currentdir = os.path.dirname(os.path.abspath(sys.argv[0]))
 basedir = os.path.abspath(os.path.join(currentdir, '..'))
-if os.path.exists(os.path.join(basedir, '.svn')):
+if (os.path.exists(os.path.join(basedir, '.svn')) or
+    os.path.exists(os.path.join(basedir, '.git'))):
     path = basedir
 else:
     path = os.path.join(basedir, 'lib', 'python%d.%d' % sys.version_info[:2],

@@ -18,7 +18,7 @@ endif
 
 ACLOCAL_AMFLAGS = -I m4
 
-SUBDIRS = gir girepository giscanner tools tests
+SUBDIRS = girepository giscanner tools gir tests
 DIST_SUBDIRS = m4 $(SUBDIRS)
 
 man_MANS = docs/g-ir-scanner.1
