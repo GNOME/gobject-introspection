@@ -1,5 +1,10 @@
 2008-08-17  Johan Dahlin  <johan@gnome.org>
 
+	* docs/global-module-registry.txt:
+	Add a document for an on disk module registry format
+
+2008-08-17  Johan Dahlin  <johan@gnome.org>
+
 	* gir/Makefile.am:
 	* gir/gio-2.0-good.gir:
 	Add a gio gir.
