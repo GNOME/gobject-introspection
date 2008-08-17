@@ -1217,47 +1217,6 @@
         </parameter>
       </parameters>
     </function>
-    <function name="closure_get_type" c:identifier="g_closure_get_type">
-      <return-value>
-        <type name="GType" c:type="GType"/>
-      </return-value>
-    </function>
-    <function name="value_get_type" c:identifier="g_value_get_type">
-      <return-value>
-        <type name="GType" c:type="GType"/>
-      </return-value>
-    </function>
-    <function name="value_array_get_type"
-              c:identifier="g_value_array_get_type">
-      <return-value>
-        <type name="GType" c:type="GType"/>
-      </return-value>
-    </function>
-    <function name="date_get_type" c:identifier="g_date_get_type">
-      <return-value>
-        <type name="GType" c:type="GType"/>
-      </return-value>
-    </function>
-    <function name="strv_get_type" c:identifier="g_strv_get_type">
-      <return-value>
-        <type name="GType" c:type="GType"/>
-      </return-value>
-    </function>
-    <function name="gstring_get_type" c:identifier="g_gstring_get_type">
-      <return-value>
-        <type name="GType" c:type="GType"/>
-      </return-value>
-    </function>
-    <function name="hash_table_get_type" c:identifier="g_hash_table_get_type">
-      <return-value>
-        <type name="GType" c:type="GType"/>
-      </return-value>
-    </function>
-    <function name="regex_get_type" c:identifier="g_regex_get_type">
-      <return-value>
-        <type name="GType" c:type="GType"/>
-      </return-value>
-    </function>
     <record name="Closure" c:type="GClosure"/>
     <record name="ClosureNotifyData" c:type="GClosureNotifyData"/>
     <callback name="GCallback">
@@ -4063,12 +4022,6 @@
         <type name="GValue" c:type="GValue*"/>
       </field>
     </record>
-    <function name="initially_unowned_get_type"
-              c:identifier="g_initially_unowned_get_type">
-      <return-value>
-        <type name="GType" c:type="GType"/>
-      </return-value>
-    </function>
     <function name="object_class_install_property"
               c:identifier="g_object_class_install_property">
       <return-value>
@@ -5594,81 +5547,21 @@
         </parameter>
       </parameters>
     </function>
-    <function name="io_channel_get_type" c:identifier="g_io_channel_get_type">
-      <return-value>
-        <type name="GType" c:type="GType"/>
-      </return-value>
-    </function>
-    <function name="io_condition_get_type"
-              c:identifier="g_io_condition_get_type">
-      <return-value>
-        <type name="GType" c:type="GType"/>
-      </return-value>
-    </function>
+    <bitfield name="GIOCondition"
+              c:type="GIOCondition"
+              glib:type-name="GIOCondition"
+              glib:get-type="g_io_condition_get_type">
+      <member name="in" value="1" c:identifier="G_IO_IN" glib:nick="in"/>
+      <member name="out" value="4" c:identifier="G_IO_OUT" glib:nick="out"/>
+      <member name="pri" value="2" c:identifier="G_IO_PRI" glib:nick="pri"/>
+      <member name="err" value="8" c:identifier="G_IO_ERR" glib:nick="err"/>
+      <member name="hup" value="16" c:identifier="G_IO_HUP" glib:nick="hup"/>
+      <member name="nval"
+              value="32"
+              c:identifier="G_IO_NVAL"
+              glib:nick="nval"/>
+    </bitfield>
     <record name="TypeModule" c:type="GTypeModule"/>
-    <record name="GTypeModule" c:type="_GTypeModule">
-      <field name="parent_instance">
-        <type name="Object" c:type="GObject"/>
-      </field>
-      <field name="use_count">
-        <type name="uint32" c:type="guint"/>
-      </field>
-      <field name="type_infos">
-        <type name="GLib.GSList" c:type="GSList*"/>
-      </field>
-      <field name="interface_infos">
-        <type name="GLib.GSList" c:type="GSList*"/>
-      </field>
-      <field name="name">
-        <type name="string" c:type="gchar*"/>
-      </field>
-      <callback name="load">
-        <return-value>
-          <type name="boolean" c:type="gboolean"/>
-        </return-value>
-        <parameters>
-          <parameter name="module">
-            <type name="GTypeModule" c:type="GTypeModule*"/>
-          </parameter>
-        </parameters>
-      </callback>
-      <callback name="unload">
-        <return-value>
-          <type name="none" c:type="void"/>
-        </return-value>
-        <parameters>
-          <parameter name="module">
-            <type name="GTypeModule" c:type="GTypeModule*"/>
-          </parameter>
-        </parameters>
-      </callback>
-      <callback name="reserved1">
-        <return-value>
-          <type name="none" c:type="void"/>
-        </return-value>
-      </callback>
-      <callback name="reserved2">
-        <return-value>
-          <type name="none" c:type="void"/>
-        </return-value>
-      </callback>
-      <callback name="reserved3">
-        <return-value>
-          <type name="none" c:type="void"/>
-        </return-value>
-      </callback>
-      <callback name="reserved4">
-        <return-value>
-          <type name="none" c:type="void"/>
-        </return-value>
-      </callback>
-    </record>
-    <function name="type_module_get_type"
-              c:identifier="g_type_module_get_type">
-      <return-value>
-        <type name="GType" c:type="GType"/>
-      </return-value>
-    </function>
     <function name="type_module_use" c:identifier="g_type_module_use">
       <return-value>
         <type name="boolean" c:type="gboolean"/>
@@ -5838,12 +5731,25 @@
         </parameter>
       </parameters>
     </callback>
-    <function name="type_plugin_get_type"
-              c:identifier="g_type_plugin_get_type">
-      <return-value>
-        <type name="GType" c:type="GType"/>
-      </return-value>
-    </function>
+    <interface name="GTypePlugin"
+               c:type="GTypePlugin"
+               glib:type-name="GTypePlugin"
+               glib:get-type="g_type_plugin_get_type">
+      <field name="use_plugin">
+        <type name="GTypePluginUse" c:type="GTypePluginUse"/>
+      </field>
+      <field name="unuse_plugin">
+        <type name="GTypePluginUnuse" c:type="GTypePluginUnuse"/>
+      </field>
+      <field name="complete_type_info">
+        <type name="GTypePluginCompleteTypeInfo"
+              c:type="GTypePluginCompleteTypeInfo"/>
+      </field>
+      <field name="complete_interface_info">
+        <type name="GTypePluginCompleteInterfaceInfo"
+              c:type="GTypePluginCompleteInterfaceInfo"/>
+      </field>
+    </interface>
     <function name="type_plugin_use" c:identifier="g_type_plugin_use">
       <return-value>
         <type name="none" c:type="void"/>
@@ -6366,11 +6272,6 @@
           <type name="GValue" c:type="GValue*"/>
         </parameter>
       </parameters>
-    </function>
-    <function name="gtype_get_type" c:identifier="g_gtype_get_type">
-      <return-value>
-        <type name="GType" c:type="GType"/>
-      </return-value>
     </function>
     <function name="value_set_gtype" c:identifier="g_value_set_gtype">
       <return-value>

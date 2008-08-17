@@ -1,3 +1,14 @@
+2008-08-17  Johan Dahlin  <johan@gnome.org>
+
+	* gir/Makefile.am:
+	* gir/glib-2.0-good.gir:
+	* gir/gobject-2.0-good.gir:
+	* giscanner/cgobject.py:
+	* giscanner/glibtransformer.py:
+	Regenerate GObject & GType.
+	Avoid warnings when generating gobject-2.0.gir.
+	Introspect a little more, and skip *_get_type functions.
+
 2008-08-17  Colin Walters  <walters@verbum.org>
 
 	* gir/glib-2.0.gir, gir/gobject-2.0.gir:

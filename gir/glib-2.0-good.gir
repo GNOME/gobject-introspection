@@ -13896,19 +13896,6 @@
         </parameter>
       </parameters>
     </function>
-    <function name="fprintf" c:identifier="g_fprintf">
-      <return-value>
-        <type name="int32" c:type="gint"/>
-      </return-value>
-      <parameters>
-        <parameter name="file">
-          <type name="FILE" c:type="FILE*"/>
-        </parameter>
-        <parameter name="format">
-          <type name="string" c:type="gchar*"/>
-        </parameter>
-      </parameters>
-    </function>
     <function name="sprintf" c:identifier="g_sprintf">
       <return-value>
         <type name="int32" c:type="gint"/>

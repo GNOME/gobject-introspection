@@ -41,9 +41,9 @@ TYPE_INTERFACE = 8
 TYPE_ENUM = 48
 TYPE_FLAGS = 52
 TYPE_STRING = 64
+TYPE_POINTER = 68
 TYPE_BOXED = 72
 TYPE_OBJECT = 80
-
 
 # Typedefs
 
@@ -253,3 +253,6 @@ def signal_list(type_id):
         info = GSignalInfo()
         signal_query(signal_ids[i], ctypes.byref(info))
         yield info
+
+TYPE_GTYPE = type_from_name('GType')
+TYPE_POINTER = type_from_name('gpointer')

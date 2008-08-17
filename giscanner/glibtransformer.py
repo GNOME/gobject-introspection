@@ -152,15 +152,16 @@ class GLibTransformer(object):
         symbol = func.symbol
         if not symbol.endswith('_get_type'):
             return False
-        if not self._libraries:
-            print "Warning: No libraries loaded, parsing _get_type function"
-            return False
         # GType *_get_type(void)
-        if func.retval.type.name != 'GObject.GType':
+        if func.retval.type.name not in ['GType', 'GObject.GType']:
             print ("Warning: *_get_type function returns '%r'" + \
                 ", not GObject.GType") % (func.retval.type.name, )
             return False
         if func.parameters:
+            return False
+
+        if not self._libraries:
+            print "Warning: No libraries loaded, cannot call %s" % (symbol, )
             return False
 
         for library in self._libraries:
@@ -288,8 +289,16 @@ class GLibTransformer(object):
             self._introspect_interface(type_id, symbol)
         elif fundamental_type_id == cgobject.TYPE_BOXED:
             self._introspect_boxed(type_id, symbol)
+        elif fundamental_type_id == cgobject.TYPE_BOXED:
+            self._introspect_boxed(type_id, symbol)
+        elif fundamental_type_id == cgobject.TYPE_POINTER:
+            # FIXME: Should we do something about these?
+            #        GHashTable, GValue and a few other fundamentals are
+            #        covered here
+            return
         else:
-            print 'unhandled GType: %s' % (cgobject.type_name(type_id), )
+            print 'unhandled GType: %s(%d)' % (cgobject.type_name(type_id),
+                                               type_id)
 
     def _introspect_enum(self, ftype_id, type_id, symbol):
         type_class = cgobject.type_class_ref(type_id)
