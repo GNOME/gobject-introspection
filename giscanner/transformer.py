@@ -76,12 +76,12 @@ class Transformer(object):
             raise NotImplementedError(filename)
         nsname = parser.get_namespace_name()
         for node in parser.get_nodes():
-            if hasattr(node, 'ctype'):
-                self._ctype_names[node.ctype] = (nsname, node)
             if isinstance(node, (GLibBoxed, Interface, Class)):
                 self._type_names[node.type_name] = (nsname, node)
             elif isinstance(node, Alias):
                 self._alias_names[node.name] = (nsname, node)
+            elif hasattr(node, 'ctype'):
+                self._ctype_names[node.ctype] = (nsname, node)
             else:
                 self._type_names[node.name] = (nsname, node)
 
@@ -157,6 +157,7 @@ class Transformer(object):
 
         enum_name = self.strip_namespace_object(symbol.ident)
         enum_name = symbol.ident[-len(enum_name):]
+        enum_name = self._remove_prefix(enum_name)
         enum = Enum(enum_name, symbol.ident, members)
         self._type_names[symbol.ident] = (None, enum)
         return enum
@@ -191,7 +192,7 @@ class Transformer(object):
         else:
             print 'TRANSFORMER: Unhandled source type %r' % (
                 source_type, )
-            value = '???'
+            value = 'any'
         return value
 
     def _create_parameters(self, base_type, options=None):

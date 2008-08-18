@@ -150,4 +150,9 @@ struct _FooRectangle
   gint height;
 };
 
+void
+foo_method_external_references (UtilityObject *object,
+				UtilityEnumType e,
+				UtilityFlagType f);
+
 #endif /* __FOO_OBJECT_H__ */

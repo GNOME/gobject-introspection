@@ -49,6 +49,7 @@ gio-2.0.gir: $(G_IR_SCANNER) $(G_IR_SCANNER_FILES)
 	    -I$(GIO_LIBDIR)/glib-2.0/include \
 	    -DGIO_COMPILATION \
             --pkg glib-2.0 \
+            --pkg gobject-2.0 \
 	    $(GLIB_INCLUDEDIR)/gio/*.h
 BUILT_SOURCES += gio-2.0.gir
 CLEANFILES = $(BUILT_SOURCES)

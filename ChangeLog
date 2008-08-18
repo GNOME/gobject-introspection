@@ -1,5 +1,21 @@
 2008-08-18  Johan Dahlin  <johan@gnome.org>
 
+	* gir/Makefile.am:
+	* giscanner/girparser.py:
+	Set ctype of enums
+	* giscanner/transformer.py:
+	Improve enum parsing for enums without a GType.
+	Make flags/enum references to other girs work
+	* giscanner/utils.py:
+	Simplify this a bit
+	* tests/scanner/Makefile.am:
+	* tests/scanner/foo-object.h:
+	* tests/scanner/utility-expected.gir:
+	* tests/scanner/utility.h:
+	Add a new test for external enum references
+
+2008-08-18  Johan Dahlin  <johan@gnome.org>
+
 	* docs/global-module-registry.txt: Update
 
 	* tests/array.gir: Update with new type proposal

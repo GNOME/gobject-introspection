@@ -9,5 +9,15 @@
            glib:type-name="UtilityObject"
            glib:get-type="utility_object_get_type">
     </class>
+    <enumeration name="Enum" c:type="UtilityEnum">
+      <member name="a" value="0" c:identifier="UTILITY_ENUM_A"/>
+      <member name="b" value="1" c:identifier="UTILITY_ENUM_B"/>
+      <member name="c" value="2" c:identifier="UTILITY_ENUM_C"/>
+    </enumeration>
+    <enumeration name="Flag" c:type="UtilityFlag">
+      <member name="a" value="0" c:identifier="UTILITY_FLAG_A"/>
+      <member name="b" value="1" c:identifier="UTILITY_FLAG_B"/>
+      <member name="c" value="2" c:identifier="UTILITY_FLAG_C"/>
+    </enumeration>
   </namespace>
 </repository>

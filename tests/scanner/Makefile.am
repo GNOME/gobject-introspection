@@ -22,6 +22,7 @@ SCANNER_LIBS = $(top_srcdir)/giscanner/*.py $(top_builddir)/giscanner/libgiscann
 
 utility.gir: libutility.la utility.h $(SCANNER) $(SCANNER_LIBS)
 	$(CHECK_DEBUG) $(SCANNER) -v \
+	--include=$(top_srcdir)/gir/glib-2.0.gir \
 	--include=$(top_srcdir)/gir/gobject-2.0.gir \
 	--library=libutility.la \
 	--namespace=utility \
@@ -31,6 +32,7 @@ utility.gir: libutility.la utility.h $(SCANNER) $(SCANNER_LIBS)
 
 Foo.gir: libfoo.la foo-object.h $(SCANNER) $(SCANNER_LIBS)
 	$(CHECK_DEBUG) $(SCANNER) -v \
+	--include=$(top_srcdir)/gir/glib-2.0.gir \
 	--include=$(top_srcdir)/gir/gobject-2.0.gir \
 	--include=$(top_builddir)/tests/scanner/utility.gir \
 	--library=libfoo.la \

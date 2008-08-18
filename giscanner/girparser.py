@@ -158,13 +158,12 @@ class GIRParser(object):
 
     def _parse_enumeration_bitfield(self, node):
         klass = (GLibFlags if node.tag == _corens('bitfield') else GLibEnum)
-
         members = []
         for member in node.findall(_corens('member')):
             members.append(self._parse_member(member))
-        obj = klass(node.attrib.get(_corens('name')),
+        obj = klass(node.attrib.get('name'),
                     node.attrib.get(_glibns('type-name')),
                     members,
                     node.attrib.get(_glibns('get-type')))
-
+        obj.ctype = node.attrib.get(_cns('type'))
         self._add_node(obj)

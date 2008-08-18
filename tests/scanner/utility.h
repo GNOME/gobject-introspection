@@ -22,4 +22,18 @@ struct _UtilityObjectClass
 
 GType                 utility_object_get_type          (void) G_GNUC_CONST;
 
+typedef enum
+{
+  UTILITY_ENUM_A,
+  UTILITY_ENUM_B,
+  UTILITY_ENUM_C
+} UtilityEnumType;
+
+typedef enum
+{
+  UTILITY_FLAG_A,
+  UTILITY_FLAG_B,
+  UTILITY_FLAG_C
+} UtilityFlagType;
+
 #endif /* __UTILITY_H__ */

@@ -48,8 +48,8 @@ def extract_libtool(libname):
 
 
 def strip_common_prefix(first, second):
-    first_underscore = to_underscores(first)
-    for i, c in enumerate(first_underscore.upper()):
+    second = second.replace('_', '')
+    for i, c in enumerate(first.upper()):
         if c != second[i]:
             break
     return second[i:]
