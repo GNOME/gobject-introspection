@@ -1,5 +1,7 @@
 2008-08-18  Johan Dahlin  <johan@gnome.org>
 
+	* tests/array.gir: Update with new type proposal
+
 	* girepository/girepository.c (g_type_tag_to_string):
 	* girepository/girepository.h:
 	* girepository/girnode.c (g_ir_node_get_full_size_internal),
