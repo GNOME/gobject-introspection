@@ -153,6 +153,9 @@ struct _FooRectangle
 void
 foo_method_external_references (UtilityObject *object,
 				UtilityEnumType e,
-				UtilityFlagType f);
+				UtilityFlagType f,
+				UtilityStruct s);
+
+void foo_rectangle_add(FooRectangle *r1, const FooRectangle *r2);
 
 #endif /* __FOO_OBJECT_H__ */

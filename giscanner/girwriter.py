@@ -209,7 +209,7 @@ class GIRWriter(XMLWriter):
 
     def _write_callback(self, callback):
         # FIXME: reuse _write_function
-        attrs = [('name', callback.name)]
+        attrs = [('name', callback.name), ('c:type', callback.ctype)]
         with self.tagcontext('callback', attrs):
             self._write_return_type(callback.retval)
             self._write_parameters(callback.parameters)

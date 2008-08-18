@@ -91,7 +91,8 @@ class GIRParser(object):
 
     def _parse_alias(self, node):
         return Alias(node.attrib['name'],
-                     node.attrib['target'])
+                     node.attrib['target'],
+                     node.attrib.get(_cns('type')))
 
     def _parse_object_interface(self, node):
         if node.tag == _corens('interface'):
@@ -121,7 +122,8 @@ class GIRParser(object):
             parameters.append(Parameter(paramnode.attrib['name'],
                                         self._parse_type(paramnode)))
         if klass is Callback:
-            return klass(name, retval, parameters)
+            return klass(name, retval, parameters,
+                         node.attrib.get(_cns('type')))
         else:
             identifier = node.attrib.get(_cns('identifier'))
             return klass(name, retval, parameters, identifier)

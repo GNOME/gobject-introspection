@@ -36,4 +36,9 @@ typedef enum
   UTILITY_FLAG_C
 } UtilityFlagType;
 
+typedef struct
+{
+  int field;
+} UtilityStruct;
+
 #endif /* __UTILITY_H__ */

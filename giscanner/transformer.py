@@ -76,12 +76,14 @@ class Transformer(object):
             raise NotImplementedError(filename)
         nsname = parser.get_namespace_name()
         for node in parser.get_nodes():
-            if isinstance(node, (GLibBoxed, Interface, Class)):
+            if isinstance(node, Alias):
+                self._alias_names[node.ctype] = (nsname, node)
+            elif isinstance(node, (GLibBoxed, Interface, Class)):
                 self._type_names[node.type_name] = (nsname, node)
-            elif isinstance(node, Alias):
-                self._alias_names[node.name] = (nsname, node)
             elif hasattr(node, 'ctype'):
                 self._ctype_names[node.ctype] = (nsname, node)
+            elif hasattr(node, 'symbol'):
+                self._ctype_names[node.symbol] = (nsname, node)
             else:
                 self._type_names[node.name] = (nsname, node)
 
@@ -89,7 +91,7 @@ class Transformer(object):
         prefix = self._namespace.name.lower()
         if len(name) > len(prefix) and name.lower().startswith(prefix):
             return name[len(prefix):]
-        return name
+        return self._remove_prefix(name)
 
     # Private
 
@@ -102,12 +104,10 @@ class Transformer(object):
         self._output_ns[node.name] = node
 
     def _strip_namespace_func(self, name):
-        orig_name = name
         prefix = self._namespace.name.lower() + '_'
-        name = name.lower()
-        if name.startswith(prefix):
-            name = orig_name[len(prefix):]
-        return name
+        if name.lower().startswith(prefix):
+            name = name[len(prefix):]
+        return self._remove_prefix(name)
 
     def _remove_prefix(self, name):
         # when --strip-prefix=g:
@@ -227,7 +227,9 @@ class Transformer(object):
                        CTYPE_UNION,
                        CTYPE_VOID):
             if symbol.base_type.name:
-                return Alias(symbol.ident, symbol.base_type.name)
+                name = self.strip_namespace_object(symbol.ident)
+                target = self.strip_namespace_object(symbol.base_type.name)
+                return Alias(name, target, ctype=symbol.ident)
             return None
         else:
             raise NotImplementedError(
@@ -289,6 +291,7 @@ class Transformer(object):
 
     def _create_typedef_struct(self, symbol):
         name = self._remove_prefix(symbol.ident)
+        name = self.strip_namespace_object(name)
         struct = Struct(name, symbol.ident)
         self._typedefs_ns[symbol.ident] = struct
         return struct
@@ -296,7 +299,15 @@ class Transformer(object):
     def _create_struct(self, symbol):
         struct = self._typedefs_ns.get(symbol.ident, None)
         if struct is None:
-            name = self._remove_prefix(symbol.ident)
+            # This is a bit of a hack; really we should try
+            # to resolve through the typedefs to find the real
+            # name
+            if symbol.ident.startswith('_'):
+                name = symbol.ident[1:]
+            else:
+                name = symbol.ident
+            name = self._remove_prefix(name)
+            name = self.strip_namespace_object(name)
             name = self.resolve_type_name(name)
             struct = Struct(name, symbol.ident)
 
@@ -310,7 +321,8 @@ class Transformer(object):
     def _create_callback(self, symbol):
         parameters = self._create_parameters(symbol.base_type.base_type)
         retval = self._create_return(symbol.base_type.base_type.base_type)
-        return Callback(symbol.ident, retval, list(parameters))
+        name = self.strip_namespace_object(symbol.ident)
+        return Callback(name, retval, list(parameters), symbol.ident)
 
     def _parse_type_annotation(self, annotation):
         if (annotation[0] == "[" and
@@ -324,30 +336,31 @@ class Transformer(object):
             return item.name
         return '%s.%s' % (nsname, item.name)
 
-    def resolve_type_name(self, type_name):
+    def resolve_type_name(self, type_name, ctype=None):
         type_name = type_name.replace('*', '')
-        resolved = self._type_names.get(type_name)
-        if resolved:
-            return self._typepair_to_str(resolved)
+        type_name = self.strip_namespace_object(type_name)
         resolved = self._alias_names.get(type_name)
         if resolved:
             return self._typepair_to_str(resolved)
-        return type_name
-
-    def resolve_param_type(self, ptype):
-        type_name = ptype.name.replace('*', '')
         resolved = self._type_names.get(type_name)
         if resolved:
-            ptype.name = self._typepair_to_str(resolved)
-            return ptype
-        if hasattr(ptype, 'ctype'):
-            ctype = ptype.ctype
+            return self._typepair_to_str(resolved)
+        if ctype:
+            ctype = ctype.replace('*', '')
             resolved = self._ctype_names.get(ctype)
             if resolved:
-                ptype.name = self._typepair_to_str(resolved)
-                return ptype
-        resolved = self._alias_names.get(type_name)
-        if resolved:
-            ptype.name = self._typepair_to_str(resolved)
-            return ptype
+                return self._typepair_to_str(resolved)
+        return type_name
+
+    def ctype_of(self, obj):
+        if hasattr(obj, 'ctype'):
+            return obj.ctype
+        elif hasattr(obj, 'symbol'):
+            return obj.symbol
+        else:
+            return None
+
+    def resolve_param_type(self, ptype):
+        ptype.name = self.resolve_type_name(ptype.name,
+                                            self.ctype_of(ptype))
         return ptype

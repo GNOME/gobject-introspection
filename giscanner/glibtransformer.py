@@ -19,13 +19,14 @@
 #
 
 import ctypes
+import sys
 
 from . import cgobject
 from .odict import odict
 from .ast import (Callback, Enum, Function, Member, Namespace, Parameter,
                   Property, Return, Struct, Type, Alias, type_name_from_ctype)
 from .glibast import (GLibBoxed, GLibEnum, GLibEnumMember, GLibFlags,
-                      GLibInterface, GLibObject, GLibSignal)
+                      GLibInterface, GLibObject, GLibSignal, type_names)
 from .utils import extract_libtool, to_underscores
 
 
@@ -37,7 +38,9 @@ class GLibTransformer(object):
         self._aliases = []
         self._output_ns = odict()
         self._libraries = []
+        self._failed_types = {}
         self._internal_types = {}
+        self._validating = False
 
     # Public API
 
@@ -56,16 +59,20 @@ class GLibTransformer(object):
 
         # Introspection is done from within parsing
 
-        # Second pass, resolving types; we need to create
-        # a new list here because we're removing things
-        # as we iterate.
-        for node in list(self._output_ns.itervalues()):
+        # Second pass, delete class structures, resolve
+        # all types we now know about
+        nodes = list(self._output_ns.itervalues())
+        for node in nodes:
+            self._resolve_node(node)
             # associate GtkButtonClass with GtkButton
             if isinstance(node, Struct):
                 self._pair_class_struct(node)
-            self._resolve_node(node)
         for alias in self._aliases:
             self._resolve_alias(alias)
+
+        # Third pass; ensure all types are known
+        if 0:
+            self._validate(nodes)
 
         # Create a new namespace with what we found
         namespace = Namespace(namespace.name)
@@ -94,6 +101,7 @@ class GLibTransformer(object):
     def _create_type(self, type_id):
         ctype = cgobject.type_name(type_id)
         type_name = type_name_from_ctype(ctype)
+        type_name = self._resolve_type_name(type_name)
         return Type(type_name, ctype)
 
     def _create_gobject(self, node):
@@ -153,9 +161,14 @@ class GLibTransformer(object):
         if not symbol.endswith('_get_type'):
             return False
         # GType *_get_type(void)
-        if func.retval.type.name not in ['GType', 'GObject.GType']:
-            print ("Warning: *_get_type function returns '%r'" + \
-                ", not GObject.GType") % (func.retval.type.name, )
+        # This is a bit fishy, why do we need all these aliases?
+        if func.retval.type.name not in ['Type',
+                                         'GType',
+                                         'Object.Type',
+                                         'GObject.Type',
+                                         'GObject.GType']:
+            print ("Warning: *_get_type function returns '%r'"
+                   ", not GObject.Type") % (func.retval.type.name, )
             return False
         if func.parameters:
             return False
@@ -172,6 +185,8 @@ class GLibTransformer(object):
                 continue
         else:
             print 'Warning: could not find symbol: %s' % symbol
+            name = symbol.replace('_get_type', '')
+            self._failed_types[name] = True
             return False
 
         func.restype = cgobject.GType
@@ -182,7 +197,7 @@ class GLibTransformer(object):
 
     def _name_is_internal_gtype(self, giname):
         try:
-            node = self._internal_types[giname]
+            node = self._get_attribute(giname)
             return isinstance(node, (GLibObject, GLibInterface, GLibBoxed,
                                      GLibEnum, GLibFlags))
         except KeyError, e:
@@ -191,47 +206,34 @@ class GLibTransformer(object):
     def _parse_method(self, func):
         if not func.parameters:
             return False
-
-        # FIXME: This is hackish, we should preserve the pointer structures
-        #        here, so we can find pointers to objects and not just
-        #        pointers to anything
-        first_arg = func.parameters[0].type.name
-        if not self._name_is_internal_gtype(first_arg):
-            return False
-
-        object_name = first_arg.replace('*', '')
-        return self._parse_method_common(func, object_name, is_method=True)
+        return self._parse_method_common(func, True)
 
     def _parse_constructor(self, func):
-        # FIXME: This is hackish, we should preserve the pointer structures
-        #        here, so we can find pointers to objects and not just
-        #        pointers to anything
-        rtype = func.retval.type.name
-        if not self._name_is_internal_gtype(rtype):
+        return self._parse_method_common(func, False)
+
+    def _parse_method_common(self, func, is_method):
+        if not is_method:
+            target_arg = func.retval
+        else:
+            target_arg = func.parameters[0]
+        klass = self._get_attribute(target_arg.type.name)
+        if klass is None or not isinstance(klass, (GLibObject, GLibBoxed)):
             return False
 
-        object_name = rtype.replace('*', '')
-        return self._parse_method_common(func, object_name, is_method=False)
-
-    def _parse_method_common(self, func, object_name, is_method):
-        orig_name = object_name
-        if object_name.lower().startswith(self._namespace_name.lower()):
-            object_name = object_name[len(self._namespace_name):]
-        class_ = self._get_attribute(object_name)
-        if class_ is None or not isinstance(class_, (GLibObject, GLibBoxed)):
-            return False
-
-        # GtkButton -> gtk_button_, so we can figure out the method name
-        prefix = to_underscores(orig_name).lower() + '_'
+        # Look at the original C type (before namespace stripping), without
+        # pointers: GtkButton -> gtk_button_, so we can figure out the
+        # method name
+        orig_type = target_arg.type.ctype.replace('*', '')
+        prefix = to_underscores(orig_type).lower() + '_'
         if not func.symbol.startswith(prefix):
             return False
 
         # Strip namespace and object prefix: gtk_window_new -> new
         func.name = func.symbol[len(prefix):]
         if is_method:
-            class_.methods.append(func)
+            klass.methods.append(func)
         else:
-            class_.constructors.append(func)
+            klass.constructors.append(func)
         return True
 
     def _parse_struct(self, struct):
@@ -254,26 +256,48 @@ class GLibTransformer(object):
     def _parse_callback(self, callback):
         self._add_attribute(callback)
 
-    def _pair_class_struct(self, maybe_class):
-        name = maybe_class.name
+    def _strip_class_suffix(self, name):
         if (name.endswith('Class') or
             name.endswith('Iface')):
-            name = name[:-5]
+            return name[:-5]
         elif name.endswith('Interface'):
-            name = name[:-9]
+            return name[:-9]
         else:
+            return name
+
+    def _arg_is_failed(self, param):
+        ctype = self._transformer.ctype_of(param).replace('*', '')
+        uscored = to_underscores(self._strip_class_suffix(ctype)).lower()
+        if uscored in self._failed_types:
+            print >> sys.stderr, "failed type: %r" % (param, )
+            return True
+        return False
+
+    def _pair_class_struct(self, maybe_class):
+        name = self._strip_class_suffix(maybe_class.name)
+        if name == maybe_class.name:
             return
+
+        if self._arg_is_failed(maybe_class):
+            print "WARNING: deleting no-type %r" % (maybe_class.name, )
+            del self._output_ns[maybe_class.name]
+            return
+
         name = self._resolve_type_name(name)
         resolved = self._transformer.strip_namespace_object(name)
         pair_class = self._output_ns.get(resolved)
-        if pair_class:
+        if pair_class and isinstance(pair_class,
+                                     (GLibObject, GLibBoxed, GLibInterface)):
+
             del self._output_ns[maybe_class.name]
             for field in maybe_class.fields[1:]:
                 pair_class.fields.append(field)
             return
         name = self._transformer.strip_namespace_object(maybe_class.name)
         pair_class = self._output_ns.get(name)
-        if pair_class:
+        if pair_class and isinstance(pair_class,
+                                     (GLibObject, GLibBoxed, GLibInterface)):
+
             del self._output_ns[maybe_class.name]
 
     # Introspection
@@ -328,12 +352,7 @@ class GLibTransformer(object):
             type_name, symbol)
         self._introspect_properties(node, type_id)
         self._introspect_signals(node, type_id)
-        self._add_attribute(node)
-        try:
-            self._remove_attribute(type_name)
-        except KeyError:
-            print 'Warning: could not remove %s' % type_name
-            pass
+        self._add_attribute(node, replace=True)
         self._register_internal_type(type_name, node)
 
     def _introspect_interface(self, type_id, symbol):
@@ -345,19 +364,14 @@ class GLibTransformer(object):
             type_name, symbol)
         self._introspect_properties(node, type_id)
         self._introspect_signals(node, type_id)
-        self._add_attribute(node)
+        self._add_attribute(node, replace=True)
         self._register_internal_type(type_name, node)
 
     def _introspect_boxed(self, type_id, symbol):
         type_name = cgobject.type_name(type_id)
         node = GLibBoxed(self._transformer.strip_namespace_object(type_name),
                          type_name, symbol)
-        self._add_attribute(node)
-        # GdkEvent raises KeyError, FooBoxed ends up duplicated if we don't
-        try:
-            self._remove_attribute(type_name)
-        except KeyError:
-            pass
+        self._add_attribute(node, replace=True)
         self._register_internal_type(type_name, node)
 
     def _introspect_properties(self, node, type_id):
@@ -406,6 +420,19 @@ class GLibTransformer(object):
             return possible_node.name
         return type_name
 
+    def _validate_type(self, name):
+        if name in type_names:
+            return True
+        if name.find('.') >= 0:
+            return True
+        if name in self._internal_types:
+            return True
+        if name in self._aliases:
+            return True
+        if name in self._output_ns:
+            return True
+        return False
+
     def _resolve_param_type(self, ptype):
         ptype.name = ptype.name.replace('*', '')
         type_name = ptype.name
@@ -414,6 +441,8 @@ class GLibTransformer(object):
             ptype.name = possible_node.name
         else:
             ptype = self._transformer.resolve_param_type(ptype)
+        if self._validating and not self._validate_type(ptype.name):
+            raise ValueError("Unknown type %r" % (ptype.name, ))
         return ptype
 
     def _resolve_node(self, node):
@@ -484,3 +513,24 @@ class GLibTransformer(object):
 
     def _resolve_alias(self, field):
         field.target = self._resolve_type_name(field.target)
+
+    # Validation
+
+    def _validate(self, nodes):
+        nodes = list(self._output_ns.itervalues())
+        i = 0
+        self._validating = True
+        while True:
+            print "Type resolution; pass=%d" % (i, )
+            initlen = len(nodes)
+            nodes = list(self._output_ns.itervalues())
+            for node in nodes:
+                try:
+                    self._resolve_node(node)
+                except ValueError, e:
+                    print "WARNING: %s: Deleting %r" % (e, node)
+                    self._remove_attribute(node.name)
+            if len(nodes) == initlen:
+                break
+            i += 1
+        self._validating = False

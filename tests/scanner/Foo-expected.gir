@@ -3,17 +3,12 @@
             xmlns:c="http://www.gtk.org/introspection/c/1.0"
             xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
   <namespace name="Foo">
-    <alias name="FooList" target="GSList"/>
+    <alias name="List" target="GSList" c:type="FooList"/>
     <interface name="Interface"
                c:type="FooInterface"
                glib:type-name="FooInterface"
                glib:get-type="foo_interface_get_type">
     </interface>
-    <function name="init" c:identifier="foo_init">
-      <return-value>
-        <type name="int32" c:type="gint"/>
-      </return-value>
-    </function>
     <class name="Object"
            c:type="FooObject"
            parent="GObject.Object"
@@ -26,7 +21,7 @@
       </constructor>
       <method name="method" c:identifier="foo_object_method">
         <return-value>
-          <type name="int32" c:type="gint"/>
+          <type name="int" c:type="gint"/>
         </return-value>
         <parameters>
           <parameter name="object">
@@ -46,7 +41,7 @@
       </method>
       <method name="out" c:identifier="foo_object_out">
         <return-value>
-          <type name="int32" c:type="gint"/>
+          <type name="int" c:type="gint"/>
         </return-value>
         <parameters>
           <parameter name="object">
@@ -82,7 +77,7 @@
       </method>
       <method name="inout" c:identifier="foo_object_inout">
         <return-value>
-          <type name="int32" c:type="gint"/>
+          <type name="int" c:type="gint"/>
         </return-value>
         <parameters>
           <parameter name="object">
@@ -95,7 +90,7 @@
       </method>
       <method name="inout2" c:identifier="foo_object_inout2">
         <return-value>
-          <type name="int32" c:type="gint"/>
+          <type name="int" c:type="gint"/>
         </return-value>
         <parameters>
           <parameter name="object">
@@ -108,7 +103,7 @@
       </method>
       <method name="inout3" c:identifier="foo_object_inout3">
         <return-value>
-          <type name="int32" c:type="gint"/>
+          <type name="int" c:type="gint"/>
         </return-value>
         <parameters>
           <parameter name="object">
@@ -121,7 +116,7 @@
       </method>
       <method name="in" c:identifier="foo_object_in">
         <return-value>
-          <type name="int32" c:type="gint"/>
+          <type name="int" c:type="gint"/>
         </return-value>
         <parameters>
           <parameter name="object">
@@ -134,7 +129,7 @@
       </method>
       <method name="calleeowns" c:identifier="foo_object_calleeowns">
         <return-value>
-          <type name="int32" c:type="gint"/>
+          <type name="int" c:type="gint"/>
         </return-value>
         <parameters>
           <parameter name="object">
@@ -147,7 +142,7 @@
       </method>
       <method name="calleesowns" c:identifier="foo_object_calleesowns">
         <return-value>
-          <type name="int32" c:type="gint"/>
+          <type name="int" c:type="gint"/>
         </return-value>
         <parameters>
           <parameter name="object">
@@ -197,7 +192,7 @@
             <type name="any" c:type="void*"/>
           </parameter>
           <parameter name="some_type">
-            <type name="GObject.GType" c:type="GType"/>
+            <type name="GObject.Type" c:type="GType"/>
           </parameter>
         </parameters>
       </method>
@@ -210,14 +205,14 @@
             <type name="Object" c:type="FooObject*"/>
           </parameter>
           <parameter name="blah">
-            <type name="FooList" c:type="FooList*"/>
+            <type name="List" c:type="FooList*"/>
           </parameter>
         </parameters>
       </method>
       <property name="string">
         <type name="string" c:type="gchararray"/>
       </property>
-      <callback name="virtual_method">
+      <callback name="virtual_method" c:type="virtual_method">
         <return-value>
           <type name="boolean" c:type="gboolean"/>
         </return-value>
@@ -255,6 +250,11 @@
         </return-value>
       </constructor>
     </class>
+    <function name="init" c:identifier="foo_init">
+      <return-value>
+        <type name="int" c:type="gint"/>
+      </return-value>
+    </function>
     <enumeration name="EnumType"
                  c:type="FooEnumType"
                  glib:type-name="FooEnumType"
@@ -334,7 +334,7 @@
         </parameters>
       </method>
     </glib:boxed>
-    <callback name="FooCallback">
+    <callback name="Callback" c:type="FooCallback">
       <return-value>
         <type name="boolean" c:type="gboolean"/>
       </return-value>
@@ -350,28 +350,61 @@
         </parameter>
       </parameters>
     </callback>
-    <record name="FooStruct" c:type="FooStruct">
+    <record name="Struct" c:type="FooStruct">
       <field name="priv">
-        <type name="FooStructPrivate" c:type="FooStructPrivate*"/>
+        <type name="StructPrivate" c:type="FooStructPrivate*"/>
       </field>
       <field name="member">
         <type name="int32" c:type="int"/>
       </field>
     </record>
-    <record name="FooStructPrivate" c:type="FooStructPrivate"/>
-    <record name="FooRectangle" c:type="FooRectangle">
+    <record name="StructPrivate" c:type="FooStructPrivate"/>
+    <record name="Rectangle" c:type="FooRectangle">
       <field name="x">
-        <type name="int32" c:type="gint"/>
+        <type name="int" c:type="gint"/>
       </field>
       <field name="y">
-        <type name="int32" c:type="gint"/>
+        <type name="int" c:type="gint"/>
       </field>
       <field name="width">
-        <type name="int32" c:type="gint"/>
+        <type name="int" c:type="gint"/>
       </field>
       <field name="height">
-        <type name="int32" c:type="gint"/>
+        <type name="int" c:type="gint"/>
       </field>
     </record>
+    <function name="method_external_references"
+              c:identifier="foo_method_external_references">
+      <return-value>
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="object">
+          <type name="utility.Object" c:type="UtilityObject*"/>
+        </parameter>
+        <parameter name="e">
+          <type name="utility.EnumType" c:type="UtilityEnumType"/>
+        </parameter>
+        <parameter name="f">
+          <type name="utility.FlagType" c:type="UtilityFlagType"/>
+        </parameter>
+        <parameter name="s">
+          <type name="utility.Struct" c:type="UtilityStruct"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="rectangle_add" c:identifier="foo_rectangle_add">
+      <return-value>
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="r1">
+          <type name="Rectangle" c:type="FooRectangle*"/>
+        </parameter>
+        <parameter name="r2">
+          <type name="Rectangle" c:type="FooRectangle*"/>
+        </parameter>
+      </parameters>
+    </function>
   </namespace>
 </repository>

@@ -22,7 +22,8 @@ from .ast import Class, Enum, Interface, Member, Node, Property, Struct
 from .ast import (
     type_names,
     TYPE_STRING, TYPE_INT8, TYPE_UINT8, TYPE_INT16, TYPE_UINT16,
-    TYPE_UINT32, TYPE_INT32, TYPE_LONG, TYPE_ULONG, TYPE_FLOAT,
+    TYPE_UINT32, TYPE_INT32, TYPE_LONG, TYPE_ULONG, TYPE_INT64,
+    TYPE_UINT64, TYPE_FLOAT, TYPE_INT, TYPE_UINT,
     TYPE_DOUBLE, TYPE_BOOLEAN, TYPE_ANY, TYPE_SIZE, TYPE_SSIZE)
 
 # Glib type names
@@ -31,12 +32,14 @@ type_names['gint8'] = TYPE_INT8
 type_names['guint8'] = TYPE_UINT8
 type_names['gint16'] = TYPE_INT16
 type_names['guint16'] = TYPE_UINT16
-type_names['gint'] = TYPE_INT32
-type_names['guint'] = TYPE_UINT32
+type_names['gint'] = TYPE_INT
+type_names['guint'] = TYPE_UINT
 type_names['gint32'] = TYPE_INT32
 type_names['guint32'] = TYPE_UINT32
 type_names['glong'] = TYPE_LONG
 type_names['gulong'] = TYPE_ULONG
+type_names['gint64'] = TYPE_INT64
+type_names['guint64'] = TYPE_UINT64
 type_names['gfloat'] = TYPE_FLOAT
 type_names['gdouble'] = TYPE_DOUBLE
 type_names['gchar*'] = TYPE_STRING

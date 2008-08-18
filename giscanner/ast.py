@@ -35,12 +35,14 @@ TYPE_INT8 = 'int8'
 TYPE_UINT8 = 'uint8'
 TYPE_INT16 = 'int16'
 TYPE_UINT16 = 'uint16'
+TYPE_INT = 'int'
+TYPE_UINT = 'uint'
 TYPE_INT32 = 'int32'
 TYPE_UINT32 = 'uint32'
-TYPE_INT64 = 'int64'
-TYPE_UINT64 = 'uint64'
 TYPE_LONG = 'long'
 TYPE_ULONG = 'ulong'
+TYPE_INT64 = 'int64'
+TYPE_UINT64 = 'uint64'
 
 # Floating-point
 TYPE_FLOAT = 'float'
@@ -90,6 +92,13 @@ type_names['void*'] = TYPE_ANY
 type_names['void'] = TYPE_NONE
 type_names['size_t'] = TYPE_SIZE
 type_names['ssize_t'] = TYPE_SSIZE
+
+# GIR names
+type_names['none'] = TYPE_NONE
+type_names['string'] = TYPE_STRING
+type_names['int32'] = TYPE_INT32
+type_names['uint32'] = TYPE_UINT32
+type_names['any'] = TYPE_ANY
 
 
 def type_name_from_ctype(ctype):
@@ -278,10 +287,11 @@ class Property(Node):
 
 class Callback(Node):
 
-    def __init__(self, name, retval, parameters):
+    def __init__(self, name, retval, parameters, ctype=None):
         Node.__init__(self, name)
         self.retval = retval
         self.parameters = parameters
+        self.ctype = ctype
 
     def __repr__(self):
         return 'Callback(%r, %r, %r)' % (

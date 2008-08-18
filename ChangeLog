@@ -1,5 +1,21 @@
 2008-08-18  Johan Dahlin  <johan@gnome.org>
 
+	* giscanner/ast.py:
+	* giscanner/girparser.py:
+	* giscanner/girwriter.py:
+	* giscanner/glibast.py:
+	* giscanner/glibtransformer.py:
+	* giscanner/transformer.py:
+	* tests/scanner/Foo-expected.gir:
+	* tests/scanner/foo-object.h:
+	* tests/scanner/utility-expected.gir:
+	* tests/scanner/utility.h:
+	Redo type resolving and validation.
+	Add a couple of new tests.
+	Patch mostly written by Colin.
+
+2008-08-18  Johan Dahlin  <johan@gnome.org>
+
 	* gir/Makefile.am:
 	* giscanner/girparser.py:
 	Set ctype of enums
