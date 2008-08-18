@@ -1,5 +1,7 @@
 2008-08-18  Johan Dahlin  <johan@gnome.org>
 
+	* docs/global-module-registry.txt: Update
+
 	* tests/array.gir: Update with new type proposal
 
 	* girepository/girepository.c (g_type_tag_to_string):

@@ -15,14 +15,25 @@ Gtk namespace
 Layout of the on disk tool
 ==========================
 
-Location to should be /var/lib/glib/introspection-registry.db
+Location to should be /var/lib/glib/introspection-registry.xml
+Should be read completely. Not expected to be larger than one page on most
+systems.
 
-root { 
-  'Gtk': (path, version),
-}
+Layout in XML:
 
-The format should be mmap(2):able, changes should only affect new processes. 
-Existing ones should keep on using the old registry. The overhead must be minimal.
+<root>
+  <registry-path location="/usr/lib/typelibs/1.0/">
+  <registry-path location="$HOME/.typelibs/">
+  <entry namespace="Gtk" 
+         library-location="libgtk-x11-2.0.so.0"
+         typelib-location="gtk.typelib"/>
+</root>
+
+FIXME: version?
+FIXME: pkg-config name?
+
+The overhead should be reduced to a minimum, both runtime and memory footprint.
+Thus a binary format that is mmap(2):able is ideal:
 
 gir-registry-tool
 ================
