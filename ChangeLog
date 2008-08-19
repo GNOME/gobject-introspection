@@ -1,3 +1,30 @@
+2008-08-19  Colin Walters  <walters@verbum.org>
+
+	* giscanner/ast.py: Rework types to be more closely
+	based on GITypeTag.
+	* giscanner/girparser.py: Parse more bits.
+	* giscanner/girwriter.py: Write sequences in a new
+	way that specifies container type.
+	* giscanner/glibast.py: Adjust for ast.py changes,
+	add 'ctype' property to GLibObject and GLibInterface
+	so we can look things up by it later.
+	* gicanner/transformer.py: Names is new class holding
+	the various namespaces we manage.  Do not confuse
+	with Namespace which is toplevel XML node effectively.
+	Rework all type resolution to go through
+	_resolve_type_name_1.
+	* giscanner/glibtransformer.py: Raise UnknownTypeError
+	instead of ValueError for cleanliness.  Add Unresolved
+	class to mark types whose parent we haven't seen yet.
+	Use new Names object from transformer.py.
+	Correctly look up parent=.
+	Fix type validation to handle sequences.
+	* tests/scanner/Foo-expected.gir: Update for sequence
+	work, int instead of int32.
+	* tools/g-ir-scanner: Add --noclosure option
+	* gir/Makefile.am: Use --noclosure by default for
+	GLib/GObject.
+
 2008-08-18  Johan Dahlin  <johan@gnome.org>
 
 	* gir/gio-2.0-good.gir:
