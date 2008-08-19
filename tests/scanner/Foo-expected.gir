@@ -4,6 +4,7 @@
             xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
   <namespace name="Foo">
     <alias name="List" target="GSList" c:type="FooList"/>
+    <alias name="XEvent" target="none" c:type="FooXEvent"/>
     <interface name="Interface"
                c:type="FooInterface"
                glib:type-name="FooInterface"

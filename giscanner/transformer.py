@@ -234,11 +234,12 @@ class Transformer(object):
                        CTYPE_POINTER,
                        CTYPE_BASIC_TYPE,
                        CTYPE_VOID):
+            name = self.strip_namespace_object(symbol.ident)
             if symbol.base_type.name:
-                name = self.strip_namespace_object(symbol.ident)
                 target = self.strip_namespace_object(symbol.base_type.name)
-                return Alias(name, target, ctype=symbol.ident)
-            return None
+            else:
+                target = 'none'
+            return Alias(name, target, ctype=symbol.ident)
         else:
             raise NotImplementedError(
                 "symbol %r of type %s" % (symbol.ident, ctype_name(ctype)))

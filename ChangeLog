@@ -1,5 +1,13 @@
 2008-08-19  Johan Dahlin  <johan@gnome.org>
 
+	* giscanner/transformer.py:
+	* tests/scanner/Foo-expected.gir:
+	* tests/scanner/foo-object.h:
+	Add support for typedef void foo type of
+	aliases.
+
+2008-08-19  Johan Dahlin  <johan@gnome.org>
+
 	* giscanner/ast.py:
 	* giscanner/girwriter.py:
 	* giscanner/glibtransformer.py:

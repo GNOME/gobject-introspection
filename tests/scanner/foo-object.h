@@ -181,4 +181,6 @@ union _FooEvent
   FooEventExpose expose;
 };
 
+typedef void FooXEvent;
+
 #endif /* __FOO_OBJECT_H__ */
