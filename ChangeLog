@@ -1,5 +1,12 @@
 2008-08-19  Johan Dahlin  <johan@gnome.org>
 
+	* tests/scanner/Foo-expected.gir:
+	* tests/scanner/foo-object.h:
+	Add a union testcase which the compiler currently
+	barfs at.
+
+2008-08-19  Johan Dahlin  <johan@gnome.org>
+
 	* gobject-introspection-1.0.pc.in:
 	Add a g_ir_compiler variable
 

@@ -158,4 +158,27 @@ foo_method_external_references (UtilityObject *object,
 
 void foo_rectangle_add(FooRectangle *r1, const FooRectangle *r2);
 
+typedef struct _FooEventAny FooEventAny;
+typedef struct _FooEventExpose FooEventExpose;
+
+typedef union  _FooEvent FooEvent;
+
+struct _FooEventAny
+{
+  gint8 send_event;
+};
+
+struct _FooEventExpose
+{
+  gint8 send_event;
+  gint count;
+};
+  
+union _FooEvent
+{
+  int type;
+  FooEventAny any;
+  FooEventExpose expose;
+};
+
 #endif /* __FOO_OBJECT_H__ */

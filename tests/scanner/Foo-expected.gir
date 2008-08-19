@@ -4,6 +4,7 @@
             xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
   <namespace name="Foo">
     <alias name="List" target="GSList" c:type="FooList"/>
+    <alias name="Event" target="Event" c:type="FooEvent"/>
     <interface name="Interface"
                c:type="FooInterface"
                glib:type-name="FooInterface"
@@ -406,5 +407,18 @@
         </parameter>
       </parameters>
     </function>
+    <record name="EventAny" c:type="FooEventAny">
+      <field name="send_event">
+        <type name="int8" c:type="gint8"/>
+      </field>
+    </record>
+    <record name="EventExpose" c:type="FooEventExpose">
+      <field name="send_event">
+        <type name="int8" c:type="gint8"/>
+      </field>
+      <field name="count">
+        <type name="int" c:type="gint"/>
+      </field>
+    </record>
   </namespace>
 </repository>
