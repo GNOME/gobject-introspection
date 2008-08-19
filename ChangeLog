@@ -1,3 +1,12 @@
+2008-08-20  Johan Dahlin  <johan@gnome.org>
+
+	* tests/scanner/Foo-expected.gir:
+	* tests/scanner/foo-object.h:
+	* tests/scanner/foo.c (foo_drawable_class_init),
+	(foo_drawable_init):
+	Add a based on GdkDrawable which generates
+	a broken gir.
+
 2008-08-19  Colin Walters  <walters@verbum.org>
 
 	* giscanner/transformer.py: Don't try

@@ -423,3 +423,17 @@ foo_boxed_method (FooBoxed *boxed)
 {
 
 }
+
+G_DEFINE_ABSTRACT_TYPE (FooDrawable, foo_drawable, G_TYPE_OBJECT);
+
+static void
+foo_drawable_class_init (FooDrawableClass *klass)
+{
+
+}
+
+static void
+foo_drawable_init (FooDrawable *drawable)
+{
+
+}
