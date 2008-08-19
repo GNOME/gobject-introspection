@@ -306,3 +306,14 @@ class Sequence(Type):
 
     def __repr__(self):
         return 'Sequence(%r of %r)' % (self.name, self.element_type, )
+
+
+class Union(Node):
+
+    def __init__(self, name, symbol):
+        Node.__init__(self, name)
+        self.fields = []
+        self.symbol = symbol
+
+    def __repr__(self):
+        return 'Union(%r, %r)' % (self.name, self.fields, )

@@ -1,5 +1,15 @@
 2008-08-19  Johan Dahlin  <johan@gnome.org>
 
+	* giscanner/ast.py:
+	* giscanner/girwriter.py:
+	* giscanner/glibtransformer.py:
+	* giscanner/transformer.py:
+	* tests/scanner/Foo-expected.gir:
+	Add basic support for union, base the code much
+	on Struct. Add a testcase.
+
+2008-08-19  Johan Dahlin  <johan@gnome.org>
+
 	* tests/scanner/Foo-expected.gir:
 	* tests/scanner/foo-object.h:
 	Add a union testcase which the compiler currently

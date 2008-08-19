@@ -21,7 +21,7 @@
 from __future__ import with_statement
 
 from .ast import (Callback, Class, Enum, Function, Interface, Member,
-                  Sequence, Struct, Alias)
+                  Sequence, Struct, Alias, Union)
 from .glibast import (GLibBoxed, GLibEnum, GLibEnumMember,
                       GLibFlags, GLibObject, GLibInterface)
 from .xmlwriter import XMLWriter
@@ -62,6 +62,8 @@ class GIRWriter(XMLWriter):
             self._write_callback(node)
         elif isinstance(node, Struct):
             self._write_record(node)
+        elif isinstance(node, Union):
+            self._write_union(node)
         elif isinstance(node, Member):
             # FIXME: atk_misc_instance singleton
             pass
@@ -226,6 +228,16 @@ class GIRWriter(XMLWriter):
                     self._write_field(field)
         else:
             self.write_tag('record', attrs)
+
+    def _write_union(self, union):
+        attrs = [('name', union.name),
+                 ('c:type', union.symbol)]
+        if union.fields:
+            with self.tagcontext('union', attrs):
+                for field in union.fields:
+                    self._write_field(field)
+        else:
+            self.write_tag('union', attrs)
 
     def _write_field(self, field):
         # FIXME: Just function

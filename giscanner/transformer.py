@@ -20,7 +20,7 @@
 
 from giscanner.ast import (Callback, Enum, Function, Namespace, Member,
                            Parameter, Return, Sequence, Struct, Field,
-                           Type, Alias, Interface, Class, Node,
+                           Type, Alias, Interface, Class, Node, Union,
                            type_name_from_ctype, type_names)
 from .glibast import GLibBoxed
 from giscanner.sourcescanner import (
@@ -149,8 +149,7 @@ class Transformer(object):
         elif stype == CSYMBOL_TYPE_MEMBER:
             return self._create_member(symbol)
         elif stype == CSYMBOL_TYPE_UNION:
-            # Unions are not supported
-            pass
+            return self._create_union(symbol)
         else:
             raise NotImplementedError(
                 'Transformer: unhandled symbol: %r' % (symbol, ))
@@ -227,12 +226,13 @@ class Transformer(object):
             node = self._create_callback(symbol)
         elif ctype == CTYPE_STRUCT:
             node = self._create_typedef_struct(symbol)
+        elif ctype == CTYPE_UNION:
+            node = self._create_typedef_union(symbol)
         elif ctype == CTYPE_ENUM:
             return self._create_enum(symbol)
         elif ctype in (CTYPE_TYPEDEF,
                        CTYPE_POINTER,
                        CTYPE_BASIC_TYPE,
-                       CTYPE_UNION,
                        CTYPE_VOID):
             if symbol.base_type.name:
                 name = self.strip_namespace_object(symbol.ident)
@@ -308,6 +308,13 @@ class Transformer(object):
         self._typedefs_ns[symbol.ident] = struct
         return struct
 
+    def _create_typedef_union(self, symbol):
+        name = self._remove_prefix(symbol.ident)
+        name = self.strip_namespace_object(name)
+        union = Union(name, symbol.ident)
+        self._typedefs_ns[symbol.ident] = union
+        return union
+
     def _create_struct(self, symbol):
         struct = self._typedefs_ns.get(symbol.ident, None)
         if struct is None:
@@ -329,6 +336,28 @@ class Transformer(object):
                 struct.fields.append(field)
 
         return struct
+
+    def _create_union(self, symbol):
+        union = self._typedefs_ns.get(symbol.ident, None)
+        if union is None:
+            # This is a bit of a hack; really we should try
+            # to resolve through the typedefs to find the real
+            # name
+            if symbol.ident.startswith('_'):
+                name = symbol.ident[1:]
+            else:
+                name = symbol.ident
+            name = self._remove_prefix(name)
+            name = self.strip_namespace_object(name)
+            name = self.resolve_type_name(name)
+            union = Union(name, symbol.ident)
+
+        for child in symbol.base_type.child_list:
+            field = self._traverse_one(child)
+            if field:
+                union.fields.append(field)
+
+        return union
 
     def _create_callback(self, symbol):
         parameters = self._create_parameters(symbol.base_type.base_type)

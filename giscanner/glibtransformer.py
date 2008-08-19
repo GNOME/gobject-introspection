@@ -23,7 +23,7 @@ import ctypes
 from . import cgobject
 from .ast import (Callback, Enum, Function, Member, Namespace, Parameter,
                   Sequence, Property, Return, Struct, Type, Alias,
-                  type_name_from_ctype)
+                  Union, type_name_from_ctype)
 from .transformer import Names
 from .glibast import (GLibBoxed, GLibEnum, GLibEnumMember, GLibFlags,
                       GLibInterface, GLibObject, GLibSignal, type_names)
@@ -160,8 +160,10 @@ class GLibTransformer(object):
         elif isinstance(node, Member):
             # FIXME: atk_misc_instance singletons
             pass
+        elif isinstance(node, Union):
+            self._parse_union(node)
         else:
-            print 'GOBJECT BUILDER: Unhandled node:', node
+            print 'GLIB Transformer: Unhandled node:', node
 
     def _parse_alias(self, alias):
         self._names.aliases[alias.name] = (None, alias)
@@ -276,6 +278,14 @@ class GLibTransformer(object):
             return
         (ns, node) = node
         node.fields = struct.fields[:]
+
+    def _parse_union(self, union):
+        node = self._names.names.get(union.name)
+        if node is None:
+            self._add_attribute(union, replace=True)
+            return
+        (ns, node) = node
+        node.fields = union.fields[:]
 
     def _parse_callback(self, callback):
         self._add_attribute(callback)
@@ -489,10 +499,16 @@ class GLibTransformer(object):
             self._resolve_glib_boxed(node)
         elif isinstance(node, Struct):
             self._resolve_struct(node)
+        elif isinstance(node, Union):
+            self._resolve_union(node)
         elif isinstance(node, Alias):
             self._resolve_alias(node)
 
     def _resolve_struct(self, node):
+        for field in node.fields:
+            self._resolve_field(field)
+
+    def _resolve_union(self, node):
         for field in node.fields:
             self._resolve_field(field)
 
