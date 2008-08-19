@@ -303,8 +303,7 @@ class Transformer(object):
         return return_
 
     def _create_typedef_struct(self, symbol):
-        name = self._remove_prefix(symbol.ident)
-        name = self.strip_namespace_object(name)
+        name = self.strip_namespace_object(symbol.ident)
         struct = Struct(name, symbol.ident)
         self._typedefs_ns[symbol.ident] = struct
         return struct
@@ -326,7 +325,6 @@ class Transformer(object):
                 name = symbol.ident[1:]
             else:
                 name = symbol.ident
-            name = self._remove_prefix(name)
             name = self.strip_namespace_object(name)
             name = self.resolve_type_name(name)
             struct = Struct(name, symbol.ident)

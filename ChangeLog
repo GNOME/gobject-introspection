@@ -1,3 +1,8 @@
+2008-08-19  Colin Walters  <walters@verbum.org>
+
+	* giscanner/transformer.py: Don't try
+	to strip prefix before namespace.
+
 2008-08-19  Johan Dahlin  <johan@gnome.org>
 
 	* giscanner/transformer.py:
