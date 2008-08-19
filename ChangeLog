@@ -1,3 +1,8 @@
+2008-08-19  Johan Dahlin  <johan@gnome.org>
+
+	* gobject-introspection-1.0.pc.in:
+	Add a g_ir_compiler variable
+
 2008-08-19  Colin Walters  <walters@verbum.org>
 
 	* giscanner/ast.py: Rework types to be more closely
