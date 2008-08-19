@@ -67,6 +67,10 @@ def _get_option_parser():
     parser.add_option("-v", "--verbose",
                       action="store_true", dest="verbose",
                       help="be verbose")
+    parser.add_option("", "--noclosure",
+                      action="store_true", dest="noclosure",# default=True,
+                      help="do not delete unknown types")
+
 
     group = optparse.OptionGroup(parser, "Preprocessor options")
     group.add_option("-I", help="Pre-processor include file",
@@ -137,7 +141,7 @@ def main(args):
 
     # Transform the C AST nodes into higher level
     # GLib/GObject nodes
-    glibtransformer = GLibTransformer(transformer)
+    glibtransformer = GLibTransformer(transformer, noclosure=options.noclosure)
     if options.libraries:
         for library in options.libraries:
             glibtransformer.add_library(library)

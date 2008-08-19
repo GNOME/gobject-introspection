@@ -19,27 +19,36 @@
 #
 
 import ctypes
-import sys
 
 from . import cgobject
-from .odict import odict
 from .ast import (Callback, Enum, Function, Member, Namespace, Parameter,
-                  Property, Return, Struct, Type, Alias, type_name_from_ctype)
+                  Sequence, Property, Return, Struct, Type, Alias,
+                  type_name_from_ctype)
+from .transformer import Names
 from .glibast import (GLibBoxed, GLibEnum, GLibEnumMember, GLibFlags,
                       GLibInterface, GLibObject, GLibSignal, type_names)
 from .utils import extract_libtool, to_underscores
 
 
+class Unresolved(object):
+
+    def __init__(self, target):
+        self.target = target
+
+
+class UnknownTypeError(Exception):
+    pass
+
+
 class GLibTransformer(object):
 
-    def __init__(self, transformer):
+    def __init__(self, transformer, noclosure=False):
         self._transformer = transformer
         self._namespace_name = None
-        self._aliases = []
-        self._output_ns = odict()
+        self._names = Names()
         self._libraries = []
         self._failed_types = {}
-        self._internal_types = {}
+        self._noclosure = noclosure
         self._validating = False
 
     # Public API
@@ -61,60 +70,74 @@ class GLibTransformer(object):
 
         # Second pass, delete class structures, resolve
         # all types we now know about
-        nodes = list(self._output_ns.itervalues())
-        for node in nodes:
+        nodes = list(self._names.names.itervalues())
+        for (ns, node) in nodes:
             self._resolve_node(node)
             # associate GtkButtonClass with GtkButton
             if isinstance(node, Struct):
                 self._pair_class_struct(node)
-        for alias in self._aliases:
+        for (ns, alias) in self._names.aliases.itervalues():
             self._resolve_alias(alias)
 
         # Third pass; ensure all types are known
-        if 0:
+        if not self._noclosure:
             self._validate(nodes)
 
         # Create a new namespace with what we found
         namespace = Namespace(namespace.name)
-        namespace.nodes = self._aliases + list(self._output_ns.itervalues())
+        namespace.nodes = map(lambda x: x[1], self._names.aliases.itervalues())
+        for (ns, x) in self._names.names.itervalues():
+            namespace.nodes.append(x)
         return namespace
 
     # Private
 
     def _add_attribute(self, node, replace=False):
         node_name = node.name
-        if (not replace) and node_name in self._output_ns:
+        if (not replace) and node_name in self._names.names:
             return
-        self._output_ns[node_name] = node
+        self._names.names[node_name] = (None, node)
 
     def _remove_attribute(self, name):
-        del self._output_ns[name]
+        del self._names.names[name]
 
     def _get_attribute(self, name):
-        return self._output_ns.get(name)
+        node = self._names.names.get(name)
+        if node:
+            return node[1]
+        return None
 
     def _register_internal_type(self, type_name, node):
-        self._internal_types[type_name] = node
+        self._names.type_names[type_name] = (None, node)
 
     # Helper functions
 
     def _create_type(self, type_id):
         ctype = cgobject.type_name(type_id)
         type_name = type_name_from_ctype(ctype)
+        type_name = type_name.replace('*', '')
         type_name = self._resolve_type_name(type_name)
         return Type(type_name, ctype)
+
+    def _resolve_gtypename(self, gtype_name):
+        try:
+            return self._transformer.gtypename_to_giname(gtype_name,
+                                                         self._names)
+        except KeyError, e:
+            return Unresolved(gtype_name)
 
     def _create_gobject(self, node):
         type_name = 'G' + node.name
         if type_name == 'GObject':
-            parent_type_name = None
+            parent_gitype = None
             symbol = 'intern'
         else:
             type_id = cgobject.type_from_name(type_name)
             parent_type_name = cgobject.type_name(
                 cgobject.type_parent(type_id))
+            parent_gitype = self._resolve_gtypename(parent_type_name)
             symbol = to_underscores(type_name).lower() + '_get_type'
-        node = GLibObject(node.name, parent_type_name, type_name, symbol)
+        node = GLibObject(node.name, parent_gitype, type_name, symbol)
         type_id = cgobject.TYPE_OBJECT
         self._introspect_properties(node, type_id)
         self._introspect_signals(node, type_id)
@@ -141,7 +164,7 @@ class GLibTransformer(object):
             print 'GOBJECT BUILDER: Unhandled node:', node
 
     def _parse_alias(self, alias):
-        self._aliases.append(alias)
+        self._names.aliases[alias.name] = (None, alias)
 
     def _parse_enum(self, enum):
         self._add_attribute(enum)
@@ -247,10 +270,11 @@ class GLibTransformer(object):
         elif struct.name in g_internal_names:
             # Avoid duplicates
             return
-        node = self._output_ns.get(struct.name)
+        node = self._names.names.get(struct.name)
         if node is None:
             self._add_attribute(struct, replace=True)
             return
+        (ns, node) = node
         node.fields = struct.fields[:]
 
     def _parse_callback(self, callback):
@@ -269,7 +293,7 @@ class GLibTransformer(object):
         ctype = self._transformer.ctype_of(param).replace('*', '')
         uscored = to_underscores(self._strip_class_suffix(ctype)).lower()
         if uscored in self._failed_types:
-            print >> sys.stderr, "failed type: %r" % (param, )
+            print "Warning: failed type: %r" % (param, )
             return True
         return False
 
@@ -280,25 +304,24 @@ class GLibTransformer(object):
 
         if self._arg_is_failed(maybe_class):
             print "WARNING: deleting no-type %r" % (maybe_class.name, )
-            del self._output_ns[maybe_class.name]
+            del self._names.names[maybe_class.name]
             return
 
         name = self._resolve_type_name(name)
         resolved = self._transformer.strip_namespace_object(name)
-        pair_class = self._output_ns.get(resolved)
+        pair_class = self._get_attribute(resolved)
         if pair_class and isinstance(pair_class,
                                      (GLibObject, GLibBoxed, GLibInterface)):
-
-            del self._output_ns[maybe_class.name]
+            del self._names.names[maybe_class.name]
             for field in maybe_class.fields[1:]:
                 pair_class.fields.append(field)
             return
         name = self._transformer.strip_namespace_object(maybe_class.name)
-        pair_class = self._output_ns.get(name)
+        pair_class = self._get_attribute(name)
         if pair_class and isinstance(pair_class,
                                      (GLibObject, GLibBoxed, GLibInterface)):
 
-            del self._output_ns[maybe_class.name]
+            del self._names.names[maybe_class.name]
 
     # Introspection
 
@@ -346,9 +369,10 @@ class GLibTransformer(object):
     def _introspect_object(self, type_id, symbol):
         type_name = cgobject.type_name(type_id)
         parent_type_name = cgobject.type_name(cgobject.type_parent(type_id))
+        parent_gitype = self._resolve_gtypename(parent_type_name)
         node = GLibObject(
             self._transformer.strip_namespace_object(type_name),
-            self._resolve_type_name(parent_type_name),
+            parent_gitype,
             type_name, symbol)
         self._introspect_properties(node, type_id)
         self._introspect_signals(node, type_id)
@@ -358,9 +382,13 @@ class GLibTransformer(object):
     def _introspect_interface(self, type_id, symbol):
         type_name = cgobject.type_name(type_id)
         parent_type_name = cgobject.type_name(cgobject.type_parent(type_id))
+        if parent_type_name == 'GInterface':
+            parent_gitype = None
+        else:
+            parent_gitype = self._resolve_gtypename(parent_type_name)
         node = GLibInterface(
             self._transformer.strip_namespace_object(type_name),
-            self._resolve_type_name(parent_type_name),
+            parent_gitype,
             type_name, symbol)
         self._introspect_properties(node, type_id)
         self._introspect_signals(node, type_id)
@@ -411,38 +439,43 @@ class GLibTransformer(object):
     # Resolver
 
     def _resolve_type_name(self, type_name):
-        type_name = type_name.replace('*', '')
-        possible_name = self._transformer.resolve_type_name(type_name)
-        if possible_name != type_name:
-            return possible_name
-        possible_node = self._internal_types.get(type_name)
-        if possible_node:
-            return possible_node.name
-        return type_name
+        res = self._transformer.resolve_type_name_full
+        try:
+            return res(type_name, None, self._names)
+        except KeyError, e:
+            return self._transformer.resolve_type_name(type_name, None)
 
-    def _validate_type(self, name):
+    def _validate_type_name(self, name):
         if name in type_names:
             return True
         if name.find('.') >= 0:
             return True
-        if name in self._internal_types:
+        if name in self._names.aliases:
             return True
-        if name in self._aliases:
-            return True
-        if name in self._output_ns:
+        if name in self._names.names:
             return True
         return False
 
+    def _validate_type(self, ptype):
+        if isinstance(ptype, Sequence):
+            etype = ptype.element_type
+            if isinstance(etype, Sequence):
+                return self._validate_type(etype)
+            return self._validate_type_name(etype)
+        return self._validate_type_name(ptype.name)
+
+    def _resolve_param_type_validate(self, ptype):
+        ptype = self._resolve_param_type(ptype)
+        if self._validating and not self._validate_type(ptype):
+            raise UnknownTypeError("Unknown type %r" % (ptype, ))
+        return ptype
+
     def _resolve_param_type(self, ptype):
-        ptype.name = ptype.name.replace('*', '')
-        type_name = ptype.name
-        possible_node = self._internal_types.get(type_name)
-        if possible_node:
-            ptype.name = possible_node.name
-        else:
-            ptype = self._transformer.resolve_param_type(ptype)
-        if self._validating and not self._validate_type(ptype.name):
-            raise ValueError("Unknown type %r" % (ptype.name, ))
+        try:
+            return self._transformer.resolve_param_type_full(ptype,
+                                                             self._names)
+        except KeyError, e:
+            return self._transformer.resolve_param_type(ptype)
         return ptype
 
     def _resolve_node(self, node):
@@ -463,12 +496,22 @@ class GLibTransformer(object):
         for field in node.fields:
             self._resolve_field(field)
 
+    def _resolve_parent(self, node):
+        if not isinstance(node, (GLibInterface, GLibObject)):
+            raise AssertionError
+        if isinstance(node.parent, Unresolved):
+            node.parent = \
+                self._transformer.gtypename_to_giname(node.parent.target,
+                                                      self._names)
+
     def _resolve_glib_interface(self, node):
+        self._resolve_parent(node)
         self._resolve_methods(node.methods)
         self._resolve_properties(node.properties)
         self._resolve_signals(node.signals)
 
     def _resolve_glib_object(self, node):
+        self._resolve_parent(node)
         self._resolve_constructors(node.constructors)
         self._resolve_methods(node.methods)
         self._resolve_properties(node.properties)
@@ -511,23 +554,23 @@ class GLibTransformer(object):
             return
         field.type = self._resolve_param_type(field.type)
 
-    def _resolve_alias(self, field):
-        field.target = self._resolve_type_name(field.target)
+    def _resolve_alias(self, alias):
+        alias.target = self._resolve_type_name(alias.target)
 
     # Validation
 
     def _validate(self, nodes):
-        nodes = list(self._output_ns.itervalues())
+        nodes = list(self._names.names.itervalues())
         i = 0
         self._validating = True
         while True:
             print "Type resolution; pass=%d" % (i, )
             initlen = len(nodes)
-            nodes = list(self._output_ns.itervalues())
+            nodes = list(self._names.names.itervalues())
             for node in nodes:
                 try:
                     self._resolve_node(node)
-                except ValueError, e:
+                except UnknownTypeError, e:
                     print "WARNING: %s: Deleting %r" % (e, node)
                     self._remove_attribute(node.name)
             if len(nodes) == initlen:

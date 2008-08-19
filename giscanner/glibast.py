@@ -22,9 +22,11 @@ from .ast import Class, Enum, Interface, Member, Node, Property, Struct
 from .ast import (
     type_names,
     TYPE_STRING, TYPE_INT8, TYPE_UINT8, TYPE_INT16, TYPE_UINT16,
-    TYPE_UINT32, TYPE_INT32, TYPE_LONG, TYPE_ULONG, TYPE_INT64,
-    TYPE_UINT64, TYPE_FLOAT, TYPE_INT, TYPE_UINT,
-    TYPE_DOUBLE, TYPE_BOOLEAN, TYPE_ANY, TYPE_SIZE, TYPE_SSIZE)
+    TYPE_INT, TYPE_UINT, TYPE_UINT32, TYPE_INT32, TYPE_LONG,
+    TYPE_ULONG, TYPE_INT64, TYPE_UINT64, TYPE_FLOAT,
+    TYPE_DOUBLE, TYPE_BOOLEAN, TYPE_ANY, TYPE_SSIZET,
+    TYPE_SIZET)
+
 
 # Glib type names
 type_names['gchararray'] = TYPE_STRING
@@ -46,8 +48,8 @@ type_names['gchar*'] = TYPE_STRING
 type_names['gboolean'] = TYPE_BOOLEAN
 type_names['gpointer'] = TYPE_ANY
 type_names['gconstpointer'] = TYPE_ANY
-type_names['gsize'] = TYPE_SIZE
-type_names['gssize'] = TYPE_SSIZE
+type_names['gsize'] = TYPE_SIZET
+type_names['gssize'] = TYPE_SSIZET
 
 
 class GLibEnum(Enum):
@@ -79,34 +81,35 @@ class GLibEnumMember(Member):
 
 class GLibObject(Class):
 
-    def __init__(self, name, parent, type_name, get_type):
+    def __init__(self, name, parent, type_name, get_type, ctype=None):
         Class.__init__(self, name, parent)
-        self.ctype = type_name
         self.type_name = type_name
         self.get_type = get_type
         self.signals = []
+        self.ctype = ctype or type_name
 
 
 class GLibBoxed(Struct):
 
-    def __init__(self, name, type_name, get_type):
+    def __init__(self, name, type_name, get_type, ctype=None):
         Struct.__init__(self, name, get_type)
-        self.ctype = name
         self.constructors = []
         self.methods = []
         self.type_name = type_name
         self.symbol = type_name
         self.get_type = get_type
+        self.ctype = ctype or type_name
 
 
 class GLibInterface(Interface):
 
-    def __init__(self, name, parent, type_name, get_type):
+    def __init__(self, name, parent, type_name, get_type,
+                 ctype=None):
         Interface.__init__(self, name, parent)
-        self.ctype = type_name
         self.type_name = type_name
         self.get_type = get_type
         self.signals = []
+        self.ctype = ctype or type_name
 
 
 class GLibProperty(Property):

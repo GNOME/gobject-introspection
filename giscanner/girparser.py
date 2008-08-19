@@ -105,7 +105,8 @@ class GIRParser(object):
         obj = klass(node.attrib['name'],
                     node.attrib.get('parent'),
                     node.attrib[_glibns('type-name')],
-                    node.attrib[_glibns('get-type')])
+                    node.attrib[_glibns('get-type')],
+                    node.attrib.get(_cns('type')))
         for method in node.findall(_corens('method')):
             obj.methods.append(self._parse_function(method, Function))
         for ctor in node.findall(_corens('constructor')):
@@ -143,7 +144,8 @@ class GIRParser(object):
     def _parse_boxed(self, node):
         obj = GLibBoxed(node.attrib[_glibns('name')],
                         node.attrib[_glibns('type-name')],
-                        node.attrib[_glibns('get-type')])
+                        node.attrib[_glibns('get-type')],
+                        node.attrib.get(_cns('type')))
         for method in node.findall(_corens('method')):
             obj.methods.append(self._parse_function(method, Function))
         for ctor in node.findall(_corens('constructor')):

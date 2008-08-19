@@ -9,6 +9,7 @@ GLIB_INCLUDEDIR=`pkg-config --variable=includedir glib-2.0`/glib-2.0
 GLIB_LIBDIR=`pkg-config --variable=libdir glib-2.0`
 glib-2.0.gir: $(G_IR_SCANNER) $(G_IR_SCANNER_FILES)
 	$(G_IR_SCANNER) -v --namespace GLib \
+	    --noclosure \
 	    --output $@ \
 	    --strip-prefix=g \
 	    -I$(GLIB_INCLUDEDIR) \
@@ -21,8 +22,9 @@ BUILT_SOURCES += glib-2.0.gir
 # gobject
 GOBJECT_INCLUDEDIR=`pkg-config --variable=includedir gobject-2.0`/glib-2.0
 GOBJECT_LIBDIR=`pkg-config --variable=libdir gobject-2.0`
-gobject-2.0.gir: $(G_IR_SCANNER) $(G_IR_SCANNER_FILES)
+gobject-2.0.gir: glib-2.0.gir $(G_IR_SCANNER) $(G_IR_SCANNER_FILES)
 	$(G_IR_SCANNER) -v --namespace GObject \
+	    --noclosure \
 	    --output $@ \
 	    --strip-prefix=g \
             --include=$(builddir)/glib-2.0.gir \
@@ -40,6 +42,7 @@ GIO_INCLUDEDIR=`pkg-config --variable=includedir gio-2.0`/glib-2.0
 GIO_LIBDIR=`pkg-config --variable=libdir gio-2.0`
 gio-2.0.gir: $(G_IR_SCANNER) $(G_IR_SCANNER_FILES)
 	$(G_IR_SCANNER) -v --namespace Gio \
+	    --noclosure \
 	    --output $@ \
 	    --strip-prefix=g \
             --include=$(builddir)/glib-2.0.gir \

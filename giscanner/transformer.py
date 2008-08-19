@@ -20,8 +20,8 @@
 
 from giscanner.ast import (Callback, Enum, Function, Namespace, Member,
                            Parameter, Return, Sequence, Struct, Field,
-                           Type, Alias, Interface, Class,
-                           type_name_from_ctype)
+                           Type, Alias, Interface, Class, Node,
+                           type_name_from_ctype, type_names)
 from .glibast import GLibBoxed
 from giscanner.sourcescanner import (
     SourceSymbol, ctype_name, CTYPE_POINTER,
@@ -30,6 +30,7 @@ from giscanner.sourcescanner import (
     CSYMBOL_TYPE_FUNCTION, CSYMBOL_TYPE_TYPEDEF, CSYMBOL_TYPE_STRUCT,
     CSYMBOL_TYPE_ENUM, CSYMBOL_TYPE_UNION, CSYMBOL_TYPE_OBJECT,
     CSYMBOL_TYPE_MEMBER)
+from .odict import odict
 from .utils import strip_common_prefix
 
 
@@ -37,23 +38,31 @@ class SkipError(Exception):
     pass
 
 
+class Names(object):
+    names = property(lambda self: self._names)
+    aliases = property(lambda self: self._aliases)
+    type_names = property(lambda self: self._type_names)
+    ctypes = property(lambda self: self._ctypes)
+
+    def __init__(self):
+        super(Names, self).__init__()
+        self._names = odict() # Maps from GIName -> (namespace, node)
+        self._aliases = {} # Maps from GIName -> GIName
+        self._type_names = {} # Maps from GTName -> (namespace, node)
+        self._ctypes = {} # Maps from CType -> (namespace, node)
+
+
 class Transformer(object):
 
     def __init__(self, generator, namespace_name):
         self.generator = generator
         self._namespace = Namespace(namespace_name)
-        self._output_ns = {}
-        self._alias_names = {} # Maps from GIName -> GIName
-        self._type_names = {} # Maps from GTName -> (namespace, node)
-        self._ctype_names = {} # Maps from CType -> (namespace, node)
+        self._names = Names()
         self._typedefs_ns = {}
         self._strip_prefix = ''
 
-    def get_type_names(self):
-        return self._type_names
-
-    def get_alias_names(self):
-        return self._alias_names
+    def get_names(self):
+        return self._names
 
     def set_strip_prefix(self, strip_prefix):
         self._strip_prefix = strip_prefix
@@ -77,15 +86,14 @@ class Transformer(object):
         nsname = parser.get_namespace_name()
         for node in parser.get_nodes():
             if isinstance(node, Alias):
-                self._alias_names[node.ctype] = (nsname, node)
+                self._names.aliases[node.name] = (nsname, node)
             elif isinstance(node, (GLibBoxed, Interface, Class)):
-                self._type_names[node.type_name] = (nsname, node)
-            elif hasattr(node, 'ctype'):
-                self._ctype_names[node.ctype] = (nsname, node)
+                self._names.type_names[node.type_name] = (nsname, node)
+            self._names.names[node.name] = (nsname, node)
+            if hasattr(node, 'ctype'):
+                self._names.ctypes[node.ctype] = (nsname, node)
             elif hasattr(node, 'symbol'):
-                self._ctype_names[node.symbol] = (nsname, node)
-            else:
-                self._type_names[node.name] = (nsname, node)
+                self._names.ctypes[node.symbol] = (nsname, node)
 
     def strip_namespace_object(self, name):
         prefix = self._namespace.name.lower()
@@ -101,7 +109,7 @@ class Transformer(object):
         if node.name.startswith('_'):
             return
         self._namespace.nodes.append(node)
-        self._output_ns[node.name] = node
+        self._names.names[node.name] = (None, node)
 
     def _strip_namespace_func(self, name):
         prefix = self._namespace.name.lower() + '_'
@@ -159,7 +167,7 @@ class Transformer(object):
         enum_name = symbol.ident[-len(enum_name):]
         enum_name = self._remove_prefix(enum_name)
         enum = Enum(enum_name, symbol.ident, members)
-        self._type_names[symbol.ident] = (None, enum)
+        self._names.type_names[symbol.ident] = (None, enum)
         return enum
 
     def _create_object(self, symbol):
@@ -245,6 +253,7 @@ class Transformer(object):
         elif ctype == 'FILE*':
             raise SkipError
         type_name = type_name_from_ctype(ctype)
+        type_name = type_name.replace('*', '')
         resolved_type_name = self.resolve_type_name(type_name)
         return Type(resolved_type_name, ctype)
 
@@ -278,7 +287,10 @@ class Transformer(object):
                 return_.transfer = True
             elif option.startswith('seq '):
                 value, element_options = option[3:].split(None, 2)
-                element_type = self._parse_type_annotation(value)
+                c_element_type = self._parse_type_annotation(value)
+                element_type = c_element_type.replace('*', '')
+                element_type = self.resolve_type_name(element_type,
+                                                      c_element_type)
                 seq = Sequence(rtype.name,
                                type_name_from_ctype(rtype.name),
                                element_type)
@@ -336,21 +348,55 @@ class Transformer(object):
             return item.name
         return '%s.%s' % (nsname, item.name)
 
-    def resolve_type_name(self, type_name, ctype=None):
-        type_name = type_name.replace('*', '')
+    def _resolve_type_name_1(self, type_name, ctype, names):
+        # First look using the built-in names
+        if ctype:
+            try:
+                return type_names[ctype]
+            except KeyError, e:
+                pass
+        try:
+            return type_names[type_name]
+        except KeyError, e:
+            pass
         type_name = self.strip_namespace_object(type_name)
-        resolved = self._alias_names.get(type_name)
+        resolved = names.aliases.get(type_name)
         if resolved:
             return self._typepair_to_str(resolved)
-        resolved = self._type_names.get(type_name)
+        resolved = names.names.get(type_name)
         if resolved:
             return self._typepair_to_str(resolved)
         if ctype:
             ctype = ctype.replace('*', '')
-            resolved = self._ctype_names.get(ctype)
+            resolved = names.ctypes.get(ctype)
             if resolved:
                 return self._typepair_to_str(resolved)
-        return type_name
+        raise KeyError("failed to find %r" % (type_name, ))
+
+    def resolve_type_name_full(self, type_name, ctype,
+                               names):
+        try:
+            return self._resolve_type_name_1(type_name, ctype, names)
+        except KeyError, e:
+            try:
+                return self._resolve_type_name_1(type_name, ctype, self._names)
+            except KeyError, e:
+                return type_name
+
+    def resolve_type_name(self, type_name, ctype=None):
+        try:
+            return self.resolve_type_name_full(type_name, ctype, self._names)
+        except KeyError, e:
+            return type_name
+
+    def gtypename_to_giname(self, gtname, names):
+        resolved = names.type_names.get(gtname)
+        if resolved:
+            return self._typepair_to_str(resolved)
+        resolved = self._names.type_names.get(gtname)
+        if resolved:
+            return self._typepair_to_str(resolved)
+        raise KeyError("Failed to resolve GType name: %r" % (gtname, ))
 
     def ctype_of(self, obj):
         if hasattr(obj, 'ctype'):
@@ -360,7 +406,22 @@ class Transformer(object):
         else:
             return None
 
-    def resolve_param_type(self, ptype):
-        ptype.name = self.resolve_type_name(ptype.name,
-                                            self.ctype_of(ptype))
+    def resolve_param_type_full(self, ptype, names):
+        if isinstance(ptype, Sequence):
+            ptype.element_type = \
+                self.resolve_param_type_full(ptype.element_type, names)
+        elif isinstance(ptype, Node):
+            ptype.name = self.resolve_type_name_full(ptype.name,
+                                                     self.ctype_of(ptype),
+                                                     names)
+        elif isinstance(ptype, basestring):
+            return self.resolve_type_name_full(ptype, None, names)
+        else:
+            raise AssertionError("Unhandled param: %r" % (ptype, ))
         return ptype
+
+    def resolve_param_type(self, ptype):
+        try:
+            return self.resolve_param_type_full(ptype, self._names)
+        except KeyError, e:
+            return ptype

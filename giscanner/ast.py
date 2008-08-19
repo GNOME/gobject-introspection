@@ -27,10 +27,12 @@ which is language/library/domain specific.
 """
 
 ##
-## Types
+## Basic types, modeled on GITypeTag but not equivalent
 ##
 
-# Basic types
+TYPE_NONE = 'none' # We differ from repository on these first two
+TYPE_ANY = 'any'
+TYPE_BOOLEAN = 'boolean'
 TYPE_INT8 = 'int8'
 TYPE_UINT8 = 'uint8'
 TYPE_INT16 = 'int16'
@@ -39,32 +41,32 @@ TYPE_INT = 'int'
 TYPE_UINT = 'uint'
 TYPE_INT32 = 'int32'
 TYPE_UINT32 = 'uint32'
-TYPE_LONG = 'long'
-TYPE_ULONG = 'ulong'
 TYPE_INT64 = 'int64'
 TYPE_UINT64 = 'uint64'
-
-# Floating-point
+TYPE_LONG = 'long'
+TYPE_ULONG = 'ulong'
+TYPE_SSIZET = 'ssize_t'
+TYPE_SIZET = 'size_t'
 TYPE_FLOAT = 'float'
 TYPE_DOUBLE = 'double'
+TYPE_STRING = 'string' # requires zero-terminated
+TYPE_FILENAME = 'filename'
+
+BASIC_GIR_TYPES = [TYPE_BOOLEAN, TYPE_INT8, TYPE_UINT8, TYPE_INT16,
+                   TYPE_UINT16, TYPE_INT32, TYPE_UINT32, TYPE_INT64,
+                   TYPE_UINT64, TYPE_INT, TYPE_UINT, TYPE_LONG,
+                   TYPE_ULONG, TYPE_SSIZET, TYPE_SIZET, TYPE_FLOAT,
+                   TYPE_DOUBLE]
+GIR_TYPES = [TYPE_NONE, TYPE_ANY]
+GIR_TYPES.extend(BASIC_GIR_TYPES)
+GIR_TYPES.extend([TYPE_STRING, TYPE_FILENAME])
 
 # Higher-level data types
-TYPE_NONE = 'none'
-TYPE_ANY = 'any'           # CORBA Any/Variant/GValue, holds anything.
-TYPE_BOOLEAN = 'boolean'   # True/False
-TYPE_STRING = 'string'     # Sequence of characters
 TYPE_SEQUENCE = 'sequence' # Sequence of something
-TYPE_CHAR = 'char'         # Character
-TYPE_UCHAR = 'uchar'       # Unsigned Character
-TYPE_SIZE = 'size'         # Size type (memory, buffer etc)
-TYPE_SSIZE = 'ssize'
 
 # Wide/Unicode
 TYPE_UCHAR = 'uchar'
 TYPE_USTRING = 'ustring'
-
-# Domain specific, but practically useful
-TYPE_FILENAME = 'filename'
 
 ##
 ## Parameters
@@ -75,14 +77,16 @@ PARAM_DIRECTION_OUT = 'out'
 PARAM_DIRECTION_INOUT = 'inout'
 
 type_names = {}
+for name in GIR_TYPES:
+    type_names[name] = name
 
 # C
-type_names['char'] = TYPE_CHAR
-type_names['unsigned char'] = TYPE_UCHAR
+type_names['char'] = TYPE_INT8
+type_names['unsigned char'] = TYPE_UINT8
 type_names['short'] = TYPE_INT16
 type_names['unsigned short'] = TYPE_UINT16
-type_names['int'] = TYPE_INT32
-type_names['unsigned int'] = TYPE_UINT32
+type_names['int'] = TYPE_INT
+type_names['unsigned int'] = TYPE_UINT
 type_names['long'] = TYPE_LONG
 type_names['unsigned long'] = TYPE_ULONG
 type_names['float'] = TYPE_FLOAT
@@ -90,15 +94,8 @@ type_names['double'] = TYPE_DOUBLE
 type_names['char*'] = TYPE_STRING
 type_names['void*'] = TYPE_ANY
 type_names['void'] = TYPE_NONE
-type_names['size_t'] = TYPE_SIZE
-type_names['ssize_t'] = TYPE_SSIZE
-
-# GIR names
-type_names['none'] = TYPE_NONE
-type_names['string'] = TYPE_STRING
-type_names['int32'] = TYPE_INT32
-type_names['uint32'] = TYPE_UINT32
-type_names['any'] = TYPE_ANY
+type_names['size_t'] = TYPE_SIZET
+type_names['ssize_t'] = TYPE_SSIZET
 
 
 def type_name_from_ctype(ctype):
@@ -148,6 +145,7 @@ class Type(Node):
     def __init__(self, name, ctype=None):
         Node.__init__(self, name)
         self.ctype = ctype
+        self.resolved = False
 
 
 class Alias(Node):
@@ -305,3 +303,6 @@ class Sequence(Type):
         Type.__init__(self, name, ctype)
         self.element_type = element_type
         self.transfer = False
+
+    def __repr__(self):
+        return 'Sequence(%r of %r)' % (self.name, self.element_type, )

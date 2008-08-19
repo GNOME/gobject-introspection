@@ -158,9 +158,9 @@
       </method>
       <method name="get_strings" c:identifier="foo_object_get_strings">
         <return-value>
-          <sequence transfer-ownership="1">
-            <element-type c:identifier="char*"/>
-          </sequence>
+          <type name="GLib.List" transfer-ownership="1">
+            <type name="string" relation="element"/>
+          </type>
         </return-value>
         <parameters>
           <parameter name="object">
@@ -170,9 +170,9 @@
       </method>
       <method name="get_objects" c:identifier="foo_object_get_objects">
         <return-value>
-          <sequence transfer-ownership="1">
-            <element-type c:identifier="FooObject*"/>
-          </sequence>
+          <type name="GLib.SList" transfer-ownership="1">
+            <type name="Object" relation="element"/>
+          </type>
         </return-value>
         <parameters>
           <parameter name="object">
@@ -221,7 +221,7 @@
             <type name="Object" c:type="FooObject*"/>
           </parameter>
           <parameter name="first_param">
-            <type name="int32" c:type="int"/>
+            <type name="int" c:type="int"/>
           </parameter>
         </parameters>
       </callback>
@@ -274,7 +274,7 @@
     </enumeration>
     <function name="enum_type_method" c:identifier="foo_enum_type_method">
       <return-value>
-        <type name="int32" c:type="int"/>
+        <type name="int" c:type="int"/>
       </return-value>
       <parameters>
         <parameter name="foo_enum">
@@ -288,7 +288,7 @@
       </return-value>
       <parameters>
         <parameter name="x">
-          <type name="int32" c:type="int"/>
+          <type name="int" c:type="int"/>
         </parameter>
       </parameters>
     </function>
@@ -314,7 +314,7 @@
       <member name="deux" value="2" c:identifier="FOO_ENUM_DEUX"/>
       <member name="trois" value="3" c:identifier="FOO_ENUM_TROIS"/>
     </enumeration>
-    <glib:boxed c:type="Boxed"
+    <glib:boxed c:type="FooBoxed"
                 glib:name="Boxed"
                 glib:type-name="FooBoxed"
                 glib:get-type="foo_boxed_get_type">
@@ -355,7 +355,7 @@
         <type name="StructPrivate" c:type="FooStructPrivate*"/>
       </field>
       <field name="member">
-        <type name="int32" c:type="int"/>
+        <type name="int" c:type="int"/>
       </field>
     </record>
     <record name="StructPrivate" c:type="FooStructPrivate"/>
