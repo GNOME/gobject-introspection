@@ -1,6 +1,18 @@
 2008-08-20  Johan Dahlin  <johan@gnome.org>
 
 	* tests/scanner/Foo-expected.gir:
+	* tests/scanner/Makefile.am:
+	* tests/scanner/drawable-expected.gir:
+	* tests/scanner/drawable.c (test_drawable_class_init),
+	(test_drawable_init):
+	* tests/scanner/drawable.h:
+	* tests/scanner/foo-object.h:
+	* tests/scanner/foo.c (foo_boxed_method):
+	Move the drawable parts out of Foo to its own test.
+
+2008-08-20  Johan Dahlin  <johan@gnome.org>
+
+	* tests/scanner/Foo-expected.gir:
 	* tests/scanner/foo-object.h:
 	* tests/scanner/foo.c (foo_drawable_class_init),
 	(foo_drawable_init):

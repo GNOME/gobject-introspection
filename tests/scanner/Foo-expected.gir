@@ -431,16 +431,5 @@
         <type name="EventExpose" c:type="FooEventExpose"/>
       </field>
     </union>
-    <class name="Drawable"
-           c:type="FooDrawable"
-           parent="GObject.Object"
-           glib:type-name="FooDrawable"
-           glib:get-type="foo_drawable_get_type">
-    </class>
-    <record name="PixmapObjectClass" c:type="_FooPixmapObjectClass">
-      <field name="parent_class">
-        <type name="DrawableClass" c:type="FooDrawableClass"/>
-      </field>
-    </record>
   </namespace>
 </repository>

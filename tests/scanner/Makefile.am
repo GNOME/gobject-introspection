@@ -1,8 +1,13 @@
 # We need to build a shared library, which can be dlopened
 # it does not work with noinst_LTLIBRARIES
-testlib_LTLIBRARIES = libfoo.la libutility.la
+testlib_LTLIBRARIES = libdrawable.la libfoo.la libutility.la
 testlibdir = $(prefix)/unused
 install-testlibLTLIBRARIES: # prevent it from being installed
+
+libdrawable_la_SOURCES = $(srcdir)/drawable.c $(srcdir)/drawable.h
+libdrawable_la_CFLAGS = $(GOBJECT_CFLAGS)
+libdrawable_la_LDFLAGS = -module -avoid-version
+libdrawable_la_LIBADD = $(GOBJECT_LIBS)
 
 libfoo_la_SOURCES = $(srcdir)/foo.c $(srcdir)/foo-object.h
 libfoo_la_CFLAGS = $(GOBJECT_CFLAGS)
@@ -18,7 +23,9 @@ CLEANFILES = utility.gir Foo.gir
 EXTRA_DIST = utility-expected.gir Foo-expected.gir
 
 SCANNER = $(top_srcdir)/tools/g-ir-scanner
-SCANNER_LIBS = $(top_srcdir)/giscanner/*.py $(top_builddir)/giscanner/libgiscanner.la
+SCANNER_LIBS = \
+	$(top_srcdir)/giscanner/*.py \
+	$(top_builddir)/giscanner/libgiscanner.la
 
 utility.gir: libutility.la utility.h $(SCANNER) $(SCANNER_LIBS)
 	$(CHECK_DEBUG) $(SCANNER) -v \
@@ -41,6 +48,16 @@ Foo.gir: libfoo.la foo-object.h $(SCANNER) $(SCANNER_LIBS)
 	$(libfoo_la_SOURCES) \
 	 --output $@
 
+drawable.gir: libdrawable.la drawable.h $(SCANNER) $(SCANNER_LIBS)
+	$(CHECK_DEBUG) $(SCANNER) -v \
+	--include=$(top_srcdir)/gir/glib-2.0.gir \
+	--include=$(top_srcdir)/gir/gobject-2.0.gir \
+	--library=libdrawable.la \
+	--namespace=test \
+	--pkg gobject-2.0 \
+	$(libdrawable_la_SOURCES) \
+	 --output $@
+
 check-%.gir: %.gir
 	@diff -u -U 10 $(srcdir)/$*-expected.gir $*.gir && echo "* $*.gir"
 
@@ -50,7 +67,7 @@ pre-check:
 	fi
 	@echo "Running scanner checks..."
 
-check-local: pre-check check-utility.gir check-Foo.gir
+check-local: pre-check check-utility.gir check-drawable.gir check-Foo.gir
 	@echo "======================="
 	@echo "All parser tests passed"
 	@echo "======================="
@@ -58,4 +75,4 @@ check-local: pre-check check-utility.gir check-Foo.gir
 	   rm -f $(top_builddir)/giscanner/*.py*; \
 	fi
 
-.PHONY: utility.gir Foo.gir
+.PHONY: utility.gir drawable.gir Foo.gir

@@ -183,24 +183,4 @@ union _FooEvent
 
 typedef void FooXEvent;
 
-typedef struct _FooDrawable FooDrawable;
-typedef struct _FooDrawableClass FooDrawableClass;
-
-struct _FooDrawable
-{
-  GObject parent_instance;
-};
- 
-struct _FooDrawableClass 
-{
-  GObjectClass parent_class;
-};
-
-GType foo_drawable_get_type (void) G_GNUC_CONST;
-
-struct _FooPixmapObjectClass
-{
-  FooDrawableClass parent_class;
-};
-
 #endif /* __FOO_OBJECT_H__ */
