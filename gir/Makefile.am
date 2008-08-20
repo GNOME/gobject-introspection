@@ -39,13 +39,13 @@ BUILT_SOURCES += GObject.gir
 # gio
 GIO_INCLUDEDIR=`pkg-config --variable=includedir gio-2.0`/glib-2.0
 GIO_LIBDIR=`pkg-config --variable=libdir gio-2.0`
-Gio.gir: $(G_IR_SCANNER) $(G_IR_SCANNER_FILES)
+Gio.gir: GObject.gir $(G_IR_SCANNER) $(G_IR_SCANNER_FILES)
 	$(G_IR_SCANNER) -v --namespace Gio \
 	    --noclosure \
 	    --output $@ \
 	    --strip-prefix=g \
-            --include=$(builddir)/glib-2.0.gir \
-            --include=$(builddir)/gobject-2.0.gir \
+            --include=$(builddir)/GLib.gir \
+            --include=$(builddir)/GObject.gir \
 	    --library=$(GIO_LIBDIR)/libgio-2.0.so \
 	    -I$(GIO_INCLUDEDIR) \
 	    -I$(GIO_LIBDIR)/glib-2.0/include \
@@ -63,6 +63,6 @@ dist_gir_DATA = $(BUILT_SOURCES)
 	$(top_builddir)/tools/g-ir-compiler $< --raw -o $@
 
 typelibsdir = $(datadir)/gitypelibs
-typelibs_DATA = #Gio.typelib
+typelibs_DATA = GObject.typelib
 
 EXTRA_DIST = glib-2.0-good.gir gobject-2.0-good.gir gobject-2.0-gio.gir
