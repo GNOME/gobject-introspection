@@ -3,12 +3,13 @@
             xmlns:c="http://www.gtk.org/introspection/c/1.0"
             xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
   <namespace name="GObject">
-    <alias name="Type" target="size" c:type="GType"/>
-    <alias name="TypeCValue" target="TypeCValue" c:type="GTypeCValue"/>
     <alias name="SignalCMarshaller"
            target="ClosureMarshal"
            c:type="GSignalCMarshaller"/>
-    <glib:boxed c:type="Value"
+    <alias name="chararray" target="none" c:type="gchararray"/>
+    <alias name="Type" target="size" c:type="GType"/>
+    <alias name="Strv" target="none" c:type="GStrv"/>
+    <glib:boxed c:type="GValue"
                 glib:name="Value"
                 glib:type-name="GValue"
                 glib:get-type="g_value_get_type">
@@ -292,13 +293,13 @@
             <type name="Value" c:type="GValue*"/>
           </parameter>
           <parameter name="v_char">
-            <type name="char" c:type="gchar"/>
+            <type name="GLib.char" c:type="gchar"/>
           </parameter>
         </parameters>
       </method>
       <method name="get_char" c:identifier="g_value_get_char">
         <return-value>
-          <type name="char" c:type="gchar"/>
+          <type name="GLib.char" c:type="gchar"/>
         </return-value>
         <parameters>
           <parameter name="value">
@@ -315,13 +316,13 @@
             <type name="Value" c:type="GValue*"/>
           </parameter>
           <parameter name="v_uchar">
-            <type name="uchar" c:type="guchar"/>
+            <type name="GLib.uchar" c:type="guchar"/>
           </parameter>
         </parameters>
       </method>
       <method name="get_uchar" c:identifier="g_value_get_uchar">
         <return-value>
-          <type name="uchar" c:type="guchar"/>
+          <type name="GLib.uchar" c:type="guchar"/>
         </return-value>
         <parameters>
           <parameter name="value">
@@ -657,6 +658,23 @@
         </parameters>
       </method>
     </glib:boxed>
+    <union name="TypeCValue" c:type="GTypeCValue">
+      <field name="v_int">
+        <type name="int" c:type="gint"/>
+      </field>
+      <field name="v_long">
+        <type name="long" c:type="glong"/>
+      </field>
+      <field name="v_int64">
+        <type name="int64" c:type="gint64"/>
+      </field>
+      <field name="v_double">
+        <type name="double" c:type="gdouble"/>
+      </field>
+      <field name="v_pointer">
+        <type name="any" c:type="gpointer"/>
+      </field>
+    </union>
     <interface name="TypePlugin"
                c:type="GTypePlugin"
                glib:type-name="GTypePlugin"
@@ -879,7 +897,7 @@
     </function>
     <function name="type_qname" c:identifier="g_type_qname">
       <return-value>
-        <type name="Quark" c:type="GQuark"/>
+        <type name="GLib.Quark" c:type="GQuark"/>
       </return-value>
       <parameters>
         <parameter name="type">
@@ -1087,7 +1105,7 @@
           <type name="Type" c:type="GType"/>
         </parameter>
         <parameter name="quark">
-          <type name="Quark" c:type="GQuark"/>
+          <type name="GLib.Quark" c:type="GQuark"/>
         </parameter>
         <parameter name="data">
           <type name="any" c:type="gpointer"/>
@@ -1103,7 +1121,7 @@
           <type name="Type" c:type="GType"/>
         </parameter>
         <parameter name="quark">
-          <type name="Quark" c:type="GQuark"/>
+          <type name="GLib.Quark" c:type="GQuark"/>
         </parameter>
       </parameters>
     </function>
@@ -1413,7 +1431,7 @@
           <type name="any" c:type="gpointer"/>
         </parameter>
         <parameter name="private_size">
-          <type name="size" c:type="gsize"/>
+          <type name="size_t" c:type="gsize"/>
         </parameter>
       </parameters>
     </function>
@@ -1892,7 +1910,7 @@
         </parameter>
       </parameters>
     </function>
-    <glib:boxed c:type="Closure"
+    <glib:boxed c:type="GClosure"
                 glib:name="Closure"
                 glib:type-name="GClosure"
                 glib:get-type="g_closure_get_type">
@@ -2106,7 +2124,7 @@
         </parameters>
       </method>
     </glib:boxed>
-    <glib:boxed c:type="ValueArray"
+    <glib:boxed c:type="GValueArray"
                 glib:name="ValueArray"
                 glib:type-name="GValueArray"
                 glib:get-type="g_value_array_get_type">
@@ -2226,27 +2244,27 @@
         </parameters>
       </method>
     </glib:boxed>
-    <glib:boxed c:type="Date"
+    <glib:boxed c:type="GDate"
                 glib:name="Date"
                 glib:type-name="GDate"
                 glib:get-type="g_date_get_type">
     </glib:boxed>
-    <glib:boxed c:type="Strv"
+    <glib:boxed c:type="GStrv"
                 glib:name="Strv"
                 glib:type-name="GStrv"
                 glib:get-type="g_strv_get_type">
     </glib:boxed>
-    <glib:boxed c:type="String"
+    <glib:boxed c:type="GString"
                 glib:name="String"
                 glib:type-name="GString"
                 glib:get-type="g_gstring_get_type">
     </glib:boxed>
-    <glib:boxed c:type="HashTable"
+    <glib:boxed c:type="GHashTable"
                 glib:name="HashTable"
                 glib:type-name="GHashTable"
                 glib:get-type="g_hash_table_get_type">
     </glib:boxed>
-    <glib:boxed c:type="Regex"
+    <glib:boxed c:type="GRegex"
                 glib:name="Regex"
                 glib:type-name="GRegex"
                 glib:get-type="g_regex_get_type">
@@ -3303,7 +3321,7 @@
           <type name="ParamSpec" c:type="GParamSpec*"/>
         </parameter>
         <parameter name="quark">
-          <type name="Quark" c:type="GQuark"/>
+          <type name="GLib.Quark" c:type="GQuark"/>
         </parameter>
       </parameters>
     </function>
@@ -3317,7 +3335,7 @@
           <type name="ParamSpec" c:type="GParamSpec*"/>
         </parameter>
         <parameter name="quark">
-          <type name="Quark" c:type="GQuark"/>
+          <type name="GLib.Quark" c:type="GQuark"/>
         </parameter>
         <parameter name="data">
           <type name="any" c:type="gpointer"/>
@@ -3334,7 +3352,7 @@
           <type name="ParamSpec" c:type="GParamSpec*"/>
         </parameter>
         <parameter name="quark">
-          <type name="Quark" c:type="GQuark"/>
+          <type name="GLib.Quark" c:type="GQuark"/>
         </parameter>
         <parameter name="data">
           <type name="any" c:type="gpointer"/>
@@ -3354,7 +3372,7 @@
           <type name="ParamSpec" c:type="GParamSpec*"/>
         </parameter>
         <parameter name="quark">
-          <type name="Quark" c:type="GQuark"/>
+          <type name="GLib.Quark" c:type="GQuark"/>
         </parameter>
       </parameters>
     </function>
@@ -3723,7 +3741,7 @@
         <type name="uint" c:type="guint"/>
       </field>
       <field name="detail">
-        <type name="Quark" c:type="GQuark"/>
+        <type name="GLib.Quark" c:type="GQuark"/>
       </field>
       <field name="run_type">
         <type name="SignalFlags" c:type="GSignalFlags"/>
@@ -3873,7 +3891,7 @@
           <type name="uint" c:type="guint"/>
         </parameter>
         <parameter name="detail">
-          <type name="Quark" c:type="GQuark"/>
+          <type name="GLib.Quark" c:type="GQuark"/>
         </parameter>
         <parameter name="return_value">
           <type name="Value" c:type="GValue*"/>
@@ -3892,7 +3910,7 @@
           <type name="uint" c:type="guint"/>
         </parameter>
         <parameter name="detail">
-          <type name="Quark" c:type="GQuark"/>
+          <type name="GLib.Quark" c:type="GQuark"/>
         </parameter>
       </parameters>
     </function>
@@ -3973,7 +3991,7 @@
           <type name="uint" c:type="guint*"/>
         </parameter>
         <parameter name="detail_p">
-          <type name="Quark" c:type="GQuark*"/>
+          <type name="GLib.Quark" c:type="GQuark*"/>
         </parameter>
         <parameter name="force_detail_quark">
           <type name="boolean" c:type="gboolean"/>
@@ -4004,7 +4022,7 @@
           <type name="uint" c:type="guint"/>
         </parameter>
         <parameter name="detail">
-          <type name="Quark" c:type="GQuark"/>
+          <type name="GLib.Quark" c:type="GQuark"/>
         </parameter>
       </parameters>
     </function>
@@ -4032,7 +4050,7 @@
           <type name="uint" c:type="guint"/>
         </parameter>
         <parameter name="detail">
-          <type name="Quark" c:type="GQuark"/>
+          <type name="GLib.Quark" c:type="GQuark"/>
         </parameter>
         <parameter name="hook_func">
           <type name="SignalEmissionHook" c:type="GSignalEmissionHook"/>
@@ -4072,7 +4090,7 @@
           <type name="uint" c:type="guint"/>
         </parameter>
         <parameter name="detail">
-          <type name="Quark" c:type="GQuark"/>
+          <type name="GLib.Quark" c:type="GQuark"/>
         </parameter>
         <parameter name="may_be_blocked">
           <type name="boolean" c:type="gboolean"/>
@@ -4092,7 +4110,7 @@
           <type name="uint" c:type="guint"/>
         </parameter>
         <parameter name="detail">
-          <type name="Quark" c:type="GQuark"/>
+          <type name="GLib.Quark" c:type="GQuark"/>
         </parameter>
         <parameter name="closure">
           <type name="Closure" c:type="GClosure*"/>
@@ -4218,7 +4236,7 @@
           <type name="uint" c:type="guint"/>
         </parameter>
         <parameter name="detail">
-          <type name="Quark" c:type="GQuark"/>
+          <type name="GLib.Quark" c:type="GQuark"/>
         </parameter>
         <parameter name="closure">
           <type name="Closure" c:type="GClosure*"/>
@@ -4247,7 +4265,7 @@
           <type name="uint" c:type="guint"/>
         </parameter>
         <parameter name="detail">
-          <type name="Quark" c:type="GQuark"/>
+          <type name="GLib.Quark" c:type="GQuark"/>
         </parameter>
         <parameter name="closure">
           <type name="Closure" c:type="GClosure*"/>
@@ -4276,7 +4294,7 @@
           <type name="uint" c:type="guint"/>
         </parameter>
         <parameter name="detail">
-          <type name="Quark" c:type="GQuark"/>
+          <type name="GLib.Quark" c:type="GQuark"/>
         </parameter>
         <parameter name="closure">
           <type name="Closure" c:type="GClosure*"/>
@@ -4305,7 +4323,7 @@
           <type name="uint" c:type="guint"/>
         </parameter>
         <parameter name="detail">
-          <type name="Quark" c:type="GQuark"/>
+          <type name="GLib.Quark" c:type="GQuark"/>
         </parameter>
         <parameter name="closure">
           <type name="Closure" c:type="GClosure*"/>
@@ -4500,7 +4518,7 @@
             <type name="Object" c:type="GObject*"/>
           </parameter>
           <parameter name="weak_pointer_location">
-            <type name="pointer" c:type="gpointer*"/>
+            <type name="any" c:type="gpointer*"/>
           </parameter>
         </parameters>
       </method>
@@ -4514,7 +4532,7 @@
             <type name="Object" c:type="GObject*"/>
           </parameter>
           <parameter name="weak_pointer_location">
-            <type name="pointer" c:type="gpointer*"/>
+            <type name="any" c:type="gpointer*"/>
           </parameter>
         </parameters>
       </method>
@@ -4560,7 +4578,7 @@
             <type name="Object" c:type="GObject*"/>
           </parameter>
           <parameter name="quark">
-            <type name="Quark" c:type="GQuark"/>
+            <type name="GLib.Quark" c:type="GQuark"/>
           </parameter>
         </parameters>
       </method>
@@ -4573,7 +4591,7 @@
             <type name="Object" c:type="GObject*"/>
           </parameter>
           <parameter name="quark">
-            <type name="Quark" c:type="GQuark"/>
+            <type name="GLib.Quark" c:type="GQuark"/>
           </parameter>
           <parameter name="data">
             <type name="any" c:type="gpointer"/>
@@ -4589,7 +4607,7 @@
             <type name="Object" c:type="GObject*"/>
           </parameter>
           <parameter name="quark">
-            <type name="Quark" c:type="GQuark"/>
+            <type name="GLib.Quark" c:type="GQuark"/>
           </parameter>
           <parameter name="data">
             <type name="any" c:type="gpointer"/>
@@ -4608,7 +4626,7 @@
             <type name="Object" c:type="GObject*"/>
           </parameter>
           <parameter name="quark">
-            <type name="Quark" c:type="GQuark"/>
+            <type name="GLib.Quark" c:type="GQuark"/>
           </parameter>
         </parameters>
       </method>
@@ -4706,6 +4724,21 @@
           </parameter>
         </parameters>
       </method>
+      <glib:signal name="notify">
+        <return-value>
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <parameter name="object">
+            <type name="GParam" c:type="GParam"/>
+          </parameter>
+        </parameters>
+      </glib:signal>
+    </class>
+    <record name="Class" c:type="GObjectClass">
+      <field name="g_type_class">
+        <type name="TypeClass" c:type="GTypeClass"/>
+      </field>
       <field name="construct_properties">
         <type name="GLib.SList" c:type="GSList*"/>
       </field>
@@ -4826,24 +4859,15 @@
       <field name="pdummy">
         <type name="any" c:type="gpointer"/>
       </field>
-      <glib:signal name="notify">
-        <return-value>
-          <type name="none" c:type="void"/>
-        </return-value>
-        <parameters>
-          <parameter name="object">
-            <type name="Param" c:type="GParam"/>
-          </parameter>
-        </parameters>
-      </glib:signal>
-    </class>
+    </record>
     <class name="InitiallyUnowned"
            c:type="GInitiallyUnowned"
            parent="Object"
            glib:type-name="GInitiallyUnowned"
            glib:get-type="g_initially_unowned_get_type">
     </class>
-    <record name="ObjectConstructParam" c:type="GObjectConstructParam">
+    <record name="InitiallyUnownedClass" c:type="GInitiallyUnownedClass"/>
+    <record name="ConstructParam" c:type="GObjectConstructParam">
       <field name="pspec">
         <type name="ParamSpec" c:type="GParamSpec*"/>
       </field>
@@ -5206,11 +5230,11 @@
     <function name="object_compat_control"
               c:identifier="g_object_compat_control">
       <return-value>
-        <type name="size" c:type="gsize"/>
+        <type name="size_t" c:type="gsize"/>
       </return-value>
       <parameters>
         <parameter name="what">
-          <type name="size" c:type="gsize"/>
+          <type name="size_t" c:type="gsize"/>
         </parameter>
         <parameter name="data">
           <type name="any" c:type="gpointer"/>
@@ -5342,7 +5366,7 @@
         <type name="ParamSpec" c:type="GParamSpec"/>
       </field>
       <field name="default_value">
-        <type name="unichar" c:type="gunichar"/>
+        <type name="GLib.unichar" c:type="gunichar"/>
       </field>
     </record>
     <record name="ParamSpecEnum" c:type="GParamSpecEnum">
@@ -5415,7 +5439,7 @@
         <type name="string" c:type="gchar*"/>
       </field>
       <field name="substitutor">
-        <type name="char" c:type="gchar"/>
+        <type name="GLib.char" c:type="gchar"/>
       </field>
       <field name="null_fold_if_empty">
         <type name="uint" c:type="guint"/>
@@ -5732,7 +5756,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="default_value">
-          <type name="unichar" c:type="gunichar"/>
+          <type name="GLib.unichar" c:type="gunichar"/>
         </parameter>
         <parameter name="flags">
           <type name="ParamFlags" c:type="GParamFlags"/>
@@ -6023,7 +6047,7 @@
         </parameter>
       </parameters>
     </function>
-    <glib:boxed c:type="IOChannel"
+    <glib:boxed c:type="GIOChannel"
                 glib:name="IOChannel"
                 glib:type-name="GIOChannel"
                 glib:get-type="g_io_channel_get_type">
@@ -6195,6 +6219,70 @@
         </return-value>
       </callback>
     </class>
+    <record name="TypeModuleClass" c:type="GTypeModuleClass">
+      <field name="parent_class">
+        <type name="Class" c:type="GObjectClass"/>
+      </field>
+      <callback name="load" c:type="load">
+        <return-value>
+          <type name="boolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <parameter name="module">
+            <type name="TypeModule" c:type="GTypeModule*"/>
+          </parameter>
+        </parameters>
+      </callback>
+      <callback name="unload" c:type="unload">
+        <return-value>
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <parameter name="module">
+            <type name="TypeModule" c:type="GTypeModule*"/>
+          </parameter>
+        </parameters>
+      </callback>
+      <callback name="reserved1" c:type="reserved1">
+        <return-value>
+          <type name="none" c:type="void"/>
+        </return-value>
+      </callback>
+      <callback name="reserved2" c:type="reserved2">
+        <return-value>
+          <type name="none" c:type="void"/>
+        </return-value>
+      </callback>
+      <callback name="reserved3" c:type="reserved3">
+        <return-value>
+          <type name="none" c:type="void"/>
+        </return-value>
+      </callback>
+      <callback name="reserved4" c:type="reserved4">
+        <return-value>
+          <type name="none" c:type="void"/>
+        </return-value>
+      </callback>
+    </record>
+    <record name="TypePluginClass" c:type="GTypePluginClass">
+      <field name="base_iface">
+        <type name="TypeInterface" c:type="GTypeInterface"/>
+      </field>
+      <field name="use_plugin">
+        <type name="TypePluginUse" c:type="GTypePluginUse"/>
+      </field>
+      <field name="unuse_plugin">
+        <type name="TypePluginUnuse" c:type="GTypePluginUnuse"/>
+      </field>
+      <field name="complete_type_info">
+        <type name="TypePluginCompleteTypeInfo"
+              c:type="GTypePluginCompleteTypeInfo"/>
+      </field>
+      <field name="complete_interface_info">
+        <type name="TypePluginCompleteInterfaceInfo"
+              c:type="GTypePluginCompleteInterfaceInfo"/>
+      </field>
+    </record>
     <callback name="TypePluginUse" c:type="GTypePluginUse">
       <return-value>
         <type name="none" c:type="void"/>

@@ -1,5 +1,18 @@
 2008-08-20  Johan Dahlin  <johan@gnome.org>
 
+	* gir/gio-2.0-good.gir:
+	* gir/glib-2.0-good.gir:
+	* gir/gobject-2.0-good.gir:
+	Regnerate
+	* giscanner/glibtransformer.py:
+	Do not delete Class structures, we need them in gdk/gtk.
+	* tests/scanner/drawable-expected.gir:
+	* tests/scanner/foo-expected.gir:
+	* tests/scanner/utility-expected.gir:
+	Update tests.
+
+2008-08-20  Johan Dahlin  <johan@gnome.org>
+
 	* tests/scanner/Makefile.am:
 	* tests/scanner/annotation-expected.gir:
 	* tests/scanner/annotation.c (annotation_object_class_init),

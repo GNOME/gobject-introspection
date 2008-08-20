@@ -3,28 +3,26 @@
             xmlns:c="http://www.gtk.org/introspection/c/1.0"
             xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
   <namespace name="GLib">
-    <alias name="char" target="char" c:type="gchar"/>
-    <alias name="short" target="short" c:type="gshort"/>
-    <alias name="long" target="long" c:type="glong"/>
-    <alias name="int" target="int" c:type="gint"/>
-    <alias name="boolean" target="int" c:type="gboolean"/>
-    <alias name="uchar" target="unsigned" c:type="guchar"/>
-    <alias name="ushort" target="unsigned" c:type="gushort"/>
+    <alias name="IConv" target="none" c:type="GIConv"/>
+    <alias name="short" target="int16" c:type="gshort"/>
     <alias name="ulong" target="unsigned" c:type="gulong"/>
-    <alias name="uint" target="unsigned" c:type="guint"/>
-    <alias name="float" target="float" c:type="gfloat"/>
-    <alias name="double" target="double" c:type="gdouble"/>
-    <alias name="DoubleIEEE754"
-           target="DoubleIEEE754"
-           c:type="GDoubleIEEE754"/>
-    <alias name="FloatIEEE754" target="FloatIEEE754" c:type="GFloatIEEE754"/>
-    <alias name="Quark" target="uint32" c:type="GQuark"/>
-    <alias name="Time" target="int32" c:type="GTime"/>
-    <alias name="DateYear" target="uint16" c:type="GDateYear"/>
-    <alias name="DateDay" target="uint8" c:type="GDateDay"/>
     <alias name="unichar" target="uint32" c:type="gunichar"/>
+    <alias name="int" target="int" c:type="gint"/>
+    <alias name="double" target="double" c:type="gdouble"/>
+    <alias name="ushort" target="unsigned" c:type="gushort"/>
+    <alias name="DateDay" target="uint8" c:type="GDateDay"/>
+    <alias name="long" target="long" c:type="glong"/>
+    <alias name="Quark" target="uint32" c:type="GQuark"/>
+    <alias name="char" target="int8" c:type="gchar"/>
+    <alias name="uchar" target="unsigned" c:type="guchar"/>
+    <alias name="float" target="float" c:type="gfloat"/>
+    <alias name="boolean" target="int" c:type="gboolean"/>
+    <alias name="uint" target="unsigned" c:type="guint"/>
+    <alias name="Time" target="int32" c:type="GTime"/>
     <alias name="unichar2" target="uint16" c:type="gunichar2"/>
-    <alias name="TokenValue" target="TokenValue" c:type="GTokenValue"/>
+    <alias name="constpointer" target="none" c:type="gconstpointer"/>
+    <alias name="DateYear" target="uint16" c:type="GDateYear"/>
+    <alias name="pointer" target="none" c:type="gpointer"/>
     <callback name="CompareFunc" c:type="GCompareFunc">
       <return-value>
         <type name="int" c:type="gint"/>
@@ -139,6 +137,22 @@
         </parameter>
       </parameters>
     </callback>
+    <union name="DoubleIEEE754" c:type="GDoubleIEEE754">
+      <field name="v_double">
+        <type name="double" c:type="gdouble"/>
+      </field>
+      <field name="mpn">
+        <type name="any" c:type="any"/>
+      </field>
+    </union>
+    <union name="FloatIEEE754" c:type="GFloatIEEE754">
+      <field name="v_float">
+        <type name="float" c:type="gfloat"/>
+      </field>
+      <field name="mpn">
+        <type name="any" c:type="any"/>
+      </field>
+    </union>
     <record name="TimeVal" c:type="GTimeVal">
       <field name="tv_sec">
         <type name="long" c:type="glong"/>
@@ -165,7 +179,7 @@
     </record>
     <record name="PtrArray" c:type="GPtrArray">
       <field name="pdata">
-        <type name="pointer" c:type="gpointer*"/>
+        <type name="any" c:type="gpointer*"/>
       </field>
       <field name="len">
         <type name="uint" c:type="guint"/>
@@ -373,7 +387,7 @@
     </function>
     <function name="ptr_array_free" c:identifier="g_ptr_array_free">
       <return-value>
-        <type name="pointer" c:type="gpointer*"/>
+        <type name="any" c:type="gpointer*"/>
       </return-value>
       <parameters>
         <parameter name="array">
@@ -963,18 +977,18 @@
     </function>
     <function name="et_system_data_dirs" c:identifier="g_get_system_data_dirs">
       <return-value>
-        <type name="char" c:type="gchar**"/>
+        <type name="int8" c:type="gchar**"/>
       </return-value>
     </function>
     <function name="et_system_config_dirs"
               c:identifier="g_get_system_config_dirs">
       <return-value>
-        <type name="char" c:type="gchar**"/>
+        <type name="int8" c:type="gchar**"/>
       </return-value>
     </function>
     <function name="et_language_names" c:identifier="g_get_language_names">
       <return-value>
-        <type name="char" c:type="gchar**"/>
+        <type name="int8" c:type="gchar**"/>
       </return-value>
     </function>
     <enumeration name="UserDirectory" c:type="GUserDirectory">
@@ -1113,7 +1127,7 @@
       </return-value>
       <parameters>
         <parameter name="nullify_location">
-          <type name="pointer" c:type="gpointer*"/>
+          <type name="any" c:type="gpointer*"/>
         </parameter>
       </parameters>
     </function>
@@ -1155,7 +1169,7 @@
     </function>
     <function name="listenv" c:identifier="g_listenv">
       <return-value>
-        <type name="char" c:type="gchar**"/>
+        <type name="int8" c:type="gchar**"/>
       </return-value>
     </function>
     <function name="getenv_nomalloc" c:identifier="_g_getenv_nomalloc">
@@ -1167,7 +1181,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="buffer">
-          <type name="char" c:type="gchar"/>
+          <type name="int8" c:type="gchar"/>
         </parameter>
       </parameters>
     </function>
@@ -1348,7 +1362,7 @@
       </return-value>
       <parameters>
         <parameter name="atomic">
-          <type name="pointer" c:type="gpointer*"/>
+          <type name="any" c:type="gpointer*"/>
         </parameter>
         <parameter name="oldval">
           <type name="any" c:type="gpointer"/>
@@ -1387,7 +1401,7 @@
       </return-value>
       <parameters>
         <parameter name="atomic">
-          <type name="pointer" c:type="gpointer*"/>
+          <type name="any" c:type="gpointer*"/>
         </parameter>
       </parameters>
     </function>
@@ -1397,7 +1411,7 @@
       </return-value>
       <parameters>
         <parameter name="atomic">
-          <type name="pointer" c:type="gpointer*"/>
+          <type name="any" c:type="gpointer*"/>
         </parameter>
         <parameter name="newval">
           <type name="any" c:type="gpointer"/>
@@ -1789,7 +1803,7 @@
       </return-value>
       <parameters>
         <parameter name="mutex">
-          <type name="StaticMutex" c:type="GStaticMutex*"/>
+          <type name="GStaticMutex" c:type="GStaticMutex*"/>
         </parameter>
       </parameters>
     </function>
@@ -1799,7 +1813,7 @@
       </return-value>
       <parameters>
         <parameter name="mutex">
-          <type name="StaticMutex" c:type="GStaticMutex*"/>
+          <type name="GStaticMutex" c:type="GStaticMutex*"/>
         </parameter>
       </parameters>
     </function>
@@ -1851,13 +1865,13 @@
     </function>
     <record name="StaticRecMutex" c:type="GStaticRecMutex">
       <field name="mutex">
-        <type name="StaticMutex" c:type="GStaticMutex"/>
+        <type name="GStaticMutex" c:type="GStaticMutex"/>
       </field>
       <field name="depth">
         <type name="uint" c:type="guint"/>
       </field>
       <field name="owner">
-        <type name="SystemThread" c:type="GSystemThread"/>
+        <type name="GSystemThread" c:type="GSystemThread"/>
       </field>
     </record>
     <function name="static_rec_mutex_init"
@@ -1942,7 +1956,7 @@
     </function>
     <record name="StaticRWLock" c:type="GStaticRWLock">
       <field name="mutex">
-        <type name="StaticMutex" c:type="GStaticMutex"/>
+        <type name="GStaticMutex" c:type="GStaticMutex"/>
       </field>
       <field name="read_cond">
         <type name="Cond" c:type="GCond*"/>
@@ -2101,7 +2115,7 @@
       </return-value>
       <parameters>
         <parameter name="value_location">
-          <type name="size" c:type="gsize*"/>
+          <type name="size_t" c:type="gsize*"/>
         </parameter>
       </parameters>
     </function>
@@ -2112,7 +2126,7 @@
       </return-value>
       <parameters>
         <parameter name="value_location">
-          <type name="size" c:type="gsize*"/>
+          <type name="size_t" c:type="gsize*"/>
         </parameter>
       </parameters>
     </function>
@@ -2122,10 +2136,10 @@
       </return-value>
       <parameters>
         <parameter name="value_location">
-          <type name="size" c:type="gsize*"/>
+          <type name="size_t" c:type="gsize*"/>
         </parameter>
         <parameter name="initialization_value">
-          <type name="size" c:type="gsize"/>
+          <type name="size_t" c:type="gsize"/>
         </parameter>
       </parameters>
     </function>
@@ -2438,14 +2452,14 @@
     </function>
     <function name="base64_encode_step" c:identifier="g_base64_encode_step">
       <return-value>
-        <type name="size" c:type="gsize"/>
+        <type name="size_t" c:type="gsize"/>
       </return-value>
       <parameters>
         <parameter name="in">
           <type name="uchar" c:type="guchar*"/>
         </parameter>
         <parameter name="len">
-          <type name="size" c:type="gsize"/>
+          <type name="size_t" c:type="gsize"/>
         </parameter>
         <parameter name="break_lines">
           <type name="boolean" c:type="gboolean"/>
@@ -2463,7 +2477,7 @@
     </function>
     <function name="base64_encode_close" c:identifier="g_base64_encode_close">
       <return-value>
-        <type name="size" c:type="gsize"/>
+        <type name="size_t" c:type="gsize"/>
       </return-value>
       <parameters>
         <parameter name="break_lines">
@@ -2489,20 +2503,20 @@
           <type name="uchar" c:type="guchar*"/>
         </parameter>
         <parameter name="len">
-          <type name="size" c:type="gsize"/>
+          <type name="size_t" c:type="gsize"/>
         </parameter>
       </parameters>
     </function>
     <function name="base64_decode_step" c:identifier="g_base64_decode_step">
       <return-value>
-        <type name="size" c:type="gsize"/>
+        <type name="size_t" c:type="gsize"/>
       </return-value>
       <parameters>
         <parameter name="in">
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="len">
-          <type name="size" c:type="gsize"/>
+          <type name="size_t" c:type="gsize"/>
         </parameter>
         <parameter name="out">
           <type name="uchar" c:type="guchar*"/>
@@ -2524,7 +2538,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="out_len">
-          <type name="size" c:type="gsize*"/>
+          <type name="size_t" c:type="gsize*"/>
         </parameter>
       </parameters>
     </function>
@@ -2606,7 +2620,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="length">
-          <type name="size" c:type="gsize"/>
+          <type name="size_t" c:type="gsize"/>
         </parameter>
         <parameter name="error">
           <type name="Error" c:type="GError**"/>
@@ -2626,7 +2640,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="full_path">
-          <type name="char" c:type="gchar**"/>
+          <type name="int8" c:type="gchar**"/>
         </parameter>
         <parameter name="error">
           <type name="Error" c:type="GError**"/>
@@ -2643,7 +2657,7 @@
           <type name="BookmarkFile" c:type="GBookmarkFile*"/>
         </parameter>
         <parameter name="length">
-          <type name="size" c:type="gsize*"/>
+          <type name="size_t" c:type="gsize*"/>
         </parameter>
         <parameter name="error">
           <type name="Error" c:type="GError**"/>
@@ -2782,10 +2796,10 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="groups">
-          <type name="char" c:type="gchar**"/>
+          <type name="int8" c:type="gchar**"/>
         </parameter>
         <parameter name="length">
-          <type name="size" c:type="gsize"/>
+          <type name="size_t" c:type="gsize"/>
         </parameter>
       </parameters>
     </function>
@@ -2829,7 +2843,7 @@
     <function name="bookmark_file_get_groups"
               c:identifier="g_bookmark_file_get_groups">
       <return-value>
-        <type name="char" c:type="gchar**"/>
+        <type name="int8" c:type="gchar**"/>
       </return-value>
       <parameters>
         <parameter name="bookmark">
@@ -2839,7 +2853,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="length">
-          <type name="size" c:type="gsize*"/>
+          <type name="size_t" c:type="gsize*"/>
         </parameter>
         <parameter name="error">
           <type name="Error" c:type="GError**"/>
@@ -2889,7 +2903,7 @@
     <function name="bookmark_file_get_applications"
               c:identifier="g_bookmark_file_get_applications">
       <return-value>
-        <type name="char" c:type="gchar**"/>
+        <type name="int8" c:type="gchar**"/>
       </return-value>
       <parameters>
         <parameter name="bookmark">
@@ -2899,7 +2913,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="length">
-          <type name="size" c:type="gsize*"/>
+          <type name="size_t" c:type="gsize*"/>
         </parameter>
         <parameter name="error">
           <type name="Error" c:type="GError**"/>
@@ -2951,7 +2965,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="exec">
-          <type name="char" c:type="gchar**"/>
+          <type name="int8" c:type="gchar**"/>
         </parameter>
         <parameter name="count">
           <type name="uint" c:type="guint*"/>
@@ -3031,10 +3045,10 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="href">
-          <type name="char" c:type="gchar**"/>
+          <type name="int8" c:type="gchar**"/>
         </parameter>
         <parameter name="mime_type">
-          <type name="char" c:type="gchar**"/>
+          <type name="int8" c:type="gchar**"/>
         </parameter>
         <parameter name="error">
           <type name="Error" c:type="GError**"/>
@@ -3171,14 +3185,14 @@
     <function name="bookmark_file_get_uris"
               c:identifier="g_bookmark_file_get_uris">
       <return-value>
-        <type name="char" c:type="gchar**"/>
+        <type name="int8" c:type="gchar**"/>
       </return-value>
       <parameters>
         <parameter name="bookmark">
           <type name="BookmarkFile" c:type="GBookmarkFile*"/>
         </parameter>
         <parameter name="length">
-          <type name="size" c:type="gsize*"/>
+          <type name="size_t" c:type="gsize*"/>
         </parameter>
       </parameters>
     </function>
@@ -3265,7 +3279,7 @@
       </return-value>
       <parameters>
         <parameter name="block_size">
-          <type name="size" c:type="gsize"/>
+          <type name="size_t" c:type="gsize"/>
         </parameter>
       </parameters>
     </function>
@@ -3275,7 +3289,7 @@
       </return-value>
       <parameters>
         <parameter name="block_size">
-          <type name="size" c:type="gsize"/>
+          <type name="size_t" c:type="gsize"/>
         </parameter>
       </parameters>
     </function>
@@ -3285,7 +3299,7 @@
       </return-value>
       <parameters>
         <parameter name="block_size">
-          <type name="size" c:type="gsize"/>
+          <type name="size_t" c:type="gsize"/>
         </parameter>
         <parameter name="mem_block">
           <type name="any" c:type="gconstpointer"/>
@@ -3298,7 +3312,7 @@
       </return-value>
       <parameters>
         <parameter name="block_size">
-          <type name="size" c:type="gsize"/>
+          <type name="size_t" c:type="gsize"/>
         </parameter>
         <parameter name="mem_block">
           <type name="any" c:type="gpointer"/>
@@ -3312,13 +3326,13 @@
       </return-value>
       <parameters>
         <parameter name="block_size">
-          <type name="size" c:type="gsize"/>
+          <type name="size_t" c:type="gsize"/>
         </parameter>
         <parameter name="mem_chain">
           <type name="any" c:type="gpointer"/>
         </parameter>
         <parameter name="next_offset">
-          <type name="size" c:type="gsize"/>
+          <type name="size_t" c:type="gsize"/>
         </parameter>
       </parameters>
     </function>
@@ -3389,7 +3403,7 @@
         </return-value>
         <parameters>
           <parameter name="n_bytes">
-            <type name="size" c:type="gsize"/>
+            <type name="size_t" c:type="gsize"/>
           </parameter>
         </parameters>
       </callback>
@@ -3402,7 +3416,7 @@
             <type name="any" c:type="gpointer"/>
           </parameter>
           <parameter name="n_bytes">
-            <type name="size" c:type="gsize"/>
+            <type name="size_t" c:type="gsize"/>
           </parameter>
         </parameters>
       </callback>
@@ -3422,10 +3436,10 @@
         </return-value>
         <parameters>
           <parameter name="n_blocks">
-            <type name="size" c:type="gsize"/>
+            <type name="size_t" c:type="gsize"/>
           </parameter>
           <parameter name="n_block_bytes">
-            <type name="size" c:type="gsize"/>
+            <type name="size_t" c:type="gsize"/>
           </parameter>
         </parameters>
       </callback>
@@ -3435,7 +3449,7 @@
         </return-value>
         <parameters>
           <parameter name="n_bytes">
-            <type name="size" c:type="gsize"/>
+            <type name="size_t" c:type="gsize"/>
           </parameter>
         </parameters>
       </callback>
@@ -3448,7 +3462,7 @@
             <type name="any" c:type="gpointer"/>
           </parameter>
           <parameter name="n_bytes">
-            <type name="size" c:type="gsize"/>
+            <type name="size_t" c:type="gsize"/>
           </parameter>
         </parameters>
       </callback>
@@ -3459,7 +3473,7 @@
       </return-value>
       <parameters>
         <parameter name="n_bytes">
-          <type name="size" c:type="gsize"/>
+          <type name="size_t" c:type="gsize"/>
         </parameter>
       </parameters>
     </function>
@@ -3469,7 +3483,7 @@
       </return-value>
       <parameters>
         <parameter name="n_bytes">
-          <type name="size" c:type="gsize"/>
+          <type name="size_t" c:type="gsize"/>
         </parameter>
       </parameters>
     </function>
@@ -3482,7 +3496,7 @@
           <type name="any" c:type="gpointer"/>
         </parameter>
         <parameter name="n_bytes">
-          <type name="size" c:type="gsize"/>
+          <type name="size_t" c:type="gsize"/>
         </parameter>
       </parameters>
     </function>
@@ -3502,7 +3516,7 @@
       </return-value>
       <parameters>
         <parameter name="n_bytes">
-          <type name="size" c:type="gsize"/>
+          <type name="size_t" c:type="gsize"/>
         </parameter>
       </parameters>
     </function>
@@ -3512,7 +3526,7 @@
       </return-value>
       <parameters>
         <parameter name="n_bytes">
-          <type name="size" c:type="gsize"/>
+          <type name="size_t" c:type="gsize"/>
         </parameter>
       </parameters>
     </function>
@@ -3525,7 +3539,7 @@
           <type name="any" c:type="gpointer"/>
         </parameter>
         <parameter name="n_bytes">
-          <type name="size" c:type="gsize"/>
+          <type name="size_t" c:type="gsize"/>
         </parameter>
       </parameters>
     </function>
@@ -3564,7 +3578,7 @@
           <type name="int" c:type="gint"/>
         </parameter>
         <parameter name="area_size">
-          <type name="size" c:type="gsize"/>
+          <type name="size_t" c:type="gsize"/>
         </parameter>
         <parameter name="type">
           <type name="int" c:type="gint"/>
@@ -4212,7 +4226,7 @@
     <function name="checksum_type_get_length"
               c:identifier="g_checksum_type_get_length">
       <return-value>
-        <type name="ssize" c:type="gssize"/>
+        <type name="ssize_t" c:type="gssize"/>
       </return-value>
       <parameters>
         <parameter name="checksum_type">
@@ -4262,7 +4276,7 @@
           <type name="uchar" c:type="guchar*"/>
         </parameter>
         <parameter name="length">
-          <type name="ssize" c:type="gssize"/>
+          <type name="ssize_t" c:type="gssize"/>
         </parameter>
       </parameters>
     </function>
@@ -4288,7 +4302,7 @@
           <type name="uint8" c:type="guint8*"/>
         </parameter>
         <parameter name="digest_len">
-          <type name="size" c:type="gsize*"/>
+          <type name="size_t" c:type="gsize*"/>
         </parameter>
       </parameters>
     </function>
@@ -4305,7 +4319,7 @@
           <type name="uchar" c:type="guchar*"/>
         </parameter>
         <parameter name="length">
-          <type name="size" c:type="gsize"/>
+          <type name="size_t" c:type="gsize"/>
         </parameter>
       </parameters>
     </function>
@@ -4322,7 +4336,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="length">
-          <type name="ssize" c:type="gssize"/>
+          <type name="ssize_t" c:type="gssize"/>
         </parameter>
       </parameters>
     </function>
@@ -4365,7 +4379,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="n">
-          <type name="size" c:type="gsize"/>
+          <type name="size_t" c:type="gsize"/>
         </parameter>
       </parameters>
     </callback>
@@ -4430,7 +4444,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="new_prefix">
-          <type name="char" c:type="gchar**"/>
+          <type name="int8" c:type="gchar**"/>
         </parameter>
       </parameters>
     </function>
@@ -4447,7 +4461,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="new_prefix">
-          <type name="char" c:type="gchar**"/>
+          <type name="int8" c:type="gchar**"/>
         </parameter>
       </parameters>
     </function>
@@ -4511,23 +4525,23 @@
     </function>
     <function name="iconv" c:identifier="g_iconv">
       <return-value>
-        <type name="size" c:type="gsize"/>
+        <type name="size_t" c:type="gsize"/>
       </return-value>
       <parameters>
         <parameter name="converter">
           <type name="IConv" c:type="GIConv"/>
         </parameter>
         <parameter name="inbuf">
-          <type name="char" c:type="gchar**"/>
+          <type name="int8" c:type="gchar**"/>
         </parameter>
         <parameter name="inbytes_left">
-          <type name="size" c:type="gsize*"/>
+          <type name="size_t" c:type="gsize*"/>
         </parameter>
         <parameter name="outbuf">
-          <type name="char" c:type="gchar**"/>
+          <type name="int8" c:type="gchar**"/>
         </parameter>
         <parameter name="outbytes_left">
-          <type name="size" c:type="gsize*"/>
+          <type name="size_t" c:type="gsize*"/>
         </parameter>
       </parameters>
     </function>
@@ -4550,7 +4564,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="len">
-          <type name="ssize" c:type="gssize"/>
+          <type name="ssize_t" c:type="gssize"/>
         </parameter>
         <parameter name="to_codeset">
           <type name="string" c:type="gchar*"/>
@@ -4559,10 +4573,10 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="bytes_read">
-          <type name="size" c:type="gsize*"/>
+          <type name="size_t" c:type="gsize*"/>
         </parameter>
         <parameter name="bytes_written">
-          <type name="size" c:type="gsize*"/>
+          <type name="size_t" c:type="gsize*"/>
         </parameter>
         <parameter name="error">
           <type name="Error" c:type="GError**"/>
@@ -4578,16 +4592,16 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="len">
-          <type name="ssize" c:type="gssize"/>
+          <type name="ssize_t" c:type="gssize"/>
         </parameter>
         <parameter name="converter">
           <type name="IConv" c:type="GIConv"/>
         </parameter>
         <parameter name="bytes_read">
-          <type name="size" c:type="gsize*"/>
+          <type name="size_t" c:type="gsize*"/>
         </parameter>
         <parameter name="bytes_written">
-          <type name="size" c:type="gsize*"/>
+          <type name="size_t" c:type="gsize*"/>
         </parameter>
         <parameter name="error">
           <type name="Error" c:type="GError**"/>
@@ -4604,7 +4618,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="len">
-          <type name="ssize" c:type="gssize"/>
+          <type name="ssize_t" c:type="gssize"/>
         </parameter>
         <parameter name="to_codeset">
           <type name="string" c:type="gchar*"/>
@@ -4616,10 +4630,10 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="bytes_read">
-          <type name="size" c:type="gsize*"/>
+          <type name="size_t" c:type="gsize*"/>
         </parameter>
         <parameter name="bytes_written">
-          <type name="size" c:type="gsize*"/>
+          <type name="size_t" c:type="gsize*"/>
         </parameter>
         <parameter name="error">
           <type name="Error" c:type="GError**"/>
@@ -4635,13 +4649,13 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="len">
-          <type name="ssize" c:type="gssize"/>
+          <type name="ssize_t" c:type="gssize"/>
         </parameter>
         <parameter name="bytes_read">
-          <type name="size" c:type="gsize*"/>
+          <type name="size_t" c:type="gsize*"/>
         </parameter>
         <parameter name="bytes_written">
-          <type name="size" c:type="gsize*"/>
+          <type name="size_t" c:type="gsize*"/>
         </parameter>
         <parameter name="error">
           <type name="Error" c:type="GError**"/>
@@ -4657,13 +4671,13 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="len">
-          <type name="ssize" c:type="gssize"/>
+          <type name="ssize_t" c:type="gssize"/>
         </parameter>
         <parameter name="bytes_read">
-          <type name="size" c:type="gsize*"/>
+          <type name="size_t" c:type="gsize*"/>
         </parameter>
         <parameter name="bytes_written">
-          <type name="size" c:type="gsize*"/>
+          <type name="size_t" c:type="gsize*"/>
         </parameter>
         <parameter name="error">
           <type name="Error" c:type="GError**"/>
@@ -4679,13 +4693,13 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="len">
-          <type name="ssize" c:type="gssize"/>
+          <type name="ssize_t" c:type="gssize"/>
         </parameter>
         <parameter name="bytes_read">
-          <type name="size" c:type="gsize*"/>
+          <type name="size_t" c:type="gsize*"/>
         </parameter>
         <parameter name="bytes_written">
-          <type name="size" c:type="gsize*"/>
+          <type name="size_t" c:type="gsize*"/>
         </parameter>
         <parameter name="error">
           <type name="Error" c:type="GError**"/>
@@ -4701,13 +4715,13 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="len">
-          <type name="ssize" c:type="gssize"/>
+          <type name="ssize_t" c:type="gssize"/>
         </parameter>
         <parameter name="bytes_read">
-          <type name="size" c:type="gsize*"/>
+          <type name="size_t" c:type="gsize*"/>
         </parameter>
         <parameter name="bytes_written">
-          <type name="size" c:type="gsize*"/>
+          <type name="size_t" c:type="gsize*"/>
         </parameter>
         <parameter name="error">
           <type name="Error" c:type="GError**"/>
@@ -4723,7 +4737,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="hostname">
-          <type name="char" c:type="gchar**"/>
+          <type name="int8" c:type="gchar**"/>
         </parameter>
         <parameter name="error">
           <type name="Error" c:type="GError**"/>
@@ -4764,7 +4778,7 @@
       </return-value>
       <parameters>
         <parameter name="charsets">
-          <type name="char" c:type="gchar***"/>
+          <type name="int8" c:type="gchar***"/>
         </parameter>
       </parameters>
     </function>
@@ -4782,7 +4796,7 @@
     <function name="uri_list_extract_uris"
               c:identifier="g_uri_list_extract_uris">
       <return-value>
-        <type name="char" c:type="gchar**"/>
+        <type name="int8" c:type="gchar**"/>
       </return-value>
       <parameters>
         <parameter name="uri_list">
@@ -5615,14 +5629,14 @@
     </function>
     <function name="date_strftime" c:identifier="g_date_strftime">
       <return-value>
-        <type name="size" c:type="gsize"/>
+        <type name="size_t" c:type="gsize"/>
       </return-value>
       <parameters>
         <parameter name="s">
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="slen">
-          <type name="size" c:type="gsize"/>
+          <type name="size_t" c:type="gsize"/>
         </parameter>
         <parameter name="format">
           <type name="string" c:type="gchar*"/>
@@ -5759,10 +5773,10 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="contents">
-          <type name="char" c:type="gchar**"/>
+          <type name="int8" c:type="gchar**"/>
         </parameter>
         <parameter name="length">
-          <type name="size" c:type="gsize*"/>
+          <type name="size_t" c:type="gsize*"/>
         </parameter>
         <parameter name="error">
           <type name="Error" c:type="GError**"/>
@@ -5781,7 +5795,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="length">
-          <type name="ssize" c:type="gssize"/>
+          <type name="ssize_t" c:type="gssize"/>
         </parameter>
         <parameter name="error">
           <type name="Error" c:type="GError**"/>
@@ -5820,7 +5834,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="name_used">
-          <type name="char" c:type="gchar**"/>
+          <type name="int8" c:type="gchar**"/>
         </parameter>
         <parameter name="error">
           <type name="Error" c:type="GError**"/>
@@ -5834,7 +5848,7 @@
       </return-value>
       <parameters>
         <parameter name="size">
-          <type name="offset" c:type="goffset"/>
+          <type name="goffset" c:type="goffset"/>
         </parameter>
       </parameters>
     </function>
@@ -5860,7 +5874,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="args">
-          <type name="char" c:type="gchar**"/>
+          <type name="int8" c:type="gchar**"/>
         </parameter>
       </parameters>
     </function>
@@ -5880,20 +5894,20 @@
       </return-value>
       <parameters>
         <parameter name="args">
-          <type name="char" c:type="gchar**"/>
+          <type name="int8" c:type="gchar**"/>
         </parameter>
       </parameters>
     </function>
     <function name="mkdir_with_parents" c:identifier="g_mkdir_with_parents">
       <return-value>
-        <type name="int32" c:type="int"/>
+        <type name="int" c:type="int"/>
       </return-value>
       <parameters>
         <parameter name="pathname">
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="mode">
-          <type name="int32" c:type="int"/>
+          <type name="int" c:type="int"/>
         </parameter>
       </parameters>
     </function>
@@ -5925,7 +5939,7 @@
         <type name="any" c:type="gpointer"/>
       </field>
       <field name="dummy4">
-        <type name="int32" c:type="int"/>
+        <type name="int" c:type="int"/>
       </field>
       <field name="dummy5">
         <type name="boolean" c:type="gboolean"/>
@@ -6082,10 +6096,10 @@
           <type name="any" c:type="gconstpointer"/>
         </parameter>
         <parameter name="orig_key">
-          <type name="pointer" c:type="gpointer*"/>
+          <type name="any" c:type="gpointer*"/>
         </parameter>
         <parameter name="value">
-          <type name="pointer" c:type="gpointer*"/>
+          <type name="any" c:type="gpointer*"/>
         </parameter>
       </parameters>
     </function>
@@ -6210,10 +6224,10 @@
           <type name="HashTableIter" c:type="GHashTableIter*"/>
         </parameter>
         <parameter name="key">
-          <type name="pointer" c:type="gpointer*"/>
+          <type name="any" c:type="gpointer*"/>
         </parameter>
         <parameter name="value">
-          <type name="pointer" c:type="gpointer*"/>
+          <type name="any" c:type="gpointer*"/>
         </parameter>
       </parameters>
     </function>
@@ -6827,21 +6841,21 @@
     </enumeration>
     <function name="ascii_tolower" c:identifier="g_ascii_tolower">
       <return-value>
-        <type name="char" c:type="gchar"/>
+        <type name="int8" c:type="gchar"/>
       </return-value>
       <parameters>
         <parameter name="c">
-          <type name="char" c:type="gchar"/>
+          <type name="int8" c:type="gchar"/>
         </parameter>
       </parameters>
     </function>
     <function name="ascii_toupper" c:identifier="g_ascii_toupper">
       <return-value>
-        <type name="char" c:type="gchar"/>
+        <type name="int8" c:type="gchar"/>
       </return-value>
       <parameters>
         <parameter name="c">
-          <type name="char" c:type="gchar"/>
+          <type name="int8" c:type="gchar"/>
         </parameter>
       </parameters>
     </function>
@@ -6851,7 +6865,7 @@
       </return-value>
       <parameters>
         <parameter name="c">
-          <type name="char" c:type="gchar"/>
+          <type name="int8" c:type="gchar"/>
         </parameter>
       </parameters>
     </function>
@@ -6861,7 +6875,7 @@
       </return-value>
       <parameters>
         <parameter name="c">
-          <type name="char" c:type="gchar"/>
+          <type name="int8" c:type="gchar"/>
         </parameter>
       </parameters>
     </function>
@@ -6877,7 +6891,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="new_delimiter">
-          <type name="char" c:type="gchar"/>
+          <type name="int8" c:type="gchar"/>
         </parameter>
       </parameters>
     </function>
@@ -6893,7 +6907,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="substitutor">
-          <type name="char" c:type="gchar"/>
+          <type name="int8" c:type="gchar"/>
         </parameter>
       </parameters>
     </function>
@@ -6929,7 +6943,7 @@
     </function>
     <function name="strlcpy" c:identifier="g_strlcpy">
       <return-value>
-        <type name="size" c:type="gsize"/>
+        <type name="size_t" c:type="gsize"/>
       </return-value>
       <parameters>
         <parameter name="dest">
@@ -6939,13 +6953,13 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="dest_size">
-          <type name="size" c:type="gsize"/>
+          <type name="size_t" c:type="gsize"/>
         </parameter>
       </parameters>
     </function>
     <function name="strlcat" c:identifier="g_strlcat">
       <return-value>
-        <type name="size" c:type="gsize"/>
+        <type name="size_t" c:type="gsize"/>
       </return-value>
       <parameters>
         <parameter name="dest">
@@ -6955,7 +6969,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="dest_size">
-          <type name="size" c:type="gsize"/>
+          <type name="size_t" c:type="gsize"/>
         </parameter>
       </parameters>
     </function>
@@ -6968,7 +6982,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="haystack_len">
-          <type name="ssize" c:type="gssize"/>
+          <type name="ssize_t" c:type="gssize"/>
         </parameter>
         <parameter name="needle">
           <type name="string" c:type="gchar*"/>
@@ -6997,7 +7011,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="haystack_len">
-          <type name="ssize" c:type="gssize"/>
+          <type name="ssize_t" c:type="gssize"/>
         </parameter>
         <parameter name="needle">
           <type name="string" c:type="gchar*"/>
@@ -7039,7 +7053,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="endptr">
-          <type name="char" c:type="gchar**"/>
+          <type name="int8" c:type="gchar**"/>
         </parameter>
       </parameters>
     </function>
@@ -7052,7 +7066,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="endptr">
-          <type name="char" c:type="gchar**"/>
+          <type name="int8" c:type="gchar**"/>
         </parameter>
       </parameters>
     </function>
@@ -7065,7 +7079,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="endptr">
-          <type name="char" c:type="gchar**"/>
+          <type name="int8" c:type="gchar**"/>
         </parameter>
         <parameter name="base">
           <type name="uint" c:type="guint"/>
@@ -7081,7 +7095,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="endptr">
-          <type name="char" c:type="gchar**"/>
+          <type name="int8" c:type="gchar**"/>
         </parameter>
         <parameter name="base">
           <type name="uint" c:type="guint"/>
@@ -7168,7 +7182,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="n">
-          <type name="size" c:type="gsize"/>
+          <type name="size_t" c:type="gsize"/>
         </parameter>
       </parameters>
     </function>
@@ -7181,7 +7195,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="len">
-          <type name="ssize" c:type="gssize"/>
+          <type name="ssize_t" c:type="gssize"/>
         </parameter>
       </parameters>
     </function>
@@ -7194,7 +7208,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="len">
-          <type name="ssize" c:type="gssize"/>
+          <type name="ssize_t" c:type="gssize"/>
         </parameter>
       </parameters>
     </function>
@@ -7276,7 +7290,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="n">
-          <type name="size" c:type="gsize"/>
+          <type name="size_t" c:type="gsize"/>
         </parameter>
       </parameters>
     </function>
@@ -7286,10 +7300,10 @@
       </return-value>
       <parameters>
         <parameter name="length">
-          <type name="size" c:type="gsize"/>
+          <type name="size_t" c:type="gsize"/>
         </parameter>
         <parameter name="fill_char">
-          <type name="char" c:type="gchar"/>
+          <type name="int8" c:type="gchar"/>
         </parameter>
       </parameters>
     </function>
@@ -7351,7 +7365,7 @@
     </function>
     <function name="strsplit" c:identifier="g_strsplit">
       <return-value>
-        <type name="char" c:type="gchar**"/>
+        <type name="int8" c:type="gchar**"/>
       </return-value>
       <parameters>
         <parameter name="string">
@@ -7367,7 +7381,7 @@
     </function>
     <function name="strsplit_set" c:identifier="g_strsplit_set">
       <return-value>
-        <type name="char" c:type="gchar**"/>
+        <type name="int8" c:type="gchar**"/>
       </return-value>
       <parameters>
         <parameter name="string">
@@ -7390,7 +7404,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="str_array">
-          <type name="char" c:type="gchar**"/>
+          <type name="int8" c:type="gchar**"/>
         </parameter>
       </parameters>
     </function>
@@ -7400,17 +7414,17 @@
       </return-value>
       <parameters>
         <parameter name="str_array">
-          <type name="char" c:type="gchar**"/>
+          <type name="int8" c:type="gchar**"/>
         </parameter>
       </parameters>
     </function>
     <function name="strdupv" c:identifier="g_strdupv">
       <return-value>
-        <type name="char" c:type="gchar**"/>
+        <type name="int8" c:type="gchar**"/>
       </return-value>
       <parameters>
         <parameter name="str_array">
-          <type name="char" c:type="gchar**"/>
+          <type name="int8" c:type="gchar**"/>
         </parameter>
       </parameters>
     </function>
@@ -7420,7 +7434,7 @@
       </return-value>
       <parameters>
         <parameter name="str_array">
-          <type name="char" c:type="gchar**"/>
+          <type name="int8" c:type="gchar**"/>
         </parameter>
       </parameters>
     </function>
@@ -7462,7 +7476,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="msgidoffset">
-          <type name="size" c:type="gsize"/>
+          <type name="size_t" c:type="gsize"/>
         </parameter>
       </parameters>
     </function>
@@ -7920,7 +7934,7 @@
             <type name="SourceFunc" c:type="GSourceFunc*"/>
           </parameter>
           <parameter name="data">
-            <type name="pointer" c:type="gpointer*"/>
+            <type name="any" c:type="gpointer*"/>
           </parameter>
         </parameters>
       </callback>
@@ -7998,7 +8012,7 @@
       </return-value>
       <parameters>
         <parameter name="pid">
-          <type name="Pid" c:type="GPid"/>
+          <type name="GPid" c:type="GPid"/>
         </parameter>
         <parameter name="status">
           <type name="int" c:type="gint"/>
@@ -8642,7 +8656,7 @@
       </return-value>
       <parameters>
         <parameter name="pid">
-          <type name="Pid" c:type="GPid"/>
+          <type name="GPid" c:type="GPid"/>
         </parameter>
       </parameters>
     </function>
@@ -8799,7 +8813,7 @@
           <type name="int" c:type="gint"/>
         </parameter>
         <parameter name="pid">
-          <type name="Pid" c:type="GPid"/>
+          <type name="GPid" c:type="GPid"/>
         </parameter>
         <parameter name="function">
           <type name="ChildWatchFunc" c:type="GChildWatchFunc"/>
@@ -8818,7 +8832,7 @@
       </return-value>
       <parameters>
         <parameter name="pid">
-          <type name="Pid" c:type="GPid"/>
+          <type name="GPid" c:type="GPid"/>
         </parameter>
         <parameter name="function">
           <type name="ChildWatchFunc" c:type="GChildWatchFunc"/>
@@ -9257,7 +9271,7 @@
       </return-value>
       <parameters>
         <parameter name="charset">
-          <type name="char" c:type="char**"/>
+          <type name="int8" c:type="char**"/>
         </parameter>
       </parameters>
     </function>
@@ -9523,7 +9537,7 @@
           <type name="unichar" c:type="gunichar*"/>
         </parameter>
         <parameter name="len">
-          <type name="size" c:type="gsize"/>
+          <type name="size_t" c:type="gsize"/>
         </parameter>
       </parameters>
     </function>
@@ -9537,7 +9551,7 @@
           <type name="unichar" c:type="gunichar"/>
         </parameter>
         <parameter name="result_len">
-          <type name="size" c:type="gsize*"/>
+          <type name="size_t" c:type="gsize*"/>
         </parameter>
       </parameters>
     </function>
@@ -9561,7 +9575,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="max_len">
-          <type name="ssize" c:type="gssize"/>
+          <type name="ssize_t" c:type="gssize"/>
         </parameter>
       </parameters>
     </function>
@@ -9638,7 +9652,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="max">
-          <type name="ssize" c:type="gssize"/>
+          <type name="ssize_t" c:type="gssize"/>
         </parameter>
       </parameters>
     </function>
@@ -9654,7 +9668,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="n">
-          <type name="size" c:type="gsize"/>
+          <type name="size_t" c:type="gsize"/>
         </parameter>
       </parameters>
     </function>
@@ -9667,7 +9681,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="len">
-          <type name="ssize" c:type="gssize"/>
+          <type name="ssize_t" c:type="gssize"/>
         </parameter>
         <parameter name="c">
           <type name="unichar" c:type="gunichar"/>
@@ -9683,7 +9697,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="len">
-          <type name="ssize" c:type="gssize"/>
+          <type name="ssize_t" c:type="gssize"/>
         </parameter>
         <parameter name="c">
           <type name="unichar" c:type="gunichar"/>
@@ -9699,7 +9713,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="len">
-          <type name="ssize" c:type="gssize"/>
+          <type name="ssize_t" c:type="gssize"/>
         </parameter>
       </parameters>
     </function>
@@ -9873,10 +9887,10 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="max_len">
-          <type name="ssize" c:type="gssize"/>
+          <type name="ssize_t" c:type="gssize"/>
         </parameter>
         <parameter name="end">
-          <type name="char" c:type="gchar**"/>
+          <type name="int8" c:type="gchar**"/>
         </parameter>
       </parameters>
     </function>
@@ -9899,7 +9913,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="len">
-          <type name="ssize" c:type="gssize"/>
+          <type name="ssize_t" c:type="gssize"/>
         </parameter>
       </parameters>
     </function>
@@ -9912,7 +9926,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="len">
-          <type name="ssize" c:type="gssize"/>
+          <type name="ssize_t" c:type="gssize"/>
         </parameter>
       </parameters>
     </function>
@@ -9925,7 +9939,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="len">
-          <type name="ssize" c:type="gssize"/>
+          <type name="ssize_t" c:type="gssize"/>
         </parameter>
       </parameters>
     </function>
@@ -9952,7 +9966,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="len">
-          <type name="ssize" c:type="gssize"/>
+          <type name="ssize_t" c:type="gssize"/>
         </parameter>
         <parameter name="mode">
           <type name="NormalizeMode" c:type="GNormalizeMode"/>
@@ -9981,7 +9995,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="len">
-          <type name="ssize" c:type="gssize"/>
+          <type name="ssize_t" c:type="gssize"/>
         </parameter>
       </parameters>
     </function>
@@ -9995,7 +10009,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="len">
-          <type name="ssize" c:type="gssize"/>
+          <type name="ssize_t" c:type="gssize"/>
         </parameter>
       </parameters>
     </function>
@@ -10038,10 +10052,10 @@
         <type name="string" c:type="gchar*"/>
       </field>
       <field name="len">
-        <type name="size" c:type="gsize"/>
+        <type name="size_t" c:type="gsize"/>
       </field>
       <field name="allocated_len">
-        <type name="size" c:type="gsize"/>
+        <type name="size_t" c:type="gsize"/>
       </field>
     </record>
     <record name="StringChunk" c:type="GStringChunk"/>
@@ -10051,7 +10065,7 @@
       </return-value>
       <parameters>
         <parameter name="size">
-          <type name="size" c:type="gsize"/>
+          <type name="size_t" c:type="gsize"/>
         </parameter>
       </parameters>
     </function>
@@ -10101,7 +10115,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="len">
-          <type name="ssize" c:type="gssize"/>
+          <type name="ssize_t" c:type="gssize"/>
         </parameter>
       </parameters>
     </function>
@@ -10138,7 +10152,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="len">
-          <type name="ssize" c:type="gssize"/>
+          <type name="ssize_t" c:type="gssize"/>
         </parameter>
       </parameters>
     </function>
@@ -10148,7 +10162,7 @@
       </return-value>
       <parameters>
         <parameter name="dfl_size">
-          <type name="size" c:type="gsize"/>
+          <type name="size_t" c:type="gsize"/>
         </parameter>
       </parameters>
     </function>
@@ -10210,7 +10224,7 @@
           <type name="String" c:type="GString*"/>
         </parameter>
         <parameter name="len">
-          <type name="size" c:type="gsize"/>
+          <type name="size_t" c:type="gsize"/>
         </parameter>
       </parameters>
     </function>
@@ -10223,7 +10237,7 @@
           <type name="String" c:type="GString*"/>
         </parameter>
         <parameter name="len">
-          <type name="size" c:type="gsize"/>
+          <type name="size_t" c:type="gsize"/>
         </parameter>
       </parameters>
     </function>
@@ -10236,13 +10250,13 @@
           <type name="String" c:type="GString*"/>
         </parameter>
         <parameter name="pos">
-          <type name="ssize" c:type="gssize"/>
+          <type name="ssize_t" c:type="gssize"/>
         </parameter>
         <parameter name="val">
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="len">
-          <type name="ssize" c:type="gssize"/>
+          <type name="ssize_t" c:type="gssize"/>
         </parameter>
       </parameters>
     </function>
@@ -10271,7 +10285,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="len">
-          <type name="ssize" c:type="gssize"/>
+          <type name="ssize_t" c:type="gssize"/>
         </parameter>
       </parameters>
     </function>
@@ -10284,7 +10298,7 @@
           <type name="String" c:type="GString*"/>
         </parameter>
         <parameter name="c">
-          <type name="char" c:type="gchar"/>
+          <type name="int8" c:type="gchar"/>
         </parameter>
       </parameters>
     </function>
@@ -10324,7 +10338,7 @@
           <type name="String" c:type="GString*"/>
         </parameter>
         <parameter name="c">
-          <type name="char" c:type="gchar"/>
+          <type name="int8" c:type="gchar"/>
         </parameter>
       </parameters>
     </function>
@@ -10354,7 +10368,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="len">
-          <type name="ssize" c:type="gssize"/>
+          <type name="ssize_t" c:type="gssize"/>
         </parameter>
       </parameters>
     </function>
@@ -10367,7 +10381,7 @@
           <type name="String" c:type="GString*"/>
         </parameter>
         <parameter name="pos">
-          <type name="ssize" c:type="gssize"/>
+          <type name="ssize_t" c:type="gssize"/>
         </parameter>
         <parameter name="val">
           <type name="string" c:type="gchar*"/>
@@ -10383,10 +10397,10 @@
           <type name="String" c:type="GString*"/>
         </parameter>
         <parameter name="pos">
-          <type name="ssize" c:type="gssize"/>
+          <type name="ssize_t" c:type="gssize"/>
         </parameter>
         <parameter name="c">
-          <type name="char" c:type="gchar"/>
+          <type name="int8" c:type="gchar"/>
         </parameter>
       </parameters>
     </function>
@@ -10400,7 +10414,7 @@
           <type name="String" c:type="GString*"/>
         </parameter>
         <parameter name="pos">
-          <type name="ssize" c:type="gssize"/>
+          <type name="ssize_t" c:type="gssize"/>
         </parameter>
         <parameter name="wc">
           <type name="unichar" c:type="gunichar"/>
@@ -10416,7 +10430,7 @@
           <type name="String" c:type="GString*"/>
         </parameter>
         <parameter name="pos">
-          <type name="size" c:type="gsize"/>
+          <type name="size_t" c:type="gsize"/>
         </parameter>
         <parameter name="val">
           <type name="string" c:type="gchar*"/>
@@ -10433,13 +10447,13 @@
           <type name="String" c:type="GString*"/>
         </parameter>
         <parameter name="pos">
-          <type name="size" c:type="gsize"/>
+          <type name="size_t" c:type="gsize"/>
         </parameter>
         <parameter name="val">
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="len">
-          <type name="ssize" c:type="gssize"/>
+          <type name="ssize_t" c:type="gssize"/>
         </parameter>
       </parameters>
     </function>
@@ -10452,10 +10466,10 @@
           <type name="String" c:type="GString*"/>
         </parameter>
         <parameter name="pos">
-          <type name="ssize" c:type="gssize"/>
+          <type name="ssize_t" c:type="gssize"/>
         </parameter>
         <parameter name="len">
-          <type name="ssize" c:type="gssize"/>
+          <type name="ssize_t" c:type="gssize"/>
         </parameter>
       </parameters>
     </function>
@@ -10569,7 +10583,7 @@
         <type name="uint" c:type="guint"/>
       </field>
       <field name="buf_size">
-        <type name="size" c:type="gsize"/>
+        <type name="size_t" c:type="gsize"/>
       </field>
       <field name="read_buf">
         <type name="String" c:type="GString*"/>
@@ -10581,7 +10595,7 @@
         <type name="String" c:type="GString*"/>
       </field>
       <field name="partial_write_buf">
-        <type name="char" c:type="gchar"/>
+        <type name="int8" c:type="gchar"/>
       </field>
       <field name="use_buffer">
         <type name="uint" c:type="guint"/>
@@ -10621,10 +10635,10 @@
             <type name="string" c:type="gchar*"/>
           </parameter>
           <parameter name="count">
-            <type name="size" c:type="gsize"/>
+            <type name="size_t" c:type="gsize"/>
           </parameter>
           <parameter name="bytes_read">
-            <type name="size" c:type="gsize*"/>
+            <type name="size_t" c:type="gsize*"/>
           </parameter>
           <parameter name="err">
             <type name="Error" c:type="GError**"/>
@@ -10643,10 +10657,10 @@
             <type name="string" c:type="gchar*"/>
           </parameter>
           <parameter name="count">
-            <type name="size" c:type="gsize"/>
+            <type name="size_t" c:type="gsize"/>
           </parameter>
           <parameter name="bytes_written">
-            <type name="size" c:type="gsize*"/>
+            <type name="size_t" c:type="gsize*"/>
           </parameter>
           <parameter name="err">
             <type name="Error" c:type="GError**"/>
@@ -10849,10 +10863,10 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="count">
-          <type name="size" c:type="gsize"/>
+          <type name="size_t" c:type="gsize"/>
         </parameter>
         <parameter name="bytes_read">
-          <type name="size" c:type="gsize*"/>
+          <type name="size_t" c:type="gsize*"/>
         </parameter>
       </parameters>
     </function>
@@ -10868,10 +10882,10 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="count">
-          <type name="size" c:type="gsize"/>
+          <type name="size_t" c:type="gsize"/>
         </parameter>
         <parameter name="bytes_written">
-          <type name="size" c:type="gsize*"/>
+          <type name="size_t" c:type="gsize*"/>
         </parameter>
       </parameters>
     </function>
@@ -10984,14 +10998,14 @@
           <type name="IOChannel" c:type="GIOChannel*"/>
         </parameter>
         <parameter name="size">
-          <type name="size" c:type="gsize"/>
+          <type name="size_t" c:type="gsize"/>
         </parameter>
       </parameters>
     </function>
     <function name="io_channel_get_buffer_size"
               c:identifier="g_io_channel_get_buffer_size">
       <return-value>
-        <type name="size" c:type="gsize"/>
+        <type name="size_t" c:type="gsize"/>
       </return-value>
       <parameters>
         <parameter name="channel">
@@ -11170,13 +11184,13 @@
           <type name="IOChannel" c:type="GIOChannel*"/>
         </parameter>
         <parameter name="str_return">
-          <type name="char" c:type="gchar**"/>
+          <type name="int8" c:type="gchar**"/>
         </parameter>
         <parameter name="length">
-          <type name="size" c:type="gsize*"/>
+          <type name="size_t" c:type="gsize*"/>
         </parameter>
         <parameter name="terminator_pos">
-          <type name="size" c:type="gsize*"/>
+          <type name="size_t" c:type="gsize*"/>
         </parameter>
         <parameter name="error">
           <type name="Error" c:type="GError**"/>
@@ -11196,7 +11210,7 @@
           <type name="String" c:type="GString*"/>
         </parameter>
         <parameter name="terminator_pos">
-          <type name="size" c:type="gsize*"/>
+          <type name="size_t" c:type="gsize*"/>
         </parameter>
         <parameter name="error">
           <type name="Error" c:type="GError**"/>
@@ -11213,10 +11227,10 @@
           <type name="IOChannel" c:type="GIOChannel*"/>
         </parameter>
         <parameter name="str_return">
-          <type name="char" c:type="gchar**"/>
+          <type name="int8" c:type="gchar**"/>
         </parameter>
         <parameter name="length">
-          <type name="size" c:type="gsize*"/>
+          <type name="size_t" c:type="gsize*"/>
         </parameter>
         <parameter name="error">
           <type name="Error" c:type="GError**"/>
@@ -11236,10 +11250,10 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="count">
-          <type name="size" c:type="gsize"/>
+          <type name="size_t" c:type="gsize"/>
         </parameter>
         <parameter name="bytes_read">
-          <type name="size" c:type="gsize*"/>
+          <type name="size_t" c:type="gsize*"/>
         </parameter>
         <parameter name="error">
           <type name="Error" c:type="GError**"/>
@@ -11276,10 +11290,10 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="count">
-          <type name="ssize" c:type="gssize"/>
+          <type name="ssize_t" c:type="gssize"/>
         </parameter>
         <parameter name="bytes_written">
-          <type name="size" c:type="gsize*"/>
+          <type name="size_t" c:type="gsize*"/>
         </parameter>
         <parameter name="error">
           <type name="Error" c:type="GError**"/>
@@ -11362,7 +11376,7 @@
       </return-value>
       <parameters>
         <parameter name="fd">
-          <type name="int32" c:type="int"/>
+          <type name="int" c:type="int"/>
         </parameter>
       </parameters>
     </function>
@@ -11436,7 +11450,7 @@
           <type name="KeyFile" c:type="GKeyFile*"/>
         </parameter>
         <parameter name="separator">
-          <type name="char" c:type="gchar"/>
+          <type name="int8" c:type="gchar"/>
         </parameter>
       </parameters>
     </function>
@@ -11473,7 +11487,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="length">
-          <type name="size" c:type="gsize"/>
+          <type name="size_t" c:type="gsize"/>
         </parameter>
         <parameter name="flags">
           <type name="KeyFileFlags" c:type="GKeyFileFlags"/>
@@ -11496,10 +11510,10 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="search_dirs">
-          <type name="char" c:type="gchar**"/>
+          <type name="int8" c:type="gchar**"/>
         </parameter>
         <parameter name="full_path">
-          <type name="char" c:type="gchar**"/>
+          <type name="int8" c:type="gchar**"/>
         </parameter>
         <parameter name="flags">
           <type name="KeyFileFlags" c:type="GKeyFileFlags"/>
@@ -11522,7 +11536,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="full_path">
-          <type name="char" c:type="gchar**"/>
+          <type name="int8" c:type="gchar**"/>
         </parameter>
         <parameter name="flags">
           <type name="KeyFileFlags" c:type="GKeyFileFlags"/>
@@ -11541,7 +11555,7 @@
           <type name="KeyFile" c:type="GKeyFile*"/>
         </parameter>
         <parameter name="length">
-          <type name="size" c:type="gsize*"/>
+          <type name="size_t" c:type="gsize*"/>
         </parameter>
         <parameter name="error">
           <type name="Error" c:type="GError**"/>
@@ -11561,20 +11575,20 @@
     </function>
     <function name="key_file_get_groups" c:identifier="g_key_file_get_groups">
       <return-value>
-        <type name="char" c:type="gchar**"/>
+        <type name="int8" c:type="gchar**"/>
       </return-value>
       <parameters>
         <parameter name="key_file">
           <type name="KeyFile" c:type="GKeyFile*"/>
         </parameter>
         <parameter name="length">
-          <type name="size" c:type="gsize*"/>
+          <type name="size_t" c:type="gsize*"/>
         </parameter>
       </parameters>
     </function>
     <function name="key_file_get_keys" c:identifier="g_key_file_get_keys">
       <return-value>
-        <type name="char" c:type="gchar**"/>
+        <type name="int8" c:type="gchar**"/>
       </return-value>
       <parameters>
         <parameter name="key_file">
@@ -11584,7 +11598,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="length">
-          <type name="size" c:type="gsize*"/>
+          <type name="size_t" c:type="gsize*"/>
         </parameter>
         <parameter name="error">
           <type name="Error" c:type="GError**"/>
@@ -11866,7 +11880,7 @@
     <function name="key_file_get_string_list"
               c:identifier="g_key_file_get_string_list">
       <return-value>
-        <type name="char" c:type="gchar**"/>
+        <type name="int8" c:type="gchar**"/>
       </return-value>
       <parameters>
         <parameter name="key_file">
@@ -11879,7 +11893,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="length">
-          <type name="size" c:type="gsize*"/>
+          <type name="size_t" c:type="gsize*"/>
         </parameter>
         <parameter name="error">
           <type name="Error" c:type="GError**"/>
@@ -11905,14 +11919,14 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="length">
-          <type name="size" c:type="gsize"/>
+          <type name="size_t" c:type="gsize"/>
         </parameter>
       </parameters>
     </function>
     <function name="key_file_get_locale_string_list"
               c:identifier="g_key_file_get_locale_string_list">
       <return-value>
-        <type name="char" c:type="gchar**"/>
+        <type name="int8" c:type="gchar**"/>
       </return-value>
       <parameters>
         <parameter name="key_file">
@@ -11928,7 +11942,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="length">
-          <type name="size" c:type="gsize*"/>
+          <type name="size_t" c:type="gsize*"/>
         </parameter>
         <parameter name="error">
           <type name="Error" c:type="GError**"/>
@@ -11957,7 +11971,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="length">
-          <type name="size" c:type="gsize"/>
+          <type name="size_t" c:type="gsize"/>
         </parameter>
       </parameters>
     </function>
@@ -11977,7 +11991,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="length">
-          <type name="size" c:type="gsize*"/>
+          <type name="size_t" c:type="gsize*"/>
         </parameter>
         <parameter name="error">
           <type name="Error" c:type="GError**"/>
@@ -12003,7 +12017,7 @@
           <type name="boolean" c:type="gboolean"/>
         </parameter>
         <parameter name="length">
-          <type name="size" c:type="gsize"/>
+          <type name="size_t" c:type="gsize"/>
         </parameter>
       </parameters>
     </function>
@@ -12023,7 +12037,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="length">
-          <type name="size" c:type="gsize*"/>
+          <type name="size_t" c:type="gsize*"/>
         </parameter>
         <parameter name="error">
           <type name="Error" c:type="GError**"/>
@@ -12049,7 +12063,7 @@
           <type name="double" c:type="gdouble"/>
         </parameter>
         <parameter name="length">
-          <type name="size" c:type="gsize"/>
+          <type name="size_t" c:type="gsize"/>
         </parameter>
       </parameters>
     </function>
@@ -12069,7 +12083,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="length">
-          <type name="size" c:type="gsize*"/>
+          <type name="size_t" c:type="gsize*"/>
         </parameter>
         <parameter name="error">
           <type name="Error" c:type="GError**"/>
@@ -12095,7 +12109,7 @@
           <type name="int" c:type="gint"/>
         </parameter>
         <parameter name="length">
-          <type name="size" c:type="gsize"/>
+          <type name="size_t" c:type="gsize"/>
         </parameter>
       </parameters>
     </function>
@@ -12218,7 +12232,7 @@
     <function name="mapped_file_get_length"
               c:identifier="g_mapped_file_get_length">
       <return-value>
-        <type name="size" c:type="gsize"/>
+        <type name="size_t" c:type="gsize"/>
       </return-value>
       <parameters>
         <parameter name="file">
@@ -12296,10 +12310,10 @@
             <type name="string" c:type="gchar*"/>
           </parameter>
           <parameter name="attribute_names">
-            <type name="char" c:type="gchar**"/>
+            <type name="int8" c:type="gchar**"/>
           </parameter>
           <parameter name="attribute_values">
-            <type name="char" c:type="gchar**"/>
+            <type name="int8" c:type="gchar**"/>
           </parameter>
           <parameter name="user_data">
             <type name="any" c:type="gpointer"/>
@@ -12340,7 +12354,7 @@
             <type name="string" c:type="gchar*"/>
           </parameter>
           <parameter name="text_len">
-            <type name="size" c:type="gsize"/>
+            <type name="size_t" c:type="gsize"/>
           </parameter>
           <parameter name="user_data">
             <type name="any" c:type="gpointer"/>
@@ -12362,7 +12376,7 @@
             <type name="string" c:type="gchar*"/>
           </parameter>
           <parameter name="text_len">
-            <type name="size" c:type="gsize"/>
+            <type name="size_t" c:type="gsize"/>
           </parameter>
           <parameter name="user_data">
             <type name="any" c:type="gpointer"/>
@@ -12433,7 +12447,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="text_len">
-          <type name="ssize" c:type="gssize"/>
+          <type name="ssize_t" c:type="gssize"/>
         </parameter>
         <parameter name="error">
           <type name="Error" c:type="GError**"/>
@@ -12502,7 +12516,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="length">
-          <type name="ssize" c:type="gssize"/>
+          <type name="ssize_t" c:type="gssize"/>
         </parameter>
       </parameters>
     </function>
@@ -12543,10 +12557,10 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="attribute_names">
-          <type name="char" c:type="gchar**"/>
+          <type name="int8" c:type="gchar**"/>
         </parameter>
         <parameter name="attribute_values">
-          <type name="char" c:type="gchar**"/>
+          <type name="int8" c:type="gchar**"/>
         </parameter>
         <parameter name="error">
           <type name="Error" c:type="GError**"/>
@@ -12745,7 +12759,7 @@
           <type name="string" c:type="char*"/>
         </parameter>
         <parameter name="line">
-          <type name="int32" c:type="int"/>
+          <type name="int" c:type="int"/>
         </parameter>
         <parameter name="func">
           <type name="string" c:type="char*"/>
@@ -12767,7 +12781,7 @@
           <type name="string" c:type="char*"/>
         </parameter>
         <parameter name="line">
-          <type name="int32" c:type="int"/>
+          <type name="int" c:type="int"/>
         </parameter>
         <parameter name="pretty_function">
           <type name="string" c:type="char*"/>
@@ -13263,7 +13277,7 @@
         <type name="string" c:type="gchar*"/>
       </field>
       <field name="short_name">
-        <type name="char" c:type="gchar"/>
+        <type name="int8" c:type="gchar"/>
       </field>
       <field name="flags">
         <type name="int" c:type="gint"/>
@@ -13530,7 +13544,7 @@
           <type name="int" c:type="gint*"/>
         </parameter>
         <parameter name="argv">
-          <type name="char" c:type="gchar***"/>
+          <type name="int8" c:type="gchar***"/>
         </parameter>
         <parameter name="error">
           <type name="Error" c:type="GError**"/>
@@ -13865,7 +13879,7 @@
           <type name="int" c:type="gint"/>
         </parameter>
         <parameter name="size">
-          <type name="size" c:type="gsize"/>
+          <type name="size_t" c:type="gsize"/>
         </parameter>
         <parameter name="compare_func">
           <type name="CompareDataFunc" c:type="GCompareDataFunc"/>
@@ -14892,7 +14906,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="string_len">
-          <type name="ssize" c:type="gssize"/>
+          <type name="ssize_t" c:type="gssize"/>
         </parameter>
         <parameter name="start_position">
           <type name="int" c:type="gint"/>
@@ -14940,7 +14954,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="string_len">
-          <type name="ssize" c:type="gssize"/>
+          <type name="ssize_t" c:type="gssize"/>
         </parameter>
         <parameter name="start_position">
           <type name="int" c:type="gint"/>
@@ -14958,7 +14972,7 @@
     </function>
     <function name="regex_split_simple" c:identifier="g_regex_split_simple">
       <return-value>
-        <type name="char" c:type="gchar**"/>
+        <type name="int8" c:type="gchar**"/>
       </return-value>
       <parameters>
         <parameter name="pattern">
@@ -14977,7 +14991,7 @@
     </function>
     <function name="regex_split" c:identifier="g_regex_split">
       <return-value>
-        <type name="char" c:type="gchar**"/>
+        <type name="int8" c:type="gchar**"/>
       </return-value>
       <parameters>
         <parameter name="regex">
@@ -14993,7 +15007,7 @@
     </function>
     <function name="regex_split_full" c:identifier="g_regex_split_full">
       <return-value>
-        <type name="char" c:type="gchar**"/>
+        <type name="int8" c:type="gchar**"/>
       </return-value>
       <parameters>
         <parameter name="regex">
@@ -15003,7 +15017,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="string_len">
-          <type name="ssize" c:type="gssize"/>
+          <type name="ssize_t" c:type="gssize"/>
         </parameter>
         <parameter name="start_position">
           <type name="int" c:type="gint"/>
@@ -15031,7 +15045,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="string_len">
-          <type name="ssize" c:type="gssize"/>
+          <type name="ssize_t" c:type="gssize"/>
         </parameter>
         <parameter name="start_position">
           <type name="int" c:type="gint"/>
@@ -15060,7 +15074,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="string_len">
-          <type name="ssize" c:type="gssize"/>
+          <type name="ssize_t" c:type="gssize"/>
         </parameter>
         <parameter name="start_position">
           <type name="int" c:type="gint"/>
@@ -15088,7 +15102,7 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="string_len">
-          <type name="ssize" c:type="gssize"/>
+          <type name="ssize_t" c:type="gssize"/>
         </parameter>
         <parameter name="start_position">
           <type name="int" c:type="gint"/>
@@ -15288,7 +15302,7 @@
     <function name="match_info_fetch_all"
               c:identifier="g_match_info_fetch_all">
       <return-value>
-        <type name="char" c:type="gchar**"/>
+        <type name="int8" c:type="gchar**"/>
       </return-value>
       <parameters>
         <parameter name="match_info">
@@ -15593,6 +15607,44 @@
         <type name="uint" c:type="guint"/>
       </field>
     </record>
+    <union name="TokenValue" c:type="GTokenValue">
+      <field name="v_symbol">
+        <type name="any" c:type="gpointer"/>
+      </field>
+      <field name="v_identifier">
+        <type name="string" c:type="gchar*"/>
+      </field>
+      <field name="v_binary">
+        <type name="ulong" c:type="gulong"/>
+      </field>
+      <field name="v_octal">
+        <type name="ulong" c:type="gulong"/>
+      </field>
+      <field name="v_int">
+        <type name="ulong" c:type="gulong"/>
+      </field>
+      <field name="v_int64">
+        <type name="uint64" c:type="guint64"/>
+      </field>
+      <field name="v_float">
+        <type name="double" c:type="gdouble"/>
+      </field>
+      <field name="v_hex">
+        <type name="ulong" c:type="gulong"/>
+      </field>
+      <field name="v_string">
+        <type name="string" c:type="gchar*"/>
+      </field>
+      <field name="v_comment">
+        <type name="string" c:type="gchar*"/>
+      </field>
+      <field name="v_char">
+        <type name="uchar" c:type="guchar"/>
+      </field>
+      <field name="v_error">
+        <type name="uint" c:type="guint"/>
+      </field>
+    </union>
     <callback name="ScannerMsgFunc" c:type="GScannerMsgFunc">
       <return-value>
         <type name="none" c:type="void"/>
@@ -16499,7 +16551,7 @@
           <type name="int" c:type="gint*"/>
         </parameter>
         <parameter name="argvp">
-          <type name="char" c:type="gchar***"/>
+          <type name="int8" c:type="gchar***"/>
         </parameter>
         <parameter name="error">
           <type name="Error" c:type="GError**"/>
@@ -16575,10 +16627,10 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="argv">
-          <type name="char" c:type="gchar**"/>
+          <type name="int8" c:type="gchar**"/>
         </parameter>
         <parameter name="envp">
-          <type name="char" c:type="gchar**"/>
+          <type name="int8" c:type="gchar**"/>
         </parameter>
         <parameter name="flags">
           <type name="SpawnFlags" c:type="GSpawnFlags"/>
@@ -16590,7 +16642,7 @@
           <type name="any" c:type="gpointer"/>
         </parameter>
         <parameter name="child_pid">
-          <type name="Pid" c:type="GPid*"/>
+          <type name="GPid" c:type="GPid*"/>
         </parameter>
         <parameter name="error">
           <type name="Error" c:type="GError**"/>
@@ -16607,10 +16659,10 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="argv">
-          <type name="char" c:type="gchar**"/>
+          <type name="int8" c:type="gchar**"/>
         </parameter>
         <parameter name="envp">
-          <type name="char" c:type="gchar**"/>
+          <type name="int8" c:type="gchar**"/>
         </parameter>
         <parameter name="flags">
           <type name="SpawnFlags" c:type="GSpawnFlags"/>
@@ -16622,7 +16674,7 @@
           <type name="any" c:type="gpointer"/>
         </parameter>
         <parameter name="child_pid">
-          <type name="Pid" c:type="GPid*"/>
+          <type name="GPid" c:type="GPid*"/>
         </parameter>
         <parameter name="standard_input">
           <type name="int" c:type="gint*"/>
@@ -16647,10 +16699,10 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="argv">
-          <type name="char" c:type="gchar**"/>
+          <type name="int8" c:type="gchar**"/>
         </parameter>
         <parameter name="envp">
-          <type name="char" c:type="gchar**"/>
+          <type name="int8" c:type="gchar**"/>
         </parameter>
         <parameter name="flags">
           <type name="SpawnFlags" c:type="GSpawnFlags"/>
@@ -16662,10 +16714,10 @@
           <type name="any" c:type="gpointer"/>
         </parameter>
         <parameter name="standard_output">
-          <type name="char" c:type="gchar**"/>
+          <type name="int8" c:type="gchar**"/>
         </parameter>
         <parameter name="standard_error">
-          <type name="char" c:type="gchar**"/>
+          <type name="int8" c:type="gchar**"/>
         </parameter>
         <parameter name="exit_status">
           <type name="int" c:type="gint*"/>
@@ -16685,10 +16737,10 @@
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="standard_output">
-          <type name="char" c:type="gchar**"/>
+          <type name="int8" c:type="gchar**"/>
         </parameter>
         <parameter name="standard_error">
-          <type name="char" c:type="gchar**"/>
+          <type name="int8" c:type="gchar**"/>
         </parameter>
         <parameter name="exit_status">
           <type name="int" c:type="gint*"/>
@@ -16718,26 +16770,26 @@
       </return-value>
       <parameters>
         <parameter name="pid">
-          <type name="Pid" c:type="GPid"/>
+          <type name="GPid" c:type="GPid"/>
         </parameter>
       </parameters>
     </function>
     <function name="access" c:identifier="g_access">
       <return-value>
-        <type name="int32" c:type="int"/>
+        <type name="int" c:type="int"/>
       </return-value>
       <parameters>
         <parameter name="filename">
           <type name="string" c:type="gchar*"/>
         </parameter>
         <parameter name="mode">
-          <type name="int32" c:type="int"/>
+          <type name="int" c:type="int"/>
         </parameter>
       </parameters>
     </function>
     <function name="chdir" c:identifier="g_chdir">
       <return-value>
-        <type name="int32" c:type="int"/>
+        <type name="int" c:type="int"/>
       </return-value>
       <parameters>
         <parameter name="path">
@@ -16747,7 +16799,7 @@
     </function>
     <function name="unlink" c:identifier="g_unlink">
       <return-value>
-        <type name="int32" c:type="int"/>
+        <type name="int" c:type="int"/>
       </return-value>
       <parameters>
         <parameter name="filename">
@@ -16757,7 +16809,7 @@
     </function>
     <function name="rmdir" c:identifier="g_rmdir">
       <return-value>
-        <type name="int32" c:type="int"/>
+        <type name="int" c:type="int"/>
       </return-value>
       <parameters>
         <parameter name="filename">
@@ -17212,10 +17264,10 @@
           <type name="any" c:type="gconstpointer"/>
         </parameter>
         <parameter name="orig_key">
-          <type name="pointer" c:type="gpointer*"/>
+          <type name="any" c:type="gpointer*"/>
         </parameter>
         <parameter name="value">
-          <type name="pointer" c:type="gpointer*"/>
+          <type name="any" c:type="gpointer*"/>
         </parameter>
       </parameters>
     </function>
@@ -17350,7 +17402,7 @@
     <record name="TestSuite" c:type="GTestSuite"/>
     <function name="strcmp0" c:identifier="g_strcmp0">
       <return-value>
-        <type name="int32" c:type="int"/>
+        <type name="int" c:type="int"/>
       </return-value>
       <parameters>
         <parameter name="str1">
@@ -17398,13 +17450,13 @@
           <type name="int" c:type="int*"/>
         </parameter>
         <parameter name="argv">
-          <type name="char" c:type="char***"/>
+          <type name="int8" c:type="char***"/>
         </parameter>
       </parameters>
     </function>
     <function name="test_run" c:identifier="g_test_run">
       <return-value>
-        <type name="int32" c:type="int"/>
+        <type name="int" c:type="int"/>
       </return-value>
     </function>
     <function name="test_add_func" c:identifier="g_test_add_func">
@@ -17586,7 +17638,7 @@
           <type name="string" c:type="char*"/>
         </parameter>
         <parameter name="data_size">
-          <type name="size" c:type="gsize"/>
+          <type name="size_t" c:type="gsize"/>
         </parameter>
         <parameter name="test_data">
           <type name="any" c:type="gconstpointer"/>
@@ -17646,7 +17698,7 @@
     </function>
     <function name="test_run_suite" c:identifier="g_test_run_suite">
       <return-value>
-        <type name="int32" c:type="int"/>
+        <type name="int" c:type="int"/>
       </return-value>
       <parameters>
         <parameter name="suite">
@@ -17667,7 +17719,7 @@
           <type name="string" c:type="char*"/>
         </parameter>
         <parameter name="line">
-          <type name="int32" c:type="int"/>
+          <type name="int" c:type="int"/>
         </parameter>
         <parameter name="func">
           <type name="string" c:type="char*"/>
@@ -17692,7 +17744,7 @@
           <type name="string" c:type="char*"/>
         </parameter>
         <parameter name="line">
-          <type name="int32" c:type="int"/>
+          <type name="int" c:type="int"/>
         </parameter>
         <parameter name="func">
           <type name="string" c:type="char*"/>
@@ -17715,7 +17767,7 @@
           <type name="string" c:type="char*"/>
         </parameter>
         <parameter name="line">
-          <type name="int32" c:type="int"/>
+          <type name="int" c:type="int"/>
         </parameter>
         <parameter name="func">
           <type name="string" c:type="char*"/>
@@ -17738,7 +17790,7 @@
           <type name="string" c:type="char*"/>
         </parameter>
         <parameter name="line">
-          <type name="int32" c:type="int"/>
+          <type name="int" c:type="int"/>
         </parameter>
         <parameter name="func">
           <type name="string" c:type="char*"/>
@@ -17770,7 +17822,7 @@
           <type name="string" c:type="char*"/>
         </parameter>
         <parameter name="line">
-          <type name="int32" c:type="int"/>
+          <type name="int" c:type="int"/>
         </parameter>
         <parameter name="func">
           <type name="string" c:type="char*"/>
@@ -17788,7 +17840,7 @@
           <type name="long" c:type="long"/>
         </parameter>
         <parameter name="numtype">
-          <type name="char" c:type="char"/>
+          <type name="int8" c:type="char"/>
         </parameter>
       </parameters>
     </function>
@@ -17801,7 +17853,7 @@
           <type name="string" c:type="char*"/>
         </parameter>
         <parameter name="data_size">
-          <type name="size" c:type="gsize"/>
+          <type name="size_t" c:type="gsize"/>
         </parameter>
         <parameter name="test_data">
           <type name="any" c:type="gconstpointer"/>

@@ -322,7 +322,6 @@ class GLibTransformer(object):
         pair_class = self._get_attribute(resolved)
         if pair_class and isinstance(pair_class,
                                      (GLibObject, GLibBoxed, GLibInterface)):
-            del self._names.names[maybe_class.name]
             for field in maybe_class.fields[1:]:
                 pair_class.fields.append(field)
             return
