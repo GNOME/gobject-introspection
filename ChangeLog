@@ -1,5 +1,10 @@
 2008-08-20  Colin Walters  <walters@verbum.org>
 
+	* giscanner/glibtransformer.py: Try to look up
+	aliases using the c:type too.
+
+2008-08-20  Colin Walters  <walters@verbum.org>
+
 	* girepository/girparser.c: Parse union fields.
 
 2008-08-20  Johan Dahlin  <johan@gnome.org>

@@ -447,12 +447,12 @@ class GLibTransformer(object):
 
     # Resolver
 
-    def _resolve_type_name(self, type_name):
+    def _resolve_type_name(self, type_name, ctype=None):
         res = self._transformer.resolve_type_name_full
         try:
-            return res(type_name, None, self._names)
+            return res(type_name, ctype, self._names)
         except KeyError, e:
-            return self._transformer.resolve_type_name(type_name, None)
+            return self._transformer.resolve_type_name(type_name, ctype)
 
     def _validate_type_name(self, name):
         if name in type_names:
@@ -570,7 +570,7 @@ class GLibTransformer(object):
         field.type = self._resolve_param_type(field.type)
 
     def _resolve_alias(self, alias):
-        alias.target = self._resolve_type_name(alias.target)
+        alias.target = self._resolve_type_name(alias.target, alias.target)
 
     # Validation
 
