@@ -1,5 +1,11 @@
 2008-08-20  Colin Walters  <walters@verbum.org>
 
+	* girepository/transformer.py: Suppress aliases whose
+	name is a builtin.
+	* girepository/ast.py: Define some more aliases.
+
+2008-08-20  Colin Walters  <walters@verbum.org>
+
 	* girepository/girparser.c: Avoid alias infloops.
 
 2008-08-20  Colin Walters  <walters@verbum.org>

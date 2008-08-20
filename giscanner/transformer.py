@@ -239,6 +239,8 @@ class Transformer(object):
                 target = self.strip_namespace_object(symbol.base_type.name)
             else:
                 target = 'none'
+            if name in type_names:
+                return None
             return Alias(name, target, ctype=symbol.ident)
         else:
             raise NotImplementedError(

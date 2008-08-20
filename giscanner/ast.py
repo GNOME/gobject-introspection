@@ -98,6 +98,11 @@ type_names['size_t'] = TYPE_SIZET
 type_names['ssize_t'] = TYPE_SSIZET
 type_names['time_t'] = TYPE_LONG
 
+# Suppress some GLib names
+type_names['uchar'] = TYPE_UINT8
+type_names['ushort'] = TYPE_UINT16
+type_names['pointer'] = TYPE_ANY
+type_names['constpointer'] = TYPE_ANY
 
 def type_name_from_ctype(ctype):
     return type_names.get(ctype, ctype)
