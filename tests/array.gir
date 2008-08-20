@@ -28,8 +28,8 @@
           <type name="uint" c:type="gint" direction="out"/>
         </parameter>
         <parameter name="p1">
-          <type name="sequence" c:type="guint8*" length="0" directon="out">
-            <type name="uint8" c:type="guint8"/>
+          <type name="uint8" c:type="guint8*" relation="sequence" length="0" directon="out">
+            <type name="uint8" c:type="guint8" relation="element"/>
           </type>
         </parameter>
       </parameters>
@@ -40,7 +40,7 @@
       </return-value>
       <parameters>
         <parameter name="data">
-          <type name="sequence" c:type="guint8*" length="1" zero-terminated="1">
+          <type name="uint8" c:type="guint8*" relation="sequence" length="1" zero-terminated="1">
             <type name="uint8" c:type="guint8" relation="element"/>
           </type>
         </parameter>
@@ -52,7 +52,7 @@
       </return-value>
       <parameters>
         <parameter name="objects">
-          <type name="sequence" c:type="GSList*">
+          <type name="GLib.SList" c:type="GSList*" relation="sequence">
             <type name="GObject.Object" c:type="GObject*" relation="element"/>
           </type>
         </parameter>
@@ -64,7 +64,7 @@
       </return-value>
       <parameters>
         <parameter name="mapping">
-          <type name="mapping" c:type="GHashTable*">
+          <type name="GLib.HashTable" c:type="GHashTable*" relation="mapping">
             <type name="uint8" c:type="guint8" relation="key"/>
             <type name="string" c:type="gchar*" relation="value"/>
           </type>
