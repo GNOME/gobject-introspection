@@ -46,20 +46,7 @@ gint                  foo_init                     (void);
 
 GType                 foo_object_get_type          (void) G_GNUC_CONST;
 FooObject*            foo_object_new               ();
-gint                  foo_object_method            (FooObject *object);
 UtilityObject*        foo_object_external_type     (FooObject *object);
-gint                  foo_object_out               (FooObject *object,
-						    int       *outarg);
-GObject*              foo_object_create_object     (FooObject *object);
-GObject*              foo_object_allow_none        (FooObject *object, gchar *allow_none);
-gint                  foo_object_inout             (FooObject *object, int *inoutarg);
-gint                  foo_object_inout2            (FooObject *object, int *inoutarg);
-gint                  foo_object_inout3            (FooObject *object, int *inoutarg);
-gint                  foo_object_in                (FooObject *object, int *inarg);
-gint                  foo_object_calleeowns        (FooObject *object, GObject *toown);
-gint                  foo_object_calleesowns       (FooObject *object, GObject *toown1, GObject *toown2);
-GList*                foo_object_get_strings       (FooObject *object);
-GSList*               foo_object_get_objects       (FooObject *object);
 
 void                  foo_object_various           (FooObject *object, void *data, GType some_type);
 
