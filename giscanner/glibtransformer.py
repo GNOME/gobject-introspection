@@ -448,6 +448,10 @@ class GLibTransformer(object):
     # Resolver
 
     def _resolve_type_name(self, type_name, ctype=None):
+        # Workaround glib bug #548689, to be included in 2.18.0
+        if type_name == "GParam":
+            type_name = "GObject.ParamSpec"
+
         res = self._transformer.resolve_type_name_full
         try:
             return res(type_name, ctype, self._names)
