@@ -86,12 +86,17 @@ pre-check:
 	fi
 	@echo "Running scanner checks..."
 
-check-local: pre-check check-utility.gir check-annotation.gir check-drawable.gir check-foo.gir
-	@echo "======================="
-	@echo "All parser tests passed"
-	@echo "======================="
+post-check:
+	@echo "========================"
+	@echo "All scanner tests passed"
+	@echo "========================"
 	@if test "$(top_builddir)" != "$(top_srcdir)"; then \
 	   rm -f $(top_builddir)/giscanner/*.py*; \
 	fi
+
+check-local: pre-check
+check-local: check-utility.gir check-annotation.gir 
+check-local: check-drawable.gir check-foo.gir
+check-local: post-check
 
 .PHONY: annotation.gir drawable.gir foo.gir utility.gir 
