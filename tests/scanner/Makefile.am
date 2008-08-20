@@ -95,8 +95,8 @@ post-check:
 	fi
 
 check-local: pre-check
-check-local: check-utility.gir check-annotation.gir 
-check-local: check-drawable.gir check-foo.gir
+check-local: check-utility.gir check-annotation.gir check-drawable.gir 
+check-local: check-foo.gir
 check-local: post-check
 
 .PHONY: annotation.gir drawable.gir foo.gir utility.gir 
