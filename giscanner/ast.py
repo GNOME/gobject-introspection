@@ -104,6 +104,7 @@ type_names['ushort'] = TYPE_UINT16
 type_names['pointer'] = TYPE_ANY
 type_names['constpointer'] = TYPE_ANY
 
+
 def type_name_from_ctype(ctype):
     return type_names.get(ctype, ctype)
 
