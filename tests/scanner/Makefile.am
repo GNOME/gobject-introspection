@@ -38,8 +38,8 @@ SCANNER_LIBS = \
 
 annotation.gir: libannotation.la annotation.h $(SCANNER) $(SCANNER_LIBS)
 	$(CHECK_DEBUG) $(SCANNER) -v \
-	--include=$(top_srcdir)/gir/glib-2.0.gir \
-	--include=$(top_srcdir)/gir/gobject-2.0.gir \
+	--include=$(top_srcdir)/gir/GLib.gir \
+	--include=$(top_srcdir)/gir/GObject.gir \
 	--library=libannotation.la \
 	--namespace=test \
 	--pkg gobject-2.0 \
@@ -48,8 +48,8 @@ annotation.gir: libannotation.la annotation.h $(SCANNER) $(SCANNER_LIBS)
 
 drawable.gir: libdrawable.la drawable.h $(SCANNER) $(SCANNER_LIBS)
 	$(CHECK_DEBUG) $(SCANNER) -v \
-	--include=$(top_srcdir)/gir/glib-2.0.gir \
-	--include=$(top_srcdir)/gir/gobject-2.0.gir \
+	--include=$(top_srcdir)/gir/GLib.gir \
+	--include=$(top_srcdir)/gir/GObject.gir \
 	--library=libdrawable.la \
 	--namespace=test \
 	--pkg gobject-2.0 \
@@ -58,8 +58,8 @@ drawable.gir: libdrawable.la drawable.h $(SCANNER) $(SCANNER_LIBS)
 
 foo.gir: libfoo.la foo.h $(SCANNER) $(SCANNER_LIBS)
 	$(CHECK_DEBUG) $(SCANNER) -v \
-	--include=$(top_srcdir)/gir/glib-2.0.gir \
-	--include=$(top_srcdir)/gir/gobject-2.0.gir \
+	--include=$(top_srcdir)/gir/GLib.gir \
+	--include=$(top_srcdir)/gir/GObject.gir \
 	--include=$(top_builddir)/tests/scanner/utility.gir \
 	--library=libfoo.la \
 	--namespace=foo \
@@ -69,8 +69,8 @@ foo.gir: libfoo.la foo.h $(SCANNER) $(SCANNER_LIBS)
 
 utility.gir: libutility.la utility.h $(SCANNER) $(SCANNER_LIBS)
 	$(CHECK_DEBUG) $(SCANNER) -v \
-	--include=$(top_srcdir)/gir/glib-2.0.gir \
-	--include=$(top_srcdir)/gir/gobject-2.0.gir \
+	--include=$(top_srcdir)/gir/GLib.gir \
+	--include=$(top_srcdir)/gir/GObject.gir \
 	--library=libutility.la \
 	--namespace=utility \
 	--pkg gobject-2.0 \

@@ -1,5 +1,16 @@
 2008-08-20  Colin Walters  <walters@verbum.org>
 
+	* gir/Makefile.am: Rename .gir files using GI namespace.
+	* girepository/girepository.c: Use XDG_DATA_DIRS for
+	looking up typelibs.  Also typelibs are now suffixed
+	with .typelib.
+	* tests/invoke/Makefile.am: Only use metadata.
+	* girepository/Makefile.am: Remove unnecessary include.
+	* tests/scanner/Makefile.am: Update using GI namespaces
+	for scanner includes.
+
+2008-08-20  Colin Walters  <walters@verbum.org>
+
 	* girepository/transformer.py: Suppress aliases whose
 	name is a builtin.
 	* girepository/ast.py: Define some more aliases.
