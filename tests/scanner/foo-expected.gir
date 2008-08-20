@@ -3,7 +3,7 @@
             xmlns:c="http://www.gtk.org/introspection/c/1.0"
             xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
   <namespace name="foo">
-    <alias name="List" target="GSList" c:type="FooList"/>
+    <alias name="List" target="GLib.SList" c:type="FooList"/>
     <alias name="XEvent" target="none" c:type="FooXEvent"/>
     <interface name="Interface"
                c:type="FooInterface"
