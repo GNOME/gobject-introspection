@@ -96,6 +96,7 @@ type_names['void*'] = TYPE_ANY
 type_names['void'] = TYPE_NONE
 type_names['size_t'] = TYPE_SIZET
 type_names['ssize_t'] = TYPE_SSIZET
+type_names['time_t'] = TYPE_LONG
 
 
 def type_name_from_ctype(ctype):
