@@ -9,7 +9,7 @@ libdrawable_la_CFLAGS = $(GOBJECT_CFLAGS)
 libdrawable_la_LDFLAGS = -module -avoid-version
 libdrawable_la_LIBADD = $(GOBJECT_LIBS)
 
-libfoo_la_SOURCES = $(srcdir)/foo.c $(srcdir)/foo-object.h
+libfoo_la_SOURCES = $(srcdir)/foo.c $(srcdir)/foo.h
 libfoo_la_CFLAGS = $(GOBJECT_CFLAGS)
 libfoo_la_LDFLAGS = -module -avoid-version
 libfoo_la_LIBADD = $(GOBJECT_LIBS)
@@ -19,8 +19,8 @@ libutility_la_CFLAGS = $(GOBJECT_CFLAGS)
 libutility_la_LDFLAGS = -module -avoid-version
 libutility_la_LIBADD = $(GOBJECT_LIBS)
 
-CLEANFILES = utility.gir Foo.gir
-EXTRA_DIST = utility-expected.gir Foo-expected.gir
+CLEANFILES = utility.gir foo.gir
+EXTRA_DIST = utility-expected.gir foo-expected.gir
 
 SCANNER = $(top_srcdir)/tools/g-ir-scanner
 SCANNER_LIBS = \
@@ -37,13 +37,13 @@ utility.gir: libutility.la utility.h $(SCANNER) $(SCANNER_LIBS)
 	$(libutility_la_SOURCES) \
 	--output $@
 
-Foo.gir: libfoo.la foo-object.h $(SCANNER) $(SCANNER_LIBS)
+foo.gir: libfoo.la foo.h $(SCANNER) $(SCANNER_LIBS)
 	$(CHECK_DEBUG) $(SCANNER) -v \
 	--include=$(top_srcdir)/gir/glib-2.0.gir \
 	--include=$(top_srcdir)/gir/gobject-2.0.gir \
 	--include=$(top_builddir)/tests/scanner/utility.gir \
 	--library=libfoo.la \
-	--namespace=Foo \
+	--namespace=foo \
 	--pkg gobject-2.0 \
 	$(libfoo_la_SOURCES) \
 	 --output $@
@@ -67,7 +67,7 @@ pre-check:
 	fi
 	@echo "Running scanner checks..."
 
-check-local: pre-check check-utility.gir check-drawable.gir check-Foo.gir
+check-local: pre-check check-utility.gir check-drawable.gir check-foo.gir
 	@echo "======================="
 	@echo "All parser tests passed"
 	@echo "======================="
@@ -75,4 +75,4 @@ check-local: pre-check check-utility.gir check-drawable.gir check-Foo.gir
 	   rm -f $(top_builddir)/giscanner/*.py*; \
 	fi
 
-.PHONY: utility.gir drawable.gir Foo.gir
+.PHONY: utility.gir drawable.gir foo.gir

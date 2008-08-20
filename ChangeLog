@@ -2,6 +2,15 @@
 
 	* tests/scanner/Foo-expected.gir:
 	* tests/scanner/Makefile.am:
+	* tests/scanner/foo-expected.gir:
+	* tests/scanner/foo-object.h:
+	* tests/scanner/foo.c:
+	Foo->foo, foo-object.h -> foo.h
+
+2008-08-20  Johan Dahlin  <johan@gnome.org>
+
+	* tests/scanner/Foo-expected.gir:
+	* tests/scanner/Makefile.am:
 	* tests/scanner/drawable-expected.gir:
 	* tests/scanner/drawable.c (test_drawable_class_init),
 	(test_drawable_init):

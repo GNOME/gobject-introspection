@@ -1,6 +1,6 @@
 #define FOO_SUCCESS_INT 0x1138
 
-#include "foo-object.h"
+#include "foo.h"
 
 typedef struct
 {

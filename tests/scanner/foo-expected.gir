@@ -2,7 +2,7 @@
             xmlns="http://www.gtk.org/introspection/core/1.0"
             xmlns:c="http://www.gtk.org/introspection/c/1.0"
             xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
-  <namespace name="Foo">
+  <namespace name="foo">
     <alias name="List" target="GSList" c:type="FooList"/>
     <alias name="XEvent" target="none" c:type="FooXEvent"/>
     <interface name="Interface"
