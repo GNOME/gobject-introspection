@@ -20,6 +20,8 @@
 
 from __future__ import with_statement
 
+import os
+
 from .ast import (Callback, Class, Enum, Function, Interface, Member,
                   Sequence, Struct, Alias, Union)
 from .glibast import (GLibBoxed, GLibEnum, GLibEnumMember,
@@ -29,11 +31,11 @@ from .xmlwriter import XMLWriter
 
 class GIRWriter(XMLWriter):
 
-    def __init__(self, namespace):
+    def __init__(self, namespace, shlib):
         super(GIRWriter, self).__init__()
-        self._write_repository(namespace)
+        self._write_repository(namespace, shlib)
 
-    def _write_repository(self, namespace):
+    def _write_repository(self, namespace, shlib):
         attrs = [
             ('version', '1.0'),
             ('xmlns', 'http://www.gtk.org/introspection/core/1.0'),
@@ -41,10 +43,10 @@ class GIRWriter(XMLWriter):
             ('xmlns:glib', 'http://www.gtk.org/introspection/glib/1.0'),
             ]
         with self.tagcontext('repository', attrs):
-            self._write_namespace(namespace)
+            self._write_namespace(namespace, shlib)
 
-    def _write_namespace(self, namespace):
-        attrs = [('name', namespace.name)]
+    def _write_namespace(self, namespace, shlib):
+        attrs = [('name', namespace.name),('shared-library', os.path.basename(shlib))]
         with self.tagcontext('namespace', attrs):
             for node in namespace.nodes:
                 self._write_node(node)

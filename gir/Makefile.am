@@ -12,6 +12,7 @@ GLib.gir: $(G_IR_SCANNER) $(G_IR_SCANNER_FILES)
 	    --noclosure \
 	    --output $@ \
 	    --strip-prefix=g \
+	    --library=$(GOBJECT_LIBDIR)/libglib-2.0.so \
 	    -I$(GLIB_INCLUDEDIR) \
 	    -I$(GLIB_LIBDIR)/glib-2.0/include \
 	    -DGETTEXT_PACKAGE=Dummy \

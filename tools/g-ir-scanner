@@ -109,6 +109,10 @@ def main(args):
     else:
         _error("Unknown format: %s" % (options.format, ))
 
+    if not options.libraries:
+        _error("Must specify --library for primary library")
+    primary_library = options.libraries[0]
+
     for package in options.packages:
         output = commands.getoutput('pkg-config --cflags %s' % (package, ))
         pkg_options, unused = parser.parse_args(output.split())
@@ -149,7 +153,7 @@ def main(args):
     namespace = glibtransformer.parse()
 
     # Write out AST
-    writer = Writer(namespace)
+    writer = Writer(namespace, primary_library)
     data = writer.get_xml()
     if options.output:
         fd = open(options.output, "w")
