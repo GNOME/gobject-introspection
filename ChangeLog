@@ -1,3 +1,7 @@
+2008-08-20  Johan Dahlin  <johan@gnome.org>
+
+	* giscanner/glibast.py: Add gshort/gushort types
+
 2008-08-20  Colin Walters  <walters@verbum.org>
 
 	* gir/Makefile.am: Rename .gir files using GI namespace.

@@ -50,6 +50,8 @@ type_names['gpointer'] = TYPE_ANY
 type_names['gconstpointer'] = TYPE_ANY
 type_names['gsize'] = TYPE_SIZET
 type_names['gssize'] = TYPE_SSIZET
+type_names['gshort'] = TYPE_INT16
+type_names['gushort'] = TYPE_UINT16
 
 
 class GLibEnum(Enum):
