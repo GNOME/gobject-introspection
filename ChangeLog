@@ -1,5 +1,8 @@
 2008-08-21  Johan Dahlin  <johan@gnome.org>
 
+	* gir/Makefile.am (typelibs_DATA): Build and 
+	install the Gio.typelib too
+
 	* girepository/gtypelib.c (_g_typelib_init):
 	Use g_module_build_path to resolve the shlib name
 
