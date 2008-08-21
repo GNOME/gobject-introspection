@@ -1,5 +1,10 @@
 2008-08-20  Colin Walters  <walters@verbum.org>
 
+	* girepository/girmodule.c (g_ir_module_build_typelib): 
+	Calculate size correctly, avoid use-after-free.
+
+2008-08-20  Colin Walters  <walters@verbum.org>
+
 	* girepository/girepository.c: Remove
 	g_irepository_register_file in favor of
 	g_irepository_require.  There are two
