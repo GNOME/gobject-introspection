@@ -1,3 +1,8 @@
+2008-08-21  Colin Walters  <walters@verbum.org>
+
+	* girepository/girparser.c (g_irepository_require):
+	Fix one small leak in error case.
+
 2008-08-21  Johan Dahlin  <johan@gnome.org>
 
 	* gir/Makefile.am:
