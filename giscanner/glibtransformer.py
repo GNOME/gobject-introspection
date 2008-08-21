@@ -55,9 +55,11 @@ class GLibTransformer(object):
     # Public API
 
     def add_library(self, libname):
+        # For testing mainly.
         if libname.endswith('.la'):
             libname = extract_libtool(libname)
-        libname = find_library(libname)
+        else:
+            libname = find_library(libname)
         self._libraries.append(ctypes.cdll.LoadLibrary(libname))
 
     def parse(self):

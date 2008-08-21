@@ -1,3 +1,8 @@
+2008-08-21  Johan Dahlin  <johan@gnome.org>
+
+	* giscanner/glibtransformer.py:
+	Do not send .la files through find_library.
+
 2008-08-21  Colin Walters  <walters@verbum.org>
 
 	* girepository/girparser.c (g_irepository_require):
