@@ -18,7 +18,8 @@ GLib.gir: $(G_IR_SCANNER) $(G_IR_SCANNER_FILES)
 	    -I$(GLIB_LIBDIR)/glib-2.0/include \
 	    -DGETTEXT_PACKAGE=Dummy \
 	    -D__G_I18N_LIB_H__ \
-	    $(GLIB_INCLUDEDIR)/glib/*.h
+	    $(GLIB_INCLUDEDIR)/glib/*.h \
+	    $(GLIB_LIBDIR)/glib-2.0/include/glibconfig.h
 BUILT_SOURCES += GLib.gir
 
 # gobject
@@ -67,6 +68,6 @@ dist_gir_DATA = $(BUILT_SOURCES)
 	$(top_builddir)/tools/g-ir-compiler $< --raw -o $@
 
 typelibsdir = $(datadir)/gitypelibs
-typelibs_DATA = GObject.typelib
+typelibs_DATA = GLib.typelib GObject.typelib
 
 EXTRA_DIST = glib-2.0-good.gir gobject-2.0-good.gir gobject-2.0-gio.gir
