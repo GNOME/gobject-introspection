@@ -245,11 +245,25 @@ class GLibTransformer(object):
             target_arg = func.parameters[0]
         target_arg.type = self._resolve_param_type(target_arg.type)
 
+        if is_method:
+            # Methods require their first arg to be a known class
+            # Look at the original C type (before namespace stripping), without
+            # pointers: GtkButton -> gtk_button_, so we can figure out the
+            # method name
+            orig_type = target_arg.type.ctype.replace('*', '')
+            prefix = to_underscores(orig_type).lower()
+        else:
+            # Constructors must have _new
+            # Take everything before that as class name
+            new_idx = func.symbol.find('_new')
+            if new_idx < 0:
+                return None
+            prefix = func.symbol[:new_idx]
+
         klass = None
-        symbol_components = func.symbol.split('_')
         for key in self._uscore_type_names:
             klass = None
-            if func.symbol.startswith(key):
+            if key.startswith(prefix):
                 klass = self._uscore_type_names.get(key)
                 if (klass is not None and
                     isinstance(klass, (GLibObject, GLibBoxed,
@@ -260,30 +274,15 @@ class GLibTransformer(object):
             return
 
         if not is_method:
-            # Constructors must have _new
-            new_idx = func.symbol.find('_new')
-            if new_idx < 0:
-                return None
             # Interfaces can't have constructors, punt to global scope
             if isinstance(klass, GLibInterface):
                 return None
-            # Just strip everything before _new
-            prefix = func.symbol[:new_idx+1]
             # TODO - check that the return type is a subclass of the
             # class from the prefix
-        else:
-            # Methods require their first arg to be a known class
-            # Look at the original C type (before namespace stripping), without
-            # pointers: GtkButton -> gtk_button_, so we can figure out the
-            # method name
-            orig_type = target_arg.type.ctype.replace('*', '')
-            prefix = to_underscores(orig_type).lower() + '_'
-            if not func.symbol.startswith(prefix):
-                return None
 
         self._remove_attribute(func.name)
         # Strip namespace and object prefix: gtk_window_new -> new
-        func.name = func.symbol[len(prefix):]
+        func.name = func.symbol[len(prefix)+1:]
         if is_method:
             klass.methods.append(func)
         else:

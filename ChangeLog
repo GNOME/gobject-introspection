@@ -1,5 +1,11 @@
 2008-08-21  Colin Walters  <walters@verbum.org>
 
+	* giscanner/glibtransformer.py: More ctor work,
+	avoid having gtk_window_group_new end up under
+	GtkWindow.
+
+2008-08-21  Colin Walters  <walters@verbum.org>
+
 	* giscanner/glibtransformer.py: Much simpler approach
 	of mapping uscored names to classes.
 	* giscanner/utils.py: Remove unnecessary function.
