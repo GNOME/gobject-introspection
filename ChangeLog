@@ -1,3 +1,16 @@
+2008-08-21  Colin Walters  <walters@verbum.org>
+
+	* girepository/girnode.c (write_string): Tweak to
+	use UINT instead of INT.  Not likely to matter.
+	* girepository/girmodule.c (g_ir_module_build_typelib):
+	Add to header_offset as well for header strings
+	to match what write_string does.
+	* girepository/gtypelib.c: Replace is_name with
+	validate_name, which more strongly validates and
+	handles errors in a better way.  Update all callers.
+	* giscanner/glibtransformer.py: Handle constructors
+	better.
+
 2008-08-21  Johan Dahlin  <johan@gnome.org>
 
 	* gir/Makefile.am (typelibs_DATA): Build and 

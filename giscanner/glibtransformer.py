@@ -178,10 +178,6 @@ class GLibTransformer(object):
     def _parse_function(self, func):
         if self._parse_get_type_function(func):
             return
-        elif self._parse_constructor(func):
-            return
-        elif self._parse_method(func):
-            return
 
         self._add_attribute(func)
 
@@ -245,25 +241,41 @@ class GLibTransformer(object):
             target_arg = func.retval
         else:
             target_arg = func.parameters[0]
-        klass = self._get_attribute(target_arg.type.name)
-        if klass is None or not isinstance(klass, (GLibObject, GLibBoxed)):
-            return False
+        target_arg.type = self._resolve_param_type(target_arg.type)
 
-        # Look at the original C type (before namespace stripping), without
-        # pointers: GtkButton -> gtk_button_, so we can figure out the
-        # method name
+        klass = self._get_attribute(target_arg.type.name)
+        if klass is None or not isinstance(klass, (GLibObject, GLibBoxed,
+                                                   GLibInterface)):
+            return None
+
         orig_type = target_arg.type.ctype.replace('*', '')
         prefix = to_underscores(orig_type).lower() + '_'
-        if not func.symbol.startswith(prefix):
-            return False
+        if not is_method:
+            # Interfaces can't have constructors, punt to global scope
+            # Constructors must have _new
+            new_idx = func.symbol.find('_new')
+            if (isinstance(klass, GLibInterface) or
+                new_idx < 0):
+                return None
+            # Just strip everything before _new
+            prefix = func.symbol[:new_idx+1]
+            # TODO - check that the return type is a subclass of the
+            # class from the prefix
+        else:
+            # Look at the original C type (before namespace stripping), without
+            # pointers: GtkButton -> gtk_button_, so we can figure out the
+            # method name
+            if not func.symbol.startswith(prefix):
+                return None
 
+        self._remove_attribute(func.name)
         # Strip namespace and object prefix: gtk_window_new -> new
         func.name = func.symbol[len(prefix):]
         if is_method:
             klass.methods.append(func)
         else:
             klass.constructors.append(func)
-        return True
+        return func
 
     def _parse_struct(self, struct):
         # This is a hack, but GObject is a rather fundamental piece so.
@@ -496,7 +508,10 @@ class GLibTransformer(object):
         return ptype
 
     def _resolve_node(self, node):
-        if isinstance(node, (Callback, Function)):
+        if isinstance(node, Function):
+            self._resolve_function_toplevel(node)
+
+        elif isinstance(node, Callback):
             self._resolve_function(node)
         elif isinstance(node, GLibObject):
             self._resolve_glib_object(node)
@@ -510,6 +525,15 @@ class GLibTransformer(object):
             self._resolve_union(node)
         elif isinstance(node, Alias):
             self._resolve_alias(node)
+
+    def _resolve_function_toplevel(self, func):
+        newfunc = self._parse_constructor(func)
+        if not newfunc:
+            newfunc = self._parse_method(func)
+            if not newfunc:
+                self._resolve_function(func)
+                return
+        self._resolve_function(newfunc)
 
     def _resolve_struct(self, node):
         for field in node.fields:
