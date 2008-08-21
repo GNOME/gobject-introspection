@@ -6,6 +6,13 @@
 
 2008-08-21  Colin Walters  <walters@verbum.org>
 
+	* giscanner/glibtransformer.py: Look up all permutations
+	of class names when scanning methods/ctors based on
+	the prefix instead of using the return value.  This
+	associates gtk_window_new with the right class.
+
+2008-08-21  Colin Walters  <walters@verbum.org>
+
 	* girepository/girmodule.c (g_ir_module_build_typelib): 
 	Revert change to increment header_size; we do that in
 	write_string.

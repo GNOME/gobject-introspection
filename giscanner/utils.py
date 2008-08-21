@@ -36,6 +36,24 @@ def to_underscores(name):
     name = _upperstr_pat3.sub(r'\1_\2', name, count=1)
     return name
 
+
+def _gen_pascal_combinations(nameset):
+    firstname = [nameset[0].title(), nameset[0].upper()]
+    if len(nameset) == 1:
+        return firstname
+    else:
+        subset = _gen_pascal_combinations(nameset[1:])
+        results = []
+        for x in subset:
+            results.append(firstname[0] + x)
+            results.append(firstname[1] + x)
+        return results
+
+
+def to_pascal_combinations(name):
+    return _gen_pascal_combinations(name.split('_'))
+
+
 _libtool_pat = re.compile("dlname='([A-z0-9\.\-\+]+)'\n")
 
 
