@@ -1,5 +1,11 @@
 2008-08-20  Colin Walters  <walters@verbum.org>
 
+	* girepository/girepository.c: Add new function
+	g_irepository_get_typelib_path which tells
+	us from where we loaded a namespace.
+
+2008-08-20  Colin Walters  <walters@verbum.org>
+
 	* tests/scanner/*-expected.gir: Adjust for
 	added shared-library.
 	* giscanner/giwriter.py: Make pylint happy.
