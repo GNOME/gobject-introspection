@@ -28,7 +28,7 @@ from .ast import (Callback, Enum, Function, Member, Namespace, Parameter,
 from .transformer import Names
 from .glibast import (GLibBoxed, GLibEnum, GLibEnumMember, GLibFlags,
                       GLibInterface, GLibObject, GLibSignal, type_names)
-from .utils import extract_libtool, to_underscores, to_pascal_combinations
+from .utils import extract_libtool, to_underscores
 
 
 class Unresolved(object):
@@ -47,6 +47,7 @@ class GLibTransformer(object):
         self._transformer = transformer
         self._namespace_name = None
         self._names = Names()
+        self._uscore_type_names = {}
         self._libraries = []
         self._failed_types = {}
         self._noclosure = noclosure
@@ -113,6 +114,7 @@ class GLibTransformer(object):
 
     def _register_internal_type(self, type_name, node):
         self._names.type_names[type_name] = (None, node)
+        self._uscore_type_names[to_underscores(type_name).lower()] = node
 
     # Helper functions
 
@@ -243,27 +245,16 @@ class GLibTransformer(object):
             target_arg = func.parameters[0]
         target_arg.type = self._resolve_param_type(target_arg.type)
 
-        # We look at all possible permutations of the symbol prefixes
-        # in Pascal case permutations.  For example, let's say we
-        # see gtk_frob_bar_new.  We look for classes named:
-        # Frob, FROB, FrobBar, FROBBar, FrobBAR, FROBBAR,
-        # FrobBarNew, FrobBarNEW, FrobBARNew, ...
+        klass = None
         symbol_components = func.symbol.split('_')
-        for i in range(len(symbol_components)):
-            subset = symbol_components[:i]
-            subsymbol = '_'.join(subset)
+        for key in self._uscore_type_names:
             klass = None
-            possible_classnames = to_pascal_combinations(subsymbol)
-            for possible_classname in possible_classnames:
-                strip = self._transformer.strip_namespace_object
-                possible_classname = strip(possible_classname)
-                klass = self._get_attribute(possible_classname)
+            if func.symbol.startswith(key):
+                klass = self._uscore_type_names.get(key)
                 if (klass is not None and
                     isinstance(klass, (GLibObject, GLibBoxed,
                                        GLibInterface))):
                     break
-            if klass is not None:
-                break
 
         if klass is None:
             return
