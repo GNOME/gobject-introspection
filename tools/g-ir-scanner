@@ -52,6 +52,9 @@ def _get_option_parser():
     parser.add_option("-l", "--library",
                       action="append", dest="libraries", default=[],
                       help="libraries of this unit")
+    parser.add_option("-L", "--library-path",
+                      action="append", dest="library_paths", default=[],
+                      help="directories to search for libraries")
     parser.add_option("-n", "--namespace",
                       action="store", dest="namespace_name",
                       help="name of namespace for this unit")
@@ -119,6 +122,11 @@ def main(args):
         options.cpp_includes.extend(pkg_options.cpp_includes)
         options.cpp_defines.extend(pkg_options.cpp_defines)
         options.cpp_undefines.extend(pkg_options.cpp_undefines)
+
+        output = commands.getoutput('pkg-config --libs-only-L %s' % (
+            package, ))
+        pkg_options, unused = parser.parse_args(output.split())
+        options.library_paths.extend(pkg_options.library_paths)
 
     filenames = []
     for arg in args:

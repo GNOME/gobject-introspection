@@ -8,11 +8,12 @@ G_IR_SCANNER_FILES = $(top_srcdir)/giscanner/*.py \
 GLIB_INCLUDEDIR=`pkg-config --variable=includedir glib-2.0`/glib-2.0
 GLIB_LIBDIR=`pkg-config --variable=libdir glib-2.0`
 GLib.gir: $(G_IR_SCANNER) $(G_IR_SCANNER_FILES)
-	$(G_IR_SCANNER) -v --namespace GLib \
+	PYTHONPATH=$(top_srcdir):$$PYTHONPATH $(G_IR_SCANNER) \
+	    -v --namespace GLib \
 	    --noclosure \
 	    --output $@ \
 	    --strip-prefix=g \
-	    --library=$(GOBJECT_LIBDIR)/libglib-2.0.so \
+	    --library=glib-2.0 \
 	    -I$(GLIB_INCLUDEDIR) \
 	    -I$(GLIB_LIBDIR)/glib-2.0/include \
 	    -DGETTEXT_PACKAGE=Dummy \
@@ -24,12 +25,13 @@ BUILT_SOURCES += GLib.gir
 GOBJECT_INCLUDEDIR=`pkg-config --variable=includedir gobject-2.0`/glib-2.0
 GOBJECT_LIBDIR=`pkg-config --variable=libdir gobject-2.0`
 GObject.gir: GLib.gir $(G_IR_SCANNER) $(G_IR_SCANNER_FILES)
-	$(G_IR_SCANNER) -v --namespace GObject \
+	PYTHONPATH=$(top_srcdir):$$PYTHONPATH $(G_IR_SCANNER) \
+	    -v --namespace GObject \
 	    --noclosure \
 	    --output $@ \
 	    --strip-prefix=g \
             --include=$(builddir)/GLib.gir \
-	    --library=$(GOBJECT_LIBDIR)/libgobject-2.0.so \
+	    --library=gobject-2.0 \
 	    -I$(GOBJECT_INCLUDEDIR) \
 	    -I$(GOBJECT_LIBDIR)/glib-2.0/include \
 	    -DGOBJECT_COMPILATION \
@@ -41,13 +43,14 @@ BUILT_SOURCES += GObject.gir
 GIO_INCLUDEDIR=`pkg-config --variable=includedir gio-2.0`/glib-2.0
 GIO_LIBDIR=`pkg-config --variable=libdir gio-2.0`
 Gio.gir: GObject.gir $(G_IR_SCANNER) $(G_IR_SCANNER_FILES)
-	$(G_IR_SCANNER) -v --namespace Gio \
+	PYTHONPATH=$(top_srcdir):$$PYTHONPATH $(G_IR_SCANNER) \
+	    -v --namespace Gio \
 	    --noclosure \
 	    --output $@ \
 	    --strip-prefix=g \
             --include=$(builddir)/GLib.gir \
             --include=$(builddir)/GObject.gir \
-	    --library=$(GIO_LIBDIR)/libgio-2.0.so \
+	    --library=gio-2.0 \
 	    -I$(GIO_INCLUDEDIR) \
 	    -I$(GIO_LIBDIR)/glib-2.0/include \
 	    -DGIO_COMPILATION \

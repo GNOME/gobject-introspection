@@ -1,5 +1,13 @@
 2008-08-21  Johan Dahlin  <johan@gnome.org>
 
+	* gir/Makefile.am:
+	* giscanner/glibtransformer.py:
+	* tools/g-ir-scanner:
+	Do not hard-core library names in the Makefile, reuse
+	ctypes find_library instead.
+
+2008-08-21  Johan Dahlin  <johan@gnome.org>
+
 	* girepository/girparser.c (resolve_aliases):
 	Remove compilation warnings
 

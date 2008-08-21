@@ -19,6 +19,7 @@
 #
 
 import ctypes
+from ctypes.util import find_library
 
 from . import cgobject
 from .ast import (Callback, Enum, Function, Member, Namespace, Parameter,
@@ -56,6 +57,7 @@ class GLibTransformer(object):
     def add_library(self, libname):
         if libname.endswith('.la'):
             libname = extract_libtool(libname)
+        libname = find_library(libname)
         self._libraries.append(ctypes.cdll.LoadLibrary(libname))
 
     def parse(self):
