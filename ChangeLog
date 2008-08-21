@@ -1,3 +1,8 @@
+2008-08-21  Johan Dahlin  <johan@gnome.org>
+
+	* girepository/gtypelib.c (_g_typelib_init):
+	Use g_module_build_path to resolve the shlib name
+
 2008-08-21  Colin Walters  <walters@verbum.org>
 
 	* gir/Makefile.am: CLEANFILES typelibs too.
