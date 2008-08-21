@@ -257,8 +257,13 @@ class GLibTransformer(object):
             # Look at the original C type (before namespace stripping), without
             # pointers: GtkButton -> gtk_button_, so we can figure out the
             # method name
-            orig_type = target_arg.type.ctype.replace('*', '')
-            prefix = to_underscores(orig_type).lower()
+            argtype = target_arg.type.ctype.replace('*', '')
+            name = self._transformer.strip_namespace_object(argtype)
+            name_uscore = to_underscores(name).lower()
+            name_offset = func.symbol.find(name_uscore)
+            if name_offset < 0:
+                return None
+            prefix = func.symbol[:name_offset+len(name_uscore)]
         else:
             # Constructors must have _new
             # Take everything before that as class name

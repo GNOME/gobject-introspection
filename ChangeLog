@@ -1,5 +1,12 @@
 2008-08-21  Colin Walters  <walters@verbum.org>
 
+	* giscanner/glibtransformer.py: Compute prefix
+	by searching through the symbol for bits
+	rather than going directly from ctype; this fixes
+	webkit_ namespace.
+
+2008-08-21  Colin Walters  <walters@verbum.org>
+
 	* giscanner/glibtransformer.py: Also try squashing
 	underscores from namespace, fixes webkit_web_view_new.
 
