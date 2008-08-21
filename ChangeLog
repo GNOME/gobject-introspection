@@ -1,5 +1,10 @@
 2008-08-21  Johan Dahlin  <johan@gnome.org>
 
+	* girepository/girparser.c (resolve_aliases):
+	Remove compilation warnings
+
+2008-08-21  Johan Dahlin  <johan@gnome.org>
+
 	* girepository/girepository.c (g_irepository_require):
 	Rewrap and fix double free bug by leaking a bit.
 
