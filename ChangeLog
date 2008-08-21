@@ -1,3 +1,7 @@
+2008-08-21  Colin Walters  <walters@verbum.org>
+
+	* gir/Makefile.am: CLEANFILES typelibs too.
+
 2008-08-21  Johan Dahlin  <johan@gnome.org>
 
 	* giscanner/glibtransformer.py:

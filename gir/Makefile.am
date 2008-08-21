@@ -69,5 +69,6 @@ dist_gir_DATA = $(BUILT_SOURCES)
 
 typelibsdir = $(datadir)/gitypelibs
 typelibs_DATA = GLib.typelib GObject.typelib
+CLEANFILES += $(typelibs_DATA)
 
 EXTRA_DIST = glib-2.0-good.gir gobject-2.0-good.gir gobject-2.0-gio.gir
