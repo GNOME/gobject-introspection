@@ -1,5 +1,11 @@
 2008-08-21  Colin Walters  <walters@verbum.org>
 
+	* girepository/girmodule.c (g_ir_module_build_typelib): 
+	Revert change to increment header_size; we do that in
+	write_string.
+
+2008-08-21  Colin Walters  <walters@verbum.org>
+
 	* girepository/girnode.c (write_string): Tweak to
 	use UINT instead of INT.  Not likely to matter.
 	* girepository/girmodule.c (g_ir_module_build_typelib):
