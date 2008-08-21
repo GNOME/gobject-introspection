@@ -46,7 +46,8 @@ class GIRWriter(XMLWriter):
             self._write_namespace(namespace, shlib)
 
     def _write_namespace(self, namespace, shlib):
-        attrs = [('name', namespace.name),('shared-library', os.path.basename(shlib))]
+        attrs = [('name', namespace.name),
+                 ('shared-library', os.path.basename(shlib))]
         with self.tagcontext('namespace', attrs):
             for node in namespace.nodes:
                 self._write_node(node)

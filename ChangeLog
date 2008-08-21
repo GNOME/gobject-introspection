@@ -1,5 +1,11 @@
 2008-08-20  Colin Walters  <walters@verbum.org>
 
+	* tests/scanner/*-expected.gir: Adjust for
+	added shared-library.
+	* giscanner/giwriter.py: Make pylint happy.
+
+2008-08-20  Colin Walters  <walters@verbum.org>
+
 	* girepository/girmodule.c (g_ir_module_build_typelib): 
 	Calculate size correctly, avoid use-after-free.
 
