@@ -1,5 +1,10 @@
 2008-08-21  Colin Walters  <walters@verbum.org>
 
+	* giscanner/glibtransformer.py: Also try squashing
+	underscores from namespace, fixes webkit_web_view_new.
+
+2008-08-21  Colin Walters  <walters@verbum.org>
+
 	* giscanner/glibtransformer.py: More ctor work,
 	avoid having gtk_window_group_new end up under
 	GtkWindow.

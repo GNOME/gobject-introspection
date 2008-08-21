@@ -115,6 +115,13 @@ class GLibTransformer(object):
     def _register_internal_type(self, type_name, node):
         self._names.type_names[type_name] = (None, node)
         self._uscore_type_names[to_underscores(type_name).lower()] = node
+        # Besides the straight underscore conversion, we also try
+        # removing the underscores from the namespace as a possible C
+        # mapping; e.g. it's webkit_web_view, not web_kit_web_view
+        suffix = self._transformer.strip_namespace_object(type_name)
+        prefix = type_name[:-len(suffix)]
+        no_uscore_prefixed = (prefix + '_' + to_underscores(suffix)).lower()
+        self._uscore_type_names[no_uscore_prefixed] = node
 
     # Helper functions
 
