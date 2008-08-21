@@ -1,3 +1,8 @@
+2008-08-21  Johan Dahlin  <johan@gnome.org>
+
+	* girepository/girepository.c (g_irepository_require):
+	Rewrap and fix double free bug by leaking a bit.
+
 2008-08-20  Colin Walters  <walters@verbum.org>
 
 	* girepository/girepository.c: Add new function
