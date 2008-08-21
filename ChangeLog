@@ -1,3 +1,9 @@
+2008-08-21  Johan Dahlin  <johan@gnome.org>
+
+	* girepository/girepository.c (g_irepository_require):
+	Plug memory leak and avoid using freed memory.
+	Resolve the whole module path, here as well.
+
 2008-08-21  Colin Walters  <walters@verbum.org>
 
 	* girepository/girmodule.c (g_ir_module_build_typelib): 
