@@ -10,7 +10,7 @@ glibconfig.h:
 	cat $(GLIBCONFIG_H) \
 	| sed s/__G_LIBCONFIG_H__/__G_LIBCONFIG_GI_COPY_H__/g \
 	| sed s/define\ G_HAVE_ISO_VARARGS\ 1/define\ G_HAVE_ISO_VARARGS\ 0/g \
-	| sed s/define\ G_HAVE_GNUC_VARARGS\ 1/define\ G_HAVE_GNUC_VARARGS\ 1/g \
+	| sed s/define\ G_HAVE_GNUC_VARARGS\ 1/define\ G_HAVE_GNUC_VARARGS\ 0/g \
         > $(builddir)/$@
 
 # glib
