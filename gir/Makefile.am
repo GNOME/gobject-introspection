@@ -11,7 +11,7 @@ glibconfig.h:
 	| sed s/__G_LIBCONFIG_H__/__G_LIBCONFIG_GI_COPY_H__/g \
 	| sed s/define\ G_HAVE_ISO_VARARGS\ 1/define\ G_HAVE_ISO_VARARGS\ 0/g \
 	| sed s/define\ G_HAVE_GNUC_VARARGS\ 1/define\ G_HAVE_GNUC_VARARGS\ 0/g \
-        > $(builddir)/$@
+        > $(top_builddir)/gir/$@
 
 # glib
 GLIB_INCLUDEDIR=`pkg-config --variable=includedir glib-2.0`/glib-2.0
@@ -28,7 +28,7 @@ GLib.gir: $(G_IR_SCANNER) $(G_IR_SCANNER_FILES)
 	    -DGETTEXT_PACKAGE=Dummy \
 	    -D__G_I18N_LIB_H__ \
 	    -D__G_LIBCONFIG_H__ \
-	    $(builddir)/glibconfig.h
+	    $(top_builddir)/gir/glibconfig.h
 	    $(GLIB_INCLUDEDIR)/glib/*.h \
 BUILT_SOURCES += GLib.gir
 
@@ -41,7 +41,7 @@ GObject.gir: GLib.gir $(G_IR_SCANNER) $(G_IR_SCANNER_FILES)
 	    --noclosure \
 	    --output $@ \
 	    --strip-prefix=g \
-            --include=$(builddir)/GLib.gir \
+            --include=$(top_builddir)/gir/GLib.gir \
 	    --library=gobject-2.0 \
 	    -I$(GOBJECT_INCLUDEDIR) \
 	    -I$(GOBJECT_LIBDIR)/glib-2.0/include \
@@ -59,8 +59,8 @@ Gio.gir: GObject.gir $(G_IR_SCANNER) $(G_IR_SCANNER_FILES)
 	    --noclosure \
 	    --output $@ \
 	    --strip-prefix=g \
-            --include=$(builddir)/GLib.gir \
-            --include=$(builddir)/GObject.gir \
+            --include=$(top_builddir)/gir/GLib.gir \
+            --include=$(top_builddir)/gir/GObject.gir \
 	    --library=gio-2.0 \
 	    -I$(GIO_INCLUDEDIR) \
 	    -I$(GIO_LIBDIR)/glib-2.0/include \
