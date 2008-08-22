@@ -61,6 +61,8 @@ class GLibTransformer(object):
             libname = extract_libtool(libname)
         else:
             libname = find_library(libname)
+        if not libname:
+            raise ValueError("Failed to find library: %r" % (libname, ))
         self._libraries.append(ctypes.cdll.LoadLibrary(libname))
 
     def parse(self):
