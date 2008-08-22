@@ -228,6 +228,9 @@ class SourceScanner(object):
             '-C',
             '-U__GNUC__',
             '-D__GI_SCANNER__',
+            # libintl.h has no types we care about and breaks
+            # cpp on some systems
+            '-D_LIBINTL_H',
             '-I.',
             ]
 
