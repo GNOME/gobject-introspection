@@ -102,6 +102,7 @@ Makefile
 gir/Makefile
 girepository/Makefile
 giscanner/Makefile
+giscanner/config.py
 m4/Makefile
 tools/Makefile
 tests/Makefile

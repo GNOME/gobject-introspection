@@ -23,6 +23,7 @@ import subprocess
 import tempfile
 
 from . import _giscanner
+from .config import INCLUDEDIR
 
 (CSYMBOL_TYPE_INVALID,
  CSYMBOL_TYPE_CONST,
@@ -229,6 +230,16 @@ class SourceScanner(object):
             '-D__GI_SCANNER__',
             '-I.',
             ]
+
+        # Do not parse the normal glibconfig.h, use the
+        # one we provide instead
+        cpp_args.append('-D__G_LIBCONFIG_H__')
+        dirname = os.path.dirname(os.path.abspath(__file__))
+        includedir = os.path.join(dirname, '..', 'giscanner')
+        if not os.path.exists(includedir):
+            includedir = INCLUDEDIR
+        filenames.insert(0, os.path.join(includedir, 'glibconfig-scanner.h'))
+
         cpp_args += self._cpp_options
         proc = subprocess.Popen(cpp_args,
                                 stdin=subprocess.PIPE,

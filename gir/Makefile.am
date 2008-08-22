@@ -1,16 +1,8 @@
-BUILT_SOURCES = glibconfig.h
+BUILT_SOURCES =
 
 G_IR_SCANNER = $(top_srcdir)/tools/g-ir-scanner
 G_IR_SCANNER_FILES = $(top_srcdir)/giscanner/*.py \
 	$(top_builddir)/giscanner/libgiscanner.la
-
-GLIBCONFIG=`pkg-config --variable=libdir glib-2.0`/glib-2.0/include/glibconfig.h
-glibconfig.h:
-	cat $(GLIBCONFIG) \
-	| sed s/__G_LIBCONFIG_H__/__G_LIBCONFIG_GI_COPY_H__/g \
-	| sed s/define\ G_HAVE_ISO_VARARGS\ 1/define\ G_HAVE_ISO_VARARGS\ 0/g \
-	| sed s/define\ G_HAVE_GNUC_VARARGS\ 1/define\ G_HAVE_GNUC_VARARGS\ 0/g \
-        > $(top_builddir)/gir/$@
 
 # glib
 GLIB_INCLUDEDIR=`pkg-config --variable=includedir glib-2.0`/glib-2.0
@@ -27,7 +19,7 @@ GLib.gir: $(G_IR_SCANNER) $(G_IR_SCANNER_FILES)
 	    -DGETTEXT_PACKAGE=Dummy \
 	    -D__G_I18N_LIB_H__ \
 	    -D__G_LIBCONFIG_H__ \
-	    $(top_builddir)/gir/glibconfig.h \
+	    $(top_builddir)/giscanner/glibconfig-scanner.h \
 	    $(GLIB_INCLUDEDIR)/glib/*.h
 BUILT_SOURCES += GLib.gir
 

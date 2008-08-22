@@ -1,5 +1,16 @@
 2008-08-22  Johan Dahlin  <johan@gnome.org>
 
+	* configure.ac:
+	* gir/Makefile.am:
+	* giscanner/Makefile.am:
+	* giscanner/config.py.in:
+	* giscanner/sourcescanner.py:
+	Use the generated glibconfig.h for all scanner invokations.
+	Rename it to glibconfig-scanner.h and install it.
+	Add a config.py which so far contains the include dir.
+
+2008-08-22  Johan Dahlin  <johan@gnome.org>
+
 	* gir/Makefile.am:
 	Replace glibconfig.h with our own, do some replacement
 	for CPP/C features we do not support
