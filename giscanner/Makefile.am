@@ -71,8 +71,8 @@ GLIBCONFIG=`pkg-config --variable=libdir glib-2.0`/glib-2.0/include/glibconfig.h
 glibconfig-scanner.h:
 	cat $(GLIBCONFIG) \
 	| sed s/__G_LIBCONFIG_H__/__G_LIBCONFIG_SCANNER_H__/g \
-	| sed s/define\ G_HAVE_ISO_VARARGS\ 1/define\ G_HAVE_ISO_VARARGS\ 0/g \
-	| sed s/define\ G_HAVE_GNUC_VARARGS\ 1/define\ G_HAVE_GNUC_VARARGS\ 0/g \
+	| sed s/define\ G_HAVE_ISO_VARARGS\ 1/undef\ G_HAVE_ISO_VARARGS/g \
+	| sed s/define\ G_HAVE_GNUC_VARARGS\ 1/undef\ G_HAVE_GNUC_VARARGS/g \
         > $(top_builddir)/giscanner/$@
 
 gidir = $(includedir)/gobject-introspection-1.0/
