@@ -18,6 +18,8 @@ struct _TestDrawableClass
 
 GType test_drawable_get_type (void) G_GNUC_CONST;
 
+void test_drawable_do_foo (TestDrawable *drawable, int x);
+
 struct _TestPixmapObjectClass
 {
   TestDrawableClass parent_class;

@@ -13,3 +13,9 @@ test_drawable_init (TestDrawable *drawable)
 {
 
 }
+
+void 
+test_drawable_do_foo (TestDrawable *drawable, int x)
+{
+  
+}

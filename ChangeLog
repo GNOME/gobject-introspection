@@ -1,5 +1,12 @@
 2008-08-21  Colin Walters  <walters@verbum.org>
 
+	* tests/scanner/drawable-expected.gir,
+	* tests/scanner/drawable.c,
+	* tests/scanner/drawable.h:
+	Add a method.
+
+2008-08-21  Colin Walters  <walters@verbum.org>
+
 	* giscanner/glibtransformer.py: Compute prefix
 	by searching through the symbol for bits
 	rather than going directly from ctype; this fixes
