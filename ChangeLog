@@ -1,5 +1,11 @@
 2008-08-22  Johan Dahlin  <johan@gnome.org>
 
+	* giscanner/sourcescanner.py:
+	Check for ../gobject-introspection-1.0.pc.in to determine
+	if we run installed or uninstalled.
+
+2008-08-22  Johan Dahlin  <johan@gnome.org>
+
 	* gir/Makefile.am:
 	* giscanner/sourcescanner.py:
 	Send in undefs/defines via writing it directly to stdin

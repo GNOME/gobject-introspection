@@ -236,8 +236,10 @@ class SourceScanner(object):
         defines.append('__G_LIBCONFIG_H__')
 
         dirname = os.path.dirname(os.path.abspath(__file__))
-        includedir = os.path.join(dirname, '..', 'giscanner')
-        if not os.path.exists(includedir):
+        if os.path.exists(
+            os.path.join(dirname, '..', 'gobject-introspection-1.0.pc.in')):
+            includedir = os.path.join(dirname, '..', 'giscanner')
+        else:
             includedir = INCLUDEDIR
         filenames.insert(0, os.path.join(includedir, 'glibconfig-scanner.h'))
 
