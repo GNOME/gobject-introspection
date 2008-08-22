@@ -66,7 +66,7 @@ girdir=$(datadir)/gir
 dist_gir_DATA = $(BUILT_SOURCES)
 
 %.typelib: %.gir
-	$(top_builddir)/tools/g-ir-compiler $< --raw -o $@
+	$(top_builddir)/tools/g-ir-compiler $< -o $@
 
 typelibsdir = $(datadir)/gitypelibs
 typelibs_DATA = GLib.typelib GObject.typelib Gio.typelib

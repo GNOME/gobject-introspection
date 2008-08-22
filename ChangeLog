@@ -1,3 +1,10 @@
+2008-08-22  Johan Dahlin  <johan@gnome.org>
+
+	* gir/Makefile.am:
+	* giscanner/sourcescanner.py:
+	Send in undefs/defines via writing it directly to stdin
+	of cpp instead of via arguments.
+
 2008-08-22  Colin Walters  <walters@verbum.org>
 
 	* tools/generate.c, tools/compiler.c: Default

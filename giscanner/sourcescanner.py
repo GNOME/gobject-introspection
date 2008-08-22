@@ -223,20 +223,18 @@ class SourceScanner(object):
         if not filenames:
             return
 
-        cpp_args = [
-            'cpp',
-            '-C',
-            '-U__GNUC__',
-            '-D__GI_SCANNER__',
-            # libintl.h has no types we care about and breaks
-            # cpp on some systems
-            '-D_LIBINTL_H',
-            '-I.',
-            ]
+        defines = ['__GI_SCANNER__']
+        undefs = ['__GNUC__']
+        cpp_args = ['cpp', '-C', '-I.']
+
+        # libintl.h has no types we care about and breaks
+        # cpp on some systems
+        defines.append('_LIBINTL_H')
 
         # Do not parse the normal glibconfig.h, use the
         # one we provide instead
-        cpp_args.append('-D__G_LIBCONFIG_H__')
+        defines.append('__G_LIBCONFIG_H__')
+
         dirname = os.path.dirname(os.path.abspath(__file__))
         includedir = os.path.join(dirname, '..', 'giscanner')
         if not os.path.exists(includedir):
@@ -247,7 +245,12 @@ class SourceScanner(object):
         proc = subprocess.Popen(cpp_args,
                                 stdin=subprocess.PIPE,
                                 stdout=subprocess.PIPE)
-
+        for define in defines:
+            proc.stdin.write('#ifndef %s\n' % (define, ))
+            proc.stdin.write('# define %s\n' % (define, ))
+            proc.stdin.write('#endif\n')
+        for undef in undefs:
+            proc.stdin.write('#undef %s\n' % (undef, ))
         for filename in filenames:
             filename = os.path.abspath(filename)
             proc.stdin.write('#include <%s>\n' % (filename, ))
