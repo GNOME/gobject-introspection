@@ -1,3 +1,8 @@
+2008-08-22  Colin Walters  <walters@verbum.org>
+
+	* girepository/girnode.c: Don't hardcode integers,
+	use GITypeTag.
+
 2008-08-22  Johan Dahlin  <johan@gnome.org>
 
 	* giscanner/sourcescanner.py:
