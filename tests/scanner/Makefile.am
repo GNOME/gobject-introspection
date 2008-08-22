@@ -84,7 +84,7 @@ check-%.gir: %.gir
 	@diff -u -U 10 $(srcdir)/$*-expected.gir $*.gir && echo "* $*.gir"
 
 %.typelib: %.gir
-	$(top_builddir)/tools/g-ir-compiler $< --raw -o $@
+	$(top_builddir)/tools/g-ir-compiler $< -o $@
 	$(SCANNER) --typelib-xml $< > $<.tmp && mv $<.tmp $<.txml
 
 check-%.typelib: %.typelib

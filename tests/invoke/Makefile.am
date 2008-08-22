@@ -16,8 +16,8 @@ testfns_la_LIBADD = $(GIREPO_LIBS) $(top_builddir)/girepository/libgirepository.
 BUILT_SOURCES = testfns-metadata.c
 CLEANFILES = testfns-metadata.c 
 
-testfns-metadata.c: testfns.gir $(top_builddir)/tools/g-ir-compiler
-	$(CHECK_DEBUG) $(top_builddir)/tools/g-ir-compiler $(srcdir)/testfns.gir -o testfns-metadata.c
+testfns-metadata.c: testfns.gir $(top_builddir)/tools/g-ir-compiler Makefile
+	$(CHECK_DEBUG) $(top_builddir)/tools/g-ir-compiler $(srcdir)/testfns.gir --code -o testfns-metadata.c
 
 invoke_SOURCES = invoke.c
 invoke_CFLAGS = $(GIREPO_CFLAGS)  -I$(top_srcdir)/girepository
