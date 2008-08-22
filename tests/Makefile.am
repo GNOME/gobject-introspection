@@ -25,8 +25,8 @@ GIRTESTS = 			\
 
 %.gir.test: %.gir
 	@echo Testing $<:
-	$(top_builddir)/tools/g-ir-compiler --raw $< > $<.1; \
-	$(top_builddir)/tools/g-ir-generate --raw $<.1 > $<.2; \
+	$(DEBUG) $(top_builddir)/tools/g-ir-compiler --raw $< > $<.1; \
+	$(DEBUG) $(top_builddir)/tools/g-ir-generate --raw $<.1 > $<.2; \
 	diff -u $< $<.2; rm $<.1 $<.2
 
 check-local: $(GIRTESTS)

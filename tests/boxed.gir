@@ -60,7 +60,6 @@
         </parameter>
       </parameters>
     </function>
-    <glib:boxed glib:name="boxed2" glib:type-name="BoxedType2" glib:get-type="boxed2_get_type" deprecated="1">
-    </glib:boxed>
+    <glib:boxed glib:name="boxed2" glib:type-name="BoxedType2" glib:get-type="boxed2_get_type" deprecated="1"/>
   </namespace>
 </repository>
