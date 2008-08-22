@@ -1,8 +1,17 @@
-BUILT_SOURCES = 
+BUILT_SOURCES = glibconfig.h
 
 G_IR_SCANNER = $(top_srcdir)/tools/g-ir-scanner
 G_IR_SCANNER_FILES = $(top_srcdir)/giscanner/*.py \
 	$(top_builddir)/giscanner/libgiscanner.la
+
+GLIBCONFIG_H = `pkg-config --variable=libdir glib-2.0`/glib-2.0/include/glibconfig.h
+
+glibconfig.h:
+	cat $(GLIBCONFIG_H) \
+	| sed s/__G_LIBCONFIG_H__/__G_LIBCONFIG_GI_COPY_H__/g \
+	| sed s/define\ G_HAVE_ISO_VARARGS\ 1/define\ G_HAVE_ISO_VARARGS\ 0/g \
+	| sed s/define\ G_HAVE_GNUC_VARARGS\ 1/define\ G_HAVE_GNUC_VARARGS\ 1/g \
+        > $(builddir)/$@
 
 # glib
 GLIB_INCLUDEDIR=`pkg-config --variable=includedir glib-2.0`/glib-2.0
@@ -18,8 +27,9 @@ GLib.gir: $(G_IR_SCANNER) $(G_IR_SCANNER_FILES)
 	    -I$(GLIB_LIBDIR)/glib-2.0/include \
 	    -DGETTEXT_PACKAGE=Dummy \
 	    -D__G_I18N_LIB_H__ \
+	    -D__G_LIBCONFIG_H__ \
+	    $(builddir)/glibconfig.h
 	    $(GLIB_INCLUDEDIR)/glib/*.h \
-	    $(GLIB_LIBDIR)/glib-2.0/include/glibconfig.h
 BUILT_SOURCES += GLib.gir
 
 # gobject
@@ -72,3 +82,5 @@ typelibs_DATA = GLib.typelib GObject.typelib Gio.typelib
 CLEANFILES += $(typelibs_DATA)
 
 EXTRA_DIST = glib-2.0-good.gir gobject-2.0-good.gir gobject-2.0-gio.gir
+
+.PHONY: glibconfig.h

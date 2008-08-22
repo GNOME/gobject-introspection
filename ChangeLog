@@ -1,3 +1,9 @@
+2008-08-22  Johan Dahlin  <johan@gnome.org>
+
+	* gir/Makefile.am:
+	Replace glibconfig.h with our own, do some replacement
+	for CPP/C features we do not support
+
 2008-08-22  Colin Walters  <walters@verbum.org>
 
 	* tools/generate.c (write_callable_info): Fix unref
