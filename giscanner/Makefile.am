@@ -73,6 +73,7 @@ glibconfig-scanner.h:
 	| sed s/__G_LIBCONFIG_H__/__G_LIBCONFIG_SCANNER_H__/g \
 	| sed s/define\ G_HAVE_ISO_VARARGS\ 1/undef\ G_HAVE_ISO_VARARGS/g \
 	| sed s/define\ G_HAVE_GNUC_VARARGS\ 1/undef\ G_HAVE_GNUC_VARARGS/g \
+	| sed s/G_GNUC_EXTENSION\ //g \
         > $(top_builddir)/giscanner/$@
 
 gidir = $(includedir)/gobject-introspection-1.0/
