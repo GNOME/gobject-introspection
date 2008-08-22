@@ -39,6 +39,7 @@ pkgpyexec_PYTHON = 		\
 	__init__.py		\
 	ast.py			\
 	cgobject.py		\
+	config.py		\
 	gidlparser.py		\
 	gidlwriter.py		\
 	girparser.py		\
