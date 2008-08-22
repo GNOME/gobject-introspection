@@ -1,5 +1,10 @@
 2008-08-22  Colin Walters  <walters@verbum.org>
 
+	* tools/generate.c (write_callable_info): Fix unref
+	sequence.
+
+2008-08-22  Colin Walters  <walters@verbum.org>
+
 	* gobject-introspection-1.0.pc.in: Add g-ir-generate.
 	* tests/Makefile.am: Support $(DEBUG)
 	* tools/generate.c: Do immediate close tags if no
