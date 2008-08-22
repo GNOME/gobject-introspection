@@ -27,6 +27,7 @@ class XMLWriter(object):
 
     def __init__(self):
         self._data = StringIO()
+        self._data.write('<?xml version="1.0"?>\n')
         self._tag_stack = []
         self._indent = 0
         self._indent_unit = 2

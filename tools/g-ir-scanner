@@ -71,8 +71,11 @@ def _get_option_parser():
                       action="store_true", dest="verbose",
                       help="be verbose")
     parser.add_option("", "--noclosure",
-                      action="store_true", dest="noclosure",# default=True,
+                      action="store_true", dest="noclosure",
                       help="do not delete unknown types")
+    parser.add_option("", "--typelib-xml",
+                      action="store_true", dest="typelib_xml",
+                      help="Just convert GIR to typelib XML")
 
 
     group = optparse.OptionGroup(parser, "Preprocessor options")
@@ -94,6 +97,18 @@ def _get_option_parser():
 def _error(msg):
     raise SystemExit('ERROR: %s' % (msg, ))
 
+def typelib_xml_strip(path):
+    from giscanner.girparser import C_NS
+    c_ns_key = '{%s}' % (C_NS, )
+
+    from xml.etree.cElementTree import parse
+    doc = parse(open(path))
+    for node in doc.getiterator():
+        for attrib in list(node.attrib):
+            if attrib.startswith(c_ns_key):
+                del node.attrib[attrib]
+    doc.write(sys.stdout)
+    return 0
 
 def main(args):
     parser = _get_option_parser()
@@ -101,6 +116,9 @@ def main(args):
 
     if len(args) <= 1:
         _error('Need at least one filename')
+
+    if options.typelib_xml:
+        return typelib_xml_strip(args[1])
 
     if not options.namespace_name:
         _error('Namespace name missing')

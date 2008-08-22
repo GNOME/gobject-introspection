@@ -1,3 +1,19 @@
+2008-08-22  Colin Walters  <walters@verbum.org>
+
+	* girepository/girparser.c: Pass through
+	recursive types.  Avoid overwriting errors.
+	* giscanner/xmlwriter.py: Always write the
+	XML header.
+	* tests/*.gir: Adjust.
+	* tests/scanner/Makefile.am: Build typelibs,
+	and generate XML from those.  Once we
+	have a good diff mechanism...
+	* tests/scanner/*-expected.gir: Add XML
+	header.
+	* tools/g-ir-scanner: Accept --typelib-xml
+	option.
+	* tools/generate.c: Better defaults for transfer.
+
 2008-08-22  Johan Dahlin  <johan@gnome.org>
 
 	* configure.ac:

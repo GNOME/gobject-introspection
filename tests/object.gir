@@ -31,9 +31,9 @@
           </parameter>
         </parameters>
       </glib:signal>
-      <vfunc name="vfunc1" offset="20" transfer="none">
+      <vfunc name="vfunc1" offset="20">
         <return-value>
-          <type name="Object2*"/>
+          <type name="Object2"/>
         </return-value>
         <parameters>
           <parameter name="param1" direction="in">
@@ -41,9 +41,9 @@
           </parameter>
         </parameters>
       </vfunc>
-      <vfunc name="vfunc2" offset="24" transfer="none">
+      <vfunc name="vfunc2" offset="24">
         <return-value>
-          <type name="Object2*"/>
+          <type name="Object2"/>
         </return-value>
         <parameters>
           <parameter name="param1" direction="in">

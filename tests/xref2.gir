@@ -12,7 +12,7 @@
       </return-value>
       <parameters>
         <parameter name="p1" transfer="full" direction="in">
-	  <type name="Foo.Boxed*"/>
+	  <type name="Foo.Boxed"/>
         </parameter>
       </parameters>
     </function>

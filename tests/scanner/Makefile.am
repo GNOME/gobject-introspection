@@ -1,3 +1,6 @@
+CLEANFILES = 
+EXTRA_DIST =
+
 # We need to build a shared library, which can be dlopened
 # it does not work with noinst_LTLIBRARIES
 testlib_LTLIBRARIES = 		\
@@ -28,8 +31,8 @@ libutility_la_CFLAGS = $(GOBJECT_CFLAGS)
 libutility_la_LDFLAGS = -module -avoid-version
 libutility_la_LIBADD = $(GOBJECT_LIBS)
 
-CLEANFILES = utility.gir foo.gir
-EXTRA_DIST = utility-expected.gir foo-expected.gir
+GIRS = utility.gir annotation.gir foo.gir
+EXTRA_DIST += $(GIRS:.gir=-expected.gir)
 
 SCANNER = $(top_srcdir)/tools/g-ir-scanner
 SCANNER_LIBS = \
@@ -56,7 +59,7 @@ drawable.gir: libdrawable.la drawable.h $(SCANNER) $(SCANNER_LIBS)
 	$(libdrawable_la_SOURCES) \
 	 --output $@
 
-foo.gir: libfoo.la foo.h $(SCANNER) $(SCANNER_LIBS)
+foo.gir: utility.gir libfoo.la foo.h $(SCANNER) $(SCANNER_LIBS)
 	$(CHECK_DEBUG) $(SCANNER) -v \
 	--include=$(top_srcdir)/gir/GLib.gir \
 	--include=$(top_srcdir)/gir/GObject.gir \
@@ -80,6 +83,16 @@ utility.gir: libutility.la utility.h $(SCANNER) $(SCANNER_LIBS)
 check-%.gir: %.gir
 	@diff -u -U 10 $(srcdir)/$*-expected.gir $*.gir && echo "* $*.gir"
 
+%.typelib: %.gir
+	$(top_builddir)/tools/g-ir-compiler $< --raw -o $@
+	$(SCANNER) --typelib-xml $< > $<.tmp && mv $<.tmp $<.txml
+
+check-%.typelib: %.typelib
+
+
+TYPELIBS = $(GIRS:.gir=.typelib)
+CLEANFILES += $(TYPELIBS)
+
 pre-check:
 	@if test "$(top_builddir)" != "$(top_srcdir)"; then \
 	   cp $(top_srcdir)/giscanner/*.py $(top_builddir)/giscanner; \
@@ -97,6 +110,7 @@ post-check:
 check-local: pre-check
 check-local: check-utility.gir check-annotation.gir check-drawable.gir 
 check-local: check-foo.gir
+check-local: $(TYPELIBS)
 check-local: post-check
 
 .PHONY: annotation.gir drawable.gir foo.gir utility.gir 

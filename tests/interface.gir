@@ -10,11 +10,11 @@
       </requires>
       <method name="method1" symbol="method1">
         <return-value transfer="full">
-          <type name="Iface2*"/>
+          <type name="Iface2"/>
         </return-value>
         <parameters>
           <parameter name="param1" transfer="full" direction="in">
-            <type name="Iface2*"/>
+            <type name="Iface2"/>
           </parameter>
         </parameters>
       </method>
@@ -27,7 +27,7 @@
         </return-value>
         <parameters>
           <parameter name="obj" transfer="full" direction="in">
-            <type name="Iface2*"/>
+            <type name="Iface2"/>
           </parameter>
         </parameters>
       </glib:signal>
@@ -37,17 +37,17 @@
         </return-value>
         <parameters>
           <parameter name="obj" transfer="full" direction="in">
-            <type name="Iface1*"/>
+            <type name="Iface1"/>
           </parameter>
         </parameters>
       </glib:signal>
       <vfunc name="vfunc1" offset="10">
         <return-value transfer="full">
-          <type name="Iface2*"/>
+          <type name="Iface2"/>
         </return-value>
         <parameters>
           <parameter name="param1" transfer="full" direction="in">
-            <type name="Iface2*"/>
+            <type name="Iface2"/>
           </parameter>
         </parameters>
       </vfunc>

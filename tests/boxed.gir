@@ -23,13 +23,13 @@
             <type name="BoxedType1"/>
           </parameter>
           <parameter name="w" direction="in">
-            <type name="GList<boxed2*>*"/>
+            <type name="GList<boxed2>"/>
           </parameter>
           <parameter name="t" transfer="full" direction="in">
-            <type name="GHashTable<utf8,int64>*"/>
+            <type name="GHashTable<utf8,int64>"/>
           </parameter>
           <parameter name="e" transfer="full" direction="out">
-            <type name="GError*"/>
+            <type name="GError"/>
           </parameter>
         </parameters>
       </method>
@@ -39,7 +39,7 @@
         </return-value>
         <parameters>
           <parameter name="box" direction="in">
-            <type name="boxed2*"/>
+            <type name="boxed2"/>
           </parameter>
           <parameter name="val" transfer="full" direction="inout">
             <type name="uint"/>
