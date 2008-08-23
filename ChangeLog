@@ -1,5 +1,18 @@
 2008-08-23  Colin Walters  <walters@verbum.org>
 
+	* girepository/gtypelib.c: Check constructor
+	returns.
+	* girepository/girnode.c: Small tweaks.
+	* girepository/ginfo.c: Calculate signature offsets
+	more robustly.
+	* girepository/girparser.c: Remove duplicate
+	start_boxed.
+	* giscanner/glibtransformer.py: Avoid marking
+	functions which return a basic type as
+	constructors.
+
+2008-08-23  Colin Walters  <walters@verbum.org>
+
 	* girepository/girparser.c: Ignore <include>.
 	* giscanner/girparser.py: Parse them.
 	* giscanner/girwriter.py: Generate them.
