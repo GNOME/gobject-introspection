@@ -1,5 +1,10 @@
 2008-08-23  Colin Walters  <walters@verbum.org>
 
+	* giscanner/config.py: Define DATADIR.
+	* giscanner/transformer.py: Look in DATADIR.
+
+2008-08-23  Colin Walters  <walters@verbum.org>
+
 	* girepository/gtypelib.c: Check constructor
 	returns.
 	* girepository/girnode.c: Small tweaks.

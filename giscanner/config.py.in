@@ -18,6 +18,10 @@
 # 02110-1301, USA.
 #
 
+DATADIR = "@datadir@"
+DATADIR = DATADIR.replace(
+    "${prefix}", "@prefix@")
+
 INCLUDEDIR = "@includedir@/gobject-introspection-1.0"
 INCLUDEDIR = INCLUDEDIR.replace(
     "${prefix}", "@prefix@")

@@ -24,6 +24,7 @@ from giscanner.ast import (Callback, Enum, Function, Namespace, Member,
                            Parameter, Return, Sequence, Struct, Field,
                            Type, Alias, Interface, Class, Node, Union,
                            type_name_from_ctype, type_names)
+from giscanner.config import DATADIR
 from .glibast import GLibBoxed
 from giscanner.sourcescanner import (
     SourceSymbol, ctype_name, CTYPE_POINTER,
@@ -36,7 +37,7 @@ from .odict import odict
 from .utils import strip_common_prefix
 
 _xdg_data_dirs = [x for x in os.environ.get('XDG_DATA_DIRS', '').split(':') \
-                      + ['/usr/share'] if x]
+                      + [DATADIR, '/usr/share'] if x]
 
 
 class SkipError(Exception):
