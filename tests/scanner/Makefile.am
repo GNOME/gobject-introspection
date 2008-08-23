@@ -28,7 +28,7 @@ CHECKGIRS = $(GIRS:.gir=.gir.check)
 CLEANFILES = $(TYPELIBS) $(TXMLS) $(GIRS)
 BUILT_SOURCES = $(TYPELIBS) $(TXMLS) $(GIRS)
 
-%.gir: lib%.la %.c %.h utility.gir $(SCANNER) $(SCANNER_LIBS)
+%.gir: lib%.la %.c %.h utility.gir $(SCANNER) $(SCANNER_LIBS) Makefile
 	$(CHECK_DEBUG) $(SCANNER) -v \
 	--include=$(top_srcdir)/gir/GObject.gir \
 	--include=$(top_builddir)/tests/scanner/utility.gir \
@@ -41,7 +41,7 @@ GIRS += annotation.gir
 GIRS += drawable.gir
 GIRS += foo.gir
 
-utility.gir: libutility.la utility.h $(SCANNER) $(SCANNER_LIBS)
+utility.gir: libutility.la utility.h $(SCANNER) $(SCANNER_LIBS) Makefile
 	$(CHECK_DEBUG) $(SCANNER) -v \
 	--include=$(top_srcdir)/gir/GObject.gir \
 	--library=$< \
