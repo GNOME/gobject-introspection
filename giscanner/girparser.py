@@ -45,6 +45,7 @@ class GIRParser(object):
 
     def __init__(self, filename):
         self._nodes = []
+        self._includes = set()
         self._namespace_name = None
 
         tree = parse(filename)
@@ -54,6 +55,9 @@ class GIRParser(object):
 
     def get_namespace_name(self):
         return self._namespace_name
+
+    def get_includes(self):
+        return self._includes
 
     def get_nodes(self):
         return self._nodes
@@ -65,6 +69,9 @@ class GIRParser(object):
 
     def _parse_api(self, root):
         assert root.tag == _corens('repository')
+        for node in root.getchildren():
+            if node.tag == _corens('include'):
+                self._includes.add(node.attrib['name'])
         ns = root.find(_corens('namespace'))
         assert ns is not None
         self._namespace_name = ns.attrib['name']

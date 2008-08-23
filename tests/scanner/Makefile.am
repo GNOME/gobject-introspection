@@ -30,7 +30,6 @@ BUILT_SOURCES = $(TYPELIBS) $(TXMLS) $(GIRS)
 
 %.gir: lib%.la %.c %.h utility.gir $(SCANNER) $(SCANNER_LIBS)
 	$(CHECK_DEBUG) $(SCANNER) -v \
-	--include=$(top_srcdir)/gir/GLib.gir \
 	--include=$(top_srcdir)/gir/GObject.gir \
 	--include=$(top_builddir)/tests/scanner/utility.gir \
 	--library=$< \
@@ -44,7 +43,6 @@ GIRS += foo.gir
 
 utility.gir: libutility.la utility.h $(SCANNER) $(SCANNER_LIBS)
 	$(CHECK_DEBUG) $(SCANNER) -v \
-	--include=$(top_srcdir)/gir/GLib.gir \
 	--include=$(top_srcdir)/gir/GObject.gir \
 	--library=$< \
 	--namespace=$* \

@@ -18,6 +18,8 @@
 # 02110-1301, USA.
 #
 
+import os
+
 from giscanner.ast import (Callback, Enum, Function, Namespace, Member,
                            Parameter, Return, Sequence, Struct, Field,
                            Type, Alias, Interface, Class, Node, Union,
@@ -32,6 +34,9 @@ from giscanner.sourcescanner import (
     CSYMBOL_TYPE_MEMBER)
 from .odict import odict
 from .utils import strip_common_prefix
+
+_xdg_data_dirs = [x for x in os.environ.get('XDG_DATA_DIRS', '').split(':') \
+                      + ['/usr/share'] if x]
 
 
 class SkipError(Exception):
@@ -60,9 +65,14 @@ class Transformer(object):
         self._names = Names()
         self._typedefs_ns = {}
         self._strip_prefix = ''
+        self._includes = set()
+        self._includepaths = []
 
     def get_names(self):
         return self._names
+
+    def get_includes(self):
+        return self._includes
 
     def set_strip_prefix(self, strip_prefix):
         self._strip_prefix = strip_prefix
@@ -75,14 +85,38 @@ class Transformer(object):
         return self._namespace
 
     def register_include(self, filename):
-        if filename.endswith('.gir'):
+        (path, suffix) = os.path.splitext(filename)
+        name = os.path.basename(path)
+        if name in self._includes:
+            return
+        if suffix == '':
+            suffix = '.gir'
+            filename = path + suffix
+        if suffix == '.gir':
+            source = filename
+            if not os.path.exists(filename):
+                searchdirs = [os.path.join(d, 'gir') for d \
+                                  in _xdg_data_dirs]
+                searchdirs.extend(self._includepaths)
+                source = None
+                for d in searchdirs:
+                    source = os.path.join(d, filename)
+                    if os.path.exists(source):
+                        break
+                    source = None
+            if not source:
+                raise ValueError("Couldn't find include %r (search path: %r)"\
+                                     % (filename, searchdirs))
+            d = os.path.dirname(source)
+            if d not in self._includepaths:
+                self._includepaths.append(d)
+            self._includes.add(name)
             from .girparser import GIRParser
-            parser = GIRParser(filename)
-        elif filename.endswith('.gidl'):
-            from .gidlparser import GIDLParser
-            parser = GIDLParser(filename)
+            parser = GIRParser(source)
         else:
             raise NotImplementedError(filename)
+        for include in parser.get_includes():
+            self.register_include(include)
         nsname = parser.get_namespace_name()
         for node in parser.get_nodes():
             if isinstance(node, Alias):

@@ -50,7 +50,6 @@ Gio.gir: GObject.gir $(G_IR_SCANNER) $(G_IR_SCANNER_FILES)
 	    --noclosure \
 	    --output $@ \
 	    --strip-prefix=g \
-            --include=$(top_builddir)/gir/GLib.gir \
             --include=$(top_builddir)/gir/GObject.gir \
 	    --library=gio-2.0 \
 	    -I$(GIO_INCLUDEDIR) \

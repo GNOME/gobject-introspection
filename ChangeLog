@@ -1,3 +1,16 @@
+2008-08-23  Colin Walters  <walters@verbum.org>
+
+	* girepository/girparser.c: Ignore <include>.
+	* giscanner/girparser.py: Parse them.
+	* giscanner/girwriter.py: Generate them.
+	* giscanner/transformer.py: Process <include>
+	recursively.  Don't require full path for
+	includes, look in {$XDG_DATA_DIRS}/gir.
+	* tools/g-ir-scanner: Pass through includes.
+	* Makefile.am: Remove extra --include
+	args for scanner.
+	* *-expected.gir: Add expected includes.
+
 2008-08-23  Johan Dahlin  <johan@gnome.org>
 
 	* tests/scanner/Makefile.am:
