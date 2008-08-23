@@ -10,8 +10,8 @@ struct _TestDrawable
 {
   GObject parent_instance;
 };
- 
-struct _TestDrawableClass 
+
+struct _TestDrawableClass
 {
   GObjectClass parent_class;
 };

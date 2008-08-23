@@ -1,3 +1,11 @@
+2008-08-23  Johan Dahlin  <johan@gnome.org>
+
+	* tests/scanner/Makefile.am:
+	* tests/scanner/annotation-expected.gir:
+	* tests/scanner/drawable-expected.gir:
+	Avoid duplication in the Makefile, regenerate with new
+	namespaces (same as the filename)
+
 2008-08-22  Colin Walters  <walters@verbum.org>
 
 	* girepository/girnode.c: Don't hardcode integers,
