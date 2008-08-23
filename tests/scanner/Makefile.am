@@ -45,9 +45,9 @@ utility.gir: libutility.la utility.h $(SCANNER) $(SCANNER_LIBS)
 	$(CHECK_DEBUG) $(SCANNER) -v \
 	--include=$(top_srcdir)/gir/GObject.gir \
 	--library=$< \
-	--namespace=$* \
+	--namespace=utility \
 	--pkg gobject-2.0 \
-	$(srcdir)/$*.h $(srcdir)/$*.c \
+	$(libutility_la_SOURCES) \
 	--output $@
 GIRS += utility.gir
 
