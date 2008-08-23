@@ -272,6 +272,9 @@ class GLibTransformer(object):
             new_idx = func.symbol.find('_new')
             if new_idx < 0:
                 return None
+            # Constructors don't return basic types
+            if target_arg.type.name in type_names:
+                return None
             prefix = func.symbol[:new_idx]
 
         klass = None
