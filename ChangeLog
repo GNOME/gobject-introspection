@@ -1,5 +1,12 @@
 2008-08-24  Johan Dahlin  <johan@gnome.org>
 
+	* girepository/girparser.c (start_glib_boxed), (start_function),
+	(start_field), (start_alias):
+	Refactor a couple of parsing functions to be simpler to follow.
+	Avoid huge ifs.
+
+2008-08-24  Johan Dahlin  <johan@gnome.org>
+
 	* girepository/girparser.c (start_function):
 	Remove left-over code, checking type of function.
 
