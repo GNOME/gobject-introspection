@@ -645,8 +645,8 @@ class GLibTransformer(object):
         i = 0
         self._validating = True
         while True:
-            print "Type resolution; pass=%d" % (i, )
             initlen = len(nodes)
+            print "Type resolution; pass=%d (%d nodes)" % (i, initlen)
             nodes = list(self._names.names.itervalues())
             for node in nodes:
                 try:
