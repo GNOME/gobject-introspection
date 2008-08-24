@@ -1,3 +1,9 @@
+2008-08-24  Colin Walters  <walters@verbum.org>
+
+	* girepository/gtypelib.c: Add context stack so
+	when we get an error we can print out nicely
+	where it is.
+
 2008-08-24  Johan Dahlin  <johan@gnome.org>
 
 	* girepository/girparser.c (start_glib_boxed), (start_function),
