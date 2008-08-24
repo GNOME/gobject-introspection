@@ -19,7 +19,7 @@
 # 02110-1301, USA.
 #
 
-import commands
+import subprocess
 import optparse
 import os
 import sys
@@ -135,14 +135,15 @@ def main(args):
     primary_library = options.libraries[0]
 
     for package in options.packages:
-        output = commands.getoutput('pkg-config --cflags %s' % (package, ))
+        output = subprocess.Popen(['pkg-config', '--cflags', package], 
+                                  stdout=subprocess.PIPE).communicate()[0]
         pkg_options, unused = parser.parse_args(output.split())
         options.cpp_includes.extend(pkg_options.cpp_includes)
         options.cpp_defines.extend(pkg_options.cpp_defines)
         options.cpp_undefines.extend(pkg_options.cpp_undefines)
 
-        output = commands.getoutput('pkg-config --libs-only-L %s' % (
-            package, ))
+        output = subprocess.Popen(['pkg-config', '--libs-only-L', package],
+                                  stdout=subprocess.PIPE).communicate()[0]
         pkg_options, unused = parser.parse_args(output.split())
         options.library_paths.extend(pkg_options.library_paths)
 

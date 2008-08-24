@@ -1,5 +1,11 @@
 2008-08-24  Colin Walters  <walters@verbum.org>
 
+	* tools/g-ir-scanner: Use subprocess instead of
+	commands, works on Windows and avoids the evil
+	shell on Unix.
+
+2008-08-24  Colin Walters  <walters@verbum.org>
+
 	* giscanner/glibtransformer.py: Skip over
 	g_object_get_type from GLib trunk.
 
