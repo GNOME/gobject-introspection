@@ -422,6 +422,11 @@ class GLibTransformer(object):
 
     def _introspect_object(self, type_id, symbol):
         type_name = cgobject.type_name(type_id)
+        # We handle this specially above; in 2.16 and below there
+        # was no g_object_get_type, for later versions we need
+        # to skip it
+        if type_name == 'GObject':
+            return
         parent_type_name = cgobject.type_name(cgobject.type_parent(type_id))
         parent_gitype = self._resolve_gtypename(parent_type_name)
         node = GLibObject(

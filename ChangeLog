@@ -1,5 +1,10 @@
 2008-08-24  Colin Walters  <walters@verbum.org>
 
+	* giscanner/glibtransformer.py: Skip over
+	g_object_get_type from GLib trunk.
+
+2008-08-24  Colin Walters  <walters@verbum.org>
+
 	* girepository/girepository.c (g_irepository_require): 
 	Don't open shared library here; we already do it
 	in gtypelib.c.
