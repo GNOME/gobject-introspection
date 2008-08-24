@@ -1,3 +1,8 @@
+2008-08-24  Johan Dahlin  <johan@gnome.org>
+
+	* girepository/girparser.c (start_function):
+	Remove left-over code, checking type of function.
+
 2008-08-23  Colin Walters  <walters@verbum.org>
 
 	* giscanner/config.py: Define DATADIR.
