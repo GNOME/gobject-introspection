@@ -1,5 +1,10 @@
 2008-08-24  Colin Walters  <walters@verbum.org>
 
+	* tools/g-ir-scanner: Filter out unknown options from
+	pkg-config files.
+
+2008-08-24  Colin Walters  <walters@verbum.org>
+
 	* giscanner/glibtransformer.py: Fail with better
 	error if we can't find library.
 
