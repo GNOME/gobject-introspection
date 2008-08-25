@@ -4,10 +4,10 @@
             xmlns:c="http://www.gtk.org/introspection/c/1.0"
             xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
   <namespace name="Foo">
+    <interface name="IFace1" glib:type-name="IFace1" glib:get-type="iface1_get_type">
+    </interface>
     <class name="Object1" parent="Object2" glib:type-name="Object1" glib:get-type="object1_get_type">
-      <implements>
-        <interface name="Iface1" />
-      </implements>
+      <implements name="IFace1" />
       <property name="prop1" readable="0" writable="0">
         <type name="int"/>
       </property>

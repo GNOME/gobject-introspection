@@ -1,5 +1,12 @@
 2008-08-25  Colin Walters  <walters@verbum.org>
 
+	* girepository/girparser.c: Parse new implements
+	syntax, drop gapi one.
+	* tests/object.gir: Update.
+	* tools/generate.c: Generate new syntax.
+
+2008-08-25  Colin Walters  <walters@verbum.org>
+
 	* giscanner/ast.py: Add interfaces property
 	to class.
 	* giscanner/girwriter.py: Write out implemented
