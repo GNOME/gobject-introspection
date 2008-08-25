@@ -646,7 +646,16 @@ class GLibTransformer(object):
         self._validating = True
         while True:
             initlen = len(nodes)
-            print "Type resolution; pass=%d (%d nodes)" % (i, initlen)
+            def count_type(otype):
+                return len([x for x in nodes
+                               if isinstance(x[1], otype)])
+            objectcount = count_type(GLibObject)
+            ifacecount = count_type(GLibInterface)
+            enumcount = count_type(GLibEnum)
+            boxedcount = count_type(GLibBoxed)
+            print "Type resolution; pass=%d" % (i, )
+            print " %d nodes; %d objects, %d interfaces, %d enums, %d boxed" \
+                % (initlen, objectcount, ifacecount, enumcount, boxedcount)
             nodes = list(self._names.names.itervalues())
             for node in nodes:
                 try:
