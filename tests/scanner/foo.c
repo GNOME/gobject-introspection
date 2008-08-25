@@ -2,6 +2,8 @@
 
 #include "foo.h"
 
+static void foo_do_foo (FooInterface *self);
+
 typedef struct
 {
   int i;
@@ -30,6 +32,10 @@ foo_interface_get_type (void)
   return object_type;
 }
 
+void foo_interface_do_foo (FooInterface *self)
+{
+  FOO_INTERFACE_GET_INTERFACE(self)->do_foo (self);
+}
 
 enum {
   PROP_0,
@@ -43,7 +49,17 @@ enum {
 
 static guint foo_object_signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE (FooObject, foo_object, G_TYPE_OBJECT);
+static void
+foo_foo_interface_init (gpointer         g_iface,
+			gpointer         iface_data)
+{
+  FooInterfaceIface *iface = (FooInterfaceIface *)g_iface;
+  iface->do_foo = foo_do_foo;
+}
+
+G_DEFINE_TYPE_EXTENDED (FooObject, foo_object, G_TYPE_OBJECT,
+			0, G_IMPLEMENT_INTERFACE (FOO_TYPE_INTERFACE,
+						  foo_foo_interface_init));
 
 static void
 foo_object_set_property (GObject         *object,
@@ -118,6 +134,13 @@ foo_object_init (FooObject *object)
 UtilityObject*
 foo_object_external_type (FooObject *object)
 {
+
+}
+
+void
+foo_do_foo (FooInterface *self)
+{
+
 
 }
 

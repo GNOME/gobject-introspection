@@ -238,6 +238,7 @@ class Class(Node):
         self.ctype = name
         self.parent = parent
         self.methods = []
+        self.interfaces = []
         self.constructors = []
         self.properties = []
         self.fields = []

@@ -449,6 +449,7 @@ class GLibTransformer(object):
             type_name, symbol)
         self._introspect_properties(node, type_id)
         self._introspect_signals(node, type_id)
+        self._introspect_implemented_interfaces(node, type_id)
         self._add_attribute(node, replace=True)
         self._register_internal_type(type_name, node)
 
@@ -474,6 +475,18 @@ class GLibTransformer(object):
                          type_name, symbol)
         self._add_attribute(node, replace=True)
         self._register_internal_type(type_name, node)
+
+    def _introspect_implemented_interfaces(self, node, type_id):
+        fundamental_type_id = cgobject.type_fundamental(type_id)
+        if fundamental_type_id != cgobject.TYPE_OBJECT:
+            raise AssertionError
+        interfaces = cgobject.type_interfaces(type_id)
+        gt_interfaces = []
+        for interface_typeid in interfaces:
+            iname = cgobject.type_name(interface_typeid)
+            gitype = self._resolve_gtypename(iname)
+            gt_interfaces.append(gitype)
+        node.interfaces = gt_interfaces
 
     def _introspect_properties(self, node, type_id):
         fundamental_type_id = cgobject.type_fundamental(type_id)
@@ -591,22 +604,21 @@ class GLibTransformer(object):
         for field in node.fields:
             self._resolve_field(field)
 
-    def _resolve_parent(self, node):
-        if not isinstance(node, (GLibInterface, GLibObject)):
-            raise AssertionError
-        if isinstance(node.parent, Unresolved):
-            node.parent = \
-                self._transformer.gtypename_to_giname(node.parent.target,
-                                                      self._names)
+    def _force_resolve(self, item):
+        if isinstance(item, Unresolved):
+            return self._transformer.gtypename_to_giname(item.target,
+                                                         self._names)
+        return item
 
     def _resolve_glib_interface(self, node):
-        self._resolve_parent(node)
+        node.parent = self._force_resolve(node.parent)
         self._resolve_methods(node.methods)
         self._resolve_properties(node.properties)
         self._resolve_signals(node.signals)
 
     def _resolve_glib_object(self, node):
-        self._resolve_parent(node)
+        node.parent = self._force_resolve(node.parent)
+        node.interfaces = [self._force_resolve(x) for x in node.interfaces]
         self._resolve_constructors(node.constructors)
         self._resolve_methods(node.methods)
         self._resolve_properties(node.properties)

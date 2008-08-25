@@ -1,5 +1,16 @@
 2008-08-25  Colin Walters  <walters@verbum.org>
 
+	* giscanner/ast.py: Add interfaces property
+	to class.
+	* giscanner/girwriter.py: Write out implemented
+	interfaces.
+	* giscanner/glibtransformer.py: Introspect
+	implemented interfaces.
+	* tests/scanner/*: Make FooObject implement
+	FooInterface.
+
+2008-08-25  Colin Walters  <walters@verbum.org>
+
 	* giscanner/glibtransformer.py: More correctly pair
 	methods; if we have a symbol that starts with
 	e.g. hippo_canvas look for a matching HippoCanvas

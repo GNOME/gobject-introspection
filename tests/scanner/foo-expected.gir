@@ -13,17 +13,38 @@
                c:type="FooInterface"
                glib:type-name="FooInterface"
                glib:get-type="foo_interface_get_type">
+      <callback name="do_foo" c:type="do_foo">
+        <return-value>
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <parameter name="self">
+            <type name="Interface" c:type="FooInterface*"/>
+          </parameter>
+        </parameters>
+      </callback>
     </interface>
     <record name="InterfaceIface" c:type="FooInterfaceIface">
       <field name="parent_iface">
         <type name="GObject.TypeInterface" c:type="GTypeInterface"/>
       </field>
+      <callback name="do_foo" c:type="do_foo">
+        <return-value>
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <parameter name="self">
+            <type name="Interface" c:type="FooInterface*"/>
+          </parameter>
+        </parameters>
+      </callback>
     </record>
     <class name="Object"
            c:type="FooObject"
            parent="GObject.Object"
            glib:type-name="FooObject"
            glib:get-type="foo_object_get_type">
+      <implements name="Interface"/>
       <constructor name="new" c:identifier="foo_object_new">
         <return-value>
           <type name="Object" c:type="FooObject*"/>
@@ -121,6 +142,7 @@
            parent="Object"
            glib:type-name="FooSubobject"
            glib:get-type="foo_subobject_get_type">
+      <implements name="Interface"/>
       <constructor name="new" c:identifier="foo_subobject_new">
         <return-value>
           <type name="Subobject" c:type="FooSubobject*"/>
