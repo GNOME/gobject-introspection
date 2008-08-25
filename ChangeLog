@@ -1,5 +1,10 @@
 2008-08-24  Colin Walters  <walters@verbum.org>
 
+	* giscanner/glibtransformer.py: Fail with better
+	error if we can't find library.
+
+2008-08-24  Colin Walters  <walters@verbum.org>
+
 	* tools/g-ir-scanner: Use subprocess instead of
 	commands, works on Windows and avoids the evil
 	shell on Unix.
