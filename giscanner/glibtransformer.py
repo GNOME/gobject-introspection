@@ -248,6 +248,11 @@ class GLibTransformer(object):
         return self._parse_method_common(func, False)
 
     def _parse_method_common(self, func, is_method):
+        # Skip _get_type functions, we processed them
+        # already
+        if func.symbol.endswith('_get_type'):
+            return None
+
         if not is_method:
             target_arg = func.retval
         else:
@@ -278,15 +283,24 @@ class GLibTransformer(object):
             prefix = func.symbol[:new_idx]
 
         klass = None
-        for key in self._uscore_type_names:
-            klass = None
-            if key.startswith(prefix):
-                klass = self._uscore_type_names.get(key)
-                if (klass is not None and
-                    isinstance(klass, (GLibObject, GLibBoxed,
-                                       GLibInterface))):
-                    break
 
+        def valid_matching_klass(tclass):
+            return (tclass is not None and
+                    isinstance(tclass, (GLibObject, GLibBoxed,
+                                        GLibInterface)) and
+                    not isinstance(tclass, GLibEnum))
+
+        # First look for an exact match;
+        klass = self._uscore_type_names.get(prefix)
+        # Now try searching for a prefix as a last resort
+        if klass is None or not valid_matching_klass(klass):
+            for key in self._uscore_type_names:
+                klass = None
+                if key.startswith(prefix):
+                    klass = self._uscore_type_names.get(key)
+                    if valid_matching_klass(klass):
+                        break
+        # Enums can't have ctors or methods
         if klass is None:
             return
 
@@ -646,9 +660,11 @@ class GLibTransformer(object):
         self._validating = True
         while True:
             initlen = len(nodes)
+
             def count_type(otype):
                 return len([x for x in nodes
                                if isinstance(x[1], otype)])
+
             objectcount = count_type(GLibObject)
             ifacecount = count_type(GLibInterface)
             enumcount = count_type(GLibEnum)

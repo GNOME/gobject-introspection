@@ -1,3 +1,10 @@
+2008-08-25  Colin Walters  <walters@verbum.org>
+
+	* giscanner/glibtransformer.py: More correctly pair
+	methods; if we have a symbol that starts with
+	e.g. hippo_canvas look for a matching HippoCanvas
+	class before accepting e.g. HippoCanvasImage.
+
 2008-08-24  Colin Walters  <walters@verbum.org>
 
 	* tools/g-ir-scanner: Filter out unknown options from
