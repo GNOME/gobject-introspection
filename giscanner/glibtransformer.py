@@ -50,6 +50,7 @@ class GLibTransformer(object):
         self._uscore_type_names = {}
         self._libraries = []
         self._failed_types = {}
+        self._private_internal_types = {}
         self._noclosure = noclosure
         self._validating = False
 
@@ -79,7 +80,11 @@ class GLibTransformer(object):
         # all types we now know about
         nodes = list(self._names.names.itervalues())
         for (ns, node) in nodes:
-            self._resolve_node(node)
+            try:
+                self._resolve_node(node)
+            except KeyError, e:
+                print "WARNING: DELETING node %s: %s" % (node.name, e)
+                self._remove_attribute(node.name)
             # associate GtkButtonClass with GtkButton
             if isinstance(node, Struct):
                 self._pair_class_struct(node)
@@ -466,8 +471,14 @@ class GLibTransformer(object):
             type_name, symbol)
         self._introspect_properties(node, type_id)
         self._introspect_signals(node, type_id)
-        self._add_attribute(node, replace=True)
-        self._register_internal_type(type_name, node)
+        # GtkFileChooserEmbed is an example of a private interface, we
+        # just filter them out
+        if symbol.startswith('_'):
+            print "NOTICE: Marking %s as internal type" % (type_name, )
+            self._private_internal_types[type_name] = node
+        else:
+            self._add_attribute(node, replace=True)
+            self._register_internal_type(type_name, node)
 
     def _introspect_boxed(self, type_id, symbol):
         type_name = cgobject.type_name(type_id)
@@ -604,10 +615,22 @@ class GLibTransformer(object):
         for field in node.fields:
             self._resolve_field(field)
 
-    def _force_resolve(self, item):
+    def _force_resolve(self, item, allow_unknown=False):
         if isinstance(item, Unresolved):
-            return self._transformer.gtypename_to_giname(item.target,
-                                                         self._names)
+            if item.target in self._private_internal_types:
+                return None
+            try:
+                return self._transformer.gtypename_to_giname(item.target,
+                                                             self._names)
+            except KeyError, e:
+                if allow_unknown:
+                    print "WARNING: Skipping unknown interface %s" % \
+                        (item.target, )
+                    return None
+                else:
+                    raise
+        if item in self._private_internal_types:
+            return None
         return item
 
     def _resolve_glib_interface(self, node):
@@ -618,7 +641,8 @@ class GLibTransformer(object):
 
     def _resolve_glib_object(self, node):
         node.parent = self._force_resolve(node.parent)
-        node.interfaces = [self._force_resolve(x) for x in node.interfaces]
+        node.interfaces = filter(None, [self._force_resolve(x, allow_unknown=True)
+                                        for x in node.interfaces])
         self._resolve_constructors(node.constructors)
         self._resolve_methods(node.methods)
         self._resolve_properties(node.properties)

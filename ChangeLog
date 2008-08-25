@@ -1,5 +1,10 @@
 2008-08-25  Colin Walters  <walters@verbum.org>
 
+	* giscanner/glibtransformer.py: Skip over
+	interfaces we don't know.
+
+2008-08-25  Colin Walters  <walters@verbum.org>
+
 	* girepository/girparser.c: Parse new implements
 	syntax, drop gapi one.
 	* tests/object.gir: Update.
