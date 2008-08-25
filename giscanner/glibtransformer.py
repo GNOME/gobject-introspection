@@ -66,6 +66,19 @@ class GLibTransformer(object):
             raise ValueError("Failed to find library: %r" % (libname, ))
         self._libraries.append(ctypes.cdll.LoadLibrary(found_libname))
 
+    def _print_statistics(self):
+        nodes = list(self._names.names.itervalues())
+        def count_type(otype):
+            return len([x for x in nodes
+                        if isinstance(x[1], otype)])
+        
+        objectcount = count_type(GLibObject)
+        ifacecount = count_type(GLibInterface)
+        enumcount = count_type(GLibEnum)
+        boxedcount = count_type(GLibBoxed)
+        print " %d nodes; %d objects, %d interfaces, %d enums, %d boxed" \
+            % (len(nodes), objectcount, ifacecount, enumcount, boxedcount)
+
     def parse(self):
         namespace = self._transformer.parse()
         self._namespace_name = namespace.name
@@ -91,6 +104,7 @@ class GLibTransformer(object):
         for (ns, alias) in self._names.aliases.itervalues():
             self._resolve_alias(alias)
 
+        self._print_statistics()
         # Third pass; ensure all types are known
         if not self._noclosure:
             self._validate(nodes)
@@ -98,7 +112,7 @@ class GLibTransformer(object):
         # Create a new namespace with what we found
         namespace = Namespace(namespace.name)
         namespace.nodes = map(lambda x: x[1], self._names.aliases.itervalues())
-        for (ns, x) in self._names.names.itervalues():
+        for (ns, x) in nodes:
             namespace.nodes.append(x)
         return namespace
 
@@ -697,17 +711,7 @@ class GLibTransformer(object):
         while True:
             initlen = len(nodes)
 
-            def count_type(otype):
-                return len([x for x in nodes
-                               if isinstance(x[1], otype)])
-
-            objectcount = count_type(GLibObject)
-            ifacecount = count_type(GLibInterface)
-            enumcount = count_type(GLibEnum)
-            boxedcount = count_type(GLibBoxed)
             print "Type resolution; pass=%d" % (i, )
-            print " %d nodes; %d objects, %d interfaces, %d enums, %d boxed" \
-                % (initlen, objectcount, ifacecount, enumcount, boxedcount)
             nodes = list(self._names.names.itervalues())
             for node in nodes:
                 try:
@@ -718,4 +722,5 @@ class GLibTransformer(object):
             if len(nodes) == initlen:
                 break
             i += 1
+            self._print_statistics()
         self._validating = False

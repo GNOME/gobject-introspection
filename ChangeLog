@@ -1,5 +1,10 @@
 2008-08-25  Colin Walters  <walters@verbum.org>
 
+	* giscanner/glibtransformer.py: Always print
+	statistics.
+
+2008-08-25  Colin Walters  <walters@verbum.org>
+
 	* giscanner/glibtransformer.py: Skip over
 	interfaces we don't know.
 
