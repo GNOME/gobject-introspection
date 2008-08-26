@@ -1,3 +1,9 @@
+2008-08-26  Colin Walters  <walters@verbum.org>
+
+	* girepository/gtypelib.c (_g_typelib_init): Handle
+	both .la and .so names; this works better in the
+	uninstalled library case.
+
 2008-08-26  Johan Dahlin  <johan@gnome.org>
 
 	* gir/Makefile.am:
