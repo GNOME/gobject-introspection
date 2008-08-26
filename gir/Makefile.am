@@ -18,8 +18,7 @@ GLib.gir: $(G_IR_SCANNER) $(G_IR_SCANNER_FILES)
 	    -I$(GLIB_LIBDIR)/glib-2.0/include \
 	    -DGETTEXT_PACKAGE=Dummy \
 	    -D__G_I18N_LIB_H__ \
-	    -D__G_LIBCONFIG_H__ \
-	    $(top_builddir)/giscanner/glibconfig-scanner.h \
+	    $(GLIB_LIBDIR)/glib-2.0/include/glibconfig.h \
 	    $(GLIB_INCLUDEDIR)/glib/*.h
 BUILT_SOURCES += GLib.gir
 

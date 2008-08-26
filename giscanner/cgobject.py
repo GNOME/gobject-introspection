@@ -127,7 +127,7 @@ class GSignalInfo(ctypes.Structure):
 _library_path = find_library('gobject-2.0')
 if not _library_path:
     raise ImportError("Could not find gobject-2.0 library")
-_gobj = ctypes.cdll.LoadLibrary(_library_path)
+_gobj = ctypes.CDLL(_library_path, ctypes.RTLD_GLOBAL)
 _gobj.g_type_init()
 
 

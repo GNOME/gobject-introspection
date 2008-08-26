@@ -2,14 +2,12 @@
 
 INCLUDES = -I$(top_srcdir)/girepository
 BUILT_SOURCES = 		\
-	glibconfig-scanner.h	\
 	scannerparser.c		\
 	scannerparser.h 	\
 	scannerlexer.c 		\
 	scannerlexer.h
 
 CLEANFILES = 		\
-	glibconfig-scanner.h	\
 	scannerparser.c		\
 	scannerparser.h 	\
 	scannerlexer.c 		\
@@ -67,17 +65,5 @@ CLEANFILES += _giscanner.so
 # Yuck, ugly but...
 _giscanner.so: _giscanner.la
 	ln -sf .libs/_giscanner.so .
-
-GLIBCONFIG=`pkg-config --variable=libdir glib-2.0`/glib-2.0/include/glibconfig.h
-glibconfig-scanner.h:
-	cat $(GLIBCONFIG) \
-	| sed s/__G_LIBCONFIG_H__/__G_LIBCONFIG_SCANNER_H__/g \
-	| sed s/define\ G_HAVE_ISO_VARARGS\ 1/undef\ G_HAVE_ISO_VARARGS/g \
-	| sed s/define\ G_HAVE_GNUC_VARARGS\ 1/undef\ G_HAVE_GNUC_VARARGS/g \
-	| sed s/G_GNUC_EXTENSION\ //g \
-        > $(top_builddir)/giscanner/$@
-
-gidir = $(includedir)/gobject-introspection-1.0/
-gi_HEADERS = glibconfig-scanner.h
 
 include $(top_srcdir)/gcov.mak

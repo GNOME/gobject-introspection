@@ -1,3 +1,13 @@
+2008-08-26  Johan Dahlin  <johan@gnome.org>
+
+	* gir/Makefile.am:
+	* giscanner/Makefile.am:
+	* giscanner/cgobject.py:
+	* giscanner/config.py.in:
+	* giscanner/sourcescanner.py:
+	Avoid undeffing __GNUC__, instead define
+	__attribute__ & friends. Remove glibconfig.h hack.
+
 2008-08-25  Colin Walters  <walters@verbum.org>
 
 	* giscanner/glibtransformer.py: Always print

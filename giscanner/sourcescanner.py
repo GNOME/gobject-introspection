@@ -23,7 +23,6 @@ import subprocess
 import tempfile
 
 from . import _giscanner
-from .config import INCLUDEDIR
 
 (CSYMBOL_TYPE_INVALID,
  CSYMBOL_TYPE_CONST,
@@ -224,29 +223,20 @@ class SourceScanner(object):
             return
 
         defines = ['__GI_SCANNER__']
-        undefs = ['__GNUC__']
-        cpp_args = ['cpp', '-C', '-I.']
-
-        # libintl.h has no types we care about and breaks
-        # cpp on some systems
-        defines.append('_LIBINTL_H')
-
-        # Do not parse the normal glibconfig.h, use the
-        # one we provide instead
-        defines.append('__G_LIBCONFIG_H__')
-
-        dirname = os.path.dirname(os.path.abspath(__file__))
-        if os.path.exists(
-            os.path.join(dirname, '..', 'gobject-introspection-1.0.pc.in')):
-            includedir = os.path.join(dirname, '..', 'giscanner')
-        else:
-            includedir = INCLUDEDIR
-        filenames.insert(0, os.path.join(includedir, 'glibconfig-scanner.h'))
+        undefs = []
+        cpp_args = ['gcc', '-E', '-C', '-I.', '-']
 
         cpp_args += self._cpp_options
         proc = subprocess.Popen(cpp_args,
                                 stdin=subprocess.PIPE,
                                 stdout=subprocess.PIPE)
+
+        proc.stdin.write('#define __attribute__(x)\n')
+        proc.stdin.write('#define __const\n')
+        proc.stdin.write('#define __extension__\n')
+        proc.stdin.write('#define __inline\n')
+        proc.stdin.write('#define __restrict\n')
+
         for define in defines:
             proc.stdin.write('#ifndef %s\n' % (define, ))
             proc.stdin.write('# define %s\n' % (define, ))
