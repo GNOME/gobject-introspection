@@ -31,6 +31,19 @@
         <type name="GObject.Class" c:type="GObjectClass"/>
       </field>
     </record>
+    <function name="do_foo" c:identifier="test_drawable_do_foo">
+      <return-value>
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="drawable">
+          <type name="TestDrawable" c:type="TestDrawable*"/>
+        </parameter>
+        <parameter name="x">
+          <type name="int" c:type="int"/>
+        </parameter>
+      </parameters>
+    </function>
     <record name="TestPixmapObjectClass" c:type="_TestPixmapObjectClass">
       <field name="parent_class">
         <type name="TestDrawableClass" c:type="TestDrawableClass"/>

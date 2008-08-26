@@ -68,10 +68,10 @@ class GLibTransformer(object):
 
     def _print_statistics(self):
         nodes = list(self._names.names.itervalues())
+
         def count_type(otype):
             return len([x for x in nodes
                         if isinstance(x[1], otype)])
-        
         objectcount = count_type(GLibObject)
         ifacecount = count_type(GLibInterface)
         enumcount = count_type(GLibEnum)
@@ -655,8 +655,9 @@ class GLibTransformer(object):
 
     def _resolve_glib_object(self, node):
         node.parent = self._force_resolve(node.parent)
-        node.interfaces = filter(None, [self._force_resolve(x, allow_unknown=True)
-                                        for x in node.interfaces])
+        node.interfaces = filter(None,
+            [self._force_resolve(x, allow_unknown=True)
+                                    for x in node.interfaces])
         self._resolve_constructors(node.constructors)
         self._resolve_methods(node.methods)
         self._resolve_properties(node.properties)

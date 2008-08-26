@@ -159,6 +159,55 @@
         <type name="int" c:type="gint"/>
       </return-value>
     </function>
+    <function name="new" c:identifier="foo_object_new">
+      <return-value>
+        <type name="Object" c:type="FooObject*"/>
+      </return-value>
+    </function>
+    <function name="external_type" c:identifier="foo_object_external_type">
+      <return-value>
+        <type name="utility.Object" c:type="UtilityObject*"/>
+      </return-value>
+      <parameters>
+        <parameter name="object">
+          <type name="Object" c:type="FooObject*"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="various" c:identifier="foo_object_various">
+      <return-value>
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="object">
+          <type name="Object" c:type="FooObject*"/>
+        </parameter>
+        <parameter name="data">
+          <type name="any" c:type="void*"/>
+        </parameter>
+        <parameter name="some_type">
+          <type name="GObject.Type" c:type="GType"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="with_tdef" c:identifier="foo_object_with_tdef">
+      <return-value>
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="object">
+          <type name="Object" c:type="FooObject*"/>
+        </parameter>
+        <parameter name="blah">
+          <type name="List" c:type="FooList*"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="new" c:identifier="foo_subobject_new">
+      <return-value>
+        <type name="Subobject" c:type="FooSubobject*"/>
+      </return-value>
+    </function>
     <enumeration name="EnumType"
                  c:type="FooEnumType"
                  glib:type-name="FooEnumType"
@@ -238,6 +287,21 @@
         </parameters>
       </method>
     </glib:boxed>
+    <function name="new" c:identifier="foo_boxed_new">
+      <return-value>
+        <type name="Boxed" c:type="FooBoxed*"/>
+      </return-value>
+    </function>
+    <function name="method" c:identifier="foo_boxed_method">
+      <return-value>
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="boxed">
+          <type name="Boxed" c:type="FooBoxed*"/>
+        </parameter>
+      </parameters>
+    </function>
     <callback name="Callback" c:type="FooCallback">
       <return-value>
         <type name="boolean" c:type="gboolean"/>
