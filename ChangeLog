@@ -1,5 +1,10 @@
 2008-08-26  Colin Walters  <walters@verbum.org>
 
+	* girepository/gtypelib.c (_g_typelib_init): Also
+	use G_MODULE_SUFFIX instead of hardcoding .so.
+
+2008-08-26  Colin Walters  <walters@verbum.org>
+
 	* girepository/gtypelib.c (_g_typelib_init): Free
 	string in the right place.
 
