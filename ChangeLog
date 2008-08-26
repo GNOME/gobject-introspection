@@ -7,6 +7,8 @@
 	* giscanner/sourcescanner.py:
 	Avoid undeffing __GNUC__, instead define
 	__attribute__ & friends. Remove glibconfig.h hack.
+	This makes gobject-introspection work better on
+	MacOS X, Thanks to Richard Hult for kind help.
 
 2008-08-25  Colin Walters  <walters@verbum.org>
 
