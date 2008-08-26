@@ -1,5 +1,14 @@
 2008-08-26  Colin Walters  <walters@verbum.org>
 
+	* girepository/girepository.c: Search
+	$DATADIR/girepository instead of
+	$DATADIR/gitypelibs; this naming makes
+	it clearer that e.g. jgir can install
+	.jars there.
+	* gir/Makefile.am: Install there.
+
+2008-08-26  Colin Walters  <walters@verbum.org>
+
 	* girepository/gtypelib.c (_g_typelib_init): Also
 	use G_MODULE_SUFFIX instead of hardcoding .so.
 

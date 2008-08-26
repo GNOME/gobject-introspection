@@ -66,7 +66,7 @@ dist_gir_DATA = $(BUILT_SOURCES)
 %.typelib: %.gir $(top_builddir)/tools/g-ir-compiler
 	$(DEBUG) $(top_builddir)/tools/g-ir-compiler $< -o $@
 
-typelibsdir = $(datadir)/gitypelibs
+typelibsdir = $(datadir)/girepository
 typelibs_DATA = GLib.typelib GObject.typelib Gio.typelib
 CLEANFILES += $(typelibs_DATA)
 
