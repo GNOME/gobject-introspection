@@ -44,9 +44,10 @@ static int yywrap (void);
 static void parse_comment (GISourceScanner *scanner);
 static void process_directive (GISourceScanner *scanner);
 static int check_identifier (GISourceScanner *scanner, const char *);
+static int parse_attribute (void);
 %}
 
-intsuffix				([uU][lL]?)|([lL][uU]?)
+intsuffix				([uU][lL]?[lL]?)|([lL][lL]?[uU]?)
 fracconst				([0-9]*\.[0-9]+)|([0-9]+\.)
 exppart					[eE][-+]?[0-9]+
 floatsuffix				[fFlL]
@@ -117,6 +118,8 @@ stringtext				([^\"])|(\\.)
 ","					{ return ','; }
 "->"					{ return ARROW; }
 
+"__attribute__" 			{ if (!parse_attribute()) REJECT; }
+
 [a-zA-Z_][a-zA-Z_0-9]*			{ if (scanner->macro_scan) return IDENTIFIER; else REJECT; }
 
 "auto"					{ return AUTO; }
@@ -137,6 +140,7 @@ stringtext				([^\"])|(\\.)
 "goto"					{ return GOTO; }
 "if"					{ return IF; }
 "inline"				{ return INLINE; }
+"__inline__"				{ return INLINE; }
 "int"					{ return INT; }
 "long"					{ return LONG; }
 "register"				{ return REGISTER; }
@@ -405,3 +409,49 @@ process_directive (GISourceScanner *scanner)
 	g_string_free (filename_builder, TRUE);
 }
 
+static int
+parse_attribute (void)
+{
+	int c;
+	int nest;
+
+	while ((c = input ()) != EOF && isspace (c))
+		;
+	if (c != '(')
+		return FALSE;
+	while ((c = input ()) != EOF && isspace (c))
+		;
+	if (c != '(')
+		return FALSE;
+
+	nest = 0;
+	while ((c = input ()) != EOF && (nest > 0 || c != ')')) {
+		if (c == '(')
+			nest++;
+		else if (c == ')')
+			nest--;
+		else if (c == '"') {
+			while ((c = input ()) != EOF && c != '"') {
+				if (c == '\\')
+					c = input ();
+			}
+		} else if (c == '\'') {
+			c = input ();
+			if (c == '\\')
+				c = input ();
+			else if (c == '\'')
+				return FALSE;
+			c = input ();
+			if (c != '\'')
+				return FALSE;
+		} else if (c == '\n')
+			lineno++;
+	}
+
+	while ((c = input ()) != EOF && isspace (c))
+		;
+	if (c != ')')
+		return FALSE;
+
+	return TRUE;
+}

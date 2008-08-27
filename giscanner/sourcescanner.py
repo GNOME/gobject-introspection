@@ -231,7 +231,6 @@ class SourceScanner(object):
                                 stdin=subprocess.PIPE,
                                 stdout=subprocess.PIPE)
 
-        proc.stdin.write('#define __attribute__(x)\n')
         proc.stdin.write('#define __const\n')
         proc.stdin.write('#define __extension__\n')
         proc.stdin.write('#define __inline\n')
@@ -260,4 +259,5 @@ class SourceScanner(object):
         fp.seek(0, 0)
         assert proc, 'Proc was none'
         self._scanner.parse_file(fp.fileno())
+        fp.close()
         os.unlink(tmp)

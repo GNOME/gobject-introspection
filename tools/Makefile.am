@@ -10,15 +10,15 @@ bin_SCRIPTS = g-ir-scanner
 g_ir_compiler_SOURCES = compiler.c	
 g_ir_compiler_CFLAGS = $(GIREPO_CFLAGS)
 g_ir_compiler_LDADD = \
-	$(GIREPO_LIBS) \
+	$(top_builddir)/girepository/libgirepository-parser.la \
 	$(top_builddir)/girepository/libgirepository.la \
-	$(top_builddir)/girepository/libgirepository-parser.la
+	$(GIREPO_LIBS)
 
 g_ir_generate_SOURCES = generate.c
 g_ir_generate_CFLAGS = $(GIREPO_CFLAGS)
 g_ir_generate_LDADD = \
-	$(GIREPO_LIBS) \
-	$(top_builddir)/girepository/libgirepository.la
+	$(top_builddir)/girepository/libgirepository.la \
+	$(GIREPO_LIBS)
 
 GCOVSOURCES =					\
 	$(g_ir_compiler_SOURCES)		\

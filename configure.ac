@@ -9,6 +9,20 @@ AC_CONFIG_HEADER([config.h])
 
 AC_CONFIG_MACRO_DIR([m4])
 
+# Check for Win32
+AC_CANONICAL_HOST
+AC_MSG_CHECKING([for Win32])
+case "$host" in
+*-*-mingw*)
+	os_win32=yes
+	;;
+*)
+	os_win32=no
+	;;
+esac
+AC_MSG_RESULT([$os_win32])
+AM_CONDITIONAL(OS_WIN32, [test "$os_win32" = "yes"])
+
 # Checks for programs.
 AC_PROG_CC
 AM_PROG_CC_C_O
@@ -95,6 +109,13 @@ AC_CHECK_FUNCS([memchr strchr strspn strstr strtol strtoull])
 AC_MSG_CHECKING([whether Python support is requested])
 
 AM_PATH_PYTHON([2.5])
+case "$host" in
+*-*-mingw*)
+	# Change backslashes to forward slashes in pyexecdir to avoid
+	# quoting issues
+	pyexecdir=`echo $pyexecdir | tr '\\\\' '/'`
+	;;
+esac
 AM_CHECK_PYTHON_HEADERS
 
 AC_CONFIG_FILES([

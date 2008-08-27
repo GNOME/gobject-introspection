@@ -1,3 +1,68 @@
+2008-08-27  Tor Lillqvist  <tml@novell.com>
+
+	Make g-ir-scanner work on Windows. Still problems with the typelib
+	code. Changes okayed by jdahlin.
+
+	* configure.ac: Check for Windows, set Automake conditional
+	OS_WIN32. Change backslashes to forward slashes in pyexecdir to
+	avoid shell quoting issues
+	
+	* girepository/Makefile.am: Use -no-undefined so that libtool
+	agrees to build a shared library on Windows.
+
+	* girepository/girparser.c (backtrace_stderr): No backtrace() on
+	Windows. Empty implementation on Windows so far.
+
+	* girepository/gtypelib.c (g_typelib_check_sanity): Give more
+	informative error message for the assertion failures. Tell also
+	what the expected size of the struct is. Check all sizes first and
+	fail afterwards if at least one size was different from expected.
+
+	* tools/Makefile.am: Reorder libraries into proper logical
+	dependency order.
+
+	* tools/generate.c: Don't include <dlfcn.h>, not used.
+
+	* giscanner/Makefile.am: On Windows, link with the Python library,
+	and install the module DLL as _giscanner.pyd. Remove the
+	unnecessary import library and libtool library that libtool has
+	installed.
+
+	* giscanner/scannerlexer.l: Recognize the gcc __attribute__ syntax
+	and just skip it. Recognize also two "l" suffixes for long long
+	constants. Recognize also __inline__.
+
+	* giscanner/grealpath.h (g_realpath): Implement on Windows, using
+	GetFullPathName(). As such, GetFullPathName() does more than the
+	UNIX realpath(). It also changes relative paths into absolute
+	paths. But for our purposes that shouldn't matter.
+
+	* giscanner/giscannermodule.c (pygi_source_scanner_parse_file): On
+	Windows the file descriptor passed to us is from Python. Python
+	Python2.5 uses the msvcr71.dll C library, while mingw-built code
+	uses msvcrt.dll. On Windows, file descriptors are specific to
+	which C library is used. So we must find out what underlying OS
+	handle corresponds to the file descriptor Python passes us, and
+	then make that into a file descriptor valid for the C library this
+	code uses.
+
+	* giscanner/sourcescanner.py (_parse): Don't need to bypass
+	__attribute__ as the lexer now handles it. The definition as empty
+	was ineffective for mingw anyway, as mingw's _mingw.h undefines
+	__attribute__. Close the temp file before unlinking it.
+
+	* giscanner/cgobject.py: Use correct library name for the gobject
+	DLL on Windows.
+
+	* gir/Makefile.am: Must pass the full basename of the DLLs on
+	Windows to g-ir-scanner. It's a bit ugly that we have to "know"
+	that the names of the GLib DLLs are like libglib-2.0-0.dll, but in
+	reality they won't change, until there is a GLib 3, and then also
+	the Unix code here needs changing.
+
+	Must pass CPPFLAGS to g-ir-scanner when building GLib.gir so that
+	libintl.h is found.
+
 2008-08-26  Colin Walters  <walters@verbum.org>
 
 	* girepository/girepository.c: Search

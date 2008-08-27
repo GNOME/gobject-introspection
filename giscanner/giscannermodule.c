@@ -25,6 +25,14 @@
 #include "sourcescanner.h"
 #include <Python.h>
 
+#ifdef _WIN32
+#include <fcntl.h>
+#include <io.h>
+#define WIN32_LEAN_AND_MEAN
+#define STRICT
+#include <windows.h>
+#endif
+
 #define NEW_CLASS(ctype, name, cname)	      \
 static const PyMethodDef _Py##cname##_methods[];    \
 PyTypeObject Py##cname##_Type = {             \
@@ -392,6 +400,47 @@ pygi_source_scanner_parse_file (PyGISourceScanner *self,
   
   if (!PyArg_ParseTuple (args, "i:SourceScanner.parse_file", &fd))
     return NULL;
+
+#ifdef _WIN32
+  /* The file descriptor passed to us is from the C library Python
+   * uses. That is msvcr71.dll at least for Python 2.5. This code, at
+   * least if compiled with mingw, uses msvcrt.dll, so we cannot use
+   * the file descriptor directly. So perform appropriate magic.
+   */
+  {
+    HMODULE msvcr71;
+    int (*p__get_osfhandle) (int);
+    HANDLE handle;
+
+    msvcr71 = GetModuleHandle ("msvcr71.dll");
+    if (!msvcr71)
+      {
+	g_print ("No msvcr71.dll loaded.\n");
+	return NULL;
+      }
+
+    p__get_osfhandle = GetProcAddress (msvcr71, "_get_osfhandle");
+    if (!p__get_osfhandle)
+      {
+	g_print ("No _get_osfhandle found in msvcr71.dll.\n");
+	return NULL;
+      }
+
+    handle = p__get_osfhandle (fd);
+    if (!p__get_osfhandle)
+      {
+	g_print ("Could not get OS handle from msvcr71 fd.\n");
+	return NULL;
+      }
+    
+    fd = _open_osfhandle (handle, _O_RDONLY);
+    if (fd == -1)
+      {
+	g_print ("Could not open C fd from OS handle.\n");
+	return NULL;
+      }
+  }
+#endif
 
   fp = fdopen (fd, "r");
   if (!fp)
