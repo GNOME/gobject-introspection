@@ -1,3 +1,8 @@
+2008-08-27  Johan Dahlin  <johan@gnome.org>
+
+	* giscanner/Makefile.am:
+	Only send in -no-undefined on Win32 as it breaks on MacOS X.
+
 2008-08-27  Tor Lillqvist  <tml@novell.com>
 
 	Make g-ir-scanner work on Windows. Still problems with the typelib

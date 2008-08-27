@@ -57,12 +57,12 @@ _giscanner_la_CFLAGS = \
 _giscanner_la_LIBADD = $(GOBJECT_LIBS) libgiscanner.la
 
 _giscanner_la_LDFLAGS = \
-	-module -avoid-version -export-symbols-regex init_giscanner -no-undefined
+	-module -avoid-version -export-symbols-regex init_giscanner
 
 if OS_WIN32
 # Yuck. Probably there is a way to get this from Python, but I don't
 # know how. Use -Wl to avoid libtool crack.
-_giscanner_la_LDFLAGS += -Wl,$(pyexecdir)/../../libs/libpython25.a
+_giscanner_la_LDFLAGS += -Wl,$(pyexecdir)/../../libs/libpython25.a -no-undefined
 endif
 
 _giscanner_la_SOURCES = giscannermodule.c
