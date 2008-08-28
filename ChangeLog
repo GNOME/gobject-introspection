@@ -1,5 +1,7 @@
 2008-08-28  Tor Lillqvist  <tml@novell.com>
 
+	Make check now runs successfully on Windows.
+
 	* tools/compiler.c (write_out_typelib): Use binary mode for output
 	file on Windows.
 
