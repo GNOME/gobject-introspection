@@ -85,8 +85,8 @@ CLEANFILES = $(BUILT_SOURCES)
 girdir=$(datadir)/gir
 dist_gir_DATA = $(BUILT_SOURCES)
 
-%.typelib: %.gir $(top_builddir)/tools/g-ir-compiler$(EXEEXT)
-	$(DEBUG) $(top_builddir)/tools/g-ir-compiler$(EXEEXT) $< -o $@
+%.typelib: %.gir $(top_builddir)/tools/g-ir-compiler$(EXEEXT) Makefile
+	$(DEBUG) $(top_builddir)/tools/g-ir-compiler$(EXEEXT) --includedir=. $(G_IR_COMPILER_OPTS) $< -o $@
 
 typelibsdir = $(datadir)/girepository
 typelibs_DATA = GLib.typelib GObject.typelib Gio.typelib
