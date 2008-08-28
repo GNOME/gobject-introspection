@@ -74,8 +74,8 @@ post-check:
 %.gir.check: %.gir
 	@diff -u -U 10 $(srcdir)/$*-expected.gir $*.gir && echo "* $*.gir"
 
-%.typelib: %.gir
-	$(top_builddir)/tools/g-ir-compiler $< -o $@
+%.typelib: %.gir $(top_builddir)/tools/g-ir-compiler Makefile
+	$(top_builddir)/tools/g-ir-compiler --includedir=. --includedir=$(top_builddir)/gir $< -o $@
 	$(SCANNER) --typelib-xml $< > $<.tmp && mv $<.tmp $<.txml
 
 check-local: pre-check
