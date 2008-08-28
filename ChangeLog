@@ -1,3 +1,10 @@
+2008-08-28  Tor Lillqvist  <tml@novell.com>
+
+	* girepository/gtypelib.h: Change type of bitfield fields from
+	guint to the most suitable smaller type. This makes the struct
+	sizes match the ones on Linux that the sanity check expects when
+	using gcc -mms-bitfields on Windows.
+
 2008-08-28  Johan Dahlin  <johan@gnome.org>
 
 	* Makefile.am:
