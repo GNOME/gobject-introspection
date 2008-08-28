@@ -1,3 +1,14 @@
+2008-08-28  Colin Walters  <walters@verbum.org>
+
+	* gir/Makefile.am: Use --includedir
+	* girepository/girparser.c: Recursively parse
+	includes to pull in aliases and expand them.
+    	We need this to	avoid putting unknown names in
+    	the typelibs.
+	* tools/compiler.c: Add --includedir option.
+	* giscanner/ast.py: Map size/ssize to types
+	too.
+
 2008-08-28  Tor Lillqvist  <tml@novell.com>
 
 	Make check now runs successfully on Windows.
