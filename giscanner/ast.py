@@ -101,6 +101,8 @@ type_names['time_t'] = TYPE_LONG
 # Suppress some GLib names
 type_names['uchar'] = TYPE_UINT8
 type_names['ushort'] = TYPE_UINT16
+type_names['size'] = TYPE_SIZET
+type_names['ssize'] = TYPE_SSIZET
 type_names['pointer'] = TYPE_ANY
 type_names['constpointer'] = TYPE_ANY
 
