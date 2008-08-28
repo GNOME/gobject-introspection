@@ -1,5 +1,14 @@
 2008-08-28  Colin Walters  <walters@verbum.org>
 
+	* tests/scanner/Makefile.am: Pass the right
+    	--includedir args.  Add a Makefile dep.
+	* tools/compiler.c: Pass includedirs down.
+	* girepository/girparser.c: Actually put
+    	includedirs in context, pass down.  Fix
+    	locate_gir.
+
+2008-08-28  Colin Walters  <walters@verbum.org>
+
 	* gir/Makefile.am: Use --includedir
 	* girepository/girparser.c: Recursively parse
 	includes to pull in aliases and expand them.
