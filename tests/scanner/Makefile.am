@@ -25,8 +25,10 @@ SCANNER_LIBS = \
 TYPELIBS = $(GIRS:.gir=.typelib)
 TXMLS = $(GIRS:.gir=.gir.txml)
 CHECKGIRS = $(GIRS:.gir=.gir.check)
+EXPECTEDGIRS = $(GIRS:.gir=-expected.gir)
 CLEANFILES = $(TYPELIBS) $(TXMLS) $(GIRS)
 BUILT_SOURCES = $(TYPELIBS) $(TXMLS) $(GIRS)
+EXTRA_DIST = $(EXPECTEDGIRS)
 
 %.gir: lib%.la %.c %.h utility.gir $(SCANNER) $(SCANNER_LIBS) Makefile
 	$(CHECK_DEBUG) $(SCANNER) -v \
@@ -53,7 +55,7 @@ GIRS += utility.gir
 
 pre-check:
 	@if test "$(top_builddir)" != "$(top_srcdir)"; then \
-	   cp $(top_srcdir)/giscanner/*.py $(top_builddir)/giscanner; \
+	   cp -f $(top_srcdir)/giscanner/*.py $(top_builddir)/giscanner; \
 	fi
 	@echo "Running scanner checks..."
 

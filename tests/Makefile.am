@@ -3,6 +3,7 @@ SUBDIRS = . invoke scanner
 EXTRA_DIST = \
 	array.gir	\
 	boxed.gir	\
+	constant.gir	\
 	enum.gir	\
 	errors.gir	\
 	function.gir	\
@@ -25,9 +26,9 @@ GIRTESTS = 			\
 
 %.gir.test: %.gir
 	@echo Testing $<:
-	$(DEBUG) $(top_builddir)/tools/g-ir-compiler $< > $<.1; \
-	$(DEBUG) $(top_builddir)/tools/g-ir-generate $<.1 > $<.2; \
-	diff -u $< $<.2; rm $<.1 $<.2
+	$(DEBUG) $(top_builddir)/tools/g-ir-compiler $< > $*.1; \
+	$(DEBUG) $(top_builddir)/tools/g-ir-generate $*.1 > $*.2; \
+	diff -u $< $*.2; rm $*.1 $*.2
 
 check-local: $(GIRTESTS)
 	@echo Running PEP8 on Python sources

@@ -88,3 +88,8 @@ _giscanner.so: _giscanner.la
 	ln -sf .libs/_giscanner.so .
 
 include $(top_srcdir)/gcov.mak
+
+check-local:
+	@if test "$(top_builddir)" != "$(top_srcdir)"; then \
+	   cp $(top_srcdir)/giscanner/*.py $(top_builddir)/giscanner; \
+	fi

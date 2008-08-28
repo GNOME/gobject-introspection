@@ -15,7 +15,7 @@ GLIB_LIBRARY=glib-2.0
 endif
 
 GLib.gir: $(G_IR_SCANNER) $(G_IR_SCANNER_FILES)
-	PYTHONPATH=$(top_srcdir):$$PYTHONPATH $(G_IR_SCANNER) \
+	PYTHONPATH=$(top_builddir):$$PYTHONPATH $(G_IR_SCANNER) \
 	    -v --namespace GLib \
 	    --noclosure \
 	    --output $@ \
@@ -41,7 +41,7 @@ GOBJECT_LIBRARY=gobject-2.0
 endif
 
 GObject.gir: GLib.gir $(G_IR_SCANNER) $(G_IR_SCANNER_FILES)
-	PYTHONPATH=$(top_srcdir):$$PYTHONPATH $(G_IR_SCANNER) \
+	PYTHONPATH=$(top_builddir):$$PYTHONPATH $(G_IR_SCANNER) \
 	    -v --namespace GObject \
 	    --noclosure \
 	    --output $@ \
@@ -66,7 +66,7 @@ GIO_LIBRARY=gio-2.0
 endif
 
 Gio.gir: GObject.gir $(G_IR_SCANNER) $(G_IR_SCANNER_FILES)
-	PYTHONPATH=$(top_srcdir):$$PYTHONPATH $(G_IR_SCANNER) \
+	PYTHONPATH=$(top_builddir):$$PYTHONPATH $(G_IR_SCANNER) \
 	    -v --namespace Gio \
 	    --noclosure \
 	    --output $@ \

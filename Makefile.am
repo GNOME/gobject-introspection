@@ -26,5 +26,9 @@ man_MANS = docs/g-ir-scanner.1
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = gobject-introspection-1.0.pc
 
-EXTRA_DIST = $(pkgconfig_DATA)
+EXTRA_DIST = 			\
+	$(pkgconfig_DATA)	\
+	$(man_MANS)		\
+	misc/pep8.py		\
+	misc/pyflakes.py
 

@@ -1,3 +1,13 @@
+2008-08-28  Johan Dahlin  <johan@gnome.org>
+
+	* Makefile.am:
+	* configure.ac:
+	* gir/Makefile.am:
+	* giscanner/Makefile.am:
+	* tests/Makefile.am:
+	* tests/scanner/Makefile.am:
+	Make distcheck pass.
+
 2008-08-27  Johan Dahlin  <johan@gnome.org>
 
 	* giscanner/Makefile.am:
