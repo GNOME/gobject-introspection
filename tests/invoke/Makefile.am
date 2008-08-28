@@ -13,6 +13,10 @@ testfns_la_CFLAGS = $(GIREPO_CFLAGS) -I$(top_srcdir)/girepository
 testfns_la_LDFLAGS = -module -avoid-version
 testfns_la_LIBADD = $(GIREPO_LIBS) $(top_builddir)/girepository/libgirepository.la
 
+if OS_WIN32
+testfns_la_LDFLAGS += -no-undefined
+endif
+
 BUILT_SOURCES = testfns-metadata.c
 CLEANFILES = testfns-metadata.c 
 

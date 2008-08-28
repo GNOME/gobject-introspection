@@ -1,5 +1,4 @@
 #include <stdlib.h>
-#include <dlfcn.h>
 #include <string.h>
 
 #include <glib.h>
@@ -131,7 +130,7 @@ main (int argc, char *argv[])
   
 
   /* test GList*/
-  g_print ("Test 6");
+  g_print ("Test 6\n");
   info = g_irepository_find_by_name (rep, "test", "test6");
   g_assert (g_base_info_get_type (info) == GI_INFO_TYPE_FUNCTION);
   function = (GIFunctionInfo *)info;
@@ -147,7 +146,7 @@ main (int argc, char *argv[])
 	       g_base_info_get_name (info),
 	       error->message);
 
-    g_print("returned %d", retval.v_int);
+    g_print("returned %d\n", retval.v_int);
     g_assert (retval.v_int == 2);
     g_list_free (list);
   }
@@ -156,7 +155,7 @@ main (int argc, char *argv[])
   g_clear_error (&error);
 
   /* test GList more, transfer ownership*/
-  g_print ("Test 7");
+  g_print ("Test 7\n");
   info = g_irepository_find_by_name (rep, "test", "test7");
   g_assert (g_base_info_get_type (info) == GI_INFO_TYPE_FUNCTION);
   function = (GIFunctionInfo *)info;
@@ -172,7 +171,7 @@ main (int argc, char *argv[])
 	       g_base_info_get_name (info),
 	       error->message);
 
-    g_print("returned %s", retval.v_pointer);
+    g_print("returned %s\n", retval.v_pointer);
     g_assert (strcmp(retval.v_pointer, "Hey there...")==0);
     g_list_foreach (list, (GFunc) g_free, NULL);
     g_list_free (list);
@@ -208,34 +207,34 @@ main (int argc, char *argv[])
   g_assert (g_base_info_get_type (info) == GI_INFO_TYPE_FUNCTION);
   function = (GIFunctionInfo *)info;
 
-  if (!g_function_info_invoke (function, NULL, 0, NULL, 0, NULL, &error))
-    g_print ("Invokation of %s failed: %s\n",
-	     g_base_info_get_name (info),
-	     error->message);
+  g_assert (!g_function_info_invoke (function, NULL, 0, NULL, 0, NULL, &error) &&
+	    error != NULL &&
+	    error->domain == G_INVOKE_ERROR &&
+	    error->code == G_INVOKE_ERROR_ARGUMENT_MISMATCH);
 
   g_clear_error (&error);
 
   /* too few out arguments */
-  if (!g_function_info_invoke (function, in_args, 1, NULL, 0, NULL, &error))
-    g_print ("Invokation of %s failed: %s\n",
-	     g_base_info_get_name (info),
-	     error->message);
+  g_assert (!g_function_info_invoke (function, in_args, 1, NULL, 0, NULL, &error) &&
+	    error != NULL &&
+	    error->domain == G_INVOKE_ERROR &&
+	    error->code == G_INVOKE_ERROR_ARGUMENT_MISMATCH);
 
   g_clear_error (&error);
 
   /* too many in arguments */
-  if (!g_function_info_invoke (function, in_args, 2, out_args, 1, NULL, &error))
-    g_print ("Invokation of %s failed: %s\n",
-	     g_base_info_get_name (info),
-	     error->message);
+  g_assert (!g_function_info_invoke (function, in_args, 2, out_args, 1, NULL, &error) &&
+	    error != NULL &&
+	    error->domain == G_INVOKE_ERROR &&
+	    error->code == G_INVOKE_ERROR_ARGUMENT_MISMATCH);
 
   g_clear_error (&error);
 
   /* too many out arguments */
-  if (!g_function_info_invoke (function, in_args, 1, out_args, 2, NULL, &error))
-    g_print ("Invokation of %s failed: %s\n",
-	     g_base_info_get_name (info),
-	     error->message);
+  g_assert (!g_function_info_invoke (function, in_args, 1, out_args, 2, NULL, &error) &&
+	    error != NULL &&
+	    error->domain == G_INVOKE_ERROR &&
+	    error->code == G_INVOKE_ERROR_ARGUMENT_MISMATCH);
 
   g_clear_error (&error);
 

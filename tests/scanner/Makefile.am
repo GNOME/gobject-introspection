@@ -17,6 +17,10 @@ libdrawable_la_SOURCES = $(srcdir)/drawable.c $(srcdir)/drawable.h
 libfoo_la_SOURCES = $(srcdir)/foo.c $(srcdir)/foo.h
 libutility_la_SOURCES = $(srcdir)/utility.c $(srcdir)/utility.h
 
+if OS_WIN32
+AM_LDFLAGS += -no-undefined
+endif
+
 GIRS =
 SCANNER = $(top_srcdir)/tools/g-ir-scanner
 SCANNER_LIBS = \

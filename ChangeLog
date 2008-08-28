@@ -1,5 +1,19 @@
 2008-08-28  Tor Lillqvist  <tml@novell.com>
 
+	* tools/compiler.c (write_out_typelib): Use binary mode for output
+	file on Windows.
+
+	* girepository/girnode.c: Don't print NULL strings.
+
+	* tests/invoke/Makefile.am
+	* tests/scanner/Makefile.am: Use -no-undefined on Windows to
+	convince libtool to build shared libraries.
+
+	* tests/invoke/invoke.c: Don't needlessly include <dlfcn.h>. Use
+	g_assert() instead of printing out expected errors.
+
+2008-08-28  Tor Lillqvist  <tml@novell.com>
+
 	* girepository/gtypelib.h: Change type of bitfield fields from
 	guint to the most suitable smaller type. This makes the struct
 	sizes match the ones on Linux that the sanity check expects when
