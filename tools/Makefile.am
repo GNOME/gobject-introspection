@@ -6,6 +6,7 @@ INCLUDES = \
 
 bin_PROGRAMS = g-ir-compiler g-ir-generate
 bin_SCRIPTS = g-ir-scanner
+EXTRA_DIST = g-ir-scanner
 
 g_ir_compiler_SOURCES = compiler.c	
 g_ir_compiler_CFLAGS = $(GIREPO_CFLAGS)
