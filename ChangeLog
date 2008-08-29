@@ -1,5 +1,10 @@
 2008-08-29  Colin Walters  <walters@verbum.org>
 
+	* girepository/girparser.c: Don't search aliases
+	for basic types.
+
+2008-08-29  Colin Walters  <walters@verbum.org>
+
 	* girepository/girparser.c: Rewrite type parsing
 	to handle both GLib parsing case as well as correctly
 	handling GLib.List and friends.  Don't try to treat
