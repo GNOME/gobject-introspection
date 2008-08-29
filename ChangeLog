@@ -1,5 +1,12 @@
 2008-08-29  Colin Walters  <walters@verbum.org>
 
+	* girepository/girparser.c: Rewrite type parsing
+	to handle both GLib parsing case as well as correctly
+	handling GLib.List and friends.  Don't try to treat
+	e.g. ListStore as a List.
+
+2008-08-29  Colin Walters  <walters@verbum.org>
+
 	* girepository/gtypelib.c: Add more context
     	during validate.
 
