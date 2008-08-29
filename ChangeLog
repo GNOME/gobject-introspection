@@ -1,3 +1,11 @@
+2008-08-29  Johan Dahlin  <johan@gnome.org>
+
+	* giscanner/Makefile.am:
+	* giscanner/gidlparser.py:
+	* giscanner/gidlwriter.py:
+	* tools/g-ir-scanner:
+	Remove gidl support.
+
 2008-08-28  Colin Walters  <walters@verbum.org>
 
 	* tests/scanner/Makefile.am: Pass the right

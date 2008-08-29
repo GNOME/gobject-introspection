@@ -125,8 +125,6 @@ def main(args):
 
     if options.format == 'gir':
         from giscanner.girwriter import GIRWriter as Writer
-    elif options.format == 'gidl':
-        from giscanner.gidlwriter import GIDLWriter as Writer
     else:
         _error("Unknown format: %s" % (options.format, ))
 
@@ -135,7 +133,7 @@ def main(args):
     primary_library = options.libraries[0]
 
     for package in options.packages:
-        output = subprocess.Popen(['pkg-config', '--cflags', package], 
+        output = subprocess.Popen(['pkg-config', '--cflags', package],
                                   stdout=subprocess.PIPE).communicate()[0]
         # Some pkg-config files on Windows have options we don't understand,
         # so we explicitly filter to only the ones we need.
