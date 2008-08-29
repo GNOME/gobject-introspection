@@ -1,5 +1,10 @@
 2008-08-29  Colin Walters  <walters@verbum.org>
 
+	* girepository/gtypelib.c: Add more context
+    	during validate.
+
+2008-08-29  Colin Walters  <walters@verbum.org>
+
 	* giscanner/glibtransformer.py: Add some informative
     	logging messages in corner cases.  Be sure we use
     	the most recent node set instead of a cache
