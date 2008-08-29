@@ -71,7 +71,7 @@
       </return-value>
       <parameters>
         <parameter name="list" direction="in">
-          <type name="GList<gint>*" c:type="GList*"/>
+          <type name="GLib.List<gint>*" c:type="GList*"/>
         </parameter>
       </parameters>
     </function>
@@ -83,7 +83,7 @@
       </return-value>
       <parameters>
         <parameter name="list" direction="in">
-          <type name="GList<utf8>*" c:type="GList*"/>
+          <type name="GLib.List<utf8>*" c:type="GList*"/>
         </parameter>
       </parameters>
     </function>
