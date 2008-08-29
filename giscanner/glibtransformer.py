@@ -31,6 +31,13 @@ from .glibast import (GLibBoxed, GLibEnum, GLibEnumMember, GLibFlags,
 from .utils import extract_libtool, to_underscores
 
 
+SYMBOL_BLACKLIST = [
+    # These ones break GError conventions
+    'g_simple_async_result_new_from_error',
+    'gtk_print_operation_get_error',
+]
+
+
 class Unresolved(object):
 
     def __init__(self, target):
@@ -207,6 +214,10 @@ class GLibTransformer(object):
         self._add_attribute(enum)
 
     def _parse_function(self, func):
+        if func.symbol in SYMBOL_BLACKLIST:
+            print "WARNING: Skipping blacklisted function: %r" \
+                % (func.symbol, )
+            return
         if self._parse_get_type_function(func):
             return
 
