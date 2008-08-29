@@ -3,37 +3,78 @@
 g-ir-scanner \- extracting C metadata from sources and headers
 .SH SYNOPSIS
 .B g-ir-scanner
-[OPTION...] FILE...
+[OPTION...] FILES...
 .SH DESCRIPTION
-FIXME
+g-ir-scanner is a tool which generates GIR XML files by parsing headers
+and introspecting GObject based libraries.
+It is usually invoked during the normal build step for a project and
+the information is saved to disk and later installed so language bindings 
+and other applications can use it.
+Header files and source files are passed in arguments on the command line.
+The suffix determines if it should be treated as source (.c) or header (.h),
+currently only C based libraries are supported by the scanner.
 .SH OPTIONS
 .TP
 .B \---help
 Show help options
 .TP
-.B \---format
-FIXME
+.B \---format=FORMAT
+This parameters decides which the resulting format will be used.
+The default value is gir.
 .TP
 .B \---include=NAME
-FIXME
+Parses another metadata file. The format is determined by looking
+at the file suffix. If a library depends on another the corresponding
+metadata file should be included so references to external types are
+correctly specified.
 .TP
 .B \-i, ---library=LIBRARY
-FIXME
+Specifies a library that will be introspected. This means that the 
+*_get_type() functions in it will be called for GObject data types.
+The name of the library should not contain the leading lib prefix nor
+the ending shared library suffix. Eg: 
+.TP
+.B \-L, ---library-path=PATH
+Include this directory when searching for a library.
+This option can be specified multiple times to include more than one
+directory to look for libraries in.
 .TP
 .B \-n, ---namspace=NAME
-FIXME
+The namespace name. This name should be capitalized, eg the first letter
+should be upper case. Examples: Gtk, Clutter, WebKit.
 .TP
 .B \, ---strip-prefix=PREFIX
-FIXME
+If this option is specified a prefix will be stripped from all functions.
+If not specified, the lower case version of the namespace will be used.
+Eg, a strip prefix of 
+.B g_
+and a namespace set to
+.B GLib
+will export the function 
+.B g_type_name
+as 
+.B GLib.type_name.
 .TP
 .B \, ---output=FILENAME
-FIXME
+Name of the file to output. Normally namespace + format extension.
+Eg, GLib.gir.
 .TP
 .B \, ---pkg=PACKAGE
-FIXME
+List of pkg-config packages to get compiler and linker flags from.
+This option can be specified multiple times to include flags from 
+several pkg-config packages.
 .TP
 .B \---verbose                       
+Be verbose, include some debugging information.
+.TP
+.B \---noclosure                       
+Do not delete unknown types from the resulting format.
+.TP
+.B \---typelib-xml                       
+Convert the resulting xml to only output the types relevant
+to the typelib compiler.
 FIXME
+.TP
 .SH BUGS
 Report bugs at http://bugzilla.gnome.org/ in the glib product and
 introspection component.

@@ -1,5 +1,7 @@
 2008-08-29  Johan Dahlin  <johan@gnome.org>
 
+	* docs/g-ir-scanner.1: Document
+
 	* giscanner/Makefile.am:
 	* giscanner/gidlparser.py:
 	* giscanner/gidlwriter.py:
