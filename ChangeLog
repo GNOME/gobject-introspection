@@ -1,5 +1,13 @@
 2008-08-29  Johan Dahlin  <johan@gnome.org>
 
+	* Makefile.am:
+	* docs/g-ir-compiler.1:
+	* docs/g-ir-generate.1:
+	* docs/g-ir-scanner.1:
+	Add man pages for the generator and compiler.
+
+2008-08-29  Johan Dahlin  <johan@gnome.org>
+
 	* docs/g-ir-scanner.1: Document
 
 	* giscanner/Makefile.am:
