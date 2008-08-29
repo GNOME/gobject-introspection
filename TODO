@@ -1,6 +1,6 @@
-XML format
+GIR XML format
 ----------
-- Document the format
+- Document the format better
 - Add attributes to connect signals to their default handlers
   and wrappers to their vfuncs
 - Add a way to specify default values
@@ -38,16 +38,12 @@ Scanner
 ------
 - Property.readable/writable, GLibProperty.blurb/nick
 - Constants
-- Annotations in external files
-
-General
--------
-- More tests
-- Check how the format scales to something the size of GTK+
+- Annotations in external files which is not source code
 
 C API
 -------
-- type SYMBOL is kind of inconvenient; would be nicer to go straight to boxed, etc.
+- type SYMBOL is kind of inconvenient; would be nicer to go straight to 
+  boxed, etc.
 - no way to construct a boxed type
 - no way to access struct fields (should have a way to go field -> GArgument)
 - types namespaced GI, functions namespaced g_

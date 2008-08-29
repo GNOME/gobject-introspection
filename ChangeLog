@@ -1,5 +1,13 @@
 2008-08-29  Johan Dahlin  <johan@gnome.org>
 
+	* README:
+	* TODO:
+	* examples/gdk-pixbuf.gidl:
+	* libffi.pc.in:
+	Update and remove old cruft.
+
+2008-08-29  Johan Dahlin  <johan@gnome.org>
+
 	* Makefile.am:
 	* docs/g-ir-compiler.1:
 	* docs/g-ir-generate.1:

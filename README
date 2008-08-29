@@ -1,25 +1,33 @@
-This is a very first prototype of an introspection framework for GObject. 
+GObject Introspection
 
-The metadata format is described in metadata-format.txt, the XML IDL format 
-follows the DTD in gidl.dtd. Look at the files in tests/ for testcases, 
-and at examples/ for bigger examples. 
+GIR & Typelib formats
+=====================
+FIXME
 
-The code in src/ currently produces four things:
-- g-idl-compile, a metadata compiler. It converts one or more IDL files 
-  into one or more metadata blobs. It can either emit the raw metadata 
-  blob (--raw) or C code (--code). 
-- libirepository, the repository API. 
-- g-idl-generate, an IDL generator, using the repository API. It generates
-  IDL files from binary metadata which can be in a shared object, or a raw
-  metadata blob (--raw). 
-- a function to invoke functions, given the function info object. The 
-  implementation is based on libffi (a recent snapshot of libffi can
-  be found at http://spindazzle.org/libffi-green.tar.gz). After the 
-  autoconfiscation, configure expects to find a ffi.pc file. The 
-  ffi.pc.in file in this directory may be helpful in construction 
-  such a file.
+Tools
+=====
 
-There are a number of IDL test files in test/, and a script to do
-roundtrip tests (IDL -> binary -> IDL).
- 
+Three tools are shipped with GObject Introspection:
+- g-ir-compile, a typelib compiler. It converts one or more GIR files 
+  into one or more typelib blobs. It can either emit the raw typelib 
+  blob or C code (--code). 
+- g-ir-generate, an GIR generator, using the repository API. It generates
+  GIR files from binary typelib which can be in a shared object, or a raw
+  typelib blob. 
+- g-ir-scanner, a tool which generates GIR XML files by parsing headers
+  and introspecting GObject based libraries.
+
+API library
+===========
+There's also a C based library called libgirepository which provides
+an API to access to the typelib metadata. It also contains an API to 
+invoke functions, given the function info object. The implementation is 
+based on libffi (3.0 or higher of libffi required, can be found at 
+http://sourceware.org/libffi).
+
+There are a number of GIR test files in tests/, and a script to do
+roundtrip tests (GIR -> typelib -> GIR).
+
+Helping out
+=========== 
 The introspection framework needs a lot more work, see TODO. 
