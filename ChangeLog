@@ -1,5 +1,10 @@
 2008-08-29  Colin Walters  <walters@verbum.org>
 
+	* giscanner/glibtransformer.py: Blacklist a few
+    	functions that use GError oddly
+
+2008-08-29  Colin Walters  <walters@verbum.org>
+
 	* girepository/gtypelib.c: Don't crash if no
 	shlib is embedded
 
