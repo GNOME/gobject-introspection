@@ -1,5 +1,11 @@
 2008-08-29  Johan Dahlin  <johan@gnome.org>
 
+	* giscanner/config.py.in:
+	Use datarootdir instead of datadir to avoid
+	an autoconf warning.
+
+2008-08-29  Johan Dahlin  <johan@gnome.org>
+
 	* README:
 	* TODO:
 	* examples/gdk-pixbuf.gidl:

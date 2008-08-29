@@ -18,6 +18,6 @@
 # 02110-1301, USA.
 #
 
-DATADIR = "@datadir@"
+DATADIR = "@datarootdir@"
 DATADIR = DATADIR.replace(
     "${prefix}", "@prefix@")
