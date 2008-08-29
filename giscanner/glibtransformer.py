@@ -112,8 +112,9 @@ class GLibTransformer(object):
         # Create a new namespace with what we found
         namespace = Namespace(namespace.name)
         namespace.nodes = map(lambda x: x[1], self._names.aliases.itervalues())
-        for (ns, x) in nodes:
+        for (ns, x) in self._names.names.itervalues():
             namespace.nodes.append(x)
+        print "Scan complete."
         return namespace
 
     # Private
@@ -298,6 +299,8 @@ class GLibTransformer(object):
                 return None
             # Constructors don't return basic types
             if target_arg.type.name in type_names:
+                print "NOTE: Rejecting constructor returning basic: %r" \
+                    % (func.symbol, )
                 return None
             prefix = func.symbol[:new_idx]
 
@@ -321,11 +324,15 @@ class GLibTransformer(object):
                         break
         # Enums can't have ctors or methods
         if klass is None:
+            print "NOTE: No valid matching class for likely "+\
+                "method or constructor: %r" % (func.symbol, )
             return
 
         if not is_method:
             # Interfaces can't have constructors, punt to global scope
             if isinstance(klass, GLibInterface):
+                print "NOTE: Rejecting method or constructor for"+\
+                    " interface type: %r" % (func.symbol, )
                 return None
             # TODO - check that the return type is a subclass of the
             # class from the prefix
