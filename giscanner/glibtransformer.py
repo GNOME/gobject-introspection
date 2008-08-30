@@ -217,8 +217,6 @@ class GLibTransformer(object):
 
     def _parse_function(self, func):
         if func.symbol in SYMBOL_BLACKLIST:
-            print "WARNING: Skipping blacklisted function: %r" \
-                % (func.symbol, )
             return
         if self._parse_get_type_function(func):
             return
@@ -228,6 +226,9 @@ class GLibTransformer(object):
     def _parse_get_type_function(self, func):
         symbol = func.symbol
         if not symbol.endswith('_get_type'):
+            return False
+        if self._namespace_name == 'GLib':
+            # No GObjects in GLib
             return False
         # GType *_get_type(void)
         # This is a bit fishy, why do we need all these aliases?
@@ -284,6 +285,9 @@ class GLibTransformer(object):
         # Skip _get_type functions, we processed them
         # already
         if func.symbol.endswith('_get_type'):
+            return None
+        if self._namespace_name == 'GLib':
+            # No GObjects in GLib
             return None
 
         if not is_method:
