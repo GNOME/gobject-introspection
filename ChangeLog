@@ -1,3 +1,7 @@
+2008-08-30  Colin Walters  <walters@verbum.org>
+
+	* giscanner/glibtransformer.py: Reduce warning noise.
+
 2008-08-29  Colin Walters  <walters@verbum.org>
 
 	* girepository/ginfo.c: Add some assertions regarding
