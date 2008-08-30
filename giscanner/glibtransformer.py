@@ -34,6 +34,8 @@ from .utils import extract_libtool, to_underscores
 SYMBOL_BLACKLIST = [
     # These ones break GError conventions
     'g_simple_async_result_new_from_error',
+    'g_simple_async_result_set_from_error',
+    'g_simple_async_result_propagate_error',
     'gtk_print_operation_get_error',
 ]
 
