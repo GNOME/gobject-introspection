@@ -1,5 +1,12 @@
 2008-08-29  Colin Walters  <walters@verbum.org>
 
+	* girepository/ginfo.c: Add some assertions regarding
+    	refcounts, just to be sure.
+	* giscanner/glibtransformer.py: Blacklist a few more
+    	odd Gio methods.
+
+2008-08-29  Colin Walters  <walters@verbum.org>
+
 	* giscanner/glibtransformer.py: Blacklist a few
     	functions that use GError oddly
 
