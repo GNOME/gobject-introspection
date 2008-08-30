@@ -1,7 +1,10 @@
 GObject binary typelib for introspection
 -----------------------------------------
 
-Version 0.7
+Version 0.8
+
+Changes since 0.7:
+- Add dependencies
 
 Changes since 0.6:
 - rename metadata to typelib, to follow xpcom terminology
@@ -105,6 +108,8 @@ struct Header
   guint32   directory;
   guint32   annotations;
 
+  guint32   dependencies;
+
   guint32   size;
   guint32   namespace;
   
@@ -151,6 +156,13 @@ directory:
 
 annotations: 
           Offset of the list of annotations in the typelib.
+
+dependencies:
+          Offset of a single string, which is the list of
+          dependencies, separated by the '|' character.  The
+          dependencies are required in order to avoid having programs
+          consuming a typelib check for an "Unresolved" type return
+          from every API call.
 
 size:     The size of the typelib.
 

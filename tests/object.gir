@@ -3,6 +3,7 @@
             xmlns="http://www.gtk.org/introspection/core/1.0"
             xmlns:c="http://www.gtk.org/introspection/c/1.0"
             xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
+  <include name="GObject"/>
   <namespace name="Foo">
     <interface name="IFace1" glib:type-name="IFace1" glib:get-type="iface1_get_type">
     </interface>
@@ -57,7 +58,7 @@
     </constant>
     <interface name="Iface1" glib:type-name="Iface1" glib:get-type="iface1_get_type">
     </interface>
-    <class name="Object2" parent="GObject.GObject" glib:type-name="Object2" glib:get-type="object2_get_type">
+    <class name="Object2" glib:type-name="Object2" glib:get-type="object2_get_type">
     </class>
   </namespace>
 </repository>

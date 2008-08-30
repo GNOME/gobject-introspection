@@ -7,7 +7,6 @@ EXTRA_DIST = \
 	enum.gir	\
 	errors.gir	\
 	function.gir	\
-	gobject.gir	\
 	interface.gir	\
 	object.gir	\
 	struct.gir	\
@@ -20,15 +19,15 @@ GIRTESTS = 			\
 	boxed.gir.test  	\
 	constant.gir.test	\
 	enum.gir.test  		\
-	gobject.gir.test	\
 	object.gir.test		\
 	struct.gir.test
 
-%.gir.test: %.gir
+%.gir.test: %.gir Makefile
 	@echo Testing $<:
-	$(DEBUG) $(top_builddir)/tools/g-ir-compiler $< > $*.1; \
-	$(DEBUG) $(top_builddir)/tools/g-ir-generate $*.1 > $*.2; \
-	diff -u $< $*.2; rm $*.1 $*.2
+	$(DEBUG) $(top_builddir)/tools/g-ir-compiler --includedir=$(top_builddir)/gir $< > $*.1; \
+	$(DEBUG) $(top_builddir)/tools/g-ir-generate --includedir=$(top_builddir)/gir $*.1 > $*.2; \
+	diff -u $*.1 $*.2; rm $*.1 $*.2
+
 
 check-local: $(GIRTESTS)
 	@echo Running PEP8 on Python sources

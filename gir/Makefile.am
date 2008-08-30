@@ -14,8 +14,8 @@ else
 GLIB_LIBRARY=glib-2.0
 endif
 
-GLib.gir: $(G_IR_SCANNER) $(G_IR_SCANNER_FILES)
-	PYTHONPATH=$(top_builddir):$$PYTHONPATH $(G_IR_SCANNER) \
+GLib.gir: $(G_IR_SCANNER) $(G_IR_SCANNER_FILES) Makefile
+	PYTHONPATH=$(top_srcdir):$$PYTHONPATH $(G_IR_SCANNER) \
 	    -v --namespace GLib \
 	    --noclosure \
 	    --output $@ \
@@ -40,8 +40,8 @@ else
 GOBJECT_LIBRARY=gobject-2.0
 endif
 
-GObject.gir: GLib.gir $(G_IR_SCANNER) $(G_IR_SCANNER_FILES)
-	PYTHONPATH=$(top_builddir):$$PYTHONPATH $(G_IR_SCANNER) \
+GObject.gir: GLib.gir $(G_IR_SCANNER) $(G_IR_SCANNER_FILES) Makefile
+	PYTHONPATH=$(top_srcdir):$$PYTHONPATH $(G_IR_SCANNER) \
 	    -v --namespace GObject \
 	    --noclosure \
 	    --output $@ \
@@ -65,8 +65,8 @@ else
 GIO_LIBRARY=gio-2.0
 endif
 
-Gio.gir: GObject.gir $(G_IR_SCANNER) $(G_IR_SCANNER_FILES)
-	PYTHONPATH=$(top_builddir):$$PYTHONPATH $(G_IR_SCANNER) \
+Gio.gir: GObject.gir $(G_IR_SCANNER) $(G_IR_SCANNER_FILES) Makefile
+	PYTHONPATH=$(top_srcdir):$$PYTHONPATH $(G_IR_SCANNER) \
 	    -v --namespace Gio \
 	    --noclosure \
 	    --output $@ \
