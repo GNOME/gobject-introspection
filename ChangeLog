@@ -1,5 +1,34 @@
 2008-08-30  Colin Walters  <walters@verbum.org>
 
+	* docs/typelib-format.txt: Add a guint32
+	for dependencies.
+	* gir/Makefile.am: Dep on Makefile
+	* girepository/ginfo.c:
+	* girepository/girepository.c: Clean up
+    	default typelib handling; remove global
+    	default_typelib variable.  Ensure we handle
+    	NULL repository in more places.
+    	Support dependency resolution.
+	Support lazy loading.
+	* girepository/girepository.h: Remove
+	g_irepository_unregister; we don't support
+	unloading typelibs since really they're
+	process-global.  Update for lazy loading
+	API.
+	* girepository/girmodule.c: Use g_new0.
+	Add dependencies to GirModule.
+	* girepository/girparser.c: Parse dependencies.
+	* girepository/gtypelib.c: Add 4 bytes for
+	dependencies.
+	* tests/Makefile.am: Kill off gobject.gir,
+    	it conflicts with the real one.
+	* tests/object.gir: Dep on GObject.
+	* tools/generate.c: Take --includedir
+    	argument to say which directories to search
+    	for typelibs.  Print out dependencies.
+
+2008-08-30  Colin Walters  <walters@verbum.org>
+
 	* giscanner/glibtransformer.py: Reduce warning noise.
 
 2008-08-29  Colin Walters  <walters@verbum.org>
