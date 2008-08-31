@@ -1,3 +1,8 @@
+2008-08-31  Johan Dahlin  <johan@gnome.org>
+
+	* configure.ac:
+	Bump version to 0.5.0
+
 2008-08-31  Colin Walters  <walters@verbum.org>
 	
 	* giscanner/glibtransformer.py: Follow aliases to ensure
