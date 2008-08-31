@@ -40,7 +40,7 @@ release-tag:
 	ROOT=`echo $$TRUNK|cut -d/ -f-5`; \
 	SVNVERSION=`echo $(VERSION)|sed s/\\\./_/g`;\
 	  echo "* Tagging $(VERSION)"; \
-          echo svn cp -m "Tag $(VERSION)" \
+          svn cp -m "Tag $(VERSION)" \
               $$TRUNK \
               $$ROOT/tags/GOBJECT_INTROSPECTION_$$SVNVERSION
 
