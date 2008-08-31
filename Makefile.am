@@ -35,3 +35,12 @@ EXTRA_DIST = 			\
 	misc/pep8.py		\
 	misc/pyflakes.py
 
+release-tag:
+	@TRUNK=`svn info --xml|egrep ^"<url>"|cut -d\> -f2|cut -d\< -f1`; \
+	ROOT=`echo $$TRUNK|cut -d/ -f-5`; \
+	SVNVERSION=`echo $(VERSION)|sed s/\\\./_/g`;\
+	  echo "* Tagging $(VERSION)"; \
+          echo svn cp -m "Tag $(VERSION)" \
+              $$TRUNK \
+              $$ROOT/tags/GOBJECT_INTROSPECTION_$$SVNVERSION
+
