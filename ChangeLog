@@ -1,3 +1,10 @@
+2008-08-31  Colin Walters  <walters@verbum.org>
+	
+	* giscanner/glibtransformer.py: Follow aliases to ensure
+	we don't get a constructor returning a basic type.
+	* giscanner/transformer.py: Add function to follow aliases.
+	* tests/ Update.
+
 2008-08-31  Johan Dahlin  <johan@gnome.org>
 
 	* giscanner/scannerlexer.l:
