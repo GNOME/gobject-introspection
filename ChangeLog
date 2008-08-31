@@ -1,5 +1,14 @@
 2008-08-31  Johan Dahlin  <johan@gnome.org>
 
+	* giscanner/scannerlexer.l:
+	* giscanner/scannerparser.y:
+	* giscanner/sourcescanner.h:
+	* giscanner/sourcescanner.py:
+	Parse GCC extensions in the parser instead of just undeffing them
+	in the pre-processor.
+
+2008-08-31  Johan Dahlin  <johan@gnome.org>
+
 	* giscanner/glibtransformer.py:
 	Clean up a huge if. Do not add methods or constructors
 	to enums/flags.

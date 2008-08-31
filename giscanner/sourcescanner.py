@@ -56,6 +56,7 @@ TYPE_QUALIFIER_NONE = 0
 TYPE_QUALIFIER_CONST = 1 << 1
 TYPE_QUALIFIER_RESTRICT = 1 << 2
 TYPE_QUALIFIER_VOLATILE = 1 << 3
+TYPE_QUALIFIER_EXTENSION = 1 << 4
 
 FUNCTION_NONE = 0
 FUNCTION_INLINE = 1 << 1
@@ -230,11 +231,6 @@ class SourceScanner(object):
         proc = subprocess.Popen(cpp_args,
                                 stdin=subprocess.PIPE,
                                 stdout=subprocess.PIPE)
-
-        proc.stdin.write('#define __const\n')
-        proc.stdin.write('#define __extension__\n')
-        proc.stdin.write('#define __inline\n')
-        proc.stdin.write('#define __restrict\n')
 
         for define in defines:
             proc.stdin.write('#ifndef %s\n' % (define, ))

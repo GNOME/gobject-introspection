@@ -44,7 +44,7 @@ static int yywrap (void);
 static void parse_comment (GISourceScanner *scanner);
 static void process_directive (GISourceScanner *scanner);
 static int check_identifier (GISourceScanner *scanner, const char *);
-static int parse_attribute (void);
+static int parse_ignored_macro (void);
 %}
 
 intsuffix				([uU][lL]?[lL]?)|([lL][lL]?[uU]?)
@@ -118,7 +118,12 @@ stringtext				([^\"])|(\\.)
 ","					{ return ','; }
 "->"					{ return ARROW; }
 
-"__attribute__" 			{ if (!parse_attribute()) REJECT; }
+"__attribute__" 		        { if (!parse_ignored_macro()) REJECT; }
+"__const"                               { return CONST; }
+"__extension__"                         { return EXTENSION; }
+"__inline"				{ return INLINE; }
+"__nonnull" 			        { if (!parse_ignored_macro()) REJECT; }
+"__restrict"				{ return RESTRICT; }
 
 [a-zA-Z_][a-zA-Z_0-9]*			{ if (scanner->macro_scan) return IDENTIFIER; else REJECT; }
 
@@ -409,8 +414,12 @@ process_directive (GISourceScanner *scanner)
 	g_string_free (filename_builder, TRUE);
 }
 
+/*
+ * This parses a macro which is ignored, such as
+ * __attribute__(x)
+ */
 static int
-parse_attribute (void)
+parse_ignored_macro (void)
 {
 	int c;
 	int nest;
