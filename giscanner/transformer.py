@@ -490,3 +490,13 @@ class Transformer(object):
             return self.resolve_param_type_full(ptype, self._names)
         except KeyError, e:
             return ptype
+
+    def follow_aliases(self, type_name, names):
+        while True:
+            resolved = names.aliases.get(type_name)
+            if resolved:
+                (ns, alias) = resolved
+                type_name = alias.target
+            else:
+                break
+        return type_name

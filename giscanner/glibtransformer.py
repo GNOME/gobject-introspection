@@ -319,7 +319,9 @@ class GLibTransformer(object):
             if new_idx < 0:
                 return None
             # Constructors don't return basic types
-            if target_arg.type.name in type_names:
+            derefed = self._transformer.follow_aliases(target_arg.type.name,
+                                                       self._names)
+            if derefed in type_names:
                 print "NOTE: Rejecting constructor returning basic: %r" \
                     % (func.symbol, )
                 return None

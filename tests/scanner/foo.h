@@ -58,6 +58,9 @@ typedef GSList FooList;
 
 void                  foo_object_with_tdef         (FooObject *object, FooList *blah);
 
+typedef gpointer FooObjectCookie;
+
+FooObjectCookie       foo_object_new_cookie        (FooObject *object, const char *target);
 
 struct _FooSubobject
 {

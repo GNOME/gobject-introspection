@@ -9,6 +9,7 @@
   <namespace name="foo" shared-library="foo">
     <alias name="List" target="GLib.SList" c:type="FooList"/>
     <alias name="XEvent" target="none" c:type="FooXEvent"/>
+    <alias name="ObjectCookie" target="any" c:type="FooObjectCookie"/>
     <interface name="Interface"
                c:type="FooInterface"
                glib:type-name="FooInterface"
@@ -86,6 +87,19 @@
           </parameter>
           <parameter name="blah">
             <type name="List" c:type="FooList*"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="new_cookie" c:identifier="foo_object_new_cookie">
+        <return-value>
+          <type name="ObjectCookie" c:type="FooObjectCookie"/>
+        </return-value>
+        <parameters>
+          <parameter name="object">
+            <type name="Object" c:type="FooObject*"/>
+          </parameter>
+          <parameter name="target">
+            <type name="string" c:type="char*"/>
           </parameter>
         </parameters>
       </method>
