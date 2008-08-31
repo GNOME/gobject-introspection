@@ -1,3 +1,9 @@
+2008-08-31  Colin Walters  <walters@verbum.org>
+
+	* giscanner/glibtransformer.py: Look for libtool
+	library in current directory
+	* tests/scanner - Update.
+
 2008-08-30  Colin Walters  <walters@verbum.org>
 
 	* docs/typelib-format.txt: Add a guint32
