@@ -38,7 +38,7 @@ EXTRA_DIST = $(EXPECTEDGIRS)
 	$(CHECK_DEBUG) $(SCANNER) -v \
 	--include=$(top_srcdir)/gir/GObject.gir \
 	--include=$(top_builddir)/tests/scanner/utility.gir \
-	--library=$< \
+	--library=$* \
 	--namespace=$* \
 	--pkg gobject-2.0 \
 	$(srcdir)/$*.h $(srcdir)/$*.c \
@@ -50,7 +50,7 @@ GIRS += foo.gir
 utility.gir: libutility.la utility.h $(SCANNER) $(SCANNER_LIBS) Makefile
 	$(CHECK_DEBUG) $(SCANNER) -v \
 	--include=$(top_srcdir)/gir/GObject.gir \
-	--library=$< \
+	--library=utility \
 	--namespace=utility \
 	--pkg gobject-2.0 \
 	$(libutility_la_SOURCES) \

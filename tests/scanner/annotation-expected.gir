@@ -6,7 +6,7 @@
   <include name="GLib"/>
   <include name="GObject"/>
   <include name="utility"/>
-  <namespace name="annotation" shared-library="libannotation.la">
+  <namespace name="annotation" shared-library="annotation">
     <record name="Object" c:type="AnnotationObject">
       <field name="parent_instance">
         <type name="GObject.Object" c:type="GObject"/>

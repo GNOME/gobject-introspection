@@ -6,7 +6,7 @@
   <include name="GLib"/>
   <include name="GObject"/>
   <include name="utility"/>
-  <namespace name="foo" shared-library="libfoo.la">
+  <namespace name="foo" shared-library="foo">
     <alias name="List" target="GLib.SList" c:type="FooList"/>
     <alias name="XEvent" target="none" c:type="FooXEvent"/>
     <interface name="Interface"

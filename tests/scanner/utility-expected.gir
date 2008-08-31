@@ -5,7 +5,7 @@
             xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
   <include name="GLib"/>
   <include name="GObject"/>
-  <namespace name="utility" shared-library="libutility.la">
+  <namespace name="utility" shared-library="utility">
     <class name="Object"
            c:type="UtilityObject"
            parent="GObject.Object"
