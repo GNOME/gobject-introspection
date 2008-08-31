@@ -1,5 +1,13 @@
 2008-08-31  Johan Dahlin  <johan@gnome.org>
 
+	* giscanner/glibtransformer.py:
+	Clean up a huge if. Do not add methods or constructors
+	to enums/flags.
+	* giscanner/utils.py:
+	second might be longer than first, check that.
+
+2008-08-31  Johan Dahlin  <johan@gnome.org>
+
 	* gir/Makefile.am:
 	Add a GModule.gir
 

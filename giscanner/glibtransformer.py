@@ -328,10 +328,15 @@ class GLibTransformer(object):
         klass = None
 
         def valid_matching_klass(tclass):
-            return (tclass is not None and
-                    isinstance(tclass, (GLibObject, GLibBoxed,
-                                        GLibInterface)) and
-                    not isinstance(tclass, GLibEnum))
+            if tclass is None:
+                return False
+            elif isinstance(klass, (GLibEnum, GLibFlags)):
+                return False
+            elif not isinstance(tclass, (GLibObject, GLibBoxed,
+                                         GLibInterface)):
+                return False
+            else:
+                return True
 
         # First look for an exact match;
         klass = self._uscore_type_names.get(prefix)
@@ -348,6 +353,8 @@ class GLibTransformer(object):
             print "NOTE: No valid matching class for likely "+\
                 "method or constructor: %r" % (func.symbol, )
             return
+        if isinstance(klass, (GLibEnum, GLibFlags)):
+            return None
 
         if not is_method:
             # Interfaces can't have constructors, punt to global scope

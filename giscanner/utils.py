@@ -51,6 +51,6 @@ def extract_libtool(libname):
 def strip_common_prefix(first, second):
     second = second.replace('_', '')
     for i, c in enumerate(first.upper()):
-        if c != second[i]:
+        if c != second[i] or c > len(second):
             break
     return second[i:]
