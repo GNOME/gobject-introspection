@@ -359,7 +359,7 @@ class GLibTransformer(object):
         if not is_method:
             # Interfaces can't have constructors, punt to global scope
             if isinstance(klass, GLibInterface):
-                print "NOTE: Rejecting method or constructor for"+\
+                print "NOTE: Rejecting constructor for"+\
                     " interface type: %r" % (func.symbol, )
                 return None
             # TODO - check that the return type is a subclass of the
