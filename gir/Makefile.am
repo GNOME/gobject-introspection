@@ -55,6 +55,30 @@ GObject.gir: GLib.gir $(G_IR_SCANNER) $(G_IR_SCANNER_FILES) Makefile
 	    $(GLIB_INCLUDEDIR)/gobject/*.h
 BUILT_SOURCES += GObject.gir
 
+# gmodule
+GMODULE_INCLUDEDIR=`pkg-config --variable=includedir gmodule-2.0`/glib-2.0
+GMODULE_LIBDIR=`pkg-config --variable=libdir gmodule-2.0`
+
+if OS_WIN32
+GMODULE_LIBRARY=libgmodule-2.0-0
+else
+GMODULE_LIBRARY=gmodule-2.0
+endif
+
+GModule.gir: GLib.gir $(G_IR_SCANNER) $(G_IR_SCANNER_FILES)
+	PYTHONPATH=$(top_builddir):$$PYTHONPATH $(G_IR_SCANNER) \
+	    -v --namespace GModule \
+	    --noclosure \
+	    --output $@ \
+	    --strip-prefix=g \
+            --include=$(top_builddir)/gir/GLib.gir \
+	    --library=$(GMODULE_LIBRARY) \
+	    -I$(GMODULE_INCLUDEDIR) \
+	    -I$(GMODULE_LIBDIR)/glib-2.0/include \
+            --pkg glib-2.0 \
+	    $(GLIB_INCLUDEDIR)/gmodule.h
+BUILT_SOURCES += GModule.gir
+
 # gio
 GIO_INCLUDEDIR=`pkg-config --variable=includedir gio-2.0`/glib-2.0
 GIO_LIBDIR=`pkg-config --variable=libdir gio-2.0`
@@ -89,5 +113,5 @@ dist_gir_DATA = $(BUILT_SOURCES)
 	$(DEBUG) $(top_builddir)/tools/g-ir-compiler$(EXEEXT) --includedir=. $(G_IR_COMPILER_OPTS) $< -o $@
 
 typelibsdir = $(datadir)/girepository
-typelibs_DATA = GLib.typelib GObject.typelib Gio.typelib
+typelibs_DATA = GLib.typelib GModule.typelib GObject.typelib Gio.typelib
 CLEANFILES += $(typelibs_DATA)
