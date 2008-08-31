@@ -322,8 +322,8 @@ class GLibTransformer(object):
             derefed = self._transformer.follow_aliases(target_arg.type.name,
                                                        self._names)
             if derefed in type_names:
-                print "NOTE: Rejecting constructor returning basic: %r" \
-                    % (func.symbol, )
+                #print "NOTE: Rejecting constructor returning basic: %r" \
+                #    % (func.symbol, )
                 return None
             prefix = func.symbol[:new_idx]
 
@@ -350,19 +350,19 @@ class GLibTransformer(object):
                     klass = self._uscore_type_names.get(key)
                     if valid_matching_klass(klass):
                         break
-        # Enums can't have ctors or methods
         if klass is None:
-            print "NOTE: No valid matching class for likely "+\
-                "method or constructor: %r" % (func.symbol, )
-            return
+            #print "NOTE: No valid matching class for likely "+\
+            #    "method or constructor: %r" % (func.symbol, )
+            return None
+        # Enums can't have ctors or methods
         if isinstance(klass, (GLibEnum, GLibFlags)):
             return None
 
         if not is_method:
             # Interfaces can't have constructors, punt to global scope
             if isinstance(klass, GLibInterface):
-                print "NOTE: Rejecting constructor for"+\
-                    " interface type: %r" % (func.symbol, )
+                #print "NOTE: Rejecting constructor for"+\
+                #    " interface type: %r" % (func.symbol, )
                 return None
             # TODO - check that the return type is a subclass of the
             # class from the prefix
