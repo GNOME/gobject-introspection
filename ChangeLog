@@ -1,3 +1,8 @@
+=== 0.5.0 ===
+2008-09-01  Johan Dahlin  <johan@gnome.org>
+
+	* NEWS: Update
+
 2008-08-31  Colin Walters  <walters@verbum.org>
 
 	* giscanner/glibtransformer.py: Blacklist marshaling
