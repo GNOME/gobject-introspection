@@ -1,5 +1,11 @@
 2008-09-01  Johan Dahlin  <johan@gnome.org>
 
+	* tests/scanner/Makefile.am:
+	Set PYTHONPATH so the scanner can run
+	even if you didn't install anything.
+
+2008-09-01  Johan Dahlin  <johan@gnome.org>
+
 	* configure.ac:
 	Post-release version bump
 
@@ -11,7 +17,7 @@
 2008-08-31  Colin Walters  <walters@verbum.org>
 
 	* giscanner/glibtransformer.py: Blacklist marshaling
-    	functions
+	functions
 
 2008-08-31  Colin Walters  <walters@verbum.org>
 
