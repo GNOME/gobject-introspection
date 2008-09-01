@@ -1,5 +1,10 @@
 2008-08-31  Colin Walters  <walters@verbum.org>
 
+	* giscanner/glibtransformer.py: Blacklist marshaling
+    	functions
+
+2008-08-31  Colin Walters  <walters@verbum.org>
+
 	* giscanner/glibtransformer.py: Quiet info
 	prints for now.
 
