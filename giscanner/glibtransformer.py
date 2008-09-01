@@ -19,6 +19,7 @@
 #
 
 import os
+import re
 import ctypes
 from ctypes.util import find_library
 
@@ -37,8 +38,12 @@ SYMBOL_BLACKLIST = [
     'g_simple_async_result_new_from_error',
     'g_simple_async_result_set_from_error',
     'g_simple_async_result_propagate_error',
+    'g_simple_async_result_report_error_in_idle',
     'gtk_print_operation_get_error',
 ]
+
+SYMBOL_BLACKLIST_RE = [re.compile(x) for x in \
+                           [r'\w+_marshal_[A-Z]+__', ]]
 
 
 class Unresolved(object):
@@ -222,6 +227,9 @@ class GLibTransformer(object):
     def _parse_function(self, func):
         if func.symbol in SYMBOL_BLACKLIST:
             return
+        for regexp in SYMBOL_BLACKLIST_RE:
+            if regexp.match(func.symbol):
+                return
         if self._parse_get_type_function(func):
             return
 
