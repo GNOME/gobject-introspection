@@ -1,3 +1,8 @@
+2008-09-01  Colin Walters  <walters@verbum.org>
+
+	* girepository/girparser.c: Look at c:type to determine
+	whether or not an item is a pointer.
+
 2008-09-01  Johan Dahlin  <johan@gnome.org>
 
 	* tests/scanner/Makefile.am:
@@ -13,11 +18,6 @@
 2008-09-01  Johan Dahlin  <johan@gnome.org>
 
 	* NEWS: Update
-
-2008-08-31  Colin Walters  <walters@verbum.org>
-
-	* giscanner/glibtransformer.py: Blacklist marshaling
-	functions
 
 2008-08-31  Colin Walters  <walters@verbum.org>
 
