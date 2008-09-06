@@ -1,5 +1,7 @@
 2008-09-06  Johan Dahlin  <johan@gnome.org>
 
+	* giscanner/grealpath.h: Include stdlib.h
+
 	* docs/g-ir-generate.1: Remove leading %
 
 2008-09-01  Colin Walters  <walters@verbum.org>

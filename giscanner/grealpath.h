@@ -1,6 +1,8 @@
 #ifndef __G_REALPATH_H__
 #define __G_REALPATH_H__
 
+#include <stdlib.h>
+
 /**
  * g_realpath:
  *
