@@ -127,6 +127,8 @@ stringtext				([^\"])|(\\.)
 
 [a-zA-Z_][a-zA-Z_0-9]*			{ if (scanner->macro_scan) return IDENTIFIER; else REJECT; }
 
+"asm"           		        { if (!parse_ignored_macro()) REJECT; }
+"__asm__" 	        	        { if (!parse_ignored_macro()) REJECT; }
 "auto"					{ return AUTO; }
 "_Bool"					{ return BOOL; }
 "break"					{ return BREAK; }
@@ -416,7 +418,7 @@ process_directive (GISourceScanner *scanner)
 
 /*
  * This parses a macro which is ignored, such as
- * __attribute__(x)
+ * __attribute__((x)) or __asm__ (x)
  */
 static int
 parse_ignored_macro (void)
@@ -424,10 +426,6 @@ parse_ignored_macro (void)
 	int c;
 	int nest;
 
-	while ((c = input ()) != EOF && isspace (c))
-		;
-	if (c != '(')
-		return FALSE;
 	while ((c = input ()) != EOF && isspace (c))
 		;
 	if (c != '(')
@@ -456,11 +454,6 @@ parse_ignored_macro (void)
 		} else if (c == '\n')
 			lineno++;
 	}
-
-	while ((c = input ()) != EOF && isspace (c))
-		;
-	if (c != ')')
-		return FALSE;
 
 	return TRUE;
 }

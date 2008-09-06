@@ -1,3 +1,9 @@
+2008-09-07  Johan Dahlin  <johan@gnome.org>
+
+	Bug 551162 – giscanner does not recognize asm and __asm__
+	* giscanner/scannerlexer.l:
+	Patch by Jani Monoses.
+
 2008-09-06  Colin Walters  <walters@verbum.org>
 
 	* girepository/girnode.c: Allow gtype_name
