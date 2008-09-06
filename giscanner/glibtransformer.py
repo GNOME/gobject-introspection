@@ -29,7 +29,8 @@ from .ast import (Callback, Enum, Function, Member, Namespace, Parameter,
                   Union, type_name_from_ctype)
 from .transformer import Names
 from .glibast import (GLibBoxed, GLibEnum, GLibEnumMember, GLibFlags,
-                      GLibInterface, GLibObject, GLibSignal, type_names)
+                      GLibInterface, GLibObject, GLibSignal, GLibBoxedStruct,
+                      GLibBoxedUnion, GLibBoxedOther, type_names)
 from .utils import extract_libtool, to_underscores
 
 
@@ -65,6 +66,7 @@ class GLibTransformer(object):
         self._uscore_type_names = {}
         self._libraries = []
         self._failed_types = {}
+        self._boxed_types = {}
         self._private_internal_types = {}
         self._noclosure = noclosure
         self._validating = False
@@ -93,21 +95,23 @@ class GLibTransformer(object):
         objectcount = count_type(GLibObject)
         ifacecount = count_type(GLibInterface)
         enumcount = count_type(GLibEnum)
-        boxedcount = count_type(GLibBoxed)
-        print " %d nodes; %d objects, %d interfaces, %d enums, %d boxed" \
-            % (len(nodes), objectcount, ifacecount, enumcount, boxedcount)
+        print " %d nodes; %d objects, %d interfaces, %d enumsr" \
+            % (len(nodes), objectcount, ifacecount, enumcount)
 
     def parse(self):
         namespace = self._transformer.parse()
         self._namespace_name = namespace.name
 
-        # First pass, parsing
+        # First pass: parsing
         for node in namespace.nodes:
             self._parse_node(node)
 
         # Introspection is done from within parsing
 
-        # Second pass, delete class structures, resolve
+        # Second pass: pair boxed structures
+        for boxed in self._boxed_types.itervalues():
+            self._pair_boxed_type(boxed)
+        # Third pass: delete class structures, resolve
         # all types we now know about
         nodes = list(self._names.names.itervalues())
         for (ns, node) in nodes:
@@ -123,7 +127,7 @@ class GLibTransformer(object):
             self._resolve_alias(alias)
 
         self._print_statistics()
-        # Third pass; ensure all types are known
+        # Fourth pass: ensure all types are known
         if not self._noclosure:
             self._validate(nodes)
 
@@ -132,7 +136,6 @@ class GLibTransformer(object):
         namespace.nodes = map(lambda x: x[1], self._names.aliases.itervalues())
         for (ns, x) in self._names.names.itervalues():
             namespace.nodes.append(x)
-        print "Scan complete."
         return namespace
 
     # Private
@@ -280,7 +283,7 @@ class GLibTransformer(object):
     def _name_is_internal_gtype(self, giname):
         try:
             node = self._get_attribute(giname)
-            return isinstance(node, (GLibObject, GLibInterface, GLibBoxed,
+            return isinstance(node, (GLibObject, GLibInterface,
                                      GLibEnum, GLibFlags))
         except KeyError, e:
             return False
@@ -343,7 +346,7 @@ class GLibTransformer(object):
             elif isinstance(klass, (GLibEnum, GLibFlags)):
                 return False
             elif not isinstance(tclass, (GLibObject, GLibBoxed,
-                                         GLibInterface)):
+                                          GLibInterface)):
                 return False
             else:
                 return True
@@ -366,9 +369,15 @@ class GLibTransformer(object):
         if isinstance(klass, (GLibEnum, GLibFlags)):
             return None
 
+        # The _uscore_type_names member holds the plain GLibBoxed
+        # object; we want to actually use the struct/record associated
+        if isinstance(klass, GLibBoxed):
+            name = self._transformer.strip_namespace_object(klass.type_name)
+            klass = self._get_attribute(name)
+
         if not is_method:
             # Interfaces can't have constructors, punt to global scope
-            if isinstance(klass, GLibInterface):
+            if isinstance(klass, (GLibInterface, GLibBoxed)):
                 #print "NOTE: Rejecting constructor for"+\
                 #    " interface type: %r" % (func.symbol, )
                 return None
@@ -444,14 +453,14 @@ class GLibTransformer(object):
         resolved = self._transformer.strip_namespace_object(name)
         pair_class = self._get_attribute(resolved)
         if pair_class and isinstance(pair_class,
-                                     (GLibObject, GLibBoxed, GLibInterface)):
+                                     (GLibObject, GLibInterface)):
             for field in maybe_class.fields[1:]:
                 pair_class.fields.append(field)
             return
         name = self._transformer.strip_namespace_object(maybe_class.name)
         pair_class = self._get_attribute(name)
         if pair_class and isinstance(pair_class,
-                                     (GLibObject, GLibBoxed, GLibInterface)):
+                                     (GLibObject, GLibInterface)):
 
             del self._names.names[maybe_class.name]
 
@@ -541,9 +550,10 @@ class GLibTransformer(object):
 
     def _introspect_boxed(self, type_id, symbol):
         type_name = cgobject.type_name(type_id)
-        node = GLibBoxed(self._transformer.strip_namespace_object(type_name),
-                         type_name, symbol)
-        self._add_attribute(node, replace=True)
+        # This one doesn't go in the main namespace; we associate it with
+        # the struct or union
+        node = GLibBoxed(type_name, symbol)
+        self._boxed_types[node.type_name] = node
         self._register_internal_type(type_name, node)
 
     def _introspect_implemented_interfaces(self, node, type_id):
@@ -648,8 +658,6 @@ class GLibTransformer(object):
             self._resolve_glib_object(node)
         elif isinstance(node, GLibInterface):
             self._resolve_glib_interface(node)
-        elif isinstance(node, GLibBoxed):
-            self._resolve_glib_boxed(node)
         elif isinstance(node, Struct):
             self._resolve_struct(node)
         elif isinstance(node, Union):
@@ -665,6 +673,24 @@ class GLibTransformer(object):
                 self._resolve_function(func)
                 return
         self._resolve_function(newfunc)
+
+    def _pair_boxed_type(self, boxed):
+        name = self._transformer.strip_namespace_object(boxed.type_name)
+        pair_node = self._get_attribute(name)
+        if not pair_node:
+            boxed_item = GLibBoxedOther(name, boxed.type_name,
+                                        boxed.get_type)
+        elif isinstance(pair_node, Struct):
+            boxed_item = GLibBoxedStruct(pair_node.name, boxed.type_name,
+                                         boxed.get_type)
+            boxed_item.fields = pair_node.fields
+        elif isinstance(pair_node, Union):
+            boxed_item = GLibBoxedUnion(pair_node.name, boxed.type_name,
+                                         boxed.get_type)
+            boxed_item.fields = pair_node.fields
+        else:
+            return False
+        self._add_attribute(boxed_item, replace=True)
 
     def _resolve_struct(self, node):
         for field in node.fields:

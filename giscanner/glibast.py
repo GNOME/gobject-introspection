@@ -18,7 +18,7 @@
 # 02110-1301, USA.
 #
 
-from .ast import Class, Enum, Interface, Member, Node, Property, Struct
+from .ast import Class, Enum, Interface, Member, Node, Property, Struct, Union
 from .ast import (
     type_names,
     TYPE_STRING, TYPE_INT8, TYPE_UINT8, TYPE_INT16, TYPE_UINT16,
@@ -91,16 +91,36 @@ class GLibObject(Class):
         self.ctype = ctype or type_name
 
 
-class GLibBoxed(Struct):
+class GLibBoxed:
 
-    def __init__(self, name, type_name, get_type, ctype=None):
-        Struct.__init__(self, name, get_type)
+    def __init__(self, type_name, get_type):
         self.constructors = []
         self.methods = []
         self.type_name = type_name
         self.symbol = type_name
+        self.ctype = type_name
         self.get_type = get_type
-        self.ctype = ctype or type_name
+
+
+class GLibBoxedStruct(Struct, GLibBoxed):
+
+    def __init__(self, name, type_name, get_type):
+        Struct.__init__(self, name, name)
+        GLibBoxed.__init__(self, type_name, get_type)
+
+
+class GLibBoxedUnion(Union, GLibBoxed):
+
+    def __init__(self, name, type_name, get_type):
+        Union.__init__(self, name, name)
+        GLibBoxed.__init__(self, type_name, get_type)
+
+
+class GLibBoxedOther(Node, GLibBoxed):
+
+    def __init__(self, name, type_name, get_type):
+        Node.__init__(self, name)
+        GLibBoxed.__init__(self, type_name, get_type)
 
 
 class GLibInterface(Interface):

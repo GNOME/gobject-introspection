@@ -20,9 +20,11 @@
 
 from xml.etree.cElementTree import parse
 
-from .ast import Alias, Callback, Function, Parameter, Return, Struct, Type
-from .glibast import (GLibBoxed, GLibEnum, GLibEnumMember, GLibFlags,
-                      GLibInterface, GLibObject)
+from .ast import (Alias, Callback, Function, Parameter, Return, Union,
+                  Struct, Type)
+from .glibast import (GLibEnum, GLibEnumMember, GLibFlags,
+                      GLibInterface, GLibObject, GLibBoxedStruct,
+                      GLibBoxedUnion, GLibBoxedOther)
 
 CORE_NS = "http://www.gtk.org/introspection/core/1.0"
 C_NS = "http://www.gtk.org/introspection/c/1.0"
@@ -90,6 +92,8 @@ class GIRParser(object):
             self._parse_object_interface(node)
         elif node.tag == _corens('record'):
             self._parse_struct(node)
+        elif node.tag == _corens('union'):
+            self._parse_union(node)
         elif node.tag == _glibns('boxed'):
             self._parse_boxed(node)
         elif node.tag in [_corens('enumeration'),
@@ -137,8 +141,23 @@ class GIRParser(object):
             return klass(name, retval, parameters, identifier)
 
     def _parse_struct(self, node):
-        struct = Struct(node.attrib['name'],
-                        node.attrib[_cns('type')])
+        if _glibns('type-name') in node.attrib:
+            struct = GLibBoxedStruct(node.attrib['name'],
+                                     node.attrib[_glibns('type-name')],
+                                     node.attrib[_glibns('get-type')])
+        else:
+            struct = Struct(node.attrib['name'],
+                            node.attrib[_cns('type')])
+        self._add_node(struct)
+
+    def _parse_union(self, node):
+        if _glibns('type-name') in node.attrib:
+            struct = GLibBoxedUnion(node.attrib['name'],
+                                    node.attrib[_glibns('type-name')],
+                                    node.attrib[_glibns('get-type')])
+        else:
+            struct = Union(node.attrib['name'],
+                           node.attrib[_cns('type')])
         self._add_node(struct)
 
     def _parse_type(self, node):
@@ -149,10 +168,9 @@ class GIRParser(object):
                     typenode.attrib[_cns('type')])
 
     def _parse_boxed(self, node):
-        obj = GLibBoxed(node.attrib[_glibns('name')],
-                        node.attrib[_glibns('type-name')],
-                        node.attrib[_glibns('get-type')],
-                        node.attrib.get(_cns('type')))
+        obj = GLibBoxedOther(node.attrib[_glibns('name')],
+                             node.attrib[_glibns('type-name')],
+                             node.attrib[_glibns('get-type')])
         for method in node.findall(_corens('method')):
             obj.methods.append(self._parse_function(method, Function))
         for ctor in node.findall(_corens('constructor')):

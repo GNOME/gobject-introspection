@@ -65,14 +65,14 @@ class GIRWriter(XMLWriter):
             self._write_enum(node)
         elif isinstance(node, (Class, Interface)):
             self._write_class(node)
-        elif isinstance(node, GLibBoxed):
-            self._write_boxed(node)
         elif isinstance(node, Callback):
             self._write_callback(node)
         elif isinstance(node, Struct):
             self._write_record(node)
         elif isinstance(node, Union):
             self._write_union(node)
+        elif isinstance(node, GLibBoxed):
+            self._write_boxed(node)
         elif isinstance(node, Member):
             # FIXME: atk_misc_instance singleton
             pass
@@ -209,15 +209,10 @@ class GIRWriter(XMLWriter):
 
     def _write_boxed(self, boxed):
         attrs = [('c:type', boxed.ctype),
-                 ('glib:name', boxed.name),
-                 ('glib:type-name', boxed.type_name),
-                 ('glib:get-type', boxed.get_type)]
-
+                 ('glib:name', boxed.name)]
+        attrs.extend(self._boxed_attrs(boxed))
         with self.tagcontext('glib:boxed', attrs):
-            for method in boxed.constructors:
-                self._write_constructor(method)
-            for method in boxed.methods:
-                self._write_method(method)
+            self._write_boxed_ctors_methods(boxed)
 
     def _write_property(self, prop):
         attrs = [('name', prop.name)]
@@ -231,25 +226,39 @@ class GIRWriter(XMLWriter):
             self._write_return_type(callback.retval)
             self._write_parameters(callback.parameters)
 
+    def _boxed_attrs(self, boxed):
+        return [('glib:type-name', boxed.type_name),
+                ('glib:get-type', boxed.get_type)]
+
+    def _write_boxed_ctors_methods(self, boxed):
+        for method in boxed.constructors:
+            self._write_constructor(method)
+        for method in boxed.methods:
+            self._write_method(method)
+
     def _write_record(self, record):
         attrs = [('name', record.name),
                  ('c:type', record.symbol)]
-        if record.fields:
-            with self.tagcontext('record', attrs):
+        if isinstance(record, GLibBoxed):
+            attrs.extend(self._boxed_attrs(record))
+        with self.tagcontext('record', attrs):
+            if record.fields:
                 for field in record.fields:
                     self._write_field(field)
-        else:
-            self.write_tag('record', attrs)
+            if isinstance(record, GLibBoxed):
+                self._write_boxed_ctors_methods(record)
 
     def _write_union(self, union):
         attrs = [('name', union.name),
                  ('c:type', union.symbol)]
-        if union.fields:
-            with self.tagcontext('union', attrs):
+        if isinstance(union, GLibBoxed):
+            attrs.extend(self._boxed_attrs(union))
+        with self.tagcontext('union', attrs):
+            if union.fields:
                 for field in union.fields:
                     self._write_field(field)
-        else:
-            self.write_tag('union', attrs)
+            if isinstance(union, GLibBoxed):
+                self._write_boxed_ctors_methods(union)
 
     def _write_field(self, field):
         # FIXME: Just function

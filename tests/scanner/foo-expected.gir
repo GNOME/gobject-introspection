@@ -232,15 +232,10 @@
       <member name="deux" value="2" c:identifier="FOO_ENUM_DEUX"/>
       <member name="trois" value="3" c:identifier="FOO_ENUM_TROIS"/>
     </enumeration>
-    <glib:boxed c:type="FooBoxed"
-                glib:name="Boxed"
-                glib:type-name="FooBoxed"
-                glib:get-type="foo_boxed_get_type">
-      <constructor name="new" c:identifier="foo_boxed_new">
-        <return-value>
-          <type name="Boxed" c:type="FooBoxed*"/>
-        </return-value>
-      </constructor>
+    <record name="Boxed"
+            c:type="FooBoxed"
+            glib:type-name="FooBoxed"
+            glib:get-type="foo_boxed_get_type">
       <method name="method" c:identifier="foo_boxed_method">
         <return-value>
           <type name="none" c:type="void"/>
@@ -251,7 +246,12 @@
           </parameter>
         </parameters>
       </method>
-    </glib:boxed>
+    </record>
+    <function name="boxed_new" c:identifier="foo_boxed_new">
+      <return-value>
+        <type name="Boxed" c:type="FooBoxed*"/>
+      </return-value>
+    </function>
     <callback name="Callback" c:type="FooCallback">
       <return-value>
         <type name="boolean" c:type="gboolean"/>
@@ -276,7 +276,8 @@
         <type name="int" c:type="int"/>
       </field>
     </record>
-    <record name="StructPrivate" c:type="FooStructPrivate"/>
+    <record name="StructPrivate" c:type="FooStructPrivate">
+    </record>
     <record name="Rectangle" c:type="FooRectangle">
       <field name="x">
         <type name="int" c:type="gint"/>
