@@ -1,3 +1,25 @@
+2008-09-06  Colin Walters  <walters@verbum.org>
+
+	* girepository/girnode.c: Allow gtype_name
+	and gtype_init in struct and union.
+	* girepository/girparser.c: Parse glib:
+	boxed bits for both structure and union.
+	* girepository/gtypelib.c: Don't barf
+	if structure is boxed.
+	* giscanner/girparser.py: Parse new XML
+	format.
+	* giscanner/girwriter.py: Write out new
+	XML format.
+	* giscanner/glibast.py: Define new classes
+	which are both Boxed and Struct/Union, as
+	well as an "Other" for everything else.
+	* giscanner/glibtransformer.py: Handle
+	boxed types specially; we try to merge
+	them with a struct/union if one exists,
+	otherwise fall back to generic boxed.
+	* tests/*: Update.
+	* tools/generate.c: Write out new format.
+
 2008-09-06  Johan Dahlin  <johan@gnome.org>
 
 	* giscanner/grealpath.h: Include stdlib.h
