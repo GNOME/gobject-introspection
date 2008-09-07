@@ -387,7 +387,6 @@ class Transformer(object):
                 name = symbol.ident[1:]
             else:
                 name = symbol.ident
-            name = self._remove_prefix(name)
             name = self.strip_namespace_object(name)
             name = self.resolve_type_name(name)
             union = Union(name, symbol.ident)
