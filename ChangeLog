@@ -1,5 +1,9 @@
 2008-09-07  Colin Walters  <walters@verbum.org>
 
+	* giscanner/cgobject.py: Add comment.
+
+2008-09-07  Colin Walters  <walters@verbum.org>
+
 	* giscanner/cgobject.py: Also call g_thread_init.
 
 2008-09-07  Colin Walters  <walters@verbum.org>
