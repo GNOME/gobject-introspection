@@ -1,3 +1,9 @@
+2008-09-07  Colin Walters  <walters@verbum.org>
+
+	* giscanner/transformer.py: Fix regression by not
+	stripping prefix before stripping namespace for unions
+	either.
+
 2008-09-06  Colin Walters  <walters@verbum.org>
 
 	* giscanner/transformer.py: If a namespace contains
