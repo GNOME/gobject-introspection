@@ -134,6 +134,9 @@ if not _library_path:
 _gobj = ctypes.CDLL(_library_path, ctypes.RTLD_GLOBAL)
 _gobj.g_type_init()
 
+# We need to initialize threads just in case part of the library
+# wants to use gthreads; libsoup seems to use g_once for its
+# type init functions.
 if os.name == 'nt':
     _threads_library_path = find_library('libgthread-2.0-0')
 else:
