@@ -34,7 +34,7 @@ from giscanner.sourcescanner import (
     CSYMBOL_TYPE_ENUM, CSYMBOL_TYPE_UNION, CSYMBOL_TYPE_OBJECT,
     CSYMBOL_TYPE_MEMBER)
 from .odict import odict
-from .utils import strip_common_prefix
+from .utils import strip_common_prefix, to_underscores
 
 _xdg_data_dirs = [x for x in os.environ.get('XDG_DATA_DIRS', '').split(':') \
                       + [DATADIR, '/usr/share'] if x]
@@ -150,6 +150,10 @@ class Transformer(object):
         prefix = self._namespace.name.lower() + '_'
         if name.lower().startswith(prefix):
             name = name[len(prefix):]
+        else:
+            prefix = to_underscores(self._namespace.name).lower() + '_'
+            if name.lower().startswith(prefix):
+                name = name[len(prefix):]
         return self._remove_prefix(name)
 
     def _remove_prefix(self, name):
