@@ -6,6 +6,12 @@
 
 2008-09-06  Colin Walters  <walters@verbum.org>
 
+	* giscanner/transformer.py: If a namespace contains
+    	multiple caps, try stripping both gnomekeyring_ and
+    	gnome_keyring_.
+
+2008-09-06  Colin Walters  <walters@verbum.org>
+
 	* girepository/girnode.c: Allow gtype_name
 	and gtype_init in struct and union.
 	* girepository/girparser.c: Parse glib:
