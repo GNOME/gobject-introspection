@@ -1,3 +1,11 @@
+2008-09-08  Colin Walters  <walters@verbum.org>
+
+	* girepository/girparser.c: Default to "readable" for properties.
+	* giscanner/ast.py: Add readable, writable etc.
+	* giscanner/girwriter.py: Writ them.
+	* giscanner/glibtransformer.py: Inspect them.
+	* tests/*: Update.
+
 2008-09-07  Colin Walters  <walters@verbum.org>
 
 	* giscanner/cgobject.py: Add comment.
