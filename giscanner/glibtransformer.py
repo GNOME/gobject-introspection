@@ -581,9 +581,14 @@ class GLibTransformer(object):
             if pspec.owner_type != type_id:
                 continue
             ctype = cgobject.type_name(pspec.value_type)
+            readable = (pspec.flags & 1) != 0
+            writable = (pspec.flags & 2) != 0
+            construct = (pspec.flags & 4) != 0
+            construct_only = (pspec.flags & 8) != 0
             node.properties.append(Property(
                 pspec.name,
                 type_name_from_ctype(ctype),
+                readable, writable, construct, construct_only,
                 ctype,
                 ))
 

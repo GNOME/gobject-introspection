@@ -280,9 +280,14 @@ class Constant(Node):
 
 class Property(Node):
 
-    def __init__(self, name, type_name, ctype=None):
+    def __init__(self, name, type_name, readable, writable,
+                 construct, construct_only, ctype=None):
         Node.__init__(self, name)
         self.type = Type(type_name, ctype)
+        self.readable = readable
+        self.writable = writable
+        self.construct = construct
+        self.construct_only = construct_only
 
     def __repr__(self):
         return '%s(%r, %r, %r)' % (

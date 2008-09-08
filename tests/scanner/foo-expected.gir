@@ -103,7 +103,7 @@
           </parameter>
         </parameters>
       </method>
-      <property name="string">
+      <property name="string" writable="1">
         <type name="string" c:type="gchararray"/>
       </property>
       <callback name="virtual_method" c:type="virtual_method">
