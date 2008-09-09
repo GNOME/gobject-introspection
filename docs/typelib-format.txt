@@ -225,7 +225,7 @@ blob_type:
 	 10 errordomain
 	 	 
 
-is_local: Wether this entry refers to a blob in this typelib.
+is_local: Whether this entry refers to a blob in this typelib.
 
 name:     The name of the entry.
 
@@ -250,7 +250,7 @@ blob_type:
           for details.
 
 deprecated: 
-          Wether the blob is deprecated.
+          Whether the blob is deprecated.
 
 name:     The name of the blob.
 
@@ -402,7 +402,7 @@ dipper:   The parameter is a pointer to a struct or object that will
 
 null_ok:  Only meaningful for types which are passed as pointers.
           For an in parameter, indicates if it is ok to pass NULL in, for 
-          an out parameter, wether it may return NULL. Note that NULL is a 
+          an out parameter, whether it may return NULL. Note that NULL is a 
           valid GList and GSList value, thus null_ok will normally be set for 
           parameters of these types.
 
@@ -452,7 +452,7 @@ union SimpleTypeBlob
 }
 
 is_pointer: 
-          indicates wether the type is passed by reference. 
+          indicates whether the type is passed by reference. 
 
 tag:      specifies what kind of type is described, as follows:
           0  void
@@ -680,7 +680,7 @@ has_class_closure:
           Set if the signal has a class closure.
 
 true_stops_emit:
-          Wether the signal has true-stops-emit semantics          
+          Whether the signal has true-stops-emit semantics          
 
 class_closure: 
           The index of the class closure in the list of virtual functions

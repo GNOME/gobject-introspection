@@ -1,3 +1,7 @@
+2008-09-09  Owen Taylor  <otaylor@redhat.com>
+
+	* docs/typelib-format.txt: Wether => Whether
+
 2008-09-08  Colin Walters  <walters@verbum.org>
 
 	* girepository/girparser.c: Default to "readable" for properties.
