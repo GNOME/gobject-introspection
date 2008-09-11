@@ -154,14 +154,17 @@ class Transformer(object):
             prefix = to_underscores(self._namespace.name).lower() + '_'
             if name.lower().startswith(prefix):
                 name = name[len(prefix):]
-        return self._remove_prefix(name)
+        return self._remove_prefix(name, isfunction=True)
 
-    def _remove_prefix(self, name):
+    def _remove_prefix(self, name, isfunction=False):
         # when --strip-prefix=g:
         #   GHashTable -> HashTable
         #   g_hash_table_new -> hash_table_new
-        if name.lower().startswith(self._strip_prefix.lower()):
-            name = name[len(self._strip_prefix):]
+        prefix = self._strip_prefix.lower()
+        if isfunction:
+            prefix += '_'
+        if name.lower().startswith(prefix):
+            name = name[len(prefix):]
 
         while name.startswith('_'):
             name = name[1:]
@@ -218,8 +221,7 @@ class Transformer(object):
             symbol.base_type, directives))
         return_ = self._create_return(symbol.base_type.base_type,
                                       directives.get('return', []))
-        name = self._remove_prefix(symbol.ident)
-        name = self._strip_namespace_func(name)
+        name = self._strip_namespace_func(symbol.ident)
         return Function(name, return_, parameters, symbol.ident)
 
     def _create_source_type(self, source_type):
@@ -401,7 +403,10 @@ class Transformer(object):
     def _create_callback(self, symbol):
         parameters = self._create_parameters(symbol.base_type.base_type)
         retval = self._create_return(symbol.base_type.base_type.base_type)
-        name = self.strip_namespace_object(symbol.ident)
+        if symbol.ident.find('_') > 0:
+            name = self._strip_namespace_func(symbol.ident)
+        else:
+            name = self.strip_namespace_object(symbol.ident)
         return Callback(name, retval, list(parameters), symbol.ident)
 
     def _parse_type_annotation(self, annotation):
