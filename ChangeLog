@@ -1,3 +1,12 @@
+2008-09-11  Colin Walters  <walters@verbum.org>
+
+	http://bugzilla.gnome.org/show_bug.cgi?id=551737
+
+	* giscanner/transformer.py: Fix strip_namespace_func to only strip
+	prefix if it ends with _.  Tweak callback stripping to determine
+	based on presence of _ whether we need to use strip_namespace_func
+	or strip_namespace_object.
+
 2008-09-09  Owen Taylor  <otaylor@redhat.com>
 
 	* docs/typelib-format.txt: Wether => Whether
