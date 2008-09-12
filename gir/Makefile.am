@@ -28,6 +28,8 @@ GLib.gir: $(G_IR_SCANNER) $(G_IR_SCANNER_FILES) Makefile
 	    -D__G_I18N_LIB_H__ \
 	    $(GLIB_LIBDIR)/glib-2.0/include/glibconfig.h \
 	    $(GLIB_INCLUDEDIR)/glib/*.h
+	PYTHONPATH=$(top_builddir):$$PYTHONPATH $(G_IR_SCANNER) \
+	    --xpath-assertions=GLib-assertions.txt GLib.gir	
 BUILT_SOURCES += GLib.gir
 
 # gobject

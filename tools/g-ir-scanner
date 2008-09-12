@@ -38,6 +38,7 @@ sys.path.insert(0, path)
 from giscanner.glibtransformer import GLibTransformer
 from giscanner.sourcescanner import SourceScanner
 from giscanner.transformer import Transformer
+from giscanner.minixpath import xpath_assert
 
 
 def _get_option_parser():
@@ -76,7 +77,9 @@ def _get_option_parser():
     parser.add_option("", "--typelib-xml",
                       action="store_true", dest="typelib_xml",
                       help="Just convert GIR to typelib XML")
-
+    parser.add_option("", "--xpath-assertions",
+                      action="store", dest="xpath_assertions",
+                      help="Use given file to create assertions on GIR content")
 
     group = optparse.OptionGroup(parser, "Preprocessor options")
     group.add_option("-I", help="Pre-processor include file",
@@ -110,6 +113,21 @@ def typelib_xml_strip(path):
     doc.write(sys.stdout)
     return 0
 
+def validate(assertions, path):
+    from xml.etree.cElementTree import parse
+    doc = parse(open(path))
+    root = doc.getroot()
+    f = open(assertions)
+    assertions_list = f.readlines()
+    print "=== CHECKING %s (%d assertions) ===" % (assertions, 
+                                                   len(assertions_list))
+    for assertion in assertions_list:
+        assertion = assertion.strip()
+        xpath_assert(root, assertion)
+    f.close()
+    print "=== PASSED %s ===" % (assertions, )
+    return 0
+
 def main(args):
     parser = _get_option_parser()
     (options, args) = parser.parse_args(args)
@@ -119,6 +137,9 @@ def main(args):
 
     if options.typelib_xml:
         return typelib_xml_strip(args[1])
+
+    if options.xpath_assertions:
+        return validate(options.xpath_assertions, args[1])
 
     if not options.namespace_name:
         _error('Namespace name missing')

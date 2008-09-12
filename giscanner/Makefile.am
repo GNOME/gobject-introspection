@@ -42,6 +42,7 @@ pkgpyexec_PYTHON = 		\
 	girwriter.py		\
 	glibast.py		\
 	glibtransformer.py 	\
+	minixpath.py		\
 	odict.py		\
 	sourcescanner.py	\
 	transformer.py		\
