@@ -1,3 +1,13 @@
+2008-09-12  Colin Walters  <walters@verbum.org>
+
+	* giscanner/minixpath.py: Code to run an "XPath"
+	assertion against an XML tree, taken from 
+	gir-repository/gir/tests.py.
+	* giscanner/Makefile.am: Ship it.
+	* tools/g-ir-scanner: Add --xpath-assertions option.
+	* gir/GLib-assertions.txt: Add a few assertions.
+	* gir/Makefile.am: Run them.
+
 2008-09-11  Colin Walters  <walters@verbum.org>
 
 	http://bugzilla.gnome.org/show_bug.cgi?id=551737
