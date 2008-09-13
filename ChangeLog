@@ -1,5 +1,9 @@
 2008-09-12  Colin Walters  <walters@verbum.org>
 
+	* giscanner/glibtransformer.py: Accept Gtk.Type as GType.
+
+2008-09-12  Colin Walters  <walters@verbum.org>
+
 	* giscanner/ast.py: Bind pid_t to INT for vte.
 
 2008-09-12  Colin Walters  <walters@verbum.org>
