@@ -444,6 +444,9 @@ class Transformer(object):
             resolved = names.ctypes.get(ctype)
             if resolved:
                 return self._typepair_to_str(resolved)
+        resolved = names.type_names.get(type_name)
+        if resolved:
+            return self._typepair_to_str(resolved)
         raise KeyError("failed to find %r" % (type_name, ))
 
     def resolve_type_name_full(self, type_name, ctype,

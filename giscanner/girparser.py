@@ -144,7 +144,8 @@ class GIRParser(object):
         if _glibns('type-name') in node.attrib:
             struct = GLibBoxedStruct(node.attrib['name'],
                                      node.attrib[_glibns('type-name')],
-                                     node.attrib[_glibns('get-type')])
+                                     node.attrib[_glibns('get-type')],
+                                     node.attrib.get(_cns('type')))
         else:
             struct = Struct(node.attrib['name'],
                             node.attrib[_cns('type')])
@@ -154,7 +155,8 @@ class GIRParser(object):
         if _glibns('type-name') in node.attrib:
             struct = GLibBoxedUnion(node.attrib['name'],
                                     node.attrib[_glibns('type-name')],
-                                    node.attrib[_glibns('get-type')])
+                                    node.attrib[_glibns('get-type')],
+                                    node.attrib.get(_cns('type')))
         else:
             struct = Union(node.attrib['name'],
                            node.attrib[_cns('type')])

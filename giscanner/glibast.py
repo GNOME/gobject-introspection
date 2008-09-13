@@ -97,22 +97,20 @@ class GLibBoxed:
         self.constructors = []
         self.methods = []
         self.type_name = type_name
-        self.symbol = type_name
-        self.ctype = type_name
         self.get_type = get_type
 
 
 class GLibBoxedStruct(Struct, GLibBoxed):
 
-    def __init__(self, name, type_name, get_type):
-        Struct.__init__(self, name, name)
+    def __init__(self, name, type_name, get_type, ctype=None):
+        Struct.__init__(self, name, ctype or type_name)
         GLibBoxed.__init__(self, type_name, get_type)
 
 
 class GLibBoxedUnion(Union, GLibBoxed):
 
-    def __init__(self, name, type_name, get_type):
-        Union.__init__(self, name, name)
+    def __init__(self, name, type_name, get_type, ctype=None):
+        Union.__init__(self, name, ctype or type_name)
         GLibBoxed.__init__(self, type_name, get_type)
 
 
@@ -121,6 +119,7 @@ class GLibBoxedOther(Node, GLibBoxed):
     def __init__(self, name, type_name, get_type):
         Node.__init__(self, name)
         GLibBoxed.__init__(self, type_name, get_type)
+        self.ctype = type_name
 
 
 class GLibInterface(Interface):
