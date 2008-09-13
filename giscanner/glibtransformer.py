@@ -251,6 +251,7 @@ class GLibTransformer(object):
                                          'GType',
                                          'Object.Type',
                                          'GObject.Type',
+                                         'Gtk.Type',
                                          'GObject.GType']:
             print ("Warning: *_get_type function returns '%r'"
                    ", not GObject.Type") % (func.retval.type.name, )
