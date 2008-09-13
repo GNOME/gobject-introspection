@@ -96,7 +96,9 @@ type_names['void*'] = TYPE_ANY
 type_names['void'] = TYPE_NONE
 type_names['size_t'] = TYPE_SIZET
 type_names['ssize_t'] = TYPE_SSIZET
+# FIXME - we should be evaluating these per-platform; maybe check glibconfig.h?
 type_names['time_t'] = TYPE_LONG
+type_names['pid_t'] = TYPE_INT
 
 # Suppress some GLib names
 type_names['uchar'] = TYPE_UINT8
