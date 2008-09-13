@@ -1,5 +1,9 @@
 2008-09-12  Colin Walters  <walters@verbum.org>
 
+	* giscanner/ast.py: Bind pid_t to INT for vte.
+
+2008-09-12  Colin Walters  <walters@verbum.org>
+
 	* giscanner/girparser.py: Parse c:type for boxed records/unions.
 	* giscanner/glibast.py: Avoid overwriting ctype.
 	* giscsanner/transformer.py: Try resolving types using the GType names.
