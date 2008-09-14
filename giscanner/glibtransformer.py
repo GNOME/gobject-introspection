@@ -230,6 +230,8 @@ class GLibTransformer(object):
     def _parse_function(self, func):
         if func.symbol in SYMBOL_BLACKLIST:
             return
+        if func.symbol.startswith('_'):
+            return
         for regexp in SYMBOL_BLACKLIST_RE:
             if regexp.match(func.symbol):
                 return
