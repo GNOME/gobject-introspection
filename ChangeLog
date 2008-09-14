@@ -1,3 +1,8 @@
+2008-09-14  Colin Walters  <walters@verbum.org>
+
+	* giscanner/glibtransformer.py: Ignore functions with 
+	leading _.
+
 2008-09-12  Colin Walters  <walters@verbum.org>
 
 	* giscanner/glibtransformer.py: Accept Gtk.Type as GType.
