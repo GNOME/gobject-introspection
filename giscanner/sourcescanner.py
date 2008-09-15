@@ -99,7 +99,8 @@ def ctype_name(ctype):
 
 
 class SourceType(object):
-    __members__ = ['type', 'base_type', 'name', 'child_list']
+    __members__ = ['type', 'base_type', 'name', 'type_qualifier',
+                   'child_list']
 
     def __init__(self, scanner, stype):
         self._scanner = scanner
