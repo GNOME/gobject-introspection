@@ -174,5 +174,18 @@
         </parameter>
       </parameters>
     </function>
+    <function name="object_do_not_use"
+              c:identifier="annotation_object_do_not_use"
+              deprecated="Use annotation_object_create_object() instead."
+              deprecated-version="0.12">
+      <return-value>
+        <type name="GObject.Object" c:type="GObject*"/>
+      </return-value>
+      <parameters>
+        <parameter name="object">
+          <type name="Object" c:type="AnnotationObject*"/>
+        </parameter>
+      </parameters>
+    </function>
   </namespace>
 </repository>

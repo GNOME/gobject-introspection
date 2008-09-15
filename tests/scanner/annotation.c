@@ -208,3 +208,15 @@ GObject*
 annotation_object_allow_none (AnnotationObject *object, gchar *allow_none)
 {
 }
+
+/**
+ * annotation_object_do_not_use: 
+ * @object: a #GObject
+ *
+ * Deprecated: 0.12: Use annotation_object_create_object() instead.
+ **/
+GObject*
+annotation_object_do_not_use (AnnotationObject *object)
+{
+  return NULL;
+}

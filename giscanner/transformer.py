@@ -222,7 +222,16 @@ class Transformer(object):
         return_ = self._create_return(symbol.base_type.base_type,
                                       directives.get('return', []))
         name = self._strip_namespace_func(symbol.ident)
-        return Function(name, return_, parameters, symbol.ident)
+        func = Function(name, return_, parameters, symbol.ident)
+        deprecated = directives.get('deprecated', False)
+        if deprecated:
+            try:
+                # Split out gtk-doc version
+                func.deprecated = deprecated[0].split(':', 1)
+            except ValueError, e:
+                # No version, just include str
+                func.deprecated = (None, deprecated[0])
+        return func
 
     def _create_source_type(self, source_type):
         if source_type is None:

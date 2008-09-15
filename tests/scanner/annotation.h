@@ -38,4 +38,7 @@ gint     annotation_object_calleesowns  (AnnotationObject *object,
 GList*   annotation_object_get_strings  (AnnotationObject *object);
 GSList*  annotation_object_get_objects  (AnnotationObject *object);
 
+GObject* annotation_object_do_not_use   (AnnotationObject *object);
+
+
 #endif /* __ANNOTATION_OBJECT_H__ */

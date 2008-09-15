@@ -207,6 +207,7 @@ parse_gtkdoc (GISourceScanner *scanner,
   GSList *directives;
   GSList *options = NULL;
   char *rname;
+  int n_parts;
 
   i = 0;
   do 
@@ -229,12 +230,24 @@ parse_gtkdoc (GISourceScanner *scanner,
   line[i] = '\0';
 
   parts = g_strsplit (line, ": ", 3);
+  n_parts = g_strv_length (parts);
 
-  if (g_strv_length (parts) >= 2)
+  if (g_ascii_strcasecmp (parts[0], "eprecated") == 0)
+    {
+      if (n_parts == 3)
+	options = g_slist_prepend (options, g_strdup (parts[2]));
+      else if (n_parts == 2)
+	options = g_slist_prepend (options, g_strdup (parts[1]));
+      else
+	options = g_slist_prepend (options, g_strdup (""));
+      name = parts[0];
+      value = NULL;
+    }
+  else if (n_parts >= 2)
     {
       name = parts[0];
 
-      if (g_strv_length (parts) == 3) 
+      if (n_parts == 3) 
         {
           char *ptr = parts[1];
           GString *current = NULL;
@@ -275,12 +288,13 @@ parse_gtkdoc (GISourceScanner *scanner,
     }
 
   /*
-   * This is a special case for return values, name will only be
-   * 'eturn' or a valid name, check the call site.
-   * Context-sensitive parsing would probably be the right way to go
+   * Special cases for global annotations.
+   * Context-sensitive parsing would probably be the right way to go.
    */
   if (g_ascii_strncasecmp ("eturn", name, 5) == 0)
     rname = "return";
+  else if (g_ascii_strncasecmp ("eprecated", name, 9) == 0)
+    rname = "deprecated";
   else
     rname = name;
 
@@ -333,7 +347,7 @@ parse_comment (GISourceScanner *scanner)
       if ((c1 != '*' && c1 != ' '))
           startofline = FALSE;
 
-      if (startofline && (c1 == ' ') && (c2 == '@' || (c2 == 'r') || (c2 == 'R')))
+      if (startofline && (c1 == ' ') && (c2 == '@' || (c2 == 'r') || (c2 == 'R') || (c2 == 'D')))
         {
            c1 = c2;
            c2 = input();
