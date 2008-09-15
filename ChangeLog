@@ -1,3 +1,16 @@
+2008-09-15  Colin Walters  <walters@verbum.org>
+
+	http://bugzilla.gnome.org/show_bug.cgi?id=552065
+
+	* giscanner/ast.py: Add deprecation attributes.
+	* giscanner/girwriter.py: Write out deprecation data.
+	* girepository/girparser.c: Relax parsing; deprecated
+	attribute now includes freeform string.
+	* giscanner/scannerlexer.l: Parse Deprecated.
+	* giscanner/transformer.py: Look for deprecated attribute
+	on functions.
+	* tests/scanner/*: Add a Deprecated test.
+
 2008-09-14  Tor Lillqvist  <tml@novell.com>
 
 	* tests/scanner/Makefile.am (%.typelib): Use $(EXEEXT).
