@@ -225,12 +225,14 @@ class Transformer(object):
         func = Function(name, return_, parameters, symbol.ident)
         deprecated = directives.get('deprecated', False)
         if deprecated:
-            try:
+            deprecated_value = deprecated[0]
+            if ':' in deprecated_value:
                 # Split out gtk-doc version
-                func.deprecated = deprecated[0].split(':', 1)
-            except ValueError, e:
+                (func.deprecated_version, func.deprecated) = \
+                    [x.strip() for x in deprecated_value.split(':', 1)]
+            else:
                 # No version, just include str
-                func.deprecated = (None, deprecated[0])
+                func.deprecated = deprecated_value.strip()
         return func
 
     def _create_source_type(self, source_type):

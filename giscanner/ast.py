@@ -118,6 +118,7 @@ class Node(object):
     def __init__(self, name=None):
         self.name = name
         self.deprecated = None
+        self.deprecated_version = None
 
     def __repr__(self):
         return '%s(%r)' % (self.__class__.__name__, self.name)

@@ -83,11 +83,10 @@ class GIRWriter(XMLWriter):
 
     def _append_deprecated(self, node, attrs):
         if node.deprecated:
-            (deprecated_version, deprecated_str) = node.deprecated
-            attrs.append(('deprecated', deprecated_str.strip()))
-            if deprecated_version:
+            attrs.append(('deprecated', node.deprecated))
+            if node.deprecated_version:
                 attrs.append(('deprecated-version',
-                              deprecated_version.strip()))
+                              node.deprecated_version))
 
     def _write_alias(self, alias):
         attrs = [('name', alias.name), ('target', alias.target)]
