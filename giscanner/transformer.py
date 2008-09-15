@@ -215,6 +215,19 @@ class Transformer(object):
         return Member(symbol.ident, symbol.base_type.name,
                       symbol.ident)
 
+    def _parse_deprecated(self, node, directives):
+        deprecated = directives.get('deprecated', False)
+        if deprecated:
+            deprecated_value = deprecated[0]
+            print "DEPRECATED: %r" % (deprecated_value, )
+            if ':' in deprecated_value:
+                # Split out gtk-doc version
+                (node.deprecated_version, node.deprecated) = \
+                    [x.strip() for x in deprecated_value.split(':', 1)]
+            else:
+                # No version, just include str
+                node.deprecated = deprecated_value.strip()
+
     def _create_function(self, symbol):
         directives = symbol.directives()
         parameters = list(self._create_parameters(
@@ -223,16 +236,7 @@ class Transformer(object):
                                       directives.get('return', []))
         name = self._strip_namespace_func(symbol.ident)
         func = Function(name, return_, parameters, symbol.ident)
-        deprecated = directives.get('deprecated', False)
-        if deprecated:
-            deprecated_value = deprecated[0]
-            if ':' in deprecated_value:
-                # Split out gtk-doc version
-                (func.deprecated_version, func.deprecated) = \
-                    [x.strip() for x in deprecated_value.split(':', 1)]
-            else:
-                # No version, just include str
-                func.deprecated = deprecated_value.strip()
+        self._parse_deprecated(func, directives)
         return func
 
     def _create_source_type(self, source_type):

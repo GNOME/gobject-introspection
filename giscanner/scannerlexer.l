@@ -235,7 +235,7 @@ parse_gtkdoc (GISourceScanner *scanner,
   if (g_ascii_strcasecmp (parts[0], "eprecated") == 0)
     {
       if (n_parts == 3)
-	options = g_slist_prepend (options, g_strdup (parts[2]));
+	options = g_slist_prepend (options, g_strdup_printf ("%s: %s", parts[1], parts[2]));
       else if (n_parts == 2)
 	options = g_slist_prepend (options, g_strdup (parts[1]));
       else
