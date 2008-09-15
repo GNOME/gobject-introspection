@@ -125,6 +125,10 @@ class SourceType(object):
         return self._stype.name
 
     @property
+    def type_qualifier(self):
+        return self._stype.type_qualifier
+
+    @property
     def child_list(self):
         for symbol in self._stype.child_list:
             if symbol is None:

@@ -1,3 +1,8 @@
+2008-09-15  Johan Dahlin  <johan@gnome.org>
+
+	* giscanner/sourcescanner.py (SourceType.type_qualifier): Add
+	a wrapper for type_qualifier as well.
+
 2008-09-15  Colin Walters  <walters@verbum.org>
 
 	http://bugzilla.gnome.org/show_bug.cgi?id=552065
