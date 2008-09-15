@@ -219,7 +219,6 @@ class Transformer(object):
         deprecated = directives.get('deprecated', False)
         if deprecated:
             deprecated_value = deprecated[0]
-            print "DEPRECATED: %r" % (deprecated_value, )
             if ':' in deprecated_value:
                 # Split out gtk-doc version
                 (node.deprecated_version, node.deprecated) = \
