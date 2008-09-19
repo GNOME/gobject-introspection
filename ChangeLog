@@ -1,7 +1,18 @@
+2008-09-19  Colin Walters  <walters@verbum.org>
+
+    Add check to make sure we're not hitting out unresolved types
+
+    Validate the "this" argument for methods
+
+    Remove heuristic matching of methods to classes based on prefix
+
+    It was a broken hack that dated from when we handled underscoring
+    and capitalization conventions less well.
+
 2008-09-18  Colin Walters  <walters@verbum.org>
 
     Bug 522384: Use SHLIB_SUFFIX intead of G_MODULE_SUFFIX for Darwin
-    
+
     On Darwin, the suffix for installed shared libraries (.dylib) is
     different from loadable modules (.so).  We use a bit of magic shell
     script from Behdad Esfahbod to figure out the right suffix.
