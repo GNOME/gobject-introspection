@@ -354,16 +354,7 @@ class GLibTransformer(object):
             else:
                 return True
 
-        # First look for an exact match;
         klass = self._uscore_type_names.get(prefix)
-        # Now try searching for a prefix as a last resort
-        if klass is None or not valid_matching_klass(klass):
-            for key in self._uscore_type_names:
-                klass = None
-                if key.startswith(prefix):
-                    klass = self._uscore_type_names.get(key)
-                    if valid_matching_klass(klass):
-                        break
         if klass is None:
             #print "NOTE: No valid matching class for likely "+\
             #    "method or constructor: %r" % (func.symbol, )
