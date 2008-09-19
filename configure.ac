@@ -51,6 +51,20 @@ GI_ENABLE_GCOV
 
 AC_CHECK_LIB([dl], [dlopen])
 
+AC_MSG_CHECKING(for the suffix of shared libraries)
+export SED
+shrext_cmds=`./libtool --config | grep '^shrext_cmds='`
+eval $shrext_cmds
+eval std_shrext=$shrext_cmds
+# chop the initial dot
+SHLIB_SUFFIX=`echo $std_shrext | sed 's/^\.//'`
+AC_MSG_RESULT(.$SHLIB_SUFFIX)
+# any reason it may fail?
+if test "X$SHLIB_SUFFIX" = x; then
+        AC_MSG_ERROR(Cannot determine shared library suffix from libtool)
+fi
+AC_DEFINE_UNQUOTED([SHLIB_SUFFIX], "$SHLIB_SUFFIX", [Define to the platform's shared library suffix])
+
 PKG_CHECK_MODULES(GOBJECT, [gobject-2.0])
 
 PKG_CHECK_MODULES(SCANNER, [gobject-2.0 gthread-2.0])
