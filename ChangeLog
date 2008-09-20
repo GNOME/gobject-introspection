@@ -1,5 +1,13 @@
 2008-09-19  Colin Walters  <walters@verbum.org>
 
+    Bug 552390: Handle capitialization like "DBus" more robustly
+
+    The to_underscores function was designed for use against prefixed
+    names; we need a separate function which will convert names like
+    DBusFoo into dbus_foo, not d_bus_foo.
+
+2008-09-19  Colin Walters  <walters@verbum.org>
+
     Add check to make sure we're not hitting out unresolved types
 
     Validate the "this" argument for methods
