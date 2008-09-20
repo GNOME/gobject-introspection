@@ -253,3 +253,33 @@ foo_boxed_method (FooBoxed *boxed)
 {
 
 }
+
+struct _FooDBusData
+{
+  double private;
+};
+
+FooDBusData *
+foo_dbus_data_copy (const FooDBusData *boxed)
+{
+  return (FooDBusData *)g_memdup (boxed, sizeof (FooDBusData));
+}
+
+void
+foo_dbus_data_free (FooBoxed *boxed)
+{
+  g_slice_free (FooDBusData, boxed);
+}
+
+
+GType
+foo_dbus_data_get_type (void)
+{
+  static GType our_type = 0;
+  
+  if (our_type == 0)
+    our_type = g_boxed_type_register_static ("FooDBusData",
+					     (GBoxedCopyFunc) foo_dbus_data_copy,
+					     (GBoxedFreeFunc) foo_dbus_data_free);
+  return our_type;
+}

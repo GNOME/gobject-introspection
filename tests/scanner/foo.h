@@ -110,6 +110,11 @@ GType                 foo_boxed_get_type       (void) G_GNUC_CONST;
 FooBoxed*             foo_boxed_new            (void);
 void                  foo_boxed_method         (FooBoxed* boxed);
 
+/* This one tests capitalization handling with respect to DBus */
+typedef struct _FooDBusData FooDBusData;
+GType                 foo_dbus_data_get_type       (void) G_GNUC_CONST;
+void                  foo_dbus_data_method         (FooDBusData* dbusdata);
+
 /* FIXME: Scanner does not support this yet
 const char *FOO_CONSTANT_STR = "foo-constant-str";
 const int FOO_CONSTANT_INT = 10;

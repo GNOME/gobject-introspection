@@ -252,6 +252,21 @@
         <type name="Boxed" c:type="FooBoxed*"/>
       </return-value>
     </function>
+    <record name="DBusData"
+            c:type="FooDBusData"
+            glib:type-name="FooDBusData"
+            glib:get-type="foo_dbus_data_get_type">
+      <method name="method" c:identifier="foo_dbus_data_method">
+        <return-value>
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <parameter name="dbusdata">
+            <type name="DBusData" c:type="FooDBusData*"/>
+          </parameter>
+        </parameters>
+      </method>
+    </record>
     <callback name="Callback" c:type="FooCallback">
       <return-value>
         <type name="boolean" c:type="gboolean"/>

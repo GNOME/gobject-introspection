@@ -37,6 +37,13 @@ def to_underscores(name):
     return name
 
 
+def to_underscores_noprefix(name):
+    """Like to_underscores, but designed for "unprefixed" names.
+    to_underscores("DBusFoo") => dbus_foo, not d_bus_foo."""
+    name = _upperstr_pat1.sub(r'\1_\2', name)
+    name = _upperstr_pat2.sub(r'\1_\2', name)
+    return name
+
 _libtool_pat = re.compile("dlname='([A-z0-9\.\-\+]+)'\n")
 
 

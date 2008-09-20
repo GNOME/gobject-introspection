@@ -31,7 +31,7 @@ from .transformer import Names
 from .glibast import (GLibBoxed, GLibEnum, GLibEnumMember, GLibFlags,
                       GLibInterface, GLibObject, GLibSignal, GLibBoxedStruct,
                       GLibBoxedUnion, GLibBoxedOther, type_names)
-from .utils import extract_libtool, to_underscores
+from .utils import extract_libtool, to_underscores, to_underscores_noprefix
 
 
 SYMBOL_BLACKLIST = [
@@ -157,7 +157,8 @@ class GLibTransformer(object):
 
     def _register_internal_type(self, type_name, node):
         self._names.type_names[type_name] = (None, node)
-        self._uscore_type_names[to_underscores(type_name).lower()] = node
+        uscored = to_underscores(type_name).lower()
+        self._uscore_type_names[uscored] = node
         # Besides the straight underscore conversion, we also try
         # removing the underscores from the namespace as a possible C
         # mapping; e.g. it's webkit_web_view, not web_kit_web_view
@@ -165,6 +166,7 @@ class GLibTransformer(object):
         prefix = type_name[:-len(suffix)]
         no_uscore_prefixed = (prefix + '_' + to_underscores(suffix)).lower()
         self._uscore_type_names[no_uscore_prefixed] = node
+        print "ADDING USCORED: %r %r" % (uscored, no_uscore_prefixed)
 
     # Helper functions
 
@@ -321,7 +323,7 @@ class GLibTransformer(object):
             # method name
             argtype = target_arg.type.ctype.replace('*', '')
             name = self._transformer.strip_namespace_object(argtype)
-            name_uscore = to_underscores(name).lower()
+            name_uscore = to_underscores_noprefix(name).lower()
             name_offset = func.symbol.find(name_uscore)
             if name_offset < 0:
                 return None
