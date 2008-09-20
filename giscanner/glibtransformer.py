@@ -166,7 +166,6 @@ class GLibTransformer(object):
         prefix = type_name[:-len(suffix)]
         no_uscore_prefixed = (prefix + '_' + to_underscores(suffix)).lower()
         self._uscore_type_names[no_uscore_prefixed] = node
-        print "ADDING USCORED: %r %r" % (uscored, no_uscore_prefixed)
 
     # Helper functions
 
