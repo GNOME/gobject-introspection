@@ -49,11 +49,15 @@ def myxpath(node, expr):
         if not curnodes:
             return None
         found = True
+        #print "LOOKING %d nodes" % (len(curnodes), )
         for node in curnodes:
+            #print "LOOKING: %r expecting: %r attrib: %r" \
+            #    % (node, exp_attrs, node.attrib)
             passes = True
-            for (name, val) in exp_attrs:
+            for name, val in exp_attrs:
                 a = node.attrib.get(name)
                 if not a or a != val:
+                    #print "ATTR FAIL: %r=%r" % (val, a)
                     passes = False
                     break
             if passes:
