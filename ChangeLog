@@ -1,3 +1,11 @@
+2008-09-23  Colin Walters  <walters@verbum.org>
+
+	Bug 552566: Add time_t type
+
+	We need a type for time_t since it's special in C, and just
+	mapping it to long precluded bindings from handling it
+	in a nice way.
+
 2008-09-19  Colin Walters  <walters@verbum.org>
 
     Bug 552390: Handle capitialization like "DBus" more robustly
