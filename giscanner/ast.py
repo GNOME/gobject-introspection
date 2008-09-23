@@ -47,6 +47,7 @@ TYPE_LONG = 'long'
 TYPE_ULONG = 'ulong'
 TYPE_SSIZET = 'ssize_t'
 TYPE_SIZET = 'size_t'
+TYPE_TIMET = 'time_t'
 TYPE_FLOAT = 'float'
 TYPE_DOUBLE = 'double'
 TYPE_STRING = 'string' # requires zero-terminated
@@ -56,7 +57,7 @@ BASIC_GIR_TYPES = [TYPE_BOOLEAN, TYPE_INT8, TYPE_UINT8, TYPE_INT16,
                    TYPE_UINT16, TYPE_INT32, TYPE_UINT32, TYPE_INT64,
                    TYPE_UINT64, TYPE_INT, TYPE_UINT, TYPE_LONG,
                    TYPE_ULONG, TYPE_SSIZET, TYPE_SIZET, TYPE_FLOAT,
-                   TYPE_DOUBLE]
+                   TYPE_DOUBLE, TYPE_TIMET]
 GIR_TYPES = [TYPE_NONE, TYPE_ANY]
 GIR_TYPES.extend(BASIC_GIR_TYPES)
 GIR_TYPES.extend([TYPE_STRING, TYPE_FILENAME])
@@ -96,8 +97,7 @@ type_names['void*'] = TYPE_ANY
 type_names['void'] = TYPE_NONE
 type_names['size_t'] = TYPE_SIZET
 type_names['ssize_t'] = TYPE_SSIZET
-# FIXME - we should be evaluating these per-platform; maybe check glibconfig.h?
-type_names['time_t'] = TYPE_LONG
+# FIXME - can we make libraries use GPid?
 type_names['pid_t'] = TYPE_INT
 
 # Suppress some GLib names

@@ -103,6 +103,19 @@
           </parameter>
         </parameters>
       </method>
+      <method name="is_it_time_yet" c:identifier="foo_object_is_it_time_yet">
+        <return-value>
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <parameter name="object">
+            <type name="Object" c:type="FooObject*"/>
+          </parameter>
+          <parameter name="time">
+            <type name="time_t" c:type="time_t"/>
+          </parameter>
+        </parameters>
+      </method>
       <property name="string" writable="1">
         <type name="string" c:type="gchararray"/>
       </property>

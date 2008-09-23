@@ -62,6 +62,8 @@ typedef gpointer FooObjectCookie;
 
 FooObjectCookie       foo_object_new_cookie        (FooObject *object, const char *target);
 
+void                  foo_object_is_it_time_yet    (FooObject *object, time_t time);
+
 struct _FooSubobject
 {
   FooObject parent_instance;

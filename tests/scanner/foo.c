@@ -144,6 +144,11 @@ foo_do_foo (FooInterface *self)
 
 }
 
+void
+foo_object_is_it_time_yet (FooObject *object, time_t time)
+{
+}
+
 G_DEFINE_TYPE (FooSubobject, foo_subobject, FOO_TYPE_OBJECT);
 
 static void
