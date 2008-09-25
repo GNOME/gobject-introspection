@@ -17,7 +17,7 @@
 
     <function name="test2" c:identifier="test2">
       <return-value>
-        <type name="void" c:type="void"/>
+        <type name="none" c:type="void"/>
       </return-value>
       <parameters>
         <parameter name="in" c:type="gint" direction="in">
@@ -31,7 +31,7 @@
 
     <function name="test3" c:identifier="test3">
       <return-value>
-        <type name="void" c:type="void"/>
+        <type name="none" c:type="void"/>
       </return-value>
       <parameters>
         <parameter name="inout" c:type="gint" direction="inout">
@@ -42,7 +42,7 @@
 
     <function name="test4" c:identifier="test4">
       <return-value>
-        <type name="void" c:type="void"/>
+        <type name="none" c:type="void"/>
       </return-value>
       <parameters>
         <parameter name="blurb" direction="in">
@@ -53,7 +53,7 @@
 
     <function name="test5" c:identifier="test5">
       <return-value>
-        <type name="void" c:type="void"/>
+        <type name="none" c:type="void"/>
       </return-value>
       <parameters>
         <parameter name="blurb" direction="out" transfer="full">
@@ -71,7 +71,7 @@
       </return-value>
       <parameters>
         <parameter name="list" direction="in">
-          <type name="GLib.List<gint>*" c:type="GList*"/>
+          <type name="GLib.List<int>*" c:type="GList*"/>
         </parameter>
       </parameters>
     </function>
@@ -90,7 +90,7 @@
 
     <function name="broken" c:identifier="broken">
       <return-value>
-         <type name="void" c:type="void"/>
+         <type name="none" c:type="void"/>
       </return-value>
     </function>
 

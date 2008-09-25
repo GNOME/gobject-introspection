@@ -50,7 +50,7 @@ TYPE_SIZET = 'size_t'
 TYPE_TIMET = 'time_t'
 TYPE_FLOAT = 'float'
 TYPE_DOUBLE = 'double'
-TYPE_STRING = 'string' # requires zero-terminated
+TYPE_STRING = 'utf8' # requires zero-terminated
 TYPE_FILENAME = 'filename'
 
 BASIC_GIR_TYPES = [TYPE_BOOLEAN, TYPE_INT8, TYPE_UINT8, TYPE_INT16,

@@ -61,7 +61,7 @@
           <type name="Object" c:type="AnnotationObject*"/>
         </parameter>
         <parameter name="allow_none" allow-none="1">
-          <type name="string" c:type="gchar*"/>
+          <type name="utf8" c:type="gchar*"/>
         </parameter>
       </parameters>
     </function>
@@ -152,7 +152,7 @@
               c:identifier="annotation_object_get_strings">
       <return-value>
         <type name="GLib.List" transfer-ownership="1">
-          <type name="string" relation="element"/>
+          <type name="utf8" relation="element"/>
         </type>
       </return-value>
       <parameters>

@@ -99,7 +99,7 @@
             <type name="Object" c:type="FooObject*"/>
           </parameter>
           <parameter name="target">
-            <type name="string" c:type="char*"/>
+            <type name="utf8" c:type="char*"/>
           </parameter>
         </parameters>
       </method>
@@ -117,7 +117,7 @@
         </parameters>
       </method>
       <property name="string" writable="1">
-        <type name="string" c:type="gchararray"/>
+        <type name="utf8" c:type="gchararray"/>
       </property>
       <callback name="virtual_method" c:type="virtual_method">
         <return-value>
@@ -134,7 +134,7 @@
       </callback>
       <glib:signal name="signal">
         <return-value>
-          <type name="string" c:type="gchararray"/>
+          <type name="utf8" c:type="gchararray"/>
         </return-value>
         <parameters>
           <parameter name="object">
