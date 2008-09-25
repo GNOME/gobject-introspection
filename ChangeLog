@@ -1,3 +1,13 @@
+2008-09-25  Colin Walters  <walters@verbum.org>
+
+	Remove non-repository types from GIR
+
+	* giscanner/ast.py: The canonical name is 'utf8', not
+	'string'.
+	* giscanner/glibast.py: A few more glib type mappings.
+	* girepository/girparser.c: We only parse repository types.
+	* tests/*.gir: Update.
+
 2008-09-23  Colin Walters  <walters@verbum.org>
 
 	Bug 552566: Add time_t type
