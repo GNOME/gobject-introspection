@@ -1,3 +1,7 @@
+2008-09-27  Colin Walters  <walters@verbum.org>
+
+	* tools/g-ir-scanner: Add --inject option.
+
 2008-09-25  Colin Walters  <walters@verbum.org>
 
 	Remove non-repository types from GIR

@@ -38,7 +38,7 @@ sys.path.insert(0, path)
 from giscanner.glibtransformer import GLibTransformer
 from giscanner.sourcescanner import SourceScanner
 from giscanner.transformer import Transformer
-from giscanner.minixpath import xpath_assert
+from giscanner.minixpath import myxpath, xpath_assert
 
 
 def _get_option_parser():
@@ -77,6 +77,9 @@ def _get_option_parser():
     parser.add_option("", "--typelib-xml",
                       action="store_true", dest="typelib_xml",
                       help="Just convert GIR to typelib XML")
+    parser.add_option("", "--inject",
+                      action="store_true", dest="inject",
+                      help="Inject additional components into GIR XML")
     parser.add_option("", "--xpath-assertions",
                       action="store", dest="xpath_assertions",
                       help="Use given file to create assertions on GIR content")
@@ -113,6 +116,23 @@ def typelib_xml_strip(path):
     doc.write(sys.stdout)
     return 0
 
+def inject(path, additions, outpath):
+    from xml.etree.cElementTree import parse
+    doc = parse(open(path))
+    root = doc.getroot()
+    injectDoc = parse(open(additions))
+    for node in injectDoc.getroot():
+        injectPath = node.attrib['path']
+        target = myxpath(root, injectPath)
+        if not target:
+            raise ValueError("Couldn't find path %r" % (injectPath, ))
+        for child in node:
+            target.append(child)
+    outf = open(outpath, 'w')
+    doc.write(outf)    
+    outf.close()
+    return 0
+
 def validate(assertions, path):
     from xml.etree.cElementTree import parse
     doc = parse(open(path))
@@ -137,6 +157,11 @@ def main(args):
 
     if options.typelib_xml:
         return typelib_xml_strip(args[1])
+
+    if options.inject:
+        if len(args) != 4:
+            _error('Need three filenames; e.g. g-ir-scanner --inject Source.gir Additions.xml SourceOut.gir')
+        return inject(*args[1:4])
 
     if options.xpath_assertions:
         return validate(options.xpath_assertions, args[1])
