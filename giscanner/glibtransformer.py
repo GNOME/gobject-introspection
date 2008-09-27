@@ -169,7 +169,7 @@ class GLibTransformer(object):
 
     # Helper functions
 
-    def _create_type(self, type_id):
+    def _type_from_gtype(self, type_id):
         ctype = cgobject.type_name(type_id)
         type_name = type_name_from_ctype(ctype)
         type_name = type_name.replace('*', '')
@@ -589,7 +589,7 @@ class GLibTransformer(object):
 
     def _introspect_signals(self, node, type_id):
         for signal_info in cgobject.signal_list(type_id):
-            rtype = self._create_type(signal_info.return_type)
+            rtype = self._type_from_gtype(signal_info.return_type)
             return_ = Return(rtype)
             signal = GLibSignal(signal_info.signal_name, return_)
             for i, parameter in enumerate(signal_info.get_params()):
@@ -597,7 +597,7 @@ class GLibTransformer(object):
                     name = 'object'
                 else:
                     name = 'p%s' % (i-1, )
-                ptype = self._create_type(parameter)
+                ptype = self._type_from_gtype(parameter)
                 param = Parameter(name, ptype)
                 signal.parameters.append(param)
             node.signals.append(signal)
