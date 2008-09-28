@@ -378,6 +378,9 @@ class GLibTransformer(object):
                 return None
             # TODO - check that the return type is a subclass of the
             # class from the prefix
+            # But for now, ensure that constructor returns are always
+            # the most concrete class
+            func.retval.type = Type(klass.name, klass.ctype+'*')
 
         self._remove_attribute(func.name)
         # Strip namespace and object prefix: gtk_window_new -> new
