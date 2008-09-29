@@ -143,21 +143,6 @@ class GIRWriter(XMLWriter):
     def _type_to_string(self, ntype):
         if isinstance(ntype, basestring):
             return ntype
-        if isinstance(ntype, List) and ntype.element_type:
-            return '%s<%s>' % (ntype.name,
-                               self._type_to_string(ntype.element_type))
-        if isinstance(ntype, Map) and ntype.key_type:
-            return '%s<%s,%s>' % (ntype.name,
-                                  self._type_to_string(ntype.key_type),
-                                  self._type_to_string(ntype.value_type))
-        if isinstance(ntype, Array):
-            options = []
-            if not ntype.zeroterminated:
-                options.append('zero-terminated=0')
-            if ntype.length_param_index >= 0:
-                options.append('length=%d' % (ntype.length_param_index, ))
-            return self._type_to_string(ntype.element_type) + \
-                '[%s]' % (','.join(options), )
         return ntype.name
 
     def _write_type(self, ntype, relation=None):
@@ -167,15 +152,33 @@ class GIRWriter(XMLWriter):
         else:
             typename = ntype.name
             type_cname = ntype.ctype
+        if isinstance(ntype, Array):
+            attrs = []
+            if not ntype.zeroterminated:
+                attrs.append(('zero-terminated', '0'))
+            if ntype.length_param_index >= 0:
+                attrs.append(('length', '%d' % (ntype.length_param_index, )))
+            attrs.append(('c:type', ntype.ctype))
+            with self.tagcontext('array', attrs):
+                self._write_type(ntype.element_type)
+            return
         attrs = [('name', self._type_to_string(ntype))]
-        if relation:
-            attrs.append(('relation', relation))
         # FIXME: figure out if type references a basic type
         #        or a boxed/class/interface etc. and skip
         #        writing the ctype if the latter.
         if type_cname is not None:
             attrs.append(('c:type', type_cname))
-            self.write_tag('type', attrs)
+        if isinstance(ntype, List) and ntype.element_type:
+            with self.tagcontext('type', attrs):
+                self._write_type(ntype.element_type)
+            return
+        if isinstance(ntype, Map) and ntype.key_type:
+            with self.tagcontext('type', attrs):
+                self._write_type(ntype.key_type)
+                self._write_type(ntype.value_type)
+            return
+        # Not a special type, just write it out
+        self.write_tag('type', attrs)
 
     def _write_enum(self, enum):
         attrs = [('name', enum.name),

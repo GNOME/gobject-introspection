@@ -151,7 +151,9 @@
     <function name="object_get_strings"
               c:identifier="annotation_object_get_strings">
       <return-value transfer-ownership="1">
-        <type name="GLib.List&lt;utf8&gt;" c:type="GList*"/>
+        <type name="GLib.List" c:type="GList*">
+          <type name="utf8"/>
+        </type>
       </return-value>
       <parameters>
         <parameter name="object">
@@ -162,7 +164,9 @@
     <function name="object_get_objects"
               c:identifier="annotation_object_get_objects">
       <return-value transfer-ownership="1">
-        <type name="GLib.SList&lt;Object&gt;" c:type="GSList*"/>
+        <type name="GLib.SList" c:type="GSList*">
+          <type name="Object"/>
+        </type>
       </return-value>
       <parameters>
         <parameter name="object">
@@ -180,7 +184,9 @@
           <type name="Object" c:type="AnnotationObject*"/>
         </parameter>
         <parameter name="bytes">
-          <type name="uint8[]" c:type="guchar*"/>
+          <array c:type="guchar*">
+            <type name="uint8"/>
+          </array>
         </parameter>
       </parameters>
     </function>
@@ -194,7 +200,9 @@
           <type name="Object" c:type="AnnotationObject*"/>
         </parameter>
         <parameter name="nums">
-          <type name="int[]" c:type="int*"/>
+          <array c:type="int*">
+            <type name="int"/>
+          </array>
         </parameter>
       </parameters>
     </function>
@@ -208,7 +216,9 @@
           <type name="Object" c:type="AnnotationObject*"/>
         </parameter>
         <parameter name="nums">
-          <type name="int[length=2]" c:type="int*"/>
+          <array length="2" c:type="int*">
+            <type name="int"/>
+          </array>
         </parameter>
         <parameter name="n_nums">
           <type name="int" c:type="int"/>

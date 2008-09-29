@@ -347,7 +347,7 @@ class Transformer(object):
             if 'array' in options:
                 options.remove('array')
             derefed = ctype[:-1] # strip the *
-            return Array(None, ctype,
+            return Array(ctype,
                          self._parse_and_resolve_ctype(derefed))
         resolved_type_name = self._parse_and_resolve_ctype(ctype)
         return Type(resolved_type_name, ctype)

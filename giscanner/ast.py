@@ -170,8 +170,8 @@ class Type(Node):
 
 class Array(Type):
 
-    def __init__(self, name, ctype, element_type):
-        Type.__init__(self, name, ctype)
+    def __init__(self, ctype, element_type):
+        Type.__init__(self, '<carray>', ctype)
         self.element_type = element_type
         self.zeroterminated = True
         self.length_param_index = -1

@@ -21,7 +21,7 @@
 from xml.etree.cElementTree import parse
 
 from .ast import (Alias, Callback, Function, Parameter, Return, Union,
-                  Struct, Type)
+                  Struct, Type, Array)
 from .glibast import (GLibEnum, GLibEnumMember, GLibFlags,
                       GLibInterface, GLibObject, GLibBoxedStruct,
                       GLibBoxedUnion, GLibBoxedOther)
@@ -128,7 +128,10 @@ class GIRParser(object):
 
     def _parse_function(self, node, klass):
         name = node.attrib['name']
-        retval = Return(self._parse_type(node.find(_corens('return-value'))))
+        returnnode = node.find(_corens('return-value'))
+        if not returnnode:
+            raise ValueError('node %r has no return-value' % (name, ))
+        retval = Return(self._parse_type(returnnode))
         parameters = []
         for paramnode in node.findall('parameter'):
             parameters.append(Parameter(paramnode.attrib['name'],
@@ -164,10 +167,15 @@ class GIRParser(object):
 
     def _parse_type(self, node):
         typenode = node.find(_corens('type'))
-        if node is None:
-            raise ValueError("failed to find type")
-        return Type(typenode.attrib['name'],
-                    typenode.attrib[_cns('type')])
+        if typenode is not None:
+            return Type(typenode.attrib['name'],
+                        typenode.attrib.get(_cns('type')))
+        typenode = node.find(_corens('array'))
+        if typenode is not None:
+            return Array(typenode.attrib[_cns('type')],
+                         self._parse_type(typenode))
+        raise ValueError("Couldn't parse type of node %r; children=%r",
+                         node, list(node))
 
     def _parse_boxed(self, node):
         obj = GLibBoxedOther(node.attrib[_glibns('name')],
