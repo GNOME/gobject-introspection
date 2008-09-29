@@ -313,7 +313,7 @@ class Transformer(object):
     def _parse_and_resolve_ctype(self, ctype):
         canonical = type_name_from_ctype(ctype)
         derefed = canonical.replace('*', '')
-        return self.resolve_type_name(derefed)
+        return self.resolve_type_name(derefed, derefed)
 
     def _create_type(self, source_type, options=[]):
         ctype = self._create_source_type(source_type)
@@ -348,7 +348,7 @@ class Transformer(object):
                 options.remove('array')
             derefed = ctype[:-1] # strip the *
             return Array(None, ctype,
-                         type_name_from_ctype(derefed))
+                         self._parse_and_resolve_ctype(derefed))
         resolved_type_name = self._parse_and_resolve_ctype(ctype)
         return Type(resolved_type_name, ctype)
 
