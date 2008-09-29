@@ -109,6 +109,13 @@ type_names['pointer'] = TYPE_ANY
 type_names['constpointer'] = TYPE_ANY
 
 
+# These types, when seen by reference, are converted into an Array()
+# by default
+default_array_types = {}
+default_array_types['uint8*'] = TYPE_UINT8
+default_array_types['char**'] = TYPE_STRING
+
+
 def type_name_from_ctype(ctype):
     return type_names.get(ctype, ctype)
 
@@ -159,6 +166,39 @@ class Type(Node):
         Node.__init__(self, name)
         self.ctype = ctype
         self.resolved = False
+
+
+class Array(Type):
+
+    def __init__(self, name, ctype, element_type):
+        Type.__init__(self, name, ctype)
+        self.element_type = element_type
+        self.zeroterminated = True
+        self.length_param_index = -1
+
+    def __repr__(self):
+        return 'Array(%r of %r)' % (self.name, self.element_type, )
+
+
+class List(Type):
+
+    def __init__(self, name, ctype, element_type):
+        Type.__init__(self, name, ctype)
+        self.element_type = element_type
+
+    def __repr__(self):
+        return 'List(%r of %r)' % (self.name, self.element_type, )
+
+
+class Map(Type):
+
+    def __init__(self, name, ctype, key_type, value_type):
+        Type.__init__(self, name, ctype)
+        self.key_type = key_type
+        self.value_type = value_type
+
+    def __repr__(self):
+        return 'Map(%r <%r,%r.)' % (self.name, self.key_type, self.value_type)
 
 
 class Alias(Node):
@@ -313,18 +353,6 @@ class Callback(Node):
     def __repr__(self):
         return 'Callback(%r, %r, %r)' % (
             self.name, self.retval, self.parameters)
-
-
-class Sequence(Type):
-    # Subclass, because a Sequence is a kind of Type
-
-    def __init__(self, name, ctype, element_type):
-        Type.__init__(self, name, ctype)
-        self.element_type = element_type
-        self.transfer = False
-
-    def __repr__(self):
-        return 'Sequence(%r of %r)' % (self.name, self.element_type, )
 
 
 class Union(Node):

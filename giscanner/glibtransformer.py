@@ -25,7 +25,7 @@ from ctypes.util import find_library
 
 from . import cgobject
 from .ast import (Callback, Enum, Function, Member, Namespace, Parameter,
-                  Sequence, Property, Return, Struct, Type, Alias,
+                  Property, Return, Struct, Type, Alias, Array,
                   Union, type_name_from_ctype)
 from .transformer import Names
 from .glibast import (GLibBoxed, GLibEnum, GLibEnumMember, GLibFlags,
@@ -166,6 +166,12 @@ class GLibTransformer(object):
         prefix = type_name[:-len(suffix)]
         no_uscore_prefixed = (prefix + '_' + to_underscores(suffix)).lower()
         self._uscore_type_names[no_uscore_prefixed] = node
+
+    def type_is_list(self, ctype):
+        return ctype in ['GList*', 'GSList*']
+
+    def type_is_map(self, ctype):
+        return ctype in ['GHashTable*']
 
     # Helper functions
 
@@ -630,9 +636,9 @@ class GLibTransformer(object):
         return False
 
     def _validate_type(self, ptype):
-        if isinstance(ptype, Sequence):
+        if isinstance(ptype, Array):
             etype = ptype.element_type
-            if isinstance(etype, Sequence):
+            if isinstance(etype, Array):
                 return self._validate_type(etype)
             return self._validate_type_name(etype)
         return self._validate_type_name(ptype.name)

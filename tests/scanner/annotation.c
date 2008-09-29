@@ -32,7 +32,7 @@ annotation_object_method (AnnotationObject *object)
  *
  * This is a test for out arguments
  *
- * @outarg: (out): This is an argument test
+ * @outarg: <out>: This is an argument test
  * Return value: an int
  */
 gint
@@ -47,7 +47,7 @@ annotation_object_in (AnnotationObject *object, int *outarg)
  *
  * This is a test for out arguments
  *
- * @outarg: (in): This is an argument test
+ * @outarg: <in>: This is an argument test
  * Return value: an int
  */
 gint
@@ -63,7 +63,7 @@ annotation_object_out (AnnotationObject *object, int *outarg)
  *
  * This is a test for out arguments
  *
- * @inoutarg: (inout): This is an argument test
+ * @inoutarg: <out>: This is an argument test
  * Return value: an int
  */
 gint
@@ -78,7 +78,7 @@ annotation_object_inout (AnnotationObject *object, int *inoutarg)
  *
  * This is a second test for out arguments
  *
- * @inoutarg: (in) (out): This is an argument test
+ * @inoutarg: <inout>: This is an argument test
  * Return value: an int
  */
 gint
@@ -94,7 +94,7 @@ annotation_object_inout2 (AnnotationObject *object, int *inoutarg)
  *
  * This is a 3th test for out arguments
  *
- * @inoutarg: (in-out) (allow-none): This is an argument test
+ * @inoutarg: <inout,allow-none>: This is an argument test
  * Return value: an int
  */
 gint
@@ -109,11 +109,11 @@ annotation_object_inout3 (AnnotationObject *object, int *inoutarg)
  *
  * This is a test for out arguments
  *
- * @toown: (callee-owns): a #GObject
+ * @toown: <out,transfer>: a #GObject
  * Return value: an int
  */
 gint
-annotation_object_calleeowns (AnnotationObject *object, GObject *toown)
+annotation_object_calleeowns (AnnotationObject *object, GObject **toown)
 {
 	return 1;
 }
@@ -125,14 +125,14 @@ annotation_object_calleeowns (AnnotationObject *object, GObject *toown)
  *
  * This is a test for out arguments
  *
- * @toown1: (callee-owns): a #GObject
- * @toown2: (callee-owns): a #GObject
+ * @toown1: <out,transfer>: a #GObject
+ * @toown2: <out,transfer>: a #GObject
  * Return value: an int
  */
 gint
 annotation_object_calleesowns (AnnotationObject *object,
-			       GObject *toown1,
-			       GObject *toown2)
+			       GObject **toown1,
+			       GObject **toown2)
 {
 	return 1;
 }
@@ -142,16 +142,17 @@ annotation_object_calleesowns (AnnotationObject *object,
  * annotation_object_get_strings:
  * @object: a #GObject
  *
- * This is a test for returning a list of strings
+ * This is a test for returning a list of strings, where
+ * each string needs to be freed.
  *
- * Return value: (seq char* (callee-owns)) (caller-owns): list of strings
+ * Return value: <char*,transfer>: list of strings
  */
 GList*
 annotation_object_get_strings (AnnotationObject *object)
 {
   GList *list = NULL;
-  list = g_list_prepend (list, "annotation");
-  list = g_list_prepend (list, "bar");
+  list = g_list_prepend (list, g_strdup ("annotation"));
+  list = g_list_prepend (list, g_strdup ("bar"));
   return list;
 }
 
@@ -174,8 +175,7 @@ annotation_object_with_voidp (AnnotationObject *object, void *data)
  * The list itself should be freed, but not the internal objects,
  * intentionally similar example to gtk_container_get_children
  *
- * Return value: (seq AnnotationObject* (callee-owns)) (caller-owns): a list
- *               of strings
+ * Return value: <AnnotationObject*>: list of objects
  */
 GSList*
 annotation_object_get_objects (AnnotationObject *object)
@@ -191,21 +191,51 @@ annotation_object_get_objects (AnnotationObject *object)
  *
  * Test returning a caller-owned object
  *
- * Return value: (caller-owns): The object
+ * Return value: <transfer>: The object
  **/
-GObject*
+GObject* 
 annotation_object_create_object (AnnotationObject *object)
 {
 	return g_object_ref (object);
 }
 
 /**
+ * annotation_object_compute_sum:
+ * @object: a #GObject
+ * @nums: <array>: Sequence of numbers
+ *
+ * Test taking a zero-terminated array
+ **/
+void
+annotation_object_compute_sum  (AnnotationObject *object,
+				int              *nums)
+{
+
+}
+
+/**
+ * annotation_object_compute_sum_n:
+ * @object: a #GObject
+ * @nums: <array,length=2>: Sequence of numbers
+ * @nums: Length of number array
+ *
+ * Test taking an array with length parameter
+ **/
+void     
+annotation_object_compute_sum_n(AnnotationObject *object,
+				int              *nums,
+				int               n_nums)
+{
+
+}
+
+/**
  * annotation_object_allow_none: 
  * @object: a #GObject
- * @allow_none: (allow-none): 
+ * @somearg: <allow-none>: 
  **/
 GObject*
-annotation_object_allow_none (AnnotationObject *object, gchar *allow_none)
+annotation_object_allow_none (AnnotationObject *object, gchar *somearg)
 {
 }
 

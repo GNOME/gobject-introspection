@@ -21,9 +21,10 @@
 import os
 
 from giscanner.ast import (Callback, Enum, Function, Namespace, Member,
-                           Parameter, Return, Sequence, Struct, Field,
+                           Parameter, Return, Array, Struct, Field,
                            Type, Alias, Interface, Class, Node, Union,
-                           type_name_from_ctype, type_names)
+                           List, Map, type_name_from_ctype, type_names,
+                           default_array_types)
 from giscanner.config import DATADIR
 from .glibast import GLibBoxed
 from giscanner.sourcescanner import (
@@ -68,6 +69,9 @@ class Transformer(object):
         self._strip_prefix = ''
         self._includes = set()
         self._includepaths = []
+
+        self._list_ctypes = []
+        self._map_ctypes = []
 
     def get_names(self):
         return self._names
@@ -302,7 +306,7 @@ class Transformer(object):
                 "symbol %r of type %s" % (symbol.ident, ctype_name(ctype)))
         return node
 
-    def _create_type(self, source_type):
+    def _create_type(self, source_type, options=[]):
         ctype = self._create_source_type(source_type)
         if ctype == 'va_list':
             raise SkipError
@@ -310,13 +314,35 @@ class Transformer(object):
         #        properly instead
         elif ctype == 'FILE*':
             raise SkipError
+        if ctype in self._list_ctypes:
+            if len(options) > 0:
+                contained_type = options[0]
+            else:
+                contained_type = None
+            return List(ctype.replace('*', ''),
+                        ctype,
+                        contained_type)
+        if ctype in self._list_ctypes:
+            if len(options) > 0:
+                key_type = options[0]
+                value_type = options[1]
+            else:
+                key_type = None
+                value_type = None
+            return Map(ctype.replace('*', ''),
+                       ctype,
+                       key_type, value_type)
+        if ctype in default_array_types:
+            derefed = ctype[:-1] # strip the *
+            return Array(None, ctype,
+                         type_name_from_ctype(derefed))
         type_name = type_name_from_ctype(ctype)
         type_name = type_name.replace('*', '')
         resolved_type_name = self.resolve_type_name(type_name)
         return Type(resolved_type_name, ctype)
 
     def _create_parameter(self, symbol, options):
-        ptype = self._create_type(symbol.base_type)
+        ptype = self._create_type(symbol.base_type, options)
         param = Parameter(symbol.ident, ptype)
         for option in options:
             if option in ['in-out', 'inout']:
@@ -325,12 +351,12 @@ class Transformer(object):
                 param.direction = 'in'
             elif option == 'out':
                 param.direction = 'out'
-            elif option == 'callee-owns':
+            elif option == 'transfer':
                 param.transfer = True
             elif option == 'allow-none':
                 param.allow_none = True
             else:
-                print 'Unhandled parameter annotation option: %s' % (
+                print 'Unhandled parameter annotation option: %r' % (
                     option, )
         return param
 
@@ -343,17 +369,6 @@ class Transformer(object):
         for option in options:
             if option == 'caller-owns':
                 return_.transfer = True
-            elif option.startswith('seq '):
-                value, element_options = option[3:].split(None, 2)
-                c_element_type = self._parse_type_annotation(value)
-                element_type = c_element_type.replace('*', '')
-                element_type = self.resolve_type_name(element_type,
-                                                      c_element_type)
-                seq = Sequence(rtype.name,
-                               type_name_from_ctype(rtype.name),
-                               element_type)
-                seq.transfer = True
-                return_.type = seq
             else:
                 print 'Unhandled parameter annotation option: %s' % (
                     option, )
@@ -423,12 +438,6 @@ class Transformer(object):
             name = self.strip_namespace_object(symbol.ident)
         return Callback(name, retval, list(parameters), symbol.ident)
 
-    def _parse_type_annotation(self, annotation):
-        if (annotation[0] == "[" and
-            annotation[-1] == "]"):
-            return Sequence(self._parse_type_annotation(annotation[1:-1]))
-        return annotation
-
     def _typepair_to_str(self, item):
         nsname, item = item
         if nsname is None:
@@ -497,7 +506,7 @@ class Transformer(object):
             return None
 
     def resolve_param_type_full(self, ptype, names):
-        if isinstance(ptype, Sequence):
+        if isinstance(ptype, Array):
             ptype.element_type = \
                 self.resolve_param_type_full(ptype.element_type, names)
         elif isinstance(ptype, Node):

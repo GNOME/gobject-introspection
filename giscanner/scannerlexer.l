@@ -258,13 +258,13 @@ parse_gtkdoc (GISourceScanner *scanner,
 
           do
             {
-              if (*ptr == '(')
+              if (*ptr == '<')
 		{
 		  pstack++;
 		  if (pstack == 1)
 		    continue;
 		}
-	      else if (*ptr == ')')
+	      else if (*ptr == '>')
 		pstack--;
 		       
               if (pstack == 0)

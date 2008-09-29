@@ -23,7 +23,7 @@ from __future__ import with_statement
 import os
 
 from .ast import (Callback, Class, Enum, Function, Interface, Member,
-                  Sequence, Struct, Alias, Union)
+                  Array, Struct, Alias, Union)
 from .glibast import (GLibBoxed, GLibEnum, GLibEnumMember,
                       GLibFlags, GLibObject, GLibInterface)
 from .xmlwriter import XMLWriter
@@ -140,6 +140,19 @@ class GIRWriter(XMLWriter):
         with self.tagcontext('parameter', attrs):
             self._write_type(parameter.type)
 
+    def _type_to_string(self, ntype):
+        if isinstance(ntype, basestring):
+            return ntype
+        if isinstance(ntype, Array):
+            options = []
+            if not ntype.zeroterminated:
+                options.append('zero-terminated=0')
+            if ntype.length_param_index >= 0:
+                options.append('length=%d' % (ntype.length_param_index, ))
+            return self._type_to_string(ntype.element_type) + \
+                '[%s]' % (','.join(options), )
+        return ntype.name
+
     def _write_type(self, ntype, relation=None):
         if isinstance(ntype, basestring):
             typename = ntype
@@ -147,21 +160,14 @@ class GIRWriter(XMLWriter):
         else:
             typename = ntype.name
             type_cname = ntype.ctype
-        attrs = [('name', typename)]
+        attrs = [('name', self._type_to_string(ntype))]
         if relation:
             attrs.append(('relation', relation))
-        if isinstance(ntype, Sequence):
-            if ntype.transfer:
-                attrs.append(('transfer-ownership',
-                              str(int(ntype.transfer))))
-            with self.tagcontext('type', attrs):
-                self._write_type(ntype.element_type, relation="element")
-        else:
-            # FIXME: figure out if type references a basic type
-            #        or a boxed/class/interface etc. and skip
-            #        writing the ctype if the latter.
-            if type_cname is not None:
-                attrs.append(('c:type', type_cname))
+        # FIXME: figure out if type references a basic type
+        #        or a boxed/class/interface etc. and skip
+        #        writing the ctype if the latter.
+        if type_cname is not None:
+            attrs.append(('c:type', type_cname))
             self.write_tag('type', attrs)
 
     def _write_enum(self, enum):

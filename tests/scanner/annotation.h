@@ -31,12 +31,19 @@ gint     annotation_object_inout3       (AnnotationObject *object,
 gint     annotation_object_in           (AnnotationObject *object,
 					 int              *inarg);
 gint     annotation_object_calleeowns   (AnnotationObject *object,
-					 GObject          *toown);
+					 GObject          **toown);
 gint     annotation_object_calleesowns  (AnnotationObject *object,
-					 GObject          *toown1,
-					 GObject          *toown2);
+					 GObject          **toown1,
+					 GObject          **toown2);
 GList*   annotation_object_get_strings  (AnnotationObject *object);
 GSList*  annotation_object_get_objects  (AnnotationObject *object);
+
+void     annotation_object_compute_sum  (AnnotationObject *object,
+					 int              *nums);
+
+void     annotation_object_compute_sum_n(AnnotationObject *object,
+					 int              *nums,
+					 int               n_nums);
 
 GObject* annotation_object_do_not_use   (AnnotationObject *object);
 
