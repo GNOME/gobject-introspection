@@ -271,7 +271,8 @@ class Return(Node):
     def __init__(self, rtype):
         Node.__init__(self)
         self.type = rtype
-        self.transfer = False
+        self.transfer = isinstance(rtype, (List, Map, Array)) or \
+            rtype.name in ('utf8', 'filename')
 
     def __repr__(self):
         return 'Return(%r)' % (self.type, )

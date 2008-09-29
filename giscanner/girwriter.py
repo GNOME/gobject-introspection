@@ -23,7 +23,7 @@ from __future__ import with_statement
 import os
 
 from .ast import (Callback, Class, Enum, Function, Interface, Member,
-                  Array, Struct, Alias, Union)
+                  Array, Struct, Alias, Union, List, Map)
 from .glibast import (GLibBoxed, GLibEnum, GLibEnumMember,
                       GLibFlags, GLibObject, GLibInterface)
 from .xmlwriter import XMLWriter
@@ -143,6 +143,13 @@ class GIRWriter(XMLWriter):
     def _type_to_string(self, ntype):
         if isinstance(ntype, basestring):
             return ntype
+        if isinstance(ntype, List) and ntype.element_type:
+            return '%s<%s>' % (ntype.name,
+                               self._type_to_string(ntype.element_type))
+        if isinstance(ntype, Map) and ntype.key_type:
+            return '%s<%s,%s>' % (ntype.name,
+                                  self._type_to_string(ntype.key_type),
+                                  self._type_to_string(ntype.value_type))
         if isinstance(ntype, Array):
             options = []
             if not ntype.zeroterminated:

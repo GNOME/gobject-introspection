@@ -133,7 +133,7 @@
         </parameters>
       </callback>
       <glib:signal name="signal">
-        <return-value>
+        <return-value transfer-ownership="1">
           <type name="utf8" c:type="gchararray"/>
         </return-value>
         <parameters>

@@ -21,7 +21,7 @@ gint     annotation_object_out          (AnnotationObject *object,
 					 int              *outarg);
 GObject* annotation_object_create_object(AnnotationObject *object);
 GObject* annotation_object_allow_none   (AnnotationObject *object,
-					 gchar            *allow_none);
+					 gchar            *somearg);
 gint     annotation_object_inout        (AnnotationObject *object,
 					 int              *inoutarg);
 gint     annotation_object_inout2       (AnnotationObject *object,
@@ -37,6 +37,9 @@ gint     annotation_object_calleesowns  (AnnotationObject *object,
 					 GObject          **toown2);
 GList*   annotation_object_get_strings  (AnnotationObject *object);
 GSList*  annotation_object_get_objects  (AnnotationObject *object);
+
+void     annotation_object_use_buffer   (AnnotationObject *object,
+					 guchar           *bytes);
 
 void     annotation_object_compute_sum  (AnnotationObject *object,
 					 int              *nums);

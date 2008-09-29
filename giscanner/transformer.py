@@ -79,6 +79,10 @@ class Transformer(object):
     def get_includes(self):
         return self._includes
 
+    def set_container_types(self, list_ctypes, map_ctypes):
+        self._list_ctypes = list_ctypes
+        self._map_ctypes = map_ctypes
+
     def set_strip_prefix(self, strip_prefix):
         self._strip_prefix = strip_prefix
 
@@ -306,6 +310,11 @@ class Transformer(object):
                 "symbol %r of type %s" % (symbol.ident, ctype_name(ctype)))
         return node
 
+    def _parse_and_resolve_ctype(self, ctype):
+        canonical = type_name_from_ctype(ctype)
+        derefed = canonical.replace('*', '')
+        return self.resolve_type_name(derefed)
+
     def _create_type(self, source_type, options=[]):
         ctype = self._create_source_type(source_type)
         if ctype == 'va_list':
@@ -316,7 +325,8 @@ class Transformer(object):
             raise SkipError
         if ctype in self._list_ctypes:
             if len(options) > 0:
-                contained_type = options[0]
+                contained_type = self._parse_and_resolve_ctype(options[0])
+                del options[0]
             else:
                 contained_type = None
             return List(ctype.replace('*', ''),
@@ -324,21 +334,22 @@ class Transformer(object):
                         contained_type)
         if ctype in self._list_ctypes:
             if len(options) > 0:
-                key_type = options[0]
-                value_type = options[1]
+                key_type = self._parse_and_resolve_ctype(options[0])
+                value_type = self._parse_and_resolve_ctype(options[1])
+                del options[0:2]
             else:
                 key_type = None
                 value_type = None
             return Map(ctype.replace('*', ''),
                        ctype,
                        key_type, value_type)
-        if ctype in default_array_types:
+        if (ctype in default_array_types) or ('array' in options):
+            if 'array' in options:
+                options.remove('array')
             derefed = ctype[:-1] # strip the *
             return Array(None, ctype,
                          type_name_from_ctype(derefed))
-        type_name = type_name_from_ctype(ctype)
-        type_name = type_name.replace('*', '')
-        resolved_type_name = self.resolve_type_name(type_name)
+        resolved_type_name = self._parse_and_resolve_ctype(ctype)
         return Type(resolved_type_name, ctype)
 
     def _create_parameter(self, symbol, options):
@@ -353,6 +364,8 @@ class Transformer(object):
                 param.direction = 'out'
             elif option == 'transfer':
                 param.transfer = True
+            elif option == 'notransfer':
+                param.transfer = False
             elif option == 'allow-none':
                 param.allow_none = True
             else:
@@ -360,17 +373,15 @@ class Transformer(object):
                     option, )
         return param
 
-    def _create_return(self, source_type, options=None):
-        if not options:
-            options = []
-        rtype = self._create_type(source_type)
+    def _create_return(self, source_type, options=[]):
+        rtype = self._create_type(source_type, options)
         rtype = self.resolve_param_type(rtype)
         return_ = Return(rtype)
         for option in options:
-            if option == 'caller-owns':
+            if option == 'transfer':
                 return_.transfer = True
             else:
-                print 'Unhandled parameter annotation option: %s' % (
+                print 'Unhandled parameter annotation option: %r' % (
                     option, )
         return return_
 

@@ -60,7 +60,7 @@
         <parameter name="object">
           <type name="Object" c:type="AnnotationObject*"/>
         </parameter>
-        <parameter name="allow_none" allow-none="1">
+        <parameter name="somearg" allow-none="1">
           <type name="utf8" c:type="gchar*"/>
         </parameter>
       </parameters>
@@ -86,7 +86,7 @@
         <parameter name="object">
           <type name="Object" c:type="AnnotationObject*"/>
         </parameter>
-        <parameter name="inoutarg">
+        <parameter name="inoutarg" direction="inout">
           <type name="int" c:type="int*"/>
         </parameter>
       </parameters>
@@ -99,7 +99,7 @@
         <parameter name="object">
           <type name="Object" c:type="AnnotationObject*"/>
         </parameter>
-        <parameter name="inoutarg" direction="inout">
+        <parameter name="inoutarg" direction="inout" allow-none="1">
           <type name="int" c:type="int*"/>
         </parameter>
       </parameters>
@@ -126,8 +126,8 @@
         <parameter name="object">
           <type name="Object" c:type="AnnotationObject*"/>
         </parameter>
-        <parameter name="toown" transfer-ownership="1">
-          <type name="GObject.Object" c:type="GObject*"/>
+        <parameter name="toown" direction="out" transfer-ownership="1">
+          <type name="GObject.Object" c:type="GObject**"/>
         </parameter>
       </parameters>
     </function>
@@ -140,20 +140,18 @@
         <parameter name="object">
           <type name="Object" c:type="AnnotationObject*"/>
         </parameter>
-        <parameter name="toown1" transfer-ownership="1">
-          <type name="GObject.Object" c:type="GObject*"/>
+        <parameter name="toown1" direction="out" transfer-ownership="1">
+          <type name="GObject.Object" c:type="GObject**"/>
         </parameter>
-        <parameter name="toown2" transfer-ownership="1">
-          <type name="GObject.Object" c:type="GObject*"/>
+        <parameter name="toown2" direction="out" transfer-ownership="1">
+          <type name="GObject.Object" c:type="GObject**"/>
         </parameter>
       </parameters>
     </function>
     <function name="object_get_strings"
               c:identifier="annotation_object_get_strings">
-      <return-value>
-        <type name="GLib.List" transfer-ownership="1">
-          <type name="utf8" relation="element"/>
-        </type>
+      <return-value transfer-ownership="1">
+        <type name="GLib.List&lt;utf8&gt;" c:type="GList*"/>
       </return-value>
       <parameters>
         <parameter name="object">
@@ -163,14 +161,57 @@
     </function>
     <function name="object_get_objects"
               c:identifier="annotation_object_get_objects">
-      <return-value>
-        <type name="GLib.SList" transfer-ownership="1">
-          <type name="Object" relation="element"/>
-        </type>
+      <return-value transfer-ownership="1">
+        <type name="GLib.SList&lt;Object&gt;" c:type="GSList*"/>
       </return-value>
       <parameters>
         <parameter name="object">
           <type name="Object" c:type="AnnotationObject*"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="object_use_buffer"
+              c:identifier="annotation_object_use_buffer">
+      <return-value>
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="object">
+          <type name="Object" c:type="AnnotationObject*"/>
+        </parameter>
+        <parameter name="bytes">
+          <type name="uint8[]" c:type="guchar*"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="object_compute_sum"
+              c:identifier="annotation_object_compute_sum">
+      <return-value>
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="object">
+          <type name="Object" c:type="AnnotationObject*"/>
+        </parameter>
+        <parameter name="nums">
+          <type name="int[]" c:type="int*"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="object_compute_sum_n"
+              c:identifier="annotation_object_compute_sum_n">
+      <return-value>
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="object">
+          <type name="Object" c:type="AnnotationObject*"/>
+        </parameter>
+        <parameter name="nums">
+          <type name="int[]" c:type="int*"/>
+        </parameter>
+        <parameter name="n_nums">
+          <type name="int" c:type="int"/>
         </parameter>
       </parameters>
     </function>

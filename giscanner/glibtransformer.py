@@ -26,13 +26,15 @@ from ctypes.util import find_library
 from . import cgobject
 from .ast import (Callback, Enum, Function, Member, Namespace, Parameter,
                   Property, Return, Struct, Type, Alias, Array,
-                  Union, type_name_from_ctype)
+                  Union, type_name_from_ctype,
+                  default_array_types, TYPE_UINT8)
 from .transformer import Names
 from .glibast import (GLibBoxed, GLibEnum, GLibEnumMember, GLibFlags,
                       GLibInterface, GLibObject, GLibSignal, GLibBoxedStruct,
                       GLibBoxedUnion, GLibBoxedOther, type_names)
 from .utils import extract_libtool, to_underscores, to_underscores_noprefix
 
+default_array_types['guchar*'] = TYPE_UINT8
 
 SYMBOL_BLACKLIST = [
     # These ones break GError conventions
@@ -61,6 +63,8 @@ class GLibTransformer(object):
 
     def __init__(self, transformer, noclosure=False):
         self._transformer = transformer
+        self._transformer.set_container_types(['GList*', 'GSList*'],
+                                              ['GHashtable*'])
         self._namespace_name = None
         self._names = Names()
         self._uscore_type_names = {}
@@ -166,12 +170,6 @@ class GLibTransformer(object):
         prefix = type_name[:-len(suffix)]
         no_uscore_prefixed = (prefix + '_' + to_underscores(suffix)).lower()
         self._uscore_type_names[no_uscore_prefixed] = node
-
-    def type_is_list(self, ctype):
-        return ctype in ['GList*', 'GSList*']
-
-    def type_is_map(self, ctype):
-        return ctype in ['GHashTable*']
 
     # Helper functions
 

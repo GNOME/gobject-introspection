@@ -23,7 +23,7 @@ annotation_object_init (AnnotationObject *object)
 gint
 annotation_object_method (AnnotationObject *object)
 {
-	return 1;
+  return 1;
 }
 
 /**
@@ -38,7 +38,8 @@ annotation_object_method (AnnotationObject *object)
 gint
 annotation_object_in (AnnotationObject *object, int *outarg)
 {
-	return 1;
+  *outarg = 2;
+  return 1;
 }
 
 /**
@@ -53,7 +54,8 @@ annotation_object_in (AnnotationObject *object, int *outarg)
 gint
 annotation_object_out (AnnotationObject *object, int *outarg)
 {
-	return 1;
+  *outarg = 2;
+  return 1;
 }
 
 
@@ -63,13 +65,13 @@ annotation_object_out (AnnotationObject *object, int *outarg)
  *
  * This is a test for out arguments
  *
- * @inoutarg: <out>: This is an argument test
+ * @inoutarg: <inout>: This is an argument test
  * Return value: an int
  */
 gint
 annotation_object_inout (AnnotationObject *object, int *inoutarg)
 {
-	return 1;
+  return *inoutarg += 1;
 }
 
 /**
@@ -84,7 +86,7 @@ annotation_object_inout (AnnotationObject *object, int *inoutarg)
 gint
 annotation_object_inout2 (AnnotationObject *object, int *inoutarg)
 {
-	return 1;
+  return *inoutarg += 1;
 }
 
 
@@ -100,7 +102,9 @@ annotation_object_inout2 (AnnotationObject *object, int *inoutarg)
 gint
 annotation_object_inout3 (AnnotationObject *object, int *inoutarg)
 {
-	return 1;
+  if (inoutarg)
+    return *inoutarg + 1;
+  return 1;
 }
 
 /**
@@ -115,7 +119,7 @@ annotation_object_inout3 (AnnotationObject *object, int *inoutarg)
 gint
 annotation_object_calleeowns (AnnotationObject *object, GObject **toown)
 {
-	return 1;
+  return 1;
 }
 
 
@@ -134,7 +138,7 @@ annotation_object_calleesowns (AnnotationObject *object,
 			       GObject **toown1,
 			       GObject **toown2)
 {
-	return 1;
+  return 1;
 }
 
 
@@ -197,6 +201,13 @@ GObject*
 annotation_object_create_object (AnnotationObject *object)
 {
 	return g_object_ref (object);
+}
+
+void     
+annotation_object_use_buffer   (AnnotationObject *object,
+				guchar           *bytes)
+{
+  
 }
 
 /**
