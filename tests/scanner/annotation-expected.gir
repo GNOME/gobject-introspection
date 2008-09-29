@@ -208,7 +208,7 @@
           <type name="Object" c:type="AnnotationObject*"/>
         </parameter>
         <parameter name="nums">
-          <type name="int[]" c:type="int*"/>
+          <type name="int[length=2]" c:type="int*"/>
         </parameter>
         <parameter name="n_nums">
           <type name="int" c:type="int"/>

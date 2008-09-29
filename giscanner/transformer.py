@@ -366,6 +366,9 @@ class Transformer(object):
                 param.transfer = True
             elif option == 'notransfer':
                 param.transfer = False
+            elif isinstance(ptype, Array) and option.startswith('length'):
+                (_, index) = option.split('=')
+                ptype.length_param_index = int(index)
             elif option == 'allow-none':
                 param.allow_none = True
             else:
