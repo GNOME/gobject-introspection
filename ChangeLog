@@ -1,3 +1,23 @@
+2008-09-29  Colin Walters  <walters@verbum.org>
+
+	Bug 552380: Array parameters should be marked in the gir
+
+	* giscanner/ast.py: Default char** to utf8[], and guchar* to
+	uint8[].  Add Array, List, and Map subclasses of Type;
+	these types can be generic.  Return transfer defaults
+	to true if return value is string or container type.
+	Delete Sequence type.
+	* giscanner/scannerlexer.l: Syntax change for annotations;
+	use <> since it's more readable.
+	* giscanner/girwriter.py: Write out these changes.
+	* giscanner/girparser.py: Parse them.
+	* giscanner/transformer.py: Have a defined set of
+	both list and map types.  When creating a type,
+	check if the ctype we've parsed is one of them,
+	if so create a container type subclass as appropriate.
+	* girepository/girparser.c: Parse in generic types.
+	* tests/*: Update.
+
 2008-09-27  Colin Walters  <walters@verbum.org>
 
 	* tools/g-ir-scanner: Add --inject option.
