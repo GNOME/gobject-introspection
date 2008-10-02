@@ -1,3 +1,14 @@
+2008-10-02  Colin Walters  <walters@verbum.org>
+
+	Bug 552961: remove this parameter for methods
+
+	* giscanner/glibtransformer.py: Delete this parameter; it is
+	redundant.
+	* girepository/ginvoke.c: Insert this parameter for methods.
+	* girepository/gtypelib.c: Remove no longer needed verification of
+	method this parameter.
+	* tests/*: Update.
+
 2008-09-30  Dan Winship  <danw@gnome.org>
 
 	Bug 554490: g-ir-scanner gets confused by '\\'
