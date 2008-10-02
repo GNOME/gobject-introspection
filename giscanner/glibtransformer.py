@@ -392,6 +392,8 @@ class GLibTransformer(object):
         # Strip namespace and object prefix: gtk_window_new -> new
         func.name = func.symbol[len(prefix)+1:]
         if is_method:
+            # We don't need the "this" parameter
+            del func.parameters[0]
             klass.methods.append(func)
         else:
             klass.constructors.append(func)

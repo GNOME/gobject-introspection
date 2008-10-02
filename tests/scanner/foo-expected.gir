@@ -55,20 +55,12 @@
         <return-value>
           <type name="utility.Object" c:type="UtilityObject*"/>
         </return-value>
-        <parameters>
-          <parameter name="object">
-            <type name="Object" c:type="FooObject*"/>
-          </parameter>
-        </parameters>
       </method>
       <method name="various" c:identifier="foo_object_various">
         <return-value>
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
-          <parameter name="object">
-            <type name="Object" c:type="FooObject*"/>
-          </parameter>
           <parameter name="data">
             <type name="any" c:type="void*"/>
           </parameter>
@@ -99,9 +91,6 @@
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
-          <parameter name="object">
-            <type name="Object" c:type="FooObject*"/>
-          </parameter>
           <parameter name="blah">
             <type name="List" c:type="FooList*"/>
           </parameter>
@@ -112,9 +101,6 @@
           <type name="ObjectCookie" c:type="FooObjectCookie"/>
         </return-value>
         <parameters>
-          <parameter name="object">
-            <type name="Object" c:type="FooObject*"/>
-          </parameter>
           <parameter name="target">
             <type name="utf8" c:type="char*"/>
           </parameter>
@@ -125,9 +111,6 @@
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
-          <parameter name="object">
-            <type name="Object" c:type="FooObject*"/>
-          </parameter>
           <parameter name="time">
             <type name="time_t" c:type="time_t"/>
           </parameter>
@@ -275,11 +258,6 @@
         <return-value>
           <type name="none" c:type="void"/>
         </return-value>
-        <parameters>
-          <parameter name="boxed">
-            <type name="Boxed" c:type="FooBoxed*"/>
-          </parameter>
-        </parameters>
       </method>
     </record>
     <function name="boxed_new" c:identifier="foo_boxed_new">
@@ -295,11 +273,6 @@
         <return-value>
           <type name="none" c:type="void"/>
         </return-value>
-        <parameters>
-          <parameter name="dbusdata">
-            <type name="DBusData" c:type="FooDBusData*"/>
-          </parameter>
-        </parameters>
       </method>
     </record>
     <callback name="Callback" c:type="FooCallback">

@@ -17,9 +17,6 @@
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
-          <parameter name="drawable">
-            <type name="TestDrawable" c:type="TestDrawable*"/>
-          </parameter>
           <parameter name="x">
             <type name="int" c:type="int"/>
           </parameter>
