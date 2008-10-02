@@ -137,6 +137,12 @@ foo_object_external_type (FooObject *object)
 
 }
 
+void                  
+foo_object_take_all (FooObject *object, int x, ...)
+{
+
+}
+
 void
 foo_do_foo (FooInterface *self)
 {

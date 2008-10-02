@@ -100,7 +100,6 @@ static GHashTable *const_table = NULL;
 %type <list> enumerator_list
 %type <list> identifier_list
 %type <list> init_declarator_list
-%type <list> parameter_type_list
 %type <list> parameter_list
 %type <list> struct_declaration
 %type <list> struct_declaration_list
@@ -904,7 +903,7 @@ direct_declarator
 		$$ = $1;
 		gi_source_symbol_merge_type ($$, gi_source_array_new ());
 	  }
-	| direct_declarator '(' parameter_type_list ')'
+	| direct_declarator '(' parameter_list ')'
 	  {
 		GISourceType *func = gi_source_function_new ();
 		// ignore (void) parameter list
@@ -958,11 +957,6 @@ type_qualifier_list
 	  }
 	;
 
-parameter_type_list
-	: parameter_list
-	| parameter_list ',' ELLIPSIS
-	;
-
 parameter_list
 	: parameter_declaration
 	  {
@@ -989,6 +983,10 @@ parameter_declaration
 	  {
 		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID);
 		$$->base_type = $1;
+	  }
+	| ELLIPSIS
+	  {
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_ELLIPSIS);
 	  }
 	;
 
@@ -1057,7 +1055,7 @@ direct_abstract_declarator
 		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID);
 		gi_source_symbol_merge_type ($$, func);
 	  }
-	| '(' parameter_type_list ')'
+	| '(' parameter_list ')'
 	  {
 		GISourceType *func = gi_source_function_new ();
 		// ignore (void) parameter list
@@ -1073,7 +1071,7 @@ direct_abstract_declarator
 		$$ = $1;
 		gi_source_symbol_merge_type ($$, func);
 	  }
-	| direct_abstract_declarator '(' parameter_type_list ')'
+	| direct_abstract_declarator '(' parameter_list ')'
 	  {
 		GISourceType *func = gi_source_function_new ();
 		// ignore (void) parameter list

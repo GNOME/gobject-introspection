@@ -25,6 +25,7 @@ import tempfile
 from . import _giscanner
 
 (CSYMBOL_TYPE_INVALID,
+ CSYMBOL_TYPE_ELLIPSIS,
  CSYMBOL_TYPE_CONST,
  CSYMBOL_TYPE_OBJECT,
  CSYMBOL_TYPE_FUNCTION,
@@ -32,7 +33,7 @@ from . import _giscanner
  CSYMBOL_TYPE_UNION,
  CSYMBOL_TYPE_ENUM,
  CSYMBOL_TYPE_TYPEDEF,
- CSYMBOL_TYPE_MEMBER) = range(9)
+ CSYMBOL_TYPE_MEMBER) = range(10)
 
 (CTYPE_INVALID,
  CTYPE_VOID,
@@ -72,6 +73,7 @@ FUNCTION_INLINE = 1 << 1
 def symbol_type_name(symbol_type):
     return {
         CSYMBOL_TYPE_INVALID: 'invalid',
+        CSYMBOL_TYPE_ELLIPSIS: 'ellipsis',
         CSYMBOL_TYPE_CONST: 'const',
         CSYMBOL_TYPE_OBJECT: 'object',
         CSYMBOL_TYPE_FUNCTION: 'function',

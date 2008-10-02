@@ -23,7 +23,7 @@ from __future__ import with_statement
 import os
 
 from .ast import (Callback, Class, Enum, Function, Interface, Member,
-                  Array, Struct, Alias, Union, List, Map)
+                  Array, Struct, Alias, Union, List, Map, Varargs)
 from .glibast import (GLibBoxed, GLibEnum, GLibEnumMember,
                       GLibFlags, GLibObject, GLibInterface)
 from .xmlwriter import XMLWriter
@@ -152,6 +152,10 @@ class GIRWriter(XMLWriter):
         else:
             typename = ntype.name
             type_cname = ntype.ctype
+        if isinstance(ntype, Varargs):
+            with self.tagcontext('varargs', []):
+                pass
+            return
         if isinstance(ntype, Array):
             attrs = []
             if not ntype.zeroterminated:

@@ -53,6 +53,8 @@ UtilityObject*        foo_object_external_type     (FooObject *object);
 
 void                  foo_object_various           (FooObject *object, void *data, GType some_type);
 
+void                  foo_object_take_all          (FooObject *object, int x, ...);
+
 /* A random typedef */
 typedef GSList FooList;
 

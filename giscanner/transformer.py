@@ -23,8 +23,8 @@ import os
 from giscanner.ast import (Callback, Enum, Function, Namespace, Member,
                            Parameter, Return, Array, Struct, Field,
                            Type, Alias, Interface, Class, Node, Union,
-                           List, Map, type_name_from_ctype, type_names,
-                           default_array_types)
+                           List, Map, Varargs, type_name_from_ctype,
+                           type_names, default_array_types)
 from giscanner.config import DATADIR
 from .glibast import GLibBoxed
 from giscanner.sourcescanner import (
@@ -33,7 +33,7 @@ from giscanner.sourcescanner import (
     CTYPE_VOID, CTYPE_ENUM, CTYPE_FUNCTION, CTYPE_STRUCT,
     CSYMBOL_TYPE_FUNCTION, CSYMBOL_TYPE_TYPEDEF, CSYMBOL_TYPE_STRUCT,
     CSYMBOL_TYPE_ENUM, CSYMBOL_TYPE_UNION, CSYMBOL_TYPE_OBJECT,
-    CSYMBOL_TYPE_MEMBER)
+    CSYMBOL_TYPE_MEMBER, CSYMBOL_TYPE_ELLIPSIS)
 from .odict import odict
 from .utils import strip_common_prefix, to_underscores
 
@@ -318,7 +318,7 @@ class Transformer(object):
     def _create_type(self, source_type, options=[]):
         ctype = self._create_source_type(source_type)
         if ctype == 'va_list':
-            raise SkipError
+            raise SkipError()
         # FIXME: FILE* should not be skipped, it should be handled
         #        properly instead
         elif ctype == 'FILE*':
@@ -353,7 +353,10 @@ class Transformer(object):
         return Type(resolved_type_name, ctype)
 
     def _create_parameter(self, symbol, options):
-        ptype = self._create_type(symbol.base_type, options)
+        if symbol.type == CSYMBOL_TYPE_ELLIPSIS:
+            ptype = Varargs()
+        else:
+            ptype = self._create_type(symbol.base_type, options)
         param = Parameter(symbol.ident, ptype)
         for option in options:
             if option in ['in-out', 'inout']:

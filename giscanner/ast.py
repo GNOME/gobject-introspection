@@ -169,6 +169,12 @@ class Type(Node):
         self.resolved = False
 
 
+class Varargs(Type):
+
+    def __init__(self):
+        Type.__init__(self, '<varargs>')
+
+
 class Array(Type):
 
     def __init__(self, ctype, element_type):

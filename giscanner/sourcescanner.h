@@ -36,6 +36,7 @@ typedef struct _GISourceDirective GISourceDirective;
 typedef enum
 {
   CSYMBOL_TYPE_INVALID,
+  CSYMBOL_TYPE_ELLIPSIS,
   CSYMBOL_TYPE_CONST,
   CSYMBOL_TYPE_OBJECT,
   CSYMBOL_TYPE_FUNCTION,
