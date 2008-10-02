@@ -245,6 +245,11 @@
       <member name="deux" value="2" c:identifier="FOO_ENUM_DEUX"/>
       <member name="trois" value="3" c:identifier="FOO_ENUM_TROIS"/>
     </enumeration>
+    <enumeration name="EnumFullname" c:type="FooEnumFullname">
+      <member name="one" value="1" c:identifier="FOO_ENUM_FULLNAME_ONE"/>
+      <member name="two" value="2" c:identifier="FOO_ENUM_FULLNAME_TWO"/>
+      <member name="three" value="3" c:identifier="FOO_ENUM_FULLNAME_THREE"/>
+    </enumeration>
     <record name="Boxed"
             c:type="FooBoxed"
             glib:type-name="FooBoxed"

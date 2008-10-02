@@ -59,5 +59,5 @@ def strip_common_prefix(first, second):
     second = second.replace('_', '')
     for i, c in enumerate(first.upper()):
         if i >= len(second) or c != second[i]:
-            break
-    return second[i:]
+            return second[i:]
+    return second[i + 1:]

@@ -106,6 +106,13 @@ typedef enum
 
 GType foo_flags_type_get_type (void);
 
+typedef enum
+{
+  FOO_ENUM_FULLNAME_ONE = 1,
+  FOO_ENUM_FULLNAME_TWO,
+  FOO_ENUM_FULLNAME_THREE
+} FooEnumFullname;
+
 typedef struct _FooBoxed FooBoxed;
 
 GType                 foo_boxed_get_type       (void) G_GNUC_CONST;

@@ -1,3 +1,15 @@
+2008-09-30  Dan Winship  <danw@gnome.org>
+
+	Bug 554521: scanner generates wrong names for enum members with
+	full type name prefix
+
+	* giscanner/utils.py (strip_common_prefix): Fix this to strip the
+	right amount when the entire "first" string is a prefix of
+	"second"
+
+	* tests/scanner/foo.h (FooEnumFullname):
+	* tests/scanner/foo-expected.gir: test that
+
 2008-09-29  Colin Walters  <walters@verbum.org>
 
 	Bug 552380: Array parameters should be marked in the gir
