@@ -1,5 +1,19 @@
 2008-10-02  Colin Walters  <walters@verbum.org>
 
+	bug 552393: Note variadic functions
+
+	* giscanner/scannerparser.y: Parse ellipsis.  Refactor grammar
+	to use parameter_list directly.
+	* giscanner/sourcescanner.h: Add ellipsis csymbol type.
+	* giscanner/ast.py: Add Varargs type.
+	* giscanner/transformer.py: Check for ellipsis symbol, transform
+	to varargs type.
+	* girepository/girnode.h: Add varargs flag to in-memory nodes.
+	Parse varargs functions, but filter them out before we start
+	compiling the typelib.
+
+2008-10-02  Colin Walters  <walters@verbum.org>
+
 	Bug 554632: type tag for GType
 
 	* girepository/girepository.h, girepository/girepository.c:
