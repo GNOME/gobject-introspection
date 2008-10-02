@@ -1,3 +1,15 @@
+2008-09-30  Dan Winship  <danw@gnome.org>
+
+	Bug 554490: g-ir-scanner gets confused by '\\'
+
+	* giscanner/scannerlexer.l (chartext, stringtext): fix use of
+	backslashes so it will correctly parse '\\' and "\\"
+
+	* tests/scanner/annotation.c: add a use of '\\' to make sure that
+	this stays fixed
+
+	* giscanner/glibtransformer.py (GLibTransformer.count_type): typo
+
 2008-10-02  Colin Walters  <walters@verbum.org>
 
 	bug 552393: Note variadic functions

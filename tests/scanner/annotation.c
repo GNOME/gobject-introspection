@@ -1,5 +1,7 @@
 #include "annotation.h"
 
+static char backslash_parsing_tester = '\\';
+
 G_DEFINE_TYPE (AnnotationObject, annotation_object, G_TYPE_OBJECT);
 
 static void
@@ -261,3 +263,5 @@ annotation_object_do_not_use (AnnotationObject *object)
 {
   return NULL;
 }
+
+static char backslash_parsing_tester_2 = '\\';

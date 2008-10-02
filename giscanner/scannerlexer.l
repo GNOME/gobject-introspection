@@ -51,8 +51,8 @@ intsuffix				([uU][lL]?[lL]?)|([lL][lL]?[uU]?)
 fracconst				([0-9]*\.[0-9]+)|([0-9]+\.)
 exppart					[eE][-+]?[0-9]+
 floatsuffix				[fFlL]
-chartext				([^\'])|(\\.) 
-stringtext				([^\"])|(\\.)
+chartext				([^\\\'])|(\\.) 
+stringtext				([^\\\"])|(\\.)
 
 %%
 

@@ -99,7 +99,7 @@ class GLibTransformer(object):
         objectcount = count_type(GLibObject)
         ifacecount = count_type(GLibInterface)
         enumcount = count_type(GLibEnum)
-        print " %d nodes; %d objects, %d interfaces, %d enumsr" \
+        print " %d nodes; %d objects, %d interfaces, %d enums" \
             % (len(nodes), objectcount, ifacecount, enumcount)
 
     def parse(self):
