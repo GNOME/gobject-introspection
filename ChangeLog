@@ -1,3 +1,17 @@
+2008-10-02  Colin Walters  <walters@verbum.org>
+
+	Bug 554632: type tag for GType
+
+	* girepository/girepository.h, girepository/girepository.c:
+	Add type tag for GType - it's a special type we don't want
+	to resolve to just "long".
+	* docs/typelib-format.txt: Update.
+	* girepository/girparser.c: Parse it.
+	* giscanner/glibtransformer.py: Ensure we don't put GType in
+	the GObject.gir.
+	* tools/generate.c: Remove hardcoded type list.
+	* test/* update.
+
 2008-09-30  Dan Winship  <danw@gnome.org>
 
 	Bug 554521: scanner generates wrong names for enum members with
