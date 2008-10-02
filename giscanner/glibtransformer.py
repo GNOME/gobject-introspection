@@ -110,6 +110,11 @@ class GLibTransformer(object):
         for node in namespace.nodes:
             self._parse_node(node)
 
+        # We don't want an alias for this - it's handled specially in
+        # the typelib compiler.
+        if namespace.name == 'GObject':
+            del self._names.aliases['Type']
+
         # Introspection is done from within parsing
 
         # Second pass: pair boxed structures
@@ -253,13 +258,10 @@ class GLibTransformer(object):
             # No GObjects in GLib
             return False
         # GType *_get_type(void)
-        # This is a bit fishy, why do we need all these aliases?
         if func.retval.type.name not in ['Type',
                                          'GType',
-                                         'Object.Type',
                                          'GObject.Type',
-                                         'Gtk.Type',
-                                         'GObject.GType']:
+                                         'Gtk.Type']:
             print ("Warning: *_get_type function returns '%r'"
                    ", not GObject.Type") % (func.retval.type.name, )
             return False

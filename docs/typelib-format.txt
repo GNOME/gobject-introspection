@@ -473,9 +473,11 @@ tag:      specifies what kind of type is described, as follows:
          15  size_t
          16  float
          17  double
-         18  utf8     (these are zero-terminated char[] and assumed to be 
+	 18  time_t
+	 19  GType
+         20  utf8     (these are zero-terminated char[] and assumed to be 
                        in UTF-8)
-         19  filename (these are zero-terminated char[] and assumed to be
+         21  filename (these are zero-terminated char[] and assumed to be
                        in the GLib filename encoding)
 
          For utf8 and filename is_pointer will always be set.
