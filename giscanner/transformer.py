@@ -310,10 +310,10 @@ class Transformer(object):
                 "symbol %r of type %s" % (symbol.ident, ctype_name(ctype)))
         return node
 
-    def _parse_and_resolve_ctype(self, ctype):
+    def _parse_ctype(self, ctype):
         canonical = type_name_from_ctype(ctype)
         derefed = canonical.replace('*', '')
-        return self.resolve_type_name(derefed, derefed)
+        return derefed
 
     def _create_type(self, source_type, options=[]):
         ctype = self._create_source_type(source_type)
@@ -325,7 +325,7 @@ class Transformer(object):
             raise SkipError
         if ctype in self._list_ctypes:
             if len(options) > 0:
-                contained_type = self._parse_and_resolve_ctype(options[0])
+                contained_type = self._parse_ctype(options[0])
                 del options[0]
             else:
                 contained_type = None
@@ -334,8 +334,8 @@ class Transformer(object):
                         contained_type)
         if ctype in self._list_ctypes:
             if len(options) > 0:
-                key_type = self._parse_and_resolve_ctype(options[0])
-                value_type = self._parse_and_resolve_ctype(options[1])
+                key_type = self._parse_ctype(options[0])
+                value_type = self._parse_ctype(options[1])
                 del options[0:2]
             else:
                 key_type = None
@@ -348,8 +348,8 @@ class Transformer(object):
                 options.remove('array')
             derefed = ctype[:-1] # strip the *
             return Array(ctype,
-                         self._parse_and_resolve_ctype(derefed))
-        resolved_type_name = self._parse_and_resolve_ctype(ctype)
+                         self._parse_ctype(derefed))
+        resolved_type_name = self._parse_ctype(ctype)
         return Type(resolved_type_name, ctype)
 
     def _create_parameter(self, symbol, options):
@@ -523,13 +523,20 @@ class Transformer(object):
             return None
 
     def resolve_param_type_full(self, ptype, names):
-        if isinstance(ptype, Array):
-            ptype.element_type = \
-                self.resolve_param_type_full(ptype.element_type, names)
-        elif isinstance(ptype, Node):
+        if isinstance(ptype, Node):
             ptype.name = self.resolve_type_name_full(ptype.name,
                                                      self.ctype_of(ptype),
                                                      names)
+            if isinstance(ptype, (Array, List)):
+                if ptype.element_type is not None:
+                    ptype.element_type = \
+                        self.resolve_param_type_full(ptype.element_type, names)
+            if isinstance(ptype, Map):
+                if ptype.key_type is not None:
+                    ptype.key_type = \
+                        self.resolve_param_type_full(ptype.key_type, names)
+                    ptype.value_type = \
+                        self.resolve_param_type_full(ptype.value_type, names)
         elif isinstance(ptype, basestring):
             return self.resolve_type_name_full(ptype, None, names)
         else:

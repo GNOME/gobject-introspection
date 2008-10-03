@@ -744,6 +744,8 @@ class GLibTransformer(object):
         self._resolve_methods(node.methods)
         self._resolve_properties(node.properties)
         self._resolve_signals(node.signals)
+        for field in node.fields:
+            self._resolve_field(field)
 
     def _resolve_glib_boxed(self, node):
         self._resolve_constructors(node.constructors)
