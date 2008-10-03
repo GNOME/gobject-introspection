@@ -294,7 +294,7 @@ class GLibTransformer(object):
         try:
             node = self._get_attribute(giname)
             return isinstance(node, (GLibObject, GLibInterface,
-                                     GLibEnum, GLibFlags))
+                                     GLibBoxed, GLibEnum, GLibFlags))
         except KeyError, e:
             return False
 
