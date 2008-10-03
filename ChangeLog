@@ -1,5 +1,15 @@
 2008-10-03  Colin Walters  <walters@verbum.org>
 
+	Bug 551744: Non-GObject types aren't aggregating ctors and methods
+
+	* girepository/gtypelib.c: Allow ctors/methods on struct,union,
+	and boxed.
+	* giscanner/glibtransformer.py: Ditto, and GLibBoxed is also a
+	registered type.
+	* tests/*: Extend.
+
+2008-10-03  Colin Walters  <walters@verbum.org>
+
 	Bug 554576: scan problem with ev_selection_render_selection()
 
 	* giscanner/transformer.py: Only do type resolution once we've
