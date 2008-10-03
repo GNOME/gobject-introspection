@@ -193,7 +193,7 @@ class GIRParser(object):
         return GLibEnumMember(node.attrib['name'],
                               node.attrib['value'],
                               node.attrib[_cns('identifier')],
-                              node.attrib.get(_glibns('get-type')))
+                              node.attrib.get(_glibns('nick')))
 
     def _parse_enumeration_bitfield(self, node):
         klass = (GLibFlags if node.tag == _corens('bitfield') else GLibEnum)

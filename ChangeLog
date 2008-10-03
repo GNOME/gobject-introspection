@@ -1,3 +1,8 @@
+2008-10-03  Lucas Rocha  <lucasr@gnome.org>
+
+	* giscanner/girwriter.py (_parser_member): fix the last parameter of
+	GLibEnumMember constructor as it should be the enum member nick.
+
 2008-10-02  Colin Walters  <walters@verbum.org>
 
 	Bug 552961: remove this parameter for methods
