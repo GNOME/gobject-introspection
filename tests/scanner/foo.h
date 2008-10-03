@@ -167,6 +167,9 @@ foo_method_external_references (UtilityObject *object,
 
 void foo_rectangle_add(FooRectangle *r1, const FooRectangle *r2);
 
+FooRectangle * foo_rectangle_new (int x, int y, int width, int height);
+
+
 typedef struct _FooEventAny FooEventAny;
 typedef struct _FooEventExpose FooEventExpose;
 
@@ -191,5 +194,36 @@ union _FooEvent
 };
 
 typedef void FooXEvent;
+
+/* And now some boxed variants */
+
+typedef struct _FooBRect          FooBRect;
+
+struct _FooBRect
+{
+  double x;
+  double y;
+};
+
+GType foo_brect_get_type (void);
+
+FooBRect *foo_brect_new (double x, double y);
+
+void foo_brect_add (FooBRect *b1, FooBRect *b2);
+
+typedef union _FooBUnion FooBUnion;
+
+union _FooBUnion
+{
+  int type;
+  double v;
+  FooBRect *rect;
+};
+
+FooBUnion *foo_bunion_new (void);
+
+GType foo_bunion_get_type (void);
+
+int foo_bunion_get_contained_type (FooBUnion *bunion);
 
 #endif /* __FOO_OBJECT_H__ */

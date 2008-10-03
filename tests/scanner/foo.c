@@ -294,3 +294,27 @@ foo_dbus_data_get_type (void)
 					     (GBoxedFreeFunc) foo_dbus_data_free);
   return our_type;
 }
+
+GType
+foo_brect_get_type (void)
+{
+  static GType our_type = 0;
+  
+  if (our_type == 0)
+    our_type = g_boxed_type_register_static ("FooBRect",
+					     (GBoxedCopyFunc) g_memdup, /* Won't work */
+					     (GBoxedFreeFunc) g_free);
+  return our_type;
+}
+
+GType
+foo_bunion_get_type (void)
+{
+  static GType our_type = 0;
+  
+  if (our_type == 0)
+    our_type = g_boxed_type_register_static ("FooBUnion",
+					     (GBoxedCopyFunc) g_memdup, /* Won't work */
+					     (GBoxedFreeFunc) g_free);
+  return our_type;
+}

@@ -345,6 +345,25 @@
         </parameter>
       </parameters>
     </function>
+    <function name="rectangle_new" c:identifier="foo_rectangle_new">
+      <return-value>
+        <type name="Rectangle" c:type="FooRectangle*"/>
+      </return-value>
+      <parameters>
+        <parameter name="x">
+          <type name="int" c:type="int"/>
+        </parameter>
+        <parameter name="y">
+          <type name="int" c:type="int"/>
+        </parameter>
+        <parameter name="width">
+          <type name="int" c:type="int"/>
+        </parameter>
+        <parameter name="height">
+          <type name="int" c:type="int"/>
+        </parameter>
+      </parameters>
+    </function>
     <record name="EventAny" c:type="FooEventAny">
       <field name="send_event">
         <type name="int8" c:type="gint8"/>
@@ -368,6 +387,65 @@
       <field name="expose">
         <type name="EventExpose" c:type="FooEventExpose"/>
       </field>
+    </union>
+    <record name="BRect"
+            c:type="FooBRect"
+            glib:type-name="FooBRect"
+            glib:get-type="foo_brect_get_type">
+      <field name="x">
+        <type name="double" c:type="double"/>
+      </field>
+      <field name="y">
+        <type name="double" c:type="double"/>
+      </field>
+      <constructor name="new" c:identifier="foo_brect_new">
+        <return-value>
+          <type name="BRect" c:type="FooBRect*"/>
+        </return-value>
+        <parameters>
+          <parameter name="x">
+            <type name="double" c:type="double"/>
+          </parameter>
+          <parameter name="y">
+            <type name="double" c:type="double"/>
+          </parameter>
+        </parameters>
+      </constructor>
+      <method name="add" c:identifier="foo_brect_add">
+        <return-value>
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <parameter name="b2">
+            <type name="BRect" c:type="FooBRect*"/>
+          </parameter>
+        </parameters>
+      </method>
+    </record>
+    <union name="BUnion"
+           c:type="FooBUnion"
+           glib:type-name="FooBUnion"
+           glib:get-type="foo_bunion_get_type">
+      <field name="type">
+        <type name="int" c:type="int"/>
+      </field>
+      <field name="v">
+        <type name="double" c:type="double"/>
+      </field>
+      <field name="rect">
+        <type name="BRect" c:type="FooBRect*"/>
+      </field>
+      <constructor name="new" c:identifier="foo_bunion_new">
+        <return-value>
+          <type name="BUnion" c:type="FooBUnion*"/>
+        </return-value>
+      </constructor>
+      <method name="get_contained_type"
+              c:identifier="foo_bunion_get_contained_type">
+        <return-value>
+          <type name="int" c:type="int"/>
+        </return-value>
+      </method>
     </union>
   </namespace>
 </repository>
