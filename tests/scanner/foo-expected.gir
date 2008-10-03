@@ -251,17 +251,17 @@
             c:type="FooBoxed"
             glib:type-name="FooBoxed"
             glib:get-type="foo_boxed_get_type">
+      <constructor name="new" c:identifier="foo_boxed_new">
+        <return-value>
+          <type name="Boxed" c:type="FooBoxed*"/>
+        </return-value>
+      </constructor>
       <method name="method" c:identifier="foo_boxed_method">
         <return-value>
           <type name="none" c:type="void"/>
         </return-value>
       </method>
     </record>
-    <function name="boxed_new" c:identifier="foo_boxed_new">
-      <return-value>
-        <type name="Boxed" c:type="FooBoxed*"/>
-      </return-value>
-    </function>
     <record name="DBusData"
             c:type="FooDBusData"
             glib:type-name="FooDBusData"

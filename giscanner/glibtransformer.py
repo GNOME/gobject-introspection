@@ -378,7 +378,7 @@ class GLibTransformer(object):
 
         if not is_method:
             # Interfaces can't have constructors, punt to global scope
-            if isinstance(klass, (GLibInterface, GLibBoxed)):
+            if isinstance(klass, GLibInterface):
                 #print "NOTE: Rejecting constructor for"+\
                 #    " interface type: %r" % (func.symbol, )
                 return None
@@ -386,7 +386,8 @@ class GLibTransformer(object):
             # class from the prefix
             # But for now, ensure that constructor returns are always
             # the most concrete class
-            func.retval.type = Type(klass.name, klass.ctype+'*')
+            func.retval.type = Type(klass.name,
+                                    self._transformer.ctype_of(klass)+'*')
 
         self._remove_attribute(func.name)
         # Strip namespace and object prefix: gtk_window_new -> new
