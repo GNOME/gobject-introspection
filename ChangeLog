@@ -1,3 +1,15 @@
+2008-10-03  Colin Walters  <walters@verbum.org>
+
+	Bug 554576: scan problem with ev_selection_render_selection()
+
+	* giscanner/transformer.py: Only do type resolution once we've
+	scanned all types.  What could happen before is that we'd strip
+	the namespace from local type "EvSelection" => Selection, and
+	then later pull a "Selection" from some other namespace because
+	we hadn't yet seen the local EvSelection.  This could come
+	down to hash table ordering and other things so not easy
+	to write a test for.
+
 2008-10-03  Lucas Rocha  <lucasr@gnome.org>
 
 	* giscanner/girwriter.py (_parser_member): fix the last parameter of
