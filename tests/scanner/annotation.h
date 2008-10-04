@@ -16,6 +16,8 @@ struct _AnnotationObjectClass
   GObjectClass parent_class;
 };
 
+GType    annotation_object_get_type (void);
+
 gint     annotation_object_method       (AnnotationObject *object);
 gint     annotation_object_out          (AnnotationObject *object,
 					 int              *outarg);

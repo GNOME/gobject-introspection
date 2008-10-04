@@ -7,236 +7,172 @@
   <include name="GObject"/>
   <include name="utility"/>
   <namespace name="annotation" shared-library="annotation">
-    <record name="Object" c:type="AnnotationObject">
-      <field name="parent_instance">
-        <type name="GObject.Object" c:type="GObject"/>
-      </field>
-    </record>
+    <class name="Object"
+           c:type="AnnotationObject"
+           parent="GObject.Object"
+           glib:type-name="AnnotationObject"
+           glib:get-type="annotation_object_get_type">
+      <method name="method" c:identifier="annotation_object_method">
+        <return-value>
+          <type name="int" c:type="gint"/>
+        </return-value>
+      </method>
+      <method name="out" c:identifier="annotation_object_out">
+        <return-value>
+          <type name="int" c:type="gint"/>
+        </return-value>
+        <parameters>
+          <parameter name="outarg" direction="out">
+            <type name="int" c:type="int*"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="create_object"
+              c:identifier="annotation_object_create_object">
+        <return-value transfer-ownership="1">
+          <type name="GObject.Object" c:type="GObject*"/>
+        </return-value>
+      </method>
+      <method name="allow_none" c:identifier="annotation_object_allow_none">
+        <return-value>
+          <type name="GObject.Object" c:type="GObject*"/>
+        </return-value>
+        <parameters>
+          <parameter name="somearg" allow-none="1">
+            <type name="utf8" c:type="gchar*"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="inout" c:identifier="annotation_object_inout">
+        <return-value>
+          <type name="int" c:type="gint"/>
+        </return-value>
+        <parameters>
+          <parameter name="inoutarg" direction="inout">
+            <type name="int" c:type="int*"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="inout2" c:identifier="annotation_object_inout2">
+        <return-value>
+          <type name="int" c:type="gint"/>
+        </return-value>
+        <parameters>
+          <parameter name="inoutarg" direction="inout">
+            <type name="int" c:type="int*"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="inout3" c:identifier="annotation_object_inout3">
+        <return-value>
+          <type name="int" c:type="gint"/>
+        </return-value>
+        <parameters>
+          <parameter name="inoutarg" direction="inout" allow-none="1">
+            <type name="int" c:type="int*"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="in" c:identifier="annotation_object_in">
+        <return-value>
+          <type name="int" c:type="gint"/>
+        </return-value>
+        <parameters>
+          <parameter name="inarg">
+            <type name="int" c:type="int*"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="calleeowns" c:identifier="annotation_object_calleeowns">
+        <return-value>
+          <type name="int" c:type="gint"/>
+        </return-value>
+        <parameters>
+          <parameter name="toown" direction="out" transfer-ownership="1">
+            <type name="GObject.Object" c:type="GObject**"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="calleesowns" c:identifier="annotation_object_calleesowns">
+        <return-value>
+          <type name="int" c:type="gint"/>
+        </return-value>
+        <parameters>
+          <parameter name="toown1" direction="out" transfer-ownership="1">
+            <type name="GObject.Object" c:type="GObject**"/>
+          </parameter>
+          <parameter name="toown2" direction="out" transfer-ownership="1">
+            <type name="GObject.Object" c:type="GObject**"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="get_strings" c:identifier="annotation_object_get_strings">
+        <return-value transfer-ownership="1">
+          <type name="GLib.List" c:type="GList*">
+            <type name="utf8"/>
+          </type>
+        </return-value>
+      </method>
+      <method name="get_objects" c:identifier="annotation_object_get_objects">
+        <return-value transfer-ownership="1">
+          <type name="GLib.SList" c:type="GSList*">
+            <type name="Object"/>
+          </type>
+        </return-value>
+      </method>
+      <method name="use_buffer" c:identifier="annotation_object_use_buffer">
+        <return-value>
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <parameter name="bytes">
+            <array c:type="guchar*">
+              <type name="uint8"/>
+            </array>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="compute_sum" c:identifier="annotation_object_compute_sum">
+        <return-value>
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <parameter name="nums">
+            <array c:type="int*">
+              <type name="int"/>
+            </array>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="compute_sum_n"
+              c:identifier="annotation_object_compute_sum_n">
+        <return-value>
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <parameter name="nums">
+            <array length="2" c:type="int*">
+              <type name="int"/>
+            </array>
+          </parameter>
+          <parameter name="n_nums">
+            <type name="int" c:type="int"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="do_not_use"
+              c:identifier="annotation_object_do_not_use"
+              deprecated="Use annotation_object_create_object() instead."
+              deprecated-version="0.12">
+        <return-value>
+          <type name="GObject.Object" c:type="GObject*"/>
+        </return-value>
+      </method>
+    </class>
     <record name="ObjectClass" c:type="AnnotationObjectClass">
       <field name="parent_class">
         <type name="GObject.Class" c:type="GObjectClass"/>
       </field>
     </record>
-    <function name="object_method" c:identifier="annotation_object_method">
-      <return-value>
-        <type name="int" c:type="gint"/>
-      </return-value>
-      <parameters>
-        <parameter name="object">
-          <type name="Object" c:type="AnnotationObject*"/>
-        </parameter>
-      </parameters>
-    </function>
-    <function name="object_out" c:identifier="annotation_object_out">
-      <return-value>
-        <type name="int" c:type="gint"/>
-      </return-value>
-      <parameters>
-        <parameter name="object">
-          <type name="Object" c:type="AnnotationObject*"/>
-        </parameter>
-        <parameter name="outarg" direction="out">
-          <type name="int" c:type="int*"/>
-        </parameter>
-      </parameters>
-    </function>
-    <function name="object_create_object"
-              c:identifier="annotation_object_create_object">
-      <return-value transfer-ownership="1">
-        <type name="GObject.Object" c:type="GObject*"/>
-      </return-value>
-      <parameters>
-        <parameter name="object">
-          <type name="Object" c:type="AnnotationObject*"/>
-        </parameter>
-      </parameters>
-    </function>
-    <function name="object_allow_none"
-              c:identifier="annotation_object_allow_none">
-      <return-value>
-        <type name="GObject.Object" c:type="GObject*"/>
-      </return-value>
-      <parameters>
-        <parameter name="object">
-          <type name="Object" c:type="AnnotationObject*"/>
-        </parameter>
-        <parameter name="somearg" allow-none="1">
-          <type name="utf8" c:type="gchar*"/>
-        </parameter>
-      </parameters>
-    </function>
-    <function name="object_inout" c:identifier="annotation_object_inout">
-      <return-value>
-        <type name="int" c:type="gint"/>
-      </return-value>
-      <parameters>
-        <parameter name="object">
-          <type name="Object" c:type="AnnotationObject*"/>
-        </parameter>
-        <parameter name="inoutarg" direction="inout">
-          <type name="int" c:type="int*"/>
-        </parameter>
-      </parameters>
-    </function>
-    <function name="object_inout2" c:identifier="annotation_object_inout2">
-      <return-value>
-        <type name="int" c:type="gint"/>
-      </return-value>
-      <parameters>
-        <parameter name="object">
-          <type name="Object" c:type="AnnotationObject*"/>
-        </parameter>
-        <parameter name="inoutarg" direction="inout">
-          <type name="int" c:type="int*"/>
-        </parameter>
-      </parameters>
-    </function>
-    <function name="object_inout3" c:identifier="annotation_object_inout3">
-      <return-value>
-        <type name="int" c:type="gint"/>
-      </return-value>
-      <parameters>
-        <parameter name="object">
-          <type name="Object" c:type="AnnotationObject*"/>
-        </parameter>
-        <parameter name="inoutarg" direction="inout" allow-none="1">
-          <type name="int" c:type="int*"/>
-        </parameter>
-      </parameters>
-    </function>
-    <function name="object_in" c:identifier="annotation_object_in">
-      <return-value>
-        <type name="int" c:type="gint"/>
-      </return-value>
-      <parameters>
-        <parameter name="object">
-          <type name="Object" c:type="AnnotationObject*"/>
-        </parameter>
-        <parameter name="inarg">
-          <type name="int" c:type="int*"/>
-        </parameter>
-      </parameters>
-    </function>
-    <function name="object_calleeowns"
-              c:identifier="annotation_object_calleeowns">
-      <return-value>
-        <type name="int" c:type="gint"/>
-      </return-value>
-      <parameters>
-        <parameter name="object">
-          <type name="Object" c:type="AnnotationObject*"/>
-        </parameter>
-        <parameter name="toown" direction="out" transfer-ownership="1">
-          <type name="GObject.Object" c:type="GObject**"/>
-        </parameter>
-      </parameters>
-    </function>
-    <function name="object_calleesowns"
-              c:identifier="annotation_object_calleesowns">
-      <return-value>
-        <type name="int" c:type="gint"/>
-      </return-value>
-      <parameters>
-        <parameter name="object">
-          <type name="Object" c:type="AnnotationObject*"/>
-        </parameter>
-        <parameter name="toown1" direction="out" transfer-ownership="1">
-          <type name="GObject.Object" c:type="GObject**"/>
-        </parameter>
-        <parameter name="toown2" direction="out" transfer-ownership="1">
-          <type name="GObject.Object" c:type="GObject**"/>
-        </parameter>
-      </parameters>
-    </function>
-    <function name="object_get_strings"
-              c:identifier="annotation_object_get_strings">
-      <return-value transfer-ownership="1">
-        <type name="GLib.List" c:type="GList*">
-          <type name="utf8"/>
-        </type>
-      </return-value>
-      <parameters>
-        <parameter name="object">
-          <type name="Object" c:type="AnnotationObject*"/>
-        </parameter>
-      </parameters>
-    </function>
-    <function name="object_get_objects"
-              c:identifier="annotation_object_get_objects">
-      <return-value transfer-ownership="1">
-        <type name="GLib.SList" c:type="GSList*">
-          <type name="Object"/>
-        </type>
-      </return-value>
-      <parameters>
-        <parameter name="object">
-          <type name="Object" c:type="AnnotationObject*"/>
-        </parameter>
-      </parameters>
-    </function>
-    <function name="object_use_buffer"
-              c:identifier="annotation_object_use_buffer">
-      <return-value>
-        <type name="none" c:type="void"/>
-      </return-value>
-      <parameters>
-        <parameter name="object">
-          <type name="Object" c:type="AnnotationObject*"/>
-        </parameter>
-        <parameter name="bytes">
-          <array c:type="guchar*">
-            <type name="uint8"/>
-          </array>
-        </parameter>
-      </parameters>
-    </function>
-    <function name="object_compute_sum"
-              c:identifier="annotation_object_compute_sum">
-      <return-value>
-        <type name="none" c:type="void"/>
-      </return-value>
-      <parameters>
-        <parameter name="object">
-          <type name="Object" c:type="AnnotationObject*"/>
-        </parameter>
-        <parameter name="nums">
-          <array c:type="int*">
-            <type name="int"/>
-          </array>
-        </parameter>
-      </parameters>
-    </function>
-    <function name="object_compute_sum_n"
-              c:identifier="annotation_object_compute_sum_n">
-      <return-value>
-        <type name="none" c:type="void"/>
-      </return-value>
-      <parameters>
-        <parameter name="object">
-          <type name="Object" c:type="AnnotationObject*"/>
-        </parameter>
-        <parameter name="nums">
-          <array length="2" c:type="int*">
-            <type name="int"/>
-          </array>
-        </parameter>
-        <parameter name="n_nums">
-          <type name="int" c:type="int"/>
-        </parameter>
-      </parameters>
-    </function>
-    <function name="object_do_not_use"
-              c:identifier="annotation_object_do_not_use"
-              deprecated="Use annotation_object_create_object() instead."
-              deprecated-version="0.12">
-      <return-value>
-        <type name="GObject.Object" c:type="GObject*"/>
-      </return-value>
-      <parameters>
-        <parameter name="object">
-          <type name="Object" c:type="AnnotationObject*"/>
-        </parameter>
-      </parameters>
-    </function>
   </namespace>
 </repository>
