@@ -1,3 +1,9 @@
+2008-10-06  Colin Walters  <walters@verbum.org>
+
+	* giscanner/transformer.py: Parse length= annotation as
+	a parameter name, not a raw int.
+	* tests/*: Update.
+
 2008-10-03  Colin Walters  <walters@verbum.org>
 
 	Bug 551744: Non-GObject types aren't aggregating ctors and methods

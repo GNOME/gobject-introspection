@@ -235,10 +235,32 @@ class Transformer(object):
                 # No version, just include str
                 node.deprecated = deprecated_value.strip()
 
+    def _pair_array(self, params, array):
+        if not array.type.length_param_name:
+            return
+        target_name = array.type.length_param_name
+        for i, param in enumerate(params):
+            if param.name == array.type.length_param_name:
+                array.type.length_param_index = i
+                return
+        raise ValueError("Unmatched length parameter name %r"\
+                             % (target_name, ))
+
+    def _pair_annotations(self, params):
+        names = {}
+        for param in params:
+            if param.name in names:
+                raise ValueError("Duplicate parameter name %r"\
+                                     % (param.name, ))
+            names[param.name] = 1
+            if isinstance(param.type, Array):
+                self._pair_array(params, param)
+
     def _create_function(self, symbol):
         directives = symbol.directives()
         parameters = list(self._create_parameters(
             symbol.base_type, directives))
+        self._pair_annotations(parameters)
         return_ = self._create_return(symbol.base_type.base_type,
                                       directives.get('return', []))
         name = self._strip_namespace_func(symbol.ident)
@@ -370,8 +392,8 @@ class Transformer(object):
             elif option == 'notransfer':
                 param.transfer = False
             elif isinstance(ptype, Array) and option.startswith('length'):
-                (_, index) = option.split('=')
-                ptype.length_param_index = int(index)
+                (_, index_param) = option.split('=')
+                ptype.length_param_name = index_param
             elif option == 'allow-none':
                 param.allow_none = True
             else:

@@ -229,8 +229,8 @@ annotation_object_compute_sum  (AnnotationObject *object,
 /**
  * annotation_object_compute_sum_n:
  * @object: a #GObject
- * @nums: <array,length=2>: Sequence of numbers
- * @nums: Length of number array
+ * @nums: <array,length=n_nums>: Sequence of numbers
+ * @n_nums: Length of number array
  *
  * Test taking an array with length parameter
  **/

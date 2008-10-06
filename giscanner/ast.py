@@ -182,6 +182,7 @@ class Array(Type):
         self.element_type = element_type
         self.zeroterminated = True
         self.length_param_index = -1
+        self.length_param_name = None
 
     def __repr__(self):
         return 'Array(%r of %r)' % (self.name, self.element_type, )
