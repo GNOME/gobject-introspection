@@ -1,3 +1,21 @@
+2008-10-06  Lucas Rocha  <lucasr@gnome.org>
+
+	Bug 555294: Add support for multiple shared libraries per typelib.
+
+	* girepository/ginvoke.c (g_function_info_invoke),
+	girepository/ginfo.c(g_registered_type_info_get_g_type): use
+	g_typelib_symbol instead of g_module_symbol.
+	* girepository/girepository.h: remove g_typelib_set_module and add
+	g_typelib_symbol. 
+	* girepository/gtypelib.[ch] (find_some_symbol, _g_typelib_init,
+	g_typelib_new_from_memory, g_typelib_new_from_const_memory,
+	g_typelib_free, g_typelib_symbol): chnage GTypeLib to hold a list of
+	modules instead of just one. The symbol lookup is now abstracted
+	behind g_typelib_symbol which tries to find the passed symbol name in
+	one of its modules.
+	* giscanner/girwriter.py, tools/g-ir-scanner: change scanner to read
+	and write shared_library attribute as a comma-separated list of libs.
+
 2008-10-06  Colin Walters  <walters@verbum.org>
 
 	* giscanner/transformer.py: Parse length= annotation as

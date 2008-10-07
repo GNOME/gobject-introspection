@@ -175,8 +175,8 @@ def main(args):
         _error("Unknown format: %s" % (options.format, ))
 
     if not options.libraries:
-        _error("Must specify --library for primary library")
-    primary_library = options.libraries[0]
+        _error("Must specify --library at least one primary library")
+    libraries = options.libraries
 
     for package in options.packages:
         output = subprocess.Popen(['pkg-config', '--cflags', package],
@@ -236,7 +236,7 @@ def main(args):
     namespace = glibtransformer.parse()
 
     # Write out AST
-    writer = Writer(namespace, primary_library, transformer.get_includes())
+    writer = Writer(namespace, libraries, transformer.get_includes())
     data = writer.get_xml()
     if options.output:
         fd = open(options.output, "w")
