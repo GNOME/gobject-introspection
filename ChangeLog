@@ -1,3 +1,10 @@
+2008-10-09  Lucas Rocha  <lucasr@gnome.org>
+
+	* girepository/girepository.c (register_internal): fix regression on
+	invoke test case by making sure we load the global module in the
+	typelib when dealing with inline typelibs.
+	* girepository/gtypelib.c: a couple of coding style fixes.
+
 2008-10-06  Lucas Rocha  <lucasr@gnome.org>
 
 	Bug 555294: Add support for multiple shared libraries per typelib.
