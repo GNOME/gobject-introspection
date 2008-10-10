@@ -203,6 +203,16 @@ def main(args):
         pkg_options, unused = parser.parse_args(filtered_output)
         options.library_paths.extend(pkg_options.library_paths)
 
+    # FIXME: using LPATH is definitely not portable enough. Using Python's
+    # find_library for finding our shared libraries is not a portable enough
+    # anyway as it behaves differently depending on the OS
+    lpath = os.environ.get('LPATH')
+    library_path = ':'.join(options.library_paths)
+    if lpath:
+        os.environ['LPATH'] = ':'.join([lpath, library_path])
+    else:
+        os.environ['LPATH'] = library_path
+
     filenames = []
     for arg in args:
         if (arg.endswith('.c') or
