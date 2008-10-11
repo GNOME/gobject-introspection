@@ -1,3 +1,13 @@
+2008-10-11  Jürg Billeter  <j@bitron.ch>
+
+	Bug 552370: unsigned not scanned properly
+
+	* giscanner/scannerparser.y: combine basic types such as unsigned
+	int and long long when scanning
+	* tests/scanner/foo-expected.gir:
+	* tests/scanner/foo.c: (foo_test_unsigned):
+	* tests/scanner/foo.h: test that
+
 2008-10-11  Lucas Rocha  <lucasr@gnome.org>
 
 	Bug 554854: The --typelib-xml and --inject options should reuse

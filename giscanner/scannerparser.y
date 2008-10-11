@@ -559,7 +559,15 @@ declaration_specifiers
 	| type_specifier declaration_specifiers
 	  {
 		$$ = $1;
-		$$->base_type = $2;
+		/* combine basic types like unsigned int and long long */
+		if ($$->type == CTYPE_BASIC_TYPE && $2->type == CTYPE_BASIC_TYPE) {
+			char *name = g_strdup_printf ("%s %s", $$->name, $2->name);
+			g_free ($$->name);
+			$$->name = name;
+			ctype_free ($2);
+		} else {
+			$$->base_type = $2;
+		}
 	  }
 	| type_specifier
 	| type_qualifier declaration_specifiers

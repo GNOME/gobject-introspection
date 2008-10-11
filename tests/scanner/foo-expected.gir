@@ -184,9 +184,9 @@
       </return-value>
     </function>
     <enumeration name="EnumType"
-                 c:type="FooEnumType"
                  glib:type-name="FooEnumType"
-                 glib:get-type="foo_enum_type_get_type">
+                 glib:get-type="foo_enum_type_get_type"
+                 c:type="FooEnumType">
       <member name="alpha"
               value="0"
               c:identifier="FOO_ENUM_ALPHA"
@@ -221,9 +221,9 @@
       </parameters>
     </function>
     <bitfield name="FlagsType"
-              c:type="FooFlagsType"
               glib:type-name="FooFlagsType"
-              glib:get-type="foo_flags_type_get_type">
+              glib:get-type="foo_flags_type_get_type"
+              c:type="FooFlagsType">
       <member name="first"
               value="1"
               c:identifier="FOO_FLAGS_FIRST"
@@ -448,5 +448,15 @@
         </return-value>
       </method>
     </union>
+    <function name="test_unsigned" c:identifier="foo_test_unsigned">
+      <return-value>
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="unsigned_param">
+          <type name="uint" c:type="unsigned int"/>
+        </parameter>
+      </parameters>
+    </function>
   </namespace>
 </repository>

@@ -318,3 +318,8 @@ foo_bunion_get_type (void)
 					     (GBoxedFreeFunc) g_free);
   return our_type;
 }
+
+void foo_test_unsigned (unsigned int uint)
+{
+}
+
