@@ -1,3 +1,15 @@
+2008-10-11  Lucas Rocha  <lucasr@gnome.org>
+
+	Bug 552376: scanner generates wrong names for enum members when
+	there's no defined gtype.
+
+	* giscanner/utils.py (strip_common_prefix): Always strip common
+	prefix exactly up to the last "_", and not beyond.
+	* tests/scanner/foo.h (FooEnumNoType): add FOO_ENUM_NEUF. The point
+	here is that the first character after the last '_' should should be
+	the same as the character in the same position on the type name.
+	* tests/scanner/foo-expected.gir: test that
+
 2008-10-10  Lucas Rocha  <lucasr@gnome.org>
 
 	Bug 555293: append library_paths to LPATH env variable to work

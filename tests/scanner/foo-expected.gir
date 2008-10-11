@@ -241,6 +241,7 @@
       <member name="un" value="1" c:identifier="FOO_ENUM_UN"/>
       <member name="deux" value="2" c:identifier="FOO_ENUM_DEUX"/>
       <member name="trois" value="3" c:identifier="FOO_ENUM_TROIS"/>
+      <member name="neuf" value="9" c:identifier="FOO_ENUM_NEUF"/>
     </enumeration>
     <enumeration name="EnumFullname" c:type="FooEnumFullname">
       <member name="one" value="1" c:identifier="FOO_ENUM_FULLNAME_ONE"/>

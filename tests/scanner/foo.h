@@ -104,6 +104,7 @@ typedef enum
   FOO_ENUM_UN = 1,
   FOO_ENUM_DEUX = 2,
   FOO_ENUM_TROIS = 3,
+  FOO_ENUM_NEUF = 9
 } FooEnumNoType;
 
 GType foo_flags_type_get_type (void);
