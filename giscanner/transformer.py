@@ -23,7 +23,7 @@ import os
 from giscanner.ast import (Callback, Enum, Function, Namespace, Member,
                            Parameter, Return, Array, Struct, Field,
                            Type, Alias, Interface, Class, Node, Union,
-                           List, Map, Varargs, type_name_from_ctype,
+                           List, Map, Varargs, Constant, type_name_from_ctype,
                            type_names, default_array_types)
 from giscanner.config import DATADIR
 from .glibast import GLibBoxed
@@ -33,7 +33,7 @@ from giscanner.sourcescanner import (
     CTYPE_VOID, CTYPE_ENUM, CTYPE_FUNCTION, CTYPE_STRUCT,
     CSYMBOL_TYPE_FUNCTION, CSYMBOL_TYPE_TYPEDEF, CSYMBOL_TYPE_STRUCT,
     CSYMBOL_TYPE_ENUM, CSYMBOL_TYPE_UNION, CSYMBOL_TYPE_OBJECT,
-    CSYMBOL_TYPE_MEMBER, CSYMBOL_TYPE_ELLIPSIS,
+    CSYMBOL_TYPE_MEMBER, CSYMBOL_TYPE_ELLIPSIS, CSYMBOL_TYPE_CONST,
     TYPE_QUALIFIER_CONST)
 from .odict import odict
 from .utils import strip_common_prefix, to_underscores
@@ -201,6 +201,8 @@ class Transformer(object):
             return self._create_member(symbol)
         elif stype == CSYMBOL_TYPE_UNION:
             return self._create_union(symbol)
+        elif stype == CSYMBOL_TYPE_CONST:
+            return self._create_const(symbol)
         else:
             raise NotImplementedError(
                 'Transformer: unhandled symbol: %r' % (symbol, ))
@@ -423,6 +425,18 @@ class Transformer(object):
                 print 'Unhandled return type annotation option: %r' % (
                     option, )
         return return_
+
+    def _create_const(self, symbol):
+        name = self._remove_prefix(symbol.ident)
+        name = self.strip_namespace_object(name)
+        if symbol.const_string is None:
+            type_name = 'int'
+            value = symbol.const_int
+        else:
+            type_name = 'utf8'
+            value = symbol.const_string
+        const = Constant(name, type_name, value)
+        return const
 
     def _create_typedef_struct(self, symbol):
         name = self.strip_namespace_object(symbol.ident)

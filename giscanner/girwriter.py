@@ -22,7 +22,7 @@ from __future__ import with_statement
 
 import os
 
-from .ast import (Callback, Class, Enum, Function, Interface, Member,
+from .ast import (Callback, Class, Constant, Enum, Function, Interface, Member,
                   Array, Struct, Alias, Union, List, Map, Varargs)
 from .glibast import (GLibBoxed, GLibEnum, GLibEnumMember,
                       GLibFlags, GLibObject, GLibInterface)
@@ -82,6 +82,8 @@ class GIRWriter(XMLWriter):
             pass
         elif isinstance(node, Alias):
             self._write_alias(node)
+        elif isinstance(node, Constant):
+            self._write_constant(node)
         else:
             print 'WRITER: Unhandled node', node
 
@@ -212,6 +214,12 @@ class GIRWriter(XMLWriter):
         if isinstance(member, GLibEnumMember):
             attrs.append(('glib:nick', member.nick))
         self.write_tag('member', attrs)
+
+    def _write_constant(self, constant):
+        attrs = [('name', constant.name),
+                 ('value', str(constant.value))]
+        with self.tagcontext('constant', attrs):
+            self._write_type(constant.type)
 
     def _write_class(self, node):
         attrs = [('name', node.name),

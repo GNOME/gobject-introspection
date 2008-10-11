@@ -1,3 +1,21 @@
+2008-10-11  Johan Bilien  <jobi@litl.com>
+
+	* giscanner/scannerparser.y: ignore non-UTF-8 string constants
+
+2008-10-11  Johan Bilien  <jobi@litl.com>
+
+	Bug 552347: Parse #defines constants
+
+	* girepository/gtypelib.c: update the list of value_size
+	with recently defined type tags
+	* giscanner/scannerparser.y: brought back parsing of #defined, as
+	present in older version
+	* giscanner/giscannermodule.c: bind gi_source_scanner_append_filename
+	* giscanner/girwriter.py: write out constant tags in the gir
+	* giscanner/sourcescanner.py: add accessor for const_string
+	* giscanner/transformer.py, giscanner/glibtransformer.py: handle
+	constant
+
 2008-10-11  Tommi Komulainen  <tommi.komulainen@iki.fi>
 
 	Bug 555946: Install a test module exercising all types, transfer

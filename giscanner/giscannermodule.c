@@ -392,6 +392,41 @@ pygi_source_scanner_append_filename (PyGISourceScanner *self,
 }
 
 static PyObject *
+pygi_source_scanner_parse_macros (PyGISourceScanner *self,
+                                  PyObject          *args)
+{
+  GList *filenames;
+  int i;
+  PyObject *list;
+
+  list = PyTuple_GET_ITEM (args, 0);
+
+  if (!PyList_Check (list))
+    {
+      PyErr_SetString (PyExc_RuntimeError, "parse macro takes a list of filenames");
+      return NULL;
+    }
+
+  filenames = NULL;
+  for (i = 0; i < PyList_Size (list); ++i)
+    {
+      PyObject *obj;
+      char *filename;
+
+      obj = PyList_GetItem (list, i);
+      filename = PyString_AsString (obj);
+
+      filenames = g_list_append (filenames, filename);
+    }
+
+  gi_source_scanner_parse_macros (self->scanner, filenames);
+  g_list_free (filenames);
+
+  Py_INCREF (Py_None);
+  return Py_None;
+}
+
+static PyObject *
 pygi_source_scanner_parse_file (PyGISourceScanner *self,
 				PyObject          *args)
 {
@@ -548,6 +583,7 @@ static const PyMethodDef _PyGISourceScanner_methods[] = {
   { "get_symbols", (PyCFunction) pygi_source_scanner_get_symbols, METH_NOARGS },
   { "append_filename", (PyCFunction) pygi_source_scanner_append_filename, METH_VARARGS },
   { "parse_file", (PyCFunction) pygi_source_scanner_parse_file, METH_VARARGS },
+  { "parse_macros", (PyCFunction) pygi_source_scanner_parse_macros, METH_VARARGS },
   { "lex_filename", (PyCFunction) pygi_source_scanner_lex_filename, METH_VARARGS },
   { "set_macro_scan", (PyCFunction) pygi_source_scanner_set_macro_scan, METH_VARARGS },
   { NULL, NULL, 0 }

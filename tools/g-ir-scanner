@@ -241,7 +241,7 @@ def main(args):
                        options.cpp_defines,
                        options.cpp_undefines)
     ss.parse_files(filenames)
-    ss.parse_macros()
+    ss.parse_macros(filenames)
 
     # Transform the C symbols into AST nodes
     transformer = Transformer(ss, options.namespace_name)

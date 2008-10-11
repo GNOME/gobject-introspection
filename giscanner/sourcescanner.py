@@ -140,7 +140,7 @@ class SourceType(object):
 
 
 class SourceSymbol(object):
-    __members__ = ['const_int', 'ident', 'type', 'base_type']
+    __members__ = ['const_int', 'const_string', 'ident', 'type', 'base_type']
 
     def __init__(self, scanner, symbol):
         self._scanner = scanner
@@ -161,6 +161,10 @@ class SourceSymbol(object):
     @property
     def const_int(self):
         return self._symbol.const_int
+
+    @property
+    def const_string(self):
+        return self._symbol.const_string
 
     @property
     def ident(self):
@@ -210,9 +214,9 @@ class SourceScanner(object):
         self._parse(headers)
         self._filenames.extend(headers)
 
-    def parse_macros(self):
+    def parse_macros(self, filenames):
         self._scanner.set_macro_scan(True)
-        self._parse(self._filenames)
+        self._scanner.parse_macros(filenames)
         self._scanner.set_macro_scan(False)
 
     def get_symbols(self):

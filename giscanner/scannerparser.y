@@ -32,6 +32,7 @@
 #include <string.h>
 #include <errno.h>
 #include <glib.h>
+#include <glib/gstdio.h>
 #include "sourcescanner.h"
 #include "scannerparser.h"
 
@@ -179,6 +180,13 @@ strings
 		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST);
 		yytext[strlen (yytext) - 1] = '\0';
 		$$->const_string = g_strcompress (yytext + 1);
+                if (!g_utf8_validate ($$->const_string, -1, NULL))
+                  {
+                    g_warning ("Ignoring non-UTF-8 constant string %s", $$->ident);
+                    g_free($$->const_string);
+                    $$->const_string = NULL;
+                  }
+
 	  }
 	| strings STRING
 	  {
@@ -1251,6 +1259,183 @@ yyerror (GISourceScanner *scanner, const char *s)
       fprintf(stderr, "%s:%d: %s\n",
 	      scanner->current_filename, lineno, s);
     }
+}
+
+static int
+eat_hspace (FILE * f)
+{
+  int c;
+  do
+    {
+      c = fgetc (f);
+    }
+  while (c == ' ' || c == '\t');
+  return c;
+}
+
+static int
+eat_line (FILE * f, int c)
+{
+  while (c != EOF && c != '\n')
+    {
+      c = fgetc (f);
+    }
+  if (c == '\n')
+    {
+      c = fgetc (f);
+      if (c == ' ' || c == '\t')
+        {
+          c = eat_hspace (f);
+        }
+    }
+  return c;
+}
+
+static int
+read_identifier (FILE * f, int c, char **identifier)
+{
+  GString *id = g_string_new ("");
+  while (g_ascii_isalnum (c) || c == '_')
+    {
+      g_string_append_c (id, c);
+      c = fgetc (f);
+    }
+  *identifier = g_string_free (id, FALSE);
+  return c;
+}
+
+void
+gi_source_scanner_parse_macros (GISourceScanner *scanner, GList *filenames)
+{
+  GError *error = NULL;
+  char *tmp_name = NULL;
+  FILE *fmacros =
+    fdopen (g_file_open_tmp ("gen-introspect-XXXXXX.h", &tmp_name, &error),
+            "w+");
+  g_unlink (tmp_name);
+
+  GList *l;
+  for (l = filenames; l != NULL; l = l->next)
+    {
+      FILE *f = fopen (l->data, "r");
+      int line = 1;
+
+      GString *define_line;
+      char *str;
+      gboolean error_line = FALSE;
+      int c = eat_hspace (f);
+      while (c != EOF)
+        {
+          if (c != '#')
+            {
+              /* ignore line */
+              c = eat_line (f, c);
+              line++;
+              continue;
+            }
+
+          /* print current location */
+          str = g_strescape (l->data, "");
+          fprintf (fmacros, "# %d \"%s\"\n", line, str);
+          g_free (str);
+
+          c = eat_hspace (f);
+          c = read_identifier (f, c, &str);
+          if (strcmp (str, "define") != 0 || (c != ' ' && c != '\t'))
+            {
+              g_free (str);
+              /* ignore line */
+              c = eat_line (f, c);
+              line++;
+              continue;
+            }
+          g_free (str);
+          c = eat_hspace (f);
+          c = read_identifier (f, c, &str);
+          if (strlen (str) == 0 || (c != ' ' && c != '\t' && c != '('))
+            {
+              g_free (str);
+              /* ignore line */
+              c = eat_line (f, c);
+              line++;
+              continue;
+            }
+          define_line = g_string_new ("#define ");
+          g_string_append (define_line, str);
+          g_free (str);
+          if (c == '(')
+            {
+              while (c != ')')
+                {
+                  g_string_append_c (define_line, c);
+                  c = fgetc (f);
+                  if (c == EOF || c == '\n')
+                    {
+                      error_line = TRUE;
+                      break;
+                    }
+                }
+              if (error_line)
+                {
+                  g_string_free (define_line, TRUE);
+                  /* ignore line */
+                  c = eat_line (f, c);
+                  line++;
+                  continue;
+                }
+
+              g_assert (c == ')');
+              g_string_append_c (define_line, c);
+              c = fgetc (f);
+
+              /* found function-like macro */
+              fprintf (fmacros, "%s\n", define_line->str);
+
+              g_string_free (define_line, TRUE);
+              /* ignore rest of line */
+              c = eat_line (f, c);
+              line++;
+              continue;
+            }
+          if (c != ' ' && c != '\t')
+            {
+              g_string_free (define_line, TRUE);
+              /* ignore line */
+              c = eat_line (f, c);
+              line++;
+              continue;
+            }
+          while (c != EOF && c != '\n')
+            {
+              g_string_append_c (define_line, c);
+              c = fgetc (f);
+              if (c == '\\')
+                {
+                  c = fgetc (f);
+                  if (c == '\n')
+                    {
+                      /* fold lines when seeing backslash new-line sequence */
+                      c = fgetc (f);
+                    }
+                  else
+                    {
+                      g_string_append_c (define_line, '\\');
+                    }
+                }
+            }
+
+          /* found object-like macro */
+          fprintf (fmacros, "%s\n", define_line->str);
+
+          c = eat_line (f, c);
+          line++;
+        }
+
+      fclose (f);
+    }
+
+  rewind (fmacros);
+  gi_source_scanner_parse_file (scanner, fmacros);
 }
 
 gboolean

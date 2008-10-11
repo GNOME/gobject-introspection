@@ -24,8 +24,8 @@ import ctypes
 from ctypes.util import find_library
 
 from . import cgobject
-from .ast import (Callback, Enum, Function, Member, Namespace, Parameter,
-                  Property, Return, Struct, Type, Alias, Array,
+from .ast import (Callback, Constant, Enum, Function, Member, Namespace,
+                  Parameter, Property, Return, Struct, Type, Alias, Array,
                   Union, type_name_from_ctype,
                   default_array_types, TYPE_UINT8)
 from .transformer import Names
@@ -228,6 +228,8 @@ class GLibTransformer(object):
             pass
         elif isinstance(node, Union):
             self._parse_union(node)
+        elif isinstance(node, Constant):
+            self._parse_constant(node)
         else:
             print 'GLIB Transformer: Unhandled node:', node
 
@@ -236,6 +238,9 @@ class GLibTransformer(object):
 
     def _parse_enum(self, enum):
         self._add_attribute(enum)
+
+    def _parse_constant(self, constant):
+        self._add_attribute(constant)
 
     def _parse_function(self, func):
         if func.symbol in SYMBOL_BLACKLIST:
