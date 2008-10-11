@@ -1,3 +1,14 @@
+2008-10-11  Tommi Komulainen  <tommi.komulainen@iki.fi>
+
+	Bug 555946: Install a test module exercising all types, transfer
+	rules, etc.
+
+	* configure.ac
+	* tests/Makefile.am
+	* tests/types/*: Add and install a test module that has functions
+	accepting and returning most of the basic types to enable bindings
+	implementors to more easily test their type conversion routines.
+
 2008-10-11  Jürg Billeter  <j@bitron.ch>
 
 	Bug 552374: Const strings should be identified in the gir.
