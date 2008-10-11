@@ -1,3 +1,8 @@
+2008-10-11  Johan Dahlin  <johan@gnome.org>
+
+	* giscanner/girparser.py:
+	Also parse enums which are not glib types.
+
 2008-10-11  Lucas Rocha  <lucasr@gnome.org>
 
 	Bug 552370: add one more test for unsigned as a type, not as

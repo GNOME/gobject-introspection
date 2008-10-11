@@ -20,8 +20,8 @@
 
 from xml.etree.cElementTree import parse
 
-from .ast import (Alias, Callback, Function, Field, Parameter, Property,
-                  Return, Union, Struct, Type, Array, Namespace, Varargs)
+from .ast import (Alias, Array, Callback, Enum, Function, Field, Namespace,
+                  Parameter, Property, Return, Union, Struct, Type, Varargs)
 from .glibast import (GLibEnum, GLibEnumMember, GLibFlags,
                       GLibInterface, GLibObject, GLibBoxedStruct,
                       GLibBoxedUnion, GLibBoxedOther)
@@ -257,13 +257,25 @@ class GIRParser(object):
                               node.attrib.get(_glibns('nick')))
 
     def _parse_enumeration_bitfield(self, node):
-        klass = (GLibFlags if node.tag == _corens('bitfield') else GLibEnum)
+        name = node.attrib.get('name')
+        ctype = node.attrib.get(_cns('type'))
+        get_type = node.attrib.get(_glibns('get-type'))
+        type_name = node.attrib.get(_glibns('type-name'))
+        if get_type:
+            if node.tag == _corens('bitfield'):
+                klass = GLibFlags
+            else:
+                klass = GLibEnum
+        else:
+            klass = Enum
+            type_name = ctype
         members = []
         for member in node.findall(_corens('member')):
             members.append(self._parse_member(member))
-        obj = klass(node.attrib.get('name'),
-                    node.attrib.get(_glibns('type-name')),
-                    members,
-                    node.attrib.get(_glibns('get-type')))
-        obj.ctype = node.attrib.get(_cns('type'))
+
+        if klass is Enum:
+            obj = klass(name, type_name, member)
+        else:
+            obj = klass(name, type_name, members, get_type)
+            obj.ctype = ctype
         self._add_node(obj)
