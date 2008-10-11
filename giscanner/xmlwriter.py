@@ -40,9 +40,12 @@ class XMLWriter(object):
             return -1
         attr_length = 0
         for attr, value in attributes:
+            # FIXME: actually, if we have attributes with None as value this
+            # should be considered a bug and raise an error. We are just
+            # ignoring them here while we fix GIRParser to create the right
+            # ast with the correct attributes.
             if value is None:
-                raise ValueError(
-                    "value for attribute %r cannot be None" % (attr, ))
+                continue
             attr_length += 2 + len(attr) + len(quoteattr(value))
         return attr_length + indent + self._indent
 
@@ -56,11 +59,14 @@ class XMLWriter(object):
         first = True
         attr_value = ''
         for attr, value in attributes:
+            # FIXME: actually, if we have attributes with None as value this
+            # should be considered a bug and raise an error. We are just
+            # ignoring them here while we fix GIRParser to create the right
+            # ast with the correct attributes.
+            if value is None:
+                continue
             if indent_len and not first:
                 attr_value += '\n%s' % (self._indent_char * indent_len)
-            if value is None:
-                raise ValueError(
-                    "value for attribute %r cannot be None" % (attr, ))
             attr_value += ' %s=%s' % (attr, quoteattr(value))
             if first:
                 first = False

@@ -104,22 +104,31 @@ def _error(msg):
     raise SystemExit('ERROR: %s' % (msg, ))
 
 def typelib_xml_strip(path):
+    from giscanner.girparser import GIRParser
+    from giscanner.girwriter import GIRWriter
     from giscanner.girparser import C_NS
     c_ns_key = '{%s}' % (C_NS, )
 
-    from xml.etree.cElementTree import parse
-    doc = parse(open(path))
+    parser = GIRParser(path, initial_parse=False)
+    doc = parser.get_doc()
     for node in doc.getiterator():
         for attrib in list(node.attrib):
             if attrib.startswith(c_ns_key):
                 del node.attrib[attrib]
-    doc.write(sys.stdout)
+    parser.parse()
+    writer = GIRWriter(parser.get_namespace(),
+                       parser.get_shared_libraries(),
+                       parser.get_includes())
+    sys.stdout.write(writer.get_xml())
     return 0
 
 def inject(path, additions, outpath):
+    from giscanner.girparser import GIRParser
+    from giscanner.girwriter import GIRWriter
     from xml.etree.cElementTree import parse
-    doc = parse(open(path))
-    root = doc.getroot()
+
+    parser = GIRParser(path, initial_parse=False)
+    root = parser.get_doc().getroot()
     injectDoc = parse(open(additions))
     for node in injectDoc.getroot():
         injectPath = node.attrib['path']
@@ -128,8 +137,12 @@ def inject(path, additions, outpath):
             raise ValueError("Couldn't find path %r" % (injectPath, ))
         for child in node:
             target.append(child)
+    parser.parse()
+    writer = GIRWriter(parser.get_namespace(),
+                       parser.get_shared_libraries(),
+                       parser.get_includes())
     outf = open(outpath, 'w')
-    doc.write(outf)
+    outf.write(writer.get_xml())
     outf.close()
     return 0
 

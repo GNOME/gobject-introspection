@@ -126,8 +126,8 @@ class Transformer(object):
             raise NotImplementedError(filename)
         for include in parser.get_includes():
             self.register_include(include)
-        nsname = parser.get_namespace_name()
-        for node in parser.get_nodes():
+        nsname = parser.get_namespace().name
+        for node in parser.get_namespace().nodes:
             if isinstance(node, Alias):
                 self._names.aliases[node.name] = (nsname, node)
             elif isinstance(node, (GLibBoxed, Interface, Class)):

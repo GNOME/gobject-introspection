@@ -260,6 +260,7 @@ class Struct(Node):
     def __init__(self, name, symbol):
         Node.__init__(self, name)
         self.fields = []
+        self.constructors = []
         self.symbol = symbol
 
 
@@ -276,11 +277,11 @@ class Field(Node):
 
 class Return(Node):
 
-    def __init__(self, rtype):
+    def __init__(self, rtype, transfer=False):
         Node.__init__(self)
         self.type = rtype
         self.transfer = isinstance(rtype, (List, Map, Array)) or \
-            rtype.name in ('utf8', 'filename')
+            rtype.name in ('utf8', 'filename') or transfer
 
     def __repr__(self):
         return 'Return(%r)' % (self.type, )
@@ -369,6 +370,7 @@ class Union(Node):
     def __init__(self, name, symbol):
         Node.__init__(self, name)
         self.fields = []
+        self.constructors = []
         self.symbol = symbol
 
     def __repr__(self):

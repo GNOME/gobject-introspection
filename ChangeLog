@@ -1,5 +1,20 @@
 2008-10-11  Lucas Rocha  <lucasr@gnome.org>
 
+	Bug 554854: The --typelib-xml and --inject options should reuse
+	giscanner parser/writer.
+
+	* giscanner/ast.py: add constructor list to Struct and Union.
+	Add new param in Return's contructor to define transfer. 
+	* giscanner/girparser.py: several additions to the parser in order
+	to have parsing all nodes of the gir xml files.
+	* tools/g-ir-scanner (typelib_xml_strip, inject): use gir parser
+	and writer in --inject and --typelib-xml options.
+	* giscanner/xmlwriter.py: ignore empty attributes instead of
+	raising an error as this basically exposes a bug in GIRParser.
+	This should be reverted as soon as the parser is fixed.
+
+2008-10-11  Lucas Rocha  <lucasr@gnome.org>
+
 	Bug 552376: scanner generates wrong names for enum members when
 	there's no defined gtype.
 

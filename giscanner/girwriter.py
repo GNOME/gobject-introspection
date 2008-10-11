@@ -189,16 +189,18 @@ class GIRWriter(XMLWriter):
         self.write_tag('type', attrs)
 
     def _write_enum(self, enum):
-        attrs = [('name', enum.name),
-                 ('c:type', enum.symbol)]
+        attrs = [('name', enum.name)]
         self._append_deprecated(enum, attrs)
-        tag_name = 'enumeration'
-        if isinstance(enum, GLibEnum):
+        if isinstance(enum, GLibFlags):
+            tag_name = 'bitfield'
+        else:
+            tag_name = 'enumeration'
+        if isinstance(enum, GLibEnum) or isinstance(enum, GLibFlags):
             attrs.extend([('glib:type-name', enum.type_name),
-                          ('glib:get-type', enum.get_type)])
-            if isinstance(enum, GLibFlags):
-                tag_name = 'bitfield'
-
+                          ('glib:get-type', enum.get_type),
+                          ('c:type', enum.ctype)])
+        else:
+            attrs.append(('c:type', enum.symbol))
         with self.tagcontext(tag_name, attrs):
             for member in enum.members:
                 self._write_member(member)
@@ -305,8 +307,11 @@ class GIRWriter(XMLWriter):
                 self._write_boxed_ctors_methods(union)
 
     def _write_field(self, field):
-        # FIXME: Just function
-        if isinstance(field, (Callback, Function)):
+        if isinstance(field, Function):
+            self._write_method(field)
+            return
+
+        if isinstance(field, Callback):
             self._write_callback(field)
             return
 
