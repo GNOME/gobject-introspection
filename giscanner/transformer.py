@@ -33,7 +33,8 @@ from giscanner.sourcescanner import (
     CTYPE_VOID, CTYPE_ENUM, CTYPE_FUNCTION, CTYPE_STRUCT,
     CSYMBOL_TYPE_FUNCTION, CSYMBOL_TYPE_TYPEDEF, CSYMBOL_TYPE_STRUCT,
     CSYMBOL_TYPE_ENUM, CSYMBOL_TYPE_UNION, CSYMBOL_TYPE_OBJECT,
-    CSYMBOL_TYPE_MEMBER, CSYMBOL_TYPE_ELLIPSIS)
+    CSYMBOL_TYPE_MEMBER, CSYMBOL_TYPE_ELLIPSIS,
+    TYPE_QUALIFIER_CONST)
 from .odict import odict
 from .utils import strip_common_prefix, to_underscores
 
@@ -372,6 +373,14 @@ class Transformer(object):
             return Array(ctype,
                          self._parse_ctype(derefed))
         resolved_type_name = self._parse_ctype(ctype)
+
+        # string memory management
+        if ctype == 'char*':
+            if source_type.base_type.type_qualifier & TYPE_QUALIFIER_CONST:
+                options.append('notransfer')
+            else:
+                options.append('transfer')
+
         return Type(resolved_type_name, ctype)
 
     def _create_parameter(self, symbol, options):
@@ -408,8 +417,10 @@ class Transformer(object):
         for option in options:
             if option == 'transfer':
                 return_.transfer = True
+            elif option == 'notransfer':
+                return_.transfer = False
             else:
-                print 'Unhandled parameter annotation option: %r' % (
+                print 'Unhandled return type annotation option: %r' % (
                     option, )
         return return_
 

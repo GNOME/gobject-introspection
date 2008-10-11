@@ -113,6 +113,16 @@
           </parameter>
         </parameters>
       </method>
+      <method name="get_name" c:identifier="foo_object_get_name">
+        <return-value>
+          <type name="utf8" c:type="char*"/>
+        </return-value>
+      </method>
+      <method name="dup_name" c:identifier="foo_object_dup_name">
+        <return-value transfer-ownership="1">
+          <type name="utf8" c:type="char*"/>
+        </return-value>
+      </method>
       <property name="string" writable="1">
         <type name="utf8" c:type="gchararray"/>
       </property>

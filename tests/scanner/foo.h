@@ -66,6 +66,10 @@ FooObjectCookie       foo_object_new_cookie        (FooObject *object, const cha
 
 void                  foo_object_is_it_time_yet    (FooObject *object, time_t time);
 
+const char *          foo_object_get_name          (FooObject *object);
+
+char *                foo_object_dup_name          (FooObject *object);
+
 struct _FooSubobject
 {
   FooObject parent_instance;

@@ -155,6 +155,18 @@ foo_object_is_it_time_yet (FooObject *object, time_t time)
 {
 }
 
+const char *
+foo_object_get_name (FooObject *object)
+{
+  return "foo";
+}
+
+char *
+foo_object_dup_name (FooObject *object)
+{
+  return g_strdup ("foo");
+}
+
 G_DEFINE_TYPE (FooSubobject, foo_subobject, FOO_TYPE_OBJECT);
 
 static void

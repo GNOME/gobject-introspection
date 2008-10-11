@@ -1,3 +1,11 @@
+2008-10-11  Jürg Billeter  <j@bitron.ch>
+
+	Bug 552374: Const strings should be identified in the gir.
+
+	* giscanner/transformer.py: support string memory management
+	* tests/scanner/foo.h: use char * and const char *
+	* tests/scanner/foo-expected.gir: test that
+
 2008-10-11  Johan Dahlin  <johan@gnome.org>
 
 	* giscanner/girparser.py:
