@@ -34,7 +34,7 @@ annotation_object_method (AnnotationObject *object)
  *
  * This is a test for out arguments
  *
- * @outarg: <out>: This is an argument test
+ * @outarg: (out): This is an argument test
  * Return value: an int
  */
 gint
@@ -50,7 +50,7 @@ annotation_object_in (AnnotationObject *object, int *outarg)
  *
  * This is a test for out arguments
  *
- * @outarg: <in>: This is an argument test
+ * @outarg: (in): This is an argument test
  * Return value: an int
  */
 gint
@@ -67,7 +67,7 @@ annotation_object_out (AnnotationObject *object, int *outarg)
  *
  * This is a test for out arguments
  *
- * @inoutarg: <inout>: This is an argument test
+ * @inoutarg: (inout): This is an argument test
  * Return value: an int
  */
 gint
@@ -82,7 +82,7 @@ annotation_object_inout (AnnotationObject *object, int *inoutarg)
  *
  * This is a second test for out arguments
  *
- * @inoutarg: <inout>: This is an argument test
+ * @inoutarg: (inout): This is an argument test
  * Return value: an int
  */
 gint
@@ -98,7 +98,7 @@ annotation_object_inout2 (AnnotationObject *object, int *inoutarg)
  *
  * This is a 3th test for out arguments
  *
- * @inoutarg: <inout,allow-none>: This is an argument test
+ * @inoutarg: (inout) (allow-none): This is an argument test
  * Return value: an int
  */
 gint
@@ -115,7 +115,7 @@ annotation_object_inout3 (AnnotationObject *object, int *inoutarg)
  *
  * This is a test for out arguments
  *
- * @toown: <out,transfer>: a #GObject
+ * @toown: (out) (transfer): a #GObject
  * Return value: an int
  */
 gint
@@ -131,8 +131,8 @@ annotation_object_calleeowns (AnnotationObject *object, GObject **toown)
  *
  * This is a test for out arguments
  *
- * @toown1: <out,transfer>: a #GObject
- * @toown2: <out,transfer>: a #GObject
+ * @toown1: (out) (transfer): a #GObject
+ * @toown2: (out) (transfer): a #GObject
  * Return value: an int
  */
 gint
@@ -151,7 +151,7 @@ annotation_object_calleesowns (AnnotationObject *object,
  * This is a test for returning a list of strings, where
  * each string needs to be freed.
  *
- * Return value: <char*,transfer>: list of strings
+ * Return value: (element-type utf8) (transfer): list of strings
  */
 GList*
 annotation_object_get_strings (AnnotationObject *object)
@@ -181,7 +181,7 @@ annotation_object_with_voidp (AnnotationObject *object, void *data)
  * The list itself should be freed, but not the internal objects,
  * intentionally similar example to gtk_container_get_children
  *
- * Return value: <AnnotationObject*>: list of objects
+ * Return value: (element-type AnnotationObject) (transfer container): list of objects
  */
 GSList*
 annotation_object_get_objects (AnnotationObject *object)
@@ -197,7 +197,7 @@ annotation_object_get_objects (AnnotationObject *object)
  *
  * Test returning a caller-owned object
  *
- * Return value: <transfer>: The object
+ * Return value: (transfer): The object
  **/
 GObject* 
 annotation_object_create_object (AnnotationObject *object)
@@ -215,7 +215,7 @@ annotation_object_use_buffer   (AnnotationObject *object,
 /**
  * annotation_object_compute_sum:
  * @object: a #GObject
- * @nums: <array>: Sequence of numbers
+ * @nums: (array): Sequence of numbers
  *
  * Test taking a zero-terminated array
  **/
@@ -229,7 +229,7 @@ annotation_object_compute_sum  (AnnotationObject *object,
 /**
  * annotation_object_compute_sum_n:
  * @object: a #GObject
- * @nums: <array,length=n_nums>: Sequence of numbers
+ * @nums: (array length=n_nums): Sequence of numbers
  * @n_nums: Length of number array
  *
  * Test taking an array with length parameter
@@ -245,7 +245,7 @@ annotation_object_compute_sum_n(AnnotationObject *object,
 /**
  * annotation_object_allow_none: 
  * @object: a #GObject
- * @somearg: <allow-none>: 
+ * @somearg: (allow-none): 
  **/
 GObject*
 annotation_object_allow_none (AnnotationObject *object, gchar *somearg)

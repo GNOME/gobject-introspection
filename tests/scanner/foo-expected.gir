@@ -98,7 +98,7 @@
           <type name="ObjectCookie" c:type="FooObjectCookie"/>
         </return-value>
         <parameters>
-          <parameter name="target">
+          <parameter name="target" transfer-ownership="none">
             <type name="utf8" c:type="char*"/>
           </parameter>
         </parameters>
@@ -114,12 +114,12 @@
         </parameters>
       </method>
       <method name="get_name" c:identifier="foo_object_get_name">
-        <return-value>
+        <return-value transfer-ownership="none">
           <type name="utf8" c:type="char*"/>
         </return-value>
       </method>
       <method name="dup_name" c:identifier="foo_object_dup_name">
-        <return-value transfer-ownership="1">
+        <return-value transfer-ownership="full">
           <type name="utf8" c:type="char*"/>
         </return-value>
       </method>
@@ -140,7 +140,7 @@
         </parameters>
       </callback>
       <glib:signal name="signal">
-        <return-value transfer-ownership="1">
+        <return-value transfer-ownership="full">
           <type name="utf8" c:type="gchararray"/>
         </return-value>
         <parameters>

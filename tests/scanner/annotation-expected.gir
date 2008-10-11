@@ -29,7 +29,7 @@
       </method>
       <method name="create_object"
               c:identifier="annotation_object_create_object">
-        <return-value transfer-ownership="1">
+        <return-value transfer-ownership="full">
           <type name="GObject.Object" c:type="GObject*"/>
         </return-value>
       </method>
@@ -88,7 +88,7 @@
           <type name="int" c:type="gint"/>
         </return-value>
         <parameters>
-          <parameter name="toown" direction="out" transfer-ownership="1">
+          <parameter name="toown" direction="out" transfer-ownership="full">
             <type name="GObject.Object" c:type="GObject**"/>
           </parameter>
         </parameters>
@@ -98,23 +98,23 @@
           <type name="int" c:type="gint"/>
         </return-value>
         <parameters>
-          <parameter name="toown1" direction="out" transfer-ownership="1">
+          <parameter name="toown1" direction="out" transfer-ownership="full">
             <type name="GObject.Object" c:type="GObject**"/>
           </parameter>
-          <parameter name="toown2" direction="out" transfer-ownership="1">
+          <parameter name="toown2" direction="out" transfer-ownership="full">
             <type name="GObject.Object" c:type="GObject**"/>
           </parameter>
         </parameters>
       </method>
       <method name="get_strings" c:identifier="annotation_object_get_strings">
-        <return-value transfer-ownership="1">
+        <return-value transfer-ownership="full">
           <type name="GLib.List" c:type="GList*">
             <type name="utf8"/>
           </type>
         </return-value>
       </method>
       <method name="get_objects" c:identifier="annotation_object_get_objects">
-        <return-value transfer-ownership="1">
+        <return-value transfer-ownership="container">
           <type name="GLib.SList" c:type="GSList*">
             <type name="Object"/>
           </type>

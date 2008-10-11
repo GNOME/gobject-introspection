@@ -121,7 +121,7 @@ class GIRWriter(XMLWriter):
         attrs = []
         if return_.transfer:
             attrs.append(('transfer-ownership',
-                          str(int(return_.transfer))))
+                          return_.transfer))
         with self.tagcontext('return-value', attrs):
             self._write_type(return_.type)
 
@@ -140,7 +140,7 @@ class GIRWriter(XMLWriter):
             attrs.append(('direction', parameter.direction))
         if parameter.transfer:
             attrs.append(('transfer-ownership',
-                          str(int(parameter.transfer))))
+                          parameter.transfer))
         if parameter.allow_none:
             attrs.append(('allow-none', '1'))
         with self.tagcontext('parameter', attrs):

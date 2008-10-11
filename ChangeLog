@@ -1,3 +1,16 @@
+2008-10-11  Colin Walters  <walters@verbum.org>
+
+	Bug 555947 - update annotations syntax
+
+	* giscanner/ast.py: Default to None for transfer.  Remove
+	default transfers for container types; we require this to
+	be specified now.
+	* giscanner/girwriter.py: Transfer is now 'none', 'container',
+	'full' to match repository.
+	* giscanner/scannerlexer.l: Annotations now are parenthesized.
+	* giscanner/transformer.py: Update for new annotations syntax.
+	* tests/*: Update.
+
 2008-10-11  Johan Bilien  <jobi@litl.com>
 
 	* giscanner/scannerparser.y: ignore non-UTF-8 string constants

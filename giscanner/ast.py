@@ -227,7 +227,7 @@ class Parameter(Node):
         Node.__init__(self, name)
         self.type = typenode
         self.direction = PARAM_DIRECTION_IN
-        self.transfer = False
+        self.transfer = None
         self.allow_none = False
 
     def __repr__(self):
@@ -282,11 +282,13 @@ class Field(Node):
 
 class Return(Node):
 
-    def __init__(self, rtype, transfer=False):
+    def __init__(self, rtype, transfer=None):
         Node.__init__(self)
         self.type = rtype
-        self.transfer = isinstance(rtype, (List, Map, Array)) or \
-            rtype.name in ('utf8', 'filename') or transfer
+        if transfer is None and rtype.name in ['utf8', 'filename']:
+            self.transfer = 'full'
+        else:
+            self.transfer = transfer
 
     def __repr__(self):
         return 'Return(%r)' % (self.type, )

@@ -19,6 +19,7 @@
 #
 
 import os
+import re
 
 from giscanner.ast import (Callback, Enum, Function, Namespace, Member,
                            Parameter, Return, Array, Struct, Field,
@@ -259,13 +260,25 @@ class Transformer(object):
             if isinstance(param.type, Array):
                 self._pair_array(params, param)
 
+    # We take the annotations from the parser as strings; here we
+    # want to split them into components, so:
+    # (transfer full) -> {'transfer' : [ 'full' ]}
+
+    def _parse_options(self, options):
+        ret = {}
+        ws_re = re.compile(r'\s+')
+        for opt in options:
+            items = ws_re.split(opt)
+            ret[items[0]] = items[1:]
+        return ret
+
     def _create_function(self, symbol):
         directives = symbol.directives()
         parameters = list(self._create_parameters(
             symbol.base_type, directives))
         self._pair_annotations(parameters)
         return_ = self._create_return(symbol.base_type.base_type,
-                                      directives.get('return', []))
+                                      directives.get('return', {}))
         name = self._strip_namespace_func(symbol.ident)
         func = Function(name, return_, parameters, symbol.ident)
         self._parse_deprecated(func, directives)
@@ -290,12 +303,14 @@ class Transformer(object):
             value = 'any'
         return value
 
-    def _create_parameters(self, base_type, options=None):
-        if not options:
-            options = {}
+    def _create_parameters(self, base_type, directives=None):
+        if directives is None:
+            dirs = {}
+        else:
+            dirs = directives
         for child in base_type.child_list:
             yield self._create_parameter(
-                child, options.get(child.ident, []))
+                child, dirs.get(child.ident, {}))
 
     def _create_member(self, symbol):
         ctype = symbol.base_type.type
@@ -303,7 +318,7 @@ class Transformer(object):
             symbol.base_type.base_type.type == CTYPE_FUNCTION):
             node = self._create_callback(symbol)
         else:
-            ftype = self._create_type(symbol.base_type)
+            ftype = self._create_type(symbol.base_type, {})
             node = Field(symbol.ident, ftype, symbol.ident, symbol.const_int)
         return node
 
@@ -340,7 +355,7 @@ class Transformer(object):
         derefed = canonical.replace('*', '')
         return derefed
 
-    def _create_type(self, source_type, options=[]):
+    def _create_type(self, source_type, options):
         ctype = self._create_source_type(source_type)
         if ctype == 'va_list':
             raise SkipError()
@@ -349,19 +364,19 @@ class Transformer(object):
         elif ctype == 'FILE*':
             raise SkipError
         if ctype in self._list_ctypes:
-            if len(options) > 0:
-                contained_type = self._parse_ctype(options[0])
-                del options[0]
+            param = options.get('element-type')
+            if param:
+                contained_type = self._parse_ctype(param[0])
             else:
                 contained_type = None
             return List(ctype.replace('*', ''),
                         ctype,
                         contained_type)
-        if ctype in self._list_ctypes:
-            if len(options) > 0:
-                key_type = self._parse_ctype(options[0])
-                value_type = self._parse_ctype(options[1])
-                del options[0:2]
+        if ctype in self._map_ctypes:
+            param = options.get('element-type')
+            if param:
+                key_type = self._parse_ctype(param[0])
+                value_type = self._parse_ctype(param[1])
             else:
                 key_type = None
                 value_type = None
@@ -369,58 +384,74 @@ class Transformer(object):
                        ctype,
                        key_type, value_type)
         if (ctype in default_array_types) or ('array' in options):
-            if 'array' in options:
-                options.remove('array')
             derefed = ctype[:-1] # strip the *
-            return Array(ctype,
+            result = Array(ctype,
                          self._parse_ctype(derefed))
+            array_opts = options.get('array')
+            if array_opts:
+                (_, len_name) = array_opts[0].split('=')
+                result.length_param_name = len_name
+            return result
         resolved_type_name = self._parse_ctype(ctype)
 
         # string memory management
         if ctype == 'char*':
             if source_type.base_type.type_qualifier & TYPE_QUALIFIER_CONST:
-                options.append('notransfer')
+                options['transfer'] = ['none']
             else:
-                options.append('transfer')
+                options['transfer'] = ['full']
 
         return Type(resolved_type_name, ctype)
 
+    def _handle_generic_param_options(self, param, options):
+        for option, data in options.iteritems():
+            if option == 'transfer':
+                if data:
+                    depth = data[0]
+                    if depth not in ('none', 'container', 'full'):
+                        raise ValueError("Invalid transfer %r" % (depth, ))
+                else:
+                    depth = 'full'
+                param.transfer = depth
+
     def _create_parameter(self, symbol, options):
+        options = self._parse_options(options)
         if symbol.type == CSYMBOL_TYPE_ELLIPSIS:
             ptype = Varargs()
         else:
             ptype = self._create_type(symbol.base_type, options)
         param = Parameter(symbol.ident, ptype)
-        for option in options:
+        for option, data in options.iteritems():
             if option in ['in-out', 'inout']:
                 param.direction = 'inout'
             elif option == 'in':
                 param.direction = 'in'
             elif option == 'out':
                 param.direction = 'out'
-            elif option == 'transfer':
-                param.transfer = True
-            elif option == 'notransfer':
-                param.transfer = False
-            elif isinstance(ptype, Array) and option.startswith('length'):
-                (_, index_param) = option.split('=')
-                ptype.length_param_name = index_param
             elif option == 'allow-none':
                 param.allow_none = True
+            elif option.startswith(('element-type', 'array')):
+                pass
+            elif option == 'transfer':
+                pass
             else:
                 print 'Unhandled parameter annotation option: %r' % (
                     option, )
+        self._handle_generic_param_options(param, options)
         return param
 
-    def _create_return(self, source_type, options=[]):
-        rtype = self._create_type(source_type, options)
+    def _create_return(self, source_type, options=None):
+        if options is None:
+            options_map = {}
+        else:
+            options_map = self._parse_options(options)
+        rtype = self._create_type(source_type, options_map)
         rtype = self.resolve_param_type(rtype)
         return_ = Return(rtype)
-        for option in options:
+        self._handle_generic_param_options(return_, options_map)
+        for option, data in options_map.iteritems():
             if option == 'transfer':
-                return_.transfer = True
-            elif option == 'notransfer':
-                return_.transfer = False
+                pass
             else:
                 print 'Unhandled return type annotation option: %r' % (
                     option, )

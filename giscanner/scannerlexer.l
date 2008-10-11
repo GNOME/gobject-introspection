@@ -250,20 +250,20 @@ parse_gtkdoc (GISourceScanner *scanner,
       if (n_parts == 3) 
         {
           char *ptr = g_strdup (parts[1]);
+	  char *start;
+	  char *end;
 	  char **option_parts, **option_part;
 
-	  if (*ptr == '<')
+	  options = NULL;
+	  start = strchr (ptr, '(');
+	  while (start != NULL) 
 	    {
-	      char *end = strchr (ptr, '>');
-	      if (end) 
+	      end = strchr (start, ')');
+	      if (end)
 		{
-		  *end = '\0';
-		  option_parts = g_strsplit (ptr+1, ",", 0);
-		  for (option_part = option_parts; *option_part; option_part++)
-		    options = g_slist_prepend (options, g_strdup (*option_part));
-		  options = g_slist_reverse (options);
-		  g_strfreev (option_parts);
+		  options = g_slist_prepend (options, g_strndup (start+1, end-(start+1)));
 		}
+	      start = strchr (end+1, '(');
 	    }
 	  g_free (ptr);
           value = parts[2];
