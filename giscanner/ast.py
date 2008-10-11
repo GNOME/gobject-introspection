@@ -266,13 +266,17 @@ class Struct(Node):
 
 class Field(Node):
 
-    def __init__(self, name, typenode, symbol):
+    def __init__(self, name, typenode, symbol, bits=None):
         Node.__init__(self, name)
         self.type = typenode
         self.symbol = symbol
+        self.bits = bits
 
     def __repr__(self):
-        return 'Field(%r, %r)' % (self.name, self.type)
+        if self.bits:
+            return 'Field(%r, %r, %r)' % (self.name, self.type, self.bits)
+        else:
+            return 'Field(%r, %r)' % (self.name, self.type)
 
 
 class Return(Node):

@@ -316,6 +316,8 @@ class GIRWriter(XMLWriter):
             return
 
         attrs = [('name', field.name)]
+        if field.bits:
+            attrs.append(('bits', str(field.bits)))
         with self.tagcontext('field', attrs):
             self._write_type(field.type)
 

@@ -792,6 +792,13 @@ struct_declarator
 		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID);
 	  }
 	| declarator ':' constant_expression
+	  {
+		$$ = $1;
+		if ($3->const_int_set) {
+		  $$->const_int_set = TRUE;
+		  $$->const_int = $3->const_int;
+		}
+	  }
 	;
 
 enum_specifier

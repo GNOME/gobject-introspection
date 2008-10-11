@@ -301,7 +301,7 @@ class Transformer(object):
             node = self._create_callback(symbol)
         else:
             ftype = self._create_type(symbol.base_type)
-            node = Field(symbol.ident, ftype, symbol.ident)
+            node = Field(symbol.ident, ftype, symbol.ident, symbol.const_int)
         return node
 
     def _create_typedef(self, symbol):
@@ -417,6 +417,7 @@ class Transformer(object):
         name = self.strip_namespace_object(symbol.ident)
         struct = Struct(name, symbol.ident)
         self._typedefs_ns[symbol.ident] = struct
+        self._create_struct(symbol)
         return struct
 
     def _create_typedef_union(self, symbol):
@@ -424,6 +425,7 @@ class Transformer(object):
         name = self.strip_namespace_object(name)
         union = Union(name, symbol.ident)
         self._typedefs_ns[symbol.ident] = union
+        self._create_union(symbol)
         return union
 
     def _create_struct(self, symbol):

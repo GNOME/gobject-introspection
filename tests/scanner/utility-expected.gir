@@ -28,6 +28,26 @@
       <member name="c" value="2" c:identifier="UTILITY_FLAG_C"/>
     </enumeration>
     <record name="Struct" c:type="UtilityStruct">
+      <field name="field">
+        <type name="int" c:type="int"/>
+      </field>
+      <field name="bitfield1" bits="3">
+        <type name="uint" c:type="guint"/>
+      </field>
+      <field name="bitfield2" bits="2">
+        <type name="uint" c:type="guint"/>
+      </field>
     </record>
+    <union name="Union" c:type="UtilityUnion">
+      <field name="pointer">
+        <type name="utf8" c:type="char*"/>
+      </field>
+      <field name="integer">
+        <type name="long" c:type="glong"/>
+      </field>
+      <field name="real">
+        <type name="double" c:type="double"/>
+      </field>
+    </union>
   </namespace>
 </repository>

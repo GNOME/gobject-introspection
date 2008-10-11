@@ -39,6 +39,15 @@ typedef enum
 typedef struct
 {
   int field;
+  guint bitfield1 : 3;
+  guint bitfield2 : 2;
 } UtilityStruct;
 
+typedef union
+{
+  char *pointer;
+  glong integer;
+  double real;
+} UtilityUnion;
+  
 #endif /* __UTILITY_H__ */

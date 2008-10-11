@@ -1,3 +1,24 @@
+2008-10-09  Andreas Rottmann  <a.rottmann@gmx.at>
+
+	Bug 555712: Struct and union issues
+
+	* giscanner/scannerparser.y (struct_declarator): Use information
+	provided about the bit width of a field.
+	* giscanner/transformer.py (Transformer._create_member): Pass the
+	symbol's const_int member to the created field (it represents the
+	bit width).
+	* giscanner/girwriter.py (GIRWriter._write_field): Output 'bits'
+	field attribute, if present.
+	* giscanner/ast.py (Field): Add 'bits' member, specifying the
+	width in bits of the field (only relevant for bitfields).
+	* tests/*: Updated.
+
+	* giscanner/transformer.py (Transformer._create_typedef_struct)
+	(Transformer._create_typedef_union): Add calls to _create_struct()
+	and _create_union(), respectively. This causes the scanner to
+	generate output for fields of struct and union typedefs.
+	* tests/*: Updated.
+
 2008-10-11  Jürg Billeter  <j@bitron.ch>
 
 	Bug 552370: unsigned not scanned properly
