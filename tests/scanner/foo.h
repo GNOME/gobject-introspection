@@ -227,6 +227,7 @@ GType foo_bunion_get_type (void);
 
 int foo_bunion_get_contained_type (FooBUnion *bunion);
 
-void foo_test_unsigned (unsigned int unsigned_param);
+void foo_test_unsigned_qualifier (unsigned int unsigned_param);
+void foo_test_unsigned_type (unsigned unsigned_param);
 
 #endif /* __FOO_OBJECT_H__ */

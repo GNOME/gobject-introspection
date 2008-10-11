@@ -448,13 +448,24 @@
         </return-value>
       </method>
     </union>
-    <function name="test_unsigned" c:identifier="foo_test_unsigned">
+    <function name="test_unsigned_qualifier"
+              c:identifier="foo_test_unsigned_qualifier">
       <return-value>
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
         <parameter name="unsigned_param">
           <type name="uint" c:type="unsigned int"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="test_unsigned_type" c:identifier="foo_test_unsigned_type">
+      <return-value>
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="unsigned_param">
+          <type name="uint" c:type="unsigned"/>
         </parameter>
       </parameters>
     </function>

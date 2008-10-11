@@ -1,4 +1,13 @@
-2008-10-09  Andreas Rottmann  <a.rottmann@gmx.at>
+2008-10-11  Lucas Rocha  <lucasr@gnome.org>
+
+	Bug 552370: add one more test for unsigned as a type, not as
+	a type qualifier.
+
+	* giscanner/ast.py: add 'uint' type name for 'unsigned'.
+	* test/scanner/foo.h: add function which uses unsigned as a type.
+	* test/scanner/foo-expected.gir: test that.
+
+2008-10-11  Andreas Rottmann  <a.rottmann@gmx.at>
 
 	Bug 555712: Struct and union issues
 

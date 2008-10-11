@@ -89,6 +89,7 @@ type_names['short'] = TYPE_INT16
 type_names['unsigned short'] = TYPE_UINT16
 type_names['int'] = TYPE_INT
 type_names['unsigned int'] = TYPE_UINT
+type_names['unsigned'] = TYPE_UINT
 type_names['long'] = TYPE_LONG
 type_names['unsigned long'] = TYPE_ULONG
 type_names['float'] = TYPE_FLOAT
