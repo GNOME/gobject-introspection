@@ -129,7 +129,7 @@ def inject(path, additions, outpath):
         for child in node:
             target.append(child)
     outf = open(outpath, 'w')
-    doc.write(outf)    
+    doc.write(outf)
     outf.close()
     return 0
 
@@ -139,7 +139,7 @@ def validate(assertions, path):
     root = doc.getroot()
     f = open(assertions)
     assertions_list = f.readlines()
-    print "=== CHECKING %s (%d assertions) ===" % (assertions, 
+    print "=== CHECKING %s (%d assertions) ===" % (assertions,
                                                    len(assertions_list))
     for assertion in assertions_list:
         assertion = assertion.strip()
