@@ -150,6 +150,7 @@ tools/Makefile
 tests/Makefile
 tests/invoke/Makefile
 tests/scanner/Makefile
+tests/repository/Makefile
 tests/types/Makefile
 gobject-introspection-1.0.pc])
 AC_OUTPUT

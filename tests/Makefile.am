@@ -1,4 +1,4 @@
-SUBDIRS = . invoke scanner types
+SUBDIRS = . invoke scanner repository types
 
 EXTRA_DIST = \
 	array.gir	\
