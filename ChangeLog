@@ -7,6 +7,11 @@
 
 2008-10-12  Tommi Komulainen  <tommi.komulainen@iki.fi>
 
+	* girepository/girparser.c (start_return_value): handle
+	"transfer-ownership" attribute
+
+2008-10-12  Tommi Komulainen  <tommi.komulainen@iki.fi>
+
 	* girepository/girparser.c (parse_param_transfer):
 	* tools/generate.c (write_callable_info): use "container" for
 	container/shallow ownership transfer (not "shallow")
