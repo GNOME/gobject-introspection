@@ -1,3 +1,11 @@
+2008-10-12  Tommi Komulainen  <tommi.komulainen@iki.fi>
+
+	Bug 556048 – Crash in g_irepository_find_by_gtype
+
+	* girepository/gtypelib.h (BLOB_IS_REGISTERED_TYPE): added
+	* girepository/girepository.c (find_interface): Fix
+	find_by_gtype case to get the type name from right offset
+
 2008-10-12  Jürg Billeter  <j@bitron.ch>
 
 	* giscanner/girparser.py: Fix parsing transfer-ownership attribute
