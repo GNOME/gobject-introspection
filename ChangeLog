@@ -7,6 +7,11 @@
 
 2008-10-12  Tommi Komulainen  <tommi.komulainen@iki.fi>
 
+	* tools/generate.c (write_callable_info): use "transfer-ownership"
+	attribute for return values
+
+2008-10-12  Tommi Komulainen  <tommi.komulainen@iki.fi>
+
 	* tools/generate.c (write_callable_info): move "transfer" and
 	"null-ok" attributes from <function> to <return-value> element
 
