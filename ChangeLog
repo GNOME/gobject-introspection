@@ -1,3 +1,7 @@
+2008-10-12  Johan Bilien  <jobi@via.ecp.fr>
+
+	* giscanner/girparser.py: actually add the parsed constant nodes
+
 2008-10-12  Colin Walters  <walters@verbum.org>
 
 	* girepository/girepository.c: Don't cast DirEntry to Blob,

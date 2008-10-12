@@ -113,7 +113,7 @@ class GIRParser(object):
                           _corens('bitfield')]:
             self._parse_enumeration_bitfield(node)
         elif node.tag in _corens('constant'):
-            self._parse_constant(node)
+            self._add_node(self._parse_constant(node))
 
     def _parse_alias(self, node):
         return Alias(node.attrib['name'],
