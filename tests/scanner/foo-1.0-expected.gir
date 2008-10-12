@@ -479,5 +479,8 @@
         </parameter>
       </parameters>
     </function>
+    <constant name="SUCCESS_INT" value="4408">
+      <type name="int"/>
+    </constant>
   </namespace>
 </repository>
