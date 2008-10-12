@@ -1,3 +1,8 @@
+2008-10-12  Colin Walters  <walters@verbum.org>
+
+	* girepository/girepository.c: Don't cast DirEntry to Blob,
+	actually look it up by offset.
+
 2008-10-12  Johan Bilien  <jobi@via.ecp.fr>
 
 	* giscanner/girparser.py: parse constant nodes in gir files
