@@ -43,7 +43,7 @@ class GIRWriter(XMLWriter):
             ('xmlns:glib', 'http://www.gtk.org/introspection/glib/1.0'),
             ]
         with self.tagcontext('repository', attrs):
-            for include in includes:
+            for include in sorted(includes):
                 self._write_include(include)
             self._write_namespace(namespace, shlibs)
 
@@ -57,6 +57,7 @@ class GIRWriter(XMLWriter):
             libraries.append(os.path.basename(l))
 
         attrs = [('name', namespace.name),
+                 ('version', namespace.version),
                  ('shared-library', ','.join(libraries))]
         with self.tagcontext('namespace', attrs):
             for node in namespace.nodes:

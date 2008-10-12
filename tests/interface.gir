@@ -3,7 +3,7 @@
             xmlns="http://www.gtk.org/introspection/core/1.0"
             xmlns:c="http://www.gtk.org/introspection/c/1.0"
             xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
-  <namespace name="Foo">
+  <namespace name="Foo" version="1.0">
     <interface name="Iface1" glib:type-name="Iface1" glib:get-type="iface1_get_type">
       <requires>
         <interface name="Iface2" />

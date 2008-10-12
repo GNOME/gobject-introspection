@@ -112,6 +112,7 @@ struct Header
 
   guint32   size;
   guint32   namespace;
+  guint32   nsversion;
   
   guint16   entry_blob_size;        /* 12 */
   guint16   function_blob_size;     /* 16 */
@@ -168,6 +169,8 @@ size:     The size of the typelib.
 
 namespace:
           Offset of the namespace string in the typelib. 
+nsversion:
+          Offset of the namespace version string in the typelib. 
 
 entry_blob_size:
 function_blob_size:

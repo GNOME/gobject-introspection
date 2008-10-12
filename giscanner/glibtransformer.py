@@ -141,7 +141,7 @@ class GLibTransformer(object):
             self._validate(nodes)
 
         # Create a new namespace with what we found
-        namespace = Namespace(namespace.name)
+        namespace = Namespace(namespace.name, namespace.version)
         namespace.nodes = map(lambda x: x[1], self._names.aliases.itervalues())
         for (ns, x) in self._names.names.itervalues():
             namespace.nodes.append(x)

@@ -135,13 +135,14 @@ class Node(object):
 
 class Namespace(Node):
 
-    def __init__(self, name):
+    def __init__(self, name, version):
         Node.__init__(self, name)
+        self.version = version
         self.nodes = []
 
     def __repr__(self):
-        return '%s(%r, %r)' % (self.__class__.__name__, self.name,
-                               self.nodes)
+        return '%s(%r, %r, %r)' % (self.__class__.__name__, self.name,
+                                   self.version, self.nodes)
 
 
 class Function(Node):

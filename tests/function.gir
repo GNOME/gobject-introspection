@@ -3,7 +3,7 @@
             xmlns="http://www.gtk.org/introspection/core/1.0"
             xmlns:c="http://www.gtk.org/introspection/c/1.0"
             xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
-  <namespace name="Foo">
+  <namespace name="Foo" version="1.0">
     <boxed name="Boxed1" type-name="Boxed1" get-type="boxed1_get_type">
     </boxed>
     <function name="test1" symbol="test1" deprecated="1">

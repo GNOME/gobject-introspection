@@ -34,28 +34,52 @@ CLEANFILES = $(TYPELIBS) $(TXMLS) $(GIRS)
 BUILT_SOURCES = $(TYPELIBS) $(TXMLS) $(GIRS)
 EXTRA_DIST = $(EXPECTEDGIRS)
 
-%.gir: lib%.la %.c %.h utility.gir $(SCANNER) $(SCANNER_LIBS) Makefile
+annotation-1.0.gir: libannotation.la annotation.c annotation.h utility-1.0.gir $(SCANNER) $(SCANNER_LIBS) Makefile
 	PYTHONPATH=$(top_builddir):$$PYTHONPATH $(CHECK_DEBUG) $(SCANNER) -v \
-	--include=$(top_srcdir)/gir/GObject.gir \
-	--include=$(top_builddir)/tests/scanner/utility.gir \
-	--library=$* \
-	--namespace=$* \
+	--include=$(top_srcdir)/gir/GObject-2.0.gir \
+	--include=$(top_builddir)/tests/scanner/utility-1.0.gir \
+	--library=annotation \
+	--namespace=annotation \
+	--nsversion=1.0 \
 	--pkg gobject-2.0 \
-	$(srcdir)/$*.h $(srcdir)/$*.c \
+	$(srcdir)/annotation.h $(srcdir)/annotation.c \
 	 --output $@
-GIRS += annotation.gir
-GIRS += drawable.gir
-GIRS += foo.gir
+GIRS += annotation-1.0.gir
 
-utility.gir: libutility.la utility.h $(SCANNER) $(SCANNER_LIBS) Makefile
+drawable-1.0.gir: libdrawable.la drawable.c drawable.h utility-1.0.gir $(SCANNER) $(SCANNER_LIBS) Makefile
 	PYTHONPATH=$(top_builddir):$$PYTHONPATH $(CHECK_DEBUG) $(SCANNER) -v \
-	--include=$(top_srcdir)/gir/GObject.gir \
+	--include=$(top_srcdir)/gir/GObject-2.0.gir \
+	--include=$(top_builddir)/tests/scanner/utility-1.0.gir \
+	--library=drawable \
+	--namespace=drawable \
+	--nsversion=1.0 \
+	--pkg gobject-2.0 \
+	$(srcdir)/drawable.h $(srcdir)/drawable.c \
+	 --output $@
+GIRS += drawable-1.0.gir
+
+foo-1.0.gir: libfoo.la foo.c foo.h utility-1.0.gir $(SCANNER) $(SCANNER_LIBS) Makefile
+	PYTHONPATH=$(top_builddir):$$PYTHONPATH $(CHECK_DEBUG) $(SCANNER) -v \
+	--include=$(top_srcdir)/gir/GObject-2.0.gir \
+	--include=$(top_builddir)/tests/scanner/utility-1.0.gir \
+	--library=foo \
+	--namespace=foo \
+	--nsversion=1.0 \
+	--pkg gobject-2.0 \
+	$(srcdir)/foo.h $(srcdir)/foo.c \
+	 --output $@
+GIRS += foo-1.0.gir
+
+utility-1.0.gir: libutility.la utility.h $(SCANNER) $(SCANNER_LIBS) Makefile
+	PYTHONPATH=$(top_builddir):$$PYTHONPATH $(CHECK_DEBUG) $(SCANNER) -v \
+	--include=$(top_srcdir)/gir/GObject-2.0.gir \
 	--library=utility \
 	--namespace=utility \
+	--nsversion=1.0 \
 	--pkg gobject-2.0 \
 	$(libutility_la_SOURCES) \
 	--output $@
-GIRS += utility.gir
+GIRS += utility-1.0.gir
 
 pre-check:
 	@if test "$(top_builddir)" != "$(top_srcdir)"; then \

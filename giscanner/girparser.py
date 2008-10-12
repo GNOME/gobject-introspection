@@ -84,10 +84,10 @@ class GIRParser(object):
         assert root.tag == _corens('repository')
         for node in root.getchildren():
             if node.tag == _corens('include'):
-                self._includes.add(node.attrib['name'])
+                self._includes.add((node.attrib['name']))
         ns = root.find(_corens('namespace'))
         assert ns is not None
-        self._namespace = Namespace(ns.attrib['name'])
+        self._namespace = Namespace(ns.attrib['name'], ns.attrib['version'])
         self._shared_libraries.extend(ns.attrib['shared-library'].split(','))
         for child in ns.getchildren():
             self._parse_node(child)

@@ -63,9 +63,9 @@ class Names(object):
 
 class Transformer(object):
 
-    def __init__(self, generator, namespace_name):
+    def __init__(self, generator, namespace_name, namespace_version):
         self.generator = generator
-        self._namespace = Namespace(namespace_name)
+        self._namespace = Namespace(namespace_name, namespace_version)
         self._names = Names()
         self._typedefs_ns = {}
         self._strip_prefix = ''
@@ -96,36 +96,37 @@ class Transformer(object):
         return self._namespace
 
     def register_include(self, filename):
-        (path, suffix) = os.path.splitext(filename)
-        name = os.path.basename(path)
+        (dirname, basename) = os.path.split(filename)
+        if dirname:
+            path = filename
+            (name, suffix) = os.path.splitext(basename)
+        else:
+            path = None
+            name = filename
+            if name.endswith('.gir'):
+                (name, suffix) = os.path.splitext(name)
         if name in self._includes:
             return
-        if suffix == '':
-            suffix = '.gir'
-            filename = path + suffix
-        if suffix == '.gir':
-            source = filename
-            if not os.path.exists(filename):
-                searchdirs = [os.path.join(d, 'gir') for d \
-                                  in _xdg_data_dirs]
-                searchdirs.extend(self._includepaths)
-                source = None
-                for d in searchdirs:
-                    source = os.path.join(d, filename)
-                    if os.path.exists(source):
-                        break
-                    source = None
-            if not source:
+        source = filename
+        if path is None:
+            girname = name + '.gir'
+            searchdirs = [os.path.join(d, 'gir') for d \
+                              in _xdg_data_dirs]
+            searchdirs.extend(self._includepaths)
+            for d in searchdirs:
+                path = os.path.join(d, girname)
+                if os.path.exists(path):
+                    break
+                path = None
+            if not path:
                 raise ValueError("Couldn't find include %r (search path: %r)"\
-                                     % (filename, searchdirs))
-            d = os.path.dirname(source)
-            if d not in self._includepaths:
-                self._includepaths.append(d)
-            self._includes.add(name)
-            from .girparser import GIRParser
-            parser = GIRParser(source)
-        else:
-            raise NotImplementedError(filename)
+                                     % (girname, searchdirs))
+        d = os.path.dirname(path)
+        if d not in self._includepaths:
+            self._includepaths.append(d)
+        self._includes.add(name)
+        from .girparser import GIRParser
+        parser = GIRParser(path)
         for include in parser.get_includes():
             self.register_include(include)
         nsname = parser.get_namespace().name

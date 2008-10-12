@@ -1,5 +1,33 @@
 2008-10-11  Colin Walters  <walters@verbum.org>
 
+	Bug 552858: versioning
+
+	This is a big patch.  You should probably remove your installation
+	tree to be cleaner.
+
+	* docs/typelib-format.txt: Add nsversion entry which holds
+	version of namespace.
+	* girepository/girepository.h: Add 'version' parameter to
+	g_irepository_require.  This may be NULL.  Normally
+	bindings should pass an explicit version though.
+	* girepository/girepository.c: Lots of infrastructure to
+	support versioning.  Add some more documentation.  Disallow
+	some usage of NULL namespaces.
+	* girepository/girmodule.c: Add version parameter.
+	* girepository/gtypelib.c: Update header size.
+	* giscanner/ast.py: Add version to Namespace.
+	* giscanner/girparser.py: Parse version attribute from
+	XML, pass to Namespace.
+	* giscanner/girwriter.py: Write out version parameter.
+	* giscanner/transformer.py: Clean up include registration.
+	* tests/*: Add version attribute.
+	* tests/invoke/invoke.c: Don't try looking up test before
+	it's loaded in repository.
+	* tools/generate.c: Output version parameter.
+	* gir/Makefile.am: Add 2.0 version to .gir files.
+
+2008-10-11  Colin Walters  <walters@verbum.org>
+
 	* giscanner/scannerlexer.l (parse_gtkdoc): Don't lose
 	if we have mismatched parens.
 

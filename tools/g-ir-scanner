@@ -59,6 +59,9 @@ def _get_option_parser():
     parser.add_option("-n", "--namespace",
                       action="store", dest="namespace_name",
                       help="name of namespace for this unit")
+    parser.add_option("", "--nsversion",
+                      action="store", dest="namespace_version",
+                      help="version of namespace for this unit")
     parser.add_option("", "--strip-prefix",
                       action="store", dest="strip_prefix", default="",
                       help="prefix to strip from functions, like g_")
@@ -244,7 +247,7 @@ def main(args):
     ss.parse_macros(filenames)
 
     # Transform the C symbols into AST nodes
-    transformer = Transformer(ss, options.namespace_name)
+    transformer = Transformer(ss, options.namespace_name, options.namespace_version)
     transformer.set_strip_prefix(options.strip_prefix)
     for include in options.includes:
         transformer.register_include(include)

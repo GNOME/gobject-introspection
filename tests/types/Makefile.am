@@ -28,15 +28,15 @@ TXMLS = $(GIRS:.gir=.gir.txml)
 CLEANFILES = $(TYPELIBS) $(TXMLS) $(GIRS)
 BUILT_SOURCES = $(TYPELIBS) $(TXMLS) $(GIRS)
 
-%.gir: lib%.la %.c %.h $(SCANNER) $(SCANNER_LIBS)
+gitesttypes-1.0.gir: libgitesttypes.la gitesttypes.c gitesttypes.h $(SCANNER) $(SCANNER_LIBS)
 	PYTHONPATH=$(top_builddir):$$PYTHONPATH $(CHECK_DEBUG) $(SCANNER) -v \
-	--include=$(top_srcdir)/gir/GObject.gir \
-	--library=$* \
-	--namespace=$* \
+	--include=$(top_srcdir)/gir/GObject-2.0.gir \
+	--library=gitesttypes \
+	--namespace=giesttypes --nsversion=1.0 \
 	--pkg gobject-2.0 \
-	$(srcdir)/$*.h $(srcdir)/$*.c \
+	$(srcdir)/gitesttypes.h $(srcdir)/gitesttypes.c \
 	--output $@
-GIRS += gitesttypes.gir
+GIRS += gitesttypes-1.0.gir
 
 %.typelib: %.gir $(top_builddir)/tools/g-ir-compiler$(EXEEXT) Makefile
 	$(top_builddir)/tools/g-ir-compiler --includedir=. --includedir=$(top_builddir)/gir $< -o $@

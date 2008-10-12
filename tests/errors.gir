@@ -3,7 +3,7 @@
             xmlns="http://www.gtk.org/introspection/core/1.0"
             xmlns:c="http://www.gtk.org/introspection/c/1.0"
             xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
-  <namespace name="Foo">
+  <namespace name="Foo" version="1.0">
     <enum name="ErrorCodes1" type-name="ErrorCodes1" get-type="foo_error_codes1_get_type">
       <member name="e1" value="0" />
       <member name="e2" value="1" deprecated="1" />

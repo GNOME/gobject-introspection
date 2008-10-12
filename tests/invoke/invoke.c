@@ -25,16 +25,16 @@ main (int argc, char *argv[])
 
   rep = g_irepository_get_default ();
 
-  g_print ("before dlopening %s: %d infos in the repository\n", 
-	   testfns,
-	   g_irepository_get_n_infos (rep, "test"));
-
+  g_assert (!g_irepository_is_registered (NULL, "test", NULL));
+  
   handle = g_module_open (testfns, 0);
   if (!handle)
     {
       g_error ("module open failed: %s\n", g_module_error ());
       return 1;
     }
+
+  g_assert (g_irepository_is_registered (NULL, "test", NULL));
 
   g_print ("after dlopening %s: %d infos in the repository\n", 
 	   testfns,
