@@ -7,6 +7,12 @@
 
 2008-10-12  Tommi Komulainen  <tommi.komulainen@iki.fi>
 
+	* girepository/girparser.c (parse_param_transfer,
+	start_parameter): Refactor handling of transfer=none/shallow/full
+	to separate function
+
+2008-10-12  Tommi Komulainen  <tommi.komulainen@iki.fi>
+
 	Bug 556048 – Crash in g_irepository_find_by_gtype
 
 	* girepository/gtypelib.h (BLOB_IS_REGISTERED_TYPE): added
