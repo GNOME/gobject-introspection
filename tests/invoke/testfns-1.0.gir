@@ -1,0 +1,98 @@
+<?xml version="1.0"?>
+<repository version="1.0"
+            xmlns="http://www.gtk.org/introspection/core/1.0"
+            xmlns:c="http://www.gtk.org/introspection/c/1.0"
+            xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
+  <namespace name="test" version="1.0">
+    <function name="test1" c:identifier="test1">
+      <return-value>
+        <type name="int" c:type="gint"/>
+      </return-value>
+      <parameters>
+        <parameter name="in" direction="in">
+          <type name="int" c:type="gint"/>
+        </parameter>
+      </parameters>
+    </function>
+
+    <function name="test2" c:identifier="test2">
+      <return-value>
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="in" c:type="gint" direction="in">
+          <type name="int" c:type="gint"/>
+        </parameter>
+        <parameter name="out" c:type="gint" direction="out">
+          <type name="int" c:type="gint"/>
+        </parameter>
+      </parameters>
+    </function>
+
+    <function name="test3" c:identifier="test3">
+      <return-value>
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="inout" c:type="gint" direction="inout">
+          <type name="int" c:type="gint"/>
+        </parameter>
+      </parameters>
+    </function>
+
+    <function name="test4" c:identifier="test4">
+      <return-value>
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="blurb" direction="in">
+          <type name="utf8" c:type="gchar*"/>
+        </parameter>
+      </parameters>
+    </function>
+
+    <function name="test5" c:identifier="test5">
+      <return-value>
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="blurb" direction="out" transfer="full">
+          <type name="utf8" c:type="gchar*"/>
+        </parameter>
+        <parameter name="len" direction="out">
+          <type name="int" c:type="gint"/>
+        </parameter>
+      </parameters>
+    </function>
+
+    <function name="test6" c:identifier="test6">
+      <return-value>
+        <type name="int" c:type="gint"/>
+      </return-value>
+      <parameters>
+        <parameter name="list" direction="in">
+          <type name="GLib.List<int>*" c:type="GList*"/>
+        </parameter>
+      </parameters>
+    </function>
+
+
+    <function name="test7" c:identifier="test7">
+      <return-value transfer="full">
+         <type name="utf8" c:type="gchar*"/>
+      </return-value>
+      <parameters>
+        <parameter name="list" direction="in">
+          <type name="GLib.List<utf8>*" c:type="GList*"/>
+        </parameter>
+      </parameters>
+    </function>
+
+    <function name="broken" c:identifier="broken">
+      <return-value>
+         <type name="none" c:type="void"/>
+      </return-value>
+    </function>
+
+  </namespace>
+</repository>
