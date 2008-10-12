@@ -1,5 +1,9 @@
 2008-10-12  Johan Bilien  <jobi@via.ecp.fr>
 
+	* giscanner/girparser.py: parse constant nodes in gir files
+
+2008-10-12  Johan Bilien  <jobi@via.ecp.fr>
+
 	* giscanner/transformer.py: prefix for constants have an underscore,
 	so remove them as if they were functions, not objects.
 

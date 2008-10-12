@@ -20,8 +20,9 @@
 
 from xml.etree.cElementTree import parse
 
-from .ast import (Alias, Array, Callback, Enum, Function, Field, Namespace,
-                  Parameter, Property, Return, Union, Struct, Type, Varargs)
+from .ast import (Alias, Array, Callback, Constant, Enum, Function, Field,
+                  Namespace, Parameter, Property, Return, Union, Struct, Type,
+                  Varargs)
 from .glibast import (GLibEnum, GLibEnumMember, GLibFlags,
                       GLibInterface, GLibObject, GLibBoxedStruct,
                       GLibBoxedUnion, GLibBoxedOther)
@@ -111,6 +112,8 @@ class GIRParser(object):
         elif node.tag in [_corens('enumeration'),
                           _corens('bitfield')]:
             self._parse_enumeration_bitfield(node)
+        elif node.tag in _corens('constant'):
+            self._parse_constant(node)
 
     def _parse_alias(self, node):
         return Alias(node.attrib['name'],
@@ -252,6 +255,12 @@ class GIRParser(object):
                               node.attrib['value'],
                               node.attrib.get(_cns('identifier')),
                               node.attrib.get(_glibns('nick')))
+
+    def _parse_constant(self, node):
+        type_node = self._parse_type(node)
+        return Constant(node.attrib['name'],
+                        type_node.name,
+                        node.attrib['value'])
 
     def _parse_enumeration_bitfield(self, node):
         name = node.attrib.get('name')
