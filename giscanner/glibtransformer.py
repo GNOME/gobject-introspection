@@ -468,12 +468,6 @@ class GLibTransformer(object):
                                      (GLibObject, GLibInterface)):
             for field in maybe_class.fields[1:]:
                 pair_class.fields.append(field)
-            return
-        name = self._transformer.strip_namespace_object(maybe_class.name)
-        pair_class = self._get_attribute(name)
-        if pair_class and isinstance(pair_class,
-                                     (GLibObject, GLibInterface)):
-
             del self._names.names[maybe_class.name]
 
     # Introspection

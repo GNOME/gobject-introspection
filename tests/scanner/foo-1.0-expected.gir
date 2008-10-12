@@ -25,21 +25,6 @@
         </parameters>
       </callback>
     </interface>
-    <record name="InterfaceIface" c:type="FooInterfaceIface">
-      <field name="parent_iface">
-        <type name="GObject.TypeInterface" c:type="GTypeInterface"/>
-      </field>
-      <callback name="do_foo" c:type="do_foo">
-        <return-value>
-          <type name="none" c:type="void"/>
-        </return-value>
-        <parameters>
-          <parameter name="self">
-            <type name="Interface" c:type="FooInterface*"/>
-          </parameter>
-        </parameters>
-      </callback>
-    </record>
     <class name="Object"
            c:type="FooObject"
            parent="GObject.Object"
@@ -153,24 +138,6 @@
         </parameters>
       </glib:signal>
     </class>
-    <record name="ObjectClass" c:type="FooObjectClass">
-      <field name="parent_class">
-        <type name="GObject.Class" c:type="GObjectClass"/>
-      </field>
-      <callback name="virtual_method" c:type="virtual_method">
-        <return-value>
-          <type name="boolean" c:type="gboolean"/>
-        </return-value>
-        <parameters>
-          <parameter name="object">
-            <type name="Object" c:type="FooObject*"/>
-          </parameter>
-          <parameter name="first_param">
-            <type name="int" c:type="int"/>
-          </parameter>
-        </parameters>
-      </callback>
-    </record>
     <class name="Subobject"
            c:type="FooSubobject"
            parent="Object"
@@ -183,11 +150,6 @@
         </return-value>
       </constructor>
     </class>
-    <record name="SubobjectClass" c:type="FooSubobjectClass">
-      <field name="parent_class">
-        <type name="ObjectClass" c:type="FooObjectClass"/>
-      </field>
-    </record>
     <function name="init" c:identifier="foo_init">
       <return-value>
         <type name="int" c:type="gint"/>

@@ -1,3 +1,9 @@
+2008-10-12  Jürg Billeter  <j@bitron.ch>
+
+	* giscanner/glibtransformer.py: Don't generate <record> elements
+	for class structs.
+	* tests/scanner/*: Update test cases
+
 2008-10-11  Colin Walters  <walters@verbum.org>
 
 	Bug 552858: versioning
