@@ -1,3 +1,7 @@
+2008-10-12  Tommi Komulainen  <tommi.komulainen@iki.fi>
+
+	* tests/types/Makefile.am: fix typo in gitesttypes namespace
+
 2008-10-12  Jürg Billeter  <j@bitron.ch>
 
 	* giscanner/glibtransformer.py: Don't generate <record> elements

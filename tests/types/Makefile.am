@@ -32,7 +32,7 @@ gitesttypes-1.0.gir: libgitesttypes.la gitesttypes.c gitesttypes.h $(SCANNER) $(
 	PYTHONPATH=$(top_builddir):$$PYTHONPATH $(CHECK_DEBUG) $(SCANNER) -v \
 	--include=$(top_srcdir)/gir/GObject-2.0.gir \
 	--library=gitesttypes \
-	--namespace=giesttypes --nsversion=1.0 \
+	--namespace=gitesttypes --nsversion=1.0 \
 	--pkg gobject-2.0 \
 	$(srcdir)/gitesttypes.h $(srcdir)/gitesttypes.c \
 	--output $@
