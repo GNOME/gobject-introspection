@@ -1,3 +1,10 @@
+2008-10-12  Colin Walters  <walters@verbum.org>
+
+	Initial patch from Jani Monoses.
+
+	* girepository/gtypelib.c: Fix inverted test for success
+	in version parsing.
+
 2008-10-12  Tommi Komulainen  <tommi.komulainen@iki.fi>
 
 	Bug 556048 – Crash in g_irepository_find_by_gtype
