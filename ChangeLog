@@ -1,3 +1,14 @@
+2008-10-12  Jürg Billeter  <j@bitron.ch>
+
+	* giscanner/glibtransformer.py:
+	* tests/scanner/annotation-1.0-expected.gir:
+	* tests/scanner/drawable-1.0-expected.gir:
+	* tests/scanner/drawable.h:
+	* tests/scanner/foo-1.0-expected.gir:
+	* tests/scanner/utility-1.0-expected.gir:
+
+	Readd class records as workaround to not break Gtk typelib
+
 2008-10-12  Tommi Komulainen  <tommi.komulainen@iki.fi>
 
 	* tests/types/Makefile.am: fix typo in gitesttypes namespace
