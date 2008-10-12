@@ -460,7 +460,7 @@ class Transformer(object):
 
     def _create_const(self, symbol):
         name = self._remove_prefix(symbol.ident)
-        name = self.strip_namespace_object(name)
+        name = self._strip_namespace_func(name)
         if symbol.const_string is None:
             type_name = 'int'
             value = symbol.const_int

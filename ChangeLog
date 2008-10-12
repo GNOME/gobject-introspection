@@ -1,5 +1,10 @@
 2008-10-12  Johan Bilien  <jobi@via.ecp.fr>
 
+	* giscanner/transformer.py: prefix for constants have an underscore,
+	so remove them as if they were functions, not objects.
+
+2008-10-12  Johan Bilien  <jobi@via.ecp.fr>
+
 	* tests/scanner/foo-1.0-expected.gir: add constants to expected gir
 	file
 
