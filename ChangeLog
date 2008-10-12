@@ -1,3 +1,10 @@
+2008-10-12  Tommi Komulainen  <tommi.komulainen@iki.fi>
+
+	* tests/repository/Makefile.am: run 'gitestrepo' in 'make check'
+	* tests/repository/gitestrepo.c (main): instantiate
+	'GCancellable' to ensure the GType is registered before using
+	g_type_from_name()
+
 2008-10-12  Johan Bilien  <jobi@via.ecp.fr>
 
 	* giscanner/girparser.py: actually add the parsed constant nodes

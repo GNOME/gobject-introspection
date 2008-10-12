@@ -8,4 +8,4 @@ gitestrepo_SOURCES = $(srcdir)/gitestrepo.c
 gitestrepo_CPPFLAGS = $(GIREPO_CFLAGS) -I$(top_srcdir)/girepository
 gitestrepo_LDADD = $(GIREPO_LIBS) $(top_builddir)/girepository/libgirepository.la
 
-TESTS = # gitestrepo
+TESTS = gitestrepo
