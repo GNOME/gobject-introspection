@@ -274,7 +274,7 @@ class GIRParser(object):
             members.append(self._parse_member(member))
 
         if klass is Enum:
-            obj = klass(name, type_name, member)
+            obj = klass(name, type_name, members)
         else:
             obj = klass(name, type_name, members, get_type)
             obj.ctype = ctype

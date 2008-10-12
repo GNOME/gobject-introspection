@@ -1,3 +1,8 @@
+2008-10-11  Lucas Rocha  <lucasr@gnome.org>
+
+	* giscanner/girparser.py (_parse_enumeration_bitfield): fix typo
+	on 'members' variable.
+
 2008-10-11  Colin Walters  <walters@verbum.org>
 
 	Bug 555947 - update annotations syntax
