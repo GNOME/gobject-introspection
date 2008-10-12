@@ -262,8 +262,12 @@ parse_gtkdoc (GISourceScanner *scanner,
 	      if (end)
 		{
 		  options = g_slist_prepend (options, g_strndup (start+1, end-(start+1)));
+		  start = strchr (end+1, '(');
 		}
-	      start = strchr (end+1, '(');
+	      else
+		{
+		  break;
+		}
 	    }
 	  g_free (ptr);
           value = parts[2];

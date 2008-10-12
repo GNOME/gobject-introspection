@@ -1,3 +1,8 @@
+2008-10-11  Colin Walters  <walters@verbum.org>
+
+	* giscanner/scannerlexer.l (parse_gtkdoc): Don't lose
+	if we have mismatched parens.
+
 2008-10-11  Lucas Rocha  <lucasr@gnome.org>
 
 	* giscanner/girparser.py (_parse_enumeration_bitfield): fix typo
