@@ -151,10 +151,7 @@ class GIRParser(object):
         returnnode = node.find(_corens('return-value'))
         if not returnnode:
             raise ValueError('node %r has no return-value' % (name, ))
-        transfer = False
-        transfer_param = returnnode.attrib.get('transfer-ownership')
-        if transfer_param is not None:
-            transfer = (transfer_param == '1')
+        transfer = returnnode.attrib.get('transfer-ownership')
         retval = Return(self._parse_type(returnnode), transfer)
         parameters_node = node.find(_corens('parameters'))
         parameters = []
