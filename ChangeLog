@@ -7,6 +7,11 @@
 
 2008-10-12  Tommi Komulainen  <tommi.komulainen@iki.fi>
 
+	* tools/generate.c (write_callable_info): move "transfer" and
+	"null-ok" attributes from <function> to <return-value> element
+
+2008-10-12  Tommi Komulainen  <tommi.komulainen@iki.fi>
+
 	* girepository/girparser.c (start_return_value): handle
 	"transfer-ownership" attribute
 
