@@ -1,3 +1,7 @@
+2008-10-12  Jürg Billeter  <j@bitron.ch>
+
+	* giscanner/girparser.py: Parse bits attribute of fields
+
 2008-10-12  Tommi Komulainen  <tommi.komulainen@iki.fi>
 
 	* tests/repository/Makefile.am: run 'gitestrepo' in 'make check'
