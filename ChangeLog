@@ -1,3 +1,8 @@
+2008-10-12  Tommi Komulainen  <tommi.komulainen@iki.fi>
+
+	* girepository/gtypelib.h (RegisteredTypeBlob): make
+	'unregistered' one bit wide as everywhere else
+
 2008-10-12  Jürg Billeter  <j@bitron.ch>
 
 	* giscanner/glibtransformer.py:
