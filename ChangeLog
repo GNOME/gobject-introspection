@@ -1,3 +1,7 @@
+2008-10-13  Jürg Billeter  <j@bitron.ch>
+
+	* giscanner/ast.py: add signed integer and off_t to type_names
+
 2008-10-12  Jürg Billeter  <j@bitron.ch>
 
 	* giscanner/girparser.py: Parse bits attribute of fields

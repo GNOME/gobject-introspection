@@ -84,13 +84,18 @@ for name in GIR_TYPES:
 
 # C
 type_names['char'] = TYPE_INT8
+type_names['signed char'] = TYPE_INT8
 type_names['unsigned char'] = TYPE_UINT8
 type_names['short'] = TYPE_INT16
+type_names['signed short'] = TYPE_INT16
 type_names['unsigned short'] = TYPE_UINT16
 type_names['int'] = TYPE_INT
+type_names['signed int'] = TYPE_INT
+type_names['signed'] = TYPE_INT
 type_names['unsigned int'] = TYPE_UINT
 type_names['unsigned'] = TYPE_UINT
 type_names['long'] = TYPE_LONG
+type_names['signed long'] = TYPE_LONG
 type_names['unsigned long'] = TYPE_ULONG
 type_names['float'] = TYPE_FLOAT
 type_names['double'] = TYPE_DOUBLE
@@ -99,6 +104,7 @@ type_names['void*'] = TYPE_ANY
 type_names['void'] = TYPE_NONE
 type_names['size_t'] = TYPE_SIZET
 type_names['ssize_t'] = TYPE_SSIZET
+type_names['off_t'] = TYPE_SIZET
 # FIXME - can we make libraries use GPid?
 type_names['pid_t'] = TYPE_INT
 
