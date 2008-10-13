@@ -168,6 +168,9 @@
           <type name="GObject.Object" c:type="GObject*"/>
         </return-value>
       </method>
+      <field name="parent_instance">
+        <type name="GObject.Object" c:type="GObject"/>
+      </field>
     </class>
     <record name="ObjectClass" c:type="AnnotationObjectClass">
       <field name="parent_class">

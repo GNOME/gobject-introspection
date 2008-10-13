@@ -535,6 +535,12 @@ class GLibTransformer(object):
         self._introspect_properties(node, type_id)
         self._introspect_signals(node, type_id)
         self._introspect_implemented_interfaces(node, type_id)
+
+        # add struct fields
+        struct = self._get_attribute(node.name)
+        if struct is not None:
+            node.fields = struct.fields
+
         self._add_attribute(node, replace=True)
         self._register_internal_type(type_name, node)
 

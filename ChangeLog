@@ -1,5 +1,15 @@
 2008-10-13  Jürg Billeter  <j@bitron.ch>
 
+	* giscanner/glibtransformer.py:
+	* tests/scanner/annotation-1.0-expected.gir:
+	* tests/scanner/drawable-1.0-expected.gir:
+	* tests/scanner/foo-1.0-expected.gir:
+	* tests/scanner/utility-1.0-expected.gir:
+
+	Support fields in GObject structs
+
+2008-10-13  Jürg Billeter  <j@bitron.ch>
+
 	* giscanner/ast.py: add signed integer and off_t to type_names
 
 2008-10-12  Jürg Billeter  <j@bitron.ch>

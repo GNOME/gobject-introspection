@@ -22,6 +22,9 @@
           </parameter>
         </parameters>
       </method>
+      <field name="parent_instance">
+        <type name="GObject.Object" c:type="GObject"/>
+      </field>
     </class>
     <record name="TestDrawableClass" c:type="TestDrawableClass">
       <field name="parent_class">

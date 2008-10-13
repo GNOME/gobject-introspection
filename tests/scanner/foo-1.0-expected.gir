@@ -126,6 +126,9 @@
       <property name="string" writable="1">
         <type name="utf8" c:type="gchararray"/>
       </property>
+      <field name="parent_instance">
+        <type name="GObject.Object" c:type="GObject"/>
+      </field>
       <callback name="virtual_method" c:type="virtual_method">
         <return-value>
           <type name="boolean" c:type="gboolean"/>
@@ -182,6 +185,9 @@
           <type name="Subobject" c:type="FooSubobject*"/>
         </return-value>
       </constructor>
+      <field name="parent_instance">
+        <type name="Object" c:type="FooObject"/>
+      </field>
     </class>
     <record name="SubobjectClass" c:type="FooSubobjectClass">
       <field name="parent_class">

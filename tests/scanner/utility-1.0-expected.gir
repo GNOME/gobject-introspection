@@ -11,6 +11,9 @@
            parent="GObject.Object"
            glib:type-name="UtilityObject"
            glib:get-type="utility_object_get_type">
+      <field name="parent_instance">
+        <type name="GObject.Object" c:type="GObject"/>
+      </field>
     </class>
     <record name="ObjectClass" c:type="UtilityObjectClass">
       <field name="parent_class">
