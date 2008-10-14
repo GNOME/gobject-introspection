@@ -1,5 +1,14 @@
 2008-10-14  Johan Bilien  <jobi@via.ecp.fr>
 
+	Bug 556323 – transfer-ownership is wrong for functions returning const
+	char *
+
+	* giscanner/transformer.py: check for a const string as return value,
+	not just const char*. Suggested by Colin Walters
+	* tests/scanner/annotation-1.0-expected.gir: updated expected output
+
+2008-10-14  Johan Bilien  <jobi@via.ecp.fr>
+
 	* girepository/ginfo.c, girepository/girepository.h: add
 	g_union_info_find_method
 

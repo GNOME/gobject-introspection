@@ -25,7 +25,7 @@ from giscanner.ast import (Callback, Enum, Function, Namespace, Member,
                            Parameter, Return, Array, Struct, Field,
                            Type, Alias, Interface, Class, Node, Union,
                            List, Map, Varargs, Constant, type_name_from_ctype,
-                           type_names, default_array_types)
+                           type_names, default_array_types, TYPE_STRING)
 from giscanner.config import DATADIR
 from .glibast import GLibBoxed
 from giscanner.sourcescanner import (
@@ -396,7 +396,7 @@ class Transformer(object):
         resolved_type_name = self._parse_ctype(ctype)
 
         # string memory management
-        if ctype == 'char*':
+        if type_name_from_ctype(ctype) == TYPE_STRING:
             if source_type.base_type.type_qualifier & TYPE_QUALIFIER_CONST:
                 options['transfer'] = ['none']
             else:

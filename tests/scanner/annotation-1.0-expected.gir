@@ -38,7 +38,7 @@
           <type name="GObject.Object" c:type="GObject*"/>
         </return-value>
         <parameters>
-          <parameter name="somearg" allow-none="1">
+          <parameter name="somearg" transfer-ownership="full" allow-none="1">
             <type name="utf8" c:type="gchar*"/>
           </parameter>
         </parameters>
