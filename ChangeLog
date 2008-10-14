@@ -1,3 +1,10 @@
+2008-10-14  Colin Walters  <walters@verbum.org>
+
+	* tests/repository/Makefile.am: Reenable repo test.
+	* tests/repository/gitestrepo.c: Prepend search
+	path for $(top_builddir)/gir dir so that we don't
+	require installation for "make check" to pass.
+
 2008-10-13  Jürg Billeter  <j@bitron.ch>
 
 	* giscanner/glibtransformer.py:

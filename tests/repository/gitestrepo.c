@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-int 
+int
 main(int argc, char **argv)
 {
   GIRepository *repo;
@@ -12,10 +12,15 @@ main(int argc, char **argv)
   GError *error = NULL;
   GIBaseInfo *info;
   GType gtype;
+  char *girdir;
 
   g_type_init ();
 
   repo = g_irepository_get_default ();
+
+  girdir = g_build_filename (g_getenv ("top_builddir"), "gir", NULL);
+  g_irepository_prepend_search_path (girdir);
+  g_free (girdir);
 
   ret = g_irepository_require (repo, "Gio", NULL, 0, &error);
   g_assert (ret);
@@ -30,6 +35,8 @@ main(int argc, char **argv)
 
   info = g_irepository_find_by_gtype (repo, g_type_from_name ("GCancellable"));
   g_assert (info != NULL);
+
+  g_print ("Successfully found GCancellable\n");
 
   exit(0);
 }
