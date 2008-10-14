@@ -1,3 +1,8 @@
+2008-10-14  Johan Bilien  <jobi@via.ecp.fr>
+
+	* girepository/ginfo.c, girepository/girepository.h: add
+	g_union_info_find_method
+
 2008-10-14  Colin Walters  <walters@verbum.org>
 
 	* tests/repository/Makefile.am: Reenable repo test.
