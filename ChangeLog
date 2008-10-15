@@ -1,5 +1,10 @@
 2008-10-15  Tommi Komulainen  <tommi.komulainen@iki.fi>
 
+	* tests/Makefile.am: fix tests to compare xml to xml instead of
+	typelib to xml, and stop on error
+
+2008-10-15  Tommi Komulainen  <tommi.komulainen@iki.fi>
+
 	* tools/generate.c (write_type_name, write_type_info,
 	write_type_info, write_object_info, write_object_info,
 	write_interface_info, write_error_domain_info): reduce code

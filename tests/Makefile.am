@@ -22,11 +22,13 @@ GIRTESTS = 			\
 	object.gir.test		\
 	struct.gir.test
 
+CLEANFILES = $(GIRTESTS:%.gir.test=%.1) $(GIRTESTS:%.gir.test=%.2)
+
 %.gir.test: %.gir Makefile
 	@echo Testing $<:
-	$(DEBUG) $(top_builddir)/tools/g-ir-compiler --includedir=$(top_builddir)/gir $< > $*.1; \
-	$(DEBUG) $(top_builddir)/tools/g-ir-generate --includedir=$(top_builddir)/gir $*.1 > $*.2; \
-	diff -u $*.1 $*.2; rm $*.1 $*.2
+	$(DEBUG) $(top_builddir)/tools/g-ir-compiler --includedir=$(top_builddir)/gir $< > $*.1
+	$(DEBUG) $(top_builddir)/tools/g-ir-generate --includedir=$(top_builddir)/gir $*.1 > $*.2
+	diff -u $*.gir $*.2 && rm $*.1 $*.2
 
 
 check-local: $(GIRTESTS)
