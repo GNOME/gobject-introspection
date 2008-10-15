@@ -1,5 +1,16 @@
 2008-10-15  Tommi Komulainen  <tommi.komulainen@iki.fi>
 
+	* tools/generate.c (xml_printf, xml_open, xml_close, xml_free):
+	(write_type_name, write_type_info, write_field_info,
+	write_callable_info, write_function_info, write_callback_info,
+	write_struct_info, write_value_info, write_constant_value,
+	write_constant_info, write_enum_info, write_signal_info,
+	write_vfunc_info, write_property_info, write_object_info,
+	write_interface_info, write_error_domain_info, write_union_info,
+	write_repository): wrap all FILE access to go through simple xmlwriter
+
+2008-10-15  Tommi Komulainen  <tommi.komulainen@iki.fi>
+
 	Bug 556400 – Fails to build on OS X 10.4
 
 	* configure.ac: check for functions backtrace and backtrace_symbols
