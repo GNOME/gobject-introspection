@@ -136,5 +136,5 @@ testgir-%: %.test.gir
 CLEANFILES += $(typelibs_DATA:%.typelib=%.test.gir)
 CLEANFILES += $(typelibs_DATA:%.typelib=%.test.typelib)
 
-check-local: $(typelibs_DATA:%.typelib=testlib-%)
+#check-local: $(typelibs_DATA:%.typelib=testlib-%)
 check-gir: $(typelibs_DATA:%.typelib=testgir-%)
