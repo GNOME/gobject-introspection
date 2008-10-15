@@ -1,5 +1,11 @@
 2008-10-15  Tommi Komulainen  <tommi.komulainen@iki.fi>
 
+	* tools/generate.c (xml_printf): quote printf arguments so that
+	we don't generate invalid XML by writing unescaped double quotes
+	and such in attributes
+
+2008-10-15  Tommi Komulainen  <tommi.komulainen@iki.fi>
+
 	* tools/generate.c (write_field_info, write_callable_info,
 	write_function_info, write_callback_info, write_struct_info,
 	write_constant_value, write_signal_info, write_vfunc_info,
