@@ -1,3 +1,7 @@
+2008-10-15  Johan Bilien  <jobi@via.ecp.fr>
+
+	* tests/scanner/annotation.c: fixed a few copy-paste errors
+
 2008-10-14  Johan Bilien  <jobi@via.ecp.fr>
 
 	Bug 556323 – transfer-ownership is wrong for functions returning const

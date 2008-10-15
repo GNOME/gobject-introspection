@@ -38,7 +38,7 @@ annotation_object_method (AnnotationObject *object)
  * Return value: an int
  */
 gint
-annotation_object_in (AnnotationObject *object, int *outarg)
+annotation_object_out (AnnotationObject *object, int *outarg)
 {
   *outarg = 2;
   return 1;
@@ -48,16 +48,15 @@ annotation_object_in (AnnotationObject *object, int *outarg)
  * annotation_object_in:
  * @object: a #GObject
  *
- * This is a test for out arguments
+ * This is a test for in arguments
  *
  * @outarg: (in): This is an argument test
  * Return value: an int
  */
 gint
-annotation_object_out (AnnotationObject *object, int *outarg)
+annotation_object_in (AnnotationObject *object, int *inarg)
 {
-  *outarg = 2;
-  return 1;
+  return *inarg;
 }
 
 
