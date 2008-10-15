@@ -1,5 +1,10 @@
 2008-10-15  Tommi Komulainen  <tommi.komulainen@iki.fi>
 
+	* gir/Makefile.am (check-local): check that typelib -> gir -> typelib
+	transformation is lossless (it's not)
+
+2008-10-15  Tommi Komulainen  <tommi.komulainen@iki.fi>
+
 	* tests/Makefile.am: fix tests to compare xml to xml instead of
 	typelib to xml, and stop on error
 

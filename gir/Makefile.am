@@ -117,3 +117,24 @@ dist_gir_DATA = $(BUILT_SOURCES)
 typelibsdir = $(datadir)/girepository
 typelibs_DATA = GLib-2.0.typelib GModule-2.0.typelib GObject-2.0.typelib Gio-2.0.typelib
 CLEANFILES += $(typelibs_DATA)
+
+# Check that typelib -> gir -> typelib transformation is lossless.
+# Comparing gir files is relatively fragile (whitespace, attribute default
+# values, etc.) but the typelibs should identical as long as the gir files are
+# semantically equivalent.
+
+%.test.gir: %.typelib $(top_builddir)/tools/g-ir-generate$(EXEEXT) Makefile
+	$(DEBUG) $(top_builddir)/tools/g-ir-generate$(EXEEXT) --includedir=. $< -o $@
+
+testlib-%: %.test.gir $(top_builddir)/tools/g-ir-generate$(EXEEXT) Makefile
+	$(DEBUG) $(top_builddir)/tools/g-ir-compiler$(EXEEXT) --includedir=. $(G_IR_COMPILER_OPTS) $< -o $*.test.typelib
+	cmp $*.typelib $*.test.typelib && rm $*.test.typelib
+
+testgir-%: %.test.gir
+	diff -u $*.gir $< && rm $<
+
+CLEANFILES += $(typelibs_DATA:%.typelib=%.test.gir)
+CLEANFILES += $(typelibs_DATA:%.typelib=%.test.typelib)
+
+check-local: $(typelibs_DATA:%.typelib=testlib-%)
+check-gir: $(typelibs_DATA:%.typelib=testgir-%)
