@@ -1,5 +1,15 @@
 2008-10-15  Tommi Komulainen  <tommi.komulainen@iki.fi>
 
+	Bug 556174 – parse types for lists etc.
+
+	* girepository/girparser.c (end_type_recurse):
+	* tests/boxed.gir:
+	* tools/generate.c (write_type_info, write_field_info,
+	write_callable_info, write_callable_info, write_constant_info,
+	write_property_info): use nested <type>s for lists and hashes
+
+2008-10-15  Tommi Komulainen  <tommi.komulainen@iki.fi>
+
 	* tests/enum.gir:
 	* tests/object.gir: remove trailing whitespace from inside
 	elements to match g-ir-generate output

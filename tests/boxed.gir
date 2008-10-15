@@ -23,10 +23,15 @@
             <type name="BoxedType1"/>
           </parameter>
           <parameter name="w" direction="in">
-            <type name="GLib.List<boxed2>"/>
+            <type name="GLib.List">
+              <type name="boxed2"/>
+            </type>
           </parameter>
           <parameter name="t" transfer="full" direction="in">
-            <type name="GLib.HashTable<utf8,int64>"/>
+            <type name="GLib.HashTable">
+              <type name="utf8"/>
+              <type name="int64"/>
+            </type>
           </parameter>
           <parameter name="e" transfer="full" direction="out">
             <type name="GLib.Error"/>
