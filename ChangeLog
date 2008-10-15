@@ -1,5 +1,14 @@
 2008-10-15  Tommi Komulainen  <tommi.komulainen@iki.fi>
 
+	* tools/generate.c (write_field_info, write_callable_info,
+	write_function_info, write_callback_info, write_struct_info,
+	write_constant_value, write_signal_info, write_vfunc_info,
+	write_object_info, write_interface_info, write_union_info,
+	write_repository): remove unused indent parameters, xmlwriter
+	keeps track of necessary indentation
+
+2008-10-15  Tommi Komulainen  <tommi.komulainen@iki.fi>
+
 	* tools/generate.c (xml_element_new, xml_element_free,
 	xml_start_element, xml_end_element, xml_end_element_unchecked,
 	xml_open, xml_close): Keep track of generated XML tree and
