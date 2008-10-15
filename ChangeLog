@@ -1,5 +1,11 @@
 2008-10-15  Tommi Komulainen  <tommi.komulainen@iki.fi>
 
+	* a/girepository/girnode.c (g_ir_node_build_members,
+	g_ir_node_build_typelib): refactor common code for processing
+	members to a function
+
+2008-10-15  Tommi Komulainen  <tommi.komulainen@iki.fi>
+
 	* gir/Makefile.am (check-local): check that typelib -> gir -> typelib
 	transformation is lossless (it's not)
 
