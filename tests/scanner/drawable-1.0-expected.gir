@@ -22,6 +22,32 @@
           </parameter>
         </parameters>
       </method>
+      <method name="get_origin" c:identifier="test_drawable_get_origin">
+        <return-value>
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <parameter name="x" direction="out">
+            <type name="int" c:type="int*"/>
+          </parameter>
+          <parameter name="y" direction="out">
+            <type name="int" c:type="int*"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="get_size" c:identifier="test_drawable_get_size">
+        <return-value>
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <parameter name="width" direction="out">
+            <type name="uint" c:type="guint*"/>
+          </parameter>
+          <parameter name="height" direction="out">
+            <type name="uint" c:type="guint*"/>
+          </parameter>
+        </parameters>
+      </method>
       <field name="parent_instance">
         <type name="GObject.Object" c:type="GObject"/>
       </field>

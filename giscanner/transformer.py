@@ -25,7 +25,8 @@ from giscanner.ast import (Callback, Enum, Function, Namespace, Member,
                            Parameter, Return, Array, Struct, Field,
                            Type, Alias, Interface, Class, Node, Union,
                            List, Map, Varargs, Constant, type_name_from_ctype,
-                           type_names, default_array_types, TYPE_STRING)
+                           type_names, default_array_types, default_out_types,
+                           TYPE_STRING)
 from giscanner.config import DATADIR
 from .glibast import GLibBoxed
 from giscanner.sourcescanner import (
@@ -401,6 +402,15 @@ class Transformer(object):
                 options['transfer'] = ['none']
             else:
                 options['transfer'] = ['full']
+
+        # deduce direction for some types passed by reference
+        if (not ('out' in options or
+                 'in' in options or
+                 'inout' in options or
+                 'in-out' in options) and
+            source_type.type == CTYPE_POINTER and
+            type_name_from_ctype(resolved_type_name) in default_out_types):
+            options['out'] = []
 
         return Type(resolved_type_name, ctype)
 

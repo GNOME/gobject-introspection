@@ -123,6 +123,10 @@ default_array_types = {}
 default_array_types['uint8*'] = TYPE_UINT8
 default_array_types['char**'] = TYPE_STRING
 
+# These types, when seen by reference, are interpreted as out parameters
+default_out_types = (TYPE_INT, TYPE_UINT, TYPE_LONG, TYPE_ULONG,
+                     TYPE_FLOAT, TYPE_DOUBLE)
+
 
 def type_name_from_ctype(ctype):
     return type_names.get(ctype, ctype)

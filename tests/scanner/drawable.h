@@ -19,6 +19,8 @@ struct _TestDrawableClass
 GType test_drawable_get_type (void) G_GNUC_CONST;
 
 void test_drawable_do_foo (TestDrawable *drawable, int x);
+void test_drawable_get_origin (TestDrawable *drawable, int *x, int *y);
+void test_drawable_get_size (TestDrawable *drawable, guint *width, guint *height);
 
 struct _TestPixmapObjectClass
 {
