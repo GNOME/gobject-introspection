@@ -1,5 +1,12 @@
 2008-10-15  Tommi Komulainen  <tommi.komulainen@iki.fi>
 
+	* tools/generate.c (write_type_name, write_type_info,
+	write_type_info, write_object_info, write_object_info,
+	write_interface_info, write_error_domain_info): reduce code
+	duplication
+
+2008-10-15  Tommi Komulainen  <tommi.komulainen@iki.fi>
+
 	Bug 556174 – parse types for lists etc.
 
 	* girepository/girparser.c (end_type_recurse):
