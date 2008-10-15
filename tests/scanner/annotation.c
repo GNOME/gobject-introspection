@@ -50,7 +50,7 @@ annotation_object_out (AnnotationObject *object, int *outarg)
  *
  * This is a test for in arguments
  *
- * @outarg: (in): This is an argument test
+ * @inarg: (in): This is an argument test
  * Return value: an int
  */
 gint
