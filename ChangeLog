@@ -1,5 +1,15 @@
 2008-10-15  Tommi Komulainen  <tommi.komulainen@iki.fi>
 
+	Bug 556434 – unhandled interface/object/... member types
+
+	* girepository/girnode.c (g_ir_node_check_unhandled_members,
+	g_ir_node_build_typelib): Check all
+	interface/object/boxed/struct/union members are processed and
+	abort if they are not. (Mostly callbacks in structs, but also
+	fields in interfaces.)
+
+2008-10-15  Tommi Komulainen  <tommi.komulainen@iki.fi>
+
 	* a/girepository/girnode.c (g_ir_node_build_members,
 	g_ir_node_build_typelib): refactor common code for processing
 	members to a function
