@@ -1,3 +1,13 @@
+2008-10-15  Tommi Komulainen  <tommi.komulainen@iki.fi>
+
+	Bug 556400 – Fails to build on OS X 10.4
+
+	* configure.ac: check for functions backtrace and backtrace_symbols
+	* girepository/girparser.c (backtrace_stderr): Comment out
+	implementation if the functions are not available.
+	* gcov.mak (clean-gcov, clean-gcno): always call 'find' with a
+	directory for better portability
+
 2008-10-15  Johan Bilien  <jobi@via.ecp.fr>
 
 	Bug 556433 – assume direction = out for int * parameters

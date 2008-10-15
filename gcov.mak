@@ -2,10 +2,10 @@
 if GI_GCOV_ENABLED
 
 clean-gcov:
-	find  -name "*.gcda" -o -name "*.gcov" -delete
+	find . -name "*.gcda" -o -name "*.gcov" -delete
 
 clean-gcno:
-	find  -name "*.gcno" -delete
+	find . -name "*.gcno" -delete
 
 gcov-all:
 	@for dir in $(GCOV_DIRS); do \
