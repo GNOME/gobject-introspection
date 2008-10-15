@@ -1,5 +1,11 @@
 2008-10-15  Tommi Komulainen  <tommi.komulainen@iki.fi>
 
+	* tests/enum.gir:
+	* tests/object.gir: remove trailing whitespace from inside
+	elements to match g-ir-generate output
+
+2008-10-15  Tommi Komulainen  <tommi.komulainen@iki.fi>
+
 	* tools/generate.c (xml_printf): quote printf arguments so that
 	we don't generate invalid XML by writing unescaped double quotes
 	and such in attributes

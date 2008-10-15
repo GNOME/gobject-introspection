@@ -5,19 +5,19 @@
             xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
   <namespace name="Foo" version="1.0">
     <enumeration name="Enum1" glib:type-name="FooEnum" glib:get-type="foo_enum_get_type">
-      <member name="value1" value="0" />
-      <member name="value2" value="1" />
-      <member name="value3" value="2" />
+      <member name="value1" value="0"/>
+      <member name="value2" value="1"/>
+      <member name="value3" value="2"/>
     </enumeration>
     <bitfield name="Flags1" glib:type-name="FooFlags" glib:get-type="foo_flags_get_type">
-      <member name="value1" value="1" />
-      <member name="value2" value="2" />
-      <member name="value3" value="4" />
+      <member name="value1" value="1"/>
+      <member name="value2" value="2"/>
+      <member name="value3" value="4"/>
     </bitfield>
     <enumeration name="Enum2">
-      <member name="value1" value="0" />
-      <member name="value2" value="1" />
-      <member name="value3" value="2" />
+      <member name="value1" value="0"/>
+      <member name="value2" value="1"/>
+      <member name="value3" value="2"/>
     </enumeration>
   </namespace>
 </repository>
