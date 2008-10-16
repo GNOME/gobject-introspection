@@ -46,6 +46,29 @@ if test "$YACC" = :; then
 	AC_MSG_ERROR([bison not found but required])
 fi
 
+changequote(,)dnl
+ensureflag() {
+  flag="$1"; shift
+  result="$@"
+
+  case " ${result} " in
+  *[\ \	]${flag}[\ \	]*) ;;
+  *) result="${flag} ${result}" ;;
+  esac
+
+  echo ${result}
+}
+changequote([,])dnl
+
+if test "$GCC" = "yes"; then
+    for flag in -Wall -Wchar-subscripts -Wmissing-declarations \
+        -Wmissing-prototypes -Wnested-externs -Wpointer-arith -Wcast-align \
+        -Wsign-compare -fno-strict-aliasing;
+    do
+        CFLAGS="$(ensureflag $flag $CFLAGS)"
+    done
+fi
+
 # Checks for libraries.
 GI_ENABLE_GCOV
 

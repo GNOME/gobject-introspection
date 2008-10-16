@@ -1,5 +1,9 @@
 2008-10-16  Tommi Komulainen  <tommi.komulainen@iki.fi>
 
+	* configure.ac: enable bunch of gcc warning CFLAGS
+
+2008-10-16  Tommi Komulainen  <tommi.komulainen@iki.fi>
+
 	Bug 556543 – reduce compiler warnings
 
 	* girepository/ginfo.c:
