@@ -3,9 +3,9 @@
             xmlns="http://www.gtk.org/introspection/core/1.0"
             xmlns:c="http://www.gtk.org/introspection/c/1.0"
             xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
-  <include name="GLib-2.0"/>
-  <include name="GObject-2.0"/>
-  <include name="utility-1.0"/>
+  <include name="GLib" version="2.0"/>
+  <include name="GObject" version="2.0"/>
+  <include name="utility" version="1.0"/>
   <namespace name="drawable" version="1.0" shared-library="drawable">
     <class name="TestDrawable"
            c:type="TestDrawable"

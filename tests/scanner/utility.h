@@ -20,6 +20,9 @@ struct _UtilityObjectClass
   GObjectClass parent_class;
 };
 
+/* This one is similar to Pango.Glyph */
+typedef guint32 UtilityGlyph;
+
 GType                 utility_object_get_type          (void) G_GNUC_CONST;
 
 typedef enum

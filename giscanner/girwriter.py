@@ -48,7 +48,7 @@ class GIRWriter(XMLWriter):
             self._write_namespace(namespace, shlibs)
 
     def _write_include(self, include):
-        attrs = [('name', include)]
+        attrs = [('name', include.name), ('version', include.version)]
         self.write_tag('include', attrs)
 
     def _write_namespace(self, namespace, shlibs):

@@ -38,6 +38,7 @@ sys.path.insert(0, path)
 from giscanner.glibtransformer import GLibTransformer
 from giscanner.sourcescanner import SourceScanner
 from giscanner.transformer import Transformer
+from giscanner.ast import Include
 from giscanner.minixpath import myxpath, xpath_assert
 
 
@@ -50,6 +51,9 @@ def _get_option_parser():
     parser.add_option("-i", "--include",
                       action="append", dest="includes", default=[],
                       help="include types for other gidls")
+    parser.add_option("--add-include-path",
+                      action="append", dest="include_paths", default=[],
+                      help="include paths for other GIR files")
     parser.add_option("-l", "--library",
                       action="append", dest="libraries", default=[],
                       help="libraries of this unit")
@@ -249,8 +253,13 @@ def main(args):
     # Transform the C symbols into AST nodes
     transformer = Transformer(ss, options.namespace_name, options.namespace_version)
     transformer.set_strip_prefix(options.strip_prefix)
+    transformer.set_include_paths(options.include_paths)
+    shown_include_warning = False
     for include in options.includes:
-        transformer.register_include(include)
+        if os.sep in include:
+            raise ValueError("Invalid include path %r" % (include, ))
+        include_obj = Include.from_string(include)
+        transformer.register_include(include_obj)
 
     # Transform the C AST nodes into higher level
     # GLib/GObject nodes

@@ -30,7 +30,8 @@ BUILT_SOURCES = $(TYPELIBS) $(TXMLS) $(GIRS)
 
 gitesttypes-1.0.gir: libgitesttypes.la gitesttypes.c gitesttypes.h $(SCANNER) $(SCANNER_LIBS)
 	PYTHONPATH=$(top_builddir):$$PYTHONPATH $(CHECK_DEBUG) $(SCANNER) -v \
-	--include=$(top_srcdir)/gir/GObject-2.0.gir \
+	--add-include-path=$(top_builddir)/gir \
+	--include=GObject-2.0 \
 	--library=gitesttypes \
 	--namespace=gitesttypes --nsversion=1.0 \
 	--pkg gobject-2.0 \

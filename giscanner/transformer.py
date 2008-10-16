@@ -96,24 +96,15 @@ class Transformer(object):
             self._add_node(node)
         return self._namespace
 
-    def register_include(self, filename):
-        (dirname, basename) = os.path.split(filename)
-        if dirname:
-            path = filename
-            (name, suffix) = os.path.splitext(basename)
-        else:
-            path = None
-            name = filename
-            if name.endswith('.gir'):
-                (name, suffix) = os.path.splitext(name)
-        if name in self._includes:
-            return
-        source = filename
+    def set_include_paths(self, paths):
+        self._includepaths = list(paths)
+
+    def register_include(self, include, path=None):
         if path is None:
-            girname = name + '.gir'
-            searchdirs = [os.path.join(d, 'gir') for d \
-                              in _xdg_data_dirs]
-            searchdirs.extend(self._includepaths)
+            girname = '%s-%s.gir' % (include.name, include.version)
+            searchdirs = list(self._includepaths)
+            searchdirs.extend([os.path.join(d, 'gir')
+                               for d in _xdg_data_dirs])
             for d in searchdirs:
                 path = os.path.join(d, girname)
                 if os.path.exists(path):
@@ -123,9 +114,7 @@ class Transformer(object):
                 raise ValueError("Couldn't find include %r (search path: %r)"\
                                      % (girname, searchdirs))
         d = os.path.dirname(path)
-        if d not in self._includepaths:
-            self._includepaths.append(d)
-        self._includes.add(name)
+        self._includes.add(include)
         from .girparser import GIRParser
         parser = GIRParser(path)
         for include in parser.get_includes():

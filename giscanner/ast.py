@@ -155,6 +155,32 @@ class Namespace(Node):
                                    self.version, self.nodes)
 
 
+class Include(Node):
+
+    def __init__(self, name, version):
+        Node.__init__(self, 'include')
+        self.name = name
+        self.version = version
+
+    @classmethod
+    def from_string(self, string):
+        return Include(*string.split('-', 1))
+
+    def __cmp__(self, other):
+        if not isinstance(other, Include):
+            return cmp(self, other)
+        namecmp = cmp(self.name, other.name)
+        if namecmp != 0:
+            return namecmp
+        return cmp(self.version, other.version)
+
+    def __hash__(self):
+        return hash((self.name, self.version))
+
+    def __str__(self):
+        return '%s-%s' % (self.name, self.version)
+
+
 class Function(Node):
 
     def __init__(self, name, retval, parameters, symbol):

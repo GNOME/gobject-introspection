@@ -17,6 +17,7 @@ endif
 GLib-2.0.gir: $(G_IR_SCANNER) $(G_IR_SCANNER_FILES) Makefile
 	PYTHONPATH=$(top_builddir):$$PYTHONPATH $(G_IR_SCANNER) \
 	    -v --namespace GLib --nsversion=2.0 \
+	    --add-include-path=. \
 	    --noclosure \
 	    --output $@ \
 	    --strip-prefix=g \
@@ -45,10 +46,11 @@ endif
 GObject-2.0.gir: GLib-2.0.gir $(G_IR_SCANNER) $(G_IR_SCANNER_FILES) Makefile
 	PYTHONPATH=$(top_builddir):$$PYTHONPATH $(G_IR_SCANNER) \
 	    -v --namespace GObject --nsversion=2.0 \
+	    --add-include-path=. \
 	    --noclosure \
 	    --output $@ \
 	    --strip-prefix=g \
-            --include=$(top_builddir)/gir/GLib-2.0.gir \
+            --include=GLib-2.0 \
 	    --library=$(GOBJECT_LIBRARY) \
 	    -I$(GOBJECT_INCLUDEDIR) \
 	    -I$(GOBJECT_LIBDIR)/glib-2.0/include \
@@ -70,10 +72,11 @@ endif
 GModule-2.0.gir: GLib-2.0.gir $(G_IR_SCANNER) $(G_IR_SCANNER_FILES)
 	PYTHONPATH=$(top_builddir):$$PYTHONPATH $(G_IR_SCANNER) \
 	    -v --namespace GModule --nsversion=2.0 \
+	    --add-include-path=. \
 	    --noclosure \
 	    --output $@ \
 	    --strip-prefix=g \
-            --include=$(top_builddir)/gir/GLib-2.0.gir \
+            --include=GLib-2.0 \
 	    --library=$(GMODULE_LIBRARY) \
 	    -I$(GMODULE_INCLUDEDIR) \
 	    -I$(GMODULE_LIBDIR)/glib-2.0/include \
@@ -94,10 +97,11 @@ endif
 Gio-2.0.gir: GObject-2.0.gir $(G_IR_SCANNER) $(G_IR_SCANNER_FILES) Makefile
 	PYTHONPATH=$(top_builddir):$$PYTHONPATH $(G_IR_SCANNER) \
 	    -v --namespace Gio --nsversion=2.0 \
+	    --add-include-path=. \
 	    --noclosure \
 	    --output $@ \
 	    --strip-prefix=g \
-            --include=$(top_builddir)/gir/GObject-2.0.gir \
+            --include=GObject-2.0 \
 	    --library=$(GIO_LIBRARY) \
 	    -I$(GIO_INCLUDEDIR) \
 	    -I$(GIO_LIBDIR)/glib-2.0/include \

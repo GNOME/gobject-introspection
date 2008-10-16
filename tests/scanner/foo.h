@@ -70,6 +70,8 @@ const char *          foo_object_get_name          (FooObject *object);
 
 char *                foo_object_dup_name          (FooObject *object);
 
+void                  foo_object_handle_glyph      (FooObject *object, UtilityGlyph glyph);
+
 struct _FooSubobject
 {
   FooObject parent_instance;

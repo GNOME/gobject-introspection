@@ -22,7 +22,7 @@ from xml.etree.cElementTree import parse
 
 from .ast import (Alias, Array, Callback, Constant, Enum, Function, Field,
                   Namespace, Parameter, Property, Return, Union, Struct, Type,
-                  Varargs)
+                  Varargs, Include)
 from .glibast import (GLibEnum, GLibEnumMember, GLibFlags,
                       GLibInterface, GLibObject, GLibBoxedStruct,
                       GLibBoxedUnion, GLibBoxedOther)
@@ -85,7 +85,9 @@ class GIRParser(object):
         assert root.tag == _corens('repository')
         for node in root.getchildren():
             if node.tag == _corens('include'):
-                self._includes.add((node.attrib['name']))
+                include = Include(node.attrib['name'],
+                                  node.attrib['version'])
+                self._includes.add(include)
         ns = root.find(_corens('namespace'))
         assert ns is not None
         self._namespace = Namespace(ns.attrib['name'], ns.attrib['version'])

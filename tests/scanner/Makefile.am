@@ -36,8 +36,9 @@ EXTRA_DIST = $(EXPECTEDGIRS)
 
 annotation-1.0.gir: libannotation.la annotation.c annotation.h utility-1.0.gir $(SCANNER) $(SCANNER_LIBS) Makefile
 	PYTHONPATH=$(top_builddir):$$PYTHONPATH $(CHECK_DEBUG) $(SCANNER) -v \
-	--include=$(top_srcdir)/gir/GObject-2.0.gir \
-	--include=$(top_builddir)/tests/scanner/utility-1.0.gir \
+	--add-include-path=$(top_builddir)/gir --add-include-path=. \
+	--include=GObject-2.0 \
+	--include=utility-1.0 \
 	--library=annotation \
 	--namespace=annotation \
 	--nsversion=1.0 \
@@ -48,8 +49,9 @@ GIRS += annotation-1.0.gir
 
 drawable-1.0.gir: libdrawable.la drawable.c drawable.h utility-1.0.gir $(SCANNER) $(SCANNER_LIBS) Makefile
 	PYTHONPATH=$(top_builddir):$$PYTHONPATH $(CHECK_DEBUG) $(SCANNER) -v \
-	--include=$(top_srcdir)/gir/GObject-2.0.gir \
-	--include=$(top_builddir)/tests/scanner/utility-1.0.gir \
+	--add-include-path=$(top_builddir)/gir --add-include-path=. \
+	--include=GObject-2.0 \
+	--include=utility-1.0 \
 	--library=drawable \
 	--namespace=drawable \
 	--nsversion=1.0 \
@@ -60,8 +62,9 @@ GIRS += drawable-1.0.gir
 
 foo-1.0.gir: libfoo.la foo.c foo.h utility-1.0.gir $(SCANNER) $(SCANNER_LIBS) Makefile
 	PYTHONPATH=$(top_builddir):$$PYTHONPATH $(CHECK_DEBUG) $(SCANNER) -v \
-	--include=$(top_srcdir)/gir/GObject-2.0.gir \
-	--include=$(top_builddir)/tests/scanner/utility-1.0.gir \
+	--add-include-path=$(top_builddir)/gir --add-include-path=. \
+	--include=GObject-2.0 \
+	--include=utility-1.0 \
 	--library=foo \
 	--namespace=foo \
 	--nsversion=1.0 \
@@ -72,7 +75,8 @@ GIRS += foo-1.0.gir
 
 utility-1.0.gir: libutility.la utility.h $(SCANNER) $(SCANNER_LIBS) Makefile
 	PYTHONPATH=$(top_builddir):$$PYTHONPATH $(CHECK_DEBUG) $(SCANNER) -v \
-	--include=$(top_srcdir)/gir/GObject-2.0.gir \
+	--add-include-path=$(top_builddir)/gir --add-include-path=. \
+	--include=GObject-2.0 \
 	--library=utility \
 	--namespace=utility \
 	--nsversion=1.0 \
