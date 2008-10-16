@@ -27,11 +27,10 @@ SCANNER_LIBS = \
 	$(top_srcdir)/giscanner/*.py \
 	$(top_builddir)/giscanner/libgiscanner.la
 TYPELIBS = $(GIRS:.gir=.typelib)
-TXMLS = $(GIRS:.gir=.gir.txml)
 CHECKGIRS = $(GIRS:.gir=.gir.check)
 EXPECTEDGIRS = $(GIRS:.gir=-expected.gir)
-CLEANFILES = $(TYPELIBS) $(TXMLS) $(GIRS)
-BUILT_SOURCES = $(TYPELIBS) $(TXMLS) $(GIRS)
+CLEANFILES = $(TYPELIBS)  $(GIRS)
+BUILT_SOURCES = $(TYPELIBS) $(GIRS)
 EXTRA_DIST = $(EXPECTEDGIRS)
 
 annotation-1.0.gir: libannotation.la annotation.c annotation.h utility-1.0.gir $(SCANNER) $(SCANNER_LIBS) Makefile
@@ -104,8 +103,13 @@ post-check:
 
 %.typelib: %.gir $(top_builddir)/tools/g-ir-compiler$(EXEEXT) Makefile
 	$(top_builddir)/tools/g-ir-compiler --includedir=. --includedir=$(top_builddir)/gir $< -o $@
-	$(SCANNER) --typelib-xml $< > $<.tmp && mv $<.tmp $<.txml
 
 check-local: pre-check
 check-local: $(CHECKGIRS) $(TYPELIBS)
+	@for x in $(TYPELIBS); do \
+	 echo 1>&2 "$(DEBUG) $(top_builddir)/tools/g-ir-generate --includedir=. $${x} > $${x}.tmp && mv $${x}.tmp $${x}.xml;"; \
+	 $(DEBUG) $(top_builddir)/tools/g-ir-generate --includedir=. $${x} > $${x}.tmp && mv $${x}.tmp $${x}.xml; \
+	done
+CLEANFILES += $(TYPELIBS:.typelib:.typelib.xml)
+
 check-local: post-check
