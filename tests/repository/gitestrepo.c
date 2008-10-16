@@ -4,6 +4,33 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+void
+test_constructor_return_type(GIBaseInfo* object_info)
+{
+  GIFunctionInfo* constructor;
+  GITypeInfo* return_type;
+  GIBaseInfo *return_info;
+  const gchar* class_name;
+  const gchar* return_name;
+
+  class_name = g_registered_type_info_get_type_name ((GIRegisteredTypeInfo*) object_info);
+  g_assert (class_name);
+
+  constructor = g_object_info_find_method((GIObjectInfo*)object_info, "new");
+  g_assert (constructor);
+
+  return_type = g_callable_info_get_return_type ((GICallableInfo*)constructor);
+  g_assert (return_type);
+  g_assert (g_type_info_get_tag (return_type) == GI_TYPE_TAG_INTERFACE);
+
+  return_info = g_type_info_get_interface (return_type);
+  g_assert (return_info);
+
+  return_name = g_registered_type_info_get_type_name ((GIRegisteredTypeInfo*) return_info);
+  g_assert (strcmp (class_name, return_name) == 0);
+}
+
+
 int
 main(int argc, char **argv)
 {
@@ -37,6 +64,8 @@ main(int argc, char **argv)
   g_assert (info != NULL);
 
   g_print ("Successfully found GCancellable\n");
+
+  test_constructor_return_type (info);
 
   exit(0);
 }

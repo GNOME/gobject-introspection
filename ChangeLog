@@ -1,5 +1,16 @@
 2008-10-16  Colin Walters  <walters@verbum.org>
 
+	Bug 556185 - segfault on g_callable_info_get_return_type
+
+	Initial patch from John Ehresman.
+
+	* tests/repository/*: Add a test using
+	g_callable_info_get_return_type.  Instead of casting a
+	GITypeInfo directly to a GIRegisteredTypeInfo, we need
+	to call g_type_info_get_interface.
+
+2008-10-16  Colin Walters  <walters@verbum.org>
+
 	Bug 556579 - union and struct name misresolved
 
 	* giscanner/transformer.py: The calls to _resolve_type_name
