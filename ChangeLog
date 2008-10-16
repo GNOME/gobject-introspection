@@ -1,5 +1,16 @@
 2008-10-16  Colin Walters  <walters@verbum.org>
 
+	Bug 556579 - union and struct name misresolved
+
+	* giscanner/transformer.py: The calls to _resolve_type_name
+	for struct/union names was a legacy holdover from when type
+	resolution had multiple phases.  Now it's actively harmful
+	since we might pull in an identical name from another
+	namespace.
+	* tests/*: Update.
+
+2008-10-16  Colin Walters  <walters@verbum.org>
+
 	Bug 556432 - transfer annotations and defaults
 
 	* giscanner/transformer.py: Canonicalize type
