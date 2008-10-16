@@ -227,6 +227,11 @@ union _FooBUnion
   FooBRect *rect;
 };
 
+typedef union _FooUnion
+{
+  int foo;
+} FooUnion;
+
 FooBUnion *foo_bunion_new (void);
 
 GType foo_bunion_get_type (void);

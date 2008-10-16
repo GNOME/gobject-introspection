@@ -497,7 +497,6 @@ class Transformer(object):
             else:
                 name = symbol.ident
             name = self.strip_namespace_object(name)
-            name = self.resolve_type_name(name)
             struct = Struct(name, symbol.ident)
 
         for child in symbol.base_type.child_list:
@@ -518,7 +517,6 @@ class Transformer(object):
             else:
                 name = symbol.ident
             name = self.strip_namespace_object(name)
-            name = self.resolve_type_name(name)
             union = Union(name, symbol.ident)
 
         for child in symbol.base_type.child_list:

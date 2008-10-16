@@ -474,6 +474,11 @@
         </return-value>
       </method>
     </union>
+    <union name="Union" c:type="_FooUnion">
+      <field name="foo">
+        <type name="int" c:type="int"/>
+      </field>
+    </union>
     <function name="test_unsigned_qualifier"
               c:identifier="foo_test_unsigned_qualifier">
       <return-value>
