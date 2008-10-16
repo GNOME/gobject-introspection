@@ -34,7 +34,7 @@
         </return-value>
       </method>
       <method name="allow_none" c:identifier="annotation_object_allow_none">
-        <return-value>
+        <return-value transfer-ownership="full">
           <type name="GObject.Object" c:type="GObject*"/>
         </return-value>
         <parameters>
@@ -42,6 +42,11 @@
             <type name="utf8" c:type="gchar*"/>
           </parameter>
         </parameters>
+      </method>
+      <method name="notrans" c:identifier="annotation_object_notrans">
+        <return-value transfer-ownership="none">
+          <type name="GObject.Object" c:type="GObject*"/>
+        </return-value>
       </method>
       <method name="inout" c:identifier="annotation_object_inout">
         <return-value>
@@ -101,7 +106,7 @@
           <parameter name="toown1" direction="out" transfer-ownership="full">
             <type name="GObject.Object" c:type="GObject**"/>
           </parameter>
-          <parameter name="toown2" direction="out" transfer-ownership="full">
+          <parameter name="toown2" direction="out" transfer-ownership="none">
             <type name="GObject.Object" c:type="GObject**"/>
           </parameter>
         </parameters>
@@ -164,7 +169,7 @@
               c:identifier="annotation_object_do_not_use"
               deprecated="Use annotation_object_create_object() instead."
               deprecated-version="0.12">
-        <return-value>
+        <return-value transfer-ownership="full">
           <type name="GObject.Object" c:type="GObject*"/>
         </return-value>
       </method>

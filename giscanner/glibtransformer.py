@@ -27,7 +27,7 @@ from . import cgobject
 from .ast import (Callback, Constant, Enum, Function, Member, Namespace,
                   Parameter, Property, Return, Struct, Type, Alias, Array,
                   Union, type_name_from_ctype,
-                  default_array_types, TYPE_UINT8)
+                  default_array_types, TYPE_UINT8, PARAM_DIRECTION_IN)
 from .transformer import Names
 from .glibast import (GLibBoxed, GLibEnum, GLibEnumMember, GLibFlags,
                       GLibInterface, GLibObject, GLibSignal, GLibBoxedStruct,
@@ -659,6 +659,7 @@ class GLibTransformer(object):
 
     def _resolve_param_type_validate(self, ptype):
         ptype = self._resolve_param_type(ptype)
+
         if self._validating and not self._validate_type(ptype):
             raise UnknownTypeError("Unknown type %r" % (ptype, ))
         return ptype
@@ -669,7 +670,6 @@ class GLibTransformer(object):
                                                              self._names)
         except KeyError, e:
             return self._transformer.resolve_param_type(ptype)
-        return ptype
 
     def _resolve_node(self, node):
         if isinstance(node, Function):
@@ -782,13 +782,30 @@ class GLibTransformer(object):
     def _resolve_property(self, prop):
         prop.type = self._resolve_param_type(prop.type)
 
+    def _adjust_transfer(self, param):
+        # Do GLib/GObject-specific type transformations here
+
+        # Default to full transfer for GObjects
+        if isinstance(param, Parameter):
+            is_out = (param.direction != PARAM_DIRECTION_IN)
+        else:
+            is_out = True
+        if (is_out and
+            param.transfer is None and
+            (param.type.name == 'GObject.Object' or
+             (self._namespace_name == 'GObject'
+              and param.type.name == 'Object'))):
+            param.transfer = 'full'
+
     def _resolve_function(self, func):
         self._resolve_parameters(func.parameters)
         func.retval.type = self._resolve_param_type(func.retval.type)
+        self._adjust_transfer(func.retval)
 
     def _resolve_parameters(self, parameters):
         for parameter in parameters:
             parameter.type = self._resolve_param_type(parameter.type)
+            self._adjust_transfer(parameter)
 
     def _resolve_field(self, field):
         if isinstance(field, Callback):

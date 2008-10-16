@@ -24,6 +24,7 @@ gint     annotation_object_out          (AnnotationObject *object,
 GObject* annotation_object_create_object(AnnotationObject *object);
 GObject* annotation_object_allow_none   (AnnotationObject *object,
 					 gchar            *somearg);
+GObject* annotation_object_notrans      (AnnotationObject *object);
 gint     annotation_object_inout        (AnnotationObject *object,
 					 int              *inoutarg);
 gint     annotation_object_inout2       (AnnotationObject *object,

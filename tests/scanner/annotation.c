@@ -112,9 +112,9 @@ annotation_object_inout3 (AnnotationObject *object, int *inoutarg)
  * annotation_object_calleeowns:
  * @object: a #GObject
  *
- * This is a test for out arguments
+ * This is a test for out arguments; GObject defaults to transfer
  *
- * @toown: (out) (transfer): a #GObject
+ * @toown: (out): a #GObject
  * Return value: an int
  */
 gint
@@ -128,10 +128,10 @@ annotation_object_calleeowns (AnnotationObject *object, GObject **toown)
  * annotation_object_calleesowns:
  * @object: a #GObject
  *
- * This is a test for out arguments
+ * This is a test for out arguments, one transferred, other not
  *
  * @toown1: (out) (transfer): a #GObject
- * @toown2: (out) (transfer): a #GObject
+ * @toown2: (out) (transfer none): a #GObject
  * Return value: an int
  */
 gint
@@ -249,6 +249,20 @@ annotation_object_compute_sum_n(AnnotationObject *object,
 GObject*
 annotation_object_allow_none (AnnotationObject *object, gchar *somearg)
 {
+  return NULL;
+}
+
+/**
+ * annotation_object_notrans:
+ * @object: a #GObject
+ *
+ * Returns: (transfer none): An object, not referenced
+ **/
+
+GObject*
+annotation_object_notrans (AnnotationObject *object)
+{
+  return NULL;
 }
 
 /**

@@ -342,9 +342,8 @@ class Transformer(object):
         return node
 
     def _parse_ctype(self, ctype):
-        canonical = type_name_from_ctype(ctype)
-        derefed = canonical.replace('*', '')
-        return derefed
+        derefed = ctype.replace('*', '')
+        return type_name_from_ctype(derefed)
 
     def _create_type(self, source_type, options):
         ctype = self._create_source_type(source_type)
@@ -354,6 +353,8 @@ class Transformer(object):
         #        properly instead
         elif ctype == 'FILE*':
             raise SkipError
+
+        # Now check for a list/map/array type
         if ctype in self._list_ctypes:
             param = options.get('element-type')
             if param:
@@ -363,7 +364,7 @@ class Transformer(object):
             return List(ctype.replace('*', ''),
                         ctype,
                         contained_type)
-        if ctype in self._map_ctypes:
+        elif ctype in self._map_ctypes:
             param = options.get('element-type')
             if param:
                 key_type = self._parse_ctype(param[0])
@@ -374,7 +375,7 @@ class Transformer(object):
             return Map(ctype.replace('*', ''),
                        ctype,
                        key_type, value_type)
-        if (ctype in default_array_types) or ('array' in options):
+        elif (ctype in default_array_types) or ('array' in options):
             derefed = ctype[:-1] # strip the *
             result = Array(ctype,
                          self._parse_ctype(derefed))
@@ -383,14 +384,15 @@ class Transformer(object):
                 (_, len_name) = array_opts[0].split('=')
                 result.length_param_name = len_name
             return result
-        resolved_type_name = self._parse_ctype(ctype)
 
-        # string memory management
+        # string memory management - we just look at 'const'
         if type_name_from_ctype(ctype) == TYPE_STRING:
             if source_type.base_type.type_qualifier & TYPE_QUALIFIER_CONST:
                 options['transfer'] = ['none']
             else:
                 options['transfer'] = ['full']
+
+        derefed_name = self._parse_ctype(ctype)
 
         # deduce direction for some types passed by reference
         if (not ('out' in options or
@@ -398,10 +400,12 @@ class Transformer(object):
                  'inout' in options or
                  'in-out' in options) and
             source_type.type == CTYPE_POINTER and
-            type_name_from_ctype(resolved_type_name) in default_out_types):
+            derefed_name in default_out_types):
             options['out'] = []
 
-        return Type(resolved_type_name, ctype)
+        resolved_name = self.resolve_type_name(derefed_name, ctype)
+
+        return Type(derefed_name, ctype)
 
     def _handle_generic_param_options(self, param, options):
         for option, data in options.iteritems():
