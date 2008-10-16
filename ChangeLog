@@ -1,3 +1,11 @@
+2008-10-16  Tommi Komulainen  <tommi.komulainen@iki.fi>
+
+	Bug 556541 – access union members through UnionBlob rather than
+	StructBlob
+
+	* girepository/ginfo.c (g_union_info_find_method): access union
+	members through UnionBlob rather than StructBlob
+
 2008-10-15  Colin Walters  <walters@verbum.org>
 
 	Bug 556331 - clean up includes handling
