@@ -1,3 +1,21 @@
+2008-10-15  Colin Walters  <walters@verbum.org>
+
+	Bug 556331 - clean up includes handling
+
+	* tools/g-ir-scanner: Rework command line arguments; now we take
+	--add-include-path and --include separately.
+	* giscanner/girwriter.py: Separate name= and version= in include
+	directives.
+	* giscanner/ast.py: Add Include type.
+	* giscanner/transformer.py: Cleanups to register_include now that
+	we don't need to handle mixed filenames and relative arguments.
+	* girepository/girparser.c: Parse name and version separately;
+	this fixes a bug as a side effect where we weren't resolving
+	through aliases for basic types.
+	* girepository/girepository.c: Fix format string args.
+	* gir/Makefile.am: Update.
+	* tests/*: Update.
+
 2008-10-15  Tommi Komulainen  <tommi.komulainen@iki.fi>
 
 	Bug 556434 – unhandled interface/object/... member types
