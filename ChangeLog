@@ -1,5 +1,34 @@
 2008-10-16  Tommi Komulainen  <tommi.komulainen@iki.fi>
 
+	Bug 556543 – reduce compiler warnings
+
+	* girepository/ginfo.c:
+	* girepository/girepository.c (register_internal,
+	count_interfaces, find_interface, find_namespace_version,
+	parse_version, g_irepository_require):
+	* girepository/girmodule.c (g_ir_module_build_typelib):
+	* girepository/girnode.c (init_stats, dump_stats,
+	_g_irnode_init_stats, _g_irnode_dump_stats,
+	g_ir_node_can_have_member):
+	* girepository/girparser.c (firstpass_end_element_handler,
+	locate_gir, parse_basic, parse_type_internal, resolve_aliases,
+	start_alias, start_type, end_type_top, parse_include, cleanup,
+	post_filter):
+	* girepository/gtypelib.c (validate_function_blob, validate_enum_blob):
+	* giscanner/giscannermodule.c (directive_get_options,
+	type_get_child_list):
+	* giscanner/scannerlexer.l (parse_gtkdoc):
+	* giscanner/scannerparser.y (ctype_free):
+	* giscanner/sourcescanner.c:
+	* giscanner/sourcescanner.h (gi_source_scanner_parse_macros):
+	* tests/types/gitesttypes.c:
+	* tools/compiler.c (main):
+	* tools/generate.c (write_repository): Remove unused variables
+	and code, add missing includes, declarations and case
+	statements.
+
+2008-10-16  Tommi Komulainen  <tommi.komulainen@iki.fi>
+
 	Bug 556541 – access union members through UnionBlob rather than
 	StructBlob
 

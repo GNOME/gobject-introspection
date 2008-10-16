@@ -252,7 +252,6 @@ parse_gtkdoc (GISourceScanner *scanner,
           char *ptr = g_strdup (parts[1]);
 	  char *start;
 	  char *end;
-	  char **option_parts, **option_part;
 
 	  options = NULL;
 	  start = strchr (ptr, '(');

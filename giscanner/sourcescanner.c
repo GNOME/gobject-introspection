@@ -21,6 +21,7 @@
  */
 
 #include "sourcescanner.h"
+#include <string.h>
 
 GISourceSymbol *
 gi_source_symbol_new (GISourceSymbolType type)

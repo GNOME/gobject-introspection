@@ -1,5 +1,6 @@
 
 #include <gitesttypes.h>
+#include <string.h>
 
 /* basic types */
 gboolean test_boolean (gboolean in)

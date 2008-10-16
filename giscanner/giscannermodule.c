@@ -126,7 +126,7 @@ static PyObject *
 directive_get_options (PyGISourceDirective *self,
 		       void                *context)
 {
-  GSList *l, *symbols;
+  GSList *l;
   PyObject *list;
   int i = 0;
 
@@ -327,7 +327,7 @@ static PyObject *
 type_get_child_list (PyGISourceType *self,
 		     void           *context)
 {
-  GList *l, *symbols;
+  GList *l;
   PyObject *list;
   int i = 0;
 

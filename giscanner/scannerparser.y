@@ -43,6 +43,8 @@ extern char *yytext;
 extern int yylex (GISourceScanner *scanner);
 static void yyerror (GISourceScanner *scanner, const char *str);
  
+extern void ctype_free (GISourceType * type);
+
 static int last_enum_value = -1;
 static GHashTable *const_table = NULL;
 %}
