@@ -403,8 +403,6 @@ class Transformer(object):
             derefed_name in default_out_types):
             options['out'] = []
 
-        resolved_name = self.resolve_type_name(derefed_name, ctype)
-
         return Type(derefed_name, ctype)
 
     def _handle_generic_param_options(self, param, options):
