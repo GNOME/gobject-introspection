@@ -1,3 +1,15 @@
+2008-10-16  Colin Walters  <walters@verbum.org>
+
+	Bug 556432 - transfer annotations and defaults
+
+	* giscanner/transformer.py: Canonicalize type
+	after removing *, not before.  This ensures that
+	guchar* is transformed to 'uint8'.
+	Add some comments here.
+	* giscanner/glibtransformer.py: Add _adjust_transfer
+	phase for tweaking GObject transfers.
+	* tests/*: test it.
+
 2008-10-16  Tommi Komulainen  <tommi.komulainen@iki.fi>
 
 	* configure.ac: enable bunch of gcc warning CFLAGS
