@@ -8,7 +8,7 @@
     <interface name="IFace1" glib:type-name="IFace1" glib:get-type="iface1_get_type"/>
     <class name="Object1" parent="Object2" glib:type-name="Object1" glib:get-type="object1_get_type">
       <implements name="IFace1"/>
-      <property name="prop1" readable="0" writable="0">
+      <property name="prop1" readable="0">
         <type name="int"/>
       </property>
       <glib:signal name="signal1" when="LAST">

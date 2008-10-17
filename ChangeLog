@@ -1,3 +1,14 @@
+2008-10-17  Tommi Komulainen  <tommi.komulainen@iki.fi>
+
+	Bug 556732 – generate gir files consistently
+
+	* giscanner/girwriter.py (_write_property): write properties
+	'construct' attribute if set
+	* tools/generate.c (write_property_info): write properties
+	'readable' and 'writable' attributes only if non-default
+	* tests/object.gir: add writable="0"
+	* tests/scanner/foo-1.0-expected.gir: add construct="1"
+
 2008-10-17  Johan Bilien  <jobi@via.ecp.fr>
 
 	* gir/glib-2.0.c: added annotations

@@ -133,7 +133,7 @@
           </parameter>
         </parameters>
       </method>
-      <property name="string" writable="1">
+      <property name="string" writable="1" construct="1">
         <type name="utf8" c:type="gchararray"/>
       </property>
       <field name="parent_instance">

@@ -261,11 +261,13 @@ class GIRWriter(XMLWriter):
 
     def _write_property(self, prop):
         attrs = [('name', prop.name)]
-        # Properties are assumed to be readable
+        # Properties are assumed to be readable (see also generate.c)
         if not prop.readable:
             attrs.append(('readable', '0'))
         if prop.writable:
             attrs.append(('writable', '1'))
+        if prop.construct:
+            attrs.append(('construct', '1'))
         if prop.construct_only:
             attrs.append(('construct-only', '1'))
         with self.tagcontext('property', attrs):
