@@ -14,7 +14,7 @@ else
 GLIB_LIBRARY=glib-2.0
 endif
 
-GLib-2.0.gir: $(G_IR_SCANNER) $(G_IR_SCANNER_FILES) Makefile
+GLib-2.0.gir: $(G_IR_SCANNER) $(G_IR_SCANNER_FILES) Makefile glib-2.0.c
 	PYTHONPATH=$(top_builddir):$$PYTHONPATH $(G_IR_SCANNER) \
 	    -v --namespace GLib --nsversion=2.0 \
 	    --add-include-path=. \
@@ -28,6 +28,7 @@ GLib-2.0.gir: $(G_IR_SCANNER) $(G_IR_SCANNER_FILES) Makefile
 	    -DGETTEXT_PACKAGE=Dummy \
 	    -D__G_I18N_LIB_H__ \
 	    $(GLIB_LIBDIR)/glib-2.0/include/glibconfig.h \
+	    $(srcdir)/glib-2.0.c \
 	    $(GLIB_INCLUDEDIR)/glib/*.h
 	PYTHONPATH=$(top_builddir):$$PYTHONPATH $(G_IR_SCANNER) \
 	    --xpath-assertions=GLib-assertions.txt GLib-2.0.gir	

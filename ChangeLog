@@ -1,3 +1,7 @@
+2008-10-17  Johan Bilien  <jobi@via.ecp.fr>
+
+	* gir/glib-2.0.c: added annotations
+
 2008-10-16  Johan Bilien  <jobi@via.ecp.fr>
 
 	* giscanner/ast.py: Also assume direction=out for size_t*, ssize_t*
