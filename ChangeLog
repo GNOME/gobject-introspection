@@ -1,3 +1,13 @@
+2008-10-16  Johan Bilien  <jobi@via.ecp.fr>
+
+	Bug 556610 – giscanner/girparser.py drops parameter options
+
+	* tests/scanner/drawable-injected-1.0-expected.gir,
+	tests/scanner/DrawableAdditions.xml: added simple test for injection.
+	* giscanner/ast.py: allow Parameter to take options in the constructor
+	* giscanner/girparser.py: parse parameter options (transfer,
+	direction, allow-none)
+
 2008-10-16  Colin Walters  <walters@verbum.org>
 
 	Bug 556185 - segfault on g_callable_info_get_return_type

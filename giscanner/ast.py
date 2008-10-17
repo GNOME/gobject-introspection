@@ -78,6 +78,10 @@ PARAM_DIRECTION_IN = 'in'
 PARAM_DIRECTION_OUT = 'out'
 PARAM_DIRECTION_INOUT = 'inout'
 
+PARAM_TRANSFER_NONE = 'none'
+PARAM_TRANSFER_CONTAINER = 'container'
+PARAM_TRANSFER_FULL = 'full'
+
 type_names = {}
 for name in GIR_TYPES:
     type_names[name] = name
@@ -260,12 +264,23 @@ class Alias(Node):
 
 class Parameter(Node):
 
-    def __init__(self, name, typenode):
+    def __init__(self, name, typenode, direction=PARAM_DIRECTION_IN,
+                 transfer=None, allow_none=False):
         Node.__init__(self, name)
         self.type = typenode
-        self.direction = PARAM_DIRECTION_IN
-        self.transfer = None
-        self.allow_none = False
+        if direction in [PARAM_DIRECTION_IN, PARAM_DIRECTION_OUT,
+                         PARAM_DIRECTION_INOUT]:
+            self.direction = direction
+        else:
+            self.direction = PARAM_DIRECTION_IN
+
+        if transfer in [PARAM_TRANSFER_NONE, PARAM_TRANSFER_CONTAINER,
+                        PARAM_TRANSFER_FULL]:
+            self.transfer = transfer
+        else:
+            self.transfer = None
+
+        self.allow_none = not not allow_none
 
     def __repr__(self):
         return 'Parameter(%r, %r)' % (self.name, self.type)

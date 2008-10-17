@@ -162,8 +162,12 @@ class GIRParser(object):
         parameters = []
         if (parameters_node is not None):
             for paramnode in parameters_node.findall(_corens('parameter')):
-                parameters.append(Parameter(paramnode.attrib.get('name'),
-                                  self._parse_type(paramnode)))
+                param = Parameter(paramnode.attrib.get('name'),
+                                  self._parse_type(paramnode),
+                                  paramnode.attrib.get('direction'),
+                                  paramnode.attrib.get('transfer'),
+                                  paramnode.attrib.get('allow-none') == '1')
+                parameters.append(param)
         if klass is Callback:
             return klass(name, retval, parameters,
                          node.attrib.get(_cns('type')))
