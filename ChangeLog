@@ -2,6 +2,16 @@
 
 	Bug 556732 – generate gir files consistently
 
+	* tools/generate.c (write_callable_info): write 'direction'
+	attribute only if other than 'in' to be consistent with
+	girwriter.py
+	* tests/boxed.gir:
+	* tests/object.gir: remove direction="in" which is the default
+
+2008-10-17  Tommi Komulainen  <tommi.komulainen@iki.fi>
+
+	Bug 556732 – generate gir files consistently
+
 	* giscanner/ast.py (Field): add readable and writable properties
 	* giscanner/girparser.py (_parse_field): copy 'readable' and
 	'writable' attributes

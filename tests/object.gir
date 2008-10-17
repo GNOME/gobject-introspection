@@ -16,7 +16,7 @@
           <type name="boolean"/>
         </return-value>
         <parameters>
-          <parameter name="obj" direction="in">
+          <parameter name="obj">
             <type name="Object1"/>
           </parameter>
         </parameters>
@@ -26,7 +26,7 @@
           <type name="none"/>
         </return-value>
         <parameters>
-          <parameter name="obj" direction="in">
+          <parameter name="obj">
             <type name="Object1"/>
           </parameter>
         </parameters>
@@ -36,7 +36,7 @@
           <type name="Object2"/>
         </return-value>
         <parameters>
-          <parameter name="param1" direction="in">
+          <parameter name="param1">
             <type name="Object1"/>
           </parameter>
         </parameters>
@@ -46,7 +46,7 @@
           <type name="Object2"/>
         </return-value>
         <parameters>
-          <parameter name="param1" direction="in">
+          <parameter name="param1">
             <type name="Object1"/>
           </parameter>
         </parameters>

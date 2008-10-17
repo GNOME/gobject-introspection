@@ -19,15 +19,15 @@
           <type name="none"/>
         </return-value>
         <parameters>
-          <parameter name="box" direction="in">
+          <parameter name="box">
             <type name="BoxedType1"/>
           </parameter>
-          <parameter name="w" direction="in">
+          <parameter name="w">
             <type name="GLib.List">
               <type name="boxed2"/>
             </type>
           </parameter>
-          <parameter name="t" transfer="full" direction="in">
+          <parameter name="t" transfer="full">
             <type name="GLib.HashTable">
               <type name="utf8"/>
               <type name="int64"/>
@@ -43,7 +43,7 @@
           <type name="boolean"/>
         </return-value>
         <parameters>
-          <parameter name="box" direction="in">
+          <parameter name="box">
             <type name="boxed2"/>
           </parameter>
           <parameter name="val" transfer="full" direction="inout">
@@ -57,10 +57,10 @@
         <type name="boolean"/>
       </return-value>
       <parameters>
-        <parameter name="v1" direction="in">
+        <parameter name="v1">
           <type name="int"/>
         </parameter>
-        <parameter name="val2" direction="in">
+        <parameter name="val2">
           <type name="int"/>
         </parameter>
       </parameters>
