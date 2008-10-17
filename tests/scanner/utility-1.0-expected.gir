@@ -32,24 +32,24 @@
       <member name="c" value="2" c:identifier="UTILITY_FLAG_C"/>
     </enumeration>
     <record name="Struct" c:type="UtilityStruct">
-      <field name="field">
+      <field name="field" writable="1">
         <type name="int" c:type="int"/>
       </field>
-      <field name="bitfield1" bits="3">
+      <field name="bitfield1" writable="1" bits="3">
         <type name="uint" c:type="guint"/>
       </field>
-      <field name="bitfield2" bits="2">
+      <field name="bitfield2" writable="1" bits="2">
         <type name="uint" c:type="guint"/>
       </field>
     </record>
     <union name="Union" c:type="UtilityUnion">
-      <field name="pointer">
+      <field name="pointer" writable="1">
         <type name="utf8" c:type="char*"/>
       </field>
-      <field name="integer">
+      <field name="integer" writable="1">
         <type name="long" c:type="glong"/>
       </field>
-      <field name="real">
+      <field name="real" writable="1">
         <type name="double" c:type="double"/>
       </field>
     </union>

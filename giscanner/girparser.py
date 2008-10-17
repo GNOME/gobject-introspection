@@ -245,6 +245,8 @@ class GIRParser(object):
         return Field(node.attrib['name'],
                      type_node,
                      type_node.ctype,
+                     node.attrib.get('readable') != '0',
+                     node.attrib.get('writable') == '1',
                      node.attrib.get('bits'))
 
     def _parse_property(self, node):

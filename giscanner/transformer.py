@@ -310,7 +310,10 @@ class Transformer(object):
             node = self._create_callback(symbol)
         else:
             ftype = self._create_type(symbol.base_type, {})
-            node = Field(symbol.ident, ftype, symbol.ident, symbol.const_int)
+            # Fields are assumed to be read-write
+            # (except for Objects, see also glibtransformer.py)
+            node = Field(symbol.ident, ftype, symbol.ident,
+                       readable=True, writable=True, bits=symbol.const_int)
         return node
 
     def _create_typedef(self, symbol):

@@ -327,6 +327,12 @@ class GIRWriter(XMLWriter):
             return
 
         attrs = [('name', field.name)]
+        # Fields are assumed to be read-only
+        # (see also girparser.c and generate.c)
+        if not field.readable:
+            attrs.append(('readable', '0'))
+        if field.writable:
+            attrs.append(('writable', '1'))
         if field.bits:
             attrs.append(('bits', str(field.bits)))
         with self.tagcontext('field', attrs):

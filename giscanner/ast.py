@@ -319,10 +319,12 @@ class Struct(Node):
 
 class Field(Node):
 
-    def __init__(self, name, typenode, symbol, bits=None):
+    def __init__(self, name, typenode, symbol, readable, writable, bits=None):
         Node.__init__(self, name)
         self.type = typenode
         self.symbol = symbol
+        self.readable = readable
+        self.writable = writable
         self.bits = bits
 
     def __repr__(self):

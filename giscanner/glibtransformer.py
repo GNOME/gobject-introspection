@@ -26,7 +26,7 @@ from ctypes.util import find_library
 from . import cgobject
 from .ast import (Callback, Constant, Enum, Function, Member, Namespace,
                   Parameter, Property, Return, Struct, Type, Alias, Array,
-                  Union, type_name_from_ctype,
+                  Union, Field, type_name_from_ctype,
                   default_array_types, TYPE_UINT8, PARAM_DIRECTION_IN)
 from .transformer import Names
 from .glibast import (GLibBoxed, GLibEnum, GLibEnumMember, GLibFlags,
@@ -461,6 +461,12 @@ class GLibTransformer(object):
             del self._names.names[maybe_class.name]
             return
 
+        # Object class fields are assumed to be read-only
+        # (see also _introspect_object and transformer.py)
+        for field in maybe_class.fields:
+            if isinstance(field, Field):
+                field.writable = False
+
         name = self._resolve_type_name(name)
         resolved = self._transformer.strip_namespace_object(name)
         pair_class = self._get_attribute(resolved)
@@ -540,6 +546,11 @@ class GLibTransformer(object):
         struct = self._get_attribute(node.name)
         if struct is not None:
             node.fields = struct.fields
+            for field in node.fields:
+                if isinstance(field, Field):
+                    # Object instance fields are assumed to be read-only
+                    # (see also _pair_class_struct and transformer.py)
+                    field.writable = False
 
         self._add_attribute(node, replace=True)
         self._register_internal_type(type_name, node)

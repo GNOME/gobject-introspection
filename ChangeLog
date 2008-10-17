@@ -2,6 +2,29 @@
 
 	Bug 556732 – generate gir files consistently
 
+	* giscanner/ast.py (Field): add readable and writable properties
+	* giscanner/girparser.py (_parse_field): copy 'readable' and
+	'writable' attributes
+	* giscanner/transformer.py (_create_member): create fields as
+	read-write
+	* giscanner/glibtransformer.py (_introspect_object,
+	_pair_class_struct): make object instance and class fields
+	read-only
+	* giscanner/girwriter.py (_write_field):
+	* tools/generate.c (write_field_info): write field 'readable'
+	and 'writable' attributes only if non-default (read-only)
+	* girepository/girparser.c (start_field): in the absence of
+	attributes assume fields are read-only
+	* tests/boxed.gir:
+	* tests/struct.gir: remove redundant readable="1" from fields
+	* tests/scanner/foo-1.0-expected.gir:
+	* tests/scanner/utility-1.0-expected.gir: add writable="1" to
+	all record and union fields
+
+2008-10-17  Tommi Komulainen  <tommi.komulainen@iki.fi>
+
+	Bug 556732 – generate gir files consistently
+
 	* giscanner/girwriter.py (_write_property): write properties
 	'construct' attribute if set
 	* tools/generate.c (write_property_info): write properties

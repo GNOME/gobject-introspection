@@ -316,26 +316,26 @@
       </parameters>
     </callback>
     <record name="Struct" c:type="FooStruct">
-      <field name="priv">
+      <field name="priv" writable="1">
         <type name="StructPrivate" c:type="FooStructPrivate*"/>
       </field>
-      <field name="member">
+      <field name="member" writable="1">
         <type name="int" c:type="int"/>
       </field>
     </record>
     <record name="StructPrivate" c:type="FooStructPrivate">
     </record>
     <record name="Rectangle" c:type="FooRectangle">
-      <field name="x">
+      <field name="x" writable="1">
         <type name="int" c:type="gint"/>
       </field>
-      <field name="y">
+      <field name="y" writable="1">
         <type name="int" c:type="gint"/>
       </field>
-      <field name="width">
+      <field name="width" writable="1">
         <type name="int" c:type="gint"/>
       </field>
-      <field name="height">
+      <field name="height" writable="1">
         <type name="int" c:type="gint"/>
       </field>
     </record>
@@ -392,26 +392,26 @@
       </parameters>
     </function>
     <record name="EventAny" c:type="FooEventAny">
-      <field name="send_event">
+      <field name="send_event" writable="1">
         <type name="int8" c:type="gint8"/>
       </field>
     </record>
     <record name="EventExpose" c:type="FooEventExpose">
-      <field name="send_event">
+      <field name="send_event" writable="1">
         <type name="int8" c:type="gint8"/>
       </field>
-      <field name="count">
+      <field name="count" writable="1">
         <type name="int" c:type="gint"/>
       </field>
     </record>
     <union name="Event" c:type="FooEvent">
-      <field name="type">
+      <field name="type" writable="1">
         <type name="int" c:type="int"/>
       </field>
-      <field name="any">
+      <field name="any" writable="1">
         <type name="EventAny" c:type="FooEventAny"/>
       </field>
-      <field name="expose">
+      <field name="expose" writable="1">
         <type name="EventExpose" c:type="FooEventExpose"/>
       </field>
     </union>
@@ -419,10 +419,10 @@
             c:type="FooBRect"
             glib:type-name="FooBRect"
             glib:get-type="foo_brect_get_type">
-      <field name="x">
+      <field name="x" writable="1">
         <type name="double" c:type="double"/>
       </field>
-      <field name="y">
+      <field name="y" writable="1">
         <type name="double" c:type="double"/>
       </field>
       <constructor name="new" c:identifier="foo_brect_new">
@@ -453,13 +453,13 @@
            c:type="FooBUnion"
            glib:type-name="FooBUnion"
            glib:get-type="foo_bunion_get_type">
-      <field name="type">
+      <field name="type" writable="1">
         <type name="int" c:type="int"/>
       </field>
-      <field name="v">
+      <field name="v" writable="1">
         <type name="double" c:type="double"/>
       </field>
-      <field name="rect">
+      <field name="rect" writable="1">
         <type name="BRect" c:type="FooBRect*"/>
       </field>
       <constructor name="new" c:identifier="foo_bunion_new">
@@ -475,7 +475,7 @@
       </method>
     </union>
     <union name="Union" c:type="_FooUnion">
-      <field name="foo">
+      <field name="foo" writable="1">
         <type name="int" c:type="int"/>
       </field>
     </union>
