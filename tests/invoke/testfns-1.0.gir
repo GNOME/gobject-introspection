@@ -56,7 +56,7 @@
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
-        <parameter name="blurb" direction="out" transfer="full">
+        <parameter name="blurb" direction="out" transfer-ownership="full">
           <type name="utf8" c:type="gchar*"/>
         </parameter>
         <parameter name="len" direction="out">
@@ -78,7 +78,7 @@
 
 
     <function name="test7" c:identifier="test7">
-      <return-value transfer="full">
+      <return-value transfer-ownership="full">
          <type name="utf8" c:type="gchar*"/>
       </return-value>
       <parameters>

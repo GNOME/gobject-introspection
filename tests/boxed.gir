@@ -27,13 +27,13 @@
               <type name="boxed2"/>
             </type>
           </parameter>
-          <parameter name="t" transfer="full">
+          <parameter name="t" transfer-ownership="full">
             <type name="GLib.HashTable">
               <type name="utf8"/>
               <type name="int64"/>
             </type>
           </parameter>
-          <parameter name="e" transfer="full" direction="out">
+          <parameter name="e" transfer-ownership="full" direction="out">
             <type name="GLib.Error"/>
           </parameter>
         </parameters>
@@ -46,7 +46,7 @@
           <parameter name="box">
             <type name="boxed2"/>
           </parameter>
-          <parameter name="val" transfer="full" direction="inout">
+          <parameter name="val" transfer-ownership="full" direction="inout">
             <type name="uint"/>
           </parameter>
         </parameters>

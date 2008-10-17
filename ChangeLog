@@ -2,6 +2,17 @@
 
 	Bug 556732 – generate gir files consistently
 
+	* girepository/girparser.c (start_parameter):
+	* tests/boxed.gir:
+	* tests/invoke/testfns-1.0.gir:
+	* tools/generate.c (write_callable_info): write
+	'transfer-ownership' attribute consistently with both
+	return-value and parameter elements
+
+2008-10-17  Tommi Komulainen  <tommi.komulainen@iki.fi>
+
+	Bug 556732 – generate gir files consistently
+
 	* tools/generate.c (write_callable_info): write 'direction'
 	attribute only if other than 'in' to be consistent with
 	girwriter.py
