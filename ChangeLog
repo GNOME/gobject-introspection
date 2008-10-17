@@ -1,5 +1,10 @@
 2008-10-16  Johan Bilien  <jobi@via.ecp.fr>
 
+	* giscanner/ast.py: Also assume direction=out for size_t*, ssize_t*
+	arguments
+
+2008-10-16  Johan Bilien  <jobi@via.ecp.fr>
+
 	Bug 556610 – giscanner/girparser.py drops parameter options
 
 	* tests/scanner/drawable-injected-1.0-expected.gir,

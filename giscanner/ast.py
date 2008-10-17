@@ -129,7 +129,7 @@ default_array_types['char**'] = TYPE_STRING
 
 # These types, when seen by reference, are interpreted as out parameters
 default_out_types = (TYPE_INT, TYPE_UINT, TYPE_LONG, TYPE_ULONG,
-                     TYPE_FLOAT, TYPE_DOUBLE)
+                     TYPE_FLOAT, TYPE_DOUBLE, TYPE_SIZET, TYPE_SSIZET)
 
 
 def type_name_from_ctype(ctype):
