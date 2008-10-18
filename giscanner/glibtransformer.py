@@ -171,7 +171,7 @@ class GLibTransformer(object):
         # Besides the straight underscore conversion, we also try
         # removing the underscores from the namespace as a possible C
         # mapping; e.g. it's webkit_web_view, not web_kit_web_view
-        suffix = self._transformer.strip_namespace_object(type_name)
+        suffix = self._transformer.remove_prefix(type_name)
         prefix = type_name[:-len(suffix)]
         no_uscore_prefixed = (prefix + '_' + to_underscores(suffix)).lower()
         self._uscore_type_names[no_uscore_prefixed] = node
@@ -332,7 +332,7 @@ class GLibTransformer(object):
             # pointers: GtkButton -> gtk_button_, so we can figure out the
             # method name
             argtype = target_arg.type.ctype.replace('*', '')
-            name = self._transformer.strip_namespace_object(argtype)
+            name = self._transformer.remove_prefix(argtype)
             name_uscore = to_underscores_noprefix(name).lower()
             name_offset = func.symbol.find(name_uscore)
             if name_offset < 0:
@@ -378,7 +378,7 @@ class GLibTransformer(object):
         # The _uscore_type_names member holds the plain GLibBoxed
         # object; we want to actually use the struct/record associated
         if isinstance(klass, GLibBoxed):
-            name = self._transformer.strip_namespace_object(klass.type_name)
+            name = self._transformer.remove_prefix(klass.type_name)
             klass = self._get_attribute(name)
 
         if not is_method:
@@ -468,14 +468,14 @@ class GLibTransformer(object):
                 field.writable = False
 
         name = self._resolve_type_name(name)
-        resolved = self._transformer.strip_namespace_object(name)
+        resolved = self._transformer.remove_prefix(name)
         pair_class = self._get_attribute(resolved)
         if pair_class and isinstance(pair_class,
                                      (GLibObject, GLibInterface)):
             for field in maybe_class.fields[1:]:
                 pair_class.fields.append(field)
             return
-        name = self._transformer.strip_namespace_object(maybe_class.name)
+        name = self._transformer.remove_prefix(maybe_class.name)
         pair_class = self._get_attribute(name)
         if pair_class and isinstance(pair_class,
                                      (GLibObject, GLibInterface)):
@@ -520,7 +520,7 @@ class GLibTransformer(object):
 
         klass = (GLibFlags if ftype_id == cgobject.TYPE_FLAGS else GLibEnum)
         type_name = cgobject.type_name(type_id)
-        enum_name = self._transformer.strip_namespace_object(type_name)
+        enum_name = self._transformer.remove_prefix(type_name)
         node = klass(enum_name, type_name, members, symbol)
         self._add_attribute(node, replace=True)
         self._register_internal_type(type_name, node)
@@ -535,7 +535,7 @@ class GLibTransformer(object):
         parent_type_name = cgobject.type_name(cgobject.type_parent(type_id))
         parent_gitype = self._resolve_gtypename(parent_type_name)
         node = GLibObject(
-            self._transformer.strip_namespace_object(type_name),
+            self._transformer.remove_prefix(type_name),
             parent_gitype,
             type_name, symbol)
         self._introspect_properties(node, type_id)
@@ -563,7 +563,7 @@ class GLibTransformer(object):
         else:
             parent_gitype = self._resolve_gtypename(parent_type_name)
         node = GLibInterface(
-            self._transformer.strip_namespace_object(type_name),
+            self._transformer.remove_prefix(type_name),
             parent_gitype,
             type_name, symbol)
         self._introspect_properties(node, type_id)
@@ -709,7 +709,7 @@ class GLibTransformer(object):
         self._resolve_function(newfunc)
 
     def _pair_boxed_type(self, boxed):
-        name = self._transformer.strip_namespace_object(boxed.type_name)
+        name = self._transformer.remove_prefix(boxed.type_name)
         pair_node = self._get_attribute(name)
         if not pair_node:
             boxed_item = GLibBoxedOther(name, boxed.type_name,

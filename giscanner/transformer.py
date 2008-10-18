@@ -131,12 +131,6 @@ class Transformer(object):
             elif hasattr(node, 'symbol'):
                 self._names.ctypes[node.symbol] = (nsname, node)
 
-    def strip_namespace_object(self, name):
-        prefix = self._namespace.name.lower()
-        if len(name) > len(prefix) and name.lower().startswith(prefix):
-            return name[len(prefix):]
-        return self._remove_prefix(name)
-
     # Private
 
     def _add_node(self, node):
@@ -155,16 +149,16 @@ class Transformer(object):
             prefix = to_underscores(self._namespace.name).lower() + '_'
             if name.lower().startswith(prefix):
                 name = name[len(prefix):]
-        return self._remove_prefix(name, isfunction=True)
+        return self.remove_prefix(name, isfunction=True)
 
-    def _remove_prefix(self, name, isfunction=False):
+    def remove_prefix(self, name, isfunction=False):
         # when --strip-prefix=g:
         #   GHashTable -> HashTable
         #   g_hash_table_new -> hash_table_new
         prefix = self._strip_prefix.lower()
         if isfunction:
             prefix += '_'
-        if name.lower().startswith(prefix):
+        if len(name) > len(prefix) and name.lower().startswith(prefix):
             name = name[len(prefix):]
 
         while name.startswith('_'):
@@ -207,9 +201,7 @@ class Transformer(object):
                                   child.const_int,
                                   child.ident))
 
-        enum_name = self.strip_namespace_object(symbol.ident)
-        enum_name = symbol.ident[-len(enum_name):]
-        enum_name = self._remove_prefix(enum_name)
+        enum_name = self.remove_prefix(symbol.ident)
         enum = Enum(enum_name, symbol.ident, members)
         self._names.type_names[symbol.ident] = (None, enum)
         return enum
@@ -331,9 +323,9 @@ class Transformer(object):
                        CTYPE_POINTER,
                        CTYPE_BASIC_TYPE,
                        CTYPE_VOID):
-            name = self.strip_namespace_object(symbol.ident)
+            name = self.remove_prefix(symbol.ident)
             if symbol.base_type.name:
-                target = self.strip_namespace_object(symbol.base_type.name)
+                target = self.remove_prefix(symbol.base_type.name)
             else:
                 target = 'none'
             if name in type_names:
@@ -463,8 +455,7 @@ class Transformer(object):
         return return_
 
     def _create_const(self, symbol):
-        name = self._remove_prefix(symbol.ident)
-        name = self._strip_namespace_func(name)
+        name = self.remove_prefix(symbol.ident)
         if symbol.const_string is None:
             type_name = 'int'
             value = symbol.const_int
@@ -475,15 +466,14 @@ class Transformer(object):
         return const
 
     def _create_typedef_struct(self, symbol):
-        name = self.strip_namespace_object(symbol.ident)
+        name = self.remove_prefix(symbol.ident)
         struct = Struct(name, symbol.ident)
         self._typedefs_ns[symbol.ident] = struct
         self._create_struct(symbol)
         return struct
 
     def _create_typedef_union(self, symbol):
-        name = self._remove_prefix(symbol.ident)
-        name = self.strip_namespace_object(name)
+        name = self.remove_prefix(symbol.ident)
         union = Union(name, symbol.ident)
         self._typedefs_ns[symbol.ident] = union
         self._create_union(symbol)
@@ -499,7 +489,7 @@ class Transformer(object):
                 name = symbol.ident[1:]
             else:
                 name = symbol.ident
-            name = self.strip_namespace_object(name)
+            name = self.remove_prefix(name)
             struct = Struct(name, symbol.ident)
 
         for child in symbol.base_type.child_list:
@@ -519,7 +509,7 @@ class Transformer(object):
                 name = symbol.ident[1:]
             else:
                 name = symbol.ident
-            name = self.strip_namespace_object(name)
+            name = self.remove_prefix(name)
             union = Union(name, symbol.ident)
 
         for child in symbol.base_type.child_list:
@@ -533,9 +523,9 @@ class Transformer(object):
         parameters = self._create_parameters(symbol.base_type.base_type)
         retval = self._create_return(symbol.base_type.base_type.base_type)
         if symbol.ident.find('_') > 0:
-            name = self._strip_namespace_func(symbol.ident)
+            name = self.remove_prefix(symbol.ident, True)
         else:
-            name = self.strip_namespace_object(symbol.ident)
+            name = self.remove_prefix(symbol.ident)
         return Callback(name, retval, list(parameters), symbol.ident)
 
     def _typepair_to_str(self, item):
@@ -555,7 +545,7 @@ class Transformer(object):
             return type_names[type_name]
         except KeyError, e:
             pass
-        type_name = self.strip_namespace_object(type_name)
+        type_name = self.remove_prefix(type_name)
         resolved = names.aliases.get(type_name)
         if resolved:
             return self._typepair_to_str(resolved)
