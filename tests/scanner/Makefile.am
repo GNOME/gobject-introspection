@@ -4,7 +4,8 @@ testlib_LTLIBRARIES = \
 	libannotation.la \
 	libdrawable.la \
 	libfoo.la \
-	libutility.la
+	libutility.la \
+	libgtkfrob.la
 testlibdir = $(prefix)/unused
 install-testlibLTLIBRARIES: # prevent it from being installed
 
@@ -16,6 +17,7 @@ libannotation_la_SOURCES = $(srcdir)/annotation.c $(srcdir)/annotation.h
 libdrawable_la_SOURCES = $(srcdir)/drawable.c $(srcdir)/drawable.h
 libfoo_la_SOURCES = $(srcdir)/foo.c $(srcdir)/foo.h
 libutility_la_SOURCES = $(srcdir)/utility.c $(srcdir)/utility.h
+libgtkfrob_la_SOURCES = $(srcdir)/gtkfrob.c $(srcdir)/gtkfrob.h
 
 if OS_WIN32
 AM_LDFLAGS += -no-undefined
@@ -88,6 +90,20 @@ utility-1.0.gir: libutility.la utility.h $(SCANNER) $(SCANNER_LIBS) Makefile
 	$(libutility_la_SOURCES) \
 	--output $@
 GIRS += utility-1.0.gir
+
+# This one tests different --namespace and --strip-prefix
+GtkFrob-1.0.gir: libgtkfrob.la gtkfrob.h $(SCANNER) $(SCANNER_LIBS) Makefile
+	PYTHONPATH=$(top_builddir):$$PYTHONPATH $(CHECK_DEBUG) $(SCANNER) -v \
+	--add-include-path=$(top_builddir)/gir --add-include-path=. \
+	--include=GObject-2.0 \
+	--library=gtkfrob \
+	--namespace=GtkFrob \
+	--strip-prefix=Gtk \
+	--nsversion=1.0 \
+	--pkg gobject-2.0 \
+	$(libgtkfrob_la_SOURCES) \
+	--output $@
+GIRS += GtkFrob-1.0.gir
 
 pre-check:
 	@if test "$(top_builddir)" != "$(top_srcdir)"; then \
