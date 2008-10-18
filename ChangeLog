@@ -1,5 +1,13 @@
 2008-10-17  Colin Walters  <walters@verbum.org>
 
+	Bug 556795 - char ** regression
+
+	* giscanner/transformer.py: Fix parsing of ctypes, add some
+	comments about what's going on.
+	* tests/*: Add a test for char **.
+
+2008-10-17  Colin Walters  <walters@verbum.org>
+
 	Bug 556783 - change namespace handling to be more consistent
 
 	* giscanner/transformer.py: Eliminate usage of
