@@ -1,3 +1,18 @@
+2008-10-17  Colin Walters  <walters@verbum.org>
+
+	Bug 556783 - change namespace handling to be more consistent
+
+	* giscanner/transformer.py: Eliminate usage of
+	strip_namespace_object.  We now treat --namespace as the default
+	--strip-prefix; however, if --strip-prefix is specified it
+	overrides --namespace.  This applies to everything except function
+	names, where we do also strip the namespace.
+	* giscanner/glibtransformer.py: Remove usage of
+	strip_namespace_object.
+	* tests/*: Update.
+	* tests/*: Add skeletal GtkFrob-1.0 test which has different
+	--namespace and --strip-prefix.
+
 2008-10-17  Tommi Komulainen  <tommi.komulainen@iki.fi>
 
 	Bug 556732 – generate gir files consistently
