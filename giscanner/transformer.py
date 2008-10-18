@@ -337,7 +337,18 @@ class Transformer(object):
         return node
 
     def _parse_ctype(self, ctype):
-        derefed = ctype.replace('*', '')
+        # First look up the ctype including any pointers;
+        # a few type names like 'char*' have their own aliases
+        # and we need pointer information for those.
+        firstpass = type_name_from_ctype(ctype)
+
+        # Remove all pointers - we require standard calling
+        # conventions.  For example, an 'int' is always passed by
+        # value (unless it's out or inout).
+        derefed = firstpass.replace('*', '')
+
+        # Canonicalize our type again, this time without the pointer;
+        # this ensures we turn e.g. plain "guint" => "int"
         return type_name_from_ctype(derefed)
 
     def _create_type(self, source_type, options):

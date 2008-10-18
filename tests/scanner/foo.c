@@ -335,3 +335,7 @@ void foo_test_unsigned (unsigned int uint)
 {
 }
 
+void
+foo_test_string_array (char **array)
+{
+}
