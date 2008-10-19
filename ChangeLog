@@ -1,6 +1,7 @@
 2008-10-19  Colin Walters  <walters@verbum.org>
 
-	* giscanner/girparser.py: Parse array length=.
+	* giscanner/girparser.py: Parse array length= to ensure
+	it doesn't get lost from --inject.
 
 2008-10-17  Colin Walters  <walters@verbum.org>
 
