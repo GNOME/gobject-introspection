@@ -220,8 +220,12 @@ class GIRParser(object):
                         typenode.attrib.get(_cns('type')))
         typenode = node.find(_corens('array'))
         if typenode is not None:
-            return Array(typenode.attrib.get(_cns('type')),
-                         self._parse_type(typenode))
+            ret = Array(typenode.attrib.get(_cns('type')),
+                        self._parse_type(typenode))
+            lenidx = typenode.attrib.get('length')
+            if lenidx:
+                ret.length_param_index = int(lenidx)
+            return ret
         typenode = node.find(_corens('varargs'))
         if typenode is not None:
             return Varargs()

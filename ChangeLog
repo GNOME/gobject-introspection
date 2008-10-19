@@ -1,3 +1,7 @@
+2008-10-19  Colin Walters  <walters@verbum.org>
+
+	* giscanner/girparser.py: Parse array length=.
+
 2008-10-17  Colin Walters  <walters@verbum.org>
 
 	Bug 556795 - char ** regression
