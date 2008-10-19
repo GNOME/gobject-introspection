@@ -128,6 +128,7 @@ stringtext				([^\\\"])|(\\.)
 [a-zA-Z_][a-zA-Z_0-9]*			{ if (scanner->macro_scan) return IDENTIFIER; else REJECT; }
 
 "asm"           		        { if (!parse_ignored_macro()) REJECT; }
+"__asm" 	        	        { if (!parse_ignored_macro()) REJECT; }
 "__asm__" 	        	        { if (!parse_ignored_macro()) REJECT; }
 "auto"					{ return AUTO; }
 "_Bool"					{ return BOOL; }

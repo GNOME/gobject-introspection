@@ -1,3 +1,7 @@
+2008-10-19  Johan Dahlin  <johan@gnome.org>
+
+	* giscanner/scannerlexer.l: Parse and ignore __asm.
+
 2008-10-19  Colin Walters  <walters@verbum.org>
 
 	* giscanner/girparser.py: Parse array length= to ensure
