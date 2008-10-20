@@ -3,6 +3,7 @@
 	* giscanner/glibast.py: Also register g variants of
 	default_array_types.  This is not beautiful, but
 	good alternatives aren't easy to come by.
+	This fixes gchar ** parsing.
 
 2008-10-20  Colin Walters  <walters@verbum.org>
 
