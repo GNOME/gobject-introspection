@@ -407,9 +407,9 @@ class Property(Node):
         self.construct_only = construct_only
 
     def __repr__(self):
-        return '%s(%r, %r, %r)' % (
+        return '%s(%r, %r)' % (
             self.__class__.__name__,
-            self.name, self.type, self.value)
+            self.name, self.type)
 
 
 # FIXME: Inherit from Function
