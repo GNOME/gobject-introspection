@@ -574,13 +574,15 @@ class Transformer(object):
         raise KeyError("failed to find %r" % (type_name, ))
 
     def resolve_type_name_full(self, type_name, ctype,
-                               names):
+                               names, allow_invalid=True):
         try:
             return self._resolve_type_name_1(type_name, ctype, names)
         except KeyError, e:
             try:
                 return self._resolve_type_name_1(type_name, ctype, self._names)
             except KeyError, e:
+                if not allow_invalid:
+                    raise
                 return type_name
 
     def resolve_type_name(self, type_name, ctype=None):
@@ -606,23 +608,26 @@ class Transformer(object):
         else:
             return None
 
-    def resolve_param_type_full(self, ptype, names):
+    def resolve_param_type_full(self, ptype, names, **kwargs):
         if isinstance(ptype, Node):
             ptype.name = self.resolve_type_name_full(ptype.name,
                                                      self.ctype_of(ptype),
-                                                     names)
+                                                     names, **kwargs)
             if isinstance(ptype, (Array, List)):
                 if ptype.element_type is not None:
                     ptype.element_type = \
-                        self.resolve_param_type_full(ptype.element_type, names)
+                        self.resolve_param_type_full(ptype.element_type,
+                                                     names, **kwargs)
             if isinstance(ptype, Map):
                 if ptype.key_type is not None:
                     ptype.key_type = \
-                        self.resolve_param_type_full(ptype.key_type, names)
+                        self.resolve_param_type_full(ptype.key_type,
+                                                     names, **kwargs)
                     ptype.value_type = \
-                        self.resolve_param_type_full(ptype.value_type, names)
+                        self.resolve_param_type_full(ptype.value_type,
+                                                     names, **kwargs)
         elif isinstance(ptype, basestring):
-            return self.resolve_type_name_full(ptype, None, names)
+            return self.resolve_type_name_full(ptype, None, names, **kwargs)
         else:
             raise AssertionError("Unhandled param: %r" % (ptype, ))
         return ptype
