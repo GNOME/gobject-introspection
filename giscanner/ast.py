@@ -123,6 +123,7 @@ type_names['constpointer'] = TYPE_ANY
 
 # These types, when seen by reference, are converted into an Array()
 # by default
+# If you add/change these, be sure to update glibast.py too
 default_array_types = {}
 default_array_types['uint8*'] = TYPE_UINT8
 default_array_types['char**'] = TYPE_STRING

@@ -1,5 +1,11 @@
 2008-10-20  Colin Walters  <walters@verbum.org>
 
+	* giscanner/glibast.py: Also register g variants of
+	default_array_types.  This is not beautiful, but
+	good alternatives aren't easy to come by.
+
+2008-10-20  Colin Walters  <walters@verbum.org>
+
 	* docs/typelib-format.txt, girepository/gtypelib.h:
 	Take a bit from ObjectInfo to represent abstract flag.
 	* giscanner/cgobject.py: Expose g_type_get_flags.

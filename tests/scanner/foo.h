@@ -243,4 +243,6 @@ void foo_test_unsigned_type (unsigned unsigned_param);
 
 void foo_test_string_array (char **array);
 
+void foo_test_string_array_with_g (gchar **array);
+
 #endif /* __FOO_OBJECT_H__ */

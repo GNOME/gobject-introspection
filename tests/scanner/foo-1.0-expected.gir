@@ -513,6 +513,19 @@
         </parameter>
       </parameters>
     </function>
+    <function name="test_string_array_with_g"
+              c:identifier="foo_test_string_array_with_g">
+      <return-value>
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="array">
+          <array c:type="gchar**">
+            <type name="utf8"/>
+          </array>
+        </parameter>
+      </parameters>
+    </function>
     <constant name="SUCCESS_INT" value="4408">
       <type name="int"/>
     </constant>
