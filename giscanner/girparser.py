@@ -165,7 +165,7 @@ class GIRParser(object):
                 param = Parameter(paramnode.attrib.get('name'),
                                   self._parse_type(paramnode),
                                   paramnode.attrib.get('direction'),
-                                  paramnode.attrib.get('transfer'),
+                                  paramnode.attrib.get('transfer-ownership'),
                                   paramnode.attrib.get('allow-none') == '1')
                 parameters.append(param)
         if klass is Callback:
