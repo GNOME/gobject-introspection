@@ -41,4 +41,4 @@ GIRS += gitesttypes-1.0.gir
 
 %.typelib: %.gir $(top_builddir)/tools/g-ir-compiler$(EXEEXT) Makefile
 	$(top_builddir)/tools/g-ir-compiler --includedir=. --includedir=$(top_builddir)/gir $< -o $@
-	$(SCANNER) --typelib-xml $< > $<.tmp && mv $<.tmp $<.txml
+	PYTHONPATH=$(top_builddir):$$PYTHONPATH $(SCANNER) --add-include-path=$(top_builddir)/gir --typelib-xml $< > $<.tmp && mv $<.tmp $<.txml

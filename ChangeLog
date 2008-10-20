@@ -1,3 +1,9 @@
+2008-10-20  Andreas Rottmann  <a.rottmann@gmx.at>
+
+	* tests/scanner/Makefile.am (%.typelib): Set PYTHONPATH
+	and --add-include-path appropriately when invoking the scanner.
+	* tests/types/Makefile.am (%typelib): Likewise.
+
 2008-10-20  Colin Walters  <walters@verbum.org>
 
 	Bug 556777 - validate properties
