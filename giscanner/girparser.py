@@ -123,18 +123,23 @@ class GIRParser(object):
                      node.attrib.get(_cns('type')))
 
     def _parse_object_interface(self, node):
+        ctor_args = [node.attrib['name'],
+                     node.attrib.get('parent'),
+                     node.attrib[_glibns('type-name')],
+                     node.attrib[_glibns('get-type')]]
         if node.tag == _corens('interface'):
             klass = GLibInterface
         elif node.tag == _corens('class'):
             klass = GLibObject
+            is_abstract = node.attrib.get('abstract')
+            is_abstract = is_abstract and is_abstract != '0'
+            ctor_args.append(is_abstract)
         else:
             raise AssertionError(node)
 
-        obj = klass(node.attrib['name'],
-                    node.attrib.get('parent'),
-                    node.attrib[_glibns('type-name')],
-                    node.attrib[_glibns('get-type')],
-                    node.attrib.get(_cns('type')))
+        ctor_args.append(node.attrib.get(_cns('type')))
+        obj = klass(*ctor_args)
+
         for iface in node.findall(_corens('implements')):
             obj.interfaces.append(iface.attrib['name'])
         for method in node.findall(_corens('method')):

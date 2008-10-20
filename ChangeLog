@@ -1,3 +1,17 @@
+2008-10-20  Colin Walters  <walters@verbum.org>
+
+	* docs/typelib-format.txt, girepository/gtypelib.h:
+	Take a bit from ObjectInfo to represent abstract flag.
+	* giscanner/cgobject.py: Expose g_type_get_flags.
+	* girepository/girepository.h: Add accessor.
+	* girepository/ginfo.c: Implement it.
+	* giscanner/ast.py: Add is_abstract flag to generic
+	class object.
+	* giscanner/glibast.py: Use it.
+	* giscanner/girwriter.py: Write it.
+	* girepository/girparser.c: Parse it.
+	* tests/*: Test it.
+
 2008-10-20  Tommi Komulainen  <tommi.komulainen@iki.fi>
 
 	* giscanner/girparser.py (_parse_function): don't lose

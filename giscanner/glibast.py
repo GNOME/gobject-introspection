@@ -85,8 +85,9 @@ class GLibEnumMember(Member):
 
 class GLibObject(Class):
 
-    def __init__(self, name, parent, type_name, get_type, ctype=None):
-        Class.__init__(self, name, parent)
+    def __init__(self, name, parent, type_name, get_type,
+                 is_abstract, ctype=None):
+        Class.__init__(self, name, parent, is_abstract)
         self.type_name = type_name
         self.get_type = get_type
         self.signals = []

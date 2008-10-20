@@ -51,6 +51,7 @@ TYPE_OBJECT = 80
 # FIXME - this is wrong on win64, where long == 32 but size_t == 64
 GType = ctypes.c_ulong
 
+TYPE_FLAG_ABSTRACT = 1 << 4
 
 # Structs
 
@@ -188,6 +189,15 @@ def type_from_name(name):
 @_gwrap('g_type_fundamental', GType, GType)
 def type_fundamental(type_id):
     return _gobj.g_type_fundamental(type_id)
+
+
+@_gwrap('g_type_test_flags', ctypes.c_int, GType, ctypes.c_int)
+def type_test_flags(type_id, flag):
+    return _gobj.g_type_test_flags(type_id, flag)
+
+
+def type_is_abstract(type_id):
+    return type_test_flags(type_id, TYPE_FLAG_ABSTRACT) != 0
 
 
 @_gwrap('g_type_parent', GType, GType)

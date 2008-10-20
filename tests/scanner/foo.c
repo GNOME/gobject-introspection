@@ -167,7 +167,7 @@ foo_object_dup_name (FooObject *object)
   return g_strdup ("foo");
 }
 
-G_DEFINE_TYPE (FooSubobject, foo_subobject, FOO_TYPE_OBJECT);
+G_DEFINE_ABSTRACT_TYPE (FooSubobject, foo_subobject, FOO_TYPE_OBJECT);
 
 static void
 foo_subobject_class_init (FooSubobjectClass *klass)

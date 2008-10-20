@@ -230,6 +230,8 @@ class GIRWriter(XMLWriter):
             tag_name = 'class'
             if node.parent is not None:
                 attrs.append(('parent', node.parent))
+            if node.is_abstract:
+                attrs.append(('abstract', '1'))
         else:
             tag_name = 'interface'
         if isinstance(node, (GLibObject, GLibInterface)):

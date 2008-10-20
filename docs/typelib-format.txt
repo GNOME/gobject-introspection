@@ -873,8 +873,9 @@ ObjectBlob (32 + x bytes)
 struct ObjectBlob
 {
   guint16 blob_type;  /* 7 */
-  guint   deprecated   : 1; 
-  guint   reserved     :15;
+  guint   deprecated   : 1;
+  guint   abstract     : 1;
+  guint   reserved     :14;
   guint32 name; 
 
   GTypeBlob gtype;

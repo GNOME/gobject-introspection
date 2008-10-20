@@ -350,10 +350,11 @@ class Return(Node):
 
 class Class(Node):
 
-    def __init__(self, name, parent):
+    def __init__(self, name, parent, is_abstract):
         Node.__init__(self, name)
         self.ctype = name
         self.parent = parent
+        self.is_abstract = is_abstract
         self.methods = []
         self.interfaces = []
         self.constructors = []
