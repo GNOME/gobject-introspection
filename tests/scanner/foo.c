@@ -2,6 +2,40 @@
 
 #include "foo.h"
 
+/* A hidden type not exposed publicly, similar to GUPNP's XML wrapper
+   object */
+typedef struct _FooHidden FooHidden;
+
+struct _FooHidden
+{
+  char *frob;
+};
+
+FooHidden *
+foo_hidden_copy (const FooHidden *boxed)
+{
+  return (FooHidden *)g_memdup (boxed, sizeof (FooHidden));
+}
+
+void
+foo_hidden_free (FooHidden *boxed)
+{
+  g_slice_free (FooHidden, boxed);
+}
+
+
+GType
+foo_hidden_get_type (void)
+{
+  static GType our_type = 0;
+
+  if (our_type == 0)
+    our_type = g_boxed_type_register_static ("FooHidden",
+					     (GBoxedCopyFunc) foo_hidden_copy,
+					     (GBoxedFreeFunc) foo_hidden_free);
+  return our_type;
+}
+
 static void foo_do_foo (FooInterface *self);
 
 typedef struct
@@ -39,7 +73,8 @@ void foo_interface_do_foo (FooInterface *self)
 
 enum {
   PROP_0,
-  PROP_STRING
+  PROP_STRING,
+  PROP_HIDDEN
 };
 
 enum {
@@ -73,6 +108,8 @@ foo_object_set_property (GObject         *object,
     {
     case PROP_STRING:
       break;
+    case PROP_HIDDEN:
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -90,6 +127,8 @@ foo_object_get_property (GObject         *object,
   switch (prop_id)
     {
     case PROP_STRING:
+      break;
+    case PROP_HIDDEN:
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -114,6 +153,13 @@ foo_object_class_init (FooObjectClass *klass)
                                                         "The String Property Blurb",
                                                         NULL,
                                                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT));
+  g_object_class_install_property (gobject_class,
+                                   PROP_HIDDEN,
+                                   g_param_spec_boxed ("hidden",
+						       "hidden property",
+						       "should not be exposed",
+						       foo_hidden_get_type (),
+						       G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
   foo_object_signals[SIGNAL] =
     g_signal_new ("signal",
 		  G_OBJECT_CLASS_TYPE (gobject_class),
