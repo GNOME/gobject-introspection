@@ -1,3 +1,9 @@
+2008-10-20  Tommi Komulainen  <tommi.komulainen@iki.fi>
+
+	* giscanner/girparser.py (_parse_function): don't lose
+	'transfer-ownership' attributes when injecting, check for the
+	correct attribute
+
 2008-10-19  Johan Dahlin  <johan@gnome.org>
 
 	* giscanner/scannerlexer.l: Parse and ignore __asm.
