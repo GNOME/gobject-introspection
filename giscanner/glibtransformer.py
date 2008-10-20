@@ -25,7 +25,7 @@ from ctypes.util import find_library
 
 from . import cgobject
 from .ast import (Callback, Constant, Enum, Function, Member, Namespace,
-                  Parameter, Property, Return, Struct, Type, Alias, Array,
+                  Parameter, Property, Return, Struct, Type, Alias,
                   Union, Field, type_name_from_ctype,
                   default_array_types, TYPE_UINT8, PARAM_DIRECTION_IN)
 from .transformer import Names
@@ -651,38 +651,10 @@ class GLibTransformer(object):
         except KeyError, e:
             return self._transformer.resolve_type_name(type_name, ctype)
 
-    def _validate_type_name(self, name):
-        if name in type_names:
-            return True
-        if name.find('.') >= 0:
-            return True
-        if name in self._names.aliases:
-            return True
-        if name in self._names.names:
-            return True
-        return False
-
-    def _validate_type(self, ptype):
-        if isinstance(ptype, Array):
-            etype = ptype.element_type
-            if isinstance(etype, Array):
-                return self._validate_type(etype)
-            return self._validate_type_name(etype)
-        return self._validate_type_name(ptype.name)
-
-    def _resolve_param_type_validate(self, ptype):
-        ptype = self._resolve_param_type(ptype)
-
-        if self._validating and not self._validate_type(ptype):
-            raise UnknownTypeError("Unknown type %r" % (ptype, ))
-        return ptype
-
-    def _resolve_param_type(self, ptype):
-        try:
-            return self._transformer.resolve_param_type_full(ptype,
-                                                             self._names)
-        except KeyError, e:
-            return self._transformer.resolve_param_type(ptype)
+    def _resolve_param_type(self, ptype, **kwargs):
+        return self._transformer.resolve_param_type_full(ptype,
+                                                         self._names,
+                                                         **kwargs)
 
     def _resolve_node(self, node):
         if isinstance(node, Function):
@@ -757,7 +729,7 @@ class GLibTransformer(object):
     def _resolve_glib_interface(self, node):
         node.parent = self._force_resolve(node.parent)
         self._resolve_methods(node.methods)
-        self._resolve_properties(node.properties)
+        self._resolve_properties(node.properties, node)
         self._resolve_signals(node.signals)
 
     def _resolve_glib_object(self, node):
@@ -767,7 +739,7 @@ class GLibTransformer(object):
                                     for x in node.interfaces])
         self._resolve_constructors(node.constructors)
         self._resolve_methods(node.methods)
-        self._resolve_properties(node.properties)
+        self._resolve_properties(node.properties, node)
         self._resolve_signals(node.signals)
         for field in node.fields:
             self._resolve_field(field)
@@ -788,12 +760,20 @@ class GLibTransformer(object):
         for signal in signals:
             self._resolve_function(signal)
 
-    def _resolve_properties(self, properties):
+    def _resolve_properties(self, properties, context):
+        failed = []
         for prop in properties:
-            self._resolve_property(prop)
+            try:
+                self._resolve_property(prop)
+            except KeyError, e:
+                failed.append(prop)
+        for fail in failed:
+            print ("WARNING: Deleting object property %r (of %r)" +\
+                       "with unknown type") % (fail, context)
+            properties.remove(fail)
 
     def _resolve_property(self, prop):
-        prop.type = self._resolve_param_type(prop.type)
+        prop.type = self._resolve_param_type(prop.type, allow_invalid=False)
 
     def _adjust_transfer(self, param):
         # Do GLib/GObject-specific type transformations here
