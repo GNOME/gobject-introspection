@@ -458,7 +458,7 @@ class Transformer(object):
         return_ = Return(rtype)
         self._handle_generic_param_options(return_, options_map)
         for option, data in options_map.iteritems():
-            if option == 'transfer':
+            if option in ('transfer', 'element-type', 'out'):
                 pass
             else:
                 print 'Unhandled return type annotation option: %r' % (
