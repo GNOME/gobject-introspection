@@ -1,3 +1,9 @@
+2008-10-21  Tommi Komulainen  <tommi.komulainen@iki.fi>
+
+	* giscanner/transformer.py (_create_parameters): Warn if we see
+	annotations for unknown parameters. If .h and .c files name
+	parameters differently, the annotations may be lost.
+
 2008-10-21  Johan Dahlin  <johan@gnome.org>
 
 	Bug 556358 - don't use libtool internals
