@@ -291,6 +291,16 @@ class Transformer(object):
             dirs = {}
         else:
             dirs = directives
+
+        # warn if we see annotations for unknown parameters
+        param_names = set(child.ident for child in base_type.child_list)
+        dirs_for = set(dirs)
+        dirs_for = dirs_for.difference(param_names)
+        dirs_for.discard('return')
+        if dirs_for:
+            print 'Unexpected annotations for %s, parameters are %s' % (
+                list(dirs_for), list(param_names), )
+
         for child in base_type.child_list:
             yield self._create_parameter(
                 child, dirs.get(child.ident, {}))
