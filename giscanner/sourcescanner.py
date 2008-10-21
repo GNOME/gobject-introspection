@@ -22,7 +22,10 @@ import os
 import subprocess
 import tempfile
 
+from .libtoolimporter import install_libtoolimporter, uninstall_libtoolimporter
+install_libtoolimporter()
 from . import _giscanner
+uninstall_libtoolimporter()
 
 (CSYMBOL_TYPE_INVALID,
  CSYMBOL_TYPE_ELLIPSIS,

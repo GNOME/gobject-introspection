@@ -1,3 +1,13 @@
+2008-10-21  Johan Dahlin  <johan@gnome.org>
+
+	Bug 556358 - don't use libtool internals
+
+	* giscanner/Makefile.am:
+	* giscanner/libtoolimporter.py:
+	* giscanner/sourcescanner.py:
+	* giscanner/utils.py:
+	Add a python meta importer and remove a libtool symlink hack.
+
 2008-10-20  Andreas Rottmann  <a.rottmann@gmx.at>
 
 	* tests/scanner/Makefile.am (%.typelib): Set PYTHONPATH

@@ -52,6 +52,10 @@ def extract_libtool(libname):
     filename = _libtool_pat.search(data).groups()[0]
     libname = os.path.join(os.path.dirname(libname),
                            '.libs', filename)
+    # FIXME: This hackish, but I'm not sure how to do this
+    #        in a way which is compatible with both libtool 2.2
+    #        and pre-2.2. Johan 2008-10-21
+    libname = libname.replace('.libs/.libs', '.libs')
     return libname
 
 

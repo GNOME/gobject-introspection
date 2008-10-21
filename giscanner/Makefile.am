@@ -42,6 +42,7 @@ pkgpyexec_PYTHON = 		\
 	girwriter.py		\
 	glibast.py		\
 	glibtransformer.py 	\
+	libtoolimporter.py	\
 	minixpath.py		\
 	odict.py		\
 	sourcescanner.py	\
@@ -77,13 +78,6 @@ install-exec-hook:
 	mv $(pkgpyexecdir)/_giscanner.dll $(pkgpyexecdir)/_giscanner.pyd
 	rm $(pkgpyexecdir)/_giscanner.dll.a
 	rm $(pkgpyexecdir)/_giscanner.la
-else
-BUILT_SOURCES += _giscanner.so
-CLEANFILES += _giscanner.so
 endif
-
-# Yuck, ugly but...
-_giscanner.so: _giscanner.la
-	ln -sf .libs/_giscanner.so .
 
 include $(top_srcdir)/gcov.mak
