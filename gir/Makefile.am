@@ -1,4 +1,5 @@
 BUILT_SOURCES =
+EXTRA_DIST = 
 
 G_IR_SCANNER = $(top_srcdir)/tools/g-ir-scanner
 G_IR_SCANNER_FILES = $(top_srcdir)/giscanner/*.py \
@@ -31,8 +32,9 @@ GLib-2.0.gir: $(G_IR_SCANNER) $(G_IR_SCANNER_FILES) Makefile glib-2.0.c
 	    $(srcdir)/glib-2.0.c \
 	    $(GLIB_INCLUDEDIR)/glib/*.h
 	PYTHONPATH=$(top_builddir):$$PYTHONPATH $(G_IR_SCANNER) \
-	    --xpath-assertions=GLib-assertions.txt GLib-2.0.gir	
+	    --xpath-assertions=GLib-2.0.xpath GLib-2.0.gir	
 BUILT_SOURCES += GLib-2.0.gir
+EXTRA_DIST += GLib-2.0.xpath
 
 # gobject
 GOBJECT_INCLUDEDIR=`pkg-config --variable=includedir gobject-2.0`/glib-2.0
