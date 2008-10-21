@@ -1,3 +1,8 @@
+2008-10-21  Owen Taylor  <otaylor@redhat.com>
+
+	* giscanner/transformer.py: For string parameters allow transfer annotation
+	to override the standard automatic guessing based on 'const'.
+
 2008-10-21  Johan Bilien  <jobi@via.ecp.fr>
 
 	Bug 557241 – "throws" flag for functions

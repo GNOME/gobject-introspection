@@ -402,7 +402,7 @@ class Transformer(object):
             return result
 
         # string memory management - we just look at 'const'
-        if type_name_from_ctype(ctype) == TYPE_STRING:
+        if type_name_from_ctype(ctype) == TYPE_STRING and 'transfer' not in options:
             if source_type.base_type.type_qualifier & TYPE_QUALIFIER_CONST:
                 options['transfer'] = ['none']
             else:
