@@ -37,7 +37,6 @@ class LibToolImporter(object):
             full = os.path.join(part, '.libs', modname + '.la')
             if os.path.exists(full):
                 return LibToolImporter(name, full)
-        raise SystemExit
 
     def load_module(self, name):
         realpath = extract_libtool(self.path)
