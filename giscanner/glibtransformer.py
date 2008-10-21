@@ -790,9 +790,23 @@ class GLibTransformer(object):
               and param.type.name == 'Object'))):
             param.transfer = 'full'
 
+    def _adjust_throws(self, func):
+        if func.parameters == []:
+            return
+
+        last_param = func.parameters.pop()
+
+        if (last_param.type.name == 'GLib.Error' or
+            (self._namespace_name == 'GLib' and
+             last_param.type.name == 'Error')):
+            func.throws = True
+        else:
+            func.parameters.append(last_param)
+
     def _resolve_function(self, func):
         self._resolve_parameters(func.parameters)
         func.retval.type = self._resolve_param_type(func.retval.type)
+        self._adjust_throws(func)
         self._adjust_transfer(func.retval)
 
     def _resolve_parameters(self, parameters):

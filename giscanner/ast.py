@@ -188,11 +188,12 @@ class Include(Node):
 
 class Function(Node):
 
-    def __init__(self, name, retval, parameters, symbol):
+    def __init__(self, name, retval, parameters, symbol, throws=None):
         Node.__init__(self, name)
         self.retval = retval
         self.parameters = parameters
         self.symbol = symbol
+        self.throws = not not throws
 
     def __repr__(self):
         return '%s(%r, %r, %r)' % (self.__class__.__name__,

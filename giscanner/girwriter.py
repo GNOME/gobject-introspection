@@ -95,6 +95,10 @@ class GIRWriter(XMLWriter):
                 attrs.append(('deprecated-version',
                               node.deprecated_version))
 
+    def _append_throws(self, func, attrs):
+        if func.throws:
+            attrs.append(('throws', '1'))
+
     def _write_alias(self, alias):
         attrs = [('name', alias.name), ('target', alias.target)]
         if alias.ctype is not None:
@@ -105,6 +109,7 @@ class GIRWriter(XMLWriter):
         attrs = [('name', func.name),
                  ('c:identifier', func.symbol)]
         self._append_deprecated(func, attrs)
+        self._append_throws(func, attrs)
         with self.tagcontext(tag_name, attrs):
             self._write_return_type(func.retval)
             self._write_parameters(func.parameters)

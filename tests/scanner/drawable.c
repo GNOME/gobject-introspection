@@ -33,3 +33,10 @@ test_drawable_get_size (TestDrawable *drawable, guint *width, guint *height)
   *width = 42;
   *height = 42;
 }
+
+void
+test_drawable_do_foo_maybe_throw (TestDrawable *drawable, int x, GError **error)
+{
+  if (x != 42)
+    g_set_error(error, 0, 12, "The answer should be 42!");
+}

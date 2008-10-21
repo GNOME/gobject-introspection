@@ -178,7 +178,8 @@ class GIRParser(object):
                          node.attrib.get(_cns('type')))
         else:
             identifier = node.attrib.get(_cns('identifier'))
-            return klass(name, retval, parameters, identifier)
+            throws = (node.attrib.get('throws') == '1')
+            return klass(name, retval, parameters, identifier, throws)
 
     def _parse_struct(self, node):
         if _glibns('type-name') in node.attrib:

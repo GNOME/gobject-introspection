@@ -1,3 +1,28 @@
+2008-10-21  Johan Bilien  <jobi@via.ecp.fr>
+
+	Bug 557241 – "throws" flag for functions
+
+	* tests/scanner/drawable-1.0-expected.gir,
+	tests/scanner/drawable-injected-1.0-expected.gir,
+	tests/scanner/drawable.[ch]: add simple test for throwing
+	function (has GError ** as last argument)
+
+	* giscanner/ast.py: add a 'throws' flag to Function
+	* giscanner/glibtransformer.py: if a function's last paramerter is
+	a GError, set the 'throws' flag and remove that parameter
+	* giscanner/girwriter.py: write out the 'throws' attribute
+	* giscanner/girparser.py: support parsing the 'throws' attribute
+
+	* tests/repository/gitestthrows.c: add a simple test to check the
+	throws flag in a typelib and invoke the function
+
+	* girepository/ginfo.c, girepository/girnode.[ch],
+	girepository/girnode.h, girepository/girparser.c,
+	girepository/girepository.h: Add and parse the GI_FUNCTION_THROWS flag
+
+	* girepository/ginvoke.c: if a function throws, add a GError as last
+	arguments, and propagate the error to the invoker.
+
 2008-10-21  Tommi Komulainen  <tommi.komulainen@iki.fi>
 
 	* giscanner/transformer.py (_create_parameters): Warn if we see
