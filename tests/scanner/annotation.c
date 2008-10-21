@@ -244,7 +244,7 @@ annotation_object_compute_sum_n(AnnotationObject *object,
 /**
  * annotation_object_allow_none: 
  * @object: a #GObject
- * @somearg: (allow-none): 
+ * @somearg: (allow-none):
  **/
 GObject*
 annotation_object_allow_none (AnnotationObject *object, gchar *somearg)

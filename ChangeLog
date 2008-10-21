@@ -1,5 +1,11 @@
 2008-10-21  Colin Walters  <walters@verbum.org>
 
+	* giscanner/scannerlexer.l: Don't require trailing whitespace after
+	uncommented parameters.
+	* tests/*: Test it.
+
+2008-10-21  Colin Walters  <walters@verbum.org>
+
 	* girepository/girepository.c: Ensure that when doing an unversioned
 	require, we prefer items earlier in the search path to later ones.
 

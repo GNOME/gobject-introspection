@@ -228,9 +228,15 @@ parse_gtkdoc (GISourceScanner *scanner,
   if (!isline)
     return;
 
+  /* Ignore lines that don't have a : - this is a hack but avoids
+   * trying to parse too many things as annotations
+   */
+  if (!strchr (line, ':'))
+    return;
+
   line[i] = '\0';
 
-  parts = g_strsplit (line, ": ", 3);
+  parts = g_strsplit (line, ":", 3);
   n_parts = g_strv_length (parts);
 
   if (g_ascii_strcasecmp (parts[0], "eprecated") == 0)
@@ -295,11 +301,10 @@ parse_gtkdoc (GISourceScanner *scanner,
   directive = gi_source_directive_new (rname, value, options);
   directives = g_hash_table_lookup (scanner->directives_map, symbol);
   directives = g_slist_prepend (directives, directive);
-  g_hash_table_replace (scanner->directives_map, 
+  g_hash_table_replace (scanner->directives_map,
 			g_strdup (symbol), directives);
 
   g_strfreev (parts);
-  
 }
 
 
