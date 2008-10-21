@@ -1,5 +1,5 @@
 /* -*- Mode: C -*-
-/* GObject introspection: C lexer
+ * GObject introspection: C lexer
  *
  * Copyright (c) 1997 Sandro Sigala  <ssigala@globalnet.it>
  * Copyright (c) 2007-2008 Jürg Billeter  <j@bitron.ch>

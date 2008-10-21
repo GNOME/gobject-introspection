@@ -26,6 +26,7 @@ from .utils import extract_libtool
 
 
 class LibToolImporter(object):
+
     def __init__(self, name, path):
         self.name = name
         self.path = path
@@ -44,8 +45,10 @@ class LibToolImporter(object):
                               ('.so', 'rb', 3))
         return mod
 
+
 def install_libtoolimporter():
     sys.meta_path.append(LibToolImporter)
+
 
 def uninstall_libtoolimporter():
     sys.meta_path.remove(LibToolImporter)

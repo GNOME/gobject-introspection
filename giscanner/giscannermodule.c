@@ -33,6 +33,8 @@
 #include <windows.h>
 #endif
 
+DL_EXPORT(void) init_giscanner(void);
+
 #define NEW_CLASS(ctype, name, cname)	      \
 static const PyMethodDef _Py##cname##_methods[];    \
 PyTypeObject Py##cname##_Type = {             \
