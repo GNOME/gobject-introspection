@@ -23,6 +23,7 @@ if OS_WIN32
 AM_LDFLAGS += -no-undefined
 endif
 
+# .gir --[scanner]-> .typelib --[generate]-> .tgir
 GIRS =
 SCANNER = $(top_srcdir)/tools/g-ir-scanner
 SCANNER_LIBS = \
@@ -31,9 +32,11 @@ SCANNER_LIBS = \
 TYPELIBS = $(GIRS:.gir=.typelib)
 CHECKGIRS = $(GIRS:.gir=.gir.check)
 EXPECTEDGIRS = $(GIRS:.gir=-expected.gir)
+CHECKTGIRS = $(GIRS:.gir=.tgir.check)
+EXPECTEDTGIRS = $(GIRS:.gir=-expected.tgir)
 CLEANFILES = $(TYPELIBS)  $(GIRS)
 BUILT_SOURCES = $(TYPELIBS) $(GIRS)
-EXTRA_DIST = $(EXPECTEDGIRS)
+EXTRA_DIST = $(EXPECTEDGIRS) $(EXPECTEDTGIRS)
 
 annotation-1.0.gir: libannotation.la annotation.c annotation.h utility-1.0.gir $(SCANNER) $(SCANNER_LIBS) Makefile
 	PYTHONPATH=$(top_builddir):$$PYTHONPATH $(CHECK_DEBUG) $(SCANNER) -v \
@@ -125,8 +128,14 @@ post-check:
 %.typelib: %.gir $(top_builddir)/tools/g-ir-compiler$(EXEEXT) Makefile
 	$(top_builddir)/tools/g-ir-compiler --includedir=. --includedir=$(top_builddir)/gir $< -o $@
 
+%.tgir: %.typelib $(top_builddir)/tools/g-ir-generate$(EXEEXT) Makefile
+	 $(DEBUG) $(top_builddir)/tools/g-ir-generate --includedir=. --includedir=$(top_builddir)/gir $< -o $@
+
+%.tgir.check: %.tgir
+	@diff -u -U 10 $(srcdir)/$*-expected.tgir $*.tgir && echo "* $*.tgir"
+
 check-local: pre-check
-check-local: $(CHECKGIRS) $(TYPELIBS)
+check-local: $(CHECKGIRS) $(CHECKTGIRS) $(TYPELIBS)
 	@for x in $(TYPELIBS); do \
 	 echo 1>&2 "$(DEBUG) $(top_builddir)/tools/g-ir-generate --includedir=. --includedir=$(top_builddir)/gir $${x} > $${x}.tmp && mv $${x}.tmp $${x}.xml;"; \
 	 $(DEBUG) $(top_builddir)/tools/g-ir-generate --includedir=. --includedir=$(top_builddir)/gir $${x} > $${x}.tmp && mv $${x}.tmp $${x}.xml; \

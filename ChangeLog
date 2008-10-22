@@ -1,3 +1,19 @@
+2008-10-22  Tommi Komulainen  <tommi.komulainen@iki.fi>
+
+	Bug 557377 – Add test to ensure annotations survive the roundtrip via typelib
+
+	* tests/scanner/Makefile.am:
+	* tests/scanner/annotation-1.0-expected.tgir:
+	* tests/scanner/drawable-1.0-expected.tgir:
+	* tests/scanner/drawable-injected-1.0-expected.tgir:
+	* tests/scanner/foo-1.0-expected.tgir:
+	* tests/scanner/GtkFrob-1.0-expected.tgir:
+	* tests/scanner/utility-1.0-expected.tgir: Add test to ensure
+	annotations survive the roundtrip via typelib
+
+	The expectations are as currently produced by g-ir-generate,
+	comparison with the .gir files shows there are differences.
+
 2008-10-22  Lucas Rocha  <lucasr@gnome.org>
 
 	* girepository/girmodule.c, girepository/gtypelib.c,

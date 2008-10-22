@@ -1,0 +1,201 @@
+<?xml version="1.0"?>
+<repository version="1.0"
+            xmlns="http://www.gtk.org/introspection/core/1.0"
+            xmlns:c="http://www.gtk.org/introspection/c/1.0"
+            xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
+  <include name="utility" version="1.0"/>
+  <include name="GObject" version="2.0"/>
+  <include name="GLib" version="2.0"/>
+  <namespace name="annotation" version="1.0" shared-library="annotation">
+    <callback name="Callback">
+      <return-value>
+        <type name="int"/>
+      </return-value>
+      <parameters>
+        <parameter name="in">
+          <type name="int"/>
+        </parameter>
+      </parameters>
+    </callback>
+    <callback name="ListCallback">
+      <return-value transfer-ownership="container">
+        <type name="GLib.List">
+          <type name="utf8"/>
+        </type>
+      </return-value>
+      <parameters>
+        <parameter name="in">
+          <type name="GLib.List">
+            <type name="utf8"/>
+          </type>
+        </parameter>
+      </parameters>
+    </callback>
+    <class name="Object" parent="GObject.Object" glib:type-name="AnnotationObject" glib:get-type="annotation_object_get_type">
+      <field name="parent_instance" offset="0">
+        <type name="GObject.Object"/>
+      </field>
+      <method name="method" c:identifier="annotation_object_method">
+        <return-value>
+          <type name="int"/>
+        </return-value>
+      </method>
+      <method name="out" c:identifier="annotation_object_out">
+        <return-value>
+          <type name="int"/>
+        </return-value>
+        <parameters>
+          <parameter name="outarg" transfer-ownership="full" direction="out">
+            <type name="int"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="create_object" c:identifier="annotation_object_create_object">
+        <return-value>
+          <type name="GObject.Object"/>
+        </return-value>
+      </method>
+      <method name="allow_none" c:identifier="annotation_object_allow_none">
+        <return-value>
+          <type name="GObject.Object"/>
+        </return-value>
+        <parameters>
+          <parameter name="somearg" transfer-ownership="full" allow-none="1">
+            <type name="utf8"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="notrans" c:identifier="annotation_object_notrans">
+        <return-value>
+          <type name="GObject.Object"/>
+        </return-value>
+      </method>
+      <method name="inout" c:identifier="annotation_object_inout">
+        <return-value>
+          <type name="int"/>
+        </return-value>
+        <parameters>
+          <parameter name="inoutarg" transfer-ownership="full" direction="inout">
+            <type name="int"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="inout2" c:identifier="annotation_object_inout2">
+        <return-value>
+          <type name="int"/>
+        </return-value>
+        <parameters>
+          <parameter name="inoutarg" transfer-ownership="full" direction="inout">
+            <type name="int"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="inout3" c:identifier="annotation_object_inout3">
+        <return-value>
+          <type name="int"/>
+        </return-value>
+        <parameters>
+          <parameter name="inoutarg" transfer-ownership="full" direction="inout" allow-none="1">
+            <type name="int"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="in" c:identifier="annotation_object_in">
+        <return-value>
+          <type name="int"/>
+        </return-value>
+        <parameters>
+          <parameter name="inarg">
+            <type name="int"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="calleeowns" c:identifier="annotation_object_calleeowns">
+        <return-value>
+          <type name="int"/>
+        </return-value>
+        <parameters>
+          <parameter name="toown" transfer-ownership="full" direction="out">
+            <type name="GObject.Object"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="calleesowns" c:identifier="annotation_object_calleesowns">
+        <return-value>
+          <type name="int"/>
+        </return-value>
+        <parameters>
+          <parameter name="toown1" transfer-ownership="full" direction="out">
+            <type name="GObject.Object"/>
+          </parameter>
+          <parameter name="toown2" direction="out">
+            <type name="GObject.Object"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="get_strings" c:identifier="annotation_object_get_strings">
+        <return-value transfer-ownership="full">
+          <type name="GLib.List">
+            <type name="utf8"/>
+          </type>
+        </return-value>
+      </method>
+      <method name="get_objects" c:identifier="annotation_object_get_objects">
+        <return-value transfer-ownership="container">
+          <type name="GLib.SList">
+            <type name="GObject.Object"/>
+          </type>
+        </return-value>
+      </method>
+      <method name="use_buffer" c:identifier="annotation_object_use_buffer">
+        <return-value>
+          <type name="none"/>
+        </return-value>
+        <parameters>
+          <parameter name="bytes">
+            <array zero-terminated="1">
+              <type name="uint8"/>
+            </array>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="compute_sum" c:identifier="annotation_object_compute_sum">
+        <return-value>
+          <type name="none"/>
+        </return-value>
+        <parameters>
+          <parameter name="nums">
+            <array zero-terminated="1">
+              <type name="int"/>
+            </array>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="compute_sum_n" c:identifier="annotation_object_compute_sum_n">
+        <return-value>
+          <type name="none"/>
+        </return-value>
+        <parameters>
+          <parameter name="nums">
+            <array length="2" zero-terminated="1">
+              <type name="int"/>
+            </array>
+          </parameter>
+          <parameter name="n_nums">
+            <type name="int"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="do_not_use" c:identifier="annotation_object_do_not_use" deprecated="1">
+        <return-value>
+          <type name="GObject.Object"/>
+        </return-value>
+      </method>
+    </class>
+    <record name="ObjectClass">
+      <field name="parent_class" offset="0">
+        <type name="GObject.ObjectClass"/>
+      </field>
+    </record>
+  </namespace>
+</repository>
