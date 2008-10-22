@@ -901,7 +901,7 @@
 
 2008-09-18  Colin Walters  <walters@verbum.org>
 
-    Bug 522384: Use SHLIB_SUFFIX intead of G_MODULE_SUFFIX for Darwin
+    Bug 552384: Use SHLIB_SUFFIX intead of G_MODULE_SUFFIX for Darwin
 
     On Darwin, the suffix for installed shared libraries (.dylib) is
     different from loadable modules (.so).  We use a bit of magic shell
