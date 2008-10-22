@@ -7,6 +7,30 @@
   <include name="GObject" version="2.0"/>
   <include name="utility" version="1.0"/>
   <namespace name="annotation" version="1.0" shared-library="annotation">
+    <callback name="Callback" c:type="AnnotationCallback">
+      <return-value transfer-ownership="none">
+        <type name="int" c:type="gint*"/>
+      </return-value>
+      <parameters>
+        <parameter name="in" transfer-ownership="none">
+          <type name="int" c:type="gint*"/>
+        </parameter>
+      </parameters>
+    </callback>
+    <callback name="ListCallback" c:type="AnnotationListCallback">
+      <return-value transfer-ownership="container">
+        <type name="GLib.List" c:type="GList*">
+          <type name="utf8"/>
+        </type>
+      </return-value>
+      <parameters>
+        <parameter name="in" transfer-ownership="none">
+          <type name="GLib.List" c:type="GList*">
+            <type name="utf8"/>
+          </type>
+        </parameter>
+      </parameters>
+    </callback>
     <class name="Object"
            c:type="AnnotationObject"
            parent="GObject.Object"

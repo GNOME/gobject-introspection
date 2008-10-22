@@ -3,6 +3,22 @@
 
 #include <glib-object.h>
 
+/**
+ * AnnotationCallback:
+ * @in: (in) (transfer none): array of ints
+ *
+ * Return value: (transfer none): array of ints
+ */
+typedef const gint* (*AnnotationCallback) (const gint *in);
+
+/**
+ * AnnotationListCallback:
+ * @in: (in) (transfer none) (element-type utf8): list of strings
+ *
+ * Return value: (transfer container) (element-type utf8): list of strings
+ */
+typedef GList* (*AnnotationListCallback) (GList *in);
+
 typedef struct _AnnotationObject          AnnotationObject;
 typedef struct _AnnotationObjectClass     AnnotationObjectClass;
 

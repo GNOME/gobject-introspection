@@ -542,8 +542,11 @@ class Transformer(object):
         return union
 
     def _create_callback(self, symbol):
-        parameters = self._create_parameters(symbol.base_type.base_type)
-        retval = self._create_return(symbol.base_type.base_type.base_type)
+        directives = symbol.directives()
+        parameters = self._create_parameters(symbol.base_type.base_type,
+            directives)
+        retval = self._create_return(symbol.base_type.base_type.base_type,
+            directives.get('return', {}))
         if symbol.ident.find('_') > 0:
             name = self.remove_prefix(symbol.ident, True)
         else:

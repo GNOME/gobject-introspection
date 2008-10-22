@@ -1,3 +1,12 @@
+2008-10-22  Tommi Komulainen  <tommi.komulainen@iki.fi>
+
+	Bug 557092 – Callback annotations not used
+
+	* giscanner/transformer.py (_create_callback): use annotations
+	for callbacks
+	* tests/scanner/annotation.h
+	* tests/scanner/annotation-1.0-expected.gir: add tests
+
 2008-10-21  Colin Walters  <walters@verbum.org>
 
 	* giscanner/scannerlexer.l: Don't require trailing whitespace after
