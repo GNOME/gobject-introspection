@@ -1,5 +1,15 @@
 2008-10-22  Tommi Komulainen  <tommi.komulainen@iki.fi>
 
+	Bug 557379 – g-ir-generate not writing the 'abstract' attribute
+
+	* tests/scanner/drawable-1.0-expected.tgir:
+	* tests/scanner/drawable-injected-1.0-expected.tgir:
+	* tests/scanner/foo-1.0-expected.tgir:
+	* tools/generate.c (write_object_info): write 'abstract'
+	attribute for classes
+
+2008-10-22  Tommi Komulainen  <tommi.komulainen@iki.fi>
+
 	Bug 557377 – Add test to ensure annotations survive the roundtrip via typelib
 
 	* tests/scanner/Makefile.am:

@@ -7,7 +7,7 @@
   <include name="GObject" version="2.0"/>
   <include name="GLib" version="2.0"/>
   <namespace name="drawable" version="1.0" shared-library="drawable">
-    <class name="TestDrawable" parent="GObject.Object" glib:type-name="TestDrawable" glib:get-type="test_drawable_get_type">
+    <class name="TestDrawable" parent="GObject.Object" abstract="1" glib:type-name="TestDrawable" glib:get-type="test_drawable_get_type">
       <field name="parent_instance" offset="0">
         <type name="GObject.Object"/>
       </field>

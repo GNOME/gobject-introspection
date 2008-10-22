@@ -115,7 +115,7 @@
         <type name="GObject.ObjectClass"/>
       </field>
     </record>
-    <class name="Subobject" parent="Object" glib:type-name="FooSubobject" glib:get-type="foo_subobject_get_type">
+    <class name="Subobject" parent="Object" abstract="1" glib:type-name="FooSubobject" glib:get-type="foo_subobject_get_type">
       <implements name="Interface"/>
       <field name="parent_instance" offset="0">
         <type name="GObject.Object"/>
