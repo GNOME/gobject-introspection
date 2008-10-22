@@ -1,5 +1,21 @@
 2008-10-22  Tommi Komulainen  <tommi.komulainen@iki.fi>
 
+	Bug 557405 – Use 'allow-none' consistently
+
+	* docs/typelib-format.txt:
+	* girepository/ginfo.c (g_arg_info_may_be_null):
+	* girepository/girnode.c (g_ir_node_build_typelib):
+	* girepository/girnode.h (struct _GIrNodeParam):
+	* girepository/girparser.c (start_parameter):
+	* girepository/girwriter.c (function_generate):
+	* girepository/gtypelib.h (ArgBlob):
+	* tests/errors.gir:
+	* tests/function.gir:
+	* tools/generate.c (write_callable_info): Use 'allow-none'
+	consistently throughout
+
+2008-10-22  Tommi Komulainen  <tommi.komulainen@iki.fi>
+
 	Bug 557092 – Callback annotations not used
 
 	* giscanner/transformer.py (_create_callback): use annotations

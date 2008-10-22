@@ -17,7 +17,7 @@
     <function name="test1" symbol="test1">
       <return-type type="gboolean" />
       <parameters>
-        <parameter name="p1" type="gint" direction="in" null-ok="1" />
+        <parameter name="p1" type="gint" direction="in" allow-none="1" />
         <parameter name="p2" type="GError<Errors1,Errors2>*" transfer="full" direction="out" />
       </parameters>
     </function>

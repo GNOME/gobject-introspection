@@ -380,7 +380,7 @@ struct ArgBlob
   guint          in                           : 1;
   guint          out                          : 1;
   guint          dipper                       : 1;
-  guint          null_ok                      : 1;
+  guint          allow_none                   : 1;
   guint          optional                     : 1;
   guint          transfer_ownership           : 1;
   guint          transfer_container_ownership : 1;
@@ -403,11 +403,12 @@ out:      The parameter is used to return an output of the function.
 dipper:   The parameter is a pointer to a struct or object that will 
           receive an output of the function. 
 
-null_ok:  Only meaningful for types which are passed as pointers.
+allow_none:
+          Only meaningful for types which are passed as pointers.
           For an in parameter, indicates if it is ok to pass NULL in, for 
           an out parameter, whether it may return NULL. Note that NULL is a 
-          valid GList and GSList value, thus null_ok will normally be set for 
-          parameters of these types.
+          valid GList and GSList value, thus allow_none will normally be set
+          for parameters of these types.
 
 optional:          
           For an out parameter, indicates that NULL may be passed in
