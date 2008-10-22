@@ -1,3 +1,8 @@
+2008-10-22  Lucas Rocha  <lucasr@gnome.org>
+
+	* girepository/girmodule.c, girepository/gtypelib.c,
+	girepository/girparser.[ch]: fix some build warnings.
+
 2008-10-22  Tommi Komulainen  <tommi.komulainen@iki.fi>
 
 	Bug 557405 – Use 'allow-none' consistently
