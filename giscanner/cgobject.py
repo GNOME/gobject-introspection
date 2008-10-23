@@ -36,15 +36,35 @@ from ctypes.util import find_library
 
 # Constants
 
-# FIXME: Are these stable?
-TYPE_INVALID = 0
-TYPE_INTERFACE = 8
-TYPE_ENUM = 48
-TYPE_FLAGS = 52
-TYPE_STRING = 64
-TYPE_POINTER = 68
-TYPE_BOXED = 72
-TYPE_OBJECT = 80
+# from gobject/gtype.h
+
+
+def _make_fundamental(x):
+    G_TYPE_FUNDAMENTAL_SHIFT = 2
+    return x << G_TYPE_FUNDAMENTAL_SHIFT
+
+
+TYPE_INVALID = _make_fundamental(0)
+TYPE_NONE = _make_fundamental(1)
+TYPE_INTERFACE = _make_fundamental(2)
+TYPE_CHAR = _make_fundamental(3)
+TYPE_UCHAR = _make_fundamental(4)
+TYPE_BOOLEAN = _make_fundamental(5)
+TYPE_INT = _make_fundamental(6)
+TYPE_UINT = _make_fundamental(7)
+TYPE_LONG = _make_fundamental(8)
+TYPE_ULONG = _make_fundamental(9)
+TYPE_INT64 = _make_fundamental(10)
+TYPE_UINT64 = _make_fundamental(11)
+TYPE_ENUM = _make_fundamental(12)
+TYPE_FLAGS = _make_fundamental(13)
+TYPE_FLOAT = _make_fundamental(14)
+TYPE_DOUBLE = _make_fundamental(15)
+TYPE_STRING = _make_fundamental(16)
+TYPE_POINTER = _make_fundamental(17)
+TYPE_BOXED = _make_fundamental(18)
+TYPE_PARAM = _make_fundamental(19)
+TYPE_OBJECT = _make_fundamental(20)
 
 # Typedefs
 
@@ -281,4 +301,3 @@ def signal_list(type_id):
         yield info
 
 TYPE_GTYPE = type_from_name('GType')
-TYPE_POINTER = type_from_name('gpointer')
