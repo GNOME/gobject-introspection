@@ -487,6 +487,8 @@ class Transformer(object):
         options = self._parse_options(options)
         if symbol.type == CSYMBOL_TYPE_ELLIPSIS:
             ptype = Varargs()
+            if 'transfer' not in options:
+                options['transfer'] = ['none']
         else:
             ptype = self._create_type(symbol.base_type, options, True)
         param = Parameter(symbol.ident, ptype)

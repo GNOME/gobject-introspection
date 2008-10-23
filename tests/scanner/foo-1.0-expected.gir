@@ -77,7 +77,7 @@
           <parameter name="x" transfer-ownership="none">
             <type name="int" c:type="int"/>
           </parameter>
-          <parameter>
+          <parameter transfer-ownership="none">
             <varargs>
             </varargs>
           </parameter>
