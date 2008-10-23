@@ -799,10 +799,9 @@ class GLibTransformer(object):
             is_out = (param.direction != PARAM_DIRECTION_IN)
         else:
             is_out = True
-        if (is_out and
-            (param.transfer is None or param.transfer_inferred) and
-            is_object):
-            param.transfer = 'full'
+        if param.transfer is None or param.transfer_inferred:
+            if is_out and is_object:
+                param.transfer = 'full'
 
     def _adjust_throws(self, func):
         if func.parameters == []:
