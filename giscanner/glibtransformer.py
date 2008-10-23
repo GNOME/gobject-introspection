@@ -781,6 +781,19 @@ class GLibTransformer(object):
     def _adjust_transfer(self, param):
         # Do GLib/GObject-specific type transformations here
 
+        is_object = None
+        if hasattr(param.type, '_gtype'):
+            ftype = cgobject.type_fundamental(param.type._gtype)
+            assert ftype != cgobject.TYPE_INVALID, param.type._gtype
+
+            is_object = ftype in [cgobject.TYPE_OBJECT,
+                                  cgobject.TYPE_INTERFACE]
+
+        if is_object is None:
+            is_object = (param.type.name == 'GObject.Object' or
+                         (self._namespace_name == 'GObject' and
+                          param.type.name == 'Object'))
+
         # Default to full transfer for GObjects
         if isinstance(param, Parameter):
             is_out = (param.direction != PARAM_DIRECTION_IN)
@@ -788,9 +801,7 @@ class GLibTransformer(object):
             is_out = True
         if (is_out and
             (param.transfer is None or param.transfer_inferred) and
-            (param.type.name == 'GObject.Object' or
-             (self._namespace_name == 'GObject'
-              and param.type.name == 'Object'))):
+            is_object):
             param.transfer = 'full'
 
     def _adjust_throws(self, func):
