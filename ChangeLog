@@ -1,19 +1,15 @@
-2008-10-23  Johan Bilien  <jobi@via.ecp.fr>
+2008-10-23  Colin Walters  <walters@verbum.org>
 
-	Bug 557468 – Support for GI_TYPELIB_PATH
+	Bug 556739 - transfer ownership
 
-	* girepository/girepository.c: if the GI_TYPELIB_PATH is set, add the
-	provided paths to the global search path.
-
-2008-10-22  Tommi Komulainen  <tommi.komulainen@iki.fi>
-
-	Bug 557379 – g-ir-generate not writing the 'abstract' attribute
-
-	* tests/scanner/drawable-1.0-expected.tgir:
-	* tests/scanner/drawable-injected-1.0-expected.tgir:
-	* tests/scanner/foo-1.0-expected.tgir:
-	* tools/generate.c (write_object_info): write 'abstract'
-	attribute for classes
+	* giscanner/ast.py: Refactor Parameter/Return to share
+	common attributes.  Add transfer_inferred attribute
+	which says whether or not we made a guess.
+	* giscanner/transformer.py: Add much more extensive
+	heuristics around parameter and return transfer.
+	* giscanner/glibtransformer.py: Adjust to inspect
+	transfer_inferred.
+	* tests/*: Adjust.
 
 2008-10-22  Tommi Komulainen  <tommi.komulainen@iki.fi>
 
@@ -30,6 +26,23 @@
 
 	The expectations are as currently produced by g-ir-generate,
 	comparison with the .gir files shows there are differences.
+
+2008-10-23  Johan Bilien  <jobi@via.ecp.fr>
+
+	Bug 557468 – Support for GI_TYPELIB_PATH
+
+	* girepository/girepository.c: if the GI_TYPELIB_PATH is set, add the
+	provided paths to the global search path.
+
+2008-10-22  Tommi Komulainen  <tommi.komulainen@iki.fi>
+
+	Bug 557379 – g-ir-generate not writing the 'abstract' attribute
+
+	* tests/scanner/drawable-1.0-expected.tgir:
+	* tests/scanner/drawable-injected-1.0-expected.tgir:
+	* tests/scanner/foo-1.0-expected.tgir:
+	* tools/generate.c (write_object_info): write 'abstract'
+	attribute for classes
 
 2008-10-22  Lucas Rocha  <lucasr@gnome.org>
 
