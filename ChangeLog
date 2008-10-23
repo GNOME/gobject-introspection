@@ -1,5 +1,20 @@
 2008-10-23  Tommi Komulainen  <tommi.komulainen@iki.fi>
 
+	* giscanner/cgobject.py: build fundamental types same way as glib
+
+	* giscanner/glibtransformer.py (_type_from_gtype): record GType
+	when constructing the Type from it
+
+	* giscanner/glibtransformer.py (_adjust_transfer): Check whether
+	the parameter is a GObject from its GType, if available.
+
+	* giscanner/glibtransformer.py (_adjust_transfer):
+	* tests/scanner/foo-1.0-expected.gir:
+	* tests/scanner/foo-1.0-expected.tgir: deduce
+	transfer-ownership from GTypes
+
+2008-10-23  Tommi Komulainen  <tommi.komulainen@iki.fi>
+
 	* giscanner/transformer.py (_create_parameter):
 	* tests/scanner/foo-1.0-expected.gir: make varargs
 	transfer-ownership="none"
