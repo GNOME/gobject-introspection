@@ -2,7 +2,9 @@ AM_CFLAGS = $(GOBJECT_CFLAGS)
 AM_LDFLAGS = -module -avoid-version
 LIBS = $(GOBJECT_LIBS)
 
-noinst_LTLIBRARIES = libgitesttypes.la
+testtypes_LTLIBRARIES = libgitesttypes.la
+testtypesdir = $(prefix)/unused
+install-testtypesLTLIBRARIES: # prevent it from being installed
 
 libgitesttypes_la_SOURCES = $(srcdir)/gitesttypes.c $(srcdir)/gitesttypes.h
 
