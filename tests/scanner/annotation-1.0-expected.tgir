@@ -8,11 +8,11 @@
   <include name="GLib" version="2.0"/>
   <namespace name="annotation" version="1.0" shared-library="annotation">
     <callback name="Callback">
-      <return-value>
+      <return-value transfer-ownership="none">
         <type name="int"/>
       </return-value>
       <parameters>
-        <parameter name="in">
+        <parameter name="in" transfer-ownership="none">
           <type name="int"/>
         </parameter>
       </parameters>
@@ -24,7 +24,7 @@
         </type>
       </return-value>
       <parameters>
-        <parameter name="in">
+        <parameter name="in" transfer-ownership="none">
           <type name="GLib.List">
             <type name="utf8"/>
           </type>
@@ -36,12 +36,12 @@
         <type name="GObject.Object"/>
       </field>
       <method name="method" c:identifier="annotation_object_method">
-        <return-value>
+        <return-value transfer-ownership="none">
           <type name="int"/>
         </return-value>
       </method>
       <method name="out" c:identifier="annotation_object_out">
-        <return-value>
+        <return-value transfer-ownership="none">
           <type name="int"/>
         </return-value>
         <parameters>
@@ -51,12 +51,12 @@
         </parameters>
       </method>
       <method name="create_object" c:identifier="annotation_object_create_object">
-        <return-value>
+        <return-value transfer-ownership="full">
           <type name="GObject.Object"/>
         </return-value>
       </method>
       <method name="allow_none" c:identifier="annotation_object_allow_none">
-        <return-value>
+        <return-value transfer-ownership="full">
           <type name="GObject.Object"/>
         </return-value>
         <parameters>
@@ -66,12 +66,12 @@
         </parameters>
       </method>
       <method name="notrans" c:identifier="annotation_object_notrans">
-        <return-value>
+        <return-value transfer-ownership="none">
           <type name="GObject.Object"/>
         </return-value>
       </method>
       <method name="inout" c:identifier="annotation_object_inout">
-        <return-value>
+        <return-value transfer-ownership="none">
           <type name="int"/>
         </return-value>
         <parameters>
@@ -81,7 +81,7 @@
         </parameters>
       </method>
       <method name="inout2" c:identifier="annotation_object_inout2">
-        <return-value>
+        <return-value transfer-ownership="none">
           <type name="int"/>
         </return-value>
         <parameters>
@@ -91,7 +91,7 @@
         </parameters>
       </method>
       <method name="inout3" c:identifier="annotation_object_inout3">
-        <return-value>
+        <return-value transfer-ownership="none">
           <type name="int"/>
         </return-value>
         <parameters>
@@ -101,17 +101,17 @@
         </parameters>
       </method>
       <method name="in" c:identifier="annotation_object_in">
-        <return-value>
+        <return-value transfer-ownership="none">
           <type name="int"/>
         </return-value>
         <parameters>
-          <parameter name="inarg">
+          <parameter name="inarg" transfer-ownership="none">
             <type name="int"/>
           </parameter>
         </parameters>
       </method>
       <method name="calleeowns" c:identifier="annotation_object_calleeowns">
-        <return-value>
+        <return-value transfer-ownership="none">
           <type name="int"/>
         </return-value>
         <parameters>
@@ -121,14 +121,14 @@
         </parameters>
       </method>
       <method name="calleesowns" c:identifier="annotation_object_calleesowns">
-        <return-value>
+        <return-value transfer-ownership="none">
           <type name="int"/>
         </return-value>
         <parameters>
           <parameter name="toown1" transfer-ownership="full" direction="out">
             <type name="GObject.Object"/>
           </parameter>
-          <parameter name="toown2" direction="out">
+          <parameter name="toown2" transfer-ownership="none" direction="out">
             <type name="GObject.Object"/>
           </parameter>
         </parameters>
@@ -148,11 +148,11 @@
         </return-value>
       </method>
       <method name="use_buffer" c:identifier="annotation_object_use_buffer">
-        <return-value>
+        <return-value transfer-ownership="none">
           <type name="none"/>
         </return-value>
         <parameters>
-          <parameter name="bytes">
+          <parameter name="bytes" transfer-ownership="none">
             <array zero-terminated="1">
               <type name="uint8"/>
             </array>
@@ -160,11 +160,11 @@
         </parameters>
       </method>
       <method name="compute_sum" c:identifier="annotation_object_compute_sum">
-        <return-value>
+        <return-value transfer-ownership="none">
           <type name="none"/>
         </return-value>
         <parameters>
-          <parameter name="nums">
+          <parameter name="nums" transfer-ownership="none">
             <array zero-terminated="1">
               <type name="int"/>
             </array>
@@ -172,22 +172,22 @@
         </parameters>
       </method>
       <method name="compute_sum_n" c:identifier="annotation_object_compute_sum_n">
-        <return-value>
+        <return-value transfer-ownership="none">
           <type name="none"/>
         </return-value>
         <parameters>
-          <parameter name="nums">
+          <parameter name="nums" transfer-ownership="none">
             <array length="2" zero-terminated="1">
               <type name="int"/>
             </array>
           </parameter>
-          <parameter name="n_nums">
+          <parameter name="n_nums" transfer-ownership="none">
             <type name="int"/>
           </parameter>
         </parameters>
       </method>
       <method name="do_not_use" c:identifier="annotation_object_do_not_use" deprecated="1">
-        <return-value>
+        <return-value transfer-ownership="full">
           <type name="GObject.Object"/>
         </return-value>
       </method>

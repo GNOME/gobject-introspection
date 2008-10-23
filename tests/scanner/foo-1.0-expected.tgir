@@ -19,34 +19,34 @@
         <type name="GObject.Object"/>
       </field>
       <constructor name="new" c:identifier="foo_object_new">
-        <return-value>
+        <return-value transfer-ownership="full">
           <type name="GObject.Object"/>
         </return-value>
       </constructor>
       <method name="external_type" c:identifier="foo_object_external_type">
-        <return-value>
+        <return-value transfer-ownership="full">
           <type name="GObject.Object"/>
         </return-value>
       </method>
       <method name="various" c:identifier="foo_object_various">
-        <return-value>
+        <return-value transfer-ownership="none">
           <type name="none"/>
         </return-value>
         <parameters>
-          <parameter name="data">
+          <parameter name="data" transfer-ownership="none">
             <type name="any"/>
           </parameter>
-          <parameter name="some_type">
+          <parameter name="some_type" transfer-ownership="none">
             <type name="GType"/>
           </parameter>
         </parameters>
       </method>
       <method name="with_tdef" c:identifier="foo_object_with_tdef">
-        <return-value>
+        <return-value transfer-ownership="none">
           <type name="none"/>
         </return-value>
         <parameters>
-          <parameter name="blah">
+          <parameter name="blah" transfer-ownership="none">
             <type name="GLib.SList">
               <type name="any"/>
             </type>
@@ -58,23 +58,23 @@
           <type name="any"/>
         </return-value>
         <parameters>
-          <parameter name="target">
+          <parameter name="target" transfer-ownership="none">
             <type name="utf8"/>
           </parameter>
         </parameters>
       </method>
       <method name="is_it_time_yet" c:identifier="foo_object_is_it_time_yet">
-        <return-value>
+        <return-value transfer-ownership="none">
           <type name="none"/>
         </return-value>
         <parameters>
-          <parameter name="time">
+          <parameter name="time" transfer-ownership="none">
             <type name="time_t"/>
           </parameter>
         </parameters>
       </method>
       <method name="get_name" c:identifier="foo_object_get_name">
-        <return-value>
+        <return-value transfer-ownership="none">
           <type name="utf8"/>
         </return-value>
       </method>
@@ -84,11 +84,11 @@
         </return-value>
       </method>
       <method name="handle_glyph" c:identifier="foo_object_handle_glyph">
-        <return-value>
+        <return-value transfer-ownership="none">
           <type name="none"/>
         </return-value>
         <parameters>
-          <parameter name="glyph">
+          <parameter name="glyph" transfer-ownership="none">
             <type name="uint32"/>
           </parameter>
         </parameters>
@@ -104,7 +104,7 @@
           <parameter name="object" transfer-ownership="full">
             <type name="GObject.Object"/>
           </parameter>
-          <parameter name="p0">
+          <parameter name="p0" transfer-ownership="none">
             <type name="any"/>
           </parameter>
         </parameters>
@@ -132,7 +132,7 @@
       </field>
     </record>
     <function name="init" c:identifier="foo_init">
-      <return-value>
+      <return-value transfer-ownership="none">
         <type name="int"/>
       </return-value>
     </function>
@@ -142,21 +142,21 @@
       <member name="delta" value="2"/>
     </enumeration>
     <function name="enum_type_method" c:identifier="foo_enum_type_method">
-      <return-value>
+      <return-value transfer-ownership="none">
         <type name="int"/>
       </return-value>
       <parameters>
-        <parameter name="foo_enum">
+        <parameter name="foo_enum" transfer-ownership="none">
           <type name="EnumType"/>
         </parameter>
       </parameters>
     </function>
     <function name="enum_type_returnv" c:identifier="foo_enum_type_returnv">
-      <return-value>
+      <return-value transfer-ownership="full">
         <type name="EnumType"/>
       </return-value>
       <parameters>
-        <parameter name="x">
+        <parameter name="x" transfer-ownership="none">
           <type name="int"/>
         </parameter>
       </parameters>
@@ -184,30 +184,30 @@
         </return-value>
       </constructor>
       <method name="method" c:identifier="foo_boxed_method">
-        <return-value>
+        <return-value transfer-ownership="none">
           <type name="none"/>
         </return-value>
       </method>
     </record>
     <record name="DBusData" glib:type-name="FooDBusData" glib:get-type="foo_dbus_data_get_type">
       <method name="method" c:identifier="foo_dbus_data_method">
-        <return-value>
+        <return-value transfer-ownership="none">
           <type name="none"/>
         </return-value>
       </method>
     </record>
     <callback name="Callback">
-      <return-value>
+      <return-value transfer-ownership="none">
         <type name="boolean"/>
       </return-value>
       <parameters>
-        <parameter name="foo">
+        <parameter name="foo" transfer-ownership="none">
           <type name="GObject.Object"/>
         </parameter>
-        <parameter name="b">
+        <parameter name="b" transfer-ownership="none">
           <type name="boolean"/>
         </parameter>
-        <parameter name="data">
+        <parameter name="data" transfer-ownership="none">
           <type name="any"/>
         </parameter>
       </parameters>
@@ -236,33 +236,33 @@
       </field>
     </record>
     <function name="method_external_references" c:identifier="foo_method_external_references">
-      <return-value>
+      <return-value transfer-ownership="none">
         <type name="none"/>
       </return-value>
       <parameters>
-        <parameter name="object">
+        <parameter name="object" transfer-ownership="none">
           <type name="GObject.Object"/>
         </parameter>
-        <parameter name="e">
+        <parameter name="e" transfer-ownership="none">
           <type name="EnumType"/>
         </parameter>
-        <parameter name="f">
+        <parameter name="f" transfer-ownership="none">
           <type name="utility.FlagType"/>
         </parameter>
-        <parameter name="s">
+        <parameter name="s" transfer-ownership="none">
           <type name="utility.Struct"/>
         </parameter>
       </parameters>
     </function>
     <function name="rectangle_add" c:identifier="foo_rectangle_add">
-      <return-value>
+      <return-value transfer-ownership="none">
         <type name="none"/>
       </return-value>
       <parameters>
         <parameter name="r1" transfer-ownership="full" direction="inout">
           <type name="Rectangle"/>
         </parameter>
-        <parameter name="r2">
+        <parameter name="r2" transfer-ownership="none">
           <type name="Rectangle"/>
         </parameter>
       </parameters>
@@ -272,16 +272,16 @@
         <type name="Rectangle"/>
       </return-value>
       <parameters>
-        <parameter name="x">
+        <parameter name="x" transfer-ownership="none">
           <type name="int"/>
         </parameter>
-        <parameter name="y">
+        <parameter name="y" transfer-ownership="none">
           <type name="int"/>
         </parameter>
-        <parameter name="width">
+        <parameter name="width" transfer-ownership="none">
           <type name="int"/>
         </parameter>
-        <parameter name="height">
+        <parameter name="height" transfer-ownership="none">
           <type name="int"/>
         </parameter>
       </parameters>
@@ -322,20 +322,20 @@
           <type name="BRect"/>
         </return-value>
         <parameters>
-          <parameter name="x">
+          <parameter name="x" transfer-ownership="none">
             <type name="double"/>
           </parameter>
-          <parameter name="y">
+          <parameter name="y" transfer-ownership="none">
             <type name="double"/>
           </parameter>
         </parameters>
       </constructor>
       <method name="add" c:identifier="foo_brect_add">
-        <return-value>
+        <return-value transfer-ownership="none">
           <type name="none"/>
         </return-value>
         <parameters>
-          <parameter name="b2">
+          <parameter name="b2" transfer-ownership="none">
             <type name="BRect"/>
           </parameter>
         </parameters>
@@ -357,7 +357,7 @@
         </return-value>
       </constructor>
       <method name="get_contained_type" c:identifier="foo_bunion_get_contained_type">
-        <return-value>
+        <return-value transfer-ownership="none">
           <type name="int"/>
         </return-value>
       </method>
@@ -368,31 +368,31 @@
       </field>
     </union>
     <function name="test_unsigned_qualifier" c:identifier="foo_test_unsigned_qualifier">
-      <return-value>
+      <return-value transfer-ownership="none">
         <type name="none"/>
       </return-value>
       <parameters>
-        <parameter name="unsigned_param">
+        <parameter name="unsigned_param" transfer-ownership="none">
           <type name="uint"/>
         </parameter>
       </parameters>
     </function>
     <function name="test_unsigned_type" c:identifier="foo_test_unsigned_type">
-      <return-value>
+      <return-value transfer-ownership="none">
         <type name="none"/>
       </return-value>
       <parameters>
-        <parameter name="unsigned_param">
+        <parameter name="unsigned_param" transfer-ownership="none">
           <type name="uint"/>
         </parameter>
       </parameters>
     </function>
     <function name="test_string_array" c:identifier="foo_test_string_array">
-      <return-value>
+      <return-value transfer-ownership="none">
         <type name="none"/>
       </return-value>
       <parameters>
-        <parameter name="array">
+        <parameter name="array" transfer-ownership="none">
           <array zero-terminated="1">
             <type name="utf8"/>
           </array>
@@ -400,11 +400,11 @@
       </parameters>
     </function>
     <function name="test_string_array_with_g" c:identifier="foo_test_string_array_with_g">
-      <return-value>
+      <return-value transfer-ownership="none">
         <type name="none"/>
       </return-value>
       <parameters>
-        <parameter name="array">
+        <parameter name="array" transfer-ownership="none">
           <array zero-terminated="1">
             <type name="utf8"/>
           </array>

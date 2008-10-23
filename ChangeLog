@@ -1,5 +1,26 @@
 2008-10-23  Tommi Komulainen  <tommi.komulainen@iki.fi>
 
+	Bug 556739 – transfer-ownership attribute should be mandatory in .gir
+
+	* girepository/girparser.c (parse_param_transfer):
+	* giscanner/transformer.py (_create_parameter, _create_return):
+	* giscanner/girwriter.py (_write_return, _write_parameter):
+	* tools/generate.c (write_callable_info): always write and
+	require "transfer-ownership" for return-values and parameters
+
+	* tests/boxed.gir:
+	* tests/invoke/testfns-1.0.gir:
+	* tests/object.gir:
+	* tests/scanner/DrawableAdditions.xml:
+	* tests/scanner/GtkFrob-1.0-expected.tgir:
+	* tests/scanner/annotation-1.0-expected.tgir:
+	* tests/scanner/drawable-1.0-expected.tgir:
+	* tests/scanner/drawable-injected-1.0-expected.gir:
+	* tests/scanner/drawable-injected-1.0-expected.tgir:
+	* tests/scanner/foo-1.0-expected.tgir: Updated
+
+2008-10-23  Tommi Komulainen  <tommi.komulainen@iki.fi>
+
 	* giscanner/cgobject.py: build fundamental types same way as glib
 
 	* giscanner/glibtransformer.py (_type_from_gtype): record GType

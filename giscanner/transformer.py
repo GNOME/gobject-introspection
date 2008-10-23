@@ -509,6 +509,8 @@ class Transformer(object):
                 print 'Unhandled parameter annotation option: %r' % (
                     option, )
         self._handle_generic_param_options(param, options)
+
+        assert param.transfer is not None, param
         return param
 
     def _create_return(self, source_type, options=None):
@@ -527,6 +529,8 @@ class Transformer(object):
             else:
                 print 'Unhandled return type annotation option: %r' % (
                     option, )
+
+        assert return_.transfer is not None, return_
         return return_
 
     def _create_const(self, symbol):

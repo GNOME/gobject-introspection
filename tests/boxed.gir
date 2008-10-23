@@ -15,14 +15,14 @@
         <type name="uint32"/>
       </field>
       <method name="frob_boxed1" c:identifier="frob_boxed1">
-        <return-value>
+        <return-value transfer-ownership="none">
           <type name="none"/>
         </return-value>
         <parameters>
-          <parameter name="box">
+          <parameter name="box" transfer-ownership="none">
             <type name="BoxedType1"/>
           </parameter>
-          <parameter name="w">
+          <parameter name="w" transfer-ownership="none">
             <type name="GLib.List">
               <type name="boxed2"/>
             </type>
@@ -39,11 +39,11 @@
         </parameters>
       </method>
       <method name="lart" c:identifier="lart">
-        <return-value>
+        <return-value transfer-ownership="none">
           <type name="boolean"/>
         </return-value>
         <parameters>
-          <parameter name="box">
+          <parameter name="box" transfer-ownership="none">
             <type name="boxed2"/>
           </parameter>
           <parameter name="val" transfer-ownership="full" direction="inout">
@@ -53,14 +53,14 @@
       </method>
     </glib:boxed>
     <function name="freefunc" c:identifier="freefunc" deprecated="1">
-      <return-value>
+      <return-value transfer-ownership="none">
         <type name="boolean"/>
       </return-value>
       <parameters>
-        <parameter name="v1">
+        <parameter name="v1" transfer-ownership="none">
           <type name="int"/>
         </parameter>
-        <parameter name="val2">
+        <parameter name="val2" transfer-ownership="none">
           <type name="int"/>
         </parameter>
       </parameters>

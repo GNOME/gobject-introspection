@@ -62,7 +62,7 @@
         </parameters>
       </method>
       <method name="get_width" c:identifier="girepo_test_drawable_get_width">
-        <return-value>
+        <return-value transfer-ownership="none">
           <type name="int" c:type="gint"/>
         </return-value>
       </method>

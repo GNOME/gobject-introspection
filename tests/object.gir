@@ -12,41 +12,41 @@
         <type name="int"/>
       </property>
       <glib:signal name="signal1" when="LAST">
-        <return-value>
+        <return-value transfer-ownership="none">
           <type name="boolean"/>
         </return-value>
         <parameters>
-          <parameter name="obj">
+          <parameter name="obj" transfer-ownership="none">
             <type name="Object1"/>
           </parameter>
         </parameters>
       </glib:signal>
       <glib:signal name="signal2" when="FIRST" no-recurse="1" detailed="1" action="1" no-hooks="1">
-        <return-value>
+        <return-value transfer-ownership="none">
           <type name="none"/>
         </return-value>
         <parameters>
-          <parameter name="obj">
+          <parameter name="obj" transfer-ownership="none">
             <type name="Object1"/>
           </parameter>
         </parameters>
       </glib:signal>
       <vfunc name="vfunc1" offset="20">
-        <return-value>
+        <return-value transfer-ownership="none">
           <type name="Object2"/>
         </return-value>
         <parameters>
-          <parameter name="param1">
+          <parameter name="param1" transfer-ownership="none">
             <type name="Object1"/>
           </parameter>
         </parameters>
       </vfunc>
       <vfunc name="vfunc2" offset="24">
-        <return-value>
+        <return-value transfer-ownership="none">
           <type name="Object2"/>
         </return-value>
         <parameters>
-          <parameter name="param1">
+          <parameter name="param1" transfer-ownership="none">
             <type name="Object1"/>
           </parameter>
         </parameters>

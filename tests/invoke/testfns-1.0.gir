@@ -5,72 +5,72 @@
             xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
   <namespace name="test" version="1.0">
     <function name="test1" c:identifier="test1">
-      <return-value>
+      <return-value transfer-ownership="none">
         <type name="int" c:type="gint"/>
       </return-value>
       <parameters>
-        <parameter name="in" direction="in">
+        <parameter name="in" direction="in" transfer-ownership="none">
           <type name="int" c:type="gint"/>
         </parameter>
       </parameters>
     </function>
 
     <function name="test2" c:identifier="test2">
-      <return-value>
+      <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
-        <parameter name="in" c:type="gint" direction="in">
+        <parameter name="in" c:type="gint" direction="in" transfer-ownership="none">
           <type name="int" c:type="gint"/>
         </parameter>
-        <parameter name="out" c:type="gint" direction="out">
+        <parameter name="out" c:type="gint" direction="out" transfer-ownership="none">
           <type name="int" c:type="gint"/>
         </parameter>
       </parameters>
     </function>
 
     <function name="test3" c:identifier="test3">
-      <return-value>
+      <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
-        <parameter name="inout" c:type="gint" direction="inout">
+        <parameter name="inout" c:type="gint" direction="inout" transfer-ownership="none">
           <type name="int" c:type="gint"/>
         </parameter>
       </parameters>
     </function>
 
     <function name="test4" c:identifier="test4">
-      <return-value>
+      <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
-        <parameter name="blurb" direction="in">
+        <parameter name="blurb" direction="in" transfer-ownership="none">
           <type name="utf8" c:type="gchar*"/>
         </parameter>
       </parameters>
     </function>
 
     <function name="test5" c:identifier="test5">
-      <return-value>
+      <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
         <parameter name="blurb" direction="out" transfer-ownership="full">
           <type name="utf8" c:type="gchar*"/>
         </parameter>
-        <parameter name="len" direction="out">
+        <parameter name="len" direction="out" transfer-ownership="none">
           <type name="int" c:type="gint"/>
         </parameter>
       </parameters>
     </function>
 
     <function name="test6" c:identifier="test6">
-      <return-value>
+      <return-value transfer-ownership="none">
         <type name="int" c:type="gint"/>
       </return-value>
       <parameters>
-        <parameter name="list" direction="in">
+        <parameter name="list" direction="in" transfer-ownership="none">
           <type name="GLib.List<int>*" c:type="GList*"/>
         </parameter>
       </parameters>
@@ -82,14 +82,14 @@
          <type name="utf8" c:type="gchar*"/>
       </return-value>
       <parameters>
-        <parameter name="list" direction="in">
+        <parameter name="list" direction="in" transfer-ownership="none">
           <type name="GLib.List<utf8>*" c:type="GList*"/>
         </parameter>
       </parameters>
     </function>
 
     <function name="broken" c:identifier="broken">
-      <return-value>
+      <return-value transfer-ownership="none">
          <type name="none" c:type="void"/>
       </return-value>
     </function>

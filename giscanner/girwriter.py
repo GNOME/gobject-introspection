@@ -124,10 +124,10 @@ class GIRWriter(XMLWriter):
         if not return_:
             return
 
+        assert return_.transfer is not None, return_
+
         attrs = []
-        if return_.transfer:
-            attrs.append(('transfer-ownership',
-                          return_.transfer))
+        attrs.append(('transfer-ownership', return_.transfer))
         with self.tagcontext('return-value', attrs):
             self._write_type(return_.type)
 
@@ -139,14 +139,15 @@ class GIRWriter(XMLWriter):
                 self._write_parameter(parameter)
 
     def _write_parameter(self, parameter):
+        assert parameter.transfer is not None, parameter
+
         attrs = []
         if parameter.name is not None:
             attrs.append(('name', parameter.name))
         if parameter.direction != 'in':
             attrs.append(('direction', parameter.direction))
-        if parameter.transfer:
-            attrs.append(('transfer-ownership',
-                          parameter.transfer))
+        attrs.append(('transfer-ownership',
+                     parameter.transfer))
         if parameter.allow_none:
             attrs.append(('allow-none', '1'))
         with self.tagcontext('parameter', attrs):

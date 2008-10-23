@@ -12,17 +12,17 @@
         <type name="GObject.Object"/>
       </field>
       <method name="do_foo" c:identifier="test_drawable_do_foo">
-        <return-value>
+        <return-value transfer-ownership="none">
           <type name="none"/>
         </return-value>
         <parameters>
-          <parameter name="x">
+          <parameter name="x" transfer-ownership="none">
             <type name="int"/>
           </parameter>
         </parameters>
       </method>
       <method name="get_origin" c:identifier="test_drawable_get_origin">
-        <return-value>
+        <return-value transfer-ownership="none">
           <type name="none"/>
         </return-value>
         <parameters>
@@ -35,7 +35,7 @@
         </parameters>
       </method>
       <method name="get_size" c:identifier="test_drawable_get_size">
-        <return-value>
+        <return-value transfer-ownership="none">
           <type name="none"/>
         </return-value>
         <parameters>
@@ -48,11 +48,11 @@
         </parameters>
       </method>
       <method name="do_foo_maybe_throw" c:identifier="test_drawable_do_foo_maybe_throw" throws="1">
-        <return-value>
+        <return-value transfer-ownership="none">
           <type name="none"/>
         </return-value>
         <parameters>
-          <parameter name="x">
+          <parameter name="x" transfer-ownership="none">
             <type name="int"/>
           </parameter>
         </parameters>

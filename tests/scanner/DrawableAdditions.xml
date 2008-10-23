@@ -4,7 +4,7 @@
             xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
   <inject path="namespace/class[@name='TestDrawable']">
     <method name="get_width" c:identifier="girepo_test_drawable_get_width">
-      <return-value>
+      <return-value transfer-ownership="none">
         <type name="int" c:type="gint"/>
       </return-value>
     </method>
