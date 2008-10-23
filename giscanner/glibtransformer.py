@@ -784,7 +784,7 @@ class GLibTransformer(object):
         else:
             is_out = True
         if (is_out and
-            param.transfer is None and
+            (param.transfer is None or param.transfer_inferred) and
             (param.type.name == 'GObject.Object' or
              (self._namespace_name == 'GObject'
               and param.type.name == 'Object'))):

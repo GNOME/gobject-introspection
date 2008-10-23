@@ -14,37 +14,37 @@
            glib:type-name="TestDrawable"
            glib:get-type="test_drawable_get_type">
       <method name="do_foo" c:identifier="test_drawable_do_foo">
-        <return-value>
+        <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
-          <parameter name="x">
+          <parameter name="x" transfer-ownership="none">
             <type name="int" c:type="int"/>
           </parameter>
         </parameters>
       </method>
       <method name="get_origin" c:identifier="test_drawable_get_origin">
-        <return-value>
+        <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
-          <parameter name="x" direction="out">
+          <parameter name="x" direction="out" transfer-ownership="full">
             <type name="int" c:type="int*"/>
           </parameter>
-          <parameter name="y" direction="out">
+          <parameter name="y" direction="out" transfer-ownership="full">
             <type name="int" c:type="int*"/>
           </parameter>
         </parameters>
       </method>
       <method name="get_size" c:identifier="test_drawable_get_size">
-        <return-value>
+        <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
-          <parameter name="width" direction="out">
+          <parameter name="width" direction="out" transfer-ownership="full">
             <type name="uint" c:type="guint*"/>
           </parameter>
-          <parameter name="height" direction="out">
+          <parameter name="height" direction="out" transfer-ownership="full">
             <type name="uint" c:type="guint*"/>
           </parameter>
         </parameters>
@@ -52,11 +52,11 @@
       <method name="do_foo_maybe_throw"
               c:identifier="test_drawable_do_foo_maybe_throw"
               throws="1">
-        <return-value>
+        <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
-          <parameter name="x">
+          <parameter name="x" transfer-ownership="none">
             <type name="int" c:type="int"/>
           </parameter>
         </parameters>

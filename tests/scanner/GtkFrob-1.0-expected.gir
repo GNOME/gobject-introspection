@@ -8,7 +8,7 @@
   <namespace name="GtkFrob" version="1.0" shared-library="gtkfrob">
     <function name="language_manager_get_default"
               c:identifier="gtk_frob_language_manager_get_default">
-      <return-value>
+      <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
     </function>

@@ -37,16 +37,16 @@
            glib:type-name="AnnotationObject"
            glib:get-type="annotation_object_get_type">
       <method name="method" c:identifier="annotation_object_method">
-        <return-value>
+        <return-value transfer-ownership="none">
           <type name="int" c:type="gint"/>
         </return-value>
       </method>
       <method name="out" c:identifier="annotation_object_out">
-        <return-value>
+        <return-value transfer-ownership="none">
           <type name="int" c:type="gint"/>
         </return-value>
         <parameters>
-          <parameter name="outarg" direction="out">
+          <parameter name="outarg" direction="out" transfer-ownership="full">
             <type name="int" c:type="int*"/>
           </parameter>
         </parameters>
@@ -73,47 +73,54 @@
         </return-value>
       </method>
       <method name="inout" c:identifier="annotation_object_inout">
-        <return-value>
+        <return-value transfer-ownership="none">
           <type name="int" c:type="gint"/>
         </return-value>
         <parameters>
-          <parameter name="inoutarg" direction="inout">
+          <parameter name="inoutarg"
+                     direction="inout"
+                     transfer-ownership="full">
             <type name="int" c:type="int*"/>
           </parameter>
         </parameters>
       </method>
       <method name="inout2" c:identifier="annotation_object_inout2">
-        <return-value>
+        <return-value transfer-ownership="none">
           <type name="int" c:type="gint"/>
         </return-value>
         <parameters>
-          <parameter name="inoutarg" direction="inout">
+          <parameter name="inoutarg"
+                     direction="inout"
+                     transfer-ownership="full">
             <type name="int" c:type="int*"/>
           </parameter>
         </parameters>
       </method>
       <method name="inout3" c:identifier="annotation_object_inout3">
-        <return-value>
+        <return-value transfer-ownership="none">
           <type name="int" c:type="gint"/>
         </return-value>
         <parameters>
-          <parameter name="inoutarg" direction="inout" allow-none="1">
+          <parameter name="inoutarg"
+                     direction="inout"
+                     transfer-ownership="full"
+                     allow-none="1">
             <type name="int" c:type="int*"/>
           </parameter>
         </parameters>
       </method>
       <method name="in" c:identifier="annotation_object_in">
-        <return-value>
+        <return-value transfer-ownership="none">
           <type name="int" c:type="gint"/>
         </return-value>
         <parameters>
-          <parameter name="inarg">
+          <parameter name="inarg" transfer-ownership="none">
             <type name="int" c:type="int*"/>
           </parameter>
         </parameters>
       </method>
       <method name="calleeowns" c:identifier="annotation_object_calleeowns">
-        <return-value>
+        <return-value transfer-ownership="none">
           <type name="int" c:type="gint"/>
         </return-value>
         <parameters>
@@ -123,7 +130,7 @@
         </parameters>
       </method>
       <method name="calleesowns" c:identifier="annotation_object_calleesowns">
-        <return-value>
+        <return-value transfer-ownership="none">
           <type name="int" c:type="gint"/>
         </return-value>
         <parameters>
@@ -150,11 +157,11 @@
         </return-value>
       </method>
       <method name="use_buffer" c:identifier="annotation_object_use_buffer">
-        <return-value>
+        <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
-          <parameter name="bytes">
+          <parameter name="bytes" transfer-ownership="none">
             <array c:type="guchar*">
               <type name="uint8"/>
             </array>
@@ -162,11 +169,11 @@
         </parameters>
       </method>
       <method name="compute_sum" c:identifier="annotation_object_compute_sum">
-        <return-value>
+        <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
-          <parameter name="nums">
+          <parameter name="nums" transfer-ownership="none">
             <array c:type="int*">
               <type name="int"/>
             </array>
@@ -175,16 +182,16 @@
       </method>
       <method name="compute_sum_n"
               c:identifier="annotation_object_compute_sum_n">
-        <return-value>
+        <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
-          <parameter name="nums">
+          <parameter name="nums" transfer-ownership="none">
             <array length="2" c:type="int*">
               <type name="int"/>
             </array>
           </parameter>
-          <parameter name="n_nums">
+          <parameter name="n_nums" transfer-ownership="none">
             <type name="int" c:type="int"/>
           </parameter>
         </parameters>

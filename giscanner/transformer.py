@@ -26,7 +26,7 @@ from giscanner.ast import (Callback, Enum, Function, Namespace, Member,
                            Type, Alias, Interface, Class, Node, Union,
                            List, Map, Varargs, Constant, type_name_from_ctype,
                            type_names, default_array_types, default_out_types,
-                           TYPE_STRING)
+                           TYPE_STRING, BASIC_GIR_TYPES, TYPE_NONE)
 from giscanner.config import DATADIR
 from .glibast import GLibBoxed
 from giscanner.sourcescanner import (
@@ -311,7 +311,7 @@ class Transformer(object):
             symbol.base_type.base_type.type == CTYPE_FUNCTION):
             node = self._create_callback(symbol)
         else:
-            ftype = self._create_type(symbol.base_type, {})
+            ftype = self._create_type(symbol.base_type, {}, True)
             # Fields are assumed to be read-write
             # (except for Objects, see also glibtransformer.py)
             node = Field(symbol.ident, ftype, symbol.ident,
@@ -361,7 +361,7 @@ class Transformer(object):
         # this ensures we turn e.g. plain "guint" => "int"
         return type_name_from_ctype(derefed)
 
-    def _create_type(self, source_type, options):
+    def _create_type(self, source_type, options, is_param):
         ctype = self._create_source_type(source_type)
         if ctype == 'va_list':
             raise SkipError()
@@ -377,9 +377,10 @@ class Transformer(object):
                 contained_type = self._parse_ctype(param[0])
             else:
                 contained_type = None
-            return List(ctype.replace('*', ''),
-                        ctype,
-                        contained_type)
+            derefed_name = self._parse_ctype(ctype)
+            rettype = List(derefed_name,
+                           ctype,
+                           contained_type)
         elif ctype in self._map_ctypes:
             param = options.get('element-type')
             if param:
@@ -388,31 +389,26 @@ class Transformer(object):
             else:
                 key_type = None
                 value_type = None
-            return Map(ctype.replace('*', ''),
-                       ctype,
-                       key_type, value_type)
+            derefed_name = self._parse_ctype(ctype)
+            rettype = Map(derefed_name,
+                          ctype,
+                          key_type, value_type)
         elif (ctype in default_array_types) or ('array' in options):
-            derefed = ctype[:-1] # strip the *
-            result = Array(ctype,
-                         self._parse_ctype(derefed))
+            derefed_name = ctype[:-1] # strip the *
+            rettype = Array(ctype,
+                            self._parse_ctype(derefed_name))
             array_opts = options.get('array')
             if array_opts:
                 (_, len_name) = array_opts[0].split('=')
-                result.length_param_name = len_name
-            return result
+                rettype.length_param_name = len_name
+        else:
+            derefed_name = self._parse_ctype(ctype)
+            rettype = Type(derefed_name, ctype)
 
-        # string memory management - we just look at 'const'
-        if (type_name_from_ctype(ctype) == TYPE_STRING
-            and 'transfer' not in options):
-            if source_type.base_type.type_qualifier & TYPE_QUALIFIER_CONST:
-                options['transfer'] = ['none']
-            else:
-                options['transfer'] = ['full']
-
-        derefed_name = self._parse_ctype(ctype)
-
-        # deduce direction for some types passed by reference
-        if (not ('out' in options or
+        # Deduce direction for some types passed by reference that
+        # aren't arrays; modifies the options array.
+        if ('array' not in options and
+            not ('out' in options or
                  'in' in options or
                  'inout' in options or
                  'in-out' in options) and
@@ -420,7 +416,57 @@ class Transformer(object):
             derefed_name in default_out_types):
             options['out'] = []
 
-        return Type(derefed_name, ctype)
+        if 'transfer' in options:
+            # Transfer is specified, we don't question it.
+            return rettype
+
+        canontype = type_name_from_ctype(ctype)
+
+        # Since no transfer is specified, we drop into a bunch of
+        # heuristics to guess it.  This mutates the options array to
+        # set the 'transfer' option.
+        # Note that we inferred the transfer
+        options['transfer-inferred'] = []
+        stype = source_type
+        if canontype == TYPE_STRING:
+            # It's a string - we just look at 'const'
+            if source_type.base_type.type_qualifier & TYPE_QUALIFIER_CONST:
+                options['transfer'] = ['none']
+            else:
+                options['transfer'] = ['full']
+        elif 'array' in options or stype.type == CTYPE_ARRAY:
+            # It's rare to mutate arrays in public GObject APIs
+            options['transfer'] = ['none']
+        elif (canontype in BASIC_GIR_TYPES or
+              canontype == TYPE_NONE or
+              stype.type == CTYPE_ENUM):
+            # Basic types default to 'none'
+            options['transfer'] = ['none']
+        elif (stype.type == CTYPE_POINTER and
+              stype.base_type.type_qualifier & TYPE_QUALIFIER_CONST):
+            # Anything with 'const' gets none
+            options['transfer'] = ['none']
+        elif is_param and stype.type == CTYPE_POINTER:
+            # For generic pointer types, let's look at the argument
+            # direction.  An out/inout argument gets full, everything
+            # else none.
+            if ('out' in options or
+                'inout' in options or
+                'in-out' in options):
+                options['transfer'] = ['full']
+            else:
+                options['transfer'] = ['none']
+        else:
+            # For anything else we default to none for parameters;
+            # this covers enums and possibly some other corner cases.
+            # Return values of structures and the like will end up
+            # full.
+            if is_param:
+                options['transfer'] = ['none']
+            else:
+                options['transfer'] = ['full']
+
+        return rettype
 
     def _handle_generic_param_options(self, param, options):
         for option, data in options.iteritems():
@@ -432,13 +478,17 @@ class Transformer(object):
                 else:
                     depth = 'full'
                 param.transfer = depth
+            elif option == 'transfer-inferred':
+                # This is a purely internal flag; we don't expect
+                # people to write it
+                param.transfer_inferred = True
 
     def _create_parameter(self, symbol, options):
         options = self._parse_options(options)
         if symbol.type == CSYMBOL_TYPE_ELLIPSIS:
             ptype = Varargs()
         else:
-            ptype = self._create_type(symbol.base_type, options)
+            ptype = self._create_type(symbol.base_type, options, True)
         param = Parameter(symbol.ident, ptype)
         for option, data in options.iteritems():
             if option in ['in-out', 'inout']:
@@ -451,7 +501,7 @@ class Transformer(object):
                 param.allow_none = True
             elif option.startswith(('element-type', 'array')):
                 pass
-            elif option == 'transfer':
+            elif option in ('transfer', 'transfer-inferred'):
                 pass
             else:
                 print 'Unhandled parameter annotation option: %r' % (
@@ -464,12 +514,13 @@ class Transformer(object):
             options_map = {}
         else:
             options_map = self._parse_options(options)
-        rtype = self._create_type(source_type, options_map)
+        rtype = self._create_type(source_type, options_map, False)
         rtype = self.resolve_param_type(rtype)
         return_ = Return(rtype)
         self._handle_generic_param_options(return_, options_map)
         for option, data in options_map.iteritems():
-            if option in ('transfer', 'element-type', 'out'):
+            if option in ('transfer', 'transfer-inferred',
+                          'element-type', 'out'):
                 pass
             else:
                 print 'Unhandled return type annotation option: %r' % (

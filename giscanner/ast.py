@@ -264,23 +264,31 @@ class Alias(Node):
         return 'Alias(%r, %r)' % (self.name, self.target)
 
 
-class Parameter(Node):
+class TypeContainer(Node):
 
-    def __init__(self, name, typenode, direction=PARAM_DIRECTION_IN,
-                 transfer=None, allow_none=False):
+    def __init__(self, name, typenode, transfer):
         Node.__init__(self, name)
         self.type = typenode
-        if direction in [PARAM_DIRECTION_IN, PARAM_DIRECTION_OUT,
-                         PARAM_DIRECTION_INOUT]:
-            self.direction = direction
-        else:
-            self.direction = PARAM_DIRECTION_IN
-
         if transfer in [PARAM_TRANSFER_NONE, PARAM_TRANSFER_CONTAINER,
                         PARAM_TRANSFER_FULL]:
             self.transfer = transfer
         else:
             self.transfer = None
+
+        # transformer.py overrides this as needed
+        self.transfer_inferred = False
+
+
+class Parameter(TypeContainer):
+
+    def __init__(self, name, typenode, direction=PARAM_DIRECTION_IN,
+                 transfer=None, allow_none=False):
+        TypeContainer.__init__(self, name, typenode, transfer)
+        if direction in [PARAM_DIRECTION_IN, PARAM_DIRECTION_OUT,
+                         PARAM_DIRECTION_INOUT]:
+            self.direction = direction
+        else:
+            self.direction = PARAM_DIRECTION_IN
 
         self.allow_none = not not allow_none
 
@@ -336,15 +344,10 @@ class Field(Node):
             return 'Field(%r, %r)' % (self.name, self.type)
 
 
-class Return(Node):
+class Return(TypeContainer):
 
     def __init__(self, rtype, transfer=None):
-        Node.__init__(self)
-        self.type = rtype
-        if transfer is None and rtype.name in ['utf8', 'filename']:
-            self.transfer = 'full'
-        else:
-            self.transfer = transfer
+        TypeContainer.__init__(self, None, rtype, transfer)
 
     def __repr__(self):
         return 'Return(%r)' % (self.type, )

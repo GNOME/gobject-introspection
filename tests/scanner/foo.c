@@ -385,3 +385,14 @@ void
 foo_test_string_array (char **array)
 {
 }
+
+/**
+ * foo_rectangle_add:
+ * @r1: (inout): add to this rect
+ * @r2: source rectangle
+ */
+void
+foo_rectangle_add(FooRectangle *r1, const FooRectangle *r2)
+{
+
+}
