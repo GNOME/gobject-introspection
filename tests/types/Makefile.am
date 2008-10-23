@@ -2,16 +2,7 @@ AM_CFLAGS = $(GOBJECT_CFLAGS)
 AM_LDFLAGS = -module -avoid-version
 LIBS = $(GOBJECT_LIBS)
 
-testprefix = $(pkglibdir)/test
-
-testlibdir = $(testprefix)
 noinst_LTLIBRARIES = libgitesttypes.la
-
-girdir = $(testprefix)/gir
-dist_gir_DATA = $(GIRS)
-
-typelibdir = $(testprefix)/girepository
-typelib_DATA = $(TYPELIBS)
 
 libgitesttypes_la_SOURCES = $(srcdir)/gitesttypes.c $(srcdir)/gitesttypes.h
 
