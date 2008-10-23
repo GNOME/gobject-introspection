@@ -183,7 +183,10 @@ class GLibTransformer(object):
         type_name = type_name_from_ctype(ctype)
         type_name = type_name.replace('*', '')
         type_name = self._resolve_type_name(type_name)
-        return Type(type_name, ctype)
+
+        type = Type(type_name, ctype)
+        type._gtype = type_id
+        return type
 
     def _resolve_gtypename(self, gtype_name):
         try:
