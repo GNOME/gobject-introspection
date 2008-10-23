@@ -153,14 +153,14 @@
         </parameters>
       </callback>
       <glib:signal name="signal">
-        <return-value>
+        <return-value transfer-ownership="full">
           <type name="utf8" c:type="gchararray"/>
         </return-value>
         <parameters>
-          <parameter name="object">
+          <parameter name="object" transfer-ownership="full">
             <type name="GObject.Object" c:type="GObject"/>
           </parameter>
-          <parameter name="p0">
+          <parameter name="p0" transfer-ownership="none">
             <type name="any" c:type="gpointer"/>
           </parameter>
         </parameters>
