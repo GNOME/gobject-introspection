@@ -5,7 +5,7 @@ LIBS = $(GOBJECT_LIBS)
 testprefix = $(pkglibdir)/test
 
 testlibdir = $(testprefix)
-testlib_LTLIBRARIES = libgitesttypes.la
+noinst_LTLIBRARIES = libgitesttypes.la
 
 girdir = $(testprefix)/gir
 dist_gir_DATA = $(GIRS)
