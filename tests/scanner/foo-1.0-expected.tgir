@@ -259,7 +259,7 @@
         <type name="none"/>
       </return-value>
       <parameters>
-        <parameter name="r1">
+        <parameter name="r1" transfer-ownership="full" direction="inout">
           <type name="Rectangle"/>
         </parameter>
         <parameter name="r2">
