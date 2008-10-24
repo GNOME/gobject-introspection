@@ -1,5 +1,10 @@
 2008-10-24  Johan Dahlin  <johan@gnome.org>
 
+	* girepository/girnode.c (g_ir_node_check_unhandled_members):
+	Be quiet, do not warn about unhandled members.
+
+2008-10-24  Johan Dahlin  <johan@gnome.org>
+
 	* girepository/gtypelib.c:
 	Only use SHLIB_SUFFIX on darwin, otherwise use
 	G_MODULE_SUFFIX, we cannot get shext_cmds from libtool 2.2.
