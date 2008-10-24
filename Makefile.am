@@ -30,6 +30,7 @@ pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = gobject-introspection-1.0.pc
 
 EXTRA_DIST = 			\
+	CONTRIBUTORS		\
 	$(pkgconfig_DATA)	\
 	$(man_MANS)		\
 	misc/pep8.py		\
