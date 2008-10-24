@@ -352,7 +352,9 @@ multiplicative_expression
 	  {
 		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST);
 		$$->const_int_set = TRUE;
-		$$->const_int = $1->const_int % $3->const_int;
+		if ($3->const_int != 0) {
+			$$->const_int = $1->const_int % $3->const_int;
+		}
 	  }
 	;
 

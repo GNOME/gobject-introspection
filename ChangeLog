@@ -1,5 +1,12 @@
 2008-10-24  Johan Dahlin  <johan@gnome.org>
 
+	* giscanner/scannerparser.y:
+	Check against division by zero for the modula operator.
+	This fixes header parsing of OSX system headers included
+	by libsoup.
+
+2008-10-24  Johan Dahlin  <johan@gnome.org>
+
 	* CONTRIBUTORS:
 	* Makefile.am:
 	Add a CONTRIBUTORS file and dist it.
