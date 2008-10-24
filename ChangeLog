@@ -1,3 +1,9 @@
+2008-10-24  Lucas Rocha  <lucasr@gnome.org>
+
+	Bug 557623 - Constructors shouldn't be flagged as methods.
+
+	* girepository/ginfo.c (g_function_info_get_flags): ditto.
+
 2008-10-24  Johan Dahlin  <johan@gnome.org>
 
 	* giscanner/scannerparser.y:
