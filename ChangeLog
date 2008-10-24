@@ -1,3 +1,9 @@
+2008-10-24  Johan Dahlin  <johan@gnome.org>
+
+	* girepository/gtypelib.c:
+	Only use SHLIB_SUFFIX on darwin, otherwise use
+	G_MODULE_SUFFIX, we cannot get shext_cmds from libtool 2.2.
+
 2008-10-24  Lucas Rocha  <lucasr@gnome.org>
 
 	Bug 557623 - Constructors shouldn't be flagged as methods.
