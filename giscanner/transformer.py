@@ -281,8 +281,6 @@ class Transformer(object):
         elif source_type.type == CTYPE_POINTER:
             value = self._create_source_type(source_type.base_type) + '*'
         else:
-            print 'TRANSFORMER: Unhandled source type %r' % (
-                source_type, )
             value = 'any'
         return value
 
