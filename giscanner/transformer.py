@@ -309,7 +309,14 @@ class Transformer(object):
             symbol.base_type.base_type.type == CTYPE_FUNCTION):
             node = self._create_callback(symbol)
         else:
-            ftype = self._create_type(symbol.base_type, {}, True)
+            opts = {}
+            if ctype == CTYPE_ARRAY:
+                opts['array'] = []
+                child_list = list(symbol.base_type.child_list)
+                if child_list:
+                    size_opt = 'fixed-size=%d' % (child_list[0].const_int, )
+                    opts['array'].append(size_opt)
+            ftype = self._create_type(symbol.base_type, opts, True)
             # Fields are assumed to be read-write
             # (except for Objects, see also glibtransformer.py)
             node = Field(symbol.ident, ftype, symbol.ident,
@@ -392,13 +399,16 @@ class Transformer(object):
                           ctype,
                           key_type, value_type)
         elif (ctype in default_array_types) or ('array' in options):
-            derefed_name = ctype[:-1] # strip the *
+            derefed_name = ctype[:-1] if ctype[-1] == '*' else ctype
             rettype = Array(ctype,
                             self._parse_ctype(derefed_name))
-            array_opts = options.get('array')
-            if array_opts:
-                (_, len_name) = array_opts[0].split('=')
-                rettype.length_param_name = len_name
+            array_opts = dict([opt.split('=')
+                               for opt in options.get('array', [])])
+            if 'length' in array_opts:
+                rettype.length_param_name = array_opts['length']
+            if 'fixed-size' in array_opts:
+                rettype.size = array_opts['fixed-size']
+                rettype.zeroterminated = False
         else:
             derefed_name = self._parse_ctype(ctype)
             rettype = Type(derefed_name, ctype)

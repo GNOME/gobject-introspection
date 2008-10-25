@@ -923,12 +923,12 @@ direct_declarator
 	| direct_declarator '[' assignment_expression ']'
 	  {
 		$$ = $1;
-		gi_source_symbol_merge_type ($$, gi_source_array_new ());
+		gi_source_symbol_merge_type ($$, gi_source_array_new ($3));
 	  }
 	| direct_declarator '[' ']'
 	  {
 		$$ = $1;
-		gi_source_symbol_merge_type ($$, gi_source_array_new ());
+		gi_source_symbol_merge_type ($$, gi_source_array_new (NULL));
 	  }
 	| direct_declarator '(' parameter_list ')'
 	  {
@@ -1059,22 +1059,22 @@ direct_abstract_declarator
 	| '[' ']'
 	  {
 		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID);
-		gi_source_symbol_merge_type ($$, gi_source_array_new ());
+		gi_source_symbol_merge_type ($$, gi_source_array_new (NULL));
 	  }
 	| '[' assignment_expression ']'
 	  {
 		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID);
-		gi_source_symbol_merge_type ($$, gi_source_array_new ());
+		gi_source_symbol_merge_type ($$, gi_source_array_new ($2));
 	  }
 	| direct_abstract_declarator '[' ']'
 	  {
 		$$ = $1;
-		gi_source_symbol_merge_type ($$, gi_source_array_new ());
+		gi_source_symbol_merge_type ($$, gi_source_array_new (NULL));
 	  }
 	| direct_abstract_declarator '[' assignment_expression ']'
 	  {
 		$$ = $1;
-		gi_source_symbol_merge_type ($$, gi_source_array_new ());
+		gi_source_symbol_merge_type ($$, gi_source_array_new ($3));
 	  }
 	| '(' ')'
 	  {

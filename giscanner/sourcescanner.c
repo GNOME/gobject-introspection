@@ -163,9 +163,11 @@ gi_source_pointer_new (GISourceType * base_type)
 }
 
 GISourceType *
-gi_source_array_new (void)
+gi_source_array_new (GISourceSymbol *size)
 {
   GISourceType *array = gi_source_type_new (CTYPE_ARRAY);
+  if (size != NULL && size->type == CSYMBOL_TYPE_CONST && size->const_int_set)
+      array->child_list = g_list_append (array->child_list, size);
   return array;
 }
 

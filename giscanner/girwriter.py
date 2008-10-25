@@ -176,6 +176,8 @@ class GIRWriter(XMLWriter):
             if ntype.length_param_index >= 0:
                 attrs.append(('length', '%d' % (ntype.length_param_index, )))
             attrs.append(('c:type', ntype.ctype))
+            if ntype.size is not None:
+                attrs.append(('fixed-size', ntype.size))
             with self.tagcontext('array', attrs):
                 self._write_type(ntype.element_type)
             return

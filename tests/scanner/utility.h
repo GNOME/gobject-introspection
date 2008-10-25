@@ -44,6 +44,7 @@ typedef struct
   int field;
   guint bitfield1 : 3;
   guint bitfield2 : 2;
+  guint8 data[16];
 } UtilityStruct;
 
 typedef union

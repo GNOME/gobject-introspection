@@ -1,3 +1,15 @@
+2008-10-25  Andreas Rottmann  <a.rottmann@gmx.at>
+
+	Bug 557786 - support fixed size arrays
+
+	* girepository/ginfo.c: Add g_type_info_get_array_fixed_size.
+	* giscanner/scannerparser.y: Retain fixed array size.
+	* giscanner/ast.py: Add to note.
+	* giscanner/girwriter.py: Write to gir.
+	* girepository/girnode.c: Write it to typelib.
+	* tools/generate.c: Generate.
+	* tests/*: Add tests.
+
 2008-10-25  Colin Walters  <walters@verbum.org>
 
 	Bug 557076 - move typelibs to $libdir

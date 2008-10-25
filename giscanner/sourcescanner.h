@@ -163,7 +163,6 @@ GISourceDirective * gi_source_directive_new            (const gchar 	   *name,
 void                gi_source_directive_free           (GISourceDirective  *directive);
 
 /* Private */
-GISourceType *      gi_source_array_new                (void);
 void                gi_source_scanner_add_symbol       (GISourceScanner  *scanner,
 							GISourceSymbol   *symbol);
 gboolean            gi_source_scanner_is_typedef       (GISourceScanner  *scanner,
@@ -178,7 +177,7 @@ GISourceType * 	    gi_source_struct_new               (const char 	 *name);
 GISourceType * 	    gi_source_union_new 	       (const char 	 *name);
 GISourceType * 	    gi_source_enum_new 		       (const char 	 *name);
 GISourceType * 	    gi_source_pointer_new 	       (GISourceType     *base_type);
-GISourceType * 	    gi_source_array_new                (void);
+GISourceType * 	    gi_source_array_new                (GISourceSymbol   *size);
 GISourceType * 	    gi_source_function_new             (void);
 
 G_END_DECLS

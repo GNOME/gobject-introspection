@@ -36,6 +36,11 @@
       <field name="bitfield2" writable="1" offset="0">
         <type name="uint"/>
       </field>
+      <field name="data" writable="1" offset="0">
+        <array fixed-size="16">
+          <type name="uint8"/>
+        </array>
+      </field>
     </record>
     <union name="Union">
       <field name="pointer" writable="1" offset="0">

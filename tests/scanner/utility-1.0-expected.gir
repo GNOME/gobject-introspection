@@ -41,6 +41,11 @@
       <field name="bitfield2" writable="1" bits="2">
         <type name="uint" c:type="guint"/>
       </field>
+      <field name="data" writable="1">
+        <array zero-terminated="0" c:type="guint8" fixed-size="16">
+          <type name="uint8"/>
+        </array>
+      </field>
     </record>
     <union name="Union" c:type="UtilityUnion">
       <field name="pointer" writable="1">
