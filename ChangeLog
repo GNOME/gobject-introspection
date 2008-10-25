@@ -1,3 +1,14 @@
+2008-10-25  Colin Walters  <walters@verbum.org>
+
+	Bug 557076 - move typelibs to $libdir
+
+	* configure.ac: Steal some configury bits from dbus to expand
+	libdir.
+	* gir/Makefile.am: Move to libdir.
+	* girepository/girepository.c: Stop searching XDG_DATA_DIRS;
+	instead just look at one hardcoded path in libdir.
+	* acinclude.m4: Bits from dbus.
+
 2008-10-24  Johan Dahlin  <johan@gnome.org>
 
 	* girepository/girnode.c (g_ir_node_check_unhandled_members):

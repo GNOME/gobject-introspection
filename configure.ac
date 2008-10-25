@@ -88,6 +88,22 @@ if test "X$SHLIB_SUFFIX" = x; then
 fi
 AC_DEFINE_UNQUOTED([SHLIB_SUFFIX], "$SHLIB_SUFFIX", [Define to the platform's shared library suffix])
 
+# Copied from dbus configure.in
+#### find the actual value for $prefix that we'll end up with
+##   (I know this is broken and should be done in the Makefile, but
+##    that's a major pain and almost nobody actually seems to care)
+AS_AC_EXPAND(EXPANDED_LOCALSTATEDIR, "$localstatedir")
+AS_AC_EXPAND(EXPANDED_SYSCONFDIR, "$sysconfdir")
+AS_AC_EXPAND(EXPANDED_BINDIR, "$bindir")
+AS_AC_EXPAND(EXPANDED_LIBDIR, "$libdir")
+AS_AC_EXPAND(EXPANDED_LIBEXECDIR, "$libexecdir")
+AS_AC_EXPAND(EXPANDED_DATADIR, "$datadir")
+
+#### Directory to install the libexec binaries
+GOBJECT_INTROSPECTION_LIBDIR="$EXPANDED_LIBDIR"
+AC_SUBST(GOBJECT_INTROSPECTION_LIBDIR)
+AC_DEFINE_UNQUOTED(GOBJECT_INTROSPECTION_LIBDIR,"$GOBJECT_INTROSPECTION_LIBDIR", [Directory prefix for typelib installation])
+
 PKG_CHECK_MODULES(GOBJECT, [gobject-2.0])
 
 PKG_CHECK_MODULES(SCANNER, [gobject-2.0 gthread-2.0])
