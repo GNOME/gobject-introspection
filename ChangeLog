@@ -1,3 +1,10 @@
+2008-10-25  Andreas Rottmann  <a.rottmann@gmx.at>
+
+	Bug 557791 – g_irepository_require() could return a GTypelib *
+
+	* girepository/girepository.c: Return GTypelib; this is useful
+	for low level manipulation.
+
 2008-10-25  Colin Walters  <walters@verbum.org>
 
 	Bug 557788 – Return types for constructors in generated typelib bogus
