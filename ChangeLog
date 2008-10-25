@@ -1,3 +1,10 @@
+2008-10-25  Colin Walters  <walters@verbum.org>
+
+	Bug 557788 – Return types for constructors in generated typelib bogus
+
+	* giscanner/glibtransformer.py: Don't resolve ctors incrementally,
+	rely on end pass resolution.
+
 2008-10-25  Andreas Rottmann  <a.rottmann@gmx.at>
 
 	Bug 557786 - support fixed size arrays

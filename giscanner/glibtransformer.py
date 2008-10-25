@@ -327,7 +327,6 @@ class GLibTransformer(object):
             target_arg = func.retval
         else:
             target_arg = func.parameters[0]
-        target_arg.type = self._resolve_param_type(target_arg.type)
 
         if is_method:
             # Methods require their first arg to be a known class
@@ -394,8 +393,8 @@ class GLibTransformer(object):
             # class from the prefix
             # But for now, ensure that constructor returns are always
             # the most concrete class
-            func.retval.type = Type(klass.name,
-                                    self._transformer.ctype_of(klass)+'*')
+            name = self._transformer.remove_prefix(klass.type_name)
+            func.retval.type = Type(name, func.retval.type.ctype)
 
         self._remove_attribute(func.name)
         # Strip namespace and object prefix: gtk_window_new -> new
