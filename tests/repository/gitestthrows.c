@@ -9,7 +9,7 @@ int
 main(int argc, char **argv)
 {
   GIRepository *repo;
-  gboolean ret;
+  GTypelib *ret;
   GIBaseInfo *info;
   char *girdir;
   GArgument in_arg[1];
@@ -27,7 +27,7 @@ main(int argc, char **argv)
 
   error = NULL;
   ret = g_irepository_require (repo, "GLib", NULL, 0, &error);
-  g_assert (ret);
+  g_assert (ret != NULL);
   g_assert (error == NULL);
 
   info = g_irepository_find_by_name (repo, "GLib", "file_read_link");
