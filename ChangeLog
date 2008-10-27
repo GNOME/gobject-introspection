@@ -1,5 +1,10 @@
 2008-10-27  Johan Bilien  <jobi@via.ecp.fr>
 
+	* gio/gio-2.0.c: add allow-none annotations, based on the pygobject
+	.defs file
+
+2008-10-27  Johan Bilien  <jobi@via.ecp.fr>
+
 	Bug 558068 – when invoking a method, offset the in arguments by one,
 	not the out
 
