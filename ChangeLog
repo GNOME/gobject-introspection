@@ -1,3 +1,11 @@
+2008-10-27  Tommi Komulainen  <tommi.komulainen@iki.fi>
+
+	Bug 558062 – provide and use paths in the .pc file
+
+	* gobject-introspection-1.0.pc.in: provide typelibdir variable
+	for where .typelibs should be installed (callers shouldn't need
+	to construct paths from bits and pieces)
+
 2008-10-25  Andreas Rottmann  <a.rottmann@gmx.at>
 
 	Bug 557791 – g_irepository_require() could return a GTypelib *
