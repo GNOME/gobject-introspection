@@ -97,7 +97,7 @@ else
 GIO_LIBRARY=gio-2.0
 endif
 
-Gio-2.0.gir: GObject-2.0.gir $(G_IR_SCANNER) $(G_IR_SCANNER_FILES) Makefile
+Gio-2.0.gir: GObject-2.0.gir $(G_IR_SCANNER) $(G_IR_SCANNER_FILES) Makefile $(srcdir)/gio-2.0.c
 	PYTHONPATH=$(top_builddir):$$PYTHONPATH $(G_IR_SCANNER) \
 	    -v --namespace Gio --nsversion=2.0 \
 	    --add-include-path=. \
@@ -111,6 +111,7 @@ Gio-2.0.gir: GObject-2.0.gir $(G_IR_SCANNER) $(G_IR_SCANNER_FILES) Makefile
 	    -DGIO_COMPILATION \
             --pkg glib-2.0 \
             --pkg gobject-2.0 \
+	    $(srcdir)/gio-2.0.c \
 	    $(GLIB_INCLUDEDIR)/gio/*.h
 BUILT_SOURCES += Gio-2.0.gir
 CLEANFILES = $(BUILT_SOURCES)

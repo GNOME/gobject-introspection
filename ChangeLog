@@ -1,3 +1,7 @@
+2008-10-27  Johan Bilien  <jobi@via.ecp.fr>
+
+	* gir/gio-2.0.c: add annotation for g_file_delete
+
 2008-10-27  Tommi Komulainen  <tommi.komulainen@iki.fi>
 
 	Bug 558062 – provide and use paths in the .pc file
