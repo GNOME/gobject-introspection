@@ -88,6 +88,29 @@
       </parameters>
     </function>
 
+    <record name="TestStruct" c:type="TestStruct">
+      <constructor name="test8" c:identifier="test8">
+        <return-value transfer-ownership="full">
+          <type name="TestStruct" c:type="TestStruct*"/>
+        </return-value>
+        <parameters>
+          <parameter name="foo" direction="in" transfer-ownership="full">
+            <type name="int" c:type="int"/>
+          </parameter>
+        </parameters>
+      </constructor>
+      <method name="test9" c:identifier="test9">
+        <return-value transfer-ownership="full">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <parameter name="out" direction="out" transfer-ownership="full">
+            <type name="int" c:type="int*"/>
+          </parameter>
+        </parameters>
+      </method>
+    </record>
+
     <function name="broken" c:identifier="broken">
       <return-value transfer-ownership="none">
          <type name="none" c:type="void"/>

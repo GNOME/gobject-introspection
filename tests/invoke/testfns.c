@@ -3,6 +3,10 @@
 #include <glib.h>
 #include <glib/gprintf.h>
 
+typedef struct {
+    int foo;
+} TestStruct;
+
 gint test1 (gint in)
 {
   return in + 4;
@@ -44,4 +48,19 @@ char *test7 (GList *list)
       g_string_append(string, (const char *)lp->data);
     }
   return g_string_free (string, FALSE);
+}
+
+/* constructor */
+TestStruct * test8 (int foo)
+{
+  TestStruct *ret;
+
+  ret = g_new(TestStruct, 1);
+  ret->foo = foo;
+  return ret;
+}
+
+void test9 (TestStruct *test_struct, int *out)
+{
+  *out = test_struct->foo;
 }

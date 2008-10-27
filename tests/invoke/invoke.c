@@ -4,6 +4,12 @@
 #include <glib.h>
 #include <girepository.h>
 
+typedef struct
+{
+  int foo;
+} TestStruct;
+
+
 int
 main (int argc, char *argv[])
 {
@@ -12,6 +18,7 @@ main (int argc, char *argv[])
   GIRepository *rep;
   GIBaseInfo *info;
   GIFunctionInfo *function;
+  GIStructInfo *record;
   GArgument in_args[3];
   GArgument out_args[3];
   GArgument retval;
@@ -20,6 +27,7 @@ main (int argc, char *argv[])
   gint len;
   GError *error = NULL;
   const gchar *name;
+  TestStruct *s;
   
   g_type_init ();
 
@@ -184,6 +192,59 @@ main (int argc, char *argv[])
 
   g_base_info_unref (info);
   g_clear_error (&error);
+
+  g_print("Test 8\n");
+  info = g_irepository_find_by_name (rep, "test", "TestStruct");
+  g_assert (g_base_info_get_type (info) == GI_INFO_TYPE_STRUCT);
+  record = (GIStructInfo *)info;
+  info = g_struct_info_find_method (record, "test8");
+  g_assert (g_base_info_get_type (info) == GI_INFO_TYPE_FUNCTION);
+  function = (GIFunctionInfo *)info;
+  g_assert (g_function_info_get_flags (info) & GI_FUNCTION_IS_CONSTRUCTOR);
+
+  {
+    in_args[0].v_int = 42;
+    retval.v_pointer = NULL;
+
+    if (!g_function_info_invoke (function, in_args, 1, NULL, 0, &retval, &error))
+      g_print ("Invocation of %s failed: %s\n",
+               g_base_info_get_name (info),
+               error->message);
+
+    s = (TestStruct *)retval.v_pointer;
+
+    g_assert(s->foo == 42);
+
+  }
+
+  g_base_info_unref (info);
+  g_clear_error (&error);
+
+  g_print("Test 9\n");
+  info = g_struct_info_find_method (record, "test9");
+  g_assert (g_base_info_get_type (info) == GI_INFO_TYPE_FUNCTION);
+  function = (GIFunctionInfo *)info;
+  g_assert (g_function_info_get_flags (info) & GI_FUNCTION_IS_METHOD);
+
+  {
+    TestStruct s = { 42 };
+    int out_i;
+
+    retval.v_pointer = NULL;
+    in_args[0].v_pointer = &s;
+    out_args[0].v_pointer = &out_i;
+    if (!g_function_info_invoke (function, in_args, 1, out_args, 1, &retval, &error))
+      g_print ("Invocation of %s failed: %s\n",
+               g_base_info_get_name (info),
+               error->message);
+
+    g_assert(out_i == 42);
+  }
+
+  g_base_info_unref (info);
+  g_base_info_unref (record);
+  g_clear_error (&error);
+
 
   /* test error handling */
 

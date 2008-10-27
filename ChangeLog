@@ -1,5 +1,15 @@
 2008-10-27  Johan Bilien  <jobi@via.ecp.fr>
 
+	Bug 558068 – when invoking a method, offset the in arguments by one,
+	not the out
+
+	* tests/invoke/invoke.c, tests/invoke/testfns.c,
+	tests/invoke/testfns-1.0.gir: Add testing of method and constructor.
+	* girepository/ginvoke.c: do not offset the index of given out
+	arguments by one for methods, "this" is provided as in argument only.
+
+2008-10-27  Johan Bilien  <jobi@via.ecp.fr>
+
 	* gir/gio-2.0.c: add annotation for g_file_delete
 
 2008-10-27  Tommi Komulainen  <tommi.komulainen@iki.fi>
