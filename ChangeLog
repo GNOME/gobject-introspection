@@ -1,3 +1,7 @@
+2008-10-28  Johan Bilien  <jobi@via.ecp.fr>
+
+	* tools/g-ir-scanner: add LD_LIBRARY_PATH to LPATH before calling ld.
+
 2008-10-27  Johan Bilien  <jobi@via.ecp.fr>
 
 	* gio/gio-2.0.c: add allow-none annotations, based on the pygobject

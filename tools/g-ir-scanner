@@ -228,6 +228,11 @@ def main(args):
     # anyway as it behaves differently depending on the OS
     lpath = os.environ.get('LPATH')
     library_path = ':'.join(options.library_paths)
+
+    ld_library_path = os.environ.get('LD_LIBRARY_PATH')
+    if ld_library_path:
+        library_path = ':'.join([ld_library_path, library_path])
+
     if lpath:
         os.environ['LPATH'] = ':'.join([lpath, library_path])
     else:
