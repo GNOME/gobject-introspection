@@ -1,3 +1,12 @@
+2008-10-29  Johan Dahlin  <jdahlin@async.com.br>
+
+	* giscanner/libtoolimporter.py:
+	* giscanner/sourcescanner.py:
+	Clean up the libtool importer a bit. Add a context so we
+	can use it through a with statement.
+	Don't just look in the current directory, look in the whole
+	sys.path.
+
 2008-10-29  Tommi Komulainen  <tommi.komulainen@iki.fi>
 
 	Bug 558065 – gitesttypes should be installed

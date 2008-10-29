@@ -18,14 +18,13 @@
 # 02110-1301, USA.
 #
 
+from __future__ import with_statement
 import os
 import subprocess
 import tempfile
 
-from .libtoolimporter import install_libtoolimporter, uninstall_libtoolimporter
-install_libtoolimporter()
-from . import _giscanner
-uninstall_libtoolimporter()
+from .libtoolimporter import LibtoolImporter
+
 
 (CSYMBOL_TYPE_INVALID,
  CSYMBOL_TYPE_ELLIPSIS,
@@ -186,7 +185,9 @@ class SourceSymbol(object):
 class SourceScanner(object):
 
     def __init__(self):
-        self._scanner = _giscanner.SourceScanner()
+        with LibtoolImporter:
+            from _giscanner import SourceScanner
+        self._scanner = SourceScanner()
         self._filenames = []
         self._cpp_options = []
 

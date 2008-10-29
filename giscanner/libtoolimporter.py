@@ -25,19 +25,19 @@ import sys
 from .utils import extract_libtool
 
 
-class LibToolImporter(object):
+class LibtoolImporter(object):
 
     def __init__(self, name, path):
         self.name = name
         self.path = path
 
-    @staticmethod
-    def find_module(name, path=None):
+    @classmethod
+    def find_module(cls, name, path=None):
         modname = name.split('.')[-1]
         for part in path or sys.path:
             full = os.path.join(part, '.libs', modname + '.la')
             if os.path.exists(full):
-                return LibToolImporter(name, full)
+                return cls(name, full)
 
     def load_module(self, name):
         realpath = extract_libtool(self.path)
@@ -45,10 +45,10 @@ class LibToolImporter(object):
                               ('.so', 'rb', 3))
         return mod
 
+    @classmethod
+    def __enter__(cls):
+        sys.meta_path.append(cls)
 
-def install_libtoolimporter():
-    sys.meta_path.append(LibToolImporter)
-
-
-def uninstall_libtoolimporter():
-    sys.meta_path.remove(LibToolImporter)
+    @classmethod
+    def __exit__(cls, type, value, traceback):
+        sys.meta_path.remove(cls)
