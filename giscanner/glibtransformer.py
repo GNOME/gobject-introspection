@@ -80,7 +80,9 @@ class GLibTransformer(object):
     def add_library(self, libname):
         # For testing mainly.
         libtool_libname = 'lib' + libname + '.la'
-        if os.path.exists(libtool_libname):
+        if os.path.exists(libname):
+            found_libname = os.path.abspath(libname)
+        elif os.path.exists(libtool_libname):
             found_libname = extract_libtool(libtool_libname)
         elif libname.endswith('.la'):
             found_libname = extract_libtool(libname)
