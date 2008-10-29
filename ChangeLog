@@ -1,3 +1,21 @@
+2008-10-29  Tommi Komulainen  <tommi.komulainen@iki.fi>
+
+	Bug 558065 – gitesttypes should be installed
+
+	* configure.ac:
+	* tests/Makefile.am:
+	* tests/types/Makefile.am   -> tests/everything/Makefile.am
+	* tests/types/gitesttypes.c -> tests/everything/gitesttypes.c
+	* tests/types/gitesttypes.h -> tests/everything/gitesttypes.h
+	move tests/types to tests/everything
+
+	* tests/everything/Makefile.am: build normal shared library
+	libgirepository-everything.so.1.0.0 and corresponding typelib
+	Everything-1.0.typelib
+
+	* tests/everything/Makefile.am: explicitly link libtool
+	versioning with typelib versioning with variables
+
 2008-10-28  Johan Bilien  <jobi@via.ecp.fr>
 
 	* tools/g-ir-scanner: add LD_LIBRARY_PATH to LPATH before calling ld.
