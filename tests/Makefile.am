@@ -28,7 +28,7 @@ CLEANFILES = $(GIRTESTS:%.gir.test=%.1) $(GIRTESTS:%.gir.test=%.2)
 	@echo Testing $<:
 	$(DEBUG) $(top_builddir)/tools/g-ir-compiler --includedir=$(top_builddir)/gir $< > $*.1
 	$(DEBUG) $(top_builddir)/tools/g-ir-generate --includedir=$(top_builddir)/gir $*.1 > $*.2
-	diff -u $*.gir $*.2 && rm $*.1 $*.2
+	diff -u $(srcdir)/$*.gir $*.2 && rm $*.1 $*.2
 
 
 check-local: $(GIRTESTS)

@@ -29,5 +29,5 @@ invoke_LDADD = $(GIREPO_LIBS) $(top_builddir)/girepository/libgirepository.la
 
 TESTS = invoke invoke-namespace-find.sh
 
-EXTRA_DIST = invoke-namespace-find.sh testfns.gir
+EXTRA_DIST = invoke-namespace-find.sh testfns-1.0.gir
 

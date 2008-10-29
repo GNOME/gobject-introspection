@@ -32,9 +32,10 @@ SCANNER_LIBS = \
 TYPELIBS = $(GIRS:.gir=.typelib)
 CHECKGIRS = $(GIRS:.gir=.gir.check)
 EXPECTEDGIRS = $(GIRS:.gir=-expected.gir)
+TGIRS = $(GIRS:.gir=.tgir)
 CHECKTGIRS = $(GIRS:.gir=.tgir.check)
 EXPECTEDTGIRS = $(GIRS:.gir=-expected.tgir)
-CLEANFILES = $(TYPELIBS)  $(GIRS)
+CLEANFILES = $(TYPELIBS)  $(GIRS) $(TGIRS)
 BUILT_SOURCES = $(TYPELIBS) $(GIRS)
 EXTRA_DIST = $(EXPECTEDGIRS) $(EXPECTEDTGIRS)
 
@@ -66,8 +67,9 @@ GIRS += drawable-1.0.gir
 
 drawable-injected-1.0.gir: drawable-1.0.gir $(SCANNER) $(SCANNER_LIBS) Makefile
 	PYTHONPATH=$(top_builddir):$$PYTHONPATH $(CHECK_DEBUG) $(SCANNER) -v \
-	 --inject drawable-1.0.gir DrawableAdditions.xml $@
+	 --inject drawable-1.0.gir $(srcdir)/DrawableAdditions.xml $@
 GIRS += drawable-injected-1.0.gir
+EXTRA_DIST += DrawableAdditions.xml
 
 foo-1.0.gir: libfoo.la foo.c foo.h utility-1.0.gir $(SCANNER) $(SCANNER_LIBS) Makefile
 	PYTHONPATH=$(top_builddir):$$PYTHONPATH $(CHECK_DEBUG) $(SCANNER) -v \
@@ -140,6 +142,6 @@ check-local: $(CHECKGIRS) $(CHECKTGIRS) $(TYPELIBS)
 	 echo 1>&2 "$(DEBUG) $(top_builddir)/tools/g-ir-generate --includedir=. --includedir=$(top_builddir)/gir $${x} > $${x}.tmp && mv $${x}.tmp $${x}.xml;"; \
 	 $(DEBUG) $(top_builddir)/tools/g-ir-generate --includedir=. --includedir=$(top_builddir)/gir $${x} > $${x}.tmp && mv $${x}.tmp $${x}.xml; \
 	done
-CLEANFILES += $(TYPELIBS:.typelib:.typelib.xml)
+CLEANFILES += $(TYPELIBS:.typelib=.typelib.xml)
 
 check-local: post-check

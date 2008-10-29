@@ -32,9 +32,9 @@ GLib-2.0.gir: $(G_IR_SCANNER) $(G_IR_SCANNER_FILES) Makefile glib-2.0.c
 	    $(srcdir)/glib-2.0.c \
 	    $(GLIB_INCLUDEDIR)/glib/*.h
 	PYTHONPATH=$(top_builddir):$$PYTHONPATH $(G_IR_SCANNER) \
-	    --xpath-assertions=GLib-2.0.xpath GLib-2.0.gir	
+	    --xpath-assertions=$(srcdir)/GLib-2.0.xpath GLib-2.0.gir
 BUILT_SOURCES += GLib-2.0.gir
-EXTRA_DIST += GLib-2.0.xpath
+EXTRA_DIST += glib-2.0.c GLib-2.0.xpath
 
 # gobject
 GOBJECT_INCLUDEDIR=`pkg-config --variable=includedir gobject-2.0`/glib-2.0
@@ -114,6 +114,7 @@ Gio-2.0.gir: GObject-2.0.gir $(G_IR_SCANNER) $(G_IR_SCANNER_FILES) Makefile $(sr
 	    $(srcdir)/gio-2.0.c \
 	    $(GLIB_INCLUDEDIR)/gio/*.h
 BUILT_SOURCES += Gio-2.0.gir
+EXTRA_DIST += gio-2.0.c
 CLEANFILES = $(BUILT_SOURCES)
 
 girdir=$(datadir)/gir
