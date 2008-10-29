@@ -1,5 +1,11 @@
+LT_CURRENT = 1
+LT_REVISION = 0
+LT_AGE = 0
+LT_VERSION = $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)
+TYPELIB_VERSION = $(LT_CURRENT).0
+
 AM_CFLAGS = $(GOBJECT_CFLAGS)
-AM_LDFLAGS = -version-info 1:0:0
+AM_LDFLAGS = -version-info $(LT_VERSION)
 LIBS = $(GOBJECT_LIBS)
 
 typelibsdir = $(libdir)/girepository
@@ -25,16 +31,16 @@ TXMLS = $(GIRS:.gir=.gir.txml)
 CLEANFILES = $(TYPELIBS) $(TXMLS) $(GIRS)
 BUILT_SOURCES = $(TYPELIBS) $(TXMLS) $(GIRS)
 
-Everything-1.0.gir: libgirepository-everything.la gitesttypes.c gitesttypes.h $(SCANNER) $(SCANNER_LIBS)
+Everything-$(TYPELIB_VERSION).gir: libgirepository-everything.la gitesttypes.c gitesttypes.h $(SCANNER) $(SCANNER_LIBS)
 	PYTHONPATH=$(top_builddir):$$PYTHONPATH $(CHECK_DEBUG) $(SCANNER) -v \
 	--add-include-path=$(top_builddir)/gir \
 	--include=GObject-2.0 \
 	--library=girepository-everything \
-	--namespace=Everything --nsversion=1.0 \
+	--namespace=Everything --nsversion=$(TYPELIB_VERSION) \
 	--pkg gobject-2.0 \
 	$(srcdir)/gitesttypes.h $(srcdir)/gitesttypes.c \
 	--output $@
-GIRS += Everything-1.0.gir
+GIRS += Everything-$(TYPELIB_VERSION).gir
 
 %.typelib: %.gir $(top_builddir)/tools/g-ir-compiler$(EXEEXT) Makefile
 	$(top_builddir)/tools/g-ir-compiler --includedir=. --includedir=$(top_builddir)/gir $< -o $@
