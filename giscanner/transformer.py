@@ -73,7 +73,6 @@ class Transformer(object):
         self._strip_prefix = ''
         self._includes = set()
         self._includepaths = []
-
         self._list_ctypes = []
         self._map_ctypes = []
 
@@ -100,23 +99,29 @@ class Transformer(object):
     def set_include_paths(self, paths):
         self._includepaths = list(paths)
 
-    def register_include(self, include, path=None):
-        if path is None:
-            girname = '%s-%s.gir' % (include.name, include.version)
-            searchdirs = list(self._includepaths)
-            searchdirs.extend([os.path.join(d, 'gir')
-                               for d in _xdg_data_dirs])
-            for d in searchdirs:
-                path = os.path.join(d, girname)
-                if os.path.exists(path):
-                    break
-                path = None
-            if not path:
-                raise ValueError("Couldn't find include %r (search path: %r)"\
-                                     % (girname, searchdirs))
-        d = os.path.dirname(path)
+    def register_include(self, include):
+        filename = self._find_include(include)
+        self._parse_include(filename)
         self._includes.add(include)
-        parser = GIRParser(path)
+
+    # Private
+
+    def _find_include(self, include):
+        searchdirs = self._includepaths[:]
+        for path in _xdg_data_dirs:
+            searchdirs.append(os.path.join(path, 'gir'))
+
+        girname = '%s-%s.gir' % (include.name, include.version)
+        for d in self._includepaths:
+            path = os.path.join(d, girname)
+            if os.path.exists(path):
+                return path
+        else:
+            raise ValueError("Couldn't find include %r (search path: %r)"\
+                             % (girname, searchdirs))
+
+    def _parse_include(self, filename):
+        parser = GIRParser(filename)
         for include in parser.get_includes():
             self.register_include(include)
         nsname = parser.get_namespace().name
@@ -130,8 +135,6 @@ class Transformer(object):
                 self._names.ctypes[node.ctype] = (nsname, node)
             elif hasattr(node, 'symbol'):
                 self._names.ctypes[node.symbol] = (nsname, node)
-
-    # Private
 
     def _add_node(self, node):
         if node is None:
