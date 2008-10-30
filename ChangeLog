@@ -1,3 +1,8 @@
+2008-10-30  Tommi Komulainen  <tommi.komulainen@iki.fi>
+
+	* giscanner/ast.py: map 'id' (ObjC) to 'any' type to stop
+	gir-repository from choking with gdk/quartz
+
 2008-10-30  Johan Dahlin  <jdahlin@async.com.br>
 
 	* giscanner/giscannermodule.c (calc_attrs_length),

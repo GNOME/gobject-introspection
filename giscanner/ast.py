@@ -112,6 +112,9 @@ type_names['off_t'] = TYPE_SIZET
 # FIXME - can we make libraries use GPid?
 type_names['pid_t'] = TYPE_INT
 
+# Obj-C
+type_names['id'] = TYPE_ANY
+
 # Suppress some GLib names
 type_names['uchar'] = TYPE_UINT8
 type_names['ushort'] = TYPE_UINT16
