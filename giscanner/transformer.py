@@ -112,7 +112,7 @@ class Transformer(object):
             searchdirs.append(os.path.join(path, 'gir'))
 
         girname = '%s-%s.gir' % (include.name, include.version)
-        for d in self._includepaths:
+        for d in searchdirs:
             path = os.path.join(d, girname)
             if os.path.exists(path):
                 return path
