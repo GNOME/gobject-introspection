@@ -46,10 +46,13 @@ def _cns(tag):
 
 class GIRParser(object):
 
-    def __init__(self, filename, initial_parse=True):
+    def __init__(self, filename,
+                 initial_parse=True,
+                 include_parsing=False):
         self._includes = set()
         self._namespace = None
         self._shared_libraries = []
+        self._include_parsing = include_parsing
         self._tree = parse(filename)
 
         if initial_parse:
@@ -139,9 +142,12 @@ class GIRParser(object):
         else:
             raise AssertionError(node)
 
-        ctor_args.append(node.attrib.get(_cns('type')))
         obj = klass(*ctor_args)
+        self._add_node(obj)
 
+        if self._include_parsing:
+            return
+        ctor_args.append(node.attrib.get(_cns('type')))
         for iface in node.findall(_corens('implements')):
             obj.interfaces.append(iface.attrib['name'])
         for method in node.findall(_corens('method')):
@@ -157,7 +163,6 @@ class GIRParser(object):
             obj.properties.append(self._parse_property(property))
         for signal in node.findall(_glibns('signal')):
             obj.signals.append(self._parse_function_common(signal, Function))
-        self._add_node(obj)
 
     def _parse_callback(self, node):
         callback = self._parse_function_common(node, Callback)
@@ -174,8 +179,20 @@ class GIRParser(object):
             raise ValueError('node %r has no return-value' % (name, ))
         transfer = returnnode.attrib.get('transfer-ownership')
         retval = Return(self._parse_type(returnnode), transfer)
-        parameters_node = node.find(_corens('parameters'))
         parameters = []
+
+        if klass is Callback:
+            func = klass(name, retval, parameters,
+                         node.attrib.get(_cns('type')))
+        else:
+            identifier = node.attrib.get(_cns('identifier'))
+            throws = (node.attrib.get('throws') == '1')
+            func = klass(name, retval, parameters, identifier, throws)
+
+        if self._include_parsing:
+            return func
+
+        parameters_node = node.find(_corens('parameters'))
         if (parameters_node is not None):
             for paramnode in parameters_node.findall(_corens('parameter')):
                 param = Parameter(paramnode.attrib.get('name'),
@@ -184,13 +201,8 @@ class GIRParser(object):
                                   paramnode.attrib.get('transfer-ownership'),
                                   paramnode.attrib.get('allow-none') == '1')
                 parameters.append(param)
-        if klass is Callback:
-            return klass(name, retval, parameters,
-                         node.attrib.get(_cns('type')))
-        else:
-            identifier = node.attrib.get(_cns('identifier'))
-            throws = (node.attrib.get('throws') == '1')
-            return klass(name, retval, parameters, identifier, throws)
+
+        return func
 
     def _parse_record(self, node):
         if _glibns('type-name') in node.attrib:
@@ -201,6 +213,10 @@ class GIRParser(object):
         else:
             struct = Struct(node.attrib['name'],
                             node.attrib.get(_cns('type')))
+        self._add_node(struct)
+
+        if self._include_parsing:
+            return
         for field in node.findall(_corens('field')):
             struct.fields.append(self._parse_field(field))
         for callback in node.findall(_corens('callback')):
@@ -212,29 +228,31 @@ class GIRParser(object):
         for ctor in node.findall(_corens('constructor')):
             struct.constructors.append(
                 self._parse_function_common(ctor, Function))
-        self._add_node(struct)
 
     def _parse_union(self, node):
         if _glibns('type-name') in node.attrib:
-            struct = GLibBoxedUnion(node.attrib['name'],
+            union = GLibBoxedUnion(node.attrib['name'],
                                     node.attrib[_glibns('type-name')],
                                     node.attrib[_glibns('get-type')],
                                     node.attrib.get(_cns('type')))
         else:
-            struct = Union(node.attrib['name'],
+            union = Union(node.attrib['name'],
                            node.attrib.get(_cns('type')))
+        self._add_node(union)
+
+        if self._include_parsing:
+            return
         for callback in node.findall(_corens('callback')):
-            struct.fields.append(
+            union.fields.append(
                 self._parse_function_common(callback, Callback))
         for field in node.findall(_corens('field')):
-            struct.fields.append(self._parse_field(field))
+            union.fields.append(self._parse_field(field))
         for method in node.findall(_corens('method')):
-            struct.fields.append(
+            union.fields.append(
                 self._parse_function_common(method, Function))
         for ctor in node.findall(_corens('constructor')):
-            struct.constructors.append(
+            union.constructors.append(
                 self._parse_function_common(ctor, Function))
-        self._add_node(struct)
 
     def _parse_type(self, node):
         typenode = node.find(_corens('type'))
@@ -259,6 +277,9 @@ class GIRParser(object):
         obj = GLibBoxedOther(node.attrib[_glibns('name')],
                              node.attrib[_glibns('type-name')],
                              node.attrib[_glibns('get-type')])
+        self._add_node(obj)
+        if self._include_parsing:
+            return
         for method in node.findall(_corens('method')):
             obj.methods.append(
                 self._parse_function_common(method, Function))
@@ -268,7 +289,6 @@ class GIRParser(object):
         for callback in node.findall(_corens('callback')):
             obj.fields.append(
                 self._parse_function_common(callback, Callback))
-        self._add_node(obj)
 
     def _parse_field(self, node):
         type_node = self._parse_type(node)
@@ -316,12 +336,14 @@ class GIRParser(object):
             klass = Enum
             type_name = ctype
         members = []
-        for member in node.findall(_corens('member')):
-            members.append(self._parse_member(member))
-
         if klass is Enum:
             obj = klass(name, type_name, members)
         else:
             obj = klass(name, type_name, members, get_type)
             obj.ctype = ctype
         self._add_node(obj)
+
+        if self._include_parsing:
+            return
+        for member in node.findall(_corens('member')):
+            members.append(self._parse_member(member))

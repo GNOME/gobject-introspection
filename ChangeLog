@@ -1,6 +1,13 @@
 2008-10-30  Johan Dahlin  <jdahlin@async.com.br>
 
 	* giscanner/girparser.py:
+	* giscanner/transformer.py:
+	Avoid parsing parameters, types etc when parsing
+	includes. Should speed up include parsing a bit.
+
+2008-10-30  Johan Dahlin  <jdahlin@async.com.br>
+
+	* giscanner/girparser.py:
 	Avoid big if/else and use a dispatch table like
 	approach.
 

@@ -121,7 +121,7 @@ class Transformer(object):
                              % (girname, searchdirs))
 
     def _parse_include(self, filename):
-        parser = GIRParser(filename)
+        parser = GIRParser(filename, include_parsing=True)
         for include in parser.get_includes():
             self.register_include(include)
         nsname = parser.get_namespace().name
