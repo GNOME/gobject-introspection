@@ -46,26 +46,23 @@ def _cns(tag):
 
 class GIRParser(object):
 
-    def __init__(self, filename,
-                 initial_parse=True,
-                 include_parsing=False):
+    def __init__(self):
+        self._include_parsing = False
+        self._shared_libraries = []
         self._includes = set()
         self._namespace = None
-        self._shared_libraries = []
-        self._include_parsing = include_parsing
-        self._tree = parse(filename)
-
-        if initial_parse:
-            self.parse()
 
     # Public API
 
-    def parse(self):
-        self._includes.clear()
-        del self._namespace
-        del self._shared_libraries[:]
+    def parse(self, filename):
+        tree = parse(filename)
+        self.parse_tree(tree)
 
-        self._parse_api(self._tree.getroot())
+    def parse_tree(self, tree):
+        self._includes.clear()
+        self._namespace = None
+        self._shared_libraries = []
+        self._parse_api(tree.getroot())
 
     def get_namespace(self):
         return self._namespace
@@ -77,7 +74,10 @@ class GIRParser(object):
         return self._includes
 
     def get_doc(self):
-        return self._tree
+        return parse(self._filename)
+
+    def set_include_parsing(self, include_parsing):
+        self._include_parsing = include_parsing
 
     # Private
 
@@ -159,8 +159,8 @@ class GIRParser(object):
             obj.fields.append(self._parse_function_common(callback, Callback))
         for field in node.findall(_corens('field')):
             obj.fields.append(self._parse_field(field))
-        for property in node.findall(_corens('property')):
-            obj.properties.append(self._parse_property(property))
+        for prop in node.findall(_corens('property')):
+            obj.properties.append(self._parse_property(prop))
         for signal in node.findall(_glibns('signal')):
             obj.signals.append(self._parse_function_common(signal, Function))
 
@@ -237,7 +237,7 @@ class GIRParser(object):
                                     node.attrib.get(_cns('type')))
         else:
             union = Union(node.attrib['name'],
-                           node.attrib.get(_cns('type')))
+                          node.attrib.get(_cns('type')))
         self._add_node(union)
 
         if self._include_parsing:

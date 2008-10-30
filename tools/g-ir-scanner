@@ -36,6 +36,7 @@ else:
 sys.path.insert(0, path)
 
 from giscanner.ast import Include
+from giscanner.cachestore import CacheStore
 from giscanner.glibtransformer import GLibTransformer
 from giscanner.minixpath import myxpath, xpath_assert
 from giscanner.sourcescanner import SourceScanner
@@ -115,15 +116,19 @@ def typelib_xml_strip(path):
     from giscanner.girparser import GIRParser
     from giscanner.girwriter import GIRWriter
     from giscanner.girparser import C_NS
+    from xml.etree.cElementTree import parse
+
     c_ns_key = '{%s}' % (C_NS, )
 
-    parser = GIRParser(path, initial_parse=False)
-    doc = parser.get_doc()
-    for node in doc.getiterator():
+    tree = parse(path)
+    root = tree.getroot()
+    for node in root.getiterator():
         for attrib in list(node.attrib):
             if attrib.startswith(c_ns_key):
                 del node.attrib[attrib]
-    parser.parse()
+    parser = GIRParser()
+    parser.parse_tree(tree)
+
     writer = GIRWriter(parser.get_namespace(),
                        parser.get_shared_libraries(),
                        parser.get_includes())
@@ -135,8 +140,8 @@ def inject(path, additions, outpath):
     from giscanner.girwriter import GIRWriter
     from xml.etree.cElementTree import parse
 
-    parser = GIRParser(path, initial_parse=False)
-    root = parser.get_doc().getroot()
+    tree = parse(path)
+    root = tree.getroot()
     injectDoc = parse(open(additions))
     for node in injectDoc.getroot():
         injectPath = node.attrib['path']
@@ -145,7 +150,9 @@ def inject(path, additions, outpath):
             raise ValueError("Couldn't find path %r" % (injectPath, ))
         for child in node:
             target.append(child)
-    parser.parse()
+
+    parser = GIRParser()
+    parser.parse_tree(tree)
     writer = GIRWriter(parser.get_namespace(),
                        parser.get_shared_libraries(),
                        parser.get_includes())
@@ -248,6 +255,7 @@ def main(args):
                 _error('%s: no such a file or directory' % (arg, ))
             filenames.append(arg)
 
+    cachestore = CacheStore()
     # Run the preprocessor, tokenize and construct simple
     # objects representing the raw C symbols
     ss = SourceScanner()
@@ -258,7 +266,7 @@ def main(args):
     ss.parse_macros(filenames)
 
     # Transform the C symbols into AST nodes
-    transformer = Transformer(ss,
+    transformer = Transformer(cachestore, ss,
                               options.namespace_name,
                               options.namespace_version)
     if options.strip_prefix:

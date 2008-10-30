@@ -65,7 +65,9 @@ class Names(object):
 
 class Transformer(object):
 
-    def __init__(self, generator, namespace_name, namespace_version):
+    def __init__(self, cachestore, generator,
+                 namespace_name, namespace_version):
+        self._cachestore = cachestore
         self.generator = generator
         self._namespace = Namespace(namespace_name, namespace_version)
         self._names = Names()
@@ -123,11 +125,19 @@ class Transformer(object):
                              % (girname, searchdirs))
 
     def _parse_include(self, filename):
-        parser = GIRParser(filename, include_parsing=True)
+        parser = self._cachestore.load(filename)
+        if parser is None:
+            parser = GIRParser()
+            parser.set_include_parsing(True)
+            parser.parse(filename)
+            self._cachestore.store(filename, parser)
+
         for include in parser.get_includes():
             self.register_include(include)
-        nsname = parser.get_namespace().name
-        for node in parser.get_namespace().nodes:
+
+        namespace = parser.get_namespace()
+        nsname = namespace.name
+        for node in namespace.nodes:
             if isinstance(node, Alias):
                 self._names.aliases[node.name] = (nsname, node)
             elif isinstance(node, (GLibBoxed, Interface, Class)):

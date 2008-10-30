@@ -36,6 +36,7 @@ pkgpyexec_LTLIBRARIES = _giscanner.la
 pkgpyexec_PYTHON = 		\
 	__init__.py		\
 	ast.py			\
+	cachestore.py		\
 	cgobject.py		\
 	config.py		\
 	girparser.py		\

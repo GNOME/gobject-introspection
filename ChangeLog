@@ -1,3 +1,18 @@
+2008-10-30  Johan Dahlin  <jdahlin@async.com.br>
+
+	* giscanner/girparser.py:
+	Remove arguments from the constructor, move them to
+	separate accessors. Add a new parse_tree method
+	which takes an element tree instance.
+	* tools/g-ir-scanner:
+	Update callsite for this
+
+	* giscanner/Makefile.am:
+	* giscanner/cachestore.py:
+	* giscanner/transformer.py:
+	Cache the include parsing. Saves ~25% time when
+	creating vte (which includes everything up to gtk+).
+
 2008-10-30  Colin Walters  <walters@verbum.org>
 
 	* giscanner/transformer.py: Don't reparse includes
