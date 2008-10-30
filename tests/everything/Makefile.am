@@ -24,6 +24,7 @@ endif
 
 GIRS =
 SCANNER = $(top_srcdir)/tools/g-ir-scanner
+SCANNER_PYTHONPATH = $(top_builddir):$(top_srcdir):$$PYTHONPATH
 SCANNER_LIBS = $(top_srcdir)/giscanner/*.py \
 	       $(top_builddir)/giscanner/libgiscanner.la
 TYPELIBS = $(GIRS:.gir=.typelib)
@@ -32,7 +33,7 @@ CLEANFILES = $(TYPELIBS) $(TXMLS) $(GIRS)
 BUILT_SOURCES = $(TYPELIBS) $(TXMLS) $(GIRS)
 
 Everything-$(TYPELIB_VERSION).gir: libgirepository-everything.la gitesttypes.c gitesttypes.h $(SCANNER) $(SCANNER_LIBS)
-	PYTHONPATH=$(top_builddir):$$PYTHONPATH $(CHECK_DEBUG) $(SCANNER) -v \
+	PYTHONPATH=$(SCANNER_PYTHONPATH) $(CHECK_DEBUG) $(SCANNER) -v \
 	--add-include-path=$(top_builddir)/gir \
 	--include=GObject-2.0 \
 	--library=girepository-everything \
@@ -44,4 +45,4 @@ GIRS += Everything-$(TYPELIB_VERSION).gir
 
 %.typelib: %.gir $(top_builddir)/tools/g-ir-compiler$(EXEEXT) Makefile
 	$(top_builddir)/tools/g-ir-compiler --includedir=. --includedir=$(top_builddir)/gir $< -o $@
-	PYTHONPATH=$(top_builddir):$$PYTHONPATH $(SCANNER) --add-include-path=$(top_builddir)/gir --typelib-xml $< > $<.tmp && mv $<.tmp $<.txml
+	PYTHONPATH=$(SCANNER_PYTHONPATH) $(SCANNER) --add-include-path=$(top_builddir)/gir --typelib-xml $< > $<.tmp && mv $<.tmp $<.txml

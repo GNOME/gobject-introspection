@@ -186,7 +186,7 @@ class SourceScanner(object):
 
     def __init__(self):
         with LibtoolImporter:
-            from _giscanner import SourceScanner
+            from giscanner._giscanner import SourceScanner
         self._scanner = SourceScanner()
         self._filenames = []
         self._cpp_options = []

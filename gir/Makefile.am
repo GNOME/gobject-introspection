@@ -2,6 +2,7 @@ BUILT_SOURCES =
 EXTRA_DIST = 
 
 G_IR_SCANNER = $(top_srcdir)/tools/g-ir-scanner
+G_IR_SCANNER_PYTHONPATH = $(top_builddir):$(top_srcdir):$$PYTHONPATH
 G_IR_SCANNER_FILES = $(top_srcdir)/giscanner/*.py \
 	$(top_builddir)/giscanner/libgiscanner.la
 
@@ -16,7 +17,7 @@ GLIB_LIBRARY=glib-2.0
 endif
 
 GLib-2.0.gir: $(G_IR_SCANNER) $(G_IR_SCANNER_FILES) Makefile glib-2.0.c
-	PYTHONPATH=$(top_builddir):$$PYTHONPATH $(G_IR_SCANNER) \
+	PYTHONPATH=$(G_IR_SCANNER_PYTHONPATH) $(G_IR_SCANNER) \
 	    -v --namespace GLib --nsversion=2.0 \
 	    --add-include-path=. \
 	    --noclosure \
@@ -31,7 +32,7 @@ GLib-2.0.gir: $(G_IR_SCANNER) $(G_IR_SCANNER_FILES) Makefile glib-2.0.c
 	    $(GLIB_LIBDIR)/glib-2.0/include/glibconfig.h \
 	    $(srcdir)/glib-2.0.c \
 	    $(GLIB_INCLUDEDIR)/glib/*.h
-	PYTHONPATH=$(top_builddir):$$PYTHONPATH $(G_IR_SCANNER) \
+	PYTHONPATH=$(G_IR_SCANNER_PYTHONPATH) $(G_IR_SCANNER) \
 	    --xpath-assertions=$(srcdir)/GLib-2.0.xpath GLib-2.0.gir
 BUILT_SOURCES += GLib-2.0.gir
 EXTRA_DIST += glib-2.0.c GLib-2.0.xpath
@@ -47,7 +48,7 @@ GOBJECT_LIBRARY=gobject-2.0
 endif
 
 GObject-2.0.gir: GLib-2.0.gir $(G_IR_SCANNER) $(G_IR_SCANNER_FILES) Makefile
-	PYTHONPATH=$(top_builddir):$$PYTHONPATH $(G_IR_SCANNER) \
+	PYTHONPATH=$(G_IR_SCANNER_PYTHONPATH) $(G_IR_SCANNER) \
 	    -v --namespace GObject --nsversion=2.0 \
 	    --add-include-path=. \
 	    --noclosure \
@@ -73,7 +74,7 @@ GMODULE_LIBRARY=gmodule-2.0
 endif
 
 GModule-2.0.gir: GLib-2.0.gir $(G_IR_SCANNER) $(G_IR_SCANNER_FILES)
-	PYTHONPATH=$(top_builddir):$$PYTHONPATH $(G_IR_SCANNER) \
+	PYTHONPATH=$(G_IR_SCANNER_PYTHONPATH) $(G_IR_SCANNER) \
 	    -v --namespace GModule --nsversion=2.0 \
 	    --add-include-path=. \
 	    --noclosure \
@@ -98,7 +99,7 @@ GIO_LIBRARY=gio-2.0
 endif
 
 Gio-2.0.gir: GObject-2.0.gir $(G_IR_SCANNER) $(G_IR_SCANNER_FILES) Makefile $(srcdir)/gio-2.0.c
-	PYTHONPATH=$(top_builddir):$$PYTHONPATH $(G_IR_SCANNER) \
+	PYTHONPATH=$(G_IR_SCANNER_PYTHONPATH) $(G_IR_SCANNER) \
 	    -v --namespace Gio --nsversion=2.0 \
 	    --add-include-path=. \
 	    --noclosure \

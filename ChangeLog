@@ -1,3 +1,21 @@
+2008-10-30  Johan Dahlin  <jdahlin@async.com.br>
+
+	Bug 558383 – builddir != srcdir build fails if giscanner python module not already installed
+
+	* gir/Makefile.am:
+	construct PYTHONPATH just once
+
+	* tests/everything/Makefile.am:
+	* tests/scanner/Makefile.am:
+	add $(top_srcdir) to PYTHONPATH to
+	handle builddir != srcdir
+
+	* giscanner/libtoolimporter.py:
+	* giscanner/sourcescanner.py:
+	Make the libtoolimporter work when distchecking too.
+
+	Mostly based on patch by Tommi Komulainen
+
 2008-10-29  Owen Taylor  <otaylor@redhat.com>
 
 	* giscanner/glibtransformer.py: If a filename of an existing

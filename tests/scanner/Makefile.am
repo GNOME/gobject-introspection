@@ -26,6 +26,7 @@ endif
 # .gir --[scanner]-> .typelib --[generate]-> .tgir
 GIRS =
 SCANNER = $(top_srcdir)/tools/g-ir-scanner
+SCANNER_PYTHONPATH = $(top_builddir):$(top_srcdir):$$PYTHONPATH
 SCANNER_LIBS = \
 	$(top_srcdir)/giscanner/*.py \
 	$(top_builddir)/giscanner/libgiscanner.la
@@ -40,7 +41,7 @@ BUILT_SOURCES = $(TYPELIBS) $(GIRS)
 EXTRA_DIST = $(EXPECTEDGIRS) $(EXPECTEDTGIRS)
 
 annotation-1.0.gir: libannotation.la annotation.c annotation.h utility-1.0.gir $(SCANNER) $(SCANNER_LIBS) Makefile
-	PYTHONPATH=$(top_builddir):$$PYTHONPATH $(CHECK_DEBUG) $(SCANNER) -v \
+	PYTHONPATH=$(SCANNER_PYTHONPATH) $(CHECK_DEBUG) $(SCANNER) -v \
 	--add-include-path=$(top_builddir)/gir --add-include-path=. \
 	--include=GObject-2.0 \
 	--include=utility-1.0 \
@@ -53,7 +54,7 @@ annotation-1.0.gir: libannotation.la annotation.c annotation.h utility-1.0.gir $
 GIRS += annotation-1.0.gir
 
 drawable-1.0.gir: libdrawable.la drawable.c drawable.h utility-1.0.gir $(SCANNER) $(SCANNER_LIBS) Makefile
-	PYTHONPATH=$(top_builddir):$$PYTHONPATH $(CHECK_DEBUG) $(SCANNER) -v \
+	PYTHONPATH=$(SCANNER_PYTHONPATH) $(CHECK_DEBUG) $(SCANNER) -v \
 	--add-include-path=$(top_builddir)/gir --add-include-path=. \
 	--include=GObject-2.0 \
 	--include=utility-1.0 \
@@ -66,13 +67,13 @@ drawable-1.0.gir: libdrawable.la drawable.c drawable.h utility-1.0.gir $(SCANNER
 GIRS += drawable-1.0.gir
 
 drawable-injected-1.0.gir: drawable-1.0.gir $(SCANNER) $(SCANNER_LIBS) Makefile
-	PYTHONPATH=$(top_builddir):$$PYTHONPATH $(CHECK_DEBUG) $(SCANNER) -v \
+	PYTHONPATH=$(SCANNER_PYTHONPATH) $(CHECK_DEBUG) $(SCANNER) -v \
 	 --inject drawable-1.0.gir $(srcdir)/DrawableAdditions.xml $@
 GIRS += drawable-injected-1.0.gir
 EXTRA_DIST += DrawableAdditions.xml
 
 foo-1.0.gir: libfoo.la foo.c foo.h utility-1.0.gir $(SCANNER) $(SCANNER_LIBS) Makefile
-	PYTHONPATH=$(top_builddir):$$PYTHONPATH $(CHECK_DEBUG) $(SCANNER) -v \
+	PYTHONPATH=$(SCANNER_PYTHONPATH) $(CHECK_DEBUG) $(SCANNER) -v \
 	--add-include-path=$(top_builddir)/gir --add-include-path=. \
 	--include=GObject-2.0 \
 	--include=utility-1.0 \
@@ -85,7 +86,7 @@ foo-1.0.gir: libfoo.la foo.c foo.h utility-1.0.gir $(SCANNER) $(SCANNER_LIBS) Ma
 GIRS += foo-1.0.gir
 
 utility-1.0.gir: libutility.la utility.h $(SCANNER) $(SCANNER_LIBS) Makefile
-	PYTHONPATH=$(top_builddir):$$PYTHONPATH $(CHECK_DEBUG) $(SCANNER) -v \
+	PYTHONPATH=$(SCANNER_PYTHONPATH) $(CHECK_DEBUG) $(SCANNER) -v \
 	--add-include-path=$(top_builddir)/gir --add-include-path=. \
 	--include=GObject-2.0 \
 	--library=utility \
@@ -98,7 +99,7 @@ GIRS += utility-1.0.gir
 
 # This one tests different --namespace and --strip-prefix
 GtkFrob-1.0.gir: libgtkfrob.la gtkfrob.h $(SCANNER) $(SCANNER_LIBS) Makefile
-	PYTHONPATH=$(top_builddir):$$PYTHONPATH $(CHECK_DEBUG) $(SCANNER) -v \
+	PYTHONPATH=$(SCANNER_PYTHONPATH) $(CHECK_DEBUG) $(SCANNER) -v \
 	--add-include-path=$(top_builddir)/gir --add-include-path=. \
 	--include=GObject-2.0 \
 	--library=gtkfrob \
