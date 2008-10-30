@@ -52,7 +52,7 @@ class GIRParser(object):
         self._shared_libraries = []
         self._tree = parse(filename)
 
-        if (initial_parse):
+        if initial_parse:
             self.parse()
 
     # Public API
@@ -85,42 +85,44 @@ class GIRParser(object):
         assert root.tag == _corens('repository')
         for node in root.getchildren():
             if node.tag == _corens('include'):
-                include = Include(node.attrib['name'],
-                                  node.attrib['version'])
-                self._includes.add(include)
+                self._parse_include(node)
+
         ns = root.find(_corens('namespace'))
         assert ns is not None
-        self._namespace = Namespace(ns.attrib['name'], ns.attrib['version'])
-        self._shared_libraries.extend(ns.attrib['shared-library'].split(','))
-        for child in ns.getchildren():
-            self._parse_node(child)
+        self._namespace = Namespace(ns.attrib['name'],
+                                    ns.attrib['version'])
+        self._shared_libraries.extend(
+            ns.attrib['shared-library'].split(','))
 
-    def _parse_node(self, node):
-        if node.tag == _corens('alias'):
-            self._add_node(self._parse_alias(node))
-        elif node.tag in [_corens('callback')]:
-            self._add_node(self._parse_function(node, Callback))
-        elif node.tag in [_corens('function')]:
-            self._add_node(self._parse_function(node, Function))
-        elif node.tag in [_corens('class'),
-                          _corens('interface')]:
-            self._parse_object_interface(node)
-        elif node.tag == _corens('record'):
-            self._parse_struct(node)
-        elif node.tag == _corens('union'):
-            self._parse_union(node)
-        elif node.tag == _glibns('boxed'):
-            self._parse_boxed(node)
-        elif node.tag in [_corens('enumeration'),
-                          _corens('bitfield')]:
-            self._parse_enumeration_bitfield(node)
-        elif node.tag in _corens('constant'):
-            self._add_node(self._parse_constant(node))
+        parser_methods = {
+            _corens('alias'): self._parse_alias,
+            _corens('bitfield'): self._parse_enumeration_bitfield,
+            _corens('callback'): self._parse_callback,
+            _corens('class'): self._parse_object_interface,
+            _corens('constant'): self._parse_constant,
+            _corens('function'): self._parse_function,
+            _corens('enumeration'): self._parse_enumeration_bitfield,
+            _corens('interface'): self._parse_object_interface,
+            _corens('record'): self._parse_record,
+            _corens('union'): self._parse_union,
+            _corens('boxed'): self._parse_boxed,
+            }
+
+        for node in ns.getchildren():
+            method = parser_methods.get(node.tag)
+            if method is not None:
+                method(node)
+
+    def _parse_include(self, node):
+        include = Include(node.attrib['name'],
+                          node.attrib['version'])
+        self._includes.add(include)
 
     def _parse_alias(self, node):
-        return Alias(node.attrib['name'],
-                     node.attrib['target'],
-                     node.attrib.get(_cns('type')))
+        alias = Alias(node.attrib['name'],
+                      node.attrib['target'],
+                      node.attrib.get(_cns('type')))
+        self._add_node(alias)
 
     def _parse_object_interface(self, node):
         ctor_args = [node.attrib['name'],
@@ -143,20 +145,29 @@ class GIRParser(object):
         for iface in node.findall(_corens('implements')):
             obj.interfaces.append(iface.attrib['name'])
         for method in node.findall(_corens('method')):
-            obj.methods.append(self._parse_function(method, Function))
+            obj.methods.append(self._parse_function_common(method, Function))
         for ctor in node.findall(_corens('constructor')):
-            obj.constructors.append(self._parse_function(ctor, Function))
+            obj.constructors.append(
+                self._parse_function_common(ctor, Function))
         for callback in node.findall(_corens('callback')):
-            obj.fields.append(self._parse_function(callback, Callback))
+            obj.fields.append(self._parse_function_common(callback, Callback))
         for field in node.findall(_corens('field')):
             obj.fields.append(self._parse_field(field))
         for property in node.findall(_corens('property')):
             obj.properties.append(self._parse_property(property))
         for signal in node.findall(_glibns('signal')):
-            obj.signals.append(self._parse_function(signal, Function))
+            obj.signals.append(self._parse_function_common(signal, Function))
         self._add_node(obj)
 
-    def _parse_function(self, node, klass):
+    def _parse_callback(self, node):
+        callback = self._parse_function_common(node, Callback)
+        self._add_node(callback)
+
+    def _parse_function(self, node):
+        function = self._parse_function_common(node, Function)
+        self._add_node(function)
+
+    def _parse_function_common(self, node, klass):
         name = node.attrib['name']
         returnnode = node.find(_corens('return-value'))
         if not returnnode:
@@ -181,7 +192,7 @@ class GIRParser(object):
             throws = (node.attrib.get('throws') == '1')
             return klass(name, retval, parameters, identifier, throws)
 
-    def _parse_struct(self, node):
+    def _parse_record(self, node):
         if _glibns('type-name') in node.attrib:
             struct = GLibBoxedStruct(node.attrib['name'],
                                      node.attrib[_glibns('type-name')],
@@ -193,11 +204,14 @@ class GIRParser(object):
         for field in node.findall(_corens('field')):
             struct.fields.append(self._parse_field(field))
         for callback in node.findall(_corens('callback')):
-            struct.fields.append(self._parse_function(callback, Callback))
+            struct.fields.append(
+                self._parse_function_common(callback, Callback))
         for method in node.findall(_corens('method')):
-            struct.fields.append(self._parse_function(method, Function))
+            struct.fields.append(
+                self._parse_function_common(method, Function))
         for ctor in node.findall(_corens('constructor')):
-            struct.constructors.append(self._parse_function(ctor, Function))
+            struct.constructors.append(
+                self._parse_function_common(ctor, Function))
         self._add_node(struct)
 
     def _parse_union(self, node):
@@ -210,13 +224,16 @@ class GIRParser(object):
             struct = Union(node.attrib['name'],
                            node.attrib.get(_cns('type')))
         for callback in node.findall(_corens('callback')):
-            struct.fields.append(self._parse_function(callback, Callback))
+            struct.fields.append(
+                self._parse_function_common(callback, Callback))
         for field in node.findall(_corens('field')):
             struct.fields.append(self._parse_field(field))
         for method in node.findall(_corens('method')):
-            struct.fields.append(self._parse_function(method, Function))
+            struct.fields.append(
+                self._parse_function_common(method, Function))
         for ctor in node.findall(_corens('constructor')):
-            struct.constructors.append(self._parse_function(ctor, Function))
+            struct.constructors.append(
+                self._parse_function_common(ctor, Function))
         self._add_node(struct)
 
     def _parse_type(self, node):
@@ -243,11 +260,14 @@ class GIRParser(object):
                              node.attrib[_glibns('type-name')],
                              node.attrib[_glibns('get-type')])
         for method in node.findall(_corens('method')):
-            obj.methods.append(self._parse_function(method, Function))
+            obj.methods.append(
+                self._parse_function_common(method, Function))
         for ctor in node.findall(_corens('constructor')):
-            obj.constructors.append(self._parse_function(ctor, Function))
+            obj.constructors.append(
+                self._parse_function_common(ctor, Function))
         for callback in node.findall(_corens('callback')):
-            obj.fields.append(self._parse_function(callback, Callback))
+            obj.fields.append(
+                self._parse_function_common(callback, Callback))
         self._add_node(obj)
 
     def _parse_field(self, node):
@@ -277,9 +297,10 @@ class GIRParser(object):
 
     def _parse_constant(self, node):
         type_node = self._parse_type(node)
-        return Constant(node.attrib['name'],
-                        type_node.name,
-                        node.attrib['value'])
+        constant = Constant(node.attrib['name'],
+                            type_node.name,
+                            node.attrib['value'])
+        self._add_node(constant)
 
     def _parse_enumeration_bitfield(self, node):
         name = node.attrib.get('name')

@@ -1,5 +1,11 @@
 2008-10-30  Johan Dahlin  <jdahlin@async.com.br>
 
+	* giscanner/girparser.py:
+	Avoid big if/else and use a dispatch table like
+	approach.
+
+2008-10-30  Johan Dahlin  <jdahlin@async.com.br>
+
 	* giscanner/transformer.py:
 	Clean up include parsing and registration.
 
