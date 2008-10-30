@@ -592,9 +592,101 @@ static const PyMethodDef _PyGISourceScanner_methods[] = {
 };
 
 
+static int calc_attrs_length(PyObject *attributes, int indent,
+			     int self_indent)
+{
+  int attr_length = 0;
+  int i;
+  
+  if (indent == -1)
+    return -1;
+
+  for (i = 0; i < PyList_Size (attributes); ++i)
+    {
+      PyObject *tuple;
+      char *attr, *value;
+      char *escaped;
+      
+      tuple = PyList_GetItem (attributes, i);
+      if (PyTuple_GetItem(tuple, 1) == Py_None)
+	continue;
+
+      g_assert(PyArg_ParseTuple(tuple, "ss", &attr, &value));
+      
+      escaped = g_markup_escape_text (value, -1);
+      attr_length += 2 + strlen(attr) + strlen(escaped) + 2;
+      g_free(escaped);
+    }
+
+  return attr_length + indent + self_indent;
+}
+
+static PyObject *
+pygi_collect_attributes (PyObject *self,
+			 PyObject *args)
+{
+  char *tag_name;
+  PyObject *attributes;
+  int indent, indent_len, i, j, self_indent;
+  char *indent_char;
+  gboolean first;
+  GString *attr_value;
+  
+  if (!PyArg_ParseTuple(args, "sOisi",
+			&tag_name, &attributes,
+			&self_indent, &indent_char,
+			&indent))
+    return NULL;
+
+  if (attributes == Py_None || !PyList_Size(attributes))
+    return PyString_FromString("");
+
+  if (calc_attrs_length(attributes, indent, self_indent) > 79)
+    indent_len = self_indent + strlen(tag_name) + 1;
+  else
+    indent_len = 0;
+
+  first = TRUE;
+  attr_value = g_string_new ("");
+
+  for (i = 0; i < PyList_Size (attributes); ++i)
+    {
+      PyObject *tuple;
+      char *attr, *value, *escaped;
+      
+      tuple = PyList_GetItem (attributes, i);
+      g_assert(tuple != NULL);
+      g_assert(PyTuple_Size(tuple) == 2);
+      if (PyTuple_GetItem(tuple, 1) == Py_None)
+	continue;
+
+      g_assert(PyArg_ParseTuple(tuple, "ss", &attr, &value));
+
+      if (indent_len && !first)
+	{
+	  g_string_append_c (attr_value, '\n');
+	  for (j = 0; j < indent_len; j++)
+	    g_string_append_c (attr_value, ' ');
+	}
+      g_string_append_c (attr_value, ' ');
+      g_string_append (attr_value, attr);
+      g_string_append_c (attr_value, '=');
+      g_string_append_c (attr_value, '\"');
+      escaped = g_markup_escape_text (value, -1);
+      g_string_append (attr_value, escaped);
+      g_string_append_c (attr_value, '\"');
+      if (first)
+	first = FALSE;
+  }
+
+  return PyString_FromString (g_string_free (attr_value, FALSE));
+}
+
 /* Module */
 
 static const PyMethodDef pyscanner_functions[] = {
+  { "collect_attributes",
+    (PyCFunction) pygi_collect_attributes, METH_VARARGS },
   { NULL, NULL, 0, NULL }
 };
 

@@ -1,5 +1,13 @@
 2008-10-30  Johan Dahlin  <jdahlin@async.com.br>
 
+	* giscanner/giscannermodule.c (calc_attrs_length),
+	(pygi_collect_attributes):
+	* giscanner/xmlwriter.py:
+	Write a C version of the xml namespace formatter.
+	Saves 15% of the time it takes to create a gtk gir.
+
+2008-10-30  Johan Dahlin  <jdahlin@async.com.br>
+
 	* giscanner/xmlwriter.py: Abstract attribute formatting
 	to a function external to the XMLWriter class.
 

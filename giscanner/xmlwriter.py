@@ -18,9 +18,13 @@
 # 02110-1301, USA.
 #
 
+from __future__ import with_statement
+
 from contextlib import contextmanager
 from cStringIO import StringIO
 from xml.sax.saxutils import quoteattr
+
+from .libtoolimporter import LibtoolImporter
 
 
 def _calc_attrs_length(attributes, indent, self_indent):
@@ -38,8 +42,8 @@ def _calc_attrs_length(attributes, indent, self_indent):
     return attr_length + indent + self_indent
 
 
-def _collect_attributes(tag_name, attributes, self_indent,
-                        self_indent_char, indent=-1):
+def collect_attributes(tag_name, attributes, self_indent,
+                       self_indent_char, indent=-1):
     if not attributes:
         return ''
     if _calc_attrs_length(attributes, indent, self_indent) > 79:
@@ -63,6 +67,10 @@ def _collect_attributes(tag_name, attributes, self_indent,
     return attr_value
 
 
+with LibtoolImporter:
+    from giscanner._giscanner import collect_attributes
+
+
 class XMLWriter(object):
 
     def __init__(self):
@@ -76,7 +84,7 @@ class XMLWriter(object):
     # Private
 
     def _open_tag(self, tag_name, attributes=None):
-        attrs = _collect_attributes(
+        attrs = collect_attributes(
             tag_name, attributes, self._indent,
             self._indent_char,
             len(tag_name) + 2)
@@ -101,7 +109,7 @@ class XMLWriter(object):
             suffix = '>%s</%s>' % (data, tag_name)
         else:
             suffix = '/>'
-        attrs = _collect_attributes(
+        attrs = collect_attributes(
             tag_name, attributes,
             self._indent,
             self._indent_char,
