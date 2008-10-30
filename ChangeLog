@@ -1,5 +1,8 @@
 2008-10-30  Johan Dahlin  <jdahlin@async.com.br>
 
+	* giscanner/xmlwriter.py: Abstract attribute formatting
+	to a function external to the XMLWriter class.
+
 	* giscanner/scannerlexer.l:
 	Parse and discard __typeof and __attribute.
 

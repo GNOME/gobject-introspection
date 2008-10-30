@@ -23,6 +23,46 @@ from cStringIO import StringIO
 from xml.sax.saxutils import quoteattr
 
 
+def _calc_attrs_length(attributes, indent, self_indent):
+    if indent == -1:
+        return -1
+    attr_length = 0
+    for attr, value in attributes:
+        # FIXME: actually, if we have attributes with None as value this
+        # should be considered a bug and raise an error. We are just
+        # ignoring them here while we fix GIRParser to create the right
+        # ast with the correct attributes.
+        if value is None:
+            continue
+        attr_length += 2 + len(attr) + len(quoteattr(value))
+    return attr_length + indent + self_indent
+
+
+def _collect_attributes(tag_name, attributes, self_indent,
+                        self_indent_char, indent=-1):
+    if not attributes:
+        return ''
+    if _calc_attrs_length(attributes, indent, self_indent) > 79:
+        indent_len = self_indent + len(tag_name) + 1
+    else:
+        indent_len = 0
+    first = True
+    attr_value = ''
+    for attr, value in attributes:
+        # FIXME: actually, if we have attributes with None as value this
+        # should be considered a bug and raise an error. We are just
+        # ignoring them here while we fix GIRParser to create the right
+        # ast with the correct attributes.
+        if value is None:
+            continue
+        if indent_len and not first:
+            attr_value += '\n%s' % (self_indent_char * indent_len)
+        attr_value += ' %s=%s' % (attr, quoteattr(value))
+        if first:
+            first = False
+    return attr_value
+
+
 class XMLWriter(object):
 
     def __init__(self):
@@ -35,46 +75,11 @@ class XMLWriter(object):
 
     # Private
 
-    def _calc_attrs_length(self, attributes, indent):
-        if indent == -1:
-            return -1
-        attr_length = 0
-        for attr, value in attributes:
-            # FIXME: actually, if we have attributes with None as value this
-            # should be considered a bug and raise an error. We are just
-            # ignoring them here while we fix GIRParser to create the right
-            # ast with the correct attributes.
-            if value is None:
-                continue
-            attr_length += 2 + len(attr) + len(quoteattr(value))
-        return attr_length + indent + self._indent
-
-    def _collect_attributes(self, tag_name, attributes, indent=-1):
-        if not attributes:
-            return ''
-        if self._calc_attrs_length(attributes, indent) > 79:
-            indent_len = self._indent + len(tag_name) + 1
-        else:
-            indent_len = 0
-        first = True
-        attr_value = ''
-        for attr, value in attributes:
-            # FIXME: actually, if we have attributes with None as value this
-            # should be considered a bug and raise an error. We are just
-            # ignoring them here while we fix GIRParser to create the right
-            # ast with the correct attributes.
-            if value is None:
-                continue
-            if indent_len and not first:
-                attr_value += '\n%s' % (self._indent_char * indent_len)
-            attr_value += ' %s=%s' % (attr, quoteattr(value))
-            if first:
-                first = False
-        return attr_value
-
     def _open_tag(self, tag_name, attributes=None):
-        attrs = self._collect_attributes(
-            tag_name, attributes, len(tag_name) + 2)
+        attrs = _collect_attributes(
+            tag_name, attributes, self._indent,
+            self._indent_char,
+            len(tag_name) + 2)
         self.write_line('<%s%s>' % (tag_name, attrs))
 
     def _close_tag(self, tag_name):
@@ -96,8 +101,11 @@ class XMLWriter(object):
             suffix = '>%s</%s>' % (data, tag_name)
         else:
             suffix = '/>'
-        attrs = self._collect_attributes(
-            tag_name, attributes, len(prefix) + len(suffix))
+        attrs = _collect_attributes(
+            tag_name, attributes,
+            self._indent,
+            self._indent_char,
+            len(prefix) + len(suffix))
         self.write_line(prefix + attrs + suffix)
 
     def push_tag(self, tag_name, attributes=None):
