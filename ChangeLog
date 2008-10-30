@@ -1,5 +1,10 @@
 2008-10-30  Johan Dahlin  <jdahlin@async.com.br>
 
+	* giscanner/scannerlexer.l:
+	Parse and discard __typeof and __attribute.
+
+2008-10-30  Johan Dahlin  <jdahlin@async.com.br>
+
 	* giscanner/girparser.py:
 	Remove arguments from the constructor, move them to
 	separate accessors. Add a new parse_tree method

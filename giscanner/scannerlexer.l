@@ -118,20 +118,22 @@ stringtext				([^\\\"])|(\\.)
 ","					{ return ','; }
 "->"					{ return ARROW; }
 
+"__asm" 	        	        { if (!parse_ignored_macro()) REJECT; }
+"__asm__" 	        	        { if (!parse_ignored_macro()) REJECT; }
 "__attribute__" 		        { if (!parse_ignored_macro()) REJECT; }
+"__attribute" 		                { if (!parse_ignored_macro()) REJECT; }
 "__const"                               { return CONST; }
 "__extension__"                         { return EXTENSION; }
 "__inline"				{ return INLINE; }
 "__nonnull" 			        { if (!parse_ignored_macro()) REJECT; }
 "__restrict"				{ return RESTRICT; }
+"__typeof"				{ if (!parse_ignored_macro()) REJECT; }
+"_Bool"					{ return BOOL; }
 
 [a-zA-Z_][a-zA-Z_0-9]*			{ if (scanner->macro_scan) return IDENTIFIER; else REJECT; }
 
 "asm"           		        { if (!parse_ignored_macro()) REJECT; }
-"__asm" 	        	        { if (!parse_ignored_macro()) REJECT; }
-"__asm__" 	        	        { if (!parse_ignored_macro()) REJECT; }
 "auto"					{ return AUTO; }
-"_Bool"					{ return BOOL; }
 "break"					{ return BREAK; }
 "case"					{ return CASE; }
 "char"					{ return CHAR; }
@@ -148,7 +150,6 @@ stringtext				([^\\\"])|(\\.)
 "goto"					{ return GOTO; }
 "if"					{ return IF; }
 "inline"				{ return INLINE; }
-"__inline__"				{ return INLINE; }
 "int"					{ return INT; }
 "long"					{ return LONG; }
 "register"				{ return REGISTER; }
