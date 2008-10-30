@@ -35,11 +35,11 @@ else:
                         'site-packages')
 sys.path.insert(0, path)
 
+from giscanner.ast import Include
 from giscanner.glibtransformer import GLibTransformer
+from giscanner.minixpath import myxpath, xpath_assert
 from giscanner.sourcescanner import SourceScanner
 from giscanner.transformer import Transformer
-from giscanner.ast import Include
-from giscanner.minixpath import myxpath, xpath_assert
 
 
 def _get_option_parser():
@@ -62,7 +62,8 @@ def _get_option_parser():
                       help="directories to search for libraries")
     parser.add_option("-n", "--namespace",
                       action="store", dest="namespace_name",
-                      help="name of namespace for this unit, also used as --strip-prefix default")
+                      help=("name of namespace for this unit, also "
+                            "used as --strip-prefix default"))
     parser.add_option("", "--nsversion",
                       action="store", dest="namespace_version",
                       help="version of namespace for this unit")
@@ -180,7 +181,8 @@ def main(args):
 
     if options.inject:
         if len(args) != 4:
-            _error('Need three filenames; e.g. g-ir-scanner --inject Source.gir Additions.xml SourceOut.gir')
+            _error('Need three filenames; e.g. g-ir-scanner '
+                   '--inject Source.gir Additions.xml SourceOut.gir')
         return inject(*args[1:4])
 
     if options.xpath_assertions:
@@ -256,7 +258,9 @@ def main(args):
     ss.parse_macros(filenames)
 
     # Transform the C symbols into AST nodes
-    transformer = Transformer(ss, options.namespace_name, options.namespace_version)
+    transformer = Transformer(ss,
+                              options.namespace_name,
+                              options.namespace_version)
     if options.strip_prefix:
         transformer.set_strip_prefix(options.strip_prefix)
     else:
