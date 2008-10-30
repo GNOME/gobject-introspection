@@ -100,6 +100,8 @@ class Transformer(object):
         self._includepaths = list(paths)
 
     def register_include(self, include):
+        if include in self._includes:
+            return
         filename = self._find_include(include)
         self._parse_include(filename)
         self._includes.add(include)

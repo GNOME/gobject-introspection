@@ -1,3 +1,8 @@
+2008-10-30  Colin Walters  <walters@verbum.org>
+
+	* giscanner/transformer.py: Don't reparse includes
+	we've already processed.
+
 2008-10-30  Johan Dahlin  <jdahlin@async.com.br>
 
 	* giscanner/girparser.py:
