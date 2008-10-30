@@ -1,5 +1,10 @@
 2008-10-30  Johan Dahlin  <jdahlin@async.com.br>
 
+	* giscanner/transformer.py:
+	Clean up imports
+
+2008-10-30  Johan Dahlin  <jdahlin@async.com.br>
+
 	Bug 558383 – builddir != srcdir build fails if giscanner python module not already installed
 
 	* gir/Makefile.am:

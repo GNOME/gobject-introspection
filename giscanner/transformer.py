@@ -21,15 +21,17 @@
 import os
 import re
 
-from giscanner.ast import (Callback, Enum, Function, Namespace, Member,
-                           Parameter, Return, Array, Struct, Field,
-                           Type, Alias, Interface, Class, Node, Union,
-                           List, Map, Varargs, Constant, type_name_from_ctype,
-                           type_names, default_array_types, default_out_types,
-                           TYPE_STRING, BASIC_GIR_TYPES, TYPE_NONE)
-from giscanner.config import DATADIR
+from .ast import (Callback, Enum, Function, Namespace, Member,
+                  Parameter, Return, Array, Struct, Field,
+                  Type, Alias, Interface, Class, Node, Union,
+                  List, Map, Varargs, Constant, type_name_from_ctype,
+                  type_names, default_array_types, default_out_types,
+                  TYPE_STRING, BASIC_GIR_TYPES, TYPE_NONE)
+from .config import DATADIR
 from .glibast import GLibBoxed
-from giscanner.sourcescanner import (
+from .girparser import GIRParser
+from .odict import odict
+from .sourcescanner import (
     SourceSymbol, ctype_name, CTYPE_POINTER,
     CTYPE_BASIC_TYPE, CTYPE_UNION, CTYPE_ARRAY, CTYPE_TYPEDEF,
     CTYPE_VOID, CTYPE_ENUM, CTYPE_FUNCTION, CTYPE_STRUCT,
@@ -37,7 +39,6 @@ from giscanner.sourcescanner import (
     CSYMBOL_TYPE_ENUM, CSYMBOL_TYPE_UNION, CSYMBOL_TYPE_OBJECT,
     CSYMBOL_TYPE_MEMBER, CSYMBOL_TYPE_ELLIPSIS, CSYMBOL_TYPE_CONST,
     TYPE_QUALIFIER_CONST)
-from .odict import odict
 from .utils import strip_common_prefix, to_underscores
 
 _xdg_data_dirs = [x for x in os.environ.get('XDG_DATA_DIRS', '').split(':') \
@@ -115,7 +116,6 @@ class Transformer(object):
                                      % (girname, searchdirs))
         d = os.path.dirname(path)
         self._includes.add(include)
-        from .girparser import GIRParser
         parser = GIRParser(path)
         for include in parser.get_includes():
             self.register_include(include)
