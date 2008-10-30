@@ -126,6 +126,7 @@ stringtext				([^\\\"])|(\\.)
 "__extension__"                         { return EXTENSION; }
 "__inline"				{ return INLINE; }
 "__nonnull" 			        { if (!parse_ignored_macro()) REJECT; }
+"__signed__"				{ return SIGNED; }
 "__restrict"				{ return RESTRICT; }
 "__typeof"				{ if (!parse_ignored_macro()) REJECT; }
 "_Bool"					{ return BOOL; }
