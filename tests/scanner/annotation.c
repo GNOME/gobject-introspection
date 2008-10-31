@@ -169,7 +169,7 @@ annotation_object_get_strings (AnnotationObject *object)
 void
 annotation_object_with_voidp (AnnotationObject *object, void *data)
 {
-  
+
 }
 
 /**
@@ -198,17 +198,17 @@ annotation_object_get_objects (AnnotationObject *object)
  *
  * Return value: (transfer): The object
  **/
-GObject* 
+GObject*
 annotation_object_create_object (AnnotationObject *object)
 {
 	return g_object_ref (object);
 }
 
-void     
+void
 annotation_object_use_buffer   (AnnotationObject *object,
 				guchar           *bytes)
 {
-  
+
 }
 
 /**
@@ -233,7 +233,7 @@ annotation_object_compute_sum  (AnnotationObject *object,
  *
  * Test taking an array with length parameter
  **/
-void     
+void
 annotation_object_compute_sum_n(AnnotationObject *object,
 				int              *nums,
 				int               n_nums)
@@ -242,7 +242,7 @@ annotation_object_compute_sum_n(AnnotationObject *object,
 }
 
 /**
- * annotation_object_allow_none: 
+ * annotation_object_allow_none:
  * @object: a #GObject
  * @somearg: (allow-none):
  **/
@@ -266,7 +266,7 @@ annotation_object_notrans (AnnotationObject *object)
 }
 
 /**
- * annotation_object_do_not_use: 
+ * annotation_object_do_not_use:
  * @object: a #GObject
  *
  * Deprecated: 0.12: Use annotation_object_create_object() instead.
