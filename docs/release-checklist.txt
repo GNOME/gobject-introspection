@@ -1,10 +1,11 @@
 Check bugzilla
 Run all tests
 Update NEWS
+Add ChangeLog marker === XXX ===
+Commit
 make distcheck
 make release-tag
 make upload-release
-
 Send release announcement
 Bump version number:
   configure.ac

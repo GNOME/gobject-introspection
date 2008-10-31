@@ -1,3 +1,11 @@
+=== 0.6.0 ===
+2008-10-31  Johan Dahlin  <jdahlin@async.com.br>
+
+	* NEWS:
+	* configure.ac:
+	* docs/release-checklist.txt:
+	0.6.0
+
 2008-10-31  Johan Dahlin  <jdahlin@async.com.br>
 
 	* Makefile.am: add an upload-release target
@@ -1048,7 +1056,7 @@
 	giscanner parser/writer.
 
 	* giscanner/ast.py: add constructor list to Struct and Union.
-	Add new param in Return's contructor to define transfer. 
+	Add new param in Return's contructor to define transfer.
 	* giscanner/girparser.py: several additions to the parser in order
 	to have parsing all nodes of the gir xml files.
 	* tools/g-ir-scanner (typelib_xml_strip, inject): use gir parser
@@ -1091,7 +1099,7 @@
 	girepository/ginfo.c(g_registered_type_info_get_g_type): use
 	g_typelib_symbol instead of g_module_symbol.
 	* girepository/girepository.h: remove g_typelib_set_module and add
-	g_typelib_symbol. 
+	g_typelib_symbol.
 	* girepository/gtypelib.[ch] (find_some_symbol, _g_typelib_init,
 	g_typelib_new_from_memory, g_typelib_new_from_const_memory,
 	g_typelib_free, g_typelib_symbol): chnage GTypeLib to hold a list of
@@ -1290,7 +1298,7 @@
 
 2008-09-14  Colin Walters  <walters@verbum.org>
 
-	* giscanner/glibtransformer.py: Ignore functions with 
+	* giscanner/glibtransformer.py: Ignore functions with
 	leading _.
 
 2008-09-12  Colin Walters  <walters@verbum.org>
@@ -1310,7 +1318,7 @@
 2008-09-12  Colin Walters  <walters@verbum.org>
 
 	* giscanner/minixpath.py: Code to run an "XPath"
-	assertion against an XML tree, taken from 
+	assertion against an XML tree, taken from
 	gir-repository/gir/tests.py.
 	* giscanner/Makefile.am: Ship it.
 	* tools/g-ir-scanner: Add --xpath-assertions option.

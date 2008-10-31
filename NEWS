@@ -1,2 +1,66 @@
+0.6.0 31-oct-2008
+    Bugs resolved:
+    - Bug 551162 - giscanner does not recognize asm and __asm__
+    - Bug 551737 - Fix strip_namespace_func to only strip prefix...
+    - Bug 551744 - Non-GObject types aren't aggregating ctors and methods
+    - Bug 552065 - Add deprecation annotation
+    - Bug 552347 - Parse #defines constants
+    - Bug 552370 - add one more test for unsigned as a type, not as a type qualifier
+    - Bug 552370 - unsigned not scanned properly
+    - Bug 552374 - Const strings should be identified in the gir
+    - Bug 552380 - Array parameters should be marked in the gir
+    - Bug 552384 - Use SHLIB_SUFFIX intead of G_MODULE_SUFFIX for Darwin
+    - Bug 552390 - Handle capitialization like "DBus" more robustly
+    - Bug 552393 - Note variadic functions
+    - Bug 552566 - Add time_t type 
+    - Bug 552858 - versioning
+    - Bug 554490 - g-ir-scanner gets confused by '\\'
+    - Bug 554521 - scanner generates wrong names for enum members with...
+    - Bug 554576 - scan problem with ev_selection_render_selection()
+    - Bug 554632 - type tag for GType
+    - Bug 554854 - The --typelib-xml and --inject options should reuse giscanner ...
+    - Bug 555293 - append library_paths to LPATH env variable to workaround a...
+    - Bug 555294 - Add support for multiple shared libraries per typelib.
+    - Bug 555712 - Struct and union issues
+    - Bug 555946 - Install a test module exercising all types, transfer rules, etc
+    - Bug 556048 – Crash in g_irepository_find_by_gtype
+    - Bug 556174 – parse types for lists etc
+    - Bug 556185 - segfault on g_callable_info_get_return_type
+    - Bug 556323 – transfer-ownership is wrong for functions returning const char *
+    - Bug 556331 - clean up includes handling
+    - Bug 556358 - don't use libtool internals
+    - Bug 556400 – Fails to build on OS X 10.4
+    - Bug 556432 - transfer annotations and defaults
+    - Bug 556433 – assume direction = out for int * parameters
+    - Bug 556434 – unhandled interface/object/... member types
+    - Bug 556541 – access union members through UnionBlob rather than StructBlob
+    - Bug 556543 – reduce compiler warnings
+    - Bug 556579 - union and struct name misresolved
+    - Bug 556610 – giscanner/girparser.py drops parameter options
+    - Bug 556732 – generate gir files consistently
+    - Bug 556739 - transfer ownership
+    - Bug 556777 - validate properties
+    - Bug 556783 - change namespace handling to be more consistent
+    - Bug 556795 - char ** regression
+    - Bug 557076 - move typelibs to $libdir
+    - Bug 557092 – Callback annotations not used
+    - Bug 557241 – "throws" flag for functions
+    - Bug 557377 – Add test to ensure annotations survive the roundtrip via typelib
+    - Bug 557379 – g-ir-generate not writing the 'abstract' attribute
+    - Bug 557405 – Use 'allow-none' consistently
+    - Bug 557468 – Support for GI_TYPELIB_PATH
+    - Bug 557623 - Constructors shouldn't be flagged as methods
+    - Bug 557786 - support fixed size arrays
+    - Bug 557788 – Return types for constructors in generated typelib bogus
+    - Bug 557791 – g_irepository_require() could return a GTypelib *
+    - Bug 558062 – provide and use paths in the .pc file
+    - Bug 558065 – gitesttypes should be installed
+    - Bug 558068 – when invoking a method, offset the in arguments by one, not the out
+    - Bug 558109 – _g_typelib_init fails to find shared libraries
+    - Bug 558383 – builddir != srcdir build fails if giscanner python module not already installed
+    Contributors: Johan Bilien, Jürg Billeter, Johan Dahlin, John Ehresman,
+      Tommi Komulainen, Jani Monoses, Lucas Rocha, Andreas Rottmann
+      Colin Walters, Dan Winship, Owen Taylor
+
 0.5.0 01-sep-2008
     - First public release
