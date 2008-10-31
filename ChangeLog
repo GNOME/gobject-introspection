@@ -1,3 +1,12 @@
+2008-10-31  Tommi Komulainen  <tommi.komulainen@iki.fi>
+
+	* giscanner/Makefile.am:
+	* tests/invoke/Makefile.am:
+	* tests/repository/Makefile.am: List in-tree libraries first in
+	LDADD / LIBADD. If installed library is listed first, the
+	resulting binary will prefer installed version to one in .libs,
+	possibly making 'make check' behave strangely.
+
 2008-10-30  Tommi Komulainen  <tommi.komulainen@iki.fi>
 
 	* giscanner/ast.py: map 'id' (ObjC) to 'any' type to stop

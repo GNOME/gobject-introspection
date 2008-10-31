@@ -11,7 +11,7 @@ testfns_la_SOURCES =				\
 	testfns-metadata.c
 testfns_la_CFLAGS = $(GIREPO_CFLAGS) -I$(top_srcdir)/girepository
 testfns_la_LDFLAGS = -module -avoid-version
-testfns_la_LIBADD = $(GIREPO_LIBS) $(top_builddir)/girepository/libgirepository.la
+testfns_la_LIBADD = $(top_builddir)/girepository/libgirepository.la $(GIREPO_LIBS)
 
 if OS_WIN32
 testfns_la_LDFLAGS += -no-undefined
@@ -25,7 +25,7 @@ testfns-metadata.c: testfns-1.0.gir $(top_builddir)/tools/g-ir-compiler Makefile
 
 invoke_SOURCES = invoke.c
 invoke_CFLAGS = $(GIREPO_CFLAGS)  -I$(top_srcdir)/girepository
-invoke_LDADD = $(GIREPO_LIBS) $(top_builddir)/girepository/libgirepository.la
+invoke_LDADD = $(top_builddir)/girepository/libgirepository.la $(GIREPO_LIBS)
 
 TESTS = invoke invoke-namespace-find.sh
 

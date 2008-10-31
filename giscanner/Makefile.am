@@ -55,7 +55,7 @@ _giscanner_la_CFLAGS = \
 	$(PYTHON_INCLUDES) \
 	$(GOBJECT_CFLAGS) \
 	-I$(top_srcdir)/giscanner
-_giscanner_la_LIBADD = $(GOBJECT_LIBS) libgiscanner.la
+_giscanner_la_LIBADD = libgiscanner.la $(GOBJECT_LIBS)
 
 _giscanner_la_LDFLAGS = \
 	-module -avoid-version -export-symbols-regex init_giscanner
