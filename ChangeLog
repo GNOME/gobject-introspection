@@ -1,3 +1,11 @@
+2008-10-31  Colin Walters  <walters@verbum.org>
+
+	Bug 558109 – _g_typelib_init fails to find shared libraries
+
+	* transformer/glibtransformer.py: Use ctypes' find_library
+	on passed libraries and write that for the shared-library
+	entry.  We want to avoid depending on -devel packages.
+
 2008-10-31  Johan Dahlin  <jdahlin@async.com.br>
 
 	* docs/g-ir-scanner.1:

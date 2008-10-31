@@ -21,6 +21,7 @@
 from __future__ import with_statement
 
 import os
+from ctypes.util import find_library
 
 from .ast import (Callback, Class, Constant, Enum, Function, Interface, Member,
                   Array, Struct, Alias, Union, List, Map, Varargs)
@@ -54,7 +55,10 @@ class GIRWriter(XMLWriter):
     def _write_namespace(self, namespace, shlibs):
         libraries = []
         for l in shlibs:
-            libraries.append(os.path.basename(l))
+            found_libname = find_library(l)
+            if not found_libname:
+                found_libname = l
+            libraries.append(os.path.basename(found_libname))
 
         attrs = [('name', namespace.name),
                  ('version', namespace.version),
