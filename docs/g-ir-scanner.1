@@ -28,6 +28,10 @@ at the file suffix. If a library depends on another the corresponding
 metadata file should be included so references to external types are
 correctly specified.
 .TP
+.B \---add-include-path=PATH
+Add a directory to the path which the scanner uses to find GIR files.
+Can be used multiple times to specify multiple directories
+.TP
 .B \-i, ---library=LIBRARY
 Specifies a library that will be introspected. This means that the 
 *_get_type() functions in it will be called for GObject data types.
@@ -76,8 +80,31 @@ Do not delete unknown types from the resulting format.
 .TP
 .B \---typelib-xml                       
 Convert the resulting xml to only output the types relevant
-to the typelib compiler.
-FIXME
+to the typelib compiler. This is mainly useful for verifying the
+correctness of the typelib itself.
+.TP
+.B \---inject=FILENAME
+Injects a variant of a GIR file into the scanner. This is used to add
+custom functions to a GIR wrapping a library without modifying the upstream
+library itself. The Format of the inject file is similar to a GIR,
+but the root node is <injections> rather than <repository> and
+<inject path="..."> where ... is an xpath expression.
+
+Example:
+
+  <inject path="namespace/class[@name='TestDrawable']">
+    <method name="get_width" c:identifier="girepo_test_drawable_get_width">
+      <return-value transfer-ownership="none">
+        <type name="int" c:type="gint"/>
+      </return-value>
+    </method>
+  </inject>
+
+The example above will add a new method called get_with to the TestDrawable class.
+.TP
+.B \---xpath-assertions=FILENAME
+Loads a list xpath assertions from FILENAME, this is useful for verifying
+that the GIR itself is properly generated.
 .TP
 .SH BUGS
 Report bugs at http://bugzilla.gnome.org/ in the glib product and

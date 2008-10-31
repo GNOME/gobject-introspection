@@ -1,3 +1,8 @@
+2008-10-31  Johan Dahlin  <jdahlin@async.com.br>
+
+	* docs/g-ir-scanner.1:
+	Document the renaming options.
+
 2008-10-31  Tommi Komulainen  <tommi.komulainen@iki.fi>
 
 	* giscanner/Makefile.am:
