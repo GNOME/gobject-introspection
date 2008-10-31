@@ -15,10 +15,10 @@ EXTRA_DIST = \
 	xref1.gir	\
 	xref2.gir
 
-GIRTESTS = 			\
-	boxed.gir.test  	\
+GIRTESTS =				\
+	boxed.gir.test		\
 	constant.gir.test	\
-	enum.gir.test  		\
+	enum.gir.test		\
 	object.gir.test		\
 	struct.gir.test
 
