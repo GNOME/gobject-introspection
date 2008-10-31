@@ -1,3 +1,9 @@
+2008-10-31  Johan Dahlin  <jdahlin@async.com.br>
+
+	* Makefile.am: add an upload-release target
+	* docs/release-checklist.txt:
+	Release process documentation
+
 2008-10-31  Colin Walters  <walters@verbum.org>
 
 	Bug 558109 – _g_typelib_init fails to find shared libraries

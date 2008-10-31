@@ -1,0 +1,10 @@
+Check bugzilla
+Run all tests
+Update NEWS
+make distcheck
+make release-tag
+make upload-release
+
+Send release announcement
+Bump version number:
+  configure.ac

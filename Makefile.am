@@ -45,3 +45,6 @@ release-tag:
               $$TRUNK \
               $$ROOT/tags/GOBJECT_INTROSPECTION_$$SVNVERSION
 
+upload-release: $(distdir).tar.gz
+	scp dist/$(distdir).tar.gz gnome.org:
+	ssh gnome.org install-module $(distdir).tar.gz
