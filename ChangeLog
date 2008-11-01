@@ -1,3 +1,11 @@
+2008-11-01  Owen Taylor  <otaylor@redhat.com>
+
+	Bug 558848 giparser.py: shared library should be optional
+
+	When parsing a .gir, allow the shared-library attribute
+	of <namespace/> to be missing: this corresponds to the handling
+	in libgirepository and elsewhere.
+
 2008-11-01  Tommi Komulainen  <tommi.komulainen@iki.fi>
 
 	Bug 557898 – Fails to build on OSX 10.4

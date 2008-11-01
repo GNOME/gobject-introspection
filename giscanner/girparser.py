@@ -94,8 +94,9 @@ class GIRParser(object):
         assert ns is not None
         self._namespace = Namespace(ns.attrib['name'],
                                     ns.attrib['version'])
-        self._shared_libraries.extend(
-            ns.attrib['shared-library'].split(','))
+        if 'shared-library' in ns.attrib:
+            self._shared_libraries.extend(
+                ns.attrib['shared-library'].split(','))
 
         parser_methods = {
             _corens('alias'): self._parse_alias,
