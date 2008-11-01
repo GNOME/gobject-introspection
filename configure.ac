@@ -75,15 +75,18 @@ GI_ENABLE_GCOV
 AC_CHECK_LIB([dl], [dlopen])
 
 AC_MSG_CHECKING(for the suffix of shared libraries)
-export SED
-shrext_cmds=`./libtool --config | grep '^shrext_cmds='`
-eval $shrext_cmds
+# libtool variables are immediately available since 2.0, prior to that we need
+# to call libtool --config explicitly
+if test "x$shrext_cmds" = x; then
+    shrext_cmds=`SED=$SED ./libtool --config | grep '^shrext_cmds='`
+    eval $shrext_cmds
+fi
 eval std_shrext=$shrext_cmds
 # chop the initial dot
-SHLIB_SUFFIX=`echo $std_shrext | sed 's/^\.//'`
+SHLIB_SUFFIX=${std_shrext#.}
 AC_MSG_RESULT(.$SHLIB_SUFFIX)
 # any reason it may fail?
-if test "X$SHLIB_SUFFIX" = x; then
+if test "x$SHLIB_SUFFIX" = x; then
         AC_MSG_ERROR(Cannot determine shared library suffix from libtool)
 fi
 AC_DEFINE_UNQUOTED([SHLIB_SUFFIX], "$SHLIB_SUFFIX", [Define to the platform's shared library suffix])

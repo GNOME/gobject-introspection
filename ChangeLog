@@ -1,3 +1,13 @@
+2008-11-01  Tommi Komulainen  <tommi.komulainen@iki.fi>
+
+	Bug 557898 – Fails to build on OSX 10.4
+
+	* configure.ac: Check for $shrext_cmds that should be implicitly
+	available if you're using libtool >= 2.0. If undefined, call
+	libtool --config explicitly to get its value.
+	* girepository/gtypelib.c: Remove special case for (non-)Darwin
+	systems as unneeded.
+
 2008-10-31  Colin Walters  <walters@verbum.org>
 
 	* COPYING, COPYING.lib, COPYING.tools: Clarify licensing status.
