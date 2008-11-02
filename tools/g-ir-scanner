@@ -31,7 +31,13 @@ if (os.path.exists(os.path.join(basedir, '.svn')) or
     os.path.exists(os.path.join(basedir, '.git'))):
     path = basedir
 else:
-    path = os.path.join(basedir, 'lib', 'python%d.%d' % sys.version_info[:2],
+    libdir = 'lib'
+    for p in sys.path:
+	if 'lib64' in p:
+	    libdir = 'lib64'
+	    break
+
+    path = os.path.join(basedir, libdir, 'python%d.%d' % sys.version_info[:2],
                         'site-packages')
 sys.path.insert(0, path)
 
