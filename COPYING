@@ -1,9 +1,10 @@
 gobject-introspection has two licenses; one for the typelib library,
 and one for the tools.
 
-The typelib library (girepository/) is licensed under the LGPLv2+.
+The scanner (giscanner/) and typelib libraries (girepository/) are
+licensed under the LGPLv2+.
 
-The tools (tools/ and giscanner) are licensed under the GPLv2+.
+The tools (tools/) are licensed under the GPLv2+.
 
 There is also some MIT code in giscanner/.  In general where
 applicable files should have headers denoting their license status; if
