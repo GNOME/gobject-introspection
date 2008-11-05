@@ -1,5 +1,11 @@
 2008-11-05  Colin Walters  <walters@verbum.org>
 
+	* girepository/ginvoke.c (g_function_info_invoke): Don't use
+	nested scope local variable for error which may go away after
+	conditional is complete.
+
+2008-11-05  Colin Walters  <walters@verbum.org>
+
 	* giscanner/scannerlexer.l: Avoid static 256 char buf which we
 	manipulate hackily; just use GString.  This avoids an
 	uninitialized memory read pointed out by Havoc.
