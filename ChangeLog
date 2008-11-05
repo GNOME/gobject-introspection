@@ -1,3 +1,9 @@
+2008-11-05  Colin Walters  <walters@verbum.org>
+
+	* giscanner/scannerlexer.l: Avoid static 256 char buf which we
+	manipulate hackily; just use GString.  This avoids an
+	uninitialized memory read pointed out by Havoc.
+
 2008-11-04  Johan Dahlin  <jdahlin@async.com.br>
 
 	* giscanner/__init__.py:

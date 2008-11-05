@@ -202,8 +202,8 @@ parse_gtkdoc (GISourceScanner *scanner,
 	      int             *c2)
 {
   gboolean isline = FALSE;
-  gchar line[256];
-  int i;
+  GString *line_buf;
+  char *line;
   gchar **parts;
   GISourceDirective *directive;
   char *name,*value;
@@ -212,7 +212,8 @@ parse_gtkdoc (GISourceScanner *scanner,
   char *rname;
   int n_parts;
 
-  i = 0;
+  line_buf = g_string_new ("");
+
   do 
     {
       *c1 = *c2;
@@ -221,22 +222,26 @@ parse_gtkdoc (GISourceScanner *scanner,
           isline = TRUE;
           break;
         }
-      if (i >= 256)
-        break;
-      line[i++] = *c1;
+      g_string_append_c (line_buf, *c1);
       *c2 = input();
     } while (*c2 != EOF && !(*c1 == '*' && *c2 == '/'));
   
   if (!isline)
-    return;
+    {
+      g_string_free (line_buf, TRUE);
+      return;
+    }
+
+  line = g_string_free (line_buf, FALSE);
 
   /* Ignore lines that don't have a : - this is a hack but avoids
    * trying to parse too many things as annotations
    */
   if (!strchr (line, ':'))
-    return;
-
-  line[i] = '\0';
+    {
+      g_free (line);
+      return;
+    }
 
   parts = g_strsplit (line, ":", 3);
   n_parts = g_strv_length (parts);
@@ -307,6 +312,7 @@ parse_gtkdoc (GISourceScanner *scanner,
 			g_strdup (symbol), directives);
 
   g_strfreev (parts);
+  g_free (line);
 }
 
 
