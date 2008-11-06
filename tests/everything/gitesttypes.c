@@ -142,10 +142,36 @@ void test_utf8_inout (char **inout)
 
 /* filename? */
 /* non-basic-types */
-/* array */
-/* interface */
 
 static const char *test_sequence[] = {"1", "2", "3"};
+
+/* array */
+gboolean
+test_strv_in (char **arr)
+{
+  if (g_strv_length (arr) != 3)
+    return FALSE;
+  if (strcmp (arr[0], "1") != 0)
+    return FALSE;
+  if (strcmp (arr[1], "2") != 0)
+    return FALSE;
+  if (strcmp (arr[2], "3") != 0)
+    return FALSE;
+  return TRUE;
+}
+
+char **
+test_strv_out (void)
+{
+  char **ret = g_new (char *, 4);
+  ret[0] = "1";
+  ret[1] = "2";
+  ret[2] = "3";
+  ret[3] = NULL;
+  return ret;
+}
+
+/* interface */
 
 /************************************************************************/
 /* GList */

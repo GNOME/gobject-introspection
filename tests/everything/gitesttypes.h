@@ -35,6 +35,8 @@ void test_utf8_inout (char **inout);
 /* filename? */
 /* non-basic-types */
 /* array */
+gboolean test_strv_in (char **arr);
+char **test_strv_out (void);
 /* interface */
 /* GList */
 G_CONST_RETURN GList *test_glist_nothing_return (void);
