@@ -1,9 +1,16 @@
+2008-11-07  Johan Dahlin  <jdahlin@async.com.br>
+
+	* giscanner/libtoolimporter.py (LibtoolImporter.find_module): Clear
+	up some confusion about the second argument to find_module, it's
+	actually the packages __path__ attribute which we can safely ignore
+	for our purposes.
+
 2008-11-07  Owen Taylor  <otaylor@redhat.com>
 
 	Bug 559737 – Deal with continuations in macros
 
 	* giscanner/giscannerlexer.l: Treat continuation lines the same
-	as regular newlines. This makes the scanner not complain about 
+	as regular newlines. This makes the scanner not complain about
 	#define foo(x) \ <stuff> inside a C file. There's no attempt
 	however to handle parsing macro definitions split across lines.
 

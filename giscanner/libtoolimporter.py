@@ -32,7 +32,7 @@ class LibtoolImporter(object):
         self.path = path
 
     @classmethod
-    def find_module(cls, name, relpath=None):
+    def find_module(cls, name, packagepath=None):
         modparts = name.split('.')
         filename = modparts.pop() + '.la'
 
@@ -40,14 +40,9 @@ class LibtoolImporter(object):
         # should be looked for. See if we can find a ".libs/module.la" relative
         # to those directories and failing that look for file
         # "some/package/.libs/module.la" relative to sys.path
-        if relpath is None:
-            paths = relpath
-            module = ''
-        else:
-            paths = sys.path
-            module = os.path.join(*modparts)
+        module = os.path.join(*modparts)
 
-        for path in paths:
+        for path in sys.path:
             full = os.path.join(path, module, '.libs', filename)
             if os.path.exists(full):
                 return cls(name, full)
