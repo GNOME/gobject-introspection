@@ -57,6 +57,7 @@ stringtext				([^\\\"])|(\\.)
 %%
 
 "\n"					{ ++lineno; } /* " */
+"\\\n"					{ ++lineno; }
 [\t\f\v\r ]+				{ /* Ignore whitespace. */ }
 
 "/*"					{ parse_comment(scanner); }
