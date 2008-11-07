@@ -51,6 +51,7 @@ class LibtoolImporter(object):
         realpath = extract_libtool(self.path)
         mod = imp.load_module(name, open(realpath), realpath,
                               ('.so', 'rb', 3))
+        mod.__loader__ = self
         return mod
 
     @classmethod

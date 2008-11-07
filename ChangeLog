@@ -4,6 +4,7 @@
 	up some confusion about the second argument to find_module, it's
 	actually the packages __path__ attribute which we can safely ignore
 	for our purposes.
+	(LibtoolImporter.load_module): Set module.__loader__ as per PEP 302.
 
 2008-11-07  Owen Taylor  <otaylor@redhat.com>
 
