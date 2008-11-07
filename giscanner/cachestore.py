@@ -61,6 +61,19 @@ class CacheStore(object):
         return (os.stat(store_filename).st_mtime >=
                 os.stat(filename).st_mtime)
 
+    def _purge_cache(self, filename):
+        try:
+            os.unlink(filename)
+        except IOError, e:
+            # Permission denied
+            if e.errno == errno.EACCES:
+                return
+            # File does not exist
+            elif e.errno == errno.ENOENT:
+                return
+            else:
+                raise
+
     def store(self, filename, data):
         store_filename = self._get_filename(filename)
         if store_filename is None:
@@ -69,7 +82,14 @@ class CacheStore(object):
             self._cache_is_valid(store_filename, filename)):
             return None
         fd = open(store_filename, 'w')
-        cPickle.dump(data, fd)
+        try:
+            cPickle.dump(data, fd)
+        except IOError, e:
+            # No space left on device
+            if e.errno == e.ENOSPC:
+                return
+            else:
+                raise
 
     def load(self, filename):
         store_filename = self._get_filename(filename)
@@ -80,8 +100,14 @@ class CacheStore(object):
         except IOError, e:
             if e.errno == errno.ENOENT:
                 return None
-            raise
+            else:
+                raise
         if not self._cache_is_valid(store_filename, filename):
             return None
-        data = cPickle.load(fd)
+        try:
+            data = cPickle.load(fd)
+        except EOFError:
+            # Broken cache entry, remove it
+            self._purge_cache(store_filename)
+            data = None
         return data

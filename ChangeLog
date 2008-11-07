@@ -1,3 +1,9 @@
+2008-11-07  Johan Dahlin  <jdahlin@async.com.br>
+
+	* giscanner/cachestore.py:
+	Handle broken cache entries, write only filesystems and
+	running out of diskspace.
+
 2008-11-07  Owen Taylor  <otaylor@redhat.com>
 
 	* giscanner/giscannermodule.c (pygi_source_scanner_lex_filename):
