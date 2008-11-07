@@ -1,3 +1,9 @@
+2008-11-07  Owen Taylor  <otaylor@redhat.com>
+
+	* giscanner/giscannermodule.c (pygi_source_scanner_lex_filename):
+	Set current_filename before lexing the file so error messages
+	are reported in the right file.
+
 2008-11-06  Colin Walters  <walters@verbum.org>
 
 	* tests/everything/*: Add some tests for strv.
