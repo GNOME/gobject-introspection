@@ -430,6 +430,7 @@ class Callback(Node):
         self.retval = retval
         self.parameters = parameters
         self.ctype = ctype
+        self.throws = False
 
     def __repr__(self):
         return 'Callback(%r, %r, %r)' % (

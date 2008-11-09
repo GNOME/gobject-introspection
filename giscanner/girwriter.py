@@ -291,6 +291,7 @@ class GIRWriter(XMLWriter):
         # FIXME: reuse _write_function
         attrs = [('name', callback.name), ('c:type', callback.ctype)]
         self._append_deprecated(callback, attrs)
+        self._append_throws(callback, attrs)
         with self.tagcontext('callback', attrs):
             self._write_return_type(callback.retval)
             self._write_parameters(callback.parameters)

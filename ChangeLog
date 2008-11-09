@@ -1,3 +1,10 @@
+2008-11-09  Jürg Billeter  <j@bitron.ch>
+
+	* giscanner/ast.py:
+	* giscanner/girwriter.py:
+
+	Write throws attribute for virtual functions, fixes bug 559703
+
 2008-11-07  Johan Dahlin  <jdahlin@async.com.br>
 
 	* giscanner/libtoolimporter.py (LibtoolImporter.find_module): Clear
