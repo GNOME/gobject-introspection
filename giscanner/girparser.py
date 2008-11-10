@@ -212,8 +212,10 @@ class GIRParser(object):
                                      node.attrib[_glibns('get-type')],
                                      node.attrib.get(_cns('type')))
         else:
+            disguised = node.attrib.get('disguised') == '1'
             struct = Struct(node.attrib['name'],
-                            node.attrib.get(_cns('type')))
+                            node.attrib.get(_cns('type')),
+                            disguised=disguised)
         self._add_node(struct)
 
         if self._include_parsing:

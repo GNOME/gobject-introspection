@@ -309,6 +309,8 @@ class GIRWriter(XMLWriter):
     def _write_record(self, record):
         attrs = [('name', record.name),
                  ('c:type', record.symbol)]
+        if record.disguised:
+            attrs.append(('disguised', '1'))
         self._append_deprecated(record, attrs)
         if isinstance(record, GLibBoxed):
             attrs.extend(self._boxed_attrs(record))

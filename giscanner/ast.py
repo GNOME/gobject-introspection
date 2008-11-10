@@ -324,11 +324,12 @@ class Member(Node):
 
 class Struct(Node):
 
-    def __init__(self, name, symbol):
+    def __init__(self, name, symbol, disguised=False):
         Node.__init__(self, name)
         self.fields = []
         self.constructors = []
         self.symbol = symbol
+        self.disguised = disguised
 
 
 class Field(Node):

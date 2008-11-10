@@ -343,6 +343,9 @@ class Transformer(object):
         if (ctype == CTYPE_POINTER and
             symbol.base_type.base_type.type == CTYPE_FUNCTION):
             node = self._create_callback(symbol)
+        elif (ctype == CTYPE_POINTER and
+            symbol.base_type.base_type.type == CTYPE_STRUCT):
+            node = self._create_typedef_struct(symbol, disguised=True)
         elif ctype == CTYPE_STRUCT:
             node = self._create_typedef_struct(symbol)
         elif ctype == CTYPE_UNION:
@@ -567,9 +570,9 @@ class Transformer(object):
         const = Constant(name, type_name, value)
         return const
 
-    def _create_typedef_struct(self, symbol):
+    def _create_typedef_struct(self, symbol, disguised=False):
         name = self.remove_prefix(symbol.ident)
-        struct = Struct(name, symbol.ident)
+        struct = Struct(name, symbol.ident, disguised)
         self._typedefs_ns[symbol.ident] = struct
         self._create_struct(symbol)
         return struct
