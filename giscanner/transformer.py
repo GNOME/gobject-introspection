@@ -332,6 +332,7 @@ class Transformer(object):
                     size_opt = 'fixed-size=%d' % (child_list[0].const_int, )
                     opts['array'].append(size_opt)
             ftype = self._create_type(symbol.base_type, opts, True)
+            ftype = self.resolve_param_type(ftype)
             # Fields are assumed to be read-write
             # (except for Objects, see also glibtransformer.py)
             node = Field(symbol.ident, ftype, symbol.ident,
@@ -517,6 +518,7 @@ class Transformer(object):
                 options['transfer'] = ['none']
         else:
             ptype = self._create_type(symbol.base_type, options, True)
+            ptype = self.resolve_param_type(ptype)
         param = Parameter(symbol.ident, ptype)
         for option, data in options.iteritems():
             if option in ['in-out', 'inout']:
@@ -653,6 +655,12 @@ class Transformer(object):
             return type_names[type_name]
         except KeyError, e:
             pass
+
+        if ctype:
+            ctype = ctype.replace('*', '')
+            resolved = names.ctypes.get(ctype)
+            if resolved:
+                return self._typepair_to_str(resolved)
         type_name = self.remove_prefix(type_name)
         resolved = names.aliases.get(type_name)
         if resolved:
@@ -660,11 +668,6 @@ class Transformer(object):
         resolved = names.names.get(type_name)
         if resolved:
             return self._typepair_to_str(resolved)
-        if ctype:
-            ctype = ctype.replace('*', '')
-            resolved = names.ctypes.get(ctype)
-            if resolved:
-                return self._typepair_to_str(resolved)
         resolved = names.type_names.get(type_name)
         if resolved:
             return self._typepair_to_str(resolved)

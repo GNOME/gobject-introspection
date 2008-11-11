@@ -1,3 +1,17 @@
+2008-11-11  Tommi Komulainen  <tommi.komulainen@iki.fi>
+
+	Bug 560308 – g-ir-compiler goes in infinite loop on Gdk-2.0.gir
+
+	Based on patch by Johan Bilien.
+
+	* giscanner/transformer.py (_create_member, _create_parameter):
+	Resolve types here as well.
+	(_resolve_type_name_1): Try resolving using 'ctype' first since
+	it's least ambiguous. Fixes struct member type resolution with
+	similarly named types, e.g. Gdk.PangoRendererClass and
+	Pango.RendererClass
+	* tests/scanner/foo*: Add test.
+
 2008-11-11  Owen Taylor  <otaylor@redhat.com>
 
 	* girepository/girparser.c: Search provided include dirs before

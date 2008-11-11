@@ -232,6 +232,12 @@ typedef union _FooUnion
   int foo;
 } FooUnion;
 
+typedef struct _FooUtilityStruct FooUtilityStruct;
+struct _FooUtilityStruct
+{
+  UtilityStruct bar;
+};
+
 FooBUnion *foo_bunion_new (void);
 
 GType foo_bunion_get_type (void);

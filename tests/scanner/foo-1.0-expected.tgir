@@ -367,6 +367,11 @@
         <type name="int"/>
       </field>
     </union>
+    <record name="UtilityStruct">
+      <field name="bar" writable="1">
+        <type name="utility.Struct"/>
+      </field>
+    </record>
     <function name="test_unsigned_qualifier" c:identifier="foo_test_unsigned_qualifier">
       <return-value transfer-ownership="none">
         <type name="none"/>
