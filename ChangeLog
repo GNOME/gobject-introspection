@@ -1,3 +1,38 @@
+2008-11-10  Owen Taylor <otaylor@redhat.com>
+
+	Bug 560250 - Fully parse included modules
+
+	For some things, like computing structure offsets to put into the typelib
+	we need more than just the aliases from included modules. Do a completel
+	parse of included modules and store in module->included_modules.
+
+	Also add g_ir_find_node() to find node information from within the
+	active set of modules and their includes.
+
+2008-11-10  Owen Taylor <otaylor@redhat.com>
+
+	Split g_ir_ffi_get_ffi_type() out from ginvoke.c
+
+	Extract a function to convert GITypeTag to ffi_type from the internals
+	of ginvoke.c. This will be useful in figure out structure alignment.
+
+	Also fix handling of gsize and time_t to be portable. (Add a check
+	to configure.ac to figure out the width of time_t.)
+
+2008-11-10  Owen Taylor <otaylor@redhat.com>
+
+	Bug 560248 – "disguised structures"
+
+	Certain types like GIConv and GdkAtom are pointers internally but don't
+	look like pointers when referenced. They have the form.
+
+	  typedef struct _X *X;
+
+	Parse these as structures/records but mark them in the gir with a 'disguised'
+	attribute so that we know that they need special handling.
+
+	In the typelib treat them like any other structure.
+
 2008-11-09  Jürg Billeter  <j@bitron.ch>
 
 	* giscanner/ast.py:
