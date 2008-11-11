@@ -1,3 +1,7 @@
+2008-11-11  Owen Taylor  <otaylor@redhat.com>
+
+	* girepository/girparser.c: Remove an unused variable.
+
 2008-11-10  Owen Taylor <otaylor@redhat.com>
 
 	Add tests for field offset computations
