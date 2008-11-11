@@ -1,5 +1,10 @@
 2008-11-11  Owen Taylor  <otaylor@redhat.com>
 
+	* girepository/giroffsets.c: Include fully-qualified names in
+	all error messages.
+
+2008-11-11  Owen Taylor  <otaylor@redhat.com>
+
 	* girepository/giroffsets.c: Fail gracefully with an informative
 	error message when recursion is encountered when computing a 
 	structure size.
