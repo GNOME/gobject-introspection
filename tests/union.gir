@@ -6,12 +6,12 @@
   <namespace name="Foo" version="1.0">
     <union name="union1" type-name="UnionType1" get-type="union1_get_type">
       <discriminator offset="-4" type="gint" />
-      <field name="field1" readable="1" writable="1" offset="0" type="guint32" branch="0" />
-      <field name="field1" readable="1" writable="1" offset="0" type="gdouble" branch="1" />
+      <field name="field1" readable="1" writable="1" type="guint32" branch="0" />
+      <field name="field1" readable="1" writable="1" type="gdouble" branch="1" />
     </union>
     <union name="union2" type-name="UnionType1" get-type="union1_get_type">
-      <field name="field1" readable="1" writable="1" offset="0" type="guint32" />
-      <field name="field1" readable="1" writable="1" offset="0" type="gdouble" />
+      <field name="field1" readable="1" writable="1" type="guint32" />
+      <field name="field1" readable="1" writable="1" type="gdouble" />
     </union>
   </namespace>
 </repository>

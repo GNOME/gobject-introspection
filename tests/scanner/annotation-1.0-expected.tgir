@@ -32,7 +32,7 @@
       </parameters>
     </callback>
     <class name="Object" parent="GObject.Object" glib:type-name="AnnotationObject" glib:get-type="annotation_object_get_type">
-      <field name="parent_instance" offset="0">
+      <field name="parent_instance">
         <type name="GObject.Object"/>
       </field>
       <method name="method" c:identifier="annotation_object_method">
@@ -193,7 +193,7 @@
       </method>
     </class>
     <record name="ObjectClass">
-      <field name="parent_class" offset="0">
+      <field name="parent_class">
         <type name="GObject.ObjectClass"/>
       </field>
     </record>

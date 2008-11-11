@@ -1,5 +1,21 @@
 2008-11-10  Owen Taylor <otaylor@redhat.com>
 
+	Remove field offsets from g-ir-generate output and test inputs
+
+	Field offsets are a) architecture dependent so they shouldn't be part
+	of the architecture-independent gir format which is installed in
+	datadir. b) Are architecture-dependent so they shouldn't be in test
+	expected output.
+
+	* girepository/girparser.c: Don't parse offset for fields
+	* tools/generate.c: Don't parse offset for fields
+	* tests/*.gir test/scanner/*.tgir: Remove offsets
+
+	(Virtual function and discriminator offsets are not removed, as they
+	aren't fully hooked up to the field-offset computation machinery yet.)
+
+2008-11-10  Owen Taylor <otaylor@redhat.com>
+
 	Bug 560252 - Compute field offsets before writing typelib
 
 	* girepository/girnode.h: Store the total size and alignment for

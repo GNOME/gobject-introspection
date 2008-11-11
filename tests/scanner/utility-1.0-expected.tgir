@@ -7,12 +7,12 @@
   <include name="GLib" version="2.0"/>
   <namespace name="utility" version="1.0" shared-library="utility">
     <class name="Object" parent="GObject.Object" glib:type-name="UtilityObject" glib:get-type="utility_object_get_type">
-      <field name="parent_instance" offset="0">
+      <field name="parent_instance">
         <type name="GObject.Object"/>
       </field>
     </class>
     <record name="ObjectClass">
-      <field name="parent_class" offset="0">
+      <field name="parent_class">
         <type name="GObject.ObjectClass"/>
       </field>
     </record>
@@ -27,29 +27,29 @@
       <member name="c" value="2"/>
     </enumeration>
     <record name="Struct">
-      <field name="field" writable="1" offset="0">
+      <field name="field" writable="1">
         <type name="int"/>
       </field>
-      <field name="bitfield1" writable="1" offset="0">
+      <field name="bitfield1" writable="1">
         <type name="uint"/>
       </field>
-      <field name="bitfield2" writable="1" offset="0">
+      <field name="bitfield2" writable="1">
         <type name="uint"/>
       </field>
-      <field name="data" writable="1" offset="0">
+      <field name="data" writable="1">
         <array fixed-size="16">
           <type name="uint8"/>
         </array>
       </field>
     </record>
     <union name="Union">
-      <field name="pointer" writable="1" offset="0">
+      <field name="pointer" writable="1">
         <type name="utf8"/>
       </field>
-      <field name="integer" writable="1" offset="0">
+      <field name="integer" writable="1">
         <type name="long"/>
       </field>
-      <field name="real" writable="1" offset="0">
+      <field name="real" writable="1">
         <type name="double"/>
       </field>
     </union>

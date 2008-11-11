@@ -5,27 +5,27 @@
             xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
   <namespace name="Foo" version="1.0">
     <record name="FooStruct">
-      <field name="foo_int" writable="1" offset="0">
+      <field name="foo_int" writable="1">
         <type name="int"/>
       </field>
-      <field name="foo_int64" writable="1" offset="4">
+      <field name="foo_int64" writable="1">
         <type name="int64"/>
       </field>
-      <field name="foo_uint" writable="1" offset="12">
+      <field name="foo_uint" writable="1">
         <type name="uint"/>
       </field>
-      <field name="foo_uint64" writable="1" offset="16">
+      <field name="foo_uint64" writable="1">
         <type name="uint64"/>
       </field>
-      <field name="string" writable="1" offset="24">
+      <field name="string" writable="1">
         <type name="utf8"/>
       </field>
     </record>
     <record name="FooStruct2">
-      <field name="sub" writable="1" offset="0">
+      <field name="sub" writable="1">
         <type name="FooStruct"/>
       </field>
-      <field name="string" writable="1" offset="24">
+      <field name="string" writable="1">
         <type name="utf8"/>
       </field>
     </record>

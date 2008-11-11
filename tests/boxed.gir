@@ -5,13 +5,13 @@
             xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
   <namespace name="Foo" version="1.0">
     <glib:boxed glib:name="BoxedType1" glib:type-name="boxed1" glib:get-type="boxed1_get_type" deprecated="1">
-      <field name="field1" writable="1" offset="0">
+      <field name="field1" writable="1">
         <type name="uint32"/>
       </field>
-      <field name="field2" writable="1" offset="4">
+      <field name="field2" writable="1">
         <type name="uint32"/>
       </field>
-      <field name="field3" writable="1" offset="8">
+      <field name="field3" writable="1">
         <type name="uint32"/>
       </field>
       <method name="frob_boxed1" c:identifier="frob_boxed1">
