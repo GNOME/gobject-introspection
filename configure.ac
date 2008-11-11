@@ -147,6 +147,8 @@ if test x"$have_ffi_pkgconfig" = xno ; then
   AC_SUBST(FFI_CFLAGS)
 fi
 
+AC_CHECK_SIZEOF(time_t, [], [#include <time.h>])
+
 PKG_CHECK_MODULES(GIREPO, [glib-2.0 gobject-2.0 gmodule-2.0])
 
 # if we ever remove manual check for ffi and require .pc file, then 
