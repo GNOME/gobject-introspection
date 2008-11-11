@@ -6,37 +6,20 @@
    object */
 typedef struct _FooHidden FooHidden;
 
-struct _FooHidden
-{
-  char *frob;
-};
-
-FooHidden *
-foo_hidden_copy (const FooHidden *boxed)
-{
-  return (FooHidden *)g_memdup (boxed, sizeof (FooHidden));
-}
-
-void
-foo_hidden_free (FooHidden *boxed)
-{
-  g_slice_free (FooHidden, boxed);
-}
-
-
-GType
-foo_hidden_get_type (void)
-{
-  static GType our_type = 0;
-
-  if (our_type == 0)
-    our_type = g_boxed_type_register_static ("FooHidden",
-					     (GBoxedCopyFunc) foo_hidden_copy,
-					     (GBoxedFreeFunc) foo_hidden_free);
-  return our_type;
-}
-
-static void foo_do_foo (FooInterface *self);
+int foo_init_argv (int argc, char **argv);
+int foo_init_argv_address (int *argc, char ***argv);
+void foo_private_function (FooObject *foo);
+void foo_test_unsigned (unsigned int uint);
+void foo_interface_do_foo (FooInterface *self);
+void foo_do_foo (FooInterface *self);
+int foo_enum_method (FooEnumType foo_enum);
+FooHidden * foo_hidden_copy (const FooHidden *boxed);
+void foo_hidden_free (FooHidden *boxed);
+GType foo_hidden_get_type (void);
+FooBoxed *foo_boxed_copy (const FooBoxed *boxed);
+void foo_boxed_free (FooBoxed *boxed);
+void foo_dbus_data_free (FooDBusData *boxed);
+FooDBusData *foo_dbus_data_copy (const FooDBusData *boxed);
 
 typedef struct
 {
@@ -102,8 +85,6 @@ foo_object_set_property (GObject         *object,
                          const GValue    *value,
                          GParamSpec      *pspec)
 {
-  FooObject *foo = FOO_OBJECT (object);
-
   switch (prop_id)
     {
     case PROP_STRING:
@@ -122,8 +103,6 @@ foo_object_get_property (GObject         *object,
                          GValue          *value,
                          GParamSpec      *pspec)
 {
-  FooObject *foo = FOO_OBJECT (object);
-
   switch (prop_id)
     {
     case PROP_STRING:
@@ -180,7 +159,7 @@ foo_object_init (FooObject *object)
 UtilityObject*
 foo_object_external_type (FooObject *object)
 {
-
+  return NULL;
 }
 
 void                  
@@ -323,6 +302,7 @@ foo_boxed_method (FooBoxed *boxed)
 
 }
 
+/* FooDbus */
 struct _FooDBusData
 {
   double private;
@@ -335,7 +315,7 @@ foo_dbus_data_copy (const FooDBusData *boxed)
 }
 
 void
-foo_dbus_data_free (FooBoxed *boxed)
+foo_dbus_data_free (FooDBusData *boxed)
 {
   g_slice_free (FooDBusData, boxed);
 }
@@ -396,3 +376,36 @@ foo_rectangle_add(FooRectangle *r1, const FooRectangle *r2)
 {
 
 }
+
+/* FooHidden */
+
+struct _FooHidden
+{
+  char *frob;
+};
+
+FooHidden *
+foo_hidden_copy (const FooHidden *boxed)
+{
+  return (FooHidden *)g_memdup (boxed, sizeof (FooHidden));
+}
+
+void
+foo_hidden_free (FooHidden *boxed)
+{
+  g_slice_free (FooHidden, boxed);
+}
+
+
+GType
+foo_hidden_get_type (void)
+{
+  static GType our_type = 0;
+
+  if (our_type == 0)
+    our_type = g_boxed_type_register_static ("FooHidden",
+					     (GBoxedCopyFunc) foo_hidden_copy,
+					     (GBoxedFreeFunc) foo_hidden_free);
+  return our_type;
+}
+
