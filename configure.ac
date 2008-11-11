@@ -194,6 +194,7 @@ m4/Makefile
 tools/Makefile
 tests/Makefile
 tests/invoke/Makefile
+tests/offsets/Makefile
 tests/scanner/Makefile
 tests/repository/Makefile
 tests/everything/Makefile

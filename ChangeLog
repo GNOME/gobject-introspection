@@ -1,5 +1,18 @@
 2008-11-10  Owen Taylor <otaylor@redhat.com>
 
+	Add tests for field offset computations
+
+	* tests/offsets/offsets.h: Header file with structure definitions to test
+
+	* tests/offsets/gen-gitestoffsets: Generate a C program that computes
+	field offsets for the structures in offsets.h two ways: using
+	the information from a generated typelib, and as computed by the
+	compiler.
+
+	We diff these two versions to test that everything is OK.
+
+2008-11-10  Owen Taylor <otaylor@redhat.com>
+
 	Remove field offsets from g-ir-generate output and test inputs
 
 	Field offsets are a) architecture dependent so they shouldn't be part
