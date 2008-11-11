@@ -1,5 +1,22 @@
 2008-11-10  Owen Taylor <otaylor@redhat.com>
 
+	Bug 560252 - Compute field offsets before writing typelib
+
+	* girepository/girnode.h: Store the total size and alignment for
+	GIrNodeStruct/Boxed/Union.
+
+	* girepository/giroffset.c: New file implementing computation of
+	structure field offsets.
+
+	* girepository/girnode.c: Compute structure field offsets before
+	writing types into the typelib.
+
+	* docs/typelib-format.txt: Document that a field offset of 0xFFFF
+	means "unknown". Also fix description of the discriminator_offset
+	field for unions.
+
+2008-11-10  Owen Taylor <otaylor@redhat.com>
+
 	Bug 560250 - Fully parse included modules
 
 	For some things, like computing structure offsets to put into the typelib

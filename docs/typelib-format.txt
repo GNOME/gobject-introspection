@@ -735,7 +735,8 @@ signal:
 	  interface to which this virtual function belongs.
 
 struct_offset:
-          The offset of the function pointer in the class struct.
+          The offset of the function pointer in the class struct. The value
+	  0xFFFF indicates that the struct offset is unknown.
 
 signature: 
           Offset of the SignatureBlob describing the parameter types and the 
@@ -767,7 +768,8 @@ bits:     If this field is part of a bitfield, the number of bits which it
           uses, otherwise 0.
 
 struct_offset:
-          The offset of the field in the struct.
+          The offset of the field in the struct. The value 0xFFFF indicates
+	  that the struct offset is unknown.
 
 type:     The type of the field.
 
@@ -1071,8 +1073,10 @@ gtype:    For types which are registered with GType, contains the
 n_fields: Length of the arrays
 
 discriminator_offset: 
-          Offset from the beginning of the blob where the
-	  discriminator of a discriminated union is located
+          Offset from the beginning of the union where the
+	  discriminator of a discriminated union is located.
+	  The value 0xFFFF indicates that the discriminator offset
+	  is unknown.
 
 discriminator_type: 
           Type of the discriminator 
