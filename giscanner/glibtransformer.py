@@ -772,8 +772,8 @@ class GLibTransformer(object):
             except KeyError, e:
                 failed.append(prop)
         for fail in failed:
-            print ("WARNING: Deleting object property %r (of %r)" +\
-                       "with unknown type") % (fail, context)
+            print ("WARNING: Deleting object property %r (of %r) "
+                   "with unknown type") % (fail, context)
             properties.remove(fail)
 
     def _resolve_property(self, prop):
