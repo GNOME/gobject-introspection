@@ -1,3 +1,14 @@
+2008-11-11  Owen Taylor  <otaylor@redhat.com>
+
+	Compute field offsets and overall size for object structures
+
+	Bug 560326 – Fails to build Gtk-2.0.typelib with "Unexpected non-pointer
+	field of type object in structure"
+
+	Do basic computation of field offsets for objects and interfaces;
+	this doesn't attempt to address all of the "mess" for virtual
+	functions described in Bug 560281.
+
 2008-11-11  Tommi Komulainen  <tommi.komulainen@iki.fi>
 
 	Bug 560308 – g-ir-compiler goes in infinite loop on Gdk-2.0.gir
