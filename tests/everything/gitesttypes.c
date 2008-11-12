@@ -110,7 +110,7 @@ G_CONST_RETURN char *test_utf8_const_return (void)
   return utf8_const;
 }
 
-/** test_utf8_nonconst_return:
+/** test_utf8_nonconst_return:8
  * Return value: <char*> UTF-8 string
  */
 char *test_utf8_nonconst_return (void)
@@ -140,7 +140,18 @@ void test_utf8_inout (char **inout)
 }
 #endif
 
-/* filename? */
+/**
+ * test_filename_return:
+ *
+ * Return value: (element-type filename) (transfer none): list of strings
+ */
+GSList *test_filename_return (void)
+{
+  GSList *filenames = NULL;
+  filenames = g_slist_prepend (filenames, "/etc/fstab");
+  return filenames;
+}
+
 /* non-basic-types */
 
 static const char *test_sequence[] = {"1", "2", "3"};

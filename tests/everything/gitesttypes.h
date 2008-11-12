@@ -32,7 +32,7 @@ void test_utf8_const_in (const char *in);
 void test_utf8_out (char **out);
 void test_utf8_inout (char **inout);
 #endif
-/* filename? */
+GSList *test_filename_return (void);
 /* non-basic-types */
 /* array */
 gboolean test_strv_in (char **arr);
