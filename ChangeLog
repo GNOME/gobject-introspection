@@ -1,3 +1,8 @@
+2008-11-12  Tommi Komulainen  <tommi.komulainen@iki.fi>
+
+	* tests/offsets/Makefile.am (gitestoffsets.c): fix
+	gen-gitestoffsets invocation with builddir != srcdir
+
 2008-11-12  Johan Dahlin  <jdahlin@async.com.br>
 
 	* girepository/girepository.c:
