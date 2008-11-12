@@ -118,10 +118,11 @@ BUILT_SOURCES += Gio-2.0.gir
 EXTRA_DIST += gio-2.0.c
 
 # girepository
-GIREPOSITORY_INCLUDEDIR=`pkg-config --variable=includedir girepository-2.0`/glib-2.0
-GIREPOSITORY_LIBDIR=`pkg-config --variable=libdir girepository-2.0`
+GIREPOSITORY_FILES = \
+	$(top_srcdir)/girepository/girepository.c \
+	$(top_srcdir)/girepository/girepository.h
 
-GIRepository-2.0.gir: GObject-2.0.gir $(G_IR_SCANNER) $(G_IR_SCANNER_FILES)
+GIRepository-2.0.gir: GObject-2.0.gir $(G_IR_SCANNER) $(G_IR_SCANNER_FILES) $(GIREPOSITORY_FILES)
 	PYTHONPATH=$(G_IR_SCANNER_PYTHONPATH) $(G_IR_SCANNER) \
 	    -v --namespace GIRepository --nsversion=1.0\
 	    --add-include-path=. \
@@ -133,8 +134,7 @@ GIRepository-2.0.gir: GObject-2.0.gir $(G_IR_SCANNER) $(G_IR_SCANNER_FILES)
 	    -I$(srcdir)/girepository \
             --pkg glib-2.0 \
             --pkg gobject-2.0 \
-	    $(top_srcdir)/girepository/girepository.c \
-	    $(top_srcdir)/girepository/girepository.h
+	    $(GIREPOSITORY_FILES)
 BUILT_SOURCES += GIRepository-2.0.gir
 
 # Generic rules

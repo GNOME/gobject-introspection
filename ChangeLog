@@ -1,5 +1,11 @@
 2008-11-12  Johan Dahlin  <jdahlin@async.com.br>
 
+	* gir/Makefile.am:
+	Remove unused variables, add a dependency of girepository.ch, so when
+	they change we rebuild the gir automatically.
+
+2008-11-12  Johan Dahlin  <jdahlin@async.com.br>
+
 	* girepository/girepository.c (g_irepository_get_search_path):
 	* girepository/girepository.h:
 	Add a g_irepository_get_search_path, so we can access the search
