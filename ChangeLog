@@ -1,3 +1,24 @@
+2008-11-12  Owen Taylor  <otaylor@redhat.com>
+
+	Only allow one <namespace/> element per <repository/> (#560419)
+
+	* girepository/girparser.c: The logic in girparser.c didn't work
+	very well if there were multiple <namespace/> nodes within a
+	single <repository/> (context->namespace was always the overall
+	filename and not the the name specified in the <namespace/>
+	element for one thing; this would cause aliases to be mis-prefixed
+	in include modules.) Also check that the "name" in the
+	<namespace/> node matches the filename.
+
+2008-11-12  Owen Taylor  <otaylor@redhat.com>
+
+	Add a GirParser object to hold the state of a compilation
+
+	* girepository/girparser.[ch] tools/compiler.c: Add a toplevel
+	GirParser object to hold state that is global across a
+	compilation. Currently just holds the include path, but will
+	eventually also keep a cached list of parsed modules.
+
 2008-11-12  Tommi Komulainen  <tommi.komulainen@iki.fi>
 
 	* girepository/girepository.c (find_namespace_latest): Fix
