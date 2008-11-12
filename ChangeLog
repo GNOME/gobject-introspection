@@ -1,5 +1,13 @@
 2008-11-12  Owen Taylor  <otaylor@redhat.com>
 
+	Fix management of ParseContext.includes_modules (#560419)
+
+	* girepository/girparser.c: Fix some trivial bugs in managing the
+	list of include modules. (Add to module's list twice, not
+	initialized to NULL, not freed.)
+
+2008-11-12  Owen Taylor  <otaylor@redhat.com>
+
 	Keep aliases and disguised_structures local to each module (#560419)
 
 	* girepository/girmodule.[ch]: When parsing, keep keep a separate
