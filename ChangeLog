@@ -1,5 +1,14 @@
 2008-11-12  Owen Taylor  <otaylor@redhat.com>
 
+	Fix mismatches between .gir name and 'name' attribute (#560419)
+
+	* tests/boxed.gir tests/constant.gir tests/enum.gir tests/invoke/invoke.c
+	tests/invoke/testfns-1.0.gir tests/object.gir tests/struct.gir: Fix places
+	where the 'name' element of <namespace/> didn't match the filename of the
+	gir, an assumption that the compiler has always expected and now enforces.
+
+2008-11-12  Owen Taylor  <otaylor@redhat.com>
+
 	Only allow one <namespace/> element per <repository/> (#560419)
 
 	* girepository/girparser.c: The logic in girparser.c didn't work

@@ -33,7 +33,7 @@ main (int argc, char *argv[])
 
   rep = g_irepository_get_default ();
 
-  g_assert (!g_irepository_is_registered (NULL, "test", NULL));
+  g_assert (!g_irepository_is_registered (NULL, "testfns", NULL));
   
   handle = g_module_open (testfns, 0);
   if (!handle)
@@ -42,17 +42,17 @@ main (int argc, char *argv[])
       return 1;
     }
 
-  g_assert (g_irepository_is_registered (NULL, "test", NULL));
+  g_assert (g_irepository_is_registered (NULL, "testfns", NULL));
 
   g_print ("after dlopening %s: %d infos in the repository\n", 
 	   testfns,
-	   g_irepository_get_n_infos (rep, "test"));
+	   g_irepository_get_n_infos (rep, "testfns"));
 
   /* test1 calculates x + 4, 
    * taking x as an in parameter
    * and returning the result 
    */
-  info = g_irepository_find_by_name (rep, "test", "test1");  
+  info = g_irepository_find_by_name (rep, "testfns", "test1");  
   g_assert (g_base_info_get_type (info) == GI_INFO_TYPE_FUNCTION);
   function = (GIFunctionInfo *)info;
 
@@ -70,7 +70,7 @@ main (int argc, char *argv[])
    * taking x as an in parameter
    * and storing the result in an out parameter
    */
-  info = g_irepository_find_by_name (rep, "test", "test2");  
+  info = g_irepository_find_by_name (rep, "testfns", "test2");  
   g_assert (g_base_info_get_type (info) == GI_INFO_TYPE_FUNCTION);
   function = (GIFunctionInfo *)info;
 
@@ -89,7 +89,7 @@ main (int argc, char *argv[])
    * taking x as an inout parameter
    * and storing the result in the same parameter
    */
-  info = g_irepository_find_by_name (rep, "test", "test3");  
+  info = g_irepository_find_by_name (rep, "testfns", "test3");  
   g_assert (g_base_info_get_type (info) == GI_INFO_TYPE_FUNCTION);
   function = (GIFunctionInfo *)info;
 
@@ -105,7 +105,7 @@ main (int argc, char *argv[])
 
   /* test4 prints out a string
    */
-  info = g_irepository_find_by_name (rep, "test", "test4");  
+  info = g_irepository_find_by_name (rep, "testfns", "test4");  
   g_assert (g_base_info_get_type (info) == GI_INFO_TYPE_FUNCTION);
   function = (GIFunctionInfo *)info;
 
@@ -119,7 +119,7 @@ main (int argc, char *argv[])
 
   /* test5 returns a string and a length
    */
-  info = g_irepository_find_by_name (rep, "test", "test5");  
+  info = g_irepository_find_by_name (rep, "testfns", "test5");  
   g_assert (g_base_info_get_type (info) == GI_INFO_TYPE_FUNCTION);
   function = (GIFunctionInfo *)info;
 
@@ -139,7 +139,7 @@ main (int argc, char *argv[])
 
   /* test GList*/
   g_print ("Test 6\n");
-  info = g_irepository_find_by_name (rep, "test", "test6");
+  info = g_irepository_find_by_name (rep, "testfns", "test6");
   g_assert (g_base_info_get_type (info) == GI_INFO_TYPE_FUNCTION);
   function = (GIFunctionInfo *)info;
 
@@ -164,7 +164,7 @@ main (int argc, char *argv[])
 
   /* test GList more, transfer ownership*/
   g_print ("Test 7\n");
-  info = g_irepository_find_by_name (rep, "test", "test7");
+  info = g_irepository_find_by_name (rep, "testfns", "test7");
   g_assert (g_base_info_get_type (info) == GI_INFO_TYPE_FUNCTION);
   function = (GIFunctionInfo *)info;
 
@@ -194,7 +194,7 @@ main (int argc, char *argv[])
   g_clear_error (&error);
 
   g_print("Test 8\n");
-  info = g_irepository_find_by_name (rep, "test", "TestStruct");
+  info = g_irepository_find_by_name (rep, "testfns", "TestStruct");
   g_assert (g_base_info_get_type (info) == GI_INFO_TYPE_STRUCT);
   record = (GIStructInfo *)info;
   info = g_struct_info_find_method (record, "test8");
@@ -250,7 +250,7 @@ main (int argc, char *argv[])
 
 #if 0
   /* "broken" is in the typelib but not in the .so*/
-  info = g_irepository_find_by_name (rep, "test", "broken");  
+  info = g_irepository_find_by_name (rep, "testfns", "broken");  
   g_assert (g_base_info_get_type (info) == GI_INFO_TYPE_FUNCTION);
   function = (GIFunctionInfo *)info;
 
@@ -264,7 +264,7 @@ main (int argc, char *argv[])
 #endif
   
   /* too few in arguments */
-  info = g_irepository_find_by_name (rep, "test", "test2");  
+  info = g_irepository_find_by_name (rep, "testfns", "test2");  
   g_assert (g_base_info_get_type (info) == GI_INFO_TYPE_FUNCTION);
   function = (GIFunctionInfo *)info;
 

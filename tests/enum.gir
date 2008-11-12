@@ -3,7 +3,7 @@
             xmlns="http://www.gtk.org/introspection/core/1.0"
             xmlns:c="http://www.gtk.org/introspection/c/1.0"
             xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
-  <namespace name="Foo" version="1.0">
+  <namespace name="enum" version="1.0">
     <enumeration name="Enum1" glib:type-name="FooEnum" glib:get-type="foo_enum_get_type">
       <member name="value1" value="0"/>
       <member name="value2" value="1"/>

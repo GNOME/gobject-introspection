@@ -3,7 +3,7 @@
             xmlns="http://www.gtk.org/introspection/core/1.0"
             xmlns:c="http://www.gtk.org/introspection/c/1.0"
             xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
-  <namespace name="Foo" version="1.0">
+  <namespace name="struct" version="1.0">
     <record name="FooStruct">
       <field name="foo_int" writable="1">
         <type name="int"/>

@@ -3,7 +3,7 @@
             xmlns="http://www.gtk.org/introspection/core/1.0"
             xmlns:c="http://www.gtk.org/introspection/c/1.0"
             xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
-  <namespace name="test" version="1.0">
+  <namespace name="testfns" version="1.0">
     <function name="test1" c:identifier="test1">
       <return-value transfer-ownership="none">
         <type name="int" c:type="gint"/>
