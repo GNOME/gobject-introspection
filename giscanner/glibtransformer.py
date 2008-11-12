@@ -84,7 +84,6 @@ class GLibTransformer(object):
             found_libname = os.path.abspath(libname)
         elif os.path.exists(libtool_libname):
             found_libname = extract_libtool(libtool_libname)
-            libname = os.path.basename(found_libname)
         else:
             found_libname = find_library(libname)
 
