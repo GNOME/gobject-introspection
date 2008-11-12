@@ -1,5 +1,20 @@
 2008-11-12  Owen Taylor  <otaylor@redhat.com>
 
+	Keep aliases and disguised_structures local to each module (#560419)
+
+	* girepository/girmodule.[ch]: When parsing, keep keep a separate
+	hash tables of aliases and 'disguised' flags for each module, and
+	store that on the module.
+
+	After parsing an include merge the aliases/disguised flags to the
+	including module.
+
+	* girepository/girparser.c: Remove 'prefix_aliases' flag and
+	always prefix aliases/disguised structure types when parsing; this
+	simplifies the code considerably.
+
+2008-11-12  Owen Taylor  <otaylor@redhat.com>
+
 	Fix mismatches between .gir name and 'name' attribute (#560419)
 
 	* tests/boxed.gir tests/constant.gir tests/enum.gir tests/invoke/invoke.c
