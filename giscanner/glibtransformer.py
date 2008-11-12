@@ -84,13 +84,17 @@ class GLibTransformer(object):
             found_libname = os.path.abspath(libname)
         elif os.path.exists(libtool_libname):
             found_libname = extract_libtool(libtool_libname)
-        elif libname.endswith('.la'):
-            found_libname = extract_libtool(libname)
+            libname = os.path.basename(found_libname)
         else:
             found_libname = find_library(libname)
+
+        if libname.endswith('.la'):
+            found_libname = extract_libtool(libname)
+            libname = os.path.basename(found_libname)
         if not found_libname:
             raise ValueError("Failed to find library: %r" % (libname, ))
         self._libraries.append(ctypes.cdll.LoadLibrary(found_libname))
+        return libname
 
     def _print_statistics(self):
         nodes = list(self._names.names.itervalues())
@@ -267,6 +271,8 @@ class GLibTransformer(object):
         if self._namespace_name == 'GLib':
             # No GObjects in GLib
             return False
+        if func.parameters:
+            return False
         # GType *_get_type(void)
         if func.retval.type.name not in ['Type',
                                          'GType',
@@ -274,8 +280,6 @@ class GLibTransformer(object):
                                          'Gtk.Type']:
             print ("Warning: *_get_type function returns '%r'"
                    ", not GObject.Type") % (func.retval.type.name, )
-            return False
-        if func.parameters:
             return False
 
         if not self._libraries:

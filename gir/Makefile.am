@@ -16,7 +16,7 @@ else
 GLIB_LIBRARY=glib-2.0
 endif
 
-GLib-2.0.gir: $(G_IR_SCANNER) $(G_IR_SCANNER_FILES) Makefile glib-2.0.c
+GLib-2.0.gir: $(G_IR_SCANNER) $(G_IR_SCANNER_FILES) glib-2.0.c
 	PYTHONPATH=$(G_IR_SCANNER_PYTHONPATH) $(G_IR_SCANNER) \
 	    -v --namespace GLib --nsversion=2.0 \
 	    --add-include-path=. \
@@ -47,7 +47,7 @@ else
 GOBJECT_LIBRARY=gobject-2.0
 endif
 
-GObject-2.0.gir: GLib-2.0.gir $(G_IR_SCANNER) $(G_IR_SCANNER_FILES) Makefile
+GObject-2.0.gir: GLib-2.0.gir $(G_IR_SCANNER) $(G_IR_SCANNER_FILES)
 	PYTHONPATH=$(G_IR_SCANNER_PYTHONPATH) $(G_IR_SCANNER) \
 	    -v --namespace GObject --nsversion=2.0 \
 	    --add-include-path=. \
@@ -98,7 +98,7 @@ else
 GIO_LIBRARY=gio-2.0
 endif
 
-Gio-2.0.gir: GObject-2.0.gir $(G_IR_SCANNER) $(G_IR_SCANNER_FILES) Makefile $(srcdir)/gio-2.0.c
+Gio-2.0.gir: GObject-2.0.gir $(G_IR_SCANNER) $(G_IR_SCANNER_FILES) $(srcdir)/gio-2.0.c
 	PYTHONPATH=$(G_IR_SCANNER_PYTHONPATH) $(G_IR_SCANNER) \
 	    -v --namespace Gio --nsversion=2.0 \
 	    --add-include-path=. \
@@ -116,16 +116,43 @@ Gio-2.0.gir: GObject-2.0.gir $(G_IR_SCANNER) $(G_IR_SCANNER_FILES) Makefile $(sr
 	    $(GLIB_INCLUDEDIR)/gio/*.h
 BUILT_SOURCES += Gio-2.0.gir
 EXTRA_DIST += gio-2.0.c
-CLEANFILES = $(BUILT_SOURCES)
 
+# girepository
+GIREPOSITORY_INCLUDEDIR=`pkg-config --variable=includedir girepository-2.0`/glib-2.0
+GIREPOSITORY_LIBDIR=`pkg-config --variable=libdir girepository-2.0`
+
+GIRepository-2.0.gir: GObject-2.0.gir $(G_IR_SCANNER) $(G_IR_SCANNER_FILES)
+	PYTHONPATH=$(G_IR_SCANNER_PYTHONPATH) $(G_IR_SCANNER) \
+	    -v --namespace GIRepository --nsversion=1.0\
+	    --add-include-path=. \
+	    --noclosure \
+	    --output $@ \
+	    --strip-prefix=g \
+            --include=GObject-2.0 \
+	    --library=$(top_builddir)/girepository/libgirepository.la \
+	    -I$(srcdir)/girepository \
+            --pkg glib-2.0 \
+            --pkg gobject-2.0 \
+	    $(top_srcdir)/girepository/girepository.c \
+	    $(top_srcdir)/girepository/girepository.h
+BUILT_SOURCES += GIRepository-2.0.gir
+
+# Generic rules
+CLEANFILES = $(BUILT_SOURCES)
 girdir=$(datadir)/gir
 dist_gir_DATA = $(BUILT_SOURCES)
 
-%.typelib: %.gir $(top_builddir)/tools/g-ir-compiler$(EXEEXT) Makefile
+%.typelib: %.gir $(top_builddir)/tools/g-ir-compiler$(EXEEXT)
 	$(DEBUG) $(top_builddir)/tools/g-ir-compiler$(EXEEXT) --includedir=. $(G_IR_COMPILER_OPTS) $< -o $@
 
 typelibsdir = $(libdir)/girepository
-typelibs_DATA = GLib-2.0.typelib GModule-2.0.typelib GObject-2.0.typelib Gio-2.0.typelib
+typelibs_DATA = 		\
+	GLib-2.0.typelib 	\
+	GModule-2.0.typelib	\
+	GObject-2.0.typelib	\
+	Gio-2.0.typelib		\
+	GIRepository-2.0.typelib
+
 CLEANFILES += $(typelibs_DATA)
 
 # Check that typelib -> gir -> typelib transformation is lossless.
@@ -133,10 +160,10 @@ CLEANFILES += $(typelibs_DATA)
 # values, etc.) but the typelibs should identical as long as the gir files are
 # semantically equivalent.
 
-%.test.gir: %.typelib $(top_builddir)/tools/g-ir-generate$(EXEEXT) Makefile
+%.test.gir: %.typelib $(top_builddir)/tools/g-ir-generate$(EXEEXT)
 	$(DEBUG) $(top_builddir)/tools/g-ir-generate$(EXEEXT) --includedir=. $< -o $@
 
-testlib-%: %.test.gir $(top_builddir)/tools/g-ir-generate$(EXEEXT) Makefile
+testlib-%: %.test.gir $(top_builddir)/tools/g-ir-generate$(EXEEXT)
 	$(DEBUG) $(top_builddir)/tools/g-ir-compiler$(EXEEXT) --includedir=. $(G_IR_COMPILER_OPTS) $< -o $*.test.typelib
 	cmp $*.typelib $*.test.typelib && rm $*.test.typelib
 

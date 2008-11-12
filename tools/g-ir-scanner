@@ -211,7 +211,6 @@ def main(args):
 
     if not options.libraries:
         _error("Must specify --library at least one primary library")
-    libraries = options.libraries
 
     for package in options.packages:
         output = subprocess.Popen(['pkg-config', '--cflags', package],
@@ -252,7 +251,6 @@ def main(args):
         os.environ['LPATH'] = ':'.join([lpath, library_path])
     else:
         os.environ['LPATH'] = library_path
-
     filenames = []
     for arg in args:
         if (arg.endswith('.c') or
@@ -290,9 +288,10 @@ def main(args):
     # Transform the C AST nodes into higher level
     # GLib/GObject nodes
     glibtransformer = GLibTransformer(transformer, noclosure=options.noclosure)
+    libraries = []
     if options.libraries:
         for library in options.libraries:
-            glibtransformer.add_library(library)
+            libraries.append(glibtransformer.add_library(library))
 
     namespace = glibtransformer.parse()
 

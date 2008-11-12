@@ -1,3 +1,14 @@
+2008-11-12  Johan Dahlin  <jdahlin@async.com.br>
+
+	* gir/Makefile.am:
+	* giscanner/glibtransformer.py:
+	* tools/g-ir-scanner:
+	Add a GIRepository-2.0.gir. Change the libtool lookup slightly
+	so we can just pass in --library=foo/bar/baz.la and the scanner
+	does the right thing.
+	Don't warn for _get_type() functions if they don't take any
+	parameters
+
 2008-11-11  Owen Taylor  <otaylor@redhat.com>
 
 	Bug 560404 – Prefix types when resolving aliases in included modules
