@@ -1,5 +1,13 @@
 2008-11-12  Owen Taylor  <otaylor@redhat.com>
 
+	Bug 560419 – Cache includes when parsing
+
+	Keep track of all modules parsed within a GIrParser, and when a
+	module is referenced a second time, use the existing parsed copy
+	instead of reparsing.
+
+2008-11-12  Owen Taylor  <otaylor@redhat.com>
+
 	Fix management of ParseContext.includes_modules (#560419)
 
 	* girepository/girparser.c: Fix some trivial bugs in managing the
