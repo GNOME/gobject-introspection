@@ -149,6 +149,7 @@ GSList *test_filename_return (void)
 {
   GSList *filenames = NULL;
   filenames = g_slist_prepend (filenames, "/etc/fstab");
+  filenames = g_slist_prepend (filenames, "åäö");
   return filenames;
 }
 
