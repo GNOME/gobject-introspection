@@ -1,3 +1,8 @@
+2008-11-13  Tommi Komulainen  <tommi.komulainen@iki.fi>
+
+	* tests/everything/gitesttypes.c (test_filename_return): Return
+	strings in filename encoding.
+
 2008-11-13  Owen Taylor  <otaylor@redhat.com>
 
 	Bug 560253 – Add structure and boxed types to Everything test module

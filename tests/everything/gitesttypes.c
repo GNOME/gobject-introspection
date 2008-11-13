@@ -143,13 +143,13 @@ void test_utf8_inout (char **inout)
 /**
  * test_filename_return:
  *
- * Return value: (element-type filename) (transfer none): list of strings
+ * Return value: (element-type filename) (transfer full): list of strings
  */
 GSList *test_filename_return (void)
 {
   GSList *filenames = NULL;
-  filenames = g_slist_prepend (filenames, "/etc/fstab");
-  filenames = g_slist_prepend (filenames, "åäö");
+  filenames = g_slist_prepend (filenames, g_filename_from_utf8("/etc/fstab", -1, NULL, NULL, NULL));
+  filenames = g_slist_prepend (filenames, g_filename_from_utf8("åäö", -1, NULL, NULL, NULL));
   return filenames;
 }
 
