@@ -60,7 +60,7 @@
           <type name="GObject.Object"/>
         </return-value>
         <parameters>
-          <parameter name="somearg" transfer-ownership="full" allow-none="1">
+          <parameter name="somearg" transfer-ownership="none" allow-none="1">
             <type name="utf8"/>
           </parameter>
         </parameters>

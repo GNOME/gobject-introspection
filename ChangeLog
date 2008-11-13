@@ -1,5 +1,25 @@
 2008-11-13  Colin Walters  <walters@verbum.org>
 
+	Bug 558436 - avoid having scanner load app code
+
+	* giscanner/cgobject.py: Delete; we no longer load shared
+	libraries directly.
+	* giscanner/dumper.py: Support for linking a library to
+	a stub binary for introspection.
+	* giscanner/glibtransformer.py: Rewrite to use gdump XML
+	from invocation of child binary.
+	* giscanner/transformer.py: Fix up to use fully qualified
+	name in parse tree.  Make parse_ctype public so we can use
+	it inside glibtransformer.
+	* tests/scanner/barapp.c: New test, using --program arg
+	for g-ir-scanner.
+	* tests/*: Update to use common.mk for invoking scanner.
+	* tools/g-ir-scanner: Add options --program, --program-arg,
+	and --no-libtool.
+	* docs/g-ir-scanner.1: Update.
+
+2008-11-13  Colin Walters  <walters@verbum.org>
+
 	* configure.ac: Depend on Gio, we use it in gdump.c.
 	* girepository/gdump.c: Code to dump GType data to XML.
 	* girepository/girepository.c: Add option group for dumping.

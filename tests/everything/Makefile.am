@@ -1,3 +1,5 @@
+include $(top_srcdir)/common.mk
+
 LT_CURRENT = 1
 LT_REVISION = 0
 LT_AGE = 0
@@ -23,18 +25,13 @@ AM_LDFLAGS += -no-undefined
 endif
 
 GIRS =
-SCANNER = $(top_srcdir)/tools/g-ir-scanner
-SCANNER_PYTHONPATH = $(top_builddir):$(top_srcdir):$$PYTHONPATH
-SCANNER_LIBS = $(top_srcdir)/giscanner/*.py \
-	       $(top_builddir)/giscanner/libgiscanner.la
 TYPELIBS = $(GIRS:.gir=.typelib)
 TXMLS = $(GIRS:.gir=.gir.txml)
 CLEANFILES = $(TYPELIBS) $(TXMLS) $(GIRS)
 BUILT_SOURCES = $(TYPELIBS) $(TXMLS) $(GIRS)
 
-Everything-$(TYPELIB_VERSION).gir: libgirepository-everything.la gitesttypes.c gitesttypes.h $(SCANNER) $(SCANNER_LIBS)
-	PYTHONPATH=$(SCANNER_PYTHONPATH) $(CHECK_DEBUG) $(SCANNER) -v \
-	--add-include-path=$(top_builddir)/gir \
+Everything-$(TYPELIB_VERSION).gir: libgirepository-everything.la gitesttypes.c gitesttypes.h $(SCANNER_BIN) $(SCANNER_LIBS)
+	$(CHECK_DEBUG) $(SCANNER) \
 	--include=GObject-2.0 \
 	--library=girepository-everything \
 	--namespace=Everything --nsversion=$(TYPELIB_VERSION) \

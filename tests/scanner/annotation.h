@@ -39,7 +39,7 @@ gint     annotation_object_out          (AnnotationObject *object,
 					 int              *outarg);
 GObject* annotation_object_create_object(AnnotationObject *object);
 GObject* annotation_object_allow_none   (AnnotationObject *object,
-					 gchar            *somearg);
+					 const gchar      *somearg);
 GObject* annotation_object_notrans      (AnnotationObject *object);
 gint     annotation_object_inout        (AnnotationObject *object,
 					 int              *inoutarg);

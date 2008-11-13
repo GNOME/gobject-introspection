@@ -1,3 +1,5 @@
+include $(top_srcdir)/common.mk
+
 # We need to build a shared library, which can be dlopened
 # it does not work with noinst_LTLIBRARIES
 testlib_LTLIBRARIES = \
@@ -9,9 +11,10 @@ testlib_LTLIBRARIES = \
 testlibdir = $(prefix)/unused
 install-testlibLTLIBRARIES: # prevent it from being installed
 
-AM_CFLAGS = $(GOBJECT_CFLAGS)
-AM_LDFLAGS = -module -avoid-version
-LIBS = $(GOBJECT_LIBS)
+AM_CPPFLAGS = -I$(top_srcdir)/girepository
+AM_CFLAGS = $(GOBJECT_CFLAGS) $(GTHREAD_CFLAGS)
+AM_LDFLAGS = -avoid-version
+LIBS = $(GOBJECT_LIBS) $(GTHREAD_LIBS)
 
 libannotation_la_SOURCES = $(srcdir)/annotation.c $(srcdir)/annotation.h
 libdrawable_la_SOURCES = $(srcdir)/drawable.c $(srcdir)/drawable.h
@@ -25,11 +28,6 @@ endif
 
 # .gir --[scanner]-> .typelib --[generate]-> .tgir
 GIRS =
-SCANNER = $(top_srcdir)/tools/g-ir-scanner
-SCANNER_PYTHONPATH = $(top_builddir):$(top_srcdir):$$PYTHONPATH
-SCANNER_LIBS = \
-	$(top_srcdir)/giscanner/*.py \
-	$(top_builddir)/giscanner/libgiscanner.la
 TYPELIBS = $(GIRS:.gir=.typelib)
 CHECKGIRS = $(GIRS:.gir=.gir.check)
 EXPECTEDGIRS = $(GIRS:.gir=-expected.gir)
@@ -40,9 +38,8 @@ CLEANFILES = $(TYPELIBS)  $(GIRS) $(TGIRS)
 BUILT_SOURCES = $(TYPELIBS) $(GIRS)
 EXTRA_DIST = $(EXPECTEDGIRS) $(EXPECTEDTGIRS)
 
-annotation-1.0.gir: libannotation.la annotation.c annotation.h utility-1.0.gir $(SCANNER) $(SCANNER_LIBS) Makefile
-	PYTHONPATH=$(SCANNER_PYTHONPATH) $(CHECK_DEBUG) $(SCANNER) -v \
-	--add-include-path=$(top_builddir)/gir --add-include-path=. \
+annotation-1.0.gir: libannotation.la annotation.c annotation.h utility-1.0.gir $(SCANNER_BIN) $(SCANNER_LIBS) Makefile
+	 $(CHECK_DEBUG) $(SCANNER) \
 	--include=GObject-2.0 \
 	--include=utility-1.0 \
 	--library=annotation \
@@ -53,9 +50,8 @@ annotation-1.0.gir: libannotation.la annotation.c annotation.h utility-1.0.gir $
 	 --output $@
 GIRS += annotation-1.0.gir
 
-drawable-1.0.gir: libdrawable.la drawable.c drawable.h utility-1.0.gir $(SCANNER) $(SCANNER_LIBS) Makefile
-	PYTHONPATH=$(SCANNER_PYTHONPATH) $(CHECK_DEBUG) $(SCANNER) -v \
-	--add-include-path=$(top_builddir)/gir --add-include-path=. \
+drawable-1.0.gir: libdrawable.la drawable.c drawable.h utility-1.0.gir $(SCANNER_BIN) $(SCANNER_LIBS) Makefile
+	$(CHECK_DEBUG) $(SCANNER) \
 	--include=GObject-2.0 \
 	--include=utility-1.0 \
 	--library=drawable \
@@ -66,15 +62,14 @@ drawable-1.0.gir: libdrawable.la drawable.c drawable.h utility-1.0.gir $(SCANNER
 	 --output $@
 GIRS += drawable-1.0.gir
 
-drawable-injected-1.0.gir: drawable-1.0.gir $(SCANNER) $(SCANNER_LIBS) Makefile
-	PYTHONPATH=$(SCANNER_PYTHONPATH) $(CHECK_DEBUG) $(SCANNER) -v \
+drawable-injected-1.0.gir: drawable-1.0.gir $(SCANNER_BIN) $(SCANNER_LIBS) Makefile
+	$(CHECK_DEBUG) $(SCANNER) -v \
 	 --inject drawable-1.0.gir $(srcdir)/DrawableAdditions.xml $@
 GIRS += drawable-injected-1.0.gir
 EXTRA_DIST += DrawableAdditions.xml
 
-foo-1.0.gir: libfoo.la foo.c foo.h utility-1.0.gir $(SCANNER) $(SCANNER_LIBS) Makefile
-	PYTHONPATH=$(SCANNER_PYTHONPATH) $(CHECK_DEBUG) $(SCANNER) -v \
-	--add-include-path=$(top_builddir)/gir --add-include-path=. \
+foo-1.0.gir: libfoo.la foo.c foo.h utility-1.0.gir $(SCANNER_BIN) $(SCANNER_LIBS) Makefile
+	$(CHECK_DEBUG) $(SCANNER) \
 	--include=GObject-2.0 \
 	--include=utility-1.0 \
 	--library=foo \
@@ -85,9 +80,8 @@ foo-1.0.gir: libfoo.la foo.c foo.h utility-1.0.gir $(SCANNER) $(SCANNER_LIBS) Ma
 	 --output $@
 GIRS += foo-1.0.gir
 
-utility-1.0.gir: libutility.la utility.h $(SCANNER) $(SCANNER_LIBS) Makefile
-	PYTHONPATH=$(SCANNER_PYTHONPATH) $(CHECK_DEBUG) $(SCANNER) -v \
-	--add-include-path=$(top_builddir)/gir --add-include-path=. \
+utility-1.0.gir: libutility.la utility.h $(SCANNER_BIN) $(SCANNER_LIBS) Makefile
+	$(CHECK_DEBUG) $(SCANNER) \
 	--include=GObject-2.0 \
 	--library=utility \
 	--namespace=utility \
@@ -98,9 +92,8 @@ utility-1.0.gir: libutility.la utility.h $(SCANNER) $(SCANNER_LIBS) Makefile
 GIRS += utility-1.0.gir
 
 # This one tests different --namespace and --strip-prefix
-GtkFrob-1.0.gir: libgtkfrob.la gtkfrob.h $(SCANNER) $(SCANNER_LIBS) Makefile
-	PYTHONPATH=$(SCANNER_PYTHONPATH) $(CHECK_DEBUG) $(SCANNER) -v \
-	--add-include-path=$(top_builddir)/gir --add-include-path=. \
+GtkFrob-1.0.gir: libgtkfrob.la gtkfrob.h $(SCANNER_BIN) $(SCANNER_LIBS) Makefile
+	$(CHECK_DEBUG) $(SCANNER) \
 	--include=GObject-2.0 \
 	--library=gtkfrob \
 	--namespace=GtkFrob \
@@ -110,6 +103,23 @@ GtkFrob-1.0.gir: libgtkfrob.la gtkfrob.h $(SCANNER) $(SCANNER_LIBS) Makefile
 	$(libgtkfrob_la_SOURCES) \
 	--output $@
 GIRS += GtkFrob-1.0.gir
+
+bin_PROGRAMS = barapp
+
+barapp_SOURCES = barapp.c barapp.h
+barapp_LDADD = $(top_builddir)/girepository/libgirepository.la
+barapp_LDFLAGS = -export-dynamic
+BarApp-1.0.gir: barapp $(SCANNER_BIN) $(SCANNER_LIBS) Makefile
+	$(SCANNER) \
+	--include=GObject-2.0 \
+	--program=./barapp \
+	--namespace=BarApp \
+	--strip-prefix=Bar \
+	--nsversion=1.0 \
+	--pkg gobject-2.0 \
+	$(barapp_SOURCES) \
+	--output $@
+GIRS += BarApp-1.0.gir
 
 pre-check:
 	@if test "$(top_builddir)" != "$(top_srcdir)"; then \

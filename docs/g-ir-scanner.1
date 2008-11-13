@@ -43,13 +43,26 @@ Include this directory when searching for a library.
 This option can be specified multiple times to include more than one
 directory to look for libraries in.
 .TP
-.B \-n, ---namspace=NAME
+.B \-n, ---namespace=NAME
 The namespace name. This name should be capitalized, eg the first letter
 should be upper case. Examples: Gtk, Clutter, WebKit.
+.TP
+.B \---no-libtool
+Disable usage of libtool for compiling stub introspection binary.  Use this
+if your build system does not require libtool.
 .TP
 .B ---nsversion=VERSION
 The namespace version. For instance 1.0. This is usually the platform version,
 eg 2.0 for Gtk+, not 2.12.7.
+.TP
+.B \-p, ---program=PROGRAM
+Specifies a binary that will be introspected. This means that the
+*_get_type() functions in it will be called for GObject data types.
+The binary must be modified to take a --introspect= option, and
+to pass the argument to this function to g_irepository_dump.
+.TP
+.B \---program-arg=ARG
+Additional argument to pass to program for introspection.
 .TP
 .B \, ---strip-prefix=PREFIX
 If this option is specified a prefix will be stripped from all functions.

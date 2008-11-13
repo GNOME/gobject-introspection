@@ -1,10 +1,7 @@
+include $(top_srcdir)/common.mk
+
 BUILT_SOURCES =
 EXTRA_DIST = 
-
-G_IR_SCANNER = $(top_srcdir)/tools/g-ir-scanner
-G_IR_SCANNER_PYTHONPATH = $(top_builddir):$(top_srcdir):$$PYTHONPATH
-G_IR_SCANNER_FILES = $(top_srcdir)/giscanner/*.py \
-	$(top_builddir)/giscanner/libgiscanner.la
 
 # glib
 GLIB_INCLUDEDIR=`pkg-config --variable=includedir glib-2.0`/glib-2.0
@@ -16,10 +13,9 @@ else
 GLIB_LIBRARY=glib-2.0
 endif
 
-GLib-2.0.gir: $(G_IR_SCANNER) $(G_IR_SCANNER_FILES) glib-2.0.c
-	PYTHONPATH=$(G_IR_SCANNER_PYTHONPATH) $(G_IR_SCANNER) \
-	    -v --namespace GLib --nsversion=2.0 \
-	    --add-include-path=. \
+GLib-2.0.gir: $(SCANNER_BIN) $(SCANNER_LIBS) Makefile glib-2.0.c
+	$(SCANNER) \
+	    --namespace GLib --nsversion=2.0 \
 	    --noclosure \
 	    --output $@ \
 	    --strip-prefix=g \
@@ -32,7 +28,7 @@ GLib-2.0.gir: $(G_IR_SCANNER) $(G_IR_SCANNER_FILES) glib-2.0.c
 	    $(GLIB_LIBDIR)/glib-2.0/include/glibconfig.h \
 	    $(srcdir)/glib-2.0.c \
 	    $(GLIB_INCLUDEDIR)/glib/*.h
-	PYTHONPATH=$(G_IR_SCANNER_PYTHONPATH) $(G_IR_SCANNER) \
+	$(SCANNER) $(SCANNER_ARGS) \
 	    --xpath-assertions=$(srcdir)/GLib-2.0.xpath GLib-2.0.gir
 BUILT_SOURCES += GLib-2.0.gir
 EXTRA_DIST += glib-2.0.c GLib-2.0.xpath
@@ -47,10 +43,9 @@ else
 GOBJECT_LIBRARY=gobject-2.0
 endif
 
-GObject-2.0.gir: GLib-2.0.gir $(G_IR_SCANNER) $(G_IR_SCANNER_FILES)
-	PYTHONPATH=$(G_IR_SCANNER_PYTHONPATH) $(G_IR_SCANNER) \
-	    -v --namespace GObject --nsversion=2.0 \
-	    --add-include-path=. \
+GObject-2.0.gir: GLib-2.0.gir $(SCANNER_BIN) $(SCANNER_LIBS) Makefile
+	$(SCANNER) \
+	    --namespace GObject --nsversion=2.0 \
 	    --noclosure \
 	    --output $@ \
 	    --strip-prefix=g \
@@ -73,9 +68,9 @@ else
 GMODULE_LIBRARY=gmodule-2.0
 endif
 
-GModule-2.0.gir: GLib-2.0.gir $(G_IR_SCANNER) $(G_IR_SCANNER_FILES)
-	PYTHONPATH=$(G_IR_SCANNER_PYTHONPATH) $(G_IR_SCANNER) \
-	    -v --namespace GModule --nsversion=2.0 \
+GModule-2.0.gir: GLib-2.0.gir $(SCANNER_BIN) $(SCANNER_LIBS)
+	$(SCANNER) \
+	    --namespace GModule --nsversion=2.0 \
 	    --add-include-path=. \
 	    --noclosure \
 	    --output $@ \
@@ -98,9 +93,9 @@ else
 GIO_LIBRARY=gio-2.0
 endif
 
-Gio-2.0.gir: GObject-2.0.gir $(G_IR_SCANNER) $(G_IR_SCANNER_FILES) $(srcdir)/gio-2.0.c
-	PYTHONPATH=$(G_IR_SCANNER_PYTHONPATH) $(G_IR_SCANNER) \
-	    -v --namespace Gio --nsversion=2.0 \
+Gio-2.0.gir: GObject-2.0.gir $(SCANNER_BIN) $(SCANNER_LIBS) Makefile $(srcdir)/gio-2.0.c
+	$(SCANNER) \
+	    --namespace Gio --nsversion=2.0 \
 	    --add-include-path=. \
 	    --noclosure \
 	    --output $@ \
@@ -122,15 +117,14 @@ GIREPOSITORY_FILES = \
 	$(top_srcdir)/girepository/girepository.c \
 	$(top_srcdir)/girepository/girepository.h
 
-GIRepository-2.0.gir: GObject-2.0.gir $(G_IR_SCANNER) $(G_IR_SCANNER_FILES) $(GIREPOSITORY_FILES)
-	PYTHONPATH=$(G_IR_SCANNER_PYTHONPATH) $(G_IR_SCANNER) \
-	    -v --namespace GIRepository --nsversion=1.0\
-	    --add-include-path=. \
+GIRepository-2.0.gir: GObject-2.0.gir $(SCANNER_BIN) $(SCANNER_LIBS) $(GIREPOSITORY_FILES)
+	$(SCANNER) \
+	    --namespace GIRepository --nsversion=1.0\
 	    --noclosure \
 	    --output $@ \
 	    --strip-prefix=g \
             --include=GObject-2.0 \
-	    --library=$(top_builddir)/girepository/libgirepository.la \
+	    --library=girepository \
 	    -I$(srcdir)/girepository \
             --pkg glib-2.0 \
             --pkg gobject-2.0 \

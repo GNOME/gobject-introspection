@@ -1,15 +1,11 @@
+include $(top_srcdir)/common.mk
+
 BUILT_SOURCES =
 CLEANFILES =
 EXTRA_DIST =
 
 check_LTLIBRARIES =
 check_PROGRAMS =
-
-SCANNER = $(top_srcdir)/tools/g-ir-scanner
-SCANNER_PYTHONPATH = $(top_builddir):$(top_srcdir):$$PYTHONPATH
-SCANNER_LIBS = \
-	$(top_srcdir)/giscanner/*.py \
-	$(top_builddir)/giscanner/libgiscanner.la
 
 ############################################################
 
@@ -20,11 +16,10 @@ liboffsets_la_SOURCES = \
 	offsets.c
 liboffsets_la_CPPFLAGS = $(GIREPO_CFLAGS)
 # dummy rpath to get built dynamically (huh?)
-liboffsets_la_LDFLAGS = -module -avoid-version -rpath $(libdir)
+liboffsets_la_LDFLAGS = -avoid-version -rpath $(libdir)
 
-offsets-1.0.gir: liboffsets.la offsets.h $(SCANNER) $(SCANNER_LIBS) Makefile
-	PYTHONPATH=$(SCANNER_PYTHONPATH) $(CHECK_DEBUG) $(SCANNER) -v \
-	--add-include-path=$(top_builddir)/gir --add-include-path=. \
+offsets-1.0.gir: liboffsets.la offsets.h $(SCANNER_BIN) $(SCANNER_LIBS) Makefile
+	$(CHECK_DEBUG) $(SCANNER) \
 	--library=offsets \
 	--namespace=offsets \
 	--nsversion=1.0 \

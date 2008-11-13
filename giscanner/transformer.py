@@ -142,7 +142,8 @@ class Transformer(object):
                 self._names.aliases[node.name] = (nsname, node)
             elif isinstance(node, (GLibBoxed, Interface, Class)):
                 self._names.type_names[node.type_name] = (nsname, node)
-            self._names.names[node.name] = (nsname, node)
+            giname = '%s.%s' % (nsname, node.name)
+            self._names.names[giname] = (nsname, node)
             if hasattr(node, 'ctype'):
                 self._names.ctypes[node.ctype] = (nsname, node)
             elif hasattr(node, 'symbol'):
@@ -370,7 +371,7 @@ class Transformer(object):
                 "symbol %r of type %s" % (symbol.ident, ctype_name(ctype)))
         return node
 
-    def _parse_ctype(self, ctype):
+    def parse_ctype(self, ctype):
         # First look up the ctype including any pointers;
         # a few type names like 'char*' have their own aliases
         # and we need pointer information for those.
@@ -398,29 +399,29 @@ class Transformer(object):
         if ctype in self._list_ctypes:
             param = options.get('element-type')
             if param:
-                contained_type = self._parse_ctype(param[0])
+                contained_type = self.parse_ctype(param[0])
             else:
                 contained_type = None
-            derefed_name = self._parse_ctype(ctype)
+            derefed_name = self.parse_ctype(ctype)
             rettype = List(derefed_name,
                            ctype,
                            contained_type)
         elif ctype in self._map_ctypes:
             param = options.get('element-type')
             if param:
-                key_type = self._parse_ctype(param[0])
-                value_type = self._parse_ctype(param[1])
+                key_type = self.parse_ctype(param[0])
+                value_type = self.parse_ctype(param[1])
             else:
                 key_type = None
                 value_type = None
-            derefed_name = self._parse_ctype(ctype)
+            derefed_name = self.parse_ctype(ctype)
             rettype = Map(derefed_name,
                           ctype,
                           key_type, value_type)
         elif (ctype in default_array_types) or ('array' in options):
             derefed_name = ctype[:-1] if ctype[-1] == '*' else ctype
             rettype = Array(ctype,
-                            self._parse_ctype(derefed_name))
+                            self.parse_ctype(derefed_name))
             array_opts = dict([opt.split('=')
                                for opt in options.get('array', [])])
             if 'length' in array_opts:
@@ -429,7 +430,7 @@ class Transformer(object):
                 rettype.size = array_opts['fixed-size']
                 rettype.zeroterminated = False
         else:
-            derefed_name = self._parse_ctype(ctype)
+            derefed_name = self.parse_ctype(ctype)
             rettype = Type(derefed_name, ctype)
 
         # Deduce direction for some types passed by reference that

@@ -101,7 +101,7 @@
           <type name="utf8"/>
         </return-value>
         <parameters>
-          <parameter name="object" transfer-ownership="full">
+          <parameter name="object" transfer-ownership="none">
             <type name="GObject.Object"/>
           </parameter>
           <parameter name="p0" transfer-ownership="none">

@@ -19,11 +19,12 @@
 #
 
 import os
+import sys
 import re
-import ctypes
-from ctypes.util import find_library
+import tempfile
+import shutil
+import subprocess
 
-from . import cgobject
 from .ast import (Callback, Constant, Enum, Function, Member, Namespace,
                   Parameter, Property, Return, Struct, Type, Alias,
                   Union, Field, type_name_from_ctype,
@@ -32,9 +33,19 @@ from .transformer import Names
 from .glibast import (GLibBoxed, GLibEnum, GLibEnumMember, GLibFlags,
                       GLibInterface, GLibObject, GLibSignal, GLibBoxedStruct,
                       GLibBoxedUnion, GLibBoxedOther, type_names)
-from .utils import extract_libtool, to_underscores, to_underscores_noprefix
+from .utils import to_underscores, to_underscores_noprefix
 
 default_array_types['guchar*'] = TYPE_UINT8
+
+# GParamFlags
+G_PARAM_READABLE = 1 << 0
+G_PARAM_WRITABLE = 1 << 1
+G_PARAM_CONSTRUCT = 1 << 2
+G_PARAM_CONSTRUCT_ONLY = 1 << 3
+G_PARAM_LAX_VALIDATION = 1 << 4
+G_PARAM_STATIC_NAME = 1 << 5
+G_PARAM_STATIC_NICK = 1 << 6
+G_PARAM_STATIC_BLURB = 1 << 7
 
 SYMBOL_BLACKLIST = [
     # These ones break GError conventions
@@ -47,6 +58,16 @@ SYMBOL_BLACKLIST = [
 
 SYMBOL_BLACKLIST_RE = [re.compile(x) for x in \
                            [r'\w+_marshal_[A-Z]+__', ]]
+
+
+class IntrospectionBinary(object):
+
+    def __init__(self, args, tmpdir=None):
+        self.args = args
+        if tmpdir is None:
+            self.tmpdir = tempfile.mkdtemp('', 'tmp-introspect')
+        else:
+            self.tmpdir = tmpdir
 
 
 class Unresolved(object):
@@ -68,7 +89,9 @@ class GLibTransformer(object):
         self._namespace_name = None
         self._names = Names()
         self._uscore_type_names = {}
-        self._libraries = []
+        self._binary = None
+        self._get_type_functions = []
+        self._gtype_data = {}
         self._failed_types = {}
         self._boxed_types = {}
         self._private_internal_types = {}
@@ -77,23 +100,8 @@ class GLibTransformer(object):
 
     # Public API
 
-    def add_library(self, libname):
-        # For testing mainly.
-        libtool_libname = 'lib' + libname + '.la'
-        if os.path.exists(libname):
-            found_libname = os.path.abspath(libname)
-        elif os.path.exists(libtool_libname):
-            found_libname = extract_libtool(libtool_libname)
-        else:
-            found_libname = find_library(libname)
-
-        if libname.endswith('.la'):
-            found_libname = extract_libtool(libname)
-            libname = os.path.basename(found_libname)
-        if not found_libname:
-            raise ValueError("Failed to find library: %r" % (libname, ))
-        self._libraries.append(ctypes.cdll.LoadLibrary(found_libname))
-        return libname
+    def set_introspection_binary(self, binary):
+        self._binary = binary
 
     def _print_statistics(self):
         nodes = list(self._names.names.itervalues())
@@ -119,6 +127,11 @@ class GLibTransformer(object):
         # the typelib compiler.
         if namespace.name == 'GObject':
             del self._names.aliases['Type']
+
+        # Get all the GObject data by passing our list of get_type
+        # functions to the compiled binary
+
+        self._execute_binary()
 
         # Introspection is done from within parsing
 
@@ -169,6 +182,16 @@ class GLibTransformer(object):
             return node[1]
         return None
 
+    def _lookup_node(self, name):
+        if name in type_names:
+            return None
+        node = self._get_attribute(name)
+        if node is None:
+            node = self._transformer.get_names().names.get(name)
+            if node:
+                return node[1]
+        return node
+
     def _register_internal_type(self, type_name, node):
         self._names.type_names[type_name] = (None, node)
         uscored = to_underscores(type_name).lower()
@@ -183,16 +206,6 @@ class GLibTransformer(object):
 
     # Helper functions
 
-    def _type_from_gtype(self, type_id):
-        ctype = cgobject.type_name(type_id)
-        type_name = type_name_from_ctype(ctype)
-        type_name = type_name.replace('*', '')
-        type_name = self._resolve_type_name(type_name)
-
-        type = Type(type_name, ctype)
-        type._gtype = type_id
-        return type
-
     def _resolve_gtypename(self, gtype_name):
         try:
             return self._transformer.gtypename_to_giname(gtype_name,
@@ -200,21 +213,45 @@ class GLibTransformer(object):
         except KeyError, e:
             return Unresolved(gtype_name)
 
+    def _execute_binary(self):
+        in_path = os.path.join(self._binary.tmpdir, 'types.txt')
+        f = open(in_path, 'w')
+        for func in self._get_type_functions:
+            f.write(func)
+            f.write('\n')
+        f.close()
+        out_path = os.path.join(self._binary.tmpdir, 'dump.xml')
+
+        introspect_arg = '--introspect-dump=%s,%s' % (in_path, out_path)
+        args = self._binary.args
+        args.append(introspect_arg)
+        # Invoke the binary, having written our get_type functions to types.txt
+        print args
+        subprocess.check_call(args, stdout=sys.stdout, stderr=sys.stderr)
+        self._read_introspect_dump(out_path)
+
+        # Clean up temporaries
+        shutil.rmtree(self._binary.tmpdir)
+
+    def _read_introspect_dump(self, xmlpath):
+        from xml.etree.cElementTree import parse
+        tree = parse(xmlpath)
+        root = tree.getroot()
+        for child in root:
+            self._gtype_data[child.attrib['name']] = child
+        for child in root:
+            self._introspect_type(child)
+
     def _create_gobject(self, node):
         type_name = 'G' + node.name
         if type_name == 'GObject':
             parent_gitype = None
             symbol = 'intern'
-        else:
-            type_id = cgobject.type_from_name(type_name)
-            parent_type_name = cgobject.type_name(
-                cgobject.type_parent(type_id))
+        elif type_name == 'GInitiallyUnowned':
+            parent_type_name = 'GObject'
             parent_gitype = self._resolve_gtypename(parent_type_name)
-            symbol = to_underscores(type_name).lower() + '_get_type'
+            symbol = 'g_initially_unowned_get_type'
         node = GLibObject(node.name, parent_gitype, type_name, symbol, True)
-        type_id = cgobject.TYPE_OBJECT
-        self._introspect_properties(node, type_id)
-        self._introspect_signals(node, type_id)
         self._add_attribute(node)
         self._register_internal_type(type_name, node)
 
@@ -281,26 +318,7 @@ class GLibTransformer(object):
                    ", not GObject.Type") % (func.retval.type.name, )
             return False
 
-        if not self._libraries:
-            print "Warning: No libraries loaded, cannot call %s" % (symbol, )
-            return False
-
-        for library in self._libraries:
-            try:
-                func = getattr(library, symbol)
-                break
-            except AttributeError:
-                continue
-        else:
-            print 'Warning: could not find symbol: %s' % symbol
-            name = symbol.replace('_get_type', '')
-            self._failed_types[name] = True
-            return False
-
-        func.restype = cgobject.GType
-        func.argtypes = []
-        type_id = func()
-        self._introspect_type(type_id, symbol)
+        self._get_type_functions.append(symbol)
         return True
 
     def _name_is_internal_gtype(self, giname):
@@ -491,65 +509,51 @@ class GLibTransformer(object):
 
     # Introspection
 
-    def _introspect_type(self, type_id, symbol):
-        fundamental_type_id = cgobject.type_fundamental(type_id)
-        if (fundamental_type_id == cgobject.TYPE_ENUM or
-            fundamental_type_id == cgobject.TYPE_FLAGS):
-            self._introspect_enum(fundamental_type_id, type_id, symbol)
-        elif fundamental_type_id == cgobject.TYPE_OBJECT:
-            self._introspect_object(type_id, symbol)
-        elif fundamental_type_id == cgobject.TYPE_INTERFACE:
-            self._introspect_interface(type_id, symbol)
-        elif fundamental_type_id == cgobject.TYPE_BOXED:
-            self._introspect_boxed(type_id, symbol)
-        elif fundamental_type_id == cgobject.TYPE_BOXED:
-            self._introspect_boxed(type_id, symbol)
-        elif fundamental_type_id == cgobject.TYPE_POINTER:
-            # FIXME: Should we do something about these?
-            #        GHashTable, GValue and a few other fundamentals are
-            #        covered here
-            return
+    def _introspect_type(self, xmlnode):
+        if xmlnode.tag in ('enum', 'flags'):
+            self._introspect_enum(xmlnode)
+        elif xmlnode.tag == 'class':
+            self._introspect_object(xmlnode)
+        elif xmlnode.tag == 'interface':
+            self._introspect_interface(xmlnode)
+        elif xmlnode.tag == 'boxed':
+            self._introspect_boxed(xmlnode)
         else:
-            print 'unhandled GType: %s(%d)' % (cgobject.type_name(type_id),
-                                               type_id)
+            raise ValueError("Unhandled introspection XML tag %s", xmlnode.tag)
 
-    def _introspect_enum(self, ftype_id, type_id, symbol):
-        type_class = cgobject.type_class_ref(type_id)
-        if type_class is None:
-            return
-
+    def _introspect_enum(self, node):
         members = []
-        for enum_value in type_class.get_values():
-            members.append(GLibEnumMember(enum_value.value_nick,
-                                          enum_value.value,
-                                          enum_value.value_name,
-                                          enum_value.value_nick))
+        for member in node.findall('member'):
+            members.append(GLibEnumMember(member.attrib['nick'],
+                                          member.attrib['value'],
+                                          member.attrib['name'],
+                                          member.attrib['nick']))
 
-        klass = (GLibFlags if ftype_id == cgobject.TYPE_FLAGS else GLibEnum)
-        type_name = cgobject.type_name(type_id)
+        klass = (GLibFlags if node.tag == 'flags' else GLibEnum)
+        type_name = node.attrib['name']
         enum_name = self._transformer.remove_prefix(type_name)
-        node = klass(enum_name, type_name, members, symbol)
+        node = klass(enum_name, type_name, members, node.attrib['get-type'])
         self._add_attribute(node, replace=True)
         self._register_internal_type(type_name, node)
 
-    def _introspect_object(self, type_id, symbol):
-        type_name = cgobject.type_name(type_id)
+    def _introspect_object(self, xmlnode):
+        type_name = xmlnode.attrib['name']
         # We handle this specially above; in 2.16 and below there
         # was no g_object_get_type, for later versions we need
         # to skip it
         if type_name == 'GObject':
             return
-        parent_type_name = cgobject.type_name(cgobject.type_parent(type_id))
+        parent_type_name = xmlnode.attrib['parent']
         parent_gitype = self._resolve_gtypename(parent_type_name)
-        is_abstract = cgobject.type_is_abstract(type_id)
+        is_abstract = not not xmlnode.attrib.get('abstract', False)
         node = GLibObject(
             self._transformer.remove_prefix(type_name),
             parent_gitype,
             type_name,
-            symbol, is_abstract)
-        self._introspect_properties(node, type_id)
-        self._introspect_signals(node, type_id)
-        self._introspect_implemented_interfaces(node, type_id)
+            xmlnode.attrib['get-type'], is_abstract)
+        self._introspect_properties(node, xmlnode)
+        self._introspect_signals(node, xmlnode)
+        self._introspect_implemented_interfaces(node, xmlnode)
 
         # add struct fields
         struct = self._get_attribute(node.name)
@@ -564,84 +568,69 @@ class GLibTransformer(object):
         self._add_attribute(node, replace=True)
         self._register_internal_type(type_name, node)
 
-    def _introspect_interface(self, type_id, symbol):
-        type_name = cgobject.type_name(type_id)
-        parent_type_name = cgobject.type_name(cgobject.type_parent(type_id))
-        if parent_type_name == 'GInterface':
-            parent_gitype = None
-        else:
-            parent_gitype = self._resolve_gtypename(parent_type_name)
+    def _introspect_interface(self, xmlnode):
+        type_name = xmlnode.attrib['name']
         node = GLibInterface(
             self._transformer.remove_prefix(type_name),
-            parent_gitype,
-            type_name, symbol)
-        self._introspect_properties(node, type_id)
-        self._introspect_signals(node, type_id)
+            None,
+            type_name, xmlnode.attrib['get-type'])
+        self._introspect_properties(node, xmlnode)
+        self._introspect_signals(node, xmlnode)
         # GtkFileChooserEmbed is an example of a private interface, we
         # just filter them out
-        if symbol.startswith('_'):
+        if xmlnode.attrib['get-type'].startswith('_'):
             print "NOTICE: Marking %s as internal type" % (type_name, )
             self._private_internal_types[type_name] = node
         else:
             self._add_attribute(node, replace=True)
             self._register_internal_type(type_name, node)
 
-    def _introspect_boxed(self, type_id, symbol):
-        type_name = cgobject.type_name(type_id)
+    def _introspect_boxed(self, xmlnode):
+        type_name = xmlnode.attrib['name']
         # This one doesn't go in the main namespace; we associate it with
         # the struct or union
-        node = GLibBoxed(type_name, symbol)
+        node = GLibBoxed(type_name, xmlnode.attrib['get-type'])
         self._boxed_types[node.type_name] = node
         self._register_internal_type(type_name, node)
 
-    def _introspect_implemented_interfaces(self, node, type_id):
-        fundamental_type_id = cgobject.type_fundamental(type_id)
-        if fundamental_type_id != cgobject.TYPE_OBJECT:
-            raise AssertionError
-        interfaces = cgobject.type_interfaces(type_id)
+    def _introspect_implemented_interfaces(self, node, xmlnode):
         gt_interfaces = []
-        for interface_typeid in interfaces:
-            iname = cgobject.type_name(interface_typeid)
-            gitype = self._resolve_gtypename(iname)
+        for interface in xmlnode.findall('implements'):
+            gitype = self._resolve_gtypename(interface.attrib['name'])
             gt_interfaces.append(gitype)
         node.interfaces = gt_interfaces
 
-    def _introspect_properties(self, node, type_id):
-        fundamental_type_id = cgobject.type_fundamental(type_id)
-        if fundamental_type_id == cgobject.TYPE_OBJECT:
-            pspecs = cgobject.object_class_list_properties(type_id)
-        elif fundamental_type_id == cgobject.TYPE_INTERFACE:
-            pspecs = cgobject.object_interface_list_properties(type_id)
-        else:
-            raise AssertionError
-
-        for pspec in pspecs:
-            if pspec.owner_type != type_id:
-                continue
-            ctype = cgobject.type_name(pspec.value_type)
-            readable = (pspec.flags & 1) != 0
-            writable = (pspec.flags & 2) != 0
-            construct = (pspec.flags & 4) != 0
-            construct_only = (pspec.flags & 8) != 0
+    def _introspect_properties(self, node, xmlnode):
+        for pspec in xmlnode.findall('property'):
+            ctype = pspec.attrib['type']
+            flags = int(pspec.attrib['flags'])
+            readable = (flags & G_PARAM_READABLE) != 0
+            writable = (flags & G_PARAM_WRITABLE) != 0
+            construct = (flags & G_PARAM_CONSTRUCT) != 0
+            construct_only = (flags & G_PARAM_CONSTRUCT_ONLY) != 0
             node.properties.append(Property(
-                pspec.name,
+                pspec.attrib['name'],
                 type_name_from_ctype(ctype),
                 readable, writable, construct, construct_only,
                 ctype,
                 ))
 
-    def _introspect_signals(self, node, type_id):
-        for signal_info in cgobject.signal_list(type_id):
-            rtype = self._type_from_gtype(signal_info.return_type)
-            return_ = Return(rtype)
-            signal = GLibSignal(signal_info.signal_name, return_)
-            for i, parameter in enumerate(signal_info.get_params()):
+    def _introspect_signals(self, node, xmlnode):
+        for signal_info in xmlnode.findall('signal'):
+            rctype = signal_info.attrib['return']
+            rtype = Type(self._transformer.parse_ctype(rctype), rctype)
+            return_ = Return(rtype, signal_info.attrib['return'])
+            return_.transfer = 'full'
+            signal = GLibSignal(signal_info.attrib['name'], return_)
+            for i, parameter in enumerate(signal_info.findall('param')):
                 if i == 0:
                     name = 'object'
                 else:
                     name = 'p%s' % (i-1, )
-                ptype = self._type_from_gtype(parameter)
+                pctype = parameter.attrib['type']
+                ptype = Type(self._transformer.parse_ctype(pctype), pctype)
                 param = Parameter(name, ptype)
+                param.transfer = 'none'
                 signal.parameters.append(param)
             node.signals.append(signal)
 
@@ -651,7 +640,6 @@ class GLibTransformer(object):
         # Workaround glib bug #548689, to be included in 2.18.0
         if type_name == "GParam":
             type_name = "GObject.ParamSpec"
-
         res = self._transformer.resolve_type_name_full
         try:
             return res(type_name, ctype, self._names)
@@ -659,6 +647,9 @@ class GLibTransformer(object):
             return self._transformer.resolve_type_name(type_name, ctype)
 
     def _resolve_param_type(self, ptype, **kwargs):
+        # Workaround glib bug #548689, to be included in 2.18.0
+        if ptype.name == "GParam":
+            ptype.name = "GObject.ParamSpec"
         return self._transformer.resolve_param_type_full(ptype,
                                                          self._names,
                                                          **kwargs)
@@ -783,43 +774,23 @@ class GLibTransformer(object):
         prop.type = self._resolve_param_type(prop.type, allow_invalid=False)
 
     def _adjust_transfer(self, param):
+        if not (param.transfer is None or param.transfer_inferred):
+            return
+
         # Do GLib/GObject-specific type transformations here
+        node = self._lookup_node(param.type.name)
+        if node is None:
+            return
 
-        transfer = None
-        is_object = None
-        if hasattr(param.type, '_gtype'):
-            ftype = cgobject.type_fundamental(param.type._gtype)
-            assert ftype != cgobject.TYPE_INVALID, param.type._gtype
-
-            is_object = ftype in [cgobject.TYPE_OBJECT,
-                                  cgobject.TYPE_INTERFACE]
-
-            if ftype in [cgobject.TYPE_OBJECT,
-                         cgobject.TYPE_INTERFACE,
-                         cgobject.TYPE_STRING,
-                         cgobject.TYPE_BOXED,
-                         cgobject.TYPE_PARAM]:
+        if isinstance(param, Parameter):
+            if param.direction != PARAM_DIRECTION_IN:
                 transfer = 'full'
             else:
-                # if type is a cgobject.TYPE_POINTER we could require direction
-                # and transfer-ownership annotations
                 transfer = 'none'
-
-        if is_object is None:
-            is_object = (param.type.name == 'GObject.Object' or
-                         (self._namespace_name == 'GObject' and
-                          param.type.name == 'Object'))
-
-        # Default to full transfer for GObjects
-        if isinstance(param, Parameter):
-            is_out = (param.direction != PARAM_DIRECTION_IN)
         else:
-            is_out = True
-        if param.transfer is None or param.transfer_inferred:
-            if is_out and is_object:
-                param.transfer = 'full'
-            elif transfer is not None:
-                param.transfer = transfer
+            transfer = 'full'
+
+        param.transfer = transfer
 
     def _adjust_throws(self, func):
         if func.parameters == []:

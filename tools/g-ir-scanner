@@ -43,11 +43,11 @@ sys.path.insert(0, path)
 
 from giscanner.ast import Include
 from giscanner.cachestore import CacheStore
-from giscanner.glibtransformer import GLibTransformer
+from giscanner.dumper import compile_introspection_binary
+from giscanner.glibtransformer import GLibTransformer, IntrospectionBinary
 from giscanner.minixpath import myxpath, xpath_assert
 from giscanner.sourcescanner import SourceScanner
 from giscanner.transformer import Transformer
-
 
 def _get_option_parser():
     parser = optparse.OptionParser('%prog [options] sources')
@@ -58,9 +58,18 @@ def _get_option_parser():
     parser.add_option("-i", "--include",
                       action="append", dest="includes", default=[],
                       help="include types for other gidls")
-    parser.add_option("--add-include-path",
+    parser.add_option("", "--add-include-path",
                       action="append", dest="include_paths", default=[],
                       help="include paths for other GIR files")
+    parser.add_option("", "--program",
+                      action="store", dest="program", default=None,
+                      help="program to execute")
+    parser.add_option("", "--program-arg",
+                      action="append", dest="program_args", default=[],
+                      help="extra arguments to program")
+    parser.add_option("", "--no-libtool",
+                      action="store_true", dest="nolibtool", default=False,
+                      help="use libtool")
     parser.add_option("-l", "--library",
                       action="append", dest="libraries", default=[],
                       help="libraries of this unit")
@@ -209,8 +218,9 @@ def main(args):
     else:
         _error("Unknown format: %s" % (options.format, ))
 
-    if not options.libraries:
-        _error("Must specify --library at least one primary library")
+    if not (options.libraries or options.program):
+        _error("Must specify --program or --library")
+    libraries = options.libraries
 
     for package in options.packages:
         output = subprocess.Popen(['pkg-config', '--cflags', package],
@@ -285,13 +295,17 @@ def main(args):
         include_obj = Include.from_string(include)
         transformer.register_include(include_obj)
 
+    if options.program:
+        args=[options.program]
+        args.extend(options.program_args)
+        binary = IntrospectionBinary(args)
+    else:
+        binary = compile_introspection_binary(options)
+
     # Transform the C AST nodes into higher level
     # GLib/GObject nodes
     glibtransformer = GLibTransformer(transformer, noclosure=options.noclosure)
-    libraries = []
-    if options.libraries:
-        for library in options.libraries:
-            libraries.append(glibtransformer.add_library(library))
+    glibtransformer.set_introspection_binary(binary)
 
     namespace = glibtransformer.parse()
 
