@@ -64,4 +64,70 @@ void test_gslist_free (GSList *in);
 /* ghash? */
 /* error? */
 
+/* structures */
+typedef struct _TestStructA TestStructA;
+typedef struct _TestStructB TestStructB;
+
+struct _TestStructA
+{
+  gint some_int;
+  gint8 some_int8;
+  gdouble some_double;
+};
+
+void test_struct_a_clone (TestStructA *a,
+			  TestStructA *a_out);
+
+struct _TestStructB
+{
+  gint8 some_int8;
+  TestStructA nested_a;
+};
+
+void test_struct_b_clone (TestStructB *b,
+			  TestStructB *b_out);
+
+/* plain-old-data boxed types */
+typedef struct _TestSimpleBoxedA TestSimpleBoxedA;
+typedef struct _TestSimpleBoxedB TestSimpleBoxedB;
+
+struct _TestSimpleBoxedA
+{
+  gint some_int;
+  gint8 some_int8;
+  gdouble some_double;
+};
+
+GType             test_simple_boxed_a_get_type (void);
+TestSimpleBoxedA *test_simple_boxed_a_copy     (TestSimpleBoxedA *a);
+gboolean          test_simple_boxed_a_equals   (TestSimpleBoxedA *a,
+						TestSimpleBoxedA *other_a);
+
+struct _TestSimpleBoxedB
+{
+  gint8 some_int8;
+  TestSimpleBoxedA nested_a;
+};
+
+GType             test_simple_boxed_b_get_type (void);
+TestSimpleBoxedB *test_simple_boxed_b_copy     (TestSimpleBoxedB *b);
+
+/* opaque boxed */
+typedef struct _TestBoxed TestBoxed;
+typedef struct _TestBoxedPrivate TestBoxedPrivate;
+
+struct _TestBoxed
+{
+  gint8 some_int8;
+  TestSimpleBoxedA nested_a;
+
+  TestBoxedPrivate *priv;
+};
+
+GType      test_boxed_get_type (void);
+TestBoxed *test_boxed_new      (void);
+TestBoxed *test_boxed_copy     (TestBoxed *boxed);
+gboolean   test_boxed_equals   (TestBoxed *boxed,
+				TestBoxed *other);
+
 #endif /* __GITESTTYPES_H__ */

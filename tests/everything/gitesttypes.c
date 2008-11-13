@@ -364,3 +364,160 @@ void test_gslist_everything_in (GSList *in)
 
 /* ghash? */
 /* error? */
+
+/* structures */
+
+/**
+ * test_struct_a_clone:
+ * @a: the structure
+ * @a_out: (out): the cloned structure
+ *
+ * Make a copy of a TestStructA
+ */
+void
+test_struct_a_clone (TestStructA *a,
+		     TestStructA *a_out)
+{
+  *a_out = *a;
+}
+
+/**
+ * test_struct_a_clone:
+ * @a: the structure
+ * @b_out: (out): the cloned structure
+ *
+ * Make a copy of a TestStructA
+ */
+void
+test_struct_b_clone (TestStructB *b,
+		     TestStructB *b_out)
+{
+  *b_out = *b;
+}
+
+/* plain-old-data boxed types */
+
+TestSimpleBoxedA *
+test_simple_boxed_a_copy (TestSimpleBoxedA *a)
+{
+  TestSimpleBoxedA *new_a = g_slice_new (TestSimpleBoxedA);
+
+  *new_a = *a;
+
+  return new_a;
+}
+
+static void
+test_simple_boxed_a_free (TestSimpleBoxedA *a)
+{
+  g_slice_free (TestSimpleBoxedA, a);
+}
+
+GType
+test_simple_boxed_a_get_type (void)
+{
+  static GType our_type = 0;
+
+  if (our_type == 0)
+    our_type = g_boxed_type_register_static (g_intern_static_string ("TestSimpleBoxedA"),
+					     (GBoxedCopyFunc)test_simple_boxed_a_copy,
+					     (GBoxedFreeFunc)test_simple_boxed_a_free);
+  return our_type;
+}
+
+TestSimpleBoxedB *
+test_simple_boxed_b_copy (TestSimpleBoxedB *b)
+{
+  TestSimpleBoxedB *new_b = g_slice_new (TestSimpleBoxedB);
+
+  *new_b = *b;
+
+  return new_b;
+}
+
+gboolean
+test_simple_boxed_a_equals (TestSimpleBoxedA *a,
+			    TestSimpleBoxedA *other_a)
+{
+  return (a->some_int == other_a->some_int &&
+	  a->some_int8 == other_a->some_int8 &&
+	  a->some_double == other_a->some_double);
+}
+
+static void
+test_simple_boxed_b_free (TestSimpleBoxedB *a)
+{
+  g_slice_free (TestSimpleBoxedB, a);
+}
+
+GType
+test_simple_boxed_b_get_type (void)
+{
+  static GType our_type = 0;
+
+  if (our_type == 0)
+    our_type = g_boxed_type_register_static (g_intern_static_string ("TestSimpleBoxedB"),
+					     (GBoxedCopyFunc)test_simple_boxed_b_copy,
+					     (GBoxedFreeFunc)test_simple_boxed_b_free);
+  return our_type;
+}
+
+/* opaque boxed */
+
+struct _TestBoxedPrivate
+{
+  guint magic;
+};
+
+TestBoxed *
+test_boxed_new (void)
+{
+  TestBoxed *boxed = g_slice_new0(TestBoxed);
+  boxed->priv = g_slice_new0(TestBoxedPrivate);
+  boxed->priv->magic = 0xdeadbeef;
+
+  return boxed;
+}
+
+TestBoxed *
+test_boxed_copy (TestBoxed *boxed)
+{
+  TestBoxed *new_boxed = test_boxed_new();
+  TestBoxedPrivate *save;
+
+  save = new_boxed->priv;
+  *new_boxed = *boxed;
+  new_boxed->priv = save;
+
+  return new_boxed;
+}
+
+gboolean
+test_boxed_equals (TestBoxed *boxed,
+		   TestBoxed *other)
+{
+  return (other->some_int8 == boxed->some_int8 &&
+	  test_simple_boxed_a_equals(&other->nested_a, &boxed->nested_a));
+}
+
+static void
+test_boxed_free (TestBoxed *boxed)
+{
+  g_assert (boxed->priv->magic == 0xdeadbeef);
+
+  g_slice_free (TestBoxedPrivate, boxed->priv);
+  g_slice_free (TestBoxed, boxed);
+}
+
+GType
+test_boxed_get_type (void)
+{
+  static GType our_type = 0;
+
+  if (our_type == 0)
+    our_type = g_boxed_type_register_static (g_intern_static_string ("TestBoxed"),
+					     (GBoxedCopyFunc)test_boxed_copy,
+					     (GBoxedFreeFunc)test_boxed_free);
+  return our_type;
+}
+

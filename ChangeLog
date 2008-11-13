@@ -1,3 +1,15 @@
+2008-11-13  Owen Taylor  <otaylor@redhat.com>
+
+	Bug 560253 – Add structure and boxed types to Everything test module
+
+	* tests/everything/gitesttypes.[ch]: Add examples of:
+
+	  Plain old data structs
+	  Plain old data structs with nested fields
+	  Plain old data boxed
+	  Plain old data boxed with nested fields
+	  More complicated boxed types with internal state
+
 2008-11-12  Johan Dahlin  <jdahlin@async.com.br>
 
 	* tests/everything/gitesttypes.c (test_gtype_in):
