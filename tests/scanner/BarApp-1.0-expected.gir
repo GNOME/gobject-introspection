@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<repository version="1.0"
+            xmlns="http://www.gtk.org/introspection/core/1.0"
+            xmlns:c="http://www.gtk.org/introspection/c/1.0"
+            xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
+  <include name="GLib" version="2.0"/>
+  <include name="GObject" version="2.0"/>
+  <namespace name="BarApp" version="1.0" shared-library="">
+    <class name="Baz"
+           c:type="BarBaz"
+           parent="GObject.Object"
+           glib:type-name="BarBaz"
+           glib:get-type="bar_baz_get_type">
+      <field name="parent_instance">
+        <type name="GObject.Object" c:type="GObject"/>
+      </field>
+    </class>
+    <record name="BazClass" c:type="BarBazClass">
+      <field name="parent_class">
+        <type name="GObject.ObjectClass" c:type="GObjectClass"/>
+      </field>
+    </record>
+    <function name="func" c:identifier="barapp_func">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+    </function>
+    <function name="func2" c:identifier="barapp_func2">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="x" transfer-ownership="none">
+          <type name="int" c:type="int"/>
+        </parameter>
+        <parameter name="y" transfer-ownership="none">
+          <type name="double" c:type="double"/>
+        </parameter>
+      </parameters>
+    </function>
+  </namespace>
+</repository>
