@@ -226,7 +226,6 @@ class GLibTransformer(object):
         args = self._binary.args
         args.append(introspect_arg)
         # Invoke the binary, having written our get_type functions to types.txt
-        print args
         subprocess.check_call(args, stdout=sys.stdout, stderr=sys.stderr)
         self._read_introspect_dump(out_path)
 

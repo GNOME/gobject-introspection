@@ -76,7 +76,6 @@ main(int argc, char **argv)
     for include in options.cpp_includes:
         cc_args.append('-I' + include)
     cc_args.extend(['-c', '-o', o_path, c_path])
-    print "%r" % (cc_args, )
     subprocess.check_call(cc_args)
 
     bin_path = mktmp(tmpdir, nsname, nsver, '')
@@ -108,7 +107,6 @@ main(int argc, char **argv)
     # from gir-repository.  Right now those don't define new GTypes, so we
     # don't need to introspect them.
     ld_args.append('-l'+options.libraries[0])
-    print "%r" % (ld_args, )
     subprocess.check_call(ld_args)
 
     os.unlink(c_path)
