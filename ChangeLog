@@ -1,3 +1,8 @@
+2008-11-13  Owen Taylor  <otaylor@redhat.com>
+
+	* girepository/girffi.c: Fix  "Unexpected time for time_t"
+	message.
+
 2008-11-13  Colin Walters  <walters@verbum.org>
 
 	Bug 558436 - avoid having scanner load app code
