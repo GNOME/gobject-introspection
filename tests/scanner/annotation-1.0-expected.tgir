@@ -177,6 +177,21 @@
         </return-value>
         <parameters>
           <parameter name="nums" transfer-ownership="none">
+            <array length="2">
+              <type name="int"/>
+            </array>
+          </parameter>
+          <parameter name="n_nums" transfer-ownership="none">
+            <type name="int"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="compute_sum_nz" c:identifier="annotation_object_compute_sum_nz">
+        <return-value transfer-ownership="none">
+          <type name="none"/>
+        </return-value>
+        <parameters>
+          <parameter name="nums" transfer-ownership="none">
             <array length="2" zero-terminated="1">
               <type name="int"/>
             </array>

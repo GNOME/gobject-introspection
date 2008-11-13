@@ -426,9 +426,12 @@ class Transformer(object):
                                for opt in options.get('array', [])])
             if 'length' in array_opts:
                 rettype.length_param_name = array_opts['length']
+                rettype.zeroterminated = False
             if 'fixed-size' in array_opts:
                 rettype.size = array_opts['fixed-size']
                 rettype.zeroterminated = False
+            if 'zero-terminated' in array_opts:
+                rettype.zeroterminated = array_opts['zero-terminated'] != '0'
         else:
             derefed_name = self.parse_ctype(ctype)
             rettype = Type(derefed_name, ctype)

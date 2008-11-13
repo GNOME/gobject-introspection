@@ -242,6 +242,22 @@ annotation_object_compute_sum_n(AnnotationObject *object,
 }
 
 /**
+ * annotation_object_compute_sum_nz:
+ * @object: a #AnnotationObject
+ * @nums: (array length=n_nums zero-terminated=1): Sequence of numbers
+ * @n_nums: Length of number array
+ *
+ * Test taking a zero-terminated array with length parameter
+ **/
+void
+annotation_object_compute_sum_nz(AnnotationObject *object,
+                                 int             *nums,
+                                 int              n_nums)
+{
+
+}
+
+/**
  * annotation_object_allow_none:
  * @object: a #GObject
  * @somearg: (allow-none):

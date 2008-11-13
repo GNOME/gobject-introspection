@@ -1,5 +1,14 @@
 2008-11-13  Andreas Rottmann  <a.rottmann@gmx.at>
 
+	Bug 560708 – Don't treat arrays that have a length specified as
+	zero-terminated by default
+
+	* giscanner/transformer.py: Default to non zero terminated for
+	arrays with length.
+	* tests/*: Update, add test for zero vs not.
+
+2008-11-13  Andreas Rottmann  <a.rottmann@gmx.at>
+
 	Bug 557788 - Return types for constructors in generated typelib bogus
 
 	* girepository/girnode.c: Namespace-qualify XREFs; not doing so is
