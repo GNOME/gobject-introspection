@@ -1,3 +1,8 @@
+2008-11-13  Colin Walters  <walters@verbum.org>
+
+	* common.mk: Add a file to include with Makefile fragments
+	useful for scanner invocation.
+
 2008-11-13  Tommi Komulainen  <tommi.komulainen@iki.fi>
 
 	* tests/everything/gitesttypes.c (test_filename_return): Return
