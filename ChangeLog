@@ -1,5 +1,12 @@
 2008-11-13  Colin Walters  <walters@verbum.org>
 
+	* configure.ac: Depend on Gio, we use it in gdump.c.
+	* girepository/gdump.c: Code to dump GType data to XML.
+	* girepository/girepository.c: Add option group for dumping.
+	* girepository/girepository.h: Define API for the above.
+
+2008-11-13  Colin Walters  <walters@verbum.org>
+
 	* common.mk: Add a file to include with Makefile fragments
 	useful for scanner invocation.
 

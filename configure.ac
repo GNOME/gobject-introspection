@@ -107,9 +107,10 @@ GOBJECT_INTROSPECTION_LIBDIR="$EXPANDED_LIBDIR"
 AC_SUBST(GOBJECT_INTROSPECTION_LIBDIR)
 AC_DEFINE_UNQUOTED(GOBJECT_INTROSPECTION_LIBDIR,"$GOBJECT_INTROSPECTION_LIBDIR", [Directory prefix for typelib installation])
 
-PKG_CHECK_MODULES(GOBJECT, [gobject-2.0])
+PKG_CHECK_MODULES(GOBJECT, [gobject-2.0 gio-2.0])
+PKG_CHECK_MODULES(GTHREAD, [gthread-2.0])
 
-PKG_CHECK_MODULES(SCANNER, [gobject-2.0 gthread-2.0])
+PKG_CHECK_MODULES(SCANNER, [gobject-2.0 gthread-2.0 gio-2.0])
 
 dnl libffi
 PKG_CHECK_MODULES(FFI, libffi, have_ffi_pkgconfig=yes, have_ffi_pkgconfig=no)
@@ -149,7 +150,7 @@ fi
 
 AC_CHECK_SIZEOF(time_t, [], [#include <time.h>])
 
-PKG_CHECK_MODULES(GIREPO, [glib-2.0 gobject-2.0 gmodule-2.0])
+PKG_CHECK_MODULES(GIREPO, [glib-2.0 gobject-2.0 gmodule-2.0 gio-2.0])
 
 # if we ever remove manual check for ffi and require .pc file, then 
 # just put libffi in the PKG_CHECK_MODULES(GIREPO) deps
