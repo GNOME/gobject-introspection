@@ -172,6 +172,17 @@ test_strv_in (char **arr)
   return TRUE;
 }
 
+/**
+ * test_gtype_in:
+ * @n_types: 
+ * @types: (array length=n_types): List of types
+ */
+int
+test_gtype_in (int n_types, GType **types)
+{
+  return n_types;
+}
+
 char **
 test_strv_out (void)
 {

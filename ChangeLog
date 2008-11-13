@@ -1,3 +1,9 @@
+2008-11-12  Johan Dahlin  <jdahlin@async.com.br>
+
+	* tests/everything/gitesttypes.c (test_gtype_in):
+	* tests/everything/gitesttypes.h:
+	Add a test of GType arrays, a la gtk_list_store_set_columns.
+
 2008-11-12  Owen Taylor  <otaylor@redhat.com>
 
 	Bug 560419 – Cache includes when parsing
