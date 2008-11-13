@@ -158,6 +158,17 @@ GSList *test_filename_return (void)
 static const char *test_sequence[] = {"1", "2", "3"};
 
 /* array */
+/**
+ * test_int_in:
+ * @n_types: 
+ * @types: (array length=n_types): List of ints
+ */
+int
+test_int_in (int n_types, int *types)
+{
+  return n_types;
+}
+
 gboolean
 test_strv_in (char **arr)
 {
@@ -178,7 +189,7 @@ test_strv_in (char **arr)
  * @types: (array length=n_types): List of types
  */
 int
-test_gtype_in (int n_types, GType **types)
+test_gtype_in (int n_types, GType *types)
 {
   return n_types;
 }
