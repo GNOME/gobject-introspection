@@ -119,7 +119,7 @@ GIREPOSITORY_FILES = \
 
 GIRepository-2.0.gir: GObject-2.0.gir $(SCANNER_BIN) $(SCANNER_LIBS) $(GIREPOSITORY_FILES)
 	$(SCANNER) \
-	    --namespace GIRepository --nsversion=1.0\
+	    --namespace GIRepository --nsversion=2.0 \
 	    --noclosure \
 	    --output $@ \
 	    --strip-prefix=g \
