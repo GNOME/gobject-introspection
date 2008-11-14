@@ -192,7 +192,7 @@ test_strv_in (char **arr)
  * @types: (array length=n_types): List of types
  * Return value: string representation of provided types
  * */
-const char *
+char *
 test_array_gtype_in (int n_types, GType *types)
 {
   GString *string;

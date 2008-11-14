@@ -37,7 +37,7 @@ GSList *test_filename_return (void);
 /* array */
 gboolean test_strv_in (char **arr);
 int test_array_int_in (int n_ints, int *ints);
-const char *test_array_gtype_in (int n_types, GType *types);
+char *test_array_gtype_in (int n_types, GType *types);
 char **test_strv_out (void);
 /* interface */
 /* GList */
