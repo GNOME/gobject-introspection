@@ -18,7 +18,7 @@ girs_DATA = $(GIRS)
 
 lib_LTLIBRARIES = libgirepository-everything.la
 
-libgirepository_everything_la_SOURCES = $(srcdir)/gitesttypes.c $(srcdir)/gitesttypes.h
+libgirepository_everything_la_SOURCES = $(srcdir)/everything.c $(srcdir)/everything.h
 
 if OS_WIN32
 AM_LDFLAGS += -no-undefined
@@ -30,13 +30,13 @@ TXMLS = $(GIRS:.gir=.gir.txml)
 CLEANFILES = $(TYPELIBS) $(TXMLS) $(GIRS)
 BUILT_SOURCES = $(TYPELIBS) $(TXMLS) $(GIRS)
 
-Everything-$(TYPELIB_VERSION).gir: libgirepository-everything.la gitesttypes.c gitesttypes.h $(SCANNER_BIN) $(SCANNER_LIBS)
+Everything-$(TYPELIB_VERSION).gir: libgirepository-everything.la everything.c everything.h $(SCANNER_BIN) $(SCANNER_LIBS)
 	$(CHECK_DEBUG) $(SCANNER) \
 	--include=GObject-2.0 \
 	--library=girepository-everything \
 	--namespace=Everything --nsversion=$(TYPELIB_VERSION) \
 	--pkg gobject-2.0 \
-	$(srcdir)/gitesttypes.h $(srcdir)/gitesttypes.c \
+	$(srcdir)/everything.h $(srcdir)/everything.c \
 	--output $@
 GIRS += Everything-$(TYPELIB_VERSION).gir
 

@@ -1,3 +1,12 @@
+2008-11-14  Johan Dahlin  <jdahlin@async.com.br>
+
+	* tests/everything/Makefile.am:
+	* tests/everything/everything.c:
+	* tests/everything/everything.h:
+	* tests/everything/gitesttypes.c:
+	* tests/everything/gitesttypes.h:
+	Rename gitesttypes.[ch] to everything.[ch]
+
 2008-11-13  Andreas Rottmann  <a.rottmann@gmx.at>
 
 	Bug 560708 – Don't treat arrays that have a length specified as
