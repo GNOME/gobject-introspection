@@ -157,15 +157,19 @@ GSList *test_filename_return (void)
 static const char *test_sequence[] = {"1", "2", "3"};
 
 /* array */
+
 /**
- * test_int_in:
- * @n_types: 
- * @types: (array length=n_types): List of ints
+ * test_array_int_in:
+ * @n_ints: 
+ * @ints: (array length=n_ints): List of ints
  */
 int
-test_int_in (int n_types, int *types)
+test_array_int_in (int n_ints, int *ints)
 {
-  return n_types;
+  int i, sum = 0;
+  for (i = 0; i < n_ints; i++)
+    sum += ints[i];
+  return sum;
 }
 
 gboolean
@@ -183,14 +187,25 @@ test_strv_in (char **arr)
 }
 
 /**
- * test_gtype_in:
+ * test_array_gtype_in:
  * @n_types: 
  * @types: (array length=n_types): List of types
- */
-int
-test_gtype_in (int n_types, GType *types)
+ * Return value: string representation of provided types
+ * */
+const char *
+test_array_gtype_in (int n_types, GType *types)
 {
-  return n_types;
+  GString *string;
+  int i;
+
+  string = g_string_new ("[");
+  for (i = 0; i < n_types; i++)
+    {
+      g_string_append (string, g_type_name (types[i]));
+      g_string_append_c (string, ',');
+    }
+  g_string_append_c (string, ']');
+  return g_string_free (string, FALSE);
 }
 
 char **

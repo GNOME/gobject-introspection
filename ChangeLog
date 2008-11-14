@@ -1,5 +1,13 @@
 2008-11-14  Johan Dahlin  <jdahlin@async.com.br>
 
+	* tests/everything/everything.c (test_array_int_in),
+	(test_array_gtype_in):
+	* tests/everything/everything.h:
+	Rename the int/gtype array tests. Make the return value
+	useful, an aggregation of the array input values.
+
+2008-11-14  Johan Dahlin  <jdahlin@async.com.br>
+
 	* tests/everything/Makefile.am:
 	* tests/everything/everything.c:
 	* tests/everything/everything.h:
