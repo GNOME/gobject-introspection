@@ -332,7 +332,8 @@ class Transformer(object):
                 if child_list:
                     size_opt = 'fixed-size=%d' % (child_list[0].const_int, )
                     opts['array'].append(size_opt)
-            ftype = self._create_type(symbol.base_type, opts, True)
+            ftype = self._create_type(symbol.base_type, opts,
+                                      is_param=False, is_retval=False)
             ftype = self.resolve_param_type(ftype)
             # Fields are assumed to be read-write
             # (except for Objects, see also glibtransformer.py)
@@ -371,7 +372,7 @@ class Transformer(object):
                 "symbol %r of type %s" % (symbol.ident, ctype_name(ctype)))
         return node
 
-    def parse_ctype(self, ctype):
+    def parse_ctype(self, ctype, is_member=False):
         # First look up the ctype including any pointers;
         # a few type names like 'char*' have their own aliases
         # and we need pointer information for those.
@@ -384,9 +385,16 @@ class Transformer(object):
 
         # Canonicalize our type again, this time without the pointer;
         # this ensures we turn e.g. plain "guint" => "int"
-        return type_name_from_ctype(derefed)
+        derefed_typename = type_name_from_ctype(derefed)
 
-    def _create_type(self, source_type, options, is_param):
+        # Preserve "pointerness" of struct/union members
+        if (is_member and firstpass.endswith('*') and
+            derefed_typename in BASIC_GIR_TYPES):
+            return 'any'
+        else:
+            return derefed_typename
+
+    def _create_type(self, source_type, options, is_param, is_retval):
         ctype = self._create_source_type(source_type)
         if ctype == 'va_list':
             raise SkipError()
@@ -418,7 +426,8 @@ class Transformer(object):
             rettype = Map(derefed_name,
                           ctype,
                           key_type, value_type)
-        elif (ctype in default_array_types) or ('array' in options):
+        elif ((is_param and ctype in default_array_types)
+              or ('array' in options)):
             derefed_name = ctype[:-1] if ctype[-1] == '*' else ctype
             rettype = Array(ctype,
                             self.parse_ctype(derefed_name))
@@ -433,7 +442,8 @@ class Transformer(object):
             if 'zero-terminated' in array_opts:
                 rettype.zeroterminated = array_opts['zero-terminated'] != '0'
         else:
-            derefed_name = self.parse_ctype(ctype)
+            derefed_name = self.parse_ctype(ctype,
+                                            not (is_param or is_retval))
             rettype = Type(derefed_name, ctype)
 
         # Deduce direction for some types passed by reference that
@@ -521,7 +531,8 @@ class Transformer(object):
             if 'transfer' not in options:
                 options['transfer'] = ['none']
         else:
-            ptype = self._create_type(symbol.base_type, options, True)
+            ptype = self._create_type(symbol.base_type, options,
+                                      is_param=True, is_retval=False)
             ptype = self.resolve_param_type(ptype)
         param = Parameter(symbol.ident, ptype)
         for option, data in options.iteritems():
@@ -550,7 +561,8 @@ class Transformer(object):
             options_map = {}
         else:
             options_map = self._parse_options(options)
-        rtype = self._create_type(source_type, options_map, False)
+        rtype = self._create_type(source_type, options_map,
+                                  is_param=False, is_retval=True)
         rtype = self.resolve_param_type(rtype)
         return_ = Return(rtype)
         self._handle_generic_param_options(return_, options_map)

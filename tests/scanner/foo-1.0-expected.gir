@@ -485,6 +485,22 @@
         <type name="utility.Struct" c:type="UtilityStruct"/>
       </field>
     </record>
+    <record name="ThingWithArray" c:type="_FooThingWithArray">
+      <field name="x" writable="1">
+        <type name="int" c:type="int"/>
+      </field>
+      <field name="y" writable="1">
+        <type name="int" c:type="int"/>
+      </field>
+      <field name="lines" writable="1">
+        <array zero-terminated="0" c:type="char" fixed-size="80">
+          <type name="int8"/>
+        </array>
+      </field>
+      <field name="data" writable="1">
+        <type name="any" c:type="guchar*"/>
+      </field>
+    </record>
     <function name="test_unsigned_qualifier"
               c:identifier="foo_test_unsigned_qualifier">
       <return-value transfer-ownership="none">

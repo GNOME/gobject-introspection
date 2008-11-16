@@ -237,6 +237,13 @@ struct _FooUtilityStruct
 {
   UtilityStruct bar;
 };
+typedef struct _FooThingWithArray
+{
+  int x;
+  int y;
+  char lines[80];
+  guchar *data;
+} FooThingWithArray;
 
 FooBUnion *foo_bunion_new (void);
 
