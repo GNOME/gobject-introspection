@@ -1,10 +1,19 @@
+2008-11-16  Owen Taylor  <otaylor@redhat.com>
+
+	Bug 552371 – implement struct field get/set
+
+	* girepository/gfield.c girepository/girepository.h: Add
+	convenience functions g_field_info_set_field() and
+	g_field_info_get_field() to set and get fields based on the
+	offsets in GIFieldInfo.
+
 2008-11-16  Andreas Rottmann  <a.rottmann@gmx.at>
 
 	Bug 560241 - Out-arguments should not be marked as being pointers
 	in all cases
 
 	* girepository/girparser.c: Improved logic for out arguments.
-	
+
 2008-11-16  Andreas Rottmann  <a.rottmann@gmx.at>
 
 	Bug 559601 - Pointers in structs/unions unduly treated as arrays
