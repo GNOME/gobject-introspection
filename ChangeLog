@@ -3,6 +3,12 @@
 	Bug 560241 - Out-arguments should not be marked as being pointers
 	in all cases
 
+	* girepository/girparser.c: Improved logic for out arguments.
+	
+2008-11-16  Andreas Rottmann  <a.rottmann@gmx.at>
+
+	Bug 559601 - Pointers in structs/unions unduly treated as arrays
+
 	* giscanner/transformer.py: Differentiate type creation logic
 	between parameters and struct components.
 
