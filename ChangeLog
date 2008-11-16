@@ -1,5 +1,16 @@
 2008-11-16  Owen Taylor  <otaylor@redhat.com>
 
+	Bug 561087 - Respect is_pointer in serialize_type()
+
+	Add a '*' to the serialization for the cases where we set is_pointer
+	in the type blob we write out depending on node->is_pointer. Don't
+	add the '*' in the cases where is_pointer is set or not set in a
+	fixed fashion.
+
+	http://bugzilla.gnome.org/show_bug.cgi?id=561087
+
+2008-11-16  Owen Taylor  <otaylor@redhat.com>
+
 	Bug 560825 – Add size and alignment to typelib
 
 	Include the size and alignment of structures and unions in the typelib,
