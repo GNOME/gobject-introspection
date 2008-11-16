@@ -812,10 +812,13 @@ struct StructBlob
   guint16      blob_type; /* 3: struct, 4: boxed */
   guint        deprecated   : 1;
   guint        unregistered : 1;
-  guint        reserved     :14;
+  guint        alignment    : 6;
+  guint        reserved     : 8;
   guint32      name;
 
   GTypeBlob    gtype;
+
+  guint32      size;
 
   guint16      n_fields;
   guint16      n_functions;
@@ -826,6 +829,11 @@ struct StructBlob
 
 unregistered: 
           If this is set, the type is not registered with GType.
+
+alignment:
+	  The byte boundary that the struct is aligned to in memory
+
+size:	  The size of the struct in bytes.
 
 gtype:    For types which are registered with GType, contains the 
           information about the GType. Otherwise unused.
@@ -1045,10 +1053,13 @@ struct UnionBlob
   guint        deprecated    : 1;
   guint        unregistered  : 1;
   guint        discriminated : 1;
-  guint        reserved      :13;
+  guint        alignment     : 6;
+  guint        reserved      : 7;
   guint32      name;
 
   GTypeBlob    gtype;
+
+  guint32      size;
 
   guint16      n_fields;
   guint16      n_functions;
@@ -1066,6 +1077,11 @@ unregistered:
 
 discriminated: 
           Is set if the union is discriminated
+
+alignment:
+	  The byte boundary that the union is aligned to in memory
+
+size:	  The size of the union in bytes.
 
 gtype:    For types which are registered with GType, contains the 
           information about the GType. Otherwise unused.

@@ -141,10 +141,17 @@ for symbol in symbols:
     fields = symbol_fields[symbol]
 
     output({'symbol' : symbol}, r'''
+|typedef struct {
+|   char dummy;
+|   %(symbol)s struct_;
+|} Align%(symbol)s;
+|
 |static void
 |compiled_%(symbol)s (FILE *outfile)
 |{
-|  fprintf (outfile, "%(symbol)s:\n");
+|  fprintf (outfile, "%(symbol)s: size=%%" G_GSIZE_FORMAT ", alignment=%%ld\n",
+|           sizeof(%(symbol)s),
+|           G_STRUCT_OFFSET(Align%(symbol)s, struct_));
 |
            ''')
 
@@ -174,7 +181,9 @@ for symbol in symbols:
 |  if (!struct_info)
 |     g_error ("Can't find GIStructInfo for '%(symbol)s'");
 |
-|  fprintf (outfile, "%(symbol)s:\n");
+|  fprintf (outfile, "%(symbol)s: size=%%" G_GSIZE_FORMAT ", alignment=%%" G_GSIZE_FORMAT "\n",
+|           g_struct_info_get_size (struct_info),
+|           g_struct_info_get_alignment (struct_info));
 |
            ''')
     for field in fields:

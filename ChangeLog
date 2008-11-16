@@ -1,5 +1,21 @@
 2008-11-16  Owen Taylor  <otaylor@redhat.com>
 
+	Bug 560825 – Add size and alignment to typelib
+
+	Include the size and alignment of structures and unions in the typelib,
+	and add getter methods to retrieve them from GIStructInfo/GIUnionInfo.
+
+	* docs/typelib-format.txt girepository/gtypelib.h girepository/girnode.c
+	girepository/girmodule.c girepository/gtypelib.c: Add size and alignment
+	to StructBlob and UnionBlob.
+
+	* girepository/ginfo.c girepository/girepository.h:
+	Add g_[struct|union]_get[size|alignment]().
+
+	* test/offsets/gen-gitestoffsets: Test overall structure size and alignment.
+
+2008-11-16  Owen Taylor  <otaylor@redhat.com>
+
 	Bug 552371 – implement struct field get/set
 
 	* girepository/gfield.c girepository/girepository.h: Add
