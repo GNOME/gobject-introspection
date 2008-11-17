@@ -7,4 +7,5 @@ SCANNER_ARGS = -v --add-include-path=$(top_builddir)/gir --add-include-path=.
 SCANNER = $(SCANNER_ENV) $(SCANNER_BIN) $(SCANNER_ARGS)
 SCANNER_LIBS = \
 	$(top_srcdir)/giscanner/*.py \
-	$(top_builddir)/giscanner/libgiscanner.la
+	$(top_builddir)/giscanner/libgiscanner.la \
+	$(top_builddir)/girepository/libgirepository.la

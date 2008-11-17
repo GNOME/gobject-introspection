@@ -575,6 +575,10 @@ class GLibTransformer(object):
             type_name, xmlnode.attrib['get-type'])
         self._introspect_properties(node, xmlnode)
         self._introspect_signals(node, xmlnode)
+        for child in xmlnode.findall('prerequisite'):
+            name = child.attrib['name']
+            prereq = self._resolve_gtypename(name)
+            node.prerequisites.append(prereq)
         # GtkFileChooserEmbed is an example of a private interface, we
         # just filter them out
         if xmlnode.attrib['get-type'].startswith('_'):
@@ -728,6 +732,9 @@ class GLibTransformer(object):
         self._resolve_methods(node.methods)
         self._resolve_properties(node.properties, node)
         self._resolve_signals(node.signals)
+        node.prerequisites = filter(None,
+            [self._force_resolve(x, allow_unknown=True)
+             for x in node.prerequisites])
 
     def _resolve_glib_object(self, node):
         node.parent = self._force_resolve(node.parent)

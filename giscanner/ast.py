@@ -385,6 +385,7 @@ class Interface(Node):
         self.methods = []
         self.properties = []
         self.fields = []
+        self.prerequisites = []
 
     def __repr__(self):
         return '%s(%r, %r)' % (

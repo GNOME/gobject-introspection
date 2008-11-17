@@ -254,6 +254,9 @@ class GIRWriter(XMLWriter):
             if isinstance(node, GLibObject):
                 for iface in node.interfaces:
                     self.write_tag('implements', [('name', iface)])
+            if isinstance(node, Interface):
+                for iface in node.prerequisites:
+                    self.write_tag('prerequisite', [('name', iface)])
             if isinstance(node, Class):
                 for method in node.constructors:
                     self._write_constructor(method)
