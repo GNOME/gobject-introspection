@@ -1,3 +1,16 @@
+2008-11-16  Colin Walters  <walters@verbum.org>
+
+	Bug 559706 - Interface prerequisites
+
+	* common.mk: Dep on libgirepository.la for scanner libs so that
+	we rebuild things even if just gdump.c changes.
+	* girepository/gdump.c: Dump prerequisites.
+	* giscanner/ast.py: Add prerequisite list.
+	* giscanner/girparser.py: Parse them from gdump.
+	* giscanner/girwriter.py: Write them.
+	* giscanner/glibtransformer.py: Resolve them.
+	* tests/*: Test.
+
 2008-11-16  Owen Taylor  <otaylor@redhat.com>
 
 	Bug 561087 - Respect is_pointer in serialize_type()
