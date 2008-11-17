@@ -1,5 +1,10 @@
 2008-11-16  Colin Walters  <walters@verbum.org>
 
+	* girepository/girepository.c: Ensure we always call init_globals,
+	even if passed a non-default repository.
+
+2008-11-16  Colin Walters  <walters@verbum.org>
+
 	Bug 559706 - Interface prerequisites
 
 	* common.mk: Dep on libgirepository.la for scanner libs so that
