@@ -372,23 +372,43 @@ class Transformer(object):
                 "symbol %r of type %s" % (symbol.ident, ctype_name(ctype)))
         return node
 
-    def parse_ctype(self, ctype, is_member=False):
+    def _canonicalize_ctype(self, ctype):
         # First look up the ctype including any pointers;
         # a few type names like 'char*' have their own aliases
         # and we need pointer information for those.
         firstpass = type_name_from_ctype(ctype)
 
+        # If we have a particular alias for this, skip deep
+        # canonicalization to prevent changing
+        # e.g. char* -> int8*
+        if firstpass != ctype:
+            return firstpass
+
+        # We're also done if the type is already a fundamental
+        # known type, or there are no pointers.
+        if ctype in type_names or not firstpass.endswith('*'):
+            return firstpass
+
+        # We have a pointer type.
+        # Strip the end pointer, canonicalize our base type
+        base = firstpass[:-1]
+        canonical_base = self._canonicalize_ctype(base)
+
+        # Append the pointer again
+        canonical = canonical_base + '*'
+
+        return canonical
+
+    def parse_ctype(self, ctype, is_member=False):
+        canonical = self._canonicalize_ctype(ctype)
+
         # Remove all pointers - we require standard calling
         # conventions.  For example, an 'int' is always passed by
         # value (unless it's out or inout).
-        derefed = firstpass.replace('*', '')
-
-        # Canonicalize our type again, this time without the pointer;
-        # this ensures we turn e.g. plain "guint" => "int"
-        derefed_typename = type_name_from_ctype(derefed)
+        derefed_typename = canonical.replace('*', '')
 
         # Preserve "pointerness" of struct/union members
-        if (is_member and firstpass.endswith('*') and
+        if (is_member and canonical.endswith('*') and
             derefed_typename in BASIC_GIR_TYPES):
             return 'any'
         else:
@@ -403,8 +423,10 @@ class Transformer(object):
         elif ctype == 'FILE*':
             raise SkipError
 
+        canonical_ctype = self._canonicalize_ctype(ctype)
+
         # Now check for a list/map/array type
-        if ctype in self._list_ctypes:
+        if canonical_ctype in self._list_ctypes:
             param = options.get('element-type')
             if param:
                 contained_type = self.parse_ctype(param[0])
@@ -414,7 +436,7 @@ class Transformer(object):
             rettype = List(derefed_name,
                            ctype,
                            contained_type)
-        elif ctype in self._map_ctypes:
+        elif canonical_ctype in self._map_ctypes:
             param = options.get('element-type')
             if param:
                 key_type = self.parse_ctype(param[0])
@@ -426,9 +448,12 @@ class Transformer(object):
             rettype = Map(derefed_name,
                           ctype,
                           key_type, value_type)
-        elif ((is_param and ctype in default_array_types)
+        elif ((is_param and canonical_ctype in default_array_types)
               or ('array' in options)):
-            derefed_name = ctype[:-1] if ctype[-1] == '*' else ctype
+            if canonical_ctype[-1] == '*':
+                derefed_name = canonical_ctype[:-1]
+            else:
+                derefed_name = canonical_ctype
             rettype = Array(ctype,
                             self.parse_ctype(derefed_name))
             array_opts = dict([opt.split('=')

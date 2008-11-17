@@ -1,3 +1,12 @@
+2008-11-17  Andreas Rottmann  <a.rottmann@gmx.at>
+
+	* giscanner/ast.py: Change string array match type to be in terms
+	of canonicalized type.
+	* giscanner/transformer.py: Add canonicalize_ctype which gives us
+	a version of a c:type without aliases, so we can deep canonicalize
+	char** to utf8*.  Update parse_ctype to use it.
+	* tests/*: Add gtk_init like int*/char*** arg functions for testing.
+
 2008-11-16  Colin Walters  <walters@verbum.org>
 
 	* girepository/girepository.c: Ensure we always call init_globals,

@@ -258,6 +258,22 @@ annotation_object_compute_sum_nz(AnnotationObject *object,
 }
 
 /**
+ * annotation_object_parse_args:
+ * @object: a #AnnotationObject
+ * @argc: (inout): Length of the argument vector
+ * @argv: (inout) (array length=argc zero-terminated=1): Argument vector
+ *
+ * Test taking a zero-terminated array with length parameter
+ **/
+void
+annotation_object_parse_args(AnnotationObject *object,
+                             int              *argc,
+                             char           ***argv)
+{
+
+}
+
+/**
  * annotation_object_allow_none:
  * @object: a #GObject
  * @somearg: (allow-none):
@@ -292,5 +308,17 @@ annotation_object_do_not_use (AnnotationObject *object)
 {
   return NULL;
 }
+
+/**
+ * annotation_init:
+ * @argc: (inout): The number of args. 
+ * @argv: (inout) (array length=argc zero-terminated=1): The arguments.
+ **/
+void
+annotation_init (int *argc, char ***argv)
+{
+
+}
+
 
 static char backslash_parsing_tester_2 = '\\';

@@ -212,6 +212,21 @@
           </parameter>
         </parameters>
       </method>
+      <method name="parse_args" c:identifier="annotation_object_parse_args">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <parameter name="argc" direction="inout" transfer-ownership="full">
+            <type name="int" c:type="int*"/>
+          </parameter>
+          <parameter name="argv" direction="inout" transfer-ownership="none">
+            <array length="1" c:type="char***">
+              <type name="utf8"/>
+            </array>
+          </parameter>
+        </parameters>
+      </method>
       <method name="do_not_use"
               c:identifier="annotation_object_do_not_use"
               deprecated="Use annotation_object_create_object() instead."
@@ -229,5 +244,20 @@
         <type name="GObject.ObjectClass" c:type="GObjectClass"/>
       </field>
     </record>
+    <function name="init" c:identifier="annotation_init">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="argc" direction="inout" transfer-ownership="full">
+          <type name="int" c:type="int*"/>
+        </parameter>
+        <parameter name="argv" direction="inout" transfer-ownership="none">
+          <array length="0" c:type="char***">
+            <type name="utf8"/>
+          </array>
+        </parameter>
+      </parameters>
+    </function>
   </namespace>
 </repository>

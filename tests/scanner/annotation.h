@@ -69,8 +69,13 @@ void     annotation_object_compute_sum_n(AnnotationObject *object,
 void     annotation_object_compute_sum_nz(AnnotationObject *object,
                                           int             *nums,
                                           int              n_nums);
+void     annotation_object_parse_args   (AnnotationObject *object,
+                                         int              *argc,
+                                         char           ***argv);
 
 GObject* annotation_object_do_not_use   (AnnotationObject *object);
 
+
+void     annotation_init (int *argc, char ***argv);
 
 #endif /* __ANNOTATION_OBJECT_H__ */
