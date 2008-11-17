@@ -151,6 +151,8 @@ class GIRParser(object):
         ctor_args.append(node.attrib.get(_cns('type')))
         for iface in node.findall(_corens('implements')):
             obj.interfaces.append(iface.attrib['name'])
+        for iface in node.findall(_corens('prerequisites')):
+            obj.prerequisities.append(iface.attrib['name'])
         for method in node.findall(_corens('method')):
             obj.methods.append(self._parse_function_common(method, Function))
         for ctor in node.findall(_corens('constructor')):
