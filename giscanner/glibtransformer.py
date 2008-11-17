@@ -85,7 +85,7 @@ class GLibTransformer(object):
     def __init__(self, transformer, noclosure=False):
         self._transformer = transformer
         self._transformer.set_container_types(['GList*', 'GSList*'],
-                                              ['GHashtable*'])
+                                              ['GHashTable*'])
         self._namespace_name = None
         self._names = Names()
         self._uscore_type_names = {}

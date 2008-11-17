@@ -161,6 +161,24 @@ annotation_object_get_strings (AnnotationObject *object)
   return list;
 }
 
+/**
+ * annotation_object_get_hash:
+ * @object: a #GObject
+ *
+ * This is a test for returning a hash table mapping strings to
+ * objects.
+ *
+ * Return value: (element-type utf8 GObject): hash table
+ */
+GHashTable*
+annotation_object_get_hash (AnnotationObject *object)
+{
+  GHashTable *hash = g_hash_table_new_full (g_str_hash, g_str_equal,
+					    g_free, g_object_unref);
+  g_hash_table_insert (hash, g_strdup ("one"), g_object_ref (object));
+  g_hash_table_insert (hash, g_strdup ("two"), g_object_ref (object));
+  return hash;
+}
 
 /**
  * annotation_object_with_voidp

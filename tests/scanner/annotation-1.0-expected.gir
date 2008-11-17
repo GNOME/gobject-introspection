@@ -149,6 +149,14 @@
           </type>
         </return-value>
       </method>
+      <method name="get_hash" c:identifier="annotation_object_get_hash">
+        <return-value transfer-ownership="full">
+          <type name="GLib.HashTable" c:type="GHashTable*">
+            <type name="utf8"/>
+            <type name="GObject.Object"/>
+          </type>
+        </return-value>
+      </method>
       <method name="get_objects" c:identifier="annotation_object_get_objects">
         <return-value transfer-ownership="container">
           <type name="GLib.SList" c:type="GSList*">

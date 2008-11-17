@@ -1,3 +1,13 @@
+2008-11-17  Dan Winship  <danw@gnome.org>
+
+	* giscanner/glibtransformer.py (GLibTransformer.__init__): fix
+	spelling of GHashTable. #561135
+
+	* tests/scanner/annotation.c (annotation_object_get_hash):
+	* tests/scanner/annotation-1.0-expected.gir:
+	* tests/scanner/annotation-1.0-expected.tgir: add a test of
+	GHashTable annotations
+
 2008-11-17  Andreas Rottmann  <a.rottmann@gmx.at>
 
 	* giscanner/ast.py: Change string array match type to be in terms
