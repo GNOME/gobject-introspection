@@ -40,6 +40,42 @@
         </parameters>
       </callback>
     </record>
+    <interface name="SubInterface"
+               c:type="FooSubInterface"
+               glib:type-name="FooSubInterface"
+               glib:get-type="foo_sub_interface_get_type">
+      <prerequisite name="Interface"/>
+      <method name="do_bar" c:identifier="foo_sub_interface_do_bar">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+      </method>
+      <callback name="do_bar" c:type="do_bar">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <parameter name="self" transfer-ownership="none">
+            <type name="SubInterface" c:type="FooSubInterface*"/>
+          </parameter>
+        </parameters>
+      </callback>
+    </interface>
+    <record name="SubInterfaceIface" c:type="FooSubInterfaceIface">
+      <field name="parent_iface">
+        <type name="GObject.TypeInterface" c:type="GTypeInterface"/>
+      </field>
+      <callback name="do_bar" c:type="do_bar">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <parameter name="self" transfer-ownership="none">
+            <type name="SubInterface" c:type="FooSubInterface*"/>
+          </parameter>
+        </parameters>
+      </callback>
+    </record>
     <class name="Object"
            c:type="FooObject"
            parent="GObject.Object"

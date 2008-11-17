@@ -9,6 +9,12 @@
 #define FOO_IS_INTERFACE(object)     (G_TYPE_CHECK_INSTANCE_TYPE ((object), FOO_TYPE_INTERFACE))
 #define FOO_INTERFACE_GET_INTERFACE(inst) (G_TYPE_INSTANCE_GET_INTERFACE ((inst), FOO_TYPE_INTERFACE, FooInterfaceIface))
 
+#define FOO_TYPE_SUBINTERFACE           (foo_sub_interface_get_type ())
+#define FOO_SUBINTERFACE(object)        (G_TYPE_CHECK_INSTANCE_CAST ((object), FOO_TYPE_SUBINTERFACE, FooSubInterface))
+#define FOO_IS_SUBINTERFACE(object)     (G_TYPE_CHECK_INSTANCE_TYPE ((object), FOO_TYPE_SUBINTERFACE))
+#define FOO_SUBINTERFACE_GET_INTERFACE(inst) (G_TYPE_INSTANCE_GET_INTERFACE ((inst), FOO_TYPE_SUBINTERFACE, FooSubInterfaceIface))
+
+
 #define FOO_TYPE_OBJECT              (foo_object_get_type ())
 #define FOO_OBJECT(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), FOO_TYPE_OBJECT, FooObject))
 #define FOO_IS_OBJECT(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), FOO_TYPE_OBJECT))
@@ -19,6 +25,8 @@
 
 typedef struct _FooInterface       FooInterface;
 typedef struct _FooInterfaceIface  FooInterfaceIface;
+typedef struct _FooSubInterface       FooSubInterface;
+typedef struct _FooSubInterfaceIface  FooSubInterfaceIface;
 typedef struct _FooObject          FooObject;
 typedef struct _FooObjectClass     FooObjectClass;
 typedef struct _FooSubobject       FooSubobject;
@@ -32,6 +40,17 @@ struct _FooInterfaceIface
 };
 
 GType                 foo_interface_get_type       (void) G_GNUC_CONST;
+
+struct _FooSubInterfaceIface
+{
+  GTypeInterface parent_iface;
+
+  void (*do_bar) (FooSubInterface *self);
+};
+
+GType                 foo_sub_interface_get_type       (void) G_GNUC_CONST;
+
+void foo_sub_interface_do_bar (FooSubInterface *self);
 
 struct _FooObject
 {

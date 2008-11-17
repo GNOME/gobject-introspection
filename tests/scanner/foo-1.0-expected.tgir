@@ -13,6 +13,19 @@
         <type name="GObject.TypeInterface"/>
       </field>
     </record>
+    <interface name="SubInterface" glib:type-name="FooSubInterface" glib:get-type="foo_sub_interface_get_type">
+      <prerequisite name="Interface"/>
+      <method name="do_bar" c:identifier="foo_sub_interface_do_bar">
+        <return-value transfer-ownership="none">
+          <type name="none"/>
+        </return-value>
+      </method>
+    </interface>
+    <record name="SubInterfaceIface">
+      <field name="parent_iface">
+        <type name="GObject.TypeInterface"/>
+      </field>
+    </record>
     <class name="Object" parent="GObject.Object" glib:type-name="FooObject" glib:get-type="foo_object_get_type">
       <implements name="Interface"/>
       <field name="parent_instance">

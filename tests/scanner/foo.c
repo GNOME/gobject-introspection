@@ -75,6 +75,30 @@ foo_foo_interface_init (gpointer         g_iface,
   iface->do_foo = foo_do_foo;
 }
 
+GType
+foo_sub_interface_get_type (void)
+{
+  static GType object_type = 0;
+
+  if (!object_type)
+    {
+      object_type = g_type_register_static_simple (G_TYPE_INTERFACE,
+                                                   "FooSubInterface",
+                                                   sizeof (FooSubInterfaceIface),
+                                                   NULL, 0, NULL, 0);
+
+      g_type_interface_add_prerequisite (object_type, FOO_TYPE_INTERFACE);
+    }
+
+  return object_type;
+}
+
+void foo_sub_interface_do_bar (FooSubInterface *self)
+{
+  FOO_SUBINTERFACE_GET_INTERFACE(self)->do_bar (self);
+}
+
+
 G_DEFINE_TYPE_EXTENDED (FooObject, foo_object, G_TYPE_OBJECT,
 			0, G_IMPLEMENT_INTERFACE (FOO_TYPE_INTERFACE,
 						  foo_foo_interface_init));
