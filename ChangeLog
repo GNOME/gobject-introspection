@@ -1,3 +1,8 @@
+2008-11-17  Owen Taylor  <otaylor@redhat.com>
+
+	* tests/everything/everything.c: Fix doc comment annotations
+	for test_struct_b_clone() to refer to the right function.
+
 2008-11-17  Dan Winship  <danw@gnome.org>
 
 	* giscanner/glibtransformer.py (GLibTransformer.__init__): fix

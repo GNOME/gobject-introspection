@@ -407,11 +407,11 @@ test_struct_a_clone (TestStructA *a,
 }
 
 /**
- * test_struct_a_clone:
- * @a: the structure
+ * test_struct_b_clone:
+ * @b: the structure
  * @b_out: (out): the cloned structure
  *
- * Make a copy of a TestStructA
+ * Make a copy of a TestStructB
  */
 void
 test_struct_b_clone (TestStructB *b,
