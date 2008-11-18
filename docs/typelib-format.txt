@@ -856,7 +856,8 @@ struct EnumBlob
   guint16   blob_type;  /* 5: enum, 6: flags */
   guint     deprecated   : 1; 
   guint     unregistered : 1;
-  guint     reserved     :14;
+  guint     storage_type : 5;
+  guint     reserved     : 9;
   guint32   name; 
 
   GTypeBlob gtype;
@@ -869,6 +870,10 @@ struct EnumBlob
 
 unregistered: 
           If this is set, the type is not registered with GType.
+
+storage_type:
+	  The tag of the type used for the enum in the C ABI
+	  (will be a signed or unsigned integral type)
 
 gtype:    For types which are registered with GType, contains the 
           information about the GType. Otherwise unused.

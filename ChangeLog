@@ -1,5 +1,24 @@
 2008-11-18  Owen Taylor <otaylor@redhat.com>
 
+	Bug 561296 - Add "storage type" to the typelib data for enums
+
+	In order to set and get enum and flag fields in structures, we need
+	to know the integral type that the enumeration is stored as. We are already
+	computing that at compile time in order to compute struct offsets, so the
+	easiest thing to do is to save that in the typelib.
+
+	* docs/typelib-format.txt girepository/girnode.[ch] girepository/giroffsets.c
+	girepository/gtypelib.h: Add 'storage_type' to the typelib format for EnumBlob
+	and compute and save it at compile time.
+
+	* girepository/girepository.h girepository/ginfo.c:
+	Add g_enum_info_get_storage_type().
+
+	* girepository/gfield.c: Implement reading and writing enum and flags fields
+	based on the storage type.
+
+2008-11-18  Owen Taylor <otaylor@redhat.com>
+
 	Add enums to the Everything test module
 
 	* tests/everything/everything.[ch]: Add TestEnum and TestFlags to the Everything
