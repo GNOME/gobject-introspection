@@ -1,3 +1,8 @@
+2008-11-18  Johan Dahlin  <jdahlin@async.com.br>
+
+	* giscanner/cachestore.py:
+	Catch BadPickleGet exceptions as well.	
+
 2008-11-17  Owen Taylor  <otaylor@redhat.com>
 
 	* tests/everything/everything.c: Fix doc comment annotations

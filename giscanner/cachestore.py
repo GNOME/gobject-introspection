@@ -106,7 +106,7 @@ class CacheStore(object):
             return None
         try:
             data = cPickle.load(fd)
-        except EOFError:
+        except (EOFError, cPickle.BadPickleGet):
             # Broken cache entry, remove it
             self._purge_cache(store_filename)
             data = None
