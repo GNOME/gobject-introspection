@@ -106,7 +106,7 @@ GIRS += GtkFrob-1.0.gir
 
 bin_PROGRAMS = barapp
 
-barapp_SOURCES = barapp.c barapp.h
+barapp_SOURCES = $(srcdir)/barapp.c $(srcdir)/barapp.h
 barapp_LDADD = $(top_builddir)/girepository/libgirepository.la
 barapp_LDFLAGS = -export-dynamic
 BarApp-1.0.gir: barapp $(SCANNER_BIN) $(SCANNER_LIBS) Makefile
