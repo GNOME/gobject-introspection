@@ -65,6 +65,27 @@ void test_gslist_free (GSList *in);
 /* ghash? */
 /* error? */
 
+/* enums / flags */
+
+typedef enum
+{
+  TEST_VALUE1,
+  TEST_VALUE2,
+  TEST_VALUE3 = 42
+} TestEnum;
+
+typedef enum
+{
+  TEST_FLAG1 = 1 << 0,
+  TEST_FLAG2 = 1 << 1,
+  TEST_FLAG3 = 1 << 2,
+} TestFlags;
+
+GType test_enum_get_type (void) G_GNUC_CONST;
+#define TEST_TYPE_ENUM (test_enum_get_type ())
+GType test_flags_get_type (void) G_GNUC_CONST;
+#define TES_TYPE_FLAGS (test_flags_get_type ())
+
 /* structures */
 typedef struct _TestStructA TestStructA;
 typedef struct _TestStructB TestStructB;
@@ -74,6 +95,7 @@ struct _TestStructA
   gint some_int;
   gint8 some_int8;
   gdouble some_double;
+  TestEnum some_enum;
 };
 
 void test_struct_a_clone (TestStructA *a,
@@ -97,6 +119,7 @@ struct _TestSimpleBoxedA
   gint some_int;
   gint8 some_int8;
   gdouble some_double;
+  TestEnum some_enum;
 };
 
 GType             test_simple_boxed_a_get_type (void);

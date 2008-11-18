@@ -390,6 +390,42 @@ void test_gslist_everything_in (GSList *in)
 /* ghash? */
 /* error? */
 
+/* enums / flags */
+
+GType
+test_enum_get_type (void)
+{
+    static GType etype = 0;
+    if (G_UNLIKELY(etype == 0)) {
+        static const GEnumValue values[] = {
+            { TEST_VALUE1, "TEST_VALUE1", "value1" },
+            { TEST_VALUE2, "TEST_VALUE2", "value2" },
+            { TEST_VALUE3, "TEST_VALUE3", "value3" },
+            { 0, NULL, NULL }
+        };
+        etype = g_enum_register_static (g_intern_static_string ("TestEnum"), values);
+    }
+
+    return etype;
+}
+
+GType
+test_flags_get_type (void)
+{
+    static GType etype = 0;
+    if (G_UNLIKELY(etype == 0)) {
+        static const GFlagsValue values[] = {
+            { TEST_FLAG1, "TEST_FLAG1", "flag1" },
+            { TEST_FLAG2, "TEST_FLAG2", "flag2" },
+            { TEST_FLAG3, "TEST_FLAG3", "flag2" },
+            { 0, NULL, NULL }
+        };
+        etype = g_flags_register_static (g_intern_static_string ("TestFlags"), values);
+    }
+
+    return etype;
+}
+
 /* structures */
 
 /**
