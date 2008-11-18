@@ -1,3 +1,8 @@
+2008-11-18  Andreas Rottmann  <a.rottmann@gmx.at>
+
+	* girepository/girnode.c (g_ir_node_build_typelib): Use sizeof()
+	instead of hard-coding struct sizes.
+
 2008-11-18  Owen Taylor <otaylor@redhat.com>
 
 	Bug 561296 - Add "storage type" to the typelib data for enums
