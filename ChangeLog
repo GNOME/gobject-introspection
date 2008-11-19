@@ -1,3 +1,8 @@
+2008-11-19  Johan Dahlin  <jdahlin@async.com.br>
+
+	* giscanner/cachestore.py:
+	Catch ValueError exceptions.
+
 2008-11-18  Tommi Komulainen  <tommi.komulainen@iki.fi>
 
 	* tests/scanner/Makefile.am (barapp_SOURCES): fix builddir != srcdir
