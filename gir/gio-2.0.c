@@ -4,6 +4,14 @@
  */
 
 /**
+ * g_app_info_launch:
+ * @appinfo:
+ * @files:
+ * @launch_context: (allow-none):
+ * @error:
+ */
+
+/**
  * g_buffered_input_stream_fill:
  * @cancellable: (allow-none):
  */
