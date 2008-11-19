@@ -582,3 +582,26 @@ test_boxed_get_type (void)
   return our_type;
 }
 
+G_DEFINE_TYPE(TestObj, test_obj, G_TYPE_OBJECT);
+
+static void
+test_obj_class_init (TestObjClass *klass)
+{
+}
+
+static void
+test_obj_init (TestObj *obj)
+{
+}
+
+TestObj *
+test_obj_new_from_file (const char *x, GError **error)
+{
+  return g_object_new (TEST_TYPE_OBJ, NULL);
+}
+
+double
+test_obj_static_method (int x)
+{
+  return x;
+}

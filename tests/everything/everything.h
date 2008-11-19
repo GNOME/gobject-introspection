@@ -154,4 +154,24 @@ TestBoxed *test_boxed_copy     (TestBoxed *boxed);
 gboolean   test_boxed_equals   (TestBoxed *boxed,
 				TestBoxed *other);
 
+#define TEST_TYPE_OBJ              (test_obj_get_type ())
+#define TEST_OBJECT(object)        (G_TYPE_CHECK_INSTANCE_CAST ((object), TEST_TYPE_OBJ, TestObj))
+#define TEST_IS_OBJECT(object)     (G_TYPE_CHECK_INSTANCE_TYPE ((object), TEST_TYPE_OBJ))
+
+typedef struct _TestObj          TestObj;
+typedef struct _TestObjClass     TestObjClass;
+struct _TestObj
+{
+  GObject parent_instance;
+};
+
+struct _TestObjClass
+{
+  GObjectClass parent_class;
+};
+
+GType      test_obj_get_type (void);
+TestObj*   test_obj_new_from_file (const char *x, GError **error);
+double     test_obj_static_method (int x);
+
 #endif /* __GITESTTYPES_H__ */
