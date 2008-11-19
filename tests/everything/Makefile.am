@@ -26,7 +26,7 @@ endif
 
 GIRS =
 TYPELIBS = $(GIRS:.gir=.typelib)
-TXMLS = $(GIRS:.gir=.gir.txml)
+TXMLS = $(GIRS:.gir=.tgir)
 CLEANFILES = $(TYPELIBS) $(TXMLS) $(GIRS)
 BUILT_SOURCES = $(TYPELIBS) $(TXMLS) $(GIRS)
 
@@ -42,4 +42,6 @@ GIRS += Everything-$(TYPELIB_VERSION).gir
 
 %.typelib: %.gir $(top_builddir)/tools/g-ir-compiler$(EXEEXT) Makefile
 	$(top_builddir)/tools/g-ir-compiler --includedir=. --includedir=$(top_builddir)/gir $< -o $@
-	PYTHONPATH=$(SCANNER_PYTHONPATH) $(SCANNER) --add-include-path=$(top_builddir)/gir --typelib-xml $< > $<.tmp && mv $<.tmp $<.txml
+
+%.tgir: %.typelib $(top_builddir)/tools/g-ir-generate$(EXEEXT) Makefile
+	 $(DEBUG) $(top_builddir)/tools/g-ir-generate --includedir=. --includedir=$(top_builddir)/gir $< -o $@
