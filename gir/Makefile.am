@@ -93,6 +93,12 @@ else
 GIO_LIBRARY=gio-2.0
 endif
 
+if HAVE_GIO_UNIX
+GIO_UNIX_HDRS=`pkg-config --variable=includedir gio-unix-2.0`/gio-unix-2.0/gio/*.h
+else
+GIO_UNIX_HDRS=
+endif
+
 Gio-2.0.gir: GObject-2.0.gir $(SCANNER_BIN) $(SCANNER_LIBS) Makefile $(srcdir)/gio-2.0.c
 	$(SCANNER) \
 	    --namespace Gio --nsversion=2.0 \
@@ -108,7 +114,8 @@ Gio-2.0.gir: GObject-2.0.gir $(SCANNER_BIN) $(SCANNER_LIBS) Makefile $(srcdir)/g
             --pkg glib-2.0 \
             --pkg gobject-2.0 \
 	    $(srcdir)/gio-2.0.c \
-	    $(GLIB_INCLUDEDIR)/gio/*.h
+	    $(GLIB_INCLUDEDIR)/gio/*.h \
+	    $(GIO_UNIX_HDRS)
 BUILT_SOURCES += Gio-2.0.gir
 EXTRA_DIST += gio-2.0.c
 
