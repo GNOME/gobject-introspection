@@ -4,6 +4,12 @@
  */
 
 /**
+ * g_app_info_get_all:
+ *
+ * Returns: (element-type GAppInfo) (transfer full): 
+ */
+
+/**
  * g_app_info_launch:
  * @appinfo:
  * @files:
