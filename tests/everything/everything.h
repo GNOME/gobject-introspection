@@ -65,6 +65,10 @@ void test_gslist_free (GSList *in);
 /* ghash? */
 /* error? */
 
+/* closure */
+int test_closure (GClosure *closure);
+int test_closure_one_arg (GClosure *closure, int arg);
+
 /* enums / flags */
 
 typedef enum

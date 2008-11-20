@@ -94,6 +94,49 @@ GType test_gtype (GType in)
   return in;
 }
 
+int test_closure (GClosure *closure)
+{
+  GValue return_value = {0, };
+  int ret;
+
+  g_value_init (&return_value, G_TYPE_INT);
+
+  g_closure_invoke (closure,
+                    &return_value,
+                    0, NULL,
+                    NULL);
+
+  ret = g_value_get_int (&return_value);
+
+  g_value_unset(&return_value);
+
+  return ret;
+}
+
+int test_closure_one_arg (GClosure *closure, int arg)
+{
+  GValue return_value = {0, };
+  GValue arguments[1];
+  int ret;
+
+  g_value_init (&return_value, G_TYPE_INT);
+
+  g_value_init (&arguments[0], G_TYPE_INT);
+  g_value_set_int (&arguments[0], arg);
+
+  g_closure_invoke (closure,
+                    &return_value,
+                    1, arguments,
+                    NULL);
+
+  ret = g_value_get_int (&return_value);
+
+  g_value_unset(&return_value);
+  g_value_unset(&arguments[0]);
+
+  return ret;
+}
+
 #if 0
 /************************************************************************/
 /* utf8 */

@@ -1,3 +1,8 @@
+2008-11-20  Johan Bilien  <jobi@via.ecp.fr>
+
+	* tests/everything/everything.[ch]: add a test function which calls a
+	closure.
+
 2008-11-19  Johan Dahlin  <jdahlin@async.com.br>
 
 	* giscanner/cachestore.py:
