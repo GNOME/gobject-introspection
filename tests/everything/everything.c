@@ -121,6 +121,7 @@ int test_closure_one_arg (GClosure *closure, int arg)
 
   g_value_init (&return_value, G_TYPE_INT);
 
+  memset (&arguments[0], 0, sizeof (arguments));
   g_value_init (&arguments[0], G_TYPE_INT);
   g_value_set_int (&arguments[0], arg);
 
