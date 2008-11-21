@@ -10,6 +10,12 @@
  */
 
 /**
+ * g_app_info_get_icon:
+ *
+ * Returns: (transfer none):
+ */
+
+/**
  * g_app_info_launch:
  * @appinfo:
  * @files:
