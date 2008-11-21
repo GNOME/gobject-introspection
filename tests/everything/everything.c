@@ -88,7 +88,11 @@ gdouble test_double (gdouble in)
 }
 
 
-/* time_t? */
+time_t test_timet (time_t in)
+{
+  return in;
+}
+
 GType test_gtype (GType in)
 {
   return in;

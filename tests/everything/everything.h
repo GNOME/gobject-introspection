@@ -2,6 +2,7 @@
 #define __GITESTTYPES_H__
 
 #include <glib-object.h>
+#include <time.h>
 
 /* basic types */
 gboolean test_boolean (gboolean in);
@@ -21,7 +22,7 @@ gssize test_ssize (gssize in);
 gsize test_size (gsize in);
 gfloat test_float (gfloat in);
 gdouble test_double (gdouble in);
-/* time_t? */
+time_t test_timet (time_t in);
 GType test_gtype (GType in);
 #if 0
 /* utf8 */
