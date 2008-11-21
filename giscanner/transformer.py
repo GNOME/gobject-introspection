@@ -249,7 +249,7 @@ class Transformer(object):
         raise ValueError("Unmatched length parameter name %r"\
                              % (target_name, ))
 
-    def _pair_annotations(self, params):
+    def _pair_annotations(self, params, return_):
         names = {}
         for param in params:
             if param.name in names:
@@ -258,6 +258,9 @@ class Transformer(object):
             names[param.name] = 1
             if isinstance(param.type, Array):
                 self._pair_array(params, param)
+
+        if isinstance(return_.type, Array):
+            self._pair_array(params, return_)
 
     # We take the annotations from the parser as strings; here we
     # want to split them into components, so:
@@ -275,9 +278,9 @@ class Transformer(object):
         directives = symbol.directives()
         parameters = list(self._create_parameters(
             symbol.base_type, directives))
-        self._pair_annotations(parameters)
         return_ = self._create_return(symbol.base_type.base_type,
                                       directives.get('return', {}))
+        self._pair_annotations(parameters, return_)
         name = self._strip_namespace_func(symbol.ident)
         func = Function(name, return_, parameters, symbol.ident)
         self._parse_deprecated(func, directives)
@@ -594,6 +597,8 @@ class Transformer(object):
         for option, data in options_map.iteritems():
             if option in ('transfer', 'transfer-inferred',
                           'element-type', 'out'):
+                pass
+            elif option.startswith(('element-type', 'array')):
                 pass
             else:
                 print 'Unhandled return type annotation option: %r' % (

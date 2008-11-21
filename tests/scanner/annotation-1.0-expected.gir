@@ -267,5 +267,17 @@
         </parameter>
       </parameters>
     </function>
+    <function name="return_array" c:identifier="annotation_return_array">
+      <return-value transfer-ownership="none">
+        <array length="0" c:type="char**">
+          <type name="utf8"/>
+        </array>
+      </return-value>
+      <parameters>
+        <parameter name="length" direction="out" transfer-ownership="full">
+          <type name="int" c:type="int*"/>
+        </parameter>
+      </parameters>
+    </function>
   </namespace>
 </repository>

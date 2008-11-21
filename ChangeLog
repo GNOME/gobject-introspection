@@ -1,3 +1,12 @@
+2008-11-21  Johan Dahlin  <jdahlin@async.com.br>
+
+	Bug 561617 – Return value array annotations
+
+	* giscanner/transformer.py:
+	* tests/scanner/annotation.c (annotation_return_array):
+	* tests/scanner/annotation.h:
+	Add support for (array) for return value annotations as well.
+
 2008-11-20  Johan Bilien  <jobi@via.ecp.fr>
 
 	* tests/everything/everything.[ch]: add a test function which calls a

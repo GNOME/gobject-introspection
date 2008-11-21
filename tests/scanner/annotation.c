@@ -338,5 +338,17 @@ annotation_init (int *argc, char ***argv)
 
 }
 
+/**
+ * annotation_return_array:
+ * @length: (out): Number of return values
+ *
+ * Return value: (array length=length zero-terminated=1): The return value
+ **/
+char **
+annotation_return_array (int *length)
+{
+  return NULL;
+}
+
 
 static char backslash_parsing_tester_2 = '\\';
