@@ -1,3 +1,10 @@
+2008-11-23  Johan Dahlin  <jdahlin@async.com.br>
+
+	Bug 562022 – gobject-introspection needs python headers
+
+	* configure.ac: fail without python headers present.
+	Patch by: Tom Parker
+
 2008-11-21  Johan Dahlin  <jdahlin@async.com.br>
 
 	Bug 561617 – Return value array annotations

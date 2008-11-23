@@ -185,7 +185,7 @@ case "$host" in
 	pyexecdir=`echo $pyexecdir | tr '\\\\' '/'`
 	;;
 esac
-AM_CHECK_PYTHON_HEADERS
+AM_CHECK_PYTHON_HEADERS(,AC_MSG_ERROR([Python headers not found]))
 
 AC_CONFIG_FILES([
 Makefile
