@@ -1,4 +1,9 @@
 2008-11-23  Johan Dahlin  <jdahlin@async.com.br>
+	
+	Make it compilable with -Werror on my system by adding
+	a couple of prototypes and including headers.
+
+2008-11-23  Johan Dahlin  <jdahlin@async.com.br>
 
 	Bug 562022 – gobject-introspection needs python headers
 

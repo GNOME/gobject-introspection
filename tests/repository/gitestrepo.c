@@ -2,7 +2,10 @@
 #include "girepository.h"
 
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
+
+void test_constructor_return_type(GIBaseInfo* object_info);
 
 void
 test_constructor_return_type(GIBaseInfo* object_info)

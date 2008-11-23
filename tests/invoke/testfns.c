@@ -7,6 +7,16 @@ typedef struct {
     int foo;
 } TestStruct;
 
+gint test1 (gint in);
+void test2 (gint in, gint *out);
+void test3 (gint *inout);
+void test4 (const gchar *blurb);
+void test5 (gchar **blurb, gint *len);
+gint test6 (GList *list);
+char *test7 (GList *list);
+TestStruct * test8 (int foo);
+void test9 (TestStruct *test_struct, int *out);
+
 gint test1 (gint in)
 {
   return in + 4;
