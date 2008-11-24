@@ -1,3 +1,8 @@
+2008-11-24  Johan Dahlin  <jdahlin@async.com.br>
+
+	* girepository/gdump.c (dump_type): Remove a warning,
+	be less verbose on error on fundamental types.
+
 2008-11-23  Johan Dahlin  <jdahlin@async.com.br>
 
 	* giscanner/dumper.py: Add license headers,
@@ -5,7 +10,7 @@
 	extra pedantic checks.
 
 2008-11-23  Johan Dahlin  <jdahlin@async.com.br>
-	
+
 	Make it compilable with -Werror on my system by adding
 	a couple of prototypes and including headers.
 
