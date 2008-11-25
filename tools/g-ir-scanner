@@ -304,7 +304,9 @@ def main(args):
 
     # Transform the C AST nodes into higher level
     # GLib/GObject nodes
-    glibtransformer = GLibTransformer(transformer, noclosure=options.noclosure)
+    glibtransformer = GLibTransformer(transformer,
+                                      noclosure=options.noclosure,
+                                      nolibtool=options.nolibtool)
     glibtransformer.set_introspection_binary(binary)
 
     namespace = glibtransformer.parse()

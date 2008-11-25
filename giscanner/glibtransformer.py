@@ -82,8 +82,10 @@ class UnknownTypeError(Exception):
 
 class GLibTransformer(object):
 
-    def __init__(self, transformer, noclosure=False):
+    def __init__(self, transformer, noclosure=False, nolibtool=False):
         self._transformer = transformer
+        self._noclosure = noclosure
+        self._nolibtool = nolibtool
         self._transformer.set_container_types(['GList*', 'GSList*'],
                                               ['GHashTable*'])
         self._namespace_name = None
@@ -95,7 +97,6 @@ class GLibTransformer(object):
         self._failed_types = {}
         self._boxed_types = {}
         self._private_internal_types = {}
-        self._noclosure = noclosure
         self._validating = False
 
     # Public API
@@ -213,6 +214,19 @@ class GLibTransformer(object):
         except KeyError, e:
             return Unresolved(gtype_name)
 
+    def _use_libtool_infection(self):
+        libtool_infection = not self._nolibtool
+        if not libtool_infection:
+            return False
+
+        try:
+            subprocess.check_call(['libtool', '--version'])
+        except subprocess.CalledProcessError, e:
+            # If libtool's not installed, assume we don't need it
+            return False
+
+        return True
+
     def _execute_binary(self):
         in_path = os.path.join(self._binary.tmpdir, 'types.txt')
         f = open(in_path, 'w')
@@ -222,9 +236,12 @@ class GLibTransformer(object):
         f.close()
         out_path = os.path.join(self._binary.tmpdir, 'dump.xml')
 
-        introspect_arg = '--introspect-dump=%s,%s' % (in_path, out_path)
-        args = self._binary.args
-        args.append(introspect_arg)
+        args = []
+        if self._use_libtool_infection():
+            args.extend(['libtool', '--mode=execute'])
+        args.extend(self._binary.args)
+        args.append('--introspect-dump=%s,%s' % (in_path, out_path))
+
         # Invoke the binary, having written our get_type functions to types.txt
         subprocess.check_call(args, stdout=sys.stdout, stderr=sys.stderr)
         self._read_introspect_dump(out_path)

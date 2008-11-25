@@ -1,3 +1,10 @@
+2008-11-25  Johan Dahlin  <jdahlin@async.com.br>
+
+	* giscanner/glibtransformer.py:
+	* tools/g-ir-scanner:
+	Execute the dumper program through libtool if it's installed,
+	so we avoid loading the installed version.
+
 2008-11-24  Johan Dahlin  <jdahlin@async.com.br>
 
 	* girepository/gdump.c (dump_type): Remove a warning,
