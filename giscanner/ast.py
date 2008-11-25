@@ -86,7 +86,7 @@ type_names = {}
 for name in GIR_TYPES:
     type_names[name] = name
 
-# C
+# C builtin
 type_names['char'] = TYPE_INT8
 type_names['signed char'] = TYPE_INT8
 type_names['unsigned char'] = TYPE_UINT8
@@ -106,11 +106,13 @@ type_names['double'] = TYPE_DOUBLE
 type_names['char*'] = TYPE_STRING
 type_names['void*'] = TYPE_ANY
 type_names['void'] = TYPE_NONE
+
+# C unix types
+type_names['off_t'] = TYPE_SIZET
+type_names['pid_t'] = TYPE_INT
 type_names['size_t'] = TYPE_SIZET
 type_names['ssize_t'] = TYPE_SSIZET
-type_names['off_t'] = TYPE_SIZET
-# FIXME - can we make libraries use GPid?
-type_names['pid_t'] = TYPE_INT
+type_names['socklen_t'] = TYPE_INT32
 
 # Obj-C
 type_names['id'] = TYPE_ANY
