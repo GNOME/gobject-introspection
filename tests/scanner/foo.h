@@ -91,6 +91,8 @@ char *                foo_object_dup_name          (FooObject *object);
 
 void                  foo_object_handle_glyph      (FooObject *object, UtilityGlyph glyph);
 
+int                   foo_object_static_meth       ();
+
 struct _FooSubobject
 {
   FooObject parent_instance;

@@ -36,6 +36,11 @@
           <type name="Object"/>
         </return-value>
       </constructor>
+      <function name="static_meth" c:identifier="foo_object_static_meth">
+        <return-value transfer-ownership="none">
+          <type name="int"/>
+        </return-value>
+      </function>
       <method name="external_type" c:identifier="foo_object_external_type">
         <return-value transfer-ownership="full">
           <type name="utility.Object"/>

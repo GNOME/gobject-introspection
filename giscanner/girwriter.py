@@ -121,6 +121,9 @@ class GIRWriter(XMLWriter):
     def _write_method(self, method):
         self._write_function(method, tag_name='method')
 
+    def _write_static_method(self, method):
+        self._write_function(method, tag_name='function')
+
     def _write_constructor(self, method):
         self._write_function(method, tag_name='constructor')
 
@@ -260,6 +263,8 @@ class GIRWriter(XMLWriter):
             if isinstance(node, Class):
                 for method in node.constructors:
                     self._write_constructor(method)
+                for method in node.static_methods:
+                    self._write_static_method(method)
             for method in node.methods:
                 self._write_method(method)
             for prop in node.properties:

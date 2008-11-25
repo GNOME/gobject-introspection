@@ -368,6 +368,7 @@ class Class(Node):
         self.parent = parent
         self.is_abstract = is_abstract
         self.methods = []
+        self.static_methods = []
         self.interfaces = []
         self.constructors = []
         self.properties = []

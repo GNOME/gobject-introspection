@@ -1,3 +1,23 @@
+2008-11-25  Colin Walters  <walters@verbum.org>
+
+	Bug 559705 – Missing association between static methods and classes
+
+	* docs/typelib-format.txt:
+	* girepository/ginfo.c (g_function_info_get_flags):
+	* girepository/girmodule.c (g_ir_module_build_typelib):
+	* girepository/girnode.c (g_ir_node_get_size),
+	(g_ir_node_build_typelib):
+	* girepository/girparser.c (start_function):
+	* girepository/gtypelib.c (g_typelib_check_sanity),
+	(validate_header), (validate_function_blob):
+	* girepository/gtypelib.h:
+	* giscanner/ast.py:
+	* giscanner/girwriter.py:
+	* giscanner/glibtransformer.py:
+	* tests/scanner/foo-1.0-expected.gir:
+	* tests/scanner/foo-1.0-expected.tgir:
+	* tests/scanner/foo.h:
+
 2008-11-25  Johan Dahlin  <jdahlin@async.com.br>
 
 	* giscanner/ast.py: Define socklen_t as an alias for int32.

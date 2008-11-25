@@ -302,7 +302,7 @@ arguments:
           An array of ArgBlob for the arguments of the function.
 
 
-FunctionBlob (16 bytes)
+FunctionBlob (20 bytes)
 
 struct FunctionBlob 
 {
@@ -313,12 +313,14 @@ struct FunctionBlob
   guint   is_getter      : 1;
   guint   is_constructor : 1;
   guint   wraps_vfunc    : 1;
-  guint   reserved       : 1;
+  guint   throws         : 1;
   guint   index          :10;
 
   guint32 name;
   guint32 c_name;
   guint32 signature;
+  guint   is_static      : 1;
+  guint   reserved       : 31;
 }
 
 c_name:   The symbol which can be used to obtain the function pointer with 
@@ -351,6 +353,10 @@ index:    Index of the property that this function is a setter or getter of
 signature: 
           Offset of the SignatureBlob describing the parameter types and the 
           return value type.
+
+is_static
+          The function is a "static method"; in other words it's a pure
+	  function whose name is conceptually scoped to the object.
 
 
 CallbackBlob (12 bytes)

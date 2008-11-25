@@ -329,6 +329,27 @@ class GLibTransformer(object):
         except KeyError, e:
             return False
 
+    def _parse_static_method(self, func):
+        components = func.symbol.split('_')
+        if len(components) < 2:
+            return None
+        target_klass = None
+        prefix_components = None
+        methname = None
+        for i in xrange(1, len(components)-1):
+            prefix_components = '_'.join(components[0:-i])
+            methname = '_'.join(components[-i:])
+            target_klass = self._uscore_type_names.get(prefix_components)
+            if target_klass and isinstance(target_klass, GLibObject):
+                break
+            target_klass = None
+        if not target_klass:
+            return None
+        self._remove_attribute(func.name)
+        func.name = methname
+        target_klass.static_methods.append(func)
+        return func
+
     def _parse_method(self, func):
         if not func.parameters:
             return False
@@ -377,19 +398,6 @@ class GLibTransformer(object):
                 #    % (func.symbol, )
                 return None
             prefix = func.symbol[:new_idx]
-
-        klass = None
-
-        def valid_matching_klass(tclass):
-            if tclass is None:
-                return False
-            elif isinstance(klass, (GLibEnum, GLibFlags)):
-                return False
-            elif not isinstance(tclass, (GLibObject, GLibBoxed,
-                                          GLibInterface)):
-                return False
-            else:
-                return True
 
         klass = self._uscore_type_names.get(prefix)
         if klass is None:
@@ -676,13 +684,14 @@ class GLibTransformer(object):
             self._resolve_alias(node)
 
     def _resolve_function_toplevel(self, func):
-        newfunc = self._parse_constructor(func)
-        if not newfunc:
-            newfunc = self._parse_method(func)
-            if not newfunc:
-                self._resolve_function(func)
+        for parser in [self._parse_constructor,
+                       self._parse_method,
+                       self._parse_static_method]:
+            newfunc = parser(func)
+            if newfunc:
+                self._resolve_function(newfunc)
                 return
-        self._resolve_function(newfunc)
+        self._resolve_function(func)
 
     def _pair_boxed_type(self, boxed):
         name = self._transformer.remove_prefix(boxed.type_name)
@@ -744,6 +753,7 @@ class GLibTransformer(object):
                                     for x in node.interfaces])
         self._resolve_constructors(node.constructors)
         self._resolve_methods(node.methods)
+        self._resolve_methods(node.static_methods)
         self._resolve_properties(node.properties, node)
         self._resolve_signals(node.signals)
         for field in node.fields:
