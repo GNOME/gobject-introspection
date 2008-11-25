@@ -163,6 +163,19 @@ class DumpCompiler(object):
             args.extend(['libtool', '--mode=link'])
 
         args.extend([self._linker_cmd, '-o', output])
+
+        # Make sure to list the library to be introspected first since it's
+        # likely to be uninstalled yet and we want the uninstalled RPATHs have
+        # priority (or we might run with installed library that is older)
+
+        # Search the current directory first
+        args.append('-L.')
+
+        # We only use the first library; assume others are "custom" libraries
+        # like from gir-repository.  Right now those don't define new GTypes,
+        # so we don't need to introspect them.
+        args.append('-l' + self._options.libraries[0])
+
         args.extend(self._run_pkgconfig('--libs'))
         for source in sources:
             if not os.path.exists(source):
@@ -177,13 +190,6 @@ class DumpCompiler(object):
                                 'libgirepository.la')
             args.append(path)
 
-        # Search the current directory first
-        args.append('-L.')
-
-        # We only use the first library; assume others are "custom" libraries
-        # like from gir-repository.  Right now those don't define new GTypes,
-        # so we don't need to introspect them.
-        args.append('-l' + self._options.libraries[0])
         subprocess.check_call(args)
 
 
