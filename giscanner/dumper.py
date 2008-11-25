@@ -171,10 +171,21 @@ class DumpCompiler(object):
         # Search the current directory first
         args.append('-L.')
 
-        # We only use the first library; assume others are "custom" libraries
-        # like from gir-repository.  Right now those don't define new GTypes,
-        # so we don't need to introspect them.
-        args.append('-l' + self._options.libraries[0])
+        uninst_builddir = os.environ.get('UNINSTALLED_INTROSPECTION_BUILDDIR')
+        # hack for building GIRepository.gir, skip -lgirepository since
+        # libgirepository.la is not in current directory and we refer to it
+        # explicitly below anyway
+        if not uninst_builddir or self._options.libraries[0] != 'girepository':
+            # We only use the first library; assume others are "custom"
+            # libraries like from gir-repository.  Right now those don't define
+            # new GTypes, so we don't need to introspect them.
+            args.append('-l' + self._options.libraries[0])
+
+        # hack for building gobject-introspection itself
+        if uninst_builddir:
+            path = os.path.join(uninst_builddir, 'girepository',
+                                'libgirepository.la')
+            args.append(path)
 
         args.extend(self._run_pkgconfig('--libs'))
         for source in sources:
@@ -182,13 +193,6 @@ class DumpCompiler(object):
                 raise CompilerError(
                     "Could not find object file: %s" % (source, ))
         args.extend(list(sources))
-
-        uninst_builddir = os.environ.get('UNINSTALLED_INTROSPECTION_BUILDDIR')
-        # This hack is only for building gobject-introspection itself
-        if uninst_builddir:
-            path = os.path.join(uninst_builddir, 'girepository',
-                                'libgirepository.la')
-            args.append(path)
 
         subprocess.check_call(args)
 
