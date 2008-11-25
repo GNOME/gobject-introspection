@@ -1,3 +1,9 @@
+=== 0.6.1 ===
+2008-11-25  Johan Dahlin  <jdahlin@async.com.br>
+
+	* NEWS:
+	Release 0.6.1
+
 2008-11-25  Colin Walters  <walters@verbum.org>
 
 	Bug 559705 – Missing association between static methods and classes

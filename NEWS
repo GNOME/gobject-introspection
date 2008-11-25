@@ -1,3 +1,46 @@
+0.6.1 25-nov-2008
+    Bugs resolved:
+    - Bug 552371 - implement struct field get/set
+    - Bug 552568 - All the argv parameters in Gtk.gir map char*** to int8
+    - Bug 557468 - Support for GI_TYPELIB_PATH
+    - Bug 557788 - Return types for constructors in generated typelib bogus
+    - Bug 557898 - Fails to build on OSX 10.4
+    - Bug 558436 - avoid having scanner load app code
+    - Bug 558848 - girparser.py: shared-library should be optional
+    - Bug 558849 - girepository: extend X stubbing
+    - Bug 559601 - Pointers in structs/unions unduly treated as arrays
+    - Bug 559703 - Virtual functions miss throws attribute in .gir
+    - Bug 559706 - Interface prerequisites missing
+    - Bug 559736 - Show the right filename in error messages
+    - Bug 559737 - Deal with continuations in macros
+    - Bug 560241 - Out-arguments should not be marked as being pointers in a...
+    - Bug 560248 - "disguised structures"
+    - Bug 560250 - [PATCH] Fully parse included modules
+    - Bug 560251 - [PATCH] Split g_ir_ffi_get_ffi_type() out from ginvoke.c
+    - Bug 560252 - Compute field offsets before writing typelib
+    - Bug 560253 - [PATCH] Add struture and boxed types to Everything test m...
+    - Bug 560308 - g-ir-compiler goes in infinite loop on Gdk-2.0.gir
+    - Bug 560326 - Fails to build Gtk-2.0.typelib with "Unexpected non-point...
+    - Bug 560346 - Fix and install pkgconfig file
+    - Bug 560404 - Prefix types when resolving aliases in included modules
+    - Bug 560419 - Cache includes when parsing
+    - Bug 560474 - g-ir-compiler crashes when compiling the glib gir
+    - Bug 560708 - Don't treat arrays that have a length specified as zero-t...
+    - Bug 560825 - Add size and alignment to typelib
+    - Bug 561087 - Respect is_pointer in serialize_type()
+    - Bug 561135 - hashtable element-type annotations broken
+    - Bug 561137 - support multiple repos for GBaseInfo
+    - Bug 561296 - Add "storage type" to the typelib data for enums
+    - Bug 561568 - Add Gio Unix bits to the Gio.gir if available
+    - Bug 561570 - Add TestObj with static methods
+    - Bug 561617 - Return value array annotations
+    - Bug 562022 - gobject-introspection needs python headers
+    - Bug 562030 - gir repository fails to build DBus-1.0.typelib without db...
+    - Bug 562031 - gir repository fails to libxml2 typelib without libxml2 i... 
+    Contributors: Étienne Bersac, Johan Bilien, Jürg Billeter, Johan Dahlin,
+      Tommi Komulainen, Tom Parker, Lucas Rocha, Andreas Rottmann
+      Colin Walters, Dan Winship, Owen Taylor
+
 0.6.0 31-oct-2008
     Bugs resolved:
     - Bug 551162 - giscanner does not recognize asm and __asm__
