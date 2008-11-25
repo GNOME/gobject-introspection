@@ -82,10 +82,9 @@ class UnknownTypeError(Exception):
 
 class GLibTransformer(object):
 
-    def __init__(self, transformer, noclosure=False, nolibtool=False):
+    def __init__(self, transformer, noclosure=False):
         self._transformer = transformer
         self._noclosure = noclosure
-        self._nolibtool = nolibtool
         self._transformer.set_container_types(['GList*', 'GSList*'],
                                               ['GHashTable*'])
         self._namespace_name = None
@@ -214,19 +213,6 @@ class GLibTransformer(object):
         except KeyError, e:
             return Unresolved(gtype_name)
 
-    def _use_libtool_infection(self):
-        libtool_infection = not self._nolibtool
-        if not libtool_infection:
-            return False
-
-        try:
-            subprocess.check_call(['libtool', '--version'])
-        except subprocess.CalledProcessError, e:
-            # If libtool's not installed, assume we don't need it
-            return False
-
-        return True
-
     def _execute_binary(self):
         in_path = os.path.join(self._binary.tmpdir, 'types.txt')
         f = open(in_path, 'w')
@@ -237,8 +223,6 @@ class GLibTransformer(object):
         out_path = os.path.join(self._binary.tmpdir, 'dump.xml')
 
         args = []
-        if self._use_libtool_infection():
-            args.extend(['libtool', '--mode=execute'])
         args.extend(self._binary.args)
         args.append('--introspect-dump=%s,%s' % (in_path, out_path))
 
