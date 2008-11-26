@@ -153,10 +153,6 @@ post-check:
 
 check-local: pre-check
 check-local: $(CHECKGIRS) $(CHECKTGIRS) $(TYPELIBS)
-	@for x in $(TYPELIBS); do \
-	 echo 1>&2 "$(DEBUG) $(top_builddir)/tools/g-ir-generate --includedir=. --includedir=$(top_builddir)/gir $${x} > $${x}.tmp && mv $${x}.tmp $${x}.xml;"; \
-	 $(DEBUG) $(top_builddir)/tools/g-ir-generate --includedir=. --includedir=$(top_builddir)/gir $${x} > $${x}.tmp && mv $${x}.tmp $${x}.xml; \
-	done
-CLEANFILES += $(TYPELIBS:.typelib=.typelib.xml)
+CLEANFILES += $(TGIRS)
 
 check-local: post-check

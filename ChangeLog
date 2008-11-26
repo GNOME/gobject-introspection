@@ -1,3 +1,9 @@
+2008-11-25  Colin Walters  <walters@verbum.org>
+
+	* tests/scanner/Makefile.am: Remove hand-rolled generation of .tgir; easier
+	to just use a Makefile rule and dependencies.  This corresponds with a change
+	made to gir-repository to fix srcdir != builddir issues.
+
 2008-11-25  Johan Dahlin  <jdahlin@async.com.br>
 
 	* configure.ac:
