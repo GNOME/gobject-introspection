@@ -67,6 +67,9 @@ def _get_option_parser():
     parser.add_option("", "--program-arg",
                       action="append", dest="program_args", default=[],
                       help="extra arguments to program")
+    parser.add_option("", "--libtool",
+                      action="store", dest="libtool_path", default=None,
+                      help="full path to libtool")
     parser.add_option("", "--no-libtool",
                       action="store_true", dest="nolibtool", default=False,
                       help="use libtool")

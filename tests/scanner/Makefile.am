@@ -42,6 +42,7 @@ annotation-1.0.gir: libannotation.la annotation.c annotation.h utility-1.0.gir $
 	 $(CHECK_DEBUG) $(SCANNER) \
 	--include=GObject-2.0 \
 	--include=utility-1.0 \
+        --libtool="$(LIBTOOL)" \
 	--library=annotation \
 	--namespace=annotation \
 	--nsversion=1.0 \
@@ -54,6 +55,7 @@ drawable-1.0.gir: libdrawable.la drawable.c drawable.h utility-1.0.gir $(SCANNER
 	$(CHECK_DEBUG) $(SCANNER) \
 	--include=GObject-2.0 \
 	--include=utility-1.0 \
+        --libtool="$(LIBTOOL)" \
 	--library=drawable \
 	--namespace=drawable \
 	--nsversion=1.0 \
@@ -72,6 +74,7 @@ foo-1.0.gir: libfoo.la foo.c foo.h utility-1.0.gir $(SCANNER_BIN) $(SCANNER_LIBS
 	$(CHECK_DEBUG) $(SCANNER) \
 	--include=GObject-2.0 \
 	--include=utility-1.0 \
+        --libtool="$(LIBTOOL)" \
 	--library=foo \
 	--namespace=foo \
 	--nsversion=1.0 \
@@ -83,6 +86,7 @@ GIRS += foo-1.0.gir
 utility-1.0.gir: libutility.la utility.h $(SCANNER_BIN) $(SCANNER_LIBS) Makefile
 	$(CHECK_DEBUG) $(SCANNER) \
 	--include=GObject-2.0 \
+        --libtool="$(LIBTOOL)" \
 	--library=utility \
 	--namespace=utility \
 	--nsversion=1.0 \
@@ -95,6 +99,7 @@ GIRS += utility-1.0.gir
 GtkFrob-1.0.gir: libgtkfrob.la gtkfrob.h $(SCANNER_BIN) $(SCANNER_LIBS) Makefile
 	$(CHECK_DEBUG) $(SCANNER) \
 	--include=GObject-2.0 \
+        --libtool="$(LIBTOOL)" \
 	--library=gtkfrob \
 	--namespace=GtkFrob \
 	--strip-prefix=Gtk \
@@ -112,6 +117,7 @@ barapp_LDFLAGS = -export-dynamic
 BarApp-1.0.gir: barapp $(SCANNER_BIN) $(SCANNER_LIBS) Makefile
 	$(SCANNER) \
 	--include=GObject-2.0 \
+        --libtool="$(LIBTOOL)" \
 	--program=./barapp \
 	--namespace=BarApp \
 	--strip-prefix=Bar \

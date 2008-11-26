@@ -19,6 +19,7 @@ GLib-2.0.gir: $(SCANNER_BIN) $(SCANNER_LIBS) Makefile glib-2.0.c
 	    --noclosure \
 	    --output $@ \
 	    --strip-prefix=g \
+            --libtool="$(LIBTOOL)" \
 	    --library=$(GLIB_LIBRARY) \
 	    $(CPPFLAGS) \
 	    -I$(GLIB_INCLUDEDIR) \
@@ -49,6 +50,7 @@ GObject-2.0.gir: GLib-2.0.gir $(SCANNER_BIN) $(SCANNER_LIBS) Makefile
 	    --noclosure \
 	    --output $@ \
 	    --strip-prefix=g \
+            --libtool="$(LIBTOOL)" \
             --include=GLib-2.0 \
 	    --library=$(GOBJECT_LIBRARY) \
 	    -I$(GOBJECT_INCLUDEDIR) \
@@ -75,6 +77,7 @@ GModule-2.0.gir: GLib-2.0.gir $(SCANNER_BIN) $(SCANNER_LIBS)
 	    --noclosure \
 	    --output $@ \
 	    --strip-prefix=g \
+            --libtool="$(LIBTOOL)" \
             --include=GLib-2.0 \
 	    --library=$(GMODULE_LIBRARY) \
 	    -I$(GMODULE_INCLUDEDIR) \
@@ -106,6 +109,7 @@ Gio-2.0.gir: GObject-2.0.gir $(SCANNER_BIN) $(SCANNER_LIBS) Makefile $(srcdir)/g
 	    --noclosure \
 	    --output $@ \
 	    --strip-prefix=g \
+            --libtool="$(LIBTOOL)" \
             --include=GObject-2.0 \
 	    --library=$(GIO_LIBRARY) \
 	    -I$(GIO_INCLUDEDIR) \
@@ -130,6 +134,7 @@ GIRepository-2.0.gir: GObject-2.0.gir $(SCANNER_BIN) $(SCANNER_LIBS) $(GIREPOSIT
 	    --noclosure \
 	    --output $@ \
 	    --strip-prefix=g \
+            --libtool="$(LIBTOOL)" \
             --include=GObject-2.0 \
 	    --library=girepository \
 	    -I$(srcdir)/girepository \
