@@ -4,3 +4,8 @@
  * @length: (out) (allow-none): 
  */
 
+/**
+ * g_markup_escape_text:
+ * Return value: (transfer full):
+ */
+

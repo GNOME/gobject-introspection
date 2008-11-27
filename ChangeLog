@@ -1,3 +1,8 @@
+2008-11-27  Johan Dahlin  <jdahlin@async.com.br>
+
+	* gir/glib-2.0.c: Add return value transfer annotation
+	for g_markup_escape_text.
+
 2008-11-25  Colin Walters  <walters@verbum.org>
 
 	* tools/g-ir-scanner: Add --libtool option which we expect Automake-using
