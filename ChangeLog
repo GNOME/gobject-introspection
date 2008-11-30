@@ -1,3 +1,10 @@
+2008-11-30  Johan Dahlin  <jdahlin@async.com.br>
+
+	Bug 562289 – Race when removing invalid cache
+
+	* giscanner/cachestore.py:
+	ENOENT is mapped to a OSError, not IOError.
+
 2008-11-27  Johan Dahlin  <jdahlin@async.com.br>
 
 	* gir/glib-2.0.c: Add return value transfer annotation

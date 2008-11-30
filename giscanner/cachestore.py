@@ -68,8 +68,11 @@ class CacheStore(object):
             # Permission denied
             if e.errno == errno.EACCES:
                 return
+            else:
+                raise
+	except OSError, e:
             # File does not exist
-            elif e.errno == errno.ENOENT:
+            if e.errno == errno.ENOENT:
                 return
             else:
                 raise
