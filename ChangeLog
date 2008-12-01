@@ -1,3 +1,8 @@
+2008-12-01  Colin Walters  <walters@verbum.org>
+
+	* girepository/gfield.c: Fix memory leak; unref type info we
+	created, not field info
+
 2008-11-30  Johan Dahlin  <jdahlin@async.com.br>
 
 	Bug 562289 – Race when removing invalid cache
