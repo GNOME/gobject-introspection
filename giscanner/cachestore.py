@@ -70,7 +70,7 @@ class CacheStore(object):
                 return
             else:
                 raise
-	except OSError, e:
+        except OSError, e:
             # File does not exist
             if e.errno == errno.ENOENT:
                 return
