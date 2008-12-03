@@ -38,6 +38,9 @@
 
 int lineno;
 
+#undef YY_BUF_SIZE
+#define YY_BUF_SIZE 65536
+
 extern int yylex (GISourceScanner *scanner);
 #define YY_DECL int yylex (GISourceScanner *scanner)
 static int yywrap (void);

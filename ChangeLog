@@ -1,3 +1,12 @@
+2008-12-03  Christophe Fergeau  <teuf@gnome.org>
+
+	Bug 562971 – g-ir-scanner failure on libgpod headers
+
+	* giscanner/scannerlexer.l: raise YY_BUF_SIZE to 65536 up from the
+	default 16384. Without it, the lexer was aborting with a cryptic
+	error message on source files containing really long comment
+	blocks.
+
 2008-12-01  Colin Walters  <walters@verbum.org>
 
 	* girepository/gfield.c: Fix memory leak; unref type info we
