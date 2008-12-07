@@ -16,6 +16,18 @@
  */
 
 /**
+ * g_file_info_get_attribute_object:
+ *
+ * Returns: (transfer none):
+ */
+
+/**
+ * g_file_info_get_icon:
+ *
+ * Returns: (transfer none):
+ */
+
+/**
  * g_app_info_launch:
  * @appinfo:
  * @files:
