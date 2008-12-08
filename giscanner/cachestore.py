@@ -18,11 +18,11 @@
 # Boston, MA 02111-1307, USA.
 #
 
+import errno
 import cPickle
 import hashlib
 import os
-import errno
-
+import tempfile
 
 def _get_cachedir():
     cachedir = os.path.join(os.environ['HOME'], '.cache')
@@ -61,7 +61,7 @@ class CacheStore(object):
         return (os.stat(store_filename).st_mtime >=
                 os.stat(filename).st_mtime)
 
-    def _purge_cache(self, filename):
+    def _remove_filename(filename):
         try:
             os.unlink(filename)
         except IOError, e:
@@ -81,16 +81,28 @@ class CacheStore(object):
         store_filename = self._get_filename(filename)
         if store_filename is None:
             return
+
         if (os.path.exists(store_filename) and
             self._cache_is_valid(store_filename, filename)):
             return None
-        fd = open(store_filename, 'w')
+
+        tmp_fd, tmp_filename = tempfile.mkstemp(prefix='g-ir-scanner-cache-')
         try:
-            cPickle.dump(data, fd)
+            cPickle.dump(data, os.fdopen(tmp_fd, 'w'))
         except IOError, e:
             # No space left on device
-            if e.errno == e.ENOSPC:
+            if e.errno == errno.ENOSPC:
+                self._remove_filename(tmp_filename)
                 return
+            else:
+                raise
+
+        try:
+            os.rename(tmp_filename, store_filename)
+        except OSError, e:
+            # Permission denied
+            if e.errno == errno.EACCES:
+                self._remove_filename(tmp_filename)
             else:
                 raise
 
@@ -111,6 +123,6 @@ class CacheStore(object):
             data = cPickle.load(fd)
         except (EOFError, ValueError, cPickle.BadPickleGet):
             # Broken cache entry, remove it
-            self._purge_cache(store_filename)
+            self._remove_filename(store_filename)
             data = None
         return data

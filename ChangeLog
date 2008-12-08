@@ -1,3 +1,11 @@
+2008-12-08  Johan Dahlin  <johan@async.com.br>
+
+	* giscanner/cachestore.py (CacheStore.store): Dump the cache
+	file to a temporary file and rename it the expected filename
+	only when it's completely written.
+	This should make the cache more roboust when run in parallel,
+	and hopefully avoid triggering bugs in Python.
+
 2008-12-03  Christophe Fergeau  <teuf@gnome.org>
 
 	Bug 562971 – g-ir-scanner failure on libgpod headers
