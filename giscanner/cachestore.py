@@ -26,7 +26,13 @@ import tempfile
 
 
 def _get_cachedir():
-    cachedir = os.path.join(os.environ['HOME'], '.cache')
+    homedir = os.environ.get('HOME')
+    if homedir is None:
+        return None
+    if not os.path.exists(homedir):
+        return None
+
+    cachedir = os.path.join(homedir, '.cache')
     if not os.path.exists(cachedir):
         os.mkdir(cachedir, 0755)
 

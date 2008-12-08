@@ -1,5 +1,11 @@
 2008-12-08  Johan Dahlin  <johan@async.com.br>
 
+	* giscanner/cachestore.py (_get_cachedir): Don't require
+	HOME to be set and if it set, don't require the
+	directory to exist.
+
+2008-12-08  Johan Dahlin  <johan@async.com.br>
+
 	* giscanner/cachestore.py (CacheStore.store): Dump the cache
 	file to a temporary file and rename it the expected filename
 	only when it's completely written.
