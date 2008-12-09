@@ -142,6 +142,37 @@ int test_closure_one_arg (GClosure *closure, int arg)
   return ret;
 }
 
+/**
+ * test_value_arg
+ * @v: (transfer none): a GValue expected to contain an int
+ *
+ * Return value: the int contained in the GValue.
+ */
+int test_int_value_arg(const GValue *v) {
+  int i;
+
+  i = g_value_get_int (v);
+
+  return i;
+}
+
+static GValue value;
+/**
+ * test_value_return:
+ * @i: an int
+ *
+ * Return value: (transfer none): the int wrapped in a GValue.
+ */
+const GValue *test_value_return(int i) {
+  memset(&value, '\0', sizeof(GValue));
+
+  g_value_init (&value, G_TYPE_INT);
+  g_value_set_int (&value, i);
+
+  return &value;
+}
+
+
 #if 0
 /************************************************************************/
 /* utf8 */

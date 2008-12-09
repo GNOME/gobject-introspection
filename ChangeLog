@@ -1,3 +1,10 @@
+2008-12-09  Johan Bilien  <jobi@via.ecp.fr>
+
+	Bug 562545 – Add function taking / returning GValue
+
+	* tests/everything/everything.[ch]: add a test of function taking and
+	returning "const GValue *"
+
 2008-12-09  Johan Dahlin  <johan@async.com.br>
 
 	* giscanner/cachestore.py (CacheStore.store): Use

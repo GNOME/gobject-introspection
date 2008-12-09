@@ -70,6 +70,10 @@ void test_gslist_free (GSList *in);
 int test_closure (GClosure *closure);
 int test_closure_one_arg (GClosure *closure, int arg);
 
+/* value */
+int test_int_value_arg(const GValue *v);
+const GValue *test_value_return(int i);
+
 /* enums / flags */
 
 typedef enum
