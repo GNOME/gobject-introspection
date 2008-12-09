@@ -22,6 +22,7 @@ import errno
 import cPickle
 import hashlib
 import os
+import shutil
 import tempfile
 
 
@@ -105,8 +106,8 @@ class CacheStore(object):
                 raise
 
         try:
-            os.rename(tmp_filename, store_filename)
-        except OSError, e:
+            shutil.move(tmp_filename, store_filename)
+        except IOError, e:
             # Permission denied
             if e.errno == errno.EACCES:
                 self._remove_filename(tmp_filename)

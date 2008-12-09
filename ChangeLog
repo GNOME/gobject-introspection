@@ -1,6 +1,14 @@
+2008-12-09  Johan Dahlin  <johan@async.com.br>
+
+	* giscanner/cachestore.py (CacheStore.store): Use
+	shutil.move instead of os.rename, since it will
+	automatically fall back to copying+remove if the
+	src directory is on a different partition from
+	the dst directory.
+
 2008-12-08  Tristan Van Berkom  <tristan.van.berkom@gmail.com>
 
-	Bug 563742 – introspection should record the introduced version of 
+	Bug 563742 – introspection should record the introduced version of
                      symbols marked with the "Since:" tag
 
 	reviewed by: Johan
