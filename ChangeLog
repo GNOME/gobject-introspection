@@ -1,3 +1,19 @@
+2008-12-08  Tristan Van Berkom  <tristan.van.berkom@gmail.com>
+
+	Bug 563742 – introspection should record the introduced version of 
+                     symbols marked with the "Since:" tag
+
+	reviewed by: Johan
+
+	* giscanner/ast.py:
+	* giscanner/girwriter.py:
+	* giscanner/scannerlexer.l:
+	* giscanner/transformer.py:
+	* tests/scanner/annotation-1.0-expected.gir:
+	* tests/scanner/annotation-1.0-expected.tgir:
+	* tests/scanner/annotation.c (annotation_versioned):
+	* tests/scanner/annotation.h:
+
 2008-12-08  Johan Dahlin  <johan@async.com.br>
 
 	* giscanner/cachestore.py (_get_cachedir): Don't require

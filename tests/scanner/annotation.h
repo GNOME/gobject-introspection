@@ -76,8 +76,9 @@ void     annotation_object_parse_args   (AnnotationObject *object,
 
 GObject* annotation_object_do_not_use   (AnnotationObject *object);
 
-
-void     annotation_init (int *argc, char ***argv);
-char **  annotation_return_array (int *length);
+void     annotation_init                (int              *argc, 
+					 char           ***argv);
+char **  annotation_return_array        (int             *length);
+void     annotation_versioned           (void);
 
 #endif /* __ANNOTATION_OBJECT_H__ */

@@ -262,5 +262,10 @@
         </parameter>
       </parameters>
     </function>
+    <function name="versioned" c:identifier="annotation_versioned">
+      <return-value transfer-ownership="none">
+        <type name="none"/>
+      </return-value>
+    </function>
   </namespace>
 </repository>

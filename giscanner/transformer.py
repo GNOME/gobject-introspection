@@ -211,6 +211,7 @@ class Transformer(object):
 
     def _create_enum(self, symbol):
         members = []
+        directives = symbol.directives()
         for child in symbol.base_type.child_list:
             name = strip_common_prefix(symbol.ident, child.ident).lower()
             members.append(Member(name,
@@ -219,6 +220,7 @@ class Transformer(object):
 
         enum_name = self.remove_prefix(symbol.ident)
         enum = Enum(enum_name, symbol.ident, members)
+        self._parse_version(enum, directives)
         self._names.type_names[symbol.ident] = (None, enum)
         return enum
 
@@ -237,6 +239,12 @@ class Transformer(object):
             else:
                 # No version, just include str
                 node.deprecated = deprecated_value.strip()
+
+    def _parse_version(self, node, directives):
+        version = directives.get('since', False)
+        if version:
+            version_value = version[0]
+            node.version = version_value.strip()
 
     def _pair_array(self, params, array):
         if not array.type.length_param_name:
@@ -283,6 +291,7 @@ class Transformer(object):
         self._pair_annotations(parameters, return_)
         name = self._strip_namespace_func(symbol.ident)
         func = Function(name, return_, parameters, symbol.ident)
+        self._parse_version(func, directives)
         self._parse_deprecated(func, directives)
         return func
 
@@ -314,6 +323,8 @@ class Transformer(object):
         dirs_for = set(dirs)
         dirs_for = dirs_for.difference(param_names)
         dirs_for.discard('return')
+        dirs_for.discard('deprecated')
+        dirs_for.discard('since')
         if dirs_for:
             print 'Unexpected annotations for %s, parameters are %s' % (
                 list(dirs_for), list(param_names), )
@@ -633,6 +644,7 @@ class Transformer(object):
         return union
 
     def _create_struct(self, symbol):
+        directives = symbol.directives()
         struct = self._typedefs_ns.get(symbol.ident, None)
         if struct is None:
             # This is a bit of a hack; really we should try
@@ -650,9 +662,12 @@ class Transformer(object):
             if field:
                 struct.fields.append(field)
 
+        self._parse_version(struct, directives)
+
         return struct
 
     def _create_union(self, symbol):
+        directives = symbol.directives()
         union = self._typedefs_ns.get(symbol.ident, None)
         if union is None:
             # This is a bit of a hack; really we should try
@@ -670,6 +685,8 @@ class Transformer(object):
             if field:
                 union.fields.append(field)
 
+        self._parse_version(union, directives)
+
         return union
 
     def _create_callback(self, symbol):
@@ -682,7 +699,11 @@ class Transformer(object):
             name = self.remove_prefix(symbol.ident, True)
         else:
             name = self.remove_prefix(symbol.ident)
-        return Callback(name, retval, list(parameters), symbol.ident)
+        callback = Callback(name, retval, list(parameters), symbol.ident)
+
+        self._parse_version(callback, directives)
+
+        return callback
 
     def _typepair_to_str(self, item):
         nsname, item = item

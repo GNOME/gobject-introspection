@@ -350,5 +350,15 @@ annotation_return_array (int *length)
   return NULL;
 }
 
+/**
+ * annotation_versioned:
+ *
+ * Since: 0.6
+ **/
+void
+annotation_versioned (void)
+{
+}
+
 
 static char backslash_parsing_tester_2 = '\\';

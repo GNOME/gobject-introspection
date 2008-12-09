@@ -261,6 +261,15 @@ parse_gtkdoc (GISourceScanner *scanner,
       name = parts[0];
       value = NULL;
     }
+  else if (g_ascii_strcasecmp (parts[0], "ince") == 0)
+    {
+      if (n_parts == 2)
+	options = g_slist_prepend (options, g_strdup (parts[1]));
+      else
+	options = g_slist_prepend (options, g_strdup (""));
+      name = parts[0];
+      value = NULL;
+    }
   else if (n_parts >= 2)
     {
       name = parts[0];
@@ -306,6 +315,8 @@ parse_gtkdoc (GISourceScanner *scanner,
     rname = "return";
   else if (g_ascii_strncasecmp ("eprecated", name, 9) == 0)
     rname = "deprecated";
+  else if (g_ascii_strncasecmp ("ince", name, 4) == 0)
+    rname = "since";
   else
     rname = name;
 
@@ -358,7 +369,7 @@ parse_comment (GISourceScanner *scanner)
       if ((c1 != '*' && c1 != ' '))
           startofline = FALSE;
 
-      if (startofline && (c1 == ' ') && (c2 == '@' || (c2 == 'r') || (c2 == 'R') || (c2 == 'D')))
+      if (startofline && (c1 == ' ') && ((c2 == '@') || (c2 == 'r') || (c2 == 'R') || (c2 == 'D') || (c2 == 'S')))
         {
            c1 = c2;
            c2 = input();

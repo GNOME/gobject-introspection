@@ -92,6 +92,10 @@ class GIRWriter(XMLWriter):
         else:
             print 'WRITER: Unhandled node', node
 
+    def _append_version(self, node, attrs):
+        if node.version:
+            attrs.append(('version', node.version))
+
     def _append_deprecated(self, node, attrs):
         if node.deprecated:
             attrs.append(('deprecated', node.deprecated))
@@ -112,6 +116,7 @@ class GIRWriter(XMLWriter):
     def _write_function(self, func, tag_name='function'):
         attrs = [('name', func.name),
                  ('c:identifier', func.symbol)]
+        self._append_version(func, attrs)
         self._append_deprecated(func, attrs)
         self._append_throws(func, attrs)
         with self.tagcontext(tag_name, attrs):
@@ -208,6 +213,7 @@ class GIRWriter(XMLWriter):
 
     def _write_enum(self, enum):
         attrs = [('name', enum.name)]
+        self._append_version(enum, attrs)
         self._append_deprecated(enum, attrs)
         if isinstance(enum, GLibFlags):
             tag_name = 'bitfield'
@@ -240,6 +246,7 @@ class GIRWriter(XMLWriter):
     def _write_class(self, node):
         attrs = [('name', node.name),
                  ('c:type', node.ctype)]
+        self._append_version(node, attrs)
         self._append_deprecated(node, attrs)
         if isinstance(node, Class):
             tag_name = 'class'
@@ -283,6 +290,8 @@ class GIRWriter(XMLWriter):
 
     def _write_property(self, prop):
         attrs = [('name', prop.name)]
+        self._append_version(prop, attrs)
+        self._append_deprecated(prop, attrs)
         # Properties are assumed to be readable (see also generate.c)
         if not prop.readable:
             attrs.append(('readable', '0'))
@@ -298,6 +307,7 @@ class GIRWriter(XMLWriter):
     def _write_callback(self, callback):
         # FIXME: reuse _write_function
         attrs = [('name', callback.name), ('c:type', callback.ctype)]
+        self._append_version(callback, attrs)
         self._append_deprecated(callback, attrs)
         self._append_throws(callback, attrs)
         with self.tagcontext('callback', attrs):
@@ -319,6 +329,7 @@ class GIRWriter(XMLWriter):
                  ('c:type', record.symbol)]
         if record.disguised:
             attrs.append(('disguised', '1'))
+        self._append_version(record, attrs)
         self._append_deprecated(record, attrs)
         if isinstance(record, GLibBoxed):
             attrs.extend(self._boxed_attrs(record))
@@ -332,6 +343,7 @@ class GIRWriter(XMLWriter):
     def _write_union(self, union):
         attrs = [('name', union.name),
                  ('c:type', union.symbol)]
+        self._append_version(union, attrs)
         self._append_deprecated(union, attrs)
         if isinstance(union, GLibBoxed):
             attrs.extend(self._boxed_attrs(union))
@@ -365,6 +377,8 @@ class GIRWriter(XMLWriter):
 
     def _write_signal(self, signal):
         attrs = [('name', signal.name)]
+        self._append_version(signal, attrs)
+        self._append_deprecated(signal, attrs)
         with self.tagcontext('glib:signal', attrs):
             self._write_return_type(signal.retval)
             self._write_parameters(signal.parameters)
