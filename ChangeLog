@@ -1,3 +1,10 @@
+2008-12-10  Johan Bilien  <jobi@via.ecp.fr>
+
+	Bug 563998 – Cache the GIBaseInfo for GTypes
+
+	* girepository/girepository.c (g_irepository_find_by_gtype):
+	add a cache of GType -> GIBaseInfo.
+
 2008-12-09  Johan Bilien  <jobi@via.ecp.fr>
 
 	Bug 562545 – Add function taking / returning GValue
