@@ -109,7 +109,7 @@ GtkFrob-1.0.gir: libgtkfrob.la gtkfrob.h $(SCANNER_BIN) $(SCANNER_LIBS) Makefile
 	--output $@
 GIRS += GtkFrob-1.0.gir
 
-bin_PROGRAMS = barapp
+noinst_PROGRAMS = barapp
 
 barapp_SOURCES = $(srcdir)/barapp.c $(srcdir)/barapp.h
 barapp_LDADD = $(top_builddir)/girepository/libgirepository.la
