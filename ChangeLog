@@ -1,3 +1,9 @@
+2008-12-12  Johan Dahlin  <jdahlin@async.com.br>
+
+	* giscanner/dumper.py (DumpCompiler._link): Pass in
+	--tag=CC to libtool to avoid making libtool confused
+	when CC is different from gcc on some systems.
+
 2008-12-10  Johan Bilien  <jobi@via.ecp.fr>
 
 	Bug 563998 – Cache the GIBaseInfo for GTypes

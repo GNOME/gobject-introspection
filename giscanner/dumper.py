@@ -170,6 +170,7 @@ class DumpCompiler(object):
         if libtool:
             args.extend(libtool)
             args.append('--mode=link')
+            args.append('--tag=CC')
 
         args.extend([self._linker_cmd, '-o', output])
 
