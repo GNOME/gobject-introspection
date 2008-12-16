@@ -235,6 +235,16 @@
           </parameter>
         </parameters>
       </method>
+      <method name="string_out" c:identifier="annotation_object_string_out">
+        <return-value transfer-ownership="none">
+          <type name="boolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <parameter name="str_out" direction="out" transfer-ownership="full">
+            <type name="utf8" c:type="char**"/>
+          </parameter>
+        </parameters>
+      </method>
       <method name="do_not_use"
               c:identifier="annotation_object_do_not_use"
               deprecated="Use annotation_object_create_object() instead."

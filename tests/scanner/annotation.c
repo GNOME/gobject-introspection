@@ -292,6 +292,22 @@ annotation_object_parse_args(AnnotationObject *object,
 }
 
 /**
+ * annotation_object_string_out:
+ * @object: a #AnnotationObject
+ * @str_out: (out) (transfer full): string return value
+ *
+ * Test returning a string as an out parameter
+ *
+ * Returns: some boolean
+ **/
+gboolean
+annotation_object_string_out(AnnotationObject *object,
+                             char            **str_out)
+{
+
+}
+
+/**
  * annotation_object_allow_none:
  * @object: a #GObject
  * @somearg: (allow-none):

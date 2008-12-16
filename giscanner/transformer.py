@@ -462,7 +462,8 @@ class Transformer(object):
             rettype = Map(derefed_name,
                           ctype,
                           key_type, value_type)
-        elif ((is_param and canonical_ctype in default_array_types)
+        elif ((is_param and canonical_ctype in default_array_types
+               and not 'out' in options)
               or ('array' in options)):
             if canonical_ctype[-1] == '*':
                 derefed_name = canonical_ctype[:-1]

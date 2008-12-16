@@ -73,6 +73,8 @@ void     annotation_object_compute_sum_nz(AnnotationObject *object,
 void     annotation_object_parse_args   (AnnotationObject *object,
                                          int              *argc,
                                          char           ***argv);
+gboolean annotation_object_string_out   (AnnotationObject *object,
+                                         char            **str_out);
 
 GObject* annotation_object_do_not_use   (AnnotationObject *object);
 

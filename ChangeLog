@@ -1,3 +1,17 @@
+2008-12-12  Owen Taylor  <otaylor@redhat.com>
+
+	Disable array auto-detection for out-annotated parameters (#563934)
+
+	If we have a parameter annotated as (out), then having a ctype of
+	'char **' (or similar) doesn't necessarily indicate an array.
+
+	* giscanner/transformer.py: Skip array-detection logic for
+	(out)-annotated parameters.
+	* tests/scanner/annotation.h tests/scanner/annotation.c
+	tests/scanner/annotation-1.0-expected.gir
+	tests/scanner/annotation-1.0-expected.tgir: Add a test for
+	an (out) string parameter.
+
 2008-12-12  Johan Dahlin  <jdahlin@async.com.br>
 
 	* giscanner/dumper.py (DumpCompiler._link): Pass in

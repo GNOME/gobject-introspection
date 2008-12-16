@@ -224,6 +224,16 @@
           </parameter>
         </parameters>
       </method>
+      <method name="string_out" c:identifier="annotation_object_string_out">
+        <return-value transfer-ownership="none">
+          <type name="boolean"/>
+        </return-value>
+        <parameters>
+          <parameter name="str_out" transfer-ownership="full" direction="out">
+            <type name="utf8"/>
+          </parameter>
+        </parameters>
+      </method>
       <method name="do_not_use" c:identifier="annotation_object_do_not_use" deprecated="1">
         <return-value transfer-ownership="full">
           <type name="GObject.Object"/>
