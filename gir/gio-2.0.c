@@ -249,8 +249,22 @@
  */
 
 /**
+ * g_file_load_contents_finish:
+ * @contents: (out) (transfer full):
+ * @length: (allow-none) (out):
+ * @etag_out: (allow-none) (out):
+ */
+
+/**
  * g_file_load_partial_contents_async:
  * @cancellable: (allow-none):
+ */
+
+/**
+ * g_file_load_partial_contents_finish:
+ * @contents: (out) (transfer full):
+ * @length: (allow-none) (out):
+ * @etag_out: (allow-none) (out):
  */
 
 /**

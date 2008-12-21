@@ -2,7 +2,8 @@
 
 	* gir/gio-2.0.c:
 	Annotate transfer, direction and allow none for
-	g_file_load_contents parameters.
+	g_file_load_contents, g_file_load_contents_finish and
+	g_file_load_partial_contents_finish parameters.
 
 2008-12-12  Owen Taylor  <otaylor@redhat.com>
 
