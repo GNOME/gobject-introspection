@@ -1,3 +1,9 @@
+2008-12-21  Johan Dahlin  <jdahlin@async.com.br>
+
+	* gir/gio-2.0.c:
+	Annotate transfer, direction and allow none for
+	g_file_load_contents parameters.
+
 2008-12-12  Owen Taylor  <otaylor@redhat.com>
 
 	Disable array auto-detection for out-annotated parameters (#563934)

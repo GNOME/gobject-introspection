@@ -238,6 +238,9 @@
 /**
  * g_file_load_contents:
  * @cancellable: (allow-none):
+ * @contents: (out) (transfer full):
+ * @length: (allow-none) (out):
+ * @etag_out: (allow-none) (out):
  */
 
 /**
