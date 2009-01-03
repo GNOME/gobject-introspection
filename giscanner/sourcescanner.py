@@ -192,7 +192,6 @@ class SourceScanner(object):
         self._cpp_options = []
 
     # Public API
-
     def set_cpp_options(self, includes, defines, undefines):
         for prefix, args in [('-I', includes),
                              ('-D', defines),
@@ -233,7 +232,6 @@ class SourceScanner(object):
             print symbol.ident, symbol.base_type.name, symbol.type
 
     # Private
-
     def _parse(self, filenames):
         if not filenames:
             return

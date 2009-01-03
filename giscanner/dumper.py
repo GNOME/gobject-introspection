@@ -88,7 +88,6 @@ class DumpCompiler(object):
             self._packages.append('gobject-introspection-1.0')
 
     # Public API
-
     def run(self):
         c_path = self._generate_tempfile('.c')
         f = open(c_path, 'w')
@@ -113,7 +112,6 @@ class DumpCompiler(object):
         return IntrospectionBinary([bin_path], self._tmpdir)
 
     # Private API
-
     def _generate_tempfile(self, suffix=''):
         tmpl = '%s-%s%s' % (self._options.namespace_name,
                             self._options.namespace_version, suffix)

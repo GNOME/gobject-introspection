@@ -99,7 +99,6 @@ class GLibTransformer(object):
         self._validating = False
 
     # Public API
-
     def set_introspection_binary(self, binary):
         self._binary = binary
 
@@ -166,7 +165,6 @@ class GLibTransformer(object):
         return namespace
 
     # Private
-
     def _add_attribute(self, node, replace=False):
         node_name = node.name
         if (not replace) and node_name in self._names.names:
@@ -205,7 +203,6 @@ class GLibTransformer(object):
         self._uscore_type_names[no_uscore_prefixed] = node
 
     # Helper functions
-
     def _resolve_gtypename(self, gtype_name):
         try:
             return self._transformer.gtypename_to_giname(gtype_name,
@@ -256,7 +253,6 @@ class GLibTransformer(object):
         self._register_internal_type(type_name, node)
 
     # Parser
-
     def _parse_node(self, node):
         if isinstance(node, Enum):
             self._parse_enum(node)
@@ -516,7 +512,6 @@ class GLibTransformer(object):
             del self._names.names[maybe_class.name]
 
     # Introspection
-
     def _introspect_type(self, xmlnode):
         if xmlnode.tag in ('enum', 'flags'):
             self._introspect_enum(xmlnode)
@@ -647,7 +642,6 @@ class GLibTransformer(object):
             node.signals.append(signal)
 
     # Resolver
-
     def _resolve_type_name(self, type_name, ctype=None):
         # Workaround glib bug #548689, to be included in 2.18.0
         if type_name == "GParam":
@@ -843,7 +837,6 @@ class GLibTransformer(object):
         alias.target = self._resolve_type_name(alias.target, alias.target)
 
     # Validation
-
     def _validate(self, nodes):
         nodes = list(self._names.names.itervalues())
         i = 0

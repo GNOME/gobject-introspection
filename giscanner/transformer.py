@@ -109,7 +109,6 @@ class Transformer(object):
         self._includes.add(include)
 
     # Private
-
     def _find_include(self, include):
         searchdirs = self._includepaths[:]
         for path in _xdg_data_dirs:
@@ -273,7 +272,6 @@ class Transformer(object):
     # We take the annotations from the parser as strings; here we
     # want to split them into components, so:
     # (transfer full) -> {'transfer' : [ 'full' ]}
-
     def _parse_options(self, options):
         ret = {}
         ws_re = re.compile(r'\s+')

@@ -53,7 +53,6 @@ class GIRParser(object):
         self._namespace = None
 
     # Public API
-
     def parse(self, filename):
         tree = parse(filename)
         self.parse_tree(tree)
@@ -80,7 +79,6 @@ class GIRParser(object):
         self._include_parsing = include_parsing
 
     # Private
-
     def _add_node(self, node):
         self._namespace.nodes.append(node)
 

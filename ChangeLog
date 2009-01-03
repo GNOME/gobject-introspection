@@ -1,3 +1,15 @@
+2009-01-03  Jürg Billeter  <j@bitron.ch>
+
+	* giscanner/ast.py:
+	* giscanner/dumper.py:
+	* giscanner/girparser.py:
+	* giscanner/glibtransformer.py:
+	* giscanner/sourcescanner.py:
+	* giscanner/transformer.py:
+	* giscanner/xmlwriter.py:
+
+	Fix inconsistencies with PEP8
+
 2008-12-21  Johan Dahlin  <jdahlin@async.com.br>
 
 	* gir/gio-2.0.c:

@@ -82,7 +82,6 @@ class XMLWriter(object):
         self._indent_char = ' '
 
     # Private
-
     def _open_tag(self, tag_name, attributes=None):
         attrs = collect_attributes(
             tag_name, attributes, self._indent,
@@ -94,7 +93,6 @@ class XMLWriter(object):
         self.write_line('</%s>' % (tag_name, ))
 
     # Public API
-
     def get_xml(self):
         return self._data.getvalue()
 

@@ -428,7 +428,6 @@ class Property(Node):
 
 # FIXME: Inherit from Function
 
-
 class Callback(Node):
 
     def __init__(self, name, retval, parameters, ctype=None):
