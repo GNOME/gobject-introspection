@@ -14,3 +14,18 @@ utility_object_init (UtilityObject *object)
 
 }
 
+void
+utility_object_watch_dir (UtilityObject *object,
+                          const char *path,
+                          UtilityFileFunc func,
+                          gpointer user_data,
+                          GDestroyNotify destroy)
+{
+
+}
+
+void
+utility_dir_foreach (const char *path, UtilityFileFunc func, gpointer user_data)
+{
+
+}

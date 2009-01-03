@@ -289,7 +289,7 @@ class TypeContainer(Node):
 class Parameter(TypeContainer):
 
     def __init__(self, name, typenode, direction=PARAM_DIRECTION_IN,
-                 transfer=None, allow_none=False):
+                 transfer=None, allow_none=False, scope=None):
         TypeContainer.__init__(self, name, typenode, transfer)
         if direction in [PARAM_DIRECTION_IN, PARAM_DIRECTION_OUT,
                          PARAM_DIRECTION_INOUT]:
@@ -298,6 +298,9 @@ class Parameter(TypeContainer):
             self.direction = PARAM_DIRECTION_IN
 
         self.allow_none = not not allow_none
+        self.scope = scope
+        self.closure_index = -1
+        self.destroy_index = -1
 
     def __repr__(self):
         return 'Parameter(%r, %r)' % (self.name, self.type)

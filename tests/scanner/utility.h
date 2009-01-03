@@ -23,7 +23,14 @@ struct _UtilityObjectClass
 /* This one is similar to Pango.Glyph */
 typedef guint32 UtilityGlyph;
 
+typedef void (*UtilityFileFunc)(const char *path, gpointer user_data);
+
 GType                 utility_object_get_type          (void) G_GNUC_CONST;
+void                  utility_object_watch_dir         (UtilityObject *object,
+                                                        const char *path,
+                                                        UtilityFileFunc func,
+                                                        gpointer user_data,
+                                                        GDestroyNotify destroy);
 
 typedef enum
 {
@@ -53,5 +60,7 @@ typedef union
   glong integer;
   double real;
 } UtilityUnion;
-  
+
+void utility_dir_foreach (const char *path, UtilityFileFunc func, gpointer user_data);
+
 #endif /* __UTILITY_H__ */

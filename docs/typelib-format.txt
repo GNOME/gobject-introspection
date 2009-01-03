@@ -391,7 +391,11 @@ struct ArgBlob
   guint          transfer_ownership           : 1;
   guint          transfer_container_ownership : 1;
   guint          is_return_value              : 1;
-  guint          reserved                     :24:
+  guint          scope                        : 3;
+  guint          reserved                     :21:
+
+  gint8        closure;
+  gint8        destroy;
 
   SimpleTypeBlob arg_type;
 }
@@ -437,7 +441,31 @@ is_return_value:
           at most one per function call. If an out parameter is marked as 
           return value, the actual return value of the function should be 
           either void or a boolean indicating the success of the call.
-  
+
+scope: 
+	  If the parameter is of a callback type, this denotes the scope
+	  of the user_data and the callback function pointer itself
+	  (for languages that emit code at run-time).
+
+	    0 invalid -- the argument is not of callback type
+	    1 call -- the callback and associated user_data is 
+	      only used during the call to this function
+	    2 object -- the callback and associated user_data is 
+	      used until the object containing this method is destroyed
+	    3 async -- the callback and associated user_data is 
+	      only used until the callback is invoked, and the callback 
+	      is invoked always exactly once.
+	    4 notified -- the callback and and associated user_data is
+	      used until the caller is notfied via the destroy_notify
+
+closure:
+	  Index of the closure (user_data) parameter associated with the callback, 
+	  or -1.
+
+destroy:
+	  Index of the destroy notfication callback parameter associated with 
+	  the callback, or -1.
+
 arg_type:
           Describes the type of the parameter. See details below.
 

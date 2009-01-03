@@ -245,6 +245,22 @@
           </parameter>
         </parameters>
       </method>
+      <method name="foreach" c:identifier="annotation_object_foreach">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <parameter name="func"
+                     transfer-ownership="none"
+                     scope="call"
+                     closure="2">
+            <type name="ForeachFunc" c:type="AnnotationForeachFunc"/>
+          </parameter>
+          <parameter name="user_data" transfer-ownership="none">
+            <type name="any" c:type="gpointer"/>
+          </parameter>
+        </parameters>
+      </method>
       <method name="do_not_use"
               c:identifier="annotation_object_do_not_use"
               deprecated="Use annotation_object_create_object() instead."
@@ -262,6 +278,22 @@
         <type name="GObject.ObjectClass" c:type="GObjectClass"/>
       </field>
     </record>
+    <callback name="ForeachFunc" c:type="AnnotationForeachFunc">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="object" transfer-ownership="none">
+          <type name="Object" c:type="AnnotationObject*"/>
+        </parameter>
+        <parameter name="item" transfer-ownership="none">
+          <type name="utf8" c:type="char*"/>
+        </parameter>
+        <parameter name="user_data" transfer-ownership="none">
+          <type name="any" c:type="gpointer"/>
+        </parameter>
+      </parameters>
+    </callback>
     <function name="init" c:identifier="annotation_init">
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>

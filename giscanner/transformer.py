@@ -269,6 +269,52 @@ class Transformer(object):
         if isinstance(return_.type, Array):
             self._pair_array(params, return_)
 
+    def _type_is_callback(self, type):
+        if (isinstance(type, Callback) or
+            isinstance(self._typedefs_ns.get(type.name), Callback)):
+            return True
+        return False
+
+    def _handle_closure(self, param, closure_idx, closure_param):
+        if (closure_param.type.name == 'any' and
+            closure_param.name == 'user_data'):
+            param.closure_name = closure_param.name
+            param.closure_index = closure_idx
+            return True
+        return False
+
+    def _handle_destroy(self, param, destroy_idx, destroy_param):
+        if ((self._namespace.name == 'GLib' and
+             destroy_param.type.name == 'DestroyNotify') or
+            destroy_param.type.name == 'GLib.DestroyNotify'):
+            param.destroy_name = destroy_param.name
+            param.destroy_index = destroy_idx
+            return True
+        return False
+
+    def _augment_callback_params(self, params):
+        for i, param in enumerate(params):
+            if self._type_is_callback(param.type):
+                # j is the index where we look for closure/destroy to
+                # group with the callback param
+                j = i + 1
+                if j == len(params):
+                    continue # no more args -> nothing to group look
+                # at the param directly following for either a closure
+                # or a destroy; only one of these will fire
+                had_closure = self._handle_closure(param, j, params[j])
+                had_destroy = self._handle_destroy(param, j, params[j])
+                j += 1
+                # are we out of params, or did we find neither?
+                if j == len(params) or (not had_closure and not had_destroy):
+                    continue
+                # we found either a closure or a destroy; check the
+                # parameter following for the other
+                if not had_closure:
+                    self._handle_closure(param, j, params[j])
+                if not had_destroy:
+                    self._handle_destroy(param, j, params[j])
+
     # We take the annotations from the parser as strings; here we
     # want to split them into components, so:
     # (transfer full) -> {'transfer' : [ 'full' ]}
@@ -286,6 +332,7 @@ class Transformer(object):
             symbol.base_type, directives))
         return_ = self._create_return(symbol.base_type.base_type,
                                       directives.get('return', {}))
+        self._augment_callback_params(parameters)
         self._pair_annotations(parameters, return_)
         name = self._strip_namespace_func(symbol.ident)
         func = Function(name, return_, parameters, symbol.ident)
@@ -357,7 +404,7 @@ class Transformer(object):
         ctype = symbol.base_type.type
         if (ctype == CTYPE_POINTER and
             symbol.base_type.base_type.type == CTYPE_FUNCTION):
-            node = self._create_callback(symbol)
+            node = self._create_typedef_callback(symbol)
         elif (ctype == CTYPE_POINTER and
             symbol.base_type.base_type.type == CTYPE_STRUCT):
             node = self._create_typedef_struct(symbol, disguised=True)
@@ -586,6 +633,8 @@ class Transformer(object):
                 pass
             elif option in ('transfer', 'transfer-inferred'):
                 pass
+            elif option == 'scope':
+                param.scope = data[0]
             else:
                 print 'Unhandled parameter annotation option: %r' % (
                     option, )
@@ -641,6 +690,11 @@ class Transformer(object):
         self._typedefs_ns[symbol.ident] = union
         self._create_union(symbol)
         return union
+
+    def _create_typedef_callback(self, symbol):
+        callback = self._create_callback(symbol)
+        self._typedefs_ns[callback.name] = callback
+        return callback
 
     def _create_struct(self, symbol):
         directives = symbol.directives()

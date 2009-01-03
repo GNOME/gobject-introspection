@@ -308,6 +308,22 @@ annotation_object_string_out(AnnotationObject *object,
 }
 
 /**
+ * annotation_object_foreach:
+ * @object: a #AnnotationObject
+ * @func: (scope call): Callback to invoke
+ * @user_data: Callback user data
+ *
+ * Test taking a call-scoped callback
+ **/
+void
+annotation_object_foreach (AnnotationObject *object,
+                           AnnotationForeachFunc func,
+                           gpointer user_data)
+{
+  
+}
+
+/**
  * annotation_object_allow_none:
  * @object: a #GObject
  * @somearg: (allow-none):

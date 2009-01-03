@@ -162,6 +162,12 @@ class GIRWriter(XMLWriter):
                      parameter.transfer))
         if parameter.allow_none:
             attrs.append(('allow-none', '1'))
+        if parameter.scope:
+            attrs.append(('scope', parameter.scope))
+        if parameter.closure_index >= 0:
+            attrs.append(('closure', '%d' % parameter.closure_index))
+        if parameter.destroy_index >= 0:
+            attrs.append(('destroy', '%d' % parameter.destroy_index))
         with self.tagcontext('parameter', attrs):
             self._write_type(parameter.type)
 

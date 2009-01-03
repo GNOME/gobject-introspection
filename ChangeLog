@@ -1,3 +1,52 @@
+2008-01-03  Andreas Rottmann  <a.rottmann@gmx.at>
+
+	Bug 556489 – callback annotations
+	
+	* giscanner/transformer.py 
+
+	* tools/generate.c (write_callable_info): Write out the new scope,
+	closure and destroy attributes.
+
+	* giscanner/transformer.py (Transformer._type_is_callback): New
+	method, checking if a given type is a callback.
+	(Transformer._augment_callback_params): New method; adds
+	information (closure, destroy) to callback parameters.
+	(Transformer._handle_closure, Transformer._handle_destroy): New methods, 
+	auxiliary to _augment_callback_params.
+	(Transformer._create_function): Call _augment_callback_params().
+	(Transformer._create_parameter): Handle scope option.
+
+	(Transformer._create_typedef_callback): New method, creates a
+	callback, and registers it in the typedef namespace
+	(Transformer._create_typedef): Use _create_typedef_callback()
+	instead of the plain _create_callback().
+
+	* giscanner/ast.py (Parameter): Added callback-related fields.
+	* giscanner/girwriter.py: Write out new Parameter fields.
+
+	* girepository/girnode.h (GIrNodeParam): Added fields scope, 
+	closure and destroy.
+	* girepository/gtypelib.h (ArgBlob): Ditto.
+	* girepository/girparser.c (start_parameter): Handle new fields.
+
+	* girepository/girmodule.c (g_ir_module_build_typelib): Adjust
+	arg_blob_size, bump major version due to this change.
+	* girepository/girnode.c (g_ir_node_get_full_size_internal)
+	(g_ir_node_build_typelib)
+	* girepository/gtypelib.c (g_typelib_check_sanity): ArgBlob size
+	adjustments.
+	(g_ir_node_build_typelib): Fill in new ArgBlob flags from param. 
+
+	* girepository/girepository.h (GIScope): New enumeration, listing
+	the different possible scopes for callbacks.
+
+	* girepository/ginfo.c (g_arg_info_get_scope)
+	(g_arg_info_get_closure, g_arg_info_get_destroy): Accessors for
+	callback-related argument indices (callback scope, closure for a
+	callback, destroy notification for a callback).
+
+	* tests/scanner/: Added testcases for new features.
+	
 2009-01-03  Jürg Billeter  <j@bitron.ch>
 
 	* giscanner/ast.py:

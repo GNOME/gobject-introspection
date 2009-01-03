@@ -22,6 +22,10 @@ typedef GList* (*AnnotationListCallback) (GList *in);
 typedef struct _AnnotationObject          AnnotationObject;
 typedef struct _AnnotationObjectClass     AnnotationObjectClass;
 
+typedef void (*AnnotationForeachFunc) (AnnotationObject *object,
+                                       const char *item,
+                                       gpointer user_data);
+
 struct _AnnotationObject
 {
   GObject parent_instance;
@@ -75,6 +79,9 @@ void     annotation_object_parse_args   (AnnotationObject *object,
                                          char           ***argv);
 gboolean annotation_object_string_out   (AnnotationObject *object,
                                          char            **str_out);
+void     annotation_object_foreach      (AnnotationObject *object,
+                                         AnnotationForeachFunc func,
+                                         gpointer user_data);
 
 GObject* annotation_object_do_not_use   (AnnotationObject *object);
 
