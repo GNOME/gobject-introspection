@@ -192,34 +192,6 @@ def maximum_line_length(physical_line):
 ##############################################################################
 
 
-def blank_lines(logical_line, blank_lines, indent_level, line_number,
-                previous_logical):
-    """
-    Separate top-level function and class definitions with two blank lines.
-
-    Method definitions inside a class are separated by a single blank line.
-
-    Extra blank lines may be used (sparingly) to separate groups of related
-    functions.  Blank lines may be omitted between a bunch of related
-    one-liners (e.g. a set of dummy implementations).
-
-    Use blank lines in functions, sparingly, to indicate logical sections.
-    """
-    if line_number == 1:
-        return # Don't expect blank lines before the first line
-    if previous_logical.startswith('@'):
-        return # Don't expect blank lines after function decorator
-    if (logical_line.startswith('def ') or
-        logical_line.startswith('class ') or
-        logical_line.startswith('@')):
-        if indent_level > 0 and blank_lines != 1:
-            return 0, "E301 expected 1 blank line, found %d" % blank_lines
-        if indent_level == 0 and blank_lines != 2:
-            return 0, "E302 expected 2 blank lines, found %d" % blank_lines
-    if blank_lines > 2:
-        return 0, "E303 too many blank lines (%d)" % blank_lines
-
-
 def extraneous_whitespace(logical_line):
     """
     Avoid extraneous whitespace in the following situations:

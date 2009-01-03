@@ -1,3 +1,9 @@
+2009-01-03  Johan Dahlin  <jdahlin@async.com.br>
+
+	* misc/pep8.py:
+	Disable blank line check, it works differently under
+	Python 2.5 from 2.6 and was rather annoying from the start.
+
 2008-01-03  Andreas Rottmann  <a.rottmann@gmx.at>
 
 	Bug 556489 – callback annotations
