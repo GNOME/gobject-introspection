@@ -31,6 +31,9 @@
       <field name="parent_instance">
         <type name="GObject.Object"/>
       </field>
+      <field name="some_int">
+        <type name="int"/>
+      </field>
       <constructor name="new" c:identifier="foo_object_new">
         <return-value transfer-ownership="full">
           <type name="Object"/>

@@ -180,19 +180,9 @@
       <field name="parent_instance">
         <type name="GObject.Object" c:type="GObject"/>
       </field>
-      <callback name="virtual_method" c:type="virtual_method">
-        <return-value transfer-ownership="none">
-          <type name="boolean" c:type="gboolean"/>
-        </return-value>
-        <parameters>
-          <parameter name="object" transfer-ownership="none">
-            <type name="Object" c:type="FooObject*"/>
-          </parameter>
-          <parameter name="first_param" transfer-ownership="none">
-            <type name="int" c:type="int"/>
-          </parameter>
-        </parameters>
-      </callback>
+      <field name="some_int">
+        <type name="int" c:type="int"/>
+      </field>
       <glib:signal name="signal">
         <return-value transfer-ownership="full">
           <type name="utf8" c:type="gchararray"/>

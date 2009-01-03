@@ -248,9 +248,10 @@ class GLibTransformer(object):
             parent_type_name = 'GObject'
             parent_gitype = self._resolve_gtypename(parent_type_name)
             symbol = 'g_initially_unowned_get_type'
-        node = GLibObject(node.name, parent_gitype, type_name, symbol, True)
-        self._add_attribute(node)
-        self._register_internal_type(type_name, node)
+        gnode = GLibObject(node.name, parent_gitype, type_name, symbol, True)
+        gnode.fields.extend(node.fields)
+        self._add_attribute(gnode)
+        self._register_internal_type(type_name, gnode)
 
     # Parser
     def _parse_node(self, node):
@@ -499,8 +500,7 @@ class GLibTransformer(object):
         name = self._resolve_type_name(name)
         resolved = self._transformer.remove_prefix(name)
         pair_class = self._get_attribute(resolved)
-        if pair_class and isinstance(pair_class,
-                                     (GLibObject, GLibInterface)):
+        if pair_class and isinstance(pair_class, GLibInterface):
             for field in maybe_class.fields[1:]:
                 pair_class.fields.append(field)
             return

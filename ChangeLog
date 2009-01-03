@@ -1,3 +1,20 @@
+2009-01-03  Andreas Rottmann  <a.rottmann@gmx.at>
+ 
+  	Bug 563469 – Arrays not treated correctly in struct offset calculation
+ 	
+	* tests/scanner/foo.h (FooObject): Added field `some_int'.
+ 	* tests/scanner/foo-1.0-expected.gir,
+ 	* tests/scanner/foo-1.0-expected.tgir: Adapted.
+ 
+ 	* giscanner/glibtransformer.py (GLibTransformer._create_gobject):
+ 	carry over object fields from original (struct) node.
+ 	(GLibTransformer._pair_class_struct): Don't add fields of the
+ 	class struct to to the node for the class, they should go under a
+ 	nested <record> element (see also Bug 551738). This is needed as
+ 	otherwise offset calculation would not work, as the instance
+ 	fields are mingled with the class fields without a way to
+ 	distinguish them.
+  
 2009-01-03  Johan Dahlin  <jdahlin@async.com.br>
 
 	* misc/pep8.py:

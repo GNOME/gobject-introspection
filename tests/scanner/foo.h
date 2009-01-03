@@ -55,6 +55,8 @@ void foo_sub_interface_do_bar (FooSubInterface *self);
 struct _FooObject
 {
   GObject parent_instance;
+
+  int some_int;
 };
 
 struct _FooObjectClass
