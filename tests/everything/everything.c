@@ -287,6 +287,11 @@ test_array_gtype_in (int n_types, GType *types)
   return g_string_free (string, FALSE);
 }
 
+/**
+ * test_strv_out
+ *
+ * Return value: (array zero-terminated=1):
+ */
 char **
 test_strv_out (void)
 {
