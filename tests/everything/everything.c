@@ -327,25 +327,41 @@ void test_glist_free (GList *in)
   g_list_free (in);
 }
 
-/* free=none */
+/**
+ * test_glist_nothing_return:
+ *
+ * Return value: (element-type utf8) (transfer none):
+ */
 G_CONST_RETURN GList *test_glist_nothing_return (void)
 {
   return test_sequence_list ();
 }
 
-/* free=none */
+/**
+ * test_glist_nothing_return2:
+ *
+ * Return value: (element-type utf8) (transfer none):
+ */
 GList *test_glist_nothing_return2 (void)
 {
   return test_sequence_list ();
 }
 
-/* free=g_list_free */
+/**
+ * test_glist_container_return:
+ *
+ * Return value: (element-type utf8) (transfer container):
+ */
 GList *test_glist_container_return (void)
 {
   return g_list_copy (test_sequence_list ());
 }
 
-/* free=test_glist_free */
+/**
+ * test_glist_everything_return:
+ *
+ * Return value: (element-type utf8) (transfer full):
+ */
 GList *test_glist_everything_return (void)
 {
   GList *list;
@@ -410,25 +426,41 @@ void test_gslist_free (GSList *in)
   g_slist_free (in);
 }
 
-/* free=none */
+/**
+ * test_gslist_nothing_return:
+ *
+ * Return value: (element-type utf8) (transfer none):
+ */
 G_CONST_RETURN GSList *test_gslist_nothing_return (void)
 {
   return test_sequence_slist ();
 }
 
-/* free=none */
+/**
+ * test_gslist_nothing_return2:
+ *
+ * Return value: (element-type utf8) (transfer none):
+ */
 GSList *test_gslist_nothing_return2 (void)
 {
   return test_sequence_slist ();
 }
 
-/* free=g_slist_free */
+/**
+ * test_gslist_container_return:
+ *
+ * Return value: (element-type utf8) (transfer container):
+ */
 GSList *test_gslist_container_return (void)
 {
   return g_slist_copy (test_sequence_slist ());
 }
 
-/* free=test_gslist_free */
+/**
+ * test_gslist_everything_return:
+ *
+ * Return value: (element-type utf8) (transfer full):
+ */
 GSList *test_gslist_everything_return (void)
 {
   GSList *list;
