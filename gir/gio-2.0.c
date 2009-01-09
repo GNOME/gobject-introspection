@@ -577,3 +577,9 @@
  * @cancellable: (allow-none):
  */
 
+/**
+ * g_file_info_list_attributes:
+ *
+ * Return value: (array zero-terminated=1):
+ */
+
