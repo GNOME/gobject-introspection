@@ -312,13 +312,13 @@ class AnnotationApplier(object):
     def _parse_param(self, parent, param, block):
         tag = self._get_tag(block, param.name)
         options = getattr(tag, 'options', {})
-        self._parse_param_ret_common(parent, param, options)
 
         if isinstance(parent, Function):
             scope = options.get('scope')
             if scope:
                 param.scope = scope.one()
                 param.transfer = PARAM_TRANSFER_NONE
+        self._parse_param_ret_common(parent, param, options)
 
     def _parse_param_ret_common(self, parent, node, options):
         node.direction = self._extract_direction(node, options)
