@@ -490,7 +490,8 @@ class AnnotationApplier(object):
                 return PARAM_TRANSFER_NONE
         elif isinstance(node, Return):
             if (node.type.canonical in BASIC_GIR_TYPES or
-                node.type.canonical in [TYPE_NONE, TYPE_ANY]):
+                (node.type.canonical in [TYPE_NONE, TYPE_ANY] and
+                 node.type.is_const)):
                 return PARAM_TRANSFER_NONE
             else:
                 return PARAM_TRANSFER_FULL
