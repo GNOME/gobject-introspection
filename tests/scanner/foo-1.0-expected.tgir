@@ -453,6 +453,36 @@
         </parameter>
       </parameters>
     </function>
+    <function name="test_const_char_retval" c:identifier="foo_test_const_char_retval">
+      <return-value transfer-ownership="none">
+        <type name="utf8"/>
+      </return-value>
+    </function>
+    <function name="test_const_struct_retval" c:identifier="foo_test_const_struct_retval">
+      <return-value transfer-ownership="none">
+        <type name="Struct"/>
+      </return-value>
+    </function>
+    <function name="test_const_char_param" c:identifier="foo_test_const_char_param">
+      <return-value transfer-ownership="none">
+        <type name="none"/>
+      </return-value>
+      <parameters>
+        <parameter name="param" transfer-ownership="none">
+          <type name="utf8"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="test_const_struct_param" c:identifier="foo_test_const_struct_param">
+      <return-value transfer-ownership="none">
+        <type name="none"/>
+      </return-value>
+      <parameters>
+        <parameter name="param" transfer-ownership="none">
+          <type name="Struct"/>
+        </parameter>
+      </parameters>
+    </function>
     <constant name="SUCCESS_INT" value="4408">
       <type name="int"/>
     </constant>
