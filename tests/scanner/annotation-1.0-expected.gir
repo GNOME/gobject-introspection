@@ -328,5 +328,12 @@
         <type name="none" c:type="void"/>
       </return-value>
     </function>
+    <record name="Struct" c:type="_AnnotationStruct">
+      <field name="objects" writable="1">
+        <array zero-terminated="0" c:type="AnnotationObject*" fixed-size="10">
+          <type name="Object"/>
+        </array>
+      </field>
+    </record>
   </namespace>
 </repository>

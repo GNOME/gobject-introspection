@@ -306,5 +306,12 @@
         <type name="none"/>
       </return-value>
     </function>
+    <record name="Struct">
+      <field name="objects" writable="1">
+        <array fixed-size="10">
+          <type name="Object"/>
+        </array>
+      </field>
+    </record>
   </namespace>
 </repository>

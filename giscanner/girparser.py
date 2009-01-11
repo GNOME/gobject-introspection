@@ -53,6 +53,7 @@ class GIRParser(object):
         self._namespace = None
 
     # Public API
+
     def parse(self, filename):
         tree = parse(filename)
         self.parse_tree(tree)
@@ -79,6 +80,7 @@ class GIRParser(object):
         self._include_parsing = include_parsing
 
     # Private
+
     def _add_node(self, node):
         self._namespace.nodes.append(node)
 
@@ -152,7 +154,9 @@ class GIRParser(object):
         for iface in node.findall(_corens('prerequisites')):
             obj.prerequisities.append(iface.attrib['name'])
         for method in node.findall(_corens('method')):
-            obj.methods.append(self._parse_function_common(method, Function))
+            func = self._parse_function_common(method, Function)
+            func.is_method = True
+            obj.methods.append(func)
         for ctor in node.findall(_corens('constructor')):
             obj.constructors.append(
                 self._parse_function_common(ctor, Function))
@@ -284,8 +288,9 @@ class GIRParser(object):
         if self._include_parsing:
             return
         for method in node.findall(_corens('method')):
-            obj.methods.append(
-                self._parse_function_common(method, Function))
+            func = self._parse_function_common(method, Function)
+            func.is_method = True
+            obj.methods.append(func)
         for ctor in node.findall(_corens('constructor')):
             obj.constructors.append(
                 self._parse_function_common(ctor, Function))

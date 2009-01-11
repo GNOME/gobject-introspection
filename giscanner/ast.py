@@ -200,6 +200,17 @@ class Function(Node):
         self.parameters = parameters
         self.symbol = symbol
         self.throws = not not throws
+        self.is_method = False
+
+    def get_parameter_index(self, name):
+        for i, parameter in enumerate(self.parameters):
+            if parameter.name == name:
+                return i + int(self.is_method)
+
+    def get_parameter(self, name):
+        for parameter in self.parameters:
+            if parameter.name == name:
+                return parameter
 
     def __repr__(self):
         return '%s(%r, %r, %r)' % (self.__class__.__name__,
@@ -217,6 +228,9 @@ class Type(Node):
         Node.__init__(self, name)
         self.ctype = ctype
         self.resolved = False
+        self.is_const = False
+        self.canonical = None
+        self.derefed_canonical = None
 
 
 class Varargs(Type):
@@ -236,7 +250,7 @@ class Array(Type):
         self.size = None
 
     def __repr__(self):
-        return 'Array(%r of %r)' % (self.name, self.element_type, )
+        return 'Array(%r, %r)' % (self.name, self.element_type, )
 
 
 class List(Type):
@@ -282,17 +296,14 @@ class TypeContainer(Node):
         else:
             self.transfer = None
 
-        # transformer.py overrides this as needed
-        self.transfer_inferred = False
-
 
 class Parameter(TypeContainer):
 
-    def __init__(self, name, typenode, direction=PARAM_DIRECTION_IN,
+    def __init__(self, name, typenode, direction=None,
                  transfer=None, allow_none=False, scope=None):
         TypeContainer.__init__(self, name, typenode, transfer)
         if direction in [PARAM_DIRECTION_IN, PARAM_DIRECTION_OUT,
-                         PARAM_DIRECTION_INOUT]:
+                         PARAM_DIRECTION_INOUT, None]:
             self.direction = direction
         else:
             self.direction = PARAM_DIRECTION_IN
@@ -328,7 +339,7 @@ class Member(Node):
         return 'Member(%r, %r)' % (self.name, self.value)
 
 
-class Struct(Node):
+class Record(Node):
 
     def __init__(self, name, symbol, disguised=False):
         Node.__init__(self, name)
@@ -336,6 +347,9 @@ class Struct(Node):
         self.constructors = []
         self.symbol = symbol
         self.disguised = disguised
+
+# BW compat, remove
+Struct = Record
 
 
 class Field(Node):
@@ -359,6 +373,7 @@ class Return(TypeContainer):
 
     def __init__(self, rtype, transfer=None):
         TypeContainer.__init__(self, None, rtype, transfer)
+        self.direction = PARAM_DIRECTION_OUT
 
     def __repr__(self):
         return 'Return(%r)' % (self.type, )
@@ -430,6 +445,7 @@ class Property(Node):
 
 
 # FIXME: Inherit from Function
+
 
 class Callback(Node):
 

@@ -31,7 +31,6 @@ G_BEGIN_DECLS
 typedef struct _GISourceScanner GISourceScanner;
 typedef struct _GISourceSymbol GISourceSymbol;
 typedef struct _GISourceType GISourceType;
-typedef struct _GISourceDirective GISourceDirective;
 
 typedef enum
 {
@@ -102,7 +101,7 @@ struct _GISourceScanner
   gboolean macro_scan;
   GSList *symbols;
   GList *filenames;
-  GHashTable *directives_map;
+  GSList *comments;
   GHashTable *typedef_table;
   GHashTable *struct_or_union_or_enum_table;
 };
@@ -117,7 +116,6 @@ struct _GISourceSymbol
   gboolean const_int_set;
   int const_int;
   char *const_string;
-  GSList *directives; /* list of GISourceDirective */
 };
 
 struct _GISourceType
@@ -131,13 +129,6 @@ struct _GISourceType
   GList *child_list; /* list of GISourceSymbol */
 };
 
-struct _GISourceDirective
-{
-  char *name;
-  char *value;
-  GSList *options; /* list of options (key=value) */
-};
-
 GISourceScanner *   gi_source_scanner_new              (void);
 gboolean            gi_source_scanner_lex_filename     (GISourceScanner  *igenerator,
 						        const gchar      *filename);
@@ -148,19 +139,13 @@ void                gi_source_scanner_parse_macros     (GISourceScanner  *scanne
 void                gi_source_scanner_set_macro_scan   (GISourceScanner  *scanner,
 							gboolean          macro_scan);
 GSList *            gi_source_scanner_get_symbols      (GISourceScanner  *scanner);
-GSList *            gi_source_scanner_get_directives   (GISourceScanner  *scanner,
-							const gchar      *name);
+GSList *            gi_source_scanner_get_comments     (GISourceScanner  *scanner);
 void                gi_source_scanner_free             (GISourceScanner  *scanner);
 
 GISourceSymbol *    gi_source_symbol_new               (GISourceSymbolType  type);
 gboolean            gi_source_symbol_get_const_boolean (GISourceSymbol     *symbol);
 GISourceSymbol *    gi_source_symbol_ref               (GISourceSymbol     *symbol);
 void                gi_source_symbol_unref             (GISourceSymbol     *symbol);
-
-GISourceDirective * gi_source_directive_new            (const gchar 	   *name,
-							const gchar 	   *value,
-							GSList             *options);
-void                gi_source_directive_free           (GISourceDirective  *directive);
 
 /* Private */
 void                gi_source_scanner_add_symbol       (GISourceScanner  *scanner,
