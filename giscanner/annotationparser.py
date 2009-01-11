@@ -482,13 +482,15 @@ class AnnotationApplier(object):
             if node.direction in [PARAM_DIRECTION_INOUT,
                                   PARAM_DIRECTION_OUT]:
                 return PARAM_TRANSFER_FULL
-            # Input basic types default to 'none'
-            elif node.type.canonical in BASIC_GIR_TYPES:
-                return PARAM_TRANSFER_NONE
-            else:
+            # This one is a hack for compatibility; the transfer
+            # for string parameters really has no defined meaning.
+            elif node.type.canonical == 'utf8':
                 return PARAM_TRANSFER_FULL
+            else:
+                return PARAM_TRANSFER_NONE
         elif isinstance(node, Return):
-            if node.type.canonical in BASIC_GIR_TYPES:
+            if (node.type.canonical in BASIC_GIR_TYPES or
+                node.type.canonical in [TYPE_NONE, TYPE_ANY]):
                 return PARAM_TRANSFER_NONE
             else:
                 return PARAM_TRANSFER_FULL
