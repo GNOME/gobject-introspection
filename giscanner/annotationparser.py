@@ -329,7 +329,8 @@ class AnnotationApplier(object):
         if not node.direction:
             node.direction = self._guess_direction(node)
         node.transfer = self._extract_transfer(parent, node, options)
-        node.allow_none = 'allow-none' in options
+        if 'allow-none' in options:
+            node.allow_none = True
 
         assert node.transfer is not None
 
