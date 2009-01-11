@@ -308,7 +308,7 @@ class Parameter(TypeContainer):
         else:
             self.direction = PARAM_DIRECTION_IN
 
-        self.allow_none = not not allow_none
+        self.allow_none = allow_none
         self.scope = scope
         self.closure_index = -1
         self.destroy_index = -1
