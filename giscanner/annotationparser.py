@@ -318,6 +318,7 @@ class AnnotationApplier(object):
             scope = options.get('scope')
             if scope:
                 param.scope = scope.one()
+                param.transfer = PARAM_TRANSFER_NONE
 
     def _parse_param_ret_common(self, parent, node, options):
         node.direction = self._extract_direction(node, options)
