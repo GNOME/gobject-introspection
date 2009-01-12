@@ -119,8 +119,11 @@ class AnnotationParser(object):
         comment = comment[len(_COMMENT_HEADER):]
         pos = comment.index('\n ')
 
-        block = DocBlock(comment[:pos-1])
-
+        block_name = comment[:pos]
+        block_name = block_name.strip()
+        if not block_name.endswith(':'):
+            return
+        block = DocBlock(block_name[:-1])
         content = comment[pos+1:]
         for line in content.split('\n'):
             line = line[2:].strip() # Skip ' *'
