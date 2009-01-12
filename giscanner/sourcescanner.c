@@ -108,6 +108,7 @@ gi_source_type_copy (GISourceType * type)
     result->base_type = gi_source_type_copy (type->base_type);
   for (l = type->child_list; l; l = l->next)
     result->child_list = g_list_append (result->child_list, gi_source_symbol_ref (l->data));
+  result->is_bitfield = type->is_bitfield;
   return result;
 }
 

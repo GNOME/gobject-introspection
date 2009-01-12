@@ -301,6 +301,11 @@
       <member name="trois" value="3" c:identifier="FOO_ENUM_TROIS"/>
       <member name="neuf" value="9" c:identifier="FOO_ENUM_NEUF"/>
     </enumeration>
+    <bitfield name="FlagsNoType" c:type="FooFlagsNoType">
+      <member name="ett" value="1" c:identifier="FOO_FLAGS_ETT"/>
+      <member name="tva" value="2" c:identifier="FOO_FLAGS_TVA"/>
+      <member name="fyra" value="4" c:identifier="FOO_FLAGS_FYRA"/>
+    </bitfield>
     <enumeration name="EnumFullname" c:type="FooEnumFullname">
       <member name="one" value="1" c:identifier="FOO_ENUM_FULLNAME_ONE"/>
       <member name="two" value="2" c:identifier="FOO_ENUM_FULLNAME_TWO"/>

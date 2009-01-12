@@ -20,7 +20,7 @@
 
 import os
 
-from .ast import (Callback, Enum, Function, Namespace, Member,
+from .ast import (Bitfield, Callback, Enum, Function, Namespace, Member,
                   Parameter, Return, Struct, Field,
                   Type, Array, Alias, Interface, Class, Node, Union,
                   Varargs, Constant, type_name_from_ctype,
@@ -210,9 +210,13 @@ class Transformer(object):
                                   child.ident))
 
         enum_name = self.remove_prefix(symbol.ident)
-        enum = Enum(enum_name, symbol.ident, members)
-        self._names.type_names[symbol.ident] = (None, enum)
-        return enum
+        if symbol.base_type.is_bitfield:
+            klass = Bitfield
+        else:
+            klass = Enum
+        node = klass(enum_name, symbol.ident, members)
+        self._names.type_names[symbol.ident] = (None, node)
+        return node
 
     def _create_object(self, symbol):
         return Member(symbol.ident, symbol.base_type.name,

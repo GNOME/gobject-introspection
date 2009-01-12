@@ -18,7 +18,8 @@
 # Boston, MA 02111-1307, USA.
 #
 
-from .ast import Class, Enum, Interface, Member, Node, Property, Struct, Union
+from .ast import (Bitfield, Class, Enum, Interface, Member, Node,
+                  Property, Struct, Union)
 from .ast import (
     type_names, default_array_types,
     TYPE_STRING, TYPE_INT8, TYPE_UINT8, TYPE_INT16, TYPE_UINT16,
@@ -71,15 +72,21 @@ class GLibEnum(Enum):
         self.get_type = get_type
 
     def __repr__(self):
-        return '%s(%r, %r, %r)' % (
-            self.__class__.__name__,
-            self.name,
-            self.members,
-            self.get_type)
+        return 'GlibEnum(%r, %r, %r)' % (self.name, self.members,
+                                         self.get_type)
 
 
-class GLibFlags(GLibEnum):
-    pass
+class GLibFlags(Bitfield):
+
+    def __init__(self, name, type_name, members, get_type):
+        Bitfield.__init__(self, name, type_name, members)
+        self.ctype = type_name
+        self.type_name = type_name
+        self.get_type = get_type
+
+    def __repr__(self):
+        return 'GlibFlags(%r, %r, %r)' % (self.name, self.members,
+                                          self.get_type)
 
 
 class GLibEnumMember(Member):

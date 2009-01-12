@@ -328,6 +328,17 @@ class Enum(Node):
         return 'Enum(%r, %r)' % (self.name, self.members)
 
 
+class Bitfield(Node):
+
+    def __init__(self, name, symbol, members):
+        Node.__init__(self, name)
+        self.symbol = symbol
+        self.members = members
+
+    def __repr__(self):
+        return 'Bitfield(%r, %r)' % (self.name, self.members)
+
+
 class Member(Node):
 
     def __init__(self, name, value, symbol):

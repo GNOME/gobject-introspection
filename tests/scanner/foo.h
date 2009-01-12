@@ -128,6 +128,8 @@ typedef enum
   FOO_FLAGS_THIRD  = 1 << 2
 } FooFlagsType;
 
+GType foo_flags_type_get_type (void);
+
 typedef enum
 {
   FOO_ENUM_UN = 1,
@@ -136,7 +138,12 @@ typedef enum
   FOO_ENUM_NEUF = 9
 } FooEnumNoType;
 
-GType foo_flags_type_get_type (void);
+typedef enum
+{
+  FOO_FLAGS_ETT  = 1 << 0,
+  FOO_FLAGS_TVA = 1 << 1,
+  FOO_FLAGS_FYRA  = 1 << 2
+} FooFlagsNoType;
 
 typedef enum
 {

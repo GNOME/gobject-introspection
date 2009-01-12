@@ -25,8 +25,8 @@ import tempfile
 import shutil
 import subprocess
 
-from .ast import (Callback, Constant, Enum, Function, Member, Namespace,
-                  Parameter, Property, Return, Struct, Type, Alias,
+from .ast import (Alias, Bitfield, Callback, Constant, Enum, Function, Member,
+                  Namespace, Parameter, Property, Return, Struct, Type,
                   Union, Field, type_name_from_ctype,
                   default_array_types, TYPE_UINT8, PARAM_TRANSFER_FULL)
 from .transformer import Names
@@ -259,6 +259,8 @@ class GLibTransformer(object):
     def _parse_node(self, node):
         if isinstance(node, Enum):
             self._parse_enum(node)
+        elif isinstance(node, Bitfield):
+            self._parse_bitfield(node)
         elif isinstance(node, Function):
             self._parse_function(node)
         elif isinstance(node, Struct):
@@ -281,6 +283,9 @@ class GLibTransformer(object):
         self._names.aliases[alias.name] = (None, alias)
 
     def _parse_enum(self, enum):
+        self._add_attribute(enum)
+
+    def _parse_bitfield(self, enum):
         self._add_attribute(enum)
 
     def _parse_constant(self, constant):

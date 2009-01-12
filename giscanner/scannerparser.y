@@ -46,6 +46,7 @@ static void yyerror (GISourceScanner *scanner, const char *str);
 extern void ctype_free (GISourceType * type);
 
 static int last_enum_value = -1;
+static gboolean is_bitfield;
 static GHashTable *const_table = NULL;
 %}
 
@@ -381,6 +382,12 @@ shift_expression
 		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST);
 		$$->const_int_set = TRUE;
 		$$->const_int = $1->const_int << $3->const_int;
+
+		/* assume this is a bitfield/flags declaration
+		 * if a left shift operator is sued in an enum value
+                 * This mimics the glib-mkenum behavior.
+		 */
+		is_bitfield = TRUE;
 	  }
 	| shift_expression SR additive_expression
 	  {
@@ -818,24 +825,28 @@ enum_specifier
 	  {
 		$$ = gi_source_enum_new ($2);
 		$$->child_list = $4;
+		$$->is_bitfield = is_bitfield;
 		last_enum_value = -1;
 	  }
 	| ENUM '{' enumerator_list '}'
 	  {
 		$$ = gi_source_enum_new (NULL);
 		$$->child_list = $3;
+		$$->is_bitfield = is_bitfield;
 		last_enum_value = -1;
 	  }
 	| ENUM identifier_or_typedef_name '{' enumerator_list ',' '}'
 	  {
 		$$ = gi_source_enum_new ($2);
 		$$->child_list = $4;
+		$$->is_bitfield = is_bitfield;
 		last_enum_value = -1;
 	  }
 	| ENUM '{' enumerator_list ',' '}'
 	  {
 		$$ = gi_source_enum_new (NULL);
 		$$->child_list = $3;
+		$$->is_bitfield = is_bitfield;
 		last_enum_value = -1;
 	  }
 	| ENUM identifier_or_typedef_name
@@ -845,9 +856,14 @@ enum_specifier
 	;
 
 enumerator_list
-	: enumerator
+	:
 	  {
-		$$ = g_list_append (NULL, $1);
+		/* reset flag before the first enum value */
+		is_bitfield = FALSE;
+	  }
+	  enumerator
+	  {
+		$$ = g_list_append (NULL, $2);
 	  }
 	| enumerator_list ',' enumerator
 	  {

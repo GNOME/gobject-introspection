@@ -104,7 +104,7 @@ def ctype_name(ctype):
 
 class SourceType(object):
     __members__ = ['type', 'base_type', 'name', 'type_qualifier',
-                   'child_list']
+                   'child_list', 'is_bitfield']
 
     def __init__(self, scanner, stype):
         self._scanner = scanner
@@ -139,6 +139,10 @@ class SourceType(object):
             if symbol is None:
                 continue
             yield SourceSymbol(self._scanner, symbol)
+
+    @property
+    def is_bitfield(self):
+        return self._stype.is_bitfield
 
 
 class SourceSymbol(object):

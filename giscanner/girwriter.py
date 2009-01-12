@@ -23,8 +23,9 @@ from __future__ import with_statement
 import os
 from ctypes.util import find_library
 
-from .ast import (Callback, Class, Constant, Enum, Function, Interface, Member,
-                  Array, Struct, Alias, Union, List, Map, Varargs)
+from .ast import (Alias, Array, Bitfield, Callback, Class, Constant, Enum,
+                  Function, Interface, List, Map, Member, Struct, Union,
+                  Varargs)
 from .glibast import (GLibBoxed, GLibEnum, GLibEnumMember,
                       GLibFlags, GLibObject, GLibInterface)
 from .xmlwriter import XMLWriter
@@ -72,6 +73,8 @@ class GIRWriter(XMLWriter):
             self._write_function(node)
         elif isinstance(node, Enum):
             self._write_enum(node)
+        elif isinstance(node, Bitfield):
+            self._write_bitfield(node)
         elif isinstance(node, (Class, Interface)):
             self._write_class(node)
         elif isinstance(node, Callback):
@@ -221,18 +224,28 @@ class GIRWriter(XMLWriter):
         attrs = [('name', enum.name)]
         self._append_version(enum, attrs)
         self._append_deprecated(enum, attrs)
-        if isinstance(enum, GLibFlags):
-            tag_name = 'bitfield'
-        else:
-            tag_name = 'enumeration'
-        if isinstance(enum, GLibEnum) or isinstance(enum, GLibFlags):
+        if isinstance(enum, GLibEnum):
             attrs.extend([('glib:type-name', enum.type_name),
                           ('glib:get-type', enum.get_type),
                           ('c:type', enum.ctype)])
         else:
             attrs.append(('c:type', enum.symbol))
-        with self.tagcontext(tag_name, attrs):
+        with self.tagcontext('enumeration', attrs):
             for member in enum.members:
+                self._write_member(member)
+
+    def _write_bitfield(self, bitfield):
+        attrs = [('name', bitfield.name)]
+        self._append_version(bitfield, attrs)
+        self._append_deprecated(bitfield, attrs)
+        if isinstance(bitfield, GLibFlags):
+            attrs.extend([('glib:type-name', bitfield.type_name),
+                          ('glib:get-type', bitfield.get_type),
+                          ('c:type', bitfield.ctype)])
+        else:
+            attrs.append(('c:type', bitfield.symbol))
+        with self.tagcontext('bitfield', attrs):
+            for member in bitfield.members:
                 self._write_member(member)
 
     def _write_member(self, member):

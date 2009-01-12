@@ -1,3 +1,23 @@
+2009-01-12  Johan Dahlin  <jdahlin@async.com.br>
+
+	Bug 563591 – Flags not recognized when there is no introspection data
+
+	* giscanner/ast.py:
+	* giscanner/girwriter.py:
+	* giscanner/giscannermodule.c (type_get_is_bitfield):
+	* giscanner/glibast.py:
+	* giscanner/glibtransformer.py:
+	* giscanner/scannerparser.y:
+	* giscanner/sourcescanner.c (gi_source_type_copy):
+	* giscanner/sourcescanner.h:
+	* giscanner/sourcescanner.py:
+	* giscanner/transformer.py:
+	* tests/scanner/foo-1.0-expected.gir:
+	* tests/scanner/foo-1.0-expected.tgir:
+	* tests/scanner/foo.h:
+
+	Large parts of this patch was done by Jürg Billeter.
+
 2009-01-12  Havoc Pennington  <hp@pobox.com>
 
 	Bug 563386 – scanner ignores "const" on boxed return values

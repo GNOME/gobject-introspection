@@ -193,6 +193,11 @@
       <member name="trois" value="3"/>
       <member name="neuf" value="9"/>
     </enumeration>
+    <bitfield name="FlagsNoType">
+      <member name="ett" value="1"/>
+      <member name="tva" value="2"/>
+      <member name="fyra" value="4"/>
+    </bitfield>
     <enumeration name="EnumFullname">
       <member name="one" value="1"/>
       <member name="two" value="2"/>

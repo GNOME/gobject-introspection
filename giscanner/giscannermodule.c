@@ -256,6 +256,13 @@ type_get_child_list (PyGISourceType *self,
   return list;
 }
 
+static PyObject *
+type_get_is_bitfield (PyGISourceType *self,
+			     void           *context)
+{
+  return PyInt_FromLong (self->type->is_bitfield);
+}
+
 static const PyGetSetDef _PyGISourceType_getsets[] = {
   { "type", (getter)type_get_type, NULL, NULL},
   { "storage_class_specifier", (getter)type_get_storage_class_specifier, NULL, NULL},
@@ -264,6 +271,7 @@ static const PyGetSetDef _PyGISourceType_getsets[] = {
   { "name", (getter)type_get_name, NULL, NULL},
   { "base_type", (getter)type_get_base_type, NULL, NULL},
   { "child_list", (getter)type_get_child_list, NULL, NULL},
+  { "is_bitfield", (getter)type_get_is_bitfield, NULL, NULL},
   { 0 }
 };
 

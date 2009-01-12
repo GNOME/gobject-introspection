@@ -127,6 +127,7 @@ struct _GISourceType
   char *name;
   GISourceType *base_type;
   GList *child_list; /* list of GISourceSymbol */
+  gboolean is_bitfield;
 };
 
 GISourceScanner *   gi_source_scanner_new              (void);
