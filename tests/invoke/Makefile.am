@@ -1,10 +1,9 @@
 ## Process this file with automake to produce Makefile.in
 
-check_PROGRAMS = invoke
+check_PROGRAMS = invoke genericmarshaller
 testlib_LTLIBRARIES = testfns.la
 testlibdir = /tmp
 install-testlibLTLIBRARIES: # prevent it from being installed
-
 
 testfns_la_SOURCES =				\
 	testfns.c				\
@@ -27,7 +26,11 @@ invoke_SOURCES = invoke.c
 invoke_CFLAGS = $(GIREPO_CFLAGS)  -I$(top_srcdir)/girepository
 invoke_LDADD = $(top_builddir)/girepository/libgirepository.la $(GIREPO_LIBS)
 
-TESTS = invoke invoke-namespace-find.sh
+genericmarshaller_SOURCES = genericmarshaller.c
+genericmarshaller_CFLAGS = $(GIREPO_CFLAGS)  -I$(top_srcdir)/girepository
+genericmarshaller_LDADD = $(top_builddir)/girepository/libgirepository.la $(GIREPO_LIBS)
+
+TESTS = invoke genericmarshaller invoke-namespace-find.sh
 
 EXTRA_DIST = invoke-namespace-find.sh testfns-1.0.gir
 
