@@ -154,12 +154,6 @@ class SourceSymbol(object):
             symbol_type_name(self.type),
             self.ident)
 
-    def directives(self):
-        mapping = {}
-        for directive in self._scanner.get_directives(self._symbol.ident):
-            mapping[directive.name] = directive.options
-        return mapping
-
     @property
     def const_int(self):
         return self._symbol.const_int
@@ -192,6 +186,7 @@ class SourceScanner(object):
         self._cpp_options = []
 
     # Public API
+
     def set_cpp_options(self, includes, defines, undefines):
         for prefix, args in [('-I', includes),
                              ('-D', defines),
@@ -226,12 +221,16 @@ class SourceScanner(object):
         for symbol in self._scanner.get_symbols():
             yield SourceSymbol(self._scanner, symbol)
 
+    def get_comments(self):
+        return self._scanner.get_comments()
+
     def dump(self):
         print '-'*30
         for symbol in self._scanner.get_symbols():
             print symbol.ident, symbol.base_type.name, symbol.type
 
     # Private
+
     def _parse(self, filenames):
         if not filenames:
             return

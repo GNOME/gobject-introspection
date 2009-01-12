@@ -41,6 +41,7 @@ else:
                         'site-packages')
 sys.path.insert(0, path)
 
+from giscanner.annotationparser import AnnotationParser, InvalidAnnotationError
 from giscanner.ast import Include
 from giscanner.cachestore import CacheStore
 from giscanner.dumper import compile_introspection_binary
@@ -312,6 +313,12 @@ def main(args):
     glibtransformer.set_introspection_binary(binary)
 
     namespace = glibtransformer.parse()
+
+    ap = AnnotationParser(namespace, ss, transformer)
+    try:
+        ap.parse()
+    except InvalidAnnotationError, e:
+        raise SystemExit("ERROR in annotation: %s" % (str(e), ))
 
     # Write out AST
     writer = Writer(namespace, libraries, transformer.get_includes())

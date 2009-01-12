@@ -90,4 +90,9 @@ void     annotation_init                (int              *argc,
 char **  annotation_return_array        (int             *length);
 void     annotation_versioned           (void);
 
+struct _AnnotationStruct
+{
+  AnnotationObject *objects[10];
+};
+
 #endif /* __ANNOTATION_OBJECT_H__ */

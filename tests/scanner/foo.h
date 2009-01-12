@@ -281,4 +281,9 @@ void foo_test_string_array (char **array);
 
 void foo_test_string_array_with_g (gchar **array);
 
+const char * foo_test_const_char_retval (void);
+const FooStruct * foo_test_const_struct_retval (void);
+void foo_test_const_char_param (const char * param);
+void foo_test_const_struct_param (const FooStruct * param);
+
 #endif /* __FOO_OBJECT_H__ */

@@ -1,3 +1,38 @@
+2009-01-12  Johan Dahlin  <jdahlin@async.com.br>
+
+	Bug 563794 - Redo annotation parsing & applying
+	
+	Thanks to Colin for helping out considerably in landing this.
+
+	* giscanner/Makefile.am:
+	* giscanner/ast.py:
+	* giscanner/dumper.py:
+	* giscanner/girparser.py:
+	* giscanner/giscannermodule.c (pygi_source_scanner_get_comments),
+	(calc_attrs_length), (pygi_collect_attributes), (init_giscanner):
+	* giscanner/glibtransformer.py:
+	* giscanner/scannerlexer.l:
+	* giscanner/sourcescanner.c (gi_source_symbol_unref),
+	(gi_source_scanner_new), (gi_source_scanner_free),
+	(gi_source_scanner_get_comments):
+	* giscanner/sourcescanner.h:
+	* giscanner/sourcescanner.py:
+	* giscanner/transformer.py:
+	* giscanner/xmlwriter.py:
+	* tests/scanner/annotation-1.0-expected.gir:
+	* tests/scanner/annotation-1.0-expected.tgir:
+	* tests/scanner/annotation.c:
+	* tests/scanner/annotation.h:
+	* tests/scanner/foo-1.0-expected.gir:
+	* tests/scanner/foo-1.0-expected.tgir:
+	* tests/scanner/foo.h:
+	* tools/g-ir-scanner:
+
+	This commit merges the annotation parser rewrite branch.
+	It'll change the annotation parsing to be done completely in python
+	code which will make it easier to do further annotation parsing 
+  	easier.
+
 2009-01-03  Andreas Rottmann  <a.rottmann@gmx.at>
  
   	Bug 563469 – Arrays not treated correctly in struct offset calculation

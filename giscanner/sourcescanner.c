@@ -60,8 +60,6 @@ gi_source_symbol_unref (GISourceSymbol * symbol)
       if (symbol->base_type)
         ctype_free (symbol->base_type);
       g_free (symbol->const_string);
-      g_slist_foreach (symbol->directives, (GFunc)gi_source_directive_free, NULL);
-      g_slist_free (symbol->directives);
       g_slice_free (GISourceSymbol, symbol);
     }
 }
@@ -178,28 +176,6 @@ gi_source_function_new (void)
   return func;
 }
 
-GISourceDirective *
-gi_source_directive_new (const gchar *name,
-			 const gchar *value,
-			 GSList *options)
-{
-  GISourceDirective *directive;
-    
-  directive = g_slice_new (GISourceDirective);
-  directive->name = g_strdup (name);
-  directive->value = g_strdup (value);
-  directive->options = options;
-  return directive;
-}
-
-void
-gi_source_directive_free (GISourceDirective *directive)
-{
-  g_free (directive->name);
-  g_free (directive->value);
-  g_slice_free (GISourceDirective, directive);
-}
-
 GISourceScanner *
 gi_source_scanner_new (void)
 {
@@ -208,7 +184,6 @@ gi_source_scanner_new (void)
   scanner = g_slice_new0 (GISourceScanner);
   scanner->typedef_table = g_hash_table_new_full (g_str_hash, g_str_equal,
 						  g_free, NULL);
-  scanner->directives_map = g_hash_table_new (g_str_hash, g_str_equal);
   scanner->struct_or_union_or_enum_table =
     g_hash_table_new_full (g_str_hash, g_str_equal,
 			   g_free, (GDestroyNotify)gi_source_symbol_unref);
@@ -221,10 +196,11 @@ gi_source_scanner_free (GISourceScanner *scanner)
 {
   g_free (scanner->current_filename);
 
-  g_hash_table_destroy (scanner->directives_map);
   g_hash_table_destroy (scanner->typedef_table);
   g_hash_table_destroy (scanner->struct_or_union_or_enum_table);
 
+  g_slist_foreach (scanner->comments, (GFunc)g_free, NULL);
+  g_slist_free (scanner->comments);
   g_slist_foreach (scanner->symbols, (GFunc)gi_source_symbol_unref, NULL);
   g_slist_free (scanner->symbols);
 
@@ -295,8 +271,7 @@ gi_source_scanner_get_symbols (GISourceScanner  *scanner)
 }
 
 GSList *
-gi_source_scanner_get_directives(GISourceScanner  *scanner,
-				 const gchar      *name)
+gi_source_scanner_get_comments(GISourceScanner  *scanner)
 {
-  return g_hash_table_lookup (scanner->directives_map, name);
+  return g_slist_reverse (scanner->comments);
 }

@@ -50,7 +50,7 @@ annotation_object_out (AnnotationObject *object, int *outarg)
  *
  * This is a test for in arguments
  *
- * @inarg: (in): This is an argument test
+ * @inarg: (in): (transfer none): This is an argument test
  * Return value: an int
  */
 gint
@@ -246,7 +246,7 @@ annotation_object_compute_sum  (AnnotationObject *object,
 /**
  * annotation_object_compute_sum_n:
  * @object: a #GObject
- * @nums: (array length=n_nums): Sequence of numbers
+ * @nums: (array length=n_nums zero-terminated=0): Sequence of numbers
  * @n_nums: Length of number array
  *
  * Test taking an array with length parameter

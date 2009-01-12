@@ -28,7 +28,7 @@ import subprocess
 from .ast import (Callback, Constant, Enum, Function, Member, Namespace,
                   Parameter, Property, Return, Struct, Type, Alias,
                   Union, Field, type_name_from_ctype,
-                  default_array_types, TYPE_UINT8, PARAM_DIRECTION_IN)
+                  default_array_types, TYPE_UINT8, PARAM_TRANSFER_FULL)
 from .transformer import Names
 from .glibast import (GLibBoxed, GLibEnum, GLibEnumMember, GLibFlags,
                       GLibInterface, GLibObject, GLibSignal, GLibBoxedStruct,
@@ -85,8 +85,6 @@ class GLibTransformer(object):
     def __init__(self, transformer, noclosure=False):
         self._transformer = transformer
         self._noclosure = noclosure
-        self._transformer.set_container_types(['GList*', 'GSList*'],
-                                              ['GHashTable*'])
         self._namespace_name = None
         self._names = Names()
         self._uscore_type_names = {}
@@ -99,6 +97,7 @@ class GLibTransformer(object):
         self._validating = False
 
     # Public API
+
     def set_introspection_binary(self, binary):
         self._binary = binary
 
@@ -165,6 +164,7 @@ class GLibTransformer(object):
         return namespace
 
     # Private
+
     def _add_attribute(self, node, replace=False):
         node_name = node.name
         if (not replace) and node_name in self._names.names:
@@ -203,6 +203,7 @@ class GLibTransformer(object):
         self._uscore_type_names[no_uscore_prefixed] = node
 
     # Helper functions
+
     def _resolve_gtypename(self, gtype_name):
         try:
             return self._transformer.gtypename_to_giname(gtype_name,
@@ -254,6 +255,7 @@ class GLibTransformer(object):
         self._register_internal_type(type_name, gnode)
 
     # Parser
+
     def _parse_node(self, node):
         if isinstance(node, Enum):
             self._parse_enum(node)
@@ -345,6 +347,7 @@ class GLibTransformer(object):
         self._remove_attribute(func.name)
         func.name = methname
         target_klass.static_methods.append(func)
+        func.is_method = True
         return func
 
     def _parse_method(self, func):
@@ -431,6 +434,7 @@ class GLibTransformer(object):
             # We don't need the "this" parameter
             del func.parameters[0]
             klass.methods.append(func)
+            func.is_method = True
         else:
             klass.constructors.append(func)
         return func
@@ -512,6 +516,7 @@ class GLibTransformer(object):
             del self._names.names[maybe_class.name]
 
     # Introspection
+
     def _introspect_type(self, xmlnode):
         if xmlnode.tag in ('enum', 'flags'):
             self._introspect_enum(xmlnode)
@@ -627,7 +632,7 @@ class GLibTransformer(object):
             rctype = signal_info.attrib['return']
             rtype = Type(self._transformer.parse_ctype(rctype), rctype)
             return_ = Return(rtype, signal_info.attrib['return'])
-            return_.transfer = 'full'
+            return_.transfer = PARAM_TRANSFER_FULL
             signal = GLibSignal(signal_info.attrib['name'], return_)
             for i, parameter in enumerate(signal_info.findall('param')):
                 if i == 0:
@@ -642,6 +647,7 @@ class GLibTransformer(object):
             node.signals.append(signal)
 
     # Resolver
+
     def _resolve_type_name(self, type_name, ctype=None):
         # Workaround glib bug #548689, to be included in 2.18.0
         if type_name == "GParam":
@@ -784,25 +790,6 @@ class GLibTransformer(object):
     def _resolve_property(self, prop):
         prop.type = self._resolve_param_type(prop.type, allow_invalid=False)
 
-    def _adjust_transfer(self, param):
-        if not (param.transfer is None or param.transfer_inferred):
-            return
-
-        # Do GLib/GObject-specific type transformations here
-        node = self._lookup_node(param.type.name)
-        if node is None:
-            return
-
-        if isinstance(param, Parameter):
-            if param.direction != PARAM_DIRECTION_IN:
-                transfer = 'full'
-            else:
-                transfer = 'none'
-        else:
-            transfer = 'full'
-
-        param.transfer = transfer
-
     def _adjust_throws(self, func):
         if func.parameters == []:
             return
@@ -820,12 +807,10 @@ class GLibTransformer(object):
         self._resolve_parameters(func.parameters)
         func.retval.type = self._resolve_param_type(func.retval.type)
         self._adjust_throws(func)
-        self._adjust_transfer(func.retval)
 
     def _resolve_parameters(self, parameters):
         for parameter in parameters:
             parameter.type = self._resolve_param_type(parameter.type)
-            self._adjust_transfer(parameter)
 
     def _resolve_field(self, field):
         if isinstance(field, Callback):
@@ -837,6 +822,7 @@ class GLibTransformer(object):
         alias.target = self._resolve_type_name(alias.target, alias.target)
 
     # Validation
+
     def _validate(self, nodes):
         nodes = list(self._names.names.itervalues())
         i = 0

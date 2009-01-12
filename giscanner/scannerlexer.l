@@ -200,187 +200,27 @@ yywrap (void)
 
 
 static void
-parse_gtkdoc (GISourceScanner *scanner,
-	      gchar           *symbol,
-	      int             *c1,
-	      int             *c2)
-{
-  gboolean isline = FALSE;
-  GString *line_buf;
-  char *line;
-  gchar **parts;
-  GISourceDirective *directive;
-  char *name,*value;
-  GSList *directives;
-  GSList *options = NULL;
-  char *rname;
-  int n_parts;
-
-  line_buf = g_string_new ("");
-
-  do 
-    {
-      *c1 = *c2;
-      if (*c1 == '\n')
-        {
-          isline = TRUE;
-          break;
-        }
-      g_string_append_c (line_buf, *c1);
-      *c2 = input();
-    } while (*c2 != EOF && !(*c1 == '*' && *c2 == '/'));
-  
-  if (!isline)
-    {
-      g_string_free (line_buf, TRUE);
-      return;
-    }
-
-  line = g_string_free (line_buf, FALSE);
-
-  /* Ignore lines that don't have a : - this is a hack but avoids
-   * trying to parse too many things as annotations
-   */
-  if (!strchr (line, ':'))
-    {
-      g_free (line);
-      return;
-    }
-
-  parts = g_strsplit (line, ":", 3);
-  n_parts = g_strv_length (parts);
-
-  if (g_ascii_strcasecmp (parts[0], "eprecated") == 0)
-    {
-      if (n_parts == 3)
-	options = g_slist_prepend (options, g_strdup_printf ("%s: %s", parts[1], parts[2]));
-      else if (n_parts == 2)
-	options = g_slist_prepend (options, g_strdup (parts[1]));
-      else
-	options = g_slist_prepend (options, g_strdup (""));
-      name = parts[0];
-      value = NULL;
-    }
-  else if (g_ascii_strcasecmp (parts[0], "ince") == 0)
-    {
-      if (n_parts == 2)
-	options = g_slist_prepend (options, g_strdup (parts[1]));
-      else
-	options = g_slist_prepend (options, g_strdup (""));
-      name = parts[0];
-      value = NULL;
-    }
-  else if (n_parts >= 2)
-    {
-      name = parts[0];
-
-      if (n_parts == 3) 
-        {
-          char *ptr = g_strdup (parts[1]);
-	  char *start;
-	  char *end;
-
-	  options = NULL;
-	  start = strchr (ptr, '(');
-	  while (start != NULL) 
-	    {
-	      end = strchr (start, ')');
-	      if (end)
-		{
-		  options = g_slist_prepend (options, g_strndup (start+1, end-(start+1)));
-		  start = strchr (end+1, '(');
-		}
-	      else
-		{
-		  break;
-		}
-	    }
-	  g_free (ptr);
-          value = parts[2];
-        } 
-      else
-        value = parts[1];
-    }
-  else /* parts == 1 */
-    {
-      name = parts[0];
-      value = NULL;
-    }
-
-  /*
-   * Special cases for global annotations.
-   * Context-sensitive parsing would probably be the right way to go.
-   */
-  if (g_ascii_strncasecmp ("eturn", name, 5) == 0)
-    rname = "return";
-  else if (g_ascii_strncasecmp ("eprecated", name, 9) == 0)
-    rname = "deprecated";
-  else if (g_ascii_strncasecmp ("ince", name, 4) == 0)
-    rname = "since";
-  else
-    rname = name;
-
-  directive = gi_source_directive_new (rname, value, options);
-  directives = g_hash_table_lookup (scanner->directives_map, symbol);
-  directives = g_slist_prepend (directives, directive);
-  g_hash_table_replace (scanner->directives_map,
-			g_strdup (symbol), directives);
-
-  g_strfreev (parts);
-  g_free (line);
-}
-
-
-static void
 parse_comment (GISourceScanner *scanner)
 {
-  GString *symbol = NULL;
-  gboolean startofline = FALSE, have_symbol = FALSE, start1 = FALSE, start_symbol = FALSE;
+  GString *comment;
   int c1, c2;
 
   c1 = input();
   c2 = input();
 
+  comment = g_string_new ("");
+
   while (c2 != EOF && !(c1 == '*' && c2 == '/'))
     {
-      if (c1 == ':')
-        have_symbol = TRUE;
-      else if (c1 == '\n')
-         start1 = TRUE;
-      else if (c1 == '*' && start1)
-         start_symbol = TRUE;
-      else if (!have_symbol && start_symbol) 
-        {
-          if (!symbol)
-            symbol = g_string_new ("");
-          if (c1 != ' ')
-            g_string_append_c (symbol, c1);
-        }
-
-      if (c1 == '\n') 
-        {
-          ++lineno;
-          startofline = TRUE;
-        }
+      g_string_append_c (comment, c1);
 
       c1 = c2;
       c2 = input();
 
-      if ((c1 != '*' && c1 != ' '))
-          startofline = FALSE;
-
-      if (startofline && (c1 == ' ') && ((c2 == '@') || (c2 == 'r') || (c2 == 'R') || (c2 == 'D') || (c2 == 'S')))
-        {
-           c1 = c2;
-           c2 = input();
-           if (symbol)
-             parse_gtkdoc (scanner, symbol->str, &c1, &c2);
-        }
     }
 
-  if (symbol)
-    g_string_free (symbol, TRUE);
-  
+  scanner->comments = g_slist_prepend (scanner->comments,
+                                       g_string_free (comment, FALSE));
 }
 
 static int

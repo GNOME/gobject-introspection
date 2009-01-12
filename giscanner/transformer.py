@@ -19,14 +19,12 @@
 #
 
 import os
-import re
 
 from .ast import (Callback, Enum, Function, Namespace, Member,
-                  Parameter, Return, Array, Struct, Field,
-                  Type, Alias, Interface, Class, Node, Union,
-                  List, Map, Varargs, Constant, type_name_from_ctype,
-                  type_names, default_array_types, default_out_types,
-                  TYPE_STRING, BASIC_GIR_TYPES, TYPE_NONE)
+                  Parameter, Return, Struct, Field,
+                  Type, Array, Alias, Interface, Class, Node, Union,
+                  Varargs, Constant, type_name_from_ctype,
+                  type_names, TYPE_STRING, BASIC_GIR_TYPES)
 from .config import DATADIR
 from .glibast import GLibBoxed
 from .girparser import GIRParser
@@ -75,18 +73,12 @@ class Transformer(object):
         self._strip_prefix = ''
         self._includes = set()
         self._includepaths = []
-        self._list_ctypes = []
-        self._map_ctypes = []
 
     def get_names(self):
         return self._names
 
     def get_includes(self):
         return self._includes
-
-    def set_container_types(self, list_ctypes, map_ctypes):
-        self._list_ctypes = list_ctypes
-        self._map_ctypes = map_ctypes
 
     def set_strip_prefix(self, strip_prefix):
         self._strip_prefix = strip_prefix
@@ -109,6 +101,7 @@ class Transformer(object):
         self._includes.add(include)
 
     # Private
+
     def _find_include(self, include):
         searchdirs = self._includepaths[:]
         for path in _xdg_data_dirs:
@@ -210,7 +203,6 @@ class Transformer(object):
 
     def _create_enum(self, symbol):
         members = []
-        directives = symbol.directives()
         for child in symbol.base_type.child_list:
             name = strip_common_prefix(symbol.ident, child.ident).lower()
             members.append(Member(name,
@@ -219,55 +211,12 @@ class Transformer(object):
 
         enum_name = self.remove_prefix(symbol.ident)
         enum = Enum(enum_name, symbol.ident, members)
-        self._parse_version(enum, directives)
         self._names.type_names[symbol.ident] = (None, enum)
         return enum
 
     def _create_object(self, symbol):
         return Member(symbol.ident, symbol.base_type.name,
                       symbol.ident)
-
-    def _parse_deprecated(self, node, directives):
-        deprecated = directives.get('deprecated', False)
-        if deprecated:
-            deprecated_value = deprecated[0]
-            if ':' in deprecated_value:
-                # Split out gtk-doc version
-                (node.deprecated_version, node.deprecated) = \
-                    [x.strip() for x in deprecated_value.split(':', 1)]
-            else:
-                # No version, just include str
-                node.deprecated = deprecated_value.strip()
-
-    def _parse_version(self, node, directives):
-        version = directives.get('since', False)
-        if version:
-            version_value = version[0]
-            node.version = version_value.strip()
-
-    def _pair_array(self, params, array):
-        if not array.type.length_param_name:
-            return
-        target_name = array.type.length_param_name
-        for i, param in enumerate(params):
-            if param.name == array.type.length_param_name:
-                array.type.length_param_index = i
-                return
-        raise ValueError("Unmatched length parameter name %r"\
-                             % (target_name, ))
-
-    def _pair_annotations(self, params, return_):
-        names = {}
-        for param in params:
-            if param.name in names:
-                raise ValueError("Duplicate parameter name %r"\
-                                     % (param.name, ))
-            names[param.name] = 1
-            if isinstance(param.type, Array):
-                self._pair_array(params, param)
-
-        if isinstance(return_.type, Array):
-            self._pair_array(params, return_)
 
     def _type_is_callback(self, type):
         if (isinstance(type, Callback) or
@@ -294,50 +243,35 @@ class Transformer(object):
 
     def _augment_callback_params(self, params):
         for i, param in enumerate(params):
-            if self._type_is_callback(param.type):
-                # j is the index where we look for closure/destroy to
-                # group with the callback param
-                j = i + 1
-                if j == len(params):
-                    continue # no more args -> nothing to group look
-                # at the param directly following for either a closure
-                # or a destroy; only one of these will fire
-                had_closure = self._handle_closure(param, j, params[j])
-                had_destroy = self._handle_destroy(param, j, params[j])
-                j += 1
-                # are we out of params, or did we find neither?
-                if j == len(params) or (not had_closure and not had_destroy):
-                    continue
-                # we found either a closure or a destroy; check the
-                # parameter following for the other
-                if not had_closure:
-                    self._handle_closure(param, j, params[j])
-                if not had_destroy:
-                    self._handle_destroy(param, j, params[j])
+            if not self._type_is_callback(param.type):
+                continue
 
-    # We take the annotations from the parser as strings; here we
-    # want to split them into components, so:
-    # (transfer full) -> {'transfer' : [ 'full' ]}
-    def _parse_options(self, options):
-        ret = {}
-        ws_re = re.compile(r'\s+')
-        for opt in options:
-            items = ws_re.split(opt)
-            ret[items[0]] = items[1:]
-        return ret
+            # j is the index where we look for closure/destroy to
+            # group with the callback param
+            j = i + 1
+            if j == len(params):
+                continue # no more args -> nothing to group look
+            # at the param directly following for either a closure
+            # or a destroy; only one of these will fire
+            had_closure = self._handle_closure(param, j, params[j])
+            had_destroy = self._handle_destroy(param, j, params[j])
+            j += 1
+            # are we out of params, or did we find neither?
+            if j == len(params) or (not had_closure and not had_destroy):
+                continue
+            # we found either a closure or a destroy; check the
+            # parameter following for the other
+            if not had_closure:
+                self._handle_closure(param, j, params[j])
+            if not had_destroy:
+                self._handle_destroy(param, j, params[j])
 
     def _create_function(self, symbol):
-        directives = symbol.directives()
-        parameters = list(self._create_parameters(
-            symbol.base_type, directives))
-        return_ = self._create_return(symbol.base_type.base_type,
-                                      directives.get('return', {}))
+        parameters = list(self._create_parameters(symbol.base_type))
+        return_ = self._create_return(symbol.base_type.base_type)
         self._augment_callback_params(parameters)
-        self._pair_annotations(parameters, return_)
         name = self._strip_namespace_func(symbol.ident)
         func = Function(name, return_, parameters, symbol.ident)
-        self._parse_version(func, directives)
-        self._parse_deprecated(func, directives)
         return func
 
     def _create_source_type(self, source_type):
@@ -357,47 +291,42 @@ class Transformer(object):
             value = 'any'
         return value
 
-    def _create_parameters(self, base_type, directives=None):
-        if directives is None:
-            dirs = {}
-        else:
-            dirs = directives
+    def _create_parameters(self, base_type):
 
         # warn if we see annotations for unknown parameters
         param_names = set(child.ident for child in base_type.child_list)
-        dirs_for = set(dirs)
-        dirs_for = dirs_for.difference(param_names)
-        dirs_for.discard('return')
-        dirs_for.discard('deprecated')
-        dirs_for.discard('since')
-        if dirs_for:
-            print 'Unexpected annotations for %s, parameters are %s' % (
-                list(dirs_for), list(param_names), )
-
         for child in base_type.child_list:
-            yield self._create_parameter(
-                child, dirs.get(child.ident, {}))
+            yield self._create_parameter(child)
 
     def _create_member(self, symbol):
-        ctype = symbol.base_type.type
-        if (ctype == CTYPE_POINTER and
+        source_type = symbol.base_type
+        if (source_type.type == CTYPE_POINTER and
             symbol.base_type.base_type.type == CTYPE_FUNCTION):
             node = self._create_callback(symbol)
         else:
-            opts = {}
-            if ctype == CTYPE_ARRAY:
-                opts['array'] = []
+            # Special handling for fields; we don't have annotations on them
+            # to apply later, yet.
+            if source_type.type == CTYPE_ARRAY:
+                ctype = self._create_source_type(source_type)
+                canonical_ctype = self._canonicalize_ctype(ctype)
+                if canonical_ctype[-1] == '*':
+                    derefed_name = canonical_ctype[:-1]
+                else:
+                    derefed_name = canonical_ctype
+                derefed_name = self.resolve_param_type(derefed_name)
+                ftype = Array(ctype, self.parse_ctype(derefed_name))
                 child_list = list(symbol.base_type.child_list)
+                ftype.zeroterminated = False
                 if child_list:
-                    size_opt = 'fixed-size=%d' % (child_list[0].const_int, )
-                    opts['array'].append(size_opt)
-            ftype = self._create_type(symbol.base_type, opts,
-                                      is_param=False, is_retval=False)
+                    ftype.size = '%d' % (child_list[0].const_int, )
+            else:
+                ftype = self._create_type(symbol.base_type,
+                                          is_param=False, is_retval=False)
             ftype = self.resolve_param_type(ftype)
             # Fields are assumed to be read-write
             # (except for Objects, see also glibtransformer.py)
-            node = Field(symbol.ident, ftype, symbol.ident,
-                       readable=True, writable=True, bits=symbol.const_int)
+            node = Field(symbol.ident, ftype, ftype.name,
+                         readable=True, writable=True, bits=symbol.const_int)
         return node
 
     def _create_typedef(self, symbol):
@@ -473,7 +402,7 @@ class Transformer(object):
         else:
             return derefed_typename
 
-    def _create_type(self, source_type, options, is_param, is_retval):
+    def _create_type(self, source_type, is_param, is_retval):
         ctype = self._create_source_type(source_type)
         if ctype == 'va_list':
             raise SkipError()
@@ -482,188 +411,37 @@ class Transformer(object):
         elif ctype == 'FILE*':
             raise SkipError
 
-        canonical_ctype = self._canonicalize_ctype(ctype)
-
-        # Now check for a list/map/array type
-        if canonical_ctype in self._list_ctypes:
-            param = options.get('element-type')
-            if param:
-                contained_type = self.parse_ctype(param[0])
-            else:
-                contained_type = None
-            derefed_name = self.parse_ctype(ctype)
-            rettype = List(derefed_name,
-                           ctype,
-                           contained_type)
-        elif canonical_ctype in self._map_ctypes:
-            param = options.get('element-type')
-            if param:
-                key_type = self.parse_ctype(param[0])
-                value_type = self.parse_ctype(param[1])
-            else:
-                key_type = None
-                value_type = None
-            derefed_name = self.parse_ctype(ctype)
-            rettype = Map(derefed_name,
-                          ctype,
-                          key_type, value_type)
-        elif ((is_param and canonical_ctype in default_array_types
-               and not 'out' in options)
-              or ('array' in options)):
-            if canonical_ctype[-1] == '*':
-                derefed_name = canonical_ctype[:-1]
-            else:
-                derefed_name = canonical_ctype
-            rettype = Array(ctype,
-                            self.parse_ctype(derefed_name))
-            array_opts = dict([opt.split('=')
-                               for opt in options.get('array', [])])
-            if 'length' in array_opts:
-                rettype.length_param_name = array_opts['length']
-                rettype.zeroterminated = False
-            if 'fixed-size' in array_opts:
-                rettype.size = array_opts['fixed-size']
-                rettype.zeroterminated = False
-            if 'zero-terminated' in array_opts:
-                rettype.zeroterminated = array_opts['zero-terminated'] != '0'
-        else:
-            derefed_name = self.parse_ctype(ctype,
-                                            not (is_param or is_retval))
-            rettype = Type(derefed_name, ctype)
-
-        # Deduce direction for some types passed by reference that
-        # aren't arrays; modifies the options array.
-        if ('array' not in options and
-            not ('out' in options or
-                 'in' in options or
-                 'inout' in options or
-                 'in-out' in options) and
-            source_type.type == CTYPE_POINTER and
-            derefed_name in default_out_types):
-            options['out'] = []
-
-        if 'transfer' in options:
-            # Transfer is specified, we don't question it.
-            return rettype
+        is_member = not (is_param or is_retval)
+        # Here we handle basic type parsing; most of the heavy lifting
+        # and inference comes in annotationparser.py when we merge
+        # in annotation data.
+        derefed_name = self.parse_ctype(ctype, is_member)
+        rettype = Type(derefed_name, ctype)
+        rettype.canonical = self._canonicalize_ctype(ctype)
+        derefed_ctype = ctype.replace('*', '')
+        rettype.derefed_canonical = self._canonicalize_ctype(derefed_ctype)
 
         canontype = type_name_from_ctype(ctype)
-
-        # Since no transfer is specified, we drop into a bunch of
-        # heuristics to guess it.  This mutates the options array to
-        # set the 'transfer' option.
-        # Note that we inferred the transfer
-        options['transfer-inferred'] = []
-        stype = source_type
-        if canontype == TYPE_STRING:
-            # It's a string - we just look at 'const'
-            if source_type.base_type.type_qualifier & TYPE_QUALIFIER_CONST:
-                options['transfer'] = ['none']
-            else:
-                options['transfer'] = ['full']
-        elif 'array' in options or stype.type == CTYPE_ARRAY:
-            # It's rare to mutate arrays in public GObject APIs
-            options['transfer'] = ['none']
-        elif (canontype in BASIC_GIR_TYPES or
-              canontype == TYPE_NONE or
-              stype.type == CTYPE_ENUM):
-            # Basic types default to 'none'
-            options['transfer'] = ['none']
-        elif (stype.type == CTYPE_POINTER and
-              stype.base_type.type_qualifier & TYPE_QUALIFIER_CONST):
-            # Anything with 'const' gets none
-            options['transfer'] = ['none']
-        elif is_param and stype.type == CTYPE_POINTER:
-            # For generic pointer types, let's look at the argument
-            # direction.  An out/inout argument gets full, everything
-            # else none.
-            if ('out' in options or
-                'inout' in options or
-                'in-out' in options):
-                options['transfer'] = ['full']
-            else:
-                options['transfer'] = ['none']
-        else:
-            # For anything else we default to none for parameters;
-            # this covers enums and possibly some other corner cases.
-            # Return values of structures and the like will end up
-            # full.
-            if is_param:
-                options['transfer'] = ['none']
-            else:
-                options['transfer'] = ['full']
-
+        if ((canontype == TYPE_STRING or
+             source_type.type == CTYPE_POINTER) and
+            source_type.base_type.type_qualifier & TYPE_QUALIFIER_CONST):
+            rettype.is_const = True
         return rettype
 
-    def _handle_generic_param_options(self, param, options):
-        for option, data in options.iteritems():
-            if option == 'transfer':
-                if data:
-                    depth = data[0]
-                    if depth not in ('none', 'container', 'full'):
-                        raise ValueError("Invalid transfer %r" % (depth, ))
-                else:
-                    depth = 'full'
-                param.transfer = depth
-            elif option == 'transfer-inferred':
-                # This is a purely internal flag; we don't expect
-                # people to write it
-                param.transfer_inferred = True
-
-    def _create_parameter(self, symbol, options):
-        options = self._parse_options(options)
+    def _create_parameter(self, symbol):
         if symbol.type == CSYMBOL_TYPE_ELLIPSIS:
             ptype = Varargs()
-            if 'transfer' not in options:
-                options['transfer'] = ['none']
         else:
-            ptype = self._create_type(symbol.base_type, options,
+            ptype = self._create_type(symbol.base_type,
                                       is_param=True, is_retval=False)
             ptype = self.resolve_param_type(ptype)
-        param = Parameter(symbol.ident, ptype)
-        for option, data in options.iteritems():
-            if option in ['in-out', 'inout']:
-                param.direction = 'inout'
-            elif option == 'in':
-                param.direction = 'in'
-            elif option == 'out':
-                param.direction = 'out'
-            elif option == 'allow-none':
-                param.allow_none = True
-            elif option.startswith(('element-type', 'array')):
-                pass
-            elif option in ('transfer', 'transfer-inferred'):
-                pass
-            elif option == 'scope':
-                param.scope = data[0]
-            else:
-                print 'Unhandled parameter annotation option: %r' % (
-                    option, )
-        self._handle_generic_param_options(param, options)
+        return Parameter(symbol.ident, ptype)
 
-        assert param.transfer is not None, param
-        return param
-
-    def _create_return(self, source_type, options=None):
-        if options is None:
-            options_map = {}
-        else:
-            options_map = self._parse_options(options)
-        rtype = self._create_type(source_type, options_map,
+    def _create_return(self, source_type):
+        rtype = self._create_type(source_type,
                                   is_param=False, is_retval=True)
         rtype = self.resolve_param_type(rtype)
         return_ = Return(rtype)
-        self._handle_generic_param_options(return_, options_map)
-        for option, data in options_map.iteritems():
-            if option in ('transfer', 'transfer-inferred',
-                          'element-type', 'out'):
-                pass
-            elif option.startswith(('element-type', 'array')):
-                pass
-            else:
-                print 'Unhandled return type annotation option: %r' % (
-                    option, )
-
-        assert return_.transfer is not None, return_
         return return_
 
     def _create_const(self, symbol):
@@ -697,7 +475,6 @@ class Transformer(object):
         return callback
 
     def _create_struct(self, symbol):
-        directives = symbol.directives()
         struct = self._typedefs_ns.get(symbol.ident, None)
         if struct is None:
             # This is a bit of a hack; really we should try
@@ -715,12 +492,9 @@ class Transformer(object):
             if field:
                 struct.fields.append(field)
 
-        self._parse_version(struct, directives)
-
         return struct
 
     def _create_union(self, symbol):
-        directives = symbol.directives()
         union = self._typedefs_ns.get(symbol.ident, None)
         if union is None:
             # This is a bit of a hack; really we should try
@@ -738,23 +512,16 @@ class Transformer(object):
             if field:
                 union.fields.append(field)
 
-        self._parse_version(union, directives)
-
         return union
 
     def _create_callback(self, symbol):
-        directives = symbol.directives()
-        parameters = self._create_parameters(symbol.base_type.base_type,
-            directives)
-        retval = self._create_return(symbol.base_type.base_type.base_type,
-            directives.get('return', {}))
+        parameters = self._create_parameters(symbol.base_type.base_type)
+        retval = self._create_return(symbol.base_type.base_type.base_type)
         if symbol.ident.find('_') > 0:
             name = self.remove_prefix(symbol.ident, True)
         else:
             name = self.remove_prefix(symbol.ident)
         callback = Callback(name, retval, list(parameters), symbol.ident)
-
-        self._parse_version(callback, directives)
 
         return callback
 
@@ -832,19 +599,6 @@ class Transformer(object):
         if isinstance(ptype, Node):
             ptype.name = self.resolve_type_name_full(ptype.name,
                                                      self.ctype_of(ptype),
-                                                     names, **kwargs)
-            if isinstance(ptype, (Array, List)):
-                if ptype.element_type is not None:
-                    ptype.element_type = \
-                        self.resolve_param_type_full(ptype.element_type,
-                                                     names, **kwargs)
-            if isinstance(ptype, Map):
-                if ptype.key_type is not None:
-                    ptype.key_type = \
-                        self.resolve_param_type_full(ptype.key_type,
-                                                     names, **kwargs)
-                    ptype.value_type = \
-                        self.resolve_param_type_full(ptype.value_type,
                                                      names, **kwargs)
         elif isinstance(ptype, basestring):
             return self.resolve_type_name_full(ptype, None, names, **kwargs)
