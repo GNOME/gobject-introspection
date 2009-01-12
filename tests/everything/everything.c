@@ -621,6 +621,16 @@ test_simple_boxed_a_equals (TestSimpleBoxedA *a,
 	  a->some_double == other_a->some_double);
 }
 
+const TestSimpleBoxedA*
+test_simple_boxed_a_const_return (void)
+{
+  static TestSimpleBoxedA simple_a = {
+    5, 6, 7.0
+  };
+
+  return &simple_a;
+}
+
 static void
 test_simple_boxed_b_free (TestSimpleBoxedB *a)
 {

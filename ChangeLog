@@ -1,3 +1,13 @@
+2009-01-12  Havoc Pennington  <hp@pobox.com>
+
+	Bug 563386 – scanner ignores "const" on boxed return values
+
+	* tests/everything/everything.c (test_simple_boxed_a_const_return):
+	* tests/everything/everything.h:
+
+	This adds just the tests specified in the bug above, the fix itself
+	was included in Bug 563794
+
 2009-01-03  Andreas Rottmann  <a.rottmann@gmx.at>
 
 	Bug 566404 – Annotations for GLib

@@ -131,10 +131,12 @@ struct _TestSimpleBoxedA
   TestEnum some_enum;
 };
 
-GType             test_simple_boxed_a_get_type (void);
-TestSimpleBoxedA *test_simple_boxed_a_copy     (TestSimpleBoxedA *a);
-gboolean          test_simple_boxed_a_equals   (TestSimpleBoxedA *a,
-						TestSimpleBoxedA *other_a);
+GType                   test_simple_boxed_a_get_type     (void);
+TestSimpleBoxedA *      test_simple_boxed_a_copy         (TestSimpleBoxedA *a);
+gboolean                test_simple_boxed_a_equals       (TestSimpleBoxedA *a,
+                                                          TestSimpleBoxedA *other_a);
+const TestSimpleBoxedA *test_simple_boxed_a_const_return (void);
+
 
 struct _TestSimpleBoxedB
 {
