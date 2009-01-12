@@ -1,7 +1,14 @@
+2009-01-03  Andreas Rottmann  <a.rottmann@gmx.at>
+
+	Bug 566404 – Annotations for GLib
+
+	* gir/glib-2.0.c: Added allow-none annotations for g_thread_init()
+	and g_main_loop_new().
+
 2009-01-12  Johan Dahlin  <jdahlin@async.com.br>
 
         Bug 566419 – Element type of arrays not properly handled in all cases
-	
+
 	* giscanner/annotationparser.py:
 	* tests/scanner/annotation-1.0-expected.gir:
 	* tests/scanner/annotation-1.0-expected.tgir:
