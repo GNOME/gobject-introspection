@@ -1,5 +1,15 @@
 2009-01-12  Johan Dahlin  <jdahlin@async.com.br>
 
+	Bug 566560 – giscanner.transformer.SkipError
+
+	* giscanner/transformer.py:
+
+	Catch SkipError for all nodes, not just functions.
+	Makes it possible to skip unsupported parameter types in 
+	callbacks.
+
+2009-01-12  Johan Dahlin  <jdahlin@async.com.br>
+
 	Bug 563794 - Redo annotation parsing & applying
 	
 	Thanks to Colin for helping out considerably in landing this.

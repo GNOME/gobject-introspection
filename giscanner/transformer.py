@@ -86,7 +86,10 @@ class Transformer(object):
     def parse(self):
         nodes = []
         for symbol in self.generator.get_symbols():
-            node = self._traverse_one(symbol)
+            try:
+                node = self._traverse_one(symbol)
+            except SkipError:
+                continue
             self._add_node(node)
         return self._namespace
 
@@ -179,10 +182,7 @@ class Transformer(object):
         if stype is None:
             stype = symbol.type
         if stype == CSYMBOL_TYPE_FUNCTION:
-            try:
-                return self._create_function(symbol)
-            except SkipError:
-                return
+            return self._create_function(symbol)
         elif stype == CSYMBOL_TYPE_TYPEDEF:
             return self._create_typedef(symbol)
         elif stype == CSYMBOL_TYPE_STRUCT:
