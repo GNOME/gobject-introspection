@@ -4,9 +4,39 @@ static char backslash_parsing_tester = '\\';
 
 G_DEFINE_TYPE (AnnotationObject, annotation_object, G_TYPE_OBJECT);
 
+enum {
+  STRING_SIGNAL,
+  LAST_SIGNAL
+};
+
+static guint annotation_object_signals[LAST_SIGNAL] = { 0 };
+
 static void
 annotation_object_class_init (AnnotationObjectClass *klass)
 {
+  GObjectClass *gobject_class;
+
+  gobject_class = G_OBJECT_CLASS (klass);
+
+  /**
+   * AnnotationObject::string-signal:
+   * @annotation: the annotation object
+   * @string: (type utf8): a string
+   *
+   * This is a signal which has a broken signal handler,
+   * it says it's pointer but it's actually a string.
+   *
+   * Since: 1.0
+   * Deprecated: 1.2: Use other-signal instead
+   */
+  annotation_object_signals[STRING_SIGNAL] =
+    g_signal_new ("string-signal",
+		  G_OBJECT_CLASS_TYPE (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  0,
+		  NULL, NULL,
+		  (GSignalCMarshaller)g_cclosure_marshal_VOID__POINTER,
+		  G_TYPE_NONE, 1, G_TYPE_POINTER);
 
 }
 

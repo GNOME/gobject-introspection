@@ -317,6 +317,19 @@
       <field name="parent_instance">
         <type name="GObject.Object" c:type="GObject"/>
       </field>
+      <glib:signal name="string-signal"
+                   version="1.0"
+                   deprecated="Use other-signal instead"
+                   deprecated-version="1.2">
+        <return-value transfer-ownership="full">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <parameter name="string" transfer-ownership="none">
+            <type name="utf8" c:type="gpointer"/>
+          </parameter>
+        </parameters>
+      </glib:signal>
     </class>
     <record name="ObjectClass" c:type="AnnotationObjectClass">
       <field name="parent_class">

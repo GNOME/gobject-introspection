@@ -21,7 +21,7 @@
 # AnnotationParser - parses gtk-doc annotations
 
 # All gtk-doc comments needs to start with this:
-_COMMENT_HEADER = '*\n * '
+_COMMENT_HEADER = '*\n '
 
 from .ast import (Array, Callback, Class, Enum, Field, Function, Interface,
                   List, Map, Parameter, Record, Return, Type, Union, Varargs,
@@ -34,6 +34,7 @@ from .ast import (Array, Callback, Class, Enum, Field, Function, Interface,
                   PARAM_TRANSFER_CONTAINER,
                   PARAM_TRANSFER_FULL,
                   TYPE_ANY, TYPE_NONE)
+from .odict import odict
 from .glibast import GLibBoxed
 
 
@@ -46,10 +47,10 @@ class DocBlock(object):
     def __init__(self, name):
         self.name = name
         self.value = None
-        self.tags = {}
+        self.tags = odict()
 
     def __repr__(self):
-        return '<Directive %r>' % (self.name, )
+        return '<DocBlock %r>' % (self.name, )
 
     def get(self, name):
         if name == 'Returns':
@@ -114,9 +115,15 @@ class AnnotationParser(object):
         aa.parse(self._namespace)
 
     def _parse_comment(self, comment):
+        comment = comment.lstrip()
         if not comment.startswith(_COMMENT_HEADER):
             return
         comment = comment[len(_COMMENT_HEADER):]
+        comment = comment.strip()
+        if not comment.startswith('* '):
+            return
+        comment = comment[2:]
+
         pos = comment.index('\n ')
 
         block_name = comment[:pos]
@@ -126,6 +133,7 @@ class AnnotationParser(object):
         block = DocBlock(block_name[:-1])
         content = comment[pos+1:]
         for line in content.split('\n'):
+            line = line.lstrip()
             line = line[2:].strip() # Skip ' *'
             if not line:
                 continue
@@ -221,7 +229,7 @@ class AnnotationApplier(object):
         self._parse_methods(class_.methods)
         self._parse_methods(class_.static_methods)
         self._parse_properties(class_.properties)
-        self._parse_signals(class_.signals)
+        self._parse_signals(class_, class_.signals)
         self._parse_fields(class_, class_.fields)
 
     def _parse_interface(self, interface):
@@ -229,7 +237,7 @@ class AnnotationApplier(object):
         self._parse_version(interface, block)
         self._parse_methods(interface.methods)
         self._parse_properties(interface.properties)
-        self._parse_signals(interface.signals)
+        self._parse_signals(interface, interface.signals)
         self._parse_fields(interface, interface.fields)
 
     def _parse_record(self, record):
@@ -273,9 +281,9 @@ class AnnotationApplier(object):
         for method in methods:
             self._parse_function(method)
 
-    def _parse_signals(self, signals):
+    def _parse_signals(self, parent, signals):
         for signal in signals:
-            self._parse_signal(signal)
+            self._parse_signal(parent, signal)
 
     def _parse_property(self, prop):
         pass
@@ -293,10 +301,28 @@ class AnnotationApplier(object):
         self._parse_params(func, func.parameters, block)
         self._parse_return(func, func.retval, block)
 
-    def _parse_signal(self, signal):
-        block = self._blocks.get(signal.name)
+    def _parse_signal(self, parent, signal):
+        block = self._blocks.get('%s::%s' % (parent.type_name, signal.name))
         self._parse_version(signal, block)
-        self._parse_params(signal, signal.parameters, block)
+        self._parse_deprecated(signal, block)
+        # We're only attempting to name the signal parameters if
+        # the number of parameter tags (@foo) is the same or greater
+        # than the number of signal parameters
+        if block and len(block.tags) > len(signal.parameters):
+            names = block.tags.items()
+        else:
+            names = []
+        for i, param in enumerate(signal.parameters):
+            if names:
+                name, tag = names[i+1]
+                param.name = name
+                options = getattr(tag, 'options', {})
+                param_type = options.get('type')
+                if param_type:
+                    param.type.name = param_type.one()
+            else:
+                tag = None
+            self._parse_param(signal, param, tag)
         self._parse_return(signal, signal.retval, block)
 
     def _parse_field(self, parent, field):
@@ -305,15 +331,15 @@ class AnnotationApplier(object):
 
     def _parse_params(self, parent, params, block):
         for param in params:
-            self._parse_param(parent, param, block)
+            tag = self._get_tag(block, param.name)
+            self._parse_param(parent, param, tag)
 
     def _parse_return(self, parent, return_, block):
         tag = self._get_tag(block, 'Returns')
         options = getattr(tag, 'options', {})
         self._parse_param_ret_common(parent, return_, options)
 
-    def _parse_param(self, parent, param, block):
-        tag = self._get_tag(block, param.name)
+    def _parse_param(self, parent, param, tag):
         options = getattr(tag, 'options', {})
 
         if isinstance(parent, Function):

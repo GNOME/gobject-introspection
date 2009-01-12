@@ -297,6 +297,16 @@
           <type name="GObject.Object"/>
         </return-value>
       </method>
+      <glib:signal name="string-signal" when="LAST">
+        <return-value transfer-ownership="full">
+          <type name="none"/>
+        </return-value>
+        <parameters>
+          <parameter name="string" transfer-ownership="none">
+            <type name="utf8"/>
+          </parameter>
+        </parameters>
+      </glib:signal>
     </class>
     <record name="ObjectClass">
       <field name="parent_class">
