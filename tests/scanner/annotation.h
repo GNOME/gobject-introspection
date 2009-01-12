@@ -83,6 +83,16 @@ void     annotation_object_foreach      (AnnotationObject *object,
                                          AnnotationForeachFunc func,
                                          gpointer user_data);
 
+void     annotation_object_set_data     (AnnotationObject *object,
+                                         const guchar     *data,
+                                         gsize             length);
+void     annotation_object_set_data2    (AnnotationObject *object,
+                                         const gchar      *data,
+                                         gsize             length);
+void     annotation_object_set_data3    (AnnotationObject *object,
+                                         gpointer          data,
+                                         gsize             length);
+
 GObject* annotation_object_do_not_use   (AnnotationObject *object);
 
 void     annotation_init                (int              *argc, 

@@ -324,6 +324,55 @@ annotation_object_foreach (AnnotationObject *object,
 }
 
 /**
+ * annotation_object_set_data:
+ * @object: a #AnnotationObject
+ * @data: (array length=length): The data
+ * @length: Length of the data
+ *
+ * Test taking a guchar * with a length.
+ **/
+void
+annotation_object_set_data (AnnotationObject *object,
+                            const guchar *data,
+                            gsize length)
+{
+  
+}
+
+/**
+ * annotation_object_set_data2:
+ * @object: a #AnnotationObject
+ * @data: (array length=length): The data
+ * @length: Length of the data
+ *
+ * Test taking a gchar * with a length.
+ **/
+void
+annotation_object_set_data2 (AnnotationObject *object,
+                             const gchar *data,
+                             gsize length)
+{
+  
+}
+
+/**
+ * annotation_object_set_data3:
+ * @object: a #AnnotationObject
+ * @data: (array length=length) (element-type uint8): The data
+ * @length: Length of the data
+ *
+ * Test taking a gchar * with a length, overriding the array element
+ * type.
+ **/
+void
+annotation_object_set_data3 (AnnotationObject *object,
+                             gpointer data,
+                             gsize length)
+{
+  
+}
+
+/**
  * annotation_object_allow_none:
  * @object: a #GObject
  * @somearg: (allow-none):

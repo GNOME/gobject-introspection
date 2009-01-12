@@ -1,5 +1,18 @@
 2009-01-12  Johan Dahlin  <jdahlin@async.com.br>
 
+        Bug 566419 – Element type of arrays not properly handled in all cases
+	
+	* giscanner/annotationparser.py:
+	* tests/scanner/annotation-1.0-expected.gir:
+	* tests/scanner/annotation-1.0-expected.tgir:
+	* tests/scanner/annotation.c (annotation_object_set_data),
+	(annotation_object_set_data2), (annotation_object_set_data3):
+	* tests/scanner/annotation.h:
+
+	Based on patch by Andreas Rottmann
+
+2009-01-12  Johan Dahlin  <jdahlin@async.com.br>
+
 	Bug 566560 – giscanner.transformer.SkipError
 
 	* giscanner/transformer.py:

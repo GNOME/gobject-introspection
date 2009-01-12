@@ -329,7 +329,7 @@ class AnnotationApplier(object):
             parent, node, options)
         if container_type is not None:
             node.type = container_type
-        if not node.direction:
+        if node.direction is None:
             node.direction = self._guess_direction(node)
         node.transfer = self._extract_transfer(parent, node, options)
         if 'allow-none' in options:
@@ -383,18 +383,34 @@ class AnnotationApplier(object):
     def _parse_array(self, parent, node, options):
         array_opt = options.get('array')
         if array_opt:
-            values = array_opt.all()
+            array_values = array_opt.all()
         else:
-            values = {}
-        container_type = Array(node.type.ctype, node.type.name)
-        if 'zero-terminated' in values:
-            container_type.zeroterminated = values.get(
+            array_values = {}
+
+        element_type = options.get('element-type')
+        if element_type is not None:
+            element_type_name = element_type.one()
+        else:
+            element_type_name = node.type.name
+
+        container_type = Array(node.type.ctype,
+                               element_type_name)
+        if 'zero-terminated' in array_values:
+            container_type.zeroterminated = array_values.get(
                 'zero-terminated') == '1'
-        length = values.get('length')
+        length = array_values.get('length')
         if length is not None:
             param_index = parent.get_parameter_index(length)
             container_type.length_param_index = param_index
-        container_type.size = values.get('fized-size')
+            # For in parameters we're incorrectly deferring
+            # char/unsigned char to utf8 when a length annotation
+            # is specified.
+            if (isinstance(node, Parameter) and
+                node.type.name == 'utf8' and
+                self._guess_direction(node) == PARAM_DIRECTION_IN):
+                # FIXME: unsigned char/guchar should be uint8
+                container_type.element_type = 'int8'
+        container_type.size = array_values.get('fized-size')
         return container_type
 
     def _parse_element_type(self, parent, node, options):

@@ -261,6 +261,51 @@
           </parameter>
         </parameters>
       </method>
+      <method name="set_data" c:identifier="annotation_object_set_data">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <parameter name="data" transfer-ownership="none">
+            <array length="2" c:type="guchar*">
+              <type name="uint8"/>
+            </array>
+          </parameter>
+          <parameter name="length" transfer-ownership="none">
+            <type name="size_t" c:type="gsize"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="set_data2" c:identifier="annotation_object_set_data2">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <parameter name="data" transfer-ownership="none">
+            <array length="2" c:type="gchar*">
+              <type name="int8"/>
+            </array>
+          </parameter>
+          <parameter name="length" transfer-ownership="none">
+            <type name="size_t" c:type="gsize"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="set_data3" c:identifier="annotation_object_set_data3">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <parameter name="data" transfer-ownership="none">
+            <array length="2" c:type="gpointer">
+              <type name="uint8"/>
+            </array>
+          </parameter>
+          <parameter name="length" transfer-ownership="none">
+            <type name="size_t" c:type="gsize"/>
+          </parameter>
+        </parameters>
+      </method>
       <method name="do_not_use"
               c:identifier="annotation_object_do_not_use"
               deprecated="Use annotation_object_create_object() instead."
