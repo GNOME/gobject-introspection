@@ -228,7 +228,7 @@ class AnnotationApplier(object):
         self._parse_constructors(class_.constructors)
         self._parse_methods(class_.methods)
         self._parse_methods(class_.static_methods)
-        self._parse_properties(class_.properties)
+        self._parse_properties(class_, class_.properties)
         self._parse_signals(class_, class_.signals)
         self._parse_fields(class_, class_.fields)
 
@@ -236,7 +236,7 @@ class AnnotationApplier(object):
         block = self._blocks.get(interface.name)
         self._parse_version(interface, block)
         self._parse_methods(interface.methods)
-        self._parse_properties(interface.properties)
+        self._parse_properties(interface, interface.properties)
         self._parse_signals(interface, interface.signals)
         self._parse_fields(interface, interface.fields)
 
@@ -273,9 +273,9 @@ class AnnotationApplier(object):
         for field in fields:
             self._parse_field(parent, field)
 
-    def _parse_properties(self, properties):
+    def _parse_properties(self, parent, properties):
         for prop in properties:
-            self._parse_property(property)
+            self._parse_property(parent, prop)
 
     def _parse_methods(self, methods):
         for method in methods:
@@ -285,8 +285,10 @@ class AnnotationApplier(object):
         for signal in signals:
             self._parse_signal(parent, signal)
 
-    def _parse_property(self, prop):
-        pass
+    def _parse_property(self, parent, prop):
+        block = self._blocks.get('%s:%s' % (parent.type_name, prop.name))
+        self._parse_version(prop, block)
+        self._parse_deprecated(prop, block)
 
     def _parse_callback(self, callback):
         block = self._blocks.get(callback.ctype)

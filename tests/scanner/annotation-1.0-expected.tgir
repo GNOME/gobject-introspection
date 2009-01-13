@@ -297,6 +297,9 @@
           <type name="GObject.Object"/>
         </return-value>
       </method>
+      <property name="string-property" writable="1" construct="1">
+        <type name="utf8"/>
+      </property>
       <glib:signal name="string-signal" when="LAST">
         <return-value transfer-ownership="full">
           <type name="none"/>

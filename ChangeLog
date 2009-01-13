@@ -1,5 +1,17 @@
 2009-01-12  Johan Dahlin  <jdahlin@async.com.br>
 
+	Bug 562467 – Property annotation
+
+	* giscanner/annotationparser.py:
+	* tests/scanner/annotation-1.0-expected.gir:
+	* tests/scanner/annotation-1.0-expected.tgir:
+	* tests/scanner/annotation.c (annotation_object_set_property),
+	(annotation_object_get_property), (annotation_object_class_init):
+
+	Annotations are parsed for properties.
+
+2009-01-12  Johan Dahlin  <jdahlin@async.com.br>
+
 	Bug 546739 – Introspection should know precise signal parameter types
 
 	* giscanner/annotationparser.py:

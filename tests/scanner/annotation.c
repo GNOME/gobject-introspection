@@ -5,6 +5,11 @@ static char backslash_parsing_tester = '\\';
 G_DEFINE_TYPE (AnnotationObject, annotation_object, G_TYPE_OBJECT);
 
 enum {
+  PROP_0,
+  PROP_STRING_PROPERTY,
+};
+
+enum {
   STRING_SIGNAL,
   LAST_SIGNAL
 };
@@ -12,11 +17,46 @@ enum {
 static guint annotation_object_signals[LAST_SIGNAL] = { 0 };
 
 static void
+annotation_object_set_property (GObject         *object,
+                                guint            prop_id,
+                                const GValue    *value,
+                                GParamSpec      *pspec)
+{
+  switch (prop_id)
+    {
+    case PROP_STRING_PROPERTY:
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+annotation_object_get_property (GObject         *object,
+                                guint            prop_id,
+                                GValue          *value,
+                                GParamSpec      *pspec)
+{
+  switch (prop_id)
+    {
+    case PROP_STRING_PROPERTY:
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
 annotation_object_class_init (AnnotationObjectClass *klass)
 {
   GObjectClass *gobject_class;
 
   gobject_class = G_OBJECT_CLASS (klass);
+
+  gobject_class->set_property = annotation_object_set_property;
+  gobject_class->get_property = annotation_object_get_property;
 
   /**
    * AnnotationObject::string-signal:
@@ -38,6 +78,23 @@ annotation_object_class_init (AnnotationObjectClass *klass)
 		  (GSignalCMarshaller)g_cclosure_marshal_VOID__POINTER,
 		  G_TYPE_NONE, 1, G_TYPE_POINTER);
 
+
+  /**
+   * AnnotationObject:string-property:
+   *
+   * This is a property which is a string
+   *
+   * Since: 1.0
+   * Deprecated: 1.2: Use better-string-property instead
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_STRING_PROPERTY,
+                                   g_param_spec_string ("string-property",
+                                                        "String property",
+                                                        "This property is a string",
+                                                        NULL,
+                                                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT));
+  
 }
 
 static void
