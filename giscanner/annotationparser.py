@@ -411,24 +411,19 @@ class AnnotationApplier(object):
 
     def _parse_return(self, parent, return_, block):
         tag = self._get_tag(block, TAG_RETURNS)
-        options = getattr(tag, 'options', {})
-        self._parse_param_ret_common(parent, return_, options)
-        if tag is not None and tag.comment is not None:
-            return_.doc = tag.comment
+        self._parse_param_ret_common(parent, return_, tag)
 
     def _parse_param(self, parent, param, tag):
-        options = getattr(tag, 'options', {})
-
         if isinstance(parent, Function):
+            options = getattr(tag, 'options', {})
             scope = options.get(OPT_SCOPE)
             if scope:
                 param.scope = scope.one()
                 param.transfer = PARAM_TRANSFER_NONE
-        self._parse_param_ret_common(parent, param, options)
-        if tag is not None and tag.comment is not None:
-            param.doc = tag.comment
+        self._parse_param_ret_common(parent, param, tag)
 
-    def _parse_param_ret_common(self, parent, node, options):
+    def _parse_param_ret_common(self, parent, node, tag):
+        options = getattr(tag, 'options', {})
         node.direction = self._extract_direction(node, options)
         container_type = self._extract_container_type(
             parent, node, options)
@@ -441,6 +436,8 @@ class AnnotationApplier(object):
             node.allow_none = True
 
         assert node.transfer is not None
+        if tag is not None and tag.comment is not None:
+            node.doc = tag.comment
 
     def _extract_direction(self, node, options):
         if (OPT_INOUT in options or
