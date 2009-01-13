@@ -310,6 +310,18 @@
           </parameter>
         </parameters>
       </glib:signal>
+      <glib:signal name="list-signal" when="LAST">
+        <return-value transfer-ownership="full">
+          <type name="none"/>
+        </return-value>
+        <parameters>
+          <parameter name="list" transfer-ownership="container">
+            <type name="GLib.List">
+              <type name="utf8"/>
+            </type>
+          </parameter>
+        </parameters>
+      </glib:signal>
     </class>
     <record name="ObjectClass">
       <field name="parent_class">

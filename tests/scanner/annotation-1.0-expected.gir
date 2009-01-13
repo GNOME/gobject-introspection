@@ -338,6 +338,18 @@
           </parameter>
         </parameters>
       </glib:signal>
+      <glib:signal name="list-signal">
+        <return-value transfer-ownership="full">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <parameter name="list" transfer-ownership="container">
+            <type name="GLib.List" c:type="gpointer">
+              <type name="utf8"/>
+            </type>
+          </parameter>
+        </parameters>
+      </glib:signal>
     </class>
     <record name="ObjectClass" c:type="AnnotationObjectClass">
       <field name="parent_class">

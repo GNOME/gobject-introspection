@@ -11,6 +11,7 @@ enum {
 
 enum {
   STRING_SIGNAL,
+  LIST_SIGNAL,
   LAST_SIGNAL
 };
 
@@ -78,6 +79,22 @@ annotation_object_class_init (AnnotationObjectClass *klass)
 		  (GSignalCMarshaller)g_cclosure_marshal_VOID__POINTER,
 		  G_TYPE_NONE, 1, G_TYPE_POINTER);
 
+  /**
+   * AnnotationObject::list-signal:
+   * @annotation: the annotation object
+   * @list: (type GLib.List): (element-type utf8): (transfer container): a list of strings
+   *
+   * This is a signal which takes a list of strings, but it's not
+   * known by GObject as it's only marked as G_TYPE_POINTER
+   */
+  annotation_object_signals[LIST_SIGNAL] =
+    g_signal_new ("list-signal",
+		  G_OBJECT_CLASS_TYPE (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  0,
+		  NULL, NULL,
+		  (GSignalCMarshaller)g_cclosure_marshal_VOID__POINTER,
+		  G_TYPE_NONE, 1, G_TYPE_POINTER);
 
   /**
    * AnnotationObject:string-property:
