@@ -20,9 +20,6 @@
 
 # AnnotationParser - parses gtk-doc annotations
 
-# All gtk-doc comments needs to start with this:
-_COMMENT_HEADER = '*\n '
-
 from .ast import (Array, Callback, Class, Enum, Field, Function, Interface,
                   List, Map, Parameter, Record, Return, Type, Union, Varargs,
                   default_array_types,
@@ -36,6 +33,32 @@ from .ast import (Array, Callback, Class, Enum, Field, Function, Interface,
                   TYPE_ANY, TYPE_NONE)
 from .odict import odict
 from .glibast import GLibBoxed
+
+# All gtk-doc comments needs to start with this:
+_COMMENT_HEADER = '*\n '
+
+# Tags - annotations applyed to comment blocks
+TAG_SINCE = 'Since'
+TAG_DEPRECATED = 'Deprecated'
+TAG_RETURNS = 'Returns'
+TAG_RETURNS_ALT = 'Return value'
+
+# Options - annotations for parameters and return values
+OPT_ALLOW_NONE = 'allow-none'
+OPT_ARRAY = 'array'
+OPT_ELEMENT_TYPE = 'element-type'
+OPT_IN = 'in'
+OPT_INOUT = 'inout'
+OPT_INOUT_ALT = 'in-out'
+OPT_OUT = 'out'
+OPT_SCOPE = 'scope'
+OPT_TRANSFER = 'transfer'
+OPT_TYPE = 'type'
+
+# Array options - array specific annotations
+OPT_ARRAY_FIXED_SIZE = 'fixed-size'
+OPT_ARRAY_LENGTH = 'length'
+OPT_ARRAY_ZERO_TERMINATED = 'zero-terminated'
 
 
 class InvalidAnnotationError(Exception):
@@ -53,10 +76,10 @@ class DocBlock(object):
         return '<DocBlock %r>' % (self.name, )
 
     def get(self, name):
-        if name == 'Returns':
+        if name == TAG_RETURNS:
             value = self.tags.get(name)
             if value is None:
-                return self.tags.get('Return value')
+                return self.tags.get(TAG_RETURNS_ALT)
             else:
                 return value
         else:
@@ -319,7 +342,7 @@ class AnnotationApplier(object):
                 name, tag = names[i+1]
                 param.name = name
                 options = getattr(tag, 'options', {})
-                param_type = options.get('type')
+                param_type = options.get(OPT_TYPE)
                 if param_type:
                     param.type.name = param_type.one()
             else:
@@ -337,7 +360,7 @@ class AnnotationApplier(object):
             self._parse_param(parent, param, tag)
 
     def _parse_return(self, parent, return_, block):
-        tag = self._get_tag(block, 'Returns')
+        tag = self._get_tag(block, TAG_RETURNS)
         options = getattr(tag, 'options', {})
         self._parse_param_ret_common(parent, return_, options)
 
@@ -345,7 +368,7 @@ class AnnotationApplier(object):
         options = getattr(tag, 'options', {})
 
         if isinstance(parent, Function):
-            scope = options.get('scope')
+            scope = options.get(OPT_SCOPE)
             if scope:
                 param.scope = scope.one()
                 param.transfer = PARAM_TRANSFER_NONE
@@ -360,18 +383,18 @@ class AnnotationApplier(object):
         if node.direction is None:
             node.direction = self._guess_direction(node)
         node.transfer = self._extract_transfer(parent, node, options)
-        if 'allow-none' in options:
+        if OPT_ALLOW_NONE in options:
             node.allow_none = True
 
         assert node.transfer is not None
 
     def _extract_direction(self, node, options):
-        if ('inout' in options or
-            'in-out' in options):
+        if (OPT_INOUT in options or
+            OPT_INOUT_ALT in options):
             direction = PARAM_DIRECTION_INOUT
-        elif 'out' in options:
+        elif OPT_OUT in options:
             direction = PARAM_DIRECTION_OUT
-        elif 'in' in options:
+        elif OPT_IN in options:
             direction = PARAM_DIRECTION_IN
         else:
             direction = node.direction
@@ -388,8 +411,8 @@ class AnnotationApplier(object):
         return False
 
     def _extract_container_type(self, parent, node, options):
-        has_element_type = 'element-type' in options
-        has_array = 'array' in options
+        has_element_type = OPT_ELEMENT_TYPE in options
+        has_array = OPT_ARRAY in options
 
         # FIXME: This is a hack :-(
         if (not isinstance(node, Field) and
@@ -409,13 +432,13 @@ class AnnotationApplier(object):
         return container_type
 
     def _parse_array(self, parent, node, options):
-        array_opt = options.get('array')
+        array_opt = options.get(OPT_ARRAY)
         if array_opt:
             array_values = array_opt.all()
         else:
             array_values = {}
 
-        element_type = options.get('element-type')
+        element_type = options.get(OPT_ELEMENT_TYPE)
         if element_type is not None:
             element_type_name = element_type.one()
         else:
@@ -423,10 +446,10 @@ class AnnotationApplier(object):
 
         container_type = Array(node.type.ctype,
                                element_type_name)
-        if 'zero-terminated' in array_values:
+        if OPT_ARRAY_ZERO_TERMINATED in array_values:
             container_type.zeroterminated = array_values.get(
-                'zero-terminated') == '1'
-        length = array_values.get('length')
+                OPT_ARRAY_ZERO_TERMINATED) == '1'
+        length = array_values.get(OPT_ARRAY_LENGTH)
         if length is not None:
             param_index = parent.get_parameter_index(length)
             container_type.length_param_index = param_index
@@ -438,11 +461,11 @@ class AnnotationApplier(object):
                 self._guess_direction(node) == PARAM_DIRECTION_IN):
                 # FIXME: unsigned char/guchar should be uint8
                 container_type.element_type = 'int8'
-        container_type.size = array_values.get('fized-size')
+        container_type.size = array_values.get(OPT_ARRAY_FIXED_SIZE)
         return container_type
 
     def _parse_element_type(self, parent, node, options):
-        element_type_opt = options.get('element-type')
+        element_type_opt = options.get(OPT_ELEMENT_TYPE)
         element_type = element_type_opt.flat()
         if node.type.name in ['GLib.List', 'GLib.SList']:
             assert len(element_type) == 1
@@ -465,7 +488,7 @@ class AnnotationApplier(object):
         return container_type
 
     def _extract_transfer(self, parent, node, options):
-        transfer_opt = options.get('transfer')
+        transfer_opt = options.get(OPT_TRANSFER)
         if transfer_opt is None:
             transfer = self._guess_transfer(node, options)
         else:
@@ -481,13 +504,13 @@ class AnnotationApplier(object):
         return transfer
 
     def _parse_version(self, node, block):
-        since_tag = self._get_tag(block, 'Since')
+        since_tag = self._get_tag(block, TAG_SINCE)
         if since_tag is None:
             return
         node.version = since_tag.value
 
     def _parse_deprecated(self, node, block):
-        deprecated_tag = self._get_tag(block, 'Deprecated')
+        deprecated_tag = self._get_tag(block, TAG_DEPRECATED)
         if deprecated_tag is None:
             return
         value = deprecated_tag.value
