@@ -119,6 +119,8 @@ class GIRWriter(XMLWriter):
     def _write_function(self, func, tag_name='function'):
         attrs = [('name', func.name),
                  ('c:identifier', func.symbol)]
+        if func.doc:
+            attrs.append(('doc', func.doc))
         self._append_version(func, attrs)
         self._append_deprecated(func, attrs)
         self._append_throws(func, attrs)
@@ -143,6 +145,8 @@ class GIRWriter(XMLWriter):
 
         attrs = []
         attrs.append(('transfer-ownership', return_.transfer))
+        if return_.doc:
+            attrs.append(('doc', return_.doc))
         with self.tagcontext('return-value', attrs):
             self._write_type(return_.type)
 
@@ -171,6 +175,8 @@ class GIRWriter(XMLWriter):
             attrs.append(('closure', '%d' % parameter.closure_index))
         if parameter.destroy_index >= 0:
             attrs.append(('destroy', '%d' % parameter.destroy_index))
+        if parameter.doc:
+            attrs.append(('doc', parameter.doc))
         with self.tagcontext('parameter', attrs):
             self._write_type(parameter.type)
 
@@ -222,6 +228,8 @@ class GIRWriter(XMLWriter):
 
     def _write_enum(self, enum):
         attrs = [('name', enum.name)]
+        if enum.doc:
+            attrs.append(('doc', enum.doc))
         self._append_version(enum, attrs)
         self._append_deprecated(enum, attrs)
         if isinstance(enum, GLibEnum):
@@ -236,6 +244,8 @@ class GIRWriter(XMLWriter):
 
     def _write_bitfield(self, bitfield):
         attrs = [('name', bitfield.name)]
+        if bitfield.doc:
+            attrs.append(('doc', bitfield.doc))
         self._append_version(bitfield, attrs)
         self._append_deprecated(bitfield, attrs)
         if isinstance(bitfield, GLibFlags):
@@ -265,6 +275,8 @@ class GIRWriter(XMLWriter):
     def _write_class(self, node):
         attrs = [('name', node.name),
                  ('c:type', node.ctype)]
+        if node.doc:
+            attrs.append(('doc', node.doc))
         self._append_version(node, attrs)
         self._append_deprecated(node, attrs)
         if isinstance(node, Class):
@@ -303,6 +315,8 @@ class GIRWriter(XMLWriter):
     def _write_boxed(self, boxed):
         attrs = [('c:type', boxed.ctype),
                  ('glib:name', boxed.name)]
+        if boxed.doc:
+            attrs.append(('doc', boxed.doc))
         attrs.extend(self._boxed_attrs(boxed))
         with self.tagcontext('glib:boxed', attrs):
             self._write_boxed_ctors_methods(boxed)
@@ -320,12 +334,16 @@ class GIRWriter(XMLWriter):
             attrs.append(('construct', '1'))
         if prop.construct_only:
             attrs.append(('construct-only', '1'))
+        if prop.doc:
+            attrs.append(('doc', prop.doc))
         with self.tagcontext('property', attrs):
             self._write_type(prop.type)
 
     def _write_callback(self, callback):
         # FIXME: reuse _write_function
         attrs = [('name', callback.name), ('c:type', callback.ctype)]
+        if callback.doc:
+            attrs.append(('doc', callback.doc))
         self._append_version(callback, attrs)
         self._append_deprecated(callback, attrs)
         self._append_throws(callback, attrs)
@@ -348,6 +366,8 @@ class GIRWriter(XMLWriter):
                  ('c:type', record.symbol)]
         if record.disguised:
             attrs.append(('disguised', '1'))
+        if record.doc:
+            attrs.append(('doc', record.doc))
         self._append_version(record, attrs)
         self._append_deprecated(record, attrs)
         if isinstance(record, GLibBoxed):
@@ -362,6 +382,8 @@ class GIRWriter(XMLWriter):
     def _write_union(self, union):
         attrs = [('name', union.name),
                  ('c:type', union.symbol)]
+        if union.doc:
+            attrs.append(('doc', union.doc))
         self._append_version(union, attrs)
         self._append_deprecated(union, attrs)
         if isinstance(union, GLibBoxed):
@@ -396,6 +418,8 @@ class GIRWriter(XMLWriter):
 
     def _write_signal(self, signal):
         attrs = [('name', signal.name)]
+        if signal.doc:
+            attrs.append(('doc', signal.doc))
         self._append_version(signal, attrs)
         self._append_deprecated(signal, attrs)
         with self.tagcontext('glib:signal', attrs):

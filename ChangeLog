@@ -1,5 +1,17 @@
 2009-01-13  Johan Dahlin  <jdahlin@async.com.br>
 
+	Bug 555036 – put gtk-doc in GIR
+
+	* giscanner/annotationparser.py:
+	* giscanner/ast.py:
+	* giscanner/girwriter.py:
+	* giscanner/glibast.py:
+	* tests/scanner/annotation-1.0-expected.gir:
+	* tests/scanner/annotation.h:
+	* tests/scanner/foo-1.0-expected.gir:
+
+2009-01-13  Johan Dahlin  <jdahlin@async.com.br>
+
 	* giscanner/cachestore.py (CacheStore.load): Catch AttributeError
 	which seems to be occasionally raised for Record.
 

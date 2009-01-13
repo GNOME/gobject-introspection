@@ -401,7 +401,10 @@
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
-        <parameter name="r1" direction="inout" transfer-ownership="full">
+        <parameter name="r1"
+                   direction="inout"
+                   transfer-ownership="full"
+                   doc="add to this rect">
           <type name="Rectangle" c:type="FooRectangle*"/>
         </parameter>
         <parameter name="r2" transfer-ownership="none">

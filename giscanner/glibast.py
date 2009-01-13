@@ -136,7 +136,7 @@ class GLibBoxedOther(Node, GLibBoxed):
         Node.__init__(self, name)
         GLibBoxed.__init__(self, type_name, get_type)
         self.ctype = type_name
-
+        self.doc = None
 
 class GLibInterface(Interface):
 
@@ -159,3 +159,4 @@ class GLibSignal(Node):
         Node.__init__(self, name)
         self.retval = retval
         self.parameters = []
+        self.doc = None

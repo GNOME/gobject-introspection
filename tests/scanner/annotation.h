@@ -7,6 +7,7 @@
  * AnnotationCallback:
  * @in: (in) (transfer none): array of ints
  *
+ * This is a callback.
  * Return value: (transfer none): array of ints
  */
 typedef const gint* (*AnnotationCallback) (const gint *in);
@@ -15,10 +16,16 @@ typedef const gint* (*AnnotationCallback) (const gint *in);
  * AnnotationListCallback:
  * @in: (in) (transfer none) (element-type utf8): list of strings
  *
+ * This is a callback taking a list.
  * Return value: (transfer container) (element-type utf8): list of strings
  */
 typedef GList* (*AnnotationListCallback) (GList *in);
 
+/**
+ * AnnotationObject:
+ *
+ * This is an object used to test annotations.
+ */
 typedef struct _AnnotationObject          AnnotationObject;
 typedef struct _AnnotationObjectClass     AnnotationObjectClass;
 
@@ -100,7 +107,12 @@ void     annotation_init                (int              *argc,
 char **  annotation_return_array        (int             *length);
 void     annotation_versioned           (void);
 
-struct _AnnotationStruct
+/**
+ * AnnotationStruct:
+ *
+ * This is a test of an array of object in an field of a struct.
+ */
+struct AnnotationStruct
 {
   AnnotationObject *objects[10];
 };

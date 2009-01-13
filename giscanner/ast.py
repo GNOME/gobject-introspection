@@ -201,6 +201,7 @@ class Function(Node):
         self.symbol = symbol
         self.throws = not not throws
         self.is_method = False
+        self.doc = None
 
     def get_parameter_index(self, name):
         for i, parameter in enumerate(self.parameters):
@@ -312,6 +313,7 @@ class Parameter(TypeContainer):
         self.scope = scope
         self.closure_index = -1
         self.destroy_index = -1
+        self.doc = None
 
     def __repr__(self):
         return 'Parameter(%r, %r)' % (self.name, self.type)
@@ -323,6 +325,7 @@ class Enum(Node):
         Node.__init__(self, name)
         self.symbol = symbol
         self.members = members
+        self.doc = None
 
     def __repr__(self):
         return 'Enum(%r, %r)' % (self.name, self.members)
@@ -334,6 +337,7 @@ class Bitfield(Node):
         Node.__init__(self, name)
         self.symbol = symbol
         self.members = members
+        self.doc = None
 
     def __repr__(self):
         return 'Bitfield(%r, %r)' % (self.name, self.members)
@@ -358,6 +362,7 @@ class Record(Node):
         self.constructors = []
         self.symbol = symbol
         self.disguised = disguised
+        self.doc = None
 
 # BW compat, remove
 Struct = Record
@@ -385,6 +390,7 @@ class Return(TypeContainer):
     def __init__(self, rtype, transfer=None):
         TypeContainer.__init__(self, None, rtype, transfer)
         self.direction = PARAM_DIRECTION_OUT
+        self.doc = None
 
     def __repr__(self):
         return 'Return(%r)' % (self.type, )
@@ -403,6 +409,7 @@ class Class(Node):
         self.constructors = []
         self.properties = []
         self.fields = []
+        self.doc = None
 
     def __repr__(self):
         return '%s(%r, %r, %r)' % (
@@ -419,6 +426,7 @@ class Interface(Node):
         self.properties = []
         self.fields = []
         self.prerequisites = []
+        self.doc = None
 
     def __repr__(self):
         return '%s(%r, %r)' % (
@@ -448,6 +456,7 @@ class Property(Node):
         self.writable = writable
         self.construct = construct
         self.construct_only = construct_only
+        self.doc = None
 
     def __repr__(self):
         return '%s(%r, %r)' % (
@@ -466,6 +475,7 @@ class Callback(Node):
         self.parameters = parameters
         self.ctype = ctype
         self.throws = False
+        self.doc = None
 
     def __repr__(self):
         return 'Callback(%r, %r, %r)' % (
@@ -479,6 +489,7 @@ class Union(Node):
         self.fields = []
         self.constructors = []
         self.symbol = symbol
+        self.doc = None
 
     def __repr__(self):
         return 'Union(%r, %r)' % (self.name, self.fields, )

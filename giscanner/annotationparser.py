@@ -20,8 +20,9 @@
 
 # AnnotationParser - parses gtk-doc annotations
 
-from .ast import (Array, Callback, Class, Enum, Field, Function, Interface,
-                  List, Map, Parameter, Record, Return, Type, Union, Varargs,
+from .ast import (Array, Bitfield, Callback, Class, Enum, Field, Function,
+                  Interface, List, Map, Parameter, Record, Return, Type, Union,
+                  Varargs,
                   default_array_types,
                   BASIC_GIR_TYPES,
                   PARAM_DIRECTION_INOUT,
@@ -71,6 +72,7 @@ class DocBlock(object):
         self.name = name
         self.value = None
         self.tags = odict()
+        self.comment = None
 
     def __repr__(self):
         return '<DocBlock %r>' % (self.name, )
@@ -91,6 +93,7 @@ class DocTag(object):
     def __init__(self, name):
         self.name = name
         self.options = []
+        self.comment = None
 
 
 class Option(object):
@@ -164,34 +167,36 @@ class AnnotationParser(object):
         if not block_name.endswith(':'):
             return
         block = DocBlock(block_name[:-1])
-        content = comment[pos+1:]
-        for line in content.split('\n'):
+        comment_lines = []
+        for line in comment[pos+1:].split('\n'):
             line = line.lstrip()
             line = line[2:].strip() # Skip ' *'
             if not line:
                 continue
-
             if line.startswith('@'):
                 line = line[1:]
             elif not ': ' in line:
+                comment_lines.append(line)
                 continue
             tag = self._parse_tag(line)
             block.tags[tag.name] = tag
-
+        block.comment = '\n'.join(comment_lines)
         self._blocks[block.name] = block
 
-    def _parse_tag(self, value):
+    def _parse_tag(self, raw):
         # Tag: bar
         # Tag: bar opt1 opt2
-        parts = value.split(': ', 1)
+        parts = raw.split(': ', 1)
         if len(parts) == 1:
             tag_name = parts[0]
-            options = ''
+            value = ''
         else:
-            tag_name, options = parts
+            tag_name, value = parts
+        options, rest = self._parse_options(value)
         tag = DocTag(tag_name)
-        tag.value = options
-        tag.options = self._parse_options(options)
+        tag.value = value
+        tag.options = options
+        tag.comment = rest
         return tag
 
     def _parse_options(self, value):
@@ -199,6 +204,7 @@ class AnnotationParser(object):
         # (bar opt1 opt2...)
         opened = -1
         options = {}
+        last = None
         for i, c in enumerate(value):
             if c == '(' and opened == -1:
                 opened = i+1
@@ -215,8 +221,14 @@ class AnnotationParser(object):
                 if option is not None:
                     option = Option(option)
                 options[name] = option
+                last = i + 2
                 opened = -1
-        return options
+
+        if last is not None:
+            rest = value[last:].strip()
+        else:
+            rest = None
+        return options, rest
 
 
 class AnnotationApplier(object):
@@ -242,6 +254,8 @@ class AnnotationApplier(object):
             self._parse_function(node)
         elif isinstance(node, Enum):
             self._parse_enum(node)
+        elif isinstance(node, Bitfield):
+            self._parse_bitfield(node)
         elif isinstance(node, Class):
             self._parse_class(node)
         elif isinstance(node, Interface):
@@ -256,7 +270,7 @@ class AnnotationApplier(object):
             self._parse_boxed(node)
 
     def _parse_class(self, class_):
-        block = self._blocks.get(class_.name)
+        block = self._blocks.get(class_.type_name)
         self._parse_version(class_, block)
         self._parse_constructors(class_.constructors)
         self._parse_methods(class_.methods)
@@ -264,14 +278,18 @@ class AnnotationApplier(object):
         self._parse_properties(class_, class_.properties)
         self._parse_signals(class_, class_.signals)
         self._parse_fields(class_, class_.fields)
+        if block:
+            class_.doc = block.comment
 
     def _parse_interface(self, interface):
-        block = self._blocks.get(interface.name)
+        block = self._blocks.get(interface.type_name)
         self._parse_version(interface, block)
         self._parse_methods(interface.methods)
         self._parse_properties(interface, interface.properties)
         self._parse_signals(interface, interface.signals)
         self._parse_fields(interface, interface.fields)
+        if block:
+            interface.doc = block.comment
 
     def _parse_record(self, record):
         block = self._blocks.get(record.symbol)
@@ -280,12 +298,16 @@ class AnnotationApplier(object):
         self._parse_fields(record, record.fields)
         if isinstance(record, GLibBoxed):
             self._parse_methods(record.methods)
+        if block:
+            record.doc = block.comment
 
     def _parse_boxed(self, boxed):
         block = self._blocks.get(boxed.name)
         self._parse_version(boxed, block)
         self._parse_constructors(boxed.constructors)
         self._parse_methods(boxed.methods)
+        if block:
+            boxed.doc = block.comment
 
     def _parse_union(self, union):
         block = self._blocks.get(union.name)
@@ -293,10 +315,20 @@ class AnnotationApplier(object):
         self._parse_constructors(union.constructors)
         if isinstance(union, GLibBoxed):
             self._parse_methods(union.methods)
+        if block:
+            union.doc = block.comment
 
     def _parse_enum(self, enum):
         block = self._blocks.get(enum.symbol)
         self._parse_version(enum, block)
+        if block:
+            enum.doc = block.comment
+
+    def _parse_bitfield(self, bitfield):
+        block = self._blocks.get(bitfield.symbol)
+        self._parse_version(bitfield, block)
+        if block:
+            bitfield.doc = block.comment
 
     def _parse_constructors(self, constructors):
         for ctor in constructors:
@@ -322,12 +354,16 @@ class AnnotationApplier(object):
         block = self._blocks.get('%s:%s' % (parent.type_name, prop.name))
         self._parse_version(prop, block)
         self._parse_deprecated(prop, block)
+        if block:
+            prop.doc = block.comment
 
     def _parse_callback(self, callback):
         block = self._blocks.get(callback.ctype)
         self._parse_version(callback, block)
         self._parse_params(callback, callback.parameters, block)
         self._parse_return(callback, callback.retval, block)
+        if block:
+            callback.doc = block.comment
 
     def _parse_function(self, func):
         block = self._blocks.get(func.symbol)
@@ -335,6 +371,8 @@ class AnnotationApplier(object):
         self._parse_deprecated(func, block)
         self._parse_params(func, func.parameters, block)
         self._parse_return(func, func.retval, block)
+        if block:
+            func.doc = block.comment
 
     def _parse_signal(self, parent, signal):
         block = self._blocks.get('%s::%s' % (parent.type_name, signal.name))
@@ -359,6 +397,8 @@ class AnnotationApplier(object):
                 tag = None
             self._parse_param(signal, param, tag)
         self._parse_return(signal, signal.retval, block)
+        if block:
+            signal.doc = block.comment
 
     def _parse_field(self, parent, field):
         if isinstance(field, Callback):
@@ -373,6 +413,8 @@ class AnnotationApplier(object):
         tag = self._get_tag(block, TAG_RETURNS)
         options = getattr(tag, 'options', {})
         self._parse_param_ret_common(parent, return_, options)
+        if tag is not None and tag.comment is not None:
+            return_.doc = tag.comment
 
     def _parse_param(self, parent, param, tag):
         options = getattr(tag, 'options', {})
@@ -383,6 +425,8 @@ class AnnotationApplier(object):
                 param.scope = scope.one()
                 param.transfer = PARAM_TRANSFER_NONE
         self._parse_param_ret_common(parent, param, options)
+        if tag is not None and tag.comment is not None:
+            param.doc = tag.comment
 
     def _parse_param_ret_common(self, parent, node, options):
         node.direction = self._extract_direction(node, options)
