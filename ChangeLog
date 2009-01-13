@@ -1,3 +1,8 @@
+2009-01-13  Johan Dahlin  <jdahlin@async.com.br>
+
+	* giscanner/annotationparser.py:
+	Fix a bug where \n was not present in a comment
+
 2009-01-12  Johan Dahlin  <jdahlin@async.com.br>
 
 	Bug 562467 – Property annotation

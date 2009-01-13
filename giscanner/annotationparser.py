@@ -138,6 +138,15 @@ class AnnotationParser(object):
         aa.parse(self._namespace)
 
     def _parse_comment(self, comment):
+        # We're looking for gtk-doc comments here, they look like this:
+        # /**
+        #   * symbol:
+        #
+        # symbol is currently one of:
+        #  - function: gtk_widget_show
+        #  - signal:   GtkWidget::destroy
+        #  - property: GtkWidget:visible
+        #
         comment = comment.lstrip()
         if not comment.startswith(_COMMENT_HEADER):
             return
@@ -147,8 +156,9 @@ class AnnotationParser(object):
             return
         comment = comment[2:]
 
-        pos = comment.index('\n ')
-
+        pos = comment.find('\n ')
+        if pos == -1:
+            return
         block_name = comment[:pos]
         block_name = block_name.strip()
         if not block_name.endswith(':'):
