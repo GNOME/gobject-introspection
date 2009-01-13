@@ -129,7 +129,7 @@ class CacheStore(object):
             return None
         try:
             data = cPickle.load(fd)
-        except (EOFError, ValueError, cPickle.BadPickleGet):
+        except (AttributeError, EOFError, ValueError, cPickle.BadPickleGet):
             # Broken cache entry, remove it
             self._remove_filename(store_filename)
             data = None

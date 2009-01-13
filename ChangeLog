@@ -1,5 +1,8 @@
 2009-01-13  Johan Dahlin  <jdahlin@async.com.br>
 
+	* giscanner/cachestore.py (CacheStore.load): Catch AttributeError
+	which seems to be occasionally raised for Record.
+
 	* giscanner/annotationparser.py:
 	Fix a bug where \n was not present in a comment
 
