@@ -106,6 +106,8 @@ void     annotation_init                (int              *argc,
 					 char           ***argv);
 char **  annotation_return_array        (int             *length);
 void     annotation_versioned           (void);
+char **  annotation_string_zero_terminated (void);
+void     annotation_string_zero_terminated_out (char ***out);
 
 /**
  * AnnotationStruct:

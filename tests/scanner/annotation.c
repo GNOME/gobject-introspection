@@ -515,7 +515,7 @@ annotation_object_do_not_use (AnnotationObject *object)
 /**
  * annotation_init:
  * @argc: (inout): The number of args. 
- * @argv: (inout) (array length=argc zero-terminated=1): The arguments.
+ * @argv: (inout) (array length=argc): The arguments.
  **/
 void
 annotation_init (int *argc, char ***argv)
@@ -527,10 +527,31 @@ annotation_init (int *argc, char ***argv)
  * annotation_return_array:
  * @length: (out): Number of return values
  *
- * Return value: (array length=length zero-terminated=1): The return value
+ * Return value: (array length=length): The return value
  **/
 char **
 annotation_return_array (int *length)
+{
+  return NULL;
+}
+
+/**
+ * annotation_string_zero_terminated:
+ *
+ * Return value: (array zero-terminated=1): The return value
+ **/
+char **
+annotation_string_zero_terminated (void)
+{
+  return NULL;
+}
+
+/**
+ * annotation_string_zero_terminated_out:
+ * @out: (array zero-terminated=1) (inout)
+ **/
+void
+annotation_string_zero_terminated_out (char ***out)
 {
   return NULL;
 }
