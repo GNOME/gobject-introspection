@@ -35,8 +35,10 @@ class GIRWriter(XMLWriter):
 
     def __init__(self, namespace, shlibs, includes):
         super(GIRWriter, self).__init__()
-        self.write_comment('''This file was automatically generated from C sources - DO NOT EDIT!
-     To affect the contents of this file, edit the original C definitions, and/or use gtk-doc annotations. ''')
+        self.write_comment(
+'''This file was automatically generated from C sources - DO NOT EDIT!
+To affect the contents of this file, edit the original C definitions,
+and/or use gtk-doc annotations. ''')
         self._write_repository(namespace, shlibs, includes)
 
     def _write_repository(self, namespace, shlibs, includes=set()):
