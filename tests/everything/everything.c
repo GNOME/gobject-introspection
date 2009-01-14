@@ -288,7 +288,7 @@ test_array_gtype_in (int n_types, GType *types)
 }
 
 /**
- * test_strv_out
+ * test_strv_out:
  *
  * Return value: (array zero-terminated=1) (transfer full):
  */
