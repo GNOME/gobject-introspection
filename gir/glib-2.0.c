@@ -10,9 +10,9 @@
  */
 
 /**
-* g_thread_init:
-* @vtable: (allow-none):
-*/
+ * g_thread_init:
+ * @vtable: (allow-none):
+ */
  
 /**
  * g_main_loop_new:
