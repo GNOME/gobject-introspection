@@ -101,6 +101,9 @@ class XMLWriter(object):
     def write_line(self, line=''):
         self._data.write('%s%s\n' % (self._indent_char * self._indent, line))
 
+    def write_comment(self, text):
+        self.write_line('<!-- %s -->' % (text, ))
+
     def write_tag(self, tag_name, attributes, data=None):
         if attributes is None:
             attributes = []
