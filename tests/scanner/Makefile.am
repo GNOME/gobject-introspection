@@ -64,12 +64,6 @@ drawable-1.0.gir: libdrawable.la drawable.c drawable.h utility-1.0.gir $(SCANNER
 	 --output $@
 GIRS += drawable-1.0.gir
 
-drawable-injected-1.0.gir: drawable-1.0.gir $(SCANNER_BIN) $(SCANNER_LIBS) Makefile
-	$(CHECK_DEBUG) $(SCANNER) -v \
-	 --inject drawable-1.0.gir $(srcdir)/DrawableAdditions.xml $@
-GIRS += drawable-injected-1.0.gir
-EXTRA_DIST += DrawableAdditions.xml
-
 foo-1.0.gir: libfoo.la foo.c foo.h utility-1.0.gir $(SCANNER_BIN) $(SCANNER_LIBS) Makefile
 	$(CHECK_DEBUG) $(SCANNER) \
 	--include=GObject-2.0 \
