@@ -376,6 +376,25 @@
         <type name="none"/>
       </return-value>
     </function>
+    <function name="string_zero_terminated" c:identifier="annotation_string_zero_terminated">
+      <return-value transfer-ownership="none">
+        <array zero-terminated="1">
+          <type name="utf8"/>
+        </array>
+      </return-value>
+    </function>
+    <function name="string_zero_terminated_out" c:identifier="annotation_string_zero_terminated_out">
+      <return-value transfer-ownership="none">
+        <type name="none"/>
+      </return-value>
+      <parameters>
+        <parameter name="out" transfer-ownership="none" direction="inout">
+          <array zero-terminated="1">
+            <type name="utf8"/>
+          </array>
+        </parameter>
+      </parameters>
+    </function>
     <record name="Struct">
       <field name="objects" writable="1">
         <array fixed-size="10">
