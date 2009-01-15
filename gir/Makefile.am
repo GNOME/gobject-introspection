@@ -1,7 +1,19 @@
 include $(top_srcdir)/common.mk
 
-BUILT_SOURCES =
+BUILT_GIRSOURCES = 
+CLEANFILES =
 EXTRA_DIST = 
+
+BASE_GIRSOURCES = 		\
+	cairo-1.0.gir 		\
+	fontconfig-2.0.gir	\
+	freetype2-2.0.gir	\
+	GL-1.0.gir		\
+	libxml2-2.0.gir		\
+	xft-2.0.gir 		\
+	xlib-2.0.gir 		\
+	xfixes-4.0.gir
+EXTRA_DIST += $(BASE_GIRSOURCES)
 
 # glib
 GLIB_INCLUDEDIR=`pkg-config --variable=includedir glib-2.0`/glib-2.0
@@ -31,7 +43,7 @@ GLib-2.0.gir: $(SCANNER_BIN) $(SCANNER_LIBS) Makefile glib-2.0.c
 	    $(GLIB_INCLUDEDIR)/glib/*.h
 	$(SCANNER) $(SCANNER_ARGS) \
 	    --xpath-assertions=$(srcdir)/GLib-2.0.xpath GLib-2.0.gir
-BUILT_SOURCES += GLib-2.0.gir
+BUILT_GIRSOURCES += GLib-2.0.gir
 EXTRA_DIST += glib-2.0.c GLib-2.0.xpath
 
 # gobject
@@ -58,7 +70,7 @@ GObject-2.0.gir: GLib-2.0.gir $(SCANNER_BIN) $(SCANNER_LIBS) Makefile
 	    -DGOBJECT_COMPILATION \
             --pkg glib-2.0 \
 	    $(GLIB_INCLUDEDIR)/gobject/*.h
-BUILT_SOURCES += GObject-2.0.gir
+BUILT_GIRSOURCES += GObject-2.0.gir
 
 # gmodule
 GMODULE_INCLUDEDIR=`pkg-config --variable=includedir gmodule-2.0`/glib-2.0
@@ -84,7 +96,7 @@ GModule-2.0.gir: GLib-2.0.gir $(SCANNER_BIN) $(SCANNER_LIBS)
 	    -I$(GMODULE_LIBDIR)/glib-2.0/include \
             --pkg glib-2.0 \
 	    $(GLIB_INCLUDEDIR)/gmodule.h
-BUILT_SOURCES += GModule-2.0.gir
+BUILT_GIRSOURCES += GModule-2.0.gir
 
 # gio
 GIO_INCLUDEDIR=`pkg-config --variable=includedir gio-2.0`/glib-2.0
@@ -120,7 +132,7 @@ Gio-2.0.gir: GObject-2.0.gir $(SCANNER_BIN) $(SCANNER_LIBS) Makefile $(srcdir)/g
 	    $(srcdir)/gio-2.0.c \
 	    $(GLIB_INCLUDEDIR)/gio/*.h \
 	    $(GIO_UNIX_HDRS)
-BUILT_SOURCES += Gio-2.0.gir
+BUILT_GIRSOURCES += Gio-2.0.gir
 EXTRA_DIST += gio-2.0.c
 
 # girepository
@@ -141,23 +153,23 @@ GIRepository-2.0.gir: GObject-2.0.gir $(SCANNER_BIN) $(SCANNER_LIBS) $(GIREPOSIT
             --pkg glib-2.0 \
             --pkg gobject-2.0 \
 	    $(GIREPOSITORY_FILES)
-BUILT_SOURCES += GIRepository-2.0.gir
+BUILT_GIRSOURCES += GIRepository-2.0.gir
 
 # Generic rules
-CLEANFILES = $(BUILT_SOURCES)
-girdir=$(datadir)/gir-1.0
-dist_gir_DATA = $(BUILT_SOURCES)
+CLEANFILES += $(BUILT_GIRSOURCES)
+
+GIRSOURCES = 			\
+	$(BASE_GIRSOURCES)	\
+	$(BUILT_GIRSOURCES)
+
+girdir = $(datadir)/gir-1.0
+dist_gir_DATA = $(GIRSOURCES)
 
 %.typelib: %.gir $(top_builddir)/tools/g-ir-compiler$(EXEEXT)
 	$(DEBUG) $(top_builddir)/tools/g-ir-compiler$(EXEEXT) --includedir=. $(G_IR_COMPILER_OPTS) $< -o $@
 
 typelibsdir = $(libdir)/girepository-1.0
-typelibs_DATA = 		\
-	GLib-2.0.typelib 	\
-	GModule-2.0.typelib	\
-	GObject-2.0.typelib	\
-	Gio-2.0.typelib		\
-	GIRepository-2.0.typelib
+typelibs_DATA = $(GIRSOURCES:.gir=.typelib) $(GIRSOURCES:.gir=.typelib)
 
 CLEANFILES += $(typelibs_DATA)
 
