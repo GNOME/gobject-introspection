@@ -8,4 +8,4 @@ SCANNER = $(SCANNER_ENV) $(SCANNER_BIN) $(SCANNER_ARGS)
 SCANNER_LIBS = \
 	$(top_srcdir)/giscanner/*.py \
 	$(top_builddir)/giscanner/libgiscanner.la \
-	$(top_builddir)/girepository/libgirepository.la
+	$(top_builddir)/girepository/libgirepository-1.0.la
