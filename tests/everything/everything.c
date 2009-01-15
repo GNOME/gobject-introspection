@@ -143,7 +143,7 @@ int test_closure_one_arg (GClosure *closure, int arg)
 }
 
 /**
- * test_value_arg
+ * test_value_arg:
  * @v: (transfer none): a GValue expected to contain an int
  *
  * Return value: the int contained in the GValue.
@@ -180,7 +180,8 @@ const GValue *test_value_return(int i) {
 static const char utf8_const[]    = "const \xe2\x99\xa5 utf8";
 static const char utf8_nonconst[] = "nonconst \xe2\x99\xa5 utf8";
 
-/** test_utf8_const_return:
+/** 
+ * test_utf8_const_return:
  * Return value: <const char*> UTF-8 string
  */
 G_CONST_RETURN char *test_utf8_const_return (void)
@@ -188,7 +189,8 @@ G_CONST_RETURN char *test_utf8_const_return (void)
   return utf8_const;
 }
 
-/** test_utf8_nonconst_return:8
+/** 
+ * test_utf8_nonconst_return:8
  * Return value: <char*> UTF-8 string
  */
 char *test_utf8_nonconst_return (void)
