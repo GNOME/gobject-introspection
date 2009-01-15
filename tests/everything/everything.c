@@ -190,7 +190,7 @@ G_CONST_RETURN char *test_utf8_const_return (void)
 }
 
 /** 
- * test_utf8_nonconst_return:8
+ * test_utf8_nonconst_return:
  * Return value: <char*> UTF-8 string
  */
 char *test_utf8_nonconst_return (void)
