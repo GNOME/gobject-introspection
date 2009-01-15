@@ -1,3 +1,21 @@
+2009-01-15  Johan Dahlin  <jdahlin@async.com.br>
+
+	Bug 567813 – Everything should be versioned
+
+	* gir/Makefile.am:
+	* girepository/Makefile.am:
+	* girepository/girepository.c (init_globals):
+	* girepository/girparser.c (locate_gir):
+	* giscanner/dumper.py:
+	* giscanner/transformer.py:
+	* gobject-introspection-1.0.pc.in:
+	* tests/everything/Makefile.am:
+	* tests/invoke/Makefile.am:
+	* tests/offsets/Makefile.am:
+	* tests/repository/Makefile.am:
+	* tests/scanner/Makefile.am:
+	* tools/Makefile.am:
+
 2009-01-13  Johan Dahlin  <jdahlin@async.com.br>
 
 	Bug 555036 – put gtk-doc in GIR

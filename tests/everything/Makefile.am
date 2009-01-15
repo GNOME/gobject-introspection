@@ -10,15 +10,15 @@ AM_CFLAGS = $(GOBJECT_CFLAGS)
 AM_LDFLAGS = -version-info $(LT_VERSION)
 LIBS = $(GOBJECT_LIBS)
 
-typelibsdir = $(libdir)/girepository
+typelibsdir = $(libdir)/girepository-1.0
 typelibs_DATA = $(TYPELIBS)
 
-girsdir = $(datadir)/gir
+girsdir = $(datadir)/gir-1.0
 girs_DATA = $(GIRS)
 
-lib_LTLIBRARIES = libgirepository-everything.la
+lib_LTLIBRARIES = libgirepository-everything-1.0.la
 
-libgirepository_everything_la_SOURCES = $(srcdir)/everything.c $(srcdir)/everything.h
+libgirepository_everything_1_0_la_SOURCES = $(srcdir)/everything.c $(srcdir)/everything.h
 
 if OS_WIN32
 AM_LDFLAGS += -no-undefined
@@ -30,11 +30,11 @@ TXMLS = $(GIRS:.gir=.tgir)
 CLEANFILES = $(TYPELIBS) $(TXMLS) $(GIRS)
 BUILT_SOURCES = $(TYPELIBS) $(TXMLS) $(GIRS)
 
-Everything-$(TYPELIB_VERSION).gir: libgirepository-everything.la everything.c everything.h $(SCANNER_BIN) $(SCANNER_LIBS)
+Everything-$(TYPELIB_VERSION).gir: libgirepository-everything-1.0.la everything.c everything.h $(SCANNER_BIN) $(SCANNER_LIBS)
 	$(CHECK_DEBUG) $(SCANNER) \
 	--include=GObject-2.0 \
         --libtool="$(LIBTOOL)" \
-	--library=girepository-everything \
+	--library=girepository-everything-1.0 \
 	--namespace=Everything --nsversion=$(TYPELIB_VERSION) \
 	--pkg gobject-2.0 \
 	$(srcdir)/everything.h $(srcdir)/everything.c \

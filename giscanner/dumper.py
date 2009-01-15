@@ -49,7 +49,7 @@ main(int argc, char **argv)
   g_thread_init (NULL);
 
   context = g_option_context_new ("");
-  g_option_context_add_main_entries (context, entries, "girepository");
+  g_option_context_add_main_entries (context, entries, "girepository-1.0");
   g_option_context_add_group (context, g_irepository_get_option_group ());
   if (!g_option_context_parse (context, &argc, &argv, &error))
     {
@@ -182,10 +182,10 @@ class DumpCompiler(object):
         args.append('-L.')
 
         uninst_builddir = os.environ.get('UNINSTALLED_INTROSPECTION_BUILDDIR')
-        # hack for building GIRepository.gir, skip -lgirepository since
-        # libgirepository.la is not in current directory and we refer to it
+        # hack for building GIRepository.gir, skip -lgirepository-1.0 since
+        # libgirepository-1.0.la is not in current directory and we refer to it
         # explicitly below anyway
-        if not uninst_builddir or self._options.libraries[0] != 'girepository':
+        if not uninst_builddir or self._options.libraries[0] != 'girepository-1.0':
             # We only use the first library; assume others are "custom"
             # libraries like from gir-repository.  Right now those don't define
             # new GTypes, so we don't need to introspect them.
@@ -194,7 +194,7 @@ class DumpCompiler(object):
         # hack for building gobject-introspection itself
         if uninst_builddir:
             path = os.path.join(uninst_builddir, 'girepository',
-                                'libgirepository.la')
+                                'libgirepository-1.0.la')
             args.append(path)
 
         args.extend(self._run_pkgconfig('--libs'))

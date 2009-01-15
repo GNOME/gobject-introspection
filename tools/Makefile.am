@@ -12,13 +12,13 @@ g_ir_compiler_SOURCES = compiler.c
 g_ir_compiler_CFLAGS = $(GIREPO_CFLAGS)
 g_ir_compiler_LDADD = \
 	$(top_builddir)/girepository/libgirepository-parser.la \
-	$(top_builddir)/girepository/libgirepository.la \
+	$(top_builddir)/girepository/libgirepository-1.0.la \
 	$(GIREPO_LIBS)
 
 g_ir_generate_SOURCES = generate.c
 g_ir_generate_CFLAGS = $(GIREPO_CFLAGS)
 g_ir_generate_LDADD = \
-	$(top_builddir)/girepository/libgirepository.la \
+	$(top_builddir)/girepository/libgirepository-1.0.la \
 	$(GIREPO_LIBS)
 
 GCOVSOURCES =					\

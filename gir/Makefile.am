@@ -136,7 +136,7 @@ GIRepository-2.0.gir: GObject-2.0.gir $(SCANNER_BIN) $(SCANNER_LIBS) $(GIREPOSIT
 	    --strip-prefix=g \
             --libtool="$(LIBTOOL)" \
             --include=GObject-2.0 \
-	    --library=girepository \
+	    --library=girepository-1.0 \
 	    -I$(srcdir)/girepository \
             --pkg glib-2.0 \
             --pkg gobject-2.0 \
@@ -145,13 +145,13 @@ BUILT_SOURCES += GIRepository-2.0.gir
 
 # Generic rules
 CLEANFILES = $(BUILT_SOURCES)
-girdir=$(datadir)/gir
+girdir=$(datadir)/gir-1.0
 dist_gir_DATA = $(BUILT_SOURCES)
 
 %.typelib: %.gir $(top_builddir)/tools/g-ir-compiler$(EXEEXT)
 	$(DEBUG) $(top_builddir)/tools/g-ir-compiler$(EXEEXT) --includedir=. $(G_IR_COMPILER_OPTS) $< -o $@
 
-typelibsdir = $(libdir)/girepository
+typelibsdir = $(libdir)/girepository-1.0
 typelibs_DATA = 		\
 	GLib-2.0.typelib 	\
 	GModule-2.0.typelib	\

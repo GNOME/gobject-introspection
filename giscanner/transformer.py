@@ -108,7 +108,7 @@ class Transformer(object):
     def _find_include(self, include):
         searchdirs = self._includepaths[:]
         for path in _xdg_data_dirs:
-            searchdirs.append(os.path.join(path, 'gir'))
+            searchdirs.append(os.path.join(path, 'gir-1.0'))
 
         girname = '%s-%s.gir' % (include.name, include.version)
         for d in searchdirs:
