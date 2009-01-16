@@ -1,3 +1,8 @@
+2009-01-16  Dan Winship  <danw@gnome.org>
+
+	* gir/GL-1.0.gir: add back GLvoid, which got lost during the
+	gir-repository -> gobject-introspection migration
+
 2009-01-15  Johan Dahlin  <jdahlin@async.com.br>
 
 	* gir/freetype2-2.0.gir: add FT_Int32

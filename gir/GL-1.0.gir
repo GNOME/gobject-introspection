@@ -11,6 +11,7 @@
     <record name="int" c:type="GLint"/>
     <record name="sizei" c:type="GLsizei"/>
     <record name="uint" c:type="GLuint"/>
+    <record name="void" c:type="GLvoid"/>
 
     <function name="InitNames" c:identifier="glInitNames">
       <return-value transfer-ownership="none">
