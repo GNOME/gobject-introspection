@@ -225,7 +225,10 @@ class GLibTransformer(object):
         args.append('--introspect-dump=%s,%s' % (in_path, out_path))
 
         # Invoke the binary, having written our get_type functions to types.txt
-        subprocess.check_call(args, stdout=sys.stdout, stderr=sys.stderr)
+        try:
+            subprocess.check_call(args, stdout=sys.stdout, stderr=sys.stderr)
+        except subprocess.CalledProcessError, e:
+            raise SystemExit(e)
         self._read_introspect_dump(out_path)
 
         # Clean up temporaries

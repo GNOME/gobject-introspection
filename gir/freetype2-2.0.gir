@@ -5,6 +5,7 @@
   <namespace name="freetype2" version="2.0" shared-library="freetype">
     <record name="Bitmap" c:type="FT_Bitmap"/>
     <record name="Face" c:type="FT_Face"/>
+    <alias name="Int32" target="int32" c:type="FT_Int32"/>
     <function name="library_version" c:identifier="FT_Library_Version">
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>

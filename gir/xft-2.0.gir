@@ -5,6 +5,7 @@
   <namespace name="xft" version="2.0" shared-library="Xft">
     <record name="Color" c:type="XftColor"/>
     <record name="Draw" c:type="XftDraw"/>
+    <record name="Font" c:type="XftFont"/>
 
     <function name="init" c:identifier="XftInit">
       <return-value transfer-ownership="none">

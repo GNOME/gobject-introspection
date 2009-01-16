@@ -1,5 +1,16 @@
 2009-01-15  Johan Dahlin  <jdahlin@async.com.br>
 
+	* gir/freetype2-2.0.gir: add FT_Int32
+	* gir/xft-2.0.gir: add XftFont
+	* girepository/gdump.c (g_irepository_dump):
+	Report errors when an invalid type is encountered
+	* giscanner/glibtransformer.py:
+	Make the error message a bit nicer.
+
+	Part of preparating for gir generating inside pango.
+
+2009-01-15  Johan Dahlin  <jdahlin@async.com.br>
+
 	* gir/GL-1.0.gir:
 	* gir/Makefile.am:
 	* gir/cairo-1.0.gir:
