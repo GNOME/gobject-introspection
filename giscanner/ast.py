@@ -363,6 +363,8 @@ class Record(Node):
         self.symbol = symbol
         self.disguised = disguised
         self.doc = None
+        self.constructors = []
+        self.methods = []
 
 # BW compat, remove
 Struct = Record
@@ -488,6 +490,7 @@ class Union(Node):
         Node.__init__(self, name)
         self.fields = []
         self.constructors = []
+        self.methods = []
         self.symbol = symbol
         self.doc = None
 

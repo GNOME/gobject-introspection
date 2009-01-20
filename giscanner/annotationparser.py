@@ -295,9 +295,8 @@ class AnnotationApplier(object):
         block = self._blocks.get(record.symbol)
         self._parse_version(record, block)
         self._parse_constructors(record.constructors)
+        self._parse_methods(record.methods)
         self._parse_fields(record, record.fields)
-        if isinstance(record, GLibBoxed):
-            self._parse_methods(record.methods)
         if block:
             record.doc = block.comment
 
@@ -313,8 +312,7 @@ class AnnotationApplier(object):
         block = self._blocks.get(union.name)
         self._parse_fields(union, union.fields)
         self._parse_constructors(union.constructors)
-        if isinstance(union, GLibBoxed):
-            self._parse_methods(union.methods)
+        self._parse_methods(union.methods)
         if block:
             union.doc = block.comment
 

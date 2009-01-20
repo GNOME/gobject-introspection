@@ -260,6 +260,35 @@
       <field name="height" writable="1">
         <type name="int"/>
       </field>
+      <constructor name="new" c:identifier="foo_rectangle_new">
+        <return-value transfer-ownership="full">
+          <type name="Rectangle"/>
+        </return-value>
+        <parameters>
+          <parameter name="x" transfer-ownership="none">
+            <type name="int"/>
+          </parameter>
+          <parameter name="y" transfer-ownership="none">
+            <type name="int"/>
+          </parameter>
+          <parameter name="width" transfer-ownership="none">
+            <type name="int"/>
+          </parameter>
+          <parameter name="height" transfer-ownership="none">
+            <type name="int"/>
+          </parameter>
+        </parameters>
+      </constructor>
+      <method name="add" c:identifier="foo_rectangle_add">
+        <return-value transfer-ownership="none">
+          <type name="none"/>
+        </return-value>
+        <parameters>
+          <parameter name="r2" transfer-ownership="none">
+            <type name="Rectangle"/>
+          </parameter>
+        </parameters>
+      </method>
     </record>
     <function name="method_external_references" c:identifier="foo_method_external_references">
       <return-value transfer-ownership="none">
@@ -277,38 +306,6 @@
         </parameter>
         <parameter name="s" transfer-ownership="none">
           <type name="utility.Struct"/>
-        </parameter>
-      </parameters>
-    </function>
-    <function name="rectangle_add" c:identifier="foo_rectangle_add">
-      <return-value transfer-ownership="none">
-        <type name="none"/>
-      </return-value>
-      <parameters>
-        <parameter name="r1" transfer-ownership="full" direction="inout">
-          <type name="Rectangle"/>
-        </parameter>
-        <parameter name="r2" transfer-ownership="none">
-          <type name="Rectangle"/>
-        </parameter>
-      </parameters>
-    </function>
-    <function name="rectangle_new" c:identifier="foo_rectangle_new">
-      <return-value transfer-ownership="full">
-        <type name="Rectangle"/>
-      </return-value>
-      <parameters>
-        <parameter name="x" transfer-ownership="none">
-          <type name="int"/>
-        </parameter>
-        <parameter name="y" transfer-ownership="none">
-          <type name="int"/>
-        </parameter>
-        <parameter name="width" transfer-ownership="none">
-          <type name="int"/>
-        </parameter>
-        <parameter name="height" transfer-ownership="none">
-          <type name="int"/>
         </parameter>
       </parameters>
     </function>

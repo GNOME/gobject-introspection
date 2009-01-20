@@ -378,6 +378,35 @@ and/or use gtk-doc annotations.  -->
       <field name="height" writable="1">
         <type name="int" c:type="gint"/>
       </field>
+      <constructor name="new" c:identifier="foo_rectangle_new">
+        <return-value transfer-ownership="full">
+          <type name="Rectangle" c:type="FooRectangle*"/>
+        </return-value>
+        <parameters>
+          <parameter name="x" transfer-ownership="none">
+            <type name="int" c:type="int"/>
+          </parameter>
+          <parameter name="y" transfer-ownership="none">
+            <type name="int" c:type="int"/>
+          </parameter>
+          <parameter name="width" transfer-ownership="none">
+            <type name="int" c:type="int"/>
+          </parameter>
+          <parameter name="height" transfer-ownership="none">
+            <type name="int" c:type="int"/>
+          </parameter>
+        </parameters>
+      </constructor>
+      <method name="add" c:identifier="foo_rectangle_add">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <parameter name="r2" transfer-ownership="none">
+            <type name="Rectangle" c:type="FooRectangle*"/>
+          </parameter>
+        </parameters>
+      </method>
     </record>
     <function name="method_external_references"
               c:identifier="foo_method_external_references">
@@ -396,41 +425,6 @@ and/or use gtk-doc annotations.  -->
         </parameter>
         <parameter name="s" transfer-ownership="none">
           <type name="utility.Struct" c:type="UtilityStruct"/>
-        </parameter>
-      </parameters>
-    </function>
-    <function name="rectangle_add" c:identifier="foo_rectangle_add">
-      <return-value transfer-ownership="none">
-        <type name="none" c:type="void"/>
-      </return-value>
-      <parameters>
-        <parameter name="r1"
-                   direction="inout"
-                   transfer-ownership="full"
-                   doc="add to this rect">
-          <type name="Rectangle" c:type="FooRectangle*"/>
-        </parameter>
-        <parameter name="r2" transfer-ownership="none">
-          <type name="Rectangle" c:type="FooRectangle*"/>
-        </parameter>
-      </parameters>
-    </function>
-    <function name="rectangle_new" c:identifier="foo_rectangle_new">
-      <return-value transfer-ownership="full">
-        <type name="Rectangle" c:type="FooRectangle*"/>
-      </return-value>
-      <parameters>
-        <parameter name="x" transfer-ownership="none">
-          <type name="int" c:type="int"/>
-        </parameter>
-        <parameter name="y" transfer-ownership="none">
-          <type name="int" c:type="int"/>
-        </parameter>
-        <parameter name="width" transfer-ownership="none">
-          <type name="int" c:type="int"/>
-        </parameter>
-        <parameter name="height" transfer-ownership="none">
-          <type name="int" c:type="int"/>
         </parameter>
       </parameters>
     </function>

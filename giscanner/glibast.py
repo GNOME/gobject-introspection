@@ -110,8 +110,6 @@ class GLibObject(Class):
 class GLibBoxed:
 
     def __init__(self, type_name, get_type):
-        self.constructors = []
-        self.methods = []
         self.type_name = type_name
         self.get_type = get_type
 
@@ -135,6 +133,8 @@ class GLibBoxedOther(Node, GLibBoxed):
     def __init__(self, name, type_name, get_type):
         Node.__init__(self, name)
         GLibBoxed.__init__(self, type_name, get_type)
+        self.constructors = []
+        self.methods = []
         self.ctype = type_name
         self.doc = None
 

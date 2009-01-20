@@ -323,7 +323,10 @@ and/or use gtk-doc annotations. ''')
             attrs.append(('doc', boxed.doc))
         attrs.extend(self._boxed_attrs(boxed))
         with self.tagcontext('glib:boxed', attrs):
-            self._write_boxed_ctors_methods(boxed)
+            for method in boxed.constructors:
+                self._write_constructor(method)
+            for method in boxed.methods:
+                self._write_method(method)
 
     def _write_property(self, prop):
         attrs = [('name', prop.name)]
@@ -359,12 +362,6 @@ and/or use gtk-doc annotations. ''')
         return [('glib:type-name', boxed.type_name),
                 ('glib:get-type', boxed.get_type)]
 
-    def _write_boxed_ctors_methods(self, boxed):
-        for method in boxed.constructors:
-            self._write_constructor(method)
-        for method in boxed.methods:
-            self._write_method(method)
-
     def _write_record(self, record):
         attrs = [('name', record.name),
                  ('c:type', record.symbol)]
@@ -380,8 +377,10 @@ and/or use gtk-doc annotations. ''')
             if record.fields:
                 for field in record.fields:
                     self._write_field(field)
-            if isinstance(record, GLibBoxed):
-                self._write_boxed_ctors_methods(record)
+            for method in record.constructors:
+                self._write_constructor(method)
+            for method in record.methods:
+                self._write_method(method)
 
     def _write_union(self, union):
         attrs = [('name', union.name),
@@ -396,8 +395,10 @@ and/or use gtk-doc annotations. ''')
             if union.fields:
                 for field in union.fields:
                     self._write_field(field)
-            if isinstance(union, GLibBoxed):
-                self._write_boxed_ctors_methods(union)
+            for method in union.constructors:
+                self._write_constructor(method)
+            for method in union.methods:
+                self._write_method(method)
 
     def _write_field(self, field):
         if isinstance(field, Function):

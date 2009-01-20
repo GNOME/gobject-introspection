@@ -1,3 +1,15 @@
+2009-01-20  Johan Dahlin  <jdahlin@async.com.br>
+
+	Bug 562615 – Struct methods missing
+
+	* giscanner/annotationparser.py:
+	* giscanner/ast.py:
+	* giscanner/girwriter.py:
+	* giscanner/glibast.py:
+	* giscanner/glibtransformer.py:
+	* tests/scanner/foo-1.0-expected.gir:
+	* tests/scanner/foo-1.0-expected.tgir:
+
 2009-01-16  Dan Winship  <danw@gnome.org>
 
 	* gir/GL-1.0.gir: add back GLvoid, which got lost during the

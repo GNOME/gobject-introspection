@@ -418,9 +418,13 @@ class GLibTransformer(object):
 
         # The _uscore_type_names member holds the plain GLibBoxed
         # object; we want to actually use the struct/record associated
-        if isinstance(klass, (Record, GLibBoxed)):
-            name = self._transformer.remove_prefix(klass.type_name)
-            klass = self._get_attribute(name)
+        if isinstance(klass, (Record, Union)):
+            remove_prefix = klass.symbol
+        else:
+            remove_prefix = klass.type_name
+
+        name = self._transformer.remove_prefix(remove_prefix)
+        klass = self._get_attribute(name)
 
         if not is_method:
             # Interfaces can't have constructors, punt to global scope
@@ -432,7 +436,7 @@ class GLibTransformer(object):
             # class from the prefix
             # But for now, ensure that constructor returns are always
             # the most concrete class
-            name = self._transformer.remove_prefix(klass.type_name)
+            name = self._transformer.remove_prefix(remove_prefix)
             func.retval.type = Type(name, func.retval.type.ctype)
 
         self._remove_attribute(func.name)
@@ -461,6 +465,7 @@ class GLibTransformer(object):
         node = self._names.names.get(record.name)
         if node is None:
             self._add_attribute(record, replace=True)
+            self._register_internal_type(record.symbol, record)
             return
         (ns, node) = node
         node.fields = record.fields[:]
@@ -469,6 +474,7 @@ class GLibTransformer(object):
         node = self._names.names.get(union.name)
         if node is None:
             self._add_attribute(union, replace=True)
+            self._register_internal_type(union.symbol, union)
             return
         (ns, node) = node
         node.fields = union.fields[:]
