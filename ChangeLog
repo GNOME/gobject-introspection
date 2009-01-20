@@ -1,5 +1,11 @@
 2009-01-20  Johan Dahlin  <jdahlin@async.com.br>
 
+	* giscanner/scannerlexer.l:
+	Increase the buffer size to 1M, so
+	gtkalias.h can be parsed.
+
+2009-01-20  Johan Dahlin  <jdahlin@async.com.br>
+
 	* giscanner/glibtransformer.py:
 	When trying to map functions to structs, do
 	not require a public structure to exist, should
