@@ -447,23 +447,23 @@ class GLibTransformer(object):
             klass.constructors.append(func)
         return func
 
-    def _parse_record(self, recurd):
+    def _parse_record(self, record):
         # This is a hack, but GObject is a rather fundamental piece so.
         internal_names = ["Object", 'InitiallyUnowned']
         g_internal_names = ["G" + x for x in internal_names]
         if (self._namespace_name == 'GObject' and
-            recurd.name in internal_names):
-            self._create_gobject(recurd)
+            record.name in internal_names):
+            self._create_gobject(record)
             return
-        elif recurd.name in g_internal_names:
+        elif record.name in g_internal_names:
             # Avoid duplicates
             return
-        node = self._names.names.get(recurd.name)
+        node = self._names.names.get(record.name)
         if node is None:
-            self._add_attribute(recurd, replace=True)
+            self._add_attribute(record, replace=True)
             return
         (ns, node) = node
-        node.fields = recurd.fields[:]
+        node.fields = record.fields[:]
 
     def _parse_union(self, union):
         node = self._names.names.get(union.name)
@@ -571,10 +571,10 @@ class GLibTransformer(object):
         self._introspect_signals(node, xmlnode)
         self._introspect_implemented_interfaces(node, xmlnode)
 
-        # add recurd fields
-        recurd = self._get_attribute(node.name)
-        if recurd is not None:
-            node.fields = recurd.fields
+        # add record fields
+        record = self._get_attribute(node.name)
+        if record is not None:
+            node.fields = record.fields
             for field in node.fields:
                 if isinstance(field, Field):
                     # Object instance fields are assumed to be read-only
