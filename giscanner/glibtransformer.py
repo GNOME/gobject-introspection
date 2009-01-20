@@ -26,8 +26,8 @@ import shutil
 import subprocess
 
 from .ast import (Alias, Bitfield, Callback, Constant, Enum, Function, Member,
-                  Namespace, Parameter, Property, Return, Struct, Type,
-                  Union, Field, type_name_from_ctype,
+                  Namespace, Parameter, Property, Record, Return, Type, Union,
+                  Field, type_name_from_ctype,
                   default_array_types, TYPE_UINT8, PARAM_TRANSFER_FULL)
 from .transformer import Names
 from .glibast import (GLibBoxed, GLibEnum, GLibEnumMember, GLibFlags,
@@ -146,8 +146,8 @@ class GLibTransformer(object):
                 print "WARNING: DELETING node %s: %s" % (node.name, e)
                 self._remove_attribute(node.name)
             # associate GtkButtonClass with GtkButton
-            if isinstance(node, Struct):
-                self._pair_class_struct(node)
+            if isinstance(node, Record):
+                self._pair_class_record(node)
         for (ns, alias) in self._names.aliases.itervalues():
             self._resolve_alias(alias)
 
@@ -266,8 +266,8 @@ class GLibTransformer(object):
             self._parse_bitfield(node)
         elif isinstance(node, Function):
             self._parse_function(node)
-        elif isinstance(node, Struct):
-            self._parse_struct(node)
+        elif isinstance(node, Record):
+            self._parse_record(node)
         elif isinstance(node, Callback):
             self._parse_callback(node)
         elif isinstance(node, Alias):
@@ -418,7 +418,7 @@ class GLibTransformer(object):
 
         # The _uscore_type_names member holds the plain GLibBoxed
         # object; we want to actually use the struct/record associated
-        if isinstance(klass, GLibBoxed):
+        if isinstance(klass, (Record, GLibBoxed)):
             name = self._transformer.remove_prefix(klass.type_name)
             klass = self._get_attribute(name)
 
@@ -447,23 +447,23 @@ class GLibTransformer(object):
             klass.constructors.append(func)
         return func
 
-    def _parse_struct(self, struct):
+    def _parse_record(self, recurd):
         # This is a hack, but GObject is a rather fundamental piece so.
         internal_names = ["Object", 'InitiallyUnowned']
         g_internal_names = ["G" + x for x in internal_names]
         if (self._namespace_name == 'GObject' and
-            struct.name in internal_names):
-            self._create_gobject(struct)
+            recurd.name in internal_names):
+            self._create_gobject(recurd)
             return
-        elif struct.name in g_internal_names:
+        elif recurd.name in g_internal_names:
             # Avoid duplicates
             return
-        node = self._names.names.get(struct.name)
+        node = self._names.names.get(recurd.name)
         if node is None:
-            self._add_attribute(struct, replace=True)
+            self._add_attribute(recurd, replace=True)
             return
         (ns, node) = node
-        node.fields = struct.fields[:]
+        node.fields = recurd.fields[:]
 
     def _parse_union(self, union):
         node = self._names.names.get(union.name)
@@ -493,7 +493,7 @@ class GLibTransformer(object):
             return True
         return False
 
-    def _pair_class_struct(self, maybe_class):
+    def _pair_class_record(self, maybe_class):
         name = self._strip_class_suffix(maybe_class.name)
         if name == maybe_class.name:
             return
@@ -571,14 +571,14 @@ class GLibTransformer(object):
         self._introspect_signals(node, xmlnode)
         self._introspect_implemented_interfaces(node, xmlnode)
 
-        # add struct fields
-        struct = self._get_attribute(node.name)
-        if struct is not None:
-            node.fields = struct.fields
+        # add recurd fields
+        recurd = self._get_attribute(node.name)
+        if recurd is not None:
+            node.fields = recurd.fields
             for field in node.fields:
                 if isinstance(field, Field):
                     # Object instance fields are assumed to be read-only
-                    # (see also _pair_class_struct and transformer.py)
+                    # (see also _pair_class_record and transformer.py)
                     field.writable = False
 
         self._add_attribute(node, replace=True)
@@ -684,8 +684,8 @@ class GLibTransformer(object):
             self._resolve_glib_object(node)
         elif isinstance(node, GLibInterface):
             self._resolve_glib_interface(node)
-        elif isinstance(node, Struct):
-            self._resolve_struct(node)
+        elif isinstance(node, Record):
+            self._resolve_record(node)
         elif isinstance(node, Union):
             self._resolve_union(node)
         elif isinstance(node, Alias):
@@ -707,7 +707,7 @@ class GLibTransformer(object):
         if not pair_node:
             boxed_item = GLibBoxedOther(name, boxed.type_name,
                                         boxed.get_type)
-        elif isinstance(pair_node, Struct):
+        elif isinstance(pair_node, Record):
             boxed_item = GLibBoxedStruct(pair_node.name, boxed.type_name,
                                          boxed.get_type)
             boxed_item.fields = pair_node.fields
@@ -719,7 +719,7 @@ class GLibTransformer(object):
             return False
         self._add_attribute(boxed_item, replace=True)
 
-    def _resolve_struct(self, node):
+    def _resolve_record(self, node):
         for field in node.fields:
             self._resolve_field(field)
 
