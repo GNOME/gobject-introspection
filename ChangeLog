@@ -1,5 +1,12 @@
 2009-01-20  Johan Dahlin  <jdahlin@async.com.br>
 
+	* giscanner/glibtransformer.py:
+	When trying to map functions to structs, do
+	not require a public structure to exist, should
+	fix Gst gir generation in.
+
+2009-01-20  Johan Dahlin  <jdahlin@async.com.br>
+
 	Bug 562615 – Struct methods missing
 
 	* giscanner/annotationparser.py:

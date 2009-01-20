@@ -425,6 +425,8 @@ class GLibTransformer(object):
 
         name = self._transformer.remove_prefix(remove_prefix)
         klass = self._get_attribute(name)
+        if klass is None:
+            return
 
         if not is_method:
             # Interfaces can't have constructors, punt to global scope
