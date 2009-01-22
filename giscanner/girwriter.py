@@ -240,8 +240,11 @@ and/or use gtk-doc annotations. ''')
             attrs.extend([('glib:type-name', enum.type_name),
                           ('glib:get-type', enum.get_type),
                           ('c:type', enum.ctype)])
+            if enum.error_quark:
+                attrs.append(('glib:error-quark', enum.error_quark))
         else:
             attrs.append(('c:type', enum.symbol))
+
         with self.tagcontext('enumeration', attrs):
             for member in enum.members:
                 self._write_member(member)

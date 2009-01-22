@@ -34,8 +34,8 @@ EXPECTEDGIRS = $(GIRS:.gir=-expected.gir)
 TGIRS = $(GIRS:.gir=.tgir)
 CHECKTGIRS = $(GIRS:.gir=.tgir.check)
 EXPECTEDTGIRS = $(GIRS:.gir=-expected.tgir)
-CLEANFILES = $(TYPELIBS)  $(GIRS) $(TGIRS)
-BUILT_SOURCES = $(TYPELIBS) $(GIRS)
+CLEANFILES = $(TYPELIBS)  $(GIRS)
+BUILT_SOURCES = $(TYPELIBS) $(GIRS) $(TGIRS)
 EXTRA_DIST = $(EXPECTEDGIRS) $(EXPECTEDTGIRS)
 
 annotation-1.0.gir: libannotation.la annotation.c annotation.h utility-1.0.gir $(SCANNER_BIN) $(SCANNER_LIBS) Makefile
@@ -149,10 +149,13 @@ post-check:
 	 $(DEBUG) $(top_builddir)/tools/g-ir-generate --includedir=. --includedir=$(top_builddir)/gir $< -o $@
 
 %.tgir.check: %.tgir
-	@diff -u -U 10 $(srcdir)/$*-expected.tgir $*.tgir && echo "* $*.tgir"
+	@diff -u -U 10 $(srcdir)/$*-expected.tgir $*.tgir; \
+	if test "$$?" = "0"; then \
+           echo "* $*.tgir"; \
+           rm -f $*.tgir; \
+        fi
 
 check-local: pre-check
 check-local: $(CHECKGIRS) $(CHECKTGIRS) $(TYPELIBS)
-CLEANFILES += $(TGIRS)
 
 check-local: post-check

@@ -293,4 +293,13 @@ const FooStruct * foo_test_const_struct_retval (void);
 void foo_test_const_char_param (const char * param);
 void foo_test_const_struct_param (const FooStruct * param);
 
+typedef enum {
+  FOO_ERROR_GOOD,
+  FOO_ERROR_BAD,
+  FOO_ERROR_UGLY
+} FooError;
+GType foo_error_get_type (void);
+
+GQuark foo_error_quark (void);
+
 #endif /* __FOO_OBJECT_H__ */

@@ -485,6 +485,11 @@
         </parameter>
       </parameters>
     </function>
+    <enumeration name="Error" glib:type-name="FooError" glib:get-type="foo_error_get_type">
+      <member name="good" value="0"/>
+      <member name="bad" value="1"/>
+      <member name="ugly" value="2"/>
+    </enumeration>
     <constant name="SUCCESS_INT" value="4408">
       <type name="int"/>
     </constant>

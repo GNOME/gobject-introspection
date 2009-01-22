@@ -433,3 +433,25 @@ foo_hidden_get_type (void)
   return our_type;
 }
 
+GType
+foo_error_get_type (void)
+{
+    static GType etype = 0;
+    if (G_UNLIKELY(etype == 0)) {
+        static const GEnumValue values[] = {
+            { FOO_ERROR_GOOD, "FOO_ERROR_GOOD", "good" },
+            { FOO_ERROR_BAD, "FOO_ERROR_BAD", "bad" },
+            { FOO_ERROR_UGLY, "FOO_ERROR_UGLY", "ugly" },
+            { 0, NULL, NULL }
+        };
+        etype = g_enum_register_static (g_intern_static_string ("FooError"), values);
+    }
+    return etype;
+}
+
+GQuark
+foo_error_quark (void)
+{
+  return g_quark_from_static_string ("foo-error-quark");
+}
+

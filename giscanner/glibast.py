@@ -70,6 +70,7 @@ class GLibEnum(Enum):
         self.ctype = type_name
         self.type_name = type_name
         self.get_type = get_type
+        self.error_quark = None
 
     def __repr__(self):
         return 'GlibEnum(%r, %r, %r)' % (self.name, self.members,

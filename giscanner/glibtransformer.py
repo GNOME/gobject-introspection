@@ -90,6 +90,7 @@ class GLibTransformer(object):
         self._uscore_type_names = {}
         self._binary = None
         self._get_type_functions = []
+        self._error_quark_functions = []
         self._gtype_data = {}
         self._failed_types = {}
         self._boxed_types = {}
@@ -150,7 +151,7 @@ class GLibTransformer(object):
                 self._pair_class_record(node)
         for (ns, alias) in self._names.aliases.itervalues():
             self._resolve_alias(alias)
-
+        self._resolve_quarks()
         self._print_statistics()
         # Fourth pass: ensure all types are known
         if not self._noclosure:
@@ -202,6 +203,13 @@ class GLibTransformer(object):
         no_uscore_prefixed = (prefix + '_' + to_underscores(suffix)).lower()
         self._uscore_type_names[no_uscore_prefixed] = node
 
+    def _resolve_quarks(self):
+        for node in self._error_quark_functions:
+            short = node.symbol[:-len('_quark')]
+            enum = self._uscore_type_names.get(short)
+            if enum is not None:
+                enum.error_quark = node.symbol
+
     # Helper functions
 
     def _resolve_gtypename(self, gtype_name):
@@ -214,6 +222,7 @@ class GLibTransformer(object):
     def _execute_binary(self):
         in_path = os.path.join(self._binary.tmpdir, 'types.txt')
         f = open(in_path, 'w')
+        # TODO: Introspect GQuark functions
         for func in self._get_type_functions:
             f.write(func)
             f.write('\n')
@@ -304,6 +313,8 @@ class GLibTransformer(object):
                 return
         if self._parse_get_type_function(func):
             return
+        if self._parse_error_quark_function(func):
+            return
 
         self._add_attribute(func)
 
@@ -326,6 +337,18 @@ class GLibTransformer(object):
             return False
 
         self._get_type_functions.append(symbol)
+        return True
+
+    def _parse_error_quark_function(self, func):
+        if not func.symbol.endswith('_error_quark'):
+            return False
+        if func.parameters:
+            return False
+        if func.retval.type.name not in ['GLib.Quark',
+                                         'GQuark']:
+            return False
+
+        self._error_quark_functions.append(func)
         return True
 
     def _name_is_internal_gtype(self, giname):
