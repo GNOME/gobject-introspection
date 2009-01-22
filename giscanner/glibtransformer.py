@@ -325,6 +325,10 @@ class GLibTransformer(object):
         if self._namespace_name == 'GLib':
             # No GObjects in GLib
             return False
+        if (self._namespace_name == 'GObject' and
+            symbol in ('g_object_get_type', 'g_initially_unowned_get_type')):
+            # We handle these internally, see _create_gobject
+            return True
         if func.parameters:
             return False
         # GType *_get_type(void)
