@@ -155,6 +155,11 @@ post-check:
            rm -f $*.tgir; \
         fi
 
+distclean-local:
+	@if test "$(top_builddir)" != "$(top_srcdir)"; then \
+	    rm -f $(top_builddir)/tests/scanner/*.tgir; \
+	fi
+
 check-local: pre-check
 check-local: $(CHECKGIRS) $(CHECKTGIRS) $(TYPELIBS)
 
