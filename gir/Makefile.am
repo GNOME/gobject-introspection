@@ -68,7 +68,7 @@ GObject-2.0.gir: GLib-2.0.gir $(SCANNER_BIN) $(SCANNER_LIBS) Makefile
 	    -I$(GOBJECT_INCLUDEDIR) \
 	    -I$(GOBJECT_LIBDIR)/glib-2.0/include \
 	    -DGOBJECT_COMPILATION \
-            --pkg glib-2.0 \
+            --pkg gobject-2.0 \
 	    $(GLIB_INCLUDEDIR)/gobject/*.h
 BUILT_GIRSOURCES += GObject-2.0.gir
 
@@ -94,7 +94,7 @@ GModule-2.0.gir: GLib-2.0.gir $(SCANNER_BIN) $(SCANNER_LIBS)
 	    --library=$(GMODULE_LIBRARY) \
 	    -I$(GMODULE_INCLUDEDIR) \
 	    -I$(GMODULE_LIBDIR)/glib-2.0/include \
-            --pkg glib-2.0 \
+            --pkg gmodule-2.0 \
 	    $(GLIB_INCLUDEDIR)/gmodule.h
 BUILT_GIRSOURCES += GModule-2.0.gir
 
@@ -127,8 +127,7 @@ Gio-2.0.gir: GObject-2.0.gir $(SCANNER_BIN) $(SCANNER_LIBS) Makefile $(srcdir)/g
 	    -I$(GIO_INCLUDEDIR) \
 	    -I$(GIO_LIBDIR)/glib-2.0/include \
 	    -DGIO_COMPILATION \
-            --pkg glib-2.0 \
-            --pkg gobject-2.0 \
+        --pkg gio-2.0 \
 	    $(srcdir)/gio-2.0.c \
 	    $(GLIB_INCLUDEDIR)/gio/*.h \
 	    $(GIO_UNIX_HDRS)
