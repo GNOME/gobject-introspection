@@ -1,3 +1,36 @@
+0.6.2 21-jan-2009
+    Bugs resolved:
+    - Bug 562622 – Errordomains missing
+    - Bug 562615 – Struct methods missing
+    - Bug 567813 – Everything should be versioned
+    - Bug 555036 – put gtk-doc in GIR
+    - Bug 562467 – Property annotation
+    - Bug 546739 – Introspection should know precise signal parameter types
+    - Bug 563591 – Flags not recognized when there is no introspection data
+    - Bug 563386 – scanner ignores "const" on boxed return values
+    - Bug 566404 – Annotations for GLib
+    - Bug 566419 – Element type of arrays not properly handled in all cases
+    - Bug 566560 – giscanner.transformer.SkipError
+    - Bug 563794 - Redo annotation parsing & applying
+    - Bug 563469 – Arrays not treated correctly in struct offset calculation
+    - Bug 556489 – callback annotations
+    - Bug 563998 – Cache the GIBaseInfo for GTypes
+    - Bug 562545 – Add function taking / returning GValue
+    - Bug 563742 – introspection should record the introduced version of
+    - Bug 562971 – g-ir-scanner failure on libgpod headers
+    - Bug 562289 – Race when removing invalid cache
+    - Bug 559705 – Missing association between static methods and classes
+    - Bug 562022 – gobject-introspection needs python headers
+    - Bug 561617 – Return value array annotations
+    - Bug 561296 - Add "storage type" to the typelib data for enums
+    - Bug 559706 - Interface prerequisites
+    - Bug 561087 - Respect is_pointer in serialize_type()
+    - Bug 560825 – Add size and alignment to typelib
+    Contributors:
+    Johan Bilien, Jürg Billeter, Johan Dahlin, Christophe Fergeau
+    Havoc Pennington, Andreas Rottmann, Owen Taylor, Tristan Van Berkom
+    Colin Walters, Dan Winship
+    
 0.6.1 25-nov-2008
     Bugs resolved:
     - Bug 552371 - implement struct field get/set
