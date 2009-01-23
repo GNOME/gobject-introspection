@@ -544,6 +544,20 @@ test_flags_get_type (void)
     return etype;
 }
 
+const gchar *
+test_enum_param(TestEnum e)
+{
+  GEnumValue *ev;
+  GEnumClass *ec;
+
+  ec = g_type_class_ref (test_enum_get_type ());  
+  ev = g_enum_get_value (ec, e);
+  g_type_class_unref (ec);
+
+  return ev->value_nick;
+  
+}
+
 /* structures */
 
 /**

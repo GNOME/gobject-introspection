@@ -1,3 +1,10 @@
+2009-01-23  Johan Dahlin  <jdahlin@async.com.br>
+
+	* tests/everything/everything.c (test_enum_param):
+	* tests/everything/everything.h:
+
+	Add an enum param test function
+
 2009-01-21  Johan Dahlin  <jdahlin@async.com.br>
 
 	* configure.ac:

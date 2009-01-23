@@ -95,6 +95,8 @@ GType test_enum_get_type (void) G_GNUC_CONST;
 GType test_flags_get_type (void) G_GNUC_CONST;
 #define TES_TYPE_FLAGS (test_flags_get_type ())
 
+const gchar * test_enum_param(TestEnum e);
+
 /* structures */
 typedef struct _TestStructA TestStructA;
 typedef struct _TestStructB TestStructB;
