@@ -36,6 +36,9 @@
     <record name="ScaledFont" c:type="cairo_scaled_font_t"
     	    glib:type-name="CairoScaledFont"
 	    glib:get-type="cairo_scaled_font_get_glib_type"/>
+    <record name="Path" c:type="cairo_path_t"
+            glib:type-name="CairoPath"
+	    glib:get-type="cairo_path_get_glib_type"/>
     <function name="image_surface_create" c:identifier="cairo_image_surface_create">
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
