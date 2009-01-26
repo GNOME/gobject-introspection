@@ -1,3 +1,8 @@
+2009-01-26  Johan Dahlin  <jdahlin@async.com.br>
+
+	* girepository/ginfo.c (g_base_info_unref):
+	Only unref the repository if it's actually set.
+
 2009-01-23  Johan Dahlin  <jdahlin@async.com.br>
 
 	* tests/everything/everything.c (test_enum_param):
