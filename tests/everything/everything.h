@@ -167,6 +167,7 @@ TestBoxed *test_boxed_copy     (TestBoxed *boxed);
 gboolean   test_boxed_equals   (TestBoxed *boxed,
 				TestBoxed *other);
 
+/* gobject */
 #define TEST_TYPE_OBJ              (test_obj_get_type ())
 #define TEST_OBJECT(object)        (G_TYPE_CHECK_INSTANCE_CAST ((object), TEST_TYPE_OBJ, TestObj))
 #define TEST_IS_OBJECT(object)     (G_TYPE_CHECK_INSTANCE_TYPE ((object), TEST_TYPE_OBJ))
@@ -186,5 +187,19 @@ struct _TestObjClass
 GType      test_obj_get_type (void);
 TestObj*   test_obj_new_from_file (const char *x, GError **error);
 double     test_obj_static_method (int x);
+
+/* callback */
+typedef int (*TestCallback) ();
+typedef int (*TestCallbackUserData) (gpointer user_data);
+
+int test_callback (TestCallback callback);
+int test_callback_user_data (TestCallbackUserData callback,
+                             gpointer user_data);
+int test_callback_destroy_notify (TestCallbackUserData callback,
+                                  gpointer user_data,
+                                  GDestroyNotify notify);
+int test_callback_infinte (TestCallbackUserData callback,
+                           gpointer user_data);
+
 
 #endif /* __GITESTTYPES_H__ */

@@ -1,9 +1,8 @@
 2009-01-26  Johan Dahlin  <jdahlin@async.com.br>
 
-	reviewed by: <delete if not using a buddy>
-
 	* tests/everything/everything.c (test_callback):
 	* tests/everything/everything.h:
+	Add a couple of callback tests.
 
 2009-01-26  Johan Dahlin  <jdahlin@async.com.br>
 
@@ -215,13 +214,13 @@
 	* giscanner/transformer.py:
 
 	Catch SkipError for all nodes, not just functions.
-	Makes it possible to skip unsupported parameter types in
+	Makes it possible to skip unsupported parameter types in 
 	callbacks.
 
 2009-01-12  Johan Dahlin  <jdahlin@async.com.br>
 
 	Bug 563794 - Redo annotation parsing & applying
-
+	
 	Thanks to Colin for helping out considerably in landing this.
 
 	* giscanner/Makefile.am:
@@ -250,17 +249,17 @@
 
 	This commit merges the annotation parser rewrite branch.
 	It'll change the annotation parsing to be done completely in python
-	code which will make it easier to do further annotation parsing
+	code which will make it easier to do further annotation parsing 
   	easier.
 
 2009-01-03  Andreas Rottmann  <a.rottmann@gmx.at>
-
+ 
   	Bug 563469 – Arrays not treated correctly in struct offset calculation
-
+ 	
 	* tests/scanner/foo.h (FooObject): Added field `some_int'.
  	* tests/scanner/foo-1.0-expected.gir,
  	* tests/scanner/foo-1.0-expected.tgir: Adapted.
-
+ 
  	* giscanner/glibtransformer.py (GLibTransformer._create_gobject):
  	carry over object fields from original (struct) node.
  	(GLibTransformer._pair_class_struct): Don't add fields of the
@@ -269,7 +268,7 @@
  	otherwise offset calculation would not work, as the instance
  	fields are mingled with the class fields without a way to
  	distinguish them.
-
+  
 2009-01-03  Johan Dahlin  <jdahlin@async.com.br>
 
 	* misc/pep8.py:
@@ -279,8 +278,8 @@
 2008-01-03  Andreas Rottmann  <a.rottmann@gmx.at>
 
 	Bug 556489 – callback annotations
-
-	* giscanner/transformer.py
+	
+	* giscanner/transformer.py 
 
 	* tools/generate.c (write_callable_info): Write out the new scope,
 	closure and destroy attributes.
@@ -289,7 +288,7 @@
 	method, checking if a given type is a callback.
 	(Transformer._augment_callback_params): New method; adds
 	information (closure, destroy) to callback parameters.
-	(Transformer._handle_closure, Transformer._handle_destroy): New methods,
+	(Transformer._handle_closure, Transformer._handle_destroy): New methods, 
 	auxiliary to _augment_callback_params.
 	(Transformer._create_function): Call _augment_callback_params().
 	(Transformer._create_parameter): Handle scope option.
@@ -302,7 +301,7 @@
 	* giscanner/ast.py (Parameter): Added callback-related fields.
 	* giscanner/girwriter.py: Write out new Parameter fields.
 
-	* girepository/girnode.h (GIrNodeParam): Added fields scope,
+	* girepository/girnode.h (GIrNodeParam): Added fields scope, 
 	closure and destroy.
 	* girepository/gtypelib.h (ArgBlob): Ditto.
 	* girepository/girparser.c (start_parameter): Handle new fields.
@@ -313,7 +312,7 @@
 	(g_ir_node_build_typelib)
 	* girepository/gtypelib.c (g_typelib_check_sanity): ArgBlob size
 	adjustments.
-	(g_ir_node_build_typelib): Fill in new ArgBlob flags from param.
+	(g_ir_node_build_typelib): Fill in new ArgBlob flags from param. 
 
 	* girepository/girepository.h (GIScope): New enumeration, listing
 	the different possible scopes for callbacks.
@@ -324,7 +323,7 @@
 	callback, destroy notification for a callback).
 
 	* tests/scanner/: Added testcases for new features.
-
+	
 2009-01-03  Jürg Billeter  <j@bitron.ch>
 
 	* giscanner/ast.py:
@@ -572,7 +571,7 @@
 2008-11-18  Johan Dahlin  <jdahlin@async.com.br>
 
 	* giscanner/cachestore.py:
-	Catch BadPickleGet exceptions as well.
+	Catch BadPickleGet exceptions as well.	
 
 2008-11-17  Owen Taylor  <otaylor@redhat.com>
 
@@ -929,7 +928,7 @@
 2008-11-11  Owen Taylor  <otaylor@redhat.com>
 
 	* girepository/giroffsets.c: Fail gracefully with an informative
-	error message when recursion is encountered when computing a
+	error message when recursion is encountered when computing a 
 	structure size.
 
 2008-11-11  Owen Taylor  <otaylor@redhat.com>
@@ -2776,7 +2775,7 @@
 	* configure.ac: Check for Windows, set Automake conditional
 	OS_WIN32. Change backslashes to forward slashes in pyexecdir to
 	avoid shell quoting issues
-
+	
 	* girepository/Makefile.am: Use -no-undefined so that libtool
 	agrees to build a shared library on Windows.
 
@@ -2928,7 +2927,7 @@
 
 2008-08-24  Colin Walters  <walters@verbum.org>
 
-	* girepository/girepository.c (g_irepository_require):
+	* girepository/girepository.c (g_irepository_require): 
 	Don't open shared library here; we already do it
 	in gtypelib.c.
 
@@ -3104,7 +3103,7 @@
 
 2008-08-21  Colin Walters  <walters@verbum.org>
 
-	* girepository/girmodule.c (g_ir_module_build_typelib):
+	* girepository/girmodule.c (g_ir_module_build_typelib): 
 	Revert change to increment header_size; we do that in
 	write_string.
 
@@ -3123,7 +3122,7 @@
 
 2008-08-21  Johan Dahlin  <johan@gnome.org>
 
-	* gir/Makefile.am (typelibs_DATA): Build and
+	* gir/Makefile.am (typelibs_DATA): Build and 
 	install the Gio.typelib too
 
 	* girepository/gtypelib.c (_g_typelib_init):
@@ -3243,7 +3242,7 @@
 
 2008-08-20  Johan Dahlin  <johan@gnome.org>
 
-	* giscanner/glibtransformer.py (GLibTransformer._resolve_type_name):
+	* giscanner/glibtransformer.py (GLibTransformer._resolve_type_name): 
 	Add a workaround for #548689.
 	We can now compile gtk!
 
@@ -3509,7 +3508,7 @@
 	ones which have a paired GObject.
 	Fix printing of type warning.
 	* giscanner/transformer.py: Make strip_namespace_object
-	be the identity function if it doesn't match the
+	be the identity function if it doesn't match the 
 	namespace.
 
 2008-08-15  Colin Walters  <walters@verbum.org>
@@ -3956,7 +3955,7 @@
 	* girepository/girepository.c (g_irepository_register): Add
 	environment variable G_IREPOSITORY_VERBOSE so we can print
 	out what we're doing.
-	* girepository/girepository.c (g_irepository_register_file):
+	* girepository/girepository.c (g_irepository_register_file): 
 	Add GError error message to g_debug call.
 
 2008-07-08  Jürg Billeter  <j@bitron.ch>
@@ -4585,7 +4584,7 @@
 
 	* giscanner/gidlwriter.py:
 	* giscanner/xmlwriter.py:
-	Add a simple api for writing tags which can be used
+	Add a simple api for writing tags which can be used 
 	with the new 'with statement' in python 2.5
 
 2008-04-21  Johan Dahlin  <johan@gnome.org>
@@ -4598,7 +4597,7 @@
 	* tools/g-ir-scanner (main): Add --pkg option to pass in
 	pkg-config modules to get cflags from.
 
-	* giscanner/gidlwriter.py (GIDLWriter._write_method):
+	* giscanner/gidlwriter.py (GIDLWriter._write_method): 
 	Avoid duplication, reuse function writer for methods.
 
 2008-04-21  Johan Dahlin  <jdahlin@async.com.br>
@@ -4684,7 +4683,7 @@
 	Fix a typo and add an example python test program.
 
 2008-03-25  Johan Dahlin  <johan@gnome.org>
-
+	
 	* giscanner/__init__.py:
 	* giscanner/giscannermodule.c:
 	* giscanner/sourcescanner.c:
@@ -4692,14 +4691,14 @@
 	Add constants and wrap a few more SymbolType fields
 
 2008-03-25  Johan Dahlin  <johan@gnome.org>
-
+	
 	* configure.ac:
 	* giscanner:
 	* giscanner/__init__.py:
 	* giscanner/giscannermodule.c:
 	* giscanner/Makefile.am:
 
-	Add initial python bindings for the scanner and
+	Add initial python bindings for the scanner and 
 	depend on python 2.5.
 
 2008-03-25  Johan Dahlin  <johan@gnome.org>
@@ -4715,7 +4714,7 @@
 	* tools/sourcescanner.h:
 
 	Move the scanner to a separate library.
-
+	
 2008-03-23  Johan Dahlin  <johan@gnome.org>
 
 	* tools/Makefile.am:
@@ -4732,8 +4731,8 @@
 
 2008-03-23  Johan Dahlin  <johan@gnome.org>
 
-	* tests/parser/Makefile.am (utility.gidl):
-	* tests/parser/utility-expected.gidl:
+	* tests/parser/Makefile.am (utility.gidl): 
+	* tests/parser/utility-expected.gidl: 
 	Pass in the gobject.gidl since we're defining a GObject.
 
 2008-03-12  Johan Dahlin  <johan@gnome.org>
@@ -4766,7 +4765,7 @@
 	* tests/parser/utility.h:
 	Add a get_type-function, so the scanner actually
 	parses it as an object.
-
+	
 2008-03-12  Johan Dahlin  <johan@gnome.org>
 
 	* tools/gidlwriter.c (function_generate): Add missing trailing quote.
@@ -4791,14 +4790,14 @@
 	Remove most global variables
 
 2008-03-11  Philip Van Hoof  <me@pvanhoof.be>
-
+ 
  	* tools/scannerlexer.l:
  	* tools/scanner.c:
  	* tests/parser/Foo-expected.gidl:
  	* tests/parser/foo.c:
  	* tests/parser/Makefile.am:
  	* tests/parser/foo-object.h:
-
+ 
  	Added a few extra tests. Which resulted in finding a few
  	bugs. Which resulted in me fixing those bugs
 
@@ -4826,7 +4825,7 @@
 	Add support for parsing return arguments. Add support for
 	caller-owns return types.
 	Patch by Philip Van Hoof.
-
+	
 	* tools/scannerparser.y:
 	Remove parsing of the @deprecated syntax used in headers.
 	We will support gtk-doc deprecation in the future instead.
@@ -4878,7 +4877,7 @@
 
 2008-03-10  Johan Dahlin  <johan@gnome.org>
 
-	* tests/invoke/Makefile.am: Make the generated metadata
+	* tests/invoke/Makefile.am: Make the generated metadata 
 	depend on the g-idl-compiler
 
 2008-02-21  Mark Doffman  <mark.doffman@codethink.co.uk>

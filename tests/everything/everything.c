@@ -747,3 +747,68 @@ test_obj_static_method (int x)
 {
   return x;
 }
+
+/**
+ * test_callback:
+ * @callback: (scope call):
+ *
+ **/
+int
+test_callback (TestCallback callback)
+{
+  return callback();
+}
+
+/**
+ * test_callback_user_data:
+ * @callback: (scope call):
+ *
+ * Call - callback parameter persists for the duration of the method
+ * call and can be released on return.
+ **/
+int
+test_callback_user_data (TestCallbackUserData callback,
+                         gpointer user_data)
+{
+  return callback(user_data);
+}
+
+/**
+ * test_callback_destroy_notify:
+ * @callback: (scope notified): 
+ *
+ * Notified - callback persists until a DestroyNotify delegate
+ * is invoked.
+ **/
+int
+test_callback_destroy_notify (TestCallbackUserData callback,
+                              gpointer user_data,
+                              GDestroyNotify notify)
+{
+  int retval;
+
+  retval = callback(user_data);
+  if (notify)
+    notify(user_data);
+
+  return retval;
+}
+
+/**
+ * test_callback_infinte:
+ * @callback: (scope infinte): 
+ *
+ * Infinite - callback persists forever.
+ **/
+
+static GSList *infinite_callbacks = NULL;
+
+int
+test_callback_infinte (TestCallbackUserData callback,
+                       gpointer user_data)
+{
+  infinite_callbacks = g_slist_prepend(infinite_callbacks, callback);
+  
+  return callback(user_data);
+}
+
