@@ -6,6 +6,6 @@
 
 /* A global function */
 
-void gtk_frob_language_manager_get_default ();
+void gtk_frob_language_manager_get_default (void);
 
 #endif /* __GTKFROB_H__ */

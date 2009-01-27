@@ -1,6 +1,6 @@
 #include "annotation.h"
 
-static char backslash_parsing_tester = '\\';
+char backslash_parsing_tester = '\\';
 
 G_DEFINE_TYPE (AnnotationObject, annotation_object, G_TYPE_OBJECT);
 
@@ -408,7 +408,7 @@ gboolean
 annotation_object_string_out(AnnotationObject *object,
                              char            **str_out)
 {
-
+  return FALSE;
 }
 
 /**
@@ -553,7 +553,6 @@ annotation_string_zero_terminated (void)
 void
 annotation_string_zero_terminated_out (char ***out)
 {
-  return NULL;
 }
 
 /**
@@ -567,4 +566,4 @@ annotation_versioned (void)
 }
 
 
-static char backslash_parsing_tester_2 = '\\';
+char backslash_parsing_tester_2 = '\\';

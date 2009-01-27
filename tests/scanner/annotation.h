@@ -67,6 +67,8 @@ gint     annotation_object_calleesowns  (AnnotationObject *object,
 					 GObject          **toown2);
 GList*   annotation_object_get_strings  (AnnotationObject *object);
 GHashTable*annotation_object_get_hash   (AnnotationObject *object);
+void     annotation_object_with_voidp   (AnnotationObject *object,
+					 void             *data);
 GSList*  annotation_object_get_objects  (AnnotationObject *object);
 
 void     annotation_object_use_buffer   (AnnotationObject *object,

@@ -1,3 +1,26 @@
+2009-01-27  Dan Winship  <danw@gnome.org>
+
+	Misc warning fixes
+
+	* giscanner/scannerparser.y: Fix the "Ignoring non-UTF-8 constant
+	string" error to print the right value.
+
+	* tests/scanner/annotation.c (backslash_parsing_tester)
+	(backslash_parsing_tester_2): make these non-static to avoid a
+	warning.
+	(annotation_object_string_out)
+	(annotation_string_zero_terminated): fix return values
+
+	* tests/scanner/annotation.h (annotation_object_with_voidp):
+	prototype this
+
+	* tests/scanner/gtkfrob.c:
+	* tests/scanner/gtkfrob.h (gtk_frob_language_manager_get_default):
+	fix prototype. (s/()/(void)/).
+
+	* tools/compiler.c (format_output): fix signed/unsigned warning.
+	Output a prototype for register_typelib() to avoid warnings later.
+
 2009-01-26  Johan Dahlin  <jdahlin@async.com.br>
 
 	* tests/everything/everything.c (test_callback):

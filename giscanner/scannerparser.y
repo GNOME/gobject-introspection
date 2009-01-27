@@ -185,7 +185,7 @@ strings
 		$$->const_string = g_strcompress (yytext + 1);
                 if (!g_utf8_validate ($$->const_string, -1, NULL))
                   {
-                    g_warning ("Ignoring non-UTF-8 constant string %s", $$->ident);
+                    g_warning ("Ignoring non-UTF-8 constant string \"%s\"", yytext + 1);
                     g_free($$->const_string);
                     $$->const_string = NULL;
                   }
