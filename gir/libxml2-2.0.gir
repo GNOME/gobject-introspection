@@ -2,7 +2,7 @@
 <repository version="1.0"
             xmlns="http://www.gtk.org/introspection/core/1.0"
             xmlns:c="http://www.gtk.org/introspection/c/1.0">
-  <namespace name="libxml2" version="2.0" shared-library="libxml2">
+  <namespace name="libxml2" version="2.0">
     <record name="Node" c:type="xmlNode"/>
     <record name="NodePtr" c:type="xmlNodePtr"/>
     <record name="Doc" c:type="xmlDoc"/>

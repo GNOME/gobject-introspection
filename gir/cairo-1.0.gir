@@ -3,7 +3,7 @@
             xmlns="http://www.gtk.org/introspection/core/1.0"
             xmlns:c="http://www.gtk.org/introspection/c/1.0"
             xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
-  <namespace name="cairo" version="1.0" shared-library="cairo">
+  <namespace name="cairo" version="1.0">
     <record name="Context" c:type="cairo_t"
             glib:type-name="CairoContext"
 	    glib:get-type="cairo_get_g_type"/>

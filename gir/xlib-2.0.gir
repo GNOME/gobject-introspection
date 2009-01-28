@@ -2,7 +2,7 @@
 <repository version="1.0"
             xmlns="http://www.gtk.org/introspection/core/1.0"
             xmlns:c="http://www.gtk.org/introspection/c/1.0">
-  <namespace name="xlib" version="2.0" shared-library="X11">
+  <namespace name="xlib" version="2.0">
     <record name="Atom" c:type="Atom"/>
     <record name="Display" c:type="Display"/>
     <record name="Drawable" c:type="Drawable"/>

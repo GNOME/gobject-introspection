@@ -2,7 +2,7 @@
 <repository version="1.0"
             xmlns="http://www.gtk.org/introspection/core/1.0"
             xmlns:c="http://www.gtk.org/introspection/c/1.0">
-  <namespace name="xft" version="2.0" shared-library="Xft">
+  <namespace name="xft" version="2.0">
     <record name="Color" c:type="XftColor"/>
     <record name="Draw" c:type="XftDraw"/>
     <record name="Font" c:type="XftFont"/>

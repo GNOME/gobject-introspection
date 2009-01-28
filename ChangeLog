@@ -1,5 +1,16 @@
 2009-01-27  Johan Dahlin  <jdahlin@async.com.br>
 
+	* gir/cairo-1.0.gir:
+	* gir/fontconfig-2.0.gir:
+	* gir/freetype2-2.0.gir:
+	* gir/libxml2-2.0.gir:
+	* gir/xfixes-4.0.gir:
+	* gir/xft-2.0.gir:
+	* gir/xlib-2.0.gir:
+	Remove shared-library tags for these too.
+
+2009-01-27  Johan Dahlin  <jdahlin@async.com.br>
+
 	* gir/GL-1.0.gir:
 	Remove shared-library which removes the build
 	time dependency on mesa.
