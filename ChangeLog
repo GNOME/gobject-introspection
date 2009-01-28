@@ -1,3 +1,9 @@
+2009-01-27  Johan Dahlin  <jdahlin@async.com.br>
+
+	* gir/GL-1.0.gir:
+	Remove shared-library which removes the build
+	time dependency on mesa.
+
 2009-01-27  Dan Winship  <danw@gnome.org>
 
 	Misc warning fixes

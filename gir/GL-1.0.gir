@@ -2,7 +2,7 @@
 <repository version="1.0"
             xmlns="http://www.gtk.org/introspection/core/1.0"
             xmlns:c="http://www.gtk.org/introspection/c/1.0">
-  <namespace name="GL" version="1.0" shared-library="GL">
+  <namespace name="GL" version="1.0">
     <record name="bitfield" c:type="GLbitfield"/>
     <record name="charARB" c:type="GLcharARB"/>
     <record name="enum" c:type="GLenum"/>
