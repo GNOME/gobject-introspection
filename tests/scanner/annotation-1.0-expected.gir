@@ -204,6 +204,16 @@ objects.">
           </type>
         </return-value>
       </method>
+      <method name="with_voidp" c:identifier="annotation_object_with_voidp">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <parameter name="data" transfer-ownership="none">
+            <type name="any" c:type="void*"/>
+          </parameter>
+        </parameters>
+      </method>
       <method name="get_objects"
               c:identifier="annotation_object_get_objects"
               doc="This is a test for returning a list of objects.

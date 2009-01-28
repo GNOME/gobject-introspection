@@ -1,3 +1,8 @@
+2009-01-28  Johan Bilien  <jobi@via.ecp.fr>
+
+	* tests/scanner/annotation-1.0-expected.gir: add missing
+	with_voidp
+
 2009-01-27  Johan Dahlin  <jdahlin@async.com.br>
 
 	* gir/cairo-1.0.gir:
