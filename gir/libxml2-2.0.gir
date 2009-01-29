@@ -9,6 +9,7 @@
     <record name="DocPtr" c:type="xmlDocPtr"/>
     <record name="NsPtr" c:type="xmlNsPtr"/>
     <record name="Char" c:type="xmlChar"/>
+    <record name="TextWriter" c:type="xmlTextWriterPtr"/>
     <function name="dummy" c:identifier="dummy">
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
