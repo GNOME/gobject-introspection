@@ -1,3 +1,9 @@
+2009-01-28  Robert Carr   <carrr@rpi.edu>
+	
+	* girepository/girparser.c: post_filter_varargs_functions
+	should also filter callbacks.
+	* tests/scanner/foo.h: Add tests of varargs callbacks.
+
 2009-01-28  Johan Bilien  <jobi@via.ecp.fr>
 
 	* tests/scanner/annotation-1.0-expected.gir: add missing
