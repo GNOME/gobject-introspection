@@ -1,3 +1,9 @@
+2009-02-02  Dan Winship  <danw@gnome.org>
+
+	* girepository/ginfo.c (g_registered_type_info_get_g_type): handle
+	the special case for GObject, whose glib:get-type is listed as
+	"intern".
+
 2009-02-02  Andreas Rottmann  <a.rottmann@gmx.at>
 
 	Bug 569408 – Scanner doesn't handle arbitrary typedefs correctly
