@@ -478,45 +478,33 @@ class Transformer(object):
         self._typedefs_ns[callback.name] = callback
         return callback
 
-    def _create_struct(self, symbol):
-        struct = self._typedefs_ns.get(symbol.ident, None)
-        if struct is None:
+    def _create_compound(self, klass, symbol):
+        compound = self._typedefs_ns.get(symbol.ident, None)
+        if compound is None:
             # This is a bit of a hack; really we should try
             # to resolve through the typedefs to find the real
             # name
             if symbol.ident.startswith('_'):
                 name = symbol.ident[1:]
+                compound = self._typedefs_ns.get(name, None)
             else:
                 name = symbol.ident
-            name = self.remove_prefix(name)
-            struct = Struct(name, symbol.ident)
+            if compound is None:
+                name = self.remove_prefix(name)
+                compound = klass(name, symbol.ident)
 
         for child in symbol.base_type.child_list:
             field = self._traverse_one(child)
             if field:
-                struct.fields.append(field)
+                compound.fields.append(field)
 
-        return struct
+        return compound
+
+    def _create_struct(self, symbol):
+        return self._create_compound(Struct, symbol)
 
     def _create_union(self, symbol):
-        union = self._typedefs_ns.get(symbol.ident, None)
-        if union is None:
-            # This is a bit of a hack; really we should try
-            # to resolve through the typedefs to find the real
-            # name
-            if symbol.ident.startswith('_'):
-                name = symbol.ident[1:]
-            else:
-                name = symbol.ident
-            name = self.remove_prefix(name)
-            union = Union(name, symbol.ident)
-
-        for child in symbol.base_type.child_list:
-            field = self._traverse_one(child)
-            if field:
-                union.fields.append(field)
-
-        return union
+        return self._create_compound(Union, symbol)
 
     def _create_callback(self, symbol):
         parameters = self._create_parameters(symbol.base_type.base_type)

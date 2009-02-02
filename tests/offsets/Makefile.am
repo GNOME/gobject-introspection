@@ -20,6 +20,7 @@ liboffsets_la_LDFLAGS = -avoid-version -rpath $(libdir)
 
 offsets-1.0.gir: liboffsets.la offsets.h $(SCANNER_BIN) $(SCANNER_LIBS) Makefile
 	$(CHECK_DEBUG) $(SCANNER) \
+	--include=GObject-2.0 \
         --libtool="$(LIBTOOL)" \
 	--library=offsets \
 	--namespace=offsets \
@@ -51,7 +52,7 @@ CLEANFILES += gitestoffsets.c
 ############################################################
 
 check-local: offsets-1.0.typelib
-	LD_LIBRARY_PATH=$${LD_LIBRARY_PATH:+$$LD_LIBRARY_PATH:}$(builddir) GI_TYPELIB_PATH=$(builddir) \
+	LD_LIBRARY_PATH=$${LD_LIBRARY_PATH:+$$LD_LIBRARY_PATH:}$(builddir) GI_TYPELIB_PATH=$(builddir):$(top_builddir)/gir \
 	  $(builddir)/gitestoffsets$(EXEEXT) offsets.compiled offsets.introspected
 	diff -u offsets.compiled offsets.introspected
 

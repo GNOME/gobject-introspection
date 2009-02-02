@@ -2,6 +2,7 @@
 #define __OFFSETS_H__
 
 #include <glib.h>
+#include <glib-object.h>
 #include <time.h>
 
 /* Test we get the alignment right for various basic types; we put
@@ -116,6 +117,24 @@ struct _OffsetsArray
   gdouble some_doubles[4];
   Enum1 some_enum[2];
   gpointer some_ptrs[5];
+};
+
+/** Test object offsets
+ */
+
+typedef struct _OffsetsObj OffsetsObj;
+typedef struct _OffsetsObjClass OffsetsObjClass;
+
+struct _OffsetsObj
+{
+  GObject parent_instance;
+
+  GObject *other;
+};
+
+struct _OffsetsObjClass
+{
+  GObjectClass parent_class;
 };
 
 #endif /* __OFFSETS_H__ */

@@ -261,8 +261,20 @@ class GLibTransformer(object):
             parent_type_name = 'GObject'
             parent_gitype = self._resolve_gtypename(parent_type_name)
             symbol = 'g_initially_unowned_get_type'
+        else:
+            assert False
         gnode = GLibObject(node.name, parent_gitype, type_name, symbol, True)
-        gnode.fields.extend(node.fields)
+        if type_name == 'GObject':
+            gnode.fields.extend(node.fields)
+        else:
+            # http://bugzilla.gnome.org/show_bug.cgi?id=569408
+            # GInitiallyUnowned is actually a typedef for GObject, but
+            # that's not reflected in the GIR, where it appears as a
+            # subclass (as it appears in the GType hierarchy).  So
+            # what we do here is copy all of the GObject fields into
+            # GInitiallyUnowned so that struct offset computation
+            # works correctly.
+            gnode.fields = self._names.names['Object'][1].fields
         self._add_attribute(gnode)
         self._register_internal_type(type_name, gnode)
 

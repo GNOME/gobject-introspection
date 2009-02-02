@@ -1,5 +1,32 @@
 2009-02-02  Andreas Rottmann  <a.rottmann@gmx.at>
 
+	Bug 569408 – Scanner doesn't handle arbitrary typedefs correctly
+
+	* giscanner/glibtransformer.py (GLibTransformer._create_gobject):
+	Treat GInitiallyUnowned specially.
+
+	Bug 568680 – Scanner misses fields (at least in GObject.Object)
+
+	* girepository/giroffsets.c (compute_struct_field_offsets): Fix
+	handling of callbacks (a callback member clobbered the size
+	computed so far).
+
+	* giscanner/transformer.py (Transformer._create_compound): Use
+	the (empty) compound created by a typedef if present; this means
+	that fields will no longer get lost.
+
+	* giscanner/transformer.py (Transformer._create_compound): New
+	method, contains logic common to _create_union and _create_struct.
+	(Transformer._create_struct, Transformer._create_union): Rewritten
+	in terms of _create_compound.
+
+	* gir/GObject-2.0.xpath: Some new assertations of the presence
+	GObject fields.
+	* tests/offsets/Makefile.am, tests/offsets/offsets.h: Added test
+	for object field offsets.
+
+  2009-02-02  Andreas Rottmann  <a.rottmann@gmx.at>
+
 	Bug 563469 – Arrays not treated correctly in struct offset calculation
 
 	* tests/offsets/offsets.h (OffsetsArray): New struct, containing a

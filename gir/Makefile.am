@@ -70,6 +70,8 @@ GObject-2.0.gir: GLib-2.0.gir $(SCANNER_BIN) $(SCANNER_LIBS) Makefile
 	    -DGOBJECT_COMPILATION \
             --pkg gobject-2.0 \
 	    $(GLIB_INCLUDEDIR)/gobject/*.h
+	$(SCANNER) $(SCANNER_ARGS) \
+	    --xpath-assertions=$(srcdir)/GObject-2.0.xpath GObject-2.0.gir
 BUILT_GIRSOURCES += GObject-2.0.gir
 
 # gmodule
