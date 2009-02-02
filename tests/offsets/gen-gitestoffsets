@@ -61,7 +61,7 @@ STRUCT_DEF_RE = compile_re("struct\s+_(TOKEN)\s*{([^}]*)}")
 
 # This certainly can't handle all type declarations, but it only
 # needs to handle the ones we use in the test cases
-FIELD_RE = compile_re("^(?:const\s+)?TOKEN(?:[\s*]+)(TOKEN)\s*;$");
+FIELD_RE = compile_re(r"^(?:const\s+)?TOKEN(?:[\s*]+)(TOKEN)\s*(?:\[([0-9]*)\])?\s*;$")
 
 
 input_f = open(sys.argv[1])

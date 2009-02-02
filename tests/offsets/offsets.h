@@ -104,4 +104,18 @@ struct _OffsetsNested {
   char dummy3;
 };
 
+/* Test array offsets
+ */
+
+typedef struct _OffsetsArray OffsetsArray;
+
+struct _OffsetsArray
+{ 
+  gint some_ints[2];
+  gint8 some_int8s[3];
+  gdouble some_doubles[4];
+  Enum1 some_enum[2];
+  gpointer some_ptrs[5];
+};
+
 #endif /* __OFFSETS_H__ */

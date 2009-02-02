@@ -1,4 +1,23 @@
-2009-01-28  Johan Bilien  <jobi@via.ecp.fr>
+2009-02-02  Andreas Rottmann  <a.rottmann@gmx.at>
+
+	Bug 563469 – Arrays not treated correctly in struct offset calculation
+
+	* tests/offsets/offsets.h (OffsetsArray): New struct, containing a
+	bunch of arrays.
+
+	* tests/offsets/gen-gitestoffsets (FIELD_RE): Handle arrays.
+
+	* girepository/giroffsets.c (get_interface_size_alignment):
+	Refactored to make it more general, now takes a GIrNodeType*
+	instead of a GIrNodeField*, plus an additional 'who' parameter
+	that denotes what the size/alignment is calculated for.
+	(get_type_size_alignment): New function, refactored version of
+	get_field_size_alignment().
+	(get_field_size_alignment): Implemented in terms of
+	get_type_size_alignment().
+	(get_type_size_alignment): Handle array types correctly.
+
+  2009-01-28  Johan Bilien  <jobi@via.ecp.fr>
 
 	* tests/scanner/annotation-1.0-expected.gir: add missing
 	with_voidp
