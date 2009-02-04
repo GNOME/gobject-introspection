@@ -1,3 +1,14 @@
+2009-02-03  Andreas Rottmann  <a.rottmann@gmx.at>
+	
+	* girepository/girparser.c (ParseContext): Removed member
+	current_node, added node_stack instead.
+	(CURRENT_NODE): New macro, returns the current node (top of
+	node_stack).
+	(pop_node, push_node): New functions; pop or push a node from
+	node_stack.
+	Rest of the file adapted to these changes, which are necessary 
+	for supporting nested structs/and unions.
+
 2009-02-02  Dan Winship  <danw@gnome.org>
 
 	* girepository/ginfo.c (g_registered_type_info_get_g_type): handle
