@@ -39,13 +39,11 @@
       <field name="tag" writable="1">
         <type name="int"/>
       </field>
-      <!-- FIXME: anonymous union member missing -->
     </record>
     <union name="Byte">
       <field name="value" writable="1">
         <type name="uint8"/>
       </field>
-      <!-- FIXME: anonymous struct member missing -->
     </union>
     <callback name="FileFunc">
       <return-value transfer-ownership="none">
