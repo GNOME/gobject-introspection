@@ -307,6 +307,10 @@ class Transformer(object):
         if (source_type.type == CTYPE_POINTER and
             symbol.base_type.base_type.type == CTYPE_FUNCTION):
             node = self._create_callback(symbol)
+        elif source_type.type == CTYPE_STRUCT and source_type.name is None:
+            node = self._create_struct(symbol, anonymous=True)
+        elif source_type.type == CTYPE_UNION and source_type.name is None:
+            node = self._create_union(symbol, anonymous=True)
         else:
             # Special handling for fields; we don't have annotations on them
             # to apply later, yet.
@@ -478,8 +482,14 @@ class Transformer(object):
         self._typedefs_ns[callback.name] = callback
         return callback
 
-    def _create_compound(self, klass, symbol):
-        compound = self._typedefs_ns.get(symbol.ident, None)
+    def _create_compound(self, klass, symbol, anonymous):
+        if symbol.ident is None:
+            # the compound is an anonymous member of another union or a struct
+            assert anonymous
+            compound = klass(None, None)
+        else:
+            compound = self._typedefs_ns.get(symbol.ident, None)
+
         if compound is None:
             # This is a bit of a hack; really we should try
             # to resolve through the typedefs to find the real
@@ -500,11 +510,11 @@ class Transformer(object):
 
         return compound
 
-    def _create_struct(self, symbol):
-        return self._create_compound(Struct, symbol)
+    def _create_struct(self, symbol, anonymous=False):
+        return self._create_compound(Struct, symbol, anonymous)
 
-    def _create_union(self, symbol):
-        return self._create_compound(Union, symbol)
+    def _create_union(self, symbol, anonymous=False):
+        return self._create_compound(Union, symbol, anonymous)
 
     def _create_callback(self, symbol):
         parameters = self._create_parameters(symbol.base_type.base_type)

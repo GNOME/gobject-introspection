@@ -46,6 +46,35 @@ and/or use gtk-doc annotations.  -->
         <type name="GObject.ObjectClass" c:type="GObjectClass"/>
       </field>
     </record>
+    <record name="TaggedValue" c:type="UtilityTaggedValue">
+      <field name="tag" writable="1">
+        <type name="int" c:type="int"/>
+      </field>
+      <union>
+        <field name="v_pointer" writable="1">
+          <type name="any" c:type="gpointer"/>
+        </field>
+        <field name="v_real" writable="1">
+          <type name="double" c:type="double"/>
+        </field>
+        <field name="v_integer" writable="1">
+          <type name="long" c:type="long"/>
+        </field>
+      </union>
+    </record>
+    <union name="Byte" c:type="UtilityByte">
+      <field name="value" writable="1">
+        <type name="uint8" c:type="guint8"/>
+      </field>
+      <record>
+        <field name="first_nibble" writable="1" bits="4">
+          <type name="uint8" c:type="guint8"/>
+        </field>
+        <field name="second_nibble" writable="1" bits="4">
+          <type name="uint8" c:type="guint8"/>
+        </field>
+      </record>
+    </union>
     <callback name="FileFunc" c:type="UtilityFileFunc">
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>

@@ -1,4 +1,41 @@
 2009-02-03  Andreas Rottmann  <a.rottmann@gmx.at>
+
+	* tests/scanner/utility.h (UtilityTaggedValue): Make the union
+	member anonymous.
+	(UtilityByte): New union typedef with an unnamed struct in it.
+
+	* giscanner/transformer.py (Transformer._create_struct): Create
+	unnamed structs for symbols with a None ident.
+	(Transformer._create_union): Likewise.
+
+	* giscanner/girwriter.py (GIRWriter._write_record): Allow name
+	being None.
+	(GIRWriter._write_union): Likewise.
+
+	* girepository/girparser.c (start_struct): Allow a NULL name for
+	non-toplevel structs.
+	(start_union): Likewise.
+
+	* tests/scanner/utility.h (UtilityTaggedValue): New struct
+	typedef, which has a nested union member.
+	* tests/scanner/utility-expected.gir: Adapted.
+
+	* giscanner/transformer.py (Transformer._create_member): Create
+	struct/union members if appropriate.
+	(Transformer._create_struct, Transformer._create_union): Allow for
+	structs/unions without a C type.
+
+	* giscanner/glibtransformer.py (GLibTransformer._resolve_field):
+	We don't need to resolve non-typef'd
+	(GLibTransformer._resolve_field): Add cases for non-typedef'd
+	struct/union "fields".
+
+	* giscanner/girwriter.py (GIRWriter._write_record): Allow for
+	records without a C type.
+	(GIRWriter._write_field): structs and unions may appear in places
+	where fields do.
+
+2009-02-03  Andreas Rottmann  <a.rottmann@gmx.at>
 	
 	* girepository/girparser.c (ParseContext): Removed member
 	current_node, added node_stack instead.

@@ -366,8 +366,11 @@ and/or use gtk-doc annotations. ''')
                 ('glib:get-type', boxed.get_type)]
 
     def _write_record(self, record):
-        attrs = [('name', record.name),
-                 ('c:type', record.symbol)]
+        attrs = []
+        if record.name is not None:
+            attrs.append(('name', record.name))
+        if record.symbol is not None: # the record might be anonymous
+            attrs.append(('c:type', record.symbol))
         if record.disguised:
             attrs.append(('disguised', '1'))
         if record.doc:
@@ -386,8 +389,11 @@ and/or use gtk-doc annotations. ''')
                 self._write_method(method)
 
     def _write_union(self, union):
-        attrs = [('name', union.name),
-                 ('c:type', union.symbol)]
+        attrs = []
+        if union.name is not None:
+            attrs.append(('name', union.name))
+        if union.symbol is not None: # the union might be anonymous
+            attrs.append(('c:type', union.symbol))
         if union.doc:
             attrs.append(('doc', union.doc))
         self._append_version(union, attrs)
@@ -410,19 +416,22 @@ and/or use gtk-doc annotations. ''')
 
         if isinstance(field, Callback):
             self._write_callback(field)
-            return
-
-        attrs = [('name', field.name)]
-        # Fields are assumed to be read-only
-        # (see also girparser.c and generate.c)
-        if not field.readable:
-            attrs.append(('readable', '0'))
-        if field.writable:
-            attrs.append(('writable', '1'))
-        if field.bits:
-            attrs.append(('bits', str(field.bits)))
-        with self.tagcontext('field', attrs):
-            self._write_type(field.type)
+        elif isinstance(field, Struct):
+            self._write_record(field)
+        elif isinstance(field, Union):
+            self._write_union(field)
+        else:
+            attrs = [('name', field.name)]
+            # Fields are assumed to be read-only
+            # (see also girparser.c and generate.c)
+            if not field.readable:
+                attrs.append(('readable', '0'))
+            if field.writable:
+                attrs.append(('writable', '1'))
+            if field.bits:
+                attrs.append(('bits', str(field.bits)))
+            with self.tagcontext('field', attrs):
+                self._write_type(field.type)
 
     def _write_signal(self, signal):
         attrs = [('name', signal.name)]

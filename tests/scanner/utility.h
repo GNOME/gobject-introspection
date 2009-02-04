@@ -23,6 +23,27 @@ struct _UtilityObjectClass
 /* This one is similar to Pango.Glyph */
 typedef guint32 UtilityGlyph;
 
+typedef struct
+{
+  int tag;
+  union
+  {
+    gpointer v_pointer;
+    double v_real;
+    long v_integer;
+  };
+} UtilityTaggedValue;
+
+typedef union
+{
+  guint8 value;
+  struct
+  {
+    guint8 first_nibble : 4;
+    guint8 second_nibble : 4;
+  };
+} UtilityByte;
+
 typedef void (*UtilityFileFunc)(const char *path, gpointer user_data);
 
 GType                 utility_object_get_type          (void) G_GNUC_CONST;

@@ -870,8 +870,12 @@ class GLibTransformer(object):
     def _resolve_field(self, field):
         if isinstance(field, Callback):
             self._resolve_function(field)
-            return
-        field.type = self._resolve_param_type(field.type)
+        elif isinstance(field, Record): # non-typedef'd struct
+            self._resolve_record(field)
+        elif isinstance(field, Union): # non-typedef'd union
+            self._resolve_union(field)
+        else:
+            field.type = self._resolve_param_type(field.type)
 
     def _resolve_alias(self, alias):
         alias.target = self._resolve_type_name(alias.target, alias.target)
