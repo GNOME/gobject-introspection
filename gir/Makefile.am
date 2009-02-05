@@ -33,6 +33,7 @@ GLib-2.0.gir: $(SCANNER_BIN) $(SCANNER_LIBS) Makefile glib-2.0.c
 	    --strip-prefix=g \
             --libtool="$(LIBTOOL)" \
 	    --library=$(GLIB_LIBRARY) \
+	    --pkg glib-2.0 \
 	    $(CPPFLAGS) \
 	    -I$(GLIB_INCLUDEDIR) \
 	    -I$(GLIB_LIBDIR)/glib-2.0/include \

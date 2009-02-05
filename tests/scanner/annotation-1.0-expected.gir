@@ -9,6 +9,7 @@ and/or use gtk-doc annotations.  -->
   <include name="GLib" version="2.0"/>
   <include name="GObject" version="2.0"/>
   <include name="utility" version="1.0"/>
+  <package name="gobject-2.0"/>
   <namespace name="annotation" version="1.0" shared-library="annotation">
     <callback name="Callback"
               c:type="AnnotationCallback"

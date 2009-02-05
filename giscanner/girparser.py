@@ -50,6 +50,7 @@ class GIRParser(object):
         self._include_parsing = False
         self._shared_libraries = []
         self._includes = set()
+        self._pkgconfig_packages = set()
         self._namespace = None
 
     # Public API
@@ -62,6 +63,7 @@ class GIRParser(object):
         self._includes.clear()
         self._namespace = None
         self._shared_libraries = []
+        self._pkgconfig_packages = set()
         self._parse_api(tree.getroot())
 
     def get_namespace(self):
@@ -72,6 +74,9 @@ class GIRParser(object):
 
     def get_includes(self):
         return self._includes
+
+    def get_pkgconfig_packages(self):
+        return self._pkgconfig_packages
 
     def get_doc(self):
         return parse(self._filename)
@@ -89,6 +94,8 @@ class GIRParser(object):
         for node in root.getchildren():
             if node.tag == _corens('include'):
                 self._parse_include(node)
+            elif node.tag == _corens('package'):
+                self._parse_pkgconfig_package(node)
 
         ns = root.find(_corens('namespace'))
         assert ns is not None
@@ -121,6 +128,9 @@ class GIRParser(object):
         include = Include(node.attrib['name'],
                           node.attrib['version'])
         self._includes.add(include)
+
+    def _parse_pkgconfig_package(self, node):
+        self._pkgconfig_packages.add(node.attrib['name'])
 
     def _parse_alias(self, node):
         alias = Alias(node.attrib['name'],

@@ -195,6 +195,41 @@ def validate(assertions, path):
     print "=== PASSED %s ===" % (assertions, )
     return 0
 
+def process_packages(parser, options, packages):
+    args = ['pkg-config', '--cflags']
+    args.extend(packages)
+    output = subprocess.Popen(args,
+                              stdout=subprocess.PIPE).communicate()[0]
+    if output is None:
+        # the error output should have already appeared on our stderr,
+        # so we just exit
+        sys.exit(1)
+    # Some pkg-config files on Windows have options we don't understand,
+    # so we explicitly filter to only the ones we need.
+    options_whitelist = ['-I', '-D', '-U', '-l', '-L']
+    def filter_option(opt):
+        for optstart in options_whitelist:
+            if opt.startswith(optstart):
+                return True
+        return False
+    output = output.split()
+    filtered_output = filter(filter_option, output)
+    pkg_options, unused = parser.parse_args(filtered_output)
+    options.cpp_includes.extend(pkg_options.cpp_includes)
+    options.cpp_defines.extend(pkg_options.cpp_defines)
+    options.cpp_undefines.extend(pkg_options.cpp_undefines)
+
+    args = ['pkg-config', '--libs-only-L']
+    args.extend(packages)
+    output = subprocess.Popen(args,
+                              stdout=subprocess.PIPE).communicate()[0]
+    if output is None:
+        sys.exit(1)
+    output = output.split()
+    filtered_output = filter(filter_option, output)
+    pkg_options, unused = parser.parse_args(filtered_output)
+    options.library_paths.extend(pkg_options.library_paths)	
+
 def main(args):
     parser = _get_option_parser()
     (options, args) = parser.parse_args(args)
@@ -226,31 +261,6 @@ def main(args):
         _error("Must specify --program or --library")
     libraries = options.libraries
 
-    for package in options.packages:
-        output = subprocess.Popen(['pkg-config', '--cflags', package],
-                                  stdout=subprocess.PIPE).communicate()[0]
-        # Some pkg-config files on Windows have options we don't understand,
-        # so we explicitly filter to only the ones we need.
-        options_whitelist = ['-I', '-D', '-U', '-l', '-L']
-        def filter_option(opt):
-            for optstart in options_whitelist:
-                if opt.startswith(optstart):
-                    return True
-            return False
-        output = output.split()
-        filtered_output = filter(filter_option, output)
-        pkg_options, unused = parser.parse_args(filtered_output)
-        options.cpp_includes.extend(pkg_options.cpp_includes)
-        options.cpp_defines.extend(pkg_options.cpp_defines)
-        options.cpp_undefines.extend(pkg_options.cpp_undefines)
-
-        output = subprocess.Popen(['pkg-config', '--libs-only-L', package],
-                                  stdout=subprocess.PIPE).communicate()[0]
-        output = output.split()
-        filtered_output = filter(filter_option, output)
-        pkg_options, unused = parser.parse_args(filtered_output)
-        options.library_paths.extend(pkg_options.library_paths)
-
     # FIXME: using LPATH is definitely not portable enough. Using Python's
     # find_library for finding our shared libraries is not a portable enough
     # anyway as it behaves differently depending on the OS
@@ -272,19 +282,9 @@ def main(args):
             if not os.path.exists(arg):
                 _error('%s: no such a file or directory' % (arg, ))
             filenames.append(arg)
-
-    cachestore = CacheStore()
-    # Run the preprocessor, tokenize and construct simple
-    # objects representing the raw C symbols
-    ss = SourceScanner()
-    ss.set_cpp_options(options.cpp_includes,
-                       options.cpp_defines,
-                       options.cpp_undefines)
-    ss.parse_files(filenames)
-    ss.parse_macros(filenames)
-
-    # Transform the C symbols into AST nodes
-    transformer = Transformer(cachestore, ss,
+            
+    cachestore = CacheStore()            
+    transformer = Transformer(cachestore,
                               options.namespace_name,
                               options.namespace_version)
     if options.strip_prefix:
@@ -298,6 +298,22 @@ def main(args):
             raise ValueError("Invalid include path %r" % (include, ))
         include_obj = Include.from_string(include)
         transformer.register_include(include_obj)
+        
+    packages = set(options.packages)
+    packages.update(transformer.get_pkgconfig_packages())
+    process_packages(parser, options, packages)
+
+    # Run the preprocessor, tokenize and construct simple
+    # objects representing the raw C symbols
+    ss = SourceScanner()
+    ss.set_cpp_options(options.cpp_includes,
+                       options.cpp_defines,
+                       options.cpp_undefines)
+    ss.parse_files(filenames)
+    ss.parse_macros(filenames)
+
+    # Transform the C symbols into AST nodes
+    transformer.set_source_ast(ss)
 
     if options.program:
         args=[options.program]
@@ -321,7 +337,8 @@ def main(args):
         raise SystemExit("ERROR in annotation: %s" % (str(e), ))
 
     # Write out AST
-    writer = Writer(namespace, libraries, transformer.get_includes())
+    writer = Writer(namespace, libraries, transformer.get_includes(),
+                    options.packages)
     data = writer.get_xml()
     if options.output:
         fd = open(options.output, "w")

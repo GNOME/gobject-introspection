@@ -63,12 +63,12 @@ class Names(object):
 
 class Transformer(object):
 
-    def __init__(self, cachestore, generator,
-                 namespace_name, namespace_version):
+    def __init__(self, cachestore, namespace_name, namespace_version):
         self._cachestore = cachestore
-        self.generator = generator
+        self.generator = None
         self._namespace = Namespace(namespace_name, namespace_version)
         self._names = Names()
+        self._pkg_config_packages = set()
         self._typedefs_ns = {}
         self._strip_prefix = ''
         self._includes = set()
@@ -82,6 +82,12 @@ class Transformer(object):
 
     def set_strip_prefix(self, strip_prefix):
         self._strip_prefix = strip_prefix
+
+    def get_pkgconfig_packages(self):
+        return self._pkg_config_packages
+
+    def set_source_ast(self, src_ast):
+        self.generator = src_ast
 
     def parse(self):
         nodes = []
@@ -115,9 +121,8 @@ class Transformer(object):
             path = os.path.join(d, girname)
             if os.path.exists(path):
                 return path
-        else:
-            raise ValueError("Couldn't find include %r (search path: %r)"\
-                             % (girname, searchdirs))
+        raise ValueError("Couldn't find include %r (search path: %r)"\
+                         % (girname, searchdirs))
 
     def _parse_include(self, filename):
         parser = self._cachestore.load(filename)
@@ -130,6 +135,8 @@ class Transformer(object):
         for include in parser.get_includes():
             self.register_include(include)
 
+        for pkg in parser.get_pkgconfig_packages():
+            self._pkg_config_packages.add(pkg)
         namespace = parser.get_namespace()
         nsname = namespace.name
         for node in namespace.nodes:
