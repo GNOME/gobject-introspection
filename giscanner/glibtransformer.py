@@ -802,7 +802,17 @@ class GLibTransformer(object):
              for x in node.prerequisites])
 
     def _resolve_glib_object(self, node):
-        node.parent = self._force_resolve(node.parent)
+        # If we can't find the parent class, just drop back to GObject.
+        # This supports hidden parent classes.
+        # http://bugzilla.gnome.org/show_bug.cgi?id=561360
+        try:
+            node.parent = self._force_resolve(node.parent)
+        except KeyError, e:
+            print ("WARNING: Parent %r of class %r" +\
+                   " not found; using GObject") % (node.parent.target,
+                                                   node.name)
+            node.parent = self._transformer.gtypename_to_giname("GObject",
+                                                                self._names)
         node.interfaces = filter(None,
             [self._force_resolve(x, allow_unknown=True)
                                     for x in node.interfaces])

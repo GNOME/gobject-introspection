@@ -420,7 +420,6 @@ foo_hidden_free (FooHidden *boxed)
   g_slice_free (FooHidden, boxed);
 }
 
-
 GType
 foo_hidden_get_type (void)
 {
@@ -458,5 +457,68 @@ foo_error_quark (void)
 void
 foo_some_variant (guint x, va_list args)
 {
-  
+}
+
+/* This setup of a totally hidden parent class matches
+ * http://bugzilla.gnome.org/show_bug.cgi?id=561360
+ */
+#define FOO_TYPE_TILE_HANDLER        (foo_tile_handler_get_type ())
+#define FOO_TILE_HANDLER(object)     (G_TYPE_CHECK_INSTANCE_CAST ((object), FOO_TYPE_TILE_HANDLER, FooTileHandler))
+#define FOO_IS_TILE_HANDLER(object)  (G_TYPE_CHECK_INSTANCE_TYPE ((object), FOO_TYPE_TILE_HANDLER))
+
+struct _FooTileHandler
+{
+  FooObject parent_instance;
+};
+
+
+struct _FooTileHandlerClass
+{
+  FooObjectClass parent_class;
+};
+
+typedef struct _FooTileHandler          FooTileHandler;
+typedef struct _FooTileHandlerClass     FooTileHandlerClass;
+
+G_DEFINE_TYPE(FooTileHandler, foo_tile_handler, FOO_TYPE_OBJECT);
+
+static void
+foo_tile_handler_class_init (FooTileHandlerClass *klass)
+{
+
+}
+
+static void
+foo_tile_handler_init (FooTileHandler *object)
+{
+
+}
+
+struct _FooBuffer
+{
+  FooTileHandler parent_instance;
+};
+
+struct _FooBufferClass
+{
+  FooTileHandlerClass parent_class;
+};
+
+G_DEFINE_TYPE(FooBuffer, foo_buffer, FOO_TYPE_TILE_HANDLER);
+
+static void
+foo_buffer_class_init (FooBufferClass *klass)
+{
+
+}
+
+static void
+foo_buffer_init (FooBuffer *object)
+{
+
+}
+
+void
+foo_buffer_some_method (FooBuffer *buffer)
+{
 }

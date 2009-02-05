@@ -239,6 +239,20 @@ and/or use gtk-doc annotations.  -->
         <type name="ObjectClass" c:type="FooObjectClass"/>
       </field>
     </record>
+    <class name="Buffer"
+           c:type="FooBuffer"
+           parent="GObject.Object"
+           glib:type-name="FooBuffer"
+           glib:get-type="foo_buffer_get_type">
+      <implements name="Interface"/>
+      <method name="some_method" c:identifier="foo_buffer_some_method">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+      </method>
+    </class>
+    <record name="BufferClass" c:type="FooBufferClass">
+    </record>
     <function name="init" c:identifier="foo_init">
       <return-value transfer-ownership="none">
         <type name="int" c:type="gint"/>

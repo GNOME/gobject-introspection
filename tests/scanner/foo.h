@@ -23,6 +23,10 @@
 #define FOO_SUBOBJECT(subobject)     (G_TYPE_CHECK_INSTANCE_CAST ((subobject), FOO_TYPE_SUBOBJECT, FooSubobject))
 #define FOO_IS_SUBOBJECT(subobject)  (G_TYPE_CHECK_INSTANCE_TYPE ((subobject), FOO_TYPE_SUBOBJECT))
 
+#define FOO_TYPE_BUFFER        (foo_buffer_get_type ())
+#define FOO_BUFFER(object)     (G_TYPE_CHECK_INSTANCE_CAST ((object), FOO_TYPE_BUFFER, FooBuffer))
+#define FOO_IS_BUFFER(object)  (G_TYPE_CHECK_INSTANCE_TYPE ((object), FOO_TYPE_BUFFER))
+
 typedef struct _FooInterface       FooInterface;
 typedef struct _FooInterfaceIface  FooInterfaceIface;
 typedef struct _FooSubInterface       FooSubInterface;
@@ -31,6 +35,8 @@ typedef struct _FooObject          FooObject;
 typedef struct _FooObjectClass     FooObjectClass;
 typedef struct _FooSubobject       FooSubobject;
 typedef struct _FooSubobjectClass  FooSubobjectClass;
+typedef struct _FooBuffer          FooBuffer;
+typedef struct _FooBufferClass     FooBufferClass;
 
 struct _FooInterfaceIface
 {
@@ -107,6 +113,10 @@ struct _FooSubobjectClass
 
 GType                 foo_subobject_get_type       (void) G_GNUC_CONST;
 FooSubobject*         foo_subobject_new            ();
+
+GType                 foo_buffer_get_type          (void);
+
+void                  foo_buffer_some_method       (FooBuffer *buffer);
 
 typedef enum
 {

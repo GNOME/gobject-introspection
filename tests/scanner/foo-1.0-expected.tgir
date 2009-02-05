@@ -152,6 +152,15 @@
         <type name="ObjectClass"/>
       </field>
     </record>
+    <class name="Buffer" parent="GObject.Object" glib:type-name="FooBuffer" glib:get-type="foo_buffer_get_type">
+      <implements name="Interface"/>
+      <method name="some_method" c:identifier="foo_buffer_some_method">
+        <return-value transfer-ownership="none">
+          <type name="none"/>
+        </return-value>
+      </method>
+    </class>
+    <record name="BufferClass"/>
     <function name="init" c:identifier="foo_init">
       <return-value transfer-ownership="none">
         <type name="int"/>
