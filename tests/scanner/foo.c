@@ -455,3 +455,8 @@ foo_error_quark (void)
   return g_quark_from_static_string ("foo-error-quark");
 }
 
+void
+foo_some_variant (guint x, va_list args)
+{
+  
+}

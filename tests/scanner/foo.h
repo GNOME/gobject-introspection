@@ -302,4 +302,7 @@ GType foo_error_get_type (void);
 
 GQuark foo_error_quark (void);
 
+/* Should be skipped */
+void foo_some_variant (guint x, va_list args);
+
 #endif /* __FOO_OBJECT_H__ */
