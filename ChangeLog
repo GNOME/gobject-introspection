@@ -1,3 +1,13 @@
+2009-02-04  Johan Dahlin  <jdahlin@async.com.br>
+
+	* girepository/Makefile.am:
+	* girepository/girffi.c (g_callable_info_get_ffi_arg_types),
+	(g_callable_info_get_ffi_return_type),
+	(g_callable_info_prepare_closure), (g_callable_info_free_closure):
+	* girepository/girffi.h:
+	Add utility functions for invocing closures given a GICallableInfo
+	using libffi.
+
 2009-02-03  Andreas Rottmann  <a.rottmann@gmx.at>
 
 	* tests/scanner/utility.h (UtilityTaggedValue): Make the union
