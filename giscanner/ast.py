@@ -365,6 +365,9 @@ class Record(Node):
         self.doc = None
         self.constructors = []
         self.methods = []
+        # If true, this record defines the FooClass C structure
+        # for some Foo GObject
+        self.is_gobject_struct_for = False
 
 # BW compat, remove
 Struct = Record
@@ -404,6 +407,7 @@ class Class(Node):
         Node.__init__(self, name)
         self.ctype = name
         self.parent = parent
+        self.class_struct = None
         self.is_abstract = is_abstract
         self.methods = []
         self.static_methods = []

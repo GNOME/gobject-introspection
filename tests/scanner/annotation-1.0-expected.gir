@@ -43,7 +43,8 @@ and/or use gtk-doc annotations.  -->
            doc="This is an object used to test annotations."
            parent="GObject.Object"
            glib:type-name="AnnotationObject"
-           glib:get-type="annotation_object_get_type">
+           glib:get-type="annotation_object_get_type"
+           glib:class-struct="ObjectClass">
       <method name="method" c:identifier="annotation_object_method">
         <return-value transfer-ownership="none">
           <type name="int" c:type="gint"/>
@@ -452,7 +453,9 @@ known by GObject as it&apos;s only marked as G_TYPE_POINTER">
         </parameters>
       </glib:signal>
     </class>
-    <record name="ObjectClass" c:type="AnnotationObjectClass">
+    <record name="ObjectClass"
+            c:type="AnnotationObjectClass"
+            glib:is-class-struct-for="Object">
       <field name="parent_class">
         <type name="GObject.ObjectClass" c:type="GObjectClass"/>
       </field>

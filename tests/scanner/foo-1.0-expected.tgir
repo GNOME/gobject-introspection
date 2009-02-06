@@ -26,7 +26,7 @@
         <type name="GObject.TypeInterface"/>
       </field>
     </record>
-    <class name="Object" parent="GObject.Object" glib:type-name="FooObject" glib:get-type="foo_object_get_type">
+    <class name="Object" parent="GObject.Object" glib:class-struct="ObjectClass" glib:type-name="FooObject" glib:get-type="foo_object_get_type">
       <implements name="Interface"/>
       <field name="parent_instance">
         <type name="GObject.Object"/>
@@ -131,12 +131,12 @@
         </parameters>
       </glib:signal>
     </class>
-    <record name="ObjectClass">
+    <record name="ObjectClass" glib:is-class-struct="1">
       <field name="parent_class">
         <type name="GObject.ObjectClass"/>
       </field>
     </record>
-    <class name="Subobject" parent="Object" abstract="1" glib:type-name="FooSubobject" glib:get-type="foo_subobject_get_type">
+    <class name="Subobject" parent="Object" glib:class-struct="SubobjectClass" abstract="1" glib:type-name="FooSubobject" glib:get-type="foo_subobject_get_type">
       <implements name="Interface"/>
       <field name="parent_instance">
         <type name="Object"/>
@@ -147,12 +147,12 @@
         </return-value>
       </constructor>
     </class>
-    <record name="SubobjectClass">
+    <record name="SubobjectClass" glib:is-class-struct="1">
       <field name="parent_class">
         <type name="ObjectClass"/>
       </field>
     </record>
-    <class name="Buffer" parent="GObject.Object" glib:type-name="FooBuffer" glib:get-type="foo_buffer_get_type">
+    <class name="Buffer" parent="GObject.Object" glib:class-struct="BufferClass" glib:type-name="FooBuffer" glib:get-type="foo_buffer_get_type">
       <implements name="Interface"/>
       <method name="some_method" c:identifier="foo_buffer_some_method">
         <return-value transfer-ownership="none">
@@ -160,7 +160,7 @@
         </return-value>
       </method>
     </class>
-    <record name="BufferClass"/>
+    <record name="BufferClass"  glib:is-class-struct="1"/>
     <function name="init" c:identifier="foo_init">
       <return-value transfer-ownership="none">
         <type name="int"/>

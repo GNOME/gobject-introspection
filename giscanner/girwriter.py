@@ -298,6 +298,9 @@ and/or use gtk-doc annotations. ''')
             attrs.append(('glib:type-name', node.type_name))
             if node.get_type:
                 attrs.append(('glib:get-type', node.get_type))
+        if isinstance(node, GLibObject):
+            if node.class_struct:
+                attrs.append(('glib:class-struct', node.class_struct.name))
         with self.tagcontext(tag_name, attrs):
             if isinstance(node, GLibObject):
                 for iface in node.interfaces:
@@ -365,14 +368,17 @@ and/or use gtk-doc annotations. ''')
         return [('glib:type-name', boxed.type_name),
                 ('glib:get-type', boxed.get_type)]
 
-    def _write_record(self, record):
-        attrs = []
+    def _write_record(self, record, extra_attrs=[]):
+        attrs = list(extra_attrs)
         if record.name is not None:
             attrs.append(('name', record.name))
         if record.symbol is not None: # the record might be anonymous
             attrs.append(('c:type', record.symbol))
         if record.disguised:
             attrs.append(('disguised', '1'))
+        if record.is_gobject_struct_for:
+            attrs.append(('glib:is-class-struct-for',
+                          record.is_gobject_struct_for))
         if record.doc:
             attrs.append(('doc', record.doc))
         self._append_version(record, attrs)

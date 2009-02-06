@@ -13,12 +13,15 @@ and/or use gtk-doc annotations.  -->
            c:type="BarBaz"
            parent="GObject.Object"
            glib:type-name="BarBaz"
-           glib:get-type="bar_baz_get_type">
+           glib:get-type="bar_baz_get_type"
+           glib:class-struct="BazClass">
       <field name="parent_instance">
         <type name="GObject.Object" c:type="GObject"/>
       </field>
     </class>
-    <record name="BazClass" c:type="BarBazClass">
+    <record name="BazClass"
+            c:type="BarBazClass"
+            glib:is-class-struct-for="Baz">
       <field name="parent_class">
         <type name="GObject.ObjectClass" c:type="GObjectClass"/>
       </field>

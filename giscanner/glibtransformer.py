@@ -545,9 +545,15 @@ class GLibTransformer(object):
         if name == maybe_class.name:
             return
 
-        if self._arg_is_failed(maybe_class):
-            print "WARNING: deleting no-type %r" % (maybe_class.name, )
-            del self._names.names[maybe_class.name]
+        class_struct = maybe_class
+        if self._arg_is_failed(class_struct):
+            print "WARNING: deleting no-type %r" % (class_struct.name, )
+            del self._names.names[class_struct.name]
+            return
+
+        pair_class = self._get_attribute(name)
+        if (not pair_class or
+            not isinstance(pair_class, (GLibObject, GLibInterface))):
             return
 
         # Object class fields are assumed to be read-only
@@ -555,20 +561,13 @@ class GLibTransformer(object):
         for field in maybe_class.fields:
             if isinstance(field, Field):
                 field.writable = False
-
-        name = self._resolve_type_name(name)
-        resolved = self._transformer.remove_prefix(name)
-        pair_class = self._get_attribute(resolved)
-        if pair_class and isinstance(pair_class, GLibInterface):
+        if isinstance(pair_class, GLibInterface):
             for field in maybe_class.fields[1:]:
                 pair_class.fields.append(field)
             return
-        name = self._transformer.remove_prefix(maybe_class.name)
-        pair_class = self._get_attribute(name)
-        if pair_class and isinstance(pair_class,
-                                     (GLibObject, GLibInterface)):
-
-            del self._names.names[maybe_class.name]
+        elif isinstance(pair_class, GLibObject):
+            pair_class.class_struct = class_struct
+            class_struct.is_gobject_struct_for = name
 
     # Introspection
 

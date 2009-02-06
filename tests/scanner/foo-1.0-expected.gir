@@ -83,7 +83,8 @@ and/or use gtk-doc annotations.  -->
            c:type="FooObject"
            parent="GObject.Object"
            glib:type-name="FooObject"
-           glib:get-type="foo_object_get_type">
+           glib:get-type="foo_object_get_type"
+           glib:class-struct="ObjectClass">
       <implements name="Interface"/>
       <constructor name="new" c:identifier="foo_object_new">
         <return-value transfer-ownership="full">
@@ -200,7 +201,9 @@ and/or use gtk-doc annotations.  -->
         </parameters>
       </glib:signal>
     </class>
-    <record name="ObjectClass" c:type="FooObjectClass">
+    <record name="ObjectClass"
+            c:type="FooObjectClass"
+            glib:is-class-struct-for="Object">
       <field name="parent_class">
         <type name="GObject.ObjectClass" c:type="GObjectClass"/>
       </field>
@@ -223,7 +226,8 @@ and/or use gtk-doc annotations.  -->
            parent="Object"
            abstract="1"
            glib:type-name="FooSubobject"
-           glib:get-type="foo_subobject_get_type">
+           glib:get-type="foo_subobject_get_type"
+           glib:class-struct="SubobjectClass">
       <implements name="Interface"/>
       <constructor name="new" c:identifier="foo_subobject_new">
         <return-value transfer-ownership="full">
@@ -234,7 +238,9 @@ and/or use gtk-doc annotations.  -->
         <type name="Object" c:type="FooObject"/>
       </field>
     </class>
-    <record name="SubobjectClass" c:type="FooSubobjectClass">
+    <record name="SubobjectClass"
+            c:type="FooSubobjectClass"
+            glib:is-class-struct-for="Subobject">
       <field name="parent_class">
         <type name="ObjectClass" c:type="FooObjectClass"/>
       </field>
@@ -243,7 +249,8 @@ and/or use gtk-doc annotations.  -->
            c:type="FooBuffer"
            parent="GObject.Object"
            glib:type-name="FooBuffer"
-           glib:get-type="foo_buffer_get_type">
+           glib:get-type="foo_buffer_get_type"
+           glib:class-struct="BufferClass">
       <implements name="Interface"/>
       <method name="some_method" c:identifier="foo_buffer_some_method">
         <return-value transfer-ownership="none">
@@ -251,7 +258,9 @@ and/or use gtk-doc annotations.  -->
         </return-value>
       </method>
     </class>
-    <record name="BufferClass" c:type="FooBufferClass">
+    <record name="BufferClass"
+            c:type="FooBufferClass"
+            glib:is-class-struct-for="Buffer">
     </record>
     <function name="init" c:identifier="foo_init">
       <return-value transfer-ownership="none">

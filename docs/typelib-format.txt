@@ -1,7 +1,11 @@
 GObject binary typelib for introspection
 -----------------------------------------
 
-Version 0.8
+Version 0.9
+
+Changes since 0.8:
+- Add class struct concept to ObjectBlob
+- Add is_class_struct bit to StructBlob
 
 Changes since 0.7:
 - Add dependencies
@@ -847,7 +851,8 @@ struct StructBlob
   guint        deprecated   : 1;
   guint        unregistered : 1;
   guint        alignment    : 6;
-  guint        reserved     : 8;
+  guint        is_class_struct : 1
+  guint        reserved     : 7;
   guint32      name;
 
   GTypeBlob    gtype;
@@ -866,6 +871,9 @@ unregistered:
 
 alignment:
 	  The byte boundary that the struct is aligned to in memory
+	  
+is_class_struct:
+	Whether this structure is the "class structure" for a GObject
 
 size:	  The size of the struct in bytes.
 
@@ -918,7 +926,7 @@ n_values:
 values:   Describes the enum values. 
 
 
-ObjectBlob (32 + x bytes)
+ObjectBlob (36 + x bytes)
 
 struct ObjectBlob
 {
@@ -931,6 +939,7 @@ struct ObjectBlob
   GTypeBlob gtype;
 
   guint16 parent;
+  guint16 class_struct;
 
   guint16 n_interfaces;
   guint16 n_fields;

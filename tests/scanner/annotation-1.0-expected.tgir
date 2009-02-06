@@ -31,7 +31,7 @@
         </parameter>
       </parameters>
     </callback>
-    <class name="Object" parent="GObject.Object" glib:type-name="AnnotationObject" glib:get-type="annotation_object_get_type">
+    <class name="Object" parent="GObject.Object" glib:class-struct="ObjectClass" glib:type-name="AnnotationObject" glib:get-type="annotation_object_get_type">
       <field name="parent_instance">
         <type name="GObject.Object"/>
       </field>
@@ -147,6 +147,16 @@
             <type name="GObject.Object"/>
           </type>
         </return-value>
+      </method>
+      <method name="with_voidp" c:identifier="annotation_object_with_voidp">
+        <return-value transfer-ownership="none">
+          <type name="none"/>
+        </return-value>
+        <parameters>
+          <parameter name="data" transfer-ownership="none">
+            <type name="any"/>
+          </parameter>
+        </parameters>
       </method>
       <method name="get_objects" c:identifier="annotation_object_get_objects">
         <return-value transfer-ownership="container">
@@ -323,7 +333,7 @@
         </parameters>
       </glib:signal>
     </class>
-    <record name="ObjectClass">
+    <record name="ObjectClass" glib:is-class-struct="1">
       <field name="parent_class">
         <type name="GObject.ObjectClass"/>
       </field>
