@@ -1,3 +1,8 @@
+2009-02-06  Owen Taylor  <otaylor@redhat.com>
+
+	* gir/xlib-2.0.gir: Add KeySym and KeyCode to the dummy
+	xlib-2.0.gir.
+
 2009-02-04  Johan Dahlin  <jdahlin@async.com.br>
 
 	* girepository/Makefile.am:

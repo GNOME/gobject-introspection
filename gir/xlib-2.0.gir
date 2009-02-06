@@ -7,6 +7,8 @@
     <record name="Display" c:type="Display"/>
     <record name="Drawable" c:type="Drawable"/>
     <record name="GC" c:type="GC"/>
+    <record name="KeyCode" c:type="KeyCode"/>
+    <record name="KeySym" c:type="KeySym"/>
     <record name="Picture" c:type="Picture"/>
     <record name="Screen" c:type="Screen"/>
     <record name="VisualID" c:type="VisualID"/>
