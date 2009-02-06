@@ -151,9 +151,11 @@ post-check:
 %.tgir.check: %.tgir
 	@diff -u -U 10 $(srcdir)/$*-expected.tgir $*.tgir; \
 	if test "$$?" = "0"; then \
-           echo "* $*.tgir"; \
-           rm -f $*.tgir; \
-        fi
+	    echo "* $*.tgir"; \
+	    rm -f $*.tgir; \
+	else \
+	    exit 1; \
+	fi
 
 distclean-local:
 	@if test "$(top_builddir)" != "$(top_srcdir)"; then \
