@@ -160,7 +160,7 @@
         </return-value>
       </method>
     </class>
-    <record name="BufferClass"  glib:is-class-struct="1"/>
+    <record name="BufferClass" glib:is-class-struct="1"/>
     <function name="init" c:identifier="foo_init">
       <return-value transfer-ownership="none">
         <type name="int"/>
