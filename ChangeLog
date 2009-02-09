@@ -1,3 +1,9 @@
+2009-02-10  Xan Lopez  <xan@gnome.org>
+
+	Bug 570903 - Add information about -I flag to scanner manpage
+
+	* docs/g-ir-scanner.1: Add info about -I flag.
+
 2009-02-06  Owen Taylor  <otaylor@redhat.com>
 
 	* gir/xlib-2.0.gir: Add KeySym and KeyCode to the dummy
