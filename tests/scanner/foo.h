@@ -303,6 +303,12 @@ const FooStruct * foo_test_const_struct_retval (void);
 void foo_test_const_char_param (const char * param);
 void foo_test_const_struct_param (const FooStruct * param);
 
+typedef void (*FooVarargsCallback) (const char * param, ...);
+void foo_test_varargs_callback (gint i, FooVarargsCallback callback);
+void foo_test_varargs_callback2 (FooVarargsCallback callback);
+void foo_test_varargs_callback3 (FooVarargsCallback callback,
+				 FooVarargsCallback callback2);
+
 typedef enum {
   FOO_ERROR_GOOD,
   FOO_ERROR_BAD,

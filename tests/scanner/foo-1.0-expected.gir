@@ -640,6 +640,59 @@ and/or use gtk-doc annotations.  -->
         </parameter>
       </parameters>
     </function>
+    <callback name="VarargsCallback" c:type="FooVarargsCallback">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="param" transfer-ownership="none">
+          <type name="utf8" c:type="char*"/>
+        </parameter>
+        <parameter transfer-ownership="none">
+          <varargs>
+          </varargs>
+        </parameter>
+      </parameters>
+    </callback>
+    <function name="test_varargs_callback"
+              c:identifier="foo_test_varargs_callback">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="i" transfer-ownership="none">
+          <type name="int" c:type="gint"/>
+        </parameter>
+        <parameter name="callback" transfer-ownership="none">
+          <type name="VarargsCallback" c:type="FooVarargsCallback"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="test_varargs_callback2"
+              c:identifier="foo_test_varargs_callback2">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="callback" transfer-ownership="none">
+          <type name="VarargsCallback" c:type="FooVarargsCallback"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="test_varargs_callback3"
+              c:identifier="foo_test_varargs_callback3">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="callback" transfer-ownership="none">
+          <type name="VarargsCallback" c:type="FooVarargsCallback"/>
+        </parameter>
+        <parameter name="callback2" transfer-ownership="none">
+          <type name="VarargsCallback" c:type="FooVarargsCallback"/>
+        </parameter>
+      </parameters>
+    </function>
     <enumeration name="Error"
                  glib:type-name="FooError"
                  glib:get-type="foo_error_get_type"

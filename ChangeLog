@@ -1,3 +1,10 @@
+2009-02-10  Rober Carr <carrr@rpi.edu>
+
+	Bug 569633 – Typelib compiler fails with vararg callbacks
+
+	* girepository/girparser.c: Also filter out callback functions
+	which take vararg arguments.
+
 2009-02-10  Xan Lopez  <xan@gnome.org>
 
 	Bug 570903 - Add information about -I flag to scanner manpage
