@@ -41,7 +41,7 @@ release-tag:
 	  echo "* Tagging $(VERSION)"; \
           git tag -m "Tag $$VERSION" -a \
               GOBJECT_INTROSPECTION_$$TAG && \
-	      git push ssh://git.gnome.org/git/gobject-introspection
+	      git push --tags ssh://git.gnome.org/git/gobject-introspection
 
 upload-release: $(distdir).tar.gz
 	scp $(distdir).tar.gz gnome.org:
