@@ -37,13 +37,11 @@ EXTRA_DIST = 			\
 	misc/pyflakes.py
 
 release-tag:
-	@TRUNK=`svn info --xml|egrep ^"<url>"|cut -d\> -f2|cut -d\< -f1`; \
-	ROOT=`echo $$TRUNK|cut -d/ -f-5`; \
-	SVNVERSION=`echo $(VERSION)|sed s/\\\./_/g`;\
+	@TAG=`echo $(VERSION)|sed s/\\\./_/g`;\
 	  echo "* Tagging $(VERSION)"; \
-          svn cp -m "Tag $(VERSION)" \
-              $$TRUNK \
-              $$ROOT/tags/GOBJECT_INTROSPECTION_$$SVNVERSION
+          git tag -m "Tag $$VERSION" -a \
+              GOBJECT_INTROSPECTION_$$TAG && \
+	      git push ssh://git.gnome.org/git/gobject-introspection
 
 upload-release: $(distdir).tar.gz
 	scp $(distdir).tar.gz gnome.org:
