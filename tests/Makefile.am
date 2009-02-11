@@ -6,6 +6,7 @@ EXTRA_DIST = \
 	constant.gir	\
 	enum.gir	\
 	errors.gir	\
+	extended.gir \
 	function.gir	\
 	interface.gir	\
 	object.gir	\
@@ -22,7 +23,10 @@ GIRTESTS =				\
 	object.gir.test		\
 	struct.gir.test
 
-CLEANFILES = $(GIRTESTS:%.gir.test=%.1) $(GIRTESTS:%.gir.test=%.2)
+CLEANFILES = $(GIRTESTS:%.gir.test=%.1) $(GIRTESTS:%.gir.test=%.2) extended.gir.test
+
+extended.gir.test: extended.gir Makefile
+	$(DEBUG) $(top_builddir)/tools/g-ir-compiler --includedir=$(top_builddir)/gir extended.gir -o extended.gir.test
 
 %.gir.test: %.gir Makefile
 	@echo Testing $<:
@@ -31,7 +35,7 @@ CLEANFILES = $(GIRTESTS:%.gir.test=%.1) $(GIRTESTS:%.gir.test=%.2)
 	diff -u $(srcdir)/$*.gir $*.2 && rm $*.1 $*.2
 
 
-check-local: $(GIRTESTS)
+check-local: $(GIRTESTS) extended.gir.test
 	@echo Running PEP8 on Python sources
 	@find $(top_srcdir)/giscanner -name \*.py | sort | uniq | xargs $(PYTHON) $(top_srcdir)/misc/pep8.py --repeat
 	@echo Running Pyflakes on Python sources
