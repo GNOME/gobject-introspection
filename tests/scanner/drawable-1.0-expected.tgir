@@ -6,7 +6,7 @@
   <include name="utility" version="1.0"/>
   <include name="GObject" version="2.0"/>
   <include name="GLib" version="2.0"/>
-  <namespace name="drawable" version="1.0" shared-library="drawable">
+  <namespace name="drawable" version="1.0" shared-library="drawable" c:prefix="drawable">
     <class name="TestDrawable" parent="GObject.Object" glib:type-struct="TestDrawableClass" abstract="1" glib:type-name="TestDrawable" glib:get-type="test_drawable_get_type">
       <field name="parent_instance">
         <type name="GObject.Object"/>

@@ -5,7 +5,7 @@
             xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
   <include name="GObject" version="2.0"/>
   <include name="GLib" version="2.0"/>
-  <namespace name="BarApp" version="1.0" shared-library="">
+  <namespace name="BarApp" version="1.0" shared-library="" c:prefix="Bar">
     <class name="Baz" parent="GObject.Object" glib:type-struct="BazClass" glib:type-name="BarBaz" glib:get-type="bar_baz_get_type">
       <field name="parent_instance">
         <type name="GObject.Object"/>
