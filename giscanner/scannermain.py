@@ -331,7 +331,8 @@ def scanner_main(args):
 
     # Write out AST
     writer = Writer(namespace, libraries, transformer.get_includes(),
-                    options.packages, options.c_includes)
+                    options.packages, options.c_includes,
+                    transformer.get_strip_prefix())
     data = writer.get_xml()
     if options.output:
         fd = open(options.output, "w")

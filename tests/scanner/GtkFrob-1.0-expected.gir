@@ -9,7 +9,10 @@ and/or use gtk-doc annotations.  -->
   <include name="GLib" version="2.0"/>
   <include name="GObject" version="2.0"/>
   <package name="gobject-2.0"/>
-  <namespace name="GtkFrob" version="1.0" shared-library="gtkfrob">
+  <namespace name="GtkFrob"
+             version="1.0"
+             shared-library="gtkfrob"
+             c:prefix="Gtk">
     <function name="language_manager_get_default"
               c:identifier="gtk_frob_language_manager_get_default">
       <return-value transfer-ownership="none">

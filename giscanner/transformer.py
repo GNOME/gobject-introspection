@@ -83,6 +83,9 @@ class Transformer(object):
     def set_strip_prefix(self, strip_prefix):
         self._strip_prefix = strip_prefix
 
+    def get_strip_prefix(self):
+        return self._strip_prefix
+
     def get_pkgconfig_packages(self):
         return self._pkg_config_packages
 

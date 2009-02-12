@@ -10,7 +10,10 @@ and/or use gtk-doc annotations.  -->
   <include name="GObject" version="2.0"/>
   <include name="utility" version="1.0"/>
   <package name="gobject-2.0"/>
-  <namespace name="drawable" version="1.0" shared-library="drawable">
+  <namespace name="drawable"
+             version="1.0"
+             shared-library="drawable"
+             c:prefix="drawable">
     <class name="TestDrawable"
            c:type="TestDrawable"
            parent="GObject.Object"

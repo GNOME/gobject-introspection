@@ -35,16 +35,17 @@ from .xmlwriter import XMLWriter
 
 class GIRWriter(XMLWriter):
 
-    def __init__(self, namespace, shlibs, includes, pkgs, c_includes):
+    def __init__(self, namespace, shlibs, includes, pkgs, c_includes, cprefix):
         super(GIRWriter, self).__init__()
         self.write_comment(
 '''This file was automatically generated from C sources - DO NOT EDIT!
 To affect the contents of this file, edit the original C definitions,
 and/or use gtk-doc annotations. ''')
-        self._write_repository(namespace, shlibs, includes, pkgs, c_includes)
+        self._write_repository(namespace, shlibs, includes, pkgs,
+                               c_includes, cprefix)
 
     def _write_repository(self, namespace, shlibs, includes=None,
-                          packages=None, c_includes=None):
+                          packages=None, c_includes=None, cprefix=None):
         if includes is None:
             includes = frozenset()
         if packages is None:
@@ -64,7 +65,7 @@ and/or use gtk-doc annotations. ''')
                 self._write_pkgconfig_pkg(pkg)
             for c_include in sorted(set(c_includes)):
                 self._write_c_include(c_include)
-            self._write_namespace(namespace, shlibs)
+            self._write_namespace(namespace, shlibs, cprefix)
 
     def _write_include(self, include):
         attrs = [('name', include.name), ('version', include.version)]
@@ -78,7 +79,7 @@ and/or use gtk-doc annotations. ''')
         attrs = [('name', c_include)]
         self.write_tag('c:include', attrs)
 
-    def _write_namespace(self, namespace, shlibs):
+    def _write_namespace(self, namespace, shlibs, cprefix):
         libraries = []
         for l in shlibs:
             found_libname = find_library(l)
@@ -88,7 +89,8 @@ and/or use gtk-doc annotations. ''')
 
         attrs = [('name', namespace.name),
                  ('version', namespace.version),
-                 ('shared-library', ','.join(libraries))]
+                 ('shared-library', ','.join(libraries)),
+                 ('c:prefix', cprefix)]
         with self.tagcontext('namespace', attrs):
             # We define a custom sorting function here because
             # we want aliases to be first.  They're a bit
