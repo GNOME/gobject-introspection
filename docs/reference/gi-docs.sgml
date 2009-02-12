@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
                "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!ENTITY % local.common.attrib "xmlns:xi  CDATA  #FIXED 'http://www.w3.org/2003/XInclude'">
 <!ENTITY gi-ginfo SYSTEM "xml/ginfo.xml">
 <!ENTITY gi-girepository SYSTEM "xml/girepository.xml">
 <!ENTITY gi-girffi SYSTEM "xml/girffi.xml">
@@ -27,15 +28,16 @@ Bla bla bla bla bla
     &gi-building;
 -->
   </chapter>
-<!--
-  <chapter id="gi-gir">
+
+  <part id="gi-gir">
     <title>GIR markup format</title>
-    &gi-gir-overview;
+      <xi:include href="gi-gir-reference.xml" />
+<!--
     &gi-gir-creating;
     &gi-gir-parsing;
     &gi-gir-verifying;
-  </chapter>
 -->
+  </part>
 
   <chapter id="gi-typelib">
     <title>typelib</title>
