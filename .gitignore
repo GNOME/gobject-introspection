@@ -2,6 +2,7 @@
 *.lo
 *.o
 *.pyc
+*.stamp
 .deps
 .libs
 Makefile
@@ -18,6 +19,7 @@ config.sub
 configure
 COPYING
 depcomp
+gtk-doc.make
 gobject-introspection-1.0.pc
 INSTALL
 install-sh
@@ -27,6 +29,8 @@ missing
 stamp-h1
 ylwrap
 py-compile
+docs/reference/html
+docs/reference/xml
 gir/GIRepository-2.0.gir
 gir/GIRepository-2.0.typelib
 gir/GL-1.0.typelib
@@ -58,7 +62,14 @@ tests/everything/Everything-1.0.gir
 tests/everything/Everything-1.0.tgir
 tests/everything/Everything-1.0.typelib
 tests/invoke/testfns-metadata.c
+tests/invoke/genericmarshaller
+tests/invoke/invoke
 tests/offsets/gitestoffsets.c
+tests/offsets/gitestoffsets
+tests/offsets/offsets-1.0.gir
+tests/offsets/offsets-1.0.typelib
+tests/offsets/offsets.compiled
+tests/offsets/offsets.introspected
 tests/repository/gitestrepo
 tests/repository/gitestthrows
 tests/scanner/BarApp-1.0.gir
@@ -80,5 +91,6 @@ tests/scanner/foo-1.0.typelib
 tests/scanner/utility-1.0.gir
 tests/scanner/utility-1.0.tgir
 tests/scanner/utility-1.0.typelib
+tests/extended.gir.test
 tools/g-ir-compiler
 tools/g-ir-generate

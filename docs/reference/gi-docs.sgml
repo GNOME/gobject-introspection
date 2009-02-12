@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!ENTITY gi-ginfo SYSTEM "xml/ginfo.xml">
+<!ENTITY gi-girepository SYSTEM "xml/girepository.xml">
+<!ENTITY gi-girffi SYSTEM "xml/girffi.xml">
+<!ENTITY gi-girmodule SYSTEM "xml/girmodule.xml">
+<!ENTITY gi-girnode SYSTEM "xml/girnode.xml">
+<!ENTITY gi-girparser SYSTEM "xml/girparser.xml">
+<!ENTITY gi-girwriter SYSTEM "xml/girwriter.xml">
+<!ENTITY gi-gtypelib SYSTEM "xml/gtypelib.xml">
+
+<!ENTITY version SYSTEM "version.xml">
+]>
+<book id="index">
+  <bookinfo>
+    <title>GObject Introspection Reference Manual</title>
+  </bookinfo>
+
+  <chapter id="glib">
+    <title>GObject-Introspection Overview</title>
+    <para>
+Bla bla bla bla bla
+    </para>
+<!--
+    &gi-overview;
+    &gi-building;
+-->
+  </chapter>
+<!--
+  <chapter id="gi-gir">
+    <title>GIR markup format</title>
+    &gi-gir-overview;
+    &gi-gir-creating;
+    &gi-gir-parsing;
+    &gi-gir-verifying;
+  </chapter>
+-->
+
+  <chapter id="gi-typelib">
+    <title>typelib</title>
+    &gi-gtypelib;
+  </chapter>
+
+  <chapter id="gi-girepository">
+    <title>GIRepository</title>
+    &gi-girepository;
+    &gi-ginfo;
+    &gi-girmodule;
+    &gi-girparser;
+    &gi-girwriter;
+    &gi-girffi;
+  </chapter>
+
+<!--
+  <chapter id="tools">
+    <title>GObject Introspection Tools</title>
+
+    &g-ir-scanner;
+    &g-ir-compiler;
+    &g-ir-generator;
+  </chapter>
+-->
+</book>

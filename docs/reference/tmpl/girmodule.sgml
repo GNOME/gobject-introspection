@@ -1,0 +1,71 @@
+<!-- ##### SECTION Title ##### -->
+girmodule
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT GIrModule ##### -->
+<para>
+
+</para>
+
+@name: 
+@version: 
+@shared_library: 
+@dependencies: 
+@entries: 
+@include_modules: 
+@aliases: 
+@disguised_structures: 
+
+<!-- ##### FUNCTION g_ir_module_new ##### -->
+<para>
+
+</para>
+
+@name: 
+@nsversion: 
+@module_filename: 
+@Returns: 
+
+
+<!-- ##### FUNCTION g_ir_module_free ##### -->
+<para>
+
+</para>
+
+@module: 
+
+
+<!-- ##### FUNCTION g_ir_module_add_include_module ##### -->
+<para>
+
+</para>
+
+@module: 
+@include_module: 
+
+
+<!-- ##### FUNCTION g_ir_module_build_typelib ##### -->
+<para>
+
+</para>
+
+@module: 
+@modules: 
+@Returns: 
+
+

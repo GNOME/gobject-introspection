@@ -1,0 +1,99 @@
+<!-- ##### SECTION Title ##### -->
+gtypelib
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### MACRO G_IR_MAGIC ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### STRUCT GTypelib ##### -->
+<para>
+
+</para>
+
+@data: 
+@len: 
+@owns_memory: 
+@mfile: 
+@modules: 
+
+<!-- ##### FUNCTION g_typelib_get_dir_entry ##### -->
+<para>
+
+</para>
+
+@typelib: 
+@index: 
+@Returns: 
+
+
+<!-- ##### FUNCTION g_typelib_check_sanity ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO g_typelib_get_string ##### -->
+<para>
+
+</para>
+
+@typelib: 
+@offset: 
+
+
+<!-- ##### ENUM GTypelibError ##### -->
+<para>
+
+</para>
+
+@G_TYPELIB_ERROR_INVALID: 
+@G_TYPELIB_ERROR_INVALID_HEADER: 
+@G_TYPELIB_ERROR_INVALID_DIRECTORY: 
+@G_TYPELIB_ERROR_INVALID_ENTRY: 
+@G_TYPELIB_ERROR_INVALID_BLOB: 
+
+<!-- ##### MACRO G_TYPELIB_ERROR ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### FUNCTION g_typelib_error_quark ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION g_typelib_validate ##### -->
+<para>
+
+</para>
+
+@typelib: 
+@error: 
+@Returns: 
+
+

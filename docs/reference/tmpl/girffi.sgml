@@ -1,0 +1,78 @@
+<!-- ##### SECTION Title ##### -->
+girffi
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### USER_FUNCTION GIFFIClosureCallback ##### -->
+<para>
+
+</para>
+
+@Param1: 
+@Param2: 
+@Param3: 
+@Param4: 
+
+
+<!-- ##### FUNCTION g_ir_ffi_get_ffi_type ##### -->
+<para>
+
+</para>
+
+@tag: 
+@Returns: 
+
+
+<!-- ##### FUNCTION g_callable_info_get_ffi_arg_types ##### -->
+<para>
+
+</para>
+
+@callable_info: 
+@Returns: 
+
+
+<!-- ##### FUNCTION g_callable_info_get_ffi_return_type ##### -->
+<para>
+
+</para>
+
+@callable_info: 
+@Returns: 
+
+
+<!-- ##### FUNCTION g_callable_info_prepare_closure ##### -->
+<para>
+
+</para>
+
+@callable_info: 
+@cif: 
+@callback: 
+@user_data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION g_callable_info_free_closure ##### -->
+<para>
+
+</para>
+
+@callable_info: 
+@closure: 
+
+
