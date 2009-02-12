@@ -150,6 +150,9 @@ class Node(object):
         self.deprecated_version = None
         self.version = None
 
+    def __cmp__(self, other):
+        return cmp(self.name, other.name)
+
     def __repr__(self):
         return '%s(%r)' % (self.__class__.__name__, self.name)
 

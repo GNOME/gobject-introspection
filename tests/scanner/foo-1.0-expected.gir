@@ -12,8 +12,217 @@ and/or use gtk-doc annotations.  -->
   <package name="gobject-2.0"/>
   <namespace name="foo" version="1.0" shared-library="foo">
     <alias name="List" target="GLib.SList" c:type="FooList"/>
-    <alias name="XEvent" target="none" c:type="FooXEvent"/>
     <alias name="ObjectCookie" target="any" c:type="FooObjectCookie"/>
+    <alias name="XEvent" target="none" c:type="FooXEvent"/>
+    <record name="BRect"
+            c:type="FooBRect"
+            glib:type-name="FooBRect"
+            glib:get-type="foo_brect_get_type">
+      <field name="x" writable="1">
+        <type name="double" c:type="double"/>
+      </field>
+      <field name="y" writable="1">
+        <type name="double" c:type="double"/>
+      </field>
+      <constructor name="new" c:identifier="foo_brect_new">
+        <return-value transfer-ownership="full">
+          <type name="BRect" c:type="FooBRect*"/>
+        </return-value>
+        <parameters>
+          <parameter name="x" transfer-ownership="none">
+            <type name="double" c:type="double"/>
+          </parameter>
+          <parameter name="y" transfer-ownership="none">
+            <type name="double" c:type="double"/>
+          </parameter>
+        </parameters>
+      </constructor>
+      <method name="add" c:identifier="foo_brect_add">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <parameter name="b2" transfer-ownership="none">
+            <type name="BRect" c:type="FooBRect*"/>
+          </parameter>
+        </parameters>
+      </method>
+    </record>
+    <union name="BUnion"
+           c:type="FooBUnion"
+           glib:type-name="FooBUnion"
+           glib:get-type="foo_bunion_get_type">
+      <field name="type" writable="1">
+        <type name="int" c:type="int"/>
+      </field>
+      <field name="v" writable="1">
+        <type name="double" c:type="double"/>
+      </field>
+      <field name="rect" writable="1">
+        <type name="BRect" c:type="FooBRect*"/>
+      </field>
+      <constructor name="new" c:identifier="foo_bunion_new">
+        <return-value transfer-ownership="full">
+          <type name="BUnion" c:type="FooBUnion*"/>
+        </return-value>
+      </constructor>
+      <method name="get_contained_type"
+              c:identifier="foo_bunion_get_contained_type">
+        <return-value transfer-ownership="none">
+          <type name="int" c:type="int"/>
+        </return-value>
+      </method>
+    </union>
+    <record name="Boxed"
+            c:type="FooBoxed"
+            glib:type-name="FooBoxed"
+            glib:get-type="foo_boxed_get_type">
+      <constructor name="new" c:identifier="foo_boxed_new">
+        <return-value transfer-ownership="full">
+          <type name="Boxed" c:type="FooBoxed*"/>
+        </return-value>
+      </constructor>
+      <method name="method" c:identifier="foo_boxed_method">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+      </method>
+    </record>
+    <class name="Buffer"
+           c:type="FooBuffer"
+           parent="GObject.Object"
+           glib:type-name="FooBuffer"
+           glib:get-type="foo_buffer_get_type"
+           glib:class-struct="BufferClass">
+      <implements name="Interface"/>
+      <method name="some_method" c:identifier="foo_buffer_some_method">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+      </method>
+    </class>
+    <record name="BufferClass"
+            c:type="FooBufferClass"
+            glib:is-class-struct-for="Buffer">
+    </record>
+    <callback name="Callback" c:type="FooCallback">
+      <return-value transfer-ownership="none">
+        <type name="boolean" c:type="gboolean"/>
+      </return-value>
+      <parameters>
+        <parameter name="foo" transfer-ownership="none">
+          <type name="Object" c:type="FooObject*"/>
+        </parameter>
+        <parameter name="b" transfer-ownership="none">
+          <type name="boolean" c:type="gboolean"/>
+        </parameter>
+        <parameter name="data" transfer-ownership="none">
+          <type name="any" c:type="gpointer"/>
+        </parameter>
+      </parameters>
+    </callback>
+    <record name="DBusData"
+            c:type="FooDBusData"
+            glib:type-name="FooDBusData"
+            glib:get-type="foo_dbus_data_get_type">
+      <method name="method" c:identifier="foo_dbus_data_method">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+      </method>
+    </record>
+    <enumeration name="EnumFullname" c:type="FooEnumFullname">
+      <member name="one" value="1" c:identifier="FOO_ENUM_FULLNAME_ONE"/>
+      <member name="two" value="2" c:identifier="FOO_ENUM_FULLNAME_TWO"/>
+      <member name="three" value="3" c:identifier="FOO_ENUM_FULLNAME_THREE"/>
+    </enumeration>
+    <enumeration name="EnumNoType" c:type="FooEnumNoType">
+      <member name="un" value="1" c:identifier="FOO_ENUM_UN"/>
+      <member name="deux" value="2" c:identifier="FOO_ENUM_DEUX"/>
+      <member name="trois" value="3" c:identifier="FOO_ENUM_TROIS"/>
+      <member name="neuf" value="9" c:identifier="FOO_ENUM_NEUF"/>
+    </enumeration>
+    <enumeration name="EnumType"
+                 glib:type-name="FooEnumType"
+                 glib:get-type="foo_enum_type_get_type"
+                 c:type="FooEnumType">
+      <member name="alpha"
+              value="0"
+              c:identifier="FOO_ENUM_ALPHA"
+              glib:nick="alpha"/>
+      <member name="beta"
+              value="1"
+              c:identifier="FOO_ENUM_BETA"
+              glib:nick="beta"/>
+      <member name="delta"
+              value="2"
+              c:identifier="FOO_ENUM_DELTA"
+              glib:nick="delta"/>
+    </enumeration>
+    <enumeration name="Error"
+                 glib:type-name="FooError"
+                 glib:get-type="foo_error_get_type"
+                 c:type="FooError"
+                 glib:error-quark="foo_error_quark">
+      <member name="good"
+              value="0"
+              c:identifier="FOO_ERROR_GOOD"
+              glib:nick="good"/>
+      <member name="bad"
+              value="1"
+              c:identifier="FOO_ERROR_BAD"
+              glib:nick="bad"/>
+      <member name="ugly"
+              value="2"
+              c:identifier="FOO_ERROR_UGLY"
+              glib:nick="ugly"/>
+    </enumeration>
+    <union name="Event" c:type="FooEvent">
+      <field name="type" writable="1">
+        <type name="int" c:type="int"/>
+      </field>
+      <field name="any" writable="1">
+        <type name="EventAny" c:type="FooEventAny"/>
+      </field>
+      <field name="expose" writable="1">
+        <type name="EventExpose" c:type="FooEventExpose"/>
+      </field>
+    </union>
+    <record name="EventAny" c:type="FooEventAny">
+      <field name="send_event" writable="1">
+        <type name="int8" c:type="gint8"/>
+      </field>
+    </record>
+    <record name="EventExpose" c:type="FooEventExpose">
+      <field name="send_event" writable="1">
+        <type name="int8" c:type="gint8"/>
+      </field>
+      <field name="count" writable="1">
+        <type name="int" c:type="gint"/>
+      </field>
+    </record>
+    <bitfield name="FlagsNoType" c:type="FooFlagsNoType">
+      <member name="ett" value="1" c:identifier="FOO_FLAGS_ETT"/>
+      <member name="tva" value="2" c:identifier="FOO_FLAGS_TVA"/>
+      <member name="fyra" value="4" c:identifier="FOO_FLAGS_FYRA"/>
+    </bitfield>
+    <bitfield name="FlagsType"
+              glib:type-name="FooFlagsType"
+              glib:get-type="foo_flags_type_get_type"
+              c:type="FooFlagsType">
+      <member name="first"
+              value="1"
+              c:identifier="FOO_FLAGS_FIRST"
+              glib:nick="first"/>
+      <member name="second"
+              value="2"
+              c:identifier="FOO_FLAGS_SECOND"
+              glib:nick="second"/>
+      <member name="third"
+              value="4"
+              c:identifier="FOO_FLAGS_THIRD"
+              glib:nick="third"/>
+    </bitfield>
     <interface name="Interface"
                c:type="FooInterface"
                glib:type-name="FooInterface"
@@ -40,42 +249,6 @@ and/or use gtk-doc annotations.  -->
         <parameters>
           <parameter name="self" transfer-ownership="none">
             <type name="Interface" c:type="FooInterface*"/>
-          </parameter>
-        </parameters>
-      </callback>
-    </record>
-    <interface name="SubInterface"
-               c:type="FooSubInterface"
-               glib:type-name="FooSubInterface"
-               glib:get-type="foo_sub_interface_get_type">
-      <prerequisite name="Interface"/>
-      <method name="do_bar" c:identifier="foo_sub_interface_do_bar">
-        <return-value transfer-ownership="none">
-          <type name="none" c:type="void"/>
-        </return-value>
-      </method>
-      <callback name="do_bar" c:type="do_bar">
-        <return-value transfer-ownership="none">
-          <type name="none" c:type="void"/>
-        </return-value>
-        <parameters>
-          <parameter name="self" transfer-ownership="none">
-            <type name="SubInterface" c:type="FooSubInterface*"/>
-          </parameter>
-        </parameters>
-      </callback>
-    </interface>
-    <record name="SubInterfaceIface" c:type="FooSubInterfaceIface">
-      <field name="parent_iface">
-        <type name="GObject.TypeInterface" c:type="GTypeInterface"/>
-      </field>
-      <callback name="do_bar" c:type="do_bar">
-        <return-value transfer-ownership="none">
-          <type name="none" c:type="void"/>
-        </return-value>
-        <parameters>
-          <parameter name="self" transfer-ownership="none">
-            <type name="SubInterface" c:type="FooSubInterface*"/>
           </parameter>
         </parameters>
       </callback>
@@ -222,173 +395,6 @@ and/or use gtk-doc annotations.  -->
         </parameters>
       </callback>
     </record>
-    <class name="Subobject"
-           c:type="FooSubobject"
-           parent="Object"
-           abstract="1"
-           glib:type-name="FooSubobject"
-           glib:get-type="foo_subobject_get_type"
-           glib:class-struct="SubobjectClass">
-      <implements name="Interface"/>
-      <constructor name="new" c:identifier="foo_subobject_new">
-        <return-value transfer-ownership="full">
-          <type name="Subobject" c:type="FooSubobject*"/>
-        </return-value>
-      </constructor>
-      <field name="parent_instance">
-        <type name="Object" c:type="FooObject"/>
-      </field>
-    </class>
-    <record name="SubobjectClass"
-            c:type="FooSubobjectClass"
-            glib:is-class-struct-for="Subobject">
-      <field name="parent_class">
-        <type name="ObjectClass" c:type="FooObjectClass"/>
-      </field>
-    </record>
-    <class name="Buffer"
-           c:type="FooBuffer"
-           parent="GObject.Object"
-           glib:type-name="FooBuffer"
-           glib:get-type="foo_buffer_get_type"
-           glib:class-struct="BufferClass">
-      <implements name="Interface"/>
-      <method name="some_method" c:identifier="foo_buffer_some_method">
-        <return-value transfer-ownership="none">
-          <type name="none" c:type="void"/>
-        </return-value>
-      </method>
-    </class>
-    <record name="BufferClass"
-            c:type="FooBufferClass"
-            glib:is-class-struct-for="Buffer">
-    </record>
-    <function name="init" c:identifier="foo_init">
-      <return-value transfer-ownership="none">
-        <type name="int" c:type="gint"/>
-      </return-value>
-    </function>
-    <enumeration name="EnumType"
-                 glib:type-name="FooEnumType"
-                 glib:get-type="foo_enum_type_get_type"
-                 c:type="FooEnumType">
-      <member name="alpha"
-              value="0"
-              c:identifier="FOO_ENUM_ALPHA"
-              glib:nick="alpha"/>
-      <member name="beta"
-              value="1"
-              c:identifier="FOO_ENUM_BETA"
-              glib:nick="beta"/>
-      <member name="delta"
-              value="2"
-              c:identifier="FOO_ENUM_DELTA"
-              glib:nick="delta"/>
-    </enumeration>
-    <function name="enum_type_method" c:identifier="foo_enum_type_method">
-      <return-value transfer-ownership="none">
-        <type name="int" c:type="int"/>
-      </return-value>
-      <parameters>
-        <parameter name="foo_enum" transfer-ownership="none">
-          <type name="EnumType" c:type="FooEnumType"/>
-        </parameter>
-      </parameters>
-    </function>
-    <function name="enum_type_returnv" c:identifier="foo_enum_type_returnv">
-      <return-value transfer-ownership="full">
-        <type name="EnumType" c:type="FooEnumType"/>
-      </return-value>
-      <parameters>
-        <parameter name="x" transfer-ownership="none">
-          <type name="int" c:type="int"/>
-        </parameter>
-      </parameters>
-    </function>
-    <bitfield name="FlagsType"
-              glib:type-name="FooFlagsType"
-              glib:get-type="foo_flags_type_get_type"
-              c:type="FooFlagsType">
-      <member name="first"
-              value="1"
-              c:identifier="FOO_FLAGS_FIRST"
-              glib:nick="first"/>
-      <member name="second"
-              value="2"
-              c:identifier="FOO_FLAGS_SECOND"
-              glib:nick="second"/>
-      <member name="third"
-              value="4"
-              c:identifier="FOO_FLAGS_THIRD"
-              glib:nick="third"/>
-    </bitfield>
-    <enumeration name="EnumNoType" c:type="FooEnumNoType">
-      <member name="un" value="1" c:identifier="FOO_ENUM_UN"/>
-      <member name="deux" value="2" c:identifier="FOO_ENUM_DEUX"/>
-      <member name="trois" value="3" c:identifier="FOO_ENUM_TROIS"/>
-      <member name="neuf" value="9" c:identifier="FOO_ENUM_NEUF"/>
-    </enumeration>
-    <bitfield name="FlagsNoType" c:type="FooFlagsNoType">
-      <member name="ett" value="1" c:identifier="FOO_FLAGS_ETT"/>
-      <member name="tva" value="2" c:identifier="FOO_FLAGS_TVA"/>
-      <member name="fyra" value="4" c:identifier="FOO_FLAGS_FYRA"/>
-    </bitfield>
-    <enumeration name="EnumFullname" c:type="FooEnumFullname">
-      <member name="one" value="1" c:identifier="FOO_ENUM_FULLNAME_ONE"/>
-      <member name="two" value="2" c:identifier="FOO_ENUM_FULLNAME_TWO"/>
-      <member name="three" value="3" c:identifier="FOO_ENUM_FULLNAME_THREE"/>
-    </enumeration>
-    <record name="Boxed"
-            c:type="FooBoxed"
-            glib:type-name="FooBoxed"
-            glib:get-type="foo_boxed_get_type">
-      <constructor name="new" c:identifier="foo_boxed_new">
-        <return-value transfer-ownership="full">
-          <type name="Boxed" c:type="FooBoxed*"/>
-        </return-value>
-      </constructor>
-      <method name="method" c:identifier="foo_boxed_method">
-        <return-value transfer-ownership="none">
-          <type name="none" c:type="void"/>
-        </return-value>
-      </method>
-    </record>
-    <record name="DBusData"
-            c:type="FooDBusData"
-            glib:type-name="FooDBusData"
-            glib:get-type="foo_dbus_data_get_type">
-      <method name="method" c:identifier="foo_dbus_data_method">
-        <return-value transfer-ownership="none">
-          <type name="none" c:type="void"/>
-        </return-value>
-      </method>
-    </record>
-    <callback name="Callback" c:type="FooCallback">
-      <return-value transfer-ownership="none">
-        <type name="boolean" c:type="gboolean"/>
-      </return-value>
-      <parameters>
-        <parameter name="foo" transfer-ownership="none">
-          <type name="Object" c:type="FooObject*"/>
-        </parameter>
-        <parameter name="b" transfer-ownership="none">
-          <type name="boolean" c:type="gboolean"/>
-        </parameter>
-        <parameter name="data" transfer-ownership="none">
-          <type name="any" c:type="gpointer"/>
-        </parameter>
-      </parameters>
-    </callback>
-    <record name="Struct" c:type="FooStruct">
-      <field name="priv" writable="1">
-        <type name="StructPrivate" c:type="FooStructPrivate*"/>
-      </field>
-      <field name="member" writable="1">
-        <type name="int" c:type="int"/>
-      </field>
-    </record>
-    <record name="StructPrivate" c:type="FooStructPrivate">
-    </record>
     <record name="Rectangle" c:type="FooRectangle">
       <field name="x" writable="1">
         <type name="int" c:type="gint"/>
@@ -432,6 +438,144 @@ and/or use gtk-doc annotations.  -->
         </parameters>
       </method>
     </record>
+    <constant name="SUCCESS_INT" value="4408">
+      <type name="int"/>
+    </constant>
+    <record name="Struct" c:type="FooStruct">
+      <field name="priv" writable="1">
+        <type name="StructPrivate" c:type="FooStructPrivate*"/>
+      </field>
+      <field name="member" writable="1">
+        <type name="int" c:type="int"/>
+      </field>
+    </record>
+    <record name="StructPrivate" c:type="FooStructPrivate">
+    </record>
+    <interface name="SubInterface"
+               c:type="FooSubInterface"
+               glib:type-name="FooSubInterface"
+               glib:get-type="foo_sub_interface_get_type">
+      <prerequisite name="Interface"/>
+      <method name="do_bar" c:identifier="foo_sub_interface_do_bar">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+      </method>
+      <callback name="do_bar" c:type="do_bar">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <parameter name="self" transfer-ownership="none">
+            <type name="SubInterface" c:type="FooSubInterface*"/>
+          </parameter>
+        </parameters>
+      </callback>
+    </interface>
+    <record name="SubInterfaceIface" c:type="FooSubInterfaceIface">
+      <field name="parent_iface">
+        <type name="GObject.TypeInterface" c:type="GTypeInterface"/>
+      </field>
+      <callback name="do_bar" c:type="do_bar">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <parameter name="self" transfer-ownership="none">
+            <type name="SubInterface" c:type="FooSubInterface*"/>
+          </parameter>
+        </parameters>
+      </callback>
+    </record>
+    <class name="Subobject"
+           c:type="FooSubobject"
+           parent="Object"
+           abstract="1"
+           glib:type-name="FooSubobject"
+           glib:get-type="foo_subobject_get_type"
+           glib:class-struct="SubobjectClass">
+      <implements name="Interface"/>
+      <constructor name="new" c:identifier="foo_subobject_new">
+        <return-value transfer-ownership="full">
+          <type name="Subobject" c:type="FooSubobject*"/>
+        </return-value>
+      </constructor>
+      <field name="parent_instance">
+        <type name="Object" c:type="FooObject"/>
+      </field>
+    </class>
+    <record name="SubobjectClass"
+            c:type="FooSubobjectClass"
+            glib:is-class-struct-for="Subobject">
+      <field name="parent_class">
+        <type name="ObjectClass" c:type="FooObjectClass"/>
+      </field>
+    </record>
+    <record name="ThingWithArray" c:type="_FooThingWithArray">
+      <field name="x" writable="1">
+        <type name="int" c:type="int"/>
+      </field>
+      <field name="y" writable="1">
+        <type name="int" c:type="int"/>
+      </field>
+      <field name="lines" writable="1">
+        <array zero-terminated="0" c:type="char" fixed-size="80">
+          <type name="int8"/>
+        </array>
+      </field>
+      <field name="data" writable="1">
+        <type name="any" c:type="guchar*"/>
+      </field>
+    </record>
+    <union name="Union" c:type="_FooUnion">
+      <field name="foo" writable="1">
+        <type name="int" c:type="int"/>
+      </field>
+    </union>
+    <record name="UtilityStruct" c:type="FooUtilityStruct">
+      <field name="bar" writable="1">
+        <type name="utility.Struct" c:type="UtilityStruct"/>
+      </field>
+    </record>
+    <callback name="VarargsCallback" c:type="FooVarargsCallback">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="param" transfer-ownership="none">
+          <type name="utf8" c:type="char*"/>
+        </parameter>
+        <parameter transfer-ownership="none">
+          <varargs>
+          </varargs>
+        </parameter>
+      </parameters>
+    </callback>
+    <function name="enum_type_method" c:identifier="foo_enum_type_method">
+      <return-value transfer-ownership="none">
+        <type name="int" c:type="int"/>
+      </return-value>
+      <parameters>
+        <parameter name="foo_enum" transfer-ownership="none">
+          <type name="EnumType" c:type="FooEnumType"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="enum_type_returnv" c:identifier="foo_enum_type_returnv">
+      <return-value transfer-ownership="full">
+        <type name="EnumType" c:type="FooEnumType"/>
+      </return-value>
+      <parameters>
+        <parameter name="x" transfer-ownership="none">
+          <type name="int" c:type="int"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="init" c:identifier="foo_init">
+      <return-value transfer-ownership="none">
+        <type name="int" c:type="gint"/>
+      </return-value>
+    </function>
     <function name="method_external_references"
               c:identifier="foo_method_external_references">
       <return-value transfer-ownership="none">
@@ -452,135 +596,39 @@ and/or use gtk-doc annotations.  -->
         </parameter>
       </parameters>
     </function>
-    <record name="EventAny" c:type="FooEventAny">
-      <field name="send_event" writable="1">
-        <type name="int8" c:type="gint8"/>
-      </field>
-    </record>
-    <record name="EventExpose" c:type="FooEventExpose">
-      <field name="send_event" writable="1">
-        <type name="int8" c:type="gint8"/>
-      </field>
-      <field name="count" writable="1">
-        <type name="int" c:type="gint"/>
-      </field>
-    </record>
-    <union name="Event" c:type="FooEvent">
-      <field name="type" writable="1">
-        <type name="int" c:type="int"/>
-      </field>
-      <field name="any" writable="1">
-        <type name="EventAny" c:type="FooEventAny"/>
-      </field>
-      <field name="expose" writable="1">
-        <type name="EventExpose" c:type="FooEventExpose"/>
-      </field>
-    </union>
-    <record name="BRect"
-            c:type="FooBRect"
-            glib:type-name="FooBRect"
-            glib:get-type="foo_brect_get_type">
-      <field name="x" writable="1">
-        <type name="double" c:type="double"/>
-      </field>
-      <field name="y" writable="1">
-        <type name="double" c:type="double"/>
-      </field>
-      <constructor name="new" c:identifier="foo_brect_new">
-        <return-value transfer-ownership="full">
-          <type name="BRect" c:type="FooBRect*"/>
-        </return-value>
-        <parameters>
-          <parameter name="x" transfer-ownership="none">
-            <type name="double" c:type="double"/>
-          </parameter>
-          <parameter name="y" transfer-ownership="none">
-            <type name="double" c:type="double"/>
-          </parameter>
-        </parameters>
-      </constructor>
-      <method name="add" c:identifier="foo_brect_add">
-        <return-value transfer-ownership="none">
-          <type name="none" c:type="void"/>
-        </return-value>
-        <parameters>
-          <parameter name="b2" transfer-ownership="none">
-            <type name="BRect" c:type="FooBRect*"/>
-          </parameter>
-        </parameters>
-      </method>
-    </record>
-    <union name="BUnion"
-           c:type="FooBUnion"
-           glib:type-name="FooBUnion"
-           glib:get-type="foo_bunion_get_type">
-      <field name="type" writable="1">
-        <type name="int" c:type="int"/>
-      </field>
-      <field name="v" writable="1">
-        <type name="double" c:type="double"/>
-      </field>
-      <field name="rect" writable="1">
-        <type name="BRect" c:type="FooBRect*"/>
-      </field>
-      <constructor name="new" c:identifier="foo_bunion_new">
-        <return-value transfer-ownership="full">
-          <type name="BUnion" c:type="FooBUnion*"/>
-        </return-value>
-      </constructor>
-      <method name="get_contained_type"
-              c:identifier="foo_bunion_get_contained_type">
-        <return-value transfer-ownership="none">
-          <type name="int" c:type="int"/>
-        </return-value>
-      </method>
-    </union>
-    <union name="Union" c:type="_FooUnion">
-      <field name="foo" writable="1">
-        <type name="int" c:type="int"/>
-      </field>
-    </union>
-    <record name="UtilityStruct" c:type="FooUtilityStruct">
-      <field name="bar" writable="1">
-        <type name="utility.Struct" c:type="UtilityStruct"/>
-      </field>
-    </record>
-    <record name="ThingWithArray" c:type="_FooThingWithArray">
-      <field name="x" writable="1">
-        <type name="int" c:type="int"/>
-      </field>
-      <field name="y" writable="1">
-        <type name="int" c:type="int"/>
-      </field>
-      <field name="lines" writable="1">
-        <array zero-terminated="0" c:type="char" fixed-size="80">
-          <type name="int8"/>
-        </array>
-      </field>
-      <field name="data" writable="1">
-        <type name="any" c:type="guchar*"/>
-      </field>
-    </record>
-    <function name="test_unsigned_qualifier"
-              c:identifier="foo_test_unsigned_qualifier">
+    <function name="test_const_char_param"
+              c:identifier="foo_test_const_char_param">
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
-        <parameter name="unsigned_param" transfer-ownership="none">
-          <type name="uint" c:type="unsigned int"/>
+        <parameter name="param" transfer-ownership="none">
+          <type name="utf8" c:type="char*"/>
         </parameter>
       </parameters>
     </function>
-    <function name="test_unsigned_type" c:identifier="foo_test_unsigned_type">
+    <function name="test_const_char_retval"
+              c:identifier="foo_test_const_char_retval">
+      <return-value transfer-ownership="none">
+        <type name="utf8" c:type="char*"/>
+      </return-value>
+    </function>
+    <function name="test_const_struct_param"
+              c:identifier="foo_test_const_struct_param">
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
-        <parameter name="unsigned_param" transfer-ownership="none">
-          <type name="uint" c:type="unsigned"/>
+        <parameter name="param" transfer-ownership="none">
+          <type name="Struct" c:type="FooStruct*"/>
         </parameter>
       </parameters>
+    </function>
+    <function name="test_const_struct_retval"
+              c:identifier="foo_test_const_struct_retval">
+      <return-value transfer-ownership="none">
+        <type name="Struct" c:type="FooStruct*"/>
+      </return-value>
     </function>
     <function name="test_string_array" c:identifier="foo_test_string_array">
       <return-value transfer-ownership="none">
@@ -607,54 +655,27 @@ and/or use gtk-doc annotations.  -->
         </parameter>
       </parameters>
     </function>
-    <function name="test_const_char_retval"
-              c:identifier="foo_test_const_char_retval">
-      <return-value transfer-ownership="none">
-        <type name="utf8" c:type="char*"/>
-      </return-value>
-    </function>
-    <function name="test_const_struct_retval"
-              c:identifier="foo_test_const_struct_retval">
-      <return-value transfer-ownership="none">
-        <type name="Struct" c:type="FooStruct*"/>
-      </return-value>
-    </function>
-    <function name="test_const_char_param"
-              c:identifier="foo_test_const_char_param">
+    <function name="test_unsigned_qualifier"
+              c:identifier="foo_test_unsigned_qualifier">
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
-        <parameter name="param" transfer-ownership="none">
-          <type name="utf8" c:type="char*"/>
+        <parameter name="unsigned_param" transfer-ownership="none">
+          <type name="uint" c:type="unsigned int"/>
         </parameter>
       </parameters>
     </function>
-    <function name="test_const_struct_param"
-              c:identifier="foo_test_const_struct_param">
+    <function name="test_unsigned_type" c:identifier="foo_test_unsigned_type">
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
-        <parameter name="param" transfer-ownership="none">
-          <type name="Struct" c:type="FooStruct*"/>
+        <parameter name="unsigned_param" transfer-ownership="none">
+          <type name="uint" c:type="unsigned"/>
         </parameter>
       </parameters>
     </function>
-    <callback name="VarargsCallback" c:type="FooVarargsCallback">
-      <return-value transfer-ownership="none">
-        <type name="none" c:type="void"/>
-      </return-value>
-      <parameters>
-        <parameter name="param" transfer-ownership="none">
-          <type name="utf8" c:type="char*"/>
-        </parameter>
-        <parameter transfer-ownership="none">
-          <varargs>
-          </varargs>
-        </parameter>
-      </parameters>
-    </callback>
     <function name="test_varargs_callback"
               c:identifier="foo_test_varargs_callback">
       <return-value transfer-ownership="none">
@@ -694,26 +715,5 @@ and/or use gtk-doc annotations.  -->
         </parameter>
       </parameters>
     </function>
-    <enumeration name="Error"
-                 glib:type-name="FooError"
-                 glib:get-type="foo_error_get_type"
-                 c:type="FooError"
-                 glib:error-quark="foo_error_quark">
-      <member name="good"
-              value="0"
-              c:identifier="FOO_ERROR_GOOD"
-              glib:nick="good"/>
-      <member name="bad"
-              value="1"
-              c:identifier="FOO_ERROR_BAD"
-              glib:nick="bad"/>
-      <member name="ugly"
-              value="2"
-              c:identifier="FOO_ERROR_UGLY"
-              glib:nick="ugly"/>
-    </enumeration>
-    <constant name="SUCCESS_INT" value="4408">
-      <type name="int"/>
-    </constant>
   </namespace>
 </repository>

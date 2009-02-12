@@ -80,7 +80,20 @@ and/or use gtk-doc annotations. ''')
                  ('version', namespace.version),
                  ('shared-library', ','.join(libraries))]
         with self.tagcontext('namespace', attrs):
-            for node in namespace.nodes:
+            # We define a custom sorting function here because
+            # we want aliases to be first.  They're a bit
+            # special because the typelib compiler expands them.
+            def nscmp(a, b):
+                if isinstance(a, Alias):
+                    if isinstance(b, Alias):
+                        return cmp(a.name, b.name)
+                    else:
+                        return -1
+                elif isinstance(b, Alias):
+                    return 1
+                else:
+                    return cmp(a, b)
+            for node in sorted(namespace.nodes, cmp=nscmp):
                 self._write_node(node)
 
     def _write_node(self, node):

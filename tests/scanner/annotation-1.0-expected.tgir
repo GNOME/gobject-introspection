@@ -17,6 +17,22 @@
         </parameter>
       </parameters>
     </callback>
+    <callback name="ForeachFunc">
+      <return-value transfer-ownership="none">
+        <type name="none"/>
+      </return-value>
+      <parameters>
+        <parameter name="object" transfer-ownership="none">
+          <type name="Object"/>
+        </parameter>
+        <parameter name="item" transfer-ownership="none">
+          <type name="utf8"/>
+        </parameter>
+        <parameter name="user_data" transfer-ownership="none">
+          <type name="any"/>
+        </parameter>
+      </parameters>
+    </callback>
     <callback name="ListCallback">
       <return-value transfer-ownership="container">
         <type name="GLib.List">
@@ -338,22 +354,13 @@
         <type name="GObject.ObjectClass"/>
       </field>
     </record>
-    <callback name="ForeachFunc">
-      <return-value transfer-ownership="none">
-        <type name="none"/>
-      </return-value>
-      <parameters>
-        <parameter name="object" transfer-ownership="none">
+    <record name="Struct">
+      <field name="objects" writable="1">
+        <array fixed-size="10">
           <type name="Object"/>
-        </parameter>
-        <parameter name="item" transfer-ownership="none">
-          <type name="utf8"/>
-        </parameter>
-        <parameter name="user_data" transfer-ownership="none">
-          <type name="any"/>
-        </parameter>
-      </parameters>
-    </callback>
+        </array>
+      </field>
+    </record>
     <function name="init" c:identifier="annotation_init">
       <return-value transfer-ownership="none">
         <type name="none"/>
@@ -381,11 +388,6 @@
         </parameter>
       </parameters>
     </function>
-    <function name="versioned" c:identifier="annotation_versioned">
-      <return-value transfer-ownership="none">
-        <type name="none"/>
-      </return-value>
-    </function>
     <function name="string_zero_terminated" c:identifier="annotation_string_zero_terminated">
       <return-value transfer-ownership="none">
         <array zero-terminated="1">
@@ -405,12 +407,10 @@
         </parameter>
       </parameters>
     </function>
-    <record name="Struct">
-      <field name="objects" writable="1">
-        <array fixed-size="10">
-          <type name="Object"/>
-        </array>
-      </field>
-    </record>
+    <function name="versioned" c:identifier="annotation_versioned">
+      <return-value transfer-ownership="none">
+        <type name="none"/>
+      </return-value>
+    </function>
   </namespace>
 </repository>

@@ -6,6 +6,34 @@
   <include name="GObject" version="2.0"/>
   <include name="GLib" version="2.0"/>
   <namespace name="utility" version="1.0" shared-library="utility">
+    <union name="Byte">
+      <field name="value" writable="1">
+        <type name="uint8"/>
+      </field>
+    </union>
+    <enumeration name="EnumType">
+      <member name="a" value="0"/>
+      <member name="b" value="1"/>
+      <member name="c" value="2"/>
+    </enumeration>
+    <callback name="FileFunc">
+      <return-value transfer-ownership="none">
+        <type name="none"/>
+      </return-value>
+      <parameters>
+        <parameter name="path" transfer-ownership="none">
+          <type name="utf8"/>
+        </parameter>
+        <parameter name="user_data" transfer-ownership="none">
+          <type name="any"/>
+        </parameter>
+      </parameters>
+    </callback>
+    <enumeration name="FlagType">
+      <member name="a" value="0"/>
+      <member name="b" value="1"/>
+      <member name="c" value="2"/>
+    </enumeration>
     <class name="Object" parent="GObject.Object" glib:class-struct="ObjectClass" glib:type-name="UtilityObject" glib:get-type="utility_object_get_type">
       <field name="parent_instance">
         <type name="GObject.Object"/>
@@ -35,39 +63,6 @@
         <type name="GObject.ObjectClass"/>
       </field>
     </record>
-    <record name="TaggedValue">
-      <field name="tag" writable="1">
-        <type name="int"/>
-      </field>
-    </record>
-    <union name="Byte">
-      <field name="value" writable="1">
-        <type name="uint8"/>
-      </field>
-    </union>
-    <callback name="FileFunc">
-      <return-value transfer-ownership="none">
-        <type name="none"/>
-      </return-value>
-      <parameters>
-        <parameter name="path" transfer-ownership="none">
-          <type name="utf8"/>
-        </parameter>
-        <parameter name="user_data" transfer-ownership="none">
-          <type name="any"/>
-        </parameter>
-      </parameters>
-    </callback>
-    <enumeration name="EnumType">
-      <member name="a" value="0"/>
-      <member name="b" value="1"/>
-      <member name="c" value="2"/>
-    </enumeration>
-    <enumeration name="FlagType">
-      <member name="a" value="0"/>
-      <member name="b" value="1"/>
-      <member name="c" value="2"/>
-    </enumeration>
     <record name="Struct">
       <field name="field" writable="1">
         <type name="int"/>
@@ -82,6 +77,11 @@
         <array fixed-size="16">
           <type name="uint8"/>
         </array>
+      </field>
+    </record>
+    <record name="TaggedValue">
+      <field name="tag" writable="1">
+        <type name="int"/>
       </field>
     </record>
     <union name="Union">

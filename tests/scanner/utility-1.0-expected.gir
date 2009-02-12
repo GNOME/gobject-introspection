@@ -11,6 +11,42 @@ and/or use gtk-doc annotations.  -->
   <package name="gobject-2.0"/>
   <namespace name="utility" version="1.0" shared-library="utility">
     <alias name="Glyph" target="uint32" c:type="UtilityGlyph"/>
+    <union name="Byte" c:type="UtilityByte">
+      <field name="value" writable="1">
+        <type name="uint8" c:type="guint8"/>
+      </field>
+      <record>
+        <field name="first_nibble" writable="1" bits="4">
+          <type name="uint8" c:type="guint8"/>
+        </field>
+        <field name="second_nibble" writable="1" bits="4">
+          <type name="uint8" c:type="guint8"/>
+        </field>
+      </record>
+    </union>
+    <enumeration name="EnumType" c:type="UtilityEnumType">
+      <member name="a" value="0" c:identifier="UTILITY_ENUM_A"/>
+      <member name="b" value="1" c:identifier="UTILITY_ENUM_B"/>
+      <member name="c" value="2" c:identifier="UTILITY_ENUM_C"/>
+    </enumeration>
+    <callback name="FileFunc" c:type="UtilityFileFunc">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="path" transfer-ownership="none">
+          <type name="utf8" c:type="char*"/>
+        </parameter>
+        <parameter name="user_data" transfer-ownership="none">
+          <type name="any" c:type="gpointer"/>
+        </parameter>
+      </parameters>
+    </callback>
+    <enumeration name="FlagType" c:type="UtilityFlagType">
+      <member name="a" value="0" c:identifier="UTILITY_FLAG_A"/>
+      <member name="b" value="1" c:identifier="UTILITY_FLAG_B"/>
+      <member name="c" value="2" c:identifier="UTILITY_FLAG_C"/>
+    </enumeration>
     <class name="Object"
            c:type="UtilityObject"
            parent="GObject.Object"
@@ -50,58 +86,6 @@ and/or use gtk-doc annotations.  -->
         <type name="GObject.ObjectClass" c:type="GObjectClass"/>
       </field>
     </record>
-    <record name="TaggedValue" c:type="UtilityTaggedValue">
-      <field name="tag" writable="1">
-        <type name="int" c:type="int"/>
-      </field>
-      <union>
-        <field name="v_pointer" writable="1">
-          <type name="any" c:type="gpointer"/>
-        </field>
-        <field name="v_real" writable="1">
-          <type name="double" c:type="double"/>
-        </field>
-        <field name="v_integer" writable="1">
-          <type name="long" c:type="long"/>
-        </field>
-      </union>
-    </record>
-    <union name="Byte" c:type="UtilityByte">
-      <field name="value" writable="1">
-        <type name="uint8" c:type="guint8"/>
-      </field>
-      <record>
-        <field name="first_nibble" writable="1" bits="4">
-          <type name="uint8" c:type="guint8"/>
-        </field>
-        <field name="second_nibble" writable="1" bits="4">
-          <type name="uint8" c:type="guint8"/>
-        </field>
-      </record>
-    </union>
-    <callback name="FileFunc" c:type="UtilityFileFunc">
-      <return-value transfer-ownership="none">
-        <type name="none" c:type="void"/>
-      </return-value>
-      <parameters>
-        <parameter name="path" transfer-ownership="none">
-          <type name="utf8" c:type="char*"/>
-        </parameter>
-        <parameter name="user_data" transfer-ownership="none">
-          <type name="any" c:type="gpointer"/>
-        </parameter>
-      </parameters>
-    </callback>
-    <enumeration name="EnumType" c:type="UtilityEnumType">
-      <member name="a" value="0" c:identifier="UTILITY_ENUM_A"/>
-      <member name="b" value="1" c:identifier="UTILITY_ENUM_B"/>
-      <member name="c" value="2" c:identifier="UTILITY_ENUM_C"/>
-    </enumeration>
-    <enumeration name="FlagType" c:type="UtilityFlagType">
-      <member name="a" value="0" c:identifier="UTILITY_FLAG_A"/>
-      <member name="b" value="1" c:identifier="UTILITY_FLAG_B"/>
-      <member name="c" value="2" c:identifier="UTILITY_FLAG_C"/>
-    </enumeration>
     <record name="Struct" c:type="UtilityStruct">
       <field name="field" writable="1">
         <type name="int" c:type="int"/>
@@ -117,6 +101,22 @@ and/or use gtk-doc annotations.  -->
           <type name="uint8"/>
         </array>
       </field>
+    </record>
+    <record name="TaggedValue" c:type="UtilityTaggedValue">
+      <field name="tag" writable="1">
+        <type name="int" c:type="int"/>
+      </field>
+      <union>
+        <field name="v_pointer" writable="1">
+          <type name="any" c:type="gpointer"/>
+        </field>
+        <field name="v_real" writable="1">
+          <type name="double" c:type="double"/>
+        </field>
+        <field name="v_integer" writable="1">
+          <type name="long" c:type="long"/>
+        </field>
+      </union>
     </record>
     <union name="Union" c:type="UtilityUnion">
       <field name="pointer" writable="1">
