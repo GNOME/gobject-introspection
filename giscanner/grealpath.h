@@ -13,6 +13,9 @@ static inline gchar*
 g_realpath (const char *path)
 {
 #ifndef _WIN32
+#ifndef PATH_MAX
+#define PATH_MAX 4096
+#endif
 	char buffer [PATH_MAX];
 	if (realpath(path, buffer))
 		return g_strdup(buffer);
