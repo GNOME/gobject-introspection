@@ -161,6 +161,9 @@ GIREPO_CFLAGS="$GIREPO_CFLAGS $FFI_CFLAGS"
 
 GIREPO_CFLAGS="$GIREPO_CFLAGS $GCOV_CFLAGS"
 
+# gtk-doc
+GTK_DOC_CHECK([1.12])
+
 # Checks for header files.
 AC_HEADER_STDC
 AC_CHECK_HEADERS([fcntl.h stdlib.h string.h])
@@ -201,5 +204,7 @@ tests/offsets/Makefile
 tests/scanner/Makefile
 tests/repository/Makefile
 tests/everything/Makefile
+docs/Makefile
+docs/reference/Makefile
 gobject-introspection-1.0.pc])
 AC_OUTPUT

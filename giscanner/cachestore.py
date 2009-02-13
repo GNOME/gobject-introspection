@@ -69,7 +69,7 @@ class CacheStore(object):
         return (os.stat(store_filename).st_mtime >=
                 os.stat(filename).st_mtime)
 
-    def _remove_filename(filename):
+    def _remove_filename(self, filename):
         try:
             os.unlink(filename)
         except IOError, e:

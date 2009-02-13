@@ -1,0 +1,29 @@
+<chapter id="gi-gir-reference">
+
+  <title>The GIR XML format</title>
+
+  <para>
+    This chapter describes the GIR XML markup format.
+    are interested in the procedure which GTK+ follows to draw its
+    widgets and windows, you should read this chapter; this will be
+    useful to know if you decide to implement your own widgets.  This
+    chapter will also clarify the reasons behind the ways certain
+    things are done in GTK+; for example, why you cannot change the
+    background color of all widgets with the same method.
+  </para>
+
+   <section id="gi-gir-api">
+      <title>API node</title>
+      
+      The root node of all GIR documents is the api node.
+
+      Attributes:
+      <itemizedlist>
+	<listitem><para>version</para></listitem>
+        The version of the GIR, currently the only known version is 1.0.
+      </itemizedlist>
+
+   </section>
+
+</chapter>
+

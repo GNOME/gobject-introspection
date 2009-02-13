@@ -29,6 +29,9 @@ man_MANS = 			\
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = gobject-introspection-1.0.pc
 
+m4dir = $(datadir)/aclocal
+m4_DATA = m4/introspection.m4
+
 EXTRA_DIST = 			\
 	CONTRIBUTORS		\
 	$(pkgconfig_DATA)	\
@@ -37,13 +40,11 @@ EXTRA_DIST = 			\
 	misc/pyflakes.py
 
 release-tag:
-	@TRUNK=`svn info --xml|egrep ^"<url>"|cut -d\> -f2|cut -d\< -f1`; \
-	ROOT=`echo $$TRUNK|cut -d/ -f-5`; \
-	SVNVERSION=`echo $(VERSION)|sed s/\\\./_/g`;\
+	@TAG=`echo $(VERSION)|sed s/\\\./_/g`;\
 	  echo "* Tagging $(VERSION)"; \
-          svn cp -m "Tag $(VERSION)" \
-              $$TRUNK \
-              $$ROOT/tags/GOBJECT_INTROSPECTION_$$SVNVERSION
+          git tag -m "Tag $$VERSION" -a \
+              GOBJECT_INTROSPECTION_$$TAG && \
+	      git push --tags ssh://git.gnome.org/git/gobject-introspection
 
 upload-release: $(distdir).tar.gz
 	scp $(distdir).tar.gz gnome.org:
