@@ -29,11 +29,13 @@ man_MANS = 			\
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = gobject-introspection-1.0.pc
 
+m4dir = $(datadir)/aclocal
+m4_DATA = m4/introspection.m4
+
 EXTRA_DIST = 			\
 	CONTRIBUTORS		\
 	$(pkgconfig_DATA)	\
 	$(man_MANS)		\
-	m4/introspection.m4	\
 	misc/pep8.py		\
 	misc/pyflakes.py
 
