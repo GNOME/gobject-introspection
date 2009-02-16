@@ -73,8 +73,9 @@ class LinkerError(Exception):
 
 class DumpCompiler(object):
 
-    def __init__(self, options):
+    def __init__(self, options, get_type_functions):
         self._options = options
+        self._get_type_functions = get_type_functions
         self._tmpdir = tempfile.mkdtemp('', 'tmp-introspect')
 
         self._compiler_cmd = os.environ.get('CC', 'gcc')
@@ -93,6 +94,22 @@ class DumpCompiler(object):
         c_path = self._generate_tempfile('.c')
         f = open(c_path, 'w')
         f.write(_PROGRAM_TEMPLATE)
+
+        # We need to reference our get_type functions to make sure they are
+        # pulled in at the linking stage if the library is a static library
+        # rather than a shared library.
+        for func in self._get_type_functions:
+            f.write("extern GType " + func + "(void);\n")
+        f.write("GType (*GI_GET_TYPE_FUNCS_[])(void) = {\n")
+        first = True
+        for func in self._get_type_functions:
+            if first:
+                first = False
+            else:
+                f.write(",\n")
+            f.write("  " + func)
+        f.write("\n};\n")
+
         f.close()
 
         o_path = self._generate_tempfile('.o')
@@ -208,6 +225,6 @@ class DumpCompiler(object):
         subprocess.check_call(args)
 
 
-def compile_introspection_binary(options):
-    dc = DumpCompiler(options)
+def compile_introspection_binary(options, get_type_functions):
+    dc = DumpCompiler(options, get_type_functions)
     return dc.run()

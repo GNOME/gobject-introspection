@@ -99,9 +99,6 @@ class GLibTransformer(object):
 
     # Public API
 
-    def set_introspection_binary(self, binary):
-        self._binary = binary
-
     def _print_statistics(self):
         nodes = list(self._names.names.itervalues())
 
@@ -114,9 +111,16 @@ class GLibTransformer(object):
         print " %d nodes; %d objects, %d interfaces, %d enums" \
             % (len(nodes), objectcount, ifacecount, enumcount)
 
-    def parse(self):
+    def init_parse(self):
+        """Do parsing steps that don't involve the introspection binary
+
+        This does enough work that get_type_functions() can be called.
+
+        """
+
         namespace = self._transformer.parse()
         self._namespace_name = namespace.name
+        self._namespace_version = namespace.version
 
         # First pass: parsing
         for node in namespace.nodes:
@@ -126,6 +130,15 @@ class GLibTransformer(object):
         # the typelib compiler.
         if namespace.name == 'GObject':
             del self._names.aliases['Type']
+
+    def get_get_type_functions(self):
+        return self._get_type_functions
+
+    def set_introspection_binary(self, binary):
+        self._binary = binary
+
+    def parse(self):
+        """Do remaining parsing steps requiring introspection binary"""
 
         # Get all the GObject data by passing our list of get_type
         # functions to the compiled binary
@@ -158,7 +171,7 @@ class GLibTransformer(object):
             self._validate(nodes)
 
         # Create a new namespace with what we found
-        namespace = Namespace(namespace.name, namespace.version)
+        namespace = Namespace(self._namespace_name, self._namespace_version)
         namespace.nodes = map(lambda x: x[1], self._names.aliases.itervalues())
         for (ns, x) in self._names.names.itervalues():
             namespace.nodes.append(x)

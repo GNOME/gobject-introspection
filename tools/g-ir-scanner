@@ -316,17 +316,23 @@ def main(args):
     # Transform the C symbols into AST nodes
     transformer.set_source_ast(ss)
 
+    # Transform the C AST nodes into higher level
+    # GLib/GObject nodes
+    glibtransformer = GLibTransformer(transformer,
+                                      noclosure=options.noclosure)
+
+    # Do enough parsing that we have the get_type() functions to reference
+    # when creating the introspection binary
+    glibtransformer.init_parse()
+
     if options.program:
         args=[options.program]
         args.extend(options.program_args)
         binary = IntrospectionBinary(args)
     else:
-        binary = compile_introspection_binary(options)
+        binary = compile_introspection_binary(options,
+                                              glibtransformer.get_get_type_functions())
 
-    # Transform the C AST nodes into higher level
-    # GLib/GObject nodes
-    glibtransformer = GLibTransformer(transformer,
-                                      noclosure=options.noclosure)
     glibtransformer.set_introspection_binary(binary)
 
     namespace = glibtransformer.parse()
