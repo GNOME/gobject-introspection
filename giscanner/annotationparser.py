@@ -39,10 +39,10 @@ from .glibast import GLibBoxed
 _COMMENT_HEADER = '*\n '
 
 # Tags - annotations applyed to comment blocks
-TAG_SINCE = 'Since'
-TAG_DEPRECATED = 'Deprecated'
-TAG_RETURNS = 'Returns'
-TAG_RETURNS_ALT = 'Return value'
+TAG_SINCE = 'since'
+TAG_DEPRECATED = 'deprecated'
+TAG_RETURNS = 'returns'
+TAG_RETURNS_ALT = 'return value'
 
 # Options - annotations for parameters and return values
 OPT_ALLOW_NONE = 'allow-none'
@@ -179,7 +179,7 @@ class AnnotationParser(object):
                 comment_lines.append(line)
                 continue
             tag = self._parse_tag(line)
-            block.tags[tag.name] = tag
+            block.tags[tag.name.lower()] = tag
         block.comment = '\n'.join(comment_lines)
         self._blocks[block.name] = block
 

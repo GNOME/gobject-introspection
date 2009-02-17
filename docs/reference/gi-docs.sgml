@@ -63,4 +63,6 @@ Bla bla bla bla bla
     &g-ir-generator;
   </chapter>
 -->
+
+   <xi:include href="xml/annotation-glossary.xml" />
 </book>
