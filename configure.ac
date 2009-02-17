@@ -204,6 +204,7 @@ tests/offsets/Makefile
 tests/scanner/Makefile
 tests/repository/Makefile
 tests/everything/Makefile
+examples/Makefile
 docs/Makefile
 docs/reference/Makefile
 gobject-introspection-1.0.pc])
