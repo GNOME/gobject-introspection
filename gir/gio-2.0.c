@@ -574,6 +574,7 @@
 
 /**
  * g_volume_mount:
+ * @mount_operation: (allow-none):
  * @cancellable: (allow-none):
  */
 
