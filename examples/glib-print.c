@@ -40,5 +40,7 @@ int main(void)
       return 1;
     }
 
+    g_base_info_unref (base_info);
+
     return 0;
 }
