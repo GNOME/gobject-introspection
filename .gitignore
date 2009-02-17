@@ -29,6 +29,7 @@ missing
 stamp-h1
 ylwrap
 py-compile
+examples/glib-print
 docs/reference/html
 docs/reference/xml
 gir/GIRepository-2.0.gir
