@@ -40,7 +40,7 @@ Bla bla bla bla bla
   </part>
 
   <chapter id="gi-typelib">
-    <title>typelib</title>
+    <title>Typelib binary format</title>
     &gi-gtypelib;
   </chapter>
 
