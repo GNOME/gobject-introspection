@@ -30,6 +30,8 @@ stamp-h1
 ylwrap
 py-compile
 examples/glib-print
+docs/reference/gi-decl-list.txt
+docs/reference/gi-decl.txt
 docs/reference/html
 docs/reference/xml
 gir/GIRepository-2.0.gir
