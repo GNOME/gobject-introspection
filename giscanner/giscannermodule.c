@@ -547,8 +547,8 @@ pygi_collect_attributes (PyObject *self,
   GString *attr_value;
   int len;
   
-  if (!PyArg_ParseTuple(args, "sOisi",
-			&tag_name, &attributes,
+  if (!PyArg_ParseTuple(args, "sO!isi",
+			&tag_name, &PyList_Type, &attributes,
 			&self_indent, &indent_char,
 			&indent))
     return NULL;
@@ -566,8 +566,6 @@ pygi_collect_attributes (PyObject *self,
 
   first = TRUE;
   attr_value = g_string_new ("");
-
-  g_assert(PyList_Check(attributes));
   
   for (i = 0; i < PyList_Size (attributes); ++i)
     {
@@ -575,9 +573,21 @@ pygi_collect_attributes (PyObject *self,
       char *attr, *value, *escaped;
       
       tuple = PyList_GetItem (attributes, i);
-      g_assert(tuple != NULL);
-      g_assert(PyTuple_Check(tuple));
-      g_assert(PyTuple_Size(tuple) == 2);
+      
+      if (!PyTuple_Check (tuple)) 
+        {
+          PyErr_SetString(PyExc_TypeError,
+                          "attribute item must be a tuple");
+          return NULL;
+        }
+      
+      if (!PyTuple_Size (tuple) == 2)
+        {
+          PyErr_SetString(PyExc_IndexError,
+                          "attribute item must be a tuple of length 2");
+          return NULL;
+        }
+      
       if (PyTuple_GetItem(tuple, 1) == Py_None)
 	continue;
 
