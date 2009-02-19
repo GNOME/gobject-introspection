@@ -567,6 +567,8 @@ pygi_collect_attributes (PyObject *self,
   first = TRUE;
   attr_value = g_string_new ("");
 
+  g_assert(PyList_Check(attributes));
+  
   for (i = 0; i < PyList_Size (attributes); ++i)
     {
       PyObject *tuple;
@@ -574,6 +576,7 @@ pygi_collect_attributes (PyObject *self,
       
       tuple = PyList_GetItem (attributes, i);
       g_assert(tuple != NULL);
+      g_assert(PyTuple_Check(tuple));
       g_assert(PyTuple_Size(tuple) == 2);
       if (PyTuple_GetItem(tuple, 1) == Py_None)
 	continue;
