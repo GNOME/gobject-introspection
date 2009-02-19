@@ -206,6 +206,11 @@
           <type name="int"/>
         </return-value>
       </function>
+      <function name="get_default" c:identifier="foo_object_get_default">
+        <return-value transfer-ownership="full">
+          <type name="Subobject"/>
+        </return-value>
+      </function>
       <method name="external_type" c:identifier="foo_object_external_type">
         <return-value transfer-ownership="full">
           <type name="utility.Object"/>

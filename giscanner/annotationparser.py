@@ -416,6 +416,7 @@ class AnnotationApplier(object):
         # We're only attempting to name the signal parameters if
         # the number of parameter tags (@foo) is the same or greater
         # than the number of signal parameters
+        resolve = self._transformer.resolve_param_type
         if block and len(block.tags) > len(signal.parameters):
             names = block.tags.items()
         else:
@@ -427,7 +428,7 @@ class AnnotationApplier(object):
                 options = getattr(tag, 'options', {})
                 param_type = options.get(OPT_TYPE)
                 if param_type:
-                    param.type.name = param_type.one()
+                    param.type.name = resolve(param_type.one())
             else:
                 tag = None
             self._parse_param(signal, param, tag)
@@ -489,6 +490,10 @@ class AnnotationApplier(object):
         node.transfer = self._extract_transfer(parent, node, options)
         if OPT_ALLOW_NONE in options:
             node.allow_none = True
+        param_type = options.get(OPT_TYPE)
+        if param_type:
+            resolve = self._transformer.resolve_param_type
+            node.type.name = resolve(param_type.one())
 
         assert node.transfer is not None
         if tag is not None and tag.comment is not None:

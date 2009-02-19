@@ -135,6 +135,8 @@ struct _FooSubobjectClass
 GType                 foo_subobject_get_type       (void) G_GNUC_CONST;
 FooSubobject*         foo_subobject_new            ();
 
+FooObject *           foo_object_get_default       ();
+
 GType                 foo_buffer_get_type          (void);
 
 void                  foo_buffer_some_method       (FooBuffer *buffer);

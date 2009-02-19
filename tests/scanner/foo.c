@@ -269,6 +269,20 @@ foo_subobject_init (FooSubobject *object)
 
 }
 
+/**
+ * foo_object_get_default:
+ *
+ * This function is intended to match clutter_stage_get_default which
+ * uses a C sugar return type.
+ *
+ * Return value: (type FooSubobject): The global #FooSubobject
+ */
+FooObject *
+foo_object_get_default ()
+{
+  return NULL;
+}
+
 int foo_init (void)
 {
   return FOO_SUCCESS_INT;

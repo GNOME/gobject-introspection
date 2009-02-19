@@ -575,4 +575,24 @@ annotation_object_extra_annos (AnnotationObject *object)
 {
 }
 
+/**
+ * annotation_get_source_file:
+ *
+ * Return value: (type filename): Source file
+ */
+char *
+annotation_get_source_file (void)
+{
+}
+
+/**
+ * annotation_set_source_file:
+ * @fname: (type filename): Source file
+ *
+ */
+void
+annotation_set_source_file (const char *fname)
+{
+}
+
 char backslash_parsing_tester_2 = '\\';

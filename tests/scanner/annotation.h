@@ -115,6 +115,9 @@ void     annotation_string_zero_terminated_out (char ***out);
 
 void     annotation_object_extra_annos (AnnotationObject *object);
 
+char *   annotation_get_source_file (void);
+void     annotation_set_source_file (const char *fname);
+
 /**
  * AnnotationStruct:
  *
