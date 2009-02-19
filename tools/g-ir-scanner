@@ -111,6 +111,9 @@ def _get_option_parser():
     parser.add_option("", "--xpath-assertions",
                       action="store", dest="xpath_assertions",
                       help="Use given file to create assertions on GIR content")
+    parser.add_option("", "--c-include",
+                      action="append", dest="c_includes", default=[],
+                      help="headers which should be included in C programs")
 
     group = optparse.OptionGroup(parser, "Preprocessor options")
     group.add_option("-I", help="Pre-processor include file",
@@ -345,7 +348,7 @@ def main(args):
 
     # Write out AST
     writer = Writer(namespace, libraries, transformer.get_includes(),
-                    options.packages)
+                    options.packages, options.c_includes)
     data = writer.get_xml()
     if options.output:
         fd = open(options.output, "w")

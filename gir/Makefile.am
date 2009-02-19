@@ -31,7 +31,8 @@ GLib-2.0.gir: $(SCANNER_BIN) $(SCANNER_LIBS) Makefile glib-2.0.c
 	    --noclosure \
 	    --output $@ \
 	    --strip-prefix=g \
-            --libtool="$(LIBTOOL)" \
+	    --libtool="$(LIBTOOL)" \
+	    --c-include="glib.h" \
 	    --library=$(GLIB_LIBRARY) \
 	    --pkg glib-2.0 \
 	    $(CPPFLAGS) \
@@ -63,13 +64,14 @@ GObject-2.0.gir: GLib-2.0.gir $(SCANNER_BIN) $(SCANNER_LIBS) Makefile
 	    --noclosure \
 	    --output $@ \
 	    --strip-prefix=g \
-            --libtool="$(LIBTOOL)" \
-            --include=GLib-2.0 \
+	    --libtool="$(LIBTOOL)" \
+	    --c-include="glib-object.h" \
+	    --include=GLib-2.0 \
 	    --library=$(GOBJECT_LIBRARY) \
 	    -I$(GOBJECT_INCLUDEDIR) \
 	    -I$(GOBJECT_LIBDIR)/glib-2.0/include \
 	    -DGOBJECT_COMPILATION \
-            --pkg gobject-2.0 \
+	    --pkg gobject-2.0 \
 	    $(GLIB_INCLUDEDIR)/gobject/*.h
 	$(SCANNER) $(SCANNER_ARGS) \
 	    --xpath-assertions=$(srcdir)/GObject-2.0.xpath GObject-2.0.gir
@@ -92,12 +94,13 @@ GModule-2.0.gir: GLib-2.0.gir $(SCANNER_BIN) $(SCANNER_LIBS)
 	    --noclosure \
 	    --output $@ \
 	    --strip-prefix=g \
-            --libtool="$(LIBTOOL)" \
-            --include=GLib-2.0 \
+	    --libtool="$(LIBTOOL)" \
+	    --c-include="gmodule.h" \
+	    --include=GLib-2.0 \
 	    --library=$(GMODULE_LIBRARY) \
 	    -I$(GMODULE_INCLUDEDIR) \
 	    -I$(GMODULE_LIBDIR)/glib-2.0/include \
-            --pkg gmodule-2.0 \
+	    --pkg gmodule-2.0 \
 	    $(GLIB_INCLUDEDIR)/gmodule.h
 BUILT_GIRSOURCES += GModule-2.0.gir
 
@@ -124,8 +127,9 @@ Gio-2.0.gir: GObject-2.0.gir $(SCANNER_BIN) $(SCANNER_LIBS) Makefile $(srcdir)/g
 	    --noclosure \
 	    --output $@ \
 	    --strip-prefix=g \
-            --libtool="$(LIBTOOL)" \
-            --include=GObject-2.0 \
+		--libtool="$(LIBTOOL)" \
+		--c-include="gio/gio.h" \
+		--include=GObject-2.0 \
 	    --library=$(GIO_LIBRARY) \
 	    -I$(GIO_INCLUDEDIR) \
 	    -I$(GIO_LIBDIR)/glib-2.0/include \
@@ -148,12 +152,13 @@ GIRepository-2.0.gir: GObject-2.0.gir $(SCANNER_BIN) $(SCANNER_LIBS) $(GIREPOSIT
 	    --noclosure \
 	    --output $@ \
 	    --strip-prefix=g \
-            --libtool="$(LIBTOOL)" \
-            --include=GObject-2.0 \
+		--libtool="$(LIBTOOL)" \
+		--c-include="girepository.h" \
+		--include=GObject-2.0 \
 	    --library=girepository-1.0 \
 	    -I$(srcdir)/girepository \
-            --pkg glib-2.0 \
-            --pkg gobject-2.0 \
+		--pkg glib-2.0 \
+		--pkg gobject-2.0 \
 	    $(GIREPOSITORY_FILES)
 BUILT_GIRSOURCES += GIRepository-2.0.gir
 

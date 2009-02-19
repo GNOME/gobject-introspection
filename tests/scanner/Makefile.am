@@ -68,6 +68,7 @@ foo-1.0.gir: libfoo.la foo.c foo.h utility-1.0.gir $(SCANNER_BIN) $(SCANNER_LIBS
 	$(CHECK_DEBUG) $(SCANNER) \
 	--include=GObject-2.0 \
 	--include=utility-1.0 \
+	--c-include="foo.h" \
         --libtool="$(LIBTOOL)" \
 	--library=foo \
 	--namespace=foo \

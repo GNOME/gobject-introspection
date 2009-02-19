@@ -33,20 +33,22 @@ from .xmlwriter import XMLWriter
 
 class GIRWriter(XMLWriter):
 
-    def __init__(self, namespace, shlibs, includes, pkgs):
+    def __init__(self, namespace, shlibs, includes, pkgs, c_includes):
         super(GIRWriter, self).__init__()
         self.write_comment(
 '''This file was automatically generated from C sources - DO NOT EDIT!
 To affect the contents of this file, edit the original C definitions,
 and/or use gtk-doc annotations. ''')
-        self._write_repository(namespace, shlibs, includes, pkgs)
+        self._write_repository(namespace, shlibs, includes, pkgs, c_includes)
 
     def _write_repository(self, namespace, shlibs, includes=None,
-                          packages=None):
+                          packages=None, c_includes=None):
         if includes is None:
             includes = frozenset()
         if packages is None:
             packages = frozenset()
+        if c_includes is None:
+            c_includes = frozenset()
         attrs = [
             ('version', '1.0'),
             ('xmlns', 'http://www.gtk.org/introspection/core/1.0'),
@@ -58,6 +60,8 @@ and/or use gtk-doc annotations. ''')
                 self._write_include(include)
             for pkg in sorted(set(packages)):
                 self._write_pkgconfig_pkg(pkg)
+            for c_include in sorted(set(c_includes)):
+                self._write_c_include(c_include)
             self._write_namespace(namespace, shlibs)
 
     def _write_include(self, include):
@@ -67,6 +71,10 @@ and/or use gtk-doc annotations. ''')
     def _write_pkgconfig_pkg(self, package):
         attrs = [('name', package)]
         self.write_tag('package', attrs)
+
+    def _write_c_include(self, c_include):
+        attrs = [('name', c_include)]
+        self.write_tag('c:include', attrs)
 
     def _write_namespace(self, namespace, shlibs):
         libraries = []
