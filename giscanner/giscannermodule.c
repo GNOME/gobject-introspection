@@ -532,6 +532,9 @@ static int calc_attrs_length(PyObject *attributes, int indent,
   return attr_length + indent + self_indent;
 }
 
+/* Hall of shame, wasted time debugging the code below
+ * 20min - Johan 2009-02-19
+ */
 static PyObject *
 pygi_collect_attributes (PyObject *self,
 			 PyObject *args)
