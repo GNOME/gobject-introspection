@@ -1,6 +1,7 @@
 # -*- Mode: Python -*-
 # GObject-Introspection - a framework for introspecting GObject libraries
 # Copyright (C) 2008  Johan Dahlin
+# Copyright (C) 2008, 2009 Red Hat, Inc.
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -27,7 +28,8 @@ from .ast import (Alias, Array, Bitfield, Callback, Class, Constant, Enum,
                   Function, Interface, List, Map, Member, Struct, Union,
                   Varargs)
 from .glibast import (GLibBoxed, GLibEnum, GLibEnumMember,
-                      GLibFlags, GLibObject, GLibInterface)
+                      GLibFlags, GLibObject, GLibInterface,
+                      GLibRecord)
 from .xmlwriter import XMLWriter
 
 
@@ -330,9 +332,8 @@ and/or use gtk-doc annotations. ''')
             attrs.append(('glib:type-name', node.type_name))
             if node.get_type:
                 attrs.append(('glib:get-type', node.get_type))
-        if isinstance(node, GLibObject):
-            if node.class_struct:
-                attrs.append(('glib:class-struct', node.class_struct.name))
+            if node.glib_type_struct:
+                attrs.append(('glib:type-struct', node.glib_type_struct.name))
         with self.tagcontext(tag_name, attrs):
             if isinstance(node, GLibObject):
                 for iface in node.interfaces:
@@ -408,9 +409,10 @@ and/or use gtk-doc annotations. ''')
             attrs.append(('c:type', record.symbol))
         if record.disguised:
             attrs.append(('disguised', '1'))
-        if record.is_gobject_struct_for:
-            attrs.append(('glib:is-class-struct-for',
-                          record.is_gobject_struct_for))
+        if isinstance(record, GLibRecord):
+            if record.is_gtype_struct_for:
+                attrs.append(('glib:is-gtype-struct-for',
+                              record.is_gtype_struct_for))
         if record.doc:
             attrs.append(('doc', record.doc))
         self._append_version(record, attrs)

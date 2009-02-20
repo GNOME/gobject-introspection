@@ -32,7 +32,7 @@ from .ast import (Alias, Bitfield, Callback, Constant, Enum, Function, Member,
 from .transformer import Names
 from .glibast import (GLibBoxed, GLibEnum, GLibEnumMember, GLibFlags,
                       GLibInterface, GLibObject, GLibSignal, GLibBoxedStruct,
-                      GLibBoxedUnion, GLibBoxedOther, type_names)
+                      GLibBoxedUnion, GLibBoxedOther, GLibRecord, type_names)
 from .utils import to_underscores, to_underscores_noprefix
 
 default_array_types['guchar*'] = TYPE_UINT8
@@ -573,13 +573,15 @@ class GLibTransformer(object):
         for field in maybe_class.fields:
             if isinstance(field, Field):
                 field.writable = False
+        # TODO: remove this, we should be computing vfuncs instead
         if isinstance(pair_class, GLibInterface):
             for field in maybe_class.fields[1:]:
                 pair_class.fields.append(field)
-            return
-        elif isinstance(pair_class, GLibObject):
-            pair_class.class_struct = class_struct
-            class_struct.is_gobject_struct_for = name
+        gclass_struct = GLibRecord.from_record(class_struct)
+        self._remove_attribute(class_struct.name)
+        self._add_attribute(gclass_struct, True)
+        pair_class.glib_type_struct = gclass_struct
+        gclass_struct.is_gtype_struct_for = name
 
     # Introspection
 

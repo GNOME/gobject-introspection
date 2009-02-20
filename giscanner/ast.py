@@ -1,6 +1,7 @@
 # -*- Mode: Python -*-
 # GObject-Introspection - a framework for introspecting GObject libraries
 # Copyright (C) 2008  Johan Dahlin
+# Copyright (C) 2008, 2009 Red Hat, Inc.
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -366,11 +367,7 @@ class Record(Node):
         self.symbol = symbol
         self.disguised = disguised
         self.doc = None
-        self.constructors = []
         self.methods = []
-        # If true, this record defines the FooClass C structure
-        # for some Foo GObject
-        self.is_gobject_struct_for = False
 
 # BW compat, remove
 Struct = Record
@@ -410,7 +407,7 @@ class Class(Node):
         Node.__init__(self, name)
         self.ctype = name
         self.parent = parent
-        self.class_struct = None
+        self.glib_type_struct = None
         self.is_abstract = is_abstract
         self.methods = []
         self.static_methods = []
@@ -432,6 +429,7 @@ class Interface(Node):
         Node.__init__(self, name)
         self.parent = parent
         self.methods = []
+        self.glib_type_struct = None
         self.properties = []
         self.fields = []
         self.prerequisites = []

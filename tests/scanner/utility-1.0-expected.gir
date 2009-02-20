@@ -52,7 +52,7 @@ and/or use gtk-doc annotations.  -->
            parent="GObject.Object"
            glib:type-name="UtilityObject"
            glib:get-type="utility_object_get_type"
-           glib:class-struct="ObjectClass">
+           glib:type-struct="ObjectClass">
       <method name="watch_dir" c:identifier="utility_object_watch_dir">
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
@@ -81,7 +81,7 @@ and/or use gtk-doc annotations.  -->
     </class>
     <record name="ObjectClass"
             c:type="UtilityObjectClass"
-            glib:is-class-struct-for="Object">
+            glib:is-gtype-struct-for="Object">
       <field name="parent_class">
         <type name="GObject.ObjectClass" c:type="GObjectClass"/>
       </field>

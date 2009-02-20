@@ -34,7 +34,7 @@
       <member name="b" value="1"/>
       <member name="c" value="2"/>
     </enumeration>
-    <class name="Object" parent="GObject.Object" glib:class-struct="ObjectClass" glib:type-name="UtilityObject" glib:get-type="utility_object_get_type">
+    <class name="Object" parent="GObject.Object" glib:type-struct="ObjectClass" glib:type-name="UtilityObject" glib:get-type="utility_object_get_type">
       <field name="parent_instance">
         <type name="GObject.Object"/>
       </field>
@@ -58,7 +58,7 @@
         </parameters>
       </method>
     </class>
-    <record name="ObjectClass" glib:is-class-struct="1">
+    <record name="ObjectClass" glib:is-gtype-struct="1">
       <field name="parent_class">
         <type name="GObject.ObjectClass"/>
       </field>

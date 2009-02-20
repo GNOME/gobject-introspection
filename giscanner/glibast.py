@@ -19,7 +19,7 @@
 #
 
 from .ast import (Bitfield, Class, Enum, Interface, Member, Node,
-                  Property, Struct, Union)
+                  Property, Struct, Union, Record)
 from .ast import (
     type_names, default_array_types,
     TYPE_STRING, TYPE_INT8, TYPE_UINT8, TYPE_INT16, TYPE_UINT16,
@@ -62,6 +62,22 @@ type_names['gushort'] = TYPE_UINT16
 default_array_types['guint8*'] = TYPE_UINT8
 default_array_types['gchar**'] = TYPE_STRING
 
+class GLibRecord(Record):
+    def __init__(self, *args, **kwargs):
+        Record.__init__(self, *args, **kwargs)
+
+    @classmethod
+    def from_record(cls, record):
+        obj = cls(record.name, record.symbol)
+        obj.fields = record.fields
+        obj.constructors = record.constructors
+        obj.disguised = record.disguised
+        obj.doc = record.doc
+        obj.methods = record.methods
+        # If true, this record defines the FooClass C structure
+        # for some Foo GObject (or similar for GInterface)
+        obj.is_gtype_struct_for = False
+        return obj
 
 class GLibEnum(Enum):
 

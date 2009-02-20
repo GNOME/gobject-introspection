@@ -70,5 +70,8 @@ main(int argc, char **argv)
 
   test_constructor_return_type (info);
 
+  info = g_irepository_find_by_name (repo, "Gio", "ThisDoesNotExist");
+  g_assert (info == NULL);
+
   exit(0);
 }
