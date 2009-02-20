@@ -62,6 +62,7 @@ and/or use gtk-doc annotations.  -->
            glib:type-name="AnnotationObject"
            glib:get-type="annotation_object_get_type"
            glib:type-struct="ObjectClass">
+      <attribute name="org.example.Test" value="cows"/>
       <method name="method" c:identifier="annotation_object_method">
         <return-value transfer-ownership="none">
           <type name="int" c:type="gint"/>
@@ -424,6 +425,12 @@ type.">
               deprecated-version="0.12">
         <return-value transfer-ownership="full">
           <type name="GObject.Object" c:type="GObject*"/>
+        </return-value>
+      </method>
+      <method name="extra_annos" c:identifier="annotation_object_extra_annos">
+        <attribute name="org.foobar" value="testvalue"/>
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
         </return-value>
       </method>
       <property name="string-property"

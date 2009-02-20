@@ -137,6 +137,10 @@ and/or use gtk-doc annotations. ''')
         if node.version:
             attrs.append(('version', node.version))
 
+    def _write_attributes(self, node):
+        for key, value in node.attributes:
+            self.write_tag('attribute', [('name', key), ('value', value)])
+
     def _append_deprecated(self, node, attrs):
         if node.deprecated:
             attrs.append(('deprecated', node.deprecated))
@@ -163,6 +167,7 @@ and/or use gtk-doc annotations. ''')
         self._append_deprecated(func, attrs)
         self._append_throws(func, attrs)
         with self.tagcontext(tag_name, attrs):
+            self._write_attributes(func)
             self._write_return_type(func.retval)
             self._write_parameters(func.parameters)
 
@@ -280,6 +285,7 @@ and/or use gtk-doc annotations. ''')
             attrs.append(('c:type', enum.symbol))
 
         with self.tagcontext('enumeration', attrs):
+            self._write_attributes(enum)
             for member in enum.members:
                 self._write_member(member)
 
@@ -296,6 +302,7 @@ and/or use gtk-doc annotations. ''')
         else:
             attrs.append(('c:type', bitfield.symbol))
         with self.tagcontext('bitfield', attrs):
+            self._write_attributes(bitfield)
             for member in bitfield.members:
                 self._write_member(member)
 
@@ -335,6 +342,7 @@ and/or use gtk-doc annotations. ''')
             if node.glib_type_struct:
                 attrs.append(('glib:type-struct', node.glib_type_struct.name))
         with self.tagcontext(tag_name, attrs):
+            self._write_attributes(node)
             if isinstance(node, GLibObject):
                 for iface in node.interfaces:
                     self.write_tag('implements', [('name', iface)])
@@ -362,6 +370,7 @@ and/or use gtk-doc annotations. ''')
             attrs.append(('doc', boxed.doc))
         attrs.extend(self._boxed_attrs(boxed))
         with self.tagcontext('glib:boxed', attrs):
+            self._write_attributes(boxed)
             for method in boxed.constructors:
                 self._write_constructor(method)
             for method in boxed.methods:
@@ -383,6 +392,7 @@ and/or use gtk-doc annotations. ''')
         if prop.doc:
             attrs.append(('doc', prop.doc))
         with self.tagcontext('property', attrs):
+            self._write_attributes(prop)
             self._write_type(prop.type)
 
     def _write_callback(self, callback):
@@ -394,6 +404,7 @@ and/or use gtk-doc annotations. ''')
         self._append_deprecated(callback, attrs)
         self._append_throws(callback, attrs)
         with self.tagcontext('callback', attrs):
+            self._write_attributes(callback)
             self._write_return_type(callback.retval)
             self._write_parameters(callback.parameters)
 
@@ -420,6 +431,7 @@ and/or use gtk-doc annotations. ''')
         if isinstance(record, GLibBoxed):
             attrs.extend(self._boxed_attrs(record))
         with self.tagcontext('record', attrs):
+            self._write_attributes(record)
             if record.fields:
                 for field in record.fields:
                     self._write_field(field)
@@ -441,6 +453,7 @@ and/or use gtk-doc annotations. ''')
         if isinstance(union, GLibBoxed):
             attrs.extend(self._boxed_attrs(union))
         with self.tagcontext('union', attrs):
+            self._write_attributes(union)
             if union.fields:
                 for field in union.fields:
                     self._write_field(field)
@@ -471,6 +484,7 @@ and/or use gtk-doc annotations. ''')
             if field.bits:
                 attrs.append(('bits', str(field.bits)))
             with self.tagcontext('field', attrs):
+                self._write_attributes(field)
                 self._write_type(field.type)
 
     def _write_signal(self, signal):
@@ -480,5 +494,6 @@ and/or use gtk-doc annotations. ''')
         self._append_version(signal, attrs)
         self._append_deprecated(signal, attrs)
         with self.tagcontext('glib:signal', attrs):
+            self._write_attributes(signal)
             self._write_return_type(signal.retval)
             self._write_parameters(signal.parameters)

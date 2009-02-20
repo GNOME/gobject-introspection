@@ -565,5 +565,14 @@ annotation_versioned (void)
 {
 }
 
+/**
+ * annotation_object_extra_annos:
+ *
+ * Attributes: (org.foobar testvalue)
+ */
+void
+annotation_object_extra_annos (AnnotationObject *object)
+{
+}
 
 char backslash_parsing_tester_2 = '\\';

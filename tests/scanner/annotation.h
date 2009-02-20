@@ -25,6 +25,8 @@ typedef GList* (*AnnotationListCallback) (GList *in);
  * AnnotationObject:
  *
  * This is an object used to test annotations.
+ *
+ * Attributes: (org.example.Test cows)
  */
 typedef struct _AnnotationObject          AnnotationObject;
 typedef struct _AnnotationObjectClass     AnnotationObjectClass;
@@ -110,6 +112,8 @@ char **  annotation_return_array        (int             *length);
 void     annotation_versioned           (void);
 char **  annotation_string_zero_terminated (void);
 void     annotation_string_zero_terminated_out (char ***out);
+
+void     annotation_object_extra_annos (AnnotationObject *object);
 
 /**
  * AnnotationStruct:

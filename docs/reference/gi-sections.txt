@@ -61,7 +61,8 @@ g_base_info_get_type
 g_base_info_get_name
 g_base_info_get_namespace
 g_base_info_is_deprecated
-g_base_info_get_annotation
+g_base_info_get_attribute
+g_base_info_iterate_attributean
 g_base_info_get_container
 g_base_info_get_typelib
 g_info_new

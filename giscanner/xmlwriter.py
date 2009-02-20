@@ -84,6 +84,8 @@ class XMLWriter(object):
     # Private
 
     def _open_tag(self, tag_name, attributes=None):
+        if attributes is None:
+            attributes = []
         attrs = collect_attributes(
             tag_name, attributes, self._indent,
             self._indent_char,

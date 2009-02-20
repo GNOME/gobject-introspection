@@ -48,6 +48,7 @@
       </parameters>
     </callback>
     <class name="Object" parent="GObject.Object" glib:type-struct="ObjectClass" glib:type-name="AnnotationObject" glib:get-type="annotation_object_get_type">
+      <attribute name="org.example.Test" value="cows"/>
       <field name="parent_instance">
         <type name="GObject.Object"/>
       </field>
@@ -321,6 +322,12 @@
       <method name="do_not_use" c:identifier="annotation_object_do_not_use" deprecated="1">
         <return-value transfer-ownership="full">
           <type name="GObject.Object"/>
+        </return-value>
+      </method>
+      <method name="extra_annos" c:identifier="annotation_object_extra_annos">
+        <attribute name="org.foobar" value="testvalue"/>
+        <return-value transfer-ownership="none">
+          <type name="none"/>
         </return-value>
       </method>
       <property name="string-property" writable="1" construct="1">
