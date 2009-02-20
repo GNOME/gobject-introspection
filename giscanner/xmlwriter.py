@@ -120,6 +120,8 @@ class XMLWriter(object):
         self.write_line(prefix + attrs + suffix)
 
     def push_tag(self, tag_name, attributes=None):
+        if attributes is None:
+            attributes = []
         self._open_tag(tag_name, attributes)
         self._tag_stack.append(tag_name)
         self._indent += self._indent_unit
