@@ -50,6 +50,8 @@ static int check_identifier (GISourceScanner *scanner, const char *);
 static int parse_ignored_macro (void);
 %}
 
+%option nounput
+
 intsuffix				([uU][lL]?[lL]?)|([lL][lL]?[uU]?)
 fracconst				([0-9]*\.[0-9]+)|([0-9]+\.)
 exppart					[eE][-+]?[0-9]+
