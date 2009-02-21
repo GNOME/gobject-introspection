@@ -31,7 +31,7 @@ GLib-2.0.gir: $(SCANNER_BIN) $(SCANNER_LIBS) Makefile glib-2.0.c
 	    --noclosure \
 	    --output $@ \
 	    --strip-prefix=g \
-	    --libtool="$(LIBTOOL)" \
+	    --libtool="$(SHAVE_SAVED_LIBTOOL)" \
 	    --c-include="glib.h" \
 	    --library=$(GLIB_LIBRARY) \
 	    --pkg glib-2.0 \
@@ -64,7 +64,7 @@ GObject-2.0.gir: GLib-2.0.gir $(SCANNER_BIN) $(SCANNER_LIBS) Makefile
 	    --noclosure \
 	    --output $@ \
 	    --strip-prefix=g \
-	    --libtool="$(LIBTOOL)" \
+	    --libtool="$(SHAVE_SAVED_LIBTOOL)" \
 	    --c-include="glib-object.h" \
 	    --include=GLib-2.0 \
 	    --library=$(GOBJECT_LIBRARY) \
@@ -94,7 +94,7 @@ GModule-2.0.gir: GLib-2.0.gir $(SCANNER_BIN) $(SCANNER_LIBS)
 	    --noclosure \
 	    --output $@ \
 	    --strip-prefix=g \
-	    --libtool="$(LIBTOOL)" \
+	    --libtool="$(SHAVE_SAVED_LIBTOOL)" \
 	    --c-include="gmodule.h" \
 	    --include=GLib-2.0 \
 	    --library=$(GMODULE_LIBRARY) \
@@ -127,7 +127,7 @@ Gio-2.0.gir: GObject-2.0.gir $(SCANNER_BIN) $(SCANNER_LIBS) Makefile $(srcdir)/g
 	    --noclosure \
 	    --output $@ \
 	    --strip-prefix=g \
-		--libtool="$(LIBTOOL)" \
+		--libtool="$(SHAVE_SAVED_LIBTOOL)" \
 		--c-include="gio/gio.h" \
 		--include=GObject-2.0 \
 	    --library=$(GIO_LIBRARY) \
@@ -152,7 +152,7 @@ GIRepository-2.0.gir: GObject-2.0.gir $(SCANNER_BIN) $(SCANNER_LIBS) $(GIREPOSIT
 	    --noclosure \
 	    --output $@ \
 	    --strip-prefix=g \
-		--libtool="$(LIBTOOL)" \
+		--libtool="$(SHAVE_SAVED_LIBTOOL)" \
 		--c-include="girepository.h" \
 		--include=GObject-2.0 \
 	    --library=girepository-1.0 \

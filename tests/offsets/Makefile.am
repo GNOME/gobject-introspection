@@ -21,7 +21,7 @@ liboffsets_la_LDFLAGS = -avoid-version -rpath $(libdir)
 offsets-1.0.gir: liboffsets.la offsets.h $(SCANNER_BIN) $(SCANNER_LIBS) Makefile
 	$(CHECK_DEBUG) $(SCANNER) \
 	--include=GObject-2.0 \
-        --libtool="$(LIBTOOL)" \
+        --libtool="$(SHAVE_SAVED_LIBTOOL)" \
 	--library=offsets \
 	--namespace=offsets \
 	--nsversion=1.0 \

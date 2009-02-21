@@ -46,6 +46,7 @@ if test "$YACC" = :; then
 	AC_MSG_ERROR([bison not found but required])
 fi
 
+
 changequote(,)dnl
 ensureflag() {
   flag="$1"; shift
@@ -190,6 +191,7 @@ case "$host" in
 esac
 AM_CHECK_PYTHON_HEADERS(,AC_MSG_ERROR([Python headers not found]))
 
+SHAVE_INIT([scripts])
 AC_CONFIG_FILES([
 Makefile
 gir/Makefile
@@ -197,6 +199,8 @@ girepository/Makefile
 giscanner/Makefile
 giscanner/config.py
 m4/Makefile
+scripts/shave
+scripts/shave-libtool
 tools/Makefile
 tests/Makefile
 tests/invoke/Makefile

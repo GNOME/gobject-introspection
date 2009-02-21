@@ -147,12 +147,13 @@ class DumpCompiler(object):
         if not libtool_infection:
             return None
 
-        if self._options.libtool_path:
+        libtool_path = self._options.libtool_path
+        if libtool_path:
             # Automake by default sets:
             # LIBTOOL = $(SHELL) $(top_builddir)/libtool
             # To be strictly correct we would have to parse shell.  For now
             # we simply split().
-            return self._options.libtool_path.split()
+            return libtool_path.split(' ')
 
         try:
             subprocess.check_call(['libtool', '--version'])
@@ -188,6 +189,7 @@ class DumpCompiler(object):
             args.extend(libtool)
             args.append('--mode=link')
             args.append('--tag=CC')
+            args.append('--silent')
 
         args.extend([self._linker_cmd, '-o', output])
 

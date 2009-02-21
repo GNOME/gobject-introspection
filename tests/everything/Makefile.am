@@ -33,7 +33,7 @@ BUILT_SOURCES = $(TYPELIBS) $(TXMLS) $(GIRS)
 Everything-$(TYPELIB_VERSION).gir: libgirepository-everything-1.0.la everything.c everything.h $(SCANNER_BIN) $(SCANNER_LIBS)
 	$(CHECK_DEBUG) $(SCANNER) \
 	--include=GObject-2.0 \
-        --libtool="$(LIBTOOL)" \
+        --libtool="$(SHAVE_SAVED_LIBTOOL)" \
 	--library=girepository-everything-1.0 \
 	--namespace=Everything --nsversion=$(TYPELIB_VERSION) \
 	--pkg gobject-2.0 \
