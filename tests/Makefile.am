@@ -29,14 +29,14 @@ extended.gir.test: extended.gir Makefile
 	$(DEBUG) $(top_builddir)/tools/g-ir-compiler --includedir=$(top_builddir)/gir extended.gir -o extended.gir.test
 
 %.gir.test: %.gir Makefile
-	@echo Testing $<:
+	@echo "  TEST " $<
 	$(DEBUG) $(top_builddir)/tools/g-ir-compiler --includedir=$(top_builddir)/gir $< > $*.1
 	$(DEBUG) $(top_builddir)/tools/g-ir-generate --includedir=$(top_builddir)/gir $*.1 > $*.2
 	diff -u $(srcdir)/$*.gir $*.2 && rm $*.1 $*.2
 
 
 check-local: $(GIRTESTS) extended.gir.test
-	@echo Running PEP8 on Python sources
+	@echo "  CHECK PEP-8"
 	@find $(top_srcdir)/giscanner -name \*.py | sort | uniq | xargs $(PYTHON) $(top_srcdir)/misc/pep8.py --repeat
-	@echo Running Pyflakes on Python sources
+	@echo "  CHECK Pyflakes"
 	@find $(top_srcdir)/giscanner -name \*.py | sort | uniq | xargs $(PYTHON) $(top_srcdir)/misc/pyflakes.py

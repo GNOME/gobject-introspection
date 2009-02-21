@@ -126,7 +126,6 @@ pre-check:
 	@if test "$(top_builddir)" != "$(top_srcdir)"; then \
 	   cp -f $(top_srcdir)/giscanner/*.py $(top_builddir)/giscanner; \
 	fi
-	@echo "Running scanner checks..."
 
 post-check:
 	@echo "========================"
@@ -137,7 +136,7 @@ post-check:
 	fi
 
 %.gir.check: %.gir
-	@diff -u -U 10 $(srcdir)/$*-expected.gir $*.gir && echo "* $*.gir"
+	@diff -u -U 10 $(srcdir)/$*-expected.gir $*.gir && echo "  TEST  $*.gir"
 
 # stop %.typelib rule from building %-expected.tgir (via %-expected.typelib)
 %-expected.typelib:
@@ -152,7 +151,7 @@ post-check:
 %.tgir.check: %.tgir
 	@diff -u -U 10 $(srcdir)/$*-expected.tgir $*.tgir; \
 	if test "$$?" = "0"; then \
-	    echo "* $*.tgir"; \
+	    echo "  TEST  $*.tgir"; \
 	    rm -f $*.tgir; \
 	else \
 	    exit 1; \
