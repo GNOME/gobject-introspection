@@ -166,6 +166,8 @@ GISourceType * 	    gi_source_pointer_new 	       (GISourceType     *base_type);
 GISourceType * 	    gi_source_array_new                (GISourceSymbol   *size);
 GISourceType * 	    gi_source_function_new             (void);
 
+void ctype_free (GISourceType * type);
+
 G_END_DECLS
 
 #endif /* __SOURCE_SCANNER_H__ */

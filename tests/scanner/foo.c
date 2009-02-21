@@ -459,6 +459,8 @@ foo_some_variant (guint x, va_list args)
 {
 }
 
+GType foo_tile_handler_get_type(void);
+
 /* This setup of a totally hidden parent class matches
  * http://bugzilla.gnome.org/show_bug.cgi?id=561360
  */

@@ -34,7 +34,7 @@ void test3 (gint *inout)
 
 void test4 (const gchar *blurb)
 {
-  g_printf (blurb);
+  g_printf ("%s", blurb);
 }
 
 void test5 (gchar **blurb, gint *len)

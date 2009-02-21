@@ -24,9 +24,8 @@ main (int argc, char *argv[])
   GArgument retval;
   gint res;
   gchar *blurb;
-  gint len;
+  guint len;
   GError *error = NULL;
-  const gchar *name;
   TestStruct *s;
   
   g_type_init ();
@@ -44,9 +43,11 @@ main (int argc, char *argv[])
 
   g_assert (g_irepository_is_registered (NULL, "testfns", NULL));
 
+#if 0
   g_print ("after dlopening %s: %d infos in the repository\n", 
 	   testfns,
 	   g_irepository_get_n_infos (rep, "testfns"));
+#endif
 
   /* test1 calculates x + 4, 
    * taking x as an in parameter
@@ -179,7 +180,7 @@ main (int argc, char *argv[])
 	       g_base_info_get_name (info),
 	       error->message);
 
-    g_print("returned %s\n", retval.v_pointer);
+    g_print("returned %p\n", retval.v_pointer);
     g_assert (strcmp(retval.v_pointer, "Hey there...")==0);
     g_list_foreach (list, (GFunc) g_free, NULL);
     g_list_free (list);
@@ -197,10 +198,10 @@ main (int argc, char *argv[])
   info = g_irepository_find_by_name (rep, "testfns", "TestStruct");
   g_assert (g_base_info_get_type (info) == GI_INFO_TYPE_STRUCT);
   record = (GIStructInfo *)info;
-  info = g_struct_info_find_method (record, "test8");
+  info = (GIBaseInfo*)g_struct_info_find_method (record, "test8");
   g_assert (g_base_info_get_type (info) == GI_INFO_TYPE_FUNCTION);
   function = (GIFunctionInfo *)info;
-  g_assert (g_function_info_get_flags (info) & GI_FUNCTION_IS_CONSTRUCTOR);
+  g_assert (g_function_info_get_flags (function) & GI_FUNCTION_IS_CONSTRUCTOR);
 
   {
     in_args[0].v_int = 42;
@@ -221,10 +222,10 @@ main (int argc, char *argv[])
   g_clear_error (&error);
 
   g_print("Test 9\n");
-  info = g_struct_info_find_method (record, "test9");
+  info = (GIBaseInfo*)g_struct_info_find_method (record, "test9");
   g_assert (g_base_info_get_type (info) == GI_INFO_TYPE_FUNCTION);
   function = (GIFunctionInfo *)info;
-  g_assert (g_function_info_get_flags (info) & GI_FUNCTION_IS_METHOD);
+  g_assert (g_function_info_get_flags (function) & GI_FUNCTION_IS_METHOD);
 
   {
     TestStruct s = { 42 };
@@ -242,7 +243,7 @@ main (int argc, char *argv[])
   }
 
   g_base_info_unref (info);
-  g_base_info_unref (record);
+  g_base_info_unref ((GIBaseInfo*)record);
   g_clear_error (&error);
 
 
@@ -262,7 +263,7 @@ main (int argc, char *argv[])
   g_base_info_unref (info);
   g_clear_error (&error);
 #endif
-  
+
   /* too few in arguments */
   info = g_irepository_find_by_name (rep, "testfns", "test2");  
   g_assert (g_base_info_get_type (info) == GI_INFO_TYPE_FUNCTION);
