@@ -189,13 +189,10 @@ def validate(assertions, path):
     root = doc.getroot()
     f = open(assertions)
     assertions_list = f.readlines()
-    print "=== CHECKING %s (%d assertions) ===" % (assertions,
-                                                   len(assertions_list))
     for assertion in assertions_list:
         assertion = assertion.strip()
         xpath_assert(root, assertion)
     f.close()
-    print "=== PASSED %s ===" % (assertions, )
     return 0
     
 def process_options(output, allowed_flags):

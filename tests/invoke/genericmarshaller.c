@@ -150,15 +150,13 @@ test4_callback (TestObject *object,
   g_return_if_fail (ulong == 30L);
 }
 
-void
+static void
 test_cclosure_marshal (void)
 {
   TestObject *object;
   gchar *data = "user-data";
   int i;
   
-  g_printerr ("running genericmarshaller tests\n");  
-
   g_type_init ();
   
   object = g_object_new (TEST_TYPE_OBJECT, NULL);
@@ -191,8 +189,6 @@ test_cclosure_marshal (void)
   g_assert (i == 20);
 
   g_object_unref (object);
-  
-  g_printerr ("genericmarshaller succeeded\n");
 }
   
 int main(void)

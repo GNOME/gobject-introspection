@@ -165,7 +165,6 @@ class GLibTransformer(object):
         for (ns, alias) in self._names.aliases.itervalues():
             self._resolve_alias(alias)
         self._resolve_quarks()
-        self._print_statistics()
         # Fourth pass: ensure all types are known
         if not self._noclosure:
             self._validate(nodes)
@@ -820,9 +819,9 @@ class GLibTransformer(object):
         try:
             node.parent = self._force_resolve(node.parent)
         except KeyError, e:
-            print ("WARNING: Parent %r of class %r" +\
-                   " not found; using GObject") % (node.parent.target,
-                                                   node.name)
+            #print ("WARNING: Parent %r of class %r" +\
+            #       " not found; using GObject") % (node.parent.target,
+            #                                       node.name)
             node.parent = self._transformer.gtypename_to_giname("GObject",
                                                                 self._names)
         node.interfaces = filter(None,
@@ -860,8 +859,8 @@ class GLibTransformer(object):
             except KeyError, e:
                 failed.append(prop)
         for fail in failed:
-            print ("WARNING: Deleting object property %r (of %r) "
-                   "with unknown type") % (fail, context)
+            #print ("WARNING: Deleting object property %r (of %r) "
+            #       "with unknown type") % (fail, context)
             properties.remove(fail)
 
     def _resolve_property(self, prop):
@@ -911,7 +910,7 @@ class GLibTransformer(object):
         while True:
             initlen = len(nodes)
 
-            print "Type resolution; pass=%d" % (i, )
+            #print "Type resolution; pass=%d" % (i, )
             nodes = list(self._names.names.itervalues())
             for node in nodes:
                 try:
