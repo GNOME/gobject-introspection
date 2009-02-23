@@ -43,4 +43,3 @@ if test -z "$gnome_autogen" ; then
 fi
 
 GNOME_DATADIR="$gnome_datadir" USE_GNOME2_MACROS=1 USE_COMMON_DOC_BUILD=yes . $gnome_autogen
-patch -N -f -p0 -i gtk-doc-shave.patch
