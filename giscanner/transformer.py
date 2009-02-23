@@ -419,7 +419,7 @@ class Transformer(object):
 
     def _create_type(self, source_type, is_param, is_retval):
         ctype = self._create_source_type(source_type)
-        if ctype == 'va_list':
+        if ctype.startswith('va_list'):
             raise SkipError()
         # FIXME: FILE* should not be skipped, it should be handled
         #        properly instead

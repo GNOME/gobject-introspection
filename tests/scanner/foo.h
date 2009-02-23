@@ -320,5 +320,6 @@ GQuark foo_error_quark (void);
 
 /* Should be skipped */
 void foo_some_variant (guint x, va_list args);
+void foo_some_variant_ptr (guint x, va_list *args);
 
 #endif /* __FOO_OBJECT_H__ */
