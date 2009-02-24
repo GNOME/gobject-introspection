@@ -460,6 +460,10 @@ class Transformer(object):
         return return_
 
     def _create_const(self, symbol):
+        # Don't create constants for non-public things
+        # http://bugzilla.gnome.org/show_bug.cgi?id=572790
+        if not symbol.source_filename.endswith('.h'):
+            return None
         name = self.remove_prefix(symbol.ident)
         if symbol.const_string is None:
             type_name = 'int'

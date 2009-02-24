@@ -282,7 +282,9 @@ def main(args):
             arg.endswith('.h')):
             if not os.path.exists(arg):
                 _error('%s: no such a file or directory' % (arg, ))
-            filenames.append(arg)
+            # Make absolute, because we do comparisons inside scannerparser.c
+            # against the absolute path that cpp will give us
+            filenames.append(os.path.abspath(arg))
             
     cachestore = CacheStore()            
     transformer = Transformer(cachestore,

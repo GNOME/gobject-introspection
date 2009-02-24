@@ -60,6 +60,7 @@ gi_source_symbol_unref (GISourceSymbol * symbol)
       if (symbol->base_type)
         ctype_free (symbol->base_type);
       g_free (symbol->const_string);
+      g_free (symbol->source_filename);
       g_slice_free (GISourceSymbol, symbol);
     }
 }
@@ -245,6 +246,11 @@ gi_source_scanner_add_symbol (GISourceScanner  *scanner,
   if (found_filename || scanner->macro_scan)
     scanner->symbols = g_slist_prepend (scanner->symbols,
 					gi_source_symbol_ref (symbol));
+  /* TODO: Refcounted string here or some other optimization */
+  if (found_filename && symbol->source_filename == NULL)
+    {
+      symbol->source_filename = g_strdup (scanner->current_filename);
+    }
 
   switch (symbol->type)
     {

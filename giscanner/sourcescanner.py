@@ -179,6 +179,10 @@ class SourceSymbol(object):
         if self._symbol.base_type is not None:
             return SourceType(self._scanner, self._symbol.base_type)
 
+    @property
+    def source_filename(self):
+        return self._symbol.source_filename
+
 
 class SourceScanner(object):
 

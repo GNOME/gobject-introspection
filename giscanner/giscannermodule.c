@@ -151,6 +151,19 @@ symbol_get_const_string (PyGISourceSymbol *self,
   return PyString_FromString (self->symbol->const_string);
 }
 
+static PyObject *
+symbol_get_source_filename (PyGISourceSymbol *self,
+                            void             *context)
+{
+  if (!self->symbol->source_filename)
+    {
+      Py_INCREF(Py_None);
+      return Py_None;
+    }
+
+  return PyString_FromString (self->symbol->source_filename);
+}
+
 static const PyGetSetDef _PyGISourceSymbol_getsets[] = {
   /* int ref_count; */
   { "type", (getter)symbol_get_type, NULL, NULL},
@@ -159,7 +172,8 @@ static const PyGetSetDef _PyGISourceSymbol_getsets[] = {
   { "base_type", (getter)symbol_get_base_type, NULL, NULL},
   /* gboolean const_int_set; */
   { "const_int", (getter)symbol_get_const_int, NULL, NULL},  
-  { "const_string", (getter)symbol_get_const_string, NULL, NULL},  
+  { "const_string", (getter)symbol_get_const_string, NULL, NULL},
+  { "source_filename", (getter)symbol_get_source_filename, NULL, NULL},
   { 0 }
 };
 
