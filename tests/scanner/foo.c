@@ -1,5 +1,3 @@
-#define FOO_SUCCESS_INT 0x1138
-
 #include "foo.h"
 
 /* A hidden type not exposed publicly, similar to GUPNP's XML wrapper
@@ -524,3 +522,5 @@ void
 foo_buffer_some_method (FooBuffer *buffer)
 {
 }
+
+#define FOO_DEFINE_SHOULD_NOT_BE_EXPOSED "should not be exposed"

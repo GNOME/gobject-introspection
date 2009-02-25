@@ -103,6 +103,9 @@
         </return-value>
       </method>
     </record>
+    <constant name="DEFINE_SHOULD_BE_EXPOSED" value="should be exposed">
+      <type name="utf8"/>
+    </constant>
     <enumeration name="EnumFullname">
       <member name="one" value="1"/>
       <member name="two" value="2"/>

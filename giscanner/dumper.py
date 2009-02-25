@@ -165,7 +165,8 @@ class DumpCompiler(object):
         return ['libtool']
 
     def _compile(self, output, *sources):
-        args = [self._compiler_cmd]
+        # Not strictly speaking correct, but easier than parsing shell
+        args = self._compiler_cmd.split()
         if self._compiler_cmd == 'gcc':
             args.append('-Wall')
         pkgconfig_flags = self._run_pkgconfig('--cflags')

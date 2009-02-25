@@ -150,12 +150,20 @@ test4_callback (TestObject *object,
   g_return_if_fail (ulong == 30L);
 }
 
+/* this callback has no "this" */
+static void
+test5_callback (gpointer user_data)
+{
+  g_return_if_fail (!strcmp (user_data, "user-data"));
+}
+
 static void
 test_cclosure_marshal (void)
 {
   TestObject *object;
   gchar *data = "user-data";
   int i;
+  GClosure *closure;
   
   g_type_init ();
   
@@ -189,7 +197,17 @@ test_cclosure_marshal (void)
   g_assert (i == 20);
 
   g_object_unref (object);
+
+  closure = g_cclosure_new (G_CALLBACK (test5_callback),
+                            data,
+                            NULL);
+  g_closure_ref (closure);
+  g_closure_sink (closure);
+  g_closure_set_marshal (closure, gi_cclosure_marshal_generic);
+  g_closure_invoke (closure, NULL, 0, NULL, NULL);
+  g_closure_unref (closure);
 }
+
   
 int main(void)
 {
