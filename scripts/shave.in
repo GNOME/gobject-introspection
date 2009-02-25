@@ -16,8 +16,8 @@ lt_unmangle ()
 tool="$1"
 shift
 
-# the reel tool (to call)
-REEL_TOOL="$1"
+# the real tool (to call)
+REAL_TOOL="$1"
 shift
 
 pass_through=0
@@ -63,8 +63,8 @@ if test -z $V; then
     if test $pass_through -eq 0; then
         echo "$Q$output"
     fi
-    $REEL_TOOL $preserved_args
+    $REAL_TOOL $preserved_args
 else
-    echo $REEL_TOOL $preserved_args
-    $REEL_TOOL $preserved_args
+    echo $REAL_TOOL $preserved_args
+    $REAL_TOOL $preserved_args
 fi
