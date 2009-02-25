@@ -8,6 +8,8 @@
 
 #define FOO_DEFINE_SHOULD_BE_EXPOSED "should be exposed"
 
+#define FOO_PIE_IS_TASTY 3.14159
+
 #define FOO_TYPE_INTERFACE           (foo_interface_get_type ())
 #define FOO_INTERFACE(object)        (G_TYPE_CHECK_INSTANCE_CAST ((object), FOO_TYPE_INTERFACE, FooInterface))
 #define FOO_IS_INTERFACE(object)     (G_TYPE_CHECK_INSTANCE_TYPE ((object), FOO_TYPE_INTERFACE))

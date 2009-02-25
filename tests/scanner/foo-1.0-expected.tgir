@@ -277,6 +277,9 @@
         <type name="GObject.ObjectClass"/>
       </field>
     </record>
+    <constant name="PIE_IS_TASTY" value="3.141590">
+      <type name="double"/>
+    </constant>
     <record name="Rectangle">
       <field name="x" writable="1">
         <type name="int"/>

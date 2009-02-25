@@ -167,7 +167,10 @@ primary_expression
 	  }
 	| FLOATING
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST);
+		$$->const_double_set = TRUE;
+		$$->const_double = 0.0;
+        sscanf (yytext, "%lf", &($$->const_double));
 	  }
 	| strings
 	| '(' expression ')'
@@ -1256,7 +1259,7 @@ function_macro_define
 object_macro_define
 	: object_macro constant_expression
 	  {
-		if ($2->const_int_set || $2->const_string != NULL) {
+		if ($2->const_int_set || $2->const_double_set || $2->const_string != NULL) {
 			$2->ident = $1;
 			gi_source_scanner_add_symbol (scanner, $2);
 			gi_source_symbol_unref ($2);

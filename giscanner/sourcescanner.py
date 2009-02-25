@@ -146,7 +146,8 @@ class SourceType(object):
 
 
 class SourceSymbol(object):
-    __members__ = ['const_int', 'const_string', 'ident', 'type', 'base_type']
+    __members__ = ['const_int', 'const_double', 'const_string', 'ident',
+                   'type', 'base_type']
 
     def __init__(self, scanner, symbol):
         self._scanner = scanner
@@ -161,6 +162,10 @@ class SourceSymbol(object):
     @property
     def const_int(self):
         return self._symbol.const_int
+
+    @property
+    def const_double(self):
+        return self._symbol.const_double
 
     @property
     def const_string(self):

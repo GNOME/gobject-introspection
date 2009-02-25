@@ -135,7 +135,24 @@ static PyObject *
 symbol_get_const_int (PyGISourceSymbol *self,
 		      void             *context)
 {
+  if (!self->symbol->const_int_set)
+    {
+      Py_INCREF(Py_None);
+      return Py_None;
+    }
   return PyInt_FromLong (self->symbol->const_int);
+}
+
+static PyObject *
+symbol_get_const_double (PyGISourceSymbol *self,
+                         void             *context)
+{
+  if (!self->symbol->const_double_set)
+    {
+      Py_INCREF(Py_None);
+      return Py_None;
+    }
+  return PyFloat_FromDouble (self->symbol->const_double);
 }
 
 static PyObject *
@@ -171,7 +188,9 @@ static const PyGetSetDef _PyGISourceSymbol_getsets[] = {
   { "ident", (getter)symbol_get_ident, NULL, NULL},
   { "base_type", (getter)symbol_get_base_type, NULL, NULL},
   /* gboolean const_int_set; */
-  { "const_int", (getter)symbol_get_const_int, NULL, NULL},  
+  { "const_int", (getter)symbol_get_const_int, NULL, NULL},
+  /* gboolean const_double_set; */
+  { "const_double", (getter)symbol_get_const_double, NULL, NULL},
   { "const_string", (getter)symbol_get_const_string, NULL, NULL},
   { "source_filename", (getter)symbol_get_source_filename, NULL, NULL},
   { 0 }

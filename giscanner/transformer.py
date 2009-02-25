@@ -465,12 +465,18 @@ class Transformer(object):
         if not symbol.source_filename.endswith('.h'):
             return None
         name = self.remove_prefix(symbol.ident)
-        if symbol.const_string is None:
-            type_name = 'int'
-            value = symbol.const_int
-        else:
+        if symbol.const_string is not None:
             type_name = 'utf8'
             value = symbol.const_string
+        elif symbol.const_int is not None:
+            type_name = 'int'
+            value = symbol.const_int
+        elif symbol.const_double is not None:
+            type_name = 'double'
+            value = symbol.const_double
+        else:
+            raise AssertionError()
+
         const = Constant(name, type_name, value)
         return const
 

@@ -116,6 +116,8 @@ struct _GISourceSymbol
   gboolean const_int_set;
   int const_int;
   char *const_string;
+  gboolean const_double_set;
+  double const_double;
   char *source_filename;
 };
 
