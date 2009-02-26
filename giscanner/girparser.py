@@ -76,6 +76,8 @@ class GIRParser(object):
         return self._includes
 
     def get_pkgconfig_packages(self):
+        if not hasattr(self, '_pkgconfig_packages'):
+            self._pkgconfig_packages = []
         return self._pkgconfig_packages
 
     def get_doc(self):
@@ -130,6 +132,8 @@ class GIRParser(object):
         self._includes.add(include)
 
     def _parse_pkgconfig_package(self, node):
+        if not hasattr(self, '_pkgconfig_packages'):
+            self._pkgconfig_packages = []
         self._pkgconfig_packages.add(node.attrib['name'])
 
     def _parse_alias(self, node):
