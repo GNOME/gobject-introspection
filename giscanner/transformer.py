@@ -237,7 +237,7 @@ class Transformer(object):
 
     def _handle_closure(self, param, closure_idx, closure_param):
         if (closure_param.type.name == 'any' and
-            closure_param.name == 'user_data'):
+            closure_param.name.endswith('data')):
             param.closure_name = closure_param.name
             param.closure_index = closure_idx
             return True
@@ -261,9 +261,9 @@ class Transformer(object):
             # group with the callback param
             j = i + 1
             if j == len(params):
-                continue # no more args -> nothing to group look
-            # at the param directly following for either a closure
-            # or a destroy; only one of these will fire
+                continue # no more args -> nothing to group
+            # look at the param directly following for either a
+            # closure or a destroy; only one of these will fire
             had_closure = self._handle_closure(param, j, params[j])
             had_destroy = self._handle_destroy(param, j, params[j])
             j += 1
