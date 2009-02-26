@@ -159,10 +159,6 @@ class GLibTransformer(object):
             except KeyError, e:
                 print "WARNING: DELETING node %s: %s" % (node.name, e)
                 self._remove_attribute(node.name)
-        # Another pass, since we need to have the methods parsed
-        # in order to correctly modify them after class/record
-        # pairing
-        for (ns, node) in nodes:
             # associate GtkButtonClass with GtkButton
             if isinstance(node, Record):
                 self._pair_class_record(node)
@@ -577,19 +573,10 @@ class GLibTransformer(object):
         for field in maybe_class.fields:
             if isinstance(field, Field):
                 field.writable = False
-
-        # Pair up virtual methods by finding a slot in
-        # the class with the same name
-        for field in maybe_class.fields:
-            if not isinstance(field, Callback):
-                continue
-            matched = False
-            for method in pair_class.methods:
-                if (method.name == field.name and
-                    len(method.parameters)+1 == len(field.parameters)):
-                    method.is_virtual = True
-                    break
-
+        # TODO: remove this, we should be computing vfuncs instead
+        if isinstance(pair_class, GLibInterface):
+            for field in maybe_class.fields[1:]:
+                pair_class.fields.append(field)
         gclass_struct = GLibRecord.from_record(class_struct)
         self._remove_attribute(class_struct.name)
         self._add_attribute(gclass_struct, True)

@@ -232,16 +232,16 @@ and/or use gtk-doc annotations.  -->
                glib:type-name="FooInterface"
                glib:get-type="foo_interface_get_type"
                glib:type-struct="InterfaceIface">
-      <vfunc name="do_foo" c:identifier="foo_interface_do_foo">
+      <callback name="do_foo" c:type="do_foo">
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
-          <parameter name="x" transfer-ownership="none">
-            <type name="int" c:type="int"/>
+          <parameter name="self" transfer-ownership="none">
+            <type name="Interface" c:type="FooInterface*"/>
           </parameter>
         </parameters>
-      </vfunc>
+      </callback>
     </interface>
     <record name="InterfaceIface"
             c:type="FooInterfaceIface"
@@ -256,9 +256,6 @@ and/or use gtk-doc annotations.  -->
         <parameters>
           <parameter name="self" transfer-ownership="none">
             <type name="Interface" c:type="FooInterface*"/>
-          </parameter>
-          <parameter name="x" transfer-ownership="none">
-            <type name="int" c:type="int"/>
           </parameter>
         </parameters>
       </callback>
@@ -362,16 +359,6 @@ and/or use gtk-doc annotations.  -->
           </parameter>
         </parameters>
       </method>
-      <vfunc name="virtual_method" c:identifier="foo_object_virtual_method">
-        <return-value transfer-ownership="none">
-          <type name="none" c:type="void"/>
-        </return-value>
-        <parameters>
-          <parameter name="first_param" transfer-ownership="none">
-            <type name="int" c:type="int"/>
-          </parameter>
-        </parameters>
-      </vfunc>
       <property name="string" writable="1" construct="1">
         <type name="utf8" c:type="gchararray"/>
       </property>
@@ -480,11 +467,21 @@ and/or use gtk-doc annotations.  -->
                glib:get-type="foo_sub_interface_get_type"
                glib:type-struct="SubInterfaceIface">
       <prerequisite name="Interface"/>
-      <vfunc name="do_bar" c:identifier="foo_sub_interface_do_bar">
+      <method name="do_bar" c:identifier="foo_sub_interface_do_bar">
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
-      </vfunc>
+      </method>
+      <callback name="do_bar" c:type="do_bar">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <parameter name="self" transfer-ownership="none">
+            <type name="SubInterface" c:type="FooSubInterface*"/>
+          </parameter>
+        </parameters>
+      </callback>
     </interface>
     <record name="SubInterfaceIface"
             c:type="FooSubInterfaceIface"

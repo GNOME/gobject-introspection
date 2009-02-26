@@ -205,7 +205,6 @@ class Function(Node):
         self.symbol = symbol
         self.throws = not not throws
         self.is_method = False
-        self.is_virtual = False
         self.doc = None
 
     def get_parameter_index(self, name):
@@ -222,6 +221,11 @@ class Function(Node):
         return '%s(%r, %r, %r)' % (self.__class__.__name__,
                                    self.name, self.retval,
                                    self.parameters)
+
+
+class VFunction(Function):
+    pass
+
 
 class Type(Node):
 

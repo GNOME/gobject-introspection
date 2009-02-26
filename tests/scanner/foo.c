@@ -8,8 +8,8 @@ int foo_init_argv (int argc, char **argv);
 int foo_init_argv_address (int *argc, char ***argv);
 void foo_private_function (FooObject *foo);
 void foo_test_unsigned (unsigned int uint);
-void foo_interface_do_foo (FooInterface *self, int x);
-void foo_do_foo (FooInterface *self, int x);
+void foo_interface_do_foo (FooInterface *self);
+void foo_do_foo (FooInterface *self);
 int foo_enum_method (FooEnumType foo_enum);
 FooHidden * foo_hidden_copy (const FooHidden *boxed);
 void foo_hidden_free (FooHidden *boxed);
@@ -47,9 +47,9 @@ foo_interface_get_type (void)
   return object_type;
 }
 
-void foo_interface_do_foo (FooInterface *self, int x)
+void foo_interface_do_foo (FooInterface *self)
 {
-  FOO_INTERFACE_GET_INTERFACE(self)->do_foo (self, x);
+  FOO_INTERFACE_GET_INTERFACE(self)->do_foo (self);
 }
 
 enum {
@@ -191,7 +191,7 @@ foo_object_take_all (FooObject *object, int x, ...)
 }
 
 void
-foo_do_foo (FooInterface *self, int x)
+foo_do_foo (FooInterface *self)
 {
 
 
