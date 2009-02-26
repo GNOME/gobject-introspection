@@ -107,6 +107,7 @@ struct _TestStructA
   gint8 some_int8;
   gdouble some_double;
   TestEnum some_enum;
+  GObject *some_obj;
 };
 
 void test_struct_a_clone (TestStructA *a,
@@ -174,18 +175,28 @@ gboolean   test_boxed_equals   (TestBoxed *boxed,
 
 typedef struct _TestObj          TestObj;
 typedef struct _TestObjClass     TestObjClass;
+
+/**
+ * TestObj:
+ * @bare: (allow-none):
+ */
 struct _TestObj
 {
   GObject parent_instance;
+
+  GObject *bare;
 };
 
 struct _TestObjClass
 {
   GObjectClass parent_class;
+
+  guint test_signal;
 };
 
 GType      test_obj_get_type (void);
 TestObj*   test_obj_new_from_file (const char *x, GError **error);
+void       test_obj_set_bare (TestObj *obj, GObject *bare);
 double     test_obj_static_method (int x);
 
 /* callback */

@@ -726,20 +726,125 @@ test_boxed_get_type (void)
 
 G_DEFINE_TYPE(TestObj, test_obj, G_TYPE_OBJECT);
 
+enum
+{
+  PROP_TEST_OBJ_BARE = 1
+};
+
+static void
+test_obj_set_property (GObject      *object,
+                       guint         property_id,
+                       const GValue *value,
+                       GParamSpec   *pspec)
+{
+  TestObj *self = TEST_OBJECT (object);
+
+  switch (property_id)
+    {
+    case PROP_TEST_OBJ_BARE:
+      test_obj_set_bare (self, g_value_get_object (value));
+      break;
+
+    default:
+      /* We don't have any other property... */
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+      break;
+    }
+}
+
+static void
+test_obj_get_property (GObject    *object,
+                        guint       property_id,
+                        GValue     *value,
+                        GParamSpec *pspec)
+{
+  TestObj *self = TEST_OBJECT (object);
+
+  switch (property_id)
+    {
+    case PROP_TEST_OBJ_BARE:
+      g_value_set_object (value, self->bare);
+      break;
+
+    default:
+      /* We don't have any other property... */
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+      break;
+    }
+}
+
+static void
+test_obj_dispose (GObject *gobject)
+{
+  TestObj *self = TEST_OBJECT (gobject);
+
+  if (self->bare)
+    {
+      g_object_unref (self->bare);
+
+      self->bare = NULL;
+    }
+
+  /* Chain up to the parent class */
+  G_OBJECT_CLASS (test_obj_parent_class)->dispose (gobject);
+}
+
 static void
 test_obj_class_init (TestObjClass *klass)
 {
+  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+  GParamSpec *pspec;
+
+  klass->test_signal =
+    g_signal_newv ("test",
+                   G_TYPE_FROM_CLASS (gobject_class),
+                   G_SIGNAL_RUN_LAST | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
+                   NULL /* closure */,
+                   NULL /* accumulator */,
+                   NULL /* accumulator data */,
+                   g_cclosure_marshal_VOID__VOID,
+                   G_TYPE_NONE /* return_type */,
+                   0     /* n_params */,
+                   NULL  /* param_types */);
+
+  gobject_class->set_property = test_obj_set_property;
+  gobject_class->get_property = test_obj_get_property;
+  gobject_class->dispose = test_obj_dispose;
+  
+  pspec = g_param_spec_object ("bare",
+                               "Bare property",
+                               "A contained object",
+                               G_TYPE_OBJECT,
+                               G_PARAM_READWRITE);
+  g_object_class_install_property (gobject_class,
+                                   PROP_TEST_OBJ_BARE,
+                                   pspec);
 }
 
 static void
 test_obj_init (TestObj *obj)
 {
+  obj->bare = NULL;
 }
 
 TestObj *
 test_obj_new_from_file (const char *x, GError **error)
 {
   return g_object_new (TEST_TYPE_OBJ, NULL);
+}
+
+/**
+ * test_obj_set_bare:
+ * @bare: (allow-none):
+ */
+void
+test_obj_set_bare (TestObj *obj, GObject *bare)
+{
+  if (obj->bare)
+    g_object_unref (obj->bare);
+  obj->bare = bare;
+  if (obj->bare)
+    g_object_ref (obj->bare);
 }
 
 double
