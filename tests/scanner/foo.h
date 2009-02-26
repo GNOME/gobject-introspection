@@ -48,10 +48,12 @@ struct _FooInterfaceIface
 {
   GTypeInterface parent_iface;
 
-  void (*do_foo) (FooInterface *self);
+  void (*do_foo) (FooInterface *self, int x);
 };
 
 GType                 foo_interface_get_type       (void) G_GNUC_CONST;
+
+void foo_interface_do_foo (FooInterface *iface, int x);
 
 struct _FooSubInterfaceIface
 {
@@ -104,6 +106,8 @@ const char *          foo_object_get_name          (FooObject *object);
 char *                foo_object_dup_name          (FooObject *object);
 
 void                  foo_object_handle_glyph      (FooObject *object, UtilityGlyph glyph);
+
+void                  foo_object_virtual_method    (FooObject *object, int first_param);
 
 int                   foo_object_static_meth       ();
 

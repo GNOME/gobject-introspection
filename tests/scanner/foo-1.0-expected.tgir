@@ -161,7 +161,18 @@
       <member name="second" value="2"/>
       <member name="third" value="4"/>
     </bitfield>
-    <interface name="Interface" glib:type-name="FooInterface" glib:get-type="foo_interface_get_type" glib:type-struct="InterfaceIface"/>
+    <interface name="Interface" glib:type-name="FooInterface" glib:get-type="foo_interface_get_type" glib:type-struct="InterfaceIface">
+      <vfunc name="do_foo" offset="0">
+        <return-value transfer-ownership="none">
+          <type name="none"/>
+        </return-value>
+        <parameters>
+          <parameter name="x" transfer-ownership="none">
+            <type name="int"/>
+          </parameter>
+        </parameters>
+      </vfunc>
+    </interface>
     <record name="InterfaceIface" glib:is-gtype-struct="1">
       <field name="parent_iface">
         <type name="GObject.TypeInterface"/>
@@ -271,6 +282,16 @@
           </parameter>
         </parameters>
       </glib:signal>
+      <vfunc name="virtual_method" offset="0">
+        <return-value transfer-ownership="none">
+          <type name="none"/>
+        </return-value>
+        <parameters>
+          <parameter name="first_param" transfer-ownership="none">
+            <type name="int"/>
+          </parameter>
+        </parameters>
+      </vfunc>
     </class>
     <record name="ObjectClass" glib:is-gtype-struct="1">
       <field name="parent_class">
@@ -337,11 +358,11 @@
     <record name="StructPrivate"/>
     <interface name="SubInterface" glib:type-name="FooSubInterface" glib:get-type="foo_sub_interface_get_type" glib:type-struct="SubInterfaceIface">
       <prerequisite name="Interface"/>
-      <method name="do_bar" c:identifier="foo_sub_interface_do_bar">
+      <vfunc name="do_bar" offset="0">
         <return-value transfer-ownership="none">
           <type name="none"/>
         </return-value>
-      </method>
+      </vfunc>
     </interface>
     <record name="SubInterfaceIface" glib:is-gtype-struct="1">
       <field name="parent_iface">

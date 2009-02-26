@@ -167,7 +167,11 @@ and/or use gtk-doc annotations. ''')
             self._write_parameters(func.parameters)
 
     def _write_method(self, method):
-        self._write_function(method, tag_name='method')
+        if method.is_virtual:
+            tag_name = 'vfunc'
+        else:
+            tag_name = 'method'
+        self._write_function(method, tag_name)
 
     def _write_static_method(self, method):
         self._write_function(method, tag_name='function')
