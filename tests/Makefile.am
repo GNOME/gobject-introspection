@@ -25,8 +25,8 @@ GIRTESTS =				\
 
 CLEANFILES = $(GIRTESTS:%.gir.test=%.1) $(GIRTESTS:%.gir.test=%.2) extended.gir.test
 
-extended.gir.test: extended.gir Makefile
-	$(DEBUG) $(top_builddir)/tools/g-ir-compiler --includedir=$(top_builddir)/gir extended.gir -o extended.gir.test
+extended.gir.test: $(srcdir)/extended.gir Makefile
+	$(DEBUG) $(top_builddir)/tools/g-ir-compiler --includedir=$(top_builddir)/gir $(srcdir)/extended.gir -o extended.gir.test
 
 %.gir.test: %.gir Makefile
 	@echo "  TEST " $<
