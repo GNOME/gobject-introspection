@@ -76,6 +76,7 @@ GObject-2.0.gir: GLib-2.0.gir $(SCANNER_BIN) $(SCANNER_LIBS) Makefile
 	$(SCANNER) $(SCANNER_ARGS) \
 	    --xpath-assertions=$(srcdir)/GObject-2.0.xpath GObject-2.0.gir
 BUILT_GIRSOURCES += GObject-2.0.gir
+EXTRA_DIST += GObject-2.0.xpath
 
 # gmodule
 GMODULE_INCLUDEDIR=`pkg-config --variable=includedir gmodule-2.0`/glib-2.0
