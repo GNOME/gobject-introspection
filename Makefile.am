@@ -36,6 +36,7 @@ EXTRA_DIST = 			\
 	CONTRIBUTORS		\
 	$(pkgconfig_DATA)	\
 	$(man_MANS)		\
+	$(m4_DATA)		\
 	misc/pep8.py		\
 	misc/pyflakes.py
 
