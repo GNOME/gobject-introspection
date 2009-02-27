@@ -29,10 +29,11 @@ GTKDOC_LIBS = $(GIREPO_LIBS) $(top_builddir)/girepository/libgirepository-1.0.la
 FIXXREF_OPTIONS=
 
 # include common portion ...
+if ENABLE_GTK_DOC
 include $(top_srcdir)/gtk-doc.make
-
 # Other files to distribute
 EXTRA_DIST += version.xml.in
+endif
 
 ########################################################################
 
