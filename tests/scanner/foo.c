@@ -1,4 +1,5 @@
 #include "foo.h"
+#include "girepository.h"
 
 /* A hidden type not exposed publicly, similar to GUPNP's XML wrapper
    object */
@@ -8,8 +9,8 @@ int foo_init_argv (int argc, char **argv);
 int foo_init_argv_address (int *argc, char ***argv);
 void foo_private_function (FooObject *foo);
 void foo_test_unsigned (unsigned int uint);
-void foo_interface_do_foo (FooInterface *self);
-void foo_do_foo (FooInterface *self);
+void foo_interface_do_foo (FooInterface *self, int x);
+void foo_do_foo (FooInterface *self, int x);
 int foo_enum_method (FooEnumType foo_enum);
 FooHidden * foo_hidden_copy (const FooHidden *boxed);
 void foo_hidden_free (FooHidden *boxed);
@@ -47,9 +48,9 @@ foo_interface_get_type (void)
   return object_type;
 }
 
-void foo_interface_do_foo (FooInterface *self)
+void foo_interface_do_foo (FooInterface *self, int x)
 {
-  FOO_INTERFACE_GET_INTERFACE(self)->do_foo (self);
+  FOO_INTERFACE_GET_INTERFACE(self)->do_foo (self, x);
 }
 
 enum {
@@ -73,6 +74,16 @@ foo_foo_interface_init (gpointer         g_iface,
   iface->do_foo = foo_do_foo;
 }
 
+enum {
+  SUBIFACE_DESTROY_EVENT,
+  SUBIFACE_LAST_SIGNAL
+};
+
+static void
+foo_sub_interface_class_init (gpointer g_class, gpointer class_data);
+
+static guint foo_subiface_signals[SUBIFACE_LAST_SIGNAL] = { 0 };
+
 GType
 foo_sub_interface_get_type (void)
 {
@@ -83,12 +94,26 @@ foo_sub_interface_get_type (void)
       object_type = g_type_register_static_simple (G_TYPE_INTERFACE,
                                                    "FooSubInterface",
                                                    sizeof (FooSubInterfaceIface),
-                                                   NULL, 0, NULL, 0);
+                                                   foo_sub_interface_class_init, 0, NULL, 0);
 
       g_type_interface_add_prerequisite (object_type, FOO_TYPE_INTERFACE);
     }
 
   return object_type;
+}
+
+static void
+foo_sub_interface_class_init (gpointer g_class, gpointer class_data)
+{
+  foo_subiface_signals[SUBIFACE_DESTROY_EVENT] =
+    g_signal_new ("destroy-event", FOO_TYPE_SUBINTERFACE,
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (FooSubInterfaceIface, destroy_event),
+                  NULL, NULL,
+                  gi_cclosure_marshal_generic,
+                  G_TYPE_NONE,
+                  0,
+                  G_TYPE_NONE);
 }
 
 void foo_sub_interface_do_bar (FooSubInterface *self)
@@ -191,7 +216,7 @@ foo_object_take_all (FooObject *object, int x, ...)
 }
 
 void
-foo_do_foo (FooInterface *self)
+foo_do_foo (FooInterface *self, int x)
 {
 
 
@@ -212,6 +237,22 @@ char *
 foo_object_dup_name (FooObject *object)
 {
   return g_strdup ("foo");
+}
+
+/**
+ * foo_object_read:
+ * @object: obj
+ * @offset: offset
+ * @length: length
+ *
+ * Read some stuff.
+ *
+ * Virtual: read_fn
+ */
+void
+foo_object_read (FooObject *object, int offset, int length)
+{
+
 }
 
 G_DEFINE_ABSTRACT_TYPE (FooSubobject, foo_subobject, FOO_TYPE_OBJECT);

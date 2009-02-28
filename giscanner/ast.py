@@ -196,15 +196,25 @@ class Include(Node):
     def __str__(self):
         return '%s-%s' % (self.name, self.version)
 
+class Callable(Node):
 
-class Function(Node):
-
-    def __init__(self, name, retval, parameters, symbol, throws=None):
+    def __init__(self, name, retval, parameters, throws):
         Node.__init__(self, name)
         self.retval = retval
         self.parameters = parameters
-        self.symbol = symbol
         self.throws = not not throws
+        self.doc = None
+
+    def __repr__(self):
+        return '%s(%r, %r, %r)' % (self.__class__.__name__,
+                                   self.name, self.retval,
+                                   self.parameters)
+
+class Function(Callable):
+
+    def __init__(self, name, retval, parameters, symbol, throws=None):
+        Callable.__init__(self, name, retval, parameters, throws)
+        self.symbol = symbol
         self.is_method = False
         self.doc = None
 
@@ -218,14 +228,18 @@ class Function(Node):
             if parameter.name == name:
                 return parameter
 
-    def __repr__(self):
-        return '%s(%r, %r, %r)' % (self.__class__.__name__,
-                                   self.name, self.retval,
-                                   self.parameters)
 
+class VFunction(Callable):
 
-class VFunction(Function):
-    pass
+    def __init__(self, name, retval, parameters, throws):
+        Callable.__init__(self, name, retval, parameters, throws)
+        self.invoker = None
+
+    @classmethod
+    def from_callback(cls, cb):
+        obj = cls(cb.name, cb.retval, cb.parameters[1:],
+                  cb.throws)
+        return obj
 
 
 class Type(Node):
@@ -411,6 +425,7 @@ class Class(Node):
         self.glib_type_struct = None
         self.is_abstract = is_abstract
         self.methods = []
+        self.virtual_methods = []
         self.static_methods = []
         self.interfaces = []
         self.constructors = []
@@ -430,6 +445,7 @@ class Interface(Node):
         Node.__init__(self, name)
         self.parent = parent
         self.methods = []
+        self.virtual_methods = []
         self.glib_type_struct = None
         self.properties = []
         self.fields = []

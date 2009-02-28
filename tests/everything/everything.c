@@ -789,6 +789,12 @@ test_obj_dispose (GObject *gobject)
   G_OBJECT_CLASS (test_obj_parent_class)->dispose (gobject);
 }
 
+static int
+test_obj_default_matrix (TestObj *obj, const char *somestr)
+{
+  return 42;
+}
+
 static void
 test_obj_class_init (TestObjClass *klass)
 {
@@ -819,6 +825,8 @@ test_obj_class_init (TestObjClass *klass)
   g_object_class_install_property (gobject_class,
                                    PROP_TEST_OBJ_BARE,
                                    pspec);
+
+  klass->matrix = test_obj_default_matrix;
 }
 
 static void
@@ -851,6 +859,23 @@ double
 test_obj_static_method (int x)
 {
   return x;
+}
+
+/**
+ * test_obj_do_matrix:
+ * @obj: A #TestObj
+ * @somestr: Meaningless string
+ *
+ * This method is virtual.  Notably its name differs from the virtual
+ * slot name, which makes it useful for testing bindings handle this
+ * case.
+ *
+ * Virtual: matrix
+ */
+int
+test_obj_do_matrix (TestObj *obj, const char *somestr)
+{
+  return TEST_OBJ_GET_CLASS (obj)->matrix (obj, somestr);
 }
 
 /**

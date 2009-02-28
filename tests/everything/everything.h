@@ -178,6 +178,7 @@ gboolean   test_boxed_equals   (TestBoxed *boxed,
 #define TEST_TYPE_OBJ              (test_obj_get_type ())
 #define TEST_OBJECT(object)        (G_TYPE_CHECK_INSTANCE_CAST ((object), TEST_TYPE_OBJ, TestObj))
 #define TEST_IS_OBJECT(object)     (G_TYPE_CHECK_INSTANCE_TYPE ((object), TEST_TYPE_OBJ))
+#define TEST_OBJ_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), TEST_TYPE_OBJ, TestObjClass))
 
 typedef struct _TestObj          TestObj;
 typedef struct _TestObjClass     TestObjClass;
@@ -197,6 +198,8 @@ struct _TestObjClass
 {
   GObjectClass parent_class;
 
+  int (*matrix) (TestObj *obj, const char *somestr);
+
   guint test_signal;
 };
 
@@ -204,6 +207,9 @@ GType      test_obj_get_type (void);
 TestObj*   test_obj_new_from_file (const char *x, GError **error);
 void       test_obj_set_bare (TestObj *obj, GObject *bare);
 double     test_obj_static_method (int x);
+
+/* virtual */
+int        test_obj_do_matrix (TestObj *obj, const char *somestr);
 
 /* callback */
 typedef int (*TestCallback) ();

@@ -161,7 +161,28 @@
       <member name="second" value="2"/>
       <member name="third" value="4"/>
     </bitfield>
-    <interface name="Interface" glib:type-name="FooInterface" glib:get-type="foo_interface_get_type" glib:type-struct="InterfaceIface"/>
+    <interface name="Interface" glib:type-name="FooInterface" glib:get-type="foo_interface_get_type" glib:type-struct="InterfaceIface">
+      <method name="do_foo" c:identifier="foo_interface_do_foo">
+        <return-value transfer-ownership="none">
+          <type name="none"/>
+        </return-value>
+        <parameters>
+          <parameter name="x" transfer-ownership="none">
+            <type name="int"/>
+          </parameter>
+        </parameters>
+      </method>
+      <virtual-method name="do_foo" offset="0" invoker="do_foo">
+        <return-value transfer-ownership="none">
+          <type name="none"/>
+        </return-value>
+        <parameters>
+          <parameter name="x" transfer-ownership="none">
+            <type name="int"/>
+          </parameter>
+        </parameters>
+      </virtual-method>
+    </interface>
     <record name="InterfaceIface" glib:is-gtype-struct="1">
       <field name="parent_iface">
         <type name="GObject.TypeInterface"/>
@@ -255,6 +276,29 @@
           </parameter>
         </parameters>
       </method>
+      <method name="virtual_method" c:identifier="foo_object_virtual_method">
+        <return-value transfer-ownership="none">
+          <type name="boolean"/>
+        </return-value>
+        <parameters>
+          <parameter name="first_param" transfer-ownership="none">
+            <type name="int"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="read" c:identifier="foo_object_read">
+        <return-value transfer-ownership="none">
+          <type name="none"/>
+        </return-value>
+        <parameters>
+          <parameter name="offset" transfer-ownership="none">
+            <type name="int"/>
+          </parameter>
+          <parameter name="length" transfer-ownership="none">
+            <type name="int"/>
+          </parameter>
+        </parameters>
+      </method>
       <property name="string" writable="1" construct="1">
         <type name="utf8"/>
       </property>
@@ -271,6 +315,29 @@
           </parameter>
         </parameters>
       </glib:signal>
+      <virtual-method name="virtual_method" offset="0" invoker="virtual_method">
+        <return-value transfer-ownership="none">
+          <type name="boolean"/>
+        </return-value>
+        <parameters>
+          <parameter name="first_param" transfer-ownership="none">
+            <type name="int"/>
+          </parameter>
+        </parameters>
+      </virtual-method>
+      <virtual-method name="read_fn" offset="0" invoker="read">
+        <return-value transfer-ownership="none">
+          <type name="none"/>
+        </return-value>
+        <parameters>
+          <parameter name="offset" transfer-ownership="none">
+            <type name="int"/>
+          </parameter>
+          <parameter name="length" transfer-ownership="none">
+            <type name="int"/>
+          </parameter>
+        </parameters>
+      </virtual-method>
     </class>
     <record name="ObjectClass" glib:is-gtype-struct="1">
       <field name="parent_class">
@@ -342,6 +409,16 @@
           <type name="none"/>
         </return-value>
       </method>
+      <glib:signal name="destroy-event" when="LAST">
+        <return-value transfer-ownership="full">
+          <type name="none"/>
+        </return-value>
+      </glib:signal>
+      <virtual-method name="do_bar" offset="0" invoker="do_bar">
+        <return-value transfer-ownership="none">
+          <type name="none"/>
+        </return-value>
+      </virtual-method>
     </interface>
     <record name="SubInterfaceIface" glib:is-gtype-struct="1">
       <field name="parent_iface">

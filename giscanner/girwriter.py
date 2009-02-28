@@ -158,18 +158,22 @@ and/or use gtk-doc annotations. ''')
             attrs.append(('c:type', alias.ctype))
         self.write_tag('alias', attrs)
 
-    def _write_function(self, func, tag_name='function'):
-        attrs = [('name', func.name),
-                 ('c:identifier', func.symbol)]
-        if func.doc:
-            attrs.append(('doc', func.doc))
-        self._append_version(func, attrs)
-        self._append_deprecated(func, attrs)
-        self._append_throws(func, attrs)
+    def _write_callable(self, callable, tag_name, extra_attrs):
+        attrs = [('name', callable.name)]
+        attrs.extend(extra_attrs)
+        if callable.doc:
+            attrs.append(('doc', callable.doc))
+        self._append_version(callable, attrs)
+        self._append_deprecated(callable, attrs)
+        self._append_throws(callable, attrs)
         with self.tagcontext(tag_name, attrs):
-            self._write_attributes(func)
-            self._write_return_type(func.retval)
-            self._write_parameters(func.parameters)
+            self._write_attributes(callable)
+            self._write_return_type(callable.retval)
+            self._write_parameters(callable.parameters)
+
+    def _write_function(self, func, tag_name='function'):
+        attrs = [('c:identifier', func.symbol)]
+        self._write_callable(func, tag_name, attrs)
 
     def _write_method(self, method):
         self._write_function(method, tag_name='method')
@@ -354,6 +358,8 @@ and/or use gtk-doc annotations. ''')
                     self._write_constructor(method)
                 for method in node.static_methods:
                     self._write_static_method(method)
+            for vfunc in node.virtual_methods:
+                self._write_vfunc(vfunc)
             for method in node.methods:
                 self._write_method(method)
             for prop in node.properties:
@@ -395,18 +401,15 @@ and/or use gtk-doc annotations. ''')
             self._write_attributes(prop)
             self._write_type(prop.type)
 
+    def _write_vfunc(self, vf):
+        attrs = []
+        if vf.invoker:
+            attrs.append(('invoker', vf.invoker))
+        self._write_callable(vf, 'virtual-method', attrs)
+
     def _write_callback(self, callback):
-        # FIXME: reuse _write_function
-        attrs = [('name', callback.name), ('c:type', callback.ctype)]
-        if callback.doc:
-            attrs.append(('doc', callback.doc))
-        self._append_version(callback, attrs)
-        self._append_deprecated(callback, attrs)
-        self._append_throws(callback, attrs)
-        with self.tagcontext('callback', attrs):
-            self._write_attributes(callback)
-            self._write_return_type(callback.retval)
-            self._write_parameters(callback.parameters)
+        attrs = [('c:type', callback.ctype)]
+        self._write_callable(callback, 'callback', attrs)
 
     def _boxed_attrs(self, boxed):
         return [('glib:type-name', boxed.type_name),

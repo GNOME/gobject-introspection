@@ -41,6 +41,7 @@ from .glibast import GLibBoxed
 _COMMENT_HEADER = '*\n '
 
 # Tags - annotations applyed to comment blocks
+TAG_VFUNC = 'virtual'
 TAG_SINCE = 'since'
 TAG_DEPRECATED = 'deprecated'
 TAG_RETURNS = 'returns'
@@ -298,8 +299,9 @@ class AnnotationApplier(object):
         block = self._blocks.get(class_.type_name)
         self._parse_node_common(class_, block)
         self._parse_constructors(class_.constructors)
-        self._parse_methods(class_.methods)
-        self._parse_methods(class_.static_methods)
+        self._parse_methods(class_, class_.methods)
+        self._parse_vfuncs(class_, class_.virtual_methods)
+        self._parse_methods(class_, class_.static_methods)
         self._parse_properties(class_, class_.properties)
         self._parse_signals(class_, class_.signals)
         self._parse_fields(class_, class_.fields)
@@ -309,7 +311,8 @@ class AnnotationApplier(object):
     def _parse_interface(self, interface):
         block = self._blocks.get(interface.type_name)
         self._parse_node_common(interface, block)
-        self._parse_methods(interface.methods)
+        self._parse_methods(interface, interface.methods)
+        self._parse_vfuncs(interface, interface.virtual_methods)
         self._parse_properties(interface, interface.properties)
         self._parse_signals(interface, interface.signals)
         self._parse_fields(interface, interface.fields)
@@ -320,7 +323,7 @@ class AnnotationApplier(object):
         block = self._blocks.get(record.symbol)
         self._parse_node_common(record, block)
         self._parse_constructors(record.constructors)
-        self._parse_methods(record.methods)
+        self._parse_methods(record, record.methods)
         self._parse_fields(record, record.fields)
         if block:
             record.doc = block.comment
@@ -329,7 +332,7 @@ class AnnotationApplier(object):
         block = self._blocks.get(boxed.name)
         self._parse_node_common(boxed, block)
         self._parse_constructors(boxed.constructors)
-        self._parse_methods(boxed.methods)
+        self._parse_methods(boxed, boxed.methods)
         if block:
             boxed.doc = block.comment
 
@@ -338,7 +341,7 @@ class AnnotationApplier(object):
         self._parse_node_common(union, block)
         self._parse_fields(union, union.fields)
         self._parse_constructors(union.constructors)
-        self._parse_methods(union.methods)
+        self._parse_methods(union, union.methods)
         if block:
             union.doc = block.comment
 
@@ -370,9 +373,13 @@ class AnnotationApplier(object):
         for prop in properties:
             self._parse_property(parent, prop)
 
-    def _parse_methods(self, methods):
+    def _parse_methods(self, parent, methods):
         for method in methods:
-            self._parse_function(method)
+            self._parse_method(parent, method)
+
+    def _parse_vfuncs(self, parent, vfuncs):
+        for vfunc in vfuncs:
+            self._parse_vfunc(parent, vfunc)
 
     def _parse_signals(self, parent, signals):
         for signal in signals:
@@ -392,18 +399,20 @@ class AnnotationApplier(object):
         if block:
             callback.doc = block.comment
 
+    def _parse_callable(self, callable, block):
+        self._parse_node_common(callable, block)
+        self._parse_params(callable, callable.parameters, block)
+        self._parse_return(callable, callable.retval, block)
+        if block:
+            callable.doc = block.comment
+
     def _parse_function(self, func):
         block = self._blocks.get(func.symbol)
-        self._parse_node_common(func, block)
-        self._parse_params(func, func.parameters, block)
-        self._parse_return(func, func.retval, block)
-        if block:
-            func.doc = block.comment
+        self._parse_callable(func, block)
 
     def _parse_signal(self, parent, signal):
         block = self._blocks.get('%s::%s' % (parent.type_name, signal.name))
         self._parse_node_common(signal, block)
-        self._parse_deprecated(signal, block)
         # We're only attempting to name the signal parameters if
         # the number of parameter tags (@foo) is the same or greater
         # than the number of signal parameters
@@ -425,6 +434,26 @@ class AnnotationApplier(object):
         self._parse_return(signal, signal.retval, block)
         if block:
             signal.doc = block.comment
+
+    def _parse_method(self, parent, meth):
+        block = self._blocks.get(meth.symbol)
+        self._parse_function(meth)
+        virtual = self._get_tag(block, TAG_VFUNC)
+        if virtual:
+            invoker_name = virtual.value
+            matched = False
+            for vfunc in parent.virtual_methods:
+                if vfunc.name == invoker_name:
+                    matched = True
+                    vfunc.invoker = meth.name
+                    break
+            if not matched:
+                print "warning: unmatched virtual invoker %r for method %r" % \
+                    (invoker_name, meth.symbol)
+
+    def _parse_vfunc(self, parent, vfunc):
+        key = '%s::%s' % (parent.type_name, vfunc.name)
+        self._parse_callable(vfunc, self._blocks.get(key))
 
     def _parse_field(self, parent, field):
         if isinstance(field, Callback):

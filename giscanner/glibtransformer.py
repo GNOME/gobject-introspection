@@ -27,12 +27,13 @@ import subprocess
 
 from .ast import (Alias, Bitfield, Callback, Constant, Enum, Function, Member,
                   Namespace, Parameter, Property, Record, Return, Type, Union,
-                  Field, type_name_from_ctype,
+                  Field, VFunction, type_name_from_ctype,
                   default_array_types, TYPE_UINT8, PARAM_TRANSFER_FULL)
 from .transformer import Names
 from .glibast import (GLibBoxed, GLibEnum, GLibEnumMember, GLibFlags,
                       GLibInterface, GLibObject, GLibSignal, GLibBoxedStruct,
-                      GLibBoxedUnion, GLibBoxedOther, GLibRecord, type_names)
+                      GLibBoxedUnion, GLibBoxedOther, GLibRecord,
+                      type_names)
 from .utils import to_underscores, to_underscores_noprefix
 
 default_array_types['guchar*'] = TYPE_UINT8
@@ -159,6 +160,10 @@ class GLibTransformer(object):
             except KeyError, e:
                 print "WARNING: DELETING node %s: %s" % (node.name, e)
                 self._remove_attribute(node.name)
+        # Another pass, since we need to have the methods parsed
+        # in order to correctly modify them after class/record
+        # pairing
+        for (ns, node) in nodes:
             # associate GtkButtonClass with GtkButton
             if isinstance(node, Record):
                 self._pair_class_record(node)
@@ -167,7 +172,9 @@ class GLibTransformer(object):
         self._resolve_quarks()
         # Fourth pass: ensure all types are known
         if not self._noclosure:
-            self._validate(nodes)
+            self._resolve_types(nodes)
+
+        self._validate(nodes)
 
         # Create a new namespace with what we found
         namespace = Namespace(self._namespace_name, self._namespace_version)
@@ -573,10 +580,43 @@ class GLibTransformer(object):
         for field in maybe_class.fields:
             if isinstance(field, Field):
                 field.writable = False
-        # TODO: remove this, we should be computing vfuncs instead
-        if isinstance(pair_class, GLibInterface):
-            for field in maybe_class.fields[1:]:
-                pair_class.fields.append(field)
+
+        # Loop through fields to determine which are virtual
+        # functions and which are signal slots by
+        # assuming everything that doesn't share a name
+        # with a known signal is a virtual slot.
+        for field in maybe_class.fields:
+            if not isinstance(field, Callback):
+                continue
+            # Check the first parameter is the object
+            if len(field.parameters) == 0:
+                continue
+            firstparam_type = field.parameters[0].type
+            if firstparam_type != pair_class:
+                continue
+            # Also double check we don't have a signal with this
+            # name.
+            matched_signal = False
+            for signal in pair_class.signals:
+                if signal.name.replace('-', '_') == field.name:
+                    matched_signal = True
+                    break
+            if matched_signal:
+                continue
+            vfunc = VFunction.from_callback(field)
+            pair_class.virtual_methods.append(vfunc)
+
+        # Take the set of virtual methods we found, and try
+        # to pair up with any matching methods using the
+        # name+signature.
+        for vfunc in pair_class.virtual_methods:
+            for method in pair_class.methods:
+                if (method.name != vfunc.name or
+                    method.retval != vfunc.retval or
+                    method.parameters != vfunc.parameters):
+                    continue
+                vfunc.invoker = method.name
+
         gclass_struct = GLibRecord.from_record(class_struct)
         self._remove_attribute(class_struct.name)
         self._add_attribute(gclass_struct, True)
@@ -903,9 +943,7 @@ class GLibTransformer(object):
     def _resolve_alias(self, alias):
         alias.target = self._resolve_type_name(alias.target, alias.target)
 
-    # Validation
-
-    def _validate(self, nodes):
+    def _resolve_types(self, nodes):
         nodes = list(self._names.names.itervalues())
         i = 0
         self._validating = True
@@ -925,3 +963,18 @@ class GLibTransformer(object):
             i += 1
             self._print_statistics()
         self._validating = False
+
+    # Validation
+
+    def _validate_interface(self, iface):
+        for vfunc in iface.virtual_methods:
+            if not vfunc.invoker:
+                print ("warning: Interface %r virtual function %r " + \
+                    "has no known invoker") % (iface.name, vfunc.name)
+
+    # This function is called at the very end, before we hand back the
+    # completed namespace to the writer.  Add static analysis checks here.
+    def _validate(self, nodes):
+        for (name, node) in nodes:
+            if isinstance(node, GLibInterface):
+                self._validate_interface(node)

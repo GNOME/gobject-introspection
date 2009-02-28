@@ -73,5 +73,53 @@ main(int argc, char **argv)
   info = g_irepository_find_by_name (repo, "Gio", "ThisDoesNotExist");
   g_assert (info == NULL);
 
+  /* vfunc tests */
+  {
+    GIVFuncInfo *vfunc;
+    GIFunctionInfo *invoker;
+
+    /* Test vfunc with invoker on interface */
+    info = g_irepository_find_by_name (repo, "Gio", "File");
+    g_assert (info != NULL);
+
+    vfunc = g_interface_info_find_vfunc ((GIInterfaceInfo*)info, "read_async");
+    g_assert (vfunc != NULL);
+
+    invoker = g_vfunc_info_get_invoker (vfunc);
+    g_assert (invoker != NULL);
+
+    g_assert (strcmp (g_base_info_get_name ((GIBaseInfo*)invoker), "read_async") == 0);
+
+    /* Test vfunc with no known invoker on object */
+    info = g_irepository_find_by_name (repo, "GObject", "Object");
+    g_assert (info != NULL);
+
+    vfunc = g_object_info_find_vfunc ((GIObjectInfo*)info, "dispose");
+    g_assert (vfunc != NULL);
+
+    /* Ok, maybe we should mark g_object_run_dispose as the invoker for
+     * dispose, but...eh.  It's pretty special however you cut it.
+     */
+    invoker = g_vfunc_info_get_invoker (vfunc);
+    g_assert (invoker == NULL);
+
+    /* Test vfunc with invoker on object */
+    info = g_irepository_find_by_name (repo, "Gio", "AppLaunchContext");
+    g_assert (info != NULL);
+
+    vfunc = g_object_info_find_vfunc ((GIObjectInfo*)info, "get_display");
+    g_assert (vfunc != NULL);
+
+    invoker = g_vfunc_info_get_invoker (vfunc);
+    g_assert (invoker != NULL);
+    g_assert (strcmp (g_base_info_get_name ((GIBaseInfo*)invoker), "get_display") == 0);
+
+    /* And let's be sure we can find the method directly */
+
+    invoker = g_object_info_find_method ((GIObjectInfo*)info, "get_display");
+    g_assert (invoker != NULL);
+    g_assert (strcmp (g_base_info_get_name ((GIBaseInfo*)invoker), "get_display") == 0);
+  }
+
   exit(0);
 }

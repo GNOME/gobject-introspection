@@ -232,16 +232,26 @@ and/or use gtk-doc annotations.  -->
                glib:type-name="FooInterface"
                glib:get-type="foo_interface_get_type"
                glib:type-struct="InterfaceIface">
-      <callback name="do_foo" c:type="do_foo">
+      <virtual-method name="do_foo" invoker="do_foo">
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
-          <parameter name="self" transfer-ownership="none">
-            <type name="Interface" c:type="FooInterface*"/>
+          <parameter name="x" transfer-ownership="none">
+            <type name="int" c:type="int"/>
           </parameter>
         </parameters>
-      </callback>
+      </virtual-method>
+      <method name="do_foo" c:identifier="foo_interface_do_foo">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <parameter name="x" transfer-ownership="none">
+            <type name="int" c:type="int"/>
+          </parameter>
+        </parameters>
+      </method>
     </interface>
     <record name="InterfaceIface"
             c:type="FooInterfaceIface"
@@ -256,6 +266,9 @@ and/or use gtk-doc annotations.  -->
         <parameters>
           <parameter name="self" transfer-ownership="none">
             <type name="Interface" c:type="FooInterface*"/>
+          </parameter>
+          <parameter name="x" transfer-ownership="none">
+            <type name="int" c:type="int"/>
           </parameter>
         </parameters>
       </callback>
@@ -277,6 +290,29 @@ and/or use gtk-doc annotations.  -->
           <type name="int" c:type="int"/>
         </return-value>
       </function>
+      <virtual-method name="virtual_method" invoker="virtual_method">
+        <return-value transfer-ownership="none">
+          <type name="boolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <parameter name="first_param" transfer-ownership="none">
+            <type name="int" c:type="int"/>
+          </parameter>
+        </parameters>
+      </virtual-method>
+      <virtual-method name="read_fn" invoker="read">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <parameter name="offset" transfer-ownership="none">
+            <type name="int" c:type="int"/>
+          </parameter>
+          <parameter name="length" transfer-ownership="none">
+            <type name="int" c:type="int"/>
+          </parameter>
+        </parameters>
+      </virtual-method>
       <method name="external_type" c:identifier="foo_object_external_type">
         <return-value transfer-ownership="full">
           <type name="utility.Object" c:type="UtilityObject*"/>
@@ -359,6 +395,31 @@ and/or use gtk-doc annotations.  -->
           </parameter>
         </parameters>
       </method>
+      <method name="virtual_method" c:identifier="foo_object_virtual_method">
+        <return-value transfer-ownership="none">
+          <type name="boolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <parameter name="first_param" transfer-ownership="none">
+            <type name="int" c:type="int"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="read"
+              c:identifier="foo_object_read"
+              doc="Read some stuff.">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <parameter name="offset" transfer-ownership="none">
+            <type name="int" c:type="int"/>
+          </parameter>
+          <parameter name="length" transfer-ownership="none">
+            <type name="int" c:type="int"/>
+          </parameter>
+        </parameters>
+      </method>
       <property name="string" writable="1" construct="1">
         <type name="utf8" c:type="gchararray"/>
       </property>
@@ -397,6 +458,22 @@ and/or use gtk-doc annotations.  -->
             <type name="Object" c:type="FooObject*"/>
           </parameter>
           <parameter name="first_param" transfer-ownership="none">
+            <type name="int" c:type="int"/>
+          </parameter>
+        </parameters>
+      </callback>
+      <callback name="read_fn" c:type="read_fn">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <parameter name="object" transfer-ownership="none">
+            <type name="Object" c:type="FooObject*"/>
+          </parameter>
+          <parameter name="offset" transfer-ownership="none">
+            <type name="int" c:type="int"/>
+          </parameter>
+          <parameter name="length" transfer-ownership="none">
             <type name="int" c:type="int"/>
           </parameter>
         </parameters>
@@ -467,12 +544,29 @@ and/or use gtk-doc annotations.  -->
                glib:get-type="foo_sub_interface_get_type"
                glib:type-struct="SubInterfaceIface">
       <prerequisite name="Interface"/>
+      <virtual-method name="do_bar" invoker="do_bar">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+      </virtual-method>
       <method name="do_bar" c:identifier="foo_sub_interface_do_bar">
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
       </method>
-      <callback name="do_bar" c:type="do_bar">
+      <glib:signal name="destroy-event">
+        <return-value transfer-ownership="full">
+          <type name="none" c:type="void"/>
+        </return-value>
+      </glib:signal>
+    </interface>
+    <record name="SubInterfaceIface"
+            c:type="FooSubInterfaceIface"
+            glib:is-gtype-struct-for="SubInterface">
+      <field name="parent_iface">
+        <type name="GObject.TypeInterface" c:type="GTypeInterface"/>
+      </field>
+      <callback name="destroy_event" c:type="destroy_event">
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -482,13 +576,6 @@ and/or use gtk-doc annotations.  -->
           </parameter>
         </parameters>
       </callback>
-    </interface>
-    <record name="SubInterfaceIface"
-            c:type="FooSubInterfaceIface"
-            glib:is-gtype-struct-for="SubInterface">
-      <field name="parent_iface">
-        <type name="GObject.TypeInterface" c:type="GTypeInterface"/>
-      </field>
       <callback name="do_bar" c:type="do_bar">
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>

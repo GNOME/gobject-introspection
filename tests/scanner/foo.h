@@ -48,14 +48,22 @@ struct _FooInterfaceIface
 {
   GTypeInterface parent_iface;
 
-  void (*do_foo) (FooInterface *self);
+  void (*do_foo) (FooInterface *self, int x);
 };
 
 GType                 foo_interface_get_type       (void) G_GNUC_CONST;
 
+void foo_interface_do_foo (FooInterface *iface, int x);
+
 struct _FooSubInterfaceIface
 {
   GTypeInterface parent_iface;
+
+  /* signals */
+
+  void (*destroy_event) (FooSubInterface *self);
+
+  /* virtual table */
 
   void (*do_bar) (FooSubInterface *self);
 };
@@ -76,6 +84,9 @@ struct _FooObjectClass
   GObjectClass parent_class;
 
   gboolean (* virtual_method) (FooObject *object, int first_param);
+
+  /* Intended to match GFile */
+  void (*read_fn) (FooObject *object, int offset, int length);
 };
 
 gint                  foo_init                     (void);
@@ -104,6 +115,10 @@ const char *          foo_object_get_name          (FooObject *object);
 char *                foo_object_dup_name          (FooObject *object);
 
 void                  foo_object_handle_glyph      (FooObject *object, UtilityGlyph glyph);
+
+gboolean              foo_object_virtual_method    (FooObject *object, int first_param);
+
+void                  foo_object_read              (FooObject *object, int offset, int length);
 
 int                   foo_object_static_meth       ();
 
