@@ -50,3 +50,9 @@ release-tag:
 upload-release: $(distdir).tar.gz
 	scp $(distdir).tar.gz gnome.org:
 	ssh gnome.org install-module $(distdir).tar.gz
+
+check-local:
+	@echo "  PEP-8 INQUISITION"
+	@find $(top_srcdir)/giscanner -name \*.py | sort | uniq | xargs $(PYTHON) $(top_srcdir)/misc/pep8.py --repeat
+	@echo "  CHECK Pyflakes"
+	@find $(top_srcdir)/giscanner -name \*.py | sort | uniq | xargs $(PYTHON) $(top_srcdir)/misc/pyflakes.py
