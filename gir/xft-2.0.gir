@@ -6,6 +6,7 @@
     <record name="Color" c:type="XftColor"/>
     <record name="Draw" c:type="XftDraw"/>
     <record name="Font" c:type="XftFont"/>
+    <record name="GlyphSpec" c:type="XftGlyphSpec"/>
 
     <function name="init" c:identifier="XftInit">
       <return-value transfer-ownership="none">
