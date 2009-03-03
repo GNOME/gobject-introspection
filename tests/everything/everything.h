@@ -107,7 +107,6 @@ struct _TestStructA
   gint8 some_int8;
   gdouble some_double;
   TestEnum some_enum;
-  GObject *some_obj;
 };
 
 void test_struct_a_clone (TestStructA *a,
@@ -121,6 +120,13 @@ struct _TestStructB
 
 void test_struct_b_clone (TestStructB *b,
 			  TestStructB *b_out);
+
+/* This one has a non-basic member */
+struct _TestStructC
+{
+  gint another_int;
+  GObject *obj;
+};
 
 /* plain-old-data boxed types */
 typedef struct _TestSimpleBoxedA TestSimpleBoxedA;
