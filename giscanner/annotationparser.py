@@ -71,14 +71,15 @@ class InvalidAnnotationError(Exception):
 
 class DocBlock(object):
 
-    def __init__(self, name):
+    def __init__(self, name, options):
         self.name = name
+        self.options = options
         self.value = None
         self.tags = odict()
         self.comment = None
 
     def __repr__(self):
-        return '<DocBlock %r>' % (self.name, )
+        return '<DocBlock %r %r>' % (self.name, self.options)
 
     def get(self, name):
         if name == TAG_RETURNS:
@@ -148,6 +149,10 @@ class AnnotationParser(object):
         # /**
         #   * symbol:
         #
+        # Or, alternatively, with options:
+        # /**
+        #   * symbol: (name value) ...
+        #
         # symbol is currently one of:
         #  - function: gtk_widget_show
         #  - signal:   GtkWidget::destroy
@@ -165,11 +170,17 @@ class AnnotationParser(object):
         pos = comment.find('\n ')
         if pos == -1:
             return
-        block_name = comment[:pos]
-        block_name = block_name.strip()
-        if not block_name.endswith(':'):
-            return
-        block = DocBlock(block_name[:-1])
+        block_header = comment[:pos]
+        block_header = block_header.strip()
+        cpos = block_header.find(': ')
+        if cpos:
+            block_name = block_header[:cpos]
+            block_options, rest = self._parse_options(block_header[cpos+2:])
+            if rest:
+                return
+        else:
+            block_name, block_options = block_header, {}
+        block = DocBlock(block_name, block_options)
         comment_lines = []
         for line in comment[pos+1:].split('\n'):
             line = line.lstrip()
