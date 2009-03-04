@@ -29,11 +29,11 @@
         </parameter>
       </parameters>
     </callback>
-    <enumeration name="FlagType">
-      <member name="a" value="0"/>
-      <member name="b" value="1"/>
-      <member name="c" value="2"/>
-    </enumeration>
+    <bitfield name="FlagType">
+      <member name="a" value="1"/>
+      <member name="b" value="2"/>
+      <member name="c" value="4"/>
+    </bitfield>
     <class name="Object" parent="GObject.Object" glib:type-struct="ObjectClass" glib:type-name="UtilityObject" glib:get-type="utility_object_get_type">
       <field name="parent_instance">
         <type name="GObject.Object"/>

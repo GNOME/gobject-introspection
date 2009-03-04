@@ -42,11 +42,11 @@ and/or use gtk-doc annotations.  -->
         </parameter>
       </parameters>
     </callback>
-    <enumeration name="FlagType" c:type="UtilityFlagType">
-      <member name="a" value="0" c:identifier="UTILITY_FLAG_A"/>
-      <member name="b" value="1" c:identifier="UTILITY_FLAG_B"/>
-      <member name="c" value="2" c:identifier="UTILITY_FLAG_C"/>
-    </enumeration>
+    <bitfield name="FlagType" c:type="UtilityFlagType">
+      <member name="a" value="1" c:identifier="UTILITY_FLAG_A"/>
+      <member name="b" value="2" c:identifier="UTILITY_FLAG_B"/>
+      <member name="c" value="4" c:identifier="UTILITY_FLAG_C"/>
+    </bitfield>
     <class name="Object"
            c:type="UtilityObject"
            parent="GObject.Object"

@@ -2,6 +2,10 @@
 
 G_DEFINE_TYPE (UtilityObject, utility_object, G_TYPE_OBJECT);
 
+/**
+ * UtilityFlagType: (type bitfield)
+ **/
+
 static void
 utility_object_class_init (UtilityObjectClass *klass)
 {

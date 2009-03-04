@@ -19,4 +19,6 @@
  * @context: (allow-none):
  */
 
- 
+/**
+ * GIOCondition: (type bitfield)
+ **/

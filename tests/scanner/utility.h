@@ -62,9 +62,9 @@ typedef enum
 
 typedef enum
 {
-  UTILITY_FLAG_A,
-  UTILITY_FLAG_B,
-  UTILITY_FLAG_C
+  UTILITY_FLAG_A = 1,
+  UTILITY_FLAG_B = 2,
+  UTILITY_FLAG_C = 4
 } UtilityFlagType;
 
 typedef struct

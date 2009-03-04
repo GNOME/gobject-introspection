@@ -59,6 +59,9 @@ OPT_SCOPE = 'scope'
 OPT_TRANSFER = 'transfer'
 OPT_TYPE = 'type'
 
+# Specific option values
+OPT_VAL_BITFIELD = 'bitfield'
+
 # Array options - array specific annotations
 OPT_ARRAY_FIXED_SIZE = 'fixed-size'
 OPT_ARRAY_LENGTH = 'length'
@@ -344,6 +347,10 @@ class AnnotationApplier(object):
         self._parse_node_common(enum, block)
         if block:
             enum.doc = block.comment
+            type_opt = block.options.get(OPT_TYPE)
+            if type_opt and type_opt.one() == OPT_VAL_BITFIELD:
+                # This is hack, but hey, it works :-)
+                enum.__class__ = Bitfield
 
     def _parse_bitfield(self, bitfield):
         block = self._blocks.get(bitfield.symbol)
