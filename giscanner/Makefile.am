@@ -31,7 +31,7 @@ libgiscanner_la_CFLAGS = $(GOBJECT_CFLAGS)
 GCOVSOURCES = $(libgiscanner_la_SOURCES)
 
 # Python module
-pkgpyexecdir = $(pyexecdir)/giscanner
+pkgpyexecdir = $(pkglibdir)/giscanner
 pkgpyexec_LTLIBRARIES = _giscanner.la
 pkgpyexec_PYTHON = 		\
 	__init__.py		\
@@ -47,6 +47,7 @@ pkgpyexec_PYTHON = 		\
 	libtoolimporter.py	\
 	minixpath.py		\
 	odict.py		\
+	scannermain.py		\
 	sourcescanner.py	\
 	transformer.py		\
 	utils.py		\

@@ -2,6 +2,7 @@
 # -*- Mode: Python -*-
 # GObject-Introspection - a framework for introspecting GObject libraries
 # Copyright (C) 2008  Johan Dahlin
+# Copyright (C) 2009 Red Hat, Inc.
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -23,23 +24,6 @@ import subprocess
 import optparse
 import os
 import sys
-
-# This only works on unix systems
-currentdir = os.path.dirname(os.path.abspath(sys.argv[0]))
-basedir = os.path.abspath(os.path.join(currentdir, '..'))
-if (os.path.exists(os.path.join(basedir, '.svn')) or
-    os.path.exists(os.path.join(basedir, '.git'))):
-    path = basedir
-else:
-    libdir = 'lib'
-    for p in sys.path:
-	if 'lib64' in p:
-	    libdir = 'lib64'
-	    break
-
-    path = os.path.join(basedir, libdir, 'python%d.%d' % sys.version_info[:2],
-                        'site-packages')
-sys.path.insert(0, path)
 
 from giscanner.annotationparser import AnnotationParser, InvalidAnnotationError
 from giscanner.ast import Include
@@ -110,7 +94,7 @@ def _get_option_parser():
                       help="Inject additional components into GIR XML")
     parser.add_option("", "--xpath-assertions",
                       action="store", dest="xpath_assertions",
-                      help="Use given file to create assertions on GIR content")
+            help="Use given file to create assertions on GIR content")
     parser.add_option("", "--c-include",
                       action="append", dest="c_includes", default=[],
                       help="headers which should be included in C programs")
@@ -194,14 +178,14 @@ def validate(assertions, path):
         xpath_assert(root, assertion)
     f.close()
     return 0
-    
+
 def process_options(output, allowed_flags):
     for option in output.split():
         for flag in allowed_flags:
             if not option.startswith(flag):
                 continue
             yield option
-            break    
+            break
 
 def process_packages(parser, options, packages):
     args = ['pkg-config', '--cflags']
@@ -214,7 +198,7 @@ def process_packages(parser, options, packages):
         sys.exit(1)
     # Some pkg-config files on Windows have options we don't understand,
     # so we explicitly filter to only the ones we need.
-    options_whitelist = ['-I', '-D', '-U', '-l', '-L']        
+    options_whitelist = ['-I', '-D', '-U', '-l', '-L']
     filtered_output = list(process_options(output, options_whitelist))
     pkg_options, unused = parser.parse_args(filtered_output)
     options.cpp_includes.extend(pkg_options.cpp_includes)
@@ -229,9 +213,9 @@ def process_packages(parser, options, packages):
         sys.exit(1)
     filtered_output = list(process_options(output, options_whitelist))
     pkg_options, unused = parser.parse_args(filtered_output)
-    options.library_paths.extend(pkg_options.library_paths)	
+    options.library_paths.extend(pkg_options.library_paths)
 
-def main(args):
+def scanner_main(args):
     parser = _get_option_parser()
     (options, args) = parser.parse_args(args)
 
@@ -285,8 +269,8 @@ def main(args):
             # Make absolute, because we do comparisons inside scannerparser.c
             # against the absolute path that cpp will give us
             filenames.append(os.path.abspath(arg))
-            
-    cachestore = CacheStore()            
+
+    cachestore = CacheStore()
     transformer = Transformer(cachestore,
                               options.namespace_name,
                               options.namespace_version)
@@ -301,7 +285,7 @@ def main(args):
             raise ValueError("Invalid include path %r" % (include, ))
         include_obj = Include.from_string(include)
         transformer.register_include(include_obj)
-        
+
     packages = set(options.packages)
     packages.update(transformer.get_pkgconfig_packages())
     process_packages(parser, options, packages)
@@ -333,7 +317,7 @@ def main(args):
         binary = IntrospectionBinary(args)
     else:
         binary = compile_introspection_binary(options,
-                                              glibtransformer.get_get_type_functions())
+                            glibtransformer.get_get_type_functions())
 
     glibtransformer.set_introspection_binary(binary)
 
@@ -356,5 +340,3 @@ def main(args):
         print data
 
     return 0
-
-sys.exit(main(sys.argv))

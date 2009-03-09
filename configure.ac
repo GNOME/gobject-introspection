@@ -212,4 +212,5 @@ examples/Makefile
 docs/Makefile
 docs/reference/Makefile
 gobject-introspection-1.0.pc])
+AC_CONFIG_FILES([tools/g-ir-scanner], [chmod a+x tools/g-ir-scanner])
 AC_OUTPUT
