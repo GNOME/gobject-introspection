@@ -534,13 +534,20 @@ class Transformer(object):
         return self._create_compound(Union, symbol, anonymous)
 
     def _create_callback(self, symbol):
-        parameters = self._create_parameters(symbol.base_type.base_type)
+        parameters = list(self._create_parameters(symbol.base_type.base_type))
         retval = self._create_return(symbol.base_type.base_type.base_type)
+
+        # Mark the 'user_data' arguments
+        for i, param in enumerate(parameters):
+            if (param.type.name == 'any' and
+                param.name == 'user_data'):
+                param.closure_index = i
+
         if symbol.ident.find('_') > 0:
             name = self.remove_prefix(symbol.ident, True)
         else:
             name = self.remove_prefix(symbol.ident)
-        callback = Callback(name, retval, list(parameters), symbol.ident)
+        callback = Callback(name, retval, parameters, symbol.ident)
 
         return callback
 

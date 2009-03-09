@@ -28,7 +28,7 @@
         <parameter name="item" transfer-ownership="none">
           <type name="utf8"/>
         </parameter>
-        <parameter name="user_data" transfer-ownership="none">
+        <parameter name="user_data" transfer-ownership="none" closure="2">
           <type name="any"/>
         </parameter>
       </parameters>

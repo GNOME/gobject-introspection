@@ -34,7 +34,7 @@ and/or use gtk-doc annotations.  -->
         <parameter name="item" transfer-ownership="none">
           <type name="utf8" c:type="char*"/>
         </parameter>
-        <parameter name="user_data" transfer-ownership="none">
+        <parameter name="user_data" transfer-ownership="none" closure="2">
           <type name="any" c:type="gpointer"/>
         </parameter>
       </parameters>
