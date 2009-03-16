@@ -341,6 +341,24 @@ GType foo_error_get_type (void);
 
 GQuark foo_error_quark (void);
 
+typedef enum
+{
+  FOO_LAYER_DESKTOP        = 0,
+  FOO_LAYER_BOTTOM        = 1,
+  FOO_LAYER_NORMAL        = 2,
+  FOO_LAYER_TOP        = 4, /* Same as DOCK; see EWMH and bug 330717 */
+  FOO_LAYER_DOCK        = 4,
+  FOO_LAYER_FULLSCREEN        = 5,
+  FOO_LAYER_FOCUSED_WINDOW    = 6,
+  FOO_LAYER_OVERRIDE_REDIRECT = 7,
+  FOO_LAYER_LAST        = 8
+} FooStackLayer;
+
+typedef enum
+{
+  FOO_SOME_SINGLE_ENUM
+} FooASingle;
+
 /* Should be skipped */
 void foo_some_variant (guint x, va_list args);
 void foo_some_variant_ptr (guint x, va_list *args);

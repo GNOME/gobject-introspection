@@ -57,14 +57,3 @@ def extract_libtool(libname):
     #        and pre-2.2. Johan 2008-10-21
     libname = libname.replace('.libs/.libs', '.libs')
     return libname
-
-
-def strip_common_prefix(first, second):
-    max_index = second.rfind('_')
-    second_len = len(second)
-    second = second.replace('_', '')
-    max_index -= second_len - len(second) - 1
-    for i, c in enumerate(first.upper()):
-        if i >= len(second) or c != second[i] or i == max_index:
-            return second[i:]
-    return second[i + 1:]

@@ -15,6 +15,11 @@ and/or use gtk-doc annotations.  -->
     <alias name="List" target="GLib.SList" c:type="FooList"/>
     <alias name="ObjectCookie" target="any" c:type="FooObjectCookie"/>
     <alias name="XEvent" target="none" c:type="FooXEvent"/>
+    <enumeration name="ASingle" c:type="FooASingle">
+      <member name="some_single_enum"
+              value="0"
+              c:identifier="FOO_SOME_SINGLE_ENUM"/>
+    </enumeration>
     <record name="BRect"
             c:type="FooBRect"
             glib:type-name="FooBRect"
@@ -536,6 +541,21 @@ uses a C sugar return type.">
     <constant name="SUCCESS_INT" value="4408">
       <type name="int"/>
     </constant>
+    <enumeration name="StackLayer" c:type="FooStackLayer">
+      <member name="desktop" value="0" c:identifier="FOO_LAYER_DESKTOP"/>
+      <member name="bottom" value="1" c:identifier="FOO_LAYER_BOTTOM"/>
+      <member name="normal" value="2" c:identifier="FOO_LAYER_NORMAL"/>
+      <member name="top" value="4" c:identifier="FOO_LAYER_TOP"/>
+      <member name="dock" value="4" c:identifier="FOO_LAYER_DOCK"/>
+      <member name="fullscreen" value="5" c:identifier="FOO_LAYER_FULLSCREEN"/>
+      <member name="focused_window"
+              value="6"
+              c:identifier="FOO_LAYER_FOCUSED_WINDOW"/>
+      <member name="override_redirect"
+              value="7"
+              c:identifier="FOO_LAYER_OVERRIDE_REDIRECT"/>
+      <member name="last" value="8" c:identifier="FOO_LAYER_LAST"/>
+    </enumeration>
     <record name="Struct" c:type="FooStruct">
       <field name="priv" writable="1">
         <type name="StructPrivate" c:type="FooStructPrivate*"/>

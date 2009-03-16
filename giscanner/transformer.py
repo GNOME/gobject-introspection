@@ -37,7 +37,7 @@ from .sourcescanner import (
     CSYMBOL_TYPE_ENUM, CSYMBOL_TYPE_UNION, CSYMBOL_TYPE_OBJECT,
     CSYMBOL_TYPE_MEMBER, CSYMBOL_TYPE_ELLIPSIS, CSYMBOL_TYPE_CONST,
     TYPE_QUALIFIER_CONST)
-from .utils import strip_common_prefix, to_underscores
+from .utils import to_underscores
 
 _xdg_data_dirs = [x for x in os.environ.get('XDG_DATA_DIRS', '').split(':') \
                       + [DATADIR, '/usr/share'] if x]
@@ -208,11 +208,46 @@ class Transformer(object):
             raise NotImplementedError(
                 'Transformer: unhandled symbol: %r' % (symbol, ))
 
+    def _enum_common_prefix(self, symbol):
+        def common_prefix(a, b):
+            alen = len(a)
+            blen = len(b)
+            l = min(alen, blen)
+            for i in xrange(l):
+                if a[i] != b[i]:
+                    return a[:i]
+            if alen > blen:
+                return b
+            return a
+        # Nothing less than 2 has a common prefix
+        if len(list(symbol.base_type.child_list)) < 2:
+            return None
+        prefix = None
+        for child in symbol.base_type.child_list:
+            if prefix is None:
+                prefix = child.ident
+            else:
+                prefix = common_prefix(prefix, child.ident)
+                if prefix == '':
+                    return None
+        return prefix
+
     def _create_enum(self, symbol):
+        prefix = self._enum_common_prefix(symbol)
+        if prefix:
+            prefixlen = len(prefix)
+        else:
+            prefixlen = 0
         members = []
         for child in symbol.base_type.child_list:
-            name = strip_common_prefix(symbol.ident, child.ident).lower()
-            members.append(Member(name,
+            if prefixlen > 0:
+                name = child.ident[prefixlen:]
+            else:
+                # Ok, the enum members don't have a consistent prefix
+                # among them, so let's just remove the global namespace
+                # prefix.
+                name = self.remove_prefix(child.ident)
+            members.append(Member(name.lower(),
                                   child.const_int,
                                   child.ident))
 

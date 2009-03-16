@@ -640,7 +640,10 @@ class GLibTransformer(object):
     def _introspect_enum(self, node):
         members = []
         for member in node.findall('member'):
-            members.append(GLibEnumMember(member.attrib['nick'],
+            # Keep the name closer to what we'd take from C by default;
+            # see http://bugzilla.gnome.org/show_bug.cgi?id=575613
+            name = member.attrib['nick'].replace('-', '_')
+            members.append(GLibEnumMember(name,
                                           member.attrib['value'],
                                           member.attrib['name'],
                                           member.attrib['nick']))

@@ -7,6 +7,9 @@
   <include name="GObject" version="2.0"/>
   <include name="GLib" version="2.0"/>
   <namespace name="foo" version="1.0" shared-library="foo">
+    <enumeration name="ASingle">
+      <member name="some_single_enum" value="0"/>
+    </enumeration>
     <record name="BRect" glib:type-name="FooBRect" glib:get-type="foo_brect_get_type">
       <field name="x" writable="1">
         <type name="double"/>
@@ -398,6 +401,17 @@
     <constant name="SUCCESS_INT" value="4408">
       <type name="int"/>
     </constant>
+    <enumeration name="StackLayer">
+      <member name="desktop" value="0"/>
+      <member name="bottom" value="1"/>
+      <member name="normal" value="2"/>
+      <member name="top" value="4"/>
+      <member name="dock" value="4"/>
+      <member name="fullscreen" value="5"/>
+      <member name="focused_window" value="6"/>
+      <member name="override_redirect" value="7"/>
+      <member name="last" value="8"/>
+    </enumeration>
     <record name="Struct">
       <field name="priv" writable="1">
         <type name="StructPrivate"/>
