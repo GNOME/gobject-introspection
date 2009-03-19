@@ -513,6 +513,41 @@ annotation_object_do_not_use (AnnotationObject *object)
 }
 
 /**
+ * annotation_object_watch:
+ * @object: A #AnnotationObject
+ * @func: The callback
+ * @user_data: The callback data
+ *
+ * This is here just for the sake of being overriden by its
+ * annotation_object_watch_full().
+ */
+void
+annotation_object_watch (AnnotationObject *object,
+                         AnnotationForeachFunc func,
+                         gpointer user_data)
+{
+}
+
+/**
+ * annotation_object_watch_full:
+ * @object: A #AnnotationObject
+ * @func: The callback
+ * @user_data: The callback data
+ * @destroy: Destroy notification
+ *
+ * Test overriding via the "Rename To" annotation.
+ *
+ * Rename to: annotation_object_watch
+ */
+void
+annotation_object_watch_full (AnnotationObject *object,
+                              AnnotationForeachFunc func,
+                              gpointer user_data,
+                              GDestroyNotify destroy)
+{
+}
+
+/**
  * annotation_init:
  * @argc: (inout): The number of args. 
  * @argv: (inout) (array length=argc): The arguments.

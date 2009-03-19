@@ -324,6 +324,22 @@
           <type name="GObject.Object"/>
         </return-value>
       </method>
+      <method name="watch" c:identifier="annotation_object_watch_full">
+        <return-value transfer-ownership="none">
+          <type name="none"/>
+        </return-value>
+        <parameters>
+          <parameter name="func" transfer-ownership="none" closure="2" destroy="3">
+            <type name="ForeachFunc"/>
+          </parameter>
+          <parameter name="user_data" transfer-ownership="none">
+            <type name="any"/>
+          </parameter>
+          <parameter name="destroy" transfer-ownership="none">
+            <type name="GLib.DestroyNotify"/>
+          </parameter>
+        </parameters>
+      </method>
       <method name="extra_annos" c:identifier="annotation_object_extra_annos">
         <attribute name="org.foobar" value="testvalue"/>
         <return-value transfer-ownership="none">

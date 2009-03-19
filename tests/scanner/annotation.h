@@ -105,6 +105,13 @@ void     annotation_object_set_data3    (AnnotationObject *object,
                                          gsize             length);
 
 GObject* annotation_object_do_not_use   (AnnotationObject *object);
+void     annotation_object_watch        (AnnotationObject *object,
+                                         AnnotationForeachFunc func,
+                                         gpointer user_data);
+void     annotation_object_watch_full   (AnnotationObject *object,
+                                         AnnotationForeachFunc func,
+                                         gpointer user_data,
+                                         GDestroyNotify destroy);
 
 void     annotation_init                (int              *argc, 
 					 char           ***argv);

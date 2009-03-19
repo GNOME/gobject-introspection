@@ -47,6 +47,7 @@ TAG_DEPRECATED = 'deprecated'
 TAG_RETURNS = 'returns'
 TAG_RETURNS_ALT = 'return value'
 TAG_ATTRIBUTES = 'attributes'
+TAG_RENAME_TO = 'rename to'
 
 # Options - annotations for parameters and return values
 OPT_ALLOW_NONE = 'allow-none'
@@ -103,6 +104,8 @@ class DocTag(object):
         self.options = {}
         self.comment = None
 
+    def __repr__(self):
+        return '<DocTag %r %r>' % (self.name, self.options)
 
 class Option(object):
 
@@ -270,8 +273,10 @@ class AnnotationApplier(object):
         return block.get(tag_name)
 
     def parse(self, namespace):
-        for node in namespace.nodes:
+        self._namespace = namespace
+        for node in namespace.nodes[:]:
             self._parse_node(node)
+        del self._namespace
 
     # Boring parsing boilerplate.
 
@@ -409,6 +414,7 @@ class AnnotationApplier(object):
     def _parse_function(self, func):
         block = self._blocks.get(func.symbol)
         self._parse_callable(func, block)
+        self._parse_rename_to_func(func, block)
 
     def _parse_signal(self, parent, signal):
         block = self._blocks.get('%s::%s' % (parent.type_name, signal.name))
@@ -645,6 +651,24 @@ class AnnotationApplier(object):
             return
         for key, value in annos_tag.options.iteritems():
             node.attributes.append((key, value.one()))
+
+    def _parse_rename_to_func(self, node, block):
+        rename_to_tag = self._get_tag(block, TAG_RENAME_TO)
+        if rename_to_tag is None:
+            return
+        new_name = rename_to_tag.value
+
+        shadowed = []
+
+        def shadowed_filter(n):
+            if isinstance(n, Function) and n.symbol == new_name:
+                shadowed.append(n)
+                return False
+            return True
+
+        self._namespace.remove_matching(shadowed_filter)
+        assert len(shadowed) == 1
+        node.name = shadowed[0].name
 
     def _guess_direction(self, node):
         if node.direction:

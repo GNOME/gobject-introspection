@@ -158,6 +158,8 @@ class Node(object):
     def __repr__(self):
         return '%s(%r)' % (self.__class__.__name__, self.name)
 
+    def remove_matching_children(self, pred):
+        pass
 
 class Namespace(Node):
 
@@ -170,6 +172,13 @@ class Namespace(Node):
         return '%s(%r, %r, %r)' % (self.__class__.__name__, self.name,
                                    self.version, self.nodes)
 
+    def remove_matching(self, pred):
+
+        def recursive_pred(node):
+            node.remove_matching_children(pred)
+            return pred(node)
+
+        self.nodes = filter(recursive_pred, self.nodes)
 
 class Include(Node):
 
@@ -384,6 +393,11 @@ class Record(Node):
         self.doc = None
         self.methods = []
 
+    def remove_matching_children(self, pred):
+        self.fields = filter(pred, self.fields)
+        self.constructors = filter(pred, self.constructors)
+        self.methods = filter(pred, self.methods)
+
 # BW compat, remove
 Struct = Record
 
@@ -432,6 +446,12 @@ class Class(Node):
         self.properties = []
         self.fields = []
         self.doc = None
+
+    def remove_matching_children(self, pred):
+        self.methods = filter(pred, self.methods)
+        self.constructors = filter(pred, self.constructors)
+        self.properties = filter(pred, self.properties)
+        self.fields = filter(pred, self.fields)
 
     def __repr__(self):
         return '%s(%r, %r, %r)' % (
