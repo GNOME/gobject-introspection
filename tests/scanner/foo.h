@@ -120,7 +120,7 @@ gboolean              foo_object_virtual_method    (FooObject *object, int first
 
 void                  foo_object_read              (FooObject *object, int offset, int length);
 
-int                   foo_object_static_meth       ();
+int                   foo_object_static_meth       (void);
 
 struct _FooSubobject
 {
@@ -133,9 +133,9 @@ struct _FooSubobjectClass
 };
 
 GType                 foo_subobject_get_type       (void) G_GNUC_CONST;
-FooSubobject*         foo_subobject_new            ();
+FooSubobject*         foo_subobject_new            (void);
 
-FooObject *           foo_object_get_default       ();
+FooObject *           foo_object_get_default       (void);
 
 GType                 foo_buffer_get_type          (void);
 

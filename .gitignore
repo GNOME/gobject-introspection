@@ -103,3 +103,4 @@ tests/scanner/utility-1.0.typelib
 tests/extended.gir.test
 tools/g-ir-compiler
 tools/g-ir-generate
+tools/g-ir-scanner

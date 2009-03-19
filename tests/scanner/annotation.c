@@ -618,6 +618,7 @@ annotation_object_extra_annos (AnnotationObject *object)
 char *
 annotation_get_source_file (void)
 {
+  return NULL;
 }
 
 /**
