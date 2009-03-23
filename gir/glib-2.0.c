@@ -20,5 +20,50 @@
  */
 
 /**
+ * g_idle_add_full:
+ * @function: (scope notified):
+ *
+ * Rename to: g_idle_add
+ */
+
+/**
+ * g_child_watch_add_full:
+ * @function: (scope notified):
+ *
+ * Rename to: g_child_watch_add
+ */
+
+/**
+ * g_io_add_watch_full:
+ * @function: (scope notified):
+ *
+ * Rename to: g_io_add_watch
+ */
+
+/**
+ * g_timeout_add_full:
+ * @function: (scope notified):
+ *
+ * Rename to: g_timeout_add
+ */
+
+/**
+ * g_timeout_add_seconds_full:
+ * @function: (scope notified):
+ *
+ * Rename to: g_timeout_add_seconds
+ */
+
+/**
  * GIOCondition: (type bitfield)
  **/
+
+/**
+ * GSourceFunc:
+ * @data: (closure):
+ */
+
+/**
+ * GIOFunc:
+ * @data: (closure):
+ */
