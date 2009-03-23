@@ -22,6 +22,15 @@ typedef const gint* (*AnnotationCallback) (const gint *in);
 typedef GList* (*AnnotationListCallback) (GList *in);
 
 /**
+ * AnnotationNotifyFunc:
+ * @data: (closure): The user data
+ *
+ * This is a callback with a 'closure' argument that is not named
+ * 'user_data' and hence has to be annotated.
+ */
+typedef void (*AnnotationNotifyFunc) (gpointer data);
+
+/**
  * AnnotationObject:
  *
  * This is an object used to test annotations.
@@ -122,6 +131,9 @@ void     annotation_string_zero_terminated_out (char ***out);
 
 void     annotation_object_extra_annos (AnnotationObject *object);
 
+void     annotation_custom_destroy (AnnotationCallback callback,
+                                    AnnotationNotifyFunc destroy,
+                                    gpointer data);
 char *   annotation_get_source_file (void);
 void     annotation_set_source_file (const char *fname);
 

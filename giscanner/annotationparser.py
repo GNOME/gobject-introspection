@@ -60,6 +60,8 @@ OPT_OUT = 'out'
 OPT_SCOPE = 'scope'
 OPT_TRANSFER = 'transfer'
 OPT_TYPE = 'type'
+OPT_CLOSURE = 'closure'
+OPT_DESTROY = 'destroy'
 
 # Specific option values
 OPT_VAL_BITFIELD = 'bitfield'
@@ -476,13 +478,36 @@ class AnnotationApplier(object):
         self._parse_param_ret_common(parent, return_, tag)
 
     def _parse_param(self, parent, param, tag):
+        options = getattr(tag, 'options', {})
         if isinstance(parent, Function):
-            options = getattr(tag, 'options', {})
             scope = options.get(OPT_SCOPE)
             if scope:
                 param.scope = scope.one()
                 param.transfer = PARAM_TRANSFER_NONE
+            destroy = options.get(OPT_DESTROY)
+            if destroy:
+                param.destroy_index = parent.get_parameter_index(destroy.one())
+                self._fixup_param_destroy(parent, param)
+            closure = options.get(OPT_CLOSURE)
+            if closure:
+                param.closure_index = parent.get_parameter_index(closure.one())
+                self._fixup_param_closure(parent, param)
+        if isinstance(parent, Callback):
+            if OPT_CLOSURE in options:
+                param.closure_index = parent.get_parameter_index(param.name)
+                self._fixup_param_closure(parent, param)
+
         self._parse_param_ret_common(parent, param, tag)
+
+    def _fixup_param_destroy(self, parent, param):
+        for p in parent.parameters:
+            if p is not param and p.destroy_index == param.destroy_index:
+                p.destroy_index = None
+
+    def _fixup_param_closure(self, parent, param):
+        for p in parent.parameters:
+            if p is not param and p.closure_index == param.closure_index:
+                p.closure_index = None
 
     def _parse_param_ret_common(self, parent, node, tag):
         options = getattr(tag, 'options', {})

@@ -521,6 +521,16 @@ class Callback(Node):
         self.throws = False
         self.doc = None
 
+    def get_parameter_index(self, name):
+        for i, parameter in enumerate(self.parameters):
+            if parameter.name == name:
+                return i
+
+    def get_parameter(self, name):
+        for parameter in self.parameters:
+            if parameter.name == name:
+                return parameter
+
     def __repr__(self):
         return 'Callback(%r, %r, %r)' % (
             self.name, self.retval, self.parameters)

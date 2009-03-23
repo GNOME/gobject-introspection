@@ -58,6 +58,22 @@ and/or use gtk-doc annotations.  -->
         </parameter>
       </parameters>
     </callback>
+    <callback name="NotifyFunc"
+              c:type="AnnotationNotifyFunc"
+              doc="This is a callback with a &apos;closure&apos; argument that is not named
+&apos;user_data&apos; and hence has to be annotated.">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="data"
+                   transfer-ownership="none"
+                   closure="0"
+                   doc="The user data">
+          <type name="any" c:type="gpointer"/>
+        </parameter>
+      </parameters>
+    </callback>
     <class name="Object"
            c:type="AnnotationObject"
            doc="This is an object used to test annotations."
@@ -517,6 +533,29 @@ known by GObject as it&apos;s only marked as G_TYPE_POINTER">
         </array>
       </field>
     </record>
+    <function name="custom_destroy"
+              c:identifier="annotation_custom_destroy"
+              doc="Test messing up the heuristic of closure/destroy-notification
+detection, and fixing it via annotations.">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="callback"
+                   transfer-ownership="none"
+                   closure="2"
+                   destroy="1"
+                   doc="Destroy notification">
+          <type name="Callback" c:type="AnnotationCallback"/>
+        </parameter>
+        <parameter name="destroy" transfer-ownership="none">
+          <type name="NotifyFunc" c:type="AnnotationNotifyFunc"/>
+        </parameter>
+        <parameter name="data" transfer-ownership="none">
+          <type name="any" c:type="gpointer"/>
+        </parameter>
+      </parameters>
+    </function>
     <function name="get_source_file" c:identifier="annotation_get_source_file">
       <return-value transfer-ownership="full" doc="Source file">
         <type name="filename" c:type="char*"/>

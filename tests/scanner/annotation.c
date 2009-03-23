@@ -611,6 +611,21 @@ annotation_object_extra_annos (AnnotationObject *object)
 }
 
 /**
+ * annotation_custom_destroy:
+ *
+ * @callback: (destroy destroy) (closure data): Destroy notification
+ *
+ * Test messing up the heuristic of closure/destroy-notification
+ * detection, and fixing it via annotations.
+ */
+void
+annotation_custom_destroy (AnnotationCallback callback,
+                           AnnotationNotifyFunc destroy,
+                           gpointer data)
+{
+}
+
+/**
  * annotation_get_source_file:
  *
  * Return value: (type filename): Source file
