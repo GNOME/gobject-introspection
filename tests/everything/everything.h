@@ -192,7 +192,6 @@ struct _TestObj
   GObject parent_instance;
 
   GObject *bare;
-  GSList *handlers;
 };
 
 struct _TestObjClass
