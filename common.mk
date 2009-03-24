@@ -1,4 +1,4 @@
-SCANNER_BIN = $(top_srcdir)/tools/g-ir-scanner
+SCANNER_BIN = $(top_builddir)/tools/g-ir-scanner
 SCANNER_PYTHONPATH = $(top_builddir):$(top_srcdir):$$PYTHONPATH
 SCANNER_ENV = env PYTHONPATH=$(SCANNER_PYTHONPATH) \
 	UNINSTALLED_INTROSPECTION_SRCDIR=$(top_srcdir) \

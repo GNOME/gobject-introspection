@@ -6,7 +6,7 @@ INCLUDES = \
 
 bin_PROGRAMS = g-ir-compiler g-ir-generate
 bin_SCRIPTS = g-ir-scanner
-EXTRA_DIST = g-ir-scanner
+EXTRA_DIST = g-ir-scanner.in
 
 g-ir-scanner: g-ir-scanner.in Makefile
 	sed -e s,@libdir\@,$(libdir), $< > $@.tmp && mv $@.tmp $@
@@ -28,3 +28,5 @@ g_ir_generate_LDADD = \
 GCOVSOURCES =					\
 	$(g_ir_compiler_SOURCES)		\
 	$(g_ir_generate_SOURCES)
+
+CLEANFILES=g-ir-scanner
