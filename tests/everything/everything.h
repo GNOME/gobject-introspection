@@ -192,6 +192,7 @@ struct _TestObj
   GObject parent_instance;
 
   GObject *bare;
+  GSList *handlers;
 };
 
 struct _TestObjClass
@@ -222,6 +223,7 @@ int test_callback_user_data (TestCallbackUserData callback,
 int test_callback_destroy_notify (TestCallbackUserData callback,
                                   gpointer user_data,
                                   GDestroyNotify notify);
+int test_callback_thaw_notifications (void);
 int test_callback_infinte (TestCallbackUserData callback,
                            gpointer user_data);
 

@@ -892,6 +892,16 @@ test_obj_do_matrix (TestObj *obj, const char *somestr)
   return TEST_OBJ_GET_CLASS (obj)->matrix (obj, somestr);
 }
 
+typedef struct _CallbackInfo CallbackInfo;
+
+struct _CallbackInfo
+{
+  TestCallbackUserData callback;
+  GDestroyNotify notify;
+  gpointer user_data;
+};
+
+
 /**
  * test_callback:
  * @callback: (scope call):
@@ -917,6 +927,8 @@ test_callback_user_data (TestCallbackUserData callback,
   return callback(user_data);
 }
 
+static GSList *notified_callbacks = NULL;
+
 /**
  * test_callback_destroy_notify:
  * @callback: (scope notified): 
@@ -930,11 +942,47 @@ test_callback_destroy_notify (TestCallbackUserData callback,
                               GDestroyNotify notify)
 {
   int retval;
-
+  CallbackInfo *info;
+  
   retval = callback(user_data);
-  if (notify)
-    notify(user_data);
+  
+  info = g_new(CallbackInfo, 1);
+  info->callback = callback;
+  info->notify = notify;
+  info->user_data = user_data;
+  
+  notified_callbacks = g_slist_prepend(notified_callbacks, info);
 
+  return retval;
+}
+
+/**
+ * test_callback_thaw_notifications:
+ *
+ * Invokes all callbacks installed by #test_callback_destroy_notify(),
+ * adding up their return values, and removes them, invoking the
+ * corresponding destroy notfications.
+ *
+ * Return value: Sum of the return values of the invoked callbacks.
+ */
+int
+test_callback_thaw_notifications (void)
+{
+  int retval = 0;
+  GSList *node;
+  
+  for (node = notified_callbacks; node != NULL; node = node->next)
+    {
+      CallbackInfo *info = (CallbackInfo *)node->data;
+      retval += info->callback (info->user_data);
+      if (info->notify)
+        info->notify (info->user_data);
+      g_free (info);
+    }
+
+  g_slist_free (notified_callbacks);
+  notified_callbacks = NULL;
+  
   return retval;
 }
 
