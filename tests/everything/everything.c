@@ -800,6 +800,7 @@ test_obj_class_init (TestObjClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GParamSpec *pspec;
+  GType param_types[1];
 
   klass->test_signal =
     g_signal_newv ("test",
@@ -812,6 +813,19 @@ test_obj_class_init (TestObjClass *klass)
                    G_TYPE_NONE /* return_type */,
                    0     /* n_params */,
                    NULL  /* param_types */);
+
+  param_types[0] = test_simple_boxed_a_get_type() | G_SIGNAL_TYPE_STATIC_SCOPE;
+  klass->test_signal_with_static_scope_arg =
+    g_signal_newv ("test-with-static-scope-arg",
+                   G_TYPE_FROM_CLASS (gobject_class),
+                   G_SIGNAL_RUN_LAST | G_SIGNAL_NO_RECURSE | G_SIGNAL_NO_HOOKS,
+                   NULL /* closure */,
+                   NULL /* accumulator */,
+                   NULL /* accumulator data */,
+                   g_cclosure_marshal_VOID__BOXED,
+                   G_TYPE_NONE /* return_type */,
+                   1     /* n_params */,
+                   param_types);
 
   gobject_class->set_property = test_obj_set_property;
   gobject_class->get_property = test_obj_get_property;

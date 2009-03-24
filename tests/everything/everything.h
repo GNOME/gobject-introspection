@@ -201,6 +201,7 @@ struct _TestObjClass
   int (*matrix) (TestObj *obj, const char *somestr);
 
   guint test_signal;
+  guint test_signal_with_static_scope_arg;
 };
 
 GType      test_obj_get_type (void);
