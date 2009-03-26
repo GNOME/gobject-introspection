@@ -443,6 +443,12 @@
  */
 
 /**
+ * g_filename_completer_get_completions:
+ *
+ * Return value: (array zero-terminated=1) (transfer full):
+ */
+
+/**
  * g_input_stream_close:
  * @cancellable: (allow-none):
  */
