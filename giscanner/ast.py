@@ -152,6 +152,7 @@ class Node(object):
     def __init__(self, name=None):
         self.name = name
         self.attributes = [] # (key, value)*
+        self.skip = False
         self.deprecated = None
         self.deprecated_version = None
         self.version = None

@@ -63,6 +63,7 @@ OPT_TRANSFER = 'transfer'
 OPT_TYPE = 'type'
 OPT_CLOSURE = 'closure'
 OPT_DESTROY = 'destroy'
+OPT_SKIP = 'skip'
 
 # Specific option values
 OPT_VAL_BITFIELD = 'bitfield'
@@ -697,6 +698,7 @@ class AnnotationApplier(object):
         self._parse_version(node, block)
         self._parse_deprecated(node, block)
         self._parse_attributes(node, block)
+        self._parse_skip(node, block)
 
     def _parse_version(self, node, block):
         since_tag = self._get_tag(block, TAG_SINCE)
@@ -724,6 +726,11 @@ class AnnotationApplier(object):
             return
         for key, value in annos_tag.options.iteritems():
             node.attributes.append((key, value.one()))
+
+    def _parse_skip(self, node, block):
+        if block is not None:
+            if OPT_SKIP in block.options:
+                node.skip = True
 
     def _parse_rename_to_func(self, node, block):
         rename_to_tag = self._get_tag(block, TAG_RENAME_TO)

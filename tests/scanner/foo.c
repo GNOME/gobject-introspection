@@ -579,3 +579,24 @@ foo_buffer_some_method (FooBuffer *buffer)
 }
 
 #define FOO_DEFINE_SHOULD_NOT_BE_EXPOSED "should not be exposed"
+
+/**
+ * FooSkippable: (skip)
+ * @FOO_SKIPPABLE_ONE: a skippable enum value
+ * @FOO_SKIPPABLE_TWO: another skippable enum value
+ *
+ * Some type that is only interesting from C and should not be
+ * exposed to language bindings.
+ */
+
+/**
+ * foo_skip_me: (skip)
+ * @fs: a #FooSkippable
+ *
+ * Does something that's only interesting from C and should not be
+ * exposed to language bindings.
+ */
+void
+foo_skip_me (FooSkippable fs)
+{
+}

@@ -363,4 +363,11 @@ typedef enum
 void foo_some_variant (guint x, va_list args);
 void foo_some_variant_ptr (guint x, va_list *args);
 
+/* Should be skipped due to annotations */
+typedef enum {
+  FOO_SKIPPABLE_ONE,
+  FOO_SKIPPABLE_TWO
+} FooSkippable;
+void foo_skip_me (FooSkippable fs);
+
 #endif /* __FOO_OBJECT_H__ */
