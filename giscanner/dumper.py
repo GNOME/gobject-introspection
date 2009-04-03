@@ -99,18 +99,18 @@ class DumpCompiler(object):
         # We need to reference our get_type functions to make sure they are
         # pulled in at the linking stage if the library is a static library
         # rather than a shared library.
-        for func in self._get_type_functions:
-            f.write("extern GType " + func + "(void);\n")
-        f.write("GType (*GI_GET_TYPE_FUNCS_[])(void) = {\n")
-        first = True
-        for func in self._get_type_functions:
-            if first:
-                first = False
-            else:
-                f.write(",\n")
-            f.write("  " + func)
-        f.write("\n};\n")
-
+        if len(self._get_type_functions) > 0:
+            for func in self._get_type_functions:
+                f.write("extern GType " + func + "(void);\n")
+            f.write("GType (*GI_GET_TYPE_FUNCS_[])(void) = {\n")
+            first = True
+            for func in self._get_type_functions:
+                if first:
+                    first = False
+                else:
+                    f.write(",\n")
+                f.write("  " + func)
+            f.write("\n};\n")
         f.close()
 
         o_path = self._generate_tempfile('.o')
