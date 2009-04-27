@@ -4,12 +4,6 @@
 
   <para>
     This chapter describes the GIR XML markup format.
-    are interested in the procedure which GTK+ follows to draw its
-    widgets and windows, you should read this chapter; this will be
-    useful to know if you decide to implement your own widgets.  This
-    chapter will also clarify the reasons behind the ways certain
-    things are done in GTK+; for example, why you cannot change the
-    background color of all widgets with the same method.
   </para>
 
    <section id="gi-gir-api">
