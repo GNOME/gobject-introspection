@@ -692,8 +692,21 @@ class AnnotationApplier(object):
             return True
 
         self._namespace.remove_matching(shadowed_filter)
-        assert len(shadowed) == 1
-        node.name = shadowed[0].name
+        if len(shadowed) == 1:
+            # method override; use the same (stripped) name as the overloaded
+            # method referenced.
+            # Note that 'g_timeout_add_full' may specify a new_name of
+            # 'g_timeout_add' but the *real* name desired is the stripped name
+            # of 'g_timeout_add' which is 'timeout_add' (for example).
+            node.name = shadowed[0].name
+        elif len(shadowed) == 0:
+            # literal rename, to force a particular prefix strip or whatever
+            # Example: the "nm-utils" package uses a "NM" prefix in most places
+            # but some functions have an "nm_utils_" prefix; the 'Rename To:'
+            # annotation in this case is used to strip the 'utils_' part off.
+            node.name = new_name
+        else:
+            assert False # more than two shadowed methods?  Shouldn't happen.
 
     def _guess_direction(self, node):
         if node.direction:
