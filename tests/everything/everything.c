@@ -173,7 +173,6 @@ const GValue *test_value_return(int i) {
 }
 
 
-#if 0
 /************************************************************************/
 /* utf8 */
 /* insert BLACK HEART SUIT to ensure UTF-8 doesn't get mangled */
@@ -186,6 +185,7 @@ static const char utf8_nonconst[] = "nonconst \xe2\x99\xa5 utf8";
  */
 G_CONST_RETURN char *test_utf8_const_return (void)
 {
+  /* transfer mode none */
   return utf8_const;
 }
 
@@ -195,30 +195,44 @@ G_CONST_RETURN char *test_utf8_const_return (void)
  */
 char *test_utf8_nonconst_return (void)
 {
+  /* transfer mode full */
   return g_strdup (utf8_nonconst);
 }
 
 void test_utf8_nonconst_in (char *in)
 {
+  /* transfer mode full */
   g_assert (strcmp (in, utf8_nonconst) == 0);
+  g_free(in);
 }
 
 void test_utf8_const_in (const char *in)
 {
+  /* transfer mode none */
   g_assert (strcmp (in, utf8_const) == 0);
 }
 
+/**
+ * test_utf8_out:
+ * @out: (out) (transfer full):
+ */
 void test_utf8_out (char **out)
 {
+  /* out parameter, transfer mode full */
   *out = g_strdup (utf8_nonconst);
 }
 
+/**
+ * test_utf8_inout:
+ * @inout: (inout):
+ */
 void test_utf8_inout (char **inout)
 {
+  /* inout parameter, transfer mode full */
   g_assert (strcmp (*inout, utf8_const) == 0);
-  *input = g_strdup (utf8_nonconst);
+  g_free(*inout);
+  *inout = g_strdup (utf8_nonconst);
 }
-#endif
 
 /**
  * test_filename_return:

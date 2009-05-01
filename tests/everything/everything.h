@@ -24,7 +24,7 @@ gfloat test_float (gfloat in);
 gdouble test_double (gdouble in);
 time_t test_timet (time_t in);
 GType test_gtype (GType in);
-#if 0
+
 /* utf8 */
 G_CONST_RETURN char *test_utf8_const_return (void);
 char *test_utf8_nonconst_return (void);
@@ -32,8 +32,8 @@ void test_utf8_nonconst_in (char *in);
 void test_utf8_const_in (const char *in);
 void test_utf8_out (char **out);
 void test_utf8_inout (char **inout);
-#endif
 GSList *test_filename_return (void);
+
 /* non-basic-types */
 /* array */
 gboolean test_strv_in (char **arr);
