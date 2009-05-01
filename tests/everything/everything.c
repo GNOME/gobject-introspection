@@ -650,7 +650,181 @@ void test_gslist_everything_in (GSList *in)
   test_gslist_free (in);
 }
 
-/* ghash? */
+/************************************************************************/
+/* GHash */
+
+static char *table_data[3][2] = {
+  { "foo", "bar" }, { "baz", "bat" }, { "qux", "quux" }
+};
+
+static GHashTable *test_table_ghash_new_container()
+{
+  GHashTable *hash;
+  int i;
+  hash = g_hash_table_new(g_str_hash, g_str_equal);
+  for (i=0; i<3; i++)
+    g_hash_table_insert(hash, table_data[i][0], table_data[i][1]);
+  return hash;
+}
+
+static GHashTable *test_table_ghash_new_full()
+{
+  GHashTable *hash;
+  int i;
+  hash = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, g_free);
+  for (i=0; i<3; i++)
+    g_hash_table_insert(hash,
+                        g_strdup(table_data[i][0]),
+                        g_strdup(table_data[i][1]));
+  return hash;
+}
+
+static /*const*/ GHashTable *test_table_ghash_const()
+{
+  static GHashTable *hash = NULL;
+  if (!hash) {
+    hash = test_table_ghash_new_container();
+  }
+  return hash;
+}
+
+/**
+ * test_ghash_free:
+ * @in: (transfer full) (element-type utf8 utf8)
+ */
+void test_ghash_free (GHashTable *in)
+{
+  /* keys and values are deleted iff an appropriate element destroy function
+   * was registered */
+  g_hash_table_unref(in);
+}
+
+/**
+ * test_ghash_null_return:
+ *
+ * Return value: (element-type utf8 utf8) (transfer none) (allow-none):
+ */
+G_CONST_RETURN GHashTable *test_ghash_null_return (void)
+{
+  return NULL;
+}
+
+/**
+ * test_ghash_nothing_return:
+ *
+ * Return value: (element-type utf8 utf8) (transfer none):
+ */
+G_CONST_RETURN GHashTable *test_ghash_nothing_return (void)
+{
+  return test_table_ghash_const ();
+}
+
+/**
+ * test_ghash_nothing_return2:
+ *
+ * Return value: (element-type utf8 utf8) (transfer none):
+ */
+GHashTable *test_ghash_nothing_return2 (void)
+{
+  return test_table_ghash_const ();
+}
+
+/**
+ * test_ghash_container_return:
+ *
+ * Return value: (element-type utf8 utf8) (transfer container):
+ */
+GHashTable *test_ghash_container_return (void)
+{
+  return test_table_ghash_new_container ();
+}
+
+/**
+ * test_ghash_everything_return:
+ *
+ * Return value: (element-type utf8 utf8) (transfer full):
+ */
+GHashTable *test_ghash_everything_return (void)
+{
+  return test_table_ghash_new_full ();
+}
+
+static void assert_test_table_ghash (const GHashTable *in)
+{
+  GHashTable *h = test_table_ghash_const();
+  GHashTableIter iter;
+  gpointer key, value;
+
+  g_assert(g_hash_table_size(h) ==
+           g_hash_table_size((GHashTable*)in));
+
+  g_hash_table_iter_init(&iter, (GHashTable*)in);
+  while (g_hash_table_iter_next (&iter, &key, &value))
+    g_assert( strcmp(g_hash_table_lookup(h, (char*)key), (char*)value) == 0);
+}
+
+/**
+ * test_ghash_null_in:
+ * @in: (element-type utf8 utf8) (allow-none):
+ */
+void test_ghash_null_in (const GHashTable *in)
+{
+  g_assert (in == NULL);
+}
+
+/**
+ * test_ghash_nothing_in:
+ * @in: (element-type utf8 utf8):
+ */
+void test_ghash_nothing_in (const GHashTable *in)
+{
+  assert_test_table_ghash (in);
+}
+
+/**
+ * test_ghash_nothing_in2:
+ * @in: (element-type utf8 utf8):
+ */
+void test_ghash_nothing_in2 (GHashTable *in)
+{
+  assert_test_table_ghash (in);
+}
+
+/**
+ * test_ghash_container_in:
+ * @in: (transfer container) (element-type utf8 utf8):
+ */
+void test_ghash_container_in (GHashTable *in)
+{
+  assert_test_table_ghash (in);
+  /* be careful and explicitly steal all the elements from the ghash before
+   * freeing it. */
+  g_hash_table_steal_all (in);
+  g_hash_table_destroy (in);
+}
+
+static gboolean ghash_freer(gpointer key, gpointer value, gpointer user_data) {
+  g_free(key);
+  g_free(value);
+  return TRUE;
+}
+
+/**
+ * test_ghash_everything_in:
+ * @in: (transfer full) (element-type utf8 utf8):
+ */
+void test_ghash_everything_in (GHashTable *in)
+{
+  assert_test_table_ghash (in);
+  /* free the elements, then free the container.  Don't rely on the
+   * GHashTable's key/value destructor functions. */
+  g_hash_table_foreach_steal (in, ghash_freer, NULL);
+  /* okay, dealloc the hash table. */
+  g_hash_table_destroy (in);
+}
+
+/************************************************************************/
+
 /* error? */
 
 /* enums / flags */

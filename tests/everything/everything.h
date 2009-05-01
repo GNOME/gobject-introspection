@@ -69,7 +69,19 @@ void test_gslist_container_in (GSList *in);
 void test_gslist_everything_in (GSList *in);
 void test_gslist_free (GSList *in);
 
-/* ghash? */
+/* GHashTable */
+G_CONST_RETURN GHashTable *test_ghash_null_return (void);
+G_CONST_RETURN GHashTable *test_ghash_nothing_return (void);
+GHashTable *test_ghash_nothing_return2 (void);
+GHashTable *test_ghash_container_return (void);
+GHashTable *test_ghash_everything_return (void);
+void test_ghash_null_in (const GHashTable *in);
+void test_ghash_nothing_in (const GHashTable *in);
+void test_ghash_nothing_in2 (GHashTable *in);
+void test_ghash_container_in (GHashTable *in);
+void test_ghash_everything_in (GHashTable *in);
+void test_ghash_free (GHashTable *in);
+
 /* error? */
 
 /* closure */
