@@ -38,8 +38,14 @@ GSList *test_filename_return (void);
 /* array */
 gboolean test_strv_in (char **arr);
 int test_array_int_in (int n_ints, int *ints);
+int test_array_gint8_in (int n_ints, gint8 *ints);
+int test_array_gint16_in (int n_ints, gint16 *ints);
+gint32 test_array_gint32_in (int n_ints, gint32 *ints);
+gint64 test_array_gint64_in (int n_ints, gint64 *ints);
 char *test_array_gtype_in (int n_types, GType *types);
 char **test_strv_out (void);
+int *test_array_int_full_out(int *len);
+int *test_array_int_none_out(int *len);
 /* interface */
 /* GList */
 G_CONST_RETURN GList *test_glist_nothing_return (void);

@@ -255,13 +255,71 @@ static const char *test_sequence[] = {"1", "2", "3"};
 
 /**
  * test_array_int_in:
- * @n_ints: 
+ * @n_ints:
  * @ints: (array length=n_ints): List of ints
  */
 int
 test_array_int_in (int n_ints, int *ints)
 {
   int i, sum = 0;
+  for (i = 0; i < n_ints; i++)
+    sum += ints[i];
+  return sum;
+}
+
+/**
+ * test_array_gint8_in:
+ * @n_ints:
+ * @ints: (array length=n_ints): List of ints
+ */
+int
+test_array_gint8_in (int n_ints, gint8 *ints)
+{
+  int i, sum = 0;
+  for (i = 0; i < n_ints; i++)
+    sum += ints[i];
+  return sum;
+}
+
+/**
+ * test_array_gint16_in:
+ * @n_ints:
+ * @ints: (array length=n_ints): List of ints
+ */
+int
+test_array_gint16_in (int n_ints, gint16 *ints)
+{
+  int i, sum = 0;
+  for (i = 0; i < n_ints; i++)
+    sum += ints[i];
+  return sum;
+}
+
+/**
+ * test_array_gint32_in:
+ * @n_ints:
+ * @ints: (array length=n_ints): List of ints
+ */
+gint32
+test_array_gint32_in (int n_ints, gint32 *ints)
+{
+  int i;
+  gint32 sum = 0;
+  for (i = 0; i < n_ints; i++)
+    sum += ints[i];
+  return sum;
+}
+
+/**
+ * test_array_gint64_in:
+ * @n_ints:
+ * @ints: (array length=n_ints): List of ints
+ */
+gint64
+test_array_gint64_in (int n_ints, gint64 *ints)
+{
+  int i;
+  gint64 sum = 0;
   for (i = 0; i < n_ints; i++)
     sum += ints[i];
   return sum;
@@ -317,6 +375,33 @@ test_strv_out (void)
   ret[2] = "3";
   ret[3] = NULL;
   return ret;
+}
+
+/**
+ * test_array_int_full_out:
+ * @len: length of the returned array.
+ * Returns: (array length=len) (transfer full): a new array of integers.
+ */
+int *
+test_array_int_full_out(int *len) {
+  int *result, i;
+  *len = 5;
+  result = g_malloc0(sizeof(*result) * (*len));
+  for (i=1; i < (*len); i++)
+    result[i] = result[i-1] + 1;
+  return result;
+}
+
+/**
+ * test_array_int_none_out:
+ * @len: length of the returned array.
+ * Returns: (array length=len) (transfer none): a static array of integers.
+ */
+int *
+test_array_int_none_out(int *len) {
+  static int result[5] = { 1, 2, 3, 4, 5 };
+  *len = 5;
+  return result;
 }
 
 /* interface */
