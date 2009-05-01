@@ -337,6 +337,10 @@ static /*const*/ GList *test_sequence_list()
     return list;
 }
 
+/**
+ * test_glist_free:
+ * @in: (element-type utf8) (transfer full):
+ */
 void test_glist_free (GList *in)
 {
   g_list_foreach (in, (GFunc)g_free, NULL);
@@ -398,22 +402,38 @@ static void assert_test_sequence_list (const GList *in)
       g_assert (strcmp (in->data, test_sequence[i]) == 0);
 }
 
+/**
+ * test_glist_nothing_in:
+ * @in: (element-type utf8):
+ */
 void test_glist_nothing_in (const GList *in)
 {
   assert_test_sequence_list (in);
 }
 
+/**
+ * test_glist_nothing_in2:
+ * @in: (element-type utf8):
+ */
 void test_glist_nothing_in2 (GList *in)
 {
   assert_test_sequence_list (in);
 }
 
+/**
+ * test_glist_container_in:
+ * @in: (element-type utf8) (transfer container):
+ */
 void test_glist_container_in (GList *in)
 {
   assert_test_sequence_list (in);
   g_list_free (in);
 }
 
+/**
+ * test_glist_everything_in:
+ * @in: (element-type utf8) (transfer full):
+ */
 void test_glist_everything_in (GList *in)
 {
   assert_test_sequence_list (in);
@@ -436,6 +456,10 @@ static /*const*/ GSList *test_sequence_slist()
     return list;
 }
 
+/**
+ * test_gslist_free:
+ * @in: (element-type utf8) (transfer full):
+ */
 void test_gslist_free (GSList *in)
 {
   g_slist_foreach (in, (GFunc)g_free, NULL);
@@ -497,22 +521,38 @@ static void assert_test_sequence_slist (const GSList *in)
       g_assert (strcmp (in->data, test_sequence[i]) == 0);
 }
 
+/**
+ * test_gslist_nothing_in:
+ * @in: (element-type utf8):
+ */
 void test_gslist_nothing_in (const GSList *in)
 {
   assert_test_sequence_slist (in);
 }
 
+/**
+ * test_gslist_nothing_in2:
+ * @in: (element-type utf8):
+ */
 void test_gslist_nothing_in2 (GSList *in)
 {
   assert_test_sequence_slist (in);
 }
 
+/**
+ * test_gslist_container_in:
+ * @in: (element-type utf8) (transfer container):
+ */
 void test_gslist_container_in (GSList *in)
 {
   assert_test_sequence_slist (in);
   g_slist_free (in);
 }
 
+/**
+ * test_gslist_everything_in:
+ * @in: (element-type utf8) (transfer full):
+ */
 void test_gslist_everything_in (GSList *in)
 {
   assert_test_sequence_slist (in);
