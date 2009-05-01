@@ -30,7 +30,15 @@
 /**
  * g_app_info_launch:
  * @appinfo:
- * @files:
+ * @files: (element-type GFile):
+ * @launch_context: (allow-none):
+ * @error:
+ */
+
+/**
+ * g_app_info_launch_uris:
+ * @appinfo:
+ * @uris: (element-type char*):
  * @launch_context: (allow-none):
  * @error:
  */
