@@ -483,8 +483,11 @@ static void assert_test_sequence_list (const GList *in)
   const GList *l;
   gsize i;
 
-  for (i = 0, l = in; l != NULL; ++i, l = l->next)
-      g_assert (strcmp (in->data, test_sequence[i]) == 0);
+  for (i = 0, l = in; l != NULL; ++i, l = l->next) {
+      g_assert (i < G_N_ELEMENTS(test_sequence));
+      g_assert (strcmp (l->data, test_sequence[i]) == 0);
+  }
+  g_assert (i == G_N_ELEMENTS(test_sequence));
 }
 
 /**
@@ -602,8 +605,11 @@ static void assert_test_sequence_slist (const GSList *in)
   const GSList *l;
   gsize i;
 
-  for (i = 0, l = in; l != NULL; ++i, l = l->next)
-      g_assert (strcmp (in->data, test_sequence[i]) == 0);
+  for (i = 0, l = in; l != NULL; ++i, l = l->next) {
+      g_assert (i < G_N_ELEMENTS(test_sequence));
+      g_assert (strcmp (l->data, test_sequence[i]) == 0);
+  }
+  g_assert (i == G_N_ELEMENTS(test_sequence));
 }
 
 /**
