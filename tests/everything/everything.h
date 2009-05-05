@@ -226,5 +226,18 @@ int test_callback_thaw_notifications (void);
 int test_callback_infinte (TestCallbackUserData callback,
                            gpointer user_data);
 
+/* interface */
+#define TEST_TYPE_INTERFACE              (test_interface_get_type ())
+#define TEST_INTERFACE(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), TEST_TYPE_INTERFACE, TestInterface))
+#define TEST_IS_INTERFACE(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), TEST_TYPE_INTERFACE))
+#define TEST_INTERFACE_GET_IFACE(obj)    (G_TYPE_INSTANCE_GET_INTERFACE ((obj), TEST_TYPE_INTERFACE, TestInterfaceIface))
+
+typedef struct _TestInterfaceIface TestInterfaceIface;
+
+struct _TestInterfaceIface {
+    GTypeInterface base_iface;
+};
+
+GType test_interface_get_type (void) G_GNUC_CONST;
 
 #endif /* __GITESTTYPES_H__ */

@@ -1004,3 +1004,25 @@ test_callback_infinte (TestCallbackUserData callback,
   return callback(user_data);
 }
 
+/* interface */
+
+static void
+test_interface_class_init(void *g_iface)
+{
+}
+
+GType
+test_interface_get_type(void)
+{
+    static GType type = 0;
+    if (type == 0) {
+        type = g_type_register_static_simple (G_TYPE_INTERFACE,
+                                              "TestInterface",
+                                              sizeof (TestInterfaceIface),
+                                              (GClassInitFunc) test_interface_class_init,
+                                              0, NULL, 0);
+    }
+
+    return type;
+}
+
