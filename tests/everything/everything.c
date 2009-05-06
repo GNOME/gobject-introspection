@@ -1017,7 +1017,7 @@ test_interface_get_type(void)
     static GType type = 0;
     if (type == 0) {
         type = g_type_register_static_simple (G_TYPE_INTERFACE,
-                                              "TestInterface",
+                                              "EverythingTestInterface",
                                               sizeof (TestInterfaceIface),
                                               (GClassInitFunc) test_interface_class_init,
                                               0, NULL, 0);
