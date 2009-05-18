@@ -55,6 +55,12 @@
  */
 
 /**
+ * g_option_context_parse:
+ * @argc: (inout):
+ * @argv: (array length=argc) (inout) (allow-none):
+ */
+
+/**
  * GIOCondition: (type bitfield)
  **/
 
