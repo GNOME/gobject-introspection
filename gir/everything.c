@@ -1418,8 +1418,8 @@ test_callback_thaw_notifications (void)
 }
 
 /**
- * test_callback_infinte:
- * @callback: (scope infinte):
+ * test_callback_infinite:
+ * @callback: (scope infinite):
  *
  * Infinite - callback persists forever.
  **/
@@ -1427,7 +1427,7 @@ test_callback_thaw_notifications (void)
 static GSList *infinite_callbacks = NULL;
 
 int
-test_callback_infinte (TestCallbackUserData callback,
+test_callback_infinite (TestCallbackUserData callback,
                        gpointer user_data)
 {
   infinite_callbacks = g_slist_prepend(infinite_callbacks, callback);

@@ -540,8 +540,8 @@ is invoked.">
         </parameter>
       </parameters>
     </function>
-    <function name="test_callback_infinte"
-              c:identifier="test_callback_infinte"
+    <function name="test_callback_infinite"
+              c:identifier="test_callback_infinite"
               doc="Infinite - callback persists forever.">
       <return-value transfer-ownership="none">
         <type name="int" c:type="int"/>
@@ -549,7 +549,7 @@ is invoked.">
       <parameters>
         <parameter name="callback"
                    transfer-ownership="none"
-                   scope="infinte"
+                   scope="infinite"
                    closure="1">
           <type name="TestCallbackUserData" c:type="TestCallbackUserData"/>
         </parameter>
