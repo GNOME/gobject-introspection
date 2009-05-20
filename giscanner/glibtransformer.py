@@ -60,6 +60,18 @@ SYMBOL_BLACKLIST = [
 SYMBOL_BLACKLIST_RE = [re.compile(x) for x in \
                            [r'\w+_marshal_[A-Z]+__', ]]
 
+GET_TYPE_OVERRIDES = {
+    # this is a special case, from glibtransforer.py:create_gobject
+    'intern': 'g_object_get_type',
+    # this is presumably a typo, should be fixed upstream
+    'g_gstring_get_type': 'g_string_get_type',
+    # this is historical cruft: there's a deprecated
+    #   #define gdk_window_get_type gdk_window_get_window_type
+    # upstream; this method can be renamed properly upstream once
+    # that deprecated alias is removed (in some future release)
+    'gdk_window_object_get_type': 'gdk_window_get_type',
+}
+
 
 class IntrospectionBinary(object):
 
@@ -213,6 +225,10 @@ class GLibTransformer(object):
     def _register_internal_type(self, type_name, node):
         self._names.type_names[type_name] = (None, node)
         uscored = to_underscores(type_name).lower()
+        # prefer the prefix of the get_type method, if there is one
+        if hasattr(node, 'get_type'):
+            uscored = GET_TYPE_OVERRIDES.get(node.get_type, node.get_type)
+            uscored = uscored[:-len('_get_type')]
         self._uscore_type_names[uscored] = node
         # Besides the straight underscore conversion, we also try
         # removing the underscores from the namespace as a possible C
@@ -220,7 +236,9 @@ class GLibTransformer(object):
         suffix = self._transformer.remove_prefix(type_name)
         prefix = type_name[:-len(suffix)]
         no_uscore_prefixed = (prefix + '_' + to_underscores(suffix)).lower()
-        self._uscore_type_names[no_uscore_prefixed] = node
+        # since this is a guess, don't overwrite any 'real' prefix
+        if no_uscore_prefixed not in self._uscore_type_names:
+            self._uscore_type_names[no_uscore_prefixed] = node
 
     def _resolve_quarks(self):
         for node in self._error_quark_functions:
@@ -401,7 +419,7 @@ class GLibTransformer(object):
         target_klass = None
         prefix_components = None
         methname = None
-        for i in xrange(1, len(components)-1):
+        for i in xrange(1, len(components)):
             prefix_components = '_'.join(components[0:-i])
             methname = '_'.join(components[-i:])
             target_klass = self._uscore_type_names.get(prefix_components)
@@ -446,6 +464,13 @@ class GLibTransformer(object):
             argtype = target_arg.type.ctype.replace('*', '')
             name = self._transformer.remove_prefix(argtype)
             name_uscore = to_underscores_noprefix(name).lower()
+            # prefer the prefix of the _get_type method, if there is one
+            if argtype in self._names.type_names:
+                node = self._names.type_names[argtype][1]
+                if hasattr(node, 'get_type'):
+                    name_uscore = GET_TYPE_OVERRIDES.get(node.get_type,
+                                                         node.get_type)
+                    name_uscore = name_uscore[:-len('_get_type')]
             name_offset = func.symbol.find(name_uscore)
             if name_offset < 0:
                 return None

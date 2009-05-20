@@ -258,4 +258,28 @@ struct _TestInterfaceIface {
 
 GType test_interface_get_type (void) G_GNUC_CONST;
 
+/* gobject with non-standard prefix */
+#define TEST_TYPE_WI_802_1X              (test_wi_802_1x_get_type ())
+#define TEST_WI_802_1X(object)        (G_TYPE_CHECK_INSTANCE_CAST ((object), TEST_TYPE_WI_802_1X, TestWi8021x))
+#define TEST_IS_WI_802_1X(object)     (G_TYPE_CHECK_INSTANCE_TYPE ((object), TEST_TYPE_WI_802_1X))
+#define TEST_WI_802_1X_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), TEST_TYPE_WI_802_1X, TestWi8021xClass))
+
+typedef struct
+{
+  GObject parent_instance;
+
+  gboolean testbool;
+} TestWi8021x;
+
+typedef struct
+{
+  GObjectClass parent_class;
+} TestWi8021xClass;
+
+GType        test_wi_802_1x_get_type (void);
+TestWi8021x* test_wi_802_1x_new (void);
+gboolean     test_wi_802_1x_get_testbool (TestWi8021x *obj);
+void         test_wi_802_1x_set_testbool (TestWi8021x *obj, gboolean v);
+int          test_wi_802_1x_static_method (int x);
+
 #endif /* __GITESTTYPES_H__ */

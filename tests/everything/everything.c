@@ -1345,3 +1345,109 @@ test_interface_get_type(void)
     return type;
 }
 
+/* gobject with non-standard prefix */
+G_DEFINE_TYPE(TestWi8021x, test_wi_802_1x, G_TYPE_OBJECT);
+
+enum
+{
+  PROP_TEST_WI_802_1X_TESTBOOL = 1
+};
+
+static void
+test_wi_802_1x_set_property (GObject      *object,
+                             guint         property_id,
+                             const GValue *value,
+                             GParamSpec   *pspec)
+{
+  TestWi8021x *self = TEST_WI_802_1X (object);
+
+  switch (property_id)
+    {
+    case PROP_TEST_WI_802_1X_TESTBOOL:
+      test_wi_802_1x_set_testbool (self, g_value_get_boolean (value));
+      break;
+
+    default:
+      /* We don't have any other property... */
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+      break;
+    }
+}
+
+static void
+test_wi_802_1x_get_property (GObject    *object,
+                        guint       property_id,
+                        GValue     *value,
+                        GParamSpec *pspec)
+{
+  TestWi8021x *self = TEST_WI_802_1X (object);
+
+  switch (property_id)
+    {
+    case PROP_TEST_WI_802_1X_TESTBOOL:
+      g_value_set_boolean (value, test_wi_802_1x_get_testbool (self));
+      break;
+
+    default:
+      /* We don't have any other property... */
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+      break;
+    }
+}
+
+static void
+test_wi_802_1x_dispose (GObject *gobject)
+{
+  /* Chain up to the parent class */
+  G_OBJECT_CLASS (test_wi_802_1x_parent_class)->dispose (gobject);
+}
+
+static void
+test_wi_802_1x_class_init (TestWi8021xClass *klass)
+{
+  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+  GParamSpec *pspec;
+
+  gobject_class->set_property = test_wi_802_1x_set_property;
+  gobject_class->get_property = test_wi_802_1x_get_property;
+  gobject_class->dispose = test_wi_802_1x_dispose;
+
+  pspec = g_param_spec_boolean ("testbool",
+                                "Nick for testbool",
+                                "Blurb for testbool",
+                                TRUE,
+                                G_PARAM_READWRITE);
+  g_object_class_install_property (gobject_class,
+                                   PROP_TEST_WI_802_1X_TESTBOOL,
+                                   pspec);
+}
+
+static void
+test_wi_802_1x_init (TestWi8021x *obj)
+{
+  obj->testbool = TRUE;
+}
+
+TestWi8021x *
+test_wi_802_1x_new (void)
+{
+  return g_object_new (TEST_TYPE_WI_802_1X, NULL);
+}
+
+void
+test_wi_802_1x_set_testbool (TestWi8021x *obj, gboolean val)
+{
+  obj->testbool = val;
+}
+
+gboolean
+test_wi_802_1x_get_testbool (TestWi8021x *obj)
+{
+  return obj->testbool;
+}
+
+int
+test_wi_802_1x_static_method (int x)
+{
+  return 2*x;
+}
