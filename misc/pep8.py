@@ -647,7 +647,7 @@ def input_file(filename):
     Run all checks on a Python source file.
     """
     if excluded(filename) or not filename_match(filename):
-        return {}
+        return 0
     if options.verbose:
         message('checking ' + filename)
     options.counters['files'] = options.counters.get('files', 0) + 1
