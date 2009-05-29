@@ -325,6 +325,10 @@ test_array_gint64_in (int n_ints, gint64 *ints)
   return sum;
 }
 
+/**
+ * test_strv_in:
+ * @arr: (array zero-terminated=1) (transfer none):
+ */
 gboolean
 test_strv_in (char **arr)
 {
@@ -337,6 +341,18 @@ test_strv_in (char **arr)
   if (strcmp (arr[2], "3") != 0)
     return FALSE;
   return TRUE;
+}
+
+/**
+ * test_strv_in_container:
+ * @arr: (array zero-terminated=1) (transfer container):
+ */
+gboolean
+test_strv_in_container (char **arr)
+{
+  gboolean result = test_strv_in (arr);
+  g_free (arr);
+  return result;
 }
 
 /**
@@ -375,6 +391,35 @@ test_strv_out (void)
   ret[2] = "3";
   ret[3] = NULL;
   return ret;
+}
+
+/**
+ * test_strv_outarg:
+ * @retp: (array zero-terminated=1) (out) (transfer container):
+ */
+void
+test_strv_outarg (char ***retp)
+{
+  char **ret = g_new (char *, 4);
+  ret[0] = "1";
+  ret[1] = "2";
+  ret[2] = "3";
+  ret[3] = NULL;
+  *retp = ret;
+}
+
+/**
+ * test_array_int_in_take:
+ * @n_ints:
+ * @ints: (array length=n_ints) (transfer full): List of ints
+ */
+int test_array_int_in_take (int n_ints, int *ints)
+{
+  int i, sum = 0;
+  for (i = 0; i < n_ints; i++)
+    sum += ints[i];
+  g_free (ints);
+  return sum;
 }
 
 /**
