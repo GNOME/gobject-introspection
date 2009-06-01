@@ -21,3 +21,5 @@
 DATADIR = "@datarootdir@"
 DATADIR = DATADIR.replace(
     "${prefix}", "@prefix@")
+GIR_DIR = "@GIR_DIR@"
+GIR_SUFFIX = "@GIR_SUFFIX@"

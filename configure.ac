@@ -108,6 +108,15 @@ GOBJECT_INTROSPECTION_LIBDIR="$EXPANDED_LIBDIR"
 AC_SUBST(GOBJECT_INTROSPECTION_LIBDIR)
 AC_DEFINE_UNQUOTED(GOBJECT_INTROSPECTION_LIBDIR,"$GOBJECT_INTROSPECTION_LIBDIR", [Directory prefix for typelib installation])
 
+#### Directory to install the gir files
+GIR_SUFFIX="gir-1.0"
+AC_SUBST(GIR_SUFFIX)
+AC_DEFINE_UNQUOTED(GIR_SUFFIX, "$GIR_SUFFIX", [Name of the gir directory])
+
+GIR_DIR="$EXPANDED_DATADIR/$GIR_SUFFIX"
+AC_SUBST(GIR_DIR)
+AC_DEFINE_UNQUOTED(GIR_DIR, "$GIR_DIR", [Director prefix for gir installation])
+
 PKG_CHECK_MODULES(GOBJECT, [gobject-2.0 gio-2.0])
 PKG_CHECK_MODULES(GTHREAD, [gthread-2.0])
 PKG_CHECK_MODULES(GIO_UNIX, [gio-unix-2.0], have_gio_unix=true, have_gio_unix=false)

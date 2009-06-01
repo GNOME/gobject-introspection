@@ -25,7 +25,7 @@ from .ast import (Bitfield, Callback, Enum, Function, Namespace, Member,
                   Type, Array, Alias, Interface, Class, Node, Union,
                   Varargs, Constant, type_name_from_ctype,
                   type_names, TYPE_STRING, BASIC_GIR_TYPES)
-from .config import DATADIR
+from .config import DATADIR, GIR_DIR, GIR_SUFFIX
 from .glibast import GLibBoxed
 from .girparser import GIRParser
 from .odict import odict
@@ -117,7 +117,8 @@ class Transformer(object):
     def _find_include(self, include):
         searchdirs = self._includepaths[:]
         for path in _xdg_data_dirs:
-            searchdirs.append(os.path.join(path, 'gir-1.0'))
+            searchdirs.append(os.path.join(path, GIR_SUFFIX))
+        searchdirs.append(GIR_DIR)
 
         girname = '%s-%s.gir' % (include.name, include.version)
         for d in searchdirs:

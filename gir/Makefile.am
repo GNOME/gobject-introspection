@@ -201,7 +201,7 @@ GIRSOURCES = 			\
 	$(BASE_GIRSOURCES)	\
 	$(BUILT_GIRSOURCES)
 
-girdir = $(datadir)/gir-1.0
+girdir = $(GIR_DIR)
 dist_gir_DATA = $(GIRSOURCES)
 
 %.typelib: %.gir $(top_builddir)/tools/g-ir-compiler$(EXEEXT)
