@@ -179,7 +179,7 @@ const GValue *test_value_return(int i) {
 static const char utf8_const[]    = "const \xe2\x99\xa5 utf8";
 static const char utf8_nonconst[] = "nonconst \xe2\x99\xa5 utf8";
 
-/** 
+/**
  * test_utf8_const_return:
  * Return value: <const char*> UTF-8 string
  */
@@ -189,7 +189,7 @@ G_CONST_RETURN char *test_utf8_const_return (void)
   return utf8_const;
 }
 
-/** 
+/**
  * test_utf8_nonconst_return:
  * Return value: <char*> UTF-8 string
  */
@@ -357,7 +357,7 @@ test_strv_in_container (char **arr)
 
 /**
  * test_array_gtype_in:
- * @n_types: 
+ * @n_types:
  * @types: (array length=n_types): List of types
  * Return value: string representation of provided types
  * */
@@ -914,12 +914,11 @@ test_enum_param(TestEnum e)
   GEnumValue *ev;
   GEnumClass *ec;
 
-  ec = g_type_class_ref (test_enum_get_type ());  
+  ec = g_type_class_ref (test_enum_get_type ());
   ev = g_enum_get_value (ec, e);
   g_type_class_unref (ec);
 
   return ev->value_nick;
-  
 }
 
 /* structures */
@@ -1194,7 +1193,7 @@ test_obj_class_init (TestObjClass *klass)
   gobject_class->set_property = test_obj_set_property;
   gobject_class->get_property = test_obj_get_property;
   gobject_class->dispose = test_obj_dispose;
-  
+
   pspec = g_param_spec_object ("bare",
                                "Bare property",
                                "A contained object",
@@ -1295,7 +1294,7 @@ static GSList *notified_callbacks = NULL;
 
 /**
  * test_callback_destroy_notify:
- * @callback: (scope notified): 
+ * @callback: (scope notified):
  *
  * Notified - callback persists until a DestroyNotify delegate
  * is invoked.
@@ -1307,14 +1306,14 @@ test_callback_destroy_notify (TestCallbackUserData callback,
 {
   int retval;
   CallbackInfo *info;
-  
+
   retval = callback(user_data);
-  
+
   info = g_new(CallbackInfo, 1);
   info->callback = callback;
   info->notify = notify;
   info->user_data = user_data;
-  
+
   notified_callbacks = g_slist_prepend(notified_callbacks, info);
 
   return retval;
@@ -1334,7 +1333,7 @@ test_callback_thaw_notifications (void)
 {
   int retval = 0;
   GSList *node;
-  
+
   for (node = notified_callbacks; node != NULL; node = node->next)
     {
       CallbackInfo *info = (CallbackInfo *)node->data;
@@ -1346,13 +1345,13 @@ test_callback_thaw_notifications (void)
 
   g_slist_free (notified_callbacks);
   notified_callbacks = NULL;
-  
+
   return retval;
 }
 
 /**
  * test_callback_infinte:
- * @callback: (scope infinte): 
+ * @callback: (scope infinte):
  *
  * Infinite - callback persists forever.
  **/
@@ -1364,7 +1363,7 @@ test_callback_infinte (TestCallbackUserData callback,
                        gpointer user_data)
 {
   infinite_callbacks = g_slist_prepend(infinite_callbacks, callback);
-  
+
   return callback(user_data);
 }
 

@@ -207,7 +207,6 @@ tests/invoke/Makefile
 tests/offsets/Makefile
 tests/scanner/Makefile
 tests/repository/Makefile
-tests/everything/Makefile
 examples/Makefile
 docs/Makefile
 docs/reference/Makefile

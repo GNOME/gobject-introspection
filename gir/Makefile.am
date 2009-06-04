@@ -1,5 +1,6 @@
 include $(top_srcdir)/common.mk
 
+CHECKGIRS =
 BUILT_GIRSOURCES = 
 CLEANFILES =
 EXTRA_DIST = 
@@ -163,6 +164,35 @@ GIRepository-2.0.gir: GObject-2.0.gir $(SCANNER_BIN) $(SCANNER_LIBS) $(GIREPOSIT
 	    $(GIREPOSITORY_FILES)
 BUILT_GIRSOURCES += GIRepository-2.0.gir
 
+LT_CURRENT = 1
+LT_REVISION = 0
+LT_AGE = 0
+LT_VERSION = $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)
+TYPELIB_VERSION = $(LT_CURRENT).0
+
+lib_LTLIBRARIES = libgirepository-everything-1.0.la
+
+libgirepository_everything_1_0_la_SOURCES = $(srcdir)/everything.c $(srcdir)/everything.h
+libgirepository_everything_1_0_la_CFLAGS = $(GOBJECT_CFLAGS)
+libgirepository_everything_1_0_la_LDFLAGS = -version-info $(LT_VERSION)
+libgirepository_everything_1_0_la_LIBS = $(GOBJECT_LIBS)
+
+if OS_WIN32
+libgirepository_everything_1_0_la_LDFLAGS += -no-undefined
+endif
+
+Everything-$(TYPELIB_VERSION).gir: libgirepository-everything-1.0.la everything.c everything.h $(SCANNER_BIN) $(SCANNER_LIBS)
+	$(CHECK_DEBUG) $(SCANNER) \
+	--include=GObject-2.0 \
+        --libtool="$(SHAVE_SAVED_LIBTOOL)" \
+	--library=girepository-everything-1.0 \
+	--namespace=Everything --nsversion=$(TYPELIB_VERSION) \
+	--pkg gobject-2.0 \
+	$(srcdir)/everything.h $(srcdir)/everything.c \
+	--output $@
+BUILT_GIRSOURCES += Everything-$(TYPELIB_VERSION).gir
+CHECKGIRS += Everything-$(TYPELIB_VERSION)-expected.gir
+
 # Generic rules
 CLEANFILES += $(BUILT_GIRSOURCES)
 
@@ -180,6 +210,11 @@ typelibsdir = $(libdir)/girepository-1.0
 typelibs_DATA = $(GIRSOURCES:.gir=.typelib) $(GIRSOURCES:.gir=.typelib)
 
 CLEANFILES += $(typelibs_DATA)
+
+%.gir.check: %.gir
+	@diff -u -U 10 $(srcdir)/$*-expected.gir $*.gir && echo "  TEST  $*.gir"
+
+check-local: $(CHECKGIRS)
 
 # Check that typelib -> gir -> typelib transformation is lossless.
 # Comparing gir files is relatively fragile (whitespace, attribute default

@@ -1,1 +1,1 @@
-SUBDIRS = . scanner everything repository invoke offsets
+SUBDIRS = . scanner repository invoke offsets
