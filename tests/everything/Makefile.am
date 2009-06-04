@@ -25,10 +25,13 @@ AM_LDFLAGS += -no-undefined
 endif
 
 GIRS =
+CHECKGIRS = $(GIRS:.gir=.gir.check)
+EXPECTEDGIRS = $(GIRS:.gir=-expected.gir)
 TYPELIBS = $(GIRS:.gir=.typelib)
 TXMLS = $(GIRS:.gir=.tgir)
 CLEANFILES = $(TYPELIBS) $(TXMLS) $(GIRS)
 BUILT_SOURCES = $(TYPELIBS) $(TXMLS) $(GIRS)
+EXTRA_DIST = $(EXPECTEDGIRS)
 
 Everything-$(TYPELIB_VERSION).gir: libgirepository-everything-1.0.la everything.c everything.h $(SCANNER_BIN) $(SCANNER_LIBS)
 	$(CHECK_DEBUG) $(SCANNER) \
@@ -46,3 +49,8 @@ GIRS += Everything-$(TYPELIB_VERSION).gir
 
 %.tgir: %.typelib $(top_builddir)/tools/g-ir-generate$(EXEEXT) Makefile
 	LD_LIBRARY_PATH=$${LD_LIBRARY_PATH:+$$LD_LIBRARY_PATH:}:$(top_builddir)/girepository/.libs $(top_builddir)/tools/g-ir-generate --includedir=. --includedir=$(top_builddir)/gir $< -o $@
+
+%.gir.check: %.gir
+	@diff -u -U 10 $(srcdir)/$*-expected.gir $*.gir && echo "  TEST  $*.gir"
+
+check-local: $(CHECKGIRS)
