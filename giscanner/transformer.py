@@ -475,9 +475,9 @@ class Transformer(object):
         rettype.derefed_canonical = self._canonicalize_ctype(derefed_ctype)
 
         canontype = type_name_from_ctype(ctype)
-        if ((canontype == TYPE_STRING or
-             source_type.type == CTYPE_POINTER) and
-            source_type.base_type.type_qualifier & TYPE_QUALIFIER_CONST):
+        # Is it a const char * or a const gpointer?
+        if ((canontype == TYPE_STRING or source_type.type == CTYPE_POINTER) and
+            (source_type.base_type.type_qualifier & TYPE_QUALIFIER_CONST)):
             rettype.is_const = True
         return rettype
 

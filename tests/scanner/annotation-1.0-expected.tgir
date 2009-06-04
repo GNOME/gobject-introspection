@@ -254,7 +254,7 @@
           <parameter name="argc" transfer-ownership="full" direction="inout">
             <type name="int"/>
           </parameter>
-          <parameter name="argv" transfer-ownership="none" direction="inout">
+          <parameter name="argv" transfer-ownership="full" direction="inout">
             <array length="1" zero-terminated="1">
               <type name="utf8"/>
             </array>
@@ -423,7 +423,7 @@
         <parameter name="argc" transfer-ownership="full" direction="inout">
           <type name="int"/>
         </parameter>
-        <parameter name="argv" transfer-ownership="none" direction="inout">
+        <parameter name="argv" transfer-ownership="full" direction="inout">
           <array length="0" zero-terminated="1">
             <type name="utf8"/>
           </array>
@@ -431,7 +431,7 @@
       </parameters>
     </function>
     <function name="return_array" c:identifier="annotation_return_array">
-      <return-value transfer-ownership="none">
+      <return-value transfer-ownership="full">
         <array length="0" zero-terminated="1">
           <type name="utf8"/>
         </array>
@@ -453,7 +453,7 @@
       </parameters>
     </function>
     <function name="string_zero_terminated" c:identifier="annotation_string_zero_terminated">
-      <return-value transfer-ownership="none">
+      <return-value transfer-ownership="full">
         <array zero-terminated="1">
           <type name="utf8"/>
         </array>
@@ -464,7 +464,7 @@
         <type name="none"/>
       </return-value>
       <parameters>
-        <parameter name="out" transfer-ownership="none" direction="inout">
+        <parameter name="out" transfer-ownership="full" direction="inout">
           <array zero-terminated="1">
             <type name="utf8"/>
           </array>

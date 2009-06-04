@@ -344,7 +344,7 @@ intentionally similar example to gtk_container_get_children">
           </parameter>
           <parameter name="argv"
                      direction="inout"
-                     transfer-ownership="none"
+                     transfer-ownership="full"
                      doc="Argument vector">
             <array length="1" c:type="char***">
               <type name="utf8"/>
@@ -574,7 +574,7 @@ detection, and fixing it via annotations.">
         </parameter>
         <parameter name="argv"
                    direction="inout"
-                   transfer-ownership="none"
+                   transfer-ownership="full"
                    doc="The arguments.">
           <array length="0" c:type="char***">
             <type name="utf8"/>
@@ -583,7 +583,7 @@ detection, and fixing it via annotations.">
       </parameters>
     </function>
     <function name="return_array" c:identifier="annotation_return_array">
-      <return-value transfer-ownership="none" doc="The return value">
+      <return-value transfer-ownership="full" doc="The return value">
         <array length="0" c:type="char**">
           <type name="utf8"/>
         </array>
@@ -609,7 +609,7 @@ detection, and fixing it via annotations.">
     </function>
     <function name="string_zero_terminated"
               c:identifier="annotation_string_zero_terminated">
-      <return-value transfer-ownership="none" doc="The return value">
+      <return-value transfer-ownership="full" doc="The return value">
         <array c:type="char**">
           <type name="utf8"/>
         </array>
@@ -621,7 +621,7 @@ detection, and fixing it via annotations.">
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
-        <parameter name="out" direction="inout" transfer-ownership="none">
+        <parameter name="out" direction="inout" transfer-ownership="full">
           <array c:type="char***">
             <type name="utf8"/>
           </array>

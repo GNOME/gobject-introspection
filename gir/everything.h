@@ -45,6 +45,7 @@ gint64 test_array_gint64_in (int n_ints, gint64 *ints);
 char *test_array_gtype_in (int n_types, GType *types);
 char **test_strv_out_container (void);
 char **test_strv_out (void);
+const char * const * test_strv_out_c (void);
 void   test_strv_outarg (char ***retp);
 
 /* transfer tests */

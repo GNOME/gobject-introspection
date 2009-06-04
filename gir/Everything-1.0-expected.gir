@@ -1083,7 +1083,26 @@ call and can be released on return.">
         </parameter>
       </parameters>
     </function>
-    <function name="test_strv_out" c:identifier="test_strv_out">
+    <function name="test_strv_out"
+              c:identifier="test_strv_out"
+              doc="No annotations here.  We want the default to Do The Right Thing.">
+      <return-value transfer-ownership="full">
+        <array c:type="char**">
+          <type name="utf8"/>
+        </array>
+      </return-value>
+    </function>
+    <function name="test_strv_out_c"
+              c:identifier="test_strv_out_c"
+              doc="No annotations here.  We want the default to Do The Right Thing.">
+      <return-value transfer-ownership="none">
+        <array c:type="char**">
+          <type name="utf8"/>
+        </array>
+      </return-value>
+    </function>
+    <function name="test_strv_out_container"
+              c:identifier="test_strv_out_container">
       <return-value transfer-ownership="container">
         <array c:type="char**">
           <type name="utf8"/>

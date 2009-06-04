@@ -377,6 +377,11 @@ test_array_gtype_in (int n_types, GType *types)
   return g_string_free (string, FALSE);
 }
 
+/**
+ * test_strv_out:
+ *
+ * No annotations here.  We want the default to Do The Right Thing.
+ */
 char **
 test_strv_out (void)
 {
@@ -436,6 +441,22 @@ int test_array_int_in_take (int n_ints, int *ints)
     sum += ints[i];
   g_free (ints);
   return sum;
+}
+
+/**
+ * test_strv_out_c:
+ *
+ * No annotations here.  We want the default to Do The Right Thing.
+ */
+const char * const*
+test_strv_out_c (void)
+{
+  static char **ret = NULL;
+
+  if (ret == NULL)
+    ret = test_strv_out ();
+
+  return (const char * const *) ret;
 }
 
 /**

@@ -560,6 +560,7 @@ class AnnotationApplier(object):
         if (not isinstance(node, Field) and
             (not has_element_type and
              (node.direction is None
+              or isinstance(node, Return)
               or node.direction == PARAM_DIRECTION_IN))):
             if self._guess_array(node):
                 has_array = True
@@ -588,6 +589,7 @@ class AnnotationApplier(object):
 
         container_type = Array(node.type.ctype,
                                element_type_name)
+        container_type.is_const = node.type.is_const
         if OPT_ARRAY_ZERO_TERMINATED in array_values:
             container_type.zeroterminated = array_values.get(
                 OPT_ARRAY_ZERO_TERMINATED) == '1'
@@ -724,12 +726,9 @@ class AnnotationApplier(object):
         if node.transfer is not None:
             return node.transfer
 
-        if isinstance(node.type, Array):
-            return PARAM_TRANSFER_NONE
         # Anything with 'const' gets none
         if node.type.is_const:
             return PARAM_TRANSFER_NONE
-
         elif node.type.name in [TYPE_NONE, TYPE_ANY]:
             return PARAM_TRANSFER_NONE
         elif isinstance(node.type, Varargs):
