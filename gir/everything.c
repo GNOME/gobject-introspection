@@ -377,13 +377,29 @@ test_array_gtype_in (int n_types, GType *types)
   return g_string_free (string, FALSE);
 }
 
+char **
+test_strv_out (void)
+{
+  int i = 0;
+  int n = 6;
+  char **ret = g_new (char *, n);
+  ret[i++] = g_strdup ("thanks");
+  ret[i++] = g_strdup ("for");
+  ret[i++] = g_strdup ("all");
+  ret[i++] = g_strdup ("the");
+  ret[i++] = g_strdup ("fish");
+  ret[i++] = NULL;
+  g_assert (i == n);
+  return ret;
+}
+
 /**
- * test_strv_out:
+ * test_strv_out_container:
  *
  * Return value: (array zero-terminated=1) (transfer container):
  */
 char **
-test_strv_out (void)
+test_strv_out_container (void)
 {
   char **ret = g_new (char *, 4);
   ret[0] = "1";
