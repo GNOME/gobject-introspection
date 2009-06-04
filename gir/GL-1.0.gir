@@ -5,6 +5,7 @@
   <namespace name="GL" version="1.0">
     <record name="bitfield" c:type="GLbitfield"/>
     <record name="charARB" c:type="GLcharARB"/>
+    <record name="clampf" c:type="GLclampf"/>
     <record name="boolean" c:type="GLboolean"/>
     <record name="enum" c:type="GLenum"/>
     <record name="float" c:type="GLfloat"/>
