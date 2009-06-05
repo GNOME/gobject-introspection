@@ -73,3 +73,42 @@
  * GIOFunc:
  * @data: (closure):
  */
+
+/**
+ * g_spawn_async:
+ * @working_directory: (allow-none):
+ * @envp: (allow-none):
+ * @child_setup: (allow-none):
+ * @user_data: (allow-none):
+ * @child_pid: (out):
+ */
+
+/**
+ * g_spawn_async_with_pipes:
+ * @working_directory: (allow-none):
+ * @envp: (allow-none):
+ * @child_setup: (allow-none):
+ * @user_data: (allow-none):
+ * @child_pid: (out):
+ * @standard_input: (out):
+ * @standard_output: (out):
+ * @standard_error: (out):
+ */
+
+/**
+ * g_spawn_sync:
+ * @working_directory: (allow-none):
+ * @envp: (allow-none):
+ * @child_setup: (allow-none):
+ * @user_data: (allow-none):
+ * @standard_output: (out):
+ * @standard_error: (out):
+ * @exit_status: (out):
+ */
+
+/**
+ * g_spawn_command_line_sync:
+ * @standard_output: (out):
+ * @standard_error: (out):
+ * @exit_status: (out):
+ */
