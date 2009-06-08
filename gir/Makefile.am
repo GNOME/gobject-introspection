@@ -175,7 +175,7 @@ lib_LTLIBRARIES = libgirepository-everything-1.0.la
 libgirepository_everything_1_0_la_SOURCES = $(srcdir)/everything.c $(srcdir)/everything.h
 libgirepository_everything_1_0_la_CFLAGS = $(GOBJECT_CFLAGS)
 libgirepository_everything_1_0_la_LDFLAGS = -version-info $(LT_VERSION)
-libgirepository_everything_1_0_la_LIBS = $(GOBJECT_LIBS)
+libgirepository_everything_1_0_la_LIBADD = $(GOBJECT_LIBS)
 
 if OS_WIN32
 libgirepository_everything_1_0_la_LDFLAGS += -no-undefined
