@@ -6,7 +6,13 @@
 /**
  * g_app_info_get_all:
  *
- * Returns: (element-type GAppInfo) (transfer full): 
+ * Returns: (element-type GAppInfo) (transfer full):
+ */
+
+/**
+ * g_app_info_get_all_for_type:
+ *
+ * Returns: (element-type GAppInfo) (transfer full):
  */
 
 /**
@@ -18,6 +24,13 @@
 /**
  * g_file_info_get_attribute_object:
  *
+ * Returns: (transfer none):
+ */
+
+/**
+ * g_file_info_get_attribute_data:
+ *
+ * @value_pp: (out)
  * Returns: (transfer none):
  */
 
@@ -426,6 +439,11 @@
  */
 
 /**
+ * g_file_set_attributes_finish:
+ * @info: (out):
+ */
+
+/**
  * g_file_set_attributes_from_info:
  * @cancellable: (allow-none):
  */
@@ -597,4 +615,3 @@
  *
  * Return value: (array zero-terminated=1) (transfer full):
  */
-
