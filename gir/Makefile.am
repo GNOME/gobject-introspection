@@ -208,7 +208,7 @@ dist_gir_DATA = $(GIRSOURCES)
 	LD_LIBRARY_PATH=$${LD_LIBRARY_PATH:+$$LD_LIBRARY_PATH:}:$(top_builddir)/girepository/.libs $(DEBUG) $(top_builddir)/tools/g-ir-compiler$(EXEEXT) --includedir=. $(G_IR_COMPILER_OPTS) $< -o $@
 
 typelibsdir = $(libdir)/girepository-1.0
-typelibs_DATA = $(GIRSOURCES:.gir=.typelib) $(GIRSOURCES:.gir=.typelib)
+typelibs_DATA = $(GIRSOURCES:.gir=.typelib)
 
 CLEANFILES += $(typelibs_DATA)
 
