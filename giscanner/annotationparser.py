@@ -20,6 +20,7 @@
 
 # AnnotationParser - parses gtk-doc annotations
 
+import re
 import sys
 
 from .ast import (Array, Bitfield, Callback, Class, Enum, Field, Function,
@@ -424,7 +425,6 @@ class AnnotationApplier(object):
         # We're only attempting to name the signal parameters if
         # the number of parameter tags (@foo) is the same or greater
         # than the number of signal parameters
-        resolve = self._transformer.resolve_param_type
         if block and len(block.tags) > len(signal.parameters):
             names = block.tags.items()
         else:
@@ -436,7 +436,7 @@ class AnnotationApplier(object):
                 options = getattr(tag, 'options', {})
                 param_type = options.get(OPT_TYPE)
                 if param_type:
-                    param.type.name = resolve(param_type.one())
+                    param.type = self._resolve(param_type.one(), param.type)
             else:
                 tag = None
             self._parse_param(signal, param, tag)
@@ -523,8 +523,7 @@ class AnnotationApplier(object):
             node.allow_none = True
         param_type = options.get(OPT_TYPE)
         if param_type:
-            resolve = self._transformer.resolve_param_type
-            node.type.name = resolve(param_type.one())
+            node.type = self._resolve(param_type.one(), node.type)
 
         assert node.transfer is not None
         if tag is not None and tag.comment is not None:
@@ -583,12 +582,12 @@ class AnnotationApplier(object):
 
         element_type = options.get(OPT_ELEMENT_TYPE)
         if element_type is not None:
-            element_type_name = element_type.one()
+            element_type_node = self._resolve(element_type.one())
         else:
-            element_type_name = node.type.name
+            element_type_node = Type(node.type.name) # erase ctype
 
         container_type = Array(node.type.ctype,
-                               element_type_name)
+                               element_type_node)
         container_type.is_const = node.type.is_const
         if OPT_ARRAY_ZERO_TERMINATED in array_values:
             container_type.zeroterminated = array_values.get(
@@ -604,29 +603,65 @@ class AnnotationApplier(object):
                 node.type.name == 'utf8' and
                 self._guess_direction(node) == PARAM_DIRECTION_IN):
                 # FIXME: unsigned char/guchar should be uint8
-                container_type.element_type = 'int8'
+                container_type.element_type = Type('int8')
         container_type.size = array_values.get(OPT_ARRAY_FIXED_SIZE)
         return container_type
+
+    def _resolve(self, type_str, orig_node=None):
+        def grab_one(type_str, resolver, top_combiner, combiner):
+            """Return a complete type, and the trailing string part after it.
+            Use resolver() on each identifier, and combiner() on the parts of
+            each complete type. (top_combiner is used on the top-most type.)"""
+            bits = re.split(r'([,<>])', type_str, 1)
+            first, sep, rest = [bits[0], '', ''] if (len(bits)==1) else bits
+            args = [resolver(first)]
+            if sep == '<':
+                while sep != '>':
+                    next, rest = grab_one(rest, resolver, combiner, combiner)
+                    args.append(next)
+                    sep, rest = rest[0], rest[1:]
+            else:
+                rest = sep + rest
+            return top_combiner(*args), rest
+        def resolver(ident):
+            return self._transformer.resolve_param_type(Type(ident))
+        def combiner(base, *rest):
+            if not rest:
+                return base
+            if base.name in ['GLib.List', 'GLib.SList'] and len(rest)==1:
+                return List(base.name, base.ctype, *rest)
+            if base.name in ['GLib.HashTable'] and len(rest)==2:
+                return Map(base.name, base.ctype, *rest)
+            print "WARNING: throwing away type parameters:", type_str
+            return base
+        def top_combiner(base, *rest):
+            """For the top most type, recycle orig_node if possible."""
+            if orig_node is not None:
+                orig_node.name = base.name
+                base = orig_node # preserve other properties of orig_node
+            return combiner(base, *rest)
+
+        result, rest = grab_one(type_str, resolver, top_combiner, combiner)
+        if rest:
+            print "WARNING: throwing away trailing part of type:", type_str
+        return result
 
     def _parse_element_type(self, parent, node, options):
         element_type_opt = options.get(OPT_ELEMENT_TYPE)
         element_type = element_type_opt.flat()
         if node.type.name in ['GLib.List', 'GLib.SList']:
             assert len(element_type) == 1
-            etype = Type(element_type[0])
             container_type = List(
                 node.type.name,
                 node.type.ctype,
-                self._transformer.resolve_param_type(etype))
+                self._resolve(element_type[0]))
         elif node.type.name in ['GLib.HashTable']:
             assert len(element_type) == 2
-            key_type = Type(element_type[0])
-            value_type = Type(element_type[1])
             container_type = Map(
                 node.type.name,
                 node.type.ctype,
-                self._transformer.resolve_param_type(key_type),
-                self._transformer.resolve_param_type(value_type))
+                self._resolve(element_type[0]),
+                self._resolve(element_type[1]))
         else:
             print 'FIXME: unhandled element-type container:', node
         return container_type

@@ -90,6 +90,8 @@ void test_ghash_nothing_in2 (GHashTable *in);
 void test_ghash_container_in (GHashTable *in);
 void test_ghash_everything_in (GHashTable *in);
 void test_ghash_free (GHashTable *in);
+GHashTable *test_ghash_nested_everything_return (void);
+GHashTable *test_ghash_nested_everything_return2 (void);
 
 /* error? */
 

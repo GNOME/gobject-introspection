@@ -300,7 +300,7 @@ class Map(Type):
         self.value_type = value_type
 
     def __repr__(self):
-        return 'Map(%r <%r,%r.)' % (self.name, self.key_type, self.value_type)
+        return 'Map(%r <%r,%r>)' % (self.name, self.key_type, self.value_type)
 
 
 class Alias(Node):

@@ -905,6 +905,37 @@ void test_ghash_everything_in (GHashTable *in)
   g_hash_table_destroy (in);
 }
 
+/* Nested collection types */
+
+/**
+ * test_ghash_nested_everything_return:
+ * Specify nested parameterized types directly with the (type ) annotation.
+ *
+ * Return value: (type GLib.HashTable<utf8,GLib.HashTable<utf8,utf8>>) (transfer full):
+ */
+GHashTable *
+test_ghash_nested_everything_return (void)
+{
+  GHashTable *hash;
+  hash = g_hash_table_new_full(g_str_hash, g_str_equal, g_free,
+                               (void (*) (gpointer)) g_hash_table_destroy);
+  g_hash_table_insert(hash, g_strdup("wibble"), test_table_ghash_new_full());
+  return hash;
+}
+
+/**
+ * test_ghash_nested_everything_return2:
+ * Another way of specifying nested parameterized types: using the
+ * element-type annotation.
+ *
+ * Return value: (element-type utf8 GLib.HashTable<utf8,utf8>) (transfer full):
+ */
+GHashTable *
+test_ghash_nested_everything_return2 (void)
+{
+  return test_ghash_nested_everything_return();
+}
+
 /************************************************************************/
 
 /* error? */
