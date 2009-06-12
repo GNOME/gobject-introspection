@@ -483,6 +483,22 @@ case.">
         </parameter>
       </parameters>
     </function>
+    <function name="test_array_int_in_take"
+              c:identifier="test_array_int_in_take">
+      <return-value transfer-ownership="none">
+        <type name="int" c:type="int"/>
+      </return-value>
+      <parameters>
+        <parameter name="n_ints" transfer-ownership="none">
+          <type name="int" c:type="int"/>
+        </parameter>
+        <parameter name="ints" transfer-ownership="full" doc="List of ints">
+          <array length="0" c:type="int*">
+            <type name="int"/>
+          </array>
+        </parameter>
+      </parameters>
+    </function>
     <function name="test_array_int_none_out"
               c:identifier="test_array_int_none_out">
       <return-value transfer-ownership="none"
@@ -1109,6 +1125,19 @@ call and can be released on return.">
         </parameter>
       </parameters>
     </function>
+    <function name="test_strv_in_container"
+              c:identifier="test_strv_in_container">
+      <return-value transfer-ownership="none">
+        <type name="boolean" c:type="gboolean"/>
+      </return-value>
+      <parameters>
+        <parameter name="arr" transfer-ownership="container">
+          <array c:type="char**">
+            <type name="utf8"/>
+          </array>
+        </parameter>
+      </parameters>
+    </function>
     <function name="test_strv_out"
               c:identifier="test_strv_out"
               doc="No annotations here.  We want the default to Do The Right Thing.">
@@ -1121,7 +1150,7 @@ call and can be released on return.">
     <function name="test_strv_out_c"
               c:identifier="test_strv_out_c"
               doc="No annotations here.  We want the default to Do The Right Thing.">
-      <return-value transfer-ownership="none">
+      <return-value transfer-ownership="full">
         <array c:type="char**">
           <type name="utf8"/>
         </array>
@@ -1134,6 +1163,18 @@ call and can be released on return.">
           <type name="utf8"/>
         </array>
       </return-value>
+    </function>
+    <function name="test_strv_outarg" c:identifier="test_strv_outarg">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="retp" direction="out" transfer-ownership="container">
+          <array c:type="char***">
+            <type name="utf8"/>
+          </array>
+        </parameter>
+      </parameters>
     </function>
     <function name="test_timet" c:identifier="test_timet">
       <return-value transfer-ownership="none">
