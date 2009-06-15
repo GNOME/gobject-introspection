@@ -78,7 +78,7 @@ GObject-2.0.gir: GLib-2.0.gir $(SCANNER_BIN) $(SCANNER_LIBS) Makefile
 	$(SCANNER) $(SCANNER_ARGS) \
 	    --xpath-assertions=$(srcdir)/GObject-2.0.xpath GObject-2.0.gir
 BUILT_GIRSOURCES += GObject-2.0.gir
-EXTRA_DIST += GObject-2.0.xpath
+EXTRA_DIST += gobject-2.0.c GObject-2.0.xpath
 
 # gmodule
 GMODULE_INCLUDEDIR=`pkg-config --variable=includedir gmodule-2.0`/glib-2.0
@@ -237,3 +237,5 @@ CLEANFILES += $(typelibs_DATA:%.typelib=%.test.typelib)
 
 #check-local: $(typelibs_DATA:%.typelib=testlib-%)
 check-gir: $(typelibs_DATA:%.typelib=testgir-%)
+
+EXTRA_DIST += $(CHECKGIRS)
