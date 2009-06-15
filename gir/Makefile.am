@@ -1,6 +1,6 @@
 include $(top_srcdir)/common.mk
 
-CHECKGIRS =
+EXPECTEDGIRS =
 BUILT_GIRSOURCES = 
 CLEANFILES =
 EXTRA_DIST = 
@@ -192,7 +192,7 @@ Everything-$(TYPELIB_VERSION).gir: libgirepository-everything-1.0.la everything.
 	$(srcdir)/everything.h $(srcdir)/everything.c \
 	--output $@
 BUILT_GIRSOURCES += Everything-$(TYPELIB_VERSION).gir
-CHECKGIRS += Everything-$(TYPELIB_VERSION)-expected.gir
+EXPECTEDGIRS += Everything-$(TYPELIB_VERSION)-expected.gir
 
 # Generic rules
 CLEANFILES += $(BUILT_GIRSOURCES)
@@ -215,6 +215,7 @@ CLEANFILES += $(typelibs_DATA)
 %.gir.check: %.gir
 	@diff -u -U 10 $(srcdir)/$*-expected.gir $*.gir && echo "  TEST  $*.gir"
 
+CHECKGIRS = $(EXPECTEDGIRS:-expected.gir=.gir.check)
 check-local: $(CHECKGIRS)
 
 # Check that typelib -> gir -> typelib transformation is lossless.
@@ -238,4 +239,4 @@ CLEANFILES += $(typelibs_DATA:%.typelib=%.test.typelib)
 #check-local: $(typelibs_DATA:%.typelib=testlib-%)
 check-gir: $(typelibs_DATA:%.typelib=testgir-%)
 
-EXTRA_DIST += $(CHECKGIRS)
+EXTRA_DIST += $(EXPECTEDGIRS)
