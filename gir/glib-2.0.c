@@ -112,3 +112,13 @@
  * @standard_error: (out):
  * @exit_status: (out):
  */
+
+/*
+ * g_get_system_config_dirs:
+ * Return value: (array zero-terminated=1) (transfer none)
+ */
+
+/**
+ * g_get_system_data_dirs:
+ * Return value: (array zero-terminated=1) (transfer none)
+ */
