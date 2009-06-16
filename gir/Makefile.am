@@ -183,7 +183,7 @@ libgirepository_everything_1_0_la_LDFLAGS += -no-undefined
 endif
 
 Everything-$(TYPELIB_VERSION).gir: libgirepository-everything-1.0.la everything.c everything.h $(SCANNER_BIN) $(SCANNER_LIBS)
-	$(CHECK_DEBUG) $(SCANNER) \
+	LPATH=$(builddir)/.libs $(CHECK_DEBUG) $(SCANNER) \
 	--include=GObject-2.0 \
         --libtool="$(SHAVE_SAVED_LIBTOOL)" \
 	--library=girepository-everything-1.0 \
@@ -205,7 +205,7 @@ girdir = $(GIR_DIR)
 dist_gir_DATA = $(GIRSOURCES)
 
 %.typelib: %.gir $(top_builddir)/tools/g-ir-compiler$(EXEEXT)
-	LD_LIBRARY_PATH=$${LD_LIBRARY_PATH:+$$LD_LIBRARY_PATH:}:$(top_builddir)/girepository/.libs $(DEBUG) $(top_builddir)/tools/g-ir-compiler$(EXEEXT) --includedir=. $(G_IR_COMPILER_OPTS) $< -o $@
+	LD_LIBRARY_PATH=$${LD_LIBRARY_PATH:+$$LD_LIBRARY_PATH:}:$(top_builddir)/girepository/.libs:$(builddir)/.libs $(DEBUG) $(top_builddir)/tools/g-ir-compiler$(EXEEXT) --includedir=. $(G_IR_COMPILER_OPTS) $< -o $@
 
 typelibsdir = $(libdir)/girepository-1.0
 typelibs_DATA = $(GIRSOURCES:.gir=.typelib)
