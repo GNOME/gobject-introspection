@@ -176,11 +176,17 @@ case.">
       <property name="bare" writable="1">
         <type name="GObject.Object" c:type="GObject"/>
       </property>
+      <property name="boxed" writable="1">
+        <type name="TestBoxed" c:type="TestBoxed"/>
+      </property>
       <field name="parent_instance">
         <type name="GObject.Object" c:type="GObject"/>
       </field>
       <field name="bare">
         <type name="GObject.Object" c:type="GObject*"/>
+      </field>
+      <field name="boxed">
+        <type name="TestBoxed" c:type="TestBoxed*"/>
       </field>
       <glib:signal name="test">
         <return-value transfer-ownership="full">

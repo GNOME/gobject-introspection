@@ -1159,7 +1159,8 @@ G_DEFINE_TYPE(TestObj, test_obj, G_TYPE_OBJECT);
 
 enum
 {
-  PROP_TEST_OBJ_BARE = 1
+  PROP_TEST_OBJ_BARE = 1,
+  PROP_TEST_OBJ_BOXED
 };
 
 static void
@@ -1176,6 +1177,12 @@ test_obj_set_property (GObject      *object,
       test_obj_set_bare (self, g_value_get_object (value));
       break;
 
+    case PROP_TEST_OBJ_BOXED:
+      if (self->boxed)
+        test_boxed_free (self->boxed);
+      self->boxed = g_value_dup_boxed (value);
+      break;
+      
     default:
       /* We don't have any other property... */
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -1197,6 +1204,10 @@ test_obj_get_property (GObject    *object,
       g_value_set_object (value, self->bare);
       break;
 
+    case PROP_TEST_OBJ_BOXED:
+      g_value_set_boxed (value, self->boxed);
+      break;
+      
     default:
       /* We don't have any other property... */
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -1216,6 +1227,12 @@ test_obj_dispose (GObject *gobject)
       self->bare = NULL;
     }
 
+  if (self->boxed)
+    {
+      test_boxed_free (self->boxed);
+      self->boxed = NULL;
+    }
+  
   /* Chain up to the parent class */
   G_OBJECT_CLASS (test_obj_parent_class)->dispose (gobject);
 }
@@ -1271,6 +1288,15 @@ test_obj_class_init (TestObjClass *klass)
                                    PROP_TEST_OBJ_BARE,
                                    pspec);
 
+  pspec = g_param_spec_boxed ("boxed",
+                              "Boxed property",
+                              "A contained boxed struct",
+                              TEST_TYPE_BOXED,
+                              G_PARAM_READWRITE);
+  g_object_class_install_property (gobject_class,
+                                   PROP_TEST_OBJ_BOXED,
+                                   pspec);
+  
   klass->matrix = test_obj_default_matrix;
 }
 
@@ -1278,6 +1304,7 @@ static void
 test_obj_init (TestObj *obj)
 {
   obj->bare = NULL;
+  obj->boxed = NULL;
 }
 
 TestObj *

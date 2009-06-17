@@ -186,6 +186,8 @@ GType             test_simple_boxed_b_get_type (void);
 TestSimpleBoxedB *test_simple_boxed_b_copy     (TestSimpleBoxedB *b);
 
 /* opaque boxed */
+#define TEST_TYPE_BOXED (test_boxed_get_type())
+
 typedef struct _TestBoxed TestBoxed;
 typedef struct _TestBoxedPrivate TestBoxedPrivate;
 
@@ -221,6 +223,7 @@ struct _TestObj
   GObject parent_instance;
 
   GObject *bare;
+  TestBoxed *boxed;
 };
 
 struct _TestObjClass
