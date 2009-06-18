@@ -237,7 +237,7 @@
         </return-value>
         <parameters>
           <parameter name="nums" transfer-ownership="none">
-            <array length="2" zero-terminated="1">
+            <array length="2">
               <type name="int"/>
             </array>
           </parameter>
@@ -255,7 +255,7 @@
             <type name="int"/>
           </parameter>
           <parameter name="argv" transfer-ownership="full" direction="inout">
-            <array length="1" zero-terminated="1">
+            <array length="1">
               <type name="utf8"/>
             </array>
           </parameter>
@@ -290,7 +290,7 @@
         </return-value>
         <parameters>
           <parameter name="data" transfer-ownership="none">
-            <array length="2" zero-terminated="1">
+            <array length="2">
               <type name="uint8"/>
             </array>
           </parameter>
@@ -305,7 +305,7 @@
         </return-value>
         <parameters>
           <parameter name="data" transfer-ownership="none">
-            <array length="2" zero-terminated="1">
+            <array length="2">
               <type name="int8"/>
             </array>
           </parameter>
@@ -320,7 +320,7 @@
         </return-value>
         <parameters>
           <parameter name="data" transfer-ownership="none">
-            <array length="2" zero-terminated="1">
+            <array length="2">
               <type name="uint8"/>
             </array>
           </parameter>
@@ -424,7 +424,7 @@
           <type name="int"/>
         </parameter>
         <parameter name="argv" transfer-ownership="full" direction="inout">
-          <array length="0" zero-terminated="1">
+          <array length="0">
             <type name="utf8"/>
           </array>
         </parameter>
@@ -432,7 +432,7 @@
     </function>
     <function name="return_array" c:identifier="annotation_return_array">
       <return-value transfer-ownership="full">
-        <array length="0" zero-terminated="1">
+        <array length="0">
           <type name="utf8"/>
         </array>
       </return-value>
