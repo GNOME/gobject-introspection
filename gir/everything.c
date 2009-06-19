@@ -47,6 +47,16 @@ guint64 test_uint64 (guint64 in)
   return in;
 }
 
+gshort test_short (gshort in)
+{
+  return in;
+}
+
+gushort test_ushort (gushort in)
+{
+  return in;
+}
+
 gint test_int (gint in)
 {
   return in;

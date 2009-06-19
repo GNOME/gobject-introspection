@@ -22,10 +22,10 @@ from .ast import (Bitfield, Class, Enum, Interface, Member, Node,
                   Property, Struct, Union, Record)
 from .ast import (
     type_names, default_array_types,
-    TYPE_STRING, TYPE_INT8, TYPE_UINT8, TYPE_INT16, TYPE_UINT16,
-    TYPE_INT, TYPE_UINT, TYPE_UINT32, TYPE_INT32, TYPE_LONG,
-    TYPE_ULONG, TYPE_INT64, TYPE_UINT64, TYPE_FLOAT,
-    TYPE_DOUBLE, TYPE_BOOLEAN, TYPE_ANY, TYPE_SSIZET,
+    TYPE_STRING, TYPE_INT8, TYPE_UINT8, TYPE_SHORT, TYPE_USHORT,
+    TYPE_INT16, TYPE_UINT16, TYPE_INT, TYPE_UINT, TYPE_UINT32,
+    TYPE_INT32, TYPE_LONG, TYPE_ULONG, TYPE_INT64, TYPE_UINT64,
+    TYPE_FLOAT, TYPE_DOUBLE, TYPE_BOOLEAN, TYPE_ANY, TYPE_SSIZET,
     TYPE_SIZET)
 
 
@@ -53,8 +53,8 @@ type_names['gsize'] = TYPE_SIZET
 type_names['gssize'] = TYPE_SSIZET
 type_names['gchar'] = TYPE_INT8
 type_names['guchar'] = TYPE_UINT8
-type_names['gshort'] = TYPE_INT16
-type_names['gushort'] = TYPE_UINT16
+type_names['gshort'] = TYPE_SHORT
+type_names['gushort'] = TYPE_USHORT
 
 # It's not very nice to duplicate the array types from ast.py,
 # but a clean fix is hard without essentially hardcoding

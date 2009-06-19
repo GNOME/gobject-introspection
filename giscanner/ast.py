@@ -36,6 +36,8 @@ TYPE_ANY = 'any'
 TYPE_BOOLEAN = 'boolean'
 TYPE_INT8 = 'int8'
 TYPE_UINT8 = 'uint8'
+TYPE_SHORT = 'short'
+TYPE_USHORT = 'ushort'
 TYPE_INT16 = 'int16'
 TYPE_UINT16 = 'uint16'
 TYPE_INT = 'int'
@@ -57,9 +59,10 @@ TYPE_FILENAME = 'filename'
 
 BASIC_GIR_TYPES = [TYPE_BOOLEAN, TYPE_INT8, TYPE_UINT8, TYPE_INT16,
                    TYPE_UINT16, TYPE_INT32, TYPE_UINT32, TYPE_INT64,
-                   TYPE_UINT64, TYPE_INT, TYPE_UINT, TYPE_LONG,
-                   TYPE_ULONG, TYPE_SSIZET, TYPE_SIZET, TYPE_FLOAT,
-                   TYPE_DOUBLE, TYPE_TIMET, TYPE_GTYPE]
+                   TYPE_UINT64, TYPE_SHORT, TYPE_USHORT, TYPE_INT,
+                   TYPE_UINT, TYPE_LONG, TYPE_ULONG, TYPE_SSIZET,
+                   TYPE_SIZET, TYPE_FLOAT, TYPE_DOUBLE, TYPE_TIMET,
+                   TYPE_GTYPE]
 GIR_TYPES = [TYPE_NONE, TYPE_ANY]
 GIR_TYPES.extend(BASIC_GIR_TYPES)
 GIR_TYPES.extend([TYPE_STRING, TYPE_FILENAME])
@@ -91,9 +94,9 @@ for name in GIR_TYPES:
 type_names['char'] = TYPE_INT8
 type_names['signed char'] = TYPE_INT8
 type_names['unsigned char'] = TYPE_UINT8
-type_names['short'] = TYPE_INT16
-type_names['signed short'] = TYPE_INT16
-type_names['unsigned short'] = TYPE_UINT16
+type_names['short'] = TYPE_SHORT
+type_names['signed short'] = TYPE_SHORT
+type_names['unsigned short'] = TYPE_USHORT
 type_names['int'] = TYPE_INT
 type_names['signed int'] = TYPE_INT
 type_names['signed'] = TYPE_INT
@@ -120,7 +123,7 @@ type_names['id'] = TYPE_ANY
 
 # Suppress some GLib names
 type_names['uchar'] = TYPE_UINT8
-type_names['ushort'] = TYPE_UINT16
+type_names['ushort'] = TYPE_USHORT
 type_names['size'] = TYPE_SIZET
 type_names['ssize'] = TYPE_SSIZET
 type_names['pointer'] = TYPE_ANY
@@ -135,8 +138,9 @@ default_array_types['uint8*'] = TYPE_UINT8
 default_array_types['utf8*'] = TYPE_STRING
 
 # These types, when seen by reference, are interpreted as out parameters
-default_out_types = (TYPE_INT, TYPE_UINT, TYPE_LONG, TYPE_ULONG,
-                     TYPE_FLOAT, TYPE_DOUBLE, TYPE_SIZET, TYPE_SSIZET)
+default_out_types = (TYPE_SHORT, TYPE_USHORT, TYPE_INT, TYPE_UINT,
+                     TYPE_LONG, TYPE_ULONG, TYPE_FLOAT, TYPE_DOUBLE,
+                     TYPE_SIZET, TYPE_SSIZET)
 
 
 def type_name_from_ctype(ctype):

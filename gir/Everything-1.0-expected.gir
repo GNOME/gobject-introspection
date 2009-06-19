@@ -1093,6 +1093,16 @@ call and can be released on return.">
         </parameter>
       </parameters>
     </function>
+    <function name="test_short" c:identifier="test_short">
+      <return-value transfer-ownership="none">
+        <type name="short" c:type="gshort"/>
+      </return-value>
+      <parameters>
+        <parameter name="in" transfer-ownership="none">
+          <type name="short" c:type="gshort"/>
+        </parameter>
+      </parameters>
+    </function>
     <function name="test_simple_boxed_a_const_return"
               c:identifier="test_simple_boxed_a_const_return">
       <return-value transfer-ownership="none">
@@ -1249,6 +1259,16 @@ call and can be released on return.">
       <parameters>
         <parameter name="in" transfer-ownership="none">
           <type name="ulong" c:type="gulong"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="test_ushort" c:identifier="test_ushort">
+      <return-value transfer-ownership="none">
+        <type name="ushort" c:type="gushort"/>
+      </return-value>
+      <parameters>
+        <parameter name="in" transfer-ownership="none">
+          <type name="ushort" c:type="gushort"/>
         </parameter>
       </parameters>
     </function>

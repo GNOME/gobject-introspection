@@ -14,6 +14,8 @@ gint32 test_int32 (gint32 in);
 guint32 test_uint32 (guint32 in);
 gint64 test_int64 (gint64 in);
 guint64 test_uint64 (guint64 in);
+gshort test_short (gshort in);
+gushort test_ushort (gushort in);
 gint test_int (gint in);
 guint test_uint (guint in);
 glong test_long (glong in);
