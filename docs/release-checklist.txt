@@ -1,7 +1,6 @@
 Check bugzilla
 Run all tests
 Update NEWS
-Add ChangeLog marker === XXX ===
 Commit
 make distcheck
 make release-tag

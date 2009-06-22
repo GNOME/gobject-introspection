@@ -1,3 +1,77 @@
+0.6.3 22-jun 2009
+    Bugs resolved:
+      - 551738 Association needed between records and classes/interfaces
+      - 555960 Nested structs and unions
+      - 555964 float #defined constants are ignored
+      - 556475 support Shadows: annotation
+      - 561360 do not fail for not-found GTypes
+      - 561604 g-ir-compiler fails on gvariant
+      - 563469 Arrays not treated correctly in struct offset calculation
+      - 563682 Fails to build on Hurd/i386 because of undefined PATH_MAX
+      - 564016 add nsprefix to gir and typelib
+      - 566560 giscanner.transformer.SkipError
+      - 567906 put pkg-config name in gir, use them by default in scanner
+      - 568680 Scanner misses fields (at least in GObject.Object)
+      - 569355 warning fixes
+      - 569633 [PATCH] Typelib compiler fails with vararg callbacks.
+      - 569930 g_registered_type_info_get_g_type does not handle GObject
+      - 570594 everything you know about C syntax is wrong
+      - 570903 Add information about -I flag to scanner manpage.
+      - 571182 introspection.m4 issues
+      - 571248 [patch] ignore unknown elements in gir parser
+      - 571483 .gir should be sorted
+      - 571548 generic typelib attributes
+      - 571649 Rename Soup-2.0.gir to Soup-2.4.gir
+      - 572075 Make the scanner work with static and convenience libraries
+      - 572086 Parse doc-comment tags case-insensitive
+      - 572423 Add c:header-filename or c:header-filenames where appropr...
+      - 572434 Have glib:is-iface-struct-for attribute on *Iface structs
+      - 572563 build failure in tests/everything
+      - 572790 #defines should be parsed in .h files but not .c files
+      - 572965 Allow generic marshaller to be called without parameters
+      - 573306 Relax callback grouping detection rules
+      - 573309 Adding an "--all" parameter to g-ir-generate
+      - 573332 Allow annotation of enums as bitfields
+      - 574139 There is no way to identify 'user_data' arguments in the ...
+      - 574284 Add support for a 'closure' and 'destroy' annotations
+      - 574501 build script looks for site-packages instead of dist-pack...
+      - 575613 incorrect enum stripping
+      - 576323 g-ir-compiler fails with constant in classes
+      - 576605 Get rid of GI_SCOPE_TYPE_OBJECT
+      - 576627 gir-repository: WebKit needs to include Soup-2.4
+      - 577065 Fix 'Could not find GIR file ...' error to use right file...
+      - 577534 use rename() to write out typelibs
+      - 577546 Missing annotations for GLib, GObject and Gio
+      - 579522 gobject-introspection fails to build when missing libsoup...
+      - 579602 Annotation fixes for gdk, gdkpixbuf, gtk and notify
+      - 581680 Leftover bogus text in g-object-introspection documentation
+      - 581681 Allow the use of the "Rename To" annotation for literal m...
+      - 581682 Improve "Everything" test library
+      - 581684 Minor doc comment fix
+      - 581685 Allow nested parameterized types for GList, GSList, and G...
+      - 581689 Better handle classes with non-standard to_underscore names.
+      - 583338 GIR annotations: gtk_init can take a null argv
+      - 584423 Add short/ushort support
+      - 584432 g-ir-compiler fails to find gir files installed by gobjec...
+      - 584453 Default annotations value for const gchar* const *
+      - 584816 Add GLclampf to the GL GIR
+      - 584842 Add an Everything-1.0-expected.gir, test Everything versu...
+      - 585081 libgirepository-everything is not linked against libglib,...
+      - 585141 Incomplete gir generation for GdkPixbuf, Atk, Poppler
+      - 585150 XPATH_TESTS are not run
+      - 585328 g_type_info_is_zero_terminated returns TRUE unless (array...
+      - 585373 Add annotations for g_spawn_* functions.
+      - 585579 g-o-i: 'make check' doesn't check Everything-1.0-expected...
+      - 585584 Fix warnings in girparser.c and compiler.c
+      - 585908 make distcheck fails
+    Contributors:
+    C. Scott Ananian, Emmanuele Bassi, Johan Bilien, Robert Carr,
+    Johan Dahlin, Holger Hans Peter Freyther, Marco Pesenti Gritti,
+    David Ignacio, Mark Lee, Simon van der Linden, Xan Lopez,
+    Didier 'Ptitjes, Chris Rivera, Andreas Rottmann, Owen W. Taylor,
+    Colin Walters, Dan Winship, Tomeu Vizoso and Marina Zhurakhinskaya
+
+
 0.6.2 21-jan-2009
     Bugs resolved:
     - Bug 562622 – Errordomains missing
@@ -30,7 +104,7 @@
     Johan Bilien, Jürg Billeter, Johan Dahlin, Christophe Fergeau
     Havoc Pennington, Andreas Rottmann, Owen Taylor, Tristan Van Berkom
     Colin Walters, Dan Winship
-    
+
 0.6.1 25-nov-2008
     Bugs resolved:
     - Bug 552371 - implement struct field get/set
