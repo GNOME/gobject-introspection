@@ -601,7 +601,8 @@ class AnnotationApplier(object):
             # is specified.
             if (isinstance(node, Parameter) and
                 node.type.name == 'utf8' and
-                self._guess_direction(node) == PARAM_DIRECTION_IN):
+                self._guess_direction(node) == PARAM_DIRECTION_IN and
+                element_type is None):
                 # FIXME: unsigned char/guchar should be uint8
                 container_type.element_type = Type('int8')
         container_type.size = array_values.get(OPT_ARRAY_FIXED_SIZE)

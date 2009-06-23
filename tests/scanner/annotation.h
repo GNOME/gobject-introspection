@@ -129,6 +129,8 @@ void     annotation_versioned           (void);
 char **  annotation_string_zero_terminated (void);
 void     annotation_string_zero_terminated_out (char ***out);
 
+void     annotation_string_array_length (guint n_properties, const gchar * const properties[]);
+
 void     annotation_object_extra_annos (AnnotationObject *object);
 
 void     annotation_custom_destroy (AnnotationCallback callback,
