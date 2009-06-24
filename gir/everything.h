@@ -44,6 +44,7 @@ char *test_utf8_out_nonconst_return (char **out);
 /* array */
 gboolean test_strv_in (char **arr);
 int test_array_int_in (int n_ints, int *ints);
+void test_array_int_out (int *n_ints, int **ints);
 int test_array_gint8_in (int n_ints, gint8 *ints);
 int test_array_gint16_in (int n_ints, gint16 *ints);
 gint32 test_array_gint32_in (int n_ints, gint32 *ints);
@@ -53,6 +54,9 @@ char **test_strv_out_container (void);
 char **test_strv_out (void);
 const char * const * test_strv_out_c (void);
 void   test_strv_outarg (char ***retp);
+int test_array_fixed_size_int_in (int *ints);
+void test_array_fixed_size_int_out (int **ints);
+int *test_array_fixed_size_int_return (void);
 
 /* transfer tests */
 int test_array_int_in_take (int n_ints, int *ints);

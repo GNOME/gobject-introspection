@@ -307,6 +307,21 @@ test_array_int_in (int n_ints, int *ints)
 }
 
 /**
+ * test_array_int_out:
+ * @n_ints: (out): the length of @ints
+ * @ints: (out) (array length=n_ints) (transfer full): a list of 5 integers, from 0 to 4 in consecutive order
+ */
+void
+test_array_int_out (int *n_ints, int **ints)
+{
+  int i;
+  *n_ints = 5;
+  *ints = g_malloc0(sizeof(**ints) * *n_ints);
+  for (i = 1; i < *n_ints; i++)
+    (*ints)[i] = (*ints)[i-1] + 1;
+}
+
+/**
  * test_array_gint8_in:
  * @n_ints:
  * @ints: (array length=n_ints): List of ints
@@ -466,6 +481,48 @@ test_strv_outarg (char ***retp)
   ret[2] = "3";
   ret[3] = NULL;
   *retp = ret;
+}
+
+/**
+ * test_array_fixed_size_int_in:
+ * @ints: (array fixed-size=5): a list of 5 integers
+ *
+ * Returns: the sum of the items in @ints
+ */
+int
+test_array_fixed_size_int_in (int *ints)
+{
+  int i, sum = 0;
+  for (i = 0; i < 5; i++)
+    sum += ints[i];
+  return sum;
+}
+
+/**
+ * test_array_fixed_size_int_out:
+ * @ints: (out) (array fixed-size=5) (transfer full): a list of 5 integers ranging from 0 to 4
+ */
+void
+test_array_fixed_size_int_out (int **ints)
+{
+  int i;
+  *ints = g_malloc0(sizeof(**ints) * 5);
+  for (i = 1; i < 5; i++)
+    (*ints)[i] = (*ints)[i-1] + 1;
+}
+
+/**
+ * test_array_fixed_size_int_return:
+ * Returns: (array fixed-size=5) (transfer full): a list of 5 integers ranging from 0 to 4
+ */
+int *
+test_array_fixed_size_int_return (void)
+{
+  int i, *ints;
+  ints = g_malloc0(sizeof(*ints) * 5);
+  for (i = 1; i < 5; i++)
+    ints[i] = ints[i-1] + 1;
+  return ints;
 }
 
 /**
