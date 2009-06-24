@@ -386,6 +386,46 @@ case.">
         <type name="GObject.ObjectClass" c:type="GObjectClass"/>
       </field>
     </record>
+    <function name="test_array_fixed_size_int_in"
+              c:identifier="test_array_fixed_size_int_in">
+      <return-value transfer-ownership="none">
+        <type name="int" c:type="int"/>
+      </return-value>
+      <parameters>
+        <parameter name="ints"
+                   transfer-ownership="none"
+                   doc="a list of 5 integers">
+          <array c:type="int*" fixed-size="5">
+            <type name="int"/>
+          </array>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="test_array_fixed_size_int_out"
+              c:identifier="test_array_fixed_size_int_out">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="ints"
+                   direction="out"
+                   transfer-ownership="full"
+                   doc="a list of 5 integers ranging from 0 to 4">
+          <array c:type="int**" fixed-size="5">
+            <type name="int"/>
+          </array>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="test_array_fixed_size_int_return"
+              c:identifier="test_array_fixed_size_int_return">
+      <return-value transfer-ownership="full"
+                    doc="a list of 5 integers ranging from 0 to 4">
+        <array c:type="int*" fixed-size="5">
+          <type name="int"/>
+        </array>
+      </return-value>
+    </function>
     <function name="test_array_gint16_in" c:identifier="test_array_gint16_in">
       <return-value transfer-ownership="none">
         <type name="int" c:type="int"/>
@@ -516,6 +556,27 @@ case.">
       <parameters>
         <parameter name="len" direction="out" transfer-ownership="full">
           <type name="int" c:type="int*"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="test_array_int_out" c:identifier="test_array_int_out">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="n_ints"
+                   direction="out"
+                   transfer-ownership="full"
+                   doc="the length of @ints">
+          <type name="int" c:type="int*"/>
+        </parameter>
+        <parameter name="ints"
+                   direction="out"
+                   transfer-ownership="full"
+                   doc="a list of 5 integers, from 0 to 4 in consecutive order">
+          <array length="0" c:type="int**">
+            <type name="int"/>
+          </array>
         </parameter>
       </parameters>
     </function>
@@ -1321,6 +1382,40 @@ call and can be released on return.">
       </return-value>
       <parameters>
         <parameter name="out" direction="out" transfer-ownership="full">
+          <type name="utf8" c:type="char**"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="test_utf8_out_nonconst_return"
+              c:identifier="test_utf8_out_nonconst_return">
+      <return-value transfer-ownership="full"
+                    doc="a copy of &quot;first&quot;">
+        <type name="utf8" c:type="char*"/>
+      </return-value>
+      <parameters>
+        <parameter name="out"
+                   direction="out"
+                   transfer-ownership="full"
+                   doc="a copy of &quot;second&quot;">
+          <type name="utf8" c:type="char**"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="test_utf8_out_out" c:identifier="test_utf8_out_out">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="out0"
+                   direction="out"
+                   transfer-ownership="full"
+                   doc="a copy of &quot;first&quot;">
+          <type name="utf8" c:type="char**"/>
+        </parameter>
+        <parameter name="out1"
+                   direction="out"
+                   transfer-ownership="full"
+                   doc="a copy of &quot;second&quot;">
           <type name="utf8" c:type="char**"/>
         </parameter>
       </parameters>
