@@ -36,6 +36,10 @@ void test_utf8_out (char **out);
 void test_utf8_inout (char **inout);
 GSList *test_filename_return (void);
 
+/* multiple output arguments */
+void test_utf8_out_out (char **out0, char **out1);
+char *test_utf8_out_nonconst_return (char **out);
+
 /* non-basic-types */
 /* array */
 gboolean test_strv_in (char **arr);

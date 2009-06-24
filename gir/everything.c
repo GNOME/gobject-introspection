@@ -257,6 +257,35 @@ GSList *test_filename_return (void)
   return filenames;
 }
 
+
+/* multiple output arguments */
+
+/**
+ * test_utf8_out_out:
+ * @out0: (out) (transfer full): a copy of "first"
+ * @out1: (out) (transfer full): a copy of "second"
+ */
+void
+test_utf8_out_out (char **out0, char **out1)
+{
+  *out0 = g_strdup ("first");
+  *out1 = g_strdup ("second");
+}
+
+/**
+ * test_utf8_out_nonconst_return:
+ * @out: (out) (transfer full): a copy of "second"
+ *
+ * Returns: (transfer full): a copy of "first"
+ */
+char *
+test_utf8_out_nonconst_return (char **out)
+{
+  *out = g_strdup ("second");
+  return g_strdup ("first");
+}
+
+
 /* non-basic-types */
 
 static const char *test_sequence[] = {"1", "2", "3"};
