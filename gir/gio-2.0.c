@@ -390,11 +390,14 @@
 
 /**
  * g_file_replace_contents:
+ * @etag: (allow-none):
+ * @new_etag: (allow-none) (out):
  * @cancellable: (allow-none):
  */
 
 /**
  * g_file_replace_contents_async:
+ * @etag: (allow-none):
  * @cancellable: (allow-none):
  */
 

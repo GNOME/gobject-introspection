@@ -5,6 +5,11 @@
  */
 
 /**
+ * g_file_open_tmp:
+ * @name_used: (out):
+ */
+
+/**
  * g_markup_escape_text:
  * Return value: (transfer full):
  */
