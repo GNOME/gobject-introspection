@@ -249,10 +249,35 @@ struct _TestObjClass
 GType      test_obj_get_type (void);
 TestObj*   test_obj_new_from_file (const char *x, GError **error);
 void       test_obj_set_bare (TestObj *obj, GObject *bare);
+int        test_obj_instance_method (TestObj *obj);
 double     test_obj_static_method (int x);
 
 /* virtual */
 int        test_obj_do_matrix (TestObj *obj, const char *somestr);
+
+/* inheritance */
+#define TEST_TYPE_SUB_OBJ           (test_sub_obj_get_type ())
+#define TEST_SUB_OBJECT(object)     (G_TYPE_CHECK_INSTANCE_CAST ((object), TEST_TYPE_SUB_OBJ, TestSubObj))
+#define TEST_IS_SUB_OBJECT(object)  (G_TYPE_CHECK_INSTANCE_TYPE ((object), TEST_TYPE_SUB_OBJ))
+#define TEST_SUB_OBJ_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TEST_TYPE_SUB_OBJ, TestSubObjClass))
+
+typedef struct _TestSubObj         TestSubObj;
+typedef struct _TestSubObjClass    TestSubObjClass;
+
+struct _TestSubObj
+{
+  TestObj parent_instance;
+};
+
+struct _TestSubObjClass
+{
+  TestObjClass parent_class;
+};
+
+GType       test_sub_obj_get_type (void);
+TestSubObj* test_sub_obj_new (void);
+void        test_sub_obj_unset_bare (TestSubObj *obj);
+int         test_sub_obj_instance_method (TestSubObj *obj);
 
 /* callback */
 typedef int (*TestCallback) ();

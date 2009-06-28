@@ -1423,6 +1423,12 @@ test_obj_set_bare (TestObj *obj, GObject *bare)
     g_object_ref (obj->bare);
 }
 
+int
+test_obj_instance_method (TestObj *obj)
+{
+    return -1;
+}
+
 double
 test_obj_static_method (int x)
 {
@@ -1454,6 +1460,37 @@ struct _CallbackInfo
   GDestroyNotify notify;
   gpointer user_data;
 };
+
+
+G_DEFINE_TYPE(TestSubObj, test_sub_obj, TEST_TYPE_OBJ);
+
+static void
+test_sub_obj_class_init (TestSubObjClass *klass)
+{
+}
+
+static void
+test_sub_obj_init (TestSubObj *obj)
+{
+}
+
+TestSubObj*
+test_sub_obj_new ()
+{
+  return g_object_new (TEST_TYPE_SUB_OBJ, NULL);
+}
+
+int
+test_sub_obj_instance_method (TestSubObj *obj)
+{
+    return 0;
+}
+
+void
+test_sub_obj_unset_bare (TestSubObj *obj)
+{
+  test_obj_set_bare(TEST_OBJECT(obj), NULL);
+}
 
 
 /**
