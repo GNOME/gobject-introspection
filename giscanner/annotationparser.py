@@ -332,7 +332,7 @@ class AnnotationApplier(object):
         self._parse_node_common(record, block)
         self._parse_constructors(record.constructors)
         self._parse_methods(record, record.methods)
-        self._parse_fields(record, record.fields)
+        self._parse_fields(record, record.fields, block)
         if block:
             record.doc = block.comment
 
@@ -347,7 +347,7 @@ class AnnotationApplier(object):
     def _parse_union(self, union):
         block = self._blocks.get(union.name)
         self._parse_node_common(union, block)
-        self._parse_fields(union, union.fields)
+        self._parse_fields(union, union.fields, block)
         self._parse_constructors(union.constructors)
         self._parse_methods(union, union.methods)
         if block:
@@ -373,9 +373,9 @@ class AnnotationApplier(object):
         for ctor in constructors:
             self._parse_function(ctor)
 
-    def _parse_fields(self, parent, fields):
+    def _parse_fields(self, parent, fields, block=None):
         for field in fields:
-            self._parse_field(parent, field)
+            self._parse_field(parent, field, block)
 
     def _parse_properties(self, parent, properties):
         for prop in properties:
@@ -464,9 +464,19 @@ class AnnotationApplier(object):
         key = '%s::%s' % (parent.type_name, vfunc.name)
         self._parse_callable(vfunc, self._blocks.get(key))
 
-    def _parse_field(self, parent, field):
+    def _parse_field(self, parent, field, block=None):
         if isinstance(field, Callback):
             self._parse_callback(field)
+        else:
+            if not block:
+                return
+            tag = block.get(field.name)
+            if not tag:
+                return
+            t = tag.options.get('type')
+            if not t:
+                return
+            field.type.name = self._transformer.resolve_type_name(t.one())
 
     def _parse_params(self, parent, params, block):
         for param in params:
