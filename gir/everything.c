@@ -322,6 +322,26 @@ test_array_int_out (int *n_ints, int **ints)
 }
 
 /**
+ * test_array_int_inout:
+ * @n_ints: (inout): the length of @ints
+ * @ints: (inout) (array length=n_ints) (transfer full): a list of integers whose items will be increased by 1, except the first that will be dropped
+ */
+void
+test_array_int_inout (int *n_ints, int **ints)
+{
+  int i;
+
+  for (i = 1; i < *n_ints; i++) {
+	(*ints)[i-1] = (*ints)[i] + 1;
+  }
+
+  if (0 < *n_ints) {
+    *n_ints -= 1;
+  }
+  *ints = g_realloc(*ints, sizeof(**ints) * *n_ints);
+}
+
+/**
  * test_array_gint8_in:
  * @n_ints:
  * @ints: (array length=n_ints): List of ints

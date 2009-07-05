@@ -583,6 +583,27 @@ case.">
         </parameter>
       </parameters>
     </function>
+    <function name="test_array_int_inout" c:identifier="test_array_int_inout">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="n_ints"
+                   direction="inout"
+                   transfer-ownership="full"
+                   doc="the length of @ints">
+          <type name="int" c:type="int*"/>
+        </parameter>
+        <parameter name="ints"
+                   direction="inout"
+                   transfer-ownership="full"
+                   doc="a list of integers whose items will be increased by 1, except the first that will be dropped">
+          <array length="0" c:type="int**">
+            <type name="int"/>
+          </array>
+        </parameter>
+      </parameters>
+    </function>
     <function name="test_array_int_none_out"
               c:identifier="test_array_int_none_out">
       <return-value transfer-ownership="none"
