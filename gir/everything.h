@@ -36,10 +36,15 @@ void test_utf8_out (char **out);
 void test_utf8_inout (char **inout);
 GSList *test_filename_return (void);
 
+/* multiple output arguments */
+void test_utf8_out_out (char **out0, char **out1);
+char *test_utf8_out_nonconst_return (char **out);
+
 /* non-basic-types */
 /* array */
 gboolean test_strv_in (char **arr);
 int test_array_int_in (int n_ints, int *ints);
+void test_array_int_out (int *n_ints, int **ints);
 int test_array_gint8_in (int n_ints, gint8 *ints);
 int test_array_gint16_in (int n_ints, gint16 *ints);
 gint32 test_array_gint32_in (int n_ints, gint32 *ints);
@@ -49,6 +54,9 @@ char **test_strv_out_container (void);
 char **test_strv_out (void);
 const char * const * test_strv_out_c (void);
 void   test_strv_outarg (char ***retp);
+int test_array_fixed_size_int_in (int *ints);
+void test_array_fixed_size_int_out (int **ints);
+int *test_array_fixed_size_int_return (void);
 
 /* transfer tests */
 int test_array_int_in_take (int n_ints, int *ints);
@@ -241,10 +249,35 @@ struct _TestObjClass
 GType      test_obj_get_type (void);
 TestObj*   test_obj_new_from_file (const char *x, GError **error);
 void       test_obj_set_bare (TestObj *obj, GObject *bare);
+int        test_obj_instance_method (TestObj *obj);
 double     test_obj_static_method (int x);
 
 /* virtual */
 int        test_obj_do_matrix (TestObj *obj, const char *somestr);
+
+/* inheritance */
+#define TEST_TYPE_SUB_OBJ           (test_sub_obj_get_type ())
+#define TEST_SUB_OBJECT(object)     (G_TYPE_CHECK_INSTANCE_CAST ((object), TEST_TYPE_SUB_OBJ, TestSubObj))
+#define TEST_IS_SUB_OBJECT(object)  (G_TYPE_CHECK_INSTANCE_TYPE ((object), TEST_TYPE_SUB_OBJ))
+#define TEST_SUB_OBJ_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TEST_TYPE_SUB_OBJ, TestSubObjClass))
+
+typedef struct _TestSubObj         TestSubObj;
+typedef struct _TestSubObjClass    TestSubObjClass;
+
+struct _TestSubObj
+{
+  TestObj parent_instance;
+};
+
+struct _TestSubObjClass
+{
+  TestObjClass parent_class;
+};
+
+GType       test_sub_obj_get_type (void);
+TestSubObj* test_sub_obj_new (void);
+void        test_sub_obj_unset_bare (TestSubObj *obj);
+int         test_sub_obj_instance_method (TestSubObj *obj);
 
 /* callback */
 typedef int (*TestCallback) ();

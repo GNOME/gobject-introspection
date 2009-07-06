@@ -159,6 +159,11 @@ and/or use gtk-doc annotations.  -->
           </parameter>
         </parameters>
       </method>
+      <method name="instance_method" c:identifier="test_obj_instance_method">
+        <return-value transfer-ownership="none">
+          <type name="int" c:type="int"/>
+        </return-value>
+      </method>
       <method name="do_matrix"
               c:identifier="test_obj_do_matrix"
               doc="This method is virtual.  Notably its name differs from the virtual
@@ -332,6 +337,39 @@ case.">
         <type name="GObject.Object" c:type="GObject*"/>
       </field>
     </record>
+    <class name="TestSubObj"
+           c:type="TestSubObj"
+           parent="TestObj"
+           glib:type-name="TestSubObj"
+           glib:get-type="test_sub_obj_get_type"
+           glib:type-struct="TestSubObjClass">
+      <constructor name="new" c:identifier="test_sub_obj_new">
+        <return-value transfer-ownership="full">
+          <type name="TestSubObj" c:type="TestSubObj*"/>
+        </return-value>
+      </constructor>
+      <method name="unset_bare" c:identifier="test_sub_obj_unset_bare">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+      </method>
+      <method name="instance_method"
+              c:identifier="test_sub_obj_instance_method">
+        <return-value transfer-ownership="none">
+          <type name="int" c:type="int"/>
+        </return-value>
+      </method>
+      <field name="parent_instance">
+        <type name="TestObj" c:type="TestObj"/>
+      </field>
+    </class>
+    <record name="TestSubObjClass"
+            c:type="TestSubObjClass"
+            glib:is-gtype-struct-for="TestSubObj">
+      <field name="parent_class">
+        <type name="TestObjClass" c:type="TestObjClass"/>
+      </field>
+    </record>
     <class name="TestWi8021x"
            c:type="TestWi8021x"
            parent="GObject.Object"
@@ -386,6 +424,46 @@ case.">
         <type name="GObject.ObjectClass" c:type="GObjectClass"/>
       </field>
     </record>
+    <function name="test_array_fixed_size_int_in"
+              c:identifier="test_array_fixed_size_int_in">
+      <return-value transfer-ownership="none">
+        <type name="int" c:type="int"/>
+      </return-value>
+      <parameters>
+        <parameter name="ints"
+                   transfer-ownership="none"
+                   doc="a list of 5 integers">
+          <array c:type="int*" fixed-size="5">
+            <type name="int"/>
+          </array>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="test_array_fixed_size_int_out"
+              c:identifier="test_array_fixed_size_int_out">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="ints"
+                   direction="out"
+                   transfer-ownership="full"
+                   doc="a list of 5 integers ranging from 0 to 4">
+          <array c:type="int**" fixed-size="5">
+            <type name="int"/>
+          </array>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="test_array_fixed_size_int_return"
+              c:identifier="test_array_fixed_size_int_return">
+      <return-value transfer-ownership="full"
+                    doc="a list of 5 integers ranging from 0 to 4">
+        <array c:type="int*" fixed-size="5">
+          <type name="int"/>
+        </array>
+      </return-value>
+    </function>
     <function name="test_array_gint16_in" c:identifier="test_array_gint16_in">
       <return-value transfer-ownership="none">
         <type name="int" c:type="int"/>
@@ -516,6 +594,27 @@ case.">
       <parameters>
         <parameter name="len" direction="out" transfer-ownership="full">
           <type name="int" c:type="int*"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="test_array_int_out" c:identifier="test_array_int_out">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="n_ints"
+                   direction="out"
+                   transfer-ownership="full"
+                   doc="the length of @ints">
+          <type name="int" c:type="int*"/>
+        </parameter>
+        <parameter name="ints"
+                   direction="out"
+                   transfer-ownership="full"
+                   doc="a list of 5 integers, from 0 to 4 in consecutive order">
+          <array length="0" c:type="int**">
+            <type name="int"/>
+          </array>
         </parameter>
       </parameters>
     </function>
@@ -1321,6 +1420,40 @@ call and can be released on return.">
       </return-value>
       <parameters>
         <parameter name="out" direction="out" transfer-ownership="full">
+          <type name="utf8" c:type="char**"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="test_utf8_out_nonconst_return"
+              c:identifier="test_utf8_out_nonconst_return">
+      <return-value transfer-ownership="full"
+                    doc="a copy of &quot;first&quot;">
+        <type name="utf8" c:type="char*"/>
+      </return-value>
+      <parameters>
+        <parameter name="out"
+                   direction="out"
+                   transfer-ownership="full"
+                   doc="a copy of &quot;second&quot;">
+          <type name="utf8" c:type="char**"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="test_utf8_out_out" c:identifier="test_utf8_out_out">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="out0"
+                   direction="out"
+                   transfer-ownership="full"
+                   doc="a copy of &quot;first&quot;">
+          <type name="utf8" c:type="char**"/>
+        </parameter>
+        <parameter name="out1"
+                   direction="out"
+                   transfer-ownership="full"
+                   doc="a copy of &quot;second&quot;">
           <type name="utf8" c:type="char**"/>
         </parameter>
       </parameters>

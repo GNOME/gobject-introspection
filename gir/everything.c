@@ -257,6 +257,35 @@ GSList *test_filename_return (void)
   return filenames;
 }
 
+
+/* multiple output arguments */
+
+/**
+ * test_utf8_out_out:
+ * @out0: (out) (transfer full): a copy of "first"
+ * @out1: (out) (transfer full): a copy of "second"
+ */
+void
+test_utf8_out_out (char **out0, char **out1)
+{
+  *out0 = g_strdup ("first");
+  *out1 = g_strdup ("second");
+}
+
+/**
+ * test_utf8_out_nonconst_return:
+ * @out: (out) (transfer full): a copy of "second"
+ *
+ * Returns: (transfer full): a copy of "first"
+ */
+char *
+test_utf8_out_nonconst_return (char **out)
+{
+  *out = g_strdup ("second");
+  return g_strdup ("first");
+}
+
+
 /* non-basic-types */
 
 static const char *test_sequence[] = {"1", "2", "3"};
@@ -275,6 +304,21 @@ test_array_int_in (int n_ints, int *ints)
   for (i = 0; i < n_ints; i++)
     sum += ints[i];
   return sum;
+}
+
+/**
+ * test_array_int_out:
+ * @n_ints: (out): the length of @ints
+ * @ints: (out) (array length=n_ints) (transfer full): a list of 5 integers, from 0 to 4 in consecutive order
+ */
+void
+test_array_int_out (int *n_ints, int **ints)
+{
+  int i;
+  *n_ints = 5;
+  *ints = g_malloc0(sizeof(**ints) * *n_ints);
+  for (i = 1; i < *n_ints; i++)
+    (*ints)[i] = (*ints)[i-1] + 1;
 }
 
 /**
@@ -437,6 +481,48 @@ test_strv_outarg (char ***retp)
   ret[2] = "3";
   ret[3] = NULL;
   *retp = ret;
+}
+
+/**
+ * test_array_fixed_size_int_in:
+ * @ints: (array fixed-size=5): a list of 5 integers
+ *
+ * Returns: the sum of the items in @ints
+ */
+int
+test_array_fixed_size_int_in (int *ints)
+{
+  int i, sum = 0;
+  for (i = 0; i < 5; i++)
+    sum += ints[i];
+  return sum;
+}
+
+/**
+ * test_array_fixed_size_int_out:
+ * @ints: (out) (array fixed-size=5) (transfer full): a list of 5 integers ranging from 0 to 4
+ */
+void
+test_array_fixed_size_int_out (int **ints)
+{
+  int i;
+  *ints = g_malloc0(sizeof(**ints) * 5);
+  for (i = 1; i < 5; i++)
+    (*ints)[i] = (*ints)[i-1] + 1;
+}
+
+/**
+ * test_array_fixed_size_int_return:
+ * Returns: (array fixed-size=5) (transfer full): a list of 5 integers ranging from 0 to 4
+ */
+int *
+test_array_fixed_size_int_return (void)
+{
+  int i, *ints;
+  ints = g_malloc0(sizeof(*ints) * 5);
+  for (i = 1; i < 5; i++)
+    ints[i] = ints[i-1] + 1;
+  return ints;
 }
 
 /**
@@ -1337,6 +1423,12 @@ test_obj_set_bare (TestObj *obj, GObject *bare)
     g_object_ref (obj->bare);
 }
 
+int
+test_obj_instance_method (TestObj *obj)
+{
+    return -1;
+}
+
 double
 test_obj_static_method (int x)
 {
@@ -1368,6 +1460,37 @@ struct _CallbackInfo
   GDestroyNotify notify;
   gpointer user_data;
 };
+
+
+G_DEFINE_TYPE(TestSubObj, test_sub_obj, TEST_TYPE_OBJ);
+
+static void
+test_sub_obj_class_init (TestSubObjClass *klass)
+{
+}
+
+static void
+test_sub_obj_init (TestSubObj *obj)
+{
+}
+
+TestSubObj*
+test_sub_obj_new ()
+{
+  return g_object_new (TEST_TYPE_SUB_OBJ, NULL);
+}
+
+int
+test_sub_obj_instance_method (TestSubObj *obj)
+{
+    return 0;
+}
+
+void
+test_sub_obj_unset_bare (TestSubObj *obj)
+{
+  test_obj_set_bare(TEST_OBJECT(obj), NULL);
+}
 
 
 /**

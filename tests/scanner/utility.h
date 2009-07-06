@@ -44,6 +44,13 @@ typedef union
   };
 } UtilityByte;
 
+/* This one is similiar to Soup.Buffer */
+typedef struct
+{
+  const char *data;
+  gsize       length;
+} UtilityBuffer;
+
 typedef void (*UtilityFileFunc)(const char *path, gpointer user_data);
 
 GType                 utility_object_get_type          (void) G_GNUC_CONST;

@@ -6,6 +6,12 @@ G_DEFINE_TYPE (UtilityObject, utility_object, G_TYPE_OBJECT);
  * UtilityFlagType: (type bitfield)
  **/
 
+/**
+ * UtilityBuffer:
+ *
+ * @data: (type pointer): the data
+ **/
+
 static void
 utility_object_class_init (UtilityObjectClass *klass)
 {

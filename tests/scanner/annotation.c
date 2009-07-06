@@ -601,6 +601,16 @@ annotation_versioned (void)
 }
 
 /**
+ * annotation_string_array_length:
+ * @n_properties:
+ * @properties: (array length=n_properties) (element-type utf8):
+ */
+void
+annotation_string_array_length (guint n_properties, const gchar * const properties[])
+{
+}
+
+/**
  * annotation_object_extra_annos:
  *
  * Attributes: (org.foobar testvalue)

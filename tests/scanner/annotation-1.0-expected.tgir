@@ -452,6 +452,21 @@
         </parameter>
       </parameters>
     </function>
+    <function name="string_array_length" c:identifier="annotation_string_array_length">
+      <return-value transfer-ownership="none">
+        <type name="none"/>
+      </return-value>
+      <parameters>
+        <parameter name="n_properties" transfer-ownership="none">
+          <type name="uint"/>
+        </parameter>
+        <parameter name="properties" transfer-ownership="none">
+          <array length="0">
+            <type name="utf8"/>
+          </array>
+        </parameter>
+      </parameters>
+    </function>
     <function name="string_zero_terminated" c:identifier="annotation_string_zero_terminated">
       <return-value transfer-ownership="full">
         <array zero-terminated="1">

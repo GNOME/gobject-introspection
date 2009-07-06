@@ -10,6 +10,7 @@
     <record name="NsPtr" c:type="xmlNsPtr"/>
     <record name="Char" c:type="xmlChar"/>
     <record name="TextWriter" c:type="xmlTextWriterPtr"/>
+    <record name="TextReader" c:type="xmlTextReaderPtr"/>
     <function name="dummy" c:identifier="dummy">
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
