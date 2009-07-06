@@ -219,5 +219,6 @@ tests/repository/Makefile
 examples/Makefile
 docs/Makefile
 docs/reference/Makefile
-gobject-introspection-1.0.pc])
+gobject-introspection-1.0.pc
+gobject-introspection-no-export-1.0.pc])
 AC_OUTPUT

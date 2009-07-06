@@ -27,7 +27,7 @@ man_MANS = 			\
 	docs/g-ir-scanner.1
 
 pkgconfigdir = $(libdir)/pkgconfig
-pkgconfig_DATA = gobject-introspection-1.0.pc
+pkgconfig_DATA = gobject-introspection-1.0.pc gobject-introspection-no-export-1.0.pc
 
 m4dir = $(datadir)/aclocal
 m4_DATA = m4/introspection.m4
