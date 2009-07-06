@@ -170,7 +170,7 @@ class GLibTransformer(object):
             try:
                 self._resolve_node(node)
             except KeyError, e:
-                print "WARNING: DELETING node %s: %s" % (node.name, e)
+                #print "WARNING: DELETING node %s: %s" % (node.name, e)
                 self._remove_attribute(node.name)
         # Another pass, since we need to have the methods parsed
         # in order to correctly modify them after class/record
@@ -186,7 +186,7 @@ class GLibTransformer(object):
         if not self._noclosure:
             self._resolve_types(nodes)
 
-        self._validate(nodes)
+        #self._validate(nodes)
 
         # Create a new namespace with what we found
         namespace = Namespace(self._namespace_name, self._namespace_version)
@@ -998,7 +998,7 @@ class GLibTransformer(object):
         for vfunc in iface.virtual_methods:
             if not vfunc.invoker:
                 print ("warning: Interface %r virtual function %r " + \
-                    "has no known invoker") % (iface.name, vfunc.name)
+                       "has no known invoker") % (iface.name, vfunc.name)
 
     # This function is called at the very end, before we hand back the
     # completed namespace to the writer.  Add static analysis checks here.
