@@ -3,6 +3,8 @@
             xmlns="http://www.gtk.org/introspection/core/1.0"
             xmlns:c="http://www.gtk.org/introspection/c/1.0">
   <namespace name="xlib" version="2.0">
+    <alias name="Window" target="uint32" c:type="Window"/>
+
     <record name="Atom" c:type="Atom"/>
     <record name="Display" c:type="Display"/>
     <record name="Drawable" c:type="Drawable"/>
@@ -12,7 +14,6 @@
     <record name="Picture" c:type="Picture"/>
     <record name="Screen" c:type="Screen"/>
     <record name="VisualID" c:type="VisualID"/>
-    <record name="Window" c:type="Window"/>
     <record name="XEvent" c:type="XEvent"/>
     <record name="XConfigureEvent" c:type="XConfigureEvent"/>
     <record name="XID" c:type="XID"/>
