@@ -1083,7 +1083,7 @@ test_flags_get_type (void)
         static const GFlagsValue values[] = {
             { TEST_FLAG1, "TEST_FLAG1", "flag1" },
             { TEST_FLAG2, "TEST_FLAG2", "flag2" },
-            { TEST_FLAG3, "TEST_FLAG3", "flag2" },
+            { TEST_FLAG3, "TEST_FLAG3", "flag3" },
             { 0, NULL, NULL }
         };
         etype = g_flags_register_static (g_intern_static_string ("TestFlags"), values);
