@@ -380,6 +380,7 @@
 
 /**
  * g_file_replace:
+ * @etag: (allow-none)
  * @cancellable: (allow-none):
  */
 
