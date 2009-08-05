@@ -207,12 +207,11 @@ class DumpCompiler(object):
         # hack for building GIRepository.gir, skip -lgirepository-1.0 since
         # libgirepository-1.0.la is not in current directory and we refer to it
         # explicitly below anyway
-        if (not uninst_builddir or
-            self._options.libraries[0] != 'girepository-1.0'):
-            # We only use the first library; assume others are "custom"
-            # libraries like from gir-repository.  Right now those don't define
-            # new GTypes, so we don't need to introspect them.
-            args.append('-l' + self._options.libraries[0])
+        for library in self._options.libraries:
+            if (uninst_builddir and
+                self._options.libraries[0] == 'girepository-1.0'):
+                continue
+            args.append('-l' + library)
 
         # hack for building gobject-introspection itself
         if uninst_builddir:
