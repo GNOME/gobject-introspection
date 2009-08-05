@@ -41,7 +41,7 @@ if test "$LEX" = :; then
 	AC_MSG_ERROR([flex not found but required])
 fi
 
-AC_CHECK_PROGS(YACC, 'bison -y' byacc yacc, :)
+AC_CHECK_PROGS(YACC, 'bison -y', :)
 if test "$YACC" = :; then
 	AC_MSG_ERROR([bison not found but required])
 fi
