@@ -118,7 +118,7 @@
  * @exit_status: (out):
  */
 
-/*
+/**
  * g_get_system_config_dirs:
  * Return value: (array zero-terminated=1) (transfer none)
  */
@@ -126,4 +126,12 @@
 /**
  * g_get_system_data_dirs:
  * Return value: (array zero-terminated=1) (transfer none)
+ */
+
+/**
+ * g_shell_parse_argv:
+ * @command_line:
+ * @argcp: (out):
+ * @argvp: (out): (array zero-terminated=1):
+ * @error:
  */
