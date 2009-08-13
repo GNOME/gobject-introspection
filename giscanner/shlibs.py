@@ -1,0 +1,77 @@
+#!/usr/bin/env python
+# -*- Mode: Python -*-
+# GObject-Introspection - a framework for introspecting GObject libraries
+# Copyright (C) 2009 Red Hat, Inc.
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+# 02110-1301, USA.
+#
+
+import re
+import subprocess
+
+from .utils import get_libtool_command
+
+# Assume ldd output is something vaguely like
+#
+#  libpangoft2-1.0.so.0 => /usr/lib/libpangoft2-1.0.so.0 (0x006c1000)
+#
+# We say that if something in the output looks like libpangoft2<blah>
+# then the *first* such in the output is the soname. We require <blah>
+# to start with [^A-Za-z0-9_-] to avoid problems with libpango vs libpangoft2
+#
+# The negative lookbehind at the start is to avoid problems if someone
+# is crazy enough to name a library liblib<foo> when lib<foo> exists.
+#
+def _library_pattern(library_name):
+    return re.compile("(?<![A-Za-z0-9_-])(lib*%s[^A-Za-z0-9_-][^\s\(\)]*)"
+                      % re.escape(library_name))
+
+# We want to resolve a set of library names (the <foo> of -l<foo>)
+# against a library to find the shared library name. The shared
+# library name is suppose to be what you pass to dlopen() (or
+# equivalent). And we want to do this using the libraries that 'binary'
+# is linking against. The implementation below assumes that we are on an
+# ELF-like system where ldd exists and the soname extracted with ldd is
+# a filename that can be opened with dlopen(). Alternate implementations
+# could be added here.
+#
+def resolve_shlibs(options, binary, libraries):
+    args = []
+    libtool = get_libtool_command(options)
+    if libtool:
+        args.extend(libtool)
+        args.append('--mode=execute')
+    args.extend(['ldd', binary.args[0]])
+    proc = subprocess.Popen(args, stdout=subprocess.PIPE)
+    patterns = {}
+    for library in libraries:
+        patterns[library] = _library_pattern(library)
+
+    shlibs = []
+    for line in proc.stdout:
+        for library, pattern in patterns.iteritems():
+            m = pattern.search(line)
+            if m:
+                del patterns[library]
+                shlibs.append(m.group(1))
+                break
+
+    if len(patterns) > 0:
+        raise SystemExit(
+            "ERROR: can't resolve libraries to shared libraries: " +
+            ", ".join(patterns.keys()))
+
+    return shlibs

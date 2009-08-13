@@ -143,10 +143,10 @@ post-check:
 	@true
 
 %.typelib: %.gir $(top_builddir)/tools/g-ir-compiler$(EXEEXT) Makefile
-	LD_LIBRARY_PATH=$(top_builddir)/girepository/.libs$${LD_LIBRARY_PATH:+:$$LD_LIBRARY_PATH} $(top_builddir)/tools/g-ir-compiler --includedir=. --includedir=$(top_builddir)/gir $< -o $@
+	LD_LIBRARY_PATH=$(top_builddir)/girepository/.libs:$(builddir)/.libs$${LD_LIBRARY_PATH:+:$$LD_LIBRARY_PATH} $(top_builddir)/tools/g-ir-compiler --includedir=. --includedir=$(top_builddir)/gir $< -o $@
 
 %.tgir: %.typelib $(top_builddir)/tools/g-ir-generate$(EXEEXT) Makefile
-	LD_LIBRARY_PATH=$(top_builddir)/girepository/.libs$${LD_LIBRARY_PATH:+:$$LD_LIBRARY_PATH} $(top_builddir)/tools/g-ir-generate --includedir=. --includedir=$(top_builddir)/gir $< -o $@
+	LD_LIBRARY_PATH=$(top_builddir)/girepository/.libs:$(builddir)/.libs$${LD_LIBRARY_PATH:+:$$LD_LIBRARY_PATH} $(top_builddir)/tools/g-ir-generate --includedir=. --includedir=$(top_builddir)/gir $< -o $@
 
 %.tgir.check: %.tgir
 	@diff -u -U 10 $(srcdir)/$*-expected.tgir $*.tgir; \

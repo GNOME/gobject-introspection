@@ -22,7 +22,6 @@
 from __future__ import with_statement
 
 import os
-from ctypes.util import find_library
 
 from .ast import (Alias, Array, Bitfield, Callback, Class, Constant, Enum,
                   Function, Interface, List, Map, Member, Struct, Union,
@@ -80,16 +79,9 @@ and/or use gtk-doc annotations. ''')
         self.write_tag('c:include', attrs)
 
     def _write_namespace(self, namespace, shlibs, cprefix):
-        libraries = []
-        for l in shlibs:
-            found_libname = find_library(l)
-            if not found_libname:
-                found_libname = l
-            libraries.append(os.path.basename(found_libname))
-
         attrs = [('name', namespace.name),
                  ('version', namespace.version),
-                 ('shared-library', ','.join(libraries)),
+                 ('shared-library', ','.join(shlibs)),
                  ('c:prefix', cprefix)]
         with self.tagcontext('namespace', attrs):
             # We define a custom sorting function here because

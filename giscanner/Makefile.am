@@ -47,6 +47,7 @@ pkgpyexec_PYTHON = 		\
 	libtoolimporter.py	\
 	minixpath.py		\
 	odict.py		\
+	shlibs.py		\
 	scannermain.py		\
 	sourcescanner.py	\
 	transformer.py		\

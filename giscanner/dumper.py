@@ -24,6 +24,7 @@ import subprocess
 import tempfile
 
 from .glibtransformer import IntrospectionBinary
+from .utils import get_libtool_command
 
 # bugzilla.gnome.org/558436
 # Compile a binary program which is then linked to a library
@@ -146,27 +147,6 @@ class DumpCompiler(object):
             stdout=subprocess.PIPE)
         return proc.communicate()[0].split()
 
-    def _use_libtool_infection(self):
-        libtool_infection = not self._options.nolibtool
-        if not libtool_infection:
-            return None
-
-        libtool_path = self._options.libtool_path
-        if libtool_path:
-            # Automake by default sets:
-            # LIBTOOL = $(SHELL) $(top_builddir)/libtool
-            # To be strictly correct we would have to parse shell.  For now
-            # we simply split().
-            return libtool_path.split(' ')
-
-        try:
-            subprocess.check_call(['libtool', '--version'])
-        except subprocess.CalledProcessError, e:
-            # If libtool's not installed, assume we don't need it
-            return None
-
-        return ['libtool']
-
     def _compile(self, output, *sources):
         # Not strictly speaking correct, but easier than parsing shell
         args = self._compiler_cmd.split()
@@ -189,7 +169,7 @@ class DumpCompiler(object):
 
     def _link(self, output, *sources):
         args = []
-        libtool = self._use_libtool_infection()
+        libtool = get_libtool_command(self._options)
         if libtool:
             args.extend(libtool)
             args.append('--mode=link')

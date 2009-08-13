@@ -32,6 +32,7 @@ from giscanner.dumper import compile_introspection_binary
 from giscanner.glibtransformer import GLibTransformer, IntrospectionBinary
 from giscanner.minixpath import myxpath, xpath_assert
 from giscanner.sourcescanner import SourceScanner
+from giscanner.shlibs import resolve_shlibs
 from giscanner.transformer import Transformer
 
 def _get_option_parser():
@@ -319,6 +320,8 @@ def scanner_main(args):
         binary = compile_introspection_binary(options,
                             glibtransformer.get_get_type_functions())
 
+    shlibs = resolve_shlibs(options, binary, libraries)
+
     glibtransformer.set_introspection_binary(binary)
 
     namespace = glibtransformer.parse()
@@ -330,7 +333,7 @@ def scanner_main(args):
         raise SystemExit("ERROR in annotation: %s" % (str(e), ))
 
     # Write out AST
-    writer = Writer(namespace, libraries, transformer.get_includes(),
+    writer = Writer(namespace, shlibs, transformer.get_includes(),
                     options.packages, options.c_includes,
                     transformer.get_strip_prefix())
     data = writer.get_xml()

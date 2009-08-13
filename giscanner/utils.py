@@ -57,3 +57,25 @@ def extract_libtool(libname):
     #        and pre-2.2. Johan 2008-10-21
     libname = libname.replace('.libs/.libs', '.libs')
     return libname
+
+# Returns arguments for invoking libtool, if applicable, otherwise None
+def get_libtool_command(options):
+    libtool_infection = not options.nolibtool
+    if not libtool_infection:
+        return None
+
+    libtool_path = options.libtool_path
+    if libtool_path:
+        # Automake by default sets:
+        # LIBTOOL = $(SHELL) $(top_builddir)/libtool
+        # To be strictly correct we would have to parse shell.  For now
+        # we simply split().
+        return libtool_path.split(' ')
+
+    try:
+        subprocess.check_call(['libtool', '--version'])
+    except subprocess.CalledProcessError, e:
+        # If libtool's not installed, assume we don't need it
+        return None
+
+    return ['libtool']
