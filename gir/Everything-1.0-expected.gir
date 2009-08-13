@@ -93,10 +93,10 @@ and/or use gtk-doc annotations.  -->
               value="2"
               c:identifier="TEST_FLAG2"
               glib:nick="flag2"/>
-      <member name="flag2"
+      <member name="flag3"
               value="4"
               c:identifier="TEST_FLAG3"
-              glib:nick="flag2"/>
+              glib:nick="flag3"/>
     </bitfield>
     <interface name="TestInterface"
                c:type="EverythingTestInterface"
