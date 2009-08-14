@@ -22,7 +22,7 @@ offsets-1.0.gir: liboffsets.la offsets.h $(SCANNER_BIN) $(SCANNER_LIBS) Makefile
 	$(CHECK_DEBUG) $(SCANNER) \
 	--include=GObject-2.0 \
         --libtool="$(SHAVE_SAVED_LIBTOOL)" \
-	--library=offsets \
+	--library=liboffsets.la \
 	--namespace=offsets \
 	--nsversion=1.0 \
 	--pkg gobject-2.0 \
@@ -30,7 +30,8 @@ offsets-1.0.gir: liboffsets.la offsets.h $(SCANNER_BIN) $(SCANNER_LIBS) Makefile
 	 --output $@
 
 %.typelib: %.gir $(top_builddir)/tools/g-ir-compiler$(EXEEXT) Makefile
-	$(top_builddir)/tools/g-ir-compiler --includedir=. --includedir=$(top_builddir)/gir $< -o $@
+	LD_LIBRARY_PATH=$(top_builddir)/girepository/.libs:$(builddir)/.libs$${LD_LIBRARY_PATH:+:$$LD_LIBRARY_PATH} \
+	 $(top_builddir)/tools/g-ir-compiler --includedir=. --includedir=$(top_builddir)/gir $< -o $@
 
 CLEANFILES += offsets-1.0.gir offsets-1.0.typelib
 
@@ -52,8 +53,8 @@ CLEANFILES += gitestoffsets.c
 ############################################################
 
 check-local: offsets-1.0.typelib
-	LD_LIBRARY_PATH=$${LD_LIBRARY_PATH:+$$LD_LIBRARY_PATH:} GI_TYPELIB_PATH=:$(top_builddir)/gir \
-	  gitestoffsets$(EXEEXT) offsets.compiled offsets.introspected
+	LD_LIBRARY_PATH=$(top_builddir)/girepository/.libs:$(builddir)/.libs$${LD_LIBRARY_PATH:+:$$LD_LIBRARY_PATH} \
+	 GI_TYPELIB_PATH=:$(top_builddir)/gir gitestoffsets$(EXEEXT) offsets.compiled offsets.introspected
 	diff -u offsets.compiled offsets.introspected
 
 CLEANFILES += offsets.compiled offsets.introspected

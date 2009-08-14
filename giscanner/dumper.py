@@ -193,7 +193,10 @@ class DumpCompiler(object):
             if (uninst_builddir and
                 self._options.libraries[0] == 'girepository-1.0'):
                 continue
-            args.append('-l' + library)
+            if library.endswith(".la"): # explicitly specified libtool library
+                args.append(library)
+            else:
+                args.append('-l' + library)
 
         # hack for building gobject-introspection itself
         if uninst_builddir:

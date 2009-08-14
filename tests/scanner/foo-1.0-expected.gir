@@ -11,7 +11,10 @@ and/or use gtk-doc annotations.  -->
   <include name="utility" version="1.0"/>
   <package name="gobject-2.0"/>
   <c:include name="foo.h"/>
-  <namespace name="foo" version="1.0" shared-library="foo" c:prefix="foo">
+  <namespace name="foo"
+             version="1.0"
+             shared-library="libfoo.so"
+             c:prefix="foo">
     <alias name="List" target="GLib.SList" c:type="FooList"/>
     <alias name="ObjectCookie" target="any" c:type="FooObjectCookie"/>
     <alias name="XEvent" target="none" c:type="FooXEvent"/>

@@ -12,7 +12,7 @@ and/or use gtk-doc annotations.  -->
   <package name="gobject-2.0"/>
   <namespace name="drawable"
              version="1.0"
-             shared-library="drawable"
+             shared-library="libdrawable.so"
              c:prefix="drawable">
     <class name="TestDrawable"
            c:type="TestDrawable"

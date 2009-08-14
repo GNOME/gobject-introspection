@@ -43,7 +43,7 @@ annotation-1.0.gir: libannotation.la annotation.c annotation.h utility-1.0.gir $
 	--include=GObject-2.0 \
 	--include=utility-1.0 \
         --libtool="$(LIBTOOL)" \
-	--library=annotation \
+	--library=libannotation.la \
 	--namespace=annotation \
 	--nsversion=1.0 \
 	--pkg gobject-2.0 \
@@ -56,7 +56,7 @@ drawable-1.0.gir: libdrawable.la drawable.c drawable.h utility-1.0.gir $(SCANNER
 	--include=GObject-2.0 \
 	--include=utility-1.0 \
         --libtool="$(LIBTOOL)" \
-	--library=drawable \
+	--library=libdrawable.la \
 	--namespace=drawable \
 	--nsversion=1.0 \
 	--pkg gobject-2.0 \
@@ -70,7 +70,7 @@ foo-1.0.gir: libfoo.la foo.c foo.h utility-1.0.gir $(SCANNER_BIN) $(SCANNER_LIBS
 	--include=utility-1.0 \
 	--c-include="foo.h" \
         --libtool="$(LIBTOOL)" \
-	--library=foo \
+	--library=libfoo.la \
 	--namespace=foo \
 	--nsversion=1.0 \
 	--pkg gobject-2.0 \
@@ -82,7 +82,7 @@ utility-1.0.gir: libutility.la utility.h $(SCANNER_BIN) $(SCANNER_LIBS) Makefile
 	$(CHECK_DEBUG) $(SCANNER) \
 	--include=GObject-2.0 \
         --libtool="$(LIBTOOL)" \
-	--library=utility \
+	--library=libutility.la \
 	--namespace=utility \
 	--nsversion=1.0 \
 	--pkg gobject-2.0 \
@@ -95,7 +95,7 @@ GtkFrob-1.0.gir: libgtkfrob.la gtkfrob.h $(SCANNER_BIN) $(SCANNER_LIBS) Makefile
 	$(CHECK_DEBUG) $(SCANNER) \
 	--include=GObject-2.0 \
         --libtool="$(LIBTOOL)" \
-	--library=gtkfrob \
+	--library=libgtkfrob.la \
 	--namespace=GtkFrob \
 	--strip-prefix=Gtk \
 	--nsversion=1.0 \

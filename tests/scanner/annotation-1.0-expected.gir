@@ -12,7 +12,7 @@ and/or use gtk-doc annotations.  -->
   <package name="gobject-2.0"/>
   <namespace name="annotation"
              version="1.0"
-             shared-library="annotation"
+             shared-library="libannotation.so"
              c:prefix="annotation">
     <callback name="Callback"
               c:type="AnnotationCallback"

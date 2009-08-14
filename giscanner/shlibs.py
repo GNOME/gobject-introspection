@@ -22,7 +22,17 @@
 import re
 import subprocess
 
-from .utils import get_libtool_command
+from .utils import get_libtool_command, extract_libtool_shlib
+
+# For .la files, the situation is easy.
+def _resolve_libtool(options, binary, libraries):
+    shlibs = []
+    for library in libraries:
+        shlib = extract_libtool_shlib(library)
+        if shlib:
+            shlibs.append(shlib)
+
+    return shlibs
 
 # Assume ldd output is something vaguely like
 #
@@ -35,20 +45,27 @@ from .utils import get_libtool_command
 # The negative lookbehind at the start is to avoid problems if someone
 # is crazy enough to name a library liblib<foo> when lib<foo> exists.
 #
-def _library_pattern(library_name):
+def _ldd_library_pattern(library_name):
     return re.compile("(?<![A-Za-z0-9_-])(lib*%s[^A-Za-z0-9_-][^\s\(\)]*)"
                       % re.escape(library_name))
 
-# We want to resolve a set of library names (the <foo> of -l<foo>)
-# against a library to find the shared library name. The shared
-# library name is suppose to be what you pass to dlopen() (or
-# equivalent). And we want to do this using the libraries that 'binary'
-# is linking against. The implementation below assumes that we are on an
+# This is a what we do for non-la files. We assume that we are on an
 # ELF-like system where ldd exists and the soname extracted with ldd is
-# a filename that can be opened with dlopen(). Alternate implementations
-# could be added here.
+# a filename that can be opened with dlopen().
 #
-def resolve_shlibs(options, binary, libraries):
+# On OS X this will need a straightforward alternate implementation
+# in terms of otool.
+#
+# Windows is more difficult, since there isn't always a straightforward
+# translation between library name (.lib) and the name of the .dll, so
+# extracting the dll names from the compiled app may not be sufficient.
+# We might need to hunt down the .lib in the compile-time path and
+# use that to figure out the name of the DLL.
+#
+def _resolve_non_libtool(options, binary, libraries):
+    if not libraries:
+        return []
+
     args = []
     libtool = get_libtool_command(options)
     if libtool:
@@ -58,7 +75,7 @@ def resolve_shlibs(options, binary, libraries):
     proc = subprocess.Popen(args, stdout=subprocess.PIPE)
     patterns = {}
     for library in libraries:
-        patterns[library] = _library_pattern(library)
+        patterns[library] = _ldd_library_pattern(library)
 
     shlibs = []
     for line in proc.stdout:
@@ -75,3 +92,16 @@ def resolve_shlibs(options, binary, libraries):
             ", ".join(patterns.keys()))
 
     return shlibs
+
+# We want to resolve a set of library names (the <foo> of -l<foo>)
+# against a library to find the shared library name. The shared
+# library name is suppose to be what you pass to dlopen() (or
+# equivalent). And we want to do this using the libraries that 'binary'
+# is linking against.
+#
+def resolve_shlibs(options, binary, libraries):
+    libtool = filter(lambda x: x.endswith(".la"), libraries)
+    non_libtool = filter(lambda x: not x.endswith(".la"), libraries)
+
+    return (_resolve_libtool(options, binary, libtool) +
+            _resolve_non_libtool(options, binary, non_libtool))

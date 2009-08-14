@@ -5,7 +5,7 @@
             xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
   <include name="GObject" version="2.0"/>
   <include name="GLib" version="2.0"/>
-  <namespace name="utility" version="1.0" shared-library="utility" c:prefix="utility">
+  <namespace name="utility" version="1.0" shared-library="libutility.so" c:prefix="utility">
     <record name="Buffer">
       <field name="data" writable="1">
         <type name="any"/>

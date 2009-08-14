@@ -5,7 +5,7 @@
             xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
   <include name="GObject" version="2.0"/>
   <include name="GLib" version="2.0"/>
-  <namespace name="GtkFrob" version="1.0" shared-library="gtkfrob" c:prefix="Gtk">
+  <namespace name="GtkFrob" version="1.0" shared-library="libgtkfrob.so" c:prefix="Gtk">
     <function name="language_manager_get_default" c:identifier="gtk_frob_language_manager_get_default">
       <return-value transfer-ownership="none">
         <type name="none"/>

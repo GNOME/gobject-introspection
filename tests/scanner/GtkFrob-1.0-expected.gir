@@ -11,7 +11,7 @@ and/or use gtk-doc annotations.  -->
   <package name="gobject-2.0"/>
   <namespace name="GtkFrob"
              version="1.0"
-             shared-library="gtkfrob"
+             shared-library="libgtkfrob.so"
              c:prefix="Gtk">
     <function name="language_manager_get_default"
               c:identifier="gtk_frob_language_manager_get_default">

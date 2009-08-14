@@ -11,7 +11,7 @@ and/or use gtk-doc annotations.  -->
   <package name="gobject-2.0"/>
   <namespace name="utility"
              version="1.0"
-             shared-library="utility"
+             shared-library="libutility.so"
              c:prefix="utility">
     <alias name="Glyph" target="uint32" c:type="UtilityGlyph"/>
     <record name="Buffer" c:type="UtilityBuffer">
