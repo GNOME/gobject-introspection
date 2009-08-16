@@ -43,6 +43,7 @@ GLib-2.0.gir: $(SCANNER_BIN) $(SCANNER_LIBS) Makefile glib-2.0.c
 	    -D__G_I18N_LIB_H__ \
 	    $(GLIB_LIBDIR)/glib-2.0/include/glibconfig.h \
 	    $(srcdir)/glib-2.0.c \
+	    -DGLIB_COMPILATION \
 	    $(GLIB_INCLUDEDIR)/glib/*.h
 	$(SCANNER) $(SCANNER_ARGS) \
 	    --xpath-assertions=$(srcdir)/GLib-2.0.xpath GLib-2.0.gir
