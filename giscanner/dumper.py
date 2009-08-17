@@ -76,7 +76,9 @@ class DumpCompiler(object):
     def __init__(self, options, get_type_functions):
         self._options = options
         self._get_type_functions = get_type_functions
-        self._tmpdir = tempfile.mkdtemp('', 'tmp-introspect')
+        # We have to use the current directory to work around Unix
+        # sysadmins who mount /tmp noexec
+        self._tmpdir = tempfile.mkdtemp('', 'tmp-introspect', dir=os.getcwd())
 
         self._compiler_cmd = os.environ.get('CC', 'gcc')
         self._linker_cmd = os.environ.get('LD', self._compiler_cmd)
