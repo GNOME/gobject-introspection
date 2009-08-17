@@ -12,6 +12,9 @@ AC_INIT(gobject-introspection, gi_version,
         http://bugzilla.gnome.org/enter_bug.cgi?product=glib&component=introspection)
 AM_INIT_AUTOMAKE([1.7 -Wno-portability])
 AM_MAINTAINER_MODE
+
+m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])],)
+
 AC_CONFIG_HEADER([config.h])
 
 AC_CONFIG_MACRO_DIR([m4])
@@ -200,7 +203,6 @@ case "$host" in
 esac
 AM_CHECK_PYTHON_HEADERS(,AC_MSG_ERROR([Python headers not found]))
 
-SHAVE_INIT([scripts])
 AC_CONFIG_FILES([
 Makefile
 gir/Makefile
@@ -208,8 +210,6 @@ girepository/Makefile
 giscanner/Makefile
 giscanner/config.py
 m4/Makefile
-scripts/shave
-scripts/shave-libtool
 tools/Makefile
 tests/Makefile
 tests/invoke/Makefile
