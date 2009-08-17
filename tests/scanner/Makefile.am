@@ -110,7 +110,7 @@ barapp_SOURCES = $(srcdir)/barapp.c $(srcdir)/barapp.h
 barapp_LDADD = $(top_builddir)/girepository/libgirepository-1.0.la
 barapp_LDFLAGS = -export-dynamic
 BarApp-1.0.gir: barapp $(SCANNER_BIN) $(SCANNER_LIBS) Makefile
-	LD_LIBRARY_PATH=$${LD_LIBRARY_PATH:+$$LD_LIBRARY_PATH:}:$(top_builddir)/girepository/.libs $(SCANNER) \
+	$(SCANNER) \
 	--include=GObject-2.0 \
         --libtool="$(LIBTOOL)" \
 	--program=./barapp \
