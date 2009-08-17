@@ -94,8 +94,6 @@ class DumpCompiler(object):
     # Public API
 
     def run(self):
-        print '  GEN   ' + (self._options.output and
-                            self._options.output or '<stdout>')
         c_path = self._generate_tempfile('.c')
         f = open(c_path, 'w')
         f.write(_PROGRAM_TEMPLATE)

@@ -95,7 +95,8 @@ def get_libtool_command(options):
         return libtool_path.split(' ')
 
     try:
-        subprocess.check_call(['libtool', '--version'])
+        subprocess.check_call(['libtool', '--version'],
+                              stdout=open(os.devnull))
     except subprocess.CalledProcessError, e:
         # If libtool's not installed, assume we don't need it
         return None

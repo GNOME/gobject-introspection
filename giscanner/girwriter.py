@@ -21,8 +21,6 @@
 
 from __future__ import with_statement
 
-import os
-
 from .ast import (Alias, Array, Bitfield, Callback, Class, Constant, Enum,
                   Function, Interface, List, Map, Member, Struct, Union,
                   Varargs)
