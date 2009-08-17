@@ -183,7 +183,7 @@ if OS_WIN32
 libgirepository_everything_1_0_la_LDFLAGS += -no-undefined
 endif
 
-Everything-$(TYPELIB_VERSION).gir: libgirepository-everything-1.0.la everything.c everything.h $(SCANNER_BIN) $(SCANNER_LIBS)
+Everything-$(TYPELIB_VERSION).gir: GObject-2.0.gir libgirepository-everything-1.0.la everything.c everything.h $(SCANNER_BIN) $(SCANNER_LIBS) Makefile
 	$(SCANNER) \
 	--include=GObject-2.0 \
 	--libtool="$(LIBTOOL)" \
