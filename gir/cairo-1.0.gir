@@ -33,6 +33,9 @@
     <record name="FontType" c:type="cairo_font_type_t"
     	    glib:type-name="CairoFontType"
 	    glib:get-type="cairo_font_type_get_glib_type"/>
+    <record name="FontFace" c:type="cairo_font_face_t"
+    	    glib:type-name="CairoFontFace"
+	    glib:get-type="cairo_font_face_get_glib_type"/>
     <record name="ScaledFont" c:type="cairo_scaled_font_t"
     	    glib:type-name="CairoScaledFont"
 	    glib:get-type="cairo_scaled_font_get_glib_type"/>
