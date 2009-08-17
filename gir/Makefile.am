@@ -184,7 +184,7 @@ libgirepository_everything_1_0_la_LDFLAGS += -no-undefined
 endif
 
 Everything-$(TYPELIB_VERSION).gir: libgirepository-everything-1.0.la everything.c everything.h $(SCANNER_BIN) $(SCANNER_LIBS)
-	LPATH=$(builddir)/.libs $(CHECK_DEBUG) $(SCANNER) \
+	$(SCANNER) \
 	--include=GObject-2.0 \
 	--libtool="$(LIBTOOL)" \
 	--library=girepository-everything-1.0 \
