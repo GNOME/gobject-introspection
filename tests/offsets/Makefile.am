@@ -52,8 +52,8 @@ CLEANFILES += gitestoffsets.c
 ############################################################
 
 check-local: offsets-1.0.typelib
-	LD_LIBRARY_PATH=$${LD_LIBRARY_PATH:+$$LD_LIBRARY_PATH:}$(builddir) GI_TYPELIB_PATH=$(builddir):$(top_builddir)/gir \
-	  $(builddir)/gitestoffsets$(EXEEXT) offsets.compiled offsets.introspected
+	LD_LIBRARY_PATH=$${LD_LIBRARY_PATH:+$$LD_LIBRARY_PATH:} GI_TYPELIB_PATH=:$(top_builddir)/gir \
+	  gitestoffsets$(EXEEXT) offsets.compiled offsets.introspected
 	diff -u offsets.compiled offsets.introspected
 
 CLEANFILES += offsets.compiled offsets.introspected
