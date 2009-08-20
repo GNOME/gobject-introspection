@@ -247,20 +247,6 @@ def scanner_main(args):
         _error("Must specify --program or --library")
     libraries = options.libraries
 
-    # FIXME: using LPATH is definitely not portable enough. Using Python's
-    # find_library for finding our shared libraries is not a portable enough
-    # anyway as it behaves differently depending on the OS
-    lpath = os.environ.get('LPATH')
-    library_path = ':'.join(options.library_paths)
-
-    ld_library_path = os.environ.get('LD_LIBRARY_PATH')
-    if ld_library_path:
-        library_path = ':'.join([ld_library_path, library_path])
-
-    if lpath:
-        os.environ['LPATH'] = ':'.join([lpath, library_path])
-    else:
-        os.environ['LPATH'] = library_path
     filenames = []
     for arg in args:
         if (arg.endswith('.c') or

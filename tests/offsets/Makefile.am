@@ -30,8 +30,7 @@ offsets-1.0.gir: liboffsets.la offsets.h $(SCANNER_BIN) $(SCANNER_LIBS) Makefile
 	 --output $@
 
 %.typelib: %.gir $(top_builddir)/tools/g-ir-compiler$(EXEEXT) Makefile
-	LD_LIBRARY_PATH=$(top_builddir)/girepository/.libs:.libs$${LD_LIBRARY_PATH:+:$$LD_LIBRARY_PATH} \
-	 $(top_builddir)/tools/g-ir-compiler --includedir=. --includedir=$(top_builddir)/gir $< -o $@
+	$(top_builddir)/tools/g-ir-compiler --includedir=. --includedir=$(top_builddir)/gir $< -o $@
 
 CLEANFILES += offsets-1.0.gir offsets-1.0.typelib
 
@@ -53,8 +52,7 @@ CLEANFILES += gitestoffsets.c
 ############################################################
 
 check-local: offsets-1.0.typelib
-	LD_LIBRARY_PATH=$(top_builddir)/girepository/.libs:.libs$${LD_LIBRARY_PATH:+:$$LD_LIBRARY_PATH} \
-	 GI_TYPELIB_PATH=:$(top_builddir)/gir ./gitestoffsets$(EXEEXT) offsets.compiled offsets.introspected
+	GI_TYPELIB_PATH=:$(top_builddir)/gir ./gitestoffsets$(EXEEXT) offsets.compiled offsets.introspected
 	diff -u offsets.compiled offsets.introspected
 
 CLEANFILES += offsets.compiled offsets.introspected
