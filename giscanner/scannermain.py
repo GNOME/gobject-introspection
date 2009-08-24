@@ -81,6 +81,9 @@ def _get_option_parser():
     parser.add_option("", "--pkg",
                       action="append", dest="packages", default=[],
                       help="pkg-config packages to get cflags from")
+    parser.add_option("", "--pkg-export",
+                      action="append", dest="packages_export", default=[],
+                      help="Associated pkg-config packages for this library")
     parser.add_option("-v", "--verbose",
                       action="store_true", dest="verbose",
                       help="be verbose")
@@ -319,8 +322,12 @@ def scanner_main(args):
         raise SystemExit("ERROR in annotation: %s" % (str(e), ))
 
     # Write out AST
+    if options.packages_export:
+        exported_packages = options.packages_export
+    else:
+        exported_packages = options.packages
     writer = Writer(namespace, shlibs, transformer.get_includes(),
-                    options.packages, options.c_includes,
+                    exported_packages, options.c_includes,
                     transformer.get_strip_prefix())
     data = writer.get_xml()
     if options.output:

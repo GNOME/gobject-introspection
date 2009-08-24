@@ -161,8 +161,8 @@ GIRepository-2.0.gir: GObject-2.0.gir $(SCANNER_BIN) $(SCANNER_LIBS) $(GIREPOSIT
 		--include=GObject-2.0 \
 	    --library=girepository-1.0 \
 	    -I$(srcdir)/girepository \
-		--pkg glib-2.0 \
 		--pkg gobject-2.0 \
+		--pkg-export gobject-introspection-1.0 \
 	    $(GIREPOSITORY_FILES)
 BUILT_GIRSOURCES += GIRepository-2.0.gir
 
