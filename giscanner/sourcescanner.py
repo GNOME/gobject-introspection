@@ -250,7 +250,7 @@ class SourceScanner(object):
 
         defines = ['__GI_SCANNER__']
         undefs = []
-        cpp_args = ['gcc', '-E', '-C', '-I.', '-']
+        cpp_args = ['cc', '-E', '-C', '-I.', '-']
 
         cpp_args += self._cpp_options
         proc = subprocess.Popen(cpp_args,
