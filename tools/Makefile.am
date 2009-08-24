@@ -9,7 +9,7 @@ bin_SCRIPTS = g-ir-scanner
 EXTRA_DIST = g-ir-scanner.in
 
 g-ir-scanner: g-ir-scanner.in Makefile
-	sed -e s,@libdir\@,$(libdir), $< > $@.tmp && mv $@.tmp $@
+	sed -e s,@libdir\@,$(libdir), -e s,@PYTHON\@,$(PYTHON), $< > $@.tmp && mv $@.tmp $@
 	chmod a+x $@
 
 g_ir_compiler_SOURCES = compiler.c	
