@@ -33,6 +33,8 @@ m4dir = $(datadir)/aclocal
 m4_DATA = m4/introspection.m4
 
 EXTRA_DIST = 			\
+	COPYING.LGPL		\
+	COPYING.GPL		\
 	CONTRIBUTORS		\
 	$(pkgconfig_DATA)	\
 	$(man_MANS)		\
