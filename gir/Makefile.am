@@ -66,7 +66,7 @@ GObject-2.0.gir: GLib-2.0.gir $(SCANNER_BIN) $(SCANNER_LIBS) Makefile
 	    --noclosure \
 	    --output $@ \
 	    --strip-prefix=g \
-	    --libtool="$(LIBTOOL_LIBTOOL)" \
+	    --libtool="$(LIBTOOL)" \
 	    --c-include="glib-object.h" \
 	    --include=GLib-2.0 \
 	    --library=$(GOBJECT_LIBRARY) \
@@ -98,7 +98,7 @@ GModule-2.0.gir: GLib-2.0.gir $(SCANNER_BIN) $(SCANNER_LIBS)
 	    --noclosure \
 	    --output $@ \
 	    --strip-prefix=g \
-	    --libtool="$(LIBTOOL_LIBTOOL)" \
+	    --libtool="$(LIBTOOL)" \
 	    --c-include="gmodule.h" \
 	    --include=GLib-2.0 \
 	    --library=$(GMODULE_LIBRARY) \
