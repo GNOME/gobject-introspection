@@ -59,12 +59,16 @@ m4_define([_GOBJECT_INTROSPECTION_CHECK_INTERNAL],
        INTROSPECTION_GENERATE=`$PKG_CONFIG --variable=g_ir_generate gobject-introspection-1.0`
        INTROSPECTION_GIRDIR=`$PKG_CONFIG --variable=girdir gobject-introspection-1.0`
        INTROSPECTION_TYPELIBDIR="$($PKG_CONFIG --variable=typelibdir gobject-introspection-1.0)"
+       INTROSPECTION_CFLAGS=`$PKG_CONFIG --cflags gobject-introspection-1.0`
+       INTROSPECTION_LIBS=`$PKG_CONFIG --libs gobject-introspection-1.0`
     fi
     AC_SUBST(INTROSPECTION_SCANNER)
     AC_SUBST(INTROSPECTION_COMPILER)
     AC_SUBST(INTROSPECTION_GENERATE)
     AC_SUBST(INTROSPECTION_GIRDIR)
     AC_SUBST(INTROSPECTION_TYPELIBDIR)
+    AC_SUBST(INTROSPECTION_CFLAGS)
+    AC_SUBST(INTROSPECTION_LIBS)
 
     AM_CONDITIONAL(HAVE_INTROSPECTION, test "x$found_introspection" = "xyes")
 ])
