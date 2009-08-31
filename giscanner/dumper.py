@@ -82,7 +82,7 @@ class DumpCompiler(object):
         self._tmpdir = tempfile.mkdtemp('', 'tmp-introspect', dir=os.getcwd())
 
         self._compiler_cmd = os.environ.get('CC', 'gcc')
-        self._linker_cmd = os.environ.get('LD', self._compiler_cmd)
+        self._linker_cmd = os.environ.get('CC', self._compiler_cmd)
         self._pkgconfig_cmd = os.environ.get('PKG_CONFIG', 'pkg-config')
 
         self._uninst_srcdir = os.environ.get(
