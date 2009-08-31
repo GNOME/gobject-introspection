@@ -4,6 +4,30 @@
  */
 
 /**
+ * g_volume_monitor_get_connected_drives:
+ *
+ * Returns: (element-type GDrive) (transfer full):
+ */
+
+/**
+ * g_volume_monitor_get_volumes:
+ *
+ * Returns: (element-type GVolume) (transfer full):
+ */
+
+/**
+ * g_volume_monitor_get_mounts:
+ *
+ * Returns: (element-type GMount) (transfer full):
+ */
+
+/**
+ * g_drive_get_volumes:
+ *
+ * Returns: (element-type GVolume) (transfer full):
+ */
+
+/**
  * g_app_info_get_all:
  *
  * Returns: (element-type GAppInfo) (transfer full):
