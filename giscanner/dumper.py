@@ -155,6 +155,10 @@ class DumpCompiler(object):
             args.append('-I' + os.path.join(self._uninst_srcdir,
                                                'girepository'))
         args.extend(pkgconfig_flags)
+        cflags = os.environ.get('CFLAGS')
+        if (cflags):
+            for iflag in cflags.split():
+                args.append(iflag)
         for include in self._options.cpp_includes:
             args.append('-I' + include)
         args.extend(['-c', '-o', output])
@@ -175,6 +179,11 @@ class DumpCompiler(object):
             args.append('--silent')
 
         args.extend([self._linker_cmd, '-o', output])
+
+        cflags = os.environ.get('CFLAGS')
+        if (cflags):
+            for iflag in cflags.split():
+                args.append(iflag)
 
         # Make sure to list the library to be introspected first since it's
         # likely to be uninstalled yet and we want the uninstalled RPATHs have
