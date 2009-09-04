@@ -24,10 +24,9 @@ import sys
 
 # This only works on unix systems
 currentdir = os.path.dirname(os.path.abspath(sys.argv[0]))
-basedir = os.path.abspath(os.path.join(currentdir, '..'))
-if (os.path.exists(os.path.join(basedir, '.svn')) or
-    os.path.exists(os.path.join(basedir, '.git'))):
-    path = basedir
+current_name = os.path.basename(currentdir)
+if current_name == 'tools':
+    path = os.path.abspath(os.path.join(currentdir, '..'))
 else:
     # This is a private directory, we don't want to pollute the global
     # namespace.
