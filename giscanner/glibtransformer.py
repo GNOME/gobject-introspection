@@ -746,7 +746,7 @@ class GLibTransformer(object):
         for interface in xmlnode.findall('implements'):
             gitype = self._resolve_gtypename(interface.attrib['name'])
             gt_interfaces.append(gitype)
-        node.interfaces = gt_interfaces
+        node.interfaces = sorted(gt_interfaces)
 
     def _introspect_properties(self, node, xmlnode):
         for pspec in xmlnode.findall('property'):
@@ -762,6 +762,7 @@ class GLibTransformer(object):
                 readable, writable, construct, construct_only,
                 ctype,
                 ))
+        node.properties = sorted(node.properties)
 
     def _introspect_signals(self, node, xmlnode):
         for signal_info in xmlnode.findall('signal'):
@@ -781,6 +782,7 @@ class GLibTransformer(object):
                 param.transfer = 'none'
                 signal.parameters.append(param)
             node.signals.append(signal)
+        node.signals = sorted(node.signals)
 
     # Resolver
 
