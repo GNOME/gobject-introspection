@@ -255,6 +255,17 @@ class GLibTransformer(object):
                                                          self._names)
         except KeyError, e:
             return Unresolved(gtype_name)
+            
+    def _resolve_gtypename_chain(self, gtype_names):
+        """Like _resolve_gtypename, but grab the first one that resolves.
+        If none of them do, return an Unresolved for the first."""
+        for gtype_name in gtype_names:
+            try:
+                return self._transformer.gtypename_to_giname(gtype_name,
+                                                             self._names)
+            except KeyError, e:
+                continue
+        return Unresolved(gtype_names[0])
 
     def _execute_binary(self):
         in_path = os.path.join(self._binary.tmpdir, 'types.txt')
@@ -687,8 +698,11 @@ class GLibTransformer(object):
         # to skip it
         if type_name == 'GObject':
             return
-        parent_type_name = xmlnode.attrib['parent']
-        parent_gitype = self._resolve_gtypename(parent_type_name)
+        # Get a list of parents here; some of them may be hidden, and what
+        # we really want to do is use the most-derived one that we know of.
+        # 
+        parent_type_names = xmlnode.attrib['parents'].split(',')
+        parent_gitype = self._resolve_gtypename_chain(parent_type_names)
         is_abstract = not not xmlnode.attrib.get('abstract', False)
         node = GLibObject(
             self._transformer.remove_prefix(type_name),
