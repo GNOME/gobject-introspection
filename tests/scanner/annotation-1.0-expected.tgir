@@ -359,16 +359,6 @@
       <property name="string-property" writable="1" construct="1">
         <type name="utf8"/>
       </property>
-      <glib:signal name="string-signal" when="LAST">
-        <return-value transfer-ownership="full">
-          <type name="none"/>
-        </return-value>
-        <parameters>
-          <parameter name="string" transfer-ownership="none">
-            <type name="utf8"/>
-          </parameter>
-        </parameters>
-      </glib:signal>
       <glib:signal name="list-signal" when="LAST">
         <return-value transfer-ownership="full">
           <type name="none"/>
@@ -378,6 +368,16 @@
             <type name="GLib.List">
               <type name="utf8"/>
             </type>
+          </parameter>
+        </parameters>
+      </glib:signal>
+      <glib:signal name="string-signal" when="LAST">
+        <return-value transfer-ownership="full">
+          <type name="none"/>
+        </return-value>
+        <parameters>
+          <parameter name="string" transfer-ownership="none">
+            <type name="utf8"/>
           </parameter>
         </parameters>
       </glib:signal>

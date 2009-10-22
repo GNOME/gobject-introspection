@@ -485,21 +485,6 @@ type.">
       <field name="parent_instance">
         <type name="GObject.Object" c:type="GObject"/>
       </field>
-      <glib:signal name="string-signal"
-                   doc="This is a signal which has a broken signal handler,
-it says it&apos;s pointer but it&apos;s actually a string."
-                   version="1.0"
-                   deprecated="Use other-signal instead"
-                   deprecated-version="1.2">
-        <return-value transfer-ownership="full">
-          <type name="none" c:type="void"/>
-        </return-value>
-        <parameters>
-          <parameter name="string" transfer-ownership="none" doc="a string">
-            <type name="utf8" c:type="gpointer"/>
-          </parameter>
-        </parameters>
-      </glib:signal>
       <glib:signal name="list-signal"
                    doc="This is a signal which takes a list of strings, but it&apos;s not
 known by GObject as it&apos;s only marked as G_TYPE_POINTER">
@@ -513,6 +498,21 @@ known by GObject as it&apos;s only marked as G_TYPE_POINTER">
             <type name="GLib.List" c:type="gpointer">
               <type name="utf8"/>
             </type>
+          </parameter>
+        </parameters>
+      </glib:signal>
+      <glib:signal name="string-signal"
+                   doc="This is a signal which has a broken signal handler,
+it says it&apos;s pointer but it&apos;s actually a string."
+                   version="1.0"
+                   deprecated="Use other-signal instead"
+                   deprecated-version="1.2">
+        <return-value transfer-ownership="full">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <parameter name="string" transfer-ownership="none" doc="a string">
+            <type name="utf8" c:type="gpointer"/>
           </parameter>
         </parameters>
       </glib:signal>
