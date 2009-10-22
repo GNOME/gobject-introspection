@@ -99,7 +99,7 @@ and/or use gtk-doc annotations.  -->
     </record>
     <class name="Buffer"
            c:type="FooBuffer"
-           parent="GObject.Object"
+           parent="Object"
            glib:type-name="FooBuffer"
            glib:get-type="foo_buffer_get_type"
            glib:type-struct="BufferClass">

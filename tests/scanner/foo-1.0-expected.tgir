@@ -74,7 +74,7 @@
         </return-value>
       </method>
     </record>
-    <class name="Buffer" parent="GObject.Object" glib:type-struct="BufferClass" glib:type-name="FooBuffer" glib:get-type="foo_buffer_get_type">
+    <class name="Buffer" parent="Object" glib:type-struct="BufferClass" glib:type-name="FooBuffer" glib:get-type="foo_buffer_get_type">
       <implements name="Interface"/>
       <method name="some_method" c:identifier="foo_buffer_some_method">
         <return-value transfer-ownership="none">

@@ -255,7 +255,7 @@ class GLibTransformer(object):
                                                          self._names)
         except KeyError, e:
             return Unresolved(gtype_name)
-            
+
     def _resolve_gtypename_chain(self, gtype_names):
         """Like _resolve_gtypename, but grab the first one that resolves.
         If none of them do, return an Unresolved for the first."""
@@ -700,7 +700,7 @@ class GLibTransformer(object):
             return
         # Get a list of parents here; some of them may be hidden, and what
         # we really want to do is use the most-derived one that we know of.
-        # 
+        #
         parent_type_names = xmlnode.attrib['parents'].split(',')
         parent_gitype = self._resolve_gtypename_chain(parent_type_names)
         is_abstract = not not xmlnode.attrib.get('abstract', False)
