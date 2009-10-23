@@ -494,6 +494,11 @@ uses a C sugar return type.">
           </parameter>
         </parameters>
       </callback>
+      <field name="_reserved">
+        <array zero-terminated="0" c:type="GCallback" fixed-size="4">
+          <type name="GObject.Callback"/>
+        </array>
+      </field>
     </record>
     <constant name="PIE_IS_TASTY" value="3.14159">
       <type name="double"/>

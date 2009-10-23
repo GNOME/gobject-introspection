@@ -351,6 +351,11 @@
       <field name="parent_class">
         <type name="GObject.ObjectClass"/>
       </field>
+      <field name="_reserved">
+        <array fixed-size="4">
+          <type name="GObject.Callback"/>
+        </array>
+      </field>
     </record>
     <constant name="PIE_IS_TASTY" value="3.141590">
       <type name="double"/>

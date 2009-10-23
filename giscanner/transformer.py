@@ -667,7 +667,7 @@ class Transformer(object):
                                                      self.ctype_of(ptype),
                                                      names, **kwargs)
         elif isinstance(ptype, basestring):
-            return self.resolve_type_name_full(ptype, None, names, **kwargs)
+            return self.resolve_type_name_full(ptype, ptype, names, **kwargs)
         else:
             raise AssertionError("Unhandled param: %r" % (ptype, ))
         return ptype

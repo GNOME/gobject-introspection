@@ -87,6 +87,9 @@ struct _FooObjectClass
 
   /* Intended to match GFile */
   void (*read_fn) (FooObject *object, int offset, int length);
+  
+  /* Test reserved stuff */
+  GCallback _reserved[4];
 };
 
 gint                  foo_init                     (void);
