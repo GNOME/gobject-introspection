@@ -318,6 +318,11 @@
  */
 
 /**
+ * g_file_make_directory_with_parents:
+ * @cancellable: (allow-none):
+ */
+
+/**
  * g_file_make_symbolic_link:
  * @cancellable: (allow-none):
  */
