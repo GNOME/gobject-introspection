@@ -267,19 +267,21 @@ and/or use gtk-doc annotations.  -->
       <field name="parent_iface">
         <type name="GObject.TypeInterface" c:type="GTypeInterface"/>
       </field>
-      <callback name="do_foo" c:type="do_foo">
-        <return-value transfer-ownership="none">
-          <type name="none" c:type="void"/>
-        </return-value>
-        <parameters>
-          <parameter name="self" transfer-ownership="none">
-            <type name="Interface" c:type="FooInterface*"/>
-          </parameter>
-          <parameter name="x" transfer-ownership="none">
-            <type name="int" c:type="int"/>
-          </parameter>
-        </parameters>
-      </callback>
+      <field name="do_foo">
+        <callback name="do_foo" c:type="do_foo">
+          <return-value transfer-ownership="none">
+            <type name="none" c:type="void"/>
+          </return-value>
+          <parameters>
+            <parameter name="self" transfer-ownership="none">
+              <type name="Interface" c:type="FooInterface*"/>
+            </parameter>
+            <parameter name="x" transfer-ownership="none">
+              <type name="int" c:type="int"/>
+            </parameter>
+          </parameters>
+        </callback>
+      </field>
     </record>
     <class name="Object"
            c:type="FooObject"
@@ -465,35 +467,39 @@ uses a C sugar return type.">
       <field name="parent_class">
         <type name="GObject.ObjectClass" c:type="GObjectClass"/>
       </field>
-      <callback name="virtual_method" c:type="virtual_method">
-        <return-value transfer-ownership="none">
-          <type name="boolean" c:type="gboolean"/>
-        </return-value>
-        <parameters>
-          <parameter name="object" transfer-ownership="none">
-            <type name="Object" c:type="FooObject*"/>
-          </parameter>
-          <parameter name="first_param" transfer-ownership="none">
-            <type name="int" c:type="int"/>
-          </parameter>
-        </parameters>
-      </callback>
-      <callback name="read_fn" c:type="read_fn">
-        <return-value transfer-ownership="none">
-          <type name="none" c:type="void"/>
-        </return-value>
-        <parameters>
-          <parameter name="object" transfer-ownership="none">
-            <type name="Object" c:type="FooObject*"/>
-          </parameter>
-          <parameter name="offset" transfer-ownership="none">
-            <type name="int" c:type="int"/>
-          </parameter>
-          <parameter name="length" transfer-ownership="none">
-            <type name="int" c:type="int"/>
-          </parameter>
-        </parameters>
-      </callback>
+      <field name="virtual_method">
+        <callback name="virtual_method" c:type="virtual_method">
+          <return-value transfer-ownership="none">
+            <type name="boolean" c:type="gboolean"/>
+          </return-value>
+          <parameters>
+            <parameter name="object" transfer-ownership="none">
+              <type name="Object" c:type="FooObject*"/>
+            </parameter>
+            <parameter name="first_param" transfer-ownership="none">
+              <type name="int" c:type="int"/>
+            </parameter>
+          </parameters>
+        </callback>
+      </field>
+      <field name="read_fn">
+        <callback name="read_fn" c:type="read_fn">
+          <return-value transfer-ownership="none">
+            <type name="none" c:type="void"/>
+          </return-value>
+          <parameters>
+            <parameter name="object" transfer-ownership="none">
+              <type name="Object" c:type="FooObject*"/>
+            </parameter>
+            <parameter name="offset" transfer-ownership="none">
+              <type name="int" c:type="int"/>
+            </parameter>
+            <parameter name="length" transfer-ownership="none">
+              <type name="int" c:type="int"/>
+            </parameter>
+          </parameters>
+        </callback>
+      </field>
       <field name="_reserved">
         <array zero-terminated="0" c:type="GCallback" fixed-size="4">
           <type name="GObject.Callback"/>
@@ -602,26 +608,30 @@ uses a C sugar return type.">
       <field name="parent_iface">
         <type name="GObject.TypeInterface" c:type="GTypeInterface"/>
       </field>
-      <callback name="destroy_event" c:type="destroy_event">
-        <return-value transfer-ownership="none">
-          <type name="none" c:type="void"/>
-        </return-value>
-        <parameters>
-          <parameter name="self" transfer-ownership="none">
-            <type name="SubInterface" c:type="FooSubInterface*"/>
-          </parameter>
-        </parameters>
-      </callback>
-      <callback name="do_bar" c:type="do_bar">
-        <return-value transfer-ownership="none">
-          <type name="none" c:type="void"/>
-        </return-value>
-        <parameters>
-          <parameter name="self" transfer-ownership="none">
-            <type name="SubInterface" c:type="FooSubInterface*"/>
-          </parameter>
-        </parameters>
-      </callback>
+      <field name="destroy_event">
+        <callback name="destroy_event" c:type="destroy_event">
+          <return-value transfer-ownership="none">
+            <type name="none" c:type="void"/>
+          </return-value>
+          <parameters>
+            <parameter name="self" transfer-ownership="none">
+              <type name="SubInterface" c:type="FooSubInterface*"/>
+            </parameter>
+          </parameters>
+        </callback>
+      </field>
+      <field name="do_bar">
+        <callback name="do_bar" c:type="do_bar">
+          <return-value transfer-ownership="none">
+            <type name="none" c:type="void"/>
+          </return-value>
+          <parameters>
+            <parameter name="self" transfer-ownership="none">
+              <type name="SubInterface" c:type="FooSubInterface*"/>
+            </parameter>
+          </parameters>
+        </callback>
+      </field>
     </record>
     <class name="Subobject"
            c:type="FooSubobject"

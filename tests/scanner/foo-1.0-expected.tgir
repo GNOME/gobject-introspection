@@ -190,6 +190,21 @@
       <field name="parent_iface">
         <type name="GObject.TypeInterface"/>
       </field>
+      <field name="do_foo">
+        <callback name="do_foo">
+          <return-value transfer-ownership="none">
+            <type name="none"/>
+          </return-value>
+          <parameters>
+            <parameter name="self" transfer-ownership="none">
+              <type name="Interface"/>
+            </parameter>
+            <parameter name="x" transfer-ownership="none">
+              <type name="int"/>
+            </parameter>
+          </parameters>
+        </callback>
+      </field>
     </record>
     <class name="Object" parent="GObject.Object" glib:type-struct="ObjectClass" glib:type-name="FooObject" glib:get-type="foo_object_get_type">
       <implements name="Interface"/>
@@ -351,6 +366,39 @@
       <field name="parent_class">
         <type name="GObject.ObjectClass"/>
       </field>
+      <field name="virtual_method">
+        <callback name="virtual_method">
+          <return-value transfer-ownership="none">
+            <type name="boolean"/>
+          </return-value>
+          <parameters>
+            <parameter name="object" transfer-ownership="none">
+              <type name="Object"/>
+            </parameter>
+            <parameter name="first_param" transfer-ownership="none">
+              <type name="int"/>
+            </parameter>
+          </parameters>
+        </callback>
+      </field>
+      <field name="read_fn">
+        <callback name="read_fn">
+          <return-value transfer-ownership="none">
+            <type name="none"/>
+          </return-value>
+          <parameters>
+            <parameter name="object" transfer-ownership="none">
+              <type name="Object"/>
+            </parameter>
+            <parameter name="offset" transfer-ownership="none">
+              <type name="int"/>
+            </parameter>
+            <parameter name="length" transfer-ownership="none">
+              <type name="int"/>
+            </parameter>
+          </parameters>
+        </callback>
+      </field>
       <field name="_reserved">
         <array fixed-size="4">
           <type name="GObject.Callback"/>
@@ -447,6 +495,30 @@
     <record name="SubInterfaceIface" glib:is-gtype-struct="1">
       <field name="parent_iface">
         <type name="GObject.TypeInterface"/>
+      </field>
+      <field name="destroy_event">
+        <callback name="destroy_event">
+          <return-value transfer-ownership="none">
+            <type name="none"/>
+          </return-value>
+          <parameters>
+            <parameter name="self" transfer-ownership="none">
+              <type name="SubInterface"/>
+            </parameter>
+          </parameters>
+        </callback>
+      </field>
+      <field name="do_bar">
+        <callback name="do_bar">
+          <return-value transfer-ownership="none">
+            <type name="none"/>
+          </return-value>
+          <parameters>
+            <parameter name="self" transfer-ownership="none">
+              <type name="SubInterface"/>
+            </parameter>
+          </parameters>
+        </callback>
       </field>
     </record>
     <class name="Subobject" parent="Object" glib:type-struct="SubobjectClass" abstract="1" glib:type-name="FooSubobject" glib:get-type="foo_subobject_get_type">

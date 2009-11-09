@@ -464,7 +464,10 @@ and/or use gtk-doc annotations. ''')
             return
 
         if isinstance(field, Callback):
-            self._write_callback(field)
+            attrs = [('name', field.name)]
+            with self.tagcontext('field', attrs):
+                self._write_attributes(field)
+                self._write_callback(field)
         elif isinstance(field, Struct):
             self._write_record(field)
         elif isinstance(field, Union):

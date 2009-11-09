@@ -215,19 +215,21 @@ case.">
       <field name="parent_class">
         <type name="GObject.ObjectClass" c:type="GObjectClass"/>
       </field>
-      <callback name="matrix" c:type="matrix">
-        <return-value transfer-ownership="none">
-          <type name="int" c:type="int"/>
-        </return-value>
-        <parameters>
-          <parameter name="obj" transfer-ownership="none">
-            <type name="TestObj" c:type="TestObj*"/>
-          </parameter>
-          <parameter name="somestr" transfer-ownership="none">
-            <type name="utf8" c:type="char*"/>
-          </parameter>
-        </parameters>
-      </callback>
+      <field name="matrix">
+        <callback name="matrix" c:type="matrix">
+          <return-value transfer-ownership="none">
+            <type name="int" c:type="int"/>
+          </return-value>
+          <parameters>
+            <parameter name="obj" transfer-ownership="none">
+              <type name="TestObj" c:type="TestObj*"/>
+            </parameter>
+            <parameter name="somestr" transfer-ownership="none">
+              <type name="utf8" c:type="char*"/>
+            </parameter>
+          </parameters>
+        </callback>
+      </field>
       <field name="test_signal">
         <type name="uint" c:type="guint"/>
       </field>
