@@ -409,6 +409,7 @@ and/or use gtk-doc annotations. ''')
                 ('glib:get-type', boxed.get_type)]
 
     def _write_record(self, record, extra_attrs=[]):
+        is_gtype_struct = False
         attrs = list(extra_attrs)
         if record.name is not None:
             attrs.append(('name', record.name))
@@ -418,6 +419,7 @@ and/or use gtk-doc annotations. ''')
             attrs.append(('disguised', '1'))
         if isinstance(record, GLibRecord):
             if record.is_gtype_struct_for:
+                is_gtype_struct = True
                 attrs.append(('glib:is-gtype-struct-for',
                               record.is_gtype_struct_for))
         if record.doc:
@@ -430,7 +432,7 @@ and/or use gtk-doc annotations. ''')
             self._write_attributes(record)
             if record.fields:
                 for field in record.fields:
-                    self._write_field(field)
+                    self._write_field(field, is_gtype_struct)
             for method in record.constructors:
                 self._write_constructor(method)
             for method in record.methods:
@@ -458,7 +460,7 @@ and/or use gtk-doc annotations. ''')
             for method in union.methods:
                 self._write_method(method)
 
-    def _write_field(self, field):
+    def _write_field(self, field, is_gtype_struct=False):
         if isinstance(field, Function):
             self._write_method(field)
             return
@@ -467,7 +469,11 @@ and/or use gtk-doc annotations. ''')
             attrs = [('name', field.name)]
             with self.tagcontext('field', attrs):
                 self._write_attributes(field)
-                self._write_callback(field)
+                if is_gtype_struct:
+                    self._write_callback(field)
+                else:
+                    attrs = [('name', 'any'), ('c:type', 'pointer')]
+                    self.write_tag('type', attrs)
         elif isinstance(field, Struct):
             self._write_record(field)
         elif isinstance(field, Union):
