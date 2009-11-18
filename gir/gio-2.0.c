@@ -261,6 +261,12 @@
  */
 
 /**
+ * g_file_enumerator_next_files_finish:
+ *
+ * Return value: (transfer container) (element-type FileInfo):
+ */
+
+/**
  * g_file_find_enclosing_mount:
  * @cancellable: (allow-none):
  */
