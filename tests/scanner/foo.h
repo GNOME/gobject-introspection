@@ -125,6 +125,8 @@ void                  foo_object_read              (FooObject *object, int offse
 
 int                   foo_object_static_meth       (void);
 
+void                  foo_object_skipped_method    (FooObject *object);
+
 struct _FooSubobject
 {
   FooObject parent_instance;

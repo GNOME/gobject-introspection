@@ -152,6 +152,8 @@ and/or use gtk-doc annotations. ''')
         self.write_tag('alias', attrs)
 
     def _write_callable(self, callable, tag_name, extra_attrs):
+        if callable.skip:
+            return
         attrs = [('name', callable.name)]
         attrs.extend(extra_attrs)
         if callable.doc:
@@ -304,6 +306,8 @@ and/or use gtk-doc annotations. ''')
                 self._write_member(member)
 
     def _write_member(self, member):
+        if member.skip:
+            return
         attrs = [('name', member.name),
                  ('value', str(member.value)),
                  ('c:identifier', member.symbol)]
@@ -376,6 +380,8 @@ and/or use gtk-doc annotations. ''')
                 self._write_method(method)
 
     def _write_property(self, prop):
+        if prop.skip:
+            return
         attrs = [('name', prop.name)]
         self._append_version(prop, attrs)
         self._append_deprecated(prop, attrs)
@@ -493,6 +499,8 @@ and/or use gtk-doc annotations. ''')
                 self._write_type(field.type)
 
     def _write_signal(self, signal):
+        if signal.skip:
+            return
         attrs = [('name', signal.name)]
         if signal.doc:
             attrs.append(('doc', signal.doc))

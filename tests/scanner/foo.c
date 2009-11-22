@@ -255,6 +255,17 @@ foo_object_read (FooObject *object, int offset, int length)
 
 }
 
+/**
+ * foo_object_skipped_method: (skip)
+ * @object: obj
+ *
+ * This is only useful from C.
+ */
+void
+foo_object_skipped_method (FooObject *object)
+{
+}
+
 G_DEFINE_ABSTRACT_TYPE (FooSubobject, foo_subobject, FOO_TYPE_OBJECT);
 
 static void
