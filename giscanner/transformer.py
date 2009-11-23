@@ -214,15 +214,13 @@ class Transformer(object):
 
     def _enum_common_prefix(self, symbol):
         def common_prefix(a, b):
-            alen = len(a)
-            blen = len(b)
-            l = min(alen, blen)
-            for i in xrange(l):
-                if a[i] != b[i]:
-                    return a[:i]
-            if alen > blen:
-                return b
-            return a
+            commonparts = []
+            for aword, bword in zip(a.split('_'), b.split('_')):
+                if aword != bword:
+                    return '_'.join(commonparts) + '_'
+                commonparts.append(aword)
+            return min(a, b)
+
         # Nothing less than 2 has a common prefix
         if len(list(symbol.base_type.child_list)) < 2:
             return None

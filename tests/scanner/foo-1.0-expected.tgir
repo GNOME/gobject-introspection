@@ -10,6 +10,11 @@
     <enumeration name="ASingle">
       <member name="some_single_enum" value="0"/>
     </enumeration>
+    <enumeration name="AddressType">
+      <member name="invalid" value="0"/>
+      <member name="ipv4" value="1"/>
+      <member name="ipv6" value="2"/>
+    </enumeration>
     <record name="BRect" glib:type-name="FooBRect" glib:get-type="foo_brect_get_type">
       <field name="x" writable="1">
         <type name="double"/>

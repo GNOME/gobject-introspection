@@ -23,6 +23,11 @@ and/or use gtk-doc annotations.  -->
               value="0"
               c:identifier="FOO_SOME_SINGLE_ENUM"/>
     </enumeration>
+    <enumeration name="AddressType" c:type="FooAddressType">
+      <member name="invalid" value="0" c:identifier="FOO_ADDRESS_INVALID"/>
+      <member name="ipv4" value="1" c:identifier="FOO_ADDRESS_IPV4"/>
+      <member name="ipv6" value="2" c:identifier="FOO_ADDRESS_IPV6"/>
+    </enumeration>
     <record name="BRect"
             c:type="FooBRect"
             glib:type-name="FooBRect"

@@ -188,6 +188,13 @@ typedef enum
   FOO_ENUM_FULLNAME_THREE
 } FooEnumFullname;
 
+typedef enum
+{
+  FOO_ADDRESS_INVALID,
+  FOO_ADDRESS_IPV4,
+  FOO_ADDRESS_IPV6
+} FooAddressType;
+
 typedef struct _FooBoxed FooBoxed;
 
 GType                 foo_boxed_get_type       (void) G_GNUC_CONST;
