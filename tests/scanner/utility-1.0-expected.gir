@@ -74,6 +74,7 @@ and/or use gtk-doc annotations.  -->
           </parameter>
           <parameter name="func"
                      transfer-ownership="none"
+                     scope="notified"
                      closure="3"
                      destroy="4">
             <type name="FileFunc" c:type="UtilityFileFunc"/>

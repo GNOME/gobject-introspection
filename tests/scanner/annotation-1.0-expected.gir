@@ -455,6 +455,7 @@ type.">
         <parameters>
           <parameter name="func"
                      transfer-ownership="none"
+                     scope="notified"
                      closure="2"
                      destroy="3">
             <type name="ForeachFunc" c:type="AnnotationForeachFunc"/>

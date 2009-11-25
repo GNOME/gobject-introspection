@@ -4,6 +4,7 @@
             xmlns:c="http://www.gtk.org/introspection/c/1.0"
             xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
   <include name="utility" version="1.0"/>
+  <include name="Gio" version="2.0"/>
   <include name="GObject" version="2.0"/>
   <include name="GLib" version="2.0"/>
   <namespace name="foo" version="1.0" shared-library="libfoo.so" c:prefix="foo">
@@ -568,6 +569,38 @@
         <type name="utility.Struct"/>
       </field>
     </record>
+    <function name="async_ready_callback" c:identifier="foo_async_ready_callback">
+      <return-value transfer-ownership="none">
+        <type name="none"/>
+      </return-value>
+      <parameters>
+        <parameter name="cancellable" transfer-ownership="none">
+          <type name="Gio.Cancellable"/>
+        </parameter>
+        <parameter name="callback" transfer-ownership="none" scope="async">
+          <type name="Gio.AsyncReadyCallback"/>
+        </parameter>
+        <parameter name="user_data" transfer-ownership="none">
+          <type name="any"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="destroy_notify_callback" c:identifier="foo_destroy_notify_callback">
+      <return-value transfer-ownership="none">
+        <type name="none"/>
+      </return-value>
+      <parameters>
+        <parameter name="callback" transfer-ownership="none" scope="notified" closure="1" destroy="2">
+          <type name="Callback"/>
+        </parameter>
+        <parameter name="data" transfer-ownership="none">
+          <type name="any"/>
+        </parameter>
+        <parameter name="destroy" transfer-ownership="none">
+          <type name="GLib.DestroyNotify"/>
+        </parameter>
+      </parameters>
+    </function>
     <function name="enum_type_method" c:identifier="foo_enum_type_method">
       <return-value transfer-ownership="none">
         <type name="int"/>

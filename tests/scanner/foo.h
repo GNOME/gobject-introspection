@@ -2,6 +2,7 @@
 #define __FOO_OBJECT_H__
 
 #include <glib-object.h>
+#include <gio/gio.h> /* GAsyncReadyCallback */
 #include "utility.h"
 
 #define FOO_SUCCESS_INT 0x1138
@@ -344,6 +345,14 @@ void foo_test_varargs_callback2 (FooVarargsCallback callback);
 void foo_test_varargs_callback3 (FooVarargsCallback callback,
 				 FooVarargsCallback callback2);
 
+/* Make sure callbacks get the right scope by default */
+void foo_async_ready_callback(GCancellable *cancellable,
+                              GAsyncReadyCallback callback,
+                              gpointer user_data);
+void foo_destroy_notify_callback(FooCallback callback,
+                                 gpointer data,
+                                 GDestroyNotify destroy);
+
 typedef enum {
   FOO_ERROR_GOOD,
   FOO_ERROR_BAD,
@@ -381,5 +390,6 @@ typedef enum {
   FOO_SKIPPABLE_TWO
 } FooSkippable;
 void foo_skip_me (FooSkippable fs);
+
 
 #endif /* __FOO_OBJECT_H__ */

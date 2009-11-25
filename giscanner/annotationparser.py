@@ -73,6 +73,9 @@ OPT_ARRAY_FIXED_SIZE = 'fixed-size'
 OPT_ARRAY_LENGTH = 'length'
 OPT_ARRAY_ZERO_TERMINATED = 'zero-terminated'
 
+OPT_SCOPE_ASYNC = 'async'
+OPT_SCOPE_CALL = 'call'
+OPT_SCOPE_NOTIFIED = 'notified'
 
 class InvalidAnnotationError(Exception):
     pass
@@ -410,6 +413,16 @@ class AnnotationApplier(object):
 
     def _parse_callable(self, callable, block):
         self._parse_node_common(callable, block)
+        for i, param in enumerate(callable.parameters):
+            if param.type.name != 'GLib.DestroyNotify':
+                continue
+            if i < 2:
+                break
+            callback_param = callable.parameters[i-2]
+            if callback_param.closure_index != -1:
+                callback_param.scope = OPT_SCOPE_NOTIFIED
+                callback_param.transfer = PARAM_TRANSFER_NONE
+
         self._parse_params(callable, callable.parameters, block)
         self._parse_return(callable, callable.retval, block)
         if block:
@@ -490,11 +503,15 @@ class AnnotationApplier(object):
 
     def _parse_param(self, parent, param, tag):
         options = getattr(tag, 'options', {})
-        if isinstance(parent, Function):
+        if isinstance(parent, Function) and not param.scope:
             scope = options.get(OPT_SCOPE)
             if scope:
                 param.scope = scope.one()
                 param.transfer = PARAM_TRANSFER_NONE
+            elif param.type.name == 'Gio.AsyncReadyCallback':
+                param.scope = OPT_SCOPE_ASYNC
+                param.transfer = PARAM_TRANSFER_NONE
+
             destroy = options.get(OPT_DESTROY)
             if destroy:
                 param.destroy_index = parent.get_parameter_index(destroy.one())

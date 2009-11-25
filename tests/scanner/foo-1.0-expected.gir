@@ -8,6 +8,7 @@ and/or use gtk-doc annotations.  -->
             xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
   <include name="GLib" version="2.0"/>
   <include name="GObject" version="2.0"/>
+  <include name="Gio" version="2.0"/>
   <include name="utility" version="1.0"/>
   <package name="gobject-2.0"/>
   <c:include name="foo.h"/>
@@ -702,6 +703,44 @@ uses a C sugar return type.">
         </parameter>
       </parameters>
     </callback>
+    <function name="async_ready_callback"
+              c:identifier="foo_async_ready_callback">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="cancellable" transfer-ownership="none">
+          <type name="Gio.Cancellable" c:type="GCancellable*"/>
+        </parameter>
+        <parameter name="callback" transfer-ownership="none" scope="async">
+          <type name="Gio.AsyncReadyCallback" c:type="GAsyncReadyCallback"/>
+        </parameter>
+        <parameter name="user_data" transfer-ownership="none">
+          <type name="any" c:type="gpointer"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="destroy_notify_callback"
+              c:identifier="foo_destroy_notify_callback">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="callback"
+                   transfer-ownership="none"
+                   scope="notified"
+                   closure="1"
+                   destroy="2">
+          <type name="Callback" c:type="FooCallback"/>
+        </parameter>
+        <parameter name="data" transfer-ownership="none">
+          <type name="any" c:type="gpointer"/>
+        </parameter>
+        <parameter name="destroy" transfer-ownership="none">
+          <type name="GLib.DestroyNotify" c:type="GDestroyNotify"/>
+        </parameter>
+      </parameters>
+    </function>
     <function name="enum_type_method" c:identifier="foo_enum_type_method">
       <return-value transfer-ownership="none">
         <type name="int" c:type="int"/>

@@ -339,7 +339,7 @@
           <type name="none"/>
         </return-value>
         <parameters>
-          <parameter name="func" transfer-ownership="none" closure="2" destroy="3">
+          <parameter name="func" transfer-ownership="none" scope="notified" closure="2" destroy="3">
             <type name="ForeachFunc"/>
           </parameter>
           <parameter name="user_data" transfer-ownership="none">

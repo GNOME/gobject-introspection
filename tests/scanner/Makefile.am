@@ -12,7 +12,7 @@ testlibdir = $(prefix)/unused
 install-testlibLTLIBRARIES: # prevent it from being installed
 
 AM_CPPFLAGS = -I$(top_srcdir)/girepository
-AM_CFLAGS = $(GOBJECT_CFLAGS) $(GTHREAD_CFLAGS)
+AM_CFLAGS = $(GIO_CFLAGS) $(GOBJECT_CFLAGS) $(GTHREAD_CFLAGS)
 AM_LDFLAGS = -avoid-version
 LIBS = $(GOBJECT_LIBS) $(GTHREAD_LIBS)
 
@@ -68,6 +68,7 @@ foo-1.0.gir: libfoo.la foo.c foo.h utility-1.0.gir $(SCANNER_BIN) $(SCANNER_LIBS
 	$(CHECK_DEBUG) $(SCANNER) \
 	--include=GObject-2.0 \
 	--include=utility-1.0 \
+	--include=Gio-2.0 \
 	--c-include="foo.h" \
         --libtool="$(LIBTOOL)" \
 	--library=libfoo.la \
