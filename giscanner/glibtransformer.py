@@ -558,6 +558,8 @@ class GLibTransformer(object):
         elif record.name in g_internal_names:
             # Avoid duplicates
             return
+        if record.name == 'InitiallyUnownedClass':
+            record.fields = self._names.names['ObjectClass'][1].fields
         node = self._names.names.get(record.name)
         if node is None:
             self._add_attribute(record, replace=True)
