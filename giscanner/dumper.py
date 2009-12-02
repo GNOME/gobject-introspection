@@ -46,8 +46,8 @@ main(int argc, char **argv)
   GOptionContext *context;
   GError *error = NULL;
 
+  if (!g_thread_supported ()) g_thread_init (NULL);
   g_type_init ();
-  g_thread_init (NULL);
 
   context = g_option_context_new ("");
   g_option_context_add_main_entries (context, entries, "girepository-1.0");
