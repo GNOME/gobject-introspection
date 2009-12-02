@@ -133,6 +133,7 @@ AC_CHECK_SIZEOF(time_t, [], [#include <time.h>])
 PKG_CHECK_MODULES(GIREPO, [glib-2.0 gobject-2.0 gmodule-2.0 gio-2.0 libffi])
 
 GIREPO_CFLAGS="$GIREPO_CFLAGS $GCOV_CFLAGS"
+GIREPO_LIBS="$GIREPO_LIBS $GCOV_LIBS"
 
 # gtk-doc
 GTK_DOC_CHECK([1.12])
