@@ -661,6 +661,22 @@ case.">
         </parameter>
       </parameters>
     </function>
+    <function name="test_callback_async" c:identifier="test_callback_async">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="callback"
+                   transfer-ownership="none"
+                   scope="async"
+                   closure="1">
+          <type name="TestCallbackUserData" c:type="TestCallbackUserData"/>
+        </parameter>
+        <parameter name="user_data" transfer-ownership="none">
+          <type name="any" c:type="gpointer"/>
+        </parameter>
+      </parameters>
+    </function>
     <function name="test_callback_destroy_notify"
               c:identifier="test_callback_destroy_notify"
               doc="Notified - callback persists until a DestroyNotify delegate
@@ -701,6 +717,12 @@ is invoked.">
           <type name="any" c:type="gpointer"/>
         </parameter>
       </parameters>
+    </function>
+    <function name="test_callback_thaw_async"
+              c:identifier="test_callback_thaw_async">
+      <return-value transfer-ownership="none">
+        <type name="int" c:type="int"/>
+      </return-value>
     </function>
     <function name="test_callback_thaw_notifications"
               c:identifier="test_callback_thaw_notifications"

@@ -1557,7 +1557,7 @@ test_callback_destroy_notify (TestCallbackUserData callback,
 
   retval = callback(user_data);
 
-  info = g_new(CallbackInfo, 1);
+  info = g_slice_new(CallbackInfo);
   info->callback = callback;
   info->notify = notify;
   info->user_data = user_data;
@@ -1584,16 +1584,57 @@ test_callback_thaw_notifications (void)
 
   for (node = notified_callbacks; node != NULL; node = node->next)
     {
-      CallbackInfo *info = (CallbackInfo *)node->data;
+      CallbackInfo *info = node->data;
       retval += info->callback (info->user_data);
       if (info->notify)
         info->notify (info->user_data);
-      g_free (info);
+      g_slice_free (CallbackInfo, info);
     }
 
   g_slist_free (notified_callbacks);
   notified_callbacks = NULL;
 
+  return retval;
+}
+
+static GSList *async_callbacks = NULL;
+
+/**
+ * test_callback_async:
+ * @callback: (scope async):
+ *
+ **/
+void
+test_callback_async (TestCallbackUserData callback,
+                     gpointer user_data)
+{
+  CallbackInfo *info;
+
+  info = g_slice_new(CallbackInfo);
+  info->callback = callback;
+  info->user_data = user_data;
+
+  async_callbacks = g_slist_prepend(async_callbacks, info);
+}
+
+/**
+ * test_callback_thaw_async:
+ */
+int
+test_callback_thaw_async (void)
+{
+  int retval = 0;
+  GSList *node;
+
+  for (node = async_callbacks; node != NULL; node = node->next)
+    {
+      CallbackInfo *info = node->data;
+      retval = info->callback (info->user_data);
+      g_slice_free (CallbackInfo, info);
+    }
+
+  g_slist_free (async_callbacks);
+  async_callbacks = NULL;
   return retval;
 }
 

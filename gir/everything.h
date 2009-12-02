@@ -291,6 +291,10 @@ int test_callback_destroy_notify (TestCallbackUserData callback,
                                   gpointer user_data,
                                   GDestroyNotify notify);
 int test_callback_thaw_notifications (void);
+
+void test_callback_async (TestCallbackUserData callback, gpointer user_data);
+int test_callback_thaw_async (void);
+
 int test_callback_infinite (TestCallbackUserData callback,
                            gpointer user_data);
 
