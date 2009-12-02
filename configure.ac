@@ -127,50 +127,10 @@ AM_CONDITIONAL(HAVE_GIO_UNIX, test x$have_gio_unix = xtrue)
 
 PKG_CHECK_MODULES(SCANNER, [gobject-2.0 gthread-2.0 gio-2.0])
 
-dnl libffi
-PKG_CHECK_MODULES(FFI, libffi, have_ffi_pkgconfig=yes, have_ffi_pkgconfig=no)
-
-if test x"$have_ffi_pkgconfig" = xno ; then
-  AC_MSG_CHECKING(for ffi.h)
-
-  AC_TRY_CPP([#include <ffi.h>], have_ffi_h=yes, have_ffi_h=no)
-  if test x"$have_ffi_h" = x"yes"; then
-
-    save_LIBS=$LIBS
-    if test x"$with_ffi" = x"yes" || test x"$with_ffi" = x"auto"; then
-      other_LIBS=
-    else
-      other_LIBS=$with_ffi
-    fi
-
-    AC_SEARCH_LIBS(ffi_call,ffi,,AC_MSG_ERROR([libffi not found]),$other_LIBS)
-    if test x"$ac_cv_search_ffi_call" = x"none required" ; then
-      FFI_LIBS=$other_LIBS
-    else
-      FFI_LIBS="$ac_cv_search_ffi_call $other_LIBS"
-    fi
-
-    LIBS=$save_LIBS
-  fi
-  if test x"$have_ffi_h" != x"yes" ; then
-    AC_MSG_ERROR([ffi.h not found])
-  fi
-
-  FFI_CFLAGS=
-
-  AC_MSG_RESULT([$have_ffi_h])
-  AC_SUBST(FFI_LIBS)
-  AC_SUBST(FFI_CFLAGS)
-fi
 
 AC_CHECK_SIZEOF(time_t, [], [#include <time.h>])
 
-PKG_CHECK_MODULES(GIREPO, [glib-2.0 gobject-2.0 gmodule-2.0 gio-2.0])
-
-# if we ever remove manual check for ffi and require .pc file, then 
-# just put libffi in the PKG_CHECK_MODULES(GIREPO) deps
-GIREPO_LIBS="$GIREPO_LIBS $GCOV_LIBS $FFI_LIBS"
-GIREPO_CFLAGS="$GIREPO_CFLAGS $FFI_CFLAGS"
+PKG_CHECK_MODULES(GIREPO, [glib-2.0 gobject-2.0 gmodule-2.0 gio-2.0 libffi])
 
 GIREPO_CFLAGS="$GIREPO_CFLAGS $GCOV_CFLAGS"
 

@@ -13,7 +13,7 @@ girdir=${datadir}/gir-1.0
 typelibdir=${libdir}/girepository-1.0
 
 Cflags: -I${includedir}/gobject-introspection-1.0
-Requires: glib-2.0 gobject-2.0 gmodule-2.0 gthread-2.0
+Requires: glib-2.0 gobject-2.0 gmodule-2.0 gthread-2.0 libffi
 Libs: -L${libdir} -lgirepository-1.0
 
 Name: gobject-introspection
