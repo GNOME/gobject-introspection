@@ -267,8 +267,10 @@ class Transformer(object):
                       symbol.ident)
 
     def _type_is_callback(self, type):
-        if (isinstance(type, Callback) or
-            isinstance(self._typedefs_ns.get(type.name), Callback)):
+        if isinstance(type, Callback):
+            return True
+        node = self._names.names.get(type.name)
+        if node and isinstance(node[1], Callback):
             return True
         return False
 
