@@ -1515,13 +1515,15 @@ test_sub_obj_unset_bare (TestSubObj *obj)
 
 /**
  * test_callback:
- * @callback: (scope call):
+ * @callback: (scope call) (allow-none):
  *
  **/
 int
 test_callback (TestCallback callback)
 {
-  return callback();
+    if (callback != NULL)
+        return callback();
+    return 0;
 }
 
 /**
