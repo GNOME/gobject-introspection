@@ -414,7 +414,7 @@ class AnnotationApplier(object):
     def _parse_callable(self, callable, block):
         self._parse_node_common(callable, block)
         for i, param in enumerate(callable.parameters):
-            if param.type.name != 'GLib.DestroyNotify':
+            if param.type.name not in ['DestroyNotify', 'GLib.DestroyNotify']:
                 continue
             if i < 2:
                 break
@@ -508,7 +508,8 @@ class AnnotationApplier(object):
             if scope:
                 param.scope = scope.one()
                 param.transfer = PARAM_TRANSFER_NONE
-            elif param.type.name == 'Gio.AsyncReadyCallback':
+            elif param.type.name in ['AsyncReadyCallback',
+                                     'Gio.AsyncReadyCallback']:
                 param.scope = OPT_SCOPE_ASYNC
                 param.transfer = PARAM_TRANSFER_NONE
 
