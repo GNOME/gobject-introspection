@@ -190,7 +190,7 @@ stringtext				([^\\\"])|(\\.)
 "\""{stringtext}*"\""			{ return STRING; }
 "L\""{stringtext}*"\""			{ return STRING; }
 
-.					{ fprintf(stderr, "%s:%d: unexpected character `%c'\n", scanner->current_filename, lineno, yytext[0]); }
+.					{ if (yytext[0]) fprintf(stderr, "%s:%d: unexpected character `%c'\n", scanner->current_filename, lineno, yytext[0]); }
 
 %%
 
