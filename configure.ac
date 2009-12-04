@@ -129,8 +129,12 @@ PKG_CHECK_MODULES(SCANNER, [gobject-2.0 gthread-2.0 gio-2.0])
 
 dnl libffi
 PKG_CHECK_MODULES(FFI, libffi, have_ffi_pkgconfig=yes, have_ffi_pkgconfig=no)
-
-if test x"$have_ffi_pkgconfig" = xno ; then
+FFI_PC_CFLAGS=""
+FFI_PC_LIBS=""
+FFI_PC_PACKAGES=""
+if test x"$have_ffi_pkgconfig" = xyes ; then
+    FFI_PC_PACKAGES="libffi"
+else
   AC_MSG_CHECKING(for ffi.h)
 
   AC_TRY_CPP([#include <ffi.h>], have_ffi_h=yes, have_ffi_h=no)
@@ -156,12 +160,16 @@ if test x"$have_ffi_pkgconfig" = xno ; then
     AC_MSG_ERROR([ffi.h not found])
   fi
 
+  FFI_PC_LIBS=$FFI_LIBS
+  FFI_PC_CFLAGS=$FFI_CFLAGS
   FFI_CFLAGS=
-
   AC_MSG_RESULT([$have_ffi_h])
   AC_SUBST(FFI_LIBS)
   AC_SUBST(FFI_CFLAGS)
 fi
+AC_SUBST(FFI_PC_CFLAGS)
+AC_SUBST(FFI_PC_LIBS)
+AC_SUBST(FFI_PC_PACKAGES)
 
 AC_CHECK_SIZEOF(time_t, [], [#include <time.h>])
 
