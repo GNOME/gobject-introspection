@@ -37,6 +37,7 @@
 #include "grealpath.h"
 
 int lineno;
+char linebuf[2000];
 
 #undef YY_BUF_SIZE
 #define YY_BUF_SIZE 1048576
@@ -61,7 +62,12 @@ stringtext				([^\\\"])|(\\.)
 
 %%
 
-"\n"					{ ++lineno; } /* " */
+\n.*					{ strncpy(linebuf, yytext+1, sizeof(linebuf)); /* save the next line */
+						linebuf[sizeof(linebuf)-1]='\0';
+						/* printf("%4d:%s\n",lineno,linebuf); */
+						yyless(1);      /* give back all but the \n to rescan */
+						++lineno;
+					}
 "\\\n"					{ ++lineno; }
 [\t\f\v\r ]+				{ /* Ignore whitespace. */ }
 

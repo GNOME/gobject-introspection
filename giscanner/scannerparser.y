@@ -38,6 +38,7 @@
 
 extern FILE *yyin;
 extern int lineno;
+extern char linebuf[2000];
 extern char *yytext;
 
 extern int yylex (GISourceScanner *scanner);
@@ -1281,8 +1282,8 @@ yyerror (GISourceScanner *scanner, const char *s)
    * have valid expressions */
   if (!scanner->macro_scan)
     {
-      fprintf(stderr, "%s:%d: %s\n",
-	      scanner->current_filename, lineno, s);
+      fprintf(stderr, "%s:%d: %s in '%s' at '%s'\n",
+	      scanner->current_filename, lineno, s, linebuf, yytext);
     }
 }
 
