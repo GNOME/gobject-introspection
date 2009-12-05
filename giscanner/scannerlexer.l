@@ -216,6 +216,9 @@ parse_comment (GISourceScanner *scanner)
     {
       g_string_append_c (comment, c1);
 
+      if (c1 == '\n')
+        lineno++;
+
       c1 = c2;
       c2 = input();
 
