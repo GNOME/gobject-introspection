@@ -261,6 +261,19 @@ GSList *test_filename_return (void)
 /* multiple output arguments */
 
 /**
+ * test_multi_double_args:
+ * @in:
+ * @one: (out): 
+ * @two: (out): 
+ */
+void
+test_multi_double_args (gdouble in, gdouble *one, gdouble *two)
+{
+  *one = in * 2;
+  *two = in * 3;
+}
+
+/**
  * test_utf8_out_out:
  * @out0: (out) (transfer full): a copy of "first"
  * @out1: (out) (transfer full): a copy of "second"

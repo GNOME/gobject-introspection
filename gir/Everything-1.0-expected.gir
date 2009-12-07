@@ -1240,6 +1240,23 @@ call and can be released on return.">
         </parameter>
       </parameters>
     </function>
+    <function name="test_multi_double_args"
+              c:identifier="test_multi_double_args">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="in" transfer-ownership="none">
+          <type name="double" c:type="gdouble"/>
+        </parameter>
+        <parameter name="one" direction="out" transfer-ownership="full">
+          <type name="double" c:type="gdouble*"/>
+        </parameter>
+        <parameter name="two" direction="out" transfer-ownership="full">
+          <type name="double" c:type="gdouble*"/>
+        </parameter>
+      </parameters>
+    </function>
     <function name="test_short" c:identifier="test_short">
       <return-value transfer-ownership="none">
         <type name="short" c:type="gshort"/>
