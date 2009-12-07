@@ -712,7 +712,10 @@ uses a C sugar return type.">
         <parameter name="cancellable" transfer-ownership="none">
           <type name="Gio.Cancellable" c:type="GCancellable*"/>
         </parameter>
-        <parameter name="callback" transfer-ownership="none" scope="async">
+        <parameter name="callback"
+                   transfer-ownership="none"
+                   scope="async"
+                   closure="2">
           <type name="Gio.AsyncReadyCallback" c:type="GAsyncReadyCallback"/>
         </parameter>
         <parameter name="user_data" transfer-ownership="none">
