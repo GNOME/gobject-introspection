@@ -209,8 +209,9 @@ class AnnotationParser(object):
             tag_name, value = self._split_tag_namevalue(line)
             canon_name = tag_name.lower()
             if canon_name in block.tags:
-                print >>sys.stderr, "Symbol %s has multiple definition of tag %r" \
-                    % (block_name, canon_name, )
+                print >> sys.stderr, (
+                    "Symbol %s has multiple definition of tag %r" % (
+                    block_name, canon_name, ))
             block.tags[canon_name] = self._create_tag(canon_name, value)
         block.comment = '\n'.join(comment_lines)
         self._blocks[block.name] = block
