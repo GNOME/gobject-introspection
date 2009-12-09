@@ -130,3 +130,8 @@
  * @argvp: (out): (array zero-terminated=1):
  * @error:
  */
+
+/**
+ * g_completion_complete_utf8:
+ * Return value: (element-type utf8) (transfer none):
+ */
