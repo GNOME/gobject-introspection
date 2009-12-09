@@ -960,9 +960,9 @@ class GLibTransformer(object):
 
         last_param = func.parameters.pop()
 
-        if (last_param.type.name == 'GLib.Error' or
-            (self._namespace_name == 'GLib' and
-             last_param.type.name == 'Error')):
+        # Checking type.name=='GLib.Error' generates false positives
+        # on methods that take a 'GError *'
+        if last_param.type.ctype == 'GError**':
             func.throws = True
         else:
             func.parameters.append(last_param)
