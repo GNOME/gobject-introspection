@@ -12,6 +12,7 @@ enum {
 enum {
   STRING_SIGNAL,
   LIST_SIGNAL,
+  DOC_EMPTY_ARG_PARSING,
   LAST_SIGNAL
 };
 
@@ -97,6 +98,22 @@ annotation_object_class_init (AnnotationObjectClass *klass)
 		  G_TYPE_NONE, 1, G_TYPE_POINTER);
 
   /**
+   * AnnotationObject::doc-empty-arg-parsing:
+   * @annotation: the annotation object
+   * @arg1:
+   *
+   * This signal tests an empty document argument (@arg1)
+   */
+  annotation_object_signals[DOC_EMPTY_ARG_PARSING] =
+    g_signal_new ("doc-empty-arg-parsing",
+		  G_OBJECT_CLASS_TYPE (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  0,
+		  NULL, NULL,
+		  (GSignalCMarshaller)g_cclosure_marshal_VOID__POINTER,
+		  G_TYPE_NONE, 1, G_TYPE_POINTER);
+
+  /**
    * AnnotationObject:string-property:
    *
    * This is a property which is a string
@@ -111,7 +128,7 @@ annotation_object_class_init (AnnotationObjectClass *klass)
                                                         "This property is a string",
                                                         NULL,
                                                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT));
-  
+
 }
 
 static void

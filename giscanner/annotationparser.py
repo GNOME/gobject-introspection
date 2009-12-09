@@ -222,6 +222,8 @@ class AnnotationParser(object):
         if len(parts) == 1:
             tag_name = parts[0]
             value = ''
+            if tag_name.endswith(':'):
+                tag_name = tag_name[:-1]
         else:
             tag_name, value = parts
         return (tag_name, value)

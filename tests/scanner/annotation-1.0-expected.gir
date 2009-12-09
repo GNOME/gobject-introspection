@@ -486,6 +486,17 @@ type.">
       <field name="parent_instance">
         <type name="GObject.Object" c:type="GObject"/>
       </field>
+      <glib:signal name="doc-empty-arg-parsing"
+                   doc="This signal tests an empty document argument (@arg1)">
+        <return-value transfer-ownership="full">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <parameter name="arg1" transfer-ownership="none">
+            <type name="any" c:type="gpointer"/>
+          </parameter>
+        </parameters>
+      </glib:signal>
       <glib:signal name="list-signal"
                    doc="This is a signal which takes a list of strings, but it&apos;s not
 known by GObject as it&apos;s only marked as G_TYPE_POINTER">

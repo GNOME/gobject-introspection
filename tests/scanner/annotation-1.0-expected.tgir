@@ -359,6 +359,16 @@
       <property name="string-property" writable="1" construct="1">
         <type name="utf8"/>
       </property>
+      <glib:signal name="doc-empty-arg-parsing" when="LAST">
+        <return-value transfer-ownership="full">
+          <type name="none"/>
+        </return-value>
+        <parameters>
+          <parameter name="arg1" transfer-ownership="none">
+            <type name="any"/>
+          </parameter>
+        </parameters>
+      </glib:signal>
       <glib:signal name="list-signal" when="LAST">
         <return-value transfer-ownership="full">
           <type name="none"/>
