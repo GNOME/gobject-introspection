@@ -417,7 +417,8 @@ class AnnotationApplier(object):
     def _parse_callable(self, callable, block):
         self._parse_node_common(callable, block)
         for i, param in enumerate(callable.parameters):
-            if param.type.name not in ['DestroyNotify', 'GLib.DestroyNotify']:
+            if (param.type.ctype != 'GDestroyNotify' and
+                param.type.name != 'GLib.DestroyNotify'):
                 continue
             if i < 2:
                 break
@@ -511,8 +512,8 @@ class AnnotationApplier(object):
             if scope:
                 param.scope = scope.one()
                 param.transfer = PARAM_TRANSFER_NONE
-            elif param.type.name in ['AsyncReadyCallback',
-                                     'Gio.AsyncReadyCallback']:
+            elif (param.type.ctype == 'GAsyncReadyCallback' or
+                  param.type.name == 'Gio.AsyncReadyCallback'):
                 param.scope = OPT_SCOPE_ASYNC
                 param.transfer = PARAM_TRANSFER_NONE
 
@@ -661,9 +662,11 @@ class AnnotationApplier(object):
         def combiner(base, *rest):
             if not rest:
                 return base
-            if base.name in ['GLib.List', 'GLib.SList'] and len(rest)==1:
+            if (base.name in ['GLib.List', 'GLib.SList'] or
+                base.ctype in ['GList*', 'GSList*']) and len(rest)==1:
                 return List(base.name, base.ctype, *rest)
-            if base.name in ['GLib.HashTable'] and len(rest)==2:
+            if (base.name in ['GLib.HashTable'] or
+                base.ctype in ['GHashTable*']) and len(rest)==2:
                 return Map(base.name, base.ctype, *rest)
             print "WARNING: throwing away type parameters:", type_str
             return base
@@ -682,13 +685,15 @@ class AnnotationApplier(object):
     def _parse_element_type(self, parent, node, options):
         element_type_opt = options.get(OPT_ELEMENT_TYPE)
         element_type = element_type_opt.flat()
-        if node.type.name in ['GLib.List', 'GLib.SList']:
+        if (node.type.name in ['GLib.List', 'GLib.SList'] or
+            node.type.ctype in ['GList*', 'GSList*']):
             assert len(element_type) == 1
             container_type = List(
                 node.type.name,
                 node.type.ctype,
                 self._resolve(element_type[0]))
-        elif node.type.name in ['GLib.HashTable']:
+        elif (node.type.name in ['GLib.HashTable'] or
+              node.type.ctype in ['GHashTable*']):
             assert len(element_type) == 2
             container_type = Map(
                 node.type.name,

@@ -283,9 +283,8 @@ class Transformer(object):
         return False
 
     def _handle_destroy(self, param, destroy_idx, destroy_param):
-        if ((self._namespace.name == 'GLib' and
-             destroy_param.type.name == 'DestroyNotify') or
-            destroy_param.type.name == 'GLib.DestroyNotify'):
+        if (destroy_param.type.name == 'GLib.DestroyNotify' or
+            destroy_param.type.ctype == 'GDestroyNotify'):
             param.destroy_name = destroy_param.name
             param.destroy_index = destroy_idx
             return True

@@ -408,8 +408,8 @@ class GLibTransformer(object):
             return False
         if func.parameters:
             return False
-        if func.retval.type.name not in ['GLib.Quark',
-                                         'GQuark']:
+        if (func.retval.type.name != 'GLib.Quark' and
+            func.retval.type.ctype != 'GQuark'):
             return False
 
         self._error_quark_functions.append(func)
