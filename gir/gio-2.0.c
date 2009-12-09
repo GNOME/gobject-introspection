@@ -438,6 +438,11 @@
  */
 
 /**
+ * g_file_replace_contents_finish:
+ * @new_etag: (allow-none) (out):
+ */
+
+/**
  * g_file_set_attribute:
  * @cancellable: (allow-none):
  */
