@@ -111,7 +111,7 @@ main (int argc, char *argv[])
   function = (GIFunctionInfo *)info;
 
   in_args[0].v_pointer = "hello world\n";
-  if (!g_function_info_invoke (function, in_args, 1, NULL, 0, NULL, &error))
+  if (!g_function_info_invoke (function, in_args, 1, NULL, 0, &retval, &error))
     g_print ("Invokation of %s failed: %s\n",
 	     g_base_info_get_name (info),
 	     error->message);
@@ -128,7 +128,7 @@ main (int argc, char *argv[])
   len = 0;
   out_args[0].v_pointer = &blurb;
   out_args[1].v_pointer = &len;
-  if (!g_function_info_invoke (function, NULL, 0, out_args, 2, NULL, &error))
+  if (!g_function_info_invoke (function, NULL, 0, out_args, 2, &retval, &error))
     g_print ("Invokation of %s failed: %s\n",
 	     g_base_info_get_name (info),
 	     error->message);
