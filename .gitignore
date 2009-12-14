@@ -21,6 +21,7 @@ COPYING
 depcomp
 gtk-doc.make
 gobject-introspection-1.0.pc
+gobject-introspection-no-export-1.0.pc
 INSTALL
 install-sh
 libtool
@@ -37,6 +38,8 @@ docs/reference/gi-decl.txt
 docs/reference/html
 docs/reference/xml
 docs/reference/tmpl
+gir/Everything-1.0.gir
+gir/Everything-1.0.typelib
 gir/GIRepository-2.0.gir
 gir/GIRepository-2.0.typelib
 gir/GL-1.0.typelib
