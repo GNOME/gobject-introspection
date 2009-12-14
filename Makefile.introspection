@@ -37,7 +37,6 @@
 
 # Make sure the required variables are set, these should under normal
 # circumstances come from introspection.m4
-$(if $(INTROSPECTION_GIRS),,$(error Need to define INTROSPECTION_GIRS))
 $(if $(INTROSPECTION_SCANNER),,$(error Need to define INTROSPECTION_SCANNER))
 $(if $(INTROSPECTION_COMPILER),,$(error Need to define INTROSPECTION_COMPILER))
 
