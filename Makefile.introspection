@@ -41,6 +41,28 @@ $(if $(INTROSPECTION_GIRS),,$(error Need to define INTROSPECTION_GIRS))
 $(if $(INTROSPECTION_SCANNER),,$(error Need to define INTROSPECTION_SCANNER))
 $(if $(INTROSPECTION_COMPILER),,$(error Need to define INTROSPECTION_COMPILER))
 
+# Private functions
+
+## Transform the gir filename to something which can reference through a variable
+## without automake/make complaining, eg Gtk-2.0.gir -> Gtk_2_0_gir
+_gir_name = $(subst -,_,$(subst .,_,$(1)))
+
+# Namespace and Version is either fetched from the gir filename
+# or the _NAMESPACE/_VERSION variable combo
+_gir_namespace = $(or $($(_gir_name)_NAMESPACE),$(firstword $(subst -, ,$(1))))
+_gir_version = $(or $($(_gir_name)_VERSION),$(lastword $(subst -, ,$(1:.gir=))))
+
+# _PROGRAM is an optional variable which needs it's own --program argument
+_gir_program = $(if $($(_gir_name)_PROGRAM),--program=$($(_gir_name)_PROGRAM))
+
+# Variables which provides a list of things
+_gir_libraries = $(foreach lib,$($(_gir_name)_LIBS),--library=$(lib))
+_gir_packages = $(foreach pkg,$($(_gir_name)_PACKAGES),--pkg=$(pkg))
+_gir_includes = $(foreach include,$($(_gir_name)_INCLUDES),--include=$(include))
+
+# Reuse the LIBTOOL variable from by automake if it's set
+_gir_libtool = $(if $(LIBTOOL),--libtool="$(LIBTOOL)")
+
 #
 # Creates a GIR by scanning C headers/sources
 # $(1) - Name of the gir file (output)
@@ -70,11 +92,8 @@ $(if $(INTROSPECTION_COMPILER),,$(error Need to define INTROSPECTION_COMPILER))
 #   GLib-2.0, Gtk-2.0. This is needed for all libraries which you depend on that
 #   provides introspection information.
 #
-define introspection-scanner
 
-# Transform the gir filename to something which can reference through a variable
-# without automake/make complaining, eg Gtk-2.0.gir -> Gtk_2_0_gir
-_gir_name = $(subst -,_,$(subst .,_,$(1)))
+define introspection-scanner
 
 # Basic sanity check, to make sure required variables are set
 $(if $($(_gir_name)_FILES),,$(error Need to define $(_gir_name)_FILES))
@@ -82,27 +101,10 @@ $(if $(or $($(_gir_name)_LIBS),
           $($(_gir_name)_PROGRAM)),,
     $(error Need to define $(_gir_name)_LIBS or $(_gir_name)_PROGRAM))
 
-# Namespace and Version is either fetched from the gir filename
-# or the _NAMESPACE/_VERSION variable combo
-_gir_namespace = $(or $($(_gir_name)_NAMESPACE),$(firstword $(subst -, ,$(1))))
-_gir_version = $(or $($(_gir_name)_VERSION),$(lastword $(subst -, ,$(1:.gir=))))
-
-# _PROGRAM is an optional variable which needs it's own --program argument
-_gir_program = $(if $($(_gir_name)_PROGRAM),--program=$($(_gir_name)_PROGRAM))
-
-# Variables which provides a list of things
-_gir_libraries = $(foreach lib,$($(_gir_name)_LIBS),--library=$(lib))
-_gir_packages = $(foreach pkg,$($(_gir_name)_PACKAGES),--pkg=$(pkg))
-_gir_includes = $(foreach include,$($(_gir_name)_INCLUDES),--include=$(include))
-
-# Reuse the LIBTOOL variable from by automake if it's set
-_gir_libtool = $(if $(LIBTOOL),--libtool="$(LIBTOOL)")
-
 # Only dependencies we know are actually filenames goes into _FILES, make
 # sure these are built before running the scanner. Libraries and programs
 # needs to be added manually.
 $(1): $$($(_gir_name)_FILES) $(INTROSPECTION_PARSER)
-    ## Invoke the scanner
 	$(INTROSPECTION_SCANNER) $(INTROSPECTION_SCANNER_ARGS) \
 	  --namespace=$(_gir_namespace) \
 	  --nsversion=$(_gir_version) \
@@ -114,7 +116,6 @@ $(1): $$($(_gir_name)_FILES) $(INTROSPECTION_PARSER)
 	  $($(_gir_name)_SCANNERFLAGS) \
 	  $($(_gir_name)_CFLAGS) \
 	  $($(_gir_name)_FILES) \
-	  ## Output should go last as it makes it easier to read compilation logs
 	  --output $(1)
 endef
 
