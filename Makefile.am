@@ -32,6 +32,9 @@ pkgconfig_DATA = gobject-introspection-1.0.pc gobject-introspection-no-export-1.
 m4dir = $(datadir)/aclocal
 m4_DATA = m4/introspection.m4
 
+makedir = $(datadir)/share/gobject-introspection-1.0
+make_DATA = Makefile.introspection
+
 EXTRA_DIST = 			\
 	COPYING.LGPL		\
 	COPYING.GPL		\

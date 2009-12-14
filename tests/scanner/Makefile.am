@@ -1,4 +1,5 @@
 include $(top_srcdir)/common.mk
+include $(top_srcdir)/Makefile.introspection
 
 # We need to build a shared library, which can be dlopened
 # it does not work with noinst_LTLIBRARIES
@@ -34,75 +35,47 @@ EXPECTEDGIRS = $(GIRS:.gir=-expected.gir)
 TGIRS = $(GIRS:.gir=.tgir)
 CHECKTGIRS = $(GIRS:.gir=.tgir.check)
 EXPECTEDTGIRS = $(GIRS:.gir=-expected.tgir)
-CLEANFILES = $(TYPELIBS)  $(GIRS)
+INTROSPECTION_GIRS = $(GIRS)
+CLEANFILES = $(TYPELIBS) $(GIRS)
 BUILT_SOURCES = $(TYPELIBS) $(GIRS) $(TGIRS)
 EXTRA_DIST = $(EXPECTEDGIRS) $(EXPECTEDTGIRS)
 
-annotation-1.0.gir: libannotation.la annotation.c annotation.h utility-1.0.gir $(SCANNER_BIN) $(SCANNER_LIBS) Makefile
-	 $(CHECK_DEBUG) $(SCANNER) \
-	--include=GObject-2.0 \
-	--include=utility-1.0 \
-        --libtool="$(LIBTOOL)" \
-	--library=libannotation.la \
-	--namespace=annotation \
-	--nsversion=1.0 \
-	--pkg gobject-2.0 \
-	$(srcdir)/annotation.h $(srcdir)/annotation.c \
-	 --output $@
+annotation-1.0.gir: utility-1.0.gir libannotation.la
+annotation_1_0_gir_PACKAGES = gobject-2.0
+annotation_1_0_gir_LIBS = libannotation.la
+annotation_1_0_gir_INCLUDES = GObject-2.0 utility-1.0
+annotation_1_0_gir_FILES = $(libannotation_la_SOURCES)
 GIRS += annotation-1.0.gir
 
-drawable-1.0.gir: libdrawable.la drawable.c drawable.h utility-1.0.gir $(SCANNER_BIN) $(SCANNER_LIBS) Makefile
-	$(CHECK_DEBUG) $(SCANNER) \
-	--include=GObject-2.0 \
-	--include=utility-1.0 \
-        --libtool="$(LIBTOOL)" \
-	--library=libdrawable.la \
-	--namespace=drawable \
-	--nsversion=1.0 \
-	--pkg gobject-2.0 \
-	$(srcdir)/drawable.h $(srcdir)/drawable.c \
-	 --output $@
+drawable-1.0.gir: utility-1.0.gir libdrawable.la
+drawable_1_0_gir_PACKAGES = gobject-2.0
+drawable_1_0_gir_LIBS = libdrawable.la
+drawable_1_0_gir_INCLUDES = GObject-2.0 utility-1.0
+drawable_1_0_gir_FILES = $(libdrawable_la_SOURCES)
 GIRS += drawable-1.0.gir
 
-foo-1.0.gir: libfoo.la foo.c foo.h utility-1.0.gir $(SCANNER_BIN) $(SCANNER_LIBS) Makefile
-	$(CHECK_DEBUG) $(SCANNER) \
-	--include=GObject-2.0 \
-	--include=utility-1.0 \
-	--include=Gio-2.0 \
-	--c-include="foo.h" \
-        --libtool="$(LIBTOOL)" \
-	--library=libfoo.la \
-	--namespace=foo \
-	--nsversion=1.0 \
-	--pkg gobject-2.0 \
-	$(srcdir)/foo.h $(srcdir)/foo.c \
-	 --output $@
+foo-1.0.gir: utility-1.0.gir libfoo.la
+foo_1_0_gir_PACKAGES = gobject-2.0
+foo_1_0_gir_LIBS = libfoo.la
+foo_1_0_gir_INCLUDES = GObject-2.0 Gio-2.0 utility-1.0
+foo_1_0_gir_FILES = $(srcdir)/foo.h $(srcdir)/foo.c
+foo_1_0_gir_SCANNERFLAGS = --c-include="foo.h"
 GIRS += foo-1.0.gir
 
-utility-1.0.gir: libutility.la utility.h $(SCANNER_BIN) $(SCANNER_LIBS) Makefile
-	$(CHECK_DEBUG) $(SCANNER) \
-	--include=GObject-2.0 \
-        --libtool="$(LIBTOOL)" \
-	--library=libutility.la \
-	--namespace=utility \
-	--nsversion=1.0 \
-	--pkg gobject-2.0 \
-	$(libutility_la_SOURCES) \
-	--output $@
+utility-1.0.gir: libutility.la
+utility_1_0_gir_PACKAGES = gobject-2.0
+utility_1_0_gir_LIBS = libutility.la
+utility_1_0_gir_INCLUDES = GObject-2.0
+utility_1_0_gir_FILES = $(libutility_la_SOURCES)
 GIRS += utility-1.0.gir
 
 # This one tests different --namespace and --strip-prefix
-GtkFrob-1.0.gir: libgtkfrob.la gtkfrob.h $(SCANNER_BIN) $(SCANNER_LIBS) Makefile
-	$(CHECK_DEBUG) $(SCANNER) \
-	--include=GObject-2.0 \
-        --libtool="$(LIBTOOL)" \
-	--library=libgtkfrob.la \
-	--namespace=GtkFrob \
-	--strip-prefix=Gtk \
-	--nsversion=1.0 \
-	--pkg gobject-2.0 \
-	$(libgtkfrob_la_SOURCES) \
-	--output $@
+GtkFrob-1.0.gir: libgtkfrob.la
+GtkFrob_1_0_gir_PACKAGES = gobject-2.0
+GtkFrob_1_0_gir_LIBS = libgtkfrob.la
+GtkFrob_1_0_gir_INCLUDES = GObject-2.0
+GtkFrob_1_0_gir_FILES = $(libgtkfrob_la_SOURCES)
+GtkFrob_1_0_gir_SCANNERFLAGS = --strip-prefix=Gtk
 GIRS += GtkFrob-1.0.gir
 
 noinst_PROGRAMS = barapp
@@ -110,17 +83,13 @@ noinst_PROGRAMS = barapp
 barapp_SOURCES = $(srcdir)/barapp.c $(srcdir)/barapp.h
 barapp_LDADD = $(top_builddir)/girepository/libgirepository-1.0.la
 barapp_LDFLAGS = -export-dynamic
-BarApp-1.0.gir: barapp $(SCANNER_BIN) $(SCANNER_LIBS) Makefile
-	$(SCANNER) \
-	--include=GObject-2.0 \
-        --libtool="$(LIBTOOL)" \
-	--program=./barapp \
-	--namespace=BarApp \
-	--strip-prefix=Bar \
-	--nsversion=1.0 \
-	--pkg gobject-2.0 \
-	$(barapp_SOURCES) \
-	--output $@
+
+BarApp-1.0.gir: barapp
+BarApp_1_0_gir_PACKAGES = gobject-2.0
+BarApp_1_0_gir_PROGRAM = ./barapp
+BarApp_1_0_gir_INCLUDES = GObject-2.0
+BarApp_1_0_gir_FILES = $(barapp_SOURCES)
+BarApp_1_0_gir_SCANNERFLAGS = --strip-prefix=Bar
 GIRS += BarApp-1.0.gir
 
 pre-check:
@@ -142,9 +111,6 @@ post-check:
 # stop %.typelib rule from building %-expected.tgir (via %-expected.typelib)
 %-expected.typelib:
 	@true
-
-%.typelib: %.gir $(top_builddir)/tools/g-ir-compiler$(EXEEXT) Makefile
-	$(top_builddir)/tools/g-ir-compiler --includedir=. --includedir=$(top_builddir)/gir $< -o $@
 
 %.tgir: %.typelib $(top_builddir)/tools/g-ir-generate$(EXEEXT) Makefile
 	$(top_builddir)/tools/g-ir-generate --includedir=. --includedir=$(top_builddir)/gir $< -o $@

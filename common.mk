@@ -9,3 +9,11 @@ SCANNER_LIBS = \
 	$(top_srcdir)/giscanner/*.py \
 	$(top_builddir)/giscanner/libgiscanner.la \
 	$(top_builddir)/girepository/libgirepository-1.0.la
+
+INTROSPECTION_SCANNER = $(SCANNER)
+INTROSPECTION_SCANNER_ARGS = $(SCANNER_ARGS)
+INTROSPECTION_COMPILER = $(top_builddir)/tools/g-ir-compiler$(EXEEXT)
+INTROSPECTION_COMPILER_ARGS = \
+	--includedir=$(srcdir) \
+	--includedir=$(top_srcdir)/gir \
+    --includedir=$(top_builddir)/gir

@@ -1,24 +1,27 @@
 include $(top_srcdir)/common.mk
+include $(top_srcdir)/Makefile.introspection
 
 EXPECTEDGIRS =
-BUILT_GIRSOURCES = 
+BUILT_GIRSOURCES =
 CLEANFILES =
-EXTRA_DIST = 
+EXTRA_DIST =
 
-BASE_GIRSOURCES = 		\
-	cairo-1.0.gir 		\
-	fontconfig-2.0.gir	\
-	freetype2-2.0.gir	\
-	GL-1.0.gir		\
-	libxml2-2.0.gir		\
-	xft-2.0.gir 		\
-	xlib-2.0.gir 		\
-	xfixes-4.0.gir
+BASE_GIRSOURCES =               \
+        cairo-1.0.gir           \
+        fontconfig-2.0.gir      \
+        freetype2-2.0.gir       \
+        GL-1.0.gir              \
+        libxml2-2.0.gir         \
+        xft-2.0.gir             \
+        xlib-2.0.gir            \
+        xfixes-4.0.gir
 EXTRA_DIST += $(BASE_GIRSOURCES)
 
+INTROSPECTION_GIRS =
+
 # glib
-GLIB_INCLUDEDIR=`pkg-config --variable=includedir glib-2.0`/glib-2.0
-GLIB_LIBDIR=`pkg-config --variable=libdir glib-2.0`
+GLIB_INCLUDEDIR=$(shell pkg-config --variable=includedir glib-2.0)/glib-2.0
+GLIB_LIBDIR=$(shell pkg-config --variable=libdir glib-2.0)
 
 if OS_WIN32
 GLIB_LIBRARY=libglib-2.0-0
@@ -26,33 +29,26 @@ else
 GLIB_LIBRARY=glib-2.0
 endif
 
-GLib-2.0.gir: $(SCANNER_BIN) $(SCANNER_LIBS) Makefile glib-2.0.c
-	$(SCANNER) \
-	    --namespace GLib --nsversion=2.0 \
-	    --noclosure \
-	    --output $@ \
-	    --strip-prefix=g \
-	    --libtool="$(LIBTOOL)" \
-	    --c-include="glib.h" \
-	    --library=$(GLIB_LIBRARY) \
-	    --pkg glib-2.0 \
-	    $(CPPFLAGS) \
-	    -I$(GLIB_INCLUDEDIR) \
-	    -I$(GLIB_LIBDIR)/glib-2.0/include \
-	    -DGETTEXT_PACKAGE=Dummy \
-	    -D__G_I18N_LIB_H__ \
-	    $(GLIB_LIBDIR)/glib-2.0/include/glibconfig.h \
-	    $(srcdir)/glib-2.0.c \
-	    -DGLIB_COMPILATION \
-	    $(GLIB_INCLUDEDIR)/glib/*.h
-	$(SCANNER) $(SCANNER_ARGS) \
-	    --xpath-assertions=$(srcdir)/GLib-2.0.xpath GLib-2.0.gir
-BUILT_GIRSOURCES += GLib-2.0.gir
+GLib_2_0_gir_LIBS = $(GLIB_LIBRARY)
+GLib_2_0_gir_SCANNERFLAGS = --noclosure --strip-prefix=g --c-include="glib.h"
+GLib_2_0_gir_PACKAGES = glib-2.0
+GLib_2_0_gir_CFLAGS = $(CPPFLAGS) \
+            -I$(GLIB_INCLUDEDIR) \
+            -I$(GLIB_LIBDIR)/glib-2.0/include \
+            -DGETTEXT_PACKAGE=Dummy \
+            -D__G_I18N_LIB_H__
+GLib_2_0_gir_ASSERTIONS = $(srcdir)/GLib-2.0.xpath
+GLib_2_0_gir_FILES =  \
+                $(GLIB_LIBDIR)/glib-2.0/include/glibconfig.h \
+            $(GLIB_INCLUDEDIR)/glib/*.h \
+                $(srcdir)/glib-2.0.c
+
+INTROSPECTION_GIRS += GLib-2.0.gir
 EXTRA_DIST += glib-2.0.c GLib-2.0.xpath
 
 # gobject
-GOBJECT_INCLUDEDIR=`pkg-config --variable=includedir gobject-2.0`/glib-2.0
-GOBJECT_LIBDIR=`pkg-config --variable=libdir gobject-2.0`
+GOBJECT_INCLUDEDIR=$(shell pkg-config --variable=includedir gobject-2.0)/glib-2.0
+GOBJECT_LIBDIR=$(shell pkg-config --variable=libdir gobject-2.0)
 
 if OS_WIN32
 GOBJECT_LIBRARY=libgobject-2.0-0
@@ -60,30 +56,25 @@ else
 GOBJECT_LIBRARY=gobject-2.0
 endif
 
-GObject-2.0.gir: GLib-2.0.gir $(SCANNER_BIN) $(SCANNER_LIBS) Makefile
-	$(SCANNER) \
-	    --namespace GObject --nsversion=2.0 \
-	    --noclosure \
-	    --output $@ \
-	    --strip-prefix=g \
-	    --libtool="$(LIBTOOL)" \
-	    --c-include="glib-object.h" \
-	    --include=GLib-2.0 \
-	    --library=$(GOBJECT_LIBRARY) \
-	    -I$(GOBJECT_INCLUDEDIR) \
-	    -I$(GOBJECT_LIBDIR)/glib-2.0/include \
-	    -DGOBJECT_COMPILATION \
-	    --pkg gobject-2.0 \
-	    $(srcdir)/gobject-2.0.c \
-	    $(GLIB_INCLUDEDIR)/gobject/*.h
-	$(SCANNER) $(SCANNER_ARGS) \
-	    --xpath-assertions=$(srcdir)/GObject-2.0.xpath GObject-2.0.gir
-BUILT_GIRSOURCES += GObject-2.0.gir
+GObject-2.0.gir: GLib-2.0.gir
+
+GObject_2_0_gir_LIBS = $(GOBJECT_LIBRARY)
+GObject_2_0_gir_SCANNERFLAGS = --noclosure --strip-prefix=g --c-include="glib-object.h"
+GObject_2_0_gir_PACKAGES = gobject-2.0
+GObject_2_0_gir_INCLUDES = GLib-2.0
+GObject_2_0_gir_CFLAGS = \
+            -DGOBJECT_COMPILATION \
+                -I$(GOBJECT_INCLUDEDIR) \
+            -I$(GOBJECT_LIBDIR)/glib-2.0/include
+GObject_2_0_gir_ASSERTIONS = $(srcdir)/GObject-2.0.xpath
+GObject_2_0_gir_FILES = $(GLIB_INCLUDEDIR)/gobject/*.h $(srcdir)/gobject-2.0.c
+
+INTROSPECTION_GIRS += GObject-2.0.gir
 EXTRA_DIST += gobject-2.0.c GObject-2.0.xpath
 
 # gmodule
-GMODULE_INCLUDEDIR=`pkg-config --variable=includedir gmodule-2.0`/glib-2.0
-GMODULE_LIBDIR=`pkg-config --variable=libdir gmodule-2.0`
+GMODULE_INCLUDEDIR=$(shell pkg-config --variable=includedir gmodule-2.0)/glib-2.0
+GMODULE_LIBDIR=$(shell pkg-config --variable=libdir gmodule-2.0)
 
 if OS_WIN32
 GMODULE_LIBRARY=libgmodule-2.0-0
@@ -91,26 +82,22 @@ else
 GMODULE_LIBRARY=gmodule-2.0
 endif
 
-GModule-2.0.gir: GLib-2.0.gir $(SCANNER_BIN) $(SCANNER_LIBS)
-	$(SCANNER) \
-	    --namespace GModule --nsversion=2.0 \
-	    --add-include-path=. \
-	    --noclosure \
-	    --output $@ \
-	    --strip-prefix=g \
-	    --libtool="$(LIBTOOL)" \
-	    --c-include="gmodule.h" \
-	    --include=GLib-2.0 \
-	    --library=$(GMODULE_LIBRARY) \
-	    -I$(GMODULE_INCLUDEDIR) \
-	    -I$(GMODULE_LIBDIR)/glib-2.0/include \
-	    --pkg gmodule-2.0 \
-	    $(GLIB_INCLUDEDIR)/gmodule.h
-BUILT_GIRSOURCES += GModule-2.0.gir
+GModule-2.0.gir: GLib-2.0.gir
+
+GModule_2_0_gir_LIBS = $(GMODULE_LIBRARY)
+GModule_2_0_gir_SCANNERFLAGS = --noclosure --strip-prefix=g --c-include="gmodule.h"
+GModule_2_0_gir_PACKAGES = gmodule-2.0
+GModule_2_0_gir_INCLUDES = GLib-2.0
+GModule_2_0_gir_CFLAGS = \
+            -I$(GMODULE_INCLUDEDIR) \
+            -I$(GMODULE_LIBDIR)/glib-2.0/include
+GModule_2_0_gir_FILES = $(GLIB_INCLUDEDIR)/gmodule.h
+
+INTROSPECTION_GIRS += GModule-2.0.gir
 
 # gio
-GIO_INCLUDEDIR=`pkg-config --variable=includedir gio-2.0`/glib-2.0
-GIO_LIBDIR=`pkg-config --variable=libdir gio-2.0`
+GIO_INCLUDEDIR=$(shell pkg-config --variable=includedir gio-2.0)/glib-2.0
+GIO_LIBDIR=$(shell pkg-config --variable=libdir gio-2.0)
 
 if OS_WIN32
 GIO_LIBRARY=libgio-2.0-0
@@ -119,53 +106,48 @@ GIO_LIBRARY=gio-2.0
 endif
 
 if HAVE_GIO_UNIX
-GIO_UNIX_HDRS=`pkg-config --variable=includedir gio-unix-2.0`/gio-unix-2.0/gio/*.h
+GIO_UNIX_HDRS=$(shell pkg-config --variable=includedir gio-unix-2.0)/gio-unix-2.0/gio/*.h
 else
 GIO_UNIX_HDRS=
 endif
 
-Gio-2.0.gir: GObject-2.0.gir $(SCANNER_BIN) $(SCANNER_LIBS) Makefile $(srcdir)/gio-2.0.c
-	$(SCANNER) \
-	    --namespace Gio --nsversion=2.0 \
-	    --add-include-path=. \
-	    --noclosure \
-	    --output $@ \
-	    --strip-prefix=g \
-		--libtool="$(LIBTOOL)" \
-		--c-include="gio/gio.h" \
-		--include=GObject-2.0 \
-	    --library=$(GIO_LIBRARY) \
-	    -I$(GIO_INCLUDEDIR) \
-	    -I$(GIO_LIBDIR)/glib-2.0/include \
-	    -DGIO_COMPILATION \
-        --pkg gio-2.0 \
-	    $(srcdir)/gio-2.0.c \
-	    $(GLIB_INCLUDEDIR)/gio/*.h \
-	    $(GIO_UNIX_HDRS)
-BUILT_GIRSOURCES += Gio-2.0.gir
+Gio-2.0.gir: GObject-2.0.gir
+
+Gio_2_0_gir_LIBS = $(GIO_LIBRARY)
+Gio_2_0_gir_SCANNERFLAGS = --noclosure --strip-prefix=g --c-include="gio/gio.h"
+Gio_2_0_gir_PACKAGES = gio-2.0
+Gio_2_0_gir_INCLUDES = GObject-2.0
+Gio_2_0_gir_CFLAGS = \
+            -DGIO_COMPILATION \
+            -I$(GIO_INCLUDEDIR) \
+            -I$(GIO_LIBDIR)/glib-2.0/include
+Gio_2_0_gir_FILES = \
+            $(GIO_UNIX_HDRS) \
+            $(GIO_INCLUDEDIR)/gio/*.h \
+            $(srcdir)/gio-2.0.c
+
+INTROSPECTION_GIRS += Gio-2.0.gir
 EXTRA_DIST += gio-2.0.c
 
 # girepository
-GIREPOSITORY_FILES = \
-	$(top_srcdir)/girepository/girepository.c \
-	$(top_srcdir)/girepository/girepository.h
+GIRepository-2.0.gir: GObject-2.0.gir $(top_builddir)/girepository/libgirepository-1.0.la
 
-GIRepository-2.0.gir: GObject-2.0.gir $(SCANNER_BIN) $(SCANNER_LIBS) $(GIREPOSITORY_FILES)
-	$(SCANNER) \
-	    --namespace GIRepository --nsversion=2.0 \
-	    --noclosure \
-	    --output $@ \
-	    --strip-prefix=g \
-		--libtool="$(LIBTOOL)" \
-		--c-include="girepository.h" \
-		--include=GObject-2.0 \
-	    --library=girepository-1.0 \
-	    -I$(srcdir)/girepository \
-		--pkg gobject-2.0 \
-		--pkg-export gobject-introspection-1.0 \
-	    $(GIREPOSITORY_FILES)
-BUILT_GIRSOURCES += GIRepository-2.0.gir
+GIRepository_2_0_gir_LIBS = girepository-1.0
+GIRepository_2_0_gir_SCANNERFLAGS = \
+        --noclosure \
+        --strip-prefix=g \
+        --c-include="girepository.h" \
+        --pkg-export gobject-introspection-1.0
+GIRepository_2_0_gir_PACKAGES = gobject-2.0
+GIRepository_2_0_gir_INCLUDES = GObject-2.0
+GIRepository_2_0_gir_CFLAGS = -I$(srcdir)/girepository
+GIRepository_2_0_gir_FILES = \
+        $(top_srcdir)/girepository/girepository.c \
+        $(top_srcdir)/girepository/girepository.h
 
+INTROSPECTION_GIRS += GIRepository-2.0.gir
+
+# everything
 LT_CURRENT = 1
 LT_REVISION = 0
 LT_AGE = 0
@@ -183,30 +165,25 @@ if OS_WIN32
 libgirepository_everything_1_0_la_LDFLAGS += -no-undefined
 endif
 
-Everything-$(TYPELIB_VERSION).gir: GObject-2.0.gir libgirepository-everything-1.0.la everything.c everything.h $(SCANNER_BIN) $(SCANNER_LIBS) Makefile
-	$(SCANNER) \
-	--include=GObject-2.0 \
-	--libtool="$(LIBTOOL)" \
-	--library=girepository-everything-1.0 \
-	--namespace=Everything --nsversion=$(TYPELIB_VERSION) \
-	--pkg gobject-2.0 \
-	$(srcdir)/everything.h $(srcdir)/everything.c \
-	--output $@
-BUILT_GIRSOURCES += Everything-$(TYPELIB_VERSION).gir
+Everything-1.0.gir: Gio-2.0.gir libgirepository-everything-1.0.la
+
+Everything_1_0_gir_LIBS = libgirepository-everything-1.0.la
+Everything_1_0_gir_PACKAGES = gobject-2.0
+Everything_1_0_gir_INCLUDES = GObject-2.0
+Everything_1_0_gir_FILES = $(srcdir)/everything.h $(srcdir)/everything.c
+
+INTROSPECTION_GIRS += Everything-$(TYPELIB_VERSION).gir
 EXPECTEDGIRS += Everything-$(TYPELIB_VERSION)-expected.gir
 
 # Generic rules
-CLEANFILES += $(BUILT_GIRSOURCES)
+CLEANFILES += $(INTROSPECTION_GIRS)
 
-GIRSOURCES = 			\
-	$(BASE_GIRSOURCES)	\
-	$(BUILT_GIRSOURCES)
+GIRSOURCES =                    \
+        $(BASE_GIRSOURCES)      \
+        $(INTROSPECTION_GIRS)
 
 girdir = $(GIR_DIR)
 dist_gir_DATA = $(GIRSOURCES)
-
-%.typelib: %.gir $(top_builddir)/tools/g-ir-compiler$(EXEEXT)
-	$(top_builddir)/tools/g-ir-compiler$(EXEEXT) --includedir=. $(G_IR_COMPILER_OPTS) $< -o $@
 
 typelibsdir = $(libdir)/girepository-1.0
 typelibs_DATA = $(GIRSOURCES:.gir=.typelib)
@@ -228,7 +205,7 @@ check-local: $(CHECKGIRS)
 	$(DEBUG) $(top_builddir)/tools/g-ir-generate$(EXEEXT) --includedir=. $< -o $@
 
 testlib-%: %.test.gir $(top_builddir)/tools/g-ir-generate$(EXEEXT)
-	$(DEBUG) $(top_builddir)/tools/g-ir-compiler$(EXEEXT) --includedir=. $(G_IR_COMPILER_OPTS) $< -o $*.test.typelib
+	$(DEBUG) $(top_builddir)/tools/g-ir-compiler$(EXEEXT) --includedir=. $< -o $*.test.typelib
 	cmp $*.typelib $*.test.typelib && rm $*.test.typelib
 
 testgir-%: %.test.gir
