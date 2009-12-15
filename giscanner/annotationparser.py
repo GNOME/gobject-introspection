@@ -552,11 +552,13 @@ class AnnotationApplier(object):
         if node.direction is None:
             node.direction = self._guess_direction(node)
         node.transfer = self._extract_transfer(parent, node, options)
-        if OPT_ALLOW_NONE in options:
-            node.allow_none = True
         param_type = options.get(OPT_TYPE)
         if param_type:
             node.type = self._resolve(param_type.one(), node.type)
+
+        if (OPT_ALLOW_NONE in options or
+            node.type.ctype == 'GCancellable*'):
+            node.allow_none = True
 
         assert node.transfer is not None
         if tag is not None and tag.comment is not None:
