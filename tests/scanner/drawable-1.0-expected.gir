@@ -36,10 +36,16 @@ and/or use gtk-doc annotations.  -->
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
-          <parameter name="x" direction="out" transfer-ownership="full">
+          <parameter name="x"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full">
             <type name="int" c:type="int*"/>
           </parameter>
-          <parameter name="y" direction="out" transfer-ownership="full">
+          <parameter name="y"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full">
             <type name="int" c:type="int*"/>
           </parameter>
         </parameters>
@@ -49,10 +55,16 @@ and/or use gtk-doc annotations.  -->
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
-          <parameter name="width" direction="out" transfer-ownership="full">
+          <parameter name="width"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full">
             <type name="uint" c:type="guint*"/>
           </parameter>
-          <parameter name="height" direction="out" transfer-ownership="full">
+          <parameter name="height"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full">
             <type name="uint" c:type="guint*"/>
           </parameter>
         </parameters>

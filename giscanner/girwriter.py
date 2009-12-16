@@ -207,6 +207,8 @@ and/or use gtk-doc annotations. ''')
             attrs.append(('name', parameter.name))
         if parameter.direction != 'in':
             attrs.append(('direction', parameter.direction))
+            attrs.append(('caller-allocates',
+                          '1' if parameter.caller_allocates else '0'))
         attrs.append(('transfer-ownership',
                      parameter.transfer))
         if parameter.allow_none:

@@ -587,13 +587,15 @@ class AnnotationApplier(object):
 
     def _parse_param_ret_common(self, parent, node, tag):
         options = getattr(tag, 'options', {})
-        node.direction = self._extract_direction(node, options)
+        (node.direction, node.caller_allocates) = \
+            self._extract_direction(node, options)
         container_type = self._extract_container_type(
             parent, node, options)
         if container_type is not None:
             node.type = container_type
         if node.direction is None:
             node.direction = self._guess_direction(node)
+            node.caller_allocates = False
         node.transfer = self._extract_transfer(parent, node, options)
         param_type = options.get(OPT_TYPE)
         if param_type:
@@ -608,16 +610,32 @@ class AnnotationApplier(object):
             node.doc = tag.comment
 
     def _extract_direction(self, node, options):
+        caller_allocates = False
         if (OPT_INOUT in options or
             OPT_INOUT_ALT in options):
             direction = PARAM_DIRECTION_INOUT
         elif OPT_OUT in options:
+            subtype = options[OPT_OUT]
+            if subtype is not None:
+                subtype = subtype.one()
             direction = PARAM_DIRECTION_OUT
+            if subtype in (None, ''):
+                if (node.type.name not in BASIC_GIR_TYPES) and node.type.ctype:
+                    caller_allocates = '**' not in node.type.ctype
+                else:
+                    caller_allocates = False
+            elif subtype == 'caller-allocates':
+                caller_allocates = True
+            elif subtype == 'callee-allocates':
+                caller_allocates = False
+            else:
+                raise InvalidAnnotationError(
+                    "out direction for %s is invalid (%r)" % (node, subtype))
         elif OPT_IN in options:
             direction = PARAM_DIRECTION_IN
         else:
             direction = node.direction
-        return direction
+        return (direction, caller_allocates)
 
     def _guess_array(self, node):
         ctype = node.type.ctype
@@ -885,6 +903,8 @@ class AnnotationApplier(object):
         elif isinstance(node, Parameter):
             if node.direction in [PARAM_DIRECTION_INOUT,
                                   PARAM_DIRECTION_OUT]:
+                if node.caller_allocates:
+                    return PARAM_TRANSFER_NONE
                 return PARAM_TRANSFER_FULL
             # This one is a hack for compatibility; the transfer
             # for string parameters really has no defined meaning.

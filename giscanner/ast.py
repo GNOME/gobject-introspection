@@ -367,6 +367,7 @@ class Parameter(TypeContainer):
         else:
             self.direction = PARAM_DIRECTION_IN
 
+        self.caller_allocates = False
         self.allow_none = allow_none
         self.scope = scope
         self.closure_index = -1

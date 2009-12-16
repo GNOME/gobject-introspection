@@ -270,16 +270,25 @@ and/or use gtk-doc annotations.  -->
           <parameter name="x" transfer-ownership="none">
             <type name="int" c:type="int"/>
           </parameter>
-          <parameter name="y" direction="out" transfer-ownership="full">
+          <parameter name="y"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full">
             <type name="double" c:type="double*"/>
           </parameter>
-          <parameter name="z" direction="out" transfer-ownership="full">
+          <parameter name="z"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full">
             <type name="int" c:type="int*"/>
           </parameter>
           <parameter name="foo" transfer-ownership="none">
             <type name="utf8" c:type="char*"/>
           </parameter>
-          <parameter name="q" direction="out" transfer-ownership="full">
+          <parameter name="q"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full">
             <type name="int" c:type="int*"/>
           </parameter>
           <parameter name="m" transfer-ownership="none">
@@ -298,16 +307,25 @@ and/or use gtk-doc annotations.  -->
           <parameter name="x" transfer-ownership="none">
             <type name="int" c:type="int"/>
           </parameter>
-          <parameter name="y" direction="out" transfer-ownership="full">
+          <parameter name="y"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full">
             <type name="double" c:type="double*"/>
           </parameter>
-          <parameter name="z" direction="out" transfer-ownership="full">
+          <parameter name="z"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full">
             <type name="int" c:type="int*"/>
           </parameter>
           <parameter name="foo" transfer-ownership="none">
             <type name="utf8" c:type="char*"/>
           </parameter>
-          <parameter name="q" direction="out" transfer-ownership="full">
+          <parameter name="q"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full">
             <type name="int" c:type="int*"/>
           </parameter>
           <parameter name="m" transfer-ownership="none">
@@ -475,7 +493,11 @@ case.">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
-          <parameter name="a_out" transfer-ownership="none">
+          <parameter name="a_out"
+                     direction="out"
+                     caller-allocates="1"
+                     transfer-ownership="none"
+                     doc="the cloned structure">
             <type name="TestStructA" c:type="TestStructA*"/>
           </parameter>
         </parameters>
@@ -495,7 +517,11 @@ case.">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
-          <parameter name="b_out" transfer-ownership="none">
+          <parameter name="b_out"
+                     direction="out"
+                     caller-allocates="1"
+                     transfer-ownership="none"
+                     doc="the cloned structure">
             <type name="TestStructB" c:type="TestStructB*"/>
           </parameter>
         </parameters>
@@ -629,6 +655,7 @@ case.">
       <parameters>
         <parameter name="ints"
                    direction="out"
+                   caller-allocates="0"
                    transfer-ownership="full"
                    doc="a list of 5 integers ranging from 0 to 4">
           <array c:type="int**" fixed-size="5">
@@ -729,7 +756,10 @@ case.">
         </array>
       </return-value>
       <parameters>
-        <parameter name="len" direction="out" transfer-ownership="full">
+        <parameter name="len"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full">
           <type name="int" c:type="int*"/>
         </parameter>
       </parameters>
@@ -772,12 +802,14 @@ case.">
       <parameters>
         <parameter name="n_ints"
                    direction="inout"
+                   caller-allocates="0"
                    transfer-ownership="full"
                    doc="the length of @ints">
           <type name="int" c:type="int*"/>
         </parameter>
         <parameter name="ints"
                    direction="inout"
+                   caller-allocates="0"
                    transfer-ownership="full"
                    doc="a list of integers whose items will be increased by 1, except the first that will be dropped">
           <array length="0" c:type="int**">
@@ -795,7 +827,10 @@ case.">
         </array>
       </return-value>
       <parameters>
-        <parameter name="len" direction="out" transfer-ownership="full">
+        <parameter name="len"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full">
           <type name="int" c:type="int*"/>
         </parameter>
       </parameters>
@@ -824,6 +859,7 @@ case.">
       <parameters>
         <parameter name="arr"
                    direction="out"
+                   caller-allocates="0"
                    transfer-ownership="full"
                    allow-none="1">
           <array length="1" c:type="int**">
@@ -832,6 +868,7 @@ case.">
         </parameter>
         <parameter name="len"
                    direction="out"
+                   caller-allocates="0"
                    transfer-ownership="full"
                    doc=": length">
           <type name="int" c:type="int*"/>
@@ -845,12 +882,14 @@ case.">
       <parameters>
         <parameter name="n_ints"
                    direction="out"
+                   caller-allocates="0"
                    transfer-ownership="full"
                    doc="the length of @ints">
           <type name="int" c:type="int*"/>
         </parameter>
         <parameter name="ints"
                    direction="out"
+                   caller-allocates="0"
                    transfer-ownership="full"
                    doc="a list of 5 integers, from 0 to 4 in consecutive order">
           <array length="0" c:type="int**">
@@ -923,7 +962,10 @@ case.">
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
-        <parameter name="surface" direction="out" transfer-ownership="full">
+        <parameter name="surface"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full">
           <type name="cairo.Surface" c:type="cairo_surface_t**"/>
         </parameter>
       </parameters>
@@ -1248,6 +1290,7 @@ call and can be released on return.">
       <parameters>
         <parameter name="out"
                    direction="out"
+                   caller-allocates="0"
                    transfer-ownership="full"
                    allow-none="1">
           <type name="GLib.HashTable" c:type="GHashTable**">
@@ -1381,6 +1424,7 @@ call and can be released on return.">
       <parameters>
         <parameter name="out_list"
                    direction="out"
+                   caller-allocates="0"
                    transfer-ownership="full"
                    allow-none="1">
           <type name="GLib.SList" c:type="GSList**">
@@ -1504,6 +1548,7 @@ call and can be released on return.">
       <parameters>
         <parameter name="out_list"
                    direction="out"
+                   caller-allocates="0"
                    transfer-ownership="full"
                    allow-none="1">
           <type name="GLib.SList" c:type="GSList**">
@@ -1577,7 +1622,10 @@ call and can be released on return.">
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
-        <parameter name="length" direction="out" transfer-ownership="full">
+        <parameter name="length"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full">
           <type name="int" c:type="int*"/>
         </parameter>
         <parameter name="in" transfer-ownership="none">
@@ -1627,10 +1675,16 @@ call and can be released on return.">
         <parameter name="in" transfer-ownership="none">
           <type name="double" c:type="gdouble"/>
         </parameter>
-        <parameter name="one" direction="out" transfer-ownership="full">
+        <parameter name="one"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full">
           <type name="double" c:type="gdouble*"/>
         </parameter>
-        <parameter name="two" direction="out" transfer-ownership="full">
+        <parameter name="two"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full">
           <type name="double" c:type="gdouble*"/>
         </parameter>
       </parameters>
@@ -1655,6 +1709,7 @@ call and can be released on return.">
       <parameters>
         <parameter name="obj"
                    direction="out"
+                   caller-allocates="0"
                    transfer-ownership="full"
                    allow-none="1"
                    doc="A #TestObj">
@@ -1767,7 +1822,10 @@ call and can be released on return.">
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
-        <parameter name="retp" direction="out" transfer-ownership="container">
+        <parameter name="retp"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="container">
           <array c:type="char***">
             <type name="utf8"/>
           </array>
@@ -1793,16 +1851,25 @@ call and can be released on return.">
         <parameter name="x" transfer-ownership="none">
           <type name="int" c:type="int"/>
         </parameter>
-        <parameter name="y" direction="out" transfer-ownership="full">
+        <parameter name="y"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full">
           <type name="double" c:type="double*"/>
         </parameter>
-        <parameter name="z" direction="out" transfer-ownership="full">
+        <parameter name="z"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full">
           <type name="int" c:type="int*"/>
         </parameter>
         <parameter name="foo" transfer-ownership="none">
           <type name="utf8" c:type="char*"/>
         </parameter>
-        <parameter name="q" direction="out" transfer-ownership="full">
+        <parameter name="q"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full">
           <type name="int" c:type="int*"/>
         </parameter>
         <parameter name="m" transfer-ownership="none">
@@ -1821,16 +1888,25 @@ call and can be released on return.">
         <parameter name="x" transfer-ownership="none">
           <type name="int" c:type="int"/>
         </parameter>
-        <parameter name="y" direction="out" transfer-ownership="full">
+        <parameter name="y"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full">
           <type name="double" c:type="double*"/>
         </parameter>
-        <parameter name="z" direction="out" transfer-ownership="full">
+        <parameter name="z"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full">
           <type name="int" c:type="int*"/>
         </parameter>
         <parameter name="foo" transfer-ownership="none">
           <type name="utf8" c:type="char*"/>
         </parameter>
-        <parameter name="q" direction="out" transfer-ownership="full">
+        <parameter name="q"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full">
           <type name="int" c:type="int*"/>
         </parameter>
         <parameter name="m" transfer-ownership="none">
@@ -1860,16 +1936,25 @@ call and can be released on return.">
         <parameter name="notify" transfer-ownership="none" scope="call">
           <type name="GLib.DestroyNotify" c:type="GDestroyNotify"/>
         </parameter>
-        <parameter name="y" direction="out" transfer-ownership="full">
+        <parameter name="y"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full">
           <type name="double" c:type="double*"/>
         </parameter>
-        <parameter name="z" direction="out" transfer-ownership="full">
+        <parameter name="z"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full">
           <type name="int" c:type="int*"/>
         </parameter>
         <parameter name="foo" transfer-ownership="none">
           <type name="utf8" c:type="char*"/>
         </parameter>
-        <parameter name="q" direction="out" transfer-ownership="full">
+        <parameter name="q"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full">
           <type name="int" c:type="int*"/>
         </parameter>
         <parameter name="m" transfer-ownership="none">
@@ -1968,7 +2053,10 @@ call and can be released on return.">
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
-        <parameter name="inout" direction="inout" transfer-ownership="full">
+        <parameter name="inout"
+                   direction="inout"
+                   caller-allocates="0"
+                   transfer-ownership="full">
           <type name="utf8" c:type="char**"/>
         </parameter>
       </parameters>
@@ -2007,6 +2095,7 @@ call and can be released on return.">
       <parameters>
         <parameter name="char_out"
                    direction="out"
+                   caller-allocates="0"
                    transfer-ownership="full"
                    allow-none="1">
           <type name="utf8" c:type="char**"/>
@@ -2018,7 +2107,10 @@ call and can be released on return.">
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
-        <parameter name="out" direction="out" transfer-ownership="full">
+        <parameter name="out"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full">
           <type name="utf8" c:type="char**"/>
         </parameter>
       </parameters>
@@ -2032,6 +2124,7 @@ call and can be released on return.">
       <parameters>
         <parameter name="out"
                    direction="out"
+                   caller-allocates="0"
                    transfer-ownership="full"
                    doc="a copy of &quot;second&quot;">
           <type name="utf8" c:type="char**"/>
@@ -2045,12 +2138,14 @@ call and can be released on return.">
       <parameters>
         <parameter name="out0"
                    direction="out"
+                   caller-allocates="0"
                    transfer-ownership="full"
                    doc="a copy of &quot;first&quot;">
           <type name="utf8" c:type="char**"/>
         </parameter>
         <parameter name="out1"
                    direction="out"
+                   caller-allocates="0"
                    transfer-ownership="full"
                    doc="a copy of &quot;second&quot;">
           <type name="utf8" c:type="char**"/>

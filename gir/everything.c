@@ -1325,7 +1325,7 @@ test_enum_param(TestEnum e)
 /**
  * test_struct_a_clone:
  * @a: the structure
- * @a_out: the cloned structure
+ * @a_out: (out caller-allocates): the cloned structure
  *
  * Make a copy of a TestStructA
  */
@@ -1339,7 +1339,7 @@ test_struct_a_clone (TestStructA *a,
 /**
  * test_struct_b_clone:
  * @b: the structure
- * @b_out: the cloned structure
+ * @b_out: (out): the cloned structure
  *
  * Make a copy of a TestStructB
  */

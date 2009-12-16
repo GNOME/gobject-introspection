@@ -72,7 +72,7 @@
           <type name="int"/>
         </return-value>
         <parameters>
-          <parameter name="outarg" transfer-ownership="full" direction="out">
+          <parameter name="outarg" transfer-ownership="full" direction="out" caller-allocates="0">
             <type name="int"/>
           </parameter>
         </parameters>
@@ -142,7 +142,7 @@
           <type name="int"/>
         </return-value>
         <parameters>
-          <parameter name="toown" transfer-ownership="full" direction="out">
+          <parameter name="toown" transfer-ownership="full" direction="out" caller-allocates="0">
             <type name="GObject.Object"/>
           </parameter>
         </parameters>
@@ -152,10 +152,10 @@
           <type name="int"/>
         </return-value>
         <parameters>
-          <parameter name="toown1" transfer-ownership="full" direction="out">
+          <parameter name="toown1" transfer-ownership="full" direction="out" caller-allocates="0">
             <type name="GObject.Object"/>
           </parameter>
-          <parameter name="toown2" transfer-ownership="none" direction="out">
+          <parameter name="toown2" transfer-ownership="none" direction="out" caller-allocates="0">
             <type name="GObject.Object"/>
           </parameter>
         </parameters>
@@ -266,7 +266,7 @@
           <type name="boolean"/>
         </return-value>
         <parameters>
-          <parameter name="str_out" transfer-ownership="full" direction="out">
+          <parameter name="str_out" transfer-ownership="full" direction="out" caller-allocates="0">
             <type name="utf8"/>
           </parameter>
         </parameters>
@@ -447,7 +447,7 @@
         </array>
       </return-value>
       <parameters>
-        <parameter name="length" transfer-ownership="full" direction="out">
+        <parameter name="length" transfer-ownership="full" direction="out" caller-allocates="0">
           <type name="int"/>
         </parameter>
       </parameters>

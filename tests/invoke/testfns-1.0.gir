@@ -23,7 +23,7 @@
         <parameter name="in" c:type="gint" direction="in" transfer-ownership="none">
           <type name="int" c:type="gint"/>
         </parameter>
-        <parameter name="out" c:type="gint" direction="out" transfer-ownership="none">
+        <parameter name="out" c:type="gint" direction="out" transfer-ownership="none" caller-allocates="0">
           <type name="int" c:type="gint"/>
         </parameter>
       </parameters>
@@ -56,10 +56,10 @@
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
-        <parameter name="blurb" direction="out" transfer-ownership="full">
+        <parameter name="blurb" direction="out" transfer-ownership="full" caller-allocates="0">
           <type name="utf8" c:type="gchar*"/>
         </parameter>
-        <parameter name="len" direction="out" transfer-ownership="none">
+        <parameter name="len" direction="out" transfer-ownership="none" caller-allocates="0">
           <type name="int" c:type="gint"/>
         </parameter>
       </parameters>
@@ -104,7 +104,7 @@
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
-          <parameter name="out" direction="out" transfer-ownership="full">
+          <parameter name="out" direction="out" transfer-ownership="full" caller-allocates="0">
             <type name="int" c:type="int*"/>
           </parameter>
         </parameters>

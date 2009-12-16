@@ -96,6 +96,7 @@ and/or use gtk-doc annotations.  -->
         <parameters>
           <parameter name="outarg"
                      direction="out"
+                     caller-allocates="0"
                      transfer-ownership="full"
                      doc="This is an argument test">
             <type name="int" c:type="int*"/>
@@ -134,6 +135,7 @@ and/or use gtk-doc annotations.  -->
         <parameters>
           <parameter name="inoutarg"
                      direction="inout"
+                     caller-allocates="0"
                      transfer-ownership="full"
                      doc="This is an argument test">
             <type name="int" c:type="int*"/>
@@ -149,6 +151,7 @@ and/or use gtk-doc annotations.  -->
         <parameters>
           <parameter name="inoutarg"
                      direction="inout"
+                     caller-allocates="0"
                      transfer-ownership="full"
                      doc="This is an argument test">
             <type name="int" c:type="int*"/>
@@ -164,6 +167,7 @@ and/or use gtk-doc annotations.  -->
         <parameters>
           <parameter name="inoutarg"
                      direction="inout"
+                     caller-allocates="0"
                      transfer-ownership="full"
                      allow-none="1"
                      doc="This is an argument test">
@@ -194,6 +198,7 @@ and/or use gtk-doc annotations.  -->
         <parameters>
           <parameter name="toown"
                      direction="out"
+                     caller-allocates="0"
                      transfer-ownership="full"
                      doc="a #GObject">
             <type name="GObject.Object" c:type="GObject**"/>
@@ -209,12 +214,14 @@ and/or use gtk-doc annotations.  -->
         <parameters>
           <parameter name="toown1"
                      direction="out"
+                     caller-allocates="0"
                      transfer-ownership="full"
                      doc="a #GObject">
             <type name="GObject.Object" c:type="GObject**"/>
           </parameter>
           <parameter name="toown2"
                      direction="out"
+                     caller-allocates="0"
                      transfer-ownership="none"
                      doc="a #GObject">
             <type name="GObject.Object" c:type="GObject**"/>
@@ -338,12 +345,14 @@ intentionally similar example to gtk_container_get_children">
         <parameters>
           <parameter name="argc"
                      direction="inout"
+                     caller-allocates="0"
                      transfer-ownership="full"
                      doc="Length of the argument vector">
             <type name="int" c:type="int*"/>
           </parameter>
           <parameter name="argv"
                      direction="inout"
+                     caller-allocates="0"
                      transfer-ownership="full"
                      doc="Argument vector">
             <array length="1" c:type="char***">
@@ -361,6 +370,7 @@ intentionally similar example to gtk_container_get_children">
         <parameters>
           <parameter name="str_out"
                      direction="out"
+                     caller-allocates="0"
                      transfer-ownership="full"
                      doc="string return value">
             <type name="utf8" c:type="char**"/>
@@ -581,12 +591,14 @@ detection, and fixing it via annotations.">
       <parameters>
         <parameter name="argc"
                    direction="inout"
+                   caller-allocates="0"
                    transfer-ownership="full"
                    doc="The number of args.">
           <type name="int" c:type="int*"/>
         </parameter>
         <parameter name="argv"
                    direction="inout"
+                   caller-allocates="0"
                    transfer-ownership="full"
                    doc="The arguments.">
           <array length="0" c:type="char***">
@@ -604,6 +616,7 @@ detection, and fixing it via annotations.">
       <parameters>
         <parameter name="length"
                    direction="out"
+                   caller-allocates="0"
                    transfer-ownership="full"
                    doc="Number of return values">
           <type name="int" c:type="int*"/>
@@ -650,7 +663,10 @@ detection, and fixing it via annotations.">
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
-        <parameter name="out" direction="inout" transfer-ownership="full">
+        <parameter name="out"
+                   direction="inout"
+                   caller-allocates="0"
+                   transfer-ownership="full">
           <array c:type="char***">
             <type name="utf8"/>
           </array>

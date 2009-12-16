@@ -26,10 +26,10 @@
           <type name="none"/>
         </return-value>
         <parameters>
-          <parameter name="x" transfer-ownership="full" direction="out">
+          <parameter name="x" transfer-ownership="full" direction="out" caller-allocates="0">
             <type name="int"/>
           </parameter>
-          <parameter name="y" transfer-ownership="full" direction="out">
+          <parameter name="y" transfer-ownership="full" direction="out" caller-allocates="0">
             <type name="int"/>
           </parameter>
         </parameters>
@@ -39,10 +39,10 @@
           <type name="none"/>
         </return-value>
         <parameters>
-          <parameter name="width" transfer-ownership="full" direction="out">
+          <parameter name="width" transfer-ownership="full" direction="out" caller-allocates="0">
             <type name="uint"/>
           </parameter>
-          <parameter name="height" transfer-ownership="full" direction="out">
+          <parameter name="height" transfer-ownership="full" direction="out" caller-allocates="0">
             <type name="uint"/>
           </parameter>
         </parameters>
