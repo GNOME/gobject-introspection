@@ -278,10 +278,10 @@ and/or use gtk-doc annotations. ''')
             attrs.extend([('glib:type-name', enum.type_name),
                           ('glib:get-type', enum.get_type),
                           ('c:type', enum.ctype)])
-            if enum.error_quark:
-                attrs.append(('glib:error-quark', enum.error_quark))
         else:
             attrs.append(('c:type', enum.symbol))
+        if hasattr(enum, 'error_quark') and enum.error_quark:
+            attrs.append(('glib:error-quark', enum.error_quark))
 
         with self.tagcontext('enumeration', attrs):
             self._write_attributes(enum)

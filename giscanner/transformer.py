@@ -692,3 +692,8 @@ class Transformer(object):
             else:
                 break
         return type_name
+
+    def iter_enums(self):
+        for node in self._namespace.nodes:
+            if isinstance(node, Enum):
+                yield node

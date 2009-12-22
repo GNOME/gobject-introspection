@@ -222,6 +222,14 @@ class GLibTransformer(object):
                 return node[1]
         return node
 
+    def _get_no_uscore_prefixed_name(self, type_name):
+        # Besides the straight underscore conversion, we also try
+        # removing the underscores from the namespace as a possible C
+        # mapping; e.g. it's webkit_web_view, not web_kit_web_view
+        suffix = self._transformer.remove_prefix(type_name)
+        prefix = type_name[:-len(suffix)]
+        return (prefix + '_' + to_underscores(suffix)).lower()
+
     def _register_internal_type(self, type_name, node):
         self._names.type_names[type_name] = (None, node)
         uscored = to_underscores(type_name).lower()
@@ -230,22 +238,43 @@ class GLibTransformer(object):
             uscored = GET_TYPE_OVERRIDES.get(node.get_type, node.get_type)
             uscored = uscored[:-len('_get_type')]
         self._uscore_type_names[uscored] = node
-        # Besides the straight underscore conversion, we also try
-        # removing the underscores from the namespace as a possible C
-        # mapping; e.g. it's webkit_web_view, not web_kit_web_view
-        suffix = self._transformer.remove_prefix(type_name)
-        prefix = type_name[:-len(suffix)]
-        no_uscore_prefixed = (prefix + '_' + to_underscores(suffix)).lower()
+
+        no_uscore_prefixed = self._get_no_uscore_prefixed_name(type_name)
         # since this is a guess, don't overwrite any 'real' prefix
         if no_uscore_prefixed not in self._uscore_type_names:
             self._uscore_type_names[no_uscore_prefixed] = node
 
     def _resolve_quarks(self):
+        # self._uscore_type_names is an authoritative mapping of types
+        # to underscored versions, since it is based on get_type() methods;
+        # but only covers enums that are registered as GObject enums.
+        # Create a fallback mapping based on all known enums in this module.
+        uscore_enums = {}
+        for enum in self._transformer.iter_enums():
+            type_name = enum.symbol
+            uscored = to_underscores(type_name).lower()
+
+            uscore_enums[uscored] = enum
+
+            no_uscore_prefixed = self._get_no_uscore_prefixed_name(type_name)
+            if no_uscore_prefixed not in uscore_enums:
+                uscore_enums[no_uscore_prefixed] = enum
+
         for node in self._error_quark_functions:
             short = node.symbol[:-len('_quark')]
-            enum = self._uscore_type_names.get(short)
+            if short == "g_io_error":
+                # Special case; GIOError was already taken forcing GIOErrorEnum
+                enum = self._names.type_names["GIOErrorEnum"][1]
+            else:
+                enum = self._uscore_type_names.get(short)
+                if enum is None:
+                    enum = uscore_enums.get(short)
             if enum is not None:
                 enum.error_quark = node.symbol
+            else:
+                print "WARNING: " + \
+                      "Couldn't find corresponding enumeration for %s" % \
+                          (node.symbol, )
 
     # Helper functions
 
