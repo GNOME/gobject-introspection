@@ -58,7 +58,7 @@ def _get_option_parser():
                       help="full path to libtool")
     parser.add_option("", "--no-libtool",
                       action="store_true", dest="nolibtool", default=False,
-                      help="use libtool")
+                      help="do not use libtool")
     parser.add_option("-l", "--library",
                       action="append", dest="libraries", default=[],
                       help="libraries of this unit")
