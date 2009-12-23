@@ -30,7 +30,7 @@ from .utils import get_libtool_command
 # Compile a binary program which is then linked to a library
 # we want to introspect, in order to call its get_type functions.
 
-_PROGRAM_TEMPLATE = '''/* This file is generated, do not edit */
+_PROGRAM_TEMPLATE = """/* This file is generated, do not edit */
 #include <glib.h>
 #include <girepository.h>
 #include <string.h>
@@ -49,19 +49,21 @@ main(int argc, char **argv)
   if (!g_thread_supported ()) g_thread_init (NULL);
   g_type_init ();
 
+  %(init_sections)s
+
   context = g_option_context_new ("");
   g_option_context_add_main_entries (context, entries, "girepository-1.0");
   g_option_context_add_group (context, g_irepository_get_option_group ());
   if (!g_option_context_parse (context, &argc, &argv, &error))
     {
-      g_printerr ("introspect failed (%d,%d): %s\\n",
+      g_printerr ("introspect failed (%%d,%%d): %%s\\n",
                   error->domain, error->code,
                   error->message);
       return 1;
     }
   return 0;
 }
-'''
+"""
 
 
 class CompilerError(Exception):
@@ -94,9 +96,12 @@ class DumpCompiler(object):
     # Public API
 
     def run(self):
+	tpl_args = {}
+	tpl_args['init_sections'] = "\n".join(self._options.init_sections)
+
         c_path = self._generate_tempfile('.c')
         f = open(c_path, 'w')
-        f.write(_PROGRAM_TEMPLATE)
+        f.write(_PROGRAM_TEMPLATE % tpl_args)
 
         # We need to reference our get_type functions to make sure they are
         # pulled in at the linking stage if the library is a static library
@@ -148,7 +153,9 @@ class DumpCompiler(object):
     def _compile(self, output, *sources):
         # Not strictly speaking correct, but easier than parsing shell
         args = self._compiler_cmd.split()
-        if self._compiler_cmd == 'gcc':
+	# Do not add -Wall when using init code as we do not include any
+	# header of the library being introspected
+        if self._compiler_cmd == 'gcc' and not self._options.init_sections:
             args.append('-Wall')
         pkgconfig_flags = self._run_pkgconfig('--cflags')
         if self._uninst_srcdir:

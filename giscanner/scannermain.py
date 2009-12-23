@@ -75,6 +75,9 @@ def _get_option_parser():
     parser.add_option("", "--strip-prefix",
                       action="store", dest="strip_prefix", default=None,
                       help="remove this prefix from objects and functions")
+    parser.add_option("", "--add-init-section",
+                      action="append", dest="init_sections", default=[],
+            help="add extra initialization code in the introspection program")
     parser.add_option("-o", "--output",
                       action="store", dest="output",
                       help="output to writeout, defaults to stdout")
