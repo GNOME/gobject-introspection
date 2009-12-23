@@ -36,6 +36,7 @@ GLib_2_0_gir_CFLAGS = $(CPPFLAGS) \
             -I$(GLIB_INCLUDEDIR) \
             -I$(GLIB_LIBDIR)/glib-2.0/include \
             -DGETTEXT_PACKAGE=Dummy \
+            -DGLIB_COMPILATION \
             -D__G_I18N_LIB_H__
 GLib_2_0_gir_ASSERTIONS = $(srcdir)/GLib-2.0.xpath
 GLib_2_0_gir_FILES =  \
