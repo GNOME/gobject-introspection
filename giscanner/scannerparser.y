@@ -534,6 +534,7 @@ assignment_operator
 expression
 	: assignment_expression
 	| expression ',' assignment_expression
+	| EXTENSION expression
 	  {
 		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID);
 	  }
