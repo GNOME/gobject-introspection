@@ -62,6 +62,15 @@ _gir_includes = $(foreach include,$($(_gir_name)_INCLUDES),--include=$(include))
 # Reuse the LIBTOOL variable from by automake if it's set
 _gir_libtool = $(if $(LIBTOOL),--libtool="$(LIBTOOL)")
 
+# Macros for AM_SILENT_RULES prettiness
+_gir_silent_scanner = $(_gir_silent_scanner_$(V))
+_gir_silent_scanner_ = $(_gir_silent_scanner_$(AM_DEFAULT_VERBOSITY))
+_gir_silent_scanner_0 = @echo "  GISCAN $(1)";
+
+_gir_silent_compiler = $(_gir_silent_compiler_$(V))
+_gir_silent_compiler_ = $(_gir_silent_compiler_$(AM_DEFAULT_VERBOSITY))
+_gir_silent_compiler_0 = @echo "  GICOMP $(1)";
+
 #
 # Creates a GIR by scanning C headers/sources
 # $(1) - Name of the gir file (output)
@@ -104,7 +113,7 @@ $(if $(or $($(_gir_name)_LIBS),
 # sure these are built before running the scanner. Libraries and programs
 # needs to be added manually.
 $(1): $$($(_gir_name)_FILES) $(INTROSPECTION_PARSER)
-	$(INTROSPECTION_SCANNER) $(INTROSPECTION_SCANNER_ARGS) \
+	$(_gir_silent_scanner) $(INTROSPECTION_SCANNER) $(INTROSPECTION_SCANNER_ARGS) \
 	  --namespace=$(_gir_namespace) \
 	  --nsversion=$(_gir_version) \
 	  $(_gir_libtool) \
@@ -126,7 +135,7 @@ $(foreach gir,$(INTROSPECTION_GIRS),$(eval $(call introspection-scanner,$(gir)))
 # $(2): typelib filename (output)
 #
 define introspection-compiler
-$(INTROSPECTION_COMPILER) $(INTROSPECTION_COMPILER_ARGS) --includedir=. $(1) -o $(2)
+$(_gir_silent_compiler) $(INTROSPECTION_COMPILER) $(INTROSPECTION_COMPILER_ARGS) --includedir=. $(1) -o $(2)
 endef
 
 # Simple rule to compile a typelib.
