@@ -22,9 +22,9 @@
 #ifdef HAVE_CONFIG_H
 #  include "config.h"
 #endif
+#include <Python.h>
 #include "sourcescanner.h"
 #include "grealpath.h"
-#include <Python.h>
 
 #ifdef _WIN32
 #include <fcntl.h>
