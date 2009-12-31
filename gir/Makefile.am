@@ -108,19 +108,20 @@ endif
 
 if HAVE_GIO_UNIX
 GIO_UNIX_HDRS=$(shell pkg-config --variable=includedir gio-unix-2.0)/gio-unix-2.0/gio/*.h
+GIO_UNIX_PACKAGES = gio-unix-2.0
 else
 GIO_UNIX_HDRS=
+GIO_UNIX_PACKAGES =
 endif
 
 Gio-2.0.gir: GObject-2.0.gir
 
 Gio_2_0_gir_LIBS = $(GIO_LIBRARY)
 Gio_2_0_gir_SCANNERFLAGS = --noclosure --strip-prefix=g --c-include="gio/gio.h"
-Gio_2_0_gir_PACKAGES = gio-2.0
+Gio_2_0_gir_PACKAGES = gio-2.0 $(GIO_UNIX_PACKAGES)
 Gio_2_0_gir_INCLUDES = GObject-2.0
 Gio_2_0_gir_CFLAGS = \
             -DGIO_COMPILATION \
-            -I$(GIO_INCLUDEDIR) \
             -I$(GIO_LIBDIR)/glib-2.0/include
 Gio_2_0_gir_FILES = \
             $(GIO_UNIX_HDRS) \
