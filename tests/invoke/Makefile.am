@@ -20,7 +20,7 @@ BUILT_SOURCES = testfns-metadata.c
 CLEANFILES = testfns-metadata.c 
 
 testfns-metadata.c: testfns-1.0.gir $(top_builddir)/tools/g-ir-compiler Makefile
-	$(CHECK_DEBUG) $(top_builddir)/tools/g-ir-compiler $(srcdir)/testfns-1.0.gir --code -o testfns-metadata.c
+	$(AM_V_GEN) $(CHECK_DEBUG) $(top_builddir)/tools/g-ir-compiler $(srcdir)/testfns-1.0.gir --code -o testfns-metadata.c
 
 invoke_SOURCES = invoke.c
 invoke_CFLAGS = $(GIREPO_CFLAGS)  -I$(top_srcdir)/girepository

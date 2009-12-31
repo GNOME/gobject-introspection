@@ -113,7 +113,7 @@ post-check:
 	@true
 
 %.tgir: %.typelib $(top_builddir)/tools/g-ir-generate$(EXEEXT) Makefile
-	$(top_builddir)/tools/g-ir-generate --includedir=. --includedir=$(top_builddir)/gir $< -o $@
+	$(AM_V_GEN) $(top_builddir)/tools/g-ir-generate --includedir=. --includedir=$(top_builddir)/gir $< -o $@
 
 %.tgir.check: %.tgir
 	@diff -u -U 10 $(srcdir)/$*-expected.tgir $*.tgir; \

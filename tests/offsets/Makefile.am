@@ -38,7 +38,7 @@ gitestoffsets_CPPFLAGS = $(GIREPO_CFLAGS) -I$(top_srcdir)/girepository
 gitestoffsets_LDADD = $(top_builddir)/girepository/libgirepository-1.0.la $(GIREPO_LIBS)
 
 gitestoffsets.c: gen-gitestoffsets offsets.h
-	$(PYTHON) $(srcdir)/gen-gitestoffsets $(srcdir)/offsets.h > $@ || ( rm -f $@ && false )
+	$(AM_V_GEN) $(PYTHON) $(srcdir)/gen-gitestoffsets $(srcdir)/offsets.h > $@ || ( rm -f $@ && false )
 
 EXTRA_DIST += gen-gitestoffsets
 BUILT_SOURCES += gitestoffsets.c
