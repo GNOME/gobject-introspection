@@ -133,8 +133,6 @@ class DumpCompiler(object):
         except LinkerError, e:
             raise SystemExit('ERROR: ' + str(e))
 
-        os.unlink(c_path)
-
         return IntrospectionBinary([bin_path], self._tmpdir)
 
     # Private API
