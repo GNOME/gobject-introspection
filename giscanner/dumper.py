@@ -96,8 +96,8 @@ class DumpCompiler(object):
     # Public API
 
     def run(self):
-	tpl_args = {}
-	tpl_args['init_sections'] = "\n".join(self._options.init_sections)
+        tpl_args = {}
+        tpl_args['init_sections'] = "\n".join(self._options.init_sections)
 
         c_path = self._generate_tempfile('.c')
         f = open(c_path, 'w')
@@ -153,8 +153,8 @@ class DumpCompiler(object):
     def _compile(self, output, *sources):
         # Not strictly speaking correct, but easier than parsing shell
         args = self._compiler_cmd.split()
-	# Do not add -Wall when using init code as we do not include any
-	# header of the library being introspected
+        # Do not add -Wall when using init code as we do not include any
+        # header of the library being introspected
         if self._compiler_cmd == 'gcc' and not self._options.init_sections:
             args.append('-Wall')
         pkgconfig_flags = self._run_pkgconfig('--cflags')
