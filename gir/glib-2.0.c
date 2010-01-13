@@ -10,6 +10,11 @@
  */
 
 /**
+ * g_filename_to_uri:
+ * @hostname: (allow-none):
+ */
+
+/**
  * g_markup_escape_text:
  * Return value: (transfer full):
  */
