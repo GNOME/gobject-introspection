@@ -295,6 +295,10 @@ class Transformer(object):
             if not self._type_is_callback(param.type):
                 continue
 
+            # set a default scope
+            if param.scope is None:
+                param.scope = 'call'
+
             # j is the index where we look for closure/destroy to
             # group with the callback param
             j = i + 1

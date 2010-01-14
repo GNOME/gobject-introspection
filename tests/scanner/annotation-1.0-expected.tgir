@@ -345,7 +345,7 @@
           <parameter name="user_data" transfer-ownership="none">
             <type name="any"/>
           </parameter>
-          <parameter name="destroy" transfer-ownership="none">
+          <parameter name="destroy" transfer-ownership="none" scope="call">
             <type name="GLib.DestroyNotify"/>
           </parameter>
         </parameters>
@@ -409,10 +409,10 @@
         <type name="none"/>
       </return-value>
       <parameters>
-        <parameter name="callback" transfer-ownership="none" closure="2" destroy="1">
+        <parameter name="callback" transfer-ownership="none" scope="call" closure="2" destroy="1">
           <type name="Callback"/>
         </parameter>
-        <parameter name="destroy" transfer-ownership="none">
+        <parameter name="destroy" transfer-ownership="none" scope="call">
           <type name="NotifyFunc"/>
         </parameter>
         <parameter name="data" transfer-ownership="none">

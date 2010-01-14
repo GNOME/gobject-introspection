@@ -507,7 +507,7 @@ class AnnotationApplier(object):
 
     def _parse_param(self, parent, param, tag):
         options = getattr(tag, 'options', {})
-        if isinstance(parent, Function) and not param.scope:
+        if isinstance(parent, Function):
             scope = options.get(OPT_SCOPE)
             if scope:
                 param.scope = scope.one()

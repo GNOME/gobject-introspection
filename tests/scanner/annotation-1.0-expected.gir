@@ -463,7 +463,7 @@ type.">
           <parameter name="user_data" transfer-ownership="none">
             <type name="any" c:type="gpointer"/>
           </parameter>
-          <parameter name="destroy" transfer-ownership="none">
+          <parameter name="destroy" transfer-ownership="none" scope="call">
             <type name="GLib.DestroyNotify" c:type="GDestroyNotify"/>
           </parameter>
         </parameters>
@@ -555,12 +555,13 @@ detection, and fixing it via annotations.">
       <parameters>
         <parameter name="callback"
                    transfer-ownership="none"
+                   scope="call"
                    closure="2"
                    destroy="1"
                    doc="Destroy notification">
           <type name="Callback" c:type="AnnotationCallback"/>
         </parameter>
-        <parameter name="destroy" transfer-ownership="none">
+        <parameter name="destroy" transfer-ownership="none" scope="call">
           <type name="NotifyFunc" c:type="AnnotationNotifyFunc"/>
         </parameter>
         <parameter name="data" transfer-ownership="none">
