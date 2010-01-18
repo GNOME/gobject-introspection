@@ -60,7 +60,7 @@
           <parameter name="user_data" transfer-ownership="none">
             <type name="any"/>
           </parameter>
-          <parameter name="destroy" transfer-ownership="none">
+          <parameter name="destroy" transfer-ownership="none" scope="call">
             <type name="GLib.DestroyNotify"/>
           </parameter>
         </parameters>
@@ -111,7 +111,7 @@
         <parameter name="path" transfer-ownership="none">
           <type name="utf8"/>
         </parameter>
-        <parameter name="func" transfer-ownership="none" closure="2">
+        <parameter name="func" transfer-ownership="none" scope="call" closure="2">
           <type name="FileFunc"/>
         </parameter>
         <parameter name="user_data" transfer-ownership="none">

@@ -596,7 +596,7 @@
         <parameter name="data" transfer-ownership="none">
           <type name="any"/>
         </parameter>
-        <parameter name="destroy" transfer-ownership="none">
+        <parameter name="destroy" transfer-ownership="none" scope="call">
           <type name="GLib.DestroyNotify"/>
         </parameter>
       </parameters>

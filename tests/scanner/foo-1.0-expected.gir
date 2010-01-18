@@ -739,7 +739,7 @@ uses a C sugar return type.">
         <parameter name="data" transfer-ownership="none">
           <type name="any" c:type="gpointer"/>
         </parameter>
-        <parameter name="destroy" transfer-ownership="none">
+        <parameter name="destroy" transfer-ownership="none" scope="call">
           <type name="GLib.DestroyNotify" c:type="GDestroyNotify"/>
         </parameter>
       </parameters>
@@ -878,7 +878,7 @@ uses a C sugar return type.">
         <parameter name="i" transfer-ownership="none">
           <type name="int" c:type="gint"/>
         </parameter>
-        <parameter name="callback" transfer-ownership="none">
+        <parameter name="callback" transfer-ownership="none" scope="call">
           <type name="VarargsCallback" c:type="FooVarargsCallback"/>
         </parameter>
       </parameters>
@@ -889,7 +889,7 @@ uses a C sugar return type.">
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
-        <parameter name="callback" transfer-ownership="none">
+        <parameter name="callback" transfer-ownership="none" scope="call">
           <type name="VarargsCallback" c:type="FooVarargsCallback"/>
         </parameter>
       </parameters>
@@ -900,10 +900,10 @@ uses a C sugar return type.">
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
-        <parameter name="callback" transfer-ownership="none">
+        <parameter name="callback" transfer-ownership="none" scope="call">
           <type name="VarargsCallback" c:type="FooVarargsCallback"/>
         </parameter>
-        <parameter name="callback2" transfer-ownership="none">
+        <parameter name="callback2" transfer-ownership="none" scope="call">
           <type name="VarargsCallback" c:type="FooVarargsCallback"/>
         </parameter>
       </parameters>
