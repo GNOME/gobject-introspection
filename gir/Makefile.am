@@ -185,7 +185,7 @@ GIRSOURCES =                    \
         $(INTROSPECTION_GIRS)
 
 girdir = $(GIR_DIR)
-dist_gir_DATA = $(GIRSOURCES)
+gir_DATA = $(GIRSOURCES)
 
 typelibsdir = $(libdir)/girepository-1.0
 typelibs_DATA = $(GIRSOURCES:.gir=.typelib)
