@@ -6,7 +6,8 @@ testlibdir = /tmp
 install-testlibLTLIBRARIES: # prevent it from being installed
 
 testfns_la_SOURCES =				\
-	testfns.c				\
+	testfns.c
+nodist_testfns_la_SOURCES =			\
 	testfns-metadata.c
 testfns_la_CFLAGS = $(GIREPO_CFLAGS) -I$(top_srcdir)/girepository
 testfns_la_LDFLAGS = -module -avoid-version
