@@ -276,7 +276,11 @@ def scanner_main(args):
     for include in options.includes:
         if os.sep in include:
             raise ValueError("Invalid include path %r" % (include, ))
-        include_obj = Include.from_string(include)
+        try:
+            include_obj = Include.from_string(include)
+        except:
+            sys.stderr.write("Malformed include %r\n" % (include, ))
+            sys.exit(1)
         transformer.register_include(include_obj)
 
     packages = set(options.packages)

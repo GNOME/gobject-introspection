@@ -18,7 +18,7 @@
 # Boston, MA 02111-1307, USA.
 #
 
-import os
+import os, sys
 
 from .ast import (Bitfield, Callback, Enum, Function, Namespace, Member,
                   Parameter, Return, Struct, Field,
@@ -125,8 +125,9 @@ class Transformer(object):
             path = os.path.join(d, girname)
             if os.path.exists(path):
                 return path
-        raise ValueError("Couldn't find include %r (search path: %r)"\
+        sys.stderr.write("Couldn't find include %r (search path: %r)\n"\
                          % (girname, searchdirs))
+        sys.exit(1)
 
     def _parse_include(self, filename):
         parser = self._cachestore.load(filename)
