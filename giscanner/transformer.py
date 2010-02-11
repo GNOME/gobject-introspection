@@ -18,7 +18,8 @@
 # Boston, MA 02111-1307, USA.
 #
 
-import os, sys
+import os
+import sys
 
 from .ast import (Bitfield, Callback, Enum, Function, Namespace, Member,
                   Parameter, Return, Struct, Field,
