@@ -574,7 +574,7 @@
         <type name="none"/>
       </return-value>
       <parameters>
-        <parameter name="cancellable" transfer-ownership="none">
+        <parameter name="cancellable" transfer-ownership="none" allow-none="1">
           <type name="Gio.Cancellable"/>
         </parameter>
         <parameter name="callback" transfer-ownership="none" scope="async" closure="2">
