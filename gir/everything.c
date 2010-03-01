@@ -257,6 +257,19 @@ GSList *test_filename_return (void)
   return filenames;
 }
 
+/* in arguments after out arguments */
+
+/**
+ * test_int_out_utf8:
+ * @out: (out):
+ * @in:
+ */
+void
+test_int_out_utf8 (int *length, const char *in)
+{
+    *length = g_utf8_strlen(in, -1);
+}
+
 
 /* multiple output arguments */
 

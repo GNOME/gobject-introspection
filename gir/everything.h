@@ -36,6 +36,9 @@ void test_utf8_out (char **out);
 void test_utf8_inout (char **inout);
 GSList *test_filename_return (void);
 
+/* in arguments after out arguments */
+void test_int_out_utf8 (int *length, const char *in);
+
 /* multiple output arguments */
 void test_multi_double_args (gdouble in, gdouble *one, gdouble *two);
 void test_utf8_out_out (char **out0, char **out1);

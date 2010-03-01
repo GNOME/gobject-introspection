@@ -1220,6 +1220,19 @@ call and can be released on return.">
         </parameter>
       </parameters>
     </function>
+    <function name="test_int_out_utf8" c:identifier="test_int_out_utf8">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="length" direction="out" transfer-ownership="full">
+          <type name="int" c:type="int*"/>
+        </parameter>
+        <parameter name="in" transfer-ownership="none">
+          <type name="utf8" c:type="char*"/>
+        </parameter>
+      </parameters>
+    </function>
     <function name="test_int_value_arg" c:identifier="test_int_value_arg">
       <return-value transfer-ownership="none">
         <type name="int" c:type="int"/>
