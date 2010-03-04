@@ -192,6 +192,7 @@ and/or use gtk-doc annotations.  -->
       </method>
       <method name="torture_signature_1"
               c:identifier="test_obj_torture_signature_1"
+              doc="This function throws an error if m is odd."
               throws="1">
         <return-value transfer-ownership="none">
           <type name="boolean" c:type="gboolean"/>
@@ -1460,6 +1461,7 @@ call and can be released on return.">
     </function>
     <function name="test_torture_signature_1"
               c:identifier="test_torture_signature_1"
+              doc="This function throws an error if m is odd."
               throws="1">
       <return-value transfer-ownership="none">
         <type name="boolean" c:type="gboolean"/>
