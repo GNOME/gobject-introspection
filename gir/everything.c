@@ -1,5 +1,6 @@
 #include <string.h>
 #include "everything.h"
+#include <gio/gio.h>
 
 /* basic types */
 gboolean test_boolean (gboolean in)
@@ -1482,6 +1483,63 @@ test_obj_static_method (int x)
 }
 
 /**
+ * test_obj_torture_signature_0:
+ * @obj: A #TestObj
+ * @x:
+ * @y: (out):
+ * @z: (out):
+ * @foo:
+ * @q: (out):
+ * @m:
+ *
+ */
+void
+test_obj_torture_signature_0 (TestObj    *obj,
+                              int         x,
+                              double     *y,
+                              int        *z,
+                              const char *foo,
+                              int        *q,
+                              guint       m)
+{
+  *y = x;
+  *z = x * 2;
+  *q = g_utf8_strlen (foo, -1) + m;
+}
+
+/**
+ * test_obj_torture_signature_1:
+ * @obj: A #TestObj
+ * @x:
+ * @y: (out):
+ * @z: (out):
+ * @foo:
+ * @q: (out):
+ * @m:
+ * @error: A #GError
+ *
+ * This function throws an error if m is odd.
+ */
+gboolean
+test_obj_torture_signature_1 (TestObj   *obj,
+                              int        x,
+                              double     *y,
+                              int        *z,
+                              const char *foo,
+                              int        *q,
+                              guint       m,
+                              GError    **error)
+{
+  *y = x;
+  *z = x * 2;
+  *q = g_utf8_strlen (foo, -1) + m;
+  if (m % 2 == 0)
+      return TRUE;
+  g_set_error (error, G_IO_ERROR, G_IO_ERROR_FAILED, "m is odd");
+  return FALSE;
+}
+
+/**
  * test_obj_do_matrix:
  * @obj: A #TestObj
  * @somestr: Meaningless string
@@ -1812,3 +1870,87 @@ test_wi_802_1x_static_method (int x)
 {
   return 2*x;
 }
+
+/**
+ * test_torture_signature_0:
+ * @x:
+ * @y: (out):
+ * @z: (out):
+ * @foo:
+ * @q: (out):
+ * @m:
+ *
+ */
+void
+test_torture_signature_0 (int         x,
+                          double     *y,
+                          int        *z,
+                          const char *foo,
+                          int        *q,
+                          guint       m)
+{
+  *y = x;
+  *z = x * 2;
+  *q = g_utf8_strlen (foo, -1) + m;
+}
+
+/**
+ * test_torture_signature_1:
+ * @x:
+ * @y: (out):
+ * @z: (out):
+ * @foo:
+ * @q: (out):
+ * @m:
+ * @error: A #GError
+ *
+ * This function throws an error if m is odd.
+ */
+gboolean
+test_torture_signature_1 (int         x,
+                          double     *y,
+                          int        *z,
+                          const char *foo,
+                          int        *q,
+                          guint       m,
+                          GError    **error)
+{
+  *y = x;
+  *z = x * 2;
+  *q = g_utf8_strlen (foo, -1) + m;
+  if (m % 2 == 0)
+      return TRUE;
+  g_set_error (error, G_IO_ERROR, G_IO_ERROR_FAILED, "m is odd");
+  return FALSE;
+}
+
+/**
+ * test_torture_signature_2:
+ * @x:
+ * @callback:
+ * @user_data:
+ * @notify:
+ * @y: (out):
+ * @z: (out):
+ * @foo:
+ * @q: (out):
+ * @m:
+ *
+ */
+void
+test_torture_signature_2 (int                   x,
+                          TestCallbackUserData  callback,
+                          gpointer              user_data,
+                          GDestroyNotify        notify,
+                          double               *y,
+                          int                  *z,
+                          const char           *foo,
+                          int                  *q,
+                          guint                 m)
+{
+  *y = x;
+  *z = x * 2;
+  *q = g_utf8_strlen (foo, -1) + m;  
+  notify (user_data);
+}
+

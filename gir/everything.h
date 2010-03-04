@@ -257,6 +257,22 @@ void       test_obj_set_bare (TestObj *obj, GObject *bare);
 int        test_obj_instance_method (TestObj *obj);
 double     test_obj_static_method (int x);
 
+void test_obj_torture_signature_0 (TestObj    *obj,
+                                   int        x,
+                                   double     *y,
+                                   int        *z,
+                                   const char *foo,
+                                   int        *q,
+                                   guint       m);
+gboolean test_obj_torture_signature_1 (TestObj    *obj,
+                                       int        x,
+                                       double     *y,
+                                       int        *z,
+                                       const char *foo,
+                                       int        *q,
+                                       guint       m,
+                                       GError    **error);
+
 /* virtual */
 int        test_obj_do_matrix (TestObj *obj, const char *somestr);
 
@@ -339,5 +355,29 @@ TestWi8021x* test_wi_802_1x_new (void);
 gboolean     test_wi_802_1x_get_testbool (TestWi8021x *obj);
 void         test_wi_802_1x_set_testbool (TestWi8021x *obj, gboolean v);
 int          test_wi_802_1x_static_method (int x);
+
+/* Function signature torture tests */
+void test_torture_signature_0 (int        x,
+                               double     *y,
+                               int        *z,
+                               const char *foo,
+                               int        *q,
+                               guint       m);
+gboolean test_torture_signature_1 (int        x,
+                                   double     *y,
+                                   int        *z,
+                                   const char *foo,
+                                   int        *q,
+                                   guint       m,
+                                   GError    **error);
+void test_torture_signature_2 (int                  x,
+                               TestCallbackUserData  callback,
+                               gpointer              user_data,
+                               GDestroyNotify        notify,
+                               double               *y,
+                               int                  *z,
+                               const char           *foo,
+                               int                  *q,
+                               guint                 m);
 
 #endif /* __GITESTTYPES_H__ */
