@@ -109,6 +109,11 @@
  */
 
 /**
+ * g_file_replace:
+ * @etag: (allow-none):
+ */
+
+/**
  * g_file_replace_contents:
  * @etag: (allow-none):
  * @new_etag: (allow-none) (out):
