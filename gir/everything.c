@@ -1,4 +1,5 @@
 #include <string.h>
+#include <stdlib.h>
 #include "everything.h"
 #include <gio/gio.h>
 
@@ -1252,6 +1253,39 @@ test_boxed_new (void)
   TestBoxed *boxed = g_slice_new0(TestBoxed);
   boxed->priv = g_slice_new0(TestBoxedPrivate);
   boxed->priv->magic = 0xdeadbeef;
+
+  return boxed;
+}
+
+TestBoxed *
+test_boxed_new_alternative_constructor1 (int i)
+{
+  TestBoxed *boxed = g_slice_new0(TestBoxed);
+  boxed->priv = g_slice_new0(TestBoxedPrivate);
+  boxed->priv->magic = 0xdeadbeef;
+  boxed->some_int8 = i;
+
+  return boxed;
+}
+
+TestBoxed *
+test_boxed_new_alternative_constructor2 (int i, int j)
+{
+  TestBoxed *boxed = g_slice_new0(TestBoxed);
+  boxed->priv = g_slice_new0(TestBoxedPrivate);
+  boxed->priv->magic = 0xdeadbeef;
+  boxed->some_int8 = i + j;
+
+  return boxed;
+}
+
+TestBoxed *
+test_boxed_new_alternative_constructor3 (char *s)
+{
+  TestBoxed *boxed = g_slice_new0(TestBoxed);
+  boxed->priv = g_slice_new0(TestBoxedPrivate);
+  boxed->priv->magic = 0xdeadbeef;
+  boxed->some_int8 = atoi(s);
 
   return boxed;
 }

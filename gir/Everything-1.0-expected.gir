@@ -31,6 +31,42 @@ and/or use gtk-doc annotations.  -->
           <type name="TestBoxed" c:type="TestBoxed*"/>
         </return-value>
       </constructor>
+      <constructor name="new_alternative_constructor1"
+                   c:identifier="test_boxed_new_alternative_constructor1">
+        <return-value transfer-ownership="full">
+          <type name="TestBoxed" c:type="TestBoxed*"/>
+        </return-value>
+        <parameters>
+          <parameter name="i" transfer-ownership="none">
+            <type name="int" c:type="int"/>
+          </parameter>
+        </parameters>
+      </constructor>
+      <constructor name="new_alternative_constructor2"
+                   c:identifier="test_boxed_new_alternative_constructor2">
+        <return-value transfer-ownership="full">
+          <type name="TestBoxed" c:type="TestBoxed*"/>
+        </return-value>
+        <parameters>
+          <parameter name="i" transfer-ownership="none">
+            <type name="int" c:type="int"/>
+          </parameter>
+          <parameter name="j" transfer-ownership="none">
+            <type name="int" c:type="int"/>
+          </parameter>
+        </parameters>
+      </constructor>
+      <constructor name="new_alternative_constructor3"
+                   c:identifier="test_boxed_new_alternative_constructor3">
+        <return-value transfer-ownership="full">
+          <type name="TestBoxed" c:type="TestBoxed*"/>
+        </return-value>
+        <parameters>
+          <parameter name="s" transfer-ownership="full">
+            <type name="utf8" c:type="char*"/>
+          </parameter>
+        </parameters>
+      </constructor>
       <method name="copy" c:identifier="test_boxed_copy">
         <return-value transfer-ownership="full">
           <type name="TestBoxed" c:type="TestBoxed*"/>

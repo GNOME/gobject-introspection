@@ -216,6 +216,10 @@ struct _TestBoxed
 
 GType      test_boxed_get_type (void);
 TestBoxed *test_boxed_new      (void);
+TestBoxed *test_boxed_new_alternative_constructor1  (int i);
+TestBoxed *test_boxed_new_alternative_constructor2  (int i, int j);
+TestBoxed *test_boxed_new_alternative_constructor3  (char *s);
+
 TestBoxed *test_boxed_copy     (TestBoxed *boxed);
 gboolean   test_boxed_equals   (TestBoxed *boxed,
 				TestBoxed *other);
