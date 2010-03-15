@@ -753,7 +753,8 @@ class AnnotationApplier(object):
         if annos_tag is None:
             return
         for key, value in annos_tag.options.iteritems():
-            node.attributes.append((key, value.one()))
+            if value:
+                node.attributes.append((key, value.one()))
 
     def _parse_skip(self, node, block):
         if block is not None:
