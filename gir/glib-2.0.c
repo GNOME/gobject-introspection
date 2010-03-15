@@ -140,3 +140,9 @@
  * g_completion_complete_utf8:
  * Return value: (element-type utf8) (transfer none):
  */
+
+/**
+ * g_convert:
+ * @bytes_read: (out):
+ * @bytes_written: (out):
+ */
