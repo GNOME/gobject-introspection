@@ -4,7 +4,7 @@
 dnl the gi version number
 m4_define(gi_major_version, 0)
 m4_define(gi_minor_version, 6)
-m4_define(gi_micro_version, 9)
+m4_define(gi_micro_version, 10)
 m4_define(gi_version, gi_major_version.gi_minor_version.gi_micro_version)
 
 AC_PREREQ(2.59)
