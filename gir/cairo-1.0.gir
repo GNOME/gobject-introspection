@@ -4,18 +4,10 @@
             xmlns:c="http://www.gtk.org/introspection/c/1.0"
             xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
   <namespace name="cairo" version="1.0">
-    <record name="Context" c:type="cairo_t"
-            glib:type-name="CairoContext"
-	    glib:get-type="cairo_get_g_type"/>
-    <record name="Surface" c:type="cairo_surface_t"
-    	    glib:type-name="CairoSurface"
-	    glib:get-type="cairo_surface_get_glib_type"/>
-    <record name="Matrix" c:type="cairo_matrix_t"
-    	    glib:type-name="CairoMatrix"
-	    glib:get-type="cairo_matrix_get_glib_type"/>
-    <record name="Pattern" c:type="cairo_pattern_t"
-    	    glib:type-name="CairoPattern"
-	    glib:get-type="cairo_pattern_get_glib_type"/>
+    <record name="Context" c:type="cairo_t"/>
+    <record name="Surface" c:type="cairo_surface_t"/>
+    <record name="Matrix" c:type="cairo_matrix_t"/>
+    <record name="Pattern" c:type="cairo_pattern_t"/>
     <enumeration name="Content" c:type="cairo_content_t">
       <member name="COLOR"
               value="4096"
@@ -27,21 +19,11 @@
               value="12288"
               c:identifier="CAIRO_CONTENT_COLOR_ALPHA"/>
     </enumeration>
-    <record name="FontOptions" c:type="cairo_font_options_t"
-    	    glib:type-name="CairoFontOptions"
-	    glib:get-type="cairo_font_options_get_glib_type"/>
-    <record name="FontType" c:type="cairo_font_type_t"
-    	    glib:type-name="CairoFontType"
-	    glib:get-type="cairo_font_type_get_glib_type"/>
-    <record name="FontFace" c:type="cairo_font_face_t"
-    	    glib:type-name="CairoFontFace"
-	    glib:get-type="cairo_font_face_get_glib_type"/>
-    <record name="ScaledFont" c:type="cairo_scaled_font_t"
-    	    glib:type-name="CairoScaledFont"
-	    glib:get-type="cairo_scaled_font_get_glib_type"/>
-    <record name="Path" c:type="cairo_path_t"
-            glib:type-name="CairoPath"
-	    glib:get-type="cairo_path_get_glib_type"/>
+    <record name="FontOptions" c:type="cairo_font_options_t"/>
+    <record name="FontType" c:type="cairo_font_type_t"/>
+    <record name="FontFace" c:type="cairo_font_face_t"/>
+    <record name="ScaledFont" c:type="cairo_scaled_font_t"/>
+    <record name="Path" c:type="cairo_path_t"/>
     <function name="image_surface_create" c:identifier="cairo_image_surface_create">
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
