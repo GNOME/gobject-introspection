@@ -8,7 +8,6 @@
 <!ENTITY gi-girmodule SYSTEM "xml/girmodule.xml">
 <!ENTITY gi-girnode SYSTEM "xml/girnode.xml">
 <!ENTITY gi-girparser SYSTEM "xml/girparser.xml">
-<!ENTITY gi-girwriter SYSTEM "xml/girwriter.xml">
 <!ENTITY gi-gtypelib SYSTEM "xml/gtypelib.xml">
 
 <!ENTITY version SYSTEM "version.xml">
