@@ -24,11 +24,12 @@
 #include <string.h>
 
 GISourceSymbol *
-gi_source_symbol_new (GISourceSymbolType type)
+gi_source_symbol_new (GISourceSymbolType type, int line)
 {
   GISourceSymbol *s = g_slice_new0 (GISourceSymbol);
   s->ref_count = 1;
   s->type = type;
+  s->line = line;
   return s;
 }
 

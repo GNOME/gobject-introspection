@@ -119,6 +119,7 @@ struct _GISourceSymbol
   gboolean const_double_set;
   double const_double;
   char *source_filename;
+  int line;
 };
 
 struct _GISourceType
@@ -146,7 +147,7 @@ GSList *            gi_source_scanner_get_symbols      (GISourceScanner  *scanne
 GSList *            gi_source_scanner_get_comments     (GISourceScanner  *scanner);
 void                gi_source_scanner_free             (GISourceScanner  *scanner);
 
-GISourceSymbol *    gi_source_symbol_new               (GISourceSymbolType  type);
+GISourceSymbol *    gi_source_symbol_new               (GISourceSymbolType  type, int line);
 gboolean            gi_source_symbol_get_const_boolean (GISourceSymbol     *symbol);
 GISourceSymbol *    gi_source_symbol_ref               (GISourceSymbol     *symbol);
 void                gi_source_symbol_unref             (GISourceSymbol     *symbol);

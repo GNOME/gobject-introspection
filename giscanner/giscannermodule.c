@@ -112,6 +112,13 @@ symbol_get_type (PyGISourceSymbol *self,
 }
 
 static PyObject *
+symbol_get_line (PyGISourceSymbol *self,
+		 void             *context)
+{
+  return PyInt_FromLong (self->symbol->line);
+}
+
+static PyObject *
 symbol_get_ident (PyGISourceSymbol *self,
 		  void            *context)
 {
@@ -194,6 +201,7 @@ static const PyGetSetDef _PyGISourceSymbol_getsets[] = {
   { "const_double", (getter)symbol_get_const_double, NULL, NULL},
   { "const_string", (getter)symbol_get_const_string, NULL, NULL},
   { "source_filename", (getter)symbol_get_source_filename, NULL, NULL},
+  { "line", (getter)symbol_get_line, NULL, NULL},
   { 0 }
 };
 
