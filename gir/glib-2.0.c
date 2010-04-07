@@ -146,3 +146,39 @@
  * @bytes_read: (out):
  * @bytes_written: (out):
  */
+
+/**
+ * g_key_file_get_string:
+ * Return value: (transfer full):
+ */
+
+/**
+  * g_key_file_get_string_list:
+  * @length: (out):
+  * Return value: (array zero-terminated=1 length=length) (element-type utf8) (transfer full):
+  */
+
+/**
+  * g_key_file_set_string_list:
+  * @list: (array zero-terminated=1 length=length) (element-type utf8):
+  * @length: (out):
+  */
+
+/**
+ * g_key_file_get_locale_string:
+ * @locale: (null-ok):
+ * Return value: (transfer full):
+ */
+
+/**
+  * g_key_file_get_locale_string_list:
+  * @length: (out):
+  * @locale: (null-ok):
+  * Return value: (array zero-terminated=1 length=length) (element-type utf8) (transfer full):
+  */
+
+/**
+  * g_key_file_set_locale_string_list:
+  * @list: (array zero-terminated=1 length=length) (element-type utf8):
+  * @length: (out):
+  */
