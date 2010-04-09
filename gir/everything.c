@@ -3,9 +3,34 @@
 #include "everything.h"
 #include <gio/gio.h>
 
+static gboolean abort_on_error = TRUE;
+
+#define ASSERT_VALUE(condition)  \
+  if (abort_on_error)             \
+    g_assert (condition);         \
+  else                            \
+    g_warn_if_fail (condition);   \
+
+void set_abort_on_error (gboolean in)
+{
+  abort_on_error = in;
+}
+
 /* basic types */
 gboolean test_boolean (gboolean in)
 {
+  return in;
+}
+
+gboolean test_boolean_true (gboolean in)
+{
+  ASSERT_VALUE (in == TRUE);
+  return in;
+}
+
+gboolean test_boolean_false (gboolean in)
+{
+  ASSERT_VALUE (in == FALSE);
   return in;
 }
 

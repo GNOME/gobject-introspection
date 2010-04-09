@@ -4,8 +4,12 @@
 #include <glib-object.h>
 #include <time.h>
 
+void set_abort_on_error (gboolean abort_on_error);
+
 /* basic types */
 gboolean test_boolean (gboolean in);
+gboolean test_boolean_true (gboolean in);
+gboolean test_boolean_false (gboolean in);
 gint8 test_int8 (gint8 in);
 guint8 test_uint8 (guint8 in);
 gint16 test_int16 (gint16 in);
