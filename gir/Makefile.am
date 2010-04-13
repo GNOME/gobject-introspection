@@ -177,6 +177,27 @@ Everything_1_0_gir_FILES = $(srcdir)/everything.h $(srcdir)/everything.c
 INTROSPECTION_GIRS += Everything-$(TYPELIB_VERSION).gir
 EXPECTEDGIRS += Everything-$(TYPELIB_VERSION)-expected.gir
 
+# marshalling tests
+lib_LTLIBRARIES += libgirepository-gimarshallingtests-1.0.la
+
+libgirepository_gimarshallingtests_1_0_la_SOURCES = $(srcdir)/gimarshallingtests.c $(srcdir)/gimarshallingtests.h
+libgirepository_gimarshallingtests_1_0_la_CFLAGS = $(GOBJECT_CFLAGS)
+libgirepository_gimarshallingtests_1_0_la_LDFLAGS = -version-info $(LT_VERSION)
+libgirepository_gimarshallingtests_1_0_la_LIBADD = $(GOBJECT_LIBS)
+
+if OS_WIN32
+libgirepository_gimarshallingtests_1_0_la_LDFLAGS += -no-undefined
+endif
+
+GIMarshallingTests-1.0.gir: libgirepository-gimarshallingtests-1.0.la
+
+GIMarshallingTests_1_0_gir_LIBS = libgirepository-gimarshallingtests-1.0.la
+GIMarshallingTests_1_0_gir_PACKAGES = gobject-2.0
+GIMarshallingTests_1_0_gir_INCLUDES = GObject-2.0
+GIMarshallingTests_1_0_gir_FILES = $(srcdir)/gimarshallingtests.h $(srcdir)/gimarshallingtests.c
+
+INTROSPECTION_GIRS += GIMarshallingTests-$(TYPELIB_VERSION).gir
+
 # Generic rules
 CLEANFILES += $(INTROSPECTION_GIRS)
 

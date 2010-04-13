@@ -40,6 +40,8 @@ docs/reference/xml
 docs/reference/tmpl
 gir/Everything-1.0.gir
 gir/Everything-1.0.typelib
+gir/GIMarshallingTests-1.0.gir
+gir/GIMarshallingTests-1.0.typelib
 gir/GIRepository-2.0.gir
 gir/GIRepository-2.0.typelib
 gir/GL-1.0.typelib
