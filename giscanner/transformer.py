@@ -509,7 +509,7 @@ class Transformer(object):
         if (symbol.source_filename is None or
             not symbol.source_filename.endswith('.h')):
             return None
-        name = self.remove_prefix(symbol.ident)
+        name = self._strip_namespace_func(symbol.ident)
         if symbol.const_string is not None:
             type_name = 'utf8'
             value = symbol.const_string
