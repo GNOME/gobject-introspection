@@ -516,6 +516,16 @@ case.">
         <type name="GObject.ObjectClass" c:type="GObjectClass"/>
       </field>
     </record>
+    <function name="set_abort_on_error" c:identifier="set_abort_on_error">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="abort_on_error" transfer-ownership="none">
+          <type name="boolean" c:type="gboolean"/>
+        </parameter>
+      </parameters>
+    </function>
     <function name="test_array_fixed_size_int_in"
               c:identifier="test_array_fixed_size_int_in">
       <return-value transfer-ownership="none">
@@ -732,6 +742,26 @@ case.">
       </parameters>
     </function>
     <function name="test_boolean" c:identifier="test_boolean">
+      <return-value transfer-ownership="none">
+        <type name="boolean" c:type="gboolean"/>
+      </return-value>
+      <parameters>
+        <parameter name="in" transfer-ownership="none">
+          <type name="boolean" c:type="gboolean"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="test_boolean_false" c:identifier="test_boolean_false">
+      <return-value transfer-ownership="none">
+        <type name="boolean" c:type="gboolean"/>
+      </return-value>
+      <parameters>
+        <parameter name="in" transfer-ownership="none">
+          <type name="boolean" c:type="gboolean"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="test_boolean_true" c:identifier="test_boolean_true">
       <return-value transfer-ownership="none">
         <type name="boolean" c:type="gboolean"/>
       </return-value>
