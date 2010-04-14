@@ -3,6 +3,7 @@
 *.o
 *.pyc
 *.stamp
+*~
 .deps
 .libs
 Makefile
