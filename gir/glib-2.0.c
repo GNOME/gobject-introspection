@@ -5,6 +5,11 @@
  */
 
 /**
+ * g_file_set_contents:
+ * @contents: (array length=length) (element-type uint8):
+ */
+
+/**
  * g_file_open_tmp:
  * @name_used: (out):
  */
