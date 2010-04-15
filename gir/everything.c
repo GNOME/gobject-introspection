@@ -1748,6 +1748,20 @@ test_callback (TestCallback callback)
 }
 
 /**
+ * test_simple_callback:
+ * @callback: (scope call) (allow-none):
+ *
+ **/
+void
+test_simple_callback (TestSimpleCallback callback)
+{
+    if (callback != NULL)
+        callback();
+
+    return;
+}
+
+/**
  * test_callback_user_data:
  * @callback: (scope call):
  *

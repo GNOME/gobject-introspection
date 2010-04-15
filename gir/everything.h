@@ -320,9 +320,11 @@ void        test_sub_obj_unset_bare (TestSubObj *obj);
 int         test_sub_obj_instance_method (TestSubObj *obj);
 
 /* callback */
-typedef int (*TestCallback) ();
+typedef void (*TestSimpleCallback) (void);
+typedef int (*TestCallback) (void);
 typedef int (*TestCallbackUserData) (gpointer user_data);
 
+void test_simple_callback (TestSimpleCallback callback);
 int test_callback (TestCallback callback);
 int test_callback_user_data (TestCallbackUserData callback,
                              gpointer user_data);
