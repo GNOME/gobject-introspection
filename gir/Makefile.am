@@ -161,7 +161,7 @@ lib_LTLIBRARIES = libgirepository-everything-1.0.la
 libgirepository_everything_1_0_la_SOURCES = $(srcdir)/everything.c $(srcdir)/everything.h
 libgirepository_everything_1_0_la_CFLAGS = $(GOBJECT_CFLAGS)
 libgirepository_everything_1_0_la_LDFLAGS = -version-info $(LT_VERSION)
-libgirepository_everything_1_0_la_LIBADD = $(GOBJECT_LIBS)
+libgirepository_everything_1_0_la_LIBADD = $(GOBJECT_LIBS) -lcairo
 
 if OS_WIN32
 libgirepository_everything_1_0_la_LDFLAGS += -no-undefined
@@ -171,7 +171,7 @@ Everything-1.0.gir: Gio-2.0.gir libgirepository-everything-1.0.la
 
 Everything_1_0_gir_LIBS = libgirepository-everything-1.0.la
 Everything_1_0_gir_PACKAGES = gobject-2.0
-Everything_1_0_gir_INCLUDES = GObject-2.0
+Everything_1_0_gir_INCLUDES = GObject-2.0 cairo-1.0
 Everything_1_0_gir_FILES = $(srcdir)/everything.h $(srcdir)/everything.c
 
 INTROSPECTION_GIRS += Everything-$(TYPELIB_VERSION).gir

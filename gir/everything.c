@@ -209,6 +209,84 @@ const GValue *test_value_return(int i) {
   return &value;
 }
 
+/************************************************************************/
+/* foreign structs */
+
+/**
+ * test_cairo_context_full_return:
+ * Returns: (transfer full):
+ */
+cairo_t *
+test_cairo_context_full_return (void)
+{
+  cairo_surface_t *surface;
+  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 10, 10);
+  return cairo_create (surface);
+}
+
+/**
+ * test_cairo_context_none_in:
+ * @context: (transfer none):
+ */
+void
+test_cairo_context_none_in (cairo_t *context)
+{
+  cairo_surface_t *surface = cairo_get_target (context);
+
+  g_assert (cairo_image_surface_get_format (surface) == CAIRO_FORMAT_ARGB32);
+  g_assert (cairo_image_surface_get_width (surface) == 10);
+  g_assert (cairo_image_surface_get_height (surface) == 10);
+}
+
+
+/**
+ * test_cairo_surface_none_return:
+ * Returns: (transfer none):
+ */
+cairo_surface_t *
+test_cairo_surface_none_return (void)
+{
+  static cairo_surface_t *surface;
+
+  if (surface == NULL) {
+    surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 10, 10);
+  }
+
+  return surface;
+}
+
+/**
+ * test_cairo_surface_full_return:
+ * Returns: (transfer full):
+ */
+cairo_surface_t *
+test_cairo_surface_full_return (void)
+{
+  return cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 10, 10);
+}
+
+/**
+ * test_cairo_surface_none_in:
+ * @surface: (transfer none):
+ */
+void
+test_cairo_surface_none_in (cairo_surface_t *surface)
+{
+  g_assert (cairo_image_surface_get_format (surface) == CAIRO_FORMAT_ARGB32);
+  g_assert (cairo_image_surface_get_width (surface) == 10);
+  g_assert (cairo_image_surface_get_height (surface) == 10);
+}
+
+/**
+ * test_cairo_surface_full_out:
+ * @surface: (out) (transfer full):
+ */
+void
+test_cairo_surface_full_out (cairo_surface_t **surface)
+{
+  *surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 10, 10);
+}
+
 
 /************************************************************************/
 /* utf8 */

@@ -1,6 +1,7 @@
 #ifndef __GITESTTYPES_H__
 #define __GITESTTYPES_H__
 
+#include <cairo/cairo.h>
 #include <glib-object.h>
 #include <time.h>
 
@@ -121,6 +122,16 @@ int test_closure_one_arg (GClosure *closure, int arg);
 /* value */
 int test_int_value_arg(const GValue *v);
 const GValue *test_value_return(int i);
+
+/* foreign structs */
+cairo_t *test_cairo_context_full_return (void);
+void test_cairo_context_none_in (cairo_t *context);
+
+cairo_surface_t *test_cairo_surface_none_return (void);
+cairo_surface_t *test_cairo_surface_full_return (void);
+void test_cairo_surface_none_in (cairo_surface_t *surface);
+void test_cairo_surface_full_out (cairo_surface_t **surface);
+
 
 /* enums / flags */
 
