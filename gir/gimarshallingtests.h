@@ -433,7 +433,7 @@ typedef struct {
 } GIMarshallingTestsNestedStruct;
 
 typedef struct {
-    gpointer pointer;
+    GIMarshallingTestsNestedStruct *pointer;
 } GIMarshallingTestsNotSimpleStruct;
 
 
