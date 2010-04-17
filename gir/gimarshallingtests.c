@@ -2793,6 +2793,26 @@ g_i_marshalling_tests_interface_get_type(void)
     return type;
 }
 
+/**
+ * g_i_marshalling_tests_interface_test_int8_in:
+ * @in: (in):
+ */
+void
+g_i_marshalling_tests_interface_test_int8_in (GIMarshallingTestsInterface *self, gint8 in)
+{
+  G_I_MARSHALLING_TESTS_INTERFACE_GET_IFACE (self)->test_int8_in (self, in);
+}
+
+/**
+ * g_i_marshalling_tests_test_interface_test_int8_in:
+ * @in: (in):
+ */
+void
+g_i_marshalling_tests_test_interface_test_int8_in (GIMarshallingTestsInterface *test_iface, gint8 in)
+{
+  g_i_marshalling_tests_interface_test_int8_in (test_iface, in);
+}
+
 
 /**
  * g_i_marshalling_tests_int_out_out:

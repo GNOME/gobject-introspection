@@ -566,9 +566,19 @@ typedef struct _GIMarshallingTestsInterfaceIface GIMarshallingTestsInterfaceIfac
 
 struct _GIMarshallingTestsInterfaceIface {
     GTypeInterface base_iface;
+
+    /**
+     * GIMarshallingTestsInterfaceIface::test_int8_in:
+     * @in: (in):
+     */
+    void (* test_int8_in) (GIMarshallingTestsInterface *self, gint8 in);
 };
 
 GType g_i_marshalling_tests_interface_get_type (void) G_GNUC_CONST;
+
+void g_i_marshalling_tests_interface_test_int8_in (GIMarshallingTestsInterface *self, gint8 in);
+
+void g_i_marshalling_tests_test_interface_test_int8_in (GIMarshallingTestsInterface *test_iface, gint8 in);
 
 
 /* Multiple output arguments */
