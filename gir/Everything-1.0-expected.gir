@@ -726,6 +726,44 @@ case.">
         </parameter>
       </parameters>
     </function>
+    <function name="test_array_int_null_in"
+              c:identifier="test_array_int_null_in">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="arr" transfer-ownership="none" allow-none="1">
+          <array c:type="int*">
+            <type name="int"/>
+          </array>
+        </parameter>
+        <parameter name="len" transfer-ownership="none">
+          <type name="int" c:type="int"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="test_array_int_null_out"
+              c:identifier="test_array_int_null_out">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="arr"
+                   direction="out"
+                   transfer-ownership="full"
+                   allow-none="1">
+          <array c:type="int**">
+            <type name="int"/>
+          </array>
+        </parameter>
+        <parameter name="len"
+                   direction="out"
+                   transfer-ownership="full"
+                   doc=": length">
+          <type name="int" c:type="int*"/>
+        </parameter>
+      </parameters>
+    </function>
     <function name="test_array_int_out" c:identifier="test_array_int_out">
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
@@ -1136,6 +1174,16 @@ call and can be released on return.">
         </parameter>
       </parameters>
     </function>
+    <function name="test_ghash_null_out" c:identifier="test_ghash_null_out">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="out" transfer-ownership="none">
+          <type name="GLib.HashTable" c:type="GHashTable**"/>
+        </parameter>
+      </parameters>
+    </function>
     <function name="test_ghash_null_return"
               c:identifier="test_ghash_null_return">
       <return-value transfer-ownership="none">
@@ -1241,6 +1289,28 @@ call and can be released on return.">
         </type>
       </return-value>
     </function>
+    <function name="test_glist_null_in" c:identifier="test_glist_null_in">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="in" transfer-ownership="none" allow-none="1">
+          <type name="GLib.SList" c:type="GSList*">
+            <type name="utf8"/>
+          </type>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="test_glist_null_out" c:identifier="test_glist_null_out">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="list_out" transfer-ownership="none">
+          <type name="GLib.SList" c:type="GSList**"/>
+        </parameter>
+      </parameters>
+    </function>
     <function name="test_gslist_container_in"
               c:identifier="test_gslist_container_in">
       <return-value transfer-ownership="none">
@@ -1336,6 +1406,28 @@ call and can be released on return.">
           <type name="utf8"/>
         </type>
       </return-value>
+    </function>
+    <function name="test_gslist_null_in" c:identifier="test_gslist_null_in">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="in" transfer-ownership="none" allow-none="1">
+          <type name="GLib.SList" c:type="GSList*">
+            <type name="utf8"/>
+          </type>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="test_gslist_null_out" c:identifier="test_gslist_null_out">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="out_list" transfer-ownership="none">
+          <type name="GLib.SList" c:type="GSList**"/>
+        </parameter>
+      </parameters>
     </function>
     <function name="test_gtype" c:identifier="test_gtype">
       <return-value transfer-ownership="none">
@@ -1774,6 +1866,29 @@ call and can be released on return.">
       <return-value transfer-ownership="full">
         <type name="utf8" c:type="char*"/>
       </return-value>
+    </function>
+    <function name="test_utf8_null_in" c:identifier="test_utf8_null_in">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="in" transfer-ownership="full" allow-none="1">
+          <type name="utf8" c:type="char*"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="test_utf8_null_out" c:identifier="test_utf8_null_out">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="char_out"
+                   direction="out"
+                   transfer-ownership="full"
+                   allow-none="1">
+          <type name="utf8" c:type="char**"/>
+        </parameter>
+      </parameters>
     </function>
     <function name="test_utf8_out" c:identifier="test_utf8_out">
       <return-value transfer-ownership="none">

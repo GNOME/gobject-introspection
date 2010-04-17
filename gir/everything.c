@@ -416,6 +416,24 @@ test_utf8_out_nonconst_return (char **out)
   return g_strdup ("first");
 }
 
+/**
+ * test_utf8_null_in:
+ * @in: (allow-none):
+ */
+void test_utf8_null_in (char *in)
+{
+  g_assert (in == NULL);
+}
+
+/**
+ * test_utf8_null_out:
+ * @char_out: (allow-none) (out):
+ */
+void test_utf8_null_out (char **char_out)
+{
+  *char_out = NULL;
+}
+
 
 /* non-basic-types */
 
@@ -733,6 +751,27 @@ test_array_int_none_out(int *len) {
   return result;
 }
 
+/**
+ * test_array_int_null_in:
+ * @arr: (array length=1) (allow-none):
+ * @len: length
+ */
+void test_array_int_null_in (int *arr, int len)
+{
+  g_assert (arr == NULL);
+}
+
+/**
+ * test_array_int_null_out:
+ * @arr: (out) (array length=1) (allow-none):
+ * @len: (out) : length
+ */
+void test_array_int_null_out (int **arr, int *len)
+{
+  *arr = NULL;
+  *len = 0;
+}
+
 /* interface */
 
 /************************************************************************/
@@ -857,6 +896,25 @@ void test_glist_everything_in (GList *in)
   test_glist_free (in);
 }
 
+/**
+ * test_glist_null_in:
+ * @in: (element-type utf8) (allow-none):
+ */
+void test_glist_null_in (GSList *in)
+{
+  g_assert (in == NULL);
+}
+
+/**
+ * test_glist_null_out:
+ * @out_list: (out) (element-type utf8) (allow-none):
+ */
+void test_glist_null_out (GSList **out_list)
+{
+  *out_list = NULL;
+}
+
+
 /************************************************************************/
 /* GSList */
 
@@ -979,6 +1037,24 @@ void test_gslist_everything_in (GSList *in)
   test_gslist_free (in);
 }
 
+/**
+ * test_gslist_null_in:
+ * @in: (element-type utf8) (allow-none):
+ */
+void test_gslist_null_in (GSList *in)
+{
+  g_assert (in == NULL);
+}
+
+/**
+ * test_gslist_null_out:
+ * @out_list: (out) (element-type utf8) (allow-none):
+ */
+void test_gslist_null_out (GSList **out_list)
+{
+  *out_list = NULL;
+}
+
 /************************************************************************/
 /* GHash */
 
@@ -1099,6 +1175,15 @@ static void assert_test_table_ghash (const GHashTable *in)
 void test_ghash_null_in (const GHashTable *in)
 {
   g_assert (in == NULL);
+}
+
+/**
+ * test_ghash_null_out:
+ * @out: (element-type utf8 utf8) (allow-none) (out):
+ */
+void test_ghash_null_out (const GHashTable **out)
+{
+  *out = NULL;
 }
 
 /**

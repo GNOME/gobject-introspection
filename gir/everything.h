@@ -40,6 +40,8 @@ void test_utf8_const_in (const char *in);
 void test_utf8_out (char **out);
 void test_utf8_inout (char **inout);
 GSList *test_filename_return (void);
+void test_utf8_null_in (char *in);
+void test_utf8_null_out (char **char_out);
 
 /* in arguments after out arguments */
 void test_int_out_utf8 (int *length, const char *in);
@@ -74,6 +76,8 @@ gboolean test_strv_in_container (char **arr);
 
 int *test_array_int_full_out(int *len);
 int *test_array_int_none_out(int *len);
+void test_array_int_null_in (int *arr, int len);
+void test_array_int_null_out (int **arr, int *len);
 
 /* interface */
 /* GList */
@@ -85,6 +89,8 @@ void test_glist_nothing_in (const GList *in);
 void test_glist_nothing_in2 (GList *in);
 void test_glist_container_in (GList *in);
 void test_glist_everything_in (GList *in);
+void test_glist_null_in(GSList *in);
+void test_glist_null_out(GSList **out_list);
 void test_glist_free (GList *in);
 
 /* GSList */
@@ -96,6 +102,8 @@ void test_gslist_nothing_in (const GSList *in);
 void test_gslist_nothing_in2 (GSList *in);
 void test_gslist_container_in (GSList *in);
 void test_gslist_everything_in (GSList *in);
+void test_gslist_null_in(GSList *in);
+void test_gslist_null_out(GSList **out_list);
 void test_gslist_free (GSList *in);
 
 /* GHashTable */
@@ -105,6 +113,7 @@ GHashTable *test_ghash_nothing_return2 (void);
 GHashTable *test_ghash_container_return (void);
 GHashTable *test_ghash_everything_return (void);
 void test_ghash_null_in (const GHashTable *in);
+void test_ghash_null_out (const GHashTable **out);
 void test_ghash_nothing_in (const GHashTable *in);
 void test_ghash_nothing_in2 (GHashTable *in);
 void test_ghash_container_in (GHashTable *in);
