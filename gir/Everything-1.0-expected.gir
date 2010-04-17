@@ -376,6 +376,11 @@ case.">
         </return-value>
       </method>
     </record>
+    <callback name="TestSimpleCallback" c:type="TestSimpleCallback">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+    </callback>
     <record name="TestStructA" c:type="TestStructA">
       <field name="some_int" writable="1">
         <type name="int" c:type="gint"/>
@@ -1457,6 +1462,19 @@ call and can be released on return.">
       <return-value transfer-ownership="none">
         <type name="TestSimpleBoxedA" c:type="TestSimpleBoxedA*"/>
       </return-value>
+    </function>
+    <function name="test_simple_callback" c:identifier="test_simple_callback">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="callback"
+                   transfer-ownership="none"
+                   allow-none="1"
+                   scope="call">
+          <type name="TestSimpleCallback" c:type="TestSimpleCallback"/>
+        </parameter>
+      </parameters>
     </function>
     <function name="test_size" c:identifier="test_size">
       <return-value transfer-ownership="none">
