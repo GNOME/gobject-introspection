@@ -60,7 +60,7 @@ endif
 GObject-2.0.gir: GLib-2.0.gir
 
 GObject_2_0_gir_LIBS = $(GOBJECT_LIBRARY)
-GObject_2_0_gir_SCANNERFLAGS = --noclosure --strip-prefix=g --c-include="glib-object.h"
+GObject_2_0_gir_SCANNERFLAGS = --noclosure --strip-prefix=g --c-include="glib-object.h" --add-include-path=.
 GObject_2_0_gir_PACKAGES = gobject-2.0
 GObject_2_0_gir_INCLUDES = GLib-2.0
 GObject_2_0_gir_CFLAGS = \
@@ -86,7 +86,7 @@ endif
 GModule-2.0.gir: GLib-2.0.gir
 
 GModule_2_0_gir_LIBS = $(GMODULE_LIBRARY)
-GModule_2_0_gir_SCANNERFLAGS = --noclosure --strip-prefix=g --c-include="gmodule.h"
+GModule_2_0_gir_SCANNERFLAGS = --noclosure --strip-prefix=g --c-include="gmodule.h" --add-include-path=.
 GModule_2_0_gir_PACKAGES = gmodule-2.0
 GModule_2_0_gir_INCLUDES = GLib-2.0
 GModule_2_0_gir_CFLAGS = \
@@ -117,7 +117,7 @@ endif
 Gio-2.0.gir: GObject-2.0.gir
 
 Gio_2_0_gir_LIBS = $(GIO_LIBRARY)
-Gio_2_0_gir_SCANNERFLAGS = --noclosure --strip-prefix=g --c-include="gio/gio.h"
+Gio_2_0_gir_SCANNERFLAGS = --noclosure --strip-prefix=g --c-include="gio/gio.h" --add-include-path=.
 Gio_2_0_gir_PACKAGES = gio-2.0 $(GIO_UNIX_PACKAGES)
 Gio_2_0_gir_INCLUDES = GObject-2.0
 Gio_2_0_gir_CFLAGS = \
@@ -139,7 +139,8 @@ GIRepository_2_0_gir_SCANNERFLAGS = \
         --noclosure \
         --strip-prefix=g \
         --c-include="girepository.h" \
-        --pkg-export gobject-introspection-1.0
+        --pkg-export gobject-introspection-1.0 \
+        --add-include-path=.
 GIRepository_2_0_gir_PACKAGES = gobject-2.0
 GIRepository_2_0_gir_INCLUDES = GObject-2.0
 GIRepository_2_0_gir_CFLAGS = -I$(srcdir)/girepository
@@ -190,7 +191,7 @@ if OS_WIN32
 libgirepository_gimarshallingtests_1_0_la_LDFLAGS += -no-undefined
 endif
 
-GIMarshallingTests-1.0.gir: libgirepository-gimarshallingtests-1.0.la
+GIMarshallingTests-1.0.gir: libgirepository-gimarshallingtests-1.0.la GObject-2.0.gir
 
 GIMarshallingTests_1_0_gir_LIBS = libgirepository-gimarshallingtests-1.0.la
 GIMarshallingTests_1_0_gir_PACKAGES = gobject-2.0
