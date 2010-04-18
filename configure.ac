@@ -125,6 +125,15 @@ PKG_CHECK_MODULES(GTHREAD, [gthread-2.0])
 PKG_CHECK_MODULES(GIO_UNIX, [gio-unix-2.0], have_gio_unix=true, have_gio_unix=false)
 AM_CONDITIONAL(HAVE_GIO_UNIX, test x$have_gio_unix = xtrue)
 
+AC_ARG_ENABLE(tests,[  --disable-tests           disable test libraries ], enable_tests=$enableval,enable_tests=yes)
+if test x$enable_tests != xno; then
+  PKG_CHECK_MODULES(CAIRO, [cairo], have_cairo=yes, have_cairo=no)
+  if test x$have_cairo != xyes; then
+    AC_MSG_ERROR([Tests enabled but cairo not found; pass --disable-tests or install cairo])
+  fi
+fi
+AM_CONDITIONAL(BUILD_TESTS, test x$enable_tests != xno)
+
 PKG_CHECK_MODULES(SCANNER, [gobject-2.0 gthread-2.0 gio-2.0])
 
 dnl libffi
