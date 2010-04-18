@@ -2622,6 +2622,16 @@ g_i_marshalling_tests_object_method_array_return (GIMarshallingTestsObject *obje
     return ints;
 }
 
+/**
+ * g_i_marshalling_tests_object_method_int8_in:
+ * @in: (in):
+ */
+void
+g_i_marshalling_tests_object_method_int8_in (GIMarshallingTestsObject *self, gint8 in)
+{
+  G_I_MARSHALLING_TESTS_OBJECT_GET_CLASS (self)->method_int8_in (self, in);
+}
+
 
 /**
  * g_i_marshalling_tests__object_none_return:
@@ -2737,6 +2747,16 @@ g_i_marshalling_tests__object_inout_same (GIMarshallingTestsObject **object)
 {
     g_assert((*object)->int_ == 42);
     (*object)->int_ = 0;
+}
+
+/**
+ * g_i_marshalling_tests__object_test_int8_in:
+ * @in: (in):
+ */
+void
+g_i_marshalling_tests__object_int8_in (GIMarshallingTestsObject *object, gint8 in)
+{
+  g_i_marshalling_tests_object_method_int8_in (object, in);
 }
 
 
