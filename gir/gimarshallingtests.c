@@ -1068,6 +1068,20 @@ g_i_marshalling_tests_utf8_full_out (gchar **utf8)
 }
 
 /**
+ * g_i_marshalling_tests_utf8_dangling_out:
+ * utf8: (out) (transfer full):
+ */
+void
+g_i_marshalling_tests_utf8_dangling_out (gchar **utf8)
+{
+    /* Intentionally don't touch the pointer to see how
+       the bindings handle this case.  Bindings should be
+       robust against broken C functions and can initialize 
+       even OUT vlues to NULL.
+    */
+}
+
+/**
  * g_i_marshalling_tests_utf8_none_inout:
  * utf8: (inout) (transfer none):
  */

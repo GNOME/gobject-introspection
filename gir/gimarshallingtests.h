@@ -253,6 +253,8 @@ void g_i_marshalling_tests_utf8_full_in (gchar *utf8);
 void g_i_marshalling_tests_utf8_none_out (gchar **utf8);
 void g_i_marshalling_tests_utf8_full_out (gchar **utf8);
 
+void g_i_marshalling_tests_utf8_dangling_out (gchar **utf8);
+
 void g_i_marshalling_tests_utf8_none_inout (gchar **utf8);
 void g_i_marshalling_tests_utf8_full_inout (gchar **utf8);
 
