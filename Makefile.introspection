@@ -114,7 +114,7 @@ $(if $(or $($(_gir_name)_LIBS),
 # Only dependencies we know are actually filenames goes into _FILES, make
 # sure these are built before running the scanner. Libraries and programs
 # needs to be added manually.
-$(1): $$($(_gir_name)_FILES) $(INTROSPECTION_PARSER)
+$(1): $$($(_gir_name)_FILES)
 	$(_gir_silent_scanner) $(INTROSPECTION_SCANNER) $(INTROSPECTION_SCANNER_ARGS) \
 	  --namespace=$(_gir_namespace) \
 	  --nsversion=$(_gir_version) \
@@ -125,7 +125,7 @@ $(1): $$($(_gir_name)_FILES) $(INTROSPECTION_PARSER)
 	  $(_gir_includes) \
 	  $($(_gir_name)_SCANNERFLAGS) \
 	  $($(_gir_name)_CFLAGS) \
-	  $($(_gir_name)_FILES) \
+	  $$^ \
 	  --output $(1)
 endef
 
@@ -141,5 +141,5 @@ $(_gir_silent_compiler) $(INTROSPECTION_COMPILER) $(INTROSPECTION_COMPILER_ARGS)
 endef
 
 # Simple rule to compile a typelib.
-%.typelib: %.gir $(INTROSPECTION_COMPILER)
+%.typelib: %.gir
 	$(call introspection-compiler,$<,$@)
