@@ -1833,6 +1833,25 @@ test_callback (TestCallback callback)
 }
 
 /**
+ * test_multi_callback:
+ * @callback: (scope call) (allow-none):
+ *
+ **/
+int
+test_multi_callback (TestCallback callback)
+{
+    int sum = 0;
+    if (callback != NULL) {
+        sum += callback();
+        sum += callback();
+    }
+
+    return sum;
+}
+
+
+
+/**
  * test_simple_callback:
  * @callback: (scope call) (allow-none):
  *

@@ -1538,6 +1538,19 @@ call and can be released on return.">
         </parameter>
       </parameters>
     </function>
+    <function name="test_multi_callback" c:identifier="test_multi_callback">
+      <return-value transfer-ownership="none">
+        <type name="int" c:type="int"/>
+      </return-value>
+      <parameters>
+        <parameter name="callback"
+                   transfer-ownership="none"
+                   allow-none="1"
+                   scope="call">
+          <type name="TestCallback" c:type="TestCallback"/>
+        </parameter>
+      </parameters>
+    </function>
     <function name="test_multi_double_args"
               c:identifier="test_multi_double_args">
       <return-value transfer-ownership="none">

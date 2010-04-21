@@ -335,6 +335,7 @@ typedef int (*TestCallbackUserData) (gpointer user_data);
 
 void test_simple_callback (TestSimpleCallback callback);
 int test_callback (TestCallback callback);
+int test_multi_callback (TestCallback callback);
 int test_callback_user_data (TestCallbackUserData callback,
                              gpointer user_data);
 int test_callback_destroy_notify (TestCallbackUserData callback,
