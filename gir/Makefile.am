@@ -157,12 +157,12 @@ LT_AGE = 0
 LT_VERSION = $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)
 TYPELIB_VERSION = $(LT_CURRENT).0
 
-lib_LTLIBRARIES = libgirepository-everything-1.0.la
+lib_LTLIBRARIES =
 
 libgirepository_everything_1_0_la_SOURCES = $(srcdir)/everything.c $(srcdir)/everything.h
-libgirepository_everything_1_0_la_CFLAGS = $(GOBJECT_CFLAGS)
+libgirepository_everything_1_0_la_CFLAGS = $(GOBJECT_CFLAGS) $(CAIRO_CFLAGS)
 libgirepository_everything_1_0_la_LDFLAGS = -version-info $(LT_VERSION)
-libgirepository_everything_1_0_la_LIBADD = $(GOBJECT_LIBS) -lcairo
+libgirepository_everything_1_0_la_LIBADD = $(GOBJECT_LIBS) $(CAIRO_LIBS)
 
 if OS_WIN32
 libgirepository_everything_1_0_la_LDFLAGS += -no-undefined
@@ -172,12 +172,16 @@ if BUILD_TESTS
 Everything-1.0.gir: Gio-2.0.gir libgirepository-everything-1.0.la
 
 Everything_1_0_gir_LIBS = libgirepository-everything-1.0.la
-Everything_1_0_gir_PACKAGES = gobject-2.0
+Everything_1_0_gir_PACKAGES = gobject-2.0 cairo
 Everything_1_0_gir_INCLUDES = GObject-2.0 cairo-1.0
 Everything_1_0_gir_FILES = $(srcdir)/everything.h $(srcdir)/everything.c
 
+if HAVE_CAIRO
 INTROSPECTION_GIRS += Everything-$(TYPELIB_VERSION).gir
 EXPECTEDGIRS += Everything-$(TYPELIB_VERSION)-expected.gir
+lib_LTLIBRARIES += libgirepository-everything-1.0.la
+endif
+
 
 # marshalling tests
 lib_LTLIBRARIES += libgirepository-gimarshallingtests-1.0.la

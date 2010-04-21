@@ -126,6 +126,7 @@ PKG_CHECK_MODULES(GIO_UNIX, [gio-unix-2.0], have_gio_unix=true, have_gio_unix=fa
 AM_CONDITIONAL(HAVE_GIO_UNIX, test x$have_gio_unix = xtrue)
 
 AC_ARG_ENABLE(tests,[  --disable-tests           disable test libraries ], enable_tests=$enableval,enable_tests=yes)
+have_cairo=no
 if test x$enable_tests != xno; then
   PKG_CHECK_MODULES(CAIRO, [cairo], have_cairo=yes, have_cairo=no)
   if test x$have_cairo != xyes; then
@@ -133,6 +134,7 @@ if test x$enable_tests != xno; then
   fi
 fi
 AM_CONDITIONAL(BUILD_TESTS, test x$enable_tests != xno)
+AM_CONDITIONAL(HAVE_CAIRO, test x$have_cairo != xno)
 
 PKG_CHECK_MODULES(SCANNER, [gobject-2.0 gthread-2.0 gio-2.0])
 
