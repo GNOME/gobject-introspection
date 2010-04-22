@@ -2124,21 +2124,55 @@ g_i_marshalling_tests_pointer_in_return (gpointer pointer)
 }
 
 GType
-g_i_marshalling_tests_enum_get_type (void)
+g_i_marshalling_tests_genum_get_type (void)
 {
     static GType type = 0;
     if (G_UNLIKELY(type == 0)) {
         static const GEnumValue values[] = {
-            { G_I_MARSHALLING_TESTS_ENUM_VALUE1, "G_I_MARSHALLING_TESTS_ENUM_VALUE1", "value1" },
-            { G_I_MARSHALLING_TESTS_ENUM_VALUE2, "G_I_MARSHALLING_TESTS_ENUM_VALUE2", "value2" },
-            { G_I_MARSHALLING_TESTS_ENUM_VALUE3, "G_I_MARSHALLING_TESTS_ENUM_VALUE3", "value3" },
+            { G_I_MARSHALLING_TESTS_GENUM_VALUE1, "G_I_MARSHALLING_TESTS_GENUM_VALUE1", "value1" },
+            { G_I_MARSHALLING_TESTS_GENUM_VALUE2, "G_I_MARSHALLING_TESTS_GENUM_VALUE2", "value2" },
+            { G_I_MARSHALLING_TESTS_GENUM_VALUE3, "G_I_MARSHALLING_TESTS_GENUM_VALUE3", "value3" },
             { 0, NULL, NULL }
         };
-        type = g_enum_register_static (g_intern_static_string ("GIMarshallingTestsEnum"), values);
+        type = g_enum_register_static (g_intern_static_string ("GIMarshallingTestsGEnum"), values);
     }
 
     return type;
 }
+
+GIMarshallingTestsEnum
+g_i_marshalling_tests_genum_return (void)
+{
+    return G_I_MARSHALLING_TESTS_GENUM_VALUE3;
+}
+
+void
+g_i_marshalling_tests_genum_in (GIMarshallingTestsGEnum enum_)
+{
+    g_assert(enum_ == G_I_MARSHALLING_TESTS_GENUM_VALUE3);
+}
+
+/**
+ * g_i_marshalling_tests_genum_out:
+ * @enum_: (out):
+ */
+void
+g_i_marshalling_tests_genum_out (GIMarshallingTestsGEnum *enum_)
+{
+    *enum_ = G_I_MARSHALLING_TESTS_GENUM_VALUE3;
+}
+
+/**
+ * g_i_marshalling_tests_genum_inout:
+ * @enum_: (inout):
+ */
+void
+g_i_marshalling_tests_genum_inout (GIMarshallingTestsGEnum *enum_)
+{
+    g_assert(*enum_ == G_I_MARSHALLING_TESTS_GENUM_VALUE3);
+    *enum_ = G_I_MARSHALLING_TESTS_GENUM_VALUE1;
+}
+
 
 GIMarshallingTestsEnum
 g_i_marshalling_tests_enum_return (void)

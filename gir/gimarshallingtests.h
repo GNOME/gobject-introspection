@@ -378,7 +378,7 @@ void g_i_marshalling_tests_gclosure_in (GClosure *closure);
 gpointer g_i_marshalling_tests_pointer_in_return (gpointer pointer);
 
 
-/* GEnum */
+/* Enum */
 
 typedef enum
 {
@@ -387,9 +387,6 @@ typedef enum
   G_I_MARSHALLING_TESTS_ENUM_VALUE3 = 42
 } GIMarshallingTestsEnum;
 
-GType g_i_marshalling_tests_enum_get_type (void) G_GNUC_CONST;
-#define G_I_MARSHALLING_TESTS_TYPE_ENUM (g_i_marshalling_tests_enum_get_type ())
-
 GIMarshallingTestsEnum g_i_marshalling_tests_enum_return (void);
 
 void g_i_marshalling_tests_enum_in (GIMarshallingTestsEnum enum_);
@@ -397,6 +394,27 @@ void g_i_marshalling_tests_enum_in (GIMarshallingTestsEnum enum_);
 void g_i_marshalling_tests_enum_out (GIMarshallingTestsEnum *enum_);
 
 void g_i_marshalling_tests_enum_inout (GIMarshallingTestsEnum *enum_);
+
+
+/* GEnum */
+
+typedef enum
+{
+  G_I_MARSHALLING_TESTS_GENUM_VALUE1,
+  G_I_MARSHALLING_TESTS_GENUM_VALUE2,
+  G_I_MARSHALLING_TESTS_GENUM_VALUE3 = 42
+} GIMarshallingTestsGEnum;
+
+GType g_i_marshalling_tests_genum_get_type (void) G_GNUC_CONST;
+#define G_I_MARSHALLING_TESTS_TYPE_GENUM (g_i_marshalling_tests_genum_get_type ())
+
+GIMarshallingTestsEnum g_i_marshalling_tests_genum_return (void);
+
+void g_i_marshalling_tests_genum_in (GIMarshallingTestsGEnum enum_);
+
+void g_i_marshalling_tests_genum_out (GIMarshallingTestsGEnum *enum_);
+
+void g_i_marshalling_tests_genum_inout (GIMarshallingTestsGEnum *enum_);
 
 
 /* GFlags */
