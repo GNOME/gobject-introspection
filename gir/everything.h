@@ -3,6 +3,7 @@
 
 #include <cairo/cairo.h>
 #include <glib-object.h>
+#include <gio/gio.h>
 #include <time.h>
 
 void set_abort_on_error (gboolean abort_on_error);
@@ -348,6 +349,8 @@ int test_callback_thaw_async (void);
 
 int test_callback_infinite (TestCallbackUserData callback,
                            gpointer user_data);
+
+void test_async_ready_callback (GAsyncReadyCallback callback);
 
 /* interface */
 #define TEST_TYPE_INTERFACE              (test_interface_get_type ())

@@ -1,7 +1,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include "everything.h"
-#include <gio/gio.h>
 
 static gboolean abort_on_error = TRUE;
 
@@ -1995,6 +1994,14 @@ test_callback_infinite (TestCallbackUserData callback,
   infinite_callbacks = g_slist_prepend(infinite_callbacks, callback);
 
   return callback(user_data);
+}
+
+void
+test_async_ready_callback (GAsyncReadyCallback callback)
+{
+  GSimpleAsyncResult *result = g_simple_async_result_new (NULL, callback, NULL,
+    test_async_ready_callback);
+  g_simple_async_result_complete_in_idle (result);
 }
 
 /* interface */

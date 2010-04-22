@@ -172,8 +172,8 @@ if BUILD_TESTS
 Everything-1.0.gir: Gio-2.0.gir libgirepository-everything-1.0.la
 
 Everything_1_0_gir_LIBS = libgirepository-everything-1.0.la
-Everything_1_0_gir_PACKAGES = gobject-2.0 cairo
-Everything_1_0_gir_INCLUDES = GObject-2.0 cairo-1.0
+Everything_1_0_gir_PACKAGES = gobject-2.0 cairo gio-2.0
+Everything_1_0_gir_INCLUDES = GObject-2.0 cairo-1.0 Gio-2.0
 Everything_1_0_gir_FILES = $(srcdir)/everything.h $(srcdir)/everything.c
 
 if HAVE_CAIRO
