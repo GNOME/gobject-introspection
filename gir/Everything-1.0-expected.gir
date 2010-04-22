@@ -8,7 +8,10 @@ and/or use gtk-doc annotations.  -->
             xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
   <include name="GLib" version="2.0"/>
   <include name="GObject" version="2.0"/>
+  <include name="Gio" version="2.0"/>
   <include name="cairo" version="1.0"/>
+  <package name="cairo"/>
+  <package name="gio-2.0"/>
   <package name="gobject-2.0"/>
   <namespace name="Everything"
              version="1.0"
@@ -782,6 +785,17 @@ case.">
           <array length="0" c:type="int**">
             <type name="int"/>
           </array>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="test_async_ready_callback"
+              c:identifier="test_async_ready_callback">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="callback" transfer-ownership="none" scope="async">
+          <type name="Gio.AsyncReadyCallback" c:type="GAsyncReadyCallback"/>
         </parameter>
       </parameters>
     </function>
