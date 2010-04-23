@@ -2503,6 +2503,103 @@ g_i_marshalling_tests__boxed_struct_inout (GIMarshallingTestsBoxedStruct **struc
     (*struct_)->long_ = 0;
 }
 
+static GIMarshallingTestsUnion *
+g_i_marshalling_tests_union_copy (GIMarshallingTestsUnion *union_)
+{
+    GIMarshallingTestsUnion *new_union;
+
+    new_union = g_slice_new (GIMarshallingTestsUnion);
+
+    *new_union = *union_;
+
+    return new_union;
+}
+
+static void
+g_i_marshalling_tests_union_free (GIMarshallingTestsUnion *union_)
+{
+    g_slice_free (GIMarshallingTestsUnion, union_);
+}
+
+GType
+g_i_marshalling_tests_union_get_type (void)
+{
+    static GType type = 0;
+
+    if (type == 0) {
+        type = g_boxed_type_register_static ("GIMarshallingTestsUnion",
+                (GBoxedCopyFunc) g_i_marshalling_tests_union_copy,
+                (GBoxedFreeFunc) g_i_marshalling_tests_union_free);
+    }
+
+    return type;
+}
+
+/**
+ * g_i_marshalling_tests__union_return:
+ * Returns: (transfer none):
+ */
+GIMarshallingTestsUnion *
+g_i_marshalling_tests__union_return (void)
+{
+    static GIMarshallingTestsUnion *union_ = NULL;
+
+    if (union_ == NULL) {
+        union_ = g_new(GIMarshallingTestsUnion, 1);
+
+        union_->long_ = 42;
+    }
+
+    return union_;
+}
+
+/**
+ * g_i_marshalling_tests__union_in:
+ * @union_: (transfer none):
+ */
+void
+g_i_marshalling_tests__union_in (GIMarshallingTestsUnion *union_)
+{
+    g_assert(union_->long_ == 42);
+}
+
+/**
+ * g_i_marshalling_tests__union_out:
+ * @union_: (out) (transfer none):
+ */
+void
+g_i_marshalling_tests__union_out (GIMarshallingTestsUnion **union_)
+{
+    static GIMarshallingTestsUnion *new_union = NULL;
+
+    if (new_union == NULL) {
+        new_union = g_new(GIMarshallingTestsUnion, 1);
+
+        new_union->long_ = 42;
+    }
+
+    *union_ = new_union;
+}
+
+/**
+ * g_i_marshalling_tests__union_inout:
+ * @union_: (inout) (transfer none):
+ */
+void
+g_i_marshalling_tests__union_inout (GIMarshallingTestsUnion **union_)
+{
+    g_assert((*union_)->long_ == 42);
+
+    (*union_)->long_ = 0;
+}
+
+void
+g_i_marshalling_tests_union_method (GIMarshallingTestsUnion *union_)
+{
+    g_assert(union_->long_ == 42);
+}
+
+
 
 enum
 {

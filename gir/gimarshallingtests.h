@@ -497,6 +497,21 @@ void g_i_marshalling_tests__boxed_struct_out (GIMarshallingTestsBoxedStruct **st
 
 void g_i_marshalling_tests__boxed_struct_inout (GIMarshallingTestsBoxedStruct **struct_);
 
+typedef union {
+    glong long_;
+} GIMarshallingTestsUnion;
+
+GType g_i_marshalling_tests_union_get_type (void) G_GNUC_CONST;
+
+GIMarshallingTestsUnion *g_i_marshalling_tests__union_return (void);
+
+void g_i_marshalling_tests__union_in (GIMarshallingTestsUnion *union_);
+
+void g_i_marshalling_tests__union_out (GIMarshallingTestsUnion **union_);
+
+void g_i_marshalling_tests__union_inout (GIMarshallingTestsUnion **union_);
+
+void g_i_marshalling_tests_union_method (GIMarshallingTestsUnion *union_);
 
 /* Object */
 
