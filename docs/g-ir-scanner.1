@@ -8,37 +8,37 @@ g-ir-scanner \- extracting C metadata from sources and headers
 g-ir-scanner is a tool which generates GIR XML files by parsing headers
 and introspecting GObject based libraries.
 It is usually invoked during the normal build step for a project and
-the information is saved to disk and later installed so language bindings 
+the information is saved to disk and later installed, so that language bindings
 and other applications can use it.
-Header files and source files are passed in arguments on the command line.
-The suffix determines if it should be treated as source (.c) or header (.h),
-currently only C based libraries are supported by the scanner.
+Header files and source files are passed in as arguments on the command line.
+The suffix determines whether a file be treated as a source file (.c) or a
+header file (.h). Currently only C based libraries are supported by the scanner.
 .SH OPTIONS
 .TP
-.B \---help
+.B \--help
 Show help options
 .TP
-.B \---format=FORMAT
+.B \--format=FORMAT
 This parameters decides which the resulting format will be used.
 The default value is gir.
 .TP
-.B \---include=NAME
+.B \--include=NAME
 Parses another metadata file. The format is determined by looking
 at the file suffix. If a library depends on another the corresponding
 metadata file should be included so references to external types are
 correctly specified.
 .TP
-.B \---add-include-path=PATH
+.B \--add-include-path=PATH
 Add a directory to the path which the scanner uses to find GIR files.
 Can be used multiple times to specify multiple directories
 .TP
-.B \-i, ---library=LIBRARY
-Specifies a library that will be introspected. This means that the 
+.B \-i, --library=LIBRARY
+Specifies a library that will be introspected. This means that the
 *_get_type() functions in it will be called for GObject data types.
 The name of the library should not contain the leading lib prefix nor
 the ending shared library suffix.
 .TP
-.B \-L, ---library-path=PATH
+.B \-L, --library-path=PATH
 Include this directory when searching for a library.
 This option can be specified multiple times to include more than one
 directory to look for libraries in.
@@ -49,34 +49,34 @@ header files.  You need to pass to the scanner all the directories
 you'd normally pass to the compiler when using the specified source
 files.
 .TP
-.B \-n, ---namespace=NAME
+.B \-n, --namespace=NAME
 The namespace name. This name should be capitalized, eg the first letter
 should be upper case. Examples: Gtk, Clutter, WebKit.
 .TP
-.B \---no-libtool
+.B \--no-libtool
 Disable usage of libtool for compiling stub introspection binary.  Use this
 if your build system does not require libtool.
 .TP
-.B \---libtool
+.B \--libtool
 Full path to libtool executable.  Typically used for Automake systems.
 .TP
-.B ---nsversion=VERSION
+.B --nsversion=VERSION
 The namespace version. For instance 1.0. This is usually the platform version,
 eg 2.0 for Gtk+, not 2.12.7.
 .TP
-.B \-p, ---program=PROGRAM
+.B \-p, --program=PROGRAM
 Specifies a binary that will be introspected. This means that the
 *_get_type() functions in it will be called for GObject data types.
 The binary must be modified to take a --introspect= option, and
 to pass the argument to this function to g_irepository_dump.
 .TP
-.B \---program-arg=ARG
+.B \--program-arg=ARG
 Additional argument to pass to program for introspection.
 .TP
-.B \, ---strip-prefix=PREFIX
+.B \, --strip-prefix=PREFIX
 If this option is specified a prefix will be stripped from all functions.
 If not specified, the lower case version of the namespace will be used.
-Eg, a strip prefix of 
+Eg, a strip prefix of
 .B g_
 and a namespace set to
 .B GLib
@@ -85,27 +85,27 @@ will export the function
 as 
 .B GLib.type_name.
 .TP
-.B \, ---output=FILENAME
+.B \, --output=FILENAME
 Name of the file to output. Normally namespace + format extension.
 Eg, GLib.gir.
 .TP
-.B \, ---pkg=PACKAGE
+.B \, --pkg=PACKAGE
 List of pkg-config packages to get compiler and linker flags from.
-This option can be specified multiple times to include flags from 
+This option can be specified multiple times to include flags from
 several pkg-config packages.
 .TP
-.B \---verbose                       
+.B \--verbose
 Be verbose, include some debugging information.
 .TP
-.B \---noclosure                       
+.B \--noclosure
 Do not delete unknown types from the resulting format.
 .TP
-.B \---typelib-xml                       
+.B \--typelib-xml
 Convert the resulting xml to only output the types relevant
 to the typelib compiler. This is mainly useful for verifying the
 correctness of the typelib itself.
 .TP
-.B \---inject=FILENAME
+.B \--inject=FILENAME
 Injects a variant of a GIR file into the scanner. This is used to add
 custom functions to a GIR wrapping a library without modifying the upstream
 library itself. The Format of the inject file is similar to a GIR,
@@ -124,7 +124,7 @@ Example:
 
 The example above will add a new method called get_with to the TestDrawable class.
 .TP
-.B \---xpath-assertions=FILENAME
+.B \--xpath-assertions=FILENAME
 Loads a list xpath assertions from FILENAME, this is useful for verifying
 that the GIR itself is properly generated.
 .TP
