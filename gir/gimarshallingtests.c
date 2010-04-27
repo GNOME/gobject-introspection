@@ -2795,7 +2795,7 @@ g_i_marshalling_tests_object_method_with_default_implementation (GIMarshallingTe
 static void
 g_i_marshalling_tests_object_real_method_with_default_implementation (GIMarshallingTestsObject *self, gint8 in)
 {
-    GValue val;
+    GValue val = {0, };
     g_value_init (&val, G_TYPE_INT);
     g_value_set_int (&val, in);
     g_object_set_property (G_OBJECT (self), "int", &val);
