@@ -2621,6 +2621,9 @@ enum
 	PROP_INT_
 };
 
+static void g_i_marshalling_tests_object_real_method_with_default_implementation (
+        GIMarshallingTestsObject *self, gint8 in);
+
 G_DEFINE_TYPE (GIMarshallingTestsObject, g_i_marshalling_tests_object, G_TYPE_OBJECT);
 
 static void
@@ -2679,6 +2682,8 @@ g_i_marshalling_tests_object_class_init (GIMarshallingTestsObjectClass *klass)
 	g_object_class_install_property (object_class, PROP_INT_,
          g_param_spec_int ("int", "Integer", "An integer", G_MININT, G_MAXINT, 0,
               G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
+
+    klass->method_with_default_implementation = g_i_marshalling_tests_object_real_method_with_default_implementation;
 }
 
 
@@ -2775,6 +2780,25 @@ void
 g_i_marshalling_tests_object_method_int8_in (GIMarshallingTestsObject *self, gint8 in)
 {
   G_I_MARSHALLING_TESTS_OBJECT_GET_CLASS (self)->method_int8_in (self, in);
+}
+
+/**
+ * g_i_marshalling_tests_object_method_with_default_implementation:
+ * @in: (in):
+ */
+void
+g_i_marshalling_tests_object_method_with_default_implementation (GIMarshallingTestsObject *self, gint8 in)
+{
+    G_I_MARSHALLING_TESTS_OBJECT_GET_CLASS (self)->method_with_default_implementation (self, in);
+}
+
+static void
+g_i_marshalling_tests_object_real_method_with_default_implementation (GIMarshallingTestsObject *self, gint8 in)
+{
+    GValue val;
+    g_value_init (&val, G_TYPE_INT);
+    g_value_set_int (&val, in);
+    g_object_set_property (G_OBJECT (self), "int", &val);
 }
 
 

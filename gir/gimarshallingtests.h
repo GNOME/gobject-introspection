@@ -536,6 +536,12 @@ struct _GIMarshallingTestsObjectClass
      * @in: (in):
      */
     void (* method_int8_in) (GIMarshallingTestsObject *self, gint8 in);
+
+    /**
+     * GIMarshallingTestsObjectClass::method_with_default_implementation:
+     * @in: (in):
+     */
+    void (* method_with_default_implementation) (GIMarshallingTestsObject *self, gint8 in);
 };
 
 struct _GIMarshallingTestsObject
@@ -557,6 +563,7 @@ void g_i_marshalling_tests_object_method_array_inout (GIMarshallingTestsObject *
 const gint *g_i_marshalling_tests_object_method_array_return (GIMarshallingTestsObject *object, gint *length);
 
 void g_i_marshalling_tests_object_method_int8_in (GIMarshallingTestsObject *object, gint8 in);
+void g_i_marshalling_tests_object_method_with_default_implementation (GIMarshallingTestsObject *object, gint8 in);
 
 
 GIMarshallingTestsObject *g_i_marshalling_tests__object_none_return (void);
