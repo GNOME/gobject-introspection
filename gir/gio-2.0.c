@@ -150,3 +150,15 @@
  *
  * Return value: (array zero-terminated=1) (transfer full):
  */
+
+/**
+ * g_filter_input_stream_get_base_stream:
+ *
+ * Return value: (transfer none):
+ */
+
+/**
+ * g_filter_output_stream_get_base_stream:
+ *
+ * Return value: (transfer none):
+ */
