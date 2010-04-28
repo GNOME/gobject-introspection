@@ -506,8 +506,9 @@ class AnnotationApplier(object):
                 if param.name == tag:
                     break
             else:
-                print 'WARNING: annotation for "%s" refers to unknown ' \
-                        'argument "%s"' % (parent.name, tag)
+                return
+                #print 'WARNING: annotation for "%s" refers to unknown ' \
+                #        'argument "%s"' % (parent.name, tag)
 
     def _parse_params(self, parent, params, block):
         self._check_arg_annotations(parent, params, block)
