@@ -496,7 +496,21 @@ class AnnotationApplier(object):
                 return
             field.type.name = self._transformer.resolve_type_name(t.one())
 
+    def _check_arg_annotations(self, parent, params, block):
+        if block is None:
+            return
+        for tag in block.tags.keys():
+            if tag == TAG_RETURNS:
+                continue
+            for param in params:
+                if param.name == tag:
+                    break
+            else:
+                print 'WARNING: annotation for "%s" refers to unknown ' \
+                        'argument "%s"' % (parent.name, tag)
+
     def _parse_params(self, parent, params, block):
+        self._check_arg_annotations(parent, params, block)
         for param in params:
             tag = self._get_tag(block, param.name)
             self._parse_param(parent, param, tag)
