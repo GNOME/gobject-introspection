@@ -14,7 +14,8 @@ BASE_GIRSOURCES =               \
         libxml2-2.0.gir         \
         xft-2.0.gir             \
         xlib-2.0.gir            \
-        xfixes-4.0.gir
+        xfixes-4.0.gir          \
+        xrandr-1.3.gir
 EXTRA_DIST += $(BASE_GIRSOURCES)
 
 INTROSPECTION_GIRS =
