@@ -789,6 +789,13 @@ uses a C sugar return type.">
         </parameter>
       </parameters>
     </function>
+    <function name="test_array" c:identifier="foo_test_array">
+      <return-value transfer-ownership="container">
+        <array c:type="GArray*">
+          <type name="utf8"/>
+        </array>
+      </return-value>
+    </function>
     <function name="test_const_char_param"
               c:identifier="foo_test_const_char_param">
       <return-value transfer-ownership="none">

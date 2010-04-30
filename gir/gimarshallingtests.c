@@ -1318,6 +1318,269 @@ g_i_marshalling_tests_array_zero_terminated_inout (gchar ***utf8s)
 
 
 /**
+ * g_i_marshalling_tests_garray_int_none_return:
+ * Returns: (element-type gint) (transfer none):
+ */
+GArray *
+g_i_marshalling_tests_garray_int_none_return (void)
+{
+    static GArray *array = NULL;
+    gint i;
+
+    if (array == NULL) {
+        array = g_array_new (TRUE, TRUE, sizeof (gint));
+        for (i = -1; i < 3; i++)
+            g_array_append_val (array, i);
+    }
+
+    return array;
+}
+
+/**
+ * g_i_marshalling_tests_garray_utf8_none_return:
+ * Returns: (element-type utf8) (transfer none):
+ */
+GArray *
+g_i_marshalling_tests_garray_utf8_none_return (void)
+{
+    static GArray *array = NULL;
+    static gchar *values[] = {"0", "1", "2", NULL};
+    gint i;
+
+    if (array == NULL) {
+        array = g_array_new (TRUE, TRUE, sizeof (gint));
+        for (i = 0; values[i]; i++)
+            g_array_append_val (array, values[i]);
+    }
+
+    return array;
+}
+
+/**
+ * g_i_marshalling_tests_garray_utf8_container_return:
+ * Returns: (element-type utf8) (transfer container):
+ */
+GArray *
+g_i_marshalling_tests_garray_utf8_container_return (void)
+{
+    GArray *array = NULL;
+    static gchar *values[] = {"0", "1", "2", NULL};
+    gint i;
+
+    array = g_array_new (TRUE, TRUE, sizeof (gint));
+    for (i = 0; values[i]; i++)
+        g_array_append_val (array, values[i]);
+
+    return array;
+}
+
+/**
+ * g_i_marshalling_tests_garray_utf8_full_return:
+ * Returns: (element-type utf8) (transfer full):
+ */
+GArray *
+g_i_marshalling_tests_garray_utf8_full_return (void)
+{
+    GArray *array = NULL;
+    static gchar *values[] = {"0", "1", "2", NULL};
+    gint i;
+
+    array = g_array_new (TRUE, TRUE, sizeof (gint));
+    for (i = 0; values[i]; i++) {
+        gchar *str = g_strdup (values[i]);
+        g_array_append_val (array, str);
+    }
+
+    return array;
+}
+
+/**
+ * g_i_marshalling_tests_garray_int_none_in:
+ * @array_: (element-type gint) (transfer none):
+ */
+void
+g_i_marshalling_tests_garray_int_none_in (GArray *array_)
+{
+    g_assert (array_->len == 4);
+    g_assert (g_array_index (array_, gint, 0) == -1);
+    g_assert (g_array_index (array_, gint, 1) == 0);
+    g_assert (g_array_index (array_, gint, 2) == 1);
+    g_assert (g_array_index (array_, gint, 3) == 2);
+}
+
+/**
+ * g_i_marshalling_tests_garray_utf8_none_in:
+ * @array_: (element-type utf8) (transfer none):
+ */
+void
+g_i_marshalling_tests_garray_utf8_none_in (GArray *array_)
+{
+    g_assert (array_->len == 3);
+    g_assert (strcmp (g_array_index (array_, gchar*, 0), "0") == 0);
+    g_assert (strcmp (g_array_index (array_, gchar*, 1), "1") == 0);
+    g_assert (strcmp (g_array_index (array_, gchar*, 2), "2") == 0);
+}
+
+/**
+ * g_i_marshalling_tests_garray_utf8_container_in:
+ * @array_: (element-type utf8) (transfer container):
+ */
+void
+g_i_marshalling_tests_garray_utf8_container_in (GArray *array_)
+{
+    g_assert (array_->len == 3);
+    g_assert (strcmp (g_array_index (array_, gchar*, 0), "0") == 0);
+    g_assert (strcmp (g_array_index (array_, gchar*, 1), "1") == 0);
+    g_assert (strcmp (g_array_index (array_, gchar*, 2), "2") == 0);
+    g_array_free (array_, TRUE);
+}
+
+/**
+ * g_i_marshalling_tests_garray_utf8_full_in:
+ * @array_: (element-type utf8) (transfer full):
+ */
+void
+g_i_marshalling_tests_garray_utf8_full_in (GArray *array_)
+{
+    g_assert (array_->len == 3);
+    g_assert (strcmp (g_array_index (array_, gchar*, 0), "0") == 0);
+    g_assert (strcmp (g_array_index (array_, gchar*, 1), "1") == 0);
+    g_assert (strcmp (g_array_index (array_, gchar*, 2), "2") == 0);
+    g_free (g_array_index (array_, gchar*, 0));
+    g_free (g_array_index (array_, gchar*, 1));
+    g_free (g_array_index (array_, gchar*, 2));
+    g_array_free (array_, TRUE);
+}
+
+/**
+ * g_i_marshalling_tests_garray_utf8_none_out:
+ * @array_: (out) (element-type utf8) (transfer none):
+ */
+void
+g_i_marshalling_tests_garray_utf8_none_out (GArray **array_)
+{
+    static GArray *internal = NULL;
+    static gchar *values[] = {"0", "1", "2", NULL};
+    gint i;
+
+    if (internal == NULL) {
+        internal = g_array_new (TRUE, TRUE, sizeof (gint));
+        for (i = 0; values[i]; i++)
+            g_array_append_val (internal, values[i]);
+    }
+
+    *array_ = internal;
+}
+
+/**
+ * g_i_marshalling_tests_garray_utf8_container_out:
+ * @array_: (out) (element-type utf8) (transfer container):
+ */
+void
+g_i_marshalling_tests_garray_utf8_container_out (GArray **array_)
+{
+    static gchar *values[] = {"0", "1", "2", NULL};
+    gint i;
+
+    *array_ = NULL;
+
+    *array_ = g_array_new (TRUE, TRUE, sizeof (gint));
+    for (i = 0; values[i]; i++)
+        g_array_append_val (*array_, values[i]);
+}
+
+/**
+ * g_i_marshalling_tests_garray_utf8_full_out:
+ * @array_: (out) (element-type utf8) (transfer full):
+ */
+void
+g_i_marshalling_tests_garray_utf8_full_out (GArray **array_)
+{
+    static gchar *values[] = {"0", "1", "2", NULL};
+    gint i;
+
+    *array_ = NULL;
+
+    *array_ = g_array_new (TRUE, TRUE, sizeof (gint));
+    for (i = 0; values[i]; i++) {
+        gchar *str = g_strdup (values[i]);
+        g_array_append_val (*array_, str);
+    }
+}
+
+/**
+ * g_i_marshalling_tests_garray_utf8_none_inout:
+ * @array_: (inout) (element-type utf8) (transfer none):
+ */
+void
+g_i_marshalling_tests_garray_utf8_none_inout (GArray **array_)
+{
+    static GArray *internal = NULL;
+    static gchar *values[] = {"-2", "-1", "0", "1", NULL};
+    gint i;
+
+    g_assert ((*array_)->len == 3);
+    g_assert (strcmp (g_array_index (*array_, gchar*, 0), "0") == 0);
+    g_assert (strcmp (g_array_index (*array_, gchar*, 1), "1") == 0);
+    g_assert (strcmp (g_array_index (*array_, gchar*, 2), "2") == 0);
+
+    if (internal == NULL) {
+        internal = g_array_new (TRUE, TRUE, sizeof (gint));
+        for (i = 0; values[i]; i++)
+            g_array_append_val (internal, values[i]);
+    }
+
+    *array_ = internal;
+}
+
+/**
+ * g_i_marshalling_tests_garray_utf8_container_inout:
+ * @array_: (inout) (element-type utf8) (transfer container):
+ */
+void
+g_i_marshalling_tests_garray_utf8_container_inout (GArray **array_)
+{
+    static gchar *val1 = "-1";
+    static gchar *val2 = "-2";
+
+    g_assert ((*array_)->len == 3);
+    g_assert (strcmp (g_array_index (*array_, gchar*, 0), "0") == 0);
+    g_assert (strcmp (g_array_index (*array_, gchar*, 1), "1") == 0);
+    g_assert (strcmp (g_array_index (*array_, gchar*, 2), "2") == 0);
+
+    g_array_remove_index (*array_, (*array_)->len - 1);
+
+    g_array_prepend_val (*array_, val1);
+    g_array_prepend_val (*array_, val2);
+}
+
+/**
+ * g_i_marshalling_tests_garray_utf8_full_inout:
+ * @array_: (inout) (element-type utf8) (transfer full):
+ */
+void
+g_i_marshalling_tests_garray_utf8_full_inout (GArray **array_)
+{
+    static gchar *val1 = "-1";
+    static gchar *val2 = "-2";
+    gchar *val;
+
+    g_assert ((*array_)->len == 3);
+    g_assert (strcmp (g_array_index (*array_, gchar*, 0), "0") == 0);
+    g_assert (strcmp (g_array_index (*array_, gchar*, 1), "1") == 0);
+    g_assert (strcmp (g_array_index (*array_, gchar*, 2), "2") == 0);
+
+    g_free (g_array_index (*array_, gchar*, (*array_)->len - 1));
+    g_array_remove_index (*array_, (*array_)->len - 1);
+
+    val = g_strdup (val1);
+    g_array_prepend_val (*array_, val);
+
+    val = g_strdup (val2);
+    g_array_prepend_val (*array_, val);
+}
+
+/**
  * g_i_marshalling_tests_glist_int_none_return:
  * Returns: (element-type gint) (transfer none):
  */

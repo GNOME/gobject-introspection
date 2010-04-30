@@ -455,6 +455,16 @@ foo_test_string_array (char **array)
 }
 
 /**
+ * foo_test_array:
+ * Returns: (element-type utf8) (transfer container):
+ */
+GArray *
+foo_test_array (void)
+{
+  return NULL;
+}
+
+/**
  * foo_rectangle_add:
  * @r1: (inout): add to this rect
  * @r2: source rectangle
