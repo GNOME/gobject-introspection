@@ -352,6 +352,12 @@ int test_callback_infinite (TestCallbackUserData callback,
 
 void test_async_ready_callback (GAsyncReadyCallback callback);
 
+void test_obj_instance_method_callback (TestObj *obj, TestCallback callback);
+void test_obj_static_method_callback (TestCallback callback);
+TestObj *test_obj_new_callback (TestCallbackUserData callback,
+                                gpointer user_data,
+                                GDestroyNotify notify);
+
 /* interface */
 #define TEST_TYPE_INTERFACE              (test_interface_get_type ())
 #define TEST_INTERFACE(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), TEST_TYPE_INTERFACE, TestInterface))

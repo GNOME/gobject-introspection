@@ -2004,6 +2004,53 @@ test_async_ready_callback (GAsyncReadyCallback callback)
   g_simple_async_result_complete_in_idle (result);
 }
 
+/**
+ * test_obj_instance_method_callback:
+ * @callback: (scope call) (allow-none):
+ *
+ **/
+void
+test_obj_instance_method_callback (TestObj *obj, TestCallback callback)
+{
+    if (callback != NULL)
+        callback();
+}
+
+/**
+ * test_obj_static_method_callback:
+ * @callback: (scope call) (allow-none):
+ *
+ **/
+void
+test_obj_static_method_callback (TestCallback callback)
+{
+    if (callback != NULL)
+        callback();
+}
+
+/**
+ * test_obj_new_callback:
+ * @callback: (scope notified):
+ *
+ **/
+TestObj *
+test_obj_new_callback (TestCallbackUserData callback, gpointer user_data,
+                       GDestroyNotify notify)
+{
+  CallbackInfo *info;
+
+  callback(user_data);
+
+  info = g_slice_new(CallbackInfo);
+  info->callback = callback;
+  info->notify = notify;
+  info->user_data = user_data;
+
+  notified_callbacks = g_slist_prepend(notified_callbacks, info);
+
+  return g_object_new (TEST_TYPE_OBJ, NULL);
+}
+
 /* interface */
 
 static void
