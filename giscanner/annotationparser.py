@@ -605,12 +605,6 @@ class AnnotationApplier(object):
         has_element_type = OPT_ELEMENT_TYPE in options
         has_array = OPT_ARRAY in options
 
-        if not has_array:
-            has_array = \
-                node.type.name in ['GLib.Array', 'GLib.PtrArray',
-                                   'GLib.ByteArray'] or \
-                node.type.ctype in ['GArray*', 'GPtrArray*', 'GByteArray*']
-
         # FIXME: This is a hack :-(
         if (not isinstance(node, Field) and
             (not has_element_type and

@@ -334,8 +334,6 @@ void foo_test_string_array (char **array);
 
 void foo_test_string_array_with_g (gchar **array);
 
-GArray *foo_test_array (void);
-
 const char * foo_test_const_char_retval (void);
 const FooStruct * foo_test_const_struct_retval (void);
 void foo_test_const_char_param (const char * param);
