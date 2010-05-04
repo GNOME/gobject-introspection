@@ -373,7 +373,7 @@ class Transformer(object):
                 else:
                     derefed_name = canonical_ctype
                 derefed_name = self.resolve_param_type(derefed_name)
-                ftype = Array(ctype, self.parse_ctype(derefed_name))
+                ftype = Array(None, ctype, self.parse_ctype(derefed_name))
                 child_list = list(symbol.base_type.child_list)
                 ftype.zeroterminated = False
                 if child_list:

@@ -244,11 +244,15 @@ and/or use gtk-doc annotations. ''')
                 attrs.append(('zero-terminated', '0'))
             if ntype.length_param_index >= 0:
                 attrs.append(('length', '%d' % (ntype.length_param_index, )))
+            if ntype.name in ['GLib.Array', 'GLib.PtrArray', 'GLib.ByteArray']:
+                attrs.append(('name', ntype.name))
             attrs.append(('c:type', ntype.ctype))
             if ntype.size is not None:
                 attrs.append(('fixed-size', ntype.size))
+
             with self.tagcontext('array', attrs):
-                self._write_type(ntype.element_type)
+                if ntype.element_type is not None:
+                    self._write_type(ntype.element_type)
             return
         attrs = [('name', self._type_to_string(ntype))]
         # FIXME: figure out if type references a basic type

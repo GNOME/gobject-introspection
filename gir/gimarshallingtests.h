@@ -296,6 +296,26 @@ void g_i_marshalling_tests_array_zero_terminated_out (gchar ***utf8s);
 void g_i_marshalling_tests_array_zero_terminated_inout (gchar ***utf8s);
 
 
+/* GArray */
+
+GArray *g_i_marshalling_tests_garray_int_none_return (void);
+GArray *g_i_marshalling_tests_garray_utf8_none_return (void);
+GArray *g_i_marshalling_tests_garray_utf8_container_return (void);
+GArray *g_i_marshalling_tests_garray_utf8_full_return (void);
+
+void g_i_marshalling_tests_garray_int_none_in (GArray *array_);
+void g_i_marshalling_tests_garray_utf8_none_in (GArray *array_);
+void g_i_marshalling_tests_garray_utf8_container_in (GArray *array_);
+void g_i_marshalling_tests_garray_utf8_full_in (GArray *array_);
+
+void g_i_marshalling_tests_garray_utf8_none_out (GArray **array_);
+void g_i_marshalling_tests_garray_utf8_container_out (GArray **array_);
+void g_i_marshalling_tests_garray_utf8_full_out (GArray **array_);
+
+void g_i_marshalling_tests_garray_utf8_none_inout (GArray **array_);
+void g_i_marshalling_tests_garray_utf8_container_inout (GArray **array_);
+void g_i_marshalling_tests_garray_utf8_full_inout (GArray **array_);
+
 /* GList */
 
 GList *g_i_marshalling_tests_glist_int_none_return (void);

@@ -280,17 +280,29 @@ class GIRParser(object):
         if typenode is not None:
             return Type(typenode.attrib['name'],
                         typenode.attrib.get(_cns('type')))
+
         typenode = node.find(_corens('array'))
         if typenode is not None:
-            ret = Array(typenode.attrib.get(_cns('type')),
-                        self._parse_type(typenode))
+
+            array_type = typenode.attrib.get(_cns('type'))
+            if array_type.startswith('GArray*') or \
+               array_type.startswith('GPtrArray*') or \
+               array_type.startswith('GByteArray*'):
+                element_type = None
+            else:
+                element_type = self._parse_type(typenode)
+
+            ret = Array(None, array_type, element_type)
+
             lenidx = typenode.attrib.get('length')
             if lenidx:
                 ret.length_param_index = int(lenidx)
             return ret
+
         typenode = node.find(_corens('varargs'))
         if typenode is not None:
             return Varargs()
+
         raise ValueError("Couldn't parse type of node %r; children=%r",
                          node, list(node))
 

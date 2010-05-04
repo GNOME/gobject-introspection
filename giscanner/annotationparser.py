@@ -605,6 +605,12 @@ class AnnotationApplier(object):
         has_element_type = OPT_ELEMENT_TYPE in options
         has_array = OPT_ARRAY in options
 
+        if not has_array:
+            has_array = \
+                node.type.name in ['GLib.Array', 'GLib.PtrArray',
+                                   'GLib.ByteArray'] or \
+                node.type.ctype in ['GArray*', 'GPtrArray*', 'GByteArray*']
+
         # FIXME: This is a hack :-(
         if (not isinstance(node, Field) and
             (not has_element_type and
@@ -630,13 +636,25 @@ class AnnotationApplier(object):
         else:
             array_values = {}
 
+        is_g_array = node.type.ctype.startswith('GArray*') or \
+                     node.type.ctype.startswith('GPtrArray*') or \
+                     node.type.ctype.startswith('GByteArray*')
+
         element_type = options.get(OPT_ELEMENT_TYPE)
         if element_type is not None:
             element_type_node = self._resolve(element_type.one())
         else:
-            element_type_node = Type(node.type.name) # erase ctype
+            if is_g_array:
+                element_type_node = None
+            else:
+                element_type_node = Type(node.type.name) # erase ctype
 
-        container_type = Array(node.type.ctype,
+        if is_g_array:
+            type_name = node.type.name
+        else:
+            type_name = None
+
+        container_type = Array(type_name, node.type.ctype,
                                element_type_node)
         container_type.is_const = node.type.is_const
         if OPT_ARRAY_ZERO_TERMINATED in array_values:
