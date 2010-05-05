@@ -558,6 +558,12 @@ struct _GIMarshallingTestsObjectClass
     void (* method_int8_in) (GIMarshallingTestsObject *self, gint8 in);
 
     /**
+     * GIMarshallingTestsObjectClass::method_int8_out:
+     * @out: (out):
+     */
+    void (* method_int8_out) (GIMarshallingTestsObject *self, gint8 *out);
+
+    /**
      * GIMarshallingTestsObjectClass::method_with_default_implementation:
      * @in: (in):
      */
@@ -583,6 +589,7 @@ void g_i_marshalling_tests_object_method_array_inout (GIMarshallingTestsObject *
 const gint *g_i_marshalling_tests_object_method_array_return (GIMarshallingTestsObject *object, gint *length);
 
 void g_i_marshalling_tests_object_method_int8_in (GIMarshallingTestsObject *object, gint8 in);
+void g_i_marshalling_tests_object_method_int8_out (GIMarshallingTestsObject *object, gint8 *out);
 void g_i_marshalling_tests_object_method_with_default_implementation (GIMarshallingTestsObject *object, gint8 in);
 
 
@@ -600,6 +607,7 @@ void g_i_marshalling_tests__object_full_inout (GIMarshallingTestsObject **object
 void g_i_marshalling_tests__object_inout_same (GIMarshallingTestsObject **object);
 
 void g_i_marshalling_tests__object_int8_in (GIMarshallingTestsObject *object, gint8 in);
+void g_i_marshalling_tests__object_int8_out (GIMarshallingTestsObject *object, gint8 *out);
 
 #define G_I_MARSHALLING_TESTS_TYPE_SUB_OBJECT             (g_i_marshalling_tests_sub_object_get_type ())
 #define G_I_MARSHALLING_TESTS_SUB_OBJECT(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), G_I_MARSHALLING_TESTS_TYPE_SUB_OBJECT, GIMarshallingTestsSubObject))

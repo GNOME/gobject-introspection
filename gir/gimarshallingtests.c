@@ -3046,6 +3046,16 @@ g_i_marshalling_tests_object_method_int8_in (GIMarshallingTestsObject *self, gin
 }
 
 /**
+ * g_i_marshalling_tests_object_method_int8_out:
+ * @out: (out):
+ */
+void
+g_i_marshalling_tests_object_method_int8_out (GIMarshallingTestsObject *self, gint8 *out)
+{
+  G_I_MARSHALLING_TESTS_OBJECT_GET_CLASS (self)->method_int8_out (self, out);
+}
+
+/**
  * g_i_marshalling_tests_object_method_with_default_implementation:
  * @in: (in):
  */
@@ -3189,6 +3199,16 @@ void
 g_i_marshalling_tests__object_int8_in (GIMarshallingTestsObject *object, gint8 in)
 {
   g_i_marshalling_tests_object_method_int8_in (object, in);
+}
+
+/**
+ * g_i_marshalling_tests__object_test_int8_out:
+ * @out: (out):
+ */
+void
+g_i_marshalling_tests__object_int8_out (GIMarshallingTestsObject *object, gint8 *out)
+{
+  g_i_marshalling_tests_object_method_int8_out (object, out);
 }
 
 
