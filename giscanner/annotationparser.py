@@ -31,6 +31,9 @@ from .ast import (Array, Bitfield, Callback, Class, Enum, Field, Function,
                   PARAM_DIRECTION_INOUT,
                   PARAM_DIRECTION_IN,
                   PARAM_DIRECTION_OUT,
+                  PARAM_SCOPE_CALL,
+                  PARAM_SCOPE_ASYNC,
+                  PARAM_SCOPE_NOTIFIED,
                   PARAM_TRANSFER_NONE,
                   PARAM_TRANSFER_CONTAINER,
                   PARAM_TRANSFER_FULL,
@@ -526,6 +529,13 @@ class AnnotationApplier(object):
             scope = options.get(OPT_SCOPE)
             if scope:
                 param.scope = scope.one()
+                if param.scope not in [PARAM_SCOPE_CALL,
+                                       PARAM_SCOPE_ASYNC,
+                                       PARAM_SCOPE_NOTIFIED]:
+                    raise InvalidAnnotationError(
+                        "scope for %s of %r is invalid (%r), must be one of "
+                        "call, async, notified."
+                        % (param.name, parent.name, param.scope))
                 param.transfer = PARAM_TRANSFER_NONE
             elif (param.type.ctype == 'GAsyncReadyCallback' or
                   param.type.name == 'Gio.AsyncReadyCallback'):
