@@ -203,6 +203,7 @@ GIMarshallingTests_1_0_gir_INCLUDES = GObject-2.0
 GIMarshallingTests_1_0_gir_FILES = $(srcdir)/gimarshallingtests.h $(srcdir)/gimarshallingtests.c
 
 INTROSPECTION_GIRS += GIMarshallingTests-$(TYPELIB_VERSION).gir
+EXPECTEDGIRS += GIMarshallingTests-$(TYPELIB_VERSION)-expected.gir
 
 endif
 
