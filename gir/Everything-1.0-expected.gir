@@ -1612,6 +1612,33 @@ call and can be released on return.">
         </parameter>
       </parameters>
     </function>
+    <function name="test_object_null_in" c:identifier="test_object_null_in">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="obj"
+                   transfer-ownership="none"
+                   allow-none="1"
+                   doc="A #TestObj">
+          <type name="TestObj" c:type="TestObj*"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="test_object_null_out" c:identifier="test_object_null_out">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="obj"
+                   direction="out"
+                   transfer-ownership="full"
+                   allow-none="1"
+                   doc="A #TestObj">
+          <type name="TestObj" c:type="TestObj**"/>
+        </parameter>
+      </parameters>
+    </function>
     <function name="test_short" c:identifier="test_short">
       <return-value transfer-ownership="none">
         <type name="short" c:type="gshort"/>

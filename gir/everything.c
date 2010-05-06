@@ -1777,6 +1777,24 @@ test_obj_do_matrix (TestObj *obj, const char *somestr)
   return TEST_OBJ_GET_CLASS (obj)->matrix (obj, somestr);
 }
 
+/**
+ * test_object_null_in:
+ * @obj: (allow-none) A #TestObj
+ */
+void
+test_object_null_in (TestObj *obj)
+{
+}
+
+/**
+ * test_object_null_out:
+ * @obj: (allow-none) (out) A #TestObj
+ */
+void
+test_object_null_out (TestObj **obj)
+{
+}
+
 typedef struct _CallbackInfo CallbackInfo;
 
 struct _CallbackInfo

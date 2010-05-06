@@ -305,6 +305,9 @@ gboolean test_obj_torture_signature_1 (TestObj    *obj,
 /* virtual */
 int        test_obj_do_matrix (TestObj *obj, const char *somestr);
 
+void test_object_null_in (TestObj *obj);
+void test_object_null_out (TestObj **obj);
+
 /* inheritance */
 #define TEST_TYPE_SUB_OBJ           (test_sub_obj_get_type ())
 #define TEST_SUB_OBJECT(object)     (G_TYPE_CHECK_INSTANCE_CAST ((object), TEST_TYPE_SUB_OBJ, TestSubObj))

@@ -511,7 +511,7 @@ class GLibTransformer(object):
                     name_uscore = GET_TYPE_OVERRIDES.get(node.get_type,
                                                          node.get_type)
                     name_uscore = name_uscore[:-len('_get_type')]
-            name_offset = func.symbol.find(name_uscore)
+            name_offset = func.symbol.find(name_uscore + '_')
             if name_offset < 0:
                 return None
             prefix = func.symbol[:name_offset+len(name_uscore)]
