@@ -523,6 +523,15 @@ class AnnotationApplier(object):
         tag = self._get_tag(block, TAG_RETURNS)
         self._parse_param_ret_common(parent, return_, tag)
 
+    def _get_parameter_index(self, parent, param_name, location_name):
+        index = parent.get_parameter_index(param_name)
+        if index is None:
+            raise InvalidAnnotationError(
+                "can't find parameter %s referenced by parameter %s of %r"
+                % (param_name, parent.name, location_name))
+
+        return index
+
     def _parse_param(self, parent, param, tag):
         options = getattr(tag, 'options', {})
         if isinstance(parent, Function):
@@ -544,14 +553,22 @@ class AnnotationApplier(object):
 
             destroy = options.get(OPT_DESTROY)
             if destroy:
-                param.destroy_index = parent.get_parameter_index(destroy.one())
+                param.destroy_index = self._get_parameter_index(parent,
+                                                                destroy.one(),
+                                                                param.name)
                 self._fixup_param_destroy(parent, param)
             closure = options.get(OPT_CLOSURE)
             if closure:
-                param.closure_index = parent.get_parameter_index(closure.one())
+                param.closure_index = self._get_parameter_index(parent,
+                                                                closure.one(),
+                                                                param.name)
                 self._fixup_param_closure(parent, param)
         if isinstance(parent, Callback):
             if OPT_CLOSURE in options:
+                # For callbacks, (closure) appears without an
+                # argument, and tags a parameter that is a closure. We
+                # represent it (weirdly) in the gir and typelib by
+                # setting param.closure_index to its own index.
                 param.closure_index = parent.get_parameter_index(param.name)
                 self._fixup_param_closure(parent, param)
 
@@ -672,7 +689,7 @@ class AnnotationApplier(object):
                 OPT_ARRAY_ZERO_TERMINATED) == '1'
         length = array_values.get(OPT_ARRAY_LENGTH)
         if length is not None:
-            param_index = parent.get_parameter_index(length)
+            param_index = self._get_parameter_index(parent, length, node.name)
             container_type.length_param_index = param_index
             # For in parameters we're incorrectly deferring
             # char/unsigned char to utf8 when a length annotation
