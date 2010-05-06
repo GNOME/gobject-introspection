@@ -550,12 +550,12 @@ class AnnotationApplier(object):
     def _fixup_param_destroy(self, parent, param):
         for p in parent.parameters:
             if p is not param and p.destroy_index == param.destroy_index:
-                p.destroy_index = None
+                p.destroy_index = -1
 
     def _fixup_param_closure(self, parent, param):
         for p in parent.parameters:
             if p is not param and p.closure_index == param.closure_index:
-                p.closure_index = None
+                p.closure_index = -1
 
     def _parse_param_ret_common(self, parent, node, tag):
         options = getattr(tag, 'options', {})
