@@ -752,7 +752,7 @@ test_array_int_none_out(int *len) {
 
 /**
  * test_array_int_null_in:
- * @arr: (array length=1) (allow-none):
+ * @arr: (array length=len) (allow-none):
  * @len: length
  */
 void test_array_int_null_in (int *arr, int len)
@@ -762,7 +762,7 @@ void test_array_int_null_in (int *arr, int len)
 
 /**
  * test_array_int_null_out:
- * @arr: (out) (array length=1) (allow-none):
+ * @arr: (out) (array length=len) (allow-none):
  * @len: (out) : length
  */
 void test_array_int_null_out (int **arr, int *len)

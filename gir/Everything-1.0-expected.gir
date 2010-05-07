@@ -784,7 +784,7 @@ case.">
       </return-value>
       <parameters>
         <parameter name="arr" transfer-ownership="none" allow-none="1">
-          <array c:type="int*">
+          <array length="1" c:type="int*">
             <type name="int"/>
           </array>
         </parameter>
@@ -803,7 +803,7 @@ case.">
                    direction="out"
                    transfer-ownership="full"
                    allow-none="1">
-          <array c:type="int**">
+          <array length="1" c:type="int**">
             <type name="int"/>
           </array>
         </parameter>
