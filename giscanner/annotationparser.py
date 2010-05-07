@@ -528,7 +528,7 @@ class AnnotationApplier(object):
         if index is None:
             raise InvalidAnnotationError(
                 "can't find parameter %s referenced by parameter %s of %r"
-                % (param_name, parent.name, location_name))
+                % (param_name, location_name, parent.name))
 
         return index
 
