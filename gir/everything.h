@@ -347,9 +347,6 @@ int test_callback_thaw_notifications (void);
 void test_callback_async (TestCallbackUserData callback, gpointer user_data);
 int test_callback_thaw_async (void);
 
-int test_callback_infinite (TestCallbackUserData callback,
-                           gpointer user_data);
-
 void test_async_ready_callback (GAsyncReadyCallback callback);
 
 void test_obj_instance_method_callback (TestObj *obj, TestCallback callback);

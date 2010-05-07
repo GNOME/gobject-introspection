@@ -1978,24 +1978,6 @@ test_callback_thaw_async (void)
   return retval;
 }
 
-/**
- * test_callback_infinite:
- * @callback: (scope infinite):
- *
- * Infinite - callback persists forever.
- **/
-
-static GSList *infinite_callbacks = NULL;
-
-int
-test_callback_infinite (TestCallbackUserData callback,
-                       gpointer user_data)
-{
-  infinite_callbacks = g_slist_prepend(infinite_callbacks, callback);
-
-  return callback(user_data);
-}
-
 void
 test_async_ready_callback (GAsyncReadyCallback callback)
 {

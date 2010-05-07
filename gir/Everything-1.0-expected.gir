@@ -980,24 +980,6 @@ is invoked.">
         </parameter>
       </parameters>
     </function>
-    <function name="test_callback_infinite"
-              c:identifier="test_callback_infinite"
-              doc="Infinite - callback persists forever.">
-      <return-value transfer-ownership="none">
-        <type name="int" c:type="int"/>
-      </return-value>
-      <parameters>
-        <parameter name="callback"
-                   transfer-ownership="none"
-                   scope="infinite"
-                   closure="1">
-          <type name="TestCallbackUserData" c:type="TestCallbackUserData"/>
-        </parameter>
-        <parameter name="user_data" transfer-ownership="none">
-          <type name="any" c:type="gpointer"/>
-        </parameter>
-      </parameters>
-    </function>
     <function name="test_callback_thaw_async"
               c:identifier="test_callback_thaw_async">
       <return-value transfer-ownership="none">
