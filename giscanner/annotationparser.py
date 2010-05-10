@@ -52,6 +52,7 @@ TAG_RETURNS = 'returns'
 TAG_RETURNS_ALT = 'return value'
 TAG_ATTRIBUTES = 'attributes'
 TAG_RENAME_TO = 'rename to'
+TAG_TYPE = 'type'
 
 # Options - annotations for parameters and return values
 OPT_ALLOW_NONE = 'allow-none'
@@ -409,6 +410,9 @@ class AnnotationApplier(object):
         self._parse_node_common(prop, block)
         if block:
             prop.doc = block.comment
+        type_tag = self._get_tag(block, TAG_TYPE)
+        if type_tag:
+            prop.type = self._resolve(type_tag.value, prop.type)
 
     def _parse_callback(self, callback):
         block = self._blocks.get(callback.ctype)

@@ -484,6 +484,9 @@ type.">
           <type name="none" c:type="void"/>
         </return-value>
       </method>
+      <property name="function-property" writable="1" construct="1">
+        <type name="Callback" c:type="gpointer"/>
+      </property>
       <property name="string-property"
                 version="1.0"
                 deprecated="Use better-string-property instead"

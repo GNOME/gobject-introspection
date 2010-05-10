@@ -7,6 +7,7 @@ G_DEFINE_TYPE (AnnotationObject, annotation_object, G_TYPE_OBJECT);
 enum {
   PROP_0,
   PROP_STRING_PROPERTY,
+  PROP_FUNCTION_PROPERTY
 };
 
 enum {
@@ -28,6 +29,8 @@ annotation_object_set_property (GObject         *object,
     {
     case PROP_STRING_PROPERTY:
       break;
+    case PROP_FUNCTION_PROPERTY:
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -43,6 +46,8 @@ annotation_object_get_property (GObject         *object,
   switch (prop_id)
     {
     case PROP_STRING_PROPERTY:
+      break;
+    case PROP_FUNCTION_PROPERTY:
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -128,6 +133,17 @@ annotation_object_class_init (AnnotationObjectClass *klass)
                                                         "This property is a string",
                                                         NULL,
                                                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT));
+  /**
+   * AnnotationObject:function-property:
+   *
+   * Type: AnnotationCallback
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_FUNCTION_PROPERTY,
+                                   g_param_spec_pointer ("function-property",
+                                                         "Function property",
+                                                         "This property is a function pointer",
+                                                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT));
 
 }
 

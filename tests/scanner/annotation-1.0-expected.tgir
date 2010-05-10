@@ -356,6 +356,9 @@
           <type name="none"/>
         </return-value>
       </method>
+      <property name="function-property" writable="1" construct="1">
+        <type name="Callback"/>
+      </property>
       <property name="string-property" writable="1" construct="1">
         <type name="utf8"/>
       </property>
