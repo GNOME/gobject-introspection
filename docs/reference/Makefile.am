@@ -39,6 +39,11 @@ if ENABLE_GTK_DOC
 include $(top_srcdir)/gtk-doc.make
 # Other files to distribute
 EXTRA_DIST += version.xml.in
+
+gtk-docs-clean:
+	rm -fr html tmpl xml
+
+clean-local: gtk-docs-clean
 endif
 
 ########################################################################
@@ -48,4 +53,3 @@ dist-hook-local: $(BUILT_EXTRA_DIST)
 	for f in $$files; do					\
 	  if test -f $$f; then d=.; else d=$(srcdir); fi;	\
 	  cp $$d/$$f $(distdir) || exit 1; done
-
