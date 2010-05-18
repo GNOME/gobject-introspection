@@ -26,7 +26,6 @@ GIUnresolvedInfo
 GTypelib
 GIArrayType
 GIAttributeIter
-GIBaseInfoStub
 <TITLE>GIRepository</TITLE>
 G_IREPOSITORY_CLASS
 G_IREPOSITORY_GET_CLASS
@@ -204,6 +203,8 @@ g_constant_info_get_value
 <SUBSECTION Standard>
 G_TYPE_TAG_IS_BASIC
 g_irepository_get_type
+<SUBSECTION Private>
+GIBaseInfoStub
 </SECTION>
 
 <SECTION>
