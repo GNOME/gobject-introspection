@@ -115,11 +115,27 @@ type_names['char*'] = TYPE_STRING
 type_names['void*'] = TYPE_ANY
 type_names['void'] = TYPE_NONE
 
-# C unix types
-type_names['off_t'] = TYPE_SIZET
-type_names['pid_t'] = TYPE_INT
+# Unix types that we special case here (and that have their own introspection
+# type tag) because of wide use in GLib.
 type_names['size_t'] = TYPE_SIZET
 type_names['ssize_t'] = TYPE_SSIZET
+
+# One off C unix type definitions; note some of these may be GNU Libc
+# specific.  If someone is actually bitten by this, feel free to do
+# the required configure goop to determine their size and replace
+# here.
+#
+# We don't want to encourage people to use these in their APIs because
+# they compromise the platform-independence that GLib gives you.
+# These are here mostly to avoid blowing when random platform-specific
+# methods are added under #ifdefs inside GLib itself.  We could just (skip)
+# the relevant methods, but on the other hand, since these types are just
+# integers it's easy enough to expand them.
+type_names['off_t'] = TYPE_SIZET
+type_names['pid_t'] = TYPE_INT
+type_names['uid_t'] = TYPE_UINT
+type_names['gid_t'] = TYPE_UINT
+type_names['dev_t'] = TYPE_INT
 type_names['socklen_t'] = TYPE_INT32
 
 # Obj-C
