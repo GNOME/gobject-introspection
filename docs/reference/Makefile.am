@@ -20,7 +20,13 @@ HFILE_GLOB=$(top_srcdir)/girepository/*.h
 CFILE_GLOB=$(top_srcdir)/girepository/*.c
 
 # Headers to ignore
-IGNORE_HFILES=
+IGNORE_HFILES= \
+    glib-compat.h   \
+    girnode.h	    \
+    ginfo.h	    \
+    girparser.h	    \
+    girwriter.h	    \
+    girmodule.h
 
 INCLUDES=$(GIREPO_CFLAGS) -I$(top_srcdir)
 GTKDOC_LIBS = $(GIREPO_LIBS) $(top_builddir)/girepository/libgirepository-1.0.la $(top_builddir)/girepository/libgirepository-parser.la
