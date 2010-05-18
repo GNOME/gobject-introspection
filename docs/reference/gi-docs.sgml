@@ -1,18 +1,11 @@
-<?xml version="1.0"?>
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
-               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
+               "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
 <!ENTITY % local.common.attrib "xmlns:xi  CDATA  #FIXED 'http://www.w3.org/2003/XInclude'">
-<!ENTITY gi-ginfo SYSTEM "xml/ginfo.xml">
-<!ENTITY gi-girepository SYSTEM "xml/girepository.xml">
-<!ENTITY gi-girffi SYSTEM "xml/girffi.xml">
-<!ENTITY gi-girmodule SYSTEM "xml/girmodule.xml">
-<!ENTITY gi-girnode SYSTEM "xml/girnode.xml">
-<!ENTITY gi-girparser SYSTEM "xml/girparser.xml">
-<!ENTITY gi-gtypelib SYSTEM "xml/gtypelib.xml">
-
 <!ENTITY version SYSTEM "version.xml">
 ]>
-<book id="index">
+<!--ENTITY index-Objects-Grouped SYSTEM "objects_grouped.sgml"-->
+<book id="index" xmlns:xi="http://www.w3.org/2003/XInclude">
   <bookinfo>
     <title>GObject Introspection Reference Manual</title>
   </bookinfo>
@@ -38,14 +31,10 @@ Bla bla bla bla bla
   </chapter>
 -->
 
-  <chapter id="gi-girepository">
+  <chapter id="gi-repository">
     <title>GIRepository</title>
-    &gi-girepository;
-    &gi-ginfo;
-    &gi-girmodule;
-    &gi-girparser;
-    &gi-girwriter;
-    &gi-girffi;
+    <xi:include href="xml/girepository.xml"/>
+    <xi:include href="xml/girffi.xml"/>
   </chapter>
 
   <part id="gi-gir">
@@ -60,7 +49,7 @@ Bla bla bla bla bla
 
   <chapter id="gi-typelib">
     <title>Typelib binary format</title>
-    &gi-gtypelib;
+    <xi:include href="xml/gtypelib.xml" />
   </chapter>
 
    <xi:include href="xml/annotation-glossary.xml" />
