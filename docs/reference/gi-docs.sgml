@@ -58,7 +58,6 @@ Bla bla bla bla bla
       <xi:include href="xml/giobjectinfo.xml"/>
       <xi:include href="xml/giinterfaceinfo.xml"/>
       <xi:include href="xml/giconstantinfo.xml"/>
-      <xi:include href="xml/gifunctioninfo.xml"/>
       <xi:include href="xml/gierrordomaininfo.xml"/>
     </chapter>
 
