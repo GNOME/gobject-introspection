@@ -69,6 +69,7 @@ gir/libxml2-2.0.typelib
 gir/xfixes-4.0.typelib
 gir/xft-2.0.typelib
 gir/xlib-2.0.typelib
+gir/xrandr-1.3.typelib
 giscanner/config.py
 giscanner/scannerlexer.c
 giscanner/scannerparser.c
