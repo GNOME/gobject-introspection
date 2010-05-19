@@ -1,6 +1,5 @@
 <SECTION>
 <FILE>girepository</FILE>
-<TITLE></TITLE>
 G_TYPE_IREPOSITORY
 G_IREPOSITORY
 GIRepositoryPrivate
@@ -9,7 +8,6 @@ GIUnresolvedInfo
 GTypelib
 GIArrayType
 GIAttributeIter
-<TITLE>GIRepository</TITLE>
 G_IREPOSITORY_CLASS
 G_IREPOSITORY_GET_CLASS
 G_IS_IREPOSITORY
@@ -58,7 +56,6 @@ g_irepository_get_type
 
 <SECTION>
 <FILE>gibaseinfo</FILE>
-<TITLE>BaseInfo</TITLE>
 GIBaseInfo
 g_base_info_ref
 g_base_info_unref
@@ -77,7 +74,6 @@ GIBaseInfoStub
 
 <SECTION>
 <FILE>gicallableinfo</FILE>
-<TITLE>Callable</TITLE>
 GICallableInfo
 g_callable_info_get_return_type
 g_callable_info_get_caller_owns
@@ -90,7 +86,6 @@ g_callable_info_load_return_type
 
 <SECTION>
 <FILE>giconstantinfo</FILE>
-<TITLE>Constant</TITLE>
 GIConstantInfo
 g_constant_info_get_type
 g_constant_info_get_value
@@ -98,7 +93,6 @@ g_constant_info_get_value
 
 <SECTION>
 <FILE>givfuncinfo</FILE>
-<TITLE>Virtual Function</TITLE>
 GIVFuncInfo
 GIVFuncInfoFlags
 g_vfunc_info_get_flags
@@ -109,7 +103,6 @@ g_vfunc_info_get_invoker
 
 <SECTION>
 <FILE>gisignalinfo</FILE>
-<TITLE>Signal</TITLE>
 GISignalInfo
 g_signal_info_get_flags
 g_signal_info_get_class_closure
@@ -118,7 +111,6 @@ g_signal_info_true_stops_emit
 
 <SECTION>
 <FILE>gipropertyinfo</FILE>
-<TITLE>Property</TITLE>
 GIPropertyInfo
 g_property_info_get_flags
 g_property_info_get_type
@@ -126,7 +118,6 @@ g_property_info_get_type
 
 <SECTION>
 <FILE>giinterfaceinfo</FILE>
-<TITLE>Interface</TITLE>
 GIInterfaceInfo
 g_interface_info_get_n_prerequisites
 g_interface_info_get_prerequisite
@@ -147,7 +138,6 @@ g_interface_info_find_vfunc
 
 <SECTION>
 <FILE>giobjectinfo</FILE>
-<TITLE>Object</TITLE>
 GIObjectInfo
 g_object_info_get_type_name
 g_object_info_get_type_init
@@ -174,7 +164,6 @@ g_object_info_find_vfunc
 
 <SECTION>
 <FILE>gienuminfo</FILE>
-<TITLE>Enum and Flags</TITLE>
 GIEnumInfo
 GIValueInfo
 g_enum_info_get_n_values
@@ -185,7 +174,6 @@ g_value_info_get_value
 
 <SECTION>
 <FILE>giregisteredtypeinfo</FILE>
-<TITLE>Registered type</TITLE>
 GIRegisteredTypeInfo
 g_registered_type_info_get_type_name
 g_registered_type_info_get_type_init
@@ -194,7 +182,6 @@ g_registered_type_info_get_g_type
 
 <SECTION>
 <FILE>gistructinfo</FILE>
-<TITLE>Struct</TITLE>
 GIStructInfo
 g_struct_info_get_n_fields
 g_struct_info_get_field
@@ -209,7 +196,6 @@ g_struct_info_is_foreign
 
 <SECTION>
 <FILE>giunioninfo</FILE>
-<TITLE>Union</TITLE>
 GIUnionInfo
 g_union_info_get_n_fields
 g_union_info_get_field
@@ -226,7 +212,6 @@ g_union_info_get_alignment
 
 <SECTION>
 <FILE>gifieldinfo</FILE>
-<TITLE>Field</TITLE>
 GIFieldInfo
 GIFieldInfoFlags
 g_field_info_get_flags
@@ -239,7 +224,6 @@ g_field_info_set_field
 
 <SECTION>
 <FILE>giarginfo</FILE>
-<TITLE>Argument</TITLE>
 GIArgInfo
 g_arg_info_get_direction
 g_arg_info_is_dipper
@@ -256,7 +240,6 @@ g_arg_info_load_type
 
 <SECTION>
 <FILE>gitypeinfo</FILE>
-<TITLE>Type</TITLE>
 GITypeInfo
 GITypeTag
 g_type_tag_to_string
@@ -274,7 +257,6 @@ g_type_info_get_array_type
 
 <SECTION>
 <FILE>gifunctioninfo</FILE>
-<TITLE>Function</TITLE>
 GIFunctionInfo
 GInvokeError
 GIFunctionInfoFlags
@@ -287,7 +269,6 @@ g_function_info_invoke
 
 <SECTION>
 <FILE>gierrordomaininfo</FILE>
-<TITLE>Error domain</TITLE>
 GIErrorDomainInfo
 g_error_domain_info_get_quark
 g_error_domain_info_get_codes
