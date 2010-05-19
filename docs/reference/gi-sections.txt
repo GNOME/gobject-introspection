@@ -1,19 +1,11 @@
 <SECTION>
 <FILE>girepository</FILE>
-G_TYPE_IREPOSITORY
-G_IREPOSITORY
-GIRepositoryPrivate
 GICallbackInfo
 GIUnresolvedInfo
-GTypelib
-GIArrayType
-GIAttributeIter
-G_IREPOSITORY_CLASS
-G_IREPOSITORY_GET_CLASS
-G_IS_IREPOSITORY
-G_IS_IREPOSITORY_CLASS
 GIRepository
+GIRepositoryError
 GIRepositoryLoadFlags
+GTypelib
 g_irepository_get_default
 g_irepository_prepend_search_path
 g_irepository_get_search_path
@@ -32,30 +24,32 @@ g_irepository_get_version
 g_irepository_get_option_group
 g_irepository_get_c_prefix
 g_irepository_dump
+G_IREPOSITORY_ERROR
 g_typelib_new_from_memory
 g_typelib_new_from_const_memory
 g_typelib_new_from_mapped_file
 g_typelib_free
 g_typelib_symbol
 g_typelib_get_namespace
-GIRepositoryError
-G_IREPOSITORY_ERROR
-g_irepository_error_quark
-gi_cclosure_marshal_generic
-GIInfoType
-g_info_new
-G_INVOKE_ERROR
-g_invoke_error_quark
-GITransfer
-GIDirection
-GIScopeType
 <SUBSECTION Standard>
-G_TYPE_TAG_IS_BASIC
+GIRepositoryClass
+G_TYPE_IREPOSITORY
+G_IREPOSITORY
+G_IREPOSITORY_CLASS
+G_IREPOSITORY_GET_CLASS
+G_IS_IREPOSITORY
+G_IS_IREPOSITORY_CLASS
+<SUBSECTION Private>
+g_info_new
+GIRepositoryPrivate
 g_irepository_get_type
+g_irepository_error_quark
 </SECTION>
 
 <SECTION>
 <FILE>gibaseinfo</FILE>
+GIInfoType
+GIAttributeIter
 GIBaseInfo
 g_base_info_ref
 g_base_info_unref
@@ -225,6 +219,9 @@ g_field_info_set_field
 <SECTION>
 <FILE>giarginfo</FILE>
 GIArgInfo
+GIDirection
+GIScopeType
+GITransfer
 g_arg_info_get_direction
 g_arg_info_is_dipper
 g_arg_info_is_return_value
@@ -240,8 +237,10 @@ g_arg_info_load_type
 
 <SECTION>
 <FILE>gitypeinfo</FILE>
+GIArrayType
 GITypeInfo
 GITypeTag
+G_TYPE_TAG_IS_BASIC
 g_type_tag_to_string
 g_type_info_is_pointer
 g_type_info_get_tag
@@ -260,11 +259,14 @@ g_type_info_get_array_type
 GIFunctionInfo
 GInvokeError
 GIFunctionInfoFlags
+G_INVOKE_ERROR
 g_function_info_get_symbol
 g_function_info_get_flags
 g_function_info_get_property
 g_function_info_get_vfunc
 g_function_info_invoke
+<SUBSECTION Private>
+g_invoke_error_quark
 </SECTION>
 
 <SECTION>
@@ -276,7 +278,6 @@ g_error_domain_info_get_codes
 
 <SECTION>
 <FILE>gtypelib</FILE>
-GTypelib
 G_IR_MAGIC
 GTypelibBlobType
 Header
@@ -309,16 +310,17 @@ g_typelib_check_sanity
 g_typelib_get_string
 GTypelibError
 G_TYPELIB_ERROR
-g_typelib_error_quark
 g_typelib_validate
-<SUBSECTION Standard>
 BLOB_IS_REGISTERED_TYPE
+<SUBSECTION Private>
+g_typelib_error_quark
 </SECTION>
 
 <SECTION>
 <FILE>girffi</FILE>
 GIFFIClosureCallback
 GIFunctionInvoker
+gi_cclosure_marshal_generic
 g_ir_ffi_get_ffi_type
 g_type_info_get_ffi_type
 g_function_info_prep_invoker
