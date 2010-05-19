@@ -20,6 +20,7 @@ ACLOCAL_AMFLAGS = -I m4
 
 SUBDIRS = girepository giscanner tools gir docs tests examples
 DIST_SUBDIRS = m4 $(SUBDIRS)
+DISTCHECK_CONFIGURE_FLAGS = --enable-gtk-doc
 
 man_MANS = 			\
 	docs/g-ir-compiler.1	\
