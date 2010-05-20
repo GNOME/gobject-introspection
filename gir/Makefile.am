@@ -39,11 +39,11 @@ GLib_2_0_gir_CFLAGS = $(CPPFLAGS) \
             -DGETTEXT_PACKAGE=Dummy \
             -DGLIB_COMPILATION \
             -D__G_I18N_LIB_H__
-GLib_2_0_gir_ASSERTIONS = $(srcdir)/GLib-2.0.xpath
+GLib_2_0_gir_ASSERTIONS = GLib-2.0.xpath
 GLib_2_0_gir_FILES =  \
                 $(GLIB_LIBDIR)/glib-2.0/include/glibconfig.h \
-            $(GLIB_INCLUDEDIR)/glib/*.h \
-                $(srcdir)/glib-2.0.c
+	$(GLIB_INCLUDEDIR)/glib/*.h \
+                glib-2.0.c
 
 INTROSPECTION_GIRS += GLib-2.0.gir
 EXTRA_DIST += glib-2.0.c GLib-2.0.xpath
@@ -68,8 +68,8 @@ GObject_2_0_gir_CFLAGS = \
             -DGOBJECT_COMPILATION \
                 -I$(GOBJECT_INCLUDEDIR) \
             -I$(GOBJECT_LIBDIR)/glib-2.0/include
-GObject_2_0_gir_ASSERTIONS = $(srcdir)/GObject-2.0.xpath
-GObject_2_0_gir_FILES = $(GLIB_INCLUDEDIR)/gobject/*.h $(srcdir)/gobject-2.0.c
+GObject_2_0_gir_ASSERTIONS = GObject-2.0.xpath
+GObject_2_0_gir_FILES = $(GLIB_INCLUDEDIR)/gobject/*.h gobject-2.0.c
 
 INTROSPECTION_GIRS += GObject-2.0.gir
 EXTRA_DIST += gobject-2.0.c GObject-2.0.xpath
@@ -127,7 +127,7 @@ Gio_2_0_gir_CFLAGS = \
 Gio_2_0_gir_FILES = \
             $(GIO_UNIX_HDRS) \
             $(GIO_INCLUDEDIR)/gio/*.h \
-            $(srcdir)/gio-2.0.c
+            gio-2.0.c
 
 INTROSPECTION_GIRS += Gio-2.0.gir
 EXTRA_DIST += gio-2.0.c
@@ -160,7 +160,7 @@ TYPELIB_VERSION = $(LT_CURRENT).0
 
 lib_LTLIBRARIES =
 
-libgirepository_everything_1_0_la_SOURCES = $(srcdir)/everything.c $(srcdir)/everything.h
+libgirepository_everything_1_0_la_SOURCES = everything.c everything.h
 libgirepository_everything_1_0_la_CFLAGS = $(GOBJECT_CFLAGS) $(CAIRO_CFLAGS)
 libgirepository_everything_1_0_la_LDFLAGS = -version-info $(LT_VERSION)
 libgirepository_everything_1_0_la_LIBADD = $(GOBJECT_LIBS) $(CAIRO_LIBS)
@@ -175,7 +175,7 @@ Everything-1.0.gir: Gio-2.0.gir libgirepository-everything-1.0.la
 Everything_1_0_gir_LIBS = libgirepository-everything-1.0.la
 Everything_1_0_gir_PACKAGES = gobject-2.0 cairo gio-2.0
 Everything_1_0_gir_INCLUDES = GObject-2.0 cairo-1.0 Gio-2.0
-Everything_1_0_gir_FILES = $(srcdir)/everything.h $(srcdir)/everything.c
+Everything_1_0_gir_FILES = everything.h everything.c
 
 if HAVE_CAIRO
 INTROSPECTION_GIRS += Everything-$(TYPELIB_VERSION).gir
@@ -187,7 +187,7 @@ endif
 # marshalling tests
 lib_LTLIBRARIES += libgirepository-gimarshallingtests-1.0.la
 
-libgirepository_gimarshallingtests_1_0_la_SOURCES = $(srcdir)/gimarshallingtests.c $(srcdir)/gimarshallingtests.h
+libgirepository_gimarshallingtests_1_0_la_SOURCES = gimarshallingtests.c gimarshallingtests.h
 libgirepository_gimarshallingtests_1_0_la_CFLAGS = $(GOBJECT_CFLAGS)
 libgirepository_gimarshallingtests_1_0_la_LDFLAGS = -version-info $(LT_VERSION)
 libgirepository_gimarshallingtests_1_0_la_LIBADD = $(GOBJECT_LIBS)
@@ -201,7 +201,7 @@ GIMarshallingTests-1.0.gir: libgirepository-gimarshallingtests-1.0.la GObject-2.
 GIMarshallingTests_1_0_gir_LIBS = libgirepository-gimarshallingtests-1.0.la
 GIMarshallingTests_1_0_gir_PACKAGES = gobject-2.0
 GIMarshallingTests_1_0_gir_INCLUDES = GObject-2.0
-GIMarshallingTests_1_0_gir_FILES = $(srcdir)/gimarshallingtests.h $(srcdir)/gimarshallingtests.c
+GIMarshallingTests_1_0_gir_FILES = gimarshallingtests.h gimarshallingtests.c
 
 INTROSPECTION_GIRS += GIMarshallingTests-$(TYPELIB_VERSION).gir
 EXPECTEDGIRS += GIMarshallingTests-$(TYPELIB_VERSION)-expected.gir
