@@ -2180,6 +2180,36 @@ test_wi_802_1x_static_method (int x)
   return 2*x;
 }
 
+/* floating gobject */
+G_DEFINE_TYPE(TestFloating, test_floating, G_TYPE_INITIALLY_UNOWNED);
+
+static void
+test_floating_finalize(GObject *object)
+{
+  g_assert(!g_object_is_floating (object));
+
+  G_OBJECT_CLASS(test_floating_parent_class)->finalize(object);
+}
+
+static void
+test_floating_class_init (TestFloatingClass *klass)
+{
+  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+  gobject_class->finalize = test_floating_finalize;
+}
+
+static void
+test_floating_init (TestFloating *obj)
+{
+}
+
+TestFloating *
+test_floating_new (void)
+{
+  return g_object_new (TEST_TYPE_FLOATING, NULL);
+}
+
+
 /**
  * test_torture_signature_0:
  * @x:

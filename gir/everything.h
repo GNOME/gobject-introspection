@@ -396,6 +396,25 @@ gboolean     test_wi_802_1x_get_testbool (TestWi8021x *obj);
 void         test_wi_802_1x_set_testbool (TestWi8021x *obj, gboolean v);
 int          test_wi_802_1x_static_method (int x);
 
+/* floating gobject */
+#define TEST_TYPE_FLOATING           (test_floating_get_type ())
+#define TEST_FLOATING(object)        (G_TYPE_CHECK_INSTANCE_CAST ((object), TEST_TYPE_FLOATING, TestFloating))
+#define TEST_IS_FLOATING(object)     (G_TYPE_CHECK_INSTANCE_TYPE ((object), TEST_TYPE_FLOATING))
+#define TEST_FLOATING_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TEST_TYPE_FLOATING, TestFloatingClass))
+
+typedef struct
+{
+  GInitiallyUnowned parent_instance;
+} TestFloating;
+
+typedef struct
+{
+  GInitiallyUnownedClass parent_class;
+} TestFloatingClass;
+
+GType        test_floating_get_type (void);
+TestFloating* test_floating_new (void);
+
 /* Function signature torture tests */
 void test_torture_signature_0 (int        x,
                                double     *y,
