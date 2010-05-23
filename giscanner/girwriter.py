@@ -427,6 +427,8 @@ and/or use gtk-doc annotations. ''')
             attrs.append(('c:type', record.symbol))
         if record.disguised:
             attrs.append(('disguised', '1'))
+        if record.foreign:
+            attrs.append(('foreign', '1'))
         if isinstance(record, GLibRecord):
             if record.is_gtype_struct_for:
                 is_gtype_struct = True

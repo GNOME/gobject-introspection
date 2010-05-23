@@ -393,5 +393,12 @@ typedef enum {
 } FooSkippable;
 void foo_skip_me (FooSkippable fs);
 
+typedef struct _FooForeignStruct           FooForeignStruct;
+
+struct _FooForeignStruct
+{
+  int foo;
+};
+
 
 #endif /* __FOO_OBJECT_H__ */

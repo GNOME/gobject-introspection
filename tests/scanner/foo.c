@@ -621,3 +621,8 @@ void
 foo_skip_me (FooSkippable fs)
 {
 }
+
+/**
+ * FooForeignStruct: (foreign)
+ *
+ */

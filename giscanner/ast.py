@@ -176,6 +176,7 @@ class Node(object):
         self.deprecated = None
         self.deprecated_version = None
         self.version = None
+        self.foreign = False
 
     def __cmp__(self, other):
         return cmp(self.name, other.name)

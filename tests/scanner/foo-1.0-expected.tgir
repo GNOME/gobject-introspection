@@ -170,6 +170,11 @@
       <member name="second" value="2"/>
       <member name="third" value="4"/>
     </bitfield>
+    <record name="ForeignStruct" foreign="1">
+      <field name="foo" writable="1">
+        <type name="int"/>
+      </field>
+    </record>
     <interface name="Interface" glib:type-name="FooInterface" glib:get-type="foo_interface_get_type" glib:type-struct="InterfaceIface">
       <method name="do_foo" c:identifier="foo_interface_do_foo">
         <return-value transfer-ownership="none">

@@ -241,6 +241,11 @@ and/or use gtk-doc annotations.  -->
               c:identifier="FOO_FLAGS_THIRD"
               glib:nick="third"/>
     </bitfield>
+    <record name="ForeignStruct" c:type="FooForeignStruct" foreign="1">
+      <field name="foo" writable="1">
+        <type name="int" c:type="int"/>
+      </field>
+    </record>
     <interface name="Interface"
                c:type="FooInterface"
                glib:type-name="FooInterface"
