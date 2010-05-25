@@ -42,6 +42,7 @@ Bla bla bla bla bla
     </chapter>
     <chapter id="gi-repository-structs">
       <title>GIRepository structs</title>
+      <xi:include href="gi-struct-hierarchy.xml"/>
       <xi:include href="xml/gibaseinfo.xml"/>
       <xi:include href="xml/gifunctioninfo.xml"/>
       <xi:include href="xml/gicallableinfo.xml"/>

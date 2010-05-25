@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
+               "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+<!ENTITY % local.common.attrib "xmlns:xi  CDATA  #FIXED 'http://www.w3.org/2003/XInclude'">
+<!ENTITY version SYSTEM "version.xml">
+]>
+<!--ENTITY index-Objects-Grouped SYSTEM "objects_grouped.sgml"-->
+<refentry id="gi-struct-hierarchy">
+<refmeta>
+  <refentrytitle role="top_of_page" id="gi-struct-hierarchy.top_of_page">Struct hierarchy</refentrytitle>
+  <manvolnum>3</manvolnum>
+  <refmiscinfo>GI Library</refmiscinfo>
+</refmeta>
+<refnamediv>
+  <refname>Struct hierarchy</refname>
+  <refpurpose>Struct hierarchy description for GIBaseInfo and all its sub structs</refpurpose>
+</refnamediv>
+
+<refsynopsisdiv id="gi-struct-hierarchy.synopsis" role="synopsis">
+<title role="synopsis.title">Synopsis</title>
+
+<synopsis>
+* <link linkend="gi-GIBaseInfo.top_of_page">GIBaseInfo</link>
+  * <link linkend="gi-GICallableInfo.top_of_page">GICallableInfo</link>
+    * <link linkend="gi-GIFunctionInfo.top_of_page">GIFunctionInfo</link>
+    * <link linkend="gi-GIVFuncInfo.top_of_page">GIVFuncInfo</link>
+  * <link linkend="gi-GIRegisteredTypeInfo.top_of_page">GIRegisteredTypeInfo</link>
+    * <link linkend="gi-GIEnumInfo.top_of_page">GIEnumInfo</link>
+    * <link linkend="gi-GIInterfaceInfo.top_of_page">GIInterfaceInfo</link>
+    * <link linkend="gi-GIObjectInfo.top_of_page">GIObjectInfo</link>
+    * <link linkend="gi-GIStructInfo.top_of_page">GIStructInfo</link>
+    * <link linkend="gi-GIUnionInfo.top_of_page">GIUnionInfo</link>
+  * <link linkend="gi-GIArgInfo.top_of_page">GIArgInfo</link>
+  * <link linkend="gi-GIConstantInfo.top_of_page">GIConstantInfo</link>
+  * <link linkend="gi-GIErrorDomainInfo.top_of_page">GIErrorDomainInfo</link>
+  * <link linkend="gi-GIFieldInfo.top_of_page">GIFieldInfo</link>
+  * <link linkend="gi-GIPropertyInfo.top_of_page">GIPropertyInfo</link>
+  * <link linkend="gi-GISignalInfo.top_of_page">GISignalInfo</link>
+  * <link linkend="gi-GITypeInfo.top_of_page">GITypeInfo</link>
+</synopsis>
+
+</refsynopsisdiv>
+
+</refentry>
