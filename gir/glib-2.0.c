@@ -187,3 +187,9 @@
   * @list: (array zero-terminated=1 length=length) (element-type utf8):
   * @length: (out):
   */
+
+// Skip this as "tm" is not available at present.
+
+/**
+ * g_date_to_struct_tm: (skip)
+ */
