@@ -14,11 +14,14 @@ INTROSPECTION_SCANNER = \
     $(top_builddir)/tools/g-ir-scanner$(EXEEXT)
 INTROSPECTION_SCANNER_ARGS = \
     --verbose \
-    --add-include-path=. \
+    --add-include-path=$(srcdir) \
+    --add-include-path=$(top_srcdir)/gir \
+    --add-include-path=$(builddir) \
     --add-include-path=$(top_builddir)/gir
 
 INTROSPECTION_COMPILER = $(top_builddir)/tools/g-ir-compiler$(EXEEXT)
 INTROSPECTION_COMPILER_ARGS = \
     --includedir=$(srcdir) \
     --includedir=$(top_srcdir)/gir \
+    --includedir=$(builddir) \
     --includedir=$(top_builddir)/gir
