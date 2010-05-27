@@ -223,7 +223,6 @@ GIDirection
 GIScopeType
 GITransfer
 g_arg_info_get_direction
-g_arg_info_is_dipper
 g_arg_info_is_return_value
 g_arg_info_is_optional
 g_arg_info_may_be_null
