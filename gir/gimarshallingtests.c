@@ -1348,7 +1348,7 @@ g_i_marshalling_tests_garray_utf8_none_return (void)
     gint i;
 
     if (array == NULL) {
-        array = g_array_new (TRUE, TRUE, sizeof (gint));
+        array = g_array_new (TRUE, TRUE, sizeof (gchar *));
         for (i = 0; values[i]; i++)
             g_array_append_val (array, values[i]);
     }
@@ -1367,7 +1367,7 @@ g_i_marshalling_tests_garray_utf8_container_return (void)
     static gchar *values[] = {"0", "1", "2", NULL};
     gint i;
 
-    array = g_array_new (TRUE, TRUE, sizeof (gint));
+    array = g_array_new (TRUE, TRUE, sizeof (gchar *));
     for (i = 0; values[i]; i++)
         g_array_append_val (array, values[i]);
 
@@ -1385,7 +1385,7 @@ g_i_marshalling_tests_garray_utf8_full_return (void)
     static gchar *values[] = {"0", "1", "2", NULL};
     gint i;
 
-    array = g_array_new (TRUE, TRUE, sizeof (gint));
+    array = g_array_new (TRUE, TRUE, sizeof (gchar *));
     for (i = 0; values[i]; i++) {
         gchar *str = g_strdup (values[i]);
         g_array_append_val (array, str);
@@ -1464,7 +1464,7 @@ g_i_marshalling_tests_garray_utf8_none_out (GArray **array_)
     gint i;
 
     if (internal == NULL) {
-        internal = g_array_new (TRUE, TRUE, sizeof (gint));
+        internal = g_array_new (TRUE, TRUE, sizeof (gchar *));
         for (i = 0; values[i]; i++)
             g_array_append_val (internal, values[i]);
     }
@@ -1484,7 +1484,7 @@ g_i_marshalling_tests_garray_utf8_container_out (GArray **array_)
 
     *array_ = NULL;
 
-    *array_ = g_array_new (TRUE, TRUE, sizeof (gint));
+    *array_ = g_array_new (TRUE, TRUE, sizeof (gchar *));
     for (i = 0; values[i]; i++)
         g_array_append_val (*array_, values[i]);
 }
@@ -1501,7 +1501,7 @@ g_i_marshalling_tests_garray_utf8_full_out (GArray **array_)
 
     *array_ = NULL;
 
-    *array_ = g_array_new (TRUE, TRUE, sizeof (gint));
+    *array_ = g_array_new (TRUE, TRUE, sizeof (gchar *));
     for (i = 0; values[i]; i++) {
         gchar *str = g_strdup (values[i]);
         g_array_append_val (*array_, str);
@@ -1525,7 +1525,7 @@ g_i_marshalling_tests_garray_utf8_none_inout (GArray **array_)
     g_assert (strcmp (g_array_index (*array_, gchar*, 2), "2") == 0);
 
     if (internal == NULL) {
-        internal = g_array_new (TRUE, TRUE, sizeof (gint));
+        internal = g_array_new (TRUE, TRUE, sizeof (gchar *));
         for (i = 0; values[i]; i++)
             g_array_append_val (internal, values[i]);
     }
