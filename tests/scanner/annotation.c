@@ -673,4 +673,13 @@ annotation_set_source_file (const char *fname)
 {
 }
 
+/**
+ * annotation_ptr_array:
+ * @array: (element-type GLib.Value): the array
+ */
+void
+annotation_ptr_array (GPtrArray *array)
+{
+}
+
 char backslash_parsing_tester_2 = '\\';

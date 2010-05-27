@@ -607,6 +607,18 @@ detection, and fixing it via annotations.">
         </parameter>
       </parameters>
     </function>
+    <function name="ptr_array" c:identifier="annotation_ptr_array">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="array" transfer-ownership="none" doc="the array">
+          <array name="GLib.PtrArray" c:type="GPtrArray*">
+            <type name="GLib.Value"/>
+          </array>
+        </parameter>
+      </parameters>
+    </function>
     <function name="return_array" c:identifier="annotation_return_array">
       <return-value transfer-ownership="full" doc="The return value">
         <array length="0" c:type="char**">

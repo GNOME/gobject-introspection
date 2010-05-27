@@ -647,15 +647,20 @@ class AnnotationApplier(object):
             return True
         return False
 
+    def _is_array_type(self, node):
+        if node.type.name in ['GLib.Array', 'GLib.PtrArray',
+                              'GLib.ByteArray']:
+            return True
+        if node.type.ctype in ['GArray*', 'GPtrArray*', 'GByteArray*']:
+            return True
+        return False
+
     def _extract_container_type(self, parent, node, options):
         has_element_type = OPT_ELEMENT_TYPE in options
         has_array = OPT_ARRAY in options
 
         if not has_array:
-            has_array = \
-                node.type.name in ['GLib.Array', 'GLib.PtrArray',
-                                   'GLib.ByteArray'] or \
-                node.type.ctype in ['GArray*', 'GPtrArray*', 'GByteArray*']
+            has_array = self._is_array_type(node)
 
         # FIXME: This is a hack :-(
         if (not isinstance(node, Field) and
@@ -781,6 +786,10 @@ class AnnotationApplier(object):
                 node.type.ctype,
                 self._resolve(element_type[0]),
                 self._resolve(element_type[1]))
+        elif self._is_array_type(node):
+            container_type = Array(node.type.name,
+                                   node.type.ctype,
+                                   self._resolve(element_type[0]))
         else:
             print 'FIXME: unhandled element-type container:', node
         return container_type

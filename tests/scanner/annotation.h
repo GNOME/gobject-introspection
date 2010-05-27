@@ -149,4 +149,7 @@ struct AnnotationStruct
   AnnotationObject *objects[10];
 };
 
+void    annotation_ptr_array (GPtrArray *array);
+
 #endif /* __ANNOTATION_OBJECT_H__ */
+

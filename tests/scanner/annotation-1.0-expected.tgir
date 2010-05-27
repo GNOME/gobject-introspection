@@ -440,6 +440,18 @@
         </parameter>
       </parameters>
     </function>
+    <function name="ptr_array" c:identifier="annotation_ptr_array">
+      <return-value transfer-ownership="none">
+        <type name="none"/>
+      </return-value>
+      <parameters>
+        <parameter name="array" transfer-ownership="none">
+          <array>
+            <type name="GLib.Value"/>
+          </array>
+        </parameter>
+      </parameters>
+    </function>
     <function name="return_array" c:identifier="annotation_return_array">
       <return-value transfer-ownership="full">
         <array length="0">
