@@ -446,7 +446,7 @@
       </return-value>
       <parameters>
         <parameter name="array" transfer-ownership="none">
-          <array>
+          <array name="GLib.PtrArray">
             <type name="GLib.Value"/>
           </array>
         </parameter>

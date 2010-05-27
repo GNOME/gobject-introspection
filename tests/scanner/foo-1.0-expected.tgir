@@ -652,7 +652,7 @@
     </function>
     <function name="test_array" c:identifier="foo_test_array">
       <return-value transfer-ownership="container">
-        <array>
+        <array name="GLib.Array">
           <type name="utf8"/>
         </array>
       </return-value>
