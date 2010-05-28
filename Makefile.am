@@ -1,21 +1,4 @@
 ## Process this file with automake to produce Makefile.in
-include $(top_srcdir)/gcov.mak
-
-GCOVSOURCES =
-
-if GI_GCOV_ENABLED
-GCOV_DIRS = girepository tools
-
-check-coverage: coverage-report.txt
-	@cat $(top_builddir)/coverage-report.txt
-
-else
-
-check-coverage:
-	@echo "ERROR: Need to reconfigure with --enable-gcov to run make check-coverage"
-
-endif
-
 ACLOCAL_AMFLAGS = -I m4
 
 SUBDIRS = girepository giscanner tools gir docs tests examples

@@ -28,8 +28,6 @@ libgiscanner_la_SOURCES = \
 libgiscanner_la_LIBADD = $(GOBJECT_LIBS)
 libgiscanner_la_CFLAGS = $(GOBJECT_CFLAGS)
 
-GCOVSOURCES = $(libgiscanner_la_SOURCES)
-
 # Python module
 pkgpyexecdir = $(pkglibdir)/giscanner
 pkgpyexec_LTLIBRARIES = _giscanner.la
@@ -83,5 +81,3 @@ install-exec-hook:
 	rm $(pkgpyexecdir)/_giscanner.dll.a
 	rm $(pkgpyexecdir)/_giscanner.la
 endif
-
-include $(top_srcdir)/gcov.mak

@@ -1,5 +1,3 @@
-include $(top_srcdir)/gcov.mak
-
 INCLUDES = \
 	-DGIREPO_DEFAULT_SEARCH_PATH="\"$(libdir)\"" \
 	-I$(top_srcdir)/girepository
