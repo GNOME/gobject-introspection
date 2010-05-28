@@ -20,23 +20,23 @@
 <title role="synopsis.title">Synopsis</title>
 
 <synopsis>
-* <link linkend="gi-GIBaseInfo.top_of_page">GIBaseInfo</link>
-  * <link linkend="gi-GICallableInfo.top_of_page">GICallableInfo</link>
-    * <link linkend="gi-GIFunctionInfo.top_of_page">GIFunctionInfo</link>
-    * <link linkend="gi-GISignalInfo.top_of_page">GISignalInfo</link>
-    * <link linkend="gi-GIVFuncInfo.top_of_page">GIVFuncInfo</link>
-  * <link linkend="gi-GIRegisteredTypeInfo.top_of_page">GIRegisteredTypeInfo</link>
-    * <link linkend="gi-GIEnumInfo.top_of_page">GIEnumInfo</link>
-    * <link linkend="gi-GIInterfaceInfo.top_of_page">GIInterfaceInfo</link>
-    * <link linkend="gi-GIObjectInfo.top_of_page">GIObjectInfo</link>
-    * <link linkend="gi-GIStructInfo.top_of_page">GIStructInfo</link>
-    * <link linkend="gi-GIUnionInfo.top_of_page">GIUnionInfo</link>
-  * <link linkend="gi-GIArgInfo.top_of_page">GIArgInfo</link>
-  * <link linkend="gi-GIConstantInfo.top_of_page">GIConstantInfo</link>
-  * <link linkend="gi-GIErrorDomainInfo.top_of_page">GIErrorDomainInfo</link>
-  * <link linkend="gi-GIFieldInfo.top_of_page">GIFieldInfo</link>
-  * <link linkend="gi-GIPropertyInfo.top_of_page">GIPropertyInfo</link>
-  * <link linkend="gi-GITypeInfo.top_of_page">GITypeInfo</link>
+* <link linkend="gi-GIBaseInfo">GIBaseInfo</link>
+  * <link linkend="gi-GICallableInfo">GICallableInfo</link>
+    * <link linkend="gi-GIFunctionInfo">GIFunctionInfo</link>
+    * <link linkend="gi-GISignalInfo">GISignalInfo</link>
+    * <link linkend="gi-GIVFuncInfo">GIVFuncInfo</link>
+  * <link linkend="gi-GIRegisteredTypeInfo">GIRegisteredTypeInfo</link>
+    * <link linkend="gi-GIEnumInfo">GIEnumInfo</link>
+    * <link linkend="gi-GIInterfaceInfo">GIInterfaceInfo</link>
+    * <link linkend="gi-GIObjectInfo">GIObjectInfo</link>
+    * <link linkend="gi-GIStructInfo">GIStructInfo</link>
+    * <link linkend="gi-GIUnionInfo">GIUnionInfo</link>
+  * <link linkend="gi-GIArgInfo">GIArgInfo</link>
+  * <link linkend="gi-GIConstantInfo">GIConstantInfo</link>
+  * <link linkend="gi-GIErrorDomainInfo">GIErrorDomainInfo</link>
+  * <link linkend="gi-GIFieldInfo">GIFieldInfo</link>
+  * <link linkend="gi-GIPropertyInfo">GIPropertyInfo</link>
+  * <link linkend="gi-GITypeInfo">GITypeInfo</link>
 </synopsis>
 
 </refsynopsisdiv>
