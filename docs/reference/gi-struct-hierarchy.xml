@@ -23,6 +23,7 @@
 * <link linkend="gi-GIBaseInfo.top_of_page">GIBaseInfo</link>
   * <link linkend="gi-GICallableInfo.top_of_page">GICallableInfo</link>
     * <link linkend="gi-GIFunctionInfo.top_of_page">GIFunctionInfo</link>
+    * <link linkend="gi-GISignalInfo.top_of_page">GISignalInfo</link>
     * <link linkend="gi-GIVFuncInfo.top_of_page">GIVFuncInfo</link>
   * <link linkend="gi-GIRegisteredTypeInfo.top_of_page">GIRegisteredTypeInfo</link>
     * <link linkend="gi-GIEnumInfo.top_of_page">GIEnumInfo</link>
@@ -35,7 +36,6 @@
   * <link linkend="gi-GIErrorDomainInfo.top_of_page">GIErrorDomainInfo</link>
   * <link linkend="gi-GIFieldInfo.top_of_page">GIFieldInfo</link>
   * <link linkend="gi-GIPropertyInfo.top_of_page">GIPropertyInfo</link>
-  * <link linkend="gi-GISignalInfo.top_of_page">GISignalInfo</link>
   * <link linkend="gi-GITypeInfo.top_of_page">GITypeInfo</link>
 </synopsis>
 
