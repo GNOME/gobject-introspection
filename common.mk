@@ -14,6 +14,7 @@ INTROSPECTION_SCANNER = \
     $(top_builddir)/tools/g-ir-scanner$(EXEEXT)
 INTROSPECTION_SCANNER_ARGS = \
     --verbose \
+    -I$(top_srcdir) \
     --add-include-path=$(srcdir) \
     --add-include-path=$(top_srcdir)/gir \
     --add-include-path=$(builddir) \
