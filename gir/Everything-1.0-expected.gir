@@ -1199,8 +1199,7 @@ call and can be released on return.">
       </parameters>
     </function>
     <function name="test_ghash_nested_everything_return"
-              c:identifier="test_ghash_nested_everything_return"
-              doc="Specify nested parameterized types directly with the (type ) annotation.">
+              c:identifier="test_ghash_nested_everything_return">
       <return-value transfer-ownership="full">
         <type name="GLib.HashTable" c:type="GHashTable*">
           <type name="utf8"/>
@@ -1212,8 +1211,7 @@ call and can be released on return.">
       </return-value>
     </function>
     <function name="test_ghash_nested_everything_return2"
-              c:identifier="test_ghash_nested_everything_return2"
-              doc="element-type annotation.">
+              c:identifier="test_ghash_nested_everything_return2">
       <return-value transfer-ownership="full">
         <type name="GLib.HashTable" c:type="GHashTable*">
           <type name="utf8"/>
