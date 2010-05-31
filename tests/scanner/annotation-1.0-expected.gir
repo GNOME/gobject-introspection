@@ -307,7 +307,7 @@ intentionally similar example to gtk_container_get_children">
         <parameters>
           <parameter name="nums"
                      transfer-ownership="none"
-                     doc="Sequence of numbers">
+                     doc="Sequence of numbers that are zero-terminated">
             <array zero-terminated="0" length="2" c:type="int*">
               <type name="int"/>
             </array>
@@ -326,7 +326,7 @@ intentionally similar example to gtk_container_get_children">
         <parameters>
           <parameter name="nums"
                      transfer-ownership="none"
-                     doc="Sequence of numbers">
+                     doc="Sequence of numbers that are zero-terminated">
             <array length="2" c:type="int*">
               <type name="int"/>
             </array>

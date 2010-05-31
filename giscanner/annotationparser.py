@@ -201,15 +201,23 @@ class AnnotationParser(object):
             block_name, block_options = block_header, {}
         block = DocBlock(block_name, block_options)
         comment_lines = []
+        parse_parameters = True
+        canon_name = ''
         for line in comment[pos+1:].split('\n'):
             line = line.lstrip()
             line = line[2:].strip() # Skip ' *'
             if not line:
+                if parse_parameters:
+                    parse_parameters = False
                 continue
             if line.startswith('@'):
                 line = line[1:]
             elif not ': ' in line:
-                comment_lines.append(line)
+                if parse_parameters and line:
+                    if canon_name != '' and canon_name in block.tags:
+                        block.tags[canon_name].comment += ' ' + line
+                else:
+                    comment_lines.append(line)
                 continue
             tag_name, value = self._split_tag_namevalue(line)
             canon_name = tag_name.lower()
@@ -240,7 +248,7 @@ class AnnotationParser(object):
         tag.value = value
         options, rest = self._parse_options(tag.value)
         tag.options = options
-        tag.comment = rest
+        tag.comment = rest or ''
         return tag
 
     def _parse_options(self, value):

@@ -383,7 +383,8 @@ annotation_object_compute_sum  (AnnotationObject *object,
 /**
  * annotation_object_compute_sum_n:
  * @object: a #GObject
- * @nums: (array length=n_nums zero-terminated=0): Sequence of numbers
+ * @nums: (array length=n_nums zero-terminated=0): Sequence of
+ *   numbers that are zero-terminated
  * @n_nums: Length of number array
  *
  * Test taking an array with length parameter
@@ -399,7 +400,8 @@ annotation_object_compute_sum_n(AnnotationObject *object,
 /**
  * annotation_object_compute_sum_nz:
  * @object: a #AnnotationObject
- * @nums: (array length=n_nums zero-terminated=1): Sequence of numbers
+ * @nums: (array length=n_nums zero-terminated=1): Sequence of numbers that
+ * are zero-terminated
  * @n_nums: Length of number array
  *
  * Test taking a zero-terminated array with length parameter
