@@ -31,6 +31,15 @@ IGNORE_HFILES= \
 INCLUDES=$(GIREPO_CFLAGS) -I$(top_srcdir)
 GTKDOC_LIBS = $(GIREPO_LIBS) $(top_builddir)/girepository/libgirepository-1.0.la $(top_builddir)/girepository/libgirepository-parser.la
 
+content_files = \
+    gi-gir-reference.xml    \
+    gi-gir.sgml		    \
+    gi-overview.xml	    \
+    gi-struct-hierarchy.xml
+
+HTML_IMAGES = \
+    $(srcdir)/images/overview.png
+
 # Extra options to supply to gtkdoc-fixref
 FIXXREF_OPTIONS=
 

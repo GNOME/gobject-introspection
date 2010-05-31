@@ -15,8 +15,8 @@
     <para>
 Bla bla bla bla bla
     </para>
+      <xi:include href="gi-overview.xml"/>
 <!--
-    &gi-overview;
     &gi-building;
 -->
   </chapter>
