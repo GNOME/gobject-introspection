@@ -47,6 +47,7 @@ docs/reference/gi.signals
 docs/reference/html
 docs/reference/xml
 docs/reference/tmpl
+docs/reference/*.bak
 gir/Everything-1.0.gir
 gir/Everything-1.0.typelib
 gir/GIMarshallingTests-1.0.gir
