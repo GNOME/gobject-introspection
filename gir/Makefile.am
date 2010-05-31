@@ -144,8 +144,14 @@ GIRepository_2_0_gir_SCANNERFLAGS = \
         --add-include-path=.
 GIRepository_2_0_gir_PACKAGES = gobject-2.0
 GIRepository_2_0_gir_INCLUDES = GObject-2.0
-GIRepository_2_0_gir_CFLAGS = -I$(srcdir)/girepository
+GIRepository_2_0_gir_CFLAGS = \
+    -I$(srcdir)/girepository -I$(top_srcdir) \
+    -DGI_COMPILATION
 GIRepository_2_0_gir_FILES = \
+        $(top_srcdir)/girepository/gibaseinfo.c \
+        $(top_srcdir)/girepository/gibaseinfo.h \
+        $(top_srcdir)/girepository/gitypelib.h \
+        $(top_srcdir)/girepository/gitypes.h \
         $(top_srcdir)/girepository/girepository.c \
         $(top_srcdir)/girepository/girepository.h
 
