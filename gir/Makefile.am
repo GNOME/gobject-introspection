@@ -145,7 +145,7 @@ GIRepository_2_0_gir_SCANNERFLAGS = \
 GIRepository_2_0_gir_PACKAGES = gobject-2.0
 GIRepository_2_0_gir_INCLUDES = GObject-2.0
 GIRepository_2_0_gir_CFLAGS = \
-    -I$(srcdir)/girepository -I$(top_srcdir) \
+    -I$(top_srcdir)/girepository -I$(top_srcdir) \
     -DGI_COMPILATION
 GIRepository_2_0_gir_FILES = \
         $(top_srcdir)/girepository/gibaseinfo.c \
