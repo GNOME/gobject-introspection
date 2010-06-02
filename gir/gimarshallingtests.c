@@ -1581,6 +1581,62 @@ g_i_marshalling_tests_garray_utf8_full_inout (GArray **array_)
 }
 
 /**
+ * g_i_marshalling_tests_gstrv_return:
+ * Returns:
+ */
+GStrv
+g_i_marshalling_tests_gstrv_return (void)
+{
+    GStrv values = g_new0 (gchar*, 4);
+    values[0] = g_strdup ("0");
+    values[1] = g_strdup ("1");
+    values[2] = g_strdup ("2");
+    values[3] = NULL;
+    return values;
+}
+
+/**
+ * g_i_marshalling_tests_gstrv_in:
+ * @g_strv:
+ */
+void
+g_i_marshalling_tests_gstrv_in (GStrv g_strv)
+{
+    g_assert(g_strv_length(g_strv) == 3);
+    g_assert(strcmp(g_strv[0], "0") == 0);
+    g_assert(strcmp(g_strv[1], "1") == 0);
+    g_assert(strcmp(g_strv[2], "2") == 0);
+}
+
+/**
+ * g_i_marshalling_tests_gstrv_out:
+ * @g_strv: (out) (transfer none):
+ */
+void
+g_i_marshalling_tests_gstrv_out (GStrv *g_strv)
+{
+    static gchar *values[] = {"0", "1", "2", NULL};
+    *g_strv = values;
+}
+
+/**
+ * g_i_marshalling_tests_gstrv_inout:
+ * @g_strv: (inout) (transfer none):
+ */
+void
+g_i_marshalling_tests_gstrv_inout (GStrv *g_strv)
+{
+    static gchar *values[] = {"-1", "0", "1", "2", NULL};
+
+    g_assert(g_strv_length(*g_strv) == 3);
+    g_assert(strcmp((*g_strv)[0], "0") == 0);
+    g_assert(strcmp((*g_strv)[1], "1") == 0);
+    g_assert(strcmp((*g_strv)[2], "2") == 0);
+
+    *g_strv = values;
+}
+
+/**
  * g_i_marshalling_tests_glist_int_none_return:
  * Returns: (element-type gint) (transfer none):
  */
@@ -2735,6 +2791,11 @@ g_i_marshalling_tests__boxed_struct_return (void)
         struct_ = g_new(GIMarshallingTestsBoxedStruct, 1);
 
         struct_->long_ = 42;
+        struct_->g_strv = g_new0(gchar*, 4);
+        struct_->g_strv[0] = g_strdup("0");
+        struct_->g_strv[1] = g_strdup("1");
+        struct_->g_strv[2] = g_strdup("2");
+        struct_->g_strv[3] = NULL;
     }
 
     return struct_;

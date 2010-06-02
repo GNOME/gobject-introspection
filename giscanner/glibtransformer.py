@@ -28,7 +28,7 @@ import subprocess
 from .ast import (Alias, Bitfield, Callback, Constant, Enum, Function, Member,
                   Namespace, Parameter, Property, Record, Return, Type, Union,
                   Field, VFunction, type_name_from_ctype,
-                  default_array_types, TYPE_UINT8, PARAM_TRANSFER_FULL)
+                  default_array_types, TYPE_UINT8, PARAM_TRANSFER_FULL, Array)
 from .transformer import Names
 from .glibast import (GLibBoxed, GLibEnum, GLibEnumMember, GLibFlags,
                       GLibInterface, GLibObject, GLibSignal, GLibBoxedStruct,
@@ -845,6 +845,9 @@ class GLibTransformer(object):
         # Workaround glib bug #548689, to be included in 2.18.0
         if ptype.name == "GParam":
             ptype.name = "GObject.ParamSpec"
+        elif ptype.name == "GObject.Strv":
+            return Array(None, ptype.ctype, Type('utf8'))
+
         return self._transformer.resolve_param_type_full(ptype,
                                                          self._names,
                                                          **kwargs)

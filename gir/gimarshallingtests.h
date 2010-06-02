@@ -316,6 +316,13 @@ void g_i_marshalling_tests_garray_utf8_none_inout (GArray **array_);
 void g_i_marshalling_tests_garray_utf8_container_inout (GArray **array_);
 void g_i_marshalling_tests_garray_utf8_full_inout (GArray **array_);
 
+/* GStrv */
+
+GStrv g_i_marshalling_tests_gstrv_return (void);
+void g_i_marshalling_tests_gstrv_in (GStrv g_strv);
+void g_i_marshalling_tests_gstrv_out (GStrv *g_strv);
+void g_i_marshalling_tests_gstrv_inout (GStrv *g_strv);
+
 /* GList */
 
 GList *g_i_marshalling_tests_glist_int_none_return (void);
@@ -505,6 +512,7 @@ void g_i_marshalling_tests__pointer_struct_inout (GIMarshallingTestsPointerStruc
 
 typedef struct {
     glong long_;
+    GStrv g_strv;
 } GIMarshallingTestsBoxedStruct;
 
 GType g_i_marshalling_tests_boxed_struct_get_type (void) G_GNUC_CONST;

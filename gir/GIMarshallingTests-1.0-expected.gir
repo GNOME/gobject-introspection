@@ -20,6 +20,11 @@ and/or use gtk-doc annotations.  -->
       <field name="long_" writable="1">
         <type name="long" c:type="glong"/>
       </field>
+      <field name="g_strv" writable="1">
+        <array c:type="GStrv">
+          <type name="utf8"/>
+        </array>
+      </field>
       <constructor name="new"
                    c:identifier="g_i_marshalling_tests_boxed_struct_new">
         <return-value transfer-ownership="full">
@@ -1828,6 +1833,57 @@ and/or use gtk-doc annotations.  -->
         <type name="GLib.SList" c:type="GSList*">
           <type name="utf8"/>
         </type>
+      </return-value>
+    </function>
+    <function name="gstrv_in" c:identifier="g_i_marshalling_tests_gstrv_in">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="g_strv" transfer-ownership="none">
+          <array c:type="GStrv">
+            <type name="utf8"/>
+          </array>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="gstrv_inout"
+              c:identifier="g_i_marshalling_tests_gstrv_inout">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="g_strv"
+                   direction="inout"
+                   caller-allocates="0"
+                   transfer-ownership="none">
+          <array c:type="GStrv*">
+            <type name="utf8"/>
+          </array>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="gstrv_out" c:identifier="g_i_marshalling_tests_gstrv_out">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="g_strv"
+                   direction="out"
+                   caller-allocates="1"
+                   transfer-ownership="none">
+          <array c:type="GStrv*">
+            <type name="utf8"/>
+          </array>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="gstrv_return"
+              c:identifier="g_i_marshalling_tests_gstrv_return">
+      <return-value transfer-ownership="full">
+        <array c:type="GStrv">
+          <type name="utf8"/>
+        </array>
       </return-value>
     </function>
     <function name="gtype_in" c:identifier="g_i_marshalling_tests_gtype_in">
