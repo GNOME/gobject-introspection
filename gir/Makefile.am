@@ -33,7 +33,7 @@ endif
 GLib_2_0_gir_LIBS = $(GLIB_LIBRARY)
 GLib_2_0_gir_SCANNERFLAGS = --noclosure --strip-prefix=g --c-include="glib.h"
 GLib_2_0_gir_PACKAGES = glib-2.0
-GLib_2_0_gir_CFLAGS = $(CPPFLAGS) \
+GLib_2_0_gir_CFLAGS = \
             -I$(GLIB_INCLUDEDIR) \
             -I$(GLIB_LIBDIR)/glib-2.0/include \
             -DGETTEXT_PACKAGE=Dummy \
