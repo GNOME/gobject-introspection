@@ -20,8 +20,8 @@
 #
 
 import re
-import subprocess
 import platform
+import subprocess
 
 from .utils import get_libtool_command, extract_libtool_shlib
 
@@ -72,10 +72,14 @@ def _resolve_non_libtool(options, binary, libraries):
     if libtool:
         args.extend(libtool)
         args.append('--mode=execute')
-    if platform.system() == 'Darwin':
+    platform_system = platform.system()
+    if platform_system == 'Darwin':
         args.extend(['otool', '-L', binary.args[0]])
-    else:
+    elif platform_system == 'Linux':
         args.extend(['ldd', binary.args[0]])
+    else:
+        raise SystemExit("Unsupported platform system: " %
+            (platform_system,))
     proc = subprocess.Popen(args, stdout=subprocess.PIPE)
     patterns = {}
     for library in libraries:
