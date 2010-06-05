@@ -79,7 +79,7 @@ def _resolve_non_libtool(options, binary, libraries):
         args.extend(['ldd', binary.args[0]])
     else:
         raise SystemExit("Unsupported platform system: " %
-            (platform_system,))
+            (platform_system, ))
     proc = subprocess.Popen(args, stdout=subprocess.PIPE)
     patterns = {}
     for library in libraries:
