@@ -74,8 +74,6 @@ if test "$GCC" = "yes"; then
 fi
 
 # Checks for libraries.
-GI_ENABLE_GCOV
-
 AC_CHECK_LIB([dl], [dlopen])
 
 AC_MSG_CHECKING(for the suffix of shared libraries)
