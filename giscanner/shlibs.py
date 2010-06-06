@@ -75,11 +75,8 @@ def _resolve_non_libtool(options, binary, libraries):
     platform_system = platform.system()
     if platform_system == 'Darwin':
         args.extend(['otool', '-L', binary.args[0]])
-    elif platform_system == 'Linux':
-        args.extend(['ldd', binary.args[0]])
     else:
-        raise SystemExit("Unsupported platform system: " %
-            (platform_system, ))
+        args.extend(['ldd', binary.args[0]])
     proc = subprocess.Popen(args, stdout=subprocess.PIPE)
     patterns = {}
     for library in libraries:
