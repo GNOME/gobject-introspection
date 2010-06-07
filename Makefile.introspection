@@ -96,6 +96,7 @@ _gir_silent_compiler_0 = @echo "  GICOMP $(1)";
 # LIBTOOL - Command to invoke libtool, usually set by automake
 # SCANNERFLAGS - Flags to pass in to the scanner, see g-ir-scanner(1) for a list
 # CFLAGS - Flags to pass in to the parser when scanning headers
+# LDFLAGS - Linker flags used by the scanner
 # PACKAGES - list of pkg-config names which cflags are required to parse
 #   the headers of this gir
 # INCLUDES - Gir files to include without the .gir suffix, for instance
@@ -125,6 +126,7 @@ $(1): $$($(_gir_name)_FILES)
 	  $(_gir_includes) \
 	  $($(_gir_name)_SCANNERFLAGS) \
 	  $($(_gir_name)_CFLAGS) \
+	  $($(_gir_name)_LDFLAGS) \
 	  $$^ \
 	  --output $(1)
 endef
