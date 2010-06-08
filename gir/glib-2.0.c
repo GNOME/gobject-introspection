@@ -188,6 +188,11 @@
   * @length: (out):
   */
 
+/**
+  * GVariant: (foreign)
+  *
+  */
+
 // Skip this as "tm" is not available at present.
 
 /**
