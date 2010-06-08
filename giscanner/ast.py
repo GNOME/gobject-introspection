@@ -521,12 +521,12 @@ class Constant(Node):
             self.name, self.type, self.value)
 
 
-class Property(Node):
+class Property(TypeContainer):
 
     def __init__(self, name, type_name, readable, writable,
-                 construct, construct_only, ctype=None):
-        Node.__init__(self, name)
+                 construct, construct_only, ctype=None, transfer=None):
         self.type = Type(type_name, ctype)
+        TypeContainer.__init__(self, name, self.type, transfer)
         self.readable = readable
         self.writable = writable
         self.construct = construct

@@ -24,8 +24,8 @@ import re
 import sys
 
 from .ast import (Array, Bitfield, Callback, Class, Enum, Field, Function,
-                  Interface, List, Map, Parameter, Record, Return, Type, Union,
-                  Varargs,
+                  Interface, List, Map, Parameter, Property, Record, Return,
+                  Type, Union, Varargs,
                   default_array_types,
                   BASIC_GIR_TYPES,
                   PARAM_DIRECTION_INOUT,
@@ -53,6 +53,7 @@ TAG_RETURNS_ALT = 'return value'
 TAG_ATTRIBUTES = 'attributes'
 TAG_RENAME_TO = 'rename to'
 TAG_TYPE = 'type'
+TAG_TRANSFER = 'transfer'
 
 # Options - annotations for parameters and return values
 OPT_ALLOW_NONE = 'allow-none'
@@ -418,6 +419,14 @@ class AnnotationApplier(object):
         self._parse_node_common(prop, block)
         if block:
             prop.doc = block.comment
+
+        transfer_tag = self._get_tag(block, TAG_TRANSFER)
+        if transfer_tag is not None:
+            options = {OPT_TRANSFER: Option(transfer_tag.value)}
+        else:
+            options = {}
+        prop.transfer = self._extract_transfer(parent, prop, options)
+
         type_tag = self._get_tag(block, TAG_TYPE)
         if type_tag:
             prop.type = self._resolve(type_tag.value, prop.type)
@@ -945,6 +954,8 @@ class AnnotationApplier(object):
             else:
                 return PARAM_TRANSFER_FULL
         elif isinstance(node, Field):
+            return PARAM_TRANSFER_NONE
+        elif isinstance(node, Property):
             return PARAM_TRANSFER_NONE
         else:
             raise AssertionError(node)

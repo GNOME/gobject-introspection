@@ -449,7 +449,10 @@ uses a C sugar return type.">
           </parameter>
         </parameters>
       </method>
-      <property name="string" writable="1" construct="1">
+      <property name="string"
+                writable="1"
+                construct="1"
+                transfer-ownership="none">
         <type name="utf8" c:type="gchararray"/>
       </property>
       <field name="parent_instance">

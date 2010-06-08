@@ -324,7 +324,10 @@ and/or use gtk-doc annotations.  -->
           </parameter>
         </parameters>
       </method>
-      <property name="int" writable="1" construct="1">
+      <property name="int"
+                writable="1"
+                construct="1"
+                transfer-ownership="none">
         <type name="int" c:type="gint"/>
       </property>
       <field name="parent_instance">

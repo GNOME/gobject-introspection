@@ -361,11 +361,22 @@ case.">
           </parameter>
         </parameters>
       </method>
-      <property name="bare" writable="1">
+      <property name="bare" writable="1" transfer-ownership="none">
         <type name="GObject.Object" c:type="GObject"/>
       </property>
-      <property name="boxed" writable="1">
+      <property name="boxed" writable="1" transfer-ownership="none">
         <type name="TestBoxed" c:type="TestBoxed"/>
+      </property>
+      <property name="hash-table" writable="1" transfer-ownership="container">
+        <type name="GLib.HashTable" c:type="GHashTable">
+          <type name="utf8"/>
+          <type name="int8"/>
+        </type>
+      </property>
+      <property name="list" writable="1" transfer-ownership="none">
+        <type name="GLib.List" c:type="gpointer">
+          <type name="utf8"/>
+        </type>
       </property>
       <field name="parent_instance">
         <type name="GObject.Object" c:type="GObject"/>
@@ -375,6 +386,12 @@ case.">
       </field>
       <field name="boxed">
         <type name="TestBoxed" c:type="TestBoxed*"/>
+      </field>
+      <field name="hash_table">
+        <type name="GLib.HashTable" c:type="GHashTable*"/>
+      </field>
+      <field name="list">
+        <type name="GLib.List" c:type="GList*"/>
       </field>
       <glib:signal name="test">
         <return-value transfer-ownership="full">
@@ -605,7 +622,7 @@ case.">
           </parameter>
         </parameters>
       </method>
-      <property name="testbool" writable="1">
+      <property name="testbool" writable="1" transfer-ownership="none">
         <type name="boolean" c:type="gboolean"/>
       </property>
       <field name="parent_instance">

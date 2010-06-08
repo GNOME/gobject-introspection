@@ -1524,7 +1524,9 @@ G_DEFINE_TYPE(TestObj, test_obj, G_TYPE_OBJECT);
 enum
 {
   PROP_TEST_OBJ_BARE = 1,
-  PROP_TEST_OBJ_BOXED
+  PROP_TEST_OBJ_BOXED,
+  PROP_TEST_OBJ_HASH_TABLE,
+  PROP_TEST_OBJ_LIST,
 };
 
 static void
@@ -1534,6 +1536,7 @@ test_obj_set_property (GObject      *object,
                        GParamSpec   *pspec)
 {
   TestObj *self = TEST_OBJECT (object);
+  GList *list;
 
   switch (property_id)
     {
@@ -1546,7 +1549,25 @@ test_obj_set_property (GObject      *object,
         test_boxed_free (self->boxed);
       self->boxed = g_value_dup_boxed (value);
       break;
-      
+
+    case PROP_TEST_OBJ_HASH_TABLE:
+      if (self->hash_table)
+        g_hash_table_unref (self->hash_table);
+      self->hash_table = g_hash_table_ref (g_value_get_boxed (value));
+      break;
+
+    case PROP_TEST_OBJ_LIST:
+      if (self->list != NULL)
+        {
+          for (list = self->list; list != NULL; list = g_list_next (list))
+            g_free (list->data);
+          g_list_free (self->list);
+        }
+      self->list = NULL;
+      for (list = g_value_get_pointer (value); list != NULL; list = g_list_next (list))
+        self->list = g_list_append (self->list, g_strdup (list->data));
+      break;
+
     default:
       /* We don't have any other property... */
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -1570,6 +1591,16 @@ test_obj_get_property (GObject    *object,
 
     case PROP_TEST_OBJ_BOXED:
       g_value_set_boxed (value, self->boxed);
+      break;
+
+    case PROP_TEST_OBJ_HASH_TABLE:
+      if (self->hash_table != NULL)
+        g_hash_table_ref (self->hash_table);
+      g_value_set_boxed (value, self->hash_table);
+      break;
+
+    case PROP_TEST_OBJ_LIST:
+      g_value_set_pointer (value, self->list);
       break;
       
     default:
@@ -1660,6 +1691,35 @@ test_obj_class_init (TestObjClass *klass)
   g_object_class_install_property (gobject_class,
                                    PROP_TEST_OBJ_BOXED,
                                    pspec);
+
+  /**
+   * TestObj:hash-table:
+   *
+   * Type: GLib.HashTable<utf8,int8>
+   * Transfer: container
+   */
+  pspec = g_param_spec_boxed ("hash-table",
+                              "GHashTable property",
+                              "A contained GHashTable",
+                              G_TYPE_HASH_TABLE,
+                              G_PARAM_READWRITE);
+  g_object_class_install_property (gobject_class,
+                                   PROP_TEST_OBJ_HASH_TABLE,
+                                   pspec);
+
+  /**
+   * TestObj:list:
+   *
+   * Type: GLib.List<utf8>
+   * Transfer: none
+   */
+  pspec = g_param_spec_pointer ("list",
+                                "GList property",
+                                "A contained GList",
+                                G_PARAM_READWRITE);
+  g_object_class_install_property (gobject_class,
+                                   PROP_TEST_OBJ_LIST,
+                                   pspec);
   
   klass->matrix = test_obj_default_matrix;
 }
@@ -1669,6 +1729,7 @@ test_obj_init (TestObj *obj)
 {
   obj->bare = NULL;
   obj->boxed = NULL;
+  obj->hash_table = NULL;
 }
 
 TestObj *

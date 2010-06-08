@@ -333,7 +333,7 @@
           </parameter>
         </parameters>
       </method>
-      <property name="string" writable="1" construct="1">
+      <property name="string" writable="1" construct="1" transfer-ownership="none">
         <type name="utf8"/>
       </property>
       <glib:signal name="signal" when="LAST">

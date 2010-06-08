@@ -400,6 +400,7 @@ and/or use gtk-doc annotations. ''')
             attrs.append(('construct', '1'))
         if prop.construct_only:
             attrs.append(('construct-only', '1'))
+        attrs.append(('transfer-ownership', prop.transfer))
         if prop.doc:
             attrs.append(('doc', prop.doc))
         with self.tagcontext('property', attrs):

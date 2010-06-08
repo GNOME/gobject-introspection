@@ -484,7 +484,10 @@ type.">
           <type name="none" c:type="void"/>
         </return-value>
       </method>
-      <property name="function-property" writable="1" construct="1">
+      <property name="function-property"
+                writable="1"
+                construct="1"
+                transfer-ownership="none">
         <type name="Callback" c:type="gpointer"/>
       </property>
       <property name="string-property"
@@ -493,6 +496,7 @@ type.">
                 deprecated-version="1.2"
                 writable="1"
                 construct="1"
+                transfer-ownership="none"
                 doc="This is a property which is a string">
         <type name="utf8" c:type="gchararray"/>
       </property>

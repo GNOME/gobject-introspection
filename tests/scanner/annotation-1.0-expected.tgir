@@ -356,10 +356,10 @@
           <type name="none"/>
         </return-value>
       </method>
-      <property name="function-property" writable="1" construct="1">
+      <property name="function-property" writable="1" construct="1" transfer-ownership="none">
         <type name="Callback"/>
       </property>
-      <property name="string-property" writable="1" construct="1">
+      <property name="string-property" writable="1" construct="1" transfer-ownership="none">
         <type name="utf8"/>
       </property>
       <glib:signal name="doc-empty-arg-parsing" when="LAST">

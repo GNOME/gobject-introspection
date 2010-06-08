@@ -268,6 +268,8 @@ struct _TestObj
 
   GObject *bare;
   TestBoxed *boxed;
+  GHashTable *hash_table;
+  GList *list;
 };
 
 struct _TestObjClass
