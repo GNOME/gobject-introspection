@@ -487,9 +487,6 @@ class GLibTransformer(object):
         # already
         if func.symbol.endswith('_get_type'):
             return None
-        if self._namespace_name == 'GLib':
-            # No GObjects in GLib
-            return None
 
         if not is_method:
             target_arg = func.retval
