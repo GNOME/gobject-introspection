@@ -1,6 +1,6 @@
 # -*- Mode: Python -*-
 # GObject-Introspection - a framework for introspecting GObject libraries
-# Copyright (C) 2008  Johan Dahlin
+# Copyright (C) 2008-2010  Johan Dahlin
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -20,11 +20,25 @@
 
 import errno
 import cPickle
+import glob
 import hashlib
 import os
 import shutil
+import sys
 import tempfile
 
+import giscanner
+
+_CACHE_VERSION_FILENAME = '.cache-version'
+
+def _get_versionhash():
+    toplevel = os.path.dirname(giscanner.__file__)
+    # Use pyc instead of py to avoid extra IO
+    sources = glob.glob(os.path.join(toplevel, '*.pyc'))
+    sources.append(sys.argv[0])
+    # Using mtimes is a bit (5x) faster than hashing the file contents
+    mtimes = (str(os.stat(source).st_mtime) for source in sources)
+    return hashlib.sha1(''.join(mtimes)).hexdigest()
 
 def _get_cachedir():
     homedir = os.environ.get('HOME')
@@ -59,6 +73,35 @@ class CacheStore(object):
                 raise
             self._directory = None
 
+        self._check_cache_version()
+
+    def _check_cache_version(self):
+        current_hash = _get_versionhash()
+        version = os.path.join(self._directory, _CACHE_VERSION_FILENAME)
+        try:
+            cache_hash = open(version).read()
+        except IOError, e:
+            # File does not exist
+            if e.errno == errno.ENOENT:
+                cache_hash = 0
+            else:
+                raise
+
+        if current_hash == cache_hash:
+            return
+
+        self._clean()
+        try:
+            fp = open(version, 'w')
+        except IOError, e:
+            # Permission denied
+            if e.errno == errno.EACCES:
+                return
+            else:
+                raise
+
+        fp.write(current_hash)
+
     def _get_filename(self, filename):
         # If we couldn't create the directory we're probably
         # on a read only home directory where we just disable
@@ -87,6 +130,12 @@ class CacheStore(object):
                 return
             else:
                 raise
+
+    def _clean(self):
+        for filename in os.listdir(self._directory):
+            if filename == _CACHE_VERSION_FILENAME:
+                continue
+            self._remove_filename(filename)
 
     def store(self, filename, data):
         store_filename = self._get_filename(filename)
