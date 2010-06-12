@@ -741,16 +741,7 @@ class GLibTransformer(object):
         self._introspect_signals(node, xmlnode)
         self._introspect_implemented_interfaces(node, xmlnode)
 
-        # add record fields
-        record = self._get_attribute(node.name)
-        if record is not None:
-            node.fields = record.fields
-            for field in node.fields:
-                if isinstance(field, Field):
-                    # Object instance fields are assumed to be read-only
-                    # (see also _pair_class_record and transformer.py)
-                    field.writable = False
-
+        self._add_record_fields(node)
         self._add_attribute(node, replace=True)
         self._register_internal_type(type_name, node)
 
@@ -825,6 +816,18 @@ class GLibTransformer(object):
                 signal.parameters.append(param)
             node.signals.append(signal)
         node.signals = sorted(node.signals)
+
+    def _add_record_fields(self, node):
+        # add record fields
+        record = self._get_attribute(node.name)
+        if record is None:
+            return
+        node.fields = record.fields
+        for field in node.fields:
+            if isinstance(field, Field):
+                # Object instance fields are assumed to be read-only
+                # (see also _pair_class_record and transformer.py)
+                field.writable = False
 
     # Resolver
 
