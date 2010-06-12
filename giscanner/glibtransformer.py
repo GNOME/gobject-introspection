@@ -731,7 +731,7 @@ class GLibTransformer(object):
         #
         parent_type_names = xmlnode.attrib['parents'].split(',')
         parent_gitype = self._resolve_gtypename_chain(parent_type_names)
-        is_abstract = not not xmlnode.attrib.get('abstract', False)
+        is_abstract = bool(xmlnode.attrib.get('abstract', False))
         node = GLibObject(
             self._transformer.remove_prefix(type_name),
             parent_gitype,
