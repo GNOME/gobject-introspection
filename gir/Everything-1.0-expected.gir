@@ -161,6 +161,107 @@ and/or use gtk-doc annotations.  -->
               c:type="GInitiallyUnownedClass"/>
       </field>
     </record>
+    <class name="TestFundamentalObject"
+           c:type="TestFundamentalObject"
+           abstract="1"
+           glib:type-name="TestFundamentalObject"
+           glib:get-type="test_fundamental_object_get_type"
+           glib:type-struct="TestFundamentalObjectClass"
+           glib:fundamental="1"
+           glib:ref-func="test_fundamental_object_ref"
+           glib:unref-func="test_fundamental_object_unref"
+           glib:set-value-func="test_value_set_fundamental_object"
+           glib:get-value-func="test_value_get_fundamental_object">
+      <method name="ref" c:identifier="test_fundamental_object_ref">
+        <return-value transfer-ownership="full">
+          <type name="TestFundamentalObject" c:type="TestFundamentalObject*"/>
+        </return-value>
+      </method>
+      <method name="unref" c:identifier="test_fundamental_object_unref">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+      </method>
+      <field name="instance">
+        <type name="GObject.TypeInstance" c:type="GTypeInstance"/>
+      </field>
+      <field name="refcount">
+        <type name="int" c:type="gint"/>
+      </field>
+      <field name="flags">
+        <type name="uint" c:type="guint"/>
+      </field>
+    </class>
+    <record name="TestFundamentalObjectClass"
+            c:type="TestFundamentalObjectClass"
+            glib:is-gtype-struct-for="TestFundamentalObject">
+      <field name="type_class">
+        <type name="GObject.TypeClass" c:type="GTypeClass"/>
+      </field>
+      <field name="copy">
+        <type name="TestFundamentalObjectCopyFunction"
+              c:type="TestFundamentalObjectCopyFunction"/>
+      </field>
+      <field name="finalize">
+        <type name="TestFundamentalObjectFinalizeFunction"
+              c:type="TestFundamentalObjectFinalizeFunction"/>
+      </field>
+    </record>
+    <callback name="TestFundamentalObjectCopyFunction"
+              c:type="TestFundamentalObjectCopyFunction">
+      <return-value transfer-ownership="full">
+        <type name="TestFundamentalObject" c:type="TestFundamentalObject*"/>
+      </return-value>
+      <parameters>
+        <parameter name="obj" transfer-ownership="none">
+          <type name="TestFundamentalObject" c:type="TestFundamentalObject*"/>
+        </parameter>
+      </parameters>
+    </callback>
+    <callback name="TestFundamentalObjectFinalizeFunction"
+              c:type="TestFundamentalObjectFinalizeFunction">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="obj" transfer-ownership="none">
+          <type name="TestFundamentalObject" c:type="TestFundamentalObject*"/>
+        </parameter>
+      </parameters>
+    </callback>
+    <class name="TestFundamentalSubObject"
+           c:type="TestFundamentalSubObject"
+           parent="TestFundamentalObject"
+           glib:type-name="TestFundamentalSubObject"
+           glib:get-type="test_fundamental_sub_object_get_type"
+           glib:type-struct="TestFundamentalSubObjectClass"
+           glib:fundamental="1">
+      <constructor name="new" c:identifier="test_fundamental_sub_object_new">
+        <return-value transfer-ownership="full">
+          <type name="TestFundamentalSubObject"
+                c:type="TestFundamentalSubObject*"/>
+        </return-value>
+        <parameters>
+          <parameter name="data" transfer-ownership="none">
+            <type name="utf8" c:type="char*"/>
+          </parameter>
+        </parameters>
+      </constructor>
+      <field name="fundamental_object">
+        <type name="TestFundamentalObject" c:type="TestFundamentalObject"/>
+      </field>
+      <field name="data">
+        <type name="utf8" c:type="char*"/>
+      </field>
+    </class>
+    <record name="TestFundamentalSubObjectClass"
+            c:type="TestFundamentalSubObjectClass"
+            glib:is-gtype-struct-for="TestFundamentalSubObject">
+      <field name="fundamental_object_class">
+        <type name="TestFundamentalObjectClass"
+              c:type="TestFundamentalObjectClass"/>
+      </field>
+    </record>
     <interface name="TestInterface"
                c:type="EverythingTestInterface"
                glib:type-name="EverythingTestInterface"

@@ -1,5 +1,8 @@
 #include <string.h>
 #include <stdlib.h>
+#include <glib-object.h>
+#include <gobject/gvaluecollector.h>
+
 #include "everything.h"
 
 static gboolean abort_on_error = TRUE;
@@ -1894,6 +1897,296 @@ void
 test_sub_obj_unset_bare (TestSubObj *obj)
 {
   test_obj_set_bare(TEST_OBJECT(obj), NULL);
+}
+
+/* TestFundamental */
+
+TestFundamentalObject *
+test_fundamental_object_ref (TestFundamentalObject * fundamental_object)
+{
+  g_return_val_if_fail (fundamental_object != NULL, NULL);
+  g_atomic_int_inc (&fundamental_object->refcount);
+
+  return fundamental_object;
+}
+
+static void
+test_fundamental_object_free (TestFundamentalObject * fundamental_object)
+{
+  TestFundamentalObjectClass *mo_class;
+  test_fundamental_object_ref (fundamental_object);
+
+  mo_class = TEST_FUNDAMENTAL_OBJECT_GET_CLASS (fundamental_object);
+  mo_class->finalize (fundamental_object);
+
+  if (G_LIKELY (g_atomic_int_dec_and_test (&fundamental_object->refcount))) {
+    g_type_free_instance ((GTypeInstance *) fundamental_object);
+  }
+}
+
+void
+test_fundamental_object_unref (TestFundamentalObject * fundamental_object)
+{
+  g_return_if_fail (fundamental_object != NULL);
+  g_return_if_fail (fundamental_object->refcount > 0);
+
+  if (G_UNLIKELY (g_atomic_int_dec_and_test (&fundamental_object->refcount))) {
+    test_fundamental_object_free (fundamental_object);
+  }
+}
+
+static void
+test_fundamental_object_replace (TestFundamentalObject ** olddata, TestFundamentalObject * newdata)
+{
+  TestFundamentalObject *olddata_val;
+
+  g_return_if_fail (olddata != NULL);
+
+  olddata_val = g_atomic_pointer_get ((gpointer *) olddata);
+
+  if (olddata_val == newdata)
+    return;
+
+  if (newdata)
+    test_fundamental_object_ref (newdata);
+
+  while (!g_atomic_pointer_compare_and_exchange ((gpointer *) olddata,
+          olddata_val, newdata)) {
+    olddata_val = g_atomic_pointer_get ((gpointer *) olddata);
+  }
+
+  if (olddata_val)
+    test_fundamental_object_unref (olddata_val);
+}
+
+static void
+test_value_fundamental_object_init (GValue * value)
+{
+  value->data[0].v_pointer = NULL;
+}
+
+static void
+test_value_fundamental_object_free (GValue * value)
+{
+  if (value->data[0].v_pointer) {
+    test_fundamental_object_unref (TEST_FUNDAMENTAL_OBJECT_CAST (value->data[0].v_pointer));
+  }
+}
+
+static void
+test_value_fundamental_object_copy (const GValue * src_value, GValue * dest_value)
+{
+  if (src_value->data[0].v_pointer) {
+    dest_value->data[0].v_pointer =
+        test_fundamental_object_ref (TEST_FUNDAMENTAL_OBJECT_CAST (src_value->data[0].
+            v_pointer));
+  } else {
+    dest_value->data[0].v_pointer = NULL;
+  }
+}
+
+static gpointer
+test_value_fundamental_object_peek_pointer (const GValue * value)
+{
+  return value->data[0].v_pointer;
+}
+
+static gchar *
+test_value_fundamental_object_collect (GValue * value,
+                                       guint n_collect_values,
+                                       GTypeCValue * collect_values,
+                                       guint collect_flags)
+{
+  if (collect_values[0].v_pointer) {
+    value->data[0].v_pointer =
+        test_fundamental_object_ref (collect_values[0].v_pointer);
+  } else {
+    value->data[0].v_pointer = NULL;
+  }
+
+  return NULL;
+}
+
+static gchar *
+test_value_fundamental_object_lcopy (const GValue * value,
+                                     guint n_collect_values,
+                                     GTypeCValue * collect_values,
+                                     guint collect_flags)
+{
+  gpointer *fundamental_object_p = collect_values[0].v_pointer;
+
+  if (!fundamental_object_p) {
+    return g_strdup_printf ("value location for '%s' passed as NULL",
+        G_VALUE_TYPE_NAME (value));
+  }
+
+  if (!value->data[0].v_pointer)
+    *fundamental_object_p = NULL;
+  else if (collect_flags & G_VALUE_NOCOPY_CONTENTS)
+    *fundamental_object_p = value->data[0].v_pointer;
+  else
+    *fundamental_object_p = test_fundamental_object_ref (value->data[0].v_pointer);
+
+  return NULL;
+}
+
+static void
+test_fundamental_object_finalize (TestFundamentalObject * obj)
+{
+
+}
+
+static TestFundamentalObject *
+test_fundamental_object_copy_default (const TestFundamentalObject * obj)
+{
+  g_warning ("TestFundamentalObject classes must implement TestFundamentalObject::copy");
+  return NULL;
+}
+
+static void
+test_fundamental_object_class_init (gpointer g_class, gpointer class_data)
+{
+  TestFundamentalObjectClass *mo_class = TEST_FUNDAMENTAL_OBJECT_CLASS (g_class);
+
+  mo_class->copy = test_fundamental_object_copy_default;
+  mo_class->finalize = test_fundamental_object_finalize;
+}
+
+static void
+test_fundamental_object_init (GTypeInstance * instance, gpointer klass)
+{
+  TestFundamentalObject *fundamental_object = TEST_FUNDAMENTAL_OBJECT_CAST (instance);
+
+  fundamental_object->refcount = 1;
+}
+
+/**
+ * TestFundamentalObject:
+ *
+ * Ref Func: test_fundamental_object_ref
+ * Unref Func: test_fundamental_object_unref
+ * Set Value Func: test_value_set_fundamental_object
+ * Get Value Func: test_value_get_fundamental_object
+ */
+
+GType
+test_fundamental_object_get_type (void)
+{
+  static GType _test_fundamental_object_type = 0;
+
+  if (G_UNLIKELY (_test_fundamental_object_type == 0)) {
+    static const GTypeValueTable value_table = {
+      test_value_fundamental_object_init,
+      test_value_fundamental_object_free,
+      test_value_fundamental_object_copy,
+      test_value_fundamental_object_peek_pointer,
+      (char *) "p",
+      test_value_fundamental_object_collect,
+      (char *) "p",
+      test_value_fundamental_object_lcopy
+    };
+    static const GTypeInfo fundamental_object_info = {
+      sizeof (TestFundamentalObjectClass),
+      NULL, NULL,
+      test_fundamental_object_class_init,
+      NULL,
+      NULL,
+      sizeof (TestFundamentalObject),
+      0,
+      (GInstanceInitFunc) test_fundamental_object_init,
+      &value_table
+    };
+    static const GTypeFundamentalInfo fundamental_object_fundamental_info = {
+      (G_TYPE_FLAG_CLASSED | G_TYPE_FLAG_INSTANTIATABLE |
+          G_TYPE_FLAG_DERIVABLE | G_TYPE_FLAG_DEEP_DERIVABLE)
+    };
+
+    _test_fundamental_object_type = g_type_fundamental_next ();
+    g_type_register_fundamental (_test_fundamental_object_type, "TestFundamentalObject",
+        &fundamental_object_info, &fundamental_object_fundamental_info, G_TYPE_FLAG_ABSTRACT);
+
+  }
+
+  return _test_fundamental_object_type;
+}
+
+/**
+ * test_value_set_fundamental_object: (skip)
+ * @value:
+ * @fundamental_object:
+ */
+void
+test_value_set_fundamental_object (GValue * value, TestFundamentalObject * fundamental_object)
+{
+  gpointer *pointer_p;
+
+  g_return_if_fail (TEST_VALUE_HOLDS_FUNDAMENTAL_OBJECT (value));
+  g_return_if_fail (fundamental_object == NULL || TEST_IS_FUNDAMENTAL_OBJECT (fundamental_object));
+
+  pointer_p = &value->data[0].v_pointer;
+
+  test_fundamental_object_replace ((TestFundamentalObject **) pointer_p, fundamental_object);
+}
+
+/**
+ * test_value_get_fundamental_object: (skip)
+ * @value:
+ */
+TestFundamentalObject *
+test_value_get_fundamental_object (const GValue * value)
+{
+  g_return_val_if_fail (TEST_VALUE_HOLDS_FUNDAMENTAL_OBJECT (value), NULL);
+
+  return value->data[0].v_pointer;
+}
+
+static TestFundamentalObjectClass *parent_class = NULL;
+
+G_DEFINE_TYPE (TestFundamentalSubObject, test_fundamental_sub_object, TEST_TYPE_FUNDAMENTAL_OBJECT);
+
+static TestFundamentalSubObject *
+_test_fundamental_sub_object_copy (TestFundamentalSubObject * fundamental_sub_object)
+{
+  TestFundamentalSubObject *copy;
+
+  copy = test_fundamental_sub_object_new(NULL);
+  copy->data = g_strdup(fundamental_sub_object->data);
+  return copy;
+}
+
+static void
+test_fundamental_sub_object_finalize (TestFundamentalSubObject * fundamental_sub_object)
+{
+  g_return_if_fail (fundamental_sub_object != NULL);
+
+  g_free(fundamental_sub_object->data);
+  test_fundamental_object_unref (TEST_FUNDAMENTAL_OBJECT (fundamental_sub_object));
+}
+
+static void
+test_fundamental_sub_object_class_init (TestFundamentalSubObjectClass * klass)
+{
+  parent_class = g_type_class_peek_parent (klass);
+
+  klass->fundamental_object_class.copy = (TestFundamentalObjectCopyFunction) _test_fundamental_sub_object_copy;
+  klass->fundamental_object_class.finalize =
+      (TestFundamentalObjectFinalizeFunction) test_fundamental_sub_object_finalize;
+}
+
+static void
+test_fundamental_sub_object_init(TestFundamentalSubObject *object)
+{
+
+}
+
+TestFundamentalSubObject *
+test_fundamental_sub_object_new (const char * data)
+{
+  TestFundamentalSubObject *object;
+
+  object = (TestFundamentalSubObject *) g_type_create_instance (test_fundamental_sub_object_get_type());
+  object->data = g_strdup(data);
+  return object;
 }
 
 

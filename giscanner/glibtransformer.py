@@ -689,6 +689,8 @@ class GLibTransformer(object):
             self._introspect_interface(xmlnode)
         elif xmlnode.tag == 'boxed':
             self._introspect_boxed(xmlnode)
+        elif xmlnode.tag == 'fundamental':
+            self._introspect_fundamental(xmlnode)
         else:
             raise ValueError("Unhandled introspection XML tag %s", xmlnode.tag)
 
@@ -807,6 +809,36 @@ class GLibTransformer(object):
                 signal.parameters.append(param)
             node.signals.append(signal)
         node.signals = sorted(node.signals)
+
+    def _introspect_fundamental(self, xmlnode):
+        # We only care about types that can be instantiatable, other
+        # fundamental types such as the Clutter.Fixed/CoglFixed registers
+        # are not yet interesting from an introspection perspective and
+        # are ignored
+        if not xmlnode.attrib.get('instantiatable', False):
+            return
+
+        type_name = xmlnode.attrib['name']
+
+        # Get a list of parents here; some of them may be hidden, and what
+        # we really want to do is use the most-derived one that we know of.
+        if 'parents' in xmlnode.attrib:
+            parent_type_names = xmlnode.attrib['parents'].split(',')
+            parent_gitype = self._resolve_gtypename_chain(parent_type_names)
+        else:
+            parent_gitype = None
+        is_abstract = bool(xmlnode.attrib.get('abstract', False))
+        node = GLibObject(
+            self._transformer.remove_prefix(type_name),
+            parent_gitype,
+            type_name,
+            xmlnode.attrib['get-type'], is_abstract)
+        node.fundamental = True
+        self._introspect_implemented_interfaces(node, xmlnode)
+
+        self._add_record_fields(node)
+        self._add_attribute(node, replace=True)
+        self._register_internal_type(type_name, node)
 
     def _add_record_fields(self, node):
         # add record fields

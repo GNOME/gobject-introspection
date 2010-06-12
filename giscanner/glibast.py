@@ -120,6 +120,11 @@ class GLibObject(Class):
         Class.__init__(self, name, parent, is_abstract)
         self.type_name = type_name
         self.get_type = get_type
+        self.fundamental = False
+        self.unref_func = None
+        self.ref_func = None
+        self.set_value_func = None
+        self.get_value_func = None
         self.signals = []
         self.ctype = ctype or type_name
 

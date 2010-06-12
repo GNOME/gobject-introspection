@@ -144,9 +144,14 @@ g_interface_info_find_vfunc
 <FILE>giobjectinfo</FILE>
 GI_IS_OBJECT_INFO
 GIObjectInfo
+GIObjectInfoGetValueFunction
+GIObjectInfoRefFunction
+GIObjectInfoSetValueFunction
+GIObjectInfoUnrefFunction
 g_object_info_get_type_name
 g_object_info_get_type_init
 g_object_info_get_abstract
+g_object_info_get_fundamental
 g_object_info_get_parent
 g_object_info_get_n_interfaces
 g_object_info_get_interface
@@ -165,6 +170,14 @@ g_object_info_get_n_constants
 g_object_info_get_constant
 g_object_info_get_class_struct
 g_object_info_find_vfunc
+g_object_info_get_unref_function
+g_object_info_get_unref_function_pointer
+g_object_info_get_ref_function
+g_object_info_get_ref_function_pointer
+g_object_info_get_set_value_function
+g_object_info_get_set_value_function_pointer
+g_object_info_get_get_value_function
+g_object_info_get_get_value_function_pointer
 </SECTION>
 
 <SECTION>

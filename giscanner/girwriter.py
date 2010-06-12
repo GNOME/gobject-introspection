@@ -348,6 +348,17 @@ and/or use gtk-doc annotations. ''')
                 attrs.append(('glib:get-type', node.get_type))
             if node.glib_type_struct:
                 attrs.append(('glib:type-struct', node.glib_type_struct.name))
+        if isinstance(node, GLibObject):
+            if node.fundamental:
+                attrs.append(('glib:fundamental', '1'))
+            if node.ref_func:
+                attrs.append(('glib:ref-func', node.ref_func))
+            if node.unref_func:
+                attrs.append(('glib:unref-func', node.unref_func))
+            if node.set_value_func:
+                attrs.append(('glib:set-value-func', node.set_value_func))
+            if node.get_value_func:
+                attrs.append(('glib:get-value-func', node.get_value_func))
         with self.tagcontext(tag_name, attrs):
             self._write_generic(node)
             if isinstance(node, GLibObject):

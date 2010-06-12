@@ -334,6 +334,61 @@ TestSubObj* test_sub_obj_new (void);
 void        test_sub_obj_unset_bare (TestSubObj *obj);
 int         test_sub_obj_instance_method (TestSubObj *obj);
 
+/* fundamental object */
+#define TEST_TYPE_FUNDAMENTAL_OBJECT            (test_fundamental_object_get_type())
+#define TEST_IS_FUNDAMENTAL_OBJECT(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TEST_TYPE_FUNDAMENTAL_OBJECT))
+#define TEST_IS_FUNDAMENTAL_OBJECT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), TEST_TYPE_FUNDAMENTAL_OBJECT))
+#define TEST_FUNDAMENTAL_OBJECT_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), TEST_TYPE_FUNDAMENTAL_OBJECT, TestFundamentalObjectClass))
+#define TEST_FUNDAMENTAL_OBJECT(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), TEST_TYPE_FUNDAMENTAL_OBJECT, TestFundamentalObject))
+#define TEST_FUNDAMENTAL_OBJECT_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), TEST_TYPE_FUNDAMENTAL_OBJECT, TestFundamentalObjectClass))
+#define TEST_FUNDAMENTAL_OBJECT_CAST(obj)       ((TestFundamentalObject*)(obj))
+
+typedef struct _TestFundamentalObject TestFundamentalObject;
+typedef struct _TestFundamentalObjectClass TestFundamentalObjectClass;
+typedef TestFundamentalObject * (*TestFundamentalObjectCopyFunction) (const TestFundamentalObject *obj);
+typedef void (*TestFundamentalObjectFinalizeFunction) (TestFundamentalObject *obj);
+
+
+struct _TestFundamentalObject {
+  GTypeInstance instance;
+  gint refcount;
+  guint flags;
+};
+
+struct _TestFundamentalObjectClass {
+  GTypeClass type_class;
+
+  TestFundamentalObjectCopyFunction copy;
+  TestFundamentalObjectFinalizeFunction finalize;
+};
+
+GType 		       test_fundamental_object_get_type (void);
+TestFundamentalObject* test_fundamental_object_ref      (TestFundamentalObject *fundamental_object);
+void 		       test_fundamental_object_unref 	(TestFundamentalObject *fundamental_object);
+
+#define TEST_VALUE_HOLDS_FUNDAMENTAL_OBJECT(value)  (G_VALUE_HOLDS(value, TEST_TYPE_FUNDAMENTAL_OBJECT))
+
+void 		       test_value_set_fundamental_object (GValue *value, TestFundamentalObject *fundamental_object);
+TestFundamentalObject* test_value_get_fundamental_object (const GValue *value);
+
+typedef struct _TestFundamentalSubObject TestFundamentalSubObject;
+typedef struct _TestFundamentalSubObjectClass TestFundamentalSubObjectClass;
+
+struct _TestFundamentalSubObject
+{
+  TestFundamentalObject fundamental_object;
+  char *data;
+};
+
+struct _TestFundamentalSubObjectClass {
+  TestFundamentalObjectClass fundamental_object_class;
+};
+
+GType test_fundamental_sub_object_get_type(void);
+
+TestFundamentalSubObject *
+test_fundamental_sub_object_new (const char *data);
+
 /* callback */
 typedef void (*TestSimpleCallback) (void);
 typedef int (*TestCallback) (void);

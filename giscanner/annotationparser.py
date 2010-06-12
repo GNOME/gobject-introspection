@@ -52,6 +52,10 @@ TAG_ATTRIBUTES = 'attributes'
 TAG_RENAME_TO = 'rename to'
 TAG_TYPE = 'type'
 TAG_TRANSFER = 'transfer'
+TAG_UNREF_FUNC = 'unref func'
+TAG_REF_FUNC = 'ref func'
+TAG_SET_VALUE_FUNC = 'set value func'
+TAG_GET_VALUE_FUNC = 'get value func'
 
 # Options - annotations for parameters and return values
 OPT_ALLOW_NONE = 'allow-none'
@@ -361,6 +365,7 @@ class AnnotationApplier(object):
         self._parse_fields(class_, class_.fields)
         if block:
             class_.doc = block.comment
+        self._parse_type_instance_tags(class_, block)
 
     def _parse_interface(self, interface):
         block = self._blocks.get(interface.type_name)
@@ -910,6 +915,16 @@ class AnnotationApplier(object):
         if block is not None:
             if OPT_FOREIGN in block.options:
                 node.foreign = True
+
+    def _parse_type_instance_tags(self, node, block):
+        tag = self._get_tag(block, TAG_UNREF_FUNC)
+        node.unref_func = tag.value if tag else None
+        tag = self._get_tag(block, TAG_REF_FUNC)
+        node.ref_func = tag.value if tag else None
+        tag = self._get_tag(block, TAG_SET_VALUE_FUNC)
+        node.set_value_func = tag.value if tag else None
+        tag = self._get_tag(block, TAG_GET_VALUE_FUNC)
+        node.get_value_func = tag.value if tag else None
 
     def _parse_rename_to_func(self, node, block):
         rename_to_tag = self._get_tag(block, TAG_RENAME_TO)
