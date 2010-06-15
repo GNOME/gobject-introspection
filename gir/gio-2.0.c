@@ -162,3 +162,17 @@
  *
  * Return value: (transfer none):
  */
+
+/**
+ * g_app_launch_context_get_display:
+ * @context: a #GAppLaunchContext
+ * @info: a #GAppInfo
+ * @files: (element-type GFile): a #GList of #GFile objects
+ */
+
+/**
+ * g_app_launch_context_get_startup_notify_id:
+ * @context: a #GAppLaunchContext
+ * @info: a #GAppInfo
+ * @files: (element-type GFile): a #GList of of #GFile objects
+ */
