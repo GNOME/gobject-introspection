@@ -236,7 +236,11 @@ and/or use gtk-doc annotations.  -->
           </parameter>
         </parameters>
       </function>
-      <virtual-method name="matrix" invoker="do_matrix">
+      <virtual-method name="matrix"
+                      invoker="do_matrix"
+                      doc="This method is virtual.  Notably its name differs from the virtual
+slot name, which makes it useful for testing bindings handle this
+case.">
         <return-value transfer-ownership="none">
           <type name="int" c:type="int"/>
         </return-value>

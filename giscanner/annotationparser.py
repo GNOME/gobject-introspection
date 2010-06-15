@@ -497,7 +497,7 @@ class AnnotationApplier(object):
             for vfunc in parent.virtual_methods:
                 if vfunc.name == invoker_name:
                     matched = True
-                    vfunc.invoker = meth.name
+                    vfunc.invoker = meth
                     break
             if not matched:
                 print "warning: unmatched virtual invoker %r for method %r" % \
@@ -506,6 +506,11 @@ class AnnotationApplier(object):
     def _parse_vfunc(self, parent, vfunc):
         key = '%s::%s' % (parent.type_name, vfunc.name)
         self._parse_callable(vfunc, self._blocks.get(key))
+        if vfunc.invoker:
+            # We normally expect annotations like (element-type) to be
+            # applied to the invoker.
+            block = self._blocks.get(vfunc.invoker.symbol)
+            self._parse_callable(vfunc, block)
 
     def _parse_field(self, parent, field, block=None):
         if isinstance(field, Callback):

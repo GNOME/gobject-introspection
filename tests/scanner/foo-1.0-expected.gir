@@ -329,7 +329,7 @@ uses a C sugar return type.">
           </parameter>
         </parameters>
       </virtual-method>
-      <virtual-method name="read_fn" invoker="read">
+      <virtual-method name="read_fn" invoker="read" doc="Read some stuff.">
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>

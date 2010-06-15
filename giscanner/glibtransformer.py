@@ -679,7 +679,7 @@ class GLibTransformer(object):
                     method.retval != vfunc.retval or
                     method.parameters != vfunc.parameters):
                     continue
-                vfunc.invoker = method.name
+                vfunc.invoker = method
 
         gclass_struct = GLibRecord.from_record(class_struct)
         self._remove_attribute(class_struct.name)

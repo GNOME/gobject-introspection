@@ -410,7 +410,7 @@ and/or use gtk-doc annotations. ''')
     def _write_vfunc(self, vf):
         attrs = []
         if vf.invoker:
-            attrs.append(('invoker', vf.invoker))
+            attrs.append(('invoker', vf.invoker.name))
         self._write_callable(vf, 'virtual-method', attrs)
 
     def _write_callback(self, callback):
