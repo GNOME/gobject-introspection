@@ -503,6 +503,23 @@ type.">
       <field name="parent_instance">
         <type name="GObject.Object" c:type="GObject"/>
       </field>
+      <glib:signal name="attribute-signal"
+                   doc="This signal tests a signal with attributes.">
+        <return-value transfer-ownership="full" doc="the return value">
+          <attribute name="some.annotation.foo3" value="val3"/>
+          <type name="utf8" c:type="gchararray"/>
+        </return-value>
+        <parameters>
+          <parameter name="arg1" transfer-ownership="none" doc="a value">
+            <attribute name="some.annotation.foo1" value="val1"/>
+            <type name="utf8" c:type="gchararray"/>
+          </parameter>
+          <parameter name="arg2" transfer-ownership="none" doc="another value">
+            <attribute name="some.annotation.foo2" value="val2"/>
+            <type name="utf8" c:type="gchararray"/>
+          </parameter>
+        </parameters>
+      </glib:signal>
       <glib:signal name="doc-empty-arg-parsing"
                    doc="This signal tests an empty document argument (@arg1)">
         <return-value transfer-ownership="full">
@@ -562,6 +579,23 @@ it says it&apos;s pointer but it&apos;s actually a string."
         </array>
       </field>
     </record>
+    <function name="attribute_func" c:identifier="annotation_attribute_func">
+      <return-value transfer-ownership="none" doc="The return value.">
+        <attribute name="yet.another.annotation" value="another_value"/>
+        <attribute name="some.other.annotation" value="value2"/>
+        <type name="int" c:type="gint"/>
+      </return-value>
+      <parameters>
+        <parameter name="object" transfer-ownership="none">
+          <type name="Object" c:type="AnnotationObject*"/>
+        </parameter>
+        <parameter name="data" transfer-ownership="none" doc="Some data.">
+          <attribute name="another.annotation" value="blahvalue"/>
+          <attribute name="some.annotation" value="value"/>
+          <type name="utf8" c:type="gchar*"/>
+        </parameter>
+      </parameters>
+    </function>
     <function name="custom_destroy"
               c:identifier="annotation_custom_destroy"
               doc="Test messing up the heuristic of closure/destroy-notification

@@ -635,6 +635,12 @@ class AnnotationApplier(object):
         if tag is not None and tag.comment is not None:
             node.doc = tag.comment
 
+        for key in options:
+            if '.' in key:
+                value = options.get(key)
+                if value:
+                    node.attributes.append((key, value.one()))
+
     def _extract_direction(self, node, options):
         caller_allocates = False
         if (OPT_INOUT in options or

@@ -192,6 +192,7 @@ and/or use gtk-doc annotations. ''')
         if return_.doc:
             attrs.append(('doc', return_.doc))
         with self.tagcontext('return-value', attrs):
+            self._write_attributes(return_)
             self._write_type(return_.type)
 
     def _write_parameters(self, parameters):
@@ -224,6 +225,7 @@ and/or use gtk-doc annotations. ''')
         if parameter.doc:
             attrs.append(('doc', parameter.doc))
         with self.tagcontext('parameter', attrs):
+            self._write_attributes(parameter)
             self._write_type(parameter.type)
 
     def _type_to_string(self, ntype):

@@ -14,6 +14,7 @@ enum {
   STRING_SIGNAL,
   LIST_SIGNAL,
   DOC_EMPTY_ARG_PARSING,
+  ATTRIBUTE_SIGNAL,
   LAST_SIGNAL
 };
 
@@ -117,6 +118,28 @@ annotation_object_class_init (AnnotationObjectClass *klass)
 		  NULL, NULL,
 		  (GSignalCMarshaller)g_cclosure_marshal_VOID__POINTER,
 		  G_TYPE_NONE, 1, G_TYPE_POINTER);
+
+  /**
+   * AnnotationObject::attribute-signal:
+   * @annotation: the annotation object
+   * @arg1: (some.annotation.foo1 val1): a value
+   * @arg2: (some.annotation.foo2 val2): another value
+   *
+   * This signal tests a signal with attributes.
+   *
+   * Returns: (some.annotation.foo3 val3): the return value
+   */
+  annotation_object_signals[ATTRIBUTE_SIGNAL] =
+    g_signal_new ("attribute-signal",
+		  G_OBJECT_CLASS_TYPE (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  0,
+		  NULL, NULL,
+		  NULL, /* marshaller */
+		  G_TYPE_STRING,
+                  2,
+                  G_TYPE_STRING,
+                  G_TYPE_STRING);
 
   /**
    * AnnotationObject:string-property:
@@ -698,6 +721,20 @@ annotation_set_source_file (const char *fname)
 void
 annotation_ptr_array (GPtrArray *array)
 {
+}
+
+/**
+ * annotation_attribute_func:
+ * @object: A #AnnotationObject.
+ * @data: (some.annotation value) (another.annotation blahvalue): Some data.
+ *
+ * Returns: (some.other.annotation value2) (yet.another.annotation another_value): The return value.
+ */
+gint
+annotation_attribute_func (AnnotationObject *object,
+                           const gchar      *data)
+{
+  return 42;
 }
 
 char backslash_parsing_tester_2 = '\\';

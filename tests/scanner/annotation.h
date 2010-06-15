@@ -139,6 +139,9 @@ void     annotation_custom_destroy (AnnotationCallback callback,
 char *   annotation_get_source_file (void);
 void     annotation_set_source_file (const char *fname);
 
+gint     annotation_attribute_func (AnnotationObject *object,
+                                    const gchar      *data);
+
 /**
  * AnnotationStruct:
  *
