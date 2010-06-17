@@ -18,6 +18,8 @@
 # Boston, MA 02111-1307, USA.
 #
 
+import os
+
 from xml.etree.cElementTree import parse
 
 from .ast import (Alias, Array, Callback, Constant, Enum, Function, Field,
@@ -54,12 +56,16 @@ class GIRParser(object):
         self._includes = set()
         self._pkgconfig_packages = set()
         self._namespace = None
+        self._filename_stack = []
 
     # Public API
 
     def parse(self, filename):
+        filename = os.path.abspath(filename)
+        self._filename_stack.append(filename)
         tree = parse(filename)
         self.parse_tree(tree)
+        self._filename_stack.pop()
 
     def parse_tree(self, tree):
         self._includes.clear()
@@ -90,6 +96,15 @@ class GIRParser(object):
 
     # Private
 
+    def _get_current_file(self):
+        if not self._filename_stack:
+            return None
+        cwd = os.getcwd() + os.sep
+        curfile = self._filename_stack[-1]
+        if curfile.startswith(cwd):
+            return curfile[len(cwd):]
+        return curfile
+        
     def _add_node(self, node):
         self._namespace.nodes.append(node)
 
@@ -97,8 +112,9 @@ class GIRParser(object):
         assert root.tag == _corens('repository')
         version = root.attrib['version']
         if version != COMPATIBLE_GIR_VERSION:
-            raise ValueError("Incompatible version %s (supported: %s)",
-                             version, COMPATIBLE_GIR_VERSION)
+            raise SystemExit("%s: Incompatible version %s (supported: %s)" \
+                             % (self._get_current_file(),
+                                version, COMPATIBLE_GIR_VERSION))
 
         for node in root.getchildren():
             if node.tag == _corens('include'):
