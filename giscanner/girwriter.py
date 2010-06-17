@@ -96,8 +96,7 @@ and/or use gtk-doc annotations. ''')
                 else:
                     return cmp(a, b)
             for node in sorted(namespace.nodes, cmp=nscmp):
-                if not node.skip:
-                    self._write_node(node)
+                self._write_node(node)
 
     def _write_node(self, node):
         if isinstance(node, Function):
@@ -134,7 +133,9 @@ and/or use gtk-doc annotations. ''')
         for key, value in node.attributes:
             self.write_tag('attribute', [('name', key), ('value', value)])
 
-    def _append_deprecated(self, node, attrs):
+    def _append_node_generic(self, node, attrs):
+        if node.skip or not node.introspectable:
+            attrs.append(('introspectable', '0'))
         if node.deprecated:
             attrs.append(('deprecated', node.deprecated))
             if node.deprecated_version:
@@ -152,14 +153,12 @@ and/or use gtk-doc annotations. ''')
         self.write_tag('alias', attrs)
 
     def _write_callable(self, callable, tag_name, extra_attrs):
-        if callable.skip:
-            return
         attrs = [('name', callable.name)]
         attrs.extend(extra_attrs)
         if callable.doc:
             attrs.append(('doc', callable.doc))
         self._append_version(callable, attrs)
-        self._append_deprecated(callable, attrs)
+        self._append_node_generic(callable, attrs)
         self._append_throws(callable, attrs)
         with self.tagcontext(tag_name, attrs):
             self._write_attributes(callable)
@@ -279,7 +278,7 @@ and/or use gtk-doc annotations. ''')
         if enum.doc:
             attrs.append(('doc', enum.doc))
         self._append_version(enum, attrs)
-        self._append_deprecated(enum, attrs)
+        self._append_node_generic(enum, attrs)
         if isinstance(enum, GLibEnum):
             attrs.extend([('glib:type-name', enum.type_name),
                           ('glib:get-type', enum.get_type),
@@ -299,7 +298,7 @@ and/or use gtk-doc annotations. ''')
         if bitfield.doc:
             attrs.append(('doc', bitfield.doc))
         self._append_version(bitfield, attrs)
-        self._append_deprecated(bitfield, attrs)
+        self._append_node_generic(bitfield, attrs)
         if isinstance(bitfield, GLibFlags):
             attrs.extend([('glib:type-name', bitfield.type_name),
                           ('glib:get-type', bitfield.get_type),
@@ -312,8 +311,6 @@ and/or use gtk-doc annotations. ''')
                 self._write_member(member)
 
     def _write_member(self, member):
-        if member.skip:
-            return
         attrs = [('name', member.name),
                  ('value', str(member.value)),
                  ('c:identifier', member.symbol)]
@@ -333,7 +330,7 @@ and/or use gtk-doc annotations. ''')
         if node.doc:
             attrs.append(('doc', node.doc))
         self._append_version(node, attrs)
-        self._append_deprecated(node, attrs)
+        self._append_node_generic(node, attrs)
         if isinstance(node, Class):
             tag_name = 'class'
             if node.parent is not None:
@@ -386,11 +383,9 @@ and/or use gtk-doc annotations. ''')
                 self._write_method(method)
 
     def _write_property(self, prop):
-        if prop.skip:
-            return
         attrs = [('name', prop.name)]
         self._append_version(prop, attrs)
-        self._append_deprecated(prop, attrs)
+        self._append_node_generic(prop, attrs)
         # Properties are assumed to be readable (see also generate.c)
         if not prop.readable:
             attrs.append(('readable', '0'))
@@ -440,7 +435,7 @@ and/or use gtk-doc annotations. ''')
         if record.doc:
             attrs.append(('doc', record.doc))
         self._append_version(record, attrs)
-        self._append_deprecated(record, attrs)
+        self._append_node_generic(record, attrs)
         if isinstance(record, GLibBoxed):
             attrs.extend(self._boxed_attrs(record))
         with self.tagcontext('record', attrs):
@@ -462,7 +457,7 @@ and/or use gtk-doc annotations. ''')
         if union.doc:
             attrs.append(('doc', union.doc))
         self._append_version(union, attrs)
-        self._append_deprecated(union, attrs)
+        self._append_node_generic(union, attrs)
         if isinstance(union, GLibBoxed):
             attrs.extend(self._boxed_attrs(union))
         with self.tagcontext('union', attrs):
@@ -508,13 +503,11 @@ and/or use gtk-doc annotations. ''')
                 self._write_type(field.type)
 
     def _write_signal(self, signal):
-        if signal.skip:
-            return
         attrs = [('name', signal.name)]
         if signal.doc:
             attrs.append(('doc', signal.doc))
         self._append_version(signal, attrs)
-        self._append_deprecated(signal, attrs)
+        self._append_node_generic(signal, attrs)
         with self.tagcontext('glib:signal', attrs):
             self._write_attributes(signal)
             self._write_return_type(signal.retval)
