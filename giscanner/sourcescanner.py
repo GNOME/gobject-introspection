@@ -188,10 +188,6 @@ class SourceSymbol(object):
     def source_filename(self):
         return self._symbol.source_filename
 
-    @property
-    def line(self):
-        return self._symbol.line
-
 
 class SourceScanner(object):
 

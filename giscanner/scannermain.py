@@ -87,12 +87,6 @@ def _get_option_parser():
     parser.add_option("", "--pkg-export",
                       action="append", dest="packages_export", default=[],
                       help="Associated pkg-config packages for this library")
-    parser.add_option('', "--Wall",
-                      action="store_true", dest="warn_all", default=False,
-                      help="If true, enable all warnings for introspection")
-    parser.add_option('', "--Werror",
-                      action="store_true", dest="warn_fatal",
-                      help="Turn warnings into fatal errors")
     parser.add_option("-v", "--verbose",
                       action="store_true", dest="verbose",
                       help="be verbose")
@@ -277,8 +271,6 @@ def scanner_main(args):
         transformer.set_strip_prefix(options.strip_prefix)
     else:
         transformer.set_strip_prefix(options.namespace_name)
-    if options.warn_all:
-        transformer.enable_warnings(True)
     transformer.set_include_paths(options.include_paths)
     shown_include_warning = False
     for include in options.includes:
@@ -335,11 +327,6 @@ def scanner_main(args):
         ap.parse()
     except InvalidAnnotationError, e:
         raise SystemExit("ERROR in annotation: %s" % (str(e), ))
-
-    glibtransformer.final_analyze()
-
-    if options.warn_fatal and transformer.did_warn():
-        return 1
 
     # Write out AST
     if options.packages_export:

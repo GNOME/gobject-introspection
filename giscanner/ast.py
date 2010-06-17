@@ -173,14 +173,12 @@ class Node(object):
 
     def __init__(self, name=None):
         self.name = name
-        self.skip = False
-        self.introspectable = True
         self.attributes = [] # (key, value)*
+        self.skip = False
         self.deprecated = None
         self.deprecated_version = None
         self.version = None
         self.foreign = False
-        self.file_positions = set()
 
     def __cmp__(self, other):
         return cmp(self.name, other.name)
@@ -190,16 +188,6 @@ class Node(object):
 
     def remove_matching_children(self, pred):
         pass
-
-    def inherit_file_positions(self, node):
-        self.file_positions.update(node.file_positions)
-
-    def add_file_position(self, filename, line, column):
-        self.file_positions.add((filename, line, column))
-
-    def add_symbol_reference(self, symbol):
-        if symbol.source_filename:
-            self.add_file_position(symbol.source_filename, symbol.line, -1)
 
 class Namespace(Node):
 

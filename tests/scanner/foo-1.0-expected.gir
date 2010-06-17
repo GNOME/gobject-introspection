@@ -360,9 +360,7 @@ uses a C sugar return type.">
           </parameter>
         </parameters>
       </method>
-      <method name="take_all"
-              c:identifier="foo_object_take_all"
-              introspectable="0">
+      <method name="take_all" c:identifier="foo_object_take_all">
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -450,14 +448,6 @@ uses a C sugar return type.">
             <type name="int" c:type="int"/>
           </parameter>
         </parameters>
-      </method>
-      <method name="skipped_method"
-              c:identifier="foo_object_skipped_method"
-              doc="This is only useful from C."
-              introspectable="0">
-        <return-value transfer-ownership="none">
-          <type name="none" c:type="void"/>
-        </return-value>
       </method>
       <property name="string"
                 writable="1"
@@ -579,14 +569,6 @@ uses a C sugar return type.">
     <constant name="SUCCESS_INT" value="4408">
       <type name="int"/>
     </constant>
-    <enumeration name="Skippable"
-                 doc="Some type that is only interesting from C and should not be
-exposed to language bindings."
-                 introspectable="0"
-                 c:type="FooSkippable">
-      <member name="one" value="0" c:identifier="FOO_SKIPPABLE_ONE"/>
-      <member name="two" value="1" c:identifier="FOO_SKIPPABLE_TWO"/>
-    </enumeration>
     <enumeration name="StackLayer" c:type="FooStackLayer">
       <member name="desktop" value="0" c:identifier="FOO_LAYER_DESKTOP"/>
       <member name="bottom" value="1" c:identifier="FOO_LAYER_BOTTOM"/>
@@ -715,9 +697,7 @@ exposed to language bindings."
         <type name="utility.Struct" c:type="UtilityStruct"/>
       </field>
     </record>
-    <callback name="VarargsCallback"
-              c:type="FooVarargsCallback"
-              introspectable="0">
+    <callback name="VarargsCallback" c:type="FooVarargsCallback">
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
@@ -817,20 +797,6 @@ exposed to language bindings."
         </parameter>
       </parameters>
     </function>
-    <function name="skip_me"
-              c:identifier="foo_skip_me"
-              doc="Does something that&apos;s only interesting from C and should not be
-exposed to language bindings."
-              introspectable="0">
-      <return-value transfer-ownership="none">
-        <type name="none" c:type="void"/>
-      </return-value>
-      <parameters>
-        <parameter name="fs" transfer-ownership="none">
-          <type name="Skippable" c:type="FooSkippable"/>
-        </parameter>
-      </parameters>
-    </function>
     <function name="test_array" c:identifier="foo_test_array">
       <return-value transfer-ownership="container">
         <array name="GLib.Array" c:type="GArray*">
@@ -919,8 +885,7 @@ exposed to language bindings."
       </parameters>
     </function>
     <function name="test_varargs_callback"
-              c:identifier="foo_test_varargs_callback"
-              introspectable="0">
+              c:identifier="foo_test_varargs_callback">
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
@@ -934,8 +899,7 @@ exposed to language bindings."
       </parameters>
     </function>
     <function name="test_varargs_callback2"
-              c:identifier="foo_test_varargs_callback2"
-              introspectable="0">
+              c:identifier="foo_test_varargs_callback2">
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
@@ -946,8 +910,7 @@ exposed to language bindings."
       </parameters>
     </function>
     <function name="test_varargs_callback3"
-              c:identifier="foo_test_varargs_callback3"
-              introspectable="0">
+              c:identifier="foo_test_varargs_callback3">
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>

@@ -65,7 +65,6 @@ class Names(object):
 class Transformer(object):
 
     def __init__(self, cachestore, namespace_name, namespace_version):
-        self.__cwd = os.getcwd() + os.sep
         self._cachestore = cachestore
         self.generator = None
         self._namespace = Namespace(namespace_name, namespace_version)
@@ -73,8 +72,6 @@ class Transformer(object):
         self._pkg_config_packages = set()
         self._typedefs_ns = {}
         self._strip_prefix = ''
-        self._enable_warnings = False
-        self._warned = False
         self._includes = set()
         self._includepaths = []
 
@@ -89,12 +86,6 @@ class Transformer(object):
 
     def get_strip_prefix(self):
         return self._strip_prefix
-
-    def enable_warnings(self, enable):
-        self._enable_warnings = enable
-
-    def did_warn(self):
-        return self._warned
 
     def get_pkgconfig_packages(self):
         return self._pkg_config_packages
@@ -123,58 +114,6 @@ class Transformer(object):
         self._includes.add(include)
 
     # Private
-
-    def _log_warning(self, string, file_positions=[], prefix=None):
-        """Log a warning, using optional file positioning information.
-If the warning is related to a Node type, see _log_node_warning()."""
-        if not self._enable_warnings:
-            return
-
-        if len(file_positions) == 0:
-            target_file_positions = [('<unknown>', -1, -1)]
-        else:
-            target_file_positions = file_positions
-
-        for (filename, line, column) in target_file_positions:
-            if filename.startswith(self.__cwd):
-                filename = filename[len(self.__cwd):]
-            if column != -1:
-                position = '%s:%d:%d' % (filename, line, column)
-            elif line != -1:
-                position = '%s:%d' % (filename, line, )
-            else:
-                position = '%s:' % (filename, )
-
-        if prefix:
-            print >>sys.stderr, \
-'''%s: warning: ns=%r %s: %s''' % (position, self._namespace.name,
-                                   prefix, string)
-        else:
-            print >>sys.stderr, \
-'''%s: warning: ns=%r: %s''' % (position, self._namespace.name, string)
-
-    def _log_symbol_warning(self, symbol, string):
-        """Log a warning in the context of the given symbol."""
-        file_positions = [(symbol.source_filename, symbol.line, -1)]
-        prefix = "symbol=%r" % (symbol.ident, )
-        self._log_warning(string, file_positions, prefix=prefix)
-
-    def _log_node_warning(self, node, string, context=None):
-        """Log a warning, using information about file positions from
-the given node.  The optional context argument, if given, should be
-another Node type which will also be displayed.  If no file position
-information is available from the node, the position data from the
-context will be used."""
-        if len(node.file_positions) == 0 and \
-                (context is not None) and len(context.file_positions) > 0:
-            file_positions = context.file_positions
-        else:
-            file_positions = node.file_positions
-
-        if context:
-            string = "context=%r %s" % (context.name, string)
-
-        self._log_warning(string, file_positions)
 
     def _find_include(self, include):
         searchdirs = self._includepaths[:]
@@ -322,15 +261,12 @@ context will be used."""
         else:
             klass = Enum
         node = klass(enum_name, symbol.ident, members)
-        node.add_symbol_reference(symbol)
         self._names.type_names[symbol.ident] = (None, node)
         return node
 
     def _create_object(self, symbol):
-        node = Member(symbol.ident, symbol.base_type.name,
+        return Member(symbol.ident, symbol.base_type.name,
                       symbol.ident)
-        node.add_symbol_reference(symbol)
-        return node
 
     def _type_is_callback(self, type):
         if isinstance(type, Callback):
@@ -391,7 +327,6 @@ context will be used."""
         self._augment_callback_params(parameters)
         name = self._strip_namespace_func(symbol.ident)
         func = Function(name, return_, parameters, symbol.ident)
-        func.add_symbol_reference(symbol)
         return func
 
     def _create_source_type(self, source_type):
@@ -451,7 +386,6 @@ context will be used."""
             # (except for Objects, see also glibtransformer.py)
             node = Field(symbol.ident, ftype, ftype.name,
                          readable=True, writable=True, bits=symbol.const_int)
-            node.add_symbol_reference(symbol)
         return node
 
     def _create_typedef(self, symbol):
@@ -589,13 +523,11 @@ context will be used."""
             raise AssertionError()
 
         const = Constant(name, type_name, value)
-        const.add_symbol_reference(symbol)
         return const
 
     def _create_typedef_struct(self, symbol, disguised=False):
         name = self.remove_prefix(symbol.ident)
         struct = Struct(name, symbol.ident, disguised)
-        struct.add_symbol_reference(symbol)
         self._typedefs_ns[symbol.ident] = struct
         self._create_struct(symbol)
         return struct
@@ -603,7 +535,6 @@ context will be used."""
     def _create_typedef_union(self, symbol):
         name = self.remove_prefix(symbol.ident)
         union = Union(name, symbol.ident)
-        union.add_symbol_reference(symbol)
         self._typedefs_ns[symbol.ident] = union
         self._create_union(symbol)
         return union
@@ -639,7 +570,6 @@ context will be used."""
             if field:
                 compound.fields.append(field)
 
-        compound.add_symbol_reference(symbol)
         return compound
 
     def _create_struct(self, symbol, anonymous=False):
@@ -663,7 +593,6 @@ context will be used."""
         else:
             name = self.remove_prefix(symbol.ident)
         callback = Callback(name, retval, parameters, symbol.ident)
-        callback.add_symbol_reference(symbol)
 
         return callback
 

@@ -1,8 +1,6 @@
 include $(top_srcdir)/common.mk
 include $(top_srcdir)/Makefile.introspection
 
-INTROSPECTION_SCANNER_ARGS += --Wall --Werror
-
 # We need to build a shared library, which can be dlopened
 # it does not work with noinst_LTLIBRARIES
 testlib_LTLIBRARIES = \

@@ -25,12 +25,10 @@ import tempfile
 import shutil
 import subprocess
 
-from .ast import (Alias, Bitfield, Callable, Callback, Class, Constant, Enum,
-                  Function, Interface, Member, Namespace, Node, Parameter,
-                  Property, Record, Return, Type, TypeContainer, Union,
-                  Field, VFunction, type_name_from_ctype, default_array_types,
-                  TYPE_UINT8, PARAM_TRANSFER_FULL, Array, List,
-                  Map, Varargs)
+from .ast import (Alias, Bitfield, Callback, Constant, Enum, Function, Member,
+                  Namespace, Parameter, Property, Record, Return, Type, Union,
+                  Field, VFunction, type_name_from_ctype,
+                  default_array_types, TYPE_UINT8, PARAM_TRANSFER_FULL, Array)
 from .transformer import Names
 from .glibast import (GLibBoxed, GLibEnum, GLibEnumMember, GLibFlags,
                       GLibInterface, GLibObject, GLibSignal, GLibBoxedStruct,
@@ -114,6 +112,18 @@ class GLibTransformer(object):
 
     # Public API
 
+    def _print_statistics(self):
+        nodes = list(self._names.names.itervalues())
+
+        def count_type(otype):
+            return len([x for x in nodes
+                        if isinstance(x[1], otype)])
+        objectcount = count_type(GLibObject)
+        ifacecount = count_type(GLibInterface)
+        enumcount = count_type(GLibEnum)
+        print " %d nodes; %d objects, %d interfaces, %d enums" \
+            % (len(nodes), objectcount, ifacecount, enumcount)
+
     def init_parse(self):
         """Do parsing steps that don't involve the introspection binary
 
@@ -160,8 +170,7 @@ class GLibTransformer(object):
             try:
                 self._resolve_node(node)
             except KeyError, e:
-                self._transformer._log_node_warning(node,
-"""Unresolvable entry %r""" % (e, ))
+                #print "WARNING: DELETING node %s: %s" % (node.name, e)
                 self._remove_attribute(node.name)
         # Another pass, since we need to have the methods parsed
         # in order to correctly modify them after class/record
@@ -172,11 +181,12 @@ class GLibTransformer(object):
                 self._pair_class_record(node)
         for (ns, alias) in self._names.aliases.itervalues():
             self._resolve_alias(alias)
-
         self._resolve_quarks()
+        # Fourth pass: ensure all types are known
+        if not self._noclosure:
+            self._resolve_types(nodes)
 
-        # Our final pass replacing types
-        self._resolve_types(nodes)
+        #self._validate(nodes)
 
         # Create a new namespace with what we found
         namespace = Namespace(self._namespace_name, self._namespace_version)
@@ -262,8 +272,9 @@ class GLibTransformer(object):
             if enum is not None:
                 enum.error_quark = node.symbol
             else:
-                self._transformer._log_node_warning(node,
-"""Couldn't find corresponding enumeration""")
+                print "WARNING: " + \
+                      "Couldn't find corresponding enumeration for %s" % \
+                          (node.symbol, )
 
     # Helper functions
 
@@ -414,7 +425,7 @@ class GLibTransformer(object):
                                          'GType',
                                          'GObject.Type',
                                          'Gtk.Type']:
-            self._transformer.log_("Warning: *_get_type function returns '%r'"
+            print ("Warning: *_get_type function returns '%r'"
                    ", not GObject.Type") % (func.retval.type.name, )
             return False
 
@@ -657,7 +668,6 @@ class GLibTransformer(object):
             if matched_signal:
                 continue
             vfunc = VFunction.from_callback(field)
-            vfunc.inherit_file_positions(field)
             pair_class.virtual_methods.append(vfunc)
 
         # Take the set of virtual methods we found, and try
@@ -675,7 +685,6 @@ class GLibTransformer(object):
         self._remove_attribute(class_struct.name)
         self._add_attribute(gclass_struct, True)
         pair_class.glib_type_struct = gclass_struct
-        pair_class.inherit_file_positions(class_struct)
         gclass_struct.is_gtype_struct_for = name
 
     # Introspection
@@ -820,90 +829,6 @@ class GLibTransformer(object):
                 # (see also _pair_class_record and transformer.py)
                 field.writable = False
 
-    def _pair_boxed_type(self, boxed):
-        name = self._transformer.remove_prefix(boxed.type_name)
-        pair_node = self._get_attribute(name)
-        if not pair_node:
-            boxed_item = GLibBoxedOther(name, boxed.type_name,
-                                        boxed.get_type)
-        elif isinstance(pair_node, Record):
-            boxed_item = GLibBoxedStruct(pair_node.name, boxed.type_name,
-                                         boxed.get_type)
-            boxed_item.inherit_file_positions(pair_node)
-            boxed_item.fields = pair_node.fields
-        elif isinstance(pair_node, Union):
-            boxed_item = GLibBoxedUnion(pair_node.name, boxed.type_name,
-                                         boxed.get_type)
-            boxed_item.inherit_file_positions(pair_node)
-            boxed_item.fields = pair_node.fields
-        else:
-            return False
-        self._add_attribute(boxed_item, replace=True)
-
-    # Node walking
-
-    def _walk(self, node, callback, chain):
-        if not isinstance(node, Node):
-            return
-        if not callback(node, chain):
-            return
-        chain.append(node)
-        def _subwalk(subnode):
-            self._walk(subnode, callback, chain)
-        if isinstance(node, (Callback, Callable)):
-            _subwalk(node.retval)
-            for parameter in node.parameters:
-                _subwalk(parameter)
-        elif isinstance(node, (Array, List)):
-            _subwalk(node.element_type)
-        elif isinstance(node, Map):
-            _subwalk(node.key_type)
-            _subwalk(node.value_type)
-        elif isinstance(node, Bitfield):
-            pass
-        elif isinstance(node, Record):
-            for ctor in node.constructors:
-                _subwalk(ctor)
-            for func in node.methods:
-                _subwalk(func)
-        elif isinstance(node, Field):
-            _subwalk(node.type)
-        elif isinstance(node, Class):
-            for meth in node.methods:
-                _subwalk(meth)
-            for meth in node.virtual_methods:
-                _subwalk(meth)
-            for meth in node.static_methods:
-                _subwalk(meth)
-            for ctor in node.constructors:
-                _subwalk(ctor)
-            for prop in node.properties:
-                _subwalk(prop)
-            for field in node.fields:
-                _subwalk(field)
-        elif isinstance(node, Interface):
-            for meth in node.methods:
-                _subwalk(meth)
-            for meth in node.virtual_methods:
-                _subwalk(meth)
-            for prop in node.properties:
-                _subwalk(prop)
-            for field in node.fields:
-                _subwalk(field)
-        elif isinstance(node, Constant):
-            _subwalk(node.type)
-        elif isinstance(node, Union):
-            for ctor in node.constructors:
-                _subwalk(ctor)
-            for meth in node.methods:
-                _subwalk(meth)
-
-        if isinstance(node, (GLibObject, GLibInterface)):
-            for sig in node.signals:
-                _subwalk(sig)
-
-        chain.pop()
-
     # Resolver
 
     def _resolve_type_name(self, type_name, ctype=None):
@@ -954,6 +879,24 @@ class GLibTransformer(object):
                 return
         self._resolve_function(func)
 
+    def _pair_boxed_type(self, boxed):
+        name = self._transformer.remove_prefix(boxed.type_name)
+        pair_node = self._get_attribute(name)
+        if not pair_node:
+            boxed_item = GLibBoxedOther(name, boxed.type_name,
+                                        boxed.get_type)
+        elif isinstance(pair_node, Record):
+            boxed_item = GLibBoxedStruct(pair_node.name, boxed.type_name,
+                                         boxed.get_type)
+            boxed_item.fields = pair_node.fields
+        elif isinstance(pair_node, Union):
+            boxed_item = GLibBoxedUnion(pair_node.name, boxed.type_name,
+                                         boxed.get_type)
+            boxed_item.fields = pair_node.fields
+        else:
+            return False
+        self._add_attribute(boxed_item, replace=True)
+
     def _resolve_record(self, node):
         for field in node.fields:
             self._resolve_field(field)
@@ -971,8 +914,8 @@ class GLibTransformer(object):
                                                              self._names)
             except KeyError, e:
                 if allow_unknown:
-                    self._transformer._log_warning(
-"""Skipping unknown interface %s""" % (item.target, ))
+                    print "WARNING: Skipping unknown interface %s" % \
+                        (item.target, )
                     return None
                 else:
                     raise
@@ -1085,6 +1028,7 @@ class GLibTransformer(object):
         while True:
             initlen = len(nodes)
 
+            #print "Type resolution; pass=%d" % (i, )
             nodes = list(self._names.names.itervalues())
             for node in nodes:
                 try:
@@ -1095,62 +1039,20 @@ class GLibTransformer(object):
             if len(nodes) == initlen:
                 break
             i += 1
+            self._print_statistics()
         self._validating = False
 
     # Validation
 
-    def _interface_vfunc_check(self, node, stack):
-        if isinstance(node, GLibInterface):
-            for vfunc in node.virtual_methods:
-                if not vfunc.invoker:
-                    self._transformer._log_node_warning(vfunc,
-"""Virtual function %r has no known invoker""" % (vfunc.name, ),
-                    context=node)
-
-    def _introspectable_analysis(self, node, stack):
-        if isinstance(node, TypeContainer):
-            parent = stack[-1]
-            if isinstance(node.type, Varargs):
-                parent.introspectable = False
-            elif not isinstance(node.type, List) and \
-                 (node.type.name == 'GLib.List' or
-                  (self._transformer._namespace.name == 'GLib'
-                   and node.type.name == 'List')):
-                if isinstance(node, Parameter):
-                    self._transformer._log_node_warning(parent,
-"""Missing (element-type) annotation on argument %r""" % (node.name, ),
-                                                    context=parent)
-                else:
-                    self._transformer._log_node_warning(parent,
-"""Missing (element-type) annotation on return value""", context=parent)
-                parent.introspectable = False
-
-    def _analyze_node(self, node, stack):
-        if node.skip:
-            return False
-        # Combine one-pass checks here
-        self._interface_vfunc_check(node, stack)
-        # Our first pass for scriptability
-        self._introspectable_analysis(node, stack)
-        return True
-
-    def _introspectable_pass2(self, node, stack):
-        if node.skip:
-            return False
-        # In the second introspectable pass, we propagate introspectablity;
-        # for example, a varargs callback as an argument to a function
-        # makes the whole function unintrospectable
-        if isinstance(node, TypeContainer):
-            parent = stack[-1]
-            target = self._lookup_node(node.type.name)
-            if target and not target.introspectable:
-                parent.introspectable = False
-        return True
+    def _validate_interface(self, iface):
+        for vfunc in iface.virtual_methods:
+            if not vfunc.invoker:
+                print ("warning: Interface %r virtual function %r " + \
+                       "has no known invoker") % (iface.name, vfunc.name)
 
     # This function is called at the very end, before we hand back the
     # completed namespace to the writer.  Add static analysis checks here.
-    def final_analyze(self):
-        for (ns, node) in self._names.names.itervalues():
-            self._walk(node, self._analyze_node, [])
-        for (ns, node) in self._names.names.itervalues():
-            self._walk(node, self._introspectable_pass2, [])
+    def _validate(self, nodes):
+        for (name, node) in nodes:
+            if isinstance(node, GLibInterface):
+                self._validate_interface(node)

@@ -118,7 +118,7 @@ endif
 Gio-2.0.gir: GObject-2.0.gir
 
 Gio_2_0_gir_LIBS = $(GIO_LIBRARY)
-Gio_2_0_gir_SCANNERFLAGS = --Wall --strip-prefix=g --c-include="gio/gio.h" --add-include-path=.
+Gio_2_0_gir_SCANNERFLAGS = --noclosure --strip-prefix=g --c-include="gio/gio.h" --add-include-path=.
 Gio_2_0_gir_PACKAGES = gio-2.0 $(GIO_UNIX_PACKAGES)
 Gio_2_0_gir_INCLUDES = GObject-2.0
 Gio_2_0_gir_CFLAGS = \
