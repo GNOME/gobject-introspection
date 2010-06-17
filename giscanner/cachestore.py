@@ -135,7 +135,7 @@ class CacheStore(object):
         for filename in os.listdir(self._directory):
             if filename == _CACHE_VERSION_FILENAME:
                 continue
-            self._remove_filename(filename)
+            self._remove_filename(os.path.join(self._directory, filename))
 
     def store(self, filename, data):
         store_filename = self._get_filename(filename)
