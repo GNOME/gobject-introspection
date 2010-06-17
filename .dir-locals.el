@@ -1,0 +1,5 @@
+((c-mode . ((c-file-style . "GNU")
+            (indent-tabs-mode . nil)
+            (show-trailing-whitespace . t)))
+((python-mode . ((indent-tabs-mode . nil)
+                 (show-trailing-whitespace . t)))
