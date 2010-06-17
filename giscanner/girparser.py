@@ -27,6 +27,8 @@ from .glibast import (GLibEnum, GLibEnumMember, GLibFlags,
                       GLibInterface, GLibObject, GLibBoxedStruct,
                       GLibBoxedUnion, GLibBoxedOther)
 
+from .girwriter import COMPATIBLE_GIR_VERSION
+
 CORE_NS = "http://www.gtk.org/introspection/core/1.0"
 C_NS = "http://www.gtk.org/introspection/c/1.0"
 GLIB_NS = "http://www.gtk.org/introspection/glib/1.0"
@@ -93,6 +95,11 @@ class GIRParser(object):
 
     def _parse_api(self, root):
         assert root.tag == _corens('repository')
+        version = root.attrib['version']
+        if version != COMPATIBLE_GIR_VERSION:
+            raise ValueError("Incompatible version %s (supported: %s)",
+                             version, COMPATIBLE_GIR_VERSION)
+
         for node in root.getchildren():
             if node.tag == _corens('include'):
                 self._parse_include(node)

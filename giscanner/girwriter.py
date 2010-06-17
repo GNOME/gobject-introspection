@@ -29,6 +29,9 @@ from .glibast import (GLibBoxed, GLibEnum, GLibEnumMember,
                       GLibRecord)
 from .xmlwriter import XMLWriter
 
+# Bump this for *incompatible* changes to the .gir.
+# Compatible changes we just make inline
+COMPATIBLE_GIR_VERSION = '1.0'
 
 class GIRWriter(XMLWriter):
 
@@ -50,7 +53,7 @@ and/or use gtk-doc annotations. ''')
         if c_includes is None:
             c_includes = frozenset()
         attrs = [
-            ('version', '1.0'),
+            ('version', COMPATIBLE_GIR_VERSION),
             ('xmlns', 'http://www.gtk.org/introspection/core/1.0'),
             ('xmlns:c', 'http://www.gtk.org/introspection/c/1.0'),
             ('xmlns:glib', 'http://www.gtk.org/introspection/glib/1.0'),
