@@ -441,4 +441,7 @@ void test_torture_signature_2 (int                  x,
                                int                  *q,
                                guint                 m);
 
+GValue *test_date_in_gvalue (void);
+GValue *test_strv_in_gvalue (void);
+
 #endif /* __GITESTTYPES_H__ */
