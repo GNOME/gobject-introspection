@@ -179,6 +179,7 @@ if BUILD_TESTS
 Everything-1.0.gir: Gio-2.0.gir libgirepository-everything-1.0.la
 
 Everything_1_0_gir_LIBS = libgirepository-everything-1.0.la
+Everything_1_0_gir_SCANNERFLAGS = --warn-all --warn-error
 Everything_1_0_gir_PACKAGES = gobject-2.0 cairo gio-2.0
 Everything_1_0_gir_INCLUDES = GObject-2.0 cairo-1.0 Gio-2.0
 Everything_1_0_gir_FILES = everything.h everything.c
@@ -208,6 +209,7 @@ GIMarshallingTests_1_0_gir_LIBS = libgirepository-gimarshallingtests-1.0.la
 GIMarshallingTests_1_0_gir_PACKAGES = gobject-2.0
 GIMarshallingTests_1_0_gir_INCLUDES = GObject-2.0
 GIMarshallingTests_1_0_gir_FILES = gimarshallingtests.h gimarshallingtests.c
+GIMarshallingTests_1_0_gir_SCANNERFLAGS = --warn-all --warn-error
 
 INTROSPECTION_GIRS += GIMarshallingTests-$(TYPELIB_VERSION).gir
 EXPECTEDGIRS += GIMarshallingTests-$(TYPELIB_VERSION)-expected.gir
