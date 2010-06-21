@@ -104,7 +104,7 @@ class GIRParser(object):
         if curfile.startswith(cwd):
             return curfile[len(cwd):]
         return curfile
-        
+
     def _add_node(self, node):
         self._namespace.nodes.append(node)
 
