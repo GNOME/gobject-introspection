@@ -1581,6 +1581,41 @@ g_i_marshalling_tests_garray_utf8_full_inout (GArray **array_)
 }
 
 /**
+ * g_i_marshalling_tests_bytearray_full_return:
+ * Returns: (transfer full):
+ */
+GByteArray *
+g_i_marshalling_tests_bytearray_full_return (void)
+{
+    GByteArray *array = NULL;
+    static gchar *values[] = {"0", "1", "2", "3", NULL};
+    gint i;
+
+    array = g_byte_array_new ();
+    for (i = 0; values[i]; i++) {
+        gchar *str = g_strdup (values[i]);
+        g_byte_array_append (array, (const guint8*)str, 1);
+    }
+
+    return array;
+
+}
+
+/**
+ * g_i_marshalling_tests_bytearray_none_in:
+ * @array_: (element-type gint) (transfer none):
+ */
+void
+g_i_marshalling_tests_bytearray_none_in (GByteArray *array_)
+{
+    g_assert (array_->len == 4);
+    g_assert (g_array_index (array_, char, 0) == '0');
+    g_assert (g_array_index (array_, char, 1) == '1');
+    g_assert (g_array_index (array_, char, 2) == '2');
+    g_assert (g_array_index (array_, char, 3) == '3');
+}
+
+/**
  * g_i_marshalling_tests_gstrv_return:
  * Returns:
  */

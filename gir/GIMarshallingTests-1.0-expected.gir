@@ -860,6 +860,26 @@ and/or use gtk-doc annotations.  -->
         <type name="BoxedStruct" c:type="GIMarshallingTestsBoxedStruct*"/>
       </return-value>
     </function>
+    <function name="bytearray_full_return"
+              c:identifier="g_i_marshalling_tests_bytearray_full_return">
+      <return-value transfer-ownership="full">
+        <array name="GLib.ByteArray" c:type="GByteArray*">
+        </array>
+      </return-value>
+    </function>
+    <function name="bytearray_none_in"
+              c:identifier="g_i_marshalling_tests_bytearray_none_in">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="array_" transfer-ownership="none">
+          <array name="GLib.ByteArray" c:type="GByteArray*">
+            <type name="int"/>
+          </array>
+        </parameter>
+      </parameters>
+    </function>
     <function name="double_in" c:identifier="g_i_marshalling_tests_double_in">
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>

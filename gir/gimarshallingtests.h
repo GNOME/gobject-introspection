@@ -316,6 +316,11 @@ void g_i_marshalling_tests_garray_utf8_none_inout (GArray **array_);
 void g_i_marshalling_tests_garray_utf8_container_inout (GArray **array_);
 void g_i_marshalling_tests_garray_utf8_full_inout (GArray **array_);
 
+/* GByteArray */
+
+GByteArray *g_i_marshalling_tests_bytearray_full_return (void);
+void g_i_marshalling_tests_bytearray_none_in (GByteArray* array_);
+
 /* GStrv */
 
 GStrv g_i_marshalling_tests_gstrv_return (void);
