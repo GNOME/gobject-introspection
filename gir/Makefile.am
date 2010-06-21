@@ -148,12 +148,13 @@ GIRepository_2_0_gir_CFLAGS = \
     -I$(top_srcdir)/girepository -I$(top_srcdir) \
     -DGI_COMPILATION
 GIRepository_2_0_gir_FILES = \
-        $(top_srcdir)/girepository/gibaseinfo.c \
-        $(top_srcdir)/girepository/gibaseinfo.h \
-        $(top_srcdir)/girepository/gitypelib.h \
-        $(top_srcdir)/girepository/gitypes.h \
-        $(top_srcdir)/girepository/girepository.c \
-        $(top_srcdir)/girepository/girepository.h
+        $(top_srcdir)/girepository/girepository.h   \
+        $(top_srcdir)/girepository/girepository.c   \
+        $(top_srcdir)/girepository/gi*info.c	    \
+        $(top_srcdir)/girepository/gi*info.h	    \
+        $(top_srcdir)/girepository/gitypelib.h	    \
+        $(top_srcdir)/girepository/gitypes.h
+
 
 INTROSPECTION_GIRS += GIRepository-2.0.gir
 
