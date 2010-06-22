@@ -713,9 +713,7 @@ class AnnotationApplier(object):
         else:
             array_values = {}
 
-        is_g_array = (node.type.ctype.startswith('GArray*') or
-                      node.type.ctype.startswith('GPtrArray*') or
-                      node.type.ctype.startswith('GByteArray*'))
+        is_g_array = self._is_array_type(node)
 
         element_type = options.get(OPT_ELEMENT_TYPE)
         if element_type is not None:
