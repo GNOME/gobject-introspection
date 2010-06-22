@@ -2354,3 +2354,26 @@ test_torture_signature_2 (int                   x,
   notify (user_data);
 }
 
+GValue *
+test_date_in_gvalue (void)
+{
+  GValue *value = g_new0 (GValue, 1);
+  GDate *date = g_date_new_dmy (5, 12, 1984);
+
+  g_value_init (value, G_TYPE_DATE);
+  g_value_take_boxed (value, date);
+
+  return value;
+}
+
+GValue *
+test_strv_in_gvalue (void)
+{
+  GValue *value = g_new0 (GValue, 1);
+  const char *strv[] = { "one", "two", "three", NULL };
+
+  g_value_init (value, G_TYPE_STRV);
+  g_value_set_boxed (value, strv);
+
+  return value;
+}
