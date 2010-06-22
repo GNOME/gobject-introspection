@@ -897,7 +897,7 @@ class GLibTransformer(object):
                 _subwalk(ctor)
             for meth in node.methods:
                 _subwalk(meth)
-        elif isinstnace(node, GLibBoxed):
+        elif isinstance(node, GLibBoxed):
             for ctor in node.constructors:
                 _subwalk(ctor)
             for meth in node.methods:
