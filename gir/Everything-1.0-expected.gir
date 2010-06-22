@@ -1123,6 +1123,11 @@ call and can be released on return.">
         </parameter>
       </parameters>
     </function>
+    <function name="test_date_in_gvalue" c:identifier="test_date_in_gvalue">
+      <return-value transfer-ownership="full">
+        <type name="GObject.Value" c:type="GValue*"/>
+      </return-value>
+    </function>
     <function name="test_double" c:identifier="test_double">
       <return-value transfer-ownership="none">
         <type name="double" c:type="gdouble"/>
@@ -1809,6 +1814,11 @@ call and can be released on return.">
           </array>
         </parameter>
       </parameters>
+    </function>
+    <function name="test_strv_in_gvalue" c:identifier="test_strv_in_gvalue">
+      <return-value transfer-ownership="full">
+        <type name="GObject.Value" c:type="GValue*"/>
+      </return-value>
     </function>
     <function name="test_strv_out"
               c:identifier="test_strv_out"
