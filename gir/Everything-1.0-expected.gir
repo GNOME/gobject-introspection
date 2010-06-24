@@ -245,7 +245,9 @@ case.">
           <type name="int" c:type="int"/>
         </return-value>
         <parameters>
-          <parameter name="somestr" transfer-ownership="none">
+          <parameter name="somestr"
+                     transfer-ownership="none"
+                     doc="Meaningless string">
             <type name="utf8" c:type="char*"/>
           </parameter>
         </parameters>
@@ -346,7 +348,9 @@ case.">
           <type name="int" c:type="int"/>
         </return-value>
         <parameters>
-          <parameter name="somestr" transfer-ownership="none">
+          <parameter name="somestr"
+                     transfer-ownership="none"
+                     doc="Meaningless string">
             <type name="utf8" c:type="char*"/>
           </parameter>
         </parameters>
@@ -428,7 +432,9 @@ case.">
             <parameter name="obj" transfer-ownership="none">
               <type name="TestObj" c:type="TestObj*"/>
             </parameter>
-            <parameter name="somestr" transfer-ownership="none">
+            <parameter name="somestr"
+                       transfer-ownership="none"
+                       doc="Meaningless string">
               <type name="utf8" c:type="char*"/>
             </parameter>
           </parameters>
@@ -655,7 +661,8 @@ case.">
     </function>
     <function name="test_array_fixed_size_int_in"
               c:identifier="test_array_fixed_size_int_in">
-      <return-value transfer-ownership="none">
+      <return-value transfer-ownership="none"
+                    doc="the sum of the items in @ints">
         <type name="int" c:type="int"/>
       </return-value>
       <parameters>
@@ -755,7 +762,8 @@ case.">
       </parameters>
     </function>
     <function name="test_array_gtype_in" c:identifier="test_array_gtype_in">
-      <return-value transfer-ownership="full">
+      <return-value transfer-ownership="full"
+                    doc="string representation of provided types">
         <type name="utf8" c:type="char*"/>
       </return-value>
       <parameters>
@@ -780,7 +788,8 @@ case.">
         <parameter name="len"
                    direction="out"
                    caller-allocates="0"
-                   transfer-ownership="full">
+                   transfer-ownership="full"
+                   doc="length of the returned array.">
           <type name="int" c:type="int*"/>
         </parameter>
       </parameters>
@@ -851,7 +860,8 @@ case.">
         <parameter name="len"
                    direction="out"
                    caller-allocates="0"
-                   transfer-ownership="full">
+                   transfer-ownership="full"
+                   doc="length of the returned array.">
           <type name="int" c:type="int*"/>
         </parameter>
       </parameters>
@@ -867,7 +877,7 @@ case.">
             <type name="int"/>
           </array>
         </parameter>
-        <parameter name="len" transfer-ownership="none">
+        <parameter name="len" transfer-ownership="none" doc="length">
           <type name="int" c:type="int"/>
         </parameter>
       </parameters>
@@ -891,7 +901,7 @@ case.">
                    direction="out"
                    caller-allocates="0"
                    transfer-ownership="full"
-                   doc=": length">
+                   doc="length">
           <type name="int" c:type="int*"/>
         </parameter>
       </parameters>
@@ -1077,7 +1087,8 @@ is invoked.">
               doc="Invokes all callbacks installed by #test_callback_destroy_notify(),
 adding up their return values, and removes them, invoking the
 corresponding destroy notfications.">
-      <return-value transfer-ownership="none">
+      <return-value transfer-ownership="none"
+                    doc="Sum of the return values of the invoked callbacks.">
         <type name="int" c:type="int"/>
       </return-value>
     </function>
@@ -1225,7 +1236,8 @@ call and can be released on return.">
       </parameters>
     </function>
     <function name="test_ghash_nested_everything_return"
-              c:identifier="test_ghash_nested_everything_return">
+              c:identifier="test_ghash_nested_everything_return"
+              doc="Specify nested parameterized types directly with the (type ) annotation.">
       <return-value transfer-ownership="full">
         <type name="GLib.HashTable" c:type="GHashTable*">
           <type name="utf8"/>
@@ -1237,7 +1249,8 @@ call and can be released on return.">
       </return-value>
     </function>
     <function name="test_ghash_nested_everything_return2"
-              c:identifier="test_ghash_nested_everything_return2">
+              c:identifier="test_ghash_nested_everything_return2"
+              doc="element-type annotation.">
       <return-value transfer-ownership="full">
         <type name="GLib.HashTable" c:type="GHashTable*">
           <type name="utf8"/>
@@ -2073,7 +2086,8 @@ call and can be released on return.">
     </function>
     <function name="test_utf8_const_return"
               c:identifier="test_utf8_const_return">
-      <return-value transfer-ownership="none">
+      <return-value transfer-ownership="none"
+                    doc="&lt;const char*&gt; UTF-8 string">
         <type name="utf8" c:type="char*"/>
       </return-value>
     </function>
@@ -2103,7 +2117,7 @@ call and can be released on return.">
     </function>
     <function name="test_utf8_nonconst_return"
               c:identifier="test_utf8_nonconst_return">
-      <return-value transfer-ownership="full">
+      <return-value transfer-ownership="full" doc="&lt;char*&gt; UTF-8 string">
         <type name="utf8" c:type="char*"/>
       </return-value>
     </function>
@@ -2187,7 +2201,7 @@ call and can be released on return.">
         <type name="GObject.Value" c:type="GValue*"/>
       </return-value>
       <parameters>
-        <parameter name="i" transfer-ownership="none">
+        <parameter name="i" transfer-ownership="none" doc="an int">
           <type name="int" c:type="int"/>
         </parameter>
       </parameters>

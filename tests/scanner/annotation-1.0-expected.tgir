@@ -383,7 +383,7 @@
           <type name="none"/>
         </return-value>
         <parameters>
-          <parameter name="arg1" transfer-ownership="none">
+          <parameter name="object" transfer-ownership="none">
             <type name="any"/>
           </parameter>
         </parameters>
@@ -473,6 +473,16 @@
           <array length="0">
             <type name="utf8"/>
           </array>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="invalid_annotation" c:identifier="annotation_invalid_annotation">
+      <return-value transfer-ownership="none">
+        <type name="none"/>
+      </return-value>
+      <parameters>
+        <parameter name="foo" transfer-ownership="none">
+          <type name="int"/>
         </parameter>
       </parameters>
     </function>

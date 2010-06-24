@@ -641,7 +641,7 @@ annotation_string_zero_terminated (void)
 
 /**
  * annotation_string_zero_terminated_out:
- * @out: (array zero-terminated=1) (inout)
+ * @out: (array zero-terminated=1) (inout):
  **/
 void
 annotation_string_zero_terminated_out (char ***out)
@@ -736,5 +736,16 @@ annotation_attribute_func (AnnotationObject *object,
 {
   return 42;
 }
+
+/**
+ * annotation_invalid_annotation:
+ * @foo: some text (e.g. example) or else
+ */
+void
+annotation_invalid_annotation (int foo)
+{
+
+}
+
 
 char backslash_parsing_tester_2 = '\\';

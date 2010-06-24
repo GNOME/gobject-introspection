@@ -1903,7 +1903,7 @@ and/or use gtk-doc annotations.  -->
     </function>
     <function name="gstrv_return"
               c:identifier="g_i_marshalling_tests_gstrv_return">
-      <return-value transfer-ownership="full">
+      <return-value transfer-ownership="full" doc="an array of strings">
         <array c:type="GStrv">
           <type name="utf8"/>
         </array>

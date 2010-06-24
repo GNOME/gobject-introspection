@@ -83,14 +83,14 @@ and/or use gtk-doc annotations.  -->
            glib:type-struct="ObjectClass">
       <attribute name="org.example.Test" value="cows"/>
       <method name="method" c:identifier="annotation_object_method">
-        <return-value transfer-ownership="none">
+        <return-value transfer-ownership="none" doc="an int">
           <type name="int" c:type="gint"/>
         </return-value>
       </method>
       <method name="out"
               c:identifier="annotation_object_out"
               doc="This is a test for out arguments">
-        <return-value transfer-ownership="none">
+        <return-value transfer-ownership="none" doc="an int">
           <type name="int" c:type="gint"/>
         </return-value>
         <parameters>
@@ -129,7 +129,7 @@ and/or use gtk-doc annotations.  -->
       <method name="inout"
               c:identifier="annotation_object_inout"
               doc="This is a test for out arguments">
-        <return-value transfer-ownership="none">
+        <return-value transfer-ownership="none" doc="an int">
           <type name="int" c:type="gint"/>
         </return-value>
         <parameters>
@@ -145,7 +145,7 @@ and/or use gtk-doc annotations.  -->
       <method name="inout2"
               c:identifier="annotation_object_inout2"
               doc="This is a second test for out arguments">
-        <return-value transfer-ownership="none">
+        <return-value transfer-ownership="none" doc="an int">
           <type name="int" c:type="gint"/>
         </return-value>
         <parameters>
@@ -161,7 +161,7 @@ and/or use gtk-doc annotations.  -->
       <method name="inout3"
               c:identifier="annotation_object_inout3"
               doc="This is a 3th test for out arguments">
-        <return-value transfer-ownership="none">
+        <return-value transfer-ownership="none" doc="an int">
           <type name="int" c:type="gint"/>
         </return-value>
         <parameters>
@@ -178,7 +178,7 @@ and/or use gtk-doc annotations.  -->
       <method name="in"
               c:identifier="annotation_object_in"
               doc="This is a test for in arguments">
-        <return-value transfer-ownership="none">
+        <return-value transfer-ownership="none" doc="an int">
           <type name="int" c:type="gint"/>
         </return-value>
         <parameters>
@@ -192,7 +192,7 @@ and/or use gtk-doc annotations.  -->
       <method name="calleeowns"
               c:identifier="annotation_object_calleeowns"
               doc="This is a test for out arguments; GObject defaults to transfer">
-        <return-value transfer-ownership="none">
+        <return-value transfer-ownership="none" doc="an int">
           <type name="int" c:type="gint"/>
         </return-value>
         <parameters>
@@ -208,7 +208,7 @@ and/or use gtk-doc annotations.  -->
       <method name="calleesowns"
               c:identifier="annotation_object_calleesowns"
               doc="This is a test for out arguments, one transferred, other not">
-        <return-value transfer-ownership="none">
+        <return-value transfer-ownership="none" doc="an int">
           <type name="int" c:type="gint"/>
         </return-value>
         <parameters>
@@ -312,7 +312,9 @@ intentionally similar example to gtk_container_get_children">
               <type name="int"/>
             </array>
           </parameter>
-          <parameter name="n_nums" transfer-ownership="none">
+          <parameter name="n_nums"
+                     transfer-ownership="none"
+                     doc="Length of number array">
             <type name="int" c:type="int"/>
           </parameter>
         </parameters>
@@ -331,7 +333,9 @@ intentionally similar example to gtk_container_get_children">
               <type name="int"/>
             </array>
           </parameter>
-          <parameter name="n_nums" transfer-ownership="none">
+          <parameter name="n_nums"
+                     transfer-ownership="none"
+                     doc="Length of number array">
             <type name="int" c:type="int"/>
           </parameter>
         </parameters>
@@ -364,7 +368,7 @@ intentionally similar example to gtk_container_get_children">
       <method name="string_out"
               c:identifier="annotation_object_string_out"
               doc="Test returning a string as an out parameter">
-        <return-value transfer-ownership="none">
+        <return-value transfer-ownership="none" doc="some boolean">
           <type name="boolean" c:type="gboolean"/>
         </return-value>
         <parameters>
@@ -391,7 +395,9 @@ intentionally similar example to gtk_container_get_children">
                      doc="Callback to invoke">
             <type name="ForeachFunc" c:type="AnnotationForeachFunc"/>
           </parameter>
-          <parameter name="user_data" transfer-ownership="none">
+          <parameter name="user_data"
+                     transfer-ownership="none"
+                     doc="Callback user data">
             <type name="any" c:type="gpointer"/>
           </parameter>
         </parameters>
@@ -408,7 +414,9 @@ intentionally similar example to gtk_container_get_children">
               <type name="uint8"/>
             </array>
           </parameter>
-          <parameter name="length" transfer-ownership="none">
+          <parameter name="length"
+                     transfer-ownership="none"
+                     doc="Length of the data">
             <type name="size_t" c:type="gsize"/>
           </parameter>
         </parameters>
@@ -425,7 +433,9 @@ intentionally similar example to gtk_container_get_children">
               <type name="int8"/>
             </array>
           </parameter>
-          <parameter name="length" transfer-ownership="none">
+          <parameter name="length"
+                     transfer-ownership="none"
+                     doc="Length of the data">
             <type name="size_t" c:type="gsize"/>
           </parameter>
         </parameters>
@@ -443,7 +453,9 @@ type.">
               <type name="uint8"/>
             </array>
           </parameter>
-          <parameter name="length" transfer-ownership="none">
+          <parameter name="length"
+                     transfer-ownership="none"
+                     doc="Length of the data">
             <type name="size_t" c:type="gsize"/>
           </parameter>
         </parameters>
@@ -467,13 +479,19 @@ type.">
                      transfer-ownership="none"
                      scope="notified"
                      closure="2"
-                     destroy="3">
+                     destroy="3"
+                     doc="The callback">
             <type name="ForeachFunc" c:type="AnnotationForeachFunc"/>
           </parameter>
-          <parameter name="user_data" transfer-ownership="none">
+          <parameter name="user_data"
+                     transfer-ownership="none"
+                     doc="The callback data">
             <type name="any" c:type="gpointer"/>
           </parameter>
-          <parameter name="destroy" transfer-ownership="none" scope="call">
+          <parameter name="destroy"
+                     transfer-ownership="none"
+                     scope="call"
+                     doc="Destroy notification">
             <type name="GLib.DestroyNotify" c:type="GDestroyNotify"/>
           </parameter>
         </parameters>
@@ -526,7 +544,7 @@ type.">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
-          <parameter name="arg1" transfer-ownership="none">
+          <parameter name="object" transfer-ownership="none">
             <type name="any" c:type="gpointer"/>
           </parameter>
         </parameters>
@@ -586,7 +604,9 @@ it says it&apos;s pointer but it&apos;s actually a string."
         <type name="int" c:type="gint"/>
       </return-value>
       <parameters>
-        <parameter name="object" transfer-ownership="none">
+        <parameter name="object"
+                   transfer-ownership="none"
+                   doc="A #AnnotationObject.">
           <type name="Object" c:type="AnnotationObject*"/>
         </parameter>
         <parameter name="data" transfer-ownership="none" doc="Some data.">
@@ -645,6 +665,19 @@ detection, and fixing it via annotations.">
           <array length="0" c:type="char***">
             <type name="utf8"/>
           </array>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="invalid_annotation"
+              c:identifier="annotation_invalid_annotation">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="foo"
+                   transfer-ownership="none"
+                   doc="some text (e.g. example) or else">
+          <type name="int" c:type="int"/>
         </parameter>
       </parameters>
     </function>

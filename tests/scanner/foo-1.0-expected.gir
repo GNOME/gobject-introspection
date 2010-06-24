@@ -334,10 +334,10 @@ uses a C sugar return type.">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
-          <parameter name="offset" transfer-ownership="none">
+          <parameter name="offset" transfer-ownership="none" doc="offset">
             <type name="int" c:type="int"/>
           </parameter>
-          <parameter name="length" transfer-ownership="none">
+          <parameter name="length" transfer-ownership="none" doc="length">
             <type name="int" c:type="int"/>
           </parameter>
         </parameters>
@@ -443,10 +443,10 @@ uses a C sugar return type.">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
-          <parameter name="offset" transfer-ownership="none">
+          <parameter name="offset" transfer-ownership="none" doc="offset">
             <type name="int" c:type="int"/>
           </parameter>
-          <parameter name="length" transfer-ownership="none">
+          <parameter name="length" transfer-ownership="none" doc="length">
             <type name="int" c:type="int"/>
           </parameter>
         </parameters>
@@ -515,10 +515,10 @@ uses a C sugar return type.">
             <parameter name="object" transfer-ownership="none">
               <type name="Object" c:type="FooObject*"/>
             </parameter>
-            <parameter name="offset" transfer-ownership="none">
+            <parameter name="offset" transfer-ownership="none" doc="offset">
               <type name="int" c:type="int"/>
             </parameter>
-            <parameter name="length" transfer-ownership="none">
+            <parameter name="length" transfer-ownership="none" doc="length">
               <type name="int" c:type="int"/>
             </parameter>
           </parameters>
@@ -570,7 +570,9 @@ uses a C sugar return type.">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
-          <parameter name="r2" transfer-ownership="none">
+          <parameter name="r2"
+                     transfer-ownership="none"
+                     doc="source rectangle">
             <type name="Rectangle" c:type="FooRectangle*"/>
           </parameter>
         </parameters>
@@ -826,7 +828,7 @@ exposed to language bindings."
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
-        <parameter name="fs" transfer-ownership="none">
+        <parameter name="fs" transfer-ownership="none" doc="a #FooSkippable">
           <type name="Skippable" c:type="FooSkippable"/>
         </parameter>
       </parameters>

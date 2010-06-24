@@ -1094,7 +1094,7 @@ static /*const*/ GHashTable *test_table_ghash_const()
 
 /**
  * test_ghash_free:
- * @in: (transfer full) (element-type utf8 utf8)
+ * @in: (transfer full) (element-type utf8 utf8):
  */
 void test_ghash_free (GHashTable *in)
 {
@@ -1840,7 +1840,7 @@ test_obj_do_matrix (TestObj *obj, const char *somestr)
 
 /**
  * test_object_null_in:
- * @obj: (allow-none) A #TestObj
+ * @obj: (allow-none): A #TestObj
  */
 void
 test_object_null_in (TestObj *obj)
@@ -1849,7 +1849,7 @@ test_object_null_in (TestObj *obj)
 
 /**
  * test_object_null_out:
- * @obj: (allow-none) (out) A #TestObj
+ * @obj: (allow-none) (out): A #TestObj
  */
 void
 test_object_null_out (TestObj **obj)

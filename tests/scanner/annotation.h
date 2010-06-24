@@ -142,6 +142,8 @@ void     annotation_set_source_file (const char *fname);
 gint     annotation_attribute_func (AnnotationObject *object,
                                     const gchar      *data);
 
+void     annotation_invalid_annotation (int foo);
+
 /**
  * AnnotationStruct:
  *

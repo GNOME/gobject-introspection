@@ -35,7 +35,7 @@ g_i_marshalling_tests_boolean_in_false (gboolean bool_)
 
 /**
  * g_i_marshalling_tests_boolean_out_true:
- * bool_: (out):
+ * @bool_: (out):
  */
 void
 g_i_marshalling_tests_boolean_out_true (gboolean *bool_)
@@ -45,7 +45,7 @@ g_i_marshalling_tests_boolean_out_true (gboolean *bool_)
 
 /**
  * g_i_marshalling_tests_boolean_out_false:
- * bool_: (out):
+ * @bool_: (out):
  */
 void
 g_i_marshalling_tests_boolean_out_false (gboolean *bool_)
@@ -55,7 +55,7 @@ g_i_marshalling_tests_boolean_out_false (gboolean *bool_)
 
 /**
  * g_i_marshalling_tests_boolean_inout_true_false:
- * bool_: (inout):
+ * @bool_: (inout):
  */
 void
 g_i_marshalling_tests_boolean_inout_true_false (gboolean *bool_)
@@ -66,7 +66,7 @@ g_i_marshalling_tests_boolean_inout_true_false (gboolean *bool_)
 
 /**
  * g_i_marshalling_tests_boolean_inout_false_true:
- * bool_: (inout):
+ * @bool_: (inout):
  */
 void
 g_i_marshalling_tests_boolean_inout_false_true (gboolean *bool_)
@@ -104,7 +104,7 @@ g_i_marshalling_tests_int8_in_min (gint8 int8)
 
 /**
  * g_i_marshalling_tests_int8_out_max:
- * int8: (out):
+ * @int8: (out):
  */
 void
 g_i_marshalling_tests_int8_out_max (gint8 *int8)
@@ -114,7 +114,7 @@ g_i_marshalling_tests_int8_out_max (gint8 *int8)
 
 /**
  * g_i_marshalling_tests_int8_out_min:
- * int8: (out):
+ * @int8: (out):
  */
 void
 g_i_marshalling_tests_int8_out_min (gint8 *int8)
@@ -124,7 +124,7 @@ g_i_marshalling_tests_int8_out_min (gint8 *int8)
 
 /**
  * g_i_marshalling_tests_int8_inout_max_min:
- * int8: (inout):
+ * @int8: (inout):
  */
 void
 g_i_marshalling_tests_int8_inout_max_min (gint8 *int8)
@@ -135,7 +135,7 @@ g_i_marshalling_tests_int8_inout_max_min (gint8 *int8)
 
 /**
  * g_i_marshalling_tests_int8_inout_min_max:
- * int8: (inout):
+ * @int8: (inout):
  */
 void
 g_i_marshalling_tests_int8_inout_min_max (gint8 *int8)
@@ -159,7 +159,7 @@ g_i_marshalling_tests_uint8_in (guint8 uint8)
 
 /**
  * g_i_marshalling_tests_uint8_out:
- * uint8: (out):
+ * @uint8: (out):
  */
 void
 g_i_marshalling_tests_uint8_out (guint8 *uint8)
@@ -169,7 +169,7 @@ g_i_marshalling_tests_uint8_out (guint8 *uint8)
 
 /**
  * g_i_marshalling_tests_uint8_inout:
- * uint8: (inout):
+ * @uint8: (inout):
  */
 void
 g_i_marshalling_tests_uint8_inout (guint8 *uint8)
@@ -205,7 +205,7 @@ g_i_marshalling_tests_int16_in_min (gint16 int16)
 
 /**
  * g_i_marshalling_tests_int16_out_max:
- * int16: (out):
+ * @int16: (out):
  */
 void
 g_i_marshalling_tests_int16_out_max (gint16 *int16)
@@ -215,7 +215,7 @@ g_i_marshalling_tests_int16_out_max (gint16 *int16)
 
 /**
  * g_i_marshalling_tests_int16_out_min:
- * int16: (out):
+ * @int16: (out):
  */
 void
 g_i_marshalling_tests_int16_out_min (gint16 *int16)
@@ -225,7 +225,7 @@ g_i_marshalling_tests_int16_out_min (gint16 *int16)
 
 /**
  * g_i_marshalling_tests_int16_inout_max_min:
- * int16: (inout):
+ * @int16: (inout):
  */
 void
 g_i_marshalling_tests_int16_inout_max_min (gint16 *int16)
@@ -236,7 +236,7 @@ g_i_marshalling_tests_int16_inout_max_min (gint16 *int16)
 
 /**
  * g_i_marshalling_tests_int16_inout_min_max:
- * int16: (inout):
+ * @int16: (inout):
  */
 void
 g_i_marshalling_tests_int16_inout_min_max (gint16 *int16)
@@ -260,7 +260,7 @@ g_i_marshalling_tests_uint16_in (guint16 uint16)
 
 /**
  * g_i_marshalling_tests_uint16_out:
- * uint16: (out):
+ * @uint16: (out):
  */
 void
 g_i_marshalling_tests_uint16_out (guint16 *uint16)
@@ -270,7 +270,7 @@ g_i_marshalling_tests_uint16_out (guint16 *uint16)
 
 /**
  * g_i_marshalling_tests_uint16_inout:
- * uint16: (inout):
+ * @uint16: (inout):
  */
 void
 g_i_marshalling_tests_uint16_inout (guint16 *uint16)
@@ -306,7 +306,7 @@ g_i_marshalling_tests_int32_in_min (gint32 int32)
 
 /**
  * g_i_marshalling_tests_int32_out_max:
- * int32: (out):
+ * @int32: (out):
  */
 void
 g_i_marshalling_tests_int32_out_max (gint32 *int32)
@@ -316,7 +316,7 @@ g_i_marshalling_tests_int32_out_max (gint32 *int32)
 
 /**
  * g_i_marshalling_tests_int32_out_min:
- * int32: (out):
+ * @int32: (out):
  */
 void
 g_i_marshalling_tests_int32_out_min (gint32 *int32)
@@ -326,7 +326,7 @@ g_i_marshalling_tests_int32_out_min (gint32 *int32)
 
 /**
  * g_i_marshalling_tests_int32_inout_max_min:
- * int32: (inout):
+ * @int32: (inout):
  */
 void
 g_i_marshalling_tests_int32_inout_max_min (gint32 *int32)
@@ -337,7 +337,7 @@ g_i_marshalling_tests_int32_inout_max_min (gint32 *int32)
 
 /**
  * g_i_marshalling_tests_int32_inout_min_max:
- * int32: (inout):
+ * @int32: (inout):
  */
 void
 g_i_marshalling_tests_int32_inout_min_max (gint32 *int32)
@@ -361,7 +361,7 @@ g_i_marshalling_tests_uint32_in (guint32 uint32)
 
 /**
  * g_i_marshalling_tests_uint32_out:
- * uint32: (out):
+ * @uint32: (out):
  */
 void
 g_i_marshalling_tests_uint32_out (guint32 *uint32)
@@ -371,7 +371,7 @@ g_i_marshalling_tests_uint32_out (guint32 *uint32)
 
 /**
  * g_i_marshalling_tests_uint32_inout:
- * uint32: (inout):
+ * @uint32: (inout):
  */
 void
 g_i_marshalling_tests_uint32_inout (guint32 *uint32)
@@ -407,7 +407,7 @@ g_i_marshalling_tests_int64_in_min (gint64 int64)
 
 /**
  * g_i_marshalling_tests_int64_out_max:
- * int64: (out):
+ * @int64: (out):
  */
 void
 g_i_marshalling_tests_int64_out_max (gint64 *int64)
@@ -417,7 +417,7 @@ g_i_marshalling_tests_int64_out_max (gint64 *int64)
 
 /**
  * g_i_marshalling_tests_int64_out_min:
- * int64: (out):
+ * @int64: (out):
  */
 void
 g_i_marshalling_tests_int64_out_min (gint64 *int64)
@@ -427,7 +427,7 @@ g_i_marshalling_tests_int64_out_min (gint64 *int64)
 
 /**
  * g_i_marshalling_tests_int64_inout_max_min:
- * int64: (inout):
+ * @int64: (inout):
  */
 void
 g_i_marshalling_tests_int64_inout_max_min (gint64 *int64)
@@ -438,7 +438,7 @@ g_i_marshalling_tests_int64_inout_max_min (gint64 *int64)
 
 /**
  * g_i_marshalling_tests_int64_inout_min_max:
- * int64: (inout):
+ * @int64: (inout):
  */
 void
 g_i_marshalling_tests_int64_inout_min_max (gint64 *int64)
@@ -462,7 +462,7 @@ g_i_marshalling_tests_uint64_in (guint64 uint64)
 
 /**
  * g_i_marshalling_tests_uint64_out:
- * uint64: (out):
+ * @uint64: (out):
  */
 void
 g_i_marshalling_tests_uint64_out (guint64 *uint64)
@@ -472,7 +472,7 @@ g_i_marshalling_tests_uint64_out (guint64 *uint64)
 
 /**
  * g_i_marshalling_tests_uint64_inout:
- * uint64: (inout):
+ * @uint64: (inout):
  */
 void
 g_i_marshalling_tests_uint64_inout (guint64 *uint64)
@@ -508,7 +508,7 @@ g_i_marshalling_tests_short_in_min (gshort short_)
 
 /**
  * g_i_marshalling_tests_short_out_max:
- * short_: (out):
+ * @short_: (out):
  */
 void
 g_i_marshalling_tests_short_out_max (gshort *short_)
@@ -518,7 +518,7 @@ g_i_marshalling_tests_short_out_max (gshort *short_)
 
 /**
  * g_i_marshalling_tests_short_out_min:
- * short_: (out):
+ * @short_: (out):
  */
 void
 g_i_marshalling_tests_short_out_min (gshort *short_)
@@ -528,7 +528,7 @@ g_i_marshalling_tests_short_out_min (gshort *short_)
 
 /**
  * g_i_marshalling_tests_short_inout_max_min:
- * short_: (inout):
+ * @short_: (inout):
  */
 void
 g_i_marshalling_tests_short_inout_max_min (gshort *short_)
@@ -539,7 +539,7 @@ g_i_marshalling_tests_short_inout_max_min (gshort *short_)
 
 /**
  * g_i_marshalling_tests_short_inout_min_max:
- * short_: (inout):
+ * @short_: (inout):
  */
 void
 g_i_marshalling_tests_short_inout_min_max (gshort *short_)
@@ -563,7 +563,7 @@ g_i_marshalling_tests_ushort_in (gushort ushort)
 
 /**
  * g_i_marshalling_tests_ushort_out:
- * ushort: (out):
+ * @ushort: (out):
  */
 void
 g_i_marshalling_tests_ushort_out (gushort *ushort)
@@ -573,7 +573,7 @@ g_i_marshalling_tests_ushort_out (gushort *ushort)
 
 /**
  * g_i_marshalling_tests_ushort_inout:
- * ushort: (inout):
+ * @ushort: (inout):
  */
 void
 g_i_marshalling_tests_ushort_inout (gushort *ushort)
@@ -609,7 +609,7 @@ g_i_marshalling_tests_int_in_min (gint int_)
 
 /**
  * g_i_marshalling_tests_int_out_max:
- * int_: (out):
+ * @int_: (out):
  */
 void
 g_i_marshalling_tests_int_out_max (gint *int_)
@@ -619,7 +619,7 @@ g_i_marshalling_tests_int_out_max (gint *int_)
 
 /**
  * g_i_marshalling_tests_int_out_min:
- * int_: (out):
+ * @int_: (out):
  */
 void
 g_i_marshalling_tests_int_out_min (gint *int_)
@@ -629,7 +629,7 @@ g_i_marshalling_tests_int_out_min (gint *int_)
 
 /**
  * g_i_marshalling_tests_int_inout_max_min:
- * int_: (inout):
+ * @int_: (inout):
  */
 void
 g_i_marshalling_tests_int_inout_max_min (gint *int_)
@@ -640,7 +640,7 @@ g_i_marshalling_tests_int_inout_max_min (gint *int_)
 
 /**
  * g_i_marshalling_tests_int_inout_min_max:
- * int_: (inout):
+ * @int_: (inout):
  */
 void
 g_i_marshalling_tests_int_inout_min_max (gint *int_)
@@ -664,7 +664,7 @@ g_i_marshalling_tests_uint_in (guint uint)
 
 /**
  * g_i_marshalling_tests_uint_out:
- * uint: (out):
+ * @uint: (out):
  */
 void
 g_i_marshalling_tests_uint_out (guint *uint)
@@ -674,7 +674,7 @@ g_i_marshalling_tests_uint_out (guint *uint)
 
 /**
  * g_i_marshalling_tests_uint_inout:
- * uint: (inout):
+ * @uint: (inout):
  */
 void
 g_i_marshalling_tests_uint_inout (guint *uint)
@@ -710,7 +710,7 @@ g_i_marshalling_tests_long_in_min (glong long_)
 
 /**
  * g_i_marshalling_tests_long_out_max:
- * long_: (out):
+ * @long_: (out):
  */
 void
 g_i_marshalling_tests_long_out_max (glong *long_)
@@ -720,7 +720,7 @@ g_i_marshalling_tests_long_out_max (glong *long_)
 
 /**
  * g_i_marshalling_tests_long_out_min:
- * long_: (out):
+ * @long_: (out):
  */
 void
 g_i_marshalling_tests_long_out_min (glong *long_)
@@ -730,7 +730,7 @@ g_i_marshalling_tests_long_out_min (glong *long_)
 
 /**
  * g_i_marshalling_tests_long_inout_max_min:
- * long_: (inout):
+ * @long_: (inout):
  */
 void
 g_i_marshalling_tests_long_inout_max_min (glong *long_)
@@ -741,7 +741,7 @@ g_i_marshalling_tests_long_inout_max_min (glong *long_)
 
 /**
  * g_i_marshalling_tests_long_inout_min_max:
- * long_: (inout):
+ * @long_: (inout):
  */
 void
 g_i_marshalling_tests_long_inout_min_max (glong *long_)
@@ -765,7 +765,7 @@ g_i_marshalling_tests_ulong_in (gulong ulong)
 
 /**
  * g_i_marshalling_tests_ulong_out:
- * ulong: (out):
+ * @ulong: (out):
  */
 void
 g_i_marshalling_tests_ulong_out (gulong *ulong)
@@ -775,7 +775,7 @@ g_i_marshalling_tests_ulong_out (gulong *ulong)
 
 /**
  * g_i_marshalling_tests_ulong_inout:
- * ulong: (inout):
+ * @ulong: (inout):
  */
 void
 g_i_marshalling_tests_ulong_inout (gulong *ulong)
@@ -811,7 +811,7 @@ g_i_marshalling_tests_ssize_in_min (gssize ssize)
 
 /**
  * g_i_marshalling_tests_ssize_out_max:
- * ssize: (out):
+ * @ssize: (out):
  */
 void
 g_i_marshalling_tests_ssize_out_max (gssize *ssize)
@@ -821,7 +821,7 @@ g_i_marshalling_tests_ssize_out_max (gssize *ssize)
 
 /**
  * g_i_marshalling_tests_ssize_out_min:
- * ssize: (out):
+ * @ssize: (out):
  */
 void
 g_i_marshalling_tests_ssize_out_min (gssize *ssize)
@@ -831,7 +831,7 @@ g_i_marshalling_tests_ssize_out_min (gssize *ssize)
 
 /**
  * g_i_marshalling_tests_ssize_inout_max_min:
- * ssize: (inout):
+ * @ssize: (inout):
  */
 void
 g_i_marshalling_tests_ssize_inout_max_min (gssize *ssize)
@@ -842,7 +842,7 @@ g_i_marshalling_tests_ssize_inout_max_min (gssize *ssize)
 
 /**
  * g_i_marshalling_tests_ssize_inout_min_max:
- * ssize: (inout):
+ * @ssize: (inout):
  */
 void
 g_i_marshalling_tests_ssize_inout_min_max (gssize *ssize)
@@ -866,7 +866,7 @@ g_i_marshalling_tests_size_in (gsize size)
 
 /**
  * g_i_marshalling_tests_size_out:
- * size: (out):
+ * @size: (out):
  */
 void
 g_i_marshalling_tests_size_out (gsize *size)
@@ -876,7 +876,7 @@ g_i_marshalling_tests_size_out (gsize *size)
 
 /**
  * g_i_marshalling_tests_size_inout:
- * size: (inout):
+ * @size: (inout):
  */
 void
 g_i_marshalling_tests_size_inout (gsize *size)
@@ -900,7 +900,7 @@ g_i_marshalling_tests_float_in (gfloat float_)
 
 /**
  * g_i_marshalling_tests_float_out:
- * float_: (out):
+ * @float_: (out):
  */
 void
 g_i_marshalling_tests_float_out (gfloat *float_)
@@ -910,7 +910,7 @@ g_i_marshalling_tests_float_out (gfloat *float_)
 
 /**
  * g_i_marshalling_tests_float_inout:
- * float_: (inout):
+ * @float_: (inout):
  */
 void
 g_i_marshalling_tests_float_inout (gfloat *float_)
@@ -934,7 +934,7 @@ g_i_marshalling_tests_double_in (gdouble double_)
 
 /**
  * g_i_marshalling_tests_double_out:
- * double_: (out):
+ * @double_: (out):
  */
 void
 g_i_marshalling_tests_double_out (gdouble *double_)
@@ -944,7 +944,7 @@ g_i_marshalling_tests_double_out (gdouble *double_)
 
 /**
  * g_i_marshalling_tests_double_inout:
- * double_: (inout):
+ * @double_: (inout):
  */
 void
 g_i_marshalling_tests_double_inout (gdouble *double_)
@@ -968,7 +968,7 @@ g_i_marshalling_tests_time_t_in (time_t time_t_)
 
 /**
  * g_i_marshalling_tests_time_t_out:
- * time_t_: (out):
+ * @time_t_: (out):
  */
 void
 g_i_marshalling_tests_time_t_out (time_t *time_t_)
@@ -978,7 +978,7 @@ g_i_marshalling_tests_time_t_out (time_t *time_t_)
 
 /**
  * g_i_marshalling_tests_time_t_inout:
- * time_t_: (inout):
+ * @time_t_: (inout):
  */
 void
 g_i_marshalling_tests_time_t_inout (time_t *time_t_)
@@ -1002,7 +1002,7 @@ g_i_marshalling_tests_gtype_in (GType gtype)
 
 /**
  * g_i_marshalling_tests_gtype_out:
- * gtype: (out):
+ * @gtype: (out):
  */
 void
 g_i_marshalling_tests_gtype_out (GType *gtype)
@@ -1012,7 +1012,7 @@ g_i_marshalling_tests_gtype_out (GType *gtype)
 
 /**
  * g_i_marshalling_tests_gtype_inout:
- * gtype: (inout):
+ * @gtype: (inout):
  */
 void
 g_i_marshalling_tests_gtype_inout (GType *gtype)
@@ -1049,7 +1049,7 @@ g_i_marshalling_tests_utf8_full_in (gchar *utf8)
 
 /**
  * g_i_marshalling_tests_utf8_none_out:
- * utf8: (out) (transfer none):
+ * @utf8: (out) (transfer none):
  */
 void
 g_i_marshalling_tests_utf8_none_out (gchar **utf8)
@@ -1059,7 +1059,7 @@ g_i_marshalling_tests_utf8_none_out (gchar **utf8)
 
 /**
  * g_i_marshalling_tests_utf8_full_out:
- * utf8: (out) (transfer full):
+ * @utf8: (out) (transfer full):
  */
 void
 g_i_marshalling_tests_utf8_full_out (gchar **utf8)
@@ -1069,7 +1069,7 @@ g_i_marshalling_tests_utf8_full_out (gchar **utf8)
 
 /**
  * g_i_marshalling_tests_utf8_dangling_out:
- * utf8: (out) (transfer full):
+ * @utf8: (out) (transfer full):
  */
 void
 g_i_marshalling_tests_utf8_dangling_out (gchar **utf8)
@@ -1083,7 +1083,7 @@ g_i_marshalling_tests_utf8_dangling_out (gchar **utf8)
 
 /**
  * g_i_marshalling_tests_utf8_none_inout:
- * utf8: (inout) (transfer none):
+ * @utf8: (inout) (transfer none):
  */
 void
 g_i_marshalling_tests_utf8_none_inout (gchar **utf8)
@@ -1094,7 +1094,7 @@ g_i_marshalling_tests_utf8_none_inout (gchar **utf8)
 
 /**
  * g_i_marshalling_tests_utf8_full_inout:
- * utf8: (inout) (transfer full):
+ * @utf8: (inout) (transfer full):
  */
 void
 g_i_marshalling_tests_utf8_full_inout (gchar **utf8)
@@ -1617,7 +1617,8 @@ g_i_marshalling_tests_bytearray_none_in (GByteArray *array_)
 
 /**
  * g_i_marshalling_tests_gstrv_return:
- * Returns:
+ *
+ * Returns: an array of strings
  */
 GStrv
 g_i_marshalling_tests_gstrv_return (void)
@@ -3384,8 +3385,8 @@ g_i_marshalling_tests_test_interface_test_int8_in (GIMarshallingTestsInterface *
 
 /**
  * g_i_marshalling_tests_int_out_out:
- * int0: (out):
- * int1: (out):
+ * @int0: (out):
+ * @int1: (out):
  */
 void
 g_i_marshalling_tests_int_out_out (gint *int0, gint *int1)
@@ -3396,7 +3397,7 @@ g_i_marshalling_tests_int_out_out (gint *int0, gint *int1)
 
 /**
  * g_i_marshalling_tests_int_return_out:
- * int_: (out):
+ * @int_: (out):
  */
 gint
 g_i_marshalling_tests_int_return_out (gint *int_)

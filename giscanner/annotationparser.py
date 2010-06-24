@@ -21,7 +21,6 @@
 # AnnotationParser - parses gtk-doc annotations
 
 import re
-import sys
 
 from .ast import (Array, Bitfield, Callback, Class, Enum, Field, Function,
                   Interface, List, Map, Parameter, Property, Record, Return,
@@ -49,7 +48,6 @@ TAG_VFUNC = 'virtual'
 TAG_SINCE = 'since'
 TAG_DEPRECATED = 'deprecated'
 TAG_RETURNS = 'returns'
-TAG_RETURNS_ALT = 'return value'
 TAG_ATTRIBUTES = 'attributes'
 TAG_RENAME_TO = 'rename to'
 TAG_TYPE = 'type'
@@ -100,14 +98,7 @@ class DocBlock(object):
         return '<DocBlock %r %r>' % (self.name, self.options)
 
     def get(self, name):
-        if name == TAG_RETURNS:
-            value = self.tags.get(name)
-            if value is None:
-                return self.tags.get(TAG_RETURNS_ALT)
-            else:
-                return value
-        else:
-            return self.tags.get(name)
+        return self.tags.get(name)
 
 
 class DocTag(object):
@@ -152,6 +143,10 @@ class Option(object):
 
 
 class AnnotationParser(object):
+    WHITESPACE_RE = re.compile(r'^\s*$')
+    ASCII_TEXT_RE = re.compile(r'\s*[A-Za-z]+')
+    OPTION_RE = re.compile(r'\([A-Za-z]+[^(]*\)')
+    RETURNS_RE = re.compile(r'^return(s?)( value)?:', re.IGNORECASE)
 
     def __init__(self, namespace, source_scanner, transformer):
         self._blocks = {}
@@ -195,64 +190,97 @@ class AnnotationParser(object):
         cpos = block_header.find(': ')
         if cpos:
             block_name = block_header[:cpos]
-            block_options, rest = self._parse_options(block_header[cpos+2:])
-            if rest:
-                return
+            block_options = self.parse_options(block_header[cpos+2:])
         else:
             block_name, block_options = block_header, {}
         block = DocBlock(block_name, block_options)
+        debug = block_name == 'annotation_object_compute_sum_n'
         comment_lines = []
-        parse_parameters = True
-        canon_name = ''
+        parsing_parameters = True
+        last_param_tag = None
+
+        # Second phase: parse parameters, return values, Tag: format
+        # annotations.
+        #
+        # Valid lines look like:
+        # * @foo: some comment here
+        # * @baz: (inout): This has an annotation
+        # * @bar: (out) (allow-none): this is a long parameter comment
+        # *  that gets wrapped to the next line.
+        # *
+        # * Some documentation for the function.
+        # *
+        # * Returns: (transfer none): A value
         for line in comment[pos+1:].split('\n'):
             line = line.lstrip()
-            line = line[2:].strip() # Skip ' *'
-            if not line:
-                if parse_parameters:
-                    parse_parameters = False
+            if (not line.startswith('*') or
+                self.WHITESPACE_RE.match(line[1:])):
+                # As soon as we find a line that's just whitespace,
+                # we're done parsing the parameters.
+                parsing_parameters = False
                 continue
-            if line.startswith('@'):
-                line = line[1:]
-            elif not ': ' in line:
-                if parse_parameters and line:
-                    if canon_name != '' and canon_name in block.tags:
-                        block.tags[canon_name].comment += ' ' + line
+
+            line = line[1:].lstrip()
+
+            # Look for a parameter or return value.  Both of these can
+            # have parenthesized options.
+            first_colonspace_index = line.find(': ')
+            is_parameter = line.startswith('@')
+            is_return_value = self.RETURNS_RE.search(line)
+            if ((is_parameter or is_return_value)
+                and first_colonspace_index > 0):
+                if is_parameter:
+                    argname = line[1:first_colonspace_index]
+                else:
+                    argname = TAG_RETURNS
+                tag = DocTag(argname)
+                second_colon_index = line.rfind(':')
+                found_options = False
+                if second_colon_index > first_colonspace_index:
+                    value_line = \
+                      line[first_colonspace_index+2:second_colon_index]
+                    if self.OPTION_RE.search(value_line):
+                        # The OPTION_RE is a little bit heuristic.  If
+                        # we found two colons, we scan inside for something
+                        # that looks like (foo).
+                        # *Ideally* we'd change the gtk-doc format to
+                        # require double colons, and then there'd be
+                        # no ambiguity.  I.e.:
+                        # @foo:: Some documentation here
+                        # But that'd be a rather incompatible change.
+                        found_options = True
+                        tag.comment = line[second_colon_index+1:].strip()
+                        tag.options = self.parse_options(value_line)
+                if not found_options:
+                    # We didn't find any options, so just take the whole thing
+                    # as documentation.
+                    tag.comment = line[first_colonspace_index+2:].strip()
+                block.tags[argname] = tag
+                last_param_tag = tag
+            elif (not is_parameter) and parsing_parameters and last_param_tag:
+                # We need to handle continuation lines on parameters.  The
+                # conditional above - if a line doesn't start with '@', we're
+                # not yet in the documentation block for the whole function,
+                # and we've seen at least one parameter.
+                last_param_tag.comment += (' ' + line.strip())
+            elif first_colonspace_index > 0:
+                # The line is of the form "Tag: some value here", like:
+                # Since: 0.8
+                tag_name = line[:first_colonspace_index]
+                if self.ASCII_TEXT_RE.match(tag_name):
+                    tag_name = tag_name.lower()
+                    tag = DocTag(tag_name)
+                    tag.value = line[first_colonspace_index+2:]
+                    block.tags[tag_name] = tag
                 else:
                     comment_lines.append(line)
-                continue
-            tag_name, value = self._split_tag_namevalue(line)
-            canon_name = tag_name.lower()
-            if canon_name in block.tags:
-                print >> sys.stderr, (
-                    "Symbol %s has multiple definition of tag %r" % (
-                    block_name, canon_name, ))
-            block.tags[canon_name] = self._create_tag(canon_name, value)
+            elif (not is_parameter):
+                comment_lines.append(line)
         block.comment = '\n'.join(comment_lines)
         self._blocks[block.name] = block
 
-    def _split_tag_namevalue(self, raw):
-        """Split a line into tag name and value"""
-        parts = raw.split(': ', 1)
-        if len(parts) == 1:
-            tag_name = parts[0]
-            value = ''
-            if tag_name.endswith(':'):
-                tag_name = tag_name[:-1]
-        else:
-            tag_name, value = parts
-        return (tag_name, value)
-
-    def _create_tag(self, tag_name, value):
-        # Tag: bar
-        # Tag: bar opt1 opt2
-        tag = DocTag(tag_name)
-        tag.value = value
-        options, rest = self._parse_options(tag.value)
-        tag.options = options
-        tag.comment = rest or ''
-        return tag
-
-    def _parse_options(self, value):
+    @classmethod
+    def parse_options(cls, value):
         # (foo)
         # (bar opt1 opt2...)
         opened = -1
@@ -277,11 +305,7 @@ class AnnotationParser(object):
                 last = i + 2
                 opened = -1
 
-        if last is not None:
-            rest = value[last:].strip()
-        else:
-            rest = None
-        return options, rest
+        return options
 
 
 class AnnotationApplier(object):
@@ -871,7 +895,8 @@ class AnnotationApplier(object):
         annos_tag = self._get_tag(block, TAG_ATTRIBUTES)
         if annos_tag is None:
             return
-        for key, value in annos_tag.options.iteritems():
+        options = AnnotationParser.parse_options(annos_tag.value)
+        for key, value in options.iteritems():
             if value:
                 node.attributes.append((key, value.one()))
 
