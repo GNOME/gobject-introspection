@@ -197,6 +197,7 @@ class DumpCompiler(object):
         # Search the current directory first
         args.append('-L.')
 
+        libtool_args = []
         uninst_builddir = os.environ.get('UNINSTALLED_INTROSPECTION_BUILDDIR')
         # hack for building GIRepository.gir, skip -lgirepository-1.0 since
         # libgirepository-1.0.la is not in current directory and we refer to it
@@ -206,7 +207,7 @@ class DumpCompiler(object):
                 self._options.libraries[0] == 'girepository-1.0'):
                 continue
             if library.endswith(".la"): # explicitly specified libtool library
-                args.append(library)
+                libtool_args.append(library)
             else:
                 args.append('-l' + library)
 
@@ -221,6 +222,8 @@ class DumpCompiler(object):
             if not os.path.exists(source):
                 raise CompilerError(
                     "Could not find object file: %s" % (source, ))
+        # need to be late - cf. bug#605156
+        args.extend(libtool_args);
         args.extend(list(sources))
 
         subprocess.check_call(args)
