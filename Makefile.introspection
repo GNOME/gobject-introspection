@@ -65,9 +65,12 @@ _gir_libtool = $(if $(LIBTOOL),--libtool="$(LIBTOOL)")
 # Macros for AM_SILENT_RULES prettiness
 _gir_verbosity = $(if $(AM_DEFAULT_VERBOSITY),$(AM_DEFAULT_VERBOSITY),1)
 
-_gir_silent_scanner = $(_gir_silent_scanner_$(V))
-_gir_silent_scanner_ = $(_gir_silent_scanner_$(_gir_verbosity))
-_gir_silent_scanner_0 = @echo "  GISCAN $(1)";
+_gir_silent_scanner_prefix = $(_gir_silent_scanner_prefix_$(V))
+_gir_silent_scanner_prefix_ = $(_gir_silent_scanner_prefix_$(_gir_verbosity))
+_gir_silent_scanner_prefix_0 = @echo "  GISCAN $(1)";
+_gir_silent_scanner_opts = $(_gir_silent_scanner_opts_$(V))
+_gir_silent_scanner_opts_ = $(_gir_silent_scanner_opts_$(_gir_verbosity))
+_gir_silent_scanner_opts_0 = --quiet
 
 _gir_silent_compiler = $(_gir_silent_compiler_$(V))
 _gir_silent_compiler_ = $(_gir_silent_compiler_$(_gir_verbosity))
@@ -116,7 +119,8 @@ $(if $(or $($(_gir_name)_LIBS),
 # sure these are built before running the scanner. Libraries and programs
 # needs to be added manually.
 $(1): $$($(_gir_name)_FILES)
-	$(_gir_silent_scanner) $(INTROSPECTION_SCANNER) $(INTROSPECTION_SCANNER_ARGS) \
+	$(_gir_silent_scanner_prefix) $(INTROSPECTION_SCANNER) $(_gir_silent_scanner_opts) \
+	$(INTROSPECTION_SCANNER_ARGS) \
 	  --namespace=$(_gir_namespace) \
 	  --nsversion=$(_gir_version) \
 	  $(_gir_libtool) \

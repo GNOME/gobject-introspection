@@ -37,6 +37,11 @@ from giscanner.transformer import Transformer
 
 def _get_option_parser():
     parser = optparse.OptionParser('%prog [options] sources')
+    parser.add_option('', "--quiet",
+                      action="store_true", dest="quiet",
+                      default=False,
+                      help="If passed, do not print details of normal" \
+                          + " operation")
     parser.add_option("", "--format",
                       action="store", dest="format",
                       default="gir",

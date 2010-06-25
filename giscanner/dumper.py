@@ -172,6 +172,8 @@ class DumpCompiler(object):
                 raise CompilerError(
                     "Could not find c source file: %s" % (source, ))
         args.extend(list(sources))
+        if not self._options.quiet:
+            print "g-ir-scanner: compile: %r" % (args, )
         subprocess.check_call(args)
 
     def _link(self, output, *sources):
@@ -228,6 +230,8 @@ class DumpCompiler(object):
                     "Could not find object file: %s" % (source, ))
         args.extend(list(sources))
 
+        if not self._options.quiet:
+            print "g-ir-scanner: link: %r" % (args, )
         subprocess.check_call(args)
 
 
