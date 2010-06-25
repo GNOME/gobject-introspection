@@ -107,6 +107,7 @@ class DocTag(object):
         self.name = name
         self.options = {}
         self.comment = None
+        self.value = ''
 
     def __repr__(self):
         return '<DocTag %r %r>' % (self.name, self.options)
