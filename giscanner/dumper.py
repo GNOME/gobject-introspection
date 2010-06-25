@@ -223,7 +223,7 @@ class DumpCompiler(object):
                 raise CompilerError(
                     "Could not find object file: %s" % (source, ))
         # need to be late - cf. bug#605156
-        args.extend(libtool_args);
+        args.extend(libtool_args)
         args.extend(list(sources))
 
         subprocess.check_call(args)
