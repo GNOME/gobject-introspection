@@ -8,6 +8,7 @@
     <record name="Surface" c:type="cairo_surface_t" foreign="1"/>
     <record name="Matrix" c:type="cairo_matrix_t" foreign="1"/>
     <record name="Pattern" c:type="cairo_pattern_t" foreign="1"/>
+    <record name="Region" c:type="cairo_region_t" foreign="1"/>
     <enumeration name="Content" c:type="cairo_content_t">
       <member name="COLOR"
               value="4096"
