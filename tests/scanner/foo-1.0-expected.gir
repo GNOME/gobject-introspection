@@ -405,7 +405,7 @@ uses a C sugar return type.</doc>
         </return-value>
         <parameters>
           <parameter name="time" transfer-ownership="none">
-            <type name="time_t" c:type="time_t"/>
+            <type name="long" c:type="time_t"/>
           </parameter>
         </parameters>
       </method>

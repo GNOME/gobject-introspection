@@ -2940,7 +2940,7 @@ and/or use gtk-doc annotations.  -->
       </return-value>
       <parameters>
         <parameter name="size" transfer-ownership="none">
-          <type name="size_t" c:type="gsize"/>
+          <type name="gsize" c:type="gsize"/>
         </parameter>
       </parameters>
     </function>
@@ -2954,7 +2954,7 @@ and/or use gtk-doc annotations.  -->
                    direction="inout"
                    caller-allocates="0"
                    transfer-ownership="full">
-          <type name="size_t" c:type="gsize*"/>
+          <type name="gsize" c:type="gsize*"/>
         </parameter>
       </parameters>
     </function>
@@ -2967,14 +2967,14 @@ and/or use gtk-doc annotations.  -->
                    direction="out"
                    caller-allocates="0"
                    transfer-ownership="full">
-          <type name="size_t" c:type="gsize*"/>
+          <type name="gsize" c:type="gsize*"/>
         </parameter>
       </parameters>
     </function>
     <function name="size_return"
               c:identifier="g_i_marshalling_tests_size_return">
       <return-value transfer-ownership="none">
-        <type name="size_t" c:type="gsize"/>
+        <type name="gsize" c:type="gsize"/>
       </return-value>
     </function>
     <function name="ssize_in_max"
@@ -2984,7 +2984,7 @@ and/or use gtk-doc annotations.  -->
       </return-value>
       <parameters>
         <parameter name="ssize" transfer-ownership="none">
-          <type name="ssize_t" c:type="gssize"/>
+          <type name="gssize" c:type="gssize"/>
         </parameter>
       </parameters>
     </function>
@@ -2995,7 +2995,7 @@ and/or use gtk-doc annotations.  -->
       </return-value>
       <parameters>
         <parameter name="ssize" transfer-ownership="none">
-          <type name="ssize_t" c:type="gssize"/>
+          <type name="gssize" c:type="gssize"/>
         </parameter>
       </parameters>
     </function>
@@ -3009,7 +3009,7 @@ and/or use gtk-doc annotations.  -->
                    direction="inout"
                    caller-allocates="0"
                    transfer-ownership="full">
-          <type name="ssize_t" c:type="gssize*"/>
+          <type name="gssize" c:type="gssize*"/>
         </parameter>
       </parameters>
     </function>
@@ -3023,7 +3023,7 @@ and/or use gtk-doc annotations.  -->
                    direction="inout"
                    caller-allocates="0"
                    transfer-ownership="full">
-          <type name="ssize_t" c:type="gssize*"/>
+          <type name="gssize" c:type="gssize*"/>
         </parameter>
       </parameters>
     </function>
@@ -3037,7 +3037,7 @@ and/or use gtk-doc annotations.  -->
                    direction="out"
                    caller-allocates="0"
                    transfer-ownership="full">
-          <type name="ssize_t" c:type="gssize*"/>
+          <type name="gssize" c:type="gssize*"/>
         </parameter>
       </parameters>
     </function>
@@ -3051,20 +3051,20 @@ and/or use gtk-doc annotations.  -->
                    direction="out"
                    caller-allocates="0"
                    transfer-ownership="full">
-          <type name="ssize_t" c:type="gssize*"/>
+          <type name="gssize" c:type="gssize*"/>
         </parameter>
       </parameters>
     </function>
     <function name="ssize_return_max"
               c:identifier="g_i_marshalling_tests_ssize_return_max">
       <return-value transfer-ownership="none">
-        <type name="ssize_t" c:type="gssize"/>
+        <type name="gssize" c:type="gssize"/>
       </return-value>
     </function>
     <function name="ssize_return_min"
               c:identifier="g_i_marshalling_tests_ssize_return_min">
       <return-value transfer-ownership="none">
-        <type name="ssize_t" c:type="gssize"/>
+        <type name="gssize" c:type="gssize"/>
       </return-value>
     </function>
     <function name="test_interface_test_int8_in"
@@ -3087,7 +3087,7 @@ and/or use gtk-doc annotations.  -->
       </return-value>
       <parameters>
         <parameter name="time_t_" transfer-ownership="none">
-          <type name="time_t" c:type="time_t"/>
+          <type name="long" c:type="time_t"/>
         </parameter>
       </parameters>
     </function>
@@ -3101,7 +3101,7 @@ and/or use gtk-doc annotations.  -->
                    direction="inout"
                    caller-allocates="0"
                    transfer-ownership="full">
-          <type name="time_t" c:type="time_t*"/>
+          <type name="long" c:type="time_t*"/>
         </parameter>
       </parameters>
     </function>
@@ -3115,14 +3115,14 @@ and/or use gtk-doc annotations.  -->
                    direction="out"
                    caller-allocates="0"
                    transfer-ownership="full">
-          <type name="time_t" c:type="time_t*"/>
+          <type name="long" c:type="time_t*"/>
         </parameter>
       </parameters>
     </function>
     <function name="time_t_return"
               c:identifier="g_i_marshalling_tests_time_t_return">
       <return-value transfer-ownership="none">
-        <type name="time_t" c:type="time_t"/>
+        <type name="long" c:type="time_t"/>
       </return-value>
     </function>
     <function name="uint16_in" c:identifier="g_i_marshalling_tests_uint16_in">

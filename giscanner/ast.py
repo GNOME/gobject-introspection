@@ -48,9 +48,8 @@ TYPE_INT64 = 'int64'
 TYPE_UINT64 = 'uint64'
 TYPE_LONG = 'long'
 TYPE_ULONG = 'ulong'
-TYPE_SSIZET = 'ssize_t'
-TYPE_SIZET = 'size_t'
-TYPE_TIMET = 'time_t'
+TYPE_SIZET = 'gsize'
+TYPE_SSIZET = 'gssize'
 TYPE_GTYPE = 'GType'
 TYPE_FLOAT = 'float'
 TYPE_DOUBLE = 'double'
@@ -61,7 +60,7 @@ BASIC_GIR_TYPES = [TYPE_BOOLEAN, TYPE_INT8, TYPE_UINT8, TYPE_INT16,
                    TYPE_UINT16, TYPE_INT32, TYPE_UINT32, TYPE_INT64,
                    TYPE_UINT64, TYPE_SHORT, TYPE_USHORT, TYPE_INT,
                    TYPE_UINT, TYPE_LONG, TYPE_ULONG, TYPE_SSIZET,
-                   TYPE_SIZET, TYPE_FLOAT, TYPE_DOUBLE, TYPE_TIMET,
+                   TYPE_SIZET, TYPE_FLOAT, TYPE_DOUBLE,
                    TYPE_GTYPE]
 GIR_TYPES = [TYPE_NONE, TYPE_ANY]
 GIR_TYPES.extend(BASIC_GIR_TYPES)
@@ -117,12 +116,7 @@ type_names['char*'] = TYPE_STRING
 type_names['void*'] = TYPE_ANY
 type_names['void'] = TYPE_NONE
 
-# Unix types that we special case here (and that have their own introspection
-# type tag) because of wide use in GLib.
-type_names['size_t'] = TYPE_SIZET
-type_names['ssize_t'] = TYPE_SSIZET
-
-# One off C unix type definitions; note some of these may be GNU Libc
+# Random C unix type definitions; note some of these may be GNU Libc
 # specific.  If someone is actually bitten by this, feel free to do
 # the required configure goop to determine their size and replace
 # here.
@@ -133,6 +127,8 @@ type_names['ssize_t'] = TYPE_SSIZET
 # methods are added under #ifdefs inside GLib itself.  We could just (skip)
 # the relevant methods, but on the other hand, since these types are just
 # integers it's easy enough to expand them.
+type_names['size_t'] = TYPE_SIZET
+type_names['time_t'] = TYPE_LONG
 type_names['off_t'] = TYPE_SIZET
 type_names['pid_t'] = TYPE_INT
 type_names['uid_t'] = TYPE_UINT

@@ -19,7 +19,7 @@ and/or use gtk-doc annotations.  -->
         <type name="any" c:type="char*"/>
       </field>
       <field name="length" writable="1">
-        <type name="size_t" c:type="gsize"/>
+        <type name="gsize" c:type="gsize"/>
       </field>
     </record>
     <union name="Byte" c:type="UtilityByte">

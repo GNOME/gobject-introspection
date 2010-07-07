@@ -180,11 +180,14 @@ AC_SUBST(FFI_PC_CFLAGS)
 AC_SUBST(FFI_PC_LIBS)
 AC_SUBST(FFI_PC_PACKAGES)
 
-AC_CHECK_SIZEOF(time_t, [], [#include <time.h>])
+AC_CHECK_SIZEOF(char)
+AC_CHECK_SIZEOF(short)
+AC_CHECK_SIZEOF(int)
+AC_CHECK_SIZEOF(long)
 
 PKG_CHECK_MODULES(GIREPO, [glib-2.0 gobject-2.0 gmodule-2.0 gio-2.0])
 
-# if we ever remove manual check for ffi and require .pc file, then 
+# if we ever remove manual check for ffi and require .pc file, then
 # just put libffi in the PKG_CHECK_MODULES(GIREPO) deps
 GIREPO_LIBS="$GIREPO_LIBS $GCOV_LIBS $FFI_LIBS"
 GIREPO_CFLAGS="$GIREPO_CFLAGS $FFI_CFLAGS"

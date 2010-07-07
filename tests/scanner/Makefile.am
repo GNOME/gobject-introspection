@@ -29,18 +29,15 @@ if OS_WIN32
 AM_LDFLAGS += -no-undefined
 endif
 
-# .gir --[scanner]-> .typelib --[generate]-> .tgir
+# .gir --[scanner]-> .typelib
 GIRS =
 TYPELIBS = $(GIRS:.gir=.typelib)
 CHECKGIRS = $(GIRS:.gir=.gir.check)
 EXPECTEDGIRS = $(GIRS:.gir=-expected.gir)
-TGIRS = $(GIRS:.gir=.tgir)
-CHECKTGIRS = $(GIRS:.gir=.tgir.check)
-EXPECTEDTGIRS = $(GIRS:.gir=-expected.tgir)
 INTROSPECTION_GIRS = $(GIRS)
 CLEANFILES = $(TYPELIBS) $(GIRS)
-BUILT_SOURCES = $(TYPELIBS) $(GIRS) $(TGIRS)
-EXTRA_DIST = $(EXPECTEDGIRS) $(EXPECTEDTGIRS)
+BUILT_SOURCES = $(TYPELIBS) $(GIRS)
+EXTRA_DIST = $(EXPECTEDGIRS)
 
 annotation-1.0.gir: utility-1.0.gir libannotation.la
 annotation_1_0_gir_PACKAGES = gobject-2.0
@@ -110,28 +107,7 @@ post-check:
 %.gir.check: %.gir
 	@diff -u -U 10 $(srcdir)/$*-expected.gir $*.gir && echo "  TEST  $*.gir"
 
-# stop %.typelib rule from building %-expected.tgir (via %-expected.typelib)
-%-expected.typelib:
-	@true
-
-%.tgir: %.typelib $(top_builddir)/tools/g-ir-generate$(EXEEXT) Makefile
-	$(AM_V_GEN) $(top_builddir)/tools/g-ir-generate --includedir=. --includedir=$(top_builddir)/gir $< -o $@
-
-%.tgir.check: %.tgir
-	@diff -u -U 10 $(srcdir)/$*-expected.tgir $*.tgir; \
-	if test "$$?" = "0"; then \
-	    echo "  TEST  $*.tgir"; \
-	    rm -f $*.tgir; \
-	else \
-	    exit 1; \
-	fi
-
-distclean-local:
-	@if test "$(top_builddir)" != "$(top_srcdir)"; then \
-	    rm -f $(top_builddir)/tests/scanner/*.tgir; \
-	fi
-
 check-local: pre-check
-check-local: $(CHECKGIRS) $(CHECKTGIRS) $(TYPELIBS)
+check-local: $(CHECKGIRS) $(TYPELIBS)
 
 check-local: post-check

@@ -1888,21 +1888,21 @@ call and can be released on return.</doc>
     </function>
     <function name="test_size" c:identifier="test_size">
       <return-value transfer-ownership="none">
-        <type name="size_t" c:type="gsize"/>
+        <type name="gsize" c:type="gsize"/>
       </return-value>
       <parameters>
         <parameter name="in" transfer-ownership="none">
-          <type name="size_t" c:type="gsize"/>
+          <type name="gsize" c:type="gsize"/>
         </parameter>
       </parameters>
     </function>
     <function name="test_ssize" c:identifier="test_ssize">
       <return-value transfer-ownership="none">
-        <type name="ssize_t" c:type="gssize"/>
+        <type name="gssize" c:type="gssize"/>
       </return-value>
       <parameters>
         <parameter name="in" transfer-ownership="none">
-          <type name="ssize_t" c:type="gssize"/>
+          <type name="gssize" c:type="gssize"/>
         </parameter>
       </parameters>
     </function>
@@ -1977,11 +1977,11 @@ call and can be released on return.</doc>
     </function>
     <function name="test_timet" c:identifier="test_timet">
       <return-value transfer-ownership="none">
-        <type name="time_t" c:type="time_t"/>
+        <type name="long" c:type="time_t"/>
       </return-value>
       <parameters>
         <parameter name="in" transfer-ownership="none">
-          <type name="time_t" c:type="time_t"/>
+          <type name="long" c:type="time_t"/>
         </parameter>
       </parameters>
     </function>
@@ -2318,6 +2318,21 @@ call and can be released on return.</doc>
         <parameter name="i" transfer-ownership="none">
           <doc xml:whitespace="preserve">an int</doc>
           <type name="int" c:type="int"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="test_value_set_fundamental_object"
+              c:identifier="test_value_set_fundamental_object"
+              introspectable="0">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="value" transfer-ownership="none">
+          <type name="GObject.Value" c:type="GValue*"/>
+        </parameter>
+        <parameter name="fundamental_object" transfer-ownership="none">
+          <type name="TestFundamentalObject" c:type="TestFundamentalObject*"/>
         </parameter>
       </parameters>
     </function>

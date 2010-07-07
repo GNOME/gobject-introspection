@@ -407,7 +407,7 @@ intentionally similar example to gtk_container_get_children</doc>
           </parameter>
           <parameter name="length" transfer-ownership="none">
             <doc xml:whitespace="preserve">Length of the data</doc>
-            <type name="size_t" c:type="gsize"/>
+            <type name="gsize" c:type="gsize"/>
           </parameter>
         </parameters>
       </method>
@@ -425,7 +425,7 @@ intentionally similar example to gtk_container_get_children</doc>
           </parameter>
           <parameter name="length" transfer-ownership="none">
             <doc xml:whitespace="preserve">Length of the data</doc>
-            <type name="size_t" c:type="gsize"/>
+            <type name="gsize" c:type="gsize"/>
           </parameter>
         </parameters>
       </method>
@@ -444,7 +444,7 @@ type.</doc>
           </parameter>
           <parameter name="length" transfer-ownership="none">
             <doc xml:whitespace="preserve">Length of the data</doc>
-            <type name="size_t" c:type="gsize"/>
+            <type name="gsize" c:type="gsize"/>
           </parameter>
         </parameters>
       </method>
