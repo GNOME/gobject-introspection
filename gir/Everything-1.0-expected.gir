@@ -236,18 +236,16 @@ and/or use gtk-doc annotations.  -->
           </parameter>
         </parameters>
       </function>
-      <virtual-method name="matrix"
-                      invoker="do_matrix"
-                      doc="This method is virtual.  Notably its name differs from the virtual
+      <virtual-method name="matrix" invoker="do_matrix">
+        <doc xml:whitespace="preserve">This method is virtual.  Notably its name differs from the virtual
 slot name, which makes it useful for testing bindings handle this
-case.">
+case.</doc>
         <return-value transfer-ownership="none">
           <type name="int" c:type="int"/>
         </return-value>
         <parameters>
-          <parameter name="somestr"
-                     transfer-ownership="none"
-                     doc="Meaningless string">
+          <parameter name="somestr" transfer-ownership="none">
+            <doc xml:whitespace="preserve">Meaningless string</doc>
             <type name="utf8" c:type="char*"/>
           </parameter>
         </parameters>
@@ -304,8 +302,8 @@ case.">
       </method>
       <method name="torture_signature_1"
               c:identifier="test_obj_torture_signature_1"
-              doc="This function throws an error if m is odd."
               throws="1">
+        <doc xml:whitespace="preserve">This function throws an error if m is odd.</doc>
         <return-value transfer-ownership="none">
           <type name="boolean" c:type="gboolean"/>
         </return-value>
@@ -339,18 +337,16 @@ case.">
           </parameter>
         </parameters>
       </method>
-      <method name="do_matrix"
-              c:identifier="test_obj_do_matrix"
-              doc="This method is virtual.  Notably its name differs from the virtual
+      <method name="do_matrix" c:identifier="test_obj_do_matrix">
+        <doc xml:whitespace="preserve">This method is virtual.  Notably its name differs from the virtual
 slot name, which makes it useful for testing bindings handle this
-case.">
+case.</doc>
         <return-value transfer-ownership="none">
           <type name="int" c:type="int"/>
         </return-value>
         <parameters>
-          <parameter name="somestr"
-                     transfer-ownership="none"
-                     doc="Meaningless string">
+          <parameter name="somestr" transfer-ownership="none">
+            <doc xml:whitespace="preserve">Meaningless string</doc>
             <type name="utf8" c:type="char*"/>
           </parameter>
         </parameters>
@@ -399,7 +395,9 @@ case.">
         <type name="GLib.HashTable" c:type="GHashTable*"/>
       </field>
       <field name="list">
-        <type name="GLib.List" c:type="GList*"/>
+        <type name="GLib.List" c:type="GList*">
+          <type name="any" c:type="gpointer"/>
+        </type>
       </field>
       <glib:signal name="test">
         <return-value transfer-ownership="full">
@@ -432,9 +430,8 @@ case.">
             <parameter name="obj" transfer-ownership="none">
               <type name="TestObj" c:type="TestObj*"/>
             </parameter>
-            <parameter name="somestr"
-                       transfer-ownership="none"
-                       doc="Meaningless string">
+            <parameter name="somestr" transfer-ownership="none">
+              <doc xml:whitespace="preserve">Meaningless string</doc>
               <type name="utf8" c:type="char*"/>
             </parameter>
           </parameters>
@@ -513,9 +510,8 @@ case.">
       <field name="some_enum" writable="1">
         <type name="TestEnum" c:type="TestEnum"/>
       </field>
-      <method name="clone"
-              c:identifier="test_struct_a_clone"
-              doc="Make a copy of a TestStructA">
+      <method name="clone" c:identifier="test_struct_a_clone">
+        <doc xml:whitespace="preserve">Make a copy of a TestStructA</doc>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -523,8 +519,8 @@ case.">
           <parameter name="a_out"
                      direction="out"
                      caller-allocates="1"
-                     transfer-ownership="none"
-                     doc="the cloned structure">
+                     transfer-ownership="none">
+            <doc xml:whitespace="preserve">the cloned structure</doc>
             <type name="TestStructA" c:type="TestStructA*"/>
           </parameter>
         </parameters>
@@ -537,9 +533,8 @@ case.">
       <field name="nested_a" writable="1">
         <type name="TestStructA" c:type="TestStructA"/>
       </field>
-      <method name="clone"
-              c:identifier="test_struct_b_clone"
-              doc="Make a copy of a TestStructB">
+      <method name="clone" c:identifier="test_struct_b_clone">
+        <doc xml:whitespace="preserve">Make a copy of a TestStructB</doc>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -547,8 +542,8 @@ case.">
           <parameter name="b_out"
                      direction="out"
                      caller-allocates="1"
-                     transfer-ownership="none"
-                     doc="the cloned structure">
+                     transfer-ownership="none">
+            <doc xml:whitespace="preserve">the cloned structure</doc>
             <type name="TestStructB" c:type="TestStructB*"/>
           </parameter>
         </parameters>
@@ -661,14 +656,13 @@ case.">
     </function>
     <function name="test_array_fixed_size_int_in"
               c:identifier="test_array_fixed_size_int_in">
-      <return-value transfer-ownership="none"
-                    doc="the sum of the items in @ints">
+      <return-value transfer-ownership="none">
+        <doc xml:whitespace="preserve">the sum of the items in @ints</doc>
         <type name="int" c:type="int"/>
       </return-value>
       <parameters>
-        <parameter name="ints"
-                   transfer-ownership="none"
-                   doc="a list of 5 integers">
+        <parameter name="ints" transfer-ownership="none">
+          <doc xml:whitespace="preserve">a list of 5 integers</doc>
           <array c:type="int*" fixed-size="5">
             <type name="int"/>
           </array>
@@ -684,8 +678,8 @@ case.">
         <parameter name="ints"
                    direction="out"
                    caller-allocates="0"
-                   transfer-ownership="full"
-                   doc="a list of 5 integers ranging from 0 to 4">
+                   transfer-ownership="full">
+          <doc xml:whitespace="preserve">a list of 5 integers ranging from 0 to 4</doc>
           <array c:type="int**" fixed-size="5">
             <type name="int"/>
           </array>
@@ -694,8 +688,8 @@ case.">
     </function>
     <function name="test_array_fixed_size_int_return"
               c:identifier="test_array_fixed_size_int_return">
-      <return-value transfer-ownership="full"
-                    doc="a list of 5 integers ranging from 0 to 4">
+      <return-value transfer-ownership="full">
+        <doc xml:whitespace="preserve">a list of 5 integers ranging from 0 to 4</doc>
         <array c:type="int*" fixed-size="5">
           <type name="int"/>
         </array>
@@ -709,7 +703,8 @@ case.">
         <parameter name="n_ints" transfer-ownership="none">
           <type name="int" c:type="int"/>
         </parameter>
-        <parameter name="ints" transfer-ownership="none" doc="List of ints">
+        <parameter name="ints" transfer-ownership="none">
+          <doc xml:whitespace="preserve">List of ints</doc>
           <array length="0" c:type="gint16*">
             <type name="int16"/>
           </array>
@@ -724,7 +719,8 @@ case.">
         <parameter name="n_ints" transfer-ownership="none">
           <type name="int" c:type="int"/>
         </parameter>
-        <parameter name="ints" transfer-ownership="none" doc="List of ints">
+        <parameter name="ints" transfer-ownership="none">
+          <doc xml:whitespace="preserve">List of ints</doc>
           <array length="0" c:type="gint32*">
             <type name="int32"/>
           </array>
@@ -739,7 +735,8 @@ case.">
         <parameter name="n_ints" transfer-ownership="none">
           <type name="int" c:type="int"/>
         </parameter>
-        <parameter name="ints" transfer-ownership="none" doc="List of ints">
+        <parameter name="ints" transfer-ownership="none">
+          <doc xml:whitespace="preserve">List of ints</doc>
           <array length="0" c:type="gint64*">
             <type name="int64"/>
           </array>
@@ -754,7 +751,8 @@ case.">
         <parameter name="n_ints" transfer-ownership="none">
           <type name="int" c:type="int"/>
         </parameter>
-        <parameter name="ints" transfer-ownership="none" doc="List of ints">
+        <parameter name="ints" transfer-ownership="none">
+          <doc xml:whitespace="preserve">List of ints</doc>
           <array length="0" c:type="gint8*">
             <type name="int8"/>
           </array>
@@ -762,15 +760,16 @@ case.">
       </parameters>
     </function>
     <function name="test_array_gtype_in" c:identifier="test_array_gtype_in">
-      <return-value transfer-ownership="full"
-                    doc="string representation of provided types">
+      <return-value transfer-ownership="full">
+        <doc xml:whitespace="preserve">string representation of provided types</doc>
         <type name="utf8" c:type="char*"/>
       </return-value>
       <parameters>
         <parameter name="n_types" transfer-ownership="none">
           <type name="int" c:type="int"/>
         </parameter>
-        <parameter name="types" transfer-ownership="none" doc="List of types">
+        <parameter name="types" transfer-ownership="none">
+          <doc xml:whitespace="preserve">List of types</doc>
           <array length="0" c:type="GType*">
             <type name="GType"/>
           </array>
@@ -779,7 +778,8 @@ case.">
     </function>
     <function name="test_array_int_full_out"
               c:identifier="test_array_int_full_out">
-      <return-value transfer-ownership="full" doc="a new array of integers.">
+      <return-value transfer-ownership="full">
+        <doc xml:whitespace="preserve">a new array of integers.</doc>
         <array length="0" c:type="int*">
           <type name="int"/>
         </array>
@@ -788,8 +788,8 @@ case.">
         <parameter name="len"
                    direction="out"
                    caller-allocates="0"
-                   transfer-ownership="full"
-                   doc="length of the returned array.">
+                   transfer-ownership="full">
+          <doc xml:whitespace="preserve">length of the returned array.</doc>
           <type name="int" c:type="int*"/>
         </parameter>
       </parameters>
@@ -802,7 +802,8 @@ case.">
         <parameter name="n_ints" transfer-ownership="none">
           <type name="int" c:type="int"/>
         </parameter>
-        <parameter name="ints" transfer-ownership="none" doc="List of ints">
+        <parameter name="ints" transfer-ownership="none">
+          <doc xml:whitespace="preserve">List of ints</doc>
           <array length="0" c:type="int*">
             <type name="int"/>
           </array>
@@ -818,7 +819,8 @@ case.">
         <parameter name="n_ints" transfer-ownership="none">
           <type name="int" c:type="int"/>
         </parameter>
-        <parameter name="ints" transfer-ownership="full" doc="List of ints">
+        <parameter name="ints" transfer-ownership="full">
+          <doc xml:whitespace="preserve">List of ints</doc>
           <array length="0" c:type="int*">
             <type name="int"/>
           </array>
@@ -833,15 +835,15 @@ case.">
         <parameter name="n_ints"
                    direction="inout"
                    caller-allocates="0"
-                   transfer-ownership="full"
-                   doc="the length of @ints">
+                   transfer-ownership="full">
+          <doc xml:whitespace="preserve">the length of @ints</doc>
           <type name="int" c:type="int*"/>
         </parameter>
         <parameter name="ints"
                    direction="inout"
                    caller-allocates="0"
-                   transfer-ownership="full"
-                   doc="a list of integers whose items will be increased by 1, except the first that will be dropped">
+                   transfer-ownership="full">
+          <doc xml:whitespace="preserve">a list of integers whose items will be increased by 1, except the first that will be dropped</doc>
           <array length="0" c:type="int**">
             <type name="int"/>
           </array>
@@ -850,8 +852,8 @@ case.">
     </function>
     <function name="test_array_int_none_out"
               c:identifier="test_array_int_none_out">
-      <return-value transfer-ownership="none"
-                    doc="a static array of integers.">
+      <return-value transfer-ownership="none">
+        <doc xml:whitespace="preserve">a static array of integers.</doc>
         <array length="0" c:type="int*">
           <type name="int"/>
         </array>
@@ -860,8 +862,8 @@ case.">
         <parameter name="len"
                    direction="out"
                    caller-allocates="0"
-                   transfer-ownership="full"
-                   doc="length of the returned array.">
+                   transfer-ownership="full">
+          <doc xml:whitespace="preserve">length of the returned array.</doc>
           <type name="int" c:type="int*"/>
         </parameter>
       </parameters>
@@ -877,7 +879,8 @@ case.">
             <type name="int"/>
           </array>
         </parameter>
-        <parameter name="len" transfer-ownership="none" doc="length">
+        <parameter name="len" transfer-ownership="none">
+          <doc xml:whitespace="preserve">length</doc>
           <type name="int" c:type="int"/>
         </parameter>
       </parameters>
@@ -900,8 +903,8 @@ case.">
         <parameter name="len"
                    direction="out"
                    caller-allocates="0"
-                   transfer-ownership="full"
-                   doc="length">
+                   transfer-ownership="full">
+          <doc xml:whitespace="preserve">length</doc>
           <type name="int" c:type="int*"/>
         </parameter>
       </parameters>
@@ -914,15 +917,15 @@ case.">
         <parameter name="n_ints"
                    direction="out"
                    caller-allocates="0"
-                   transfer-ownership="full"
-                   doc="the length of @ints">
+                   transfer-ownership="full">
+          <doc xml:whitespace="preserve">the length of @ints</doc>
           <type name="int" c:type="int*"/>
         </parameter>
         <parameter name="ints"
                    direction="out"
                    caller-allocates="0"
-                   transfer-ownership="full"
-                   doc="a list of 5 integers, from 0 to 4 in consecutive order">
+                   transfer-ownership="full">
+          <doc xml:whitespace="preserve">a list of 5 integers, from 0 to 4 in consecutive order</doc>
           <array length="0" c:type="int**">
             <type name="int"/>
           </array>
@@ -1054,9 +1057,9 @@ case.">
       </parameters>
     </function>
     <function name="test_callback_destroy_notify"
-              c:identifier="test_callback_destroy_notify"
-              doc="Notified - callback persists until a DestroyNotify delegate
-is invoked.">
+              c:identifier="test_callback_destroy_notify">
+      <doc xml:whitespace="preserve">Notified - callback persists until a DestroyNotify delegate
+is invoked.</doc>
       <return-value transfer-ownership="none">
         <type name="int" c:type="int"/>
       </return-value>
@@ -1083,19 +1086,19 @@ is invoked.">
       </return-value>
     </function>
     <function name="test_callback_thaw_notifications"
-              c:identifier="test_callback_thaw_notifications"
-              doc="Invokes all callbacks installed by #test_callback_destroy_notify(),
+              c:identifier="test_callback_thaw_notifications">
+      <doc xml:whitespace="preserve">Invokes all callbacks installed by #test_callback_destroy_notify(),
 adding up their return values, and removes them, invoking the
-corresponding destroy notfications.">
-      <return-value transfer-ownership="none"
-                    doc="Sum of the return values of the invoked callbacks.">
+corresponding destroy notfications.</doc>
+      <return-value transfer-ownership="none">
+        <doc xml:whitespace="preserve">Sum of the return values of the invoked callbacks.</doc>
         <type name="int" c:type="int"/>
       </return-value>
     </function>
     <function name="test_callback_user_data"
-              c:identifier="test_callback_user_data"
-              doc="Call - callback parameter persists for the duration of the method
-call and can be released on return.">
+              c:identifier="test_callback_user_data">
+      <doc xml:whitespace="preserve">Call - callback parameter persists for the duration of the method
+call and can be released on return.</doc>
       <return-value transfer-ownership="none">
         <type name="int" c:type="int"/>
       </return-value>
@@ -1160,7 +1163,8 @@ call and can be released on return.">
       </parameters>
     </function>
     <function name="test_filename_return" c:identifier="test_filename_return">
-      <return-value transfer-ownership="full" doc="list of strings">
+      <return-value transfer-ownership="full">
+        <doc xml:whitespace="preserve">list of strings</doc>
         <type name="GLib.SList" c:type="GSList*">
           <type name="filename"/>
         </type>
@@ -1236,8 +1240,8 @@ call and can be released on return.">
       </parameters>
     </function>
     <function name="test_ghash_nested_everything_return"
-              c:identifier="test_ghash_nested_everything_return"
-              doc="Specify nested parameterized types directly with the (type ) annotation.">
+              c:identifier="test_ghash_nested_everything_return">
+      <doc xml:whitespace="preserve">Specify nested parameterized types directly with the (type ) annotation.</doc>
       <return-value transfer-ownership="full">
         <type name="GLib.HashTable" c:type="GHashTable*">
           <type name="utf8"/>
@@ -1249,8 +1253,8 @@ call and can be released on return.">
       </return-value>
     </function>
     <function name="test_ghash_nested_everything_return2"
-              c:identifier="test_ghash_nested_everything_return2"
-              doc="element-type annotation.">
+              c:identifier="test_ghash_nested_everything_return2">
+      <doc xml:whitespace="preserve">element-type annotation.</doc>
       <return-value transfer-ownership="full">
         <type name="GLib.HashTable" c:type="GHashTable*">
           <type name="utf8"/>
@@ -1731,10 +1735,8 @@ call and can be released on return.">
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
-        <parameter name="obj"
-                   transfer-ownership="none"
-                   allow-none="1"
-                   doc="A #TestObj">
+        <parameter name="obj" transfer-ownership="none" allow-none="1">
+          <doc xml:whitespace="preserve">A #TestObj</doc>
           <type name="TestObj" c:type="TestObj*"/>
         </parameter>
       </parameters>
@@ -1748,8 +1750,8 @@ call and can be released on return.">
                    direction="out"
                    caller-allocates="0"
                    transfer-ownership="full"
-                   allow-none="1"
-                   doc="A #TestObj">
+                   allow-none="1">
+          <doc xml:whitespace="preserve">A #TestObj</doc>
           <type name="TestObj" c:type="TestObj**"/>
         </parameter>
       </parameters>
@@ -1833,18 +1835,16 @@ call and can be released on return.">
         <type name="GObject.Value" c:type="GValue*"/>
       </return-value>
     </function>
-    <function name="test_strv_out"
-              c:identifier="test_strv_out"
-              doc="No annotations here.  We want the default to Do The Right Thing.">
+    <function name="test_strv_out" c:identifier="test_strv_out">
+      <doc xml:whitespace="preserve">No annotations here.  We want the default to Do The Right Thing.</doc>
       <return-value transfer-ownership="full">
         <array c:type="char**">
           <type name="utf8"/>
         </array>
       </return-value>
     </function>
-    <function name="test_strv_out_c"
-              c:identifier="test_strv_out_c"
-              doc="No annotations here.  We want the default to Do The Right Thing.">
+    <function name="test_strv_out_c" c:identifier="test_strv_out_c">
+      <doc xml:whitespace="preserve">No annotations here.  We want the default to Do The Right Thing.</doc>
       <return-value transfer-ownership="full">
         <array c:type="char**">
           <type name="utf8"/>
@@ -1921,8 +1921,8 @@ call and can be released on return.">
     </function>
     <function name="test_torture_signature_1"
               c:identifier="test_torture_signature_1"
-              doc="This function throws an error if m is odd."
               throws="1">
+      <doc xml:whitespace="preserve">This function throws an error if m is odd.</doc>
       <return-value transfer-ownership="none">
         <type name="boolean" c:type="gboolean"/>
       </return-value>
@@ -2086,8 +2086,8 @@ call and can be released on return.">
     </function>
     <function name="test_utf8_const_return"
               c:identifier="test_utf8_const_return">
-      <return-value transfer-ownership="none"
-                    doc="&lt;const char*&gt; UTF-8 string">
+      <return-value transfer-ownership="none">
+        <doc xml:whitespace="preserve">&lt;const char*&gt; UTF-8 string</doc>
         <type name="utf8" c:type="char*"/>
       </return-value>
     </function>
@@ -2117,7 +2117,8 @@ call and can be released on return.">
     </function>
     <function name="test_utf8_nonconst_return"
               c:identifier="test_utf8_nonconst_return">
-      <return-value transfer-ownership="full" doc="&lt;char*&gt; UTF-8 string">
+      <return-value transfer-ownership="full">
+        <doc xml:whitespace="preserve">&lt;char*&gt; UTF-8 string</doc>
         <type name="utf8" c:type="char*"/>
       </return-value>
     </function>
@@ -2160,16 +2161,16 @@ call and can be released on return.">
     </function>
     <function name="test_utf8_out_nonconst_return"
               c:identifier="test_utf8_out_nonconst_return">
-      <return-value transfer-ownership="full"
-                    doc="a copy of &quot;first&quot;">
+      <return-value transfer-ownership="full">
+        <doc xml:whitespace="preserve">a copy of "first"</doc>
         <type name="utf8" c:type="char*"/>
       </return-value>
       <parameters>
         <parameter name="out"
                    direction="out"
                    caller-allocates="0"
-                   transfer-ownership="full"
-                   doc="a copy of &quot;second&quot;">
+                   transfer-ownership="full">
+          <doc xml:whitespace="preserve">a copy of "second"</doc>
           <type name="utf8" c:type="char**"/>
         </parameter>
       </parameters>
@@ -2182,26 +2183,27 @@ call and can be released on return.">
         <parameter name="out0"
                    direction="out"
                    caller-allocates="0"
-                   transfer-ownership="full"
-                   doc="a copy of &quot;first&quot;">
+                   transfer-ownership="full">
+          <doc xml:whitespace="preserve">a copy of "first"</doc>
           <type name="utf8" c:type="char**"/>
         </parameter>
         <parameter name="out1"
                    direction="out"
                    caller-allocates="0"
-                   transfer-ownership="full"
-                   doc="a copy of &quot;second&quot;">
+                   transfer-ownership="full">
+          <doc xml:whitespace="preserve">a copy of "second"</doc>
           <type name="utf8" c:type="char**"/>
         </parameter>
       </parameters>
     </function>
     <function name="test_value_return" c:identifier="test_value_return">
-      <return-value transfer-ownership="none"
-                    doc="the int wrapped in a GValue.">
+      <return-value transfer-ownership="none">
+        <doc xml:whitespace="preserve">the int wrapped in a GValue.</doc>
         <type name="GObject.Value" c:type="GValue*"/>
       </return-value>
       <parameters>
-        <parameter name="i" transfer-ownership="none" doc="an int">
+        <parameter name="i" transfer-ownership="none">
+          <doc xml:whitespace="preserve">an int</doc>
           <type name="int" c:type="int"/>
         </parameter>
       </parameters>

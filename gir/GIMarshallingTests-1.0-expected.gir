@@ -864,6 +864,7 @@ and/or use gtk-doc annotations.  -->
               c:identifier="g_i_marshalling_tests_bytearray_full_return">
       <return-value transfer-ownership="full">
         <array name="GLib.ByteArray" c:type="GByteArray*">
+          <type name="any" c:type="gpointer"/>
         </array>
       </return-value>
     </function>
@@ -970,7 +971,9 @@ and/or use gtk-doc annotations.  -->
     <function name="filename_list_return"
               c:identifier="g_i_marshalling_tests_filename_list_return">
       <return-value transfer-ownership="full">
-        <type name="GLib.SList" c:type="GSList*"/>
+        <type name="GLib.SList" c:type="GSList*">
+          <type name="any" c:type="gpointer"/>
+        </type>
       </return-value>
     </function>
     <function name="flags_in" c:identifier="g_i_marshalling_tests_flags_in">
@@ -1903,7 +1906,8 @@ and/or use gtk-doc annotations.  -->
     </function>
     <function name="gstrv_return"
               c:identifier="g_i_marshalling_tests_gstrv_return">
-      <return-value transfer-ownership="full" doc="an array of strings">
+      <return-value transfer-ownership="full">
+        <doc xml:whitespace="preserve">an array of strings</doc>
         <array c:type="GStrv">
           <type name="utf8"/>
         </array>

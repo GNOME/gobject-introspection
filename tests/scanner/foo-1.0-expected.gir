@@ -311,11 +311,11 @@ and/or use gtk-doc annotations.  -->
           <type name="int" c:type="int"/>
         </return-value>
       </function>
-      <function name="get_default"
-                c:identifier="foo_object_get_default"
-                doc="This function is intended to match clutter_stage_get_default which
-uses a C sugar return type.">
-        <return-value transfer-ownership="full" doc="The global #FooSubobject">
+      <function name="get_default" c:identifier="foo_object_get_default">
+        <doc xml:whitespace="preserve">This function is intended to match clutter_stage_get_default which
+uses a C sugar return type.</doc>
+        <return-value transfer-ownership="full">
+          <doc xml:whitespace="preserve">The global #FooSubobject</doc>
           <type name="Subobject" c:type="FooObject*"/>
         </return-value>
       </function>
@@ -329,15 +329,18 @@ uses a C sugar return type.">
           </parameter>
         </parameters>
       </virtual-method>
-      <virtual-method name="read_fn" invoker="read" doc="Read some stuff.">
+      <virtual-method name="read_fn" invoker="read">
+        <doc xml:whitespace="preserve">Read some stuff.</doc>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
-          <parameter name="offset" transfer-ownership="none" doc="offset">
+          <parameter name="offset" transfer-ownership="none">
+            <doc xml:whitespace="preserve">offset</doc>
             <type name="int" c:type="int"/>
           </parameter>
-          <parameter name="length" transfer-ownership="none" doc="length">
+          <parameter name="length" transfer-ownership="none">
+            <doc xml:whitespace="preserve">length</doc>
             <type name="int" c:type="int"/>
           </parameter>
         </parameters>
@@ -436,25 +439,26 @@ uses a C sugar return type.">
           </parameter>
         </parameters>
       </method>
-      <method name="read"
-              c:identifier="foo_object_read"
-              doc="Read some stuff.">
+      <method name="read" c:identifier="foo_object_read">
+        <doc xml:whitespace="preserve">Read some stuff.</doc>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
-          <parameter name="offset" transfer-ownership="none" doc="offset">
+          <parameter name="offset" transfer-ownership="none">
+            <doc xml:whitespace="preserve">offset</doc>
             <type name="int" c:type="int"/>
           </parameter>
-          <parameter name="length" transfer-ownership="none" doc="length">
+          <parameter name="length" transfer-ownership="none">
+            <doc xml:whitespace="preserve">length</doc>
             <type name="int" c:type="int"/>
           </parameter>
         </parameters>
       </method>
       <method name="skipped_method"
               c:identifier="foo_object_skipped_method"
-              doc="This is only useful from C."
               introspectable="0">
+        <doc xml:whitespace="preserve">This is only useful from C.</doc>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -515,10 +519,12 @@ uses a C sugar return type.">
             <parameter name="object" transfer-ownership="none">
               <type name="Object" c:type="FooObject*"/>
             </parameter>
-            <parameter name="offset" transfer-ownership="none" doc="offset">
+            <parameter name="offset" transfer-ownership="none">
+              <doc xml:whitespace="preserve">offset</doc>
               <type name="int" c:type="int"/>
             </parameter>
-            <parameter name="length" transfer-ownership="none" doc="length">
+            <parameter name="length" transfer-ownership="none">
+              <doc xml:whitespace="preserve">length</doc>
               <type name="int" c:type="int"/>
             </parameter>
           </parameters>
@@ -570,9 +576,8 @@ uses a C sugar return type.">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
-          <parameter name="r2"
-                     transfer-ownership="none"
-                     doc="source rectangle">
+          <parameter name="r2" transfer-ownership="none">
+            <doc xml:whitespace="preserve">source rectangle</doc>
             <type name="Rectangle" c:type="FooRectangle*"/>
           </parameter>
         </parameters>
@@ -581,11 +586,9 @@ uses a C sugar return type.">
     <constant name="SUCCESS_INT" value="4408">
       <type name="int"/>
     </constant>
-    <enumeration name="Skippable"
-                 doc="Some type that is only interesting from C and should not be
-exposed to language bindings."
-                 introspectable="0"
-                 c:type="FooSkippable">
+    <enumeration name="Skippable" introspectable="0" c:type="FooSkippable">
+      <doc xml:whitespace="preserve">Some type that is only interesting from C and should not be
+exposed to language bindings.</doc>
       <member name="one" value="0" c:identifier="FOO_SKIPPABLE_ONE"/>
       <member name="two" value="1" c:identifier="FOO_SKIPPABLE_TWO"/>
     </enumeration>
@@ -819,16 +822,15 @@ exposed to language bindings."
         </parameter>
       </parameters>
     </function>
-    <function name="skip_me"
-              c:identifier="foo_skip_me"
-              doc="Does something that&apos;s only interesting from C and should not be
-exposed to language bindings."
-              introspectable="0">
+    <function name="skip_me" c:identifier="foo_skip_me" introspectable="0">
+      <doc xml:whitespace="preserve">Does something that's only interesting from C and should not be
+exposed to language bindings.</doc>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
-        <parameter name="fs" transfer-ownership="none" doc="a #FooSkippable">
+        <parameter name="fs" transfer-ownership="none">
+          <doc xml:whitespace="preserve">a #FooSkippable</doc>
           <type name="Skippable" c:type="FooSkippable"/>
         </parameter>
       </parameters>

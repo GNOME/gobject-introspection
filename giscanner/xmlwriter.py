@@ -22,7 +22,7 @@ from __future__ import with_statement
 
 from contextlib import contextmanager
 from cStringIO import StringIO
-from xml.sax.saxutils import quoteattr
+from xml.sax.saxutils import escape, quoteattr
 
 from .libtoolimporter import LibtoolImporter
 
@@ -111,7 +111,7 @@ class XMLWriter(object):
             attributes = []
         prefix = '<%s' % (tag_name, )
         if data is not None:
-            suffix = '>%s</%s>' % (data, tag_name)
+            suffix = '>%s</%s>' % (escape(data), tag_name)
         else:
             suffix = '/>'
         attrs = collect_attributes(

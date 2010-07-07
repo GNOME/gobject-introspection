@@ -23,7 +23,7 @@ from __future__ import with_statement
 
 from .ast import (Alias, Array, Bitfield, Callback, Class, Constant, Enum,
                   Function, Interface, List, Map, Member, Struct, Union,
-                  Varargs)
+                  Varargs, Type)
 from .glibast import (GLibBoxed, GLibEnum, GLibEnumMember,
                       GLibFlags, GLibObject, GLibInterface,
                       GLibRecord)
@@ -132,9 +132,12 @@ and/or use gtk-doc annotations. ''')
         if node.version:
             attrs.append(('version', node.version))
 
-    def _write_attributes(self, node):
+    def _write_generic(self, node):
         for key, value in node.attributes:
             self.write_tag('attribute', [('name', key), ('value', value)])
+        if hasattr(node, 'doc') and node.doc:
+            self.write_tag('doc', [('xml:whitespace', 'preserve')],
+                           node.doc.strip())
 
     def _append_node_generic(self, node, attrs):
         if node.skip or not node.introspectable:
@@ -158,13 +161,11 @@ and/or use gtk-doc annotations. ''')
     def _write_callable(self, callable, tag_name, extra_attrs):
         attrs = [('name', callable.name)]
         attrs.extend(extra_attrs)
-        if callable.doc:
-            attrs.append(('doc', callable.doc))
         self._append_version(callable, attrs)
         self._append_node_generic(callable, attrs)
         self._append_throws(callable, attrs)
         with self.tagcontext(tag_name, attrs):
-            self._write_attributes(callable)
+            self._write_generic(callable)
             self._write_return_type(callable.retval)
             self._write_parameters(callable.parameters)
 
@@ -189,10 +190,8 @@ and/or use gtk-doc annotations. ''')
 
         attrs = []
         attrs.append(('transfer-ownership', return_.transfer))
-        if return_.doc:
-            attrs.append(('doc', return_.doc))
         with self.tagcontext('return-value', attrs):
-            self._write_attributes(return_)
+            self._write_generic(return_)
             self._write_type(return_.type)
 
     def _write_parameters(self, parameters):
@@ -222,10 +221,8 @@ and/or use gtk-doc annotations. ''')
             attrs.append(('closure', '%d' % parameter.closure_index))
         if parameter.destroy_index >= 0:
             attrs.append(('destroy', '%d' % parameter.destroy_index))
-        if parameter.doc:
-            attrs.append(('doc', parameter.doc))
         with self.tagcontext('parameter', attrs):
-            self._write_attributes(parameter)
+            self._write_generic(parameter)
             self._write_type(parameter.type)
 
     def _type_to_string(self, ntype):
@@ -259,6 +256,8 @@ and/or use gtk-doc annotations. ''')
             with self.tagcontext('array', attrs):
                 if ntype.element_type is not None:
                     self._write_type(ntype.element_type)
+                else:
+                    self._write_type(Type('any', ctype='gpointer'))
             return
         attrs = [('name', self._type_to_string(ntype))]
         # FIXME: figure out if type references a basic type
@@ -266,9 +265,14 @@ and/or use gtk-doc annotations. ''')
         #        writing the ctype if the latter.
         if type_cname is not None:
             attrs.append(('c:type', type_cname))
-        if isinstance(ntype, List) and ntype.element_type:
+        if (isinstance(ntype, List)
+            or typename in ('GLib.List',
+                            'GLib.SList')):
             with self.tagcontext('type', attrs):
-                self._write_type(ntype.element_type)
+                if isinstance(ntype, List) and ntype.element_type:
+                    self._write_type(ntype.element_type)
+                else:
+                    self._write_type(Type('any', ctype='gpointer'))
             return
         if isinstance(ntype, Map) and ntype.key_type:
             with self.tagcontext('type', attrs):
@@ -280,8 +284,6 @@ and/or use gtk-doc annotations. ''')
 
     def _write_enum(self, enum):
         attrs = [('name', enum.name)]
-        if enum.doc:
-            attrs.append(('doc', enum.doc))
         self._append_version(enum, attrs)
         self._append_node_generic(enum, attrs)
         if isinstance(enum, GLibEnum):
@@ -294,14 +296,12 @@ and/or use gtk-doc annotations. ''')
             attrs.append(('glib:error-quark', enum.error_quark))
 
         with self.tagcontext('enumeration', attrs):
-            self._write_attributes(enum)
+            self._write_generic(enum)
             for member in enum.members:
                 self._write_member(member)
 
     def _write_bitfield(self, bitfield):
         attrs = [('name', bitfield.name)]
-        if bitfield.doc:
-            attrs.append(('doc', bitfield.doc))
         self._append_version(bitfield, attrs)
         self._append_node_generic(bitfield, attrs)
         if isinstance(bitfield, GLibFlags):
@@ -311,7 +311,7 @@ and/or use gtk-doc annotations. ''')
         else:
             attrs.append(('c:type', bitfield.symbol))
         with self.tagcontext('bitfield', attrs):
-            self._write_attributes(bitfield)
+            self._write_generic(bitfield)
             for member in bitfield.members:
                 self._write_member(member)
 
@@ -332,8 +332,6 @@ and/or use gtk-doc annotations. ''')
     def _write_class(self, node):
         attrs = [('name', node.name),
                  ('c:type', node.ctype)]
-        if node.doc:
-            attrs.append(('doc', node.doc))
         self._append_version(node, attrs)
         self._append_node_generic(node, attrs)
         if isinstance(node, Class):
@@ -351,7 +349,7 @@ and/or use gtk-doc annotations. ''')
             if node.glib_type_struct:
                 attrs.append(('glib:type-struct', node.glib_type_struct.name))
         with self.tagcontext(tag_name, attrs):
-            self._write_attributes(node)
+            self._write_generic(node)
             if isinstance(node, GLibObject):
                 for iface in node.interfaces:
                     self.write_tag('implements', [('name', iface)])
@@ -377,11 +375,9 @@ and/or use gtk-doc annotations. ''')
     def _write_boxed(self, boxed):
         attrs = [('c:type', boxed.ctype),
                  ('glib:name', boxed.name)]
-        if boxed.doc:
-            attrs.append(('doc', boxed.doc))
         attrs.extend(self._boxed_attrs(boxed))
         with self.tagcontext('glib:boxed', attrs):
-            self._write_attributes(boxed)
+            self._write_generic(boxed)
             for method in boxed.constructors:
                 self._write_constructor(method)
             for method in boxed.methods:
@@ -401,10 +397,8 @@ and/or use gtk-doc annotations. ''')
         if prop.construct_only:
             attrs.append(('construct-only', '1'))
         attrs.append(('transfer-ownership', prop.transfer))
-        if prop.doc:
-            attrs.append(('doc', prop.doc))
         with self.tagcontext('property', attrs):
-            self._write_attributes(prop)
+            self._write_generic(prop)
             self._write_type(prop.type)
 
     def _write_vfunc(self, vf):
@@ -437,14 +431,12 @@ and/or use gtk-doc annotations. ''')
                 is_gtype_struct = True
                 attrs.append(('glib:is-gtype-struct-for',
                               record.is_gtype_struct_for))
-        if record.doc:
-            attrs.append(('doc', record.doc))
         self._append_version(record, attrs)
         self._append_node_generic(record, attrs)
         if isinstance(record, GLibBoxed):
             attrs.extend(self._boxed_attrs(record))
         with self.tagcontext('record', attrs):
-            self._write_attributes(record)
+            self._write_generic(record)
             if record.fields:
                 for field in record.fields:
                     self._write_field(field, is_gtype_struct)
@@ -459,14 +451,12 @@ and/or use gtk-doc annotations. ''')
             attrs.append(('name', union.name))
         if union.symbol is not None: # the union might be anonymous
             attrs.append(('c:type', union.symbol))
-        if union.doc:
-            attrs.append(('doc', union.doc))
         self._append_version(union, attrs)
         self._append_node_generic(union, attrs)
         if isinstance(union, GLibBoxed):
             attrs.extend(self._boxed_attrs(union))
         with self.tagcontext('union', attrs):
-            self._write_attributes(union)
+            self._write_generic(union)
             if union.fields:
                 for field in union.fields:
                     self._write_field(field)
@@ -483,7 +473,7 @@ and/or use gtk-doc annotations. ''')
         if isinstance(field, Callback):
             attrs = [('name', field.name)]
             with self.tagcontext('field', attrs):
-                self._write_attributes(field)
+                self._write_generic(field)
                 if is_gtype_struct:
                     self._write_callback(field)
                 else:
@@ -504,16 +494,14 @@ and/or use gtk-doc annotations. ''')
             if field.bits:
                 attrs.append(('bits', str(field.bits)))
             with self.tagcontext('field', attrs):
-                self._write_attributes(field)
+                self._write_generic(field)
                 self._write_type(field.type)
 
     def _write_signal(self, signal):
         attrs = [('name', signal.name)]
-        if signal.doc:
-            attrs.append(('doc', signal.doc))
         self._append_version(signal, attrs)
         self._append_node_generic(signal, attrs)
         with self.tagcontext('glib:signal', attrs):
-            self._write_attributes(signal)
+            self._write_generic(signal)
             self._write_return_type(signal.retval)
             self._write_parameters(signal.parameters)
