@@ -2297,6 +2297,18 @@ call and can be released on return.</doc>
         </parameter>
       </parameters>
     </function>
+    <function name="test_value_get_fundamental_object"
+              c:identifier="test_value_get_fundamental_object"
+              introspectable="0">
+      <return-value transfer-ownership="full">
+        <type name="TestFundamentalObject" c:type="TestFundamentalObject*"/>
+      </return-value>
+      <parameters>
+        <parameter name="value" transfer-ownership="none">
+          <type name="GObject.Value" c:type="GValue*"/>
+        </parameter>
+      </parameters>
+    </function>
     <function name="test_value_return" c:identifier="test_value_return">
       <return-value transfer-ownership="none">
         <doc xml:whitespace="preserve">the int wrapped in a GValue.</doc>
