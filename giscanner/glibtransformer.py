@@ -1151,8 +1151,9 @@ class GLibTransformer(object):
                 parent.introspectable = False
             elif not isinstance(node.type, List) and \
                  (node.type.name == 'GLib.List' or
+		  node.type.name == 'GLib.SList' or
                   (self._transformer._namespace.name == 'GLib'
-                   and node.type.name == 'List')):
+                   and (node.type.name == 'List' or node.type.name == 'SList'))):
                 if isinstance(node, Parameter):
                     self._transformer.log_node_warning(parent,
 """Missing (element-type) annotation on argument %r""" % (node.name, ),
