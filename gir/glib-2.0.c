@@ -193,6 +193,17 @@
   *
   */
 
+/**
+ * g_variant_new_strv:
+ * @strv: (array length=length) (element-type utf8):
+ */
+
+/**
+ * g_variant_get_strv:
+ * @length: (allow-none):
+ * @returns: (array length=length) (transfer container):
+ */
+
 // Skip this as "tm" is not available at present.
 
 /**
