@@ -176,3 +176,11 @@
  * @info: a #GAppInfo
  * @files: (element-type GFile): a #GList of of #GFile objects
  */
+
+/**
+ * g_dbus_proxy_new_sync:
+ * @info: (allow-none):
+ * @name: (allow-none):
+ * @cancellable: (allow-none):
+ * @error: (allow-none):
+ */
