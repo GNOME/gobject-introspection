@@ -556,30 +556,30 @@ g_i_marshalling_tests_ushort_return (void)
 }
 
 void
-g_i_marshalling_tests_ushort_in (gushort ushort)
+g_i_marshalling_tests_ushort_in (gushort ushort_)
 {
-    g_assert(ushort == G_MAXUSHORT);
+    g_assert(ushort_ == G_MAXUSHORT);
 }
 
 /**
  * g_i_marshalling_tests_ushort_out:
- * @ushort: (out):
+ * @ushort_: (out):
  */
 void
-g_i_marshalling_tests_ushort_out (gushort *ushort)
+g_i_marshalling_tests_ushort_out (gushort *ushort_)
 {
-    *ushort = G_MAXUSHORT;
+    *ushort_ = G_MAXUSHORT;
 }
 
 /**
  * g_i_marshalling_tests_ushort_inout:
- * @ushort: (inout):
+ * @ushort_: (inout):
  */
 void
-g_i_marshalling_tests_ushort_inout (gushort *ushort)
+g_i_marshalling_tests_ushort_inout (gushort *ushort_)
 {
-    g_assert(*ushort == G_MAXUSHORT);
-    *ushort = 0;
+    g_assert(*ushort_ == G_MAXUSHORT);
+    *ushort_ = 0;
 }
 
 
@@ -657,30 +657,30 @@ g_i_marshalling_tests_uint_return (void)
 }
 
 void
-g_i_marshalling_tests_uint_in (guint uint)
+g_i_marshalling_tests_uint_in (guint uint_)
 {
-    g_assert(uint == G_MAXUINT);
+    g_assert(uint_ == G_MAXUINT);
 }
 
 /**
  * g_i_marshalling_tests_uint_out:
- * @uint: (out):
+ * @uint_: (out):
  */
 void
-g_i_marshalling_tests_uint_out (guint *uint)
+g_i_marshalling_tests_uint_out (guint *uint_)
 {
-    *uint = G_MAXUINT;
+    *uint_ = G_MAXUINT;
 }
 
 /**
  * g_i_marshalling_tests_uint_inout:
- * @uint: (inout):
+ * @uint_: (inout):
  */
 void
-g_i_marshalling_tests_uint_inout (guint *uint)
+g_i_marshalling_tests_uint_inout (guint *uint_)
 {
-    g_assert(*uint == G_MAXUINT);
-    *uint = 0;
+    g_assert(*uint_ == G_MAXUINT);
+    *uint_ = 0;
 }
 
 
@@ -758,30 +758,30 @@ g_i_marshalling_tests_ulong_return (void)
 }
 
 void
-g_i_marshalling_tests_ulong_in (gulong ulong)
+g_i_marshalling_tests_ulong_in (gulong ulong_)
 {
-    g_assert(ulong == G_MAXULONG);
+    g_assert(ulong_ == G_MAXULONG);
 }
 
 /**
  * g_i_marshalling_tests_ulong_out:
- * @ulong: (out):
+ * @ulong_: (out):
  */
 void
-g_i_marshalling_tests_ulong_out (gulong *ulong)
+g_i_marshalling_tests_ulong_out (gulong *ulong_)
 {
-    *ulong = G_MAXULONG;
+    *ulong_ = G_MAXULONG;
 }
 
 /**
  * g_i_marshalling_tests_ulong_inout:
- * @ulong: (inout):
+ * @ulong_: (inout):
  */
 void
-g_i_marshalling_tests_ulong_inout (gulong *ulong)
+g_i_marshalling_tests_ulong_inout (gulong *ulong_)
 {
-    g_assert(*ulong == G_MAXULONG);
-    *ulong = 0;
+    g_assert(*ulong_ == G_MAXULONG);
+    *ulong_ = 0;
 }
 
 

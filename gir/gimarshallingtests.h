@@ -131,10 +131,10 @@ void g_i_marshalling_tests_short_inout_min_max (gshort *short_);
 
 gushort g_i_marshalling_tests_ushort_return (void);
 
-void g_i_marshalling_tests_ushort_in (gushort ushort);
+void g_i_marshalling_tests_ushort_in (gushort ushort_);
 
-void g_i_marshalling_tests_ushort_out (gushort *ushort);
-void g_i_marshalling_tests_ushort_inout (gushort *ushort);
+void g_i_marshalling_tests_ushort_out (gushort *ushort_);
+void g_i_marshalling_tests_ushort_inout (gushort *ushort_);
 
 
 gint g_i_marshalling_tests_int_return_max (void);
@@ -152,10 +152,10 @@ void g_i_marshalling_tests_int_inout_min_max (gint *int_);
 
 guint g_i_marshalling_tests_uint_return (void);
 
-void g_i_marshalling_tests_uint_in (guint uint);
+void g_i_marshalling_tests_uint_in (guint uint_);
 
-void g_i_marshalling_tests_uint_out (guint *uint);
-void g_i_marshalling_tests_uint_inout (guint *uint);
+void g_i_marshalling_tests_uint_out (guint *uint_);
+void g_i_marshalling_tests_uint_inout (guint *uint_);
 
 
 glong g_i_marshalling_tests_long_return_max (void);
@@ -173,10 +173,10 @@ void g_i_marshalling_tests_long_inout_min_max (glong *long_);
 
 gulong g_i_marshalling_tests_ulong_return (void);
 
-void g_i_marshalling_tests_ulong_in (gulong ulong);
+void g_i_marshalling_tests_ulong_in (gulong ulong_);
 
-void g_i_marshalling_tests_ulong_out (gulong *ulong);
-void g_i_marshalling_tests_ulong_inout (gulong *ulong);
+void g_i_marshalling_tests_ulong_out (gulong *ulong_);
+void g_i_marshalling_tests_ulong_inout (gulong *ulong_);
 
 
 gssize g_i_marshalling_tests_ssize_return_max (void);

@@ -3305,7 +3305,7 @@ and/or use gtk-doc annotations.  -->
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
-        <parameter name="uint" transfer-ownership="none">
+        <parameter name="uint_" transfer-ownership="none">
           <type name="uint" c:type="guint"/>
         </parameter>
       </parameters>
@@ -3316,7 +3316,7 @@ and/or use gtk-doc annotations.  -->
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
-        <parameter name="uint"
+        <parameter name="uint_"
                    direction="inout"
                    caller-allocates="0"
                    transfer-ownership="full">
@@ -3329,7 +3329,7 @@ and/or use gtk-doc annotations.  -->
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
-        <parameter name="uint"
+        <parameter name="uint_"
                    direction="out"
                    caller-allocates="0"
                    transfer-ownership="full">
@@ -3348,7 +3348,7 @@ and/or use gtk-doc annotations.  -->
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
-        <parameter name="ulong" transfer-ownership="none">
+        <parameter name="ulong_" transfer-ownership="none">
           <type name="ulong" c:type="gulong"/>
         </parameter>
       </parameters>
@@ -3359,7 +3359,7 @@ and/or use gtk-doc annotations.  -->
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
-        <parameter name="ulong"
+        <parameter name="ulong_"
                    direction="inout"
                    caller-allocates="0"
                    transfer-ownership="full">
@@ -3372,7 +3372,7 @@ and/or use gtk-doc annotations.  -->
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
-        <parameter name="ulong"
+        <parameter name="ulong_"
                    direction="out"
                    caller-allocates="0"
                    transfer-ownership="full">
@@ -3434,7 +3434,7 @@ and/or use gtk-doc annotations.  -->
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
-        <parameter name="ushort" transfer-ownership="none">
+        <parameter name="ushort_" transfer-ownership="none">
           <type name="ushort" c:type="gushort"/>
         </parameter>
       </parameters>
@@ -3445,7 +3445,7 @@ and/or use gtk-doc annotations.  -->
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
-        <parameter name="ushort"
+        <parameter name="ushort_"
                    direction="inout"
                    caller-allocates="0"
                    transfer-ownership="full">
@@ -3459,7 +3459,7 @@ and/or use gtk-doc annotations.  -->
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
-        <parameter name="ushort"
+        <parameter name="ushort_"
                    direction="out"
                    caller-allocates="0"
                    transfer-ownership="full">
