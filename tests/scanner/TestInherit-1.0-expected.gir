@@ -27,7 +27,19 @@ and/or use gtk-doc annotations.  -->
         </return-value>
         <parameters>
           <parameter name="x" transfer-ownership="none">
-            <type name="int" c:type="int"/>
+            <type name="gint" c:type="int"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="do_foo_maybe_throw"
+              c:identifier="test_inherit_drawable_do_foo_maybe_throw"
+              throws="1">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <parameter name="x" transfer-ownership="none">
+            <type name="gint" c:type="int"/>
           </parameter>
         </parameters>
       </method>
@@ -41,13 +53,13 @@ and/or use gtk-doc annotations.  -->
                      direction="out"
                      caller-allocates="0"
                      transfer-ownership="full">
-            <type name="int" c:type="int*"/>
+            <type name="gint" c:type="int*"/>
           </parameter>
           <parameter name="y"
                      direction="out"
                      caller-allocates="0"
                      transfer-ownership="full">
-            <type name="int" c:type="int*"/>
+            <type name="gint" c:type="int*"/>
           </parameter>
         </parameters>
       </method>
@@ -60,25 +72,13 @@ and/or use gtk-doc annotations.  -->
                      direction="out"
                      caller-allocates="0"
                      transfer-ownership="full">
-            <type name="uint" c:type="guint*"/>
+            <type name="guint" c:type="guint*"/>
           </parameter>
           <parameter name="height"
                      direction="out"
                      caller-allocates="0"
                      transfer-ownership="full">
-            <type name="uint" c:type="guint*"/>
-          </parameter>
-        </parameters>
-      </method>
-      <method name="do_foo_maybe_throw"
-              c:identifier="test_inherit_drawable_do_foo_maybe_throw"
-              throws="1">
-        <return-value transfer-ownership="none">
-          <type name="none" c:type="void"/>
-        </return-value>
-        <parameters>
-          <parameter name="x" transfer-ownership="none">
-            <type name="int" c:type="int"/>
+            <type name="guint" c:type="guint*"/>
           </parameter>
         </parameters>
       </method>

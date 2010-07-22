@@ -19,48 +19,7 @@
 #
 
 from .ast import (Bitfield, Class, Enum, Interface, Member, Node,
-                  Property, Struct, Union, Record)
-from .ast import (
-    type_names, default_array_types,
-    TYPE_STRING, TYPE_INT8, TYPE_UINT8, TYPE_SHORT, TYPE_USHORT,
-    TYPE_INT16, TYPE_UINT16, TYPE_INT, TYPE_UINT, TYPE_UINT32,
-    TYPE_INT32, TYPE_LONG, TYPE_ULONG, TYPE_INT64, TYPE_UINT64,
-    TYPE_FLOAT, TYPE_DOUBLE, TYPE_BOOLEAN, TYPE_ANY, TYPE_SSIZET,
-    TYPE_SIZET)
-
-
-# Glib type names
-type_names['gchararray'] = TYPE_STRING
-type_names['gint8'] = TYPE_INT8
-type_names['guint8'] = TYPE_UINT8
-type_names['gint16'] = TYPE_INT16
-type_names['guint16'] = TYPE_UINT16
-type_names['gint'] = TYPE_INT
-type_names['guint'] = TYPE_UINT
-type_names['gint32'] = TYPE_INT32
-type_names['guint32'] = TYPE_UINT32
-type_names['glong'] = TYPE_LONG
-type_names['gulong'] = TYPE_ULONG
-type_names['gint64'] = TYPE_INT64
-type_names['guint64'] = TYPE_UINT64
-type_names['gfloat'] = TYPE_FLOAT
-type_names['gdouble'] = TYPE_DOUBLE
-type_names['gchar*'] = TYPE_STRING
-type_names['gboolean'] = TYPE_BOOLEAN
-type_names['gpointer'] = TYPE_ANY
-type_names['gconstpointer'] = TYPE_ANY
-type_names['gsize'] = TYPE_SIZET
-type_names['gssize'] = TYPE_SSIZET
-type_names['gchar'] = TYPE_INT8
-type_names['guchar'] = TYPE_UINT8
-type_names['gshort'] = TYPE_SHORT
-type_names['gushort'] = TYPE_USHORT
-
-# It's not very nice to duplicate the array types from ast.py,
-# but a clean fix is hard without essentially hardcoding
-# char * again inside transformer.py
-default_array_types['guint8*'] = TYPE_UINT8
-default_array_types['gchar**'] = TYPE_STRING
+                  Property, Union, Record)
 
 class GLibRecord(Record):
     def __init__(self, *args, **kwargs):
@@ -136,10 +95,12 @@ class GLibBoxed:
         self.get_type = get_type
 
 
-class GLibBoxedStruct(Struct, GLibBoxed):
+
+
+class GLibBoxedStruct(Record, GLibBoxed):
 
     def __init__(self, name, type_name, get_type, ctype=None):
-        Struct.__init__(self, name, ctype or type_name)
+        Record.__init__(self, name, ctype or type_name)
         GLibBoxed.__init__(self, type_name, get_type)
 
 
@@ -159,6 +120,7 @@ class GLibBoxedOther(Node, GLibBoxed):
         self.methods = []
         self.ctype = type_name
         self.doc = None
+
 
 class GLibInterface(Interface):
 

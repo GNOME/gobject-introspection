@@ -38,10 +38,10 @@ and/or use gtk-doc annotations.  -->
       </return-value>
       <parameters>
         <parameter name="x" transfer-ownership="none">
-          <type name="int" c:type="int"/>
+          <type name="gint" c:type="int"/>
         </parameter>
         <parameter name="y" transfer-ownership="none">
-          <type name="double" c:type="double"/>
+          <type name="gdouble" c:type="double"/>
         </parameter>
       </parameters>
     </function>

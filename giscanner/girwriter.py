@@ -23,7 +23,7 @@ from __future__ import with_statement
 
 from .ast import (Alias, Array, Bitfield, Callback, Class, Constant, Enum,
                   Function, Interface, List, Map, Member, Struct, Union,
-                  Varargs, Type)
+                  Varargs, Type, TYPE_ANY)
 from .glibast import (GLibBoxed, GLibEnum, GLibEnumMember,
                       GLibFlags, GLibObject, GLibInterface,
                       GLibRecord)
@@ -258,7 +258,7 @@ and/or use gtk-doc annotations. ''')
                 if ntype.element_type is not None:
                     self._write_type(ntype.element_type)
                 else:
-                    self._write_type(Type('any', ctype='gpointer'))
+                    self._write_type(Type(TYPE_ANY, ctype='gpointer'))
             return
         attrs = [('name', self._type_to_string(ntype))]
         # FIXME: figure out if type references a basic type
@@ -273,7 +273,7 @@ and/or use gtk-doc annotations. ''')
                 if isinstance(ntype, List) and ntype.element_type:
                     self._write_type(ntype.element_type)
                 else:
-                    self._write_type(Type('any', ctype='gpointer'))
+                    self._write_type(Type(TYPE_ANY, ctype='gpointer'))
             return
         if isinstance(ntype, Map) and ntype.key_type:
             with self.tagcontext('type', attrs):
@@ -363,25 +363,25 @@ and/or use gtk-doc annotations. ''')
         with self.tagcontext(tag_name, attrs):
             self._write_generic(node)
             if isinstance(node, GLibObject):
-                for iface in node.interfaces:
+                for iface in sorted(node.interfaces):
                     self.write_tag('implements', [('name', iface)])
             if isinstance(node, Interface):
-                for iface in node.prerequisites:
+                for iface in sorted(node.prerequisites):
                     self.write_tag('prerequisite', [('name', iface)])
             if isinstance(node, Class):
-                for method in node.constructors:
+                for method in sorted(node.constructors):
                     self._write_constructor(method)
-                for method in node.static_methods:
+                for method in sorted(node.static_methods):
                     self._write_static_method(method)
-            for vfunc in node.virtual_methods:
+            for vfunc in sorted(node.virtual_methods):
                 self._write_vfunc(vfunc)
-            for method in node.methods:
+            for method in sorted(node.methods):
                 self._write_method(method)
-            for prop in node.properties:
+            for prop in sorted(node.properties):
                 self._write_property(prop)
             for field in node.fields:
                 self._write_field(field)
-            for signal in node.signals:
+            for signal in sorted(node.signals):
                 self._write_signal(signal)
 
     def _write_boxed(self, boxed):
@@ -390,9 +390,9 @@ and/or use gtk-doc annotations. ''')
         attrs.extend(self._boxed_attrs(boxed))
         with self.tagcontext('glib:boxed', attrs):
             self._write_generic(boxed)
-            for method in boxed.constructors:
+            for method in sorted(boxed.constructors):
                 self._write_constructor(method)
-            for method in boxed.methods:
+            for method in sorted(boxed.methods):
                 self._write_method(method)
 
     def _write_property(self, prop):
@@ -452,9 +452,9 @@ and/or use gtk-doc annotations. ''')
             if record.fields:
                 for field in record.fields:
                     self._write_field(field, is_gtype_struct)
-            for method in record.constructors:
+            for method in sorted(record.constructors):
                 self._write_constructor(method)
-            for method in record.methods:
+            for method in sorted(record.methods):
                 self._write_method(method)
 
     def _write_union(self, union):
@@ -472,9 +472,9 @@ and/or use gtk-doc annotations. ''')
             if union.fields:
                 for field in union.fields:
                     self._write_field(field)
-            for method in union.constructors:
+            for method in sorted(union.constructors):
                 self._write_constructor(method)
-            for method in union.methods:
+            for method in sorted(union.methods):
                 self._write_method(method)
 
     def _write_field(self, field, is_gtype_struct=False):
@@ -489,7 +489,7 @@ and/or use gtk-doc annotations. ''')
                 if is_gtype_struct:
                     self._write_callback(field)
                 else:
-                    attrs = [('name', 'any'), ('c:type', 'pointer')]
+                    attrs = [('name', TYPE_ANY), ('c:type', 'pointer')]
                     self.write_tag('type', attrs)
         elif isinstance(field, Struct):
             self._write_record(field)

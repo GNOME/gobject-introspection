@@ -6,7 +6,7 @@
 
 /**
  * g_file_set_contents:
- * @contents: (array length=length) (element-type uint8):
+ * @contents: (array length=length) (element-type guint8):
  */
 
 /**

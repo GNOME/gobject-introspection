@@ -83,7 +83,7 @@
 /**
  * g_file_enumerator_next_files_finish:
  *
- * Return value: (transfer full) (element-type FileInfo):
+ * Return value: (transfer full) (element-type GFileInfo):
  */
 
 /**

@@ -17,7 +17,7 @@ and/or use gtk-doc annotations.  -->
              shared-library="libfoo.so"
              c:prefix="Foo">
     <alias name="ObjectCookie" c:type="FooObjectCookie">
-      <type name="any"/>
+      <type name="gpointer"/>
     </alias>
     <alias name="XEvent" c:type="FooXEvent">
       <type name="none"/>
@@ -37,10 +37,10 @@ and/or use gtk-doc annotations.  -->
             glib:type-name="FooBRect"
             glib:get-type="foo_brect_get_type">
       <field name="x" writable="1">
-        <type name="double" c:type="double"/>
+        <type name="gdouble" c:type="double"/>
       </field>
       <field name="y" writable="1">
-        <type name="double" c:type="double"/>
+        <type name="gdouble" c:type="double"/>
       </field>
       <constructor name="new" c:identifier="foo_brect_new">
         <return-value transfer-ownership="full">
@@ -48,10 +48,10 @@ and/or use gtk-doc annotations.  -->
         </return-value>
         <parameters>
           <parameter name="x" transfer-ownership="none">
-            <type name="double" c:type="double"/>
+            <type name="gdouble" c:type="double"/>
           </parameter>
           <parameter name="y" transfer-ownership="none">
-            <type name="double" c:type="double"/>
+            <type name="gdouble" c:type="double"/>
           </parameter>
         </parameters>
       </constructor>
@@ -71,10 +71,10 @@ and/or use gtk-doc annotations.  -->
            glib:type-name="FooBUnion"
            glib:get-type="foo_bunion_get_type">
       <field name="type" writable="1">
-        <type name="int" c:type="int"/>
+        <type name="gint" c:type="int"/>
       </field>
       <field name="v" writable="1">
-        <type name="double" c:type="double"/>
+        <type name="gdouble" c:type="double"/>
       </field>
       <field name="rect" writable="1">
         <type name="BRect" c:type="FooBRect*"/>
@@ -87,7 +87,7 @@ and/or use gtk-doc annotations.  -->
       <method name="get_contained_type"
               c:identifier="foo_bunion_get_contained_type">
         <return-value transfer-ownership="none">
-          <type name="int" c:type="int"/>
+          <type name="gint" c:type="int"/>
         </return-value>
       </method>
     </union>
@@ -125,17 +125,17 @@ and/or use gtk-doc annotations.  -->
     </record>
     <callback name="Callback" c:type="FooCallback">
       <return-value transfer-ownership="none">
-        <type name="boolean" c:type="gboolean"/>
+        <type name="gboolean" c:type="gboolean"/>
       </return-value>
       <parameters>
         <parameter name="foo" transfer-ownership="none">
           <type name="Object" c:type="FooObject*"/>
         </parameter>
         <parameter name="b" transfer-ownership="none">
-          <type name="boolean" c:type="gboolean"/>
+          <type name="gboolean" c:type="gboolean"/>
         </parameter>
         <parameter name="data" transfer-ownership="none">
-          <type name="any" c:type="gpointer"/>
+          <type name="gpointer" c:type="gpointer"/>
         </parameter>
       </parameters>
     </callback>
@@ -200,7 +200,7 @@ and/or use gtk-doc annotations.  -->
     </enumeration>
     <union name="Event" c:type="FooEvent">
       <field name="type" writable="1">
-        <type name="int" c:type="int"/>
+        <type name="gint" c:type="int"/>
       </field>
       <field name="any" writable="1">
         <type name="EventAny" c:type="FooEventAny"/>
@@ -211,15 +211,15 @@ and/or use gtk-doc annotations.  -->
     </union>
     <record name="EventAny" c:type="FooEventAny">
       <field name="send_event" writable="1">
-        <type name="int8" c:type="gint8"/>
+        <type name="gint8" c:type="gint8"/>
       </field>
     </record>
     <record name="EventExpose" c:type="FooEventExpose">
       <field name="send_event" writable="1">
-        <type name="int8" c:type="gint8"/>
+        <type name="gint8" c:type="gint8"/>
       </field>
       <field name="count" writable="1">
-        <type name="int" c:type="gint"/>
+        <type name="gint" c:type="gint"/>
       </field>
     </record>
     <bitfield name="FlagsNoType" c:type="FooFlagsNoType">
@@ -246,7 +246,7 @@ and/or use gtk-doc annotations.  -->
     </bitfield>
     <record name="ForeignStruct" c:type="FooForeignStruct" foreign="1">
       <field name="foo" writable="1">
-        <type name="int" c:type="int"/>
+        <type name="gint" c:type="int"/>
       </field>
     </record>
     <interface name="Interface"
@@ -260,7 +260,7 @@ and/or use gtk-doc annotations.  -->
         </return-value>
         <parameters>
           <parameter name="x" transfer-ownership="none">
-            <type name="int" c:type="int"/>
+            <type name="gint" c:type="int"/>
           </parameter>
         </parameters>
       </virtual-method>
@@ -270,7 +270,7 @@ and/or use gtk-doc annotations.  -->
         </return-value>
         <parameters>
           <parameter name="x" transfer-ownership="none">
-            <type name="int" c:type="int"/>
+            <type name="gint" c:type="int"/>
           </parameter>
         </parameters>
       </method>
@@ -291,7 +291,7 @@ and/or use gtk-doc annotations.  -->
               <type name="Interface" c:type="FooInterface*"/>
             </parameter>
             <parameter name="x" transfer-ownership="none">
-              <type name="int" c:type="int"/>
+              <type name="gint" c:type="int"/>
             </parameter>
           </parameters>
         </callback>
@@ -309,11 +309,6 @@ and/or use gtk-doc annotations.  -->
           <type name="Object" c:type="FooObject*"/>
         </return-value>
       </constructor>
-      <function name="static_meth" c:identifier="foo_object_static_meth">
-        <return-value transfer-ownership="none">
-          <type name="int" c:type="int"/>
-        </return-value>
-      </function>
       <function name="get_default" c:identifier="foo_object_get_default">
         <doc xml:whitespace="preserve">This function is intended to match clutter_stage_get_default which
 uses a C sugar return type.</doc>
@@ -322,16 +317,11 @@ uses a C sugar return type.</doc>
           <type name="Subobject" c:type="FooObject*"/>
         </return-value>
       </function>
-      <virtual-method name="virtual_method" invoker="virtual_method">
+      <function name="static_meth" c:identifier="foo_object_static_meth">
         <return-value transfer-ownership="none">
-          <type name="boolean" c:type="gboolean"/>
+          <type name="gint" c:type="int"/>
         </return-value>
-        <parameters>
-          <parameter name="first_param" transfer-ownership="none">
-            <type name="int" c:type="int"/>
-          </parameter>
-        </parameters>
-      </virtual-method>
+      </function>
       <virtual-method name="read_fn" invoker="read">
         <doc xml:whitespace="preserve">Read some stuff.</doc>
         <return-value transfer-ownership="none">
@@ -340,75 +330,36 @@ uses a C sugar return type.</doc>
         <parameters>
           <parameter name="offset" transfer-ownership="none">
             <doc xml:whitespace="preserve">offset</doc>
-            <type name="int" c:type="int"/>
+            <type name="gint" c:type="int"/>
           </parameter>
           <parameter name="length" transfer-ownership="none">
             <doc xml:whitespace="preserve">length</doc>
-            <type name="int" c:type="int"/>
+            <type name="gint" c:type="int"/>
           </parameter>
         </parameters>
       </virtual-method>
+      <virtual-method name="virtual_method" invoker="virtual_method">
+        <return-value transfer-ownership="none">
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <parameter name="first_param" transfer-ownership="none">
+            <type name="gint" c:type="int"/>
+          </parameter>
+        </parameters>
+      </virtual-method>
+      <method name="dup_name" c:identifier="foo_object_dup_name">
+        <return-value transfer-ownership="full">
+          <type name="utf8" c:type="char*"/>
+        </return-value>
+      </method>
       <method name="external_type" c:identifier="foo_object_external_type">
         <return-value transfer-ownership="full">
           <type name="Utility.Object" c:type="UtilityObject*"/>
         </return-value>
       </method>
-      <method name="various" c:identifier="foo_object_various">
-        <return-value transfer-ownership="none">
-          <type name="none" c:type="void"/>
-        </return-value>
-        <parameters>
-          <parameter name="data" transfer-ownership="none">
-            <type name="any" c:type="void*"/>
-          </parameter>
-          <parameter name="some_type" transfer-ownership="none">
-            <type name="GType" c:type="GType"/>
-          </parameter>
-        </parameters>
-      </method>
-      <method name="take_all"
-              c:identifier="foo_object_take_all"
-              introspectable="0">
-        <return-value transfer-ownership="none">
-          <type name="none" c:type="void"/>
-        </return-value>
-        <parameters>
-          <parameter name="x" transfer-ownership="none">
-            <type name="int" c:type="int"/>
-          </parameter>
-          <parameter transfer-ownership="none">
-            <varargs>
-            </varargs>
-          </parameter>
-        </parameters>
-      </method>
-      <method name="new_cookie" c:identifier="foo_object_new_cookie">
-        <return-value transfer-ownership="full">
-          <type name="ObjectCookie" c:type="FooObjectCookie"/>
-        </return-value>
-        <parameters>
-          <parameter name="target" transfer-ownership="none">
-            <type name="utf8" c:type="char*"/>
-          </parameter>
-        </parameters>
-      </method>
-      <method name="is_it_time_yet" c:identifier="foo_object_is_it_time_yet">
-        <return-value transfer-ownership="none">
-          <type name="none" c:type="void"/>
-        </return-value>
-        <parameters>
-          <parameter name="time" transfer-ownership="none">
-            <type name="long" c:type="time_t"/>
-          </parameter>
-        </parameters>
-      </method>
       <method name="get_name" c:identifier="foo_object_get_name">
         <return-value transfer-ownership="none">
-          <type name="utf8" c:type="char*"/>
-        </return-value>
-      </method>
-      <method name="dup_name" c:identifier="foo_object_dup_name">
-        <return-value transfer-ownership="full">
           <type name="utf8" c:type="char*"/>
         </return-value>
       </method>
@@ -422,13 +373,23 @@ uses a C sugar return type.</doc>
           </parameter>
         </parameters>
       </method>
-      <method name="virtual_method" c:identifier="foo_object_virtual_method">
+      <method name="is_it_time_yet" c:identifier="foo_object_is_it_time_yet">
         <return-value transfer-ownership="none">
-          <type name="boolean" c:type="gboolean"/>
+          <type name="none" c:type="void"/>
         </return-value>
         <parameters>
-          <parameter name="first_param" transfer-ownership="none">
-            <type name="int" c:type="int"/>
+          <parameter name="time" transfer-ownership="none">
+            <type name="glong" c:type="time_t"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="new_cookie" c:identifier="foo_object_new_cookie">
+        <return-value transfer-ownership="full">
+          <type name="ObjectCookie" c:type="FooObjectCookie"/>
+        </return-value>
+        <parameters>
+          <parameter name="target" transfer-ownership="none">
+            <type name="utf8" c:type="char*"/>
           </parameter>
         </parameters>
       </method>
@@ -440,11 +401,11 @@ uses a C sugar return type.</doc>
         <parameters>
           <parameter name="offset" transfer-ownership="none">
             <doc xml:whitespace="preserve">offset</doc>
-            <type name="int" c:type="int"/>
+            <type name="gint" c:type="int"/>
           </parameter>
           <parameter name="length" transfer-ownership="none">
             <doc xml:whitespace="preserve">length</doc>
-            <type name="int" c:type="int"/>
+            <type name="gint" c:type="int"/>
           </parameter>
         </parameters>
       </method>
@@ -456,6 +417,45 @@ uses a C sugar return type.</doc>
           <type name="none" c:type="void"/>
         </return-value>
       </method>
+      <method name="take_all"
+              c:identifier="foo_object_take_all"
+              introspectable="0">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <parameter name="x" transfer-ownership="none">
+            <type name="gint" c:type="int"/>
+          </parameter>
+          <parameter transfer-ownership="none">
+            <varargs>
+            </varargs>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="various" c:identifier="foo_object_various">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <parameter name="data" transfer-ownership="none">
+            <type name="gpointer" c:type="void*"/>
+          </parameter>
+          <parameter name="some_type" transfer-ownership="none">
+            <type name="GType" c:type="GType"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="virtual_method" c:identifier="foo_object_virtual_method">
+        <return-value transfer-ownership="none">
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <parameter name="first_param" transfer-ownership="none">
+            <type name="gint" c:type="int"/>
+          </parameter>
+        </parameters>
+      </method>
       <property name="string"
                 writable="1"
                 construct="1"
@@ -466,7 +466,7 @@ uses a C sugar return type.</doc>
         <type name="GObject.Object" c:type="GObject"/>
       </field>
       <field name="some_int">
-        <type name="int" c:type="int"/>
+        <type name="gint" c:type="int"/>
       </field>
       <glib:signal name="signal">
         <return-value transfer-ownership="full">
@@ -477,7 +477,7 @@ uses a C sugar return type.</doc>
             <type name="GObject.Object" c:type="GObject"/>
           </parameter>
           <parameter name="p0" transfer-ownership="none">
-            <type name="any" c:type="gpointer"/>
+            <type name="gpointer" c:type="gpointer"/>
           </parameter>
         </parameters>
       </glib:signal>
@@ -491,14 +491,14 @@ uses a C sugar return type.</doc>
       <field name="virtual_method">
         <callback name="virtual_method" c:type="virtual_method">
           <return-value transfer-ownership="none">
-            <type name="boolean" c:type="gboolean"/>
+            <type name="gboolean" c:type="gboolean"/>
           </return-value>
           <parameters>
             <parameter name="object" transfer-ownership="none">
               <type name="Object" c:type="FooObject*"/>
             </parameter>
             <parameter name="first_param" transfer-ownership="none">
-              <type name="int" c:type="int"/>
+              <type name="gint" c:type="int"/>
             </parameter>
           </parameters>
         </callback>
@@ -514,11 +514,11 @@ uses a C sugar return type.</doc>
             </parameter>
             <parameter name="offset" transfer-ownership="none">
               <doc xml:whitespace="preserve">offset</doc>
-              <type name="int" c:type="int"/>
+              <type name="gint" c:type="int"/>
             </parameter>
             <parameter name="length" transfer-ownership="none">
               <doc xml:whitespace="preserve">length</doc>
-              <type name="int" c:type="int"/>
+              <type name="gint" c:type="int"/>
             </parameter>
           </parameters>
         </callback>
@@ -530,20 +530,20 @@ uses a C sugar return type.</doc>
       </field>
     </record>
     <constant name="PIE_IS_TASTY" value="3.14159">
-      <type name="double"/>
+      <type name="gdouble"/>
     </constant>
     <record name="Rectangle" c:type="FooRectangle">
       <field name="x" writable="1">
-        <type name="int" c:type="gint"/>
+        <type name="gint" c:type="gint"/>
       </field>
       <field name="y" writable="1">
-        <type name="int" c:type="gint"/>
+        <type name="gint" c:type="gint"/>
       </field>
       <field name="width" writable="1">
-        <type name="int" c:type="gint"/>
+        <type name="gint" c:type="gint"/>
       </field>
       <field name="height" writable="1">
-        <type name="int" c:type="gint"/>
+        <type name="gint" c:type="gint"/>
       </field>
       <constructor name="new" c:identifier="foo_rectangle_new">
         <return-value transfer-ownership="full">
@@ -551,16 +551,16 @@ uses a C sugar return type.</doc>
         </return-value>
         <parameters>
           <parameter name="x" transfer-ownership="none">
-            <type name="int" c:type="int"/>
+            <type name="gint" c:type="int"/>
           </parameter>
           <parameter name="y" transfer-ownership="none">
-            <type name="int" c:type="int"/>
+            <type name="gint" c:type="int"/>
           </parameter>
           <parameter name="width" transfer-ownership="none">
-            <type name="int" c:type="int"/>
+            <type name="gint" c:type="int"/>
           </parameter>
           <parameter name="height" transfer-ownership="none">
-            <type name="int" c:type="int"/>
+            <type name="gint" c:type="int"/>
           </parameter>
         </parameters>
       </constructor>
@@ -577,7 +577,7 @@ uses a C sugar return type.</doc>
       </method>
     </record>
     <constant name="SUCCESS_INT" value="4408">
-      <type name="int"/>
+      <type name="gint"/>
     </constant>
     <enumeration name="Skippable" introspectable="0" c:type="FooSkippable">
       <doc xml:whitespace="preserve">Some type that is only interesting from C and should not be
@@ -605,7 +605,7 @@ exposed to language bindings.</doc>
         <type name="StructPrivate" c:type="FooStructPrivate*"/>
       </field>
       <field name="member" writable="1">
-        <type name="int" c:type="int"/>
+        <type name="gint" c:type="int"/>
       </field>
     </record>
     <record name="StructPrivate" c:type="FooStructPrivate">
@@ -689,23 +689,23 @@ exposed to language bindings.</doc>
     </record>
     <record name="ThingWithArray" c:type="_FooThingWithArray">
       <field name="x" writable="1">
-        <type name="int" c:type="int"/>
+        <type name="gint" c:type="int"/>
       </field>
       <field name="y" writable="1">
-        <type name="int" c:type="int"/>
+        <type name="gint" c:type="int"/>
       </field>
       <field name="lines" writable="1">
         <array zero-terminated="0" c:type="char" fixed-size="80">
-          <type name="int8"/>
+          <type name="gchar"/>
         </array>
       </field>
       <field name="data" writable="1">
-        <type name="any" c:type="guchar*"/>
+        <type name="gpointer" c:type="guchar*"/>
       </field>
     </record>
     <union name="Union" c:type="_FooUnion">
       <field name="foo" writable="1">
-        <type name="int" c:type="int"/>
+        <type name="gint" c:type="int"/>
       </field>
     </union>
     <record name="UtilityStruct" c:type="FooUtilityStruct">
@@ -745,7 +745,7 @@ exposed to language bindings.</doc>
           <type name="Gio.AsyncReadyCallback" c:type="GAsyncReadyCallback"/>
         </parameter>
         <parameter name="user_data" transfer-ownership="none">
-          <type name="any" c:type="gpointer"/>
+          <type name="gpointer" c:type="gpointer"/>
         </parameter>
       </parameters>
     </function>
@@ -763,7 +763,7 @@ exposed to language bindings.</doc>
           <type name="Callback" c:type="FooCallback"/>
         </parameter>
         <parameter name="data" transfer-ownership="none">
-          <type name="any" c:type="gpointer"/>
+          <type name="gpointer" c:type="gpointer"/>
         </parameter>
         <parameter name="destroy" transfer-ownership="none" scope="call">
           <type name="GLib.DestroyNotify" c:type="GDestroyNotify"/>
@@ -772,7 +772,7 @@ exposed to language bindings.</doc>
     </function>
     <function name="enum_type_method" c:identifier="foo_enum_type_method">
       <return-value transfer-ownership="none">
-        <type name="int" c:type="int"/>
+        <type name="gint" c:type="int"/>
       </return-value>
       <parameters>
         <parameter name="foo_enum" transfer-ownership="none">
@@ -786,13 +786,13 @@ exposed to language bindings.</doc>
       </return-value>
       <parameters>
         <parameter name="x" transfer-ownership="none">
-          <type name="int" c:type="int"/>
+          <type name="gint" c:type="int"/>
         </parameter>
       </parameters>
     </function>
     <function name="init" c:identifier="foo_init">
       <return-value transfer-ownership="none">
-        <type name="int" c:type="gint"/>
+        <type name="gint" c:type="gint"/>
       </return-value>
     </function>
     <function name="method_external_references"
@@ -901,7 +901,7 @@ exposed to language bindings.</doc>
       </return-value>
       <parameters>
         <parameter name="unsigned_param" transfer-ownership="none">
-          <type name="uint" c:type="unsigned int"/>
+          <type name="guint" c:type="unsigned int"/>
         </parameter>
       </parameters>
     </function>
@@ -911,7 +911,7 @@ exposed to language bindings.</doc>
       </return-value>
       <parameters>
         <parameter name="unsigned_param" transfer-ownership="none">
-          <type name="uint" c:type="unsigned"/>
+          <type name="guint" c:type="unsigned"/>
         </parameter>
       </parameters>
     </function>
@@ -923,7 +923,7 @@ exposed to language bindings.</doc>
       </return-value>
       <parameters>
         <parameter name="i" transfer-ownership="none">
-          <type name="int" c:type="gint"/>
+          <type name="gint" c:type="gint"/>
         </parameter>
         <parameter name="callback" transfer-ownership="none" scope="call">
           <type name="VarargsCallback" c:type="FooVarargsCallback"/>

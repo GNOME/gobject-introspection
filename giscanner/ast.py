@@ -27,74 +27,58 @@ These can later on be extended (eg subclassed) with additional information
 which is language/library/domain specific.
 """
 
-##
-## Basic types, modeled on GITypeTag but not equivalent
-##
+######
+## Fundamental types
+######
+# Two special ones
+TYPE_NONE = 'none'
+TYPE_ANY = 'gpointer'
+# "Basic" types
+TYPE_BOOLEAN = 'gboolean'
+TYPE_INT8 = 'gint8'
+TYPE_UINT8 = 'guint8'
+TYPE_INT16 = 'gint16'
+TYPE_UINT16 = 'guint16'
+TYPE_INT32 = 'gint32'
+TYPE_UINT32 = 'guint32'
+TYPE_INT64 = 'gint64'
+TYPE_UINT64 = 'guint64'
+TYPE_CHAR = 'gchar'
+TYPE_SHORT = 'gshort'
+TYPE_USHORT = 'gushort'
+TYPE_INT = 'gint'
+TYPE_UINT = 'guint'
+TYPE_LONG = 'glong'
+TYPE_ULONG = 'gulong'
+# C99 types
+TYPE_LONG_LONG = 'long long'
+TYPE_LONG_ULONG = 'unsigned long long'
+TYPE_FLOAT = 'gfloat'
+TYPE_DOUBLE = 'gdouble'
+# ?
+TYPE_LONG_DOUBLE = 'long double'
 
-TYPE_NONE = 'none' # We differ from repository on these first two
-TYPE_ANY = 'any'
-TYPE_BOOLEAN = 'boolean'
-TYPE_INT8 = 'int8'
-TYPE_UINT8 = 'uint8'
-TYPE_SHORT = 'short'
-TYPE_USHORT = 'ushort'
-TYPE_INT16 = 'int16'
-TYPE_UINT16 = 'uint16'
-TYPE_INT = 'int'
-TYPE_UINT = 'uint'
-TYPE_INT32 = 'int32'
-TYPE_UINT32 = 'uint32'
-TYPE_INT64 = 'int64'
-TYPE_UINT64 = 'uint64'
-TYPE_LONG = 'long'
-TYPE_ULONG = 'ulong'
-TYPE_SIZET = 'gsize'
-TYPE_SSIZET = 'gssize'
+# C types with semantics overlaid
 TYPE_GTYPE = 'GType'
-TYPE_FLOAT = 'float'
-TYPE_DOUBLE = 'double'
-TYPE_STRING = 'utf8' # requires zero-terminated
+TYPE_STRING = 'utf8'
 TYPE_FILENAME = 'filename'
 
 BASIC_GIR_TYPES = [TYPE_BOOLEAN, TYPE_INT8, TYPE_UINT8, TYPE_INT16,
                    TYPE_UINT16, TYPE_INT32, TYPE_UINT32, TYPE_INT64,
-                   TYPE_UINT64, TYPE_SHORT, TYPE_USHORT, TYPE_INT,
-                   TYPE_UINT, TYPE_LONG, TYPE_ULONG, TYPE_SSIZET,
-                   TYPE_SIZET, TYPE_FLOAT, TYPE_DOUBLE,
-                   TYPE_GTYPE]
+                   TYPE_UINT64, TYPE_CHAR, TYPE_SHORT, TYPE_USHORT, TYPE_INT,
+                   TYPE_UINT, TYPE_LONG, TYPE_ULONG, TYPE_LONG_LONG,
+                   TYPE_LONG_ULONG, TYPE_FLOAT, TYPE_DOUBLE,
+                   TYPE_LONG_DOUBLE, TYPE_GTYPE]
 GIR_TYPES = [TYPE_NONE, TYPE_ANY]
 GIR_TYPES.extend(BASIC_GIR_TYPES)
 GIR_TYPES.extend([TYPE_STRING, TYPE_FILENAME])
 
-# Higher-level data types
-TYPE_SEQUENCE = 'sequence' # Sequence of something
-
-# Wide/Unicode
-TYPE_UCHAR = 'uchar'
-TYPE_USTRING = 'ustring'
-
-##
-## Parameters
-##
-
-PARAM_DIRECTION_IN = 'in'
-PARAM_DIRECTION_OUT = 'out'
-PARAM_DIRECTION_INOUT = 'inout'
-
-PARAM_SCOPE_CALL = 'call'
-PARAM_SCOPE_ASYNC = 'async'
-PARAM_SCOPE_NOTIFIED = 'notified'
-
-PARAM_TRANSFER_NONE = 'none'
-PARAM_TRANSFER_CONTAINER = 'container'
-PARAM_TRANSFER_FULL = 'full'
-
 type_names = {}
-for name in GIR_TYPES:
-    type_names[name] = name
+for typeval in GIR_TYPES:
+    type_names[typeval] = typeval
 
 # C builtin
-type_names['char'] = TYPE_INT8
+type_names['char'] = TYPE_CHAR
 type_names['signed char'] = TYPE_INT8
 type_names['unsigned char'] = TYPE_UINT8
 type_names['short'] = TYPE_SHORT
@@ -115,8 +99,25 @@ type_names['double'] = TYPE_DOUBLE
 type_names['char*'] = TYPE_STRING
 type_names['void*'] = TYPE_ANY
 type_names['void'] = TYPE_NONE
+# Also alias the signed one here
+type_names['signed long long'] = TYPE_LONG_LONG
 
-# Random C unix type definitions; note some of these may be GNU Libc
+# A few additional GLib type aliases
+type_names['guchar'] = TYPE_UINT8
+type_names['gchararray'] = TYPE_STRING
+type_names['gchar*'] = TYPE_STRING
+type_names['gsize'] = TYPE_ULONG
+type_names['gssize'] = TYPE_LONG
+type_names['gconstpointer'] = TYPE_ANY
+
+# Some special C types that aren't scriptable, and we just squash
+type_names['va_list'] = TYPE_ANY
+
+# C stdio, used in GLib public headers; squash this for now here
+# until we move scanning into GLib and can (skip)
+type_names['FILE*'] = TYPE_ANY
+
+# One off C unix type definitions; note some of these may be GNU Libc
 # specific.  If someone is actually bitten by this, feel free to do
 # the required configure goop to determine their size and replace
 # here.
@@ -127,39 +128,48 @@ type_names['void'] = TYPE_NONE
 # methods are added under #ifdefs inside GLib itself.  We could just (skip)
 # the relevant methods, but on the other hand, since these types are just
 # integers it's easy enough to expand them.
-type_names['size_t'] = TYPE_SIZET
+type_names['size_t'] = type_names['gsize']
 type_names['time_t'] = TYPE_LONG
-type_names['off_t'] = TYPE_SIZET
+type_names['off_t'] = type_names['gsize']
 type_names['pid_t'] = TYPE_INT
 type_names['uid_t'] = TYPE_UINT
 type_names['gid_t'] = TYPE_UINT
 type_names['dev_t'] = TYPE_INT
 type_names['socklen_t'] = TYPE_INT32
+type_names['size_t'] = TYPE_ULONG
+type_names['ssize_t'] = TYPE_LONG
 
 # Obj-C
 type_names['id'] = TYPE_ANY
 
-# Suppress some GLib names
-type_names['uchar'] = TYPE_UINT8
-type_names['ushort'] = TYPE_USHORT
-type_names['size'] = TYPE_SIZET
-type_names['ssize'] = TYPE_SSIZET
-type_names['pointer'] = TYPE_ANY
-type_names['constpointer'] = TYPE_ANY
-
-
 # These types, when seen by reference, are converted into an Array()
 # by default
-# If you add/change these, be sure to update glibast.py too
 default_array_types = {}
-default_array_types['uint8*'] = TYPE_UINT8
+default_array_types['guint8*'] = TYPE_UINT8
+default_array_types['guchar*'] = TYPE_UINT8
 default_array_types['utf8*'] = TYPE_STRING
+default_array_types['char**'] = TYPE_STRING
+default_array_types['gchar**'] = TYPE_STRING
 
 # These types, when seen by reference, are interpreted as out parameters
 default_out_types = (TYPE_SHORT, TYPE_USHORT, TYPE_INT, TYPE_UINT,
-                     TYPE_LONG, TYPE_ULONG, TYPE_FLOAT, TYPE_DOUBLE,
-                     TYPE_SIZET, TYPE_SSIZET)
+                     TYPE_LONG, TYPE_ULONG, TYPE_FLOAT, TYPE_DOUBLE)
 
+##
+## Parameters
+##
+
+PARAM_DIRECTION_IN = 'in'
+PARAM_DIRECTION_OUT = 'out'
+PARAM_DIRECTION_INOUT = 'inout'
+
+PARAM_SCOPE_CALL = 'call'
+PARAM_SCOPE_ASYNC = 'async'
+PARAM_SCOPE_NOTIFIED = 'notified'
+
+PARAM_TRANSFER_NONE = 'none'
+PARAM_TRANSFER_CONTAINER = 'container'
+PARAM_TRANSFER_FULL = 'full'
 
 def type_name_from_ctype(ctype):
     return type_names.get(ctype, ctype)

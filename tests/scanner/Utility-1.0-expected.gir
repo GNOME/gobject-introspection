@@ -14,26 +14,26 @@ and/or use gtk-doc annotations.  -->
              shared-library="libutility.so"
              c:prefix="Utility">
     <alias name="Glyph" c:type="UtilityGlyph">
-      <type name="uint32"/>
+      <type name="guint32"/>
     </alias>
     <record name="Buffer" c:type="UtilityBuffer">
       <field name="data" writable="1">
-        <type name="any" c:type="char*"/>
+        <type name="GLib.pointer" c:type="char*"/>
       </field>
       <field name="length" writable="1">
-        <type name="gsize" c:type="gsize"/>
+        <type name="gulong" c:type="gsize"/>
       </field>
     </record>
     <union name="Byte" c:type="UtilityByte">
       <field name="value" writable="1">
-        <type name="uint8" c:type="guint8"/>
+        <type name="guint8" c:type="guint8"/>
       </field>
       <record>
         <field name="first_nibble" writable="1" bits="4">
-          <type name="uint8" c:type="guint8"/>
+          <type name="guint8" c:type="guint8"/>
         </field>
         <field name="second_nibble" writable="1" bits="4">
-          <type name="uint8" c:type="guint8"/>
+          <type name="guint8" c:type="guint8"/>
         </field>
       </record>
     </union>
@@ -51,7 +51,7 @@ and/or use gtk-doc annotations.  -->
           <type name="utf8" c:type="char*"/>
         </parameter>
         <parameter name="user_data" transfer-ownership="none" closure="1">
-          <type name="any" c:type="gpointer"/>
+          <type name="gpointer" c:type="gpointer"/>
         </parameter>
       </parameters>
     </callback>
@@ -82,7 +82,7 @@ and/or use gtk-doc annotations.  -->
             <type name="FileFunc" c:type="UtilityFileFunc"/>
           </parameter>
           <parameter name="user_data" transfer-ownership="none">
-            <type name="any" c:type="gpointer"/>
+            <type name="gpointer" c:type="gpointer"/>
           </parameter>
           <parameter name="destroy" transfer-ownership="none" scope="call">
             <type name="GLib.DestroyNotify" c:type="GDestroyNotify"/>
@@ -102,33 +102,33 @@ and/or use gtk-doc annotations.  -->
     </record>
     <record name="Struct" c:type="UtilityStruct">
       <field name="field" writable="1">
-        <type name="int" c:type="int"/>
+        <type name="gint" c:type="int"/>
       </field>
       <field name="bitfield1" writable="1" bits="3">
-        <type name="uint" c:type="guint"/>
+        <type name="guint" c:type="guint"/>
       </field>
       <field name="bitfield2" writable="1" bits="2">
-        <type name="uint" c:type="guint"/>
+        <type name="guint" c:type="guint"/>
       </field>
       <field name="data" writable="1">
         <array zero-terminated="0" c:type="guint8" fixed-size="16">
-          <type name="uint8"/>
+          <type name="guint8"/>
         </array>
       </field>
     </record>
     <record name="TaggedValue" c:type="UtilityTaggedValue">
       <field name="tag" writable="1">
-        <type name="int" c:type="int"/>
+        <type name="gint" c:type="int"/>
       </field>
       <union>
         <field name="v_pointer" writable="1">
-          <type name="any" c:type="gpointer"/>
+          <type name="gpointer" c:type="gpointer"/>
         </field>
         <field name="v_real" writable="1">
-          <type name="double" c:type="double"/>
+          <type name="gdouble" c:type="double"/>
         </field>
         <field name="v_integer" writable="1">
-          <type name="long" c:type="long"/>
+          <type name="glong" c:type="long"/>
         </field>
       </union>
     </record>
@@ -137,10 +137,10 @@ and/or use gtk-doc annotations.  -->
         <type name="utf8" c:type="char*"/>
       </field>
       <field name="integer" writable="1">
-        <type name="long" c:type="glong"/>
+        <type name="glong" c:type="glong"/>
       </field>
       <field name="real" writable="1">
-        <type name="double" c:type="double"/>
+        <type name="gdouble" c:type="double"/>
       </field>
     </union>
     <function name="dir_foreach" c:identifier="utility_dir_foreach">
@@ -158,7 +158,7 @@ and/or use gtk-doc annotations.  -->
           <type name="FileFunc" c:type="UtilityFileFunc"/>
         </parameter>
         <parameter name="user_data" transfer-ownership="none">
-          <type name="any" c:type="gpointer"/>
+          <type name="gpointer" c:type="gpointer"/>
         </parameter>
       </parameters>
     </function>

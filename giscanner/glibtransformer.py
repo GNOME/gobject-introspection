@@ -30,12 +30,12 @@ from .ast import (Alias, Bitfield, Callable, Callback, Class, Constant, Enum,
                   Property, Record, Return, Type, TypeContainer, Union,
                   Field, VFunction, type_name_from_ctype, default_array_types,
                   TYPE_UINT8, PARAM_TRANSFER_FULL, Array, List,
-                  Map, Varargs)
+                  TYPE_LONG_LONG, TYPE_LONG_DOUBLE,
+                  Map, Varargs, type_names)
 from .transformer import Names
 from .glibast import (GLibBoxed, GLibEnum, GLibEnumMember, GLibFlags,
                       GLibInterface, GLibObject, GLibSignal, GLibBoxedStruct,
-                      GLibBoxedUnion, GLibBoxedOther, GLibRecord,
-                      type_names)
+                      GLibBoxedUnion, GLibBoxedOther, GLibRecord)
 from .utils import to_underscores, to_underscores_noprefix
 
 default_array_types['guchar*'] = TYPE_UINT8
@@ -772,7 +772,7 @@ class GLibTransformer(object):
         for interface in xmlnode.findall('implements'):
             gitype = self._resolve_gtypename(interface.attrib['name'])
             gt_interfaces.append(gitype)
-        node.interfaces = sorted(gt_interfaces)
+        node.interfaces = gt_interfaces
 
     def _introspect_properties(self, node, xmlnode):
         for pspec in xmlnode.findall('property'):
@@ -788,7 +788,7 @@ class GLibTransformer(object):
                 readable, writable, construct, construct_only,
                 ctype,
                 ))
-        node.properties = sorted(node.properties)
+        node.properties = node.properties
 
     def _introspect_signals(self, node, xmlnode):
         for signal_info in xmlnode.findall('signal'):
@@ -808,7 +808,7 @@ class GLibTransformer(object):
                 param.transfer = 'none'
                 signal.parameters.append(param)
             node.signals.append(signal)
-        node.signals = sorted(node.signals)
+        node.signals = node.signals
 
     def _introspect_fundamental(self, xmlnode):
         # We only care about types that can be instantiatable, other
@@ -1160,7 +1160,9 @@ class GLibTransformer(object):
     def _introspectable_analysis(self, node, stack):
         if isinstance(node, TypeContainer):
             parent = stack[-1]
-            if isinstance(node.type, Varargs):
+            if node.type.name in [TYPE_LONG_LONG, TYPE_LONG_DOUBLE]:
+                parent.introspectable = False
+            elif isinstance(node.type, Varargs):
                 parent.introspectable = False
             elif self._is_unannotated_list(node):
                 if isinstance(node, Parameter):

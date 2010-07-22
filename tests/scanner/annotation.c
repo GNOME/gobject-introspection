@@ -520,7 +520,7 @@ annotation_object_set_data2 (AnnotationObject *object,
 /**
  * annotation_object_set_data3:
  * @object: a #AnnotationObject
- * @data: (array length=length) (element-type uint8): The data
+ * @data: (array length=length) (element-type guint8): The data
  * @length: Length of the data
  *
  * Test taking a gchar * with a length, overriding the array element

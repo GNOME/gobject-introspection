@@ -25,7 +25,8 @@ from .ast import (Bitfield, Callback, Enum, Function, Namespace, Member,
                   Parameter, Return, Struct, Field,
                   Type, Array, Alias, Interface, Class, Node, Union,
                   Varargs, Constant, type_name_from_ctype,
-                  type_names, TYPE_STRING, BASIC_GIR_TYPES)
+                  type_names, TYPE_ANY, TYPE_STRING,
+                  BASIC_GIR_TYPES)
 from .config import DATADIR, GIR_DIR, GIR_SUFFIX
 from .glibast import GLibBoxed
 from .girparser import GIRParser
@@ -345,7 +346,7 @@ context will be used."""
         return False
 
     def _handle_closure(self, param, closure_idx, closure_param):
-        if (closure_param.type.name == 'any' and
+        if (closure_param.type.name == TYPE_ANY and
             closure_param.name.endswith('data')):
             param.closure_name = closure_param.name
             param.closure_index = closure_idx
@@ -412,7 +413,7 @@ context will be used."""
         elif source_type.type == CTYPE_POINTER:
             value = self._create_source_type(source_type.base_type) + '*'
         else:
-            value = 'any'
+            value = TYPE_ANY
         return value
 
     def _create_parameters(self, base_type):
@@ -527,7 +528,7 @@ context will be used."""
         # Preserve "pointerness" of struct/union members
         if (is_member and canonical.endswith('*') and
             derefed_typename in BASIC_GIR_TYPES):
-            return 'any'
+            return TYPE_ANY
         else:
             return derefed_typename
 
@@ -584,10 +585,10 @@ context will be used."""
             type_name = 'utf8'
             value = symbol.const_string
         elif symbol.const_int is not None:
-            type_name = 'int'
+            type_name = 'gint'
             value = symbol.const_int
         elif symbol.const_double is not None:
-            type_name = 'double'
+            type_name = 'gdouble'
             value = symbol.const_double
         else:
             raise AssertionError()
@@ -658,7 +659,7 @@ context will be used."""
 
         # Mark the 'user_data' arguments
         for i, param in enumerate(parameters):
-            if (param.type.name == 'any' and
+            if (param.type.name == TYPE_ANY and
                 param.name == 'user_data'):
                 param.closure_index = i
 
