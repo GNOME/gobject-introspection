@@ -1144,16 +1144,25 @@ class GLibTransformer(object):
 """Virtual function %r has no known invoker""" % (vfunc.name, ),
                     context=node)
 
+    def _is_unannotated_list(self, node):
+        # Already annotated
+        if isinstance(node.type, List):
+            return False
+        if (node.type.name == 'GLib.List' or
+            node.type.name == 'GLib.SList'):
+            return True
+        if (self._transformer._namespace.name == 'GLib' and
+            (node.type.name == 'List' or
+             node.type.name == 'SList')):
+            return True
+        return False
+
     def _introspectable_analysis(self, node, stack):
         if isinstance(node, TypeContainer):
             parent = stack[-1]
             if isinstance(node.type, Varargs):
                 parent.introspectable = False
-            elif not isinstance(node.type, List) and \
-                 (node.type.name == 'GLib.List' or
-		  node.type.name == 'GLib.SList' or
-                  (self._transformer._namespace.name == 'GLib'
-                   and (node.type.name == 'List' or node.type.name == 'SList'))):
+            elif self._is_unannotated_list(node):
                 if isinstance(node, Parameter):
                     self._transformer.log_node_warning(parent,
 """Missing (element-type) annotation on argument %r""" % (node.name, ),
