@@ -969,7 +969,8 @@ and/or use gtk-doc annotations.  -->
       </return-value>
     </function>
     <function name="filename_list_return"
-              c:identifier="g_i_marshalling_tests_filename_list_return">
+              c:identifier="g_i_marshalling_tests_filename_list_return"
+              introspectable="0">
       <return-value transfer-ownership="full">
         <type name="GLib.SList" c:type="GSList*">
           <type name="any" c:type="gpointer"/>
