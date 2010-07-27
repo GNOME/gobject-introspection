@@ -79,7 +79,7 @@ class XMLWriter(object):
         self._tag_stack = []
         self._indent = 0
         self._indent_unit = 2
-        self._indent_char = ' '
+        self.enable_whitespace()
 
     # Private
 
@@ -97,11 +97,28 @@ class XMLWriter(object):
 
     # Public API
 
+    def enable_whitespace(self):
+        self._indent_char = ' '
+        self._newline_char = '\n'
+
+    def disable_whitespace(self):
+        self._indent_char = ''
+        self._newline_char = ''
+
     def get_xml(self):
         return self._data.getvalue()
 
-    def write_line(self, line=''):
-        self._data.write('%s%s\n' % (self._indent_char * self._indent, line))
+    def write_line(self, line='', indent=True, do_escape=False):
+        if do_escape:
+            line = escape(str(line))
+
+        if indent:
+            self._data.write('%s%s%s' % (
+                    self._indent_char * self._indent,
+                    line,
+                    self._newline_char))
+        else:
+            self._data.write('%s%s' % (line, self._newline_char))
 
     def write_comment(self, text):
         self.write_line('<!-- %s -->' % (text, ))
