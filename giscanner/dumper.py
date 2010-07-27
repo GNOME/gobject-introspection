@@ -200,6 +200,10 @@ class DumpCompiler(object):
         # Search the current directory first
         args.append('-L.')
 
+        # https://bugzilla.gnome.org/show_bug.cgi?id=625195
+        if not libtool:
+          args.append('-Wl,-rpath=.')
+
         uninst_builddir = os.environ.get('UNINSTALLED_INTROSPECTION_BUILDDIR')
         if not uninst_builddir:
             proc = subprocess.Popen([self._pkgconfig_cmd, '--libs',
