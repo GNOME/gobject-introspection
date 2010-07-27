@@ -18,12 +18,11 @@
 # Boston, MA 02111-1307, USA.
 #
 
-from .ast import (Bitfield, Class, Enum, Interface, Member, Node,
-                  Property, Union, Record)
+from . import ast
 
-class GLibRecord(Record):
+class GLibRecord(ast.Record):
     def __init__(self, *args, **kwargs):
-        Record.__init__(self, *args, **kwargs)
+        ast.Record.__init__(self, *args, **kwargs)
 
     @classmethod
     def from_record(cls, record):
@@ -38,10 +37,10 @@ class GLibRecord(Record):
         obj.is_gtype_struct_for = False
         return obj
 
-class GLibEnum(Enum):
+class GLibEnum(ast.Enum):
 
     def __init__(self, name, type_name, members, get_type):
-        Enum.__init__(self, name, type_name, members)
+        ast.Enum.__init__(self, name, type_name, members)
         self.ctype = type_name
         self.type_name = type_name
         self.get_type = get_type
@@ -52,10 +51,10 @@ class GLibEnum(Enum):
                                          self.get_type)
 
 
-class GLibFlags(Bitfield):
+class GLibFlags(ast.Bitfield):
 
     def __init__(self, name, type_name, members, get_type):
-        Bitfield.__init__(self, name, type_name, members)
+        ast.Bitfield.__init__(self, name, type_name, members)
         self.ctype = type_name
         self.type_name = type_name
         self.get_type = get_type
@@ -65,20 +64,21 @@ class GLibFlags(Bitfield):
                                           self.get_type)
 
 
-class GLibEnumMember(Member):
+class GLibEnumMember(ast.Member):
 
     def __init__(self, name, value, symbol, nick):
-        Member.__init__(self, name, value, symbol)
+        ast.Member.__init__(self, name, value, symbol)
         self.nick = nick
 
 
-class GLibObject(Class):
+class GLibObject(ast.Class):
 
     def __init__(self, name, parent, type_name, get_type,
-                 is_abstract, ctype=None):
-        Class.__init__(self, name, parent, is_abstract)
+                 c_symbol_prefix, is_abstract, ctype=None):
+        ast.Class.__init__(self, name, parent, is_abstract)
         self.type_name = type_name
         self.get_type = get_type
+        self.c_symbol_prefix = c_symbol_prefix
         self.fundamental = False
         self.unref_func = None
         self.ref_func = None
@@ -87,60 +87,75 @@ class GLibObject(Class):
         self.signals = []
         self.ctype = ctype or type_name
 
+    def _walk(self, callback, chain):
+        super(GLibObject, self)._walk(callback, chain)
+        for sig in self.signals:
+            sig.walk(callback, chain)
+
 
 class GLibBoxed:
 
-    def __init__(self, type_name, get_type):
+    def __init__(self, type_name, get_type, c_symbol_prefix):
         self.type_name = type_name
         self.get_type = get_type
+        self.c_symbol_prefix = c_symbol_prefix
 
 
+class GLibBoxedStruct(ast.Record, GLibBoxed):
+
+    def __init__(self, name, type_name, get_type, c_symbol_prefix, ctype=None):
+        ast.Record.__init__(self, name, ctype or type_name)
+        GLibBoxed.__init__(self, type_name, get_type, c_symbol_prefix)
 
 
-class GLibBoxedStruct(Record, GLibBoxed):
+class GLibBoxedUnion(ast.Union, GLibBoxed):
 
-    def __init__(self, name, type_name, get_type, ctype=None):
-        Record.__init__(self, name, ctype or type_name)
-        GLibBoxed.__init__(self, type_name, get_type)
-
-
-class GLibBoxedUnion(Union, GLibBoxed):
-
-    def __init__(self, name, type_name, get_type, ctype=None):
-        Union.__init__(self, name, ctype or type_name)
-        GLibBoxed.__init__(self, type_name, get_type)
+    def __init__(self, name, type_name, get_type, c_symbol_prefix, ctype=None):
+        ast.Union.__init__(self, name, ctype or type_name)
+        GLibBoxed.__init__(self, type_name, get_type, c_symbol_prefix)
 
 
-class GLibBoxedOther(Node, GLibBoxed):
+class GLibBoxedOther(ast.Node, GLibBoxed):
 
-    def __init__(self, name, type_name, get_type):
-        Node.__init__(self, name)
-        GLibBoxed.__init__(self, type_name, get_type)
+    def __init__(self, name, type_name, get_type, c_symbol_prefix):
+        ast.Node.__init__(self, name)
+        GLibBoxed.__init__(self, type_name, get_type, c_symbol_prefix)
         self.constructors = []
         self.methods = []
+        self.static_methods = []
         self.ctype = type_name
         self.doc = None
 
+    def _walk(self, callback, chain):
+        for ctor in self.constructors:
+            ctor.walk(callback, chain)
+        for meth in self.methods:
+            meth.walk(callback, chain)
+        for meth in self.static_methods:
+            meth.walk(callback, chain)
 
-class GLibInterface(Interface):
+
+class GLibInterface(ast.Interface):
 
     def __init__(self, name, parent, type_name, get_type,
-                 ctype=None):
-        Interface.__init__(self, name, parent)
+                 c_symbol_prefix, ctype=None):
+        ast.Interface.__init__(self, name, parent)
         self.type_name = type_name
         self.get_type = get_type
+        self.c_symbol_prefix = c_symbol_prefix
         self.signals = []
         self.ctype = ctype or type_name
 
+    def _walk(self, callback, chain):
+        super(GLibInterface, self)._walk(callback, chain)
+        for sig in self.signals:
+            sig.walk(callback, chain)
 
-class GLibProperty(Property):
+class GLibProperty(ast.Property):
     pass
 
 
-class GLibSignal(Node):
+class GLibSignal(ast.Callable):
 
-    def __init__(self, name, retval):
-        Node.__init__(self, name)
-        self.retval = retval
-        self.parameters = []
-        self.doc = None
+    def __init__(self, name, retval, parameters):
+        ast.Callable.__init__(self, name, retval, parameters, False)

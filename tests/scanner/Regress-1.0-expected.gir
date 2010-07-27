@@ -2,7 +2,7 @@
 <!-- This file was automatically generated from C sources - DO NOT EDIT!
 To affect the contents of this file, edit the original C definitions,
 and/or use gtk-doc annotations.  -->
-<repository version="1.1"
+<repository version="1.2"
             xmlns="http://www.gtk.org/introspection/core/1.0"
             xmlns:c="http://www.gtk.org/introspection/c/1.0"
             xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
@@ -13,11 +13,13 @@ and/or use gtk-doc annotations.  -->
   <namespace name="Regress"
              version="1.0"
              shared-library="libregress.so"
-             c:prefix="Regress">
+             c:identifier-prefixes="Regress"
+             c:symbol-prefixes="regress">
     <record name="TestBoxed"
             c:type="RegressTestBoxed"
             glib:type-name="RegressTestBoxed"
-            glib:get-type="regress_test_boxed_get_type">
+            glib:get-type="regress_test_boxed_get_type"
+            c:symbol-prefix="test_boxed">
       <field name="some_int8" writable="1">
         <type name="gint8" c:type="gint8"/>
       </field>
@@ -63,7 +65,7 @@ and/or use gtk-doc annotations.  -->
           <type name="TestBoxed" c:type="RegressTestBoxed*"/>
         </return-value>
         <parameters>
-          <parameter name="s" transfer-ownership="full">
+          <parameter name="s" transfer-ownership="none">
             <type name="utf8" c:type="char*"/>
           </parameter>
         </parameters>
@@ -84,7 +86,9 @@ and/or use gtk-doc annotations.  -->
         </parameters>
       </method>
     </record>
-    <record name="TestBoxedPrivate" c:type="RegressTestBoxedPrivate">
+    <record name="TestBoxedPrivate"
+            c:type="RegressTestBoxedPrivate"
+            disguised="1">
     </record>
     <callback name="TestCallback" c:type="RegressTestCallback">
       <return-value transfer-ownership="none">
@@ -136,13 +140,14 @@ and/or use gtk-doc annotations.  -->
               glib:nick="flag3"/>
     </bitfield>
     <class name="TestFloating"
+           c:symbol-prefix="test_floating"
            c:type="RegressTestFloating"
            parent="GObject.InitiallyUnowned"
            glib:type-name="RegressTestFloating"
            glib:get-type="regress_test_floating_get_type"
            glib:type-struct="TestFloatingClass">
       <constructor name="new" c:identifier="regress_test_floating_new">
-        <return-value transfer-ownership="full">
+        <return-value transfer-ownership="none">
           <doc xml:whitespace="preserve">A new floating #RegressTestFloating</doc>
           <type name="TestFloating" c:type="RegressTestFloating*"/>
         </return-value>
@@ -160,6 +165,7 @@ and/or use gtk-doc annotations.  -->
       </field>
     </record>
     <class name="TestFundamentalObject"
+           c:symbol-prefix="test_fundamental_object"
            c:type="RegressTestFundamentalObject"
            abstract="1"
            glib:type-name="RegressTestFundamentalObject"
@@ -234,6 +240,7 @@ and/or use gtk-doc annotations.  -->
       </parameters>
     </callback>
     <class name="TestFundamentalSubObject"
+           c:symbol-prefix="test_fundamental_sub_object"
            c:type="RegressTestFundamentalSubObject"
            parent="TestFundamentalObject"
            glib:type-name="RegressTestFundamentalSubObject"
@@ -269,6 +276,7 @@ and/or use gtk-doc annotations.  -->
       </field>
     </record>
     <interface name="TestInterface"
+               c:symbol-prefix="test_interface"
                c:type="RegressTestInterface"
                glib:type-name="RegressTestInterface"
                glib:get-type="regress_test_interface_get_type"
@@ -282,6 +290,7 @@ and/or use gtk-doc annotations.  -->
       </field>
     </record>
     <class name="TestObj"
+           c:symbol-prefix="test_obj"
            c:type="RegressTestObj"
            parent="GObject.Object"
            glib:type-name="RegressTestObj"
@@ -304,7 +313,7 @@ and/or use gtk-doc annotations.  -->
           <parameter name="user_data" transfer-ownership="none">
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
-          <parameter name="notify" transfer-ownership="none" scope="call">
+          <parameter name="notify" transfer-ownership="none" scope="async">
             <type name="GLib.DestroyNotify" c:type="GDestroyNotify"/>
           </parameter>
         </parameters>
@@ -321,6 +330,21 @@ and/or use gtk-doc annotations.  -->
           </parameter>
         </parameters>
       </constructor>
+      <function name="null_out" c:identifier="regress_test_obj_null_out">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <parameter name="obj"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full"
+                     allow-none="1">
+            <doc xml:whitespace="preserve">A #RegressTestObj</doc>
+            <type name="TestObj" c:type="RegressTestObj**"/>
+          </parameter>
+        </parameters>
+      </function>
       <function name="static_method"
                 c:identifier="regress_test_obj_static_method">
         <return-value transfer-ownership="none">
@@ -395,11 +419,6 @@ case.</doc>
         </parameters>
       </method>
       <method name="null_in" c:identifier="regress_test_obj_null_in">
-        <return-value transfer-ownership="none">
-          <type name="none" c:type="void"/>
-        </return-value>
-      </method>
-      <method name="null_out" c:identifier="regress_test_obj_null_out">
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -487,10 +506,10 @@ case.</doc>
         </parameters>
       </method>
       <property name="bare" writable="1" transfer-ownership="none">
-        <type name="GObject.Object" c:type="GObject"/>
+        <type name="GObject.Object"/>
       </property>
       <property name="boxed" writable="1" transfer-ownership="none">
-        <type name="TestBoxed" c:type="RegressTestBoxed"/>
+        <type name="TestBoxed"/>
       </property>
       <property name="double" writable="1" transfer-ownership="none">
         <type name="gdouble"/>
@@ -499,7 +518,7 @@ case.</doc>
         <type name="gfloat"/>
       </property>
       <property name="hash-table" writable="1" transfer-ownership="container">
-        <type name="GLib.HashTable" c:type="GHashTable">
+        <type name="GLib.HashTable">
           <type name="utf8"/>
           <type name="gint8"/>
         </type>
@@ -508,7 +527,7 @@ case.</doc>
         <type name="gint"/>
       </property>
       <property name="list" writable="1" transfer-ownership="none">
-        <type name="GLib.List" c:type="gpointer">
+        <type name="GLib.List">
           <type name="utf8"/>
         </type>
       </property>
@@ -525,7 +544,10 @@ case.</doc>
         <type name="TestBoxed" c:type="RegressTestBoxed*"/>
       </field>
       <field name="hash_table">
-        <type name="GLib.HashTable" c:type="GHashTable*"/>
+        <type name="GLib.HashTable" c:type="GHashTable*">
+          <type name="gpointer" c:type="gpointer"/>
+          <type name="gpointer" c:type="gpointer"/>
+        </type>
       </field>
       <field name="list">
         <type name="GLib.List" c:type="GList*">
@@ -545,17 +567,17 @@ case.</doc>
         <type name="utf8" c:type="char*"/>
       </field>
       <glib:signal name="test">
-        <return-value transfer-ownership="full">
-          <type name="none" c:type="void"/>
+        <return-value transfer-ownership="none">
+          <type name="none"/>
         </return-value>
       </glib:signal>
       <glib:signal name="test-with-static-scope-arg">
-        <return-value transfer-ownership="full">
-          <type name="none" c:type="void"/>
+        <return-value transfer-ownership="none">
+          <type name="none"/>
         </return-value>
         <parameters>
           <parameter name="object" transfer-ownership="none">
-            <type name="TestSimpleBoxedA" c:type="RegressTestSimpleBoxedA"/>
+            <type name="TestSimpleBoxedA"/>
           </parameter>
         </parameters>
       </glib:signal>
@@ -567,7 +589,7 @@ case.</doc>
         <type name="GObject.ObjectClass" c:type="GObjectClass"/>
       </field>
       <field name="matrix">
-        <callback name="matrix" c:type="matrix">
+        <callback name="matrix">
           <return-value transfer-ownership="none">
             <type name="gint" c:type="int"/>
           </return-value>
@@ -592,7 +614,8 @@ case.</doc>
     <record name="TestSimpleBoxedA"
             c:type="RegressTestSimpleBoxedA"
             glib:type-name="RegressTestSimpleBoxedA"
-            glib:get-type="regress_test_simple_boxed_a_get_type">
+            glib:get-type="regress_test_simple_boxed_a_get_type"
+            c:symbol-prefix="test_simple_boxed_a">
       <field name="some_int" writable="1">
         <type name="gint" c:type="gint"/>
       </field>
@@ -620,11 +643,18 @@ case.</doc>
           </parameter>
         </parameters>
       </method>
+      <function name="const_return"
+                c:identifier="regress_test_simple_boxed_a_const_return">
+        <return-value transfer-ownership="none">
+          <type name="TestSimpleBoxedA" c:type="RegressTestSimpleBoxedA*"/>
+        </return-value>
+      </function>
     </record>
     <record name="TestSimpleBoxedB"
             c:type="RegressTestSimpleBoxedB"
             glib:type-name="RegressTestSimpleBoxedB"
-            glib:get-type="regress_test_simple_boxed_b_get_type">
+            glib:get-type="regress_test_simple_boxed_b_get_type"
+            c:symbol-prefix="test_simple_boxed_b">
       <field name="some_int8" writable="1">
         <type name="gint8" c:type="gint8"/>
       </field>
@@ -694,15 +724,8 @@ case.</doc>
         </parameters>
       </method>
     </record>
-    <record name="TestStructC" c:type="_RegressTestStructC">
-      <field name="another_int" writable="1">
-        <type name="gint" c:type="gint"/>
-      </field>
-      <field name="obj" writable="1">
-        <type name="GObject.Object" c:type="GObject*"/>
-      </field>
-    </record>
     <class name="TestSubObj"
+           c:symbol-prefix="test_sub_obj"
            c:type="RegressTestSubObj"
            parent="TestObj"
            glib:type-name="RegressTestSubObj"
@@ -736,6 +759,7 @@ case.</doc>
       </field>
     </record>
     <class name="TestWi8021x"
+           c:symbol-prefix="test_wi_802_1x"
            c:type="RegressTestWi8021x"
            parent="GObject.Object"
            glib:type-name="RegressTestWi8021x"
@@ -746,6 +770,31 @@ case.</doc>
           <type name="TestWi8021x" c:type="RegressTestWi8021x*"/>
         </return-value>
       </constructor>
+      <function name="get_testbool"
+                c:identifier="regress_test_wi_802_1x_get_testbool">
+        <return-value transfer-ownership="none">
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <parameter name="obj" transfer-ownership="none">
+            <type name="TestWi8021x" c:type="RegressTestWi8021x*"/>
+          </parameter>
+        </parameters>
+      </function>
+      <function name="set_testbool"
+                c:identifier="regress_test_wi_802_1x_set_testbool">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <parameter name="obj" transfer-ownership="none">
+            <type name="TestWi8021x" c:type="RegressTestWi8021x*"/>
+          </parameter>
+          <parameter name="v" transfer-ownership="none">
+            <type name="gboolean" c:type="gboolean"/>
+          </parameter>
+        </parameters>
+      </function>
       <function name="static_method"
                 c:identifier="regress_test_wi_802_1x_static_method">
         <return-value transfer-ownership="none">
@@ -757,25 +806,8 @@ case.</doc>
           </parameter>
         </parameters>
       </function>
-      <method name="get_testbool"
-              c:identifier="regress_test_wi_802_1x_get_testbool">
-        <return-value transfer-ownership="none">
-          <type name="gboolean" c:type="gboolean"/>
-        </return-value>
-      </method>
-      <method name="set_testbool"
-              c:identifier="regress_test_wi_802_1x_set_testbool">
-        <return-value transfer-ownership="none">
-          <type name="none" c:type="void"/>
-        </return-value>
-        <parameters>
-          <parameter name="v" transfer-ownership="none">
-            <type name="gboolean" c:type="gboolean"/>
-          </parameter>
-        </parameters>
-      </method>
       <property name="testbool" writable="1" transfer-ownership="none">
-        <type name="gboolean" c:type="gboolean"/>
+        <type name="gboolean"/>
       </property>
       <field name="parent_instance">
         <type name="GObject.Object" c:type="GObject"/>
@@ -789,6 +821,14 @@ case.</doc>
             glib:is-gtype-struct-for="TestWi8021x">
       <field name="parent_class">
         <type name="GObject.ObjectClass" c:type="GObjectClass"/>
+      </field>
+    </record>
+    <record name="_TestStructC" c:type="_RegressTestStructC">
+      <field name="another_int" writable="1">
+        <type name="gint" c:type="gint"/>
+      </field>
+      <field name="obj" writable="1">
+        <type name="GObject.Object" c:type="GObject*"/>
       </field>
     </record>
     <function name="set_abort_on_error"
@@ -1235,7 +1275,7 @@ is invoked.</doc>
         <parameter name="user_data" transfer-ownership="none">
           <type name="gpointer" c:type="gpointer"/>
         </parameter>
-        <parameter name="notify" transfer-ownership="none" scope="call">
+        <parameter name="notify" transfer-ownership="none" scope="async">
           <type name="GLib.DestroyNotify" c:type="GDestroyNotify"/>
         </parameter>
       </parameters>
@@ -1408,7 +1448,7 @@ call and can be released on return.</doc>
               c:identifier="regress_test_ghash_nested_everything_return">
       <doc xml:whitespace="preserve">Specify nested parameterized types directly with the (type ) annotation.</doc>
       <return-value transfer-ownership="full">
-        <type name="GLib.HashTable" c:type="GHashTable*">
+        <type name="GLib.HashTable">
           <type name="utf8"/>
           <type name="GLib.HashTable">
             <type name="utf8"/>
@@ -1914,12 +1954,6 @@ call and can be released on return.</doc>
         </parameter>
       </parameters>
     </function>
-    <function name="test_simple_boxed_a_const_return"
-              c:identifier="regress_test_simple_boxed_a_const_return">
-      <return-value transfer-ownership="none">
-        <type name="TestSimpleBoxedA" c:type="RegressTestSimpleBoxedA*"/>
-      </return-value>
-    </function>
     <function name="test_simple_callback"
               c:identifier="regress_test_simple_callback">
       <return-value transfer-ownership="none">
@@ -2124,7 +2158,7 @@ call and can be released on return.</doc>
         <parameter name="user_data" transfer-ownership="none">
           <type name="gpointer" c:type="gpointer"/>
         </parameter>
-        <parameter name="notify" transfer-ownership="none" scope="call">
+        <parameter name="notify" transfer-ownership="none" scope="async">
           <type name="GLib.DestroyNotify" c:type="GDestroyNotify"/>
         </parameter>
         <parameter name="y"
@@ -2279,7 +2313,7 @@ call and can be released on return.</doc>
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
-        <parameter name="in" transfer-ownership="full" allow-none="1">
+        <parameter name="in" transfer-ownership="none" allow-none="1">
           <type name="utf8" c:type="char*"/>
         </parameter>
       </parameters>
@@ -2353,7 +2387,7 @@ call and can be released on return.</doc>
     <function name="test_value_get_fundamental_object"
               c:identifier="regress_test_value_get_fundamental_object"
               introspectable="0">
-      <return-value transfer-ownership="full">
+      <return-value>
         <type name="TestFundamentalObject"
               c:type="RegressTestFundamentalObject*"/>
       </return-value>

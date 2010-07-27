@@ -2,15 +2,20 @@
 <!-- This file was automatically generated from C sources - DO NOT EDIT!
 To affect the contents of this file, edit the original C definitions,
 and/or use gtk-doc annotations.  -->
-<repository version="1.1"
+<repository version="1.2"
             xmlns="http://www.gtk.org/introspection/core/1.0"
             xmlns:c="http://www.gtk.org/introspection/c/1.0"
             xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
   <include name="GLib" version="2.0"/>
   <include name="GObject" version="2.0"/>
   <package name="gobject-2.0"/>
-  <namespace name="Bar" version="1.0" shared-library="" c:prefix="Bar">
+  <namespace name="Bar"
+             version="1.0"
+             shared-library=""
+             c:identifier-prefixes="Bar"
+             c:symbol-prefixes="bar">
     <class name="Baz"
+           c:symbol-prefix="baz"
            c:type="BarBaz"
            parent="GObject.Object"
            glib:type-name="BarBaz"

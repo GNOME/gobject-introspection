@@ -2,7 +2,7 @@
 <!-- This file was automatically generated from C sources - DO NOT EDIT!
 To affect the contents of this file, edit the original C definitions,
 and/or use gtk-doc annotations.  -->
-<repository version="1.1"
+<repository version="1.2"
             xmlns="http://www.gtk.org/introspection/core/1.0"
             xmlns:c="http://www.gtk.org/introspection/c/1.0"
             xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
@@ -12,13 +12,14 @@ and/or use gtk-doc annotations.  -->
   <namespace name="Utility"
              version="1.0"
              shared-library="libutility.so"
-             c:prefix="Utility">
+             c:identifier-prefixes="Utility"
+             c:symbol-prefixes="utility">
     <alias name="Glyph" c:type="UtilityGlyph">
-      <type name="guint32"/>
+      <type name="guint32" c:type="guint32"/>
     </alias>
     <record name="Buffer" c:type="UtilityBuffer">
       <field name="data" writable="1">
-        <type name="gpointer" c:type="char*"/>
+        <type name="gpointer"/>
       </field>
       <field name="length" writable="1">
         <type name="gulong" c:type="gsize"/>
@@ -61,6 +62,7 @@ and/or use gtk-doc annotations.  -->
       <member name="c" value="4" c:identifier="UTILITY_FLAG_C"/>
     </bitfield>
     <class name="Object"
+           c:symbol-prefix="object"
            c:type="UtilityObject"
            parent="GObject.Object"
            glib:type-name="UtilityObject"
@@ -77,14 +79,14 @@ and/or use gtk-doc annotations.  -->
           <parameter name="func"
                      transfer-ownership="none"
                      scope="notified"
-                     closure="3"
-                     destroy="4">
+                     closure="2"
+                     destroy="3">
             <type name="FileFunc" c:type="UtilityFileFunc"/>
           </parameter>
           <parameter name="user_data" transfer-ownership="none">
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
-          <parameter name="destroy" transfer-ownership="none" scope="call">
+          <parameter name="destroy" transfer-ownership="none" scope="async">
             <type name="GLib.DestroyNotify" c:type="GDestroyNotify"/>
           </parameter>
         </parameters>
@@ -112,7 +114,7 @@ and/or use gtk-doc annotations.  -->
       </field>
       <field name="data" writable="1">
         <array zero-terminated="0" c:type="guint8" fixed-size="16">
-          <type name="guint8"/>
+          <type name="guint8" c:type="guint8"/>
         </array>
       </field>
     </record>

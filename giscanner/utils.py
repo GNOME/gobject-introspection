@@ -102,3 +102,16 @@ def get_libtool_command(options):
         return None
 
     return ['libtool']
+
+
+def files_are_identical(path1, path2):
+    f1 = open(path1)
+    f2 = open(path2)
+    buf1 = f1.read(8192)
+    buf2 = f2.read(8192)
+    while buf1 == buf2 and buf1 != '':
+        buf1 = f1.read(8192)
+        buf2 = f2.read(8192)
+    f1.close()
+    f2.close()
+    return buf1 == buf2

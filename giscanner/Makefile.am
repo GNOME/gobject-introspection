@@ -36,18 +36,22 @@ pkgpyexec_PYTHON = 		\
 	annotationparser.py	\
 	ast.py			\
 	cachestore.py		\
+	codegen.py		\
 	config.py		\
 	dumper.py		\
+	introspectablepass.py	\
 	girparser.py		\
 	girwriter.py		\
 	glibast.py		\
-	glibtransformer.py 	\
+	gdumpparser.py 	\
 	libtoolimporter.py	\
 	minixpath.py		\
 	odict.py		\
+	primarytransformer.py	\
 	shlibs.py		\
 	scannermain.py		\
 	sourcescanner.py	\
+	testcodegen.py		\
 	transformer.py		\
 	utils.py		\
 	xmlwriter.py

@@ -82,21 +82,30 @@ to pass the argument to this function to g_irepository_dump.
 .B \--program-arg=ARG
 Additional argument to pass to program for introspection.
 .TP
-.B \--strip-prefix=PREFIX
-If this option is specified a prefix will be stripped from all functions.
-If not specified, the lower case version of the namespace will be used.
-Eg, a strip prefix of
-.B g_
-and a namespace set to
-.B GLib
-will export the function 
-.B g_type_name
-as 
-.B GLib.type_name.
+.B \--identifier-prefix=PREFIX
+This option may be specified multiple times.  Each one
+gives a prefix that will be stripped from all C identifiers.
+If none specified, the namespace will be used.
+Eg, an identifier prefix of
+.B Foo
+will export the identifier
+.B typdef struct _FooBar FooBar;
+as
+.B Foo.Bar.
+.TP
+.B \--symbol-prefix=PREFIX
+This option may be specified multiple times.  Each one
+gives a prefix that will be stripped from all C symbols.
+Eg, an symbol prefix of
+.B foo
+will export the symbol
+.B foo_bar_do_something
+as
+.B Foo.Bar.do_something.
 .TP
 .B \--output=FILENAME
 Name of the file to output. Normally namespace + format extension.
-Eg, GLib.gir.
+Eg, GLib-2.0.gir.
 .TP
 .B \--pkg=PACKAGE
 List of pkg-config packages to get compiler and linker flags from.
@@ -112,33 +121,6 @@ If not specified, the packages specified with --pkg= will be used.
 .B \--verbose
 Be verbose, include some debugging information.
 .TP
-.B \--typelib-xml
-Convert the resulting xml to only output the types relevant
-to the typelib compiler. This is mainly useful for verifying the
-correctness of the typelib itself.
-.TP
-.B \--inject=FILENAME
-Injects a variant of a GIR file into the scanner. This is used to add
-custom functions to a GIR wrapping a library without modifying the upstream
-library itself. The Format of the inject file is similar to a GIR,
-but the root node is <injections> rather than <repository> and
-<inject path="..."> where ... is an xpath expression.
-
-Example:
-
-  <inject path="namespace/class[@name='TestDrawable']">
-    <method name="get_width" c:identifier="girepo_test_drawable_get_width">
-      <return-value transfer-ownership="none">
-        <type name="int" c:type="gint"/>
-      </return-value>
-    </method>
-  </inject>
-
-The example above will add a new method called get_with to the TestDrawable class.
-.TP
-.B \--xpath-assertions=FILENAME
-Loads a list xpath assertions from FILENAME, this is useful for verifying
-that the GIR itself is properly generated.
 .SH ENVIRONMENT VARIABLES
 The g-ir-scanner uses the XDG_DATA_DIRS variable to check for dirs,
 the gir's are located in XDG_DATA_DIRS/share/gir-1.0. It is normally

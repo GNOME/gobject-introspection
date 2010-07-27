@@ -20,17 +20,11 @@
 
 import os
 import sys
+import re
 
-from .ast import (Bitfield, Callback, Enum, Function, Namespace, Member,
-                  Parameter, Return, Struct, Field,
-                  Type, Array, Alias, Interface, Class, Node, Union,
-                  Varargs, Constant, type_name_from_ctype,
-                  type_names, TYPE_ANY, TYPE_STRING,
-                  BASIC_GIR_TYPES)
+from . import ast
 from .config import DATADIR, GIR_DIR, GIR_SUFFIX
-from .glibast import GLibBoxed
 from .girparser import GIRParser
-from .odict import odict
 from .sourcescanner import (
     SourceSymbol, ctype_name, CTYPE_POINTER,
     CTYPE_BASIC_TYPE, CTYPE_UNION, CTYPE_ARRAY, CTYPE_TYPEDEF,
@@ -39,57 +33,36 @@ from .sourcescanner import (
     CSYMBOL_TYPE_ENUM, CSYMBOL_TYPE_UNION, CSYMBOL_TYPE_OBJECT,
     CSYMBOL_TYPE_MEMBER, CSYMBOL_TYPE_ELLIPSIS, CSYMBOL_TYPE_CONST,
     TYPE_QUALIFIER_CONST)
-from .utils import to_underscores
+
+class TypeResolutionException(Exception):
+    pass
 
 _xdg_data_dirs = [x for x in os.environ.get('XDG_DATA_DIRS', '').split(':') \
                       + [DATADIR, '/usr/share'] if x]
 
-
-class SkipError(Exception):
-    pass
-
-
-class Names(object):
-    names = property(lambda self: self._names)
-    aliases = property(lambda self: self._aliases)
-    type_names = property(lambda self: self._type_names)
-    ctypes = property(lambda self: self._ctypes)
-
-    def __init__(self):
-        super(Names, self).__init__()
-        self._names = odict() # Maps from GIName -> (namespace, node)
-        self._aliases = {} # Maps from GIName -> GIName
-        self._type_names = {} # Maps from GTName -> (namespace, node)
-        self._ctypes = {} # Maps from CType -> (namespace, node)
-
-
 class Transformer(object):
+    namespace = property(lambda self: self._namespace)
 
-    def __init__(self, cachestore, namespace_name, namespace_version):
+    UCASE_CONSTANT_RE = re.compile(r'[_A-Z0-9]+')
+
+    def __init__(self, cachestore, namespace_name, namespace_version,
+                 identifier_prefixes=None, symbol_prefixes=None):
         self._cwd = os.getcwd() + os.sep
         self._cachestore = cachestore
         self.generator = None
-        self._namespace = Namespace(namespace_name, namespace_version)
-        self._names = Names()
+        self._namespace = ast.Namespace(namespace_name, namespace_version,
+                                    identifier_prefixes=identifier_prefixes,
+                                    symbol_prefixes=symbol_prefixes)
         self._pkg_config_packages = set()
         self._typedefs_ns = {}
-        self._strip_prefix = ''
         self._enable_warnings = False
         self._warned = False
-        self._includes = set()
+        self._includes = {}
+        self._include_names = set()
         self._includepaths = []
 
-    def get_names(self):
-        return self._names
-
     def get_includes(self):
-        return self._includes
-
-    def set_strip_prefix(self, strip_prefix):
-        self._strip_prefix = strip_prefix
-
-    def get_strip_prefix(self):
-        return self._strip_prefix
+        return self._include_names
 
     def enable_warnings(self, enable):
         self._enable_warnings = enable
@@ -103,39 +76,97 @@ class Transformer(object):
     def set_source_ast(self, src_ast):
         self.generator = src_ast
 
+    def _append_new_node(self, node):
+        original = self._namespace.get(node.name)
+        # Special case constants here; we allow duplication to sort-of
+        # handle #ifdef.  But this introduces an arch-dependency in the .gir
+        # file.  So far this has only come up scanning glib - in theory, other
+        # modules will just depend on that.
+        if isinstance(original, ast.Constant) and isinstance(node, ast.Constant):
+            pass
+        elif original:
+            positions = set()
+            positions.update(original.file_positions)
+            positions.update(node.file_positions)
+            self.log_warning("Namespace conflict for '%s'" % (node.name, ),
+                             positions, fatal=True)
+        else:
+            self._namespace.append(node)
+
     def parse(self):
-        nodes = []
         for symbol in self.generator.get_symbols():
-            try:
-                node = self._traverse_one(symbol)
-            except SkipError:
-                continue
-            self._add_node(node)
-        return self._namespace
+            node = self._traverse_one(symbol)
+            if node:
+                self._append_new_node(node)
+
+        # Now look through the namespace for things like
+        # typedef struct _Foo Foo;
+        # where we've never seen the struct _Foo.  Just create
+        # an empty structure for these as "disguised"
+        # If we do have a class/interface, merge fields
+        for typedef, compound in self._typedefs_ns.iteritems():
+            ns_compound = self._namespace.get(compound.name)
+            if not ns_compound:
+                ns_compound = self._namespace.get('_' + compound.name)
+            if (not ns_compound and isinstance(compound, (ast.Record, ast.Union))
+                and len(compound.fields) == 0):
+                disguised = ast.Record(compound.name, typedef, disguised=True)
+                self._namespace.append(disguised)
+            elif not ns_compound:
+                self._namespace.append(compound)
+            elif isinstance(ns_compound, (ast.Record, ast.Union)) and len(ns_compound.fields) == 0:
+                ns_compound.fields = compound.fields
+        self._typedefs_ns = None
 
     def set_include_paths(self, paths):
         self._includepaths = list(paths)
 
     def register_include(self, include):
-        if include in self._includes:
+        if include in self._include_names:
             return
         filename = self._find_include(include)
         self._parse_include(filename)
-        self._includes.add(include)
+        self._include_names.add(include)
+
+    def lookup_giname(self, name):
+        """Given a name of the form Foo or Bar.Foo,
+return the corresponding ast.Node, or None if none
+available.  Will throw KeyError however for unknown
+namespaces."""
+        if '.' not in name:
+            return self._namespace.get(name)
+        else:
+            (ns, name) = name.split('.', 1)
+            if ns == self._namespace.name:
+                return self._namespace.get(name)
+            include = self._includes[ns]
+            return include.get(name)
+
+    def lookup_typenode(self, typeobj):
+        """Given a Type object, if it points to a giname,
+calls lookup_giname() on the name.  Otherwise return
+None."""
+        if typeobj.target_giname:
+            return self.lookup_giname(typeobj.target_giname)
+        return None
 
     # Private
 
-    def log_warning(self, text, file_positions=None, prefix=None):
+    def log_warning(self, text, file_positions=None, prefix=None,
+                    fatal=False):
         """Log a warning, using optional file positioning information.
-If the warning is related to a Node type, see log_node_warning()."""
-        if not self._enable_warnings:
+If the warning is related to a ast.Node type, see log_node_warning()."""
+        if not fatal and not self._enable_warnings:
             return
+
+        self._warned = True
 
         if file_positions is None or len(file_positions) == 0:
             target_file_positions = [('<unknown>', -1, -1)]
         else:
             target_file_positions = file_positions
 
+        position_strings = []
         for (filename, line, column) in target_file_positions:
             if filename.startswith(self._cwd):
                 filename = filename[len(self._cwd):]
@@ -145,41 +176,58 @@ If the warning is related to a Node type, see log_node_warning()."""
                 position = '%s:%d' % (filename, line, )
             else:
                 position = '%s:' % (filename, )
+            position_strings.append(position)
 
+        for position in position_strings[:-1]:
+            print >>sys.stderr, "%s:" % (position, )
+        last_position = position_strings[-1]
+        error_type = 'error' if fatal else 'warning'
         if prefix:
             print >>sys.stderr, \
-'''%s: warning: %s: %s: %s''' % (position, self._namespace.name,
+'''%s: %s: %s: %s: %s''' % (last_position, error_type, self._namespace.name,
                                  prefix, text)
         else:
             print >>sys.stderr, \
-'''%s: warning: %s: %s''' % (position, self._namespace.name, text)
+'''%s: %s: %s: %s''' % (last_position, error_type, self._namespace.name, text)
+        if fatal:
+            sys.exit(1)
 
-    def log_symbol_warning(self, symbol, text):
+    def log_symbol_warning(self, symbol, text, **kwargs):
         """Log a warning in the context of the given symbol."""
-        file_positions = [(symbol.source_filename, symbol.line, -1)]
+        if symbol.source_filename:
+            file_positions = [(symbol.source_filename, symbol.line, -1)]
+        else:
+            file_positions = None
         prefix = "symbol=%r" % (symbol.ident, )
-        self.log_warning(text, file_positions, prefix=prefix)
+        self.log_warning(text, file_positions, prefix=prefix, **kwargs)
 
-    def log_node_warning(self, node, text, context=None):
+    def log_node_warning(self, node, text, context=None, fatal=False):
         """Log a warning, using information about file positions from
 the given node.  The optional context argument, if given, should be
-another Node type which will also be displayed.  If no file position
+another ast.Node type which will also be displayed.  If no file position
 information is available from the node, the position data from the
 context will be used."""
-        if len(node.file_positions) == 0 and \
-                (context is not None) and len(context.file_positions) > 0:
-            file_positions = context.file_positions
+        if hasattr(node, 'file_positions'):
+            if (len(node.file_positions) == 0 and
+                (context is not None) and len(context.file_positions) > 0):
+                file_positions = context.file_positions
+            else:
+                file_positions = node.file_positions
         else:
-            file_positions = node.file_positions
+            file_positions = None
+            if not context:
+                text = "context=%r %s" % (node, text)
 
         if context:
-            if isinstance(context, Function):
+            if isinstance(context, ast.Function):
                 name = context.symbol
             else:
                 name = context.name
             text = "%s: %s" % (name, text)
+        elif len(file_positions) == 0 and hasattr(node, 'name'):
+            text = "(%s)%s: %s" % (node.__class__.__name__, node.name, text)
 
-        self.log_warning(text, file_positions)
+        self.log_warning(text, file_positions, fatal=fatal)
 
     def _find_include(self, include):
         searchdirs = self._includepaths[:]
@@ -200,7 +248,6 @@ context will be used."""
         parser = self._cachestore.load(filename)
         if parser is None:
             parser = GIRParser()
-            parser.set_include_parsing(True)
             parser.parse(filename)
             self._cachestore.store(filename, parser)
 
@@ -210,49 +257,95 @@ context will be used."""
         for pkg in parser.get_pkgconfig_packages():
             self._pkg_config_packages.add(pkg)
         namespace = parser.get_namespace()
-        nsname = namespace.name
-        for node in namespace.nodes:
-            if isinstance(node, Alias):
-                self._names.aliases[node.name] = (nsname, node)
-            elif isinstance(node, (GLibBoxed, Interface, Class)):
-                self._names.type_names[node.type_name] = (nsname, node)
-            giname = '%s.%s' % (nsname, node.name)
-            self._names.names[giname] = (nsname, node)
-            if hasattr(node, 'ctype'):
-                self._names.ctypes[node.ctype] = (nsname, node)
-            elif hasattr(node, 'symbol'):
-                self._names.ctypes[node.symbol] = (nsname, node)
+        self._includes[namespace.name] = namespace
 
-    def _add_node(self, node):
-        if node is None:
-            return
-        if node.name.startswith('_'):
-            return
-        self._namespace.nodes.append(node)
-        self._names.names[node.name] = (None, node)
+    def _iter_namespaces(self):
+        """Return an iterator over all included namespaces; the
+currently-scanned namespace is first."""
+        yield self._namespace
+        for ns in self._includes.itervalues():
+            yield ns
 
-    def _strip_namespace_func(self, name):
-        prefix = self._namespace.name.lower() + '_'
-        if name.lower().startswith(prefix):
-            name = name[len(prefix):]
-        else:
-            prefix = to_underscores(self._namespace.name).lower() + '_'
-            if name.lower().startswith(prefix):
-                name = name[len(prefix):]
-        return self.remove_prefix(name, isfunction=True)
+    def _sort_matches(self, x, y):
+        if x[0] is self._namespace:
+            return 1
+        elif y[0] is self._namespace:
+            return -1
+        return cmp(x[2], y[2])
 
-    def remove_prefix(self, name, isfunction=False):
-        # when --strip-prefix=g:
-        #   GHashTable -> HashTable
-        #   g_hash_table_new -> hash_table_new
-        prefix = self._strip_prefix.lower()
-        if isfunction:
-            prefix += '_'
-        if len(name) > len(prefix) and name.lower().startswith(prefix):
-            name = name[len(prefix):]
+    def split_ctype_namespaces(self, ident):
+        """Given a StudlyCaps string identifier like FooBar, return a
+list of (namespace, stripped_identifier) sorted by namespace length,
+or raise ValueError.  As a special case, if the current namespace matches,
+it is always biggest (i.e. last)."""
+        matches = []
+        for ns in self._iter_namespaces():
+            for prefix in ns.identifier_prefixes:
+                if ident.startswith(prefix):
+                    matches.append((ns, ident[len(prefix):], len(prefix)))
+                    break
+        if matches:
+            matches.sort(self._sort_matches)
+            return map(lambda x: (x[0], x[1]), matches)
+        raise ValueError("Unknown namespace for identifier %r" % (ident, ))
 
-        while name.startswith('_'):
-            name = name[1:]
+    def split_csymbol(self, symbol):
+        """Given a C symbol like foo_bar_do_baz, return a pair of
+(namespace, stripped_symbol) or raise ValueError."""
+        matches = []
+        for ns in self._iter_namespaces():
+            for prefix in ns.symbol_prefixes:
+                if not prefix.endswith('_'):
+                    prefix = prefix + '_'
+                if symbol.startswith(prefix):
+                    matches.append((ns, symbol[len(prefix):], len(prefix)))
+                    break
+        if matches:
+            matches.sort(self._sort_matches)
+            return (matches[-1][0], matches[-1][1])
+        raise ValueError("Unknown namespace for symbol %r" % (symbol, ))
+
+    def strip_identifier_or_warn(self, ident, fatal=False):
+        hidden = ident.startswith('_')
+        if hidden:
+            ident = ident[1:]
+        try:
+            matches = self.split_ctype_namespaces(ident)
+        except ValueError, e:
+            self.log_warning(str(e), fatal=fatal)
+            return None
+        for ns, name in matches:
+            if ns is self._namespace:
+                if hidden:
+                    return '_' + name
+                return name
+        (ns, name) = matches[-1]
+        self.log_warning("Skipping foreign identifier %r from namespace %s" % (ident, ns.name, ),
+                         fatal=fatal)
+        return None
+
+    def _strip_symbol_or_warn(self, symbol, is_constant=False, fatal=False):
+        ident = symbol.ident
+        if is_constant:
+            # Temporarily lowercase
+            ident = ident.lower()
+        hidden = ident.startswith('_')
+        if hidden:
+            ident = ident[1:]
+        try:
+            (ns, name) = self.split_csymbol(ident)
+        except ValueError, e:
+            self.log_symbol_warning(symbol, "Unknown namespace", fatal=fatal)
+            return None
+        if ns != self._namespace:
+            self.log_symbol_warning(symbol,
+"Skipping foreign symbol from namespace %s" % (ns.name, ),
+                                    fatal=fatal)
+            return None
+        if is_constant:
+            name = name.upper()
+        if hidden:
+            return '_' + name
         return name
 
     def _traverse_one(self, symbol, stype=None):
@@ -268,17 +361,17 @@ context will be used."""
             return self._create_struct(symbol)
         elif stype == CSYMBOL_TYPE_ENUM:
             return self._create_enum(symbol)
-        elif stype == CSYMBOL_TYPE_OBJECT:
-            return self._create_object(symbol)
         elif stype == CSYMBOL_TYPE_MEMBER:
             return self._create_member(symbol)
         elif stype == CSYMBOL_TYPE_UNION:
             return self._create_union(symbol)
         elif stype == CSYMBOL_TYPE_CONST:
             return self._create_const(symbol)
+        # Ignore variable declarations in the header
+        elif stype == CSYMBOL_TYPE_OBJECT:
+            pass
         else:
-            raise NotImplementedError(
-                'Transformer: unhandled symbol: %r' % (symbol, ))
+            print 'transformer: unhandled symbol: %r' % (symbol, )
 
     def _enum_common_prefix(self, symbol):
         def common_prefix(a, b):
@@ -316,86 +409,31 @@ context will be used."""
                 # Ok, the enum members don't have a consistent prefix
                 # among them, so let's just remove the global namespace
                 # prefix.
-                name = self.remove_prefix(child.ident)
-            members.append(Member(name.lower(),
+                name = self._strip_symbol_or_warn(child, is_constant=True)
+                if name is None:
+                    return None
+            members.append(ast.Member(name.lower(),
                                   child.const_int,
                                   child.ident))
 
-        enum_name = self.remove_prefix(symbol.ident)
+        enum_name = self.strip_identifier_or_warn(symbol.ident)
+        if not enum_name:
+            return None
         if symbol.base_type.is_bitfield:
-            klass = Bitfield
+            klass = ast.Bitfield
         else:
-            klass = Enum
+            klass = ast.Enum
         node = klass(enum_name, symbol.ident, members)
         node.add_symbol_reference(symbol)
-        self._names.type_names[symbol.ident] = (None, node)
         return node
-
-    def _create_object(self, symbol):
-        node = Member(symbol.ident, symbol.base_type.name,
-                      symbol.ident)
-        node.add_symbol_reference(symbol)
-        return node
-
-    def _type_is_callback(self, type):
-        if isinstance(type, Callback):
-            return True
-        node = self._names.names.get(type.name)
-        if node and isinstance(node[1], Callback):
-            return True
-        return False
-
-    def _handle_closure(self, param, closure_idx, closure_param):
-        if (closure_param.type.name == TYPE_ANY and
-            closure_param.name.endswith('data')):
-            param.closure_name = closure_param.name
-            param.closure_index = closure_idx
-            return True
-        return False
-
-    def _handle_destroy(self, param, destroy_idx, destroy_param):
-        if (destroy_param.type.name == 'GLib.DestroyNotify' or
-            destroy_param.type.ctype == 'GDestroyNotify'):
-            param.destroy_name = destroy_param.name
-            param.destroy_index = destroy_idx
-            return True
-        return False
-
-    def _augment_callback_params(self, params):
-        for i, param in enumerate(params):
-            if not self._type_is_callback(param.type):
-                continue
-
-            # set a default scope
-            if param.scope is None:
-                param.scope = 'call'
-
-            # j is the index where we look for closure/destroy to
-            # group with the callback param
-            j = i + 1
-            if j == len(params):
-                continue # no more args -> nothing to group
-            # look at the param directly following for either a
-            # closure or a destroy; only one of these will fire
-            had_closure = self._handle_closure(param, j, params[j])
-            had_destroy = self._handle_destroy(param, j, params[j])
-            j += 1
-            # are we out of params, or did we find neither?
-            if j == len(params) or (not had_closure and not had_destroy):
-                continue
-            # we found either a closure or a destroy; check the
-            # parameter following for the other
-            if not had_closure:
-                self._handle_closure(param, j, params[j])
-            if not had_destroy:
-                self._handle_destroy(param, j, params[j])
 
     def _create_function(self, symbol):
         parameters = list(self._create_parameters(symbol.base_type))
         return_ = self._create_return(symbol.base_type.base_type)
-        self._augment_callback_params(parameters)
-        name = self._strip_namespace_func(symbol.ident)
-        func = Function(name, return_, parameters, symbol.ident)
+        name = self._strip_symbol_or_warn(symbol)
+        if not name:
+            return None
+        func = ast.Function(name, return_, parameters, False, symbol.ident)
         func.add_symbol_reference(symbol)
         return func
 
@@ -413,11 +451,10 @@ context will be used."""
         elif source_type.type == CTYPE_POINTER:
             value = self._create_source_type(source_type.base_type) + '*'
         else:
-            value = TYPE_ANY
+            value = 'gpointer'
         return value
 
     def _create_parameters(self, base_type):
-
         # warn if we see annotations for unknown parameters
         param_names = set(child.ident for child in base_type.child_list)
         for child in base_type.child_list:
@@ -427,7 +464,7 @@ context will be used."""
         source_type = symbol.base_type
         if (source_type.type == CTYPE_POINTER and
             symbol.base_type.base_type.type == CTYPE_FUNCTION):
-            node = self._create_callback(symbol)
+            node = self._create_callback(symbol, member=True)
         elif source_type.type == CTYPE_STRUCT and source_type.name is None:
             node = self._create_struct(symbol, anonymous=True)
         elif source_type.type == CTYPE_UNION and source_type.name is None:
@@ -442,21 +479,18 @@ context will be used."""
                     derefed_name = canonical_ctype[:-1]
                 else:
                     derefed_name = canonical_ctype
-                derefed_name = self.resolve_param_type(derefed_name)
-                ftype = Array(None, ctype, self.parse_ctype(derefed_name))
+                ftype = ast.Array(None, self.create_type_from_ctype_string(ctype),
+                                  ctype=derefed_name)
                 child_list = list(symbol.base_type.child_list)
                 ftype.zeroterminated = False
                 if child_list:
-                    ftype.size = '%d' % (child_list[0].const_int, )
+                    ftype.size = child_list[0].const_int
             else:
-                ftype = self._create_type(symbol.base_type,
-                                          is_param=False, is_retval=False)
-            ftype = self.resolve_param_type(ftype)
-            # Fields are assumed to be read-write
+                ftype = self._create_type_from_base(symbol.base_type)
+            # ast.Fields are assumed to be read-write
             # (except for Objects, see also glibtransformer.py)
-            node = Field(symbol.ident, ftype, ftype.name,
+            node = ast.Field(symbol.ident, ftype,
                          readable=True, writable=True, bits=symbol.const_int)
-            node.add_symbol_reference(symbol)
         return node
 
     def _create_typedef(self, symbol):
@@ -477,14 +511,16 @@ context will be used."""
                        CTYPE_POINTER,
                        CTYPE_BASIC_TYPE,
                        CTYPE_VOID):
-            name = self.remove_prefix(symbol.ident)
-            if symbol.base_type.name:
-                target = self.remove_prefix(symbol.base_type.name)
-            else:
-                target = 'none'
-            if name in type_names:
+            name = self.strip_identifier_or_warn(symbol.ident)
+            if not name:
                 return None
-            return Alias(name, target, ctype=symbol.ident)
+            if symbol.base_type.name:
+                target = self.create_type_from_ctype_string(symbol.base_type.name)
+            else:
+                target = ast.TYPE_ANY
+            if name in ast.type_names:
+                return None
+            return ast.Alias(name, target, ctype=symbol.ident)
         else:
             raise NotImplementedError(
                 "symbol %r of type %s" % (symbol.ident, ctype_name(ctype)))
@@ -494,22 +530,20 @@ context will be used."""
         # First look up the ctype including any pointers;
         # a few type names like 'char*' have their own aliases
         # and we need pointer information for those.
-        firstpass = type_name_from_ctype(ctype)
+        firstpass = ast.type_names.get(ctype)
 
         # If we have a particular alias for this, skip deep
         # canonicalization to prevent changing
         # e.g. char* -> int8*
-        if firstpass != ctype:
-            return firstpass
+        if firstpass:
+            return firstpass.target_fundamental
 
-        # We're also done if the type is already a fundamental
-        # known type, or there are no pointers.
-        if ctype in type_names or not firstpass.endswith('*'):
-            return firstpass
+        if not ctype.endswith('*'):
+            return ctype
 
         # We have a pointer type.
         # Strip the end pointer, canonicalize our base type
-        base = firstpass[:-1]
+        base = ctype[:-1]
         canonical_base = self._canonicalize_ctype(base)
 
         # Append the pointer again
@@ -527,52 +561,71 @@ context will be used."""
 
         # Preserve "pointerness" of struct/union members
         if (is_member and canonical.endswith('*') and
-            derefed_typename in BASIC_GIR_TYPES):
-            return TYPE_ANY
+            derefed_typename in ast.basic_type_names):
+            return 'gpointer'
         else:
             return derefed_typename
 
-    def _create_type(self, source_type, is_param, is_retval):
+    def _create_type_from_base(self, source_type, is_parameter=False, is_return=False):
         ctype = self._create_source_type(source_type)
-        if ctype.startswith('va_list'):
-            raise SkipError()
-        # FIXME: FILE* should not be skipped, it should be handled
-        #        properly instead
-        elif ctype == 'FILE*':
-            raise SkipError
+        const = ((source_type.type == CTYPE_POINTER) and
+                 (source_type.base_type.type_qualifier & TYPE_QUALIFIER_CONST))
+        return self.create_type_from_ctype_string(ctype, is_const=const,
+                                                  is_parameter=is_parameter, is_return=is_return)
 
-        is_member = not (is_param or is_retval)
-        # Here we handle basic type parsing; most of the heavy lifting
-        # and inference comes in annotationparser.py when we merge
-        # in annotation data.
-        derefed_name = self.parse_ctype(ctype, is_member)
-        rettype = Type(derefed_name, ctype)
-        rettype.canonical = self._canonicalize_ctype(ctype)
-        derefed_ctype = ctype.replace('*', '')
-        rettype.derefed_canonical = self._canonicalize_ctype(derefed_ctype)
+    def _create_bare_container_type(self, base, ctype=None,
+                                    is_const=False):
+        if base in ('GList', 'GSList', 'GLib.List', 'GLib.SList'):
+            if base in ('GList', 'GSList'):
+                name = 'GLib.' + base[1:]
+            else:
+                name = base
+            return ast.List(name, ast.TYPE_ANY, ctype=ctype,
+                        is_const=is_const)
+        elif base in ('GArray', 'GPtrArray', 'GByteArray',
+                      'GLib.Array', 'GLib.PtrArray', 'GLib.ByteArray'):
+            if base in ('GArray', 'GPtrArray', 'GByteArray'):
+                name = 'GLib.' + base[1:]
+            else:
+                name = base
+            return ast.Array(name, ast.TYPE_ANY, ctype=ctype,
+                         is_const=is_const)
+        elif base in ('GHashTable', 'GLib.HashTable'):
+            return ast.Map(ast.TYPE_ANY, ast.TYPE_ANY, ctype=ctype, is_const=is_const)
+        return None
 
-        canontype = type_name_from_ctype(ctype)
-        # Is it a const char * or a const gpointer?
-        if ((canontype == TYPE_STRING or source_type.type == CTYPE_POINTER) and
-            (source_type.base_type.type_qualifier & TYPE_QUALIFIER_CONST)):
-            rettype.is_const = True
-        return rettype
+    def create_type_from_ctype_string(self, ctype, is_const=False,
+                                      is_parameter=False, is_return=False):
+        canonical = self._canonicalize_ctype(ctype)
+        base = canonical.replace('*', '')
+
+        # Special default: char ** -> ast.Array, same for GStrv
+        if (is_return and canonical == 'utf8*') or base == 'GStrv':
+            bare_utf8 = ast.TYPE_STRING.clone()
+            bare_utf8.ctype = None
+            return ast.Array(None, bare_utf8, ctype=ctype,
+                             is_const=is_const)
+
+        fundamental = ast.type_names.get(base)
+        if fundamental is not None:
+            return ast.Type(target_fundamental=fundamental.target_fundamental,
+                        ctype=ctype,
+                        is_const=is_const)
+        container = self._create_bare_container_type(base, ctype=ctype, is_const=is_const)
+        if container:
+            return container
+        return ast.Type(ctype=ctype, is_const=is_const)
 
     def _create_parameter(self, symbol):
         if symbol.type == CSYMBOL_TYPE_ELLIPSIS:
-            ptype = Varargs()
+            ptype = ast.Varargs()
         else:
-            ptype = self._create_type(symbol.base_type,
-                                      is_param=True, is_retval=False)
-            ptype = self.resolve_param_type(ptype)
-        return Parameter(symbol.ident, ptype)
+            ptype = self._create_type_from_base(symbol.base_type, is_parameter=True)
+        return ast.Parameter(symbol.ident, ptype)
 
     def _create_return(self, source_type):
-        rtype = self._create_type(source_type,
-                                  is_param=False, is_retval=True)
-        rtype = self.resolve_param_type(rtype)
-        return_ = Return(rtype)
-        return return_
+        typeval = self._create_type_from_base(source_type, is_return=True)
+        return ast.Return(typeval)
 
     def _create_const(self, symbol):
         # Don't create constants for non-public things
@@ -580,43 +633,66 @@ context will be used."""
         if (symbol.source_filename is None or
             not symbol.source_filename.endswith('.h')):
             return None
-        name = self._strip_namespace_func(symbol.ident)
+        # ignore non-uppercase defines
+        if not self.UCASE_CONSTANT_RE.match(symbol.ident):
+            return None
+        name = self._strip_symbol_or_warn(symbol, is_constant=True)
+        if not name:
+            return None
         if symbol.const_string is not None:
-            type_name = 'utf8'
+            typeval = ast.TYPE_STRING
             value = symbol.const_string
         elif symbol.const_int is not None:
-            type_name = 'gint'
-            value = symbol.const_int
+            typeval = ast.TYPE_INT
+            value = '%d' % (symbol.const_int, )
         elif symbol.const_double is not None:
-            type_name = 'gdouble'
-            value = symbol.const_double
+            typeval = ast.TYPE_DOUBLE
+            value = '%f' % (symbol.const_double, )
         else:
             raise AssertionError()
 
-        const = Constant(name, type_name, value)
+        const = ast.Constant(name, typeval, value)
         const.add_symbol_reference(symbol)
         return const
 
     def _create_typedef_struct(self, symbol, disguised=False):
-        name = self.remove_prefix(symbol.ident)
-        struct = Struct(name, symbol.ident, disguised)
+        name = self.strip_identifier_or_warn(symbol.ident)
+        if not name:
+            return None
+        struct = ast.Record(name, symbol.ident, disguised)
+        self._parse_fields(symbol, struct)
         struct.add_symbol_reference(symbol)
         self._typedefs_ns[symbol.ident] = struct
-        self._create_struct(symbol)
-        return struct
+        return None
 
     def _create_typedef_union(self, symbol):
-        name = self.remove_prefix(symbol.ident)
-        union = Union(name, symbol.ident)
+        name = self.strip_identifier_or_warn(symbol.ident)
+        if not name:
+            return None
+        union = ast.Union(name, symbol.ident)
+        self._parse_fields(symbol, union)
         union.add_symbol_reference(symbol)
         self._typedefs_ns[symbol.ident] = union
-        self._create_union(symbol)
-        return union
+        return None
 
     def _create_typedef_callback(self, symbol):
         callback = self._create_callback(symbol)
+        if not callback:
+            return None
         self._typedefs_ns[callback.name] = callback
         return callback
+
+    def _parse_fields(self, symbol, compound):
+        for child in symbol.base_type.child_list:
+            child_node = self._traverse_one(child)
+            if not child_node:
+                continue
+            if isinstance(child_node, ast.Field):
+                field = child_node
+            else:
+                field = ast.Field(child.ident, None, True, False,
+                              anonymous_node=child_node)
+            compound.fields.append(field)
 
     def _create_compound(self, klass, symbol, anonymous):
         if symbol.ident is None:
@@ -631,99 +707,94 @@ context will be used."""
             # to resolve through the typedefs to find the real
             # name
             if symbol.ident.startswith('_'):
-                name = symbol.ident[1:]
-                compound = self._typedefs_ns.get(name, None)
-            else:
-                name = symbol.ident
+                compound = self._typedefs_ns.get(symbol.ident[1:], None)
             if compound is None:
-                name = self.remove_prefix(name)
+                if anonymous:
+                    name = symbol.ident
+                else:
+                    name = self.strip_identifier_or_warn(symbol.ident)
+                    if not name:
+                        return None
                 compound = klass(name, symbol.ident)
 
-        for child in symbol.base_type.child_list:
-            field = self._traverse_one(child)
-            if field:
-                compound.fields.append(field)
-
+        self._parse_fields(symbol, compound)
         compound.add_symbol_reference(symbol)
         return compound
 
     def _create_struct(self, symbol, anonymous=False):
-        return self._create_compound(Struct, symbol, anonymous)
+        return self._create_compound(ast.Record, symbol, anonymous)
 
     def _create_union(self, symbol, anonymous=False):
-        return self._create_compound(Union, symbol, anonymous)
+        return self._create_compound(ast.Union, symbol, anonymous)
 
-    def _create_callback(self, symbol):
+    def _create_callback(self, symbol, member=False):
         parameters = list(self._create_parameters(symbol.base_type.base_type))
         retval = self._create_return(symbol.base_type.base_type.base_type)
 
         # Mark the 'user_data' arguments
         for i, param in enumerate(parameters):
-            if (param.type.name == TYPE_ANY and
-                param.name == 'user_data'):
-                param.closure_index = i
+            if (param.type.target_fundamental == 'gpointer' and
+                param.argname == 'user_data'):
+                param.closure_name = param.argname
 
-        if symbol.ident.find('_') > 0:
-            name = self.remove_prefix(symbol.ident, True)
+        if member:
+            name = symbol.ident
+        elif symbol.ident.find('_') > 0:
+            name = self._strip_symbol_or_warn(symbol)
+            if not name:
+                return None
         else:
-            name = self.remove_prefix(symbol.ident)
-        callback = Callback(name, retval, parameters, symbol.ident)
+            name = self.strip_identifier_or_warn(symbol.ident)
+            if not name:
+                return None
+        callback = ast.Callback(name, retval, parameters, False)
         callback.add_symbol_reference(symbol)
 
         return callback
+
+    def create_type_from_user_string(self, typestr):
+        """Parse a C type string (as might be given from an
+        annotation) and resolve it.  For compatibility, we can consume
+both GI type string (utf8, Foo.Bar) style, as well as C (char *, FooBar) style."""
+        if '.' in typestr:
+            container = self._create_bare_container_type(typestr)
+            if container:
+                return container
+            return self._namespace.type_from_name(typestr)
+        typeval = self.create_type_from_ctype_string(typestr)
+        self.resolve_type(typeval)
+        # Explicitly clear out the c_type; there isn't one in this case.
+        typeval.ctype = None
+        return typeval
+
+    def resolve_type(self, typeval):
+        if isinstance(typeval, (ast.Array, ast.List)):
+            self.resolve_type(typeval.element_type)
+            return
+        elif isinstance(typeval, ast.Map):
+            self.resolve_type(typeval.key_type)
+            self.resolve_type(typeval.value_type)
+            return
+        elif not typeval.resolved and typeval.ctype:
+            pointer_stripped = typeval.ctype.replace('*', '')
+            try:
+                matches = self.split_ctype_namespaces(pointer_stripped)
+            except ValueError, e:
+                raise TypeResolutionException(e)
+            target_giname=None
+            for namespace, name in matches:
+                target = namespace.get(name)
+                if not target:
+                    target = namespace.get_by_ctype(pointer_stripped)
+                if target:
+                    typeval.target_giname='%s.%s' % (namespace.name, target.name)
+                    return
 
     def _typepair_to_str(self, item):
         nsname, item = item
         if nsname is None:
             return item.name
         return '%s.%s' % (nsname, item.name)
-
-    def _resolve_type_name_1(self, type_name, ctype, names):
-        # First look using the built-in names
-        if ctype:
-            try:
-                return type_names[ctype]
-            except KeyError, e:
-                pass
-        try:
-            return type_names[type_name]
-        except KeyError, e:
-            pass
-
-        if ctype:
-            ctype = ctype.replace('*', '')
-            resolved = names.ctypes.get(ctype)
-            if resolved:
-                return self._typepair_to_str(resolved)
-        type_name = self.remove_prefix(type_name)
-        resolved = names.aliases.get(type_name)
-        if resolved:
-            return self._typepair_to_str(resolved)
-        resolved = names.names.get(type_name)
-        if resolved:
-            return self._typepair_to_str(resolved)
-        resolved = names.type_names.get(type_name)
-        if resolved:
-            return self._typepair_to_str(resolved)
-        raise KeyError("failed to find %r" % (type_name, ))
-
-    def resolve_type_name_full(self, type_name, ctype,
-                               names, allow_invalid=True):
-        try:
-            return self._resolve_type_name_1(type_name, ctype, names)
-        except KeyError, e:
-            try:
-                return self._resolve_type_name_1(type_name, ctype, self._names)
-            except KeyError, e:
-                if not allow_invalid:
-                    raise
-                return type_name
-
-    def resolve_type_name(self, type_name, ctype=None):
-        try:
-            return self.resolve_type_name_full(type_name, ctype, self._names)
-        except KeyError, e:
-            return type_name
 
     def gtypename_to_giname(self, gtname, names):
         resolved = names.type_names.get(gtname)
@@ -742,23 +813,6 @@ context will be used."""
         else:
             return None
 
-    def resolve_param_type_full(self, ptype, names, **kwargs):
-        if isinstance(ptype, Node):
-            ptype.name = self.resolve_type_name_full(ptype.name,
-                                                     self.ctype_of(ptype),
-                                                     names, **kwargs)
-        elif isinstance(ptype, basestring):
-            return self.resolve_type_name_full(ptype, ptype, names, **kwargs)
-        else:
-            raise AssertionError("Unhandled param: %r" % (ptype, ))
-        return ptype
-
-    def resolve_param_type(self, ptype):
-        try:
-            return self.resolve_param_type_full(ptype, self._names)
-        except KeyError, e:
-            return ptype
-
     def follow_aliases(self, type_name, names):
         while True:
             resolved = names.aliases.get(type_name)
@@ -768,8 +822,3 @@ context will be used."""
             else:
                 break
         return type_name
-
-    def iter_enums(self):
-        for node in self._namespace.nodes:
-            if isinstance(node, Enum):
-                yield node

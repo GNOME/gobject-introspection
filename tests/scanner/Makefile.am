@@ -91,7 +91,7 @@ GtkFrob_1_0_gir_PACKAGES = gobject-2.0
 GtkFrob_1_0_gir_LIBS = libgtkfrob.la
 GtkFrob_1_0_gir_INCLUDES = GObject-2.0
 GtkFrob_1_0_gir_FILES = $(libgtkfrob_la_SOURCES)
-GtkFrob_1_0_gir_SCANNERFLAGS = --strip-prefix=Gtk
+GtkFrob_1_0_gir_SCANNERFLAGS = --identifier-prefix=Gtk --symbol-prefix=gtk_frob
 GIRS += GtkFrob-1.0.gir
 
 noinst_PROGRAMS = barapp

@@ -14,7 +14,7 @@ BUILT_SOURCES += everything.c everything.h
 
 CLEANFILES += $(BUILT_SOURCES) everything-stamp.h
 everything-stamp.h: Makefile
-	$(AM_V_GEN) $(top_builddir)/tools/g-ir-scanner --test-codegen=Everything,everything.h,everything.c
+	$(AM_V_GEN) $(top_builddir)/tools/g-ir-scanner --generate-typelib-tests=Everything,everything.h,everything.c
 	touch $@
 
 everything.c: everything-stamp.h

@@ -21,19 +21,25 @@
 #
 
 import subprocess
+import tempfile
 import optparse
 import os
 import sys
 
-from giscanner.annotationparser import AnnotationParser, InvalidAnnotationError
+from giscanner.annotationparser import AnnotationParser
 from giscanner.ast import Include
 from giscanner.cachestore import CacheStore
 from giscanner.dumper import compile_introspection_binary
-from giscanner.glibtransformer import GLibTransformer, IntrospectionBinary
-from giscanner.minixpath import myxpath, xpath_assert
+from giscanner.gdumpparser import GDumpParser, IntrospectionBinary
+from giscanner.minixpath import xpath_assert
 from giscanner.sourcescanner import SourceScanner
 from giscanner.shlibs import resolve_shlibs
 from giscanner.transformer import Transformer
+from giscanner.maintransformer import MainTransformer
+from giscanner.introspectablepass import IntrospectablePass
+from giscanner.girparser import GIRParser
+from giscanner.girwriter import GIRWriter
+from giscanner.utils import files_are_identical
 
 def _get_option_parser():
     parser = optparse.OptionParser('%prog [options] sources')
@@ -49,6 +55,15 @@ def _get_option_parser():
     parser.add_option("-i", "--include",
                       action="append", dest="includes", default=[],
                       help="include types for other gidls")
+    parser.add_option('', "--generate-typelib-tests",
+                      action="store", dest="test_codegen", default=None,
+                      help="Generate test code for given namespace,output.h,output.c")
+    parser.add_option('', "--passthrough-gir",
+                      action="store", dest="passthrough_gir", default=None,
+                      help="Parse and re-output the specified GIR")
+    parser.add_option('', "--reparse-validate",
+                      action="store_true", dest="reparse_validate_gir", default=False,
+                      help="After generating the GIR, re-parse it to ensure validity")
     parser.add_option("", "--add-include-path",
                       action="append", dest="include_paths", default=[],
                       help="include paths for other GIR files")
@@ -73,13 +88,18 @@ def _get_option_parser():
     parser.add_option("-n", "--namespace",
                       action="store", dest="namespace_name",
                       help=("name of namespace for this unit, also "
-                            "used as --strip-prefix default"))
+                            "used to compute --identifier-prefix and --symbol-prefix"))
     parser.add_option("", "--nsversion",
                       action="store", dest="namespace_version",
                       help="version of namespace for this unit")
-    parser.add_option("", "--strip-prefix",
-                      action="store", dest="strip_prefix", default=None,
-                      help="remove this prefix from objects and functions")
+    parser.add_option("", "--identifier-prefix",
+                      action="append", dest="identifier_prefixes", default=[],
+                      help="""Remove this prefix from C identifiers (structure typedefs, etc.).
+May be specified multiple times.  This is also used as the default for --symbol-prefix if
+the latter is not specified.""")
+    parser.add_option("", "--symbol-prefix",
+                      action="append", dest="symbol_prefixes", default=[],
+                      help="Remove this prefix from C symbols (function names)")
     parser.add_option("", "--add-init-section",
                       action="append", dest="init_sections", default=[],
             help="add extra initialization code in the introspection program")
@@ -101,15 +121,9 @@ def _get_option_parser():
     parser.add_option("-v", "--verbose",
                       action="store_true", dest="verbose",
                       help="be verbose")
-    parser.add_option("", "--noclosure",
-                      action="store_true", dest="noclosure",
-                      help="do not delete unknown types")
     parser.add_option("", "--typelib-xml",
                       action="store_true", dest="typelib_xml",
                       help="Just convert GIR to typelib XML")
-    parser.add_option("", "--inject",
-                      action="store_true", dest="inject",
-                      help="Inject additional components into GIR XML")
     parser.add_option("", "--xpath-assertions",
                       action="store", dest="xpath_assertions",
             help="Use given file to create assertions on GIR content")
@@ -136,53 +150,25 @@ def _get_option_parser():
 def _error(msg):
     raise SystemExit('ERROR: %s' % (msg, ))
 
-def typelib_xml_strip(path):
-    from giscanner.girparser import GIRParser
-    from giscanner.girwriter import GIRWriter
-    from giscanner.girparser import C_NS
-    from xml.etree.cElementTree import parse
-
-    c_ns_key = '{%s}' % (C_NS, )
-
-    tree = parse(path)
-    root = tree.getroot()
-    for node in root.getiterator():
-        for attrib in list(node.attrib):
-            if attrib.startswith(c_ns_key):
-                del node.attrib[attrib]
+def passthrough_gir(path, f):
     parser = GIRParser()
-    parser.parse_tree(tree)
+    parser.parse(path)
 
     writer = GIRWriter(parser.get_namespace(),
                        parser.get_shared_libraries(),
-                       parser.get_includes())
-    sys.stdout.write(writer.get_xml())
-    return 0
+                       parser.get_includes(),
+                       parser.get_pkgconfig_packages(),
+                       parser.get_c_includes())
+    f.write(writer.get_xml())
 
-def inject(path, additions, outpath):
-    from giscanner.girparser import GIRParser
-    from giscanner.girwriter import GIRWriter
-    from xml.etree.cElementTree import parse
-
-    tree = parse(path)
-    root = tree.getroot()
-    injectDoc = parse(open(additions))
-    for node in injectDoc.getroot():
-        injectPath = node.attrib['path']
-        target = myxpath(root, injectPath)
-        if not target:
-            raise ValueError("Couldn't find path %r" % (injectPath, ))
-        for child in node:
-            target.append(child)
-
-    parser = GIRParser()
-    parser.parse_tree(tree)
-    writer = GIRWriter(parser.get_namespace(),
-                       parser.get_shared_libraries(),
-                       parser.get_includes())
-    outf = open(outpath, 'w')
-    outf.write(writer.get_xml())
-    outf.close()
+def test_codegen(optstring):
+    (namespace, out_h_filename, out_c_filename) = optstring.split(',')
+    if namespace == 'Everything':
+        from .testcodegen import EverythingCodeGenerator
+        gen = EverythingCodeGenerator(out_h_filename, out_c_filename)
+        gen.write()
+    else:
+        raise ValueError("Invaild namespace %r" % (namespace, ))
     return 0
 
 def validate(assertions, path):
@@ -237,17 +223,13 @@ def scanner_main(args):
     parser = _get_option_parser()
     (options, args) = parser.parse_args(args)
 
+    if options.passthrough_gir:
+        passthrough_gir(options.passthrough_gir, sys.stdout)
+    if options.test_codegen:
+        return test_codegen(options.test_codegen)
+
     if len(args) <= 1:
         _error('Need at least one filename')
-
-    if options.typelib_xml:
-        return typelib_xml_strip(args[1])
-
-    if options.inject:
-        if len(args) != 4:
-            _error('Need three filenames; e.g. g-ir-scanner '
-                   '--inject Source.gir Additions.xml SourceOut.gir')
-        return inject(*args[1:4])
 
     if options.xpath_assertions:
         return validate(options.xpath_assertions, args[1])
@@ -281,11 +263,9 @@ def scanner_main(args):
     cachestore = CacheStore()
     transformer = Transformer(cachestore,
                               options.namespace_name,
-                              options.namespace_version)
-    if options.strip_prefix:
-        transformer.set_strip_prefix(options.strip_prefix)
-    else:
-        transformer.set_strip_prefix(options.namespace_name)
+                              options.namespace_version,
+                              options.identifier_prefixes,
+                              options.symbol_prefixes)
     if options.warn_all:
         transformer.enable_warnings(True)
     transformer.set_include_paths(options.include_paths)
@@ -318,12 +298,11 @@ def scanner_main(args):
 
     # Transform the C AST nodes into higher level
     # GLib/GObject nodes
-    glibtransformer = GLibTransformer(transformer,
-                                      noclosure=options.noclosure)
+    gdump_parser = GDumpParser(transformer)
 
     # Do enough parsing that we have the get_type() functions to reference
     # when creating the introspection binary
-    glibtransformer.init_parse()
+    gdump_parser.init_parse()
 
     if options.program:
         args=[options.program]
@@ -331,38 +310,50 @@ def scanner_main(args):
         binary = IntrospectionBinary(args)
     else:
         binary = compile_introspection_binary(options,
-                            glibtransformer.get_get_type_functions())
+                            gdump_parser.get_get_type_functions())
 
     shlibs = resolve_shlibs(options, binary, libraries)
 
-    glibtransformer.set_introspection_binary(binary)
+    gdump_parser.set_introspection_binary(binary)
+    gdump_parser.parse()
 
-    namespace = glibtransformer.parse()
+    ap = AnnotationParser(ss)
+    blocks = ap.parse()
 
-    ap = AnnotationParser(namespace, ss, transformer)
-    try:
-        ap.parse()
-    except InvalidAnnotationError, e:
-        raise SystemExit("ERROR in annotation: %s" % (str(e), ))
+    main = MainTransformer(transformer, blocks)
+    main.transform()
 
-    glibtransformer.final_analyze()
+    final = IntrospectablePass(transformer)
+    final.validate()
 
     if options.warn_fatal and transformer.did_warn():
-        return 1
+        transformer.log_warning("warnings configured as fatal", fatal=True)
+        # Redundant sys.exit here, just in case
+        sys.exit(1)
 
     # Write out AST
     if options.packages_export:
         exported_packages = options.packages_export
     else:
         exported_packages = options.packages
-    writer = Writer(namespace, shlibs, transformer.get_includes(),
-                    exported_packages, options.c_includes,
-                    transformer.get_strip_prefix())
+    writer = Writer(transformer.namespace, shlibs, transformer.get_includes(),
+                    exported_packages, options.c_includes)
     data = writer.get_xml()
     if options.output:
-        fd = open(options.output, "w")
-        fd.write(data)
+        tempdir = os.path.dirname(options.output) or os.getcwd()
+        main_f = tempfile.NamedTemporaryFile(suffix='.gir', dir=tempdir, delete=False)
+        main_f.write(data)
+        main_f.close()
+        if options.reparse_validate_gir:
+            temp_f = tempfile.NamedTemporaryFile(suffix='.gir', dir=tempdir, delete=False)
+            passthrough_gir(main_f.name, temp_f)
+            temp_f.close()
+            if not files_are_identical(main_f.name, temp_f.name):
+                raise SystemExit(
+"Failed to re-parse .gir file; scanned=%r passthrough=%r" % (main_f.name, temp_f.name))
+            os.unlink(temp_f.name)
+        os.rename(main_f.name, options.output)
     else:
-        print data
+        sys.stdout.write(data)
 
     return 0

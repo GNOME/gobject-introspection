@@ -154,10 +154,16 @@ class SourceSymbol(object):
         self._symbol = symbol
 
     def __repr__(self):
-        return '<%s type=%r ident=%r>' % (
+        src = self.source_filename
+        if src:
+            line = self.line
+            if line:
+                src += ':%r' % (line, )
+        return '<%s type=%r ident=%r src=%r>' % (
             self.__class__.__name__,
             symbol_type_name(self.type),
-            self.ident)
+            self.ident,
+            src)
 
     @property
     def const_int(self):

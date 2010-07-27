@@ -2,7 +2,7 @@
 <!-- This file was automatically generated from C sources - DO NOT EDIT!
 To affect the contents of this file, edit the original C definitions,
 and/or use gtk-doc annotations.  -->
-<repository version="1.1"
+<repository version="1.2"
             xmlns="http://www.gtk.org/introspection/core/1.0"
             xmlns:c="http://www.gtk.org/introspection/c/1.0"
             xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
@@ -13,8 +13,10 @@ and/or use gtk-doc annotations.  -->
   <namespace name="TestInherit"
              version="1.0"
              shared-library="libtestinherit.so"
-             c:prefix="TestInherit">
+             c:identifier-prefixes="TestInherit"
+             c:symbol-prefixes="test_inherit">
     <class name="Drawable"
+           c:symbol-prefix="drawable"
            c:type="TestInheritDrawable"
            parent="GObject.Object"
            abstract="1"

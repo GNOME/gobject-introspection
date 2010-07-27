@@ -22,13 +22,8 @@ import os
 
 from xml.etree.cElementTree import parse
 
-from .ast import (Alias, Array, Callback, Constant, Enum, Function, Field,
-                  Namespace, Parameter, Property, Return, Union, Struct, Type,
-                  Varargs, Include)
-from .glibast import (GLibEnum, GLibEnumMember, GLibFlags,
-                      GLibInterface, GLibObject, GLibBoxedStruct,
-                      GLibBoxedUnion, GLibBoxedOther)
-
+from . import ast
+from . import glibast
 from .girwriter import COMPATIBLE_GIR_VERSION
 
 CORE_NS = "http://www.gtk.org/introspection/core/1.0"
@@ -51,7 +46,6 @@ def _cns(tag):
 class GIRParser(object):
 
     def __init__(self):
-        self._include_parsing = False
         self._shared_libraries = []
         self._includes = set()
         self._pkgconfig_packages = set()
@@ -72,6 +66,8 @@ class GIRParser(object):
         self._namespace = None
         self._shared_libraries = []
         self._pkgconfig_packages = set()
+        self._c_includes = set()
+        self._c_prefix = None
         self._parse_api(tree.getroot())
 
     def get_namespace(self):
@@ -83,6 +79,12 @@ class GIRParser(object):
     def get_includes(self):
         return self._includes
 
+    def get_c_includes(self):
+        return self._c_includes
+
+    def get_c_prefix(self):
+        return self._c_prefix
+
     def get_pkgconfig_packages(self):
         if not hasattr(self, '_pkgconfig_packages'):
             self._pkgconfig_packages = []
@@ -91,10 +93,16 @@ class GIRParser(object):
     def get_doc(self):
         return parse(self._filename)
 
-    def set_include_parsing(self, include_parsing):
-        self._include_parsing = include_parsing
-
     # Private
+
+    def _find_first_child(self, node, name):
+        for child in node.getchildren():
+            if child.tag == name:
+                return child
+        return None
+
+    def _find_children(self, node, name):
+        return [child for child in node.getchildren() if child.tag == name]
 
     def _get_current_file(self):
         if not self._filename_stack:
@@ -104,9 +112,6 @@ class GIRParser(object):
         if curfile.startswith(cwd):
             return curfile[len(cwd):]
         return curfile
-
-    def _add_node(self, node):
-        self._namespace.nodes.append(node)
 
     def _parse_api(self, root):
         assert root.tag == _corens('repository')
@@ -121,11 +126,21 @@ class GIRParser(object):
                 self._parse_include(node)
             elif node.tag == _corens('package'):
                 self._parse_pkgconfig_package(node)
+            elif node.tag == _cns('include'):
+                self._parse_c_include(node)
 
         ns = root.find(_corens('namespace'))
         assert ns is not None
-        self._namespace = Namespace(ns.attrib['name'],
-                                    ns.attrib['version'])
+        identifier_prefixes = ns.attrib.get(_cns('identifier-prefixes'))
+        if identifier_prefixes:
+            identifier_prefixes = identifier_prefixes.split(',')
+        symbol_prefixes = ns.attrib.get(_cns('symbol-prefixes'))
+        if symbol_prefixes:
+            symbol_prefixes = symbol_prefixes.split(',')
+        self._namespace = ast.Namespace(ns.attrib['name'],
+                                    ns.attrib['version'],
+                                    identifier_prefixes=identifier_prefixes,
+                                    symbol_prefixes=symbol_prefixes)
         if 'shared-library' in ns.attrib:
             self._shared_libraries.extend(
                 ns.attrib['shared-library'].split(','))
@@ -141,7 +156,7 @@ class GIRParser(object):
             _corens('interface'): self._parse_object_interface,
             _corens('record'): self._parse_record,
             _corens('union'): self._parse_union,
-            _corens('boxed'): self._parse_boxed,
+            _glibns('boxed'): self._parse_boxed,
             }
 
         for node in ns.getchildren():
@@ -150,31 +165,54 @@ class GIRParser(object):
                 method(node)
 
     def _parse_include(self, node):
-        include = Include(node.attrib['name'],
+        include = ast.Include(node.attrib['name'],
                           node.attrib['version'])
         self._includes.add(include)
 
     def _parse_pkgconfig_package(self, node):
-        if not hasattr(self, '_pkgconfig_packages'):
-            self._pkgconfig_packages = []
         self._pkgconfig_packages.add(node.attrib['name'])
+
+    def _parse_c_include(self, node):
+        self._c_includes.add(node.attrib['name'])
 
     def _parse_alias(self, node):
         typeval = self._parse_type(node)
-        alias = Alias(node.attrib['name'],
+        alias = ast.Alias(node.attrib['name'],
                       typeval,
                       node.attrib.get(_cns('type')))
-        self._add_node(alias)
+        self._namespace.append(alias)
+
+    def _parse_generic_attribs(self, node, obj):
+        assert isinstance(obj, ast.Annotated)
+        doc = node.find(_corens('doc'))
+        if doc is not None:
+            obj.doc = doc.text
+        version = node.attrib.get('version')
+        if version:
+            obj.version = version
+        deprecated = node.attrib.get('deprecated')
+        if deprecated:
+            obj.deprecated = deprecated
+        introspectable = node.attrib.get('introspectable')
+        if introspectable:
+            obj.introspectable = int(introspectable) > 0
 
     def _parse_object_interface(self, node):
+        parent = node.attrib.get('parent')
+        if parent:
+            parent_type = self._namespace.type_from_name(parent)
+        else:
+            parent_type = None
+
         ctor_args = [node.attrib['name'],
-                     node.attrib.get('parent'),
+                     parent_type,
                      node.attrib[_glibns('type-name')],
-                     node.attrib[_glibns('get-type')]]
+                     node.attrib[_glibns('get-type')],
+                     node.attrib.get(_cns('symbol-prefix'))]
         if node.tag == _corens('interface'):
-            klass = GLibInterface
+            klass = glibast.GLibInterface
         elif node.tag == _corens('class'):
-            klass = GLibObject
+            klass = glibast.GLibObject
             is_abstract = node.attrib.get('abstract')
             is_abstract = is_abstract and is_abstract != '0'
             ctor_args.append(is_abstract)
@@ -182,38 +220,49 @@ class GIRParser(object):
             raise AssertionError(node)
 
         obj = klass(*ctor_args)
-        self._add_node(obj)
+        self._parse_generic_attribs(node, obj)
+        type_struct = node.attrib.get(_glibns('type-struct'))
+        if type_struct:
+            obj.glib_type_struct = self._namespace.type_from_name(type_struct)
+        self._namespace.append(obj)
 
-        if self._include_parsing:
-            return
         ctor_args.append(node.attrib.get(_cns('type')))
-        for iface in node.findall(_corens('implements')):
-            obj.interfaces.append(iface.attrib['name'])
-        for iface in node.findall(_corens('prerequisites')):
-            obj.prerequisities.append(iface.attrib['name'])
-        for method in node.findall(_corens('method')):
-            func = self._parse_function_common(method, Function)
+        for iface in self._find_children(node, _corens('implements')):
+            obj.interfaces.append(self._namespace.type_from_name(iface.attrib['name']))
+        for iface in self._find_children(node, _corens('prerequisite')):
+            obj.prerequisites.append(self._namespace.type_from_name(iface.attrib['name']))
+        for func_node in self._find_children(node, _corens('function')):
+            func = self._parse_function_common(func_node, ast.Function)
+            obj.static_methods.append(func)
+        for method in self._find_children(node, _corens('method')):
+            func = self._parse_function_common(method, ast.Function)
             func.is_method = True
             obj.methods.append(func)
-        for ctor in node.findall(_corens('constructor')):
-            obj.constructors.append(
-                self._parse_function_common(ctor, Function))
-        for callback in node.findall(_corens('callback')):
-            obj.fields.append(self._parse_function_common(callback, Callback))
-        for field in node.findall(_corens('field')):
-            obj.fields.append(self._parse_field(field))
-        for prop in node.findall(_corens('property')):
+        for method in self._find_children(node, _corens('virtual-method')):
+            func = self._parse_function_common(method, ast.VFunction)
+            self._parse_generic_attribs(method, func)
+            func.is_method = True
+            func.invoker = method.get('invoker')
+            obj.virtual_methods.append(func)
+        for ctor in self._find_children(node, _corens('constructor')):
+            func = self._parse_function_common(ctor, ast.Function)
+            func.is_constructor = True
+            obj.constructors.append(func)
+        obj.fields.extend(self._parse_fields(node))
+        for prop in self._find_children(node, _corens('property')):
             obj.properties.append(self._parse_property(prop))
-        for signal in node.findall(_glibns('signal')):
-            obj.signals.append(self._parse_function_common(signal, Function))
+        for signal in self._find_children(node, _glibns('signal')):
+            obj.signals.append(self._parse_function_common(signal, ast.Function))
 
     def _parse_callback(self, node):
-        callback = self._parse_function_common(node, Callback)
-        self._add_node(callback)
+        callback = self._parse_function_common(node, ast.Callback)
+        self._namespace.append(callback)
 
     def _parse_function(self, node):
-        function = self._parse_function_common(node, Function)
-        self._add_node(function)
+        function = self._parse_function_common(node, ast.Function)
+        function.shadows = node.attrib.get('shadows', None)
+        function.shadowed_by = node.attrib.get('shadowed-by', None)
+        self._namespace.append(function)
 
     def _parse_function_common(self, node, klass):
         name = node.attrib['name']
@@ -221,187 +270,297 @@ class GIRParser(object):
         if not returnnode:
             raise ValueError('node %r has no return-value' % (name, ))
         transfer = returnnode.attrib.get('transfer-ownership')
-        retval = Return(self._parse_type(returnnode), transfer)
+        retval = ast.Return(self._parse_type(returnnode), transfer)
+        self._parse_generic_attribs(returnnode, retval)
         parameters = []
 
-        if klass is Callback:
-            func = klass(name, retval, parameters,
-                         node.attrib.get(_cns('type')))
-        else:
-            identifier = node.attrib.get(_cns('identifier'))
-            throws = (node.attrib.get('throws') == '1')
-            func = klass(name, retval, parameters, identifier, throws)
+        throws = (node.attrib.get('throws') == '1')
 
-        if self._include_parsing:
-            return func
+        if klass is ast.Callback:
+            func = klass(name, retval, parameters, throws,
+                         node.attrib.get(_cns('type')))
+        elif klass is ast.Function:
+            identifier = node.attrib.get(_cns('identifier'))
+            func = klass(name, retval, parameters, throws, identifier)
+        elif klass is ast.VFunction:
+            func = klass(name, retval, parameters, throws)
+        else:
+            assert False
 
         parameters_node = node.find(_corens('parameters'))
         if (parameters_node is not None):
-            for paramnode in parameters_node.findall(_corens('parameter')):
-                param = Parameter(paramnode.attrib.get('name'),
-                                  self._parse_type(paramnode),
-                                  paramnode.attrib.get('direction'),
+            for paramnode in self._find_children(parameters_node, _corens('parameter')):
+                typeval = self._parse_type(paramnode)
+                param = ast.Parameter(paramnode.attrib.get('name'),
+                                  typeval,
+                                  paramnode.attrib.get('direction') or ast.PARAM_DIRECTION_IN,
                                   paramnode.attrib.get('transfer-ownership'),
-                                  paramnode.attrib.get('allow-none') == '1')
+                                  paramnode.attrib.get('allow-none') == '1',
+                                  paramnode.attrib.get('scope'),
+                                  paramnode.attrib.get('caller-allocates') == '1')
+                self._parse_generic_attribs(paramnode, param)
                 parameters.append(param)
+            for i, paramnode in enumerate(self._find_children(parameters_node,
+                                                              _corens('parameter'))):
+                param = parameters[i]
+                self._parse_type_second_pass(func, paramnode, param.type)
+                closure = paramnode.attrib.get('closure')
+                if closure:
+                    idx = int(closure)
+                    assert idx < len(parameters), "%d >= %d" % (idx, len(parameters))
+                    param.closure_name = parameters[idx].argname
+                destroy = paramnode.attrib.get('destroy')
+                if destroy:
+                    idx = int(destroy)
+                    assert idx < len(parameters), "%d >= %d" % (idx, len(parameters))
+                    param.destroy_name = parameters[idx].argname
+
+        self._parse_type_second_pass(func, returnnode, retval.type)
+
+        self._parse_generic_attribs(node, func)
 
         return func
 
-    def _parse_record(self, node):
+    def _parse_fields(self, node):
+        res = []
+        names = (_corens('field'), _corens('record'), _corens('union'), _corens('callback'))
+        for child in node.getchildren():
+            if child.tag in names:
+                fieldobj = self._parse_field(child)
+                res.append(fieldobj)
+        return res
+
+    def _parse_record(self, node, anonymous=False):
         if _glibns('type-name') in node.attrib:
-            struct = GLibBoxedStruct(node.attrib['name'],
+            struct = glibast.GLibBoxedStruct(node.attrib['name'],
                                      node.attrib[_glibns('type-name')],
                                      node.attrib[_glibns('get-type')],
+                                     node.attrib.get(_cns('symbol-prefix')),
                                      node.attrib.get(_cns('type')))
+        elif _glibns('is-gtype-struct-for') in node.attrib:
+            struct = glibast.GLibRecord(node.attrib['name'],
+                                node.attrib.get(_cns('type')),
+                                disguised=node.attrib.get('disguised') == '1')
+            is_gtype_struct_for = node.attrib[_glibns('is-gtype-struct-for')]
+            struct.is_gtype_struct_for = self._namespace.type_from_name(is_gtype_struct_for)
         else:
-            disguised = node.attrib.get('disguised') == '1'
-            struct = Struct(node.attrib['name'],
+            struct = ast.Record(node.attrib.get('name'),
                             node.attrib.get(_cns('type')),
-                            disguised=disguised)
-        self._add_node(struct)
+                            disguised=node.attrib.get('disguised') == '1')
+        if node.attrib.get('foreign') == '1':
+            struct.foreign = True
+        self._parse_generic_attribs(node, struct)
+        if not anonymous:
+            self._namespace.append(struct)
 
-        if self._include_parsing:
-            return
-        for field in node.findall(_corens('field')):
-            struct.fields.append(self._parse_field(field))
-        for callback in node.findall(_corens('callback')):
-            struct.fields.append(
-                self._parse_function_common(callback, Callback))
-        for method in node.findall(_corens('method')):
-            struct.fields.append(
-                self._parse_function_common(method, Function))
-        for ctor in node.findall(_corens('constructor')):
+        struct.fields.extend(self._parse_fields(node))
+        for method in self._find_children(node, _corens('method')):
+            struct.methods.append(
+                self._parse_function_common(method, ast.Function))
+        for func in self._find_children(node, _corens('function')):
+            struct.static_methods.append(
+                self._parse_function_common(func, ast.Function))
+        for ctor in self._find_children(node, _corens('constructor')):
             struct.constructors.append(
-                self._parse_function_common(ctor, Function))
+                self._parse_function_common(ctor, ast.Function))
+        return struct
 
-    def _parse_union(self, node):
+    def _parse_union(self, node, anonymous=False):
         if _glibns('type-name') in node.attrib:
-            union = GLibBoxedUnion(node.attrib['name'],
+            union = glibast.GLibBoxedUnion(node.attrib['name'],
                                     node.attrib[_glibns('type-name')],
                                     node.attrib[_glibns('get-type')],
+                                    node.attrib.get(_cns('symbol-prefix')),
                                     node.attrib.get(_cns('type')))
         else:
-            union = Union(node.attrib['name'],
+            union = ast.Union(node.attrib.get('name'),
                           node.attrib.get(_cns('type')))
-        self._add_node(union)
+        if not anonymous:
+            self._namespace.append(union)
 
-        if self._include_parsing:
-            return
-        for callback in node.findall(_corens('callback')):
+        for callback in self._find_children(node, _corens('callback')):
             union.fields.append(
-                self._parse_function_common(callback, Callback))
-        for field in node.findall(_corens('field')):
-            union.fields.append(self._parse_field(field))
-        for method in node.findall(_corens('method')):
-            union.fields.append(
-                self._parse_function_common(method, Function))
-        for ctor in node.findall(_corens('constructor')):
+                self._parse_function_common(callback, ast.Callback))
+        union.fields.extend(self._parse_fields(node))
+        for method in self._find_children(node, _corens('method')):
+            union.methods.append(
+                self._parse_function_common(method, ast.Function))
+        for func in self._find_children(node, _corens('function')):
+            union.static_methods.append(
+                self._parse_function_common(func, ast.Function))
+        for ctor in self._find_children(node, _corens('constructor')):
             union.constructors.append(
-                self._parse_function_common(ctor, Function))
+                self._parse_function_common(ctor, ast.Function))
+        return union
+
+    def _parse_type_simple(self, typenode):
+        # ast.Fields can contain inline callbacks
+        if typenode.tag == _corens('callback'):
+            typeval = self._namespace.type_from_name(typenode.attrib['name'])
+            typeval.ctype = typenode.attrib.get(_cns('type'))
+            return typeval
+        # ast.Arrays have their own toplevel XML
+        elif typenode.tag == _corens('array'):
+            array_type = typenode.attrib.get('name')
+            element_type = self._parse_type(typenode)
+            array_ctype = typenode.attrib.get(_cns('type'))
+            ret = ast.Array(array_type, element_type, ctype=array_ctype)
+            # zero-terminated defaults to true...
+            zero = typenode.attrib.get('zero-terminated')
+            if zero and zero == '0':
+                ret.zeroterminated = False
+            fixed_size = typenode.attrib.get('fixed-size')
+            if fixed_size:
+                ret.size = int(fixed_size)
+
+            return ret
+        elif typenode.tag == _corens('varargs'):
+            return ast.Varargs()
+        elif typenode.tag == _corens('type'):
+            name = typenode.attrib.get('name')
+            ctype = typenode.attrib.get(_cns('type'))
+            if name is None:
+                if ctype is None:
+                    return ast.TypeUnknown()
+                return ast.Type(ctype=ctype)
+            elif name in ['GLib.List', 'GLib.SList']:
+                subchild = self._find_first_child(typenode, _corens('type'))
+                if subchild is not None:
+                    element_type = self._parse_type(typenode)
+                else:
+                    element_type = ast.TYPE_ANY
+                return ast.List(name, element_type, ctype=ctype)
+            elif name == 'GLib.HashTable':
+                subchildren = self._find_children(typenode, _corens('type'))
+                subchildren_types = map(self._parse_type_simple, subchildren)
+                while len(subchildren_types) < 2:
+                    subchildren_types.append(ast.TYPE_ANY)
+                return ast.Map(subchildren_types[0],
+                           subchildren_types[1],
+                           ctype=ctype)
+            else:
+                return self._namespace.type_from_name(name, ctype)
+        else:
+            assert False, "Failed to parse inner type"
 
     def _parse_type(self, node):
-        typenode = node.find(_corens('type'))
-        if typenode is not None:
-            return Type(typenode.attrib['name'],
-                        typenode.attrib.get(_cns('type')))
+        for name in map(_corens, ('callback', 'array', 'varargs', 'type')):
+            typenode = node.find(name)
+            if typenode is not None:
+                return self._parse_type_simple(typenode)
+        assert False, "Failed to parse toplevel type"
 
+    def _parse_type_second_pass(self, parent, node, typeval):
+        """A hack necessary to handle the integer parameter indexes on
+           array types."""
         typenode = node.find(_corens('array'))
-        if typenode is not None:
-
-            array_type = typenode.attrib.get(_cns('type'))
-            if array_type.startswith('GArray*') or \
-               array_type.startswith('GPtrArray*') or \
-               array_type.startswith('GByteArray*'):
-                element_type = None
-            else:
-                element_type = self._parse_type(typenode)
-
-            ret = Array(None, array_type, element_type)
-
-            lenidx = typenode.attrib.get('length')
-            if lenidx:
-                ret.length_param_index = int(lenidx)
-            return ret
-
-        typenode = node.find(_corens('varargs'))
-        if typenode is not None:
-            return Varargs()
-
-        raise ValueError("Couldn't parse type of node %r; children=%r",
-                         node, list(node))
+        if typenode is None:
+            return
+        lenidx = typenode.attrib.get('length')
+        if lenidx is not None:
+            idx = int(lenidx)
+            assert idx < len(parent.parameters), "%r %d >= %d" \
+                      % (parent, idx, len(parent.parameters))
+            typeval.length_param_name = parent.parameters[idx].argname
 
     def _parse_boxed(self, node):
-        obj = GLibBoxedOther(node.attrib[_glibns('name')],
+        obj = glibast.GLibBoxedOther(node.attrib[_glibns('name')],
                              node.attrib[_glibns('type-name')],
-                             node.attrib[_glibns('get-type')])
-        self._add_node(obj)
-        if self._include_parsing:
-            return
-        for method in node.findall(_corens('method')):
-            func = self._parse_function_common(method, Function)
+                             node.attrib[_glibns('get-type')],
+                             node.attrib.get(_cns('symbol-prefix')))
+        self._parse_generic_attribs(node, obj)
+        self._namespace.append(obj)
+        for method in self._find_children(node, _corens('method')):
+            func = self._parse_function_common(method, ast.Function)
             func.is_method = True
             obj.methods.append(func)
-        for ctor in node.findall(_corens('constructor')):
+        for ctor in self._find_children(node, _corens('constructor')):
             obj.constructors.append(
-                self._parse_function_common(ctor, Function))
-        for callback in node.findall(_corens('callback')):
+                self._parse_function_common(ctor, ast.Function))
+        for callback in self._find_children(node, _corens('callback')):
             obj.fields.append(
-                self._parse_function_common(callback, Callback))
+                self._parse_function_common(callback, ast.Callback))
 
     def _parse_field(self, node):
-        type_node = self._parse_type(node)
-        return Field(node.attrib['name'],
-                     type_node,
-                     type_node.ctype,
-                     node.attrib.get('readable') != '0',
-                     node.attrib.get('writable') == '1',
-                     node.attrib.get('bits'))
+        type_node = None
+        anonymous_node = None
+        if node.tag in map(_corens, ('record', 'union')):
+            anonymous_elt = node
+        else:
+            anonymous_elt = self._find_first_child(node, _corens('callback'))
+        if anonymous_elt is not None:
+            if anonymous_elt.tag == _corens('callback'):
+                anonymous_node = self._parse_function_common(anonymous_elt, ast.Callback)
+            elif anonymous_elt.tag == _corens('record'):
+                anonymous_node = self._parse_record(anonymous_elt, anonymous=True)
+            elif anonymous_elt.tag == _corens('union'):
+                anonymous_node = self._parse_union(anonymous_elt, anonymous=True)
+            else:
+                assert False, anonymous_elt.tag
+        else:
+            assert node.tag == _corens('field'), node.tag
+            type_node = self._parse_type(node)
+        field = ast.Field(node.attrib.get('name'),
+                      type_node,
+                      node.attrib.get('readable') != '0',
+                      node.attrib.get('writable') == '1',
+                      node.attrib.get('bits'),
+                      anonymous_node=anonymous_node)
+        self._parse_generic_attribs(node, field)
+        return field
 
     def _parse_property(self, node):
-        type_node = self._parse_type(node)
-        return Property(node.attrib['name'],
-                        type_node.name,
+        prop = ast.Property(node.attrib['name'],
+                        self._parse_type(node),
                         node.attrib.get('readable') != '0',
                         node.attrib.get('writable') == '1',
                         node.attrib.get('construct') == '1',
-                        node.attrib.get('construct-only') == '1',
-                        type_node.ctype)
+                        node.attrib.get('construct-only') == '1')
+        self._parse_generic_attribs(node, prop)
+        return prop
 
     def _parse_member(self, node):
-        return GLibEnumMember(node.attrib['name'],
-                              node.attrib['value'],
-                              node.attrib.get(_cns('identifier')),
-                              node.attrib.get(_glibns('nick')))
+        member = glibast.GLibEnumMember(node.attrib['name'],
+                                node.attrib['value'],
+                                node.attrib.get(_cns('identifier')),
+                                node.attrib.get(_glibns('nick')))
+        self._parse_generic_attribs(node, member)
+        return member
 
     def _parse_constant(self, node):
         type_node = self._parse_type(node)
-        constant = Constant(node.attrib['name'],
-                            type_node.name,
+        constant = ast.Constant(node.attrib['name'],
+                            type_node,
                             node.attrib['value'])
-        self._add_node(constant)
+        self._parse_generic_attribs(node, constant)
+        self._namespace.append(constant)
 
     def _parse_enumeration_bitfield(self, node):
         name = node.attrib.get('name')
         ctype = node.attrib.get(_cns('type'))
         get_type = node.attrib.get(_glibns('get-type'))
         type_name = node.attrib.get(_glibns('type-name'))
-        if get_type:
+        glib_error_quark = node.attrib.get(_glibns('error-quark'))
+        if get_type or glib_error_quark:
             if node.tag == _corens('bitfield'):
-                klass = GLibFlags
+                klass = glibast.GLibFlags
             else:
-                klass = GLibEnum
+                klass = glibast.GLibEnum
         else:
-            klass = Enum
+            if node.tag == _corens('bitfield'):
+                klass = ast.Bitfield
+            else:
+                klass = ast.Enum
             type_name = ctype
         members = []
-        if klass is Enum:
+        if klass in (ast.Enum, ast.Bitfield):
             obj = klass(name, type_name, members)
         else:
             obj = klass(name, type_name, members, get_type)
+            obj.error_quark = glib_error_quark
             obj.ctype = ctype
-        self._add_node(obj)
+        self._parse_generic_attribs(node, obj)
+        self._namespace.append(obj)
 
-        if self._include_parsing:
-            return
-        for member in node.findall(_corens('member')):
+        for member in self._find_children(node, _corens('member')):
             members.append(self._parse_member(member))

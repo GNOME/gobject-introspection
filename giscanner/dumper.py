@@ -23,7 +23,7 @@ import os
 import subprocess
 import tempfile
 
-from .glibtransformer import IntrospectionBinary
+from .gdumpparser import IntrospectionBinary
 from .utils import get_libtool_command
 
 # bugzilla.gnome.org/558436

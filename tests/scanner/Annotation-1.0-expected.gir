@@ -2,7 +2,7 @@
 <!-- This file was automatically generated from C sources - DO NOT EDIT!
 To affect the contents of this file, edit the original C definitions,
 and/or use gtk-doc annotations.  -->
-<repository version="1.1"
+<repository version="1.2"
             xmlns="http://www.gtk.org/introspection/core/1.0"
             xmlns:c="http://www.gtk.org/introspection/c/1.0"
             xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
@@ -13,7 +13,8 @@ and/or use gtk-doc annotations.  -->
   <namespace name="Annotation"
              version="1.0"
              shared-library="libannotation.so"
-             c:prefix="Annotation">
+             c:identifier-prefixes="Annotation"
+             c:symbol-prefixes="annotation">
     <callback name="Callback" c:type="AnnotationCallback">
       <doc xml:whitespace="preserve">This is a callback.</doc>
       <return-value transfer-ownership="none">
@@ -74,6 +75,7 @@ and/or use gtk-doc annotations.  -->
       </parameters>
     </callback>
     <class name="Object"
+           c:symbol-prefix="object"
            c:type="AnnotationObject"
            parent="GObject.Object"
            glib:type-name="AnnotationObject"
@@ -154,7 +156,7 @@ and/or use gtk-doc annotations.  -->
         <parameters>
           <parameter name="nums" transfer-ownership="none">
             <doc xml:whitespace="preserve">Sequence of numbers that are zero-terminated</doc>
-            <array zero-terminated="0" length="2" c:type="int*">
+            <array length="1" zero-terminated="0" c:type="int*">
               <type name="gint"/>
             </array>
           </parameter>
@@ -173,7 +175,7 @@ and/or use gtk-doc annotations.  -->
         <parameters>
           <parameter name="nums" transfer-ownership="none">
             <doc xml:whitespace="preserve">Sequence of numbers that are zero-terminated</doc>
-            <array length="2" c:type="int*">
+            <array length="1" c:type="int*">
               <type name="gint"/>
             </array>
           </parameter>
@@ -215,7 +217,7 @@ and/or use gtk-doc annotations.  -->
           <parameter name="func"
                      transfer-ownership="none"
                      scope="call"
-                     closure="2">
+                     closure="1">
             <doc xml:whitespace="preserve">Callback to invoke</doc>
             <type name="ForeachFunc" c:type="AnnotationForeachFunc"/>
           </parameter>
@@ -365,7 +367,7 @@ each string needs to be freed.</doc>
                      caller-allocates="0"
                      transfer-ownership="full">
             <doc xml:whitespace="preserve">Argument vector</doc>
-            <array length="1" c:type="char***">
+            <array length="0" c:type="char***">
               <type name="utf8"/>
             </array>
           </parameter>
@@ -379,7 +381,7 @@ each string needs to be freed.</doc>
         <parameters>
           <parameter name="data" transfer-ownership="none">
             <doc xml:whitespace="preserve">The data</doc>
-            <array length="2" c:type="guchar*">
+            <array length="1" c:type="guchar*">
               <type name="guint8"/>
             </array>
           </parameter>
@@ -397,7 +399,7 @@ each string needs to be freed.</doc>
         <parameters>
           <parameter name="data" transfer-ownership="none">
             <doc xml:whitespace="preserve">The data</doc>
-            <array length="2" c:type="gchar*">
+            <array length="1" c:type="gchar*">
               <type name="gint8"/>
             </array>
           </parameter>
@@ -416,7 +418,7 @@ type.</doc>
         <parameters>
           <parameter name="data" transfer-ownership="none">
             <doc xml:whitespace="preserve">The data</doc>
-            <array length="2" c:type="gpointer">
+            <array length="1" c:type="gpointer">
               <type name="guint8"/>
             </array>
           </parameter>
@@ -448,13 +450,33 @@ type.</doc>
         </return-value>
         <parameters>
           <parameter name="bytes" transfer-ownership="none">
-            <array c:type="guchar*">
-              <type name="guint8"/>
-            </array>
+            <type name="guint8" c:type="guchar*"/>
           </parameter>
         </parameters>
       </method>
-      <method name="watch" c:identifier="annotation_object_watch_full">
+      <method name="watch"
+              c:identifier="annotation_object_watch"
+              shadows="annotation_object_watch_full"
+              introspectable="0">
+        <doc xml:whitespace="preserve">This is here just for the sake of being overriden by its
+annotation_object_watch_full().</doc>
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <parameter name="func" transfer-ownership="none" closure="1">
+            <doc xml:whitespace="preserve">The callback</doc>
+            <type name="ForeachFunc" c:type="AnnotationForeachFunc"/>
+          </parameter>
+          <parameter name="user_data" transfer-ownership="none">
+            <doc xml:whitespace="preserve">The callback data</doc>
+            <type name="gpointer" c:type="gpointer"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="watch_full"
+              c:identifier="annotation_object_watch_full"
+              shadowed-by="annotation_object_watch">
         <doc xml:whitespace="preserve">Test overriding via the "Rename To" annotation.</doc>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
@@ -463,8 +485,8 @@ type.</doc>
           <parameter name="func"
                      transfer-ownership="none"
                      scope="notified"
-                     closure="2"
-                     destroy="3">
+                     closure="1"
+                     destroy="2">
             <doc xml:whitespace="preserve">The callback</doc>
             <type name="ForeachFunc" c:type="AnnotationForeachFunc"/>
           </parameter>
@@ -472,7 +494,7 @@ type.</doc>
             <doc xml:whitespace="preserve">The callback data</doc>
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
-          <parameter name="destroy" transfer-ownership="none" scope="call">
+          <parameter name="destroy" transfer-ownership="none" scope="async">
             <doc xml:whitespace="preserve">Destroy notification</doc>
             <type name="GLib.DestroyNotify" c:type="GDestroyNotify"/>
           </parameter>
@@ -492,7 +514,7 @@ type.</doc>
                 writable="1"
                 construct="1"
                 transfer-ownership="none">
-        <type name="Callback" c:type="gpointer"/>
+        <type name="Callback"/>
       </property>
       <property name="string-property"
                 version="1.0"
@@ -502,7 +524,7 @@ type.</doc>
                 construct="1"
                 transfer-ownership="none">
         <doc xml:whitespace="preserve">This is a property which is a string</doc>
-        <type name="utf8" c:type="gchararray"/>
+        <type name="utf8"/>
       </property>
       <field name="parent_instance">
         <type name="GObject.Object" c:type="GObject"/>
@@ -512,42 +534,42 @@ type.</doc>
         <return-value transfer-ownership="full">
           <attribute name="some.annotation.foo3" value="val3"/>
           <doc xml:whitespace="preserve">the return value</doc>
-          <type name="utf8" c:type="gchararray"/>
+          <type name="utf8"/>
         </return-value>
         <parameters>
-          <parameter name="arg1" transfer-ownership="none">
+          <parameter name="object" transfer-ownership="none">
             <attribute name="some.annotation.foo1" value="val1"/>
             <doc xml:whitespace="preserve">a value</doc>
-            <type name="utf8" c:type="gchararray"/>
+            <type name="utf8"/>
           </parameter>
-          <parameter name="arg2" transfer-ownership="none">
+          <parameter name="p0" transfer-ownership="none">
             <attribute name="some.annotation.foo2" value="val2"/>
             <doc xml:whitespace="preserve">another value</doc>
-            <type name="utf8" c:type="gchararray"/>
+            <type name="utf8"/>
           </parameter>
         </parameters>
       </glib:signal>
       <glib:signal name="doc-empty-arg-parsing">
         <doc xml:whitespace="preserve">This signal tests an empty document argument (@arg1)</doc>
-        <return-value transfer-ownership="full">
-          <type name="none" c:type="void"/>
+        <return-value transfer-ownership="none">
+          <type name="none"/>
         </return-value>
         <parameters>
           <parameter name="object" transfer-ownership="none">
-            <type name="gpointer" c:type="gpointer"/>
+            <type name="gpointer"/>
           </parameter>
         </parameters>
       </glib:signal>
       <glib:signal name="list-signal">
         <doc xml:whitespace="preserve">This is a signal which takes a list of strings, but it's not
 known by GObject as it's only marked as G_TYPE_POINTER</doc>
-        <return-value transfer-ownership="full">
-          <type name="none" c:type="void"/>
+        <return-value transfer-ownership="none">
+          <type name="none"/>
         </return-value>
         <parameters>
-          <parameter name="list" transfer-ownership="container">
+          <parameter name="object" transfer-ownership="container">
             <doc xml:whitespace="preserve">a list of strings</doc>
-            <type name="GLib.List" c:type="gpointer">
+            <type name="GLib.List">
               <type name="utf8"/>
             </type>
           </parameter>
@@ -559,13 +581,13 @@ known by GObject as it's only marked as G_TYPE_POINTER</doc>
                    deprecated-version="1.2">
         <doc xml:whitespace="preserve">This is a signal which has a broken signal handler,
 it says it's pointer but it's actually a string.</doc>
-        <return-value transfer-ownership="full">
-          <type name="none" c:type="void"/>
+        <return-value transfer-ownership="none">
+          <type name="none"/>
         </return-value>
         <parameters>
-          <parameter name="string" transfer-ownership="none">
+          <parameter name="object" transfer-ownership="none">
             <doc xml:whitespace="preserve">a string</doc>
-            <type name="utf8" c:type="gpointer"/>
+            <type name="utf8"/>
           </parameter>
         </parameters>
       </glib:signal>
@@ -580,8 +602,8 @@ it says it's pointer but it's actually a string.</doc>
     <record name="Struct" c:type="AnnotationStruct">
       <doc xml:whitespace="preserve">This is a test of an array of object in an field of a struct.</doc>
       <field name="objects" writable="1">
-        <array zero-terminated="0" c:type="AnnotationObject*" fixed-size="10">
-          <type name="Object"/>
+        <array zero-terminated="0" c:type="AnnotationObject" fixed-size="10">
+          <type name="Object" c:type="AnnotationObject*"/>
         </array>
       </field>
     </record>
@@ -614,13 +636,16 @@ detection, and fixing it via annotations.</doc>
       <parameters>
         <parameter name="callback"
                    transfer-ownership="none"
-                   scope="call"
+                   scope="notified"
                    closure="2"
                    destroy="1">
           <doc xml:whitespace="preserve">Destroy notification</doc>
           <type name="Callback" c:type="AnnotationCallback"/>
         </parameter>
-        <parameter name="destroy" transfer-ownership="none" scope="call">
+        <parameter name="destroy"
+                   transfer-ownership="none"
+                   scope="notified"
+                   closure="2">
           <type name="NotifyFunc" c:type="AnnotationNotifyFunc"/>
         </parameter>
         <parameter name="data" transfer-ownership="none">
@@ -631,7 +656,7 @@ detection, and fixing it via annotations.</doc>
     <function name="get_source_file" c:identifier="annotation_get_source_file">
       <return-value transfer-ownership="full">
         <doc xml:whitespace="preserve">Source file</doc>
-        <type name="filename" c:type="char*"/>
+        <type name="filename"/>
       </return-value>
     </function>
     <function name="init" c:identifier="annotation_init">
@@ -669,7 +694,9 @@ detection, and fixing it via annotations.</doc>
         </parameter>
       </parameters>
     </function>
-    <function name="ptr_array" c:identifier="annotation_ptr_array">
+    <function name="ptr_array"
+              c:identifier="annotation_ptr_array"
+              introspectable="0">
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
@@ -706,7 +733,7 @@ detection, and fixing it via annotations.</doc>
       <parameters>
         <parameter name="fname" transfer-ownership="none">
           <doc xml:whitespace="preserve">Source file</doc>
-          <type name="filename" c:type="char*"/>
+          <type name="filename"/>
         </parameter>
       </parameters>
     </function>
