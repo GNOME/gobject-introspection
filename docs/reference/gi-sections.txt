@@ -23,6 +23,7 @@ g_irepository_get_version
 g_irepository_get_option_group
 g_irepository_get_c_prefix
 g_irepository_dump
+g_irepository_enumerate_versions
 G_IREPOSITORY_ERROR
 g_typelib_new_from_memory
 g_typelib_new_from_const_memory
