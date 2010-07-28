@@ -51,6 +51,7 @@ GIUnresolvedInfo
 <SECTION>
 <FILE>gibaseinfo</FILE>
 GIInfoType
+g_info_type_to_string
 GIAttributeIter
 GIBaseInfo
 g_base_info_ref
