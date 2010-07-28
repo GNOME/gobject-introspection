@@ -184,3 +184,80 @@
  * @cancellable: (allow-none):
  * @error: (allow-none):
  */
+
+/**
+ * g_io_extension_point_get_extensions:
+ *
+ * Returns: (element-type GIOExtensionPoint) (transfer none):
+ */
+
+/**
+ * g_resolver_lookup_by_name:
+ *
+ * Returns: (element-type GInetAddress) (transfer full):
+ */
+
+/**
+ * g_resolver_lookup_by_name_finish:
+ *
+ * Returns: (element-type GInetAddress) (transfer full):
+ */
+
+/**
+ * g_resolver_lookup_service:
+ *
+ * Returns: (element-type GSrvTarget) (transfer full):
+ */
+
+/**
+ * g_resolver_lookup_service_finish:
+ *
+ * Returns: (element-type GSrvTarget) (transfer full):
+ */
+
+/**
+ * g_resolver_free_addresses: (skip)
+ * @addresses: (element-type GInetAddress) (transfer full):
+ */
+
+/**
+ * g_resolver_free_targets: (skip)
+ * @targets: (element-type GSrvTarget) (transfer full):
+ */
+
+/**
+ * g_content_types_get_registered:
+ *
+ * Returns: (element-type utf8) (transfer full):
+ */
+
+/**
+ * g_emblemed_icon_get_emblems:
+ *
+ * Returns: (element-type utf8) (transfer none):
+ */
+
+/**
+ * g_io_modules_load_all_in_directory:
+ *
+ * Returns: (element-type GIOModule) (transfer full):
+ */
+
+/**
+ * g_srv_target_list_sort: (skip)
+ * @targets: (element-type GSrvTarget) (transfer full):
+ *
+ * Returns: (element-type GSrvTarget) (transfer full):
+ */
+
+/**
+ * g_unix_mount_points_get:
+ *
+ * Returns: (element-type utf8) (transfer full):
+ */
+
+/**
+ * g_unix_mounts_get:
+ *
+ * Returns: (element-type utf8) (transfer full):
+ */
