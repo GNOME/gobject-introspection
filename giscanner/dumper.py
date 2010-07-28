@@ -202,7 +202,7 @@ class DumpCompiler(object):
 
         # https://bugzilla.gnome.org/show_bug.cgi?id=625195
         if not libtool:
-          args.append('-Wl,-rpath=.')
+            args.append('-Wl,-rpath=.')
 
         uninst_builddir = os.environ.get('UNINSTALLED_INTROSPECTION_BUILDDIR')
         if not uninst_builddir:
