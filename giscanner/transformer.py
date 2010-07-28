@@ -147,11 +147,11 @@ If the warning is related to a Node type, see log_node_warning()."""
 
         if prefix:
             print >>sys.stderr, \
-'''%s: warning: ns=%r %s: %s''' % (position, self._namespace.name,
-                                   prefix, text)
+'''%s: warning: %s: %s: %s''' % (position, self._namespace.name,
+                                 prefix, text)
         else:
             print >>sys.stderr, \
-'''%s: warning: ns=%r: %s''' % (position, self._namespace.name, text)
+'''%s: warning: %s: %s''' % (position, self._namespace.name, text)
 
     def log_symbol_warning(self, symbol, text):
         """Log a warning in the context of the given symbol."""
@@ -172,7 +172,11 @@ context will be used."""
             file_positions = node.file_positions
 
         if context:
-            text = "context=%r %s" % (context.name, text)
+            if isinstance(context, Function):
+                name = context.symbol
+            else:
+                name = context.name
+            text = "%s: %s" % (name, text)
 
         self.log_warning(text, file_positions)
 
