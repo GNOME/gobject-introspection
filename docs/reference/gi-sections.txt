@@ -12,6 +12,7 @@ g_irepository_load_typelib
 g_irepository_is_registered
 g_irepository_find_by_name
 g_irepository_require
+g_irepository_require_private
 g_irepository_get_dependencies
 g_irepository_get_loaded_namespaces
 g_irepository_find_by_gtype
