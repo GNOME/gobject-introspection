@@ -10,6 +10,7 @@ testlib_LTLIBRARIES = \
 	libdrawable.la \
 	libfoo.la \
 	libutility.la \
+	libregress.la \
 	libgtkfrob.la
 testlibdir = $(prefix)/unused
 install-testlibLTLIBRARIES: # prevent it from being installed
@@ -24,6 +25,16 @@ libdrawable_la_SOURCES = $(srcdir)/drawable.c $(srcdir)/drawable.h
 libfoo_la_SOURCES = $(srcdir)/foo.c $(srcdir)/foo.h
 libutility_la_SOURCES = $(srcdir)/utility.c $(srcdir)/utility.h
 libgtkfrob_la_SOURCES = $(srcdir)/gtkfrob.c $(srcdir)/gtkfrob.h
+libregress_la_SOURCES = $(srcdir)/regress.c $(srcdir)/regress.h
+
+install-data-local:
+	for src in $(libregress_la_SOURCES); do \
+	  install -m 644 -D $$src $(datadir)/gobject-introspection-1.0/tests/$$src; \
+	done
+
+libregress_la_CFLAGS = $(AM_CFLAGS) $(CAIRO_CFLAGS)
+libregress_la_LDFLAGS = $(AM_LDFLAGS) $(CAIRO_LIBS) 
+
 
 if OS_WIN32
 AM_LDFLAGS += -no-undefined
@@ -38,6 +49,12 @@ INTROSPECTION_GIRS = $(GIRS)
 CLEANFILES = $(TYPELIBS) $(GIRS)
 BUILT_SOURCES = $(TYPELIBS) $(GIRS)
 EXTRA_DIST = $(EXPECTEDGIRS)
+
+Regress-1.0.gir: $(top_builddir)/gir/Gio-2.0.gir libregress.la
+Regress_1_0_gir_LIBS = libregress.la
+Regress_1_0_gir_INCLUDES = cairo-1.0 Gio-2.0
+Regress_1_0_gir_FILES = $(libregress_la_SOURCES)
+GIRS += Regress-1.0.gir
 
 annotation-1.0.gir: utility-1.0.gir libannotation.la
 annotation_1_0_gir_PACKAGES = gobject-2.0

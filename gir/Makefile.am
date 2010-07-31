@@ -161,65 +161,6 @@ GIRepository_2_0_gir_FILES = \
 
 INTROSPECTION_GIRS += GIRepository-2.0.gir
 
-# everything
-LT_CURRENT = 1
-LT_REVISION = 0
-LT_AGE = 0
-LT_VERSION = $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)
-TYPELIB_VERSION = $(LT_CURRENT).0
-
-lib_LTLIBRARIES =
-
-libgirepository_everything_1_0_la_SOURCES = everything.c everything.h
-libgirepository_everything_1_0_la_CFLAGS = $(GOBJECT_CFLAGS) $(CAIRO_CFLAGS)
-libgirepository_everything_1_0_la_LDFLAGS = -version-info $(LT_VERSION)
-libgirepository_everything_1_0_la_LIBADD = $(GOBJECT_LIBS) $(CAIRO_LIBS)
-
-if OS_WIN32
-libgirepository_everything_1_0_la_LDFLAGS += -no-undefined
-endif
-
-if BUILD_TESTS
-Everything-1.0.gir: Gio-2.0.gir libgirepository-everything-1.0.la
-
-Everything_1_0_gir_LIBS = libgirepository-everything-1.0.la
-Everything_1_0_gir_SCANNERFLAGS = --warn-all --warn-error
-Everything_1_0_gir_PACKAGES = gobject-2.0 cairo gio-2.0
-Everything_1_0_gir_INCLUDES = GObject-2.0 cairo-1.0 Gio-2.0
-Everything_1_0_gir_FILES = everything.h everything.c
-
-if HAVE_CAIRO
-INTROSPECTION_GIRS += Everything-$(TYPELIB_VERSION).gir
-EXPECTEDGIRS += Everything-$(TYPELIB_VERSION)-expected.gir
-lib_LTLIBRARIES += libgirepository-everything-1.0.la
-endif
-
-
-# marshalling tests
-lib_LTLIBRARIES += libgirepository-gimarshallingtests-1.0.la
-
-libgirepository_gimarshallingtests_1_0_la_SOURCES = gimarshallingtests.c gimarshallingtests.h
-libgirepository_gimarshallingtests_1_0_la_CFLAGS = $(GOBJECT_CFLAGS)
-libgirepository_gimarshallingtests_1_0_la_LDFLAGS = -version-info $(LT_VERSION)
-libgirepository_gimarshallingtests_1_0_la_LIBADD = $(GOBJECT_LIBS)
-
-if OS_WIN32
-libgirepository_gimarshallingtests_1_0_la_LDFLAGS += -no-undefined
-endif
-
-GIMarshallingTests-1.0.gir: libgirepository-gimarshallingtests-1.0.la GObject-2.0.gir
-
-GIMarshallingTests_1_0_gir_LIBS = libgirepository-gimarshallingtests-1.0.la
-GIMarshallingTests_1_0_gir_PACKAGES = gobject-2.0
-GIMarshallingTests_1_0_gir_INCLUDES = GObject-2.0
-GIMarshallingTests_1_0_gir_FILES = gimarshallingtests.h gimarshallingtests.c
-GIMarshallingTests_1_0_gir_SCANNERFLAGS = --warn-all --warn-error
-
-INTROSPECTION_GIRS += GIMarshallingTests-$(TYPELIB_VERSION).gir
-EXPECTEDGIRS += GIMarshallingTests-$(TYPELIB_VERSION)-expected.gir
-
-endif
-
 # Generic rules
 CLEANFILES += $(INTROSPECTION_GIRS)
 
