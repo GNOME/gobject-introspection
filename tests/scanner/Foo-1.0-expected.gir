@@ -16,9 +16,12 @@ and/or use gtk-doc annotations.  -->
              version="1.0"
              shared-library="libfoo.so"
              c:prefix="Foo">
-    <alias name="List" target="GLib.SList" c:type="FooList"/>
-    <alias name="ObjectCookie" target="any" c:type="FooObjectCookie"/>
-    <alias name="XEvent" target="none" c:type="FooXEvent"/>
+    <alias name="ObjectCookie" c:type="FooObjectCookie">
+      <type name="any"/>
+    </alias>
+    <alias name="XEvent" c:type="FooXEvent">
+      <type name="none"/>
+    </alias>
     <enumeration name="ASingle" c:type="FooASingle">
       <member name="some_single_enum"
               value="0"
@@ -376,16 +379,6 @@ uses a C sugar return type.</doc>
           <parameter transfer-ownership="none">
             <varargs>
             </varargs>
-          </parameter>
-        </parameters>
-      </method>
-      <method name="with_tdef" c:identifier="foo_object_with_tdef">
-        <return-value transfer-ownership="none">
-          <type name="none" c:type="void"/>
-        </return-value>
-        <parameters>
-          <parameter name="blah" transfer-ownership="none">
-            <type name="List" c:type="FooList*"/>
           </parameter>
         </parameters>
       </method>

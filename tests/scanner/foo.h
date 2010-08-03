@@ -103,11 +103,6 @@ void                  foo_object_various           (FooObject *object, void *dat
 
 void                  foo_object_take_all          (FooObject *object, int x, ...);
 
-/* A random typedef */
-typedef GSList FooList;
-
-void                  foo_object_with_tdef         (FooObject *object, FooList *blah);
-
 typedef gpointer FooObjectCookie;
 
 FooObjectCookie       foo_object_new_cookie        (FooObject *object, const char *target);

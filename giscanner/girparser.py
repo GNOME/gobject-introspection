@@ -160,8 +160,9 @@ class GIRParser(object):
         self._pkgconfig_packages.add(node.attrib['name'])
 
     def _parse_alias(self, node):
+        typeval = self._parse_type(node)
         alias = Alias(node.attrib['name'],
-                      node.attrib['target'],
+                      typeval,
                       node.attrib.get(_cns('type')))
         self._add_node(alias)
 

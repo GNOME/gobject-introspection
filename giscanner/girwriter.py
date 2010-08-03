@@ -153,10 +153,11 @@ and/or use gtk-doc annotations. ''')
             attrs.append(('throws', '1'))
 
     def _write_alias(self, alias):
-        attrs = [('name', alias.name), ('target', alias.target)]
+        attrs = [('name', alias.name)]
         if alias.ctype is not None:
             attrs.append(('c:type', alias.ctype))
-        self.write_tag('alias', attrs)
+        with self.tagcontext('alias', attrs):
+            self._write_type(alias.target)
 
     def _write_callable(self, callable, tag_name, extra_attrs):
         attrs = [('name', callable.name)]
