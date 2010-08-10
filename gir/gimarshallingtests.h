@@ -397,6 +397,8 @@ GValue *g_i_marshalling_tests_gvalue_return (void);
 
 void g_i_marshalling_tests_gvalue_in (GValue *value);
 
+void g_i_marshalling_tests_gvalue_in_enum (GValue *value);
+
 void g_i_marshalling_tests_gvalue_out (GValue **value);
 
 void g_i_marshalling_tests_gvalue_inout (GValue **value);

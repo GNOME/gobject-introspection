@@ -2434,6 +2434,16 @@ g_i_marshalling_tests_gvalue_in (GValue *value)
 }
 
 /**
+ * g_i_marshalling_tests_gvalue_in_enum:
+ * @value: (transfer none):
+ */
+void
+g_i_marshalling_tests_gvalue_in_enum (GValue *value)
+{
+    g_assert(g_value_get_enum(value) == G_I_MARSHALLING_TESTS_ENUM_VALUE3);
+}
+
+/**
  * g_i_marshalling_tests_gvalue_out:
  * @value: (out) (transfer none):
  */
