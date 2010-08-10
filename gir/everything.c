@@ -1109,7 +1109,7 @@ void test_ghash_free (GHashTable *in)
 /**
  * test_ghash_null_return:
  *
- * Return value: (element-type utf8 utf8) (transfer none) (allow-none):
+ * Return value: (element-type utf8 utf8) (transfer none):
  */
 G_CONST_RETURN GHashTable *test_ghash_null_return (void)
 {
