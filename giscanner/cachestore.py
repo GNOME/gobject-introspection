@@ -76,6 +76,9 @@ class CacheStore(object):
         self._check_cache_version()
 
     def _check_cache_version(self):
+        if self._directory is None:
+            return
+
         current_hash = _get_versionhash()
         version = os.path.join(self._directory, _CACHE_VERSION_FILENAME)
         try:
