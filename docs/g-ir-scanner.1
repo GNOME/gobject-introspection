@@ -136,7 +136,10 @@ The example above will add a new method called get_with to the TestDrawable clas
 .B \--xpath-assertions=FILENAME
 Loads a list xpath assertions from FILENAME, this is useful for verifying
 that the GIR itself is properly generated.
-.TP
+.SH ENVIRONMENT VARIABLES
+The g-ir-scanner uses the XDG_DATA_DIRS variable to check for dirs,
+the gir's are located in XDG_DATA_DIRS/share/gir-1.0. It is normally
+set on a distribution so you shouldn't need to set it yourself.
 .SH BUGS
 Report bugs at http://bugzilla.gnome.org/ in the glib product and
 introspection component.
