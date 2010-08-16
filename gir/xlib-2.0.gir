@@ -4,6 +4,7 @@
             xmlns:c="http://www.gtk.org/introspection/c/1.0">
   <namespace name="xlib" version="2.0">
     <record name="Atom" c:type="Atom"/>
+    <record name="Colormap" c:type="Colormap"/>
     <record name="Cursor" c:type="Cursor"/>
     <record name="Display" c:type="Display"/>
     <record name="Drawable" c:type="Drawable"/>
