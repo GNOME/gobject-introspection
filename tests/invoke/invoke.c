@@ -27,13 +27,13 @@ main (int argc, char *argv[])
   guint len;
   GError *error = NULL;
   TestStruct *s;
-  
+
   g_type_init ();
 
   rep = g_irepository_get_default ();
 
   g_assert (!g_irepository_is_registered (NULL, "testfns", NULL));
-  
+
   handle = g_module_open (testfns, 0);
   if (!handle)
     {
@@ -44,16 +44,16 @@ main (int argc, char *argv[])
   g_assert (g_irepository_is_registered (NULL, "testfns", NULL));
 
 #if 0
-  g_print ("after dlopening %s: %d infos in the repository\n", 
+  g_print ("after dlopening %s: %d infos in the repository\n",
 	   testfns,
 	   g_irepository_get_n_infos (rep, "testfns"));
 #endif
 
-  /* test1 calculates x + 4, 
+  /* test1 calculates x + 4,
    * taking x as an in parameter
-   * and returning the result 
+   * and returning the result
    */
-  info = g_irepository_find_by_name (rep, "testfns", "test1");  
+  info = g_irepository_find_by_name (rep, "testfns", "test1");
   g_assert (g_base_info_get_type (info) == GI_INFO_TYPE_FUNCTION);
   function = (GIFunctionInfo *)info;
 
@@ -66,12 +66,12 @@ main (int argc, char *argv[])
 
   g_assert (retval.v_int == 8);
   g_base_info_unref (info);
-  
-  /* test2 calculates x + 4, 
+
+  /* test2 calculates x + 4,
    * taking x as an in parameter
    * and storing the result in an out parameter
    */
-  info = g_irepository_find_by_name (rep, "testfns", "test2");  
+  info = g_irepository_find_by_name (rep, "testfns", "test2");
   g_assert (g_base_info_get_type (info) == GI_INFO_TYPE_FUNCTION);
   function = (GIFunctionInfo *)info;
 
@@ -85,12 +85,12 @@ main (int argc, char *argv[])
 
   g_assert (res == 9);
   g_base_info_unref (info);
-  
-  /* test3 calculates x + 4, 
+
+  /* test3 calculates x + 4,
    * taking x as an inout parameter
    * and storing the result in the same parameter
    */
-  info = g_irepository_find_by_name (rep, "testfns", "test3");  
+  info = g_irepository_find_by_name (rep, "testfns", "test3");
   g_assert (g_base_info_get_type (info) == GI_INFO_TYPE_FUNCTION);
   function = (GIFunctionInfo *)info;
 
@@ -106,7 +106,7 @@ main (int argc, char *argv[])
 
   /* test4 prints out a string
    */
-  info = g_irepository_find_by_name (rep, "testfns", "test4");  
+  info = g_irepository_find_by_name (rep, "testfns", "test4");
   g_assert (g_base_info_get_type (info) == GI_INFO_TYPE_FUNCTION);
   function = (GIFunctionInfo *)info;
 
@@ -120,7 +120,7 @@ main (int argc, char *argv[])
 
   /* test5 returns a string and a length
    */
-  info = g_irepository_find_by_name (rep, "testfns", "test5");  
+  info = g_irepository_find_by_name (rep, "testfns", "test5");
   g_assert (g_base_info_get_type (info) == GI_INFO_TYPE_FUNCTION);
   function = (GIFunctionInfo *)info;
 
@@ -132,11 +132,11 @@ main (int argc, char *argv[])
     g_print ("Invokation of %s failed: %s\n",
 	     g_base_info_get_name (info),
 	     error->message);
-  
+
   g_assert (strcmp (blurb, "hey there") == 0);
   g_assert (len == strlen (blurb));
   g_base_info_unref (info);
-  
+
 
   /* test GList*/
   g_print ("Test 6\n");
@@ -187,7 +187,7 @@ main (int argc, char *argv[])
 #if 0
     g_assert (g_callable_info_get_caller_owns ((GICallableInfo *)function) ==
 	      GI_TRANSFER_EVERYTHING);
-#endif    
+#endif
     g_free (retval.v_pointer);
   }
 
@@ -251,7 +251,7 @@ main (int argc, char *argv[])
 
 #if 0
   /* "broken" is in the typelib but not in the .so*/
-  info = g_irepository_find_by_name (rep, "testfns", "broken");  
+  info = g_irepository_find_by_name (rep, "testfns", "broken");
   g_assert (g_base_info_get_type (info) == GI_INFO_TYPE_FUNCTION);
   function = (GIFunctionInfo *)info;
 
@@ -265,7 +265,7 @@ main (int argc, char *argv[])
 #endif
 
   /* too few in arguments */
-  info = g_irepository_find_by_name (rep, "testfns", "test2");  
+  info = g_irepository_find_by_name (rep, "testfns", "test2");
   g_assert (g_base_info_get_type (info) == GI_INFO_TYPE_FUNCTION);
   function = (GIFunctionInfo *)info;
 
