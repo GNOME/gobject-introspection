@@ -41,6 +41,10 @@ upload-release: $(distdir).tar.gz
 	ssh gnome.org install-module $(distdir).tar.gz
 
 check-local:
+	@test -f .git/hooks/pre-commit || (echo -e "ERROR: missing \
+	pre-commit hook.\n\ncopy misc/pre-commit to .git/hooks"; false)
+	@test -x .git/hooks/pre-commit || (echo -e "ERROR: pre-commit \
+	is not executable\n\nrun chmod +x .git/hooks/pre-commit"; false)
 	@echo "  PEP-8 INQUISITION"
 	@find $(top_srcdir)/giscanner -name \*.py | sort | uniq | xargs $(PYTHON) $(top_srcdir)/misc/pep8.py --repeat --exclude=config.py
 	@echo "  CHECK Pyflakes"
