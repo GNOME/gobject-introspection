@@ -266,8 +266,12 @@ def scanner_main(args):
 
     filenames = []
     for arg in args:
-        if (arg.endswith('.c') or
-            arg.endswith('.h')):
+        # We don't support real C++ parsing yet, but we should be able
+        # to understand C API implemented in C++ files.
+        if (arg.endswith('.c') or arg.endswith('.cpp') or
+            arg.endswith('.cc') or arg.endswith('.cxx') or
+            arg.endswith('.h') or arg.endswith('.hpp') or
+            arg.endswith('.hxx')):
             if not os.path.exists(arg):
                 _error('%s: no such a file or directory' % (arg, ))
             # Make absolute, because we do comparisons inside scannerparser.c

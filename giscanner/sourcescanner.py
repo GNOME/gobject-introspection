@@ -220,7 +220,8 @@ class SourceScanner(object):
 
         headers = []
         for filename in filenames:
-            if filename.endswith('.c'):
+            if (filename.endswith('.c') or filename.endswith('.cpp') or
+                filename.endswith('.cc') or filename.endswith('.cxx')):
                 filename = os.path.abspath(filename)
                 self._scanner.lex_filename(filename)
             else:
