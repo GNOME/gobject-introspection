@@ -672,6 +672,14 @@ and/or use gtk-doc annotations.  -->
         </parameter>
       </parameters>
     </function>
+    <function name="array_zero_terminated_container_return"
+              c:identifier="g_i_marshalling_tests_array_zero_terminated_container_return">
+      <return-value transfer-ownership="container">
+        <array c:type="gchar**">
+          <type name="utf8"/>
+        </array>
+      </return-value>
+    </function>
     <function name="array_zero_terminated_in"
               c:identifier="g_i_marshalling_tests_array_zero_terminated_in">
       <return-value transfer-ownership="none">
@@ -1958,6 +1966,17 @@ and/or use gtk-doc annotations.  -->
       </return-value>
     </function>
     <function name="gvalue_in" c:identifier="g_i_marshalling_tests_gvalue_in">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="value" transfer-ownership="none">
+          <type name="GObject.Value" c:type="GValue*"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="gvalue_in_enum"
+              c:identifier="g_i_marshalling_tests_gvalue_in_enum">
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
