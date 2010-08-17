@@ -8,6 +8,8 @@ EXTRA_DIST =
 
 BASE_GIRSOURCES =               \
         cairo-1.0.gir           \
+        DBus-1.0.gir           \
+        DBusGLib-1.0.gir           \
         fontconfig-2.0.gir      \
         freetype2-2.0.gir       \
         GL-1.0.gir              \
@@ -47,6 +49,8 @@ GLib_2_0_gir_FILES =  \
 
 INTROSPECTION_GIRS += GLib-2.0.gir
 EXTRA_DIST += glib-2.0.c GLib-2.0.xpath
+
+DBusGLib-1.0.typelib: GObject-2.0.gir
 
 # gobject
 GOBJECT_INCLUDEDIR=$(shell pkg-config --variable=includedir gobject-2.0)/glib-2.0
