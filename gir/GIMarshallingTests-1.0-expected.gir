@@ -672,14 +672,6 @@ and/or use gtk-doc annotations.  -->
         </parameter>
       </parameters>
     </function>
-    <function name="array_zero_terminated_container_return"
-              c:identifier="g_i_marshalling_tests_array_zero_terminated_container_return">
-      <return-value transfer-ownership="container">
-        <array c:type="gchar**">
-          <type name="utf8"/>
-        </array>
-      </return-value>
-    </function>
     <function name="array_zero_terminated_in"
               c:identifier="g_i_marshalling_tests_array_zero_terminated_in">
       <return-value transfer-ownership="none">
