@@ -20,5 +20,5 @@ struct BarBazClass
 
 GType bar_baz_get_type          (void) G_GNUC_CONST;
 
-void barapp_func (void);
-void barapp_func2 (int x, double y);
+void bar_app_func (void);
+void bar_app_func2 (int x, double y);

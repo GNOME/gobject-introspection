@@ -33,28 +33,28 @@ struct _OffsetsBasic {
 };
 
 typedef enum {
-  ENUM_1 = 1 /* compiler could use int8, uint8, int16, uint16, int32, uint32 */
-} Enum1;
+  OFFSETS_ENUM_1 = 1 /* compiler could use int8, uint8, int16, uint16, int32, uint32 */
+} OffsetsEnum1;
 
 typedef enum {
-  ENUM_2 = 128 /* compiler could use uint8, int16, uint16, int32, uint32 */
-} Enum2;
+  OFFSETS_ENUM_2 = 128 /* compiler could use uint8, int16, uint16, int32, uint32 */
+} OffsetsEnum2;
 
 typedef enum {
-  ENUM_3 = 257 /* compiler could use int16, uint16, int32, uint32 */
-} Enum3;
+  OFFSETS_ENUM_3 = 257 /* compiler could use int16, uint16, int32, uint32 */
+} OffsetsEnum3;
 
 typedef enum {
-  ENUM_4 = G_MAXSHORT + 1 /* compiler could use uint16, int32, uint32 */
-} Enum4;
+  OFFSETS_ENUM_4 = G_MAXSHORT + 1 /* compiler could use uint16, int32, uint32 */
+} OffsetsEnum4;
 
 typedef enum {
-  ENUM_5 = G_MAXUSHORT + 1 /* compiler could use int32, uint32 */
-} Enum5;
+  OFFSETS_ENUM_5 = G_MAXUSHORT + 1 /* compiler could use int32, uint32 */
+} OffsetsEnum5;
 
 typedef enum {
-  ENUM_6 = ((guint)G_MAXINT) + 1 /* compiler could use uint32 */
-} Enum6;
+  OFFSETS_ENUM_6 = ((guint)G_MAXINT) + 1 /* compiler could use uint32 */
+} OffsetsEnum6;
 
 /* Test that we get the width of enum fields right. The char after
  * each field will have aligment 1 (almost certainly) so should
@@ -63,17 +63,17 @@ typedef enum {
 typedef struct _OffsetsEnum OffsetsEnum;
 
 struct _OffsetsEnum {
-  Enum1 enum1;
+  OffsetsEnum1 enum1;
   char dummy1;
-  Enum2 enum2;
+  OffsetsEnum2 enum2;
   char dummy2;
-  Enum3 enum3;
+  OffsetsEnum3 enum3;
   char dummy3;
-  Enum4 enum4;
+  OffsetsEnum4 enum4;
   char dummy4;
-  Enum5 enum5;
+  OffsetsEnum5 enum5;
   char dummy5;
-  Enum6 enum6;
+  OffsetsEnum6 enum6;
   char dummy6;
 };
 
@@ -115,7 +115,7 @@ struct _OffsetsArray
   gint some_ints[2];
   gint8 some_int8s[3];
   gdouble some_doubles[4];
-  Enum1 some_enum[2];
+  OffsetsEnum1 some_enum[2];
   gpointer some_ptrs[5];
 };
 

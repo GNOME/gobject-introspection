@@ -8,20 +8,20 @@ and/or use gtk-doc annotations.  -->
             xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
   <include name="GLib" version="2.0"/>
   <include name="GObject" version="2.0"/>
-  <include name="utility" version="1.0"/>
+  <include name="Utility" version="1.0"/>
   <package name="gobject-2.0"/>
-  <namespace name="drawable"
+  <namespace name="TestInherit"
              version="1.0"
-             shared-library="libdrawable.so"
-             c:prefix="drawable">
-    <class name="TestDrawable"
-           c:type="TestDrawable"
+             shared-library="libtestinherit.so"
+             c:prefix="TestInherit">
+    <class name="Drawable"
+           c:type="TestInheritDrawable"
            parent="GObject.Object"
            abstract="1"
-           glib:type-name="TestDrawable"
-           glib:get-type="test_drawable_get_type"
-           glib:type-struct="TestDrawableClass">
-      <method name="do_foo" c:identifier="test_drawable_do_foo">
+           glib:type-name="TestInheritDrawable"
+           glib:get-type="test_inherit_drawable_get_type"
+           glib:type-struct="DrawableClass">
+      <method name="do_foo" c:identifier="test_inherit_drawable_do_foo">
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -31,7 +31,8 @@ and/or use gtk-doc annotations.  -->
           </parameter>
         </parameters>
       </method>
-      <method name="get_origin" c:identifier="test_drawable_get_origin">
+      <method name="get_origin"
+              c:identifier="test_inherit_drawable_get_origin">
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -50,7 +51,7 @@ and/or use gtk-doc annotations.  -->
           </parameter>
         </parameters>
       </method>
-      <method name="get_size" c:identifier="test_drawable_get_size">
+      <method name="get_size" c:identifier="test_inherit_drawable_get_size">
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -70,7 +71,7 @@ and/or use gtk-doc annotations.  -->
         </parameters>
       </method>
       <method name="do_foo_maybe_throw"
-              c:identifier="test_drawable_do_foo_maybe_throw"
+              c:identifier="test_inherit_drawable_do_foo_maybe_throw"
               throws="1">
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
@@ -85,16 +86,16 @@ and/or use gtk-doc annotations.  -->
         <type name="GObject.Object" c:type="GObject"/>
       </field>
     </class>
-    <record name="TestDrawableClass"
-            c:type="TestDrawableClass"
-            glib:is-gtype-struct-for="TestDrawable">
+    <record name="DrawableClass"
+            c:type="TestInheritDrawableClass"
+            glib:is-gtype-struct-for="Drawable">
       <field name="parent_class">
         <type name="GObject.ObjectClass" c:type="GObjectClass"/>
       </field>
     </record>
-    <record name="TestPixmapObjectClass" c:type="_TestPixmapObjectClass">
+    <record name="PixmapObjectClass" c:type="_TestInheritPixmapObjectClass">
       <field name="parent_class" writable="1">
-        <type name="TestDrawableClass" c:type="TestDrawableClass"/>
+        <type name="DrawableClass" c:type="TestInheritDrawableClass"/>
       </field>
     </record>
   </namespace>

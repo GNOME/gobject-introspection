@@ -16,12 +16,12 @@ bar_baz_init (BarBaz *object)
 }
 
 void
-barapp_func (void)
+bar_app_func (void)
 {
 }
 
 void
-barapp_func2 (int x, double y)
+bar_app_func2 (int x, double y)
 {
 }
 

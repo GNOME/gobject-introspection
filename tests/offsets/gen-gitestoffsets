@@ -107,7 +107,7 @@ output({}, r'''
 |#include "offsets.h"
 |
 |static GIRepository *repository;
-|static const char *namespace = "offsets";
+|static const char *namespace = "Offsets";
 |static const char *version = "1.0";
 |
 |static void

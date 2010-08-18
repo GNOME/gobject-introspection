@@ -7,7 +7,7 @@ INTROSPECTION_SCANNER_ARGS += --warn-all --warn-error
 # it does not work with noinst_LTLIBRARIES
 testlib_LTLIBRARIES = \
 	libannotation.la \
-	libdrawable.la \
+	libtestinherit.la \
 	libfoo.la \
 	libutility.la \
 	libregress.la \
@@ -21,7 +21,7 @@ AM_LDFLAGS = -avoid-version
 LIBS = $(GOBJECT_LIBS) $(GTHREAD_LIBS)
 
 libannotation_la_SOURCES = $(srcdir)/annotation.c $(srcdir)/annotation.h
-libdrawable_la_SOURCES = $(srcdir)/drawable.c $(srcdir)/drawable.h
+libtestinherit_la_SOURCES = $(srcdir)/drawable.c $(srcdir)/drawable.h
 libfoo_la_SOURCES = $(srcdir)/foo.c $(srcdir)/foo.h
 libutility_la_SOURCES = $(srcdir)/utility.c $(srcdir)/utility.h
 libgtkfrob_la_SOURCES = $(srcdir)/gtkfrob.c $(srcdir)/gtkfrob.h
@@ -56,34 +56,34 @@ Regress_1_0_gir_INCLUDES = cairo-1.0 Gio-2.0
 Regress_1_0_gir_FILES = $(libregress_la_SOURCES)
 GIRS += Regress-1.0.gir
 
-annotation-1.0.gir: utility-1.0.gir libannotation.la
-annotation_1_0_gir_PACKAGES = gobject-2.0
-annotation_1_0_gir_LIBS = libannotation.la
-annotation_1_0_gir_INCLUDES = GObject-2.0 utility-1.0
-annotation_1_0_gir_FILES = $(libannotation_la_SOURCES)
-GIRS += annotation-1.0.gir
+Annotation-1.0.gir: Utility-1.0.gir libannotation.la
+Annotation_1_0_gir_PACKAGES = gobject-2.0
+Annotation_1_0_gir_LIBS = libannotation.la
+Annotation_1_0_gir_INCLUDES = GObject-2.0 Utility-1.0
+Annotation_1_0_gir_FILES = $(libannotation_la_SOURCES)
+GIRS += Annotation-1.0.gir
 
-drawable-1.0.gir: utility-1.0.gir libdrawable.la
-drawable_1_0_gir_PACKAGES = gobject-2.0
-drawable_1_0_gir_LIBS = libdrawable.la
-drawable_1_0_gir_INCLUDES = GObject-2.0 utility-1.0
-drawable_1_0_gir_FILES = $(libdrawable_la_SOURCES)
-GIRS += drawable-1.0.gir
+TestInherit-1.0.gir: Utility-1.0.gir libtestinherit.la
+TestInherit_1_0_gir_PACKAGES = gobject-2.0
+TestInherit_1_0_gir_LIBS = libtestinherit.la
+TestInherit_1_0_gir_INCLUDES = GObject-2.0 Utility-1.0
+TestInherit_1_0_gir_FILES = $(libtestinherit_la_SOURCES)
+GIRS += TestInherit-1.0.gir
 
-foo-1.0.gir: utility-1.0.gir libfoo.la
-foo_1_0_gir_PACKAGES = gobject-2.0
-foo_1_0_gir_LIBS = libfoo.la
-foo_1_0_gir_INCLUDES = GObject-2.0 Gio-2.0 utility-1.0
-foo_1_0_gir_FILES = $(srcdir)/foo.h $(srcdir)/foo.c
-foo_1_0_gir_SCANNERFLAGS = --c-include="foo.h"
-GIRS += foo-1.0.gir
+Foo-1.0.gir: Utility-1.0.gir libfoo.la
+Foo_1_0_gir_PACKAGES = gobject-2.0
+Foo_1_0_gir_LIBS = libfoo.la
+Foo_1_0_gir_INCLUDES = GObject-2.0 Gio-2.0 Utility-1.0
+Foo_1_0_gir_FILES = $(srcdir)/foo.h $(srcdir)/foo.c
+Foo_1_0_gir_SCANNERFLAGS = --c-include="foo.h"
+GIRS += Foo-1.0.gir
 
-utility-1.0.gir: libutility.la
-utility_1_0_gir_PACKAGES = gobject-2.0
-utility_1_0_gir_LIBS = libutility.la
-utility_1_0_gir_INCLUDES = GObject-2.0
-utility_1_0_gir_FILES = $(libutility_la_SOURCES)
-GIRS += utility-1.0.gir
+Utility-1.0.gir: libutility.la
+Utility_1_0_gir_PACKAGES = gobject-2.0
+Utility_1_0_gir_LIBS = libutility.la
+Utility_1_0_gir_INCLUDES = GObject-2.0
+Utility_1_0_gir_FILES = $(libutility_la_SOURCES)
+GIRS += Utility-1.0.gir
 
 # This one tests different --namespace and --strip-prefix
 GtkFrob-1.0.gir: libgtkfrob.la
@@ -100,13 +100,12 @@ barapp_SOURCES = $(srcdir)/barapp.c $(srcdir)/barapp.h
 barapp_LDADD = $(top_builddir)/girepository/libgirepository-1.0.la
 barapp_LDFLAGS = -export-dynamic
 
-BarApp-1.0.gir: barapp
-BarApp_1_0_gir_PACKAGES = gobject-2.0
-BarApp_1_0_gir_PROGRAM = ./barapp
-BarApp_1_0_gir_INCLUDES = GObject-2.0
-BarApp_1_0_gir_FILES = $(barapp_SOURCES)
-BarApp_1_0_gir_SCANNERFLAGS = --strip-prefix=Bar
-GIRS += BarApp-1.0.gir
+Bar-1.0.gir: barapp
+Bar_1_0_gir_PACKAGES = gobject-2.0
+Bar_1_0_gir_PROGRAM = ./barapp
+Bar_1_0_gir_INCLUDES = GObject-2.0
+Bar_1_0_gir_FILES = $(barapp_SOURCES)
+GIRS += Bar-1.0.gir
 
 pre-check:
 	@if test "$(top_builddir)" != "$(top_srcdir)"; then \

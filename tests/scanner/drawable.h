@@ -1,31 +1,31 @@
-#ifndef __TEST_DRAWABLE_H__
-#define __TEST_DRAWABLE_H__
+#ifndef __TEST_INHERIT_DRAWABLE_H__
+#define __TEST_INHERIT_DRAWABLE_H__
 
 #include <glib-object.h>
 
-typedef struct _TestDrawable TestDrawable;
-typedef struct _TestDrawableClass TestDrawableClass;
+typedef struct _TestInheritDrawable TestInheritDrawable;
+typedef struct _TestInheritDrawableClass TestInheritDrawableClass;
 
-struct _TestDrawable
+struct _TestInheritDrawable
 {
   GObject parent_instance;
 };
 
-struct _TestDrawableClass
+struct _TestInheritDrawableClass
 {
   GObjectClass parent_class;
 };
 
-GType test_drawable_get_type (void) G_GNUC_CONST;
+GType test_inherit_drawable_get_type (void) G_GNUC_CONST;
 
-void test_drawable_do_foo (TestDrawable *drawable, int x);
-void test_drawable_get_origin (TestDrawable *drawable, int *x, int *y);
-void test_drawable_get_size (TestDrawable *drawable, guint *width, guint *height);
-void test_drawable_do_foo_maybe_throw (TestDrawable *drawable, int x, GError **error);
+void test_inherit_drawable_do_foo (TestInheritDrawable *drawable, int x);
+void test_inherit_drawable_get_origin (TestInheritDrawable *drawable, int *x, int *y);
+void test_inherit_drawable_get_size (TestInheritDrawable *drawable, guint *width, guint *height);
+void test_inherit_drawable_do_foo_maybe_throw (TestInheritDrawable *drawable, int x, GError **error);
 
-struct _TestPixmapObjectClass
+struct _TestInheritPixmapObjectClass
 {
-  TestDrawableClass parent_class;
+  TestInheritDrawableClass parent_class;
 };
 
-#endif /* __TEST_DRAWABLE_H__ */
+#endif /* __TEST_INHERIT_DRAWABLE_H__ */

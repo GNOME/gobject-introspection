@@ -9,13 +9,13 @@ and/or use gtk-doc annotations.  -->
   <include name="GLib" version="2.0"/>
   <include name="GObject" version="2.0"/>
   <include name="Gio" version="2.0"/>
-  <include name="utility" version="1.0"/>
+  <include name="Utility" version="1.0"/>
   <package name="gobject-2.0"/>
   <c:include name="foo.h"/>
-  <namespace name="foo"
+  <namespace name="Foo"
              version="1.0"
              shared-library="libfoo.so"
-             c:prefix="foo">
+             c:prefix="Foo">
     <alias name="List" target="GLib.SList" c:type="FooList"/>
     <alias name="ObjectCookie" target="any" c:type="FooObjectCookie"/>
     <alias name="XEvent" target="none" c:type="FooXEvent"/>
@@ -347,7 +347,7 @@ uses a C sugar return type.</doc>
       </virtual-method>
       <method name="external_type" c:identifier="foo_object_external_type">
         <return-value transfer-ownership="full">
-          <type name="utility.Object" c:type="UtilityObject*"/>
+          <type name="Utility.Object" c:type="UtilityObject*"/>
         </return-value>
       </method>
       <method name="various" c:identifier="foo_object_various">
@@ -425,7 +425,7 @@ uses a C sugar return type.</doc>
         </return-value>
         <parameters>
           <parameter name="glyph" transfer-ownership="none">
-            <type name="utility.Glyph" c:type="UtilityGlyph"/>
+            <type name="Utility.Glyph" c:type="UtilityGlyph"/>
           </parameter>
         </parameters>
       </method>
@@ -717,7 +717,7 @@ exposed to language bindings.</doc>
     </union>
     <record name="UtilityStruct" c:type="FooUtilityStruct">
       <field name="bar" writable="1">
-        <type name="utility.Struct" c:type="UtilityStruct"/>
+        <type name="Utility.Struct" c:type="UtilityStruct"/>
       </field>
     </record>
     <callback name="VarargsCallback"
@@ -809,16 +809,16 @@ exposed to language bindings.</doc>
       </return-value>
       <parameters>
         <parameter name="object" transfer-ownership="none">
-          <type name="utility.Object" c:type="UtilityObject*"/>
+          <type name="Utility.Object" c:type="UtilityObject*"/>
         </parameter>
         <parameter name="e" transfer-ownership="none">
-          <type name="utility.EnumType" c:type="UtilityEnumType"/>
+          <type name="Utility.EnumType" c:type="UtilityEnumType"/>
         </parameter>
         <parameter name="f" transfer-ownership="none">
-          <type name="utility.FlagType" c:type="UtilityFlagType"/>
+          <type name="Utility.FlagType" c:type="UtilityFlagType"/>
         </parameter>
         <parameter name="s" transfer-ownership="none">
-          <type name="utility.Struct" c:type="UtilityStruct"/>
+          <type name="Utility.Struct" c:type="UtilityStruct"/>
         </parameter>
       </parameters>
     </function>
