@@ -349,6 +349,11 @@ int         regress_test_sub_obj_instance_method (RegressTestSubObj *obj);
 
 typedef struct _RegressTestFundamentalObject RegressTestFundamentalObject;
 typedef struct _RegressTestFundamentalObjectClass RegressTestFundamentalObjectClass;
+/**
+ * RegressTestFundamentalObjectCopyFunction:
+ *
+ * Returns: (transfer full):
+ */
 typedef RegressTestFundamentalObject * (*RegressTestFundamentalObjectCopyFunction) (const RegressTestFundamentalObject *obj);
 typedef void (*RegressTestFundamentalObjectFinalizeFunction) (RegressTestFundamentalObject *obj);
 

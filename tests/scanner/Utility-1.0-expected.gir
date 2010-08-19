@@ -18,7 +18,7 @@ and/or use gtk-doc annotations.  -->
     </alias>
     <record name="Buffer" c:type="UtilityBuffer">
       <field name="data" writable="1">
-        <type name="GLib.pointer" c:type="char*"/>
+        <type name="gpointer" c:type="char*"/>
       </field>
       <field name="length" writable="1">
         <type name="gulong" c:type="gsize"/>
@@ -28,7 +28,7 @@ and/or use gtk-doc annotations.  -->
       <field name="value" writable="1">
         <type name="guint8" c:type="guint8"/>
       </field>
-      <record>
+      <record name="parts" c:type="parts">
         <field name="first_nibble" writable="1" bits="4">
           <type name="guint8" c:type="guint8"/>
         </field>
@@ -120,7 +120,7 @@ and/or use gtk-doc annotations.  -->
       <field name="tag" writable="1">
         <type name="gint" c:type="int"/>
       </field>
-      <union>
+      <union name="value" c:type="value">
         <field name="v_pointer" writable="1">
           <type name="gpointer" c:type="gpointer"/>
         </field>

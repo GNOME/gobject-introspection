@@ -20,6 +20,12 @@ test_inherit_drawable_do_foo (TestInheritDrawable *drawable, int x)
   
 }
 
+/**
+ * test_inherit_drawable_get_origin:
+ * @drawable:
+ * @x: (out):
+ * @y: (out):
+ */
 void
 test_inherit_drawable_get_origin (TestInheritDrawable *drawable, int *x, int *y)
 {
@@ -27,6 +33,12 @@ test_inherit_drawable_get_origin (TestInheritDrawable *drawable, int *x, int *y)
   *y = 0;
 }
 
+/**
+ * test_inherit_drawable_get_size:
+ * @drawable:
+ * @width: (out):
+ * @height: (out):
+ */
 void
 test_inherit_drawable_get_size (TestInheritDrawable *drawable, guint *width, guint *height)
 {

@@ -31,7 +31,7 @@ typedef struct
     gpointer v_pointer;
     double v_real;
     long v_integer;
-  };
+  } value;
 } UtilityTaggedValue;
 
 typedef union
@@ -41,7 +41,7 @@ typedef union
   {
     guint8 first_nibble : 4;
     guint8 second_nibble : 4;
-  };
+  } parts;
 } UtilityByte;
 
 /* This one is similiar to Soup.Buffer */
@@ -67,11 +67,12 @@ typedef enum
   UTILITY_ENUM_C
 } UtilityEnumType;
 
+/* The shift operators here should imply bitfield */ 
 typedef enum
 {
-  UTILITY_FLAG_A = 1,
-  UTILITY_FLAG_B = 2,
-  UTILITY_FLAG_C = 4
+  UTILITY_FLAG_A = 1 << 0,
+  UTILITY_FLAG_B = 1 << 1,
+  UTILITY_FLAG_C = 1 << 2
 } UtilityFlagType;
 
 typedef struct

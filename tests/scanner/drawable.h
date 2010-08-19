@@ -23,6 +23,8 @@ void test_inherit_drawable_get_origin (TestInheritDrawable *drawable, int *x, in
 void test_inherit_drawable_get_size (TestInheritDrawable *drawable, guint *width, guint *height);
 void test_inherit_drawable_do_foo_maybe_throw (TestInheritDrawable *drawable, int x, GError **error);
 
+typedef struct _TestInheritPixmapObjectClass TestInheritPixmapObjectClass;
+
 struct _TestInheritPixmapObjectClass
 {
   TestInheritDrawableClass parent_class;

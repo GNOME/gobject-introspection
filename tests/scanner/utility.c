@@ -3,13 +3,9 @@
 G_DEFINE_TYPE (UtilityObject, utility_object, G_TYPE_OBJECT);
 
 /**
- * UtilityFlagType: (type bitfield)
- **/
-
-/**
  * UtilityBuffer:
  *
- * @data: (type pointer): the data
+ * @data: (type gpointer): the data
  **/
 
 static void
@@ -34,6 +30,13 @@ utility_object_watch_dir (UtilityObject *object,
 
 }
 
+/**
+ * utility_dir_foreach:
+ * @path::
+ * @func: (scope call):
+ * @user_data::
+ *
+ */
 void
 utility_dir_foreach (const char *path, UtilityFileFunc func, gpointer user_data)
 {

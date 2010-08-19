@@ -93,7 +93,7 @@ and/or use gtk-doc annotations.  -->
         <type name="GObject.ObjectClass" c:type="GObjectClass"/>
       </field>
     </record>
-    <record name="PixmapObjectClass" c:type="_TestInheritPixmapObjectClass">
+    <record name="PixmapObjectClass" c:type="TestInheritPixmapObjectClass">
       <field name="parent_class" writable="1">
         <type name="DrawableClass" c:type="TestInheritDrawableClass"/>
       </field>

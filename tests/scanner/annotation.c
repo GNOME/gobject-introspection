@@ -89,7 +89,7 @@ annotation_object_class_init (AnnotationObjectClass *klass)
   /**
    * AnnotationObject::list-signal:
    * @annotation: the annotation object
-   * @list: (type GLib.List): (element-type utf8): (transfer container): a list of strings
+   * @list: (type GLib.List) (element-type utf8): (transfer container): a list of strings
    *
    * This is a signal which takes a list of strings, but it's not
    * known by GObject as it's only marked as G_TYPE_POINTER
@@ -310,7 +310,7 @@ annotation_object_calleesowns (AnnotationObject *object,
  * This is a test for returning a list of strings, where
  * each string needs to be freed.
  *
- * Return value: (element-type utf8) (transfer): list of strings
+ * Return value: (element-type utf8) (transfer full): list of strings
  */
 GList*
 annotation_object_get_strings (AnnotationObject *object)
@@ -328,7 +328,7 @@ annotation_object_get_strings (AnnotationObject *object)
  * This is a test for returning a hash table mapping strings to
  * objects.
  *
- * Return value: (element-type utf8 GObject): hash table
+ * Return value: (element-type utf8 GObject) (transfer full): hash table
  */
 GHashTable*
 annotation_object_get_hash (AnnotationObject *object)
@@ -374,7 +374,7 @@ annotation_object_get_objects (AnnotationObject *object)
  *
  * Test returning a caller-owned object
  *
- * Return value: (transfer): The object
+ * Return value: (transfer full): The object
  **/
 GObject*
 annotation_object_create_object (AnnotationObject *object)
@@ -382,6 +382,11 @@ annotation_object_create_object (AnnotationObject *object)
 	return g_object_ref (object);
 }
 
+/**
+ * annotation_object_use_buffer:
+ * @object: a #GObject
+ *
+ **/
 void
 annotation_object_use_buffer   (AnnotationObject *object,
 				guchar           *bytes)
@@ -504,7 +509,7 @@ annotation_object_set_data (AnnotationObject *object,
 /**
  * annotation_object_set_data2:
  * @object: a #AnnotationObject
- * @data: (array length=length): The data
+ * @data: (array length=length) (element-type gint8): The data
  * @length: Length of the data
  *
  * Test taking a gchar * with a length.
@@ -538,6 +543,8 @@ annotation_object_set_data3 (AnnotationObject *object,
  * annotation_object_allow_none:
  * @object: a #GObject
  * @somearg: (allow-none):
+ *
+ * Returns: (transfer none): %NULL always
  **/
 GObject*
 annotation_object_allow_none (AnnotationObject *object, const gchar *somearg)
@@ -562,6 +569,7 @@ annotation_object_notrans (AnnotationObject *object)
  * annotation_object_do_not_use:
  * @object: a #GObject
  *
+ * Returns: (transfer none): %NULL always
  * Deprecated: 0.12: Use annotation_object_create_object() instead.
  **/
 GObject*
@@ -571,7 +579,7 @@ annotation_object_do_not_use (AnnotationObject *object)
 }
 
 /**
- * annotation_object_watch:
+ * annotation_object_watch: (skip)
  * @object: A #AnnotationObject
  * @func: The callback
  * @user_data: The callback data
@@ -620,7 +628,7 @@ annotation_init (int *argc, char ***argv)
  * annotation_return_array:
  * @length: (out): Number of return values
  *
- * Return value: (array length=length): The return value
+ * Return value: (transfer full) (array length=length): The return value
  **/
 char **
 annotation_return_array (int *length)
@@ -631,7 +639,7 @@ annotation_return_array (int *length)
 /**
  * annotation_string_zero_terminated:
  *
- * Return value: (array zero-terminated=1): The return value
+ * Return value: (transfer full) (array zero-terminated=1): The return value
  **/
 char **
 annotation_string_zero_terminated (void)
@@ -696,7 +704,7 @@ annotation_custom_destroy (AnnotationCallback callback,
 /**
  * annotation_get_source_file:
  *
- * Return value: (type filename): Source file
+ * Return value: (type filename) (transfer full): Source file
  */
 char *
 annotation_get_source_file (void)

@@ -82,7 +82,8 @@ and/or use gtk-doc annotations.  -->
       <attribute name="org.example.Test" value="cows"/>
       <doc xml:whitespace="preserve">This is an object used to test annotations.</doc>
       <method name="allow_none" c:identifier="annotation_object_allow_none">
-        <return-value transfer-ownership="full">
+        <return-value transfer-ownership="none">
+          <doc xml:whitespace="preserve">%NULL always</doc>
           <type name="GObject.Object" c:type="GObject*"/>
         </return-value>
         <parameters>
@@ -194,7 +195,8 @@ and/or use gtk-doc annotations.  -->
               c:identifier="annotation_object_do_not_use"
               deprecated="Use annotation_object_create_object() instead."
               deprecated-version="0.12">
-        <return-value transfer-ownership="full">
+        <return-value transfer-ownership="none">
+          <doc xml:whitespace="preserve">%NULL always</doc>
           <type name="GObject.Object" c:type="GObject*"/>
         </return-value>
       </method>

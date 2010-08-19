@@ -629,7 +629,8 @@ regress_test_strv_in_container (char **arr)
  * regress_test_array_gtype_in:
  * @n_types:
  * @types: (array length=n_types): List of types
- * Return value: string representation of provided types
+ *
+ * Return value: (transfer full): string representation of provided types
  * */
 char *
 regress_test_array_gtype_in (int n_types, GType *types)
@@ -649,8 +650,6 @@ regress_test_array_gtype_in (int n_types, GType *types)
 
 /**
  * regress_test_strv_out:
- *
- * No annotations here.  We want the default to Do The Right Thing.
  *
  * Returns: (transfer full):
  */
@@ -761,7 +760,7 @@ regress_test_array_int_in_take (int n_ints, int *ints)
 /**
  * regress_test_strv_out_c:
  *
- * No annotations here.  We want the default to Do The Right Thing.
+ * Returns: (transfer none):
  */
 const char * const*
 regress_test_strv_out_c (void)

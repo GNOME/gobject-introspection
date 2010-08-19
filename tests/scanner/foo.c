@@ -203,6 +203,12 @@ foo_object_init (FooObject *object)
 
 }
 
+/**
+ * foo_object_external_type:
+ * @object: a #FooObject
+ * 
+ * Returns: (transfer none): %NULL always
+ */
 UtilityObject*
 foo_object_external_type (FooObject *object)
 {
@@ -225,6 +231,19 @@ foo_do_foo (FooInterface *self, int x)
 void
 foo_object_is_it_time_yet (FooObject *object, time_t time)
 {
+}
+
+/**
+ * foo_object_new_cookie: (skip)
+ * @object:
+ * @target:
+ *
+ * Not sure why this test is here...
+ */
+FooObjectCookie
+foo_object_new_cookie (FooObject *object, const char *target)
+{
+  return NULL;
 }
 
 const char *
@@ -286,7 +305,7 @@ foo_subobject_init (FooSubobject *object)
  * This function is intended to match clutter_stage_get_default which
  * uses a C sugar return type.
  *
- * Return value: (type FooSubobject): The global #FooSubobject
+ * Return value: (type FooSubobject) (transfer none): The global #FooSubobject
  */
 FooObject *
 foo_object_get_default ()
@@ -449,8 +468,21 @@ void foo_test_unsigned (unsigned int uint)
 {
 }
 
+/**
+ * foo_test_string_array:
+ * @array: (array zero-terminated=1):
+ */
 void
 foo_test_string_array (char **array)
+{
+}
+
+/**
+ * foo_test_string_array_with_g:
+ * @array: (array zero-terminated=1):
+ */
+void
+foo_test_string_array_with_g (gchar **array)
 {
 }
 
@@ -626,3 +658,32 @@ foo_skip_me (FooSkippable fs)
  * FooForeignStruct: (foreign)
  *
  */
+
+/**
+ * foo_test_varargs_callback: (skip)
+ *
+ */
+void
+foo_test_varargs_callback (gint i, FooVarargsCallback callback)
+{
+}
+
+/**
+ * foo_test_varargs_callback2: (skip)
+ *
+ */
+void
+foo_test_varargs_callback2 (FooVarargsCallback callback)
+{
+}
+
+/**
+ * foo_test_varargs_callback3: (skip)
+ *
+ */
+void
+foo_test_varargs_callback3 (FooVarargsCallback callback,
+			    FooVarargsCallback callback2)
+{
+}
+
