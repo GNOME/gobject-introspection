@@ -1,3 +1,5 @@
+include $(top_srcdir)/common.mk
+
 SUBDIRS = . scanner repository offsets
 
 EXTRA_DIST=
@@ -30,24 +32,21 @@ everything.h: everything-stamp.h
 	@true
 
 Everything-1.0.gir: libeverything-1.0.la Makefile
-	$(AM_V_GEN) $(top_builddir)/tools/g-ir-scanner --warn-all --warn-error --reparse-validate \
+	$(AM_V_GEN) $(INTROSPECTION_SCANNER) $(INTROSPECTION_SCANNER_ARGS) --warn-all --warn-error --reparse-validate \
 	--namespace=Everything --nsversion=1.0 \
 	--add-include-path=$(top_builddir)/gir --include=Gio-2.0 \
 	--library=libeverything-1.0.la --output=$@ \
 	everything.h everything.c
 
-Everything-1.0.typelib: Everything-1.0.gir
-	$(AM_V_GEN) $(top_builddir)/tools/g-ir-compiler $< -o $@
-
 GIMarshallingTests-1.0.gir: libgimarshallingtests-1.0.la Makefile
-	$(AM_V_GEN) $(top_builddir)/tools/g-ir-scanner --warn-all --warn-error --reparse-validate \
+	$(AM_V_GEN) $(INTROSPECTION_SCANNER) $(INTROSPECTION_SCANNER_ARGS) --warn-all --warn-error --reparse-validate \
 	--namespace=GIMarshallingTests --symbol-prefix=gi_marshalling_tests --nsversion=1.0 \
 	--add-include-path=$(top_builddir)/gir --include=Gio-2.0 \
 	--library=libgimarshallingtests-1.0.la  --output=$@ \
 	gimarshallingtests.h gimarshallingtests.c
 
-GIMarshallingTests-1.0.typelib: GIMarshallingTests-1.0.gir
-	$(AM_V_GEN) $(top_builddir)/tools/g-ir-compiler $< -o $@
+%.typelib: %.gir
+	$(AM_V_GEN) $(INTROSPECTION_COMPILER) $(INTROSPECTION_COMPILER_ARGS) $< -o $@
 
 check: Everything-1.0.typelib GIMarshallingTests-1.0.typelib
 
