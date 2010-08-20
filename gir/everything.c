@@ -1530,6 +1530,10 @@ enum
   PROP_TEST_OBJ_BOXED,
   PROP_TEST_OBJ_HASH_TABLE,
   PROP_TEST_OBJ_LIST,
+  PROP_TEST_OBJ_INT,
+  PROP_TEST_OBJ_FLOAT,
+  PROP_TEST_OBJ_DOUBLE,
+  PROP_TEST_OBJ_STRING,
 };
 
 static void
@@ -1571,6 +1575,22 @@ test_obj_set_property (GObject      *object,
         self->list = g_list_append (self->list, g_strdup (list->data));
       break;
 
+    case PROP_TEST_OBJ_INT:
+      self->some_int8 = g_value_get_int (value);
+      break;
+
+    case PROP_TEST_OBJ_FLOAT:
+      self->some_float = g_value_get_float (value);
+      break;
+
+    case PROP_TEST_OBJ_DOUBLE:
+      self->some_double = g_value_get_double (value);
+      break;
+
+    case PROP_TEST_OBJ_STRING:
+      self->string = g_value_dup_string (value);
+      break;
+
     default:
       /* We don't have any other property... */
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -1604,6 +1624,22 @@ test_obj_get_property (GObject    *object,
 
     case PROP_TEST_OBJ_LIST:
       g_value_set_pointer (value, self->list);
+      break;
+
+    case PROP_TEST_OBJ_INT:
+      g_value_set_int (value, self->some_int8);
+      break;
+
+    case PROP_TEST_OBJ_FLOAT:
+      g_value_set_float (value, self->some_float);
+      break;
+
+    case PROP_TEST_OBJ_DOUBLE:
+      g_value_set_double (value, self->some_double);
+      break;
+
+    case PROP_TEST_OBJ_STRING:
+      g_value_set_string (value, self->string);
       break;
       
     default:
@@ -1722,6 +1758,60 @@ test_obj_class_init (TestObjClass *klass)
                                 G_PARAM_READWRITE);
   g_object_class_install_property (gobject_class,
                                    PROP_TEST_OBJ_LIST,
+                                   pspec);
+
+  /**
+   * TestObj:int:
+   */
+  pspec = g_param_spec_int ("int",
+                            "int property",
+                            "A contained int",
+                            G_MININT,
+                            G_MAXINT,
+                            0,
+                            G_PARAM_READWRITE);
+  g_object_class_install_property (gobject_class,
+                                   PROP_TEST_OBJ_INT,
+                                   pspec);
+
+  /**
+   * TestObj:float:
+   */
+  pspec = g_param_spec_float ("float",
+                              "float property",
+                              "A contained float",
+                              G_MINFLOAT,
+                              G_MAXFLOAT,
+                              1.0f,
+                              G_PARAM_READWRITE);
+  g_object_class_install_property (gobject_class,
+                                   PROP_TEST_OBJ_FLOAT,
+                                   pspec);
+
+  /**
+   * TestObj:double:
+   */
+  pspec = g_param_spec_double ("double",
+                               "double property",
+                               "A contained double",
+                               G_MINDOUBLE,
+                               G_MAXDOUBLE,
+                               1.0f,
+                               G_PARAM_READWRITE);
+  g_object_class_install_property (gobject_class,
+                                   PROP_TEST_OBJ_DOUBLE,
+                                   pspec);
+
+  /**
+   * TestObj:string:
+   */
+  pspec = g_param_spec_string ("string",
+                               "string property",
+                               "A contained string",
+                               NULL,
+                               G_PARAM_READWRITE);
+  g_object_class_install_property (gobject_class,
+                                   PROP_TEST_OBJ_STRING,
                                    pspec);
   
   klass->matrix = test_obj_default_matrix;

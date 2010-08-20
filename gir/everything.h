@@ -270,6 +270,10 @@ struct _TestObj
   TestBoxed *boxed;
   GHashTable *hash_table;
   GList *list;
+  gint8 some_int8;
+  float some_float;
+  double some_double;
+  char* string;
 };
 
 struct _TestObjClass

@@ -472,16 +472,28 @@ case.</doc>
       <property name="boxed" writable="1" transfer-ownership="none">
         <type name="TestBoxed" c:type="TestBoxed"/>
       </property>
+      <property name="double" writable="1" transfer-ownership="none">
+        <type name="double" c:type="gdouble"/>
+      </property>
+      <property name="float" writable="1" transfer-ownership="none">
+        <type name="float" c:type="gfloat"/>
+      </property>
       <property name="hash-table" writable="1" transfer-ownership="container">
         <type name="GLib.HashTable" c:type="GHashTable">
           <type name="utf8"/>
           <type name="int8"/>
         </type>
       </property>
+      <property name="int" writable="1" transfer-ownership="none">
+        <type name="int" c:type="gint"/>
+      </property>
       <property name="list" writable="1" transfer-ownership="none">
         <type name="GLib.List" c:type="gpointer">
           <type name="utf8"/>
         </type>
+      </property>
+      <property name="string" writable="1" transfer-ownership="none">
+        <type name="utf8" c:type="gchararray"/>
       </property>
       <field name="parent_instance">
         <type name="GObject.Object" c:type="GObject"/>
@@ -499,6 +511,18 @@ case.</doc>
         <type name="GLib.List" c:type="GList*">
           <type name="any" c:type="gpointer"/>
         </type>
+      </field>
+      <field name="some_int8">
+        <type name="int8" c:type="gint8"/>
+      </field>
+      <field name="some_float">
+        <type name="float" c:type="float"/>
+      </field>
+      <field name="some_double">
+        <type name="double" c:type="double"/>
+      </field>
+      <field name="string">
+        <type name="utf8" c:type="char*"/>
       </field>
       <glib:signal name="test">
         <return-value transfer-ownership="full">
