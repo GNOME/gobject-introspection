@@ -204,6 +204,11 @@
  * @returns: (array length=length) (transfer container):
  */
 
+/**
+ * g_get_language_names:
+ * @returns: (array zero-terminated=1) (transfer none):
+ */
+
 // Skip this as "tm" is not available at present.
 
 /**
