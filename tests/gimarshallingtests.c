@@ -1040,13 +1040,6 @@ gi_marshalling_tests_utf8_none_in (const gchar *utf8)
     g_assert(strcmp(GI_MARSHALLING_TESTS_CONSTANT_UTF8, utf8) == 0);
 }
 
-void
-gi_marshalling_tests_utf8_full_in (gchar *utf8)
-{
-    g_assert(strcmp(GI_MARSHALLING_TESTS_CONSTANT_UTF8, utf8) == 0);
-    g_free(utf8);
-}
-
 /**
  * gi_marshalling_tests_utf8_none_out:
  * @utf8: (out) (transfer none):
@@ -1422,37 +1415,6 @@ gi_marshalling_tests_garray_utf8_none_in (GArray *array_)
 }
 
 /**
- * gi_marshalling_tests_garray_utf8_container_in:
- * @array_: (element-type utf8) (transfer container):
- */
-void
-gi_marshalling_tests_garray_utf8_container_in (GArray *array_)
-{
-    g_assert (array_->len == 3);
-    g_assert (strcmp (g_array_index (array_, gchar*, 0), "0") == 0);
-    g_assert (strcmp (g_array_index (array_, gchar*, 1), "1") == 0);
-    g_assert (strcmp (g_array_index (array_, gchar*, 2), "2") == 0);
-    g_array_free (array_, TRUE);
-}
-
-/**
- * gi_marshalling_tests_garray_utf8_full_in:
- * @array_: (element-type utf8) (transfer full):
- */
-void
-gi_marshalling_tests_garray_utf8_full_in (GArray *array_)
-{
-    g_assert (array_->len == 3);
-    g_assert (strcmp (g_array_index (array_, gchar*, 0), "0") == 0);
-    g_assert (strcmp (g_array_index (array_, gchar*, 1), "1") == 0);
-    g_assert (strcmp (g_array_index (array_, gchar*, 2), "2") == 0);
-    g_free (g_array_index (array_, gchar*, 0));
-    g_free (g_array_index (array_, gchar*, 1));
-    g_free (g_array_index (array_, gchar*, 2));
-    g_array_free (array_, TRUE);
-}
-
-/**
  * gi_marshalling_tests_garray_utf8_none_out:
  * @array_: (out) (element-type utf8) (transfer none):
  */
@@ -1540,18 +1502,24 @@ gi_marshalling_tests_garray_utf8_none_inout (GArray **array_)
 void
 gi_marshalling_tests_garray_utf8_container_inout (GArray **array_)
 {
-    static gchar *val1 = "-1";
-    static gchar *val2 = "-2";
+    static gchar *val1 = "-2";
+    static gchar *val2 = "-1";
+    static gchar *val3 = "0";
+    static gchar *val4 = "1";
+    GArray *result;
 
     g_assert ((*array_)->len == 3);
     g_assert (strcmp (g_array_index (*array_, gchar*, 0), "0") == 0);
     g_assert (strcmp (g_array_index (*array_, gchar*, 1), "1") == 0);
     g_assert (strcmp (g_array_index (*array_, gchar*, 2), "2") == 0);
 
-    g_array_remove_index (*array_, (*array_)->len - 1);
+    result = g_array_new (TRUE, TRUE, sizeof (gchar *));
+    g_array_append_val (result, val1);
+    g_array_append_val (result, val2);
+    g_array_append_val (result, val3);
+    g_array_append_val (result, val4);
 
-    g_array_prepend_val (*array_, val1);
-    g_array_prepend_val (*array_, val2);
+    *array_ = result;
 }
 
 /**
@@ -1564,20 +1532,24 @@ gi_marshalling_tests_garray_utf8_full_inout (GArray **array_)
     static gchar *val1 = "-1";
     static gchar *val2 = "-2";
     gchar *val;
+    GArray *result;
 
     g_assert ((*array_)->len == 3);
     g_assert (strcmp (g_array_index (*array_, gchar*, 0), "0") == 0);
     g_assert (strcmp (g_array_index (*array_, gchar*, 1), "1") == 0);
     g_assert (strcmp (g_array_index (*array_, gchar*, 2), "2") == 0);
 
-    g_free (g_array_index (*array_, gchar*, (*array_)->len - 1));
-    g_array_remove_index (*array_, (*array_)->len - 1);
-
-    val = g_strdup (val1);
-    g_array_prepend_val (*array_, val);
-
+    result = g_array_new (TRUE, TRUE, sizeof (gchar *));
     val = g_strdup (val2);
-    g_array_prepend_val (*array_, val);
+    g_array_append_val(result, val);
+    val = g_strdup (val1);
+    g_array_append_val(result, val);
+    val = g_strdup ("0");
+    g_array_append_val(result, val);
+    val = g_strdup ("1");
+    g_array_append_val(result, val);
+
+    *array_ = result;
 }
 
 /**
@@ -1769,37 +1741,6 @@ gi_marshalling_tests_glist_utf8_none_in (GList *list)
 }
 
 /**
- * gi_marshalling_tests_glist_utf8_container_in:
- * @list: (element-type utf8) (transfer container):
- */
-void
-gi_marshalling_tests_glist_utf8_container_in (GList *list)
-{
-    g_assert(g_list_length(list) == 3);
-    g_assert(strcmp(g_list_nth_data(list, 0), "0") == 0);
-    g_assert(strcmp(g_list_nth_data(list, 1), "1") == 0);
-    g_assert(strcmp(g_list_nth_data(list, 2), "2") == 0);
-    g_list_free(list);
-}
-
-/**
- * gi_marshalling_tests_glist_utf8_full_in:
- * @list: (element-type utf8) (transfer full):
- */
-void
-gi_marshalling_tests_glist_utf8_full_in (GList *list)
-{
-    g_assert(g_list_length(list) == 3);
-    g_assert(strcmp(g_list_nth_data(list, 0), "0") == 0);
-    g_assert(strcmp(g_list_nth_data(list, 1), "1") == 0);
-    g_assert(strcmp(g_list_nth_data(list, 2), "2") == 0);
-    g_free(g_list_nth_data(list, 0));
-    g_free(g_list_nth_data(list, 1));
-    g_free(g_list_nth_data(list, 2));
-    g_list_free(list);
-}
-
-/**
  * gi_marshalling_tests_glist_utf8_none_out:
  * @list: (out) (element-type utf8) (transfer none):
  */
@@ -1876,15 +1817,19 @@ gi_marshalling_tests_glist_utf8_none_inout (GList **list)
 void
 gi_marshalling_tests_glist_utf8_container_inout (GList **list)
 {
+    GList *result = NULL;
+
     g_assert(g_list_length(*list) == 3);
     g_assert(strcmp(g_list_nth_data(*list, 0), "0") == 0);
     g_assert(strcmp(g_list_nth_data(*list, 1), "1") == 0);
     g_assert(strcmp(g_list_nth_data(*list, 2), "2") == 0);
 
-    *list = g_list_remove_link(*list, g_list_last(*list));
+    result = g_list_prepend(result, "1");
+    result = g_list_prepend(result, "0");
+    result = g_list_prepend(result, "-1");
+    result = g_list_prepend(result, "-2");
 
-    *list = g_list_prepend(*list, "-1");
-    *list = g_list_prepend(*list, "-2");
+    *list = result;
 }
 
 /**
@@ -1894,19 +1839,19 @@ gi_marshalling_tests_glist_utf8_container_inout (GList **list)
 void
 gi_marshalling_tests_glist_utf8_full_inout (GList **list)
 {
-    gpointer *data;
+    GList *result = NULL;
 
     g_assert(g_list_length(*list) == 3);
     g_assert(strcmp(g_list_nth_data(*list, 0), "0") == 0);
     g_assert(strcmp(g_list_nth_data(*list, 1), "1") == 0);
     g_assert(strcmp(g_list_nth_data(*list, 2), "2") == 0);
 
-    data = g_list_last(*list)->data;
-    *list = g_list_remove(*list, data);
-    g_free(data);
+    result = g_list_prepend(result, g_strdup("1"));
+    result = g_list_prepend(result, g_strdup("0"));
+    result = g_list_prepend(result, g_strdup("-1"));
+    result = g_list_prepend(result, g_strdup("-2"));
 
-    *list = g_list_prepend(*list, g_strdup("-1"));
-    *list = g_list_prepend(*list, g_strdup("-2"));
+    *list = result;
 }
 
 
@@ -2011,37 +1956,6 @@ gi_marshalling_tests_gslist_utf8_none_in (GSList *list)
 }
 
 /**
- * gi_marshalling_tests_gslist_utf8_container_in:
- * @list: (element-type utf8) (transfer container):
- */
-void
-gi_marshalling_tests_gslist_utf8_container_in (GSList *list)
-{
-    g_assert(g_slist_length(list) == 3);
-    g_assert(strcmp(g_slist_nth_data(list, 0), "0") == 0);
-    g_assert(strcmp(g_slist_nth_data(list, 1), "1") == 0);
-    g_assert(strcmp(g_slist_nth_data(list, 2), "2") == 0);
-    g_slist_free(list);
-}
-
-/**
- * gi_marshalling_tests_gslist_utf8_full_in:
- * @list: (element-type utf8) (transfer full):
- */
-void
-gi_marshalling_tests_gslist_utf8_full_in (GSList *list)
-{
-    g_assert(g_slist_length(list) == 3);
-    g_assert(strcmp(g_slist_nth_data(list, 0), "0") == 0);
-    g_assert(strcmp(g_slist_nth_data(list, 1), "1") == 0);
-    g_assert(strcmp(g_slist_nth_data(list, 2), "2") == 0);
-    g_free(g_slist_nth_data(list, 0));
-    g_free(g_slist_nth_data(list, 1));
-    g_free(g_slist_nth_data(list, 2));
-    g_slist_free(list);
-}
-
-/**
  * gi_marshalling_tests_gslist_utf8_none_out:
  * @list: (out) (element-type utf8) (transfer none):
  */
@@ -2122,15 +2036,19 @@ gi_marshalling_tests_gslist_utf8_none_inout (GSList **list)
 void
 gi_marshalling_tests_gslist_utf8_container_inout (GSList **list)
 {
+    GSList *result = NULL;
+
     g_assert(g_slist_length(*list) == 3);
     g_assert(strcmp(g_slist_nth_data(*list, 0), "0") == 0);
     g_assert(strcmp(g_slist_nth_data(*list, 1), "1") == 0);
     g_assert(strcmp(g_slist_nth_data(*list, 2), "2") == 0);
 
-    *list = g_slist_remove_link(*list, g_slist_last(*list));
+    result = g_slist_prepend(result, "1");
+    result = g_slist_prepend(result, "0");
+    result = g_slist_prepend(result, "-1");
+    result = g_slist_prepend(result, "-2");
 
-    *list = g_slist_prepend(*list, "-1");
-    *list = g_slist_prepend(*list, "-2");
+    *list = result;
 }
 
 /**
@@ -2140,19 +2058,19 @@ gi_marshalling_tests_gslist_utf8_container_inout (GSList **list)
 void
 gi_marshalling_tests_gslist_utf8_full_inout (GSList **list)
 {
-    gpointer *data;
+    GSList *result = NULL;
 
     g_assert(g_slist_length(*list) == 3);
     g_assert(strcmp(g_slist_nth_data(*list, 0), "0") == 0);
     g_assert(strcmp(g_slist_nth_data(*list, 1), "1") == 0);
     g_assert(strcmp(g_slist_nth_data(*list, 2), "2") == 0);
 
-    data = g_slist_last(*list)->data;
-    *list = g_slist_remove(*list, data);
-    g_free(data);
+    result = g_slist_prepend(result, g_strdup("1"));
+    result = g_slist_prepend(result, g_strdup("0"));
+    result = g_slist_prepend(result, g_strdup("-1"));
+    result = g_slist_prepend(result, g_strdup("-2"));
 
-    *list = g_slist_prepend(*list, g_strdup("-1"));
-    *list = g_slist_prepend(*list, g_strdup("-2"));
+    *list = result;
 }
 
 
@@ -2259,46 +2177,6 @@ gi_marshalling_tests_ghashtable_utf8_none_in (GHashTable *hash_table)
 }
 
 /**
- * gi_marshalling_tests_ghashtable_utf8_container_in:
- * @hash_table: (element-type utf8 utf8) (transfer container):
- */
-void
-gi_marshalling_tests_ghashtable_utf8_container_in (GHashTable *hash_table)
-{
-    g_assert(strcmp(g_hash_table_lookup(hash_table, "-1"), "1") == 0);
-    g_assert(strcmp(g_hash_table_lookup(hash_table, "0"), "0") == 0);
-    g_assert(strcmp(g_hash_table_lookup(hash_table, "1"), "-1") == 0);
-    g_assert(strcmp(g_hash_table_lookup(hash_table, "2"), "-2") == 0);
-    g_hash_table_steal_all(hash_table);
-    g_hash_table_unref(hash_table);
-}
-
-/**
- * gi_marshalling_tests_ghashtable_utf8_full_in:
- * @hash_table: (element-type utf8 utf8) (transfer full):
- */
-void
-gi_marshalling_tests_ghashtable_utf8_full_in (GHashTable *hash_table)
-{
-    GHashTableIter hash_table_iter;
-    gpointer key, value;
-
-    g_assert(strcmp(g_hash_table_lookup(hash_table, "-1"), "1") == 0);
-    g_assert(strcmp(g_hash_table_lookup(hash_table, "0"), "0") == 0);
-    g_assert(strcmp(g_hash_table_lookup(hash_table, "1"), "-1") == 0);
-    g_assert(strcmp(g_hash_table_lookup(hash_table, "2"), "-2") == 0);
-
-    g_hash_table_iter_init(&hash_table_iter, hash_table);
-    while (g_hash_table_iter_next(&hash_table_iter, &key, &value)) {
-        g_free(key);
-        g_free(value);
-        g_hash_table_iter_steal(&hash_table_iter);
-    }
-
-    g_hash_table_unref(hash_table);
-}
-
-/**
  * gi_marshalling_tests_ghashtable_utf8_none_out:
  * @hash_table: (out) (element-type utf8 utf8) (transfer none):
  */
@@ -2377,14 +2255,18 @@ gi_marshalling_tests_ghashtable_utf8_none_inout (GHashTable **hash_table)
 void
 gi_marshalling_tests_ghashtable_utf8_container_inout (GHashTable **hash_table)
 {
+    GHashTable *result = g_hash_table_new(g_str_hash, g_str_equal);
+
     g_assert(strcmp(g_hash_table_lookup(*hash_table, "-1"), "1") == 0);
     g_assert(strcmp(g_hash_table_lookup(*hash_table, "0"), "0") == 0);
     g_assert(strcmp(g_hash_table_lookup(*hash_table, "1"), "-1") == 0);
     g_assert(strcmp(g_hash_table_lookup(*hash_table, "2"), "-2") == 0);
 
-    g_hash_table_steal(*hash_table, "2");
-    g_hash_table_steal(*hash_table, "1");
-    g_hash_table_insert(*hash_table, "1", "1");
+    g_hash_table_insert(result, "-1", "1");
+    g_hash_table_insert(result, "0", "0");
+    g_hash_table_insert(result, "1", "1");
+
+    *hash_table = result;
 }
 
 /**
@@ -2394,14 +2276,19 @@ gi_marshalling_tests_ghashtable_utf8_container_inout (GHashTable **hash_table)
 void
 gi_marshalling_tests_ghashtable_utf8_full_inout (GHashTable **hash_table)
 {
+    GHashTable *result = g_hash_table_new_full(g_str_hash, g_str_equal,
+					       g_free, g_free);
+
     g_assert(strcmp(g_hash_table_lookup(*hash_table, "-1"), "1") == 0);
     g_assert(strcmp(g_hash_table_lookup(*hash_table, "0"), "0") == 0);
     g_assert(strcmp(g_hash_table_lookup(*hash_table, "1"), "-1") == 0);
     g_assert(strcmp(g_hash_table_lookup(*hash_table, "2"), "-2") == 0);
 
-    g_hash_table_steal(*hash_table, "2");
-    g_hash_table_steal(*hash_table, "1");
-    g_hash_table_insert(*hash_table, "1", g_strdup("1"));
+    g_hash_table_insert(result, g_strdup("-1"), g_strdup("1"));
+    g_hash_table_insert(result, g_strdup("0"), g_strdup("0"));
+    g_hash_table_insert(result, g_strdup("1"), g_strdup("1"));
+
+    *hash_table = result;
 }
 
 
@@ -2525,7 +2412,7 @@ gi_marshalling_tests_genum_get_type (void)
 }
 
 GIMarshallingTestsEnum
-gi_marshalling_tests_genum_return (void)
+gi_marshalling_tests_genum_returnv (void)
 {
     return GI_MARSHALLING_TESTS_GENUM_VALUE3;
 }
@@ -2559,7 +2446,7 @@ gi_marshalling_tests_genum_inout (GIMarshallingTestsGEnum *enum_)
 
 
 GIMarshallingTestsEnum
-gi_marshalling_tests_enum_return (void)
+gi_marshalling_tests_enum_returnv (void)
 {
     return GI_MARSHALLING_TESTS_ENUM_VALUE3;
 }
@@ -2610,7 +2497,7 @@ gi_marshalling_tests_flags_get_type (void)
 }
 
 GIMarshallingTestsFlags
-gi_marshalling_tests_flags_return (void)
+gi_marshalling_tests_flags_returnv (void)
 {
     return GI_MARSHALLING_TESTS_FLAGS_VALUE2;
 }
@@ -2650,11 +2537,11 @@ gi_marshalling_tests_flags_inout (GIMarshallingTestsFlags *flags_)
 
 
 /**
- * gi_marshalling_tests__simple_struct_return:
+ * gi_marshalling_tests_simple_struct_returnv:
  * Returns: (transfer none):
  */
 GIMarshallingTestsSimpleStruct *
-gi_marshalling_tests__simple_struct_return (void)
+gi_marshalling_tests_simple_struct_returnv (void)
 {
     static GIMarshallingTestsSimpleStruct *struct_ = NULL;
 
@@ -2669,47 +2556,14 @@ gi_marshalling_tests__simple_struct_return (void)
 }
 
 /**
- * gi_marshalling_tests__simple_struct_in:
+ * gi_marshalling_tests_simple_struct_inv:
  * @struct_: (transfer none):
  */
 void
-gi_marshalling_tests__simple_struct_in (GIMarshallingTestsSimpleStruct *struct_)
+gi_marshalling_tests_simple_struct_inv (GIMarshallingTestsSimpleStruct *struct_)
 {
     g_assert(struct_->long_ == 6);
     g_assert(struct_->int8 == 7);
-}
-
-/**
- * gi_marshalling_tests__simple_struct_out:
- * @struct_: (out) (transfer none):
- */
-void
-gi_marshalling_tests__simple_struct_out (GIMarshallingTestsSimpleStruct **struct_)
-{
-    static GIMarshallingTestsSimpleStruct *new_struct = NULL;
-
-    if (new_struct == NULL) {
-        new_struct = g_new(GIMarshallingTestsSimpleStruct, 1);
-
-        new_struct->long_ = 6;
-        new_struct->int8 = 7;
-    }
-
-    *struct_ = new_struct;
-}
-
-/**
- * gi_marshalling_tests__simple_struct_inout:
- * @struct_: (inout) (transfer none):
- */
-void
-gi_marshalling_tests__simple_struct_inout (GIMarshallingTestsSimpleStruct **struct_)
-{
-    g_assert((*struct_)->long_ == 6);
-    g_assert((*struct_)->int8 == 7);
-
-    (*struct_)->long_ = 7;
-    (*struct_)->int8 = 6;
 }
 
 void
@@ -2733,11 +2587,11 @@ gi_marshalling_tests_pointer_struct_get_type (void)
 }
 
 /**
- * gi_marshalling_tests__pointer_struct_return:
+ * gi_marshalling_tests_pointer_struct_returnv:
  * Returns: (transfer none):
  */
 GIMarshallingTestsPointerStruct *
-gi_marshalling_tests__pointer_struct_return (void)
+gi_marshalling_tests_pointer_struct_returnv (void)
 {
     static GIMarshallingTestsPointerStruct *struct_ = NULL;
 
@@ -2751,45 +2605,14 @@ gi_marshalling_tests__pointer_struct_return (void)
 }
 
 /**
- * gi_marshalling_tests__pointer_struct_in:
+ * gi_marshalling_tests_pointer_struct_inv:
  * @struct_: (transfer none):
  */
 void
-gi_marshalling_tests__pointer_struct_in (GIMarshallingTestsPointerStruct *struct_)
+gi_marshalling_tests_pointer_struct_inv (GIMarshallingTestsPointerStruct *struct_)
 {
     g_assert(struct_->long_ == 42);
 }
-
-/**
- * gi_marshalling_tests__pointer_struct_out:
- * @struct_: (out) (transfer none):
- */
-void
-gi_marshalling_tests__pointer_struct_out (GIMarshallingTestsPointerStruct **struct_)
-{
-    static GIMarshallingTestsPointerStruct *new_struct = NULL;
-
-    if (new_struct == NULL) {
-        new_struct = g_new(GIMarshallingTestsPointerStruct, 1);
-
-        new_struct->long_ = 42;
-    }
-
-    *struct_ = new_struct;
-}
-
-/**
- * gi_marshalling_tests__pointer_struct_inout:
- * @struct_: (inout) (transfer none):
- */
-void
-gi_marshalling_tests__pointer_struct_inout (GIMarshallingTestsPointerStruct **struct_)
-{
-    g_assert((*struct_)->long_ == 42);
-
-    (*struct_)->long_ = 0;
-}
-
 
 static GIMarshallingTestsBoxedStruct *
 gi_marshalling_tests_boxed_struct_copy (GIMarshallingTestsBoxedStruct *struct_)
@@ -2830,11 +2653,11 @@ gi_marshalling_tests_boxed_struct_new (void)
 }
 
 /**
- * gi_marshalling_tests__boxed_struct_return:
+ * gi_marshalling_tests_boxed_struct_returnv:
  * Returns: (transfer none):
  */
 GIMarshallingTestsBoxedStruct *
-gi_marshalling_tests__boxed_struct_return (void)
+gi_marshalling_tests_boxed_struct_returnv (void)
 {
     static GIMarshallingTestsBoxedStruct *struct_ = NULL;
 
@@ -2853,21 +2676,21 @@ gi_marshalling_tests__boxed_struct_return (void)
 }
 
 /**
- * gi_marshalling_tests__boxed_struct_in:
+ * gi_marshalling_tests_boxed_struct_inv:
  * @struct_: (transfer none):
  */
 void
-gi_marshalling_tests__boxed_struct_in (GIMarshallingTestsBoxedStruct *struct_)
+gi_marshalling_tests_boxed_struct_inv (GIMarshallingTestsBoxedStruct *struct_)
 {
     g_assert(struct_->long_ == 42);
 }
 
 /**
- * gi_marshalling_tests__boxed_struct_out:
+ * gi_marshalling_tests_boxed_struct_out:
  * @struct_: (out) (transfer none):
  */
 void
-gi_marshalling_tests__boxed_struct_out (GIMarshallingTestsBoxedStruct **struct_)
+gi_marshalling_tests_boxed_struct_out (GIMarshallingTestsBoxedStruct **struct_)
 {
     static GIMarshallingTestsBoxedStruct *new_struct = NULL;
 
@@ -2881,14 +2704,15 @@ gi_marshalling_tests__boxed_struct_out (GIMarshallingTestsBoxedStruct **struct_)
 }
 
 /**
- * gi_marshalling_tests__boxed_struct_inout:
- * @struct_: (inout) (transfer none):
+ * gi_marshalling_tests_boxed_struct_inout:
+ * @struct_: (inout) (transfer full):
  */
 void
-gi_marshalling_tests__boxed_struct_inout (GIMarshallingTestsBoxedStruct **struct_)
+gi_marshalling_tests_boxed_struct_inout (GIMarshallingTestsBoxedStruct **struct_)
 {
     g_assert((*struct_)->long_ == 42);
 
+    (*struct_) = g_slice_new (GIMarshallingTestsBoxedStruct);
     (*struct_)->long_ = 0;
 }
 
@@ -2925,11 +2749,11 @@ gi_marshalling_tests_union_get_type (void)
 }
 
 /**
- * gi_marshalling_tests__union_return:
+ * gi_marshalling_tests_union_returnv:
  * Returns: (transfer none):
  */
 GIMarshallingTestsUnion *
-gi_marshalling_tests__union_return (void)
+gi_marshalling_tests_union_returnv (void)
 {
     static GIMarshallingTestsUnion *union_ = NULL;
 
@@ -2943,43 +2767,13 @@ gi_marshalling_tests__union_return (void)
 }
 
 /**
- * gi_marshalling_tests__union_in:
+ * gi_marshalling_tests_union_inv:
  * @union_: (transfer none):
  */
 void
-gi_marshalling_tests__union_in (GIMarshallingTestsUnion *union_)
+gi_marshalling_tests_union_inv (GIMarshallingTestsUnion *union_)
 {
     g_assert(union_->long_ == 42);
-}
-
-/**
- * gi_marshalling_tests__union_out:
- * @union_: (out) (transfer none):
- */
-void
-gi_marshalling_tests__union_out (GIMarshallingTestsUnion **union_)
-{
-    static GIMarshallingTestsUnion *new_union = NULL;
-
-    if (new_union == NULL) {
-        new_union = g_new(GIMarshallingTestsUnion, 1);
-
-        new_union->long_ = 42;
-    }
-
-    *union_ = new_union;
-}
-
-/**
- * gi_marshalling_tests__union_inout:
- * @union_: (inout) (transfer none):
- */
-void
-gi_marshalling_tests__union_inout (GIMarshallingTestsUnion **union_)
-{
-    g_assert((*union_)->long_ == 42);
-
-    (*union_)->long_ = 0;
 }
 
 void
@@ -3188,11 +2982,11 @@ gi_marshalling_tests_object_real_method_with_default_implementation (GIMarshalli
 
 
 /**
- * gi_marshalling_tests__object_none_return:
+ * gi_marshalling_tests_object_none_return:
  * Returns: (transfer none):
  */
 GIMarshallingTestsObject *
-gi_marshalling_tests__object_none_return (void)
+gi_marshalling_tests_object_none_return (void)
 {
     static GIMarshallingTestsObject *object = NULL;
 
@@ -3204,42 +2998,31 @@ gi_marshalling_tests__object_none_return (void)
 }
 
 /**
- * gi_marshalling_tests__object_full_return:
+ * gi_marshalling_tests_object_full_return:
  * Returns: (transfer full):
  */
 GIMarshallingTestsObject *
-gi_marshalling_tests__object_full_return (void)
+gi_marshalling_tests_object_full_return (void)
 {
     return g_object_new(GI_MARSHALLING_TESTS_TYPE_OBJECT, NULL);
 }
 
 /**
- * gi_marshalling_tests__object_none_in:
+ * gi_marshalling_tests_object_none_in:
  * @object: (transfer none):
  */
 void
-gi_marshalling_tests__object_none_in (GIMarshallingTestsObject *object)
+gi_marshalling_tests_object_none_in (GIMarshallingTestsObject *object)
 {
     g_assert(object->int_ == 42);
 }
 
 /**
- * gi_marshalling_tests__object_full_in:
- * @object: (transfer full):
- */
-void
-gi_marshalling_tests__object_full_in (GIMarshallingTestsObject *object)
-{
-    g_assert(object->int_ == 42);
-    g_object_unref(object);
-}
-
-/**
- * gi_marshalling_tests__object_none_out:
+ * gi_marshalling_tests_object_none_out:
  * @object: (out) (transfer none):
  */
 void
-gi_marshalling_tests__object_none_out (GIMarshallingTestsObject **object)
+gi_marshalling_tests_object_none_out (GIMarshallingTestsObject **object)
 {
     static GIMarshallingTestsObject *new_object = NULL;
 
@@ -3251,21 +3034,21 @@ gi_marshalling_tests__object_none_out (GIMarshallingTestsObject **object)
 }
 
 /**
- * gi_marshalling_tests__object_full_out:
+ * gi_marshalling_tests_object_full_out:
  * @object: (out) (transfer full):
  */
 void
-gi_marshalling_tests__object_full_out (GIMarshallingTestsObject **object)
+gi_marshalling_tests_object_full_out (GIMarshallingTestsObject **object)
 {
     *object = g_object_new(GI_MARSHALLING_TESTS_TYPE_OBJECT, NULL);
 }
 
 /**
- * gi_marshalling_tests__object_none_inout:
+ * gi_marshalling_tests_object_none_inout:
  * @object: (inout) (transfer none):
  */
 void
-gi_marshalling_tests__object_none_inout (GIMarshallingTestsObject **object)
+gi_marshalling_tests_object_none_inout (GIMarshallingTestsObject **object)
 {
     static GIMarshallingTestsObject *new_object = NULL;
 
@@ -3280,45 +3063,33 @@ gi_marshalling_tests__object_none_inout (GIMarshallingTestsObject **object)
 }
 
 /**
- * gi_marshalling_tests__object_full_inout:
+ * gi_marshalling_tests_object_full_inout:
  * @object: (inout) (transfer full):
  */
 void
-gi_marshalling_tests__object_full_inout (GIMarshallingTestsObject **object)
+gi_marshalling_tests_object_full_inout (GIMarshallingTestsObject **object)
 {
     g_assert((*object)->int_ == 42);
-    g_object_unref(*object);
 
     *object = g_object_new(GI_MARSHALLING_TESTS_TYPE_OBJECT, NULL);
 }
 
 /**
- * gi_marshalling_tests__object_inout_same:
- * @object: (inout):
- */
-void
-gi_marshalling_tests__object_inout_same (GIMarshallingTestsObject **object)
-{
-    g_assert((*object)->int_ == 42);
-    (*object)->int_ = 0;
-}
-
-/**
- * gi_marshalling_tests__object_test_int8_in:
+ * gi_marshalling_tests_object_test_int8_in:
  * @in: (in):
  */
 void
-gi_marshalling_tests__object_int8_in (GIMarshallingTestsObject *object, gint8 in)
+gi_marshalling_tests_object_int8_in (GIMarshallingTestsObject *object, gint8 in)
 {
   gi_marshalling_tests_object_method_int8_in (object, in);
 }
 
 /**
- * gi_marshalling_tests__object_test_int8_out:
+ * gi_marshalling_tests_object_test_int8_out:
  * @out: (out):
  */
 void
-gi_marshalling_tests__object_int8_out (GIMarshallingTestsObject *object, gint8 *out)
+gi_marshalling_tests_object_int8_out (GIMarshallingTestsObject *object, gint8 *out)
 {
   gi_marshalling_tests_object_method_int8_out (object, out);
 }
@@ -3468,12 +3239,12 @@ gi_marshalling_tests_overrides_struct_method (GIMarshallingTestsOverridesStruct 
 
 
 /**
- * gi_marshalling_tests__overrides_struct_return:
+ * gi_marshalling_tests_overrides_struct_returnv:
  *
  * Returns: (transfer full):
  */
 GIMarshallingTestsOverridesStruct *
-gi_marshalling_tests__overrides_struct_return (void)
+gi_marshalling_tests_overrides_struct_returnv (void)
 {
     return gi_marshalling_tests_overrides_struct_new();
 }
@@ -3517,12 +3288,12 @@ gi_marshalling_tests_overrides_object_method (GIMarshallingTestsOverridesObject 
 
 
 /**
- * gi_marshalling_tests__overrides_object_return:
+ * gi_marshalling_tests_overrides_object_returnv:
  *
  * Returns: (transfer full):
  */
 GIMarshallingTestsOverridesObject *
-gi_marshalling_tests__overrides_object_return (void)
+gi_marshalling_tests_overrides_object_returnv (void)
 {
     return g_object_new (GI_MARSHALLING_TESTS_TYPE_OVERRIDES_OBJECT, NULL);
 }
