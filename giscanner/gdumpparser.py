@@ -168,7 +168,7 @@ blob containing data gleaned from GObject's primitive introspection."""
             parent_gitype = None
             symbol = 'intern'
         elif type_name == 'GInitiallyUnowned':
-            parent_gitype = ast.Type(target_giname='GLib.Object')
+            parent_gitype = ast.Type(target_giname='GObject.Object')
             symbol = 'g_initially_unowned_get_type'
         else:
             assert False
