@@ -82,7 +82,7 @@ to pass the argument to this function to g_irepository_dump.
 .B \--program-arg=ARG
 Additional argument to pass to program for introspection.
 .TP
-.B \, --strip-prefix=PREFIX
+.B \--strip-prefix=PREFIX
 If this option is specified a prefix will be stripped from all functions.
 If not specified, the lower case version of the namespace will be used.
 Eg, a strip prefix of
@@ -94,14 +94,20 @@ will export the function
 as 
 .B GLib.type_name.
 .TP
-.B \, --output=FILENAME
+.B \--output=FILENAME
 Name of the file to output. Normally namespace + format extension.
 Eg, GLib.gir.
 .TP
-.B \, --pkg=PACKAGE
+.B \--pkg=PACKAGE
 List of pkg-config packages to get compiler and linker flags from.
 This option can be specified multiple times to include flags from
 several pkg-config packages.
+.TP
+.B \--pkg-export=PACKAGE
+List of pkg-config packages that are provided by the generated gir.
+This option can be specified multiple times if the gir provides more
+packages.
+If not specified, the packages specified with --pkg= will be used.
 .TP
 .B \--verbose
 Be verbose, include some debugging information.

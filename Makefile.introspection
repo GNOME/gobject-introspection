@@ -58,6 +58,7 @@ _gir_program = $(if $($(_gir_name)_PROGRAM),--program=$($(_gir_name)_PROGRAM))
 _gir_libraries = $(foreach lib,$($(_gir_name)_LIBS),--library=$(lib))
 _gir_packages = $(foreach pkg,$($(_gir_name)_PACKAGES),--pkg=$(pkg))
 _gir_includes = $(foreach include,$($(_gir_name)_INCLUDES),--include=$(include))
+_gir_export_packages = $(foreach pkg,$($(_gir_name)_EXPORT_PACKAGES),--pkg-export=$(pkg))
 
 # Reuse the LIBTOOL variable from by automake if it's set
 _gir_libtool = $(if $(LIBTOOL),--libtool="$(LIBTOOL)")
@@ -105,6 +106,8 @@ _gir_silent_compiler_0 = @echo "  GICOMP $(1)";
 # INCLUDES - Gir files to include without the .gir suffix, for instance
 #   GLib-2.0, Gtk-2.0. This is needed for all libraries which you depend on that
 #   provides introspection information.
+# EXPORT_PACKAGES - list of pkg-config names that are provided by this gir.
+#   By default the names in the PACKAGES variable will be used.
 #
 
 define introspection-scanner
@@ -126,6 +129,7 @@ $(1): $$($(_gir_name)_FILES)
 	  $(_gir_libtool) \
 	  $(_gir_packages) \
 	  $(_gir_includes) \
+	  $(_gir_export_packages) \
 	  $(_gir_program) \
 	  $(_gir_libraries) \
 	  $($(_gir_name)_SCANNERFLAGS) \

@@ -143,10 +143,10 @@ GIRepository_2_0_gir_LIBS = girepository-1.0
 GIRepository_2_0_gir_SCANNERFLAGS = \
         --strip-prefix=g \
         --c-include="girepository.h" \
-        --pkg-export gobject-introspection-1.0 \
         --add-include-path=.
 GIRepository_2_0_gir_PACKAGES = gobject-2.0
 GIRepository_2_0_gir_INCLUDES = GObject-2.0
+GIRepository_2_0_gir_EXPORT_PACKAGES = gobject-introspection-1.0
 GIRepository_2_0_gir_CFLAGS = \
     -I$(top_srcdir)/girepository -I$(top_srcdir) \
     -DGI_COMPILATION
