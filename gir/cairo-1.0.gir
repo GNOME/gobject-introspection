@@ -4,7 +4,8 @@
             xmlns:c="http://www.gtk.org/introspection/c/1.0"
             xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
   <namespace name="cairo" version="1.0"
-	     c:prefix="cairo">
+	     c:identifier-prefixes="cairo"
+	     c:symbol-prefixes="cairo">
     <record name="Context" c:type="cairo_t" foreign="1"/>
     <record name="Surface" c:type="cairo_surface_t" foreign="1"/>
     <record name="Matrix" c:type="cairo_matrix_t" foreign="1"/>

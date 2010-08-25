@@ -280,10 +280,14 @@ or raise ValueError.  As a special case, if the current namespace matches,
 it is always biggest (i.e. last)."""
         matches = []
         for ns in self._iter_namespaces():
-            for prefix in ns.identifier_prefixes:
-                if ident.startswith(prefix):
-                    matches.append((ns, ident[len(prefix):], len(prefix)))
-                    break
+            if ns.identifier_prefixes:
+                for prefix in ns.identifier_prefixes:
+                    if ident.startswith(prefix):
+                        matches.append((ns, ident[len(prefix):], len(prefix)))
+                        break
+            else:
+                # A special case for namespaces without a prefix, such as X
+                matches.append((ns, ident, 0))
         if matches:
             matches.sort(self._sort_matches)
             return map(lambda x: (x[0], x[1]), matches)
@@ -767,6 +771,21 @@ both GI type string (utf8, Foo.Bar) style, as well as C (char *, FooBar) style."
         typeval.ctype = None
         return typeval
 
+    def _resolve_type_from_ctype(self, typeval):
+        pointer_stripped = typeval.ctype.replace('*', '')
+        try:
+            matches = self.split_ctype_namespaces(pointer_stripped)
+        except ValueError, e:
+            raise TypeResolutionException(e)
+        target_giname = None
+        for namespace, name in matches:
+            target = namespace.get(name)
+            if not target:
+                target = namespace.get_by_ctype(pointer_stripped)
+            if target:
+                typeval.target_giname = '%s.%s' % (namespace.name, target.name)
+                return
+
     def resolve_type(self, typeval):
         if isinstance(typeval, (ast.Array, ast.List)):
             self.resolve_type(typeval.element_type)
@@ -775,20 +794,10 @@ both GI type string (utf8, Foo.Bar) style, as well as C (char *, FooBar) style."
             self.resolve_type(typeval.key_type)
             self.resolve_type(typeval.value_type)
             return
-        elif not typeval.resolved and typeval.ctype:
-            pointer_stripped = typeval.ctype.replace('*', '')
-            try:
-                matches = self.split_ctype_namespaces(pointer_stripped)
-            except ValueError, e:
-                raise TypeResolutionException(e)
-            target_giname=None
-            for namespace, name in matches:
-                target = namespace.get(name)
-                if not target:
-                    target = namespace.get_by_ctype(pointer_stripped)
-                if target:
-                    typeval.target_giname='%s.%s' % (namespace.name, target.name)
-                    return
+        elif typeval.resolved:
+            return
+        elif typeval.ctype:
+            return self._resolve_type_from_ctype(typeval)
 
     def _typepair_to_str(self, item):
         nsname, item = item

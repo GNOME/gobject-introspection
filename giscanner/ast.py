@@ -273,11 +273,11 @@ class Namespace(object):
                  symbol_prefixes=None):
         self.name = name
         self.version = version
-        if identifier_prefixes:
+        if identifier_prefixes is not None:
             self.identifier_prefixes = identifier_prefixes
         else:
             self.identifier_prefixes = [name]
-        if symbol_prefixes:
+        if symbol_prefixes is not None:
             self.symbol_prefixes = symbol_prefixes
         else:
             ps = self.identifier_prefixes

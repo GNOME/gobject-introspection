@@ -260,12 +260,24 @@ def scanner_main(args):
             # against the absolute path that cpp will give us
             filenames.append(os.path.abspath(arg))
 
+    # We do this dance because the empty list has different semantics from
+    # None; if the user didn't specify the options, we want to use None so
+    # the Namespace constructor picks the defaults.
+    if options.identifier_prefixes:
+        identifier_prefixes = options.identifier_prefixes
+    else:
+        identifier_prefixes = None
+    if options.symbol_prefixes:
+        symbol_prefixes = options.symbol_prefixes
+    else:
+        symbol_prefixes = None
+
     cachestore = CacheStore()
     transformer = Transformer(cachestore,
                               options.namespace_name,
                               options.namespace_version,
-                              options.identifier_prefixes,
-                              options.symbol_prefixes)
+                              identifier_prefixes,
+                              symbol_prefixes)
     if options.warn_all:
         transformer.enable_warnings(True)
     transformer.set_include_paths(options.include_paths)

@@ -315,7 +315,7 @@ class MainTransformer(object):
         assert supercls
         if cls is supercls:
             return True
-        if cls.parent:
+        if cls.parent and cls.parent.target_giname != 'GObject.Object':
             return self._is_gi_subclass(cls.parent, supercls_type)
         return False
 
@@ -638,6 +638,8 @@ class MainTransformer(object):
                 if target:
                     node.parent = parent
                     break
+            else:
+                node.parent = ast.Type(target_giname='GObject.Object')
             for prop in node.properties:
                 self._transformer.resolve_type(prop.type)
             for sig in node.signals:
