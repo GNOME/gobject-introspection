@@ -621,6 +621,17 @@ class MainTransformer(object):
             self._transformer.log_symbol_warning(node.symbol,
                 "Virtual slot %r not found for %r annotation" % (invoker_name, TAG_VFUNC))
 
+    def _resolve_and_filter_type_list(self, typelist):
+        """Given a list of Type instances, return a new list of types with
+the ones that failed to resolve removed."""
+        # Create a copy we'll modify
+        new_typelist = list(typelist)
+        for typeval in typelist:
+            resolved = self._transformer.resolve_type(typeval)
+            if not resolved:
+                new_typelist.remove(typeval)
+        return new_typelist
+
     def _pass_type_resolution(self, node, chain):
         if isinstance(node, ast.Alias):
             self._transformer.resolve_type(node.target)
@@ -648,18 +659,19 @@ class MainTransformer(object):
                     node.parent = parent
                     break
             else:
-                node.parent = ast.Type(target_giname='GObject.Object')
+                if isinstance(node, ast.Interface) or not node.fundamental:
+                    node.parent = ast.Type(target_giname='GObject.Object')
+                else:
+                    node.parent = None
             for prop in node.properties:
                 self._transformer.resolve_type(prop.type)
             for sig in node.signals:
                 for param in sig.parameters:
                     self._transformer.resolve_type(param.type)
         if isinstance(node, ast.Class):
-            for iface in node.interfaces:
-                self._transformer.resolve_type(iface)
+            node.interfaces = self._resolve_and_filter_type_list(node.interfaces)
         if isinstance(node, ast.Interface):
-            for iface in node.prerequisites:
-                self._transformer.resolve_type(iface)
+            node.prerequisites = self._resolve_and_filter_type_list(node.prerequisites)
         return True
 
     def _resolve_quarks(self):

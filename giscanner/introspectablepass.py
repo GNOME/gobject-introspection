@@ -156,4 +156,6 @@ class IntrospectablePass(object):
             for prop in obj.properties:
                 if not self._type_is_introspectable(prop.type):
                     prop.introspectable = False
+            for sig in obj.signals:
+                self._introspectable_callable_analysis(sig, [obj])
         return True

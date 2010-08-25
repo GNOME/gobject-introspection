@@ -759,7 +759,9 @@ it is always biggest (i.e. last)."""
     def create_type_from_user_string(self, typestr):
         """Parse a C type string (as might be given from an
         annotation) and resolve it.  For compatibility, we can consume
-both GI type string (utf8, Foo.Bar) style, as well as C (char *, FooBar) style."""
+both GI type string (utf8, Foo.Bar) style, as well as C (char *, FooBar) style.
+
+Note that type resolution may not succeed."""
         if '.' in typestr:
             container = self._create_bare_container_type(typestr)
             if container:
@@ -784,18 +786,18 @@ both GI type string (utf8, Foo.Bar) style, as well as C (char *, FooBar) style."
                 target = namespace.get_by_ctype(pointer_stripped)
             if target:
                 typeval.target_giname = '%s.%s' % (namespace.name, target.name)
-                return
+                return True
+        return False
 
     def resolve_type(self, typeval):
         if isinstance(typeval, (ast.Array, ast.List)):
-            self.resolve_type(typeval.element_type)
-            return
+            return self.resolve_type(typeval.element_type)
         elif isinstance(typeval, ast.Map):
-            self.resolve_type(typeval.key_type)
-            self.resolve_type(typeval.value_type)
-            return
+            key_resolved = self.resolve_type(typeval.key_type)
+            value_resolved = self.resolve_type(typeval.value_type)
+            return key_resolved and value_resolved
         elif typeval.resolved:
-            return
+            return True
         elif typeval.ctype:
             return self._resolve_type_from_ctype(typeval)
 
