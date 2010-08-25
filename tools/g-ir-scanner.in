@@ -22,6 +22,12 @@
 import os
 import sys
 
+if 'GI_SCANNER_DEBUG' in os.environ:
+    def on_exception(type, value, tb):
+        import pdb
+        pdb.pm()
+    sys.excepthook = on_exception
+
 # This only works on unix systems
 currentdir = os.path.dirname(os.path.abspath(sys.argv[0]))
 current_name = os.path.basename(currentdir)
