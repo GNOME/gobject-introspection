@@ -362,9 +362,10 @@ blob containing data gleaned from GObject's primitive introspection."""
         node.signals = node.signals
 
     def _parse_parents(self, xmlnode, node):
-        if 'parents' in xmlnode.attrib:
+        parents_str = xmlnode.attrib.get('parents', '')
+        if parents_str != '':
             parent_types = map(lambda s: self._transformer.create_type_from_user_string(s),
-                               xmlnode.attrib['parents'].split(','))
+                               parents_str.split(','))
         else:
             parent_types = []
         node.parent_chain = parent_types
