@@ -45,6 +45,15 @@ class MainTransformer(object):
     # Public API
 
     def transform(self):
+        # Dirty hack for now...maybe eventually we'll support the "typedef GSList FooSet"
+        # pattern.
+        if self._namespace.name == 'Atk':
+            attribute = self._namespace.get('Attribute')
+            attributeset = self._namespace.get('AttributeSet')
+            if attribute and attributeset:
+                alias = ast.Alias('AttributeSet', target=ast.TYPE_ANY)
+                self._namespace.append(alias, replace=True)
+
         # We have a rough tree which should have most of of the types
         # we know about.  Let's attempt closure; walk over all of the
         # Type() types and see if they match up with something.
