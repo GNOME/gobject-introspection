@@ -27,6 +27,7 @@ EXTRA_DIST = 			\
 	$(man_MANS)		\
 	$(m4_DATA)		\
 	misc/pep8.py		\
+	misc/pre-commit		\
 	misc/pyflakes.py
 
 release-tag:
