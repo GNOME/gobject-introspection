@@ -808,7 +808,7 @@ method or constructor of some type."""
         (origin_node, funcname) = split
         if isinstance(target, ast.Class):
             parent = origin_node
-            while parent:
+            while parent and (not parent.create_type().target_giname == 'GObject.Object'):
                 if parent == target:
                     break
                 if parent.parent:
