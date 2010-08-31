@@ -5,8 +5,8 @@ int main(void)
     GIRepository *repository;
     GError *error = NULL;
     GIBaseInfo *base_info;
-    GArgument in_args[5];
-    GArgument retval;
+    GIArgument in_args[5];
+    GIArgument retval;
 
     g_type_init();
 
@@ -30,7 +30,7 @@ int main(void)
     in_args[4].v_pointer = "hello world";
 
     if (!g_function_info_invoke ((GIFunctionInfo *)base_info,
-                                 (const GArgument*)&in_args,
+                                 (const GIArgument*)&in_args,
                                  5,
                                  NULL,
                                  0,

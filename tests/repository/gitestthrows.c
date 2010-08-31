@@ -12,8 +12,8 @@ main(int argc, char **argv)
   GTypelib *ret;
   GIBaseInfo *info;
   char *girdir;
-  GArgument in_arg[1];
-  GArgument ret_arg;
+  GIArgument in_arg[1];
+  GIArgument ret_arg;
   GError *error;
   gboolean invoke_return;
 
