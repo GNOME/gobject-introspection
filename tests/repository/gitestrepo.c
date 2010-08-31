@@ -38,7 +38,7 @@ int
 main(int argc, char **argv)
 {
   GIRepository *repo;
-  GTypelib *ret;
+  GITypelib *ret;
   GError *error = NULL;
   GIBaseInfo *info;
   GType gtype;

@@ -4,7 +4,7 @@ GICallbackInfo
 GIRepository
 GIRepositoryError
 GIRepositoryLoadFlags
-GTypelib
+GITypelib
 g_irepository_get_default
 g_irepository_prepend_search_path
 g_irepository_get_search_path

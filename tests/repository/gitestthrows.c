@@ -9,7 +9,7 @@ int
 main(int argc, char **argv)
 {
   GIRepository *repo;
-  GTypelib *ret;
+  GITypelib *ret;
   GIBaseInfo *info;
   char *girdir;
   GIArgument in_arg[1];
