@@ -356,7 +356,7 @@ def scanner_main(args):
     writer = Writer(transformer.namespace, shlibs, transformer.get_includes(),
                     exported_packages, options.c_includes)
     data = writer.get_xml()
-    if options.output:
+    if options.output and options.output != "-":
         tempdir = os.path.dirname(options.output) or os.getcwd()
         main_f = tempfile.NamedTemporaryFile(suffix='.gir', dir=tempdir, delete=False)
         main_f.write(data)
