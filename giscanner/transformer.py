@@ -23,6 +23,7 @@ import sys
 import re
 
 from . import ast
+from . import glibast
 from .config import DATADIR, GIR_DIR, GIR_SUFFIX
 from .girparser import GIRParser
 from .sourcescanner import (
@@ -304,9 +305,8 @@ currently-scanned namespace is first."""
             for ns in unprefixed_namespaces:
                 if name in ns:
                     return [(ns, name)]
-        else:
-            raise ValueError("Unknown namespace for %s %r"
-                % ('identifier' if is_identifier else 'symbol', name, ))
+        raise ValueError("Unknown namespace for %s %r"
+                         % ('identifier' if is_identifier else 'symbol', name, ))
 
     def split_ctype_namespaces(self, ident):
         """Given a StudlyCaps string identifier like FooBar, return a
@@ -791,7 +791,18 @@ Note that type resolution may not succeed."""
         typeval.ctype = None
         return typeval
 
+    def create_type_from_gtype_name(self, gtype_name):
+        """Parse a GType name (as from g_type_name()), and return a
+Type instance.  Note that this function performs namespace lookup,
+in contrast to the other create_type() functions."""
+        # First, is it a fundamental?
+        fundamental = ast.type_names.get(gtype_name)
+        if fundamental is not None:
+            return ast.Type(target_fundamental=fundamental.target_fundamental)
+        return ast.Type(gtype_name=gtype_name)
+
     def _resolve_type_from_ctype(self, typeval):
+        assert typeval.ctype is not None
         pointer_stripped = typeval.ctype.replace('*', '')
         try:
             matches = self.split_ctype_namespaces(pointer_stripped)
@@ -807,6 +818,18 @@ Note that type resolution may not succeed."""
                 return True
         return False
 
+    def _resolve_type_from_gtype_name(self, typeval):
+        assert typeval.gtype_name is not None
+        for ns in self._iter_namespaces():
+            for node in ns.itervalues():
+                if not isinstance(node, (ast.Class, ast.Interface,
+                                         glibast.GLibBoxed)):
+                    continue
+                if node.type_name == typeval.gtype_name:
+                    typeval.target_giname = '%s.%s' % (ns.name, node.name)
+                    return True
+        return False
+
     def resolve_type(self, typeval):
         if isinstance(typeval, (ast.Array, ast.List)):
             return self.resolve_type(typeval.element_type)
@@ -818,6 +841,8 @@ Note that type resolution may not succeed."""
             return True
         elif typeval.ctype:
             return self._resolve_type_from_ctype(typeval)
+        elif typeval.gtype_name:
+            return self._resolve_type_from_gtype_name(typeval)
 
     def _typepair_to_str(self, item):
         nsname, item = item

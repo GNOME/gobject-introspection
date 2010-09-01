@@ -301,7 +301,7 @@ blob containing data gleaned from GObject's primitive introspection."""
         self._introspect_signals(node, xmlnode)
         for child in xmlnode.findall('prerequisite'):
             name = child.attrib['name']
-            prereq = self._transformer.create_type_from_user_string(name)
+            prereq = self._transformer.create_type_from_gtype_name(name)
             node.prerequisites.append(prereq)
         # GtkFileChooserEmbed is an example of a private interface, we
         # just filter them out
@@ -321,7 +321,7 @@ blob containing data gleaned from GObject's primitive introspection."""
     def _introspect_implemented_interfaces(self, node, xmlnode):
         gt_interfaces = []
         for interface in xmlnode.findall('implements'):
-            gitype = self._transformer.create_type_from_user_string(interface.attrib['name'])
+            gitype = self._transformer.create_type_from_gtype_name(interface.attrib['name'])
             gt_interfaces.append(gitype)
         node.interfaces = gt_interfaces
 
@@ -335,7 +335,7 @@ blob containing data gleaned from GObject's primitive introspection."""
             construct_only = (flags & G_PARAM_CONSTRUCT_ONLY) != 0
             node.properties.append(ast.Property(
                 pspec.attrib['name'],
-                self._transformer.create_type_from_user_string(ctype),
+                self._transformer.create_type_from_gtype_name(ctype),
                 readable, writable, construct, construct_only,
                 ctype,
                 ))
@@ -344,7 +344,7 @@ blob containing data gleaned from GObject's primitive introspection."""
     def _introspect_signals(self, node, xmlnode):
         for signal_info in xmlnode.findall('signal'):
             rctype = signal_info.attrib['return']
-            rtype = self._transformer.create_type_from_user_string(rctype)
+            rtype = self._transformer.create_type_from_gtype_name(rctype)
             return_ = ast.Return(rtype)
             parameters = []
             for i, parameter in enumerate(signal_info.findall('param')):
@@ -353,7 +353,7 @@ blob containing data gleaned from GObject's primitive introspection."""
                 else:
                     argname = 'p%s' % (i-1, )
                 pctype = parameter.attrib['type']
-                ptype = self._transformer.create_type_from_user_string(pctype)
+                ptype = self._transformer.create_type_from_gtype_name(pctype)
                 param = ast.Parameter(argname, ptype)
                 param.transfer = ast.PARAM_TRANSFER_NONE
                 parameters.append(param)
@@ -364,7 +364,7 @@ blob containing data gleaned from GObject's primitive introspection."""
     def _parse_parents(self, xmlnode, node):
         parents_str = xmlnode.attrib.get('parents', '')
         if parents_str != '':
-            parent_types = map(lambda s: self._transformer.create_type_from_user_string(s),
+            parent_types = map(lambda s: self._transformer.create_type_from_gtype_name(s),
                                parents_str.split(','))
         else:
             parent_types = []

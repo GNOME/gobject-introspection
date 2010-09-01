@@ -27,12 +27,14 @@ class Type(object):
 * A reference to a node (target_giname)
 * A reference to a "fundamental" type like 'utf8'
 * A "foreign" type - this can be any string."
-If none are specified, then it's in an "unresolved" state.
-In this case, the ctype must be specified.
+If none are specified, then it's in an "unresolved" state.  An
+unresolved type can have two data sources; a "ctype" which comes
+from a C type string, or a gtype_name (from g_type_name()).
 """
 
     def __init__(self,
                  ctype=None,
+                 gtype_name=None,
                  target_fundamental=None,
                  target_giname=None,
                  target_foreign=None,
@@ -40,6 +42,7 @@ In this case, the ctype must be specified.
                  is_const=False,
                  origin_symbol=None):
         self.ctype = ctype
+        self.gtype_name = gtype_name
         self.origin_symbol = origin_symbol
         if _target_unknown:
             assert isinstance(self, TypeUnknown)
@@ -55,7 +58,7 @@ In this case, the ctype must be specified.
             assert target_giname is None
             assert target_fundamental is None
         else:
-            assert ctype is not None
+            assert (ctype is not None) or (gtype_name is not None)
         self.target_fundamental = target_fundamental
         self.target_giname = target_giname
         self.target_foreign = target_foreign
@@ -66,6 +69,15 @@ In this case, the ctype must be specified.
         return (self.target_fundamental or
                 self.target_giname or
                 self.target_foreign)
+
+    @property
+    def unresolved_string(self):
+        if self.ctype:
+            return self.ctype
+        elif self.gtype_name:
+            return self.gtype_name
+        else:
+            assert False
 
     def get_giname(self):
         assert self.target_giname is not None

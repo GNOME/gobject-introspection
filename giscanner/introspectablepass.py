@@ -64,7 +64,8 @@ class IntrospectablePass(object):
             target = None
 
         if not node.type.resolved:
-            self._parameter_warning(parent, node, "Unresolved ctype: %r" % (node.type.ctype, ))
+            self._parameter_warning(parent, node,
+"Unresolved type: %r" % (node.type.unresolved_string, ))
             parent.introspectable = False
             return
 
@@ -112,6 +113,8 @@ class IntrospectablePass(object):
 
     def _type_is_introspectable(self, typeval, warn=False):
         if not typeval.resolved:
+            return False
+        if isinstance(typeval, ast.TypeUnknown):
             return False
         if isinstance(typeval, (ast.Array, ast.List)):
             return self._type_is_introspectable(typeval.element_type)
