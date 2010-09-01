@@ -315,13 +315,17 @@ or raise ValueError.  As a special case, if the current namespace matches,
 it is always biggest (i.e. last)."""
         return self._split_c_string_for_namespace_matches(ident, is_identifier=True)
 
+    def split_csymbol_namespaces(self, symbol):
+        """Given a C symbol like foo_bar_do_baz, return a list of
+(namespace, stripped_symbol) sorted by namespace match probablity, or
+raise ValueError."""
+        return self._split_c_string_for_namespace_matches(symbol, is_identifier=False)
+
     def split_csymbol(self, symbol):
-        """Given a C symbol like foo_bar_do_baz, return a pair of
-(namespace, stripped_symbol) or raise ValueError."""
+        """Given a C symbol like foo_bar_do_baz, return the most probable
+(namespace, stripped_symbol) match, or raise ValueError."""
         matches = self._split_c_string_for_namespace_matches(symbol, is_identifier=False)
-        if matches:
-            return (matches[-1][0], matches[-1][1])
-        raise ValueError("Unknown namespace for symbol %r" % (symbol, ))
+        return matches[-1]
 
     def strip_identifier_or_warn(self, ident, fatal=False):
         hidden = ident.startswith('_')
