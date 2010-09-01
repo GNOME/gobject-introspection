@@ -823,7 +823,9 @@ in contrast to the other create_type() functions."""
         for ns in self._iter_namespaces():
             for node in ns.itervalues():
                 if not isinstance(node, (ast.Class, ast.Interface,
-                                         glibast.GLibBoxed)):
+                                         glibast.GLibBoxed,
+                                         glibast.GLibEnum,
+                                         glibast.GLibFlags)):
                     continue
                 if node.type_name == typeval.gtype_name:
                     typeval.target_giname = '%s.%s' % (ns.name, node.name)
