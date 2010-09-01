@@ -385,7 +385,14 @@ typedef enum
 void foo_some_variant (guint x, va_list args);
 void foo_some_variant_ptr (guint x, va_list *args);
 
-/* Should be skipped due to annotations */
+/**
+ * FooSkippable: (skip)
+ * @FOO_SKIPPABLE_ONE: a skippable enum value
+ * @FOO_SKIPPABLE_TWO: another skippable enum value
+ *
+ * Some type that is only interesting from C and should not be
+ * exposed to language bindings.
+ */
 typedef enum {
   FOO_SKIPPABLE_ONE,
   FOO_SKIPPABLE_TWO
