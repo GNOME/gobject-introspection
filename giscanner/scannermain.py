@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- Mode: Python -*-
 # GObject-Introspection - a framework for introspecting GObject libraries
-# Copyright (C) 2008  Johan Dahlin
+# Copyright (C) 2008-2010 Johan Dahlin
 # Copyright (C) 2009 Red Hat, Inc.
 #
 # This program is free software; you can redistribute it and/or
@@ -20,8 +20,10 @@
 # 02110-1301, USA.
 #
 
+import errno
 import optparse
 import os
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -371,7 +373,13 @@ def scanner_main(args):
                 raise SystemExit(
 "Failed to re-parse .gir file; scanned=%r passthrough=%r" % (main_f.name, temp_f.name))
             os.unlink(temp_f.name)
-        os.rename(main_f.name, options.output)
+        try:
+            shutil.move(main_f.name, options.output)
+        except OSError, e:
+            if e.errno == errno.EPERM:
+                os.unlink(main_f.name)
+                return
+            raise
     else:
         sys.stdout.write(data)
 
