@@ -102,7 +102,8 @@ the latter is not specified.""")
                       help="Remove this prefix from C symbols (function names)")
     parser.add_option("", "--accept-unprefixed",
                       action="store_true", dest="accept_unprefixed", default=False,
-                      help="If specified, accept symbols and identifiers that do not match the namespace prefix.")
+                      help="""If specified, accept symbols and identifiers that do not
+match the namespace prefix.""")
     parser.add_option("", "--add-init-section",
                       action="append", dest="init_sections", default=[],
             help="add extra initialization code in the introspection program")

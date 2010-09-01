@@ -275,44 +275,52 @@ currently-scanned namespace is first."""
             return -1
         return cmp(x[2], y[2])
 
+    def _split_c_string_for_namespace_matches(self, name, is_identifier=False):
+        matches = []  # Namespaces which might contain this name
+        unprefixed_namespaces = [] # Namespaces with no prefix, last resort
+        for ns in self._iter_namespaces():
+            if is_identifier:
+                prefixes = ns.identifier_prefixes
+            else:
+                prefixes = ns.symbol_prefixes
+            if prefixes:
+                for prefix in prefixes:
+                    if (not is_identifier) and (not prefix.endswith('_')):
+                        prefix = prefix + '_'
+                    if name.startswith(prefix):
+                        matches.append((ns, name[len(prefix):], len(prefix)))
+                        break
+            else:
+                unprefixed_namespaces.append(ns)
+        if matches:
+            matches.sort(self._sort_matches)
+            return map(lambda x: (x[0], x[1]), matches)
+        elif self._accept_unprefixed:
+            return [(self._namespace, name)]
+        elif unprefixed_namespaces:
+            # A bit of a hack; this function ideally shouldn't look through the
+            # contents of namespaces; but since we aren't scanning anything
+            # without a prefix, it's not too bad.
+            for ns in unprefixed_namespaces:
+                if name in ns:
+                    return [(ns, name)]
+        else:
+            raise ValueError("Unknown namespace for %s %r"
+                % ('identifier' if is_identifier else 'symbol', name, ))
+
     def split_ctype_namespaces(self, ident):
         """Given a StudlyCaps string identifier like FooBar, return a
 list of (namespace, stripped_identifier) sorted by namespace length,
 or raise ValueError.  As a special case, if the current namespace matches,
 it is always biggest (i.e. last)."""
-        matches = []
-        for ns in self._iter_namespaces():
-            if ns.identifier_prefixes:
-                for prefix in ns.identifier_prefixes:
-                    if ident.startswith(prefix):
-                        matches.append((ns, ident[len(prefix):], len(prefix)))
-                        break
-            else:
-                # A special case for namespaces without a prefix, such as X
-                matches.append((ns, ident, 0))
-        if matches:
-            matches.sort(self._sort_matches)
-            return map(lambda x: (x[0], x[1]), matches)
-        elif self._accept_unprefixed:
-            return [(self._namespace, ident)]
-        raise ValueError("Unknown namespace for identifier %r" % (ident, ))
+        return self._split_c_string_for_namespace_matches(ident, is_identifier=True)
 
     def split_csymbol(self, symbol):
         """Given a C symbol like foo_bar_do_baz, return a pair of
 (namespace, stripped_symbol) or raise ValueError."""
-        matches = []
-        for ns in self._iter_namespaces():
-            for prefix in ns.symbol_prefixes:
-                if not prefix.endswith('_'):
-                    prefix = prefix + '_'
-                if symbol.startswith(prefix):
-                    matches.append((ns, symbol[len(prefix):], len(prefix)))
-                    break
+        matches = self._split_c_string_for_namespace_matches(symbol, is_identifier=False)
         if matches:
-            matches.sort(self._sort_matches)
             return (matches[-1][0], matches[-1][1])
-        elif self._accept_unprefixed:
-            return (self._namespace, symbol)
         raise ValueError("Unknown namespace for symbol %r" % (symbol, ))
 
     def strip_identifier_or_warn(self, ident, fatal=False):
