@@ -137,7 +137,7 @@ class IntrospectablePass(object):
         target = self._transformer.lookup_typenode(typeval)
         if not target:
             return False
-        return target.introspectable
+        return target.introspectable and (not target.skip)
 
     def _analyze_node(self, obj, stack):
         if obj.skip:
