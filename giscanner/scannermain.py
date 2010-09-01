@@ -358,6 +358,8 @@ def scanner_main(args):
     data = writer.get_xml()
     if options.output and options.output != "-":
         tempdir = os.path.dirname(options.output) or os.getcwd()
+        if not os.access(tempdir, os.W_OK):
+            tempdir = tempfile.gettempdir()
         main_f = tempfile.NamedTemporaryFile(suffix='.gir', dir=tempdir, delete=False)
         main_f.write(data)
         main_f.close()
