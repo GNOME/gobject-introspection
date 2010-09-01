@@ -565,8 +565,21 @@ uses a C sugar return type.</doc>
       <field name="height" writable="1">
         <type name="gint" c:type="gint"/>
       </field>
-      <constructor name="new" c:identifier="foo_rectangle_new">
-        <return-value transfer-ownership="full">
+      <method name="add" c:identifier="foo_rectangle_add">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <parameter name="r2" transfer-ownership="none">
+            <doc xml:whitespace="preserve">source rectangle</doc>
+            <type name="Rectangle" c:type="FooRectangle*"/>
+          </parameter>
+        </parameters>
+      </method>
+      <function name="new" c:identifier="foo_rectangle_new" introspectable="0">
+        <doc xml:whitespace="preserve">This is a C convenience constructor; we have to (skip)
+it because it's not a boxed type.</doc>
+        <return-value>
           <type name="Rectangle" c:type="FooRectangle*"/>
         </return-value>
         <parameters>
@@ -583,18 +596,7 @@ uses a C sugar return type.</doc>
             <type name="gint" c:type="int"/>
           </parameter>
         </parameters>
-      </constructor>
-      <method name="add" c:identifier="foo_rectangle_add">
-        <return-value transfer-ownership="none">
-          <type name="none" c:type="void"/>
-        </return-value>
-        <parameters>
-          <parameter name="r2" transfer-ownership="none">
-            <doc xml:whitespace="preserve">source rectangle</doc>
-            <type name="Rectangle" c:type="FooRectangle*"/>
-          </parameter>
-        </parameters>
-      </method>
+      </function>
     </record>
     <constant name="SUCCESS_INT" value="4408">
       <type name="gint" c:type="gint"/>

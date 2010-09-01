@@ -497,6 +497,23 @@ foo_test_array (void)
 }
 
 /**
+ * foo_rectangle_new: (skip)
+ *
+ * This is a C convenience constructor; we have to (skip)
+ * it because it's not a boxed type.
+ */
+FooRectangle *
+foo_rectangle_new (int x, int y, int width, int height)
+{
+  FooRectangle *r = g_slice_new (FooRectangle);
+  r->x = x;
+  r->y = y;
+  r->width = width;
+  r->height = height;
+  return r;
+}
+
+/**
  * foo_rectangle_add:
  * @r1: (inout): add to this rect
  * @r2: source rectangle

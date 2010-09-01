@@ -54,30 +54,61 @@ class IntrospectablePass(object):
         self._transformer.log_node_warning(parent, prefix + context + text, *args)
 
     def _introspectable_param_analysis(self, parent, node):
+        is_return = isinstance(node, ast.Return)
+        is_parameter = isinstance(node, ast.Parameter)
+        assert is_return or is_parameter
+
+        if node.type.target_giname is not None:
+            target = self._transformer.lookup_typenode(node.type)
+        else:
+            target = None
+
         if not node.type.resolved:
             self._parameter_warning(parent, node, "Unresolved ctype: %r" % (node.type.ctype, ))
             parent.introspectable = False
-        elif isinstance(node.type, ast.Varargs):
+            return
+
+        if isinstance(node.type, ast.Varargs):
             parent.introspectable = False
-        elif not isinstance(node.type, ast.List) and \
+            return
+
+        if not isinstance(node.type, ast.List) and \
                 (node.type.target_giname == 'GLib.List'):
             self._parameter_warning(parent, node, "Missing (element-type) annotation")
             parent.introspectable = False
-        elif node.transfer is None:
-            self._parameter_warning(parent, node, "Missing (transfer) annotation")
-            parent.introspectable = False
+            return
 
-        if isinstance(node, ast.Parameter) and node.type.target_giname:
-            target = self._transformer.lookup_typenode(node.type)
-            if (isinstance(target, ast.Callback)
-                and not target.create_type().target_giname in ('GLib.DestroyNotify',
-                                                               'Gio.AsyncReadyCallback')
-                and node.scope is None):
+        if (is_parameter
+            and isinstance(target, ast.Callback)
+            and not node.type.target_giname in ('GLib.DestroyNotify',
+                                                'Gio.AsyncReadyCallback')
+            and node.scope is None):
                 self._parameter_warning(parent, node,
                     ("Missing (scope) annotation for callback" +
                      " without GDestroyNotify (valid: %s, %s)")
                      % (ast.PARAM_SCOPE_CALL, ast.PARAM_SCOPE_ASYNC))
                 parent.introspectable = False
+                return
+
+        if is_return and isinstance(target, ast.Callback):
+            self._parameter_warning(parent, node, "Callbacks cannot be return values; use (skip)")
+            parent.introspectable = False
+            return
+
+        if (is_return
+            and isinstance(target, (ast.Record, ast.Union))
+            and not target.foreign
+            and not isinstance(target, glibast.GLibBoxed)):
+            if node.transfer != ast.PARAM_TRANSFER_NONE:
+                self._parameter_warning(parent, node,
+"Invalid non-constant return of bare structure or union; register as boxed type or (skip)")
+                parent.introspectable = False
+            return
+
+        if node.transfer is None:
+            self._parameter_warning(parent, node, "Missing (transfer) annotation")
+            parent.introspectable = False
+            return
 
     def _type_is_introspectable(self, typeval, warn=False):
         if not typeval.resolved:
@@ -127,7 +158,7 @@ class IntrospectablePass(object):
 
     def _introspectable_callable_analysis(self, obj, stack):
         if obj.skip:
-            return True
+            return False
         # Propagate introspectability of parameters to entire functions
         if isinstance(obj, ast.Callable):
             for param in obj.parameters:
@@ -141,7 +172,7 @@ class IntrospectablePass(object):
 
     def _introspectable_pass3(self, obj, stack):
         if obj.skip:
-            return True
+            return False
         # Propagate introspectability for fields
         if isinstance(obj, (ast.Class, ast.Interface, ast.Record, ast.Union)):
             for field in obj.fields:

@@ -794,7 +794,7 @@ method or constructor of some type."""
         if not (func.symbol.find('_new_') >= 0 or func.symbol.endswith('_new')):
             return False
         target = self._transformer.lookup_typenode(func.retval.type)
-        if not isinstance(target, (ast.Class, ast.Record, ast.Union, glibast.GLibBoxedOther)):
+        if not isinstance(target, (ast.Class, glibast.GLibBoxed)):
             return False
         new_idx = func.symbol.rfind('_new')
         assert (new_idx >= 0)
