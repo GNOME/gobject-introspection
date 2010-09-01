@@ -103,6 +103,10 @@ will export the symbol
 as
 .B Foo.Bar.do_something.
 .TP
+.B \--accept-unprefixed
+If specified, the scanner will accept identifiers and symbols which
+do not match the namespace prefix.  Try to avoid using this if possible.
+.TP
 .B \--output=FILENAME
 Name of the file to output. Normally namespace + format extension.
 Eg, GLib-2.0.gir.

@@ -105,6 +105,7 @@ Bar_1_0_gir_PACKAGES = gobject-2.0
 Bar_1_0_gir_PROGRAM = ./barapp
 Bar_1_0_gir_INCLUDES = GObject-2.0
 Bar_1_0_gir_FILES = $(barapp_SOURCES)
+Bar_1_0_gir_SCANNERFLAGS = --accept-unprefixed
 GIRS += Bar-1.0.gir
 
 pre-check:

@@ -100,6 +100,9 @@ the latter is not specified.""")
     parser.add_option("", "--symbol-prefix",
                       action="append", dest="symbol_prefixes", default=[],
                       help="Remove this prefix from C symbols (function names)")
+    parser.add_option("", "--accept-unprefixed",
+                      action="store_true", dest="accept_unprefixed", default=False,
+                      help="If specified, accept symbols and identifiers that do not match the namespace prefix.")
     parser.add_option("", "--add-init-section",
                       action="append", dest="init_sections", default=[],
             help="add extra initialization code in the introspection program")
@@ -276,8 +279,9 @@ def scanner_main(args):
     transformer = Transformer(cachestore,
                               options.namespace_name,
                               options.namespace_version,
-                              identifier_prefixes,
-                              symbol_prefixes)
+                              identifier_prefixes=identifier_prefixes,
+                              symbol_prefixes=symbol_prefixes,
+                              accept_unprefixed=options.accept_unprefixed)
     if options.warn_all:
         transformer.enable_warnings(True)
     transformer.set_include_paths(options.include_paths)

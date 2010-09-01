@@ -22,3 +22,29 @@ GType bar_baz_get_type          (void) G_GNUC_CONST;
 
 void bar_app_func (void);
 void bar_app_func2 (int x, double y);
+
+
+/* The intent of this case is to match mutter, which has unprefixed names like "MutterWindow".
+ * In this case we don't want to add "Mutter" as a namespace prefix, since that gives us a
+ * clash on a class name.  (MetaWindow and MutterWindow)
+ */
+#define MUTTER_TYPE_WINDOW              (mutter_window_get_type ())
+#define MUTTER_WINDOW(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), MUTTER_TYPE_WINDOW, MutterWindow))
+#define MUTTER_IS_WINDOW(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), MUTTER_TYPE_WINDOW))
+
+typedef struct MutterWindow          MutterWindow;
+typedef struct MutterWindowClass     MutterWindowClass;
+
+struct MutterWindow
+{
+  GObject parent_instance;
+};
+
+struct MutterWindowClass
+{
+  GObjectClass parent_class;
+};
+
+GType mutter_window_get_type          (void) G_GNUC_CONST;
+
+void mutter_window_func (MutterWindow *window, guint v);

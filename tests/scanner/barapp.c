@@ -25,6 +25,24 @@ bar_app_func2 (int x, double y)
 {
 }
 
+G_DEFINE_TYPE(MutterWindow, mutter_window, G_TYPE_OBJECT);
+
+static void
+mutter_window_class_init (MutterWindowClass *klass)
+{
+}
+
+static void
+mutter_window_init (MutterWindow *object)
+{
+}
+
+void
+mutter_window_func (MutterWindow *window,
+		    guint         v)
+{
+}
+
 int
 main(int argc, char **argv)
 {

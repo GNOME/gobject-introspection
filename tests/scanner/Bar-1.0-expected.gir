@@ -32,6 +32,34 @@ and/or use gtk-doc annotations.  -->
         <type name="GObject.ObjectClass" c:type="GObjectClass"/>
       </field>
     </record>
+    <class name="MutterWindow"
+           c:symbol-prefix="mutter_window"
+           c:type="MutterWindow"
+           parent="GObject.Object"
+           glib:type-name="MutterWindow"
+           glib:get-type="mutter_window_get_type"
+           glib:type-struct="MutterWindowClass">
+      <method name="func" c:identifier="mutter_window_func">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <parameter name="v" transfer-ownership="none">
+            <type name="guint" c:type="guint"/>
+          </parameter>
+        </parameters>
+      </method>
+      <field name="parent_instance">
+        <type name="GObject.Object" c:type="GObject"/>
+      </field>
+    </class>
+    <record name="MutterWindowClass"
+            c:type="MutterWindowClass"
+            glib:is-gtype-struct-for="MutterWindow">
+      <field name="parent_class">
+        <type name="GObject.ObjectClass" c:type="GObjectClass"/>
+      </field>
+    </record>
     <function name="app_func" c:identifier="bar_app_func">
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>

@@ -46,10 +46,12 @@ class Transformer(object):
     UCASE_CONSTANT_RE = re.compile(r'[_A-Z0-9]+')
 
     def __init__(self, cachestore, namespace_name, namespace_version,
-                 identifier_prefixes=None, symbol_prefixes=None):
+                 identifier_prefixes=None, symbol_prefixes=None,
+                 accept_unprefixed=False):
         self._cwd = os.getcwd() + os.sep
         self._cachestore = cachestore
         self.generator = None
+        self._accept_unprefixed = accept_unprefixed
         self._namespace = ast.Namespace(namespace_name, namespace_version,
                                     identifier_prefixes=identifier_prefixes,
                                     symbol_prefixes=symbol_prefixes)
@@ -291,6 +293,8 @@ it is always biggest (i.e. last)."""
         if matches:
             matches.sort(self._sort_matches)
             return map(lambda x: (x[0], x[1]), matches)
+        elif self._accept_unprefixed:
+            return [(self._namespace, ident)]
         raise ValueError("Unknown namespace for identifier %r" % (ident, ))
 
     def split_csymbol(self, symbol):
@@ -307,6 +311,8 @@ it is always biggest (i.e. last)."""
         if matches:
             matches.sort(self._sort_matches)
             return (matches[-1][0], matches[-1][1])
+        elif self._accept_unprefixed:
+            return (self._namespace, symbol)
         raise ValueError("Unknown namespace for symbol %r" % (symbol, ))
 
     def strip_identifier_or_warn(self, ident, fatal=False):
