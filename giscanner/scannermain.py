@@ -20,25 +20,25 @@
 # 02110-1301, USA.
 #
 
-import subprocess
-import tempfile
 import optparse
 import os
+import subprocess
 import sys
+import tempfile
 
 from giscanner.annotationparser import AnnotationParser
 from giscanner.ast import Include
 from giscanner.cachestore import CacheStore
 from giscanner.dumper import compile_introspection_binary
 from giscanner.gdumpparser import GDumpParser, IntrospectionBinary
-from giscanner.minixpath import xpath_assert
-from giscanner.sourcescanner import SourceScanner
-from giscanner.shlibs import resolve_shlibs
-from giscanner.transformer import Transformer
 from giscanner.maintransformer import MainTransformer
+from giscanner.minixpath import xpath_assert
 from giscanner.introspectablepass import IntrospectablePass
 from giscanner.girparser import GIRParser
 from giscanner.girwriter import GIRWriter
+from giscanner.shlibs import resolve_shlibs
+from giscanner.sourcescanner import SourceScanner
+from giscanner.transformer import Transformer
 from giscanner.utils import files_are_identical
 
 def _get_option_parser():
