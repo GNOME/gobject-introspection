@@ -235,6 +235,7 @@ tests/Makefile
 tests/offsets/Makefile
 tests/scanner/Makefile
 tests/repository/Makefile
+tests/warn/Makefile
 examples/Makefile
 docs/Makefile
 docs/reference/Makefile
