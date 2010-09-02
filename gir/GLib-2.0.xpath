@@ -1,3 +1,0 @@
-/namespace/alias[@name='Quark']
-/namespace/record[@name='PtrArray']
-/namespace/callback[@name='ThreadFunc']/return-value/type[@name='any']

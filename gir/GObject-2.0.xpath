@@ -1,3 +1,0 @@
-/namespace/class[@name='Object']/field[@name='g_type_instance']
-/namespace/class[@name='Object']/field[@name='ref_count']
-/namespace/class[@name='Object']/field[@name='qdata']

@@ -45,7 +45,6 @@ pkgpyexec_PYTHON = 		\
 	glibast.py		\
 	gdumpparser.py 	\
 	libtoolimporter.py	\
-	minixpath.py		\
 	odict.py		\
 	maintransformer.py	\
 	shlibs.py		\

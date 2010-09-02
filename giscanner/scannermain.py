@@ -34,7 +34,6 @@ from giscanner.cachestore import CacheStore
 from giscanner.dumper import compile_introspection_binary
 from giscanner.gdumpparser import GDumpParser, IntrospectionBinary
 from giscanner.maintransformer import MainTransformer
-from giscanner.minixpath import xpath_assert
 from giscanner.introspectablepass import IntrospectablePass
 from giscanner.girparser import GIRParser
 from giscanner.girwriter import GIRWriter
@@ -118,9 +117,6 @@ match the namespace prefix.""")
     parser.add_option("-v", "--verbose",
                       action="store_true", dest="verbose",
                       help="be verbose")
-    parser.add_option("", "--xpath-assertions",
-                      action="store", dest="xpath_assertions",
-            help="Use given file to create assertions on GIR content")
     parser.add_option("", "--c-include",
                       action="append", dest="c_includes", default=[],
                       help="headers which should be included in C programs")
@@ -179,18 +175,6 @@ def test_codegen(optstring):
         _error("Invaild namespace %r" % (namespace, ))
     return 0
 
-def validate(assertions, path):
-    from xml.etree.cElementTree import parse
-    doc = parse(open(path))
-    root = doc.getroot()
-    f = open(assertions)
-    assertions_list = f.readlines()
-    for assertion in assertions_list:
-        assertion = assertion.strip()
-        xpath_assert(root, assertion)
-    f.close()
-    return 0
-
 def process_options(output, allowed_flags):
     for option in output.split():
         for flag in allowed_flags:
@@ -238,9 +222,6 @@ def scanner_main(args):
 
     if len(args) <= 1:
         _error('Need at least one filename')
-
-    if options.xpath_assertions:
-        return validate(options.xpath_assertions, args[1])
 
     if not options.namespace_name:
         _error('Namespace name missing')

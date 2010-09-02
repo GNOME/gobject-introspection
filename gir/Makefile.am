@@ -41,14 +41,12 @@ GLib_2_0_gir_CFLAGS = \
             -DGETTEXT_PACKAGE=Dummy \
             -DGLIB_COMPILATION \
             -D__G_I18N_LIB_H__
-GLib_2_0_gir_ASSERTIONS = GLib-2.0.xpath
 GLib_2_0_gir_FILES =  \
                 $(GLIB_LIBDIR)/glib-2.0/include/glibconfig.h \
 	$(GLIB_INCLUDEDIR)/glib/*.h \
                 glib-2.0.c
 
 INTROSPECTION_GIRS += GLib-2.0.gir
-EXTRA_DIST += glib-2.0.c GLib-2.0.xpath
 
 DBusGLib-1.0.typelib: GObject-2.0.gir
 
@@ -72,11 +70,9 @@ GObject_2_0_gir_CFLAGS = \
             -DGOBJECT_COMPILATION \
                 -I$(GOBJECT_INCLUDEDIR) \
             -I$(GOBJECT_LIBDIR)/glib-2.0/include
-GObject_2_0_gir_ASSERTIONS = GObject-2.0.xpath
 GObject_2_0_gir_FILES = $(GLIB_INCLUDEDIR)/gobject/*.h gobject-2.0.c
 
 INTROSPECTION_GIRS += GObject-2.0.gir
-EXTRA_DIST += gobject-2.0.c GObject-2.0.xpath
 
 # gmodule
 GMODULE_INCLUDEDIR=$(shell pkg-config --variable=includedir gmodule-2.0)/glib-2.0
