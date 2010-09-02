@@ -24,6 +24,7 @@ import re
 
 from . import ast
 from . import glibast
+from .cachestore import CacheStore
 from .config import DATADIR, GIR_DIR, GIR_SUFFIX
 from .girparser import GIRParser
 from .sourcescanner import (
@@ -46,11 +47,11 @@ class Transformer(object):
 
     UCASE_CONSTANT_RE = re.compile(r'[_A-Z0-9]+')
 
-    def __init__(self, cachestore, namespace_name, namespace_version,
+    def __init__(self, namespace_name, namespace_version,
                  identifier_prefixes=None, symbol_prefixes=None,
                  accept_unprefixed=False):
         self._cwd = os.getcwd() + os.sep
-        self._cachestore = cachestore
+        self._cachestore = CacheStore()
         self.generator = None
         self._accept_unprefixed = accept_unprefixed
         self._namespace = ast.Namespace(namespace_name, namespace_version,

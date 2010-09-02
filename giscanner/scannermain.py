@@ -30,7 +30,6 @@ import tempfile
 
 from giscanner.annotationparser import AnnotationParser
 from giscanner.ast import Include
-from giscanner.cachestore import CacheStore
 from giscanner.dumper import compile_introspection_binary
 from giscanner.gdumpparser import GDumpParser, IntrospectionBinary
 from giscanner.maintransformer import MainTransformer
@@ -261,9 +260,7 @@ def scanner_main(args):
     else:
         symbol_prefixes = None
 
-    cachestore = CacheStore()
-    transformer = Transformer(cachestore,
-                              options.namespace_name,
+    transformer = Transformer(options.namespace_name,
                               options.namespace_version,
                               identifier_prefixes=identifier_prefixes,
                               symbol_prefixes=symbol_prefixes,
