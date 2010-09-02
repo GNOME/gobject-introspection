@@ -32,8 +32,11 @@ from . import ast
 class MessageLogger(object):
     _instance = None
 
-    def __init__(self, namespace):
+    def __init__(self, namespace, output=None):
+        if output is None:
+            output = sys.stderr
         self._cwd = os.getcwd() + os.sep
+        self._output = output
         self._namespace = namespace
         self._enable_warnings = False
         self._warned = False
@@ -76,7 +79,7 @@ If the warning is related to a ast.Node type, see log_node_warning()."""
             position_strings.append(position)
 
         for position in position_strings[:-1]:
-            print >>sys.stderr, "%s:" % (position, )
+            self._output.write("%s:\n" % (position, ))
         last_position = position_strings[-1]
 
         if log_type == WARNING:
@@ -86,12 +89,12 @@ If the warning is related to a ast.Node type, see log_node_warning()."""
         elif log_type == FATAL:
             error_type = "Fatal"
         if prefix:
-            print >>sys.stderr, \
-'''%s: %s: %s: %s: %s''' % (last_position, error_type, self._namespace.name,
-                            prefix, text)
+            self._output.write(
+'''%s: %s: %s: %s: %s\n''' % (last_position, error_type, self._namespace.name,
+                            prefix, text))
         else:
-            print >>sys.stderr, \
-'''%s: %s: %s: %s''' % (last_position, error_type, self._namespace.name, text)
+            self._output.write(
+'''%s: %s: %s: %s\n''' % (last_position, error_type, self._namespace.name, text))
 
 
         if log_type == FATAL:
