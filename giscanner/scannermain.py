@@ -183,7 +183,7 @@ def process_options(output, allowed_flags):
             yield option
             break
 
-def process_packages(parser, options, packages):
+def process_packages(options, packages):
     args = ['pkg-config', '--cflags']
     args.extend(packages)
     output = subprocess.Popen(args,
@@ -196,6 +196,7 @@ def process_packages(parser, options, packages):
     # so we explicitly filter to only the ones we need.
     options_whitelist = ['-I', '-D', '-U', '-l', '-L']
     filtered_output = list(process_options(output, options_whitelist))
+    parser = _get_option_parser()
     pkg_options, unused = parser.parse_args(filtered_output)
     options.cpp_includes.extend(pkg_options.cpp_includes)
     options.cpp_defines.extend(pkg_options.cpp_defines)
@@ -283,7 +284,7 @@ def scanner_main(args):
 
     packages = set(options.packages)
     packages.update(transformer.get_pkgconfig_packages())
-    exit_code = process_packages(parser, options, packages)
+    exit_code = process_packages(options, packages)
     if exit_code:
         return exit_code
 
