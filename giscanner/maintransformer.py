@@ -818,6 +818,8 @@ method or constructor of some type."""
                 "Can't find matching type for constructor; symbol=%r" % (func.symbol, ))
             return False
         (origin_node, funcname) = split
+        if not isinstance(origin_node, (ast.Class, glibast.GLibBoxed)):
+            return False
         if isinstance(target, ast.Class):
             parent = origin_node
             while parent and (not parent.create_type().target_giname == 'GObject.Object'):
@@ -847,7 +849,7 @@ method or constructor of some type."""
         self._namespace.float(func)
         func.name = funcname
         func.is_constructor = True
-        target.constructors.append(func)
+        origin_node.constructors.append(func)
         # Constructors have default return semantics
         if not func.retval.transfer:
             func.retval.transfer = self._get_transfer_default_return(func, func.retval)

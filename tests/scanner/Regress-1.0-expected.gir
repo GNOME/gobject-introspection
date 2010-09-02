@@ -733,7 +733,7 @@ case.</doc>
            glib:type-struct="TestSubObjClass">
       <constructor name="new" c:identifier="regress_test_sub_obj_new">
         <return-value transfer-ownership="full">
-          <type name="TestSubObj" c:type="RegressTestSubObj*"/>
+          <type name="TestObj" c:type="RegressTestObj*"/>
         </return-value>
       </constructor>
       <method name="instance_method"

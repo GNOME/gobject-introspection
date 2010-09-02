@@ -334,7 +334,7 @@ struct _RegressTestSubObjClass
 };
 
 GType       regress_test_sub_obj_get_type (void);
-RegressTestSubObj* regress_test_sub_obj_new (void);
+RegressTestObj* regress_test_sub_obj_new (void);
 void        regress_test_sub_obj_unset_bare (RegressTestSubObj *obj);
 int         regress_test_sub_obj_instance_method (RegressTestSubObj *obj);
 

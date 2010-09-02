@@ -2099,7 +2099,7 @@ regress_test_sub_obj_init (RegressTestSubObj *obj)
 {
 }
 
-RegressTestSubObj*
+RegressTestObj*
 regress_test_sub_obj_new ()
 {
   return g_object_new (REGRESS_TEST_TYPE_SUB_OBJ, NULL);
