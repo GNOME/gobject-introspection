@@ -57,15 +57,6 @@ def _get_option_parser():
     parser.add_option("-i", "--include",
                       action="append", dest="includes", default=[],
                       help="include types for other gidls")
-    parser.add_option('', "--generate-typelib-tests",
-                      action="store", dest="test_codegen", default=None,
-                      help="Generate test code for given namespace,output.h,output.c")
-    parser.add_option('', "--passthrough-gir",
-                      action="store", dest="passthrough_gir", default=None,
-                      help="Parse and re-output the specified GIR")
-    parser.add_option('', "--reparse-validate",
-                      action="store_true", dest="reparse_validate_gir", default=False,
-                      help="After generating the GIR, re-parse it to ensure validity")
     parser.add_option("", "--add-include-path",
                       action="append", dest="include_paths", default=[],
                       help="include paths for other GIR files")
@@ -127,9 +118,6 @@ match the namespace prefix.""")
     parser.add_option("-v", "--verbose",
                       action="store_true", dest="verbose",
                       help="be verbose")
-    parser.add_option("", "--typelib-xml",
-                      action="store_true", dest="typelib_xml",
-                      help="Just convert GIR to typelib XML")
     parser.add_option("", "--xpath-assertions",
                       action="store", dest="xpath_assertions",
             help="Use given file to create assertions on GIR content")
@@ -149,6 +137,20 @@ match the namespace prefix.""")
                      default=[])
     group.add_option("-p", dest="", help="Ignored")
     parser.add_option_group(group)
+
+    # Private options
+    parser.add_option('', "--generate-typelib-tests",
+                      action="store", dest="test_codegen", default=None,
+                      help=optparse.SUPPRESS_HELP)
+    parser.add_option('', "--passthrough-gir",
+                      action="store", dest="passthrough_gir", default=None,
+                      help=optparse.SUPPRESS_HELP)
+    parser.add_option('', "--reparse-validate",
+                      action="store_true", dest="reparse_validate_gir", default=False,
+                      help=optparse.SUPPRESS_HELP)
+    parser.add_option("", "--typelib-xml",
+                      action="store_true", dest="typelib_xml",
+                      help=optparse.SUPPRESS_HELP)
 
     return parser
 
