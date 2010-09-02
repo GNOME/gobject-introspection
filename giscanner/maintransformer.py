@@ -110,9 +110,10 @@ class MainTransformer(object):
                 origin_name = 'parameter %s' % (origin.argname, )
             else:
                 origin_name = 'return value'
-            self._transformer.log_node_warning(parent,
+            message.log_node(
+                message.FATAL, parent,
                 "can't find parameter %s referenced by %s of %r"
-                % (param_name, origin_name, parent.name), fatal=True)
+                % (param_name, origin_name, parent.name))
 
         return param.argname
 
@@ -125,18 +126,21 @@ class MainTransformer(object):
         rename_to = rename_to.value
         target = self._namespace.get_by_symbol(rename_to)
         if not target:
-            self._transformer.log_node_warning(node,
-"Can't find symbol %r referenced by Rename annotation" % (rename_to, ))
+            message.warn_node(node,
+                "Can't find symbol %r referenced by Rename annotation" % (
+                rename_to, ))
         elif target.shadowed_by:
-            self._transformer.log_node_warning(node,
-"Function %r already shadowed by %r, can't overwrite with %r" % (target.symbol,
-                                                             target.shadowed_by,
-                                                             rename_to))
+            message.warn_node(node,
+                "Function %r already shadowed by %r, can't overwrite with %r" % (
+                target.symbol,
+                target.shadowed_by,
+                rename_to))
         elif target.shadows:
-            self._transformer.log_node_warning(node,
-"Function %r already shadows %r, can't multiply shadow with %r" % (target.symbol,
-                                                                   target.shadows,
-                                                                   rename_to))
+            message.warn_node(node,
+                "Function %r already shadows %r, can't multiply shadow with %r" % (
+                target.symbol,
+                target.shadows,
+                rename_to))
         else:
             target.shadows = node.symbol
             node.shadowed_by = target.symbol
@@ -225,8 +229,8 @@ class MainTransformer(object):
                 return ast.List(base.name, *rest)
             if isinstance(base, ast.Map) and len(rest) == 2:
                 return ast.Map(*rest)
-            self._transformer.log_warning(
-"Too many parameters in type specification %r" % (type_str, ))
+            message.warn(
+                "Too many parameters in type specification %r" % (type_str, ))
             return base
         def top_combiner(base, *rest):
             if orig_node is not None:
@@ -235,8 +239,8 @@ class MainTransformer(object):
 
         result, rest = grab_one(type_str, resolver, top_combiner, combiner)
         if rest:
-            self._transformer.log_warning(
-"Trailing components in type specification %r" % (type_str, ))
+            message.warn("Trailing components in type specification %r" % (
+                type_str, ))
         return result
 
     def _apply_annotations_array(self, parent, node, options):
@@ -295,7 +299,7 @@ class MainTransformer(object):
         elif isinstance(node.type, ast.Array):
             node.type.element_type = self._resolve(element_type[0])
         else:
-            self._transformer.log_node_warning(parent,
+            message.warn_node(parent,
                 "Unknown container %r for element-type annotation" % (node.type, ))
 
     def _get_transfer_default_param(self, parent, node):
@@ -404,8 +408,8 @@ class MainTransformer(object):
             elif subtype == 'callee-allocates':
                 caller_allocates = False
             else:
-                self._transformer.log_warning(
-"out allocation for %s is invalid (%r)" % (node, subtype), fatal=True)
+                message.fatal("out allocation for %s is invalid (%r)" % (
+                    node, subtype))
         elif OPT_IN in options:
             annotated_direction = ast.PARAM_DIRECTION_IN
 
@@ -481,8 +485,9 @@ class MainTransformer(object):
                 if scope not in [ast.PARAM_SCOPE_CALL,
                                  ast.PARAM_SCOPE_ASYNC,
                                  ast.PARAM_SCOPE_NOTIFIED]:
-                    self._transformer.log_warning(parent,
-"Invalid scope %r for parameter %r" % (scope, param.name))
+                    message.warn(
+                        parent,
+                        "Invalid scope %r for parameter %r" % (scope, param.name))
                 else:
                     param.scope = scope
                     param.transfer = ast.PARAM_TRANSFER_NONE
@@ -544,9 +549,9 @@ class MainTransformer(object):
                 if param.argname == tag:
                     break
             else:
-                self._transformer.log_warning(
-"Annotation for '%s' refers to unknown argument '%s'"
-% (parent.name, tag))
+                message.warn(
+                    "Annotation for '%s' refers to unknown argument '%s'"
+                    % (parent.name, tag))
 
     def _apply_annotations_field(self, parent, block, field):
         if not block:
@@ -620,7 +625,7 @@ class MainTransformer(object):
                 self._apply_annotations_callable(vfunc, [parent], block)
                 break
         if not matched:
-            self._transformer.log_symbol_warning(node.symbol,
+            message.warn_symbol(node.symbol,
                 "Virtual slot %r not found for %r annotation" % (invoker_name, TAG_VFUNC))
 
     def _resolve_and_filter_type_list(self, typelist):
@@ -716,8 +721,8 @@ the ones that failed to resolve removed."""
             if enum is not None:
                 enum.error_quark = node.symbol
             else:
-                self._transformer.log_node_warning(node,
-"""%s: Couldn't find corresponding enumeration""" % (node.symbol, ))
+                message.warn_node(node,
+                    """%s: Couldn't find corresponding enumeration""" % (node.symbol, ))
 
     def _split_uscored_by_type(self, uscored):
         """'uscored' should be an un-prefixed uscore string.  This
@@ -809,7 +814,7 @@ method or constructor of some type."""
         split = self._split_uscored_by_type(subsymbol)
         if split is None:
             # TODO - need a e.g. (method) annotation
-            self._transformer.log_node_warning(func,
+            message.warn_node(func,
                 "Can't find matching type for constructor; symbol=%r" % (func.symbol, ))
             return False
         (origin_node, funcname) = split
@@ -823,15 +828,21 @@ method or constructor of some type."""
                 else:
                     parent = None
                 if parent is None:
-                    self._transformer.log_node_warning(func,
-"Return value is not superclass for constructor; symbol=%r constructed=%r return=%r"
-% (func.symbol, str(origin_node.create_type()), str(func.retval.type)))
+                    message.warn_node(func,
+                        "Return value is not superclass for constructor; "
+                        "symbol=%r constructed=%r return=%r" % (
+                        func.symbol,
+                        str(origin_node.create_type()),
+                        str(func.retval.type)))
                     return False
         else:
             if origin_node != target:
-                self._transformer.log_node_warning(func,
-"Constructor return type mismatch symbol=%r constructed=%r return=%r"
-% (func.symbol, str(origin_node.create_type()), str(func.retval.type)))
+                message.warn_node(func,
+                    "Constructor return type mismatch symbol=%r "
+                    "constructed=%r return=%r" % (
+                    func.symbol,
+                    str(origin_node.create_type()),
+                    str(func.retval.type)))
                 return False
         self._namespace.float(func)
         func.name = funcname
@@ -845,7 +856,7 @@ method or constructor of some type."""
     def _pair_class_virtuals(self, node):
         """Look for virtual methods from the class structure."""
         if not node.glib_type_struct:
-            self._transformer.log_node_warning(node,
+            message.warn_node(node,
                 "Failed to find class structure for %r" % (node.name, ))
             return
 

@@ -209,8 +209,8 @@ blob containing data gleaned from GObject's primitive introspection."""
         rettype = func.retval.type
         if not (rettype.is_equiv(ast.TYPE_GTYPE)
                 or rettype.target_giname == 'Gtk.Type'):
-            self._transformer.log_warning("function returns '%r', not a GType"
-                                          % (func.retval.type, ))
+            message.warn("function returns '%r', not a GType" % (
+                func.retval.type, ))
             return False
 
         self._get_type_functions.append(func.symbol)

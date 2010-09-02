@@ -19,6 +19,7 @@
 
 from . import ast
 from . import glibast
+from . import message
 
 class IntrospectablePass(object):
 
@@ -38,7 +39,7 @@ class IntrospectablePass(object):
         if isinstance(node, glibast.GLibInterface):
             for vfunc in node.virtual_methods:
                 if not vfunc.invoker:
-                    self._transformer.log_node_warning(vfunc,
+                    message.warn_node(vfunc,
 """Virtual function %r has no known invoker""" % (vfunc.name, ),
                     context=node)
 
@@ -51,7 +52,7 @@ class IntrospectablePass(object):
             context = "argument %s: " % (param.argname, )
         else:
             context = "return value: "
-        self._transformer.log_node_warning(parent, prefix + context + text, *args)
+        message.warn_node(parent, prefix + context + text, *args)
 
     def _introspectable_param_analysis(self, parent, node):
         is_return = isinstance(node, ast.Return)

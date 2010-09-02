@@ -86,8 +86,8 @@ class Transformer(object):
             positions = set()
             positions.update(original.file_positions)
             positions.update(node.file_positions)
-            self.log_warning("Namespace conflict for '%s'" % (node.name, ),
-                             positions, fatal=True)
+            message.fatal("Namespace conflict for '%s'" % (node.name, ),
+                          positions)
         else:
             self._namespace.append(node)
 

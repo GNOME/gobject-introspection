@@ -33,10 +33,10 @@ from giscanner.annotationparser import AnnotationParser
 from giscanner.ast import Include, Namespace
 from giscanner.dumper import compile_introspection_binary
 from giscanner.gdumpparser import GDumpParser, IntrospectionBinary
-from giscanner.maintransformer import MainTransformer
 from giscanner.introspectablepass import IntrospectablePass
 from giscanner.girparser import GIRParser
 from giscanner.girwriter import GIRWriter
+from giscanner.maintransformer import MainTransformer
 from giscanner.shlibs import resolve_shlibs
 from giscanner.sourcescanner import SourceScanner
 from giscanner.transformer import Transformer
@@ -329,7 +329,7 @@ def scanner_main(args):
     final.validate()
 
     if options.warn_fatal and transformer.did_warn():
-        transformer.log_warning("warnings configured as fatal", fatal=True)
+        message.fatal("warnings configured as fatal")
         return 1
 
     # Write out AST
