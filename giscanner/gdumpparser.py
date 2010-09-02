@@ -79,8 +79,6 @@ class GDumpParser(object):
 
         """
 
-        self._transformer.parse()
-
         # First pass: parsing
         for node in self._namespace.itervalues():
             if isinstance(node, ast.Function):

@@ -52,7 +52,6 @@ class Transformer(object):
                  accept_unprefixed=False):
         self._cwd = os.getcwd() + os.sep
         self._cachestore = CacheStore()
-        self.generator = None
         self._accept_unprefixed = accept_unprefixed
         self._namespace = ast.Namespace(namespace_name, namespace_version,
                                     identifier_prefixes=identifier_prefixes,
@@ -77,9 +76,6 @@ class Transformer(object):
     def get_pkgconfig_packages(self):
         return self._pkg_config_packages
 
-    def set_source_ast(self, src_ast):
-        self.generator = src_ast
-
     def _append_new_node(self, node):
         original = self._namespace.get(node.name)
         # Special case constants here; we allow duplication to sort-of
@@ -97,8 +93,8 @@ class Transformer(object):
         else:
             self._namespace.append(node)
 
-    def parse(self):
-        for symbol in self.generator.get_symbols():
+    def parse(self, symbols):
+        for symbol in symbols:
             node = self._traverse_one(symbol)
             if node:
                 self._append_new_node(node)

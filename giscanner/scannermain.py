@@ -294,7 +294,7 @@ def scanner_main(args):
     ss.parse_macros(filenames)
 
     # Transform the C symbols into AST nodes
-    transformer.set_source_ast(ss)
+    transformer.parse(ss.get_symbols())
 
     # Transform the C AST nodes into higher level
     # GLib/GObject nodes
