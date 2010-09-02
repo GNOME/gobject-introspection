@@ -610,7 +610,7 @@ raise ValueError."""
         try:
             name = self.strip_identifier(symbol.ident)
         except TransformerException, e:
-            message.warn(e)
+            message.warn_symbol(symbol, e)
             return None
         struct = ast.Record(name, symbol.ident, disguised)
         self._parse_fields(symbol, struct)
