@@ -55,7 +55,11 @@ def _get_option_parser():
                       help="format to use, one of gidl, gir")
     parser.add_option("-i", "--include",
                       action="append", dest="includes", default=[],
-                      help="include types for other gidls")
+                      help="Add specified gir file as dependency")
+    parser.add_option("", "--include-uninstalled",
+                      action="append", dest="includes_uninstalled", default=[],
+                      help="""A file path to a dependency; only use this when building multiple .gir files
+inside a single module.""")
     parser.add_option("", "--add-include-path",
                       action="append", dest="include_paths", default=[],
                       help="include paths for other GIR files")
@@ -281,6 +285,8 @@ def scanner_main(args):
         except:
             _error("Malformed include %r\n" % (include, ))
         transformer.register_include(include_obj)
+    for include_path in options.includes_uninstalled:
+        transformer.register_include_uninstalled(include_path)
 
     packages = set(options.packages)
     packages.update(transformer.get_pkgconfig_packages())

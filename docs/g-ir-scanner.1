@@ -32,10 +32,14 @@ This parameters decides which the resulting format will be used.
 The default value is gir.
 .TP
 .B \--include=NAME
-Parses another metadata file. The format is determined by looking
-at the file suffix. If a library depends on another the corresponding
-metadata file should be included so references to external types are
-correctly specified.
+Add the specified introspection dependency to the scanned namespace.
+NAME is of the form NAMESPACE-VERSION, like Gtk-3.0.
+.TP
+.B \--include-uninstalled=PATH
+Add the specified introspection dependency to the scanned namespace.
+This differs from \--include in that it takes a file path, and
+does not process the pkg-config dependencies (since they may not
+be installed yet).
 .TP
 .B \--add-include-path=PATH
 Add a directory to the path which the scanner uses to find GIR files.

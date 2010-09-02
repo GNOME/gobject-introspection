@@ -117,6 +117,18 @@ class Transformer(object):
         self._parse_include(filename)
         self._include_names.add(include)
 
+    def register_include_uninstalled(self, include_path):
+        basename = os.path.basename(include_path)
+        if not basename.endswith('.gir'):
+            raise SystemExit(
+"Include path %r must be a filename path ending in .gir" % (include_path, ))
+        girname = basename[:-4]
+        include = ast.Include.from_string(girname)
+        if girname in self._include_names:
+            return
+        self._parse_include(include_path, uninstalled=True)
+        self._include_names.add(include)
+
     def lookup_giname(self, name):
         """Given a name of the form Foo or Bar.Foo,
 return the corresponding ast.Node, or None if none
@@ -156,7 +168,7 @@ None."""
                          % (girname, searchdirs))
         sys.exit(1)
 
-    def _parse_include(self, filename):
+    def _parse_include(self, filename, uninstalled=False):
         parser = self._cachestore.load(filename)
         if parser is None:
             parser = GIRParser()
@@ -166,8 +178,9 @@ None."""
         for include in parser.get_includes():
             self.register_include(include)
 
-        for pkg in parser.get_pkgconfig_packages():
-            self._pkg_config_packages.add(pkg)
+        if not uninstalled:
+            for pkg in parser.get_pkgconfig_packages():
+                self._pkg_config_packages.add(pkg)
         namespace = parser.get_namespace()
         self._includes[namespace.name] = namespace
 
