@@ -96,7 +96,6 @@ If the warning is related to a ast.Node type, see log_node_warning()."""
             self._output.write(
 '''%s: %s: %s: %s\n''' % (last_position, error_type, self._namespace.name, text))
 
-
         if log_type == FATAL:
             raise SystemExit
 
@@ -156,3 +155,4 @@ def warn_symbol(symbol, text):
 def fatal(text, file_positions=None, prefix=None):
     ml = MessageLogger.get()
     ml.log(FATAL, text, file_positions, prefix)
+    raise SystemExit
