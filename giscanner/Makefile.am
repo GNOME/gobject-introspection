@@ -47,6 +47,7 @@ pkgpyexec_PYTHON = 		\
 	libtoolimporter.py	\
 	odict.py		\
 	maintransformer.py	\
+	message.py		\
 	shlibs.py		\
 	scannermain.py		\
 	sourcescanner.py	\

@@ -28,6 +28,7 @@ import subprocess
 import sys
 import tempfile
 
+from giscanner import message
 from giscanner.annotationparser import AnnotationParser
 from giscanner.ast import Include, Namespace
 from giscanner.dumper import compile_introspection_binary
@@ -264,10 +265,10 @@ def scanner_main(args):
                           options.namespace_version,
                           identifier_prefixes=identifier_prefixes,
                           symbol_prefixes=symbol_prefixes)
+    message.MessageLogger.get(namespace=namespace,
+                              enable_warnings=options.warn_all)
     transformer = Transformer(namespace,
                               accept_unprefixed=options.accept_unprefixed)
-    if options.warn_all:
-        transformer.enable_warnings(True)
     transformer.set_include_paths(options.include_paths)
     shown_include_warning = False
     for include in options.includes:
