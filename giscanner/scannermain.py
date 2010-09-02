@@ -29,7 +29,7 @@ import sys
 import tempfile
 
 from giscanner.annotationparser import AnnotationParser
-from giscanner.ast import Include
+from giscanner.ast import Include, Namespace
 from giscanner.dumper import compile_introspection_binary
 from giscanner.gdumpparser import GDumpParser, IntrospectionBinary
 from giscanner.maintransformer import MainTransformer
@@ -260,10 +260,11 @@ def scanner_main(args):
     else:
         symbol_prefixes = None
 
-    transformer = Transformer(options.namespace_name,
-                              options.namespace_version,
-                              identifier_prefixes=identifier_prefixes,
-                              symbol_prefixes=symbol_prefixes,
+    namespace = Namespace(options.namespace_name,
+                          options.namespace_version,
+                          identifier_prefixes=identifier_prefixes,
+                          symbol_prefixes=symbol_prefixes)
+    transformer = Transformer(namespace,
                               accept_unprefixed=options.accept_unprefixed)
     if options.warn_all:
         transformer.enable_warnings(True)

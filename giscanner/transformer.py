@@ -47,15 +47,11 @@ class Transformer(object):
 
     UCASE_CONSTANT_RE = re.compile(r'[_A-Z0-9]+')
 
-    def __init__(self, namespace_name, namespace_version,
-                 identifier_prefixes=None, symbol_prefixes=None,
-                 accept_unprefixed=False):
+    def __init__(self, namespace, accept_unprefixed=False):
         self._cwd = os.getcwd() + os.sep
         self._cachestore = CacheStore()
         self._accept_unprefixed = accept_unprefixed
-        self._namespace = ast.Namespace(namespace_name, namespace_version,
-                                    identifier_prefixes=identifier_prefixes,
-                                    symbol_prefixes=symbol_prefixes)
+        self._namespace = namespace
         self._pkg_config_packages = set()
         self._typedefs_ns = {}
         self._enable_warnings = False
