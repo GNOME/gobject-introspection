@@ -485,9 +485,9 @@ class MainTransformer(object):
                 if scope not in [ast.PARAM_SCOPE_CALL,
                                  ast.PARAM_SCOPE_ASYNC,
                                  ast.PARAM_SCOPE_NOTIFIED]:
-                    message.warn(
+                    message.warn_node(
                         parent,
-                        "Invalid scope %r for parameter %r" % (scope, param.name))
+                        "Invalid scope %r for parameter %r" % (scope, param.argname))
                 else:
                     param.scope = scope
                     param.transfer = ast.PARAM_TRANSFER_NONE

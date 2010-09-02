@@ -1,6 +1,8 @@
 include $(top_srcdir)/common.mk
 
 TESTS = \
+	callback-invalid-scope.h \
+	callback-missing-scope.h \
 	return-gobject.h \
 	unresolved-type.h
 
