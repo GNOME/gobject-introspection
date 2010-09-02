@@ -205,7 +205,7 @@ def process_packages(parser, options, packages):
     if output is None:
         # the error output should have already appeared on our stderr,
         # so we just exit
-        sys.exit(1)
+        return 1
     # Some pkg-config files on Windows have options we don't understand,
     # so we explicitly filter to only the ones we need.
     options_whitelist = ['-I', '-D', '-U', '-l', '-L']
@@ -220,7 +220,7 @@ def process_packages(parser, options, packages):
     output = subprocess.Popen(args,
                               stdout=subprocess.PIPE).communicate()[0]
     if output is None:
-        sys.exit(1)
+        return 1
     filtered_output = list(process_options(output, options_whitelist))
     pkg_options, unused = parser.parse_args(filtered_output)
     options.library_paths.extend(pkg_options.library_paths)
@@ -296,12 +296,14 @@ def scanner_main(args):
             include_obj = Include.from_string(include)
         except:
             sys.stderr.write("Malformed include %r\n" % (include, ))
-            sys.exit(1)
+            return 1
         transformer.register_include(include_obj)
 
     packages = set(options.packages)
     packages.update(transformer.get_pkgconfig_packages())
-    process_packages(parser, options, packages)
+    exit_code = process_packages(parser, options, packages)
+    if exit_code:
+        return exit_code
 
     # Run the preprocessor, tokenize and construct simple
     # objects representing the raw C symbols
@@ -347,8 +349,7 @@ def scanner_main(args):
 
     if options.warn_fatal and transformer.did_warn():
         transformer.log_warning("warnings configured as fatal", fatal=True)
-        # Redundant sys.exit here, just in case
-        sys.exit(1)
+        return 1
 
     # Write out AST
     if options.packages_export:
@@ -378,7 +379,7 @@ def scanner_main(args):
         except OSError, e:
             if e.errno == errno.EPERM:
                 os.unlink(main_f.name)
-                return
+                return 0
             raise
     else:
         sys.stdout.write(data)
