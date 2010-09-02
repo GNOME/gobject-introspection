@@ -36,9 +36,6 @@ from .sourcescanner import (
     CSYMBOL_TYPE_MEMBER, CSYMBOL_TYPE_ELLIPSIS, CSYMBOL_TYPE_CONST,
     TYPE_QUALIFIER_CONST)
 
-class TypeResolutionException(Exception):
-    pass
-
 _xdg_data_dirs = [x for x in os.environ.get('XDG_DATA_DIRS', '').split(':') \
                       + [DATADIR, '/usr/share'] if x]
 
@@ -800,7 +797,7 @@ in contrast to the other create_type() functions."""
         try:
             matches = self.split_ctype_namespaces(pointer_stripped)
         except ValueError, e:
-            raise TypeResolutionException(e)
+            return False
         target_giname = None
         for namespace, name in matches:
             target = namespace.get(name)
