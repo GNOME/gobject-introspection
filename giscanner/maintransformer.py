@@ -940,6 +940,7 @@ method or constructor of some type."""
                 callback_param.scope = ast.PARAM_SCOPE_NOTIFIED
                 callback_param.transfer = ast.PARAM_TRANSFER_NONE
             elif (param.type.is_equiv(ast.TYPE_ANY) and
+                  param.argname is not None and
                   param.argname.endswith('data')):
                 callback_param.closure_name = param.argname
 

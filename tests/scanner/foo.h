@@ -67,11 +67,16 @@ struct _FooSubInterfaceIface
   /* virtual table */
 
   void (*do_bar) (FooSubInterface *self);
+
+  void (*do_baz) (FooSubInterface *, GCallback, gpointer);
 };
 
 GType                 foo_sub_interface_get_type       (void) G_GNUC_CONST;
 
 void foo_sub_interface_do_bar (FooSubInterface *self);
+void foo_sub_interface_do_baz (FooSubInterface *self,
+                               GCallback callback,
+                               gpointer data);
 
 struct _FooObject
 {

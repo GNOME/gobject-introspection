@@ -644,10 +644,39 @@ exposed to language bindings.</doc>
           <type name="none" c:type="void"/>
         </return-value>
       </virtual-method>
+      <virtual-method name="do_baz" invoker="do_baz" introspectable="0">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <parameter transfer-ownership="none">
+            <type name="GObject.Callback" c:type="GCallback"/>
+          </parameter>
+          <parameter transfer-ownership="none">
+            <type name="gpointer" c:type="gpointer"/>
+          </parameter>
+        </parameters>
+      </virtual-method>
       <method name="do_bar" c:identifier="foo_sub_interface_do_bar">
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
+      </method>
+      <method name="do_baz" c:identifier="foo_sub_interface_do_baz">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <parameter name="callback"
+                     transfer-ownership="none"
+                     scope="call"
+                     closure="1">
+            <type name="GObject.Callback" c:type="GCallback"/>
+          </parameter>
+          <parameter name="data" transfer-ownership="none">
+            <type name="gpointer" c:type="gpointer"/>
+          </parameter>
+        </parameters>
       </method>
       <glib:signal name="destroy-event">
         <return-value transfer-ownership="none">
@@ -681,6 +710,24 @@ exposed to language bindings.</doc>
           <parameters>
             <parameter name="self" transfer-ownership="none">
               <type name="SubInterface" c:type="FooSubInterface*"/>
+            </parameter>
+          </parameters>
+        </callback>
+      </field>
+      <field name="do_baz" introspectable="0">
+        <callback name="do_baz" introspectable="0">
+          <return-value transfer-ownership="none">
+            <type name="none" c:type="void"/>
+          </return-value>
+          <parameters>
+            <parameter transfer-ownership="none">
+              <type name="SubInterface" c:type="FooSubInterface*"/>
+            </parameter>
+            <parameter transfer-ownership="none">
+              <type name="GObject.Callback" c:type="GCallback"/>
+            </parameter>
+            <parameter transfer-ownership="none">
+              <type name="gpointer" c:type="gpointer"/>
             </parameter>
           </parameters>
         </callback>

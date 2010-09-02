@@ -121,6 +121,16 @@ void foo_sub_interface_do_bar (FooSubInterface *self)
   FOO_SUBINTERFACE_GET_INTERFACE(self)->do_bar (self);
 }
 
+/**
+ * foo_sub_interface_do_baz:
+ * @self:
+ * @callback: (scope call):
+ */
+void
+foo_sub_interface_do_baz (FooSubInterface *self, GCallback callback, gpointer user_data)
+{
+  FOO_SUBINTERFACE_GET_INTERFACE(self)->do_baz (self, callback, user_data);
+}
 
 G_DEFINE_TYPE_EXTENDED (FooObject, foo_object, G_TYPE_OBJECT,
 			0, G_IMPLEMENT_INTERFACE (FOO_TYPE_INTERFACE,
@@ -206,7 +216,7 @@ foo_object_init (FooObject *object)
 /**
  * foo_object_external_type:
  * @object: a #FooObject
- * 
+ *
  * Returns: (transfer none): %NULL always
  */
 UtilityObject*
