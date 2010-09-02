@@ -174,7 +174,7 @@ def test_codegen(optstring):
         gen = EverythingCodeGenerator(out_h_filename, out_c_filename)
         gen.write()
     else:
-        raise ValueError("Invaild namespace %r" % (namespace, ))
+        _error("Invaild namespace %r" % (namespace, ))
     return 0
 
 def validate(assertions, path):
@@ -291,12 +291,11 @@ def scanner_main(args):
     shown_include_warning = False
     for include in options.includes:
         if os.sep in include:
-            raise ValueError("Invalid include path %r" % (include, ))
+            _error("Invalid include path %r" % (include, ))
         try:
             include_obj = Include.from_string(include)
         except:
-            sys.stderr.write("Malformed include %r\n" % (include, ))
-            return 1
+            _error("Malformed include %r\n" % (include, ))
         transformer.register_include(include_obj)
 
     packages = set(options.packages)
@@ -371,8 +370,8 @@ def scanner_main(args):
         passthrough_gir(main_f.name, temp_f)
         temp_f.close()
         if not files_are_identical(main_f.name, temp_f.name):
-            raise SystemExit(
-"Failed to re-parse .gir file; scanned=%r passthrough=%r" % (main_f.name, temp_f.name))
+            _error("Failed to re-parse gir file; scanned=%r passthrough=%r" % (
+                main_f.name, temp_f.name))
         os.unlink(temp_f.name)
         try:
             shutil.move(main_f.name, options.output)
