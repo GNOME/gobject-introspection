@@ -110,8 +110,8 @@ match the namespace prefix.""")
                       action="append", dest="init_sections", default=[],
             help="add extra initialization code in the introspection program")
     parser.add_option("-o", "--output",
-                      action="store", dest="output",
-                      help="output to writeout, defaults to stdout")
+                      action="store", dest="output", default="-",
+                      help="output filename to write to, defaults to - (stdout)")
     parser.add_option("", "--pkg",
                       action="append", dest="packages", default=[],
                       help="pkg-config packages to get cflags from")
@@ -359,21 +359,21 @@ def scanner_main(args):
     writer = Writer(transformer.namespace, shlibs, transformer.get_includes(),
                     exported_packages, options.c_includes)
     data = writer.get_xml()
-    if options.output and options.output != "-":
-        tempdir = os.path.dirname(options.output) or os.getcwd()
-        if not os.access(tempdir, os.W_OK):
-            tempdir = tempfile.gettempdir()
-        main_f = tempfile.NamedTemporaryFile(suffix='.gir', dir=tempdir, delete=False)
+
+    if options.output == "-":
+        output = sys.stdout
+    elif options.reparse_validate_gir:
+        main_f = tempfile.NamedTemporaryFile(suffix='.gir', delete=False)
         main_f.write(data)
         main_f.close()
-        if options.reparse_validate_gir:
-            temp_f = tempfile.NamedTemporaryFile(suffix='.gir', dir=tempdir, delete=False)
-            passthrough_gir(main_f.name, temp_f)
-            temp_f.close()
-            if not files_are_identical(main_f.name, temp_f.name):
-                raise SystemExit(
+
+        temp_f = tempfile.NamedTemporaryFile(suffix='.gir', delete=False)
+        passthrough_gir(main_f.name, temp_f)
+        temp_f.close()
+        if not files_are_identical(main_f.name, temp_f.name):
+            raise SystemExit(
 "Failed to re-parse .gir file; scanned=%r passthrough=%r" % (main_f.name, temp_f.name))
-            os.unlink(temp_f.name)
+        os.unlink(temp_f.name)
         try:
             shutil.move(main_f.name, options.output)
         except OSError, e:
@@ -381,7 +381,16 @@ def scanner_main(args):
                 os.unlink(main_f.name)
                 return 0
             raise
+        return 0
     else:
-        sys.stdout.write(data)
+        try:
+            output = open(options.output, "w")
+        except IOError, e:
+            _error("opening output for writing: %s" % (e.strerror, ))
+
+    try:
+        output.write(data)
+    except IOError, e:
+        _error("while writing output: %s" % (e.strerror, ))
 
     return 0
