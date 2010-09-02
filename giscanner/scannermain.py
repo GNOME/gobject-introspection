@@ -353,22 +353,24 @@ def scanner_main(args):
     if options.output == "-":
         output = sys.stdout
     elif options.reparse_validate_gir:
-        main_f = tempfile.NamedTemporaryFile(suffix='.gir', delete=False)
+        main_f, main_f_name = tempfile.mkstemp(suffix='.gir')
+        main_f = os.fdopen(main_f, 'w')
         main_f.write(data)
         main_f.close()
 
-        temp_f = tempfile.NamedTemporaryFile(suffix='.gir', delete=False)
-        passthrough_gir(main_f.name, temp_f)
+        temp_f, temp_f_name = tempfile.mkstemp(suffix='.gir')
+        temp_f = os.fdopen(temp_f, 'w')
+        passthrough_gir(main_f_name, temp_f)
         temp_f.close()
-        if not files_are_identical(main_f.name, temp_f.name):
+        if not files_are_identical(main_f_name, temp_f_name):
             _error("Failed to re-parse gir file; scanned=%r passthrough=%r" % (
-                main_f.name, temp_f.name))
-        os.unlink(temp_f.name)
+                main_f_name, temp_f_name))
+        os.unlink(temp_f_name)
         try:
-            shutil.move(main_f.name, options.output)
+            shutil.move(main_f_name, options.output)
         except OSError, e:
             if e.errno == errno.EPERM:
-                os.unlink(main_f.name)
+                os.unlink(main_f_name)
                 return 0
             raise
         return 0
