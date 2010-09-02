@@ -317,8 +317,8 @@ def scanner_main(args):
     gdump_parser.set_introspection_binary(binary)
     gdump_parser.parse()
 
-    ap = AnnotationParser(ss)
-    blocks = ap.parse()
+    ap = AnnotationParser()
+    blocks = ap.parse(ss.get_comments())
 
     main = MainTransformer(transformer, blocks)
     main.transform()

@@ -130,12 +130,11 @@ class AnnotationParser(object):
     OPTION_RE = re.compile(r'\([A-Za-z]+[^(]*\)')
     RETURNS_RE = re.compile(r'^return(s?)( value)?:', re.IGNORECASE)
 
-    def __init__(self, source_scanner):
+    def __init__(self):
         self._blocks = {}
-        self._source_scanner = source_scanner
 
-    def parse(self):
-        for comment in self._source_scanner.get_comments():
+    def parse(self, comments):
+        for comment in comments:
             self._parse_comment(comment)
         return self._blocks
 
