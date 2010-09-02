@@ -50,26 +50,17 @@ class Transformer(object):
     UCASE_CONSTANT_RE = re.compile(r'[_A-Z0-9]+')
 
     def __init__(self, namespace, accept_unprefixed=False):
-        self._cwd = os.getcwd() + os.sep
         self._cachestore = CacheStore()
         self._accept_unprefixed = accept_unprefixed
         self._namespace = namespace
         self._pkg_config_packages = set()
         self._typedefs_ns = {}
-        self._enable_warnings = False
-        self._warned = False
         self._includes = {}
         self._include_names = set()
         self._includepaths = []
 
     def get_includes(self):
         return self._include_names
-
-    def enable_warnings(self, enable):
-        self._enable_warnings = enable
-
-    def did_warn(self):
-        return self._warned
 
     def get_pkgconfig_packages(self):
         return self._pkg_config_packages
@@ -149,83 +140,6 @@ None."""
         return None
 
     # Private
-
-    def log_warning(self, text, file_positions=None, prefix=None,
-                    fatal=False):
-        """Log a warning, using optional file positioning information.
-If the warning is related to a ast.Node type, see log_node_warning()."""
-        if not fatal and not self._enable_warnings:
-            return
-
-        self._warned = True
-
-        if file_positions is None or len(file_positions) == 0:
-            target_file_positions = [('<unknown>', -1, -1)]
-        else:
-            target_file_positions = file_positions
-
-        position_strings = []
-        for (filename, line, column) in target_file_positions:
-            if filename.startswith(self._cwd):
-                filename = filename[len(self._cwd):]
-            if column != -1:
-                position = '%s:%d:%d' % (filename, line, column)
-            elif line != -1:
-                position = '%s:%d' % (filename, line, )
-            else:
-                position = '%s:' % (filename, )
-            position_strings.append(position)
-
-        for position in position_strings[:-1]:
-            print >>sys.stderr, "%s:" % (position, )
-        last_position = position_strings[-1]
-        error_type = 'error' if fatal else 'warning'
-        if prefix:
-            print >>sys.stderr, \
-'''%s: %s: %s: %s: %s''' % (last_position, error_type, self._namespace.name,
-                                 prefix, text)
-        else:
-            print >>sys.stderr, \
-'''%s: %s: %s: %s''' % (last_position, error_type, self._namespace.name, text)
-        if fatal:
-            sys.exit(1)
-
-    def log_symbol_warning(self, symbol, text, **kwargs):
-        """Log a warning in the context of the given symbol."""
-        if symbol.source_filename:
-            file_positions = [(symbol.source_filename, symbol.line, -1)]
-        else:
-            file_positions = None
-        prefix = "symbol=%r" % (symbol.ident, )
-        self.log_warning(text, file_positions, prefix=prefix, **kwargs)
-
-    def log_node_warning(self, node, text, context=None, fatal=False):
-        """Log a warning, using information about file positions from
-the given node.  The optional context argument, if given, should be
-another ast.Node type which will also be displayed.  If no file position
-information is available from the node, the position data from the
-context will be used."""
-        if hasattr(node, 'file_positions'):
-            if (len(node.file_positions) == 0 and
-                (context is not None) and len(context.file_positions) > 0):
-                file_positions = context.file_positions
-            else:
-                file_positions = node.file_positions
-        else:
-            file_positions = None
-            if not context:
-                text = "context=%r %s" % (node, text)
-
-        if context:
-            if isinstance(context, ast.Function):
-                name = context.symbol
-            else:
-                name = context.name
-            text = "%s: %s" % (name, text)
-        elif len(file_positions) == 0 and hasattr(node, 'name'):
-            text = "(%s)%s: %s" % (node.__class__.__name__, node.name, text)
-
-        self.log_warning(text, file_positions, fatal=fatal)
 
     def _find_include(self, include):
         searchdirs = self._includepaths[:]

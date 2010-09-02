@@ -265,8 +265,9 @@ def scanner_main(args):
                           options.namespace_version,
                           identifier_prefixes=identifier_prefixes,
                           symbol_prefixes=symbol_prefixes)
-    message.MessageLogger.get(namespace=namespace,
-                              enable_warnings=options.warn_all)
+    logger = message.MessageLogger.get(namespace=namespace)
+    if options.warn_all:
+        logger.enable_warnings(True)
     transformer = Transformer(namespace,
                               accept_unprefixed=options.accept_unprefixed)
     transformer.set_include_paths(options.include_paths)
@@ -328,7 +329,7 @@ def scanner_main(args):
     final = IntrospectablePass(transformer)
     final.validate()
 
-    if options.warn_fatal and transformer.did_warn():
+    if options.warn_fatal and logger.did_warn():
         message.fatal("warnings configured as fatal")
         return 1
 
