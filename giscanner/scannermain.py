@@ -58,8 +58,9 @@ def _get_option_parser():
                       help="Add specified gir file as dependency")
     parser.add_option("", "--include-uninstalled",
                       action="append", dest="includes_uninstalled", default=[],
-                      help="""A file path to a dependency; only use this when building multiple .gir files
-inside a single module.""")
+                      help=("""A file path to a dependency; only use this "
+                            "when building multiple .gir files inside a "
+                            "single module."""))
     parser.add_option("", "--add-include-path",
                       action="append", dest="include_paths", default=[],
                       help="include paths for other GIR files")
