@@ -39,15 +39,29 @@ def _diff(orig, new, short):
     except StopIteration:
         pass
     else:
-        print repr(orig), repr(new)
         print 'ERROR: while comparing %s:' % (short, )
         for line in list(lines)[2:]:
-            print '%s: %s' % (short, line[:-1])
+            print '%s: %r' % (short, line[:-1])
 
     return diff
 
+def _extract_expected(filename):
+    fd = open(filename)
+    data = fd.read()
+
+    retval = []
+    while data:
+        pos = data.find("EXPECT:")
+        data = data[pos+7:]
+        end = data.find('\n')
+        if end == -1:
+            break
+        retval.append(data[:end])
+        data = data[end:]
+    return sorted(retval)
+
 def check(args):
-    filenames = args
+    filename = args[0]
 
     output = StringIO()
     namespace = Namespace("Test", "1.0")
@@ -66,8 +80,8 @@ def check(args):
     ss.set_cpp_options(options.cpp_includes,
                        options.cpp_defines,
                        options.cpp_undefines)
-    ss.parse_files(filenames)
-    ss.parse_macros(filenames)
+    ss.parse_files([filename])
+    ss.parse_macros([filename])
     transformer.parse(ss.get_symbols())
 
     ap = AnnotationParser()
@@ -79,26 +93,20 @@ def check(args):
     final = IntrospectablePass(transformer)
     final.validate()
 
-    warnings = output.getvalue()[:-1].split('\n')
+    raw = output.getvalue()
+    if raw.endswith('\n'):
+        raw = raw[:-1]
+    warnings = raw.split('\n')
 
     failed_tests = 0
-    for warning in warnings:
-        filename, actual = warning.split(":", 1)
-        fd = open(filename)
-        data = fd.read()
-        pos = data.find("EXPECT:")
-        if pos == -1:
-            raise SystemExit("%s: unexpected warning %s" % (filename, warning,))
-        expected = data[pos+7:]
-        while expected.endswith('\n'):
-            expected = expected[:-1]
+    expected_warnings = _extract_expected(filename)
+    if len(expected_warnings) != len(warnings):
+        raise SystemExit(
+            "ERROR: expected %d warnings, but got %d: %s\n",
+            len(expected_warnings), len(warnings), warnings.join('\n'))
+    for warning, expected in zip(warnings, expected_warnings):
+        actual = warning.split(":", 1)[1]
         if _diff(actual, expected, filename):
-            failed_tests += 1
-
-    print 'PASS: %d of %d tested passed' % (len(filenames) - failed_tests,
-                                            len(filenames))
-
-    if failed_tests:
-        raise SystemExit("ERROR: some tests failed")
+            raise SystemExit("ERROR: tests %r failed" % (filename, ))
 
 sys.exit(check(sys.argv[1:]))
