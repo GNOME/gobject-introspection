@@ -21,6 +21,7 @@ import re
 
 from . import ast
 from . import glibast
+from . import message
 from .annotationparser import (TAG_VFUNC, TAG_SINCE, TAG_DEPRECATED, TAG_RETURNS,
                                TAG_ATTRIBUTES, TAG_RENAME_TO, TAG_TYPE, TAG_TRANSFER,
                                TAG_UNREF_FUNC, TAG_REF_FUNC, TAG_SET_VALUE_FUNC,
@@ -32,6 +33,7 @@ from .annotationparser import (OPT_ALLOW_NONE,
                                OPT_FOREIGN, OPT_ARRAY_FIXED_SIZE,
                                OPT_ARRAY_LENGTH, OPT_ARRAY_ZERO_TERMINATED)
 from .annotationparser import AnnotationParser
+from .transformer import TransformerException
 from .utils import to_underscores, to_underscores_noprefix
 
 class MainTransformer(object):
@@ -688,7 +690,12 @@ the ones that failed to resolve removed."""
 
             uscore_enums[uscored] = enum
 
-            no_uscore_prefixed = self._transformer.strip_identifier_or_warn(type_name)
+            try:
+                no_uscore_prefixed = self._transformer.strip_identifier(type_name)
+            except TransformerException, e:
+                message.warn(e)
+                no_uscore_prefixed = None
+
             if no_uscore_prefixed not in uscore_enums:
                 uscore_enums[no_uscore_prefixed] = enum
 

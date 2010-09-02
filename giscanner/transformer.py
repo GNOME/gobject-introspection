@@ -24,6 +24,7 @@ import re
 
 from . import ast
 from . import glibast
+from . import message
 from .cachestore import CacheStore
 from .config import DATADIR, GIR_DIR, GIR_SUFFIX
 from .girparser import GIRParser
@@ -35,6 +36,10 @@ from .sourcescanner import (
     CSYMBOL_TYPE_ENUM, CSYMBOL_TYPE_UNION, CSYMBOL_TYPE_OBJECT,
     CSYMBOL_TYPE_MEMBER, CSYMBOL_TYPE_ELLIPSIS, CSYMBOL_TYPE_CONST,
     TYPE_QUALIFIER_CONST)
+
+class TransformerException(Exception):
+    pass
+
 
 _xdg_data_dirs = [x for x in os.environ.get('XDG_DATA_DIRS', '').split(':') \
                       + [DATADIR, '/usr/share'] if x]
@@ -317,26 +322,26 @@ raise ValueError."""
         matches = self._split_c_string_for_namespace_matches(symbol, is_identifier=False)
         return matches[-1]
 
-    def strip_identifier_or_warn(self, ident, fatal=False):
+    def strip_identifier(self, ident):
         hidden = ident.startswith('_')
         if hidden:
             ident = ident[1:]
         try:
             matches = self.split_ctype_namespaces(ident)
         except ValueError, e:
-            self.log_warning(str(e), fatal=fatal)
-            return None
+            raise TransformerException(str(e))
         for ns, name in matches:
             if ns is self._namespace:
                 if hidden:
                     return '_' + name
                 return name
         (ns, name) = matches[-1]
-        self.log_warning("Skipping foreign identifier %r from namespace %s" % (ident, ns.name, ),
-                         fatal=fatal)
+        raise TransformerException(
+            "Skipping foreign identifier %r from namespace %s" % (
+            ident, ns.name, ))
         return None
 
-    def _strip_symbol_or_warn(self, symbol, is_constant=False, fatal=False):
+    def _strip_symbol(self, symbol, is_constant=False):
         ident = symbol.ident
         if is_constant:
             # Temporarily lowercase
@@ -347,13 +352,10 @@ raise ValueError."""
         try:
             (ns, name) = self.split_csymbol(ident)
         except ValueError, e:
-            self.log_symbol_warning(symbol, "Unknown namespace", fatal=fatal)
-            return None
+            raise TransformerException("Unknown namespace")
         if ns != self._namespace:
-            self.log_symbol_warning(symbol,
-"Skipping foreign symbol from namespace %s" % (ns.name, ),
-                                    fatal=fatal)
-            return None
+            raise TransformerException(
+                "Skipping foreign symbol from namespace %s" % (ns.name, ))
         if is_constant:
             name = name.upper()
         if hidden:
@@ -421,15 +423,19 @@ raise ValueError."""
                 # Ok, the enum members don't have a consistent prefix
                 # among them, so let's just remove the global namespace
                 # prefix.
-                name = self._strip_symbol_or_warn(child, is_constant=True)
-                if name is None:
+                try:
+                    name = self._strip_symbol(child, is_constant=True)
+                except TransformerException, e:
+                    message.warn_symbol(child, e)
                     return None
             members.append(ast.Member(name.lower(),
-                                  child.const_int,
-                                  child.ident))
+                                      child.const_int,
+                                      child.ident))
 
-        enum_name = self.strip_identifier_or_warn(symbol.ident)
-        if not enum_name:
+        try:
+            enum_name = self.strip_identifier(symbol.ident)
+        except TransformerException, e:
+            message.warn(e)
             return None
         if symbol.base_type.is_bitfield:
             klass = ast.Bitfield
@@ -442,8 +448,10 @@ raise ValueError."""
     def _create_function(self, symbol):
         parameters = list(self._create_parameters(symbol.base_type))
         return_ = self._create_return(symbol.base_type.base_type)
-        name = self._strip_symbol_or_warn(symbol)
-        if not name:
+        try:
+            name = self._strip_symbol(symbol)
+        except TransformerException, e:
+            message.warn_symbol(symbol, e)
             return None
         func = ast.Function(name, return_, parameters, False, symbol.ident)
         func.add_symbol_reference(symbol)
@@ -523,8 +531,10 @@ raise ValueError."""
                        CTYPE_POINTER,
                        CTYPE_BASIC_TYPE,
                        CTYPE_VOID):
-            name = self.strip_identifier_or_warn(symbol.ident)
-            if not name:
+            try:
+                name = self.strip_identifier(symbol.ident)
+            except TransformerException, e:
+                message.warn(e)
                 return None
             if symbol.base_type.name:
                 target = self.create_type_from_ctype_string(symbol.base_type.name)
@@ -648,8 +658,10 @@ raise ValueError."""
         # ignore non-uppercase defines
         if not self.UCASE_CONSTANT_RE.match(symbol.ident):
             return None
-        name = self._strip_symbol_or_warn(symbol, is_constant=True)
-        if not name:
+        try:
+            name = self._strip_symbol(symbol, is_constant=True)
+        except TransformerException, e:
+            message.warn_symbol(symbol, e)
             return None
         if symbol.const_string is not None:
             typeval = ast.TYPE_STRING
@@ -668,8 +680,10 @@ raise ValueError."""
         return const
 
     def _create_typedef_struct(self, symbol, disguised=False):
-        name = self.strip_identifier_or_warn(symbol.ident)
-        if not name:
+        try:
+            name = self.strip_identifier(symbol.ident)
+        except TransformerException, e:
+            message.warn(e)
             return None
         struct = ast.Record(name, symbol.ident, disguised)
         self._parse_fields(symbol, struct)
@@ -678,8 +692,10 @@ raise ValueError."""
         return None
 
     def _create_typedef_union(self, symbol):
-        name = self.strip_identifier_or_warn(symbol.ident)
-        if not name:
+        try:
+            name = self.strip_identifier(symbol.ident)
+        except TransformerException, e:
+            message.warn(e)
             return None
         union = ast.Union(name, symbol.ident)
         self._parse_fields(symbol, union)
@@ -724,8 +740,10 @@ raise ValueError."""
                 if anonymous:
                     name = symbol.ident
                 else:
-                    name = self.strip_identifier_or_warn(symbol.ident)
-                    if not name:
+                    try:
+                        name = self.strip_identifier(symbol.ident)
+                    except TransformerException, e:
+                        message.warn(e)
                         return None
                 compound = klass(name, symbol.ident)
 
@@ -752,12 +770,16 @@ raise ValueError."""
         if member:
             name = symbol.ident
         elif symbol.ident.find('_') > 0:
-            name = self._strip_symbol_or_warn(symbol)
-            if not name:
+            try:
+                name = self._strip_symbol(symbol)
+            except TransformerException, e:
+                message.warn_symbol(symbol, e)
                 return None
         else:
-            name = self.strip_identifier_or_warn(symbol.ident)
-            if not name:
+            try:
+                name = self.strip_identifier(symbol.ident)
+            except TransformerException, e:
+                message.warn(e)
                 return None
         callback = ast.Callback(name, retval, parameters, False)
         callback.add_symbol_reference(symbol)

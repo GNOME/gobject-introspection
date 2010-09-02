@@ -27,6 +27,8 @@ from xml.etree.cElementTree import parse
 
 from . import ast
 from . import glibast
+from . import message
+from .transformer import TransformerException
 
 # GParamFlags
 G_PARAM_READABLE = 1 << 0
@@ -254,7 +256,10 @@ blob containing data gleaned from GObject's primitive introspection."""
 
         klass = (glibast.GLibFlags if node.tag == 'flags' else glibast.GLibEnum)
         type_name = node.attrib['name']
-        enum_name = self._transformer.strip_identifier_or_warn(type_name, fatal=True)
+        try:
+            enum_name = self._transformer.strip_identifier(type_name)
+        except TransformerException, e:
+            message.fatal(e)
         node = klass(enum_name, type_name, members, node.attrib['get-type'])
         self._namespace.append(node, replace=True)
 
@@ -275,11 +280,12 @@ blob containing data gleaned from GObject's primitive introspection."""
             return
         is_abstract = bool(xmlnode.attrib.get('abstract', False))
         (get_type, c_symbol_prefix) = self._split_type_and_symbol_prefix(xmlnode)
-        node = glibast.GLibObject(
-            self._transformer.strip_identifier_or_warn(type_name, fatal=True),
-            None,
-            type_name,
-            get_type, c_symbol_prefix, is_abstract)
+        try:
+            object_name = self._transformer.strip_identifier(type_name)
+        except TransformerException, e:
+            message.fatal(e)
+        node = glibast.GLibObject(object_name, None, type_name,
+                                  get_type, c_symbol_prefix, is_abstract)
         self._parse_parents(xmlnode, node)
         self._introspect_properties(node, xmlnode)
         self._introspect_signals(node, xmlnode)
@@ -291,10 +297,12 @@ blob containing data gleaned from GObject's primitive introspection."""
     def _introspect_interface(self, xmlnode):
         type_name = xmlnode.attrib['name']
         (get_type, c_symbol_prefix) = self._split_type_and_symbol_prefix(xmlnode)
-        node = glibast.GLibInterface(
-            self._transformer.strip_identifier_or_warn(type_name, fatal=True),
-            None,
-            type_name, get_type, c_symbol_prefix)
+        try:
+            interface_name = self._transformer.strip_identifier(type_name)
+        except TransformerException, e:
+            message.fatal(e)
+        node = glibast.GLibInterface(interface_name, None, type_name,
+                                     get_type, c_symbol_prefix)
         self._introspect_properties(node, xmlnode)
         self._introspect_signals(node, xmlnode)
         for child in xmlnode.findall('prerequisite'):
@@ -379,11 +387,13 @@ blob containing data gleaned from GObject's primitive introspection."""
         type_name = xmlnode.attrib['name']
         is_abstract = bool(xmlnode.attrib.get('abstract', False))
         (get_type, c_symbol_prefix) = self._split_type_and_symbol_prefix(xmlnode)
-        node = glibast.GLibObject(
-            self._transformer.strip_identifier_or_warn(type_name, fatal=True),
-            None,
-            type_name,
-            get_type, c_symbol_prefix, is_abstract)
+        try:
+            fundamental_name = self._transformer.strip_identifier(type_name)
+        except TransformerException, e:
+            message.fatal(e)
+
+        node = glibast.GLibObject(fundamental_name, None, type_name,
+                                  get_type, c_symbol_prefix, is_abstract)
         self._parse_parents(xmlnode, node)
         node.fundamental = True
         self._introspect_implemented_interfaces(node, xmlnode)
@@ -404,7 +414,10 @@ blob containing data gleaned from GObject's primitive introspection."""
                 field.writable = False
 
     def _pair_boxed_type(self, boxed):
-        name = self._transformer.strip_identifier_or_warn(boxed.type_name, fatal=True)
+        try:
+            name = self._transformer.strip_identifier(boxed.type_name)
+        except TransformerException, e:
+            message.fatal(e)
         pair_node = self._namespace.get(name)
         if not pair_node:
             boxed_item = glibast.GLibBoxedOther(name, boxed.type_name,
