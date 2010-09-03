@@ -625,7 +625,7 @@ class MainTransformer(object):
                 self._apply_annotations_callable(vfunc, [parent], block)
                 break
         if not matched:
-            message.warn_symbol(node.symbol,
+            message.warn_node(node,
                 "Virtual slot %r not found for %r annotation" % (invoker_name, TAG_VFUNC))
 
     def _resolve_and_filter_type_list(self, typelist):
