@@ -116,15 +116,24 @@ foo_sub_interface_class_init (gpointer g_class, gpointer class_data)
                   G_TYPE_NONE);
 }
 
-void foo_sub_interface_do_bar (FooSubInterface *self)
+void
+foo_sub_interface_do_bar (FooSubInterface *self)
 {
   FOO_SUBINTERFACE_GET_INTERFACE(self)->do_bar (self);
+}
+
+void
+foo_sub_interface_do_moo (FooSubInterface *self, int x, gpointer y)
+{
+  FOO_SUBINTERFACE_GET_INTERFACE(self)->do_moo (self, x, y);
 }
 
 /**
  * foo_sub_interface_do_baz:
  * @self:
  * @callback: (scope call):
+ * @user_data:
+ *
  */
 void
 foo_sub_interface_do_baz (FooSubInterface *self, GCallback callback, gpointer user_data)

@@ -644,13 +644,29 @@ exposed to language bindings.</doc>
           <type name="none" c:type="void"/>
         </return-value>
       </virtual-method>
-      <virtual-method name="do_baz" invoker="do_baz" introspectable="0">
+      <virtual-method name="do_baz" invoker="do_baz">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <parameter name="callback"
+                     transfer-ownership="none"
+                     scope="call"
+                     closure="1">
+            <type name="GObject.Callback" c:type="GCallback"/>
+          </parameter>
+          <parameter name="data" transfer-ownership="none">
+            <type name="gpointer" c:type="gpointer"/>
+          </parameter>
+        </parameters>
+      </virtual-method>
+      <virtual-method name="do_moo" invoker="do_moo">
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
           <parameter transfer-ownership="none">
-            <type name="GObject.Callback" c:type="GCallback"/>
+            <type name="gint" c:type="int"/>
           </parameter>
           <parameter transfer-ownership="none">
             <type name="gpointer" c:type="gpointer"/>
@@ -674,6 +690,19 @@ exposed to language bindings.</doc>
             <type name="GObject.Callback" c:type="GCallback"/>
           </parameter>
           <parameter name="data" transfer-ownership="none">
+            <type name="gpointer" c:type="gpointer"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="do_moo" c:identifier="foo_sub_interface_do_moo">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <parameter transfer-ownership="none">
+            <type name="gint" c:type="int"/>
+          </parameter>
+          <parameter transfer-ownership="none">
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
         </parameters>
@@ -714,19 +743,40 @@ exposed to language bindings.</doc>
           </parameters>
         </callback>
       </field>
-      <field name="do_baz" introspectable="0">
-        <callback name="do_baz" introspectable="0">
+      <field name="do_moo">
+        <callback name="do_moo">
           <return-value transfer-ownership="none">
             <type name="none" c:type="void"/>
           </return-value>
           <parameters>
-            <parameter transfer-ownership="none">
+            <parameter name="self" transfer-ownership="none">
               <type name="SubInterface" c:type="FooSubInterface*"/>
             </parameter>
             <parameter transfer-ownership="none">
-              <type name="GObject.Callback" c:type="GCallback"/>
+              <type name="gint" c:type="int"/>
             </parameter>
             <parameter transfer-ownership="none">
+              <type name="gpointer" c:type="gpointer"/>
+            </parameter>
+          </parameters>
+        </callback>
+      </field>
+      <field name="do_baz">
+        <callback name="do_baz">
+          <return-value transfer-ownership="none">
+            <type name="none" c:type="void"/>
+          </return-value>
+          <parameters>
+            <parameter name="self" transfer-ownership="none">
+              <type name="SubInterface" c:type="FooSubInterface*"/>
+            </parameter>
+            <parameter name="callback"
+                       transfer-ownership="none"
+                       scope="call"
+                       closure="2">
+              <type name="GObject.Callback" c:type="GCallback"/>
+            </parameter>
+            <parameter name="data" transfer-ownership="none">
               <type name="gpointer" c:type="gpointer"/>
             </parameter>
           </parameters>

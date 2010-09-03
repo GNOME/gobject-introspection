@@ -478,7 +478,7 @@ class MainTransformer(object):
             options = tag.options
         else:
             options = {}
-        if isinstance(parent, ast.Function):
+        if isinstance(parent, (ast.Function, ast.VFunction)):
             scope = options.get(OPT_SCOPE)
             if scope:
                 scope = scope.one()
@@ -919,6 +919,7 @@ method or constructor of some type."""
                 # the vfunc
                 block = self._blocks.get(method.symbol)
                 self._apply_annotations_callable(vfunc, [], block)
+                break
 
     def _pass3(self, node, chain):
         """Pass 3 is after we've loaded GType data and performed type
