@@ -50,14 +50,15 @@ def _extract_expected(filename):
     data = fd.read()
 
     retval = []
-    while data:
-        pos = data.find("EXPECT:")
-        data = data[pos+7:]
-        end = data.find('\n')
-        if end == -1:
-            break
-        retval.append(data[:end])
-        data = data[end:]
+    for line in data.split('\n'):
+        if line.startswith('// EXPECT:'):
+            sort_key = None
+            if ":" in line:
+                try:
+                    sort_key = int(line.split(":")[1])
+                except ValueError:
+                    pass
+            retval.append((sort_key, line[10:]))
     return sorted(retval)
 
 def check(args):
@@ -102,9 +103,9 @@ def check(args):
     expected_warnings = _extract_expected(filename)
     if len(expected_warnings) != len(warnings):
         raise SystemExit(
-            "ERROR: expected %d warnings, but got %d: %s\n",
-            len(expected_warnings), len(warnings), warnings.join('\n'))
-    for warning, expected in zip(warnings, expected_warnings):
+            "ERROR: expected %d warnings, but got %d: %r\n" % (
+            len(expected_warnings), len(warnings), warnings))
+    for warning, (sort_key, expected) in zip(warnings, expected_warnings):
         actual = warning.split(":", 1)[1]
         if _diff(actual, expected, filename):
             raise SystemExit("ERROR: tests %r failed" % (filename, ))
