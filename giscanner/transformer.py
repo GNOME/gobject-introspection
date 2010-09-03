@@ -726,8 +726,9 @@ Note that type resolution may not succeed."""
             return self._namespace.type_from_name(typestr)
         typeval = self.create_type_from_ctype_string(typestr)
         self.resolve_type(typeval)
-        # Explicitly clear out the c_type; there isn't one in this case.
-        typeval.ctype = None
+        if typeval.resolved:
+            # Explicitly clear out the c_type; there isn't one in this case.
+            typeval.ctype = None
         return typeval
 
     def _resolve_type_from_ctype(self, typeval):
