@@ -456,7 +456,7 @@ type.</doc>
       </method>
       <method name="watch"
               c:identifier="annotation_object_watch"
-              shadowed-by="annotation_object_watch_full"
+              shadowed-by="watch_full"
               introspectable="0">
         <doc xml:whitespace="preserve">This is here just for the sake of being overriden by its
 annotation_object_watch_full().</doc>
@@ -476,7 +476,7 @@ annotation_object_watch_full().</doc>
       </method>
       <method name="watch_full"
               c:identifier="annotation_object_watch_full"
-              shadows="annotation_object_watch">
+              shadows="watch">
         <doc xml:whitespace="preserve">Test overriding via the "Rename To" annotation.</doc>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>

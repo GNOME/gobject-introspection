@@ -142,13 +142,12 @@ class MainTransformer(object):
                 target.shadows,
                 rename_to))
         else:
-            target.shadowed_by = node.symbol
-            node.shadows = target.symbol
+            target.shadowed_by = node.name
+            node.shadows = target.name
 
     def _apply_annotations_function(self, node, chain):
         block = self._blocks.get(node.symbol)
         self._apply_annotations_callable(node, chain, block)
-        self._apply_annotation_rename_to(node, chain, block)
 
     def _pass_callable_defaults(self, node, chain):
         if isinstance(node, (ast.Callable, glibast.GLibSignal)):
@@ -607,9 +606,12 @@ class MainTransformer(object):
         return True
 
     def _apply_annotations2_function(self, node, chain):
+        block = self._blocks.get(node.symbol)
+
+        self._apply_annotation_rename_to(node, chain, block)
+
         # Handle virtual invokers
         parent = chain[-1] if chain else None
-        block = self._blocks.get(node.symbol)
         if not (block and parent):
             return
         virtual = block.get(TAG_VFUNC)
