@@ -245,6 +245,12 @@ type_names['gsize'] = TYPE_ULONG
 type_names['gssize'] = TYPE_LONG
 type_names['gconstpointer'] = TYPE_ANY
 
+# We used to support these; continue to do so
+type_names['any'] = TYPE_ANY
+type_names['boolean'] = TYPE_BOOLEAN
+type_names['uint'] = TYPE_UINT
+type_names['ulong'] = TYPE_ULONG
+
 # C stdio, used in GLib public headers; squash this for now here
 # until we move scanning into GLib and can (skip)
 type_names['FILE*'] = TYPE_ANY
