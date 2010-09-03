@@ -142,8 +142,8 @@ class MainTransformer(object):
                 target.shadows,
                 rename_to))
         else:
-            target.shadows = node.symbol
-            node.shadowed_by = target.symbol
+            target.shadowed_by = node.symbol
+            node.shadows = target.symbol
 
     def _apply_annotations_function(self, node, chain):
         block = self._blocks.get(node.symbol)
