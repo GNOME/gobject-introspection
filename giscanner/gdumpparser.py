@@ -359,7 +359,7 @@ blob containing data gleaned from GObject's primitive introspection."""
                 else:
                     argname = 'p%s' % (i-1, )
                 pctype = parameter.attrib['type']
-                ptype = ast.Type.create_type_gtype_name(pctype)
+                ptype = ast.Type.create_from_gtype_name(pctype)
                 param = ast.Parameter(argname, ptype)
                 param.transfer = ast.PARAM_TRANSFER_NONE
                 parameters.append(param)
