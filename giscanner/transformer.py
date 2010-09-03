@@ -279,7 +279,7 @@ raise ValueError."""
         try:
             (ns, name) = self.split_csymbol(ident)
         except ValueError, e:
-            raise TransformerException("Unknown namespace")
+            raise TransformerException(str(e))
         if ns != self._namespace:
             raise TransformerException(
                 "Skipping foreign symbol from namespace %s" % (ns.name, ))
@@ -353,7 +353,7 @@ raise ValueError."""
                 try:
                     name = self._strip_symbol(child, is_constant=True)
                 except TransformerException, e:
-                    message.warn_symbol(child, e)
+                    message.warn_symbol(symbol, e)
                     return None
             members.append(ast.Member(name.lower(),
                                       child.const_int,
@@ -362,7 +362,7 @@ raise ValueError."""
         try:
             enum_name = self.strip_identifier(symbol.ident)
         except TransformerException, e:
-            message.warn(e)
+            message.warn_symbol(symbol, e)
             return None
         if symbol.base_type.is_bitfield:
             klass = ast.Bitfield
