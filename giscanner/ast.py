@@ -30,7 +30,7 @@ class Type(object):
 If none are specified, then it's in an "unresolved" state.  An
 unresolved type can have two data sources; a "ctype" which comes
 from a C type string, or a gtype_name (from g_type_name()).
-"""
+""" # '''
 
     def __init__(self,
                  ctype=None,
@@ -78,6 +78,17 @@ from a C type string, or a gtype_name (from g_type_name()).
             return self.gtype_name
         else:
             assert False
+
+    @classmethod
+    def create_from_gtype_name(cls, gtype_name):
+        """Parse a GType name (as from g_type_name()), and return a
+Type instance.  Note that this function performs namespace lookup,
+in contrast to the other create_type() functions."""
+        # First, is it a fundamental?
+        fundamental = type_names.get(gtype_name)
+        if fundamental is not None:
+            return cls(target_fundamental=fundamental.target_fundamental)
+        return cls(gtype_name=gtype_name)
 
     def get_giname(self):
         assert self.target_giname is not None

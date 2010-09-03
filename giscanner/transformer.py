@@ -730,16 +730,6 @@ Note that type resolution may not succeed."""
         typeval.ctype = None
         return typeval
 
-    def create_type_from_gtype_name(self, gtype_name):
-        """Parse a GType name (as from g_type_name()), and return a
-Type instance.  Note that this function performs namespace lookup,
-in contrast to the other create_type() functions."""
-        # First, is it a fundamental?
-        fundamental = ast.type_names.get(gtype_name)
-        if fundamental is not None:
-            return ast.Type(target_fundamental=fundamental.target_fundamental)
-        return ast.Type(gtype_name=gtype_name)
-
     def _resolve_type_from_ctype(self, typeval):
         assert typeval.ctype is not None
         pointer_stripped = typeval.ctype.replace('*', '')
