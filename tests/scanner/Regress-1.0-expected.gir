@@ -330,46 +330,6 @@ and/or use gtk-doc annotations.  -->
           </parameter>
         </parameters>
       </constructor>
-      <function name="null_out" c:identifier="regress_test_obj_null_out">
-        <return-value transfer-ownership="none">
-          <type name="none" c:type="void"/>
-        </return-value>
-        <parameters>
-          <parameter name="obj"
-                     direction="out"
-                     caller-allocates="0"
-                     transfer-ownership="full"
-                     allow-none="1">
-            <doc xml:whitespace="preserve">A #RegressTestObj</doc>
-            <type name="TestObj" c:type="RegressTestObj**"/>
-          </parameter>
-        </parameters>
-      </function>
-      <function name="static_method"
-                c:identifier="regress_test_obj_static_method">
-        <return-value transfer-ownership="none">
-          <type name="gdouble" c:type="double"/>
-        </return-value>
-        <parameters>
-          <parameter name="x" transfer-ownership="none">
-            <type name="gint" c:type="int"/>
-          </parameter>
-        </parameters>
-      </function>
-      <function name="static_method_callback"
-                c:identifier="regress_test_obj_static_method_callback">
-        <return-value transfer-ownership="none">
-          <type name="none" c:type="void"/>
-        </return-value>
-        <parameters>
-          <parameter name="callback"
-                     transfer-ownership="none"
-                     allow-none="1"
-                     scope="call">
-            <type name="TestCallback" c:type="RegressTestCallback"/>
-          </parameter>
-        </parameters>
-      </function>
       <virtual-method name="matrix" invoker="do_matrix">
         <doc xml:whitespace="preserve">This method is virtual.  Notably its name differs from the virtual
 slot name, which makes it useful for testing bindings handle this
@@ -643,12 +603,6 @@ case.</doc>
           </parameter>
         </parameters>
       </method>
-      <function name="const_return"
-                c:identifier="regress_test_simple_boxed_a_const_return">
-        <return-value transfer-ownership="none">
-          <type name="TestSimpleBoxedA" c:type="RegressTestSimpleBoxedA*"/>
-        </return-value>
-      </function>
     </record>
     <record name="TestSimpleBoxedB"
             c:type="RegressTestSimpleBoxedB"
@@ -770,42 +724,6 @@ case.</doc>
           <type name="TestWi8021x" c:type="RegressTestWi8021x*"/>
         </return-value>
       </constructor>
-      <function name="get_testbool"
-                c:identifier="regress_test_wi_802_1x_get_testbool">
-        <return-value transfer-ownership="none">
-          <type name="gboolean" c:type="gboolean"/>
-        </return-value>
-        <parameters>
-          <parameter name="obj" transfer-ownership="none">
-            <type name="TestWi8021x" c:type="RegressTestWi8021x*"/>
-          </parameter>
-        </parameters>
-      </function>
-      <function name="set_testbool"
-                c:identifier="regress_test_wi_802_1x_set_testbool">
-        <return-value transfer-ownership="none">
-          <type name="none" c:type="void"/>
-        </return-value>
-        <parameters>
-          <parameter name="obj" transfer-ownership="none">
-            <type name="TestWi8021x" c:type="RegressTestWi8021x*"/>
-          </parameter>
-          <parameter name="v" transfer-ownership="none">
-            <type name="gboolean" c:type="gboolean"/>
-          </parameter>
-        </parameters>
-      </function>
-      <function name="static_method"
-                c:identifier="regress_test_wi_802_1x_static_method">
-        <return-value transfer-ownership="none">
-          <type name="gint" c:type="int"/>
-        </return-value>
-        <parameters>
-          <parameter name="x" transfer-ownership="none">
-            <type name="gint" c:type="int"/>
-          </parameter>
-        </parameters>
-      </function>
       <property name="testbool" writable="1" transfer-ownership="none">
         <type name="gboolean"/>
       </property>
@@ -1944,6 +1862,47 @@ call and can be released on return.</doc>
         </parameter>
       </parameters>
     </function>
+    <function name="test_obj_null_out"
+              c:identifier="regress_test_obj_null_out">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="obj"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full"
+                   allow-none="1">
+          <doc xml:whitespace="preserve">A #RegressTestObj</doc>
+          <type name="TestObj" c:type="RegressTestObj**"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="test_obj_static_method"
+              c:identifier="regress_test_obj_static_method">
+      <return-value transfer-ownership="none">
+        <type name="gdouble" c:type="double"/>
+      </return-value>
+      <parameters>
+        <parameter name="x" transfer-ownership="none">
+          <type name="gint" c:type="int"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="test_obj_static_method_callback"
+              c:identifier="regress_test_obj_static_method_callback">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="callback"
+                   transfer-ownership="none"
+                   allow-none="1"
+                   scope="call">
+          <type name="TestCallback" c:type="RegressTestCallback"/>
+        </parameter>
+      </parameters>
+    </function>
     <function name="test_short" c:identifier="regress_test_short">
       <return-value transfer-ownership="none">
         <type name="gshort" c:type="gshort"/>
@@ -1953,6 +1912,12 @@ call and can be released on return.</doc>
           <type name="gshort" c:type="gshort"/>
         </parameter>
       </parameters>
+    </function>
+    <function name="test_simple_boxed_a_const_return"
+              c:identifier="regress_test_simple_boxed_a_const_return">
+      <return-value transfer-ownership="none">
+        <type name="TestSimpleBoxedA" c:type="RegressTestSimpleBoxedA*"/>
+      </return-value>
     </function>
     <function name="test_simple_callback"
               c:identifier="regress_test_simple_callback">
@@ -2423,6 +2388,42 @@ call and can be released on return.</doc>
         <parameter name="fundamental_object" transfer-ownership="none">
           <type name="TestFundamentalObject"
                 c:type="RegressTestFundamentalObject*"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="test_wi_802_1x_get_testbool"
+              c:identifier="regress_test_wi_802_1x_get_testbool">
+      <return-value transfer-ownership="none">
+        <type name="gboolean" c:type="gboolean"/>
+      </return-value>
+      <parameters>
+        <parameter name="obj" transfer-ownership="none">
+          <type name="TestWi8021x" c:type="RegressTestWi8021x*"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="test_wi_802_1x_set_testbool"
+              c:identifier="regress_test_wi_802_1x_set_testbool">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="obj" transfer-ownership="none">
+          <type name="TestWi8021x" c:type="RegressTestWi8021x*"/>
+        </parameter>
+        <parameter name="v" transfer-ownership="none">
+          <type name="gboolean" c:type="gboolean"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="test_wi_802_1x_static_method"
+              c:identifier="regress_test_wi_802_1x_static_method">
+      <return-value transfer-ownership="none">
+        <type name="gint" c:type="int"/>
+      </return-value>
+      <parameters>
+        <parameter name="x" transfer-ownership="none">
+          <type name="gint" c:type="int"/>
         </parameter>
       </parameters>
     </function>
