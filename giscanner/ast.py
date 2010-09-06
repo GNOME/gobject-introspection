@@ -352,7 +352,7 @@ returned."""
         previous = self._names.get(node.name)
         if previous is not None:
             if not replace:
-                raise ValueError("Namespace conflict")
+                raise ValueError("Namespace conflict: %r" % (node, ))
             self.remove(previous)
         # A layering violation...but oh well.
         from .glibast import GLibBoxed
