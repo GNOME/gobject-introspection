@@ -23,6 +23,7 @@ LIBS = $(GOBJECT_LIBS) $(GTHREAD_LIBS)
 libannotation_la_SOURCES = $(srcdir)/annotation.c $(srcdir)/annotation.h
 libtestinherit_la_SOURCES = $(srcdir)/drawable.c $(srcdir)/drawable.h
 libfoo_la_SOURCES = $(srcdir)/foo.c $(srcdir)/foo.h
+libfoo_la_LIBADD = $(top_builddir)/girepository/libgirepository-1.0.la
 libutility_la_SOURCES = $(srcdir)/utility.c $(srcdir)/utility.h
 libgtkfrob_la_SOURCES = $(srcdir)/gtkfrob.c $(srcdir)/gtkfrob.h
 libregress_la_SOURCES = $(srcdir)/regress.c $(srcdir)/regress.h
