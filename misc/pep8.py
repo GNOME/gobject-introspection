@@ -824,6 +824,9 @@ def _main():
     start_time = time.time()
     errors = 0
     for path in args:
+        # skip emacs backups
+        if path.startswith(".#"):
+            continue
         if os.path.isdir(path):
             errors += input_dir(path)
         else:
