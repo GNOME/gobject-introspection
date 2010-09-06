@@ -56,15 +56,6 @@ pkgpyexec_PYTHON = 		\
 	utils.py		\
 	xmlwriter.py
 
-# Make sure all python files are available in builddir, so the module can be 
-# invoked by other tools during build time
-all-local:
-	for file in $(pkgpyexec_PYTHON); do			\
-	    if [ ! -f $$file ]; then				\
-	        $(LN_S) $(srcdir)/$$file $$file;		\
-	    fi							\
-	done
-
 _giscanner_la_CFLAGS = \
 	$(PYTHON_INCLUDES) \
 	$(GOBJECT_CFLAGS) \
