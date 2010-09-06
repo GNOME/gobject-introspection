@@ -348,11 +348,6 @@ returned."""
             target = '%s.%s' % (self.name, name)
         return Type(target_giname=target, ctype=ctype)
 
-    def contains_ident(self, ident):
-        """Return True if this namespace should contain the given C
-identifier string."""
-        return any(ident.startswith(prefix) for prefix in self.identifier_prefixes)
-
     def append(self, node, replace=False):
         previous = self._names.get(node.name)
         if previous is not None:
@@ -483,9 +478,6 @@ GIName.  It's possible for nodes to contain or point to other nodes."""
 
     def __repr__(self):
         return '%s(%r)' % (self.__class__.__name__, self.name)
-
-    def remove_matching_children(self, pred):
-        pass
 
     def inherit_file_positions(self, node):
         self.file_positions.update(node.file_positions)
@@ -717,11 +709,6 @@ class Record(Node):
             if field.anonymous_node is not None:
                 field.anonymous_node.walk(callback, chain)
 
-    def remove_matching_children(self, pred):
-        self.fields = filter(pred, self.fields)
-        self.constructors = filter(pred, self.constructors)
-        self.methods = filter(pred, self.methods)
-
 
 class Field(Annotated):
 
@@ -760,12 +747,6 @@ class Class(Node):
         self.constructors = []
         self.properties = []
         self.fields = []
-
-    def remove_matching_children(self, pred):
-        self.methods = filter(pred, self.methods)
-        self.constructors = filter(pred, self.constructors)
-        self.properties = filter(pred, self.properties)
-        self.fields = filter(pred, self.fields)
 
     def _walk(self, callback, chain):
         for meth in self.methods:
