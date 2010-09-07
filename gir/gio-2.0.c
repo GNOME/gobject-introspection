@@ -4,6 +4,12 @@
  */
 
 /**
+ * g_volume_monitor_get:
+ *
+ * Return value: (transfer full):
+ */
+
+/**
  * g_volume_monitor_get_connected_drives:
  *
  * Returns: (element-type GDrive) (transfer full):
@@ -65,6 +71,64 @@
  */
 
 /**
+ * g_file_new_for_path:
+ **
+ * @path:
+ * Returns: (transfer full):
+ */
+
+/**
+ * g_file_new_for_uri:
+ **
+ * @uri:
+ * Returns: (transfer full):
+ */
+
+/**
+ * g_file_new_for_commandline_arg:
+ **
+ * @arg:
+ * Returns: (transfer full):
+ */
+
+/**
+ * g_file_parse_name:
+ **
+ * @parse_name:
+ * Returns: (transfer full):
+ */
+
+/**
+ * g_file_dup:
+ *
+ * @file:
+ * Returns: (transfer full):
+ */
+
+/**
+ * g_file_enumerate_children:
+ *
+ * @file:
+ * Returns: (transfer full):
+ */
+
+/**
+ * g_file_enumerate_children_finish:
+ *
+ * @file:
+ * @res:
+ * @error:
+ * Returns: (transfer full):
+ */
+
+/**
+ * g_file_monitor_file:
+ *
+ * @file:
+ * Returns: (transfer full):
+ */
+
+/**
  * g_app_info_launch:
  * @appinfo:
  * @files: (element-type GFile):
@@ -81,9 +145,25 @@
  */
 
 /**
+ * g_file_enumerator_next_file:
+ * @enumerator:
+ * @cancellable:
+ * @error:
+ *
+ * Return value: (transfer full):
+ */
+
+/**
  * g_file_enumerator_next_files_finish:
  *
  * Return value: (transfer full) (element-type GFileInfo):
+ */
+
+/**
+ * g_file_enumerator_get_container:
+ * @enumerator:
+ *
+ * Return value: (transfer full):
  */
 
 /**
@@ -260,4 +340,20 @@
  * g_unix_mounts_get:
  *
  * Returns: (element-type utf8) (transfer full):
+ */
+
+/**
+ * g_settings_get_strv:
+ * @settings:
+ * @key:
+ *
+ * Return value: (array zero-terminated-1) (transfer full):
+ */
+
+/**
+ * g_settings_set_strv:
+ * @settings:
+ * @key:
+ * @value: (array zero-terminated-1):
+ *
  */

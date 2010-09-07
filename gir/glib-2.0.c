@@ -20,6 +20,19 @@
  */
 
 /**
+ * g_build_pathv:
+ * @separator:
+ * @args: (array zero-terminated=1):
+ * Return value:
+ */
+
+/**
+ * g_build_filenamev:
+ * @args: (array zero-terminated=1):
+ * Return value:
+ */
+
+/**
  * g_markup_escape_text:
  * Return value: (transfer full):
  */
