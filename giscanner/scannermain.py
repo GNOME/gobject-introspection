@@ -89,6 +89,10 @@ def _get_option_parser():
     parser.add_option("", "--nsversion",
                       action="store", dest="namespace_version",
                       help="version of namespace for this unit")
+    parser.add_option("", "--strip-prefix",
+		      action="store", dest="strip_prefix",
+		      help="""Option --strip-prefix is deprecated, please see --identifier-prefix
+and --symbol-prefix.""")
     parser.add_option("", "--identifier-prefix",
                       action="append", dest="identifier_prefixes", default=[],
                       help="""Remove this prefix from C identifiers (structure typedefs, etc.).
@@ -240,6 +244,9 @@ def scanner_main(args):
     if not (options.libraries or options.program):
         _error("Must specify --program or --library")
     libraries = options.libraries
+
+    if options.strip_prefix:
+	_error("Option --strip-prefix is deprecated, please see --identifier-prefix and --symbol-prefix.")
 
     filenames = []
     for arg in args:
