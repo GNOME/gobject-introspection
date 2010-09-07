@@ -318,6 +318,19 @@ and/or use gtk-doc annotations.  -->
           <type name="Object" c:type="FooObject*"/>
         </return-value>
       </constructor>
+      <function name="get_default" c:identifier="foo_object_get_default">
+        <doc xml:whitespace="preserve">This function is intended to match clutter_stage_get_default which
+uses a C sugar return type.</doc>
+        <return-value transfer-ownership="none">
+          <doc xml:whitespace="preserve">The global #FooSubobject</doc>
+          <type name="Subobject"/>
+        </return-value>
+      </function>
+      <function name="static_meth" c:identifier="foo_object_static_meth">
+        <return-value transfer-ownership="none">
+          <type name="gint" c:type="int"/>
+        </return-value>
+      </function>
       <virtual-method name="read_fn" invoker="read">
         <doc xml:whitespace="preserve">Read some stuff.</doc>
         <return-value transfer-ownership="none">
@@ -563,6 +576,27 @@ and/or use gtk-doc annotations.  -->
           </parameter>
         </parameters>
       </method>
+      <function name="new" c:identifier="foo_rectangle_new" introspectable="0">
+        <doc xml:whitespace="preserve">This is a C convenience constructor; we have to (skip)
+it because it's not a boxed type.</doc>
+        <return-value>
+          <type name="Rectangle" c:type="FooRectangle*"/>
+        </return-value>
+        <parameters>
+          <parameter name="x" transfer-ownership="none">
+            <type name="gint" c:type="int"/>
+          </parameter>
+          <parameter name="y" transfer-ownership="none">
+            <type name="gint" c:type="int"/>
+          </parameter>
+          <parameter name="width" transfer-ownership="none">
+            <type name="gint" c:type="int"/>
+          </parameter>
+          <parameter name="height" transfer-ownership="none">
+            <type name="gint" c:type="int"/>
+          </parameter>
+        </parameters>
+      </function>
     </record>
     <constant name="SUCCESS_INT" value="4408">
       <type name="gint" c:type="gint"/>
@@ -904,42 +938,6 @@ exposed to language bindings.</doc>
         </parameter>
         <parameter name="s" transfer-ownership="none">
           <type name="Utility.Struct" c:type="UtilityStruct"/>
-        </parameter>
-      </parameters>
-    </function>
-    <function name="object_get_default" c:identifier="foo_object_get_default">
-      <doc xml:whitespace="preserve">This function is intended to match clutter_stage_get_default which
-uses a C sugar return type.</doc>
-      <return-value transfer-ownership="none">
-        <doc xml:whitespace="preserve">The global #FooSubobject</doc>
-        <type name="Subobject"/>
-      </return-value>
-    </function>
-    <function name="object_static_meth" c:identifier="foo_object_static_meth">
-      <return-value transfer-ownership="none">
-        <type name="gint" c:type="int"/>
-      </return-value>
-    </function>
-    <function name="rectangle_new"
-              c:identifier="foo_rectangle_new"
-              introspectable="0">
-      <doc xml:whitespace="preserve">This is a C convenience constructor; we have to (skip)
-it because it's not a boxed type.</doc>
-      <return-value>
-        <type name="Rectangle" c:type="FooRectangle*"/>
-      </return-value>
-      <parameters>
-        <parameter name="x" transfer-ownership="none">
-          <type name="gint" c:type="int"/>
-        </parameter>
-        <parameter name="y" transfer-ownership="none">
-          <type name="gint" c:type="int"/>
-        </parameter>
-        <parameter name="width" transfer-ownership="none">
-          <type name="gint" c:type="int"/>
-        </parameter>
-        <parameter name="height" transfer-ownership="none">
-          <type name="gint" c:type="int"/>
         </parameter>
       </parameters>
     </function>

@@ -800,12 +800,9 @@ method or constructor of some type."""
         if not isinstance(node, (ast.Class, ast.Interface,
                                  ast.Record, ast.Union, glibast.GLibBoxedOther)):
             return False
-
-        # FIXME: https://bugzilla.gnome.org/show_bug.cgi?id=572408
-        #self._namespace.float(func)
-        #func.name = funcname
-        #node.static_methods.append(func)
-        return True
+        self._namespace.float(func)
+        func.name = funcname
+        node.static_methods.append(func)
 
     def _pair_constructor(self, func, subsymbol):
         if not (func.symbol.find('_new_') >= 0 or func.symbol.endswith('_new')):
