@@ -22,6 +22,20 @@ EXTRA_DIST += $(BASE_GIRSOURCES)
 
 INTROSPECTION_GIRS =
 
+# glib with source (to enable documentation)
+if WITH_GLIBSRC
+     GLib_2_0_gir_DOCSRC = $(GLIBSRC)/glib/*.c
+     GObject_2_0_gir_DOCSRC = $(GLIBSRC)/gobject/*.c
+     GModule_2_0_gir_DOCSRC = $(GLIBSRC)/gmodule/*.c
+     Gio_2_0_gir_DOCSRC = $(GLIBSRC)/gio/*.c
+else
+    GLib_2_0_gir_DOCSRC = 
+    GObject_2_0_gir_DOCSRC = 
+    GModule_2_0_gir_DOCSRC = 
+    Gio_2_0_gir_DOCSRC = 
+
+endif
+
 # glib
 GLIB_INCLUDEDIR=$(shell pkg-config --variable=includedir glib-2.0)/glib-2.0
 GLIB_LIBDIR=$(shell pkg-config --variable=libdir glib-2.0)
@@ -33,7 +47,13 @@ GLIB_LIBRARY=glib-2.0
 endif
 
 GLib_2_0_gir_LIBS = $(GLIB_LIBRARY)
-GLib_2_0_gir_SCANNERFLAGS = --reparse-validate --identifier-prefix=G --symbol-prefix=g --symbol-prefix=glib --c-include="glib.h"
+GLib_2_0_gir_SCANNERFLAGS = \
+            --reparse-validate \
+            --identifier-prefix=G \
+            --symbol-prefix=g \
+            --symbol-prefix=glib \
+            --c-include="glib.h" \
+            $(GLib_2_0_gir_DOCSRC)
 GLib_2_0_gir_PACKAGES = glib-2.0
 GLib_2_0_gir_CFLAGS = \
             -I$(GLIB_INCLUDEDIR) \
@@ -63,7 +83,13 @@ endif
 GObject-2.0.gir: GLib-2.0.gir
 
 GObject_2_0_gir_LIBS = $(GOBJECT_LIBRARY)
-GObject_2_0_gir_SCANNERFLAGS = --reparse-validate --identifier-prefix=G --c-include="glib-object.h" --add-include-path=.
+GObject_2_0_gir_SCANNERFLAGS = \
+            --reparse-validate \
+            --identifier-prefix=G \
+            --c-include="glib-object.h" \
+            --add-include-path=.+  \        
+            $(GObject_2_0_gir_DOCSRC)
+
 GObject_2_0_gir_PACKAGES = gobject-2.0
 GObject_2_0_gir_INCLUDES = GLib-2.0
 GObject_2_0_gir_CFLAGS = \
@@ -87,7 +113,12 @@ endif
 GModule-2.0.gir: GLib-2.0.gir
 
 GModule_2_0_gir_LIBS = $(GMODULE_LIBRARY)
-GModule_2_0_gir_SCANNERFLAGS = --identifier-prefix=G --c-include="gmodule.h" --add-include-path=.
+GModule_2_0_gir_SCANNERFLAGS = \
+            --identifier-prefix=G \
+            --c-include="gmodule.h" \
+            --add-include-path=. \
+            $(GModule_2_0_gir_DOCSRC)
+
 GModule_2_0_gir_PACKAGES = gmodule-2.0
 GModule_2_0_gir_INCLUDES = GLib-2.0
 GModule_2_0_gir_CFLAGS = \
@@ -118,7 +149,14 @@ endif
 Gio-2.0.gir: GObject-2.0.gir
 
 Gio_2_0_gir_LIBS = $(GIO_LIBRARY)
-Gio_2_0_gir_SCANNERFLAGS = --reparse-validate --warn-all --identifier-prefix=G --c-include="gio/gio.h" --add-include-path=.
+Gio_2_0_gir_SCANNERFLAGS = \
+            --reparse-validate \
+            --warn-all \
+            --identifier-prefix=G \
+            --c-include="gio/gio.h" \
+            --add-include-path=. \
+            $(Gio_2_0_gir_DOCSRC)
+
 Gio_2_0_gir_PACKAGES = gio-2.0 $(GIO_UNIX_PACKAGES)
 Gio_2_0_gir_INCLUDES = GObject-2.0
 Gio_2_0_gir_CFLAGS = \

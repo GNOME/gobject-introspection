@@ -223,6 +223,21 @@ case "$host" in
 esac
 AM_CHECK_PYTHON_HEADERS(,AC_MSG_ERROR([Python headers not found]))
 
+# Glib documentation
+
+GLIBSRC=
+AC_MSG_CHECKING([for glib source directory to use for documentation])
+
+AC_ARG_WITH(glib-src,
+	[  --with-glib-src=PATH    Source directory for glib - needed to add docs to gir],
+	GLIBSRC=$withval
+) 
+AM_CONDITIONAL(WITH_GLIBSRC, test x"$GLIBSRC" != x)
+AC_SUBST(GLIBSRC)
+AC_MSG_RESULT([$GLIBSRC])
+
+
+
 AC_CONFIG_FILES([
 Makefile
 gir/Makefile
