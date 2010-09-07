@@ -23,7 +23,8 @@ import os
 import sys
 
 if 'GI_SCANNER_DEBUG' in os.environ:
-    def on_exception(type, value, tb):
+    def on_exception(exctype, value, tb):
+        print "Caught exception: %r %r" % (exctype, value)
         import pdb
         pdb.pm()
     sys.excepthook = on_exception

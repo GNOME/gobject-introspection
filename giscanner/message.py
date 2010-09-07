@@ -24,6 +24,7 @@ import os
 import sys
 
 from . import ast
+from . import utils
 
 (WARNING,
  ERROR,
@@ -56,6 +57,8 @@ class MessageLogger(object):
     def log(self, log_type, text, file_positions=None, prefix=None):
         """Log a warning, using optional file positioning information.
 If the warning is related to a ast.Node type, see log_node_warning()."""
+        utils.break_on_debug_flag('warning')
+
         if not self._enable_warnings:
             return
 

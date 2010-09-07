@@ -1,0 +1,2 @@
+* You can use the GI_SCANNER_DEBUG environment variable; see utils.py
+  for a list of debug flags.

@@ -40,7 +40,7 @@ from giscanner.maintransformer import MainTransformer
 from giscanner.shlibs import resolve_shlibs
 from giscanner.sourcescanner import SourceScanner
 from giscanner.transformer import Transformer
-from giscanner.utils import files_are_identical
+from . import utils
 
 def _get_option_parser():
     parser = optparse.OptionParser('%prog [options] sources')
@@ -334,6 +334,8 @@ def scanner_main(args):
     main = MainTransformer(transformer, blocks)
     main.transform()
 
+    utils.break_on_debug_flag('tree')
+
     final = IntrospectablePass(transformer)
     final.validate()
 
@@ -362,7 +364,7 @@ def scanner_main(args):
         temp_f = os.fdopen(temp_f, 'w')
         passthrough_gir(main_f_name, temp_f)
         temp_f.close()
-        if not files_are_identical(main_f_name, temp_f_name):
+        if not utils.files_are_identical(main_f_name, temp_f_name):
             _error("Failed to re-parse gir file; scanned=%r passthrough=%r" % (
                 main_f_name, temp_f_name))
         os.unlink(temp_f_name)
