@@ -2058,11 +2058,11 @@ regress_test_obj_do_matrix (RegressTestObj *obj, const char *somestr)
 }
 
 /**
- * regress_test_obj_null_in:
+ * regress_func_obj_null_in:
  * @obj: (allow-none): A #RegressTestObj
  */
 void
-regress_test_obj_null_in (RegressTestObj *obj)
+regress_func_obj_null_in (RegressTestObj *obj)
 {
 }
 

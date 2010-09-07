@@ -311,7 +311,7 @@ gboolean regress_test_obj_torture_signature_1 (RegressTestObj    *obj,
 /* virtual */
 int        regress_test_obj_do_matrix (RegressTestObj *obj, const char *somestr);
 
-void regress_test_obj_null_in (RegressTestObj *obj);
+void regress_func_obj_null_in (RegressTestObj *obj);
 void regress_test_obj_null_out (RegressTestObj **obj);
 
 /* inheritance */
