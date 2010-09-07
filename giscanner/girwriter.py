@@ -379,6 +379,7 @@ and/or use gtk-doc annotations. ''')
             if isinstance(node, Class):
                 for method in sorted(node.constructors):
                     self._write_constructor(method)
+            if isinstance(node, (Class, Interface)):
                 for method in sorted(node.static_methods):
                     self._write_static_method(method)
             for vfunc in sorted(node.virtual_methods):

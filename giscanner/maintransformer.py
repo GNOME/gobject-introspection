@@ -797,9 +797,16 @@ method or constructor of some type."""
         if split is None:
             return False
         (node, funcname) = split
-        if not isinstance(node, (ast.Class, ast.Interface,
-                                 ast.Record, ast.Union, glibast.GLibBoxedOther)):
+
+        # We actually should treat static methods on a wider class of objects:
+        #  ast.Class, ast.Interface, ast.Record, ast.Union, glibast.GLibBoxedOther
+        # But we stick to GLibObject for now for compatibility with existing code.
+        #
+        # See https://bugzilla.gnome.org/show_bug.cgi?id=572408
+        #
+        if not isinstance(node, glibast.GLibObject):
             return False
+
         self._namespace.float(func)
         func.name = funcname
         node.static_methods.append(func)
