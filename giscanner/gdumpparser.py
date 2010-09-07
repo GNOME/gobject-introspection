@@ -390,7 +390,8 @@ blob containing data gleaned from GObject's primitive introspection."""
         try:
             fundamental_name = self._transformer.strip_identifier(type_name)
         except TransformerException, e:
-            message.fatal(e)
+            message.warn(e)
+            return
 
         node = glibast.GLibObject(fundamental_name, None, type_name,
                                   get_type, c_symbol_prefix, is_abstract)
