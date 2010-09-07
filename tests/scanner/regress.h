@@ -508,4 +508,20 @@ void regress_test_torture_signature_2 (int                  x,
 GValue *regress_test_date_in_gvalue (void);
 GValue *regress_test_strv_in_gvalue (void);
 
+/**
+ * RegressSkippedStructure: (skip)
+ *
+ * This should be skipped, and moreover, all function which
+ * use it should be.
+ */
+typedef struct
+{
+  int x;
+  double v;
+} RegressSkippedStructure;
+
+void regress_random_function_with_skipped_structure (int x,
+						     RegressSkippedStructure *foo,
+						     double v);
+
 #endif /* __GITESTTYPES_H__ */

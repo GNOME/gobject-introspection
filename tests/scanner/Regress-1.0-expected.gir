@@ -15,6 +15,18 @@ and/or use gtk-doc annotations.  -->
              shared-library="libregress.so"
              c:identifier-prefixes="Regress"
              c:symbol-prefixes="regress">
+    <record name="SkippedStructure"
+            c:type="RegressSkippedStructure"
+            introspectable="0">
+      <doc xml:whitespace="preserve">This should be skipped, and moreover, all function which
+use it should be.</doc>
+      <field name="x" writable="1">
+        <type name="gint" c:type="int"/>
+      </field>
+      <field name="v" writable="1">
+        <type name="gdouble" c:type="double"/>
+      </field>
+    </record>
     <record name="TestBoxed"
             c:type="RegressTestBoxed"
             glib:type-name="RegressTestBoxed"
@@ -828,6 +840,24 @@ case.</doc>
         <parameter name="obj" transfer-ownership="none" allow-none="1">
           <doc xml:whitespace="preserve">A #RegressTestObj</doc>
           <type name="TestObj" c:type="RegressTestObj*"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="random_function_with_skipped_structure"
+              c:identifier="regress_random_function_with_skipped_structure"
+              introspectable="0">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="x" transfer-ownership="none">
+          <type name="gint" c:type="int"/>
+        </parameter>
+        <parameter name="foo" transfer-ownership="none">
+          <type name="SkippedStructure" c:type="RegressSkippedStructure*"/>
+        </parameter>
+        <parameter name="v" transfer-ownership="none">
+          <type name="gdouble" c:type="double"/>
         </parameter>
       </parameters>
     </function>
