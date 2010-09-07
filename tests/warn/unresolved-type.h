@@ -16,4 +16,4 @@ typedef enum {
   MY_ENUM_A = 0
 } TestMyEnum2;
 
-// EXPECT:17: Warning: Test: symbol='TestMyEnum2': Unknown namespace for symbol 'my_enum_a'
+// EXPECT:17: Warning: Test: symbol='TestMyEnum2': Unknown namespace for symbol 'MY_ENUM_A'

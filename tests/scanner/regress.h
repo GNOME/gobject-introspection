@@ -166,6 +166,13 @@ GType regress_test_flags_get_type (void) G_GNUC_CONST;
 
 const gchar * regress_test_enum_param(RegressTestEnum e);
 
+/* constants */
+
+#define REGRESS_INT_CONSTANT 4422
+#define REGRESS_DOUBLE_CONSTANT 44.22
+#define REGRESS_STRING_CONSTANT "Some String"
+#define REGRESS_Mixed_Case_Constant 4423
+
 /* structures */
 typedef struct _RegressTestStructA RegressTestStructA;
 typedef struct _RegressTestStructB RegressTestStructB;

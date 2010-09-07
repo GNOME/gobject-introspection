@@ -20,7 +20,6 @@
 
 import os
 import sys
-import re
 
 from . import ast
 from . import glibast
@@ -46,8 +45,6 @@ _xdg_data_dirs = [x for x in os.environ.get('XDG_DATA_DIRS', '').split(':') \
 
 class Transformer(object):
     namespace = property(lambda self: self._namespace)
-
-    UCASE_CONSTANT_RE = re.compile(r'[_A-Z0-9]+')
 
     def __init__(self, namespace, accept_unprefixed=False):
         self._cachestore = CacheStore()
@@ -204,6 +201,8 @@ currently-scanned namespace is first."""
         for ns in self._iter_namespaces():
             if is_identifier:
                 prefixes = ns.identifier_prefixes
+            elif name[0].isupper():
+                prefixes = ns._ucase_symbol_prefixes
             else:
                 prefixes = ns.symbol_prefixes
             if prefixes:
@@ -268,11 +267,8 @@ raise ValueError."""
             ident, ns.name, ))
         return None
 
-    def _strip_symbol(self, symbol, is_constant=False):
+    def _strip_symbol(self, symbol):
         ident = symbol.ident
-        if is_constant:
-            # Temporarily lowercase
-            ident = ident.lower()
         hidden = ident.startswith('_')
         if hidden:
             ident = ident[1:]
@@ -283,8 +279,6 @@ raise ValueError."""
         if ns != self._namespace:
             raise TransformerException(
                 "Skipping foreign symbol from namespace %s" % (ns.name, ))
-        if is_constant:
-            name = name.upper()
         if hidden:
             return '_' + name
         return name
@@ -351,7 +345,7 @@ raise ValueError."""
                 # among them, so let's just remove the global namespace
                 # prefix.
                 try:
-                    name = self._strip_symbol(child, is_constant=True)
+                    name = self._strip_symbol(child)
                 except TransformerException, e:
                     message.warn_symbol(symbol, e)
                     return None
@@ -582,11 +576,8 @@ raise ValueError."""
         if (symbol.source_filename is None or
             not symbol.source_filename.endswith('.h')):
             return None
-        # ignore non-uppercase defines
-        if not self.UCASE_CONSTANT_RE.match(symbol.ident):
-            return None
         try:
-            name = self._strip_symbol(symbol, is_constant=True)
+            name = self._strip_symbol(symbol)
         except TransformerException, e:
             message.warn_symbol(symbol, e)
             return None

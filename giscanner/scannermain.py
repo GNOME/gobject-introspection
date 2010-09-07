@@ -263,6 +263,11 @@ def scanner_main(args):
     else:
         identifier_prefixes = None
     if options.symbol_prefixes:
+        for prefix in options.symbol_prefixes:
+            # See Transformer._split_c_string_for_namespace_matches() for
+            # why this check is needed
+            if prefix.lower() != prefix:
+                _error("Values for --symbol-prefix must be entirely lowercase")
         symbol_prefixes = options.symbol_prefixes
     else:
         symbol_prefixes = None

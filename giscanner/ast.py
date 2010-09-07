@@ -311,6 +311,8 @@ class Namespace(object):
         else:
             ps = self.identifier_prefixes
             self.symbol_prefixes = [to_underscores(p).lower() for p in ps]
+        # cache upper-cased versions
+        self._ucase_symbol_prefixes = [p.upper() for p in self.symbol_prefixes]
         self._names = odict() # Maps from GIName -> node
         self._aliases = {} # Maps from GIName -> GIName
         self._type_names = {} # Maps from GTName -> node
