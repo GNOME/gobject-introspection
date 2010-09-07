@@ -731,13 +731,26 @@ Note that type resolution may not succeed."""
             typeval.ctype = None
         return typeval
 
+    def _resolve_type_from_ctype_all_namespaces(self, typeval, pointer_stripped):
+        # If we can't determine the namespace from the type name,
+        # fall back to trying all of our includes.  An example of this is mutter,
+        # which has nominal namespace of "Meta", but a few classes are
+        # "Mutter".  We don't export that data in introspection currently.
+        # Basically the library should be fixed, but we'll hack around it here.
+        for namespace in self._includes.itervalues():
+            target = namespace.get_by_ctype(pointer_stripped)
+            if target:
+                typeval.target_giname = '%s.%s' % (namespace.name, target.name)
+                return True
+        return False
+
     def _resolve_type_from_ctype(self, typeval):
         assert typeval.ctype is not None
         pointer_stripped = typeval.ctype.replace('*', '')
         try:
             matches = self.split_ctype_namespaces(pointer_stripped)
         except ValueError, e:
-            return False
+            return self._resolve_type_from_ctype_all_namespaces(typeval, pointer_stripped)
         target_giname = None
         for namespace, name in matches:
             target = namespace.get(name)
