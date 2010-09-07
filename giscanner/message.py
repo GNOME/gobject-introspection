@@ -60,6 +60,8 @@ If the warning is related to a ast.Node type, see log_node_warning()."""
         utils.break_on_debug_flag('warning')
 
         if not self._enable_warnings:
+            if log_type == FATAL:
+                raise SystemExit(text)
             return
 
         self._warned = True
@@ -92,15 +94,16 @@ If the warning is related to a ast.Node type, see log_node_warning()."""
         elif log_type == FATAL:
             error_type = "Fatal"
         if prefix:
-            self._output.write(
+            text = (
 '''%s: %s: %s: %s: %s\n''' % (last_position, error_type, self._namespace.name,
                             prefix, text))
         else:
-            self._output.write(
+            text = (
 '''%s: %s: %s: %s\n''' % (last_position, error_type, self._namespace.name, text))
 
+        self._output.write(text)
         if log_type == FATAL:
-            raise SystemExit(1)
+            raise SystemExit(text)
 
     def log_node(self, log_type, node, text, context=None):
         """Log a warning, using information about file positions from
@@ -158,4 +161,3 @@ def warn_symbol(symbol, text):
 def fatal(text, file_positions=None, prefix=None):
     ml = MessageLogger.get()
     ml.log(FATAL, text, file_positions, prefix)
-    raise SystemExit
