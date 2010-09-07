@@ -418,11 +418,6 @@ case.</doc>
           </parameter>
         </parameters>
       </method>
-      <method name="null_in" c:identifier="regress_test_obj_null_in">
-        <return-value transfer-ownership="none">
-          <type name="none" c:type="void"/>
-        </return-value>
-      </method>
       <method name="set_bare" c:identifier="regress_test_obj_set_bare">
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
@@ -643,12 +638,6 @@ case.</doc>
           </parameter>
         </parameters>
       </method>
-      <function name="const_return"
-                c:identifier="regress_test_simple_boxed_a_const_return">
-        <return-value transfer-ownership="none">
-          <type name="TestSimpleBoxedA" c:type="RegressTestSimpleBoxedA*"/>
-        </return-value>
-      </function>
     </record>
     <record name="TestSimpleBoxedB"
             c:type="RegressTestSimpleBoxedB"
@@ -831,6 +820,17 @@ case.</doc>
         <type name="GObject.Object" c:type="GObject*"/>
       </field>
     </record>
+    <function name="func_obj_null_in" c:identifier="regress_func_obj_null_in">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="obj" transfer-ownership="none" allow-none="1">
+          <doc xml:whitespace="preserve">A #RegressTestObj</doc>
+          <type name="TestObj" c:type="RegressTestObj*"/>
+        </parameter>
+      </parameters>
+    </function>
     <function name="set_abort_on_error"
               c:identifier="regress_set_abort_on_error">
       <return-value transfer-ownership="none">
@@ -1953,6 +1953,12 @@ call and can be released on return.</doc>
           <type name="gshort" c:type="gshort"/>
         </parameter>
       </parameters>
+    </function>
+    <function name="test_simple_boxed_a_const_return"
+              c:identifier="regress_test_simple_boxed_a_const_return">
+      <return-value transfer-ownership="none">
+        <type name="TestSimpleBoxedA" c:type="RegressTestSimpleBoxedA*"/>
+      </return-value>
     </function>
     <function name="test_simple_callback"
               c:identifier="regress_test_simple_callback">

@@ -576,27 +576,6 @@ uses a C sugar return type.</doc>
           </parameter>
         </parameters>
       </method>
-      <function name="new" c:identifier="foo_rectangle_new" introspectable="0">
-        <doc xml:whitespace="preserve">This is a C convenience constructor; we have to (skip)
-it because it's not a boxed type.</doc>
-        <return-value>
-          <type name="Rectangle" c:type="FooRectangle*"/>
-        </return-value>
-        <parameters>
-          <parameter name="x" transfer-ownership="none">
-            <type name="gint" c:type="int"/>
-          </parameter>
-          <parameter name="y" transfer-ownership="none">
-            <type name="gint" c:type="int"/>
-          </parameter>
-          <parameter name="width" transfer-ownership="none">
-            <type name="gint" c:type="int"/>
-          </parameter>
-          <parameter name="height" transfer-ownership="none">
-            <type name="gint" c:type="int"/>
-          </parameter>
-        </parameters>
-      </function>
     </record>
     <constant name="SUCCESS_INT" value="4408">
       <type name="gint" c:type="gint"/>
@@ -938,6 +917,29 @@ exposed to language bindings.</doc>
         </parameter>
         <parameter name="s" transfer-ownership="none">
           <type name="Utility.Struct" c:type="UtilityStruct"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="rectangle_new"
+              c:identifier="foo_rectangle_new"
+              introspectable="0">
+      <doc xml:whitespace="preserve">This is a C convenience constructor; we have to (skip)
+it because it's not a boxed type.</doc>
+      <return-value>
+        <type name="Rectangle" c:type="FooRectangle*"/>
+      </return-value>
+      <parameters>
+        <parameter name="x" transfer-ownership="none">
+          <type name="gint" c:type="int"/>
+        </parameter>
+        <parameter name="y" transfer-ownership="none">
+          <type name="gint" c:type="int"/>
+        </parameter>
+        <parameter name="width" transfer-ownership="none">
+          <type name="gint" c:type="int"/>
+        </parameter>
+        <parameter name="height" transfer-ownership="none">
+          <type name="gint" c:type="int"/>
         </parameter>
       </parameters>
     </function>
