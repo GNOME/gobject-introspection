@@ -415,5 +415,9 @@ struct _FooForeignStruct
   int foo;
 };
 
+/* This one should be a global, not a method on UtilityObject since
+ * it's a separate namespace.
+ */
+void foo_object_a_global_method (UtilityObject *obj);
 
 #endif /* __FOO_OBJECT_H__ */

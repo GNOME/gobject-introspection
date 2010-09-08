@@ -775,6 +775,8 @@ method or constructor of some type."""
                                    ast.Record, ast.Union,
                                    glibast.GLibBoxedOther)):
             return False
+        if target.namespace != self._namespace:
+            return False
 
         # A quick hack here...in the future we should catch C signature/GI signature
         # mismatches in a general way in finaltransformer
@@ -828,6 +830,8 @@ method or constructor of some type."""
             return False
         (origin_node, funcname) = split
         if not isinstance(origin_node, (ast.Class, glibast.GLibBoxed)):
+            return False
+        if origin_node.namespace != self._namespace:
             return False
         if isinstance(target, ast.Class):
             parent = origin_node

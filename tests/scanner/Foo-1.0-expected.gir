@@ -318,6 +318,17 @@ and/or use gtk-doc annotations.  -->
           <type name="Object" c:type="FooObject*"/>
         </return-value>
       </constructor>
+      <function name="a_global_method"
+                c:identifier="foo_object_a_global_method">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <parameter name="obj" transfer-ownership="none">
+            <type name="Utility.Object" c:type="UtilityObject*"/>
+          </parameter>
+        </parameters>
+      </function>
       <function name="get_default" c:identifier="foo_object_get_default">
         <doc xml:whitespace="preserve">This function is intended to match clutter_stage_get_default which
 uses a C sugar return type.</doc>
