@@ -81,6 +81,7 @@ class Transformer(object):
 
     def parse(self, symbols):
         for symbol in symbols:
+            print "traverse %r" % (symbol, )
             node = self._traverse_one(symbol)
             if node:
                 self._append_new_node(node)
@@ -90,7 +91,6 @@ class Transformer(object):
                 target = self._hidden_structures.get(target_name, None)
             else:
                 continue
-            print "processing %r => %r, target=%r" % (typedef, target_name, target)
             if target is None:
                 stub = ast.Record(typedef, typedef, private=True)
                 self._namespace.append(stub)
@@ -98,12 +98,6 @@ class Transformer(object):
                 target.name = typedef
                 self._namespace.append(target)
                 del self._hidden_structures[target_name]
-
-        for name, struct in self._hidden_structures.iteritems():
-            typedef = self._namespace.get(name[1:])
-            if not typedef:
-                message.warn_node(struct,
-"%r: Hidden structure with no corresponding typedef" % (name, ))
 
     def set_include_paths(self, paths):
         self._includepaths = list(paths)
@@ -292,15 +286,15 @@ raise ValueError."""
         if stype == CSYMBOL_TYPE_FUNCTION:
             return self._create_function(symbol)
         elif stype == CSYMBOL_TYPE_TYPEDEF:
-            return self._create_typedef(symbol)
+            return self._create_typedef(symbol, is_field=is_field)
         elif stype == CSYMBOL_TYPE_STRUCT:
-            return self._create_struct(symbol, is_field=is_field)
+            return self._create_compound(ast.Record, symbol, is_field=is_field)
         elif stype == CSYMBOL_TYPE_ENUM:
             return self._create_enum(symbol)
         elif stype == CSYMBOL_TYPE_MEMBER:
             return self._create_member(symbol)
         elif stype == CSYMBOL_TYPE_UNION:
-            return self._create_union(symbol, is_field=is_field)
+            return self._create_compound(ast.Union, symbol, is_field=is_field)
         elif stype == CSYMBOL_TYPE_CONST:
             return self._create_const(symbol)
         # Ignore variable declarations in the header
@@ -436,18 +430,18 @@ raise ValueError."""
                          readable=True, writable=True, bits=symbol.const_int)
         return node
 
-    def _create_typedef(self, symbol):
+    def _create_typedef(self, symbol, is_field=False):
         ctype = symbol.base_type.type
         if (ctype == CTYPE_POINTER and
             symbol.base_type.base_type.type == CTYPE_FUNCTION):
             node = self._create_typedef_callback(symbol)
         elif (ctype == CTYPE_POINTER and
             symbol.base_type.base_type.type == CTYPE_STRUCT):
-            node = self._create_typedef_compound(ast.Struct, symbol, disguised=True)
+            node = self._create_typedef_compound(ast.Record, symbol, disguised=True)
         elif ctype == CTYPE_STRUCT:
-            node = self._create_typedef_compound(ast.Struct, symbol)
+            node = self._create_typedef_compound(ast.Record, symbol, is_field=is_field)
         elif ctype == CTYPE_UNION:
-            node = self._create_typedef_compound(ast.Union, symbol)
+            node = self._create_typedef_compound(ast.Union, symbol, is_field=is_field)
         elif ctype == CTYPE_ENUM:
             return self._create_enum(symbol)
         elif ctype in (CTYPE_TYPEDEF,
@@ -599,19 +593,23 @@ raise ValueError."""
         const.add_symbol_reference(symbol)
         return const
 
-    def _create_typedef_compound(self, cls, symbol, disguised=False):
-        try:
-            name = self.strip_identifier(symbol.ident)
-        except TransformerException, e:
-            message.warn_symbol(symbol, e)
-            return None
+    def _create_typedef_compound(self, cls, symbol, disguised=False,
+                                 is_field=False):
+        if is_field:
+            name = symbol.ident
+        else:
+            try:
+                name = self.strip_identifier(symbol.ident)
+            except TransformerException, e:
+                message.warn_symbol(symbol, e)
+                return None
 
         if disguised:
             return cls(name, symbol.ident, disguised=True)
 
         children = list(symbol.base_type.child_list)
         if len(children) > 0:
-            compound = cls(name, symbol.ident, disguised)
+            compound = cls(name, symbol.ident, disguised=disguised)
             self._parse_fields(symbol, compound)
             compound.add_symbol_reference(symbol)
             return compound
@@ -639,12 +637,11 @@ raise ValueError."""
         callback = self._create_callback(symbol)
         if not callback:
             return None
-        self._typedefs_ns[callback.name] = callback
         return callback
 
     def _parse_fields(self, symbol, compound):
         for child in symbol.base_type.child_list:
-            child_node = self._traverse_one(child)
+            child_node = self._traverse_one(child, is_field=True)
             if not child_node:
                 continue
             if isinstance(child_node, ast.Field):
@@ -654,34 +651,35 @@ raise ValueError."""
                               anonymous_node=child_node)
             compound.fields.append(field)
 
-    def _create_compound(self, klass, symbol, anonymous):
+    def _create_compound(self, klass, symbol,
+                         anonymous=False, is_field=False):
         if symbol.ident is None:
             # the compound is an anonymous member of another union or a struct
             assert anonymous
             compound = klass(None, None)
+            self._parse_fields(symbol, compound)
+            compound.add_symbol_reference(symbol)
+            return compound
+        elif is_field:
+            compound = klass(symbol.ident, symbol.ident)
+            self._parse_fields(symbol, compound)
+            compound.add_symbol_reference(symbol)
+            return compound
         else:
-            compound = self._typedefs_ns.get(symbol.ident, None)
+            try:
+                name = self.strip_identifier(symbol.ident)
+            except TransformerException, e:
+                message.warn(e)
+                return None
 
-        if compound is None:
-            # This is a bit of a hack; really we should try
-            # to resolve through the typedefs to find the real
-            # name
-            if symbol.ident.startswith('_'):
-                compound = self._typedefs_ns.get(symbol.ident[1:], None)
-            if compound is None:
-                if anonymous:
-                    name = symbol.ident
-                else:
-                    try:
-                        name = self.strip_identifier(symbol.ident)
-                    except TransformerException, e:
-                        message.warn(e)
-                        return None
-                compound = klass(name, symbol.ident)
-
-        self._parse_fields(symbol, compound)
-        compound.add_symbol_reference(symbol)
-        return compound
+            compound = klass(name, symbol.ident)
+            self._parse_fields(symbol, compound)
+            compound.add_symbol_reference(symbol)
+            if name.startswith('_'):
+                self._hidden_structures[name] = compound
+                return None
+            else:
+                return compound
 
     def _create_struct(self, symbol, anonymous=False):
         return self._create_compound(ast.Record, symbol, anonymous)
