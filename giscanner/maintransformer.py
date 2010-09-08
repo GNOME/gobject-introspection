@@ -835,14 +835,14 @@ method or constructor of some type."""
             return False
         if isinstance(target, ast.Class):
             parent = origin_node
-            while parent and (not parent.create_type().target_giname == 'GObject.Object'):
+            while parent and (not parent.gi_name == 'GObject.Object'):
                 if parent == target:
                     break
                 if parent.parent:
                     parent = self._transformer.lookup_typenode(parent.parent)
                 else:
                     parent = None
-                if parent is None:
+                if parent is None or parent.gi_name == 'GObject.Object':
                     message.warn_node(func,
                         "Return value is not superclass for constructor; "
                         "symbol=%r constructed=%r return=%r" % (
