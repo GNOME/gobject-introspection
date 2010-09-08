@@ -50,7 +50,8 @@ class Transformer(object):
         self._accept_unprefixed = accept_unprefixed
         self._namespace = namespace
         self._pkg_config_packages = set()
-        self._typedefs_ns = {}
+        self._typedefs = {}
+        self._hidden_structures = {}
         self._includes = {}
         self._include_names = set()
         self._includepaths = []
@@ -84,24 +85,25 @@ class Transformer(object):
             if node:
                 self._append_new_node(node)
 
-        # Now look through the namespace for things like
-        # typedef struct _Foo Foo;
-        # where we've never seen the struct _Foo.  Just create
-        # an empty structure for these as "disguised"
-        # If we do have a class/interface, merge fields
-        for typedef, compound in self._typedefs_ns.iteritems():
-            ns_compound = self._namespace.get(compound.name)
-            if not ns_compound:
-                ns_compound = self._namespace.get('_' + compound.name)
-            if (not ns_compound and isinstance(compound, (ast.Record, ast.Union))
-                and len(compound.fields) == 0):
-                disguised = ast.Record(compound.name, typedef, disguised=True)
-                self._namespace.append(disguised)
-            elif not ns_compound:
-                self._namespace.append(compound)
-            elif isinstance(ns_compound, (ast.Record, ast.Union)) and len(ns_compound.fields) == 0:
-                ns_compound.fields = compound.fields
-        self._typedefs_ns = None
+        for typedef, target_name in self._typedefs.iteritems():
+            if target_name.startswith('_'):
+                target = self._hidden_structures.get(target_name, None)
+            else:
+                continue
+            print "processing %r => %r, target=%r" % (typedef, target_name, target)
+            if target is None:
+                stub = ast.Record(typedef, typedef, private=True)
+                self._namespace.append(stub)
+            else:
+                target.name = typedef
+                self._namespace.append(target)
+                del self._hidden_structures[target_name]
+
+        for name, struct in self._hidden_structures.iteritems():
+            typedef = self._namespace.get(name[1:])
+            if not typedef:
+                message.warn_node(struct,
+"%r: Hidden structure with no corresponding typedef" % (name, ))
 
     def set_include_paths(self, paths):
         self._includepaths = list(paths)
@@ -282,7 +284,7 @@ raise ValueError."""
             return '_' + name
         return name
 
-    def _traverse_one(self, symbol, stype=None):
+    def _traverse_one(self, symbol, stype=None, is_field=False):
         assert isinstance(symbol, SourceSymbol), symbol
 
         if stype is None:
@@ -292,13 +294,13 @@ raise ValueError."""
         elif stype == CSYMBOL_TYPE_TYPEDEF:
             return self._create_typedef(symbol)
         elif stype == CSYMBOL_TYPE_STRUCT:
-            return self._create_struct(symbol)
+            return self._create_struct(symbol, is_field=is_field)
         elif stype == CSYMBOL_TYPE_ENUM:
             return self._create_enum(symbol)
         elif stype == CSYMBOL_TYPE_MEMBER:
             return self._create_member(symbol)
         elif stype == CSYMBOL_TYPE_UNION:
-            return self._create_union(symbol)
+            return self._create_union(symbol, is_field=is_field)
         elif stype == CSYMBOL_TYPE_CONST:
             return self._create_const(symbol)
         # Ignore variable declarations in the header
@@ -441,11 +443,11 @@ raise ValueError."""
             node = self._create_typedef_callback(symbol)
         elif (ctype == CTYPE_POINTER and
             symbol.base_type.base_type.type == CTYPE_STRUCT):
-            node = self._create_typedef_struct(symbol, disguised=True)
+            node = self._create_typedef_compound(ast.Struct, symbol, disguised=True)
         elif ctype == CTYPE_STRUCT:
-            node = self._create_typedef_struct(symbol)
+            node = self._create_typedef_compound(ast.Struct, symbol)
         elif ctype == CTYPE_UNION:
-            node = self._create_typedef_union(symbol)
+            node = self._create_typedef_compound(ast.Union, symbol)
         elif ctype == CTYPE_ENUM:
             return self._create_enum(symbol)
         elif ctype in (CTYPE_TYPEDEF,
@@ -597,17 +599,29 @@ raise ValueError."""
         const.add_symbol_reference(symbol)
         return const
 
-    def _create_typedef_struct(self, symbol, disguised=False):
+    def _create_typedef_compound(self, cls, symbol, disguised=False):
         try:
             name = self.strip_identifier(symbol.ident)
         except TransformerException, e:
             message.warn_symbol(symbol, e)
             return None
-        struct = ast.Record(name, symbol.ident, disguised=disguised)
-        self._parse_fields(symbol, struct)
-        struct.add_symbol_reference(symbol)
-        self._typedefs_ns[symbol.ident] = struct
-        return None
+
+        if disguised:
+            return cls(name, symbol.ident, disguised=True)
+
+        children = list(symbol.base_type.child_list)
+        if len(children) > 0:
+            compound = cls(name, symbol.ident, disguised)
+            self._parse_fields(symbol, compound)
+            compound.add_symbol_reference(symbol)
+            return compound
+        else:
+            try:
+                target_name = self.strip_identifier(symbol.base_type.name)
+            except TransformerException, e:
+                message.warn_symbol(symbol, e)
+                return None
+            self._typedefs[name] = target_name
 
     def _create_typedef_union(self, symbol):
         try:

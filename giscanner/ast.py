@@ -373,6 +373,7 @@ returned."""
             self._ctypes[node.symbol] = node
 
     def remove(self, node):
+        assert node.namespace is self
         if isinstance(node, Alias):
             del self._aliases[node.name]
         elif isinstance(node, Registered) and node.gtype_name is not None:
@@ -719,7 +720,8 @@ class Compound(Node, Registered):
                  gtype_name=None,
                  get_type=None,
                  c_symbol_prefix=None,
-                 disguised=False):
+                 disguised=False,
+                 private=False):
         Node.__init__(self, name)
         Registered.__init__(self, gtype_name, get_type)
         self.ctype = ctype
@@ -727,7 +729,11 @@ class Compound(Node, Registered):
         self.static_methods = []
         self.fields = []
         self.constructors = []
+        # This compound is: typedef struct Foo * Foo;
+        # note the * which hides that it's a pointer.
         self.disguised = disguised
+        # The definition of this structure is not known.
+        self.private = private
         self.gtype_name = gtype_name
         self.get_type = get_type
         self.c_symbol_prefix = c_symbol_prefix
@@ -771,13 +777,15 @@ class Record(Compound):
                  gtype_name=None,
                  get_type=None,
                  c_symbol_prefix=None,
-                 disguised=False):
+                 disguised=False,
+                 private=False):
         Compound.__init__(self, name,
                           ctype=ctype,
                           gtype_name=gtype_name,
                           get_type=get_type,
                           c_symbol_prefix=c_symbol_prefix,
-                          disguised=disguised)
+                          disguised=disguised,
+                          private=private)
         # If non-None, this record defines the FooClass C structure
         # for some Foo GObject (or similar for GInterface)
         self.is_gtype_struct_for = None
@@ -790,13 +798,15 @@ class Union(Compound):
                  gtype_name=None,
                  get_type=None,
                  c_symbol_prefix=None,
-                 disguised=False):
+                 disguised=False,
+                 private=False):
         Compound.__init__(self, name,
                           ctype=ctype,
                           gtype_name=gtype_name,
                           get_type=get_type,
                           c_symbol_prefix=c_symbol_prefix,
-                          disguised=disguised)
+                          disguised=disguised,
+                          private=private)
 
 
 class Boxed(Node, Registered):
