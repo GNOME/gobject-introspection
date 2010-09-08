@@ -122,6 +122,23 @@
  */
 
 /**
+ * g_file_get_child:
+ *
+ * @file:
+ * @name:
+ * Returns: (transfer full):
+ */
+
+/**
+ * g_file_get_child_for_display_name:
+ *
+ * @file:
+ * @display_name:
+ * @error:
+ * Returns: (transfer full):
+ */
+
+/**
  * g_file_monitor_file:
  *
  * @file:
