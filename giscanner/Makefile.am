@@ -42,7 +42,6 @@ pkgpyexec_PYTHON = 		\
 	introspectablepass.py	\
 	girparser.py		\
 	girwriter.py		\
-	glibast.py		\
 	gdumpparser.py 	\
 	libtoolimporter.py	\
 	odict.py		\

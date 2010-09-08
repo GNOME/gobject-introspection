@@ -431,6 +431,8 @@ RegressTestObj *regress_test_obj_new_callback (RegressTestCallbackUserData callb
                                 gpointer user_data,
                                 GDestroyNotify notify);
 
+typedef struct _RegressTestInterface RegressTestInterface;
+
 /* interface */
 #define REGRESS_TEST_TYPE_INTERFACE              (regress_test_interface_get_type ())
 #define REGRESS_TEST_INTERFACE(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), REGRESS_TEST_TYPE_INTERFACE, RegressTestInterface))

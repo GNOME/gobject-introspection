@@ -18,7 +18,6 @@
 #
 
 from . import ast
-from . import glibast
 from . import message
 
 class IntrospectablePass(object):
@@ -37,7 +36,7 @@ class IntrospectablePass(object):
         self._namespace.walk(self._introspectable_pass3)
 
     def _interface_vfunc_check(self, node, stack):
-        if isinstance(node, glibast.GLibInterface):
+        if isinstance(node, ast.Interface):
             for vfunc in node.virtual_methods:
                 if not vfunc.invoker:
                     message.warn_node(vfunc,
@@ -100,8 +99,8 @@ class IntrospectablePass(object):
 
         if (is_return
             and isinstance(target, (ast.Record, ast.Union))
-            and not target.foreign
-            and not isinstance(target, glibast.GLibBoxed)):
+            and target.get_type is None
+            and not target.foreign):
             if node.transfer != ast.PARAM_TRANSFER_NONE:
                 self._parameter_warning(parent, node,
 "Invalid non-constant return of bare structure or union; register as boxed type or (skip)")

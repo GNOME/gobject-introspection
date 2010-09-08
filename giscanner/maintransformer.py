@@ -20,7 +20,6 @@
 import re
 
 from . import ast
-from . import glibast
 from . import message
 from .annotationparser import (TAG_VFUNC, TAG_SINCE, TAG_DEPRECATED, TAG_RETURNS,
                                TAG_ATTRIBUTES, TAG_RENAME_TO, TAG_TYPE, TAG_TRANSFER,
@@ -74,7 +73,7 @@ class MainTransformer(object):
 
         # Generate a reverse mapping "bar_baz" -> BarBaz
         for node in self._namespace.itervalues():
-            if isinstance(node, (ast.Class, ast.Interface, glibast.GLibBoxed)):
+            if isinstance(node, ast.Registered) and node.get_type is not None:
                 self._uscore_type_names[node.c_symbol_prefix] = node
             elif isinstance(node, (ast.Record, ast.Union)):
                 uscored = to_underscores_noprefix(node.name).lower()
@@ -96,7 +95,7 @@ class MainTransformer(object):
         self._namespace.walk(self._pass3)
 
         # TODO - merge into pass3
-        self._resolve_quarks()
+        self._pair_quarks_with_enums()
 
     # Private
 
@@ -150,7 +149,7 @@ class MainTransformer(object):
         self._apply_annotations_callable(node, chain, block)
 
     def _pass_callable_defaults(self, node, chain):
-        if isinstance(node, (ast.Callable, glibast.GLibSignal)):
+        if isinstance(node, (ast.Callable, ast.Signal)):
             for param in node.parameters:
                 if param.transfer is None:
                     param.transfer = self._get_transfer_default(node, param)
@@ -343,7 +342,8 @@ class MainTransformer(object):
         target = self._transformer.lookup_typenode(typeval)
         if isinstance(target, ast.Alias):
             return self._get_transfer_default_returntype_basic(target.target)
-        elif isinstance(target, glibast.GLibBoxed):
+        elif (isinstance(target, ast.Boxed)
+              or (isinstance(target, (ast.Record, ast.Union)) and target.gtype_name is not None)):
             return ast.PARAM_TRANSFER_FULL
         elif isinstance(target, (ast.Enum, ast.Bitfield)):
             return ast.PARAM_TRANSFER_NONE
@@ -564,7 +564,7 @@ class MainTransformer(object):
         field.type = self._transformer.create_type_from_user_string(t.one())
 
     def _apply_annotations_property(self, parent, prop):
-        block = self._blocks.get('%s:%s' % (parent.type_name, prop.name))
+        block = self._blocks.get('%s:%s' % (parent.c_name, prop.name))
         self._apply_annotations_annotated(prop, block)
         if not block:
             return
@@ -578,7 +578,7 @@ class MainTransformer(object):
             prop.type = self._resolve(type_tag.value, prop.type)
 
     def _apply_annotations_signal(self, parent, signal):
-        block = self._blocks.get('%s::%s' % (parent.type_name, signal.name))
+        block = self._blocks.get('%s::%s' % (parent.c_name, signal.name))
         self._apply_annotations_annotated(signal, block)
         # We're only attempting to name the signal parameters if
         # the number of parameter tags (@foo) is the same or greater
@@ -683,7 +683,7 @@ the ones that failed to resolve removed."""
             node.prerequisites = self._resolve_and_filter_type_list(node.prerequisites)
         return True
 
-    def _resolve_quarks(self):
+    def _pair_quarks_with_enums(self):
         # self._uscore_type_names is an authoritative mapping of types
         # to underscored versions, since it is based on get_type() methods;
         # but only covers enums that are registered as GObject enums.
@@ -692,7 +692,7 @@ the ones that failed to resolve removed."""
         for enum in self._namespace.itervalues():
             if not isinstance(enum, ast.Enum):
                 continue
-            type_name = enum.symbol
+            type_name = enum.ctype
             uscored = to_underscores(type_name).lower()
 
             uscore_enums[uscored] = enum
@@ -773,7 +773,7 @@ method or constructor of some type."""
         target = self._transformer.lookup_typenode(first.type)
         if not isinstance(target, (ast.Class, ast.Interface,
                                    ast.Record, ast.Union,
-                                   glibast.GLibBoxedOther)):
+                                   ast.Boxed)):
             return False
         if target.namespace != self._namespace:
             return False
@@ -801,12 +801,12 @@ method or constructor of some type."""
         (node, funcname) = split
 
         # We actually should treat static methods on a wider class of objects:
-        #  ast.Class, ast.Interface, ast.Record, ast.Union, glibast.GLibBoxedOther
-        # But we stick to GLibObject for now for compatibility with existing code.
+        #  ast.Class, ast.Interface, ast.Record, ast.Union, ast.Boxed
+        # But we stick to ast.Class for now for compatibility with existing code.
         #
         # See https://bugzilla.gnome.org/show_bug.cgi?id=572408
         #
-        if not isinstance(node, glibast.GLibObject):
+        if not isinstance(node, ast.Class):
             return False
 
         self._namespace.float(func)
@@ -817,7 +817,9 @@ method or constructor of some type."""
         if not (func.symbol.find('_new_') >= 0 or func.symbol.endswith('_new')):
             return False
         target = self._transformer.lookup_typenode(func.retval.type)
-        if not isinstance(target, (ast.Class, glibast.GLibBoxed)):
+        if not (isinstance(target, ast.Class)
+                or (isinstance(target, (ast.Record, ast.Union, ast.Boxed))
+                    and target.get_type is not None)):
             return False
 
         split = self._split_uscored_by_type(subsymbol)
@@ -827,9 +829,10 @@ method or constructor of some type."""
                 "Can't find matching type for constructor; symbol=%r" % (func.symbol, ))
             return False
         (origin_node, funcname) = split
-
         # Some sanity checks; only objects and boxeds can have ctors
-        if not isinstance(origin_node, (ast.Class, glibast.GLibBoxed)):
+        if not (isinstance(origin_node, ast.Class)
+                or (isinstance(origin_node, (ast.Record, ast.Union, ast.Boxed))
+                    and origin_node.get_type is not None)):
             return False
         # Verify the namespace - don't want to append to foreign namespaces!
         if origin_node.namespace != self._namespace:

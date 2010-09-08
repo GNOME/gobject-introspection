@@ -23,7 +23,6 @@ import os
 from xml.etree.cElementTree import parse
 
 from . import ast
-from . import glibast
 from .girwriter import COMPATIBLE_GIR_VERSION
 
 CORE_NS = "http://www.gtk.org/introspection/core/1.0"
@@ -205,21 +204,22 @@ class GIRParser(object):
             parent_type = None
 
         ctor_args = [node.attrib['name'],
-                     parent_type,
-                     node.attrib[_glibns('type-name')],
-                     node.attrib[_glibns('get-type')],
-                     node.attrib.get(_cns('symbol-prefix'))]
+                     parent_type]
+        ctor_kwargs = {'gtype_name': node.attrib[_glibns('type-name')],
+                       'get_type': node.attrib[_glibns('get-type')],
+                       'c_symbol_prefix': node.attrib.get(_cns('symbol-prefix')),
+                       'ctype': node.attrib.get(_cns('type'))}
         if node.tag == _corens('interface'):
-            klass = glibast.GLibInterface
+            klass = ast.Interface
         elif node.tag == _corens('class'):
-            klass = glibast.GLibObject
+            klass = ast.Class
             is_abstract = node.attrib.get('abstract')
             is_abstract = is_abstract and is_abstract != '0'
-            ctor_args.append(is_abstract)
+            ctor_kwargs['is_abstract'] = is_abstract
         else:
             raise AssertionError(node)
 
-        obj = klass(*ctor_args)
+        obj = klass(*ctor_args, **ctor_kwargs)
         self._parse_generic_attribs(node, obj)
         type_struct = node.attrib.get(_glibns('type-struct'))
         if type_struct:
@@ -331,22 +331,15 @@ class GIRParser(object):
         return res
 
     def _parse_record(self, node, anonymous=False):
-        if _glibns('type-name') in node.attrib:
-            struct = glibast.GLibBoxedStruct(node.attrib['name'],
-                                     node.attrib[_glibns('type-name')],
-                                     node.attrib[_glibns('get-type')],
-                                     node.attrib.get(_cns('symbol-prefix')),
-                                     node.attrib.get(_cns('type')))
-        elif _glibns('is-gtype-struct-for') in node.attrib:
-            struct = glibast.GLibRecord(node.attrib['name'],
-                                node.attrib.get(_cns('type')),
-                                disguised=node.attrib.get('disguised') == '1')
-            is_gtype_struct_for = node.attrib[_glibns('is-gtype-struct-for')]
-            struct.is_gtype_struct_for = self._namespace.type_from_name(is_gtype_struct_for)
-        else:
-            struct = ast.Record(node.attrib.get('name'),
+        struct = ast.Record(node.attrib.get('name'),
                             node.attrib.get(_cns('type')),
-                            disguised=node.attrib.get('disguised') == '1')
+                            disguised=node.attrib.get('disguised') == '1',
+                            gtype_name=node.attrib.get(_glibns('type-name')),
+                            get_type=node.attrib.get(_glibns('get-type')),
+                            c_symbol_prefix=node.attrib.get(_cns('symbol-prefix')))
+        is_gtype_struct_for = node.attrib.get(_glibns('is-gtype-struct-for'))
+        if is_gtype_struct_for is not None:
+            struct.is_gtype_struct_for = self._namespace.type_from_name(is_gtype_struct_for)
         if node.attrib.get('foreign') == '1':
             struct.foreign = True
         self._parse_generic_attribs(node, struct)
@@ -366,15 +359,11 @@ class GIRParser(object):
         return struct
 
     def _parse_union(self, node, anonymous=False):
-        if _glibns('type-name') in node.attrib:
-            union = glibast.GLibBoxedUnion(node.attrib['name'],
-                                    node.attrib[_glibns('type-name')],
-                                    node.attrib[_glibns('get-type')],
-                                    node.attrib.get(_cns('symbol-prefix')),
-                                    node.attrib.get(_cns('type')))
-        else:
-            union = ast.Union(node.attrib.get('name'),
-                          node.attrib.get(_cns('type')))
+        union = ast.Union(node.attrib.get('name'),
+                          node.attrib.get(_cns('type')),
+                          gtype_name=node.attrib.get(_glibns('type-name')),
+                          get_type=node.attrib.get(_glibns('get-type')),
+                          c_symbol_prefix=node.attrib.get(_cns('symbol-prefix')))
         if not anonymous:
             self._namespace.append(union)
 
@@ -464,10 +453,10 @@ class GIRParser(object):
             typeval.length_param_name = parent.parameters[idx].argname
 
     def _parse_boxed(self, node):
-        obj = glibast.GLibBoxedOther(node.attrib[_glibns('name')],
-                             node.attrib[_glibns('type-name')],
-                             node.attrib[_glibns('get-type')],
-                             node.attrib.get(_cns('symbol-prefix')))
+        obj = ast.Boxed(node.attrib[_glibns('name')],
+                        gtype_name=node.attrib[_glibns('type-name')],
+                        get_type=node.attrib[_glibns('get-type')],
+                        c_symbol_prefix=node.attrib.get(_cns('symbol-prefix')))
         self._parse_generic_attribs(node, obj)
         self._namespace.append(obj)
         for method in self._find_children(node, _corens('method')):
@@ -520,10 +509,10 @@ class GIRParser(object):
         return prop
 
     def _parse_member(self, node):
-        member = glibast.GLibEnumMember(node.attrib['name'],
-                                node.attrib['value'],
-                                node.attrib.get(_cns('identifier')),
-                                node.attrib.get(_glibns('nick')))
+        member = ast.Member(node.attrib['name'],
+                            node.attrib['value'],
+                            node.attrib.get(_cns('identifier')),
+                            node.attrib.get(_glibns('nick')))
         self._parse_generic_attribs(node, member)
         return member
 
@@ -541,24 +530,17 @@ class GIRParser(object):
         get_type = node.attrib.get(_glibns('get-type'))
         type_name = node.attrib.get(_glibns('type-name'))
         glib_error_quark = node.attrib.get(_glibns('error-quark'))
-        if get_type or glib_error_quark:
-            if node.tag == _corens('bitfield'):
-                klass = glibast.GLibFlags
-            else:
-                klass = glibast.GLibEnum
+        if node.tag == _corens('bitfield'):
+            klass = ast.Bitfield
         else:
-            if node.tag == _corens('bitfield'):
-                klass = ast.Bitfield
-            else:
-                klass = ast.Enum
-            type_name = ctype
+            klass = ast.Enum
         members = []
-        if klass in (ast.Enum, ast.Bitfield):
-            obj = klass(name, type_name, members)
-        else:
-            obj = klass(name, type_name, members, get_type)
-            obj.error_quark = glib_error_quark
-            obj.ctype = ctype
+        obj = klass(name, ctype,
+                    members=members,
+                    gtype_name=type_name,
+                    get_type=get_type)
+        obj.error_quark = glib_error_quark
+        obj.ctype = ctype
         self._parse_generic_attribs(node, obj)
         self._namespace.append(obj)
 

@@ -21,12 +21,7 @@
 
 from __future__ import with_statement
 
-from .ast import (Alias, Array, Bitfield, Callback, Class, Constant, Enum,
-                  Function, Interface, List, Map, Member, Record, Union,
-                  Varargs, Type)
-from .glibast import (GLibBoxed, GLibEnum, GLibEnumMember,
-                      GLibFlags, GLibObject, GLibInterface,
-                      GLibRecord)
+from . import ast
 from .xmlwriter import XMLWriter
 
 # Bump this for *incompatible* changes to the .gir.
@@ -92,12 +87,12 @@ and/or use gtk-doc annotations. ''')
             # we want aliases to be first.  They're a bit
             # special because the typelib compiler expands them.
             def nscmp(a, b):
-                if isinstance(a, Alias):
-                    if isinstance(b, Alias):
+                if isinstance(a, ast.Alias):
+                    if isinstance(b, ast.Alias):
                         return cmp(a.name, b.name)
                     else:
                         return -1
-                elif isinstance(b, Alias):
+                elif isinstance(b, ast.Alias):
                     return 1
                 else:
                     return cmp(a, b)
@@ -105,28 +100,28 @@ and/or use gtk-doc annotations. ''')
                 self._write_node(node)
 
     def _write_node(self, node):
-        if isinstance(node, Function):
+        if isinstance(node, ast.Function):
             self._write_function(node)
-        elif isinstance(node, Enum):
+        elif isinstance(node, ast.Enum):
             self._write_enum(node)
-        elif isinstance(node, Bitfield):
+        elif isinstance(node, ast.Bitfield):
             self._write_bitfield(node)
-        elif isinstance(node, (Class, Interface)):
+        elif isinstance(node, (ast.Class, ast.Interface)):
             self._write_class(node)
-        elif isinstance(node, Callback):
+        elif isinstance(node, ast.Callback):
             self._write_callback(node)
-        elif isinstance(node, Record):
+        elif isinstance(node, ast.Record):
             self._write_record(node)
-        elif isinstance(node, Union):
+        elif isinstance(node, ast.Union):
             self._write_union(node)
-        elif isinstance(node, GLibBoxed):
+        elif isinstance(node, ast.Boxed):
             self._write_boxed(node)
-        elif isinstance(node, Member):
+        elif isinstance(node, ast.Member):
             # FIXME: atk_misc_instance singleton
             pass
-        elif isinstance(node, Alias):
+        elif isinstance(node, ast.Alias):
             self._write_alias(node)
-        elif isinstance(node, Constant):
+        elif isinstance(node, ast.Constant):
             self._write_constant(node)
         else:
             print 'WRITER: Unhandled node', node
@@ -245,15 +240,15 @@ and/or use gtk-doc annotations. ''')
         return typeval.target_giname
 
     def _write_type(self, ntype, relation=None, function=None):
-        assert isinstance(ntype, Type), ntype
+        assert isinstance(ntype, ast.Type), ntype
         attrs = []
         if ntype.ctype:
             attrs.append(('c:type', ntype.ctype))
-        if isinstance(ntype, Varargs):
+        if isinstance(ntype, ast.Varargs):
             with self.tagcontext('varargs', []):
                 pass
-        elif isinstance(ntype, Array):
-            if ntype.array_type != Array.C:
+        elif isinstance(ntype, ast.Array):
+            if ntype.array_type != ast.Array.C:
                 attrs.insert(0, ('name', ntype.array_type))
             if not ntype.zeroterminated:
                 attrs.insert(0, ('zero-terminated', '0'))
@@ -266,12 +261,12 @@ and/or use gtk-doc annotations. ''')
 
             with self.tagcontext('array', attrs):
                 self._write_type(ntype.element_type)
-        elif isinstance(ntype, List):
+        elif isinstance(ntype, ast.List):
             if ntype.name:
                 attrs.insert(0, ('name', ntype.name))
             with self.tagcontext('type', attrs):
                 self._write_type(ntype.element_type)
-        elif isinstance(ntype, Map):
+        elif isinstance(ntype, ast.Map):
             attrs.insert(0, ('name', 'GLib.HashTable'))
             with self.tagcontext('type', attrs):
                 self._write_type(ntype.key_type)
@@ -287,17 +282,19 @@ and/or use gtk-doc annotations. ''')
                 attrs.insert(0, ('foreign', '1'))
             self.write_tag('type', attrs)
 
+    def _append_registered(self, node, attrs):
+        assert isinstance(node, ast.Registered)
+        if node.get_type:
+            attrs.extend([('glib:type-name', node.gtype_name),
+                          ('glib:get-type', node.get_type)])
+
     def _write_enum(self, enum):
         attrs = [('name', enum.name)]
         self._append_version(enum, attrs)
         self._append_node_generic(enum, attrs)
-        if isinstance(enum, GLibEnum):
-            attrs.extend([('glib:type-name', enum.type_name),
-                          ('glib:get-type', enum.get_type),
-                          ('c:type', enum.ctype)])
-        else:
-            attrs.append(('c:type', enum.symbol))
-        if hasattr(enum, 'error_quark') and enum.error_quark:
+        self._append_registered(enum, attrs)
+        attrs.append(('c:type', enum.ctype))
+        if enum.error_quark:
             attrs.append(('glib:error-quark', enum.error_quark))
 
         with self.tagcontext('enumeration', attrs):
@@ -309,12 +306,8 @@ and/or use gtk-doc annotations. ''')
         attrs = [('name', bitfield.name)]
         self._append_version(bitfield, attrs)
         self._append_node_generic(bitfield, attrs)
-        if isinstance(bitfield, GLibFlags):
-            attrs.extend([('glib:type-name', bitfield.type_name),
-                          ('glib:get-type', bitfield.get_type),
-                          ('c:type', bitfield.ctype)])
-        else:
-            attrs.append(('c:type', bitfield.symbol))
+        self._append_registered(bitfield, attrs)
+        attrs.append(('c:type', bitfield.ctype))
         with self.tagcontext('bitfield', attrs):
             self._write_generic(bitfield)
             for member in bitfield.members:
@@ -324,7 +317,7 @@ and/or use gtk-doc annotations. ''')
         attrs = [('name', member.name),
                  ('value', str(member.value)),
                  ('c:identifier', member.symbol)]
-        if isinstance(member, GLibEnumMember):
+        if member.nick is not None:
             attrs.append(('glib:nick', member.nick))
         self.write_tag('member', attrs)
 
@@ -339,7 +332,7 @@ and/or use gtk-doc annotations. ''')
                  ('c:type', node.ctype)]
         self._append_version(node, attrs)
         self._append_node_generic(node, attrs)
-        if isinstance(node, Class):
+        if isinstance(node, ast.Class):
             tag_name = 'class'
             if node.parent is not None:
                 attrs.append(('parent',
@@ -347,15 +340,15 @@ and/or use gtk-doc annotations. ''')
             if node.is_abstract:
                 attrs.append(('abstract', '1'))
         else:
+            assert isinstance(node, ast.Interface)
             tag_name = 'interface'
-        if isinstance(node, (GLibObject, GLibInterface)):
-            attrs.append(('glib:type-name', node.type_name))
-            if node.get_type:
-                attrs.append(('glib:get-type', node.get_type))
-            if node.glib_type_struct:
-                attrs.append(('glib:type-struct',
-                              self._type_to_name(node.glib_type_struct)))
-        if isinstance(node, GLibObject):
+        attrs.append(('glib:type-name', node.gtype_name))
+        if node.get_type is not None:
+            attrs.append(('glib:get-type', node.get_type))
+        if node.glib_type_struct is not None:
+            attrs.append(('glib:type-struct',
+                          self._type_to_name(node.glib_type_struct)))
+        if isinstance(node, ast.Class):
             if node.fundamental:
                 attrs.append(('glib:fundamental', '1'))
             if node.ref_func:
@@ -368,18 +361,18 @@ and/or use gtk-doc annotations. ''')
                 attrs.append(('glib:get-value-func', node.get_value_func))
         with self.tagcontext(tag_name, attrs):
             self._write_generic(node)
-            if isinstance(node, GLibObject):
+            if isinstance(node, ast.Class):
                 for iface in sorted(node.interfaces):
                     self.write_tag('implements',
                                    [('name', self._type_to_name(iface))])
-            if isinstance(node, Interface):
+            if isinstance(node, ast.Interface):
                 for iface in sorted(node.prerequisites):
                     self.write_tag('prerequisite',
                                    [('name', self._type_to_name(iface))])
-            if isinstance(node, Class):
+            if isinstance(node, ast.Class):
                 for method in sorted(node.constructors):
                     self._write_constructor(method)
-            if isinstance(node, (Class, Interface)):
+            if isinstance(node, (ast.Class, ast.Interface)):
                 for method in sorted(node.static_methods):
                     self._write_static_method(method)
             for vfunc in sorted(node.virtual_methods):
@@ -394,9 +387,10 @@ and/or use gtk-doc annotations. ''')
                 self._write_signal(signal)
 
     def _write_boxed(self, boxed):
-        attrs = [('c:type', boxed.ctype),
-                 ('glib:name', boxed.name)]
-        attrs.extend(self._boxed_attrs(boxed))
+        attrs = [('glib:name', boxed.name)]
+        if boxed.c_symbol_prefix is not None:
+            attrs.append(('c:symbol-prefix', boxed.c_symbol_prefix))
+        self._append_registered(boxed, attrs)
         with self.tagcontext('glib:boxed', attrs):
             self._write_generic(boxed)
             for method in sorted(boxed.constructors):
@@ -437,31 +431,26 @@ and/or use gtk-doc annotations. ''')
             attrs.append(('c:type', callback.c_name))
         self._write_callable(callback, 'callback', attrs)
 
-    def _boxed_attrs(self, boxed):
-        return [('glib:type-name', boxed.type_name),
-                ('glib:get-type', boxed.get_type),
-                ('c:symbol-prefix', boxed.c_symbol_prefix)]
-
     def _write_record(self, record, extra_attrs=[]):
         is_gtype_struct = False
         attrs = list(extra_attrs)
         if record.name is not None:
             attrs.append(('name', record.name))
-        if record.symbol is not None: # the record might be anonymous
-            attrs.append(('c:type', record.symbol))
+        if record.ctype is not None: # the record might be anonymous
+            attrs.append(('c:type', record.ctype))
         if record.disguised:
             attrs.append(('disguised', '1'))
         if record.foreign:
             attrs.append(('foreign', '1'))
-        if isinstance(record, GLibRecord):
-            if record.is_gtype_struct_for:
-                is_gtype_struct = True
-                attrs.append(('glib:is-gtype-struct-for',
-                              self._type_to_name(record.is_gtype_struct_for)))
+        if record.is_gtype_struct_for is not None:
+            is_gtype_struct = True
+            attrs.append(('glib:is-gtype-struct-for',
+                          self._type_to_name(record.is_gtype_struct_for)))
         self._append_version(record, attrs)
         self._append_node_generic(record, attrs)
-        if isinstance(record, GLibBoxed):
-            attrs.extend(self._boxed_attrs(record))
+        self._append_registered(record, attrs)
+        if record.c_symbol_prefix:
+            attrs.append(('c:symbol-prefix', record.c_symbol_prefix))
         with self.tagcontext('record', attrs):
             self._write_generic(record)
             if record.fields:
@@ -478,12 +467,13 @@ and/or use gtk-doc annotations. ''')
         attrs = []
         if union.name is not None:
             attrs.append(('name', union.name))
-        if union.symbol is not None: # the union might be anonymous
-            attrs.append(('c:type', union.symbol))
+        if union.ctype is not None: # the union might be anonymous
+            attrs.append(('c:type', union.ctype))
         self._append_version(union, attrs)
         self._append_node_generic(union, attrs)
-        if isinstance(union, GLibBoxed):
-            attrs.extend(self._boxed_attrs(union))
+        self._append_registered(union, attrs)
+        if union.c_symbol_prefix:
+            attrs.append(('c:symbol-prefix', union.c_symbol_prefix))
         with self.tagcontext('union', attrs):
             self._write_generic(union)
             if union.fields:
@@ -498,14 +488,14 @@ and/or use gtk-doc annotations. ''')
 
     def _write_field(self, field, is_gtype_struct=False):
         if field.anonymous_node:
-            if isinstance(field.anonymous_node, Callback):
+            if isinstance(field.anonymous_node, ast.Callback):
                 attrs = [('name', field.name)]
                 self._append_node_generic(field, attrs)
                 with self.tagcontext('field', attrs):
                     self._write_callback(field.anonymous_node)
-            elif isinstance(field.anonymous_node, Record):
+            elif isinstance(field.anonymous_node, ast.Record):
                 self._write_record(field.anonymous_node)
-            elif isinstance(field.anonymous_node, Union):
+            elif isinstance(field.anonymous_node, ast.Union):
                 self._write_union(field.anonymous_node)
             else:
                 raise AssertionError("Unknown field anonymous: %r" \

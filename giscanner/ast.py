@@ -357,11 +357,10 @@ returned."""
                 raise ValueError("Namespace conflict: %r" % (node, ))
             self.remove(previous)
         # A layering violation...but oh well.
-        from .glibast import GLibBoxed
         if isinstance(node, Alias):
             self._aliases[node.name] = node
-        elif isinstance(node, (GLibBoxed, Interface, Class)):
-            self._type_names[node.type_name] = node
+        elif isinstance(node, Registered) and node.gtype_name is not None:
+            self._type_names[node.gtype_name] = node
         elif isinstance(node, Function):
             self._symbols[node.symbol] = node
         assert isinstance(node, Node)
@@ -374,11 +373,10 @@ returned."""
             self._ctypes[node.symbol] = node
 
     def remove(self, node):
-        from .glibast import GLibBoxed
         if isinstance(node, Alias):
             del self._aliases[node.name]
-        elif isinstance(node, (GLibBoxed, Interface, Class)):
-            del self._type_names[node.type_name]
+        elif isinstance(node, Registered) and node.gtype_name is not None:
+            del self._type_names[node.gtype_name]
         del self._names[node.name]
         node.namespace = None
         if hasattr(node, 'ctype'):
@@ -502,6 +500,16 @@ GIName.  It's possible for nodes to contain or point to other nodes."""
 
     def _walk(self, callback, chain):
         pass
+
+
+class Registered:
+    """A node that (possibly) has gtype_name and get_type."""
+    def __init__(self, gtype_name, get_type):
+        assert (gtype_name is None and get_type is None) or \
+               (gtype_name is not None and get_type is not None)
+        self.gtype_name = gtype_name
+        self.get_type = get_type
+
 
 class Callable(Node):
 
@@ -661,44 +669,72 @@ class Return(TypeContainer):
         self.direction = PARAM_DIRECTION_OUT
 
 
-class Enum(Node):
+class Enum(Node, Registered):
 
-    def __init__(self, name, symbol, members):
+    def __init__(self, name, ctype,
+                 gtype_name=None,
+                 get_type=None,
+                 c_symbol_prefix=None,
+                 members=None):
         Node.__init__(self, name)
-        self.symbol = symbol
+        Registered.__init__(self, gtype_name, get_type)
+        self.c_symbol_prefix = c_symbol_prefix
+        self.ctype = ctype
         self.members = members
+        # Associated error quark
+        self.error_quark = None
 
 
-class Bitfield(Node):
+class Bitfield(Node, Registered):
 
-    def __init__(self, name, symbol, members):
+    def __init__(self, name, ctype,
+                 gtype_name=None,
+                 c_symbol_prefix=None,
+                 get_type=None,
+                 members=None):
         Node.__init__(self, name)
-        self.symbol = symbol
+        Registered.__init__(self, gtype_name, get_type)
+        self.ctype = ctype
+        self.c_symbol_prefix = c_symbol_prefix
         self.members = members
 
 
 class Member(Annotated):
 
-    def __init__(self, name, value, symbol):
+    def __init__(self, name, value, symbol, nick):
         Annotated.__init__(self)
         self.name = name
         self.value = value
         self.symbol = symbol
+        self.nick = nick
 
     def __cmp__(self, other):
         return cmp(self.name, other.name)
 
 
-class Record(Node):
 
-    def __init__(self, name, symbol, disguised=False):
+class Compound(Node, Registered):
+    def __init__(self, name,
+                 ctype=None,
+                 gtype_name=None,
+                 get_type=None,
+                 c_symbol_prefix=None,
+                 disguised=False):
         Node.__init__(self, name)
-        self.fields = []
-        self.constructors = []
-        self.symbol = symbol
-        self.disguised = disguised
+        Registered.__init__(self, gtype_name, get_type)
+        self.ctype = ctype
         self.methods = []
         self.static_methods = []
+        self.fields = []
+        self.constructors = []
+        self.disguised = disguised
+        self.gtype_name = gtype_name
+        self.get_type = get_type
+        self.c_symbol_prefix = c_symbol_prefix
+
+    def add_gtype(self, gtype_name, get_type):
+        self.gtype_name = gtype_name
+        self.get_type = get_type
 
     def _walk(self, callback, chain):
         for ctor in self.constructors:
@@ -710,7 +746,6 @@ class Record(Node):
         for field in self.fields:
             if field.anonymous_node is not None:
                 field.anonymous_node.walk(callback, chain)
-
 
 class Field(Annotated):
 
@@ -729,13 +764,91 @@ class Field(Annotated):
         return cmp(self.name, other.name)
 
 
-class Class(Node):
+class Record(Compound):
 
-    def __init__(self, name, parent, is_abstract):
+    def __init__(self, name,
+                 ctype=None,
+                 gtype_name=None,
+                 get_type=None,
+                 c_symbol_prefix=None,
+                 disguised=False):
+        Compound.__init__(self, name,
+                          ctype=ctype,
+                          gtype_name=gtype_name,
+                          get_type=get_type,
+                          c_symbol_prefix=c_symbol_prefix,
+                          disguised=disguised)
+        # If non-None, this record defines the FooClass C structure
+        # for some Foo GObject (or similar for GInterface)
+        self.is_gtype_struct_for = None
+
+
+class Union(Compound):
+
+    def __init__(self, name,
+                 ctype=None,
+                 gtype_name=None,
+                 get_type=None,
+                 c_symbol_prefix=None,
+                 disguised=False):
+        Compound.__init__(self, name,
+                          ctype=ctype,
+                          gtype_name=gtype_name,
+                          get_type=get_type,
+                          c_symbol_prefix=c_symbol_prefix,
+                          disguised=disguised)
+
+
+class Boxed(Node, Registered):
+    """A boxed type with no known associated structure/union."""
+    def __init__(self, name,
+                 gtype_name=None,
+                 get_type=None,
+                 c_symbol_prefix=None):
+        assert gtype_name is not None
+        assert get_type is not None
         Node.__init__(self, name)
-        self.ctype = name
-        self.c_symbol_prefix = None
+        Registered.__init__(self, gtype_name, get_type)
+        if get_type is not None:
+            assert c_symbol_prefix is not None
+        self.c_symbol_prefix = c_symbol_prefix
+        self.constructors = []
+        self.methods = []
+        self.static_methods = []
+
+    def _walk(self, callback, chain):
+        for ctor in self.constructors:
+            ctor.walk(callback, chain)
+        for meth in self.methods:
+            meth.walk(callback, chain)
+        for meth in self.static_methods:
+            meth.walk(callback, chain)
+
+
+class Signal(Callable):
+
+    def __init__(self, name, retval, parameters):
+        Callable.__init__(self, name, retval, parameters, False)
+
+
+class Class(Node, Registered):
+
+    def __init__(self, name, parent,
+                 ctype=None,
+                 gtype_name=None,
+                 get_type=None,
+                 c_symbol_prefix=None,
+                 is_abstract=False):
+        Node.__init__(self, name)
+        Registered.__init__(self, gtype_name, get_type)
+        self.ctype = ctype
+        self.c_symbol_prefix = c_symbol_prefix
         self.parent = parent
+        self.fundamental = False
+        self.unref_func = None
+        self.ref_func = None
+        self.set_value_func = None
+        self.get_value_func = None
         # When we're in the scanner, we keep around a list
         # of parents so that we can transparently fall back
         # if there are 'hidden' parents
@@ -749,6 +862,7 @@ class Class(Node):
         self.constructors = []
         self.properties = []
         self.fields = []
+        self.signals = []
 
     def _walk(self, callback, chain):
         for meth in self.methods:
@@ -762,15 +876,25 @@ class Class(Node):
         for field in self.fields:
             if field.anonymous_node:
                 field.anonymous_node.walk(callback, chain)
+        for sig in self.signals:
+            sig.walk(callback, chain)
 
-class Interface(Node):
 
-    def __init__(self, name, parent):
+class Interface(Node, Registered):
+
+    def __init__(self, name, parent,
+                 ctype=None,
+                 gtype_name=None,
+                 get_type=None,
+                 c_symbol_prefix=None):
         Node.__init__(self, name)
-        self.c_symbol_prefix = None
+        Registered.__init__(self, gtype_name, get_type)
+        self.ctype = ctype
+        self.c_symbol_prefix = c_symbol_prefix
         self.parent = parent
         self.parent_chain = []
         self.methods = []
+        self.signals = []
         self.static_methods = []
         self.virtual_methods = []
         self.glib_type_struct = None
@@ -788,6 +912,9 @@ class Interface(Node):
         for field in self.fields:
             if field.anonymous_node:
                 field.anonymous_node.walk(callback, chain)
+        for sig in self.signals:
+            sig.walk(callback, chain)
+
 
 class Constant(Node):
 
@@ -815,25 +942,3 @@ class Callback(Callable):
     def __init__(self, name, retval, parameters, throws, ctype=None):
         Callable.__init__(self, name, retval, parameters, throws)
         self.ctype = ctype
-
-
-class Union(Node):
-
-    def __init__(self, name, symbol):
-        Node.__init__(self, name)
-        self.fields = []
-        self.constructors = []
-        self.methods = []
-        self.static_methods = []
-        self.symbol = symbol
-
-    def _walk(self, callback, chain):
-        for ctor in self.constructors:
-            ctor.walk(callback, chain)
-        for meth in self.methods:
-            meth.walk(callback, chain)
-        for meth in self.static_methods:
-            meth.walk(callback, chain)
-        for field in self.fields:
-            if field.anonymous_node:
-                field.anonymous_node.walk(callback, chain)

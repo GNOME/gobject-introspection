@@ -22,7 +22,6 @@ import os
 import sys
 
 from . import ast
-from . import glibast
 from . import message
 from .cachestore import CacheStore
 from .config import DATADIR, GIR_DIR, GIR_SUFFIX
@@ -351,7 +350,8 @@ raise ValueError."""
                     return None
             members.append(ast.Member(name.lower(),
                                       child.const_int,
-                                      child.ident))
+                                      child.ident,
+                                      None))
 
         try:
             enum_name = self.strip_identifier(symbol.ident)
@@ -362,7 +362,7 @@ raise ValueError."""
             klass = ast.Bitfield
         else:
             klass = ast.Enum
-        node = klass(enum_name, symbol.ident, members)
+        node = klass(enum_name, symbol.ident, members=members)
         node.add_symbol_reference(symbol)
         return node
 
@@ -603,7 +603,7 @@ raise ValueError."""
         except TransformerException, e:
             message.warn_symbol(symbol, e)
             return None
-        struct = ast.Record(name, symbol.ident, disguised)
+        struct = ast.Record(name, symbol.ident, disguised=disguised)
         self._parse_fields(symbol, struct)
         struct.add_symbol_reference(symbol)
         self._typedefs_ns[symbol.ident] = struct
@@ -756,12 +756,10 @@ Note that type resolution may not succeed."""
         assert typeval.gtype_name is not None
         for ns in self._iter_namespaces():
             for node in ns.itervalues():
-                if not isinstance(node, (ast.Class, ast.Interface,
-                                         glibast.GLibBoxed,
-                                         glibast.GLibEnum,
-                                         glibast.GLibFlags)):
+                if not (isinstance(node, (ast.Class, ast.Interface))
+                        or (isinstance(node, ast.Registered) and node.get_type is not None)):
                     continue
-                if node.type_name == typeval.gtype_name:
+                if node.gtype_name == typeval.gtype_name:
                     typeval.target_giname = '%s.%s' % (ns.name, node.name)
                     return True
         return False

@@ -26,7 +26,6 @@ import subprocess
 from xml.etree.cElementTree import parse
 
 from . import ast
-from . import glibast
 from . import message
 from .transformer import TransformerException
 
@@ -119,8 +118,7 @@ class GDumpParser(object):
         # Anyone who wants them can get them from the ast.Class/Interface/Boxed
         to_remove = []
         for name, node in self._namespace.iteritems():
-            if isinstance(node, (ast.Class, ast.Interface, glibast.GLibBoxed,
-                                 glibast.GLibEnum, glibast.GLibFlags)):
+            if isinstance(node, ast.Registered) and node.get_type is not None:
                 get_type_name = node.get_type
                 if get_type_name == 'intern':
                     continue
@@ -172,7 +170,11 @@ blob containing data gleaned from GObject's primitive introspection."""
             symbol = 'g_initially_unowned_get_type'
         else:
             assert False
-        gnode = glibast.GLibObject(node.name, parent_gitype, type_name, symbol, 'object', True)
+        gnode = ast.Class(node.name, parent_gitype,
+                          gtype_name=type_name,
+                          get_type=symbol,
+                          c_symbol_prefix='object',
+                          is_abstract=True)
         if type_name == 'GObject':
             gnode.fields.extend(node.fields)
         else:
@@ -243,24 +245,33 @@ blob containing data gleaned from GObject's primitive introspection."""
         else:
             raise ValueError("Unhandled introspection XML tag %s", xmlnode.tag)
 
-    def _introspect_enum(self, node):
+    def _introspect_enum(self, xmlnode):
         members = []
-        for member in node.findall('member'):
+        for member in xmlnode.findall('member'):
             # Keep the name closer to what we'd take from C by default;
             # see http://bugzilla.gnome.org/show_bug.cgi?id=575613
             name = member.attrib['nick'].replace('-', '_')
-            members.append(glibast.GLibEnumMember(name,
-                                          member.attrib['value'],
-                                          member.attrib['name'],
-                                          member.attrib['nick']))
+            members.append(ast.Member(name,
+                                      member.attrib['value'],
+                                      member.attrib['name'],
+                                      member.attrib['nick']))
 
-        klass = (glibast.GLibFlags if node.tag == 'flags' else glibast.GLibEnum)
-        type_name = node.attrib['name']
+
+        if xmlnode.tag == 'flags':
+            klass = ast.Bitfield
+        else:
+            klass = ast.Enum
+        type_name = xmlnode.attrib['name']
+        (get_type, c_symbol_prefix) = self._split_type_and_symbol_prefix(xmlnode)
         try:
             enum_name = self._transformer.strip_identifier(type_name)
         except TransformerException, e:
             message.fatal(e)
-        node = klass(enum_name, type_name, members, node.attrib['get-type'])
+        node = klass(enum_name, type_name,
+                     gtype_name=type_name,
+                     c_symbol_prefix=c_symbol_prefix,
+                     members=members,
+                     get_type=xmlnode.attrib['get-type'])
         self._namespace.append(node, replace=True)
 
     def _split_type_and_symbol_prefix(self, xmlnode):
@@ -284,8 +295,11 @@ blob containing data gleaned from GObject's primitive introspection."""
             object_name = self._transformer.strip_identifier(type_name)
         except TransformerException, e:
             message.fatal(e)
-        node = glibast.GLibObject(object_name, None, type_name,
-                                  get_type, c_symbol_prefix, is_abstract)
+        node = ast.Class(object_name, None,
+                         gtype_name=type_name,
+                         get_type=get_type,
+                         c_symbol_prefix=c_symbol_prefix,
+                         is_abstract=is_abstract)
         self._parse_parents(xmlnode, node)
         self._introspect_properties(node, xmlnode)
         self._introspect_signals(node, xmlnode)
@@ -301,14 +315,23 @@ blob containing data gleaned from GObject's primitive introspection."""
             interface_name = self._transformer.strip_identifier(type_name)
         except TransformerException, e:
             message.fatal(e)
-        node = glibast.GLibInterface(interface_name, None, type_name,
-                                     get_type, c_symbol_prefix)
+        node = ast.Interface(interface_name, None,
+                             gtype_name=type_name,
+                             get_type=get_type,
+                             c_symbol_prefix=c_symbol_prefix)
         self._introspect_properties(node, xmlnode)
         self._introspect_signals(node, xmlnode)
         for child in xmlnode.findall('prerequisite'):
             name = child.attrib['name']
             prereq = ast.Type.create_from_gtype_name(name)
             node.prerequisites.append(prereq)
+
+        record = self._namespace.get(node.name)
+        if isinstance(record, ast.Record):
+            node.ctype = record.ctype
+        else:
+            message.warn_node(node, "Couldn't find associated structure for '%r'" % (node.name, ))
+
         # GtkFileChooserEmbed is an example of a private interface, we
         # just filter them out
         if xmlnode.attrib['get-type'].startswith('_'):
@@ -318,11 +341,17 @@ blob containing data gleaned from GObject's primitive introspection."""
 
     def _introspect_boxed(self, xmlnode):
         type_name = xmlnode.attrib['name']
+        try:
+            name = self._transformer.strip_identifier(type_name)
+        except TransformerException, e:
+            message.fatal(e)
         # This one doesn't go in the main namespace; we associate it with
         # the struct or union
         (get_type, c_symbol_prefix) = self._split_type_and_symbol_prefix(xmlnode)
-        node = glibast.GLibBoxed(type_name, get_type, c_symbol_prefix)
-        self._boxed_types[node.type_name] = node
+        node = ast.Boxed(name, gtype_name=type_name,
+                         get_type=get_type,
+                         c_symbol_prefix=c_symbol_prefix)
+        self._boxed_types[node.gtype_name] = node
 
     def _introspect_implemented_interfaces(self, node, xmlnode):
         gt_interfaces = []
@@ -363,7 +392,7 @@ blob containing data gleaned from GObject's primitive introspection."""
                 param = ast.Parameter(argname, ptype)
                 param.transfer = ast.PARAM_TRANSFER_NONE
                 parameters.append(param)
-            signal = glibast.GLibSignal(signal_info.attrib['name'], return_, parameters)
+            signal = ast.Signal(signal_info.attrib['name'], return_, parameters)
             node.signals.append(signal)
         node.signals = node.signals
 
@@ -393,8 +422,11 @@ blob containing data gleaned from GObject's primitive introspection."""
             message.warn(e)
             return
 
-        node = glibast.GLibObject(fundamental_name, None, type_name,
-                                  get_type, c_symbol_prefix, is_abstract)
+        node = ast.Class(fundamental_name, None,
+                         gtype_name=type_name,
+                         get_type=get_type,
+                         c_symbol_prefix=c_symbol_prefix,
+                         is_abstract=is_abstract)
         self._parse_parents(xmlnode, node)
         node.fundamental = True
         self._introspect_implemented_interfaces(node, xmlnode)
@@ -407,6 +439,7 @@ blob containing data gleaned from GObject's primitive introspection."""
         record = self._namespace.get(node.name)
         if not isinstance(record, ast.Record):
             return
+        node.ctype = record.ctype
         node.fields = record.fields
         for field in node.fields:
             if isinstance(field, ast.Field):
@@ -416,29 +449,22 @@ blob containing data gleaned from GObject's primitive introspection."""
 
     def _pair_boxed_type(self, boxed):
         try:
-            name = self._transformer.strip_identifier(boxed.type_name)
+            name = self._transformer.strip_identifier(boxed.gtype_name)
         except TransformerException, e:
             message.fatal(e)
         pair_node = self._namespace.get(name)
         if not pair_node:
-            boxed_item = glibast.GLibBoxedOther(name, boxed.type_name,
-                                        boxed.get_type,
-                                        boxed.c_symbol_prefix)
-        elif isinstance(pair_node, ast.Record):
-            boxed_item = glibast.GLibBoxedStruct(pair_node.name, boxed.type_name,
-                                         boxed.get_type,
-                                         boxed.c_symbol_prefix)
-            boxed_item.inherit_file_positions(pair_node)
-            boxed_item.fields = pair_node.fields
-        elif isinstance(pair_node, ast.Union):
-            boxed_item = glibast.GLibBoxedUnion(pair_node.name, boxed.type_name,
-                                        boxed.get_type,
-                                        boxed.c_symbol_prefix)
-            boxed_item.inherit_file_positions(pair_node)
-            boxed_item.fields = pair_node.fields
+            # Keep the "bare" boxed instance
+            self._namespace.append(boxed)
+        elif isinstance(pair_node, (ast.Record, ast.Union)):
+            pair_node.add_gtype(boxed.gtype_name, boxed.get_type)
+            assert boxed.c_symbol_prefix is not None
+            pair_node.c_symbol_prefix = boxed.c_symbol_prefix
+            # Quick hack - reset the disguised flag; we're setting it
+            # incorrectly in the scanner
+            pair_node.disguised = False
         else:
             return False
-        self._namespace.append(boxed_item, replace=True)
 
     def _strip_class_suffix(self, name):
         if (name.endswith('Class') or
@@ -461,8 +487,6 @@ blob containing data gleaned from GObject's primitive introspection."""
         if not (pair_record and isinstance(pair_record, ast.Record)):
             return
 
-        gclass_struct = glibast.GLibRecord.from_record(pair_record)
-        self._namespace.append(gclass_struct, replace=True)
-        cls.glib_type_struct = gclass_struct.create_type()
+        cls.glib_type_struct = pair_record.create_type()
         cls.inherit_file_positions(pair_record)
-        gclass_struct.is_gtype_struct_for = cls.create_type()
+        pair_record.is_gtype_struct_for = cls.create_type()
