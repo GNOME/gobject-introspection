@@ -330,56 +330,41 @@ class GIRParser(object):
                 res.append(fieldobj)
         return res
 
+    def _parse_compound(self, cls, node):
+        compound = cls(node.attrib.get('name'),
+                       ctype=node.attrib.get(_cns('type')),
+                       disguised=node.attrib.get('disguised') == '1',
+                       gtype_name=node.attrib.get(_glibns('type-name')),
+                       get_type=node.attrib.get(_glibns('get-type')),
+                       c_symbol_prefix=node.attrib.get(_cns('symbol-prefix')))
+        if node.attrib.get('foreign') == '1':
+            compound.foreign = True
+        self._parse_generic_attribs(node, compound)
+        compound.fields.extend(self._parse_fields(node))
+        for method in self._find_children(node, _corens('method')):
+            compound.methods.append(
+                self._parse_function_common(method, ast.Function))
+        for func in self._find_children(node, _corens('function')):
+            compound.static_methods.append(
+                self._parse_function_common(func, ast.Function))
+        for ctor in self._find_children(node, _corens('constructor')):
+            compound.constructors.append(
+                self._parse_function_common(ctor, ast.Function))
+        return compound
+
     def _parse_record(self, node, anonymous=False):
-        struct = ast.Record(node.attrib.get('name'),
-                            node.attrib.get(_cns('type')),
-                            disguised=node.attrib.get('disguised') == '1',
-                            gtype_name=node.attrib.get(_glibns('type-name')),
-                            get_type=node.attrib.get(_glibns('get-type')),
-                            c_symbol_prefix=node.attrib.get(_cns('symbol-prefix')))
+        struct = self._parse_compound(ast.Record, node)
         is_gtype_struct_for = node.attrib.get(_glibns('is-gtype-struct-for'))
         if is_gtype_struct_for is not None:
             struct.is_gtype_struct_for = self._namespace.type_from_name(is_gtype_struct_for)
-        if node.attrib.get('foreign') == '1':
-            struct.foreign = True
-        self._parse_generic_attribs(node, struct)
         if not anonymous:
             self._namespace.append(struct)
-
-        struct.fields.extend(self._parse_fields(node))
-        for method in self._find_children(node, _corens('method')):
-            struct.methods.append(
-                self._parse_function_common(method, ast.Function))
-        for func in self._find_children(node, _corens('function')):
-            struct.static_methods.append(
-                self._parse_function_common(func, ast.Function))
-        for ctor in self._find_children(node, _corens('constructor')):
-            struct.constructors.append(
-                self._parse_function_common(ctor, ast.Function))
         return struct
 
     def _parse_union(self, node, anonymous=False):
-        union = ast.Union(node.attrib.get('name'),
-                          node.attrib.get(_cns('type')),
-                          gtype_name=node.attrib.get(_glibns('type-name')),
-                          get_type=node.attrib.get(_glibns('get-type')),
-                          c_symbol_prefix=node.attrib.get(_cns('symbol-prefix')))
+        union = self._parse_compound(ast.Union, node)
         if not anonymous:
             self._namespace.append(union)
-
-        for callback in self._find_children(node, _corens('callback')):
-            union.fields.append(
-                self._parse_function_common(callback, ast.Callback))
-        union.fields.extend(self._parse_fields(node))
-        for method in self._find_children(node, _corens('method')):
-            union.methods.append(
-                self._parse_function_common(method, ast.Function))
-        for func in self._find_children(node, _corens('function')):
-            union.static_methods.append(
-                self._parse_function_common(func, ast.Function))
-        for ctor in self._find_children(node, _corens('constructor')):
-            union.constructors.append(
-                self._parse_function_common(ctor, ast.Function))
         return union
 
     def _parse_type_simple(self, typenode):
