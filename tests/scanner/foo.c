@@ -667,6 +667,31 @@ foo_buffer_some_method (FooBuffer *buffer)
 {
 }
 
+struct _FooOtherObject
+{
+  GObject parent_instance;
+};
+
+struct _FooOtherObjectClass
+{
+  GObjectClass parent_class;
+};
+
+G_DEFINE_TYPE(FooOtherObject, foo_other_object, G_TYPE_OBJECT);
+
+static void
+foo_other_object_class_init (FooOtherObjectClass *klass)
+{
+
+}
+
+static void
+foo_other_object_init (FooOtherObject *object)
+{
+
+}
+
+
 #define FOO_DEFINE_SHOULD_NOT_BE_EXPOSED "should not be exposed"
 
 /**
@@ -714,3 +739,15 @@ foo_test_varargs_callback3 (FooVarargsCallback callback,
 {
 }
 
+/**
+ * foo_object_append_new_stack_layer:
+ *
+ * This shouldn't be scanned as a constructor.
+ *
+ * Returns: (transfer none):
+ */
+FooOtherObject *
+foo_object_append_new_stack_layer (FooObject *obj, int x)
+{
+  return NULL;
+}

@@ -34,6 +34,10 @@
 #define FOO_BUFFER(object)     (G_TYPE_CHECK_INSTANCE_CAST ((object), FOO_TYPE_BUFFER, FooBuffer))
 #define FOO_IS_BUFFER(object)  (G_TYPE_CHECK_INSTANCE_TYPE ((object), FOO_TYPE_BUFFER))
 
+#define FOO_TYPE_OTHER_OBJECT  (foo_other_object_get_type ())
+#define FOO_OTHER_OBJECT(object)     (G_TYPE_CHECK_INSTANCE_CAST ((object), FOO_TYPE_OTHER_OBJECT, FooOtherObject))
+#define FOO_IS_OTHER_OBJECT(object)  (G_TYPE_CHECK_INSTANCE_TYPE ((object), FOO_TYPE_OTHER_OBJECT))
+
 typedef struct _FooInterface       FooInterface;
 typedef struct _FooInterfaceIface  FooInterfaceIface;
 typedef struct _FooSubInterface       FooSubInterface;
@@ -44,6 +48,8 @@ typedef struct _FooSubobject       FooSubobject;
 typedef struct _FooSubobjectClass  FooSubobjectClass;
 typedef struct _FooBuffer          FooBuffer;
 typedef struct _FooBufferClass     FooBufferClass;
+typedef struct _FooOtherObject          FooOtherObject;
+typedef struct _FooOtherObjectClass     FooOtherObjectClass;
 
 struct _FooInterfaceIface
 {
@@ -150,6 +156,8 @@ FooObject *           foo_object_get_default       (void);
 GType                 foo_buffer_get_type          (void);
 
 void                  foo_buffer_some_method       (FooBuffer *buffer);
+
+GType                 foo_other_object_get_type    (void) G_GNUC_CONST;
 
 typedef enum
 {
@@ -419,5 +427,7 @@ struct _FooForeignStruct
  * it's a separate namespace.
  */
 void foo_object_a_global_method (UtilityObject *obj);
+
+FooOtherObject * foo_object_append_new_stack_layer (FooObject *obj, int x);
 
 #endif /* __FOO_OBJECT_H__ */

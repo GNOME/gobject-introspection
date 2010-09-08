@@ -368,6 +368,18 @@ uses a C sugar return type.</doc>
           </parameter>
         </parameters>
       </virtual-method>
+      <method name="append_new_stack_layer"
+              c:identifier="foo_object_append_new_stack_layer">
+        <doc xml:whitespace="preserve">This shouldn't be scanned as a constructor.</doc>
+        <return-value transfer-ownership="none">
+          <type name="OtherObject" c:type="FooOtherObject*"/>
+        </return-value>
+        <parameters>
+          <parameter name="x" transfer-ownership="none">
+            <type name="gint" c:type="int"/>
+          </parameter>
+        </parameters>
+      </method>
       <method name="dup_name" c:identifier="foo_object_dup_name">
         <return-value transfer-ownership="full">
           <type name="utf8" c:type="char*"/>
@@ -559,6 +571,19 @@ uses a C sugar return type.</doc>
           <type name="GObject.Callback" c:type="GCallback"/>
         </array>
       </field>
+    </record>
+    <class name="OtherObject"
+           c:symbol-prefix="other_object"
+           c:type="FooOtherObject"
+           parent="GObject.Object"
+           glib:type-name="FooOtherObject"
+           glib:get-type="foo_other_object_get_type"
+           glib:type-struct="OtherObjectClass">
+    </class>
+    <record name="OtherObjectClass"
+            c:type="FooOtherObjectClass"
+            disguised="1"
+            glib:is-gtype-struct-for="OtherObject">
     </record>
     <constant name="PIE_IS_TASTY" value="3.141590">
       <type name="gdouble" c:type="gdouble"/>

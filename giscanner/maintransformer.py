@@ -819,9 +819,7 @@ method or constructor of some type."""
         target = self._transformer.lookup_typenode(func.retval.type)
         if not isinstance(target, (ast.Class, glibast.GLibBoxed)):
             return False
-        new_idx = func.symbol.rfind('_new')
-        assert (new_idx >= 0)
-        prefix = func.symbol[:new_idx]
+
         split = self._split_uscored_by_type(subsymbol)
         if split is None:
             # TODO - need a e.g. (method) annotation
@@ -829,10 +827,19 @@ method or constructor of some type."""
                 "Can't find matching type for constructor; symbol=%r" % (func.symbol, ))
             return False
         (origin_node, funcname) = split
+
+        # Some sanity checks; only objects and boxeds can have ctors
         if not isinstance(origin_node, (ast.Class, glibast.GLibBoxed)):
             return False
+        # Verify the namespace - don't want to append to foreign namespaces!
         if origin_node.namespace != self._namespace:
             return False
+        # If it takes the object as a first arg, it's not a constructor
+        if len(func.parameters) > 0:
+            first_arg = self._transformer.lookup_typenode(func.parameters[0].type)
+            if (first_arg is not None) and first_arg.gi_name == origin_node.gi_name:
+                return False
+
         if isinstance(target, ast.Class):
             parent = origin_node
             while parent and (not parent.gi_name == 'GObject.Object'):
