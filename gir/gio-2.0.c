@@ -267,6 +267,12 @@
  */
 
 /**
+ * g_volume_get_drive:
+ *
+ * Returns: (transfer full):
+ */
+
+/**
  * g_file_info_list_attributes:
  *
  * Return value: (array zero-terminated=1) (transfer full):
