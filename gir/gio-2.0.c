@@ -40,6 +40,12 @@
  */
 
 /**
+ * g_mount_get_drive:
+ *
+ * Returns: (transfer full):
+ */
+
+/**
  * g_app_info_get_all:
  *
  * Returns: (element-type GAppInfo) (transfer full):
