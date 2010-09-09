@@ -87,7 +87,7 @@ GObject_2_0_gir_SCANNERFLAGS = \
             --reparse-validate \
             --identifier-prefix=G \
             --c-include="glib-object.h" \
-            --add-include-path=.+  \        
+            --add-include-path=. \
             $(GObject_2_0_gir_DOCSRC)
 
 GObject_2_0_gir_PACKAGES = gobject-2.0
@@ -168,7 +168,7 @@ Gio_2_0_gir_FILES = \
             gio-2.0.c
 
 INTROSPECTION_GIRS += Gio-2.0.gir
-EXTRA_DIST += gio-2.0.c
+EXTRA_DIST += glib-2.0.c gobject-2.0.c gio-2.0.c
 
 # girepository
 GIRepository-2.0.gir: GObject-2.0.gir $(top_builddir)/girepository/libgirepository-1.0.la
