@@ -40,6 +40,18 @@
  */
 
 /**
+ * g_mount_get_root:
+ *
+ * Returns: (transfer full):
+ */
+
+/**
+ * g_mount_get_icon:
+ *
+ * Returns: (transfer full):
+ */
+
+/**
  * g_mount_get_drive:
  *
  * Returns: (transfer full):
