@@ -423,6 +423,8 @@ struct _FooForeignStruct
   int foo;
 };
 
+FooForeignStruct* foo_foreign_struct_new (void);
+
 /* This one should be a global, not a method on UtilityObject since
  * it's a separate namespace.
  */

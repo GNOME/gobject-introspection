@@ -711,6 +711,12 @@ foo_skip_me (FooSkippable fs)
  *
  */
 
+FooForeignStruct*
+foo_foreign_struct_new (void)
+{
+  return g_slice_new0 (FooForeignStruct);
+}
+
 /**
  * foo_test_varargs_callback: (skip)
  *

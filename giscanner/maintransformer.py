@@ -822,7 +822,7 @@ method or constructor of some type."""
         target = self._transformer.lookup_typenode(func.retval.type)
         if not (isinstance(target, ast.Class)
                 or (isinstance(target, (ast.Record, ast.Union, ast.Boxed))
-                    and target.get_type is not None)):
+                    and (target.get_type is not None or target.foreign))):
             return False
 
         split = self._split_uscored_by_type(subsymbol)
@@ -835,7 +835,7 @@ method or constructor of some type."""
         # Some sanity checks; only objects and boxeds can have ctors
         if not (isinstance(origin_node, ast.Class)
                 or (isinstance(origin_node, (ast.Record, ast.Union, ast.Boxed))
-                    and origin_node.get_type is not None)):
+                    and (origin_node.get_type is not None or origin_node.foreign))):
             return False
         # Verify the namespace - don't want to append to foreign namespaces!
         if origin_node.namespace != self._namespace:

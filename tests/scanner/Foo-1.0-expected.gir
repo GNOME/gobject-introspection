@@ -255,6 +255,11 @@ and/or use gtk-doc annotations.  -->
       <field name="foo" writable="1">
         <type name="gint" c:type="int"/>
       </field>
+      <constructor name="new" c:identifier="foo_foreign_struct_new">
+        <return-value transfer-ownership="full">
+          <type name="ForeignStruct" c:type="FooForeignStruct*"/>
+        </return-value>
+      </constructor>
     </record>
     <interface name="Interface"
                c:symbol-prefix="interface"
