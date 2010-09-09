@@ -168,7 +168,10 @@ class MainTransformer(object):
         if isinstance(node, (ast.Class, ast.Interface, ast.Record,
                              ast.Union, ast.Enum, ast.Bitfield,
                              ast.Callback)):
-            block = self._blocks.get(node.c_name)
+            if node.ctype is not None:
+                block = self._blocks.get(node.ctype)
+            else:
+                block = self._blocks.get(node.c_name)
             self._apply_annotations_annotated(node, block)
         if isinstance(node, (ast.Class, ast.Interface, ast.Record, ast.Union)):
             for field in node.fields:
