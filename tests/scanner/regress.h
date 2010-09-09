@@ -521,6 +521,8 @@ void regress_test_torture_signature_2 (int                  x,
 GValue *regress_test_date_in_gvalue (void);
 GValue *regress_test_strv_in_gvalue (void);
 
+GObject * _regress_this_is_a_private_symbol (void);
+
 /**
  * RegressSkippedStructure: (skip)
  *

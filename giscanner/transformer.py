@@ -367,6 +367,9 @@ raise ValueError."""
         return node
 
     def _create_function(self, symbol):
+        # Drop functions that start with _ very early on here
+        if symbol.ident.startswith('_'):
+            return None
         parameters = list(self._create_parameters(symbol.base_type))
         return_ = self._create_return(symbol.base_type.base_type)
         try:
