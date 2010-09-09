@@ -90,8 +90,8 @@ def _get_option_parser():
                       action="store", dest="namespace_version",
                       help="version of namespace for this unit")
     parser.add_option("", "--strip-prefix",
-		      action="store", dest="strip_prefix",
-		      help="""Option --strip-prefix is deprecated, please see --identifier-prefix
+                      action="store", dest="strip_prefix",
+                      help="""Option --strip-prefix is deprecated, please see --identifier-prefix
 and --symbol-prefix.""")
     parser.add_option("", "--identifier-prefix",
                       action="append", dest="identifier_prefixes", default=[],
@@ -246,7 +246,8 @@ def scanner_main(args):
     libraries = options.libraries
 
     if options.strip_prefix:
-	_error("Option --strip-prefix is deprecated, please see --identifier-prefix and --symbol-prefix.")
+        _error("""Option --strip-prefix has been replaced;
+see --identifier-prefix and --symbol-prefix.""")
 
     filenames = []
     for arg in args:
