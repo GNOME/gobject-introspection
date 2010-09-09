@@ -291,6 +291,10 @@ struct _RegressTestObjClass
 
   guint test_signal;
   guint test_signal_with_static_scope_arg;
+
+  /* Should be replaced with simple "gpointer" and not be callback */
+  void (*_regress_reserved1) (void);
+  void (*_regress_reserved2) (void);
 };
 
 GType      regress_test_obj_get_type (void);

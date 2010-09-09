@@ -629,6 +629,20 @@ case.</doc>
       <field name="test_signal_with_static_scope_arg">
         <type name="guint" c:type="guint"/>
       </field>
+      <field name="_regress_reserved1" introspectable="0">
+        <callback name="_regress_reserved1">
+          <return-value transfer-ownership="none">
+            <type name="none" c:type="void"/>
+          </return-value>
+        </callback>
+      </field>
+      <field name="_regress_reserved2" introspectable="0">
+        <callback name="_regress_reserved2">
+          <return-value transfer-ownership="none">
+            <type name="none" c:type="void"/>
+          </return-value>
+        </callback>
+      </field>
     </record>
     <record name="TestSimpleBoxedA"
             c:type="RegressTestSimpleBoxedA"

@@ -55,6 +55,9 @@ class MainTransformer(object):
                 alias = ast.Alias('AttributeSet', target=ast.TYPE_ANY)
                 self._namespace.append(alias, replace=True)
 
+        # Some initial namespace surgery
+        self._namespace.walk(self._pass_fixup_hidden_fields)
+
         # We have a rough tree which should have most of of the types
         # we know about.  Let's attempt closure; walk over all of the
         # Type() types and see if they match up with something.
@@ -98,6 +101,19 @@ class MainTransformer(object):
         self._pair_quarks_with_enums()
 
     # Private
+
+    def _pass_fixup_hidden_fields(self, node, chain):
+        """Hide all callbacks starting with _; the typical
+usage is void (*_gtk_reserved1)(void);"""
+        if not isinstance(node, (ast.Class, ast.Interface,
+                                 ast.Record, ast.Union)):
+            return True
+        for field in node.fields:
+            if (field.name.startswith('_')
+                and field.anonymous_node is not None
+                and isinstance(field.anonymous_node, ast.Callback)):
+                field.introspectable = False
+        return True
 
     def _get_validate_parameter_name(self, parent, param_name, origin):
         try:
