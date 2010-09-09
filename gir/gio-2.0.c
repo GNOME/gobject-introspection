@@ -4,6 +4,12 @@
  */
 
 /**
+ * g_volume_monitor_adopt_orphan_mount:
+ *
+ * Return value: (transfer full):
+ */
+
+/**
  * g_volume_monitor_get:
  *
  * Return value: (transfer full):
@@ -19,6 +25,18 @@
  * g_volume_monitor_get_volumes:
  *
  * Returns: (element-type GVolume) (transfer full):
+ */
+
+/**
+ * g_volume_monitor_get_volume_for_uuid:
+ *
+ * Returns: (transfer full):
+ */
+
+/**
+ * g_volume_monitor_get_mount_for_uuid:
+ *
+ * Returns: (transfer full):
  */
 
 /**
@@ -262,12 +280,37 @@
  */
 
 /**
+ * g_volume_enumerate_identifiers:
+ * @volume:
+ *
+ * Returns: (array zero-terminated=1) (transfer full):
+ */
+
+/**
  * g_volume_mount:
  * @mount_operation: (allow-none):
  */
 
 /**
+ * g_volume_get_activation_root:
+ *
+ * Returns: (transfer full):
+ */
+
+/**
  * g_volume_get_drive:
+ *
+ * Returns: (transfer full):
+ */
+
+/**
+ * g_volume_get_icon:
+ *
+ * Returns: (transfer full):
+ */
+
+/**
+ * g_volume_get_mount:
  *
  * Returns: (transfer full):
  */
