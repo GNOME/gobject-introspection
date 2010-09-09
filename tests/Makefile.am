@@ -52,5 +52,5 @@ check: Everything-1.0.typelib GIMarshallingTests-1.0.typelib
 
 install-data-local:
 	for src in everything.c everything.h gimarshallingtests.c gimarshallingtests.h; do \
-	  install -m 644 -D $$src $(datadir)/gobject-introspection-1.0/tests/$$src; \
+	  install -m 644 -D $$src $(DESTDIR)$(datadir)/gobject-introspection-1.0/tests/$$src; \
 	done
