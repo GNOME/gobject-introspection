@@ -30,7 +30,7 @@ libregress_la_SOURCES = $(srcdir)/regress.c $(srcdir)/regress.h
 
 install-data-local:
 	for src in $(libregress_la_SOURCES); do \
-	  install -m 644 -D $$src $(datadir)/gobject-introspection-1.0/tests/$$src; \
+	  install -m 644 -D $$src $(DESTDIR)$(datadir)/gobject-introspection-1.0/tests/$$src; \
 	done
 
 libregress_la_CFLAGS = $(AM_CFLAGS) $(CAIRO_CFLAGS)
