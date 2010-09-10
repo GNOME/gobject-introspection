@@ -339,8 +339,21 @@ blob containing data gleaned from GObject's primitive introspection."""
         else:
             self._namespace.append(node, replace=True)
 
+    def _introspect_boxed_gstreamer_workaround(self, xmlnode):
+        node = ast.Boxed('ParamSpecMiniObject', gtype_name='GParamSpecMiniObject',
+                         get_type='gst_param_spec_mini_object_get_type',
+                         c_symbol_prefix='param_spec_mini_object')
+        self._boxed_types[node.gtype_name] = node
+
     def _introspect_boxed(self, xmlnode):
         type_name = xmlnode.attrib['name']
+
+        # Work around GStreamer legacy naming issue
+        # https://bugzilla.gnome.org/show_bug.cgi?id=550616
+        if type_name == 'GParamSpecMiniObject':
+            self._introspect_boxed_gstreamer_workaround(xmlnode)
+            return
+
         try:
             name = self._transformer.strip_identifier(type_name)
         except TransformerException, e:
