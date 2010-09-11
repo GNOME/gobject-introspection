@@ -424,6 +424,7 @@ struct _FooForeignStruct
 };
 
 FooForeignStruct* foo_foreign_struct_new (void);
+FooForeignStruct* foo_foreign_struct_copy (FooForeignStruct *original);
 
 /* This one should be a global, not a method on UtilityObject since
  * it's a separate namespace.

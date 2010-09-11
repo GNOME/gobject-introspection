@@ -65,6 +65,9 @@ class MainTransformer(object):
         # Type() types and see if they match up with something.
         self._namespace.walk(self._pass_type_resolution)
 
+        # Read in annotations needed early
+        self._namespace.walk(self._pass_read_annotations_early)
+
         # Determine some default values for transfer etc.
         # based on the current tree.
         self._namespace.walk(self._pass_callable_defaults)
@@ -166,6 +169,15 @@ usage is void (*_gtk_reserved1)(void);"""
         block = self._blocks.get(node.symbol)
         self._apply_annotations_callable(node, chain, block)
 
+    def _pass_read_annotations_early(self, node, chain):
+        if isinstance(node, ast.Record):
+            if node.ctype is not None:
+                block = self._blocks.get(node.ctype)
+            else:
+                block = self._blocks.get(node.c_name)
+            self._apply_annotations_annotated(node, block)
+        return True
+
     def _pass_callable_defaults(self, node, chain):
         if isinstance(node, (ast.Callable, ast.Signal)):
             for param in node.parameters:
@@ -198,9 +210,8 @@ usage is void (*_gtk_reserved1)(void);"""
             self._apply_annotations_function(node, chain)
         if isinstance(node, ast.Callback):
             self._apply_annotations_callable(node, chain, block = self._get_block(node))
-        if isinstance(node, (ast.Class, ast.Interface, ast.Record,
-                             ast.Union, ast.Enum, ast.Bitfield,
-                             ast.Callback)):
+        if isinstance(node, (ast.Class, ast.Interface, ast.Union, ast.Enum,
+                             ast.Bitfield, ast.Callback)):
             self._apply_annotations_annotated(node, self._get_block(node))
         if isinstance(node, (ast.Class, ast.Interface, ast.Record, ast.Union)):
             block = self._get_block(node)
@@ -384,7 +395,8 @@ usage is void (*_gtk_reserved1)(void);"""
         if isinstance(target, ast.Alias):
             return self._get_transfer_default_returntype_basic(target.target)
         elif (isinstance(target, ast.Boxed)
-              or (isinstance(target, (ast.Record, ast.Union)) and target.gtype_name is not None)):
+              or (isinstance(target, (ast.Record, ast.Union))
+                  and (target.gtype_name is not None or target.foreign))):
             return ast.PARAM_TRANSFER_FULL
         elif isinstance(target, (ast.Enum, ast.Bitfield)):
             return ast.PARAM_TRANSFER_NONE

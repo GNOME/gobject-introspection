@@ -717,6 +717,15 @@ foo_foreign_struct_new (void)
   return g_slice_new0 (FooForeignStruct);
 }
 
+FooForeignStruct*
+foo_foreign_struct_copy (FooForeignStruct *original)
+{
+    FooForeignStruct *copy;
+    copy = foo_foreign_struct_new ();
+    copy->foo = original->foo;
+    return copy;
+}
+
 /**
  * foo_test_varargs_callback: (skip)
  *
