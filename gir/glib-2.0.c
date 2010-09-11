@@ -218,6 +218,12 @@
  */
 
 /**
+ * g_variant_get_string:
+ * @length: (allow-none) (default NULL) (out):
+ * @returns:
+ */
+
+/**
  * g_get_language_names:
  * @returns: (array zero-terminated=1) (transfer none):
  */
