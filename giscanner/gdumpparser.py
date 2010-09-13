@@ -84,6 +84,7 @@ class GDumpParser(object):
         for node in self._namespace.itervalues():
             if isinstance(node, ast.Function):
                 self._initparse_function(node)
+
         if self._namespace.name == 'GObject':
             for node in self._namespace.itervalues():
                 if isinstance(node, ast.Record):
@@ -130,6 +131,13 @@ class GDumpParser(object):
                 to_remove.append(get_type_func)
         for node in to_remove:
             self._namespace.remove(node)
+
+        if self._namespace.name == 'GLib':
+            variant = self._namespace.get('Variant')
+            assert variant is not None
+            variant.add_gtype('GVariant', 'g_variant_get_gtype')
+            # Work around scanner bug
+            variant.disguised = False
 
     # Helper functions
 
@@ -220,13 +228,10 @@ blob containing data gleaned from GObject's primitive introspection."""
 
     def _initparse_gobject_record(self, record):
         # Special handling for when we're parsing GObject
-        internal_names = ("Object", 'InitiallyUnowned')
-        if record.name in internal_names:
+        if record.name in ("Object", 'InitiallyUnowned'):
             self._create_gobject(record)
-            return
-        if record.name == 'InitiallyUnownedClass':
+        elif record.name == 'InitiallyUnownedClass':
             record.fields = self._namespace.get('ObjectClass').fields
-        self._namespace.append(record, replace=True)
 
     # Introspection over the data we get from the dynamic
     # GObject/GType system out of the binary
