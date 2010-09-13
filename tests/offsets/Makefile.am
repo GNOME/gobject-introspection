@@ -28,7 +28,7 @@ Offsets_1_0_gir_FILES = $(srcdir)/offsets.h $(srcdir)/offsets.c
 Offsets_1_0_gir_SCANNERFLAGS = --warn-all --warn-error
 INTROSPECTION_GIRS += Offsets-1.0.gir
 
-CLEANFILES += offsets-1.0.gir offsets-1.0.typelib
+CLEANFILES += Offsets-1.0.gir Offsets-1.0.typelib
 
 ############################################################
 
