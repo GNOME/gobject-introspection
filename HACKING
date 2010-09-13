@@ -1,2 +1,9 @@
+Notes to developers hacking on GObjectIntrospection
+
 * You can use the GI_SCANNER_DEBUG environment variable; see utils.py
   for a list of debug flags.
+
+* If you add a new warning, you should add a new test for it
+  in test/warn
+
+* Before pushing code to the repository, make sure to run make check
