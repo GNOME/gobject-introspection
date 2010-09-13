@@ -9,6 +9,13 @@ CLEANFILES=
 INCLUDES = $(GOBJECT_CFLAGS)
 LIBADD = $(GOBJECT_LIBS)
 
+testsdir = $(datadir)/gobject-introspection-1.0/tests
+tests_DATA =		    \
+    everything.c	    \
+    everything.h	    \
+    gimarshallingtests.c    \
+    gimarshallingtests.h
+
 testlib_LTLIBRARIES = libeverything-1.0.la libgimarshallingtests-1.0.la
 testlibdir=$(prefix)/unused
 install-testlibLTLIBRARIES: # prevent it from being installed
@@ -43,14 +50,10 @@ GIMarshallingTests-1.0.gir: libgimarshallingtests-1.0.la Makefile
 	--namespace=GIMarshallingTests --symbol-prefix=gi_marshalling_tests --nsversion=1.0 \
 	--add-include-path=$(top_builddir)/gir --include=Gio-2.0 \
 	--library=libgimarshallingtests-1.0.la  --output=$@ \
-	gimarshallingtests.h gimarshallingtests.c
+	$(srcdir)/gimarshallingtests.h $(srcdir)/gimarshallingtests.c
 
 %.typelib: %.gir
 	$(AM_V_GEN) $(INTROSPECTION_COMPILER) $(INTROSPECTION_COMPILER_ARGS) $< -o $@
 
 check: Everything-1.0.typelib GIMarshallingTests-1.0.typelib
 
-install-data-local:
-	for src in everything.c everything.h gimarshallingtests.c gimarshallingtests.h; do \
-	  install -m 644 -D $$src $(DESTDIR)$(datadir)/gobject-introspection-1.0/tests/$$src; \
-	done

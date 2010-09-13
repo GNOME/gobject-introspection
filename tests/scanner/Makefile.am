@@ -28,10 +28,8 @@ libutility_la_SOURCES = $(srcdir)/utility.c $(srcdir)/utility.h
 libgtkfrob_la_SOURCES = $(srcdir)/gtkfrob.c $(srcdir)/gtkfrob.h
 libregress_la_SOURCES = $(srcdir)/regress.c $(srcdir)/regress.h
 
-install-data-local:
-	for src in $(libregress_la_SOURCES); do \
-	  install -m 644 -D $$src $(DESTDIR)$(datadir)/gobject-introspection-1.0/tests/$$src; \
-	done
+testsdir = $(datadir)/gobject-introspection-1.0/tests
+tests_DATA = $(libregress_la_SOURCES)
 
 libregress_la_CFLAGS = $(AM_CFLAGS) $(CAIRO_CFLAGS)
 libregress_la_LDFLAGS = $(AM_LDFLAGS) $(CAIRO_LIBS) 
