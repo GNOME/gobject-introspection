@@ -224,6 +224,11 @@
  */
 
 /**
+ * g_variant_builder_end:
+ * @returns: (transfer none):
+ */
+
+/**
  * g_get_language_names:
  * @returns: (array zero-terminated=1) (transfer none):
  */
