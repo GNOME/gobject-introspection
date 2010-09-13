@@ -279,6 +279,12 @@ blob containing data gleaned from GObject's primitive introspection."""
         get_type = xmlnode.attrib['get-type']
         (ns, name) = self._transformer.split_csymbol(get_type)
         assert ns is self._namespace
+        if name == 'get_type':
+            message.fatal("""The GObject name %r isn't compatibile
+with the configured identifier prefixes:
+  %r
+The class would have no name.  Most likely you want to specify a
+different --identifier-prefix.""" % (xmlnode.attrib['name'], self._namespace.identifier_prefixes))
         assert name.endswith('_get_type')
         return (get_type, name[:-len('_get_type')])
 
