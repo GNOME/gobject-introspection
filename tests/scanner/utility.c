@@ -4,8 +4,8 @@ G_DEFINE_TYPE (UtilityObject, utility_object, G_TYPE_OBJECT);
 
 /**
  * UtilityBuffer:
- *
  * @data: (type gpointer): the data
+ *
  **/
 
 static void

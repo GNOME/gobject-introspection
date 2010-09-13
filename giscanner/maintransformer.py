@@ -173,25 +173,34 @@ usage is void (*_gtk_reserved1)(void);"""
                 node.retval.transfer = self._get_transfer_default(node, node.retval)
         return True
 
+    def _get_annotation_name(self, node):
+        if isinstance(node, (ast.Class, ast.Interface, ast.Record,
+                             ast.Union, ast.Enum, ast.Bitfield,
+                             ast.Callback)):
+            if node.ctype is not None:
+                return node.ctype
+            elif isinstance(node, ast.Registered) and node.gtype_name is not None:
+                return node.gtype_name
+            return node.c_name
+        assert False, "Unhandled node %r" % (node, )
+
+    def _get_block(self, node):
+        return self._blocks.get(self._get_annotation_name(node))
+
     def _pass_read_annotations(self, node, chain):
         if not node.namespace:
             return False
         if isinstance(node, ast.Function):
             self._apply_annotations_function(node, chain)
         if isinstance(node, ast.Callback):
-            block = self._blocks.get(node.c_name)
-            self._apply_annotations_callable(node, chain, block)
+            self._apply_annotations_callable(node, chain, block = self._get_block(node))
         if isinstance(node, (ast.Class, ast.Interface, ast.Record,
                              ast.Union, ast.Enum, ast.Bitfield,
                              ast.Callback)):
-            if node.ctype is not None:
-                block = self._blocks.get(node.ctype)
-            else:
-                block = self._blocks.get(node.c_name)
-            self._apply_annotations_annotated(node, block)
+            self._apply_annotations_annotated(node, self._get_block(node))
         if isinstance(node, (ast.Class, ast.Interface, ast.Record, ast.Union)):
+            block = self._get_block(node)
             for field in node.fields:
-                self._blocks.get('%s::%s' % (node.c_name, field.name))
                 self._apply_annotations_field(node, block, field)
         if isinstance(node, (ast.Class, ast.Interface)):
             for prop in node.properties:
@@ -199,7 +208,7 @@ usage is void (*_gtk_reserved1)(void);"""
             for sig in node.signals:
                 self._apply_annotations_signal(node, sig)
         if isinstance(node, ast.Class):
-            block = self._blocks.get(node.c_name)
+            block = self._get_block(node)
             if block:
                 tag = block.get(TAG_UNREF_FUNC)
                 node.unref_func = tag.value if tag else None
@@ -583,7 +592,8 @@ usage is void (*_gtk_reserved1)(void);"""
         field.type = self._transformer.create_type_from_user_string(t.one())
 
     def _apply_annotations_property(self, parent, prop):
-        block = self._blocks.get('%s:%s' % (parent.c_name, prop.name))
+        prefix = self._get_annotation_name(parent)
+        block = self._blocks.get('%s:%s' % (prefix, prop.name))
         self._apply_annotations_annotated(prop, block)
         if not block:
             return
@@ -597,7 +607,8 @@ usage is void (*_gtk_reserved1)(void);"""
             prop.type = self._resolve(type_tag.value, prop.type)
 
     def _apply_annotations_signal(self, parent, signal):
-        block = self._blocks.get('%s::%s' % (parent.c_name, signal.name))
+        prefix = self._get_annotation_name(parent)
+        block = self._blocks.get('%s::%s' % (prefix, signal.name))
         self._apply_annotations_annotated(signal, block)
         # We're only attempting to name the signal parameters if
         # the number of parameter tags (@foo) is the same or greater
