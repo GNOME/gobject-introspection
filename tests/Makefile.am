@@ -25,9 +25,14 @@ libgimarshallingtests_1_0_la_SOURCES = gimarshallingtests.c
 
 EXTRA_DIST += gimarshallingtests.h
 
-BUILT_SOURCES += everything.c everything.h
+BUILT_SOURCES += everything.c everything.h Everything-1.0.gir GIMarshallingTests-1.0.gir
 
-CLEANFILES += $(BUILT_SOURCES) everything-stamp.h
+CLEANFILES += \
+    $(BUILT_SOURCES) \
+    everything-stamp.h \
+    Everything-1.0.typelib \
+    GIMarshallingTests-1.0.typelib
+
 everything-stamp.h: Makefile
 	$(AM_V_GEN) $(INTROSPECTION_SCANNER) $(INTROSPECTION_SCANNER_ARGS) --generate-typelib-tests=Everything,everything.h,everything.c
 	touch $@
