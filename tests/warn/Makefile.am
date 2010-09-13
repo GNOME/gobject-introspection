@@ -6,7 +6,7 @@ TESTS = \
 	return-gobject.h \
 	unresolved-type.h
 
-EXTRA_DIST = warningtester.py common.h
+EXTRA_DIST = warningtester.py common.h $(TESTS)
 
 TESTS_ENVIRONMENT = PYTHONPATH=$(top_builddir):$(top_srcdir) $(PYTHON) $(srcdir)/warningtester.py
 
