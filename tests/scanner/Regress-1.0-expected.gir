@@ -585,6 +585,20 @@ case.</doc>
       <field name="string">
         <type name="utf8" c:type="char*"/>
       </field>
+      <glib:signal name="sig-with-array-prop">
+        <doc xml:whitespace="preserve">This test signal is like TelepathyGlib's</doc>
+        <return-value transfer-ownership="none">
+          <type name="none"/>
+        </return-value>
+        <parameters>
+          <parameter name="object" transfer-ownership="none">
+            <doc xml:whitespace="preserve">numbers</doc>
+            <array name="GLib.Array">
+              <type name="guint"/>
+            </array>
+          </parameter>
+        </parameters>
+      </glib:signal>
       <glib:signal name="test">
         <return-value transfer-ownership="none">
           <type name="none"/>

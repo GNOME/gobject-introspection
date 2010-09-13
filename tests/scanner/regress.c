@@ -1798,6 +1798,13 @@ regress_test_obj_default_matrix (RegressTestObj *obj, const char *somestr)
   return 42;
 }
 
+enum {
+  REGRESS_TEST_OBJ_SIGNAL_SIG_NEW_WITH_ARRAY_PROP,
+  N_REGRESS_TEST_OBJ_SIGNALS
+};
+
+static guint regress_test_obj_signals[N_REGRESS_TEST_OBJ_SIGNALS] = { 0 };
+
 static void
 regress_test_obj_class_init (RegressTestObjClass *klass)
 {
@@ -1829,6 +1836,26 @@ regress_test_obj_class_init (RegressTestObjClass *klass)
                    G_TYPE_NONE /* return_type */,
                    1     /* n_params */,
                    param_types);
+
+  /**
+   * RegressTestObj::sig-with-array-prop:
+   * @self: an object
+   * @arr: (type GArray) (element-type uint): numbers
+   *
+   * This test signal is like TelepathyGlib's
+   *  TpChannel:: group-members-changed-detailed:
+   */
+  regress_test_obj_signals[REGRESS_TEST_OBJ_SIGNAL_SIG_NEW_WITH_ARRAY_PROP] =
+    g_signal_new ("sig-with-array-prop",
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  0,
+		  NULL,
+		  NULL,
+		  g_cclosure_marshal_VOID__BOXED,
+		  G_TYPE_NONE,
+		  1,
+		  G_TYPE_ARRAY);
 
   gobject_class->set_property = regress_test_obj_set_property;
   gobject_class->get_property = regress_test_obj_get_property;
