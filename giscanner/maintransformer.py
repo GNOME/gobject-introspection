@@ -560,12 +560,34 @@ usage is void (*_gtk_reserved1)(void);"""
         self._apply_annotations_param_ret_common(parent, return_, tag)
 
     def _apply_annotations_params(self, parent, params, block):
+        allparams = []
+        if parent.instance_parameter:
+            allparams.append(parent.instance_parameter.argname)
         for param in params:
             if block:
                 tag = block.get(param.argname)
             else:
                 tag = None
             self._apply_annotations_param(parent, param, tag)
+            allparams.append(param.argname)
+
+        if not block:
+            return
+        docparams = block.params[:]
+        for doc_name in docparams:
+            if doc_name in allparams:
+                continue
+            if len(allparams) == 0:
+                text = ''
+            elif len(allparams) == 1:
+                text = ', should be %r' % (allparams[0], )
+            else:
+                text = ', should be one of %s' % (
+                ', '.join(repr(p) for p in allparams), )
+
+            message.warn(
+                '%s: unknown parameter %r in documentation comment%s' % (
+                block.name, doc_name, text))
 
     def _apply_annotations_callable(self, node, chain, block):
         self._apply_annotations_annotated(node, block)
@@ -822,7 +844,7 @@ method or constructor of some type."""
         uscored = self._uscored_identifier_for_type(first.type)
         if not subsymbol.startswith(uscored):
             return False
-        del func.parameters[0]
+        func.instance_parameter = func.parameters.pop(0)
         subsym_idx = func.symbol.find(subsymbol)
         self._namespace.float(func)
         func.name = func.symbol[(subsym_idx + len(uscored) + 1):]
@@ -954,6 +976,7 @@ method or constructor of some type."""
             if matched_signal:
                 continue
             vfunc = ast.VFunction.from_callback(callback)
+            vfunc.instance_parameter = callback.parameters[0]
             vfunc.inherit_file_positions(callback)
             node.virtual_methods.append(vfunc)
 

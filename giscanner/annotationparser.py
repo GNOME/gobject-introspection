@@ -74,6 +74,7 @@ class DocBlock(object):
         self.value = None
         self.tags = odict()
         self.comment = None
+        self.params = []
 
     def __repr__(self):
         return '<DocBlock %r %r>' % (self.name, self.options)
@@ -235,6 +236,8 @@ class AnnotationParser(object):
                     tag.comment = line[first_colonspace_index+2:].strip()
                 block.tags[argname] = tag
                 last_param_tag = tag
+                if is_parameter:
+                    block.params.append(argname)
             elif (not is_parameter) and parsing_parameters and last_param_tag:
                 # We need to handle continuation lines on parameters.  The
                 # conditional above - if a line doesn't start with '@', we're

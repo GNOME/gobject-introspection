@@ -101,6 +101,8 @@ def check(args):
 
     failed_tests = 0
     expected_warnings = _extract_expected(filename)
+    if '' in warnings:
+        warnings.remove('')
     if len(expected_warnings) != len(warnings):
         raise SystemExit(
             "ERROR: expected %d warnings, but got %d: %r\n" % (

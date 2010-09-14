@@ -523,6 +523,7 @@ class Callable(Node):
         self.retval = retval
         self.parameters = parameters
         self.throws = not not throws
+        self.instance_parameter = None # Parameter
 
     def get_parameter_index(self, name):
         for i, parameter in enumerate(self.parameters):
