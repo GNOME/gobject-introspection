@@ -1800,6 +1800,7 @@ regress_test_obj_default_matrix (RegressTestObj *obj, const char *somestr)
 
 enum {
   REGRESS_TEST_OBJ_SIGNAL_SIG_NEW_WITH_ARRAY_PROP,
+  REGRESS_TEST_OBJ_SIGNAL_SIG_WITH_HASH_PROP,
   N_REGRESS_TEST_OBJ_SIGNALS
 };
 
@@ -1856,6 +1857,26 @@ regress_test_obj_class_init (RegressTestObjClass *klass)
 		  G_TYPE_NONE,
 		  1,
 		  G_TYPE_ARRAY);
+
+  /**
+   * RegressTestObj::sig-with-hash-prop:
+   * @self: an object
+   * @hash: (element-type utf8 GObject.Value):
+   *
+   * This test signal is like TelepathyGlib's
+   *  TpAccount::status-changed
+   */
+  regress_test_obj_signals[REGRESS_TEST_OBJ_SIGNAL_SIG_WITH_HASH_PROP] =
+    g_signal_new ("sig-with-hash-prop",
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  0,
+		  NULL,
+		  NULL,
+		  g_cclosure_marshal_VOID__BOXED,
+		  G_TYPE_NONE,
+		  1,
+		  G_TYPE_HASH_TABLE);
 
   gobject_class->set_property = regress_test_obj_set_property;
   gobject_class->get_property = regress_test_obj_get_property;

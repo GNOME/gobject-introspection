@@ -599,6 +599,21 @@ case.</doc>
           </parameter>
         </parameters>
       </glib:signal>
+      <glib:signal name="sig-with-hash-prop">
+        <doc xml:whitespace="preserve">This test signal is like TelepathyGlib's
+TpAccount::status-changed</doc>
+        <return-value transfer-ownership="none">
+          <type name="none"/>
+        </return-value>
+        <parameters>
+          <parameter name="object" transfer-ownership="none">
+            <type name="GLib.HashTable">
+              <type name="utf8"/>
+              <type name="GObject.Value"/>
+            </type>
+          </parameter>
+        </parameters>
+      </glib:signal>
       <glib:signal name="test">
         <return-value transfer-ownership="none">
           <type name="none"/>

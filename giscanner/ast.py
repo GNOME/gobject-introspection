@@ -88,6 +88,11 @@ in contrast to the other create_type() functions."""
         fundamental = type_names.get(gtype_name)
         if fundamental is not None:
             return cls(target_fundamental=fundamental.target_fundamental)
+        if gtype_name == 'GHashTable':
+            return Map(TYPE_ANY, TYPE_ANY, gtype_name=gtype_name)
+        elif gtype_name in ('GArray', 'GPtrArray', 'GByteArray'):
+            return Array('GLib.' + gtype_name[1:], TYPE_ANY,
+                         gtype_name=gtype_name)
         return cls(gtype_name=gtype_name)
 
     def get_giname(self):
@@ -577,7 +582,7 @@ class Array(Type):
         else:
             assert array_type in (self.GLIB_ARRAY,
                                   self.GLIB_BYTEARRAY,
-                                  self.GLIB_PTRARRAY)
+                                  self.GLIB_PTRARRAY), array_type
             self.array_type = array_type
         assert isinstance(element_type, Type)
         self.element_type = element_type

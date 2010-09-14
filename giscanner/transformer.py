@@ -529,14 +529,15 @@ raise ValueError."""
             return ast.List(name, ast.TYPE_ANY, ctype=ctype,
                         is_const=is_const)
         elif base in ('GArray', 'GPtrArray', 'GByteArray',
-                      'GLib.Array', 'GLib.PtrArray', 'GLib.ByteArray'):
-            if base in ('GArray', 'GPtrArray', 'GByteArray'):
-                name = 'GLib.' + base[1:]
+                      'GLib.Array', 'GLib.PtrArray', 'GLib.ByteArray',
+                      'GObject.Array', 'GObject.PtrArray', 'GObject.ByteArray'):
+            if '.' in base:
+                name = 'GLib.' + base.split('.', 1)[1]
             else:
-                name = base
+                name = 'GLib.' + base[1:]
             return ast.Array(name, ast.TYPE_ANY, ctype=ctype,
                          is_const=is_const)
-        elif base in ('GHashTable', 'GLib.HashTable'):
+        elif base in ('GHashTable', 'GLib.HashTable', 'GObject.HashTable'):
             return ast.Map(ast.TYPE_ANY, ast.TYPE_ANY, ctype=ctype, is_const=is_const)
         return None
 
