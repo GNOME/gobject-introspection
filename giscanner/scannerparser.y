@@ -155,11 +155,11 @@ primary_expression
 		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, lineno);
 		$$->const_int_set = TRUE;
 		if (g_str_has_prefix (yytext, "0x") && strlen (yytext) > 2) {
-			$$->const_int = strtol (yytext + 2, NULL, 16);
+			$$->const_int = g_ascii_strtoll (yytext + 2, NULL, 16);
 		} else if (g_str_has_prefix (yytext, "0") && strlen (yytext) > 1) {
-			$$->const_int = strtol (yytext + 1, NULL, 8);
+			$$->const_int = g_ascii_strtoll (yytext + 1, NULL, 8);
 		} else {
-			$$->const_int = atoi (yytext);
+			$$->const_int = g_ascii_strtoll (yytext, NULL, 10);
 		}
 	  }
 	| CHARACTER

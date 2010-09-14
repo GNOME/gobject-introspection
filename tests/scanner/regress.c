@@ -1238,6 +1238,22 @@ regress_test_enum_get_type (void)
 }
 
 GType
+regress_test_enum_unsigned_get_type (void)
+{
+    static GType etype = 0;
+    if (G_UNLIKELY(etype == 0)) {
+        static const GEnumValue values[] = {
+            { REGRESS_TEST_UNSIGNED_VALUE1, "REGRESS_TEST_UNSIGNED_VALUE1", "value1" },
+            { REGRESS_TEST_UNSIGNED_VALUE2, "REGRESS_TEST_UNSIGNED_VALUE2", "value2" },
+            { 0, NULL, NULL }
+        };
+        etype = g_enum_register_static (g_intern_static_string ("RegressTestEnumUnsigned"), values);
+    }
+
+    return etype;
+}
+
+GType
 regress_test_flags_get_type (void)
 {
     static GType etype = 0;
@@ -1261,6 +1277,19 @@ regress_test_enum_param(RegressTestEnum e)
   GEnumClass *ec;
 
   ec = g_type_class_ref (regress_test_enum_get_type ());
+  ev = g_enum_get_value (ec, e);
+  g_type_class_unref (ec);
+
+  return ev->value_nick;
+}
+
+const gchar *
+regress_test_unsigned_enum_param(RegressTestEnumUnsigned e)
+{
+  GEnumValue *ev;
+  GEnumClass *ec;
+
+  ec = g_type_class_ref (regress_test_enum_unsigned_get_type ());
   ev = g_enum_get_value (ec, e);
   g_type_class_unref (ec);
 

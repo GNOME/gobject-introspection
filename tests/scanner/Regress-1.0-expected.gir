@@ -168,9 +168,22 @@ use it should be.</doc>
               c:identifier="REGRESS_TEST_VALUE2"
               glib:nick="value2"/>
       <member name="value3"
-              value="42"
+              value="-1"
               c:identifier="REGRESS_TEST_VALUE3"
               glib:nick="value3"/>
+    </enumeration>
+    <enumeration name="TestEnumUnsigned"
+                 glib:type-name="RegressTestEnumUnsigned"
+                 glib:get-type="regress_test_enum_unsigned_get_type"
+                 c:type="RegressTestEnumUnsigned">
+      <member name="value1"
+              value="1"
+              c:identifier="REGRESS_TEST_UNSIGNED_VALUE1"
+              glib:nick="value1"/>
+      <member name="value2"
+              value="2147483648"
+              c:identifier="REGRESS_TEST_UNSIGNED_VALUE2"
+              glib:nick="value2"/>
     </enumeration>
     <bitfield name="TestFlags"
               glib:type-name="RegressTestFlags"
@@ -2247,6 +2260,17 @@ call and can be released on return.</doc>
       <parameters>
         <parameter name="in" transfer-ownership="none">
           <type name="gulong" c:type="gulong"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="test_unsigned_enum_param"
+              c:identifier="regress_test_unsigned_enum_param">
+      <return-value transfer-ownership="none">
+        <type name="utf8" c:type="gchar*"/>
+      </return-value>
+      <parameters>
+        <parameter name="e" transfer-ownership="none">
+          <type name="TestEnumUnsigned" c:type="RegressTestEnumUnsigned"/>
         </parameter>
       </parameters>
     </function>

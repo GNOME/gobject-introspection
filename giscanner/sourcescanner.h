@@ -124,7 +124,7 @@ struct _GISourceSymbol
   GISourceType *base_type;
   gboolean const_int_set;
   gboolean private;
-  int const_int;
+  gint64 const_int; /* 64-bit we can handle signed and unsigned 32-bit values */
   char *const_string;
   gboolean const_double_set;
   double const_double;

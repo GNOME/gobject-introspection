@@ -254,13 +254,36 @@ blob containing data gleaned from GObject's primitive introspection."""
             raise ValueError("Unhandled introspection XML tag %s", xmlnode.tag)
 
     def _introspect_enum(self, xmlnode):
+        type_name = xmlnode.attrib['name']
+        (get_type, c_symbol_prefix) = self._split_type_and_symbol_prefix(xmlnode)
+        try:
+            enum_name = self._transformer.strip_identifier(type_name)
+        except TransformerException, e:
+            message.fatal(e)
+
+        # The scanned member values are more accurate than the values that the
+        # we dumped from GEnumValue.value because GEnumValue.value has the
+        # values as a 32-bit signed integer, even if they were unsigned
+        # in the source code.
+        previous_values = {}
+        previous = self._namespace.get(enum_name)
+        if isinstance(previous, (ast.Enum, ast.Bitfield)):
+            for member in previous.members:
+                previous_values[member.name] = member.value
+
         members = []
         for member in xmlnode.findall('member'):
             # Keep the name closer to what we'd take from C by default;
             # see http://bugzilla.gnome.org/show_bug.cgi?id=575613
             name = member.attrib['nick'].replace('-', '_')
+
+            if name in previous_values:
+                value = previous_values[name]
+            else:
+                value = member.attrib['value']
+
             members.append(ast.Member(name,
-                                      member.attrib['value'],
+                                      value,
                                       member.attrib['name'],
                                       member.attrib['nick']))
 
@@ -269,12 +292,7 @@ blob containing data gleaned from GObject's primitive introspection."""
             klass = ast.Bitfield
         else:
             klass = ast.Enum
-        type_name = xmlnode.attrib['name']
-        (get_type, c_symbol_prefix) = self._split_type_and_symbol_prefix(xmlnode)
-        try:
-            enum_name = self._transformer.strip_identifier(type_name)
-        except TransformerException, e:
-            message.fatal(e)
+
         node = klass(enum_name, type_name,
                      gtype_name=type_name,
                      c_symbol_prefix=c_symbol_prefix,
