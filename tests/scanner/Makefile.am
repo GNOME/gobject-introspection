@@ -10,8 +10,11 @@ testlib_LTLIBRARIES = \
 	libtestinherit.la \
 	libfoo.la \
 	libutility.la \
-	libregress.la \
 	libgtkfrob.la
+if HAVE_CAIRO
+testlib_LTLIBRARIES += libregress.la
+endif
+
 testlibdir = $(prefix)/unused
 install-testlibLTLIBRARIES: # prevent it from being installed
 
@@ -53,7 +56,9 @@ Regress-1.0.gir: $(top_builddir)/gir/Gio-2.0.gir libregress.la
 Regress_1_0_gir_LIBS = libregress.la
 Regress_1_0_gir_INCLUDES = cairo-1.0 Gio-2.0
 Regress_1_0_gir_FILES = $(libregress_la_SOURCES)
+if HAVE_CAIRO
 GIRS += Regress-1.0.gir
+endif
 
 Annotation-1.0.gir: Utility-1.0.gir libannotation.la
 Annotation_1_0_gir_PACKAGES = gobject-2.0
