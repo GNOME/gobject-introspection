@@ -107,7 +107,7 @@ def check(args):
             len(expected_warnings), len(warnings), warnings))
     for warning, (sort_key, expected) in zip(warnings, expected_warnings):
         actual = warning.split(":", 1)[1]
-        if _diff(actual, expected, filename):
+        if _diff(expected, actual, filename):
             raise SystemExit("ERROR: tests %r failed" % (filename, ))
 
 sys.exit(check(sys.argv[1:]))
