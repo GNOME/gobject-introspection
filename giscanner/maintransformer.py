@@ -176,7 +176,7 @@ usage is void (*_gtk_reserved1)(void);"""
     def _get_annotation_name(self, node):
         if isinstance(node, (ast.Class, ast.Interface, ast.Record,
                              ast.Union, ast.Enum, ast.Bitfield,
-                             ast.Callback)):
+                             ast.Callback, ast.Alias)):
             if node.ctype is not None:
                 return node.ctype
             elif isinstance(node, ast.Registered) and node.gtype_name is not None:
@@ -190,6 +190,8 @@ usage is void (*_gtk_reserved1)(void);"""
     def _pass_read_annotations(self, node, chain):
         if not node.namespace:
             return False
+        if isinstance(node, ast.Alias):
+            self._apply_annotations_alias(node, chain)
         if isinstance(node, ast.Function):
             self._apply_annotations_function(node, chain)
         if isinstance(node, ast.Callback):
@@ -499,6 +501,10 @@ usage is void (*_gtk_reserved1)(void);"""
 
         if OPT_FOREIGN in block.options:
             node.foreign = True
+
+    def _apply_annotations_alias(self, node, chain):
+        block = self._get_block(node)
+        self._apply_annotations_annotated(node, block)
 
     def _apply_annotations_param(self, parent, param, tag):
         if tag:

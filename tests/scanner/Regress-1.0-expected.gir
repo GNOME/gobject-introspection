@@ -15,12 +15,19 @@ and/or use gtk-doc annotations.  -->
              shared-library="libregress.so"
              c:identifier-prefixes="Regress"
              c:symbol-prefixes="regress">
+    <alias name="IntSet" c:type="RegressIntSet" introspectable="0">
+      <doc xml:whitespace="preserve">Compatibility typedef, like telepathy-glib's TpIntSet</doc>
+      <type name="Intset" c:type="RegressIntset"/>
+    </alias>
     <constant name="DOUBLE_CONSTANT" value="44.220000">
       <type name="gdouble" c:type="gdouble"/>
     </constant>
     <constant name="INT_CONSTANT" value="4422">
       <type name="gint" c:type="gint"/>
     </constant>
+    <record name="Intset" c:type="RegressIntset" disguised="1">
+      <doc xml:whitespace="preserve">Like telepathy-glib's TpIntset.</doc>
+    </record>
     <constant name="Mixed_Case_Constant" value="4423">
       <type name="gint" c:type="gint"/>
     </constant>

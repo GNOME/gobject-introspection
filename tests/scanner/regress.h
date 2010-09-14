@@ -539,4 +539,20 @@ void regress_random_function_with_skipped_structure (int x,
 						     RegressSkippedStructure *foo,
 						     double v);
 
+/**
+ * RegressIntset:
+ *
+ * Like telepathy-glib's TpIntset.
+ *
+ */
+typedef struct _RegressIntset RegressIntset;
+
+/**
+ * RegressIntSet: (skip)
+ *
+ * Compatibility typedef, like telepathy-glib's TpIntSet
+ *
+ */
+typedef RegressIntset RegressIntSet;
+
 #endif /* __GITESTTYPES_H__ */

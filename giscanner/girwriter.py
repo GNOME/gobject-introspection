@@ -154,7 +154,9 @@ and/or use gtk-doc annotations. ''')
         attrs = [('name', alias.name)]
         if alias.ctype is not None:
             attrs.append(('c:type', alias.ctype))
+        self._append_node_generic(alias, attrs)
         with self.tagcontext('alias', attrs):
+            self._write_generic(alias)
             self._write_type(alias.target)
 
     def _write_callable(self, callable, tag_name, extra_attrs):

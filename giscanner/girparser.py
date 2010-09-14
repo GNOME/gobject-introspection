@@ -179,6 +179,7 @@ class GIRParser(object):
         alias = ast.Alias(node.attrib['name'],
                       typeval,
                       node.attrib.get(_cns('type')))
+        self._parse_generic_attribs(node, alias)
         self._namespace.append(alias)
 
     def _parse_generic_attribs(self, node, obj):
