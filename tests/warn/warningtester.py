@@ -59,7 +59,7 @@ def _extract_expected(filename):
                 except ValueError:
                     pass
             retval.append((sort_key, line[10:]))
-    return sorted(retval)
+    return retval
 
 def check(args):
     filename = args[0]
