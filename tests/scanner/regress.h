@@ -413,6 +413,13 @@ regress_test_fundamental_sub_object_new (const char *data);
 typedef void (*RegressTestSimpleCallback) (void);
 typedef int (*RegressTestCallback) (void);
 typedef int (*RegressTestCallbackUserData) (gpointer user_data);
+/**
+ * RegressTestCallbackFull:
+ * @foo: the investment rate
+ * @bar: how much money
+ * @path: (type filename): Path to file
+ */
+typedef int (*RegressTestCallbackFull) (int foo, double bar, char *path);
 
 void regress_test_simple_callback (RegressTestSimpleCallback callback);
 int regress_test_callback (RegressTestCallback callback);

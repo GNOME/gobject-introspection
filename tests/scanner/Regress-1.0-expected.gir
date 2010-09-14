@@ -126,6 +126,25 @@ use it should be.</doc>
         <type name="gint" c:type="int"/>
       </return-value>
     </callback>
+    <callback name="TestCallbackFull" c:type="RegressTestCallbackFull">
+      <return-value transfer-ownership="none">
+        <type name="gint" c:type="int"/>
+      </return-value>
+      <parameters>
+        <parameter name="foo" transfer-ownership="none">
+          <doc xml:whitespace="preserve">the investment rate</doc>
+          <type name="gint" c:type="int"/>
+        </parameter>
+        <parameter name="bar" transfer-ownership="none">
+          <doc xml:whitespace="preserve">how much money</doc>
+          <type name="gdouble" c:type="double"/>
+        </parameter>
+        <parameter name="path" transfer-ownership="none">
+          <doc xml:whitespace="preserve">Path to file</doc>
+          <type name="filename"/>
+        </parameter>
+      </parameters>
+    </callback>
     <callback name="TestCallbackUserData" c:type="RegressTestCallbackUserData">
       <return-value transfer-ownership="none">
         <type name="gint" c:type="int"/>

@@ -703,7 +703,8 @@ raise ValueError."""
             except TransformerException, e:
                 message.warn(e)
                 return None
-        callback = ast.Callback(name, retval, parameters, False)
+        callback = ast.Callback(name, retval, parameters, False,
+                                ctype=symbol.ident)
         callback.add_symbol_reference(symbol)
 
         return callback
