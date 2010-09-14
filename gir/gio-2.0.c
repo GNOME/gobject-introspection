@@ -190,7 +190,7 @@
 /**
  * g_app_info_launch:
  * @appinfo:
- * @files: (element-type GFile):
+ * @filenames: (element-type GFile):
  * @launch_context: (allow-none):
  * @error:
  */
