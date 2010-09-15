@@ -350,6 +350,8 @@ different --identifier-prefix.""" % (xmlnode.attrib['name'], self._namespace.ide
         else:
             self._namespace.append(node, replace=True)
 
+    ## WORKAROUND ##
+    # https://bugzilla.gnome.org/show_bug.cgi?id=550616
     def _introspect_boxed_gstreamer_workaround(self, xmlnode):
         node = ast.Boxed('ParamSpecMiniObject', gtype_name='GParamSpecMiniObject',
                          get_type='gst_param_spec_mini_object_get_type',

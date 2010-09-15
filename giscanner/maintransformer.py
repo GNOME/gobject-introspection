@@ -46,8 +46,10 @@ class MainTransformer(object):
     # Public API
 
     def transform(self):
+        ## WORKAROUND ##
         # Dirty hack for now...maybe eventually we'll support the "typedef GSList FooSet"
         # pattern.
+        # https://bugzilla.gnome.org/show_bug.cgi?id=629682
         if self._namespace.name == 'Atk':
             attribute = self._namespace.get('Attribute')
             attributeset = self._namespace.get('AttributeSet')
