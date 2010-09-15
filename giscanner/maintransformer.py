@@ -263,7 +263,7 @@ usage is void (*_gtk_reserved1)(void);"""
                 "Too many parameters in type specification %r" % (type_str, ))
             return base
         def top_combiner(base, *rest):
-            if orig_node is not None:
+            if orig_node is not None and isinstance(orig_node, ast.Type):
                 base.is_const = orig_node.is_const
             return combiner(base, *rest)
 
@@ -271,6 +271,15 @@ usage is void (*_gtk_reserved1)(void);"""
         if rest:
             message.warn("Trailing components in type specification %r" % (
                 type_str, ))
+
+        if not result.resolved:
+            parent = orig_node
+            if isinstance(parent, ast.Function):
+                text = parent.symbol
+            else:
+                text = parent.name
+            message.warn_node(parent, "%s: Unknown type: %r" %
+                              (text, result.ctype))
         return result
 
     def _apply_annotations_array(self, parent, node, options):
@@ -282,7 +291,7 @@ usage is void (*_gtk_reserved1)(void);"""
 
         element_type = options.get(OPT_ELEMENT_TYPE)
         if element_type is not None:
-            element_type_node = self._resolve(element_type.one())
+            element_type_node = self._resolve(element_type.one(), parent)
         elif isinstance(node.type, ast.Array):
             element_type_node = node.type.element_type
         else:
@@ -321,13 +330,13 @@ usage is void (*_gtk_reserved1)(void);"""
         element_type = element_type_opt.flat()
         if isinstance(node.type, ast.List):
             assert len(element_type) == 1
-            node.type.element_type = self._resolve(element_type[0])
+            node.type.element_type = self._resolve(element_type[0], parent)
         elif isinstance(node.type, ast.Map):
             assert len(element_type) == 2
-            node.type.key_type = self._resolve(element_type[0])
-            node.type.value_type = self._resolve(element_type[1])
+            node.type.key_type = self._resolve(element_type[0], parent)
+            node.type.value_type = self._resolve(element_type[1], parent)
         elif isinstance(node.type, ast.Array):
-            node.type.element_type = self._resolve(element_type[0])
+            node.type.element_type = self._resolve(element_type[0], parent)
         else:
             message.warn_node(parent,
                 "Unknown container %r for element-type annotation" % (node.type, ))
