@@ -1,3 +1,5 @@
+For NEWS for newer releases see git shortlog
+---
 0.6.3 22-jun 2009
     Bugs resolved:
       - 551738 Association needed between records and classes/interfaces

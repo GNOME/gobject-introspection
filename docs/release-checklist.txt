@@ -1,6 +1,5 @@
 Check bugzilla
 Run all tests
-Update NEWS
 Commit
 make distcheck
 make release-tag
