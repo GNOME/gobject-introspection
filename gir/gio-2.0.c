@@ -1,6 +1,8 @@
 /**
  * g_app_info_create_from_commandline:
  * @application_name: (allow-none):
+ *
+ * Return value: (transfer full):
  */
 
 /**
@@ -446,4 +448,70 @@
  * @key:
  * @value: (array zero-terminated-1):
  *
+ */
+
+/**
+ * g_action_get_state:
+ * @action:
+ *
+ * Returns: (transfer full):
+ **/
+
+/**
+ * g_action_get_state_hint:
+ * @action:
+ *
+ * Returns: (transfer full):
+ **/
+
+/**
+ * g_action_group_list_actions:
+ * @action_group:
+ *
+ * Returns: (transfer full):
+ **/
+
+/**
+ * g_action_group_get_state:
+ * @action_group:
+ * @action_name:
+ *
+ * Return value: (transfer full):
+ **/
+
+/**
+ * g_action_group_get_state_hint:
+ * @action_group:
+ * @action_name:
+ *
+ * Return value: (transfer full):
+ **/
+
+/**
+ * g_app_info_dup:
+ * @appinfo:
+ *
+ * Returns: (transfer full):
+ **/
+
+/**
+ * g_application_get_instance:
+ *
+ * Returns: (transfer none):
+ */
+
+/**
+ * g_application_list_actions:
+ * @application:
+ *
+ * Return value: (transfer full):
+ */
+
+/**
+ * g_async_initable_new_finish:
+ * @initable:
+ * @res:
+ * @error:
+ *
+ * Returns: (transfer full):
  */
