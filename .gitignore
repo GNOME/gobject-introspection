@@ -119,4 +119,5 @@ tests/extended.gir.test
 tools/g-ir-compiler
 tools/g-ir-generate
 tools/g-ir-scanner
+tools/g-ir-annotation-tool
 tools/g-ir-docgen

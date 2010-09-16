@@ -3,10 +3,14 @@ INCLUDES = \
 	-I$(top_srcdir)/girepository
 
 bin_PROGRAMS = g-ir-compiler g-ir-generate
-bin_SCRIPTS = g-ir-scanner
-EXTRA_DIST = g-ir-scanner.in
+bin_SCRIPTS = g-ir-scanner g-ir-annotation-tool
+EXTRA_DIST = g-ir-scanner.in g-ir-annotation-tool.in
 
 g-ir-scanner: g-ir-scanner.in Makefile
+	$(AM_V_GEN) sed -e s,@libdir\@,$(libdir), -e s,@PYTHON\@,$(PYTHON), $< > $@.tmp && mv $@.tmp $@
+	@chmod a+x $@
+
+g-ir-annotation-tool: g-ir-annotation-tool.in Makefile
 	$(AM_V_GEN) sed -e s,@libdir\@,$(libdir), -e s,@PYTHON\@,$(PYTHON), $< > $@.tmp && mv $@.tmp $@
 	@chmod a+x $@
 
@@ -28,4 +32,4 @@ GCOVSOURCES =					\
 	$(g_ir_compiler_SOURCES)		\
 	$(g_ir_generate_SOURCES)
 
-CLEANFILES=g-ir-scanner
+CLEANFILES=g-ir-scanner g-ir-annotation-tool

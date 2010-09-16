@@ -33,6 +33,7 @@ pkgpyexecdir = $(pkglibdir)/giscanner
 pkgpyexec_LTLIBRARIES = _giscanner.la
 pkgpyexec_PYTHON = 		\
 	__init__.py		\
+	annotationmain.py	\
 	annotationparser.py	\
 	ast.py			\
 	cachestore.py		\

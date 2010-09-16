@@ -106,6 +106,9 @@ class DocBlock(object):
         self.params = []
         self.position = None
 
+    def __cmp__(self, other):
+        return cmp(self.name, other.name)
+
     def __repr__(self):
         return '<DocBlock %r %r>' % (self.name, self.options)
 
@@ -115,6 +118,29 @@ class DocBlock(object):
 
     def get(self, name):
         return self.tags.get(name)
+
+    def to_gtk_doc(self):
+        lines = [self.name + ':']
+        tags = []
+        for name, tag in self.tags.iteritems():
+            if name in self.params:
+                lines.append(tag.to_gtk_doc_param())
+            else:
+                tags.append(tag)
+
+        lines.append('')
+        for l in self.comment.split('\n'):
+            lines.append(l)
+        if tags:
+            lines.append('')
+            for tag in tags:
+                lines.append(tag.to_gtk_doc_tag())
+
+        comment = '/**\n'
+        for line in lines:
+            comment += ' * %s\n' % (line, )
+        comment += ' */\n'
+        return comment
 
     def validate(self):
         for tag in self.tags.values():
@@ -168,6 +194,32 @@ class DocTag(object):
     def set_position(self, position):
         self.position = position
         self.options.position = position
+
+    def _get_gtk_doc_value(self):
+        def serialize_one(option, value, fmt, fmt2):
+            if value:
+                if type(value) != str:
+                    value = ' '.join((serialize_one(k, v, '%s=%s', '%s')
+                                      for k,v in value.all().iteritems()))
+                return fmt % (option, value)
+            else:
+                return fmt2 % (option, )
+        annotations = []
+        for option, value in self.options.iteritems():
+            annotations.append(
+                serialize_one(option, value, '(%s %s)', '(%s)'))
+        if annotations:
+            return ' '.join(annotations) + ': '
+        else:
+            return self.value
+
+    def to_gtk_doc_param(self):
+        return '@%s: %s%s' % (self.name, self._get_gtk_doc_value(), self.comment)
+
+    def to_gtk_doc_tag(self):
+        return '%s: %s%s' % (self.name.capitalize(),
+                             self._get_gtk_doc_value(),
+                             self.comment or '')
 
     def validate(self):
         for option in self.options:
