@@ -588,6 +588,9 @@ usage is void (*_gtk_reserved1)(void);"""
         for doc_name in docparams:
             if doc_name in allparams:
                 continue
+            # Skip varargs, see #629759
+            if doc_name == '...':
+                continue
             if len(allparams) == 0:
                 text = ''
             elif len(allparams) == 1:

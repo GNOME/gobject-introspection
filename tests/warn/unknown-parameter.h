@@ -26,3 +26,13 @@ void test_param_mismatch2(int a, int *out2);
 void test_param_missing(void);
 
 // EXPECT:: Warning: Test: test_param_missing: unknown parameter 'missing' in documentation comment
+
+
+/**
+ * test_param_vargs:
+ * @...: The varargs
+ *
+ */
+void test_param_varargs(int i, ...);
+
+// Should not warn
