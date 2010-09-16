@@ -42,6 +42,20 @@ from giscanner.sourcescanner import SourceScanner
 from giscanner.transformer import Transformer
 from . import utils
 
+def get_preprocessor_option_group(parser):
+    group = optparse.OptionGroup(parser, "Preprocessor options")
+    group.add_option("-I", help="Pre-processor include file",
+                     action="append", dest="cpp_includes",
+                     default=[])
+    group.add_option("-D", help="Pre-processor define",
+                     action="append", dest="cpp_defines",
+                     default=[])
+    group.add_option("-U", help="Pre-processor undefine",
+                     action="append", dest="cpp_undefines",
+                     default=[])
+    group.add_option("-p", dest="", help="Ignored")
+    return group
+
 def _get_option_parser():
     parser = optparse.OptionParser('%prog [options] sources')
     parser.add_option('', "--quiet",
@@ -130,17 +144,7 @@ match the namespace prefix.""")
                       action="append", dest="c_includes", default=[],
                       help="headers which should be included in C programs")
 
-    group = optparse.OptionGroup(parser, "Preprocessor options")
-    group.add_option("-I", help="Pre-processor include file",
-                     action="append", dest="cpp_includes",
-                     default=[])
-    group.add_option("-D", help="Pre-processor define",
-                     action="append", dest="cpp_defines",
-                     default=[])
-    group.add_option("-U", help="Pre-processor undefine",
-                     action="append", dest="cpp_undefines",
-                     default=[])
-    group.add_option("-p", dest="", help="Ignored")
+    group = get_preprocessor_option_group(parser)
     parser.add_option_group(group)
 
     # Private options
@@ -221,35 +225,7 @@ def process_packages(options, packages):
     pkg_options, unused = parser.parse_args(filtered_output)
     options.library_paths.extend(pkg_options.library_paths)
 
-def scanner_main(args):
-    parser = _get_option_parser()
-    (options, args) = parser.parse_args(args)
-
-    if options.passthrough_gir:
-        passthrough_gir(options.passthrough_gir, sys.stdout)
-    if options.test_codegen:
-        return test_codegen(options.test_codegen)
-
-    if len(args) <= 1:
-        _error('Need at least one filename')
-
-    if not options.namespace_name:
-        _error('Namespace name missing')
-
-    if options.format == 'gir':
-        from giscanner.girwriter import GIRWriter as Writer
-    else:
-        _error("Unknown format: %s" % (options.format, ))
-
-    if not (options.libraries or options.program):
-        _error("Must specify --program or --library")
-    libraries = options.libraries
-
-    if options.strip_prefix:
-        print """g-ir-scanner: warning: Option --strip-prefix has been deprecated;
-see --identifier-prefix and --symbol-prefix."""
-        options.identifier_prefixes.append(options.strip_prefix)
-
+def extract_filenames(args):
     filenames = []
     for arg in args:
         # We don't support real C++ parsing yet, but we should be able
@@ -263,6 +239,13 @@ see --identifier-prefix and --symbol-prefix."""
             # Make absolute, because we do comparisons inside scannerparser.c
             # against the absolute path that cpp will give us
             filenames.append(os.path.abspath(arg))
+    return filenames
+
+def create_namespace(options):
+    if options.strip_prefix:
+        print """g-ir-scanner: warning: Option --strip-prefix has been deprecated;
+see --identifier-prefix and --symbol-prefix."""
+        options.identifier_prefixes.append(options.strip_prefix)
 
     # We do this dance because the empty list has different semantics from
     # None; if the user didn't specify the options, we want to use None so
@@ -281,13 +264,12 @@ see --identifier-prefix and --symbol-prefix."""
     else:
         symbol_prefixes = None
 
-    namespace = Namespace(options.namespace_name,
-                          options.namespace_version,
-                          identifier_prefixes=identifier_prefixes,
-                          symbol_prefixes=symbol_prefixes)
-    logger = message.MessageLogger.get(namespace=namespace)
-    if options.warn_all:
-        logger.enable_warnings(True)
+    return Namespace(options.namespace_name,
+                     options.namespace_version,
+                     identifier_prefixes=identifier_prefixes,
+                     symbol_prefixes=symbol_prefixes)
+
+def create_transformer(namespace, options):
     transformer = Transformer(namespace,
                               accept_unprefixed=options.accept_unprefixed)
     transformer.set_include_paths(options.include_paths)
@@ -307,24 +289,9 @@ see --identifier-prefix and --symbol-prefix."""
     for include_path in options.includes_uninstalled:
         transformer.register_include_uninstalled(include_path)
 
-    packages = set(options.packages)
-    packages.update(transformer.get_pkgconfig_packages())
-    exit_code = process_packages(options, packages)
-    if exit_code:
-        return exit_code
+    return transformer
 
-    # Run the preprocessor, tokenize and construct simple
-    # objects representing the raw C symbols
-    ss = SourceScanner()
-    ss.set_cpp_options(options.cpp_includes,
-                       options.cpp_defines,
-                       options.cpp_undefines)
-    ss.parse_files(filenames)
-    ss.parse_macros(filenames)
-
-    # Transform the C symbols into AST nodes
-    transformer.parse(ss.get_symbols())
-
+def create_binary(transformer, options, args):
     # Transform the C AST nodes into higher level
     # GLib/GObject nodes
     gdump_parser = GDumpParser(transformer)
@@ -339,37 +306,27 @@ see --identifier-prefix and --symbol-prefix."""
         binary = IntrospectionBinary(args)
     else:
         binary = compile_introspection_binary(options,
-                            gdump_parser.get_get_type_functions())
+                                              gdump_parser.get_get_type_functions())
 
-    shlibs = resolve_shlibs(options, binary, libraries)
-
+    shlibs = resolve_shlibs(options, binary, options.libraries)
     gdump_parser.set_introspection_binary(binary)
     gdump_parser.parse()
+    return shlibs
 
-    ap = AnnotationParser()
-    blocks = ap.parse(ss.get_comments())
+def create_source_scanner(options, args):
+    filenames = extract_filenames(args)
 
-    main = MainTransformer(transformer, blocks)
-    main.transform()
+    # Run the preprocessor, tokenize and construct simple
+    # objects representing the raw C symbols
+    ss = SourceScanner()
+    ss.set_cpp_options(options.cpp_includes,
+                       options.cpp_defines,
+                       options.cpp_undefines)
+    ss.parse_files(filenames)
+    ss.parse_macros(filenames)
+    return ss
 
-    utils.break_on_debug_flag('tree')
-
-    final = IntrospectablePass(transformer, blocks)
-    final.validate()
-
-    if options.warn_fatal and logger.did_warn():
-        message.fatal("warnings configured as fatal")
-        return 1
-
-    # Write out AST
-    if options.packages_export:
-        exported_packages = options.packages_export
-    else:
-        exported_packages = options.packages
-    writer = Writer(transformer.namespace, shlibs, transformer.get_includes(),
-                    exported_packages, options.c_includes)
-    data = writer.get_xml()
-
+def write_output(data, options):
     if options.output == "-":
         output = sys.stdout
     elif options.reparse_validate_gir:
@@ -404,5 +361,74 @@ see --identifier-prefix and --symbol-prefix."""
         output.write(data)
     except IOError, e:
         _error("while writing output: %s" % (e.strerror, ))
+
+def scanner_main(args):
+    parser = _get_option_parser()
+    (options, args) = parser.parse_args(args)
+
+    if options.passthrough_gir:
+        passthrough_gir(options.passthrough_gir, sys.stdout)
+    if options.test_codegen:
+        return test_codegen(options.test_codegen)
+
+    if len(args) <= 1:
+        _error('Need at least one filename')
+
+    if not options.namespace_name:
+        _error('Namespace name missing')
+
+    if options.format == 'gir':
+        from giscanner.girwriter import GIRWriter as Writer
+    else:
+        _error("Unknown format: %s" % (options.format, ))
+
+    if not (options.libraries or options.program):
+        _error("Must specify --program or --library")
+
+    namespace = create_namespace(options)
+    logger = message.MessageLogger.get(namespace=namespace)
+    if options.warn_all:
+        logger.enable_warnings(True)
+    transformer = create_transformer(namespace, options)
+
+    packages = set(options.packages)
+    packages.update(transformer.get_pkgconfig_packages())
+    exit_code = process_packages(options, packages)
+    if exit_code:
+        return exit_code
+
+    ss = create_source_scanner(options, args)
+
+    # Transform the C symbols into AST nodes
+    transformer.parse(ss.get_symbols())
+
+    shlibs = create_binary(transformer, options, args)
+
+    ap = AnnotationParser()
+    blocks = ap.parse(ss.get_comments())
+
+    main = MainTransformer(transformer, blocks)
+    main.transform()
+
+    utils.break_on_debug_flag('tree')
+
+    final = IntrospectablePass(transformer, blocks)
+    final.validate()
+
+    if options.warn_fatal and logger.did_warn():
+        message.fatal("warnings configured as fatal")
+        return 1
+
+    # Write out AST
+    if options.packages_export:
+        exported_packages = options.packages_export
+    else:
+        exported_packages = options.packages
+
+    writer = Writer(transformer.namespace, shlibs, transformer.get_includes(),
+                    exported_packages, options.c_includes)
+    data = writer.get_xml()
+
+    write_output(data, options)
 
     return 0
