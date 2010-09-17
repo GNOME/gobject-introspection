@@ -136,6 +136,7 @@ class GDumpParser(object):
             variant = self._namespace.get('Variant')
             assert variant is not None
             variant.add_gtype('GVariant', 'g_variant_get_gtype')
+            variant.c_symbol_prefix = 'variant'
             # Work around scanner bug
             variant.disguised = False
 
