@@ -601,7 +601,7 @@ usage is void (*_gtk_reserved1)(void);"""
             if doc_name in allparams:
                 continue
             # Skip varargs, see #629759
-            if doc_name == '...':
+            if doc_name.lower() in ['...', 'varargs', 'returns']:
                 continue
             if len(allparams) == 0:
                 text = ''
