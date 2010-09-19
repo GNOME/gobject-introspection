@@ -298,7 +298,12 @@ class SourceScanner(object):
             if len(data) < 4096:
                 break
         fp.seek(0, 0)
+
         assert proc, 'Proc was none'
+        proc.wait()
+        if proc.returncode != 0:
+            raise SystemExit('Error while processing the source.')
+
         self._scanner.parse_file(fp.fileno())
         fp.close()
         os.unlink(tmp)
