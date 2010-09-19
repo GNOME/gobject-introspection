@@ -541,9 +541,10 @@ usage is void (*_gtk_reserved1)(void);"""
                 if scope not in [ast.PARAM_SCOPE_CALL,
                                  ast.PARAM_SCOPE_ASYNC,
                                  ast.PARAM_SCOPE_NOTIFIED]:
-                    message.warn_node(
-                        parent,
-                        "Invalid scope %r for parameter %r" % (scope, param.argname))
+                    message.warn(
+                        "Invalid scope %r for parameter %r" % (scope,
+                        param.argname),
+                        [(tag.filename, tag.lineno, -1)])
                 else:
                     param.scope = scope
                     param.transfer = ast.PARAM_TRANSFER_NONE
