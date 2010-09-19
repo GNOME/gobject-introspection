@@ -68,13 +68,15 @@ OPT_SCOPE_NOTIFIED = 'notified'
 
 class DocBlock(object):
 
-    def __init__(self, name, options):
+    def __init__(self, name):
         self.name = name
-        self.options = options
+        self.options = {}
         self.value = None
         self.tags = odict()
         self.comment = None
         self.params = []
+        self.filename = None
+        self.lineno = -1
 
     def __repr__(self):
         return '<DocBlock %r %r>' % (self.name, self.options)
@@ -85,18 +87,22 @@ class DocBlock(object):
 
 class DocTag(object):
 
-    def __init__(self, name):
+    def __init__(self, block, name):
+        self.block = block
         self.name = name
         self.options = {}
         self.comment = None
         self.value = ''
+        self.filename = None
+        self.lineno = -1
 
     def __repr__(self):
         return '<DocTag %r %r>' % (self.name, self.options)
 
-class Option(object):
+class DocOption(object):
 
-    def __init__(self, option):
+    def __init__(self, tag, option):
+        self.tag = tag
         self._array = []
         self._dict = {}
         for p in option.split(' '):
@@ -112,7 +118,7 @@ class Option(object):
                 self._array.append((name, value))
 
     def __repr__(self):
-        return '<Option %r>' % (self._array, )
+        return '<DocOption %r>' % (self._array, )
 
     def one(self):
         assert len(self._array) == 1
@@ -153,7 +159,7 @@ class AnnotationParser(object):
         #  - signal:   GtkWidget::destroy
         #  - property: GtkWidget:visible
         #
-        comment, lineno = cmt
+        comment, filename, lineno = cmt
         comment = comment.lstrip()
         if not comment.startswith(_COMMENT_HEADER):
             return
@@ -169,12 +175,14 @@ class AnnotationParser(object):
         block_header = comment[:pos]
         block_header = block_header.strip()
         cpos = block_header.find(': ')
+        block_name = block_header
         if cpos:
-            block_name = block_header[:cpos]
-            block_options = self.parse_options(block_header[cpos+2:])
-        else:
-            block_name, block_options = block_header, {}
-        block = DocBlock(block_name, block_options)
+            block_name = block_name[:cpos]
+        block = DocBlock(block_name)
+        block.lineno = lineno
+        block.filename = filename
+        if cpos:
+            block.options = self.parse_options(block, block_header[cpos+2:])
         comment_lines = []
         parsing_parameters = True
         last_param_tag = None
@@ -191,6 +199,10 @@ class AnnotationParser(object):
         # * Some documentation for the function.
         # *
         # * Returns: (transfer none): A value
+
+        # offset of the first doctag in relation to the start of
+        # the docblock, we parsed /** and the xxx: lines already
+        lineno = 2
         for line in comment[pos+1:].split('\n'):
             line = line.lstrip()
             if (not line.startswith('*') or
@@ -198,6 +210,7 @@ class AnnotationParser(object):
                 # As soon as we find a line that's just whitespace,
                 # we're done parsing the parameters.
                 parsing_parameters = False
+                lineno += 1
                 continue
 
             line = line[1:].lstrip()
@@ -213,7 +226,9 @@ class AnnotationParser(object):
                     argname = line[1:first_colonspace_index]
                 else:
                     argname = TAG_RETURNS
-                tag = DocTag(argname)
+                tag = DocTag(block, argname)
+                tag.filename = block.filename
+                tag.lineno = block.lineno + lineno
                 second_colon_index = line.rfind(':')
                 found_options = False
                 if second_colon_index > first_colonspace_index:
@@ -230,7 +245,7 @@ class AnnotationParser(object):
                         # But that'd be a rather incompatible change.
                         found_options = True
                         tag.comment = line[second_colon_index+1:].strip()
-                        tag.options = self.parse_options(value_line)
+                        tag.options = self.parse_options(tag, value_line)
                 if not found_options:
                     # We didn't find any options, so just take the whole thing
                     # as documentation.
@@ -251,18 +266,21 @@ class AnnotationParser(object):
                 tag_name = line[:first_colonspace_index]
                 if self.ASCII_TEXT_RE.match(tag_name):
                     tag_name = tag_name.lower()
-                    tag = DocTag(tag_name)
+                    tag = DocTag(block, tag_name)
                     tag.value = line[first_colonspace_index+2:]
+                    tag.filename = block.filename
+                    tag.lineno = block.lineno + lineno
                     block.tags[tag_name] = tag
                 else:
                     comment_lines.append(line)
             elif (not is_parameter):
                 comment_lines.append(line)
+            lineno += 1
         block.comment = '\n'.join(comment_lines)
         self._blocks[block.name] = block
 
     @classmethod
-    def parse_options(cls, value):
+    def parse_options(cls, tag, value):
         # (foo)
         # (bar opt1 opt2...)
         opened = -1
@@ -282,7 +300,7 @@ class AnnotationParser(object):
                 else:
                     raise AssertionError
                 if option is not None:
-                    option = Option(option)
+                    option = DocOption(tag, option)
                 options[name] = option
                 last = i + 2
                 opened = -1
