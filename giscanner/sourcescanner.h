@@ -28,6 +28,7 @@
 
 G_BEGIN_DECLS
 
+typedef struct _GISourceComment GISourceComment;
 typedef struct _GISourceScanner GISourceScanner;
 typedef struct _GISourceSymbol GISourceSymbol;
 typedef struct _GISourceType GISourceType;
@@ -95,13 +96,20 @@ typedef enum
   UNARY_LOGICAL_NEGATION
 } UnaryOperator;
 
+struct _GISourceComment
+{
+  char *comment;
+  char *filename;
+  int line;
+};
+
 struct _GISourceScanner
 {
   char *current_filename;
   gboolean macro_scan;
   GSList *symbols;
   GList *filenames;
-  GSList *comments;
+  GSList *comments; /* _GIComment */
   GHashTable *typedef_table;
   GHashTable *struct_or_union_or_enum_table;
 };

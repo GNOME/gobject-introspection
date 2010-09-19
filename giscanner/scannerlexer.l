@@ -210,17 +210,21 @@ yywrap (void)
 static void
 parse_comment (GISourceScanner *scanner)
 {
-  GString *comment;
+  GString *string;
   int c1, c2;
+  GISourceComment *comment;
+  int comment_lineno;
 
   c1 = input();
   c2 = input();
 
-  comment = g_string_new ("");
+  string = g_string_new ("");
+
+  comment_lineno = lineno;
 
   while (c2 != EOF && !(c1 == '*' && c2 == '/'))
     {
-      g_string_append_c (comment, c1);
+      g_string_append_c (string, c1);
 
       if (c1 == '\n')
         lineno++;
@@ -230,8 +234,13 @@ parse_comment (GISourceScanner *scanner)
 
     }
 
+  comment = g_slice_new (GISourceComment);
+  comment->comment = g_string_free (string, FALSE);
+  comment->line = comment_lineno;
+  comment->filename = g_strdup(scanner->current_filename);
+
   scanner->comments = g_slist_prepend (scanner->comments,
-                                       g_string_free (comment, FALSE));
+                                       comment);
 }
 
 static int

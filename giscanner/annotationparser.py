@@ -139,7 +139,7 @@ class AnnotationParser(object):
             self._parse_comment(comment)
         return self._blocks
 
-    def _parse_comment(self, comment):
+    def _parse_comment(self, cmt):
         # We're looking for gtk-doc comments here, they look like this:
         # /**
         #   * symbol:
@@ -153,6 +153,7 @@ class AnnotationParser(object):
         #  - signal:   GtkWidget::destroy
         #  - property: GtkWidget:visible
         #
+        comment, lineno = cmt
         comment = comment.lstrip()
         if not comment.startswith(_COMMENT_HEADER):
             return

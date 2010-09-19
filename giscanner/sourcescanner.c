@@ -194,6 +194,14 @@ gi_source_scanner_new (void)
   return scanner;
 }
 
+static void
+gi_source_comment_free (GISourceComment *comment)
+{
+  g_free (comment->comment);
+  g_free (comment->filename);
+  g_slice_free (GISourceComment, comment);
+}
+
 void
 gi_source_scanner_free (GISourceScanner *scanner)
 {
@@ -202,7 +210,7 @@ gi_source_scanner_free (GISourceScanner *scanner)
   g_hash_table_destroy (scanner->typedef_table);
   g_hash_table_destroy (scanner->struct_or_union_or_enum_table);
 
-  g_slist_foreach (scanner->comments, (GFunc)g_free, NULL);
+  g_slist_foreach (scanner->comments, (GFunc)gi_source_comment_free, NULL);
   g_slist_free (scanner->comments);
   g_slist_foreach (scanner->symbols, (GFunc)gi_source_symbol_unref, NULL);
   g_slist_free (scanner->symbols);

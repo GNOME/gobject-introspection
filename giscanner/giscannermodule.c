@@ -517,14 +517,17 @@ pygi_source_scanner_get_comments (PyGISourceScanner *self)
   GSList *l, *comments;
   PyObject *list;
   int i = 0;
-  
+
   comments = gi_source_scanner_get_comments (self->scanner);
   list = PyList_New (g_slist_length (comments));
-  
+
   for (l = comments; l; l = l->next)
     {
-      PyObject *item = PyString_FromString (l->data);
-      PyList_SetItem (list, i++, item);
+      GISourceComment *comment = l->data;
+      PyObject *item = Py_BuildValue ("(ssi)", comment->comment,
+                                      comment->filename,
+                                      comment->line);
+      PyList_SET_ITEM (list, i++, item);
       Py_INCREF (item);
     }
 
