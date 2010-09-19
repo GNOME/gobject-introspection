@@ -46,7 +46,7 @@ extern int yylex (GISourceScanner *scanner);
 #define YY_DECL int yylex (GISourceScanner *scanner)
 static int yywrap (void);
 static void parse_comment (GISourceScanner *scanner);
-static void process_directive (GISourceScanner *scanner);
+static void process_linemarks (GISourceScanner *scanner);
 static int check_identifier (GISourceScanner *scanner, const char *);
 static int parse_ignored_macro (void);
 %}
@@ -77,8 +77,8 @@ stringtext				([^\\\"])|(\\.)
 "#define "[a-zA-Z_][a-zA-Z_0-9]*"("	{ yyless (yyleng - 1); return FUNCTION_MACRO; }
 "#define "[a-zA-Z_][a-zA-Z_0-9]*	{ return OBJECT_MACRO; }
 
-"#"					{ process_directive(scanner); }
-
+"# "[0-9]+" ".*"\n"			{ process_linemarks(scanner); }
+"#"			                { }
 "{"					{ return '{'; }
 "<%"					{ return '{'; }
 "}"					{ return '}'; }
@@ -261,55 +261,29 @@ check_identifier (GISourceScanner *scanner,
 	return IDENTIFIER;
 }
 
+/*
+ * # linenum "filename" flags
+ *  See http://gcc.gnu.org/onlinedocs/cpp/Preprocessor-Output.html
+ **/
+
 static void
-process_directive (GISourceScanner *scanner)
+process_linemarks (GISourceScanner *scanner)
 {
-	/* extract current filename from #line directives */
-	GString *filename_builder;
-	gboolean in_string, found_filename;
+        char filename[1025];
+        char *compress;
+        char *real;
 
-	lineno = 0;
-	found_filename = FALSE;
-	in_string = FALSE;
-	filename_builder = g_string_new ("");
+        sscanf(yytext, "# %d \"%1024[^\"]\"", &lineno, filename);
 
-	int c = input ();
-	while (c != EOF && c != '\n') {
-		if (!in_string) {
-			if (c == '\"') {
-				in_string = TRUE;
-				found_filename = TRUE;
-			} else if (c >= '0' && c <= '9') {
-				if (!found_filename) {
-					lineno = lineno * 10 + (c - '0');
-				}
-			}
-		} else {
-			if (c == '\"') {
-				in_string = FALSE;
-			} else if (c == '\\') {
-				g_string_append_c (filename_builder, c);
-				c = input ();
-				g_string_append_c (filename_builder, c);
-			} else {
-				g_string_append_c (filename_builder, c);
-			}
-		}
-		c = input ();
-	}
-
-	if (filename_builder->len > 0) {
-		char *filename = g_strcompress (filename_builder->str);
-		if (g_realpath (filename))
-		  {
-		    g_free (scanner->current_filename);
-		    scanner->current_filename = g_realpath (filename);
-		    g_assert (scanner->current_filename);
-		    g_free(filename);
-		  }
-	}
-
-	g_string_free (filename_builder, TRUE);
+	compress = g_strcompress (filename);
+        real = g_realpath (filename);
+        if (real) {
+                g_free (scanner->current_filename);
+                scanner->current_filename = real;
+        } else {
+                g_free (real);
+        }
+        g_free (compress);
 }
 
 /*

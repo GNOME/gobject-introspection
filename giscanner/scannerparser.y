@@ -1488,6 +1488,7 @@ gi_source_scanner_parse_file (GISourceScanner *scanner, FILE *file)
 gboolean
 gi_source_scanner_lex_filename (GISourceScanner *scanner, const gchar *filename)
 {
+  lineno = 1;
   yyin = fopen (filename, "r");
 
   while (yylex (scanner) != YYEOF)
