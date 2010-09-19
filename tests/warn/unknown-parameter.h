@@ -7,7 +7,7 @@
  */
 void test_param_mismatch(int *out);
 
-// EXPECT:: Warning: Test: test_param_mismatch: unknown parameter 'wrong_name' in documentation comment, should be 'out'
+// EXPECT:5: Warning: Test: test_param_mismatch: unknown parameter 'wrong_name' in documentation comment, should be 'out'
 
 /**
  * test_param_mismatch2:
@@ -16,7 +16,7 @@ void test_param_mismatch(int *out);
  */
 void test_param_mismatch2(int a, int *out2);
 
-// EXPECT:: Warning: Test: test_param_mismatch2: unknown parameter 'wrong_name2' in documentation comment, should be one of 'a', 'out2'
+// EXPECT:14: Warning: Test: test_param_mismatch2: unknown parameter 'wrong_name2' in documentation comment, should be one of 'a', 'out2'
 
 /**
  * test_param_missing:
@@ -25,7 +25,7 @@ void test_param_mismatch2(int a, int *out2);
  */
 void test_param_missing(void);
 
-// EXPECT:: Warning: Test: test_param_missing: unknown parameter 'missing' in documentation comment
+// EXPECT:23: Warning: Test: test_param_missing: unknown parameter 'missing' in documentation comment
 
 
 /**

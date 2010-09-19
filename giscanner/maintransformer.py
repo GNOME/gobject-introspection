@@ -611,9 +611,11 @@ usage is void (*_gtk_reserved1)(void);"""
                 text = ', should be one of %s' % (
                 ', '.join(repr(p) for p in allparams), )
 
+            tag = block.get(doc_name)
             message.warn(
                 '%s: unknown parameter %r in documentation comment%s' % (
-                block.name, doc_name, text))
+                block.name, doc_name, text),
+                [(block.filename, tag.lineno, -1)])
 
     def _apply_annotations_callable(self, node, chain, block):
         self._apply_annotations_annotated(node, block)
