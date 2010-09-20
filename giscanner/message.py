@@ -118,7 +118,7 @@ context will be used."""
             else:
                 file_positions = node.file_positions
         else:
-            file_positions = None
+            file_positions = []
             if not context:
                 text = "context=%r %s" % (node, text)
 
