@@ -544,7 +544,7 @@ usage is void (*_gtk_reserved1)(void);"""
                     message.warn(
                         "Invalid scope %r for parameter %r" % (scope,
                         param.argname),
-                        [(tag.filename, tag.lineno, -1)])
+                        tag.position)
                 else:
                     param.scope = scope
                     param.transfer = ast.PARAM_TRANSFER_NONE
@@ -616,7 +616,7 @@ usage is void (*_gtk_reserved1)(void);"""
             message.warn(
                 '%s: unknown parameter %r in documentation comment%s' % (
                 block.name, doc_name, text),
-                [(block.filename, tag.lineno, -1)])
+                tag.position)
 
     def _apply_annotations_callable(self, node, chain, block):
         self._apply_annotations_annotated(node, block)

@@ -19,6 +19,7 @@
 # Boston, MA 02111-1307, USA.
 #
 
+from .message import Position
 from .odict import odict
 from .utils import to_underscores
 
@@ -487,12 +488,12 @@ GIName.  It's possible for nodes to contain or point to other nodes."""
     def inherit_file_positions(self, node):
         self.file_positions.update(node.file_positions)
 
-    def add_file_position(self, filename, line, column):
-        self.file_positions.add((filename, line, column))
+    def add_file_position(self, position):
+        self.file_positions.add(position)
 
     def add_symbol_reference(self, symbol):
         if symbol.source_filename:
-            self.add_file_position(symbol.source_filename, symbol.line, -1)
+            self.add_file_position(Position(symbol.source_filename, symbol.line))
 
     def walk(self, callback, chain):
         res = callback(self, chain)

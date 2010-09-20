@@ -23,12 +23,40 @@
 import os
 import sys
 
-from . import ast
 from . import utils
 
 (WARNING,
  ERROR,
  FATAL) = range(3)
+
+
+class Position(object):
+    """Represents a position in the source file which we
+    want to inform about.
+    """
+    def __init__(self, filename=None, line=None, column=None):
+        self.filename = filename
+        self.line = line
+        self.column = column
+
+    def __cmp__(self, other):
+        return cmp((self.filename, self.line, self.column),
+                   (other.filename, other.line, other.column))
+
+    def format(self, cwd):
+        filename = self.filename
+        if filename.startswith(cwd):
+            filename = filename[len(cwd):]
+        if self.column is not None:
+            return '%s:%d:%d' % (filename, self.line, self.column)
+        elif self.line is not None:
+            return '%s:%d' % (filename, self.line, )
+        else:
+            return '%s:' % (filename, )
+
+    def offset(self, offset):
+        return Position(self.filename, self.line+offset, self.column)
+
 
 class MessageLogger(object):
     _instance = None
@@ -54,7 +82,7 @@ class MessageLogger(object):
     def did_warn(self):
         return self._warned
 
-    def log(self, log_type, text, file_positions=None, prefix=None):
+    def log(self, log_type, text, positions=None, prefix=None):
         """Log a warning, using optional file positioning information.
 If the warning is related to a ast.Node type, see log_node_warning()."""
         utils.break_on_debug_flag('warning')
@@ -66,26 +94,17 @@ If the warning is related to a ast.Node type, see log_node_warning()."""
 
         self._warned = True
 
-        if file_positions is None or len(file_positions) == 0:
-            target_file_positions = [('<unknown>', -1, -1)]
-        else:
-            target_file_positions = file_positions
+        if type(positions) == set:
+            positions = list(positions)
+        if isinstance(positions, Position):
+            positions = [positions]
 
-        position_strings = []
-        for (filename, line, column) in target_file_positions:
-            if filename.startswith(self._cwd):
-                filename = filename[len(self._cwd):]
-            if column != -1:
-                position = '%s:%d:%d' % (filename, line, column)
-            elif line != -1:
-                position = '%s:%d' % (filename, line, )
-            else:
-                position = '%s:' % (filename, )
-            position_strings.append(position)
+        if not positions:
+            positions = [Position('<unknown>')]
 
-        for position in position_strings[:-1]:
-            self._output.write("%s:\n" % (position, ))
-        last_position = position_strings[-1]
+        for position in positions[:-1]:
+            self._output.write("%s:\n" % (position.format(cwd=self._cwd), ))
+        last_position = positions[-1].format(cwd=self._cwd)
 
         if log_type == WARNING:
             error_type = "Warning"
@@ -111,45 +130,35 @@ the given node.  The optional context argument, if given, should be
 another ast.Node type which will also be displayed.  If no file position
 information is available from the node, the position data from the
 context will be used."""
-        if hasattr(node, 'file_positions'):
-            if (len(node.file_positions) == 0 and
-                (context is not None) and len(context.file_positions) > 0):
-                file_positions = context.file_positions
-            else:
-                file_positions = node.file_positions
+        if getattr(node, 'file_positions', None):
+            positions = node.file_positions
+        elif context and context.file_positions:
+            positions = context.file_positions
         else:
-            file_positions = []
+            positions = []
             if not context:
                 text = "context=%r %s" % (node, text)
 
         if context:
-            if isinstance(context, ast.Function):
-                name = context.symbol
-            else:
-                name = context.name
-            text = "%s: %s" % (name, text)
-        elif len(file_positions) == 0 and hasattr(node, 'name'):
+            text = "%s: %s" % (getattr(context, 'symbol', context.name), text)
+        elif not positions and hasattr(node, 'name'):
             text = "(%s)%s: %s" % (node.__class__.__name__, node.name, text)
 
-        self.log(log_type, text, file_positions)
+        self.log(log_type, text, positions)
 
-    def log_symbol(self, log_type, symbol, text, **kwargs):
+    def log_symbol(self, log_type, symbol, text):
         """Log a warning in the context of the given symbol."""
-        if symbol.source_filename:
-            file_positions = [(symbol.source_filename, symbol.line, -1)]
-        else:
-            file_positions = None
-        prefix = "symbol=%r" % (symbol.ident, )
-        self.log(log_type, text, file_positions, prefix=prefix, **kwargs)
+        self.log(log_type, text, symbol.position,
+                 prefix="symbol=%r" % (symbol.ident, ))
 
 
 def log_node(log_type, node, text, context=None):
     ml = MessageLogger.get()
     ml.log_node(log_type, node, text, context=context)
 
-def warn(text, file_positions=None, prefix=None):
+def warn(text, positions=None, prefix=None):
     ml = MessageLogger.get()
-    ml.log(WARNING, text, file_positions, prefix)
+    ml.log(WARNING, text, positions, prefix)
 
 def warn_node(node, text, context=None):
     log_node(WARNING, node, text, context=context)
@@ -158,6 +167,6 @@ def warn_symbol(symbol, text):
     ml = MessageLogger.get()
     ml.log_symbol(WARNING, symbol, text)
 
-def fatal(text, file_positions=None, prefix=None):
+def fatal(text, positions=None, prefix=None):
     ml = MessageLogger.get()
-    ml.log(FATAL, text, file_positions, prefix)
+    ml.log(FATAL, text, positions, prefix)

@@ -22,6 +22,7 @@
 
 import re
 
+from .message import Position
 from .odict import odict
 
 # All gtk-doc comments needs to start with this:
@@ -75,8 +76,6 @@ class DocBlock(object):
         self.tags = odict()
         self.comment = None
         self.params = []
-        self.filename = None
-        self.lineno = -1
 
     def __repr__(self):
         return '<DocBlock %r %r>' % (self.name, self.options)
@@ -93,8 +92,6 @@ class DocTag(object):
         self.options = {}
         self.comment = None
         self.value = ''
-        self.filename = None
-        self.lineno = -1
 
     def __repr__(self):
         return '<DocTag %r %r>' % (self.name, self.options)
@@ -179,8 +176,7 @@ class AnnotationParser(object):
         if cpos:
             block_name = block_name[:cpos]
         block = DocBlock(block_name)
-        block.lineno = lineno
-        block.filename = filename
+        block.position = Position(filename, lineno)
         if cpos:
             block.options = self.parse_options(block, block_header[cpos+2:])
         comment_lines = []
@@ -227,8 +223,7 @@ class AnnotationParser(object):
                 else:
                     argname = TAG_RETURNS
                 tag = DocTag(block, argname)
-                tag.filename = block.filename
-                tag.lineno = block.lineno + lineno
+                tag.position = block.position.offset(lineno)
                 second_colon_index = line.rfind(':')
                 found_options = False
                 if second_colon_index > first_colonspace_index:
@@ -268,8 +263,7 @@ class AnnotationParser(object):
                     tag_name = tag_name.lower()
                     tag = DocTag(block, tag_name)
                     tag.value = line[first_colonspace_index+2:]
-                    tag.filename = block.filename
-                    tag.lineno = block.lineno + lineno
+                    tag.filename = block.position.offset(lineno)
                     block.tags[tag_name] = tag
                 else:
                     comment_lines.append(line)

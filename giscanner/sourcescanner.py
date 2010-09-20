@@ -24,7 +24,7 @@ import subprocess
 import tempfile
 
 from .libtoolimporter import LibtoolImporter
-
+from .message import Position
 
 (CSYMBOL_TYPE_INVALID,
  CSYMBOL_TYPE_ELLIPSIS,
@@ -197,6 +197,11 @@ class SourceSymbol(object):
     @property
     def line(self):
         return self._symbol.line
+
+    @property
+    def position(self):
+        return Position(self._symbol.source_filename,
+                        self._symbol.line)
 
 
 class SourceScanner(object):
