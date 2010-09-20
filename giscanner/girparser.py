@@ -227,7 +227,6 @@ class GIRParser(object):
             obj.glib_type_struct = self._namespace.type_from_name(type_struct)
         self._namespace.append(obj)
 
-        ctor_args.append(node.attrib.get(_cns('type')))
         for iface in self._find_children(node, _corens('implements')):
             obj.interfaces.append(self._namespace.type_from_name(iface.attrib['name']))
         for iface in self._find_children(node, _corens('prerequisite')):
