@@ -54,12 +54,19 @@ class Transformer(object):
         self._includes = {}
         self._include_names = set()
         self._includepaths = []
+        self._passthrough_mode = False
 
     def get_includes(self):
         return self._include_names
 
     def get_pkgconfig_packages(self):
         return self._pkg_config_packages
+
+    def disable_cache(self):
+        self._cachestore = None
+
+    def set_passthrough_mode(self):
+        self._passthrough_mode = True
 
     def _append_new_node(self, node):
         original = self._namespace.get(node.name)
@@ -169,11 +176,14 @@ None."""
         sys.exit(1)
 
     def _parse_include(self, filename, uninstalled=False):
-        parser = self._cachestore.load(filename)
+        parser = None
+        if self._cachestore is not None:
+            parser = self._cachestore.load(filename)
         if parser is None:
-            parser = GIRParser()
+            parser = GIRParser(types_only=not self._passthrough_mode)
             parser.parse(filename)
-            self._cachestore.store(filename, parser)
+            if self._cachestore is not None:
+                self._cachestore.store(filename, parser)
 
         for include in parser.get_includes():
             self.register_include(include)

@@ -291,6 +291,10 @@ see --identifier-prefix and --symbol-prefix."""
     transformer = Transformer(namespace,
                               accept_unprefixed=options.accept_unprefixed)
     transformer.set_include_paths(options.include_paths)
+    if options.passthrough_gir:
+        transformer.disable_cache()
+        transformer.set_passthrough_mode()
+
     shown_include_warning = False
     for include in options.includes:
         if os.sep in include:
