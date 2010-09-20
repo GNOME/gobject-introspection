@@ -285,10 +285,10 @@ usage is void (*_gtk_reserved1)(void);"""
 
         if not result.resolved:
             parent = orig_node
-            if isinstance(parent, ast.Function):
+            if parent is not None and isinstance(parent, ast.Function):
                 text = parent.symbol
             else:
-                text = parent.name
+                text = type_str
             message.warn_node(parent, "%s: Unknown type: %r" %
                               (text, result.ctype))
         return result
