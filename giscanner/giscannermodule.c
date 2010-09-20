@@ -119,6 +119,13 @@ symbol_get_line (PyGISourceSymbol *self,
 }
 
 static PyObject *
+symbol_get_private (PyGISourceSymbol *self,
+                    void             *context)
+{
+  return PyBool_FromLong (self->symbol->private);
+}
+
+static PyObject *
 symbol_get_ident (PyGISourceSymbol *self,
 		  void            *context)
 {
@@ -202,6 +209,7 @@ static const PyGetSetDef _PyGISourceSymbol_getsets[] = {
   { "const_string", (getter)symbol_get_const_string, NULL, NULL},
   { "source_filename", (getter)symbol_get_source_filename, NULL, NULL},
   { "line", (getter)symbol_get_line, NULL, NULL},
+  { "private", (getter)symbol_get_private, NULL, NULL},
   { 0 }
 };
 

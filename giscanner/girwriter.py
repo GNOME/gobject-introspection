@@ -513,6 +513,8 @@ and/or use gtk-doc annotations. ''')
                 attrs.append(('writable', '1'))
             if field.bits:
                 attrs.append(('bits', str(field.bits)))
+            if field.private:
+                attrs.append(('private', '1'))
             with self.tagcontext('field', attrs):
                 self._write_generic(field)
                 self._write_type(field.type)

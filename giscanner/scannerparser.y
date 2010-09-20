@@ -742,10 +742,12 @@ struct_or_union_specifier
 struct_or_union
 	: STRUCT
 	  {
+                scanner->private = FALSE;
 		$$ = gi_source_struct_new (NULL);
 	  }
 	| UNION
 	  {
+                scanner->private = FALSE;
 		$$ = gi_source_union_new (NULL);
 	  }
 	;
@@ -771,7 +773,8 @@ struct_declaration
 		else
 		    sym->type = CSYMBOL_TYPE_MEMBER;
 		gi_source_symbol_merge_type (sym, gi_source_type_copy ($1));
-		$$ = g_list_append ($$, sym);
+                sym->private = scanner->private;
+                $$ = g_list_append ($$, sym);
 	      }
 	    ctype_free ($1);
 	  }
@@ -830,6 +833,7 @@ struct_declarator
 enum_specifier
 	: ENUM identifier_or_typedef_name '{' enumerator_list '}'
 	  {
+                scanner->private = FALSE;
 		$$ = gi_source_enum_new ($2);
 		$$->child_list = $4;
 		$$->is_bitfield = is_bitfield;
@@ -837,6 +841,7 @@ enum_specifier
 	  }
 	| ENUM '{' enumerator_list '}'
 	  {
+                scanner->private = FALSE;
 		$$ = gi_source_enum_new (NULL);
 		$$->child_list = $3;
 		$$->is_bitfield = is_bitfield;
@@ -844,6 +849,7 @@ enum_specifier
 	  }
 	| ENUM identifier_or_typedef_name '{' enumerator_list ',' '}'
 	  {
+                scanner->private = FALSE;
 		$$ = gi_source_enum_new ($2);
 		$$->child_list = $4;
 		$$->is_bitfield = is_bitfield;
@@ -851,6 +857,7 @@ enum_specifier
 	  }
 	| ENUM '{' enumerator_list ',' '}'
 	  {
+                scanner->private = FALSE;
 		$$ = gi_source_enum_new (NULL);
 		$$->child_list = $3;
 		$$->is_bitfield = is_bitfield;
@@ -858,6 +865,7 @@ enum_specifier
 	  }
 	| ENUM identifier_or_typedef_name
 	  {
+                scanner->private = FALSE;
 		$$ = gi_source_enum_new ($2);
 	  }
 	;
@@ -870,11 +878,17 @@ enumerator_list
 	  }
 	  enumerator
 	  {
-		$$ = g_list_append (NULL, $2);
+              if (!scanner->private)
+                {
+                  $$ = g_list_append (NULL, $2);
+                }
 	  }
 	| enumerator_list ',' enumerator
 	  {
-		$$ = g_list_append ($1, $3);
+              if (!scanner->private)
+                {
+                  $$ = g_list_append ($1, $3);
+                }
 	  }
 	;
 

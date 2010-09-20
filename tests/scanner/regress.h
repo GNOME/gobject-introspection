@@ -562,4 +562,22 @@ typedef struct _RegressIntset RegressIntset;
  */
 typedef RegressIntset RegressIntSet;
 
+/* private testing */
+
+typedef struct {
+  gint this_is_public_before;
+  /* < private > */
+  gint this_is_private;
+  /* < public > */
+  gint this_is_public_after;
+} RegressTestPrivateStruct;
+
+typedef enum {
+  REGRESS_TEST_PUBLIC_ENUM_BEFORE = 1 << 0,
+  /* <private> */
+  REGRESS_TEST_PRIVATE_ENUM       = 1 << 1,
+  /* <public> */
+  REGRESS_TEST_PUBLIC_ENUM_AFTER  = 1 << 2,
+} RegressTestPrivateEnum;
+
 #endif /* __GITESTTYPES_H__ */

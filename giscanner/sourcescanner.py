@@ -199,6 +199,10 @@ class SourceSymbol(object):
         return self._symbol.line
 
     @property
+    def private(self):
+        return self._symbol.private
+
+    @property
     def position(self):
         return Position(self._symbol.source_filename,
                         self._symbol.line)

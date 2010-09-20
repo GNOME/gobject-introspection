@@ -57,7 +57,7 @@ intsuffix				([uU][lL]?[lL]?)|([lL][lL]?[uU]?)
 fracconst				([0-9]*\.[0-9]+)|([0-9]+\.)
 exppart					[eE][-+]?[0-9]+
 floatsuffix				[fFlL]
-chartext				([^\\\'])|(\\.) 
+chartext				([^\\\'])|(\\.)
 stringtext				([^\\\"])|(\\.)
 
 %%
@@ -72,6 +72,8 @@ stringtext				([^\\\"])|(\\.)
 [\t\f\v\r ]+				{ /* Ignore whitespace. */ }
 
 "/*"					{ parse_comment(scanner); }
+"/*"[\t ]*<[\t ]*"private"[\t ]*>" */"  { scanner->private = TRUE; }
+"/*"[\t ]*<[\t ]*"public"[\t ]*>" */"   { scanner->private = FALSE; }
 "//".*					{ }
 
 "#define "[a-zA-Z_][a-zA-Z_0-9]*"("	{ yyless (yyleng - 1); return FUNCTION_MACRO; }

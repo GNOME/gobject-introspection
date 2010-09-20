@@ -766,6 +766,7 @@ class Field(Annotated):
         self.writable = writable
         self.bits = bits
         self.anonymous_node = anonymous_node
+        self.private = False
 
     def __cmp__(self, other):
         return cmp(self.name, other.name)

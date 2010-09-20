@@ -107,6 +107,7 @@ struct _GISourceScanner
 {
   char *current_filename;
   gboolean macro_scan;
+  gboolean private; /* set by gtk-doc comment <private>/<public> */
   GSList *symbols;
   GList *filenames;
   GSList *comments; /* _GIComment */
@@ -122,6 +123,7 @@ struct _GISourceSymbol
   char *ident;
   GISourceType *base_type;
   gboolean const_int_set;
+  gboolean private;
   int const_int;
   char *const_string;
   gboolean const_double_set;

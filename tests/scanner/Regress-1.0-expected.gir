@@ -699,6 +699,25 @@ TpAccount::status-changed</doc>
         </callback>
       </field>
     </record>
+    <bitfield name="TestPrivateEnum" c:type="RegressTestPrivateEnum">
+      <member name="before"
+              value="1"
+              c:identifier="REGRESS_TEST_PUBLIC_ENUM_BEFORE"/>
+      <member name="after"
+              value="4"
+              c:identifier="REGRESS_TEST_PUBLIC_ENUM_AFTER"/>
+    </bitfield>
+    <record name="TestPrivateStruct" c:type="RegressTestPrivateStruct">
+      <field name="this_is_public_before" writable="1">
+        <type name="gint" c:type="gint"/>
+      </field>
+      <field name="this_is_private" readable="0" private="1">
+        <type name="gint" c:type="gint"/>
+      </field>
+      <field name="this_is_public_after" writable="1">
+        <type name="gint" c:type="gint"/>
+      </field>
+    </record>
     <record name="TestSimpleBoxedA"
             c:type="RegressTestSimpleBoxedA"
             glib:type-name="RegressTestSimpleBoxedA"

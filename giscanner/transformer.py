@@ -354,6 +354,8 @@ raise ValueError."""
             if prefixlen > 0:
                 name = child.ident[prefixlen:]
             else:
+                if child.ident is None:
+                    continue
                 # Ok, the enum members don't have a consistent prefix
                 # among them, so let's just remove the global namespace
                 # prefix.
@@ -448,7 +450,12 @@ raise ValueError."""
             # ast.Fields are assumed to be read-write
             # (except for Objects, see also glibtransformer.py)
             node = ast.Field(symbol.ident, ftype,
-                         readable=True, writable=True, bits=symbol.const_int)
+                             readable=True, writable=True,
+                             bits=symbol.const_int)
+            if symbol.private:
+                node.readable = False
+                node.writable = False
+                node.private = True
         return node
 
     def _create_typedef(self, symbol):
