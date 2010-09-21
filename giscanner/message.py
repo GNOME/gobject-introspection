@@ -124,13 +124,15 @@ If the warning is related to a ast.Node type, see log_node_warning()."""
         if log_type == FATAL:
             raise SystemExit(text)
 
-    def log_node(self, log_type, node, text, context=None):
+    def log_node(self, log_type, node, text, context=None, positions=None):
         """Log a warning, using information about file positions from
 the given node.  The optional context argument, if given, should be
 another ast.Node type which will also be displayed.  If no file position
 information is available from the node, the position data from the
 context will be used."""
-        if getattr(node, 'file_positions', None):
+        if positions:
+            pass
+        elif getattr(node, 'file_positions', None):
             positions = node.file_positions
         elif context and context.file_positions:
             positions = context.file_positions
@@ -152,16 +154,16 @@ context will be used."""
                  prefix="symbol=%r" % (symbol.ident, ))
 
 
-def log_node(log_type, node, text, context=None):
+def log_node(log_type, node, text, context=None, positions=None):
     ml = MessageLogger.get()
-    ml.log_node(log_type, node, text, context=context)
+    ml.log_node(log_type, node, text, context=context, positions=positions)
 
 def warn(text, positions=None, prefix=None):
     ml = MessageLogger.get()
     ml.log(WARNING, text, positions, prefix)
 
-def warn_node(node, text, context=None):
-    log_node(WARNING, node, text, context=context)
+def warn_node(node, text, context=None, positions=None):
+    log_node(WARNING, node, text, context=context, positions=positions)
 
 def warn_symbol(symbol, text):
     ml = MessageLogger.get()
