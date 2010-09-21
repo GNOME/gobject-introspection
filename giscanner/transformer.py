@@ -284,8 +284,7 @@ raise ValueError."""
         ident = symbol.ident
         hidden = ident.startswith('_')
         if hidden:
-            return None
-
+            ident = ident[1:]
         try:
             (ns, name) = self.split_csymbol(ident)
         except ValueError, e:
@@ -293,6 +292,8 @@ raise ValueError."""
         if ns != self._namespace:
             raise TransformerException(
                 "Skipping foreign symbol from namespace %s" % (ns.name, ))
+        if hidden:
+            return '_' + name
         return name
 
     def _traverse_one(self, symbol, stype=None):
