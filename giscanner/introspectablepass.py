@@ -45,6 +45,11 @@ class IntrospectablePass(object):
                     context=node)
 
     def _parameter_warning(self, parent, param, text, position=None):
+        # Suppress VFunctions and Callbacks warnings for now
+        # they cause more problems then they are worth
+        if isinstance(parent, (ast.VFunction, ast.Callback)):
+            return
+
         if hasattr(parent, 'symbol'):
             prefix = '%s: ' % (parent.symbol, )
             block = self._blocks.get(parent.symbol)
