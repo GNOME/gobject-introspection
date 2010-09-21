@@ -44,16 +44,20 @@ class IntrospectablePass(object):
 """Virtual function %r has no known invoker""" % (vfunc.name, ),
                     context=node)
 
-    def _parameter_warning(self, parent, param, text, *args):
+    def _parameter_warning(self, parent, param, text, position=None):
         if hasattr(parent, 'symbol'):
             prefix = '%s: ' % (parent.symbol, )
+            block = self._blocks.get(parent.symbol)
+            if block:
+                position = block.position
         else:
             prefix = ''
         if isinstance(param, ast.Parameter):
             context = "argument %s: " % (param.argname, )
         else:
             context = "return value: "
-        message.warn_node(parent, prefix + context + text, *args)
+        message.warn_node(parent, prefix + context + text,
+                          positions=position)
 
     def _introspectable_param_analysis(self, parent, node):
         is_return = isinstance(node, ast.Return)
