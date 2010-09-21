@@ -354,7 +354,7 @@ see --identifier-prefix and --symbol-prefix."""
 
     utils.break_on_debug_flag('tree')
 
-    final = IntrospectablePass(transformer)
+    final = IntrospectablePass(transformer, blocks)
     final.validate()
 
     if options.warn_fatal and logger.did_warn():

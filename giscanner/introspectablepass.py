@@ -22,9 +22,10 @@ from . import message
 
 class IntrospectablePass(object):
 
-    def __init__(self, transformer):
+    def __init__(self, transformer, blocks):
         self._transformer = transformer
         self._namespace = transformer.namespace
+        self._blocks = blocks
 
     # Public API
 

@@ -91,7 +91,7 @@ def check(args):
     main = MainTransformer(transformer, blocks)
     main.transform()
 
-    final = IntrospectablePass(transformer)
+    final = IntrospectablePass(transformer, blocks)
     final.validate()
 
     raw = output.getvalue()
