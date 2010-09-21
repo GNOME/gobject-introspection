@@ -244,7 +244,7 @@ usage is void (*_gtk_reserved1)(void);"""
         elif has_element_type:
             self._apply_annotations_element_type(parent, node, options)
 
-    def _resolve(self, type_str, orig_node=None):
+    def _resolve(self, type_str, type_node=None, node=None, parent=None):
         def grab_one(type_str, resolver, top_combiner, combiner):
             """Return a complete type, and the trailing string part after it.
             Use resolver() on each identifier, and combiner() on the parts of
@@ -274,8 +274,8 @@ usage is void (*_gtk_reserved1)(void);"""
                 "Too many parameters in type specification %r" % (type_str, ))
             return base
         def top_combiner(base, *rest):
-            if orig_node is not None and isinstance(orig_node, ast.Type):
-                base.is_const = orig_node.is_const
+            if type_node is not None and isinstance(type_node, ast.Type):
+                base.is_const = type_node.is_const
             return combiner(base, *rest)
 
         result, rest = grab_one(type_str, resolver, top_combiner, combiner)
@@ -284,14 +284,30 @@ usage is void (*_gtk_reserved1)(void);"""
                 type_str, ))
 
         if not result.resolved:
-            parent = orig_node
+            position = None
             if parent is not None and isinstance(parent, ast.Function):
                 text = parent.symbol
+                position = self._get_position(parent, node)
             else:
                 text = type_str
             message.warn_node(parent, "%s: Unknown type: %r" %
-                              (text, result.ctype))
+                              (text, result.ctype), positions=position)
         return result
+
+    def _get_position(self, func, param):
+        block = self._blocks.get(func.symbol)
+        if block:
+            if isinstance(param, ast.Parameter):
+                tag = block.tags.get(param.argname)
+            elif isinstance(param, ast.Return):
+                tag = block.tags.get('returns')
+            else:
+                tag = None
+
+            if tag.position:
+                return tag.position
+
+        return block.position
 
     def _apply_annotations_array(self, parent, node, options):
         array_opt = options.get(OPT_ARRAY)
@@ -302,7 +318,8 @@ usage is void (*_gtk_reserved1)(void);"""
 
         element_type = options.get(OPT_ELEMENT_TYPE)
         if element_type is not None:
-            element_type_node = self._resolve(element_type.one(), parent)
+            element_type_node = self._resolve(element_type.one(),
+                                              node.type, node, parent)
         elif isinstance(node.type, ast.Array):
             element_type_node = node.type.element_type
         else:
@@ -341,13 +358,17 @@ usage is void (*_gtk_reserved1)(void);"""
         element_type = element_type_opt.flat()
         if isinstance(node.type, ast.List):
             assert len(element_type) == 1
-            node.type.element_type = self._resolve(element_type[0], parent)
+            node.type.element_type = self._resolve(element_type[0],
+                                                   node.type, node, parent)
         elif isinstance(node.type, ast.Map):
             assert len(element_type) == 2
-            node.type.key_type = self._resolve(element_type[0], parent)
-            node.type.value_type = self._resolve(element_type[1], parent)
+            node.type.key_type = self._resolve(element_type[0],
+                                               node.type, node, parent)
+            node.type.value_type = self._resolve(element_type[1],
+                                                 node.type, node, parent)
         elif isinstance(node.type, ast.Array):
-            node.type.element_type = self._resolve(element_type[0], parent)
+            node.type.element_type = self._resolve(element_type[0],
+                                                   node.type, node, parent)
         else:
             message.warn_node(parent,
                 "Unknown container %r for element-type annotation" % (node.type, ))
@@ -438,7 +459,8 @@ usage is void (*_gtk_reserved1)(void);"""
 
         param_type = options.get(OPT_TYPE)
         if param_type:
-            node.type = self._resolve(param_type.one(), node.type)
+            node.type = self._resolve(param_type.one(),
+                                      node.type, node, parent)
 
         caller_allocates = False
         annotated_direction = None
@@ -661,7 +683,7 @@ usage is void (*_gtk_reserved1)(void);"""
             prop.transfer = self._get_transfer_default(parent, prop)
         type_tag = block.get(TAG_TYPE)
         if type_tag:
-            prop.type = self._resolve(type_tag.value, prop.type)
+            prop.type = self._resolve(type_tag.value, prop.type, prop, parent)
 
     def _apply_annotations_signal(self, parent, signal):
         prefix = self._get_annotation_name(parent)
@@ -681,7 +703,8 @@ usage is void (*_gtk_reserved1)(void);"""
                 options = getattr(tag, 'options', {})
                 param_type = options.get(OPT_TYPE)
                 if param_type:
-                    param.type = self._resolve(param_type.one(), param.type)
+                    param.type = self._resolve(param_type.one(), param.type,
+                                               param, parent)
             else:
                 tag = None
             self._apply_annotations_param(signal, param, tag)
