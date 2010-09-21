@@ -43,6 +43,12 @@ class Position(object):
         return cmp((self.filename, self.line, self.column),
                    (other.filename, other.line, other.column))
 
+    def __repr__(self):
+        return '<Position %s:%d:%d>' % (
+            os.path.basename(self.filename),
+            self.line or -1,
+            self.column or -1)
+
     def format(self, cwd):
         filename = self.filename
         if filename.startswith(cwd):
