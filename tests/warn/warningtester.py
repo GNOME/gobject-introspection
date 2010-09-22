@@ -16,6 +16,8 @@ from giscanner.scannermain import process_packages
 currentdir = os.path.dirname(os.path.abspath(sys.argv[0]))
 current_name = os.path.basename(currentdir)
 path = os.path.abspath(os.path.join(currentdir, '..', ''))
+top_builddir = os.environ['TOP_BUILDDIR']
+girpath = os.path.join(top_builddir, 'gir')
 
 class Options:
     def __init__(self):
@@ -70,6 +72,7 @@ def check(args):
                                output=output)
     logger.enable_warnings(True)
     transformer = Transformer(namespace)
+    transformer.set_include_paths([girpath])
     transformer.register_include(Include.from_string("GObject-2.0"))
 
     ss = SourceScanner()
