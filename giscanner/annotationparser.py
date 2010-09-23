@@ -84,6 +84,12 @@ OPT_SCOPE_ASYNC = 'async'
 OPT_SCOPE_CALL = 'call'
 OPT_SCOPE_NOTIFIED = 'notified'
 
+# Transfer options
+OPT_TRANSFER_NONE = 'none'
+OPT_TRANSFER_CONTAINER = 'container'
+OPT_TRANSFER_FULL = 'full'
+
+
 class DocBlock(object):
 
     def __init__(self, name):
@@ -124,7 +130,22 @@ class DocTag(object):
             if not option in ALL_OPTIONS:
                 message.warn('invalid option: %s' % (option, ),
                              positions=self.position)
-
+            if option == OPT_TRANSFER:
+                value = self.options[option]
+                if value is None:
+                    message.warn('transfer needs a value',
+                                 self.position)
+                    continue
+                if value.length() != 1:
+                    message.warn('transfer needs one value, not %d' % (
+                        value.length()), self.position)
+                    continue
+                valuestr = value.one()
+                if valuestr not in [OPT_TRANSFER_NONE,
+                                    OPT_TRANSFER_CONTAINER,
+                                    OPT_TRANSFER_FULL]:
+                    message.warn('invalid transfer value: %r' % (
+                        valuestr, ), self.position)
 
 class DocOptions(object):
     def __init__(self):
@@ -177,6 +198,9 @@ class DocOption(object):
 
     def __repr__(self):
         return '<DocOption %r>' % (self._array, )
+
+    def length(self):
+        return len(self._array)
 
     def one(self):
         assert len(self._array) == 1

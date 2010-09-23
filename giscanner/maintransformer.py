@@ -496,7 +496,7 @@ usage is void (*_gtk_reserved1)(void);"""
             node.transfer = self._get_transfer_default(parent, node)
 
         transfer_tag = options.get(OPT_TRANSFER)
-        if transfer_tag:
+        if transfer_tag and transfer_tag.length() == 1:
             node.transfer = transfer_tag.one()
 
         self._adjust_container_type(parent, node, options)

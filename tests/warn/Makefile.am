@@ -5,6 +5,7 @@ TESTS = \
 	callback-missing-scope.h \
 	return-gobject.h \
 	invalid-option.h \
+	invalid-transfer.h \
 	unknown-parameter.h \
 	unresolved-element-type.h \
 	unresolved-type.h
