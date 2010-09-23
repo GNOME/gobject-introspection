@@ -558,18 +558,9 @@ usage is void (*_gtk_reserved1)(void);"""
             options = {}
         if isinstance(parent, (ast.Function, ast.VFunction)):
             scope = options.get(OPT_SCOPE)
-            if scope:
-                scope = scope.one()
-                if scope not in [ast.PARAM_SCOPE_CALL,
-                                 ast.PARAM_SCOPE_ASYNC,
-                                 ast.PARAM_SCOPE_NOTIFIED]:
-                    message.warn(
-                        "Invalid scope %r for parameter %r" % (scope,
-                        param.argname),
-                        tag.position)
-                else:
-                    param.scope = scope
-                    param.transfer = ast.PARAM_TRANSFER_NONE
+            if scope and scope.length() == 1:
+                param.scope = scope.one()
+                param.transfer = ast.PARAM_TRANSFER_NONE
 
             destroy = options.get(OPT_DESTROY)
             if destroy:

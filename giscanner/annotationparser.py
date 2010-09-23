@@ -80,6 +80,7 @@ OPT_ARRAY_FIXED_SIZE = 'fixed-size'
 OPT_ARRAY_LENGTH = 'length'
 OPT_ARRAY_ZERO_TERMINATED = 'zero-terminated'
 
+# Scope options
 OPT_SCOPE_ASYNC = 'async'
 OPT_SCOPE_CALL = 'call'
 OPT_SCOPE_NOTIFIED = 'notified'
@@ -125,27 +126,50 @@ class DocTag(object):
     def __repr__(self):
         return '<DocTag %r %r>' % (self.name, self.options)
 
+    def _validate_option(self, name, value, required=False, n_params=None, choices=None):
+        if required and value is None:
+            message.warn('%s annotation needs a value' % (name, ), self.position)
+            return
+
+        if n_params is not None and value.length() != n_params:
+            if n_params == 0:
+                s = 'no value'
+            elif n_params == 1:
+                s = 'one value'
+            else:
+                s = '%d values' % (n_params, )
+            message.warn('%s annotation needs %s, not %d' % (
+                name, s, value.length()), self.position)
+            return
+
+        if choices is not None:
+            valuestr = value.one()
+            if valuestr not in choices:
+                message.warn('invalid %s annotation value: %r' % (
+                    name, valuestr, ), self.position)
+                return
+
     def validate(self):
         for option in self.options:
             if not option in ALL_OPTIONS:
                 message.warn('invalid annotation option: %s' % (option, ),
                              positions=self.position)
+            value = self.options[option]
             if option == OPT_TRANSFER:
-                value = self.options[option]
-                if value is None:
-                    message.warn('transfer needs a value',
-                                 self.position)
-                    continue
-                if value.length() != 1:
-                    message.warn('transfer needs one value, not %d' % (
-                        value.length()), self.position)
-                    continue
-                valuestr = value.one()
-                if valuestr not in [OPT_TRANSFER_NONE,
-                                    OPT_TRANSFER_CONTAINER,
-                                    OPT_TRANSFER_FULL]:
-                    message.warn('invalid transfer value: %r' % (
-                        valuestr, ), self.position)
+                self._validate_option(
+                    'transfer', value, required=True,
+                    n_params=1,
+                    choices=[OPT_TRANSFER_FULL,
+                             OPT_TRANSFER_CONTAINER,
+                             OPT_TRANSFER_NONE])
+
+            elif option == OPT_SCOPE:
+                self._validate_option(
+                    'scope', value, required=True,
+                    n_params=1,
+                    choices=[OPT_SCOPE_ASYNC,
+                             OPT_SCOPE_CALL,
+                             OPT_SCOPE_NOTIFIED])
 
 class DocOptions(object):
     def __init__(self):
