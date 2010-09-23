@@ -185,7 +185,7 @@ AC_CHECK_SIZEOF(short)
 AC_CHECK_SIZEOF(int)
 AC_CHECK_SIZEOF(long)
 
-PKG_CHECK_MODULES(GIREPO, [glib-2.0 gobject-2.0 gmodule-2.0 gio-2.0])
+PKG_CHECK_MODULES(GIREPO, [glib-2.0 >= 2.24.0 gobject-2.0 gmodule-2.0 gio-2.0])
 
 # if we ever remove manual check for ffi and require .pc file, then
 # just put libffi in the PKG_CHECK_MODULES(GIREPO) deps
