@@ -28,7 +28,7 @@ from .annotationparser import (TAG_VFUNC, TAG_SINCE, TAG_DEPRECATED, TAG_RETURNS
 from .annotationparser import (OPT_ALLOW_NONE, OPT_ARRAY, OPT_ATTRIBUTE,
                                OPT_ELEMENT_TYPE, OPT_IN, OPT_INOUT,
                                OPT_INOUT_ALT, OPT_OUT, OPT_SCOPE,
-                               OPT_TYPE, OPT_CLOSURE, OPT_DESTROY, OPT_SKIP,
+                               OPT_TYPE, OPT_CLOSURE, OPT_DESTROY, OPT_TRANSFER, OPT_SKIP,
                                OPT_FOREIGN, OPT_ARRAY_FIXED_SIZE,
                                OPT_ARRAY_LENGTH, OPT_ARRAY_ZERO_TERMINATED)
 from .annotationparser import AnnotationParser
