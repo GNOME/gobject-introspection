@@ -609,8 +609,8 @@ it says it's pointer but it's actually a string.</doc>
     </record>
     <function name="attribute_func" c:identifier="annotation_attribute_func">
       <return-value transfer-ownership="none">
-        <attribute name="yet.another.annotation" value="another_value"/>
         <attribute name="some.other.annotation" value="value2"/>
+        <attribute name="yet.another.annotation" value="another_value"/>
         <doc xml:whitespace="preserve">The return value.</doc>
         <type name="gint" c:type="gint"/>
       </return-value>
@@ -620,8 +620,8 @@ it says it's pointer but it's actually a string.</doc>
           <type name="Object" c:type="AnnotationObject*"/>
         </parameter>
         <parameter name="data" transfer-ownership="none">
-          <attribute name="another.annotation" value="blahvalue"/>
           <attribute name="some.annotation" value="value"/>
+          <attribute name="another.annotation" value="blahvalue"/>
           <doc xml:whitespace="preserve">Some data.</doc>
           <type name="utf8" c:type="gchar*"/>
         </parameter>

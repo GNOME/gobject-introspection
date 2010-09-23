@@ -25,8 +25,8 @@ from .annotationparser import (TAG_VFUNC, TAG_SINCE, TAG_DEPRECATED, TAG_RETURNS
                                TAG_ATTRIBUTES, TAG_RENAME_TO, TAG_TYPE, TAG_TRANSFER,
                                TAG_UNREF_FUNC, TAG_REF_FUNC, TAG_SET_VALUE_FUNC,
                                TAG_GET_VALUE_FUNC)
-from .annotationparser import (OPT_ALLOW_NONE,
-                               OPT_ARRAY, OPT_ELEMENT_TYPE, OPT_IN, OPT_INOUT,
+from .annotationparser import (OPT_ALLOW_NONE, OPT_ARRAY, OPT_ATTRIBUTE,
+                               OPT_ELEMENT_TYPE, OPT_IN, OPT_INOUT,
                                OPT_INOUT_ALT, OPT_OUT, OPT_SCOPE,
                                OPT_TYPE, OPT_CLOSURE, OPT_DESTROY, OPT_SKIP,
                                OPT_FOREIGN, OPT_ARRAY_FIXED_SIZE,
@@ -114,6 +114,8 @@ usage is void (*_gtk_reserved1)(void);"""
                                  ast.Record, ast.Union)):
             return True
         for field in node.fields:
+            if field is None:
+                continue
             if (field.name.startswith('_')
                 and field.anonymous_node is not None
                 and isinstance(field.anonymous_node, ast.Callback)):
@@ -506,11 +508,9 @@ usage is void (*_gtk_reserved1)(void);"""
         if tag is not None and tag.comment is not None:
             node.doc = tag.comment
 
-        for key in options:
-            if '.' in key:
-                value = options.get(key)
-                if value:
-                    node.attributes.append((key, value.one()))
+        if options:
+            for attribute in options.getall(OPT_ATTRIBUTE):
+                node.attributes.append(attribute.flat())
 
     def _apply_annotations_annotated(self, node, block):
         if block is None:

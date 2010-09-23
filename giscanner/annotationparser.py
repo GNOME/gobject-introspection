@@ -22,7 +22,7 @@
 
 import re
 
-from .message import Position
+from . import message
 from .odict import odict
 
 # All gtk-doc comments needs to start with this:
@@ -45,7 +45,11 @@ TAG_GET_VALUE_FUNC = 'get value func'
 # Options - annotations for parameters and return values
 OPT_ALLOW_NONE = 'allow-none'
 OPT_ARRAY = 'array'
+OPT_ATTRIBUTE = 'attribute'
+OPT_CLOSURE = 'closure'
+OPT_DESTROY = 'destroy'
 OPT_ELEMENT_TYPE = 'element-type'
+OPT_FOREIGN = 'foreign'
 OPT_IN = 'in'
 OPT_INOUT = 'inout'
 OPT_INOUT_ALT = 'in-out'
@@ -53,10 +57,24 @@ OPT_OUT = 'out'
 OPT_SCOPE = 'scope'
 OPT_TRANSFER = 'transfer'
 OPT_TYPE = 'type'
-OPT_CLOSURE = 'closure'
-OPT_DESTROY = 'destroy'
 OPT_SKIP = 'skip'
-OPT_FOREIGN = 'foreign'
+
+ALL_OPTIONS = [
+    OPT_ALLOW_NONE,
+    OPT_ARRAY,
+    OPT_ATTRIBUTE,
+    OPT_CLOSURE,
+    OPT_DESTROY,
+    OPT_ELEMENT_TYPE,
+    OPT_FOREIGN,
+    OPT_IN,
+    OPT_INOUT,
+    OPT_INOUT_ALT,
+    OPT_OUT,
+    OPT_SCOPE,
+    OPT_TRANSFER,
+    OPT_TYPE,
+    OPT_SKIP]
 
 # Array options - array specific annotations
 OPT_ARRAY_FIXED_SIZE = 'fixed-size'
@@ -71,11 +89,12 @@ class DocBlock(object):
 
     def __init__(self, name):
         self.name = name
-        self.options = {}
+        self.options = DocOptions()
         self.value = None
         self.tags = odict()
         self.comment = None
         self.params = []
+        self.position = None
 
     def __repr__(self):
         return '<DocBlock %r %r>' % (self.name, self.options)
@@ -83,18 +102,61 @@ class DocBlock(object):
     def get(self, name):
         return self.tags.get(name)
 
+    def validate(self):
+        for tag in self.tags.values():
+            tag.validate()
+
 
 class DocTag(object):
 
     def __init__(self, block, name):
         self.block = block
         self.name = name
-        self.options = {}
+        self.options = DocOptions()
         self.comment = None
         self.value = ''
+        self.position = None
 
     def __repr__(self):
         return '<DocTag %r %r>' % (self.name, self.options)
+
+    def validate(self):
+        for option in self.options:
+            if not option in ALL_OPTIONS:
+                message.warn('invalid option: %s' % (option, ),
+                             positions=self.position)
+
+
+class DocOptions(object):
+    def __init__(self):
+        self.values = []
+
+    def __getitem__(self, item):
+        for key, value in self.values:
+            if key == item:
+                return value
+        raise KeyError
+
+    def __iter__(self):
+        return (k for k, v in self.values)
+
+    def add(self, name, value):
+        self.values.append((name, value))
+
+    def get(self, item, default=None):
+        for key, value in self.values:
+            if key == item:
+                return value
+        return default
+
+    def getall(self, item):
+        for key, value in self.values:
+            if key == item:
+                yield value
+
+    def iteritems(self):
+        return iter(self.values)
+
 
 class DocOption(object):
 
@@ -176,7 +238,7 @@ class AnnotationParser(object):
         if cpos:
             block_name = block_name[:cpos]
         block = DocBlock(block_name)
-        block.position = Position(filename, lineno)
+        block.position = message.Position(filename, lineno)
         if cpos:
             block.options = self.parse_options(block, block_header[cpos+2:])
         comment_lines = []
@@ -271,6 +333,7 @@ class AnnotationParser(object):
                 comment_lines.append(line)
             lineno += 1
         block.comment = '\n'.join(comment_lines)
+        block.validate()
         self._blocks[block.name] = block
 
     @classmethod
@@ -278,7 +341,7 @@ class AnnotationParser(object):
         # (foo)
         # (bar opt1 opt2...)
         opened = -1
-        options = {}
+        options = DocOptions()
         last = None
         for i, c in enumerate(value):
             if c == '(' and opened == -1:
@@ -295,7 +358,7 @@ class AnnotationParser(object):
                     raise AssertionError
                 if option is not None:
                     option = DocOption(tag, option)
-                options[name] = option
+                options.add(name, option)
                 last = i + 2
                 opened = -1
 

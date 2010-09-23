@@ -122,12 +122,12 @@ annotation_object_class_init (AnnotationObjectClass *klass)
   /**
    * AnnotationObject::attribute-signal:
    * @annotation: the annotation object
-   * @arg1: (some.annotation.foo1 val1): a value
-   * @arg2: (some.annotation.foo2 val2): another value
+   * @arg1: (attribute some.annotation.foo1 val1): a value
+   * @arg2: (attribute some.annotation.foo2 val2): another value
    *
    * This signal tests a signal with attributes.
    *
-   * Returns: (some.annotation.foo3 val3): the return value
+   * Returns: (attribute some.annotation.foo3 val3): the return value
    */
   annotation_object_signals[ATTRIBUTE_SIGNAL] =
     g_signal_new ("attribute-signal",
@@ -734,9 +734,9 @@ annotation_ptr_array (GPtrArray *array)
 /**
  * annotation_attribute_func:
  * @object: A #AnnotationObject.
- * @data: (some.annotation value) (another.annotation blahvalue): Some data.
+ * @data: (attribute some.annotation value) (attribute another.annotation blahvalue): Some data.
  *
- * Returns: (some.other.annotation value2) (yet.another.annotation another_value): The return value.
+ * Returns: (attribute some.other.annotation value2) (attribute yet.another.annotation another_value): The return value.
  */
 gint
 annotation_attribute_func (AnnotationObject *object,
