@@ -128,7 +128,7 @@ class DocTag(object):
     def validate(self):
         for option in self.options:
             if not option in ALL_OPTIONS:
-                message.warn('invalid option: %s' % (option, ),
+                message.warn('invalid annotation option: %s' % (option, ),
                              positions=self.position)
             if option == OPT_TRANSFER:
                 value = self.options[option]
