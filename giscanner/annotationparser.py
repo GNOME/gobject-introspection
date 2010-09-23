@@ -278,8 +278,15 @@ class AnnotationParser(object):
             first_colonspace_index = line.find(': ')
             is_parameter = line.startswith('@')
             is_return_value = self.RETURNS_RE.search(line)
+            parse_options = True
             if ((is_parameter or is_return_value)
                 and first_colonspace_index > 0):
+                # Skip lines which has non-whitespace before first (
+                first_paren = line[first_colonspace_index+1:].find('(')
+                if (first_paren != -1 and
+                    line[first_colonspace_index+1:first_paren].strip()):
+                    parse_options = False
+
                 if is_parameter:
                     argname = line[1:first_colonspace_index]
                 else:
@@ -291,7 +298,11 @@ class AnnotationParser(object):
                 if second_colon_index > first_colonspace_index:
                     value_line = \
                       line[first_colonspace_index+2:second_colon_index]
-                    if self.OPTION_RE.search(value_line):
+                    if ')' in value_line:
+                        after_last_paren = value_line[value_line.rfind(')'):]
+                        if not after_last_paren.rstrip().endswith(')'):
+                            parse_options = False
+                    if parse_options and self.OPTION_RE.search(value_line):
                         # The OPTION_RE is a little bit heuristic.  If
                         # we found two colons, we scan inside for something
                         # that looks like (foo).
