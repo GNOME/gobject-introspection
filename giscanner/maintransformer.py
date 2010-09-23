@@ -22,7 +22,7 @@ import re
 from . import ast
 from . import message
 from .annotationparser import (TAG_VFUNC, TAG_SINCE, TAG_DEPRECATED, TAG_RETURNS,
-                               TAG_ATTRIBUTES, TAG_RENAME_TO, TAG_TYPE, TAG_TRANSFER,
+                               TAG_ATTRIBUTES, TAG_RENAME_TO, TAG_TYPE,
                                TAG_UNREF_FUNC, TAG_REF_FUNC, TAG_SET_VALUE_FUNC,
                                TAG_GET_VALUE_FUNC)
 from .annotationparser import (OPT_ALLOW_NONE, OPT_ARRAY, OPT_ATTRIBUTE,
@@ -495,7 +495,7 @@ usage is void (*_gtk_reserved1)(void);"""
             # Also reset the transfer default if we're toggling direction
             node.transfer = self._get_transfer_default(parent, node)
 
-        transfer_tag = options.get(TAG_TRANSFER)
+        transfer_tag = options.get(OPT_TRANSFER)
         if transfer_tag:
             node.transfer = transfer_tag.one()
 
@@ -676,7 +676,7 @@ usage is void (*_gtk_reserved1)(void);"""
         self._apply_annotations_annotated(prop, block)
         if not block:
             return
-        transfer_tag = block.get(TAG_TRANSFER)
+        transfer_tag = block.get(OPT_TRANSFER)
         if transfer_tag is not None:
             prop.transfer = transfer_tag.value
         else:
