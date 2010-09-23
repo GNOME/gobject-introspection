@@ -108,8 +108,12 @@ def check(args):
         warnings.remove('')
     if len(expected_warnings) != len(warnings):
         raise SystemExit(
-            "ERROR: expected %d warnings, but got %d: %r\n" % (
-            len(expected_warnings), len(warnings), warnings))
+            "ERROR in %r: expected %d warnings, but got %d:\n"
+            "----\nexpected:\n%s\n----\ngot:\n%s\n----" % (
+            os.path.basename(filename),
+            len(expected_warnings), len(warnings),
+            '\n'.join([w[1] for w in expected_warnings]),
+            '\n'.join([w.split(':', 2)[2][1:] for w in warnings])))
     for warning, (sort_key, expected) in zip(warnings, expected_warnings):
         actual = warning.split(":", 1)[1]
         if _diff(expected, actual, filename):
