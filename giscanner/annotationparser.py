@@ -136,7 +136,11 @@ class DocBlock(object):
             for tag in tags:
                 lines.append(tag.to_gtk_doc_tag())
 
-        comment = '/**\n'
+        comment = ''
+        #comment += '# %d \"%s\"\n' % (
+        #    self.position.line,
+        #    self.position.filename)
+        comment += '/**\n'
         for line in lines:
             line = line.rstrip()
             if line:
@@ -323,7 +327,7 @@ class DocTag(object):
                                       n_params=1)
             else:
                 message.warn('invalid annotation option: %s' % (option, ),
-                             positions=self.position)
+                             self.position)
 
 
 class DocOptions(object):
@@ -540,7 +544,7 @@ class AnnotationParser(object):
                     tag_name = tag_name.lower()
                     tag = DocTag(block, tag_name)
                     tag.value = line[first_colonspace_index+2:]
-                    tag.filename = block.position.offset(lineno)
+                    tag.position = block.position.offset(lineno)
                     block.tags[tag_name] = tag
                 else:
                     comment_lines.append(line)
