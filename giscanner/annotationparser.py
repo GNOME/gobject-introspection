@@ -138,7 +138,11 @@ class DocBlock(object):
 
         comment = '/**\n'
         for line in lines:
-            comment += ' * %s\n' % (line, )
+            line = line.rstrip()
+            if line:
+                comment += ' * %s\n' % (line, )
+            else:
+                comment += ' *\n'
         comment += ' */\n'
         return comment
 
@@ -200,7 +204,7 @@ class DocTag(object):
             if value:
                 if type(value) != str:
                     value = ' '.join((serialize_one(k, v, '%s=%s', '%s')
-                                      for k,v in value.all().iteritems()))
+                                      for k, v in value.all().iteritems()))
                 return fmt % (option, value)
             else:
                 return fmt2 % (option, )

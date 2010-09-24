@@ -56,23 +56,16 @@ def annotation_main(args):
     if options.extract:
         ap = AnnotationParser()
         blocks = ap.parse(ss.get_comments())
+        print '/' + ('*' * 60) + '/'
+        print '/* THIS FILE IS GENERATED DO NOT EDIT */'
+        print '/' + ('*' * 60) + '/'
+        print
         for block in blocks.values():
             print block.to_gtk_doc()
             print
-    elif options.validate:
-        transformer = create_transformer(namespace, options)
-        transformer.parse(ss.get_symbols())
-
-        shlibs = create_binary(transformer, options, args)
-
-        ap = AnnotationParser()
-        blocks = ap.parse(ss.get_comments())
-
-        main = MainTransformer(transformer, blocks)
-        main.transform()
-
-        final = IntrospectablePass(transformer)
-        final.validate()
-
+        print
+        print '/' + ('*' * 60) + '/'
+        print '/* THIS FILE IS GENERATED DO NOT EDIT */'
+        print '/' + ('*' * 60) + '/'
 
     return 0

@@ -201,6 +201,9 @@ class GIRParser(object):
         deprecated = node.attrib.get('deprecated')
         if deprecated:
             obj.deprecated = deprecated
+        deprecated_version = node.attrib.get('deprecated-version')
+        if deprecated_version:
+            obj.deprecated_version = deprecated_version
 
     def _parse_object_interface(self, node):
         parent = node.attrib.get('parent')
