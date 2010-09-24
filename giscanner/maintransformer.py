@@ -198,7 +198,7 @@ usage is void (*_gtk_reserved1)(void);"""
             elif isinstance(node, ast.Registered) and node.gtype_name is not None:
                 return node.gtype_name
             return node.c_name
-        assert False, "Unhandled node %r" % (node, )
+        raise AssertionError("Unhandled node %r" % (node, ))
 
     def _get_block(self, node):
         return self._blocks.get(self._get_annotation_name(node))
@@ -435,7 +435,7 @@ usage is void (*_gtk_reserved1)(void);"""
             elif isinstance(target, (ast.Record, ast.Union)):
                 return ast.PARAM_TRANSFER_FULL
             else:
-                assert False, "Invalid constructor"
+                raise AssertionError("Invalid constructor")
         elif isinstance(target, (ast.Class, ast.Record, ast.Union)):
             # Explicitly no default for these
             return None
@@ -483,9 +483,6 @@ usage is void (*_gtk_reserved1)(void);"""
                 caller_allocates = True
             elif subtype == 'callee-allocates':
                 caller_allocates = False
-            else:
-                message.fatal("out allocation for %s is invalid (%r)" % (
-                    node, subtype))
         elif OPT_IN in options:
             annotated_direction = ast.PARAM_DIRECTION_IN
 
