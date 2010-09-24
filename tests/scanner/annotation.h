@@ -23,7 +23,7 @@ typedef GList* (*AnnotationListCallback) (GList *in);
 
 /**
  * AnnotationNotifyFunc:
- * @data: (closure): The user data
+ * @data: (closure data): The user data
  *
  * This is a callback with a 'closure' argument that is not named
  * 'user_data' and hence has to be annotated.

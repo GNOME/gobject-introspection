@@ -439,14 +439,14 @@
  * @settings:
  * @key:
  *
- * Return value: (array zero-terminated-1) (transfer full):
+ * Return value: (array zero-terminated=1) (transfer full):
  */
 
 /**
  * g_settings_set_strv:
  * @settings:
  * @key:
- * @value: (array zero-terminated-1):
+ * @value: (array zero-terminated=1):
  *
  */
 

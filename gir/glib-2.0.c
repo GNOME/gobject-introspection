@@ -89,12 +89,12 @@
 
 /**
  * GSourceFunc:
- * @data: (closure):
+ * @data: (closure data):
  */
 
 /**
  * GIOFunc:
- * @data: (closure):
+ * @data: (closure data):
  */
 
 /**

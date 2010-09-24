@@ -290,7 +290,7 @@ annotation_object_calleeowns (AnnotationObject *object, GObject **toown)
  *
  * This is a test for out arguments, one transferred, other not
  *
- * @toown1: (out) (transfer): a #GObject
+ * @toown1: (out) (transfer full): a #GObject
  * @toown2: (out) (transfer none): a #GObject
  * Return value: an int
  */
