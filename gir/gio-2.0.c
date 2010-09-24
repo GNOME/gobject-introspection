@@ -370,7 +370,7 @@
  *
  * Gets the user data from a #GAsyncResult.
  *
- * Returns: the user data for @res.
+ * Returns: (transfer full): the user data for @res.
  */
 
 
@@ -669,7 +669,7 @@
  *
  * Guesses the icon of a Unix mount point.
  *
- * Returns: a #GIcon
+ * Returns: (transfer full): a #GIcon
  */
 
 
@@ -789,7 +789,7 @@
  * is set, it will be filled with a unix timestamp for checking
  * if the mounts have changed since with g_unix_mounts_changed_since().
  *
- * Returns: a #GUnixMount.
+ * Returns: (transfer full): a #GUnixMount.
  */
 
 
@@ -842,7 +842,7 @@
  * themselves.
  * kinds of identifiers. Use g_strfreev() to free.
  *
- * Returns: a %NULL-terminated array of strings containing
+ * Returns: (transfer full): a %NULL-terminated array of strings containing
  */
 
 
@@ -1115,7 +1115,7 @@
  * stream is blocked, the stream will set the pending flag internally, and
  * any other operations on the stream will fail with %G_IO_ERROR_PENDING.
  *
- * Returns: a #GFileInfo, or %NULL on error.
+ * Returns: (transfer full): a #GFileInfo, or %NULL on error.
  */
 
 
@@ -1230,7 +1230,7 @@
  * returned array of proxies.
  * g_strfreev().
  *
- * Returns: A NULL-terminated array of proxy URIs. Must be freed with
+ * Returns: (transfer full) (element-type utf8): A NULL-terminated array of proxy URIs. Must be freed with
  * Since: 2.26
  */
 
@@ -1331,7 +1331,7 @@
  *
  * Gets the #GFile associated with the given @icon.
  *
- * Returns: a #GFile, or %NULL.
+ * Returns: (transfer none): a #GFile, or %NULL.
  */
 
 
@@ -1513,7 +1513,7 @@
  * If a local address is specified with g_socket_client_set_local_address() the
  * socket will be bound to this address before connecting.
  *
- * Returns: a #GSocketConnection on success, %NULL on error.
+ * Returns: (transfer full): a #GSocketConnection on success, %NULL on error.
  * Since: 2.22
  */
 
@@ -1560,7 +1560,7 @@
  *
  * Finishes an asynchronous info query operation.
  *
- * Returns: #GFileInfo.
+ * Returns: (transfer full): #GFileInfo.
  */
 
 
@@ -1846,7 +1846,7 @@
  * linkend="gdbus-unix-fd-client"/> for an example of how to use this
  * low-level API to send and receive UNIX file descriptors.
  *
- * Returns: A #GDBusMessage. Do not free, it is owned by @invocation.
+ * Returns: (transfer none): #GDBusMessage. Do not free, it is owned by @invocation.
  * Since: 2.26
  */
 
@@ -1881,7 +1881,7 @@
  * marked as having had a timeout, and so the next #GSocket I/O method
  * you call will then fail with a %G_IO_ERROR_TIMED_OUT.
  *
- * Returns: a newly allocated %GSource, free with g_source_unref().
+ * Returns: (transfer full): a newly allocated %GSource, free with g_source_unref().
  * Since: 2.22
  */
 
@@ -2304,7 +2304,7 @@
  * Gives back the icon from @emblem.
  * and should not be modified or freed.
  *
- * Returns: a #GIcon. The returned object belongs to the emblem
+ * Returns: (transfer full): a #GIcon. The returned object belongs to the emblem
  * Since: 2.18
  */
 
@@ -2810,7 +2810,7 @@
  *
  * Creates a #GSocketConnection subclass of the right type for
  *
- * Returns: a #GSocketConnection
+ * Returns: (transfer full): a #GSocketConnection
  * Since: 2.22
  */
 
@@ -3032,7 +3032,7 @@
  * Gets the top cancellable from the stack.
  * if the stack is empty.
  *
- * Returns: a #GCancellable from the top of the stack, or %NULL
+ * Returns: (transfer none): a #GCancellable from the top of the stack, or %NULL
  */
 
 
@@ -3290,7 +3290,7 @@
  *
  * Duplicates a file info structure.
  *
- * Returns: a duplicate #GFileInfo of @other.
+ * Returns: (transfer full): a duplicate #GFileInfo of @other.
  */
 
 
@@ -3435,7 +3435,7 @@
  *
  * Creates a new #GSocketConnectable for connecting to the given
  *
- * Returns: the new #GNetworkAddress
+ * Returns: (transfer full): the new #GNetworkAddress
  * Since: 2.22
  */
 
@@ -3515,7 +3515,7 @@
  *
  * Creates a new icon for a file.
  *
- * Returns: a #GIcon for the given @file, or %NULL on error.
+ * Returns: (transfer full): a #GIcon for the given @file, or %NULL on error.
  */
 
 
@@ -3618,7 +3618,7 @@
  * triggering the cancellable object from another thread. If the operation
  * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned.
  *
- * Returns: a #GSocketConnection on success, %NULL on error.
+ * Returns: (transfer full): a #GSocketConnection on success, %NULL on error.
  * Since: 2.22
  */
 
@@ -3744,7 +3744,7 @@
  * Finalizes the asynchronous query started
  * by g_file_io_stream_query_info_async().
  *
- * Returns: A #GFileInfo for the finished query.
+ * Returns: (transfer full): A #GFileInfo for the finished query.
  * Since: 2.22
  */
 
@@ -3759,6 +3759,7 @@
  * This function is intended for easily hashing a #GFile to
  * add to a #GHashTable or similar data structure.
  *
+ * Virtual: hash
  * Returns: 0 if @file is not a valid #GFile, otherwise an
  */
 
@@ -3876,7 +3877,7 @@
  * g_list_free() and unref the infos with g_object_unref() when you're
  * done with them.
  *
- * Returns: (transfer full) (element-type FileInfo): a #GList of #GFileInfo<!---->s. You must free the list with
+ * Returns: (transfer full) (element-type Gio.FileInfo): a #GList of #GFileInfo<!---->s. You must free the list with
  */
 
 
@@ -4549,7 +4550,7 @@
  * %NULL on error.
  * Free the returned object with g_object_unref().
  *
- * Returns: a #GFileOutputStream for the newly created file, or
+ * Returns: (transfer full): a #GFileOutputStream for the newly created file, or
  */
 
 
@@ -4743,7 +4744,7 @@
  * rather than just opening for reading or writing.
  * Free the returned object with g_object_unref().
  *
- * Returns: a #GFileIOStream for the newly created file, or %NULL on error.
+ * Returns: (transfer full): a #GFileIOStream for the newly created file, or %NULL on error.
  * Since: 2.22
  */
 
@@ -5199,7 +5200,6 @@
  * @host_and_port: the hostname and optionally a port
  * @default_port: the default port if not in @host_and_port
  * @error: a pointer to a #GError, or %NULL
- * @host_and_port may be in any of a number of recognised formats: an IPv6
  *
  * Creates a new #GSocketConnectable for connecting to the given
  * parsing @host_and_port fails.
@@ -5214,7 +5214,7 @@
  * (allowing them to give the hostname, and a port overide if necessary)
  * and @default_port is expected to be provided by the application.
  *
- * Returns: the new #GNetworkAddress, or %NULL on error
+ * Returns: (transfer full): the new #GNetworkAddress, or %NULL on error
  * Since: 2.22
  */
 
@@ -5251,7 +5251,6 @@
  * @backend: a #GSettingsBackend implementation
  * @path: the path containing the changes
  * @origin_tag: the origin tag
- * @path must be a valid path (ie: starting and ending with a slash and
  *
  * Signals that all keys below a given path may have possibly changed.
  * Backend implementations should call this if an entire path of keys
@@ -5293,7 +5292,7 @@
  * triggering the cancellable object from another thread. If the operation
  * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned.
  *
- * Returns: a #GSocket on success, %NULL on error.
+ * Returns: (transfer full): a #GSocket on success, %NULL on error.
  * Since: 2.22
  */
 
@@ -5359,7 +5358,7 @@
  *
  * Gets the default #GVfs for the system.
  *
- * Returns: a #GVfs.
+ * Returns: (transfer none): a #GVfs.
  */
 
 
@@ -5389,7 +5388,7 @@
  * with g_file_mount_mountable().
  * Free the returned object with g_object_unref().
  *
- * Returns: a #GFile or %NULL on error.
+ * Returns: (transfer full): a #GFile or %NULL on error.
  */
 
 
@@ -5836,7 +5835,7 @@
  * If there is no implementation for this kind of control message, %NULL
  * will be returned.
  *
- * Returns: the deserialized message or %NULL
+ * Returns: (transfer full): the deserialized message or %NULL
  * Since: 2.22
  */
 
@@ -5916,7 +5915,7 @@
  * The returned object should be unreffed with
  * g_object_unref() when no longer needed.
  *
- * Returns: a #GFile.
+ * Returns: (transfer full): a #GFile.
  */
 
 
@@ -6159,7 +6158,7 @@
  *
  * Finishes an async connect operation. See g_socket_client_connect_to_service_async()
  *
- * Returns: a #GSocketConnection on success, %NULL on error.
+ * Returns: (transfer full): a #GSocketConnection on success, %NULL on error.
  * Since: 2.22
  */
 
@@ -6431,7 +6430,7 @@
  * connectable) %NULL is returned and @error (if non-%NULL) is set
  * accordingly.
  *
- * Returns: a #GSocketConnection on success, %NULL on error.
+ * Returns: (transfer full): a #GSocketConnection on success, %NULL on error.
  * Since: 2.26
  */
 
@@ -6476,7 +6475,7 @@
  * see g_mount_guess_content_type() for the asynchronous version.
  * Caller should free this array with g_strfreev() when done with it.
  *
- * Returns: a %NULL-terminated array of content types or %NULL on error.
+ * Returns: (transfer full) (element-type utf8): a %NULL-terminated array of content types or %NULL on error.
  * Since: 2.18
  */
 
@@ -6762,7 +6761,7 @@
  * The returned array belongs to GIO and must
  * not be freed or modified.
  *
- * Returns: a %NULL-terminated array of strings.
+ * Returns: (transfer none): a %NULL-terminated array of strings.
  */
 
 
@@ -6899,7 +6898,8 @@
  * Other errors are possible too, and depend on what kind of filesystem the file is on.
  * Free the returned object with g_object_unref().
  *
- * Returns: #GFileInputStream or %NULL on error.
+ * Virtual: read_fn
+ * Returns: (transfer full): #GFileInputStream or %NULL on error.
  */
 
 
@@ -6960,7 +6960,7 @@
  * g_file_replace_readwrite_async().
  * Free the returned object with g_object_unref().
  *
- * Returns: a #GFileIOStream, or %NULL on error.
+ * Returns: (transfer full): a #GFileIOStream, or %NULL on error.
  * Since: 2.22
  */
 
@@ -7023,7 +7023,7 @@
  * extension points of the module. The array must be suitable for
  * freeing with g_strfreev().
  *
- * Returns: A %NULL-terminated array of strings, listing the supported
+ * Returns: (transfer full): A %NULL-terminated array of strings, listing the supported
  * Since: 2.24
  */
 
@@ -7127,7 +7127,7 @@
  *
  * Creates a new themed icon for @iconname.
  *
- * Returns: a new #GThemedIcon.
+ * Returns: (transfer full): a new #GThemedIcon.
  */
 
 
@@ -7376,7 +7376,7 @@
  * g_file_replace_async().
  * Free the returned object with g_object_unref().
  *
- * Returns: a #GFileOutputStream, or %NULL on error.
+ * Returns: (transfer full): a #GFileOutputStream, or %NULL on error.
  */
 
 
@@ -7419,7 +7419,7 @@
  * Try to get the remote address of a socket connection.
  * Free the returned object with g_object_unref().
  *
- * Returns: a #GSocketAddress or %NULL on error.
+ * Returns: (transfer full): a #GSocketAddress or %NULL on error.
  * Since: 2.22
  */
 
@@ -7759,7 +7759,7 @@
  * Loads a loadable icon. For the asynchronous version of this function,
  * see g_loadable_icon_load_async().
  *
- * Returns: a #GInputStream to read the icon from.
+ * Returns: (transfer full): a #GInputStream to read the icon from.
  */
 
 
@@ -7806,6 +7806,7 @@
  * #GAppInfo<!-- -->s which can be deleted, and system-wide ones which
  * cannot. See g_app_info_can_delete().
  *
+ * Virtual: do_delete
  * Returns: %TRUE if @appinfo has been deleted
  * Since: 2.20
  */
@@ -8210,7 +8211,7 @@
  * rather than just opening for reading or writing.
  * Free the returned object with g_object_unref().
  *
- * Returns: a #GFileIOStream or %NULL on error.
+ * Returns: (transfer full): a #GFileIOStream or %NULL on error.
  * Since: 2.22
  */
 
@@ -8248,7 +8249,7 @@
  * g_file_query_filesystem_info_async().
  * Free the returned object with g_object_unref().
  *
- * Returns: #GFileInfo for given @file or %NULL on error.
+ * Returns: (transfer full): #GFileInfo for given @file or %NULL on error.
  */
 
 
@@ -8400,7 +8401,7 @@
  * See g_file_find_enclosing_mount_async().
  * Free the returned object with g_object_unref().
  *
- * Returns: #GMount for given @file or %NULL on error.
+ * Returns: (transfer full): #GMount for given @file or %NULL on error.
  */
 
 
@@ -8523,7 +8524,7 @@
  * Gets a reference to the class for the type that is
  * associated with @extension.
  *
- * Returns: the #GTypeClass for the type of @extension
+ * Returns: (transfer full): the #GTypeClass for the type of @extension
  */
 
 
@@ -8610,7 +8611,7 @@
  *
  * Gets the names of icons from within @icon.
  *
- * Returns: a list of icon names.
+ * Returns: (transfer full): a list of icon names.
  */
 
 
@@ -8715,7 +8716,7 @@
  * filesystem the file is on.
  * Free the returned object with g_object_unref().
  *
- * Returns: a #GFileOutputStream, or %NULL on error.
+ * Returns: (transfer full): a #GFileOutputStream, or %NULL on error.
  */
 
 
@@ -8931,6 +8932,7 @@
  * triggering the cancellable object from another thread. If the operation
  * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned.
  *
+ * Virtual: delete_file
  * Returns: %TRUE if the file was deleted. %FALSE otherwise.
  */
 
@@ -9091,7 +9093,7 @@
  *
  * Finishes an async connect operation. See g_socket_client_connect_to_host_async()
  *
- * Returns: a #GSocketConnection on success, %NULL on error.
+ * Returns: (transfer full): a #GSocketConnection on success, %NULL on error.
  * Since: 2.22
  */
 
@@ -9184,7 +9186,7 @@
 /**
  * g_output_stream_write:
  * @stream: a #GOutputStream.
- * @buffer: (array length=count) (element-type uint8): the buffer containing the data to write.
+ * @buffer: (array length=count) (element-type guint8): the buffer containing the data to write.
  * @count: the number of bytes to write
  * @cancellable: optional cancellable object
  * @error: location to store the error occuring, or %NULL to ignore
@@ -9281,7 +9283,7 @@
  *
  * Gets the credentials stored in @message.
  *
- * Returns: A #GCredentials instance. Do not free, it is owned by @message.
+ * Returns: (transfer none): A #GCredentials instance. Do not free, it is owned by @message.
  * Since: 2.26
  */
 
@@ -9622,7 +9624,7 @@
  *
  * Finishes an asynchronous icon load started in g_loadable_icon_load_async().
  *
- * Returns: a #GInputStream to read the icon from.
+ * Returns: (transfer full): a #GInputStream to read the icon from.
  */
 
 
@@ -9650,7 +9652,7 @@
  * many threads/processes, etc it should allocate for concurrent DNS
  * resolutions.
  *
- * Returns: the default #GResolver.
+ * Returns: (transfer full): the default #GResolver.
  * Since: 2.22
  */
 
@@ -9827,7 +9829,7 @@
  *
  * See g_proxy_connect().
  *
- * Returns: a #GIOStream.
+ * Returns: (transfer full): a #GIOStream.
  * Since: 2.26
  */
 
@@ -9894,7 +9896,7 @@
  * icon2 = g_themed_icon_new_with_default_fallbacks ("gnome-dev-cdrom-audio");
  * ]|
  *
- * Returns: a new #GThemedIcon.
+ * Returns: (transfer full): a new #GThemedIcon.
  */
 
 
@@ -10008,7 +10010,7 @@
 /**
  * g_output_stream_write_async:
  * @stream: A #GOutputStream.
- * @buffer: (array length=count) (element-type uint8): the buffer containing the data to write.
+ * @buffer: (array length=count) (element-type guint8): the buffer containing the data to write.
  * @count: the number of bytes to write
  * @io_priority: the io priority of the request.
  * @cancellable: optional #GCancellable object, %NULL to ignore.
@@ -10145,7 +10147,7 @@
  * @service: the name of the service to connect to
  * @cancellable: a #GCancellable, or %NULL
  * @error: a pointer to a #GError, or %NULL
- * @returns: a #GSocketConnection if successful, or %NULL on error
+ * @returns: (transfer full): a #GSocketConnection if successful, or %NULL on error
  *
  * Attempts to create a TCP connection to a service.
  * This call looks up the SRV record for @service at @domain for the
@@ -10544,7 +10546,7 @@
  * be the same as @connection, in which case a reference
  * will be added.
  *
- * Returns: a #GIOStream that will replace @connection. This might
+ * Returns: (transfer full): a #GIOStream that will replace @connection. This might
  * Since: 2.26
  */
 
@@ -10572,7 +10574,6 @@
  * @path: the path containing the changes
  * @items: the %NULL-terminated list of changed keys
  * @origin_tag: the origin tag
- * @path must be a valid path (ie: starting and ending with a slash and
  *
  * Signals that a list of keys have possibly changed.  Backend
  * implementations should call this if keys have possibly changed their
@@ -10676,7 +10677,7 @@
  *
  * Like g_dbus_message_new_method_error() but intended for language bindings.
  *
- * Returns: A #GDBusMessage. Free with g_object_unref().
+ * Returns: (transfer full): A #GDBusMessage. Free with g_object_unref().
  * Since: 2.26
  */
 
@@ -10721,7 +10722,7 @@
  *
  * Gets the default #GProxyResolver for the system.
  *
- * Returns: the default #GProxyResolver.
+ * Returns: (transfer none): the default #GProxyResolver.
  * Since: 2.26
  */
 
@@ -10951,7 +10952,7 @@
  *
  * Creates a new emblemed icon for @icon with the emblem @emblem.
  *
- * Returns: a new #GIcon
+ * Returns: (transfer full): a new #GIcon
  * Since: 2.18
  */
 
@@ -11420,7 +11421,6 @@
  * @default_port: the default port to connect to
  * @cancellable: a #GCancellable, or %NULL
  * @error: a pointer to a #GError, or %NULL
- * @host_and_port may be in any of a number of recognised formats: an IPv6
  *
  * This is a helper function for g_socket_client_connect().
  * Attempts to create a TCP connection to the named host.
@@ -11444,6 +11444,7 @@
  * connectable) %NULL is returned and @error (if non-%NULL) is set
  * accordingly.
  *
+ * Returns: (transfer full): a #GSocketConnection on success, %NULL on error.
  * Since: 2.22
  */
 
@@ -11512,7 +11513,7 @@
  * is malformed or if the URI scheme is not supported.
  * Free the returned object with g_object_unref().
  *
- * Returns: a #GFile.
+ * Returns: (transfer full): a #GFile.
  */
 
 
@@ -11580,7 +11581,7 @@
  * Note that the returned #GDBusConnection object will (usually) have
  * the #GDBusConnection:exit-on-close property set to %TRUE.
  *
- * Returns: A #GDBusConnection or %NULL if @error is set. Free with g_object_unref().
+ * Returns: (transfer full): A #GDBusConnection or %NULL if @error is set. Free with g_object_unref().
  * Since: 2.26
  */
 
@@ -11814,7 +11815,7 @@
  * g_unix_connection_receive_credentials() functions.
  * that must be freed with g_object_unref().
  *
- * Returns: %NULL if @error is set, otherwise a #GCredentials object
+ * Returns: (transfer full): %NULL if @error is set, otherwise a #GCredentials object
  * Since: 2.26
  */
 
@@ -12426,7 +12427,7 @@
  * g_file_append_to_async().
  * Free the returned object with g_object_unref().
  *
- * Returns: a valid #GFileOutputStream or %NULL on error.
+ * Returns: (transfer full): a valid #GFileOutputStream or %NULL on error.
  */
 
 
@@ -12532,7 +12533,7 @@
  * #GUnixCredentialsMessage type and g_socket_get_credentials() function.
  * g_object_unref()), %NULL if @error is set.
  *
- * Returns: Received credentials on success (free with
+ * Returns: (transfer full): Received credentials on success (free with
  * Since: 2.26
  */
 
@@ -12548,7 +12549,7 @@
  * g_proxy_resolver_lookup() for more details.
  * g_strfreev().
  *
- * Returns: A NULL-terminated array of proxy URIs. Must be freed with
+ * Returns: (transfer full) (element-type utf8): A NULL-terminated array of proxy URIs. Must be freed with
  * Since: 2.26
  */
 
@@ -12660,7 +12661,7 @@
  *
  * Creates a new #GDBusMessage that is an error reply to @method_call_message.
  *
- * Returns: A #GDBusMessage. Free with g_object_unref().
+ * Returns: (transfer full): A #GDBusMessage. Free with g_object_unref().
  * Since: 2.26
  */
 
@@ -12762,7 +12763,7 @@
  *
  * Creates a #GSocketAddressEnumerator for @connectable.
  *
- * Returns: a new #GSocketAddressEnumerator.
+ * Returns: (transfer full): a new #GSocketAddressEnumerator.
  * Since: 2.22
  */
 
@@ -12887,9 +12888,8 @@
 
 /**
  * g_settings_list_schemas:
- * @returns: a list of the schemas installed on the system
+ * @returns: (element-type utf8) (transfer none): a list of GSettings schemas that are available.  The list
  *
- * Returns a list of GSettings schemas that are available.  The list
  * must not be modified or freed.
  */
 
@@ -13136,7 +13136,7 @@
  * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned.
  * When you are done with it, release it with g_object_unref()
  *
- * Returns: a #GAppInfo if the handle was found, %NULL if there were errors.
+ * Returns: (transfer full): a #GAppInfo if the handle was found, %NULL if there were errors.
  */
 
 
@@ -13166,7 +13166,7 @@
  * %NULL for message bus clients.
  * this object, it is owned by @connection.
  *
- * Returns: A #GCredentials or %NULL if not available. Do not free
+ * Returns: (transfer none): A #GCredentials or %NULL if not available. Do not free
  * Since: 2.26
  */
 
@@ -13451,7 +13451,7 @@
  * useful for connection oriented sockets that have been connected.
  * Free the returned object with g_object_unref().
  *
- * Returns: a #GSocketAddress or %NULL on error.
+ * Returns: (transfer full): a #GSocketAddress or %NULL on error.
  * Since: 2.22
  */
 
@@ -13473,7 +13473,7 @@
  *
  * Creates a new #GDBusMessage that is a reply to @method_call_message.
  *
- * Returns: A #GDBusMessage. Free with g_object_unref().
+ * Returns: (transfer full): #GDBusMessage. Free with g_object_unref().
  * Since: 2.26
  */
 
@@ -13504,7 +13504,7 @@
  *
  * Gets the main icon for @emblemed.
  *
- * Returns: a #GIcon that is owned by @emblemed
+ * Returns: (transfer full): a #GIcon that is owned by @emblemed
  * Since: 2.18
  */
 
@@ -13618,7 +13618,7 @@
  * linkend="gdbus-unix-fd-client"/> for an example of how to use this
  * low-level API to send and receive UNIX file descriptors.
  *
- * Returns: A locked #GDBusMessage or %NULL if @error is set.
+ * Returns: (transfer full): A locked #GDBusMessage or %NULL if @error is set.
  * Since: 2.26
  */
 
@@ -13748,6 +13748,7 @@
  * </itemizedlist>
  * be serialized. Use g_free() to free.
  *
+ * Virtual: to_tokens
  * Returns: An allocated NUL-terminated UTF8 string or %NULL if @icon can't
  * Since: 2.20
  */
@@ -13774,7 +13775,7 @@
  *
  * Finishes an async accept operation. See g_socket_listener_accept_socket_async()
  *
- * Returns: a #GSocket on success, %NULL on error.
+ * Returns: (transfer full): a #GSocket on success, %NULL on error.
  * Since: 2.22
  */
 
@@ -13944,7 +13945,7 @@
  * guessing.
  * Caller should free this array with g_strfreev() when done with it.
  *
- * Returns: a %NULL-terminated array of content types or %NULL on error.
+ * Returns: (transfer full) (element-type utf8): a %NULL-terminated array of content types or %NULL on error.
  * Since: 2.18
  */
 
@@ -14561,6 +14562,8 @@
  * Mounts a volume. This is an asynchronous operation, and is
  * finished by calling g_volume_mount_finish() with the @volume
  * and #GAsyncResult returned in the @callback.
+ *
+ * Virtual: mount_fn
  */
 
 
@@ -14859,7 +14862,7 @@
  *
  * Finishes an async accept operation. See g_socket_listener_accept_async()
  *
- * Returns: a #GSocketConnection on success, %NULL on error.
+ * Returns: (transfer full): a #GSocketConnection on success, %NULL on error.
  * Since: 2.22
  */
 
@@ -15524,7 +15527,7 @@
  * return a reference to the caller, but the returned list is valid for
  * the lifetime of @message.
  *
- * Returns: the #GUnixFDList from @message
+ * Returns: (transfer none): the #GUnixFDList from @message
  * Since: 2.24
  */
 
@@ -15652,6 +15655,7 @@
  * has occurred, this function will return %FALSE and set @error
  * appropriately if present.
  *
+ * Virtual: truncate_fn
  * Returns: %TRUE if successful. If an error
  */
 
@@ -15665,7 +15669,7 @@
  *
  * Creates a new #GDBusMessage that is an error reply to @method_call_message.
  *
- * Returns: A #GDBusMessage. Free with g_object_unref().
+ * Returns: (transfer full): A #GDBusMessage. Free with g_object_unref().
  * Since: 2.26
  */
 
@@ -15842,7 +15846,7 @@
  * See g_file_query_info_async().
  * Free the returned object with g_object_unref().
  *
- * Returns: #GFileInfo for given @file or %NULL on error.
+ * Returns: (transfer full): #GFileInfo for given @file or %NULL on error.
  */
 
 
@@ -16077,7 +16081,7 @@
  * This method is only available on UNIX.
  * associated. Do not free, this object is owned by @message.
  *
- * Returns: A #GUnixFDList or %NULL if no file descriptors are
+ * Returns: (transfer none): A #GUnixFDList or %NULL if no file descriptors are
  * Since: 2.26
  */
 
@@ -16363,7 +16367,7 @@
  * Finds a #GIOExtension for an extension point by name.
  * given name, or %NULL if there is no extension with that name
  *
- * Returns: the #GIOExtension for @extension_point that has the
+ * Returns: (transfer none): the #GIOExtension for @extension_point that has the
  */
 
 
@@ -16854,7 +16858,7 @@
  * either explicitly or implicitly when connecting.
  * Free the returned object with g_object_unref().
  *
- * Returns: a #GSocketAddress or %NULL on error.
+ * Returns: (transfer full): a #GSocketAddress or %NULL on error.
  * Since: 2.22
  */
 
@@ -16978,7 +16982,7 @@
  * Other errors are possible too, and depend on what kind of filesystem the file is on.
  * Free the returned object with g_object_unref().
  *
- * Returns: a #GFileInfo for the given @file, or %NULL on error.
+ * Returns: (transfer full): a #GFileInfo for the given @file, or %NULL on error.
  */
 
 
@@ -17421,6 +17425,7 @@
  * of @prefix.
  * %FALSE otherwise.
  *
+ * Virtual: prefix_matches
  * Returns: %TRUE if the @files's parent, grandparent, etc is @prefix.
  */
 
@@ -17999,7 +18004,7 @@
  * @key: the key to get the value for
  * @mapping: the function to map the value in the settings database to the value used by the application
  * @user_data: user data for @mapping
- * @returns: the result, which may be %NULL
+ * @returns: (transfer full): the result, which may be %NULL
  *
  * Gets the value that is stored at @key in @settings, subject to
  * application-level validation/mapping.
@@ -18300,7 +18305,7 @@
  * #GFile or %NULL if there is no parent.
  * Free the returned object with g_object_unref().
  *
- * Returns: a #GFile structure to the parent of the given
+ * Returns: (transfer full): a #GFile structure to the parent of the given
  */
 
 
@@ -18500,7 +18505,7 @@
  *
  * Gets the local #GVfs for the system.
  *
- * Returns: a #GVfs.
+ * Returns: (transfer none): a #GVfs.
  */
 
 
@@ -18987,6 +18992,7 @@
  * Gets a hash for an icon.
  * use in a #GHashTable or similar data structure.
  *
+ * Virtual: hash
  * Returns: a #guint containing a hash for the @icon, suitable for
  */
 
@@ -19087,7 +19093,7 @@
  * g_settings_get_child:
  * @settings: a #GSettings object
  * @name: the name of the 'child' schema
- * @returns: a 'child' settings object
+ * @returns: (transfer full): a 'child' settings object
  *
  * Creates a 'child' settings object which has a base path of
  * <replaceable>base-path</replaceable>/@name", where
@@ -19746,7 +19752,7 @@
  * Gets the source object from a #GAsyncResult.
  * or %NULL if there is none.
  *
- * Returns: a new reference to the source object for the @res,
+ * Returns: (transfer full): a new reference to the source object for the @res,
  */
 
 
@@ -19780,7 +19786,7 @@
  * g_file_set_display_name_async().
  * Free the returned object with g_object_unref().
  *
- * Returns: a #GFile or %NULL on error.
+ * Returns: (transfer full): a #GFile or %NULL on error.
  */
 
 
@@ -19865,7 +19871,7 @@
  * is %NULL or if @file is invalid.
  * Free the returned object with g_object_unref().
  *
- * Returns: #GFile to the resolved path. %NULL if @relative_path
+ * Returns: (transfer full): #GFile to the resolved path. %NULL if @relative_path
  */
 
 
@@ -19953,7 +19959,7 @@
  * filesystem the file is on.
  * Free the returned object with g_object_unref().
  *
- * Returns: a #GFileOutputStream or %NULL on error.
+ * Returns: (transfer full): a #GFileOutputStream or %NULL on error.
  */
 
 
@@ -19978,7 +19984,7 @@
  * and the per-process or system-wide open files limit is reached.
  * g_object_unref().
  *
- * Returns: A new #GDBusMessage or %NULL if @error is set. Free with
+ * Returns: (transfer full): A new #GDBusMessage or %NULL if @error is set. Free with
  * Since: 2.26
  */
 
@@ -20147,7 +20153,7 @@
  *
  * Gets the #GDBusConnection the method was invoked on.
  *
- * Returns: A #GDBusConnection. Do not free, it is owned by @invocation.
+ * Returns: (transfer none): A #GDBusConnection. Do not free, it is owned by @invocation.
  * Since: 2.26
  */
 
@@ -20357,7 +20363,7 @@
  *
  * Guesses the icon of a Unix mount.
  *
- * Returns: a #GIcon
+ * Returns: (transfer full): a #GIcon
  */
 
 
@@ -20402,7 +20408,7 @@
  * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned.
  * Free the returned object with g_object_unref().
  *
- * Returns: a #GFileMonitor for the given @file, or %NULL on error.
+ * Returns: (transfer full): a #GFileMonitor for the given @file, or %NULL on error.
  * Since: 2.18
  */
 
@@ -21051,7 +21057,7 @@
  * g_file_open_readwrite_async().
  * Free the returned object with g_object_unref().
  *
- * Returns: a #GFileIOStream or %NULL on error.
+ * Returns: (transfer full): a #GFileIOStream or %NULL on error.
  * Since: 2.22
  */
 
@@ -21106,7 +21112,7 @@
  *
  * Gets the #GConverter that is used by @converter_stream.
  *
- * Returns: the converter of the converter input stream
+ * Returns: (transfer none): the converter of the converter input stream
  * Since: 2.24
  */
 
@@ -21167,7 +21173,7 @@
  * in a GIO module. There is no reason for applications to use it
  * directly. Applications should use g_app_info_get_default_for_uri_scheme().
  *
- * Returns: #GAppInfo for given @uri_scheme or %NULL on error.
+ * Returns: (transfer full): #GAppInfo for given @uri_scheme or %NULL on error.
  */
 
 
@@ -21381,7 +21387,7 @@
  * Other errors are possible too, and depend on what kind of filesystem the file is on.
  * Free the returned object with g_object_unref().
  *
- * Returns: a #GFileInfo or %NULL if there was an error.
+ * Returns: (transfer full): a #GFileInfo or %NULL if there was an error.
  */
 
 
@@ -21482,7 +21488,7 @@
  * was cancelled, the error %G_IO_ERROR_CANCELLED will be set, and %NULL will
  * be returned.
  *
- * Returns: a #GFileInfo for the @stream, or %NULL on error.
+ * Returns: (transfer full): a #GFileInfo for the @stream, or %NULL on error.
  * Since: 2.22
  */
 
@@ -21682,7 +21688,7 @@
  * be parsed by the #GVfs module.
  * Free the returned object with g_object_unref().
  *
- * Returns: a #GFile for the given @parse_name.
+ * Returns: (transfer full): a #GFile for the given @parse_name.
  */
 
 
@@ -21760,7 +21766,7 @@
  * g_mount_guess_content_type().
  * or %NULL. Free with g_strfreev()
  *
- * Returns: an %NULL-terminated array of zero or more content types,
+ * Returns: (transfer full): an %NULL-terminated array of zero or more content types,
  * Since: 2.18
  */
 
@@ -21820,7 +21826,7 @@
  * This is a synchronous failable function. See
  * g_dbus_address_get_stream() for the asynchronous version.
  *
- * Returns: A #GIOStream or %NULL if @error is set.
+ * Returns: (transfer full): A #GIOStream or %NULL if @error is set.
  * Since: 2.26
  */
 
@@ -21919,7 +21925,7 @@
  *
  * Finishes an async connect operation. See g_socket_client_connect_async()
  *
- * Returns: a #GSocketConnection on success, %NULL on error.
+ * Returns: (transfer full): a #GSocketConnection on success, %NULL on error.
  * Since: 2.22
  */
 
@@ -21945,7 +21951,7 @@
  * error (in which case *@error will be set) or if there are no
  * more addresses.
  *
- * Returns: a #GSocketAddress (owned by the caller), or %NULL on
+ * Returns: (transfer full): a #GSocketAddress (owned by the caller), or %NULL on
  */
 
 
@@ -22025,7 +22031,7 @@
  *
  * Creates a new themed icon for @iconnames.
  *
- * Returns: a new #GThemedIcon
+ * Returns: (transfer full): a new #GThemedIcon
  */
 
 
@@ -22076,7 +22082,7 @@
  * similar to g_object_new_valist() but also initializes the object
  * and returns %NULL, setting an error on failure.
  *
- * Returns: a newly allocated #GObject, or %NULL on error
+ * Returns: (transfer full): a newly allocated #GObject, or %NULL on error
  * Since: 2.22
  */
 
@@ -22097,7 +22103,7 @@
  * To be notified of an incoming connection, wait for the %G_IO_IN condition.
  * Free the returned object with g_object_unref().
  *
- * Returns: a new #GSocket, or %NULL on error.
+ * Returns: (transfer full): a new #GSocket, or %NULL on error.
  * Since: 2.22
  */
 
@@ -22646,7 +22652,7 @@
  *
  * Sorts @targets in place according to the algorithm in RFC 2782.
  *
- * Returns: the head of the sorted list.
+ * Returns: (transfer full): the head of the sorted list.
  * Since: 2.22
  */
 
@@ -22755,7 +22761,7 @@
  *
  * Gets the underlying stream used for IO.
  *
- * Returns: the stream used for IO
+ * Returns: (transfer none): the stream used for IO
  * Since: 2.26
  */
 
@@ -22769,7 +22775,7 @@
  * Creates a new #GNetworkService representing the given @service,
  * #GSocketConnectable interface to resolve it.
  *
- * Returns: a new #GNetworkService
+ * Returns: (transfer full): a new #GNetworkService
  * Since: 2.22
  */
 
@@ -23028,7 +23034,7 @@
  * Note that @message must be unlocked, unless @flags contain the
  * %G_DBUS_SEND_MESSAGE_FLAGS_PRESERVE_SERIAL flag.
  *
- * Returns: A locked #GDBusMessage that is the reply to @message or %NULL if @error is set.
+ * Returns: (transfer full): A locked #GDBusMessage that is the reply to @message or %NULL if @error is set.
  * Since: 2.26
  */
 
@@ -23243,7 +23249,7 @@
  * g_socket_connectable_proxy_enumerate(), this will fall back to
  * calling g_socket_connectable_enumerate().
  *
- * Returns: a new #GSocketAddressEnumerator.
+ * Returns: (transfer full): a new #GSocketAddressEnumerator.
  * Since: 2.26
  */
 
@@ -23491,7 +23497,7 @@
  * Gets the volume monitor used by gio.
  * g_object_unref() when done with it.
  *
- * Returns: a reference to the #GVolumeMonitor used by gio. Call
+ * Returns: (transfer full): a reference to the #GVolumeMonitor used by gio. Call
  */
 
 
@@ -23918,7 +23924,7 @@
  * if there was an error.
  * Free the returned object with g_object_unref().
  *
- * Returns: a #GFile specifying what @file was renamed to, or %NULL
+ * Returns: (transfer full): a #GFile specifying what @file was renamed to, or %NULL
  */
 
 
@@ -24098,7 +24104,7 @@
  * similar to g_object_newv() but also initializes the object
  * and returns %NULL, setting an error on failure.
  *
- * Returns: a newly allocated #GObject, or %NULL on error
+ * Returns: (transfer full): a newly allocated #GObject, or %NULL on error
  * Since: 2.22
  */
 
@@ -24242,7 +24248,7 @@
  * similar to g_object_new() but also initializes the object
  * and returns %NULL, setting an error on failure.
  *
- * Returns: a newly allocated #GObject, or %NULL on error
+ * Returns: (transfer full): a newly allocated #GObject, or %NULL on error
  * Since: 2.22
  */
 
@@ -24913,7 +24919,7 @@
  * Finds a #GMount object by its UUID (see g_mount_get_uuid())
  * Free the returned object with g_object_unref().
  *
- * Returns: a #GMount or %NULL if no such mount is available.
+ * Returns: (transfer full): a #GMount or %NULL if no such mount is available.
  */
 
 
@@ -24958,7 +24964,7 @@
  * g_file_create_readwrite_async().
  * Free the returned object with g_object_unref().
  *
- * Returns: a #GFileIOStream or %NULL on error.
+ * Returns: (transfer full): a #GFileIOStream or %NULL on error.
  * Since: 2.22
  */
 
@@ -24969,7 +24975,7 @@
  *
  * Gets the #GConverter that is used by @converter_stream.
  *
- * Returns: the converter of the converter output stream
+ * Returns: (transfer none): the converter of the converter output stream
  * Since: 2.24
  */
 
@@ -25020,7 +25026,7 @@
  * g_file_create_async().
  * Free the returned object with g_object_unref().
  *
- * Returns: a #GFileOutputStream or %NULL on error.
+ * Returns: (transfer full): a #GFileOutputStream or %NULL on error.
  */
 
 
@@ -25137,7 +25143,6 @@
  * @backend: a #GSettingsBackend implementation
  * @key: the name of the key
  * @origin_tag: the origin tag
- * @key must be a valid key (ie: starting with a slash, not containing
  *
  * Signals that a single key has possibly changed.  Backend
  * implementations should call this if a key has possibly changed its
@@ -25186,7 +25191,7 @@
  * Gets the icon for a content type.
  * object with g_object_unref()
  *
- * Returns: #GIcon corresponding to the content type. Free the returned
+ * Returns: (transfer full): #GIcon corresponding to the content type. Free the returned
  */
 
 
@@ -25360,7 +25365,7 @@
  * Note that the returned #GDBusConnection object will (usually) have
  * the #GDBusConnection:exit-on-close property set to %TRUE.
  *
- * Returns: A #GDBusConnection or %NULL if @error is set. Free with g_object_unref().
+ * Returns: (transfer full): A #GDBusConnection or %NULL if @error is set. Free with g_object_unref().
  * Since: 2.26
  */
 
@@ -25754,7 +25759,7 @@
  * Gets a #GFile for @path.
  * Free the returned object with g_object_unref().
  *
- * Returns: a #GFile.
+ * Returns: (transfer full): a #GFile.
  */
 
 
@@ -25857,7 +25862,7 @@
  * Gets the icon for @drive.
  * Free the returned object with g_object_unref().
  *
- * Returns: #GIcon for the @drive.
+ * Returns: (transfer full): #GIcon for the @drive.
  */
 
 
@@ -25928,7 +25933,7 @@
  * was cancelled, the error %G_IO_ERROR_CANCELLED will be set, and %NULL will
  * be returned.
  *
- * Returns: a #GFileInfo for the @stream, or %NULL on error.
+ * Returns: (transfer full): a #GFileInfo for the @stream, or %NULL on error.
  */
 
 
@@ -26095,7 +26100,7 @@
  *
  * Gets the connection @proxy is for.
  *
- * Returns: A #GDBusConnection owned by @proxy. Do not free.
+ * Returns: (transfer none): A #GDBusConnection owned by @proxy. Do not free.
  * Since: 2.26
  */
 
@@ -26125,7 +26130,7 @@
 /**
  * g_settings_list_keys:
  * @settings: a #GSettings object
- * @returns: a list of the keys on @settings
+ * @returns: (transfer full) (element-type utf8): a list of the keys on @settings
  *
  * Introspects the list of keys on @settings.
  * You should probably not be calling this function from "normal" code
@@ -26159,7 +26164,7 @@
  * error (in which case *@error will be set) or if there are no
  * more addresses.
  *
- * Returns: a #GSocketAddress (owned by the caller), or %NULL on
+ * Returns: (transfer full): a #GSocketAddress (owned by the caller), or %NULL on
  */
 
 
@@ -26296,7 +26301,7 @@
  * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned.
  * Free the returned object with g_object_unref().
  *
- * Returns: a #GMount where the @file is located or %NULL on error.
+ * Returns: (transfer full): a #GMount where the @file is located or %NULL on error.
  */
 
 
@@ -26713,7 +26718,7 @@
  * Finalizes the asynchronous query started
  * by g_file_output_stream_query_info_async().
  *
- * Returns: A #GFileInfo for the finished query.
+ * Returns: (transfer full): A #GFileInfo for the finished query.
  */
 
 
@@ -26952,7 +26957,8 @@
  * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned.
  * Free the returned object with g_object_unref().
  *
- * Returns: a #GFileMonitor for the given @file, or %NULL on error.
+ * Virtual: monitor_dir
+ * Returns: (transfer full): a #GFileMonitor for the given @file, or %NULL on error.
  */
 
 
@@ -27215,7 +27221,7 @@
  * Gets @address's #GInetAddress.
  * g_object_ref()'d if it will be stored
  *
- * Returns: the #GInetAddress for @address, which must be
+ * Returns: (transfer full): the #GInetAddress for @address, which must be
  * Since: 2.22
  */
 
@@ -27273,7 +27279,7 @@
  * just opening for reading or writing.
  * Free the returned object with g_object_unref().
  *
- * Returns: #GFileIOStream or %NULL on error.
+ * Returns: (transfer full): #GFileIOStream or %NULL on error.
  * Since: 2.22
  */
 
@@ -27905,7 +27911,7 @@
  * not contain a stringv, %NULL will be returned.
  * %NULL otherwise. Do not free.
  *
- * Returns: the contents of the @attribute value as a stringv, or
+ * Returns: (transfer none): the contents of the @attribute value as a stringv, or
  * Since: 2.22
  */
 
@@ -28558,7 +28564,7 @@
 /**
  * g_settings_list_children:
  * @settings: a #GSettings object
- * @returns: a list of the children on @settings
+ * @returns: (transfer full) (element-type utf8): a list of the children on @settings
  *
  * Gets the list of children on @settings.
  * The list is exactly the list of strings for which it is not an error
@@ -28605,7 +28611,7 @@
  *
  * Finishes an operation started with g_dbus_address_get_stream().
  *
- * Returns: A #GIOStream or %NULL if @error is set.
+ * Returns: (transfer full): A #GIOStream or %NULL if @error is set.
  * Since: 2.26
  */
 
@@ -28648,7 +28654,7 @@
  * g_file_read_async().
  * Free the returned object with g_object_unref().
  *
- * Returns: a #GFileInputStream or %NULL on error.
+ * Returns: (transfer full): a #GFileInputStream or %NULL on error.
  */
 
 
@@ -28660,7 +28666,7 @@
  *
  * Finishes an async connect operation. See g_socket_client_connect_to_uri_async()
  *
- * Returns: a #GSocketConnection on success, %NULL on error.
+ * Returns: (transfer full): a #GSocketConnection on success, %NULL on error.
  * Since: 2.26
  */
 
@@ -28751,7 +28757,7 @@
 /**
  * g_output_stream_write_all:
  * @stream: a #GOutputStream.
- * @buffer: (array length=count) (element-type uint8): the buffer containing the data to write.
+ * @buffer: (array length=count) (element-type guint8): the buffer containing the data to write.
  * @count: the number of bytes to write
  * @bytes_written: location to store the number of bytes that was written to the stream
  * @cancellable: optional #GCancellable object, %NULL to ignore.
@@ -28887,7 +28893,7 @@
  * Try to get the local address of a socket connection.
  * Free the returned object with g_object_unref().
  *
- * Returns: a #GSocketAddress or %NULL on error.
+ * Returns: (transfer full): a #GSocketAddress or %NULL on error.
  * Since: 2.22
  */
 
@@ -29243,7 +29249,7 @@
  * g_network_address_parse_host() allows #GSocketClient to determine
  * when to use application-specific proxy protocols.
  *
- * Returns: the new #GNetworkAddress, or %NULL on error
+ * Returns: (transfer full): the new #GNetworkAddress, or %NULL on error
  * Since: 2.26
  */
 
@@ -29264,7 +29270,7 @@
  * @filename: the filename of the keyfile
  * @root_path: the path under which all settings keys appear
  * @root_group: (allow-none): the group name corresponding to
- * @returns: a keyfile-backed #GSettingsBackend
+ * @returns: (transfer full): a keyfile-backed #GSettingsBackend
  *
  * Creates a keyfile-backed #GSettingsBackend.
  * The filename of the keyfile to use is given by @filename.
