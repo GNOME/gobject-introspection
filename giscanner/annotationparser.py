@@ -80,6 +80,10 @@ OPT_ARRAY_FIXED_SIZE = 'fixed-size'
 OPT_ARRAY_LENGTH = 'length'
 OPT_ARRAY_ZERO_TERMINATED = 'zero-terminated'
 
+# Out options
+OPT_OUT_CALLER_ALLOCATES = 'caller-allocates'
+OPT_OUT_CALLEE_ALLOCATES = 'callee-allocates'
+
 # Scope options
 OPT_SCOPE_ASYNC = 'async'
 OPT_SCOPE_CALL = 'call'

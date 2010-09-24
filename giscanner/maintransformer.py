@@ -28,6 +28,7 @@ from .annotationparser import (TAG_VFUNC, TAG_SINCE, TAG_DEPRECATED, TAG_RETURNS
 from .annotationparser import (OPT_ALLOW_NONE, OPT_ARRAY, OPT_ATTRIBUTE,
                                OPT_ELEMENT_TYPE, OPT_IN, OPT_INOUT,
                                OPT_INOUT_ALT, OPT_OUT, OPT_SCOPE,
+                               OPT_OUT_CALLER_ALLOCATES, OPT_OUT_CALLEE_ALLOCATES,
                                OPT_TYPE, OPT_CLOSURE, OPT_DESTROY, OPT_TRANSFER, OPT_SKIP,
                                OPT_FOREIGN, OPT_ARRAY_FIXED_SIZE,
                                OPT_ARRAY_LENGTH, OPT_ARRAY_ZERO_TERMINATED)
@@ -479,9 +480,9 @@ usage is void (*_gtk_reserved1)(void);"""
                     caller_allocates = '**' not in node.type.ctype
                 else:
                     caller_allocates = False
-            elif subtype == 'caller-allocates':
+            elif subtype == OPT_OUT_CALLER_ALLOCATES:
                 caller_allocates = True
-            elif subtype == 'callee-allocates':
+            elif subtype == OPT_OUT_CALLEE_ALLOCATES:
                 caller_allocates = False
         elif OPT_IN in options:
             annotated_direction = ast.PARAM_DIRECTION_IN
