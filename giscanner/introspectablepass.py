@@ -19,6 +19,7 @@
 
 from . import ast
 from . import message
+from .annotationparser import TAG_RETURNS
 
 class IntrospectablePass(object):
 
@@ -50,6 +51,7 @@ class IntrospectablePass(object):
         if isinstance(parent, (ast.VFunction, ast.Callback)):
             return
 
+        block = None
         if hasattr(parent, 'symbol'):
             prefix = '%s: ' % (parent.symbol, )
             block = self._blocks.get(parent.symbol)
@@ -61,6 +63,10 @@ class IntrospectablePass(object):
             context = "argument %s: " % (param.argname, )
         else:
             context = "return value: "
+            if block:
+                return_tag = block.get(TAG_RETURNS)
+                if return_tag:
+                    position = return_tag.position
         message.warn_node(parent, prefix + context + text,
                           positions=position)
 
