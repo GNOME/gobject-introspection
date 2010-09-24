@@ -353,7 +353,11 @@ usage is void (*_gtk_reserved1)(void);"""
                 container_type.length_param_name = param.argname
         fixed = array_values.get(OPT_ARRAY_FIXED_SIZE)
         if fixed:
-            container_type.size = int(fixed)
+            try:
+                container_type.size = int(fixed)
+            except ValueError:
+                # Already warned in annotationparser.py
+                return
         node.type = container_type
 
     def _apply_annotations_element_type(self, parent, node, options):

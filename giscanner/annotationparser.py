@@ -177,13 +177,33 @@ class DocTag(object):
             elif option == OPT_ARRAY:
                 if value is None:
                     continue
-                for v in value.all():
-                    if v not in [OPT_ARRAY_LENGTH,
-                                 OPT_ARRAY_ZERO_TERMINATED,
-                                 OPT_ARRAY_FIXED_SIZE]:
+                for name, v in value.all().iteritems():
+                    if name in [OPT_ARRAY_ZERO_TERMINATED, OPT_ARRAY_FIXED_SIZE]:
+                        try:
+                            int(v)
+                        except (TypeError, ValueError):
+                            if v is None:
+                                message.warn(
+                                    'array option %s needs a value' % (
+                                    name, ),
+                                    positions=self.position)
+                            else:
+                                message.warn(
+                                    'invalid array %s option value %r, '
+                                    'must be an integer' % (name, v, ),
+                                    positions=self.position)
+                            continue
+                    elif name == OPT_ARRAY_LENGTH:
+                        if v is None:
+                            message.warn(
+                                'array option length needs a value',
+                                positions=self.position)
+                            continue
+                    else:
                         message.warn(
                             'invalid array annotation value: %r' % (
-                            v, ), self.position)
+                            name, ), self.position)
+
             elif option == OPT_ATTRIBUTE:
                 self._validate_option('attribute', value, n_params=2)
             elif option == OPT_CLOSURE:
