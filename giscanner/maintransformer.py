@@ -600,7 +600,7 @@ usage is void (*_gtk_reserved1)(void);"""
                     # since we don't have a way right now to flag this callback a destroy.
                     destroy_param.scope = ast.PARAM_SCOPE_NOTIFIED
             closure = options.get(OPT_CLOSURE)
-            if closure:
+            if closure and closure.length() == 1:
                 param.closure_name = self._get_validate_parameter_name(parent,
                                                                        closure.one(),
                                                                        param)

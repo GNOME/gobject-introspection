@@ -5,6 +5,7 @@ TESTS = \
 	callback-missing-scope.h \
 	return-gobject.h \
 	invalid-array.h \
+	invalid-closure.h \
 	invalid-element-type.h \
 	invalid-option.h \
 	invalid-out.h \

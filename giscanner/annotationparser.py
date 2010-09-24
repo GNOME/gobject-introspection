@@ -207,7 +207,11 @@ class DocTag(object):
             elif option == OPT_ATTRIBUTE:
                 self._validate_option('attribute', value, n_params=2)
             elif option == OPT_CLOSURE:
-                self._validate_option('closure', value, n_params=1)
+                if value is not None and value.length() > 1:
+                    message.warn(
+                        'closure takes at maximium 1 value, %d given' % (
+                        value.length()), self.position)
+                    continue
             elif option == OPT_DESTROY:
                 self._validate_option('destroy', value, n_params=1)
             elif option == OPT_ELEMENT_TYPE:
