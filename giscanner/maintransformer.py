@@ -358,19 +358,42 @@ usage is void (*_gtk_reserved1)(void);"""
 
     def _apply_annotations_element_type(self, parent, node, options):
         element_type_opt = options.get(OPT_ELEMENT_TYPE)
-        element_type = element_type_opt.flat()
+        if element_type_opt is None:
+            message.warn(
+                'element-type annotation takes at least one option, '
+                'none given',
+                options.position)
+            return
+
         if isinstance(node.type, ast.List):
-            assert len(element_type) == 1
-            node.type.element_type = self._resolve(element_type[0],
+            if element_type_opt.length() != 1:
+                message.warn(
+                    'element-type annotation for a list must have exactly '
+                    'one option, not %d options' % (element_type_opt.length(), ),
+                    options.position)
+                return
+            node.type.element_type = self._resolve(element_type_opt.one(),
                                                    node.type, node, parent)
         elif isinstance(node.type, ast.Map):
-            assert len(element_type) == 2
+            if element_type_opt.length() != 2:
+                message.warn(
+                    'element-type annotation for a hash table must have exactly '
+                    'two options, not %d option(s)' % (element_type_opt.length(), ),
+                    options.position)
+                return
+            element_type = element_type_opt.flat()
             node.type.key_type = self._resolve(element_type[0],
                                                node.type, node, parent)
             node.type.value_type = self._resolve(element_type[1],
                                                  node.type, node, parent)
         elif isinstance(node.type, ast.Array):
-            node.type.element_type = self._resolve(element_type[0],
+            if element_type_opt.length() != 1:
+                message.warn(
+                    'element-type annotation for an array must have exactly '
+                    'one option, not %d options' % (element_type_opt.length(), ),
+                    options.position)
+                return
+            node.type.element_type = self._resolve(element_type_opt.one(),
                                                    node.type, node, parent)
         else:
             message.warn_node(parent,
