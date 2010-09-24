@@ -4,10 +4,11 @@ TESTS = \
 	callback-invalid-scope.h \
 	callback-missing-scope.h \
 	return-gobject.h \
+	invalid-element-type.h \
 	invalid-option.h \
+	invalid-out.h \
 	invalid-transfer.h \
 	unknown-parameter.h \
-	unresolved-element-type.h \
 	unresolved-type.h
 
 EXTRA_DIST = warningtester.py common.h $(TESTS)

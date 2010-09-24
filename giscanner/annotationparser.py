@@ -1,6 +1,6 @@
 # -*- Mode: Python -*-
 # GObject-Introspection - a framework for introspecting GObject libraries
-# Copyright (C) 2008  Johan Dahlin
+# Copyright (C) 2008-2010 Johan Dahlin
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -18,7 +18,7 @@
 # 02110-1301, USA.
 #
 
-# AnnotationParser - parses gtk-doc annotations
+# AnnotationParser - extract annotations from gtk-doc comments
 
 import re
 
@@ -134,21 +134,29 @@ class DocTag(object):
     def __repr__(self):
         return '<DocTag %r %r>' % (self.name, self.options)
 
-    def _validate_option(self, name, value, required=False, n_params=None, choices=None):
+    def _validate_option(self, name, value, required=False,
+                         n_params=None, choices=None):
         if required and value is None:
-            message.warn('%s annotation needs a value' % (name, ), self.position)
+            message.warn('%s annotation needs a value' % (
+                name, ), self.position)
             return
 
-        if n_params is not None and value.length() != n_params:
+        if n_params is not None:
             if n_params == 0:
                 s = 'no value'
             elif n_params == 1:
                 s = 'one value'
             else:
                 s = '%d values' % (n_params, )
-            message.warn('%s annotation needs %s, not %d' % (
-                name, s, value.length()), self.position)
-            return
+            if ((n_params > 0 and (value is None or value.length() != n_params)) or
+                n_params == 0 and value is not None):
+                if value is None:
+                    length = 0
+                else:
+                    length = value.length()
+                message.warn('%s annotation needs %s, not %d' % (
+                    name, s, length), self.position)
+                return
 
         if choices is not None:
             valuestr = value.one()
@@ -157,20 +165,63 @@ class DocTag(object):
                     name, valuestr, ), self.position)
                 return
 
+    def set_position(self, position):
+        self.position = position
+        self.options.position = position
+
     def validate(self):
         for option in self.options:
-            if not option in ALL_OPTIONS:
-                message.warn('invalid annotation option: %s' % (option, ),
-                             positions=self.position)
             value = self.options[option]
-            if option == OPT_TRANSFER:
-                self._validate_option(
-                    'transfer', value, required=True,
-                    n_params=1,
-                    choices=[OPT_TRANSFER_FULL,
-                             OPT_TRANSFER_CONTAINER,
-                             OPT_TRANSFER_NONE])
-
+            if option == OPT_ALLOW_NONE:
+                self._validate_option('allow-none', value, n_params=0)
+            elif option == OPT_ARRAY:
+                if value is None:
+                    continue
+                for v in value.all():
+                    if v not in [OPT_ARRAY_LENGTH,
+                                 OPT_ARRAY_ZERO_TERMINATED,
+                                 OPT_ARRAY_FIXED_SIZE]:
+                        message.warn(
+                            'invalid array annotation value: %r' % (
+                            v, ), self.position)
+            elif option == OPT_ATTRIBUTE:
+                self._validate_option('attribute', value, n_params=2)
+            elif option == OPT_CLOSURE:
+                self._validate_option('closure', value, n_params=1)
+            elif option == OPT_DESTROY:
+                self._validate_option('destroy', value, n_params=1)
+            elif option == OPT_ELEMENT_TYPE:
+                self._validate_option('element-type', value, required=True)
+                if value is None:
+                    message.warn(
+                        'element-type takes at least one value, none given',
+                        self.position)
+                    continue
+                if value.length() > 2:
+                    message.warn(
+                        'element-type takes at maximium 2 values, %d given' % (
+                        value.length()), self.position)
+                    continue
+            elif option == OPT_FOREIGN:
+                self._validate_option('foreign', value, n_params=0)
+            elif option == OPT_IN:
+                self._validate_option('in', value, n_params=0)
+            elif option in [OPT_INOUT, OPT_INOUT_ALT]:
+                self._validate_option('inout', value, n_params=0)
+            elif option == OPT_OUT:
+                if value is None:
+                    continue
+                if value.length() > 1:
+                    message.warn(
+                        'out annotation takes at maximium 1 value, %d given' % (
+                        value.length()), self.position)
+                    continue
+                value_str = value.one()
+                if value_str not in [OPT_OUT_CALLEE_ALLOCATES,
+                                     OPT_OUT_CALLER_ALLOCATES]:
+                    message.warn("out annotation value is invalid: %r" % (
+                        value_str), self.position)
+                    continue
             elif option == OPT_SCOPE:
                 self._validate_option(
                     'scope', value, required=True,
@@ -178,6 +229,22 @@ class DocTag(object):
                     choices=[OPT_SCOPE_ASYNC,
                              OPT_SCOPE_CALL,
                              OPT_SCOPE_NOTIFIED])
+            elif option == OPT_SKIP:
+                self._validate_option('skip', value, n_params=0)
+            elif option == OPT_TRANSFER:
+                self._validate_option(
+                    'transfer', value, required=True,
+                    n_params=1,
+                    choices=[OPT_TRANSFER_FULL,
+                             OPT_TRANSFER_CONTAINER,
+                             OPT_TRANSFER_NONE])
+            elif option == OPT_TYPE:
+                self._validate_option('type', value, required=True,
+                                      n_params=1)
+            else:
+                message.warn('invalid annotation option: %s' % (option, ),
+                             positions=self.position)
+
 
 class DocOptions(object):
     def __init__(self):
@@ -216,6 +283,7 @@ class DocOption(object):
         self.tag = tag
         self._array = []
         self._dict = {}
+        # (annotation option1=value1 option2=value2) etc
         for p in option.split(' '):
             if '=' in p:
                 name, value = p.split('=', 1)
