@@ -303,7 +303,7 @@ usage is void (*_gtk_reserved1)(void);"""
             if isinstance(param, ast.Parameter):
                 tag = block.tags.get(param.argname)
             elif isinstance(param, ast.Return):
-                tag = block.tags.get('returns')
+                tag = block.tags.get(TAG_RETURNS)
             else:
                 tag = None
 
@@ -613,7 +613,7 @@ usage is void (*_gtk_reserved1)(void);"""
             if doc_name in allparams:
                 continue
             # Skip varargs, see #629759
-            if doc_name.lower() in ['...', 'varargs', 'returns']:
+            if doc_name.lower() in ['...', 'varargs', TAG_RETURNS]:
                 continue
             if len(allparams) == 0:
                 text = ''
@@ -654,7 +654,7 @@ usage is void (*_gtk_reserved1)(void);"""
         tag = block.get(field.name)
         if not tag:
             return
-        t = tag.options.get('type')
+        t = tag.options.get(OPT_TYPE)
         if not t:
             return
         field.type = self._transformer.create_type_from_user_string(t.one())
