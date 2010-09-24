@@ -109,6 +109,10 @@ class DocBlock(object):
     def __repr__(self):
         return '<DocBlock %r %r>' % (self.name, self.options)
 
+    def set_position(self, position):
+        self.position = position
+        self.options.position = position
+
     def get(self, name):
         return self.tags.get(name)
 
@@ -289,7 +293,8 @@ class AnnotationParser(object):
         if cpos:
             block_name = block_name[:cpos]
         block = DocBlock(block_name)
-        block.position = message.Position(filename, lineno)
+        block.set_position(message.Position(filename, lineno))
+
         if cpos:
             block.options = self.parse_options(block, block_header[cpos+2:])
         comment_lines = []
@@ -343,7 +348,7 @@ class AnnotationParser(object):
                 else:
                     argname = TAG_RETURNS
                 tag = DocTag(block, argname)
-                tag.position = block.position.offset(lineno)
+                tag.set_position(block.position.offset(lineno))
                 second_colon_index = line.rfind(':')
                 found_options = False
                 if second_colon_index > first_colonspace_index:
@@ -404,6 +409,7 @@ class AnnotationParser(object):
         # (bar opt1 opt2...)
         opened = -1
         options = DocOptions()
+        options.position = tag.position
         last = None
         for i, c in enumerate(value):
             if c == '(' and opened == -1:
