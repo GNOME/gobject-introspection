@@ -270,8 +270,6 @@ class GIRParser(object):
 
     def _parse_function(self, node):
         function = self._parse_function_common(node, ast.Function)
-        function.shadows = node.attrib.get('shadows', None)
-        function.shadowed_by = node.attrib.get('shadowed-by', None)
         self._namespace.append(function)
 
     def _parse_function_common(self, node, klass):
@@ -296,6 +294,9 @@ class GIRParser(object):
             func = klass(name, retval, parameters, throws)
         else:
             assert False
+
+        func.shadows = node.attrib.get('shadows', None)
+        func.shadowed_by = node.attrib.get('shadowed-by', None)
 
         parameters_node = node.find(_corens('parameters'))
         if (parameters_node is not None):
