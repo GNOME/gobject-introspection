@@ -120,7 +120,11 @@ class DocBlock(object):
         return self.tags.get(name)
 
     def to_gtk_doc(self):
-        lines = [self.name + ':']
+        options = ''
+        if self.options:
+            options += ' '
+            options += ' '.join('(%s)' % o for o in self.options)
+        lines = [self.name + ':' + options]
         tags = []
         for name, tag in self.tags.iteritems():
             if name in self.params:
@@ -339,6 +343,9 @@ class DocOptions(object):
             if key == item:
                 return value
         raise KeyError
+
+    def __nonzero__(self):
+        return bool(self.values)
 
     def __iter__(self):
         return (k for k, v in self.values)
