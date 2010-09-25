@@ -653,7 +653,7 @@
 
 
 /**
- * g_dbus_method_invocation_get_user_data:
+ * g_dbus_method_invocation_get_user_data: (skip)
  * @invocation: A #GDBusMethodInvocation.
  *
  * Gets the @user_data #gpointer passed to g_dbus_connection_register_object().
@@ -958,7 +958,7 @@
 
 
 /**
- * g_credentials_get_native:
+ * g_credentials_get_native: (skip)
  * @credentials: A #GCredentials.
  * @native_type: The type of native credentials to get.
  *
@@ -3147,7 +3147,7 @@
 
 
 /**
- * g_resolver_free_addresses:
+ * g_resolver_free_addresses: (skip)
  * @addresses: a #GList of #GInetAddress
  *
  * Frees @addresses (which should be the return value from
@@ -6311,7 +6311,7 @@
 
 
 /**
- * g_memory_output_stream_get_data:
+ * g_memory_output_stream_get_data: (skip)
  * @ostream: a #GMemoryOutputStream
  *
  * Gets any loaded data from the @ostream.
@@ -16033,7 +16033,7 @@
 
 
 /**
- * g_simple_async_result_get_source_tag:
+ * g_simple_async_result_get_source_tag: (skip)
  * @simple: a #GSimpleAsyncResult.
  *
  * Gets the source tag for the #GSimpleAsyncResult.
@@ -20748,7 +20748,7 @@
 
 
 /**
- * g_simple_async_result_get_op_res_gpointer:
+ * g_simple_async_result_get_op_res_gpointer: (skip)
  * @simple: a #GSimpleAsyncResult.
  *
  * Gets a pointer result as returned by the asynchronous function.
@@ -22647,7 +22647,7 @@
 
 
 /**
- * g_srv_target_list_sort:
+ * g_srv_target_list_sort: (skip)
  * @targets: a #GList of #GSrvTarget
  *
  * Sorts @targets in place according to the algorithm in RFC 2782.
@@ -23275,7 +23275,7 @@
 
 
 /**
- * g_resolver_free_targets:
+ * g_resolver_free_targets: (skip)
  * @targets: a #GList of #GSrvTarget
  *
  * Frees @targets (which should be the return value from
