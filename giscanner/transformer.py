@@ -351,11 +351,11 @@ raise ValueError."""
             prefixlen = 0
         members = []
         for child in symbol.base_type.child_list:
+            if child.private:
+                continue
             if prefixlen > 0:
                 name = child.ident[prefixlen:]
             else:
-                if child.private:
-                    continue
                 # Ok, the enum members don't have a consistent prefix
                 # among them, so let's just remove the global namespace
                 # prefix.

@@ -700,10 +700,10 @@ TpAccount::status-changed</doc>
       </field>
     </record>
     <bitfield name="TestPrivateEnum" c:type="RegressTestPrivateEnum">
-      <member name="before"
+      <member name="public_enum_before"
               value="1"
               c:identifier="REGRESS_TEST_PUBLIC_ENUM_BEFORE"/>
-      <member name="after"
+      <member name="public_enum_after"
               value="4"
               c:identifier="REGRESS_TEST_PUBLIC_ENUM_AFTER"/>
     </bitfield>

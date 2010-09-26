@@ -878,10 +878,12 @@ enumerator_list
 	  }
 	  enumerator
 	  {
+            $2->private = scanner->private;
             $$ = g_list_append (NULL, $2);
 	  }
 	| enumerator_list ',' enumerator
 	  {
+            $3->private = scanner->private;
             $$ = g_list_append ($1, $3);
 	  }
 	;
