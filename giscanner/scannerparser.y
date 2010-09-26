@@ -878,17 +878,11 @@ enumerator_list
 	  }
 	  enumerator
 	  {
-              if (!scanner->private)
-                {
-                  $$ = g_list_append (NULL, $2);
-                }
+            $$ = g_list_append (NULL, $2);
 	  }
 	| enumerator_list ',' enumerator
 	  {
-              if (!scanner->private)
-                {
-                  $$ = g_list_append ($1, $3);
-                }
+            $$ = g_list_append ($1, $3);
 	  }
 	;
 
