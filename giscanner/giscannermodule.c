@@ -299,7 +299,6 @@ type_get_child_list (PyGISourceType *self,
     {
       PyObject *item = pygi_source_symbol_new (l->data);
       PyList_SetItem (list, i++, item);
-      Py_INCREF (item);
     }
 
   Py_INCREF (list);
@@ -512,7 +511,6 @@ pygi_source_scanner_get_symbols (PyGISourceScanner *self)
     {
       PyObject *item = pygi_source_symbol_new (l->data);
       PyList_SetItem (list, i++, item);
-      Py_INCREF (item);
     }
 
   Py_INCREF (list);
@@ -535,8 +533,7 @@ pygi_source_scanner_get_comments (PyGISourceScanner *self)
       PyObject *item = Py_BuildValue ("(ssi)", comment->comment,
                                       comment->filename,
                                       comment->line);
-      PyList_SET_ITEM (list, i++, item);
-      Py_INCREF (item);
+      PyList_SetItem (list, i++, item);
     }
 
   Py_INCREF (list);
