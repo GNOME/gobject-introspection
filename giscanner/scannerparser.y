@@ -43,7 +43,7 @@ extern char *yytext;
 
 extern int yylex (GISourceScanner *scanner);
 static void yyerror (GISourceScanner *scanner, const char *str);
- 
+
 extern void ctype_free (GISourceType * type);
 
 static int last_enum_value = -1;
@@ -191,7 +191,7 @@ strings
                   {
 #if 0
                     g_warning ("Ignoring non-UTF-8 constant string \"%s\"", yytext + 1);
-#endif                    
+#endif
                     g_free($$->const_string);
                     $$->const_string = NULL;
                   }
@@ -1477,17 +1477,17 @@ gboolean
 gi_source_scanner_parse_file (GISourceScanner *scanner, FILE *file)
 {
   g_return_val_if_fail (file != NULL, FALSE);
-  
+
   const_table = g_hash_table_new_full (g_str_hash, g_str_equal,
 				       g_free, (GDestroyNotify)gi_source_symbol_unref);
-  
+
   lineno = 1;
   yyin = file;
   yyparse (scanner);
-  
+
   g_hash_table_destroy (const_table);
   const_table = NULL;
-  
+
   yyin = NULL;
 
   return TRUE;
@@ -1503,6 +1503,6 @@ gi_source_scanner_lex_filename (GISourceScanner *scanner, const gchar *filename)
     ;
 
   fclose (yyin);
-  
+
   return TRUE;
 }

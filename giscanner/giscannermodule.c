@@ -91,13 +91,13 @@ static PyObject *
 pygi_source_symbol_new (GISourceSymbol *symbol)
 {
   PyGISourceSymbol *self;
-  
+
   if (symbol == NULL)
     {
       Py_INCREF (Py_None);
       return Py_None;
     }
-    
+
   self = (PyGISourceSymbol *)PyObject_New (PyGISourceSymbol,
 					   &PyGISourceSymbol_Type);
   self->symbol = symbol;
@@ -129,13 +129,13 @@ static PyObject *
 symbol_get_ident (PyGISourceSymbol *self,
 		  void            *context)
 {
-  
+
   if (!self->symbol->ident)
     {
       Py_INCREF(Py_None);
       return Py_None;
     }
-    
+
   return PyString_FromString (self->symbol->ident);
 }
 
@@ -179,7 +179,7 @@ symbol_get_const_string (PyGISourceSymbol *self,
       Py_INCREF(Py_None);
       return Py_None;
     }
-    
+
   return PyString_FromString (self->symbol->const_string);
 }
 
@@ -221,13 +221,13 @@ static PyObject *
 pygi_source_type_new (GISourceType *type)
 {
   PyGISourceType *self;
-  
+
   if (type == NULL)
     {
       Py_INCREF (Py_None);
       return Py_None;
     }
-  
+
   self = (PyGISourceType *)PyObject_New (PyGISourceType,
 					 &PyGISourceType_Type);
   self->type = type;
@@ -271,7 +271,7 @@ type_get_name (PyGISourceType *self,
       Py_INCREF (Py_None);
       return Py_None;
     }
-    
+
   return PyString_FromString (self->type->name);
 }
 
@@ -292,9 +292,9 @@ type_get_child_list (PyGISourceType *self,
 
   if (!self->type)
     return Py_BuildValue("[]");
-  
+
   list = PyList_New (g_list_length (self->type->child_list));
-  
+
   for (l = self->type->child_list; l; l = l->next)
     {
       PyObject *item = pygi_source_symbol_new (l->data);
@@ -352,7 +352,7 @@ pygi_source_scanner_append_filename (PyGISourceScanner *self,
 
   self->scanner->filenames = g_list_append (self->scanner->filenames,
 					    g_realpath (filename));
-  
+
   Py_INCREF (Py_None);
   return Py_None;
 }
@@ -398,7 +398,7 @@ pygi_source_scanner_parse_file (PyGISourceScanner *self,
 {
   int fd;
   FILE *fp;
-  
+
   if (!PyArg_ParseTuple (args, "i:SourceScanner.parse_file", &fd))
     return NULL;
 
@@ -433,7 +433,7 @@ pygi_source_scanner_parse_file (PyGISourceScanner *self,
 	g_print ("Could not get OS handle from msvcr71 fd.\n");
 	return NULL;
       }
-    
+
     fd = _open_osfhandle (handle, _O_RDONLY);
     if (fd == -1)
       {
@@ -465,7 +465,7 @@ pygi_source_scanner_lex_filename (PyGISourceScanner *self,
 				  PyObject          *args)
 {
   char *filename;
-  
+
   if (!PyArg_ParseTuple (args, "s:SourceScanner.lex_filename", &filename))
     return NULL;
 
@@ -487,7 +487,7 @@ pygi_source_scanner_set_macro_scan (PyGISourceScanner *self,
 				    PyObject          *args)
 {
   int macro_scan;
-  
+
   if (!PyArg_ParseTuple (args, "b:SourceScanner.set_macro_scan", &macro_scan))
     return NULL;
 
@@ -503,10 +503,10 @@ pygi_source_scanner_get_symbols (PyGISourceScanner *self)
   GSList *l, *symbols;
   PyObject *list;
   int i = 0;
-  
+
   symbols = gi_source_scanner_get_symbols (self->scanner);
   list = PyList_New (g_slist_length (symbols));
-  
+
   for (l = symbols; l; l = l->next)
     {
       PyObject *item = pygi_source_symbol_new (l->data);
@@ -557,7 +557,7 @@ static int calc_attrs_length(PyObject *attributes, int indent,
 {
   int attr_length = 0;
   int i;
-  
+
   if (indent == -1)
     return -1;
 
@@ -566,14 +566,14 @@ static int calc_attrs_length(PyObject *attributes, int indent,
       PyObject *tuple;
       char *attr, *value;
       char *escaped;
-      
+
       tuple = PyList_GetItem (attributes, i);
       if (PyTuple_GetItem(tuple, 1) == Py_None)
 	continue;
 
       if (!PyArg_ParseTuple(tuple, "ss", &attr, &value))
         return -1;
-      
+
       escaped = g_markup_escape_text (value, -1);
       attr_length += 2 + strlen(attr) + strlen(escaped) + 2;
       g_free(escaped);
@@ -596,7 +596,7 @@ pygi_collect_attributes (PyObject *self,
   gboolean first;
   GString *attr_value;
   int len;
-  
+
   if (!PyArg_ParseTuple(args, "sO!isi",
 			&tag_name, &PyList_Type, &attributes,
 			&self_indent, &indent_char,
@@ -616,28 +616,28 @@ pygi_collect_attributes (PyObject *self,
 
   first = TRUE;
   attr_value = g_string_new ("");
-  
+
   for (i = 0; i < PyList_Size (attributes); ++i)
     {
       PyObject *tuple;
       char *attr, *value, *escaped;
-      
+
       tuple = PyList_GetItem (attributes, i);
-      
-      if (!PyTuple_Check (tuple)) 
+
+      if (!PyTuple_Check (tuple))
         {
           PyErr_SetString(PyExc_TypeError,
                           "attribute item must be a tuple");
           return NULL;
         }
-      
+
       if (!PyTuple_Size (tuple) == 2)
         {
           PyErr_SetString(PyExc_IndexError,
                           "attribute item must be a tuple of length 2");
           return NULL;
         }
-      
+
       if (PyTuple_GetItem(tuple, 1) == Py_None)
 	continue;
 
