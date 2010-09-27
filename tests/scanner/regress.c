@@ -1175,18 +1175,6 @@ regress_test_table_ghash_const()
 }
 
 /**
- * regress_test_ghash_free:
- * @in: (transfer full) (element-type utf8 utf8):
- */
-void
-regress_test_ghash_free (GHashTable *in)
-{
-  /* keys and values are deleted iff an appropriate element destroy function
-   * was registered */
-  g_hash_table_unref(in);
-}
-
-/**
  * regress_test_ghash_null_return:
  *
  * Return value: (element-type utf8 utf8) (transfer none) (allow-none):
@@ -1307,29 +1295,6 @@ regress_test_ghash_container_in (GHashTable *in)
   /* be careful and explicitly steal all the elements from the ghash before
    * freeing it. */
   g_hash_table_steal_all (in);
-  g_hash_table_destroy (in);
-}
-
-static gboolean
-ghash_freer(gpointer key, gpointer value, gpointer user_data)
-{
-  g_free(key);
-  g_free(value);
-  return TRUE;
-}
-
-/**
- * regress_test_ghash_everything_in:
- * @in: (transfer full) (element-type utf8 utf8):
- */
-void
-regress_test_ghash_everything_in (GHashTable *in)
-{
-  assert_test_table_ghash (in);
-  /* free the elements, then free the container.  Don't rely on the
-   * GHashTable's key/value destructor functions. */
-  g_hash_table_foreach_steal (in, ghash_freer, NULL);
-  /* okay, dealloc the hash table. */
   g_hash_table_destroy (in);
 }
 

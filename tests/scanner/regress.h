@@ -118,8 +118,6 @@ void regress_test_ghash_null_out (const GHashTable **out);
 void regress_test_ghash_nothing_in (const GHashTable *in);
 void regress_test_ghash_nothing_in2 (GHashTable *in);
 void regress_test_ghash_container_in (GHashTable *in);
-void regress_test_ghash_everything_in (GHashTable *in);
-void regress_test_ghash_free (GHashTable *in);
 GHashTable *regress_test_ghash_nested_everything_return (void);
 GHashTable *regress_test_ghash_nested_everything_return2 (void);
 

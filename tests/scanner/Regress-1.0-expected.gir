@@ -1538,20 +1538,6 @@ call and can be released on return.</doc>
         </type>
       </return-value>
     </function>
-    <function name="test_ghash_everything_in"
-              c:identifier="regress_test_ghash_everything_in">
-      <return-value transfer-ownership="none">
-        <type name="none" c:type="void"/>
-      </return-value>
-      <parameters>
-        <parameter name="in" transfer-ownership="full">
-          <type name="GLib.HashTable" c:type="GHashTable*">
-            <type name="utf8"/>
-            <type name="utf8"/>
-          </type>
-        </parameter>
-      </parameters>
-    </function>
     <function name="test_ghash_everything_return"
               c:identifier="regress_test_ghash_everything_return">
       <return-value transfer-ownership="full">
@@ -1560,19 +1546,6 @@ call and can be released on return.</doc>
           <type name="utf8"/>
         </type>
       </return-value>
-    </function>
-    <function name="test_ghash_free" c:identifier="regress_test_ghash_free">
-      <return-value transfer-ownership="none">
-        <type name="none" c:type="void"/>
-      </return-value>
-      <parameters>
-        <parameter name="in" transfer-ownership="full">
-          <type name="GLib.HashTable" c:type="GHashTable*">
-            <type name="utf8"/>
-            <type name="utf8"/>
-          </type>
-        </parameter>
-      </parameters>
     </function>
     <function name="test_ghash_nested_everything_return"
               c:identifier="regress_test_ghash_nested_everything_return">
