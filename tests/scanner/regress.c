@@ -379,7 +379,6 @@ regress_test_utf8_inout (char **inout)
 {
   /* inout parameter, transfer mode full */
   g_assert (strcmp (*inout, utf8_const) == 0);
-  g_free(*inout);
   *inout = g_strdup (utf8_nonconst);
 }
 
@@ -515,15 +514,16 @@ void
 regress_test_array_int_inout (int *n_ints, int **ints)
 {
   int i;
+  int *new_ints;
 
-  for (i = 1; i < *n_ints; i++) {
-	(*ints)[i-1] = (*ints)[i] + 1;
-  }
-
-  if (0 < *n_ints) {
-    *n_ints -= 1;
-  }
-  *ints = g_realloc(*ints, sizeof(**ints) * *n_ints);
+  if (0 < *n_ints)
+    {
+      *n_ints -= 1;
+      new_ints = g_malloc(sizeof(**ints) * *n_ints);
+      for (i = 0; i < *n_ints; i++)
+	new_ints[i] = (*ints)[i + 1] + 1;
+      *ints = new_ints;
+    }
 }
 
 /**
