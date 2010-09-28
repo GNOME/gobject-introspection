@@ -757,3 +757,17 @@ annotation_invalid_annotation (int foo)
 
 
 char backslash_parsing_tester_2 = '\\';
+
+
+/**
+ * annotation_test_parsing_bug630862:
+ *
+ * See https://bugzilla.gnome.org/show_bug.cgi?id=630862
+ *
+ * Returns: (transfer none): An object, note the colon:in here
+ */
+GObject  *
+annotation_test_parsing_bug630862 (void)
+{
+  return NULL;
+}

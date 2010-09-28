@@ -508,7 +508,11 @@ class AnnotationParser(object):
                     argname = TAG_RETURNS
                 tag = DocTag(block, argname)
                 tag.set_position(block.position.offset(lineno))
-                second_colon_index = line.rfind(':')
+                line_after_first_colon_space = line[first_colonspace_index + 2:]
+                second_colon_index = line_after_first_colon_space.find(':')
+                if second_colon_index >= 0:
+                    second_colon_index += first_colonspace_index + 2
+                    assert line[second_colon_index] == ':'
                 found_options = False
                 if second_colon_index > first_colonspace_index:
                     value_line = \
