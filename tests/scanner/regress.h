@@ -36,7 +36,6 @@ GType regress_test_gtype (GType in);
 /* utf8 */
 G_CONST_RETURN char *regress_test_utf8_const_return (void);
 char *regress_test_utf8_nonconst_return (void);
-void regress_test_utf8_nonconst_in (char *in);
 void regress_test_utf8_const_in (const char *in);
 void regress_test_utf8_out (char **out);
 void regress_test_utf8_inout (char **inout);
@@ -72,9 +71,6 @@ void regress_test_array_fixed_size_int_out (int **ints);
 int *regress_test_array_fixed_size_int_return (void);
 
 /* transfer tests */
-int regress_test_array_int_in_take (int n_ints, int *ints);
-gboolean regress_test_strv_in_container (char **arr);
-
 int *regress_test_array_int_full_out(int *len);
 int *regress_test_array_int_none_out(int *len);
 void regress_test_array_int_null_in (int *arr, int len);
@@ -88,11 +84,8 @@ GList *regress_test_glist_container_return (void);
 GList *regress_test_glist_everything_return (void);
 void regress_test_glist_nothing_in (const GList *in);
 void regress_test_glist_nothing_in2 (GList *in);
-void regress_test_glist_container_in (GList *in);
-void regress_test_glist_everything_in (GList *in);
 void regress_test_glist_null_in(GSList *in);
 void regress_test_glist_null_out(GSList **out_list);
-void regress_test_glist_free (GList *in);
 
 /* GSList */
 G_CONST_RETURN GSList *regress_test_gslist_nothing_return (void);
@@ -101,11 +94,8 @@ GSList *regress_test_gslist_container_return (void);
 GSList *regress_test_gslist_everything_return (void);
 void regress_test_gslist_nothing_in (const GSList *in);
 void regress_test_gslist_nothing_in2 (GSList *in);
-void regress_test_gslist_container_in (GSList *in);
-void regress_test_gslist_everything_in (GSList *in);
 void regress_test_gslist_null_in(GSList *in);
 void regress_test_gslist_null_out(GSList **out_list);
-void regress_test_gslist_free (GSList *in);
 
 /* GHashTable */
 G_CONST_RETURN GHashTable *regress_test_ghash_null_return (void);
@@ -117,7 +107,6 @@ void regress_test_ghash_null_in (const GHashTable *in);
 void regress_test_ghash_null_out (const GHashTable **out);
 void regress_test_ghash_nothing_in (const GHashTable *in);
 void regress_test_ghash_nothing_in2 (GHashTable *in);
-void regress_test_ghash_container_in (GHashTable *in);
 GHashTable *regress_test_ghash_nested_everything_return (void);
 GHashTable *regress_test_ghash_nested_everything_return2 (void);
 

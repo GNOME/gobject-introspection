@@ -1134,23 +1134,6 @@ TpAccount::status-changed</doc>
         </parameter>
       </parameters>
     </function>
-    <function name="test_array_int_in_take"
-              c:identifier="regress_test_array_int_in_take">
-      <return-value transfer-ownership="none">
-        <type name="gint" c:type="int"/>
-      </return-value>
-      <parameters>
-        <parameter name="n_ints" transfer-ownership="none">
-          <type name="gint" c:type="int"/>
-        </parameter>
-        <parameter name="ints" transfer-ownership="full">
-          <doc xml:whitespace="preserve">List of ints</doc>
-          <array length="0" c:type="int*">
-            <type name="gint"/>
-          </array>
-        </parameter>
-      </parameters>
-    </function>
     <function name="test_array_int_inout"
               c:identifier="regress_test_array_int_inout">
       <return-value transfer-ownership="none">
@@ -1515,20 +1498,6 @@ call and can be released on return.</doc>
         </parameter>
       </parameters>
     </function>
-    <function name="test_ghash_container_in"
-              c:identifier="regress_test_ghash_container_in">
-      <return-value transfer-ownership="none">
-        <type name="none" c:type="void"/>
-      </return-value>
-      <parameters>
-        <parameter name="in" transfer-ownership="container">
-          <type name="GLib.HashTable" c:type="GHashTable*">
-            <type name="utf8"/>
-            <type name="utf8"/>
-          </type>
-        </parameter>
-      </parameters>
-    </function>
     <function name="test_ghash_container_return"
               c:identifier="regress_test_ghash_container_return">
       <return-value transfer-ownership="container">
@@ -1660,19 +1629,6 @@ call and can be released on return.</doc>
         </type>
       </return-value>
     </function>
-    <function name="test_glist_container_in"
-              c:identifier="regress_test_glist_container_in">
-      <return-value transfer-ownership="none">
-        <type name="none" c:type="void"/>
-      </return-value>
-      <parameters>
-        <parameter name="in" transfer-ownership="container">
-          <type name="GLib.List" c:type="GList*">
-            <type name="utf8"/>
-          </type>
-        </parameter>
-      </parameters>
-    </function>
     <function name="test_glist_container_return"
               c:identifier="regress_test_glist_container_return">
       <return-value transfer-ownership="container">
@@ -1681,19 +1637,6 @@ call and can be released on return.</doc>
         </type>
       </return-value>
     </function>
-    <function name="test_glist_everything_in"
-              c:identifier="regress_test_glist_everything_in">
-      <return-value transfer-ownership="none">
-        <type name="none" c:type="void"/>
-      </return-value>
-      <parameters>
-        <parameter name="in" transfer-ownership="full">
-          <type name="GLib.List" c:type="GList*">
-            <type name="utf8"/>
-          </type>
-        </parameter>
-      </parameters>
-    </function>
     <function name="test_glist_everything_return"
               c:identifier="regress_test_glist_everything_return">
       <return-value transfer-ownership="full">
@@ -1701,18 +1644,6 @@ call and can be released on return.</doc>
           <type name="utf8"/>
         </type>
       </return-value>
-    </function>
-    <function name="test_glist_free" c:identifier="regress_test_glist_free">
-      <return-value transfer-ownership="none">
-        <type name="none" c:type="void"/>
-      </return-value>
-      <parameters>
-        <parameter name="in" transfer-ownership="full">
-          <type name="GLib.List" c:type="GList*">
-            <type name="utf8"/>
-          </type>
-        </parameter>
-      </parameters>
     </function>
     <function name="test_glist_nothing_in"
               c:identifier="regress_test_glist_nothing_in">
@@ -1786,19 +1717,6 @@ call and can be released on return.</doc>
         </parameter>
       </parameters>
     </function>
-    <function name="test_gslist_container_in"
-              c:identifier="regress_test_gslist_container_in">
-      <return-value transfer-ownership="none">
-        <type name="none" c:type="void"/>
-      </return-value>
-      <parameters>
-        <parameter name="in" transfer-ownership="container">
-          <type name="GLib.SList" c:type="GSList*">
-            <type name="utf8"/>
-          </type>
-        </parameter>
-      </parameters>
-    </function>
     <function name="test_gslist_container_return"
               c:identifier="regress_test_gslist_container_return">
       <return-value transfer-ownership="container">
@@ -1807,19 +1725,6 @@ call and can be released on return.</doc>
         </type>
       </return-value>
     </function>
-    <function name="test_gslist_everything_in"
-              c:identifier="regress_test_gslist_everything_in">
-      <return-value transfer-ownership="none">
-        <type name="none" c:type="void"/>
-      </return-value>
-      <parameters>
-        <parameter name="in" transfer-ownership="full">
-          <type name="GLib.SList" c:type="GSList*">
-            <type name="utf8"/>
-          </type>
-        </parameter>
-      </parameters>
-    </function>
     <function name="test_gslist_everything_return"
               c:identifier="regress_test_gslist_everything_return">
       <return-value transfer-ownership="full">
@@ -1827,18 +1732,6 @@ call and can be released on return.</doc>
           <type name="utf8"/>
         </type>
       </return-value>
-    </function>
-    <function name="test_gslist_free" c:identifier="regress_test_gslist_free">
-      <return-value transfer-ownership="none">
-        <type name="none" c:type="void"/>
-      </return-value>
-      <parameters>
-        <parameter name="in" transfer-ownership="full">
-          <type name="GLib.SList" c:type="GSList*">
-            <type name="utf8"/>
-          </type>
-        </parameter>
-      </parameters>
     </function>
     <function name="test_gslist_nothing_in"
               c:identifier="regress_test_gslist_nothing_in">
@@ -2103,19 +1996,6 @@ call and can be released on return.</doc>
       </return-value>
       <parameters>
         <parameter name="arr" transfer-ownership="none">
-          <array c:type="char**">
-            <type name="utf8"/>
-          </array>
-        </parameter>
-      </parameters>
-    </function>
-    <function name="test_strv_in_container"
-              c:identifier="regress_test_strv_in_container">
-      <return-value transfer-ownership="none">
-        <type name="gboolean" c:type="gboolean"/>
-      </return-value>
-      <parameters>
-        <parameter name="arr" transfer-ownership="container">
           <array c:type="char**">
             <type name="utf8"/>
           </array>
@@ -2394,18 +2274,6 @@ call and can be released on return.</doc>
                    caller-allocates="0"
                    transfer-ownership="full">
           <type name="utf8" c:type="char**"/>
-        </parameter>
-      </parameters>
-    </function>
-    <function name="test_utf8_nonconst_in"
-              c:identifier="regress_test_utf8_nonconst_in">
-      <return-value transfer-ownership="none">
-        <type name="none" c:type="void"/>
-      </return-value>
-      <parameters>
-        <parameter name="in" transfer-ownership="full">
-          <doc xml:whitespace="preserve">Accepted argument</doc>
-          <type name="utf8" c:type="char*"/>
         </parameter>
       </parameters>
     </function>

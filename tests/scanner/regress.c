@@ -349,17 +349,6 @@ regress_test_utf8_nonconst_return (void)
 }
 
 /**
- * regress_test_utf8_nonconst_in:
- * @in: (transfer full): Accepted argument
- */
-void
-regress_test_utf8_nonconst_in (char *in)
-{
-  g_assert (strcmp (in, utf8_nonconst) == 0);
-  g_free(in);
-}
-
-/**
  * regress_test_utf8_const_in:
  *
  */
@@ -614,18 +603,6 @@ regress_test_strv_in (char **arr)
 }
 
 /**
- * regress_test_strv_in_container:
- * @arr: (array zero-terminated=1) (transfer container):
- */
-gboolean
-regress_test_strv_in_container (char **arr)
-{
-  gboolean result = regress_test_strv_in (arr);
-  g_free (arr);
-  return result;
-}
-
-/**
  * regress_test_array_gtype_in:
  * @n_types:
  * @types: (array length=n_types): List of types
@@ -743,21 +720,6 @@ regress_test_array_fixed_size_int_return (void)
 }
 
 /**
- * regress_test_array_int_in_take:
- * @n_ints:
- * @ints: (array length=n_ints) (transfer full): List of ints
- */
-int
-regress_test_array_int_in_take (int n_ints, int *ints)
-{
-  int i, sum = 0;
-  for (i = 0; i < n_ints; i++)
-    sum += ints[i];
-  g_free (ints);
-  return sum;
-}
-
-/**
  * regress_test_strv_out_c:
  *
  * Returns: (transfer none):
@@ -845,17 +807,6 @@ regress_test_sequence_list()
 }
 
 /**
- * regress_test_glist_free:
- * @in: (element-type utf8) (transfer full):
- */
-void
-regress_test_glist_free (GList *in)
-{
-  g_list_foreach (in, (GFunc)g_free, NULL);
-  g_list_free (in);
-}
-
-/**
  * regress_test_glist_nothing_return:
  *
  * Return value: (element-type utf8) (transfer none):
@@ -939,28 +890,6 @@ regress_test_glist_nothing_in2 (GList *in)
 }
 
 /**
- * regress_test_glist_container_in:
- * @in: (element-type utf8) (transfer container):
- */
-void
-regress_test_glist_container_in (GList *in)
-{
-  regress_assert_test_sequence_list (in);
-  g_list_free (in);
-}
-
-/**
- * regress_test_glist_everything_in:
- * @in: (element-type utf8) (transfer full):
- */
-void
-regress_test_glist_everything_in (GList *in)
-{
-  regress_assert_test_sequence_list (in);
-  regress_test_glist_free (in);
-}
-
-/**
  * regress_test_glist_null_in:
  * @in: (element-type utf8) (allow-none):
  */
@@ -996,17 +925,6 @@ regress_test_sequence_slist()
         list = g_slist_reverse (list);
     }
     return list;
-}
-
-/**
- * regress_test_gslist_free:
- * @in: (element-type utf8) (transfer full):
- */
-void
-regress_test_gslist_free (GSList *in)
-{
-  g_slist_foreach (in, (GFunc)g_free, NULL);
-  g_slist_free (in);
 }
 
 /**
@@ -1090,27 +1008,6 @@ void
 regress_test_gslist_nothing_in2 (GSList *in)
 {
   regress_assert_test_sequence_slist (in);
-}
-
-/**
- * regress_test_gslist_container_in:
- * @in: (element-type utf8) (transfer container):
- */
-void
-regress_test_gslist_container_in (GSList *in)
-{
-  regress_assert_test_sequence_slist (in);
-  g_slist_free (in);
-}
-
-/**
- * regress_test_gslist_everything_in:
- * @in: (element-type utf8) (transfer full):
- */
-void regress_test_gslist_everything_in (GSList *in)
-{
-  regress_assert_test_sequence_slist (in);
-  regress_test_gslist_free (in);
 }
 
 /**
@@ -1282,20 +1179,6 @@ void
 regress_test_ghash_nothing_in2 (GHashTable *in)
 {
   assert_test_table_ghash (in);
-}
-
-/**
- * regress_test_ghash_container_in:
- * @in: (transfer container) (element-type utf8 utf8):
- */
-void
-regress_test_ghash_container_in (GHashTable *in)
-{
-  assert_test_table_ghash (in);
-  /* be careful and explicitly steal all the elements from the ghash before
-   * freeing it. */
-  g_hash_table_steal_all (in);
-  g_hash_table_destroy (in);
 }
 
 /* Nested collection types */
