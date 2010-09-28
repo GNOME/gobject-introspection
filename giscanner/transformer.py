@@ -51,8 +51,8 @@ class Transformer(object):
         self._namespace = namespace
         self._pkg_config_packages = set()
         self._typedefs_ns = {}
-        self._includes = {}
-        self._include_names = set()
+        self._includes = {} # <string namespace -> Namespace>
+        self._include_names = set() # string namespace
         self._includepaths = []
         self._passthrough_mode = False
 
@@ -131,7 +131,7 @@ class Transformer(object):
 "Include path %r must be a filename path ending in .gir" % (include_path, ))
         girname = basename[:-4]
         include = ast.Include.from_string(girname)
-        if girname in self._include_names:
+        if include in self._include_names:
             return
         self._parse_include(include_path, uninstalled=True)
         self._include_names.add(include)
