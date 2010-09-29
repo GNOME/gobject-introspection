@@ -101,7 +101,7 @@
  * g_spawn_async:
  * @working_directory: (allow-none):
  * @envp: (allow-none):
- * @child_setup: (scope async): (allow-none):
+ * @child_setup: (scope async) (allow-none):
  * @user_data: (allow-none):
  * @child_pid: (out):
  */
@@ -110,7 +110,7 @@
  * g_spawn_async_with_pipes:
  * @working_directory: (allow-none):
  * @envp: (allow-none):
- * @child_setup: (scope async): (allow-none):
+ * @child_setup: (scope async) (allow-none):
  * @user_data: (allow-none):
  * @child_pid: (out):
  * @standard_input: (out):
@@ -122,7 +122,7 @@
  * g_spawn_sync:
  * @working_directory: (allow-none):
  * @envp: (allow-none):
- * @child_setup: (scope call): (allow-none):
+ * @child_setup: (scope call) (allow-none):
  * @user_data: (allow-none):
  * @standard_output: (out):
  * @standard_error: (out):
@@ -150,7 +150,7 @@
  * g_shell_parse_argv:
  * @command_line:
  * @argcp: (out):
- * @argvp: (out): (array zero-terminated=1):
+ * @argvp: (out) (array zero-terminated=1):
  * @error:
  */
 
