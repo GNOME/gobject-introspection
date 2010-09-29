@@ -89,7 +89,7 @@ annotation_object_class_init (AnnotationObjectClass *klass)
   /**
    * AnnotationObject::list-signal:
    * @annotation: the annotation object
-   * @list: (type GLib.List) (element-type utf8): (transfer container): a list of strings
+   * @list: (type GLib.List) (element-type utf8) (transfer container): a list of strings
    *
    * This is a signal which takes a list of strings, but it's not
    * known by GObject as it's only marked as G_TYPE_POINTER
@@ -210,7 +210,7 @@ annotation_object_out (AnnotationObject *object, int *outarg)
  *
  * This is a test for in arguments
  *
- * @inarg: (in): (transfer none): This is an argument test
+ * @inarg: (in) (transfer none): This is an argument test
  * Return value: an int
  */
 gint

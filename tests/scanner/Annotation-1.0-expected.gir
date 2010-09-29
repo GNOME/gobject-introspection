@@ -778,6 +778,14 @@ detection, and fixing it via annotations.</doc>
         </parameter>
       </parameters>
     </function>
+    <function name="test_parsing_bug630862"
+              c:identifier="annotation_test_parsing_bug630862">
+      <doc xml:whitespace="preserve">See https://bugzilla.gnome.org/show_bug.cgi?id=630862</doc>
+      <return-value transfer-ownership="none">
+        <doc xml:whitespace="preserve">An object, note the colon:in here</doc>
+        <type name="GObject.Object" c:type="GObject*"/>
+      </return-value>
+    </function>
     <function name="versioned"
               c:identifier="annotation_versioned"
               version="0.6">
