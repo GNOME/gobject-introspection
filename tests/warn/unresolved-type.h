@@ -17,3 +17,7 @@ typedef enum {
 } TestMyEnum2;
 
 // EXPECT:17: Warning: Test: symbol='TestMyEnum2': Unknown namespace for symbol 'MY_ENUM_A'
+
+/* Stub function here so namespace isn't empty */
+void test_foo (void);
+

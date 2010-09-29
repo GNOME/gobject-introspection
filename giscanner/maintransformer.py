@@ -47,6 +47,12 @@ class MainTransformer(object):
     # Public API
 
     def transform(self):
+        contents = list(self._namespace.itervalues())
+        if len(contents) == 0:
+            message.fatal("""Namespace is empty; likely causes are:
+* Not including .h files to be scanned
+* Broken --identifier-prefix
+""")
         ## WORKAROUND ##
         # Dirty hack for now...maybe eventually we'll support the "typedef GSList FooSet"
         # pattern.
