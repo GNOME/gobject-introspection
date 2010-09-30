@@ -37,9 +37,9 @@ release-tag:
               GOBJECT_INTROSPECTION_$$TAG && \
 	      git push --tags ssh://git.gnome.org/git/gobject-introspection
 
-upload-release: $(distdir).tar.gz
-	scp $(distdir).tar.gz gnome.org:
-	ssh gnome.org install-module $(distdir).tar.gz
+upload-release: $(distdir).tar.bz2
+	scp $(distdir).tar.bz2 gnome.org:
+	ssh gnome.org install-module $(distdir).tar.bz2
 
 check-local:
 	@test ! -d $(top_srcdir)/.git || (test -f .git/hooks/pre-commit || (echo -e "ERROR: missing \
