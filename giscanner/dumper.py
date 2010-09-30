@@ -25,6 +25,7 @@ import tempfile
 
 from .gdumpparser import IntrospectionBinary
 from .utils import get_libtool_command
+from .config import DATADIR
 
 # bugzilla.gnome.org/558436
 # Compile a binary program which is then linked to a library
@@ -32,36 +33,34 @@ from .utils import get_libtool_command
 
 _PROGRAM_TEMPLATE = """/* This file is generated, do not edit */
 #include <glib.h>
-#include <girepository.h>
 #include <string.h>
+#include <stdlib.h>
 
-static GOptionEntry entries[] =
-{
-  { NULL }
-};
+%(gdump_include)s
 
 int
 main(int argc, char **argv)
 {
-  GOptionContext *context;
   GError *error = NULL;
+  const char *introspect_dump_prefix = "--introspect-dump=";
 
   if (!g_thread_supported ()) g_thread_init (NULL);
   g_type_init ();
 
   %(init_sections)s
 
-  context = g_option_context_new ("");
-  g_option_context_add_main_entries (context, entries, "girepository-1.0");
-  g_option_context_add_group (context, g_irepository_get_option_group ());
-  if (!g_option_context_parse (context, &argc, &argv, &error))
+  if (argc != 2 || !g_str_has_prefix (argv[1], introspect_dump_prefix))
     {
-      g_printerr ("introspect failed (%%d,%%d): %%s\\n",
-                  error->domain, error->code,
-                  error->message);
-      return 1;
+      g_printerr ("Usage: %%s --introspect-dump=input,output", argv[0]);
+      exit (1);
     }
-  return 0;
+
+  if (!g_irepository_dump (argv[1] + strlen(introspect_dump_prefix), &error))
+    {
+      g_printerr ("%%s\\n", error->message);
+      exit (1);
+    }
+  exit (0);
 }
 """
 
@@ -90,13 +89,22 @@ class DumpCompiler(object):
         self._uninst_srcdir = os.environ.get(
             'UNINSTALLED_INTROSPECTION_SRCDIR')
         self._packages = ['gio-2.0 gthread-2.0']
-        if not self._uninst_srcdir:
-            self._packages.append('gobject-introspection-1.0')
 
     # Public API
 
     def run(self):
         tpl_args = {}
+        if self._uninst_srcdir is not None:
+            gdump_path = os.path.join(self._uninst_srcdir, 'girepository', 'gdump.c')
+        else:
+            gdump_path = os.path.join(os.path.join(DATADIR), 'gobject-introspection-1.0',
+                                      'gdump.c')
+        if not os.path.isfile(gdump_path):
+            raise SystemExit("Couldn't find %r" % (gdump_path, ))
+        gdump_file = open(gdump_path)
+        gdump_contents = gdump_file.read()
+        gdump_file.close()
+        tpl_args['gdump_include'] = gdump_contents
         tpl_args['init_sections'] = "\n".join(self._options.init_sections)
 
         c_path = self._generate_tempfile('.c')
@@ -156,9 +164,6 @@ class DumpCompiler(object):
         if self._compiler_cmd == 'gcc' and not self._options.init_sections:
             args.append('-Wall')
         pkgconfig_flags = self._run_pkgconfig('--cflags')
-        if self._uninst_srcdir:
-            args.append('-I' + os.path.join(self._uninst_srcdir,
-                                               'girepository'))
         args.extend(pkgconfig_flags)
         cflags = os.environ.get('CFLAGS')
         if (cflags):
@@ -204,29 +209,11 @@ class DumpCompiler(object):
         if not libtool:
             args.append('-Wl,-rpath=.')
 
-        uninst_builddir = os.environ.get('UNINSTALLED_INTROSPECTION_BUILDDIR')
-        if not uninst_builddir:
-            proc = subprocess.Popen([self._pkgconfig_cmd, '--libs',
-                                     'gobject-introspection-1.0'],
-                                    stdout=subprocess.PIPE)
-            args.extend(proc.communicate()[0].split())
-        # hack for building GIRepository.gir, skip -lgirepository-1.0 since
-        # libgirepository-1.0.la is not in current directory and we refer to it
-        # explicitly below anyway
         for library in self._options.libraries:
-            if (uninst_builddir and
-                self._options.libraries[0] == 'girepository-1.0'):
-                continue
             if library.endswith(".la"): # explicitly specified libtool library
                 args.append(library)
             else:
                 args.append('-l' + library)
-
-        # hack for building gobject-introspection itself
-        if uninst_builddir:
-            path = os.path.join(uninst_builddir, 'girepository',
-                                'libgirepository-1.0.la')
-            args.append(path)
 
         args.extend(self._run_pkgconfig('--libs'))
         for source in sources:
