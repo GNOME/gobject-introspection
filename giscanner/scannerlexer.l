@@ -78,6 +78,7 @@ stringtext				([^\\\"])|(\\.)
 
 "#define "[a-zA-Z_][a-zA-Z_0-9]*"("	{ yyless (yyleng - 1); return FUNCTION_MACRO; }
 "#define "[a-zA-Z_][a-zA-Z_0-9]*	{ return OBJECT_MACRO; }
+"#pragma ".*"\n"			{ /* Ignore pragma. */ }
 
 "# "[0-9]+" ".*"\n"			{ process_linemarks(scanner); }
 "#"			                { }
