@@ -192,6 +192,8 @@ class DumpCompiler(object):
             args.append('--silent')
 
         args.extend([self._linker_cmd, '-o', output])
+        if libtool:
+            args.append('-export-dynamic')
 
         cflags = os.environ.get('CFLAGS')
         if (cflags):
