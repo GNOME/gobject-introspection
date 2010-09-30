@@ -173,7 +173,7 @@ EXTRA_DIST += glib-2.0.c gobject-2.0.c gio-2.0.c
 # girepository
 GIRepository-2.0.gir: GObject-2.0.gir $(top_builddir)/girepository/libgirepository-1.0.la
 
-GIRepository_2_0_gir_LIBS = girepository-1.0
+GIRepository_2_0_gir_LIBS = $(top_builddir)/girepository/libgirepository-1.0.la
 GIRepository_2_0_gir_SCANNERFLAGS = \
 	--warn-all \
         --identifier-prefix=GI \
