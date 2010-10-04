@@ -215,16 +215,6 @@ def process_packages(options, packages):
     options.cpp_defines.extend(pkg_options.cpp_defines)
     options.cpp_undefines.extend(pkg_options.cpp_undefines)
 
-    args = ['pkg-config', '--libs-only-L']
-    args.extend(packages)
-    output = subprocess.Popen(args,
-                              stdout=subprocess.PIPE).communicate()[0]
-    if output is None:
-        return 1
-    filtered_output = list(process_options(output, options_whitelist))
-    pkg_options, unused = parser.parse_args(filtered_output)
-    options.library_paths.extend(pkg_options.library_paths)
-
 def extract_filenames(args):
     filenames = []
     for arg in args:

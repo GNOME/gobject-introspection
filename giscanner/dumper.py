@@ -216,9 +216,6 @@ class DumpCompiler(object):
         # Search the current directory first
         args.append('-L.')
 
-        for library_path in self._options.library_paths:
-            args.append('-L' + library_path)
-
         # https://bugzilla.gnome.org/show_bug.cgi?id=625195
         if not libtool:
             args.append('-Wl,-rpath=.')
@@ -228,6 +225,9 @@ class DumpCompiler(object):
                 args.append(library)
             else:
                 args.append('-l' + library)
+
+        for library_path in self._options.library_paths:
+            args.append('-L' + library_path)
 
         args.extend(self._run_pkgconfig('--libs'))
         for source in sources:
