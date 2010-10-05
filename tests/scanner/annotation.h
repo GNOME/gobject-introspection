@@ -4,6 +4,15 @@
 #include <glib-object.h>
 
 /**
+ * AnnotationBitfield: (type bitfield)
+ **/
+typedef enum
+{
+  ANNOTATION_FLAG_FOO = 1,
+  ANNOTATION_FLAG_BAR = 2
+} AnnotationBitfield;
+
+/**
  * AnnotationCallback:
  * @in: (in) (transfer none): array of ints
  *
