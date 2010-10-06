@@ -33,7 +33,7 @@ EXTRA_DIST = 			\
 release-tag:
 	@TAG=`echo $(VERSION)|sed s/\\\./_/g`;\
 	  echo "* Tagging $(VERSION)"; \
-          git tag -s -m "Tag $$VERSION" -a \
+          git tag -m "Tag $$VERSION" -a \
               GOBJECT_INTROSPECTION_$$TAG && \
 	      git push --tags ssh://git.gnome.org/git/gobject-introspection
 
