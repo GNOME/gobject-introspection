@@ -411,9 +411,10 @@ usage is void (*_gtk_reserved1)(void);"""
                 "Unknown container %r for element-type annotation" % (node.type, ))
 
     def _apply_annotations_enum(self, node, block):
-        enum_type = block.options.get(OPT_TYPE)
-        if enum_type and enum_type.one() == 'bitfield':
-            node.__class__ = ast.Bitfield
+        if block:
+            enum_type = block.options.get(OPT_TYPE)
+            if enum_type and enum_type.one() == 'bitfield':
+                node.__class__ = ast.Bitfield
         self._apply_annotations_annotated(node, block)
 
     def _get_transfer_default_param(self, parent, node):
