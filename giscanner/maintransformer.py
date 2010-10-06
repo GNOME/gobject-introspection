@@ -219,9 +219,8 @@ usage is void (*_gtk_reserved1)(void);"""
             self._apply_annotations_function(node, chain)
         if isinstance(node, ast.Callback):
             self._apply_annotations_callable(node, chain, block = self._get_block(node))
-        if isinstance(node, (ast.Enum, ast.Bitfield)):
-            self._apply_annotations_enum(node, self._get_block(node))
-        if isinstance(node, (ast.Class, ast.Interface, ast.Union, ast.Callback)):
+        if isinstance(node, (ast.Class, ast.Interface, ast.Union, ast.Enum,
+                             ast.Bitfield, ast.Callback)):
             self._apply_annotations_annotated(node, self._get_block(node))
         if isinstance(node, (ast.Class, ast.Interface, ast.Record, ast.Union)):
             block = self._get_block(node)
@@ -409,12 +408,6 @@ usage is void (*_gtk_reserved1)(void);"""
         else:
             message.warn_node(parent,
                 "Unknown container %r for element-type annotation" % (node.type, ))
-
-    def _apply_annotations_enum(self, node, block):
-        enum_type = block.options.get(OPT_TYPE)
-        if enum_type and enum_type.one() == 'bitfield':
-            node.__class__ = ast.Bitfield
-        self._apply_annotations_annotated(node, block)
 
     def _get_transfer_default_param(self, parent, node):
         if node.direction in [ast.PARAM_DIRECTION_INOUT,
