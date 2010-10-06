@@ -44,7 +44,6 @@ HTML_IMAGES = \
 FIXXREF_OPTIONS=
 
 # include common portion ...
-if ENABLE_GTK_DOC
 include $(top_srcdir)/gtk-doc.make
 # Other files to distribute
 EXTRA_DIST += version.xml.in
@@ -53,7 +52,6 @@ gtk-docs-clean:
 	rm -fr html tmpl xml
 
 clean-local: gtk-docs-clean
-endif
 
 ########################################################################
 
