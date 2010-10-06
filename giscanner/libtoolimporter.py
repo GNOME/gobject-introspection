@@ -20,6 +20,7 @@
 
 import imp
 import os
+import platform
 import sys
 
 from .utils import extract_libtool
@@ -49,8 +50,16 @@ class LibtoolImporter(object):
 
     def load_module(self, name):
         realpath = extract_libtool(self.path)
-        mod = imp.load_module(name, open(realpath), realpath,
-                              ('.so', 'rb', 3))
+        platform_system = platform.system()
+
+        if platform_system == 'Darwin':
+            extension = '.dylib'
+        elif platform_system == 'Windows':
+            extension = '.dll'
+        else:
+            extension = '.so'
+
+        mod = imp.load_module(name, open(realpath), realpath, (extension, 'rb', 3))
         mod.__loader__ = self
         return mod
 
