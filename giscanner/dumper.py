@@ -21,10 +21,11 @@
 
 import os
 import subprocess
+import shutil
 import tempfile
 
 from .gdumpparser import IntrospectionBinary
-from .utils import get_libtool_command
+from . import utils
 from .config import DATADIR
 
 # bugzilla.gnome.org/558436
@@ -78,9 +79,6 @@ class DumpCompiler(object):
     def __init__(self, options, get_type_functions):
         self._options = options
         self._get_type_functions = get_type_functions
-        # We have to use the current directory to work around Unix
-        # sysadmins who mount /tmp noexec
-        self._tmpdir = tempfile.mkdtemp('', 'tmp-introspect', dir=os.getcwd())
 
         self._compiler_cmd = os.environ.get('CC', 'gcc')
         self._linker_cmd = os.environ.get('CC', self._compiler_cmd)
@@ -93,6 +91,10 @@ class DumpCompiler(object):
     # Public API
 
     def run(self):
+        # We have to use the current directory to work around Unix
+        # sysadmins who mount /tmp noexec
+        tmpdir = tempfile.mkdtemp('', 'tmp-introspect', dir=os.getcwd())
+
         tpl_args = {}
         if self._uninst_srcdir is not None:
             gdump_path = os.path.join(self._uninst_srcdir, 'girepository', 'gdump.c')
@@ -107,7 +109,7 @@ class DumpCompiler(object):
         tpl_args['gdump_include'] = gdump_contents
         tpl_args['init_sections'] = "\n".join(self._options.init_sections)
 
-        c_path = self._generate_tempfile('.c')
+        c_path = self._generate_tempfile(tmpdir, '.c')
         f = open(c_path, 'w')
         f.write(_PROGRAM_TEMPLATE % tpl_args)
 
@@ -128,27 +130,31 @@ class DumpCompiler(object):
             f.write("\n};\n")
         f.close()
 
-        o_path = self._generate_tempfile('.o')
-        bin_path = self._generate_tempfile()
+        o_path = self._generate_tempfile(tmpdir, '.o')
+        bin_path = self._generate_tempfile(tmpdir)
 
         try:
             self._compile(o_path, c_path)
         except CompilerError, e:
-            raise SystemExit('ERROR: ' + str(e))
+            if not utils.have_debug_flag('save-temps'):
+                shutil.rmtree(tmpdir)
+            raise SystemExit('compilation of temporary binary failed:' + str(e))
 
         try:
             self._link(bin_path, o_path)
         except LinkerError, e:
-            raise SystemExit('ERROR: ' + str(e))
+            if not utils.have_debug_flag('save-temps'):
+                shutil.rmtree(tmpdir)
+            raise SystemExit('linking of temporary binary failed: ' + str(e))
 
-        return IntrospectionBinary([bin_path], self._tmpdir)
+        return IntrospectionBinary([bin_path], tmpdir)
 
     # Private API
 
-    def _generate_tempfile(self, suffix=''):
+    def _generate_tempfile(self, tmpdir, suffix=''):
         tmpl = '%s-%s%s' % (self._options.namespace_name,
                             self._options.namespace_version, suffix)
-        return os.path.join(self._tmpdir, tmpl)
+        return os.path.join(tmpdir, tmpl)
 
     def _run_pkgconfig(self, flag):
         proc = subprocess.Popen(
@@ -180,11 +186,14 @@ class DumpCompiler(object):
         if not self._options.quiet:
             print "g-ir-scanner: compile: %s" % (
                 subprocess.list2cmdline(args), )
-        subprocess.check_call(args)
+        try:
+            subprocess.check_call(args)
+        except subprocess.CalledProcessError, e:
+            raise CompilerError(e)
 
     def _link(self, output, *sources):
         args = []
-        libtool = get_libtool_command(self._options)
+        libtool = utils.get_libtool_command(self._options)
         if libtool:
             args.extend(libtool)
             args.append('--mode=link')
@@ -230,8 +239,10 @@ class DumpCompiler(object):
         if not self._options.quiet:
             print "g-ir-scanner: link: %s" % (
                 subprocess.list2cmdline(args), )
-        subprocess.check_call(args)
-
+        try:
+            subprocess.check_call(args)
+        except subprocess.CalledProcessError, e:
+            raise LinkerError(e)
 
 def compile_introspection_binary(options, get_type_functions):
     dc = DumpCompiler(options, get_type_functions)

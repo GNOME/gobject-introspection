@@ -27,6 +27,7 @@ from xml.etree.cElementTree import parse
 
 from . import ast
 from . import message
+from . import utils
 from .transformer import TransformerException
 
 # GParamFlags
@@ -167,7 +168,8 @@ blob containing data gleaned from GObject's primitive introspection."""
                 raise SystemExit(e)
             return parse(out_path)
         finally:
-            shutil.rmtree(self._binary.tmpdir)
+            if not utils.have_debug_flag('save-temps'):
+                shutil.rmtree(self._binary.tmpdir)
 
     def _create_gobject(self, node):
         type_name = 'G' + node.name
