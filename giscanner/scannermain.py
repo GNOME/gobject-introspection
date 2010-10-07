@@ -405,9 +405,13 @@ def scanner_main(args):
     final = IntrospectablePass(transformer, blocks)
     final.validate()
 
-    if options.warn_fatal and logger.did_warn():
+    warning_count = logger.get_warning_count()
+    if options.warn_fatal and warning_count > 0:
         message.fatal("warnings configured as fatal")
         return 1
+    elif warning_count > 0:
+        print ("g-ir-scanner: %s: warning: %d warnings suppressed (use --warn-all to see them)"
+               % (transformer.namespace.name, warning_count, ))
 
     # Write out AST
     if options.packages_export:

@@ -74,7 +74,7 @@ class MessageLogger(object):
         self._output = output
         self._namespace = namespace
         self._enable_warnings = False
-        self._warned = False
+        self._warning_count = 0
 
     @classmethod
     def get(cls, *args, **kwargs):
@@ -85,20 +85,20 @@ class MessageLogger(object):
     def enable_warnings(self, enable):
         self._enable_warnings = enable
 
-    def did_warn(self):
-        return self._warned
+    def get_warning_count(self):
+        return self._warning_count
 
     def log(self, log_type, text, positions=None, prefix=None):
         """Log a warning, using optional file positioning information.
 If the warning is related to a ast.Node type, see log_node_warning()."""
         utils.break_on_debug_flag('warning')
 
+        self._warning_count += 1
+
         if not self._enable_warnings:
             if log_type == FATAL:
                 raise SystemExit(text)
             return
-
-        self._warned = True
 
         if type(positions) == set:
             positions = list(positions)
