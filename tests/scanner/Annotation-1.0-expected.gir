@@ -737,6 +737,13 @@ detection, and fixing it via annotations.</doc>
         </parameter>
       </parameters>
     </function>
+    <function name="space_after_comment_bug631690"
+              c:identifier="annotation_space_after_comment_bug631690">
+      <doc xml:whitespace="preserve">Explicitly test having a space after the ** here.</doc>
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+    </function>
     <function name="string_array_length"
               c:identifier="annotation_string_array_length">
       <return-value transfer-ownership="none">

@@ -158,5 +158,8 @@ void    annotation_ptr_array (GPtrArray *array);
 
 GObject  * annotation_test_parsing_bug630862 (void);
 
+void annotation_space_after_comment_bug631690 (void);
+
+
 #endif /* __ANNOTATION_OBJECT_H__ */
 

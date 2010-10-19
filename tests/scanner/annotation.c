@@ -771,3 +771,14 @@ annotation_test_parsing_bug630862 (void)
 {
   return NULL;
 }
+
+
+/** 
+ * annotation_space_after_comment_bug631690:
+ *
+ * Explicitly test having a space after the ** here.
+ */
+void
+annotation_space_after_comment_bug631690 (void)
+{
+}

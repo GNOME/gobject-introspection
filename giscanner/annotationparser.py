@@ -25,9 +25,6 @@ import re
 from . import message
 from .odict import odict
 
-# All gtk-doc comments needs to start with this:
-_COMMENT_HEADER = '*\n '
-
 # Tags - annotations applyed to comment blocks
 TAG_VFUNC = 'virtual'
 TAG_SINCE = 'since'
@@ -405,6 +402,7 @@ class DocOption(object):
 
 
 class AnnotationParser(object):
+    COMMENT_HEADER_RE = re.compile(r'^\*[ \t]*\n ')
     WHITESPACE_RE = re.compile(r'^\s*$')
     ASCII_TEXT_RE = re.compile(r'\s*[A-Za-z]+')
     OPTION_RE = re.compile(r'\([A-Za-z]+[^(]*\)')
@@ -434,9 +432,9 @@ class AnnotationParser(object):
         #
         comment, filename, lineno = cmt
         comment = comment.lstrip()
-        if not comment.startswith(_COMMENT_HEADER):
+        if not self.COMMENT_HEADER_RE.search(comment):
             return
-        comment = comment[len(_COMMENT_HEADER):]
+        comment = self.COMMENT_HEADER_RE.sub('', comment, count=1)
         comment = comment.strip()
         if not comment.startswith('* '):
             return
