@@ -53,6 +53,7 @@ endif
 
 GLib_2_0_gir_LIBS = $(GLIB_LIBRARY)
 GLib_2_0_gir_SCANNERFLAGS = \
+            --external-library \
             --reparse-validate \
             --identifier-prefix=G \
             --symbol-prefix=g \
@@ -91,6 +92,7 @@ GObject-2.0.gir: GLib-2.0.gir
 
 GObject_2_0_gir_LIBS = $(GOBJECT_LIBRARY)
 GObject_2_0_gir_SCANNERFLAGS = \
+            --external-library \
             --reparse-validate \
             --identifier-prefix=G \
             --c-include="glib-object.h" \
@@ -121,6 +123,7 @@ GModule-2.0.gir: GLib-2.0.gir
 
 GModule_2_0_gir_LIBS = $(GMODULE_LIBRARY)
 GModule_2_0_gir_SCANNERFLAGS = \
+            --external-library \
             --identifier-prefix=G \
             --c-include="gmodule.h" \
             --add-include-path=. \
@@ -157,6 +160,7 @@ Gio-2.0.gir: GObject-2.0.gir
 
 Gio_2_0_gir_LIBS = $(GIO_LIBRARY)
 Gio_2_0_gir_SCANNERFLAGS = \
+            --external-library \
             --reparse-validate \
             --warn-all \
             --identifier-prefix=G \

@@ -214,6 +214,29 @@ class DumpCompiler(object):
         # likely to be uninstalled yet and we want the uninstalled RPATHs have
         # priority (or we might run with installed library that is older)
 
+        if not self._options.external_library:
+            self._add_link_internal_args(args, libtool)
+        else:
+            self._add_link_external_args(args)
+
+        for source in sources:
+            if not os.path.exists(source):
+                raise CompilerError(
+                    "Could not find object file: %s" % (source, ))
+        args.extend(list(sources))
+
+        if not self._options.quiet:
+            print "g-ir-scanner: link: %s" % (
+                subprocess.list2cmdline(args), )
+        try:
+            subprocess.check_call(args)
+        except subprocess.CalledProcessError, e:
+            raise LinkerError(e)
+
+    def _add_link_internal_args(self, args, libtool):
+        # An "internal" link is where the library to be introspected
+        # is being built in the current directory.
+
         # Search the current directory first
         args.append('-L.')
 
@@ -231,19 +254,18 @@ class DumpCompiler(object):
             args.append('-L' + library_path)
 
         args.extend(self._run_pkgconfig('--libs'))
-        for source in sources:
-            if not os.path.exists(source):
-                raise CompilerError(
-                    "Could not find object file: %s" % (source, ))
-        args.extend(list(sources))
 
-        if not self._options.quiet:
-            print "g-ir-scanner: link: %s" % (
-                subprocess.list2cmdline(args), )
-        try:
-            subprocess.check_call(args)
-        except subprocess.CalledProcessError, e:
-            raise LinkerError(e)
+    def _add_link_external_args(self, args):
+        # An "external" link is where the library to be introspected
+        # is installed on the system; this case is used for the scanning
+        # of GLib in gobject-introspection itself.
+
+        args.extend(self._run_pkgconfig('--libs'))
+        for library in self._options.libraries:
+            if library.endswith(".la"): # explicitly specified libtool library
+                args.append(library)
+            else:
+                args.append('-l' + library)
 
 def compile_introspection_binary(options, get_type_functions):
     dc = DumpCompiler(options, get_type_functions)
