@@ -94,6 +94,11 @@ in contrast to the other create_type() functions."""
         elif gtype_name in ('GArray', 'GPtrArray', 'GByteArray'):
             return Array('GLib.' + gtype_name[1:], TYPE_ANY,
                          gtype_name=gtype_name)
+        elif gtype_name == 'GStrv':
+            bare_utf8 = TYPE_STRING.clone()
+            bare_utf8.ctype = None
+            return Array(None, bare_utf8, ctype=None, gtype_name=gtype_name,
+                         is_const=False)
         return cls(gtype_name=gtype_name)
 
     def get_giname(self):

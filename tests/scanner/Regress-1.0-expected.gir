@@ -640,6 +640,20 @@ TpAccount::status-changed</doc>
           </parameter>
         </parameters>
       </glib:signal>
+      <glib:signal name="sig-with-strv">
+        <doc xml:whitespace="preserve">Test GStrv as a param.</doc>
+        <return-value transfer-ownership="none">
+          <type name="none"/>
+        </return-value>
+        <parameters>
+          <parameter name="object" transfer-ownership="none">
+            <doc xml:whitespace="preserve">strings</doc>
+            <array>
+              <type name="utf8"/>
+            </array>
+          </parameter>
+        </parameters>
+      </glib:signal>
       <glib:signal name="test">
         <return-value transfer-ownership="none">
           <type name="none"/>
