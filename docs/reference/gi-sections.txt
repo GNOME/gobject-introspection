@@ -29,6 +29,8 @@ g_irepository_find_by_gtype
 g_irepository_find_by_error_domain
 g_irepository_find_by_name
 <SUBSECTION>
+g_irepository_get_object_gtype_interfaces
+<SUBSECTION>
 g_irepository_dump
 <SUBSECTION>
 gi_cclosure_marshal_generic
