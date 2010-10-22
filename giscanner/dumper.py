@@ -200,7 +200,7 @@ class DumpCompiler(object):
             args.append('--tag=CC')
             args.append('--silent')
 
-        args = self._linker_cmd.split()
+        args.extend(self._linker_cmd.split())
         args.extend(['-o', output])
         if libtool:
             args.append('-export-dynamic')
