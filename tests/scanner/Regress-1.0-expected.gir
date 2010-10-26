@@ -2274,6 +2274,16 @@ call and can be released on return.</doc>
         </parameter>
       </parameters>
     </function>
+    <function name="test_unichar" c:identifier="regress_test_unichar">
+      <return-value transfer-ownership="none">
+        <type name="gunichar" c:type="gunichar"/>
+      </return-value>
+      <parameters>
+        <parameter name="in" transfer-ownership="none">
+          <type name="gunichar" c:type="gunichar"/>
+        </parameter>
+      </parameters>
+    </function>
     <function name="test_ushort" c:identifier="regress_test_ushort">
       <return-value transfer-ownership="none">
         <type name="gushort" c:type="gushort"/>

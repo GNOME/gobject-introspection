@@ -148,6 +148,11 @@ regress_test_double (gdouble in)
   return in;
 }
 
+gunichar
+regress_test_unichar (gunichar in)
+{
+  return in;
+}
 
 time_t
 regress_test_timet (time_t in)

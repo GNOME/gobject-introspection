@@ -143,10 +143,6 @@ class IntrospectablePass(object):
         if typeval.target_fundamental:
             if typeval.is_equiv(ast.TYPE_VALIST):
                 return False
-            # Mark UCHAR as not introspectable temporarily until
-            # we're ready to land the typelib changes
-            if typeval.is_equiv(ast.TYPE_UNICHAR):
-                return False
             # These are not introspectable pending us adding
             # larger type tags to the typelib (in theory these could
             # be 128 bit or larger)

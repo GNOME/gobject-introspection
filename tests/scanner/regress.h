@@ -30,6 +30,7 @@ gssize regress_test_ssize (gssize in);
 gsize regress_test_size (gsize in);
 gfloat regress_test_float (gfloat in);
 gdouble regress_test_double (gdouble in);
+gunichar regress_test_unichar (gunichar in);
 time_t regress_test_timet (time_t in);
 GType regress_test_gtype (GType in);
 
