@@ -41,6 +41,7 @@ main(int argc, char **argv)
   GITypelib *ret;
   GError *error = NULL;
   GIBaseInfo *info;
+  GIBaseInfo *siginfo;
   GType gtype;
   char *girdir;
 
@@ -72,6 +73,12 @@ main(int argc, char **argv)
 
   info = g_irepository_find_by_name (repo, "Gio", "ThisDoesNotExist");
   g_assert (info == NULL);
+
+  info = g_irepository_find_by_name (repo, "Gio", "FileMonitor");
+  g_assert (info != NULL);
+  siginfo = g_object_info_find_signal ((GIObjectInfo*) info, "changed");
+  g_assert (siginfo != NULL);
+  g_base_info_unref (siginfo);
 
   /* vfunc tests */
   {
