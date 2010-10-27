@@ -53,16 +53,6 @@ class MainTransformer(object):
 * Not including .h files to be scanned
 * Broken --identifier-prefix
 """)
-        ## WORKAROUND ##
-        # Dirty hack for now...maybe eventually we'll support the "typedef GSList FooSet"
-        # pattern.
-        # https://bugzilla.gnome.org/show_bug.cgi?id=629682
-        if self._namespace.name == 'Atk':
-            attribute = self._namespace.get('Attribute')
-            attributeset = self._namespace.get('AttributeSet')
-            if attribute and attributeset:
-                alias = ast.Alias('AttributeSet', target=ast.TYPE_ANY)
-                self._namespace.append(alias, replace=True)
 
         # Some initial namespace surgery
         self._namespace.walk(self._pass_fixup_hidden_fields)

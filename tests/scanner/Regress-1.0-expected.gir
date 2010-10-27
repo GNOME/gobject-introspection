@@ -19,6 +19,14 @@ and/or use gtk-doc annotations.  -->
       <doc xml:whitespace="preserve">Compatibility typedef, like telepathy-glib's TpIntSet</doc>
       <type name="Intset" c:type="RegressIntset"/>
     </alias>
+    <alias name="PtrArrayAlias" c:type="RegressPtrArrayAlias">
+      <doc xml:whitespace="preserve">Typedef'd GPtrArray for some reason</doc>
+      <type name="GLib.PtrArray" c:type="GPtrArray"/>
+    </alias>
+    <alias name="VaListAlias" c:type="RegressVaListAlias" introspectable="0">
+      <doc xml:whitespace="preserve">Typedef'd va_list for additional reasons</doc>
+      <type name="va_list" c:type="va_list"/>
+    </alias>
     <constant name="DOUBLE_CONSTANT" value="44.220000">
       <type name="gdouble" c:type="gdouble"/>
     </constant>
@@ -977,6 +985,29 @@ TpAccount::status-changed</doc>
                    transfer-ownership="full">
           <doc xml:whitespace="preserve">A flags value</doc>
           <type name="TestFlags" c:type="RegressTestFlags*"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="introspectable_via_alias"
+              c:identifier="regress_introspectable_via_alias">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="data" transfer-ownership="none">
+          <type name="PtrArrayAlias" c:type="RegressPtrArrayAlias*"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="not_introspectable_via_alias"
+              c:identifier="regress_not_introspectable_via_alias"
+              introspectable="0">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="ok" transfer-ownership="none">
+          <type name="VaListAlias" c:type="RegressVaListAlias"/>
         </parameter>
       </parameters>
     </function>

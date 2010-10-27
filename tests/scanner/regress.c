@@ -2871,3 +2871,21 @@ regress_test_strv_in_gvalue (void)
 
   return value;
 }
+
+/**
+ * regress_introspectable_via_alias:
+ *
+ */
+void
+regress_introspectable_via_alias (RegressPtrArrayAlias *data)
+{
+}
+
+/**
+ * regress_not_introspectable_via_alias:
+ *
+ */
+void
+regress_not_introspectable_via_alias (RegressVaListAlias ok)
+{
+}

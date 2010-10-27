@@ -31,6 +31,7 @@ class IntrospectablePass(object):
     # Public API
 
     def validate(self):
+        self._namespace.walk(self._introspectable_alias_analysis)
         self._namespace.walk(self._propagate_callable_skips)
         self._namespace.walk(self._analyze_node)
         self._namespace.walk(self._introspectable_callable_analysis)
@@ -165,6 +166,12 @@ class IntrospectablePass(object):
 
         if target.skip:
             parent.skip = True
+
+    def _introspectable_alias_analysis(self, obj, stack):
+        if isinstance(obj, ast.Alias):
+            if not self._type_is_introspectable(obj.target):
+                obj.introspectable = False
+        return True
 
     def _propagate_callable_skips(self, obj, stack):
         if isinstance(obj, ast.Callable):

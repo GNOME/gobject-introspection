@@ -561,6 +561,24 @@ typedef struct _RegressIntset RegressIntset;
  */
 typedef RegressIntset RegressIntSet;
 
+/**
+ * RegressPtrArrayAlias:
+ *
+ * Typedef'd GPtrArray for some reason
+ */
+typedef GPtrArray RegressPtrArrayAlias;
+
+void regress_introspectable_via_alias (RegressPtrArrayAlias *data);
+
+/**
+ * RegressVaListAlias:
+ *
+ * Typedef'd va_list for additional reasons
+ */
+typedef va_list RegressVaListAlias;
+
+void regress_not_introspectable_via_alias (RegressVaListAlias ok);
+
 /* private testing */
 
 typedef struct {

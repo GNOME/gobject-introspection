@@ -157,7 +157,7 @@ and/or use gtk-doc annotations. ''')
         self._append_node_generic(alias, attrs)
         with self.tagcontext('alias', attrs):
             self._write_generic(alias)
-            self._write_type(alias.target)
+            self._write_type_ref(alias.target)
 
     def _write_callable(self, callable, tag_name, extra_attrs):
         attrs = [('name', callable.name)]
@@ -240,6 +240,28 @@ and/or use gtk-doc annotations. ''')
         if typeval.target_giname.startswith(prefix):
             return typeval.target_giname[len(prefix):]
         return typeval.target_giname
+
+    def _write_type_ref(self, ntype):
+	""" Like _write_type, but only writes the type name rather than the full details """
+        assert isinstance(ntype, ast.Type), ntype
+        attrs = []
+        if ntype.ctype:
+            attrs.append(('c:type', ntype.ctype))
+        if isinstance(ntype, ast.Array):
+            if ntype.array_type != ast.Array.C:
+                attrs.insert(0, ('name', ntype.array_type))
+        elif isinstance(ntype, ast.List):
+            if ntype.name:
+                attrs.insert(0, ('name', ntype.name))
+        elif isinstance(ntype, ast.Map):
+            attrs.insert(0, ('name', 'GLib.HashTable'))
+        else:
+            if ntype.target_giname:
+                attrs.insert(0, ('name', self._type_to_name(ntype)))
+            elif ntype.target_fundamental:
+                attrs.insert(0, ('name', ntype.target_fundamental))
+
+        self.write_tag('type', attrs)
 
     def _write_type(self, ntype, relation=None, function=None):
         assert isinstance(ntype, ast.Type), ntype
