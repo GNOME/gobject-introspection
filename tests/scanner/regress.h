@@ -579,4 +579,6 @@ typedef enum {
   REGRESS_TEST_PUBLIC_ENUM_AFTER  = 1 << 2,
 } RegressTestPrivateEnum;
 
+#define REGRESS_UTF8_CONSTANT "const \xe2\x99\xa5 utf8"
+
 #endif /* __GITESTTYPES_H__ */

@@ -49,6 +49,85 @@ extern void ctype_free (GISourceType * type);
 static int last_enum_value = -1;
 static gboolean is_bitfield;
 static GHashTable *const_table = NULL;
+
+/**
+ * parse_c_string_literal:
+ * @str: A string containing a C string literal
+ *
+ * Based on g_strcompress(), but also handles
+ * hexadecimal escapes.
+ */
+static char *
+parse_c_string_literal (const char *str)
+{
+  const gchar *p = str, *num;
+  gchar *dest = g_malloc (strlen (str) + 1);
+  gchar *q = dest;
+
+  while (*p)
+    {
+      if (*p == '\\')
+        {
+          p++;
+          switch (*p)
+            {
+            case '\0':
+              g_warning ("parse_c_string_literal: trailing \\");
+              goto out;
+            case '0':  case '1':  case '2':  case '3':  case '4':
+            case '5':  case '6':  case '7':
+              *q = 0;
+              num = p;
+              while ((p < num + 3) && (*p >= '0') && (*p <= '7'))
+                {
+                  *q = (*q * 8) + (*p - '0');
+                  p++;
+                }
+              q++;
+              p--;
+              break;
+	    case 'x':
+	      *q = 0;
+	      p++;
+	      num = p;
+	      while ((p < num + 2) && (g_ascii_isxdigit(*p)))
+		{
+		  *q = (*q * 16) + g_ascii_xdigit_value(*p);
+		  p++;
+		}
+              q++;
+              p--;
+	      break;
+            case 'b':
+              *q++ = '\b';
+              break;
+            case 'f':
+              *q++ = '\f';
+              break;
+            case 'n':
+              *q++ = '\n';
+              break;
+            case 'r':
+              *q++ = '\r';
+              break;
+            case 't':
+              *q++ = '\t';
+              break;
+            default:            /* Also handles \" and \\ */
+              *q++ = *p;
+              break;
+            }
+        }
+      else
+        *q++ = *p;
+      p++;
+    }
+out:
+  *q = 0;
+
+  return dest;
+}
+
 %}
 
 %error-verbose
@@ -186,7 +265,7 @@ strings
 	  {
 		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, lineno);
 		yytext[strlen (yytext) - 1] = '\0';
-		$$->const_string = g_strcompress (yytext + 1);
+		$$->const_string = parse_c_string_literal (yytext + 1);
                 if (!g_utf8_validate ($$->const_string, -1, NULL))
                   {
 #if 0
@@ -202,7 +281,7 @@ strings
 		char *strings, *string2;
 		$$ = $1;
 		yytext[strlen (yytext) - 1] = '\0';
-		string2 = g_strcompress (yytext + 1);
+		string2 = parse_c_string_literal (yytext + 1);
 		strings = g_strconcat ($$->const_string, string2, NULL);
 		g_free ($$->const_string);
 		g_free (string2);
