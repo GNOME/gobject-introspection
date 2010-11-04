@@ -20,6 +20,8 @@
 
 from __future__ import with_statement
 
+import os
+
 from contextlib import contextmanager
 from cStringIO import StringIO
 from xml.sax.saxutils import escape, quoteattr
@@ -68,7 +70,10 @@ def collect_attributes(tag_name, attributes, self_indent,
 
 
 with LibtoolImporter(None, None):
-    from giscanner._giscanner import collect_attributes
+    if 'UNINSTALLED_INTROSPECTION_SRCDIR' in os.environ:
+        from _giscanner import collect_attributes
+    else:
+        from giscanner._giscanner import collect_attributes
 
 
 class XMLWriter(object):

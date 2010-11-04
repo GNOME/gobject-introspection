@@ -678,8 +678,14 @@ DL_EXPORT(void)
 init_giscanner(void)
 {
     PyObject *m, *d;
+    gboolean is_uninstalled;
 
-    m = Py_InitModule ("giscanner._giscanner",
+    /* Hack to avoid having to create a fake directory structure; when
+     * running uninstalled, the module will be in the top builddir,
+     * with no _giscanner prefix.
+     */
+    is_uninstalled = g_getenv ("UNINSTALLED_INTROSPECTION_SRCDIR") != NULL;
+    m = Py_InitModule (is_uninstalled ? "_giscanner" : "giscanner._giscanner",
 		       (PyMethodDef*)pyscanner_functions);
     d = PyModule_GetDict (m);
 

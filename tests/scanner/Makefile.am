@@ -26,7 +26,7 @@ LIBS = $(GOBJECT_LIBS) $(GTHREAD_LIBS)
 libannotation_la_SOURCES = $(srcdir)/annotation.c $(srcdir)/annotation.h
 libtestinherit_la_SOURCES = $(srcdir)/drawable.c $(srcdir)/drawable.h
 libfoo_la_SOURCES = $(srcdir)/foo.c $(srcdir)/foo.h
-libfoo_la_LIBADD = $(top_builddir)/girepository/libgirepository-1.0.la
+libfoo_la_LIBADD = $(top_builddir)/libgirepository-1.0.la
 libutility_la_SOURCES = $(srcdir)/utility.c $(srcdir)/utility.h
 libgtkfrob_la_SOURCES = $(srcdir)/gtkfrob.c $(srcdir)/gtkfrob.h
 libregress_la_SOURCES = $(srcdir)/regress.c $(srcdir)/regress.h
@@ -52,7 +52,7 @@ CLEANFILES = $(TYPELIBS) $(GIRS)
 BUILT_SOURCES = $(TYPELIBS) $(GIRS)
 EXTRA_DIST = $(EXPECTEDGIRS)
 
-Regress-1.0.gir: $(top_builddir)/gir/Gio-2.0.gir libregress.la
+Regress-1.0.gir: $(top_builddir)/Gio-2.0.gir libregress.la
 Regress_1_0_gir_LIBS = libregress.la
 Regress_1_0_gir_INCLUDES = cairo-1.0 Gio-2.0
 Regress_1_0_gir_FILES = $(libregress_la_SOURCES)
@@ -101,7 +101,7 @@ GIRS += GtkFrob-1.0.gir
 noinst_PROGRAMS = barapp
 
 barapp_SOURCES = $(srcdir)/barapp.c $(srcdir)/barapp.h
-barapp_LDADD = $(top_builddir)/girepository/libgirepository-1.0.la
+barapp_LDADD = $(top_builddir)/libgirepository-1.0.la
 barapp_LDFLAGS = -export-dynamic
 
 Bar-1.0.gir: barapp

@@ -26,6 +26,12 @@ import tempfile
 from .libtoolimporter import LibtoolImporter
 from .message import Position
 
+with LibtoolImporter(None, None):
+    if 'UNINSTALLED_INTROSPECTION_SRCDIR' in os.environ:
+        from _giscanner import SourceScanner as CSourceScanner
+    else:
+        from giscanner._giscanner import SourceScanner as CSourceScanner
+
 (CSYMBOL_TYPE_INVALID,
  CSYMBOL_TYPE_ELLIPSIS,
  CSYMBOL_TYPE_CONST,
@@ -211,9 +217,7 @@ class SourceSymbol(object):
 class SourceScanner(object):
 
     def __init__(self):
-        with LibtoolImporter(None, None):
-            from giscanner._giscanner import SourceScanner
-        self._scanner = SourceScanner()
+        self._scanner = CSourceScanner()
         self._filenames = []
         self._cpp_options = []
 

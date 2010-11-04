@@ -1,0 +1,33 @@
+bin_PROGRAMS += g-ir-compiler g-ir-generate
+bin_SCRIPTS += g-ir-scanner g-ir-annotation-tool
+EXTRA_DIST += tools/g-ir-scanner.in tools/g-ir-annotation-tool.in
+
+g-ir-scanner: tools/g-ir-scanner.in _giscanner.la Makefile
+	$(AM_V_GEN) sed -e s,@libdir\@,$(libdir), -e s,@PYTHON\@,$(PYTHON), $< > $@.tmp && mv $@.tmp $@
+	@chmod a+x $@
+
+g-ir-annotation-tool: tools/g-ir-annotation-tool.in _giscanner.la Makefile
+	$(AM_V_GEN) sed -e s,@libdir\@,$(libdir), -e s,@PYTHON\@,$(PYTHON), $< > $@.tmp && mv $@.tmp $@
+	@chmod a+x $@
+
+g_ir_compiler_SOURCES = tools/compiler.c
+g_ir_compiler_CPPFLAGS = -DGIREPO_DEFAULT_SEARCH_PATH="\"$(libdir)\"" \
+			 -I$(top_srcdir)/girepository
+g_ir_compiler_CFLAGS = $(GIREPO_CFLAGS)
+g_ir_compiler_LDADD = \
+	libgirepository-parser.la \
+	libgirepository-1.0.la
+
+g_ir_generate_SOURCES = tools/generate.c
+g_ir_generate_CPPFLAGS = -DGIREPO_DEFAULT_SEARCH_PATH="\"$(libdir)\"" \
+			 -I$(top_srcdir)/girepository
+g_ir_generate_CFLAGS = $(GIREPO_CFLAGS)
+g_ir_generate_LDADD = \
+	libgirepository-parser.la \
+	libgirepository-1.0.la
+
+GCOVSOURCES =					\
+	$(g_ir_compiler_SOURCES)		\
+	$(g_ir_generate_SOURCES)
+
+CLEANFILES += g-ir-scanner g-ir-annotation-tool

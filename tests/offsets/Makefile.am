@@ -36,7 +36,7 @@ check_PROGRAMS += gitestoffsets
 
 nodist_gitestoffsets_SOURCES = gitestoffsets.c
 gitestoffsets_CPPFLAGS = $(GIREPO_CFLAGS) -I$(top_srcdir)/girepository
-gitestoffsets_LDADD = $(top_builddir)/girepository/libgirepository-1.0.la $(GIREPO_LIBS)
+gitestoffsets_LDADD = $(top_builddir)/libgirepository-1.0.la $(GIREPO_LIBS)
 
 gitestoffsets.c: gen-gitestoffsets offsets.h
 	$(AM_V_GEN) $(PYTHON) $(srcdir)/gen-gitestoffsets $(srcdir)/offsets.h > $@ || ( rm -f $@ && false )

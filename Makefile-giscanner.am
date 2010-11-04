@@ -1,60 +1,55 @@
 ## Process this file with automake to produce Makefile.in
 
-INCLUDES = -I$(top_srcdir)/girepository
-BUILT_SOURCES = 		\
+BUILT_SOURCES += 		\
 	scannerparser.c		\
 	scannerparser.h 	\
 	scannerlexer.c 		\
 	scannerlexer.h
 
-CLEANFILES = 		\
-	scannerparser.c		\
-	scannerparser.h 	\
-	scannerlexer.c 		\
-	scannerlexer.h
 AM_YFLAGS = -d -t
 
 # Why do I have to do this automake?
-scannerlexer.h: scannerlexer.c
+scannerlexer.h: giscanner/scannerlexer.c
 
-noinst_LTLIBRARIES = libgiscanner.la
+noinst_LTLIBRARIES += libgiscanner.la
 
 libgiscanner_la_SOURCES = \
-	sourcescanner.c				\
-	sourcescanner.h				\
-	scannerlexer.l				\
-	scannerparser.y				\
-	grealpath.h
+	giscanner/sourcescanner.c				\
+	giscanner/sourcescanner.h				\
+	giscanner/scannerlexer.l				\
+	giscanner/scannerparser.y				\
+	giscanner/grealpath.h
+libgiscanner_la_CPPFLAGS = -I$(top_srcdir)/girepository -I$(top_srcdir)/giscanner
 libgiscanner_la_LIBADD = $(GOBJECT_LIBS)
 libgiscanner_la_CFLAGS = $(GOBJECT_CFLAGS)
 
 # Python module
 pkgpyexecdir = $(pkglibdir)/giscanner
 pkgpyexec_LTLIBRARIES = _giscanner.la
-pkgpyexec_PYTHON = 		\
-	__init__.py		\
-	annotationmain.py	\
-	annotationparser.py	\
-	ast.py			\
-	cachestore.py		\
-	codegen.py		\
-	config.py		\
-	dumper.py		\
-	introspectablepass.py	\
-	girparser.py		\
-	girwriter.py		\
-	gdumpparser.py 	\
-	libtoolimporter.py	\
-	odict.py		\
-	maintransformer.py	\
-	message.py		\
-	shlibs.py		\
-	scannermain.py		\
-	sourcescanner.py	\
-	testcodegen.py		\
-	transformer.py		\
-	utils.py		\
-	xmlwriter.py
+pkgpyexec_PYTHON =			\
+	giscanner/__init__.py		\
+	giscanner/annotationmain.py	\
+	giscanner/annotationparser.py	\
+	giscanner/ast.py		\
+	giscanner/cachestore.py		\
+	giscanner/codegen.py		\
+	giscanner/config.py		\
+	giscanner/dumper.py		\
+	giscanner/introspectablepass.py	\
+	giscanner/girparser.py		\
+	giscanner/girwriter.py		\
+	giscanner/gdumpparser.py 	\
+	giscanner/libtoolimporter.py	\
+	giscanner/odict.py		\
+	giscanner/maintransformer.py	\
+	giscanner/message.py		\
+	giscanner/shlibs.py		\
+	giscanner/scannermain.py	\
+	giscanner/sourcescanner.py	\
+	giscanner/testcodegen.py	\
+	giscanner/transformer.py	\
+	giscanner/utils.py		\
+	giscanner/xmlwriter.py
 
 _giscanner_la_CFLAGS = \
 	$(PYTHON_INCLUDES) \
@@ -71,7 +66,7 @@ if OS_WIN32
 _giscanner_la_LDFLAGS += -Wl,$(pyexecdir)/../../libs/libpython25.a -no-undefined
 endif
 
-_giscanner_la_SOURCES = giscannermodule.c
+_giscanner_la_SOURCES = giscanner/giscannermodule.c
 
 if OS_WIN32
 BUILT_SOURCES += _giscanner.pyd

@@ -1,11 +1,34 @@
+man_MANS =
+EXTRA_DIST =
+lib_LTLIBRARIES =
+noinst_LTLIBRARIES =
+BUILT_SOURCES =
+CLEANFILES = $(BUILT_SOURCES)
+INTROSPECTION_GIRS =
+check_LTLIBRARIES =
+check_PROGRAMS =
+bin_PROGRAMS =
+bin_SCRIPTS =
+noinst_PROGRAMS =
+
+include common.mk
+include Makefile.introspection
+
+include Makefile-girepository.am
+include Makefile-giscanner.am
+include Makefile-examples.am
+include Makefile-gir.am
+include Makefile-tools.am
+
 ## Process this file with automake to produce Makefile.in
 ACLOCAL_AMFLAGS = -I m4
 
-SUBDIRS = girepository giscanner tools gir docs tests examples
+SUBDIRS = . docs tests
+
 DIST_SUBDIRS = m4 $(SUBDIRS)
 DISTCHECK_CONFIGURE_FLAGS = --enable-gtk-doc
 
-man_MANS = 			\
+man_MANS += 			\
 	docs/g-ir-compiler.1	\
 	docs/g-ir-generate.1	\
 	docs/g-ir-scanner.1
@@ -19,7 +42,7 @@ m4_DATA = m4/introspection.m4
 makedir = $(datadir)/gobject-introspection-1.0
 dist_make_DATA = Makefile.introspection
 
-EXTRA_DIST = 			\
+EXTRA_DIST += 			\
 	COPYING.LGPL		\
 	COPYING.GPL		\
 	CONTRIBUTORS		\

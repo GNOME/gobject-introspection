@@ -118,8 +118,9 @@ GIR_DIR="$EXPANDED_DATADIR/$GIR_SUFFIX"
 AC_SUBST(GIR_DIR)
 AC_DEFINE_UNQUOTED(GIR_DIR, "$GIR_DIR", [Director prefix for gir installation])
 
-PKG_CHECK_MODULES(GOBJECT, [gobject-2.0 gio-2.0])
-PKG_CHECK_MODULES(GTHREAD, [gthread-2.0])
+PKG_CHECK_MODULES(GLIB, [glib-2.0])
+PKG_CHECK_MODULES(GOBJECT, [gobject-2.0])
+PKG_CHECK_MODULES(GIO, [gio-2.0])
 PKG_CHECK_MODULES(GIO_UNIX, [gio-unix-2.0], have_gio_unix=true, have_gio_unix=false)
 AM_CONDITIONAL(HAVE_GIO_UNIX, test x$have_gio_unix = xtrue)
 
@@ -240,18 +241,13 @@ AC_MSG_RESULT([$GLIBSRC])
 
 AC_CONFIG_FILES([
 Makefile
-gir/Makefile
-girepository/Makefile
-giscanner/Makefile
 giscanner/config.py
 m4/Makefile
-tools/Makefile
 tests/Makefile
 tests/offsets/Makefile
 tests/scanner/Makefile
 tests/repository/Makefile
 tests/warn/Makefile
-examples/Makefile
 docs/Makefile
 docs/reference/Makefile
 gobject-introspection-1.0.pc

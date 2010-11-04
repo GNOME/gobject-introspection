@@ -11,7 +11,7 @@ INTROSPECTION_SCANNER = \
         PYTHONPATH=$(top_builddir):$(top_srcdir) \
 	UNINSTALLED_INTROSPECTION_SRCDIR=$(top_srcdir) \
 	UNINSTALLED_INTROSPECTION_BUILDDIR=$(top_builddir) \
-    $(top_builddir)/tools/g-ir-scanner$(EXEEXT)
+    $(top_builddir)/g-ir-scanner$(EXEEXT)
 INTROSPECTION_SCANNER_ARGS = \
     --verbose \
     -I$(top_srcdir) \
@@ -20,7 +20,7 @@ INTROSPECTION_SCANNER_ARGS = \
     --add-include-path=$(builddir) \
     --add-include-path=$(top_builddir)/gir
 
-INTROSPECTION_COMPILER = $(top_builddir)/tools/g-ir-compiler$(EXEEXT)
+INTROSPECTION_COMPILER = $(top_builddir)/g-ir-compiler$(EXEEXT)
 INTROSPECTION_COMPILER_ARGS = \
     --includedir=$(srcdir) \
     --includedir=$(top_srcdir)/gir \

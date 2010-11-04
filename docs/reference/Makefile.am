@@ -29,7 +29,7 @@ IGNORE_HFILES= \
     girmodule.h
 
 INCLUDES=$(GIREPO_CFLAGS) -I$(top_srcdir)
-GTKDOC_LIBS = $(GIREPO_LIBS) $(top_builddir)/girepository/libgirepository-1.0.la $(top_builddir)/girepository/libgirepository-parser.la
+GTKDOC_LIBS = $(GIREPO_LIBS) $(top_builddir)/libgirepository-1.0.la $(top_builddir)/libgirepository-parser.la
 
 content_files = \
     gi-gir-reference.xml    \

@@ -4,6 +4,10 @@ import os.path
 import sys
 from StringIO import StringIO
 
+path=os.getenv('UNINSTALLED_INTROSPECTION_SRCDIR', None)
+assert path is not None
+sys.path.insert(0, path)
+
 from giscanner.annotationparser import AnnotationParser
 from giscanner.ast import Include, Namespace
 from giscanner.introspectablepass import IntrospectablePass
