@@ -915,7 +915,10 @@ method or constructor of some type."""
         if first.type.ctype.count('*') != 1:
             return False
 
-        uscored = self._uscored_identifier_for_type(first.type)
+        if hasattr(target, 'c_symbol_prefix') and target.c_symbol_prefix is not None:
+            uscored = target.c_symbol_prefix
+        else:
+            uscored = self._uscored_identifier_for_type(first.type)
         if not subsymbol.startswith(uscored):
             return False
         func.instance_parameter = func.parameters.pop(0)
