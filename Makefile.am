@@ -48,5 +48,7 @@ check-local:
 	is not executable\n\nrun chmod +x .git/hooks/pre-commit"; false))
 	@echo "  PEP-8 INQUISITION"
 	@find $(top_srcdir)/giscanner -name \*.py | sort | uniq | xargs $(PYTHON) $(top_srcdir)/misc/pep8.py --repeat --exclude=config.py
+
+check-pyflakes:
 	@echo "  CHECK Pyflakes"
 	@find $(top_srcdir)/giscanner -name \*.py | sort | uniq | xargs $(PYTHON) $(top_srcdir)/misc/pyflakes.py
