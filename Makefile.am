@@ -15,6 +15,7 @@ noinst_PROGRAMS = $(GTESTER_PROGS)
 include common.mk
 include Makefile.introspection
 
+include Makefile-cmph.am
 include Makefile-girepository.am
 include Makefile-giscanner.am
 include Makefile-examples.am
