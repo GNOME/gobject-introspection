@@ -1,3 +1,4 @@
+# Standard C/Automake goo
 *.la
 *.lo
 *.o
@@ -21,8 +22,6 @@ configure
 COPYING
 depcomp
 gtk-doc.make
-gobject-introspection-1.0.pc
-gobject-introspection-no-export-1.0.pc
 INSTALL
 install-sh
 libtool
@@ -33,6 +32,16 @@ ylwrap
 py-compile
 omf.make
 xmldocs.make
+m4/libtool.m4
+m4/ltoptions.m4
+m4/ltsugar.m4
+m4/ltversion.m4
+m4/lt~obsolete.m4
+m4/gtk-doc.m4
+
+# Our build artifacts
+gobject-introspection-1.0.pc
+gobject-introspection-no-export-1.0.pc
 glib-print
 scannerlexer.c
 scannerparser.[ch]
@@ -79,12 +88,6 @@ giscanner/config.py
 giscanner/scannerlexer.c
 giscanner/scannerparser.c
 giscanner/scannerparser.h
-m4/libtool.m4
-m4/ltoptions.m4
-m4/ltsugar.m4
-m4/ltversion.m4
-m4/lt~obsolete.m4
-m4/gtk-doc.m4
 scripts/shave
 scripts/shave-libtool
 tests/everything.c
@@ -123,3 +126,5 @@ g-ir-generate
 g-ir-scanner
 g-ir-annotation-tool
 g-ir-docgen
+cmph-bdz-test
+gthash-test
