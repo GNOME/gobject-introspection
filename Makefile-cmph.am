@@ -1,7 +1,7 @@
 noinst_LTLIBRARIES += libcmph.la
 
 libcmph_la_CPPFLAGS = -Icmph $(GLIB_CFLAGS)
-libcmph_la_LIBADD = $(GLIB_LIBS)
+libcmph_la_LIBADD = -lm $(GLIB_LIBS)
 
 libcmph_la_SOURCES = \
 	girepository/cmph/bdz.c \
@@ -65,3 +65,10 @@ libcmph_la_SOURCES = \
 	girepository/cmph/vqueue.h \
 	girepository/cmph/vstack.c \
 	girepository/cmph/vstack.h
+
+GTESTER_PROGS += cmph-bdz-test
+
+cmph_bdz_test_SOURCES = girepository/cmph-bdz-test.c
+cmph_bdz_test_CFLAGS = -Igirepository/cmph $(GOBJECT_CFLAGS)
+cmph_bdz_test_LDADD = libcmph.la $(GOBJECT_LIBS)
+
