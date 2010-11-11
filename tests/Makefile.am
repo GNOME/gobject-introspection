@@ -47,7 +47,7 @@ Everything-1.0.gir: libeverything-1.0.la Makefile
 	$(AM_V_GEN) $(INTROSPECTION_SCANNER) $(INTROSPECTION_SCANNER_ARGS) --warn-all --warn-error --reparse-validate \
 	--namespace=Everything --nsversion=1.0 \
 	--libtool="$(LIBTOOL)" \
-	--add-include-path=$(top_builddir)/gir --include=Gio-2.0 \
+	--add-include-path=$(top_builddir) --include=Gio-2.0 \
 	--library=libeverything-1.0.la --output=$@ \
 	everything.h everything.c
 
@@ -55,7 +55,7 @@ GIMarshallingTests-1.0.gir: libgimarshallingtests-1.0.la Makefile
 	$(AM_V_GEN) $(INTROSPECTION_SCANNER) $(INTROSPECTION_SCANNER_ARGS) --warn-all --warn-error --reparse-validate \
 	--namespace=GIMarshallingTests --symbol-prefix=gi_marshalling_tests --nsversion=1.0 \
 	--libtool="$(LIBTOOL)" \
-	--add-include-path=$(top_builddir)/gir --include=Gio-2.0 \
+	--add-include-path=$(top_builddir) --include=Gio-2.0 \
 	--library=libgimarshallingtests-1.0.la  --output=$@ \
 	$(srcdir)/gimarshallingtests.h $(srcdir)/gimarshallingtests.c
 

@@ -16,13 +16,13 @@ INTROSPECTION_SCANNER_ARGS = \
     --verbose \
     -I$(top_srcdir) \
     --add-include-path=$(srcdir) \
-    --add-include-path=$(top_srcdir)/gir \
+    --add-include-path=$(top_srcdir) \
     --add-include-path=$(builddir) \
-    --add-include-path=$(top_builddir)/gir
+    --add-include-path=$(top_builddir)
 
 INTROSPECTION_COMPILER = $(top_builddir)/g-ir-compiler$(EXEEXT)
 INTROSPECTION_COMPILER_ARGS = \
     --includedir=$(srcdir) \
-    --includedir=$(top_srcdir)/gir \
+    --includedir=$(top_srcdir) \
     --includedir=$(builddir) \
-    --includedir=$(top_builddir)/gir
+    --includedir=$(top_builddir)
