@@ -13,17 +13,19 @@ g-ir-annotation-tool: tools/g-ir-annotation-tool.in _giscanner.la Makefile
 g_ir_compiler_SOURCES = tools/compiler.c
 g_ir_compiler_CPPFLAGS = -DGIREPO_DEFAULT_SEARCH_PATH="\"$(libdir)\"" \
 			 -I$(top_srcdir)/girepository
-g_ir_compiler_CFLAGS = $(GIREPO_CFLAGS)
+g_ir_compiler_CFLAGS = $(GIO_CFLAGS)
 g_ir_compiler_LDADD = \
-	libgirepository-parser.la \
+	$(GIO_LIBS)			\
+	libgirepository-parser.la	\
 	libgirepository-1.0.la
 
 g_ir_generate_SOURCES = tools/generate.c
 g_ir_generate_CPPFLAGS = -DGIREPO_DEFAULT_SEARCH_PATH="\"$(libdir)\"" \
 			 -I$(top_srcdir)/girepository
-g_ir_generate_CFLAGS = $(GIREPO_CFLAGS)
+g_ir_generate_CFLAGS = $(GIO_CFLAGS)
 g_ir_generate_LDADD = \
-	libgirepository-parser.la \
+	$(GIO_LIBS)			\
+	libgirepository-parser.la	\
 	libgirepository-1.0.la
 
 GCOVSOURCES =					\
