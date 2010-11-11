@@ -9,7 +9,8 @@ check_LTLIBRARIES =
 check_PROGRAMS =
 bin_PROGRAMS =
 bin_SCRIPTS =
-noinst_PROGRAMS =
+GTESTER_PROGS =
+noinst_PROGRAMS = $(GTESTER_PROGS)
 
 include common.mk
 include Makefile.introspection
@@ -65,6 +66,7 @@ upload-release: $(distdir).tar.bz2
 	ssh gnome.org install-module $(distdir).tar.bz2
 
 check-local:
+	gtester --verbose $(GTESTER_PROGS)
 	@test ! -d $(top_srcdir)/.git || (test -f .git/hooks/pre-commit || (echo -e "ERROR: missing \
 	pre-commit hook.\n\ncopy misc/pre-commit to .git/hooks"; false))
 	@test ! -d $(top_srcdir)/.git || (test -x .git/hooks/pre-commit || (echo -e "ERROR: pre-commit \
