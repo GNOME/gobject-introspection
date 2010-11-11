@@ -76,7 +76,7 @@ BUILT_GIRSOURCES += GLib-2.0.gir
 
 GLib-2.0.gir: g-ir-scanner g-ir-compiler
 
-DBusGLib-1.0.typelib: GObject-2.0.gir
+gir/DBusGLib-1.0.typelib: GObject-2.0.gir
 
 # gobject
 GOBJECT_INCLUDEDIR=$(shell pkg-config --variable=includedir gobject-2.0)/glib-2.0
