@@ -198,6 +198,6 @@ girdir = $(GIR_DIR)
 gir_DATA = $(STATIC_GIRSOURCES) $(BUILT_GIRSOURCES)
 
 typelibsdir = $(libdir)/girepository-1.0
-typelibs_DATA = $(GIRSOURCES:.gir=.typelib)
+typelibs_DATA = $(gir_DATA:.gir=.typelib)
 
 CLEANFILES += $(typelibs_DATA)
