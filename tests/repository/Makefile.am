@@ -13,5 +13,5 @@ gitestthrows_CPPFLAGS = $(GIREPO_CFLAGS) -I$(top_srcdir)/girepository
 gitestthrows_LDADD = $(top_builddir)/libgirepository-1.0.la $(GIREPO_LIBS)
 
 TESTS = gitestrepo gitestthrows
-TESTS_ENVIRONMENT=env top_builddir="$(top_builddir)" \
+TESTS_ENVIRONMENT=env GI_TYPELIB_PATH=$(top_builddir) \
    XDG_DATA_DIRS="$(top_srcdir)/gir:$(XDG_DATA_DIRS)" $(DEBUG)

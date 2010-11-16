@@ -43,15 +43,10 @@ main(int argc, char **argv)
   GIBaseInfo *info;
   GIBaseInfo *siginfo;
   GType gtype;
-  char *girdir;
 
   g_type_init ();
 
   repo = g_irepository_get_default ();
-
-  girdir = g_build_filename (g_getenv ("top_builddir"), "gir", NULL);
-  g_irepository_prepend_search_path (girdir);
-  g_free (girdir);
 
   ret = g_irepository_require (repo, "Gio", NULL, 0, &error);
   if (!ret)

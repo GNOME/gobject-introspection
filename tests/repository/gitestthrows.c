@@ -11,7 +11,6 @@ main(int argc, char **argv)
   GIRepository *repo;
   GITypelib *ret;
   GIBaseInfo *info;
-  char *girdir;
   GIArgument in_arg[1];
   GIArgument ret_arg;
   GError *error;
@@ -20,10 +19,6 @@ main(int argc, char **argv)
   g_type_init ();
 
   repo = g_irepository_get_default ();
-
-  girdir = g_build_filename (g_getenv ("top_builddir"), "gir", NULL);
-  g_irepository_prepend_search_path (girdir);
-  g_free (girdir);
 
   error = NULL;
   ret = g_irepository_require (repo, "GLib", NULL, 0, &error);
