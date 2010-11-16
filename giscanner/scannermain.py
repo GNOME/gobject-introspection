@@ -92,7 +92,8 @@ def _get_option_parser():
                       help="do not use libtool")
     parser.add_option("", "--external-library",
                       action="store_true", dest="external_library", default=False,
-                      help="If true, the library is located on the system, not in the current directory")
+                      help=("""If true, the library is located on the system,""" +
+                            """not in the current directory"""))
     parser.add_option("-l", "--library",
                       action="append", dest="libraries", default=[],
                       help="libraries of this unit")
