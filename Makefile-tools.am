@@ -15,7 +15,7 @@ g_ir_compiler_CPPFLAGS = -DGIREPO_DEFAULT_SEARCH_PATH="\"$(libdir)\"" \
 			 -I$(top_srcdir)/girepository
 g_ir_compiler_CFLAGS = $(GIO_CFLAGS)
 g_ir_compiler_LDADD = \
-	libgirepository-parser.la	\
+	libgirepository-internals.la	\
 	libgirepository-1.0.la		\
 	$(GIREPO_LIBS)
 
@@ -24,7 +24,7 @@ g_ir_generate_CPPFLAGS = -DGIREPO_DEFAULT_SEARCH_PATH="\"$(libdir)\"" \
 			 -I$(top_srcdir)/girepository
 g_ir_generate_CFLAGS = $(GIO_CFLAGS)
 g_ir_generate_LDADD = \
-	libgirepository-parser.la	\
+	libgirepository-internals.la	\
 	libgirepository-1.0.la		\
 	$(GIREPO_LIBS)
 
