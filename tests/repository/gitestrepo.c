@@ -54,8 +54,8 @@ main(int argc, char **argv)
   g_free (girdir);
 
   ret = g_irepository_require (repo, "Gio", NULL, 0, &error);
-  g_assert (ret);
-  g_assert (error == NULL);
+  if (!ret)
+    g_error ("%s", error->message);
 
   info = g_irepository_find_by_name (repo, "Gio", "Cancellable");
   g_assert (info != NULL);
