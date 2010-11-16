@@ -915,16 +915,26 @@ method or constructor of some type."""
         if first.type.ctype.count('*') != 1:
             return False
 
+        # Here we check both the c_symbol_prefix and (if that fails),
+        # attempt to do a default uscoring of the type.  The reason we
+        # look at a default underscore transformation is for
+        # gdk_window_object_get_type(), which says to us that the
+        # prefix is "gdk_window_object", when really it's just
+        # "gdk_window".  Possibly need an annotation to override this.
+        prefix_matches = False
+        uscored_prefix = None
         if hasattr(target, 'c_symbol_prefix') and target.c_symbol_prefix is not None:
-            uscored = target.c_symbol_prefix
-        else:
-            uscored = self._uscored_identifier_for_type(first.type)
-        if not subsymbol.startswith(uscored):
-            return False
+            prefix_matches = subsymbol.startswith(target.c_symbol_prefix)
+            if prefix_matches:
+                uscored_prefix = target.c_symbol_prefix
+        if not prefix_matches:
+            uscored_prefix = self._uscored_identifier_for_type(first.type)
+            if not subsymbol.startswith(uscored_prefix):
+                return False
         func.instance_parameter = func.parameters.pop(0)
         subsym_idx = func.symbol.find(subsymbol)
         self._namespace.float(func)
-        func.name = func.symbol[(subsym_idx + len(uscored) + 1):]
+        func.name = func.symbol[(subsym_idx + len(uscored_prefix) + 1):]
         target.methods.append(func)
         func.is_method = True
         return True
