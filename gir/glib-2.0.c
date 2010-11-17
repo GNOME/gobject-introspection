@@ -100,7 +100,8 @@
 /**
  * g_spawn_async:
  * @working_directory: (allow-none):
- * @envp: (allow-none):
+ * @argv: (array zero-terminated=1):
+ * @envp: (array zero-terminated=1) (allow-none):
  * @child_setup: (scope async) (allow-none):
  * @user_data: (allow-none):
  * @child_pid: (out):
@@ -121,7 +122,8 @@
 /**
  * g_spawn_sync:
  * @working_directory: (allow-none):
- * @envp: (allow-none):
+ * @argv: (array zero-terminated=1):
+ * @envp: (array zero-terminated=1) (allow-none):
  * @child_setup: (scope call) (allow-none):
  * @user_data: (allow-none):
  * @standard_output: (out):
