@@ -24,15 +24,6 @@
 
 
 /**
- * GFileQueryInfoFlags:
- * @G_FILE_QUERY_INFO_NONE: No flags set.
- * @G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS: Don't follow symlinks.
- *
- * Flags used when querying a #GFileInfo.
- */
-
-
-/**
  * g_output_stream_flush_async:
  * @stream: a #GOutputStream.
  * @io_priority: the io priority of the request.
@@ -61,13 +52,6 @@
 
 
 /**
- * G_VARIANT_TYPE_STRING_ARRAY:
- *
- * The type of an array of strings.
- */
-
-
-/**
  * g_file_attribute_info_list_ref:
  * @list: a #GFileAttributeInfoList to reference.
  *
@@ -89,16 +73,6 @@
 
 
 /**
- * GUnixCredentialsMessage:
- *
- * The #GUnixCredentialsMessage structure contains only private data
- * and should only be accessed using the provided API.
- *
- * Since: 2.26
- */
-
-
-/**
  * g_dbus_message_set_header:
  * @message: A #GDBusMessage.
  * @header_field: A 8-bit unsigned integer (typically a value from the #GDBusMessageHeaderField enumeration)
@@ -108,14 +82,6 @@
  * If @value is floating, @message assumes ownership of @value.
  *
  * Since: 2.26
- */
-
-
-/**
- * G_FILE_ATTRIBUTE_FILESYSTEM_TYPE:
- *
- * A key in the "filesystem" namespace for getting the file system's type.
- * Corresponding #GFileAttributeType is %G_FILE_ATTRIBUTE_TYPE_STRING.
  */
 
 
@@ -210,34 +176,6 @@
 
 
 /**
- * G_TYPE_FROM_CLASS:
- * @g_class: Location of a valid #GTypeClass structure.
- *
- * Get the type identifier from a given @class structure.
- * This macro should only be used in type implementations.
- *
- * Returns: the #GType
- */
-
-
-/**
- * GAsyncResultIface:
- * @g_iface: The parent interface.
- * @get_user_data: Gets the user data passed to the callback.
- * @get_source_object: Gets the source object that issued the asynchronous operation.
- *
- * Interface definition for #GAsyncResult.
- */
-
-
-/**
- * G_TYPE_UCHAR:
- *
- * The fundamental type corresponding to #guchar.
- */
-
-
-/**
  * g_dbus_message_get_message_type:
  * @message: A #GDBusMessage.
  *
@@ -299,38 +237,6 @@
 
 
 /**
- * G_RESOLVER_ERROR:
- *
- * Error domain for #GResolver. Errors in this domain will be from the
- * #GResolverError enumeration. See #GError for more information on
- * error domains.
- */
-
-
-/**
- * GObjectSetPropertyFunc:
- * @object: a #GObject
- * @property_id: the numeric id under which the property was registered with g_object_class_install_property().
- * @value: the new value for the property
- * @pspec: the #GParamSpec describing the property
- *
- * The type of the @set_property function of #GObjectClass.
- */
-
-
-/**
- * GSocketControlMessageClass:
- * @get_size: gets the size of the message.
- * @get_level: gets the protocol of the message.
- * @get_type: gets the protocol specific type of the message.
- * @serialize: Writes out the message data.
- * @deserialize: Tries to deserialize a message.
- *
- *
- */
-
-
-/**
  * g_converter_output_stream_new:
  * @base_stream: a #GOutputStream
  * @converter: a #GConverter
@@ -338,29 +244,6 @@
  * Creates a new converter output stream for the @base_stream.
  *
  * Returns: a new #GOutputStream.
- */
-
-
-/**
- * GBaseInitFunc:
- * @g_class: The #GTypeClass structure to initialize.
- *
- * A callback function used by the type system to do base initialization
- * of the class structures of derived types. It is called as part of the
- * initialization process of all derived classes and should reallocate
- * or reset all dynamic class members copied over from the parent class.
- * For example, class members (such as strings) that are not sufficiently
- * handled by a plain memory copy of the parent class into the derived class
- * have to be altered. See GClassInitFunc() for a discussion of the class
- * intialization process.
- */
-
-
-/**
- * GUnixMountPoint:
- *
- * Defines a Unix mount point (e.g. <filename>/dev</filename>).
- * This corresponds roughly to a fstab entry.
  */
 
 
@@ -419,52 +302,14 @@
 
 
 /**
- * GOptionArgFunc:
- * @option_name: The name of the option being parsed. This will be either a single dash followed by a single letter (for a short name) or two dashes followed by a long option name.
- * @value: The value to be parsed.
- * @data: User data added to the #GOptionGroup containing the option when it was created with g_option_group_new()
- * @error: A return location for errors. The error code %G_OPTION_ERROR_FAILED is intended to be used for errors in #GOptionArgFunc callbacks.
- *
- * The type of function to be passed as callback for %G_OPTION_ARG_CALLBACK
- * options.
- * occurred, in which case @error should be set with g_set_error()
- *
- * Returns: %TRUE if the option was successfully parsed, %FALSE if an error
- */
-
-
-/**
  * g_application_new:
- * @appid: System-dependent application identifier
- * @argc: Number of arguments in @argv
- * @argv: (allow-none) (array length=argc): Argument vector, usually from the <parameter>argv</parameter> parameter of main()
+ * @application_id: the application id
+ * @flags: the application flags
+ * @returns: a new #GApplication instance
  *
- * Create a new #GApplication.  This uses a platform-specific
- * mechanism to ensure the current process is the unique owner of the
- * application (as defined by the @appid). If successful, the
- * #GApplication:is-remote property will be %FALSE, and it is safe to
- * continue creating other resources such as graphics windows.
- * If the given @appid is already running in another process, the the
- * GApplication::activate_with_data signal will be emitted in the
- * remote process, with the data from @argv and other
- * platform-specific data available.  Subsequently the
- * #GApplication:default-quit property will be evaluated.  If it's
- * %TRUE, then the current process will terminate.  If %FALSE, then
- * the application remains in the #GApplication:is-remote state, and
- * you can e.g. call g_application_invoke_action(). Note that proxy
- * instances should not call g_application_add_action().
- * This function may do synchronous I/O to obtain unique ownership
- * of the application id, and will block the calling thread in this
- * case.
- * If the environment does not support the basic functionality of
- * #GApplication, this function will invoke g_error(), which by
- * default is a fatal operation.  This may arise for example on
- * UNIX systems using D-Bus when the session bus is not available.
- * As a convenience, this function is defined to call g_type_init() as
- * its very first action.
- *
- * Returns: (transfer full): An application instance
- * Since: 2.26
+ * Creates a new #GApplication instance.
+ * This function calls g_type_init() for you.
+ * The application id must be valid.  See g_application_id_is_valid().
  */
 
 
@@ -480,12 +325,9 @@
 
 
 /**
- * G_VALUE_HOLDS_ULONG:
- * @value: a valid #GValue structure
+ * GSrvTarget:
  *
- * Checks whether the given #GValue can hold values of type %G_TYPE_ULONG.
- *
- * Returns: %TRUE on success.
+ * A single target host/port that a network service is running on.
  */
 
 
@@ -550,37 +392,6 @@
 
 
 /**
- * GFileProgressCallback:
- * @current_num_bytes: the current number of bytes in the operation.
- * @total_num_bytes: the total number of bytes in the operation.
- * @user_data: user data passed to the callback.
- *
- * When doing file operations that may take a while, such as moving
- * a file or copying a file, a progress callback is used to pass how
- * far along that operation is to the application.
- */
-
-
-/**
- * GInitiallyUnowned:
- *
- * All the fields in the <structname>GInitiallyUnowned</structname> structure
- * are private to the #GInitiallyUnowned implementation and should never be
- * accessed directly.
- */
-
-
-/**
- * GApplication:
- *
- * The <structname>GApplication</structname> structure contains private
- * data and should only be accessed using the provided API
- *
- * Since: 2.26
- */
-
-
-/**
  * SECTION:gdbusnameownin:
  * @title: Owning Bus Names
  * @short_description: Simple API for owning bus names
@@ -602,33 +413,6 @@
 
 
 /**
- * G_FILE_ATTRIBUTE_STANDARD_SORT_ORDER:
- *
- * A key in the "standard" namespace for setting the sort order of a file.
- * Corresponding #GFileAttributeType is %G_FILE_ATTRIBUTE_TYPE_INT32.
- * An example use would be in file managers, which would use this key
- * to set the order files are displayed. Files with smaller sort order
- * should be sorted first, and files without sort order as if sort order
- * was zero.
- */
-
-
-/**
- * GTypeInterface:
- *
- * An opaque structure used as the base of all interface types.
- */
-
-
-/**
- * G_TYPE_VALUE:
- *
- * The type ID of the "GValue" type which is a boxed type,
- * used to pass around pointers to GValues.
- */
-
-
-/**
  * GSettings:path:
  *
  * The path within the backend where the settings are stored.
@@ -641,14 +425,6 @@
  * Class structure for #GDBusMethodInvocation.
  *
  * Since: 2.26
- */
-
-
-/**
- * G_PARAM_SPEC_TYPE_NAME:
- * @pspec: a valid #GParamSpec
- *
- * Retrieves the #GType name of this @pspec.
  */
 
 
@@ -752,31 +528,6 @@
  *
  * Returns: %TRUE if the service is active, %FALSE otherwise
  * Since: 2.22
- */
-
-
-/**
- * g_action_group_get_enabled:
- * @action_group: a #GActionGroup
- * @action_name: the name of the action to query
- *
- * Checks if the named action within @action_group is currently enabled.
- * An action must be enabled in order to be activated or in order to
- * have its state changed from outside callers.
- *
- * Returns: whether or not the action is currently enabled
- * Since: 2.26
- */
-
-
-/**
- * G_NODE_IS_LEAF:
- * @node: a #GNode
- *
- * Returns %TRUE if a #GNode is a leaf node.
- * (i.e. it has no children)
- *
- * Returns: %TRUE if the #GNode is a leaf node
  */
 
 
@@ -911,30 +662,6 @@
 
 
 /**
- * G_ENUM_CLASS_TYPE_NAME:
- * @class: a #GEnumClass
- *
- * Get the static type name from a given #GEnumClass structure.
- *
- * Returns: the type name.
- */
-
-
-/**
- * GInputVector:
- * @buffer: Pointer to a buffer where data will be written.
- * @size: the available size in @buffer.
- *
- * Structure used for scatter/gather data input.
- * You generally pass in an array of #GInputVector<!-- -->s
- * and the operation will store the read data starting in the
- * first buffer, switching to the next as needed.
- *
- * Since: 2.22
- */
-
-
-/**
  * g_socket_connection_get_socket:
  * @connection: a #GSocketConnection
  *
@@ -971,20 +698,6 @@
  *
  * Returns: The pointer to native credentials or %NULL if the
  * Since: 2.26
- */
-
-
-/**
- * G_TYPE_PARAM_UCHAR:
- *
- * The #GType of #GParamSpecUChar.
- */
-
-
-/**
- * G_TYPE_PARAM_POINTER:
- *
- * The #GType of #GParamSpecPointer.
  */
 
 
@@ -1030,15 +743,6 @@
 
 
 /**
- * G_TYPE_HASH_TABLE:
- *
- * The #GType for a boxed type holding a #GHashTable reference.
- *
- * Since: 2.10
- */
-
-
-/**
  * g_file_get_path:
  * @file: input #GFile.
  *
@@ -1048,57 +752,6 @@
  * freed with g_free() when no longer needed.
  *
  * Returns: string containing the #GFile's path, or %NULL if
- */
-
-
-/**
- * GIOErrorEnum:
- * @G_IO_ERROR_FAILED: Generic error condition for when any operation fails.
- * @G_IO_ERROR_NOT_FOUND: File not found error.
- * @G_IO_ERROR_EXISTS: File already exists error.
- * @G_IO_ERROR_IS_DIRECTORY: File is a directory error.
- * @G_IO_ERROR_NOT_DIRECTORY: File is not a directory.
- * @G_IO_ERROR_NOT_EMPTY: File is a directory that isn't empty.
- * @G_IO_ERROR_NOT_REGULAR_FILE: File is not a regular file.
- * @G_IO_ERROR_NOT_SYMBOLIC_LINK: File is not a symbolic link.
- * @G_IO_ERROR_NOT_MOUNTABLE_FILE: File cannot be mounted.
- * @G_IO_ERROR_FILENAME_TOO_LONG: Filename is too many characters.
- * @G_IO_ERROR_INVALID_FILENAME: Filename is invalid or contains invalid characters.
- * @G_IO_ERROR_TOO_MANY_LINKS: File contains too many symbolic links.
- * @G_IO_ERROR_NO_SPACE: No space left on drive.
- * @G_IO_ERROR_INVALID_ARGUMENT: Invalid argument.
- * @G_IO_ERROR_PERMISSION_DENIED: Permission denied.
- * @G_IO_ERROR_NOT_SUPPORTED: Operation not supported for the current backend.
- * @G_IO_ERROR_NOT_MOUNTED: File isn't mounted.
- * @G_IO_ERROR_ALREADY_MOUNTED: File is already mounted.
- * @G_IO_ERROR_CLOSED: File was closed.
- * @G_IO_ERROR_CANCELLED: Operation was cancelled. See #GCancellable.
- * @G_IO_ERROR_PENDING: Operations are still pending.
- * @G_IO_ERROR_READ_ONLY: File is read only.
- * @G_IO_ERROR_CANT_CREATE_BACKUP: Backup couldn't be created.
- * @G_IO_ERROR_WRONG_ETAG: File's Entity Tag was incorrect.
- * @G_IO_ERROR_TIMED_OUT: Operation timed out.
- * @G_IO_ERROR_WOULD_RECURSE: Operation would be recursive.
- * @G_IO_ERROR_BUSY: File is busy.
- * @G_IO_ERROR_WOULD_BLOCK: Operation would block.
- * @G_IO_ERROR_HOST_NOT_FOUND: Host couldn't be found (remote operations).
- * @G_IO_ERROR_WOULD_MERGE: Operation would merge files.
- * @G_IO_ERROR_FAILED_HANDLED: Operation failed and a helper program has already interacted with the user. Do not display any error dialog.
- * @G_IO_ERROR_TOO_MANY_OPEN_FILES: The current process has too many files open and can't open any more. Duplicate descriptors do count toward this limit. Since 2.20
- * @G_IO_ERROR_NOT_INITIALIZED: The object has not been initialized. Since 2.22
- * @G_IO_ERROR_ADDRESS_IN_USE: The requested address is already in use. Since 2.22
- * @G_IO_ERROR_PARTIAL_INPUT: Need more input to finish operation. Since 2.24
- * @G_IO_ERROR_INVALID_DATA: There input data was invalid. Since 2.24
- * @G_IO_ERROR_DBUS_ERROR: A remote object generated an error that doesn't correspond to a locally registered #GError error domain. Use g_dbus_error_get_remote_error() to extract the D-Bus error name and g_dbus_error_strip_remote_error() to fix up the message so it matches what was received on the wire. Since 2.26.
- * @G_IO_ERROR_HOST_UNREACHABLE: Host unreachable. Since 2.26
- * @G_IO_ERROR_NETWORK_UNREACHABLE: Network unreachable. Since 2.26
- * @G_IO_ERROR_CONNECTION_REFUSED: Connection refused. Since 2.26
- * @G_IO_ERROR_PROXY_FAILED: Connection to proxy server failed. Since 2.26
- * @G_IO_ERROR_PROXY_AUTH_FAILED: Proxy authentication failed. Since 2.26
- * @G_IO_ERROR_PROXY_NEED_AUTH: Proxy server needs authentication. Since 2.26
- * @G_IO_ERROR_PROXY_NOT_ALLOWED: Proxy connection is not allowed by ruleset. Since 2.26
- *
- * Error codes returned by GIO functions.
  */
 
 
@@ -1120,40 +773,6 @@
 
 
 /**
- * G_IS_PARAM_SPEC_ENUM:
- * @pspec: a valid #GParamSpec instance
- *
- * Checks whether the given #GParamSpec is of type %G_TYPE_PARAM_ENUM.
- *
- * Returns: %TRUE on success.
- */
-
-
-/**
- * G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME:
- *
- * A key in the "standard" namespace for getting the display name of the file.
- * A display name is guaranteed to be in UTF8 and can thus be displayed in
- * the UI.
- * Corresponding #GFileAttributeType is %G_FILE_ATTRIBUTE_TYPE_STRING.
- */
-
-
-/**
- * g_application_get_action_description:
- * @application: a #GApplication
- * @name: Action name
- *
- * Gets the description of the action @name.
- * It is an error to call this function if @application is a proxy for
- * a remote application.
- *
- * Returns: Description for the given action named @name
- * Since: 2.26
- */
-
-
-/**
  * g_permission_acquire_finish:
  * @permission: a #GPermission instance
  * @result: the #GAsyncResult given to the #GAsyncReadyCallback
@@ -1170,13 +789,6 @@
 
 
 /**
- * G_TYPE_INTERFACE:
- *
- * The fundamental type from which all interfaces are derived.
- */
-
-
-/**
  * g_file_mount_enclosing_volume_finish:
  * @location: input #GFile.
  * @result: a #GAsyncResult.
@@ -1187,6 +799,26 @@
  * appropriately if present.
  *
  * Returns: %TRUE if successful. If an error
+ */
+
+
+/**
+ * g_application_id_is_valid:
+ * @application_id: a potential application identifier
+ * @returns: %TRUE if @application_id is valid
+ *
+ * Checks if @application_id is a valid application identifier.
+ * A valid ID is required for calls to g_application_new() and
+ * g_application_set_application_id().
+ * For convenience, the restrictions on application identifiers are
+ * reproduced here:
+ * <itemizedlist>
+ * <listitem>Application identifiers must contain only the ASCII characters "[A-Z][a-z][0-9]_-" and must not begin with a digit.</listitem>
+ * <listitem>Application identifiers must contain at least one '.' (period) character (and thus at least two elements).</listitem>
+ * <listitem>Application identifiers must not begin with a '.' (period) character.</listitem>
+ * <listitem>Application identifiers must not contain consecutive '.' (period) characters.</listitem>
+ * <listitem>Application identifiers must not exceed 255 characters.</listitem>
+ * </itemizedlist>
  */
 
 
@@ -1242,21 +874,6 @@
  * Creates a new data output stream for @base_stream.
  *
  * Returns: #GDataOutputStream.
- */
-
-
-/**
- * GParamSpecString:
- * @parent_instance: private #GParamSpec portion
- * @default_value: default value for the property specified
- * @cset_first: a string containing the allowed values for the first byte
- * @cset_nth: a string containing the allowed values for the subsequent bytes
- * @substitutor: the replacement byte for bytes which don't match @cset_first or @cset_nth.
- * @null_fold_if_empty: replace empty string by %NULL
- * @ensure_non_null: replace %NULL strings by an empty string
- *
- * A #GParamSpec derived structure that contains the meta data for string
- * properties.
  */
 
 
@@ -1336,16 +953,6 @@
 
 
 /**
- * GSocketService:
- *
- * A helper class for handling accepting incomming connections in the
- * glib mainloop.
- *
- * Since: 2.22
- */
-
-
-/**
  * g_seekable_seek:
  * @seekable: a #GSeekable.
  * @offset: a #goffset.
@@ -1361,34 +968,6 @@
  * appropriately if present.
  *
  * Returns: %TRUE if successful. If an error
- */
-
-
-/**
- * G_TYPE_IS_INTERFACE:
- * @type: A #GType value.
- *
- * Checks if @type is an interface type.
- * An interface type provides a pure API, the implementation
- * of which is provided by another type (which is then said to conform
- * to the interface).  GLib interfaces are somewhat analogous to Java
- * interfaces and C++ classes containing only pure virtual functions,
- * with the difference that GType interfaces are not derivable (but see
- * g_type_interface_add_prerequisite() for an alternative).
- *
- * Returns: %TRUE on success.
- */
-
-
-/**
- * GDBusSubtreeVTable:
- * @enumerate: Function for enumerating child nodes.
- * @introspect: Function for introspecting a child node.
- * @dispatch: Function for dispatching a remote call on a child node.
- *
- * Virtual table for handling subtrees registered with g_dbus_connection_register_subtree().
- *
- * Since: 2.26
  */
 
 
@@ -1436,22 +1015,6 @@
  *
  * Returns: the timeout in seconds
  * Since: 2.26
- */
-
-
-/**
- * G_FILE_ATTRIBUTE_MOUNTABLE_CAN_EJECT:
- *
- * A key in the "mountable" namespace for checking if a file (of type G_FILE_TYPE_MOUNTABLE) can be ejected.
- * Corresponding #GFileAttributeType is %G_FILE_ATTRIBUTE_TYPE_BOOLEAN.
- */
-
-
-/**
- * G_FILE_ATTRIBUTE_MOUNTABLE_CAN_MOUNT:
- *
- * A key in the "mountable" namespace for checking if a file (of type G_FILE_TYPE_MOUNTABLE) is mountable.
- * Corresponding #GFileAttributeType is %G_FILE_ATTRIBUTE_TYPE_BOOLEAN.
  */
 
 
@@ -1533,26 +1096,6 @@
 
 
 /**
- * GSeekableIface:
- * @g_iface: The parent interface.
- * @tell: Tells the current location within a stream.
- * @can_seek: Checks if seeking is supported by the stream.
- * @seek: Seeks to a location within a stream.
- * @can_truncate: Chekcs if truncation is suppored by the stream.
- * @truncate_fn: Truncates a stream.
- *
- * Provides an interface for implementing seekable functionality on I/O Streams.
- */
-
-
-/**
- * G_TYPE_PARAM_FLAGS:
- *
- * The #GType of #GParamSpecFlags.
- */
-
-
-/**
  * g_file_input_stream_query_info_finish:
  * @stream: a #GFileInputStream.
  * @result: a #GAsyncResult.
@@ -1614,27 +1157,6 @@
 
 
 /**
- * GDBusMethodInfo:
- * @ref_count: The reference count or -1 if statically allocated.
- * @name: The name of the D-Bus method, e.g. @RequestName.
- * @in_args: A pointer to a %NULL-terminated array of pointers to #GDBusArgInfo structures or %NULL if there are no in arguments.
- * @out_args: A pointer to a %NULL-terminated array of pointers to #GDBusArgInfo structures or %NULL if there are no out arguments.
- * @annotations: A pointer to a %NULL-terminated array of pointers to #GDBusAnnotationInfo structures or %NULL if there are no annotations.
- *
- * Information about a method on an D-Bus interface.
- *
- * Since: 2.26
- */
-
-
-/**
- * G_TYPE_INITIALLY_UNOWNED:
- *
- * The type for #GInitiallyUnowned.
- */
-
-
-/**
  * g_io_scheduler_push_job:
  * @job_func: a #GIOSchedulerJobFunc.
  * @user_data: data to pass to @job_func
@@ -1647,24 +1169,6 @@
  * If @cancellable is not %NULL, it can be used to cancel the I/O job
  * by calling g_cancellable_cancel() or by calling
  * g_io_scheduler_cancel_all_jobs().
- */
-
-
-/**
- * GIOSchedulerJobFunc:
- * @job: a #GIOSchedulerJob.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
- * @user_data: the data to pass to callback function
- *
- * I/O Job function.
- * Note that depending on whether threads are available, the
- * #GIOScheduler may run jobs in separate threads or in an idle
- * in the mainloop.
- * Long-running jobs should periodically check the @cancellable
- * to see if they have been cancelled.
- * complete the job, %FALSE if the job is complete (or cancelled)
- *
- * Returns: %TRUE if this function should be called again to
  */
 
 
@@ -1693,35 +1197,6 @@
 
 
 /**
- * GParamFlags:
- * @G_PARAM_READABLE: the parameter is readable
- * @G_PARAM_WRITABLE: the parameter is writable
- * @G_PARAM_CONSTRUCT: the parameter will be set upon object construction
- * @G_PARAM_CONSTRUCT_ONLY: the parameter will only be set upon object construction
- * @G_PARAM_LAX_VALIDATION: upon parameter conversion (see g_param_value_convert()) strict validation is not required
- * @G_PARAM_STATIC_NAME: the string used as name when constructing the parameter is guaranteed to remain valid and unmodified for the lifetime of the parameter. Since 2.8
- * @G_PARAM_STATIC_NICK: the string used as nick when constructing the parameter is guaranteed to remain valid and unmmodified for the lifetime of the parameter. Since 2.8
- * @G_PARAM_STATIC_BLURB: the string used as blurb when constructing the parameter is guaranteed to remain valid and unmodified for the lifetime of the parameter. Since 2.8
- * @G_PARAM_PRIVATE: internal
- * @G_PARAM_DEPRECATED: the parameter is deprecated and will be removed in a future version. A warning will be generated if it is used while running with G_ENABLE_DIAGNOSTIC=1. Since: 2.26
- *
- * Through the #GParamFlags flag values, certain aspects of parameters
- * can be configured.
- */
-
-
-/**
- * GInterfaceInfo:
- * @interface_init: location of the interface initialization function
- * @interface_finalize: location of the interface finalization function
- * @interface_data: user-supplied data passed to the interface init/finalize functions
- *
- * A structure that provides information to the type system which is
- * used specifically for managing interface types.
- */
-
-
-/**
  * g_io_stream_get_output_stream:
  * @stream: a #GIOStream
  *
@@ -1731,20 +1206,6 @@
  *
  * Returns: (transfer none): a #GOutputStream, owned by the #GIOStream.
  * Since: 2.22
- */
-
-
-/**
- * G_PARAM_READWRITE:
- *
- * #GParamFlags value alias for %G_PARAM_READABLE | %G_PARAM_WRITABLE.
- */
-
-
-/**
- * GVolume:
- *
- * Opaque mountable volume object.
  */
 
 
@@ -1769,12 +1230,14 @@
 
 
 /**
- * G_VALUE_HOLDS_POINTER:
- * @value: a valid #GValue structure
+ * GActionGroup::action-added:
+ * @action_group: the #GActionGroup that changed
+ * @action_name: the name of the action in @action_group
  *
- * Checks whether the given #GValue can hold values of type %G_TYPE_POINTER.
+ * Signals that a new action was just added to the group.  This signal
+ * is emitted after the action has been added and is now visible.
  *
- * Returns: %TRUE on success.
+ * Since: 2.28
  */
 
 
@@ -1784,21 +1247,6 @@
  * Whether to close the file handle when the stream is closed.
  *
  * Since: 2.26
- */
-
-
-/**
- * GMemVTable:
- * @malloc: function to use for allocating memory.
- * @realloc: function to use for reallocating memory.
- * @free: function to use to free memory.
- * @calloc: function to use for allocating zero-filled memory.
- * @try_malloc: function to use for allocating memory without a default error handler.
- * @try_realloc: function to use for reallocating memory without a default error handler.
- *
- * A set of functions used to perform memory allocation. The same #GMemVTable must
- * be used for all allocations in the same program; a call to g_mem_set_vtable(),
- * if it exists, should be prior to any use of GLib.
  */
 
 
@@ -1852,15 +1300,6 @@
 
 
 /**
- * GParamSpecBoolean:
- * @parent_instance: private #GParamSpec portion
- * @default_value: default value for the property specified
- *
- * A #GParamSpec derived structure that contains the meta data for boolean properties.
- */
-
-
-/**
  * g_socket_create_source:
  * @socket: a #GSocket
  * @condition: a #GIOCondition mask to monitor
@@ -1883,74 +1322,6 @@
  *
  * Returns: (transfer full): a newly allocated %GSource, free with g_source_unref().
  * Since: 2.22
- */
-
-
-/**
- * GInitableIface:
- * @g_iface: The parent interface.
- * @init: Initializes the object.
- *
- * Provides an interface for initializing object such that initialization
- * may fail.
- *
- * Since: 2.22
- */
-
-
-/**
- * GVfs:
- *
- * Virtual File System object.
- */
-
-
-/**
- * G_IS_PARAM_SPEC_INT:
- * @pspec: a valid #GParamSpec instance
- *
- * Checks whether the given #GParamSpec is of type %G_TYPE_PARAM_INT.
- *
- * Returns: %TRUE on success.
- */
-
-
-/**
- * GSignalEmissionHook:
- * @ihint: Signal invocation hint, see #GSignalInvocationHint.
- * @n_param_values: the number of parameters to the function, including the instance on which the signal was emitted.
- * @param_values: the instance on which the signal was emitted, followed by the parameters of the emission.
- * @data: user data associated with the hook.
- *
- * A simple function pointer to get invoked when the signal is emitted. This
- * allows you to tie a hook to the signal type, so that it will trap all
- * emissions of that signal, from any object.
- * You may not attach these to signals created with the #G_SIGNAL_NO_HOOKS flag.
- * hook is disconnected (and destroyed).
- *
- * Returns: whether it wants to stay connected. If it returns %FALSE, the signal
- */
-
-
-/**
- * GBinding:
- *
- * <structname>GBinding</structname> is an opaque structure whose members
- * cannot be accessed directly.
- *
- * Since: 2.26
- */
-
-
-/**
- * GSettingsBindSetMapping:
- * @value: a #GValue containing the property value to map
- * @expected_type: the #GVariantType to create
- * @user_data: user data that was specified when the binding was created
- * @returns: a new #GVariant holding the data from @value, or %NULL in case of an error
- *
- * The type for the function that is used to convert an object property
- * value to a #GVariant for storing it in #GSettings.
  */
 
 
@@ -1982,18 +1353,6 @@
 
 
 /**
- * GDBusServerFlags:
- * @G_DBUS_SERVER_FLAGS_NONE: No flags set.
- * @G_DBUS_SERVER_FLAGS_RUN_IN_THREAD: All #GDBusServer::new-connection signals will run in separated dedicated threads (see signal for details).
- * @G_DBUS_SERVER_FLAGS_AUTHENTICATION_ALLOW_ANONYMOUS: Allow the anonymous authentication method.
- *
- * Flags used when creating a #GDBusServer.
- *
- * Since: 2.26
- */
-
-
-/**
  * SECTION:gnetworkaddres:
  * @short_description: A GSocketConnectable for resolving hostnames
  * @include: gio/gio.h
@@ -2007,32 +1366,20 @@
 
 
 /**
- * mime_info_cache_reload:
- * @dir: directory path which needs reloading.
+ * g_application_get_is_remote:
+ * @application: a #GApplication
+ * @returns: %TRUE if @application is remote
  *
- * Reload the mime information for the @dir.
- */
-
-
-/**
- * g_application_get_instance:
+ * Checks if @application is remote.
+ * If @application is remote then it means that another instance of
+ * application already exists (the 'primary' instance).  Calls to
+ * perform actions on @application will result in the actions being
+ * performed by the primary instance.
+ * The value of this property can not be accessed before
+ * g_application_register() has been called.  See
+ * g_application_get_is_registered().
  *
- * In the normal case where there is exactly one #GApplication instance
- * in this process, return that instance.  If there are multiple, the
- * first one created will be returned.  Otherwise, return %NULL.
- * or %NULL if none is set
- *
- * Returns: (transfer none): The primary instance of #GApplication,
- * Since: 2.26
- */
-
-
-/**
- * G_OPTION_ERROR:
- *
- * Error domain for option parsing. Errors in this domain will
- * be from the #GOptionError enumeration. See #GError for information on
- * error domains.
+ * Since: 2.28
  */
 
 
@@ -2042,55 +1389,6 @@
  * @drive: the drive that changed
  *
  * Emitted when a drive changes.
- */
-
-
-/**
- * G_VALUE_HOLDS_BOOLEAN:
- * @value: a valid #GValue structure
- *
- * Checks whether the given #GValue can hold values of type %G_TYPE_BOOLEAN.
- *
- * Returns: %TRUE on success.
- */
-
-
-/**
- * GMount:
- *
- * A handle to an object implementing the #GMountIface interface.
- */
-
-
-/**
- * GDBusCallFlags:
- * @G_DBUS_CALL_FLAGS_NONE: No flags set.
- * @G_DBUS_CALL_FLAGS_NO_AUTO_START: The bus must not launch an owner for the destination name in response to this method invocation.
- *
- * Flags used in g_dbus_connection_call() and similar APIs.
- *
- * Since: 2.26
- */
-
-
-/**
- * G_VARIANT_TYPE_SIGNATURE:
- *
- * The type of a DBus type signature.  These are strings of a specific
- * format used as type signatures for DBus methods and messages.
- * If you are not interacting with DBus, then there is no reason to make
- * use of this type.  If you are, then the DBus specification contains a
- * precise description of valid signature strings.
- */
-
-
-/**
- * GSimpleActionClass:
- * @activate: the class closure for the activate signal
- *
- *
- *
- * Since: 2.26
  */
 
 
@@ -2148,14 +1446,13 @@
 
 
 /**
- * GActionGroup::action-added:
- * @action_group: the #GActionGroup that changed
- * @action_name: the name of the action in @action_group
+ * g_application_release:
+ * @application: a #GApplication
  *
- * Signals that a new action was just added to the group.  This signal
- * is emitted after the action has been added and is now visible.
- *
- * Since: 2.26
+ * Decrease the use count of @application.
+ * When the use count reaches zero, the application will stop running.
+ * Never call this function except to cancel the effect of a previous
+ * call to g_application_hold().
  */
 
 
@@ -2246,7 +1543,7 @@
  * g_variant_unref() when it is no longer required.
  *
  * Returns: (transfer full): the current state of the action
- * Since: 2.26
+ * Since: 2.28
  */
 
 
@@ -2266,23 +1563,6 @@
  *
  * Returns: %TRUE unless @error is set.
  * Since: 2.26
- */
-
-
-/**
- * G_PARAM_SPEC_BOOLEAN:
- * @pspec: a valid #GParamSpec instance
- *
- * Cast a #GParamSpec instance into a #GParamSpecBoolean.
- */
-
-
-/**
- * GParamSpecUnichar:
- * @parent_instance: private #GParamSpec portion
- * @default_value: default value for the property specified
- *
- * A #GParamSpec derived structure that contains the meta data for unichar (unsigned integer) properties.
  */
 
 
@@ -2330,14 +1610,6 @@
 
 
 /**
- * GParamSpecPointer:
- * @parent_instance: private #GParamSpec portion
- *
- * A #GParamSpec derived structure that contains the meta data for pointer properties.
- */
-
-
-/**
  * g_dbus_node_info_ref:
  * @info: A #GDBusNodeInfo
  *
@@ -2358,7 +1630,7 @@
  * have its state changed from outside callers.
  *
  * Returns: whether the action is enabled
- * Since: 2.26
+ * Since: 2.28
  */
 
 
@@ -2406,16 +1678,6 @@
 
 
 /**
- * GThreadedSocketService:
- *
- * A helper class for handling accepting incomming connections in the
- * glib mainloop and handling them in a thread.
- *
- * Since: 2.22
- */
-
-
-/**
  * GMountOperation:password:
  *
  * The password that is used for authentication when carrying out
@@ -2450,33 +1712,6 @@
 
 
 /**
- * GSignalMatchType:
- * @G_SIGNAL_MATCH_ID: The signal id must be equal.
- * @G_SIGNAL_MATCH_DETAIL: The signal detail be equal.
- * @G_SIGNAL_MATCH_CLOSURE: The closure must be the same.
- * @G_SIGNAL_MATCH_FUNC: The C closure callback must be the same.
- * @G_SIGNAL_MATCH_DATA: The closure data must be the same.
- * @G_SIGNAL_MATCH_UNBLOCKED: Only unblocked signals may matched.
- *
- * The match types specify what g_signal_handlers_block_matched(),
- * g_signal_handlers_unblock_matched() and g_signal_handlers_disconnect_matched()
- * match signals by.
- */
-
-
-/**
- * GTypeFundamentalFlags:
- * @G_TYPE_FLAG_CLASSED: Indicates a classed type.
- * @G_TYPE_FLAG_INSTANTIATABLE: Indicates an instantiable type (implies classed).
- * @G_TYPE_FLAG_DERIVABLE: Indicates a flat derivable type.
- * @G_TYPE_FLAG_DEEP_DERIVABLE: Indicates a deep derivable type (implies derivable).
- *
- * Bit masks used to check or determine specific characteristics of a
- * fundamental type.
- */
-
-
-/**
  * g_volume_get_mount:
  * @volume: a #GVolume.
  *
@@ -2485,13 +1720,6 @@
  * when no longer needed.
  *
  * Returns: (transfer full): a #GMount or %NULL if @volume isn't mounted.
- */
-
-
-/**
- * GIOModule:
- *
- * Opaque module base class for extending GIO.
  */
 
 
@@ -2594,22 +1822,6 @@
  *
  * Returns: A #GDBusProxy or %NULL if error is set. Free with g_object_unref().
  * Since: 2.26
- */
-
-
-/**
- * g_try_new0:
- * @struct_type: the type of the elements to allocate
- * @n_structs: the number of elements to allocate
- *
- * Attempts to allocate @n_structs elements of type @struct_type, initialized
- * to 0's, and returns %NULL on failure. Contrast with g_new0(), which aborts
- * the program on failure.
- * The returned pointer is cast to a pointer to the given type.
- * The function returns %NULL when @n_structs is 0 of if an overflow occurs.
- *
- * Since: 2.8
- * Returns: a pointer to the allocated memory, cast to a pointer to @struct_type
  */
 
 
@@ -2722,13 +1934,6 @@
 
 
 /**
- * G_TYPE_PARAM_OBJECT:
- *
- * The #GType of #GParamSpecObject.
- */
-
-
-/**
  * SECTION:
  * @title: GUnixFDMessage
  * @short_description: A GSocketControlMessage containing a GUnixFDList
@@ -2781,13 +1986,22 @@
 
 
 /**
- * GTypePluginCompleteTypeInfo:
- * @plugin: the #GTypePlugin
- * @g_type: the #GType whose info is completed
- * @info: the #GTypeInfo struct to fill in
- * @value_table: the #GTypeValueTable to fill in
+ * g_periodic_add:
+ * @periodic: a #GPeriodic clock
+ * @callback: a #GPeriodicTickFunc function
+ * @user_data: data for @callback
+ * @notify: for freeing @user_data when it is no longer needed
  *
- * The type of the @complete_type_info function of #GTypePluginClass.
+ * Request periodic calls to @callback to start.  The periodicity of the
+ * calls is determined by the 'hz' property.
+ * This function may not be called from a handler of the repair signal,
+ * but it is perfectly reasonable to call it from a handler of the tick
+ * signal.
+ * The callback may be cancelled later by using g_periodic_remove() on
+ * the return value of this function.
+ *
+ * Returns: a non-zero tag identifying this callback
+ * Since: 2.28
  */
 
 
@@ -2801,6 +2015,17 @@
  *
  * Returns: An array of header fields terminated by
  * Since: 2.26
+ */
+
+
+/**
+ * g_application_get_application_id:
+ * @application: a #GApplication
+ * @returns: the identifier for @application, owned by @application
+ *
+ * Gets the unique identifier for @application.
+ *
+ * Since: 2.28
  */
 
 
@@ -2912,14 +2137,6 @@
 
 
 /**
- * G_PRIORITY_LOW:
- *
- * Use this for very low priority background tasks.
- * It is not used within GLib or GTK+.
- */
-
-
-/**
  * g_proxy_address_get_destination_por:
  * @proxy: a #GProxyAddress
  *
@@ -2931,19 +2148,37 @@
 
 
 /**
- * GDriveStartFlags:
- * @G_DRIVE_START_NONE: No flags set.
+ * g_action_group_get_action_state_type:
+ * @action_group: a #GActionGroup
+ * @action_name: the name of the action to query
  *
- * Flags used when starting a drive.
+ * Queries the type of the state of the named action within
+ * If the action is stateful then this function returns the
+ * #GVariantType of the state.  All calls to g_action_group_set_state()
+ * must give a #GVariant of this type and g_action_group_get_state()
+ * will return a #GVariant of the same type.
+ * If the action is not stateful then this function will return %NULL.
+ * In that case, g_action_group_get_state() will return %NULL and you
+ * must not call g_action_group_set_state().
+ * The state type of a particular action will never change but it is
+ * possible for an action to be removed and for a new action to be added
+ * with the same name but a different state type.
  *
- * Since: 2.22
+ * Returns: (transfer full): the state type, if the action is stateful
+ * Since: 2.28
  */
 
 
 /**
- * G_TYPE_PARAM_STRING:
+ * g_application_activate:
+ * @application: a #GApplication
  *
- * The #GType of #GParamSpecString.
+ * Activates the application.
+ * In essence, this results in the #GApplication::activate() signal being
+ * emitted in the primary instance.
+ * The application must be registered before calling this function.
+ *
+ * Since: 2.28
  */
 
 
@@ -3037,22 +2272,6 @@
 
 
 /**
- * GSimpleAsyncResult:
- *
- * A simple implementation of #GAsyncResult.
- */
-
-
-/**
- * GTypeFundamentalInfo:
- * @type_flags: #GTypeFundamentalFlags describing the characteristics of the fundamental type
- *
- * A structure that provides information to the type system which is
- * used specifically for managing fundamental types.
- */
-
-
-/**
  * g_file_replace_readwrite_async:
  * @file: input #GFile.
  * @etag: (allow-none): an <link linkend="gfile-etag">entity tag</link> for the current #GFile, or NULL to ignore.
@@ -3075,14 +2294,29 @@
 
 
 /**
- * g_volume_monitor_get_connected_drives:
- * @volume_monitor: a #GVolumeMonitor.
+ * g_dbus_server_new_sync:
+ * @address: A D-Bus address.
+ * @flags: Flags from the #GDBusServerFlags enumeration.
+ * @guid: A D-Bus GUID.
+ * @observer: A #GDBusAuthObserver or %NULL.
+ * @cancellable: A #GCancellable or %NULL.
+ * @error: Return location for server or %NULL.
  *
- * Gets a list of drives connected to the system.
- * The returned list should be freed with g_list_free(), after
- * its elements have been unreffed with g_object_unref().
+ * Creates a new D-Bus server that listens on the first address in
+ * Once constructed, you can use g_dbus_server_get_client_address() to
+ * get a D-Bus address string that clients can use to connect.
+ * Connect to the #GDBusServer::new-connection signal to handle
+ * incoming connections.
+ * The returned #GDBusServer isn't active - you have to start it with
+ * g_dbus_server_start().
+ * See <xref linkend="gdbus-peer-to-peer"/> for how #GDBusServer can
+ * be used.
+ * This is a synchronous failable constructor. See
+ * g_dbus_server_new() for the asynchronous version.
+ * g_object_unref().
  *
- * Returns: (element-type GDrive) (transfer full): a #GList of connected #GDrive objects.
+ * Returns: A #GDBusServer or %NULL if @error is set. Free with
+ * Since: 2.26
  */
 
 
@@ -3110,17 +2344,6 @@
  * Polls @file for changes.
  *
  * Returns: a new #GFileMonitor for the given #GFile.
- */
-
-
-/**
- * GInterfaceInitFunc:
- * @g_iface: The interface structure to initialize.
- * @iface_data: The @interface_data supplied via the #GInterfaceInfo structure.
- *
- * A callback function used by the type system to initialize a new
- * interface.  This function should initialize all internal data and
- * allocate any resources required by the interface.
  */
 
 
@@ -3160,6 +2383,27 @@
 
 
 /**
+ * g_action_group_get_action_parameter_type:
+ * @action_group: a #GActionGroup
+ * @action_name: the name of the action to query
+ *
+ * Queries the type of the parameter that must be given when activating
+ * the named action within @action_group.
+ * When activating the action using g_action_group_activate(), the
+ * #GVariant given to that function must be of the type returned by this
+ * function.
+ * In the case that this function returns %NULL, you must not give any
+ * #GVariant, but %NULL instead.
+ * The parameter type of a particular action will never change but it is
+ * possible for an action to be removed and for a new action to be added
+ * with the same name but a different parameter type.
+ *
+ * Returns: the parameter type
+ * Since: 2.28
+ */
+
+
+/**
  * g_dbus_property_info_unref:
  * @info: A #GDBusPropertyInfo.
  *
@@ -3168,23 +2412,6 @@
  * the memory used is freed.
  *
  * Since: 2.26
- */
-
-
-/**
- * G_VARIANT_TYPE_DICTIONARY:
- *
- * An indefinite type that is a supertype of every dictionary type --
- * that is, any array type that has an element type equal to any
- * dictionary entry type.
- */
-
-
-/**
- * GParamSpecObject:
- * @parent_instance: private #GParamSpec portion
- *
- * A #GParamSpec derived structure that contains the meta data for object properties.
  */
 
 
@@ -3209,24 +2436,6 @@
 
 
 /**
- * G_TYPE_BOXED:
- *
- * The fundamental type from which all boxed types are derived.
- */
-
-
-/**
- * G_FILE_ATTRIBUTE_MOUNTABLE_CAN_START_DEGRADED:
- *
- * A key in the "mountable" namespace for checking if a file (of type G_FILE_TYPE_MOUNTABLE) can be started
- * degraded.
- * Corresponding #GFileAttributeType is %G_FILE_ATTRIBUTE_TYPE_BOOLEAN.
- *
- * Since: 2.22
- */
-
-
-/**
  * g_permission_acquire_async:
  * @permission: a #GPermission instance
  * @cancellable: a #GCancellable, or %NULL
@@ -3238,19 +2447,6 @@
  * g_permission_acquire().
  *
  * Since: 2.26
- */
-
-
-/**
- * GSettingsBindGetMapping:
- * @value: return location for the property value
- * @variant: the #GVariant
- * @user_data: user data that was specified when the binding was created
- * @returns: %TRUE if the conversion succeeded, %FALSE in case of an error
- *
- * The type for the function that is used to convert from #GSettings to
- * an object property. The @value is already initialized to hold values
- * of the appropriate type.
  */
 
 
@@ -3303,7 +2499,7 @@
  * If no such action exists, returns %NULL.
  *
  * Returns: (transfer none): a #GAction, or %NULL
- * Since: 2.26
+ * Since: 2.28
  */
 
 
@@ -3368,15 +2564,6 @@
  * On error -1 is returned and @error is set accordingly.
  *
  * Returns: the byte read from the @stream, or -1 on end of stream or error.
- */
-
-
-/**
- * GSimpleActionGroup:
- *
- * The #GSimpleActionGroup structure contains private data and should only be accessed using the provided API.
- *
- * Since: 2.26
  */
 
 
@@ -3500,16 +2687,6 @@
 
 
 /**
- * GFileMonitorFlags:
- * @G_FILE_MONITOR_NONE: No flags set.
- * @G_FILE_MONITOR_WATCH_MOUNTS: Watch for mount events.
- * @G_FILE_MONITOR_SEND_MOVED: Pair DELETED and CREATED events caused by file renames (moves) and send a single G_FILE_MONITOR_EVENT_MOVED event instead (NB: not supported on all backends; the default behaviour -without specifying this flag- is to send single DELETED and CREATED events).
- *
- * Flags used to set what a #GFileMonitor will watch for.
- */
-
-
-/**
  * g_file_icon_new:
  * @file: a #GFile.
  *
@@ -3558,17 +2735,6 @@
 
 
 /**
- * G_OBJECT_WARN_INVALID_PROPERTY_ID:
- * @object: the #GObject on which set_property() or get_property() was called
- * @property_id: the numeric id of the property
- * @pspec: the #GParamSpec of the property
- *
- * This macro should be used to emit a standard warning about unexpected
- * properties in set_property() and get_property() implementations.
- */
-
-
-/**
  * g_app_info_get_default_for_uri_scheme:
  * @uri_scheme: a string containing a URI scheme.
  *
@@ -3591,13 +2757,6 @@
  * Finishes setting an attribute started in g_file_set_attributes_async().
  *
  * Returns: %TRUE if the attributes were set correctly, %FALSE otherwise.
- */
-
-
-/**
- * G_VARIANT_TYPE_ARRAY:
- *
- * An indefinite type that is a supertype of every array type.
  */
 
 
@@ -3642,15 +2801,6 @@
  * Guesses whether a Unix mount point can be ejected.
  *
  * Returns: %TRUE if @mount_point is deemed to be ejectable.
- */
-
-
-/**
- * GValueArray:
- * @n_values: number of values contained in the array
- * @values: array of values
- *
- * A #GValueArray contains an array of #GValue elements.
  */
 
 
@@ -3728,14 +2878,6 @@
 
 
 /**
- * GMainLoop:
- *
- * The <structname>GMainLoop</structname> struct is an opaque data type
- * representing the main event loop of a GLib or GTK+ application.
- */
-
-
-/**
  * g_file_io_stream_query_info_finish:
  * @stream: a #GFileIOStream.
  * @result: a #GAsyncResult.
@@ -3794,8 +2936,8 @@
  * @destination: destination #GFile
  * @flags: set of #GFileCopyFlags
  * @cancellable: optional #GCancellable object, %NULL to ignore.
- * @progress_callback: function to callback with progress information
- * @progress_callback_data: user data to pass to @progress_callback
+ * @progress_callback: (scope call): function to callback with progress information
+ * @progress_callback_data: (closure): user data to pass to @progress_callback
  * @error: #GError to set on error, or %NULL
  *
  * Copies the file @source to the location specified by @destination.
@@ -3830,16 +2972,6 @@
 
 
 /**
- * G_FILE_ATTRIBUTE_DOS_IS_ARCHIVE:
- *
- * A key in the "dos" namespace for checking if the file's archive flag
- * is set. This attribute is %TRUE if the archive flag is set. This attribute
- * is only available for DOS file systems. Corresponding #GFileAttributeType
- * is %G_FILE_ATTRIBUTE_TYPE_BOOLEAN.
- */
-
-
-/**
  * g_file_set_attribute_int64:
  * @file: input #GFile.
  * @attribute: a string containing the attribute's name.
@@ -3855,15 +2987,6 @@
  * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned.
  *
  * Returns: %TRUE if the @attribute was successfully set, %FALSE otherwise.
- */
-
-
-/**
- * G_FILE_ATTRIBUTE_STANDARD_TYPE:
- *
- * A key in the "standard" namespace for storing file types.
- * Corresponding #GFileAttributeType is %G_FILE_ATTRIBUTE_TYPE_UINT32.
- * The value for this key should contain a #GFileType.
  */
 
 
@@ -3889,22 +3012,6 @@
  *
  * Returns: %TRUE if valid, %FALSE otherwise.
  * Since: 2.26
- */
-
-
-/**
- * G_DEFINE_ABSTRACT_TYPE_WITH_CODE:
- * @TN: The name of the new type, in Camel case.
- * @t_n: The name of the new type, in lowercase, with words separated by '_'.
- * @T_P: The #GType of the parent type.
- * @_C_: Custom code that gets inserted in the @type_name_get_type() function.
- *
- * A convenience macro for type implementations.
- * Similar to G_DEFINE_TYPE_WITH_CODE(), but defines an abstract type and allows you to
- * insert custom code into the *_get_type() function, e.g. interface implementations
- * via G_IMPLEMENT_INTERFACE(). See G_DEFINE_TYPE_EXTENDED() for an example.
- *
- * Since: 2.4
  */
 
 
@@ -3942,14 +3049,43 @@
 /**
  * g_application_run:
  * @application: a #GApplication
+ * @argc: the argc from main()
+ * @argv: the argv from main()
+ * @returns: the exit status
  *
- * Starts the application.
- * The default implementation of this virtual function will simply run
- * a main loop.
- * It is an error to call this function if @application is a proxy for
- * a remote application.
+ * Runs the application.
+ * This function is intended to be run from main() and its return value
+ * is intended to be returned by main().
+ * First, the local_command_line() virtual function is invoked.  This
+ * function always runs on the local instance.  If that function returns
+ * %FALSE then the application is registered and the #GApplication::command-line
+ * signal is emitted in the primary instance (which may or may not be
+ * this instance).
+ * If the application has the %G_APPLICATION_HANDLES_COMMAND_LINE
+ * flag set then the default implementation of local_command_line()
+ * always returns %FALSE immediately, resulting in the commandline
+ * always being handled in the primary instance.
+ * Otherwise, the default implementation of local_command_line() tries
+ * to do a couple of things that are probably reasonable for most
+ * applications.  First, g_application_register() is called to attempt
+ * to register the application.  If that works, then the command line
+ * arguments are inspected.  If no commandline arguments are given, then
+ * g_application_activate() is called.  If commandline arguments are
+ * given and the %G_APPLICATION_HANDLES_OPEN flag is set then they
+ * are assumed to be filenames and g_application_open() is called.
+ * If you are interested in doing more complicated local handling of the
+ * commandline then you should implement your own #GApplication subclass
+ * and override local_command_line(). See
+ * <xref linkend="gapplication-example-cmdline2"/> for an example.
+ * If, after the above is done, the use count of the application is zero
+ * then the exit status is returned immediately.  If the use count is
+ * non-zero then the mainloop is run until the use count falls to zero,
+ * at which point 0 is returned.
+ * If the %G_APPLICATION_IS_SERVICE flag is set, then the exiting at
+ * around to provide its <emphasis>service</emphasis> to others).
  *
- * Since: 2.26
+ * Use count of zero is delayed for a while (ie: the instance stays
+ * Since: 2.28
  */
 
 
@@ -3962,17 +3098,6 @@
  *
  * Returns: a new #GSocketService.
  * Since: 2.22
- */
-
-
-/**
- * G_VALUE_HOLDS_GTYPE:
- * @value: a valid #GValue structure
- *
- * Checks whether the given #GValue can hold values of type %G_TYPE_GTYPE.
- *
- * Since: 2.12
- * Returns: %TRUE on success.
  */
 
 
@@ -4017,14 +3142,6 @@
 
 
 /**
- * G_OBJECT_CLASS:
- * @class: a valid #GObjectClass
- *
- * Casts a derived #GObjectClass structure into a #GObjectClass structure.
- */
-
-
-/**
  * g_simple_async_result_set_error:
  * @simple: a #GSimpleAsyncResult.
  * @domain: a #GQuark (usually #G_IO_ERROR).
@@ -4037,58 +3154,11 @@
 
 
 /**
- * GBindingFlags:
- * @G_BINDING_DEFAULT: The default binding; if the source property changes, the target property is updated with its value.
- * @G_BINDING_BIDIRECTIONAL: Bidirectional binding; if either the property of the source or the property of the target changes, the other is updated.
- * @G_BINDING_SYNC_CREATE: Synchronize the values of the source and target properties when creating the binding; the direction of the synchronization is always from the source to the target.
- * @G_BINDING_INVERT_BOOLEAN: If the two properties being bound are booleans, setting one to %TRUE will result in the other being set to %FALSE and vice versa. This flag will only work for boolean properties, and cannot be used when passing custom transformation functions to g_object_bind_property_full().
- *
- * Flags to be passed to g_object_bind_property() or
- * g_object_bind_property_full().
- * This enumeration can be extended at later date.
- *
- * Since: 2.26
- */
-
-
-/**
- * G_CLOSURE_N_NOTIFIERS:
- * @cl: a #GClosure
- *
- * Get the total number of notifiers connected with the closure @cl.
- * The count includes the meta marshaller, the finalize and invalidate notifiers
- * and the marshal guards. Note that each guard counts as two notifiers.
- * See g_closure_set_meta_marshal(), g_closure_add_finalize_notifier(),
- * g_closure_add_invalidate_notifier() and g_closure_add_marshal_guards().
- *
- * Returns: number of notifiers
- */
-
-
-/**
  * g_file_info_remove_attribute:
  * @info: a #GFileInfo.
  * @attribute: a file attribute key.
  *
  * Removes all cases of @attribute from @info if it exists.
- */
-
-
-/**
- * G_TYPE_PARAM_PARAM:
- *
- * The #GType of #GParamSpecParam.
- */
-
-
-/**
- * G_IS_PARAM_SPEC_GTYPE:
- * @pspec: a #GParamSpec
- *
- * Checks whether the given #GParamSpec is of type %G_TYPE_PARAM_GTYPE.
- *
- * Since: 2.10
- * Returns: %TRUE on success.
  */
 
 
@@ -4134,14 +3204,6 @@
  *
  * Returns: A filter identifier that can be used with
  * Since: 2.26
- */
-
-
-/**
- * GAppInfo:
- *
- * Information about an installed application and methods to launch
- * it (with file arguments).
  */
 
 
@@ -4194,17 +3256,11 @@
 
 
 /**
- * GDBusConnectionFlags:
- * @G_DBUS_CONNECTION_FLAGS_NONE: No flags set.
- * @G_DBUS_CONNECTION_FLAGS_AUTHENTICATION_CLIENT: Perform authentication against server.
- * @G_DBUS_CONNECTION_FLAGS_AUTHENTICATION_SERVER: Perform authentication against client.
- * @G_DBUS_CONNECTION_FLAGS_AUTHENTICATION_ALLOW_ANONYMOUS: When authenticating as a server, allow the anonymous authentication method.
- * @G_DBUS_CONNECTION_FLAGS_MESSAGE_BUS_CONNECTION: Pass this flag if connecting to a peer that is a message bus. This means that the Hello() method will be invoked as part of the connection setup.
- * @G_DBUS_CONNECTION_FLAGS_DELAY_MESSAGE_PROCESSING: If set, processing of D-Bus messages is delayed until g_dbus_connection_start_message_processing() is called.
+ * GApplication::startup:
+ * @application: the application
  *
- * Flags used when creating a new #GDBusConnection.
- *
- * Since: 2.26
+ * The ::startup signal is emitted on the primary instance immediately
+ * after registration. See g_activation_register().
  */
 
 
@@ -4287,39 +3343,6 @@
 
 
 /**
- * GParamSpecTypeInfo:
- * @instance_size: Size of the instance (object) structure.
- * @n_preallocs: Prior to GLib 2.10, it specified the number of pre-allocated (cached) instances to reserve memory for (0 indicates no caching). Since GLib 2.10, it is ignored, since instances are allocated with the <link linkend="glib-Memory-Slices">slice allocator</link> now.
- * @instance_init: Location of the instance initialization function (optional).
- * @value_type: The #GType of values conforming to this #GParamSpec
- * @finalize: The instance finalization function (optional).
- * @value_set_default: Resets a @value to the default value for @pspec (recommended, the default is g_value_reset()), see g_param_value_set_default().
- * @value_validate: Ensures that the contents of @value comply with the specifications set out by @pspec (optional), see g_param_value_set_validate().
- * @values_cmp: Compares @value1 with @value2 according to @pspec (recommended, the default is memcmp()), see g_param_values_cmp().
- *
- * This structure is used to provide the type system with the information
- * required to initialize and destruct (finalize) a parameter's class and
- * instances thereof.
- * The initialized structure is passed to the g_param_type_register_static()
- * The type system will perform a deep copy of this structure, so its memory
- * does not need to be persistent across invocation of
- * g_param_type_register_static().
- */
-
-
-/**
- * G_TYPE_IS_VALUE_ABSTRACT:
- * @type: A #GType value.
- *
- * Checks if @type is an abstract value type.  An abstract value type introduces
- * a value table, but can't be used for g_value_init() and is normally used as
- * an abstract base type for derived value types.
- *
- * Returns: %TRUE on success.
- */
-
-
-/**
  * g_cancellable_pop_current:
  * @cancellable: a #GCancellable object
  *
@@ -4345,46 +3368,6 @@
 
 
 /**
- * G_FILE_ATTRIBUTE_STANDARD_IS_HIDDEN:
- *
- * A key in the "standard" namespace for checking if a file is hidden.
- * Corresponding #GFileAttributeType is %G_FILE_ATTRIBUTE_TYPE_BOOLEAN.
- */
-
-
-/**
- * GMountUnmountFlags:
- * @G_MOUNT_UNMOUNT_NONE: No flags set.
- * @G_MOUNT_UNMOUNT_FORCE: Unmount even if there are outstanding file operations on the mount.
- *
- * Flags used when an unmounting a mount.
- */
-
-
-/**
- * GAsyncInitableIface:
- * @g_iface: The parent interface.
- * @init_async: Starts initialization of the object.
- * @init_finish: Finishes initialization of the object.
- *
- * Provides an interface for asynchronous initializing object such that
- * initialization may fail.
- *
- * Since: 2.22
- */
-
-
-/**
- * G_VALUE_HOLDS_UINT64:
- * @value: a valid #GValue structure
- *
- * Checks whether the given #GValue can hold values of type %G_TYPE_UINT64.
- *
- * Returns: %TRUE on success.
- */
-
-
-/**
  * g_file_info_list_attributes:
  * @info: a #GFileInfo.
  * @name_space: a file attribute key's namespace.
@@ -4405,7 +3388,7 @@
  *
  * Signals that the enabled status of the named action has changed.
  *
- * Since: 2.26
+ * Since: 2.28
  */
 
 
@@ -4427,33 +3410,6 @@
  *
  * Returns: A #GDBusConnection or %NULL if @error is set. Free with g_object_unref().
  * Since: 2.26
- */
-
-
-/**
- * GSocketListenerClass:
- * @changed: virtual method called when the set of socket listened to changes
- *
- *
- */
-
-
-/**
- * G_FILE_ATTRIBUTE_MOUNTABLE_UNIX_DEVICE:
- *
- * A key in the "mountable" namespace for getting the unix device.
- * Corresponding #GFileAttributeType is %G_FILE_ATTRIBUTE_TYPE_UINT32.
- */
-
-
-/**
- * GTypeModuleClass:
- * @parent_class: the parent class
- * @load: loads the module and registers one or more types using g_type_module_register_type().
- * @unload: unloads the module
- *
- * In order to implement dynamic loading of types based on #GTypeModule,
- * the @load and @unload functions in #GTypeModuleClass must be implemented.
  */
 
 
@@ -4586,22 +3542,6 @@
 
 
 /**
- * GDBusInterfaceVTable:
- * @method_call: Function for handling incoming method calls.
- * @get_property: Function for getting a property.
- * @set_property: Function for setting a property.
- *
- * Virtual table for handling properties and method calls for a D-Bus
- * interface.
- * If you want to handle getting/setting D-Bus properties asynchronously, simply
- * register an object with the <literal>org.freedesktop.DBus.Properties</literal>
- * D-Bus interface using g_dbus_connection_register_object().
- *
- * Since: 2.26
- */
-
-
-/**
  * g_settings_backend_writable_changed:
  * @backend: a #GSettingsBackend implementation
  * @key: the name of the key
@@ -4680,16 +3620,6 @@
 
 
 /**
- * GDBusSignalFlags:
- * @G_DBUS_SIGNAL_FLAGS_NONE: No flags set.
- *
- * Flags used when subscribing to signals via g_dbus_connection_signal_subscribe().
- *
- * Since: 2.26
- */
-
-
-/**
  * g_drive_start:
  * @drive: a #GDrive.
  * @flags: flags affecting the start operation.
@@ -4750,14 +3680,6 @@
 
 
 /**
- * G_PARAM_SPEC_VALUE_ARRAY:
- * @pspec: a valid #GParamSpec instance
- *
- * Cast a #GParamSpec instance into a #GParamSpecValueArray.
- */
-
-
-/**
  * g_dbus_message_set_member:
  * @message: A #GDBusMessage.
  * @value: The value to set.
@@ -4802,76 +3724,6 @@
  *
  * Class structure for #GCredentials.
  *
- * Since: 2.26
- */
-
-
-/**
- * GDBusMessageFilterFunction:
- * @connection: (transfer none): A #GDBusConnection.
- * @message: (transfer full): A locked #GDBusMessage that the filter function takes ownership of.
- * @incoming: %TRUE if it is a message received from the other peer, %FALSE if it is a message to be sent to the other peer.
- * @user_data: User data passed when adding the filter.
- *
- * Signature for function used in g_dbus_connection_add_filter().
- * A filter function is passed a #GDBusMessage and expected to return
- * a #GDBusMessage too. Passive filter functions that don't modify the
- * message can simply return the @message object:
- * |[
- * static GDBusMessage *
- * passive_filter (GDBusConnection *connection
- * GDBusMessage    *message,
- * gboolean         incoming,
- * gpointer         user_data)
- * {
- * /<!-- -->* inspect @message *<!-- -->/
- * return message;
- * }
- * ]|
- * Filter functions that wants to drop a message can simply return %NULL:
- * |[
- * static GDBusMessage *
- * drop_filter (GDBusConnection *connection
- * GDBusMessage    *message,
- * gboolean         incoming,
- * gpointer         user_data)
- * {
- * if (should_drop_message)
- * {
- * g_object_unref (message);
- * message = NULL;
- * }
- * return message;
- * }
- * ]|
- * Finally, a filter function may modify a message by copying it:
- * |[
- * static GDBusMessage *
- * modifying_filter (GDBusConnection *connection
- * GDBusMessage    *message,
- * gboolean         incoming,
- * gpointer         user_data)
- * {
- * GDBusMessage *copy;
- * GError *error;
- * error = NULL;
- * copy = g_dbus_message_copy (message, &error);
- * /<!-- -->* handle @error being is set *<!-- -->/
- * g_object_unref (message);
- * /<!-- -->* modify @copy *<!-- -->/
- * return copy;
- * }
- * ]|
- * If the returned #GDBusMessage is different from @message and cannot
- * be sent on @connection (it could use features, such as file
- * descriptors, not compatible with @connection), then a warning is
- * logged to <emphasis>standard error</emphasis>. Applications can
- * check this ahead of time using g_dbus_message_to_blob() passing a
- * #GDBusCapabilityFlags value obtained from @connection.
- * g_object_unref() or %NULL to drop the message. Passive filter
- * functions can simply return the passed @message object.
- *
- * Returns: (transfer full) (allow-none): A #GDBusMessage that will be freed with
  * Since: 2.26
  */
 
@@ -4949,50 +3801,9 @@
 
 
 /**
- * G_FILE_ATTRIBUTE_MOUNTABLE_START_STOP_TYPE:
- *
- * A key in the "mountable" namespace for getting the #GDriveStartStopType.
- * Corresponding #GFileAttributeType is %G_FILE_ATTRIBUTE_TYPE_UINT32.
- *
- * Since: 2.22
- */
-
-
-/**
  * GInetAddress:
  *
  * An IPv4 or IPv6 internet address.
- */
-
-
-/**
- * GDBusPropertyInfoFlags:
- * @G_DBUS_PROPERTY_INFO_FLAGS_NONE: No flags set.
- * @G_DBUS_PROPERTY_INFO_FLAGS_READABLE: Property is readable.
- * @G_DBUS_PROPERTY_INFO_FLAGS_WRITABLE: Property is writable.
- *
- * Flags describing the access control of a D-Bus property.
- *
- * Since: 2.26
- */
-
-
-/**
- * g_node_next_sibling:
- * @node: a #GNode
- *
- * Gets the next sibling of a #GNode.
- * or %NULL
- *
- * Returns: the next sibling of @node, or %NULL if @node is the last node
- */
-
-
-/**
- * G_PARAM_SPEC_ENUM:
- * @pspec: a valid #GParamSpec instance
- *
- * Cast a #GParamSpec instance into a #GParamSpecEnum.
  */
 
 
@@ -5027,59 +3838,6 @@
  *
  * Returns: The value.
  * Since: 2.26
- */
-
-
-/**
- * GTimeSpan:
- *
- * A value representing an interval of time, in microseconds.
- *
- * Since: 2.26
- */
-
-
-/**
- * GDBusNodeInfo:
- * @ref_count: The reference count or -1 if statically allocated.
- * @path: The path of the node or %NULL if omitted. Note that this may be a relative path. See the D-Bus specification for more details.
- * @interfaces: A pointer to a %NULL-terminated array of pointers to #GDBusInterfaceInfo structures or %NULL if there are no interfaces.
- * @nodes: A pointer to a %NULL-terminated array of pointers to #GDBusNodeInfo structures or %NULL if there are no nodes.
- * @annotations: A pointer to a %NULL-terminated array of pointers to #GDBusAnnotationInfo structures or %NULL if there are no annotations.
- *
- * Information about nodes in a remote object hierarchy.
- *
- * Since: 2.26
- */
-
-
-/**
- * G_TYPE_IS_OBJECT:
- * @type: Type id to check
- *
- * Check if the passed in type id is a %G_TYPE_OBJECT or derived from it.
- *
- * Returns: %FALSE or %TRUE, indicating whether @type is a %G_TYPE_OBJECT.
- */
-
-
-/**
- * g_file_enumerator_close_finish:
- * @enumerator: a #GFileEnumerator.
- * @result: a #GAsyncResult.
- * @error: a #GError location to store the error occuring, or %NULL to ignore.
- *
- * Finishes closing a file enumerator, started from g_file_enumerator_close_async().
- * If the file enumerator was already closed when g_file_enumerator_close_async()
- * was called, then this function will report %G_IO_ERROR_CLOSED in @error, and
- * return %FALSE. If the file enumerator had pending operation when the close
- * operation was started, then this function will report %G_IO_ERROR_PENDING, and
- * return %FALSE.  If @cancellable was not %NULL, then the operation may have been
- * cancelled by triggering the cancellable object from another thread. If the operation
- * was cancelled, the error %G_IO_ERROR_CANCELLED will be set, and %FALSE will be
- * returned.
- *
- * Returns: %TRUE if the close operation has finished successfully.
  */
 
 
@@ -5126,28 +3884,10 @@
 
 
 /**
- * GConverterOutputStream:
- *
- * An implementation of #GFilterOutputStream that allows data
- * conversion.
- */
-
-
-/**
  * GSettings:schema:
  *
  * The name of the schema that describes the types of keys
  * for this #GSettings object.
- */
-
-
-/**
- * G_TYPE_IS_VALUE_TYPE:
- * @type: A #GType value.
- *
- * Checks if @type is a value type and can be used with g_value_init().
- *
- * Returns: %TRUE on success.
  */
 
 
@@ -5160,22 +3900,6 @@
  * Free the returned object with g_object_unref().
  *
  * Returns: (transfer full): a #GVolume or %NULL if no such volume is available.
- */
-
-
-/**
- * G_SIGNAL_FLAGS_MASK:
- *
- * A mask for all #GSignalFlags bits.
- */
-
-
-/**
- * G_TYPE_DBUS_INTERFACE_INFO:
- *
- * The #GType for a boxed type holding a #GDBusInterfaceInfo.
- *
- * Since: 2.26
  */
 
 
@@ -5216,33 +3940,6 @@
  *
  * Returns: (transfer full): the new #GNetworkAddress, or %NULL on error
  * Since: 2.22
- */
-
-
-/**
- * g_newa:
- * @struct_type: Type of memory chunks to be allocated
- * @n_structs: Number of chunks to be allocated
- *
- * Wraps g_alloca() in a more typesafe manner.
- *
- * Returns: Pointer to stack space for @n_structs chunks of type @struct_type
- */
-
-
-/**
- * G_IMPLEMENT_INTERFACE_DYNAMIC:
- * @TYPE_IFACE: The #GType of the interface to add
- * @iface_init: The interface init function
- *
- * A convenience macro to ease interface addition in the @_C_ section
- * of G_DEFINE_DYNAMIC_TYPE_EXTENDED(). See G_DEFINE_DYNAMIC_TYPE_EXTENDED()
- * for an example.
- * Note that this macro can only be used together with the
- * G_DEFINE_DYNAMIC_TYPE_EXTENDED macros, since it depends on variable
- * names from that macro.
- *
- * Since: 2.24
  */
 
 
@@ -5318,38 +4015,12 @@
 
 
 /**
- * G_DEFINE_BOXED_TYPE_WITH_CODE:
- * @TypeName: The name of the new type, in Camel case.
- * @type_name: The name of the new type, in lowercase, with words separated by '_'.
- * @copy_func: the #GBoxedCopyFunc for the new type
- * @free_func: the #GBoxedFreeFunc for the new type
- * @_C_: Custom code that gets inserted in the *_get_type() function.
- *
- * A convenience macro for boxed type implementations.
- * Similar to G_DEFINE_BOXED_TYPE(), but allows to insert custom code into the
- * type_name_get_type() function, e.g. to register value transformations with
- * g_value_register_transform_func().
- *
- * Since: 2.26
- */
-
-
-/**
  * g_simple_async_result_get_op_res_gssize:
  * @simple: a #GSimpleAsyncResult.
  *
  * Gets a gssize from the asynchronous result.
  *
  * Returns: a gssize returned from the asynchronous function.
- */
-
-
-/**
- * G_TYPE_DBUS_NODE_INFO:
- *
- * The #GType for a boxed type holding a #GDBusNodeInfo.
- *
- * Since: 2.26
  */
 
 
@@ -5373,7 +4044,7 @@
  * If the @state GVariant is floating, it is consumed.
  *
  * Returns: a new #GSimpleAction
- * Since: 2.26
+ * Since: 2.28
  */
 
 
@@ -5393,15 +4064,6 @@
 
 
 /**
- * G_PARAM_SPEC:
- * @pspec: a valid #GParamSpec
- *
- * Casts a derived #GParamSpec object (e.g. of type #GParamSpecInt) into
- * a #GParamSpec object.
- */
-
-
-/**
  * g_drive_poll_for_media_finish:
  * @drive: a #GDrive.
  * @result: a #GAsyncResult.
@@ -5415,13 +4077,6 @@
 
 
 /**
- * G_TYPE_PARAM_UNICHAR:
- *
- * The #GType of #GParamSpecUnichar.
- */
-
-
-/**
  * g_dbus_message_set_reply_serial:
  * @message: A #GDBusMessage.
  * @value: The value to set.
@@ -5429,16 +4084,6 @@
  * Convenience setter for the %G_DBUS_MESSAGE_HEADER_FIELD_REPLY_SERIAL header field.
  *
  * Since: 2.26
- */
-
-
-/**
- * GParameter:
- * @name: the parameter name
- * @value: the parameter value
- *
- * The <structname>GParameter</structname> struct is an auxiliary structure used
- * to hand parameter name/value pairs to g_object_newv().
  */
 
 
@@ -5473,23 +4118,6 @@
  * for any errors.
  *
  * Since: 2.22
- */
-
-
-/**
- * GFilterOutputStream:
- *
- * A base class for all output streams that work on an underlying stream.
- */
-
-
-/**
- * G_FILE_ATTRIBUTE_TIME_CHANGED_USEC:
- *
- * A key in the "time" namespace for getting the microseconds of the time
- * the file was last changed. This should be used in conjunction with
- * #G_FILE_ATTRIBUTE_TIME_CHANGED. Corresponding #GFileAttributeType is
- * %G_FILE_ATTRIBUTE_TYPE_UINT32.
  */
 
 
@@ -5598,6 +4226,23 @@
 
 
 /**
+ * g_action_group_get_action_state:
+ * @action_group: a #GActionGroup
+ * @action_name: the name of the action to query
+ *
+ * Queries the current state of the named action within @action_group.
+ * If the action is not stateful then %NULL will be returned.  If the
+ * action is stateful then the type of the return value is the type
+ * given by g_action_group_get_state_type().
+ * The return value (if non-%NULL) should be freed with
+ * g_variant_unref() when it is no longer required.
+ *
+ * Returns: (allow-none): the current state of the action
+ * Since: 2.28
+ */
+
+
+/**
  * g_drive_can_stop:
  * @drive: a #GDrive.
  *
@@ -5638,13 +4283,6 @@
 
 
 /**
- * G_TYPE_RESERVED_GLIB_LAST:
- *
- * Last fundamental type number reserved for GLib.
- */
-
-
-/**
  * g_data_input_stream_read_until:
  * @stream: a given #GDataInputStream.
  * @stop_chars: characters to terminate the read.
@@ -5665,15 +4303,6 @@
  * of the string. This function will return %NULL on an error.
  *
  * Returns: a string with the data that was read before encountering
- */
-
-
-/**
- * GInitable:
- *
- * Interface for initializable objects.
- *
- * Since: 2.22
  */
 
 
@@ -5700,52 +4329,13 @@
 
 
 /**
- * GSettingsBindFlags:
- * @G_SETTINGS_BIND_DEFAULT: Equivalent to <literal>G_SETTINGS_BIND_GET|G_SETTINGS_BIND_SET</literal>
- * @G_SETTINGS_BIND_GET: Update the #GObject property when the setting changes. It is an error to use this flag if the property is not writable.
- * @G_SETTINGS_BIND_SET: Update the setting when the #GObject property changes. It is an error to use this flag if the property is not readable.
- * @G_SETTINGS_BIND_NO_SENSITIVITY: Do not try to bind a "sensitivity" property to the writability of the setting
- * @G_SETTINGS_BIND_GET_NO_CHANGES: When set in addition to #G_SETTINGS_BIND_GET, set the #GObject property value initially from the setting, but do not listen for changes of the setting
- * @G_SETTINGS_BIND_INVERT_BOOLEAN: When passed to g_settings_bind(), uses a pair of mapping functions that invert the boolean value when mapping between the setting and the property.  The setting and property must both be booleans.  You can not pass this flag to g_settings_bind_with_mapping().
- *
- * Flags used when creating a binding. These flags determine in which
- * direction the binding works. The default is to synchronize in both
- * directions.
- */
-
-
-/**
- * GTypeInfo:
- * @class_size: Size of the class structure (required for interface, classed and instantiatable types).
- * @base_init: Location of the base initialization function (optional).
- * @base_finalize: Location of the base finalization function (optional).
- * @class_init: Location of the class initialization function for classed and instantiatable types. Location of the default vtable inititalization function for interface types. (optional) This function is used both to fill in virtual functions in the class or default vtable, and to do type-specific setup such as registering signals and object properties.
- * @class_finalize: Location of the class finalization function for classed and instantiatable types. Location fo the default vtable finalization function for interface types. (optional)
- * @class_data: User-supplied data passed to the class init/finalize functions.
- * @instance_size: Size of the instance (object) structure (required for instantiatable types only).
- * @n_preallocs: Prior to GLib 2.10, it specified the number of pre-allocated (cached) instances to reserve memory for (0 indicates no caching). Since GLib 2.10, it is ignored, since instances are allocated with the <link linkend="glib-Memory-Slices">slice allocator</link> now.
- * @instance_init: Location of the instance initialization function (optional, for instantiatable types only).
- * @value_table: A #GTypeValueTable function table for generic handling of GValues of this type (usually only useful for fundamental types).
- *
- * This structure is used to provide the type system with the information
- * required to initialize and destruct (finalize) a type's class and
- * its instances.
- * The initialized structure is passed to the g_type_register_static() function
- * (or is copied into the provided #GTypeInfo structure in the
- * g_type_plugin_complete_type_info()). The type system will perform a deep
- * copy of this structure, so its memory does not need to be persistent
- * across invocation of g_type_register_static().
- */
-
-
-/**
  * GSimpleAction:enabled:
  *
  * If @action is currently enabled.
  * If the action is disabled then calls to g_simple_action_activate() and
  * g_simple_action_set_state() have no effect.
  *
- * Since: 2.26
+ * Since: 2.28
  */
 
 
@@ -5766,15 +4356,6 @@
  * @destroy_op_res: a #GDestroyNotify function.
  *
  * Sets the operation result within the asynchronous result to a pointer.
- */
-
-
-/**
- * G_FILE_ATTRIBUTE_ACCESS_CAN_EXECUTE:
- *
- * A key in the "access" namespace for getting execution privileges.
- * Corresponding #GFileAttributeType is %G_FILE_ATTRIBUTE_TYPE_BOOLEAN.
- * This attribute will be %TRUE if the user is able to execute the file.
  */
 
 
@@ -5800,25 +4381,6 @@
  *
  * Returns: %TRUE if information was stripped, %FALSE otherwise.
  * Since: 2.26
- */
-
-
-/**
- * GParamSpecInt:
- * @parent_instance: private #GParamSpec portion
- * @minimum: minimum value for the property specified
- * @maximum: maximum value for the property specified
- * @default_value: default value for the property specified
- *
- * A #GParamSpec derived structure that contains the meta data for integer properties.
- */
-
-
-/**
- * G_PARAM_SPEC_ULONG:
- * @pspec: a valid #GParamSpec instance
- *
- * Cast a #GParamSpec instance into a #GParamSpecULong.
  */
 
 
@@ -5871,25 +4433,10 @@
 
 
 /**
- * G_VFS_EXTENSION_POINT_NAME:
- *
- * Extension point for #GVfs functionality.
- * See <link linkend="extending-gio">Extending GIO</link>.
- */
-
-
-/**
  * g_output_stream_clear_pending:
  * @stream: output stream
  *
  * Clears the pending flag on @stream.
- */
-
-
-/**
- * G_TYPE_GSTRING:
- *
- * The #GType for #GString.
  */
 
 
@@ -5920,14 +4467,6 @@
 
 
 /**
- * G_DESKTOP_APP_INFO_LOOKUP_EXTENSION_POINT_NAME:
- *
- * Extension point for default handler to URI association. See
- * <link linkend="extending-gio">Extending GIO</link>.
- */
-
-
-/**
  * g_io_scheduler_job_send_to_mainloop:
  * @job: a #GIOSchedulerJob
  * @func: a #GSourceFunc callback that will be called in the original thread
@@ -5939,15 +4478,6 @@
  * blocking the I/O job).
  *
  * Returns: The return value of @func
- */
-
-
-/**
- * G_IS_FLAGS_CLASS:
- * @class: a #GFlagsClass
- *
- * Checks whether @class "is a" valid #GFlagsClass structure of type %G_TYPE_FLAGS
- * or derived.
  */
 
 
@@ -5999,14 +4529,6 @@
 
 
 /**
- * G_FILE_ATTRIBUTE_OWNER_GROUP:
- *
- * A key in the "owner" namespace for getting the file owner's group.
- * Corresponding #GFileAttributeType is %G_FILE_ATTRIBUTE_TYPE_STRING.
- */
-
-
-/**
  * g_file_find_enclosing_mount_async:
  * @file: a #GFile
  * @io_priority: the <link linkend="io-priority">I/O priority</link> of the request.
@@ -6019,17 +4541,6 @@
  * the synchronous version of this call.
  * When the operation is finished, @callback will be called. You can then call
  * g_file_find_enclosing_mount_finish() to get the result of the operation.
- */
-
-
-/**
- * GLoadableIconIface:
- * @g_iface: The parent interface.
- * @load: Loads an icon.
- * @load_async: Loads an icon asynchronously.
- * @load_finish: Finishes an asynchronous icon load.
- *
- * Interface for icons that can be loaded as a stream.
  */
 
 
@@ -6073,39 +4584,6 @@
  * needed, and automatically do the necessary proxy negotiation.
  *
  * Since: 2.26
- */
-
-
-/**
- * GChecksum:
- *
- * An opaque structure representing a checksumming operation.
- * To create a new GChecksum, use g_checksum_new(). To free
- * a GChecksum, use g_checksum_free().
- *
- * Since: 2.16
- */
-
-
-/**
- * G_CCLOSURE_SWAP_DATA:
- * @cclosure: a #GCClosure
- *
- * Checks whether the user data of the #GCClosure should be passed as the
- * first parameter to the callback. See g_cclosure_new_swap().
- *
- * Returns: %TRUE if data has to be swapped.
- */
-
-
-/**
- * G_TYPE_IS_DEEP_DERIVABLE:
- * @type: A #GType value.
- *
- * Checks if @type is a deep derivable type.  A deep derivable type
- * can be used as the base class of a deep (multi-level) class hierarchy.
- *
- * Returns: %TRUE on success.
  */
 
 
@@ -6164,26 +4642,6 @@
 
 
 /**
- * GTranslateFunc:
- * @str: the untranslated string
- * @data: user data specified when installing the function, e.g. in g_option_group_set_translate_func()
- *
- * The type of functions which are used to translate user-visible
- * strings, for <option>--help</option> output.
- * The returned string is owned by GLib and must not be freed.
- *
- * Returns: a translation of the string for the current locale.
- */
-
-
-/**
- * G_VOLUME_IDENTIFIER_KIND_HAL_UDI:
- *
- * The string used to obtain a Hal UDI with g_volume_get_identifier().
- */
-
-
-/**
  * g_cancellable_cancel:
  * @cancellable: a #GCancellable object.
  *
@@ -6215,33 +4673,6 @@
 
 
 /**
- * GVolumeIface:
- * @g_iface: The parent interface.
- * @changed: Changed signal that is emitted when the volume's state has changed.
- * @removed: The removed signal that is emitted when the #GVolume have been removed. If the recipient is holding references to the object they should release them so the object can be finalized.
- * @get_name: Gets a string containing the name of the #GVolume.
- * @get_icon: Gets a #GIcon for the #GVolume.
- * @get_uuid: Gets the UUID for the #GVolume. The reference is typically based on the file system UUID for the mount in question and should be considered an opaque string. Returns %NULL if there is no UUID available.
- * @get_drive: Gets a #GDrive the volume is located on. Returns %NULL if the #GVolume is not associated with a #GDrive.
- * @get_mount: Gets a #GMount representing the mounted volume. Returns %NULL if the #GVolume is not mounted.
- * @can_mount: Returns %TRUE if the #GVolume can be mounted.
- * @can_eject: Checks if a #GVolume can be ejected.
- * @mount_fn: Mounts a given #GVolume. #GVolume implementations must emit the #GMountOperation::aborted signal before completing a mount operation that is aborted while awaiting input from the user through a #GMountOperation instance.
- * @mount_finish: Finishes a mount operation.
- * @eject: Ejects a given #GVolume.
- * @eject_finish: Finishes an eject operation.
- * @get_identifier: Returns the <link linkend="volume-identifier">identifier</link> of the given kind, or %NULL if the #GVolume doesn't have one.
- * @enumerate_identifiers: Returns an array strings listing the kinds of <link linkend="volume-identifier">identifiers</link> which the #GVolume has.
- * @should_automount: Returns %TRUE if the #GVolume should be automatically mounted.
- * @get_activation_root: Returns the activation root for the #GVolume if it is known in advance or %NULL if it is not known.
- * @eject_with_operation: Starts ejecting a #GVolume using a #GMountOperation. Since 2.22.
- * @eject_with_operation_finish: Finishes an eject operation using a #GMountOperation. Since 2.22.
- *
- * Interface for implementing operations for mountable volumes.
- */
-
-
-/**
  * g_file_attribute_matcher_enumerate_next:
  * @matcher: a #GFileAttributeMatcher.
  *
@@ -6249,22 +4680,6 @@
  * no more attribute exist.
  *
  * Returns: a string containing the next attribute or %NULL if
- */
-
-
-/**
- * G_TYPE_INSTANCE_GET_PRIVATE:
- * @instance: the instance of a type deriving from @private_type.
- * @g_type: the type identifying which private data to retrieve.
- * @c_type: The C type for the private structure.
- *
- * Gets the private structure for a particular type.
- * The private structure must have been registered in the
- * class_init function with g_type_class_add_private().
- * This macro should only be used in type implementations.
- *
- * Since: 2.4
- * Returns: a pointer to the private data structure.
  */
 
 
@@ -6297,16 +4712,20 @@
 
 
 /**
- * GThemedIcon:names:
+ * g_file_io_stream_query_info_async:
+ * @stream: a #GFileIOStream.
+ * @attributes: a file attribute query string.
+ * @io_priority: the <link linkend="gio-GIOScheduler">I/O priority</link> of the request.
+ * @cancellable: optional #GCancellable object, %NULL to ignore.
+ * @callback: callback to call when the request is satisfied
+ * @user_data: the data to pass to callback function
  *
- * A %NULL-terminated array of icon names.
- */
-
-
-/**
- * GSeekable:
+ * Asynchronously queries the @stream for a #GFileInfo. When completed,
+ * finish the operation with g_file_io_stream_query_info_finish().
+ * For the synchronous version of this function, see
+ * g_file_io_stream_query_info().
  *
- * Seek object for streaming operations.
+ * Since: 2.22
  */
 
 
@@ -6319,38 +4738,6 @@
  * write or truncate operation on the stream.
  *
  * Returns: pointer to the stream's data
- */
-
-
-/**
- * g_new0:
- * @struct_type: the type of the elements to allocate.
- * @n_structs: the number of elements to allocate.
- *
- * Allocates @n_structs elements of type @struct_type, initialized to 0's.
- * The returned pointer is cast to a pointer to the given type.
- * If @n_structs is 0 it returns %NULL.
- * Care is taken to avoid overflow when calculating the size of the allocated block.
- * Since the returned pointer is already casted to the right type,
- * it is normally unnecessary to cast it explicitly, and doing
- * so might hide memory allocation errors.
- *
- * Returns: a pointer to the allocated memory, cast to a pointer to @struct_type.
- */
-
-
-/**
- * GFileMonitorEvent:
- * @G_FILE_MONITOR_EVENT_CHANGED: a file changed.
- * @G_FILE_MONITOR_EVENT_CHANGES_DONE_HINT: a hint that this was probably the last change in a set of changes.
- * @G_FILE_MONITOR_EVENT_DELETED: a file was deleted.
- * @G_FILE_MONITOR_EVENT_CREATED: a file was created.
- * @G_FILE_MONITOR_EVENT_ATTRIBUTE_CHANGED: a file attribute was changed.
- * @G_FILE_MONITOR_EVENT_PRE_UNMOUNT: the file location will soon be unmounted.
- * @G_FILE_MONITOR_EVENT_UNMOUNTED: the file location was unmounted.
- * @G_FILE_MONITOR_EVENT_MOVED: the file was moved.
- *
- * Specifies what type of event a monitor event is.
  */
 
 
@@ -6382,7 +4769,7 @@
  * Removes the named action from the action group.
  * If no action of this name is in the group then nothing happens.
  *
- * Since: 2.26
+ * Since: 2.28
  */
 
 
@@ -6398,13 +4785,6 @@
  * -1 if an error occurred.
  *
  * Returns: a #gssize containing the size of the data spliced, or
- */
-
-
-/**
- * G_URI_RESERVED_CHARS_SUBCOMPONENT_DELIMITER:
- *
- * Subcomponent delimiter characters as defined in RFC 3986. Includes "!$&'()*+,;=".
  */
 
 
@@ -6445,17 +4825,6 @@
  * g_unix_mounts_points_changed_since().
  *
  * Returns: (element-type utf8) (transfer full): a #GList of the UNIX mountpoints.
- */
-
-
-/**
- * GDataStreamByteOrder:
- * @G_DATA_STREAM_BYTE_ORDER_BIG_ENDIAN: Selects Big Endian byte order.
- * @G_DATA_STREAM_BYTE_ORDER_LITTLE_ENDIAN: Selects Little Endian byte order.
- * @G_DATA_STREAM_BYTE_ORDER_HOST_ENDIAN: Selects endianness based on host machine's architecture.
- *
- * #GDataStreamByteOrder is used to ensure proper endianness of streaming data sources
- * across various machine architectures.
  */
 
 
@@ -6532,23 +4901,6 @@
 
 
 /**
- * g_new:
- * @struct_type: the type of the elements to allocate
- * @n_structs: the number of elements to allocate
- *
- * Allocates @n_structs elements of type @struct_type.
- * The returned pointer is cast to a pointer to the given type.
- * If @n_structs is 0 it returns %NULL.
- * Care is taken to avoid overflow when calculating the size of the allocated block.
- * Since the returned pointer is already casted to the right type,
- * it is normally unnecessary to cast it explicitly, and doing
- * so might hide memory allocation errors.
- *
- * Returns: a pointer to the allocated memory, cast to a pointer to @struct_type
- */
-
-
-/**
  * g_file_copy_attributes:
  * @source: a #GFile with attributes.
  * @destination: a #GFile to copy attributes to.
@@ -6569,32 +4921,12 @@
 
 
 /**
- * G_IS_PARAM_SPEC_CHAR:
- * @pspec: a valid #GParamSpec instance
- *
- * Checks whether the given #GParamSpec is of type %G_TYPE_PARAM_CHAR.
- *
- * Returns: %TRUE on success.
- */
-
-
-/**
  * g_dbus_message_get_byte_order:
  * @message: A #GDBusMessage.
  *
  * Gets the byte order of @message.
  *
  * Returns: The byte order.
- */
-
-
-/**
- * GValueTransform:
- * @src_value: Source value.
- * @dest_value: Target value.
- *
- * The type of value transformation functions which can be registered with
- * g_value_register_transform_func().
  */
 
 
@@ -6606,16 +4938,6 @@
  * Gets the #GAppInfo that corresponds to a given content type.
  *
  * Returns: #GAppInfo for given @content_type or %NULL on error.
- */
-
-
-/**
- * G_IS_PARAM_SPEC_UNICHAR:
- * @pspec: a valid #GParamSpec instance
- *
- * Checks whether the given #GParamSpec is of type %G_TYPE_PARAM_UNICHAR.
- *
- * Returns: %TRUE on success.
  */
 
 
@@ -6637,28 +4959,6 @@
  * Gets the symlink target for a given #GFileInfo.
  *
  * Returns: a string containing the symlink target.
- */
-
-
-/**
- * G_SIGNAL_TYPE_STATIC_SCOPE:
- *
- * This macro flags signal argument types for which the signal system may
- * assume that instances thereof remain persistent across all signal emissions
- * they are used in. This is only useful for non ref-counted, value-copy types.
- * To flag a signal argument in this way, add
- * <literal>| G_SIGNAL_TYPE_STATIC_SCOPE</literal> to the corresponding argument
- * of g_signal_new().
- * |[
- * g_signal_new ("size_request",
- * G_TYPE_FROM_CLASS (gobject_class),
- * G_SIGNAL_RUN_FIRST,
- * G_STRUCT_OFFSET (GtkWidgetClass, size_request),
- * NULL, NULL,
- * _gtk_marshal_VOID__BOXED,
- * G_TYPE_NONE, 1,
- * GTK_TYPE_REQUISITION | G_SIGNAL_TYPE_STATIC_SCOPE);
- * ]|
  */
 
 
@@ -6735,25 +5035,6 @@
 
 
 /**
- * G_VALUE_HOLDS_BOXED:
- * @value: a valid #GValue structure
- *
- * Checks whether the given #GValue can hold values derived from type %G_TYPE_BOXED.
- *
- * Returns: %TRUE on success.
- */
-
-
-/**
- * GFileIOStream:
- *
- * A subclass of GIOStream for opened files. This adds
- * a few file-specific operations and seeking and truncating.
- * #GFileIOStream implements GSeekable.
- */
-
-
-/**
  * g_vfs_get_supported_uri_schemes:
  * @vfs: a #GVfs.
  *
@@ -6762,16 +5043,6 @@
  * not be freed or modified.
  *
  * Returns: (transfer none): a %NULL-terminated array of strings.
- */
-
-
-/**
- * GRegex:
- *
- * A GRegex is the "compiled" form of a regular expression pattern. This
- * structure is opaque and its fields cannot be accessed directly.
- *
- * Since: 2.14
  */
 
 
@@ -6802,18 +5073,23 @@
  *
  * Possible value for the state.  if a #gvariant pair (ie: two-tuple) is
  * Returns: (transfer full): the state range hint
- * Since: 2.26
+ * Since: 2.28
  */
 
 
 /**
- * g_main_quit:
- * @loop: a #GMainLoop
+ * g_action_group_activate_action:
+ * @action_group: a #GActionGroup
+ * @action_name: the name of the action to activate
+ * @parameter: (allow-none): parameters to the activation
  *
- * Stops the #GMainLoop.
- * If g_main_run() was called to run the #GMainLoop, it will now return.
+ * Activate the named action within @action_group.
+ * If the action is expecting a parameter, then the correct type of
+ * parameter must be given as @parameter.  If the action is expecting no
+ * parameters then @parameter must be %NULL.  See
+ * g_action_group_get_parameter_type().
  *
- * Deprecated: 2.2: Use g_main_loop_quit() instead
+ * Since: 2.28
  */
 
 
@@ -6843,25 +5119,6 @@
  * This is an asynchronous failable function. See
  * g_dbus_address_get_stream_sync() for the synchronous version.
  *
- * Since: 2.26
- */
-
-
-/**
- * G_PARAM_SPEC_PARAM:
- * @pspec: a valid #GParamSpec instance
- *
- * Casts a #GParamSpec instance into a #GParamSpecParam.
- */
-
-
-/**
- * G_VALUE_HOLDS_VARIANT:
- * @value: a valid #GValue structure
- *
- * Checks whether the given #GValue can hold values of type %G_TYPE_VARIANT.
- *
- * Returns: %TRUE on success.
  * Since: 2.26
  */
 
@@ -6913,10 +5170,14 @@
 
 
 /**
- * GSource:
+ * g_volume_monitor_get_connected_drives:
+ * @volume_monitor: a #GVolumeMonitor.
  *
- * The <structname>GSource</structname> struct is an opaque data type
- * representing an event source.
+ * Gets a list of drives connected to the system.
+ * The returned list should be freed with g_list_free(), after
+ * its elements have been unreffed with g_object_unref().
+ *
+ * Returns: (element-type GDrive) (transfer full): a #GList of connected #GDrive objects.
  */
 
 
@@ -6966,32 +5227,6 @@
 
 
 /**
- * G_FILE_ATTRIBUTE_FILESYSTEM_READONLY:
- *
- * A key in the "filesystem" namespace for checking if the file system
- * is read only. Is set to %TRUE if the file system is read only.
- * Corresponding #GFileAttributeType is %G_FILE_ATTRIBUTE_TYPE_BOOLEAN.
- */
-
-
-/**
- * g_application_set_action_enabled:
- * @application: a #GApplication
- * @name: the name of the application
- * @enabled: whether to enable or disable the action @name
- *
- * Sets whether the action @name inside @application should be enabled
- * or disabled.
- * It is an error to call this function if @application is a proxy for
- * a remote application.
- * Invoking a disabled action will not result in the #GApplication::action
- * signal being emitted.
- *
- * Since: 2.26
- */
-
-
-/**
  * GUnixInputStream:fd:
  *
  * The file descriptor that the stream reads from.
@@ -7001,48 +5236,9 @@
 
 
 /**
- * g_io_module_query:
+ * GThemedIcon:names:
  *
- * Optional API for GIO modules to implement.
- * Should return a list of all the extension points that may be
- * implemented in this module.
- * This method will not be called in normal use, however it may be
- * called when probing existing modules and recording which extension
- * points that this modle is used for. This means we won't have to
- * load and initialze this module unless its needed.
- * If this function is not implemented by the module the module will
- * always be loaded, initialized and then unloaded on application startup
- * so that it can register its extension points during init.
- * Note that a module need not actually implement all the extension points
- * that g_io_module_query returns, since the exact list of extension may
- * depend on runtime issues. However all extension points actually implemented
- * must be returned by g_io_module_query() (if defined).
- * When installing a module that implements g_io_module_query you must
- * run gio-querymodules in order to build the cache files required for
- * lazy loading.
- * extension points of the module. The array must be suitable for
- * freeing with g_strfreev().
- *
- * Returns: (transfer full): A %NULL-terminated array of strings, listing the supported
- * Since: 2.24
- */
-
-
-/**
- * g_file_io_stream_query_info_async:
- * @stream: a #GFileIOStream.
- * @attributes: a file attribute query string.
- * @io_priority: the <link linkend="gio-GIOScheduler">I/O priority</link> of the request.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
- * @callback: callback to call when the request is satisfied
- * @user_data: the data to pass to callback function
- *
- * Asynchronously queries the @stream for a #GFileInfo. When completed,
- * finish the operation with g_file_io_stream_query_info_finish().
- * For the synchronous version of this function, see
- * g_file_io_stream_query_info().
- *
- * Since: 2.22
+ * A %NULL-terminated array of icon names.
  */
 
 
@@ -7082,31 +5278,11 @@
  * @source_object: a #GObject, or %NULL.
  * @callback: a #GAsyncReadyCallback.
  * @user_data: user data passed to @callback.
- * @error: a #GError location.
+ * @error: a #GError
  *
  * Creates a #GSimpleAsyncResult from an error condition.
  *
  * Returns: a #GSimpleAsyncResult.
- */
-
-
-/**
- * g_main_iteration:
- * @may_block: set to %TRUE if it should block (i.e. wait) until an event source becomes ready. It will return after an event source has been processed. If set to %FALSE it will return immediately if no event source is ready to be processed.
- *
- * Runs a single iteration for the default #GMainContext.
- *
- * Returns: %TRUE if more events are pending.
- * Deprecated: 2.2: Use g_main_context_iteration() instead.
- */
-
-
-/**
- * G_TYPE_PARAM_GTYPE:
- *
- * The #GType of #GParamSpecGType.
- *
- * Since: 2.10
  */
 
 
@@ -7132,44 +5308,29 @@
 
 
 /**
- * GVariantType:
+ * g_dbus_message_get_unix_fd_list:
+ * @message: A #GDBusMessage.
  *
- * A type in the GVariant type system.
- * Two types may not be compared by value; use g_variant_type_equal() or
- * g_variant_type_is_subtype().  May be copied using
- * g_variant_type_copy() and freed using g_variant_type_free().
- */
-
-
-/**
- * g_threaded_socket_service_new:
- * @max_threads: the maximal number of threads to execute concurrently handling incoming clients, -1 means no limit
+ * Gets the UNIX file descriptors associated with @message, if any.
+ * This method is only available on UNIX.
+ * associated. Do not free, this object is owned by @message.
  *
- * Creates a new #GThreadedSocketService with no listeners. Listeners
- * must be added with g_socket_service_add_listeners().
- *
- * Returns: a new #GSocketService.
- * Since: 2.22
- */
-
-
-/**
- * g_action_get_state_type:
- * @action: a #GAction
- *
- * Queries the type of the state of @action.
- * g_action_new_stateful()) then this function returns the #GVariantType
- * of the state.  This is the type of the initial value given as the
- * state.  All calls to g_action_set_state() must give a #GVariant of
- * this type and g_action_get_state() will return a #GVariant of the
- * same type.
- * this function will return %NULL.  In that case, g_action_get_state()
- * will return %NULL and you must not call g_action_set_state().
- *
- * If the action is stateful (ie: was created with
- * If the action is not stateful (ie: created with g_action_new()) then
- * Returns: (allow-none): the state type, if the action is stateful
+ * Returns: (transfer none): A #GUnixFDList or %NULL if no file descriptors are
  * Since: 2.26
+ */
+
+
+/**
+ * GThreadedSocketService::run:
+ * @service: the #GThreadedSocketService.
+ * @connection: a new #GSocketConnection object.
+ * @source_object: the source_object passed to g_socket_listener_add_address().
+ *
+ * The ::run signal is emitted in a worker thread in response to an
+ * incoming connection. This thread is dedicated to handling
+ * not return until the connection is closed.
+ *
+ * Returns: %TRUE to stope further signal handlers from being called
  */
 
 
@@ -7266,39 +5427,19 @@
 
 
 /**
- * g_file_replace_contents_async:
- * @file: input #GFile.
- * @contents: string of contents to replace the file with.
- * @length: the length of @contents in bytes.
- * @etag: (allow-none): a new <link linkend="gfile-etag">entity tag</link> for the @file, or %NULL
- * @make_backup: %TRUE if a backup should be created.
- * @flags: a set of #GFileCreateFlags.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
- * @callback: a #GAsyncReadyCallback to call when the request is satisfied
- * @user_data: the data to pass to callback function
+ * g_periodic_unblock:
+ * @periodic: a #GPeriodic clock
+ * @unblock_time: the unblock time
  *
- * Starts an asynchronous replacement of @file with the given
- * current entity tag.
- * When this operation has completed, @callback will be called with
- * g_file_replace_contents_finish().
- * If @cancellable is not %NULL, then the operation can be cancelled by
- * triggering the cancellable object from another thread. If the operation
- * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned.
- * If @make_backup is %TRUE, this function will attempt to
- * make a backup of @file.
- */
-
-
-/**
- * GDBusProxyFlags:
- * @G_DBUS_PROXY_FLAGS_NONE: No flags set.
- * @G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES: Don't load properties.
- * @G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS: Don't connect to signals on the remote object.
- * @G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START: If not set and the proxy if for a well-known name, then request the bus to launch an owner for the name if no-one owns the name. This flag can only be used in proxies for well-known names.
+ * Reverses the effect of a previous call to g_periodic_block().
+ * If this call removes the last block, the tick signal is immediately
+ * run.  The repair signal may also be run if the clock is marked as
+ * damaged.
+ * at which the event causing the unblock occured.
+ * This function may not be called from handlers of any signal emitted
+ * by @periodic.
  *
- * Flags used when constructing an instance of a #GDBusProxy derived class.
- *
- * Since: 2.26
+ * Since: 2.28
  */
 
 
@@ -7316,40 +5457,6 @@
 
 
 /**
- * GBookmarkFileError:
- * @G_BOOKMARK_FILE_ERROR_INVALID_URI: URI was ill-formed
- * @G_BOOKMARK_FILE_ERROR_INVALID_VALUE: a requested field was not found
- * @G_BOOKMARK_FILE_ERROR_APP_NOT_REGISTERED: a requested application did not register a bookmark
- * @G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND: a requested URI was not found
- * @G_BOOKMARK_FILE_ERROR_READ: document was ill formed
- * @G_BOOKMARK_FILE_ERROR_UNKNOWN_ENCODING: the text being parsed was in an unknown encoding
- * @G_BOOKMARK_FILE_ERROR_WRITE: an error occurred while writing
- * @G_BOOKMARK_FILE_ERROR_FILE_NOT_FOUND: requested file was not found
- *
- * Error codes returned by bookmark file parsing.
- */
-
-
-/**
- * GSocketProtocol:
- * @G_SOCKET_PROTOCOL_UNKNOWN: The protocol type is unknown
- * @G_SOCKET_PROTOCOL_DEFAULT: The default protocol for the family/type
- * @G_SOCKET_PROTOCOL_TCP: TCP over IP
- * @G_SOCKET_PROTOCOL_UDP: UDP over IP
- * @G_SOCKET_PROTOCOL_SCTP: SCTP over IP
- *
- * A protocol identifier is specified when creating a #GSocket, which is a
- * family/type specific identifier, where 0 means the default protocol for
- * the particular family/type.
- * This enum contains a set of commonly available and used protocols. You
- * can also pass any other identifiers handled by the platform in order to
- * use protocols not listed here.
- *
- * Since: 2.22
- */
-
-
-/**
  * g_action_set_state:
  * @action: a #GAction
  * @value: the new state
@@ -7362,7 +5469,7 @@
  * See g_action_get_state_hint().
  * If the @value GVariant is floating, it is consumed.
  *
- * Since: 2.26
+ * Since: 2.28
  */
 
 
@@ -7425,17 +5532,6 @@
 
 
 /**
- * GParamSpecUInt64:
- * @parent_instance: private #GParamSpec portion
- * @minimum: minimum value for the property specified
- * @maximum: maximum value for the property specified
- * @default_value: default value for the property specified
- *
- * A #GParamSpec derived structure that contains the meta data for unsigned 64bit integer properties.
- */
-
-
-/**
  * g_dbus_message_new_method_call:
  * @name: A valid D-Bus name or %NULL.
  * @path: A valid object path.
@@ -7466,154 +5562,17 @@
 
 
 /**
- * SECTION:gsimpleasyncresul:
- * @short_description: Simple asynchronous results implementation
- * @include: gio/gio.h
- * @see_also: #GAsyncResult
+ * g_simple_async_report_take_gerror_in_idle:
+ * @object: a #GObject.
+ * @callback: a #GAsyncReadyCallback.
+ * @user_data: user data passed to @callback.
+ * @error: the #GError to report
  *
- * Implements #GAsyncResult for simple cases. Most of the time, this
- * will be all an application needs, and will be used transparently.
- * Because of this, #GSimpleAsyncResult is used throughout GIO for
- * handling asynchronous functions.
- * GSimpleAsyncResult handles #GAsyncReadyCallback<!-- -->s, error
- * reporting, operation cancellation and the final state of an operation,
- * completely transparent to the application. Results can be returned
- * as a pointer e.g. for functions that return data that is collected
- * asynchronously, a boolean value for checking the success or failure
- * of an operation, or a #gssize for operations which return the number
- * of bytes modified by the operation; all of the simple return cases
- * are covered.
- * Most of the time, an application will not need to know of the details
- * of this API; it is handled transparently, and any necessary operations
- * are handled by #GAsyncResult's interface. However, if implementing a
- * new GIO module, for writing language bindings, or for complex
- * applications that need better control of how asynchronous operations
- * are completed, it is important to understand this functionality.
- * GSimpleAsyncResults are tagged with the calling function to ensure
- * that asynchronous functions and their finishing functions are used
- * together correctly.
- * To create a new #GSimpleAsyncResult, call g_simple_async_result_new().
- * If the result needs to be created for a #GError, use
- * g_simple_async_result_new_from_error(). If a #GError is not available
- * (e.g. the asynchronous operation's doesn't take a #GError argument),
- * but the result still needs to be created for an error condition, use
- * g_simple_async_result_new_error() (or g_simple_async_result_set_error_va()
- * if your application or binding requires passing a variable argument list
- * directly), and the error can then be propagated through the use of
- * g_simple_async_result_propagate_error().
- * An asynchronous operation can be made to ignore a cancellation event by
- * calling g_simple_async_result_set_handle_cancellation() with a
- * #GSimpleAsyncResult for the operation and %FALSE. This is useful for
- * operations that are dangerous to cancel, such as close (which would
- * cause a leak if cancelled before being run).
- * GSimpleAsyncResult can integrate into GLib's event loop, #GMainLoop,
- * or it can use #GThread<!-- -->s if available.
- * g_simple_async_result_complete() will finish an I/O task directly
- * from the point where it is called. g_simple_async_result_complete_in_idle()
- * will finish it from an idle handler in the <link
- * linkend="g-main-context-push-thread-default">thread-default main
- * context</link>. g_simple_async_result_run_in_thread() will run the
- * job in a separate thread and then deliver the result to the
- * thread-default main context.
- * To set the results of an asynchronous function,
- * g_simple_async_result_set_op_res_gpointer(),
- * g_simple_async_result_set_op_res_gboolean(), and
- * g_simple_async_result_set_op_res_gssize()
- * are provided, setting the operation's result to a gpointer, gboolean, or
- * gssize, respectively.
- * Likewise, to get the result of an asynchronous function,
- * g_simple_async_result_get_op_res_gpointer(),
- * g_simple_async_result_get_op_res_gboolean(), and
- * g_simple_async_result_get_op_res_gssize() are
- * provided, getting the operation's result as a gpointer, gboolean, and
- * gssize, respectively.
- * For the details of the requirements implementations must respect, see
- * #GAsyncResult.  A typical implementation of an asynchronous operation
- * using GSimpleAsyncResult looks something like this:
- * |[
- * static void
- * baked_cb (Cake    *cake,
- * gpointer user_data)
- * {
- * /&ast; In this example, this callback is not given a reference to the cake, so
- * &ast; the GSimpleAsyncResult has to take a reference to it.
- * &ast;/
- * GSimpleAsyncResult *result = user_data;
- * if (cake == NULL)
- * g_simple_async_result_set_error (result,
- * BAKER_ERRORS,
- * BAKER_ERROR_NO_FLOUR,
- * "Go to the supermarket");
- * else
- * g_simple_async_result_set_op_res_gpointer (result,
- * g_object_ref (cake),
- * g_object_unref);
- * /&ast; In this example, we assume that baked_cb is called as a callback from
- * &ast; the mainloop, so it's safe to complete the operation synchronously here.
- * &ast; If, however, _baker_prepare_cake () might call its callback without
- * &ast; first returning to the mainloop — inadvisable, but some APIs do so —
- * &ast; we would need to use g_simple_async_result_complete_in_idle().
- * &ast;/
- * g_simple_async_result_complete (result);
- * g_object_unref (result);
- * }
- * void
- * baker_bake_cake_async (Baker              *self,
- * guint               radius,
- * GAsyncReadyCallback callback,
- * gpointer            user_data)
- * {
- * GSimpleAsyncResult *simple;
- * Cake               *cake;
- * if (radius < 3)
- * {
- * g_simple_async_report_error_in_idle (G_OBJECT (self),
- * callback,
- * user_data,
- * BAKER_ERRORS,
- * BAKER_ERROR_TOO_SMALL,
- * "%ucm radius cakes are silly",
- * radius);
- * return;
- * }
- * simple = g_simple_async_result_new (G_OBJECT (self),
- * callback,
- * user_data,
- * baker_bake_cake_async);
- * cake = _baker_get_cached_cake (self, radius);
- * if (cake != NULL)
- * {
- * g_simple_async_result_set_op_res_gpointer (simple,
- * g_object_ref (cake),
- * g_object_unref);
- * g_simple_async_result_complete_in_idle (simple);
- * g_object_unref (simple);
- * /&ast; Drop the reference returned by _baker_get_cached_cake(); the
- * &ast; GSimpleAsyncResult has taken its own reference.
- * &ast;/
- * g_object_unref (cake);
- * return;
- * }
- * _baker_prepare_cake (self, radius, baked_cb, user_data);
- * }
- * Cake *
- * baker_bake_cake_finish (Baker        *self,
- * GAsyncResult *result,
- * GError      **error)
- * {
- * GSimpleAsyncResult *simple;
- * Cake               *cake;
- * g_return_val_if_fail (g_simple_async_result_is_valid (result,
- * G_OBJECT (self),
- * baker_bake_cake_async),
- * NULL);
- * simple = (GSimpleAsyncResult *) result;
- * if (g_simple_async_result_propagate_error (simple, error))
- * return NULL;
- * cake = CAKE (g_simple_async_result_get_op_res_gpointer (simple));
- * return g_object_ref (cake);
- * }
- * ]|
+ * Reports an error in an idle function. Similar to
+ * g_simple_async_report_gerror_in_idle(), but takes over the caller's
+ * ownership of @error, so the caller does not have to free it any more.
+ *
+ * Since: 2.28
  */
 
 
@@ -7634,48 +5593,6 @@
 
 
 /**
- * G_TYPE_IS_DERIVED:
- * @type: A #GType value.
- *
- * Checks if @type is derived (or in object-oriented terminology:
- * inherited) from another type (this holds true for all non-fundamental
- * types).
- *
- * Returns: %TRUE on success.
- */
-
-
-/**
- * GTypePluginUse:
- * @plugin: the #GTypePlugin whose use count should be increased
- *
- * The type of the @use_plugin function of #GTypePluginClass, which gets called
- * to increase the use count of @plugin.
- */
-
-
-/**
- * G_OBJECT_GET_CLASS:
- * @object: a #GObject instance.
- *
- * Get the class structure associated to a #GObject instance.
- *
- * Returns: pointer to object class structure.
- */
-
-
-/**
- * G_TYPE_IS_DERIVABLE:
- * @type: A #GType value.
- *
- * Checks if @type is a derivable type.  A derivable type can
- * be used as the base class of a flat (single-level) class hierarchy.
- *
- * Returns: %TRUE on success.
- */
-
-
-/**
  * g_app_info_can_remove_supports_type:
  * @appinfo: a #GAppInfo.
  *
@@ -7683,14 +5600,6 @@
  * content types from a given @appinfo, %FALSE if not.
  *
  * Returns: %TRUE if it is possible to remove supported
- */
-
-
-/**
- * G_PARAM_SPEC_INT:
- * @pspec: a valid #GParamSpec instance
- *
- * Cast a #GParamSpec instance into a #GParamSpecInt.
  */
 
 
@@ -7707,25 +5616,6 @@
 
 
 /**
- * G_TYPE_RESERVED_BSE_FIRST:
- *
- * First fundamental type number to create a new fundamental type id with
- * G_TYPE_MAKE_FUNDAMENTAL() reserved for BSE.
- */
-
-
-/**
- * g_node_first_child:
- * @node: a #GNode
- *
- * Gets the first child of a #GNode.
- * or has no children
- *
- * Returns: the first child of @node, or %NULL if @node is %NULL
- */
-
-
-/**
  * g_dbus_signal_info_ref:
  * @info: A #GDBusSignalInfo
  *
@@ -7734,17 +5624,6 @@
  *
  * Returns: The same @info.
  * Since: 2.26
- */
-
-
-/**
- * g_main_set_poll_func:
- * @func: the function to call to poll all file descriptors
- *
- * Sets the function to use for the handle polling of file descriptors
- * for the default main context.
- *
- * Deprecated: 2.2: Use g_main_context_set_poll_func() again
  */
 
 
@@ -7760,15 +5639,6 @@
  * see g_loadable_icon_load_async().
  *
  * Returns: (transfer full): a #GInputStream to read the icon from.
- */
-
-
-/**
- * G_PRIORITY_DEFAULT_IDLE:
- *
- * Use this for default priority idle functions.
- * In GLib this priority is used when adding idle functions with
- * g_idle_add().
  */
 
 
@@ -7813,14 +5683,6 @@
 
 
 /**
- * GBookmarkFile:
- *
- * The <structname>GBookmarkFile</structname> struct contains only
- * private data and should not be directly accessed.
- */
-
-
-/**
  * g_socket_control_message_get_level:
  * @message: a #GSocketControlMessage
  *
@@ -7833,99 +5695,12 @@
 
 
 /**
- * G_TYPE_VARIANT_TYPE:
- *
- * The #GType for a boxed type holding a #GVariantType.
- *
- * Since: 2.24
- */
-
-
-/**
- * GObjectClass:
- * @g_type_class: the parent class
- * @constructor: the @constructor function is called by g_object_new () to complete the object initialization after all the construction properties are set. The first thing a @constructor implementation must do is chain up to the needed, e.g. to handle construct properties, or to implement singletons.
- * @set_property: the generic setter for all properties of this type. Should be overridden for every type with properties. Implementations of @set_property don't need to emit property change notification explicitly, this is handled by the type system.
- * @get_property: the generic getter for all properties of this type. Should be overridden for every type with properties.
- * @dispose: the @dispose function is supposed to drop all references to other objects, but keep the instance otherwise intact, so that client method invocations still work. It may be run multiple times (due to reference loops). Before returning, @dispose should chain up to the @dispose method of the parent class.
- * @finalize: instance finalization function, should finish the finalization of the instance begun in @dispose and chain up to the @finalize method of the parent class.
- * @dispatch_properties_changed: emits property change notification for a bunch of properties. Overriding @dispatch_properties_changed should be rarely needed.
- * @notify: the class closure for the notify signal
- * @constructed: the @constructed function is called by g_object_new() as the final step of the object creation process.  At the point of the call, all construction properties have been set on the object.  The purpose of this call is to allow for object initialisation steps that can only be performed after construction properties have been set.  @constructed implementors should chain up to the @constructed call of their parent class to allow it to complete its initialisation.
- *
- * The class structure for the <structname>GObject</structname> type.
- * <example>
- * <title>Implementing singletons using a constructor</title>
- * <programlisting>
- * static MySingleton *the_singleton = NULL;
- * static GObject*
- * my_singleton_constructor (GType                  type,
- * guint                  n_construct_params,
- * GObjectConstructParam *construct_params)
- * {
- * GObject *object;
- * if (!the_singleton)
- * {
- * object = G_OBJECT_CLASS (parent_class)->constructor (type,
- * n_construct_params,
- * construct_params);
- * the_singleton = MY_SINGLETON (object);
- * }
- * else
- * object = g_object_ref (G_OBJECT (the_singleton));
- * return object;
- * }
- * </programlisting></example>
- */
-
-
-/**
- * g_application_remove_action:
- * @application: a #GApplication
- * @name: the name of the action to remove
- *
- * Removes the action @name from the list of exported actions of @application.
- * It is an error to call this function if @application is a proxy for
- * a remote application.
- *
- * Since: 2.26
- */
-
-
-/**
- * GRegexEvalCallback:
- * @match_info: the #GMatchInfo generated by the match. Use g_match_info_get_regex() and g_match_info_get_string() if you need the #GRegex or the matched string.
- * @result: a #GString containing the new string
- * @user_data: user data passed to g_regex_replace_eval()
- *
- * Specifies the type of the function passed to g_regex_replace_eval().
- * It is called for each occurance of the pattern in the string passed
- * to g_regex_replace_eval(), and it should append the replacement to
- *
- * Returns: %FALSE to continue the replacement process, %TRUE to stop it
- * Since: 2.14
- */
-
-
-/**
  * SECTION:gdbusutil:
  * @title: D-Bus Utilities
  * @short_description: Various utilities related to D-Bus.
  * @include: gio/gio.h
  *
  * Various utility routines related to D-Bus.
- */
-
-
-/**
- * g_node_insert_data_before:
- * @parent: the #GNode to place the new #GNode under
- * @sibling: the sibling #GNode to place the new #GNode before
- * @data: the data for the new #GNode
- *
- * Inserts a new #GNode before the given sibling.
- *
- * Returns: the new #GNode
  */
 
 
@@ -7947,39 +5722,6 @@
  * @domain: the domain to set.
  *
  * Sets the mount operation's domain.
- */
-
-
-/**
- * GTypeValueTable:
- * @value_init: Default initialize @values contents by poking values directly into the value->data array. The data array of the #GValue passed into this function was zero-filled with <function>memset()</function>, so no care has to be taken to free any old contents. E.g. for the implementation of a string value that may never be %NULL, the implementation might look like: |[ value->data[0].v_pointer = g_strdup (""); ]|
- * @value_free: Free any old contents that might be left in the data array of the passed in @value. No resources may remain allocated through the #GValue contents after this function returns. E.g. for our above string type: |[ // only free strings without a specific flag for static storage if (!(value->data[1].v_uint & G_VALUE_NOCOPY_CONTENTS)) g_free (value->data[0].v_pointer); ]|
- * @value_copy: @dest_value is a #GValue with zero-filled data section and @src_value is a properly setup #GValue of same or derived type. The purpose of this function is to copy the contents of remain valid. String type example: |[ dest_value->data[0].v_pointer = g_strdup (src_value->data[0].v_pointer); ]|
- * @value_peek_pointer: If the value contents fit into a pointer, such as objects or strings, return this pointer, so the caller can peek at the current contents. To extend on our above string example: |[ return value->data[0].v_pointer; ]|
- * @collect_format: A string format describing how to collect the contents of this value bit-by-bit. Each character in the format represents an argument to be collected, and the characters themselves indicate the type of the argument. Currently supported arguments are: <variablelist> <varlistentry><term /><listitem><para> 'i' - Integers. passed as collect_values[].v_int. </para></listitem></varlistentry> <varlistentry><term /><listitem><para> 'l' - Longs. passed as collect_values[].v_long. </para></listitem></varlistentry> <varlistentry><term /><listitem><para> 'd' - Doubles. passed as collect_values[].v_double. </para></listitem></varlistentry> <varlistentry><term /><listitem><para> 'p' - Pointers. passed as collect_values[].v_pointer. </para></listitem></varlistentry> </variablelist> It should be noted that for variable argument list construction, ANSI C promotes every type smaller than an integer to an int, and floats to doubles. So for collection of short int or char, 'i' needs to be used, and for collection of floats 'd'.
- * @collect_value: The collect_value() function is responsible for converting the values collected from a variable argument list into contents suitable for storage in a GValue. This function should setup does not allow %NULL pointers, it needs to either spew an error, or do an implicit conversion by storing an empty string. The @value passed in to this function has a zero-filled data array, so just like for value_init() it is guaranteed to not contain any old contents that might need freeing. and @collect_values is an array of unions #GTypeCValue with length @n_collect_values, containing the collected values according to @collect_format. It may contain the flag %G_VALUE_NOCOPY_CONTENTS indicating, that the collected value contents may be considered "static" for the duration of the @value lifetime. Thus an extra copy of the contents stored in @collect_values is not required for assignment to @value. For our above string example, we continue with: |[ if (!collect_values[0].v_pointer) value->data[0].v_pointer = g_strdup (""); else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) { value->data[0].v_pointer = collect_values[0].v_pointer; // keep a flag for the value_free() implementation to not free this string value->data[1].v_uint = G_VALUE_NOCOPY_CONTENTS; } else value->data[0].v_pointer = g_strdup (collect_values[0].v_pointer); return NULL; ]| It should be noted, that it is generally a bad idea to follow the #G_VALUE_NOCOPY_CONTENTS hint for reference counted types. Due to reentrancy requirements and reference count assertions performed by the #GSignal code, reference counts should always be incremented for reference counted contents stored in the value->data array. To deviate from our string example for a moment, and taking a look at an exemplary implementation for collect_value() of #GObject: |[ if (collect_values[0].v_pointer) { GObject *object = G_OBJECT (collect_values[0].v_pointer); // never honour G_VALUE_NOCOPY_CONTENTS for ref-counted types value->data[0].v_pointer = g_object_ref (object); return NULL; } else return g_strdup_printf ("Object passed as invalid NULL pointer"); } ]| The reference count for valid objects is always incremented, regardless of @collect_flags. For invalid objects, the example returns a newly allocated string without altering @value. Upon success, collect_value() needs to return %NULL. If, however, an error condition occurred, collect_value() may spew an error by returning a newly allocated non-%NULL string, giving a suitable description of the error condition. The calling code makes no assumptions about the @value contents being valid upon error returns, @value is simply thrown away without further freeing. As such, it is a good idea to not allocate #GValue contents, prior to returning an error, however, collect_values() is not obliged to return a correctly setup @value for error returns, simply because any non-%NULL return is considered a fatal condition so further program behaviour is undefined.
- * @lcopy_format: Format description of the arguments to collect for @lcopy_value, analogous to @collect_format. Usually, @lcopy_format string consists only of 'p's to provide lcopy_value() with pointers to storage locations.
- * @lcopy_value: This function is responsible for storing the @value contents into arguments passed through a variable argument list which got collected into @collect_values according to @lcopy_format. and @collect_flags may contain %G_VALUE_NOCOPY_CONTENTS. In contrast to collect_value(), lcopy_value() is obliged to always properly support %G_VALUE_NOCOPY_CONTENTS. Similar to collect_value() the function may prematurely abort by returning a newly allocated string describing an error condition. To complete the string example: |[ gchar **string_p = collect_values[0].v_pointer; if (!string_p) return g_strdup_printf ("string location passed as NULL"); if (collect_flags & G_VALUE_NOCOPY_CONTENTS) *string_p = value->data[0].v_pointer; else *string_p = g_strdup (value->data[0].v_pointer); ]| And an illustrative version of lcopy_value() for reference-counted types: |[ GObject **object_p = collect_values[0].v_pointer; if (!object_p) return g_strdup_printf ("object location passed as NULL"); if (!value->data[0].v_pointer) *object_p = NULL; else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) // always honour *object_p = value->data[0].v_pointer; else *object_p = g_object_ref (value->data[0].v_pointer); return NULL; ]|
- *
- * The #GTypeValueTable provides the functions required by the #GValue implementation,
- * to serve as a container for values of a type.
- */
-
-
-/**
- * g_try_renew:
- * @struct_type: the type of the elements to allocate
- * @mem: the currently allocated memory
- * @n_structs: the number of elements to allocate
- *
- * Attempts to reallocate the memory pointed to by @mem, so that it now has
- * space for @n_structs elements of type @struct_type, and returns %NULL on
- * failure. Contrast with g_renew(), which aborts the program on failure.
- * It returns the new address of the memory, which may have been moved.
- * The function returns %NULL if an overflow occurs.
- *
- * Since: 2.8
- * Returns: a pointer to the new allocated memory, cast to a pointer to @struct_type
  */
 
 
@@ -8011,13 +5753,6 @@
  * Completes partial file and directory names given a partial string by
  * looking in the file system for clues. Can return a list of possible
  * completion strings for widget implementations.
- */
-
-
-/**
- * G_TYPE_PARAM_CHAR:
- *
- * The #GType of #GParamSpecChar.
  */
 
 
@@ -8055,40 +5790,6 @@
  *
  * Returns: The same @info.
  * Since: 2.26
- */
-
-
-/**
- * GTypeClassCacheFunc:
- * @cache_data: data that was given to the g_type_add_class_cache_func() call
- * @g_class: The #GTypeClass structure which is unreferenced
- *
- * A callback function which is called when the reference count of a class
- * drops to zero. It may use g_type_class_ref() to prevent the class from
- * being freed. You should not call g_type_class_unref() from a
- * #GTypeClassCacheFunc function to prevent infinite recursion, use
- * g_type_class_unref_uncached() instead.
- * The functions have to check the class id passed in to figure
- * whether they actually want to cache the class of this type, since all
- * classes are routed through the same #GTypeClassCacheFunc chain.
- * called, %FALSE to continue.
- *
- * Returns: %TRUE to stop further #GTypeClassCacheFunc<!-- -->s from being
- */
-
-
-/**
- * GTimeType:
- * @G_TIME_TYPE_STANDARD: the time is in local standard time
- * @G_TIME_TYPE_DAYLIGHT: the time is in local daylight time
- * @G_TIME_TYPE_UNIVERSAL: the time is in UTC
- *
- * Disambiguates a given time in two ways.
- * First, specifies if the given time is in universal or local time.
- * Second, if the time is in local time, specifies if it is local
- * standard time or local daylight time.  This is important for the case
- * where the same local time occurs twice (during daylight savings time
- * transitions, for example).
  */
 
 
@@ -8131,17 +5832,6 @@
 
 
 /**
- * GParamSpecULong:
- * @parent_instance: private #GParamSpec portion
- * @minimum: minimum value for the property specified
- * @maximum: maximum value for the property specified
- * @default_value: default value for the property specified
- *
- * A #GParamSpec derived structure that contains the meta data for unsigned long integer properties.
- */
-
-
-/**
  * SECTION:gfilterinputstrea:
  * @short_description: Filter Input Stream
  * @include: gio/gio.h
@@ -8150,45 +5840,6 @@
  * kind of filtering operation on a base stream. Typical examples
  * of filtering operations are character set conversion, compression
  * and byte order flipping.
- */
-
-
-/**
- * G_OBJECT_TYPE:
- * @object: Object to return the type id for.
- *
- * Get the type id of an object.
- *
- * Returns: Type id of @object.
- */
-
-
-/**
- * G_VALUE_HOLDS:
- * @value: A #GValue structure.
- * @type: A #GType value.
- *
- * Checks if @value holds (or contains) a value of @type.
- * This macro will also check for @value != %NULL and issue a
- * warning if the check fails.
- *
- * Returns: %TRUE if @value holds the @type.
- */
-
-
-/**
- * GConverter:
- *
- * Seek object for streaming operations.
- *
- * Since: 2.24
- */
-
-
-/**
- * GFileMonitor:
- *
- * Watches for changes to a file.
  */
 
 
@@ -8229,17 +5880,6 @@
 
 
 /**
- * GOptionErrorFunc:
- * @context: The active #GOptionContext
- * @group: The group to which the function belongs
- * @data: User data added to the #GOptionGroup containing the option when it was created with g_option_group_new()
- * @error: The #GError containing details about the parse error
- *
- * The type of function to be used as callback when a parse error occurs.
- */
-
-
-/**
  * g_file_query_filesystem_info_finish:
  * @file: input #GFile.
  * @res: a #GAsyncResult.
@@ -8250,16 +5890,6 @@
  * Free the returned object with g_object_unref().
  *
  * Returns: (transfer full): #GFileInfo for given @file or %NULL on error.
- */
-
-
-/**
- * G_TYPE_FUNDAMENTAL:
- * @type: A #GType value.
- *
- * The fundamental type which is the ancestor of @type.
- * Fundamental types are types that serve as ultimate bases for the derived types,
- * thus they are the roots of distinct inheritance hierarchies.
  */
 
 
@@ -8300,49 +5930,12 @@
 
 
 /**
- * G_IS_PARAM_SPEC_OBJECT:
- * @pspec: a valid #GParamSpec instance
- *
- * Checks whether the given #GParamSpec is of type %G_TYPE_PARAM_OBJECT.
- *
- * Returns: %TRUE on success.
- */
-
-
-/**
  * SECTION:gzdecompresso:
  * @short_description: Zlib decompressor
  * @include: gio/gio.h
  *
  * #GZlibDecompressor is an implementation of #GConverter that
  * decompresses data compressed with zlib.
- */
-
-
-/**
- * G_IS_PARAM_SPEC_VALUE_ARRAY:
- * @pspec: a valid #GParamSpec instance
- *
- * Checks whether the given #GParamSpec is of type %G_TYPE_PARAM_VALUE_ARRAY.
- *
- * Returns: %TRUE on success.
- */
-
-
-/**
- * G_TYPE_ENUM:
- *
- * The fundamental type from which all enumeration types are derived.
- */
-
-
-/**
- * G_IS_PARAM_SPEC_BOXED:
- * @pspec: a valid #GParamSpec instance
- *
- * Checks whether the given #GParamSpec is of type %G_TYPE_PARAM_BOXED.
- *
- * Returns: %TRUE on success.
  */
 
 
@@ -8365,13 +5958,6 @@
  *
  * Returns: the origin of the emblem
  * Since: 2.18
- */
-
-
-/**
- * GMemoryInputStream:
- *
- * Implements #GInputStream for arbitrary memory chunks.
  */
 
 
@@ -8406,20 +5992,16 @@
 
 
 /**
- * SECTION:gmemoryoutputstrea:
- * @short_description: Streaming output operations on memory chunks
- * @include: gio/gio.h
- * @see_also: #GMemoryInputStream
+ * g_inet_address_get_is_site_local:
+ * @address: a #GInetAddress
  *
- * #GMemoryOutputStream is a class for using arbitrary
- * memory chunks as output for GIO streaming output operations.
- */
-
-
-/**
- * GCancellable:
+ * Tests whether @address is a site-local address such as 10.0.0.1
+ * (that is, the address identifies a host on a local network that can
+ * not be reached directly from the Internet, but which may have
+ * outgoing Internet connectivity via a NAT or firewall).
  *
- * Allows actions to be cancelled.
+ * Returns: %TRUE if @address is a site-local address.
+ * Since: 2.22
  */
 
 
@@ -8431,22 +6013,6 @@
  * Convenience setter for the %G_DBUS_MESSAGE_HEADER_FIELD_NUM_UNIX_FDS header field.
  *
  * Since: 2.26
- */
-
-
-/**
- * GWin32Mount:
- *
- * Implementation of the #GMount interface for Win32 systems.
- */
-
-
-/**
- * G_TYPE_ARRAY:
- *
- * The #GType for a boxed type holding a #GArray reference.
- *
- * Since: 2.22
  */
 
 
@@ -8473,40 +6039,6 @@
 
 
 /**
- * G_FILE_ATTRIBUTE_UNIX_DEVICE:
- *
- * A key in the "unix" namespace for getting the device id of the device the
- * file is located on (see stat() documentation). This attribute is only
- * available for UNIX file systems. Corresponding #GFileAttributeType is
- * %G_FILE_ATTRIBUTE_TYPE_UINT32.
- */
-
-
-/**
- * G_TYPE_CHECK_VALUE:
- * @value: a #GValue
- *
- * Checks if @value has been initialized to hold values
- * of a value type.
- * This macro should only be used in type implementations.
- *
- * Returns: %TRUE on success.
- */
-
-
-/**
- * G_DEFINE_POINTER_TYPE:
- * @TypeName: The name of the new type, in Camel case.
- * @type_name: The name of the new type, in lowercase, with words separated by '_'.
- *
- * A convenience macro for pointer type implementations, which defines a
- * type_name_get_type() function registering the pointer type.
- *
- * Since: 2.26
- */
-
-
-/**
  * g_dbus_method_invocation_get_method_name:
  * @invocation: A #GDBusMethodInvocation.
  *
@@ -8529,35 +6061,11 @@
 
 
 /**
- * GApplication::quit-with-data:
- * @application: the object on which the signal is emitted
- * @platform_data: Platform-specific data, or %NULL
- *
- * This signal is emitted when the Quit action is invoked on the
- * application.
- * The default handler for this signal exits the mainloop of the
- * application.
- * signal emission
- *
- * Returns: %TRUE if the signal has been handled, %FALSE to continue
- */
-
-
-/**
  * GVolumeMonitor::mount-pre-unmount:
  * @volume_monitor: The volume monitor emitting the signal.
  * @mount: a #GMount that is being unmounted.
  *
  * Emitted when a mount is about to be removed.
- */
-
-
-/**
- * GBoxedFreeFunc:
- * @boxed: The boxed structure to be freed.
- *
- * This function is provided by the user and should free the boxed
- * structure passed.
  */
 
 
@@ -8586,15 +6094,6 @@
 
 
 /**
- * GSocket:
- *
- * A lowlevel network socket object.
- *
- * Since: 2.22
- */
-
-
-/**
  * g_dbus_server_is_active:
  * @server: A #GDBusServer.
  *
@@ -8606,12 +6105,19 @@
 
 
 /**
- * g_themed_icon_get_names:
- * @icon: a #GThemedIcon.
+ * g_application_set_inactivity_timeout:
+ * @application: a #GApplication
+ * @inactivity_timeout: the timeout, in milliseconds
  *
- * Gets the names of icons from within @icon.
+ * Sets the current inactivity timeout for the application.
+ * This is the amount of time (in milliseconds) after the last call to
+ * g_application_release() before the application stops running.
+ * This call has no side effects of its own.  The value set here is only
+ * used for next time g_application_release() drops the use count to
+ * zero.  Any timeouts currently in progress are not impacted.
  *
- * Returns: (transfer full): a list of icon names.
+ * Returns: the timeout, in milliseconds
+ * Since: 2.28
  */
 
 
@@ -8738,29 +6244,6 @@
 
 
 /**
- * GType:
- *
- * A numerical value which represents the unique identifier of a registered
- * type.
- */
-
-
-/**
- * GDrive:
- *
- * Opaque drive object.
- */
-
-
-/**
- * G_FILE_ATTRIBUTE_STANDARD_IS_BACKUP:
- *
- * A key in the "standard" namespace for checking if a file is a backup file.
- * Corresponding #GFileAttributeType is %G_FILE_ATTRIBUTE_TYPE_BOOLEAN.
- */
-
-
-/**
  * g_proxy_address_get_protocol:
  * @proxy: a #GProxyAddress
  *
@@ -8784,22 +6267,13 @@
 
 
 /**
- * g_main_pending:
+ * g_application_command_line_get_is_remote:
+ * @cmdline: a #GApplicationCommandLine
  *
- * Checks if any events are pending for the default #GMainContext
- * (i.e. ready to be processed).
+ * Determines if @cmdline represents a remote invocation.
  *
- * Returns: %TRUE if any events are pending.
- * Deprected: 2.2: Use g_main_context_pending() instead.
- */
-
-
-/**
- * GIconv:
- *
- * The <structname>GIConv</structname> struct wraps an
- * iconv() conversion descriptor. It contains private data
- * and should only be accessed using the following functions.
+ * Returns: %TRUE if the invocation was remote
+ * Since: 2.28
  */
 
 
@@ -8835,41 +6309,6 @@
 
 
 /**
- * g_try_new:
- * @struct_type: the type of the elements to allocate
- * @n_structs: the number of elements to allocate
- *
- * Attempts to allocate @n_structs elements of type @struct_type, and returns
- * %NULL on failure. Contrast with g_new(), which aborts the program on failure.
- * The returned pointer is cast to a pointer to the given type.
- * The function returns %NULL when @n_structs is 0 of if an overflow occurs.
- *
- * Since: 2.8
- * Returns: a pointer to the allocated memory, cast to a pointer to @struct_type
- */
-
-
-/**
- * GSignalCMarshaller:
- *
- * This is the signature of marshaller functions, required to marshall
- * arrays of parameter values to signal emissions into C language callback
- * invocations. It is merely an alias to #GClosureMarshal since the #GClosure
- * mechanism takes over responsibility of actual function invocation for the
- * signal system.
- */
-
-
-/**
- * G_FILE_ATTRIBUTE_TRASH_ITEM_COUNT:
- *
- * A key in the "trash" namespace.  When requested against
- * "trash:///" returns the number of (toplevel) items in the trash folder.
- * Corresponding #GFileAttributeType is %G_FILE_ATTRIBUTE_TYPE_UINT32.
- */
-
-
-/**
  * g_dbus_proxy_get_cached_property_names:
  * @proxy: A #GDBusProxy.
  *
@@ -8878,15 +6317,6 @@
  *
  * Returns: A %NULL-terminated array of strings or %NULL if @proxy has
  * Since: 2.26
- */
-
-
-/**
- * G_FILE_ATTRIBUTE_ACCESS_CAN_WRITE:
- *
- * A key in the "access" namespace for getting write privileges.
- * Corresponding #GFileAttributeType is %G_FILE_ATTRIBUTE_TYPE_BOOLEAN.
- * This attribute will be %TRUE if the user is able to write to the file.
  */
 
 
@@ -8903,6 +6333,20 @@
  *
  * Emitted when the physical eject button (if any) of a drive has
  * been pressed.
+ */
+
+
+/**
+ * g_application_set_flags:
+ * @application: a #GApplication
+ * @flags: the flags for @application
+ *
+ * Sets the flags for @application.
+ * The flags can only be modified if @application has not yet been
+ * registered.
+ * See #GApplicationFlags.
+ *
+ * Since: 2.28
  */
 
 
@@ -8941,30 +6385,6 @@
  * GSettings:context:
  *
  * The name of the context that the settings are stored in.
- */
-
-
-/**
- * G_REGEX_ERROR:
- *
- * Error domain for regular expressions. Errors in this domain will be
- * from the #GRegexError enumeration. See #GError for information on
- * error domains.
- *
- * Since: 2.14
- */
-
-
-/**
- * GDBusAnnotationInfo:
- * @ref_count: The reference count or -1 if statically allocated.
- * @key: The name of the annotation, e.g. "org.freedesktop.DBus.Deprecated".
- * @value: The value of the annotation.
- * @annotations: A pointer to a %NULL-terminated array of pointers to #GDBusAnnotationInfo structures or %NULL if there are no annotations.
- *
- * Information about an annotation.
- *
- * Since: 2.26
  */
 
 
@@ -9047,20 +6467,6 @@
 
 
 /**
- * GPollFunc:
- * @ufds: an array of #GPollFD elements
- * @nfsd: the number of elements in @ufds
- * @timeout_: the maximum time to wait for an event of the file descriptors. A negative value indicates an infinite timeout.
- *
- * Specifies the type of function passed to g_main_context_set_poll_func().
- * The semantics of the function should match those of the poll() system call.
- * reported, or -1 if an error occurred.
- *
- * Returns: the number of #GPollFD elements which have events or errors
- */
-
-
-/**
  * GSimpleAction::activate:
  * @simple: the #GSimpleAction
  * @parameter: (allow-none): the parameter to the activation
@@ -9068,7 +6474,7 @@
  * Indicates that the action was just activated.
  * an incorrect type was given, no signal will be emitted.
  *
- * Since: 2.26
+ * Since: 2.28
  */
 
 
@@ -9099,16 +6505,6 @@
 
 
 /**
- * G_FILE_ATTRIBUTE_TIME_CREATED:
- *
- * A key in the "time" namespace for getting the time the file was created.
- * Corresponding #GFileAttributeType is %G_FILE_ATTRIBUTE_TYPE_UINT64,
- * and contains the UNIX time since the file was created.
- * This corresponds to the NTFS ctime.
- */
-
-
-/**
  * GMountOperation::ask-question:
  * @op: a #GMountOperation asking a question.
  * @message: string containing a message to display to the user.
@@ -9119,22 +6515,6 @@
  * If the message contains a line break, the first line should be
  * presented as a heading. For example, it may be used as the
  * primary text in a #GtkMessageDialog.
- */
-
-
-/**
- * G_IS_INITIALLY_UNOWNED_CLASS:
- * @class: a #GInitiallyUnownedClass
- *
- * Checks whether @class "is a" valid #GInitiallyUnownedClass structure of type
- * %G_TYPE_INITIALLY_UNOWNED or derived.
- */
-
-
-/**
- * GUnixOutputStream:
- *
- * Implements #GOutputStream for outputting to selectable unix file descriptors
  */
 
 
@@ -9212,16 +6592,6 @@
 
 
 /**
- * g_main_destroy:
- * @loop: a #GMainLoop
- *
- * Frees the memory allocated for the #GMainLoop.
- *
- * Deprecated: 2.2: Use g_main_loop_unref() instead
- */
-
-
-/**
  * g_dbus_connection_new:
  * @stream: A #GIOStream.
  * @guid: The GUID to use if a authenticating as a server or %NULL.
@@ -9243,37 +6613,6 @@
  * version.
  *
  * Since: 2.26
- */
-
-
-/**
- * GPasswordSave:
- * @G_PASSWORD_SAVE_NEVER: never save a password.
- * @G_PASSWORD_SAVE_FOR_SESSION: save a password for the session.
- * @G_PASSWORD_SAVE_PERMANENTLY: save a password permanently.
- *
- * #GPasswordSave is used to indicate the lifespan of a saved password.
- * #Gvfs stores passwords in the Gnome keyring when this flag allows it
- * to, and later retrieves it again from there.
- */
-
-
-/**
- * G_FILE_ATTRIBUTE_TIME_CREATED_USEC:
- *
- * A key in the "time" namespace for getting the microseconds of the time
- * the file was created. This should be used in conjunction with
- * #G_FILE_ATTRIBUTE_TIME_CREATED. Corresponding #GFileAttributeType is
- * %G_FILE_ATTRIBUTE_TYPE_UINT32.
- */
-
-
-/**
- * G_BOOKMARK_FILE_ERROR:
- *
- * Error domain for bookmark file parsing.
- * Errors in this domain will be from the #GBookmarkFileError
- * enumeration. See #GError for information on error domains.
  */
 
 
@@ -9365,14 +6704,6 @@
 
 
 /**
- * G_VARIANT_TYPE_INT64:
- *
- * The type of an integer value that can range from
- * -9223372036854775808 to 9223372036854775807.
- */
-
-
-/**
  * g_socket_address_enumerator_next_async:
  * @enumerator: a #GSocketAddressEnumerator
  * @cancellable: optional #GCancellable object, %NULL to ignore.
@@ -9437,13 +6768,13 @@
 
 
 /**
- * GParamSpecUInt:
- * @parent_instance: private #GParamSpec portion
- * @minimum: minimum value for the property specified
- * @maximum: maximum value for the property specified
- * @default_value: default value for the property specified
+ * g_periodic_get_high_priority:
+ * @periodic: a #GPeriodic clock
  *
- * A #GParamSpec derived structure that contains the meta data for unsigned integer properties.
+ * Gets the #GSource priority of the clock.
+ *
+ * Returns: the high priority level
+ * Since: 2.28
  */
 
 
@@ -9453,14 +6784,6 @@
  * @op_res: a #gboolean.
  *
  * Sets the operation result to a boolean within the asynchronous result.
- */
-
-
-/**
- * G_FILE_ATTRIBUTE_STANDARD_IS_VIRTUAL:
- *
- * A key in the "standard" namespace for checking if a file is virtual.
- * Corresponding #GFileAttributeType is %G_FILE_ATTRIBUTE_TYPE_BOOLEAN.
  */
 
 
@@ -9485,75 +6808,6 @@
 
 
 /**
- * G_TYPE_DBUS_PROPERTY_INFO:
- *
- * The #GType for a boxed type holding a #GDBusPropertyInfo.
- *
- * Since: 2.26
- */
-
-
-/**
- * G_TYPE_DATE:
- *
- * The #GType for #GDate.
- */
-
-
-/**
- * GEmblemOrigin:
- * @G_EMBLEM_ORIGIN_UNKNOWN: Emblem of unknown origin
- * @G_EMBLEM_ORIGIN_DEVICE: Emblem adds device-specific information
- * @G_EMBLEM_ORIGIN_LIVEMETADATA: Emblem depicts live metadata, such as "readonly"
- * @G_EMBLEM_ORIGIN_TAG: Emblem comes from a user-defined tag, e.g. set by nautilus (in the future)
- *
- * GEmblemOrigin is used to add information about the origin of the emblem
- * to #GEmblem.
- *
- * Since: 2.18
- */
-
-
-/**
- * GAppLaunchContext:
- *
- * Integrating the launch with the launching application. This is used to
- * handle for instance startup notification and launching the new application
- * on the same screen as the launching window.
- */
-
-
-/**
- * G_FILE_ATTRIBUTE_THUMBNAILING_FAILED:
- *
- * A key in the "thumbnail" namespace for checking if thumbnailing failed.
- * This attribute is %TRUE if thumbnailing failed. Corresponding
- * #GFileAttributeType is %G_FILE_ATTRIBUTE_TYPE_BOOLEAN.
- */
-
-
-/**
- * G_FILE_ATTRIBUTE_ETAG_VALUE:
- *
- * A key in the "etag" namespace for getting the value of the file's
- * entity tag. Corresponding #GFileAttributeType is
- * %G_FILE_ATTRIBUTE_TYPE_STRING.
- */
-
-
-/**
- * GFilesystemPreviewType:
- * @G_FILESYSTEM_PREVIEW_TYPE_IF_ALWAYS: Only preview files if user has explicitly requested it.
- * @G_FILESYSTEM_PREVIEW_TYPE_IF_LOCAL: Preview files if user has requested preview of "local" files.
- * @G_FILESYSTEM_PREVIEW_TYPE_NEVER: Never preview files.
- *
- * Indicates a hint from the file system whether files should be
- * previewed in a file manager. Returned as the value of the key
- * #G_FILE_ATTRIBUTE_FILESYSTEM_USE_PREVIEW.
- */
-
-
-/**
  * g_simple_action_new:
  * @name: the name of the action
  * @parameter_type: (allow-none): the type of parameter to the activate function
@@ -9562,7 +6816,7 @@
  * The created action is stateless.  See g_simple_action_new_stateful().
  *
  * Returns: a new #GSimpleAction
- * Since: 2.26
+ * Since: 2.28
  */
 
 
@@ -9576,20 +6830,6 @@
  *
  * Returns: %TRUE if @address is a link-local address.
  * Since: 2.22
- */
-
-
-/**
- * g_signal_connect_after:
- * @instance: the instance to connect to.
- * @detailed_signal: a string of the form "signal-name::detail".
- * @c_handler: the #GCallback to connect.
- * @data: data to pass to @c_handler calls.
- *
- * Connects a #GCallback function to a signal for a particular object.
- * The handler will be called after the default handler of the signal.
- *
- * Returns: the handler id
  */
 
 
@@ -9629,22 +6869,6 @@
 
 
 /**
- * GOptionEntry:
- * @long_name: The long name of an option can be used to specify it in a commandline as --<replaceable>long_name</replaceable>. Every option must have a long name. To resolve conflicts if multiple option groups contain the same long name, it is also possible to specify the option as --<replaceable>groupname</replaceable>-<replaceable>long_name</replaceable>.
- * @short_name: If an option has a short name, it can be specified -<replaceable>short_name</replaceable> in a commandline. @short_name must be a printable ASCII character different from '-', or zero if the option has no short name.
- * @flags: Flags from #GOptionFlags.
- * @arg: The type of the option, as a #GOptionArg.
- * @arg_data: If the @arg type is %G_OPTION_ARG_CALLBACK, then @arg_data must point to a #GOptionArgFunc callback function, which will be called to handle the extra argument. Otherwise, @arg_data is a pointer to a location to store the value, the required type of the location depends on the @arg type: <variablelist> <varlistentry> <term>%G_OPTION_ARG_NONE</term> <listitem><para>%gboolean</para></listitem> </varlistentry> <varlistentry> <term>%G_OPTION_ARG_STRING</term> <listitem><para>%gchar*</para></listitem> </varlistentry> <varlistentry> <term>%G_OPTION_ARG_INT</term> <listitem><para>%gint</para></listitem> </varlistentry> <varlistentry> <term>%G_OPTION_ARG_FILENAME</term> <listitem><para>%gchar*</para></listitem> </varlistentry> <varlistentry> <term>%G_OPTION_ARG_STRING_ARRAY</term> <listitem><para>%gchar**</para></listitem> </varlistentry> <varlistentry> <term>%G_OPTION_ARG_FILENAME_ARRAY</term> <listitem><para>%gchar**</para></listitem> </varlistentry> <varlistentry> <term>%G_OPTION_ARG_DOUBLE</term> <listitem><para>%gdouble</para></listitem> </varlistentry> </variablelist> If @arg type is %G_OPTION_ARG_STRING or %G_OPTION_ARG_FILENAME the location will contain a newly allocated string if the option was given. That string needs to be freed by the callee using g_free(). Likewise if @arg type is %G_OPTION_ARG_STRING_ARRAY or %G_OPTION_ARG_FILENAME_ARRAY, the data should be freed using g_strfreev().
- * @description: the description for the option in <option>--help</option> output. The @description is translated using the @translate_func of the group, see g_option_group_set_translation_domain().
- * @arg_description: The placeholder to use for the extra argument parsed by the option in <option>--help</option> output. The @arg_description is translated using the @translate_func of the group, see g_option_group_set_translation_domain().
- *
- * A <structname>GOptionEntry</structname> defines a single option.
- * To have an effect, they must be added to a #GOptionGroup with
- * g_option_context_add_main_entries() or g_option_group_add_entries().
- */
-
-
-/**
  * g_resolver_get_default:
  *
  * Gets the default #GResolver. You should unref it when you are done
@@ -9658,10 +6882,18 @@
 
 
 /**
- * G_PARAM_SPEC_CHAR:
- * @pspec: a valid #GParamSpec instance
+ * g_application_command_line_print:
+ * @cmdline: a #GApplicationCommandLine
+ * @format: a printf-style format string
+ * @...: arguments, as per @format
  *
- * Cast a #GParamSpec instance into a #GParamSpecChar.
+ * Formats a message and prints it using the stdout print handler in the
+ * invoking process.
+ * If @cmdline is a local invocation then this is exactly equivalent to
+ * g_print().  If @cmdline is remote then this is equivalent to calling
+ * g_print() in the invoking process.
+ *
+ * Since: 2.28
  */
 
 
@@ -9724,31 +6956,6 @@
 
 
 /**
- * GValue:
- *
- * An opaque structure used to hold different types of values.
- * to functions within a #GTypeValueTable structure, or implementations of
- * the g_value_*() API. That is, code portions which implement new fundamental
- * types.
- * #GValue users can not make any assumptions about how data is stored
- * within the 2 element @data union, and the @g_type member should
- * only be accessed through the G_VALUE_TYPE() macro.
- *
- * The data within the structure has protected scope: it is accessible only
- */
-
-
-/**
- * GFileCreateFlags:
- * @G_FILE_CREATE_NONE: No flags set.
- * @G_FILE_CREATE_PRIVATE: Create a file that can only be accessed by the current user.
- * @G_FILE_CREATE_REPLACE_DESTINATION: Replace the destination as if it didn't exist before. Don't try to keep any old permissions, replace instead of following links. This is generally useful if you're doing a "copy over" rather than a "save new version of" replace operation. You can think of it as "unlink destination" before writing to it, although the implementation may not be exactly like that. Since 2.20
- *
- * Flags used when an operation may create a file.
- */
-
-
-/**
  * g_cancellable_new:
  *
  * Creates a new #GCancellable object.
@@ -9759,29 +6966,6 @@
  * operations, but not in multiple concurrent operations.
  *
  * Returns: a #GCancellable.
- */
-
-
-/**
- * G_TYPE_PARAM_ENUM:
- *
- * The #GType of #GParamSpecEnum.
- */
-
-
-/**
- * g_application_unregistered_try_new:
- * @appid: System-dependent application identifier
- * @argc: Number of arguments in @argv
- * @argv: (allow-none) (array length=argc): Argument vector, usually from the <parameter>argv</parameter> parameter of main()
- * @error: a #GError
- *
- * This function is similar to g_application_try_new(), but also
- * sets the GApplication:register property to %FALSE.  You can later
- * call g_application_register() to complete initialization.
- *
- * Returns: (transfer full): An application instance
- * Since: 2.26
  */
 
 
@@ -9818,6 +7002,15 @@
  *
  * Returns: the display name of the application for @appinfo, or the name if
  * Since: 2.24
+ */
+
+
+/**
+ * GApplication::activate:
+ * @application: the application
+ *
+ * The ::activate signal is emitted on the primary instance when an
+ * activation occurs. See g_application_activate().
  */
 
 
@@ -9868,17 +7061,6 @@
 
 
 /**
- * GDBusProxyClass:
- * @g_properties_changed: Signal class handler for the #GDBusProxy::g-properties-changed signal.
- * @g_signal: Signal class handler for the #GDBusProxy::g-signal signal.
- *
- * Class structure for #GDBusProxy.
- *
- * Since: 2.26
- */
-
-
-/**
  * g_themed_icon_new_with_default_fallbacks:
  * @iconname: a string containing an icon name
  *
@@ -9901,14 +7083,6 @@
 
 
 /**
- * GDataOutputStream:
- *
- * An implementation of #GBufferedOutputStream that allows for high-level
- * data manipulation of arbitrary data (including binary operations).
- */
-
-
-/**
  * g_action_group_has_action:
  * @action_group: a #GActionGroup
  * @action_name: the name of the action to check for
@@ -9916,7 +7090,7 @@
  * Checks if the named action exists within @action_group.
  *
  * Returns: whether the named action exists
- * Since: 2.26
+ * Since: 2.28
  */
 
 
@@ -9993,21 +7167,6 @@
 
 
 /**
- * GLoadableIcon:
- *
- * Generic type for all kinds of icons that can be loaded
- * as a stream.
- */
-
-
-/**
- * GBufferedInputStream:
- *
- * Implements #GFilterInputStream with a sized input buffer.
- */
-
-
-/**
  * g_output_stream_write_async:
  * @stream: A #GOutputStream.
  * @buffer: (array length=count) (element-type guint8): the buffer containing the data to write.
@@ -10076,18 +7235,6 @@
  *
  * Returns: %TRUE if @error was set, %FALSE otherwise.
  * Since: 2.26
- */
-
-
-/**
- * g_signal_handlers_block_by_func:
- * @instance: The instance to block handlers from.
- * @func: The C closure callback of the handlers (useless for non-C closures).
- * @data: The closure data of the handlers' closures.
- *
- * Blocks all handlers on an instance that match @func and @data.
- *
- * Returns: The number of handlers that matched.
  */
 
 
@@ -10207,14 +7354,6 @@
 
 
 /**
- * G_VARIANT_TYPE_INT32:
- *
- * The type of an integer value that can range from -2147483648 to
- * 2147483647.
- */
-
-
-/**
  * SECTION:gseekabl:
  * @short_description: Stream seeking interface
  * @include: gio/gio.h
@@ -10222,33 +7361,6 @@
  *
  * #GSeekable is implemented by streams (implementations of
  * #GInputStream or #GOutputStream) that support seeking.
- */
-
-
-/**
- * g_application_try_new:
- * @appid: System-dependent application identifier
- * @argc: Number of arguments in @argv
- * @argv: (allow-none) (array length=argc): Argument vector, usually from the <parameter>argv</parameter> parameter of main()
- * @error: a #GError
- *
- * This function is similar to g_application_new(), but allows for
- * more graceful fallback if the environment doesn't support the
- * basic #GApplication functionality.
- *
- * Returns: (transfer full): An application instance
- * Since: 2.26
- */
-
-
-/**
- * GObjectGetPropertyFunc:
- * @object: a #GObject
- * @property_id: the numeric id under which the property was registered with g_object_class_install_property().
- * @value: a #GValue to return the property value in
- * @pspec: the #GParamSpec describing the property
- *
- * The type of the @get_property function of #GObjectClass.
  */
 
 
@@ -10305,18 +7417,6 @@
 
 
 /**
- * GBusNameVanishedCallback:
- * @connection: The #GDBusConnection the name is being watched on.
- * @name: The name being watched.
- * @user_data: User data passed to g_bus_watch_name().
- *
- * Invoked when the name being watched is known not to have to have a owner.
- *
- * Since: 2.26
- */
-
-
-/**
  * SECTION:gfilteroutputstrea:
  * @short_description: Filter Output Stream
  * @include: gio/gio.h
@@ -10325,17 +7425,6 @@
  * kind of filtering operation on a base stream. Typical examples
  * of filtering operations are character set conversion, compression
  * and byte order flipping.
- */
-
-
-/**
- * GEnumValue:
- * @value: the enum value
- * @value_name: the name of the value
- * @value_nick: the nickname of the value
- *
- * A structure which contains a single enum value, its name, and its
- * nickname.
  */
 
 
@@ -10352,27 +7441,6 @@
  * %FALSE if either is not a #GFile.
  *
  * Returns: %TRUE if @file1 and @file2 are equal.
- */
-
-
-/**
- * GOptionArg:
- * @G_OPTION_ARG_NONE: No extra argument. This is useful for simple flags.
- * @G_OPTION_ARG_STRING: The option takes a string argument.
- * @G_OPTION_ARG_INT: The option takes an integer argument.
- * @G_OPTION_ARG_CALLBACK: The option provides a callback to parse the extra argument.
- * @G_OPTION_ARG_FILENAME: The option takes a filename as argument.
- * @G_OPTION_ARG_STRING_ARRAY: The option takes a string argument, multiple uses of the option are collected into an array of strings.
- * @G_OPTION_ARG_FILENAME_ARRAY: The option takes a filename as argument, multiple uses of the option are collected into an array of strings.
- * @G_OPTION_ARG_DOUBLE: The option takes a double argument. The argument can be formatted either for the user's locale or for the "C" locale. Since 2.12
- * @G_OPTION_ARG_INT64: The option takes a 64-bit integer. Like %G_OPTION_ARG_INT but for larger numbers. The number can be in decimal base, or in hexadecimal (when prefixed with <literal>0x</literal>, for example, <literal>0xffffffff</literal>). Since 2.12
- *
- * The #GOptionArg enum values determine which type of extra argument the
- * options expect to find. If an option expects an extra argument, it
- * can be specified in several ways; with a short option:
- * <option>-x arg</option>, with a long option: <option>--name arg</option>
- *
- * Or combined in a single argument: <option>--name=arg</option>.
  */
 
 
@@ -10405,16 +7473,6 @@
 
 
 /**
- * G_VALUE_HOLDS_INT:
- * @value: a valid #GValue structure
- *
- * Checks whether the given #GValue can hold values of type %G_TYPE_INT.
- *
- * Returns: %TRUE on success.
- */
-
-
-/**
  * g_dbus_method_invocation_get_parameters:
  * @invocation: A #GDBusMethodInvocation.
  *
@@ -10441,16 +7499,6 @@
  * The asyncronous methods have a default fallback that uses threads
  * to implement asynchronicity, so they are optional for inheriting
  * classes. However, if you override one you must override all.
- */
-
-
-/**
- * G_FILE_ATTRIBUTE_UNIX_IS_MOUNTPOINT:
- *
- * A key in the "unix" namespace for checking if the file represents a
- * UNIX mount point. This attribute is %TRUE if the file is a UNIX mount
- * point. This attribute is only available for UNIX file systems.
- * Corresponding #GFileAttributeType is %G_FILE_ATTRIBUTE_TYPE_BOOLEAN.
  */
 
 
@@ -10597,31 +7645,6 @@
 
 
 /**
- * GDataStreamNewlineType:
- * @G_DATA_STREAM_NEWLINE_TYPE_LF: Selects "LF" line endings, common on most modern UNIX platforms.
- * @G_DATA_STREAM_NEWLINE_TYPE_CR: Selects "CR" line endings.
- * @G_DATA_STREAM_NEWLINE_TYPE_CR_LF: Selects "CR, LF" line ending, common on Microsoft Windows.
- * @G_DATA_STREAM_NEWLINE_TYPE_ANY: Automatically try to handle any line ending type.
- *
- * #GDataStreamNewlineType is used when checking for or setting the line endings for a given file.
- */
-
-
-/**
- * GOutputVector:
- * @buffer: Pointer to a buffer of data to read.
- * @size: the size of @buffer.
- *
- * Structure used for scatter/gather data output.
- * You generally pass in an array of #GOutputVector<!-- -->s
- * and the operation will use all the buffers as if they were
- * one buffer.
- *
- * Since: 2.22
- */
-
-
-/**
  * g_file_query_writable_namespaces:
  * @file: input #GFile.
  * @cancellable: optional #GCancellable object, %NULL to ignore.
@@ -10660,15 +7683,6 @@
 
 
 /**
- * G_TYPE_PTR_ARRAY:
- *
- * The #GType for a boxed type holding a #GPtrArray reference.
- *
- * Since: 2.22
- */
-
-
-/**
  * g_dbus_message_new_method_error_valist:
  * @method_call_message: A message of type %G_DBUS_MESSAGE_TYPE_METHOD_CALL to create a reply message to.
  * @error_name: A valid D-Bus error name.
@@ -10695,25 +7709,6 @@
  * effect if called after that.
  *
  * Since: 2.22
- */
-
-
-/**
- * G_IS_PARAM_SPEC_POINTER:
- * @pspec: a valid #GParamSpec instance
- *
- * Checks whether the given #GParamSpec is of type %G_TYPE_PARAM_POINTER.
- *
- * Returns: %TRUE on success.
- */
-
-
-/**
- * GUnixCredentialsMessageClass:
- *
- * Class structure for #GUnixCredentialsMessage.
- *
- * Since: 2.26
  */
 
 
@@ -10749,15 +7744,6 @@
 
 
 /**
- * GFileInputStream:
- *
- * A subclass of GInputStream for opened files. This adds
- * a few file-specific operations and seeking.
- * #GFileInputStream implements #GSeekable.
- */
-
-
-/**
  * SECTION:gwin32outputstrea:
  * @short_description: Streaming output operations for Windows file handles
  * @include: gio/gwin32outputstream.h
@@ -10782,10 +7768,15 @@
 
 
 /**
- * G_PARAM_SPEC_CLASS:
- * @pclass: a valid #GParamSpecClass
+ * g_periodic_get_low_priority:
+ * @periodic: a #GPeriodic clock
  *
- * Casts a derived #GParamSpecClass structure into a #GParamSpecClass structure.
+ * Gets the priority level that #GPeriodic uses to check for mainloop
+ * inactivity.  Other sources scheduled below this level of priority are
+ * effectively ignored by #GPeriodic and may be starved.
+ *
+ * Returns: the low priority level
+ * Since: 2.28
  */
 
 
@@ -10813,18 +7804,6 @@
 
 
 /**
- * G_TYPE_IS_ABSTRACT:
- * @type: A #GType value.
- *
- * Checks if @type is an abstract type.  An abstract type can not be
- * instantiated and is normally used as an abstract base class for
- * derived classes.
- *
- * Returns: %TRUE on success.
- */
-
-
-/**
  * g_settings_is_writable:
  * @settings: a #GSettings object
  * @name: the name of a key
@@ -10833,17 +7812,6 @@
  * Finds out if a key can be written or not
  *
  * Since: 2.26
- */
-
-
-/**
- * GCallback:
- *
- * The type used for callback functions in structure definitions and function
- * signatures. This doesn't mean that all callback functions must take no
- * parameters and return void. The required signature of a callback function
- * is determined by the context in which is used (e.g. the signal to which it
- * is connected). Use G_CALLBACK() to cast the callback function to a #GCallback.
  */
 
 
@@ -10900,14 +7868,6 @@
 
 
 /**
- * G_PARAM_SPEC_DOUBLE:
- * @pspec: a valid #GParamSpec instance
- *
- * Cast a #GParamSpec instance into a #GParamSpecDouble.
- */
-
-
-/**
  * g_file_get_relative_path:
  * @parent: input #GFile.
  * @descendant: input #GFile.
@@ -10922,12 +7882,14 @@
 
 
 /**
- * GClosureNotify:
- * @data: data specified when registering the notification callback
- * @closure: the #GClosure on which the notification is emitted
+ * g_simple_async_result_take_error:
+ * @simple: a #GSimpleAsyncResult
+ * @error: a #GError
  *
- * The type used for the various notification callbacks which can be registered
- * on closures.
+ * Sets the result from @error, and takes over the caller's ownership
+ * of @error, so the caller does not need to free it any more.
+ *
+ * Since: 2.28
  */
 
 
@@ -10948,32 +7910,12 @@
 /**
  * g_emblemed_icon_new:
  * @icon: a #GIcon
- * @emblem: a #GEmblem
+ * @emblem: (allow-none): a #GEmblem, or %NULL
  *
  * Creates a new emblemed icon for @icon with the emblem @emblem.
  *
  * Returns: (transfer full): a new #GIcon
  * Since: 2.18
- */
-
-
-/**
- * G_TYPE_DBUS_ANNOTATION_INFO:
- *
- * The #GType for a boxed type holding a #GDBusAnnotationInfo.
- *
- * Since: 2.26
- */
-
-
-/**
- * GSignalInvocationHint:
- * @signal_id: The signal id of the signal invoking the callback
- * @detail: The detail passed on for this emission
- * @run_type: The stage the signal emission is currently in, this field will contain one of %G_SIGNAL_RUN_FIRST, %G_SIGNAL_RUN_LAST or %G_SIGNAL_RUN_CLEANUP.
- *
- * The #GSignalInvocationHint structure is used to pass on additional information
- * to callbacks during a signal emission.
  */
 
 
@@ -11038,7 +7980,7 @@
  * Emits the #GActionGroup::action-added signal on @action_group.
  * This function should only be called by #GActionGroup implementations.
  *
- * Since: 2.26
+ * Since: 2.28
  */
 
 
@@ -11063,18 +8005,6 @@
 
 
 /**
- * GReallocFunc:
- * @data: memory block to reallocate
- * @size: size to reallocate @data to
- *
- * Changes the size of the memory block pointed to by @data to
- * The function should have the same semantics as realloc().
- *
- * Returns: a pointer to the reallocated memory
- */
-
-
-/**
  * g_dbus_error_unregister_error:
  * @error_domain: A #GQuark for a error domain.
  * @error_code: An error code.
@@ -11084,35 +8014,6 @@
  *
  * Returns: %TRUE if the association was destroyed, %FALSE if it wasn't found.
  * Since: 2.26
- */
-
-
-/**
- * g_action_group_set_state:
- * @action_group: a #GActionGroup
- * @action_name: the name of the action to request the change on
- * @value: the new state
- *
- * Request for the state of the named action within @action_group to be
- * changed to @value.
- * The action must be stateful and @value must be of the correct type.
- * See g_action_group_get_state_type().
- * This call merely requests a change.  The action may refuse to change
- * its state or may change its state to something other than @value.
- * See g_action_group_get_state_hint().
- * If the @value GVariant is floating, it is consumed.
- *
- * Since: 2.26
- */
-
-
-/**
- * G_FILE_ATTRIBUTE_MOUNTABLE_CAN_START:
- *
- * A key in the "mountable" namespace for checking if a file (of type G_FILE_TYPE_MOUNTABLE) can be started.
- * Corresponding #GFileAttributeType is %G_FILE_ATTRIBUTE_TYPE_BOOLEAN.
- *
- * Since: 2.22
  */
 
 
@@ -11327,16 +8228,6 @@
 
 
 /**
- * G_INITIALLY_UNOWNED:
- * @object: Object which is subject to casting.
- *
- * Casts a #GInitiallyUnowned or derived pointer into a (GInitiallyUnowned*)
- * pointer. Depending on the current debugging level, this function may invoke
- * certain runtime checks to identify invalid casts.
- */
-
-
-/**
  * g_unix_mounts_changed_since:
  * @time: guint64 to contain a timestamp.
  *
@@ -11351,7 +8242,7 @@
  *
  * The state of the action, or %NULL if the action is stateless.
  *
- * Since: 2.26
+ * Since: 2.28
  */
 
 
@@ -11389,15 +8280,6 @@
  * for multiple extension points, under different names.
  *
  * Returns: the name of @extension.
- */
-
-
-/**
- * GTcpConnection:
- *
- * A #GSocketConnection for UNIX domain socket connections.
- *
- * Since: 2.22
  */
 
 
@@ -11486,23 +8368,6 @@
 
 
 /**
- * G_ENUM_CLASS_TYPE:
- * @class: a #GEnumClass
- *
- * Get the type identifier from a given #GEnumClass structure.
- *
- * Returns: the #GType
- */
-
-
-/**
- * G_TYPE_FLOAT:
- *
- * The fundamental type corresponding to #gfloat.
- */
-
-
-/**
  * g_vfs_get_file_for_uri:
  * @vfs: a#GVfs.
  * @uri: a string containing a URI
@@ -11514,16 +8379,6 @@
  * Free the returned object with g_object_unref().
  *
  * Returns: (transfer full): a #GFile.
- */
-
-
-/**
- * G_VALUE_HOLDS_UCHAR:
- * @value: a valid #GValue structure
- *
- * Checks whether the given #GValue can hold values of type %G_TYPE_UCHAR.
- *
- * Returns: %TRUE on success.
  */
 
 
@@ -11548,16 +8403,21 @@
 
 
 /**
- * G_SETTINGS_BACKEND_EXTENSION_POINT_NAME:
+ * g_action_group_change_action_state:
+ * @action_group: a #GActionGroup
+ * @action_name: the name of the action to request the change on
+ * @value: the new state
  *
- * Extension point for #GSettingsBackend functionality.
- */
-
-
-/**
- * GMemoryOutputStream:
+ * Request for the state of the named action within @action_group to be
+ * changed to @value.
+ * The action must be stateful and @value must be of the correct type.
+ * See g_action_group_get_state_type().
+ * This call merely requests a change.  The action may refuse to change
+ * its state or may change its state to something other than @value.
+ * See g_action_group_get_state_hint().
+ * If the @value GVariant is floating, it is consumed.
  *
- * Implements #GOutputStream for arbitrary memory chunks.
+ * Since: 2.28
  */
 
 
@@ -11622,7 +8482,7 @@
  * @method_name: Name of method to invoke.
  * @parameters: A #GVariant tuple with parameters for the signal or %NULL if not passing parameters.
  * @flags: Flags from the #GDBusCallFlags enumeration.
- * @timeout_msec: The timeout in milliseconds or -1 to use the proxy default timeout.
+ * @timeout_msec: The timeout in milliseconds (with %G_MAXINT meaning "infinite") or -1 to use the proxy default timeout.
  * @cancellable: A #GCancellable or %NULL.
  * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL if you don't care about the result of the method invocation.
  * @user_data: The data to pass to @callback.
@@ -11662,24 +8522,14 @@
 
 
 /**
- * G_TYPE_OBJECT:
+ * GApplication::open:
+ * @application: the application
+ * @files: an array of #GFile objects
+ * @n_files: the length of @files
+ * @hint: a hint provided by the calling instance
  *
- * The fundamental type for #GObject.
- */
-
-
-/**
- * g_application_list_actions:
- * @application: a #GApplication
- *
- * Retrieves the list of action names currently exported by @application.
- * It is an error to call this function if @application is a proxy for
- * a remote application.
- * of strings containing action names; use g_strfreev() to free the
- * resources used by the returned array
- *
- * Returns: (transfer full): a newly allocation, %NULL-terminated array
- * Since: 2.26
+ * The ::open signal is emitted on the primary instance when there are
+ * files to open. See g_application_open() for more information.
  */
 
 
@@ -11722,38 +8572,11 @@
 
 
 /**
- * GDBusMessageHeaderField:
- * @G_DBUS_MESSAGE_HEADER_FIELD_INVALID: Not a valid header field.
- * @G_DBUS_MESSAGE_HEADER_FIELD_PATH: The object path.
- * @G_DBUS_MESSAGE_HEADER_FIELD_INTERFACE: The interface name.
- * @G_DBUS_MESSAGE_HEADER_FIELD_MEMBER: The method or signal name.
- * @G_DBUS_MESSAGE_HEADER_FIELD_ERROR_NAME: The name of the error that occurred.
- * @G_DBUS_MESSAGE_HEADER_FIELD_REPLY_SERIAL: The serial number the message is a reply to.
- * @G_DBUS_MESSAGE_HEADER_FIELD_DESTINATION: The name the message is intended for.
- * @G_DBUS_MESSAGE_HEADER_FIELD_SENDER: Unique name of the sender of the message (filled in by the bus).
- * @G_DBUS_MESSAGE_HEADER_FIELD_SIGNATURE: The signature of the message body.
- * @G_DBUS_MESSAGE_HEADER_FIELD_NUM_UNIX_FDS: The number of UNIX file descriptors that accompany the message.
- *
- * Header fields used in #GDBusMessage.
- *
- * Since: 2.26
- */
-
-
-/**
- * G_PARAM_SPEC_TYPE:
- * @pspec: a valid #GParamSpec
- *
- * Retrieves the #GType of this @pspec.
- */
-
-
-/**
  * g_dbus_connection_send_message_with_reply:
  * @connection: A #GDBusConnection.
  * @message: A #GDBusMessage.
  * @flags: Flags affecting how the message is sent.
- * @timeout_msec: The timeout in milliseconds or -1 to use the default timeout.
+ * @timeout_msec: The timeout in milliseconds, -1 to use the default timeout or %G_MAXINT for no timeout.
  * @out_serial: Return location for serial number assigned to @message when sending it or %NULL.
  * @cancellable: A #GCancellable or %NULL.
  * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL if you don't care about the result.
@@ -11821,64 +8644,11 @@
 
 
 /**
- * G_FILE_ATTRIBUTE_STANDARD_ALLOCATED_SIZE:
- *
- * A key in the "standard" namespace for getting the amount of disk space
- * that is consumed by the file (in bytes).  This will generally be larger
- * than the file size (due to block size overhead) but can occasionally be
- * smaller (for example, for sparse files).
- * Corresponding #GFileAttributeType is %G_FILE_ATTRIBUTE_TYPE_UINT64.
- *
- * Since: 2.20
- */
-
-
-/**
- * g_node_prepend_data:
- * @parent: the #GNode to place the new #GNode under
- * @data: the data for the new #GNode
- *
- * Inserts a new #GNode as the first child of the given parent.
- *
- * Returns: the new #GNode
- */
-
-
-/**
  * GVolumeMonitor::volume-changed:
  * @volume_monitor: The volume monitor emitting the signal.
  * @volume: a #GVolume that changed.
  *
  * Emitted when mountable volume is changed.
- */
-
-
-/**
- * GSignalQuery:
- * @signal_id: The signal id of the signal being queried, or 0 if the signal to be queried was unknown.
- * @signal_name: The signal name.
- * @itype: The interface/instance type that this signal can be emitted for.
- * @signal_flags: The signal flags as passed in to g_signal_new().
- * @return_type: The return type for user callbacks.
- * @n_params: The number of parameters that user callbacks take.
- * @param_types: The individual parameter types for user callbacks, note that the effective callback signature is: <programlisting> [#param_types param_names,] #gpointer     data2); </programlisting>
- *
- * A structure holding in-depth information for a specific signal. It is
- * filled in by the g_signal_query() function.
- */
-
-
-/**
- * G_DEFINE_ABSTRACT_TYPE:
- * @TN: The name of the new type, in Camel case.
- * @t_n: The name of the new type, in lowercase, with words separated by '_'.
- * @T_P: The #GType of the parent type.
- *
- * A convenience macro for type implementations.
- * Similar to G_DEFINE_TYPE(), but defines an abstract type.
- * See G_DEFINE_TYPE_EXTENDED() for an example.
- *
- * Since: 2.4
  */
 
 
@@ -11905,15 +8675,6 @@
  * GVolume::changed:
  *
  * Emitted when the volume has been changed.
- */
-
-
-/**
- * G_TYPE_CHAR:
- *
- * The fundamental type corresponding to #gchar.
- * The type designated by G_TYPE_CHAR is unconditionally an 8-bit signed integer.
- * This may or may not be the same type a the C type "gchar".
  */
 
 
@@ -11955,19 +8716,6 @@
  * unmounted. If the recipient is holding references to the
  * object they should release them so the object can be
  * finalized.
- */
-
-
-/**
- * GBusType:
- * @G_BUS_TYPE_STARTER: An alias for the message bus that activated the process, if any.
- * @G_BUS_TYPE_NONE: Not a message bus.
- * @G_BUS_TYPE_SYSTEM: The system-wide message bus.
- * @G_BUS_TYPE_SESSION: The login session message bus.
- *
- * An enumeration for well-known message buses.
- *
- * Since: 2.26
  */
 
 
@@ -12044,28 +8792,6 @@
 
 
 /**
- * GConverterIface:
- * @g_iface: The parent interface.
- * @convert: Converts data.
- * @reset: Reverts the internal state of the converter to its initial state.
- *
- * Provides an interface for converting data from one type
- * to another type. The conversion can be stateful
- * and may fail at any place.
- *
- * Since: 2.24
- */
-
-
-/**
- * G_FILE_ATTRIBUTE_STANDARD_SIZE:
- *
- * A key in the "standard" namespace for getting the file's size (in bytes).
- * Corresponding #GFileAttributeType is %G_FILE_ATTRIBUTE_TYPE_UINT64.
- */
-
-
-/**
  * g_app_info_get_executable:
  * @appinfo: a #GAppInfo
  *
@@ -12101,25 +8827,6 @@
 
 
 /**
- * GParamSpecFlags:
- * @parent_instance: private #GParamSpec portion
- * @flags_class: the #GFlagsClass for the flags
- * @default_value: default value for the property specified
- *
- * A #GParamSpec derived structure that contains the meta data for flags
- * properties.
- */
-
-
-/**
- * GApplication:platform-data:
- *
- * Platform-specific data retrieved from the operating system
- * environment.  It must be a #GVariant with type signature "a{sv}".
- */
-
-
-/**
  * g_dbus_connection_close_finish:
  * @connection: A #GDBusConnection.
  * @res: A #GAsyncResult obtained from the #GAsyncReadyCallback passed to g_dbus_connection_close().
@@ -12129,13 +8836,6 @@
  *
  * Returns: %TRUE if the operation succeeded, %FALSE if @error is set.
  * Since: 2.26
- */
-
-
-/**
- * G_URI_RESERVED_CHARS_GENERIC_DELIMITERS:
- *
- * Generic delimiters characters as defined in RFC 3986. Includes ":/?#[]@".
  */
 
 
@@ -12157,35 +8857,22 @@
 
 
 /**
- * GRegexMatchFlags:
- * @G_REGEX_MATCH_ANCHORED: The pattern is forced to be "anchored", that is, it is constrained to match only at the first matching point in the string that is being searched. This effect can also be achieved by appropriate constructs in the pattern itself such as the "^" metacharater.
- * @G_REGEX_MATCH_NOTBOL: Specifies that first character of the string is not the beginning of a line, so the circumflex metacharacter should not match before it. Setting this without #G_REGEX_MULTILINE (at compile time) causes circumflex never to match. This option affects only the behaviour of the circumflex metacharacter, it does not affect "\A".
- * @G_REGEX_MATCH_NOTEOL: Specifies that the end of the subject string is not the end of a line, so the dollar metacharacter should not match it nor (except in multiline mode) a newline immediately before it. Setting this without #G_REGEX_MULTILINE (at compile time) causes dollar never to match. This option affects only the behaviour of the dollar metacharacter, it does not affect "\Z" or "\z".
- * @G_REGEX_MATCH_NOTEMPTY: An empty string is not considered to be a valid match if this option is set. If there are alternatives in the pattern, they are tried. If all the alternatives match the empty string, the entire match fails. For example, if the pattern "a?b?" is applied to a string not beginning with "a" or "b", it matches the empty string at the start of the string. With this flag set, this match is not valid, so GRegex searches further into the string for occurrences of "a" or "b".
- * @G_REGEX_MATCH_PARTIAL: Turns on the partial matching feature, for more documentation on partial matching see g_match_info_is_partial_match().
- * @G_REGEX_MATCH_NEWLINE_CR: Overrides the newline definition set when creating a new #GRegex, setting the '\r' character as line terminator.
- * @G_REGEX_MATCH_NEWLINE_LF: Overrides the newline definition set when creating a new #GRegex, setting the '\n' character as line terminator.
- * @G_REGEX_MATCH_NEWLINE_CRLF: Overrides the newline definition set when creating a new #GRegex, setting the '\r\n' characters as line terminator.
- * @G_REGEX_MATCH_NEWLINE_ANY: Overrides the newline definition set when creating a new #GRegex, any newline character or character sequence is recognized.
+ * g_action_get_state_type:
+ * @action: a #GAction
  *
- * Flags specifying match-time options.
+ * Queries the type of the state of @action.
+ * g_action_new_stateful()) then this function returns the #GVariantType
+ * of the state.  This is the type of the initial value given as the
+ * state.  All calls to g_action_set_state() must give a #GVariant of
+ * this type and g_action_get_state() will return a #GVariant of the
+ * same type.
+ * this function will return %NULL.  In that case, g_action_get_state()
+ * will return %NULL and you must not call g_action_set_state().
  *
- * Since: 2.14
- */
-
-
-/**
- * GSocketFamily:
- * @G_SOCKET_FAMILY_INVALID: no address family
- * @G_SOCKET_FAMILY_IPV4: the IPv4 family
- * @G_SOCKET_FAMILY_IPV6: the IPv6 family
- * @G_SOCKET_FAMILY_UNIX: the UNIX domain family
- *
- * The protocol family of a #GSocketAddress. (These values are
- * identical to the system defines %AF_INET, %AF_INET6 and %AF_UNIX,
- * if available.)
- *
- * Since: 2.22
+ * If the action is stateful (ie: was created with
+ * If the action is not stateful (ie: created with g_action_new()) then
+ * Returns: (allow-none): the state type, if the action is stateful
+ * Since: 2.28
  */
 
 
@@ -12198,16 +8885,6 @@
  * Finishes closing a stream asynchronously, started from g_input_stream_close_async().
  *
  * Returns: %TRUE if the stream was closed successfully.
- */
-
-
-/**
- * G_TYPE_IS_CLASSED:
- * @type: A #GType value.
- *
- * Checks if @type is a classed type.
- *
- * Returns: %TRUE on success.
  */
 
 
@@ -12229,11 +8906,10 @@
 
 
 /**
- * G_TYPE_PARAM_OVERRIDE:
+ * mime_info_cache_reload:
+ * @dir: directory path which needs reloading.
  *
- * The #GType of #GParamSpecOverride.
- *
- * Since: 2.4
+ * Reload the mime information for the @dir.
  */
 
 
@@ -12249,47 +8925,6 @@
  *
  * Returns: the file descriptor of the socket.
  * Since: 2.22
- */
-
-
-/**
- * GTypeClass:
- *
- * An opaque structure used as the base of all classes.
- */
-
-
-/**
- * GBindingTransformFunc:
- * @binding: a #GBinding
- * @source_value: the value of the source property
- * @target_value: the value of the target property
- * @user_data: data passed to the transform function
- *
- * A function to be called to transform the source property of @source
- * from @source_value into the target property of @target
- * using @target_value.
- * otherwise
- *
- * Returns: %TRUE if the transformation was successful, and %FALSE
- * Since: 2.26
- */
-
-
-/**
- * G_PARAM_SPEC_OVERRIDE:
- * @pspec: a #GParamSpec
- *
- * Casts a #GParamSpec into a #GParamSpecOverride.
- *
- * Since: 2.4
- */
-
-
-/**
- * GEmblemedIcon:
- *
- * An implementation of #GIcon for icons with emblems.
  */
 
 
@@ -12327,28 +8962,11 @@
 
 
 /**
- * G_VOLUME_IDENTIFIER_KIND_NFS_MOUNT:
- *
- * The string used to obtain a NFS mount with g_volume_get_identifier().
- */
-
-
-/**
- * GFlagsValue:
- * @value: the flags value
- * @value_name: the name of the value
- * @value_nick: the nickname of the value
- *
- * A structure which contains a single flags value, its name, and its
- * nickname.
- */
-
-
-/**
  * g_data_input_stream_read_upto_async:
  * @stream: a #GDataInputStream
  * @stop_chars: characters to terminate the read
  * @stop_chars_len: length of @stop_chars. May be -1 if @stop_chars is nul-terminated
+ * @io_priority: the <link linkend="io-priority">I/O priority</link> of the request.
  * @cancellable: optional #GCancellable object, %NULL to ignore
  * @callback: callback to call when the request is satisfied
  * @user_data: the data to pass to callback function
@@ -12370,23 +8988,16 @@
 
 
 /**
- * GCredentialsType:
- * @G_CREDENTIALS_TYPE_INVALID: Indicates an invalid native credential type.
- * @G_CREDENTIALS_TYPE_LINUX_UCRED: The native credentials type is a <type>struct ucred</type>.
- * @G_CREDENTIALS_TYPE_FREEBSD_CMSGCRED: The native credentials type is a <type>struct cmsgcred</type>.
+ * g_application_set_application_id:
+ * @application: a #GApplication
+ * @application_id: the identifier for @application
  *
- * Enumeration describing different kinds of native credential types.
+ * Sets the unique identifier for @application.
+ * The application id can only be modified if @application has not yet
+ * been registered.
+ * The application id must be valid.  See g_application_id_is_valid().
  *
- * Since: 2.26
- */
-
-
-/**
- * GSocketClient:
- *
- * A helper class for network servers to listen for and accept connections.
- *
- * Since: 2.22
+ * Since: 2.28
  */
 
 
@@ -12402,18 +9013,22 @@
 
 
 /**
- * G_VARIANT_TYPE_MAYBE:
+ * g_application_open:
+ * @application: a #GApplication
+ * @files: an array of #GFiles to open
+ * @n_files: the length of the @files array
+ * @hint: a hint (or ""), but never %NULL
  *
- * An indefinite type that is a supertype of every maybe type.
- */
-
-
-/**
- * G_CONVERT_ERROR:
+ * Opens the given files.
+ * In essence, this results in the #GApplication::open signal being emitted
+ * in the primary instance.
+ * intended to be used by applications that have multiple modes for
+ * for this functionality, you should use "".
+ * The application must be registered before calling this function
+ * and it must have the %G_APPLICATION_HANDLES_OPEN flag set.
  *
- * Error domain for character set conversions. Errors in this domain will
- * be from the #GConvertError enumeration. See #GError for information on
- * error domains.
+ * Opening files (eg: "view" vs "edit", etc).  Unless you have a need
+ * Since: 2.28
  */
 
 
@@ -12483,19 +9098,7 @@
  * The #GVariantType of the state that the action has, or %NULL if the
  * action is stateless.
  *
- * Since: 2.26
- */
-
-
-/**
- * G_TYPE_CHECK_CLASS_TYPE:
- * @g_class: Location of a #GTypeClass structure.
- * @g_type: The type to be checked.
- *
- * Checks if @g_class is a class structure of the type identified by
- * This macro should only be used in type implementations.
- *
- * Returns: %TRUE on success.
+ * Since: 2.28
  */
 
 
@@ -12583,16 +9186,6 @@
 
 
 /**
- * g_io_module_unload:
- * @module: a #GIOModule.
- *
- * Required API for GIO modules to implement.
- * This function is ran when the module is being unloaded from GIO,
- * to finalize the module.
- */
-
-
-/**
  * GResolver:
  *
  * The object that handles DNS resolution. Use g_resolver_get_default()
@@ -12646,14 +9239,6 @@
 
 
 /**
- * GMountOperation:
- *
- * Class for providing authentication methods for mounting operations,
- * such as mounting a file locally, or authenticating with a server.
- */
-
-
-/**
  * g_dbus_message_new_method_error_literal:
  * @method_call_message: A message of type %G_DBUS_MESSAGE_TYPE_METHOD_CALL to create a reply message to.
  * @error_name: A valid D-Bus error name.
@@ -12663,26 +9248,6 @@
  *
  * Returns: (transfer full): A #GDBusMessage. Free with g_object_unref().
  * Since: 2.26
- */
-
-
-/**
- * g_application_is_remote:
- * @application: a #GApplication
- *
- * Returns whether the object represents a proxy for a remote application.
- *
- * Returns: %TRUE if this object represents a proxy for a remote application.
- */
-
-
-/**
- * G_VALUE_HOLDS_FLOAT:
- * @value: a valid #GValue structure
- *
- * Checks whether the given #GValue can hold values of type %G_TYPE_FLOAT.
- *
- * Returns: %TRUE on success.
  */
 
 
@@ -12856,22 +9421,6 @@
 
 
 /**
- * GCClosure:
- * @closure: the #GClosure
- * @callback: the callback function
- *
- * A #GCClosure is a specialization of #GClosure for C function callbacks.
- */
-
-
-/**
- * GWin32InputStream:
- *
- * Implements #GInputStream for reading from selectable Windows file handles
- */
-
-
-/**
  * g_settings_get_boolean:
  * @settings: a #GSettings object
  * @key: the key to get the value for
@@ -12888,24 +9437,19 @@
 
 /**
  * g_settings_list_schemas:
- * @returns: (element-type utf8) (transfer none): a list of GSettings schemas that are available.  The list
  *
- * must not be modified or freed.
- */
-
-
-/**
- * g_signal_connect_swapped:
- * @instance: the instance to connect to.
- * @detailed_signal: a string of the form "signal-name::detail".
- * @c_handler: the #GCallback to connect.
- * @data: data to pass to @c_handler calls.
+ * Gets a list of the #GSettings schemas installed on the system.  The
+ * returned list is exactly the list of schemas for which you may call
+ * g_settings_new() without adverse effects.
+ * This function does not list the schemas that do not provide their own
+ * g_settings_new_with_path()).  See
+ * g_settings_list_relocatable_schemas() for that.
+ * schemas that are available.  The list must not be modified or
+ * freed.
  *
- * Connects a #GCallback function to a signal for a particular object.
- * The instance on which the signal is emitted and @data will be swapped when
- * calling the handler.
- *
- * Returns: the handler id
+ * Paths (ie: schemas for which you must use
+ * Returns: (element-type utf8) (transfer none): a list of #GSettings
+ * Since: 2.26
  */
 
 
@@ -12917,39 +9461,6 @@
  * Unsubscribes from signals.
  *
  * Since: 2.26
- */
-
-
-/**
- * G_DBUS_ERROR:
- *
- * Error domain for errors generated by a remote message bus. Errors
- * in this domain will be from the #GDBusError enumeration.  See
- * #GError for more information on error domains.
- * Note that errors in this error domain is intended only for
- * returning errors from a remote message bus process. Errors
- * generated locally in-process by e.g. #GDBusConnection is from the
- * %G_IO_ERROR domain.
- *
- * Since: 2.26
- */
-
-
-/**
- * GSocketControlMessage:
- *
- * Base class for socket-type specific control messages that can be sent and
- * received over #GSocket.
- */
-
-
-/**
- * G_FILE_ATTRIBUTE_STANDARD_IS_SYMLINK:
- *
- * A key in the "standard" namespace for checking if the file is a symlink.
- * Typically the actual type is something else, if we followed the symlink
- * to get the type.
- * Corresponding #GFileAttributeType is %G_FILE_ATTRIBUTE_TYPE_BOOLEAN.
  */
 
 
@@ -12998,7 +9509,7 @@
  * @method_name: Name of method to invoke.
  * @parameters: A #GVariant tuple with parameters for the signal or %NULL if not passing parameters.
  * @flags: Flags from the #GDBusCallFlags enumeration.
- * @timeout_msec: The timeout in milliseconds or -1 to use the proxy default timeout.
+ * @timeout_msec: The timeout in milliseconds (with %G_MAXINT meaning "infinite") or -1 to use the proxy default timeout.
  * @cancellable: A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
  *
@@ -13054,54 +9565,11 @@
 
 
 /**
- * G_IS_PARAM_SPEC_DOUBLE:
- * @pspec: a valid #GParamSpec instance
- *
- * Checks whether the given #GParamSpec is of type %G_TYPE_PARAM_DOUBLE.
- *
- * Returns: %TRUE on success.
- */
-
-
-/**
- * G_FILE_ATTRIBUTE_ACCESS_CAN_DELETE:
- *
- * A key in the "access" namespace for checking deletion privileges.
- * Corresponding #GFileAttributeType is %G_FILE_ATTRIBUTE_TYPE_BOOLEAN.
- * This attribute will be %TRUE if the user is able to delete the file.
- */
-
-
-/**
  * g_file_info_set_attribute_mask:
  * @info: a #GFileInfo.
  * @mask: a #GFileAttributeMatcher.
  *
  * Sets @mask on @info to match specific attribute types.
- */
-
-
-/**
- * GIOStream:
- *
- * Base class for read-write streams.
- */
-
-
-/**
- * GSocketMsgFlags:
- * @G_SOCKET_MSG_NONE: No flags.
- * @G_SOCKET_MSG_OOB: Request to send/receive out of band data.
- * @G_SOCKET_MSG_PEEK: Read data from the socket without removing it from the queue.
- * @G_SOCKET_MSG_DONTROUTE: Don't use a gateway to send out the packet, only send to hosts on directly connected networks.
- *
- * Flags used in g_socket_receive_message() and g_socket_send_message().
- * The flags listed in the enum are some commonly available flags, but the
- * values used for them are the same as on the platform, and any other flags
- * are passed in/out as is. So to use a platform specific flag, just include
- * the right system header and pass in the flag.
- *
- * Since: 2.22
  */
 
 
@@ -13113,13 +9581,6 @@
  *
  * Returns: %TRUE if valid, %FALSE otherwise.
  * Since: 2.26
- */
-
-
-/**
- * G_TYPE_PARAM_ULONG:
- *
- * The #GType of #GParamSpecULong.
  */
 
 
@@ -13168,15 +9629,6 @@
  *
  * Returns: (transfer none): A #GCredentials or %NULL if not available. Do not free
  * Since: 2.26
- */
-
-
-/**
- * G_FILE_ATTRIBUTE_UNIX_INODE:
- *
- * A key in the "unix" namespace for getting the inode of the file.
- * This attribute is only available for UNIX file systems. Corresponding
- * #GFileAttributeType is %G_FILE_ATTRIBUTE_TYPE_UINT64.
  */
 
 
@@ -13231,11 +9683,14 @@
 
 
 /**
- * G_FILE_ATTRIBUTE_THUMBNAIL_PATH:
+ * g_periodic_damaged:
+ * @periodic: a #GPeriodic clock
  *
- * A key in the "thumbnail" namespace for getting the path to the thumbnail
- * image. Corresponding #GFileAttributeType is
- * %G_FILE_ATTRIBUTE_TYPE_BYTE_STRING.
+ * Report damage and schedule the "repair" signal to be emitted during
+ * the next repair phase.
+ * You may not call this function during the repair phase.
+ *
+ * Since: 2.28
  */
 
 
@@ -13259,7 +9714,7 @@
  * Emits the #GActionGroup::action-enabled-changed signal on @action_group.
  * This function should only be called by #GActionGroup implementations.
  *
- * Since: 2.26
+ * Since: 2.28
  */
 
 
@@ -13322,19 +9777,6 @@
 
 
 /**
- * G_TYPE_CHECK_VALUE_TYPE:
- * @value: a #GValue
- * @g_type: The type to be checked.
- *
- * Checks if @value has been initialized to hold values
- * of type @g_type.
- * This macro should only be used in type implementations.
- *
- * Returns: %TRUE on success.
- */
-
-
-/**
  * g_settings_get_enum:
  * @settings: a #GSettings object
  * @key: the key to get the value for
@@ -13351,22 +9793,6 @@
  * default value.
  *
  * Since: 2.26
- */
-
-
-/**
- * GApplication:argv:
- *
- * The argument vector given to this application.  It must be a #GVariant
- * with a type signature "aay".
- */
-
-
-/**
- * G_VOLUME_MONITOR_EXTENSION_POINT_NAME:
- *
- * Extension point for volume monitor functionality.
- * See <link linkend="extending-gio">Extending GIO</link>.
  */
 
 
@@ -13428,17 +9854,14 @@
 
 
 /**
- * GParamSpecClass:
- * @g_type_class: the parent class
- * @value_type: the #GValue type for this parameter
- * @finalize: The instance finalization function (optional), should chain up to the finalize method of the parent class.
- * @value_set_default: Resets a @value to the default value for this type (recommended, the default is g_value_reset()), see g_param_value_set_default().
- * @value_validate: Ensures that the contents of @value comply with the specifications set out by this type (optional), see g_param_value_set_validate().
- * @values_cmp: Compares @value1 with @value2 according to this type (recommended, the default is memcmp()), see g_param_values_cmp().
+ * g_application_hold:
+ * @application: a #GApplication
  *
- * The class structure for the <structname>GParamSpec</structname> type.
- * Normally, <structname>GParamSpec</structname> classes are filled by
- * g_param_type_register_static().
+ * Increases the use count of @application.
+ * Use this function to indicate that the application has a reason to
+ * continue to run.  For example, g_application_hold() is called by GTK+
+ * when a toplevel window is on the screen.
+ * To cancel the hold, call g_application_release().
  */
 
 
@@ -13457,17 +9880,6 @@
 
 
 /**
- * GParamSpecGType:
- * @parent_instance: private #GParamSpec portion
- * @is_a_type: a #GType whose subtypes can occur as values
- *
- * A #GParamSpec derived structure that contains the meta data for #GType properties.
- *
- * Since: 2.10
- */
-
-
-/**
  * g_dbus_message_new_method_reply:
  * @method_call_message: A message of type %G_DBUS_MESSAGE_TYPE_METHOD_CALL to create a reply message to.
  *
@@ -13481,20 +9893,26 @@
 /**
  * g_application_register:
  * @application: a #GApplication
+ * @cancellable: a #GCancellable, or %NULL
+ * @error: a pointer to a NULL #GError, or %NULL
+ * @returns: %TRUE if registration succeeded
  *
- * By default, #GApplication ensures process uniqueness when
- * initialized, but this behavior is controlled by the
- * GApplication:register property.  If it was given as %FALSE at
- * construction time, this function allows you to later attempt
- * to ensure uniqueness.  Note that the GApplication:default-quit
- * property no longer applies at this point; if this function returns
- * %FALSE, platform activation will occur, but the current process
- * will not be terminated.
- * It is an error to call this function more than once.  It is
- * also an error to call this function if the GApplication:register
- * property was %TRUE at construction time.
+ * Attempts registration of the application.
+ * This is the point at which the application discovers if it is the
+ * primary instance or merely acting as a remote for an already-existing
+ * primary instance.
+ * If the application has already been registered then %TRUE is
+ * returned with no work performed.
+ * The #GApplication::startup signal is emitted if registration succeeds
+ * and @application is the primary instance.
+ * In the event of an error (such as @cancellable being cancelled, or a
+ * failure to connect to the session bus), %FALSE is returned and @error
+ * is set appropriately.
+ * instance is or is not the primary instance of the application.  See
+ * g_application_get_is_remote() for that.
  *
- * Returns: %TRUE if registration was successful
+ * Note: the return value of this function is not an indicator that this
+ * Since: 2.28
  */
 
 
@@ -13510,20 +9928,6 @@
 
 
 /**
- * g_signal_connect:
- * @instance: the instance to connect to.
- * @detailed_signal: a string of the form "signal-name::detail".
- * @c_handler: the #GCallback to connect.
- * @data: data to pass to @c_handler calls.
- *
- * Connects a #GCallback function to a signal for a particular object.
- * The handler will be called before the default handler of the signal.
- *
- * Returns: the handler id
- */
-
-
-/**
  * g_file_info_set_attribute_object:
  * @info: a #GFileInfo.
  * @attribute: a file attribute key.
@@ -13531,24 +9935,6 @@
  *
  * Sets the @attribute to contain the given @attr_value,
  * if possible.
- */
-
-
-/**
- * GToggleNotify:
- * @data: Callback data passed to g_object_add_toggle_ref()
- * @object: The object on which g_object_add_toggle_ref() was called.
- * @is_last_ref: %TRUE if the toggle reference is now the last reference to the object. %FALSE if the toggle reference was the last reference and there are now other references.
- *
- * A callback function used for notification when the state
- * of a toggle reference changes. See g_object_add_toggle_ref().
- */
-
-
-/**
- * G_TYPE_PARAM_INT64:
- *
- * The #GType of #GParamSpecInt64.
  */
 
 
@@ -13577,6 +9963,20 @@
  *
  * Returns: An identifier (never 0) that an be used with
  * Since: 2.26
+ */
+
+
+/**
+ * g_action_group_get_action_enabled:
+ * @action_group: a #GActionGroup
+ * @action_name: the name of the action to query
+ *
+ * Checks if the named action within @action_group is currently enabled.
+ * An action must be enabled in order to be activated or in order to
+ * have its state changed from outside callers.
+ *
+ * Returns: whether or not the action is currently enabled
+ * Since: 2.28
  */
 
 
@@ -13639,6 +10039,13 @@
 
 
 /**
+ * GZlibCompressor:
+ *
+ * Zlib decompression
+ */
+
+
+/**
  * g_dbus_server_get_guid:
  * @server: A #GDBusServer.
  *
@@ -13687,30 +10094,6 @@
  * @monitor: the object on which the signal is emitted
  *
  * Emitted when the unix mount points have changed.
- */
-
-
-/**
- * GFileAttributeInfo:
- * @name: the name of the attribute.
- * @type: the #GFileAttributeType type of the attribute.
- * @flags: a set of #GFileAttributeInfoFlags.
- *
- * Information about a specific attribute.
- */
-
-
-/**
- * GOptionFlags:
- * @G_OPTION_FLAG_HIDDEN: The option doesn't appear in <option>--help</option> output.
- * @G_OPTION_FLAG_IN_MAIN: The option appears in the main section of the <option>--help</option> output, even if it is defined in a group.
- * @G_OPTION_FLAG_REVERSE: For options of the %G_OPTION_ARG_NONE kind, this flag indicates that the sense of the option is reversed.
- * @G_OPTION_FLAG_NO_ARG: For options of the %G_OPTION_ARG_CALLBACK kind, this flag indicates that the callback does not take any argument (like a %G_OPTION_ARG_NONE option). Since 2.8
- * @G_OPTION_FLAG_FILENAME: For options of the %G_OPTION_ARG_CALLBACK kind, this flag indicates that the argument should be passed to the callback in the GLib filename encoding rather than UTF-8. Since 2.8
- * @G_OPTION_FLAG_OPTIONAL_ARG: For options of the %G_OPTION_ARG_CALLBACK kind, this flag indicates that the argument supply is optional. If no argument is given then data of %GOptionParseFunc will be set to NULL. Since 2.8
- * @G_OPTION_FLAG_NOALIAS: This flag turns off the automatic conflict resolution which prefixes long option names with <literal>groupname-</literal> if there is a conflict. This option should only be used in situations where aliasing is necessary to model some legacy commandline interface. It is not safe to use this option, unless all option groups are under your direct control. Since 2.8.
- *
- * Flags which modify individual options.
  */
 
 
@@ -13781,16 +10164,6 @@
 
 
 /**
- * G_FILE_ATTRIBUTE_SELINUX_CONTEXT:
- *
- * A key in the "selinux" namespace for getting the file's SELinux
- * context. Corresponding #GFileAttributeType is
- * %G_FILE_ATTRIBUTE_TYPE_STRING. Note that this attribute is only
- * available if GLib has been built with SELinux support.
- */
-
-
-/**
  * g_io_extension_point_get_required_type:
  * @extension_point: a #GIOExtensionPoint
  *
@@ -13817,16 +10190,6 @@
 
 
 /**
- * GConnectFlags:
- * @G_CONNECT_AFTER: whether the handler should be called before or after the default handler of the signal.
- * @G_CONNECT_SWAPPED: whether the instance and data should be swapped when calling the handler.
- *
- * The connection flags are used to specify the behaviour of a signal's
- * connection.
- */
-
-
-/**
  * g_file_info_set_attribute_uint64:
  * @info: a #GFileInfo.
  * @attribute: a file attribute key.
@@ -13834,13 +10197,6 @@
  *
  * Sets the @attribute to contain the given @attr_value,
  * if possible.
- */
-
-
-/**
- * G_VARIANT_TYPE_BYTE:
- *
- * The type of an integer value that can range from 0 to 255.
  */
 
 
@@ -13870,20 +10226,155 @@
 
 
 /**
- * GFileDescriptorBasedIface:
- * @g_iface: The parent interface.
+ * SECTION:gsimpleasyncresul:
+ * @short_description: Simple asynchronous results implementation
+ * @include: gio/gio.h
+ * @see_also: #GAsyncResult
  *
- *
- */
-
-
-/**
- * G_IS_PARAM_SPEC_UCHAR:
- * @pspec: a valid #GParamSpec instance
- *
- * Checks whether the given #GParamSpec is of type %G_TYPE_PARAM_UCHAR.
- *
- * Returns: %TRUE on success.
+ * Implements #GAsyncResult for simple cases. Most of the time, this
+ * will be all an application needs, and will be used transparently.
+ * Because of this, #GSimpleAsyncResult is used throughout GIO for
+ * handling asynchronous functions.
+ * GSimpleAsyncResult handles #GAsyncReadyCallback<!-- -->s, error
+ * reporting, operation cancellation and the final state of an operation,
+ * completely transparent to the application. Results can be returned
+ * as a pointer e.g. for functions that return data that is collected
+ * asynchronously, a boolean value for checking the success or failure
+ * of an operation, or a #gssize for operations which return the number
+ * of bytes modified by the operation; all of the simple return cases
+ * are covered.
+ * Most of the time, an application will not need to know of the details
+ * of this API; it is handled transparently, and any necessary operations
+ * are handled by #GAsyncResult's interface. However, if implementing a
+ * new GIO module, for writing language bindings, or for complex
+ * applications that need better control of how asynchronous operations
+ * are completed, it is important to understand this functionality.
+ * GSimpleAsyncResults are tagged with the calling function to ensure
+ * that asynchronous functions and their finishing functions are used
+ * together correctly.
+ * To create a new #GSimpleAsyncResult, call g_simple_async_result_new().
+ * If the result needs to be created for a #GError, use
+ * g_simple_async_result_new_from_error() or
+ * g_simple_async_result_new_take_error(). If a #GError is not available
+ * (e.g. the asynchronous operation's doesn't take a #GError argument),
+ * but the result still needs to be created for an error condition, use
+ * g_simple_async_result_new_error() (or g_simple_async_result_set_error_va()
+ * if your application or binding requires passing a variable argument list
+ * directly), and the error can then be propagated through the use of
+ * g_simple_async_result_propagate_error().
+ * An asynchronous operation can be made to ignore a cancellation event by
+ * calling g_simple_async_result_set_handle_cancellation() with a
+ * #GSimpleAsyncResult for the operation and %FALSE. This is useful for
+ * operations that are dangerous to cancel, such as close (which would
+ * cause a leak if cancelled before being run).
+ * GSimpleAsyncResult can integrate into GLib's event loop, #GMainLoop,
+ * or it can use #GThread<!-- -->s if available.
+ * g_simple_async_result_complete() will finish an I/O task directly
+ * from the point where it is called. g_simple_async_result_complete_in_idle()
+ * will finish it from an idle handler in the <link
+ * linkend="g-main-context-push-thread-default">thread-default main
+ * context</link>. g_simple_async_result_run_in_thread() will run the
+ * job in a separate thread and then deliver the result to the
+ * thread-default main context.
+ * To set the results of an asynchronous function,
+ * g_simple_async_result_set_op_res_gpointer(),
+ * g_simple_async_result_set_op_res_gboolean(), and
+ * g_simple_async_result_set_op_res_gssize()
+ * are provided, setting the operation's result to a gpointer, gboolean, or
+ * gssize, respectively.
+ * Likewise, to get the result of an asynchronous function,
+ * g_simple_async_result_get_op_res_gpointer(),
+ * g_simple_async_result_get_op_res_gboolean(), and
+ * g_simple_async_result_get_op_res_gssize() are
+ * provided, getting the operation's result as a gpointer, gboolean, and
+ * gssize, respectively.
+ * For the details of the requirements implementations must respect, see
+ * #GAsyncResult.  A typical implementation of an asynchronous operation
+ * using GSimpleAsyncResult looks something like this:
+ * |[
+ * static void
+ * baked_cb (Cake    *cake,
+ * gpointer user_data)
+ * {
+ * /&ast; In this example, this callback is not given a reference to the cake, so
+ * &ast; the GSimpleAsyncResult has to take a reference to it.
+ * &ast;/
+ * GSimpleAsyncResult *result = user_data;
+ * if (cake == NULL)
+ * g_simple_async_result_set_error (result,
+ * BAKER_ERRORS,
+ * BAKER_ERROR_NO_FLOUR,
+ * "Go to the supermarket");
+ * else
+ * g_simple_async_result_set_op_res_gpointer (result,
+ * g_object_ref (cake),
+ * g_object_unref);
+ * /&ast; In this example, we assume that baked_cb is called as a callback from
+ * &ast; the mainloop, so it's safe to complete the operation synchronously here.
+ * &ast; If, however, _baker_prepare_cake () might call its callback without
+ * &ast; first returning to the mainloop — inadvisable, but some APIs do so —
+ * &ast; we would need to use g_simple_async_result_complete_in_idle().
+ * &ast;/
+ * g_simple_async_result_complete (result);
+ * g_object_unref (result);
+ * }
+ * void
+ * baker_bake_cake_async (Baker              *self,
+ * guint               radius,
+ * GAsyncReadyCallback callback,
+ * gpointer            user_data)
+ * {
+ * GSimpleAsyncResult *simple;
+ * Cake               *cake;
+ * if (radius < 3)
+ * {
+ * g_simple_async_report_error_in_idle (G_OBJECT (self),
+ * callback,
+ * user_data,
+ * BAKER_ERRORS,
+ * BAKER_ERROR_TOO_SMALL,
+ * "%ucm radius cakes are silly",
+ * radius);
+ * return;
+ * }
+ * simple = g_simple_async_result_new (G_OBJECT (self),
+ * callback,
+ * user_data,
+ * baker_bake_cake_async);
+ * cake = _baker_get_cached_cake (self, radius);
+ * if (cake != NULL)
+ * {
+ * g_simple_async_result_set_op_res_gpointer (simple,
+ * g_object_ref (cake),
+ * g_object_unref);
+ * g_simple_async_result_complete_in_idle (simple);
+ * g_object_unref (simple);
+ * /&ast; Drop the reference returned by _baker_get_cached_cake(); the
+ * &ast; GSimpleAsyncResult has taken its own reference.
+ * &ast;/
+ * g_object_unref (cake);
+ * return;
+ * }
+ * _baker_prepare_cake (self, radius, baked_cb, user_data);
+ * }
+ * Cake *
+ * baker_bake_cake_finish (Baker        *self,
+ * GAsyncResult *result,
+ * GError      **error)
+ * {
+ * GSimpleAsyncResult *simple;
+ * Cake               *cake;
+ * g_return_val_if_fail (g_simple_async_result_is_valid (result,
+ * G_OBJECT (self),
+ * baker_bake_cake_async),
+ * NULL);
+ * simple = (GSimpleAsyncResult *) result;
+ * if (g_simple_async_result_propagate_error (simple, error))
+ * return NULL;
+ * cake = CAKE (g_simple_async_result_get_op_res_gpointer (simple));
+ * return g_object_ref (cake);
+ * }
+ * ]|
  */
 
 
@@ -13947,28 +10438,6 @@
  *
  * Returns: (transfer full) (element-type utf8): a %NULL-terminated array of content types or %NULL on error.
  * Since: 2.18
- */
-
-
-/**
- * GActionGroupInterface:
- * @has_action: the virtual function pointer for g_action_group_has_action()
- * @list_actions: the virtual function pointer for g_action_group_list_actions()
- * @get_parameter_type: the virtual function pointer for g_action_group_get_parameter_type()
- * @get_state_type: the virtual function pointer for g_action_group_get_state_type()
- * @get_state_hint: the virtual function pointer for g_action_group_get_state_hint()
- * @get_enabled: the virtual function pointer for g_action_group_get_enabled()
- * @get_state: the virtual function pointer for g_action_group_get_state()
- * @set_state: the virtual function pointer for g_action_group_set_state()
- * @activate: the virtual function pointer for g_action_group_activate()
- * @action_added: the class closure for the action-added signal
- * @action_removed: the class closure for the action-removed signal
- * @action_enabled_changed: the class closure for the action-enabled-changed signal
- * @action_state_changed: the class closure for the action-enabled-changed signal
- *
- * The virtual function table for #GActionGroup.
- *
- * Since: 2.26
  */
 
 
@@ -14052,56 +10521,12 @@
 
 
 /**
- * G_TYPE_ULONG:
- *
- * The fundamental type corresponding to #gulong.
- */
-
-
-/**
  * SECTION:gdbusmessag:
  * @short_description: D-Bus Message
  * @include: gio/gio.h
  *
  * A type for representing D-Bus messages that can be sent or received
  * on a #GDBusConnection.
- */
-
-
-/**
- * GParamSpecEnum:
- * @parent_instance: private #GParamSpec portion
- * @enum_class: the #GEnumClass for the enum
- * @default_value: default value for the property specified
- *
- * A #GParamSpec derived structure that contains the meta data for enum
- * properties.
- */
-
-
-/**
- * G_PARAM_USER_SHIFT:
- *
- * Minimum shift count to be used for user defined flags, to be stored in
- * #GParamSpec.flags. The maximum allowed is 30 + G_PARAM_USER_SHIFT.
- */
-
-
-/**
- * GStrv:
- *
- * A C representable type name for #G_TYPE_STRV.
- */
-
-
-/**
- * G_TYPE_FROM_INTERFACE:
- * @g_iface: Location of a valid #GTypeInterface structure.
- *
- * Get the type identifier from a given @interface structure.
- * This macro should only be used in type implementations.
- *
- * Returns: the #GType
  */
 
 
@@ -14127,19 +10552,6 @@
 
 
 /**
- * GClosureMarshal:
- * @closure: the #GClosure to which the marshaller belongs
- * @return_value: a #GValue to store the return value. May be %NULL if the callback of @closure doesn't return a value.
- * @n_param_values: the length of the @param_values array
- * @param_values: an array of #GValue<!-- -->s holding the arguments on which to invoke the callback of @closure
- * @invocation_hint: the invocation hint given as the last argument to g_closure_invoke()
- * @marshal_data: additional data specified when registering the marshaller, see g_closure_set_marshal() and g_closure_set_meta_marshal()
- *
- * The type used for marshaller functions.
- */
-
-
-/**
  * g_file_enumerator_close_async:
  * @enumerator: a #GFileEnumerator.
  * @io_priority: the <link linkend="io-priority">I/O priority</link> of the request.
@@ -14152,17 +10564,6 @@
  * triggering the cancellable object from another thread. If the operation
  * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned in
  * g_file_enumerator_close_finish().
- */
-
-
-/**
- * G_IS_PARAM_SPEC_OVERRIDE:
- * @pspec: a #GParamSpec
- *
- * Checks whether the given #GParamSpec is of type %G_TYPE_PARAM_OVERRIDE.
- *
- * Since: 2.4
- * Returns: %TRUE on success.
  */
 
 
@@ -14219,24 +10620,6 @@
 
 
 /**
- * G_OBJECT_CLASS_TYPE:
- * @class: a valid #GObjectClass
- *
- * Get the type id of a class structure.
- *
- * Returns: Type id of @class.
- */
-
-
-/**
- * G_PRIORITY_HIGH:
- *
- * Use this for high priority event sources.
- * It is not used within GLib or GTK+.
- */
-
-
-/**
  * g_app_launch_context_get_display:
  * @context: a #GAppLaunchContext
  * @info: a #GAppInfo
@@ -14262,13 +10645,56 @@
 
 
 /**
- * g_node_append_data:
- * @parent: the #GNode to place the new #GNode under
- * @data: the data for the new #GNode
+ * SECTION:gperiodi:
+ * @title: GPeriodic
+ * @short_description: a periodic event clock
  *
- * Inserts a new #GNode as the last child of the given parent.
+ * #GPeriodic is a periodic event clock that fires a configurable number
+ * of times per second and is capable of being put into synch with an
+ * external time source.
+ * A number of #GPeriodicTickFunc<!-- -->s are registered with
+ * g_periodic_add() and are called each time the clock "ticks".
+ * performed) that are handled in a "repair" phase that follows all the
+ * tick functions having been run.  It is also possible to report damage
+ * while the clock is not running, in which case the rate of repairs
+ * will be rate limited as if the clock were running.
+ * #GPeriodic has a configurable priority range consisting of a high and
+ * low value.  Other sources with a priority higher than the high value
+ * might starve #GPeriodic and sources with the priority lower than the
+ * low value may be starved by #GPeriodic.
+ * #GPeriodic will engage in dynamic scheduling with respect to sources
+ * that have their priorities within the high to low range.  A given
+ * #GPeriodic will ensure that the events dispatched from itself are
+ * generally using less than 50% of the CPU (on average) if other tasks
+ * are pending.  If no other sources within the range are pending then
+ * #GPeriodic will use up to all of the available CPU (which can lead to
+ * starvation of lower-priority sources, as mentioned above).  The 50%
+ * figure is entirely arbitrary and may change or become configurable in
+ * the future.
+ * For example, if a #GPeriodic has been set to run at 10Hz and a
+ * particular iteration uses 140ms of time, then 2 ticks will be
+ * "skipped" to give other sources a chance to run (ie: the next tick
+ * will occur 300ms later rather than 100ms later, giving 160ms of time
+ * for other sources).
+ * This means that the high priority value for #GPeriodic should be set
+ * quite high (above anything else) and the low priority value for
+ * #GPeriodic should be set lower than everything except true "idle"
+ * truly idle).
+ * #GPeriodic generally assumes that although the things attached to it
+ * may be poorly behaved in terms of non-yielding behaviour (either
+ * individually or in aggregate), the other sources on the main loop
+ * should be "well behaved".  Other sources should try not to block the
+ * CPU for a substantial portion of the periodic interval.
+ * The sources attached to a #GPeriodic are permitted to be somewhat
+ * less well-behaved because they are generally rendering the UI for the
+ * user (which should be done smoothly) and also because they will be
+ * throttled by #GPeriodic.
+ * #GPeriodic is intended to be used as a paint clock for managing
+ * geometry updates and painting of windows.
  *
- * Returns: the new #GNode
+ * The tick functions can report "damage" (ie: updates that need to be
+ * Handlers (ie: things that you want to run only when the program is
+ * Since: 2.28
  */
 
 
@@ -14319,21 +10745,6 @@
 
 
 /**
- * GDBusInterfaceInfo:
- * @ref_count: The reference count or -1 if statically allocated.
- * @name: The name of the D-Bus interface, e.g. "org.freedesktop.DBus.Properties".
- * @methods: A pointer to a %NULL-terminated array of pointers to #GDBusMethodInfo structures or %NULL if there are no methods.
- * @signals: A pointer to a %NULL-terminated array of pointers to #GDBusSignalInfo structures or %NULL if there are no signals.
- * @properties: A pointer to a %NULL-terminated array of pointers to #GDBusPropertyInfo structures or %NULL if there are no properties.
- * @annotations: A pointer to a %NULL-terminated array of pointers to #GDBusAnnotationInfo structures or %NULL if there are no annotations.
- *
- * Information about a D-Bus interface.
- *
- * Since: 2.26
- */
-
-
-/**
  * g_permission_release:
  * @permission: a #GPermission instance
  * @cancellable: a #GCancellable, or %NULL
@@ -14353,14 +10764,6 @@
  * the non-blocking version.
  *
  * Since: 2.26
- */
-
-
-/**
- * G_VARIANT_TYPE_UINT16:
- *
- * The type of an integer value that can range from 0 to 65535.
- * There were about this many people living in Toronto in the 1870s.
  */
 
 
@@ -14490,17 +10893,6 @@
 
 
 /**
- * GDBusSendMessageFlags:
- * @G_DBUS_SEND_MESSAGE_FLAGS_NONE: No flags set.
- * @G_DBUS_SEND_MESSAGE_FLAGS_PRESERVE_SERIAL: Do not automatically assign a serial number from the #GDBusConnection object when sending a message.
- *
- * Flags used when sending #GDBusMessage<!-- -->s on a #GDBusConnection.
- *
- * Since: 2.26
- */
-
-
-/**
  * g_settings_reset:
  * @settings: a #GSettings object
  * @key: the name of a key
@@ -14509,19 +10901,6 @@
  * This call resets the key, as much as possible, to its default value.
  * That might the value specified in the schema or the one set by the
  * administrator.
- */
-
-
-/**
- * G_FILE_ATTRIBUTE_STANDARD_DESCRIPTION:
- *
- * A key in the "standard" namespace for getting the description of the file.
- * The description is a utf8 string that describes the file, generally containing
- * the filename, but can also contain furter information. Example descriptions
- * could be "filename (on hostname)" for a remote file or "filename (in trash)"
- * for a file in the trash. This is useful for instance as the window title
- * when displaying a directory or for a bookmarks menu.
- * Corresponding #GFileAttributeType is %G_FILE_ATTRIBUTE_TYPE_STRING.
  */
 
 
@@ -14614,15 +10993,6 @@
 
 
 /**
- * G_TYPE_PARAM_VARIANT:
- *
- * The #GType of #GParamSpecVariant.
- *
- * Since: 2.26
- */
-
-
-/**
  * g_settings_set_string:
  * @settings: a #GSettings object
  * @key: the name of the key to set
@@ -14633,19 +11003,6 @@
  * A convenience variant of g_settings_set() for strings.
  * It is a programmer error to give a @key that isn't specified as
  * having a string type in the schema for @settings.
- *
- * Since: 2.26
- */
-
-
-/**
- * GBusNameAppearedCallback:
- * @connection: The #GDBusConnection the name is being watched on.
- * @name: The name being watched.
- * @name_owner: Unique name of the owner of the name being watched.
- * @user_data: User data passed to g_bus_watch_name().
- *
- * Invoked when the name being watched is known to have to have a owner.
  *
  * Since: 2.26
  */
@@ -14665,11 +11022,12 @@
 
 
 /**
- * GVolumeMonitor::volume-removed:
- * @volume_monitor: The volume monitor emitting the signal.
- * @volume: a #GVolume that was removed.
+ * g_buffered_output_stream_get_buffer_size:
+ * @stream: a #GBufferedOutputStream.
  *
- * Emitted when a mountable volume is removed from the system.
+ * Gets the size of the buffer in the @stream.
+ *
+ * Returns: the current size of the buffer.
  */
 
 
@@ -14683,30 +11041,7 @@
  * actions in the groupb
  *
  * Returns: (transfer full): a %NULL-terminated array of the names of the
- * Since: 2.26
- */
-
-
-/**
- * GUserDirectory:
- * @G_USER_DIRECTORY_DESKTOP: the user's Desktop directory
- * @G_USER_DIRECTORY_DOCUMENTS: the user's Documents directory
- * @G_USER_DIRECTORY_DOWNLOAD: the user's Downloads directory
- * @G_USER_DIRECTORY_MUSIC: the user's Music directory
- * @G_USER_DIRECTORY_PICTURES: the user's Pictures directory
- * @G_USER_DIRECTORY_PUBLIC_SHARE: the user's shared directory
- * @G_USER_DIRECTORY_TEMPLATES: the user's Templates directory
- * @G_USER_DIRECTORY_VIDEOS: the user's Movies directory
- * @G_USER_N_DIRECTORIES: the number of enum values
- *
- * These are logical ids for special directories which are defined
- * depending on the platform used. You should use g_get_user_special_dir()
- * to retrieve the full path associated to the logical id.
- * The #GUserDirectory enumeration can be extended at later date. Not
- * every platform has a directory for every logical id in this
- * enumeration.
- *
- * Since: 2.14
+ * Since: 2.28
  */
 
 
@@ -14742,33 +11077,6 @@
  * References a file attribute matcher.
  *
  * Returns: a #GFileAttributeMatcher.
- */
-
-
-/**
- * GFilenameCompleter:
- *
- * Completes filenames based on files that exist within the file system.
- */
-
-
-/**
- * GDBusSignalInfo:
- * @ref_count: The reference count or -1 if statically allocated.
- * @name: The name of the D-Bus signal, e.g. "NameOwnerChanged".
- * @args: A pointer to a %NULL-terminated array of pointers to #GDBusArgInfo structures or %NULL if there are no arguments.
- * @annotations: A pointer to a %NULL-terminated array of pointers to #GDBusAnnotationInfo structures or %NULL if there are no annotations.
- *
- * Information about a signal on a D-Bus interface.
- *
- * Since: 2.26
- */
-
-
-/**
- * G_SIGNAL_MATCH_MASK:
- *
- * A mask for all #GSignalMatchType bits.
  */
 
 
@@ -14873,7 +11181,7 @@
  * The type of the parameter that must be given when activating the
  * action.
  *
- * Since: 2.26
+ * Since: 2.28
  */
 
 
@@ -14890,23 +11198,6 @@
  * g_proxy_connect() or g_proxy_connect_async().
  *
  * Returns: %TRUE if hostname resolution is supported.
- * Since: 2.26
- */
-
-
-/**
- * g_action_group_get_state:
- * @action_group: a #GActionGroup
- * @action_name: the name of the action to query
- *
- * Queries the current state of the named action within @action_group.
- * If the action is not stateful then %NULL will be returned.  If the
- * action is stateful then the type of the return value is the type
- * given by g_action_group_get_state_type().
- * The return value (if non-%NULL) should be freed with
- * g_variant_unref() when it is no longer required.
- *
- * Returns: (allow-none): the current state of the action
  * Since: 2.26
  */
 
@@ -14936,32 +11227,11 @@
 
 
 /**
- * G_TYPE_IS_ENUM:
- * @type: a #GType ID.
- *
- * Checks whether @type "is a" %G_TYPE_ENUM.
- *
- * Returns: %TRUE if @type "is a" %G_TYPE_ENUM.
- */
-
-
-/**
  * g_mount_operation_set_username:
  * @op: a #GMountOperation.
  * @username: input username.
  *
  * Sets the user name within @op to @username.
- */
-
-
-/**
- * GSourceCallbackFuncs:
- * @ref: Called when a reference is added to the callback object
- * @unref: Called when a reference to the callback object is dropped
- * @get: Called to extract the callback function and data from the callback object.
- *
- * The <structname>GSourceCallbackFuncs</structname> struct contains
- * functions for managing callback objects.
  */
 
 
@@ -14983,35 +11253,6 @@
  * will need to emit the #GMount::changed signal on @mount manually.
  *
  * Since: 2.20
- */
-
-
-/**
- * GFileInfo:
- *
- * Stores information about a file system object referenced by a #GFile.
- */
-
-
-/**
- * G_OBJECT:
- * @object: Object which is subject to casting.
- *
- * Casts a #GObject or derived pointer into a (GObject*) pointer.
- * Depending on the current debugging level, this function may invoke
- * certain runtime checks to identify invalid casts.
- */
-
-
-/**
- * GBaseFinalizeFunc:
- * @g_class: The #GTypeClass structure to finalize.
- *
- * A callback function used by the type system to finalize those portions
- * of a derived types class structure that were setup from the corresponding
- * GBaseInitFunc() function. Class finalization basically works the inverse
- * way in which class intialization is performed.
- * See GClassInitFunc() for a discussion of the class intialization process.
  */
 
 
@@ -15045,17 +11286,6 @@
  *
  * Adds a new attribute with @name to the @list, setting
  * its @type and @flags.
- */
-
-
-/**
- * G_NODE_IS_ROOT:
- * @node: a #GNode
- *
- * Returns %TRUE if a #GNode is the root of a tree.
- * (i.e. it has no parent or siblings)
- *
- * Returns: %TRUE if the #GNode is the root of a tree
  */
 
 
@@ -15104,26 +11334,6 @@
  * and #GAsyncResult data returned in the @callback.
  *
  * Deprecated: 2.22: Use g_mount_eject_with_operation() instead.
- */
-
-
-/**
- * G_VALUE_HOLDS_CHAR:
- * @value: a valid #GValue structure
- *
- * Checks whether the given #GValue can hold values of type %G_TYPE_CHAR.
- *
- * Returns: %TRUE on success.
- */
-
-
-/**
- * G_TYPE_IS_FUNDAMENTAL:
- * @type: A #GType value.
- *
- * Checks if @type is a fundamental type.
- *
- * Returns: %TRUE on success.
  */
 
 
@@ -15243,13 +11453,6 @@
 
 
 /**
- * GFileEnumerator:
- *
- * A per matched file iterator.
- */
-
-
-/**
  * g_resolver_set_default:
  * @resolver: the new default #GResolver
  *
@@ -15313,23 +11516,13 @@
 
 
 /**
- * G_VALUE_HOLDS_UINT:
- * @value: a valid #GValue structure
- *
- * Checks whether the given #GValue can hold values of type %G_TYPE_UINT.
- *
- * Returns: %TRUE on success.
- */
-
-
-/**
  * g_action_get_name:
  * @action: a #GAction
  *
  * Queries the name of @action.
  *
  * Returns: the name of the action
- * Since: 2.26
+ * Since: 2.28
  */
 
 
@@ -15364,25 +11557,6 @@
  * @filter_id: an identifier obtained from g_dbus_connection_add_filter()
  *
  * Removes a filter.
- *
- * Since: 2.26
- */
-
-
-/**
- * G_PARAM_SPEC_GTYPE:
- * @pspec: a #GParamSpec
- *
- * Casts a #GParamSpec into a #GParamSpecGType.
- *
- * Since: 2.10
- */
-
-
-/**
- * G_TYPE_ERROR:
- *
- * The #GType for a boxed type holding a #GError.
  *
  * Since: 2.26
  */
@@ -15459,14 +11633,6 @@
 
 
 /**
- * G_VARIANT_TYPE_BASIC:
- *
- * An indefinite type that is a supertype of every basic (ie:
- * non-container) type.
- */
-
-
-/**
  * g_dbus_connection_call:
  * @connection: A #GDBusConnection.
  * @bus_name: A unique or well-known bus name or %NULL if @connection is not a message bus connection.
@@ -15476,7 +11642,7 @@
  * @parameters: A #GVariant tuple with parameters for the method or %NULL if not passing parameters.
  * @reply_type: The expected type of the reply, or %NULL.
  * @flags: Flags from the #GDBusCallFlags enumeration.
- * @timeout_msec: The timeout in milliseconds or -1 to use the default timeout.
+ * @timeout_msec: The timeout in milliseconds, -1 to use the default timeout or %G_MAXINT for no timeout.
  * @cancellable: A #GCancellable or %NULL.
  * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL if you don't care about the result of the method invocation.
  * @user_data: The data to pass to @callback.
@@ -15533,15 +11699,6 @@
 
 
 /**
- * GPid:
- *
- * A type which is used to hold a process identification.
- * On UNIX, processes are identified by a process id (an integer),
- * while Windows uses process handles (which are pointers).
- */
-
-
-/**
  * g_filter_input_stream_get_base_stream:
  * @stream: a #GFilterInputStream.
  *
@@ -15562,25 +11719,9 @@
 
 
 /**
- * G_IS_OBJECT_CLASS:
- * @class: a #GObjectClass
- *
- * Checks whether @class "is a" valid #GObjectClass structure of type
- * %G_TYPE_OBJECT or derived.
- */
-
-
-/**
- * GProxyResolver:
- *
- * Interface that can be used to resolve proxy address.
- */
-
-
-/**
  * SECTION:gdbuserro:
  * @title: GDBusError
- * @short_description: Mapping D-Bus errors to and from #GError
+ * @short_description: Mapping D-Bus errors to and from GError
  * @include: gio/gio.h
  *
  * All facilities that return errors from remote methods (such as
@@ -15721,13 +11862,6 @@
 
 
 /**
- * G_TYPE_PARAM_FLOAT:
- *
- * The #GType of #GParamSpecFloat.
- */
-
-
-/**
  * g_socket_client_connect_to_host_async:
  * @client: a #GTcpClient
  * @host_and_port: the name and optionally the port of the host to connect to
@@ -15746,30 +11880,12 @@
 
 
 /**
- * GInitiallyUnownedClass:
- *
- * The class structure for the <structname>GInitiallyUnowned</structname> type.
- */
-
-
-/**
  * g_file_info_set_content_type:
  * @info: a #GFileInfo.
  * @content_type: a content type. See #GContentType.
  *
  * Sets the content type attribute for a given #GFileInfo.
  * See %G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE.
- */
-
-
-/**
- * GAppInfoCreateFlags:
- * @G_APP_INFO_CREATE_NONE: No flags.
- * @G_APP_INFO_CREATE_NEEDS_TERMINAL: Application opens in a terminal window.
- * @G_APP_INFO_CREATE_SUPPORTS_URIS: Application supports URI arguments.
- * @G_APP_INFO_CREATE_SUPPORTS_STARTUP_NOTIFICATION: Application supports startup notification. Since 2.26
- *
- * Flags used when creating a #GAppInfo.
  */
 
 
@@ -15801,22 +11917,6 @@
  *
  * Returns: A new #GDBusMessage or %NULL if @error is set. Free with
  * Since: 2.26
- */
-
-
-/**
- * G_TYPE_CLASS_GET_PRIVATE:
- * @klass: the class of a type deriving from @private_type.
- * @g_type: the type identifying which private data to retrieve.
- * @c_type: The C type for the private structure.
- *
- * Gets the private class structure for a particular type.
- * The private structure must have been registered in the
- * get_type() function with g_type_add_class_private().
- * This macro should only be used in type implementations.
- *
- * Since: 2.24
- * Returns: a pointer to the private data structure.
  */
 
 
@@ -15873,28 +11973,22 @@
 
 
 /**
- * G_PARAM_SPEC_POINTER:
- * @pspec: a valid #GParamSpec instance
+ * g_file_enumerator_close_finish:
+ * @enumerator: a #GFileEnumerator.
+ * @result: a #GAsyncResult.
+ * @error: a #GError location to store the error occuring, or %NULL to ignore.
  *
- * Casts a #GParamSpec instance into a #GParamSpecPointer.
- */
-
-
-/**
- * g_application_quit_with_data:
- * @application: a #GApplication
- * @platform_data: (allow-none): platform-specific data
+ * Finishes closing a file enumerator, started from g_file_enumerator_close_async().
+ * If the file enumerator was already closed when g_file_enumerator_close_async()
+ * was called, then this function will report %G_IO_ERROR_CLOSED in @error, and
+ * return %FALSE. If the file enumerator had pending operation when the close
+ * operation was started, then this function will report %G_IO_ERROR_PENDING, and
+ * return %FALSE.  If @cancellable was not %NULL, then the operation may have been
+ * cancelled by triggering the cancellable object from another thread. If the operation
+ * was cancelled, the error %G_IO_ERROR_CANCELLED will be set, and %FALSE will be
+ * returned.
  *
- * Request that the application quits.
- * This function has different behavior depending on whether @application
- * is acting as a proxy for another process.  In the normal case where
- * the current process is hosting the application, the default
- * implementation will quit the main loop created by g_application_run().
- * If @application is a proxy, then the remote process will be asked
- * to quit.
- *
- * Returns: %TRUE if the application accepted the request, %FALSE otherwise
- * Since: 2.26
+ * Returns: %TRUE if the close operation has finished successfully.
  */
 
 
@@ -15904,7 +11998,7 @@
  * The name of the action.  This is mostly meaningful for identifying
  * the action once it has been added to a #GSimpleActionGroup.
  *
- * Since: 2.26
+ * Since: 2.28
  */
 
 
@@ -15921,17 +12015,6 @@
 
 
 /**
- * GSimpleAsyncThreadFunc:
- * @res: a #GSimpleAsyncResult.
- * @object: a #GObject.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
- *
- * Simple thread function that runs an asynchronous operation and
- * checks for cancellation.
- */
-
-
-/**
  * g_filter_input_stream_get_close_base_stream:
  * @stream: a #GFilterInputStream.
  *
@@ -15943,23 +12026,11 @@
 
 
 /**
- * GDBusMessageType:
- * @G_DBUS_MESSAGE_TYPE_INVALID: Message is of invalid type.
- * @G_DBUS_MESSAGE_TYPE_METHOD_CALL: Method call.
- * @G_DBUS_MESSAGE_TYPE_METHOD_RETURN: Method reply.
- * @G_DBUS_MESSAGE_TYPE_ERROR: Error reply.
- * @G_DBUS_MESSAGE_TYPE_SIGNAL: Signal emission.
+ * GPeriodic:
  *
- * Message types used in #GDBusMessage.
+ * #GPeriodic is an opaque structure type.
  *
- * Since: 2.26
- */
-
-
-/**
- * G_VARIANT_TYPE_INT16:
- *
- * The type of an integer value that can range from -32768 to 32767.
+ * Since: 2.28
  */
 
 
@@ -16012,50 +12083,12 @@
 
 
 /**
- * g_hash_table_freeze:
- * @hash_table: a #GHashTable
- *
- * This function is deprecated and will be removed in the next major
- * release of GLib. It does nothing.
- */
-
-
-/**
- * G_VARIANT_TYPE_OBJECT_PATH:
- *
- * The type of a DBus object reference.  These are strings of a
- * specific format used to identify objects at a given destination on
- * the bus.
- * If you are not interacting with DBus, then there is no reason to make
- * use of this type.  If you are, then the DBus specification contains a
- * precise description of valid object paths.
- */
-
-
-/**
  * g_simple_async_result_get_source_tag: (skip)
  * @simple: a #GSimpleAsyncResult.
  *
  * Gets the source tag for the #GSimpleAsyncResult.
  *
  * Returns: a #gpointer to the source object for the #GSimpleAsyncResult.
- */
-
-
-/**
- * G_FILE_ATTRIBUTE_OWNER_USER_REAL:
- *
- * A key in the "owner" namespace for getting the real name of the
- * user that owns the file. Corresponding #GFileAttributeType is
- * %G_FILE_ATTRIBUTE_TYPE_STRING.
- */
-
-
-/**
- * GObject:
- *
- * All the fields in the <structname>GObject</structname> structure are private
- * to the #GObject implementation and should never be accessed directly.
  */
 
 
@@ -16074,30 +12107,14 @@
 
 
 /**
- * g_dbus_message_get_unix_fd_list:
- * @message: A #GDBusMessage.
+ * g_threaded_socket_service_new:
+ * @max_threads: the maximal number of threads to execute concurrently handling incoming clients, -1 means no limit
  *
- * Gets the UNIX file descriptors associated with @message, if any.
- * This method is only available on UNIX.
- * associated. Do not free, this object is owned by @message.
+ * Creates a new #GThreadedSocketService with no listeners. Listeners
+ * must be added with g_socket_service_add_listeners().
  *
- * Returns: (transfer none): A #GUnixFDList or %NULL if no file descriptors are
- * Since: 2.26
- */
-
-
-/**
- * G_IMPLEMENT_INTERFACE:
- * @TYPE_IFACE: The #GType of the interface to add
- * @iface_init: The interface init function
- *
- * A convenience macro to ease interface addition in the @_C_ section
- * of G_DEFINE_TYPE_WITH_CODE() or G_DEFINE_ABSTRACT_TYPE_WITH_CODE().
- * See G_DEFINE_TYPE_EXTENDED() for an example.
- * Note that this macro can only be used together with the G_DEFINE_TYPE_*
- * macros, since it depends on variable names from those macros.
- *
- * Since: 2.4
+ * Returns: a new #GSocketService.
+ * Since: 2.22
  */
 
 
@@ -16151,15 +12168,6 @@
 
 
 /**
- * G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE:
- *
- * A key in the "standard" namespace for getting the content type of the file.
- * Corresponding #GFileAttributeType is %G_FILE_ATTRIBUTE_TYPE_STRING.
- * The value for this key should contain a valid content type.
- */
-
-
-/**
  * SECTION:gunixmount:
  * @include: gio/gunixmounts.h
  * @short_description: UNIX mounts
@@ -16168,35 +12176,6 @@
  * Note that <filename>&lt;gio/gunixmounts.h&gt;</filename> belongs to the
  * UNIX-specific GIO interfaces, thus you have to use the
  * <filename>gio-unix-2.0.pc</filename> pkg-config file when using it.
- */
-
-
-/**
- * GParamSpecParam:
- * @parent_instance: private #GParamSpec portion
- *
- * A #GParamSpec derived structure that contains the meta data for %G_TYPE_PARAM
- * properties.
- */
-
-
-/**
- * GPollFD:
- * @fd: the file descriptor to poll (or a <type>HANDLE</type> on Win32)
- * @events: a bitwise combination from #GIOCondition, specifying which events should be polled for. Typically for reading from a file descriptor you would use %G_IO_IN | %G_IO_HUP | %G_IO_ERR, and for writing you would use %G_IO_OUT | %G_IO_ERR.
- * @revents: a bitwise combination of flags from #GIOCondition, returned from the poll() function to indicate which events occurred.
- *
- *
- */
-
-
-/**
- * G_FILE_ATTRIBUTE_TIME_ACCESS_USEC:
- *
- * A key in the "time" namespace for getting the microseconds of the time
- * the file was last accessed. This should be used in conjunction with
- * #G_FILE_ATTRIBUTE_TIME_ACCESS. Corresponding #GFileAttributeType is
- * %G_FILE_ATTRIBUTE_TYPE_UINT32.
  */
 
 
@@ -16210,17 +12189,6 @@
  *
  * Returns: %TRUE if the mount was successfully unmounted. %FALSE otherwise.
  * Since: 2.22
- */
-
-
-/**
- * GDBusMessageByteOrder:
- * @G_DBUS_MESSAGE_BYTE_ORDER_BIG_ENDIAN: The byte order is big endian.
- * @G_DBUS_MESSAGE_BYTE_ORDER_LITTLE_ENDIAN: The byte order is little endian.
- *
- * Enumeration used to describe the byte order of a D-Bus message.
- *
- * Since: 2.26
  */
 
 
@@ -16243,27 +12211,16 @@
  * unsupported uris with strange formats like mailto:), so if you have
  * a textual uri you want to pass in as argument, consider using
  * g_app_info_launch_uris() instead.
- * On UNIX, this function sets the <envvar>GIO_LAUNCHED_DESKTOP_FILE</envvar>
+ * On UNIX, this function sets the <envar>GIO_LAUNCHED_DESKTOP_FILE</envar>
  * environment variable with the path of the launched desktop file and
- * <envvar>GIO_LAUNCHED_DESKTOP_FILE_PID</envvar> to the process
+ * <envar>GIO_LAUNCHED_DESKTOP_FILE_PID</envar> to the process
  * id of the launched process. This can be used to ignore
- * <envvar>GIO_LAUNCHED_DESKTOP_FILE</envvar>, should it be inherited
- * by further processes. The <envvar>DISPLAY</envvar> and
- * <envvar>DESKTOP_STARTUP_ID</envvar> environment variables are also
+ * <envar>GIO_LAUNCHED_DESKTOP_FILE</envar>, should it be inherited
+ * by further processes. The <envar>DISPLAY</envar> and
+ * <envar>DESKTOP_STARTUP_ID</envar> environment variables are also
  * set, based on information provided in @launch_context.
  *
  * Returns: %TRUE on successful launch, %FALSE otherwise.
- */
-
-
-/**
- * GParamSpecChar:
- * @parent_instance: private #GParamSpec portion
- * @minimum: minimum value for the property specified
- * @maximum: maximum value for the property specified
- * @default_value: default value for the property specified
- *
- * A #GParamSpec derived structure that contains the meta data for character properties.
  */
 
 
@@ -16273,39 +12230,6 @@
  * @drive: a #GDrive that was disconnected.
  *
  * Emitted when a drive is disconnected from the system.
- */
-
-
-/**
- * GDBusSubtreeDispatchFunc:
- * @connection: A #GDBusConnection.
- * @sender: The unique bus name of the remote caller.
- * @object_path: The object path that was registered with g_dbus_connection_register_subtree().
- * @interface_name: The D-Bus interface name that the method call or property access is for.
- * @node: A node that is a child of @object_path (relative to @object_path) or %NULL for the root of the subtree.
- * @out_user_data: Return location for user data to pass to functions in the returned #GDBusInterfaceVTable (never %NULL).
- * @user_data: The @user_data #gpointer passed to g_dbus_connection_register_subtree().
- *
- * The type of the @dispatch function in #GDBusSubtreeVTable.
- * Subtrees are flat.  @node, if non-%NULL, is always exactly one
- *
- * Segment of the object path (ie: it never contains a slash).
- * Returns: A #GDBusInterfaceVTable or %NULL if you don't want to handle the methods.
- * Since: 2.26
- */
-
-
-/**
- * GFileCopyFlags:
- * @G_FILE_COPY_NONE: No flags set.
- * @G_FILE_COPY_OVERWRITE: Overwrite any existing files
- * @G_FILE_COPY_BACKUP: Make a backup of any existing files.
- * @G_FILE_COPY_NOFOLLOW_SYMLINKS: Don't follow symlinks.
- * @G_FILE_COPY_ALL_METADATA: Copy all file metadata instead of just default set used for copy (see #GFileInfo).
- * @G_FILE_COPY_NO_FALLBACK_FOR_MOVE: Don't use copy and delete fallback if native move not supported.
- * @G_FILE_COPY_TARGET_DEFAULT_PERMS: Leaves target file with default perms, instead of setting the source file perms.
- *
- * Flags used when copying or moving files.
  */
 
 
@@ -16372,16 +12296,6 @@
 
 
 /**
- * G_FILE_ATTRIBUTE_UNIX_NLINK:
- *
- * A key in the "unix" namespace for getting the number of hard links
- * for a file. See lstat() documentation. This attribute is only available
- * for UNIX file systems. Corresponding #GFileAttributeType is
- * %G_FILE_ATTRIBUTE_TYPE_UINT32.
- */
-
-
-/**
  * g_dbus_server_stop:
  * @server: A #GDBusServer.
  *
@@ -16392,30 +12306,12 @@
 
 
 /**
- * G_TYPE_INVALID:
- *
- * An invalid #GType used as error return value in some functions which return
- * a #GType.
- */
-
-
-/**
  * g_volume_can_eject:
  * @volume: a #GVolume.
  *
  * Checks if a volume can be ejected.
  *
  * Returns: %TRUE if the @volume can be ejected. %FALSE otherwise.
- */
-
-
-/**
- * G_IS_PARAM_SPEC_FLOAT:
- * @pspec: a valid #GParamSpec instance
- *
- * Checks whether the given #GParamSpec is of type %G_TYPE_PARAM_FLOAT.
- *
- * Returns: %TRUE on success.
  */
 
 
@@ -16445,13 +12341,6 @@
 
 
 /**
- * G_URI_RESERVED_CHARS_ALLOWED_IN_USERINFO:
- *
- * Allowed characters in userinfo as defined in RFC 3986. Includes "!$&'()*+,;=:".
- */
-
-
-/**
  * g_dbus_message_get_body:
  * @message: A #GDBusMessage.
  *
@@ -16472,13 +12361,6 @@
  * g_permission_acquire().
  *
  * Since: 2.26
- */
-
-
-/**
- * G_TYPE_PARAM_INT:
- *
- * The #GType of #GParamSpecInt.
  */
 
 
@@ -16519,20 +12401,22 @@
 
 
 /**
- * G_IS_INITIALLY_UNOWNED:
- * @object: Instance to check for being a %G_TYPE_INITIALLY_UNOWNED.
+ * g_application_command_line_getenv:
+ * @cmdline: a #GApplicationCommandLine
+ * @name: the environment variable to get
  *
- * Checks whether a valid #GTypeInstance pointer is of type %G_TYPE_INITIALLY_UNOWNED.
- */
-
-
-/**
- * G_IS_VALUE:
- * @value: A #GValue structure.
+ * Gets the value of a particular environment variable of the command
+ * line invocation, as would be returned by g_getenv().  The strings may
+ * contain non-utf8 data.
+ * The remote application usually does not send an environment.  Use
+ * %G_APPLICATION_SEND_ENVIRONMENT to affect that.  Even with this flag
+ * set it is possible that the environment is still not available (due
+ * to invocation messages from other applications).
+ * The return value should not be modified or freed and is valid for as
+ * long as @cmdline exists.
  *
- * Checks if @value is a valid and initialized #GValue structure.
- *
- * Returns: %TRUE on success.
+ * Returns: the value of the variable, or %NULL if unset or unsent
+ * Since: 2.28
  */
 
 
@@ -16572,22 +12456,6 @@
 
 
 /**
- * GDBusSignalCallback:
- * @connection: A #GDBusConnection.
- * @sender_name: The unique bus name of the sender of the signal.
- * @object_path: The object path that the signal was emitted on.
- * @interface_name: The name of the interface.
- * @signal_name: The name of the signal.
- * @parameters: A #GVariant tuple with parameters for the signal.
- * @user_data: User data passed when subscribing to the signal.
- *
- * Signature for callback function used in g_dbus_connection_signal_subscribe().
- *
- * Since: 2.26
- */
-
-
-/**
  * g_socket_client_set_socket_type:
  * @client: a #GSocketClient.
  * @type: a #GSocketType
@@ -16613,49 +12481,12 @@
 
 
 /**
- * G_PARAM_SPEC_UCHAR:
- * @pspec: a valid #GParamSpec instance
- *
- * Cast a #GParamSpec instance into a #GParamSpecUChar.
- */
-
-
-/**
- * GWeakNotify:
- * @data: data that was provided when the weak reference was established
- * @where_the_object_was: the object being finalized
- *
- * A #GWeakNotify function can be added to an object as a callback that gets
- * triggered when the object is finalized. Since the object is already being
- * finalized when the #GWeakNotify is called, there's not much you could do
- * with the object, apart from e.g. using its adress as hash-index or the like.
- */
-
-
-/**
- * GChildWatchFunc:
- * @pid: the process id of the child process
- * @status: Status information about the child process, see waitpid(2) for more information about this field
- * @data: user data passed to g_child_watch_add()
- *
- * The type of functions to be called when a child exists.
- */
-
-
-/**
  * g_io_extension_point_set_required_type:
  * @extension_point: a #GIOExtensionPoint
  * @type: the #GType to require
  *
  * Sets the required type for @extension_point to @type.
  * All implementations must henceforth have this type.
- */
-
-
-/**
- * GSettingsBackend:
- *
- * An implementation of a settings storage repository.
  */
 
 
@@ -16692,20 +12523,6 @@
 
 
 /**
- * GDBusPropertyInfo:
- * @ref_count: The reference count or -1 if statically allocated.
- * @name: The name of the D-Bus property, e.g. "SupportedFilesystems".
- * @signature: The D-Bus signature of the property (a single complete type).
- * @flags: Access control flags for the property.
- * @annotations: A pointer to a %NULL-terminated array of pointers to #GDBusAnnotationInfo structures or %NULL if there are no annotations.
- *
- * Information about a D-Bus property on a D-Bus interface.
- *
- * Since: 2.26
- */
-
-
-/**
  * g_file_set_attribute_byte_string:
  * @file: input #GFile.
  * @attribute: a string containing the attribute's name.
@@ -16723,24 +12540,6 @@
  * in the @file, %FALSE otherwise.
  *
  * Returns: %TRUE if the @attribute was successfully set to @value
- */
-
-
-/**
- * G_VALUE_HOLDS_ENUM:
- * @value: a valid #GValue structure
- *
- * Checks whether the given #GValue can hold values derived from type %G_TYPE_ENUM.
- *
- * Returns: %TRUE on success.
- */
-
-
-/**
- * G_PARAM_SPEC_UINT64:
- * @pspec: a valid #GParamSpec instance
- *
- * Cast a #GParamSpec instance into a #GParamSpecUInt64.
  */
 
 
@@ -16770,13 +12569,6 @@
  * loop</link> of the thread that @simple was initially created in.
  * Calling this function takes a reference to @simple for as long as
  * is needed to complete the call.
- */
-
-
-/**
- * G_VARIANT_TYPE_BOOLEAN:
- *
- * The type of a value that can be either %TRUE or %FALSE.
  */
 
 
@@ -16839,16 +12631,6 @@
 
 
 /**
- * GSimpleAction:
- *
- * The <structname>GSimpleAction</structname> structure contains private
- * data and should only be accessed using the provided API
- *
- * Since: 2.26
- */
-
-
-/**
  * g_socket_get_local_address:
  * @socket: a #GSocket.
  * @error: #GError for error reporting, or %NULL to ignore.
@@ -16860,43 +12642,6 @@
  *
  * Returns: (transfer full): a #GSocketAddress or %NULL on error.
  * Since: 2.22
- */
-
-
-/**
- * GDriveIface:
- * @g_iface: The parent interface.
- * @changed: Signal emitted when the drive is changed.
- * @disconnected: The removed signal that is emitted when the #GDrive have been disconnected. If the recipient is holding references to the object they should release them so the object can be finalized.
- * @eject_button: Signal emitted when the physical eject button (if any) of a drive have been pressed.
- * @get_name: Returns the name for the given #GDrive.
- * @get_icon: Returns a #GIcon for the given #GDrive.
- * @has_volumes: Returns %TRUE if the #GDrive has mountable volumes.
- * @get_volumes: Returns a list #GList of #GVolume for the #GDrive.
- * @is_media_removable: Returns %TRUE if the #GDrive supports removal and insertion of media.
- * @has_media: Returns %TRUE if the #GDrive has media inserted.
- * @is_media_check_automatic: Returns %TRUE if the #GDrive is capabable of automatically detecting media changes.
- * @can_poll_for_media: Returns %TRUE if the #GDrive is capable of manually polling for media change.
- * @can_eject: Returns %TRUE if the #GDrive can eject media.
- * @eject: Ejects a #GDrive.
- * @eject_finish: Finishes an eject operation.
- * @poll_for_media: Poll for media insertion/removal on a #GDrive.
- * @poll_for_media_finish: Finishes a media poll operation.
- * @get_identifier: Returns the identifier of the given kind, or %NULL if the #GDrive doesn't have one.
- * @enumerate_identifiers: Returns an array strings listing the kinds of identifiers which the #GDrive has.
- * @get_start_stop_type: Gets a #GDriveStartStopType with details about starting/stopping the drive. Since 2.22.
- * @can_stop: Returns %TRUE if a #GDrive can be stopped. Since 2.22.
- * @stop: Stops a #GDrive. Since 2.22.
- * @stop_finish: Finishes a stop operation. Since 2.22.
- * @can_start: Returns %TRUE if a #GDrive can be started. Since 2.22.
- * @can_start_degraded: Returns %TRUE if a #GDrive can be started degraded. Since 2.22.
- * @start: Starts a #GDrive. Since 2.22.
- * @start_finish: Finishes a start operation. Since 2.22.
- * @stop_button: Signal emitted when the physical stop button (if any) of a drive have been pressed. Since 2.22.
- * @eject_with_operation: Starts ejecting a #GDrive using a #GMountOperation. Since 2.22.
- * @eject_with_operation_finish: Finishes an eject operation using a #GMountOperation. Since 2.22.
- *
- * Interface for creating #GDrive implementations.
  */
 
 
@@ -16923,15 +12668,6 @@
 
 
 /**
- * G_FILE_ATTRIBUTE_UNIX_UID:
- *
- * A key in the "unix" namespace for getting the user ID for the file.
- * This attribute is only available for UNIX file systems.
- * Corresponding #GFileAttributeType is %G_FILE_ATTRIBUTE_TYPE_UINT32.
- */
-
-
-/**
  * g_inet_address_get_native_size:
  * @address: a #GInetAddress
  *
@@ -16940,14 +12676,6 @@
  *
  * Returns: the number of bytes used for the native version of @address.
  * Since: 2.22
- */
-
-
-/**
- * G_IS_OBJECT:
- * @object: Instance to check for being a %G_TYPE_OBJECT.
- *
- * Checks whether a valid #GTypeInstance pointer is of type %G_TYPE_OBJECT.
  */
 
 
@@ -16983,14 +12711,6 @@
  * Free the returned object with g_object_unref().
  *
  * Returns: (transfer full): a #GFileInfo for the given @file, or %NULL on error.
- */
-
-
-/**
- * GAsyncResult:
- *
- * Holds results information for an asynchronous operation,
- * usually passed directly to a asynchronous _finish() operation.
  */
 
 
@@ -17031,45 +12751,14 @@
 
 
 /**
- * GMountIface:
- * @g_iface: The parent interface.
- * @changed: Changed signal that is emitted when the mount's state has changed.
- * @unmounted: The unmounted signal that is emitted when the #GMount have been unmounted. If the recipient is holding references to the object they should release them so the object can be finalized.
- * @pre_unmount: The pre_unmout signal that is emitted when the #GMount will soon be emitted. If the recipient is somehow holding the mount open by keeping an open file on it it should close the file.
- * @get_root: Gets a #GFile to the root directory of the #GMount.
- * @get_name: Gets a string containing the name of the #GMount.
- * @get_icon: Gets a #GIcon for the #GMount.
- * @get_uuid: Gets the UUID for the #GMount. The reference is typically based on the file system UUID for the mount in question and should be considered an opaque string. Returns %NULL if there is no UUID available.
- * @get_volume: Gets a #GVolume the mount is located on. Returns %NULL if the #GMount is not associated with a #GVolume.
- * @get_drive: Gets a #GDrive the volume of the mount is located on. Returns %NULL if the #GMount is not associated with a #GDrive or a #GVolume. This is convenience method for getting the #GVolume and using that to get the #GDrive.
- * @can_unmount: Checks if a #GMount can be unmounted.
- * @can_eject: Checks if a #GMount can be ejected.
- * @unmount: Starts unmounting a #GMount.
- * @unmount_finish: Finishes an unmounting operation.
- * @eject: Starts ejecting a #GMount.
- * @eject_finish: Finishes an eject operation.
- * @remount: Starts remounting a #GMount.
- * @remount_finish: Finishes a remounting operation.
- * @guess_content_type: Starts guessing the type of the content of a #GMount. See g_mount_guess_content_type() for more information on content type guessing. This operation was added in 2.18.
- * @guess_content_type_finish: Finishes a contenet type guessing operation. Added in 2.18.
- * @guess_content_type_sync: Synchronous variant of @guess_content_type. Added in 2.18
- * @unmount_with_operation: Starts unmounting a #GMount using a #GMountOperation. Since 2.22.
- * @unmount_with_operation_finish: Finishes an unmounting operation using a #GMountOperation. Since 2.22.
- * @eject_with_operation: Starts ejecting a #GMount using a #GMountOperation. Since 2.22.
- * @eject_with_operation_finish: Finishes an eject operation using a #GMountOperation. Since 2.22.
- * @get_default_location: Gets a #GFile indication a start location that can be use as the entry point for this mount. Since 2.24.
+ * g_file_info_get_attribute_status:
+ * @info: a #GFileInfo
+ * @attribute: a file attribute key
  *
- * Interface for implementing operations for mounts.
- */
-
-
-/**
- * GOutputStreamSpliceFlags:
- * @G_OUTPUT_STREAM_SPLICE_NONE: Do not close either stream.
- * @G_OUTPUT_STREAM_SPLICE_CLOSE_SOURCE: Close the source stream after the splice.
- * @G_OUTPUT_STREAM_SPLICE_CLOSE_TARGET: Close the target stream after the splice.
+ * Gets the attribute status for an attribute key.
+ * %G_FILE_ATTRIBUTE_STATUS_UNSET if the key is invalid.
  *
- * GOutputStreamSpliceFlags determine how streams should be spliced.
+ * Returns: a #GFileAttributeStatus for the given @attribute, or
  */
 
 
@@ -17113,16 +12802,6 @@
 
 
 /**
- * G_VALUE_HOLDS_DOUBLE:
- * @value: a valid #GValue structure
- *
- * Checks whether the given #GValue can hold values of type %G_TYPE_DOUBLE.
- *
- * Returns: %TRUE on success.
- */
-
-
-/**
  * g_file_attribute_matcher_matches_only:
  * @matcher: a #GFileAttributeMatcher.
  * @attribute: a file attribute key.
@@ -17157,15 +12836,6 @@
  * To actually connect to a remote host, you will need a
  * #GInetSocketAddress (which includes a #GInetAddress as well as a
  * port number).
- */
-
-
-/**
- * g_hash_table_thaw:
- * @hash_table: a #GHashTable
- *
- * This function is deprecated and will be removed in the next major
- * release of GLib. It does nothing.
  */
 
 
@@ -17239,21 +12909,6 @@
 
 
 /**
- * G_FILE_ATTRIBUTE_MOUNTABLE_HAL_UDI:
- *
- * A key in the "mountable" namespace for getting the HAL UDI for the mountable
- * file. Corresponding #GFileAttributeType is %G_FILE_ATTRIBUTE_TYPE_STRING.
- */
-
-
-/**
- * G_VARIANT_TYPE_BYTESTRING_ARRAY:
- *
- * The type of an array of byte strings (an array of arrays of bytes).
- */
-
-
-/**
  * GPermission:allowed:
  *
  * %TRUE if the caller currently has permission to perform the action that
@@ -17261,10 +12916,18 @@
 
 
 /**
- * GUnixMountEntry:
+ * g_application_command_line_get_platform_data:
+ * @cmdline: #GApplicationCommandLine
  *
- * Defines a Unix mount entry (e.g. <filename>/media/cdrom</filename>).
- * This corresponds roughly to a mtab entry.
+ * Gets the platform data associated with the invocation of @cmdline.
+ * This is a #GVariant dictionary containing information about the
+ * context in which the invocation occured.  It typically contains
+ * information like the current working directory and the startup
+ * notification ID.
+ * For local invocation, it will be %NULL.
+ *
+ * Returns: the platform data, or %NULL
+ * Since: 2.28
  */
 
 
@@ -17328,54 +12991,11 @@
 
 
 /**
- * GVolumeMonitor:
- *
- * A Volume Monitor that watches for volume events.
- */
-
-
-/**
- * G_TIME_SPAN_HOUR:
- *
- * Evaluates to a time span of one hour.
- *
- * Since: 2.26
- */
-
-
-/**
  * g_dbus_message_set_byte_order:
  * @message: A #GDBusMessage.
  * @byte_order: The byte order.
  *
  * Sets the byte order of @message.
- */
-
-
-/**
- * G_TYPE_STRV:
- *
- * The #GType for a boxed type holding a %NULL-terminated array of strings.
- * The code fragments in the following example show the use of a property of
- * type #G_TYPE_STRV with g_object_class_install_property(), g_object_set()
- * and g_object_get().
- * |[
- * g_object_class_install_property (object_class,
- * PROP_AUTHORS,
- * g_param_spec_boxed ("authors",
- * _("Authors"),
- * _("List of authors"),
- * G_TYPE_STRV,
- * G_PARAM_READWRITE));
- * gchar *authors[] = { "Owen", "Tim", NULL };
- * g_object_set (obj, "authors", authors, NULL);
- * gchar *writers[];
- * g_object_get (obj, "authors", &writers, NULL);
- * // do something with writers
- * g_strfreev (writers);
- * ]|
- *
- * Since: 2.4
  */
 
 
@@ -17603,13 +13223,6 @@
 
 
 /**
- * GUnixMountMonitor:
- *
- * Watches #GUnixMount<!-- -->s for changes.
- */
-
-
-/**
  * g_drive_eject:
  * @drive: a #GDrive.
  * @flags: flags affecting the unmount if required for eject
@@ -17623,13 +13236,6 @@
  * result of the operation.
  *
  * Deprecated: 2.22: Use g_drive_eject_with_operation() instead.
- */
-
-
-/**
- * G_TYPE_CLOSURE:
- *
- * The #GType for #GClosure.
  */
 
 
@@ -17758,27 +13364,6 @@
 
 
 /**
- * g_action_group_get_parameter_type:
- * @action_group: a #GActionGroup
- * @action_name: the name of the action to query
- *
- * Queries the type of the parameter that must be given when activating
- * the named action within @action_group.
- * When activating the action using g_action_group_activate(), the
- * #GVariant given to that function must be of the type returned by this
- * function.
- * In the case that this function returns %NULL, you must not give any
- * #GVariant, but %NULL instead.
- * The parameter type of a particular action will never change but it is
- * possible for an action to be removed and for a new action to be added
- * with the same name but a different parameter type.
- *
- * Returns: the parameter type
- * Since: 2.26
- */
-
-
-/**
  * g_socket_close:
  * @socket: a #GSocket
  * @error: #GError for error reporting, or %NULL to ignore.
@@ -17811,46 +13396,6 @@
  *
  * Returns: %TRUE on success, %FALSE on error
  * Since: 2.22
- */
-
-
-/**
- * G_DEFINE_DYNAMIC_TYPE:
- * @TN: The name of the new type, in Camel case.
- * @t_n: The name of the new type, in lowercase, with words separated by '_'.
- * @T_P: The #GType of the parent type.
- *
- * A convenience macro for dynamic type implementations, which declares a
- * class initialization function, an instance initialization function (see
- * #GTypeInfo for information about these) and a static variable named
- * it defines a <function>*_get_type()</function> and a static
- * <function>*_register_type()</function> function for use in your
- * <function>module_init()</function>.
- * See G_DEFINE_DYNAMIC_TYPE_EXTENDED() for an example.
- *
- * Since: 2.14
- */
-
-
-/**
- * G_FILE_ATTRIBUTE_DOS_IS_SYSTEM:
- *
- * A key in the "dos" namespace for checking if the file's backup flag
- * is set. This attribute is %TRUE if the backup flag is set. This attribute
- * is only available for DOS file systems. Corresponding #GFileAttributeType
- * is %G_FILE_ATTRIBUTE_TYPE_BOOLEAN.
- */
-
-
-/**
- * GOptionGroup:
- *
- * A <structname>GOptionGroup</structname> struct defines the options in a single
- * group. The struct has only private fields and should not be directly accessed.
- * All options in a group share the same translation function. Libraries which
- * need to parse commandline options are expected to provide a function for
- * getting a <structname>GOptionGroup</structname> holding their options, which
- * the application can then add to its #GOptionContext.
  */
 
 
@@ -17926,40 +13471,6 @@
 
 
 /**
- * g_action_group_get_state_type:
- * @action_group: a #GActionGroup
- * @action_name: the name of the action to query
- *
- * Queries the type of the state of the named action within
- * If the action is stateful then this function returns the
- * #GVariantType of the state.  All calls to g_action_group_set_state()
- * must give a #GVariant of this type and g_action_group_get_state()
- * will return a #GVariant of the same type.
- * If the action is not stateful then this function will return %NULL.
- * In that case, g_action_group_get_state() will return %NULL and you
- * must not call g_action_group_set_state().
- * The state type of a particular action will never change but it is
- * possible for an action to be removed and for a new action to be added
- * with the same name but a different state type.
- *
- * Returns: (transfer full): the state type, if the action is stateful
- * Since: 2.26
- */
-
-
-/**
- * GBusAcquiredCallback:
- * @connection: The #GDBusConnection to a message bus.
- * @name: The name that is requested to be owned.
- * @user_data: User data passed to g_bus_own_name().
- *
- * Invoked when a connection to a message bus has been obtained.
- *
- * Since: 2.26
- */
-
-
-/**
  * g_permission_get_allowed:
  * @permission: a #GPermission instance
  * @returns: the value of the 'allowed' property
@@ -17968,33 +13479,6 @@
  * the caller currently has permission to perform the action that
  *
  * Since: 2.26
- */
-
-
-/**
- * G_VALUE_HOLDS_STRING:
- * @value: a valid #GValue structure
- *
- * Checks whether the given #GValue can hold values of type %G_TYPE_STRING.
- *
- * Returns: %TRUE on success.
- */
-
-
-/**
- * G_VARIANT_TYPE_STRING:
- *
- * The type of a string.  "" is a string.  %NULL is not a string.
- */
-
-
-/**
- * G_FILE_ATTRIBUTE_UNIX_RDEV:
- *
- * A key in the "unix" namespace for getting the device ID for the file
- * (if it is a special file). See lstat() documentation. This attribute
- * is only available for UNIX file systems. Corresponding #GFileAttributeType
- * is %G_FILE_ATTRIBUTE_TYPE_UINT32.
  */
 
 
@@ -18052,36 +13536,7 @@
  *
  * Signals that the state of the named action has changed.
  *
- * Since: 2.26
- */
-
-
-/**
- * GAppInfoIface:
- * @g_iface: The parent interface.
- * @dup: Copies a #GAppInfo.
- * @equal: Checks two #GAppInfo<!-- -->s for equality.
- * @get_id: Gets a string identifier for a #GAppInfo.
- * @get_name: Gets the name of the application for a #GAppInfo.
- * @get_description: Gets a short description for the application described by the #GAppInfo.
- * @get_executable: Gets the executable name for the #GAppInfo.
- * @get_icon: Gets the #GIcon for the #GAppInfo.
- * @launch: Launches an application specified by the #GAppInfo.
- * @supports_uris: Indicates whether the application specified supports launching URIs.
- * @supports_files: Indicates whether the application specified accepts filename arguments.
- * @launch_uris: Launches an application with a list of URIs.
- * @should_show: Returns whether an application should be shown (e.g. when getting a list of installed applications). <ulink url="http://standards.freedesktop.org/startup-notification-spec/startup-notification-latest.txt"> <citetitle>FreeDesktop.Org Startup Notification Specification</citetitle></ulink>.
- * @set_as_default_for_type: Sets an application as default for a given content type.
- * @set_as_default_for_extension: Sets an application as default for a given file extension.
- * @add_supports_type: Adds to the #GAppInfo information about supported file types.
- * @can_remove_supports_type: Checks for support for removing supported file types from a #GAppInfo.
- * @remove_supports_type: Removes a supported application type from a #GAppInfo.
- * @can_delete: Checks if a #GAppInfo can be deleted. Since 2.20
- * @do_delete: Deletes a #GAppInfo. Since 2.20
- * @get_commandline: Gets the commandline for the #GAppInfo. Since 2.20
- * @get_display_name: Gets the display name for the #GAppInfo. Since 2.24
- *
- * Application Information interface, for operating system portability.
+ * Since: 2.28
  */
 
 
@@ -18310,96 +13765,33 @@
 
 
 /**
- * G_TYPE_MAKE_FUNDAMENTAL:
- * @x: the fundamental type number.
+ * g_application_get_is_registered:
+ * @application: a #GApplication
+ * @returns: %TRUE if @application is registered
  *
- * Get the type ID for the fundamental type number @x.
- * Use g_type_fundamental_next() instead of this macro to create new fundamental
- * types.
+ * Checks if @application is registered.
+ * An application is registered if g_application_register() has been
+ * successfully called.
  *
- * Returns: the GType
+ * Since: 2.28
  */
 
 
 /**
- * GSocketSourceFunc:
- * @socket: the #GSocket
- * @condition: the current condition at the source fired.
- * @user_data: data passed in by the user.
+ * g_periodic_new:
+ * @hz: the frequency of the new clock in Hz (between 1 and 120)
+ * @priority: the #GSource priority to run at
  *
- * This is the function type of the callback used for the #GSource
- * returned by g_socket_create_source().
+ * Creates a new #GPeriodic clock.
+ * The created clock is attached to the thread-default main context in
+ * effect at the time of the call to this function.  See
+ * g_main_context_push_thread_default() for more information.
+ * Due to the fact that #GMainContext is only accurate to the nearest
+ * millisecond, the frequency can not meaningfully get too close to
+ * 1000.  For this reason, it is arbitrarily bounded at 120.
  *
- * Returns: it should return %FALSE if the source should be removed.
- * Since: 2.22
- */
-
-
-/**
- * G_DEFINE_DYNAMIC_TYPE_EXTENDED:
- * @TypeName: The name of the new type, in Camel case.
- * @type_name: The name of the new type, in lowercase, with words separated by '_'.
- * @TYPE_PARENT: The #GType of the parent type.
- * @flags: #GTypeFlags to pass to g_type_module_register_type()
- * @CODE: Custom code that gets inserted in the *_get_type() function.
- *
- * A more general version of G_DEFINE_DYNAMIC_TYPE() which
- * allows to specify #GTypeFlags and custom code.
- * |[
- * G_DEFINE_DYNAMIC_TYPE_EXTENDED (GtkGadget,
- * gtk_gadget,
- * GTK_TYPE_THING,
- * 0,
- * G_IMPLEMENT_INTERFACE_DYNAMIC (TYPE_GIZMO,
- * gtk_gadget_gizmo_init));
- * ]|
- * expands to
- * |[
- * static void     gtk_gadget_init              (GtkGadget      *self);
- * static void     gtk_gadget_class_init        (GtkGadgetClass *klass);
- * static void     gtk_gadget_class_finalize    (GtkGadgetClass *klass);
- * static gpointer gtk_gadget_parent_class = NULL;
- * static GType    gtk_gadget_type_id = 0;
- * static void     gtk_gadget_class_intern_init (gpointer klass)
- * {
- * gtk_gadget_parent_class = g_type_class_peek_parent (klass);
- * gtk_gadget_class_init ((GtkGadgetClass*) klass);
- * }
- * GType
- * gtk_gadget_get_type (void)
- * {
- * return gtk_gadget_type_id;
- * }
- * static void
- * gtk_gadget_register_type (GTypeModule *type_module)
- * {
- * const GTypeInfo g_define_type_info = {
- * sizeof (GtkGadgetClass),
- * (GBaseInitFunc) NULL,
- * (GBaseFinalizeFunc) NULL,
- * (GClassInitFunc) gtk_gadget_class_intern_init,
- * (GClassFinalizeFunc) gtk_gadget_class_finalize,
- * NULL,   // class_data
- * sizeof (GtkGadget),
- * 0,      // n_preallocs
- * (GInstanceInitFunc) gtk_gadget_init,
- * NULL    // value_table
- * };
- * gtk_gadget_type_id = g_type_module_register_type (type_module,
- * GTK_TYPE_THING,
- * GtkGadget,
- * &g_define_type_info,
- * (GTypeFlags) flags);
- * {
- * const GInterfaceInfo g_implement_interface_info = {
- * (GInterfaceInitFunc) gtk_gadget_gizmo_init
- * };
- * g_type_module_add_interface (type_module, g_define_type_id, TYPE_GIZMO, &g_implement_interface_info);
- * }
- * }
- * ]|
- *
- * Since: 2.14
+ * Returns: a new #GPeriodic
+ * Since: 2.28
  */
 
 
@@ -18437,24 +13829,6 @@
 
 
 /**
- * GDBusInterfaceGetPropertyFunc:
- * @connection: A #GDBusConnection.
- * @sender: The unique bus name of the remote caller.
- * @object_path: The object path that the method was invoked on.
- * @interface_name: The D-Bus interface name for the property.
- * @property_name: The name of the property to get the value of.
- * @error: Return location for error.
- * @user_data: The @user_data #gpointer passed to g_dbus_connection_register_object().
- *
- * The type of the @get_property function in #GDBusInterfaceVTable.
- * consumed - otherwise its reference count is decreased by one.
- *
- * Returns: A #GVariant with the value for @property_name or %NULL if
- * Since: 2.26
- */
-
-
-/**
  * g_action_get_parameter_type:
  * @action: a #GAction
  *
@@ -18465,7 +13839,7 @@
  * #GVariant, but %NULL instead.
  *
  * Returns: (allow-none): the parameter type
- * Since: 2.26
+ * Since: 2.28
  */
 
 
@@ -18484,48 +13858,11 @@
 
 
 /**
- * GActionInterface:
- * @get_name: the virtual function pointer for g_action_get_name()
- * @get_parameter_type: the virtual function pointer for g_action_get_parameter_type()
- * @get_state_type: the virtual function pointer for g_action_get_state_type()
- * @get_state_hint: the virtual function pointer for g_action_get_state_hint()
- * @get_enabled: the virtual function pointer for g_action_get_enabled()
- * @get_state: the virtual function pointer for g_action_get_state()
- * @set_state: the virtual function pointer for g_action_set_state()
- * @activate: the virtual function pointer for g_action_activate().  Note that #GAction does not have an 'activate' signal but that implementations of it may have one.
- *
- *
- *
- * Since: 2.26
- */
-
-
-/**
  * g_vfs_get_local:
  *
  * Gets the local #GVfs for the system.
  *
  * Returns: (transfer none): a #GVfs.
- */
-
-
-/**
- * GParamSpecBoxed:
- * @parent_instance: private #GParamSpec portion
- *
- * A #GParamSpec derived structure that contains the meta data for boxed properties.
- */
-
-
-/**
- * g_atomic_int_dec_and_test:
- * @atomic: a pointer to an integer
- *
- * Atomically decrements the integer pointed to by @atomic by 1.
- * after decrementing it
- *
- * Returns: %TRUE if the integer pointed to by @atomic is 0
- * Since: 2.4
  */
 
 
@@ -18614,66 +13951,6 @@
 
 
 /**
- * GDBusError:
- *
- * A generic error; "something went wrong" - see the error message for
- * more.
- * There was not enough memory to complete an operation.
- * The bus doesn't know how to launch a service to supply the bus name
- * you wanted.
- * The bus name you referenced doesn't exist (i.e. no application owns
- * it).
- * No reply to a message expecting one, usually means a timeout occurred.
- * Something went wrong reading or writing to a socket, for example.
- * A D-Bus bus address was malformed.
- * Requested operation isn't supported (like ENOSYS on UNIX).
- * Some limited resource is exhausted.
- * Security restrictions don't allow doing what you're trying to do.
- * Authentication didn't work.
- * Unable to connect to server (probably caused by ECONNREFUSED on a
- * socket).
- * Certain timeout errors, possibly ETIMEDOUT on a socket.  Note that
- * %G_DBUS_ERROR_NO_REPLY is used for message reply timeouts. Warning:
- * this is confusingly-named given that %G_DBUS_ERROR_TIMED_OUT also
- * exists. We can't fix it for compatibility reasons so just be
- * careful.
- * No network access (probably ENETUNREACH on a socket).
- * Can't bind a socket since its address is in use (i.e. EADDRINUSE).
- * The connection is disconnected and you're trying to use it.
- * Invalid arguments passed to a method call.
- * Missing file.
- * Existing file and the operation you're using does not silently overwrite.
- * Method name you invoked isn't known by the object you invoked it on.
- * confusingly-named given that %G_DBUS_ERROR_TIMEOUT also exists. We
- * can't fix it for compatibility reasons so just be careful.
- * Tried to remove or modify a match rule that didn't exist.
- * The match rule isn't syntactically valid.
- * While starting a new process, the exec() call failed.
- * While starting a new process, the fork() call failed.
- * While starting a new process, the child exited with a status code.
- * While starting a new process, the child exited on a signal.
- * While starting a new process, something went wrong.
- * We failed to setup the environment correctly.
- * We failed to setup the config parser correctly.
- * Bus name was not valid.
- * Service file not found in system-services directory.
- * Permissions are incorrect on the setuid helper.
- * Service file invalid (Name, User or Exec missing).
- * Tried to get a UNIX process ID and it wasn't available.
- * Tried to get a UNIX process ID and it wasn't available.
- * A type signature is not valid.
- * A file contains invalid syntax or is otherwise broken.
- * Asked for SELinux security context and it wasn't available.
- * Asked for ADT audit data and it wasn't available.
- * There's already an object with the requested object path.
- * Error codes for the %G_DBUS_ERROR error domain.
- *
- * Certain timeout errors, e.g. while starting a service. warning: this is
- * Since: 2.26
- */
-
-
-/**
  * g_socket_get_keepalive:
  * @socket: a #GSocket.
  *
@@ -18716,22 +13993,6 @@
  * If your application or library provides one or more #GIcon
  * implementations you need to ensure that each #GType is registered
  * with the type system prior to calling g_icon_new_for_string().
- */
-
-
-/**
- * GSignalFlags:
- * @G_SIGNAL_RUN_FIRST: Invoke the object method handler in the first emission stage.
- * @G_SIGNAL_RUN_LAST: Invoke the object method handler in the third emission stage.
- * @G_SIGNAL_RUN_CLEANUP: Invoke the object method handler in the last emission stage.
- * @G_SIGNAL_NO_RECURSE: Signals being emitted for an object while currently being in emission for this very object will not be emitted recursively, but instead cause the first emission to be restarted.
- * @G_SIGNAL_DETAILED: This signal supports "::detail" appendices to the signal name upon handler connections and emissions.
- * @G_SIGNAL_ACTION: Action signals are signals that may freely be emitted on alive objects from user code via g_signal_emit() and friends, without the need of being embedded into extra code that performs pre or post emission adjustments on the object. They can also be thought of as object methods which can be called generically by third-party code.
- * @G_SIGNAL_NO_HOOKS: No emissions hooks are supported for this signal.
- *
- * The signal flags are used to specify a signal's behaviour, the overall
- * signal description outlines how especially the RUN flags control the
- * stages of a signal emission.
  */
 
 
@@ -18808,16 +14069,6 @@
 
 
 /**
- * GDBusProxy:
- *
- * The #GDBusProxy structure contains only private data and
- * should only be accessed using the provided API.
- *
- * Since: 2.26
- */
-
-
-/**
  * g_file_read_async:
  * @file: input #GFile
  * @io_priority: the <link linkend="io-priority">I/O priority</link> of the request.
@@ -18854,17 +14105,20 @@
 
 
 /**
- * G_TYPE_STRING:
+ * g_settings_list_relocatable_schemas:
  *
- * The fundamental type corresponding to nul-terminated C strings.
- */
-
-
-/**
- * G_VARIANT_TYPE_UINT32:
+ * Gets a list of the relocatable #GSettings schemas installed on the
+ * system.  These are schemas that do not provide their own path.  It is
+ * usual to instantiate these schemas directly, but if you want to you
+ * can use g_settings_new_with_path() to specify the path.
+ * The output of this function, tTaken together with the output of
+ * g_settings_list_schemas() represents the complete list of all
+ * installed schemas.
+ * #GSettings schemas that are available.  The list must not be
+ * modified or freed.
  *
- * The type of an integer value that can range from 0 to 4294967295.
- * That's one number for everyone who was around in the late 1970s.
+ * Returns: (element-type utf8) (transfer none): a list of relocatable
+ * Since: 2.28
  */
 
 
@@ -18872,7 +14126,7 @@
  * SECTION:gmoun:
  * @short_description: Mount management
  * @include: gio/gio.h
- * @see also: GVolume, GUnixMount
+ * @see_also: GVolume, GUnixMount
  *
  * The #GMount interface represents user-visible mounts. Note, when
  * porting from GnomeVFS, #GMount is the moral equivalent of #GnomeVFSVolume.
@@ -18912,49 +14166,12 @@
 
 
 /**
- * g_renew:
- * @struct_type: the type of the elements to allocate
- * @mem: the currently allocated memory
- * @n_structs: the number of elements to allocate
- *
- * Reallocates the memory pointed to by @mem, so that it now has space for
- * the memory, which may have been moved.
- * Care is taken to avoid overflow when calculating the size of the allocated block.
- *
- * Returns: a pointer to the new allocated memory, cast to a pointer to @struct_type
- */
-
-
-/**
  * g_mount_can_unmount:
  * @mount: a #GMount.
  *
  * Checks if @mount can be mounted.
  *
  * Returns: %TRUE if the @mount can be unmounted.
- */
-
-
-/**
- * GParamSpecValueArray:
- * @parent_instance: private #GParamSpec portion
- * @element_spec: a #GParamSpec describing the elements contained in arrays of this property, may be %NULL
- * @fixed_n_elements: if greater than 0, arrays of this property will always have this many elements
- *
- * A #GParamSpec derived structure that contains the meta data for #GValueArray properties.
- */
-
-
-/**
- * GCopyFunc:
- * @src: A pointer to the data which should be copied
- * @data: Additional data
- *
- * A function of this signature is used to copy the node data
- * when doing a deep-copy of a tree.
- *
- * Returns: A pointer to the copy
- * Since: 2.4
  */
 
 
@@ -18972,20 +14189,6 @@
 
 
 /**
- * GAskPasswordFlags:
- * @G_ASK_PASSWORD_NEED_PASSWORD: operation requires a password.
- * @G_ASK_PASSWORD_NEED_USERNAME: operation requires a username.
- * @G_ASK_PASSWORD_NEED_DOMAIN: operation requires a domain.
- * @G_ASK_PASSWORD_SAVING_SUPPORTED: operation supports saving settings.
- * @G_ASK_PASSWORD_ANONYMOUS_SUPPORTED: operation supports anonymous users.
- *
- * #GAskPasswordFlags are used to request specific information from the
- * user, or to notify the user of their choices in an authentication
- * situation.
- */
-
-
-/**
  * g_icon_hash:
  * @icon: #gconstpointer to an icon object.
  *
@@ -18994,6 +14197,18 @@
  *
  * Virtual: hash
  * Returns: a #guint containing a hash for the @icon, suitable for
+ */
+
+
+/**
+ * g_application_command_line_get_exit_status:
+ * @cmdline: a #GApplicationCommandLine
+ *
+ * Gets the exit status of @cmdline.  See
+ * g_application_command_line_set_exit_status() for more information.
+ *
+ * Returns: the exit status
+ * Since: 2.28
  */
 
 
@@ -19053,43 +14268,6 @@
 
 
 /**
- * GIOSchedulerJob:
- *
- * Opaque class for definining and scheduling IO jobs.
- */
-
-
-/**
- * G_VARIANT_TYPE_DOUBLE:
- *
- * The type of a double precision IEEE754 floating point number.
- * These guys go up to about 1.80e308 (plus and minus) but miss out on
- * some numbers in between.  In any case, that's far greater than the
- * estimated number of fundamental particles in the observable
- * universe.
- */
-
-
-/**
- * GTypeInterfaceCheckFunc:
- * @check_data: data passed to g_type_add_interface_check().
- * @g_iface: the interface that has been initialized
- *
- * A callback called after an interface vtable is initialized.
- * See g_type_add_interface_check().
- *
- * Since: 2.4
- */
-
-
-/**
- * G_TYPE_FLAGS:
- *
- * The fundamental type from which all flags types are derived.
- */
-
-
-/**
  * g_settings_get_child:
  * @settings: a #GSettings object
  * @name: the name of the 'child' schema
@@ -19106,24 +14284,12 @@
 
 
 /**
- * GFlagsClass:
- * @g_type_class: the parent class
- * @mask: a mask covering all possible values.
- * @n_values: the number of possible values.
- * @values: an array of #GFlagsValue structs describing the individual values.
- *
- * The class of a flags type holds information about its
- * possible values.
- */
-
-
-/**
  * g_simple_action_group_new:
  *
  * Creates a new, empty, #GSimpleActionGroup.
  *
  * Returns: a new #GSimpleActionGroup
- * Since: 2.26
+ * Since: 2.28
  */
 
 
@@ -19151,15 +14317,6 @@
  * the reference count.
  *
  * Returns: The same @info.
- * Since: 2.26
- */
-
-
-/**
- * G_TYPE_DBUS_SIGNAL_INFO:
- *
- * The #GType for a boxed type holding a #GDBusSignalInfo.
- *
  * Since: 2.26
  */
 
@@ -19229,10 +14386,12 @@
 
 
 /**
- * G_VARIANT_TYPE_VARIANT:
+ * g_file_info_set_is_hidden:
+ * @info: a #GFileInfo.
+ * @is_hidden: a #gboolean.
  *
- * The type of a box that contains any other value (including another
- * variant).
+ * Sets the "is_hidden" attribute in a #GFileInfo according to @is_symlink.
+ * See %G_FILE_ATTRIBUTE_STANDARD_IS_HIDDEN.
  */
 
 
@@ -19248,42 +14407,12 @@
 
 
 /**
- * G_TIME_SPAN_DAY:
- *
- * Evaluates to a time span of one day.
- *
- * Since: 2.26
- */
-
-
-/**
  * g_io_extension_get_type:
  * @extension: a #GIOExtension
  *
  * Gets the type associated with @extension.
  *
  * Returns: the type of @extension
- */
-
-
-/**
- * GFile:
- *
- * A handle to an object implementing the #GFileIface interface.
- * Generally stores a location within the file system. Handles do not
- * necessarily represent files or directories that currently exist.
- */
-
-
-/**
- * G_TYPE_CHECK_INSTANCE:
- * @instance: Location of a #GTypeInstance structure.
- *
- * Checks if @instance is a valid #GTypeInstance structure,
- * otherwise issues a warning and returns %FALSE.
- * This macro should only be used in type implementations.
- *
- * Returns: %TRUE on success.
  */
 
 
@@ -19297,28 +14426,6 @@
  * Puts a signed 32-bit integer into the output stream.
  *
  * Returns: %TRUE if @data was successfully added to the @stream.
- */
-
-
-/**
- * GConverterInputStream:
- *
- * An implementation of #GFilterInputStream that allows data
- * conversion.
- */
-
-
-/**
- * GTestLogFatalFunc:
- * @log_domain: the log domain of the message
- * @log_level: the log level of the message (including the fatal and recursion flags)
- * @message: the message to process
- * @user_data: user data, set in g_test_log_set_fatal_handler()
- *
- * Specifies the prototype of fatal log handler functions.
- *
- * Returns: %TRUE if the program should abort, %FALSE otherwise
- * Since: 2.22
  */
 
 
@@ -19366,33 +14473,6 @@
 
 
 /**
- * GSourceFuncs:
- * @prepare: Called before all the file descriptors are polled. If the source can determine that it is ready here (without waiting for the results of the poll() call) it should return %TRUE. It can also return a @timeout_ value which should be the maximum timeout (in milliseconds) which should be passed to the poll() call. The actual timeout used will be -1 if all sources returned -1, or it will be the minimum of all the
- * @check: Called after all the file descriptors are polled. The source should return %TRUE if it is ready to be dispatched. Note that some time may have passed since the previous prepare function was called, so the source should be checked again here.
- * @dispatch: Called to dispatch the event source, after it has returned %TRUE in either its @prepare or its @check function. The @dispatch function is passed in a callback function and data. The callback function may be %NULL if the source was never connected to a callback using g_source_set_callback(). The @dispatch function should call the callback function with @user_data and whatever additional parameters are needed for this type of event source.
- * @finalize: Called when the source is finalized.
- *
- * The <structname>GSourceFuncs</structname> struct contains a table of
- * functions used to handle event sources in a generic manner.
- * For idle sources, the prepare and check functions always return %TRUE
- * to indicate that the source is always ready to be processed. The prepare
- * function also returns a timeout value of 0 to ensure that the poll() call
- * doesn't block (since that would be time wasted which could have been spent
- * running the idle function).
- * For timeout sources, the prepare and check functions both return %TRUE
- * if the timeout interval has expired. The prepare function also returns
- * a timeout value to ensure that the poll() call doesn't block too long
- * and miss the next timeout.
- * For file descriptor sources, the prepare function typically returns %FALSE,
- * since it must wait until poll() has been called before it knows whether
- * any events need to be processed. It sets the returned timeout to -1 to
- * indicate that it doesn't mind how long the poll() call blocks. In the
- * check function, it tests the results of the poll() call to see if the
- * required condition has been met, and returns %TRUE if so.
- */
-
-
-/**
  * g_dbus_auth_observer_new:
  *
  * Creates a new #GDBusAuthObserver object.
@@ -19408,24 +14488,6 @@
  * @dest_info: destination to copy attributes to.
  *
  * Copies all of the #GFileAttribute<!-- -->s from @src_info to @dest_info.
- */
-
-
-/**
- * GApplication:default-quit:
- *
- * By default, if the GApplication:register property is %TRUE, and a
- * different process is running this application, the process will
- * be exited.  Set this property to %FALSE to allow custom
- * interaction with the remote process.
- */
-
-
-/**
- * G_IO_ERROR:
- *
- * Error domain for GIO. Errors in this domain will be from the #GIOErrorEnum enumeration.
- * See #GError for more information on error domains.
  */
 
 
@@ -19547,26 +14609,6 @@
 
 
 /**
- * GBufferedOutputStream:
- *
- * An implementation of #GFilterOutputStream with a sized buffer.
- */
-
-
-/**
- * G_FILE_ATTRIBUTE_STANDARD_COPY_NAME:
- *
- * A key in the "standard" namespace for getting the copy name of the file.
- * The copy name is an optional version of the name. If available it's always
- * in UTF8, and corresponds directly to the original filename (only transcoded to
- * UTF8). This is useful if you want to copy the file to another filesystem that
- * might have a different encoding. If the filename is not a valid string in the
- * encoding selected for the filesystem it is in then the copy name will not be set.
- * Corresponding #GFileAttributeType is %G_FILE_ATTRIBUTE_TYPE_STRING.
- */
-
-
-/**
  * g_desktop_app_info_get_filename:
  * @info: a #GDesktopAppInfo
  *
@@ -19594,36 +14636,39 @@
 
 
 /**
- * g_dbus_server_new_sync:
- * @address: A D-Bus address.
- * @flags: Flags from the #GDBusServerFlags enumeration.
- * @guid: A D-Bus GUID.
- * @observer: A #GDBusAuthObserver or %NULL.
- * @cancellable: A #GCancellable or %NULL.
- * @error: Return location for server or %NULL.
+ * g_file_replace_contents_async:
+ * @file: input #GFile.
+ * @contents: string of contents to replace the file with.
+ * @length: the length of @contents in bytes.
+ * @etag: (allow-none): a new <link linkend="gfile-etag">entity tag</link> for the @file, or %NULL
+ * @make_backup: %TRUE if a backup should be created.
+ * @flags: a set of #GFileCreateFlags.
+ * @cancellable: optional #GCancellable object, %NULL to ignore.
+ * @callback: a #GAsyncReadyCallback to call when the request is satisfied
+ * @user_data: the data to pass to callback function
  *
- * Creates a new D-Bus server that listens on the first address in
- * Once constructed, you can use g_dbus_server_get_client_address() to
- * get a D-Bus address string that clients can use to connect.
- * Connect to the #GDBusServer::new-connection signal to handle
- * incoming connections.
- * The returned #GDBusServer isn't active - you have to start it with
- * g_dbus_server_start().
- * See <xref linkend="gdbus-peer-to-peer"/> for how #GDBusServer can
- * be used.
- * This is a synchronous failable constructor. See
- * g_dbus_server_new() for the asynchronous version.
- * g_object_unref().
- *
- * Returns: A #GDBusServer or %NULL if @error is set. Free with
- * Since: 2.26
+ * Starts an asynchronous replacement of @file with the given
+ * current entity tag.
+ * When this operation has completed, @callback will be called with
+ * g_file_replace_contents_finish().
+ * If @cancellable is not %NULL, then the operation can be cancelled by
+ * triggering the cancellable object from another thread. If the operation
+ * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned.
+ * If @make_backup is %TRUE, this function will attempt to
+ * make a backup of @file.
  */
 
 
 /**
- * GFileIcon:
+ * GActionGroup::action-removed:
+ * @action_group: the #GActionGroup that changed
+ * @action_name: the name of the action in @action_group
  *
- * Gets an icon for a #GFile. Implements #GLoadableIcon.
+ * Signals that an action is just about to be removed from the group.
+ * This signal is emitted before the action is removed, so the action
+ * is still visible and can be queried from the signal handler.
+ *
+ * Since: 2.28
  */
 
 
@@ -19665,16 +14710,6 @@
 
 
 /**
- * G_CLOSURE_NEEDS_MARSHAL:
- * @closure: a #GClosure
- *
- * Check if the closure still needs a marshaller. See g_closure_set_marshal().
- *
- * Returns: %TRUE if a #GClosureMarshal marshaller has not yet been set on
- */
-
-
-/**
  * g_unix_connection_send_fd:
  * @connection: a #GUnixConnection
  * @fd: a file descriptor
@@ -19694,27 +14729,6 @@
 
 
 /**
- * G_FILE_ATTRIBUTE_TRASH_DELETION_DATE:
- *
- * A key in the "trash" namespace.  When requested against
- * items in "trash:///", will return the date and time when the file
- * was trashed. The format of the returned string is YYYY-MM-DDThh:mm:ss.
- * Corresponding #GFileAttributeType is %G_FILE_ATTRIBUTE_TYPE_STRING.
- *
- * Since: 2.24.
- */
-
-
-/**
- * GProxy:
- *
- * Interface that handles proxy connection and payload.
- *
- * Since: 2.26
- */
-
-
-/**
  * g_content_type_is_unknown:
  * @type: a content type string
  *
@@ -19723,14 +14737,6 @@
  * while on win32 it is "*".
  *
  * Returns: %TRUE if the type is the unknown type.
- */
-
-
-/**
- * GMountMountFlags:
- * @G_MOUNT_MOUNT_NONE: No flags set.
- *
- * Flags used when mounting a mount.
  */
 
 
@@ -19791,18 +14797,6 @@
 
 
 /**
- * GBusNameLostCallback:
- * @connection: The #GDBusConnection on which to acquire the name or %NULL if the connection was disconnected.
- * @name: The name being owned.
- * @user_data: User data passed to g_bus_own_name() or g_bus_own_name_on_connection().
- *
- * Invoked when the name is lost or @connection has been closed.
- *
- * Since: 2.26
- */
-
-
-/**
  * g_unix_mount_point_get_mount_path:
  * @mount_point: a #GUnixMountPoint.
  *
@@ -19840,28 +14834,6 @@
 
 
 /**
- * GBusNameOwnerFlags:
- * @G_BUS_NAME_OWNER_FLAGS_NONE: No flags set.
- * @G_BUS_NAME_OWNER_FLAGS_ALLOW_REPLACEMENT: Allow another message bus connection to claim the the name.
- * @G_BUS_NAME_OWNER_FLAGS_REPLACE: If another message bus connection owns the name and have specified #G_BUS_NAME_OWNER_FLAGS_ALLOW_REPLACEMENT, then take the name from the other connection.
- *
- * Flags used in g_bus_own_name().
- *
- * Since: 2.26
- */
-
-
-/**
- * G_IS_PARAM_SPEC_ULONG:
- * @pspec: a valid #GParamSpec instance
- *
- * Checks whether the given #GParamSpec is of type %G_TYPE_PARAM_ULONG.
- *
- * Returns: %TRUE on success.
- */
-
-
-/**
  * g_file_resolve_relative_path:
  * @file: input #GFile.
  * @relative_path: a given relative path string.
@@ -19876,10 +14848,14 @@
 
 
 /**
- * G_VARIANT_TYPE_ANY:
+ * g_application_get_flags:
+ * @application: a #GApplication
+ * @returns: the flags for @application
  *
- * An indefinite type that is a supertype of every type (including
- * itself).
+ * Gets the flags for @application.
+ * See #GApplicationFlags.
+ *
+ * Since: 2.28
  */
 
 
@@ -19901,16 +14877,6 @@
  *
  * Extends the #GIcon interface and adds the ability to
  * load icons from streams.
- */
-
-
-/**
- * GDateTime:
- *
- * <structname>GDateTime</structname> is an opaque structure whose members
- * cannot be accessed directly.
- *
- * Since: 2.26
  */
 
 
@@ -19964,15 +14930,6 @@
 
 
 /**
- * G_FILE_ATTRIBUTE_OWNER_USER:
- *
- * A key in the "owner" namespace for getting the user name of the
- * file's owner. Corresponding #GFileAttributeType is
- * %G_FILE_ATTRIBUTE_TYPE_STRING.
- */
-
-
-/**
  * g_dbus_message_copy:
  * @message: A #GDBusMessage.
  * @error: Return location for error or %NULL.
@@ -19986,71 +14943,6 @@
  *
  * Returns: (transfer full): A new #GDBusMessage or %NULL if @error is set. Free with
  * Since: 2.26
- */
-
-
-/**
- * g_alloca:
- * @size: number of bytes to allocate.
- *
- * Allocates @size bytes on the stack; these bytes will be freed when the current
- * stack frame is cleaned up. This macro essentially just wraps the alloca()
- * function present on most UNIX variants.
- * Thus it provides the same advantages and pitfalls as alloca():
- * <variablelist>
- * <varlistentry><term></term><listitem><para>
- * + alloca() is very fast, as on most systems it's implemented by just adjusting
- * the stack pointer register.
- * </para></listitem></varlistentry>
- * <varlistentry><term></term><listitem><para>
- * + It doesn't cause any memory fragmentation, within its scope, separate alloca()
- * blocks just build up and are released together at function end.
- * </para></listitem></varlistentry>
- * <varlistentry><term></term><listitem><para>
- * - Allocation sizes have to fit into the current stack frame. For instance in a
- * threaded environment on Linux, the per-thread stack size is limited to 2 Megabytes,
- * so be sparse with alloca() uses.
- * </para></listitem></varlistentry>
- * <varlistentry><term></term><listitem><para>
- * - Allocation failure due to insufficient stack space is not indicated with a %NULL
- * return like e.g. with malloc(). Instead, most systems probably handle it the same
- * way as out of stack space situations from infinite function recursion, i.e.
- * with a segmentation fault.
- * </para></listitem></varlistentry>
- * <varlistentry><term></term><listitem><para>
- * - Special care has to be taken when mixing alloca() with GNU C variable sized arrays.
- * Stack space allocated with alloca() in the same scope as a variable sized array
- * will be freed together with the variable sized array upon exit of that scope, and
- * not upon exit of the enclosing function scope.
- * </para></listitem></varlistentry>
- * </variablelist>
- *
- * Returns: space for @size bytes, allocated on the stack
- */
-
-
-/**
- * G_DEFINE_TYPE_WITH_CODE:
- * @TN: The name of the new type, in Camel case.
- * @t_n: The name of the new type in lowercase, with words separated by '_'.
- * @T_P: The #GType of the parent type.
- * @_C_: Custom code that gets inserted in the *_get_type() function.
- *
- * A convenience macro for type implementations.
- * Similar to G_DEFINE_TYPE(), but allows you to insert custom code into the
- * *_get_type() function, e.g. interface implementations via G_IMPLEMENT_INTERFACE().
- * See G_DEFINE_TYPE_EXTENDED() for an example.
- *
- * Since: 2.4
- */
-
-
-/**
- * G_FILE_ATTRIBUTE_STANDARD_SYMLINK_TARGET:
- *
- * A key in the "standard" namespace for getting the symlink target, if the file
- * is a symlink. Corresponding #GFileAttributeType is
- * %G_FILE_ATTRIBUTE_TYPE_BYTE_STRING.
  */
 
 
@@ -20210,17 +15102,6 @@
 
 
 /**
- * g_node_append:
- * @parent: the #GNode to place the new #GNode under
- * @node: the #GNode to insert
- *
- * Inserts a #GNode as the last child of the given parent.
- *
- * Returns: the inserted #GNode
- */
-
-
-/**
  * g_memory_input_stream_add_data:
  * @stream: a #GMemoryInputStream
  * @data: input data
@@ -20243,14 +15124,6 @@
 
 
 /**
- * G_PARAM_SPEC_INT64:
- * @pspec: a valid #GParamSpec instance
- *
- * Cast a #GParamSpec instance into a #GParamSpecInt64.
- */
-
-
-/**
  * g_permission_release_finish:
  * @permission: a #GPermission instance
  * @result: the #GAsyncResult given to the #GAsyncReadyCallback
@@ -20267,30 +15140,12 @@
 
 
 /**
- * G_TYPE_RESERVED_BSE_LAST:
- *
- * Last fundamental type number reserved for BSE.
- */
-
-
-/**
  * g_dbus_message_get_num_unix_fds:
  * @message: A #GDBusMessage.
  *
  * Convenience getter for the %G_DBUS_MESSAGE_HEADER_FIELD_NUM_UNIX_FDS header field.
  *
  * Returns: The value.
- * Since: 2.26
- */
-
-
-/**
- * GDBusSubtreeFlags:
- * @G_DBUS_SUBTREE_FLAGS_NONE: No flags set.
- * @G_DBUS_SUBTREE_FLAGS_DISPATCH_TO_UNENUMERATED_NODES: Method calls to objects not in the enumerated range will still be dispatched. This is useful if you want to dynamically spawn objects in the subtree.
- *
- * Flags passed to g_dbus_connection_register_subtree().
- *
  * Since: 2.26
  */
 
@@ -20308,31 +15163,13 @@
 
 
 /**
- * G_FILE_ATTRIBUTE_STANDARD_TARGET_URI:
+ * SECTION:gmemoryoutputstrea:
+ * @short_description: Streaming output operations on memory chunks
+ * @include: gio/gio.h
+ * @see_also: #GMemoryInputStream
  *
- * A key in the "standard" namespace for getting the target URI for the file, in
- * the case of %G_FILE_TYPE_SHORTCUT or %G_FILE_TYPE_MOUNTABLE files.
- * Corresponding #GFileAttributeType is %G_FILE_ATTRIBUTE_TYPE_STRING.
- */
-
-
-/**
- * GSrvTarget:
- *
- * A single target host/port that a network service is running on.
- */
-
-
-/**
- * GProxyInterface:
- * @g_iface: The parent interface.
- * @connect: Connect to proxy server and wrap (if required) the #connection to handle payload.
- * @connect_async: Same has connect() but asynchronous.
- * @connect_finish: Returns the result of connect_async()
- *
- * Provides an interface for handling proxy connection and payload.
- *
- * Since: 2.26
+ * #GMemoryOutputStream is a class for using arbitrary
+ * memory chunks as output for GIO streaming output operations.
  */
 
 
@@ -20344,16 +15181,6 @@
  *
  * Returns: @addr's scheme (%NULL if not built from URI)
  * Since: 2.26
- */
-
-
-/**
- * G_FILE_ATTRIBUTE_TIME_ACCESS:
- *
- * A key in the "time" namespace for getting the time the file was last
- * accessed. Corresponding #GFileAttributeType is
- * %G_FILE_ATTRIBUTE_TYPE_UINT64, and contains the UNIX time since the
- * file was last accessed.
  */
 
 
@@ -20390,7 +15217,7 @@
  * The type of the parameter that must be given when activating the
  * action.
  *
- * Since: 2.26
+ * Since: 2.28
  */
 
 
@@ -20431,15 +15258,6 @@
 
 
 /**
- * GClosure:
- * @in_marshal: Indicates whether the closure is currently being invoked with g_closure_invoke()
- * @is_invalid: Indicates whether the closure has been invalidated by g_closure_invalidate()
- *
- * A #GClosure represents a callback supplied by the programmer.
- */
-
-
-/**
  * SECTION:gsocketaddres:
  * @short_description: Abstract base class representing endpoints for socket communication
  *
@@ -20447,15 +15265,6 @@
  * in the BSD sockets API. This is an abstract class; use
  * #GInetSocketAddress for internet sockets, or #GUnixSocketAddress
  * for UNIX domain sockets.
- */
-
-
-/**
- * G_TIME_SPAN_MINUTE:
- *
- * Evaluates to a time span of one minute.
- *
- * Since: 2.26
  */
 
 
@@ -20483,32 +15292,6 @@
 
 
 /**
- * g_application_get_id:
- * @application: a #GApplication
- *
- * Retrieves the platform-specific identifier for the #GApplication.
- * is owned by the #GApplication instance and it should never be
- * modified or freed
- *
- * Returns: The platform-specific identifier. The returned string
- * Since: 2.26
- */
-
-
-/**
- * G_TYPE_INSTANCE_GET_INTERFACE:
- * @instance: Location of the #GTypeInstance structure.
- * @g_type: The #GType of the interface to be returned.
- * @c_type: The C type of the interface structure.
- *
- * Get the interface structure for interface @g_type of a given @instance.
- * This macro should only be used in type implementations.
- *
- * Returns: a pointer to the interface structure
- */
-
-
-/**
  * g_file_info_get_attribute_as_string:
  * @info: a #GFileInfo.
  * @attribute: a file attribute key.
@@ -20532,9 +15315,46 @@
 
 
 /**
- * GFileAttributeMatcher:
+ * g_settings_get_range:
+ * @settings: a #GSettings
+ * @key: the key to query the range of
+ * @returns: a #GVariant describing the range
  *
- * Determines if a string matches a file attribute.
+ * Queries the range of a key.
+ * This function will return a #GVariant that fully describes the range
+ * of values that are valid for @key.
+ * The type of #GVariant returned is <literal>(sv)</literal>.  The
+ * string describes the type of range restriction in effect.  The type
+ * and meaning of the value contained in the variant depends on the
+ * string.
+ * If the string is <literal>'type'</literal> then the variant contains
+ * an empty array.  The element type of that empty array is the expected
+ * type of value and all values of that type are valid.
+ * If the string is <literal>'enum'</literal> then the variant contains
+ * an array enumerating the possible values.  Each item in the array is
+ * a possible valid value and no other values are valid.
+ * If the string is <literal>'flags'</literal> then the variant contains
+ * an array.  Each item in the array is a value that may appear zero or
+ * one times in an array to be used as the value for this key.  For
+ * example, if the variant contained the array <literal>['x',
+ * 'y']</literal> then the valid values for the key would be
+ * <literal>[]</literal>, <literal>['x']</literal>,
+ * <literal>['y']</literal>, <literal>['x', 'y']</literal> and
+ * <literal>['y', 'x']</literal>.
+ * Finally, if the string is <literal>'range'</literal> then the variant
+ * contains a pair of like-typed values -- the minimum and maximum
+ * permissible values for this key.
+ * This information should not be used by normal programs.  It is
+ * considered to be a hint for introspection purposes.  Normal programs
+ * should already know what is permitted by their own schema.  The
+ * format may change in any way in the future -- but particularly, new
+ * forms may be added to the possibilities described above.
+ * It is a programmer error to give a @key that isn't contained in the
+ * schema for @settings.
+ * You should free the returned value with g_variant_unref() when it is
+ * no longer needed.
+ *
+ * Since: 2.28
  */
 
 
@@ -20554,13 +15374,6 @@
 
 
 /**
- * G_TYPE_IO_CONDITION:
- *
- * The #GType for #GIOCondition.
- */
-
-
-/**
  * g_mount_unmount:
  * @mount: a #GMount.
  * @flags: flags affecting the operation
@@ -20573,16 +15386,6 @@
  * and #GAsyncResult data returned in the @callback.
  *
  * Deprecated: 2.22: Use g_mount_unmount_with_operation() instead.
- */
-
-
-/**
- * g_io_module_load:
- * @module: a #GIOModule.
- *
- * Required API for GIO modules to implement.
- * This function is ran after the module has been loaded into GIO,
- * to initialize the module.
  */
 
 
@@ -20617,30 +15420,6 @@
 
 
 /**
- * G_URI_RESERVED_CHARS_ALLOWED_IN_PATH:
- *
- * Allowed characters in a path. Includes "!$&'()*+,;=:@/".
- */
-
-
-/**
- * GDesktopAppInfoLookup:
- *
- * Interface that is used by backends to associate default
- * handlers with URI schemes.
- */
-
-
-/**
- * G_FILE_ATTRIBUTE_UNIX_BLOCK_SIZE:
- *
- * A key in the "unix" namespace for getting the block size for the file
- * system. This attribute is only available for UNIX file systems.
- * Corresponding #GFileAttributeType is %G_FILE_ATTRIBUTE_TYPE_UINT32.
- */
-
-
-/**
  * g_dbus_interface_info_lookup_property:
  * @info: A #GDBusInterfaceInfo.
  * @name: A D-Bus property name (typically in CamelCase).
@@ -20650,36 +15429,6 @@
  *
  * Returns: A #GDBusPropertyInfo or %NULL if not found. Do not free, it is owned by @info.
  * Since: 2.26
- */
-
-
-/**
- * G_TYPE_PARAM_UINT64:
- *
- * The #GType of #GParamSpecUInt64.
- */
-
-
-/**
- * GBusNameAcquiredCallback:
- * @connection: The #GDBusConnection on which to acquired the name.
- * @name: The name being owned.
- * @user_data: User data passed to g_bus_own_name() or g_bus_own_name_on_connection().
- *
- * Invoked when the name is acquired.
- *
- * Since: 2.26
- */
-
-
-/**
- * GMountOperationResult:
- * @G_MOUNT_OPERATION_HANDLED: The request was fulfilled and the user specified data is now available
- * @G_MOUNT_OPERATION_ABORTED: The user requested the mount operation to be aborted
- * @G_MOUNT_OPERATION_UNHANDLED: The request was unhandled (i.e. not implemented)
- *
- * #GMountOperationResult is returned as a result when a request for
- * information is send by the mounting operation.
  */
 
 
@@ -20768,25 +15517,6 @@
  *
  * Returns: (transfer full): the stream's data
  * Since: 2.26
- */
-
-
-/**
- * G_PARAM_SPEC_VARIANT:
- * @pspec: a #GParamSpec
- *
- * Casts a #GParamSpec into a #GParamSpecVariant.
- *
- * Since: 2.26
- */
-
-
-/**
- * GApplication:register:
- *
- * If this property is %FALSE, the application construction will not attempt
- * to ensure process uniqueness, and the application is guaranteed to be in the
- * remote state.  See GApplication:is-remote.
  */
 
 
@@ -20884,29 +15614,6 @@
 
 
 /**
- * G_TYPE_CHECK_INSTANCE_CAST:
- * @instance: Location of a #GTypeInstance structure.
- * @g_type: The type to be returned.
- * @c_type: The corresponding C type of @g_type.
- *
- * Checks that @instance is an instance of the type identified by @g_type
- * and issues a warning if this is not the case. Returns @instance casted
- * to a pointer to @c_type.
- * This macro should only be used in type implementations.
- */
-
-
-/**
- * G_IS_PARAM_SPEC_PARAM:
- * @pspec: a valid #GParamSpec instance
- *
- * Checks whether the given #GParamSpec is of type %G_TYPE_PARAM_PARAM.
- *
- * Returns: %TRUE on success.
- */
-
-
-/**
  * g_file_get_uri_scheme:
  * @file: input #GFile.
  *
@@ -20921,15 +15628,6 @@
  * when no longer needed.
  *
  * Returns: a string containing the URI scheme for the given
- */
-
-
-/**
- * GAsyncInitable:
- *
- * Interface for asynchronously initializable objects.
- *
- * Since: 2.22
  */
 
 
@@ -20965,13 +15663,6 @@
  * it will be a #GTcpConnection.
  *
  * Since: 2.22
- */
-
-
-/**
- * G_TYPE_FUNDAMENTAL_SHIFT:
- *
- * Shift value used in converting numbers to type IDs.
  */
 
 
@@ -21030,20 +15721,6 @@
  * to fail with %G_IO_ERROR_TIMED_OUT.
  *
  * Since: 2.26
- */
-
-
-/**
- * g_inet_address_get_is_site_local:
- * @address: a #GInetAddress
- *
- * Tests whether @address is a site-local address such as 10.0.0.1
- * (that is, the address identifies a host on a local network that can
- * not be reached directly from the Internet, but which may have
- * outgoing Internet connectivity via a NAT or firewall).
- *
- * Returns: %TRUE if @address is a site-local address.
- * Since: 2.22
  */
 
 
@@ -21131,6 +15808,16 @@
 
 
 /**
+ * g_themed_icon_get_names:
+ * @icon: a #GThemedIcon.
+ *
+ * Gets the names of icons from within @icon.
+ *
+ * Returns: (transfer none): a list of icon names.
+ */
+
+
+/**
  * g_file_mount_mountable:
  * @file: input #GFile.
  * @flags: flags affecting the operation
@@ -21174,41 +15861,31 @@
  * directly. Applications should use g_app_info_get_default_for_uri_scheme().
  *
  * Returns: (transfer full): #GAppInfo for given @uri_scheme or %NULL on error.
+ * Deprecated: The #GDesktopAppInfoLookup interface is deprecated and unused by gio.
  */
 
 
 /**
- * G_TYPE_PARAM:
+ * g_application_get_inactivity_timeout:
+ * @application: a #GApplication
  *
- * The fundamental type from which all #GParamSpec types are derived.
+ * Gets the current inactivity timeout for the application.
+ * This is the amount of time (in milliseconds) after the last call to
+ * g_application_release() before the application stops running.
+ *
+ * Returns: the timeout, in milliseconds
+ * Since: 2.28
  */
 
 
 /**
- * GTypePlugin:
+ * g_periodic_get_hz:
+ * @periodic: a #GPeriodic clock
  *
- * The <structname>GTypePlugin</structname> typedef is used as a placeholder
- * for objects that implement the <structname>GTypePlugin</structname>
- * interface.
- */
-
-
-/**
- * G_FILE_ATTRIBUTE_STANDARD_ICON:
+ * Gets the frequency of the clock.
  *
- * A key in the "standard" namespace for getting the icon for the file.
- * Corresponding #GFileAttributeType is %G_FILE_ATTRIBUTE_TYPE_OBJECT.
- * The value for this key should contain a #GIcon.
- */
-
-
-/**
- * G_FILE_ATTRIBUTE_MOUNTABLE_CAN_POLL:
- *
- * A key in the "mountable" namespace for checking if a file (of type G_FILE_TYPE_MOUNTABLE) can be polled.
- * Corresponding #GFileAttributeType is %G_FILE_ATTRIBUTE_TYPE_BOOLEAN.
- *
- * Since: 2.22
+ * Returns: the frquency of the clock, in Hz
+ * Since: 2.28
  */
 
 
@@ -21241,13 +15918,6 @@
  *
  * Returns: The file handle of @stream
  * Since: 2.26
- */
-
-
-/**
- * G_TYPE_PARAM_BOOLEAN:
- *
- * The #GType of #GParamSpecBoolean.
  */
 
 
@@ -21289,28 +15959,6 @@
  *
  * Removes a reference from the given @list. If the reference count
  * falls to zero, the @list is deleted.
- */
-
-
-/**
- * G_VALUE_HOLDS_OBJECT:
- * @value: a valid #GValue structure
- *
- * Checks whether the given #GValue can hold values derived from type %G_TYPE_OBJECT.
- *
- * Returns: %TRUE on success.
- */
-
-
-/**
- * GTypeQuery:
- * @type: the #GType value of the type.
- * @type_name: the name of the type.
- * @class_size: the size of the class structure.
- * @instance_size: the size of the instance structure.
- *
- * A structure holding information for a specific type. It is
- * filled in by the g_type_query() function.
  */
 
 
@@ -21494,39 +16142,12 @@
 
 
 /**
- * G_PARAM_SPEC_OBJECT:
- * @pspec: a valid #GParamSpec instance
- *
- * Casts a #GParamSpec instance into a #GParamSpecObject.
- */
-
-
-/**
- * GSocketAddressEnumerator:
- *
- * Enumerator type for objects that contain or generate
- * #GSocketAddress<!-- -->es.
- */
-
-
-/**
  * g_mount_operation_get_usernam:
  * @op: a #GMountOperation.
  *
  * Get the user name from the mount operation.
  *
  * Returns: a string containing the user name.
- */
-
-
-/**
- * GParamSpecInt64:
- * @parent_instance: private #GParamSpec portion
- * @minimum: minimum value for the property specified
- * @maximum: maximum value for the property specified
- * @default_value: default value for the property specified
- *
- * A #GParamSpec derived structure that contains the meta data for 64bit integer properties.
  */
 
 
@@ -21539,88 +16160,11 @@
 
 
 /**
- * GDBusMessageFlags:
- * @G_DBUS_MESSAGE_FLAGS_NONE: No flags set.
- * @G_DBUS_MESSAGE_FLAGS_NO_REPLY_EXPECTED: A reply is not expected.
- * @G_DBUS_MESSAGE_FLAGS_NO_AUTO_START: The bus must not launch an owner for the destination name in response to this message.
- *
- * Message flags used in #GDBusMessage.
- *
- * Since: 2.26
- */
-
-
-/**
- * G_PROXY_RESOLVER_EXTENSION_POINT_NAME:
- *
- * Extension point for proxy resolving functionality.
- * See <link linkend="extending-gio">Extending GIO</link>.
- */
-
-
-/**
- * G_VALUE_HOLDS_FLAGS:
- * @value: a valid #GValue structure
- *
- * Checks whether the given #GValue can hold values derived from type %G_TYPE_FLAGS.
- *
- * Returns: %TRUE on success.
- */
-
-
-/**
- * GClassFinalizeFunc:
- * @g_class: The #GTypeClass structure to finalize.
- * @class_data: The @class_data member supplied via the #GTypeInfo structure.
- *
- * A callback function used by the type system to finalize a class.
- * This function is rarely needed, as dynamically allocated class resources
- * should be handled by GBaseInitFunc() and GBaseFinalizeFunc().
- * Also, specification of a GClassFinalizeFunc() in the #GTypeInfo
- * structure of a static type is invalid, because classes of static types
- * will never be finalized (they are artificially kept alive when their
- * reference count drops to zero).
- */
-
-
-/**
- * GDBusInterfaceSetPropertyFunc:
- * @connection: A #GDBusConnection.
- * @sender: The unique bus name of the remote caller.
- * @object_path: The object path that the method was invoked on.
- * @interface_name: The D-Bus interface name for the property.
- * @property_name: The name of the property to get the value of.
- * @value: The value to set the property to.
- * @error: Return location for error.
- * @user_data: The @user_data #gpointer passed to g_dbus_connection_register_object().
- *
- * The type of the @set_property function in #GDBusInterfaceVTable.
- *
- * Returns: %TRUE if the property was set to @value, %FALSE if @error is set.
- * Since: 2.26
- */
-
-
-/**
  * GWin32InputStream:handle:
  *
  * The handle that the stream reads from.
  *
  * Since: 2.26
- */
-
-
-/**
- * GDriveStartStopType:
- * @G_DRIVE_START_STOP_TYPE_UNKNOWN: Unknown or drive doesn't support start/stop.
- * @G_DRIVE_START_STOP_TYPE_SHUTDOWN: The stop method will physically shut down the drive and e.g. power down the port the drive is attached to.
- * @G_DRIVE_START_STOP_TYPE_NETWORK: The start/stop methods are used for connecting/disconnect to the drive over the network.
- * @G_DRIVE_START_STOP_TYPE_MULTIDISK: The start/stop methods will assemble/disassemble a virtual drive from several physical drives.
- * @G_DRIVE_START_STOP_TYPE_PASSWORD: The start/stop methods will unlock/lock the disk (for example using the ATA <quote>SECURITY UNLOCK DEVICE</quote> command)
- *
- * Enumeration describing how a drive can be started/stopped.
- *
- * Since: 2.22
  */
 
 
@@ -21693,31 +16237,21 @@
 
 
 /**
- * GDBusSubtreeEnumerateFunc:
- * @connection: A #GDBusConnection.
- * @sender: The unique bus name of the remote caller.
- * @object_path: The object path that was registered with g_dbus_connection_register_subtree().
- * @user_data: The @user_data #gpointer passed to g_dbus_connection_register_subtree().
+ * g_application_command_line_get_environ:
+ * @cmdline: a #GApplicationCommandLine
  *
- * The type of the @enumerate function in #GDBusSubtreeVTable.
- * This function is called when generating introspection data and also
- * when preparing to dispatch incoming messages in the event that the
- * %G_DBUS_SUBTREE_FLAGS_DISPATCH_TO_UNENUMERATED_NODES flag is not
- * Hierarchies are not supported; the items that you return should not
- * contain the '/' character.
- * The return value will be freed with g_strfreev().
+ * Gets the contents of the 'environ' variable of the command line
+ * invocation, as would be returned by g_get_environ().  The strings may
+ * contain non-utf8 data.
+ * The remote application usually does not send an environment.  Use
+ * %G_APPLICATION_SEND_ENVIRONMENT to affect that.  Even with this flag
+ * set it is possible that the environment is still not available (due
+ * to invocation messages from other applications).
+ * The return value should not be modified or freed and is valid for as
+ * long as @cmdline exists.
  *
- * Specified (ie: to verify that the object path is valid).
- * Returns: A newly allocated array of strings for node names that are children of @object_path.
- * Since: 2.26
- */
-
-
-/**
- * GSocketServiceClass:
- * @incomming: signal emitted when new connections are accepted
- *
- *
+ * Returns: the environment strings, or %NULL if they were not sent
+ * Since: 2.28
  */
 
 
@@ -21728,26 +16262,6 @@
  * Frees @target
  *
  * Since: 2.22
- */
-
-
-/**
- * GThemedIcon:
- *
- * An implementation of #GIcon for themed icons.
- */
-
-
-/**
- * GConverterResult:
- * @G_CONVERTER_ERROR: There was an error during conversion.
- * @G_CONVERTER_CONVERTED: Some data was consumed or produced
- * @G_CONVERTER_FINISHED: The conversion is finished
- * @G_CONVERTER_FLUSHED: Flushing is finished
- *
- * Results returned from g_converter_convert().
- *
- * Since: 2.24
  */
 
 
@@ -21805,15 +16319,6 @@
 
 
 /**
- * G_DATALIST_FLAGS_MASK:
- *
- * A bitmask that restricts the possible flags passed to
- * g_datalist_set_flags(). Passing a flags value where
- * flags & ~G_DATALIST_FLAGS_MASK != 0 is an error.
- */
-
-
-/**
  * g_dbus_address_get_stream_sync:
  * @address: A valid D-Bus address.
  * @out_guid: %NULL or return location to store the GUID extracted from @address, if any.
@@ -21832,18 +16337,30 @@
 
 
 /**
- * GZlibCompressor:
+ * g_application_command_line_set_exit_status:
+ * @cmdline: a #GApplicationCommandLine
+ * @exit_status: the exit status
  *
- * Zlib decompression
- */
-
-
-/**
- * G_INITIALLY_UNOWNED_CLASS:
- * @class: a valid #GInitiallyUnownedClass
+ * Sets the exit status that will be used when the invoking process
+ * exits.
+ * The return value of the #GApplication::command-line signal is
+ * passed to this function when the handler returns.  This is the usual
+ * way of setting the exit status.
+ * In the event that you want the remote invocation to continue running
+ * and want to decide on the exit status in the future, you can use this
+ * call.  For the case of a remote invocation, the remote process will
+ * typically exit when the last reference is dropped on @cmdline.  The
+ * exit status of the remote process will be equal to the last value
+ * that was set with this function.
+ * In the case that the commandline invocation is local, the situation
+ * is slightly more complicated.  If the commandline invocation results
+ * increased to a non-zero value) then the application is considered to
+ * have been 'successful' in a certain sense, and the exit status is
+ * always zero.  If the application use count is zero, though, the exit
+ * status of the local #GApplicationCommandLine is used.
  *
- * Casts a derived #GInitiallyUnownedClass structure into a
- * #GInitiallyUnownedClass structure.
+ * In the mainloop running (ie: because the use-count of the application
+ * Since: 2.28
  */
 
 
@@ -21877,43 +16394,13 @@
 
 
 /**
- * G_VALUE_HOLDS_LONG:
- * @value: a valid #GValue structure
+ * GApplication::command-line:
+ * @application: the application
+ * @command_line: a #GApplicationCommandLine representing the passed commandline
  *
- * Checks whether the given #GValue can hold values of type %G_TYPE_LONG.
- *
- * Returns: %TRUE on success.
- */
-
-
-/**
- * G_FILE_ATTRIBUTE_MOUNTABLE_UNIX_DEVICE_FILE:
- *
- * A key in the "mountable" namespace for getting the unix device file.
- * Corresponding #GFileAttributeType is %G_FILE_ATTRIBUTE_TYPE_STRING.
- *
- * Since: 2.22
- */
-
-
-/**
- * GParamSpec:
- * @g_type_instance: private #GTypeInstance portion
- * @name: name of this parameter
- * @flags: #GParamFlags flags for this parameter
- * @value_type: the #GValue type for this parameter
- * @owner_type: #GType type that uses (introduces) this parameter
- *
- * All other fields of the <structname>GParamSpec</structname> struct are private and
- * should not be used directly.
- */
-
-
-/**
- * GObjectFinalizeFunc:
- * @object: the #GObject being finalized
- *
- * The type of the @finalize function of #GObjectClass.
+ * The ::command-line signal is emitted on the primary instance when
+ * a commandline is not handled locally. See g_application_run() for
+ * more information.
  */
 
 
@@ -21989,27 +16476,6 @@
 
 
 /**
- * G_FILE_ATTRIBUTE_FILESYSTEM_USE_PREVIEW:
- *
- * A key in the "filesystem" namespace for hinting a file manager
- * application whether it should preview (e.g. thumbnail) files on the
- * file system. The value for this key contain a
- * #GFilesystemPreviewType.
- */
-
-
-/**
- * G_TYPE_FROM_INSTANCE:
- * @instance: Location of a valid #GTypeInstance structure.
- *
- * Get the type identifier from a given @instance structure.
- * This macro should only be used in type implementations.
- *
- * Returns: the #GType
- */
-
-
-/**
  * g_win32_input_stream_new:
  * @handle: a Win32 file handle
  * @close_fd: %TRUE to close the handle when done
@@ -22032,20 +16498,6 @@
  * Creates a new themed icon for @iconnames.
  *
  * Returns: (transfer full): a new #GThemedIcon
- */
-
-
-/**
- * GFileType:
- * @G_FILE_TYPE_UNKNOWN: File's type is unknown.
- * @G_FILE_TYPE_REGULAR: File handle represents a regular file.
- * @G_FILE_TYPE_DIRECTORY: File handle represents a directory.
- * @G_FILE_TYPE_SYMBOLIC_LINK: File handle represents a symbolic link (Unix systems).
- * @G_FILE_TYPE_SPECIAL: File is a "special" file, such as a socket, fifo, block device, or character device.
- * @G_FILE_TYPE_SHORTCUT: File is a shortcut (Windows systems).
- * @G_FILE_TYPE_MOUNTABLE: File is a mountable location.
- *
- * Indicates the file's on-disk type.
  */
 
 
@@ -22142,22 +16594,6 @@
 
 
 /**
- * GParamSpecOverride:
- *
- * This is a type of #GParamSpec type that simply redirects operations to
- * another paramspec.  All operations other than getting or
- * setting the value are redirected, including accessing the nick and
- * blurb, validating a value, and so forth. See
- * g_param_spec_get_redirect_target() for retrieving the overidden
- * property. #GParamSpecOverride is used in implementing
- * g_object_class_override_property(), and will not be directly useful
- * unless you are implementing a new base type similar to GObject.
- *
- * Since: 2.4
- */
-
-
-/**
  * g_dbus_signal_info_unref:
  * @info: A #GDBusSignalInfo.
  *
@@ -22166,23 +16602,6 @@
  * the memory used is freed.
  *
  * Since: 2.26
- */
-
-
-/**
- * GSettingsGetMapping:
- * @value: the #GVariant to map, or %NULL
- * @result: the result of the mapping
- * @user_data: the user data that was passed to g_settings_get_mapped()
- * @returns: %TRUE if the conversion succeeded, %FALSE in case of an error
- *
- * The type of the function that is used to convert from a value stored
- * in a #GSettings to a value that is useful to the application.
- * If the value is successfully mapped, the result should be stored at
- * is not in the right format) then %FALSE should be returned.
- * If @value is %NULL then it means that the mapping function is being
- * given a "last chance" to successfully return a valid value.  %TRUE
- * must be returned in this case.
  */
 
 
@@ -22253,14 +16672,6 @@
 
 
 /**
- * G_PARAM_SPEC_GET_CLASS:
- * @pspec: a valid #GParamSpec
- *
- * Retrieves the #GParamSpecClass of a #GParamSpec.
- */
-
-
-/**
  * SECTION:gresolve:
  * @short_description: Asynchronous and cancellable DNS resolver
  * @include: gio/gio.h
@@ -22284,7 +16695,7 @@
  * the parameter type given at construction time).  If the parameter
  * type was %NULL then @parameter must also be %NULL.
  *
- * Since: 2.26
+ * Since: 2.28
  */
 
 
@@ -22307,16 +16718,6 @@
  *
  * Sets the @attribute to contain the given @attr_value,
  * if possible.
- */
-
-
-/**
- * g_main_run:
- * @loop: a #GMainLoop
- *
- * Runs a main loop until it stops running.
- *
- * Deprecated: 2.2: Use g_main_loop_run() instead
  */
 
 
@@ -22357,23 +16758,6 @@
 
 
 /**
- * g_application_add_action:
- * @application: a #GApplication
- * @name: the action name
- * @description: the action description; can be a translatable string
- *
- * Adds an action @name to the list of exported actions of @application.
- * It is an error to call this function if @application is a proxy for
- * a remote application.
- * You can invoke an action using g_application_invoke_action().
- * The newly added action is enabled by default; you can call
- * g_application_set_action_enabled() to disable it.
- *
- * Since: 2.26
- */
-
-
-/**
  * g_unix_mount_monitor_new:
  *
  * Gets a new #GUnixMountMonitor. The default rate limit for which the
@@ -22410,15 +16794,6 @@
 
 
 /**
- * G_IS_PARAM_SPEC_CLASS:
- * @pclass: a #GParamSpecClass
- *
- * Checks whether @pclass "is a" valid #GParamSpecClass structure of type
- * %G_TYPE_PARAM or derived.
- */
-
-
-/**
  * g_dbus_annotation_info_ref:
  * @info: A #GDBusNodeInfo
  *
@@ -22438,53 +16813,6 @@
  * @value_p: pointer to the value
  *
  * Sets the @attribute to contain the given value, if possible.
- */
-
-
-/**
- * GTypeFlags:
- * @G_TYPE_FLAG_ABSTRACT: Indicates an abstract type. No instances can be created for an abstract type.
- * @G_TYPE_FLAG_VALUE_ABSTRACT: Indicates an abstract value type, i.e. a type that introduces a value table, but can't be used for g_value_init().
- *
- * Bit masks used to check or determine characteristics of a type.
- */
-
-
-/**
- * G_FILE_ATTRIBUTE_UNIX_MODE:
- *
- * A key in the "unix" namespace for getting the mode of the file
- * (e.g. whether the file is a regular file, symlink, etc). See lstat()
- * documentation. This attribute is only available for UNIX file systems.
- * Corresponding #GFileAttributeType is %G_FILE_ATTRIBUTE_TYPE_UINT32.
- */
-
-
-/**
- * G_TYPE_UINT64:
- *
- * The fundamental type corresponding to #guint64.
- */
-
-
-/**
- * G_FILE_ATTRIBUTE_TIME_MODIFIED:
- *
- * A key in the "time" namespace for getting the time the file was last
- * modified. Corresponding #GFileAttributeType is
- * %G_FILE_ATTRIBUTE_TYPE_UINT64, and contains the UNIX time since the
- * file was modified.
- */
-
-
-/**
- * GTypePluginCompleteInterfaceInfo:
- * @plugin: the #GTypePlugin
- * @instance_type: the #GType of an instantiable type to which the interface is added
- * @interface_type: the #GType of the interface whose info is completed
- * @info: the #GInterfaceInfo to fill in
- *
- * The type of the @complete_interface_info function of #GTypePluginClass.
  */
 
 
@@ -22584,7 +16912,7 @@
  * Emits the #GActionGroup::action-removed signal on @action_group.
  * This function should only be called by #GActionGroup implementations.
  *
- * Since: 2.26
+ * Since: 2.28
  */
 
 
@@ -22614,16 +16942,6 @@
 
 
 /**
- * G_TYPE_IS_FLAGS:
- * @type: a #GType ID.
- *
- * Checks whether @type "is a" %G_TYPE_FLAGS.
- *
- * Returns: %TRUE if @type "is a" %G_TYPE_FLAGS.
- */
-
-
-/**
  * SECTION:gdbusintrospectio:
  * @title: D-Bus Introspection Data
  * @short_description: Node and interface description data structures
@@ -22638,15 +16956,6 @@
 
 
 /**
- * G_FILE_ATTRIBUTE_UNIX_BLOCKS:
- *
- * A key in the "unix" namespace for getting the number of blocks allocated
- * for the file. This attribute is only available for UNIX file systems.
- * Corresponding #GFileAttributeType is %G_FILE_ATTRIBUTE_TYPE_UINT64.
- */
-
-
-/**
  * g_srv_target_list_sort: (skip)
  * @targets: a #GList of #GSrvTarget
  *
@@ -22654,67 +16963,6 @@
  *
  * Returns: (transfer full): the head of the sorted list.
  * Since: 2.22
- */
-
-
-/**
- * G_DEFINE_TYPE_EXTENDED:
- * @TN: The name of the new type, in Camel case.
- * @t_n: The name of the new type, in lowercase, with words separated by '_'.
- * @T_P: The #GType of the parent type.
- * @_f_: #GTypeFlags to pass to g_type_register_static()
- * @_C_: Custom code that gets inserted in the *_get_type() function.
- *
- * The most general convenience macro for type implementations, on which
- * G_DEFINE_TYPE(), etc are based.
- * |[
- * G_DEFINE_TYPE_EXTENDED (GtkGadget,
- * gtk_gadget,
- * GTK_TYPE_WIDGET,
- * 0,
- * G_IMPLEMENT_INTERFACE (TYPE_GIZMO,
- * gtk_gadget_gizmo_init));
- * ]|
- * expands to
- * |[
- * static void     gtk_gadget_init       (GtkGadget      *self);
- * static void     gtk_gadget_class_init (GtkGadgetClass *klass);
- * static gpointer gtk_gadget_parent_class = NULL;
- * static void     gtk_gadget_class_intern_init (gpointer klass)
- * {
- * gtk_gadget_parent_class = g_type_class_peek_parent (klass);
- * gtk_gadget_class_init ((GtkGadgetClass*) klass);
- * }
- * GType
- * gtk_gadget_get_type (void)
- * {
- * static volatile gsize g_define_type_id__volatile = 0;
- * if (g_once_init_enter (&g_define_type_id__volatile))
- * {
- * GType g_define_type_id =
- * g_type_register_static_simple (GTK_TYPE_WIDGET,
- * g_intern_static_string ("GtkGadget"),
- * sizeof (GtkGadgetClass),
- * (GClassInitFunc) gtk_gadget_class_intern_init,
- * sizeof (GtkGadget),
- * (GInstanceInitFunc) gtk_gadget_init,
- * (GTypeFlags) flags);
- * {
- * static const GInterfaceInfo g_implement_interface_info = {
- * (GInterfaceInitFunc) gtk_gadget_gizmo_init
- * };
- * g_type_add_interface_static (g_define_type_id, TYPE_GIZMO, &g_implement_interface_info);
- * }
- * g_once_init_leave (&g_define_type_id__volatile, g_define_type_id);
- * }
- * return g_define_type_id__volatile;
- * }
- * ]|
- * The only pieces which have to be manually provided are the definitions of
- * the instance and class structure and the definitions of the instance and
- * class init functions.
- *
- * Since: 2.4
  */
 
 
@@ -22731,27 +16979,6 @@
  * the OS or if @native_type isn't supported by the OS.
  *
  * Since: 2.26
- */
-
-
-/**
- * G_TYPE_PARAM_DOUBLE:
- *
- * The #GType of #GParamSpecDouble.
- */
-
-
-/**
- * GSocketType:
- * @G_SOCKET_TYPE_INVALID: Type unknown or wrong
- * @G_SOCKET_TYPE_STREAM: Reliable connection-based byte streams (e.g. TCP).
- * @G_SOCKET_TYPE_DATAGRAM: Connectionless, unreliable datagram passing. (e.g. UDP)
- * @G_SOCKET_TYPE_SEQPACKET: Reliable connection-based passing of datagrams of fixed maximum length (e.g. SCTP).
- *
- * Flags used when creating a #GSocket. Some protocols may not implement
- * all the socket types.
- *
- * Since: 2.22
  */
 
 
@@ -22777,40 +17004,6 @@
  *
  * Returns: (transfer full): a new #GNetworkService
  * Since: 2.22
- */
-
-
-/**
- * GApplicationClass:
- * @action_with_data: class handler for the #GApplication::action-with-data signal
- * @quit_with_data: class handler for the #GApplication::quit-with-data signal
- * @prepare_activation: class handler for the #GApplication::prepare-activation signal
- * @run: virtual function, called by g_application_run()
- *
- * The <structname>GApplicationClass</structname> structure contains
- * private data only
- *
- * Since: 2.26
- */
-
-
-/**
- * GSignalAccumulator:
- * @ihint: Signal invocation hint, see #GSignalInvocationHint.
- * @return_accu: Accumulator to collect callback return values in, this is the return value of the current signal emission.
- * @handler_return: A #GValue holding the return value of the signal handler.
- * @data: Callback data that was specified when creating the signal.
- *
- * The signal accumulator is a special callback function that can be used
- * to collect return values of the various callbacks that are called
- * during a signal emission. The signal accumulator is specified at signal
- * creation time, if it is left %NULL, no accumulation of callback return
- * values is performed. The return value of signal emissions is then the
- * value returned by the last callback.
- * should be aborted. Returning %FALSE means to abort the
- * current emission and %TRUE is returned for continuation.
- *
- * Returns: The accumulator function returns whether the signal emission
  */
 
 
@@ -22851,21 +17044,6 @@
 
 
 /**
- * G_DEFINE_TYPE:
- * @TN: The name of the new type, in Camel case.
- * @t_n: The name of the new type, in lowercase, with words separated by '_'.
- * @T_P: The #GType of the parent type.
- *
- * A convenience macro for type implementations, which declares a
- * class initialization function, an instance initialization function (see #GTypeInfo for information about
- * these) and a static variable named @t_n<!-- -->_parent_class pointing to the parent class. Furthermore, it defines
- * a *_get_type() function. See G_DEFINE_TYPE_EXTENDED() for an example.
- *
- * Since: 2.4
- */
-
-
-/**
  * g_file_info_get_file_type:
  * @info: a #GFileInfo.
  *
@@ -22873,13 +17051,6 @@
  * This is different from the file's content type, see g_file_info_get_content_type().
  *
  * Returns: a #GFileType for the given file.
- */
-
-
-/**
- * GFilterInputStream:
- *
- * A base class for all input streams that work on an underlying stream.
  */
 
 
@@ -22928,24 +17099,6 @@
  *
  * Returns: A valid D-Bus address string for @bus_type or %NULL if @error is set.
  * Since: 2.26
- */
-
-
-/**
- * G_VALUE_HOLDS_PARAM:
- * @value: a valid #GValue structure
- *
- * Checks whether the given #GValue can hold values derived from type %G_TYPE_PARAM.
- *
- * Returns: %TRUE on success.
- */
-
-
-/**
- * G_PARAM_SPEC_STRING:
- * @pspec: a valid #GParamSpec instance
- *
- * Casts a #GParamSpec instance into a #GParamSpecString.
  */
 
 
@@ -23005,7 +17158,7 @@
  * @connection: A #GDBusConnection.
  * @message: A #GDBusMessage.
  * @flags: Flags affecting how the message is sent.
- * @timeout_msec: The timeout in milliseconds or -1 to use the default timeout.
+ * @timeout_msec: The timeout in milliseconds, -1 to use the default timeout or %G_MAXINT for no timeout.
  * @out_serial: Return location for serial number assigned to @message when sending it or %NULL.
  * @cancellable: A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
@@ -23040,33 +17193,9 @@
 
 
 /**
- * GConvertError:
- * @G_CONVERT_ERROR_NO_CONVERSION: Conversion between the requested character sets is not supported.
- * @G_CONVERT_ERROR_ILLEGAL_SEQUENCE: Invalid byte sequence in conversion input.
- * @G_CONVERT_ERROR_FAILED: Conversion failed for some reason.
- * @G_CONVERT_ERROR_PARTIAL_INPUT: Partial character sequence at end of input.
- * @G_CONVERT_ERROR_BAD_URI: URI is invalid.
- * @G_CONVERT_ERROR_NOT_ABSOLUTE_PATH: Pathname is not an absolute path.
- *
- * Error codes returned by character set conversion routines.
- */
-
-
-/**
  * GDesktopAppInfo:
  *
  * Information about an installed application from a desktop file.
- */
-
-
-/**
- * GObjectConstructParam:
- * @pspec: the #GParamSpec of the construct parameter
- * @value: the value to set the parameter to
- *
- * The <structname>GObjectConstructParam</structname> struct is an auxiliary
- * structure used to hand #GParamSpec/#GValue pairs to the @constructor of
- * a #GObjectClass.
  */
 
 
@@ -23094,14 +17223,6 @@
 
 
 /**
- * G_CALLBACK:
- * @f: a function pointer.
- *
- * Cast a function pointer to a #GCallback.
- */
-
-
-/**
  * g_dbus_message_get_locked:
  * @message: A #GDBusMessage.
  *
@@ -23115,66 +17236,12 @@
 
 
 /**
- * G_FILE_ATTRIBUTE_GVFS_BACKEND:
- *
- * A key in the "gvfs" namespace that gets the name of the current
- * GVFS backend in use. Corresponding #GFileAttributeType is
- * %G_FILE_ATTRIBUTE_TYPE_STRING.
- */
-
-
-/**
- * GOptionParseFunc:
- * @context: The active #GOptionContext
- * @group: The group to which the function belongs
- * @data: User data added to the #GOptionGroup containing the option when it was created with g_option_group_new()
- * @error: A return location for error details
- *
- * The type of function that can be called before and after parsing.
- * occurred, in which case @error should be set with g_set_error()
- *
- * Returns: %TRUE if the function completed successfully, %FALSE if an error
- */
-
-
-/**
- * G_ENUM_CLASS:
- * @class: a valid #GEnumClass
- *
- * Casts a derived #GEnumClass structure into a #GEnumClass structure.
- */
-
-
-/**
  * GAction:state-type:
  *
  * The #GVariantType of the state that the action has, or %NULL if the
  * action is stateless.
  *
- * Since: 2.26
- */
-
-
-/**
- * G_VALUE_TYPE:
- * @value: A #GValue structure.
- *
- * Get the type identifier of @value.
- *
- * Returns: the #GType.
- */
-
-
-/**
- * GApplication::action-with-data:
- * @application: the object on which the signal is emitted
- * @name: The name of the activated action
- * @platform_data: Platform-specific data, or %NULL
- *
- * This signal is emitted when an action is activated. The action name
- * is passed as the first argument, but also as signal detail, so it
- * is possible to connect to this signal for individual actions.
- * The signal is never emitted for disabled actions.
+ * Since: 2.28
  */
 
 
@@ -23198,33 +17265,12 @@
 
 
 /**
- * GDBusCapabilityFlags:
- * @G_DBUS_CAPABILITY_FLAGS_NONE: No flags set.
- * @G_DBUS_CAPABILITY_FLAGS_UNIX_FD_PASSING: The connection supports exchanging UNIX file descriptors with the remote peer.
- *
- * Capabilities negotiated with the remote peer.
- *
- * Since: 2.26
- */
-
-
-/**
  * g_unix_socket_address_abstract_names_supported:
  *
  * Checks if abstract unix domain socket names are supported.
  *
  * Returns: %TRUE if supported, %FALSE otherwise
  * Since: 2.22
- */
-
-
-/**
- * G_VARIANT_TYPE_BYTESTRING:
- *
- * The type of an array of bytes.  This type is commonly used to pass
- * around strings that may not be valid utf8.  In that case, the
- * convention is that the nul terminator character should be included as
- * the last character in the array.
  */
 
 
@@ -23299,18 +17345,6 @@
 
 
 /**
- * GParamSpecVariant:
- * @parent_instance: private #GParamSpec portion
- * @type: a #GVariantType, or %NULL
- * @default_value: a #GVariant, or %NULL
- *
- * A #GParamSpec derived structure that contains the meta data for #GVariant properties.
- *
- * Since: 2.26
- */
-
-
-/**
  * g_file_info_get_is_hidden:
  * @info: a #GFileInfo.
  *
@@ -23327,13 +17361,6 @@
  * Starts @server.
  *
  * Since: 2.26
- */
-
-
-/**
- * G_VOLUME_IDENTIFIER_KIND_LABEL:
- *
- * The string used to obtain a filesystem label with g_volume_get_identifier().
  */
 
 
@@ -23434,16 +17461,6 @@
 
 
 /**
- * G_IS_PARAM_SPEC_UINT64:
- * @pspec: a valid #GParamSpec instance
- *
- * Checks whether the given #GParamSpec is of type %G_TYPE_PARAM_UINT64.
- *
- * Returns: %TRUE on success.
- */
-
-
-/**
  * g_app_info_equal:
  * @appinfo1: the first #GAppInfo.
  * @appinfo2: the second #GAppInfo.
@@ -23481,13 +17498,6 @@
  * Checks if a volume can be mounted.
  *
  * Returns: %TRUE if the @volume can be mounted. %FALSE otherwise.
- */
-
-
-/**
- * G_TYPE_LONG:
- *
- * The fundamental type corresponding to #glong.
  */
 
 
@@ -23549,35 +17559,6 @@
  *
  * Returns: The #GFileType of the file and #G_FILE_TYPE_UNKNOWN if the file
  * Since: 2.18
- */
-
-
-/**
- * G_PARAM_SPEC_UNICHAR:
- * @pspec: a valid #GParamSpec instance
- *
- * Cast a #GParamSpec instance into a #GParamSpecUnichar.
- */
-
-
-/**
- * G_FILE_ATTRIBUTE_ACCESS_CAN_TRASH:
- *
- * A key in the "access" namespace for checking trashing privileges.
- * Corresponding #GFileAttributeType is %G_FILE_ATTRIBUTE_TYPE_BOOLEAN.
- * This attribute will be %TRUE if the user is able to move the file to
- * the trash.
- */
-
-
-/**
- * g_main_new:
- * @is_running: set to %TRUE to indicate that the loop is running. This is not very important since calling g_main_run() will set this to %TRUE anyway.
- *
- * Creates a new #GMainLoop for th default main context.
- *
- * Returns: a new #GMainLoop
- * Deprecated: 2.2: Use g_main_loop_new() instead
  */
 
 
@@ -23687,18 +17668,6 @@
 
 
 /**
- * G_FILE_ATTRIBUTE_STANDARD_NAME:
- *
- * A key in the "standard" namespace for getting the name of the file.
- * The name is the on-disk filename which may not be in any known encoding,
- * and can thus not be generally displayed as is.
- * Use #G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME if you need to display the
- * name in a user interface.
- * Corresponding #GFileAttributeType is %G_FILE_ATTRIBUTE_TYPE_BYTE_STRING.
- */
-
-
-/**
  * g_resolver_lookup_by_name_finish:
  * @resolver: a #GResolver
  * @result: the result passed to your #GAsyncReadyCallback
@@ -23713,14 +17682,6 @@
  *
  * Returns: (element-type GInetAddress) (transfer full): a #GList
  * Since: 2.22
- */
-
-
-/**
- * G_TYPE_NONE:
- *
- * A fundamental type which is used as a replacement for the C
- * <literal>void</literal> return type.
  */
 
 
@@ -23759,13 +17720,6 @@
 
 
 /**
- * gchararray:
- *
- * A C representable type name for #G_TYPE_STRING.
- */
-
-
-/**
  * g_dbus_error_register_error_domain:
  * @error_domain_quark_name: The error domain name.
  * @quark_volatile: A pointer where to store the #GQuark.
@@ -23775,16 +17729,6 @@
  * Helper function for associating a #GError error domain with D-Bus error names.
  *
  * Since: 2.26
- */
-
-
-/**
- * G_FILE_ATTRIBUTE_ID_FILE:
- *
- * A key in the "id" namespace for getting a file identifier.
- * Corresponding #GFileAttributeType is %G_FILE_ATTRIBUTE_TYPE_STRING.
- * An example use would be during listing files, to avoid recursive
- * directory scanning.
  */
 
 
@@ -23831,14 +17775,6 @@
 
 
 /**
- * G_PARAM_SPEC_FLOAT:
- * @pspec: a valid #GParamSpec instance
- *
- * Cast a #GParamSpec instance into a #GParamSpecFloat.
- */
-
-
-/**
  * g_inet_address_get_family:
  * @address: a #GInetAddress
  *
@@ -23868,20 +17804,6 @@
  * Gets the byte order for the stream.
  *
  * Returns: the #GDataStreamByteOrder for the @stream.
- */
-
-
-/**
- * GIconIface:
- * @g_iface: The parent interface.
- * @hash: A hash for a given #GIcon.
- * @equal: Checks if two #GIcon<!-- -->s are equal.
- * @to_tokens: Serializes a #GIcon into tokens. The tokens must not contain any whitespace. Don't implement if the #GIcon can't be serialized (Since 2.20).
- * @from_tokens: Constructs a #GIcon from tokens. Set the #GError if the tokens are malformed. Don't implement if the #GIcon can't be serialized (Since 2.20).
- *
- * GIconIface is used to implement GIcon types for various
- * different systems. See #GThemedIcon and #GLoadableIcon for
- * examples of how to implement this interface.
  */
 
 
@@ -23929,15 +17851,6 @@
 
 
 /**
- * G_TYPE_DATE_TIME:
- *
- * The #GType for a boxed type holding a #GDateTime.
- *
- * Since: 2.26
- */
-
-
-/**
  * g_settings_get_has_unapplied:
  * @settings: a #GSettings object
  * @returns: %TRUE if @settings has unapplied changes
@@ -23973,18 +17886,6 @@
  *
  * Returns: %TRUE if the operation finished successfully. %FALSE
  * Since: 2.22
- */
-
-
-/**
- * G_FILE_ATTRIBUTE_TRASH_ORIG_PATH:
- *
- * A key in the "trash" namespace.  When requested against
- * items in "trash:///", will return the original path to the file before it
- * was trashed. Corresponding #GFileAttributeType is
- * %G_FILE_ATTRIBUTE_TYPE_STRING.
- *
- * Since: 2.24.
  */
 
 
@@ -24083,16 +17984,6 @@
 
 
 /**
- * G_FLAGS_CLASS_TYPE_NAME:
- * @class: a #GFlagsClass
- *
- * Get the static type name from a given #GFlagsClass structure.
- *
- * Returns: the type name.
- */
-
-
-/**
  * g_initable_newv:
  * @object_type: a #GType supporting #GInitable.
  * @n_parameters: the number of parameters in @parameters
@@ -24106,13 +17997,6 @@
  *
  * Returns: (transfer full): a newly allocated #GObject, or %NULL on error
  * Since: 2.22
- */
-
-
-/**
- * GSocketConnectable:
- *
- * Interface for objects that contain or generate #GSocketAddress<!-- -->es.
  */
 
 
@@ -24193,11 +18077,18 @@
 
 
 /**
- * G_FILE_ATTRIBUTE_ACCESS_CAN_READ:
+ * g_application_command_line_get_cwd:
+ * @cmdline: a #GApplicationCommandLine
  *
- * A key in the "access" namespace for getting read privileges.
- * Corresponding #GFileAttributeType is %G_FILE_ATTRIBUTE_TYPE_BOOLEAN.
- * This attribute will be %TRUE if the user is able to read the file.
+ * Gets the working directory of the command line invocation.  The
+ * string may contain non-utf8 data.
+ * It is possible that the remote application did not send a working
+ * directory, so this may be %NULL.
+ * The return value should not be modified or freed and is valid for as
+ * long as @cmdline exists.
+ *
+ * Returns: the current directory, or %NULL
+ * Since: 2.28
  */
 
 
@@ -24207,32 +18098,6 @@
  * @password: password to set.
  *
  * Sets the mount operation's password to @password.
- */
-
-
-/**
- * GUnixSocketAddressType:
- * @G_UNIX_SOCKET_ADDRESS_INVALID: invalid
- * @G_UNIX_SOCKET_ADDRESS_ANONYMOUS: anonymous
- * @G_UNIX_SOCKET_ADDRESS_PATH: a filesystem path
- * @G_UNIX_SOCKET_ADDRESS_ABSTRACT: an abstract name
- * @G_UNIX_SOCKET_ADDRESS_ABSTRACT_PADDED: an abstract name, 0-padded to the full length of a unix socket name
- *
- * The type of name used by a #GUnixSocketAddress.
- * %G_UNIX_SOCKET_ADDRESS_PATH indicates a traditional unix domain
- * socket bound to a filesystem path. %G_UNIX_SOCKET_ADDRESS_ANONYMOUS
- * indicates a socket not bound to any name (eg, a client-side socket,
- * or a socket created with socketpair()).
- * For abstract sockets, there are two incompatible ways of naming
- * sockaddr_un</literal> as the name, padding the unused parts of the
- * %sun_path field with zeroes; this corresponds to
- * %G_UNIX_SOCKET_ADDRESS_ABSTRACT_PADDED. However, many programs
- * instead just use a portion of %sun_path, and pass an appropriate
- * smaller length to bind() or connect(). This is
- * %G_UNIX_SOCKET_ADDRESS_ABSTRACT.
- *
- * Them: the man pages suggest using the entire <literal>struct
- * Since: 2.26
  */
 
 
@@ -24365,19 +18230,6 @@
 
 
 /**
- * GEnumClass:
- * @g_type_class: the parent class
- * @minimum: the smallest possible value.
- * @maximum: the largest possible value.
- * @n_values: the number of possible values.
- * @values: an array of #GEnumValue structs describing the individual values.
- *
- * The class of an enumeration type holds information about its
- * possible values.
- */
-
-
-/**
  * g_dbus_node_info_new_for_xml:
  * @xml_data: Valid D-Bus introspection XML.
  * @error: Return location for error.
@@ -24391,36 +18243,6 @@
 
 
 /**
- * G_TYPE_FUNDAMENTAL_MAX:
- *
- * An integer constant that represents the number of identifiers reserved
- * for types that are assigned at compile-time.
- */
-
-
-/**
- * GBoxedCopyFunc:
- * @boxed: The boxed structure to be copied.
- *
- * This function is provided by the user and should produce a copy of the passed
- * in boxed structure.
- *
- * Returns: The newly created copy of the boxed structure.
- */
-
-
-/**
- * GParamSpecLong:
- * @parent_instance: private #GParamSpec portion
- * @minimum: minimum value for the property specified
- * @maximum: maximum value for the property specified
- * @default_value: default value for the property specified
- *
- * A #GParamSpec derived structure that contains the meta data for long integer properties.
- */
-
-
-/**
  * GMemoryOutputStream:data-size:
  *
  * Size of data written to the buffer.
@@ -24430,28 +18252,11 @@
 
 
 /**
- * G_TYPE_BOOLEAN:
- *
- * The fundamental type corresponding to #gboolean.
- */
-
-
-/**
  * GDBusConnection:stream:
  *
  * The underlying #GIOStream used for I/O.
  *
  * Since: 2.26
- */
-
-
-/**
- * GOptionError:
- * @G_OPTION_ERROR_UNKNOWN_OPTION: An option was not known to the parser. This error will only be reported, if the parser hasn't been instructed to ignore unknown options, see g_option_context_set_ignore_unknown_options().
- * @G_OPTION_ERROR_BAD_VALUE: A value couldn't be parsed.
- * @G_OPTION_ERROR_FAILED: A #GOptionArgFunc callback failed.
- *
- * Error codes returned by option parsing.
  */
 
 
@@ -24526,38 +18331,6 @@
 
 
 /**
- * G_FILE_ATTRIBUTE_STANDARD_EDIT_NAME:
- *
- * A key in the "standard" namespace for edit name of the file.
- * An edit name is similar to the display name, but it is meant to be
- * used when you want to rename the file in the UI. The display name
- * might contain information you don't want in the new filename (such as
- * "(invalid unicode)" if the filename was in an invalid encoding).
- * Corresponding #GFileAttributeType is %G_FILE_ATTRIBUTE_TYPE_STRING.
- */
-
-
-/**
- * GZlibCompressorFormat:
- * @G_ZLIB_COMPRESSOR_FORMAT_ZLIB: deflate compression with zlib header
- * @G_ZLIB_COMPRESSOR_FORMAT_GZIP: gzip file format
- * @G_ZLIB_COMPRESSOR_FORMAT_RAW: deflate compression with no header
- *
- * Used to select the type of data format to use for #GZlibDecompressor
- * and #GZlibCompressor.
- *
- * Since: 2.24
- */
-
-
-/**
- * G_TYPE_PARAM_VALUE_ARRAY:
- *
- * The #GType of #GParamSpecValueArray.
- */
-
-
-/**
  * g_buffered_input_stream_fill_finish:
  * @stream: a #GBufferedInputStream
  * @result: a #GAsyncResult
@@ -24566,24 +18339,6 @@
  * Finishes an asynchronous read.
  *
  * Returns: a #gssize of the read stream, or %-1 on an error.
- */
-
-
-/**
- * G_DEFINE_INTERFACE_WITH_CODE:
- * @TN: The name of the new type, in Camel case.
- * @t_n: The name of the new type, in lowercase, with words separated by '_'.
- * @T_P: The #GType of the prerequisite type for the interface, or 0 (%G_TYPE_INVALID) for no prerequisite type.
- * @_C_: Custom code that gets inserted in the *_get_type() function.
- *
- * A convenience macro for #GTypeInterface definitions. Similar to
- * G_DEFINE_INTERFACE(), but allows you to insert custom code into the
- * *_get_type() function, e.g. additional interface implementations
- * via G_IMPLEMENT_INTERFACE(), or additional prerequisite types. See
- * G_DEFINE_TYPE_EXTENDED() for a similar example using
- * G_DEFINE_TYPE_WITH_CODE().
- *
- * Since: 2.24
  */
 
 
@@ -24598,14 +18353,6 @@
 
 
 /**
- * GMainContext:
- *
- * The <structname>GMainContext</structname> struct is an opaque data
- * type representing a set of sources to be handled in a main loop.
- */
-
-
-/**
  * g_socket_address_new_from_native:
  * @native: a pointer to a <type>struct sockaddr</type>
  * @len: the size of the memory location pointed to by @native
@@ -24615,19 +18362,6 @@
  * otherwise %NULL.
  *
  * Returns: a new #GSocketAddress if @native could successfully be converted,
- * Since: 2.22
- */
-
-
-/**
- * GResolverError:
- * @G_RESOLVER_ERROR_NOT_FOUND: the requested name/address/service was not found
- * @G_RESOLVER_ERROR_TEMPORARY_FAILURE: the requested information could not be looked up due to a network error or similar problem
- * @G_RESOLVER_ERROR_INTERNAL: unknown error
- *
- * An error code used with %G_RESOLVER_ERROR in a #GError returned
- * from a #GResolver routine.
- *
  * Since: 2.22
  */
 
@@ -24647,17 +18381,21 @@
 
 
 /**
- * GTypeDebugFlags:
- * @G_TYPE_DEBUG_NONE: Print no messages.
- * @G_TYPE_DEBUG_OBJECTS: Print messages about object bookkeeping.
- * @G_TYPE_DEBUG_SIGNALS: Print messages about signal emissions.
- * @G_TYPE_DEBUG_MASK: Mask covering all debug flags.
+ * g_settings_range_check:
+ * @settings: a #GSettings
+ * @key: the key to check
+ * @value: the value to check
+ * @returns: %TRUE if @value is valid for @key
  *
- * The <type>GTypeDebugFlags</type> enumeration values can be passed to
- * g_type_init_with_debug_flags() to trigger debugging messages during runtime.
- * Note that the messages can also be triggered by setting the
- * <envar>GOBJECT_DEBUG</envar> environment variable to a ':'-separated list of
- * "objects" and "signals".
+ * Checks if the given @value is of the correct type and within the
+ * permitted range for @key.
+ * This API is not intended to be used by normal programs -- they should
+ * already know what is permitted by their own schemas.  This API is
+ * meant to be used by programs such as editors or commandline tools.
+ * It is a programmer error to give a @key that isn't contained in the
+ * schema for @settings.
+ *
+ * Since: 2.28
  */
 
 
@@ -24700,16 +18438,6 @@
 
 
 /**
- * G_IS_PARAM_SPEC_STRING:
- * @pspec: a valid #GParamSpec instance
- *
- * Checks whether the given #GParamSpec is of type %G_TYPE_PARAM_STRING.
- *
- * Returns: %TRUE on success.
- */
-
-
-/**
  * g_unix_fd_message_steal_fds:
  * @message: a #GUnixFDMessage
  * @length: pointer to the length of the returned array, or %NULL
@@ -24729,28 +18457,6 @@
  *
  * Returns: an array of file descriptors
  * Since: 2.22
- */
-
-
-/**
- * G_TYPE_POINTER:
- *
- * The fundamental type corresponding to #gpointer.
- */
-
-
-/**
- * G_VOLUME_IDENTIFIER_KIND_UUID:
- *
- * The string used to obtain a UUID with g_volume_get_identifier().
- */
-
-
-/**
- * G_VARIANT_TYPE_UNIT:
- *
- * The empty tuple type.  Has only one instance.  Known also as "triv"
- * or "void".
  */
 
 
@@ -24782,18 +18488,6 @@
  * Gets the length of @list (ie: the number of file descriptors
  * Returns: the length of @list
  * Since: 2.24
- */
-
-
-/**
- * GTypePluginClass:
- * @use_plugin: Increases the use count of the plugin.
- * @unuse_plugin: Decreases the use count of the plugin.
- * @complete_type_info: Fills in the #GTypeInfo and #GTypeValueTable structs for the type. The structs are initialized with <literal>memset(s, 0, sizeof (s))</literal> before calling this function.
- * @complete_interface_info: Fills in missing parts of the #GInterfaceInfo for the interface. The structs is initialized with <literal>memset(s, 0, sizeof (s))</literal> before calling this function.
- *
- * The #GTypePlugin interface is used by the type system in order to handle
- * the lifecycle of dynamically loaded types.
  */
 
 
@@ -24836,58 +18530,13 @@
 
 
 /**
- * G_TYPE_GTYPE:
- *
- * The type for #GType.
- */
-
-
-/**
- * G_VARIANT_TYPE:
- * @type_string: a well-formed #GVariantType type string
- *
- * Converts a string to a const #GVariantType.  Depending on the
- * current debugging level, this function may perform a runtime check
- * to ensure that @string is a valid GVariant type string.
- * It is always a programmer error to use this macro with an invalid
- * type string.
- * Since 2.24
- */
-
-
-/**
- * G_TYPE_REGEX:
- *
- * The #GType for a boxed type holding a #GRegex reference.
- *
- * Since: 2.14
- */
-
-
-/**
  * GAction:enabled:
  *
  * If @action is currently enabled.
  * If the action is disabled then calls to g_action_activate() and
  * g_action_set_state() have no effect.
  *
- * Since: 2.26
- */
-
-
-/**
- * G_TYPE_INT64:
- *
- * The fundamental type corresponding to #gint64.
- */
-
-
-/**
- * G_TIME_SPAN_MILLISECOND:
- *
- * Evaluates to a time span of one millisecond.
- *
- * Since: 2.26
+ * Since: 2.28
  */
 
 
@@ -24897,7 +18546,7 @@
  * The name of the action.  This is mostly meaningful for identifying
  * the action once it has been added to a #GActionGroup.
  *
- * Since: 2.26
+ * Since: 2.28
  */
 
 
@@ -24924,16 +18573,6 @@
 
 
 /**
- * G_VALUE_HOLDS_INT64:
- * @value: a valid #GValue structure
- *
- * Checks whether the given #GValue can hold values of type %G_TYPE_INT64.
- *
- * Returns: %TRUE on success.
- */
-
-
-/**
  * GFileMonitor::changed:
  * @monitor: a #GFileMonitor.
  * @file: a #GFile.
@@ -24941,16 +18580,6 @@
  * @event_type: a #GFileMonitorEvent.
  *
  * Emitted when a file has been changed.
- */
-
-
-/**
- * G_IS_PARAM_SPEC_FLAGS:
- * @pspec: a valid #GParamSpec instance
- *
- * Checks whether the given #GParamSpec is of type %G_TYPE_PARAM_FLAGS.
- *
- * Returns: %TRUE on success.
  */
 
 
@@ -24977,20 +18606,6 @@
  *
  * Returns: (transfer none): the converter of the converter output stream
  * Since: 2.24
- */
-
-
-/**
- * G_DEFINE_POINTER_TYPE_WITH_CODE:
- * @TypeName: The name of the new type, in Camel case.
- * @type_name: The name of the new type, in lowercase, with words separated by '_'.
- * @_C_: Custom code that gets inserted in the *_get_type() function.
- *
- * A convenience macro for pointer type implementations.
- * Similar to G_DEFINE_POINTER_TYPE(), but allows to insert custom code into the
- * type_name_get_type() function.
- *
- * Since: 2.26
  */
 
 
@@ -25031,41 +18646,12 @@
 
 
 /**
- * G_FILE_ATTRIBUTE_ACCESS_CAN_RENAME:
- *
- * A key in the "access" namespace for checking renaming privileges.
- * Corresponding #GFileAttributeType is %G_FILE_ATTRIBUTE_TYPE_BOOLEAN.
- * This attribute will be %TRUE if the user is able to rename the file.
- */
-
-
-/**
  * g_mount_operation_get_password_save:
  * @op: a #GMountOperation.
  *
  * Gets the state of saving passwords for the mount operation.
  *
  * Returns: a #GPasswordSave flag.
- */
-
-
-/**
- * G_PROXY_EXTENSION_POINT_NAME:
- *
- * Extension point for proxy functionality.
- * See <link linkend="extending-gio">Extending GIO</link>.
- *
- * Since: 2.26
- */
-
-
-/**
- * GFileAttributeInfoList:
- * @infos: an array of #GFileAttributeInfo<!-- -->s.
- * @n_infos: the number of values in the array.
- *
- * Acts as a lightweight registry for possible valid file attributes.
- * The registry stores Key-Value pair formats as #GFileAttributeInfo<!-- -->s.
  */
 
 
@@ -25091,22 +18677,6 @@
 
 
 /**
- * G_PARAM_SPEC_UINT:
- * @pspec: a valid #GParamSpec instance
- *
- * Cast a #GParamSpec instance into a #GParamSpecUInt.
- */
-
-
-/**
- * GApplication:is-remote:
- *
- * This property is %TRUE if this application instance represents a proxy
- * to the instance of this application in another process.
- */
-
-
-/**
  * g_unix_connection_send_credentials:
  * @connection: A #GUnixConnection.
  * @cancellable: A #GCancellable or %NULL.
@@ -25123,17 +18693,6 @@
  * #GUnixCredentialsMessage type and g_socket_get_credentials() function.
  *
  * Returns: %TRUE on success, %FALSE if @error is set.
- * Since: 2.26
- */
-
-
-/**
- * G_IS_PARAM_SPEC_VARIANT:
- * @pspec: a #GParamSpec
- *
- * Checks whether the given #GParamSpec is of type %G_TYPE_PARAM_VARIANT.
- *
- * Returns: %TRUE on success
  * Since: 2.26
  */
 
@@ -25196,13 +18755,6 @@
 
 
 /**
- * G_TYPE_FLAG_RESERVED_ID_BIT:
- *
- * A bit in the type number that's supposed to be left untouched.
- */
-
-
-/**
  * GInetAddress:is-mc-node-local:
  *
  * Whether this is a node-local multicast address.
@@ -25223,29 +18775,16 @@
 
 
 /**
- * G_OPTION_REMAINING:
+ * g_periodic_remove:
+ * @periodic: a #GPeriodic clock
+ * @tag: the ID of the callback to remove
  *
- * If a long option in the main group has this name, it is not treated as a
- * regular option. Instead it collects all non-option arguments which would
- * otherwise be left in <literal>argv</literal>. The option must be of type
- * %G_OPTION_ARG_CALLBACK, %G_OPTION_ARG_STRING_ARRAY
- * or %G_OPTION_ARG_FILENAME_ARRAY.
- * Using #G_OPTION_REMAINING instead of simply scanning <literal>argv</literal>
- * for leftover arguments has the advantage that GOption takes care of
- * necessary encoding conversions for strings or filenames.
+ * Reverse the effect of a previous call to g_periodic_start().
+ * This function may not be called from a handler of the repair signal,
+ * but it is perfectly reasonable to call it from a handler of the tick
+ * signal.
  *
- * Since: 2.6
- */
-
-
-/**
- * G_OBJECT_TYPE_NAME:
- * @object: Object to return the type name for.
- *
- * Get the name of an object's type.
- * should not be freed.
- *
- * Returns: Type name of @object. The string is owned by the type system and
+ * Since: 2.28
  */
 
 
@@ -25281,50 +18820,11 @@
 
 
 /**
- * G_TYPE_PARAM_LONG:
- *
- * The #GType of #GParamSpecLong.
- */
-
-
-/**
- * GOutputStream:
- *
- * Base class for writing output.
- * All classes derived from GOutputStream should implement synchronous
- * writing, splicing, flushing and closing streams, but may implement
- * asynchronous versions.
- */
-
-
-/**
- * GFileOutputStream:
- *
- * A subclass of GOutputStream for opened files. This adds
- * a few file-specific operations and seeking and truncating.
- * #GFileOutputStream implements GSeekable.
- */
-
-
-/**
  * SECTION:ginetsocketaddres:
  * @short_description: Internet GSocketAddress
  *
  * An IPv4 or IPv6 socket address; that is, the combination of a
  * #GInetAddress and a port number.
- */
-
-
-/**
- * GDBusArgInfo:
- * @ref_count: The reference count or -1 if statically allocated.
- * @name: Name of the argument, e.g. @unix_user_id.
- * @signature: D-Bus signature of the argument (a single complete type).
- * @annotations: A pointer to a %NULL-terminated array of pointers to #GDBusAnnotationInfo structures or %NULL if there are no annotations.
- *
- * Information about an argument for a method or a signal.
- *
- * Since: 2.26
  */
 
 
@@ -25371,39 +18871,37 @@
 
 
 /**
+ * g_action_group_get_action_state_hint:
+ * @action_group: a #GActionGroup
+ * @action_name: the name of the action to query
+ *
+ * Requests a hint about the valid range of values for the state of the
+ * named action within @action_group.
+ * If %NULL is returned it either means that the action is not stateful
+ * or that there is no hint about the valid range of values for the
+ * state of the action.
+ * If a #GVariant array is returned then each item in the array is a
+ * returned then the tuple specifies the inclusive lower and upper bound
+ * of valid values for the state.
+ * In any case, the information is merely a hint.  It may be possible to
+ * have a state value outside of the hinted range and setting a value
+ * within the range may fail.
+ * The return value (if non-%NULL) should be freed with
+ * g_variant_unref() when it is no longer required.
+ *
+ * Possible value for the state.  if a #gvariant pair (ie: two-tuple) is
+ * Returns: (transfer full): the state range hint
+ * Since: 2.28
+ */
+
+
+/**
  * g_app_info_get_name:
  * @appinfo: a #GAppInfo.
  *
  * Gets the installed name of the application.
  *
  * Returns: the name of the application for @appinfo.
- */
-
-
-/**
- * G_TYPE_HAS_VALUE_TABLE:
- * @type: A #GType value.
- *
- * Checks if @type has a #GTypeValueTable.
- *
- * Returns: %TRUE on success.
- */
-
-
-/**
- * GFileAttributeType:
- * @G_FILE_ATTRIBUTE_TYPE_INVALID: indicates an invalid or uninitalized type.
- * @G_FILE_ATTRIBUTE_TYPE_STRING: a null terminated UTF8 string.
- * @G_FILE_ATTRIBUTE_TYPE_BYTE_STRING: a zero terminated string of non-zero bytes.
- * @G_FILE_ATTRIBUTE_TYPE_BOOLEAN: a boolean value.
- * @G_FILE_ATTRIBUTE_TYPE_UINT32: an unsigned 4-byte/32-bit integer.
- * @G_FILE_ATTRIBUTE_TYPE_INT32: a signed 4-byte/32-bit integer.
- * @G_FILE_ATTRIBUTE_TYPE_UINT64: an unsigned 8-byte/64-bit integer.
- * @G_FILE_ATTRIBUTE_TYPE_INT64: a signed 8-byte/64-bit integer.
- * @G_FILE_ATTRIBUTE_TYPE_OBJECT: a #GObject.
- * @G_FILE_ATTRIBUTE_TYPE_STRINGV: a %NULL terminated char **. Since 2.22
- *
- * The data types for file attributes.
  */
 
 
@@ -25432,15 +18930,6 @@
  * #GFileInfo. See %G_FILE_ATTRIBUTE_ETAG_VALUE.
  *
  * Returns: a string containing the value of the "etag:value" attribute.
- */
-
-
-/**
- * G_TYPE_DBUS_METHOD_INFO:
- *
- * The #GType for a boxed type holding a #GDBusMethodInfo.
- *
- * Since: 2.26
  */
 
 
@@ -25499,22 +18988,6 @@
 
 
 /**
- * G_TYPE_VARIANT:
- *
- * The fundamental type corresponding to #GVariant.
- * All floating #GVariant instances passed through the #GType system are
- * consumed.
- * Note that callbacks in closures, and signal handlers
- * for signals of return type %G_TYPE_VARIANT, must never return floating
- * variants.
- * with this fundamental type in 2.26.
- *
- * Note: GLib 2.24 did include a boxed type with this name. It was replaced
- * Since: 2.26
- */
-
-
-/**
  * g_volume_eject:
  * @volume: a #GVolume.
  * @flags: flags affecting the unmount if required for eject
@@ -25527,25 +19000,6 @@
  * and #GAsyncResult returned in the @callback.
  *
  * Deprecated: 2.22: Use g_volume_eject_with_operation() instead.
- */
-
-
-/**
- * G_VOLUME_IDENTIFIER_KIND_UNIX_DEVICE:
- *
- * The string used to obtain a Unix device path with g_volume_get_identifier().
- */
-
-
-/**
- * g_signal_handlers_unblock_by_func:
- * @instance: The instance to unblock handlers from.
- * @func: The C closure callback of the handlers (useless for non-C closures).
- * @data: The closure data of the handlers' closures.
- *
- * Unblocks all handlers on an instance that match @func and @data.
- *
- * Returns: The number of handlers that matched.
  */
 
 
@@ -25592,27 +19046,6 @@
 
 
 /**
- * GActionGroup::action-removed:
- * @action_group: the #GActionGroup that changed
- * @action_name: the name of the action in @action_group
- *
- * Signals that an action is just about to be removed from the group.
- * This signal is emitted before the action is removed, so the action
- * is still visible and can be queried from the signal handler.
- *
- * Since: 2.26
- */
-
-
-/**
- * G_PARAM_SPEC_FLAGS:
- * @pspec: a valid #GParamSpec instance
- *
- * Cast a #GParamSpec instance into a #GParamSpecFlags.
- */
-
-
-/**
  * g_data_output_stream_put_byte:
  * @stream: a #GDataOutputStream.
  * @data: a #guchar.
@@ -25622,27 +19055,6 @@
  * Puts a byte into the output stream.
  *
  * Returns: %TRUE if @data was successfully added to the @stream.
- */
-
-
-/**
- * G_PRIORITY_HIGH_IDLE:
- *
- * Use this for high priority idle functions.
- * GTK+ uses #G_PRIORITY_HIGH_IDLE + 10 for resizing operations,
- * and #G_PRIORITY_HIGH_IDLE + 20 for redrawing operations. (This is
- * done to ensure that any pending resizes are processed before any
- * pending redraws, so that widgets are not redrawn twice unnecessarily.)
- */
-
-
-/**
- * G_FILE_ATTRIBUTE_TIME_MODIFIED_USEC:
- *
- * A key in the "time" namespace for getting the miliseconds of the time
- * the file was last modified. This should be used in conjunction with
- * #G_FILE_ATTRIBUTE_TIME_MODIFIED. Corresponding #GFileAttributeType is
- * %G_FILE_ATTRIBUTE_TYPE_UINT32.
  */
 
 
@@ -25657,18 +19069,6 @@
  *
  * Returns: %TRUE if the drive has been ejected successfully,
  * Deprecated: 2.22: Use g_drive_eject_with_operation_finish() instead.
- */
-
-
-/**
- * GParamSpecFloat:
- * @parent_instance: private #GParamSpec portion
- * @minimum: minimum value for the property specified
- * @maximum: maximum value for the property specified
- * @default_value: default value for the property specified
- * @epsilon: values closer than @epsilon will be considered identical by g_param_values_cmp(); the default value is 1e-30.
- *
- * A #GParamSpec derived structure that contains the meta data for float properties.
  */
 
 
@@ -25727,27 +19127,17 @@
 
 
 /**
- * G_TYPE_IS_INSTANTIATABLE:
- * @type: A #GType value.
+ * GPeriodicTickFunc:
+ * @periodic: the #GPeriodic clock that is ticking
+ * @timestamp: the timestamp at the time of the tick
+ * @user_data: the user data given to g_periodic_add()
  *
- * Checks if @type can be instantiated.  Instantiation is the
- * process of creating an instance (object) of this type.
+ * The signature of the callback function that is called when the
+ * #GPeriodic clock ticks.
+ * The @timestamp parameter is equal for all callbacks called during a
+ * particular tick on a given clock.
  *
- * Returns: %TRUE on success.
- */
-
-
-/**
- * GThreadedSocketService::run:
- * @service: the #GThreadedSocketService.
- * @connection: a new #GSocketConnection object.
- * @source_object: the source_object passed to g_socket_listener_add_address().
- *
- * The ::run signal is emitted in a worker thread in response to an
- * incoming connection. This thread is dedicated to handling
- * not return until the connection is closed.
- *
- * Returns: %TRUE to stope further signal handlers from being called
+ * Since: 2.28
  */
 
 
@@ -25760,22 +19150,6 @@
  * Free the returned object with g_object_unref().
  *
  * Returns: (transfer full): a #GFile.
- */
-
-
-/**
- * G_TYPE_INSTANCE_GET_CLASS:
- * @instance: Location of the #GTypeInstance structure.
- * @g_type: The #GType of the class to be returned.
- * @c_type: The C type of the class structure.
- *
- * Get the class structure of a given @instance, casted
- * to a specified ancestor type @g_type of the instance.
- * Note that while calling a GInstanceInitFunc(), the class pointer gets
- * modified, so it might not always return the expected pointer.
- * This macro should only be used in type implementations.
- *
- * Returns: a pointer to the class structure
  */
 
 
@@ -25904,13 +19278,6 @@
 
 
 /**
- * G_TYPE_INT:
- *
- * The fundamental type corresponding to #gint.
- */
-
-
-/**
  * g_file_output_stream_query_info:
  * @stream: a #GFileOutputStream.
  * @attributes: a file attribute query string.
@@ -25938,34 +19305,6 @@
 
 
 /**
- * GDBusSubtreeIntrospectFunc:
- * @connection: A #GDBusConnection.
- * @sender: The unique bus name of the remote caller.
- * @object_path: The object path that was registered with g_dbus_connection_register_subtree().
- * @node: A node that is a child of @object_path (relative to @object_path) or %NULL for the root of the subtree.
- * @user_data: The @user_data #gpointer passed to g_dbus_connection_register_subtree().
- *
- * The type of the @introspect function in #GDBusSubtreeVTable.
- * Subtrees are flat.  @node, if non-%NULL, is always exactly one
- * This function should return %NULL to indicate that there is no object
- * at this node.
- * If this function returns non-%NULL, the return value is expected to
- * be a %NULL-terminated array of pointers to #GDBusInterfaceInfo
- * structures describing the interfaces implemented by @node.  This
- * array will have g_dbus_interface_info_unref() called on each item
- * before being freed with g_free().
- * The difference between returning %NULL and an array containing zero
- * items is that the standard DBus interfaces will returned to the
- * remote introspector in the empty array case, but not in the %NULL
- * case.
- *
- * Segment of the object path (ie: it never contains a slash).
- * Returns: A %NULL-terminated array of pointers to #GDBusInterfaceInfo, or %NULL.
- * Since: 2.26
- */
-
-
-/**
  * g_data_input_stream_read_until_async:
  * @stream: a given #GDataInputStream.
  * @stop_chars: characters to terminate the read.
@@ -25988,16 +19327,6 @@
  * g_data_input_stream_read_upto_async() instead.
  *
  * Since: 2.20
- */
-
-
-/**
- * GFileAttributeStatus:
- * @G_FILE_ATTRIBUTE_STATUS_UNSET: Attribute value is unset (empty).
- * @G_FILE_ATTRIBUTE_STATUS_SET: Attribute value is set.
- * @G_FILE_ATTRIBUTE_STATUS_ERROR_SETTING: Indicates an error in setting the value.
- *
- * Used by g_file_set_attributes_from_info() when setting file attributes.
  */
 
 
@@ -26042,22 +19371,6 @@
 
 
 /**
- * g_action_group_activate:
- * @action_group: a #GActionGroup
- * @action_name: the name of the action to activate
- * @parameter: (allow-none): parameters to the activation
- *
- * Activate the named action within @action_group.
- * If the action is expecting a parameter, then the correct type of
- * parameter must be given as @parameter.  If the action is expecting no
- * parameters then @parameter must be %NULL.  See
- * g_action_group_get_parameter_type().
- *
- * Since: 2.26
- */
-
-
-/**
  * g_simple_async_report_gerror_in_idle:
  * @object: a #GObject.
  * @callback: a #GAsyncReadyCallback.
@@ -26083,18 +19396,6 @@
 
 
 /**
- * g_signal_handlers_disconnect_by_func:
- * @instance: The instance to remove handlers from.
- * @func: The C closure callback of the handlers (useless for non-C closures).
- * @data: The closure data of the handlers' closures.
- *
- * Disconnects all handlers on an instance that match @func and @data.
- *
- * Returns: The number of handlers that matched.
- */
-
-
-/**
  * g_dbus_proxy_get_connection:
  * @proxy: A #GDBusProxy.
  *
@@ -26114,6 +19415,23 @@
  *
  * Returns: %TRUE if the handle is closed when done
  * Since: 2.26
+ */
+
+
+/**
+ * g_periodic_block:
+ * @periodic: a #GPeriodic clock
+ *
+ * Temporarily blocks @periodic from running in order to bring it in
+ * synch with an external time source.
+ * This function must be called from a handler of the "repair" signal.
+ * If this function is called, emission of the tick signal will be
+ * suspended until g_periodic_unblock() is called an equal number of
+ * times.  Once that happens, the "tick" signal will run immediately and
+ * future "tick" signals will be emitted relative to the time at which
+ * the last call to g_periodic_unblock() occured.
+ *
+ * Since: 2.28
  */
 
 
@@ -26169,15 +19487,6 @@
 
 
 /**
- * GTypeModule:
- * @name: the name of the module
- *
- * The members of the <structname>GTypeModule</structname> structure should not
- * be accessed directly, except for the @name field.
- */
-
-
-/**
  * g_unix_socket_address_new_abstract:
  * @path: the abstract name
  * @path_len: the length of @path, or -1
@@ -26187,13 +19496,6 @@
  *
  * Returns: a new #GUnixSocketAddress
  * Deprecated: Use g_unix_socket_address_new_with_type().
- */
-
-
-/**
- * GInputStream:
- *
- * Base class for streaming input operations.
  */
 
 
@@ -26233,19 +19535,16 @@
 
 
 /**
- * GFileAttributeInfoFlags:
- * @G_FILE_ATTRIBUTE_INFO_NONE: no flags set.
- * @G_FILE_ATTRIBUTE_INFO_COPY_WITH_FILE: copy the attribute values when the file is copied.
- * @G_FILE_ATTRIBUTE_INFO_COPY_WHEN_MOVED: copy the attribute values when the file is moved.
+ * g_application_set_action_group:
+ * @application: a #GApplication
+ * @action_group: a #GActionGroup, or %NULL
  *
- * Flags specifying the behaviour of an attribute.
- */
-
-
-/**
- * GUnixInputStream:
+ * Sets or unsets the group of actions associated with the application.
+ * These actions are the actions that can be remotely invoked.
+ * It is an error to call this function after the application has been
+ * registered.
  *
- * Implements #GInputStream for reading from selectable unix file descriptors
+ * Since: 2.28
  */
 
 
@@ -26262,27 +19561,6 @@
  * #GVolumeMonitor.
  *
  * Returns: %TRUE, %FALSE if operation failed.
- */
-
-
-/**
- * g_application_invoke_action:
- * @application: a #GApplication
- * @name: the name of the action to invoke
- * @platform_data: (allow-none): platform-specific event data
- *
- * Invokes the action @name of the passed #GApplication.
- * This function has different behavior depending on whether @application
- * is acting as a proxy for another process.  In the normal case where
- * the current process is hosting the application, and the specified
- * action exists and is enabled, the #GApplication::action signal will
- * be emitted.
- * If @application is a proxy, then the specified action will be invoked
- * in the remote process. It is not necessary to call
- * g_application_add_action() in the current process in order to invoke
- * one remotely.
- *
- * Since: 2.26
  */
 
 
@@ -26306,156 +19584,6 @@
 
 
 /**
- * GConverterFlags:
- * @G_CONVERTER_NO_FLAGS: No flags.
- * @G_CONVERTER_INPUT_AT_END: At end of input data
- * @G_CONVERTER_FLUSH: Flush data
- *
- * Flags used when calling a g_converter_convert().
- *
- * Since: 2.24
- */
-
-
-/**
- * GClassInitFunc:
- * @g_class: The #GTypeClass structure to initialize.
- * @class_data: The @class_data member supplied via the #GTypeInfo structure.
- *
- * A callback function used by the type system to initialize the class
- * of a specific type. This function should initialize all static class
- * members.
- * The initialization process of a class involves:
- * <itemizedlist>
- * <listitem><para>
- * 1 - Copying common members from the parent class over to the
- * derived class structure.
- * </para></listitem>
- * <listitem><para>
- * 2 -  Zero initialization of the remaining members not copied
- * over from the parent class.
- * </para></listitem>
- * <listitem><para>
- * 3 - Invocation of the GBaseInitFunc() initializers of all parent
- * types and the class' type.
- * </para></listitem>
- * <listitem><para>
- * 4 - Invocation of the class' GClassInitFunc() initializer.
- * </para></listitem>
- * </itemizedlist>
- * Since derived classes are partially initialized through a memory copy
- * of the parent class, the general rule is that GBaseInitFunc() and
- * GBaseFinalizeFunc() should take care of necessary reinitialization
- * and release of those class members that were introduced by the type
- * that specified these GBaseInitFunc()/GBaseFinalizeFunc().
- * GClassInitFunc() should only care about initializing static
- * class members, while dynamic class members (such as allocated strings
- * or reference counted resources) are better handled by a GBaseInitFunc()
- * for this type, so proper initialization of the dynamic class members
- * is performed for class initialization of derived types as well.
- * An example may help to correspond the intend of the different class
- * initializers:
- * |[
- * typedef struct {
- * GObjectClass parent_class;
- * gint         static_integer;
- * gchar       *dynamic_string;
- * } TypeAClass;
- * static void
- * type_a_base_class_init (TypeAClass *class)
- * {
- * class->dynamic_string = g_strdup ("some string");
- * }
- * static void
- * type_a_base_class_finalize (TypeAClass *class)
- * {
- * g_free (class->dynamic_string);
- * }
- * static void
- * type_a_class_init (TypeAClass *class)
- * {
- * class->static_integer = 42;
- * }
- * typedef struct {
- * TypeAClass   parent_class;
- * gfloat       static_float;
- * GString     *dynamic_gstring;
- * } TypeBClass;
- * static void
- * type_b_base_class_init (TypeBClass *class)
- * {
- * class->dynamic_gstring = g_string_new ("some other string");
- * }
- * static void
- * type_b_base_class_finalize (TypeBClass *class)
- * {
- * g_string_free (class->dynamic_gstring);
- * }
- * static void
- * type_b_class_init (TypeBClass *class)
- * {
- * class->static_float = 3.14159265358979323846;
- * }
- * ]|
- * Initialization of TypeBClass will first cause initialization of
- * TypeAClass (derived classes reference their parent classes, see
- * g_type_class_ref() on this).
- * Initialization of TypeAClass roughly involves zero-initializing its fields,
- * then calling its GBaseInitFunc() type_a_base_class_init() to allocate
- * its dynamic members (dynamic_string), and finally calling its GClassInitFunc()
- * type_a_class_init() to initialize its static members (static_integer).
- * The first step in the initialization process of TypeBClass is then
- * a plain memory copy of the contents of TypeAClass into TypeBClass and
- * zero-initialization of the remaining fields in TypeBClass.
- * The dynamic members of TypeAClass within TypeBClass now need
- * reinitialization which is performed by calling type_a_base_class_init()
- * with an argument of TypeBClass.
- * After that, the GBaseInitFunc() of TypeBClass, type_b_base_class_init()
- * is called to allocate the dynamic members of TypeBClass (dynamic_gstring),
- * and finally the GClassInitFunc() of TypeBClass, type_b_class_init(),
- * is called to complete the initialization process with the static members
- * (static_float).
- * Corresponding finalization counter parts to the GBaseInitFunc() functions
- * have to be provided to release allocated resources at class finalization
- * time.
- */
-
-
-/**
- * GSocketConnection:
- *
- * A socket connection GIOStream object for connection-oriented sockets.
- *
- * Since: 2.22
- */
-
-
-/**
- * g_action_group_get_state_hint:
- * @action_group: a #GActionGroup
- * @action_name: the name of the action to query
- *
- * Requests a hint about the valid range of values for the state of the
- * named action within @action_group.
- * If %NULL is returned it either means that the action is not stateful
- * or that there is no hint about the valid range of values for the
- * state of the action.
- * If a #GVariant array is returned then each item in the array is a
- * returned then the tuple specifies the inclusive lower and upper bound
- * of valid values for the state.
- * In any case, the information is merely a hint.  It may be possible to
- * have a state value outside of the hinted range and setting a value
- * within the range may fail.
- * The return value (if non-%NULL) should be freed with
- * g_variant_unref() when it is no longer required.
- *
- * Possible value for the state.  if a #gvariant pair (ie: two-tuple) is
- * Returns: (transfer full): the state range hint
- * Since: 2.26
- */
-
-
-/**
  * g_settings_set_double:
  * @settings: a #GSettings object
  * @key: the name of the key to set
@@ -26472,15 +19600,6 @@
 
 
 /**
- * GOptionContext:
- *
- * A <structname>GOptionContext</structname> struct defines which options
- * are accepted by the commandline option parser. The struct has only private
- * fields and should not be directly accessed.
- */
-
-
-/**
  * GThemedIcon:name:
  *
  * The icon name.
@@ -26493,24 +19612,6 @@
  * @order: a %GDataStreamByteOrder.
  *
  * Sets the byte order of the data output stream to @order.
- */
-
-
-/**
- * G_VALUE_TYPE_NAME:
- * @value: A #GValue structure.
- *
- * Gets the the type name of @value.
- *
- * Returns: the type name.
- */
-
-
-/**
- * GApplication:application-id:
- *
- * The unique identifier for this application.  See the documentation for
- * #GApplication for more information about this property.
  */
 
 
@@ -26567,7 +19668,7 @@
  * Emits the #GActionGroup::action-state-changed signal on @action_group.
  * This function should only be called by #GActionGroup implementations.
  *
- * Since: 2.26
+ * Since: 2.28
  */
 
 
@@ -26593,123 +19694,6 @@
 
 
 /**
- * GFileIface:
- * @g_iface: The parent interface.
- * @dup: Duplicates a #GFile.
- * @hash: Creates a hash of a #GFile.
- * @equal: Checks equality of two given #GFile<!-- -->s.
- * @is_native: Checks to see if a file is native to the system.
- * @has_uri_scheme: Checks to see if a #GFile has a given URI scheme.
- * @get_uri_scheme: Gets the URI scheme for a #GFile.
- * @get_basename: Gets the basename for a given #GFile.
- * @get_path: Gets the current path within a #GFile.
- * @get_uri: Gets a URI for the path within a #GFile.
- * @get_parse_name: Gets the parsed name for the #GFile.
- * @get_parent: Gets the parent directory for the #GFile.
- * @prefix_matches: Checks whether a #GFile contains a specified file.
- * @get_relative_path: Gets the path for a #GFile relative to a given path.
- * @resolve_relative_path: Resolves a relative path for a #GFile to an absolute path.
- * @get_child_for_display_name: Gets the child #GFile for a given display name.
- * @enumerate_children: Gets a #GFileEnumerator with the children of a #GFile.
- * @enumerate_children_async: Asynchronously gets a #GFileEnumerator with the children of a #GFile.
- * @enumerate_children_finish: Finishes asynchronously enumerating the children.
- * @query_info: Gets the #GFileInfo for a #GFile.
- * @query_info_async: Asynchronously gets the #GFileInfo for a #GFile.
- * @query_info_finish: Finishes an asynchronous query info operation.
- * @query_filesystem_info: Gets a #GFileInfo for the file system #GFile is on.
- * @query_filesystem_info_async: Asynchronously gets a #GFileInfo for the file system #GFile is on.
- * @query_filesystem_info_finish: Finishes asynchronously getting the file system info.
- * @find_enclosing_mount: Gets a #GMount for the #GFile.
- * @find_enclosing_mount_async: Asynchronously gets the #GMount for a #GFile.
- * @find_enclosing_mount_finish: Finishes asynchronously getting the volume.
- * @set_display_name: Sets the display name for a #GFile.
- * @set_display_name_async: Asynchronously sets a #GFile's display name.
- * @set_display_name_finish: Finishes asynchronously setting a #GFile's display name.
- * @query_settable_attributes: Returns a list of #GFileAttribute<!-- -->s that can be set.
- * @_query_settable_attributes_async: Asynchronously gets a list of #GFileAttribute<!-- -->s that can be set.
- * @_query_settable_attributes_finish: Finishes asynchronously querying settable attributes.
- * @query_writable_namespaces: Returns a list of #GFileAttribute namespaces that are writable.
- * @_query_writable_namespaces_async: Asynchronously gets a list of #GFileAttribute namespaces that are writable.
- * @_query_writable_namespaces_finish: Finishes asynchronously querying the writable namespaces.
- * @set_attribute: Sets a #GFileAttribute.
- * @set_attributes_from_info: Sets a #GFileAttribute with information from a #GFileInfo.
- * @set_attributes_async: Asynchronously sets a file's attributes.
- * @set_attributes_finish: Finishes setting a file's attributes asynchronously.
- * @read_fn: Reads a file asynchronously.
- * @read_async: Asynchronously reads a file.
- * @read_finish: Finishes asynchronously reading a file.
- * @append_to: Writes to the end of a file.
- * @append_to_async: Asynchronously writes to the end of a file.
- * @append_to_finish: Finishes an asynchronous file append operation.
- * @create: Creates a new file.
- * @create_async: Asynchronously creates a file.
- * @create_finish: Finishes asynchronously creating a file.
- * @replace: Replaces the contents of a file.
- * @replace_async: Asynchronously replaces the contents of a file.
- * @replace_finish: Finishes asynchronously replacing a file.
- * @delete_file: Deletes a file.
- * @_delete_file_async: Asynchronously deletes a file.
- * @_delete_file_finish: Finishes an asynchronous delete.
- * @trash: Sends a #GFile to the Trash location.
- * @_trash_async: Asynchronously sends a #GFile to the Trash location.
- * @_trash_finish: Finishes an asynchronous file trashing operation.
- * @make_directory: Makes a directory.
- * @_make_directory_async: Asynchronously makes a directory.
- * @_make_directory_finish: Finishes making a directory asynchronously.
- * @make_symbolic_link: Makes a symbolic link.
- * @_make_symbolic_link_async: Asynchronously makes a symbolic link
- * @_make_symbolic_link_finish: Finishes making a symbolic link asynchronously.
- * @copy: Copies a file.
- * @copy_async: Asynchronously copies a file.
- * @copy_finish: Finishes an asynchronous copy operation.
- * @move: Moves a file.
- * @_move_async: Asynchronously moves a file.
- * @_move_finish: Finishes an asynchronous move operation.
- * @mount_mountable: Mounts a mountable object.
- * @mount_mountable_finish: Finishes a mounting operation.
- * @unmount_mountable: Unmounts a mountable object.
- * @unmount_mountable_finish: Finishes an unmount operation.
- * @eject_mountable: Ejects a mountable.
- * @eject_mountable_finish: Finishes an eject operation.
- * @mount_enclosing_volume: Mounts a specified location.
- * @mount_enclosing_volume_finish: Finishes mounting a specified location.
- * @monitor_dir: Creates a #GFileMonitor for the location.
- * @monitor_file: Creates a #GFileMonitor for the location.
- * @open_readwrite: Open file read/write. Since 2.22.
- * @open_readwrite_async: Asynchronously opens file read/write. Since 2.22.
- * @open_readwrite_finish: Finishes an asynchronous open read/write. Since 2.22.
- * @create_readwrite: Creates file read/write. Since 2.22.
- * @create_readwrite_async: Asynchronously creates file read/write. Since 2.22.
- * @create_readwrite_finish: Finishes an asynchronous creates read/write. Since 2.22.
- * @replace_readwrite: Replaces file read/write. Since 2.22.
- * @replace_readwrite_async: Asynchronously replaces file read/write. Since 2.22.
- * @replace_readwrite_finish: Finishes an asynchronous replace read/write. Since 2.22.
- * @start_mountable: Starts a mountable object. Since 2.22.
- * @start_mountable_finish: Finishes an start operation. Since 2.22.
- * @stop_mountable: Stops a mountable. Since 2.22.
- * @stop_mountable_finish: Finishes an stop operation. Since 2.22.
- * @supports_thread_contexts: a boolean that indicates whether the #GFile implementation supports thread-default contexts. Since 2.22.
- * @unmount_mountable_with_operation: Unmounts a mountable object using a #GMountOperation. Since 2.22.
- * @unmount_mountable_with_operation_finish: Finishes an unmount operation using a #GMountOperation. Since 2.22.
- * @eject_mountable_with_operation: Ejects a mountable object using a #GMountOperation. Since 2.22.
- * @eject_mountable_with_operation_finish: Finishes an eject operation using a #GMountOperation. Since 2.22.
- * @poll_mountable: Polls a mountable object for media changes. Since 2.22.
- * @poll_mountable_finish: Finishes an poll operation for media changes. Since 2.22.
- *
- * An interface for writing VFS file handles.
- */
-
-
-/**
- * G_IS_PARAM_SPEC:
- * @pspec: a #GParamSpec
- *
- * Checks whether @pspec "is a" valid #GParamSpec structure of type %G_TYPE_PARAM
- * or derived.
- */
-
-
-/**
  * g_file_output_stream_query_info_finish:
  * @stream: a #GFileOutputStream.
  * @result: a #GAsyncResult.
@@ -26723,25 +19707,6 @@
 
 
 /**
- * G_PARAM_SPEC_LONG:
- * @pspec: a valid #GParamSpec instance
- *
- * Cast a #GParamSpec instance into a #GParamSpecLong.
- */
-
-
-/**
- * GInterfaceFinalizeFunc:
- * @g_iface: The interface structure to finalize.
- * @iface_data: The @interface_data supplied via the #GInterfaceInfo structure.
- *
- * A callback function used by the type system to finalize an interface.
- * This function should destroy any internal data and release any resources
- * allocated by the corresponding GInterfaceInitFunc() function.
- */
-
-
-/**
  * g_simple_action_group_insert:
  * @simple: a #GSimpleActionGroup
  * @action: a #GAction
@@ -26750,15 +19715,7 @@
  * If the action group already contains an action with the same name as
  * The action group takes its own reference on @action.
  *
- * Since: 2.26
- */
-
-
-/**
- * G_VARIANT_TYPE_DICT_ENTRY:
- *
- * An indefinite type that is a supertype of every dictionary entry
- * type.
+ * Since: 2.28
  */
 
 
@@ -26782,24 +19739,18 @@
 
 
 /**
- * G_TYPE_PARAM_UINT:
+ * g_application_command_line_printerr:
+ * @cmdline: a #GApplicationCommandLine
+ * @format: a printf-style format string
+ * @...: arguments, as per @format
  *
- * The #GType of #GParamSpecUInt.
- */
-
-
-/**
- * GInstanceInitFunc:
- * @instance: The instance to initialize.
- * @g_class: The class of the type the instance is created for.
+ * Formats a message and prints it using the stderr print handler in the
+ * invoking process.
+ * If @cmdline is a local invocation then this is exactly equivalent to
+ * g_printerr().  If @cmdline is remote then this is equivalent to
+ * calling g_printerr() in the invoking process.
  *
- * A callback function used by the type system to initialize a new
- * instance of a type. This function initializes all instance members and
- * allocates any resources required by it.
- * Initialization of a derived instance involves calling all its parent
- * types instance initializers, so the class member of the instance
- * is altered during its initialization to always point to the class that
- * belongs to the type the current initializer was introduced for.
+ * Since: 2.28
  */
 
 
@@ -26818,72 +19769,6 @@
  * an error occurred.
  *
  * Returns: a signed 32-bit/4-byte value read from the @stream or %0 if
- */
-
-
-/**
- * GRegexError:
- * @G_REGEX_ERROR_COMPILE: Compilation of the regular expression failed.
- * @G_REGEX_ERROR_OPTIMIZE: Optimization of the regular expression failed.
- * @G_REGEX_ERROR_REPLACE: Replacement failed due to an ill-formed replacement string.
- * @G_REGEX_ERROR_MATCH: The match process failed.
- * @G_REGEX_ERROR_INTERNAL: Internal error of the regular expression engine. Since 2.16
- * @G_REGEX_ERROR_STRAY_BACKSLASH: "\\" at end of pattern. Since 2.16
- * @G_REGEX_ERROR_MISSING_CONTROL_CHAR: "\\c" at end of pattern. Since 2.16
- * @G_REGEX_ERROR_UNRECOGNIZED_ESCAPE: Unrecognized character follows "\\". Since 2.16
- * @G_REGEX_ERROR_QUANTIFIERS_OUT_OF_ORDER: Numbers out of order in "{}" quantifier. Since 2.16
- * @G_REGEX_ERROR_QUANTIFIER_TOO_BIG: Number too big in "{}" quantifier. Since 2.16
- * @G_REGEX_ERROR_UNTERMINATED_CHARACTER_CLASS: Missing terminating "]" for character class. Since 2.16
- * @G_REGEX_ERROR_INVALID_ESCAPE_IN_CHARACTER_CLASS: Invalid escape sequence in character class. Since 2.16
- * @G_REGEX_ERROR_RANGE_OUT_OF_ORDER: Range out of order in character class. Since 2.16
- * @G_REGEX_ERROR_NOTHING_TO_REPEAT: Nothing to repeat. Since 2.16
- * @G_REGEX_ERROR_UNRECOGNIZED_CHARACTER: Unrecognized character after "(?", "(?&lt;" or "(?P". Since 2.16
- * @G_REGEX_ERROR_POSIX_NAMED_CLASS_OUTSIDE_CLASS: POSIX named classes are supported only within a class. Since 2.16
- * @G_REGEX_ERROR_UNMATCHED_PARENTHESIS: Missing terminating ")" or ")" without opening "(". Since 2.16
- * @G_REGEX_ERROR_INEXISTENT_SUBPATTERN_REFERENCE: Reference to non-existent subpattern. Since 2.16
- * @G_REGEX_ERROR_UNTERMINATED_COMMENT: Missing terminating ")" after comment. Since 2.16
- * @G_REGEX_ERROR_EXPRESSION_TOO_LARGE: Regular expression too large. Since 2.16
- * @G_REGEX_ERROR_MEMORY_ERROR: Failed to get memory. Since 2.16
- * @G_REGEX_ERROR_VARIABLE_LENGTH_LOOKBEHIND: Lookbehind assertion is not fixed length. Since 2.16
- * @G_REGEX_ERROR_MALFORMED_CONDITION: Malformed number or name after "(?(". Since 2.16
- * @G_REGEX_ERROR_TOO_MANY_CONDITIONAL_BRANCHES: Conditional group contains more than two branches. Since 2.16
- * @G_REGEX_ERROR_ASSERTION_EXPECTED: Assertion expected after "(?(". Since 2.16
- * @G_REGEX_ERROR_UNKNOWN_POSIX_CLASS_NAME: Unknown POSIX class name. Since 2.16
- * @G_REGEX_ERROR_POSIX_COLLATING_ELEMENTS_NOT_SUPPORTED: POSIX collating elements are not supported. Since 2.16
- * @G_REGEX_ERROR_HEX_CODE_TOO_LARGE: Character value in "\\x{...}" sequence is too large. Since 2.16
- * @G_REGEX_ERROR_INVALID_CONDITION: Invalid condition "(?(0)". Since 2.16
- * @G_REGEX_ERROR_SINGLE_BYTE_MATCH_IN_LOOKBEHIND: \\C not allowed in lookbehind assertion. Since 2.16
- * @G_REGEX_ERROR_INFINITE_LOOP: Recursive call could loop indefinitely. Since 2.16
- * @G_REGEX_ERROR_MISSING_SUBPATTERN_NAME_TERMINATOR: Missing terminator in subpattern name. Since 2.16
- * @G_REGEX_ERROR_DUPLICATE_SUBPATTERN_NAME: Two named subpatterns have the same name. Since 2.16
- * @G_REGEX_ERROR_MALFORMED_PROPERTY: Malformed "\\P" or "\\p" sequence. Since 2.16
- * @G_REGEX_ERROR_UNKNOWN_PROPERTY: Unknown property name after "\\P" or "\\p". Since 2.16
- * @G_REGEX_ERROR_SUBPATTERN_NAME_TOO_LONG: Subpattern name is too long (maximum 32 characters). Since 2.16
- * @G_REGEX_ERROR_TOO_MANY_SUBPATTERNS: Too many named subpatterns (maximum 10,000). Since 2.16
- * @G_REGEX_ERROR_INVALID_OCTAL_VALUE: Octal value is greater than "\\377". Since 2.16
- * @G_REGEX_ERROR_TOO_MANY_BRANCHES_IN_DEFINE: "DEFINE" group contains more than one branch. Since 2.16
- * @G_REGEX_ERROR_DEFINE_REPETION: Repeating a "DEFINE" group is not allowed. Since 2.16
- * @G_REGEX_ERROR_INCONSISTENT_NEWLINE_OPTIONS: Inconsistent newline options. Since 2.16
- * @G_REGEX_ERROR_MISSING_BACK_REFERENCE: "\\g" is not followed by a braced name or an optionally braced non-zero number. Since 2.16
- *
- * Error codes returned by regular expressions functions.
- *
- * Since: 2.14
- */
-
-
-/**
- * GFileReadMoreCallback:
- * @file_contents: the data as currently read.
- * @file_size: the size of the data currently read.
- * @callback_data: data passed to the callback.
- *
- * When loading the partial contents of a file with g_file_load_partial_contents_async(),
- * it may become necessary to determine if any more data from the file should be loaded.
- * A #GFileReadMoreCallback function facilitates this by returning %TRUE if more data
- * should be read, or %FALSE otherwise.
- *
- * Returns: %TRUE if more data should be read back. %FALSE otherwise.
  */
 
 
@@ -26928,22 +19813,6 @@
 
 
 /**
- * G_TIME_SPAN_SECOND:
- *
- * Evaluates to a time span of one second.
- *
- * Since: 2.26
- */
-
-
-/**
- * G_TYPE_UINT:
- *
- * The fundamental type corresponding to #guint.
- */
-
-
-/**
  * g_file_monitor_directory:
  * @file: input #GFile.
  * @flags: a set of #GFileMonitorFlags.
@@ -26970,26 +19839,6 @@
 
 
 /**
- * G_FILE_ATTRIBUTE_TIME_CHANGED:
- *
- * A key in the "time" namespace for getting the time the file was last
- * changed. Corresponding #GFileAttributeType is %G_FILE_ATTRIBUTE_TYPE_UINT64,
- * and contains the UNIX time since the file was last changed.
- * This corresponds to the traditional UNIX ctime.
- */
-
-
-/**
- * G_PRIORITY_DEFAULT:
- *
- * Use this for default priority event sources.
- * In GLib this priority is used when adding timeout functions
- * with g_timeout_add(). In GDK this priority is used for events
- * from the X server.
- */
-
-
-/**
  * g_settings_new_with_backend:
  * @schema: the name of the schema
  * @backend: the #GSettingsBackend to use
@@ -27007,14 +19856,6 @@
 
 
 /**
- * G_TYPE_IS_PARAM:
- * @type: a #GType ID
- *
- * Checks whether @type "is a" %G_TYPE_PARAM.
- */
-
-
-/**
  * g_file_dup:
  * @file: input #GFile.
  *
@@ -27028,62 +19869,12 @@
 
 
 /**
- * G_TYPE_CHECK_CLASS_CAST:
- * @g_class: Location of a #GTypeClass structure.
- * @g_type: The type to be returned.
- * @c_type: The corresponding C type of class structure of @g_type.
- *
- * Checks that @g_class is a class structure of the type identified by @g_type
- * and issues a warning if this is not the case. Returns @g_class casted
- * to a pointer to @c_type.
- * This macro should only be used in type implementations.
- */
-
-
-/**
- * G_IS_ENUM_CLASS:
- * @class: a #GEnumClass
- *
- * Checks whether @class "is a" valid #GEnumClass structure of type %G_TYPE_ENUM
- * or derived.
- */
-
-
-/**
- * G_FILE_ATTRIBUTE_PREVIEW_ICON:
- *
- * A key in the "preview" namespace for getting a #GIcon that can be
- * used to get preview of the file. For example, it may be a low
- * resolution thumbnail without metadata. Corresponding
- * #GFileAttributeType is %G_FILE_ATTRIBUTE_TYPE_OBJECT.  The value
- * for this key should contain a #GIcon.
- *
- * Since: 2.20
- */
-
-
-/**
  * g_unix_mount_is_readonly:
  * @mount_entry: a #GUnixMount.
  *
  * Checks if a unix mount is mounted read only.
  *
  * Returns: %TRUE if @mount_entry is read only.
- */
-
-
-/**
- * GChecksumType:
- * @G_CHECKSUM_MD5: Use the MD5 hashing algorithm
- * @G_CHECKSUM_SHA1: Use the SHA-1 hashing algorithm
- * @G_CHECKSUM_SHA256: Use the SHA-256 hashing algorithm
- *
- * The hashing algorithm to be used by #GChecksum when performing the
- * digest of some data.
- * Note that the #GChecksumType enumeration may be extended at a later
- * date to include new hashing algorithm types.
- *
- * Since: 2.16
  */
 
 
@@ -27113,18 +19904,11 @@
 
 
 /**
- * G_URI_RESERVED_CHARS_ALLOWED_IN_PATH_ELEMENT:
- *
- * Allowed characters in path elements. Includes "!$&'()*+,;=:@".
- */
-
-
-/**
  * GSimpleAction:state:
  *
  * The state of the action, or %NULL if the action is stateless.
  *
- * Since: 2.26
+ * Since: 2.28
  */
 
 
@@ -27154,24 +19938,7 @@
  * An action must be enabled in order to be activated or in order to
  * have its state changed from outside callers.
  *
- * Since: 2.26
- */
-
-
-/**
- * GDBusInterfaceMethodCallFunc:
- * @connection: A #GDBusConnection.
- * @sender: The unique bus name of the remote caller.
- * @object_path: The object path that the method was invoked on.
- * @interface_name: The D-Bus interface name the method was invoked on.
- * @method_name: The name of the method that was invoked.
- * @parameters: A #GVariant tuple with parameters.
- * @invocation: A #GDBusMethodInvocation object that can be used to return a value or error.
- * @user_data: The @user_data #gpointer passed to g_dbus_connection_register_object().
- *
- * The type of the @method_call function in #GDBusInterfaceVTable.
- *
- * Since: 2.26
+ * Since: 2.28
  */
 
 
@@ -27200,17 +19967,6 @@
  * once.
  *
  * Since: 2.26
- */
-
-
-/**
- * G_FILE_ATTRIBUTE_ID_FILESYSTEM:
- *
- * A key in the "id" namespace for getting the file system identifier.
- * Corresponding #GFileAttributeType is %G_FILE_ATTRIBUTE_TYPE_STRING.
- * An example use would be during drag and drop to see if the source
- * and target are on the same filesystem (default to move) or not (default
- * to copy).
  */
 
 
@@ -27285,12 +20041,11 @@
 
 
 /**
- * g_buffered_output_stream_get_buffer_size:
- * @stream: a #GBufferedOutputStream.
+ * GVolumeMonitor::volume-removed:
+ * @volume_monitor: The volume monitor emitting the signal.
+ * @volume: a #GVolume that was removed.
  *
- * Gets the size of the buffer in the @stream.
- *
- * Returns: the current size of the buffer.
+ * Emitted when a mountable volume is removed from the system.
  */
 
 
@@ -27343,15 +20098,6 @@
 
 
 /**
- * GProxyAddressEnumerator:
- *
- * A subclass of #GSocketAddressEnumerator that takes another address
- * enumerator and wraps its results in #GProxyAddress<!-- -->es as
- * directed by the default #GProxyResolver.
- */
-
-
-/**
  * SECTION:gdesktopappinf:
  * @short_description: Application information from desktop files
  * @include: gio/gdesktopappinfo.h
@@ -27361,31 +20107,6 @@
  * Note that <filename>&lt;gio/gdesktopappinfo.h&gt;</filename> belongs to
  * the UNIX-specific GIO interfaces, thus you have to use the
  * <filename>gio-unix-2.0.pc</filename> pkg-config file when using it.
- */
-
-
-/**
- * GApplication::prepare-activation:
- * @application: the object on which the signal is emitted
- * @arguments: A #GVariant with the signature "aay"
- * @platform_data: A #GVariant with the signature "a{sv}", or %NULL
- *
- * This signal is emitted when a non-primary process for a given
- * application is invoked while your application is running; for
- * example, when a file browser launches your program to open a
- * file.  The raw operating system arguments are passed in the
- * stored in @platform_data.
- */
-
-
-/**
- * GDBusErrorEntry:
- * @error_code: An error code.
- * @dbus_error_name: The D-Bus error name to associate with @error_code.
- *
- * Struct used in g_dbus_error_register_error_domain().
- *
- * Since: 2.26
  */
 
 
@@ -27424,34 +20145,17 @@
 
 
 /**
- * G_DEFINE_BOXED_TYPE:
- * @TypeName: The name of the new type, in Camel case.
- * @type_name: The name of the new type, in lowercase, with words separated by '_'.
- * @copy_func: the #GBoxedCopyFunc for the new type
- * @free_func: the #GBoxedFreeFunc for the new type
+ * g_application_command_line_get_arguments:
+ * @cmdline: a #GApplicationCommandLine
+ * @argc: the length of the arguments array, or %NULL
  *
- * A convenience macro for boxed type implementations, which defines a
- * type_name_get_type() function registering the boxed type.
+ * Gets the list of arguments that was passed on the command line.
+ * The strings in the array may contain non-utf8 data.
+ * The return value is %NULL-terminated and should be freed using
+ * g_strfreev().
  *
- * Since: 2.26
- */
-
-
-/**
- * G_TYPE_VALUE_ARRAY:
- *
- * The type ID of the "GValueArray" type which is a boxed type,
- * used to pass around pointers to GValueArrays.
- */
-
-
-/**
- * G_IS_PARAM_SPEC_UINT:
- * @pspec: a valid #GParamSpec instance
- *
- * Checks whether the given #GParamSpec is of type %G_TYPE_PARAM_UINT.
- *
- * Returns: %TRUE on success.
+ * Returns: the string array containing the arguments (the argv)
+ * Since: 2.28
  */
 
 
@@ -27474,16 +20178,6 @@
  * The D-Bus address to listen on.
  *
  * Since: 2.26
- */
-
-
-/**
- * G_INITIALLY_UNOWNED_GET_CLASS:
- * @object: a #GInitiallyUnowned instance.
- *
- * Get the class structure associated to a #GInitiallyUnowned instance.
- *
- * Returns: pointer to object class structure.
  */
 
 
@@ -27540,18 +20234,6 @@
 
 
 /**
- * G_TYPE_CHECK_INSTANCE_TYPE:
- * @instance: Location of a #GTypeInstance structure.
- * @g_type: The type to be checked
- *
- * Checks if @instance is an instance of the type identified by @g_type.
- * This macro should only be used in type implementations.
- *
- * Returns: %TRUE on success.
- */
-
-
-/**
  * SECTION:gvolumemonito:
  * @short_description: Volume Monitor
  * @include: gio/gio.h
@@ -27575,16 +20257,6 @@
  *
  * Returns: %TRUE if the connection is closed, %FALSE otherwise.
  * Since: 2.26
- */
-
-
-/**
- * g_atomic_int_inc:
- * @atomic: a pointer to an integer.
- *
- * Atomically increments the integer pointed to by @atomic by 1.
- *
- * Since: 2.4
  */
 
 
@@ -27635,14 +20307,6 @@
  * cancellable signal should not do something that can block.
  *
  * Are two helper functions: g_cancellable_connect() and
- */
-
-
-/**
- * G_PARAM_STATIC_STRINGS:
- *
- * #GParamFlags value alias for %G_PARAM_STATIC_NAME | %G_PARAM_STATIC_NICK | %G_PARAM_STATIC_BLURB.
- * Since 2.13.0
  */
 
 
@@ -27714,30 +20378,6 @@
 
 
 /**
- * G_PARAM_MASK:
- *
- * Mask containing the bits of #GParamSpec.flags which are reserved for GLib.
- */
-
-
-/**
- * G_DEFINE_INTERFACE:
- * @TN: The name of the new type, in Camel case.
- * @t_n: The name of the new type, in lowercase, with words separated by '_'.
- * @T_P: The #GType of the prerequisite type for the interface, or 0 (%G_TYPE_INVALID) for no prerequisite type.
- *
- * A convenience macro for #GTypeInterface definitions, which declares
- * a default vtable initialization function and defines a *_get_type()
- * function.
- * The macro expects the interface initialization function to have the
- * name <literal>t_n ## _default_init</literal>, and the interface
- * structure to have the name <literal>TN ## Interface</literal>.
- *
- * Since: 2.24
- */
-
-
-/**
  * g_file_has_uri_scheme:
  * @file: input #GFile.
  * @uri_scheme: a string containing a URI scheme.
@@ -27752,33 +20392,27 @@
 
 
 /**
- * g_file_info_set_is_hidden:
- * @info: a #GFileInfo.
- * @is_hidden: a #gboolean.
+ * g_simple_async_result_new_take_error:
+ * @source_object: (allow-none): a #GObject, or %NULL
+ * @callback: a #GAsyncReadyCallback
+ * @user_data: (allow-none): user data passed to @callback
+ * @error: a #GError
  *
- * Sets the "is_hidden" attribute in a #GFileInfo according to @is_symlink.
- * See %G_FILE_ATTRIBUTE_STANDARD_IS_HIDDEN.
+ * Creates a #GSimpleAsyncResult from an error condition, and takes over the
+ * caller's ownership of @error, so the caller does not need to free it anymore.
+ *
+ * Returns: a #GSimpleAsyncResult
+ * Since: 2.28
  */
 
 
 /**
  * SECTION:gsimpleactiongrou:
  * @title: GSimpleActionGroup
- * @short_description: a simple #GActionGroup implementation
+ * @short_description: a simple GActionGroup implementation
  *
  * #GSimpleActionGroup is a hash table filled with #GAction objects,
  * implementing the #GActionGroup interface.
- */
-
-
-/**
- * GSocketConnectableIface:
- * @g_iface: The parent interface.
- * @enumerate: Creates a #GSocketAddressEnumerator
- * @proxy_enumerate: Creates a #GProxyAddressEnumerator
- *
- * Provides an interface for returning a #GSocketAddressEnumerator
- * and #GProxyAddressEnumerator
  */
 
 
@@ -27841,44 +20475,11 @@
 
 
 /**
- * G_PARAM_SPEC_BOXED:
- * @pspec: a valid #GParamSpec instance
- *
- * Cast a #GParamSpec instance into a #GParamSpecBoxed.
- */
-
-
-/**
  * GVolumeMonitor::mount-added:
  * @volume_monitor: The volume monitor emitting the signal.
  * @mount: a #GMount that was added.
  *
  * Emitted when a mount is added.
- */
-
-
-/**
- * GWin32OutputStream:
- *
- * Implements #GOutputStream for outputting to Windows file handles
- */
-
-
-/**
- * G_FLAGS_CLASS:
- * @class: a valid #GFlagsClass
- *
- * Casts a derived #GFlagsClass structure into a #GFlagsClass structure.
- */
-
-
-/**
- * G_IS_PARAM_SPEC_LONG:
- * @pspec: a valid #GParamSpec instance
- *
- * Checks whether the given #GParamSpec is of type %G_TYPE_PARAM_LONG.
- *
- * Returns: %TRUE on success.
  */
 
 
@@ -27913,20 +20514,6 @@
  *
  * Returns: (transfer none): the contents of the @attribute value as a stringv, or
  * Since: 2.22
- */
-
-
-/**
- * GIcon:
- *
- * An abstract type that specifies an icon.
- */
-
-
-/**
- * GEmblem:
- *
- * An object for Emblems
  */
 
 
@@ -28015,18 +20602,6 @@
 
 
 /**
- * g_node_insert_data:
- * @parent: the #GNode to place the new #GNode under
- * @position: the position to place the new #GNode at. If position is -1, the new #GNode is inserted as the last child of @parent
- * @data: the data for the new #GNode
- *
- * Inserts a new #GNode at the given position.
- *
- * Returns: the new #GNode
- */
-
-
-/**
  * g_mount_get_name:
  * @mount: a #GMount.
  *
@@ -28059,21 +20634,6 @@
  *
  * Returns: %TRUE if the mount was successfully ejected. %FALSE otherwise.
  * Since: 2.22
- */
-
-
-/**
- * g_application_get_action_enabled:
- * @application: a #GApplication
- * @name: the name of the action
- *
- * Retrieves whether the action @name is enabled or not.
- * See g_application_set_action_enabled().
- * It is an error to call this function if @application is a proxy for
- * a remote application.
- *
- * Returns: %TRUE if the action was enabled, and %FALSE otherwise
- * Since: 2.26
  */
 
 
@@ -28186,26 +20746,6 @@
 
 
 /**
- * G_FILE_ATTRIBUTE_UNIX_GID:
- *
- * A key in the "unix" namespace for getting the group ID for the file.
- * This attribute is only available for UNIX file systems.
- * Corresponding #GFileAttributeType is %G_FILE_ATTRIBUTE_TYPE_UINT32.
- */
-
-
-/**
- * g_main_is_running:
- * @loop: a #GMainLoop
- *
- * Checks if the main loop is running.
- *
- * Returns: %TRUE if the main loop is running
- * Deprecated: 2.2: Use g_main_loop_is_running() instead
- */
-
-
-/**
  * g_icon_equal:
  * @icon1: pointer to the first #GIcon.
  * @icon2: pointer to the second #GIcon.
@@ -28239,7 +20779,7 @@
 /**
  * SECTION:gsimpleactio:
  * @title: GSimpleAction
- * @short_description: a simple #GSimpleAction
+ * @short_description: a simple GSimpleAction
  *
  * A #GSimpleAction is the obvious simple implementation of the #GSimpleAction
  * interface.  This is the easiest way to create an action for purposes of
@@ -28264,22 +20804,6 @@
  *
  * Returns: %TRUE on success, %FALSE on error.
  * Since: 2.22
- */
-
-
-/**
- * G_VARIANT_TYPE_TUPLE:
- *
- * An indefinite type that is a supertype of every tuple type,
- * regardless of the number of items in the tuple.
- */
-
-
-/**
- * G_FILE_ATTRIBUTE_MOUNTABLE_CAN_UNMOUNT:
- *
- * A key in the "mountable" namespace for checking if a file (of type G_FILE_TYPE_MOUNTABLE)  is unmountable.
- * Corresponding #GFileAttributeType is %G_FILE_ATTRIBUTE_TYPE_BOOLEAN.
  */
 
 
@@ -28309,47 +20833,6 @@
  * details.
  *
  * Since: 2.26
- */
-
-
-/**
- * G_FILE_ATTRIBUTE_MOUNTABLE_IS_MEDIA_CHECK_AUTOMATIC:
- *
- * A key in the "mountable" namespace for checking if a file (of type G_FILE_TYPE_MOUNTABLE)
- * is automatically polled for media.
- * Corresponding #GFileAttributeType is %G_FILE_ATTRIBUTE_TYPE_BOOLEAN.
- *
- * Since: 2.22
- */
-
-
-/**
- * g_node_prev_sibling:
- * @node: a #GNode
- *
- * Gets the previous sibling of a #GNode.
- * node or %NULL
- *
- * Returns: the previous sibling of @node, or %NULL if @node is the first
- */
-
-
-/**
- * G_IS_PARAM_SPEC_BOOLEAN:
- * @pspec: a valid #GParamSpec instance
- *
- * Checks whether the given #GParamSpec is of type %G_TYPE_PARAM_BOOLEAN.
- *
- * Returns: %TRUE on success.
- */
-
-
-/**
- * G_FILE_ATTRIBUTE_FILESYSTEM_SIZE:
- *
- * A key in the "filesystem" namespace for getting the total size (in bytes) of the file system,
- * used in g_file_query_filesystem_info(). Corresponding #GFileAttributeType
- * is %G_FILE_ATTRIBUTE_TYPE_UINT64.
  */
 
 
@@ -28391,7 +20874,15 @@
  * <tag class="starttag">schema</tag> element). The
  * convention for schema ids is to use a dotted name, similar in
  * style to a DBus bus name, e.g. "org.gnome.font-rendering".
- * <example><title>Default values</title>
+ * In addition to #GVariant types, keys can have types that have enumerated
+ * types. These can be described by a <tag class="starttag">choice</tag>,
+ * <tag class="starttag">enum</tag> or <tag class="starttag">flags</tag> element, see
+ * <xref linkend="schema-enumerated"/>. The underlying type of
+ * such a key is string, but you can use g_settings_get_enum(),
+ * g_settings_set_enum(), g_settings_get_flags(), g_settings_set_flags()
+ * access the numeric values corresponding to the string value of enum
+ * and flags keys.
+ * <example id="schema-default-values"><title>Default values</title>
  * <programlisting><![CDATA[
  * <schemalist>
  * <schema id="org.gtk.test" path="/tests/" gettext-domain="test">
@@ -28408,12 +20899,17 @@
  * </schema>
  * </schemalist>
  * ]]></programlisting></example>
- * <example><title>Ranges, choices and enumerated types</title>
+ * <example id="schema-enumerated"><title>Ranges, choices and enumerated types</title>
  * <programlisting><![CDATA[
  * <schemalist>
  * <enum id="myenum">
  * <value nick="first" value="1"/>
  * <value nick="second" value="2"/>
+ * </enum>
+ * <enum id="myflags">
+ * <value nick="flag1" value="1"/>
+ * <value nick="flag2" value="2"/>
+ * <value nick="flag3" value="4"/>
  * </enum>
  * <schema id="org.gtk.test">
  * <key name="key-with-range" type="i">
@@ -28434,6 +20930,9 @@
  * </key>
  * <key name='enumerated-key' enum='myenum'>
  * <default>'first'</default>
+ * </key>
+ * <key name='flags-key' flags='myflags'>
+ * <default>["flag1",flag2"]</default>
  * </key>
  * </schema>
  * </schemalist>
@@ -28538,17 +21037,6 @@
 
 
 /**
- * GAsyncReadyCallback:
- * @source_object: the object the asynchronous operation was started with.
- * @res: a #GAsyncResult.
- * @user_data: user data passed to the callback.
- *
- * Type definition for a function that will be called back when an asynchronous
- * operation within GIO has been completed.
- */
-
-
-/**
  * g_dbus_method_invocation_return_gerror:
  * @invocation: A #GDBusMethodInvocation.
  * @error: A #GError.
@@ -28617,15 +21105,6 @@
 
 
 /**
- * G_TYPE_BYTE_ARRAY:
- *
- * The #GType for a boxed type holding a #GByteArray reference.
- *
- * Since: 2.22
- */
-
-
-/**
  * g_file_set_attribute_string:
  * @file: input #GFile.
  * @attribute: a string containing the attribute's name.
@@ -28672,18 +21151,6 @@
 
 
 /**
- * G_TYPE_IS_VALUE:
- * @type: A #GType value.
- *
- * Checks whether the passed in type ID can be used for g_value_init().
- * That is, this macro checks whether this type provides an implementation
- * of the #GTypeValueTable functions required for a type to create a #GValue of.
- *
- * Returns: Whether @type is suitable as a #GValue type.
- */
-
-
-/**
  * g_file_load_contents_async:
  * @file: input #GFile.
  * @cancellable: optional #GCancellable object, %NULL to ignore.
@@ -28713,7 +21180,7 @@
  * @parameters: A #GVariant tuple with parameters for the method or %NULL if not passing parameters.
  * @reply_type: The expected type of the reply, or %NULL.
  * @flags: Flags from the #GDBusCallFlags enumeration.
- * @timeout_msec: The timeout in milliseconds or -1 to use the default timeout.
+ * @timeout_msec: The timeout in milliseconds, -1 to use the default timeout or %G_MAXINT for no timeout.
  * @cancellable: A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
  *
@@ -28778,13 +21245,6 @@
 
 
 /**
- * G_TYPE_PARAM_BOXED:
- *
- * The #GType of #GParamSpecBoxed.
- */
-
-
-/**
  * g_file_monitor_file:
  * @file: input #GFile.
  * @flags: a set of #GFileMonitorFlags.
@@ -28799,6 +21259,43 @@
  * Free the returned object with g_object_unref().
  *
  * Returns: (transfer full): a #GFileMonitor for the given @file, or %NULL on error.
+ */
+
+
+/**
+ * SECTION:gapplicationcommandlin:
+ * @title: GApplicationCommandLine
+ * @short_description: A class representing a command-line invocation of an application
+ * @see_also: #GApplication
+ *
+ * #GApplicationCommandLine represents a command-line invocation of
+ * an application.  It is created by #GApplication and emitted
+ * in the #GApplication::command-line signal and virtual function.
+ * The class contains the list of arguments that the program was invoked
+ * with.  It is also possible to query if the commandline invocation was
+ * commandline to this process).
+ * The exit status of the originally-invoked process may be set and
+ * messages can be printed to stdout or stderr of that process.  The
+ * lifecycle of the originally-invoked process is tied to the lifecycle
+ * dropped).
+ * <example id="gapplication-example-cmdline"><title>Handling commandline arguments with GApplication</title>
+ * <programlisting>
+ * <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../gio/tests/gapplication-example-cmdline.c">
+ * <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
+ * </xi:include>
+ * </programlisting>
+ * </example>
+ * <example id="gapplication-example-cmdline2"><title>Complicated commandline handling</title>
+ * <programlisting>
+ * <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../gio/tests/gapplication-example-cmdline2.c">
+ * <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
+ * </xi:include>
+ * </programlisting>
+ * </example>
+ *
+ * Local (ie: the current process is running in direct response to the
+ * Invocation) or remote (ie: some other process forwarded the
+ * Of this object (ie: the process exits when the last reference is
  */
 
 
@@ -28850,8 +21347,8 @@
  * @destination: #GFile pointing to the destination location.
  * @flags: set of #GFileCopyFlags.
  * @cancellable: optional #GCancellable object, %NULL to ignore.
- * @progress_callback: #GFileProgressCallback function for updates.
- * @progress_callback_data: gpointer to user data for the callback function.
+ * @progress_callback: (scope call): #GFileProgressCallback function for updates.
+ * @progress_callback_data: (closure): gpointer to user data for the callback function.
  * @error: #GError for returning error conditions, or %NULL
  *
  * Tries to move the file or directory @source to the location specified by @destination.
@@ -28915,15 +21412,6 @@
  * Gets the object path @proxy is for.
  *
  * Returns: A string owned by @proxy. Do not free.
- * Since: 2.26
- */
-
-
-/**
- * G_TYPE_DBUS_ARG_INFO:
- *
- * The #GType for a boxed type holding a #GDBusArgInfo.
- *
  * Since: 2.26
  */
 
@@ -29018,16 +21506,6 @@
 
 
 /**
- * G_FILE_ATTRIBUTE_MOUNTABLE_CAN_STOP:
- *
- * A key in the "mountable" namespace for checking if a file (of type G_FILE_TYPE_MOUNTABLE) can be stopped.
- * Corresponding #GFileAttributeType is %G_FILE_ATTRIBUTE_TYPE_BOOLEAN.
- *
- * Since: 2.22
- */
-
-
-/**
  * g_inet_address_get_is_mc_site_local:
  * @address: a #GInetAddress
  *
@@ -29035,44 +21513,6 @@
  *
  * Returns: %TRUE if @address is a site-local multicast address.
  * Since: 2.22
- */
-
-
-/**
- * G_TYPE_RESERVED_USER_FIRST:
- *
- * First available fundamental type number to create new fundamental
- * type id with G_TYPE_MAKE_FUNDAMENTAL().
- */
-
-
-/**
- * G_TYPE_IO_CHANNEL:
- *
- * The #GType for #GIOChannel.
- */
-
-
-/**
- * GRegexCompileFlags:
- * @G_REGEX_CASELESS: Letters in the pattern match both upper- and lowercase letters. This option can be changed within a pattern by a "(?i)" option setting.
- * @G_REGEX_MULTILINE: By default, GRegex treats the strings as consisting of a single line of characters (even if it actually contains newlines). The "start of line" metacharacter ("^") matches only at the start of the string, while the "end of line" metacharacter ("$") matches only at the end of the string, or before a terminating newline (unless #G_REGEX_DOLLAR_ENDONLY is set). When #G_REGEX_MULTILINE is set, the "start of line" and "end of line" constructs match immediately following or immediately before any newline in the string, respectively, as well as at the very start and end. This can be changed within a pattern by a "(?m)" option setting.
- * @G_REGEX_DOTALL: A dot metacharater (".") in the pattern matches all characters, including newlines. Without it, newlines are excluded. This option can be changed within a pattern by a ("?s") option setting.
- * @G_REGEX_EXTENDED: Whitespace data characters in the pattern are totally ignored except when escaped or inside a character class. Whitespace does not include the VT character (code 11). In addition, characters between an unescaped "#" outside a character class and the next newline character, inclusive, are also ignored. This can be changed within a pattern by a "(?x)" option setting.
- * @G_REGEX_ANCHORED: The pattern is forced to be "anchored", that is, it is constrained to match only at the first matching point in the string that is being searched. This effect can also be achieved by appropriate constructs in the pattern itself such as the "^" metacharater.
- * @G_REGEX_DOLLAR_ENDONLY: A dollar metacharacter ("$") in the pattern matches only at the end of the string. Without this option, a dollar also matches immediately before the final character if it is a newline (but not before any other newlines). This option is ignored if #G_REGEX_MULTILINE is set.
- * @G_REGEX_UNGREEDY: Inverts the "greediness" of the quantifiers so that they are not greedy by default, but become greedy if followed by "?". It can also be set by a "(?U)" option setting within the pattern.
- * @G_REGEX_RAW: Usually strings must be valid UTF-8 strings, using this flag they are considered as a raw sequence of bytes.
- * @G_REGEX_NO_AUTO_CAPTURE: Disables the use of numbered capturing parentheses in the pattern. Any opening parenthesis that is not followed by "?" behaves as if it were followed by "?:" but named parentheses can still be used for capturing (and they acquire numbers in the usual way).
- * @G_REGEX_OPTIMIZE: Optimize the regular expression. If the pattern will be used many times, then it may be worth the effort to optimize it to improve the speed of matches.
- * @G_REGEX_DUPNAMES: Names used to identify capturing subpatterns need not be unique. This can be helpful for certain types of pattern when it is known that only one instance of the named subpattern can ever be matched.
- * @G_REGEX_NEWLINE_CR: Usually any newline character is recognized, if this option is set, the only recognized newline character is '\r'.
- * @G_REGEX_NEWLINE_LF: Usually any newline character is recognized, if this option is set, the only recognized newline character is '\n'.
- * @G_REGEX_NEWLINE_CRLF: Usually any newline character is recognized, if this option is set, the only recognized newline character sequence is '\r\n'.
- *
- * Flags specifying compile-time options.
- *
- * Since: 2.14
  */
 
 
@@ -29104,16 +21544,6 @@
  * handling an incomming client request.
  *
  * Since: 2.22
- */
-
-
-/**
- * G_FLAGS_CLASS_TYPE:
- * @class: a #GFlagsClass
- *
- * Get the type identifier from a given #GFlagsClass structure.
- *
- * Returns: the #GType
  */
 
 
@@ -29179,22 +21609,6 @@
 
 
 /**
- * G_TYPE_DOUBLE:
- *
- * The fundamental type corresponding to #gdouble.
- */
-
-
-/**
- * G_VARIANT_TYPE_UINT64:
- *
- * The type of an integer value that can range from 0 to
- * 18446744073709551616.  That's a really big number, but a Rubik's
- * cube can have a bit more than twice as many possible positions.
- */
-
-
-/**
  * g_file_replace_contents_finish:
  * @file: input #GFile.
  * @res: a #GAsyncResult.
@@ -29216,25 +21630,6 @@
  * Class structure for #GDBusConnection.
  *
  * Since: 2.26
- */
-
-
-/**
- * G_TYPE_RESERVED_GLIB_FIRST:
- *
- * First fundamental type number to create a new fundamental type id with
- * G_TYPE_MAKE_FUNDAMENTAL() reserved for GLib.
- */
-
-
-/**
- * GParamSpecUChar:
- * @parent_instance: private #GParamSpec portion
- * @minimum: minimum value for the property specified
- * @maximum: maximum value for the property specified
- * @default_value: default value for the property specified
- *
- * A #GParamSpec derived structure that contains the meta data for unsigned character properties.
  */
 
 
@@ -29311,24 +21706,6 @@
 
 
 /**
- * G_OBJECT_CLASS_NAME:
- * @class: a valid #GObjectClass
- *
- * Return the name of a class structure's type.
- * should not be freed.
- *
- * Returns: Type name of @class. The string is owned by the type system and
- */
-
-
-/**
- * GUnixMount:
- *
- * Implementation of the #GMount interface for Unix systems.
- */
-
-
-/**
  * g_socket_client_add_application_proxy:
  * @client: a #GSocketClient
  * @protocol: The proxy protocol
@@ -29369,13 +21746,6 @@
 
 
 /**
- * GFileDescriptorBased:
- *
- * An interface for file descriptor based io objects.
- */
-
-
-/**
  * g_memory_output_stream_get_data_size:
  * @ostream: a #GMemoryOutputStream
  *
@@ -29389,36 +21759,12 @@
 
 
 /**
- * GTypePluginUnuse:
- * @plugin: the #GTypePlugin whose use count should be decreased
- *
- * The type of the @unuse_plugin function of #GTypePluginClass.
- */
-
-
-/**
  * g_file_info_get_is_symlink:
  * @info: a #GFileInfo.
  *
  * Checks if a file is a symlink.
  *
  * Returns: %TRUE if the given @info is a symlink.
- */
-
-
-/**
- * G_PARAM_SPEC_VALUE_TYPE:
- * @pspec: a valid #GParamSpec
- *
- * Retrieves the #GType to initialize a #GValue for this parameter.
- */
-
-
-/**
- * GDataInputStream:
- *
- * An implementation of #GBufferedInputStream that allows for high-level
- * data manipulation of arbitrary data (including binary operations).
  */
 
 
@@ -29456,25 +21802,6 @@
  * handling an incomming client request.
  *
  * Since: 2.22
- */
-
-
-/**
- * G_IS_PARAM_SPEC_INT64:
- * @pspec: a valid #GParamSpec instance
- *
- * Checks whether the given #GParamSpec is of type %G_TYPE_PARAM_INT64.
- *
- * Returns: %TRUE on success.
- */
-
-
-/**
- * G_FILE_ATTRIBUTE_FILESYSTEM_FREE:
- *
- * A key in the "filesystem" namespace for getting the number of bytes of free space left on the
- * file system. Corresponding #GFileAttributeType is
- * %G_FILE_ATTRIBUTE_TYPE_UINT64.
  */
 
 
@@ -29528,13 +21855,6 @@
 
 
 /**
- * GTypeInstance:
- *
- * An opaque structure used as the base of all type instances.
- */
-
-
-/**
  * g_tcp_connection_set_graceful_disconnect:
  * @connection: a #GTcpConnection
  * @graceful_disconnect: Whether to do graceful disconnects or not
@@ -29549,17 +21869,6 @@
  * take a while. For this reason it is disabled by default.
  *
  * Since: 2.22
- */
-
-
-/**
- * G_FILE_ATTRIBUTE_STANDARD_FAST_CONTENT_TYPE:
- *
- * A key in the "standard" namespace for getting the fast content type.
- * The fast content type isn't as reliable as the regular one, as it
- * only uses the filename to guess it, but it is faster to calculate than the
- * regular content type.
- * Corresponding #GFileAttributeType is %G_FILE_ATTRIBUTE_TYPE_STRING.
  */
 
 
@@ -29586,45 +21895,11 @@
 
 
 /**
- * G_VARIANT_TYPE_HANDLE:
- *
- * The type of a 32bit signed integer value, that by convention, is used
- * as an index into an array of file descriptors that are sent alongside
- * a DBus message.
- * If you are not interacting with DBus, then there is no reason to make
- * use of this type.
- */
-
-
-/**
  * g_unix_credentials_message_is_supported:
  *
  * Checks if passing a #GCredential on a #GSocket is supported on this platform.
  *
  * Returns: %TRUE if supported, %FALSE otherwise
- * Since: 2.26
- */
-
-
-/**
- * GParamSpecDouble:
- * @parent_instance: private #GParamSpec portion
- * @minimum: minimum value for the property specified
- * @maximum: maximum value for the property specified
- * @default_value: default value for the property specified
- * @epsilon: values closer than @epsilon will be considered identical by g_param_values_cmp(); the default value is 1e-90.
- *
- * A #GParamSpec derived structure that contains the meta data for double properties.
- */
-
-
-/**
- * GBusNameWatcherFlags:
- * @G_BUS_NAME_WATCHER_FLAGS_NONE: No flags set.
- * @G_BUS_NAME_WATCHER_FLAGS_AUTO_START: If no-one owns the name when beginning to watch the name, ask the bus to launch an owner for the name.
- *
- * Flags used in g_bus_watch_name().
- *
  * Since: 2.26
  */
 
