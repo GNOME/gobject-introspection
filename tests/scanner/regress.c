@@ -1301,6 +1301,17 @@ regress_test_unsigned_enum_param(RegressTestEnumUnsigned e)
   return ev->value_nick;
 }
 
+/**
+ * regress_global_get_flags_out:
+ * @v: (out): A flags value
+ *
+ */
+void
+regress_global_get_flags_out (RegressTestFlags *v)
+{
+  *v = REGRESS_TEST_FLAG1 | REGRESS_TEST_FLAG3;
+}
+
 /* structures */
 
 /**

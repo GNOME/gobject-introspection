@@ -163,6 +163,8 @@ GType regress_test_flags_get_type (void) G_GNUC_CONST;
 const gchar * regress_test_enum_param(RegressTestEnum e);
 const gchar * regress_test_unsigned_enum_param(RegressTestEnumUnsigned e);
 
+void regress_global_get_flags_out (RegressTestFlags *v);
+
 /* constants */
 
 #define REGRESS_INT_CONSTANT 4422

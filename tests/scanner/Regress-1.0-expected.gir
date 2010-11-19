@@ -962,6 +962,21 @@ TpAccount::status-changed</doc>
         </parameter>
       </parameters>
     </function>
+    <function name="global_get_flags_out"
+              c:identifier="regress_global_get_flags_out">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="v"
+                   direction="out"
+                   caller-allocates="0"
+                   transfer-ownership="full">
+          <doc xml:whitespace="preserve">A flags value</doc>
+          <type name="TestFlags" c:type="RegressTestFlags*"/>
+        </parameter>
+      </parameters>
+    </function>
     <function name="random_function_with_skipped_structure"
               c:identifier="regress_random_function_with_skipped_structure"
               introspectable="0">
