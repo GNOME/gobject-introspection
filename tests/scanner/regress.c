@@ -2344,7 +2344,7 @@ regress_test_fundamental_sub_object_finalize (RegressTestFundamentalSubObject * 
   g_return_if_fail (fundamental_sub_object != NULL);
 
   g_free(fundamental_sub_object->data);
-  regress_test_fundamental_object_unref (REGRESS_TEST_FUNDAMENTAL_OBJECT (fundamental_sub_object));
+  regress_test_fundamental_object_finalize (REGRESS_TEST_FUNDAMENTAL_OBJECT (fundamental_sub_object));
 }
 
 static void
