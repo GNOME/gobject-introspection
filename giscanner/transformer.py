@@ -608,7 +608,7 @@ raise ValueError."""
             return None
         if symbol.const_string is not None:
             typeval = ast.TYPE_STRING
-            value = symbol.const_string
+            value = unicode(symbol.const_string, 'utf-8')
         elif symbol.const_int is not None:
             typeval = ast.TYPE_INT
             value = '%d' % (symbol.const_int, )

@@ -120,7 +120,7 @@ class XMLWriter(object):
         if indent:
             self._data.write('%s%s%s' % (
                     self._indent_char * self._indent,
-                    line,
+                    line.encode('utf-8'),
                     self._newline_char))
         else:
             self._data.write('%s%s' % (line, self._newline_char))

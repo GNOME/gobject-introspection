@@ -564,7 +564,7 @@ static int calc_attrs_length(PyObject *attributes, int indent,
 
   for (i = 0; i < PyList_Size (attributes); ++i)
     {
-      PyObject *tuple;
+      PyObject *tuple, *pyvalue;
       char *attr, *value;
       char *escaped;
 
@@ -572,8 +572,23 @@ static int calc_attrs_length(PyObject *attributes, int indent,
       if (PyTuple_GetItem(tuple, 1) == Py_None)
 	continue;
 
-      if (!PyArg_ParseTuple(tuple, "ss", &attr, &value))
+      if (!PyArg_ParseTuple(tuple, "sO", &attr, &pyvalue))
         return -1;
+
+      if (PyUnicode_Check(pyvalue)) {
+        PyObject *s = PyUnicode_AsUTF8String(pyvalue);
+        if (!s) {
+          return -1;
+        }
+        value = PyString_AsString(s);
+        Py_DECREF(s);
+      } else if (PyString_Check(pyvalue)) {
+        value = PyString_AsString(pyvalue);
+      } else {
+        PyErr_SetString(PyExc_TypeError,
+                        "value must be string or unicode");
+        return -1;
+      }
 
       escaped = g_markup_escape_text (value, -1);
       attr_length += 2 + strlen(attr) + strlen(escaped) + 2;
@@ -605,7 +620,7 @@ pygi_collect_attributes (PyObject *self,
     return NULL;
 
   if (attributes == Py_None || !PyList_Size(attributes))
-    return PyString_FromString("");
+    return PyUnicode_FromString("");
 
   len = calc_attrs_length(attributes, indent, self_indent);
   if (len < 0)
@@ -620,7 +635,7 @@ pygi_collect_attributes (PyObject *self,
 
   for (i = 0; i < PyList_Size (attributes); ++i)
     {
-      PyObject *tuple;
+      PyObject *tuple, *pyvalue;
       char *attr, *value, *escaped;
 
       tuple = PyList_GetItem (attributes, i);
@@ -643,8 +658,23 @@ pygi_collect_attributes (PyObject *self,
 	continue;
 
       /* this leaks, but we exit after, so */
-      if (!PyArg_ParseTuple(tuple, "ss", &attr, &value))
+      if (!PyArg_ParseTuple(tuple, "sO", &attr, &pyvalue))
         return NULL;
+
+      if (PyUnicode_Check(pyvalue)) {
+        PyObject *s = PyUnicode_AsUTF8String(pyvalue);
+        if (!s) {
+          return NULL;
+        }
+        value = PyString_AsString(s);
+        Py_DECREF(s);
+      } else if (PyString_Check(pyvalue)) {
+        value = PyString_AsString(pyvalue);
+      } else {
+        PyErr_SetString(PyExc_TypeError,
+                        "value must be string or unicode");
+        return NULL;
+      }
 
       if (indent_len && !first)
 	{
@@ -663,7 +693,7 @@ pygi_collect_attributes (PyObject *self,
 	first = FALSE;
   }
 
-  return PyString_FromString (g_string_free (attr_value, FALSE));
+  return PyUnicode_FromString (g_string_free (attr_value, FALSE));
 }
 
 /* Module */
