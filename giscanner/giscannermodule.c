@@ -610,8 +610,9 @@ pygi_collect_attributes (PyObject *self,
   int indent, indent_len, i, j, self_indent;
   char *indent_char;
   gboolean first;
-  GString *attr_value;
+  GString *attr_value = NULL;
   int len;
+  PyObject *result = NULL;
 
   if (!PyArg_ParseTuple(args, "sO!isi",
 			&tag_name, &PyList_Type, &attributes,
@@ -620,7 +621,7 @@ pygi_collect_attributes (PyObject *self,
     return NULL;
 
   if (attributes == Py_None || !PyList_Size(attributes))
-    return PyUnicode_FromString("");
+    return PyUnicode_DecodeUTF8("", 0, "strict");
 
   len = calc_attrs_length(attributes, indent, self_indent);
   if (len < 0)
@@ -644,14 +645,14 @@ pygi_collect_attributes (PyObject *self,
         {
           PyErr_SetString(PyExc_TypeError,
                           "attribute item must be a tuple");
-          return NULL;
+	  goto out;
         }
 
       if (!PyTuple_Size (tuple) == 2)
         {
           PyErr_SetString(PyExc_IndexError,
                           "attribute item must be a tuple of length 2");
-          return NULL;
+	  goto out;
         }
 
       if (PyTuple_GetItem(tuple, 1) == Py_None)
@@ -659,13 +660,12 @@ pygi_collect_attributes (PyObject *self,
 
       /* this leaks, but we exit after, so */
       if (!PyArg_ParseTuple(tuple, "sO", &attr, &pyvalue))
-        return NULL;
+	goto out;
 
       if (PyUnicode_Check(pyvalue)) {
         PyObject *s = PyUnicode_AsUTF8String(pyvalue);
-        if (!s) {
-          return NULL;
-        }
+        if (!s)
+	  goto out;
         value = PyString_AsString(s);
         Py_DECREF(s);
       } else if (PyString_Check(pyvalue)) {
@@ -673,7 +673,7 @@ pygi_collect_attributes (PyObject *self,
       } else {
         PyErr_SetString(PyExc_TypeError,
                         "value must be string or unicode");
-        return NULL;
+	goto out;
       }
 
       if (indent_len && !first)
@@ -693,7 +693,11 @@ pygi_collect_attributes (PyObject *self,
 	first = FALSE;
   }
 
-  return PyUnicode_FromString (g_string_free (attr_value, FALSE));
+  result = PyUnicode_DecodeUTF8 (attr_value->str, attr_value->len, "strict");
+ out:
+  if (attr_value != NULL)
+    g_string_free (attr_value, TRUE);
+  return result;
 }
 
 /* Module */
