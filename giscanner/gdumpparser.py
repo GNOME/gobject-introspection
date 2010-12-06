@@ -235,6 +235,7 @@ blob containing data gleaned from GObject's primitive introspection."""
             self._create_gobject(record)
         elif record.name == 'InitiallyUnownedClass':
             record.fields = self._namespace.get('ObjectClass').fields
+            record.disguised = False
 
     # Introspection over the data we get from the dynamic
     # GObject/GType system out of the binary
