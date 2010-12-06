@@ -27,7 +27,22 @@
     <record name="FontFace" c:type="cairo_font_face_t" foreign="1"/>
     <record name="ScaledFont" c:type="cairo_scaled_font_t" foreign="1"/>
     <record name="Path" c:type="cairo_path_t" foreign="1"/>
-    <record name="RectangleInt" c:type="cairo_rectangle_int_t" foreign="1"/>
+    <record name="RectangleInt" c:type="cairo_rectangle_int_t"
+	    glib:type-name="CairoRectangleInt"
+	    glib:get-type="cairo_gobject_rectangle_int_get_type">
+      <field name="x" writable="1">
+	<type name="gint" c:type="gint"/>
+      </field>
+      <field name="y" writable="1">
+	<type name="gint" c:type="gint"/>
+      </field>
+      <field name="width" writable="1">
+	<type name="gint" c:type="gint"/>
+      </field>
+      <field name="height" writable="1">
+	<type name="gint" c:type="gint"/>
+      </field>
+    </record>
     <function name="image_surface_create" c:identifier="cairo_image_surface_create">
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
