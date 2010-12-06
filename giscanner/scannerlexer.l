@@ -3,6 +3,7 @@
  *
  * Copyright (c) 1997 Sandro Sigala  <ssigala@globalnet.it>
  * Copyright (c) 2007-2008 Jürg Billeter  <j@bitron.ch>
+ * Copyright (c) 2010 Andreas Rottmann <a.rottmann@gmx.at>
  *
  * All rights reserved.
  *
@@ -46,6 +47,7 @@ extern int yylex (GISourceScanner *scanner);
 #define YY_DECL int yylex (GISourceScanner *scanner)
 static int yywrap (void);
 static void parse_comment (GISourceScanner *scanner);
+static void parse_trigraph (GISourceScanner *scanner);
 static void process_linemarks (GISourceScanner *scanner);
 static int check_identifier (GISourceScanner *scanner, const char *);
 static int parse_ignored_macro (void);
@@ -72,8 +74,7 @@ stringtext				([^\\\"])|(\\.)
 [\t\f\v\r ]+				{ /* Ignore whitespace. */ }
 
 "/*"					{ parse_comment(scanner); }
-"/*"[\t ]*<[\t ]*"private"[\t ]*>" */"  { scanner->private = TRUE; }
-"/*"[\t ]*<[\t ]*"public"[\t ]*>" */"   { scanner->private = FALSE; }
+"/*"[\t ]?<[\t ,=A-Za-z0-9_]+>[\t ]?"*/" { parse_trigraph(scanner); }
 "//".*					{ }
 
 "#define "[a-zA-Z_][a-zA-Z_0-9]*"("	{ yyless (yyleng - 1); return FUNCTION_MACRO; }
@@ -329,4 +330,30 @@ parse_ignored_macro (void)
 	}
 
 	return TRUE;
+}
+
+static void
+parse_trigraph (GISourceScanner *scanner)
+{
+	char **items;
+	char *start, *end;
+	int i;
+
+	start = g_strstr_len (yytext, yyleng, "<");
+	g_assert (start != NULL);
+	end = g_strstr_len (yytext, yyleng, ">");
+	g_assert (end != NULL);
+	*end = '\0';
+	items = g_strsplit (start + 1, ",", 0);
+	for (i = 0; items[i] != NULL; i++) {
+		char *item = items[i];
+		g_strstrip (item);
+		if (strcmp (item, "public") == 0)
+			scanner->private = FALSE;
+		else if (strcmp (item, "private") == 0)
+			scanner->private = TRUE;
+		else if (strcmp (item, "flags") == 0)
+			scanner->flags = TRUE;
+	}
+	g_strfreev (items);
 }

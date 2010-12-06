@@ -910,44 +910,47 @@ struct_declarator
 	;
 
 enum_specifier
-	: ENUM identifier_or_typedef_name '{' enumerator_list '}'
+	: enum_keyword identifier_or_typedef_name '{' enumerator_list '}'
 	  {
-                scanner->private = FALSE;
 		$$ = gi_source_enum_new ($2);
 		$$->child_list = $4;
-		$$->is_bitfield = is_bitfield;
+		$$->is_bitfield = is_bitfield || scanner->flags;
 		last_enum_value = -1;
 	  }
-	| ENUM '{' enumerator_list '}'
+	| enum_keyword '{' enumerator_list '}'
 	  {
-                scanner->private = FALSE;
 		$$ = gi_source_enum_new (NULL);
 		$$->child_list = $3;
-		$$->is_bitfield = is_bitfield;
+		$$->is_bitfield = is_bitfield || scanner->flags;
 		last_enum_value = -1;
 	  }
-	| ENUM identifier_or_typedef_name '{' enumerator_list ',' '}'
+	| enum_keyword identifier_or_typedef_name '{' enumerator_list ',' '}'
 	  {
-                scanner->private = FALSE;
 		$$ = gi_source_enum_new ($2);
 		$$->child_list = $4;
-		$$->is_bitfield = is_bitfield;
+		$$->is_bitfield = is_bitfield || scanner->flags;
 		last_enum_value = -1;
 	  }
-	| ENUM '{' enumerator_list ',' '}'
+	| enum_keyword '{' enumerator_list ',' '}'
 	  {
-                scanner->private = FALSE;
 		$$ = gi_source_enum_new (NULL);
 		$$->child_list = $3;
-		$$->is_bitfield = is_bitfield;
+		$$->is_bitfield = is_bitfield || scanner->flags;
 		last_enum_value = -1;
 	  }
-	| ENUM identifier_or_typedef_name
+	| enum_keyword identifier_or_typedef_name
 	  {
-                scanner->private = FALSE;
 		$$ = gi_source_enum_new ($2);
 	  }
 	;
+
+enum_keyword
+        : ENUM
+          {
+                scanner->flags = FALSE;
+                scanner->private = FALSE;
+          }
+        ;
 
 enumerator_list
 	:

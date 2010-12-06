@@ -84,10 +84,6 @@
  */
 
 /**
- * GIOCondition: (type bitfield)
- **/
-
-/**
  * GSourceFunc:
  * @data: (closure data):
  */

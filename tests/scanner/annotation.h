@@ -3,6 +3,12 @@
 
 #include <glib-object.h>
 
+typedef enum /*< flags,prefix=ANN >*/
+{
+  ANN_FLAG_FOO = 1,
+  ANN_FLAG_BAR = 2
+} AnnotationBitfield;
+
 /**
  * AnnotationCallback:
  * @in: (in) (transfer none): array of ints
