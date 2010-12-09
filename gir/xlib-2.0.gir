@@ -15,6 +15,7 @@
     <record name="KeySym" c:type="KeySym"/>
     <record name="Picture" c:type="Picture"/>
     <record name="Screen" c:type="Screen"/>
+    <record name="Time" c:type="Time"/>
     <record name="Visual" c:type="Visual"/>
     <record name="VisualID" c:type="VisualID"/>
     <record name="Window" c:type="Window"/>
