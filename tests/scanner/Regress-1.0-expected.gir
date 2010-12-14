@@ -630,7 +630,7 @@ case.</doc>
           <type name="none"/>
         </return-value>
         <parameters>
-          <parameter name="object" transfer-ownership="none">
+          <parameter name="arr" transfer-ownership="none">
             <doc xml:whitespace="preserve">numbers</doc>
             <array name="GLib.Array">
               <type name="guint"/>
@@ -645,7 +645,7 @@ TpAccount::status-changed</doc>
           <type name="none"/>
         </return-value>
         <parameters>
-          <parameter name="object" transfer-ownership="none">
+          <parameter name="hash" transfer-ownership="none">
             <type name="GLib.HashTable">
               <type name="utf8"/>
               <type name="GObject.Value"/>
@@ -659,7 +659,7 @@ TpAccount::status-changed</doc>
           <type name="none"/>
         </return-value>
         <parameters>
-          <parameter name="object" transfer-ownership="none">
+          <parameter name="strs" transfer-ownership="none">
             <doc xml:whitespace="preserve">strings</doc>
             <array>
               <type name="utf8"/>

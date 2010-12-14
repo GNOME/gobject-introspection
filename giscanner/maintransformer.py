@@ -719,12 +719,15 @@ usage is void (*_gtk_reserved1)(void);"""
         # than the number of signal parameters
         if block and len(block.tags) > len(signal.parameters):
             names = block.tags.items()
+            # Resolve real parameter names early, so that in later
+            # phase we can refer to them while resolving annotations.
+            for i, param in enumerate(signal.parameters):
+                param.argname, tag = names[i+1]
         else:
             names = []
         for i, param in enumerate(signal.parameters):
             if names:
                 name, tag = names[i+1]
-                param.name = name
                 options = getattr(tag, 'options', {})
                 param_type = options.get(OPT_TYPE)
                 if param_type:
