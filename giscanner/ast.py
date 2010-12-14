@@ -180,6 +180,10 @@ TYPE_INT = Type(target_fundamental='gint', ctype='gint')
 TYPE_UINT = Type(target_fundamental='guint', ctype='guint')
 TYPE_LONG = Type(target_fundamental='glong', ctype='glong')
 TYPE_ULONG = Type(target_fundamental='gulong', ctype='gulong')
+TYPE_SIZE = Type(target_fundamental='gsize', ctype='gsize')
+TYPE_SSIZE = Type(target_fundamental='gssize', ctype='gssize')
+TYPE_INTPTR = Type(target_fundamental='gintptr', ctype='gintptr')
+TYPE_UINTPTR = Type(target_fundamental='guintptr', ctype='guintptr')
 # C99 types
 TYPE_LONG_LONG = Type(target_fundamental='long long', ctype='long long')
 TYPE_LONG_ULONG = Type(target_fundamental='unsigned long long',
@@ -201,8 +205,9 @@ TYPE_VALIST = Type(target_fundamental='va_list', ctype='va_list')
 BASIC_GIR_TYPES = [TYPE_BOOLEAN, TYPE_INT8, TYPE_UINT8, TYPE_INT16,
                    TYPE_UINT16, TYPE_INT32, TYPE_UINT32, TYPE_INT64,
                    TYPE_UINT64, TYPE_CHAR, TYPE_SHORT, TYPE_USHORT, TYPE_INT,
-                   TYPE_UINT, TYPE_LONG, TYPE_ULONG, TYPE_LONG_LONG,
-                   TYPE_LONG_ULONG, TYPE_FLOAT, TYPE_DOUBLE,
+                   TYPE_UINT, TYPE_LONG, TYPE_ULONG, TYPE_SIZE, TYPE_SSIZE,
+                   TYPE_LONG_LONG, TYPE_LONG_ULONG, TYPE_INTPTR, TYPE_UINTPTR,
+                   TYPE_FLOAT, TYPE_DOUBLE,
                    TYPE_LONG_DOUBLE, TYPE_UNICHAR, TYPE_GTYPE]
 GIR_TYPES = [TYPE_NONE, TYPE_ANY]
 GIR_TYPES.extend(BASIC_GIR_TYPES)
@@ -252,8 +257,10 @@ type_names['gchararray'] = TYPE_STRING
 type_names['gchar*'] = TYPE_STRING
 type_names['goffset'] = TYPE_INT64
 type_names['gunichar2'] = TYPE_UINT16
-type_names['gsize'] = TYPE_ULONG
-type_names['gssize'] = TYPE_LONG
+type_names['gsize'] = TYPE_SIZE
+type_names['gssize'] = TYPE_SSIZE
+type_names['gintptr'] = TYPE_INTPTR
+type_names['guintptr'] = TYPE_UINTPTR
 type_names['gconstpointer'] = TYPE_ANY
 
 # We used to support these; continue to do so

@@ -2041,21 +2041,21 @@ call and can be released on return.</doc>
     </function>
     <function name="test_size" c:identifier="regress_test_size">
       <return-value transfer-ownership="none">
-        <type name="gulong" c:type="gsize"/>
+        <type name="gsize" c:type="gsize"/>
       </return-value>
       <parameters>
         <parameter name="in" transfer-ownership="none">
-          <type name="gulong" c:type="gsize"/>
+          <type name="gsize" c:type="gsize"/>
         </parameter>
       </parameters>
     </function>
     <function name="test_ssize" c:identifier="regress_test_ssize">
       <return-value transfer-ownership="none">
-        <type name="glong" c:type="gssize"/>
+        <type name="gssize" c:type="gssize"/>
       </return-value>
       <parameters>
         <parameter name="in" transfer-ownership="none">
-          <type name="glong" c:type="gssize"/>
+          <type name="gssize" c:type="gssize"/>
         </parameter>
       </parameters>
     </function>
