@@ -1,6 +1,6 @@
 #!/bin/sh
 GLIBDIR=$1
-tools/g-ir-annotation-tool --extract \
+./g-ir-annotation-tool --extract \
     -DGIO_COMPILATION \
     -I$GLIBDIR \
     -I$GLIBDIR/glib \
