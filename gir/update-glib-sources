@@ -1,0 +1,117 @@
+#!/usr/bin/python
+# Because we want to avoid a circular build dependency
+# between glib and gobject-introspection, this script
+# extracts the headers and documentation comments from
+# the GLib source tree, which we then commit.
+#
+# Run this script whenever GLib, GObject, Gio public API changes.
+# Example:
+#   ./update-glib-sources code gio /src/checkout/glib > gio-2.0.c
+#
+# Copyright (C) 2010 Red Hat, Inc.
+# Written by Colin Walters <walters@verbum.org>
+#
+# Permission is hereby granted, free of charge, to any person
+# obtaining a copy of this software and associated documentation files
+# (the "Software"), to deal in the Software without restriction,
+# including without limitation the rights to use, copy, modify, merge,
+# publish, distribute, sublicense, and/or sell copies of the Software,
+# and to permit persons to whom the Software is furnished to do so,
+# subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be
+# included in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+# NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+# BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+# ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+# CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
+import os
+import sys
+import optparse
+import glob
+
+def usage(ecode):
+    print "Usage: %s MODE MODULE /path/to/glib/source" % (sys.argv[0], )
+    print "  MODE is one of \"headers\" or \"code\""
+    print "  MODULE is one of \"glib\" \"gobject\" \"gio\""
+    print "Example: %s headers gobject" % (sys.argv[0], )
+    sys.exit(ecode)
+
+def main():
+    cwd = os.getcwd()
+    if not os.path.basename(cwd) == 'gir':
+        print "Must be run from gir/ directory"
+        sys.exit(1)
+    parser = optparse.OptionParser("%prog MODE MODULE")
+    if len(sys.argv) != 4:
+        usage(1)
+    mode = sys.argv[1]
+    if mode not in ['headers', 'code']:
+        usage(1)
+    module = sys.argv[2]
+    if module not in ['glib', 'gobject', 'gio']:
+        usage(1)
+    glibdir = sys.argv[3]
+    if not os.path.isfile(os.path.join(glibdir, 'glib-2.0.pc.in')):
+        print "\"%s\" doesn't look like a compiled GLib source tree" % (glibdir, )
+        sys.exit(1)
+    flags = None
+    srcdir = None
+    if module == 'gio':
+        flags = ['-DGIO_COMPILATION',
+                 '-I' + glibdir]
+        for path in ['glib', 'gobject', 'gmodule', 'gio']:
+            flags.append('-I' + os.path.join(glibdir, path))
+        srcdir = os.path.join(glibdir, 'gio')
+    elif module == 'gobject':
+        flags = ['-DGOBJECT_COMPILATION',
+                 '-I' + glibdir]
+        for path in ['glib', 'gobject', 'gmodule']:
+            flags.append('-I' + os.path.join(glibdir, path))
+        srcdir = os.path.join(glibdir, 'gobject')
+    elif module == 'glib':
+        flags = ['-DGLIB_COMPILATION',
+                 '-I' + glibdir]
+        for path in ['glib', 'gmodule']:
+            flags.append('-I' + os.path.join(glibdir, path))
+        srcdir = os.path.join(glibdir, 'glib')
+    else:
+        assert False, "Should not be reached"
+
+    if not srcdir.endswith('/'):
+        srcdir = srcdir + '/'
+
+    if mode == 'code':
+        args = ['../g-ir-annotation-tool', '-e']
+        args.extend(flags)
+        files = glob.glob(srcdir + '*.[ch]')
+        files.sort()
+        args.extend()
+        sys.stderr.write("Running %r\n" % (args, ))
+        sys.stderr.flush()
+        os.environ['UNINSTALLED_INTROSPECTION_SRCDIR'] = os.path.dirname(os.getcwd())
+        os.execvp(args[0], args)
+    elif mode == 'headers':
+        headers = glob.glob(srcdir + '*.h')
+        headers.sort()
+        for header_filename in headers:
+            f = open(header_filename)
+            for line in f:
+                # All headers are in this single file
+                if line.startswith('#include <gio/'):
+                    continue
+                sys.stdout.write(line)
+            f.close()
+    else:
+        assert False, "Should not be reached"
+
+    sys.exit(1)
+
+if __name__ == '__main__':
+    main()

@@ -60,7 +60,11 @@ def annotation_main(args):
         ap = AnnotationParser()
         blocks = ap.parse(ss.get_comments())
         print '/' + ('*' * 60) + '/'
-        print '/* THIS FILE IS GENERATED DO NOT EDIT */'
+        print '''
+/* GENERATED FILE - DO NOT EDIT
+ * See gobject-introspection/gir/extract-glib-sources to update.
+ */
+'''
         print '/' + ('*' * 60) + '/'
         print
         for block in blocks.values():
@@ -68,7 +72,7 @@ def annotation_main(args):
             print
         print
         print '/' + ('*' * 60) + '/'
-        print '/* THIS FILE IS GENERATED DO NOT EDIT */'
+        print '/* GENERATED FILE - DO NOT EDIT */'
         print '/' + ('*' * 60) + '/'
 
     return 0
