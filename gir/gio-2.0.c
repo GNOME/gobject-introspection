@@ -942,7 +942,7 @@
  * g_settings_bind_writable:
  * @settings: a #GSettings object
  * @key: the key to bind
- * @object: a #GObject
+ * @object: (type GObject.Object): a #GObject
  * @property: the name of a boolean property to bind
  * @inverted: whether to 'invert' the value
  *
@@ -2590,15 +2590,6 @@
 
 
 /**
- * GPeriodic::tic:
- * @periodic: the #GPeriodic on which the signal was emitted
- * @timestamp: the timestamp at the time of the tick
- *
- * The ::tick signal gets emitted whenever the clock "fires".
- */
-
-
-/**
  * GTypeFundamentalFlags:
  * @G_TYPE_FLAG_CLASSED: Indicates a classed type.
  * @G_TYPE_FLAG_INSTANTIATABLE: Indicates an instantiable type (implies classed).
@@ -2694,29 +2685,14 @@
 
 
 /**
- * SECTION:gfileiostrea:
- * @short_description: File read and write streaming operations
- * @include: gio/gio.h
- * @see_also: #GIOStream, #GFileInputStream, #GFileOutputStream, #GSeekable
+ * g_unix_input_stream_get_close_fd:
+ * @stream: a #GUnixInputStream
  *
- * GFileIOStream provides io streams that both read and write to the same
- * file handle.
- * GFileIOStream implements #GSeekable, which allows the io
- * stream to jump to arbitrary positions in the file and to truncate
- * the file, provided the filesystem of the file supports these
- * operations.
- * To find the position of a file io stream, use
- * g_seekable_tell().
- * To find out if a file io stream supports seeking, use g_seekable_can_seek().
- * To position a file io stream, use g_seekable_seek().
- * To find out if a file io stream supports truncating, use
- * g_seekable_can_truncate(). To truncate a file io
- * stream, use g_seekable_truncate().
- * The default implementation of all the #GFileIOStream operations
- * and the implementation of #GSeekable just call into the same operations
- * on the output stream.
+ * Returns whether the file descriptor of @stream will be
+ * closed when the stream is closed.
  *
- * Since: 2.22
+ * Returns: %TRUE if the file descriptor is closed when done
+ * Since: 2.20
  */
 
 
@@ -2931,26 +2907,6 @@
  * file manager, use g_drive_get_start_stop_type().
  * For porting from GnomeVFS note that there is no equivalent of
  * #GDrive in that API.
- */
-
-
-/**
- * g_periodic_add:
- * @periodic: a #GPeriodic clock
- * @callback: a #GPeriodicTickFunc function
- * @user_data: data for @callback
- * @notify: for freeing @user_data when it is no longer needed
- *
- * Request periodic calls to @callback to start. The periodicity of
- * the calls is determined by the #GPeriodic:hz property.
- * This function may not be called from a handler of the ::repair
- * signal, but it is perfectly reasonable to call it from a handler
- * of the ::tick signal.
- * The callback may be cancelled later by using g_periodic_remove()
- * on the return value of this function.
- *
- * Returns: a non-zero tag identifying this callback
- * Since: 2.28
  */
 
 
@@ -7467,15 +7423,11 @@
 
 
 /**
- * g_data_output_stream_put_string:
- * @stream: a #GDataOutputStream.
- * @str: a string.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
- * @error: a #GError, %NULL to ignore.
+ * GUnixInputStream:fd:
  *
- * Puts a string into the output stream.
+ * The file descriptor that the stream reads from.
  *
- * Returns: %TRUE if @string was successfully added to the @stream.
+ * Since: 2.20
  */
 
 
@@ -7618,16 +7570,22 @@
 
 
 /**
- * GThreadedSocketService::run:
- * @service: the #GThreadedSocketService.
- * @connection: a new #GSocketConnection object.
- * @source_object: the source_object passed to g_socket_listener_add_address().
+ * g_action_get_state_type:
+ * @action: a #GAction
  *
- * The ::run signal is emitted in a worker thread in response to an
- * incoming connection. This thread is dedicated to handling
- * not return until the connection is closed.
+ * Queries the type of the state of @action.
+ * g_action_new_stateful()) then this function returns the #GVariantType
+ * of the state.  This is the type of the initial value given as the
+ * state.  All calls to g_action_set_state() must give a #GVariant of
+ * this type and g_action_get_state() will return a #GVariant of the
+ * same type.
+ * this function will return %NULL.  In that case, g_action_get_state()
+ * will return %NULL and you must not call g_action_set_state().
  *
- * Returns: %TRUE to stope further signal handlers from being called
+ * If the action is stateful (ie: was created with
+ * If the action is not stateful (ie: created with g_action_new()) then
+ * Returns: (allow-none): the state type, if the action is stateful
+ * Since: 2.28
  */
 
 
@@ -7724,19 +7682,26 @@
 
 
 /**
- * g_periodic_unblock:
- * @periodic: a #GPeriodic clock
- * @unblock_time: the unblock time
+ * g_file_replace_contents_async:
+ * @file: input #GFile.
+ * @contents: string of contents to replace the file with.
+ * @length: the length of @contents in bytes.
+ * @etag: (allow-none): a new <link linkend="gfile-etag">entity tag</link> for the @file, or %NULL
+ * @make_backup: %TRUE if a backup should be created.
+ * @flags: a set of #GFileCreateFlags.
+ * @cancellable: optional #GCancellable object, %NULL to ignore.
+ * @callback: a #GAsyncReadyCallback to call when the request is satisfied
+ * @user_data: the data to pass to callback function
  *
- * Reverses the effect of a previous call to g_periodic_block().
- * If this call removes the last block, the ::tick signal is
- * immediately run. The ::repair signal may also be run if the clock
- * is marked as damaged.
- * at which the event causing the unblock occured.
- * This function may not be called from handlers of any signal emitted
- * by @periodic.
- *
- * Since: 2.28
+ * Starts an asynchronous replacement of @file with the given
+ * current entity tag.
+ * When this operation has completed, @callback will be called with
+ * g_file_replace_contents_finish().
+ * If @cancellable is not %NULL, then the operation can be cancelled by
+ * triggering the cancellable object from another thread. If the operation
+ * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned.
+ * If @make_backup is %TRUE, this function will attempt to
+ * make a backup of @file.
  */
 
 
@@ -9888,17 +9853,6 @@
 
 
 /**
- * g_periodic_get_high_priority:
- * @periodic: a #GPeriodic clock
- *
- * Gets the #GSource priority of the clock.
- *
- * Returns: the high priority level
- * Since: 2.28
- */
-
-
-/**
  * GParamSpecUInt:
  * @parent_instance: private #GParamSpec portion
  * @minimum: minimum value for the property specified
@@ -11267,19 +11221,6 @@
  * @pclass: a valid #GParamSpecClass
  *
  * Casts a derived #GParamSpecClass structure into a #GParamSpecClass structure.
- */
-
-
-/**
- * g_periodic_get_low_priority:
- * @periodic: a #GPeriodic clock
- *
- * Gets the priority level that #GPeriodic uses to check for mainloop
- * inactivity.  Other sources scheduled below this level of priority are
- * effectively ignored by #GPeriodic and may be starved.
- *
- * Returns: the low priority level
- * Since: 2.28
  */
 
 
@@ -12774,22 +12715,17 @@
 
 
 /**
- * g_action_get_state_type:
- * @action: a #GAction
+ * GSocketFamily:
+ * @G_SOCKET_FAMILY_INVALID: no address family
+ * @G_SOCKET_FAMILY_IPV4: the IPv4 family
+ * @G_SOCKET_FAMILY_IPV6: the IPv6 family
+ * @G_SOCKET_FAMILY_UNIX: the UNIX domain family
  *
- * Queries the type of the state of @action.
- * g_action_new_stateful()) then this function returns the #GVariantType
- * of the state.  This is the type of the initial value given as the
- * state.  All calls to g_action_set_state() must give a #GVariant of
- * this type and g_action_get_state() will return a #GVariant of the
- * same type.
- * this function will return %NULL.  In that case, g_action_get_state()
- * will return %NULL and you must not call g_action_set_state().
+ * The protocol family of a #GSocketAddress. (These values are
+ * identical to the system defines %AF_INET, %AF_INET6 and %AF_UNIX,
+ * if available.)
  *
- * If the action is stateful (ie: was created with
- * If the action is not stateful (ie: created with g_action_new()) then
- * Returns: (allow-none): the state type, if the action is stateful
- * Since: 2.28
+ * Since: 2.22
  */
 
 
@@ -13600,6 +13536,16 @@
 
 
 /**
+ * g_emblemed_icon_clear_emblems:
+ * @emblemed: a #GEmblemedIcon
+ *
+ * Removes all the emblems from @icon.
+ *
+ * Since: 2.28
+ */
+
+
+/**
  * G_DBUS_ERROR:
  *
  * Error domain for errors generated by a remote message bus. Errors
@@ -13942,18 +13888,6 @@
  * A key in the "thumbnail" namespace for getting the path to the thumbnail
  * image. Corresponding #GFileAttributeType is
  * %G_FILE_ATTRIBUTE_TYPE_BYTE_STRING.
- */
-
-
-/**
- * g_periodic_damaged:
- * @periodic: a #GPeriodic clock
- *
- * Report damage and schedule the ::repair signal to be emitted
- * during the next repair phase.
- * You may not call this function during the repair phase.
- *
- * Since: 2.28
  */
 
 
@@ -15238,60 +15172,6 @@
  * Inserts a new #GNode as the last child of the given parent.
  *
  * Returns: the new #GNode
- */
-
-
-/**
- * SECTION:gperiodi:
- * @title: GPeriodic
- * @short_description: a periodic event clock
- *
- * #GPeriodic is a periodic event clock that fires a configurable number
- * of times per second and is capable of being put into synch with an
- * external time source.
- * A number of #GPeriodicTickFuncs are registered with
- * g_periodic_add() and are called each time the clock "ticks".
- * performed) that are handled in a "repair" phase that follows all the
- * tick functions having been run.  It is also possible to report damage
- * while the clock is not running, in which case the rate of repairs
- * will be rate limited as if the clock were running.
- * #GPeriodic has a configurable priority range consisting of a high and
- * low value.  Other sources with a priority higher than the high value
- * might starve #GPeriodic and sources with the priority lower than the
- * low value may be starved by #GPeriodic.
- * #GPeriodic will engage in dynamic scheduling with respect to sources
- * that have their priorities within the high to low range.  A given
- * #GPeriodic will ensure that the events dispatched from itself are
- * generally using less than 50% of the CPU (on average) if other tasks
- * are pending.  If no other sources within the range are pending then
- * #GPeriodic will use up to all of the available CPU (which can lead to
- * starvation of lower-priority sources, as mentioned above).  The 50%
- * figure is entirely arbitrary and may change or become configurable in
- * the future.
- * For example, if a #GPeriodic has been set to run at 10Hz and a
- * particular iteration uses 140ms of time, then 2 ticks will be
- * "skipped" to give other sources a chance to run (ie: the next tick
- * will occur 300ms later rather than 100ms later, giving 160ms of time
- * for other sources).
- * This means that the high priority value for #GPeriodic should be set
- * quite high (above anything else) and the low priority value for
- * #GPeriodic should be set lower than everything except true "idle"
- * truly idle).
- * #GPeriodic generally assumes that although the things attached to it
- * may be poorly behaved in terms of non-yielding behaviour (either
- * individually or in aggregate), the other sources on the main loop
- * should be "well behaved".  Other sources should try not to block the
- * CPU for a substantial portion of the periodic interval.
- * The sources attached to a #GPeriodic are permitted to be somewhat
- * less well-behaved because they are generally rendering the UI for the
- * user (which should be done smoothly) and also because they will be
- * throttled by #GPeriodic.
- * #GPeriodic is intended to be used as a paint clock for managing
- * geometry updates and painting of windows.
- *
- * The tick functions can report "damage" (ie: updates that need to be
- * Handlers (ie: things that you want to run only when the program is
- * Since: 2.28
  */
 
 
@@ -16785,7 +16665,7 @@
  * g_settings_bind:
  * @settings: a #GSettings object
  * @key: the key to bind
- * @object: a #GObject
+ * @object: (type GObject.Object): a #GObject
  * @property: the name of the property to bind
  * @flags: flags for the binding
  *
@@ -17077,15 +16957,6 @@
 
 
 /**
- * GPeriodic:
- *
- * #GPeriodic is an opaque structure type.
- *
- * Since: 2.28
- */
-
-
-/**
  * G_VARIANT_TYPE_INT16:
  *
  * The type of an integer value that can range from -32768 to 32767.
@@ -17267,14 +17138,29 @@
 
 
 /**
- * g_unix_input_stream_get_close_fd:
- * @stream: a #GUnixInputStream
+ * SECTION:gfileiostrea:
+ * @short_description: File read and write streaming operations
+ * @include: gio/gio.h
+ * @see_also: #GIOStream, #GFileInputStream, #GFileOutputStream, #GSeekable
  *
- * Returns whether the file descriptor of @stream will be
- * closed when the stream is closed.
+ * GFileIOStream provides io streams that both read and write to the same
+ * file handle.
+ * GFileIOStream implements #GSeekable, which allows the io
+ * stream to jump to arbitrary positions in the file and to truncate
+ * the file, provided the filesystem of the file supports these
+ * operations.
+ * To find the position of a file io stream, use
+ * g_seekable_tell().
+ * To find out if a file io stream supports seeking, use g_seekable_can_seek().
+ * To position a file io stream, use g_seekable_seek().
+ * To find out if a file io stream supports truncating, use
+ * g_seekable_can_truncate(). To truncate a file io
+ * stream, use g_seekable_truncate().
+ * The default implementation of all the #GFileIOStream operations
+ * and the implementation of #GSeekable just call into the same operations
+ * on the output stream.
  *
- * Returns: %TRUE if the file descriptor is closed when done
- * Since: 2.20
+ * Since: 2.22
  */
 
 
@@ -18462,21 +18348,6 @@
 
 
 /**
- * GSocketFamily:
- * @G_SOCKET_FAMILY_INVALID: no address family
- * @G_SOCKET_FAMILY_IPV4: the IPv4 family
- * @G_SOCKET_FAMILY_IPV6: the IPv6 family
- * @G_SOCKET_FAMILY_UNIX: the UNIX domain family
- *
- * The protocol family of a #GSocketAddress. (These values are
- * identical to the system defines %AF_INET, %AF_INET6 and %AF_UNIX,
- * if available.)
- *
- * Since: 2.22
- */
-
-
-/**
  * G_FILE_ATTRIBUTE_MOUNTABLE_HAL_UDI:
  *
  * A key in the "mountable" namespace for getting the HAL UDI for the mountable
@@ -19390,20 +19261,11 @@
 
 
 /**
- * g_unix_fd_message_append_fd:
- * @message: a #GUnixFDMessage
- * @fd: a valid open file descriptor
- * @error: a #GError pointer
+ * g_simple_async_result_set_handle_cancellation:
+ * @simple: a #GSimpleAsyncResult.
+ * @handle_cancellation: a #gboolean.
  *
- * Adds a file descriptor to @message.
- * The file descriptor is duplicated using dup(). You keep your copy
- * of the descriptor and the copy contained in @message will be closed
- * when @message is finalized.
- * A possible cause of failure is exceeding the per-process or
- * system-wide file descriptor limit.
- *
- * Returns: %TRUE in case of success, else %FALSE (and @error is set)
- * Since: 2.22
+ * Sets whether to handle cancellation within the asynchronous operation.
  */
 
 
@@ -19424,11 +19286,20 @@
 
 
 /**
- * g_simple_async_result_set_handle_cancellation:
- * @simple: a #GSimpleAsyncResult.
- * @handle_cancellation: a #gboolean.
+ * g_unix_fd_message_append_fd:
+ * @message: a #GUnixFDMessage
+ * @fd: a valid open file descriptor
+ * @error: a #GError pointer
  *
- * Sets whether to handle cancellation within the asynchronous operation.
+ * Adds a file descriptor to @message.
+ * The file descriptor is duplicated using dup(). You keep your copy
+ * of the descriptor and the copy contained in @message will be closed
+ * when @message is finalized.
+ * A possible cause of failure is exceeding the per-process or
+ * system-wide file descriptor limit.
+ *
+ * Returns: %TRUE in case of success, else %FALSE (and @error is set)
+ * Since: 2.22
  */
 
 
@@ -19578,21 +19449,16 @@
 
 
 /**
- * g_periodic_new:
- * @hz: the frequency of the new clock in Hz (between 1 and 120)
- * @high_priority: the #GSource priority to run at
- * @low_priority: ignore tasks below this priority
+ * GSocketSourceFunc:
+ * @socket: the #GSocket
+ * @condition: the current condition at the source fired.
+ * @user_data: data passed in by the user.
  *
- * Creates a new #GPeriodic clock.
- * The created clock is attached to the thread-default main context
- * in effect at the time of the call to this function.
- * See g_main_context_push_thread_default() for more information.
- * Due to the fact that #GMainContext is only accurate to the nearest
- * millisecond, the frequency can not meaningfully get too close to
- * 1000.  For this reason, it is arbitrarily bounded at 120.
+ * This is the function type of the callback used for the #GSource
+ * returned by g_socket_create_source().
  *
- * Returns: a new #GPeriodic
- * Since: 2.28
+ * Returns: it should return %FALSE if the source should be removed.
+ * Since: 2.22
  */
 
 
@@ -20693,20 +20559,6 @@
 
 
 /**
- * GSocketSourceFunc:
- * @socket: the #GSocket
- * @condition: the current condition at the source fired.
- * @user_data: data passed in by the user.
- *
- * This is the function type of the callback used for the #GSource
- * returned by g_socket_create_source().
- *
- * Returns: it should return %FALSE if the source should be removed.
- * Since: 2.22
- */
-
-
-/**
  * g_buffered_input_stream_new_sized:
  * @base_stream: a #GInputStream
  * @size: a #gsize
@@ -20823,7 +20675,7 @@
  * g_settings_bind_with_mapping:
  * @settings: a #GSettings object
  * @key: the key to bind
- * @object: a #GObject
+ * @object: (type GObject.Object): a #GObject
  * @property: the name of the property to bind
  * @flags: flags for the binding
  * @get_mapping: a function that gets called to convert values from @settings to @object, or %NULL to use the default GIO mapping
@@ -20971,30 +20823,6 @@
  * will always be made in response to external events.
  *
  * Since: 2.26
- */
-
-
-/**
- * g_file_replace_contents_async:
- * @file: input #GFile.
- * @contents: string of contents to replace the file with.
- * @length: the length of @contents in bytes.
- * @etag: (allow-none): a new <link linkend="gfile-etag">entity tag</link> for the @file, or %NULL
- * @make_backup: %TRUE if a backup should be created.
- * @flags: a set of #GFileCreateFlags.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
- * @callback: a #GAsyncReadyCallback to call when the request is satisfied
- * @user_data: the data to pass to callback function
- *
- * Starts an asynchronous replacement of @file with the given
- * current entity tag.
- * When this operation has completed, @callback will be called with
- * g_file_replace_contents_finish().
- * If @cancellable is not %NULL, then the operation can be cancelled by
- * triggering the cancellable object from another thread. If the operation
- * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned.
- * If @make_backup is %TRUE, this function will attempt to
- * make a backup of @file.
  */
 
 
@@ -22760,17 +22588,6 @@
 
 
 /**
- * g_periodic_get_hz:
- * @periodic: a #GPeriodic clock
- *
- * Gets the frequency of the clock.
- *
- * Returns: the frequency of the clock, in Hz
- * Since: 2.28
- */
-
-
-/**
  * g_unix_mount_get_mount_path:
  * @mount_entry: input #GUnixMountEntry to get the mount path for.
  *
@@ -22814,14 +22631,6 @@
  *
  * Determines the byte ordering that is used when writing
  * multi-byte entities (such as integers) to the stream.
- */
-
-
-/**
- * GPeriodic::repair:
- * @periodic: the #GPeriodic on which the signal was emitted
- *
- * The ::repair signal gets emitted to start the "repair" phase.
  */
 
 
@@ -27103,20 +26912,6 @@
 
 
 /**
- * g_periodic_remove:
- * @periodic: a #GPeriodic clock
- * @tag: the ID of the callback to remove
- *
- * Reverse the effect of a previous call to g_periodic_start().
- * This function may not be called from a handler of the ::repair
- * signal, but it is perfectly reasonable to call it from a handler
- * of the ::tick signal.
- *
- * Since: 2.28
- */
-
-
-/**
  * g_io_scheduler_cancel_all_jobs:
  *
  * Cancels all cancellable I/O jobs.
@@ -27683,17 +27478,16 @@
 
 
 /**
- * GPeriodicTickFunc:
- * @periodic: the #GPeriodic clock that is ticking
- * @timestamp: the timestamp at the time of the tick
- * @user_data: the user data given to g_periodic_add()
+ * GThreadedSocketService::run:
+ * @service: the #GThreadedSocketService.
+ * @connection: a new #GSocketConnection object.
+ * @source_object: the source_object passed to g_socket_listener_add_address().
  *
- * The signature of the callback function that is called when the
- * #GPeriodic clock ticks.
- * The @timestamp parameter is equal for all callbacks called during
- * a particular tick on a given clock.
+ * The ::run signal is emitted in a worker thread in response to an
+ * incoming connection. This thread is dedicated to handling
+ * not return until the connection is closed.
  *
- * Since: 2.28
+ * Returns: %TRUE to stope further signal handlers from being called
  */
 
 
@@ -28044,24 +27838,6 @@
  *
  * Returns: %TRUE if the handle is closed when done
  * Since: 2.26
- */
-
-
-/**
- * g_periodic_block:
- * @periodic: a #GPeriodic clock
- *
- * Temporarily blocks @periodic from running in order to bring it in
- * synch with an external time source.
- * This function must be called from a handler of the #GPeriodic::repair
- * signal.
- * If this function is called, emission of the #GPeriodic::tick signal
- * will be suspended until g_periodic_unblock() is called an equal number
- * of times. Once that happens, the ::tick signal will run immediately
- * and future ::tick signals will be emitted relative to the time at
- * which the last call to g_periodic_unblock() occured.
- *
- * Since: 2.28
  */
 
 
@@ -30716,15 +30492,6 @@
 
 
 /**
- * GUnixInputStream:fd:
- *
- * The file descriptor that the stream reads from.
- *
- * Since: 2.20
- */
-
-
-/**
  * g_file_load_contents_async:
  * @file: input #GFile.
  * @cancellable: optional #GCancellable object, %NULL to ignore.
@@ -31646,6 +31413,19 @@
  * only uses the filename to guess it, but it is faster to calculate than the
  * regular content type.
  * Corresponding #GFileAttributeType is %G_FILE_ATTRIBUTE_TYPE_STRING.
+ */
+
+
+/**
+ * g_data_output_stream_put_string:
+ * @stream: a #GDataOutputStream.
+ * @str: a string.
+ * @cancellable: optional #GCancellable object, %NULL to ignore.
+ * @error: a #GError, %NULL to ignore.
+ *
+ * Puts a string into the output stream.
+ *
+ * Returns: %TRUE if @string was successfully added to the @stream.
  */
 
 
