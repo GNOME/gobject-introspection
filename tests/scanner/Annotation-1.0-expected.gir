@@ -541,12 +541,12 @@ annotation_object_watch_full().</doc>
           <type name="utf8"/>
         </return-value>
         <parameters>
-          <parameter name="object" transfer-ownership="none">
+          <parameter name="arg1" transfer-ownership="none">
             <attribute name="some.annotation.foo1" value="val1"/>
             <doc xml:whitespace="preserve">a value</doc>
             <type name="utf8"/>
           </parameter>
-          <parameter name="p0" transfer-ownership="none">
+          <parameter name="arg2" transfer-ownership="none">
             <attribute name="some.annotation.foo2" value="val2"/>
             <doc xml:whitespace="preserve">another value</doc>
             <type name="utf8"/>
@@ -571,7 +571,7 @@ known by GObject as it's only marked as G_TYPE_POINTER</doc>
           <type name="none"/>
         </return-value>
         <parameters>
-          <parameter name="object" transfer-ownership="container">
+          <parameter name="list" transfer-ownership="container">
             <doc xml:whitespace="preserve">a list of strings</doc>
             <type name="GLib.List">
               <type name="utf8"/>
@@ -589,7 +589,7 @@ it says it's pointer but it's actually a string.</doc>
           <type name="none"/>
         </return-value>
         <parameters>
-          <parameter name="object" transfer-ownership="none">
+          <parameter name="string" transfer-ownership="none">
             <doc xml:whitespace="preserve">a string</doc>
             <type name="utf8"/>
           </parameter>

@@ -242,7 +242,7 @@ and/or use gtk-doc annotations. ''')
         return typeval.target_giname
 
     def _write_type_ref(self, ntype):
-	""" Like _write_type, but only writes the type name rather than the full details """
+        """ Like _write_type, but only writes the type name rather than the full details """
         assert isinstance(ntype, ast.Type), ntype
         attrs = []
         if ntype.ctype:
