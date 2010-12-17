@@ -236,3 +236,13 @@
 /**
  * g_date_to_struct_tm: (skip)
  */
+
+/**
+ * g_get_environ:
+ * @returns: (array zero-terminated=1) (transfer full):
+ */
+
+/**
+ * g_listenv:
+ * @returns: (array zero-terminated=1) (transfer full):
+ */
