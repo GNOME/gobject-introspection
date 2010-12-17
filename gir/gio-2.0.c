@@ -36,9 +36,9 @@
  * g_output_stream_flush_async:
  * @stream: a #GOutputStream.
  * @io_priority: the io priority of the request.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
- * @callback: a #GAsyncReadyCallback to call when the request is satisfied
- * @user_data: the data to pass to callback function
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
+ * @callback: (scope async): a #GAsyncReadyCallback to call when the request is satisfied
+ * @user_data: (closure): the data to pass to callback function
  *
  * Flushes a stream asynchronously.
  * For behaviour details see g_output_stream_flush().
@@ -199,7 +199,7 @@
  * g_file_make_symbolic_link:
  * @file: a #GFile with the name of the symlink to create
  * @symlink_value: a string with the path for the target of the new symlink
- * @cancellable: optional #GCancellable object, %NULL to ignore.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  * @error: a #GError.
  *
  * Creates a symbolic link named @file which contains the string
@@ -1173,7 +1173,7 @@
  * g_file_input_stream_query_info:
  * @stream: a #GFileInputStream.
  * @attributes: a file attribute query string.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  * @error: a #GError location to store the error occuring, or %NULL to ignore.
  *
  * Queries a file input stream the given @attributes. This function blocks
@@ -1351,7 +1351,7 @@
 /**
  * g_file_make_director:
  * @file: input #GFile.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  * @error: a #GError, or %NULL
  *
  * Creates a directory. Note that this will only create a child directory of
@@ -1830,7 +1830,7 @@
 /**
  * g_file_query_settable_attributes:
  * @file: input #GFile.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  * @error: a #GError, or %NULL
  *
  * Obtain the list of settable attributes for the file.
@@ -2973,7 +2973,7 @@
 /**
  * g_file_trash:
  * @file: #GFile to send to trash.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  * @error: a #GError, or %NULL
  *
  * Sends @file to the "Trashcan", if possible. This is similar to
@@ -3202,9 +3202,9 @@
  * @make_backup: %TRUE if a backup should be created.
  * @flags: a set of #GFileCreateFlags.
  * @io_priority: the <link linkend="io-priority">I/O priority</link> of the request.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
- * @callback: a #GAsyncReadyCallback to call when the request is satisfied
- * @user_data: the data to pass to callback function
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
+ * @callback: (scope async): a #GAsyncReadyCallback to call when the request is satisfied
+ * @user_data: (closure): the data to pass to callback function
  *
  * Asynchronously overwrites the file in read-write mode, replacing the
  * contents, possibly creating a backup copy of the file first.
@@ -3371,9 +3371,9 @@
  * @file: input #GFile.
  * @flags: flags affecting the operation
  * @mount_operation: a #GMountOperation, or %NULL to avoid user interaction.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
- * @callback: a #GAsyncReadyCallback to call when the request is satisfied, or %NULL.
- * @user_data: the data to pass to callback function
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
+ * @callback: (scope async): a #GAsyncReadyCallback to call when the request is satisfied, or %NULL.
+ * @user_data: (closure): the data to pass to callback function
  *
  * Unmounts a file of type G_FILE_TYPE_MOUNTABLE.
  * If @cancellable is not %NULL, then the operation can be cancelled by
@@ -3461,9 +3461,9 @@
  * @source: a #GInputStream.
  * @flags: a set of #GOutputStreamSpliceFlags.
  * @io_priority: the io priority of the request.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
- * @callback: a #GAsyncReadyCallback.
- * @user_data: user data passed to @callback.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
+ * @callback: (scope async): a #GAsyncReadyCallback.
+ * @user_data: (closure): user data passed to @callback.
  *
  * Splices a stream asynchronously.
  * When the operation is finished @callback will be called.
@@ -3500,7 +3500,7 @@
 /**
  * g_output_stream_flush:
  * @stream: a #GOutputStream.
- * @cancellable: optional cancellable object
+ * @cancellable: (allow-none): optional cancellable object
  * @error: location to store the error occuring, or %NULL to ignore
  *
  * Flushed any outstanding buffers in the stream. Will block during
@@ -3664,7 +3664,7 @@
  * @type: The type of the attribute
  * @value_p: a pointer to the value (or the pointer itself if the type is a pointer type)
  * @flags: a set of #GFileQueryInfoFlags.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  * @error: a #GError, or %NULL
  *
  * Sets an attribute in the file with attribute name @attribute to @value.
@@ -3997,7 +3997,7 @@
  * @source: input #GFile.
  * @destination: destination #GFile
  * @flags: set of #GFileCopyFlags
- * @cancellable: optional #GCancellable object, %NULL to ignore.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  * @progress_callback: (scope call): function to callback with progress information
  * @progress_callback_data: (closure): user data to pass to @progress_callback
  * @error: #GError to set on error, or %NULL
@@ -4049,7 +4049,7 @@
  * @attribute: a string containing the attribute's name.
  * @value: a #guint64 containing the attribute's new value.
  * @flags: a #GFileQueryInfoFlags.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  * @error: a #GError, or %NULL
  *
  * Sets @attribute of type %G_FILE_ATTRIBUTE_TYPE_INT64 to @value.
@@ -4514,8 +4514,8 @@
  * @stream: a #GInputStream.
  * @buffer: a buffer to read data into (which should be at least count bytes long).
  * @count: the number of bytes that will be read from the stream
- * @bytes_read: location to store the number of bytes that was read from the stream
- * @cancellable: optional #GCancellable object, %NULL to ignore.
+ * @bytes_read: (out): location to store the number of bytes that was read from the stream
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  * @error: location to store the error occuring, or %NULL to ignore
  *
  * Tries to read @count bytes from the stream into the buffer starting at
@@ -4782,7 +4782,7 @@
  * g_file_create:
  * @file: input #GFile.
  * @flags: a set of #GFileCreateFlags.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  * @error: a #GError, or %NULL
  *
  * Creates a new file and returns an output stream for writing to it.
@@ -4993,7 +4993,7 @@
  * g_file_create_readwrite:
  * @file: a #GFile
  * @flags: a set of #GFileCreateFlags
- * @cancellable: optional #GCancellable object, %NULL to ignore
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore
  * @error: return location for a #GError, or %NULL
  *
  * Creates a new file and returns a stream for reading and writing to it.
@@ -5937,9 +5937,9 @@
  * @stream: a #GFileInputStream.
  * @attributes: a file attribute query string.
  * @io_priority: the <link linkend="io-priority">I/O priority</link> of the request.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
- * @callback: callback to call when the request is satisfied
- * @user_data: the data to pass to callback function
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
+ * @callback: (scope async): callback to call when the request is satisfied
+ * @user_data: (closure): the data to pass to callback function
  *
  * Queries the stream information asynchronously.
  * When the operation is finished @callback will be called.
@@ -6183,7 +6183,7 @@
  * @file: input #GFile.
  * @attributes: an attribute query string.
  * @flags: a set of #GFileQueryInfoFlags.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  * @error: #GError for error reporting.
  *
  * Gets the requested information about the files in a directory. The result
@@ -6352,9 +6352,9 @@
  * g_file_find_enclosing_mount_async:
  * @file: a #GFile
  * @io_priority: the <link linkend="io-priority">I/O priority</link> of the request.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
- * @callback: a #GAsyncReadyCallback to call when the request is satisfied
- * @user_data: the data to pass to callback function
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
+ * @callback: (scope async): a #GAsyncReadyCallback to call when the request is satisfied
+ * @user_data: (closure): the data to pass to callback function
  *
  * Asynchronously gets the mount for the file.
  * For more details, see g_file_find_enclosing_mount() which is
@@ -6379,9 +6379,9 @@
  * g_file_open_readwrite_async:
  * @file: input #GFile.
  * @io_priority: the <link linkend="io-priority">I/O priority</link> of the request.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
- * @callback: a #GAsyncReadyCallback to call when the request is satisfied
- * @user_data: the data to pass to callback function
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
+ * @callback: (scope async): a #GAsyncReadyCallback to call when the request is satisfied
+ * @user_data: (closure): the data to pass to callback function
  *
  * Asynchronously opens @file for reading and writing.
  * For more details, see g_file_open_readwrite() which is
@@ -6643,9 +6643,9 @@
  * @stream: a #GFileIOStream.
  * @attributes: a file attribute query string.
  * @io_priority: the <link linkend="gio-GIOScheduler">I/O priority</link> of the request.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
- * @callback: callback to call when the request is satisfied
- * @user_data: the data to pass to callback function
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
+ * @callback: (scope async): callback to call when the request is satisfied
+ * @user_data: (closure): the data to pass to callback function
  *
  * Asynchronously queries the @stream for a #GFileInfo. When completed,
  * finish the operation with g_file_io_stream_query_info_finish().
@@ -6739,7 +6739,7 @@
  * @stream: a #GOutputStream.
  * @source: a #GInputStream.
  * @flags: a set of #GOutputStreamSpliceFlags.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  * @error: a #GError location to store the error occuring, or %NULL to ignore.
  *
  * Splices an input stream into an output stream.
@@ -6923,7 +6923,7 @@
  * @source: a #GFile with attributes.
  * @destination: a #GFile to copy attributes to.
  * @flags: a set of #GFileCopyFlags.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  * @error: a #GError, %NULL to ignore.
  *
  * Copies the file attributes from @source to @destination.
@@ -7285,7 +7285,7 @@
 /**
  * g_file_read:
  * @file: #GFile to read.
- * @cancellable: a #GCancellable
+ * @cancellable: (allow-none): a #GCancellable
  * @error: a #GError, or %NULL
  *
  * Opens a file for reading. The result is a #GFileInputStream that
@@ -8395,9 +8395,9 @@
  * g_file_eject_mountable:
  * @file: input #GFile.
  * @flags: flags affecting the operation
- * @cancellable: optional #GCancellable object, %NULL to ignore.
- * @callback: a #GAsyncReadyCallback to call when the request is satisfied, or %NULL.
- * @user_data: the data to pass to callback function
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
+ * @callback: (scope async): a #GAsyncReadyCallback to call when the request is satisfied, or %NULL.
+ * @user_data: (closure): the data to pass to callback function
  *
  * Starts an asynchronous eject on a mountable.
  * When this operation has completed, @callback will be called with
@@ -8505,7 +8505,7 @@
  * @etag: (allow-none): an optional <link linkend="gfile-etag">entity tag</link> for the current #GFile, or #NULL to ignore
  * @make_backup: %TRUE if a backup should be created
  * @flags: a set of #GFileCreateFlags
- * @cancellable: optional #GCancellable object, %NULL to ignore
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore
  * @error: return location for a #GError, or %NULL
  *
  * Returns an output stream for overwriting the file in readwrite mode,
@@ -8773,7 +8773,7 @@
 
 
 /**
- * g_file_copy_async:
+ * g_file_copy_async: (skip)
  * @source: input #GFile.
  * @destination: destination #GFile
  * @flags: set of #GFileCopyFlags
@@ -8981,9 +8981,9 @@
  * g_input_stream_close_async:
  * @stream: A #GInputStream.
  * @io_priority: the <link linkend="io-priority">I/O priority</link> of the request.
- * @cancellable: optional cancellable object
- * @callback: callback to call when the request is satisfied
- * @user_data: the data to pass to callback function
+ * @cancellable: (allow-none): optional cancellable object
+ * @callback: (scope async): callback to call when the request is satisfied
+ * @user_data: (closure): the data to pass to callback function
  *
  * Requests an asynchronous closes of the stream, releasing resources related to it.
  * When the operation is finished @callback will be called.
@@ -9011,7 +9011,7 @@
  * g_file_append_to:
  * @file: input #GFile.
  * @flags: a set of #GFileCreateFlags.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  * @error: a #GError, or %NULL
  *
  * Gets an output stream for appending data to the file. If
@@ -9273,7 +9273,7 @@
 /**
  * g_file_delete:
  * @file: input #GFile.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  * @error: a #GError, or %NULL
  *
  * Deletes a file. If the @file is a directory, it will only be deleted if it
@@ -9367,9 +9367,9 @@
  * @file: input #GFile
  * @flags: a set of #GFileCreateFlags
  * @io_priority: the <link linkend="io-priority">I/O priority</link> of the request
- * @cancellable: optional #GCancellable object, %NULL to ignore
- * @callback: a #GAsyncReadyCallback to call when the request is satisfied
- * @user_data: the data to pass to callback function
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore
+ * @callback: (scope async): a #GAsyncReadyCallback to call when the request is satisfied
+ * @user_data: (closure): the data to pass to callback function
  *
  * Asynchronously creates a new file and returns a stream for reading and
  * writing to it. The file must not already exist.
@@ -9587,7 +9587,7 @@
  * @stream: a #GOutputStream.
  * @buffer: (array length=count) (element-type guint8): the buffer containing the data to write.
  * @count: the number of bytes to write
- * @cancellable: optional cancellable object
+ * @cancellable: (allow-none): optional cancellable object
  * @error: location to store the error occuring, or %NULL to ignore
  *
  * Tries to write @count bytes from @buffer into the stream. Will block
@@ -10451,9 +10451,9 @@
  * @buffer: (array length=count) (element-type guint8): the buffer containing the data to write.
  * @count: the number of bytes to write
  * @io_priority: the io priority of the request.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
- * @callback: callback to call when the request is satisfied
- * @user_data: the data to pass to callback function
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
+ * @callback: (scope async): callback to call when the request is satisfied
+ * @user_data: (closure): the data to pass to callback function
  *
  * Request an asynchronous write of @count bytes from @buffer into
  * the stream. When the operation is finished @callback will be called.
@@ -10817,9 +10817,9 @@
  * @info: a #GFileInfo.
  * @flags: a #GFileQueryInfoFlags.
  * @io_priority: the <link linkend="io-priority">I/O priority</link> of the request.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
- * @callback: a #GAsyncReadyCallback.
- * @user_data: a #gpointer.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
+ * @callback: (scope async): a #GAsyncReadyCallback.
+ * @user_data: (closure): a #gpointer.
  *
  * Asynchronously sets the attributes of @file with @info.
  * For more details, see g_file_set_attributes_from_info() which is
@@ -10864,9 +10864,9 @@
  * g_output_stream_close_async:
  * @stream: A #GOutputStream.
  * @io_priority: the io priority of the request.
- * @callback: callback to call when the request is satisfied
- * @user_data: the data to pass to callback function
- * @cancellable: optional cancellable object
+ * @cancellable: (allow-none): optional cancellable object
+ * @callback: (scope async): callback to call when the request is satisfied
+ * @user_data: (closure): the data to pass to callback function
  *
  * Requests an asynchronous close of the stream, releasing resources
  * related to it. When the operation is finished @callback will be
@@ -11059,7 +11059,7 @@
 /**
  * g_file_query_writable_namespaces:
  * @file: input #GFile.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  * @error: a #GError, or %NULL
  *
  * Obtain the list of attribute namespaces where new attributes
@@ -11079,9 +11079,9 @@
  * @file: input #GFile.
  * @flags: flags affecting the operation
  * @mount_operation: a #GMountOperation, or %NULL to avoid user interaction.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
- * @callback: a #GAsyncReadyCallback to call when the request is satisfied, or %NULL.
- * @user_data: the data to pass to callback function
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
+ * @callback: (scope async): a #GAsyncReadyCallback to call when the request is satisfied, or %NULL.
+ * @user_data: (closure): the data to pass to callback function
  *
  * Starts an asynchronous eject on a mountable.
  * When this operation has completed, @callback will be called with
@@ -11229,7 +11229,7 @@
  * @file: input #GFile.
  * @info: a #GFileInfo.
  * @flags: #GFileQueryInfoFlags
- * @cancellable: optional #GCancellable object, %NULL to ignore.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  * @error: a #GError, or %NULL
  *
  * Tries to set all attributes in the #GFileInfo on the target values,
@@ -11287,9 +11287,9 @@
  * @file: input #GFile.
  * @flags: a set of #GFileCreateFlags.
  * @io_priority: the <link linkend="io-priority">I/O priority</link> of the request.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
- * @callback: a #GAsyncReadyCallback to call when the request is satisfied
- * @user_data: the data to pass to callback function
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
+ * @callback: (scope async): a #GAsyncReadyCallback to call when the request is satisfied
+ * @user_data: (closure): the data to pass to callback function
  *
  * Asynchronously creates a new file and returns an output stream for writing to it.
  * The file must not already exist.
@@ -11618,7 +11618,7 @@
  * @attribute: a string containing the attribute's name.
  * @value: a #guint64 containing the attribute's new value.
  * @flags: a #GFileQueryInfoFlags.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  * @error: a #GError, or %NULL
  *
  * Sets @attribute of type %G_FILE_ATTRIBUTE_TYPE_UINT64 to @value.
@@ -12113,9 +12113,9 @@
  * g_file_unmount_mountable:
  * @file: input #GFile.
  * @flags: flags affecting the operation
- * @cancellable: optional #GCancellable object, %NULL to ignore.
- * @callback: a #GAsyncReadyCallback to call when the request is satisfied, or %NULL.
- * @user_data: the data to pass to callback function
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
+ * @callback: (scope async): a #GAsyncReadyCallback to call when the request is satisfied, or %NULL.
+ * @user_data: (closure): the data to pass to callback function
  *
  * Unmounts a file of type G_FILE_TYPE_MOUNTABLE.
  * If @cancellable is not %NULL, then the operation can be cancelled by
@@ -13320,7 +13320,7 @@
 /**
  * g_output_stream_close:
  * @stream: A #GOutputStream.
- * @cancellable: optional cancellable object
+ * @cancellable: (allow-none): optional cancellable object
  * @error: location to store the error occuring, or %NULL to ignore
  *
  * Closes the stream, releasing resources related to it.
@@ -13594,9 +13594,9 @@
  * @file: input #GFile.
  * @flags: a set of #GFileCreateFlags.
  * @io_priority: the <link linkend="io-priority">I/O priority</link> of the request.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
- * @callback: a #GAsyncReadyCallback to call when the request is satisfied
- * @user_data: the data to pass to callback function
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
+ * @callback: (scope async): a #GAsyncReadyCallback to call when the request is satisfied
+ * @user_data: (closure): the data to pass to callback function
  *
  * Asynchronously opens @file for appending.
  * For more details, see g_file_append_to() which is
@@ -13920,7 +13920,7 @@
  * @stream: a #GInputStream.
  * @buffer: a buffer to read data into (which should be at least count bytes long).
  * @count: the number of bytes that will be read from the stream
- * @cancellable: optional #GCancellable object, %NULL to ignore.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  * @error: location to store the error occuring, or %NULL to ignore
  *
  * Tries to read @count bytes from the stream into the buffer starting at
@@ -14775,9 +14775,9 @@
  * @stream: A #GInputStream.
  * @count: the number of bytes that will be skipped from the stream
  * @io_priority: the <link linkend="io-priority">I/O priority</link> of the request.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
- * @callback: callback to call when the request is satisfied
- * @user_data: the data to pass to callback function
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
+ * @callback: (scope async): callback to call when the request is satisfied
+ * @user_data: (closure): the data to pass to callback function
  *
  * Request an asynchronous skip of @count bytes from the stream.
  * When the operation is finished @callback will be called.
@@ -14856,7 +14856,7 @@
 /**
  * g_file_query_exists:
  * @file: input #GFile.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  *
  * Utility function to check if a particular file exists. This is
  * implemented using g_file_query_info() and as such does blocking I/O.
@@ -15323,9 +15323,9 @@
  * @buffer: a buffer to read data into (which should be at least count bytes long).
  * @count: the number of bytes that will be read from the stream
  * @io_priority: the <link linkend="io-priority">I/O priority</link> of the request.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
- * @callback: callback to call when the request is satisfied
- * @user_data: the data to pass to callback function
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
+ * @callback: (scope async): callback to call when the request is satisfied
+ * @user_data: (closure): the data to pass to callback function
  *
  * Request an asynchronous read of @count bytes from the stream into the buffer
  * starting at @buffer. When the operation is finished @callback will be called.
@@ -15710,7 +15710,7 @@
 /**
  * g_input_stream_close:
  * @stream: A #GInputStream.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  * @error: location to store the error occuring, or %NULL to ignore
  *
  * Closes the stream, releasing resources related to it.
@@ -15754,9 +15754,9 @@
  * @file: input #GFile.
  * @display_name: a string.
  * @io_priority: the <link linkend="io-priority">I/O priority</link> of the request.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
- * @callback: a #GAsyncReadyCallback to call when the request is satisfied
- * @user_data: the data to pass to callback function
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
+ * @callback: (scope async): a #GAsyncReadyCallback to call when the request is satisfied
+ * @user_data: (closure): the data to pass to callback function
  *
  * Asynchronously sets the display name for a given #GFile.
  * For more details, see g_file_set_display_name() which is
@@ -15949,9 +15949,9 @@
  * @file: input #GFile.
  * @attributes: an attribute query string.
  * @io_priority: the <link linkend="io-priority">I/O priority</link> of the request.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
- * @callback: a #GAsyncReadyCallback to call when the request is satisfied
- * @user_data: the data to pass to callback function
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
+ * @callback: (scope async): a #GAsyncReadyCallback to call when the request is satisfied
+ * @user_data: (closure): the data to pass to callback function
  *
  * Asynchronously gets the requested information about the filesystem
  * that the specified @file is on. The result is a #GFileInfo object
@@ -17781,7 +17781,7 @@
  * @attribute: a string containing the attribute's name.
  * @value: a string containing the attribute's new value.
  * @flags: a #GFileQueryInfoFlags.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  * @error: a #GError, or %NULL
  *
  * Sets @attribute of type %G_FILE_ATTRIBUTE_TYPE_BYTE_STRING to @value.
@@ -18053,7 +18053,7 @@
  * @file: input #GFile.
  * @attributes: an attribute query string.
  * @flags: a set of #GFileQueryInfoFlags.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  * @error: a #GError.
  *
  * Gets the requested information about specified @file. The result
@@ -18513,7 +18513,7 @@
  * @attribute: a string containing the attribute's name.
  * @value: a #guint32 containing the attribute's new value.
  * @flags: a #GFileQueryInfoFlags.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  * @error: a #GError, or %NULL
  *
  * Sets @attribute of type %G_FILE_ATTRIBUTE_TYPE_UINT32 to @value.
@@ -19367,7 +19367,7 @@
 
 
 /**
- * g_file_load_partial_contents_async:
+ * g_file_load_partial_contents_async: (skip)
  * @file: input #GFile.
  * @cancellable: optional #GCancellable object, %NULL to ignore.
  * @read_more_callback: a #GFileReadMoreCallback to receive partial data and to specify whether further data should be read.
@@ -19980,9 +19980,9 @@
  * g_file_read_async:
  * @file: input #GFile
  * @io_priority: the <link linkend="io-priority">I/O priority</link> of the request.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
- * @callback: a #GAsyncReadyCallback to call when the request is satisfied
- * @user_data: the data to pass to callback function
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
+ * @callback: (scope async): a #GAsyncReadyCallback to call when the request is satisfied
+ * @user_data: (closure): the data to pass to callback function
  *
  * Asynchronously opens @file for reading.
  * For more details, see g_file_read() which is
@@ -20982,9 +20982,9 @@
  * @make_backup: %TRUE if a backup should be created.
  * @flags: a set of #GFileCreateFlags.
  * @io_priority: the <link linkend="io-priority">I/O priority</link> of the request.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
- * @callback: a #GAsyncReadyCallback to call when the request is satisfied
- * @user_data: the data to pass to callback function
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
+ * @callback: (scope async): a #GAsyncReadyCallback to call when the request is satisfied
+ * @user_data: (closure): the data to pass to callback function
  *
  * Asynchronously overwrites the file, replacing the contents, possibly
  * creating a backup copy of the file first.
@@ -21165,7 +21165,7 @@
  * @etag: (allow-none): an optional <link linkend="gfile-etag">entity tag</link> for the current #GFile, or #NULL to ignore.
  * @make_backup: %TRUE if a backup should be created.
  * @flags: a set of #GFileCreateFlags.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  * @error: a #GError, or %NULL
  *
  * Returns an output stream for overwriting the file, possibly
@@ -21662,7 +21662,7 @@
  * g_file_monitor:
  * @file: input #GFile
  * @flags: a set of #GFileMonitorFlags
- * @cancellable: optional #GCancellable object, %NULL to ignore
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore
  * @error: a #GError, or %NULL
  *
  * Obtains a file or directory monitor for the given file, depending
@@ -22496,9 +22496,9 @@
  * @file: input #GFile.
  * @flags: flags affecting the operation
  * @mount_operation: a #GMountOperation, or %NULL to avoid user interaction.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
- * @callback: a #GAsyncReadyCallback to call when the request is satisfied, or %NULL.
- * @user_data: the data to pass to callback function
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
+ * @callback: (scope async): a #GAsyncReadyCallback to call when the request is satisfied, or %NULL.
+ * @user_data: (closure): the data to pass to callback function
  *
  * Mounts a file of type G_FILE_TYPE_MOUNTABLE.
  * Using @mount_operation, you can request callbacks when, for instance,
@@ -22787,7 +22787,7 @@
  * g_file_query_filesystem_info:
  * @file: input #GFile.
  * @attributes: an attribute query string.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  * @error: a #GError.
  *
  * Similar to g_file_query_info(), but obtains information
@@ -22892,7 +22892,7 @@
  * g_file_io_stream_query_info:
  * @stream: a #GFileIOStream.
  * @attributes: a file attribute query string.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  * @error: a #GError, %NULL to ignore.
  *
  * Queries a file io stream for the given @attributes.
@@ -23400,7 +23400,7 @@
  * g_file_query_file_type:
  * @file: input #GFile.
  * @flags: a set of #GFileQueryInfoFlags passed to g_file_query_info().
- * @cancellable: optional #GCancellable object, %NULL to ignore.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  *
  * Utility function to inspect the #GFileType of a file. This is
  * implemented using g_file_query_info() and as such does blocking I/O.
@@ -23703,9 +23703,9 @@
  * g_io_stream_close_async:
  * @stream: a #GIOStream
  * @io_priority: the io priority of the request
- * @callback: callback to call when the request is satisfied
- * @user_data: the data to pass to callback function
- * @cancellable: optional cancellable object
+ * @cancellable: (allow-none): optional cancellable object
+ * @callback: (scope async): callback to call when the request is satisfied
+ * @user_data: (closure): the data to pass to callback function
  *
  * Requests an asynchronous close of the stream, releasing resources
  * related to it. When the operation is finished @callback will be
@@ -24061,9 +24061,9 @@
  * @attributes: an attribute query string.
  * @flags: a set of #GFileQueryInfoFlags.
  * @io_priority: the <link linkend="io-priority">I/O priority</link> of the request.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
- * @callback: a #GAsyncReadyCallback to call when the request is satisfied
- * @user_data: the data to pass to callback function
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
+ * @callback: (scope async): a #GAsyncReadyCallback to call when the request is satisfied
+ * @user_data: (closure): the data to pass to callback function
  *
  * Asynchronously gets the requested information about the files in a directory. The result
  * is a #GFileEnumerator object that will give out #GFileInfo objects for
@@ -25010,7 +25010,7 @@
 /**
  * g_file_make_directory_with_parents:
  * @file: input #GFile.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  * @error: a #GError, or %NULL
  *
  * Creates a directory and any parent directories that may not exist similar to
@@ -25420,7 +25420,7 @@
  * g_file_set_display_name:
  * @file: input #GFile.
  * @display_name: a string.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  * @error: a #GError, or %NULL
  *
  * Renames @file to the specified display name.
@@ -25601,9 +25601,9 @@
  * @attributes: an attribute query string.
  * @flags: a set of #GFileQueryInfoFlags.
  * @io_priority: the <link linkend="io-priority">I/O priority</link> of the request.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
- * @callback: a #GAsyncReadyCallback to call when the request is satisfied
- * @user_data: the data to pass to callback function
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
+ * @callback: (scope async): a #GAsyncReadyCallback to call when the request is satisfied
+ * @user_data: (closure): the data to pass to callback function
  *
  * Asynchronously gets the requested information about specified @file. The result
  * is a #GFileInfo object that contains key-value attributes (such as type or size
@@ -26058,7 +26058,7 @@
  * g_input_stream_skip:
  * @stream: a #GInputStream.
  * @count: the number of bytes that will be skipped from the stream
- * @cancellable: optional #GCancellable object, %NULL to ignore.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  * @error: location to store the error occuring, or %NULL to ignore
  *
  * Tries to skip @count bytes from the stream. Will block during the operation.
@@ -26502,9 +26502,9 @@
  * @stream2: a #GIOStream.
  * @flags: a set of #GIOStreamSpliceFlags.
  * @io_priority: the io priority of the request.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
- * @callback: a #GAsyncReadyCallback.
- * @user_data: user data passed to @callback.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
+ * @callback: (scope async): a #GAsyncReadyCallback.
+ * @user_data: (closure): user data passed to @callback.
  *
  * Asyncronously splice the output stream of @stream1 to the input stream of
  * When the operation is finished @callback will be called.
@@ -28029,7 +28029,7 @@
 /**
  * g_file_find_enclosing_mount:
  * @file: input #GFile.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  * @error: a #GError.
  *
  * Gets a #GMount for the #GFile.
@@ -28720,7 +28720,7 @@
  * g_file_monitor_directory:
  * @file: input #GFile.
  * @flags: a set of #GFileMonitorFlags.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  * @error: a #GError, or %NULL.
  *
  * Obtains a directory monitor for the given file.
@@ -29048,7 +29048,7 @@
 /**
  * g_file_open_readwrite:
  * @file: #GFile to open
- * @cancellable: a #GCancellable
+ * @cancellable: (allow-none): a #GCancellable
  * @error: a #GError, or %NULL
  *
  * Opens an existing file for reading and writing. The result is
@@ -29103,7 +29103,7 @@
  * @attribute: a string containing the attribute's name.
  * @value: a #gint32 containing the attribute's new value.
  * @flags: a #GFileQueryInfoFlags.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  * @error: a #GError, or %NULL
  *
  * Sets @attribute of type %G_FILE_ATTRIBUTE_TYPE_INT32 to @value.
@@ -30439,7 +30439,7 @@
  * @attribute: a string containing the attribute's name.
  * @value: a string containing the attribute's value.
  * @flags: #GFileQueryInfoFlags.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  * @error: a #GError, or %NULL
  *
  * Sets @attribute of type %G_FILE_ATTRIBUTE_TYPE_STRING to @value.
@@ -30567,8 +30567,8 @@
  * @stream: a #GOutputStream.
  * @buffer: (array length=count) (element-type guint8): the buffer containing the data to write.
  * @count: the number of bytes to write
- * @bytes_written: location to store the number of bytes that was written to the stream
- * @cancellable: optional #GCancellable object, %NULL to ignore.
+ * @bytes_written: (out): location to store the number of bytes that was written to the stream
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  * @error: location to store the error occuring, or %NULL to ignore
  *
  * Tries to write @count bytes from @buffer into the stream. Will block
@@ -30596,7 +30596,7 @@
  * g_file_monitor_file:
  * @file: input #GFile.
  * @flags: a set of #GFileMonitorFlags.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  * @error: a #GError, or %NULL.
  *
  * Obtains a file monitor for the given file. If no file notification
@@ -30699,7 +30699,7 @@
  * @source: #GFile pointing to the source location.
  * @destination: #GFile pointing to the destination location.
  * @flags: set of #GFileCopyFlags.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  * @progress_callback: (scope call): #GFileProgressCallback function for updates.
  * @progress_callback_data: (closure): gpointer to user data for the callback function.
  * @error: #GError for returning error conditions, or %NULL
@@ -31345,7 +31345,7 @@
 /**
  * g_io_stream_close:
  * @stream: a #GIOStream
- * @cancellable: optional #GCancellable object, %NULL to ignore
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore
  * @error: location to store the error occuring, or %NULL to ignore
  *
  * Closes the stream, releasing resources related to it. This will also
