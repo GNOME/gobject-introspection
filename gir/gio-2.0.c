@@ -6318,7 +6318,7 @@
 
 /**
  * g_simple_async_result_new:
- * @source_object: a #GObject the asynchronous function was called with, or %NULL.
+ * @source_object: (allow-none): a #GObject, or %NULL.
  * @callback: a #GAsyncReadyCallback.
  * @user_data: user data passed to @callback.
  * @source_tag: the asynchronous function.
@@ -7494,7 +7494,7 @@
 
 /**
  * g_simple_async_result_new_from_error:
- * @source_object: a #GObject, or %NULL.
+ * @source_object: (allow-none): a #GObject, or %NULL.
  * @callback: a #GAsyncReadyCallback.
  * @user_data: user data passed to @callback.
  * @error: a #GError
@@ -7867,7 +7867,7 @@
 
 /**
  * g_simple_async_result_new_error:
- * @source_object: a #GObject, or %NULL.
+ * @source_object: (allow-none): a #GObject, or %NULL.
  * @callback: a #GAsyncReadyCallback.
  * @user_data: user data passed to @callback.
  * @domain: a #GQuark.
@@ -7883,7 +7883,7 @@
 
 /**
  * g_simple_async_report_take_gerror_in_idle:
- * @object: a #GObject.
+ * @object: (allow-none): a #GObject, or %NULL
  * @callback: a #GAsyncReadyCallback.
  * @user_data: user data passed to @callback.
  * @error: the #GError to report
@@ -11970,7 +11970,7 @@
 
 /**
  * g_simple_async_report_error_in_idle:
- * @object: a #GObject.
+ * @object: (allow-none): a #GObject, or %NULL.
  * @callback: a #GAsyncReadyCallback.
  * @user_data: user data passed to @callback.
  * @domain: a #GQuark containing the error domain (usually #G_IO_ERROR).

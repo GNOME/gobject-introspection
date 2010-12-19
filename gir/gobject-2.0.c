@@ -45,14 +45,15 @@
 /**
  * g_value_array_sort_with_data:
  * @value_array: #GValueArray to sort
- * @compare_func: function to compare elements
- * @user_data: extra data argument provided for @compare_func
+ * @compare_func: (scope call): function to compare elements
+ * @user_data: (closure): extra data argument provided for @compare_func
  *
  * Sort @value_array using @compare_func to compare the elements accoring
  * to the semantics of #GCompareDataFunc.
  * The current implementation uses Quick-Sort as sorting algorithm.
  *
- * Returns: the #GValueArray passed in as @value_array
+ * Rename to: g_value_array_sort
+ * Returns: (transfer none): the #GValueArray passed in as @value_array
  */
 
 
@@ -216,7 +217,7 @@
 
 
 /**
- * g_cclosure_new:
+ * g_cclosure_new: (skip)
  * @callback_func: the function to invoke
  * @user_data: user data to pass to @callback_func
  * @destroy_data: destroy notify to be called when @user_data is no longer used
@@ -730,7 +731,7 @@
  *
  * Get the contents of a %G_TYPE_PARAM #GValue.
  *
- * Returns: #GParamSpec content of @value
+ * Returns: (transfer none): #GParamSpec content of @value
  */
 
 
@@ -772,9 +773,8 @@
  *
  * Get the contents of a %G_TYPE_OBJECT derived #GValue, increasing
  * its reference count.
- * longer needed.
  *
- * Returns: object content of @value, should be unreferenced when no
+ * Returns: (type GObject.Object) (transfer full): object content of
  */
 
 
@@ -862,17 +862,19 @@
 
 
 /**
- * G_DEFINE_TYPE:
- * @TN: The name of the new type, in Camel case.
- * @t_n: The name of the new type, in lowercase, with words separated by '_'.
- * @T_P: The #GType of the parent type.
+ * g_clear_object:
+ * @object_ptr: a pointer to a #GObject reference
  *
- * A convenience macro for type implementations, which declares a
- * class initialization function, an instance initialization function (see #GTypeInfo for information about
- * these) and a static variable named @t_n<!-- -->_parent_class pointing to the parent class. Furthermore, it defines
- * a *_get_type() function. See G_DEFINE_TYPE_EXTENDED() for an example.
+ * Clears a reference to a #GObject.
+ * If the reference is %NULL then this function does nothing.
+ * Otherwise, the reference count of the object is decreased and the
+ * pointer is set to %NULL.
+ * This function is threadsafe and modifies the pointer atomically,
+ * using memory barriers where needed.
+ * A macro is also included that allows this function to be used without
+ * pointer casts.
  *
- * Since: 2.4
+ * Since: 2.28
  */
 
 
@@ -1434,14 +1436,17 @@
 
 
 /**
- * GTypeCValue:
- * @v_int: the field for holding integer values
- * @v_long: the field for holding long integer values
- * @v_int64: the field for holding 64 bit integer values
- * @v_double: the field for holding floating point values
- * @v_pointer: the field for holding pointers
+ * g_source_set_dummy_callback:
+ * @source: the source
  *
- * A union holding one collected value.
+ * Sets a dummy callback for @source. The callback will do nothing, and
+ * if the source expects a #gboolean return value, it will return %TRUE.
+ * (If the source expects any other type of return value, it will return
+ * a 0/%NULL value; whatever g_value_init() initializes a #GValue to for
+ * that type.)
+ * If the source is not one of the standard GLib types, the
+ * structure must have been filled in with pointers to appropriate
+ * functions.
  */
 
 
@@ -2194,7 +2199,7 @@
  *
  * Initializes @value with the default value of @type.
  *
- * Returns: the #GValue structure that has been passed in
+ * Returns: (transfer none): the #GValue structure that has been passed in
  */
 
 
@@ -3260,7 +3265,7 @@
  *
  * Get the contents of a pointer #GValue.
  *
- * Returns: pointer contents of @value
+ * Returns: (transfer none): pointer contents of @value
  */
 
 
@@ -3324,7 +3329,7 @@
  * }
  * ]|
  *
- * Returns: a newly allocated #GClosure
+ * Returns: (transfer full): a newly allocated #GClosure
  */
 
 
@@ -3344,7 +3349,7 @@
  * Increments the reference count on a closure to force it staying
  * alive while the caller holds a pointer to it.
  *
- * Returns: The @closure passed in, for convenience
+ * Returns: (transfer none): The @closure passed in, for convenience
  */
 
 
@@ -3623,7 +3628,7 @@
 
 
 /**
- * g_closure_set_meta_marshal:
+ * g_closure_set_meta_marshal: (skip)
  * @closure: a #GClosure
  * @marshal_data: context-dependent data to pass to @meta_marshal
  * @meta_marshal: a #GClosureMarshal function
@@ -4244,7 +4249,7 @@
  *
  * Remove the value at position @index_ from @value_array.
  *
- * Returns: the #GValueArray passed in as @value_array
+ * Returns: (transfer none): the #GValueArray passed in as @value_array
  */
 
 
@@ -4413,7 +4418,7 @@
  *
  * Get the contents of a %G_TYPE_BOXED derived #GValue.
  *
- * Returns: boxed contents of @value
+ * Returns: (transfer none): boxed contents of @value
  */
 
 
@@ -4421,11 +4426,11 @@
  * g_value_peek_pointer:
  * @value: An initialized #GValue structure.
  *
- * Return the value contents as pointer. This function asserts that
- * g_value_fits_pointer() returned %TRUE for the passed in value.
- * This is an internal function introduced mainly for C marshallers.
+ * function asserts that g_value_fits_pointer() returned %TRUE for the
+ * passed in value.  This is an internal function introduced mainly
+ * for C marshallers.
  *
- * Returns: %TRUE if @value will fit inside a pointer value.
+ * Returns: (transfer none): the value contents as pointer. This
  */
 
 
@@ -4615,15 +4620,17 @@
 
 
 /**
- * G_VALUE_HOLDS:
- * @value: A #GValue structure.
- * @type: A #GType value.
+ * G_DEFINE_TYPE:
+ * @TN: The name of the new type, in Camel case.
+ * @t_n: The name of the new type, in lowercase, with words separated by '_'.
+ * @T_P: The #GType of the parent type.
  *
- * Checks if @value holds (or contains) a value of @type.
- * This macro will also check for @value != %NULL and issue a
- * warning if the check fails.
+ * A convenience macro for type implementations, which declares a
+ * class initialization function, an instance initialization function (see #GTypeInfo for information about
+ * these) and a static variable named @t_n<!-- -->_parent_class pointing to the parent class. Furthermore, it defines
+ * a *_get_type() function. See G_DEFINE_TYPE_EXTENDED() for an example.
  *
- * Returns: %TRUE if @value holds the @type.
+ * Since: 2.4
  */
 
 
@@ -4893,12 +4900,12 @@
 /**
  * g_value_array_prepend:
  * @value_array: #GValueArray to add an element to
- * @value: #GValue to copy into #GValueArray, or %NULL
+ * @value: (allow-none): #GValue to copy into #GValueArray, or %NULL
  *
  * Insert a copy of @value as first element of @value_array. If @value is
  * %NULL, an uninitialized value is prepended.
  *
- * Returns: the #GValueArray passed in as @value_array
+ * Returns: (transfer none): the #GValueArray passed in as @value_array
  */
 
 
@@ -4943,12 +4950,12 @@
  * g_value_array_insert:
  * @value_array: #GValueArray to add an element to
  * @index_: insertion position, must be &lt;= value_array-&gt;n_values
- * @value: #GValue to copy into #GValueArray, or %NULL
+ * @value: (allow-none): #GValue to copy into #GValueArray, or %NULL
  *
  * Insert a copy of @value at specified position into @value_array. If @value
  * is %NULL, an uninitialized value is inserted.
  *
- * Returns: the #GValueArray passed in as @value_array
+ * Returns: (transfer none): the #GValueArray passed in as @value_array
  */
 
 
@@ -5229,7 +5236,7 @@
  * The property id of 0 is treated specially by #GObject and it should not
  * be used to store a #GParamSpec.
  * This function should be used if you plan to use a static array of
- * #GParamSpec<!-- -->s and g_object_notify_pspec(). For instance, this
+ * #GParamSpec<!-- -->s and g_object_notify_by_pspec(). For instance, this
  * class initialization:
  * |[
  * enum {
@@ -5318,7 +5325,7 @@
 
 
 /**
- * g_closure_add_invalidate_notifier:
+ * g_closure_add_invalidate_notifier: (skip)
  * @closure: a #GClosure
  * @notify_data: data to pass to @notify_func
  * @notify_func: the callback function to register
@@ -5889,7 +5896,7 @@
  *
  * Return a pointer to the value at @index_ containd in @value_array.
  *
- * Returns: pointer to a value at @index_ in @value_array
+ * Returns: (transfer none): pointer to a value at @index_ in @value_array
  */
 
 
@@ -6150,7 +6157,7 @@
 
 
 /**
- * g_cclosure_new_object_swap:
+ * g_cclosure_new_object_swap: (skip)
  * @callback_func: the function to invoke
  * @object: a #GObject pointer to pass to @callback_func
  *
@@ -6538,7 +6545,9 @@
  * @property_name: the name of the property to get
  * @value: return location for the property value
  *
- * Gets a property of an object.
+ * Gets a property of an object. @value must have been initialized to the
+ * expected type of the property (or a type to which the expected type can be
+ * transformed) using g_value_init().
  * In general, a copy is made of the property contents and the caller is
  * responsible for freeing the memory by calling g_value_unset().
  * Note that g_object_get_property() is really intended for language
@@ -7346,7 +7355,7 @@
  * @closure: a #GClosure
  * @return_value: a #GValue to store the return value. May be %NULL if the callback of @closure doesn't return a value.
  * @n_param_values: the length of the @param_values array
- * @param_values: an array of #GValue<!-- -->s holding the arguments on which to invoke the callback of @closure
+ * @param_values: (array length=n_param_values): an array of #GValue<!-- -->s holding the arguments on which to invoke the callback of @closure
  * @invocation_hint: a context-dependent invocation hint
  *
  * Invokes the closure, i.e. executes the callback represented by the @closure.
@@ -7666,7 +7675,7 @@
 
 
 /**
- * g_cclosure_new_swap:
+ * g_cclosure_new_swap: (skip)
  * @callback_func: the function to invoke
  * @user_data: user data to pass to @callback_func
  * @destroy_data: destroy notify to be called when @user_data is no longer used
@@ -7674,7 +7683,7 @@
  * Creates a new closure which invokes @callback_func with @user_data as
  * the first parameter.
  *
- * Returns: a new #GCClosure
+ * Returns: (transfer full): a new #GCClosure
  */
 
 
@@ -7831,7 +7840,7 @@
  *
  * Get the contents of a %G_TYPE_OBJECT derived #GValue.
  *
- * Returns: object contents of @value
+ * Returns: (type GObject.Object) (transfer none): object contents of @value
  */
 
 
@@ -8189,7 +8198,7 @@
  * Construct an exact copy of a #GValueArray by duplicating all its
  * contents.
  *
- * Returns: Newly allocated copy of #GValueArray
+ * Returns: (transfer full): Newly allocated copy of #GValueArray
  */
 
 
@@ -8216,7 +8225,7 @@
 
 
 /**
- * g_value_register_transform_func:
+ * g_value_register_transform_func: (skip)
  * @src_type: Source type.
  * @dest_type: Target type.
  * @transform_func: a function which transforms values of type @src_type into value of type @dest_type
@@ -8300,13 +8309,13 @@
 /**
  * g_value_array_sort:
  * @value_array: #GValueArray to sort
- * @compare_func: function to compare elements
+ * @compare_func: (scope call): function to compare elements
  *
  * Sort @value_array using @compare_func to compare the elements accoring to
  * the semantics of #GCompareFunc.
  * The current implementation uses Quick-Sort as sorting algorithm.
  *
- * Returns: the #GValueArray passed in as @value_array
+ * Returns: (transfer none): the #GValueArray passed in as @value_array
  */
 
 
@@ -8448,7 +8457,7 @@
  * A predefined #GSignalAccumulator for signals that return a
  * boolean values. The behavior that this accumulator gives is
  * callbacks will be invoked, while a return of %FALSE allows
- * the emission to coninue. The idea here is that a %TRUE return
+ * the emission to continue. The idea here is that a %TRUE return
  * indicates that the callback <emphasis>handled</emphasis> the signal,
  * and no further handling is needed.
  *
@@ -8485,7 +8494,7 @@
 
 
 /**
- * g_value_dup_boxed:
+ * g_value_dup_boxed: (skip)
  * @value: a valid #GValue of %G_TYPE_BOXED derived type
  *
  * Get the contents of a %G_TYPE_BOXED derived #GValue.  Upon getting,
@@ -8498,7 +8507,7 @@
 
 
 /**
- * g_value_dup_param:
+ * g_value_dup_param: (skip)
  * @value: a valid #GValue whose type is derived from %G_TYPE_PARAM
  *
  * Get the contents of a %G_TYPE_PARAM #GValue, increasing its
@@ -8536,6 +8545,19 @@
  *
  * Since: 2.4
  * Returns: a pointer to the private data structure.
+ */
+
+
+/**
+ * G_VALUE_HOLDS:
+ * @value: A #GValue structure.
+ * @type: A #GType value.
+ *
+ * Checks if @value holds (or contains) a value of @type.
+ * This macro will also check for @value != %NULL and issue a
+ * warning if the check fails.
+ *
+ * Returns: %TRUE if @value holds the @type.
  */
 
 
@@ -8628,6 +8650,18 @@
  * g_signal_query().
  *
  * Returns: Newly allocated array of signal IDs.
+ */
+
+
+/**
+ * GTypeCValue:
+ * @v_int: the field for holding integer values
+ * @v_long: the field for holding long integer values
+ * @v_int64: the field for holding 64 bit integer values
+ * @v_double: the field for holding floating point values
+ * @v_pointer: the field for holding pointers
+ *
+ * A union holding one collected value.
  */
 
 
@@ -8878,6 +8912,28 @@
 
 
 /**
+ * g_signal_accumulator_first_wins:
+ * @ihint: standard #GSignalAccumulator parameter
+ * @return_accu: standard #GSignalAccumulator parameter
+ * @handler_return: standard #GSignalAccumulator parameter
+ * @dummy: standard #GSignalAccumulator parameter
+ *
+ * A predefined #GSignalAccumulator for signals intended to be used as a
+ * hook for application code to provide a particular value.  Usually
+ * only one such value is desired and multiple handlers for the same
+ * signal don't make much sense (except for the case of the default
+ * handler defined in the class structure, in which case you will
+ * usually want the signal connection to override the class handler).
+ * This accumulator will use the return value from the first signal
+ * handler that is run as the return value for the signal and not run
+ *
+ * Any further handlers (ie: the first handler "wins").
+ * Returns: standard #GSignalAccumulator result
+ * Since: 2.28
+ */
+
+
+/**
  * g_new:
  * @struct_type: the type of the elements to allocate
  * @n_structs: the number of elements to allocate
@@ -9078,12 +9134,12 @@
 /**
  * g_value_array_append:
  * @value_array: #GValueArray to add an element to
- * @value: #GValue to copy into #GValueArray, or %NULL
+ * @value: (allow-none): #GValue to copy into #GValueArray, or %NULL
  *
  * Insert a copy of @value as last element of @value_array. If @value is
  * %NULL, an uninitialized value is appended.
  *
- * Returns: the #GValueArray passed in as @value_array
+ * Returns: (transfer none): the #GValueArray passed in as @value_array
  */
 
 
@@ -9123,7 +9179,7 @@
 
 
 /**
- * g_closure_remove_invalidate_notifier:
+ * g_closure_remove_invalidate_notifier: (skip)
  * @closure: a #GClosure
  * @notify_data: data which was passed to g_closure_add_invalidate_notifier() when registering @notify_func
  * @notify_func: the callback function to remove
@@ -9152,7 +9208,7 @@
 
 
 /**
- * g_closure_add_marshal_guards:
+ * g_closure_add_marshal_guards: (skip)
  * @closure: a #GClosure
  * @pre_marshal_data: data to pass to @pre_marshal_notify
  * @pre_marshal_notify: a function to call before the closure callback
@@ -10064,7 +10120,7 @@
 
 
 /**
- * g_closure_add_finalize_notifier:
+ * g_closure_add_finalize_notifier: (skip)
  * @closure: a #GClosure
  * @notify_data: data to pass to @notify_func
  * @notify_func: the callback function to register
@@ -10095,7 +10151,7 @@
 
 
 /**
- * g_closure_remove_finalize_notifier:
+ * g_closure_remove_finalize_notifier: (skip)
  * @closure: a #GClosure
  * @notify_data: data which was passed to g_closure_add_finalize_notifier() when registering @notify_func
  * @notify_func: the callback function to remove
@@ -10286,7 +10342,7 @@
 
 
 /**
- * g_closure_set_marshal:
+ * g_closure_set_marshal: (skip)
  * @closure: a #GClosure
  * @marshal: a #GClosureMarshal function
  *
