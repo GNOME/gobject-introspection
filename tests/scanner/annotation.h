@@ -127,6 +127,7 @@ void     annotation_object_watch_full   (AnnotationObject *object,
                                          AnnotationForeachFunc func,
                                          gpointer user_data,
                                          GDestroyNotify destroy);
+void     annotation_object_hidden_self  (gpointer object);
 
 void     annotation_init                (int              *argc, 
 					 char           ***argv);

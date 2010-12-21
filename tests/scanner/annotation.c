@@ -614,6 +614,15 @@ annotation_object_watch_full (AnnotationObject *object,
 }
 
 /**
+ * annotation_object_hidden_self:
+ * @object: (type AnnotationObject): A #AnnotationObject
+ **/
+void
+annotation_object_hidden_self (gpointer object)
+{
+}
+
+/**
  * annotation_init:
  * @argc: (inout): The number of args. 
  * @argv: (inout) (array length=argc): The arguments.

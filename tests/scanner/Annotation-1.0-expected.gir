@@ -263,6 +263,11 @@ each string needs to be freed.</doc>
           </type>
         </return-value>
       </method>
+      <method name="hidden_self" c:identifier="annotation_object_hidden_self">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+      </method>
       <method name="in" c:identifier="annotation_object_in">
         <doc xml:whitespace="preserve">This is a test for in arguments</doc>
         <return-value transfer-ownership="none">

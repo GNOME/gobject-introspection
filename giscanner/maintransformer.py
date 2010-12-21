@@ -908,7 +908,7 @@ method or constructor of some type."""
 
         # A quick hack here...in the future we should catch C signature/GI signature
         # mismatches in a general way in finaltransformer
-        if first.type.ctype.count('*') != 1:
+        if first.type.ctype is not None and first.type.ctype.count('*') != 1:
             return False
 
         # Here we check both the c_symbol_prefix and (if that fails),
