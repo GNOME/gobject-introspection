@@ -82,5 +82,5 @@ gdump_DATA = girepository/gdump.c
 GTESTER_PROGS += gthash-test
 
 gthash_test_SOURCES = girepository/gthash.c girepository/gthash-test.c
-gthash_test_CFLAGS = -Igirepository $(GOBJECT_CFLAGS)
+gthash_test_CFLAGS = -I$(top_srcdir)/girepository $(GOBJECT_CFLAGS)
 gthash_test_LDADD = libcmph.la libgirepository-1.0.la $(GOBJECT_LIBS)

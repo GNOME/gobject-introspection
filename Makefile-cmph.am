@@ -69,6 +69,6 @@ libcmph_la_SOURCES = \
 GTESTER_PROGS += cmph-bdz-test
 
 cmph_bdz_test_SOURCES = girepository/cmph-bdz-test.c
-cmph_bdz_test_CFLAGS = -Igirepository/cmph $(GOBJECT_CFLAGS)
+cmph_bdz_test_CFLAGS = -I$(top_srcdir)/girepository/cmph $(GOBJECT_CFLAGS)
 cmph_bdz_test_LDADD = libcmph.la $(GOBJECT_LIBS)
 
