@@ -22,7 +22,7 @@
 
 
 /**
- * g_type_remove_class_cache_func:
+ * g_type_remove_class_cache_func: (skip)
  * @cache_data: data that was given when adding @cache_func
  * @cache_func: a #GTypeClassCacheFunc
  *
@@ -322,7 +322,7 @@
 
 
 /**
- * g_type_create_instance:
+ * g_type_create_instance: (skip)
  * @type: An instantiatable type to create an instance for.
  *
  * Creates and initializes an instance of @type if @type is valid and
@@ -347,13 +347,14 @@
 /**
  * g_type_interface_prerequisites:
  * @interface_type: an interface type
- * @n_prerequisites: location to return the number of prerequisites, or %NULL
+ * @n_prerequisites: (out) (allow-none): location to return the number of prerequisites, or %NULL
  *
  * Returns the prerequisites of an interfaces type.
+ * newly-allocated zero-terminated array of #GType containing
  * the prerequisites of @interface_type
  *
  * Since: 2.2
- * Returns: a newly-allocated zero-terminated array of #GType containing
+ * Returns: (array length=n_prerequisites) (transfer full): a
  */
 
 
@@ -693,7 +694,7 @@
 
 
 /**
- * g_object_set_data_full:
+ * g_object_set_data_full: (skip)
  * @object: #GObject containing the associations
  * @key: name of the key
  * @data: data to associate with that key
@@ -773,8 +774,9 @@
  *
  * Get the contents of a %G_TYPE_OBJECT derived #GValue, increasing
  * its reference count.
+ * should be unreferenced when no longer needed.
  *
- * Returns: (type GObject.Object) (transfer full): object content of
+ * Returns: (type GObject.Object) (transfer full): object content of @value,
  */
 
 
@@ -812,7 +814,7 @@
 
 
 /**
- * g_object_get_valist:
+ * g_object_get_valist: (skip)
  * @object: a #GObject
  * @first_property_name: name of the first property to get
  * @var_args: return location for the first property, followed optionally by more name/return location pairs, followed by %NULL
@@ -862,7 +864,7 @@
 
 
 /**
- * g_clear_object:
+ * g_clear_object: (skip)
  * @object_ptr: a pointer to a #GObject reference
  *
  * Clears a reference to a #GObject.
@@ -897,7 +899,7 @@
 
 
 /**
- * g_object_set:
+ * g_object_set: (skip)
  * @object: a #GObject
  * @first_property_name: name of the first property to set
  * @...: value for the first property, followed optionally by more name/value pairs, followed by %NULL
@@ -918,7 +920,7 @@
 
 /**
  * g_object_is_floating:
- * @object: a #GObject
+ * @object: (type GObject.Object): a #GObject
  *
  * Checks wether @object has a <link linkend="floating-ref">floating</link>
  * reference.
@@ -962,8 +964,9 @@
  *
  * Increments the reference count of the class structure belonging to
  * exist already.
+ * structure for the given type ID.
  *
- * Returns: The #GTypeClass structure for the given type ID.
+ * Returns: (type GObject.TypeClass) (transfer none): The #GTypeClass
  */
 
 
@@ -1007,16 +1010,17 @@
 
 /**
  * g_type_interface_peek_parent:
- * @g_iface: A #GTypeInterface structure.
+ * @g_iface: (type GObject.TypeInterface): A #GTypeInterface structure.
  *
  * Returns the corresponding #GTypeInterface structure of the parent type
  * of the instance type to which @g_iface belongs. This is useful when
  * deriving the implementation of an interface from the parent type and
  * then possibly overriding some methods.
- * type of the instance type to which @g_iface belongs, or
- * %NULL if the parent type doesn't conform to the interface.
+ * corresponding #GTypeInterface structure of the parent type of the
+ * instance type to which @g_iface belongs, or %NULL if the parent
+ * type doesn't conform to the interface.
  *
- * Returns: The corresponding #GTypeInterface structure of the parent
+ * Returns: (transfer none) (type GObject.TypeInterface): The
  */
 
 
@@ -1119,7 +1123,7 @@
 
 
 /**
- * g_object_new:
+ * g_object_new: (skip)
  * @object_type: the type id of the #GObject subtype to instantiate
  * @first_property_name: the name of the first property
  * @...: the value of the first property, followed optionally by more name/value pairs, followed by %NULL
@@ -1128,7 +1132,7 @@
  * Construction parameters (see #G_PARAM_CONSTRUCT, #G_PARAM_CONSTRUCT_ONLY)
  * which are not explicitly specified are set to their default values.
  *
- * Returns: a new instance of @object_type
+ * Returns: (transfer full): a new instance of @object_type
  */
 
 
@@ -1173,12 +1177,13 @@
 /**
  * g_type_children:
  * @type: The parent type.
- * @n_children: Optional #guint pointer to contain the number of child types.
+ * @n_children: (out) (allow-none): Optional #guint pointer to contain the number of child types.
  *
  * Return a newly allocated and 0-terminated array of type IDs, listing the
  * child types of @type. The return value has to be g_free()ed after use.
+ * and 0-terminated array of child types.
  *
- * Returns: Newly allocated and 0-terminated array of child types.
+ * Returns: (array length=n_children) (transfer full): Newly allocated
  */
 
 
@@ -1212,7 +1217,7 @@
 
 /**
  * g_type_default_interface_unref:
- * @g_iface: the default vtable structure for a interface, as returned by g_type_default_interface_ref()
+ * @g_iface: (type GObject.TypeInterface): the default vtable structure for a interface, as returned by g_type_default_interface_ref()
  *
  * Decrements the reference count for the type corresponding to the
  * interface default vtable @g_iface. If the type is dynamic, then
@@ -1235,7 +1240,7 @@
 
 
 /**
- * g_param_spec_int64:
+ * g_param_spec_int64: (skip)
  * @name: canonical name of the property specified
  * @nick: nick name for the property specified
  * @blurb: description of the property specified
@@ -1587,7 +1592,7 @@
  * A variant of g_closure_new_simple() which stores @object in the
  * when implementing new types of closures.
  *
- * Returns: a newly allocated #GClosure
+ * Returns: (transfer full): a newly allocated #GClosure
  */
 
 
@@ -1736,7 +1741,7 @@
 
 
 /**
- * g_param_spec_param:
+ * g_param_spec_param: (skip)
  * @name: canonical name of the property specified
  * @nick: nick name for the property specified
  * @blurb: description of the property specified
@@ -1752,7 +1757,7 @@
 
 
 /**
- * g_param_spec_ulong:
+ * g_param_spec_ulong: (skip)
  * @name: canonical name of the property specified
  * @nick: nick name for the property specified
  * @blurb: description of the property specified
@@ -1956,7 +1961,7 @@
  * Obtains data which has previously been attached to @type
  * with g_type_set_qdata().
  *
- * Returns: the data, or %NULL if no data was found
+ * Returns: (transfer none): the data, or %NULL if no data was found
  */
 
 
@@ -2057,7 +2062,7 @@
 
 
 /**
- * g_param_spec_gtype:
+ * g_param_spec_gtype: (skip)
  * @name: canonical name of the property specified
  * @nick: nick name for the property specified
  * @blurb: description of the property specified
@@ -2215,12 +2220,12 @@
 /**
  * g_object_class_list_properties:
  * @oclass: a #GObjectClass
- * @n_properties: return location for the length of the returned array
+ * @n_properties: (out): return location for the length of the returned array
  *
  * Get an array of #GParamSpec* for all properties of a class.
  * #GParamSpec* which should be freed after use
  *
- * Returns: (array length=n_properties) (transfer full): an array of
+ * Returns: (array length=n_properties) (transfer container): an array of
  */
 
 
@@ -2257,8 +2262,9 @@
  * @walk_ancestors: If %TRUE, also try to find a #GParamSpec with @param_name owned by an ancestor of @owner_type.
  *
  * Looks up a #GParamSpec in the pool.
+ * matching #GParamSpec was found.
  *
- * Returns: The found #GParamSpec, or %NULL if no matching #GParamSpec was found.
+ * Returns: (transfer none): The found #GParamSpec, or %NULL if no
  */
 
 
@@ -2371,7 +2377,7 @@
 
 
 /**
- * g_param_spec_enum:
+ * g_param_spec_enum: (skip)
  * @name: canonical name of the property specified
  * @nick: nick name for the property specified
  * @blurb: description of the property specified
@@ -2431,7 +2437,7 @@
 
 
 /**
- * g_object_set_valist:
+ * g_object_set_valist: (skip)
  * @object: a #GObject
  * @first_property_name: name of the first property to set
  * @var_args: value for the first property, followed optionally by more name/value pairs, followed by %NULL
@@ -2540,7 +2546,7 @@
 
 
 /**
- * g_param_spec_ref_sink:
+ * g_param_spec_ref_sink: (skip)
  * @pspec: a valid #GParamSpec
  *
  * Convenience function to ref and sink a #GParamSpec.
@@ -2583,7 +2589,7 @@
 
 
 /**
- * g_param_spec_uint64:
+ * g_param_spec_uint64: (skip)
  * @name: canonical name of the property specified
  * @nick: nick name for the property specified
  * @blurb: description of the property specified
@@ -2601,7 +2607,7 @@
 
 
 /**
- * g_object_remove_weak_pointer:
+ * g_object_remove_weak_pointer: (skip)
  * @object: The object that is weak referenced.
  * @weak_pointer_location: (inout): The memory address of a pointer.
  *
@@ -2621,7 +2627,7 @@
 
 
 /**
- * g_param_spec_boxed:
+ * g_param_spec_boxed: (skip)
  * @name: canonical name of the property specified
  * @nick: nick name for the property specified
  * @blurb: description of the property specified
@@ -2686,7 +2692,7 @@
 
 
 /**
- * g_param_spec_pointer:
+ * g_param_spec_pointer: (skip)
  * @name: canonical name of the property specified
  * @nick: nick name for the property specified
  * @blurb: description of the property specified
@@ -2872,7 +2878,7 @@
 
 /**
  * g_type_class_peek_parent:
- * @g_class: The #GTypeClass structure to retrieve the parent class for.
+ * @g_class: (type GObject.TypeClass): The #GTypeClass structure to retrieve the parent class for.
  *
  * This is a convenience function often needed in class initializers.
  * It returns the class structure of the immediate parent type of the
@@ -2883,8 +2889,9 @@
  * <programlisting>
  * g_type_class_peek (g_type_parent (G_TYPE_FROM_CLASS (g_class)));
  * </programlisting>
+ * of @g_class.
  *
- * Returns: The parent class of @g_class.
+ * Returns: (type GObject.TypeClass) (transfer none): The parent class
  */
 
 
@@ -3024,7 +3031,7 @@
 
 
 /**
- * g_param_spec_set_qdata_full:
+ * g_param_spec_set_qdata_full: (skip)
  * @pspec: the #GParamSpec to set store a user data pointer
  * @quark: a #GQuark, naming the user data pointer
  * @data: an opaque user data pointer
@@ -3275,14 +3282,14 @@
  * @property_name: the name of the property to look up
  *
  * Looks up the #GParamSpec for a property of a class.
- * doesn't have a property of that name
+ * %NULL if the class doesn't have a property of that name
  *
- * Returns: the #GParamSpec for the property, or %NULL if the class
+ * Returns: (transfer none): the #GParamSpec for the property, or
  */
 
 
 /**
- * g_value_take_param:
+ * g_value_take_param: (skip)
  * @value: a valid #GValue of type %G_TYPE_PARAM
  * @param: the #GParamSpec to be set
  *
@@ -3426,13 +3433,14 @@
 /**
  * g_type_interfaces:
  * @type: The type to list interface types for.
- * @n_interfaces: Optional #guint pointer to contain the number of interface types.
+ * @n_interfaces: (out) (allow-none): Optional #guint pointer to contain the number of interface types.
  *
  * Return a newly allocated and 0-terminated array of type IDs, listing the
  * interface types that @type conforms to. The return value has to be
  * g_free()ed after use.
+ * allocated and 0-terminated array of interface types.
  *
- * Returns: Newly allocated and 0-terminated array of interface types.
+ * Returns: (array length=n_interfaces) (transfer full): Newly
  */
 
 
@@ -3617,13 +3625,14 @@
  * g_param_spec_pool_list:
  * @pool: a #GParamSpecPool
  * @owner_type: the owner to look for
- * @n_pspecs_p: return location for the length of the returned array
+ * @n_pspecs_p: (out): return location for the length of the returned array
  *
  * Gets an array of all #GParamSpec<!-- -->s owned by @owner_type in
  * the pool.
- * #GParamSpec<!-- -->s owned by @owner_type in the pool
+ * allocated array containing pointers to all #GParamSpecs
+ * owned by @owner_type in the pool
  *
- * Returns: a newly allocated array containing pointers to all
+ * Returns: (array length=n_pspecs_p) (transfer container): a newly
  */
 
 
@@ -3849,7 +3858,7 @@
 
 
 /**
- * g_param_spec_uchar:
+ * g_param_spec_uchar: (skip)
  * @name: canonical name of the property specified
  * @nick: nick name for the property specified
  * @blurb: description of the property specified
@@ -3929,9 +3938,10 @@
  * the classes reference count isn't incremented. As a consequence, this function
  * may return %NULL if the class of the type passed in does not currently
  * exist (hasn't been referenced before).
- * if the class does not currently exist.
+ * structure for the given type ID or %NULL if the class does not
+ * currently exist.
  *
- * Returns: The #GTypeClass structure for the given type ID or %NULL
+ * Returns: (type GObject.TypeClass) (transfer none): The #GTypeClass
  */
 
 
@@ -3942,9 +3952,10 @@
  *
  * Gets an #GList of all #GParamSpec<!-- -->s owned by @owner_type in
  * the pool.
- * in the pool#GParamSpec<!-- -->s.
+ * #GList of all #GParamSpec<!-- -->s owned by @owner_type in
+ * the pool#GParamSpec<!-- -->s.
  *
- * Returns: a #GList of all #GParamSpec<!-- -->s owned by @owner_type
+ * Returns: (transfer container) (element-type GObject.ParamSpec): a
  */
 
 
@@ -3985,7 +3996,7 @@
 
 
 /**
- * g_param_spec_uint:
+ * g_param_spec_uint: (skip)
  * @name: canonical name of the property specified
  * @nick: nick name for the property specified
  * @blurb: description of the property specified
@@ -4165,7 +4176,7 @@
 /**
  * g_type_query:
  * @type: the #GType value of a static, classed type.
- * @query: A user provided structure that is filled in with constant values upon success.
+ * @query: (out caller-allocates): A user provided structure that is filled in with constant values upon success.
  *
  * Queries the type system for information about a specific type.
  * This function will fill in a user-provided structure to hold
@@ -4261,7 +4272,7 @@
  * This function gets back user data pointers stored via
  * g_object_set_qdata().
  *
- * Returns: The user data pointer set, or %NULL
+ * Returns: (transfer none): The user data pointer set, or %NULL
  */
 
 
@@ -4303,7 +4314,7 @@
 
 
 /**
- * g_object_weak_ref:
+ * g_object_weak_ref: (skip)
  * @object: #GObject to reference weakly
  * @notify: callback to invoke before the object is freed
  * @data: extra data to pass to notify
@@ -4403,7 +4414,7 @@
 
 
 /**
- * g_param_spec_ref:
+ * g_param_spec_ref: (skip)
  * @pspec: a valid #GParamSpec
  *
  * Increments the reference count of @pspec.
@@ -4472,10 +4483,11 @@
  *
  * A more efficient version of g_type_class_peek() which works only for
  * static types.
- * if the class does not currently exist or is dynamically loaded.
+ * structure for the given type ID or %NULL if the class does not
+ * currently exist or is dynamically loaded.
  *
  * Since: 2.4
- * Returns: The #GTypeClass structure for the given type ID or %NULL
+ * Returns: (type GObject.TypeClass) (transfer none): The #GTypeClass
  */
 
 
@@ -4491,7 +4503,7 @@
 
 
 /**
- * g_param_spec_boolean:
+ * g_param_spec_boolean: (skip)
  * @name: canonical name of the property specified
  * @nick: nick name for the property specified
  * @blurb: description of the property specified
@@ -4665,7 +4677,7 @@
  * function (if any was set).  Usually, calling this function is only
  * required to update user data pointers with a destroy notifier.
  *
- * Returns: the user data pointer set, or %NULL
+ * Returns: (transfer none): the user data pointer set, or %NULL
  */
 
 
@@ -4699,7 +4711,7 @@
 
 
 /**
- * g_object_weak_unref:
+ * g_object_weak_unref: (skip)
  * @object: #GObject to remove a weak reference from
  * @notify: callback to search for
  * @data: data to search for
@@ -5091,7 +5103,7 @@
  *
  * Gets back user data pointers stored via g_param_spec_set_qdata().
  *
- * Returns: the user data pointer set, or %NULL
+ * Returns: (transfer none): the user data pointer set, or %NULL
  */
 
 
@@ -5283,7 +5295,7 @@
 /**
  * g_value_set_object:
  * @value: a valid #GValue of %G_TYPE_OBJECT derived type
- * @v_object: object value to be set
+ * @v_object: (type GObject.Object): object value to be set
  *
  * Set the contents of a %G_TYPE_OBJECT derived #GValue to @v_object.
  * g_value_set_object() increases the reference count of @v_object
@@ -5512,7 +5524,7 @@
 
 
 /**
- * g_object_add_toggle_ref:
+ * g_object_add_toggle_ref: (skip)
  * @object: a #GObject
  * @notify: a function to call when this reference is the last reference to the object, or is no longer the last reference.
  * @data: data to pass to @notify
@@ -5599,7 +5611,7 @@
 
 
 /**
- * g_type_register_static_simple:
+ * g_type_register_static_simple: (skip)
  * @parent_type: Type from which this type will be derived.
  * @type_name: 0-terminated string used as the name of the new type.
  * @class_size: Size of the class structure (see #GTypeInfo)
@@ -5630,7 +5642,7 @@
 
 
 /**
- * g_param_spec_float:
+ * g_param_spec_float: (skip)
  * @name: canonical name of the property specified
  * @nick: nick name for the property specified
  * @blurb: description of the property specified
@@ -5800,7 +5812,7 @@
 
 
 /**
- * g_param_spec_unref:
+ * g_param_spec_unref: (skip)
  * @pspec: a valid #GParamSpec
  *
  * Decrements the reference count of a @pspec.
@@ -6172,7 +6184,7 @@
 
 
 /**
- * g_param_spec_flags:
+ * g_param_spec_flags: (skip)
  * @name: canonical name of the property specified
  * @nick: nick name for the property specified
  * @blurb: description of the property specified
@@ -6232,7 +6244,7 @@
 
 
 /**
- * g_object_add_weak_pointer:
+ * g_object_add_weak_pointer: (skip)
  * @object: The object that should be weak referenced.
  * @weak_pointer_location: (inout): The memory address of a pointer.
  *
@@ -6263,7 +6275,7 @@
 
 
 /**
- * g_param_spec_value_array:
+ * g_param_spec_value_array: (skip)
  * @name: canonical name of the property specified
  * @nick: nick name for the property specified
  * @blurb: description of the property specified
@@ -6305,7 +6317,7 @@
 
 
 /**
- * g_param_spec_variant:
+ * g_param_spec_variant: (skip)
  * @name: canonical name of the property specified
  * @nick: nick name for the property specified
  * @blurb: description of the property specified
@@ -6395,7 +6407,7 @@
 
 
 /**
- * g_param_spec_unichar:
+ * g_param_spec_unichar: (skip)
  * @name: canonical name of the property specified
  * @nick: nick name for the property specified
  * @blurb: description of the property specified
@@ -6421,7 +6433,7 @@
 
 
 /**
- * g_object_get:
+ * g_object_get: (skip)
  * @object: a #GObject
  * @first_property_name: name of the first property to get
  * @...: return location for the first property, followed optionally by more name/return location pairs, followed by %NULL
@@ -6535,7 +6547,7 @@
  *
  * Gets a named field from the objects table of associations (see g_object_set_data()).
  *
- * Returns: the data if found, or %NULL if no such data exists.
+ * Returns: (transfer none): the data if found, or %NULL if no such data exists.
  */
 
 
@@ -6655,7 +6667,7 @@
 
 
 /**
- * g_object_new_valist:
+ * g_object_new_valist: (skip)
  * @object_type: the type id of the #GObject subtype to instantiate
  * @first_property_name: the name of the first property
  * @var_args: the value of the first property, followed optionally by more name/value pairs, followed by %NULL
@@ -6811,7 +6823,7 @@
 
 
 /**
- * g_value_set_param_take_ownership:
+ * g_value_set_param_take_ownership: (skip)
  * @value: a valid #GValue of type %G_TYPE_PARAM
  * @param: the #GParamSpec to be set
  *
@@ -6832,8 +6844,8 @@
 
 
 /**
- * g_type_class_unref_uncached:
- * @g_class: The #GTypeClass structure to unreference.
+ * g_type_class_unref_uncached: (skip)
+ * @g_class: (type GObject.TypeClass): The #GTypeClass structure to unreference.
  *
  * A variant of g_type_class_unref() for use in #GTypeClassCacheFunc
  * implementations. It unreferences a class without consulting the chain
@@ -6852,7 +6864,7 @@
  * property name, like "GtkContainer:border-width". This feature is
  * deprecated, so you should always set @type_prefixing to %FALSE.
  *
- * Returns: a newly allocated #GParamSpecPool.
+ * Returns: (transfer none): a newly allocated #GParamSpecPool.
  */
 
 
@@ -6989,7 +7001,7 @@
 
 
 /**
- * g_cclosure_new_object:
+ * g_cclosure_new_object: (skip)
  * @callback_func: the function to invoke
  * @object: a #GObject pointer to pass to @callback_func
  *
@@ -7015,7 +7027,7 @@
 
 
 /**
- * g_object_remove_toggle_ref:
+ * g_object_remove_toggle_ref: (skip)
  * @object: a #GObject
  * @notify: a function to call when this reference is the last reference to the object, or is no longer the last reference.
  * @data: data to pass to @notify
@@ -7119,7 +7131,7 @@
 
 /**
  * g_type_class_unref:
- * @g_class: The #GTypeClass structure to unreference.
+ * @g_class: (type GObject.TypeClass): The #GTypeClass structure to unreference.
  *
  * Decrements the reference count of the class structure being passed in.
  * Once the last reference count of a class has been released, classes
@@ -7138,7 +7150,7 @@
 
 
 /**
- * g_param_spec_long:
+ * g_param_spec_long: (skip)
  * @name: canonical name of the property specified
  * @nick: nick name for the property specified
  * @blurb: description of the property specified
@@ -7172,7 +7184,7 @@
 
 
 /**
- * g_value_set_object_take_ownership:
+ * g_value_set_object_take_ownership: (skip)
  * @value: a valid #GValue of %G_TYPE_OBJECT derived type
  * @v_object: object value to be set
  *
@@ -7296,9 +7308,9 @@
  *
  * Returns the #GTypePlugin structure for @type or
  * %NULL if @type does not have a #GTypePlugin structure.
- * %NULL otherwise.
+ * dynamic type, %NULL otherwise.
  *
- * Returns: The corresponding plugin if @type is a dynamic type,
+ * Returns: (transfer none): The corresponding plugin if @type is a
  */
 
 
@@ -7334,7 +7346,7 @@
 
 
 /**
- * g_param_spec_int:
+ * g_param_spec_int: (skip)
  * @name: canonical name of the property specified
  * @nick: nick name for the property specified
  * @blurb: description of the property specified
@@ -7465,7 +7477,7 @@
 
 
 /**
- * g_object_connect:
+ * g_object_connect: (skip)
  * @object: a #GObject
  * @signal_spec: the spec for the first signal
  * @...: #GCallback for the first signal, followed by data for the first signal, followed optionally by more signal spec/callback/data triples, followed by %NULL
@@ -7541,7 +7553,7 @@
  * NULL);
  * ]|
  *
- * Returns: @object
+ * Returns: (transfer none): @object
  */
 
 
@@ -7699,7 +7711,7 @@
 
 
 /**
- * g_type_add_class_cache_func:
+ * g_type_add_class_cache_func: (skip)
  * @cache_data: data to be passed to @cache_func
  * @cache_func: a #GTypeClassCacheFunc
  *
@@ -7733,10 +7745,11 @@
  * will be the default vtable from g_type_default_interface_ref(), or,
  * if you know the interface has already been loaded,
  * g_type_default_interface_peek().
- * name @property_name, or %NULL if no such property exists.
+ * interface with the name @property_name, or %NULL if no
+ * such property exists.
  *
  * Since: 2.4
- * Returns: the #GParamSpec for the property of the interface with the
+ * Returns: (transfer none): the #GParamSpec for the property of the
  */
 
 
@@ -7990,7 +8003,7 @@
 
 
 /**
- * g_object_set_qdata_full:
+ * g_object_set_qdata_full: (skip)
  * @object: The GObject to set store a user data pointer
  * @quark: A #GQuark, naming the user data pointer
  * @data: An opaque user data pointer
@@ -8021,13 +8034,14 @@
  * g_object_newv:
  * @object_type: the type id of the #GObject subtype to instantiate
  * @n_parameters: the length of the @parameters array
- * @parameters: an array of #GParameter
+ * @parameters: (array length=n_parameters): an array of #GParameter
  *
  * Creates a new instance of a #GObject subtype and sets its properties.
  * Construction parameters (see #G_PARAM_CONSTRUCT, #G_PARAM_CONSTRUCT_ONLY)
  * which are not explicitly specified are set to their default values.
  *
- * Returns: a new instance of @object_type
+ * Rename to: g_object_new
+ * Returns: (type GObject.Object) (transfer full): a new instance of
  */
 
 
@@ -8038,9 +8052,9 @@
  *
  * Returns the #GTypePlugin structure for the dynamic interface
  * have a #GTypePlugin structure. See g_type_add_interface_dynamic().
- * of @instance_type.
+ * interface @interface_type of @instance_type.
  *
- * Returns: the #GTypePlugin for the dynamic interface @interface_type
+ * Returns: (transfer none): the #GTypePlugin for the dynamic
  */
 
 
@@ -8118,12 +8132,12 @@
  * and thus the partial string list would have been freed upon
  * g_object_set_qdata_full().
  *
- * Returns: The user data pointer set, or %NULL
+ * Returns: (transfer full): The user data pointer set, or %NULL
  */
 
 
 /**
- * g_object_set_qdata:
+ * g_object_set_qdata: (skip)
  * @object: The GObject to set store a user data pointer
  * @quark: A #GQuark, naming the user data pointer
  * @data: An opaque user data pointer
@@ -8140,7 +8154,7 @@
 
 
 /**
- * g_type_add_interface_check:
+ * g_type_add_interface_check: (skip)
  * @check_data: data to pass to @check_func
  * @check_func: function to be called after each interface is initialized.
  *
@@ -8238,11 +8252,11 @@
 
 /**
  * g_object_ref:
- * @object: a #GObject
+ * @object: (type GObject.Object): a #GObject
  *
  * Increases the reference count of @object.
  *
- * Returns: the same @object
+ * Returns: (type GObject.Object) (transfer none): the same @object
  */
 
 
@@ -8281,7 +8295,7 @@
 
 
 /**
- * g_type_remove_interface_check:
+ * g_type_remove_interface_check: (skip)
  * @check_data: callback data passed to g_type_add_interface_check()
  * @check_func: callback function passed to g_type_add_interface_check()
  *
@@ -8357,11 +8371,11 @@
  * Calling g_type_default_interface_ref() is useful when you
  * want to make sure that signals and properties for an interface
  * have been installed.
- * g_type_default_interface_unref() when you are done using
- * the interface.
+ * vtable for the interface; call g_type_default_interface_unref()
+ * when you are done using the interface.
  *
  * Since: 2.4
- * Returns: the default vtable for the interface; call
+ * Returns: (type GObject.TypeInterface) (transfer none): the default
  */
 
 
@@ -8377,7 +8391,7 @@
 
 /**
  * g_object_unref:
- * @object: a #GObject
+ * @object: (type GObject.Object): a #GObject
  *
  * Decreases the reference count of @object. When its reference count
  * drops to 0, the object is finalized (i.e. its memory is freed).
@@ -8405,7 +8419,7 @@
 
 
 /**
- * g_value_take_object:
+ * g_value_take_object: (skip)
  * @value: a valid #GValue of %G_TYPE_OBJECT derived type
  * @v_object: object value to be set
  *
@@ -8597,7 +8611,7 @@
  * Remove a specified datum from the object's data associations,
  * without invoking the association's destroy handler.
  *
- * Returns: the data if found, or %NULL if no such data exists.
+ * Returns: (transfer full): the data if found, or %NULL if no such data exists.
  */
 
 
@@ -8624,7 +8638,7 @@
 
 /**
  * g_object_ref_sink:
- * @object: a #GObject
+ * @object: (type GObject.Object): a #GObject
  *
  * Increase the reference count of @object, and possibly remove the
  * <link linkend="floating-ref">floating</link> reference, if @object
@@ -8636,7 +8650,7 @@
  * adds a new normal reference increasing the reference count by one.
  *
  * Since: 2.10
- * Returns: @object
+ * Returns: (type GObject.Object) (transfer none): @object
  */
 
 
@@ -8709,7 +8723,7 @@
 
 
 /**
- * g_param_spec_char:
+ * g_param_spec_char: (skip)
  * @name: canonical name of the property specified
  * @nick: nick name for the property specified
  * @blurb: description of the property specified
@@ -8864,23 +8878,24 @@
 /**
  * g_object_interface_list_properties:
  * @g_iface: any interface vtable for the interface, or the default vtable for the interface
- * @n_properties_p: location to store number of properties returned.
+ * @n_properties_p: (out): location to store number of properties returned.
  *
  * Lists the properties of an interface.Generally, the interface
  * vtable passed in as @g_iface will be the default vtable from
  * g_type_default_interface_ref(), or, if you know the interface has
  * already been loaded, g_type_default_interface_peek().
+ * pointer to an array of pointers to #GParamSpec
  * structures. The paramspecs are owned by GLib, but the
  * array should be freed with g_free() when you are done with
  * it.
  *
  * Since: 2.4
- * Returns: a pointer to an array of pointers to #GParamSpec
+ * Returns: (array length=n_properties_p) (transfer container): a
  */
 
 
 /**
- * g_signal_connect_object:
+ * g_signal_connect_object: (skip)
  * @instance: the instance to connect to.
  * @detailed_signal: a string of the form "signal-name::detail".
  * @c_handler: the #GCallback to connect.
@@ -9256,14 +9271,15 @@
 
 /**
  * g_type_interface_peek:
- * @instance_class: A #GTypeClass structure.
+ * @instance_class: (type GObject.TypeClass): A #GTypeClass structure.
  * @iface_type: An interface ID which this class conforms to.
  *
  * Returns the #GTypeInterface structure of an interface to which the
  * passed in class conforms.
- * by @instance_class, %NULL otherwise
+ * structure of iface_type if implemented by @instance_class, %NULL
+ * otherwise
  *
- * Returns: The GTypeInterface structure of iface_type if implemented
+ * Returns: (type GObject.TypeInterface) (transfer none): The GTypeInterface
  */
 
 
@@ -9432,7 +9448,7 @@
 
 
 /**
- * g_param_spec_internal:
+ * g_param_spec_internal: (skip)
  * @param_type: the #GType for the property; must be derived from #G_TYPE_PARAM
  * @name: the canonical name of the property
  * @nick: the nickname of the property
@@ -9495,10 +9511,10 @@
  * type. Redirection is established by creating a property
  * of type #GParamSpecOverride. See g_object_class_override_property()
  * for an example of the use of this capability.
- * be redirected, or %NULL if none.
+ * paramspec should be redirected, or %NULL if none.
  *
  * Since: 2.4
- * Returns: paramspec to which requests on this paramspec should
+ * Returns: (transfer none): paramspec to which requests on this
  */
 
 
@@ -9751,7 +9767,7 @@
 
 
 /**
- * g_param_spec_override:
+ * g_param_spec_override: (skip)
  * @name: the name of the property.
  * @overridden: The property that is being overridden
  *
@@ -9765,7 +9781,7 @@
 
 
 /**
- * g_type_value_table_peek:
+ * g_type_value_table_peek: (skip)
  * @type: A #GType value.
  *
  * Returns the location of the #GTypeValueTable associated with @type.
@@ -9783,10 +9799,11 @@
  *
  * If the interface type @g_type is currently in use, returns its
  * default interface vtable.
- * if the type is not currently in use.
+ * vtable for the interface, or %NULL if the type is not currently in
+ * use.
  *
  * Since: 2.4
- * Returns: the default vtable for the interface, or %NULL
+ * Returns: (type GObject.TypeInterface) (transfer none): the default
  */
 
 
@@ -10044,7 +10061,7 @@
 
 
 /**
- * g_param_spec_double:
+ * g_param_spec_double: (skip)
  * @name: canonical name of the property specified
  * @nick: nick name for the property specified
  * @blurb: description of the property specified
@@ -10135,7 +10152,7 @@
 
 
 /**
- * g_param_spec_object:
+ * g_param_spec_object: (skip)
  * @name: canonical name of the property specified
  * @nick: nick name for the property specified
  * @blurb: description of the property specified
@@ -10237,7 +10254,7 @@
 
 
 /**
- * g_param_spec_string:
+ * g_param_spec_string: (skip)
  * @name: canonical name of the property specified
  * @nick: nick name for the property specified
  * @blurb: description of the property specified
@@ -10328,7 +10345,7 @@
 
 
 /**
- * g_object_disconnect:
+ * g_object_disconnect: (skip)
  * @object: a #GObject
  * @signal_spec: the spec for the first signal
  * @...: #GCallback for the first signal, followed by data for the first signal, followed optionally by more signal spec/callback/data triples, followed by %NULL

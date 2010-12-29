@@ -608,7 +608,7 @@
  * g_resolver_lookup_by_address:
  * @resolver: a #GResolver
  * @address: the address to reverse-resolve
- * @cancellable: a #GCancellable, or %NULL
+ * @cancellable: (allow-none): a #GCancellable, or %NULL
  * @error: return location for a #GError, or %NULL
  *
  * Synchronously reverse-resolves @address to determine its
@@ -967,9 +967,9 @@
 
 /**
  * g_memory_input_stream_new_from_data:
- * @data: input data
+ * @data: (array length=len) (element-type guint8): input data
  * @len: length of the data, may be -1 if @data is a nul-terminated string
- * @destroy: function that is called to free @data, or %NULL
+ * @destroy: (allow-none): function that is called to free @data, or %NULL
  *
  * Creates a new #GMemoryInputStream with data in memory of a given size.
  *
@@ -1084,7 +1084,7 @@
 
 
 /**
- * g_inet_address_to_bytes:
+ * g_inet_address_to_bytes: (skip)
  * @address: a #GInetAddress
  *
  * Gets the raw binary address data from @address.
@@ -1269,9 +1269,9 @@
  * @service: the service type to look up (eg, "ldap")
  * @protocol: the networking protocol to use for @service (eg, "tcp")
  * @domain: the DNS domain to look up the service in
- * @cancellable: a #GCancellable, or %NULL
- * @callback: callback to call after resolution completes
- * @user_data: data for @callback
+ * @cancellable: (allow-none): a #GCancellable, or %NULL
+ * @callback: (scope async): callback to call after resolution completes
+ * @user_data: (closure): data for @callback
  *
  * Begins asynchronously performing a DNS SRV lookup for the given
  * get the final result. See g_resolver_lookup_service() for more
@@ -1285,7 +1285,7 @@
  * g_proxy_resolver_lookup:
  * @resolver: a #GProxyResolver
  * @uri: a URI representing the destination to connect to
- * @cancellable: a #GCancellable, or %NULL
+ * @cancellable: (allow-none): a #GCancellable, or %NULL
  * @error: return location for a #GError, or %NULL
  *
  * Looks into the system proxy configuration to determine what proxy,
@@ -1301,9 +1301,10 @@
  * <literal>direct://</literal> is used when no proxy is needed.
  * Direct connection should not be attempted unless it is part of the
  * returned array of proxies.
- * g_strfreev().
+ * NULL-terminated array of proxy URIs. Must be freed
+ * with g_strfreev().
  *
- * Returns: (transfer full) (element-type utf8): A NULL-terminated array of proxy URIs. Must be freed with
+ * Returns: (transfer full) (array zero-terminated=1): A
  * Since: 2.26
  */
 
@@ -1447,7 +1448,7 @@
  * @seekable: a #GSeekable.
  * @offset: a #goffset.
  * @type: a #GSeekType.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  * @error: a #GError location to store the error occuring, or %NULL to ignore.
  *
  * Seeks in the stream by the given @offset, modified by @type.
@@ -1593,7 +1594,7 @@
  * g_socket_client_connect:
  * @client: a #GSocketClient.
  * @connectable: a #GSocketConnectable specifying the remote address.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  * @error: #GError for error reporting, or %NULL to ignore.
  *
  * Tries to resolve the @connectable and make a network connection to it..
@@ -1952,10 +1953,10 @@
 
 
 /**
- * g_socket_create_source:
+ * g_socket_create_source: (skip)
  * @socket: a #GSocket
  * @condition: a #GIOCondition mask to monitor
- * @cancellable: a %GCancellable or %NULL
+ * @cancellable: (allow-none): a %GCancellable or %NULL
  *
  * Creates a %GSource that can be attached to a %GMainContext to monitor
  * for the availibility of the specified @condition on the socket.
@@ -2427,9 +2428,9 @@
  * @emblem: a #GEmblem from which the icon should be extracted.
  *
  * Gives back the icon from @emblem.
- * and should not be modified or freed.
+ * the emblem and should not be modified or freed.
  *
- * Returns: (transfer full): a #GIcon. The returned object belongs to the emblem
+ * Returns: (transfer none): a #GIcon. The returned object belongs to
  * Since: 2.18
  */
 
@@ -2676,7 +2677,7 @@
 
 
 /**
- * GMemoryOutputStream:realloc-function:
+ * GMemoryOutputStream:realloc-function: (skip)
  *
  * Function with realloc semantics called to enlarge the buffer.
  *
@@ -2813,9 +2814,9 @@
  * g_socket_send_to:
  * @socket: a #GSocket
  * @address: a #GSocketAddress, or %NULL
- * @buffer: the buffer containing the data to send.
+ * @buffer: (array length=size): the buffer containing the data to send.
  * @size: the number of bytes to send
- * @cancellable: a %GCancellable or %NULL
+ * @cancellable: (allow-none): a %GCancellable or %NULL
  * @error: #GError for error reporting, or %NULL to ignore.
  *
  * Tries to send @size bytes from @buffer to @address. If @address is
@@ -3600,7 +3601,7 @@
 /**
  * g_unix_fd_list_peek_fds:
  * @list: a #GUnixFDList
- * @length: pointer to the length of the returned array, or %NULL
+ * @length: (out) (allow-none): pointer to the length of the returned array, or %NULL
  *
  * Returns the array of file descriptors that is contained in this
  * object.
@@ -3612,8 +3613,9 @@
  * terminated with -1.
  * This function never returns %NULL. In case there are no file
  * descriptors contained in @list, an empty array is returned.
+ * descriptors
  *
- * Returns: an array of file descriptors
+ * Returns: (array length=length) (transfer none): an array of file
  * Since: 2.24
  */
 
@@ -3716,6 +3718,9 @@
  * Gets a list of recommended #GAppInfos for a given content type, i.e.
  * those applications which claim to support the given content type exactly,
  * and not by MIME type subclassing.
+ * Note that the first application of the list is the last used one, i.e.
+ * the last one for which #g_app_info_set_as_last_used_for_type has been
+ * called.
  * for given @content_type or %NULL on error.
  *
  * Returns: (element-type GAppInfo) (transfer full): #GList of #GAppInfos
@@ -3781,7 +3786,7 @@
  * of the URI, up to but not including the ':', e.g. "http",
  * "ftp" or "sip".
  *
- * Returns: #GAppInfo for given @uri_scheme or %NULL on error.
+ * Returns: (transfer full): #GAppInfo for given @uri_scheme or %NULL on error.
  */
 
 
@@ -3809,7 +3814,7 @@
  * g_socket_listener_accept:
  * @listener: a #GSocketListener
  * @source_object: (out) (transfer none) (allow-none): location where #GObject pointer will be stored, or %NULL
- * @cancellable: optional #GCancellable object, %NULL to ignore.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  * @error: #GError for error reporting, or %NULL to ignore.
  *
  * Blocks waiting for a client to connect to any of the sockets added
@@ -3924,9 +3929,9 @@
  * @emblemed: a #GEmblemedIcon
  *
  * Gets the list of emblems for the @icon.
- * is owned by @emblemed
+ * #GEmblem <!-- -->s that is owned by @emblemed
  *
- * Returns: (element-type utf8) (transfer none): a #GList of #GEmblem <!-- -->s that
+ * Returns: (element-type Gio.Emblem) (transfer none): a #GList of
  * Since: 2.18
  */
 
@@ -4736,13 +4741,23 @@
  * @proxy: a #GProxy
  * @connection: a #GIOStream
  * @proxy_address: a #GProxyAddress
- * @cancellable: a #GCancellable
- * @callback: a #GAsyncReadyCallback
- * @user_data: callback data
+ * @cancellable: (allow-none): a #GCancellable
+ * @callback: (scope async): a #GAsyncReadyCallback
+ * @user_data: (closure): callback data
  *
  * Asynchronous version of g_proxy_connect().
  *
  * Since: 2.26
+ */
+
+
+/**
+ * GSettings:delay-apply:
+ *
+ * Whether the #GSettings object is in 'delay-apply' mode. See
+ * g_settings_delay() for details.
+ *
+ * Since: 2.28
  */
 
 
@@ -4752,7 +4767,7 @@
  * @service: the service type to look up (eg, "ldap")
  * @protocol: the networking protocol to use for @service (eg, "tcp")
  * @domain: the DNS domain to look up the service in
- * @cancellable: a #GCancellable, or %NULL
+ * @cancellable: (allow-none): a #GCancellable, or %NULL
  * @error: return location for a #GError, or %NULL
  *
  * Synchronously performs a DNS SRV lookup for the given @service and
@@ -5045,7 +5060,7 @@
  * @address: a pointer to a #GSocketAddress pointer, or %NULL
  * @buffer: a buffer to read data into (which should be at least @size bytes long).
  * @size: the number of bytes you want to read from the socket
- * @cancellable: a %GCancellable or %NULL
+ * @cancellable: (allow-none): a %GCancellable or %NULL
  * @error: #GError for error reporting, or %NULL to ignore.
  *
  * Receive data (up to @size bytes) from a socket.
@@ -5571,7 +5586,7 @@
  * g_socket_listener_accept_socket:
  * @listener: a #GSocketListener
  * @source_object: (out) (transfer none) (allow-none): location where #GObject pointer will be stored, or %NULL.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  * @error: #GError for error reporting, or %NULL to ignore.
  *
  * Blocks waiting for a client to connect to any of the sockets added
@@ -5888,8 +5903,9 @@
  * If your application or library provides one or more #GIcon
  * implementations you need to ensure that each #GType is registered
  * with the type system prior to calling g_icon_new_for_string().
+ * interface or %NULL if @error is set.
  *
- * Returns: An object implementing the #GIcon interface or %NULL if
+ * Returns: (transfer full): An object implementing the #GIcon
  * Since: 2.20
  */
 
@@ -6166,7 +6182,7 @@
  * @level: a socket level
  * @type: a socket control message type for the given @level
  * @size: the size of the data in bytes
- * @data: pointer to the message data
+ * @data: (array length=size) (element-type guint8): pointer to the message data
  *
  * Tries to deserialize a socket control message of a given
  * of #GSocketControlMessage if they can understand this kind
@@ -6614,7 +6630,7 @@
 /**
  * g_file_enumerator_close:
  * @enumerator: a #GFileEnumerator.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  * @error: location to store the error occuring, or %NULL to ignore
  *
  * Releases all resources used by this enumerator, making the
@@ -6640,20 +6656,9 @@
 
 
 /**
- * g_file_io_stream_query_info_async:
- * @stream: a #GFileIOStream.
- * @attributes: a file attribute query string.
- * @io_priority: the <link linkend="gio-GIOScheduler">I/O priority</link> of the request.
- * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
- * @callback: (scope async): callback to call when the request is satisfied
- * @user_data: (closure): the data to pass to callback function
+ * GThemedIcon:names:
  *
- * Asynchronously queries the @stream for a #GFileInfo. When completed,
- * finish the operation with g_file_io_stream_query_info_finish().
- * For the synchronous version of this function, see
- * g_file_io_stream_query_info().
- *
- * Since: 2.22
+ * A %NULL-terminated array of icon names.
  */
 
 
@@ -6665,14 +6670,14 @@
 
 
 /**
- * g_memory_output_stream_get_data: (skip)
+ * g_memory_output_stream_get_data:
  * @ostream: a #GMemoryOutputStream
  *
  * Gets any loaded data from the @ostream.
  * Note that the returned pointer may become invalid on the next
  * write or truncate operation on the stream.
  *
- * Returns: pointer to the stream's data
+ * Returns: (transfer none): pointer to the stream's data
  */
 
 
@@ -6783,7 +6788,7 @@
  * @client: a #GSocketClient
  * @uri: A network URI
  * @default_port: the default port to connect to
- * @cancellable: a #GCancellable, or %NULL
+ * @cancellable: (allow-none): a #GCancellable, or %NULL
  * @error: a pointer to a #GError, or %NULL
  *
  * This is a helper function for g_socket_client_connect().
@@ -6976,8 +6981,9 @@
  * @must_support_uris: if %TRUE, the #GAppInfo is expected to support URIs
  *
  * Gets the #GAppInfo that corresponds to a given content type.
+ * %NULL on error.
  *
- * Returns: #GAppInfo for given @content_type or %NULL on error.
+ * Returns: (transfer full): #GAppInfo for given @content_type or
  */
 
 
@@ -7070,7 +7076,7 @@
  * @address: a #GSocketAddress
  * @type: a #GSocketType
  * @protocol: a #GSocketProtocol
- * @source_object: Optional #GObject identifying this source
+ * @source_object: (allow-none): Optional #GObject identifying this source
  * @effective_address: (out) (allow-none): location to store the address that was bound to, or %NULL.
  * @error: #GError for error reporting, or %NULL to ignore.
  *
@@ -7462,9 +7468,20 @@
 
 
 /**
- * GThemedIcon:names:
+ * g_file_io_stream_query_info_async:
+ * @stream: a #GFileIOStream.
+ * @attributes: a file attribute query string.
+ * @io_priority: the <link linkend="gio-GIOScheduler">I/O priority</link> of the request.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
+ * @callback: (scope async): callback to call when the request is satisfied
+ * @user_data: (closure): the data to pass to callback function
  *
- * A %NULL-terminated array of icon names.
+ * Asynchronously queries the @stream for a #GFileInfo. When completed,
+ * finish the operation with g_file_io_stream_query_info_finish().
+ * For the synchronous version of this function, see
+ * g_file_io_stream_query_info().
+ *
+ * Since: 2.22
  */
 
 
@@ -7628,7 +7645,7 @@
 
 
 /**
- * g_memory_output_stream_new:
+ * g_memory_output_stream_new: (skip)
  * @data: pointer to a chunk of memory to use, or %NULL
  * @size: the size of @data
  * @realloc_function: a function with realloc() semantics (like g_realloc()) to be called when @data needs to be grown, or %NULL
@@ -8045,8 +8062,8 @@
  * g_loadable_icon_load:
  * @icon: a #GLoadableIcon.
  * @size: an integer.
- * @type: a location to store the type of the loaded icon, %NULL to ignore.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
+ * @type: (out) (allow-none): a location to store the type of the loaded icon, %NULL to ignore.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  * @error: a #GError location to store the error occuring, or %NULL to ignore.
  *
  * Loads a loadable icon. For the asynchronous version of this function,
@@ -8077,9 +8094,9 @@
  * @client: a #GSocketClient
  * @uri: a network uri
  * @default_port: the default port to connect to
- * @cancellable: a #GCancellable, or %NULL
- * @callback: a #GAsyncReadyCallback
- * @user_data: user data for the callback
+ * @cancellable: (allow-none): a #GCancellable, or %NULL
+ * @callback: (scope async): a #GAsyncReadyCallback
+ * @user_data: (closure): user data for the callback
  *
  * This is the asynchronous version of g_socket_client_connect_to_uri().
  * When the operation is finished @callback will be
@@ -8684,7 +8701,7 @@
  *
  * Gets the origin of the emblem.
  *
- * Returns: the origin of the emblem
+ * Returns: (transfer none): the origin of the emblem
  * Since: 2.18
  */
 
@@ -9426,7 +9443,7 @@
 
 
 /**
- * g_cancellable_source_new:
+ * g_cancellable_source_new: (skip)
  * @cancellable: a #GCancellable, or %NULL
  *
  * Creates a source that triggers if @cancellable is cancelled and
@@ -9436,7 +9453,7 @@
  * For convenience, you can call this with a %NULL #GCancellable,
  * in which case the source will never trigger.
  *
- * Returns: the new #GSource.
+ * Returns: (transfer full): the new #GSource.
  * Since: 2.28
  */
 
@@ -9564,9 +9581,9 @@
 /**
  * g_pollable_output_stream_write_nonblocking:
  * @stream: a #GPollableOutputStream
- * @buffer: a buffer to write data from
+ * @buffer: (array length=size) (element-type guint8): a buffer to write data from
  * @size: the number of bytes you want to write
- * @cancellable: a #GCancellable, or %NULL
+ * @cancellable: (allow-none): a #GCancellable, or %NULL
  * @error: #GError for error reporting, or %NULL to ignore.
  *
  * Attempts to write up to @size bytes from @buffer to @stream, as
@@ -9581,6 +9598,7 @@
  * to having been cancelled.
  * %G_IO_ERROR_WOULD_BLOCK).
  *
+ * Virtual: write_nonblocking
  * Returns: the number of bytes written, or -1 on error (including
  */
 
@@ -9777,9 +9795,9 @@
 /**
  * g_socket_address_enumerator_next_async:
  * @enumerator: a #GSocketAddressEnumerator
- * @cancellable: optional #GCancellable object, %NULL to ignore.
- * @callback: a #GAsyncReadyCallback to call when the request is satisfied
- * @user_data: the data to pass to callback function
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
+ * @callback: (scope async): a #GAsyncReadyCallback to call when the request is satisfied
+ * @user_data: (closure): the data to pass to callback function
  *
  * Asynchronously retrieves the next #GSocketAddress from @enumerator
  * and then calls @callback, which must call
@@ -10500,7 +10518,7 @@
  * g_socket_condition_wait:
  * @socket: a #GSocket
  * @condition: a #GIOCondition mask to wait for
- * @cancellable: a #GCancellable, or %NULL
+ * @cancellable: (allow-none): a #GCancellable, or %NULL
  * @error: a #GError pointer, or %NULL
  *
  * Waits for @condition to become true on @socket. When the condition
@@ -10550,9 +10568,9 @@
  * @client: a #GSocketClient
  * @domain: a domain name
  * @service: the name of the service to connect to
- * @cancellable: a #GCancellable, or %NULL
- * @callback: a #GAsyncReadyCallback
- * @user_data: user data for the callback
+ * @cancellable: (allow-none): a #GCancellable, or %NULL
+ * @callback: (scope async): a #GAsyncReadyCallback
+ * @user_data: (closure): user data for the callback
  *
  * This is the asynchronous version of
  * g_socket_client_connect_to_service().
@@ -10599,7 +10617,7 @@
  * @client: a #GSocketConnection
  * @domain: a domain name
  * @service: the name of the service to connect to
- * @cancellable: a #GCancellable, or %NULL
+ * @cancellable: (allow-none): a #GCancellable, or %NULL
  * @error: a pointer to a #GError, or %NULL
  * @returns: (transfer full): a #GSocketConnection if successful, or %NULL on error
  *
@@ -10729,9 +10747,9 @@
  * g_resolver_lookup_by_name_async:
  * @resolver: a #GResolver
  * @hostname: the hostname to look up the address of
- * @cancellable: a #GCancellable, or %NULL
- * @callback: callback to call after resolution completes
- * @user_data: data for @callback
+ * @cancellable: (allow-none): a #GCancellable, or %NULL
+ * @callback: (scope async): callback to call after resolution completes
+ * @user_data: (closure): data for @callback
  *
  * Begins asynchronously resolving @hostname to determine its
  * associated IP address(es), and eventually calls @callback, which
@@ -10974,7 +10992,7 @@
  * @proxy: a #GProxy
  * @connection: a #GIOStream
  * @proxy_address: a #GProxyAddress
- * @cancellable: a #GCancellable
+ * @cancellable: (allow-none): a #GCancellable
  * @error: return #GError
  *
  * Given @connection to communicate with a proxy (eg, a
@@ -11178,7 +11196,7 @@
 
 
 /**
- * GMemoryOutputStream:destroy-function:
+ * GMemoryOutputStream:destroy-function: (skip)
  *
  * Function called with the buffer as argument when the stream is destroyed.
  *
@@ -11697,13 +11715,13 @@
 /**
  * g_converter_convert:
  * @converter: a #GConverter.
- * @inbuf: the buffer containing the data to convert.
+ * @inbuf: (array length=inbuf_size) (element-type guint8): the buffer containing the data to convert.
  * @inbuf_size: the number of bytes in @inbuf
  * @outbuf: a buffer to write converted data in.
  * @outbuf_size: the number of bytes in @outbuf, must be at least one
  * @flags: a #GConvertFlags controlling the conversion details
- * @bytes_read: will be set to the number of bytes read from @inbuf on success
- * @bytes_written: will be set to the number of bytes written to @outbuf on success
+ * @bytes_read: (out): will be set to the number of bytes read from @inbuf on success
+ * @bytes_written: (out): will be set to the number of bytes written to @outbuf on success
  * @error: location to store the error occuring, or %NULL to ignore
  *
  * This is the main operation used when converting data. It is to be called
@@ -11875,7 +11893,7 @@
  * @client: a #GSocketClient
  * @host_and_port: the name and optionally port of the host to connect to
  * @default_port: the default port to connect to
- * @cancellable: a #GCancellable, or %NULL
+ * @cancellable: (allow-none): a #GCancellable, or %NULL
  * @error: a pointer to a #GError, or %NULL
  *
  * This is a helper function for g_socket_client_connect().
@@ -12468,7 +12486,7 @@
  * g_memory_output_stream_get_size:
  * @ostream: a #GMemoryOutputStream
  *
- * Gets the size of the currently allocated data area (availible from
+ * Gets the size of the currently allocated data area (available from
  * g_memory_output_stream_get_data()). If the stream isn't
  * growable (no realloc was passed to g_memory_output_stream_new()) then
  * this is the maximum size of the stream and further writes
@@ -13126,7 +13144,7 @@
 /**
  * g_unix_connection_receive_credentials:
  * @connection: A #GUnixConnection.
- * @cancellable: A #GCancellable or %NULL.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
  *
  * Receives credentials from the sending end of the connection.  The
@@ -13153,9 +13171,10 @@
  * Call this function to obtain the array of proxy URIs when
  * g_proxy_resolver_lookup_async() is complete. See
  * g_proxy_resolver_lookup() for more details.
- * g_strfreev().
+ * NULL-terminated array of proxy URIs. Must be freed
+ * with g_strfreev().
  *
- * Returns: (transfer full) (element-type utf8): A NULL-terminated array of proxy URIs. Must be freed with
+ * Returns: (transfer full) (array zero-terminated=1): A
  * Since: 2.26
  */
 
@@ -13175,9 +13194,9 @@
  * g_socket_client_connect_async:
  * @client: a #GTcpClient
  * @connectable: a #GSocketConnectable specifying the remote address.
- * @cancellable: a #GCancellable, or %NULL
- * @callback: a #GAsyncReadyCallback
- * @user_data: user data for the callback
+ * @cancellable: (allow-none): a #GCancellable, or %NULL
+ * @callback: (scope async): a #GAsyncReadyCallback
+ * @user_data: (closure): user data for the callback
  *
  * This is the asynchronous version of g_socket_client_connect().
  * When the operation is finished @callback will be
@@ -13692,6 +13711,17 @@
 
 
 /**
+ * G_TYPE_FROM_INSTANCE:
+ * @instance: Location of a valid #GTypeInstance structure.
+ *
+ * Get the type identifier from a given @instance structure.
+ * This macro should only be used in type implementations.
+ *
+ * Returns: the #GType
+ */
+
+
+/**
  * g_file_info_set_is_symlink:
  * @info: a #GFileInfo.
  * @is_symlink: a #gboolean.
@@ -14169,7 +14199,7 @@
  *
  * Gets the main icon for @emblemed.
  *
- * Returns: (transfer full): a #GIcon that is owned by @emblemed
+ * Returns: (transfer none): a #GIcon that is owned by @emblemed
  * Since: 2.18
  */
 
@@ -14299,8 +14329,9 @@
  *
  * Lookup "gio-proxy" extension point for a proxy implementation that supports
  * specified protocol.
+ * is not supported.
  *
- * Returns: return a #GProxy or NULL if protocol is not supported.
+ * Returns: (transfer full): return a #GProxy or NULL if protocol
  * Since: 2.26
  */
 
@@ -14488,7 +14519,7 @@
  * g_socket_listener_accept_socket_finish:
  * @listener: a #GSocketListener
  * @result: a #GAsyncResult.
- * @source_object: Optional #GObject identifying this source
+ * @source_object: (out) (transfer none) (allow-none): Optional #GObject identifying this source
  * @error: a #GError location to store the error occuring, or %NULL to ignore.
  *
  * Finishes an async accept operation. See g_socket_listener_accept_socket_async()
@@ -14848,7 +14879,7 @@
  * @cancellable: a #GCancellable object
  *
  * Pushes @cancellable onto the cancellable stack. The current
- * cancllable can then be recieved using g_cancellable_get_current().
+ * cancellable can then be recieved using g_cancellable_get_current().
  * This is useful when implementing cancellable operations in
  * code that does not allow you to pass down the cancellable object.
  * This is typically called automatically by e.g. #GFile operations,
@@ -15014,9 +15045,9 @@
  * g_file_enumerator_close_async:
  * @enumerator: a #GFileEnumerator.
  * @io_priority: the <link linkend="io-priority">I/O priority</link> of the request.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
- * @callback: a #GAsyncReadyCallback to call when the request is satisfied
- * @user_data: the data to pass to callback function
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
+ * @callback: (scope async): a #GAsyncReadyCallback to call when the request is satisfied
+ * @user_data: (closure): the data to pass to callback function
  *
  * Asynchronously closes the file enumerator.
  * If @cancellable is not %NULL, then the operation can be cancelled by
@@ -15182,12 +15213,12 @@
  * g_socket_send_message:
  * @socket: a #GSocket
  * @address: a #GSocketAddress, or %NULL
- * @vectors: an array of #GOutputVector structs
+ * @vectors: (array length=num_vectors): an array of #GOutputVector structs
  * @num_vectors: the number of elements in @vectors, or -1
- * @messages: a pointer to an array of #GSocketControlMessages, or %NULL.
+ * @messages: (array length=num_messages) (allow-none): a pointer to an array of #GSocketControlMessages, or %NULL.
  * @num_messages: number of elements in @messages, or -1.
  * @flags: an int containing #GSocketMsgFlags flags
- * @cancellable: a %GCancellable or %NULL
+ * @cancellable: (allow-none): a %GCancellable or %NULL
  * @error: #GError for error reporting, or %NULL to ignore.
  *
  * Send data to @address on @socket.  This is the most complicated and
@@ -15773,7 +15804,7 @@
  * g_socket_listener_accept_finish:
  * @listener: a #GSocketListener
  * @result: a #GAsyncResult.
- * @source_object: Optional #GObject identifying this source
+ * @source_object: (out) (transfer none) (allow-none): Optional #GObject identifying this source
  * @error: a #GError location to store the error occuring, or %NULL to ignore.
  *
  * Finishes an async accept operation. See g_socket_listener_accept_async()
@@ -16357,7 +16388,7 @@
  * g_resolver_lookup_by_name:
  * @resolver: a #GResolver
  * @hostname: the hostname to look up
- * @cancellable: a #GCancellable, or %NULL
+ * @cancellable: (allow-none): a #GCancellable, or %NULL
  * @error: return location for a #GError, or %NULL
  *
  * Synchronously resolves @hostname to determine its associated IP
@@ -16388,9 +16419,9 @@
 /**
  * g_socket_listener_accept_async:
  * @listener: a #GSocketListener
- * @cancellable: a #GCancellable, or %NULL
- * @callback: a #GAsyncReadyCallback
- * @user_data: user data for the callback
+ * @cancellable: (allow-none): a #GCancellable, or %NULL
+ * @callback: (scope async): a #GAsyncReadyCallback
+ * @user_data: (closure): user data for the callback
  *
  * This is the asynchronous version of g_socket_listener_accept().
  * When the operation is finished @callback will be
@@ -16616,7 +16647,7 @@
  * g_seekable_truncate:
  * @seekable: a #GSeekable.
  * @offset: a #goffset.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  * @error: a #GError location to store the error occuring, or %NULL to ignore.
  *
  * Truncates a stream with a given #offset.
@@ -16698,9 +16729,9 @@
  * @client: a #GTcpClient
  * @host_and_port: the name and optionally the port of the host to connect to
  * @default_port: the default port to connect to
- * @cancellable: a #GCancellable, or %NULL
- * @callback: a #GAsyncReadyCallback
- * @user_data: user data for the callback
+ * @cancellable: (allow-none): a #GCancellable, or %NULL
+ * @callback: (scope async): a #GAsyncReadyCallback
+ * @user_data: (closure): user data for the callback
  *
  * This is the asynchronous version of g_socket_client_connect_to_host().
  * When the operation is finished @callback will be
@@ -16752,7 +16783,7 @@
 
 /**
  * g_unix_fd_list_new_from_array:
- * @fds: the initial list of file descriptors
+ * @fds: (array length=n_fds): the initial list of file descriptors
  * @n_fds: the length of #fds, or -1
  *
  * Creates a new #GUnixFDList containing the file descriptors given in
@@ -16770,9 +16801,9 @@
  * g_loadable_icon_load_async:
  * @icon: a #GLoadableIcon.
  * @size: an integer.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
- * @callback: a #GAsyncReadyCallback to call when the request is satisfied
- * @user_data: the data to pass to callback function
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
+ * @callback: (scope async): a #GAsyncReadyCallback to call when the request is satisfied
+ * @user_data: (closure): the data to pass to callback function
  *
  * Loads an icon asynchronously. To finish this function, see
  * g_loadable_icon_load_finish(). For the synchronous, blocking
@@ -17101,7 +17132,7 @@
 
 
 /**
- * g_pollable_source_new:
+ * g_pollable_source_new: (skip)
  * @pollable_stream: the stream associated with the new source
  *
  * Utility method for #GPollableInputStream and #GPollableOutputStream
@@ -17110,7 +17141,7 @@
  * anything on its own; use g_source_add_child_source() to add other
  * sources to it to cause it to trigger.
  *
- * Returns: the new #GSource.
+ * Returns: (transfer full): the new #GSource.
  * Since: 2.28
  */
 
@@ -18311,9 +18342,9 @@
 /**
  * g_socket_listener_accept_socket_async:
  * @listener: a #GSocketListener
- * @cancellable: a #GCancellable, or %NULL
- * @callback: a #GAsyncReadyCallback
- * @user_data: user data for the callback
+ * @cancellable: (allow-none): a #GCancellable, or %NULL
+ * @callback: (scope async): a #GAsyncReadyCallback
+ * @user_data: (closure): user data for the callback
  *
  * This is the asynchronous version of g_socket_listener_accept_socket().
  * When the operation is finished @callback will be
@@ -18426,7 +18457,7 @@
 /**
  * g_unix_fd_list_steal_fds:
  * @list: a #GUnixFDList
- * @length: pointer to the length of the returned array, or %NULL
+ * @length: (out) (allow-none): pointer to the length of the returned array, or %NULL
  *
  * Returns the array of file descriptors that is contained in this
  * object.
@@ -18441,8 +18472,9 @@
  * terminated with -1.
  * This function never returns %NULL. In case there are no file
  * descriptors contained in @list, an empty array is returned.
+ * descriptors
  *
- * Returns: an array of file descriptors
+ * Returns: (array length=length) (transfer full): an array of file
  * Since: 2.24
  */
 
@@ -19902,7 +19934,7 @@
  * @socket: a #GSocket
  * @buffer: a buffer to read data into (which should be at least @size bytes long).
  * @size: the number of bytes you want to read from the socket
- * @cancellable: a %GCancellable or %NULL
+ * @cancellable: (allow-none): a %GCancellable or %NULL
  * @error: #GError for error reporting, or %NULL to ignore.
  *
  * Receive data (up to @size bytes) from a socket. This is mainly used by
@@ -19947,7 +19979,7 @@
  * g_socket_connect:
  * @socket: a #GSocket.
  * @address: a #GSocketAddress specifying the remote address.
- * @cancellable: a %GCancellable or %NULL
+ * @cancellable: (allow-none): a %GCancellable or %NULL
  * @error: #GError for error reporting, or %NULL to ignore.
  *
  * Connect the socket to the specified remote address.
@@ -20349,9 +20381,9 @@
  * g_resolver_lookup_by_address_async:
  * @resolver: a #GResolver
  * @address: the address to reverse-resolve
- * @cancellable: a #GCancellable, or %NULL
- * @callback: callback to call after resolution completes
- * @user_data: data for @callback
+ * @cancellable: (allow-none): a #GCancellable, or %NULL
+ * @callback: (scope async): callback to call after resolution completes
+ * @user_data: (closure): data for @callback
  *
  * Begins asynchronously reverse-resolving @address to determine its
  * associated hostname, and eventually calls @callback, which must
@@ -20431,7 +20463,7 @@
  * g_socket_listener_add_socket:
  * @listener: a #GSocketListener
  * @socket: a listening #GSocket
- * @source_object: Optional #GObject identifying this source
+ * @source_object: (allow-none): Optional #GObject identifying this source
  * @error: #GError for error reporting, or %NULL to ignore.
  *
  * Adds @socket to the set of sockets that we try to accept
@@ -21484,9 +21516,9 @@
 /**
  * g_memory_input_stream_add_data:
  * @stream: a #GMemoryInputStream
- * @data: input data
+ * @data: (array length=len) (element-type guint8): input data
  * @len: length of the data, may be -1 if @data is a nul-terminated string
- * @destroy: function that is called to free @data, or %NULL
+ * @destroy: (allow-none): function that is called to free @data, or %NULL
  *
  * Appends @data to data that can be read from the input stream
  */
@@ -22345,9 +22377,9 @@
 /**
  * g_socket_send:
  * @socket: a #GSocket
- * @buffer: the buffer containing the data to send.
+ * @buffer: (array length=size): the buffer containing the data to send.
  * @size: the number of bytes to send
- * @cancellable: a %GCancellable or %NULL
+ * @cancellable: (allow-none): a %GCancellable or %NULL
  * @error: #GError for error reporting, or %NULL to ignore.
  *
  * Tries to send @size bytes from @buffer on the socket. This is
@@ -23189,9 +23221,9 @@
  * specification for more on x-content types.
  * This function is useful in the implementation of
  * g_mount_guess_content_type().
- * or %NULL. Free with g_strfreev()
+ * array of zero or more content types, or %NULL. Free with g_strfreev()
  *
- * Returns: (transfer full): an %NULL-terminated array of zero or more content types,
+ * Returns: (transfer full) (array zero-terminated=1): an %NULL-terminated
  * Since: 2.18
  */
 
@@ -23419,7 +23451,7 @@
 /**
  * g_app_info_launch_uris:
  * @appinfo: a #GAppInfo
- * @uris: (element-type char*): a #GList containing URIs to launch.
+ * @uris: (element-type utf8): a #GList containing URIs to launch.
  * @launch_context: (allow-none): a #GAppLaunchContext or %NULL
  * @error: a #GError
  *
@@ -23481,13 +23513,17 @@
 
 
 /**
- * G_TYPE_FROM_INSTANCE:
- * @instance: Location of a valid #GTypeInstance structure.
+ * g_app_info_set_as_last_used_for_type:
+ * @appinfo: a #GAppInfo.
+ * @content_type: the content type.
+ * @error: a #GError.
  *
- * Get the type identifier from a given @instance structure.
- * This macro should only be used in type implementations.
+ * Sets the application as the last used application for a given type.
+ * This will make the application appear as first in the list returned by
+ * #g_app_info_get_recommended_for_type, regardless of the default application
+ * for that content type.
  *
- * Returns: the #GType
+ * Returns: %TRUE on success, %FALSE on error.
  */
 
 
@@ -23508,7 +23544,7 @@
 
 /**
  * g_themed_icon_new_from_names:
- * @iconnames: an array of strings containing icon names.
+ * @iconnames: (array length=len): an array of strings containing icon names.
  * @len: the length of the @iconnames array, or -1 if @iconnames is %NULL-terminated
  *
  * Creates a new themed icon for @iconnames.
@@ -23572,7 +23608,7 @@
 /**
  * g_socket_accept:
  * @socket: a #GSocket.
- * @cancellable: a %GCancellable or %NULL
+ * @cancellable: (allow-none): a %GCancellable or %NULL
  * @error: #GError for error reporting, or %NULL to ignore.
  *
  * Accept incoming connections on a connection-based socket. This removes
@@ -23906,9 +23942,9 @@
 
 
 /**
- * g_pollable_output_stream_create_source:
+ * g_pollable_output_stream_create_source: (skip)
  * @stream: a #GPollableOutputStream.
- * @cancellable: a #GCancellable, or %NULL
+ * @cancellable: (allow-none): a #GCancellable, or %NULL
  *
  * Creates a #GSource that triggers when @stream can be written, or
  * source is of the #GPollableSourceFunc type.
@@ -23917,7 +23953,7 @@
  * triggers, so you should use g_pollable_output_stream_write_nonblocking()
  * rather than g_output_stream_write() from the callback.
  *
- * Returns: a new #GSource
+ * Returns: (transfer full): a new #GSource
  * Since: 2.28
  */
 
@@ -24038,9 +24074,9 @@
  * @enumerator: a #GFileEnumerator.
  * @num_files: the number of file info objects to request
  * @io_priority: the <link linkend="gioscheduler">io priority</link> of the request.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
- * @callback: a #GAsyncReadyCallback to call when the request is satisfied
- * @user_data: the data to pass to callback function
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
+ * @callback: (scope async): a #GAsyncReadyCallback to call when the request is satisfied
+ * @user_data: (closure): the data to pass to callback function
  *
  * Request information for a number of files from the enumerator asynchronously.
  * When all i/o for the operation is finished the @callback will be called with
@@ -24690,10 +24726,10 @@
 /**
  * g_socket_send_with_blocking:
  * @socket: a #GSocket
- * @buffer: the buffer containing the data to send.
+ * @buffer: (array length=size): the buffer containing the data to send.
  * @size: the number of bytes to send
  * @blocking: whether to do blocking or non-blocking I/O
- * @cancellable: a %GCancellable or %NULL
+ * @cancellable: (allow-none): a %GCancellable or %NULL
  * @error: #GError for error reporting, or %NULL to ignore.
  *
  * This behaves exactly the same as g_socket_send(), except that
@@ -25048,7 +25084,7 @@
 /**
  * g_socket_address_enumerator_next:
  * @enumerator: a #GSocketAddressEnumerator
- * @cancellable: optional #GCancellable object, %NULL to ignore.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  * @error: a #GError.
  *
  * Retrieves the next #GSocketAddress from @enumerator. Note that this
@@ -26094,7 +26130,7 @@
 /**
  * g_app_info_launch_default_for_uri:
  * @uri: the uri to show
- * @launch_context: an optional #GAppLaunchContext.
+ * @launch_context: (allow-none): an optional #GAppLaunchContext.
  * @error: a #GError.
  *
  * Utility function that launches the default application
@@ -26312,7 +26348,7 @@
 /**
  * g_unix_fd_message_steal_fds:
  * @message: a #GUnixFDMessage
- * @length: pointer to the length of the returned array, or %NULL
+ * @length: (out) (allow-none): pointer to the length of the returned array, or %NULL
  *
  * Returns the array of file descriptors that is contained in this
  * object.
@@ -26326,8 +26362,9 @@
  * terminated with -1.
  * This function never returns %NULL. In case there are no file
  * descriptors contained in @message, an empty array is returned.
+ * descriptors
  *
- * Returns: an array of file descriptors
+ * Returns: (array length=length) (transfer full): an array of file
  * Since: 2.22
  */
 
@@ -26357,7 +26394,7 @@
 /**
  * g_file_enumerator_next_file:
  * @enumerator: a #GFileEnumerator.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  * @error: location to store the error occuring, or %NULL to ignore
  *
  * Returns information for the next file in the enumerated object.
@@ -26751,7 +26788,7 @@
 /**
  * g_unix_connection_send_credentials:
  * @connection: A #GUnixConnection.
- * @cancellable: A #GCancellable or %NULL.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
  *
  * Passes the credentials of the current user the receiving side
@@ -27622,7 +27659,7 @@
 /**
  * g_socket_listener_add_any_inet_port:
  * @listener: a #GSocketListener
- * @source_object: Optional #GObject identifying this source
+ * @source_object: (allow-none): Optional #GObject identifying this source
  * @error: a #GError location to store the error occuring, or %NULL to ignore.
  *
  * Listens for TCP connections on any available port number for both
@@ -27788,7 +27825,7 @@
 
 /**
  * g_simple_async_report_gerror_in_idle:
- * @object: a #GObject.
+ * @object: (allow-none): a #GObject, or %NULL
  * @callback: (scope async): a #GAsyncReadyCallback.
  * @user_data: (closure): user data passed to @callback.
  * @error: the #GError to report
@@ -27921,7 +27958,7 @@
 
 /**
  * g_unix_socket_address_new_abstract:
- * @path: the abstract name
+ * @path: (array length=path_len) (element-type gchar): the abstract name
  * @path_len: the length of @path, or -1
  *
  * Creates a new %G_UNIX_SOCKET_ADDRESS_ABSTRACT_PADDED
@@ -28646,7 +28683,7 @@
  * @stream: a #GPollableInputStream
  * @buffer: a buffer to read data into (which should be at least @size bytes long).
  * @size: the number of bytes you want to read
- * @cancellable: a #GCancellable, or %NULL
+ * @cancellable: (allow-none): a #GCancellable, or %NULL
  * @error: #GError for error reporting, or %NULL to ignore.
  *
  * Attempts to read up to @size bytes from @stream into @buffer, as
@@ -28661,6 +28698,7 @@
  * to having been cancelled.
  * %G_IO_ERROR_WOULD_BLOCK).
  *
+ * Virtual: read_nonblocking
  * Returns: the number of bytes read, or -1 on error (including
  */
 
@@ -28999,7 +29037,7 @@
  * Gets @address's #GInetAddress.
  * g_object_ref()'d if it will be stored
  *
- * Returns: (transfer full): the #GInetAddress for @address, which must be
+ * Returns: (transfer none): the #GInetAddress for @address, which must be
  * Since: 2.22
  */
 
@@ -29167,7 +29205,7 @@
 
 /**
  * g_unix_socket_address_new_with_type:
- * @path: the name
+ * @path: (array length=path_len) (element-type gchar): the name
  * @path_len: the length of @path, or -1
  * @type: a #GUnixSocketAddressType
  *
@@ -29743,8 +29781,8 @@
  * @protocol: The proxy protocol to support, in lower case (e.g. socks, http).
  * @dest_hostname: The destination hostname the the proxy should tunnel to.
  * @dest_port: The destination port to tunnel to.
- * @username: The username to authenticate to the proxy server (or %NULL).
- * @password: The password to authenticate to the proxy server (or %NULL).
+ * @username: (allow-none): The username to authenticate to the proxy server (or %NULL).
+ * @password: (allow-none): The password to authenticate to the proxy server (or %NULL).
  *
  * Creates a new #GProxyAddress for @inetaddr with @protocol that should
  * tunnel through @dest_hostname and @dest_port.
@@ -29787,7 +29825,7 @@
  * @buffer: a buffer to read data into (which should be at least @size bytes long).
  * @size: the number of bytes you want to read from the socket
  * @blocking: whether to do blocking or non-blocking I/O
- * @cancellable: a %GCancellable or %NULL
+ * @cancellable: (allow-none): a %GCancellable or %NULL
  * @error: #GError for error reporting, or %NULL to ignore.
  *
  * This behaves exactly the same as g_socket_receive(), except that
@@ -30034,7 +30072,7 @@
  * g_socket_listener_add_inet_port:
  * @listener: a #GSocketListener
  * @port: an IP port number (non-zero)
- * @source_object: Optional #GObject identifying this source
+ * @source_object: (allow-none): Optional #GObject identifying this source
  * @error: #GError for error reporting, or %NULL to ignore.
  *
  * Helper function for g_socket_listener_add_address() that
@@ -30098,9 +30136,9 @@
  * g_proxy_resolver_lookup_async:
  * @resolver: a #GProxyResolver
  * @uri: a URI representing the destination to connect to
- * @cancellable: a #GCancellable, or %NULL
- * @callback: callback to call after resolution completes
- * @user_data: data for @callback
+ * @cancellable: (allow-none): a #GCancellable, or %NULL
+ * @callback: (scope async): callback to call after resolution completes
+ * @user_data: (closure): data for @callback
  *
  * Asynchronous lookup of proxy. See g_proxy_resolver_lookup() for more
  * details.
@@ -30668,9 +30706,9 @@
 
 
 /**
- * g_pollable_input_stream_create_source:
+ * g_pollable_input_stream_create_source: (skip)
  * @stream: a #GPollableInputStream.
- * @cancellable: a #GCancellable, or %NULL
+ * @cancellable: (allow-none): a #GCancellable, or %NULL
  *
  * Creates a #GSource that triggers when @stream can be read, or
  * source is of the #GPollableSourceFunc type.
@@ -30679,7 +30717,7 @@
  * triggers, so you should use g_pollable_input_stream_read_nonblocking()
  * rather than g_input_stream_read() from the callback.
  *
- * Returns: a new #GSource
+ * Returns: (transfer full): a new #GSource
  * Since: 2.28
  */
 
@@ -30819,12 +30857,12 @@
  * g_socket_receive_message:
  * @socket: a #GSocket
  * @address: a pointer to a #GSocketAddress pointer, or %NULL
- * @vectors: an array of #GInputVector structs
+ * @vectors: (array length=num_vectors): an array of #GInputVector structs
  * @num_vectors: the number of elements in @vectors, or -1
- * @messages: a pointer which may be filled with an array of #GSocketControlMessages, or %NULL
+ * @messages: (array length=num_messages) (allow-none): a pointer which may be filled with an array of #GSocketControlMessages, or %NULL
  * @num_messages: a pointer which will be filled with the number of elements in @messages, or %NULL
  * @flags: a pointer to an int containing #GSocketMsgFlags flags
- * @cancellable: a %GCancellable or %NULL
+ * @cancellable: (allow-none): a %GCancellable or %NULL
  * @error: a #GError pointer, or %NULL
  *
  * Receive data from a socket.  This is the most complicated and
