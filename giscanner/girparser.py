@@ -95,10 +95,15 @@ class GIRParser(object):
 
     # Private
 
-    def _find_first_child(self, node, name):
-        for child in node.getchildren():
-            if child.tag == name:
-                return child
+    def _find_first_child(self, node, name_or_names):
+        if isinstance(name_or_names, str):
+            for child in node.getchildren():
+                if child.tag == name_or_names:
+                    return child
+        else:
+            for child in node.getchildren():
+                if child.tag in name_or_names:
+                    return child
         return None
 
     def _find_children(self, node, name):
@@ -410,7 +415,7 @@ class GIRParser(object):
                     return ast.TypeUnknown()
                 return ast.Type(ctype=ctype)
             elif name in ['GLib.List', 'GLib.SList']:
-                subchild = self._find_first_child(typenode, _corens('type'))
+                subchild = self._find_first_child(typenode, map(_corens, ('callback', 'array', 'varargs', 'type')))
                 if subchild is not None:
                     element_type = self._parse_type(typenode)
                 else:
