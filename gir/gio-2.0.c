@@ -5393,6 +5393,24 @@
 
 
 /**
+ * g_settings_list_schemas:
+ *
+ * Gets a list of the #GSettings schemas installed on the system.  The
+ * returned list is exactly the list of schemas for which you may call
+ * g_settings_new() without adverse effects.
+ * This function does not list the schemas that do not provide their own
+ * g_settings_new_with_path()).  See
+ * g_settings_list_relocatable_schemas() for that.
+ * schemas that are available.  The list must not be modified or
+ * freed.
+ *
+ * Paths (ie: schemas for which you must use
+ * Returns: (element-type utf8) (transfer none): a list of #GSettings
+ * Since: 2.26
+ */
+
+
+/**
  * g_file_load_contents:
  * @file: input #GFile.
  * @cancellable: optional #GCancellable object, %NULL to ignore.
@@ -8954,6 +8972,18 @@
  * This signal is emitted when the #GVolume have been removed. If
  * the recipient is holding references to the object they should
  * release them so the object can be finalized.
+ */
+
+
+/**
+ * GDesktopAppLaunchCallback:
+ * @appinfo: a #GDesktopAppInfo
+ * @pid: Process identifier
+ * @user_data: User data
+ *
+ * During invocation, g_desktop_app_info_launch_uris_as_manager() may
+ * create one or more child processes.  This callback is invoked once
+ * for each, providing the process ID.
  */
 
 
@@ -13514,20 +13544,27 @@
 
 
 /**
- * g_settings_list_schemas:
+ * g_desktop_app_info_launch_uris_as_manager:
+ * @appinfo: a #GDesktopAppInfo
+ * @uris: (element-type utf8): List of URIs
+ * @launch_context: a #GAppLaunchContext
+ * @spawn_flags: #GSpawnFlags, used for each process
+ * @user_setup: (scope call): a #GSpawnChildSetupFunc, used once for each process.
+ * @user_setup_data: (closure user_setup): User data for @user_setup
+ * @pid_callback: (scope call): Callback for child processes
+ * @pid_callback_data: (closure pid_callback): User data for @callback
+ * @error: a #GError
  *
- * Gets a list of the #GSettings schemas installed on the system.  The
- * returned list is exactly the list of schemas for which you may call
- * g_settings_new() without adverse effects.
- * This function does not list the schemas that do not provide their own
- * g_settings_new_with_path()).  See
- * g_settings_list_relocatable_schemas() for that.
- * schemas that are available.  The list must not be modified or
- * freed.
- *
- * Paths (ie: schemas for which you must use
- * Returns: (element-type utf8) (transfer none): a list of #GSettings
- * Since: 2.26
+ * This function performs the equivalent of g_app_info_launch_uris(),
+ * but is intended primarily for operating system components that
+ * launch applications.  Ordinary applications should use
+ * g_app_info_launch_uris().
+ * In contrast to g_app_info_launch_uris(), all processes created will
+ * always be run directly as children as if by the UNIX fork()/exec()
+ * calls.
+ * This guarantee allows additional control over the exact environment
+ * of the child processes, which is provided via a setup function
+ * semantics of the @setup function.
  */
 
 
@@ -28251,7 +28288,11 @@
  * that the server will accept client certificates signed by. If the
  * server requests a client certificate during the handshake, then
  * this property will be set after the handshake completes.
+ * Each item in the list is a #GByteArray which contains the complete
+ * subject DN of the certificate authority.
  *
+ * Type: GList<GByteArray>
+ * Transfer: full
  * Since: 2.28
  */
 
@@ -30111,9 +30152,12 @@
  * that the server will accept certificates from. This will be set
  * during the TLS handshake if the server requests a certificate.
  * Otherwise, it will be %NULL.
- * of CA names, which you must free (eg, with g_strfreev()).
+ * Each item in the list is a #GByteArray which contains the complete
+ * subject DN of the certificate authority.
+ * CA DNs. You should unref each element with g_byte_array_unref() and then
+ * the free the list with g_list_free().
  *
- * Returns: (transfer full) (array zero-terminated=1): the list
+ * Returns: (element-type GByteArray) (transfer full): the list of
  * Since: 2.28
  */
 
