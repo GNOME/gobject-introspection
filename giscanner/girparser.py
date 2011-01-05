@@ -415,7 +415,8 @@ class GIRParser(object):
                     return ast.TypeUnknown()
                 return ast.Type(ctype=ctype)
             elif name in ['GLib.List', 'GLib.SList']:
-                subchild = self._find_first_child(typenode, map(_corens, ('callback', 'array', 'varargs', 'type')))
+                subchild = self._find_first_child(typenode,
+                               map(_corens, ('callback', 'array', 'varargs', 'type')))
                 if subchild is not None:
                     element_type = self._parse_type(typenode)
                 else:
@@ -509,7 +510,8 @@ class GIRParser(object):
                         node.attrib.get('readable') != '0',
                         node.attrib.get('writable') == '1',
                         node.attrib.get('construct') == '1',
-                        node.attrib.get('construct-only') == '1')
+                        node.attrib.get('construct-only') == '1',
+                        node.attrib.get('transfer-ownership'))
         self._parse_generic_attribs(node, prop)
         return prop
 

@@ -419,9 +419,7 @@ different --identifier-prefix.""" % (xmlnode.attrib['name'], self._namespace.ide
             node.properties.append(ast.Property(
                 pspec.attrib['name'],
                 ast.Type.create_from_gtype_name(ctype),
-                readable, writable, construct, construct_only,
-                ctype,
-                ))
+                readable, writable, construct, construct_only))
         node.properties = node.properties
 
     def _introspect_signals(self, node, xmlnode):

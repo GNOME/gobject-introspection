@@ -947,7 +947,10 @@ class Property(Node):
         self.writable = writable
         self.construct = construct
         self.construct_only = construct_only
-        self.transfer = PARAM_TRANSFER_NONE
+        if transfer is None:
+            self.transfer = PARAM_TRANSFER_NONE
+        else:
+            self.transfer = transfer
 
 
 class Callback(Callable):
