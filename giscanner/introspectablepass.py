@@ -38,14 +38,6 @@ class IntrospectablePass(object):
         self._namespace.walk(self._introspectable_callable_analysis)
         self._namespace.walk(self._introspectable_pass3)
 
-    def _interface_vfunc_check(self, node, stack):
-        if isinstance(node, ast.Interface):
-            for vfunc in node.virtual_methods:
-                if not vfunc.invoker:
-                    message.warn_node(vfunc,
-"""Virtual function %r has no known invoker""" % (vfunc.name, ),
-                    context=node)
-
     def _parameter_warning(self, parent, param, text, position=None):
         # Suppress VFunctions and Callbacks warnings for now
         # they cause more problems then they are worth
@@ -183,8 +175,6 @@ class IntrospectablePass(object):
     def _analyze_node(self, obj, stack):
         if obj.skip:
             return False
-        # Combine one-pass checks here
-        self._interface_vfunc_check(obj, stack)
         # Our first pass for scriptability
         if isinstance(obj, ast.Callable):
             for param in obj.parameters:

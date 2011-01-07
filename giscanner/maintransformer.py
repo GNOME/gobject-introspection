@@ -1035,10 +1035,6 @@ method or constructor of some type."""
             if isinstance(field, ast.Field):
                 field.writable = False
 
-        # Loop through fields to determine which are virtual
-        # functions and which are signal slots by
-        # assuming everything that doesn't share a name
-        # with a known signal is a virtual slot.
         for field in class_struct.fields:
             if not isinstance(field.anonymous_node, ast.Callback):
                 continue
@@ -1048,15 +1044,6 @@ method or constructor of some type."""
                 continue
             firstparam_type = callback.parameters[0].type
             if firstparam_type != node_type:
-                continue
-            # Also double check we don't have a signal with this
-            # name.
-            matched_signal = False
-            for signal in node.signals:
-                if signal.name.replace('-', '_') == callback.name:
-                    matched_signal = True
-                    break
-            if matched_signal:
                 continue
             vfunc = ast.VFunction.from_callback(callback)
             vfunc.instance_parameter = callback.parameters[0]

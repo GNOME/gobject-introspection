@@ -664,6 +664,11 @@ exposed to language bindings.</doc>
                glib:get-type="foo_sub_interface_get_type"
                glib:type-struct="SubInterfaceIface">
       <prerequisite name="Interface"/>
+      <virtual-method name="destroy_event">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+      </virtual-method>
       <virtual-method name="do_bar" invoker="do_bar">
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
