@@ -295,6 +295,8 @@ void gi_marshalling_tests_array_zero_terminated_out (gchar ***utf8s);
 
 void gi_marshalling_tests_array_zero_terminated_inout (gchar ***utf8s);
 
+GVariant **gi_marshalling_tests_array_gvariant_in (GVariant **variants);
+
 
 /* GArray */
 

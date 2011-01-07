@@ -1309,6 +1309,20 @@ gi_marshalling_tests_array_zero_terminated_inout (gchar ***utf8s)
     *utf8s = values;
 }
 
+/**
+ * gi_marshalling_tests_array_gvariant_in:
+ * @variants: (array zero-terminated=1) (transfer none):
+ */
+GVariant **
+gi_marshalling_tests_array_gvariant_in (GVariant **variants)
+{
+    g_assert (variants != NULL);
+    g_assert_cmpint (g_variant_get_int32 (variants[0]), ==, 27);
+    g_assert_cmpstr (g_variant_get_string (variants[1], NULL), ==, "Hello");
+    g_assert (variants[2] == NULL);
+
+    return variants;
+}
 
 /**
  * gi_marshalling_tests_garray_int_none_return:
