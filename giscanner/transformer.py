@@ -827,12 +827,15 @@ Note that type resolution may not succeed."""
         else:
             return None
 
-    def follow_aliases(self, type_name, names):
-        while True:
-            resolved = names.aliases.get(type_name)
-            if resolved:
-                (ns, alias) = resolved
-                type_name = alias.target
+    def resolve_aliases(self, typenode):
+        """Removes all aliases from typenode, returns first non-alias
+        in the typenode alias chain.  Returns typenode argument if it
+        is not an alias."""
+        while isinstance(typenode, ast.Alias):
+            if typenode.target.target_giname is not None:
+                typenode = self.lookup_giname(typenode.target.target_giname)
+            elif typenode.target.target_fundamental is not None:
+                typenode = ast.type_names[typenode.target.target_fundamental]
             else:
                 break
-        return type_name
+        return typenode

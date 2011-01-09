@@ -579,6 +579,15 @@ typedef va_list RegressVaListAlias;
 
 void regress_not_introspectable_via_alias (RegressVaListAlias ok);
 
+/**
+ * RegressAliasedTestBoxed:
+ *
+ * Typedef TestBoxed to test caller-allocates correctness
+ */
+typedef RegressTestBoxed RegressAliasedTestBoxed;
+
+void regress_aliased_caller_alloc (RegressAliasedTestBoxed *boxed);
+
 /* private testing */
 
 typedef struct {

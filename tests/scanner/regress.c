@@ -2889,3 +2889,13 @@ void
 regress_not_introspectable_via_alias (RegressVaListAlias ok)
 {
 }
+
+/**
+ * regress_aliased_caller_alloc:
+ * @boxed: (out):
+ */
+void regress_aliased_caller_alloc (RegressAliasedTestBoxed *boxed)
+{
+  boxed->priv = g_slice_new0 (RegressTestBoxedPrivate);
+  boxed->priv->magic = 0xdeadbeef;
+}

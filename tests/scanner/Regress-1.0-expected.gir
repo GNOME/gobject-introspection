@@ -16,6 +16,10 @@ and/or use gtk-doc annotations.  -->
              shared-library="libregress.so"
              c:identifier-prefixes="Regress"
              c:symbol-prefixes="regress">
+    <alias name="AliasedTestBoxed" c:type="RegressAliasedTestBoxed">
+      <doc xml:whitespace="preserve">Typedef TestBoxed to test caller-allocates correctness</doc>
+      <type name="TestBoxed" c:type="RegressTestBoxed"/>
+    </alias>
     <alias name="IntSet" c:type="RegressIntSet" introspectable="0">
       <doc xml:whitespace="preserve">Compatibility typedef, like telepathy-glib's TpIntSet</doc>
       <type name="Intset" c:type="RegressIntset"/>
@@ -963,6 +967,20 @@ TpAccount::status-changed</doc>
         <type name="GObject.Object" c:type="GObject*"/>
       </field>
     </record>
+    <function name="aliased_caller_alloc"
+              c:identifier="regress_aliased_caller_alloc">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="boxed"
+                   direction="out"
+                   caller-allocates="1"
+                   transfer-ownership="none">
+          <type name="AliasedTestBoxed" c:type="RegressAliasedTestBoxed*"/>
+        </parameter>
+      </parameters>
+    </function>
     <function name="func_obj_null_in" c:identifier="regress_func_obj_null_in">
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>

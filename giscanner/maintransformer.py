@@ -501,6 +501,7 @@ usage is void (*_gtk_reserved1)(void);"""
             if subtype in (None, ''):
                 if node.type.target_giname and node.type.ctype:
                     target = self._transformer.lookup_giname(node.type.target_giname)
+                    target = self._transformer.resolve_aliases(target)
                     has_double_indirection = '**' in node.type.ctype
                     is_structure_or_union = isinstance(target, (ast.Record, ast.Union))
                     caller_allocates = (not has_double_indirection and is_structure_or_union)
