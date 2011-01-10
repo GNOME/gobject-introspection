@@ -121,8 +121,6 @@ class DumpCompiler(object):
         # pulled in at the linking stage if the library is a static library
         # rather than a shared library.
         if len(self._get_type_functions) > 0:
-            for func in self._get_type_functions:
-                f.write("extern GType " + func + "(void);\n")
             f.write("GType (*GI_GET_TYPE_FUNCS_[])(void) = {\n")
             first = True
             for func in self._get_type_functions:
