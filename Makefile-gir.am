@@ -155,6 +155,7 @@ else
 GIO_UNIX_HDRS=
 GIO_UNIX_PACKAGES =
 endif
+GIO_CINCLUDES=$(patsubst %,--c-include='%',$(shell echo $(GIO_UNIX_HDRS)))
 
 Gio-2.0.gir: GObject-2.0.gir
 
@@ -165,6 +166,7 @@ Gio_2_0_gir_SCANNERFLAGS = \
             --warn-all \
             --identifier-prefix=G \
             --c-include="gio/gio.h" \
+            $(GIO_CINCLUDES) \
             --add-include-path=. \
             $(Gio_2_0_gir_DOCSRC)
 
@@ -175,7 +177,7 @@ Gio_2_0_gir_CFLAGS = \
             -I$(GIO_LIBDIR)/glib-2.0/include
 Gio_2_0_gir_FILES = \
             $(GIO_UNIX_HDRS) \
-            $(GIO_INCLUDEDIR)/gio/*.h \
+            $(filter-out %/gsettingsbackend.h, $(shell echo $(GIO_INCLUDEDIR)/gio/*.h)) \
             gir/gio-2.0.c
 
 BUILT_GIRSOURCES += Gio-2.0.gir
