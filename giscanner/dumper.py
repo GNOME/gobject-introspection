@@ -37,8 +37,6 @@ _PROGRAM_TEMPLATE = """/* This file is generated, do not edit */
 #include <string.h>
 #include <stdlib.h>
 
-%(c_include)s
-
 %(gdump_include)s
 
 int
@@ -109,7 +107,6 @@ class DumpCompiler(object):
         gdump_file = open(gdump_path)
         gdump_contents = gdump_file.read()
         gdump_file.close()
-        tpl_args['c_include'] = "\n".join("#include <%s>" % i for i in self._options.c_includes)
         tpl_args['gdump_include'] = gdump_contents
         tpl_args['init_sections'] = "\n".join(self._options.init_sections)
 
