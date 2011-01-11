@@ -57,6 +57,7 @@ GIMarshallingTests-1.0.gir: libgimarshallingtests-1.0.la Makefile
 	--libtool="$(LIBTOOL)" \
 	--add-include-path=$(top_builddir) --include=Gio-2.0 \
 	--library=libgimarshallingtests-1.0.la  --output=$@ \
+	--c-include="tests/gimarshallingtests.h" \
 	$(srcdir)/gimarshallingtests.h $(srcdir)/gimarshallingtests.c
 
 %.typelib: %.gir

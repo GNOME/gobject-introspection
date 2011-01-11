@@ -1,7 +1,7 @@
 include $(top_srcdir)/common.mk
 include $(top_srcdir)/Makefile.introspection
 
-INTROSPECTION_SCANNER_ARGS += --warn-all --warn-error
+INTROSPECTION_SCANNER_ARGS += --warn-all --warn-error -I.
 
 # We need to build a shared library, which can be dlopened
 # it does not work with noinst_LTLIBRARIES
@@ -56,6 +56,7 @@ Regress-1.0.gir: $(top_builddir)/Gio-2.0.gir libregress.la
 Regress_1_0_gir_LIBS = libregress.la
 Regress_1_0_gir_INCLUDES = cairo-1.0 Gio-2.0
 Regress_1_0_gir_FILES = $(libregress_la_SOURCES)
+Regress_1_0_gir_SCANNERFLAGS = --c-include="regress.h"
 if HAVE_CAIRO
 GIRS += Regress-1.0.gir
 endif
@@ -65,6 +66,7 @@ Annotation_1_0_gir_PACKAGES = gobject-2.0
 Annotation_1_0_gir_LIBS = libannotation.la
 Annotation_1_0_gir_INCLUDES = GObject-2.0 Utility-1.0
 Annotation_1_0_gir_FILES = $(libannotation_la_SOURCES)
+Annotation_1_0_gir_SCANNERFLAGS = --c-include="annotation.h"
 GIRS += Annotation-1.0.gir
 
 TestInherit-1.0.gir: Utility-1.0.gir libtestinherit.la
@@ -72,6 +74,7 @@ TestInherit_1_0_gir_PACKAGES = gobject-2.0
 TestInherit_1_0_gir_LIBS = libtestinherit.la
 TestInherit_1_0_gir_INCLUDES = GObject-2.0 Utility-1.0
 TestInherit_1_0_gir_FILES = $(libtestinherit_la_SOURCES)
+TestInherit_1_0_gir_SCANNERFLAGS = --c-include="drawable.h"
 GIRS += TestInherit-1.0.gir
 
 Foo-1.0.gir: Utility-1.0.gir libfoo.la
@@ -87,6 +90,7 @@ Utility_1_0_gir_PACKAGES = gobject-2.0
 Utility_1_0_gir_LIBS = libutility.la
 Utility_1_0_gir_INCLUDES = GObject-2.0
 Utility_1_0_gir_FILES = $(libutility_la_SOURCES)
+Utility_1_0_gir_SCANNERFLAGS = --c-include="utility.h"
 GIRS += Utility-1.0.gir
 
 # This one tests different --namespace and --strip-prefix
