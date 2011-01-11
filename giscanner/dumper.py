@@ -58,7 +58,7 @@ main(int argc, char **argv)
       exit (1);
     }
 
-  if (!g_irepository_dump (argv[1] + strlen(introspect_dump_prefix), &error))
+  if (!dump_irepository (argv[1] + strlen(introspect_dump_prefix), &error))
     {
       g_printerr ("%%s\\n", error->message);
       exit (1);
