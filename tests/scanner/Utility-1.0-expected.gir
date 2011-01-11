@@ -9,6 +9,7 @@ and/or use gtk-doc annotations.  -->
   <include name="GLib" version="2.0"/>
   <include name="GObject" version="2.0"/>
   <package name="gobject-2.0"/>
+  <c:include name="utility.h"/>
   <namespace name="Utility"
              version="1.0"
              shared-library="libutility.so"

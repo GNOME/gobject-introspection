@@ -10,6 +10,7 @@ and/or use gtk-doc annotations.  -->
   <include name="GObject" version="2.0"/>
   <include name="Gio" version="2.0"/>
   <include name="cairo" version="1.0"/>
+  <c:include name="regress.h"/>
   <namespace name="Regress"
              version="1.0"
              shared-library="libregress.so"

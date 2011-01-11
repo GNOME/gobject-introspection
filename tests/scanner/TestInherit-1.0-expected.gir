@@ -10,6 +10,7 @@ and/or use gtk-doc annotations.  -->
   <include name="GObject" version="2.0"/>
   <include name="Utility" version="1.0"/>
   <package name="gobject-2.0"/>
+  <c:include name="drawable.h"/>
   <namespace name="TestInherit"
              version="1.0"
              shared-library="libtestinherit.so"
