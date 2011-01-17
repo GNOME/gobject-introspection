@@ -423,6 +423,12 @@ typedef enum
   GI_MARSHALLING_TESTS_ENUM_VALUE3 = 42
 } GIMarshallingTestsEnum;
 
+typedef enum
+{
+  GI_MARSHALLING_TESTS_SECOND_ENUM_SECONDVALUE1,
+  GI_MARSHALLING_TESTS_SECOND_ENUM_SECONDVALUE2,
+} GIMarshallingTestsSecondEnum;
+
 GIMarshallingTestsEnum gi_marshalling_tests_enum_returnv (void);
 
 void gi_marshalling_tests_enum_in (GIMarshallingTestsEnum enum_);
