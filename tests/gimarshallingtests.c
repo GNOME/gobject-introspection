@@ -2677,7 +2677,7 @@ gi_marshalling_tests_boxed_struct_get_type (void)
 GIMarshallingTestsBoxedStruct *
 gi_marshalling_tests_boxed_struct_new (void)
 {
-    return g_slice_new (GIMarshallingTestsBoxedStruct);
+    return g_slice_new0 (GIMarshallingTestsBoxedStruct);
 }
 
 /**
