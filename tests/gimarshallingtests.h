@@ -683,6 +683,14 @@ gint gi_marshalling_tests_int_return_out (gint *int_);
 void gi_marshalling_tests_utf8_full_out_out (gchar **utf80, gchar **utf82);
 
 
+/* GError */
+
+#define GI_MARSHALLING_TESTS_CONSTANT_GERROR_DOMAIN "gi-marshalling-tests-gerror-domain"
+#define GI_MARSHALLING_TESTS_CONSTANT_GERROR_CODE 5
+#define GI_MARSHALLING_TESTS_CONSTANT_GERROR_MESSAGE "gi-marshalling-tests-gerror-message"
+
+void gi_marshalling_tests_gerror(GError **error);
+
 /* Overrides */
 
 #define GI_MARSHALLING_TESTS_OVERRIDES_CONSTANT 42
