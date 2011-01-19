@@ -281,6 +281,8 @@ const gint *gi_marshalling_tests_array_return (gint *length);
 
 void gi_marshalling_tests_array_in (const gint *ints, gint length);
 
+void gi_marshalling_tests_array_uint8_in (const guint8 *chars, gint length);
+
 void gi_marshalling_tests_array_out (gint **ints, gint *length);
 
 void gi_marshalling_tests_array_inout (gint **ints, gint *length);

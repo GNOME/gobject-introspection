@@ -1225,6 +1225,20 @@ gi_marshalling_tests_array_in (const gint *ints, gint length)
 }
 
 /**
+ * gi_marshalling_tests_array_uint8_in:
+ * @chars: (array length=length):
+ */
+void
+gi_marshalling_tests_array_uint8_in (const guint8 *chars, gint length)
+{
+    g_assert(length == 4);
+    g_assert(chars[0] == 'a');
+    g_assert(chars[1] == 'b');
+    g_assert(chars[2] == 'c');
+    g_assert(chars[3] == 'd');
+}
+
+/**
  * gi_marshalling_tests_array_out:
  * @ints: (out) (array length=length) (transfer none):
  */
