@@ -126,14 +126,29 @@ AM_CONDITIONAL(HAVE_GIO_UNIX, test x$have_gio_unix = xtrue)
 
 AC_ARG_ENABLE(tests,[  --disable-tests           disable test libraries ], enable_tests=$enableval,enable_tests=yes)
 have_cairo=no
-if test x$enable_tests != xno; then
-  PKG_CHECK_MODULES(CAIRO, [cairo], have_cairo=yes, have_cairo=no)
-  if test x$have_cairo != xyes; then
-    AC_MSG_ERROR([Tests enabled but cairo not found; pass --disable-tests or install cairo])
-  fi
+PKG_CHECK_MODULES(CAIRO, [cairo], have_cairo=yes, have_cairo=no)
+if test x$have_cairo != xyes && test x$enable_tests != xno; then
+  AC_MSG_ERROR([Tests enabled but cairo not found; pass --disable-tests or install cairo])
 fi
+
+have_cairo_gobject=no
+if test x$have_cairo = xyes; then
+  PKG_CHECK_MODULES(CAIRO_GOBJECT, [cairo-gobject], have_cairo_gobject=yes, have_cairo_gobject=no)
+fi
+
+if test x$have_cairo_gobject = xyes; then
+  CAIRO_SHARED_LIBRARY="libcairo-gobject.so"
+  CAIRO_GIR_PACKAGE="cairo-gobject"
+elif test x$have_cairo = xyes; then
+  CAIRO_SHARED_LIBRARY="libcairo.so"
+  CAIRO_GIR_PACKAGE="cairo"
+fi
+AC_SUBST(CAIRO_SHARED_LIBRARY)
+AC_SUBST(CAIRO_GIR_PACKAGE)
+
 AM_CONDITIONAL(BUILD_TESTS, test x$enable_tests != xno)
 AM_CONDITIONAL(HAVE_CAIRO, test x$have_cairo != xno)
+AM_CONDITIONAL(HAVE_CAIRO_GOBJECT, test x$have_cairo_gobject != xno)
 
 PKG_CHECK_MODULES(SCANNER, [gobject-2.0 gthread-2.0 gio-2.0])
 
@@ -241,6 +256,7 @@ AC_MSG_RESULT([$GLIBSRC])
 
 AC_CONFIG_FILES([
 Makefile
+gir/cairo-1.0.gir
 giscanner/config.py
 m4/Makefile
 tests/Makefile
