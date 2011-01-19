@@ -606,7 +606,6 @@ class Array(Type):
 
     def clone(self):
         arr = Array(self.array_type, self.element_type)
-        arr.element_type = self.element_type
         arr.zeroterminated = self.zeroterminated
         arr.length_param_name = self.length_param_name
         arr.size = self.size
@@ -623,7 +622,6 @@ class List(Type):
 
     def clone(self):
         l = List(self.name, self.element_type)
-        l.element_type = self.element_type
         l.zeroterminated = self.zeroterminated
         l.length_param_name = self.length_param_name
         l.size = self.size
@@ -639,8 +637,7 @@ class Map(Type):
         self.value_type = value_type
 
     def clone(self):
-        m = Map(self.key_type, self.value_type)
-        return m
+        return Map(self.key_type, self.value_type)
 
 class Alias(Node):
 
