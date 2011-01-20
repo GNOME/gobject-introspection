@@ -6,7 +6,7 @@
  * g_mount_guess_content_type:
  * @mount: a #GMount
  * @force_rescan: Whether to force a rescan of the content. Otherwise a cached result will be used if available
- * @cancellable: optional #GCancellable object, %NULL to ignore
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore
  * @callback: a #GAsyncReadyCallback
  * @user_data: user data passed to @callback
  *
@@ -907,9 +907,10 @@
  * Gets the kinds of identifiers that @drive has.
  * Use g_drive_get_identifer() to obtain the identifiers
  * themselves.
- * kinds of identifiers. Use g_strfreev() to free.
+ * array of strings containing kinds of identifiers. Use g_strfreev()
+ * to free.
  *
- * Returns: (transfer full): a %NULL-terminated array of strings containing
+ * Returns: (transfer full) (array zero-terminated=1): a %NULL-terminated
  */
 
 
@@ -2960,8 +2961,8 @@
 /**
  * g_drive_poll_for_media:
  * @drive: a #GDrive.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
- * @callback: a #GAsyncReadyCallback, or %NULL.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
+ * @callback: (allow-none): a #GAsyncReadyCallback, or %NULL.
  * @user_data: user data to pass to @callback
  *
  * Asynchronously polls @drive to see if media has been inserted or removed.
@@ -2990,15 +2991,16 @@
 
 
 /**
- * g_unix_mounts_get:
- * @time_read: (allow-none): guint64 to contain a timestamp, or %NULL
+ * g_unix_mounts_get: (skip)
+ * @time_read: (out) (allow-none): guint64 to contain a timestamp, or %NULL
  *
  * Gets a #GList of #GUnixMountEntry containing the unix mounts.
  * If @time_read is set, it will be filled with the mount
  * timestamp, allowing for checking if the mounts have changed
  * with g_unix_mounts_changed_since().
+ * a #GList of the UNIX mounts.
  *
- * Returns: (element-type utf8) (transfer full): a #GList of the UNIX mounts.
+ * Returns: (element-type GUnixMountEntry) (transfer full):
  */
 
 
@@ -3128,9 +3130,9 @@
  * g_mount_unmount_with_operation:
  * @mount: a #GMount.
  * @flags: flags affecting the operation
- * @mount_operation: a #GMountOperation or %NULL to avoid user interaction.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
- * @callback: a #GAsyncReadyCallback, or %NULL.
+ * @mount_operation: (allow-none): a #GMountOperation or %NULL to avoid user interaction.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
+ * @callback: (allow-none): a #GAsyncReadyCallback, or %NULL.
  * @user_data: user data passed to @callback.
  *
  * Unmounts a mount. This is an asynchronous operation, and is
@@ -3248,9 +3250,9 @@
 /**
  * g_settings_backend_flatten_tree:
  * @tree: a #GTree containing the changes
- * @path: the location to save the path
- * @keys: the location to save the relative keys
- * @values: the location to save the values, or %NULL
+ * @path: (out): the location to save the path
+ * @keys: (out) (transfer container) (array zero-terminated=1): the location to save the relative keys
+ * @values: (out) (allow-none) (transfer container) (array zero-terminated=1):  the location to save the values, or %NULL
  *
  * Calculate the longest common prefix of all keys in a tree and write
  * out an array of the key names relative to that prefix and,
@@ -3476,6 +3478,16 @@
 
 
 /**
+ * GMarkupParseContext:
+ *
+ * A parse context is used to parse a stream of bytes that
+ * you expect to contain marked-up text.
+ * See g_markup_parse_context_new(), #GMarkupParser, and so
+ * on for more details.
+ */
+
+
+/**
  * g_file_info_dup:
  * @other: a #GFileInfo.
  *
@@ -3629,6 +3641,19 @@
  *
  * Returns: (transfer full): the new #GNetworkAddress
  * Since: 2.22
+ */
+
+
+/**
+ * g_settings_backend_get_default:
+ * @returns: (transfer full): the default #GSettingsBackend
+ *
+ * Returns the default #GSettingsBackend. It is possible to override
+ * the default by setting the <envar>GSETTINGS_BACKEND</envar>
+ * environment variable to the name of a settings backend.
+ * The user gets a reference to the backend.
+ *
+ * Since: 2.28
  */
 
 
@@ -4979,9 +5004,9 @@
  * g_drive_start:
  * @drive: a #GDrive.
  * @flags: flags affecting the start operation.
- * @mount_operation: a #GMountOperation or %NULL to avoid user interaction.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
- * @callback: a #GAsyncReadyCallback, or %NULL.
+ * @mount_operation: (allow-none): a #GMountOperation or %NULL to avoid user interaction.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
+ * @callback: (allow-none): a #GAsyncReadyCallback, or %NULL.
  * @user_data: user data to pass to @callback
  *
  * Asynchronously starts a drive.
@@ -5662,15 +5687,15 @@
 
 
 /**
- * g_unix_mount_at:
+ * g_unix_mount_at: (skip)
  * @mount_path: path for a possible unix mount.
- * @time_read: guint64 to contain a timestamp.
+ * @time_read: (out) (allow-none): guint64 to contain a timestamp.
  *
  * Gets a #GUnixMountEntry for a given mount path. If @time_read
  * is set, it will be filled with a unix timestamp for checking
  * if the mounts have changed since with g_unix_mounts_changed_since().
  *
- * Returns: (transfer full): a #GUnixMount.
+ * Returns: (transfer full): a #GUnixMountEntry.
  */
 
 
@@ -6831,15 +6856,16 @@
 
 
 /**
- * g_unix_mount_points_get:
- * @time_read: (allow-none): guint64 to contain a timestamp.
+ * g_unix_mount_points_get: (skip)
+ * @time_read: (out) (allow-none): guint64 to contain a timestamp.
  *
  * Gets a #GList of #GUnixMountPoint containing the unix mount points.
  * If @time_read is set, it will be filled with the mount timestamp,
  * allowing for checking if the mounts have changed with
  * g_unix_mounts_points_changed_since().
+ * a #GList of the UNIX mountpoints.
  *
- * Returns: (element-type utf8) (transfer full): a #GList of the UNIX mountpoints.
+ * Returns: (element-type GUnixMountPoint) (transfer full):
  */
 
 
@@ -6858,7 +6884,7 @@
  * g_mount_guess_content_type_sync:
  * @mount: a #GMount
  * @force_rescan: Whether to force a rescan of the content. Otherwise a cached result will be used if available
- * @cancellable: optional #GCancellable object, %NULL to ignore
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore
  * @error: a #GError location to store the error occuring, or %NULL to ignore
  *
  * Tries to guess the type of content stored on @mount. Returns one or
@@ -9839,12 +9865,11 @@
  * g_settings_get_strv:
  * @settings: a #GSettings object
  * @key: the key to get the value for
- * @returns: (array zero-terminated=1) (transfer full): the value that is
+ * @returns: (array zero-terminated=1) (transfer full): a newly-allocated, %NULL-terminated array of strings, the value that is stored at @key in @settings.
  *
  * A convenience variant of g_settings_get() for string arrays.
  * It is a programmer error to give a @key that isn't specified as
  * having an array of strings type in the schema for @settings.
- * stored at @key in @settings.
  *
  * Since: 2.26
  */
@@ -11058,7 +11083,7 @@
  * g_settings_backend_keys_changed:
  * @backend: a #GSettingsBackend implementation
  * @path: the path containing the changes
- * @items: the %NULL-terminated list of changed keys
+ * @items: (array zero-terminated=1): the %NULL-terminated list of changed keys
  * @origin_tag: the origin tag
  *
  * Signals that a list of keys have possibly changed.  Backend
@@ -12597,8 +12622,8 @@
  * @volume: a #GVolume.
  * @flags: flags affecting the operation
  * @mount_operation: (allow-none): a #GMountOperation or %NULL to avoid user interaction.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
- * @callback: a #GAsyncReadyCallback, or %NULL.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
+ * @callback: (allow-none): a #GAsyncReadyCallback, or %NULL.
  * @user_data: user data that gets passed to @callback
  *
  * Mounts a volume. This is an asynchronous operation, and is
@@ -13525,6 +13550,15 @@
  * GWin32InputStream:
  *
  * Implements #GInputStream for reading from selectable Windows file handles
+ */
+
+
+/**
+ * G_MARKUP_ERROR:
+ *
+ * Error domain for markup parsing.
+ * Errors in this domain will be from the #GMarkupError enumeration.
+ * See #GError for information on error domains.
  */
 
 
@@ -15341,7 +15375,7 @@
 /**
  * GSettings::change-event:
  * @settings: the object on which the signal was emitted
- * @keys: an array of #GQuark<!-- -->s for the changed keys, or %NULL
+ * @keys: (array length=n_keys) (element-type GQuark) (allow-none):  an array of #GQuark<!-- -->s for the changed keys, or %NULL
  * @n_keys: the length of the @keys array, or 0
  * @returns: %TRUE to stop other handlers from being invoked for the event. FALSE to propagate the event further.
  *
@@ -16002,6 +16036,16 @@
 
 
 /**
+ * GMarkupParseFlags:
+ * @G_MARKUP_DO_NOT_USE_THIS_UNSUPPORTED_FLAG: flag you should not use
+ * @G_MARKUP_TREAT_CDATA_AS_TEXT: When this flag is set, CDATA marked sections are not passed literally to the @passthrough function of the parser. Instead, the content of the section (without the <literal>&lt;![CDATA[</literal> and <literal>]]&gt;</literal>) is passed to the @text function. This flag was added in GLib 2.12
+ * @G_MARKUP_PREFIX_ERROR_POSITION: Normally errors caught by GMarkup itself have line/column information prefixed to them to let the caller know the location of the error. When this flag is set the location information is also prefixed to errors generated by the #GMarkupParser implementation functions
+ *
+ * Flags that affect the behaviour of the parser.
+ */
+
+
+/**
  * GTlsConnection:peer-certificate:
  *
  * The connection's peer's certificate, after the TLS handshake has
@@ -16095,8 +16139,8 @@
  * g_mount_eject:
  * @mount: a #GMount.
  * @flags: flags affecting the unmount if required for eject
- * @cancellable: optional #GCancellable object, %NULL to ignore.
- * @callback: a #GAsyncReadyCallback, or %NULL.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
+ * @callback: (allow-none): a #GAsyncReadyCallback, or %NULL.
  * @user_data: user data passed to @callback.
  *
  * Ejects a mount. This is an asynchronous operation, and is
@@ -16719,8 +16763,8 @@
  * g_volume_eject_with_operation:
  * @volume: a #GVolume.
  * @flags: flags affecting the unmount if required for eject
- * @mount_operation: a #GMountOperation or %NULL to avoid user interaction.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
+ * @mount_operation: (allow-none): a #GMountOperation or %NULL to avoid user interaction.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  * @callback: a #GAsyncReadyCallback, or %NULL.
  * @user_data: user data passed to @callback.
  *
@@ -18802,8 +18846,8 @@
  * g_drive_eject:
  * @drive: a #GDrive.
  * @flags: flags affecting the unmount if required for eject
- * @cancellable: optional #GCancellable object, %NULL to ignore.
- * @callback: a #GAsyncReadyCallback, or %NULL.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
+ * @callback: (allow-none): a #GAsyncReadyCallback, or %NULL.
  * @user_data: user data to pass to @callback
  *
  * Asynchronously ejects a drive.
@@ -19162,7 +19206,7 @@
  * g_settings_get_mapped:
  * @settings: a #GSettings object
  * @key: the key to get the value for
- * @mapping: the function to map the value in the settings database to the value used by the application
+ * @mapping: (scope call): the function to map the value in the settings database to the value used by the application
  * @user_data: user data for @mapping
  * @returns: (transfer full): the result, which may be %NULL
  *
@@ -20140,9 +20184,9 @@
  * g_drive_eject_with_operation:
  * @drive: a #GDrive.
  * @flags: flags affecting the unmount if required for eject
- * @mount_operation: a #GMountOperation or %NULL to avoid user interaction.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
- * @callback: a #GAsyncReadyCallback, or %NULL.
+ * @mount_operation: (allow-none): a #GMountOperation or %NULL to avoid user interaction.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
+ * @callback: (allow-none): a #GAsyncReadyCallback, or %NULL.
  * @user_data: user data passed to @callback.
  *
  * Ejects a drive. This is an asynchronous operation, and is
@@ -20383,7 +20427,7 @@
  * @returns: (transfer full): a 'child' settings object
  *
  * Creates a 'child' settings object which has a base path of
- * <replaceable>base-path</replaceable>/@name", where
+ * <replaceable>base-path</replaceable>/@name, where
  * <replaceable>base-path</replaceable> is the base path of @settings.
  * The schema for the child settings object must have been declared
  * in the schema of @settings using a <tag class="starttag">child</tag> element.
@@ -20744,7 +20788,7 @@
 
 
 /**
- * g_settings_bind_with_mapping:
+ * g_settings_bind_with_mapping: (skip)
  * @settings: a #GSettings object
  * @key: the key to bind
  * @object: (type GObject.Object): a #GObject
@@ -21948,8 +21992,8 @@
  * g_mount_unmount:
  * @mount: a #GMount.
  * @flags: flags affecting the operation
- * @cancellable: optional #GCancellable object, %NULL to ignore.
- * @callback: a #GAsyncReadyCallback, or %NULL.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
+ * @callback: (allow-none): a #GAsyncReadyCallback, or %NULL.
  * @user_data: user data passed to @callback.
  *
  * Unmounts a mount. This is an asynchronous operation, and is
@@ -23005,6 +23049,20 @@
 
 
 /**
+ * GMarkupError:
+ * @G_MARKUP_ERROR_BAD_UTF8: text being parsed was not valid UTF-8
+ * @G_MARKUP_ERROR_EMPTY: document contained nothing, or only whitespace
+ * @G_MARKUP_ERROR_PARSE: document was ill-formed
+ * @G_MARKUP_ERROR_UNKNOWN_ELEMENT: error should be set by #GMarkupParser functions; element wasn't known
+ * @G_MARKUP_ERROR_UNKNOWN_ATTRIBUTE: error should be set by #GMarkupParser functions; attribute wasn't known
+ * @G_MARKUP_ERROR_INVALID_CONTENT: error should be set by #GMarkupParser functions; content was invalid
+ * @G_MARKUP_ERROR_MISSING_ATTRIBUTE: error should be set by #GMarkupParser functions; a required attribute was missing
+ *
+ * Error codes returned by markup parsing.
+ */
+
+
+/**
  * g_mount_operation_get_usernam:
  * @op: a #GMountOperation.
  *
@@ -23727,8 +23785,8 @@
 /**
  * GSettingsGetMapping:
  * @value: the #GVariant to map, or %NULL
- * @result: the result of the mapping
- * @user_data: the user data that was passed to g_settings_get_mapped()
+ * @result: (out): the result of the mapping
+ * @user_data: (closure): the user data that was passed to g_settings_get_mapped()
  * @returns: %TRUE if the conversion succeeded, %FALSE in case of an error
  *
  * The type of the function that is used to convert from a value stored
@@ -23975,6 +24033,24 @@
  *
  * Returns: The same @info.
  * Since: 2.26
+ */
+
+
+/**
+ * GMarkupParser:
+ * @start_element: Callback to invoke when the opening tag of an element is seen.
+ * @end_element: Callback to invoke when the closing tag of an element is seen. Note that this is also called for empty tags like <literal>&lt;empty/&gt;</literal>.
+ * @text: Callback to invoke when some text is seen (text is always inside an element). Note that the text of an element may be spread over multiple calls of this function. If the %G_MARKUP_TREAT_CDATA_AS_TEXT flag is set, this function is also called for the content of CDATA marked sections.
+ * @passthrough: Callback to invoke for comments, processing instructions and doctype declarations; if you're re-writing the parsed document, write the passthrough text back out in the same position. If the %G_MARKUP_TREAT_CDATA_AS_TEXT flag is not set, this function is also called for CDATA marked sections.
+ * @error: Callback to invoke when an error occurs.
+ *
+ * Any of the fields in #GMarkupParser can be %NULL, in which case they
+ * will be ignored. Except for the @error function, any of these callbacks
+ * can set an error; in particular the %G_MARKUP_ERROR_UNKNOWN_ELEMENT,
+ * %G_MARKUP_ERROR_UNKNOWN_ATTRIBUTE, and %G_MARKUP_ERROR_INVALID_CONTENT
+ * errors are intended to be set from these callbacks. If you set an error
+ * from a callback, g_markup_parse_context_parse() will report that error
+ * back to its caller.
  */
 
 
@@ -25040,9 +25116,9 @@
  * g_mount_remount:
  * @mount: a #GMount.
  * @flags: flags affecting the operation
- * @mount_operation: a #GMountOperation or %NULL to avoid user interaction.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
- * @callback: a #GAsyncReadyCallback, or %NULL.
+ * @mount_operation: (allow-none): a #GMountOperation or %NULL to avoid user interaction.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
+ * @callback: (allow-none): a #GAsyncReadyCallback, or %NULL.
  * @user_data: user data passed to @callback.
  *
  * Remounts a mount. This is an asynchronous operation, and is
@@ -27284,8 +27360,8 @@
  * g_volume_eject:
  * @volume: a #GVolume.
  * @flags: flags affecting the unmount if required for eject
- * @cancellable: optional #GCancellable object, %NULL to ignore.
- * @callback: a #GAsyncReadyCallback, or %NULL.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
+ * @callback: (allow-none): a #GAsyncReadyCallback, or %NULL.
  * @user_data: user data that gets passed to @callback
  *
  * Ejects a volume. This is an asynchronous operation, and is
@@ -28291,8 +28367,6 @@
  * Each item in the list is a #GByteArray which contains the complete
  * subject DN of the certificate authority.
  *
- * Type: GList<GByteArray>
- * Transfer: full
  * Since: 2.28
  */
 
@@ -28989,9 +29063,9 @@
  * g_mount_eject_with_operation:
  * @mount: a #GMount.
  * @flags: flags affecting the unmount if required for eject
- * @mount_operation: a #GMountOperation or %NULL to avoid user interaction.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
- * @callback: a #GAsyncReadyCallback, or %NULL.
+ * @mount_operation: (allow-none): a #GMountOperation or %NULL to avoid user interaction.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
+ * @callback: (allow-none): a #GAsyncReadyCallback, or %NULL.
  * @user_data: user data passed to @callback.
  *
  * Ejects a mount. This is an asynchronous operation, and is
@@ -29115,8 +29189,6 @@
  *
  * #GTlsClientConnection is the client-side subclass of
  * #GTlsConnection, representing a client-side TLS connection.
- *
- * Since: 2.28
  */
 
 
@@ -30269,7 +30341,11 @@
  * in the <tag class="attribute">id</tag> attribute of the
  * <tag class="starttag">schema</tag> element). The
  * convention for schema ids is to use a dotted name, similar in
- * style to a DBus bus name, e.g. "org.gnome.font-rendering".
+ * style to a D-Bus bus name, e.g. "org.gnome.SessionManager". In particular,
+ * if the settings are for a specific service that owns a D-Bus bus name,
+ * the D-Bus bus name and schema id should match. For schemas which deal
+ * with settings not associated with one named application, the id should
+ * not use StudlyCaps, e.g. "org.gnome.font-rendering".
  * In addition to #GVariant types, keys can have types that have enumerated
  * types. These can be described by a <tag class="starttag">choice</tag>,
  * <tag class="starttag">enum</tag> or <tag class="starttag">flags</tag> element, see
@@ -30281,7 +30357,7 @@
  * <example id="schema-default-values"><title>Default values</title>
  * <programlisting><![CDATA[
  * <schemalist>
- * <schema id="org.gtk.test" path="/tests/" gettext-domain="test">
+ * <schema id="org.gtk.Test" path="/tests/" gettext-domain="test">
  * <key name="greeting" type="s">
  * <default l10n="messages">"Hello, earthlings"</default>
  * <summary>A greeting</summary>
@@ -30307,7 +30383,7 @@
  * <value nick="flag2" value="2"/>
  * <value nick="flag3" value="4"/>
  * </enum>
- * <schema id="org.gtk.test">
+ * <schema id="org.gtk.Test">
  * <key name="key-with-range" type="i">
  * <range min="1" max="100"/>
  * <default>10</default>
@@ -31294,9 +31370,9 @@
  * g_drive_stop:
  * @drive: a #GDrive.
  * @flags: flags affecting the unmount if required for stopping.
- * @mount_operation: a #GMountOperation or %NULL to avoid user interaction.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
- * @callback: a #GAsyncReadyCallback, or %NULL.
+ * @mount_operation: (allow-none): a #GMountOperation or %NULL to avoid user interaction.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
+ * @callback: (allow-none): a #GAsyncReadyCallback, or %NULL.
  * @user_data: user data to pass to @callback
  *
  * Asynchronously stops a drive.
