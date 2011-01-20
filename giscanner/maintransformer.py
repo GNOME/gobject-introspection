@@ -1023,8 +1023,9 @@ method or constructor of some type."""
     def _pair_class_virtuals(self, node):
         """Look for virtual methods from the class structure."""
         if not node.glib_type_struct:
-            message.warn_node(node,
-                "Failed to find class structure for %r" % (node.name, ))
+            # https://bugzilla.gnome.org/show_bug.cgi?id=629080
+            #message.warn_node(node,
+            #    "Failed to find class structure for %r" % (node.name, ))
             return
 
         node_type = node.create_type()
