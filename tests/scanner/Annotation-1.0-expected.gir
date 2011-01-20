@@ -147,7 +147,7 @@ and/or use gtk-doc annotations.  -->
           <parameter name="nums" transfer-ownership="none">
             <doc xml:whitespace="preserve">Sequence of numbers</doc>
             <array c:type="int*">
-              <type name="gint"/>
+              <type name="gint" c:type="int"/>
             </array>
           </parameter>
         </parameters>
@@ -162,7 +162,7 @@ and/or use gtk-doc annotations.  -->
           <parameter name="nums" transfer-ownership="none">
             <doc xml:whitespace="preserve">Sequence of numbers that are zero-terminated</doc>
             <array length="1" zero-terminated="0" c:type="int*">
-              <type name="gint"/>
+              <type name="gint" c:type="int"/>
             </array>
           </parameter>
           <parameter name="n_nums" transfer-ownership="none">
@@ -181,7 +181,7 @@ and/or use gtk-doc annotations.  -->
           <parameter name="nums" transfer-ownership="none">
             <doc xml:whitespace="preserve">Sequence of numbers that are zero-terminated</doc>
             <array length="1" c:type="int*">
-              <type name="gint"/>
+              <type name="gint" c:type="int"/>
             </array>
           </parameter>
           <parameter name="n_nums" transfer-ownership="none">
@@ -378,7 +378,7 @@ each string needs to be freed.</doc>
                      transfer-ownership="full">
             <doc xml:whitespace="preserve">Argument vector</doc>
             <array length="0" c:type="char***">
-              <type name="utf8"/>
+              <type name="utf8" c:type="char**"/>
             </array>
           </parameter>
         </parameters>
@@ -392,7 +392,7 @@ each string needs to be freed.</doc>
           <parameter name="data" transfer-ownership="none">
             <doc xml:whitespace="preserve">The data</doc>
             <array length="1" c:type="guchar*">
-              <type name="guint8"/>
+              <type name="guint8" c:type="guchar"/>
             </array>
           </parameter>
           <parameter name="length" transfer-ownership="none">
@@ -687,7 +687,7 @@ detection, and fixing it via annotations.</doc>
                    transfer-ownership="full">
           <doc xml:whitespace="preserve">The arguments.</doc>
           <array length="0" c:type="char***">
-            <type name="utf8"/>
+            <type name="utf8" c:type="char**"/>
           </array>
         </parameter>
       </parameters>
@@ -790,7 +790,7 @@ detection, and fixing it via annotations.</doc>
                    caller-allocates="0"
                    transfer-ownership="full">
           <array c:type="char***">
-            <type name="utf8"/>
+            <type name="utf8" c:type="char**"/>
           </array>
         </parameter>
       </parameters>

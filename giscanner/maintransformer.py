@@ -325,8 +325,9 @@ usage is void (*_gtk_reserved1)(void);"""
             # We're assuming here that Foo* with an (array) annotation
             # and no (element-type) means array of Foo
             element_type_node = node.type.clone()
-            # Explicitly erase ctype since it's no longer valid
-            element_type_node.ctype = None
+            # The element's ctype is the array's dereferenced
+            if element_type_node.ctype.endswith('*'):
+                element_type_node.ctype = element_type_node.ctype[:-1]
 
         if isinstance(node.type, ast.Array):
             array_type = node.type.array_type
