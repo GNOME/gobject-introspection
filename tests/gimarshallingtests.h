@@ -674,6 +674,29 @@ void gi_marshalling_tests_interface_test_int8_in (GIMarshallingTestsInterface *s
 
 void gi_marshalling_tests_test_interface_test_int8_in (GIMarshallingTestsInterface *test_iface, gint8 in);
 
+/* GIMarshallingTestsInterface2 allows us testing vfunc clashes when a class'
+   vfunc implementation ambiguously relates to its prototype */
+
+#define GI_MARSHALLING_TESTS_TYPE_INTERFACE2              (gi_marshalling_tests_interface2_get_type ())
+#define GI_MARSHALLING_TESTS_INTERFACE2(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GI_MARSHALLING_TESTS_TYPE_INTERFACE2, GIMarshallingTestsInterface2))
+#define GI_MARSHALLING_TESTS_IS_INTERFACE2(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GI_MARSHALLING_TESTS_TYPE_INTERFACE2))
+#define GI_MARSHALLING_TESTS_INTERFACE2_GET_IFACE(obj)    (G_TYPE_INSTANCE_GET_INTERFACE2 ((obj), GI_MARSHALLING_TESTS_TYPE_INTERFACE2, GIMarshallingTestsInterface2Iface))
+
+typedef struct _GIMarshallingTestsInterface2 GIMarshallingTestsInterface2;
+typedef struct _GIMarshallingTestsInterface2Iface GIMarshallingTestsInterface2Iface;
+
+struct _GIMarshallingTestsInterface2Iface {
+    GTypeInterface base_iface;
+
+    /**
+     * GIMarshallingTestsInterface2Iface::test_int8_in:
+     * @in: (in):
+     */
+    void (* test_int8_in) (GIMarshallingTestsInterface2 *self, gint8 in);
+};
+
+GType gi_marshalling_tests_interface2_get_type (void) G_GNUC_CONST;
+
 
 /* Multiple output arguments */
 

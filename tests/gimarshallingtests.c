@@ -3197,6 +3197,27 @@ gi_marshalling_tests_test_interface_test_int8_in (GIMarshallingTestsInterface *t
 }
 
 
+static void
+gi_marshalling_tests_interface2_class_init(void *g_iface)
+{
+}
+
+GType
+gi_marshalling_tests_interface2_get_type(void)
+{
+    static GType type = 0;
+    if (type == 0) {
+        type = g_type_register_static_simple (G_TYPE_INTERFACE,
+                                              "GIMarshallingTestsInterface2",
+                                              sizeof (GIMarshallingTestsInterface2Iface),
+                                              (GClassInitFunc) gi_marshalling_tests_interface2_class_init,
+                                              0, NULL, 0);
+    }
+
+    return type;
+}
+
+
 /**
  * gi_marshalling_tests_int_out_out:
  * @int0: (out):
