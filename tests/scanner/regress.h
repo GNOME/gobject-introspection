@@ -302,6 +302,7 @@ RegressTestObj*   regress_test_obj_new_from_file (const char *x, GError **error)
 void       regress_test_obj_set_bare (RegressTestObj *obj, GObject *bare);
 int        regress_test_obj_instance_method (RegressTestObj *obj);
 double     regress_test_obj_static_method (int x);
+void       regress_forced_method (RegressTestObj *obj);
 
 void regress_test_obj_torture_signature_0 (RegressTestObj    *obj,
                                    int        x,

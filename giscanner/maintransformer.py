@@ -32,7 +32,7 @@ from .annotationparser import (OPT_ALLOW_NONE, OPT_ARRAY, OPT_ATTRIBUTE,
                                OPT_TYPE, OPT_CLOSURE, OPT_DESTROY, OPT_TRANSFER, OPT_SKIP,
                                OPT_FOREIGN, OPT_ARRAY_FIXED_SIZE,
                                OPT_ARRAY_LENGTH, OPT_ARRAY_ZERO_TERMINATED,
-                               OPT_CONSTRUCTOR)
+                               OPT_CONSTRUCTOR, OPT_METHOD)
 from .annotationparser import AnnotationParser
 from .transformer import TransformerException
 from .utils import to_underscores, to_underscores_noprefix
@@ -583,6 +583,9 @@ usage is void (*_gtk_reserved1)(void);"""
         if OPT_CONSTRUCTOR in block.options and isinstance(node, ast.Function):
             node.is_constructor = True
 
+        if OPT_METHOD in block.options:
+            node.is_method = True
+
     def _apply_annotations_alias(self, node, chain):
         block = self._get_block(node)
         self._apply_annotations_annotated(node, block)
@@ -897,7 +900,8 @@ method or constructor of some type."""
         if func.is_constructor or self._is_constructor(func, subsymbol):
             self._set_up_constructor(func, subsymbol)
             return
-        elif self._pair_method(func, subsymbol):
+        elif func.is_method or self._is_method(func, subsymbol):
+            self._setup_method(func, subsymbol)
             return
         elif self._pair_static_method(func, subsymbol):
             return
@@ -907,7 +911,7 @@ method or constructor of some type."""
         name = typeval.get_giname()
         return to_underscores_noprefix(name).lower()
 
-    def _pair_method(self, func, subsymbol):
+    def _is_method(self, func, subsymbol):
         if not func.parameters:
             return False
         first = func.parameters[0]
@@ -924,6 +928,27 @@ method or constructor of some type."""
         if first.type.ctype is not None and first.type.ctype.count('*') != 1:
             return False
 
+        uscored_prefix = self._get_uscored_prefix(func, subsymbol)
+        if not subsymbol.startswith(uscored_prefix):
+            return False
+
+        return True
+
+    def _setup_method(self, func, subsymbol):
+        uscored_prefix = self._get_uscored_prefix(func, subsymbol)
+        target = self._transformer.lookup_typenode(func.parameters[0].type)
+
+        func.instance_parameter = func.parameters.pop(0)
+        self._namespace.float(func)
+
+        if not func.is_method:
+            subsym_idx = func.symbol.find(subsymbol)
+            func.name = func.symbol[(subsym_idx + len(uscored_prefix) + 1):]
+            func.is_method = True
+
+        target.methods.append(func)
+
+    def _get_uscored_prefix(self, func, subsymbol):
         # Here we check both the c_symbol_prefix and (if that fails),
         # attempt to do a default uscoring of the type.  The reason we
         # look at a default underscore transformation is for
@@ -932,21 +957,16 @@ method or constructor of some type."""
         # "gdk_window".  Possibly need an annotation to override this.
         prefix_matches = False
         uscored_prefix = None
+        first_arg = func.parameters[0]
+        target = self._transformer.lookup_typenode(first_arg.type)
         if hasattr(target, 'c_symbol_prefix') and target.c_symbol_prefix is not None:
             prefix_matches = subsymbol.startswith(target.c_symbol_prefix)
             if prefix_matches:
                 uscored_prefix = target.c_symbol_prefix
         if not prefix_matches:
-            uscored_prefix = self._uscored_identifier_for_type(first.type)
-            if not subsymbol.startswith(uscored_prefix):
-                return False
-        func.instance_parameter = func.parameters.pop(0)
-        subsym_idx = func.symbol.find(subsymbol)
-        self._namespace.float(func)
-        func.name = func.symbol[(subsym_idx + len(uscored_prefix) + 1):]
-        target.methods.append(func)
-        func.is_method = True
-        return True
+            uscored_prefix = self._uscored_identifier_for_type(first_arg.type)
+
+        return uscored_prefix
 
     def _pair_static_method(self, func, subsymbol):
         split = self._split_uscored_by_type(subsymbol)

@@ -485,6 +485,11 @@ case.</doc>
           </parameter>
         </parameters>
       </method>
+      <method name="forced_method" c:identifier="regress_forced_method">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+      </method>
       <method name="instance_method"
               c:identifier="regress_test_obj_instance_method">
         <return-value transfer-ownership="none">

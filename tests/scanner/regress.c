@@ -1955,6 +1955,16 @@ regress_test_obj_static_method (int x)
 }
 
 /**
+ * regress_forced_method: (method)
+ * @obj: A #RegressTestObj
+ *
+ */
+void
+regress_forced_method (RegressTestObj *obj)
+{
+}
+
+/**
  * regress_test_obj_torture_signature_0:
  * @obj: A #RegressTestObj
  * @x:

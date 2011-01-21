@@ -55,6 +55,7 @@ OPT_TRANSFER = 'transfer'
 OPT_TYPE = 'type'
 OPT_SKIP = 'skip'
 OPT_CONSTRUCTOR = 'constructor'
+OPT_METHOD = 'method'
 
 ALL_OPTIONS = [
     OPT_ALLOW_NONE,
@@ -72,7 +73,8 @@ ALL_OPTIONS = [
     OPT_TRANSFER,
     OPT_TYPE,
     OPT_SKIP,
-    OPT_CONSTRUCTOR]
+    OPT_CONSTRUCTOR,
+    OPT_METHOD]
 
 # Array options - array specific annotations
 OPT_ARRAY_FIXED_SIZE = 'fixed-size'
@@ -333,6 +335,8 @@ class DocTag(object):
                                       n_params=1)
             elif option == OPT_CONSTRUCTOR:
                 self._validate_option('constructor', value, n_params=0)
+            elif option == OPT_METHOD:
+                self._validate_option('method', value, n_params=0)
             else:
                 message.warn('invalid annotation option: %s' % (option, ),
                              self.position)
