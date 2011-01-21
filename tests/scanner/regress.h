@@ -297,6 +297,7 @@ struct _RegressTestObjClass
 };
 
 GType      regress_test_obj_get_type (void);
+RegressTestObj*   regress_test_obj_new (RegressTestObj *obj);
 RegressTestObj*   regress_test_obj_new_from_file (const char *x, GError **error);
 void       regress_test_obj_set_bare (RegressTestObj *obj, GObject *bare);
 int        regress_test_obj_instance_method (RegressTestObj *obj);

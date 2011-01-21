@@ -1910,6 +1910,16 @@ regress_test_obj_init (RegressTestObj *obj)
 }
 
 /**
+ * regress_test_obj_new: (constructor)
+ * @obj: A #RegressTestObj
+ */
+RegressTestObj *
+regress_test_obj_new (RegressTestObj *obj)
+{
+  return g_object_new (REGRESS_TEST_TYPE_OBJ, NULL);
+}
+
+/**
  * regress_test_obj_new_from_file:
  */
 RegressTestObj *

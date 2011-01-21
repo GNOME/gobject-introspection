@@ -31,7 +31,8 @@ from .annotationparser import (OPT_ALLOW_NONE, OPT_ARRAY, OPT_ATTRIBUTE,
                                OPT_OUT_CALLER_ALLOCATES, OPT_OUT_CALLEE_ALLOCATES,
                                OPT_TYPE, OPT_CLOSURE, OPT_DESTROY, OPT_TRANSFER, OPT_SKIP,
                                OPT_FOREIGN, OPT_ARRAY_FIXED_SIZE,
-                               OPT_ARRAY_LENGTH, OPT_ARRAY_ZERO_TERMINATED)
+                               OPT_ARRAY_LENGTH, OPT_ARRAY_ZERO_TERMINATED,
+                               OPT_CONSTRUCTOR)
 from .annotationparser import AnnotationParser
 from .transformer import TransformerException
 from .utils import to_underscores, to_underscores_noprefix
@@ -574,6 +575,9 @@ usage is void (*_gtk_reserved1)(void);"""
         if OPT_FOREIGN in block.options:
             node.foreign = True
 
+        if OPT_CONSTRUCTOR in block.options and isinstance(node, ast.Function):
+            node.is_constructor = True
+
     def _apply_annotations_alias(self, node, chain):
         block = self._get_block(node)
         self._apply_annotations_annotated(node, block)
@@ -885,7 +889,8 @@ method or constructor of some type."""
             return
         (ns, subsymbol) = self._transformer.split_csymbol(func.symbol)
         assert ns == self._namespace
-        if self._pair_constructor(func, subsymbol):
+        if func.is_constructor or self._is_constructor(func, subsymbol):
+            self._set_up_constructor(func, subsymbol)
             return
         elif self._pair_method(func, subsymbol):
             return
@@ -957,7 +962,20 @@ method or constructor of some type."""
         func.name = funcname
         node.static_methods.append(func)
 
-    def _pair_constructor(self, func, subsymbol):
+    def _set_up_constructor(self, func, subsymbol):
+        self._namespace.float(func)
+
+        origin_node, funcname = self._split_uscored_by_type(subsymbol)
+        func.name = funcname
+        origin_node.constructors.append(func)
+
+        func.is_constructor = True
+
+        # Constructors have default return semantics
+        if not func.retval.transfer:
+            func.retval.transfer = self._get_transfer_default_return(func, func.retval)
+
+    def _is_constructor(self, func, subsymbol):
         if not (func.symbol.find('_new_') >= 0 or func.symbol.endswith('_new')):
             return False
         target = self._transformer.lookup_typenode(func.retval.type)
@@ -968,7 +986,6 @@ method or constructor of some type."""
 
         split = self._split_uscored_by_type(subsymbol)
         if split is None:
-            # TODO - need a e.g. (method) annotation
             message.warn_node(func,
                 "Can't find matching type for constructor; symbol=%r" % (func.symbol, ))
             return False
@@ -1013,13 +1030,7 @@ method or constructor of some type."""
                     str(origin_node.create_type()),
                     str(func.retval.type)))
                 return False
-        self._namespace.float(func)
-        func.name = funcname
-        func.is_constructor = True
-        origin_node.constructors.append(func)
-        # Constructors have default return semantics
-        if not func.retval.transfer:
-            func.retval.transfer = self._get_transfer_default_return(func, func.retval)
+
         return True
 
     def _pair_class_virtuals(self, node):
