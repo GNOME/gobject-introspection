@@ -63,7 +63,7 @@ def annotation_main(args):
         print '/* THIS FILE IS GENERATED DO NOT EDIT */'
         print '/' + ('*' * 60) + '/'
         print
-        for block in blocks.values():
+        for block in sorted(blocks.values()):
             print block.to_gtk_doc()
             print
         print
