@@ -29,7 +29,7 @@ if 'GI_SCANNER_DEBUG' in os.environ:
         pdb.pm()
     sys.excepthook = on_exception
 
-srcdir=os.getenv('UNINSTALLED_INTROSPECTION_SRCDIR', None)
+srcdir = os.getenv('UNINSTALLED_INTROSPECTION_SRCDIR', None)
 if srcdir is not None:
     path = srcdir
 else:
