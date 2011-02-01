@@ -4192,7 +4192,7 @@
 
 
 /**
- * G_URI_RESERVED_CHARS_SUBCOMPONENT_DELIMITER:
+ * G_URI_RESERVED_CHARS_SUBCOMPONENT_DELIMITERS:
  *
  * Subcomponent delimiter characters as defined in RFC 3986. Includes "!$&'()*+,;=".
  */
@@ -4709,7 +4709,7 @@
 
 
 /**
- * SECTION:enumerations_flag:
+ * SECTION:enumerations_flags
  * @short_description: Enumeration and flags types
  * @title: Enumeration and Flag Types g_param_spec_flags()
  *
@@ -4731,7 +4731,7 @@
 
 
 /**
- * SECTION:gbindin:
+ * SECTION:gbinding
  * @Title: GBinding
  * @Short_Description: Bind two object properties
  *
@@ -4798,7 +4798,7 @@
 
 
 /**
- * SECTION:gboxe:
+ * SECTION:gboxed
  * @short_description: A mechanism to wrap opaque C structures registered by the type system
  * @see_also: #GParamSpecBoxed, g_param_spec_boxed()
  * @title: Boxed Types
@@ -4813,7 +4813,7 @@
 
 
 /**
- * SECTION:gclosur:
+ * SECTION:gclosure
  * @short_description: Functions as first-class objects
  * @title: Closures
  *
@@ -4864,7 +4864,7 @@
 
 
 /**
- * SECTION:generic_value:
+ * SECTION:generic_values
  * @short_description: A polymorphic type that can hold values of any other type
  * @see_also: The fundamental types which all support #GValue operations and thus can be used as a type initializer for g_value_init() are defined by a separate interface.  See the <link linkend="gobject-Standard-Parameter-and-Value-Types">Standard Values API</link> for details.
  * @title: Generic values
@@ -4931,7 +4931,7 @@
 
 
 /**
- * SECTION:gparamspe:
+ * SECTION:gparamspec
  * @short_description: Metadata for parameter specifications
  * @see_also: g_object_class_install_property(), g_object_set(), g_object_get(), g_object_set_property(), g_object_get_property(), g_value_register_transform_func()
  * @title: GParamSpec
@@ -4949,7 +4949,7 @@
 
 
 /**
- * SECTION:gtyp:
+ * SECTION:gtype
  * @short_description: The GLib Runtime type identification and management system
  *
  * The GType API is the foundation of the GObject system.  It provides the
@@ -4985,7 +4985,7 @@
 
 
 /**
- * SECTION:gtypemodul:
+ * SECTION:gtypemodule
  * @short_description: Type loading modules <varlistentry> <term>#GTypePlugin</term> <listitem><para>The abstract type loader interface.</para></listitem> </varlistentry> <varlistentry> <term>#GModule</term> <listitem><para>Portable mechanism for dynamically loaded modules.</para></listitem> </varlistentry> </variablelist>
  * @title: GTypeModule
  *
@@ -5018,7 +5018,7 @@
 
 
 /**
- * SECTION:gtypeplugi:
+ * SECTION:gtypeplugin
  * @short_description: An interface for dynamically loadable types
  * @see_also: #GTypeModule and g_type_register_dynamic().
  * @title: GTypePlugin
@@ -5080,7 +5080,7 @@
 
 
 /**
- * SECTION:object:
+ * SECTION:objects
  * @short_description: The base object type
  * @see_also: #GParamSpecObject, g_param_spec_object()
  * @title: The Base Object Type
@@ -5142,7 +5142,7 @@
 
 
 /**
- * SECTION:param_value_type:
+ * SECTION:param_value_types
  * @short_description: Standard Parameter and Value Types
  * @see_also: #GParamSpec, #GValue, g_object_class_install_property().
  * @title: Parameters and Values
@@ -5161,7 +5161,7 @@
 
 
 /**
- * SECTION:signal:
+ * SECTION:signals
  * @short_description: A means for customization of object behaviour and a general purpose notification mechanism
  * @title: Signals
  *
@@ -5224,7 +5224,7 @@
 
 
 /**
- * SECTION:value_array:
+ * SECTION:value_arrays
  * @short_description: A container structure to maintain an array of generic values
  * @see_also: #GValue, #GParamSpecValueArray, g_param_spec_value_array()
  * @title: Value arrays
@@ -5237,7 +5237,7 @@
 
 
 /**
- * SECTION:value_collectio:
+ * SECTION:value_collection
  * @Short_description: Converting varargs to generic values
  * @Title: Varargs Value Collection
  *

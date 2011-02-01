@@ -9585,7 +9585,7 @@
 
 
 /**
- * G_URI_RESERVED_CHARS_SUBCOMPONENT_DELIMITER:
+ * G_URI_RESERVED_CHARS_SUBCOMPONENT_DELIMITERS:
  *
  * Subcomponent delimiter characters as defined in RFC 3986. Includes "!$&'()*+,;=".
  */
@@ -10100,29 +10100,7 @@
 
 
 /**
- * SECTION:
- * @title: GUnixFDMessage
- * @short_description: A GSocketControlMessage containing a GUnixFDList
- * @include: gio/gunixfdmessage.h
- * @see_also: #GUnixConnection, #GUnixFDList, #GSocketControlMessage
- *
- * This #GSocketControlMessage contains a #GUnixFDList.
- * It may be sent using g_socket_send_message() and received using
- * %G_SOCKET_ADDRESS_UNIX family). The file descriptors are copied
- * between processes by the kernel.
- * For an easier way to send and receive file descriptors over
- * stream-oriented UNIX sockets, see g_unix_connection_send_fd() and
- * g_unix_connection_receive_fd().
- * Note that <filename>&lt;gio/gunixfdmessage.h&gt;</filename> belongs to
- * the UNIX-specific GIO interfaces, thus you have to use the
- * <filename>gio-unix-2.0.pc</filename> pkg-config file when using it.
- *
- * G_socket_receive_message() over unix sockets (ie: sockets in the
- */
-
-
-/**
- * SECTION:extensionpoint:
+ * SECTION:extensionpoints
  * @short_description: Extension Points
  * @include: gio.h
  * @see_also: <link linkend="extending-gio">Extending GIO</link>
@@ -10167,7 +10145,7 @@
 
 
 /**
- * SECTION:gactio:
+ * SECTION:gaction
  * @title: GAction
  * @short_description: An action
  *
@@ -10198,7 +10176,7 @@
 
 
 /**
- * SECTION:gactiongrou:
+ * SECTION:gactiongroup
  * @title: GActionGroup
  * @short_description: A group of actions
  *
@@ -10220,7 +10198,7 @@
 
 
 /**
- * SECTION:gappinf:
+ * SECTION:gappinfo
  * @short_description: Application information and launch contexts
  * @include: gio/gio.h
  *
@@ -10271,7 +10249,79 @@
 
 
 /**
- * SECTION:gapplicationcommandlin:
+ * SECTION:gapplication
+ * @title: GApplication
+ * @short_description: Core application class
+ *
+ * A #GApplication is the foundation of an application, unique for a
+ * given application identifier.  The GApplication class wraps some
+ * low-level platform-specific services and is intended to act as the
+ * foundation for higher-level application classes such as
+ * #GtkApplication or #MxApplication.  In general, you should not use
+ * this class outside of a higher level framework.
+ * One of the core features that GApplication provides is process
+ * uniqueness, in the context of a "session".  The session concept is
+ * platform-dependent, but corresponds roughly to a graphical desktop
+ * login.  When your application is launched again, its arguments
+ * are passed through platform communication to the already running
+ * program. The already running instance of the program is called the
+ * <firstterm>primary instance</firstterm>.
+ * Before using GApplication, you must choose an "application identifier".
+ * The expected form of an application identifier is very close to that of
+ * of a <ulink url="http://dbus.freedesktop.org/doc/dbus-specification.html#message-protocol-names-interface">DBus bus name</ulink>.
+ * For details on valid application identifiers, see
+ * g_application_id_is_valid().
+ * The application identifier is claimed by the application as a
+ * well-known bus name on the user's session bus.  This means that the
+ * uniqueness of your application is scoped to the current session.  It
+ * also means that your application may provide additional services
+ * (through registration of other object paths) at that bus name.
+ * The registration of these object paths should be done with the shared
+ * GDBus session bus.  Note that due to the internal architecture of
+ * GDBus, method calls can be dispatched at any time (even if a main
+ * loop is not running).  For this reason, you must ensure that any
+ * object paths that you wish to register are registered before
+ * #GApplication attempts to acquire the bus name of your application
+ * (which happens in g_application_register()).  Unfortunately, this
+ * means that you can not use g_application_get_is_remote() to decide if
+ * you want to register object paths.
+ * GApplication provides convenient life cycle management by maintaining
+ * a <firstterm>use count</firstterm> for the primary application instance.
+ * The use count can be changed using g_application_hold() and
+ * g_application_release(). If it drops to zero, the application exits.
+ * GApplication also implements the #GActionGroup interface and lets you
+ * easily export actions by adding them with g_application_set_action_group().
+ * When invoking an action by calling g_action_group_activate_action() on
+ * the application, it is always invoked in the primary instance.
+ * There is a number of different entry points into a #GApplication:
+ * <itemizedlist>
+ * <listitem>via 'Activate' (i.e. just starting the application)</listitem>
+ * <listitem>via 'Open' (i.e. opening some files)</listitem>
+ * <listitem>via activating an action</listitem>
+ * </itemizedlist>
+ * The #GApplication::startup signal lets you handle the application
+ * initialization for all of these in a single place.
+ * <example id="gapplication-example-open"><title>Opening files with a GApplication</title>
+ * <programlisting>
+ * <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../gio/tests/gapplication-example-open.c">
+ * <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
+ * </xi:include>
+ * </programlisting>
+ * </example>
+ * <example id="gapplication-example-actions"><title>A GApplication with actions</title>
+ * <programlisting>
+ * <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../gio/tests/gapplication-example-actions.c">
+ * <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
+ * </xi:include>
+ * </programlisting>
+ * </example>
+ *
+ * Examples include: "com.example.MyApp", "org.example.internal-apps.Calculator".
+ */
+
+
+/**
+ * SECTION:gapplicationcommandline
  * @title: GApplicationCommandLine
  * @short_description: A command-line invocation of an application
  * @see_also: #GApplication
@@ -10308,7 +10358,7 @@
 
 
 /**
- * SECTION:gasynchelpe:
+ * SECTION:gasynchelper
  * @short_description: Asynchronous Helper Functions
  * @include: gio/gio.h
  * @see_also: #GAsyncReady
@@ -10318,7 +10368,7 @@
 
 
 /**
- * SECTION:gasyncinitabl:
+ * SECTION:gasyncinitable
  * @short_description: Asynchronously failable object initialization interface
  * @include: gio/gio.h
  * @see_also: #GInitable
@@ -10414,7 +10464,7 @@
 
 
 /**
- * SECTION:gasyncresul:
+ * SECTION:gasyncresult
  * @short_description: Asynchronous Function Results
  * @include: gio/gio.h
  * @see_also: #GSimpleAsyncResult
@@ -10484,7 +10534,7 @@
 
 
 /**
- * SECTION:gbufferedinputstrea:
+ * SECTION:gbufferedinputstream
  * @short_description: Buffered Input Stream
  * @include: gio/gio.h
  * @see_also: #GFilterInputStream, #GInputStream
@@ -10504,7 +10554,7 @@
 
 
 /**
- * SECTION:gbufferedoutputstrea:
+ * SECTION:gbufferedoutputstream
  * @short_description: Buffered Output Stream
  * @include: gio/gio.h
  * @see_also: #GFilterOutputStream, #GOutputStream
@@ -10524,7 +10574,7 @@
 
 
 /**
- * SECTION:gcancellabl:
+ * SECTION:gcancellable
  * @short_description: Thread-safe Operation Cancellation Stack
  * @include: gio/gio.h
  *
@@ -10535,7 +10585,7 @@
 
 
 /**
- * SECTION:gcharsetconverte:
+ * SECTION:gcharsetconverter
  * @short_description: Convert between charsets
  * @include: gio/gio.h
  *
@@ -10545,7 +10595,7 @@
 
 
 /**
- * SECTION:gcontenttyp:
+ * SECTION:gcontenttype
  * @short_description: Platform-specific content typing
  * @include: gio/gio.h
  *
@@ -10557,7 +10607,7 @@
 
 
 /**
- * SECTION:gconverte:
+ * SECTION:gconverter
  * @short_description: Data conversion interface
  * @include: gio/gio.h
  * @see_also: #GInputStream, #GOutputStream
@@ -10574,7 +10624,7 @@
 
 
 /**
- * SECTION:gconverterinputstrea:
+ * SECTION:gconverterinputstream
  * @short_description: Converter Input Stream
  * @include: gio/gio.h
  * @see_also: #GInputStream, #GConverter
@@ -10585,7 +10635,7 @@
 
 
 /**
- * SECTION:gconverteroutputstrea:
+ * SECTION:gconverteroutputstream
  * @short_description: Converter Output Stream
  * @include: gio/gio.h
  * @see_also: #GOutputStream, #GConverter
@@ -10596,7 +10646,7 @@
 
 
 /**
- * SECTION:gcredential:
+ * SECTION:gcredentials
  * @short_description: An object containing credentials
  * @include: gio/gio.h
  *
@@ -10621,7 +10671,7 @@
 
 
 /**
- * SECTION:gdatainputstrea:
+ * SECTION:gdatainputstream
  * @short_description: Data Input Stream
  * @include: gio/gio.h
  * @see_also: #GInputStream
@@ -10632,7 +10682,7 @@
 
 
 /**
- * SECTION:gdataoutputstrea:
+ * SECTION:gdataoutputstream
  * @short_description: Data Output Stream
  * @include: gio/gio.h
  * @see_also: #GOutputStream
@@ -10643,7 +10693,7 @@
 
 
 /**
- * SECTION:gdbusaddres:
+ * SECTION:gdbusaddress
  * @title: D-Bus Addresses
  * @short_description: D-Bus connection endpoints
  * @include: gio/gio.h
@@ -10655,7 +10705,7 @@
 
 
 /**
- * SECTION:gdbusauthobserve:
+ * SECTION:gdbusauthobserver
  * @short_description: Object used for authenticating connections
  * @include: gio/gio.h
  *
@@ -10691,7 +10741,7 @@
 
 
 /**
- * SECTION:gdbusconnectio:
+ * SECTION:gdbusconnection
  * @short_description: D-Bus Connections
  * @include: gio/gio.h
  *
@@ -10710,7 +10760,7 @@
 
 
 /**
- * SECTION:gdbuserro:
+ * SECTION:gdbuserror
  * @title: GDBusError
  * @short_description: Mapping D-Bus errors to and from GError
  * @include: gio/gio.h
@@ -10772,7 +10822,7 @@
 
 
 /**
- * SECTION:gdbusintrospectio:
+ * SECTION:gdbusintrospection
  * @title: D-Bus Introspection Data
  * @short_description: Node and interface description data structures
  * @include: gio/gio.h
@@ -10786,7 +10836,7 @@
 
 
 /**
- * SECTION:gdbusmessag:
+ * SECTION:gdbusmessage
  * @short_description: D-Bus Message
  * @include: gio/gio.h
  *
@@ -10796,7 +10846,7 @@
 
 
 /**
- * SECTION:gdbusmethodinvocatio:
+ * SECTION:gdbusmethodinvocation
  * @short_description: Object for handling remote calls
  * @include: gio/gio.h
  *
@@ -10810,7 +10860,7 @@
 
 
 /**
- * SECTION:gdbusnameownin:
+ * SECTION:gdbusnameowning
  * @title: Owning Bus Names
  * @short_description: Simple API for owning bus names
  * @include: gio/gio.h
@@ -10821,7 +10871,7 @@
 
 
 /**
- * SECTION:gdbusnamewatchin:
+ * SECTION:gdbusnamewatching
  * @title: Watching Bus Names
  * @short_description: Simple API for watching bus names
  * @include: gio/gio.h
@@ -10832,7 +10882,7 @@
 
 
 /**
- * SECTION:gdbusprox:
+ * SECTION:gdbusproxy
  * @short_description: Client-side proxies
  * @include: gio/gio.h
  *
@@ -10866,7 +10916,7 @@
 
 
 /**
- * SECTION:gdbusserve:
+ * SECTION:gdbusserver
  * @short_description: Helper for accepting connections
  * @include: gio/gio.h
  *
@@ -10877,7 +10927,7 @@
 
 
 /**
- * SECTION:gdbusutil:
+ * SECTION:gdbusutils
  * @title: D-Bus Utilities
  * @short_description: Various utilities related to D-Bus.
  * @include: gio/gio.h
@@ -10887,7 +10937,7 @@
 
 
 /**
- * SECTION:gdesktopappinf:
+ * SECTION:gdesktopappinfo
  * @title: GDesktopAppInfo
  * @short_description: Application information from desktop files
  * @include: gio/gdesktopappinfo.h
@@ -10901,7 +10951,7 @@
 
 
 /**
- * SECTION:gdriv:
+ * SECTION:gdrive
  * @short_description: Drive management
  * @include: gio/gio.h
  *
@@ -10931,7 +10981,7 @@
 
 
 /**
- * SECTION:gemble:
+ * SECTION:gemblem
  * @short_description: An object for emblems
  * @include: gio/gio.h
  * @see_also: #GIcon, #GEmblemedIcon, #GLoadableIcon, #GThemedIcon
@@ -10945,7 +10995,7 @@
 
 
 /**
- * SECTION:gemblemedico:
+ * SECTION:gemblemedicon
  * @short_description: Icon with emblems
  * @include: gio/gio.h
  * @see_also: #GIcon, #GLoadableIcon, #GThemedIcon, #GEmblem
@@ -10959,7 +11009,7 @@
 
 
 /**
- * SECTION:gfil:
+ * SECTION:gfile
  * @short_description: File and Directory Handling
  * @include: gio/gio.h
  * @see_also: #GFileInfo, #GFileEnumerator
@@ -11030,7 +11080,7 @@
 
 
 /**
- * SECTION:gfileattribut:
+ * SECTION:gfileattribute
  * @short_description: Key-Value Paired File Attributes
  * @include: gio/gio.h
  * @see_also: #GFile, #GFileInfo
@@ -11202,7 +11252,7 @@
 
 
 /**
- * SECTION:gfiledescriptorbase:
+ * SECTION:gfiledescriptorbased
  * @short_description: Interface for file descriptor based IO
  * @include: gio/gfiledescriptorbased.h
  * @see_also: #GInputStream, #GOutputStream
@@ -11218,7 +11268,7 @@
 
 
 /**
- * SECTION:gfileenumerato:
+ * SECTION:gfileenumerator
  * @short_description: Enumerated Files Routines
  * @include: gio/gio.h
  *
@@ -11239,7 +11289,7 @@
 
 
 /**
- * SECTION:gfileico:
+ * SECTION:gfileicon
  * @short_description: Icons pointing to an image file
  * @include: gio/gio.h
  * @see_also: #GIcon, #GLoadableIcon
@@ -11250,7 +11300,7 @@
 
 
 /**
- * SECTION:gfileinf:
+ * SECTION:gfileinfo
  * @short_description: File Information and Attributes
  * @include: gio/gio.h
  * @see_also: #GFile, <link linkend="gio-GFileAttribute">GFileAttribute</link>
@@ -11278,7 +11328,7 @@
 
 
 /**
- * SECTION:gfileinputstrea:
+ * SECTION:gfileinputstream
  * @short_description: File input streaming operations
  * @include: gio/gio.h
  * @see_also: #GInputStream, #GDataInputStream, #GSeekable
@@ -11295,7 +11345,7 @@
 
 
 /**
- * SECTION:gfileiostrea:
+ * SECTION:gfileiostream
  * @short_description: File read and write streaming operations
  * @include: gio/gio.h
  * @see_also: #GIOStream, #GFileInputStream, #GFileOutputStream, #GSeekable
@@ -11322,7 +11372,7 @@
 
 
 /**
- * SECTION:gfilemonito:
+ * SECTION:gfilemonitor
  * @short_description: File Monitor
  * @include: gio/gio.h
  *
@@ -11342,7 +11392,7 @@
 
 
 /**
- * SECTION:gfilenamecomplete:
+ * SECTION:gfilenamecompleter
  * @short_description: Filename Completer
  * @include: gio/gio.h
  *
@@ -11353,7 +11403,7 @@
 
 
 /**
- * SECTION:gfileoutputstrea:
+ * SECTION:gfileoutputstream
  * @short_description: File output streaming operations
  * @include: gio/gio.h
  * @see_also: #GOutputStream, #GDataOutputStream, #GSeekable
@@ -11374,7 +11424,7 @@
 
 
 /**
- * SECTION:gfilterinputstrea:
+ * SECTION:gfilterinputstream
  * @short_description: Filter Input Stream
  * @include: gio/gio.h
  *
@@ -11386,7 +11436,7 @@
 
 
 /**
- * SECTION:gfilteroutputstrea:
+ * SECTION:gfilteroutputstream
  * @short_description: Filter Output Stream
  * @include: gio/gio.h
  *
@@ -11398,7 +11448,7 @@
 
 
 /**
- * SECTION:gico:
+ * SECTION:gicon
  * @short_description: Interface for icons
  * @include: gio/gio.h
  *
@@ -11419,7 +11469,7 @@
 
 
 /**
- * SECTION:ginetaddres:
+ * SECTION:ginetaddress
  * @short_description: An IPv4/IPv6 address
  *
  * #GInetAddress represents an IPv4 or IPv6 internet address. Use
@@ -11435,7 +11485,7 @@
 
 
 /**
- * SECTION:ginetsocketaddres:
+ * SECTION:ginetsocketaddress
  * @short_description: Internet GSocketAddress
  *
  * An IPv4 or IPv6 socket address; that is, the combination of a
@@ -11444,7 +11494,7 @@
 
 
 /**
- * SECTION:ginitabl:
+ * SECTION:ginitable
  * @short_description: Failable object initialization interface
  * @include: gio/gio.h
  * @see_also: #GAsyncInitable
@@ -11469,7 +11519,7 @@
 
 
 /**
- * SECTION:ginputstrea:
+ * SECTION:ginputstream
  * @short_description: Base class for implementing streaming input
  * @include: gio/gio.h
  *
@@ -11483,7 +11533,7 @@
 
 
 /**
- * SECTION:gioerro:
+ * SECTION:gioerror
  * @short_description: Error helper functions
  * @include: gio/gio.h
  *
@@ -11492,7 +11542,7 @@
 
 
 /**
- * SECTION:giomodul:
+ * SECTION:giomodule
  * @short_description: Loadable GIO Modules
  * @include: gio/gio.h
  *
@@ -11503,7 +11553,7 @@
 
 
 /**
- * SECTION:gioschedule:
+ * SECTION:gioscheduler
  * @short_description: I/O Scheduler
  * @include: gio/gio.h
  *
@@ -11522,7 +11572,7 @@
 
 
 /**
- * SECTION:giostrea:
+ * SECTION:giostream
  * @short_description: Base class for implementing read/write streams
  * @include: gio/gio.h
  * @see_also: #GInputStream, #GOutputStream
@@ -11553,7 +11603,7 @@
 
 
 /**
- * SECTION:gloadableico:
+ * SECTION:gloadableicon
  * @short_description: Loadable Icons
  * @include: gio/gio.h
  * @see_also: #GIcon, #GThemedIcon
@@ -11564,7 +11614,7 @@
 
 
 /**
- * SECTION:gmemoryinputstrea:
+ * SECTION:gmemoryinputstream
  * @short_description: Streaming input operations on memory chunks
  * @include: gio/gio.h
  * @see_also: #GMemoryOutputStream
@@ -11575,7 +11625,7 @@
 
 
 /**
- * SECTION:gmemoryoutputstrea:
+ * SECTION:gmemoryoutputstream
  * @short_description: Streaming output operations on memory chunks
  * @include: gio/gio.h
  * @see_also: #GMemoryInputStream
@@ -11586,7 +11636,7 @@
 
 
 /**
- * SECTION:gmoun:
+ * SECTION:gmount
  * @short_description: Mount management
  * @include: gio/gio.h
  * @see_also: GVolume, GUnixMount
@@ -11612,7 +11662,7 @@
 
 
 /**
- * SECTION:gmountoperatio:
+ * SECTION:gmountoperation
  * @short_description: Object used for authentication and user interaction
  * @include: gio/gio.h
  *
@@ -11633,7 +11683,7 @@
 
 
 /**
- * SECTION:gnetworkaddres:
+ * SECTION:gnetworkaddress
  * @short_description: A GSocketConnectable for resolving hostnames
  * @include: gio/gio.h
  *
@@ -11646,7 +11696,7 @@
 
 
 /**
- * SECTION:gnetworkservic:
+ * SECTION:gnetworkservice
  * @short_description: A GSocketConnectable for resolving SRV records
  * @include: gio/gio.h
  *
@@ -11662,7 +11712,7 @@
 
 
 /**
- * SECTION:goutputstrea:
+ * SECTION:goutputstream
  * @short_description: Base class for implementing streaming output
  * @include: gio/gio.h
  *
@@ -11676,7 +11726,7 @@
 
 
 /**
- * SECTION:gpermissio:
+ * SECTION:gpermission
  * @title: GPermission
  * @short_description: An object representing the permission to perform a certain action
  *
@@ -11696,7 +11746,7 @@
 
 
 /**
- * SECTION:gpollableinputstrea:
+ * SECTION:gpollableinputstream
  * @short_description: Interface for pollable input streams
  * @include: gio/gio.h
  * @see_also: #GInputStream, #GPollableOutputStream, #GFileDescriptorBased
@@ -11711,7 +11761,7 @@
 
 
 /**
- * SECTION:gpollableoutputstrea:
+ * SECTION:gpollableoutputstream
  * @short_description: Interface for pollable output streams
  * @include: gio/gio.h
  * @see_also: #GOutputStream, #GFileDescriptorBased, #GPollableInputStream
@@ -11726,7 +11776,7 @@
 
 
 /**
- * SECTION:gprox:
+ * SECTION:gproxy
  * @short_description: Interface for proxy handling
  *
  * A #GProxy handles connecting to a remote host via a given type of
@@ -11741,7 +11791,7 @@
 
 
 /**
- * SECTION:gproxyaddres:
+ * SECTION:gproxyaddress
  * @short_description: An internet address with proxy information
  *
  * Support for proxied #GInetSocketAddress.
@@ -11749,7 +11799,7 @@
 
 
 /**
- * SECTION:gproxyresolve:
+ * SECTION:gproxyresolver
  * @short_description: Asynchronous and cancellable network proxy resolver
  * @include: gio/gio.h
  *
@@ -11760,7 +11810,7 @@
 
 
 /**
- * SECTION:gresolve:
+ * SECTION:gresolver
  * @short_description: Asynchronous and cancellable DNS resolver
  * @include: gio/gio.h
  *
@@ -11775,7 +11825,7 @@
 
 
 /**
- * SECTION:gseekabl:
+ * SECTION:gseekable
  * @short_description: Stream seeking interface
  * @include: gio/gio.h
  * @see_also: #GInputStream, #GOutputStream
@@ -11786,7 +11836,7 @@
 
 
 /**
- * SECTION:gsetting:
+ * SECTION:gsettings
  * @short_description: High-level API for application settings
  *
  * The #GSettings class provides a convenient API for storing and retrieving
@@ -11932,7 +11982,7 @@
 
 
 /**
- * SECTION:gsettingsbacken:
+ * SECTION:gsettingsbackend
  * @title: GSettingsBackend
  * @short_description: Interface for settings backend implementations
  * @include: gio/gsettingsbackend.h
@@ -11964,7 +12014,7 @@
 
 
 /**
- * SECTION:gsimpleactio:
+ * SECTION:gsimpleaction
  * @title: GSimpleAction
  * @short_description: A simple GSimpleAction
  *
@@ -11976,7 +12026,7 @@
 
 
 /**
- * SECTION:gsimpleactiongrou:
+ * SECTION:gsimpleactiongroup
  * @title: GSimpleActionGroup
  * @short_description: A simple GActionGroup implementation
  *
@@ -11986,7 +12036,7 @@
 
 
 /**
- * SECTION:gsimpleasyncresul:
+ * SECTION:gsimpleasyncresult
  * @short_description: Simple asynchronous results implementation
  * @include: gio/gio.h
  * @see_also: #GAsyncResult
@@ -12139,7 +12189,7 @@
 
 
 /**
- * SECTION:gsimplepermissio:
+ * SECTION:gsimplepermission
  * @title: GSimplePermission
  * @short_description: A GPermission that doesn't change value
  *
@@ -12151,7 +12201,7 @@
 
 
 /**
- * SECTION:gsocke:
+ * SECTION:gsocket
  * @short_description: Low-level socket object
  * @include: gio/gio.h
  * @see_also: #GInitable
@@ -12201,7 +12251,7 @@
 
 
 /**
- * SECTION:gsocketaddres:
+ * SECTION:gsocketaddress
  * @short_description: Abstract base class representing endpoints for socket communication
  *
  * #GSocketAddress is the equivalent of <type>struct sockaddr</type>
@@ -12212,7 +12262,7 @@
 
 
 /**
- * SECTION:gsocketclien:
+ * SECTION:gsocketclient
  * @short_description: Helper for connecting to a network service
  * @include: gio/gio.h
  * @see_also: #GSocketConnection, #GSocketListener
@@ -12231,7 +12281,7 @@
 
 
 /**
- * SECTION:gsocketconnectabl:
+ * SECTION:gsocketconnectable
  * @short_description: Interface for potential socket endpoints
  *
  * Objects that describe one or more potential socket endpoints
@@ -12296,7 +12346,7 @@
 
 
 /**
- * SECTION:gsocketconnectio:
+ * SECTION:gsocketconnection
  * @short_description: A socket connection
  * @include: gio/gio.h
  * @see_also: #GIOStream, #GSocketClient, #GSocketListener
@@ -12317,7 +12367,82 @@
 
 
 /**
- * SECTION:gsrvtarge:
+ * SECTION:gsocketcontrolmessage
+ * @title: GSocketControlMessage
+ * @short_description: A GSocket control message
+ * @see_also: #GSocket.
+ *
+ * A #GSocketControlMessage is a special-purpose utility message that
+ * can be sent to or received from a #GSocket. These types of
+ * messages are often called "ancillary data".
+ * The message can represent some sort of special instruction to or
+ * information from the socket or can represent a special kind of
+ * transfer to the peer (for example, sending a file description over
+ * a UNIX socket).
+ * These messages are sent with g_socket_send_message() and received
+ * with g_socket_receive_message().
+ * To extend the set of control message that can be sent, subclass this
+ * class and override the get_size, get_level, get_type and serialize
+ * methods.
+ * To extend the set of control messages that can be received, subclass
+ * this class and implement the deserialize method. Also, make sure your
+ * class is registered with the GType typesystem before calling
+ * g_socket_receive_message() to read such a message.
+ *
+ * Since: 2.22
+ */
+
+
+/**
+ * SECTION:gsocketlistener
+ * @title: GSocketListener
+ * @short_description: Helper for accepting network client connections
+ * @see_also: #GThreadedSocketService, #GSocketService.
+ *
+ * A #GSocketListener is an object that keeps track of a set
+ * of server sockets and helps you accept sockets from any of the
+ * socket, either sync or async.
+ * If you want to implement a network server, also look at #GSocketService
+ * and #GThreadedSocketService which are subclass of #GSocketListener
+ * that makes this even easier.
+ *
+ * Since: 2.22
+ */
+
+
+/**
+ * SECTION:gsocketservice
+ * @title: GSocketService
+ * @short_description: Make it easy to implement a network service
+ * @see_also: #GThreadedSocketService, #GSocketListener.
+ *
+ * A #GSocketService is an object that represents a service that is
+ * provided to the network or over local sockets.  When a new
+ * connection is made to the service the #GSocketService:incoming
+ * signal is emitted.
+ * A #GSocketService is a subclass of #GSocketListener and you need
+ * to add the addresses you want to accept connections on to the
+ * with the #GSocketListener APIs.
+ * There are two options for implementing a network service based on
+ * #GSocketService. The first is to create the service using
+ * g_socket_service_new() and to connect to the #GSocketService:incoming
+ * signal. The second is to subclass #GSocketService and override the
+ * default signal handler implementation.
+ * In either case, the handler must immediately return, or else it
+ * will block additional incoming connections from being serviced.
+ * If you are interested in writing connection handlers that contain
+ * blocking code then see #GThreadedSocketService.
+ * The socket service runs on the main loop in the main thread, and is
+ * not threadsafe in general. However, the calls to start and stop
+ * the service are threadsafe so these can be used from threads that
+ * handle incoming clients.
+ *
+ * Since: 2.22
+ */
+
+
+/**
+ * SECTION:gsrvtarget
  * @short_description: DNS SRV record target
  * @include: gio/gio.h
  *
@@ -12338,7 +12463,36 @@
 
 
 /**
- * SECTION:gthemedico:
+ * SECTION:gtcpconnection
+ * @title: GTcpConnection
+ * @short_description: A TCP GSocketConnection
+ * @see_also: #GSocketConnection.
+ *
+ * This is the subclass of #GSocketConnection that is created
+ * for TCP/IP sockets.
+ *
+ * Since: 2.22
+ */
+
+
+/**
+ * SECTION:gtcpwrapperconnection
+ * @title: GTcpWrapperConnection
+ * @short_description: wrapper for non-GSocketConnection-based, GSocket-based GIOStreams
+ * @see_also: #GSocketConnection.
+ *
+ * A #GTcpWrapperConnection can be used to wrap a #GIOStream that is
+ * based on a #GSocket, but which is not actually a
+ * #GSocketConnection. This is used by #GSocketClient so that it can
+ * always return a #GSocketConnection, even when the connection it has
+ * actually created is not directly a #GSocketConnection.
+ *
+ * Since: 2.28
+ */
+
+
+/**
+ * SECTION:gthemedicon
  * @short_description: Icon theming support
  * @include: gio/gio.h
  * @see_also: #GIcon, #GLoadableIcon
@@ -12354,7 +12508,28 @@
 
 
 /**
- * SECTION:gtl:
+ * SECTION:gthreadedsocketservice
+ * @title: GThreadedSocketService
+ * @short_description: A threaded GSocketService
+ * @see_also: #GSocketService.
+ *
+ * A #GThreadedSocketService is a simple subclass of #GSocketService
+ * that handles incoming connections by creating a worker thread and
+ * dispatching the connection to it by emitting the ::run signal in
+ * the new thread.
+ * The signal handler may perform blocking IO and need not return
+ * until the connection is closed.
+ * The service is implemented using a thread pool, so there is a
+ * limited amount of threads availible to serve incomming requests.
+ * The service automatically stops the #GSocketService from accepting
+ * new connections when all threads are busy.
+ * As with #GSocketService, you may connect to #GThreadedSocketService:run,
+ * or subclass and override the default handler.
+ */
+
+
+/**
+ * SECTION:gtls
  * @title: TLS Overview
  * @short_description: TLS (aka SSL) support for GSocketConnection
  * @include: gio/gio.h
@@ -12383,7 +12558,7 @@
 
 
 /**
- * SECTION:gtlsbacken:
+ * SECTION:gtlsbackend
  * @title: GTlsBackend
  * @short_description: TLS backend implementation
  * @include: gio/gio.h
@@ -12393,7 +12568,23 @@
 
 
 /**
- * SECTION:gtlsclientconnectio:
+ * SECTION:gtlscertificate
+ * @title: GTlsCertificate
+ * @short_description: TLS certificate
+ * @see_also: #GTlsConnection
+ *
+ * A certificate used for TLS authentication and encryption.
+ * This can represent either a public key only (eg, the certificate
+ * received by a client from a server), or the combination of
+ * a public key and a private key (which is needed when acting as a
+ * #GTlsServerConnection).
+ *
+ * Since: 2.28
+ */
+
+
+/**
+ * SECTION:gtlsclientconnection
  * @short_description: TLS client-side connection
  * @include: gio/gio.h
  *
@@ -12403,7 +12594,7 @@
 
 
 /**
- * SECTION:gtlsconnectio:
+ * SECTION:gtlsconnection
  * @short_description: TLS connection type
  * @include: gio/gio.h
  *
@@ -12417,7 +12608,7 @@
 
 
 /**
- * SECTION:gtlsserverconnectio:
+ * SECTION:gtlsserverconnection
  * @short_description: TLS server-side connection
  * @include: gio/gio.h
  *
@@ -12429,7 +12620,87 @@
 
 
 /**
- * SECTION:gunixinputstrea:
+ * SECTION:gunixconnection
+ * @title: GUnixConnection
+ * @short_description: A UNIX domain GSocketConnection
+ * @include: gio/gunixconnection.h
+ * @see_also: #GSocketConnection.
+ *
+ * This is the subclass of #GSocketConnection that is created
+ * for UNIX domain sockets.
+ * It contains functions to do some of the UNIX socket specific
+ * functionality like passing file descriptors.
+ * Note that <filename>&lt;gio/gunixconnection.h&gt;</filename> belongs to
+ * the UNIX-specific GIO interfaces, thus you have to use the
+ * <filename>gio-unix-2.0.pc</filename> pkg-config file when using it.
+ *
+ * Since: 2.22
+ */
+
+
+/**
+ * SECTION:gunixcredentialsmessage
+ * @title: GUnixCredentialsMessage
+ * @short_description: A GSocketControlMessage containing credentials
+ * @include: gio/gunixcredentialsmessage.h
+ * @see_also: #GUnixConnection, #GSocketControlMessage
+ *
+ * This #GSocketControlMessage contains a #GCredentials instance.  It
+ * may be sent using g_socket_send_message() and received using
+ * %G_SOCKET_FAMILY_UNIX family).
+ * For an easier way to send and receive credentials over
+ * stream-oriented UNIX sockets, see
+ * g_unix_connection_send_credentials() and
+ * g_unix_connection_receive_credentials(). To receive credentials of
+ * a foreign process connected to a socket, use
+ * g_socket_get_credentials().
+ *
+ * G_socket_receive_message() over unix sockets (ie: sockets in the
+ */
+
+
+/**
+ * SECTION:gunixfdlist
+ * @title: GUnixFDList
+ * @short_description: An object containing a set of UNIX file descriptors
+ * @include: gio/gunixfdlist.h
+ * @see_also: #GUnixFDMessage
+ *
+ * A #GUnixFDList contains a list of file descriptors.  It owns the file
+ * descriptors that it contains, closing them when finalized.
+ * It may be wrapped in a #GUnixFDMessage and sent over a #GSocket in
+ * the %G_SOCKET_ADDRESS_UNIX family by using g_socket_send_message()
+ * and received using g_socket_receive_message().
+ * Note that <filename>&lt;gio/gunixfdlist.h&gt;</filename> belongs to
+ * the UNIX-specific GIO interfaces, thus you have to use the
+ * <filename>gio-unix-2.0.pc</filename> pkg-config file when using it.
+ */
+
+
+/**
+ * SECTION:gunixfdmessage
+ * @title: GUnixFDMessage
+ * @short_description: A GSocketControlMessage containing a GUnixFDList
+ * @include: gio/gunixfdmessage.h
+ * @see_also: #GUnixConnection, #GUnixFDList, #GSocketControlMessage
+ *
+ * This #GSocketControlMessage contains a #GUnixFDList.
+ * It may be sent using g_socket_send_message() and received using
+ * %G_SOCKET_ADDRESS_UNIX family). The file descriptors are copied
+ * between processes by the kernel.
+ * For an easier way to send and receive file descriptors over
+ * stream-oriented UNIX sockets, see g_unix_connection_send_fd() and
+ * g_unix_connection_receive_fd().
+ * Note that <filename>&lt;gio/gunixfdmessage.h&gt;</filename> belongs to
+ * the UNIX-specific GIO interfaces, thus you have to use the
+ * <filename>gio-unix-2.0.pc</filename> pkg-config file when using it.
+ *
+ * G_socket_receive_message() over unix sockets (ie: sockets in the
+ */
+
+
+/**
+ * SECTION:gunixinputstream
  * @short_description: Streaming input operations for UNIX file descriptors
  * @include: gio/gunixinputstream.h
  * @see_also: #GInputStream
@@ -12444,7 +12715,7 @@
 
 
 /**
- * SECTION:gunixmount:
+ * SECTION:gunixmounts
  * @include: gio/gunixmounts.h
  * @short_description: UNIX mounts
  *
@@ -12456,7 +12727,7 @@
 
 
 /**
- * SECTION:gunixoutputstrea:
+ * SECTION:gunixoutputstream
  * @short_description: Streaming output operations for UNIX file descriptors
  * @include: gio/gunixoutputstream.h
  * @see_also: #GOutputStream
@@ -12471,7 +12742,7 @@
 
 
 /**
- * SECTION:gunixsocketaddres:
+ * SECTION:gunixsocketaddress
  * @short_description: UNIX GSocketAddress
  * @include: gio/gunixsocketaddress.h
  *
@@ -12491,7 +12762,7 @@
 
 
 /**
- * SECTION:gvf:
+ * SECTION:gvfs
  * @short_description: Virtual File System
  * @include: gio/gio.h
  *
@@ -12500,7 +12771,7 @@
 
 
 /**
- * SECTION:gvolum:
+ * SECTION:gvolume
  * @short_description: Volume management
  * @include: gio/gio.h
  *
@@ -12545,7 +12816,7 @@
 
 
 /**
- * SECTION:gvolumemonito:
+ * SECTION:gvolumemonitor
  * @short_description: Volume Monitor
  * @include: gio/gio.h
  * @see_also: #GFileMonitor
@@ -12561,7 +12832,7 @@
 
 
 /**
- * SECTION:gwin32inputstrea:
+ * SECTION:gwin32inputstream
  * @short_description: Streaming input operations for Windows file handles
  * @include: gio/gwin32inputstream.h
  * @see_also: #GInputStream
@@ -12575,7 +12846,7 @@
 
 
 /**
- * SECTION:gwin32outputstrea:
+ * SECTION:gwin32outputstream
  * @short_description: Streaming output operations for Windows file handles
  * @include: gio/gwin32outputstream.h
  * @see_also: #GOutputStream
@@ -12589,7 +12860,7 @@
 
 
 /**
- * SECTION:gzcompresso:
+ * SECTION:gzcompressor
  * @short_description: Zlib compressor
  * @include: gio/gio.h
  *
@@ -12599,7 +12870,7 @@
 
 
 /**
- * SECTION:gzdecompresso:
+ * SECTION:gzdecompressor
  * @short_description: Zlib decompressor
  * @include: gio/gio.h
  *
@@ -12609,7 +12880,7 @@
 
 
 /**
- * The string info map is an efficient data structure designed to b:
+ * The string info map is an efficient data structure designed to be:
  *
  * used with a small set of items.  It is used by GSettings schemas for
  * three purposes:
@@ -20842,7 +21113,7 @@
 
 
 /**
- * g_file_info_set_modification_tim:
+ * g_file_info_set_modification_time:
  * @info: a #GFileInfo.
  * @mtime: a #GTimeVal.
  *
@@ -21144,7 +21415,7 @@
 
 
 /**
- * g_file_make_director:
+ * g_file_make_directory:
  * @file: input #GFile.
  * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  * @error: a #GError, or %NULL
@@ -24428,7 +24699,7 @@
 
 
 /**
- * g_mount_operation_get_usernam:
+ * g_mount_operation_get_username:
  * @op: a #GMountOperation.
  *
  * Get the user name from the mount operation.
@@ -25569,7 +25840,7 @@
 
 
 /**
- * g_proxy_address_get_destination_hostnam:
+ * g_proxy_address_get_destination_hostname:
  * @proxy: a #GProxyAddress
  *
  * Gets @proxy's destination hostname.
@@ -25580,7 +25851,7 @@
 
 
 /**
- * g_proxy_address_get_destination_por:
+ * g_proxy_address_get_destination_port:
  * @proxy: a #GProxyAddress
  *
  * Gets @proxy's destination port.
@@ -25591,7 +25862,7 @@
 
 
 /**
- * g_proxy_address_get_passwor:
+ * g_proxy_address_get_password:
  * @proxy: a #GProxyAddress
  *
  * Gets @proxy's password.
@@ -25613,7 +25884,7 @@
 
 
 /**
- * g_proxy_address_get_usernam:
+ * g_proxy_address_get_username:
  * @proxy: a #GProxyAddress
  *
  * Gets @proxy's username.
