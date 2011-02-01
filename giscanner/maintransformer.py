@@ -217,6 +217,11 @@ usage is void (*_gtk_reserved1)(void);"""
             block = self._get_block(node)
             for field in node.fields:
                 self._apply_annotations_field(node, block, field)
+            name = self._get_annotation_name(node)
+            section_name = 'SECTION:' + name.lower()
+            block = self._blocks.get(section_name)
+            if block:
+                node.doc = block.comment
         if isinstance(node, (ast.Class, ast.Interface)):
             for prop in node.properties:
                 self._apply_annotations_property(node, prop)

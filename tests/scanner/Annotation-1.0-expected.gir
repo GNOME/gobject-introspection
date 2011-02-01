@@ -516,6 +516,7 @@ annotation_object_watch_full().</doc>
         </return-value>
         <parameters>
           <parameter name="data" transfer-ownership="none">
+            <doc xml:whitespace="preserve">Opaque pointer handle</doc>
             <type name="gpointer" c:type="void*"/>
           </parameter>
         </parameters>

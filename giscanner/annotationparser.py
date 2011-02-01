@@ -123,7 +123,10 @@ class DocBlock(object):
         if self.options:
             options += ' '
             options += ' '.join('(%s)' % o for o in self.options)
-        lines = [self.name + ':' + options]
+        lines = [self.name]
+        if 'SECTION' not in self.name:
+            lines[0] += ':'
+        lines[0] += options
         tags = []
         for name, tag in self.tags.iteritems():
             if name in self.params:
@@ -451,8 +454,11 @@ class AnnotationParser(object):
         block_header = block_header.strip()
         cpos = block_header.find(': ')
         block_name = block_header
-        if cpos:
-            block_name = block_name[:cpos]
+        raw_name = block_header
+        if cpos != -1:
+            block_name = block_name[:cpos].strip()
+        if block_name.endswith(':'):
+            block_name = block_name[:-1]
         block = DocBlock(block_name)
         block.set_position(message.Position(filename, lineno))
 
