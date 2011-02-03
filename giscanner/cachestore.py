@@ -56,7 +56,10 @@ def _get_cachedir():
 
     scannerdir = os.path.join(cachedir, 'g-ir-scanner')
     if not os.path.exists(scannerdir):
-        os.mkdir(scannerdir, 0755)
+        try:
+            os.mkdir(scannerdir, 0755)
+        except OSError:
+            return None
     # If it exists and is a file, don't cache at all
     elif not os.path.isdir(scannerdir):
         return None
