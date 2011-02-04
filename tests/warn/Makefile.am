@@ -6,6 +6,7 @@ TESTS = \
 	return-gobject.h \
 	invalid-array.h \
 	invalid-closure.h \
+	invalid-constructor.h \
 	invalid-element-type.h \
 	invalid-method.h \
 	invalid-option.h \

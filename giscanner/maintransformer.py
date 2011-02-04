@@ -897,7 +897,7 @@ method or constructor of some type."""
             return
         (ns, subsymbol) = self._transformer.split_csymbol(func.symbol)
         assert ns == self._namespace
-        if func.is_constructor or self._is_constructor(func, subsymbol):
+        if self._is_constructor(func, subsymbol):
             self._set_up_constructor(func, subsymbol)
             return
         elif self._is_method(func, subsymbol):
@@ -1002,31 +1002,66 @@ method or constructor of some type."""
     def _set_up_constructor(self, func, subsymbol):
         self._namespace.float(func)
 
-        origin_node, funcname = self._split_uscored_by_type(subsymbol)
-        func.name = funcname
+        func.name = self._get_constructor_name(func, subsymbol)
+
+        origin_node = self._get_constructor_class(func, subsymbol)
         origin_node.constructors.append(func)
 
         func.is_constructor = True
 
         # Constructors have default return semantics
         if not func.retval.transfer:
-            func.retval.transfer = self._get_transfer_default_return(func, func.retval)
+            func.retval.transfer = self._get_transfer_default_return(func,
+                    func.retval)
+
+    def _get_constructor_class(self, func, subsymbol):
+        origin_node = None
+        split = self._split_uscored_by_type(subsymbol)
+        if split is None:
+            if func.is_constructor:
+                origin_node = self._transformer.lookup_typenode(func.retval.type)
+        else:
+            origin_node, _ = split
+
+        return origin_node
+
+    def _get_constructor_name(self, func, subsymbol):
+        name = None
+        split = self._split_uscored_by_type(subsymbol)
+        if split is None:
+            if func.is_constructor:
+                name = func.name
+        else:
+            _, name = split
+
+        return name
 
     def _is_constructor(self, func, subsymbol):
-        if not (func.symbol.find('_new_') >= 0 or func.symbol.endswith('_new')):
+        if False and func.symbol == 'regress_constructor':
+            import pdb
+            pdb.set_trace()
+        # func.is_constructor will be True if we have a (constructor) annotation
+        if not func.is_constructor and \
+                not (func.symbol.find('_new_') >= 0 or \
+                        func.symbol.endswith('_new')):
             return False
         target = self._transformer.lookup_typenode(func.retval.type)
         if not (isinstance(target, ast.Class)
                 or (isinstance(target, (ast.Record, ast.Union, ast.Boxed))
                     and (target.get_type is not None or target.foreign))):
+            if func.is_constructor:
+                message.warn_node(func,
+                    '%s: Constructors must return an instance of their class'
+                    % (func.symbol, ))
             return False
 
-        split = self._split_uscored_by_type(subsymbol)
-        if split is None:
+        origin_node = self._get_constructor_class(func, subsymbol)
+        if origin_node is None:
             message.warn_node(func,
-                "Can't find matching type for constructor; symbol=%r" % (func.symbol, ))
+                "Can't find matching type for constructor; symbol=%r" \
+                % (func.symbol, ))
             return False
-        (origin_node, funcname) = split
+
         # Some sanity checks; only objects and boxeds can have ctors
         if not (isinstance(origin_node, ast.Class)
                 or (isinstance(origin_node, (ast.Record, ast.Union, ast.Boxed))
@@ -1034,9 +1069,13 @@ method or constructor of some type."""
             return False
         # Verify the namespace - don't want to append to foreign namespaces!
         if origin_node.namespace != self._namespace:
+            if func.is_constructor:
+                message.warn_node(func,
+                    '%s: Constructors must belong to the same namespace as the '
+                    'class they belong to' % (func.symbol, ))
             return False
-        # If it takes the object as a first arg, it's not a constructor
-        if len(func.parameters) > 0:
+        # If it takes the object as a first arg, guess it's not a constructor
+        if not func.is_constructor and len(func.parameters) > 0:
             first_arg = self._transformer.lookup_typenode(func.parameters[0].type)
             if (first_arg is not None) and first_arg.gi_name == origin_node.gi_name:
                 return False

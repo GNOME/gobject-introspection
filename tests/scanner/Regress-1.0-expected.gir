@@ -372,6 +372,11 @@ use it should be.</doc>
            glib:type-name="RegressTestObj"
            glib:get-type="regress_test_obj_get_type"
            glib:type-struct="TestObjClass">
+      <constructor name="constructor" c:identifier="regress_constructor">
+        <return-value transfer-ownership="full">
+          <type name="TestObj" c:type="RegressTestObj*"/>
+        </return-value>
+      </constructor>
       <constructor name="new" c:identifier="regress_test_obj_new">
         <return-value transfer-ownership="full">
           <type name="TestObj" c:type="RegressTestObj*"/>

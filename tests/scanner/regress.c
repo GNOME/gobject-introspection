@@ -1920,6 +1920,16 @@ regress_test_obj_new (RegressTestObj *obj)
 }
 
 /**
+ * regress_constructor: (constructor)
+ *
+ */
+RegressTestObj *
+regress_constructor (void)
+{
+  return g_object_new (REGRESS_TEST_TYPE_OBJ, NULL);
+}
+
+/**
  * regress_test_obj_new_from_file:
  */
 RegressTestObj *
