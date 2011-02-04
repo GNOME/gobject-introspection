@@ -900,7 +900,7 @@ method or constructor of some type."""
         if func.is_constructor or self._is_constructor(func, subsymbol):
             self._set_up_constructor(func, subsymbol)
             return
-        elif func.is_method or self._is_method(func, subsymbol):
+        elif self._is_method(func, subsymbol):
             self._setup_method(func, subsymbol)
             return
         elif self._pair_static_method(func, subsymbol):
@@ -913,14 +913,25 @@ method or constructor of some type."""
 
     def _is_method(self, func, subsymbol):
         if not func.parameters:
+            if func.is_method:
+                message.warn_node(func,
+                    '%s: Methods must have parameters' % (func.symbol, ))
             return False
         first = func.parameters[0]
         target = self._transformer.lookup_typenode(first.type)
         if not isinstance(target, (ast.Class, ast.Interface,
                                    ast.Record, ast.Union,
                                    ast.Boxed)):
+            if func.is_method:
+                message.warn_node(func,
+                    '%s: Methods must have a pointer as their first '
+                    'parameter' % (func.symbol, ))
             return False
         if target.namespace != self._namespace:
+            if func.is_method:
+                message.warn_node(func,
+                    '%s: Methods must belong to the same namespace as the '
+                    'class they belong to' % (func.symbol, ))
             return False
 
         # A quick hack here...in the future we should catch C signature/GI signature
@@ -928,9 +939,10 @@ method or constructor of some type."""
         if first.type.ctype is not None and first.type.ctype.count('*') != 1:
             return False
 
-        uscored_prefix = self._get_uscored_prefix(func, subsymbol)
-        if not subsymbol.startswith(uscored_prefix):
-            return False
+        if not func.is_method:
+            uscored_prefix = self._get_uscored_prefix(func, subsymbol)
+            if not subsymbol.startswith(uscored_prefix):
+                return False
 
         return True
 

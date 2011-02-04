@@ -7,6 +7,7 @@ TESTS = \
 	invalid-array.h \
 	invalid-closure.h \
 	invalid-element-type.h \
+	invalid-method.h \
 	invalid-option.h \
 	invalid-out.h \
 	invalid-transfer.h \
