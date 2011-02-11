@@ -1,7 +1,7 @@
 #ifndef __GITESTTYPES_H__
 #define __GITESTTYPES_H__
 
-#include <cairo/cairo.h>
+#include <cairo.h>
 #include <glib-object.h>
 #include <gio/gio.h>
 #include <time.h>
