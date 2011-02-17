@@ -3231,6 +3231,24 @@ gi_marshalling_tests_int_out_out (gint *int0, gint *int1)
 }
 
 /**
+ * gi_marshalling_tests_int_three_in_three_out:
+ * @a: (in):
+ * @b: (in):
+ * @c: (in):
+ * @out0: (out):
+ * @out1: (out):
+ * @out2: (out):
+ */
+void
+gi_marshalling_tests_int_three_in_three_out(gint a, gint b, gint c,
+                                            gint *out0, gint *out1, gint *out2)
+{
+    *out0 = a;
+    *out1 = b;
+    *out2 = c;
+}
+
+/**
  * gi_marshalling_tests_int_return_out:
  * @int_: (out):
  */

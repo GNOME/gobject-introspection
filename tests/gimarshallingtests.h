@@ -701,9 +701,9 @@ GType gi_marshalling_tests_interface2_get_type (void) G_GNUC_CONST;
 /* Multiple output arguments */
 
 void gi_marshalling_tests_int_out_out (gint *int0, gint *int1);
-void gi_marshalling_tests_int_out_in (gint *int0, gint int1);
+void gi_marshalling_tests_int_three_in_three_out(gint a, gint b, gint c,
+                                                 gint *out0, gint *out1, gint *out2);
 gint gi_marshalling_tests_int_return_out (gint *int_);
-void gi_marshalling_tests_utf8_full_out_out (gchar **utf80, gchar **utf82);
 
 
 /* GError */
