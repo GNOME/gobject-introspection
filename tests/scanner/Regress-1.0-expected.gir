@@ -886,6 +886,16 @@ TpAccount::status-changed</doc>
         </parameters>
       </method>
     </record>
+    <record name="TestStructFixedArray" c:type="RegressTestStructFixedArray">
+      <field name="just_int" writable="1">
+        <type name="gint" c:type="gint"/>
+      </field>
+      <field name="array" writable="1">
+        <array zero-terminated="0" c:type="gint" fixed-size="10">
+          <type name="gint" c:type="gint"/>
+        </array>
+      </field>
+    </record>
     <class name="TestSubObj"
            c:symbol-prefix="test_sub_obj"
            c:type="RegressTestSubObj"
