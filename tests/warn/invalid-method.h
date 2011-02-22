@@ -22,5 +22,5 @@ void test_method_invalid_first_parameter(int param);
  */
 void test_method_invalid_namespace(GClosure *param);
 
-// EXPECT:23: Warning: Test: test_method_invalid_namespace: Methods must belong to the same namespace as the class they are into
+// EXPECT:23: Warning: Test: test_method_invalid_namespace: Methods must belong to the same namespace as the class they belong to
 
