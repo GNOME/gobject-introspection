@@ -2564,6 +2564,46 @@ gi_marshalling_tests_flags_inout (GIMarshallingTestsFlags *flags_)
 }
 
 
+GIMarshallingTestsNoTypeFlags
+gi_marshalling_tests_no_type_flags_returnv (void)
+{
+    return GI_MARSHALLING_TESTS_NO_TYPE_FLAGS_VALUE2;
+}
+
+void
+gi_marshalling_tests_no_type_flags_in (GIMarshallingTestsNoTypeFlags flags_)
+{
+    g_assert(flags_ == GI_MARSHALLING_TESTS_NO_TYPE_FLAGS_VALUE2);
+}
+
+void
+gi_marshalling_tests_no_type_flags_in_zero (GIMarshallingTestsNoTypeFlags flags)
+{
+    g_assert(flags == 0);
+}
+
+/**
+ * gi_marshalling_tests_no_type_flags_out:
+ * @flags_: (out):
+ */
+void
+gi_marshalling_tests_no_type_flags_out (GIMarshallingTestsNoTypeFlags *flags_)
+{
+    *flags_ = GI_MARSHALLING_TESTS_NO_TYPE_FLAGS_VALUE2;
+}
+
+/**
+ * gi_marshalling_tests_no_type_flags_inout:
+ * @flags_: (inout):
+ */
+void
+gi_marshalling_tests_no_type_flags_inout (GIMarshallingTestsNoTypeFlags *flags_)
+{
+    g_assert(*flags_ == GI_MARSHALLING_TESTS_NO_TYPE_FLAGS_VALUE2);
+    *flags_ = GI_MARSHALLING_TESTS_NO_TYPE_FLAGS_VALUE1;
+}
+
+
 /**
  * gi_marshalling_tests_simple_struct_returnv:
  * Returns: (transfer none):

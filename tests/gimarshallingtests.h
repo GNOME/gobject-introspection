@@ -482,6 +482,24 @@ void gi_marshalling_tests_flags_out (GIMarshallingTestsFlags *flags_);
 
 void gi_marshalling_tests_flags_inout (GIMarshallingTestsFlags *flags_);
 
+/* Flags with no GType */
+
+typedef enum
+{
+  GI_MARSHALLING_TESTS_NO_TYPE_FLAGS_VALUE1 = 1 << 0,
+  GI_MARSHALLING_TESTS_NO_TYPE_FLAGS_VALUE2 = 1 << 1,
+  GI_MARSHALLING_TESTS_NO_TYPE_FLAGS_VALUE3 = 1 << 2
+} GIMarshallingTestsNoTypeFlags;
+
+GIMarshallingTestsNoTypeFlags gi_marshalling_tests_no_type_flags_returnv (void);
+
+void gi_marshalling_tests_no_type_flags_in (GIMarshallingTestsNoTypeFlags flags_);
+void gi_marshalling_tests_no_type_flags_in_zero (GIMarshallingTestsNoTypeFlags flags);
+
+void gi_marshalling_tests_no_type_flags_out (GIMarshallingTestsNoTypeFlags *flags_);
+
+void gi_marshalling_tests_no_type_flags_inout (GIMarshallingTestsNoTypeFlags *flags_);
+
 
 /* Structure */
 
