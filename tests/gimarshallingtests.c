@@ -3313,6 +3313,20 @@ gi_marshalling_tests_gerror(GError **error)
                         GI_MARSHALLING_TESTS_CONSTANT_GERROR_MESSAGE);
 }
 
+/**
+ * gi_marshalling_tests_gerror_array_in:
+ * @in_ints: (array zero-terminated=1):
+ */
+void
+gi_marshalling_tests_gerror_array_in(gint *in_ints, GError **error)
+{
+    GQuark quark = g_quark_from_static_string(GI_MARSHALLING_TESTS_CONSTANT_GERROR_DOMAIN);
+    g_set_error_literal(error,
+                        quark,
+                        GI_MARSHALLING_TESTS_CONSTANT_GERROR_CODE,
+                        GI_MARSHALLING_TESTS_CONSTANT_GERROR_MESSAGE);
+}
+
 static GIMarshallingTestsOverridesStruct *
 gi_marshalling_tests_overrides_struct_copy (GIMarshallingTestsOverridesStruct *struct_)
 {

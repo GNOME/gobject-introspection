@@ -737,6 +737,7 @@ gint gi_marshalling_tests_int_return_out (gint *int_);
 #define GI_MARSHALLING_TESTS_CONSTANT_GERROR_MESSAGE "gi-marshalling-tests-gerror-message"
 
 void gi_marshalling_tests_gerror(GError **error);
+void gi_marshalling_tests_gerror_array_in(gint *in_ints, GError **error);
 
 /* Overrides */
 
