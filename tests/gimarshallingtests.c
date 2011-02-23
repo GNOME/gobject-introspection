@@ -2516,6 +2516,8 @@ gi_marshalling_tests_flags_get_type (void)
             { GI_MARSHALLING_TESTS_FLAGS_VALUE1, "GI_MARSHALLING_TESTS_FLAGS_VALUE1", "value1" },
             { GI_MARSHALLING_TESTS_FLAGS_VALUE2, "GI_MARSHALLING_TESTS_FLAGS_VALUE2", "value2" },
             { GI_MARSHALLING_TESTS_FLAGS_VALUE3, "GI_MARSHALLING_TESTS_FLAGS_VALUE3", "value3" },
+            { GI_MARSHALLING_TESTS_FLAGS_MASK,   "GI_MARSHALLING_TESTS_FLAGS_MASK",   "mask"   },
+            { GI_MARSHALLING_TESTS_FLAGS_MASK2,  "GI_MARSHALLING_TESTS_FLAGS_MASK2",  "mask2"  },
             { 0, NULL, NULL }
         };
         type = g_flags_register_static (g_intern_static_string ("GIMarshallingTestsFlags"), values);
