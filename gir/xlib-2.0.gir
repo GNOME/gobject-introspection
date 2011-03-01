@@ -6,48 +6,44 @@
 	     c:identifier-prefixes=""
 	     c:symbol-prefixes="X">
     <alias name="Atom" c:type="Atom">
-      <type name="gulong" c:type="gulong"/>
+      <type name="ID" c:type="XID"/>
     </alias>
     <alias name="Colormap" c:type="Colormap">
-      <type name="gulong" c:type="gulong"/>
+      <type name="ID" c:type="XID"/>
     </alias>
     <alias name="Cursor" c:type="Cursor">
-      <type name="gulong" c:type="gulong"/>
+      <type name="ID" c:type="XID"/>
     </alias>
     <record name="Display" c:type="Display"/>
     <alias name="Drawable" c:type="Drawable">
-      <type name="gulong" c:type="gulong"/>
+      <type name="ID" c:type="XID"/>
     </alias>
-    <alias name="GC" c:type="GC">
-      <type name="gpointer" c:type="gpointer"/>
-    </alias>
+    <record name="GC" c:type="GC"/>
     <alias name="KeyCode" c:type="KeyCode">
-      <type name="guint8" c:type="guint8"/>
+      <type name="guchar" c:type="unsigned char"/>
     </alias>
     <alias name="KeySym" c:type="KeySym">
-      <type name="gulong" c:type="gulong"/>
+      <type name="ID" c:type="XID"/>
     </alias>
-    <alias name="Picture" c:type="Picture">
-      <type name="gulong" c:type="gulong"/>
-    </alias>
+    <record name="Picture" c:type="Picture"/>
     <record name="Screen" c:type="Screen"/>
     <alias name="Time" c:type="Time">
-      <type name="gulong" c:type="gulong"/>
+      <type name="guint32" c:type="CARD32"/>
     </alias>
     <record name="Visual" c:type="Visual"/>
     <alias name="VisualID" c:type="VisualID">
-      <type name="gulong" c:type="gulong"/>
+      <type name="ID" c:type="XID"/>
     </alias>
     <alias name="Window" c:type="Window">
-      <type name="gulong" c:type="gulong"/>
+      <type name="ID" c:type="XID"/>
     </alias>
     <union name="XEvent" c:type="XEvent"/>
     <record name="XConfigureEvent" c:type="XConfigureEvent"/>
-    <alias name="XID" c:type="XID">
-      <type name="gulong" c:type="gulong"/>
+    <alias name="ID" c:type="XID">
+      <type name="guint32" c:type="CARD32"/>
     </alias>
     <alias name="Pixmap" c:type="Pixmap">
-      <type name="gulong" c:type="gulong"/>
+      <type name="ID" c:type="XID"/>
     </alias>
     <record name="XImage" c:type="XImage"/>
     <record name="XFontStruct" c:type="XFontStruct"/>
