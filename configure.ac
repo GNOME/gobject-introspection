@@ -137,10 +137,10 @@ if test x$have_cairo = xyes; then
 fi
 
 if test x$have_cairo_gobject = xyes; then
-  CAIRO_SHARED_LIBRARY="libcairo-gobject.so"
+  CAIRO_SHARED_LIBRARY="libcairo-gobject.so.2"
   CAIRO_GIR_PACKAGE="cairo-gobject"
 elif test x$have_cairo = xyes; then
-  CAIRO_SHARED_LIBRARY="libcairo.so"
+  CAIRO_SHARED_LIBRARY="libcairo.so.2"
   CAIRO_GIR_PACKAGE="cairo"
 fi
 AC_SUBST(CAIRO_SHARED_LIBRARY)
