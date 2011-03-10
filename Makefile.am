@@ -55,14 +55,19 @@ EXTRA_DIST += 			\
 	misc/pre-commit		\
 	misc/pyflakes.py
 
-release-tag:
+prepare-release-tag:
 	@TAG=`echo $(VERSION)|sed s/\\\./_/g`;\
-	  echo "* Tagging $(VERSION)"; \
+	  echo "git tag GOBJECT_INTROSPECTION_$$TAG"; \
           git tag -m "Tag $$VERSION" -a \
-              GOBJECT_INTROSPECTION_$$TAG && \
-	      git push --tags ssh://git.gnome.org/git/gobject-introspection
+              GOBJECT_INTROSPECTION_$$TAG
+
+prepare-minor-release: $(distdir).tar.bz2 prepare-release-tag
+	python $(top_srcdir)/tools/verbump.py
 
 upload-release: $(distdir).tar.bz2
+	git log origin/master..master
+	@echo -n "Ok to push? [y/N] "; read ans; test x$$ans == xy || exit 1
+	git push --tags origin master:master
 	scp $(distdir).tar.bz2 gnome.org:
 	ssh gnome.org install-module $(distdir).tar.bz2
 
