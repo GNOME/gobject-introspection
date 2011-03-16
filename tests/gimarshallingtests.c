@@ -2411,6 +2411,43 @@ gi_marshalling_tests_gclosure_in (GClosure *closure)
     g_value_unset(&return_value);
 }
 
+static gint
+_closure_return_42 (void)
+{
+  return 42;
+}
+
+static void
+_marshal_INT__VOID (GClosure *closure,
+                    GValue *return_value,
+                    guint n_param_values,
+                    const GValue *param_values,
+                    gpointer invocation_hint,
+                    gpointer marshal_data)
+{
+  typedef gint (*GMarshalFunc_INT__VOID) (void);
+  register GMarshalFunc_INT__VOID callback;
+  register GCClosure *cc = (GCClosure*) closure;
+
+  callback = (GMarshalFunc_INT__VOID) cc->callback;
+  g_value_set_int(return_value, callback());
+}
+
+/**
+ * gi_marshalling_tests_gclosure_return:
+ * 
+ * Return: a #GClosure
+ */
+GClosure *
+gi_marshalling_tests_gclosure_return (void)
+{
+    GClosure *closure = g_cclosure_new ((GCallback *)_closure_return_42, 
+                                        NULL, NULL);
+    g_closure_set_marshal (closure, _marshal_INT__VOID);
+
+    return closure;
+}
+
 /**
  * gi_marshalling_tests_pointer_in_return:
  *

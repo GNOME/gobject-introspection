@@ -409,7 +409,7 @@ void gi_marshalling_tests_gvalue_inout (GValue **value);
 /* GClosure */
 
 void gi_marshalling_tests_gclosure_in (GClosure *closure);
-
+GClosure *gi_marshalling_tests_gclosure_return (void);
 
 /* Pointer */
 
