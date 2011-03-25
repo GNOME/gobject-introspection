@@ -1,7 +1,6 @@
 BUILT_GIRSOURCES =
 
 STATIC_GIRSOURCES =               \
-        gir/cairo-1.0.gir           \
         gir/DBus-1.0.gir           \
         gir/DBusGLib-1.0.gir           \
         gir/fontconfig-2.0.gir      \
@@ -13,6 +12,17 @@ STATIC_GIRSOURCES =               \
         gir/xfixes-4.0.gir          \
         gir/xrandr-1.3.gir
 EXTRA_DIST += $(STATIC_GIRSOURCES)
+
+cairogirdir=$(GIR_DIR)
+cairogir_DATA = gir/cairo-1.0.gir
+gir/cairo-1.0.gir: gir/cairo-1.0.gir.in Makefile
+	sed \
+	-e s,%CAIRO_SHARED_LIBRARY%,$(CAIRO_SHARED_LIBRARY), \
+	-e s,%CAIRO_GIR_PACKAGE%,$(CAIRO_GIR_PACKAGE), \
+	< $< > $@.tmp && mv $@.tmp $@
+BUILT_SOURCES += gir/cairo-1.0.gir
+CLEANFILES += gir/cairo-1.0.gir
+EXTRA_DIST += cairo-1.0.gir.in
 
 # Doesn't seem to work to do gir/%.typelib =(
 gir/cairo-1.0.typelib: g-ir-compiler

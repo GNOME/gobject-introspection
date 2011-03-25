@@ -256,7 +256,6 @@ AC_MSG_RESULT([$GLIBSRC])
 
 AC_CONFIG_FILES([
 Makefile
-gir/cairo-1.0.gir
 giscanner/config.py
 m4/Makefile
 tests/Makefile
