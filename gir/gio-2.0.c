@@ -119,7 +119,7 @@
  *
  * The virtual function table for #GActionGroup.
  *
- * Since: 2.26
+ * Since: 2.28
  */
 
 
@@ -136,7 +136,7 @@
  *
  *
  *
- * Since: 2.26
+ * Since: 2.28
  */
 
 
@@ -203,7 +203,7 @@
  * The <structname>GApplication</structname> structure contains private
  * data and should only be accessed using the provided API
  *
- * Since: 2.26
+ * Since: 2.28
  */
 
 
@@ -222,8 +222,11 @@
  * @command_line: a #GApplicationCommandLine representing the passed commandline
  *
  * The ::command-line signal is emitted on the primary instance when
- * a commandline is not handled locally. See g_application_run() for
- * more information.
+ * a commandline is not handled locally. See g_application_run() and
+ * the #GApplicationCommandline documentation for more information.
+ * process. See g_application_command_line_set_exit_status().
+ *
+ * Returns: An integer that is set as the exit status for the calling
  */
 
 
@@ -244,7 +247,7 @@
  * @application: the application
  *
  * The ::startup signal is emitted on the primary instance immediately
- * after registration. See g_activation_register().
+ * after registration. See g_application_register().
  */
 
 
@@ -255,15 +258,15 @@
  * @open: invoked on the primary instance when there are files to open
  * @command_line: invoked on the primary instance when a command-line is not handled locally
  * @local_command_line: invoked (locally) when the process has been invoked via commandline execution.  The virtual function has the chance to inspect (and possibly replace) the list of command line arguments. See g_application_run() for more information.
- * @before_emit: invoked on the primary instance before 'activate', 'open' or any action invocation
- * @after_emit: invoked on the primary instance after 'activate', 'open' or any action invocation
+ * @before_emit: invoked on the primary instance before 'activate', 'open', 'command-line' or any action invocation, gets the 'platform data' from the calling instance
+ * @after_emit: invoked on the primary instance after 'activate', 'open', 'command-line' or any action invocation, gets the 'platform data' from the calling instance
  * @add_platform_data: invoked (locally) to add 'platform data' to be sent to the primary instance when activating, opening or invoking actions
  * @quit_mainloop: invoked on the primary instance when the use count of the application drops to zero (and after any inactivity timeout, if requested)
  * @run_mainloop: invoked on the primary instance from g_application_run() if the use-count is non-zero
  *
  *
  *
- * Since: 2.26
+ * Since: 2.28
  */
 
 
@@ -273,7 +276,7 @@
  * The <structname>GApplicationCommandLine</structname> structure contains private
  * data and should only be accessed using the provided API
  *
- * Since: 2.26
+ * Since: 2.28
  */
 
 
@@ -283,7 +286,7 @@
  * The <structname>GApplicationCommandLineClass</structname> structure contains
  * private data only
  *
- * Since: 2.26
+ * Since: 2.28
  */
 
 
@@ -292,13 +295,13 @@
  * @G_APPLICATION_FLAGS_NONE: Default
  * @G_APPLICATION_IS_SERVICE: Run as a service. In this mode, registration fails if the service is already running, and the application will stay around for a while when the use count falls to zero.
  * @G_APPLICATION_IS_LAUNCHER: Don't try to become the primary instance.
- * @G_APPLICATION_HANDLES_OPEN: This application handles opening files (in the primary instance)
- * @G_APPLICATION_HANDLES_COMMAND_LINE: This application handles command line arguments (in the primary instance)
- * @G_APPLICATION_SEND_ENVIRONMENT: Send the environment of the launching process to the primary instance
+ * @G_APPLICATION_HANDLES_OPEN: This application handles opening files (in the primary instance). Note that this flag only affects the default implementation of local_command_line(), and has no effect if %G_APPLICATION_HANDLES_COMMAND_LINE is given. See g_application_run() for details.
+ * @G_APPLICATION_HANDLES_COMMAND_LINE: This application handles command line arguments (in the primary instance). Note that this flag only affect the default implementation of local_command_line(). See g_application_run() for details.
+ * @G_APPLICATION_SEND_ENVIRONMENT: Send the environment of the launching process to the primary instance. Set this flag if your application is expected to behave differently depending on certain environment variables. For instance, an editor might be expected to use the <envar>GIT_COMMITTER_NAME</envar> environment variable when editing a git commit message. The environment is available to the #GApplication::command-line signal handler, via g_application_command_line_getenv().
  *
  * Flags used to define the behaviour of a #GApplication.
  *
- * Since: 2.26
+ * Since: 2.28
  */
 
 
@@ -463,8 +466,8 @@
  * GBoxedCopyFunc:
  * @boxed: The boxed structure to be copied.
  *
- * This function is provided by the user and should produce a copy of the passed
- * in boxed structure.
+ * This function is provided by the user and should produce a copy
+ * of the passed in boxed structure.
  *
  * Returns: The newly created copy of the boxed structure.
  */
@@ -4579,7 +4582,7 @@
  * @G_SETTINGS_BIND_SET: Update the setting when the #GObject property changes. It is an error to use this flag if the property is not readable.
  * @G_SETTINGS_BIND_NO_SENSITIVITY: Do not try to bind a "sensitivity" property to the writability of the setting
  * @G_SETTINGS_BIND_GET_NO_CHANGES: When set in addition to #G_SETTINGS_BIND_GET, set the #GObject property value initially from the setting, but do not listen for changes of the setting
- * @G_SETTINGS_BIND_INVERT_BOOLEAN: When passed to g_settings_bind(), uses a pair of mapping functions that invert the boolean value when mapping between the setting and the property.  The setting and property must both be booleans.  You can not pass this flag to g_settings_bind_with_mapping().
+ * @G_SETTINGS_BIND_INVERT_BOOLEAN: When passed to g_settings_bind(), uses a pair of mapping functions that invert the boolean value when mapping between the setting and the property.  The setting and property must both be booleans.  You cannot pass this flag to g_settings_bind_with_mapping().
  *
  * Flags used when creating a binding. These flags determine in which
  * direction the binding works. The default is to synchronize in both
@@ -4686,6 +4689,7 @@
  * @G_SIGNAL_DETAILED: This signal supports "::detail" appendices to the signal name upon handler connections and emissions.
  * @G_SIGNAL_ACTION: Action signals are signals that may freely be emitted on alive objects from user code via g_signal_emit() and friends, without the need of being embedded into extra code that performs pre or post emission adjustments on the object. They can also be thought of as object methods which can be called generically by third-party code.
  * @G_SIGNAL_NO_HOOKS: No emissions hooks are supported for this signal.
+ * @G_SIGNAL_MUST_COLLECT: Varargs signal emission will always collect the arguments, even if there are no signal handlers connected.  Since 2.30.
  *
  * The signal flags are used to specify a signal's behaviour, the overall
  * signal description outlines how especially the RUN flags control the
@@ -4740,7 +4744,7 @@
  * The <structname>GSimpleAction</structname> structure contains private
  * data and should only be accessed using the provided API
  *
- * Since: 2.26
+ * Since: 2.28
  */
 
 
@@ -4812,7 +4816,7 @@
  *
  *
  *
- * Since: 2.26
+ * Since: 2.28
  */
 
 
@@ -4821,7 +4825,7 @@
  *
  * The #GSimpleActionGroup structure contains private data and should only be accessed using the provided API.
  *
- * Since: 2.26
+ * Since: 2.28
  */
 
 
@@ -5865,7 +5869,7 @@
  * @collect_format: A string format describing how to collect the contents of this value bit-by-bit. Each character in the format represents an argument to be collected, and the characters themselves indicate the type of the argument. Currently supported arguments are: <variablelist> <varlistentry><term /><listitem><para> 'i' - Integers. passed as collect_values[].v_int. </para></listitem></varlistentry> <varlistentry><term /><listitem><para> 'l' - Longs. passed as collect_values[].v_long. </para></listitem></varlistentry> <varlistentry><term /><listitem><para> 'd' - Doubles. passed as collect_values[].v_double. </para></listitem></varlistentry> <varlistentry><term /><listitem><para> 'p' - Pointers. passed as collect_values[].v_pointer. </para></listitem></varlistentry> </variablelist> It should be noted that for variable argument list construction, ANSI C promotes every type smaller than an integer to an int, and floats to doubles. So for collection of short int or char, 'i' needs to be used, and for collection of floats 'd'.
  * @collect_value: The collect_value() function is responsible for converting the values collected from a variable argument list into contents suitable for storage in a GValue. This function should setup does not allow %NULL pointers, it needs to either spew an error, or do an implicit conversion by storing an empty string. The @value passed in to this function has a zero-filled data array, so just like for value_init() it is guaranteed to not contain any old contents that might need freeing. and @collect_values is an array of unions #GTypeCValue with length @n_collect_values, containing the collected values according to @collect_format. It may contain the flag %G_VALUE_NOCOPY_CONTENTS indicating, that the collected value contents may be considered "static" for the duration of the @value lifetime. Thus an extra copy of the contents stored in @collect_values is not required for assignment to @value. For our above string example, we continue with: |[ if (!collect_values[0].v_pointer) value->data[0].v_pointer = g_strdup (""); else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) { value->data[0].v_pointer = collect_values[0].v_pointer; // keep a flag for the value_free() implementation to not free this string value->data[1].v_uint = G_VALUE_NOCOPY_CONTENTS; } else value->data[0].v_pointer = g_strdup (collect_values[0].v_pointer); return NULL; ]| It should be noted, that it is generally a bad idea to follow the #G_VALUE_NOCOPY_CONTENTS hint for reference counted types. Due to reentrancy requirements and reference count assertions performed by the #GSignal code, reference counts should always be incremented for reference counted contents stored in the value->data array. To deviate from our string example for a moment, and taking a look at an exemplary implementation for collect_value() of #GObject: |[ if (collect_values[0].v_pointer) { GObject *object = G_OBJECT (collect_values[0].v_pointer); // never honour G_VALUE_NOCOPY_CONTENTS for ref-counted types value->data[0].v_pointer = g_object_ref (object); return NULL; } else return g_strdup_printf ("Object passed as invalid NULL pointer"); } ]| The reference count for valid objects is always incremented, regardless of @collect_flags. For invalid objects, the example returns a newly allocated string without altering @value. Upon success, collect_value() needs to return %NULL. If, however, an error condition occurred, collect_value() may spew an error by returning a newly allocated non-%NULL string, giving a suitable description of the error condition. The calling code makes no assumptions about the @value contents being valid upon error returns, @value is simply thrown away without further freeing. As such, it is a good idea to not allocate #GValue contents, prior to returning an error, however, collect_values() is not obliged to return a correctly setup @value for error returns, simply because any non-%NULL return is considered a fatal condition so further program behaviour is undefined.
  * @lcopy_format: Format description of the arguments to collect for @lcopy_value, analogous to @collect_format. Usually, @lcopy_format string consists only of 'p's to provide lcopy_value() with pointers to storage locations.
- * @lcopy_value: This function is responsible for storing the @value contents into arguments passed through a variable argument list which got collected into @collect_values according to @lcopy_format. and @collect_flags may contain %G_VALUE_NOCOPY_CONTENTS. In contrast to collect_value(), lcopy_value() is obliged to always properly support %G_VALUE_NOCOPY_CONTENTS. Similar to collect_value() the function may prematurely abort by returning a newly allocated string describing an error condition. To complete the string example: |[ gchar **string_p = collect_values[0].v_pointer; if (!string_p) return g_strdup_printf ("string location passed as NULL"); if (collect_flags & G_VALUE_NOCOPY_CONTENTS) *string_p = value->data[0].v_pointer; else *string_p = g_strdup (value->data[0].v_pointer); ]| And an illustrative version of lcopy_value() for reference-counted types: |[ GObject **object_p = collect_values[0].v_pointer; if (!object_p) return g_strdup_printf ("object location passed as NULL"); if (!value->data[0].v_pointer) *object_p = NULL; else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) // always honour *object_p = value->data[0].v_pointer; else *object_p = g_object_ref (value->data[0].v_pointer); return NULL; ]|
+ * @lcopy_value: This function is responsible for storing the @value contents into arguments passed through a variable argument list which got collected into @collect_values according to @lcopy_format. and @collect_flags may contain %G_VALUE_NOCOPY_CONTENTS. In contrast to collect_value(), lcopy_value() is obliged to always properly support %G_VALUE_NOCOPY_CONTENTS. Similar to collect_value() the function may prematurely abort by returning a newly allocated string describing an error condition. To complete the string example: |[ gchar **string_p = collect_values[0].v_pointer; if (!string_p) return g_strdup_printf ("string location passed as NULL"); if (collect_flags & G_VALUE_NOCOPY_CONTENTS) *string_p = value->data[0].v_pointer; else *string_p = g_strdup (value->data[0].v_pointer); ]| And an illustrative version of lcopy_value() for reference-counted types: |[ GObject **object_p = collect_values[0].v_pointer; if (!object_p) return g_strdup_printf ("object location passed as NULL"); if (!value->data[0].v_pointer) *object_p = NULL; else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) /&ast; always honour &ast;/ *object_p = value->data[0].v_pointer; else *object_p = g_object_ref (value->data[0].v_pointer); return NULL; ]|
  *
  * The #GTypeValueTable provides the functions required by the #GValue implementation,
  * to serve as a container for values of a type.
@@ -6029,6 +6033,7 @@
  * indicates a socket not bound to any name (eg, a client-side socket,
  * or a socket created with socketpair()).
  * For abstract sockets, there are two incompatible ways of naming
+ * them; the man pages suggest using the entire <literal>struct
  * sockaddr_un</literal> as the name, padding the unused parts of the
  * %sun_path field with zeroes; this corresponds to
  * %G_UNIX_SOCKET_ADDRESS_ABSTRACT_PADDED. However, many programs
@@ -6036,7 +6041,6 @@
  * smaller length to bind() or connect(). This is
  * %G_UNIX_SOCKET_ADDRESS_ABSTRACT.
  *
- * Them: the man pages suggest using the entire <literal>struct
  * Since: 2.26
  */
 
@@ -6071,7 +6075,7 @@
  * to functions within a #GTypeValueTable structure, or implementations of
  * the g_value_*() API. That is, code portions which implement new fundamental
  * types.
- * #GValue users can not make any assumptions about how data is stored
+ * #GValue users cannot make any assumptions about how data is stored
  * within the 2 element @data union, and the @g_type member should
  * only be accessed through the G_VALUE_TYPE() macro.
  *
@@ -6103,7 +6107,7 @@
  *
  * A type in the GVariant type system.
  * Two types may not be compared by value; use g_variant_type_equal() or
- * g_variant_type_is_subtype().  May be copied using
+ * g_variant_type_is_subtype_of().  May be copied using
  * g_variant_type_copy() and freed using g_variant_type_free().
  */
 
@@ -9021,7 +9025,7 @@
  * G_TYPE_IS_ABSTRACT:
  * @type: A #GType value.
  *
- * Checks if @type is an abstract type.  An abstract type can not be
+ * Checks if @type is an abstract type.  An abstract type cannot be
  * instantiated and is normally used as an abstract base class for
  * derived classes.
  *
@@ -9479,7 +9483,7 @@
  * g_object_set (obj, "authors", authors, NULL);
  * gchar *writers[];
  * g_object_get (obj, "authors", &writers, NULL);
- * // do something with writers
+ * /&ast; do something with writers &ast;/
  * g_strfreev (writers);
  * ]|
  *
@@ -9618,7 +9622,8 @@
  * G_VALUE_HOLDS_BOXED:
  * @value: a valid #GValue structure
  *
- * Checks whether the given #GValue can hold values derived from type %G_TYPE_BOXED.
+ * Checks whether the given #GValue can hold values derived
+ * from type %G_TYPE_BOXED.
  *
  * Returns: %TRUE on success.
  */
@@ -9803,6 +9808,15 @@
  *
  * Returns: %TRUE on success.
  * Since: 2.26
+ */
+
+
+/**
+ * G_VALUE_NOCOPY_CONTENTS:
+ *
+ * If passed to G_VALUE_COLLECT(), allocated data won't be copied
+ * but used verbatim. This does not affect ref-counted types like
+ * objects. For more details, see the #GValueTable documentation.
  */
 
 
@@ -10037,6 +10051,14 @@
  *
  * The empty tuple type.  Has only one instance.  Known also as "triv"
  * or "void".
+ */
+
+
+/**
+ * G_VARIANT_TYPE_VARDICT:
+ *
+ * The type of a dictionary mapping strings to variants (the ubiquitous
+ * "a{sv}" type).
  */
 
 
@@ -10283,7 +10305,7 @@
  * object paths that you wish to register are registered before
  * #GApplication attempts to acquire the bus name of your application
  * (which happens in g_application_register()).  Unfortunately, this
- * means that you can not use g_application_get_is_remote() to decide if
+ * means that you cannot use g_application_get_is_remote() to decide if
  * you want to register object paths.
  * GApplication provides convenient life cycle management by maintaining
  * a <firstterm>use count</firstterm> for the primary application instance.
@@ -10297,10 +10319,34 @@
  * <itemizedlist>
  * <listitem>via 'Activate' (i.e. just starting the application)</listitem>
  * <listitem>via 'Open' (i.e. opening some files)</listitem>
+ * <listitem>by handling a command-line</listitem>
  * <listitem>via activating an action</listitem>
  * </itemizedlist>
  * The #GApplication::startup signal lets you handle the application
  * initialization for all of these in a single place.
+ * Regardless of which of these entry points is used to start the application,
+ * GApplication passes some <firstterm id="platform-data">platform
+ * data</firstterm> from the launching instance to the primary instance,
+ * in the form of a #GVariant dictionary mapping strings to variants.
+ * To use platform data, override the @before_emit or @after_emit virtual
+ * functions in your #GApplication subclass. When dealing with
+ * #GApplicationCommandline objects, the platform data is directly
+ * available via g_application_command_line_get_cwd(),
+ * g_application_command_line_get_environ() and
+ * g_application_command_line_get_platform_data().
+ * As the name indicates, the platform data may vary depending on the
+ * operating system, but it always includes the current directory (key
+ * "cwd"), and optionally the environment (ie the set of environment
+ * variables and their values) of the calling process (key "environ").
+ * The environment is only added to the platform data if the
+ * #G_APPLICATION_SEND_ENVIONMENT flag is set. GApplication subclasses
+ * can add their own platform data by overriding the @add_platform_data
+ * virtual function. For instance, #GtkApplication adds startup notification
+ * data in this way.
+ * To parse commandline arguments you may handle the
+ * #GApplication::command-line signal or override the local_command_line()
+ * vfunc, to parse them in either the primary instance or the local instance,
+ * respectively.
  * <example id="gapplication-example-open"><title>Opening files with a GApplication</title>
  * <programlisting>
  * <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../gio/tests/gapplication-example-open.c">
@@ -10332,20 +10378,64 @@
  * The class contains the list of arguments that the program was invoked
  * with.  It is also possible to query if the commandline invocation was
  * commandline to this process).
+ * The GApplicationCommandLine object can provide the @argc and @argv
+ * parameters for use with the #GOptionContext command-line parsing API,
+ * with the g_application_command_line_get_arguments() function. See
+ * <xref linkend="gapplication-example-cmdline3"/> for an example.
  * The exit status of the originally-invoked process may be set and
  * messages can be printed to stdout or stderr of that process.  The
  * lifecycle of the originally-invoked process is tied to the lifecycle
  * dropped).
+ * The main use for #GApplicationCommandline (and the
+ * #GApplication::command-line signal) is 'Emacs server' like use cases:
+ * You can set the <envar>EDITOR</envar> environment variable to have
+ * e.g. git use your favourite editor to edit commit messages, and if you
+ * already have an instance of the editor running, the editing will happen
+ * in the running instance, instead of opening a new one. An important
+ * aspect of this use case is that the process that gets started by git
+ * does not return until the editing is done.
  * <example id="gapplication-example-cmdline"><title>Handling commandline arguments with GApplication</title>
+ * <para>
+ * A simple example where the commandline is completely handled
+ * in the #GApplication::command-line handler. The launching instance exits
+ * once the signal handler in the primary instance has returned, and the
+ * return value of the signal handler becomes the exit status of the launching
+ * instance.
+ * </para>
  * <programlisting>
  * <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../gio/tests/gapplication-example-cmdline.c">
  * <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
  * </xi:include>
  * </programlisting>
  * </example>
- * <example id="gapplication-example-cmdline2"><title>Complicated commandline handling</title>
+ * <example id="gapplication-example-cmdline2"><title>Split commandline handling</title>
+ * <para>
+ * An example of split commandline handling. Options that start with
+ * <literal>--local-</literal> are handled locally, all other options are
+ * passed to the #GApplication::command-line handler which runs in the primary
+ * instance.
+ * </para>
  * <programlisting>
  * <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../gio/tests/gapplication-example-cmdline2.c">
+ * <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
+ * </xi:include>
+ * </programlisting>
+ * </example>
+ * <example id="gapplication-example-cmdline3"><title>Deferred commandline handling</title>
+ * <para>
+ * An example of deferred commandline handling. Here, the commandline is
+ * not completely handled before the #GApplication::command-line handler
+ * returns. Instead, we keep a reference to the GApplicationCommandline
+ * object and handle it later(in this example, in an idle). Note that it
+ * is necessary to hold the application until you are done with the
+ * commandline.
+ * </para>
+ * <para>
+ * This example also shows how to use #GOptionContext for parsing the
+ * commandline arguments.
+ * </para>
+ * <programlisting>
+ * <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../gio/tests/gapplication-example-cmdline3.c">
  * <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
  * </xi:include>
  * </programlisting>
@@ -11510,7 +11600,8 @@
  * in various ways. For C applications you generally just call
  * g_initable_new() directly, or indirectly via a foo_thing_new() wrapper.
  * This will call g_initable_init() under the cover, returning %NULL and
- * setting a %GError on failure.
+ * setting a #GError on failure (at which point the instance is
+ * unreferenced).
  * For bindings in languages where the native constructor supports
  * exceptions the binding could check for objects implemention %GInitable
  * during normal construction and automatically initialize them, throwing
@@ -11841,6 +11932,21 @@
  *
  * The #GSettings class provides a convenient API for storing and retrieving
  * application settings.
+ * Reads and writes can be considered to be non-blocking.  Reading
+ * approximately the same order of magnitude (but slower than) a
+ * #GHashTable lookup.  Writing settings is also extremely fast in terms
+ * of time to return to your application, but can be extremely expensive
+ * for other threads and other processes.  Many settings backends
+ * (including dconf) have lazy initialisation which means in the common
+ * case of the user using their computer without modifying any settings
+ * a lot of work can be avoided.  For dconf, the D-Bus service doesn't
+ * even need to be started in this case.  For this reason, you should
+ * only ever modify #GSettings keys in response to explicit user action.
+ * Particular care should be paid to ensure that modifications are not
+ * made during startup -- for example, when settings the initial value
+ * of preferences widgets.  The built-in g_settings_bind() functionality
+ * is careful not to write settings in response to notify signals as a
+ * result of modifications that it makes to widgets.
  * When creating a GSettings instance, you have to specify a schema
  * that describes the keys in your settings and their types and default
  * values, as well as some other information.
@@ -11868,6 +11974,7 @@
  * utility. The input is a schema description in an XML format that can be
  * described by the following DTD:
  * |[<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../gio/gschema.dtd"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include>]|
+ * glib-compile-schemas expects schema files to have the extension <filename>.gschema.xml</filename>
  * At runtime, schemas are identified by their id (as specified
  * in the <tag class="attribute">id</tag> attribute of the
  * <tag class="starttag">schema</tag> element). The
@@ -11958,6 +12065,10 @@
  * key2=1.5
  * </programlisting></informalexample>
  * </para>
+ * <para>
+ * glib-compile-schemas expects schema files to have the extension
+ * <filename>.gschema.override</filename>
+ * </para>
  * </refsect2>
  * <refsect2>
  * <title>Binding</title>
@@ -11978,6 +12089,8 @@
  * #G_SETTINGS_BIND_NO_SENSITIVITY flag.
  * </para>
  * </refsect2>
+ *
+ * Settings with #gsettings is typically extremely fast: on
  */
 
 
@@ -13827,8 +13940,8 @@
  * g_application_command_line_get_cwd:
  * @cmdline: a #GApplicationCommandLine
  *
- * Gets the working directory of the command line invocation.  The
- * string may contain non-utf8 data.
+ * Gets the working directory of the command line invocation.
+ * The string may contain non-utf8 data.
  * It is possible that the remote application did not send a working
  * directory, so this may be %NULL.
  * The return value should not be modified or freed and is valid for as
@@ -13844,14 +13957,17 @@
  * @cmdline: a #GApplicationCommandLine
  *
  * Gets the contents of the 'environ' variable of the command line
- * invocation, as would be returned by g_get_environ().  The strings may
- * contain non-utf8 data.
+ * invocation, as would be returned by g_get_environ(), ie as a
+ * %NULL-terminated list of strings in the form 'NAME=VALUE'.
+ * The strings may contain non-utf8 data.
  * The remote application usually does not send an environment.  Use
  * %G_APPLICATION_SEND_ENVIRONMENT to affect that.  Even with this flag
  * set it is possible that the environment is still not available (due
  * to invocation messages from other applications).
  * The return value should not be modified or freed and is valid for as
  * long as @cmdline exists.
+ * See g_application_command_line_getenv() if you are only interested
+ * in the value of a single environment variable.
  * strings, or %NULL if they were not sent
  *
  * Returns: (array zero-terminated=1) (transfer none): the environment
@@ -14037,7 +14153,7 @@
  * application already exists (the 'primary' instance).  Calls to
  * perform actions on @application will result in the actions being
  * performed by the primary instance.
- * The value of this property can not be accessed before
+ * The value of this property cannot be accessed before
  * g_application_register() has been called.  See
  * g_application_get_is_registered().
  *
@@ -14068,9 +14184,9 @@
  * For convenience, the restrictions on application identifiers are
  * reproduced here:
  * <itemizedlist>
- * <listitem>Application identifiers must contain only the ASCII characters "[A-Z][a-z][0-9]_-" and must not begin with a digit.</listitem>
- * <listitem>Application identifiers must contain at least one '.' (period) character (and thus at least two elements).</listitem>
- * <listitem>Application identifiers must not begin with a '.' (period) character.</listitem>
+ * <listitem>Application identifiers must contain only the ASCII characters "[A-Z][a-z][0-9]_-." and must not begin with a digit.</listitem>
+ * <listitem>Application identifiers must contain at least one '.' (period) character (and thus at least three elements).</listitem>
+ * <listitem>Application identifiers must not begin or end with a '.' (period) character.</listitem>
  * <listitem>Application identifiers must not contain consecutive '.' (period) characters.</listitem>
  * <listitem>Application identifiers must not exceed 255 characters.</listitem>
  * </itemizedlist>
@@ -14120,7 +14236,7 @@
  * This is the point at which the application discovers if it is the
  * primary instance or merely acting as a remote for an already-existing
  * primary instance.  This is implemented by attempting to acquire the
- * application identifier as a uniue bus name on the session bus using
+ * application identifier as a unique bus name on the session bus using
  * GDBus.
  * Due to the internal architecture of GDBus, method calls can be
  * dispatched at any time (even if a main loop is not running).  For
@@ -14155,18 +14271,35 @@
 /**
  * g_application_run:
  * @application: a #GApplication
- * @argc: the argc from main()
- * @argv: (array length=argc): the argv from main()
+ * @argc: the argc from main() (or 0 if @argv is %NULL)
+ * @argv: (array length=argc) (allow-none): the argv from main(), or %NULL
  * @returns: the exit status
  *
  * Runs the application.
  * This function is intended to be run from main() and its return value
- * is intended to be returned by main().
- * First, the local_command_line() virtual function is invoked.  This
- * function always runs on the local instance.  If that function returns
- * %FALSE then the application is registered and the #GApplication::command-line
- * signal is emitted in the primary instance (which may or may not be
- * this instance).
+ * is intended to be returned by main(). Although you are expected to pass
+ * the @argc, @argv parameters from main() to this function, it is possible
+ * to pass %NULL if @argv is not available or commandline handling is not
+ * required.
+ * First, the local_command_line() virtual function is invoked.
+ * This function always runs on the local instance. It gets passed a pointer
+ * to a %NULL-terminated copy of @argv and is expected to remove the arguments
+ * that it handled (shifting up remaining arguments). See
+ * <xref linkend="gapplication-example-cmdline2"/> for an example of
+ * parsing @argv manually. Alternatively, you may use the #GOptionContext API,
+ * after setting <literal>argc = g_strv_length (argv);</literal>.
+ * The last argument to local_command_line() is a pointer to the @status
+ * variable which can used to set the exit status that is returned from
+ * g_application_run().
+ * If local_command_line() returns %TRUE, the command line is expected
+ * to be completely handled, including possibly registering as the primary
+ * instance, calling g_application_activate() or g_application_open(), etc.
+ * If local_command_line() returns %FALSE then the application is registered
+ * and the #GApplication::command-line signal is emitted in the primary
+ * instance (which may or may not be this instance). The signal handler
+ * gets passed a #GApplicationCommandline object that (among other things)
+ * contains the remaining commandline arguments that have not been handled
+ * by local_command_line().
  * If the application has the %G_APPLICATION_HANDLES_COMMAND_LINE
  * flag set then the default implementation of local_command_line()
  * always returns %FALSE immediately, resulting in the commandline
@@ -14179,9 +14312,16 @@
  * g_application_activate() is called.  If commandline arguments are
  * given and the %G_APPLICATION_HANDLES_OPEN flag is set then they
  * are assumed to be filenames and g_application_open() is called.
+ * If you need to handle commandline arguments that are not filenames,
+ * and you don't mind commandline handling to happen in the primary
+ * instance, you should set %G_APPLICATION_HANDLED_COMMAND_LINE and
+ * process the commandline arguments in your #GApplication::command-line
+ * signal handler, either manually or using the #GOptionContext API.
  * If you are interested in doing more complicated local handling of the
  * commandline then you should implement your own #GApplication subclass
- * and override local_command_line(). See
+ * and override local_command_line(). In this case, you most likely want
+ * to return %TRUE from your local_command_line() implementation to
+ * suppress the default handling. See
  * <xref linkend="gapplication-example-cmdline2"/> for an example.
  * If, after the above is done, the use count of the application is zero
  * then the exit status is returned immediately.  If the use count is
@@ -17250,6 +17390,35 @@
 
 
 /**
+ * g_dbus_interface_info_cache_build:
+ * @info: A #GDBusInterfaceInfo.
+ *
+ * Builds a lookup-cache to speed up
+ * g_dbus_interface_info_lookup_method(),
+ * g_dbus_interface_info_lookup_signal() and
+ * g_dbus_interface_info_lookup_property().
+ * If this has already been called with @info, the existing cache is
+ * used and its use count is increased.
+ * Note that @info cannot be modified until
+ * g_dbus_interface_info_cache_release() is called.
+ *
+ * Since: 2.30
+ */
+
+
+/**
+ * g_dbus_interface_info_cache_release:
+ * @info: A GDBusInterfaceInfo
+ *
+ * Decrements the usage count for the cache for @info built by
+ * g_dbus_interface_info_cache_build() (if any) and frees the
+ * resources used by the cache if the usage count drops to zero.
+ *
+ * Since: 2.30
+ */
+
+
+/**
  * g_dbus_interface_info_generate_xml:
  * @info: A #GDBusNodeInfo
  * @indent: Indentation level.
@@ -17271,7 +17440,8 @@
  * @name: A D-Bus method name (typically in CamelCase)
  *
  * Looks up information about a method.
- * This cost of this function is O(n) in number of methods.
+ * This cost of this function is O(n) in number of methods unless
+ * g_dbus_interface_info_cache_build() has been used on @info.
  *
  * Returns: A #GDBusMethodInfo or %NULL if not found. Do not free, it is owned by @info.
  * Since: 2.26
@@ -17284,7 +17454,8 @@
  * @name: A D-Bus property name (typically in CamelCase).
  *
  * Looks up information about a property.
- * This cost of this function is O(n) in number of properties.
+ * This cost of this function is O(n) in number of properties unless
+ * g_dbus_interface_info_cache_build() has been used on @info.
  *
  * Returns: A #GDBusPropertyInfo or %NULL if not found. Do not free, it is owned by @info.
  * Since: 2.26
@@ -17297,7 +17468,8 @@
  * @name: A D-Bus signal name (typically in CamelCase)
  *
  * Looks up information about a signal.
- * This cost of this function is O(n) in number of signals.
+ * This cost of this function is O(n) in number of signals unless
+ * g_dbus_interface_info_cache_build() has been used on @info.
  *
  * Returns: A #GDBusSignalInfo or %NULL if not found. Do not free, it is owned by @info.
  * Since: 2.26
@@ -20648,7 +20820,7 @@
  * not contain a string, %NULL will be returned.
  * %NULL otherwise.
  *
- * Returns: the contents of the @attribute value as a string, or
+ * Returns: the contents of the @attribute value as a UTF-8 string, or
  */
 
 
@@ -20659,7 +20831,7 @@
  *
  * Gets the value of a stringv attribute. If the attribute does
  * not contain a stringv, %NULL will be returned.
- * %NULL otherwise. Do not free.
+ * %NULL otherwise. Do not free. These returned strings are UTF-8.
  *
  * Returns: (transfer none): the contents of the @attribute value as a stringv, or
  * Since: 2.22
@@ -21000,7 +21172,7 @@
  * g_file_info_set_attribute_string:
  * @info: a #GFileInfo.
  * @attribute: a file attribute key.
- * @attr_value: a string.
+ * @attr_value: a UTF-8 string.
  *
  * Sets the @attribute to contain the given @attr_value,
  * if possible.
@@ -21010,8 +21182,8 @@
 /**
  * g_file_info_set_attribute_stringv:
  * @info: a #GFileInfo.
- * @attribute: a file attribute key.
- * @attr_value: a %NULL terminated string array
+ * @attribute: a file attribute key
+ * @attr_value: a %NULL terminated array of UTF-8 strings.
  *
  * Sets the @attribute to contain the given @attr_value,
  * if possible.
@@ -21316,7 +21488,7 @@
  * g_file_load_contents:
  * @file: input #GFile.
  * @cancellable: optional #GCancellable object, %NULL to ignore.
- * @contents: (out) (transfer full): a location to place the contents of the file.
+ * @contents: (out) (transfer full) (element-type guint8) (array length=length): a location to place the contents of the file.
  * @length: (out) (allow-none): a location to place the length of the contents of the file, or %NULL if the length is not needed
  * @etag_out: (out) (allow-none): a location to place the current entity tag for the file, or %NULL if the entity tag is not needed
  * @error: a #GError, or %NULL
@@ -21358,7 +21530,7 @@
  * g_file_load_contents_finish:
  * @file: input #GFile.
  * @res: a #GAsyncResult.
- * @contents: (out) (transfer full): a location to place the contents of the file.
+ * @contents: (out) (transfer full) (element-type guint8) (array length=length): a location to place the contents of the file.
  * @length: (out) (allow-none): a location to place the length of the contents of the file, or %NULL if the length is not needed
  * @etag_out: (out) (allow-none): a location to place the current entity tag for the file, or %NULL if the entity tag is not needed
  * @error: a #GError, or %NULL
@@ -21398,7 +21570,7 @@
  * g_file_load_partial_contents_finish:
  * @file: input #GFile.
  * @res: a #GAsyncResult.
- * @contents: (out) (transfer full): a location to place the contents of the file.
+ * @contents: (out) (transfer full) (element-type guint8) (array length=length): a location to place the contents of the file.
  * @length: (out) (allow-none): a location to place the length of the contents of the file, or %NULL if the length is not needed
  * @etag_out: (out) (allow-none): a location to place the current entity tag for the file, or %NULL if the entity tag is not needed
  * @error: a #GError, or %NULL
@@ -22251,7 +22423,7 @@
 /**
  * g_file_replace_contents:
  * @file: input #GFile.
- * @contents: a string containing the new contents for @file.
+ * @contents: (element-type guint8) (array length=length): a string containing the new contents for @file.
  * @length: the length of @contents in bytes.
  * @etag: (allow-none): the old <link linkend="gfile-etag">entity tag</link> for the document, or %NULL
  * @make_backup: %TRUE if a backup should be created.
@@ -22279,7 +22451,7 @@
 /**
  * g_file_replace_contents_async:
  * @file: input #GFile.
- * @contents: string of contents to replace the file with.
+ * @contents: (element-type guint8) (array length=length): string of contents to replace the file with.
  * @length: the length of @contents in bytes.
  * @etag: (allow-none): a new <link linkend="gfile-etag">entity tag</link> for the @file, or %NULL
  * @make_backup: %TRUE if a backup should be created.
@@ -24388,6 +24560,19 @@
 
 
 /**
+ * g_memory_settings_backend_new:
+ *
+ * Creates a memory-backed #GSettingsBackend.
+ * This backend allows changes to settings, but does not write them
+ * to any backing storage, so the next time you run your application,
+ * the memory backend will start out with the default values again.
+ *
+ * Returns: (transfer full): a newly created #GSettingsBackend
+ * Since: 2.28
+ */
+
+
+/**
  * g_mount_can_eject:
  * @mount: a #GMount.
  *
@@ -25185,6 +25370,18 @@
  * node or %NULL
  *
  * Returns: the previous sibling of @node, or %NULL if @node is the first
+ */
+
+
+/**
+ * g_null_settings_backend_new:
+ *
+ * Creates a readonly #GSettingsBackend.
+ * This backend does not allow changes to settings, so all settings
+ * will always have their default values.
+ *
+ * Returns: (transfer full): a newly created #GSettingsBackend
+ * Since: 2.28
  */
 
 
