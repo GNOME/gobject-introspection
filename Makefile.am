@@ -55,13 +55,13 @@ EXTRA_DIST += 			\
 	misc/pre-commit		\
 	misc/pyflakes.py
 
-prepare-release-tag:
+prepare-release-tag: Makefile
 	@TAG=`echo $(VERSION)|sed s/\\\./_/g`;\
 	  echo "git tag GOBJECT_INTROSPECTION_$$TAG"; \
           git tag -m "Tag $$VERSION" -a \
               GOBJECT_INTROSPECTION_$$TAG
 
-prepare-minor-release: $(distdir).tar.bz2 prepare-release-tag
+prepare-minor-release: Makefile $(distdir).tar.bz2 prepare-release-tag
 	python $(top_srcdir)/tools/verbump.py
 
 upload-release: $(distdir).tar.bz2
