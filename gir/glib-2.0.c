@@ -246,3 +246,18 @@
  * g_listenv:
  * @returns: (array zero-terminated=1) (transfer full):
  */
+
+/**
+ * g_base64_encode:
+ * @data: (array length=len) (element-type guint8):
+ *
+ * @returns: (transfer full):
+ */
+
+/**
+ * g_base64_decode:
+ * @text:
+ * @out_len: (out):
+ *
+ * @returns: (array length=out_len) (element-type guint8) (transfer full):
+ */
