@@ -137,7 +137,8 @@ typedef enum
 {
   REGRESS_TEST_VALUE1,
   REGRESS_TEST_VALUE2,
-  REGRESS_TEST_VALUE3 = -1
+  REGRESS_TEST_VALUE3 = -1,
+  REGRESS_TEST_VALUE4 = '0'
 } RegressTestEnum;
 
 typedef enum
@@ -159,6 +160,14 @@ GType regress_test_enum_unsigned_get_type (void) G_GNUC_CONST;
 #define REGRESS_TEST_TYPE_ENUM_UNSIGNED (regress_test_enum_unsigned_get_type ())
 GType regress_test_flags_get_type (void) G_GNUC_CONST;
 #define REGRESS_TEST_TYPE_FLAGS (regress_test_flags_get_type ())
+
+/* this is not registered with GType */
+typedef enum
+{
+  REGRESS_TEST_EVALUE1,
+  REGRESS_TEST_EVALUE2 = 42,
+  REGRESS_TEST_EVALUE3 = '0'
+} RegressTestEnumNoGEnum;
 
 const gchar * regress_test_enum_param(RegressTestEnum e);
 const gchar * regress_test_unsigned_enum_param(RegressTestEnumUnsigned e);

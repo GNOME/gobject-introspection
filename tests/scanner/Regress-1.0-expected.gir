@@ -184,6 +184,15 @@ use it should be.</doc>
               value="-1"
               c:identifier="REGRESS_TEST_VALUE3"
               glib:nick="value3"/>
+      <member name="value4"
+              value="48"
+              c:identifier="REGRESS_TEST_VALUE4"
+              glib:nick="value4"/>
+    </enumeration>
+    <enumeration name="TestEnumNoGEnum" c:type="RegressTestEnumNoGEnum">
+      <member name="evalue1" value="0" c:identifier="REGRESS_TEST_EVALUE1"/>
+      <member name="evalue2" value="42" c:identifier="REGRESS_TEST_EVALUE2"/>
+      <member name="evalue3" value="48" c:identifier="REGRESS_TEST_EVALUE3"/>
     </enumeration>
     <enumeration name="TestEnumUnsigned"
                  glib:type-name="RegressTestEnumUnsigned"

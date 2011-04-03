@@ -243,7 +243,9 @@ primary_expression
 	  }
 	| CHARACTER
 	  {
-		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, lineno);
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, lineno);
+		$$->const_int_set = TRUE;
+		$$->const_int = g_utf8_get_char(yytext + 1);
 	  }
 	| FLOATING
 	  {
