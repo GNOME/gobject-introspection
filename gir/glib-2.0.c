@@ -211,6 +211,12 @@
  */
 
 /**
+ * g_variant_new_variant: (constructor)
+ * @value:
+ * @returns:
+ */
+
+/**
  * g_variant_get_strv:
  * @length: (allow-none):
  * @returns: (array length=length) (transfer container):
