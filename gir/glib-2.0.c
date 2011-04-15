@@ -106,7 +106,8 @@
 /**
  * g_spawn_async_with_pipes:
  * @working_directory: (allow-none):
- * @envp: (allow-none):
+ * @argv: (array zero-terminated=1):
+ * @envp: (array zero-terminated=1) (allow-none):
  * @child_setup: (scope async) (allow-none):
  * @user_data: (allow-none):
  * @child_pid: (out):
