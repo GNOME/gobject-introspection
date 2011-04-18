@@ -2441,7 +2441,7 @@ _marshal_INT__VOID (GClosure *closure,
 GClosure *
 gi_marshalling_tests_gclosure_return (void)
 {
-    GClosure *closure = g_cclosure_new ((GCallback *)_closure_return_42, 
+    GClosure *closure = g_cclosure_new ((GCallback)_closure_return_42,
                                         NULL, NULL);
     g_closure_set_marshal (closure, _marshal_INT__VOID);
 
