@@ -886,6 +886,44 @@ TpAccount::status-changed</doc>
         </parameters>
       </method>
     </record>
+    <record name="TestStructC" c:type="RegressTestStructC">
+      <field name="another_int" writable="1">
+        <type name="gint" c:type="gint"/>
+      </field>
+      <field name="obj" writable="1">
+        <type name="GObject.Object" c:type="GObject*"/>
+      </field>
+    </record>
+    <record name="TestStructD" c:type="RegressTestStructD">
+      <field name="array1" writable="1">
+        <array c:type="RegressTestStructA**">
+          <type name="TestStructA" c:type="RegressTestStructA*"/>
+        </array>
+      </field>
+      <field name="array2" writable="1">
+        <array c:type="RegressTestStructB**" fixed-size="5">
+          <type name="TestStructB" c:type="RegressTestStructB*"/>
+        </array>
+      </field>
+      <field name="array3" writable="1">
+        <array c:type="gpointer*">
+          <type name="TestObj"/>
+        </array>
+      </field>
+      <field name="field" writable="1">
+        <type name="TestObj"/>
+      </field>
+      <field name="list" writable="1">
+        <type name="GLib.List" c:type="GList*">
+          <type name="TestObj"/>
+        </type>
+      </field>
+      <field name="garray" writable="1">
+        <array name="GLib.PtrArray" c:type="GPtrArray*">
+          <type name="TestObj"/>
+        </array>
+      </field>
+    </record>
     <record name="TestStructFixedArray" c:type="RegressTestStructFixedArray">
       <field name="just_int" writable="1">
         <type name="gint" c:type="gint"/>
@@ -995,14 +1033,6 @@ TpAccount::status-changed</doc>
     <constant name="UTF8_CONSTANT" value="const ♥ utf8">
       <type name="utf8" c:type="gchar*"/>
     </constant>
-    <record name="_TestStructC" c:type="_RegressTestStructC">
-      <field name="another_int" writable="1">
-        <type name="gint" c:type="gint"/>
-      </field>
-      <field name="obj" writable="1">
-        <type name="GObject.Object" c:type="GObject*"/>
-      </field>
-    </record>
     <function name="aliased_caller_alloc"
               c:identifier="regress_aliased_caller_alloc">
       <return-value transfer-ownership="none">

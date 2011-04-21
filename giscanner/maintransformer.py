@@ -696,9 +696,13 @@ usage is void (*_gtk_reserved1)(void);"""
         if not tag:
             return
         t = tag.options.get(OPT_TYPE)
-        if not t:
-            return
-        field.type = self._transformer.create_type_from_user_string(t.one())
+        if t:
+            field.type = self._transformer.create_type_from_user_string(t.one())
+
+        try:
+            self._adjust_container_type(parent, field, tag.options)
+        except AttributeError:
+            pass
 
     def _apply_annotations_property(self, parent, prop):
         prefix = self._get_annotation_name(parent)

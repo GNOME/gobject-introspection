@@ -175,6 +175,8 @@ void regress_global_get_flags_out (RegressTestFlags *v);
 /* structures */
 typedef struct _RegressTestStructA RegressTestStructA;
 typedef struct _RegressTestStructB RegressTestStructB;
+typedef struct _RegressTestStructC RegressTestStructC;
+typedef struct _RegressTestStructD RegressTestStructD;
 
 struct _RegressTestStructA
 {
@@ -201,6 +203,26 @@ struct _RegressTestStructC
 {
   gint another_int;
   GObject *obj;
+};
+
+/* This one has annotated fields */
+/**
+ * RegressTestStructD:
+ * @array1: (array zero-terminated=1):
+ * @array2: (array fixed-size=5):
+ * @array3: (array) (element-type RegressTestObj):
+ * @field: (type RegressTestObj):
+ * @list: (element-type RegressTestObj):
+ * @garray: (element-type RegressTestObj):
+ */
+struct _RegressTestStructD
+{
+  RegressTestStructA **array1;
+  RegressTestStructB **array2;
+  gpointer            *array3;
+  gpointer             field;
+  GList               *list;
+  GPtrArray           *garray;
 };
 
 /* plain-old-data boxed types */
