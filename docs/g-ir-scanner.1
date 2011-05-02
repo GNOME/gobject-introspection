@@ -133,6 +133,9 @@ Be verbose, include some debugging information.
 The g-ir-scanner uses the XDG_DATA_DIRS variable to check for dirs,
 the gir's are located in XDG_DATA_DIRS/share/gir-1.0. It is normally
 set on a distribution so you shouldn't need to set it yourself.
+
+The variable GI_SCANNER_DISABLE_CACHE ensures that the scanner will
+not write cache data to $HOME.
 .SH BUGS
 Report bugs at http://bugzilla.gnome.org/ in the glib product and
 introspection component.

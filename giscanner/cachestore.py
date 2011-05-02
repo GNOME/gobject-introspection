@@ -41,6 +41,8 @@ def _get_versionhash():
     return hashlib.sha1(''.join(mtimes)).hexdigest()
 
 def _get_cachedir():
+    if 'GI_SCANNER_DISABLE_CACHE' in os.environ:
+        return None
     homedir = os.environ.get('HOME')
     if homedir is None:
         return None
