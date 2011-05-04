@@ -2929,3 +2929,13 @@ void regress_aliased_caller_alloc (RegressAliasedTestBoxed *boxed)
   boxed->priv = g_slice_new0 (RegressTestBoxedPrivate);
   boxed->priv->magic = 0xdeadbeef;
 }
+
+void
+regress_test_struct_fixed_array_frob (RegressTestStructFixedArray *str)
+{
+  guint i;
+  str->just_int = 7;
+
+  for (i = 0; i < G_N_ELEMENTS(str->array); i++)
+    str->array[i] = 42 + i;
+}

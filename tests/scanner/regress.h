@@ -614,6 +614,8 @@ typedef struct {
   gint array[10];
 } RegressTestStructFixedArray;
 
+void regress_test_struct_fixed_array_frob (RegressTestStructFixedArray *str);
+
 #define REGRESS_UTF8_CONSTANT "const \xe2\x99\xa5 utf8"
 
 #endif /* __GITESTTYPES_H__ */
