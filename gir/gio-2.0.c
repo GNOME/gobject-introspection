@@ -30076,7 +30076,7 @@
  *
  * Gets the default #GTlsBackend for the system.
  *
- * Returns: a #GTlsBackend
+ * Returns: (transfer none): a #GTlsBackend
  * Since: 2.28
  */
 
@@ -30235,7 +30235,7 @@
  * expected server identity, or %NULL if the expected identity is not
  * known.
  *
- * Returns: a #GSocketConnectable describing the
+ * Returns: (transfer none): a #GSocketConnectable describing the
  * Since: 2.28
  */
 
