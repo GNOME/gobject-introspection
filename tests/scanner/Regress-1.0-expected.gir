@@ -895,6 +895,11 @@ TpAccount::status-changed</doc>
           <type name="gint" c:type="gint"/>
         </array>
       </field>
+      <method name="frob" c:identifier="regress_test_struct_fixed_array_frob">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+      </method>
     </record>
     <class name="TestSubObj"
            c:symbol-prefix="test_sub_obj"
