@@ -261,6 +261,96 @@ void gi_marshalling_tests_utf8_full_inout (gchar **utf8);
 
 GSList *gi_marshalling_tests_filename_list_return (void);
 
+/* Enum */
+
+typedef enum
+{
+  GI_MARSHALLING_TESTS_ENUM_VALUE1,
+  GI_MARSHALLING_TESTS_ENUM_VALUE2,
+  GI_MARSHALLING_TESTS_ENUM_VALUE3 = 42
+} GIMarshallingTestsEnum;
+
+typedef enum
+{
+  GI_MARSHALLING_TESTS_SECOND_ENUM_SECONDVALUE1,
+  GI_MARSHALLING_TESTS_SECOND_ENUM_SECONDVALUE2,
+} GIMarshallingTestsSecondEnum;
+
+GIMarshallingTestsEnum gi_marshalling_tests_enum_returnv (void);
+
+void gi_marshalling_tests_enum_in (GIMarshallingTestsEnum enum_);
+
+void gi_marshalling_tests_enum_out (GIMarshallingTestsEnum *enum_);
+
+void gi_marshalling_tests_enum_inout (GIMarshallingTestsEnum *enum_);
+
+
+/* GEnum */
+
+typedef enum
+{
+  GI_MARSHALLING_TESTS_GENUM_VALUE1,
+  GI_MARSHALLING_TESTS_GENUM_VALUE2,
+  GI_MARSHALLING_TESTS_GENUM_VALUE3 = 42
+} GIMarshallingTestsGEnum;
+
+GType gi_marshalling_tests_genum_get_type (void) G_GNUC_CONST;
+#define GI_MARSHALLING_TESTS_TYPE_GENUM (gi_marshalling_tests_genum_get_type ())
+
+GIMarshallingTestsEnum gi_marshalling_tests_genum_returnv (void);
+
+void gi_marshalling_tests_genum_in (GIMarshallingTestsGEnum enum_);
+
+void gi_marshalling_tests_genum_out (GIMarshallingTestsGEnum *enum_);
+
+void gi_marshalling_tests_genum_inout (GIMarshallingTestsGEnum *enum_);
+
+
+/* GFlags */
+
+typedef enum
+{
+  GI_MARSHALLING_TESTS_FLAGS_VALUE1 = 1 << 0,
+  GI_MARSHALLING_TESTS_FLAGS_VALUE2 = 1 << 1,
+  GI_MARSHALLING_TESTS_FLAGS_VALUE3 = 1 << 2,
+  GI_MARSHALLING_TESTS_FLAGS_MASK = GI_MARSHALLING_TESTS_FLAGS_VALUE1 |
+                                    GI_MARSHALLING_TESTS_FLAGS_VALUE2,
+  GI_MARSHALLING_TESTS_FLAGS_MASK2 = GI_MARSHALLING_TESTS_FLAGS_MASK
+} GIMarshallingTestsFlags;
+
+GType gi_marshalling_tests_flags_get_type (void) G_GNUC_CONST;
+#define GI_MARSHALLING_TESTS_TYPE_FLAGS (gi_marshalling_tests_flags_get_type ())
+
+GIMarshallingTestsFlags gi_marshalling_tests_flags_returnv (void);
+
+void gi_marshalling_tests_flags_in (GIMarshallingTestsFlags flags_);
+void gi_marshalling_tests_flags_in_zero (GIMarshallingTestsFlags flags);
+
+void gi_marshalling_tests_flags_out (GIMarshallingTestsFlags *flags_);
+
+void gi_marshalling_tests_flags_inout (GIMarshallingTestsFlags *flags_);
+
+/* Flags with no GType */
+
+typedef enum
+{
+  GI_MARSHALLING_TESTS_NO_TYPE_FLAGS_VALUE1 = 1 << 0,
+  GI_MARSHALLING_TESTS_NO_TYPE_FLAGS_VALUE2 = 1 << 1,
+  GI_MARSHALLING_TESTS_NO_TYPE_FLAGS_VALUE3 = 1 << 2,
+  GI_MARSHALLING_TESTS_NO_TYPE_FLAGS_MASK = GI_MARSHALLING_TESTS_NO_TYPE_FLAGS_VALUE1 |
+                                            GI_MARSHALLING_TESTS_NO_TYPE_FLAGS_VALUE2,
+  GI_MARSHALLING_TESTS_NO_TYPE_FLAGS_MASK2 = GI_MARSHALLING_TESTS_FLAGS_MASK
+} GIMarshallingTestsNoTypeFlags;
+
+GIMarshallingTestsNoTypeFlags gi_marshalling_tests_no_type_flags_returnv (void);
+
+void gi_marshalling_tests_no_type_flags_in (GIMarshallingTestsNoTypeFlags flags_);
+void gi_marshalling_tests_no_type_flags_in_zero (GIMarshallingTestsNoTypeFlags flags);
+
+void gi_marshalling_tests_no_type_flags_out (GIMarshallingTestsNoTypeFlags *flags_);
+
+void gi_marshalling_tests_no_type_flags_inout (GIMarshallingTestsNoTypeFlags *flags_);
+
 /* Arrays */
 
 /* Fixed-size */
@@ -282,8 +372,16 @@ const gint *gi_marshalling_tests_array_return (gint *length);
 const gint *gi_marshalling_tests_array_return_etc (gint first, gint *length, gint last, gint *sum);
 
 void gi_marshalling_tests_array_in (const gint *ints, gint length);
-
+void gi_marshalling_tests_array_in_len_before (gint length, const gint *ints);
+void gi_marshalling_tests_array_in_len_zero_terminated (const gint *ints, gint length);
+void gi_marshalling_tests_array_string_in (const gchar **strings, gint length);
 void gi_marshalling_tests_array_uint8_in (const guint8 *chars, gint length);
+void gi_marshalling_tests_array_struct_in (GIMarshallingTestsBoxedStruct **structs, gint length);
+void gi_marshalling_tests_array_struct_take_in (GIMarshallingTestsBoxedStruct **structs, gint length);
+void gi_marshalling_tests_array_enum_in (GIMarshallingTestsEnum *_enum, gint length);
+void gi_marshalling_tests_array_nested_in (GSList **list, gint length);
+void gi_marshalling_tests_array_in_guint64_len (const gint *ints, guint64 length);
+void gi_marshalling_tests_array_in_guint8_len (const gint *ints, guint8 length);
 
 void gi_marshalling_tests_array_out (gint **ints, gint *length);
 void gi_marshalling_tests_array_out_etc (gint first, gint **ints, gint *length, gint last, gint *sum);
@@ -419,98 +517,6 @@ GClosure *gi_marshalling_tests_gclosure_return (void);
 /* Pointer */
 
 gpointer gi_marshalling_tests_pointer_in_return (gpointer pointer);
-
-
-/* Enum */
-
-typedef enum
-{
-  GI_MARSHALLING_TESTS_ENUM_VALUE1,
-  GI_MARSHALLING_TESTS_ENUM_VALUE2,
-  GI_MARSHALLING_TESTS_ENUM_VALUE3 = 42
-} GIMarshallingTestsEnum;
-
-typedef enum
-{
-  GI_MARSHALLING_TESTS_SECOND_ENUM_SECONDVALUE1,
-  GI_MARSHALLING_TESTS_SECOND_ENUM_SECONDVALUE2,
-} GIMarshallingTestsSecondEnum;
-
-GIMarshallingTestsEnum gi_marshalling_tests_enum_returnv (void);
-
-void gi_marshalling_tests_enum_in (GIMarshallingTestsEnum enum_);
-
-void gi_marshalling_tests_enum_out (GIMarshallingTestsEnum *enum_);
-
-void gi_marshalling_tests_enum_inout (GIMarshallingTestsEnum *enum_);
-
-
-/* GEnum */
-
-typedef enum
-{
-  GI_MARSHALLING_TESTS_GENUM_VALUE1,
-  GI_MARSHALLING_TESTS_GENUM_VALUE2,
-  GI_MARSHALLING_TESTS_GENUM_VALUE3 = 42
-} GIMarshallingTestsGEnum;
-
-GType gi_marshalling_tests_genum_get_type (void) G_GNUC_CONST;
-#define GI_MARSHALLING_TESTS_TYPE_GENUM (gi_marshalling_tests_genum_get_type ())
-
-GIMarshallingTestsEnum gi_marshalling_tests_genum_returnv (void);
-
-void gi_marshalling_tests_genum_in (GIMarshallingTestsGEnum enum_);
-
-void gi_marshalling_tests_genum_out (GIMarshallingTestsGEnum *enum_);
-
-void gi_marshalling_tests_genum_inout (GIMarshallingTestsGEnum *enum_);
-
-
-/* GFlags */
-
-typedef enum
-{
-  GI_MARSHALLING_TESTS_FLAGS_VALUE1 = 1 << 0,
-  GI_MARSHALLING_TESTS_FLAGS_VALUE2 = 1 << 1,
-  GI_MARSHALLING_TESTS_FLAGS_VALUE3 = 1 << 2,
-  GI_MARSHALLING_TESTS_FLAGS_MASK = GI_MARSHALLING_TESTS_FLAGS_VALUE1 |
-                                    GI_MARSHALLING_TESTS_FLAGS_VALUE2,
-  GI_MARSHALLING_TESTS_FLAGS_MASK2 = GI_MARSHALLING_TESTS_FLAGS_MASK
-} GIMarshallingTestsFlags;
-
-GType gi_marshalling_tests_flags_get_type (void) G_GNUC_CONST;
-#define GI_MARSHALLING_TESTS_TYPE_FLAGS (gi_marshalling_tests_flags_get_type ())
-
-GIMarshallingTestsFlags gi_marshalling_tests_flags_returnv (void);
-
-void gi_marshalling_tests_flags_in (GIMarshallingTestsFlags flags_);
-void gi_marshalling_tests_flags_in_zero (GIMarshallingTestsFlags flags);
-
-void gi_marshalling_tests_flags_out (GIMarshallingTestsFlags *flags_);
-
-void gi_marshalling_tests_flags_inout (GIMarshallingTestsFlags *flags_);
-
-/* Flags with no GType */
-
-typedef enum
-{
-  GI_MARSHALLING_TESTS_NO_TYPE_FLAGS_VALUE1 = 1 << 0,
-  GI_MARSHALLING_TESTS_NO_TYPE_FLAGS_VALUE2 = 1 << 1,
-  GI_MARSHALLING_TESTS_NO_TYPE_FLAGS_VALUE3 = 1 << 2,
-  GI_MARSHALLING_TESTS_NO_TYPE_FLAGS_MASK = GI_MARSHALLING_TESTS_NO_TYPE_FLAGS_VALUE1 |
-                                            GI_MARSHALLING_TESTS_NO_TYPE_FLAGS_VALUE2,
-  GI_MARSHALLING_TESTS_NO_TYPE_FLAGS_MASK2 = GI_MARSHALLING_TESTS_FLAGS_MASK
-} GIMarshallingTestsNoTypeFlags;
-
-GIMarshallingTestsNoTypeFlags gi_marshalling_tests_no_type_flags_returnv (void);
-
-void gi_marshalling_tests_no_type_flags_in (GIMarshallingTestsNoTypeFlags flags_);
-void gi_marshalling_tests_no_type_flags_in_zero (GIMarshallingTestsNoTypeFlags flags);
-
-void gi_marshalling_tests_no_type_flags_out (GIMarshallingTestsNoTypeFlags *flags_);
-
-void gi_marshalling_tests_no_type_flags_inout (GIMarshallingTestsNoTypeFlags *flags_);
-
 
 /* Structure */
 

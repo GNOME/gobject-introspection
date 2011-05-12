@@ -6,6 +6,7 @@
 
 #include <string.h>
 
+static void gi_marshalling_tests_boxed_struct_free (GIMarshallingTestsBoxedStruct *struct_);
 
 /* Booleans */
 
@@ -1233,6 +1234,7 @@ gi_marshalling_tests_array_return_etc (gint first, gint *length, gint last, gint
 /**
  * gi_marshalling_tests_array_in:
  * @ints: (array length=length):
+ * @length:
  */
 void
 gi_marshalling_tests_array_in (const gint *ints, gint length)
@@ -1242,6 +1244,48 @@ gi_marshalling_tests_array_in (const gint *ints, gint length)
     g_assert(ints[1] == 0);
     g_assert(ints[2] == 1);
     g_assert(ints[3] == 2);
+}
+
+/**
+ * gi_marshalling_tests_array_in_len_before:
+ * @length:
+ * @ints: (array length=length):
+ */
+void
+gi_marshalling_tests_array_in_len_before (gint length, const gint *ints)
+{
+    gi_marshalling_tests_array_in (ints, length);
+}
+
+/**
+ * gi_marshalling_tests_array_in_len_zero_terminated:
+ * @ints: (array length=length zero-terminated=1):
+ * @length:
+ */
+void
+gi_marshalling_tests_array_in_len_zero_terminated (const gint *ints, gint length)
+{
+    g_assert (length == 4);
+
+    g_assert (ints[0] == -1);
+    g_assert (ints[1] == 0);
+    g_assert (ints[2] == 1);
+    g_assert (ints[3] == 2);
+
+    /* One past the end, null terminator */
+    g_assert (ints[4] == 0);
+}
+
+/**
+ * gi_marshalling_tests_array_string_in:
+ * @strings: (array length=length):
+ */
+void
+gi_marshalling_tests_array_string_in (const gchar **strings, gint length)
+{
+    g_assert(length == 2);
+    g_assert(g_strcmp0(strings[0], "foo") == 0);
+    g_assert(g_strcmp0(strings[1], "bar") == 0);
 }
 
 /**
@@ -1256,6 +1300,98 @@ gi_marshalling_tests_array_uint8_in (const guint8 *chars, gint length)
     g_assert(chars[1] == 'b');
     g_assert(chars[2] == 'c');
     g_assert(chars[3] == 'd');
+}
+
+/**
+ * gi_marshalling_tests_array_struct_in:
+ * @structs: (array length=length):
+ */
+void
+gi_marshalling_tests_array_struct_in (GIMarshallingTestsBoxedStruct **structs, gint length)
+{
+    g_assert(length == 3);
+    g_assert(structs[0]->long_ == 1);
+    g_assert(structs[1]->long_ == 2);
+    g_assert(structs[2]->long_ == 3);
+}
+
+/**
+ * gi_marshalling_tests_array_struct_take_in:
+ * @structs: (array length=length) (transfer full):
+ */
+void
+gi_marshalling_tests_array_struct_take_in (GIMarshallingTestsBoxedStruct **structs, gint length)
+{
+    gi_marshalling_tests_array_struct_in (structs, length);
+
+    /* only really useful if run in valgrind actually */
+    gi_marshalling_tests_boxed_struct_free (structs[0]);
+    gi_marshalling_tests_boxed_struct_free (structs[1]);
+    gi_marshalling_tests_boxed_struct_free (structs[2]);
+    g_free (structs);
+}
+
+/**
+ * gi_marshalling_tests_array_enum_in:
+ * @_enum: (array length=length) (transfer none):
+ * @length:
+ */
+void
+gi_marshalling_tests_array_enum_in (GIMarshallingTestsEnum *_enum, gint length)
+{
+    g_assert (length == 3);
+    g_assert (_enum[0] == GI_MARSHALLING_TESTS_ENUM_VALUE1);
+    g_assert (_enum[1] == GI_MARSHALLING_TESTS_ENUM_VALUE2);
+    g_assert (_enum[2] == GI_MARSHALLING_TESTS_ENUM_VALUE3);
+}
+
+/**
+ * gi_marshalling_tests_array_nested_in:
+ * @list: (array length=length) (element-type GSList<gint>):
+ * @length:
+ */
+void
+gi_marshalling_tests_array_nested_in (GSList **list, gint length)
+{
+    g_assert (length == 3);
+
+    g_assert (g_slist_length (list[0]) == 1);
+    g_assert (list[0]->data == GINT_TO_POINTER (11));
+
+    g_assert (g_slist_length (list[1]) == 3);
+    g_assert (list[1]->data == GINT_TO_POINTER (21));
+    g_assert (list[1]->next->data == GINT_TO_POINTER (22));
+    g_assert (list[1]->next->next->data == GINT_TO_POINTER (23));
+
+    g_assert (g_slist_length (list[2]) == 2);
+    g_assert (list[2]->data == GINT_TO_POINTER (31));
+    g_assert (list[2]->next->data == GINT_TO_POINTER (32));
+}
+
+/**
+ * gi_marshalling_tests_array_in_guint64_len:
+ * @ints: (array length=length) (transfer none):
+ * @length:
+ */
+void
+gi_marshalling_tests_array_in_guint64_len (const gint *ints, guint64 length)
+{
+    g_assert (length == 4);
+
+    gi_marshalling_tests_array_in (ints, length);
+}
+
+/**
+ * gi_marshalling_tests_array_in_guint8_len:
+ * @ints: (array length=length) (transfer none):
+ * @length:
+ */
+void
+gi_marshalling_tests_array_in_guint8_len (const gint *ints, guint8 length)
+{
+    g_assert (length == 4);
+
+    gi_marshalling_tests_array_in (ints, length);
 }
 
 /**
