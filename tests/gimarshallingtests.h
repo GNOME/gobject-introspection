@@ -8,6 +8,7 @@
 #define __GI_MARSHALLING_TESTS_H__
 
 typedef struct _GIMarshallingTestsSimpleStruct GIMarshallingTestsSimpleStruct;
+typedef struct _GIMarshallingTestsBoxedStruct GIMarshallingTestsBoxedStruct;
 
 /* Constants */
 
@@ -290,6 +291,7 @@ void gi_marshalling_tests_array_inout (gint **ints, gint *length);
 /* Zero-terminated */
 
 gchar **gi_marshalling_tests_array_zero_terminated_return (void);
+GIMarshallingTestsBoxedStruct **gi_marshalling_tests_array_zero_terminated_return_struct (void);
 
 void gi_marshalling_tests_array_zero_terminated_in (gchar **utf8s);
 
@@ -540,10 +542,10 @@ GIMarshallingTestsPointerStruct *gi_marshalling_tests_pointer_struct_returnv (vo
 
 void gi_marshalling_tests_pointer_struct_inv (GIMarshallingTestsPointerStruct *struct_);
 
-typedef struct {
+struct _GIMarshallingTestsBoxedStruct {
     glong long_;
     GStrv g_strv;
-} GIMarshallingTestsBoxedStruct;
+};
 
 GType gi_marshalling_tests_boxed_struct_get_type (void) G_GNUC_CONST;
 

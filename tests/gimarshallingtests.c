@@ -1283,6 +1283,29 @@ gi_marshalling_tests_array_zero_terminated_return (void)
 }
 
 /**
+ * gi_marshalling_tests_array_zero_terminated_return_struct:
+ * Returns: (array zero-terminated=1) (transfer full):
+ */
+GIMarshallingTestsBoxedStruct **
+gi_marshalling_tests_array_zero_terminated_return_struct (void)
+{
+    GIMarshallingTestsBoxedStruct **ret = (GIMarshallingTestsBoxedStruct**) g_new (gpointer, 4);
+
+    ret[0] = gi_marshalling_tests_boxed_struct_new ();
+    ret[0]->long_ = 42;
+
+    ret[1] = gi_marshalling_tests_boxed_struct_new ();
+    ret[1]->long_ = 43;
+
+    ret[2] = gi_marshalling_tests_boxed_struct_new ();
+    ret[2]->long_ = 44;
+
+    ret[3] = NULL;
+
+    return ret;
+}
+
+/**
  * gi_marshalling_tests_array_zero_terminated_in:
  * @utf8s: (array zero-terminated=1) (transfer none):
  */
