@@ -196,6 +196,8 @@ and/or use gtk-doc annotations. ''')
         attrs = []
         if return_.transfer:
             attrs.append(('transfer-ownership', return_.transfer))
+        if return_.skip:
+            attrs.append(('skip', '1'))
         with self.tagcontext('return-value', attrs):
             self._write_generic(return_)
             self._write_type(return_.type, function=parent)
@@ -228,6 +230,8 @@ and/or use gtk-doc annotations. ''')
         if parameter.destroy_name is not None:
             idx = parent.get_parameter_index(parameter.destroy_name)
             attrs.append(('destroy', '%d' % (idx, )))
+        if parameter.skip:
+            attrs.append(('skip', '1'))
         with self.tagcontext('parameter', attrs):
             self._write_generic(parameter)
             self._write_type(parameter.type, function=parent)

@@ -541,6 +541,9 @@ usage is void (*_gtk_reserved1)(void);"""
         if tag is not None and tag.comment is not None:
             node.doc = tag.comment
 
+        if OPT_SKIP in options:
+            node.skip = True
+
         if options:
             for attribute in options.getall(OPT_ATTRIBUTE):
                 node.attributes.append(attribute.flat())

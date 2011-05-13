@@ -707,6 +707,49 @@ foo_skip_me (FooSkippable fs)
 }
 
 /**
+ * foo_object_skip_return_val:
+ * @object: a #FooObject
+ * @a: Parameter.
+ * @out_b: (out): A return value.
+ * @c: Other parameter.
+ * @error: Return location for error.
+ *
+ * Check that the return value is skipped
+ *
+ * Returns: (skip): %TRUE if the call succeeds, %FALSE if @error is set.
+ */
+gboolean
+foo_object_skip_return_val (FooObject  *object,
+                            gint        a,
+                            gint       *out_b,
+                            gdouble     c,
+                            GError    **error)
+{
+  return TRUE;
+}
+
+/**
+ * foo_object_skip_param:
+ * @object: A #FooObject.
+ * @a: Parameter.
+ * @out_b: (out): Return value.
+ * @c: (skip): Other parameter.
+ *
+ * Check that the return value is skipped
+ *
+ * Returns: %TRUE if the call succeeds, %FALSE if @error is set.
+ */
+gboolean
+foo_object_skip_param (FooObject *object,
+                       gint       a,
+                       gint      *out_b,
+                       gdouble    c,
+                       GError   **error)
+{
+  return TRUE;
+}
+
+/**
  * FooForeignStruct: (foreign)
  *
  */

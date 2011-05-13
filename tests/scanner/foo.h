@@ -416,6 +416,18 @@ typedef enum {
 } FooSkippable;
 void foo_skip_me (FooSkippable fs);
 
+gboolean foo_object_skip_return_val (FooObject  *object,
+                                     gint        a,
+                                     gint       *out_b,
+                                     gdouble     c,
+                                     GError    **error);
+
+gboolean foo_object_skip_param (FooObject *object,
+                                gint       a,
+                                gint      *out_b,
+                                gdouble    c,
+                                GError   **error);
+
 typedef struct _FooForeignStruct           FooForeignStruct;
 
 struct _FooForeignStruct
