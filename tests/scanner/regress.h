@@ -352,6 +352,18 @@ gboolean regress_test_obj_torture_signature_1 (RegressTestObj    *obj,
                                        guint       m,
                                        GError    **error);
 
+gboolean regress_test_obj_skip_return_val (RegressTestObj  *obj,
+                                           gint             a,
+                                           gint            *out_b,
+                                           gdouble          c,
+                                           GError         **error);
+
+gboolean regress_test_obj_skip_param (RegressTestObj *obj,
+                                      gint            a,
+                                      gint           *out_b,
+                                      gdouble         c,
+                                      GError        **error);
+
 /* virtual */
 int        regress_test_obj_do_matrix (RegressTestObj *obj, const char *somestr);
 

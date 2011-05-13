@@ -534,6 +534,58 @@ case.</doc>
           </parameter>
         </parameters>
       </method>
+      <method name="skip_param"
+              c:identifier="regress_test_obj_skip_param"
+              throws="1">
+        <doc xml:whitespace="preserve">Check that the return value is skipped</doc>
+        <return-value transfer-ownership="none">
+          <doc xml:whitespace="preserve">%TRUE if the call succeeds, %FALSE if @error is set.</doc>
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <parameter name="a" transfer-ownership="none">
+            <doc xml:whitespace="preserve">Parameter.</doc>
+            <type name="gint" c:type="gint"/>
+          </parameter>
+          <parameter name="out_b"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full">
+            <doc xml:whitespace="preserve">Return value.</doc>
+            <type name="gint" c:type="gint*"/>
+          </parameter>
+          <parameter name="c" transfer-ownership="none" skip="1">
+            <doc xml:whitespace="preserve">Other parameter.</doc>
+            <type name="gdouble" c:type="gdouble"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="skip_return_val"
+              c:identifier="regress_test_obj_skip_return_val"
+              throws="1">
+        <doc xml:whitespace="preserve">Check that the return value is skipped</doc>
+        <return-value transfer-ownership="none" skip="1">
+          <doc xml:whitespace="preserve">%TRUE if the call succeeds, %FALSE if @error is set.</doc>
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <parameter name="a" transfer-ownership="none">
+            <doc xml:whitespace="preserve">Parameter.</doc>
+            <type name="gint" c:type="gint"/>
+          </parameter>
+          <parameter name="out_b"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full">
+            <doc xml:whitespace="preserve">A return value.</doc>
+            <type name="gint" c:type="gint*"/>
+          </parameter>
+          <parameter name="c" transfer-ownership="none">
+            <doc xml:whitespace="preserve">Other parameter.</doc>
+            <type name="gdouble" c:type="gdouble"/>
+          </parameter>
+        </parameters>
+      </method>
       <method name="torture_signature_0"
               c:identifier="regress_test_obj_torture_signature_0">
         <return-value transfer-ownership="none">

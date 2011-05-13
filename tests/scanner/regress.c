@@ -2033,6 +2033,55 @@ regress_test_obj_torture_signature_1 (RegressTestObj   *obj,
 }
 
 /**
+ * regress_test_obj_skip_return_val:
+ * @obj: a #RegressTestObj
+ * @a: Parameter.
+ * @out_b: (out): A return value.
+ * @c: Other parameter.
+ * @error: Return location for error.
+ *
+ * Check that the return value is skipped
+ *
+ * Returns: (skip): %TRUE if the call succeeds, %FALSE if @error is set.
+ */
+gboolean
+regress_test_obj_skip_return_val (RegressTestObj  *obj,
+                                  gint             a,
+                                  gint            *out_b,
+                                  gdouble          c,
+                                  GError         **error)
+{
+  if (a == 0)
+    return TRUE;
+  g_set_error (error, G_IO_ERROR, G_IO_ERROR_FAILED, "a is non-zero");
+  return FALSE;
+}
+
+/**
+ * regress_test_obj_skip_param:
+ * @obj: A #RegressTestObj.
+ * @a: Parameter.
+ * @out_b: (out): Return value.
+ * @c: (skip): Other parameter.
+ *
+ * Check that the return value is skipped
+ *
+ * Returns: %TRUE if the call succeeds, %FALSE if @error is set.
+ */
+gboolean
+regress_test_obj_skip_param (RegressTestObj *obj,
+                             gint            a,
+                             gint           *out_b,
+                             gdouble         c,
+                             GError        **error)
+{
+  if (a == 0)
+    return TRUE;
+  g_set_error (error, G_IO_ERROR, G_IO_ERROR_FAILED, "a is non-zero");
+  return FALSE;
+}
+
+/**
  * regress_test_obj_do_matrix:
  * @obj: A #RegressTestObj
  * @somestr: Meaningless string
