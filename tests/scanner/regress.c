@@ -2038,6 +2038,10 @@ regress_test_obj_torture_signature_1 (RegressTestObj   *obj,
  * @a: Parameter.
  * @out_b: (out): A return value.
  * @c: Other parameter.
+ * @inout_d: (inout): Will be incremented.
+ * @out_sum: (out): Return value.
+ * @num1: Number.
+ * @num2: Number.
  * @error: Return location for error.
  *
  * Check that the return value is skipped
@@ -2045,16 +2049,23 @@ regress_test_obj_torture_signature_1 (RegressTestObj   *obj,
  * Returns: (skip): %TRUE if the call succeeds, %FALSE if @error is set.
  */
 gboolean
-regress_test_obj_skip_return_val (RegressTestObj  *obj,
-                                  gint             a,
-                                  gint            *out_b,
-                                  gdouble          c,
-                                  GError         **error)
+regress_test_obj_skip_return_val (RegressTestObj *obj,
+                                  gint            a,
+                                  gint           *out_b,
+                                  gdouble         c,
+                                  gint           *inout_d,
+                                  gint           *out_sum,
+                                  gint            num1,
+                                  gint            num2,
+                                  GError        **error)
 {
-  if (a == 0)
-    return TRUE;
-  g_set_error (error, G_IO_ERROR, G_IO_ERROR_FAILED, "a is non-zero");
-  return FALSE;
+  if (out_b != NULL)
+    *out_b = a + 1;
+  if (inout_d != NULL)
+    *inout_d = *inout_d + 1;
+  if (out_sum != NULL)
+    *out_sum = num1 + 10*num2;
+  return TRUE;
 }
 
 /**
@@ -2063,8 +2074,13 @@ regress_test_obj_skip_return_val (RegressTestObj  *obj,
  * @a: Parameter.
  * @out_b: (out): Return value.
  * @c: (skip): Other parameter.
+ * @inout_d: (inout): Will be incremented.
+ * @out_sum: (out): Return value.
+ * @num1: Number.
+ * @num2: Number.
+ * @error: Return location for error.
  *
- * Check that the return value is skipped
+ * Check that a parameter is skipped
  *
  * Returns: %TRUE if the call succeeds, %FALSE if @error is set.
  */
@@ -2073,12 +2089,91 @@ regress_test_obj_skip_param (RegressTestObj *obj,
                              gint            a,
                              gint           *out_b,
                              gdouble         c,
+                             gint           *inout_d,
+                             gint           *out_sum,
+                             gint            num1,
+                             gint            num2,
                              GError        **error)
 {
-  if (a == 0)
-    return TRUE;
-  g_set_error (error, G_IO_ERROR, G_IO_ERROR_FAILED, "a is non-zero");
-  return FALSE;
+  if (out_b != NULL)
+    *out_b = a + 1;
+  if (inout_d != NULL)
+    *inout_d = *inout_d + 1;
+  if (out_sum != NULL)
+    *out_sum = num1 + 10*num2;
+  return TRUE;
+}
+
+/**
+ * regress_test_obj_skip_out_param:
+ * @obj: A #RegressTestObj.
+ * @a: Parameter.
+ * @out_b: (out) (skip): Return value.
+ * @c: Other parameter.
+ * @inout_d: (inout): Will be incremented.
+ * @out_sum: (out): Return value.
+ * @num1: Number.
+ * @num2: Number.
+ * @error: Return location for error.
+ *
+ * Check that the out value is skipped
+ *
+ * Returns: %TRUE if the call succeeds, %FALSE if @error is set.
+ */
+gboolean
+regress_test_obj_skip_out_param (RegressTestObj *obj,
+                                 gint            a,
+                                 gint           *out_b,
+                                 gdouble         c,
+                                 gint           *inout_d,
+                                 gint           *out_sum,
+                                 gint            num1,
+                                 gint            num2,
+                                 GError        **error)
+{
+  if (out_b != NULL)
+    *out_b = a + 1;
+  if (inout_d != NULL)
+    *inout_d = *inout_d + 1;
+  if (out_sum != NULL)
+    *out_sum = num1 + 10*num2;
+  return TRUE;
+}
+
+/**
+ * regress_test_obj_skip_inout_param:
+ * @obj: A #RegressTestObj.
+ * @a: Parameter.
+ * @out_b: (out): Return value.
+ * @c: Other parameter.
+ * @inout_d: (inout) (skip): Will be incremented.
+ * @out_sum: (out): Return value.
+ * @num1: Number.
+ * @num2: Number.
+ * @error: Return location for error.
+ *
+ * Check that the out value is skipped
+ *
+ * Returns: %TRUE if the call succeeds, %FALSE if @error is set.
+ */
+gboolean
+regress_test_obj_skip_inout_param (RegressTestObj *obj,
+                                   gint            a,
+                                   gint           *out_b,
+                                   gdouble         c,
+                                   gint           *inout_d,
+                                   gint           *out_sum,
+                                   gint            num1,
+                                   gint            num2,
+                                   GError        **error)
+{
+  if (out_b != NULL)
+    *out_b = a + 1;
+  if (inout_d != NULL)
+    *inout_d = *inout_d + 1;
+  if (out_sum != NULL)
+    *out_sum = num1 + 10*num2;
+  return TRUE;
 }
 
 /**

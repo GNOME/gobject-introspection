@@ -534,10 +534,108 @@ case.</doc>
           </parameter>
         </parameters>
       </method>
+      <method name="skip_inout_param"
+              c:identifier="regress_test_obj_skip_inout_param"
+              throws="1">
+        <doc xml:whitespace="preserve">Check that the out value is skipped</doc>
+        <return-value transfer-ownership="none">
+          <doc xml:whitespace="preserve">%TRUE if the call succeeds, %FALSE if @error is set.</doc>
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <parameter name="a" transfer-ownership="none">
+            <doc xml:whitespace="preserve">Parameter.</doc>
+            <type name="gint" c:type="gint"/>
+          </parameter>
+          <parameter name="out_b"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full">
+            <doc xml:whitespace="preserve">Return value.</doc>
+            <type name="gint" c:type="gint*"/>
+          </parameter>
+          <parameter name="c" transfer-ownership="none">
+            <doc xml:whitespace="preserve">Other parameter.</doc>
+            <type name="gdouble" c:type="gdouble"/>
+          </parameter>
+          <parameter name="inout_d"
+                     direction="inout"
+                     caller-allocates="0"
+                     transfer-ownership="full"
+                     skip="1">
+            <doc xml:whitespace="preserve">Will be incremented.</doc>
+            <type name="gint" c:type="gint*"/>
+          </parameter>
+          <parameter name="out_sum"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full">
+            <doc xml:whitespace="preserve">Return value.</doc>
+            <type name="gint" c:type="gint*"/>
+          </parameter>
+          <parameter name="num1" transfer-ownership="none">
+            <doc xml:whitespace="preserve">Number.</doc>
+            <type name="gint" c:type="gint"/>
+          </parameter>
+          <parameter name="num2" transfer-ownership="none">
+            <doc xml:whitespace="preserve">Number.</doc>
+            <type name="gint" c:type="gint"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="skip_out_param"
+              c:identifier="regress_test_obj_skip_out_param"
+              throws="1">
+        <doc xml:whitespace="preserve">Check that the out value is skipped</doc>
+        <return-value transfer-ownership="none">
+          <doc xml:whitespace="preserve">%TRUE if the call succeeds, %FALSE if @error is set.</doc>
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <parameter name="a" transfer-ownership="none">
+            <doc xml:whitespace="preserve">Parameter.</doc>
+            <type name="gint" c:type="gint"/>
+          </parameter>
+          <parameter name="out_b"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full"
+                     skip="1">
+            <doc xml:whitespace="preserve">Return value.</doc>
+            <type name="gint" c:type="gint*"/>
+          </parameter>
+          <parameter name="c" transfer-ownership="none">
+            <doc xml:whitespace="preserve">Other parameter.</doc>
+            <type name="gdouble" c:type="gdouble"/>
+          </parameter>
+          <parameter name="inout_d"
+                     direction="inout"
+                     caller-allocates="0"
+                     transfer-ownership="full">
+            <doc xml:whitespace="preserve">Will be incremented.</doc>
+            <type name="gint" c:type="gint*"/>
+          </parameter>
+          <parameter name="out_sum"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full">
+            <doc xml:whitespace="preserve">Return value.</doc>
+            <type name="gint" c:type="gint*"/>
+          </parameter>
+          <parameter name="num1" transfer-ownership="none">
+            <doc xml:whitespace="preserve">Number.</doc>
+            <type name="gint" c:type="gint"/>
+          </parameter>
+          <parameter name="num2" transfer-ownership="none">
+            <doc xml:whitespace="preserve">Number.</doc>
+            <type name="gint" c:type="gint"/>
+          </parameter>
+        </parameters>
+      </method>
       <method name="skip_param"
               c:identifier="regress_test_obj_skip_param"
               throws="1">
-        <doc xml:whitespace="preserve">Check that the return value is skipped</doc>
+        <doc xml:whitespace="preserve">Check that a parameter is skipped</doc>
         <return-value transfer-ownership="none">
           <doc xml:whitespace="preserve">%TRUE if the call succeeds, %FALSE if @error is set.</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -557,6 +655,28 @@ case.</doc>
           <parameter name="c" transfer-ownership="none" skip="1">
             <doc xml:whitespace="preserve">Other parameter.</doc>
             <type name="gdouble" c:type="gdouble"/>
+          </parameter>
+          <parameter name="inout_d"
+                     direction="inout"
+                     caller-allocates="0"
+                     transfer-ownership="full">
+            <doc xml:whitespace="preserve">Will be incremented.</doc>
+            <type name="gint" c:type="gint*"/>
+          </parameter>
+          <parameter name="out_sum"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full">
+            <doc xml:whitespace="preserve">Return value.</doc>
+            <type name="gint" c:type="gint*"/>
+          </parameter>
+          <parameter name="num1" transfer-ownership="none">
+            <doc xml:whitespace="preserve">Number.</doc>
+            <type name="gint" c:type="gint"/>
+          </parameter>
+          <parameter name="num2" transfer-ownership="none">
+            <doc xml:whitespace="preserve">Number.</doc>
+            <type name="gint" c:type="gint"/>
           </parameter>
         </parameters>
       </method>
@@ -583,6 +703,28 @@ case.</doc>
           <parameter name="c" transfer-ownership="none">
             <doc xml:whitespace="preserve">Other parameter.</doc>
             <type name="gdouble" c:type="gdouble"/>
+          </parameter>
+          <parameter name="inout_d"
+                     direction="inout"
+                     caller-allocates="0"
+                     transfer-ownership="full">
+            <doc xml:whitespace="preserve">Will be incremented.</doc>
+            <type name="gint" c:type="gint*"/>
+          </parameter>
+          <parameter name="out_sum"
+                     direction="out"
+                     caller-allocates="0"
+                     transfer-ownership="full">
+            <doc xml:whitespace="preserve">Return value.</doc>
+            <type name="gint" c:type="gint*"/>
+          </parameter>
+          <parameter name="num1" transfer-ownership="none">
+            <doc xml:whitespace="preserve">Number.</doc>
+            <type name="gint" c:type="gint"/>
+          </parameter>
+          <parameter name="num2" transfer-ownership="none">
+            <doc xml:whitespace="preserve">Number.</doc>
+            <type name="gint" c:type="gint"/>
           </parameter>
         </parameters>
       </method>
