@@ -24,10 +24,11 @@
 #include <string.h>
 
 GISourceSymbol *
-gi_source_symbol_new (GISourceSymbolType type, int line)
+gi_source_symbol_new (GISourceSymbolType type, const gchar *filename, int line)
 {
   GISourceSymbol *s = g_slice_new0 (GISourceSymbol);
   s->ref_count = 1;
+  s->source_filename = g_strdup (filename);
   s->type = type;
   s->line = line;
   return s;
@@ -255,11 +256,7 @@ gi_source_scanner_add_symbol (GISourceScanner  *scanner,
   if (found_filename || scanner->macro_scan)
     scanner->symbols = g_slist_prepend (scanner->symbols,
 					gi_source_symbol_ref (symbol));
-  /* TODO: Refcounted string here or some other optimization */
-  if (found_filename && symbol->source_filename == NULL)
-    {
-      symbol->source_filename = g_strdup (scanner->current_filename);
-    }
+  g_assert (symbol->source_filename != NULL);
 
   switch (symbol->type)
     {
