@@ -68,7 +68,8 @@ class GDumpParser(object):
         self._namespace = transformer.namespace
         self._binary = None
         self._get_type_functions = []
-        self._gtype_data = {}
+        self._error_quark_functions = []
+        self._error_domains = {}
         self._boxed_types = {}
         self._private_internal_types = {}
 
@@ -94,6 +95,9 @@ class GDumpParser(object):
     def get_get_type_functions(self):
         return self._get_type_functions
 
+    def get_error_quark_functions(self):
+        return self._error_quark_functions
+
     def set_introspection_binary(self, binary):
         self._binary = binary
 
@@ -105,9 +109,10 @@ class GDumpParser(object):
         tree = self._execute_binary_get_tree()
         root = tree.getroot()
         for child in root:
-            self._gtype_data[child.attrib['name']] = child
-        for child in root:
-            self._introspect_type(child)
+            if child.tag == 'error-quark':
+                self._introspect_error_quark(child)
+            else:
+                self._introspect_type(child)
 
         # Pair up boxed types and class records
         for name, boxed in self._boxed_types.iteritems():
@@ -138,10 +143,14 @@ class GDumpParser(object):
     def _execute_binary_get_tree(self):
         """Load the library (or executable), returning an XML
 blob containing data gleaned from GObject's primitive introspection."""
-        in_path = os.path.join(self._binary.tmpdir, 'types.txt')
+        in_path = os.path.join(self._binary.tmpdir, 'functions.txt')
         f = open(in_path, 'w')
-        # TODO: Introspect GQuark functions
         for func in self._get_type_functions:
+            f.write('get-type:')
+            f.write(func)
+            f.write('\n')
+        for func in self._error_quark_functions:
+            f.write('error-quark:')
             f.write(func)
             f.write('\n')
         f.close()
@@ -209,6 +218,8 @@ blob containing data gleaned from GObject's primitive introspection."""
             return
         elif (symbol.endswith('_get_type') or symbol.endswith('_get_gtype')):
             self._initparse_get_type_function(func)
+        elif symbol.endswith('_error_quark'):
+            self._initparse_error_quark_function(func)
 
     def _initparse_get_type_function(self, func):
         if func.symbol in ('g_object_get_type',
@@ -227,6 +238,12 @@ blob containing data gleaned from GObject's primitive introspection."""
             return False
 
         self._get_type_functions.append(func.symbol)
+        return True
+
+    def _initparse_error_quark_function(self, func):
+        if (func.retval.type.ctype != 'GQuark'):
+            return False
+        self._error_quark_functions.append(func.symbol)
         return True
 
     def _initparse_gobject_record(self, record):
@@ -494,6 +511,18 @@ different --identifier-prefix.""" % (xmlnode.attrib['name'], self._namespace.ide
                 # Object instance fields are assumed to be read-only
                 # (see also _find_class_record and transformer.py)
                 field.writable = False
+
+    def _introspect_error_quark(self, xmlnode):
+        symbol = xmlnode.attrib['function']
+        error_domain = xmlnode.attrib['domain']
+        function = self._namespace.get_by_symbol(symbol)
+        if function is None:
+            return
+
+        node = ast.ErrorQuarkFunction(function.name, function.retval,
+                                      function.parameters, function.throws,
+                                      function.symbol, error_domain)
+        self._namespace.append(node, replace=True)
 
     def _pair_boxed_type(self, boxed):
         try:

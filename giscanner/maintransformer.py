@@ -858,9 +858,7 @@ the ones that failed to resolve removed."""
                 uscore_enums[no_uscore_prefixed] = enum
 
         for node in self._namespace.itervalues():
-            if not isinstance(node, ast.Function):
-                continue
-            if node.retval.type.target_giname != 'GLib.Quark':
+            if not isinstance(node, ast.ErrorQuarkFunction):
                 continue
             short = node.symbol[:-len('_quark')]
             if short == "g_io_error":
@@ -872,7 +870,7 @@ the ones that failed to resolve removed."""
                 if enum is None:
                     enum = uscore_enums.get(short)
             if enum is not None:
-                enum.error_quark = node.symbol
+                enum.error_domain = node.error_domain
             else:
                 message.warn_node(node,
                     """%s: Couldn't find corresponding enumeration""" % (node.symbol, ))

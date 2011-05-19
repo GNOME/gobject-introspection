@@ -76,9 +76,10 @@ class LinkerError(Exception):
 
 class DumpCompiler(object):
 
-    def __init__(self, options, get_type_functions):
+    def __init__(self, options, get_type_functions, error_quark_functions):
         self._options = options
         self._get_type_functions = get_type_functions
+        self._error_quark_functions = error_quark_functions
 
         self._compiler_cmd = os.environ.get('CC', 'gcc')
         self._linker_cmd = os.environ.get('CC', self._compiler_cmd)
@@ -114,15 +115,27 @@ class DumpCompiler(object):
         f = open(c_path, 'w')
         f.write(_PROGRAM_TEMPLATE % tpl_args)
 
-        # We need to reference our get_type functions to make sure they are
-        # pulled in at the linking stage if the library is a static library
-        # rather than a shared library.
+        # We need to reference our get_type and error_quark functions
+        # to make sure they are pulled in at the linking stage if the
+        # library is a static library rather than a shared library.
         if len(self._get_type_functions) > 0:
             for func in self._get_type_functions:
                 f.write("extern GType " + func + "(void);\n")
             f.write("GType (*GI_GET_TYPE_FUNCS_[])(void) = {\n")
             first = True
             for func in self._get_type_functions:
+                if first:
+                    first = False
+                else:
+                    f.write(",\n")
+                f.write("  " + func)
+            f.write("\n};\n")
+        if len(self._error_quark_functions) > 0:
+            for func in self._error_quark_functions:
+                f.write("extern GQuark " + func + "(void);\n")
+            f.write("GQuark (*GI_ERROR_QUARK_FUNCS_[])(void) = {\n")
+            first = True
+            for func in self._error_quark_functions:
                 if first:
                     first = False
                 else:
@@ -271,6 +284,7 @@ class DumpCompiler(object):
             else:
                 args.append('-l' + library)
 
-def compile_introspection_binary(options, get_type_functions):
-    dc = DumpCompiler(options, get_type_functions)
+def compile_introspection_binary(options, get_type_functions,
+                                 error_quark_functions):
+    dc = DumpCompiler(options, get_type_functions, error_quark_functions)
     return dc.run()

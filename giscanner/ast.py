@@ -569,6 +569,13 @@ class Function(Callable):
         self.shadows = None # C symbol string
 
 
+class ErrorQuarkFunction(Function):
+
+    def __init__(self, name, retval, parameters, throws, symbol, error_domain):
+        Function.__init__(self, name, retval, parameters, throws, symbol)
+        self.error_domain = error_domain
+
+
 class VFunction(Callable):
 
     def __init__(self, name, retval, parameters, throws):
@@ -704,8 +711,8 @@ class Enum(Node, Registered):
         self.c_symbol_prefix = c_symbol_prefix
         self.ctype = ctype
         self.members = members
-        # Associated error quark
-        self.error_quark = None
+        # Associated error domain name
+        self.error_domain = None
 
 
 class Bitfield(Node, Registered):
