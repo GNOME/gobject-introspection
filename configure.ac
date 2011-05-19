@@ -137,10 +137,24 @@ if test x$have_cairo = xyes; then
 fi
 
 if test x$have_cairo_gobject = xyes; then
-  CAIRO_SHARED_LIBRARY="libcairo-gobject.so.2"
+  case "$host" in
+    *-*-darwin*)
+      CAIRO_SHARED_LIBRARY="libcairo-gobject.2.dylib"
+      ;;
+    *)
+      CAIRO_SHARED_LIBRARY="libcairo-gobject.so.2"
+      ;;
+  esac
   CAIRO_GIR_PACKAGE="cairo-gobject"
 elif test x$have_cairo = xyes; then
-  CAIRO_SHARED_LIBRARY="libcairo.so.2"
+  case "$host" in
+    *-*-darwin*)
+      CAIRO_SHARED_LIBRARY="libcairo.2.dylib"
+      ;;
+    *)
+      CAIRO_SHARED_LIBRARY="libcairo.so.2"
+      ;;
+  esac
   CAIRO_GIR_PACKAGE="cairo"
 fi
 AC_SUBST(CAIRO_SHARED_LIBRARY)
