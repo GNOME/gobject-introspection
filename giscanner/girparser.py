@@ -536,7 +536,7 @@ class GIRParser(object):
         ctype = node.attrib.get(_cns('type'))
         get_type = node.attrib.get(_glibns('get-type'))
         type_name = node.attrib.get(_glibns('type-name'))
-        glib_error_quark = node.attrib.get(_glibns('error-quark'))
+        glib_error_domain = node.attrib.get(_glibns('error-domain'))
         if node.tag == _corens('bitfield'):
             klass = ast.Bitfield
         else:
@@ -546,7 +546,7 @@ class GIRParser(object):
                     members=members,
                     gtype_name=type_name,
                     get_type=get_type)
-        obj.error_quark = glib_error_quark
+        obj.error_domain = glib_error_domain
         obj.ctype = ctype
         self._parse_generic_attribs(node, obj)
         self._namespace.append(obj)

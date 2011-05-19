@@ -328,8 +328,8 @@ and/or use gtk-doc annotations. ''')
         self._append_node_generic(enum, attrs)
         self._append_registered(enum, attrs)
         attrs.append(('c:type', enum.ctype))
-        if enum.error_quark:
-            attrs.append(('glib:error-quark', enum.error_quark))
+        if enum.error_domain:
+            attrs.append(('glib:error-domain', enum.error_domain))
 
         with self.tagcontext('enumeration', attrs):
             self._write_generic(enum)

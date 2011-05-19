@@ -300,7 +300,8 @@ def create_binary(transformer, options, args):
         binary = IntrospectionBinary(args)
     else:
         binary = compile_introspection_binary(options,
-                                              gdump_parser.get_get_type_functions())
+                                              gdump_parser.get_get_type_functions(),
+                                              gdump_parser.get_error_quark_functions())
 
     shlibs = resolve_shlibs(options, binary, options.libraries)
     gdump_parser.set_introspection_binary(binary)
