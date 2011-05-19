@@ -5,6 +5,8 @@
 #include <string.h>
 #include <unistd.h>
 
+#include <gio/gio.h>
+
 void test_constructor_return_type(GIBaseInfo* object_info);
 
 void
@@ -42,6 +44,7 @@ main(int argc, char **argv)
   GError *error = NULL;
   GIBaseInfo *info;
   GIBaseInfo *siginfo;
+  GIEnumInfo *errorinfo;
   GType gtype;
 
   g_type_init ();
@@ -122,6 +125,12 @@ main(int argc, char **argv)
     g_assert (invoker != NULL);
     g_assert (strcmp (g_base_info_get_name ((GIBaseInfo*)invoker), "get_display") == 0);
   }
+
+  /* Error quark tests */
+  errorinfo = g_irepository_find_by_error_domain (repo, G_RESOLVER_ERROR);
+  g_assert (errorinfo != NULL);
+  g_assert (g_base_info_get_type ((GIBaseInfo *)errorinfo) == GI_INFO_TYPE_ENUM);
+  g_assert (strcmp (g_base_info_get_name ((GIBaseInfo*)errorinfo), "ResolverError") == 0);
 
   exit(0);
 }
