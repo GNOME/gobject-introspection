@@ -324,6 +324,69 @@ regress_test_cairo_surface_full_out (cairo_surface_t **surface)
   *surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 10, 10);
 }
 
+/**
+ * regress_test_gvariant_i:
+ *
+ * Returns: (transfer full): New variant
+ */
+GVariant *
+regress_test_gvariant_i (void)
+{
+  return g_variant_new_int32 (1);
+}
+
+/**
+ * regress_test_gvariant_s:
+ *
+ * Returns: (transfer full): New variant
+ */
+GVariant *
+regress_test_gvariant_s (void)
+{
+  return g_variant_new_string ("one");
+}
+
+/**
+ * regress_test_gvariant_asv:
+ *
+ * Returns: (transfer full): New variant
+ */
+GVariant *
+regress_test_gvariant_asv (void)
+{
+  GVariantBuilder b;
+
+  g_variant_builder_init (&b, G_VARIANT_TYPE ("a{sv}"));
+
+  g_variant_builder_add (&b, "{sv}", "name", g_variant_new_string ("foo"));
+  g_variant_builder_add (&b, "{sv}", "timeout", g_variant_new_int32 (10));
+
+  return g_variant_builder_end (&b);
+}
+
+/**
+ * regress_test_gvariant_v:
+ *
+ * Returns: (transfer full): New variant
+ */
+GVariant *
+regress_test_gvariant_v (void)
+{
+  return g_variant_new_variant (g_variant_new_string ("contents"));
+}
+
+/**
+ * regress_test_gvariant_as:
+ *
+ * Returns: (transfer full): New variant
+ */
+GVariant *
+regress_test_gvariant_as (void)
+{
+  const char *as[] = { "one", "two", "three", NULL };
+
+  return g_variant_new_strv (as, -1);
+}
 
 /************************************************************************/
 /* utf8 */

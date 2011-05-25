@@ -2171,6 +2171,37 @@ call and can be released on return.</doc>
         </parameter>
       </parameters>
     </function>
+    <function name="test_gvariant_as" c:identifier="regress_test_gvariant_as">
+      <return-value transfer-ownership="full">
+        <doc xml:whitespace="preserve">New variant</doc>
+        <type name="GLib.Variant" c:type="GVariant*"/>
+      </return-value>
+    </function>
+    <function name="test_gvariant_asv"
+              c:identifier="regress_test_gvariant_asv">
+      <return-value transfer-ownership="full">
+        <doc xml:whitespace="preserve">New variant</doc>
+        <type name="GLib.Variant" c:type="GVariant*"/>
+      </return-value>
+    </function>
+    <function name="test_gvariant_i" c:identifier="regress_test_gvariant_i">
+      <return-value transfer-ownership="full">
+        <doc xml:whitespace="preserve">New variant</doc>
+        <type name="GLib.Variant" c:type="GVariant*"/>
+      </return-value>
+    </function>
+    <function name="test_gvariant_s" c:identifier="regress_test_gvariant_s">
+      <return-value transfer-ownership="full">
+        <doc xml:whitespace="preserve">New variant</doc>
+        <type name="GLib.Variant" c:type="GVariant*"/>
+      </return-value>
+    </function>
+    <function name="test_gvariant_v" c:identifier="regress_test_gvariant_v">
+      <return-value transfer-ownership="full">
+        <doc xml:whitespace="preserve">New variant</doc>
+        <type name="GLib.Variant" c:type="GVariant*"/>
+      </return-value>
+    </function>
     <function name="test_int" c:identifier="regress_test_int">
       <return-value transfer-ownership="none">
         <type name="gint" c:type="gint"/>
