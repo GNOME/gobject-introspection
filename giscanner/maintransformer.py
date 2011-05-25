@@ -820,10 +820,8 @@ the ones that failed to resolve removed."""
                     node.parent = parent
                     break
             else:
-                if isinstance(node, ast.Interface) or not node.fundamental:
+                if isinstance(node, ast.Interface):
                     node.parent = ast.Type(target_giname='GObject.Object')
-                else:
-                    node.parent = None
             for prop in node.properties:
                 self._transformer.resolve_type(prop.type)
             for sig in node.signals:

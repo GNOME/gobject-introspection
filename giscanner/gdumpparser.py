@@ -86,7 +86,7 @@ class GDumpParser(object):
             if isinstance(node, ast.Function):
                 self._initparse_function(node)
 
-        if self._namespace.name == 'GObject':
+        if self._namespace.name == 'GObject' or self._namespace.name == 'GLib':
             for node in self._namespace.itervalues():
                 if isinstance(node, ast.Record):
                     self._initparse_gobject_record(node)
@@ -164,23 +164,31 @@ blob containing data gleaned from GObject's primitive introspection."""
                 shutil.rmtree(self._binary.tmpdir)
 
     def _create_gobject(self, node):
-        type_name = 'G' + node.name
-        if type_name == 'GObject':
-            parent_gitype = None
-            symbol = 'intern'
-        elif type_name == 'GInitiallyUnowned':
-            parent_gitype = ast.Type(target_giname='GObject.Object')
+        symbol = 'intern'
+        parent_gitype = None
+        if node.name == 'ParamSpec':
+            type_name = 'GParam'
+            # Some function use g_param_value instead
+            c_symbol_prefix = 'param_spec'
+        elif node.name == 'Object':
+            type_name = 'GObject'
+            c_symbol_prefix = 'object'
+        elif node.name == 'InitiallyUnowned':
+            type_name = 'GInitiallyUnowned'
             symbol = 'g_initially_unowned_get_type'
+            parent_gitype = ast.Type(target_giname='GObject.Object')
+            # Not really used, but otherwise InitallyUnowned
+            # gets the static methods that should be in Object
+            c_symbol_prefix = 'initially_unowned'
         else:
             assert False
+
         gnode = ast.Class(node.name, parent_gitype,
                           gtype_name=type_name,
                           get_type=symbol,
-                          c_symbol_prefix='object',
+                          c_symbol_prefix=c_symbol_prefix,
                           is_abstract=True)
-        if type_name == 'GObject':
-            gnode.fields.extend(node.fields)
-        else:
+        if node.name == 'InitiallyUnowned':
             # http://bugzilla.gnome.org/show_bug.cgi?id=569408
             # GInitiallyUnowned is actually a typedef for GObject, but
             # that's not reflected in the GIR, where it appears as a
@@ -189,6 +197,8 @@ blob containing data gleaned from GObject's primitive introspection."""
             # GInitiallyUnowned so that struct offset computation
             # works correctly.
             gnode.fields = self._namespace.get('Object').fields
+        else:
+            gnode.fields.extend(node.fields)
         self._namespace.append(gnode, replace=True)
 
     # Parser
@@ -201,9 +211,8 @@ blob containing data gleaned from GObject's primitive introspection."""
             self._initparse_get_type_function(func)
 
     def _initparse_get_type_function(self, func):
-        if (self._namespace.name == 'GObject' and
-            func.symbol in ('g_object_get_type', 'g_initially_unowned_get_type')):
-            # We handle these internally, see _create_gobject
+        if func.symbol in ('g_object_get_type', 'g_initially_unowned_get_type', 'g_variant_get_gtype'):
+            # We handle these internally, see _initparse_gobject_record
             return True
         if func.parameters:
             return False
@@ -219,9 +228,14 @@ blob containing data gleaned from GObject's primitive introspection."""
         return True
 
     def _initparse_gobject_record(self, record):
-        # Special handling for when we're parsing GObject
-        if record.name in ("Object", 'InitiallyUnowned'):
+        # Special handling for when we're parsing GObject / GLib
+        if record.name in ('Object', 'InitiallyUnowned', 'ParamSpec'):
             self._create_gobject(record)
+        elif record.name == 'Variant':
+            self._boxed_types['GVariant'] = ast.Boxed('Variant',
+                                                      gtype_name='GVariant',
+                                                      get_type='intern',
+                                                      c_symbol_prefix='variant')
         elif record.name == 'InitiallyUnownedClass':
             record.fields = self._namespace.get('ObjectClass').fields
             record.disguised = False
@@ -445,11 +459,6 @@ different --identifier-prefix.""" % (xmlnode.attrib['name'], self._namespace.ide
 
     def _introspect_fundamental(self, xmlnode):
         type_name = xmlnode.attrib['name']
-        if type_name == 'GVariant':
-            # HACK: make GVariant a boxed to avoid looking up GInitiallyUnowned
-            # when computing the default transfer ownership
-            self._introspect_boxed(xmlnode)
-            return
 
         is_abstract = bool(xmlnode.attrib.get('abstract', False))
         (get_type, c_symbol_prefix) = self._split_type_and_symbol_prefix(xmlnode)
