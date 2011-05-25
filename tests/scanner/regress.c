@@ -327,7 +327,7 @@ regress_test_cairo_surface_full_out (cairo_surface_t **surface)
 /**
  * regress_test_gvariant_i:
  *
- * Returns: (transfer full): New variant
+ * Returns: (transfer none): New variant
  */
 GVariant *
 regress_test_gvariant_i (void)
@@ -338,7 +338,7 @@ regress_test_gvariant_i (void)
 /**
  * regress_test_gvariant_s:
  *
- * Returns: (transfer full): New variant
+ * Returns: (transfer none): New variant
  */
 GVariant *
 regress_test_gvariant_s (void)
@@ -349,7 +349,7 @@ regress_test_gvariant_s (void)
 /**
  * regress_test_gvariant_asv:
  *
- * Returns: (transfer full): New variant
+ * Returns: (transfer none): New variant
  */
 GVariant *
 regress_test_gvariant_asv (void)
@@ -367,7 +367,7 @@ regress_test_gvariant_asv (void)
 /**
  * regress_test_gvariant_v:
  *
- * Returns: (transfer full): New variant
+ * Returns: (transfer none): New variant
  */
 GVariant *
 regress_test_gvariant_v (void)
@@ -378,7 +378,7 @@ regress_test_gvariant_v (void)
 /**
  * regress_test_gvariant_as:
  *
- * Returns: (transfer full): New variant
+ * Returns: (transfer none): New variant
  */
 GVariant *
 regress_test_gvariant_as (void)
