@@ -146,7 +146,7 @@ and/or use gtk-doc annotations.  -->
         <parameters>
           <parameter name="nums" transfer-ownership="none">
             <doc xml:whitespace="preserve">Sequence of numbers</doc>
-            <array c:type="int*">
+            <array zero-terminated="0" c:type="int*">
               <type name="gint" c:type="int"/>
             </array>
           </parameter>
@@ -180,7 +180,7 @@ and/or use gtk-doc annotations.  -->
         <parameters>
           <parameter name="nums" transfer-ownership="none">
             <doc xml:whitespace="preserve">Sequence of numbers that are zero-terminated</doc>
-            <array length="1" c:type="int*">
+            <array length="1" zero-terminated="1" c:type="int*">
               <type name="gint" c:type="int"/>
             </array>
           </parameter>
@@ -377,7 +377,7 @@ each string needs to be freed.</doc>
                      caller-allocates="0"
                      transfer-ownership="full">
             <doc xml:whitespace="preserve">Argument vector</doc>
-            <array length="0" c:type="char***">
+            <array length="0" zero-terminated="1" c:type="char***">
               <type name="utf8" c:type="char**"/>
             </array>
           </parameter>
@@ -391,7 +391,7 @@ each string needs to be freed.</doc>
         <parameters>
           <parameter name="data" transfer-ownership="none">
             <doc xml:whitespace="preserve">The data</doc>
-            <array length="1" c:type="guchar*">
+            <array length="1" zero-terminated="0" c:type="guchar*">
               <type name="guint8" c:type="guchar"/>
             </array>
           </parameter>
@@ -409,7 +409,7 @@ each string needs to be freed.</doc>
         <parameters>
           <parameter name="data" transfer-ownership="none">
             <doc xml:whitespace="preserve">The data</doc>
-            <array length="1" c:type="gchar*">
+            <array length="1" zero-terminated="0" c:type="gchar*">
               <type name="gint8"/>
             </array>
           </parameter>
@@ -428,7 +428,7 @@ type.</doc>
         <parameters>
           <parameter name="data" transfer-ownership="none">
             <doc xml:whitespace="preserve">The data</doc>
-            <array length="1" c:type="gpointer">
+            <array length="1" zero-terminated="0" c:type="gpointer">
               <type name="guint8"/>
             </array>
           </parameter>
@@ -687,7 +687,7 @@ detection, and fixing it via annotations.</doc>
                    caller-allocates="0"
                    transfer-ownership="full">
           <doc xml:whitespace="preserve">The arguments.</doc>
-          <array length="0" c:type="char***">
+          <array length="0" zero-terminated="0" c:type="char***">
             <type name="utf8" c:type="char**"/>
           </array>
         </parameter>
@@ -723,7 +723,7 @@ detection, and fixing it via annotations.</doc>
     <function name="return_array" c:identifier="annotation_return_array">
       <return-value transfer-ownership="full">
         <doc xml:whitespace="preserve">The return value</doc>
-        <array length="0" c:type="char**">
+        <array length="0" zero-terminated="0" c:type="char**">
           <type name="utf8"/>
         </array>
       </return-value>
@@ -765,7 +765,7 @@ detection, and fixing it via annotations.</doc>
           <type name="guint" c:type="guint"/>
         </parameter>
         <parameter name="properties" transfer-ownership="none">
-          <array length="0" c:type="gchar*">
+          <array length="0" zero-terminated="0" c:type="gchar*">
             <type name="utf8"/>
           </array>
         </parameter>

@@ -278,8 +278,14 @@ and/or use gtk-doc annotations. ''')
         elif isinstance(ntype, ast.Array):
             if ntype.array_type != ast.Array.C:
                 attrs.insert(0, ('name', ntype.array_type))
+            # we insert an explicit 'zero-terminated' attribute
+            # when it is false, or when it would not be implied
+            # by the absence of length and fixed-size
             if not ntype.zeroterminated:
                 attrs.insert(0, ('zero-terminated', '0'))
+            elif (ntype.zeroterminated
+                  and (ntype.size is not None or ntype.length_param_name is not None)):
+                attrs.insert(0, ('zero-terminated', '1'))
             if ntype.size is not None:
                 attrs.append(('fixed-size', '%d' % (ntype.size, )))
             if ntype.length_param_name is not None:

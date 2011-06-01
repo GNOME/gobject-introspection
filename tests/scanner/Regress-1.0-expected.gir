@@ -1104,12 +1104,14 @@ TpAccount::status-changed</doc>
         </array>
       </field>
       <field name="array2" writable="1">
-        <array c:type="RegressTestStructB**" fixed-size="5">
+        <array zero-terminated="0"
+               c:type="RegressTestStructB**"
+               fixed-size="5">
           <type name="TestStructB" c:type="RegressTestStructB*"/>
         </array>
       </field>
       <field name="array3" writable="1">
-        <array c:type="gpointer*">
+        <array zero-terminated="0" c:type="gpointer*">
           <type name="TestObj"/>
         </array>
       </field>
@@ -1337,7 +1339,7 @@ TpAccount::status-changed</doc>
       <parameters>
         <parameter name="ints" transfer-ownership="none">
           <doc xml:whitespace="preserve">a list of 5 integers</doc>
-          <array c:type="int*" fixed-size="5">
+          <array zero-terminated="0" c:type="int*" fixed-size="5">
             <type name="gint" c:type="int"/>
           </array>
         </parameter>
@@ -1354,7 +1356,7 @@ TpAccount::status-changed</doc>
                    caller-allocates="0"
                    transfer-ownership="full">
           <doc xml:whitespace="preserve">a list of 5 integers ranging from 0 to 4</doc>
-          <array c:type="int**" fixed-size="5">
+          <array zero-terminated="0" c:type="int**" fixed-size="5">
             <type name="gint" c:type="int*"/>
           </array>
         </parameter>
@@ -1364,7 +1366,7 @@ TpAccount::status-changed</doc>
               c:identifier="regress_test_array_fixed_size_int_return">
       <return-value transfer-ownership="full">
         <doc xml:whitespace="preserve">a list of 5 integers ranging from 0 to 4</doc>
-        <array c:type="int*" fixed-size="5">
+        <array zero-terminated="0" c:type="int*" fixed-size="5">
           <type name="gint" c:type="int"/>
         </array>
       </return-value>
@@ -1380,7 +1382,7 @@ TpAccount::status-changed</doc>
         </parameter>
         <parameter name="ints" transfer-ownership="none">
           <doc xml:whitespace="preserve">List of ints</doc>
-          <array length="0" c:type="gint16*">
+          <array length="0" zero-terminated="0" c:type="gint16*">
             <type name="gint16" c:type="gint16"/>
           </array>
         </parameter>
@@ -1397,7 +1399,7 @@ TpAccount::status-changed</doc>
         </parameter>
         <parameter name="ints" transfer-ownership="none">
           <doc xml:whitespace="preserve">List of ints</doc>
-          <array length="0" c:type="gint32*">
+          <array length="0" zero-terminated="0" c:type="gint32*">
             <type name="gint32" c:type="gint32"/>
           </array>
         </parameter>
@@ -1414,7 +1416,7 @@ TpAccount::status-changed</doc>
         </parameter>
         <parameter name="ints" transfer-ownership="none">
           <doc xml:whitespace="preserve">List of ints</doc>
-          <array length="0" c:type="gint64*">
+          <array length="0" zero-terminated="0" c:type="gint64*">
             <type name="gint64" c:type="gint64"/>
           </array>
         </parameter>
@@ -1431,7 +1433,7 @@ TpAccount::status-changed</doc>
         </parameter>
         <parameter name="ints" transfer-ownership="none">
           <doc xml:whitespace="preserve">List of ints</doc>
-          <array length="0" c:type="gint8*">
+          <array length="0" zero-terminated="0" c:type="gint8*">
             <type name="gint8" c:type="gint8"/>
           </array>
         </parameter>
@@ -1449,7 +1451,7 @@ TpAccount::status-changed</doc>
         </parameter>
         <parameter name="types" transfer-ownership="none">
           <doc xml:whitespace="preserve">List of types</doc>
-          <array length="0" c:type="GType*">
+          <array length="0" zero-terminated="0" c:type="GType*">
             <type name="GType" c:type="GType"/>
           </array>
         </parameter>
@@ -1459,7 +1461,7 @@ TpAccount::status-changed</doc>
               c:identifier="regress_test_array_int_full_out">
       <return-value transfer-ownership="full">
         <doc xml:whitespace="preserve">a new array of integers.</doc>
-        <array length="0" c:type="int*">
+        <array length="0" zero-terminated="0" c:type="int*">
           <type name="gint" c:type="int"/>
         </array>
       </return-value>
@@ -1484,7 +1486,7 @@ TpAccount::status-changed</doc>
         </parameter>
         <parameter name="ints" transfer-ownership="none">
           <doc xml:whitespace="preserve">List of ints</doc>
-          <array length="0" c:type="int*">
+          <array length="0" zero-terminated="0" c:type="int*">
             <type name="gint" c:type="int"/>
           </array>
         </parameter>
@@ -1508,7 +1510,7 @@ TpAccount::status-changed</doc>
                    caller-allocates="0"
                    transfer-ownership="full">
           <doc xml:whitespace="preserve">a list of integers whose items will be increased by 1, except the first that will be dropped</doc>
-          <array length="0" c:type="int**">
+          <array length="0" zero-terminated="0" c:type="int**">
             <type name="gint" c:type="int*"/>
           </array>
         </parameter>
@@ -1518,7 +1520,7 @@ TpAccount::status-changed</doc>
               c:identifier="regress_test_array_int_none_out">
       <return-value transfer-ownership="none">
         <doc xml:whitespace="preserve">a static array of integers.</doc>
-        <array length="0" c:type="int*">
+        <array length="0" zero-terminated="0" c:type="int*">
           <type name="gint" c:type="int"/>
         </array>
       </return-value>
@@ -1539,7 +1541,7 @@ TpAccount::status-changed</doc>
       </return-value>
       <parameters>
         <parameter name="arr" transfer-ownership="none" allow-none="1">
-          <array length="1" c:type="int*">
+          <array length="1" zero-terminated="0" c:type="int*">
             <type name="gint" c:type="int"/>
           </array>
         </parameter>
@@ -1560,7 +1562,7 @@ TpAccount::status-changed</doc>
                    caller-allocates="0"
                    transfer-ownership="full"
                    allow-none="1">
-          <array length="1" c:type="int**">
+          <array length="1" zero-terminated="0" c:type="int**">
             <type name="gint" c:type="int*"/>
           </array>
         </parameter>
@@ -1591,7 +1593,7 @@ TpAccount::status-changed</doc>
                    caller-allocates="0"
                    transfer-ownership="full">
           <doc xml:whitespace="preserve">a list of 5 integers, from 0 to 4 in consecutive order</doc>
-          <array length="0" c:type="int**">
+          <array length="0" zero-terminated="0" c:type="int**">
             <type name="gint" c:type="int*"/>
           </array>
         </parameter>

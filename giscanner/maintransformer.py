@@ -346,6 +346,8 @@ usage is void (*_gtk_reserved1)(void);"""
         if OPT_ARRAY_ZERO_TERMINATED in array_values:
             container_type.zeroterminated = array_values.get(
                 OPT_ARRAY_ZERO_TERMINATED) == '1'
+        else:
+            container_type.zeroterminated = False
         length = array_values.get(OPT_ARRAY_LENGTH)
         if length is not None:
             paramname = self._get_validate_parameter_name(parent, length, node)
