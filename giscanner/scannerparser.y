@@ -259,6 +259,10 @@ primary_expression
 	  {
 		$$ = $2;
 	  }
+	| EXTENSION '(' '{' block_item_list '}' ')'
+	  {
+		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, lineno);
+	  }
 	;
 
 /* concatenate adjacent string literal tokens */

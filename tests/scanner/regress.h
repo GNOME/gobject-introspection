@@ -694,4 +694,8 @@ void regress_test_struct_fixed_array_frob (RegressTestStructFixedArray *str);
 
 #define REGRESS_UTF8_CONSTANT "const \xe2\x99\xa5 utf8"
 
+#ifdef __GNUC__
+#define REGRESS_TEST_GNUC_EXTENSION_STMT(foo) (G_GNUC_EXTENSION ({ int x[10]; x[5] = 42; x[5]; }))
+#endif
+
 #endif /* __GITESTTYPES_H__ */
