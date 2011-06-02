@@ -279,14 +279,17 @@ void gi_marshalling_tests_array_fixed_inout (gint **ints);
 /* Variable-size */
 
 const gint *gi_marshalling_tests_array_return (gint *length);
+const gint *gi_marshalling_tests_array_return_etc (gint first, gint *length, gint last, gint *sum);
 
 void gi_marshalling_tests_array_in (const gint *ints, gint length);
 
 void gi_marshalling_tests_array_uint8_in (const guint8 *chars, gint length);
 
 void gi_marshalling_tests_array_out (gint **ints, gint *length);
+void gi_marshalling_tests_array_out_etc (gint first, gint **ints, gint *length, gint last, gint *sum);
 
 void gi_marshalling_tests_array_inout (gint **ints, gint *length);
+void gi_marshalling_tests_array_inout_etc (gint first, gint **ints, gint *length, gint last, gint *sum);
 
 /* Zero-terminated */
 

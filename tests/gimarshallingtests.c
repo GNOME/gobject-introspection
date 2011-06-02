@@ -1211,6 +1211,26 @@ gi_marshalling_tests_array_return (gint *length)
 }
 
 /**
+ * gi_marshalling_tests_array_return_etc:
+ * @first:
+ * @length: (out):
+ * @last:
+ * @sum: (out):
+ * Returns: (array length=length):
+ */
+const gint *
+gi_marshalling_tests_array_return_etc (gint first, gint *length, gint last, gint *sum)
+{
+    static gint ints[] = {-1, 0, 1, 2};
+
+    ints[0] = first;
+    ints[3] = last;
+    *sum = first + last;
+    *length = 4;
+    return ints;
+}
+
+/**
  * gi_marshalling_tests_array_in:
  * @ints: (array length=length):
  */
@@ -1252,6 +1272,26 @@ gi_marshalling_tests_array_out (gint **ints, gint *length)
 }
 
 /**
+ * gi_marshalling_tests_array_out_etc:
+ * @first:
+ * @ints: (out) (array length=length) (transfer none):
+ * @length: (out):
+ * @last:
+ * @sum: (out):
+ */
+void
+gi_marshalling_tests_array_out_etc (gint first, gint **ints, gint *length, gint last, gint *sum)
+{
+    static gint values[] = {-1, 0, 1, 2};
+
+    values[0] = first;
+    values[3] = last;
+    *sum = first + last;
+    *length = 4;
+    *ints = values;
+}
+
+/**
  * gi_marshalling_tests_array_inout:
  * @ints: (inout) (array length=length) (transfer none):
  * @length: (inout):
@@ -1267,6 +1307,32 @@ gi_marshalling_tests_array_inout (gint **ints, gint *length)
     g_assert((*ints)[2] == 1);
     g_assert((*ints)[3] == 2);
 
+    *length = 5;
+    *ints = values;
+}
+
+/**
+ * gi_marshalling_tests_array_inout_etc:
+ * @first:
+ * @ints: (inout) (array length=length) (transfer none):
+ * @length: (inout):
+ * @last:
+ * @sum: (out):
+ */
+void
+gi_marshalling_tests_array_inout_etc (gint first, gint **ints, gint *length, gint last, gint *sum)
+{
+    static gint values[] = {-2, -1, 0, 1, 2};
+
+    g_assert(*length == 4);
+    g_assert((*ints)[0] == -1);
+    g_assert((*ints)[1] == 0);
+    g_assert((*ints)[2] == 1);
+    g_assert((*ints)[3] == 2);
+
+    values[0] = first;
+    values[4] = last;
+    *sum = first + last;
     *length = 5;
     *ints = values;
 }
