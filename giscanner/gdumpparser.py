@@ -133,14 +133,6 @@ class GDumpParser(object):
         for node in to_remove:
             self._namespace.remove(node)
 
-        if self._namespace.name == 'GLib':
-            variant = self._namespace.get('Variant')
-            assert variant is not None
-            variant.add_gtype('GVariant', 'g_variant_get_gtype')
-            variant.c_symbol_prefix = 'variant'
-            # Work around scanner bug
-            variant.disguised = False
-
     # Helper functions
 
     def _execute_binary_get_tree(self):
@@ -209,9 +201,6 @@ blob containing data gleaned from GObject's primitive introspection."""
             self._initparse_get_type_function(func)
 
     def _initparse_get_type_function(self, func):
-        if self._namespace.name == 'GLib':
-            # No GObjects in GLib
-            return False
         if (self._namespace.name == 'GObject' and
             func.symbol in ('g_object_get_type', 'g_initially_unowned_get_type')):
             # We handle these internally, see _create_gobject
@@ -455,14 +444,13 @@ different --identifier-prefix.""" % (xmlnode.attrib['name'], self._namespace.ide
         node.parent_chain = parent_types
 
     def _introspect_fundamental(self, xmlnode):
-        # We only care about types that can be instantiatable, other
-        # fundamental types such as the Clutter.Fixed/CoglFixed registers
-        # are not yet interesting from an introspection perspective and
-        # are ignored
-        if not xmlnode.attrib.get('instantiatable', False):
+        type_name = xmlnode.attrib['name']
+        if type_name == 'GVariant':
+            # HACK: make GVariant a boxed to avoid looking up GInitiallyUnowned
+            # when computing the default transfer ownership
+            self._introspect_boxed(xmlnode)
             return
 
-        type_name = xmlnode.attrib['name']
         is_abstract = bool(xmlnode.attrib.get('abstract', False))
         (get_type, c_symbol_prefix) = self._split_type_and_symbol_prefix(xmlnode)
         try:
