@@ -985,7 +985,7 @@ TpAccount::status-changed</doc>
     <record name="TestSimpleBoxedA"
             c:type="RegressTestSimpleBoxedA"
             glib:type-name="RegressTestSimpleBoxedA"
-            glib:get-type="regress_test_simple_boxed_a_get_type"
+            glib:get-type="regress_test_simple_boxed_a_get_gtype"
             c:symbol-prefix="test_simple_boxed_a">
       <field name="some_int" writable="1">
         <type name="gint" c:type="gint"/>

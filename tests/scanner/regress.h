@@ -251,7 +251,8 @@ struct _RegressTestSimpleBoxedA
   RegressTestEnum some_enum;
 };
 
-GType                   regress_test_simple_boxed_a_get_type     (void);
+/* Intentionally uses _get_gtype */
+GType                   regress_test_simple_boxed_a_get_gtype     (void);
 RegressTestSimpleBoxedA *regress_test_simple_boxed_a_copy         (RegressTestSimpleBoxedA *a);
 gboolean                regress_test_simple_boxed_a_equals       (RegressTestSimpleBoxedA *a,
                                                           RegressTestSimpleBoxedA *other_a);

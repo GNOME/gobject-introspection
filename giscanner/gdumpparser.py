@@ -205,7 +205,7 @@ blob containing data gleaned from GObject's primitive introspection."""
         symbol = func.symbol
         if symbol.startswith('_'):
             return
-        elif symbol.endswith('_get_type'):
+        elif (symbol.endswith('_get_type') or symbol.endswith('_get_gtype')):
             self._initparse_get_type_function(func)
 
     def _initparse_get_type_function(self, func):
@@ -306,14 +306,17 @@ blob containing data gleaned from GObject's primitive introspection."""
         get_type = xmlnode.attrib['get-type']
         (ns, name) = self._transformer.split_csymbol(get_type)
         assert ns is self._namespace
-        if name == 'get_type':
+        if name in ('get_type', '_get_gtype'):
             message.fatal("""The GObject name %r isn't compatibile
 with the configured identifier prefixes:
   %r
 The class would have no name.  Most likely you want to specify a
 different --identifier-prefix.""" % (xmlnode.attrib['name'], self._namespace.identifier_prefixes))
-        assert name.endswith('_get_type')
-        return (get_type, name[:-len('_get_type')])
+        if name.endswith('_get_type'):
+            type_suffix = '_get_type'
+        else:
+            type_suffix = '_get_gtype'
+        return (get_type, name[:-len(type_suffix)])
 
     def _introspect_object(self, xmlnode):
         type_name = xmlnode.attrib['name']

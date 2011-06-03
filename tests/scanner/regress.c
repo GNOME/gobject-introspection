@@ -1425,7 +1425,7 @@ regress_test_simple_boxed_a_free (RegressTestSimpleBoxedA *a)
 }
 
 GType
-regress_test_simple_boxed_a_get_type (void)
+regress_test_simple_boxed_a_get_gtype (void)
 {
   static GType our_type = 0;
 
@@ -1783,7 +1783,7 @@ regress_test_obj_class_init (RegressTestObjClass *klass)
                    0     /* n_params */,
                    NULL  /* param_types */);
 
-  param_types[0] = regress_test_simple_boxed_a_get_type() | G_SIGNAL_TYPE_STATIC_SCOPE;
+  param_types[0] = regress_test_simple_boxed_a_get_gtype() | G_SIGNAL_TYPE_STATIC_SCOPE;
   klass->test_signal_with_static_scope_arg =
     g_signal_newv ("test-with-static-scope-arg",
                    G_TYPE_FROM_CLASS (gobject_class),
