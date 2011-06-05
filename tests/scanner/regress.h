@@ -223,8 +223,7 @@ struct _RegressTestStructC
 /**
  * RegressTestStructD:
  * @array1: (array zero-terminated=1):
- * @array2: (array fixed-size=5):
- * @array3: (array) (element-type RegressTestObj):
+ * @array2: (array zero-terminated=1) (element-type RegressTestObj):
  * @field: (type RegressTestObj):
  * @list: (element-type RegressTestObj):
  * @garray: (element-type RegressTestObj):
@@ -232,8 +231,7 @@ struct _RegressTestStructC
 struct _RegressTestStructD
 {
   RegressTestStructA **array1;
-  RegressTestStructB **array2;
-  gpointer            *array3;
+  gpointer            *array2;
   gpointer             field;
   GList               *list;
   GPtrArray           *garray;

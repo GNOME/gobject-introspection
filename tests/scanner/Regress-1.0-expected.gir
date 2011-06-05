@@ -1104,14 +1104,7 @@ TpAccount::status-changed</doc>
         </array>
       </field>
       <field name="array2" writable="1">
-        <array zero-terminated="0"
-               c:type="RegressTestStructB**"
-               fixed-size="5">
-          <type name="TestStructB" c:type="RegressTestStructB*"/>
-        </array>
-      </field>
-      <field name="array3" writable="1">
-        <array zero-terminated="0" c:type="gpointer*">
+        <array c:type="gpointer*">
           <type name="TestObj"/>
         </array>
       </field>
