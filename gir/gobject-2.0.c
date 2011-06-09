@@ -145,8 +145,8 @@
  * GBoxedCopyFunc:
  * @boxed: The boxed structure to be copied.
  *
- * This function is provided by the user and should produce a copy of the passed
- * in boxed structure.
+ * This function is provided by the user and should produce a copy
+ * of the passed in boxed structure.
  *
  * Returns: The newly created copy of the boxed structure.
  */
@@ -415,6 +415,16 @@
 
 
 /**
+ * GDebugKey:
+ * @key: the string
+ * @value: the flag
+ *
+ * Associates a string with a bit flag.
+ * Used in g_parse_debug_string().
+ */
+
+
+/**
  * GEnumClass:
  * @g_type_class: the parent class
  * @minimum: the smallest possible value.
@@ -458,6 +468,16 @@
  *
  * A structure which contains a single flags value, its name, and its
  * nickname.
+ */
+
+
+/**
+ * GFreeFunc:
+ * @data: a data pointer
+ *
+ * Declares a type of function which takes an arbitrary
+ * data pointer argument and has no return value. It is
+ * not currently used in GLib or GTK+.
  */
 
 
@@ -1393,6 +1413,7 @@
  * @G_SIGNAL_DETAILED: This signal supports "::detail" appendices to the signal name upon handler connections and emissions.
  * @G_SIGNAL_ACTION: Action signals are signals that may freely be emitted on alive objects from user code via g_signal_emit() and friends, without the need of being embedded into extra code that performs pre or post emission adjustments on the object. They can also be thought of as object methods which can be called generically by third-party code.
  * @G_SIGNAL_NO_HOOKS: No emissions hooks are supported for this signal.
+ * @G_SIGNAL_MUST_COLLECT: Varargs signal emission will always collect the arguments, even if there are no signal handlers connected.  Since 2.30.
  *
  * The signal flags are used to specify a signal's behaviour, the overall
  * signal description outlines how especially the RUN flags control the
@@ -1457,6 +1478,25 @@
  *
  * The <structname>GSourceCallbackFuncs</structname> struct contains
  * functions for managing callback objects.
+ */
+
+
+/**
+ * GSourceDummyMarshal:
+ *
+ * This is just a placeholder for #GClosureMarshal,
+ * which cannot be used here for dependency reasons.
+ */
+
+
+/**
+ * GSourceFunc:
+ * @data: data passed to the function, set when the source was created with one of the above functions
+ *
+ * Specifies the type of function passed to g_timeout_add(),
+ * g_timeout_add_full(), g_idle_add(), and g_idle_add_full().
+ *
+ * Returns: %FALSE if the source should be removed
  */
 
 
@@ -1798,7 +1838,7 @@
  * @collect_format: A string format describing how to collect the contents of this value bit-by-bit. Each character in the format represents an argument to be collected, and the characters themselves indicate the type of the argument. Currently supported arguments are: <variablelist> <varlistentry><term /><listitem><para> 'i' - Integers. passed as collect_values[].v_int. </para></listitem></varlistentry> <varlistentry><term /><listitem><para> 'l' - Longs. passed as collect_values[].v_long. </para></listitem></varlistentry> <varlistentry><term /><listitem><para> 'd' - Doubles. passed as collect_values[].v_double. </para></listitem></varlistentry> <varlistentry><term /><listitem><para> 'p' - Pointers. passed as collect_values[].v_pointer. </para></listitem></varlistentry> </variablelist> It should be noted that for variable argument list construction, ANSI C promotes every type smaller than an integer to an int, and floats to doubles. So for collection of short int or char, 'i' needs to be used, and for collection of floats 'd'.
  * @collect_value: The collect_value() function is responsible for converting the values collected from a variable argument list into contents suitable for storage in a GValue. This function should setup does not allow %NULL pointers, it needs to either spew an error, or do an implicit conversion by storing an empty string. The @value passed in to this function has a zero-filled data array, so just like for value_init() it is guaranteed to not contain any old contents that might need freeing. and @collect_values is an array of unions #GTypeCValue with length @n_collect_values, containing the collected values according to @collect_format. It may contain the flag %G_VALUE_NOCOPY_CONTENTS indicating, that the collected value contents may be considered "static" for the duration of the @value lifetime. Thus an extra copy of the contents stored in @collect_values is not required for assignment to @value. For our above string example, we continue with: |[ if (!collect_values[0].v_pointer) value->data[0].v_pointer = g_strdup (""); else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) { value->data[0].v_pointer = collect_values[0].v_pointer; // keep a flag for the value_free() implementation to not free this string value->data[1].v_uint = G_VALUE_NOCOPY_CONTENTS; } else value->data[0].v_pointer = g_strdup (collect_values[0].v_pointer); return NULL; ]| It should be noted, that it is generally a bad idea to follow the #G_VALUE_NOCOPY_CONTENTS hint for reference counted types. Due to reentrancy requirements and reference count assertions performed by the #GSignal code, reference counts should always be incremented for reference counted contents stored in the value->data array. To deviate from our string example for a moment, and taking a look at an exemplary implementation for collect_value() of #GObject: |[ if (collect_values[0].v_pointer) { GObject *object = G_OBJECT (collect_values[0].v_pointer); // never honour G_VALUE_NOCOPY_CONTENTS for ref-counted types value->data[0].v_pointer = g_object_ref (object); return NULL; } else return g_strdup_printf ("Object passed as invalid NULL pointer"); } ]| The reference count for valid objects is always incremented, regardless of @collect_flags. For invalid objects, the example returns a newly allocated string without altering @value. Upon success, collect_value() needs to return %NULL. If, however, an error condition occurred, collect_value() may spew an error by returning a newly allocated non-%NULL string, giving a suitable description of the error condition. The calling code makes no assumptions about the @value contents being valid upon error returns, @value is simply thrown away without further freeing. As such, it is a good idea to not allocate #GValue contents, prior to returning an error, however, collect_values() is not obliged to return a correctly setup @value for error returns, simply because any non-%NULL return is considered a fatal condition so further program behaviour is undefined.
  * @lcopy_format: Format description of the arguments to collect for @lcopy_value, analogous to @collect_format. Usually, @lcopy_format string consists only of 'p's to provide lcopy_value() with pointers to storage locations.
- * @lcopy_value: This function is responsible for storing the @value contents into arguments passed through a variable argument list which got collected into @collect_values according to @lcopy_format. and @collect_flags may contain %G_VALUE_NOCOPY_CONTENTS. In contrast to collect_value(), lcopy_value() is obliged to always properly support %G_VALUE_NOCOPY_CONTENTS. Similar to collect_value() the function may prematurely abort by returning a newly allocated string describing an error condition. To complete the string example: |[ gchar **string_p = collect_values[0].v_pointer; if (!string_p) return g_strdup_printf ("string location passed as NULL"); if (collect_flags & G_VALUE_NOCOPY_CONTENTS) *string_p = value->data[0].v_pointer; else *string_p = g_strdup (value->data[0].v_pointer); ]| And an illustrative version of lcopy_value() for reference-counted types: |[ GObject **object_p = collect_values[0].v_pointer; if (!object_p) return g_strdup_printf ("object location passed as NULL"); if (!value->data[0].v_pointer) *object_p = NULL; else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) // always honour *object_p = value->data[0].v_pointer; else *object_p = g_object_ref (value->data[0].v_pointer); return NULL; ]|
+ * @lcopy_value: This function is responsible for storing the @value contents into arguments passed through a variable argument list which got collected into @collect_values according to @lcopy_format. and @collect_flags may contain %G_VALUE_NOCOPY_CONTENTS. In contrast to collect_value(), lcopy_value() is obliged to always properly support %G_VALUE_NOCOPY_CONTENTS. Similar to collect_value() the function may prematurely abort by returning a newly allocated string describing an error condition. To complete the string example: |[ gchar **string_p = collect_values[0].v_pointer; if (!string_p) return g_strdup_printf ("string location passed as NULL"); if (collect_flags & G_VALUE_NOCOPY_CONTENTS) *string_p = value->data[0].v_pointer; else *string_p = g_strdup (value->data[0].v_pointer); ]| And an illustrative version of lcopy_value() for reference-counted types: |[ GObject **object_p = collect_values[0].v_pointer; if (!object_p) return g_strdup_printf ("object location passed as NULL"); if (!value->data[0].v_pointer) *object_p = NULL; else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) /&ast; always honour &ast;/ *object_p = value->data[0].v_pointer; else *object_p = g_object_ref (value->data[0].v_pointer); return NULL; ]|
  *
  * The #GTypeValueTable provides the functions required by the #GValue implementation,
  * to serve as a container for values of a type.
@@ -1835,7 +1875,7 @@
  * to functions within a #GTypeValueTable structure, or implementations of
  * the g_value_*() API. That is, code portions which implement new fundamental
  * types.
- * #GValue users can not make any assumptions about how data is stored
+ * #GValue users cannot make any assumptions about how data is stored
  * within the 2 element @data union, and the @g_type member should
  * only be accessed through the G_VALUE_TYPE() macro.
  *
@@ -1867,8 +1907,17 @@
  *
  * A type in the GVariant type system.
  * Two types may not be compared by value; use g_variant_type_equal() or
- * g_variant_type_is_subtype().  May be copied using
+ * g_variant_type_is_subtype_of().  May be copied using
  * g_variant_type_copy() and freed using g_variant_type_free().
+ */
+
+
+/**
+ * GVoidFunc:
+ *
+ * Declares a type of function which takes no arguments
+ * and has no return value. It is used to specify the type
+ * function passed to g_atexit().
  */
 
 
@@ -3628,7 +3677,7 @@
  * G_TYPE_IS_ABSTRACT:
  * @type: A #GType value.
  *
- * Checks if @type is an abstract type.  An abstract type can not be
+ * Checks if @type is an abstract type.  An abstract type cannot be
  * instantiated and is normally used as an abstract base class for
  * derived classes.
  *
@@ -4086,7 +4135,7 @@
  * g_object_set (obj, "authors", authors, NULL);
  * gchar *writers[];
  * g_object_get (obj, "authors", &writers, NULL);
- * // do something with writers
+ * /&ast; do something with writers &ast;/
  * g_strfreev (writers);
  * ]|
  *
@@ -4151,6 +4200,15 @@
  *
  * Note: GLib 2.24 did include a boxed type with this name. It was replaced
  * Since: 2.26
+ */
+
+
+/**
+ * G_TYPE_VARIANT_BUILDER:
+ *
+ * The #GType for a boxed type holding a #GVariantBuilder.
+ *
+ * Since: 2.30
  */
 
 
@@ -4266,7 +4324,8 @@
  * G_VALUE_HOLDS_BOXED:
  * @value: a valid #GValue structure
  *
- * Checks whether the given #GValue can hold values derived from type %G_TYPE_BOXED.
+ * Checks whether the given #GValue can hold values derived
+ * from type %G_TYPE_BOXED.
  *
  * Returns: %TRUE on success.
  */
@@ -4467,6 +4526,15 @@
 
 
 /**
+ * G_VALUE_NOCOPY_CONTENTS:
+ *
+ * If passed to G_VALUE_COLLECT(), allocated data won't be copied
+ * but used verbatim. This does not affect ref-counted types like
+ * objects. For more details, see the #GValueTable documentation.
+ */
+
+
+/**
  * G_VALUE_TYPE:
  * @value: A #GValue structure.
  *
@@ -4586,8 +4654,8 @@
  *
  * The type of a 32bit signed integer value, that by convention, is used
  * as an index into an array of file descriptors that are sent alongside
- * a DBus message.
- * If you are not interacting with DBus, then there is no reason to make
+ * a D-Bus message.
+ * If you are not interacting with D-Bus, then there is no reason to make
  * use of this type.
  */
 
@@ -4625,11 +4693,11 @@
 /**
  * G_VARIANT_TYPE_OBJECT_PATH:
  *
- * The type of a DBus object reference.  These are strings of a
+ * The type of a D-Bus object reference.  These are strings of a
  * specific format used to identify objects at a given destination on
  * the bus.
- * If you are not interacting with DBus, then there is no reason to make
- * use of this type.  If you are, then the DBus specification contains a
+ * If you are not interacting with D-Bus, then there is no reason to make
+ * use of this type.  If you are, then the D-Bus specification contains a
  * precise description of valid object paths.
  */
 
@@ -4637,10 +4705,10 @@
 /**
  * G_VARIANT_TYPE_SIGNATURE:
  *
- * The type of a DBus type signature.  These are strings of a specific
- * format used as type signatures for DBus methods and messages.
- * If you are not interacting with DBus, then there is no reason to make
- * use of this type.  If you are, then the DBus specification contains a
+ * The type of a D-Bus type signature.  These are strings of a specific
+ * format used as type signatures for D-Bus methods and messages.
+ * If you are not interacting with D-Bus, then there is no reason to make
+ * use of this type.  If you are, then the D-Bus specification contains a
  * precise description of valid signature strings.
  */
 
@@ -4697,6 +4765,16 @@
  *
  * The empty tuple type.  Has only one instance.  Known also as "triv"
  * or "void".
+ */
+
+
+/**
+ * G_VARIANT_TYPE_VARDICT:
+ *
+ * The type of a dictionary mapping strings to variants (the ubiquitous
+ * "a{sv}" type).
+ *
+ * Since: 2.30
  */
 
 
@@ -4998,7 +5076,7 @@
  * types and interface implementations are in use, the module is kept
  * loaded. When the types and interfaces are gone, the module may be
  * unloaded. If the types and interfaces become used again, the module
- * will be reloaded. Note that the last unref can not happen in module
+ * will be reloaded. Note that the last unref cannot happen in module
  * code, since that would lead to the caller's code being unloaded before
  * g_object_unref() returns to it.
  * Keeping track of whether the module should be loaded or not is done by
@@ -5092,14 +5170,14 @@
  * support.  Signals are described in detail in <xref
  * linkend="gobject-Signals"/>.
  * <para id="floating-ref">
- * #GInitiallyUnowned is derived from #GObject. The only difference between
- * the two is that the initial reference of a #GInitiallyUnowned is flagged
+ * GInitiallyUnowned is derived from GObject. The only difference between
+ * the two is that the initial reference of a GInitiallyUnowned is flagged
  * as a <firstterm>floating</firstterm> reference.
  * This means that it is not specifically claimed to be "owned" by
  * any code portion. The main motivation for providing floating references is
  * C convenience. In particular, it allows code to be written as:
  * |[
- * container = create_container();
+ * container = create_container ();
  * container_add_child (container, create_child());
  * ]|
  * If <function>container_add_child()</function> will g_object_ref_sink() the
@@ -5109,8 +5187,8 @@
  * reference leaks, it would have to be written as:
  * |[
  * Child *child;
- * container = create_container();
- * child = create_child();
+ * container = create_container ();
+ * child = create_child ();
  * container_add_child (container, child);
  * g_object_unref (child);
  * ]|
@@ -5121,22 +5199,22 @@
  * a new reference.
  * Since floating references are useful almost exclusively for C convenience,
  * language bindings that provide automated reference and memory ownership
- * maintenance (such as smart pointers or garbage collection) therefore don't
- * need to expose floating references in their API.
+ * maintenance (such as smart pointers or garbage collection) should not
+ * expose floating references in their API.
  * </para>
  * Some object implementations may need to save an objects floating state
- * across certain code portions (an example is #GtkMenu), to achive this, the
- * following sequence can be used:
+ * across certain code portions (an example is #GtkMenu), to achieve this,
+ * the following sequence can be used:
  * |[
- * // save floating state
+ * /&ast; save floating state &ast;/
  * gboolean was_floating = g_object_is_floating (object);
  * g_object_ref_sink (object);
- * // protected code portion
+ * /&ast; protected code portion &ast;/
  * ...;
- * // restore floating state
+ * /&ast; restore floating state &ast;/
  * if (was_floating)
  * g_object_force_floating (object);
- * g_obejct_unref (object); // release previously acquired reference
+ * g_object_unref (object); /&ast; release previously acquired reference &ast;/
  * ]|
  */
 
@@ -5285,28 +5363,6 @@
  * </variablelist>
  *
  * Returns: space for @size bytes, allocated on the stack
- */
-
-
-/**
- * g_atomic_int_dec_and_test:
- * @atomic: a pointer to an integer
- *
- * Atomically decrements the integer pointed to by @atomic by 1.
- * after decrementing it
- *
- * Returns: %TRUE if the integer pointed to by @atomic is 0
- * Since: 2.4
- */
-
-
-/**
- * g_atomic_int_inc:
- * @atomic: a pointer to an integer.
- *
- * Atomically increments the integer pointed to by @atomic by 1.
- *
- * Since: 2.4
  */
 
 
@@ -5718,6 +5774,22 @@
  *
  * A marshaller for a #GCClosure with a callback of type
  * <literal>void (*callback) (gpointer instance, gpointer user_data)</literal>.
+ */
+
+
+/**
+ * g_cclosure_marshal_generic:
+ * @closure: A #GClosure.
+ * @return_gvalue: A #GValue to store the return value. May be %NULL if the callback of closure doesn't return a value.
+ * @n_param_values: The length of the @param_values array.
+ * @param_values: An array of #GValue<!-- -->s holding the arguments on which to invoke the callback of closure.
+ * @invocation_hint: The invocation hint given as the last argument to g_closure_invoke().
+ * @marshal_data: Additional data specified when registering the marshaller, see g_closure_set_marshal() and g_closure_set_meta_marshal()
+ *
+ * A generic marshaller function implemented via <ulink
+ * url="http://sourceware.org/libffi/">libffi</ulink>.
+ *
+ * Since: 2.30
  */
 
 
@@ -6780,10 +6852,10 @@
  *
  * This function is intended for #GObject implementations to re-enforce a
  * <link linkend="floating-ref">floating</link> object reference.
- * Doing this is seldomly required, all
  * #GInitiallyUnowned<!-- -->s are created with a floating reference which
  * usually just needs to be sunken by calling g_object_ref_sink().
  *
+ * Doing this is seldomly required: all
  * Since: 2.10
  */
 
@@ -6950,7 +7022,7 @@
  * g_object_is_floating:
  * @object: (type GObject.Object): a #GObject
  *
- * Checks wether @object has a <link linkend="floating-ref">floating</link>
+ * Checks whether @object has a <link linkend="floating-ref">floating</link>
  * reference.
  *
  * Since: 2.10
@@ -9246,6 +9318,9 @@
  *
  * Obtains data which has previously been attached to @type
  * with g_type_set_qdata().
+ * Note that this does not take subtyping into account; data
+ * attached to one type with g_type_set_qdata() cannot
+ * be retrieved from a subtype using g_type_get_qdata().
  *
  * Returns: (transfer none): the data, or %NULL if no data was found
  */
@@ -9780,7 +9855,7 @@
 /**
  * g_value_array_remove:
  * @value_array: #GValueArray to remove an element from
- * @index_: position of value to remove, must be &lt; value_array->n_values
+ * @index_: position of value to remove, which must be less than <code>value_array-><link linkend="GValueArray.n-values">n_values</link></code>
  *
  * Remove the value at position @index_ from @value_array.
  *
@@ -9843,7 +9918,8 @@
  * @value: a valid #GValue whose type is derived from %G_TYPE_OBJECT
  *
  * Get the contents of a %G_TYPE_OBJECT derived #GValue, increasing
- * its reference count.
+ * its reference count. If the contents of the #GValue are %NULL, then
+ * %NULL will be returned.
  * should be unreferenced when no longer needed.
  *
  * Returns: (type GObject.Object) (transfer full): object content of @value,
