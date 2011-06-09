@@ -211,7 +211,9 @@ blob containing data gleaned from GObject's primitive introspection."""
             self._initparse_get_type_function(func)
 
     def _initparse_get_type_function(self, func):
-        if func.symbol in ('g_object_get_type', 'g_initially_unowned_get_type', 'g_variant_get_gtype'):
+        if func.symbol in ('g_object_get_type',
+                           'g_initially_unowned_get_type',
+                           'g_variant_get_gtype'):
             # We handle these internally, see _initparse_gobject_record
             return True
         if func.parameters:
