@@ -35,7 +35,7 @@ time_t regress_test_timet (time_t in);
 GType regress_test_gtype (GType in);
 
 /* utf8 */
-G_CONST_RETURN char *regress_test_utf8_const_return (void);
+const char *regress_test_utf8_const_return (void);
 char *regress_test_utf8_nonconst_return (void);
 void regress_test_utf8_const_in (const char *in);
 void regress_test_utf8_out (char **out);
@@ -79,7 +79,7 @@ void regress_test_array_int_null_out (int **arr, int *len);
 
 /* interface */
 /* GList */
-G_CONST_RETURN GList *regress_test_glist_nothing_return (void);
+const GList *regress_test_glist_nothing_return (void);
 GList *regress_test_glist_nothing_return2 (void);
 GList *regress_test_glist_container_return (void);
 GList *regress_test_glist_everything_return (void);
@@ -89,7 +89,7 @@ void regress_test_glist_null_in(GSList *in);
 void regress_test_glist_null_out(GSList **out_list);
 
 /* GSList */
-G_CONST_RETURN GSList *regress_test_gslist_nothing_return (void);
+const GSList *regress_test_gslist_nothing_return (void);
 GSList *regress_test_gslist_nothing_return2 (void);
 GSList *regress_test_gslist_container_return (void);
 GSList *regress_test_gslist_everything_return (void);
@@ -99,8 +99,8 @@ void regress_test_gslist_null_in(GSList *in);
 void regress_test_gslist_null_out(GSList **out_list);
 
 /* GHashTable */
-G_CONST_RETURN GHashTable *regress_test_ghash_null_return (void);
-G_CONST_RETURN GHashTable *regress_test_ghash_nothing_return (void);
+const GHashTable *regress_test_ghash_null_return (void);
+const GHashTable *regress_test_ghash_nothing_return (void);
 GHashTable *regress_test_ghash_nothing_return2 (void);
 GHashTable *regress_test_ghash_container_return (void);
 GHashTable *regress_test_ghash_everything_return (void);
