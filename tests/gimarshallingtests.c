@@ -1804,6 +1804,248 @@ gi_marshalling_tests_garray_utf8_full_inout (GArray **array_)
 }
 
 /**
+ * gi_marshalling_tests_gptrarray_int_none_return:
+ * Returns: (element-type gint) (transfer none):
+ */
+GPtrArray *
+gi_marshalling_tests_gptrarray_int_none_return (void)
+{
+    static GPtrArray *parray = NULL;
+    gint i;
+
+    if (parray == NULL) {
+        parray = g_ptr_array_new ();
+        for (i = 0; i < 4; i++) {
+            g_ptr_array_add (parray, GINT_TO_POINTER(i));
+        }
+    }
+
+    return parray;
+}
+/**
+ * gi_marshalling_tests_gptrarray_utf8_none_return:
+ * Returns: (element-type utf8) (transfer none):
+ */
+GPtrArray *
+gi_marshalling_tests_gptrarray_utf8_none_return (void)
+{
+    static GPtrArray *parray = NULL;
+    static gchar *values[] = {"0", "1", "2"};
+    gint i;
+
+    if (parray == NULL) {
+        parray = g_ptr_array_new ();
+        for (i = 0; i < 3; i++)
+            g_ptr_array_add (parray, (gpointer) values[i]);
+    }
+
+    return parray;
+}
+
+/**
+ * gi_marshalling_tests_gptrarray_utf8_container_return:
+ * Returns: (element-type utf8) (transfer container):
+ */
+GPtrArray *
+gi_marshalling_tests_gptrarray_utf8_container_return (void)
+{
+    GPtrArray *parray = NULL;
+    static gchar *values[] = {"0", "1", "2", NULL};
+    gint i;
+
+    parray = g_ptr_array_new ();
+    for (i = 0; values[i]; i++)
+        g_ptr_array_add (parray, (gpointer)values[i]);
+
+    return parray;
+}
+
+/**
+ * gi_marshalling_tests_gptrarray_utf8_full_return:
+ * Returns: (element-type utf8) (transfer full):
+ */
+GPtrArray *
+gi_marshalling_tests_gptrarray_utf8_full_return (void)
+{
+    GPtrArray *parray = NULL;
+    static gchar *values[] = {"0", "1", "2", NULL};
+    gint i;
+
+    parray = g_ptr_array_new ();
+    for (i = 0; values[i]; i++) {
+        gchar *str = g_strdup (values[i]);
+        g_ptr_array_add (parray, (gpointer)str);
+    }
+
+    return parray;
+}
+
+/**
+ * gi_marshalling_tests_gptrarray_int_none_in:
+ * @parray_: (element-type gint) (transfer none):
+ */
+void
+gi_marshalling_tests_gptrarray_int_none_in (GPtrArray *parray_)
+{
+    g_assert (parray_->len == 4);
+    g_assert (g_ptr_array_index (parray_, 0) == GINT_TO_POINTER(0));
+    g_assert (g_ptr_array_index (parray_, 1) == GINT_TO_POINTER(1));
+    g_assert (g_ptr_array_index (parray_, 2) == GINT_TO_POINTER(2));
+    g_assert (g_ptr_array_index (parray_, 3) == GINT_TO_POINTER(3));
+}
+
+/**
+ * gi_marshalling_tests_gptrarray_utf8_none_in:
+ * @parray_: (element-type utf8) (transfer none):
+ */
+void
+gi_marshalling_tests_gptrarray_utf8_none_in (GPtrArray *parray_)
+{
+    g_assert (parray_->len == 3);
+    g_assert (strcmp (g_ptr_array_index (parray_, 0), "0") == 0);
+    g_assert (strcmp (g_ptr_array_index (parray_, 1), "1") == 0);
+    g_assert (strcmp (g_ptr_array_index (parray_, 2), "2") == 0);
+}
+
+/**
+ * gi_marshalling_tests_gptrarray_utf8_none_out:
+ * @parray_: (out) (element-type utf8) (transfer none):
+ */
+void
+gi_marshalling_tests_gptrarray_utf8_none_out (GPtrArray **parray_)
+{
+    static GPtrArray *internal = NULL;
+    static gchar *values[] = {"0", "1", "2", NULL};
+    gint i;
+
+    if (internal == NULL) {
+        internal = g_ptr_array_new ();
+        for (i = 0; values[i]; i++)
+            g_ptr_array_add (internal, (gpointer)values[i]);
+    }
+
+    *parray_ = internal;
+}
+
+/**
+ * gi_marshalling_tests_gptrarray_utf8_container_out:
+ * @parray_: (out) (element-type utf8) (transfer container):
+ */
+void
+gi_marshalling_tests_gptrarray_utf8_container_out (GPtrArray **parray_)
+{
+    static gchar *values[] = {"0", "1", "2", NULL};
+    gint i;
+
+    *parray_ = NULL;
+
+    *parray_ = g_ptr_array_new ();
+    for (i = 0; values[i]; i++)
+        g_ptr_array_add (*parray_, (gpointer)values[i]);
+}
+
+/**
+ * gi_marshalling_tests_gptrarray_utf8_full_out:
+ * @parray_: (out) (element-type utf8) (transfer full):
+ */
+void
+gi_marshalling_tests_gptrarray_utf8_full_out (GPtrArray **parray_)
+{
+    static gchar *values[] = {"0", "1", "2", NULL};
+    gint i;
+
+    *parray_ = NULL;
+
+    *parray_ = g_ptr_array_new ();
+    for (i = 0; values[i]; i++) {
+        gchar *str = g_strdup (values[i]);
+        g_ptr_array_add (*parray_, (gpointer)str);
+    }
+}
+
+/**
+ * gi_marshalling_tests_gptrarray_utf8_none_inout:
+ * @parray_: (inout) (element-type utf8) (transfer none):
+ */
+void
+gi_marshalling_tests_gptrarray_utf8_none_inout (GPtrArray **parray_)
+{
+    static GPtrArray *internal = NULL;
+    static gchar *values[] = {"-2", "-1", "0", "1", NULL};
+    gint i;
+
+    g_assert ((*parray_)->len == 3);
+    g_assert (strcmp (g_ptr_array_index (*parray_, 0), "0") == 0);
+    g_assert (strcmp (g_ptr_array_index (*parray_, 1), "1") == 0);
+    g_assert (strcmp (g_ptr_array_index (*parray_, 2), "2") == 0);
+
+    if (internal == NULL) {
+        internal = g_ptr_array_new ();
+        for (i = 0; values[i]; i++)
+            g_ptr_array_add (internal, (gpointer) values[i]);
+    }
+
+    *parray_ = internal;
+}
+
+/**
+ * gi_marshalling_tests_gptrarray_utf8_container_inout:
+ * @parray_: (inout) (element-type utf8) (transfer container):
+ */
+void
+gi_marshalling_tests_gptrarray_utf8_container_inout (GPtrArray **parray_)
+{
+    static gchar *val1 = "-2";
+    static gchar *val2 = "-1";
+    static gchar *val3 = "0";
+    static gchar *val4 = "1";
+    GPtrArray *result;
+
+    g_assert ((*parray_)->len == 3);
+    g_assert (strcmp (g_ptr_array_index (*parray_, 0), "0") == 0);
+    g_assert (strcmp (g_ptr_array_index (*parray_, 1), "1") == 0);
+    g_assert (strcmp (g_ptr_array_index (*parray_, 2), "2") == 0);
+
+    result = g_ptr_array_new ();
+    g_ptr_array_add (result, (gpointer) val1);
+    g_ptr_array_add (result, (gpointer) val2);
+    g_ptr_array_add (result, (gpointer) val3);
+    g_ptr_array_add (result, (gpointer) val4);
+
+    *parray_ = result;
+}
+
+/**
+ * gi_marshalling_tests_gptrarray_utf8_full_inout:
+ * @parray_: (inout) (element-type utf8) (transfer full):
+ */
+void
+gi_marshalling_tests_gptrarray_utf8_full_inout (GPtrArray **parray_)
+{
+    static gchar *val1 = "-1";
+    static gchar *val2 = "-2";
+    gchar *val;
+    GPtrArray *result;
+
+    g_assert ((*parray_)->len == 3);
+    g_assert (strcmp (g_ptr_array_index (*parray_, 0), "0") == 0);
+    g_assert (strcmp (g_ptr_array_index (*parray_, 1), "1") == 0);
+    g_assert (strcmp (g_ptr_array_index (*parray_, 2), "2") == 0);
+
+    result = g_ptr_array_new ();
+    val = g_strdup (val2);
+    g_ptr_array_add(result, (gpointer) val);
+    val = g_strdup (val1);
+    g_ptr_array_add(result, (gpointer) val);
+    val = g_strdup ("0");
+    g_ptr_array_add(result, (gpointer) val);
+    val = g_strdup ("1");
+    g_ptr_array_add(result, (gpointer) val);
+
+    *parray_ = result;
+}
+
+/**
  * gi_marshalling_tests_bytearray_full_return:
  * Returns: (transfer full):
  */
