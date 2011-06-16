@@ -353,6 +353,8 @@ void gi_marshalling_tests_no_type_flags_inout (GIMarshallingTestsNoTypeFlags *fl
 
 /* Arrays */
 
+gboolean gi_marshalling_tests_init_function (gint *n_args, char ***argv);
+
 /* Fixed-size */
 const gint *gi_marshalling_tests_array_fixed_int_return (void);
 const gshort *gi_marshalling_tests_array_fixed_short_return (void);

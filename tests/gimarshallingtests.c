@@ -1100,6 +1100,27 @@ gi_marshalling_tests_utf8_full_inout (gchar **utf8)
 
 
 /**
+ * gi_marshalling_tests_init_function:
+ * @n_args: (inout) (allow-none): number of args
+ * @argv: (inout) (array length=n_args) (allow-none): args
+ *
+ * This is like gtk_init().
+ */
+gboolean
+gi_marshalling_tests_init_function (gint *n_args, char ***argv)
+{
+    if (n_args == NULL)
+	return TRUE;
+
+    if (*n_args == 0)
+	return TRUE;
+    (*n_args)--;
+    g_assert (argv != NULL);
+    *argv[*n_args] = NULL;
+    return TRUE;
+}
+
+/**
  * gi_marshalling_tests_array_fixed_int_return:
  * Returns: (array fixed-size=4):
  */
