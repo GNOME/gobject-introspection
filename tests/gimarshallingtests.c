@@ -1346,29 +1346,6 @@ gi_marshalling_tests_array_enum_in (GIMarshallingTestsEnum *_enum, gint length)
 }
 
 /**
- * gi_marshalling_tests_array_nested_in:
- * @list: (array length=length) (element-type GSList<gint>):
- * @length:
- */
-void
-gi_marshalling_tests_array_nested_in (GSList **list, gint length)
-{
-    g_assert (length == 3);
-
-    g_assert (g_slist_length (list[0]) == 1);
-    g_assert (list[0]->data == GINT_TO_POINTER (11));
-
-    g_assert (g_slist_length (list[1]) == 3);
-    g_assert (list[1]->data == GINT_TO_POINTER (21));
-    g_assert (list[1]->next->data == GINT_TO_POINTER (22));
-    g_assert (list[1]->next->next->data == GINT_TO_POINTER (23));
-
-    g_assert (g_slist_length (list[2]) == 2);
-    g_assert (list[2]->data == GINT_TO_POINTER (31));
-    g_assert (list[2]->next->data == GINT_TO_POINTER (32));
-}
-
-/**
  * gi_marshalling_tests_array_in_guint64_len:
  * @ints: (array length=length) (transfer none):
  * @length:
