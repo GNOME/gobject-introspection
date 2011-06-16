@@ -142,6 +142,8 @@ GVariant *regress_test_gvariant_as (void);
 
 /* enums / flags */
 
+#define NUM_REGRESS_FOO
+
 typedef enum
 {
   REGRESS_TEST_VALUE1,

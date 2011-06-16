@@ -1338,6 +1338,12 @@ regress_test_garray_container_return (void)
 
 /* enums / flags */
 
+/**
+ * NUM_REGRESS_FOO: (skip)
+ *
+ * num of elements in RegressFoo
+ */
+
 GType
 regress_test_enum_get_type (void)
 {
