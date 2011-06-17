@@ -1116,7 +1116,7 @@ gi_marshalling_tests_init_function (gint *n_args, char ***argv)
 	return TRUE;
     (*n_args)--;
     g_assert (argv != NULL);
-    *argv[*n_args] = NULL;
+    (*argv)[*n_args] = NULL;
     return TRUE;
 }
 
