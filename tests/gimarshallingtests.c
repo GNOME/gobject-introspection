@@ -1811,14 +1811,10 @@ GByteArray *
 gi_marshalling_tests_bytearray_full_return (void)
 {
     GByteArray *array = NULL;
-    static gchar *values[] = {"0", "1", "2", "3", NULL};
-    gint i;
+    guint8 data[] = {'\0', '1', '\xFF', '3'};
 
     array = g_byte_array_new ();
-    for (i = 0; values[i]; i++) {
-        gchar *str = g_strdup (values[i]);
-        g_byte_array_append (array, (const guint8*)str, 1);
-    }
+    g_byte_array_append (array, (const guint8*)data, G_N_ELEMENTS(data));
 
     return array;
 
@@ -1831,11 +1827,11 @@ gi_marshalling_tests_bytearray_full_return (void)
 void
 gi_marshalling_tests_bytearray_none_in (GByteArray *array_)
 {
-    g_assert (array_->len == 4);
-    g_assert (g_array_index (array_, char, 0) == '0');
-    g_assert (g_array_index (array_, char, 1) == '1');
-    g_assert (g_array_index (array_, char, 2) == '2');
-    g_assert (g_array_index (array_, char, 3) == '3');
+    g_assert_cmpuint (array_->len, ==, 4);
+    g_assert_cmpuint (g_array_index (array_, unsigned char, 0), ==, 0);
+    g_assert_cmpuint (g_array_index (array_, unsigned char, 1), ==, 49);
+    g_assert_cmpuint (g_array_index (array_, unsigned char, 2), ==, 0xFF);
+    g_assert_cmpuint (g_array_index (array_, unsigned char, 3), ==, 51);
 }
 
 /**
