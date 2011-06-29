@@ -891,6 +891,7 @@ exposed to language bindings.</doc>
         </parameter>
         <parameter name="callback"
                    transfer-ownership="none"
+                   allow-none="1"
                    scope="async"
                    closure="2">
           <type name="Gio.AsyncReadyCallback" c:type="GAsyncReadyCallback"/>

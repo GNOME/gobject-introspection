@@ -537,6 +537,7 @@ usage is void (*_gtk_reserved1)(void);"""
         self._adjust_container_type(parent, node, options)
 
         if (OPT_ALLOW_NONE in options or
+            node.type.target_giname == 'Gio.AsyncReadyCallback' or
             node.type.target_giname == 'Gio.Cancellable'):
             node.allow_none = True
 

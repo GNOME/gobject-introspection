@@ -1598,7 +1598,10 @@ TpAccount::status-changed</doc>
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
-        <parameter name="callback" transfer-ownership="none" scope="async">
+        <parameter name="callback"
+                   transfer-ownership="none"
+                   allow-none="1"
+                   scope="async">
           <type name="Gio.AsyncReadyCallback" c:type="GAsyncReadyCallback"/>
         </parameter>
       </parameters>
