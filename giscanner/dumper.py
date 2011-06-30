@@ -20,6 +20,7 @@
 #
 
 import os
+import sys
 import subprocess
 import shutil
 import tempfile
@@ -187,6 +188,7 @@ class DumpCompiler(object):
         if not self._options.quiet:
             print "g-ir-scanner: compile: %s" % (
                 subprocess.list2cmdline(args), )
+            sys.stdout.flush()
         try:
             subprocess.check_call(args)
         except subprocess.CalledProcessError, e:
@@ -230,6 +232,7 @@ class DumpCompiler(object):
         if not self._options.quiet:
             print "g-ir-scanner: link: %s" % (
                 subprocess.list2cmdline(args), )
+            sys.stdout.flush()
         try:
             subprocess.check_call(args)
         except subprocess.CalledProcessError, e:
