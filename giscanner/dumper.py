@@ -199,7 +199,8 @@ class DumpCompiler(object):
             args.extend(libtool)
             args.append('--mode=link')
             args.append('--tag=CC')
-            args.append('--silent')
+            if self._options.quiet:
+                args.append('--silent')
 
         args.extend(self._linker_cmd.split())
         args.extend(['-o', output])
