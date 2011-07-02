@@ -1782,25 +1782,6 @@ gi_marshalling_tests_garray_utf8_full_inout (GArray **array_)
 }
 
 /**
- * gi_marshalling_tests_gptrarray_int_none_return:
- * Returns: (element-type gint) (transfer none):
- */
-GPtrArray *
-gi_marshalling_tests_gptrarray_int_none_return (void)
-{
-    static GPtrArray *parray = NULL;
-    gint i;
-
-    if (parray == NULL) {
-        parray = g_ptr_array_new ();
-        for (i = 0; i < 4; i++) {
-            g_ptr_array_add (parray, GINT_TO_POINTER(i));
-        }
-    }
-
-    return parray;
-}
-/**
  * gi_marshalling_tests_gptrarray_utf8_none_return:
  * Returns: (element-type utf8) (transfer none):
  */
@@ -1856,20 +1837,6 @@ gi_marshalling_tests_gptrarray_utf8_full_return (void)
     }
 
     return parray;
-}
-
-/**
- * gi_marshalling_tests_gptrarray_int_none_in:
- * @parray_: (element-type gint) (transfer none):
- */
-void
-gi_marshalling_tests_gptrarray_int_none_in (GPtrArray *parray_)
-{
-    g_assert (parray_->len == 4);
-    g_assert (g_ptr_array_index (parray_, 0) == GINT_TO_POINTER(0));
-    g_assert (g_ptr_array_index (parray_, 1) == GINT_TO_POINTER(1));
-    g_assert (g_ptr_array_index (parray_, 2) == GINT_TO_POINTER(2));
-    g_assert (g_ptr_array_index (parray_, 3) == GINT_TO_POINTER(3));
 }
 
 /**

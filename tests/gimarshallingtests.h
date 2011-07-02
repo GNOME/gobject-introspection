@@ -423,12 +423,10 @@ void gi_marshalling_tests_garray_utf8_container_inout (GArray **array_);
 void gi_marshalling_tests_garray_utf8_full_inout (GArray **array_);
 
 /* GPtrArray */
-GPtrArray *gi_marshalling_tests_gptrarray_int_none_return (void);
 GPtrArray *gi_marshalling_tests_gptrarray_utf8_none_return (void);
 GPtrArray *gi_marshalling_tests_gptrarray_utf8_container_return (void);
 GPtrArray *gi_marshalling_tests_gptrarray_utf8_full_return (void);
 
-void gi_marshalling_tests_gptrarray_int_none_in (GPtrArray *parray_);
 void gi_marshalling_tests_gptrarray_utf8_none_in (GPtrArray *parray_);
 
 void gi_marshalling_tests_gptrarray_utf8_none_out (GPtrArray **parray_);

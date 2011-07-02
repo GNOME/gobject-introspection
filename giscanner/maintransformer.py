@@ -318,6 +318,18 @@ usage is void (*_gtk_reserved1)(void);"""
 
         return block.position
 
+    def _check_array_element_type(self, array, options):
+        # GPtrArrays are allowed to contain non basic types
+        # (except enums and flags) or basic types that are
+        # as big as a gpointer
+        if array.array_type == ast.Array.GLIB_PTRARRAY and \
+           ((array.element_type in ast.BASIC_GIR_TYPES \
+             and not array.element_type in ast.POINTER_TYPES) or \
+            isinstance(array.element_type, ast.Enum) or \
+            isinstance(array.element_type, ast.Bitfield)):
+            message.warn("invalid (element-type) for a GPtrArray, "
+                        "must be a pointer", options.position)
+
     def _apply_annotations_array(self, parent, node, options):
         array_opt = options.get(OPT_ARRAY)
         if array_opt:
@@ -368,6 +380,7 @@ usage is void (*_gtk_reserved1)(void);"""
             except ValueError:
                 # Already warned in annotationparser.py
                 return
+        self._check_array_element_type(container_type, options)
         node.type = container_type
 
     def _apply_annotations_element_type(self, parent, node, options):
@@ -409,6 +422,7 @@ usage is void (*_gtk_reserved1)(void);"""
                 return
             node.type.element_type = self._resolve(element_type_opt.one(),
                                                    node.type, node, parent)
+            self._check_array_element_type(node.type, options)
         else:
             message.warn_node(parent,
                 "Unknown container %r for element-type annotation" % (node.type, ))

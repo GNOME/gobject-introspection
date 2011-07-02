@@ -222,6 +222,10 @@ GIR_TYPES = [TYPE_NONE, TYPE_ANY]
 GIR_TYPES.extend(BASIC_GIR_TYPES)
 GIR_TYPES.extend([TYPE_STRING, TYPE_FILENAME, TYPE_VALIST])
 
+# These are the only basic types that are guaranteed to
+# be as big as a pointer (and thus are allowed in GPtrArray)
+POINTER_TYPES = [TYPE_ANY, TYPE_INTPTR, TYPE_UINTPTR]
+
 INTROSPECTABLE_BASIC = list(GIR_TYPES)
 for v in [TYPE_NONE, TYPE_ANY,
           TYPE_LONG_LONG, TYPE_LONG_ULONG,
