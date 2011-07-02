@@ -249,6 +249,9 @@ usage is void (*_gtk_reserved1)(void);"""
         elif has_element_type:
             self._apply_annotations_element_type(parent, node, options)
 
+        if isinstance(node.type, ast.Array):
+            self._check_array_element_type(node.type, options)
+
     def _resolve(self, type_str, type_node=None, node=None, parent=None):
         def grab_one(type_str, resolver, top_combiner, combiner):
             """Return a complete type, and the trailing string part after it.
@@ -330,6 +333,17 @@ usage is void (*_gtk_reserved1)(void);"""
             message.warn("invalid (element-type) for a GPtrArray, "
                         "must be a pointer", options.position)
 
+        # GByteArrays have (element-type) guint8 by default
+        if array.array_type == ast.Array.GLIB_BYTEARRAY:
+            if array.element_type == ast.TYPE_ANY:
+                array.element_type = ast.TYPE_UINT8
+            elif not array.element_type in [ast.TYPE_UINT8,
+                                            ast.TYPE_INT8,
+                                            ast.TYPE_CHAR]:
+                message.warn("invalid (element-type) for a GByteArray, "
+                             "must be one of guint8, gint8 or gchar",
+                             options.position)
+
     def _apply_annotations_array(self, parent, node, options):
         array_opt = options.get(OPT_ARRAY)
         if array_opt:
@@ -380,7 +394,6 @@ usage is void (*_gtk_reserved1)(void);"""
             except ValueError:
                 # Already warned in annotationparser.py
                 return
-        self._check_array_element_type(container_type, options)
         node.type = container_type
 
     def _apply_annotations_element_type(self, parent, node, options):
@@ -422,7 +435,6 @@ usage is void (*_gtk_reserved1)(void);"""
                 return
             node.type.element_type = self._resolve(element_type_opt.one(),
                                                    node.type, node, parent)
-            self._check_array_element_type(node.type, options)
         else:
             message.warn_node(parent,
                 "Unknown container %r for element-type annotation" % (node.type, ))

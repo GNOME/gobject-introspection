@@ -2009,7 +2009,7 @@ gi_marshalling_tests_bytearray_full_return (void)
 
 /**
  * gi_marshalling_tests_bytearray_none_in:
- * @array_: (element-type gint) (transfer none):
+ * @array_: (element-type gint8) (transfer none):
  */
 void
 gi_marshalling_tests_bytearray_none_in (GByteArray *array_)
