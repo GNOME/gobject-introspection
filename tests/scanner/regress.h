@@ -550,10 +550,19 @@ typedef void (*RegressTestCallbackOwnedGError) (GError *error);
  * @path: (type filename): Path to file
  */
 typedef int (*RegressTestCallbackFull) (int foo, double bar, char *path);
+/**
+ * RegressTestCallbackArray:
+ * @one: (array length=one_length):
+ * @one_length:
+ * @two: (array length=two_length) (element-type utf8):
+ * @two_length:
+ */
+typedef int (*RegressTestCallbackArray) (int *one, gsize one_length, const char** two, int two_length);
 
 void regress_test_simple_callback (RegressTestSimpleCallback callback);
 int regress_test_callback (RegressTestCallback callback);
 int regress_test_multi_callback (RegressTestCallback callback);
+int regress_test_array_callback (RegressTestCallbackArray callback);
 int regress_test_callback_user_data (RegressTestCallbackUserData callback,
                              gpointer user_data);
 int regress_test_callback_destroy_notify (RegressTestCallbackUserData callback,

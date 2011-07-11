@@ -2872,7 +2872,22 @@ regress_test_multi_callback (RegressTestCallback callback)
     return sum;
 }
 
+/**
+ * regress_test_array_callback:
+ * @callback: (scope call):
+ *
+ **/
+int regress_test_array_callback (RegressTestCallbackArray callback)
+{
+  static const char *strings[] = { "one", "two", "three" };
+  static int ints[] = { -1, 0, 1, 2 };
+  int sum = 0;
 
+  sum += callback(ints, 4, strings, 3);
+  sum += callback(ints, 4, strings, 3);
+
+  return sum;
+}
 
 /**
  * regress_test_simple_callback:

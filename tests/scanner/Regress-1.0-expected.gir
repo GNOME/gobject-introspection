@@ -180,6 +180,29 @@ use it should be.</doc>
         <type name="gint" c:type="int"/>
       </return-value>
     </callback>
+    <callback name="TestCallbackArray" c:type="RegressTestCallbackArray">
+      <return-value transfer-ownership="none">
+        <type name="gint" c:type="int"/>
+      </return-value>
+      <parameters>
+        <parameter name="one" transfer-ownership="none">
+          <array length="1" zero-terminated="0" c:type="int*">
+            <type name="gint" c:type="int"/>
+          </array>
+        </parameter>
+        <parameter name="one_length" transfer-ownership="none">
+          <type name="gsize" c:type="gsize"/>
+        </parameter>
+        <parameter name="two" transfer-ownership="none">
+          <array length="3" zero-terminated="0" c:type="char**">
+            <type name="utf8"/>
+          </array>
+        </parameter>
+        <parameter name="two_length" transfer-ownership="none">
+          <type name="gint" c:type="int"/>
+        </parameter>
+      </parameters>
+    </callback>
     <callback name="TestCallbackFull" c:type="RegressTestCallbackFull">
       <return-value transfer-ownership="none">
         <type name="gint" c:type="int"/>
@@ -1544,6 +1567,17 @@ Use with regress_test_obj_emit_sig_with_obj</doc>
           <array zero-terminated="0" c:type="RegressTestObj***" fixed-size="2">
             <type name="TestObj" c:type="RegressTestObj**"/>
           </array>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="test_array_callback"
+              c:identifier="regress_test_array_callback">
+      <return-value transfer-ownership="none">
+        <type name="gint" c:type="int"/>
+      </return-value>
+      <parameters>
+        <parameter name="callback" transfer-ownership="none" scope="call">
+          <type name="TestCallbackArray" c:type="RegressTestCallbackArray"/>
         </parameter>
       </parameters>
     </function>
