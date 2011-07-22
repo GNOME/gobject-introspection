@@ -7,7 +7,7 @@
  *
  * If @action is currently enabled.
  * If the action is disabled then calls to g_action_activate() and
- * g_action_set_state() have no effect.
+ * g_action_change_state() have no effect.
  *
  * Since: 2.28
  */
@@ -49,6 +49,25 @@
  * action is stateless.
  *
  * Since: 2.28
+ */
+
+
+/**
+ * GActionEntry:
+ * @name: the name of the action
+ * @activate: the callback to connect to the "activate" signal of the action
+ * @parameter_type: the type of the parameter that must be passed to the activate function for this action, given as a single GVariant type string (or %NULL for no parameter)
+ * @state: the initial state for this action, given in GVariant text format.  The state is parsed with no extra type information, so type tags must be added to the string if they are necessary.
+ * @change_state: the callback to connect to the "change-state" signal of the action
+ *
+ * This struct defines a single action.  It is for use with
+ * g_simple_action_group_add_entries().
+ * The order of the items in the structure are intended to reflect
+ * frequency of use.  It is permissible to use an incomplete initialiser
+ * in order to leave some of the later values as %NULL.  All values
+ * after @name are optional.  Additional optional fields may be added in
+ * the future.
+ * See g_simple_action_group_add_entries() for an example.
  */
 
 
@@ -132,7 +151,7 @@
  * @get_state_hint: the virtual function pointer for g_action_get_state_hint()
  * @get_enabled: the virtual function pointer for g_action_get_enabled()
  * @get_state: the virtual function pointer for g_action_get_state()
- * @set_state: the virtual function pointer for g_action_set_state()
+ * @change_state: the virtual function pointer for g_action_change_state()
  * @activate: the virtual function pointer for g_action_activate().  Note that #GAction does not have an 'activate' signal but that implementations of it may have one.
  *
  *
@@ -1496,7 +1515,7 @@
  * @parent_class: The parent class.
  * @get_info: Returns a #GDBusInterfaceInfo. See g_dbus_interface_skeleton_get_info() for details.
  * @get_vtable: Returns a #GDBusInterfaceVTable. See g_dbus_interface_skeleton_get_vtable() for details.
- * @get_properties: Returns a new, floating, #GVariant with all properties. See g_dbus_interface_skeleton_get_properties().
+ * @get_properties: Returns a #GVariant with all properties. See g_dbus_interface_skeleton_get_properties().
  * @flush: Emits outstanding changes, if any. See g_dbus_interface_skeleton_flush().
  * @g_authorize_method: Signal class handler for the #GDBusInterfaceSkeleton::g-authorize-method signal.
  *
@@ -2838,6 +2857,17 @@
 
 
 /**
+ * GError:
+ * @domain: error domain, e.g. #G_FILE_ERROR
+ * @code: error code, e.g. %G_FILE_ERROR_NOENT
+ * @message: human-readable informative error message
+ *
+ * The <structname>GError</structname> structure contains
+ * information about an error that has occurred.
+ */
+
+
+/**
  * GFile:
  *
  * A handle to an object implementing the #GFileIface interface.
@@ -3622,6 +3652,28 @@
 
 
 /**
+ * GLIB_CHECK_VERSION:
+ * @major: the major version to check for
+ * @minor: the minor version to check for
+ * @micro: the micro version to check for
+ *
+ * Checks the version of the GLib library that is being compiled
+ * against.
+ * <example>
+ * <title>Checking the version of the GLib library</title>
+ * <programlisting>
+ * if (!GLIB_CHECK_VERSION (1, 2, 0))
+ * g_error ("GLib version 1.2.0 or above is needed");
+ * </programlisting>
+ * </example>
+ * See glib_check_version() for a runtime check.
+ * is the same as or newer than the passed-in version.
+ *
+ * Returns: %TRUE if the version of the GLib header files
+ */
+
+
+/**
  * GLoadableIcon:
  *
  * Generic type for all kinds of icons that can be loaded
@@ -4022,6 +4074,25 @@
 
 
 /**
+ * GNormalizeMode:
+ * @G_NORMALIZE_DEFAULT: standardize differences that do not affect the text content, such as the above-mentioned accent representation
+ * @G_NORMALIZE_NFD: another name for %G_NORMALIZE_DEFAULT
+ * @G_NORMALIZE_DEFAULT_COMPOSE: like %G_NORMALIZE_DEFAULT, but with composed forms rather than a maximally decomposed form
+ * @G_NORMALIZE_NFC: another name for %G_NORMALIZE_DEFAULT_COMPOSE
+ * @G_NORMALIZE_ALL: beyond %G_NORMALIZE_DEFAULT also standardize the "compatibility" characters in Unicode, such as SUPERSCRIPT THREE to the standard forms (in this case DIGIT THREE). Formatting information may be lost but for most text operations such characters should be considered the same
+ * @G_NORMALIZE_NFKD: another name for %G_NORMALIZE_ALL
+ * @G_NORMALIZE_ALL_COMPOSE: like %G_NORMALIZE_ALL, but with composed forms rather than a maximally decomposed form
+ * @G_NORMALIZE_NFKC: another name for %G_NORMALIZE_ALL_COMPOSE
+ *
+ * Defines how a Unicode string is transformed in a canonical
+ * form, standardizing such issues as whether a character with
+ * an accent is represented as a base character and combining
+ * accent or as a single precomposed character. Unicode strings
+ * should generally be normalized before comparing them.
+ */
+
+
+/**
  * GObject:
  *
  * All the fields in the <structname>GObject</structname> structure are private
@@ -4285,7 +4356,7 @@
 /**
  * GParamSpec:
  * @g_type_instance: private #GTypeInstance portion
- * @name: name of this parameter
+ * @name: name of this parameter: always an interned string
  * @flags: #GParamFlags flags for this parameter
  * @value_type: the #GValue type for this parameter
  * @owner_type: #GType type that uses (introduces) this parameter
@@ -4741,6 +4812,15 @@
 
 
 /**
+ * GPrintFunc:
+ * @string: the message to output
+ *
+ * Specifies the type of the print handler functions.
+ * These are called with the complete formatted string to output.
+ */
+
+
+/**
  * GProxy:
  *
  * Interface that handles proxy connection and payload.
@@ -4784,6 +4864,17 @@
  * GProxyResolver:
  *
  * Interface that can be used to resolve proxy address.
+ */
+
+
+/**
+ * GQueue:
+ * @head: a pointer to the first element of the queue
+ * @tail: a pointer to the last element of the queue
+ * @length: the number of elements in the queue
+ *
+ * Contains the public fields of a
+ * <link linkend="glib-Double-ended-Queues">Queue</link>.
  */
 
 
@@ -5253,16 +5344,6 @@
 
 
 /**
- * GSimpleAction:
- *
- * The <structname>GSimpleAction</structname> structure contains private
- * data and should only be accessed using the provided API
- *
- * Since: 2.28
- */
-
-
-/**
  * GSimpleAction::activate:
  * @simple: the #GSimpleAction
  * @parameter: (allow-none): the parameter to the activation
@@ -5275,11 +5356,47 @@
 
 
 /**
+ * GSimpleAction::change-state:
+ * @simple: the #GSimpleAction
+ * @value: (allow-none): the requested value for the state
+ *
+ * Indicates that the action just received a request to change its
+ * state.
+ * an incorrect type was given, no signal will be emitted.
+ * If no handler is connected to this signal then the default
+ * behaviour is to call g_simple_action_set_state() to set the state
+ * to the requested value.  If you connect a signal handler then no
+ * default action is taken.  If the state should change then you must
+ * call g_simple_action_set_state() from the handler.
+ * <example>
+ * <title>Example 'change-state' handler</title>
+ * <programlisting>
+ * static void
+ * change_volume_state (GSimpleAction *action,
+ * GVariant      *value,
+ * gpointer       user_data)
+ * {
+ * gint requested;
+ * requested = g_variant_get_int32 (value);
+ * // Volume only goes from 0 to 10
+ * if (0 <= requested && requested <= 10)
+ * g_simple_action_set_state (action, value);
+ * }
+ * </programlisting>
+ * </example>
+ * The handler need not set the state to the requested value.  It
+ * could set it to any value at all, or take some other action.
+ *
+ * Since: 2.30
+ */
+
+
+/**
  * GSimpleAction:enabled:
  *
  * If @action is currently enabled.
  * If the action is disabled then calls to g_simple_action_activate() and
- * g_simple_action_set_state() have no effect.
+ * g_simple_action_change_state() have no effect.
  *
  * Since: 2.28
  */
@@ -5319,16 +5436,6 @@
  *
  * The #GVariantType of the state that the action has, or %NULL if the
  * action is stateless.
- *
- * Since: 2.28
- */
-
-
-/**
- * GSimpleActionClass:
- * @activate: the class closure for the activate signal
- *
- *
  *
  * Since: 2.28
  */
@@ -5647,9 +5754,83 @@
 
 
 /**
+ * GSpawnChildSetupFunc:
+ * @user_data: user data to pass to the function.
+ *
+ * Specifies the type of the setup function passed to g_spawn_async(),
+ * g_spawn_sync() and g_spawn_async_with_pipes(). On POSIX platforms it
+ * is called in the child after GLib has performed all the setup it plans
+ * to perform but before calling exec(). On POSIX actions taken in this
+ * function will thus only affect the child, not the parent.
+ * Note that POSIX allows only async-signal-safe functions (see signal(7))
+ * to be called in the child between fork() and exec(), which drastically
+ * limits the usefulness of child setup functions.
+ * Also note that modifying the environment from the child setup function
+ * may not have the intended effect, since it will get overridden by
+ * a non-%NULL @env argument to the <literal>g_spawn...</literal> functions.
+ * On Windows the function is called in the parent. Its usefulness on
+ * Windows is thus questionable. In many cases executing the child setup
+ * function in the parent can have ill effects, and you should be very
+ * careful when porting software to Windows that uses child setup
+ * functions.
+ */
+
+
+/**
+ * GSpawnError:
+ * @G_SPAWN_ERROR_FORK: Fork failed due to lack of memory.
+ * @G_SPAWN_ERROR_READ: Read or select on pipes failed.
+ * @G_SPAWN_ERROR_CHDIR: Changing to working directory failed.
+ * @G_SPAWN_ERROR_ACCES: execv() returned %EACCES.
+ * @G_SPAWN_ERROR_PERM: execv() returned %EPERM.
+ * @G_SPAWN_ERROR_2BIG: execv() returned %E2BIG.
+ * @G_SPAWN_ERROR_NOEXEC: execv() returned %ENOEXEC.
+ * @G_SPAWN_ERROR_NAMETOOLONG: execv() returned %ENAMETOOLONG.
+ * @G_SPAWN_ERROR_NOENT: execv() returned %ENOENT.
+ * @G_SPAWN_ERROR_NOMEM: execv() returned %ENOMEM.
+ * @G_SPAWN_ERROR_NOTDIR: execv() returned %ENOTDIR.
+ * @G_SPAWN_ERROR_LOOP: execv() returned %ELOOP.
+ * @G_SPAWN_ERROR_TXTBUSY: execv() returned %ETXTBUSY.
+ * @G_SPAWN_ERROR_IO: execv() returned %EIO.
+ * @G_SPAWN_ERROR_NFILE: execv() returned %ENFILE.
+ * @G_SPAWN_ERROR_MFILE: execv() returned %EMFILE.
+ * @G_SPAWN_ERROR_INVAL: execv() returned %EINVAL.
+ * @G_SPAWN_ERROR_ISDIR: execv() returned %EISDIR.
+ * @G_SPAWN_ERROR_LIBBAD: execv() returned %ELIBBAD.
+ * @G_SPAWN_ERROR_FAILED: Some other fatal failure, <literal>error-&gt;message</literal> should explain.
+ *
+ * Error codes returned by spawning processes.
+ */
+
+
+/**
+ * GSpawnFlags:
+ * @G_SPAWN_LEAVE_DESCRIPTORS_OPEN: the parent's open file descriptors will be inherited by the child; otherwise all descriptors except stdin/stdout/stderr will be closed before calling exec() in the child.
+ * @G_SPAWN_DO_NOT_REAP_CHILD: the child will not be automatically reaped; you must use g_child_watch_add() yourself (or call waitpid() or handle <literal>SIGCHLD</literal> yourself), or the child will become a zombie.
+ * @G_SPAWN_SEARCH_PATH: <literal>argv[0]</literal> need not be an absolute path, it will be looked for in the user's <envar>PATH</envar>.
+ * @G_SPAWN_STDOUT_TO_DEV_NULL: the child's standard output will be discarded, instead of going to the same location as the parent's standard output.
+ * @G_SPAWN_STDERR_TO_DEV_NULL: the child's standard error will be discarded.
+ * @G_SPAWN_CHILD_INHERITS_STDIN: the child will inherit the parent's standard input (by default, the child's standard input is attached to <filename>/dev/null</filename>).
+ * @G_SPAWN_FILE_AND_ARGV_ZERO: the first element of <literal>argv</literal> is the file to execute, while the remaining elements are the actual argument vector to pass to the file. Normally g_spawn_async_with_pipes() uses <literal>argv[0]</literal> as the file to execute, and passes all of <literal>argv</literal> to the child.
+ *
+ * Flags passed to g_spawn_sync(), g_spawn_async() and g_spawn_async_with_pipes().
+ */
+
+
+/**
  * GSrvTarget:
  *
  * A single target host/port that a network service is running on.
+ */
+
+
+/**
+ * GString:
+ * @str: points to the character data. It may move as text is added. The @str field is null-terminated and so can be used as an ordinary C string.
+ * @len: contains the length of the string, not including the terminating nul byte.
+ * @allocated_len: the number of bytes that can be stored in the string before it needs to be reallocated. May be larger than @len.
+ *
+ * The #GString struct contains the public fields of a #GString.
  */
 
 
@@ -6433,6 +6614,196 @@
 
 
 /**
+ * GUnicodeBreakType:
+ * @G_UNICODE_BREAK_MANDATORY: Mandatory Break (BK)
+ * @G_UNICODE_BREAK_CARRIAGE_RETURN: Carriage Return (CR)
+ * @G_UNICODE_BREAK_LINE_FEED: Line Feed (LF)
+ * @G_UNICODE_BREAK_COMBINING_MARK: Attached Characters and Combining Marks (CM)
+ * @G_UNICODE_BREAK_SURROGATE: Surrogates (SG)
+ * @G_UNICODE_BREAK_ZERO_WIDTH_SPACE: Zero Width Space (ZW)
+ * @G_UNICODE_BREAK_INSEPARABLE: Inseparable (IN)
+ * @G_UNICODE_BREAK_NON_BREAKING_GLUE: Non-breaking ("Glue") (GL)
+ * @G_UNICODE_BREAK_CONTINGENT: Contingent Break Opportunity (CB)
+ * @G_UNICODE_BREAK_SPACE: Space (SP)
+ * @G_UNICODE_BREAK_AFTER: Break Opportunity After (BA)
+ * @G_UNICODE_BREAK_BEFORE: Break Opportunity Before (BB)
+ * @G_UNICODE_BREAK_BEFORE_AND_AFTER: Break Opportunity Before and After (B2)
+ * @G_UNICODE_BREAK_HYPHEN: Hyphen (HY)
+ * @G_UNICODE_BREAK_NON_STARTER: Nonstarter (NS)
+ * @G_UNICODE_BREAK_OPEN_PUNCTUATION: Opening Punctuation (OP)
+ * @G_UNICODE_BREAK_CLOSE_PUNCTUATION: Closing Punctuation (CL)
+ * @G_UNICODE_BREAK_QUOTATION: Ambiguous Quotation (QU)
+ * @G_UNICODE_BREAK_EXCLAMATION: Exclamation/Interrogation (EX)
+ * @G_UNICODE_BREAK_IDEOGRAPHIC: Ideographic (ID)
+ * @G_UNICODE_BREAK_NUMERIC: Numeric (NU)
+ * @G_UNICODE_BREAK_INFIX_SEPARATOR: Infix Separator (Numeric) (IS)
+ * @G_UNICODE_BREAK_SYMBOL: Symbols Allowing Break After (SY)
+ * @G_UNICODE_BREAK_ALPHABETIC: Ordinary Alphabetic and Symbol Characters (AL)
+ * @G_UNICODE_BREAK_PREFIX: Prefix (Numeric) (PR)
+ * @G_UNICODE_BREAK_POSTFIX: Postfix (Numeric) (PO)
+ * @G_UNICODE_BREAK_COMPLEX_CONTEXT: Complex Content Dependent (South East Asian) (SA)
+ * @G_UNICODE_BREAK_AMBIGUOUS: Ambiguous (Alphabetic or Ideographic) (AI)
+ * @G_UNICODE_BREAK_UNKNOWN: Unknown (XX)
+ * @G_UNICODE_BREAK_NEXT_LINE: Next Line (NL)
+ * @G_UNICODE_BREAK_WORD_JOINER: Word Joiner (WJ)
+ * @G_UNICODE_BREAK_HANGUL_L_JAMO: Hangul L Jamo (JL)
+ * @G_UNICODE_BREAK_HANGUL_V_JAMO: Hangul V Jamo (JV)
+ * @G_UNICODE_BREAK_HANGUL_T_JAMO: Hangul T Jamo (JT)
+ * @G_UNICODE_BREAK_HANGUL_LV_SYLLABLE: Hangul LV Syllable (H2)
+ * @G_UNICODE_BREAK_HANGUL_LVT_SYLLABLE: Hangul LVT Syllable (H3)
+ * @G_UNICODE_BREAK_CLOSE_PARANTHESIS: Closing Parenthesis (CP). Since 2.28
+ *
+ * These are the possible line break classifications.
+ * The five Hangul types were added in Unicode 4.1, so, has been
+ * introduced in GLib 2.10. Note that new types may be added in the future.
+ * Applications should be ready to handle unknown values.
+ * They may be regarded as %G_UNICODE_BREAK_UNKNOWN.
+ * See <ulink url="http://www.unicode.org/unicode/reports/tr14/">http://www.unicode.org/unicode/reports/tr14/</ulink>.
+ */
+
+
+/**
+ * GUnicodeScript:
+ * @G_UNICODE_SCRIPT_COMMON: a character used by multiple different scripts
+ * @G_UNICODE_SCRIPT_INHERITED: a mark glyph that takes its script from the i                             base glyph to which it is attached
+ * @G_UNICODE_SCRIPT_ARABIC: Arabic
+ * @G_UNICODE_SCRIPT_ARMENIAN: Armenian
+ * @G_UNICODE_SCRIPT_BENGALI: Bengali
+ * @G_UNICODE_SCRIPT_BOPOMOFO: Bopomofo
+ * @G_UNICODE_SCRIPT_CHEROKEE: Cherokee
+ * @G_UNICODE_SCRIPT_COPTIC: Coptic
+ * @G_UNICODE_SCRIPT_CYRILLIC: Cyrillic
+ * @G_UNICODE_SCRIPT_DESERET: Deseret
+ * @G_UNICODE_SCRIPT_DEVANAGARI: Devanagari
+ * @G_UNICODE_SCRIPT_ETHIOPIC: Ethiopic
+ * @G_UNICODE_SCRIPT_GEORGIAN: Georgian
+ * @G_UNICODE_SCRIPT_GOTHIC: Gothic
+ * @G_UNICODE_SCRIPT_GREEK: Greek
+ * @G_UNICODE_SCRIPT_GUJARATI: Gujarati
+ * @G_UNICODE_SCRIPT_GURMUKHI: Gurmukhi
+ * @G_UNICODE_SCRIPT_HAN: Han
+ * @G_UNICODE_SCRIPT_HANGUL: Hangul
+ * @G_UNICODE_SCRIPT_HEBREW: Hebrew
+ * @G_UNICODE_SCRIPT_HIRAGANA: Hiragana
+ * @G_UNICODE_SCRIPT_KANNADA: Kannada
+ * @G_UNICODE_SCRIPT_KATAKANA: Katakana
+ * @G_UNICODE_SCRIPT_KHMER: Khmer
+ * @G_UNICODE_SCRIPT_LAO: Lao
+ * @G_UNICODE_SCRIPT_LATIN: Latin
+ * @G_UNICODE_SCRIPT_MALAYALAM: Malayalam
+ * @G_UNICODE_SCRIPT_MONGOLIAN: Mongolian
+ * @G_UNICODE_SCRIPT_MYANMAR: Myanmar
+ * @G_UNICODE_SCRIPT_OGHAM: Ogham
+ * @G_UNICODE_SCRIPT_OLD_ITALIC: Old Italic
+ * @G_UNICODE_SCRIPT_ORIYA: Oriya
+ * @G_UNICODE_SCRIPT_RUNIC: Runic
+ * @G_UNICODE_SCRIPT_SINHALA: Sinhala
+ * @G_UNICODE_SCRIPT_SYRIAC: Syriac
+ * @G_UNICODE_SCRIPT_TAMIL: Tamil
+ * @G_UNICODE_SCRIPT_TELUGU: Telugu
+ * @G_UNICODE_SCRIPT_THAANA: Thaana
+ * @G_UNICODE_SCRIPT_THAI: Thai
+ * @G_UNICODE_SCRIPT_TIBETAN: Tibetan Canadian Aboriginal
+ * @G_UNICODE_SCRIPT_YI: Yi
+ * @G_UNICODE_SCRIPT_TAGALOG: Tagalog
+ * @G_UNICODE_SCRIPT_HANUNOO: Hanunoo
+ * @G_UNICODE_SCRIPT_BUHID: Buhid
+ * @G_UNICODE_SCRIPT_TAGBANWA: Tagbanwa
+ * @G_UNICODE_SCRIPT_BRAILLE: Braille
+ * @G_UNICODE_SCRIPT_CYPRIOT: Cypriot
+ * @G_UNICODE_SCRIPT_LIMBU: Limbu
+ * @G_UNICODE_SCRIPT_OSMANYA: Osmanya
+ * @G_UNICODE_SCRIPT_SHAVIAN: Shavian
+ * @G_UNICODE_SCRIPT_LINEAR_B: Linear B
+ * @G_UNICODE_SCRIPT_TAI_LE: Tai Le
+ * @G_UNICODE_SCRIPT_UGARITIC: Ugaritic New Tai Lue
+ * @G_UNICODE_SCRIPT_BUGINESE: Buginese
+ * @G_UNICODE_SCRIPT_GLAGOLITIC: Glagolitic
+ * @G_UNICODE_SCRIPT_TIFINAGH: Tifinagh Syloti Nagri Old Persian
+ * @G_UNICODE_SCRIPT_KHAROSHTHI: Kharoshthi
+ * @G_UNICODE_SCRIPT_UNKNOWN: an unassigned code point
+ * @G_UNICODE_SCRIPT_BALINESE: Balinese
+ * @G_UNICODE_SCRIPT_CUNEIFORM: Cuneiform
+ * @G_UNICODE_SCRIPT_PHOENICIAN: Phoenician
+ * @G_UNICODE_SCRIPT_PHAGS_PA: Phags-pa
+ * @G_UNICODE_SCRIPT_NKO: N'Ko
+ * @G_UNICODE_SCRIPT_KAYAH_LI: Kayah Li. Since 2.16.3
+ * @G_UNICODE_SCRIPT_LEPCHA: Lepcha. Since 2.16.3
+ * @G_UNICODE_SCRIPT_REJANG: Rejang. Since 2.16.3
+ * @G_UNICODE_SCRIPT_SUNDANESE: Sundanese. Since 2.16.3
+ * @G_UNICODE_SCRIPT_SAURASHTRA: Saurashtra. Since 2.16.3
+ * @G_UNICODE_SCRIPT_CHAM: Cham. Since 2.16.3
+ * @G_UNICODE_SCRIPT_OL_CHIKI: Ol Chiki. Since 2.16.3
+ * @G_UNICODE_SCRIPT_VAI: Vai. Since 2.16.3
+ * @G_UNICODE_SCRIPT_CARIAN: Carian. Since 2.16.3
+ * @G_UNICODE_SCRIPT_LYCIAN: Lycian. Since 2.16.3
+ * @G_UNICODE_SCRIPT_LYDIAN: Lydian. Since 2.16.3
+ * @G_UNICODE_SCRIPT_AVESTAN: Avestan. Since 2.26
+ * @G_UNICODE_SCRIPT_BAMUM: Bamum. Since 2.26 Egyptian Hieroglpyhs. Since 2.26 Imperial Aramaic. Since 2.26 Inscriptional Pahlavi. Since 2.26 Inscriptional Parthian. Since 2.26
+ * @G_UNICODE_SCRIPT_JAVANESE: Javanese. Since 2.26
+ * @G_UNICODE_SCRIPT_KAITHI: Kaithi. Since 2.26
+ * @G_UNICODE_SCRIPT_LISU: Lisu. Since 2.26 Meetei Mayek. Since 2.26 Old South Arabian. Since 2.26
+ * @G_UNICODE_SCRIPT_OLD_TURKIC: Old Turkic. Since 2.28
+ * @G_UNICODE_SCRIPT_SAMARITAN: Samaritan. Since 2.26
+ * @G_UNICODE_SCRIPT_TAI_THAM: Tai Tham. Since 2.26
+ * @G_UNICODE_SCRIPT_TAI_VIET: Tai Viet. Since 2.26
+ * @G_UNICODE_SCRIPT_BATAK: Batak. Since 2.28
+ * @G_UNICODE_SCRIPT_BRAHMI: Brahmi. Since 2.28
+ * @G_UNICODE_SCRIPT_MANDAIC: Mandaic. Since 2.28
+ *
+ * a value never returned from g_unichar_get_script()
+ * The #GUnicodeScript enumeration identifies different writing
+ * systems. The values correspond to the names as defined in the
+ * Unicode standard. The enumeration has been added in GLib 2.14,
+ * and is interchangeable with #PangoScript.
+ * Note that new types may be added in the future. Applications
+ * should be ready to handle unknown values.
+ * See <ulink
+ * url="http://www.unicode.org/reports/tr24/">Unicode Standard Annex
+ * #24: Script names</ulink>.
+ */
+
+
+/**
+ * GUnicodeType:
+ * @G_UNICODE_CONTROL: General category "Other, Control" (Cc)
+ * @G_UNICODE_FORMAT: General category "Other, Format" (Cf)
+ * @G_UNICODE_UNASSIGNED: General category "Other, Not Assigned" (Cn)
+ * @G_UNICODE_PRIVATE_USE: General category "Other, Private Use" (Co)
+ * @G_UNICODE_SURROGATE: General category "Other, Surrogate" (Cs)
+ * @G_UNICODE_LOWERCASE_LETTER: General category "Letter, Lowercase" (Ll)
+ * @G_UNICODE_MODIFIER_LETTER: General category "Letter, Modifier" (Lm)
+ * @G_UNICODE_OTHER_LETTER: General category "Letter, Other" (Lo)
+ * @G_UNICODE_TITLECASE_LETTER: General category "Letter, Titlecase" (Lt)
+ * @G_UNICODE_UPPERCASE_LETTER: General category "Letter, Uppercase" (Lu)
+ * @G_UNICODE_SPACING_MARK: General category "Mark, Spacing" (Mc)
+ * @G_UNICODE_ENCLOSING_MARK: General category "Mark, Enclosing" (Me)
+ * @G_UNICODE_NON_SPACING_MARK: General category "Mark, Nonspacing" (Mn)
+ * @G_UNICODE_DECIMAL_NUMBER: General category "Number, Decimal Digit" (Nd)
+ * @G_UNICODE_LETTER_NUMBER: General category "Number, Letter" (Nl)
+ * @G_UNICODE_OTHER_NUMBER: General category "Number, Other" (No)
+ * @G_UNICODE_CONNECT_PUNCTUATION: General category "Punctuation, Connector" (Pc)
+ * @G_UNICODE_DASH_PUNCTUATION: General category "Punctuation, Dash" (Pd)
+ * @G_UNICODE_CLOSE_PUNCTUATION: General category "Punctuation, Close" (Pe)
+ * @G_UNICODE_FINAL_PUNCTUATION: General category "Punctuation, Final quote" (Pf)
+ * @G_UNICODE_INITIAL_PUNCTUATION: General category "Punctuation, Initial quote" (Pi)
+ * @G_UNICODE_OTHER_PUNCTUATION: General category "Punctuation, Other" (Po)
+ * @G_UNICODE_OPEN_PUNCTUATION: General category "Punctuation, Open" (Ps)
+ * @G_UNICODE_CURRENCY_SYMBOL: General category "Symbol, Currency" (Sc)
+ * @G_UNICODE_MODIFIER_SYMBOL: General category "Symbol, Modifier" (Sk)
+ * @G_UNICODE_MATH_SYMBOL: General category "Symbol, Math" (Sm)
+ * @G_UNICODE_OTHER_SYMBOL: General category "Symbol, Other" (So)
+ * @G_UNICODE_LINE_SEPARATOR: General category "Separator, Line" (Zl)
+ * @G_UNICODE_PARAGRAPH_SEPARATOR: General category "Separator, Paragraph" (Zp)
+ * @G_UNICODE_SPACE_SEPARATOR: General category "Separator, Space" (Zs)
+ *
+ * These are the possible character classifications from the
+ * Unicode specification.
+ * See <ulink url="http://www.unicode.org/Public/UNIDATA/UnicodeData.html">http://www.unicode.org/Public/UNIDATA/UnicodeData.html</ulink>.
+ */
+
+
+/**
  * GUnixCredentialsMessage:credentials:
  *
  * The credentials stored in the message.
@@ -6894,6 +7265,15 @@
  * Error domain for bookmark file parsing.
  * Errors in this domain will be from the #GBookmarkFileError
  * enumeration. See #GError for information on error domains.
+ */
+
+
+/**
+ * G_BREAKPOINT:
+ *
+ * Inserts a breakpoint instruction into the code.
+ * On x86 and alpha systems this is implemented as a soft interrupt
+ * and on other architectures it raises a %SIGTRAP signal.
  */
 
 
@@ -8910,6 +9290,21 @@
 
 
 /**
+ * G_QUEUE_INIT:
+ *
+ * A statically-allocated #GQueue must be initialized with this
+ * macro before it can be used. This macro can be used to initialize
+ * a variable, but it cannot be assigned to a variable. In that case
+ * you have to use g_queue_init().
+ * |[
+ * GQueue my_queue = G_QUEUE_INIT;
+ * ]|
+ *
+ * Since: 2.14
+ */
+
+
+/**
  * G_REGEX_ERROR:
  *
  * Error domain for regular expressions. Errors in this domain will be
@@ -8969,6 +9364,15 @@
  * G_TYPE_NONE, 1,
  * GTK_TYPE_REQUISITION | G_SIGNAL_TYPE_STATIC_SCOPE);
  * ]|
+ */
+
+
+/**
+ * G_SPAWN_ERROR:
+ *
+ * Error domain for spawning processes. Errors in this domain will
+ * be from the #GSpawnError enumeration. See #GError for information on
+ * error domains.
  */
 
 
@@ -9679,6 +10083,15 @@
 
 
 /**
+ * G_TYPE_MATCH_INFO:
+ *
+ * The #GType for a boxed type holding a #GMatchInfo reference.
+ *
+ * Since: 2.30
+ */
+
+
+/**
  * G_TYPE_NONE:
  *
  * A fundamental type which is used as a replacement for the C
@@ -10039,6 +10452,15 @@
  * The #GType for a boxed type holding a #GVariantType.
  *
  * Since: 2.24
+ */
+
+
+/**
+ * G_UNICODE_COMBINING_MARK:
+ *
+ * Older name for %G_UNICODE_SPACING_MARK.
+ *
+ * Deprecated: 2.30: Use %G_UNICODE_SPACING_MARK.
  */
 
 
@@ -10471,6 +10893,13 @@
 
 
 /**
+ * G_VARIANT_TYPE_OBJECT_PATH_ARRAY:
+ *
+ * The type of an array of object paths.
+ */
+
+
+/**
  * G_VARIANT_TYPE_SIGNATURE:
  *
  * The type of a D-Bus type signature.  These are strings of a specific
@@ -10662,7 +11091,7 @@
  * %NULL).  The correct type for the parameter is determined by a static
  * parameter type (which is given at construction time).
  * An action may optionally have a state, in which case the state may be
- * set with g_action_set_state().  This call takes a #GVariant.  The
+ * set with g_action_change_state().  This call takes a #GVariant.  The
  * correct type for the state is determined by a static state type
  * (which is given at construction time).
  * The state may have a hint associated with it, specifying its valid
@@ -10674,8 +11103,8 @@
  * name of the action, the parameter type, the enabled state, the
  * optional state type and the state and emitting the appropriate
  * signals when these change.  The implementor responsible for filtering
- * calls to g_action_activate() and g_action_set_state() for type safety
- * and for the state being enabled.
+ * calls to g_action_activate() and g_action_change_state() for type
+ * safety and for the state being enabled.
  * Probably the only useful thing to do with a #GAction is to put it
  * inside of a #GSimpleActionGroup.
  */
@@ -11064,9 +11493,11 @@
  * "enumerate children" operation). If the result or error status of the
  * operation is not needed, there is no need to call the "_finish()"
  * function; GIO will take care of cleaning up the result and error
- * information after the #GAsyncReadyCallback returns. Applications may
- * also take a reference to the #GAsyncResult and call "_finish()"
- * later; however, the "_finish()" function may be called at most once.
+ * information after the #GAsyncReadyCallback returns. You can pass
+ * %NULL for the #GAsyncReadyCallback if you don't need to take any
+ * action at all after the operation completes. Applications may also
+ * take a reference to the #GAsyncResult and call "_finish()" later;
+ * however, the "_finish()" function may be called at most once.
  * Example of a typical asynchronous operation flow:
  * |[
  * void _theoretical_frobnitz_async (Theoretical         *t,
@@ -12633,8 +13064,7 @@
  * values as #GVariant, and allows any #GVariantType for keys. Key names
  * are restricted to lowercase characters, numbers and '-'. Furthermore,
  * the names must begin with a lowercase character, must not end
- * with a '-', and must not contain consecutive dashes. Key names can
- * be up to 32 characters long.
+ * with a '-', and must not contain consecutive dashes.
  * Similar to GConf, the default values in GSettings schemas can be
  * localized, but the localized values are stored in gettext catalogs
  * and looked up with the domain that is specified in the
@@ -12804,7 +13234,7 @@
  * @title: GSimpleAction
  * @short_description: A simple GSimpleAction
  *
- * A #GSimpleAction is the obvious simple implementation of the #GSimpleAction
+ * A #GSimpleAction is the obvious simple implementation of the #GAction
  * interface.  This is the easiest way to create an action for purposes of
  * adding it to a #GSimpleActionGroup.
  * See also #GtkAction.
@@ -13769,6 +14199,23 @@
 
 
 /**
+ * g_action_change_state:
+ * @action: a #GAction
+ * @value: the new state
+ *
+ * Request for the state of @action to be changed to @value.
+ * The action must be stateful and @value must be of the correct type.
+ * See g_action_get_state_type().
+ * This call merely requests a change.  The action may refuse to change
+ * its state or may change its state to something other than @value.
+ * See g_action_get_state_hint().
+ * If the @value GVariant is floating, it is consumed.
+ *
+ * Since: 2.30
+ */
+
+
+/**
  * g_action_get_enabled:
  * @action: a #GAction
  *
@@ -13854,12 +14301,12 @@
  * If the action is stateful (e.g. created with
  * g_simple_action_new_stateful()) then this function returns the
  * #GVariantType of the state.  This is the type of the initial value
- * given as the state. All calls to g_action_set_state() must give a
+ * given as the state. All calls to g_action_change_state() must give a
  * #GVariant of this type and g_action_get_state() will return a
  * #GVariant of the same type.
  * If the action is not stateful (e.g. created with g_simple_action_new())
  * then this function will return %NULL. In that case, g_action_get_state()
- * will return %NULL and you must not call g_action_set_state().
+ * will return %NULL and you must not call g_action_change_state().
  *
  * Returns: (allow-none): the state type, if the action is stateful
  * Since: 2.28
@@ -14073,23 +14520,6 @@
  * actions in the groupb
  *
  * Returns: (transfer full): a %NULL-terminated array of the names of the
- * Since: 2.28
- */
-
-
-/**
- * g_action_set_state:
- * @action: a #GAction
- * @value: the new state
- *
- * Request for the state of @action to be changed to @value.
- * The action must be stateful and @value must be of the correct type.
- * See g_action_get_state_type().
- * This call merely requests a change.  The action may refuse to change
- * its state or may change its state to something other than @value.
- * See g_action_get_state_hint().
- * If the @value GVariant is floating, it is consumed.
- *
  * Since: 2.28
  */
 
@@ -14439,11 +14869,11 @@
  * @launch_context: (allow-none): a #GAppLaunchContext or %NULL
  * @error: a #GError
  *
- * Launches the application. Passes @uris to the launched application
+ * Launches the application. This passes the @uris to the launched application
  * as arguments, using the optional @launch_context to get information
  * about the details of the launcher (like what screen it is on).
  * On error, @error will be set accordingly.
- * To lauch the application without arguments pass a %NULL @uris list.
+ * To launch the application without arguments pass a %NULL @uris list.
  * Note that even if the launch is successful the application launched
  * can fail to start if it runs into problems during startup. There is
  * no way to detect this.
@@ -16512,15 +16942,19 @@
  * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  * @error: #GError for error reporting.
  *
- * Reads a line from the data input stream.
+ * Reads a line from the data input stream.  Note that no encoding
+ * checks or conversion is performed; the input is not guaranteed to
+ * be UTF-8, and may in fact have embedded NUL characters.
  * If @cancellable is not %NULL, then the operation can be cancelled by
  * triggering the cancellable object from another thread. If the operation
  * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned.
- * (without the newlines).  Set @length to a #gsize to get the
- * length of the read line.  On an error, it will return %NULL and
- * still return %NULL, but @error won't be set.
+ * NUL terminated byte array with the line that was read in (without
+ * the newlines).  Set @length to a #gsize to get the length of the
+ * read line.  On an error, it will return %NULL and @error will be
+ * set. If there's no content to read, it will still return %NULL,
+ * but @error won't be set.
  *
- * Returns: (transfer full): a string with the line that was read in
+ * Returns: (transfer full) (array zero-terminated=1) (element-type guint8): a
  */
 
 
@@ -16550,13 +16984,58 @@
  * @error: #GError for error reporting.
  *
  * Finish an asynchronous call started by
- * g_data_input_stream_read_line_async().
+ * g_data_input_stream_read_line_async().  Note the warning about
+ * string encoding in g_data_input_stream_read_line() applies here as
+ * well.
+ * NUL-terminated byte array with the line that was read in
  * (without the newlines).  Set @length to a #gsize to get the
  * length of the read line.  On an error, it will return %NULL and
  * still return %NULL, but @error won't be set.
  *
- * Returns: (transfer full): a string with the line that was read in
+ * Returns: (transfer full) (array zero-terminated=1) (element-type guint8): a
  * Since: 2.20
+ */
+
+
+/**
+ * g_data_input_stream_read_line_finish_utf8:
+ * @stream: a given #GDataInputStream.
+ * @result: the #GAsyncResult that was provided to the callback.
+ * @length: (out): a #gsize to get the length of the data read in.
+ * @error: #GError for error reporting.
+ *
+ * Finish an asynchronous call started by
+ * g_data_input_stream_read_line_async().
+ * (without the newlines).  Set @length to a #gsize to get the length
+ * of the read line.  On an error, it will return %NULL and @error
+ * will be set. For UTF-8 conversion errors, the set error domain is
+ * %G_CONVERT_ERROR.  If there's no content to read, it will still
+ * return %NULL, but @error won't be set.
+ *
+ * Returns: (transfer full): a string with the line that was read in
+ * Since: 2.30
+ */
+
+
+/**
+ * g_data_input_stream_read_line_utf8:
+ * @stream: a given #GDataInputStream.
+ * @length: (out): a #gsize to get the length of the data read in.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
+ * @error: #GError for error reporting.
+ *
+ * Reads a UTF-8 encoded line from the data input stream.
+ * If @cancellable is not %NULL, then the operation can be cancelled by
+ * triggering the cancellable object from another thread. If the operation
+ * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned.
+ * line that was read in (without the newlines).  Set @length to a
+ * #gsize to get the length of the read line.  On an error, it will
+ * return %NULL and @error will be set.  For UTF-8 conversion errors,
+ * the set error domain is %G_CONVERT_ERROR.  If there's no content to
+ * read, it will still return %NULL, but @error won't be set.
+ *
+ * Returns: (transfer full): a NUL terminated UTF-8 string with the
+ * Since: 2.30
  */
 
 
@@ -17205,6 +17684,69 @@
  *
  * Returns: %NULL if @error is set. Otherwise a #GVariant tuple with
  * Since: 2.26
+ */
+
+
+/**
+ * g_dbus_connection_call_with_unix_fd_list:
+ * @connection: A #GDBusConnection.
+ * @bus_name: (allow-none): A unique or well-known bus name or %NULL if
+ * @object_path: Path of remote object.
+ * @interface_name: D-Bus interface to invoke method on.
+ * @method_name: The name of the method to invoke.
+ * @parameters: (allow-none): A #GVariant tuple with parameters for the method or %NULL if not passing parameters.
+ * @reply_type: (allow-none): The expected type of the reply, or %NULL.
+ * @flags: Flags from the #GDBusCallFlags enumeration.
+ * @timeout_msec: The timeout in milliseconds, -1 to use the default timeout or %G_MAXINT for no timeout.
+ * @fd_list: (allow-none): A #GUnixFDList or %NULL.
+ * @cancellable: A #GCancellable or %NULL.
+ * @callback: (allow-none): A #GAsyncReadyCallback to call when the request is satisfied or %NULL if you don't * care about the result of the method invocation.
+ * @user_data: The data to pass to @callback.
+ *
+ * Like g_dbus_connection_call() but also takes a #GUnixFDList object.
+ * This method is only available on UNIX.
+ *
+ * Since: 2.30
+ */
+
+
+/**
+ * g_dbus_connection_call_with_unix_fd_list_finish:
+ * @connection: A #GDBusConnection.
+ * @out_fd_list: (out): Return location for a #GUnixFDList or %NULL.
+ * @res: A #GAsyncResult obtained from the #GAsyncReadyCallback passed to g_dbus_connection_call_with_unix_fd_list().
+ * @error: Return location for error or %NULL.
+ *
+ * Finishes an operation started with g_dbus_connection_call_with_unix_fd_list().
+ * return values. Free with g_variant_unref().
+ *
+ * Returns: %NULL if @error is set. Otherwise a #GVariant tuple with
+ * Since: 2.30
+ */
+
+
+/**
+ * g_dbus_connection_call_with_unix_fd_list_sync:
+ * @connection: A #GDBusConnection.
+ * @bus_name: A unique or well-known bus name.
+ * @object_path: Path of remote object.
+ * @interface_name: D-Bus interface to invoke method on.
+ * @method_name: The name of the method to invoke.
+ * @parameters: (allow-none): A #GVariant tuple with parameters for the method or %NULL if not passing parameters.
+ * @reply_type: (allow-none): The expected type of the reply, or %NULL.
+ * @flags: Flags from the #GDBusCallFlags enumeration.
+ * @timeout_msec: The timeout in milliseconds, -1 to use the default timeout or %G_MAXINT for no timeout.
+ * @fd_list: (allow-none): A #GUnixFDList or %NULL.
+ * @out_fd_list: (out): Return location for a #GUnixFDList or %NULL.
+ * @cancellable: A #GCancellable or %NULL.
+ * @error: Return location for error or %NULL.
+ *
+ * Like g_dbus_connection_call_sync() but also takes and returns #GUnixFDList objects.
+ * This method is only available on UNIX.
+ * return values. Free with g_variant_unref().
+ *
+ * Returns: %NULL if @error is set. Otherwise a #GVariant tuple with
+ * Since: 2.30
  */
 
 
@@ -18090,7 +18632,7 @@
  * </row>
  * <row>
  * <entry>#G_TYPE_STRV</entry>
- * <entry><link linkend="G-VARIANT-TYPE-STRING-ARRAY:CAPS">'as'</link> or <link linkend="G-VARIANT-TYPE-BYTESTRING-ARRAY:CAPS">'aay'</link></entry>
+ * <entry><link linkend="G-VARIANT-TYPE-STRING-ARRAY:CAPS">'as'</link>, <link linkend="G-VARIANT-TYPE-OBJECT-PATH-ARRAY:CAPS">'ao'</link> or <link linkend="G-VARIANT-TYPE-BYTESTRING-ARRAY:CAPS">'aay'</link></entry>
  * </row>
  * <row>
  * <entry>#G_TYPE_BOOLEAN</entry>
@@ -18115,10 +18657,6 @@
  * <row>
  * <entry>#G_TYPE_UINT64</entry>
  * <entry><link linkend="G-VARIANT-TYPE-UINT64:CAPS">'t'</link></entry>
- * </row>
- * <row>
- * <entry>#G_TYPE_INT</entry>
- * <entry><link linkend="G-VARIANT-TYPE-HANDLE:CAPS">'h'</link></entry>
  * </row>
  * <row>
  * <entry>#G_TYPE_DOUBLE</entry>
@@ -18241,7 +18779,7 @@
  * This cost of this function is O(n) in number of methods unless
  * g_dbus_interface_info_cache_build() has been used on @info.
  *
- * Returns: A #GDBusMethodInfo or %NULL if not found. Do not free, it is owned by @info.
+ * Returns: (transfer none): A #GDBusMethodInfo or %NULL if not found. Do not free, it is owned by @info.
  * Since: 2.26
  */
 
@@ -18255,7 +18793,7 @@
  * This cost of this function is O(n) in number of properties unless
  * g_dbus_interface_info_cache_build() has been used on @info.
  *
- * Returns: A #GDBusPropertyInfo or %NULL if not found. Do not free, it is owned by @info.
+ * Returns: (transfer none): A #GDBusPropertyInfo or %NULL if not found. Do not free, it is owned by @info.
  * Since: 2.26
  */
 
@@ -18269,7 +18807,7 @@
  * This cost of this function is O(n) in number of signals unless
  * g_dbus_interface_info_cache_build() has been used on @info.
  *
- * Returns: A #GDBusSignalInfo or %NULL if not found. Do not free, it is owned by @info.
+ * Returns: (transfer none): A #GDBusSignalInfo or %NULL if not found. Do not free, it is owned by @info.
  * Since: 2.26
  */
 
@@ -18395,7 +18933,7 @@
  *
  * Gets all D-Bus properties for @interface_.
  *
- * Returns: A new, floating, #GVariant of type <link linkend="G-VARIANT-TYPE-VARDICT:CAPS">'a{sv}'</link>. Free with g_variant_unref().
+ * Returns: (transfer full): A #GVariant of type <link linkend="G-VARIANT-TYPE-VARDICT:CAPS">'a{sv}'</link>. Free with g_variant_unref().
  * Since: 2.30
  */
 
@@ -19364,6 +19902,20 @@
 
 
 /**
+ * g_dbus_method_invocation_return_value_with_unix_fd_list:
+ * @invocation: (transfer full): A #GDBusMethodInvocation.
+ * @parameters: (allow-none): A #GVariant tuple with out parameters for the method or %NULL if not passing any parameters.
+ * @fd_list: (allow-none): A #GUnixFDList or %NULL.
+ *
+ * Like g_dbus_method_invocation_return_value() but also takes a #GUnixFDList.
+ * This method is only available on UNIX.
+ * This method will free @invocation, you cannot use it afterwards.
+ *
+ * Since: 2.30
+ */
+
+
+/**
  * g_dbus_method_invocation_take_error: (skip)
  * @invocation: (transfer full): A #GDBusMethodInvocation.
  * @error: (transfer full): A #GError.
@@ -20016,6 +20568,61 @@
 
 
 /**
+ * g_dbus_proxy_call_with_unix_fd_list:
+ * @proxy: A #GDBusProxy.
+ * @method_name: Name of method to invoke.
+ * @parameters: (allow-none): A #GVariant tuple with parameters for the signal or %NULL if not passing parameters.
+ * @flags: Flags from the #GDBusCallFlags enumeration.
+ * @timeout_msec: The timeout in milliseconds (with %G_MAXINT meaning "infinite") or -1 to use the proxy default timeout.
+ * @fd_list: (allow-none): A #GUnixFDList or %NULL.
+ * @cancellable: A #GCancellable or %NULL.
+ * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL if you don't care about the result of the method invocation.
+ * @user_data: The data to pass to @callback.
+ *
+ * Like g_dbus_proxy_call() but also takes a #GUnixFDList object.
+ * This method is only available on UNIX.
+ *
+ * Since: 2.30
+ */
+
+
+/**
+ * g_dbus_proxy_call_with_unix_fd_list_finish:
+ * @proxy: A #GDBusProxy.
+ * @out_fd_list: (out): Return location for a #GUnixFDList or %NULL.
+ * @res: A #GAsyncResult obtained from the #GAsyncReadyCallback passed to g_dbus_proxy_call_with_unix_fd_list().
+ * @error: Return location for error or %NULL.
+ *
+ * Finishes an operation started with g_dbus_proxy_call_with_unix_fd_list().
+ * return values. Free with g_variant_unref().
+ *
+ * Returns: %NULL if @error is set. Otherwise a #GVariant tuple with
+ * Since: 2.30
+ */
+
+
+/**
+ * g_dbus_proxy_call_with_unix_fd_list_sync:
+ * @proxy: A #GDBusProxy.
+ * @method_name: Name of method to invoke.
+ * @parameters: (allow-none): A #GVariant tuple with parameters for the signal or %NULL if not passing parameters.
+ * @flags: Flags from the #GDBusCallFlags enumeration.
+ * @timeout_msec: The timeout in milliseconds (with %G_MAXINT meaning "infinite") or -1 to use the proxy default timeout.
+ * @fd_list: (allow-none): A #GUnixFDList or %NULL.
+ * @out_fd_list: (out): Return location for a #GUnixFDList or %NULL.
+ * @cancellable: A #GCancellable or %NULL.
+ * @error: Return location for error or %NULL.
+ *
+ * Like g_dbus_proxy_call_sync() but also takes and returns #GUnixFDList objects.
+ * This method is only available on UNIX.
+ * return values. Free with g_variant_unref().
+ *
+ * Returns: %NULL if @error is set. Otherwise a #GVariant tuple with
+ * Since: 2.30
+ */
+
+
+/**
  * g_dbus_proxy_get_cached_property:
  * @proxy: A #GDBusProxy.
  * @property_name: Property name.
@@ -20499,6 +21106,19 @@
  * set to True.
  *
  * Returns: %TRUE if hidden, %FALSE otherwise.
+ */
+
+
+/**
+ * g_desktop_app_info_get_nodisplay:
+ * @info: a #GDesktopAppInfo
+ *
+ * Gets the value of the NoDisplay key, which helps determine if the
+ * application info should be shown in menus. See
+ * #G_KEY_FILE_DESKTOP_KEY_NO_DISPLAY and g_app_info_should_show().
+ *
+ * Returns: The value of the NoDisplay key
+ * Since: 2.30
  */
 
 
@@ -24008,6 +24628,8 @@
  * @error: a #GError, or %NULL
  *
  * Sets an attribute in the file with attribute name @attribute to @value.
+ * Some attributes can be unset by setting @attribute to
+ * %G_FILE_ATTRIBUTE_TYPE_INVALID and @value to %NULL.
  * If @cancellable is not %NULL, then the operation can be cancelled by
  * triggering the cancellable object from another thread. If the operation
  * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned.
@@ -26991,7 +27613,10 @@
  * @error: a #GError location to store the error occuring, or %NULL to ignore.
  *
  * Splices an input stream into an output stream.
- * -1 if an error occurred.
+ * -1 if an error occurred. Note that if the number of bytes
+ * spliced is greater than %G_MAXSSIZE, then that will be
+ * returned, and there is no way to determine the actual number
+ * of bytes spliced.
  *
  * Returns: a #gssize containing the size of the data spliced, or
  */
@@ -27023,8 +27648,11 @@
  * @error: a #GError location to store the error occuring, or %NULL to ignore.
  *
  * Finishes an asynchronous stream splice operation.
+ * number of bytes spliced is greater than %G_MAXSSIZE, then that
+ * will be returned, and there is no way to determine the actual
+ * number of bytes spliced.
  *
- * Returns: a #gssize of the number of bytes spliced.
+ * Returns: a #gssize of the number of bytes spliced. Note that if the
  */
 
 
@@ -29036,6 +29664,52 @@
 
 
 /**
+ * g_simple_action_group_add_entries:
+ * @simple: a #GSimpleActionGroup
+ * @entries: a pointer to the first item in an array of #GActionEntry structs
+ * @n_entries: the length of @entries, or -1
+ * @user_data: the user data for signal connections
+ *
+ * A convenience function for creating multiple #GSimpleAction instances
+ * and adding them to the action group.
+ * Each action is constructed as per one #GActionEntry.
+ * <example>
+ * <title>Using g_simple_action_group_add_entries()</title>
+ * <programlisting>
+ * static void
+ * activate_quit (GSimpleAction *simple,
+ * GVariant      *parameter,
+ * gpointer       user_data)
+ * {
+ * exit (0);
+ * }
+ * static void
+ * activate_print_string (GSimpleAction *simple,
+ * GVariant      *parameter,
+ * gpointer       user_data)
+ * {
+ * g_print ("%s\n", g_variant_get_string (parameter, NULL));
+ * }
+ * static GActionGroup *
+ * create_action_group (void)
+ * {
+ * const GActionEntry entries[] = {
+ * { "quit",         activate_quit              },
+ * { "print-string", activate_print_string, "s" }
+ * };
+ * GSimpleActionGroup *group;
+ * group = g_simple_action_group_new ();
+ * g_simple_action_group_add_entries (group, entries, G_N_ELEMENTS (entries), NULL);
+ * return G_ACTION_GROUP (group);
+ * }
+ * </programlisting>
+ * </example>
+ *
+ * Since: 2.30
+ */
+
+
+/**
  * g_simple_action_group_insert:
  * @simple: a #GSimpleActionGroup
  * @action: a #GAction
@@ -29119,8 +29793,26 @@
  * Sets the action as enabled or not.
  * An action must be enabled in order to be activated or in order to
  * have its state changed from outside callers.
+ * This should only be called by the implementor of the action.  Users
+ * of the action should not attempt to modify its enabled flag.
  *
  * Since: 2.28
+ */
+
+
+/**
+ * g_simple_action_set_state:
+ * @simple: a #GSimpleAction
+ * @value: the new #GVariant for the state
+ *
+ * Sets the state of the action.
+ * This directly updates the 'state' property to the given value.
+ * This should only be called by the implementor of the action.  Users
+ * of the action should not attempt to directly modify the 'state'
+ * property.  Instead, they should call g_action_change_state() to
+ * request the change.
+ *
+ * Since: 2.30
  */
 
 
@@ -33005,6 +33697,19 @@
 
 
 /**
+ * g_utf8_next_char:
+ * @p: Pointer to the start of a valid UTF-8 character
+ *
+ * Skips to the next character in a UTF-8 string. The string must be
+ * valid; this macro is as fast as possible, and has no error-checking.
+ * You would use this macro to iterate over a string character by
+ * character. The macro returns the start of the next UTF-8 character.
+ * Before using this macro, use g_utf8_validate() to validate strings
+ * that may contain invalid UTF-8.
+ */
+
+
+/**
  * g_vfs_get_default:
  *
  * Gets the default #GVfs for the system.
@@ -33439,6 +34144,25 @@
 
 
 /**
+ * g_warn_if_fail:
+ * @expr: the expression to check
+ *
+ * Logs a warning if the expression is not true.
+ *
+ * Since: 2.16
+ */
+
+
+/**
+ * g_warn_if_reached:
+ *
+ * Logs a critical warning.
+ *
+ * Since: 2.16
+ */
+
+
+/**
  * g_win32_input_stream_get_close_handle:
  * @stream: a #GWin32InputStream
  *
@@ -33623,6 +34347,47 @@
  * to handle @mime_type.
  *
  * Returns: a #GList containing the desktop ids which claim
+ */
+
+
+/**
+ * gunichar:
+ *
+ * A type which can hold any UTF-32 or UCS-4 character code,
+ * also known as a Unicode code point.
+ * If you want to produce the UTF-8 representation of a #gunichar,
+ * use g_ucs4_to_utf8(). See also g_utf8_to_ucs4() for the reverse
+ * process.
+ * To print/scan values of this type as integer, use
+ * %G_GINT32_MODIFIER and/or %G_GUINT32_FORMAT.
+ * The notation to express a Unicode code point in running text is
+ * as a hexadecimal number with four to six digits and uppercase
+ * letters, prefixed by the string "U+". Leading zeros are omitted,
+ * unless the code point would have fewer than four hexadecimal digits.
+ * For example, "U+0041 LATIN CAPITAL LETTER A". To print a code point
+ * in the U+-notation, use the format string "U+%04"G_GINT32_FORMAT"X".
+ * To scan, use the format string "U+%06"G_GINT32_FORMAT"X".
+ * |[
+ * gunichar c;
+ * sscanf ("U+0041", "U+%06"G_GINT32_FORMAT"X", &amp;c)
+ * g_print ("Read U+%04"G_GINT32_FORMAT"X", c);
+ * ]|
+ */
+
+
+/**
+ * gunichar2:
+ *
+ * A type which can hold any UTF-16 code
+ * point<footnote id="utf16_surrogate_pairs">UTF-16 also has so called
+ * <firstterm>surrogate pairs</firstterm> to encode characters beyond
+ * the BMP as pairs of 16bit numbers. Surrogate pairs cannot be stored
+ * in a single gunichar2 field, but all GLib functions accepting gunichar2
+ * arrays will correctly interpret surrogate pairs.</footnote>.
+ * To print/scan values of this type to/from text you need to convert
+ * to/from UTF-8, using g_utf16_to_utf8()/g_utf8_to_utf16().
+ * To print/scan values of this type as integer, use
+ * %G_GINT16_MODIFIER and/or %G_GUINT16_FORMAT.
  */
 
 

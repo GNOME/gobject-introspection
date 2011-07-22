@@ -449,6 +449,17 @@
 
 
 /**
+ * GError:
+ * @domain: error domain, e.g. #G_FILE_ERROR
+ * @code: error code, e.g. %G_FILE_ERROR_NOENT
+ * @message: human-readable informative error message
+ *
+ * The <structname>GError</structname> structure contains
+ * information about an error that has occurred.
+ */
+
+
+/**
  * GFlagsClass:
  * @g_type_class: the parent class
  * @mask: a mask covering all possible values.
@@ -555,6 +566,28 @@
 
 
 /**
+ * GLIB_CHECK_VERSION:
+ * @major: the major version to check for
+ * @minor: the minor version to check for
+ * @micro: the micro version to check for
+ *
+ * Checks the version of the GLib library that is being compiled
+ * against.
+ * <example>
+ * <title>Checking the version of the GLib library</title>
+ * <programlisting>
+ * if (!GLIB_CHECK_VERSION (1, 2, 0))
+ * g_error ("GLib version 1.2.0 or above is needed");
+ * </programlisting>
+ * </example>
+ * See glib_check_version() for a runtime check.
+ * is the same as or newer than the passed-in version.
+ *
+ * Returns: %TRUE if the version of the GLib header files
+ */
+
+
+/**
  * GMainContext:
  *
  * The <structname>GMainContext</structname> struct is an opaque data
@@ -634,6 +667,25 @@
  * A set of functions used to perform memory allocation. The same #GMemVTable must
  * be used for all allocations in the same program; a call to g_mem_set_vtable(),
  * if it exists, should be prior to any use of GLib.
+ */
+
+
+/**
+ * GNormalizeMode:
+ * @G_NORMALIZE_DEFAULT: standardize differences that do not affect the text content, such as the above-mentioned accent representation
+ * @G_NORMALIZE_NFD: another name for %G_NORMALIZE_DEFAULT
+ * @G_NORMALIZE_DEFAULT_COMPOSE: like %G_NORMALIZE_DEFAULT, but with composed forms rather than a maximally decomposed form
+ * @G_NORMALIZE_NFC: another name for %G_NORMALIZE_DEFAULT_COMPOSE
+ * @G_NORMALIZE_ALL: beyond %G_NORMALIZE_DEFAULT also standardize the "compatibility" characters in Unicode, such as SUPERSCRIPT THREE to the standard forms (in this case DIGIT THREE). Formatting information may be lost but for most text operations such characters should be considered the same
+ * @G_NORMALIZE_NFKD: another name for %G_NORMALIZE_ALL
+ * @G_NORMALIZE_ALL_COMPOSE: like %G_NORMALIZE_ALL, but with composed forms rather than a maximally decomposed form
+ * @G_NORMALIZE_NFKC: another name for %G_NORMALIZE_ALL_COMPOSE
+ *
+ * Defines how a Unicode string is transformed in a canonical
+ * form, standardizing such issues as whether a character with
+ * an accent is represented as a base character and combining
+ * accent or as a single precomposed character. Unicode strings
+ * should generally be normalized before comparing them.
  */
 
 
@@ -891,7 +943,7 @@
 /**
  * GParamSpec:
  * @g_type_instance: private #GTypeInstance portion
- * @name: name of this parameter
+ * @name: name of this parameter: always an interned string
  * @flags: #GParamFlags flags for this parameter
  * @value_type: the #GValue type for this parameter
  * @owner_type: #GType type that uses (introduces) this parameter
@@ -1240,6 +1292,26 @@
 
 
 /**
+ * GPrintFunc:
+ * @string: the message to output
+ *
+ * Specifies the type of the print handler functions.
+ * These are called with the complete formatted string to output.
+ */
+
+
+/**
+ * GQueue:
+ * @head: a pointer to the first element of the queue
+ * @tail: a pointer to the last element of the queue
+ * @length: the number of elements in the queue
+ *
+ * Contains the public fields of a
+ * <link linkend="glib-Double-ended-Queues">Queue</link>.
+ */
+
+
+/**
  * GRegex:
  *
  * A GRegex is the "compiled" form of a regular expression pattern. This
@@ -1524,6 +1596,80 @@
  * indicate that it doesn't mind how long the poll() call blocks. In the
  * check function, it tests the results of the poll() call to see if the
  * required condition has been met, and returns %TRUE if so.
+ */
+
+
+/**
+ * GSpawnChildSetupFunc:
+ * @user_data: user data to pass to the function.
+ *
+ * Specifies the type of the setup function passed to g_spawn_async(),
+ * g_spawn_sync() and g_spawn_async_with_pipes(). On POSIX platforms it
+ * is called in the child after GLib has performed all the setup it plans
+ * to perform but before calling exec(). On POSIX actions taken in this
+ * function will thus only affect the child, not the parent.
+ * Note that POSIX allows only async-signal-safe functions (see signal(7))
+ * to be called in the child between fork() and exec(), which drastically
+ * limits the usefulness of child setup functions.
+ * Also note that modifying the environment from the child setup function
+ * may not have the intended effect, since it will get overridden by
+ * a non-%NULL @env argument to the <literal>g_spawn...</literal> functions.
+ * On Windows the function is called in the parent. Its usefulness on
+ * Windows is thus questionable. In many cases executing the child setup
+ * function in the parent can have ill effects, and you should be very
+ * careful when porting software to Windows that uses child setup
+ * functions.
+ */
+
+
+/**
+ * GSpawnError:
+ * @G_SPAWN_ERROR_FORK: Fork failed due to lack of memory.
+ * @G_SPAWN_ERROR_READ: Read or select on pipes failed.
+ * @G_SPAWN_ERROR_CHDIR: Changing to working directory failed.
+ * @G_SPAWN_ERROR_ACCES: execv() returned %EACCES.
+ * @G_SPAWN_ERROR_PERM: execv() returned %EPERM.
+ * @G_SPAWN_ERROR_2BIG: execv() returned %E2BIG.
+ * @G_SPAWN_ERROR_NOEXEC: execv() returned %ENOEXEC.
+ * @G_SPAWN_ERROR_NAMETOOLONG: execv() returned %ENAMETOOLONG.
+ * @G_SPAWN_ERROR_NOENT: execv() returned %ENOENT.
+ * @G_SPAWN_ERROR_NOMEM: execv() returned %ENOMEM.
+ * @G_SPAWN_ERROR_NOTDIR: execv() returned %ENOTDIR.
+ * @G_SPAWN_ERROR_LOOP: execv() returned %ELOOP.
+ * @G_SPAWN_ERROR_TXTBUSY: execv() returned %ETXTBUSY.
+ * @G_SPAWN_ERROR_IO: execv() returned %EIO.
+ * @G_SPAWN_ERROR_NFILE: execv() returned %ENFILE.
+ * @G_SPAWN_ERROR_MFILE: execv() returned %EMFILE.
+ * @G_SPAWN_ERROR_INVAL: execv() returned %EINVAL.
+ * @G_SPAWN_ERROR_ISDIR: execv() returned %EISDIR.
+ * @G_SPAWN_ERROR_LIBBAD: execv() returned %ELIBBAD.
+ * @G_SPAWN_ERROR_FAILED: Some other fatal failure, <literal>error-&gt;message</literal> should explain.
+ *
+ * Error codes returned by spawning processes.
+ */
+
+
+/**
+ * GSpawnFlags:
+ * @G_SPAWN_LEAVE_DESCRIPTORS_OPEN: the parent's open file descriptors will be inherited by the child; otherwise all descriptors except stdin/stdout/stderr will be closed before calling exec() in the child.
+ * @G_SPAWN_DO_NOT_REAP_CHILD: the child will not be automatically reaped; you must use g_child_watch_add() yourself (or call waitpid() or handle <literal>SIGCHLD</literal> yourself), or the child will become a zombie.
+ * @G_SPAWN_SEARCH_PATH: <literal>argv[0]</literal> need not be an absolute path, it will be looked for in the user's <envar>PATH</envar>.
+ * @G_SPAWN_STDOUT_TO_DEV_NULL: the child's standard output will be discarded, instead of going to the same location as the parent's standard output.
+ * @G_SPAWN_STDERR_TO_DEV_NULL: the child's standard error will be discarded.
+ * @G_SPAWN_CHILD_INHERITS_STDIN: the child will inherit the parent's standard input (by default, the child's standard input is attached to <filename>/dev/null</filename>).
+ * @G_SPAWN_FILE_AND_ARGV_ZERO: the first element of <literal>argv</literal> is the file to execute, while the remaining elements are the actual argument vector to pass to the file. Normally g_spawn_async_with_pipes() uses <literal>argv[0]</literal> as the file to execute, and passes all of <literal>argv</literal> to the child.
+ *
+ * Flags passed to g_spawn_sync(), g_spawn_async() and g_spawn_async_with_pipes().
+ */
+
+
+/**
+ * GString:
+ * @str: points to the character data. It may move as text is added. The @str field is null-terminated and so can be used as an ordinary C string.
+ * @len: contains the length of the string, not including the terminating nul byte.
+ * @allocated_len: the number of bytes that can be stored in the string before it needs to be reallocated. May be larger than @len.
+ *
+ * The #GString struct contains the public fields of a #GString.
  */
 
 
@@ -1846,6 +1992,196 @@
 
 
 /**
+ * GUnicodeBreakType:
+ * @G_UNICODE_BREAK_MANDATORY: Mandatory Break (BK)
+ * @G_UNICODE_BREAK_CARRIAGE_RETURN: Carriage Return (CR)
+ * @G_UNICODE_BREAK_LINE_FEED: Line Feed (LF)
+ * @G_UNICODE_BREAK_COMBINING_MARK: Attached Characters and Combining Marks (CM)
+ * @G_UNICODE_BREAK_SURROGATE: Surrogates (SG)
+ * @G_UNICODE_BREAK_ZERO_WIDTH_SPACE: Zero Width Space (ZW)
+ * @G_UNICODE_BREAK_INSEPARABLE: Inseparable (IN)
+ * @G_UNICODE_BREAK_NON_BREAKING_GLUE: Non-breaking ("Glue") (GL)
+ * @G_UNICODE_BREAK_CONTINGENT: Contingent Break Opportunity (CB)
+ * @G_UNICODE_BREAK_SPACE: Space (SP)
+ * @G_UNICODE_BREAK_AFTER: Break Opportunity After (BA)
+ * @G_UNICODE_BREAK_BEFORE: Break Opportunity Before (BB)
+ * @G_UNICODE_BREAK_BEFORE_AND_AFTER: Break Opportunity Before and After (B2)
+ * @G_UNICODE_BREAK_HYPHEN: Hyphen (HY)
+ * @G_UNICODE_BREAK_NON_STARTER: Nonstarter (NS)
+ * @G_UNICODE_BREAK_OPEN_PUNCTUATION: Opening Punctuation (OP)
+ * @G_UNICODE_BREAK_CLOSE_PUNCTUATION: Closing Punctuation (CL)
+ * @G_UNICODE_BREAK_QUOTATION: Ambiguous Quotation (QU)
+ * @G_UNICODE_BREAK_EXCLAMATION: Exclamation/Interrogation (EX)
+ * @G_UNICODE_BREAK_IDEOGRAPHIC: Ideographic (ID)
+ * @G_UNICODE_BREAK_NUMERIC: Numeric (NU)
+ * @G_UNICODE_BREAK_INFIX_SEPARATOR: Infix Separator (Numeric) (IS)
+ * @G_UNICODE_BREAK_SYMBOL: Symbols Allowing Break After (SY)
+ * @G_UNICODE_BREAK_ALPHABETIC: Ordinary Alphabetic and Symbol Characters (AL)
+ * @G_UNICODE_BREAK_PREFIX: Prefix (Numeric) (PR)
+ * @G_UNICODE_BREAK_POSTFIX: Postfix (Numeric) (PO)
+ * @G_UNICODE_BREAK_COMPLEX_CONTEXT: Complex Content Dependent (South East Asian) (SA)
+ * @G_UNICODE_BREAK_AMBIGUOUS: Ambiguous (Alphabetic or Ideographic) (AI)
+ * @G_UNICODE_BREAK_UNKNOWN: Unknown (XX)
+ * @G_UNICODE_BREAK_NEXT_LINE: Next Line (NL)
+ * @G_UNICODE_BREAK_WORD_JOINER: Word Joiner (WJ)
+ * @G_UNICODE_BREAK_HANGUL_L_JAMO: Hangul L Jamo (JL)
+ * @G_UNICODE_BREAK_HANGUL_V_JAMO: Hangul V Jamo (JV)
+ * @G_UNICODE_BREAK_HANGUL_T_JAMO: Hangul T Jamo (JT)
+ * @G_UNICODE_BREAK_HANGUL_LV_SYLLABLE: Hangul LV Syllable (H2)
+ * @G_UNICODE_BREAK_HANGUL_LVT_SYLLABLE: Hangul LVT Syllable (H3)
+ * @G_UNICODE_BREAK_CLOSE_PARANTHESIS: Closing Parenthesis (CP). Since 2.28
+ *
+ * These are the possible line break classifications.
+ * The five Hangul types were added in Unicode 4.1, so, has been
+ * introduced in GLib 2.10. Note that new types may be added in the future.
+ * Applications should be ready to handle unknown values.
+ * They may be regarded as %G_UNICODE_BREAK_UNKNOWN.
+ * See <ulink url="http://www.unicode.org/unicode/reports/tr14/">http://www.unicode.org/unicode/reports/tr14/</ulink>.
+ */
+
+
+/**
+ * GUnicodeScript:
+ * @G_UNICODE_SCRIPT_COMMON: a character used by multiple different scripts
+ * @G_UNICODE_SCRIPT_INHERITED: a mark glyph that takes its script from the i                             base glyph to which it is attached
+ * @G_UNICODE_SCRIPT_ARABIC: Arabic
+ * @G_UNICODE_SCRIPT_ARMENIAN: Armenian
+ * @G_UNICODE_SCRIPT_BENGALI: Bengali
+ * @G_UNICODE_SCRIPT_BOPOMOFO: Bopomofo
+ * @G_UNICODE_SCRIPT_CHEROKEE: Cherokee
+ * @G_UNICODE_SCRIPT_COPTIC: Coptic
+ * @G_UNICODE_SCRIPT_CYRILLIC: Cyrillic
+ * @G_UNICODE_SCRIPT_DESERET: Deseret
+ * @G_UNICODE_SCRIPT_DEVANAGARI: Devanagari
+ * @G_UNICODE_SCRIPT_ETHIOPIC: Ethiopic
+ * @G_UNICODE_SCRIPT_GEORGIAN: Georgian
+ * @G_UNICODE_SCRIPT_GOTHIC: Gothic
+ * @G_UNICODE_SCRIPT_GREEK: Greek
+ * @G_UNICODE_SCRIPT_GUJARATI: Gujarati
+ * @G_UNICODE_SCRIPT_GURMUKHI: Gurmukhi
+ * @G_UNICODE_SCRIPT_HAN: Han
+ * @G_UNICODE_SCRIPT_HANGUL: Hangul
+ * @G_UNICODE_SCRIPT_HEBREW: Hebrew
+ * @G_UNICODE_SCRIPT_HIRAGANA: Hiragana
+ * @G_UNICODE_SCRIPT_KANNADA: Kannada
+ * @G_UNICODE_SCRIPT_KATAKANA: Katakana
+ * @G_UNICODE_SCRIPT_KHMER: Khmer
+ * @G_UNICODE_SCRIPT_LAO: Lao
+ * @G_UNICODE_SCRIPT_LATIN: Latin
+ * @G_UNICODE_SCRIPT_MALAYALAM: Malayalam
+ * @G_UNICODE_SCRIPT_MONGOLIAN: Mongolian
+ * @G_UNICODE_SCRIPT_MYANMAR: Myanmar
+ * @G_UNICODE_SCRIPT_OGHAM: Ogham
+ * @G_UNICODE_SCRIPT_OLD_ITALIC: Old Italic
+ * @G_UNICODE_SCRIPT_ORIYA: Oriya
+ * @G_UNICODE_SCRIPT_RUNIC: Runic
+ * @G_UNICODE_SCRIPT_SINHALA: Sinhala
+ * @G_UNICODE_SCRIPT_SYRIAC: Syriac
+ * @G_UNICODE_SCRIPT_TAMIL: Tamil
+ * @G_UNICODE_SCRIPT_TELUGU: Telugu
+ * @G_UNICODE_SCRIPT_THAANA: Thaana
+ * @G_UNICODE_SCRIPT_THAI: Thai
+ * @G_UNICODE_SCRIPT_TIBETAN: Tibetan Canadian Aboriginal
+ * @G_UNICODE_SCRIPT_YI: Yi
+ * @G_UNICODE_SCRIPT_TAGALOG: Tagalog
+ * @G_UNICODE_SCRIPT_HANUNOO: Hanunoo
+ * @G_UNICODE_SCRIPT_BUHID: Buhid
+ * @G_UNICODE_SCRIPT_TAGBANWA: Tagbanwa
+ * @G_UNICODE_SCRIPT_BRAILLE: Braille
+ * @G_UNICODE_SCRIPT_CYPRIOT: Cypriot
+ * @G_UNICODE_SCRIPT_LIMBU: Limbu
+ * @G_UNICODE_SCRIPT_OSMANYA: Osmanya
+ * @G_UNICODE_SCRIPT_SHAVIAN: Shavian
+ * @G_UNICODE_SCRIPT_LINEAR_B: Linear B
+ * @G_UNICODE_SCRIPT_TAI_LE: Tai Le
+ * @G_UNICODE_SCRIPT_UGARITIC: Ugaritic New Tai Lue
+ * @G_UNICODE_SCRIPT_BUGINESE: Buginese
+ * @G_UNICODE_SCRIPT_GLAGOLITIC: Glagolitic
+ * @G_UNICODE_SCRIPT_TIFINAGH: Tifinagh Syloti Nagri Old Persian
+ * @G_UNICODE_SCRIPT_KHAROSHTHI: Kharoshthi
+ * @G_UNICODE_SCRIPT_UNKNOWN: an unassigned code point
+ * @G_UNICODE_SCRIPT_BALINESE: Balinese
+ * @G_UNICODE_SCRIPT_CUNEIFORM: Cuneiform
+ * @G_UNICODE_SCRIPT_PHOENICIAN: Phoenician
+ * @G_UNICODE_SCRIPT_PHAGS_PA: Phags-pa
+ * @G_UNICODE_SCRIPT_NKO: N'Ko
+ * @G_UNICODE_SCRIPT_KAYAH_LI: Kayah Li. Since 2.16.3
+ * @G_UNICODE_SCRIPT_LEPCHA: Lepcha. Since 2.16.3
+ * @G_UNICODE_SCRIPT_REJANG: Rejang. Since 2.16.3
+ * @G_UNICODE_SCRIPT_SUNDANESE: Sundanese. Since 2.16.3
+ * @G_UNICODE_SCRIPT_SAURASHTRA: Saurashtra. Since 2.16.3
+ * @G_UNICODE_SCRIPT_CHAM: Cham. Since 2.16.3
+ * @G_UNICODE_SCRIPT_OL_CHIKI: Ol Chiki. Since 2.16.3
+ * @G_UNICODE_SCRIPT_VAI: Vai. Since 2.16.3
+ * @G_UNICODE_SCRIPT_CARIAN: Carian. Since 2.16.3
+ * @G_UNICODE_SCRIPT_LYCIAN: Lycian. Since 2.16.3
+ * @G_UNICODE_SCRIPT_LYDIAN: Lydian. Since 2.16.3
+ * @G_UNICODE_SCRIPT_AVESTAN: Avestan. Since 2.26
+ * @G_UNICODE_SCRIPT_BAMUM: Bamum. Since 2.26 Egyptian Hieroglpyhs. Since 2.26 Imperial Aramaic. Since 2.26 Inscriptional Pahlavi. Since 2.26 Inscriptional Parthian. Since 2.26
+ * @G_UNICODE_SCRIPT_JAVANESE: Javanese. Since 2.26
+ * @G_UNICODE_SCRIPT_KAITHI: Kaithi. Since 2.26
+ * @G_UNICODE_SCRIPT_LISU: Lisu. Since 2.26 Meetei Mayek. Since 2.26 Old South Arabian. Since 2.26
+ * @G_UNICODE_SCRIPT_OLD_TURKIC: Old Turkic. Since 2.28
+ * @G_UNICODE_SCRIPT_SAMARITAN: Samaritan. Since 2.26
+ * @G_UNICODE_SCRIPT_TAI_THAM: Tai Tham. Since 2.26
+ * @G_UNICODE_SCRIPT_TAI_VIET: Tai Viet. Since 2.26
+ * @G_UNICODE_SCRIPT_BATAK: Batak. Since 2.28
+ * @G_UNICODE_SCRIPT_BRAHMI: Brahmi. Since 2.28
+ * @G_UNICODE_SCRIPT_MANDAIC: Mandaic. Since 2.28
+ *
+ * a value never returned from g_unichar_get_script()
+ * The #GUnicodeScript enumeration identifies different writing
+ * systems. The values correspond to the names as defined in the
+ * Unicode standard. The enumeration has been added in GLib 2.14,
+ * and is interchangeable with #PangoScript.
+ * Note that new types may be added in the future. Applications
+ * should be ready to handle unknown values.
+ * See <ulink
+ * url="http://www.unicode.org/reports/tr24/">Unicode Standard Annex
+ * #24: Script names</ulink>.
+ */
+
+
+/**
+ * GUnicodeType:
+ * @G_UNICODE_CONTROL: General category "Other, Control" (Cc)
+ * @G_UNICODE_FORMAT: General category "Other, Format" (Cf)
+ * @G_UNICODE_UNASSIGNED: General category "Other, Not Assigned" (Cn)
+ * @G_UNICODE_PRIVATE_USE: General category "Other, Private Use" (Co)
+ * @G_UNICODE_SURROGATE: General category "Other, Surrogate" (Cs)
+ * @G_UNICODE_LOWERCASE_LETTER: General category "Letter, Lowercase" (Ll)
+ * @G_UNICODE_MODIFIER_LETTER: General category "Letter, Modifier" (Lm)
+ * @G_UNICODE_OTHER_LETTER: General category "Letter, Other" (Lo)
+ * @G_UNICODE_TITLECASE_LETTER: General category "Letter, Titlecase" (Lt)
+ * @G_UNICODE_UPPERCASE_LETTER: General category "Letter, Uppercase" (Lu)
+ * @G_UNICODE_SPACING_MARK: General category "Mark, Spacing" (Mc)
+ * @G_UNICODE_ENCLOSING_MARK: General category "Mark, Enclosing" (Me)
+ * @G_UNICODE_NON_SPACING_MARK: General category "Mark, Nonspacing" (Mn)
+ * @G_UNICODE_DECIMAL_NUMBER: General category "Number, Decimal Digit" (Nd)
+ * @G_UNICODE_LETTER_NUMBER: General category "Number, Letter" (Nl)
+ * @G_UNICODE_OTHER_NUMBER: General category "Number, Other" (No)
+ * @G_UNICODE_CONNECT_PUNCTUATION: General category "Punctuation, Connector" (Pc)
+ * @G_UNICODE_DASH_PUNCTUATION: General category "Punctuation, Dash" (Pd)
+ * @G_UNICODE_CLOSE_PUNCTUATION: General category "Punctuation, Close" (Pe)
+ * @G_UNICODE_FINAL_PUNCTUATION: General category "Punctuation, Final quote" (Pf)
+ * @G_UNICODE_INITIAL_PUNCTUATION: General category "Punctuation, Initial quote" (Pi)
+ * @G_UNICODE_OTHER_PUNCTUATION: General category "Punctuation, Other" (Po)
+ * @G_UNICODE_OPEN_PUNCTUATION: General category "Punctuation, Open" (Ps)
+ * @G_UNICODE_CURRENCY_SYMBOL: General category "Symbol, Currency" (Sc)
+ * @G_UNICODE_MODIFIER_SYMBOL: General category "Symbol, Modifier" (Sk)
+ * @G_UNICODE_MATH_SYMBOL: General category "Symbol, Math" (Sm)
+ * @G_UNICODE_OTHER_SYMBOL: General category "Symbol, Other" (So)
+ * @G_UNICODE_LINE_SEPARATOR: General category "Separator, Line" (Zl)
+ * @G_UNICODE_PARAGRAPH_SEPARATOR: General category "Separator, Paragraph" (Zp)
+ * @G_UNICODE_SPACE_SEPARATOR: General category "Separator, Space" (Zs)
+ *
+ * These are the possible character classifications from the
+ * Unicode specification.
+ * See <ulink url="http://www.unicode.org/Public/UNIDATA/UnicodeData.html">http://www.unicode.org/Public/UNIDATA/UnicodeData.html</ulink>.
+ */
+
+
+/**
  * GUserDirectory:
  * @G_USER_DIRECTORY_DESKTOP: the user's Desktop directory
  * @G_USER_DIRECTORY_DOCUMENTS: the user's Documents directory
@@ -1939,6 +2275,15 @@
  * Error domain for bookmark file parsing.
  * Errors in this domain will be from the #GBookmarkFileError
  * enumeration. See #GError for information on error domains.
+ */
+
+
+/**
+ * G_BREAKPOINT:
+ *
+ * Inserts a breakpoint instruction into the code.
+ * On x86 and alpha systems this is implemented as a soft interrupt
+ * and on other architectures it raises a %SIGTRAP signal.
  */
 
 
@@ -3185,6 +3530,21 @@
 
 
 /**
+ * G_QUEUE_INIT:
+ *
+ * A statically-allocated #GQueue must be initialized with this
+ * macro before it can be used. This macro can be used to initialize
+ * a variable, but it cannot be assigned to a variable. In that case
+ * you have to use g_queue_init().
+ * |[
+ * GQueue my_queue = G_QUEUE_INIT;
+ * ]|
+ *
+ * Since: 2.14
+ */
+
+
+/**
  * G_REGEX_ERROR:
  *
  * Error domain for regular expressions. Errors in this domain will be
@@ -3228,6 +3588,15 @@
  * G_TYPE_NONE, 1,
  * GTK_TYPE_REQUISITION | G_SIGNAL_TYPE_STATIC_SCOPE);
  * ]|
+ */
+
+
+/**
+ * G_SPAWN_ERROR:
+ *
+ * Error domain for spawning processes. Errors in this domain will
+ * be from the #GSpawnError enumeration. See #GError for information on
+ * error domains.
  */
 
 
@@ -3858,6 +4227,15 @@
 
 
 /**
+ * G_TYPE_MATCH_INFO:
+ *
+ * The #GType for a boxed type holding a #GMatchInfo reference.
+ *
+ * Since: 2.30
+ */
+
+
+/**
  * G_TYPE_NONE:
  *
  * A fundamental type which is used as a replacement for the C
@@ -4218,6 +4596,15 @@
  * The #GType for a boxed type holding a #GVariantType.
  *
  * Since: 2.24
+ */
+
+
+/**
+ * G_UNICODE_COMBINING_MARK:
+ *
+ * Older name for %G_UNICODE_SPACING_MARK.
+ *
+ * Deprecated: 2.30: Use %G_UNICODE_SPACING_MARK.
  */
 
 
@@ -4699,6 +5086,13 @@
  * If you are not interacting with D-Bus, then there is no reason to make
  * use of this type.  If you are, then the D-Bus specification contains a
  * precise description of valid object paths.
+ */
+
+
+/**
+ * G_VARIANT_TYPE_OBJECT_PATH_ARRAY:
+ *
+ * The type of an array of object paths.
  */
 
 
@@ -7524,6 +7918,8 @@
  * @pspec: a valid #GParamSpec
  *
  * Get the name of a #GParamSpec.
+ * The name is always an "interned" string (as per g_intern_string()).
+ * This allows for pointer-value comparisons.
  *
  * Returns: the name of @pspec.
  */
@@ -8645,7 +9041,7 @@
  * @class_offset: The offset of the function pointer in the class structure for this type. Used to invoke a class method generically. Pass 0 to not associate a class method slot with this signal.
  * @accumulator: the accumulator for this signal; may be %NULL.
  * @accu_data: user data for the @accumulator.
- * @c_marshaller: the function to translate arrays of parameter values to signal emissions into C language callback invocations.
+ * @c_marshaller: (allow-none): the function to translate arrays of parameter values to signal emissions into C language callback invocations or %NULL.
  * @return_type: the type of return value, or #G_TYPE_NONE for a signal without a return value.
  * @n_params: the number of parameter types to follow.
  * @...: a list of types, one for each parameter.
@@ -8661,6 +9057,8 @@
  * in their <code>class_init</code> method by doing
  * <code>super_class->signal_handler = my_signal_handler</code>. Instead they
  * will have to use g_signal_override_class_handler().
+ * If c_marshaller is %NULL @g_cclosure_marshal_generic will be used as
+ * the marshaller for this signal.
  *
  * Returns: the signal id
  */
@@ -8674,7 +9072,7 @@
  * @class_handler: a #GCallback which acts as class implementation of this signal. Used to invoke a class method generically. Pass %NULL to not associate a class method with this signal.
  * @accumulator: the accumulator for this signal; may be %NULL.
  * @accu_data: user data for the @accumulator.
- * @c_marshaller: the function to translate arrays of parameter values to signal emissions into C language callback invocations.
+ * @c_marshaller: (allow-none): the function to translate arrays of parameter values to signal emissions into C language callback invocations or %NULL.
  * @return_type: the type of return value, or #G_TYPE_NONE for a signal without a return value.
  * @n_params: the number of parameter types to follow.
  * @...: a list of types, one for each parameter.
@@ -8690,6 +9088,8 @@
  * g_signal_chain_from_overridden() or
  * g_signal_chain_from_overridden_handler().
  * See g_signal_new() for information about signal names.
+ * If c_marshaller is %NULL @g_cclosure_marshal_generic will be used as
+ * the marshaller for this signal.
  *
  * Returns: the signal id
  * Since: 2.18
@@ -8704,13 +9104,15 @@
  * @class_closure: The closure to invoke on signal emission; may be %NULL.
  * @accumulator: the accumulator for this signal; may be %NULL.
  * @accu_data: user data for the @accumulator.
- * @c_marshaller: the function to translate arrays of parameter values to signal emissions into C language callback invocations.
+ * @c_marshaller: (allow-none): the function to translate arrays of parameter values to signal emissions into C language callback invocations or %NULL.
  * @return_type: the type of return value, or #G_TYPE_NONE for a signal without a return value.
  * @n_params: the number of parameter types in @args.
  * @args: va_list of #GType, one for each parameter.
  *
  * Creates a new signal. (This is usually done in the class initializer.)
  * See g_signal_new() for details on allowed signal names.
+ * If c_marshaller is %NULL @g_cclosure_marshal_generic will be used as
+ * the marshaller for this signal.
  *
  * Returns: the signal id
  */
@@ -8724,13 +9126,15 @@
  * @class_closure: The closure to invoke on signal emission; may be %NULL
  * @accumulator: the accumulator for this signal; may be %NULL
  * @accu_data: user data for the @accumulator
- * @c_marshaller: the function to translate arrays of parameter values to signal emissions into C language callback invocations
+ * @c_marshaller: (allow-none): the function to translate arrays of parameter values to signal emissions into C language callback invocations or %NULL
  * @return_type: the type of return value, or #G_TYPE_NONE for a signal without a return value
  * @n_params: the length of @param_types
  * @param_types: an array of types, one for each parameter
  *
  * Creates a new signal. (This is usually done in the class initializer.)
  * See g_signal_new() for details on allowed signal names.
+ * If c_marshaller is %NULL @g_cclosure_marshal_generic will be used as
+ * the marshaller for this signal.
  *
  * Returns: the signal id
  */
@@ -9774,6 +10178,19 @@
 
 
 /**
+ * g_utf8_next_char:
+ * @p: Pointer to the start of a valid UTF-8 character
+ *
+ * Skips to the next character in a UTF-8 string. The string must be
+ * valid; this macro is as fast as possible, and has no error-checking.
+ * You would use this macro to iterate over a string character by
+ * character. The macro returns the start of the next UTF-8 character.
+ * Before using this macro, use g_utf8_validate() to validate strings
+ * that may contain invalid UTF-8.
+ */
+
+
+/**
  * g_value_array_append:
  * @value_array: #GValueArray to add an element to
  * @value: (allow-none): #GValue to copy into #GValueArray, or %NULL
@@ -10550,10 +10967,8 @@
  * the ownership of the caller's reference to @variant;
  * the caller doesn't have to unref it any more (i.e. the reference
  * count of the variant is not increased).
- * It is a programmer error to pass a floating variant to this function.
- * In particular this means that callbacks in closures, and signal handlers
- * for signals of return type %G_TYPE_VARIANT, must never return floating
- * variants.
+ * If @variant was floating then its floating reference is converted to
+ * a hard reference.
  * If you want the #GValue to hold its own reference to @variant, use
  * g_value_set_variant() instead.
  * This is an internal function introduced mainly for C marshallers.
@@ -10626,9 +11041,69 @@
 
 
 /**
+ * g_warn_if_fail:
+ * @expr: the expression to check
+ *
+ * Logs a warning if the expression is not true.
+ *
+ * Since: 2.16
+ */
+
+
+/**
+ * g_warn_if_reached:
+ *
+ * Logs a critical warning.
+ *
+ * Since: 2.16
+ */
+
+
+/**
  * gchararray:
  *
  * A C representable type name for #G_TYPE_STRING.
+ */
+
+
+/**
+ * gunichar:
+ *
+ * A type which can hold any UTF-32 or UCS-4 character code,
+ * also known as a Unicode code point.
+ * If you want to produce the UTF-8 representation of a #gunichar,
+ * use g_ucs4_to_utf8(). See also g_utf8_to_ucs4() for the reverse
+ * process.
+ * To print/scan values of this type as integer, use
+ * %G_GINT32_MODIFIER and/or %G_GUINT32_FORMAT.
+ * The notation to express a Unicode code point in running text is
+ * as a hexadecimal number with four to six digits and uppercase
+ * letters, prefixed by the string "U+". Leading zeros are omitted,
+ * unless the code point would have fewer than four hexadecimal digits.
+ * For example, "U+0041 LATIN CAPITAL LETTER A". To print a code point
+ * in the U+-notation, use the format string "U+%04"G_GINT32_FORMAT"X".
+ * To scan, use the format string "U+%06"G_GINT32_FORMAT"X".
+ * |[
+ * gunichar c;
+ * sscanf ("U+0041", "U+%06"G_GINT32_FORMAT"X", &amp;c)
+ * g_print ("Read U+%04"G_GINT32_FORMAT"X", c);
+ * ]|
+ */
+
+
+/**
+ * gunichar2:
+ *
+ * A type which can hold any UTF-16 code
+ * point<footnote id="utf16_surrogate_pairs">UTF-16 also has so called
+ * <firstterm>surrogate pairs</firstterm> to encode characters beyond
+ * the BMP as pairs of 16bit numbers. Surrogate pairs cannot be stored
+ * in a single gunichar2 field, but all GLib functions accepting gunichar2
+ * arrays will correctly interpret surrogate pairs.</footnote>.
+ * To print/scan values of this type to/from text you need to convert
+ * to/from UTF-8, using g_utf16_to_utf8()/g_utf8_to_utf16().
+ * To print/scan values of this type as integer, use
+ * %G_GINT16_MODIFIER and/or %G_GUINT16_FORMAT.
  */
 
 
