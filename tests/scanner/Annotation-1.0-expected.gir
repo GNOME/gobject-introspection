@@ -537,6 +537,15 @@ annotation_object_watch_full().</doc>
         <doc xml:whitespace="preserve">This is a property which is a string</doc>
         <type name="utf8"/>
       </property>
+      <property name="tab-property"
+                version="1.2"
+                writable="1"
+                construct="1"
+                transfer-ownership="none">
+        <doc xml:whitespace="preserve">This is a property annotation intentionally indented with a mix
+of tabs and strings to test the tab handling capabilities of the scanner.</doc>
+        <type name="utf8"/>
+      </property>
       <field name="parent_instance">
         <type name="GObject.Object" c:type="GObject"/>
       </field>

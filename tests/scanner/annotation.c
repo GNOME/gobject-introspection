@@ -7,7 +7,8 @@ G_DEFINE_TYPE (AnnotationObject, annotation_object, G_TYPE_OBJECT);
 enum {
   PROP_0,
   PROP_STRING_PROPERTY,
-  PROP_FUNCTION_PROPERTY
+  PROP_FUNCTION_PROPERTY,
+  PROP_TAB_PROPERTY
 };
 
 enum {
@@ -32,6 +33,8 @@ annotation_object_set_property (GObject         *object,
       break;
     case PROP_FUNCTION_PROPERTY:
       break;
+    case PROP_TAB_PROPERTY:
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -49,6 +52,8 @@ annotation_object_get_property (GObject         *object,
     case PROP_STRING_PROPERTY:
       break;
     case PROP_FUNCTION_PROPERTY:
+      break;
+    case PROP_TAB_PROPERTY:
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -168,6 +173,21 @@ annotation_object_class_init (AnnotationObjectClass *klass)
                                                          "This property is a function pointer",
                                                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT));
 
+	  /**
+	   * AnnotationObject:tab-property:
+	   *
+	   * This is a property annotation intentionally indented with a mix
+	   * of tabs and strings to test the tab handling capabilities of the scanner.
+	   *
+	   * Since: 1.2
+	   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_TAB_PROPERTY,
+                                   g_param_spec_string ("tab-property",
+                                                        "Tab property",
+                                                        "This property is a thing",
+                                                        NULL,
+                                                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT));
 }
 
 static void

@@ -413,7 +413,8 @@ class DocOption(object):
 
 
 class AnnotationParser(object):
-    COMMENT_HEADER_RE = re.compile(r'^\*[ \t]*\n ')
+    COMMENT_HEADER_RE = re.compile(r'^\*[ \t]*\n[\t ]')
+    COMMENT_HEADER_START_RE = re.compile(r'\n[\t ]')
     WHITESPACE_RE = re.compile(r'^\s*$')
     ASCII_TEXT_RE = re.compile(r'\s*[A-Za-z]+')
     OPTION_RE = re.compile(r'\([A-Za-z]+[^(]*\)')
@@ -451,9 +452,10 @@ class AnnotationParser(object):
             return
         comment = comment[2:]
 
-        pos = comment.find('\n ')
-        if pos == -1:
+        match = self.COMMENT_HEADER_START_RE.search(comment)
+        if match is None:
             return
+        pos = match.start()
         block_header = comment[:pos]
         block_header = block_header.strip()
         cpos = block_header.find(': ')
