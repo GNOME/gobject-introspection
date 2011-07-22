@@ -16,6 +16,17 @@ for d in possible_builddirs:
 assert builddir is not None
 annotation_tool_base_args = [os.path.join(builddir, 'g-ir-annotation-tool'), '--extract']
 
+def directory_includes(dirs, srcdir, builddir):
+    result = []
+    result.append('-I' + srcdir)
+    if srcdir != builddir:
+        result.append('-I' + builddir)
+    for name in dirs:
+        result.append('-I' + os.path.join(srcdir, name))
+        if srcdir != builddir:
+            result.append('-I' + os.path.join(builddir, name))
+    return result
+
 def extract_glib_annotations(srcdir, builddir, outfile):
     projname = 'glib'
     headersfile = os.path.join(builddir, projname, projname + '-public-headers.txt')
@@ -33,10 +44,7 @@ def extract_glib_annotations(srcdir, builddir, outfile):
         if sourcename.endswith('.c'):
             sources.append(os.path.join(subdir, sourcename))
     return subprocess.check_call(annotation_tool_base_args +
-                                 ['-DGLIB_COMPILATION',
-                                  '-I' + srcdir,
-                                  '-I' + os.path.join(srcdir, 'glib'),
-                                  '-I' + os.path.join(srcdir, 'gmodule')] + sources,
+                                 ['-DGLIB_COMPILATION'] + directory_includes(['glib', 'gmodule'], srcdir, builddir) + sources,
                                  stdout=outfile)
 
 def extract_gobject_annotations(srcdir, builddir, outfile):
@@ -54,11 +62,7 @@ def extract_gobject_annotations(srcdir, builddir, outfile):
         if sourcename.endswith('.c'):
             sources.append(os.path.join(subdir, sourcename))
     return subprocess.check_call(annotation_tool_base_args +
-                                 ['-DGOBJECT_COMPILATION',
-                                  '-I' + srcdir,
-                                  '-I' + os.path.join(srcdir, 'glib'),
-                                  '-I' + os.path.join(srcdir, 'gobject'),
-                                  '-I' + os.path.join(srcdir, 'gmodule')] + sources,
+                                 ['-DGOBJECT_COMPILATION'] + directory_includes(['glib', 'gobject', 'gmodule'], srcdir, builddir) + sources,
                                  stdout=outfile)
 
 def extract_gio_annotations(srcdir, builddir, outfile):
@@ -77,12 +81,7 @@ def extract_gio_annotations(srcdir, builddir, outfile):
             sources.append(os.path.join(subdir, sourcename))
     return subprocess.check_call(annotation_tool_base_args +
                                  ['-DGOBJECT_COMPILATION',
-                                  '-DGIO_COMPILATION',
-                                  '-I' + srcdir,
-                                  '-I' + os.path.join(srcdir, 'glib'),
-                                  '-I' + os.path.join(srcdir, 'gobject'),
-                                  '-I' + os.path.join(srcdir, 'gio'),
-                                  '-I' + os.path.join(srcdir, 'gmodule')] + sources,
+                                  '-DGIO_COMPILATION'] + directory_includes(['glib', 'gmodule', 'gobject', 'gio'], srcdir, builddir) + sources,
                                  stdout=outfile)
 
 if __name__ == '__main__':
@@ -92,11 +91,15 @@ if __name__ == '__main__':
     else:
         builddir = srcdir
 
+    print "Using source directory: %r build directory: %r" % (srcdir, builddir)
+
     srcname = '../gir/glib-2.0.c'
     srcfile = open(srcname + '.tmp', 'w')
     extract_glib_annotations(srcdir, builddir, srcfile)
     srcfile.close()
     os.rename(srcname + '.tmp', srcname)
+
+    print "Updated %r" % (srcname, )
 
     srcname = '../gir/gobject-2.0.c'
     srcfile = open(srcname + '.tmp', 'w')
@@ -104,9 +107,15 @@ if __name__ == '__main__':
     srcfile.close()
     os.rename(srcname + '.tmp', srcname)
 
+    print "Updated %r" % (srcname, )
+
     srcname = '../gir/gio-2.0.c'
     srcfile = open(srcname + '.tmp', 'w')
     extract_gio_annotations(srcdir, builddir, srcfile)
     srcfile.close()
     os.rename(srcname + '.tmp', srcname)
+
+    print "Updated %r" % (srcname, )
+
+    print "Done; run \"git diff\" to see any changes."
 
