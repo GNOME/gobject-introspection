@@ -57,9 +57,9 @@ EXTRA_DIST += 			\
 
 check-local:
 	gtester --verbose $(GTESTER_PROGS)
-	@test ! -d $(top_srcdir)/.git || (test -f .git/hooks/pre-commit || (echo -e "ERROR: missing \
+	@test ! -d $(top_srcdir)/.git || (test -f $(top_srcdir)/.git/hooks/pre-commit || (echo -e "ERROR: missing \
 	pre-commit hook.\n\ncopy misc/pre-commit to .git/hooks"; false))
-	@test ! -d $(top_srcdir)/.git || (test -x .git/hooks/pre-commit || (echo -e "ERROR: pre-commit \
+	@test ! -d $(top_srcdir)/.git || (test -x $(top_srcdir)/.git/hooks/pre-commit || (echo -e "ERROR: pre-commit \
 	is not executable\n\nrun chmod +x .git/hooks/pre-commit"; false))
 	@echo "  PEP-8 INQUISITION"
 	@find $(top_srcdir)/giscanner -name \*.py | sort | uniq | xargs $(PYTHON) $(top_srcdir)/misc/pep8.py --repeat --exclude=config.py
