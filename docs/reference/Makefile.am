@@ -7,7 +7,7 @@ DOC_MODULE=gi
 DOC_MAIN_SGML_FILE=gi-docs.sgml
 
 # The directory containing the source code. Relative to $(srcdir)
-DOC_SOURCE_DIR=../../girepository
+DOC_SOURCE_DIR=$(top_srcdir)/girepository
 
 # Extra options to supply to gtkdoc-scan
 SCAN_OPTIONS=
