@@ -55,22 +55,6 @@ EXTRA_DIST += 			\
 	misc/pre-commit		\
 	misc/pyflakes.py
 
-prepare-release-tag: Makefile
-	@TAG=`echo $(VERSION)|sed s/\\\./_/g`;\
-	  echo "git tag GOBJECT_INTROSPECTION_$$TAG"; \
-          git tag -m "Tag $$VERSION" -a \
-              GOBJECT_INTROSPECTION_$$TAG
-
-prepare-minor-release: Makefile $(distdir).tar.bz2 prepare-release-tag
-	python $(top_srcdir)/tools/verbump.py
-
-upload-release: $(distdir).tar.bz2
-	git log origin/master..master
-	@echo -n "Ok to push? [y/N] "; read ans; test x$$ans == xy || exit 1
-	git push --tags origin master:master
-	scp $(distdir).tar.bz2 master.gnome.org:
-	ssh master.gnome.org install-module $(distdir).tar.bz2
-
 check-local:
 	gtester --verbose $(GTESTER_PROGS)
 	@test ! -d $(top_srcdir)/.git || (test -f .git/hooks/pre-commit || (echo -e "ERROR: missing \
@@ -83,3 +67,38 @@ check-local:
 check-pyflakes:
 	@echo "  CHECK Pyflakes"
 	@find $(top_srcdir)/giscanner -name \*.py | sort | uniq | xargs $(PYTHON) $(top_srcdir)/misc/pyflakes.py
+
+
+# Colin's handy Makefile bits for:
+# 1) stuffing tarballs with pre-generated scripts from your workstation
+# 2) bumping configure.ac version post-release
+# 3) tagging correctly in git
+# 4) uploading to gnome.org
+# To use:
+#  $ make check
+#  $ make dist
+#  $ make prepare-minor-release
+
+# Customize to taste
+TAG_PREFIX=GOBJECT_INTROSPECTION_
+COMPRESSION=.bz2
+
+
+PACKAGE=@PACKAGE@
+VERSION=@VERSION@
+DISTNAME=$(PACKAGE)-$(VERSION).tar$(COMPRESSION)
+TAG_VERSION=$(shell echo $(VERSION) |sed s/\\\./_/g)
+
+prepare-release-tag: Makefile.release
+	git tag -m "Tag $(TAG_VERSION)" -a $(TAG_PREFIX)$(TAG_VERSION)
+
+prepare-minor-release: $(DISTNAME) prepare-release-tag
+	env top_srcdir=$(top_srcdir) python $(top_srcdir)/tools/verbump.py
+
+upload-release: $(DISTNAME)
+	git log origin/master..master
+	@echo -n "Ok to push? [y/N] "; read ans; test x$$ans == xy || exit 1
+	git push --tags origin master:master
+	scp $(DISTNAME) master.gnome.org:
+	ssh master.gnome.org install-module $(DISTNAME)
+
