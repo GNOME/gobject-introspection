@@ -89,13 +89,13 @@ VERSION=@VERSION@
 DISTNAME=$(PACKAGE)-$(VERSION).tar$(COMPRESSION)
 TAG_VERSION=$(shell echo $(VERSION) |sed s/\\\./_/g)
 
-prepare-release-tag: Makefile.release
+prepare-release-tag: Makefile
 	git tag -m "Tag $(TAG_VERSION)" -a $(TAG_PREFIX)$(TAG_VERSION)
 
-prepare-minor-release: $(DISTNAME) prepare-release-tag
+prepare-minor-release: $(DISTNAME) prepare-release-tag Makefile
 	env top_srcdir=$(top_srcdir) python $(top_srcdir)/tools/verbump.py
 
-upload-release: $(DISTNAME)
+upload-release: $(DISTNAME) Makefile
 	git log origin/master..master
 	@echo -n "Ok to push? [y/N] "; read ans; test x$$ans == xy || exit 1
 	git push --tags origin master:master
