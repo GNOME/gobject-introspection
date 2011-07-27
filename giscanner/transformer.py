@@ -24,7 +24,6 @@ import sys
 from . import ast
 from . import message
 from .cachestore import CacheStore
-from .config import DATADIR, GIR_DIR, GIR_SUFFIX
 from .girparser import GIRParser
 from .sourcescanner import (
     SourceSymbol, ctype_name, CTYPE_POINTER,
@@ -163,8 +162,8 @@ None."""
     def _find_include(self, include):
         searchdirs = self._includepaths[:]
         for path in _xdg_data_dirs:
-            searchdirs.append(os.path.join(path, GIR_SUFFIX))
-        searchdirs.append(GIR_DIR)
+            searchdirs.append(os.path.join(path, 'gir-1.0'))
+        searchdirs.append(os.path.join(DATADIR, 'gir-1.0'))
 
         girname = '%s-%s.gir' % (include.name, include.version)
         for d in searchdirs:

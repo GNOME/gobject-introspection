@@ -27,7 +27,6 @@ import tempfile
 
 from .gdumpparser import IntrospectionBinary
 from . import utils
-from .config import DATADIR
 
 # bugzilla.gnome.org/558436
 # Compile a binary program which is then linked to a library

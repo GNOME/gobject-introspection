@@ -270,7 +270,6 @@ AC_MSG_RESULT([$GLIBSRC])
 
 AC_CONFIG_FILES([
 Makefile
-giscanner/config.py
 m4/Makefile
 tests/Makefile
 tests/offsets/Makefile
