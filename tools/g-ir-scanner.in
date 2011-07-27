@@ -23,7 +23,7 @@ import os
 import sys
 import __builtin__
 
-__builtin__.__dict__['DATADIR'] = "@pkgdatadir@"
+__builtin__.__dict__['DATADIR'] = "@datarootdir@"
 
 if 'GI_SCANNER_DEBUG' in os.environ:
     def on_exception(exctype, value, tb):

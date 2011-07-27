@@ -2,7 +2,7 @@ bin_PROGRAMS += g-ir-compiler g-ir-generate
 bin_SCRIPTS += g-ir-scanner g-ir-annotation-tool
 EXTRA_DIST += tools/g-ir-scanner.in tools/g-ir-annotation-tool.in
 
-TOOL_SUBSTITUTIONS = sed -e s,@libdir\@,$(libdir), -e s,@pkgdatadir\@,$(pkgdatadir), -e s,@PYTHON\@,$(PYTHON),
+TOOL_SUBSTITUTIONS = sed -e s,@libdir\@,$(libdir), -e s,@datarootdir\@,$(datarootdir), -e s,@PYTHON\@,$(PYTHON),
 
 g-ir-scanner: tools/g-ir-scanner.in _giscanner.la Makefile
 	$(AM_V_GEN) $(TOOL_SUBSTITUTIONS) $< > $@.tmp && mv $@.tmp $@
