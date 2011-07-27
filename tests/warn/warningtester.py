@@ -3,10 +3,14 @@ import os
 import os.path
 import sys
 from StringIO import StringIO
+import __builtin__
 
 path=os.getenv('UNINSTALLED_INTROSPECTION_SRCDIR', None)
 assert path is not None
 sys.path.insert(0, path)
+
+# Not correct, but enough to get the tests going uninstalled
+__builtin__.__dict__['DATADIR'] = path
 
 from giscanner.annotationparser import AnnotationParser
 from giscanner.ast import Include, Namespace
