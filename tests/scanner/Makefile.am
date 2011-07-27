@@ -116,23 +116,7 @@ Bar_1_0_gir_FILES = $(barapp_SOURCES)
 Bar_1_0_gir_SCANNERFLAGS = --accept-unprefixed
 GIRS += Bar-1.0.gir
 
-pre-check:
-	@if test "$(top_builddir)" != "$(top_srcdir)"; then \
-	   cp -f $(top_srcdir)/giscanner/*.py $(top_builddir)/giscanner; \
-	fi
-
-post-check:
-	@echo "========================"
-	@echo "All scanner tests passed"
-	@echo "========================"
-	@if test "$(top_builddir)" != "$(top_srcdir)"; then \
-	   rm -f $(top_builddir)/giscanner/*.py*; \
-	fi
-
 %.gir.check: %.gir
 	@diff -u -U 10 $(srcdir)/$*-expected.gir $*.gir && echo "  TEST  $*.gir"
 
-check-local: pre-check
 check-local: $(CHECKGIRS) $(TYPELIBS)
-
-check-local: post-check
