@@ -397,11 +397,6 @@ different --identifier-prefix.""" % (xmlnode.attrib['name'], self._namespace.ide
             self._introspect_boxed_gstreamer_workaround(xmlnode)
             return
 
-        # Work around CairoRectangleInt vs. GdkRectangle issue
-        # https://bugzilla.gnome.org/show_bug.cgi?id=655423
-        if type_name == 'CairoRectangleInt':
-            return
-
         try:
             name = self._transformer.strip_identifier(type_name)
         except TransformerException, e:
