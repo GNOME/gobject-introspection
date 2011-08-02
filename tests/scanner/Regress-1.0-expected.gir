@@ -1928,6 +1928,14 @@ call and can be released on return.</doc>
         </parameter>
       </parameters>
     </function>
+    <function name="test_garray_container_return"
+              c:identifier="regress_test_garray_container_return">
+      <return-value transfer-ownership="container">
+        <array name="GLib.PtrArray" c:type="GPtrArray*">
+          <type name="utf8" c:type="GPtrArray*"/>
+        </array>
+      </return-value>
+    </function>
     <function name="test_ghash_container_return"
               c:identifier="regress_test_ghash_container_return">
       <return-value transfer-ownership="container">

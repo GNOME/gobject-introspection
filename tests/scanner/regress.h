@@ -111,6 +111,9 @@ void regress_test_ghash_nothing_in2 (GHashTable *in);
 GHashTable *regress_test_ghash_nested_everything_return (void);
 GHashTable *regress_test_ghash_nested_everything_return2 (void);
 
+/* GPtrArray */
+GPtrArray *regress_test_garray_container_return (void);
+
 /* error? */
 
 /* closure */

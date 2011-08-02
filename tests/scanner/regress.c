@@ -1316,6 +1316,24 @@ regress_test_ghash_nested_everything_return2 (void)
 
 /************************************************************************/
 
+/**
+ * regress_test_garray_container_return:
+ *
+ * Returns: (transfer container) (type GLib.PtrArray) (element-type utf8):
+ */
+GPtrArray *
+regress_test_garray_container_return (void)
+{
+  GPtrArray *array;
+
+  array = g_ptr_array_new_with_free_func (g_object_unref);
+  g_ptr_array_add (array, g_strdup ("regress"));
+
+  return array;
+}
+
+/************************************************************************/
+
 /* error? */
 
 /* enums / flags */
