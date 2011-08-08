@@ -398,7 +398,7 @@ static const char utf8_nonconst[] = "nonconst \xe2\x99\xa5 utf8";
  * regress_test_utf8_const_return:
  * Return value: UTF-8 string
  */
-G_CONST_RETURN char *
+const char *
 regress_test_utf8_const_return (void)
 {
   /* transfer mode none */
@@ -879,7 +879,7 @@ regress_test_sequence_list()
  *
  * Return value: (element-type utf8) (transfer none):
  */
-G_CONST_RETURN GList *
+const GList *
 regress_test_glist_nothing_return (void)
 {
   return regress_test_sequence_list ();
@@ -1000,7 +1000,7 @@ regress_test_sequence_slist()
  *
  * Return value: (element-type utf8) (transfer none):
  */
-G_CONST_RETURN GSList *
+const GSList *
 regress_test_gslist_nothing_return (void)
 {
   return regress_test_sequence_slist ();
@@ -1144,7 +1144,7 @@ regress_test_table_ghash_const()
  *
  * Return value: (element-type utf8 utf8) (transfer none) (allow-none):
  */
-G_CONST_RETURN GHashTable *
+const GHashTable *
 regress_test_ghash_null_return (void)
 {
   return NULL;
@@ -1155,7 +1155,7 @@ regress_test_ghash_null_return (void)
  *
  * Return value: (element-type utf8 utf8) (transfer none):
  */
-G_CONST_RETURN GHashTable *
+const GHashTable *
 regress_test_ghash_nothing_return (void)
 {
   return regress_test_table_ghash_const ();
