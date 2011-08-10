@@ -54,6 +54,7 @@ class Transformer(object):
         self._include_names = set() # string namespace
         self._includepaths = []
         self._passthrough_mode = False
+        self._annotations = {}
 
     def get_includes(self):
         return self._include_names
@@ -66,6 +67,9 @@ class Transformer(object):
 
     def set_passthrough_mode(self):
         self._passthrough_mode = True
+
+    def set_annotations(self, annotations):
+        self._annotations = annotations
 
     def _append_new_node(self, node):
         original = self._namespace.get(node.name)
@@ -313,7 +317,10 @@ raise ValueError."""
         elif stype == CSYMBOL_TYPE_UNION:
             return self._create_union(symbol)
         elif stype == CSYMBOL_TYPE_CONST:
-            return self._create_const(symbol)
+            # Don't parse constants which are marked (skip)
+            docblock = self._annotations.get(symbol.ident)
+            if not docblock or not 'skip' in docblock.options:
+                return self._create_const(symbol)
         # Ignore variable declarations in the header
         elif stype == CSYMBOL_TYPE_OBJECT:
             pass

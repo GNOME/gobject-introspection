@@ -393,13 +393,14 @@ def scanner_main(args):
 
     ss = create_source_scanner(options, args)
 
+    ap = AnnotationParser()
+    blocks = ap.parse(ss.get_comments())
+
     # Transform the C symbols into AST nodes
+    transformer.set_annotations(blocks)
     transformer.parse(ss.get_symbols())
 
     shlibs = create_binary(transformer, options, args)
-
-    ap = AnnotationParser()
-    blocks = ap.parse(ss.get_comments())
 
     main = MainTransformer(transformer, blocks)
     main.transform()
