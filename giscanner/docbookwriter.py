@@ -122,15 +122,15 @@ class DocBookFormatter(object):
 
 class DocBookPage(object):
     def __init__(self, name, description=""):
-        self.entities = []
+        self.methods = []
         self.name = name
         self.description = description
 
-    def add_entity(self, entity):
-        self.entities.append(entity)
+    def add_method(self, entity):
+        self.methods.append(entity)
 
-    def get_entities(self):
-        return self.entities
+    def get_methods(self):
+        return self.methods
 
 
 class DocBookEntity(object):
@@ -177,7 +177,7 @@ class DocBookWriter(object):
         if isinstance(node, (ast.Class, ast.Record, ast.Interface)):
             for method in node.methods:
                 method.parent_class = node
-                page.add_entity(DocBookEntity(method.name, "method", method))
+                page.add_method(DocBookEntity(method.name, "method", method))
 
     def write(self, output):
         with self._writer.tagcontext("book", [
@@ -211,7 +211,7 @@ class DocBookWriter(object):
                 self._writer.write_tag(
                     "title", [("role", "synopsis.title")], "Synopsis")
                 with self._writer.tagcontext('synopsis'):
-                    for entity in page.get_entities():
+                    for entity in page.get_methods():
                         self._formatter.render_method(entity, link=True)
 
             # if page.description:
@@ -247,10 +247,10 @@ class DocBookWriter(object):
                                          ("role", "details")]):
                 self._writer.write_tag("title", [("role", "details.title")],
                                       "Details")
-            for entity in page.get_entities():
-                self._render_entity(entity)
+            for entity in page.get_methods():
+                self._render_method(entity)
 
-    def _render_entity(self, entity):
+    def _render_method(self, entity):
 
         self._writer.push_tag('refsect2',
                              [('id', "%s-function" % entity.get_name()),
