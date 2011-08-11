@@ -119,19 +119,59 @@ class DocBookFormatter(object):
         self._render_parameters(method, method.parameters)
         self._writer.enable_whitespace()
 
+    def render_property(self, entity, link=False):
+        prop = entity.get_ast()
+        self._writer.disable_whitespace()
+
+        prop_name = '"%s"' % prop.name
+        self._writer.write_line(_space(2))
+        self._writer.write_line(prop_name)
+        self._writer.write_line(_space(27 - len(prop_name)))
+
+        self._writer.write_line(str(prop.type))
+        self._writer.write_line(_space(22 - len(str(prop.type))))
+
+        flags = []
+        if prop.readable:
+            flags.append("Read")
+        if prop.writable:
+            flags.append("Write")
+        if prop.construct:
+            flags.append("Construct")
+        if prop.construct_only:
+            flags.append("Construct Only")
+
+        self._writer.write_line(": " + " / ".join(flags))
+        self._writer.write_line("\n")
+
+        self._writer.enable_whitespace()
+
 
 class DocBookPage(object):
     def __init__(self, name, description=""):
         self.methods = []
+        self.properties = []
+        self.signals = []
         self.name = name
         self.description = description
 
     def add_method(self, entity):
         self.methods.append(entity)
 
+    def add_property(self, entity):
+        self.properties.append(entity)
+
+    def add_signal(self, entity):
+        self.signals.append(entity)
+
     def get_methods(self):
         return self.methods
 
+    def get_properties(self):
+        return self.properties
+
+    def get_signals(self):
+        return self.signals
 
 class DocBookEntity(object):
     def __init__(self, entity_name, entity_type, entity_ast):
@@ -178,6 +218,12 @@ class DocBookWriter(object):
             for method in node.methods:
                 method.parent_class = node
                 page.add_method(DocBookEntity(method.name, "method", method))
+
+        if isinstance(node, (ast.Class, ast.Interface)):
+            for property_ in node.properties:
+                page.add_property(DocBookEntity(property_.name, "property", property_))
+            for signal in node.signals:
+                page.add_signal(DocBookEntity(signal.name, "signal", signal))
 
     def write(self, output):
         with self._writer.tagcontext("book", [
@@ -232,15 +278,15 @@ class DocBookWriter(object):
             #         desc = desc.replace("&", "&amp;")
             #         self._writer.write_line(desc)
 
-            with self._writer.tagcontext('refsect1',
-                                        [('id', '%s.properties' % page.name),
-                                         ('role', 'properties')]):
-                self._writer.write_tag("title", [('role', 'properties.title')],
-                                      "Properties")
-                with self._writer.tagcontext("synopsis"):
-                    self._writer.disable_whitespace()
-                    self._writer.write_line('')
-                    self._writer.enable_whitespace()
+            if page.get_properties():
+                with self._writer.tagcontext('refsect1',
+                                            [('id', '%s.properties' % page.name),
+                                             ('role', 'properties')]):
+                    self._writer.write_tag("title", [('role', 'properties.title')],
+                                          "Properties")
+                    with self._writer.tagcontext("synopsis"):
+                        for entity in page.get_properties():
+                            self._formatter.render_property(entity, link=True)
 
             with self._writer.tagcontext('refsect1',
                                         [('id', "%s-details" % page.name),
