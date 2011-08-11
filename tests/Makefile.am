@@ -1,6 +1,6 @@
 include $(top_srcdir)/common.mk
 
-SUBDIRS = . scanner repository offsets warn
+SUBDIRS = . scanner repository offsets warn doctool
 
 EXTRA_DIST=
 BUILT_SOURCES=

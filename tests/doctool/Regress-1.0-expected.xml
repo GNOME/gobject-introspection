@@ -1,0 +1,737 @@
+<?xml version="1.0"?>
+<book xml:id="page_Regress"
+      xmlns="http://docbook.org/ns/docbook"
+      version="5.0">
+  <title>Regress Documentation</title>
+  <chapter xml:id="ch_Intset">
+    <anchor id="ch_Intset"/>
+    <anchor id="RegressIntset"/>
+    <title>Regress Intset</title>
+    <refsynopsisdiv id="Intset.synopsis" role="synopsis">
+      <title role="synopsis.title">Synopsis</title>
+      <synopsis>
+      </synopsis>
+    </refsynopsisdiv>
+    <refsect1 id="Intset-details" role="details">
+      <title role="details.title">Details</title>
+    </refsect1>
+  </chapter>
+  <chapter xml:id="ch_SkippedStructure">
+    <anchor id="ch_SkippedStructure"/>
+    <anchor id="RegressSkippedStructure"/>
+    <title>Regress SkippedStructure</title>
+    <refsynopsisdiv id="SkippedStructure.synopsis" role="synopsis">
+      <title role="synopsis.title">Synopsis</title>
+      <synopsis>
+      </synopsis>
+    </refsynopsisdiv>
+    <refsect1 id="SkippedStructure-details" role="details">
+      <title role="details.title">Details</title>
+    </refsect1>
+  </chapter>
+  <chapter xml:id="ch_TestBoxed">
+    <anchor id="ch_TestBoxed"/>
+    <anchor id="RegressTestBoxed"/>
+    <title>Regress TestBoxed</title>
+    <refsynopsisdiv id="TestBoxed.synopsis" role="synopsis">
+      <title role="synopsis.title">Synopsis</title>
+      <synopsis>
+<link linkend="RegressTestBoxed"><returnvalue>RegressTestBoxed*</returnvalue></link>   <link linkend="copy-details">regress_test_boxed_copy</link>                 (<parameter><link linkend="RegressTestBoxed"><type>RegressTestBoxed*</type></link> testboxed</parameter>);
+<link linkend="gboolean"><returnvalue>gboolean</returnvalue></link>            <link linkend="equals-details">regress_test_boxed_equals</link>               (<parameter><link linkend="RegressTestBoxed"><type>RegressTestBoxed*</type></link> testboxed, </parameter>
+                                                             <parameter><link linkend="RegressTestBoxed"><type>RegressTestBoxed*</type></link> other</parameter>);
+      </synopsis>
+    </refsynopsisdiv>
+    <refsect1 id="TestBoxed-details" role="details">
+      <title role="details.title">Details</title>
+    </refsect1>
+    <refsect2 id="copy-function" role="struct">
+      <title>copy</title>
+      <indexterm zone="copy">
+        <primary>copy</primary>
+      </indexterm>
+      <programlisting>
+<link linkend="RegressTestBoxed"><returnvalue>RegressTestBoxed*</returnvalue></link>   regress_test_boxed_copy                 (<parameter><link linkend="RegressTestBoxed"><type>RegressTestBoxed*</type></link> testboxed</parameter>);
+      </programlisting>
+      <para/>
+    </refsect2>
+    <refsect2 id="equals-function" role="struct">
+      <title>equals</title>
+      <indexterm zone="equals">
+        <primary>equals</primary>
+      </indexterm>
+      <programlisting>
+<link linkend="gboolean"><returnvalue>gboolean</returnvalue></link>            regress_test_boxed_equals               (<parameter><link linkend="RegressTestBoxed"><type>RegressTestBoxed*</type></link> testboxed, </parameter>
+                                                             <parameter><link linkend="RegressTestBoxed"><type>RegressTestBoxed*</type></link> other</parameter>);
+      </programlisting>
+      <para/>
+    </refsect2>
+  </chapter>
+  <chapter xml:id="ch_TestBoxedPrivate">
+    <anchor id="ch_TestBoxedPrivate"/>
+    <anchor id="RegressTestBoxedPrivate"/>
+    <title>Regress TestBoxedPrivate</title>
+    <refsynopsisdiv id="TestBoxedPrivate.synopsis" role="synopsis">
+      <title role="synopsis.title">Synopsis</title>
+      <synopsis>
+      </synopsis>
+    </refsynopsisdiv>
+    <refsect1 id="TestBoxedPrivate-details" role="details">
+      <title role="details.title">Details</title>
+    </refsect1>
+  </chapter>
+  <chapter xml:id="ch_TestFloating">
+    <anchor id="ch_TestFloating"/>
+    <anchor id="RegressTestFloating"/>
+    <title>Regress TestFloating</title>
+    <refsynopsisdiv id="TestFloating.synopsis" role="synopsis">
+      <title role="synopsis.title">Synopsis</title>
+      <synopsis>
+      </synopsis>
+    </refsynopsisdiv>
+    <refsect1 id="TestFloating-details" role="details">
+      <title role="details.title">Details</title>
+    </refsect1>
+  </chapter>
+  <chapter xml:id="ch_TestFloatingClass">
+    <anchor id="ch_TestFloatingClass"/>
+    <anchor id="RegressTestFloatingClass"/>
+    <title>Regress TestFloatingClass</title>
+    <refsynopsisdiv id="TestFloatingClass.synopsis" role="synopsis">
+      <title role="synopsis.title">Synopsis</title>
+      <synopsis>
+      </synopsis>
+    </refsynopsisdiv>
+    <refsect1 id="TestFloatingClass-details" role="details">
+      <title role="details.title">Details</title>
+    </refsect1>
+  </chapter>
+  <chapter xml:id="ch_TestFundamentalObject">
+    <anchor id="ch_TestFundamentalObject"/>
+    <anchor id="RegressTestFundamentalObject"/>
+    <title>Regress TestFundamentalObject</title>
+    <refsynopsisdiv id="TestFundamentalObject.synopsis" role="synopsis">
+      <title role="synopsis.title">Synopsis</title>
+      <synopsis>
+<link linkend="RegressTestFundamentalObject"><returnvalue>RegressTestFundamentalObject*</returnvalue></link><link linkend="ref-details">regress_test_fundamental_object_ref</link>     (<parameter><link linkend="RegressTestFundamentalObject"><type>RegressTestFundamentalObject*</type></link> testfundamentalobject</parameter>);
+<link linkend="void"><returnvalue>void</returnvalue></link>                <link linkend="unref-details">regress_test_fundamental_object_unref</link>   (<parameter><link linkend="RegressTestFundamentalObject"><type>RegressTestFundamentalObject*</type></link> testfundamentalobject</parameter>);
+      </synopsis>
+    </refsynopsisdiv>
+    <refsect1 id="TestFundamentalObject-details" role="details">
+      <title role="details.title">Details</title>
+    </refsect1>
+    <refsect2 id="ref-function" role="struct">
+      <title>ref</title>
+      <indexterm zone="ref">
+        <primary>ref</primary>
+      </indexterm>
+      <programlisting>
+<link linkend="RegressTestFundamentalObject"><returnvalue>RegressTestFundamentalObject*</returnvalue></link>regress_test_fundamental_object_ref     (<parameter><link linkend="RegressTestFundamentalObject"><type>RegressTestFundamentalObject*</type></link> testfundamentalobject</parameter>);
+      </programlisting>
+      <para/>
+    </refsect2>
+    <refsect2 id="unref-function" role="struct">
+      <title>unref</title>
+      <indexterm zone="unref">
+        <primary>unref</primary>
+      </indexterm>
+      <programlisting>
+<link linkend="void"><returnvalue>void</returnvalue></link>                regress_test_fundamental_object_unref   (<parameter><link linkend="RegressTestFundamentalObject"><type>RegressTestFundamentalObject*</type></link> testfundamentalobject</parameter>);
+      </programlisting>
+      <para/>
+    </refsect2>
+  </chapter>
+  <chapter xml:id="ch_TestFundamentalObjectClass">
+    <anchor id="ch_TestFundamentalObjectClass"/>
+    <anchor id="RegressTestFundamentalObjectClass"/>
+    <title>Regress TestFundamentalObjectClass</title>
+    <refsynopsisdiv id="TestFundamentalObjectClass.synopsis" role="synopsis">
+      <title role="synopsis.title">Synopsis</title>
+      <synopsis>
+      </synopsis>
+    </refsynopsisdiv>
+    <refsect1 id="TestFundamentalObjectClass-details" role="details">
+      <title role="details.title">Details</title>
+    </refsect1>
+  </chapter>
+  <chapter xml:id="ch_TestFundamentalSubObject">
+    <anchor id="ch_TestFundamentalSubObject"/>
+    <anchor id="RegressTestFundamentalSubObject"/>
+    <title>Regress TestFundamentalSubObject</title>
+    <refsynopsisdiv id="TestFundamentalSubObject.synopsis" role="synopsis">
+      <title role="synopsis.title">Synopsis</title>
+      <synopsis>
+      </synopsis>
+    </refsynopsisdiv>
+    <refsect1 id="TestFundamentalSubObject-details" role="details">
+      <title role="details.title">Details</title>
+    </refsect1>
+  </chapter>
+  <chapter xml:id="ch_TestFundamentalSubObjectClass">
+    <anchor id="ch_TestFundamentalSubObjectClass"/>
+    <anchor id="RegressTestFundamentalSubObjectClass"/>
+    <title>Regress TestFundamentalSubObjectClass</title>
+    <refsynopsisdiv id="TestFundamentalSubObjectClass.synopsis"
+                    role="synopsis">
+      <title role="synopsis.title">Synopsis</title>
+      <synopsis>
+      </synopsis>
+    </refsynopsisdiv>
+    <refsect1 id="TestFundamentalSubObjectClass-details" role="details">
+      <title role="details.title">Details</title>
+    </refsect1>
+  </chapter>
+  <chapter xml:id="ch_TestInterface">
+    <anchor id="ch_TestInterface"/>
+    <anchor id="RegressTestInterface"/>
+    <title>Regress TestInterface</title>
+    <refsynopsisdiv id="TestInterface.synopsis" role="synopsis">
+      <title role="synopsis.title">Synopsis</title>
+      <synopsis>
+      </synopsis>
+    </refsynopsisdiv>
+    <refsect1 id="TestInterface-details" role="details">
+      <title role="details.title">Details</title>
+    </refsect1>
+  </chapter>
+  <chapter xml:id="ch_TestInterfaceIface">
+    <anchor id="ch_TestInterfaceIface"/>
+    <anchor id="RegressTestInterfaceIface"/>
+    <title>Regress TestInterfaceIface</title>
+    <refsynopsisdiv id="TestInterfaceIface.synopsis" role="synopsis">
+      <title role="synopsis.title">Synopsis</title>
+      <synopsis>
+      </synopsis>
+    </refsynopsisdiv>
+    <refsect1 id="TestInterfaceIface-details" role="details">
+      <title role="details.title">Details</title>
+    </refsect1>
+  </chapter>
+  <chapter xml:id="ch_TestObj">
+    <anchor id="ch_TestObj"/>
+    <anchor id="RegressTestObj"/>
+    <title>Regress TestObj</title>
+    <refsynopsisdiv id="TestObj.synopsis" role="synopsis">
+      <title role="synopsis.title">Synopsis</title>
+      <synopsis>
+<link linkend="int"><returnvalue>int</returnvalue></link>                 <link linkend="do_matrix-details">regress_test_obj_do_matrix</link>              (<parameter><link linkend="RegressTestObj"><type>RegressTestObj*</type></link> testobj, </parameter>
+                                                             <parameter><link linkend="char"><type>char*</type></link> somestr</parameter>);
+<link linkend="void"><returnvalue>void</returnvalue></link>                <link linkend="forced_method-details">regress_forced_method</link>                   (<parameter><link linkend="RegressTestObj"><type>RegressTestObj*</type></link> testobj</parameter>);
+<link linkend="int"><returnvalue>int</returnvalue></link>                 <link linkend="instance_method-details">regress_test_obj_instance_method</link>        (<parameter><link linkend="RegressTestObj"><type>RegressTestObj*</type></link> testobj</parameter>);
+<link linkend="void"><returnvalue>void</returnvalue></link>                <link linkend="instance_method_callback-details">regress_test_obj_instance_method_callback</link>(<parameter><link linkend="RegressTestObj"><type>RegressTestObj*</type></link> testobj, </parameter>
+                                                             <parameter><link linkend="RegressTestCallback"><type>RegressTestCallback</type></link> callback</parameter>);
+<link linkend="void"><returnvalue>void</returnvalue></link>                <link linkend="set_bare-details">regress_test_obj_set_bare</link>               (<parameter><link linkend="RegressTestObj"><type>RegressTestObj*</type></link> testobj, </parameter>
+                                                             <parameter><link linkend="GObject"><type>GObject*</type></link> bare</parameter>);
+<link linkend="gboolean"><returnvalue>gboolean</returnvalue></link>            <link linkend="skip_inout_param-details">regress_test_obj_skip_inout_param</link>       (<parameter><link linkend="RegressTestObj"><type>RegressTestObj*</type></link> testobj, </parameter>
+                                                             <parameter><link linkend="gint"><type>gint</type></link> a, </parameter>
+                                                             <parameter><link linkend="gint"><type>gint*</type></link> out_b, </parameter>
+                                                             <parameter><link linkend="gdouble"><type>gdouble</type></link> c, </parameter>
+                                                             <parameter><link linkend="gint"><type>gint*</type></link> inout_d, </parameter>
+                                                             <parameter><link linkend="gint"><type>gint*</type></link> out_sum, </parameter>
+                                                             <parameter><link linkend="gint"><type>gint</type></link> num1, </parameter>
+                                                             <parameter><link linkend="gint"><type>gint</type></link> num2</parameter>);
+<link linkend="gboolean"><returnvalue>gboolean</returnvalue></link>            <link linkend="skip_out_param-details">regress_test_obj_skip_out_param</link>         (<parameter><link linkend="RegressTestObj"><type>RegressTestObj*</type></link> testobj, </parameter>
+                                                             <parameter><link linkend="gint"><type>gint</type></link> a, </parameter>
+                                                             <parameter><link linkend="gint"><type>gint*</type></link> out_b, </parameter>
+                                                             <parameter><link linkend="gdouble"><type>gdouble</type></link> c, </parameter>
+                                                             <parameter><link linkend="gint"><type>gint*</type></link> inout_d, </parameter>
+                                                             <parameter><link linkend="gint"><type>gint*</type></link> out_sum, </parameter>
+                                                             <parameter><link linkend="gint"><type>gint</type></link> num1, </parameter>
+                                                             <parameter><link linkend="gint"><type>gint</type></link> num2</parameter>);
+<link linkend="gboolean"><returnvalue>gboolean</returnvalue></link>            <link linkend="skip_param-details">regress_test_obj_skip_param</link>             (<parameter><link linkend="RegressTestObj"><type>RegressTestObj*</type></link> testobj, </parameter>
+                                                             <parameter><link linkend="gint"><type>gint</type></link> a, </parameter>
+                                                             <parameter><link linkend="gint"><type>gint*</type></link> out_b, </parameter>
+                                                             <parameter><link linkend="gdouble"><type>gdouble</type></link> c, </parameter>
+                                                             <parameter><link linkend="gint"><type>gint*</type></link> inout_d, </parameter>
+                                                             <parameter><link linkend="gint"><type>gint*</type></link> out_sum, </parameter>
+                                                             <parameter><link linkend="gint"><type>gint</type></link> num1, </parameter>
+                                                             <parameter><link linkend="gint"><type>gint</type></link> num2</parameter>);
+<link linkend="gboolean"><returnvalue>gboolean</returnvalue></link>            <link linkend="skip_return_val-details">regress_test_obj_skip_return_val</link>        (<parameter><link linkend="RegressTestObj"><type>RegressTestObj*</type></link> testobj, </parameter>
+                                                             <parameter><link linkend="gint"><type>gint</type></link> a, </parameter>
+                                                             <parameter><link linkend="gint"><type>gint*</type></link> out_b, </parameter>
+                                                             <parameter><link linkend="gdouble"><type>gdouble</type></link> c, </parameter>
+                                                             <parameter><link linkend="gint"><type>gint*</type></link> inout_d, </parameter>
+                                                             <parameter><link linkend="gint"><type>gint*</type></link> out_sum, </parameter>
+                                                             <parameter><link linkend="gint"><type>gint</type></link> num1, </parameter>
+                                                             <parameter><link linkend="gint"><type>gint</type></link> num2</parameter>);
+<link linkend="void"><returnvalue>void</returnvalue></link>                <link linkend="torture_signature_0-details">regress_test_obj_torture_signature_0</link>    (<parameter><link linkend="RegressTestObj"><type>RegressTestObj*</type></link> testobj, </parameter>
+                                                             <parameter><link linkend="int"><type>int</type></link> x, </parameter>
+                                                             <parameter><link linkend="double"><type>double*</type></link> y, </parameter>
+                                                             <parameter><link linkend="int"><type>int*</type></link> z, </parameter>
+                                                             <parameter><link linkend="char"><type>char*</type></link> foo, </parameter>
+                                                             <parameter><link linkend="int"><type>int*</type></link> q, </parameter>
+                                                             <parameter><link linkend="guint"><type>guint</type></link> m</parameter>);
+<link linkend="gboolean"><returnvalue>gboolean</returnvalue></link>            <link linkend="torture_signature_1-details">regress_test_obj_torture_signature_1</link>    (<parameter><link linkend="RegressTestObj"><type>RegressTestObj*</type></link> testobj, </parameter>
+                                                             <parameter><link linkend="int"><type>int</type></link> x, </parameter>
+                                                             <parameter><link linkend="double"><type>double*</type></link> y, </parameter>
+                                                             <parameter><link linkend="int"><type>int*</type></link> z, </parameter>
+                                                             <parameter><link linkend="char"><type>char*</type></link> foo, </parameter>
+                                                             <parameter><link linkend="int"><type>int*</type></link> q, </parameter>
+                                                             <parameter><link linkend="guint"><type>guint</type></link> m</parameter>);
+      </synopsis>
+    </refsynopsisdiv>
+    <refsect1 id="TestObj.properties" role="properties">
+      <title role="properties.title">Properties</title>
+      <synopsis>
+  "bare"                     GObject.Object        : Read / Write
+  "boxed"                    Regress.TestBoxed     : Read / Write
+  "double"                   gdouble               : Read / Write
+  "float"                    gfloat                : Read / Write
+  "hash-table"               <map>                 : Read / Write
+  "int"                      gint                  : Read / Write
+  "list"                     <list>                : Read / Write
+  "string"                   utf8                  : Read / Write
+      </synopsis>
+    </refsect1>
+    <refsect1 id="TestObj-details" role="details">
+      <title role="details.title">Details</title>
+    </refsect1>
+    <refsect2 id="do_matrix-function" role="struct">
+      <title>do_matrix</title>
+      <indexterm zone="do_matrix">
+        <primary>do_matrix</primary>
+      </indexterm>
+      <programlisting>
+<link linkend="int"><returnvalue>int</returnvalue></link>                 regress_test_obj_do_matrix              (<parameter><link linkend="RegressTestObj"><type>RegressTestObj*</type></link> testobj, </parameter>
+                                                             <parameter><link linkend="char"><type>char*</type></link> somestr</parameter>);
+      </programlisting>
+      <para>This method is virtual.  Notably its name differs from the virtual
+slot name, which makes it useful for testing bindings handle this
+case.</para>
+    </refsect2>
+    <refsect2 id="forced_method-function" role="struct">
+      <title>forced_method</title>
+      <indexterm zone="forced_method">
+        <primary>forced_method</primary>
+      </indexterm>
+      <programlisting>
+<link linkend="void"><returnvalue>void</returnvalue></link>                regress_forced_method                   (<parameter><link linkend="RegressTestObj"><type>RegressTestObj*</type></link> testobj</parameter>);
+      </programlisting>
+      <para/>
+    </refsect2>
+    <refsect2 id="instance_method-function" role="struct">
+      <title>instance_method</title>
+      <indexterm zone="instance_method">
+        <primary>instance_method</primary>
+      </indexterm>
+      <programlisting>
+<link linkend="int"><returnvalue>int</returnvalue></link>                 regress_test_obj_instance_method        (<parameter><link linkend="RegressTestObj"><type>RegressTestObj*</type></link> testobj</parameter>);
+      </programlisting>
+      <para/>
+    </refsect2>
+    <refsect2 id="instance_method_callback-function" role="struct">
+      <title>instance_method_callback</title>
+      <indexterm zone="instance_method_callback">
+        <primary>instance_method_callback</primary>
+      </indexterm>
+      <programlisting>
+<link linkend="void"><returnvalue>void</returnvalue></link>                regress_test_obj_instance_method_callback(<parameter><link linkend="RegressTestObj"><type>RegressTestObj*</type></link> testobj, </parameter>
+                                                             <parameter><link linkend="RegressTestCallback"><type>RegressTestCallback</type></link> callback</parameter>);
+      </programlisting>
+      <para/>
+    </refsect2>
+    <refsect2 id="set_bare-function" role="struct">
+      <title>set_bare</title>
+      <indexterm zone="set_bare">
+        <primary>set_bare</primary>
+      </indexterm>
+      <programlisting>
+<link linkend="void"><returnvalue>void</returnvalue></link>                regress_test_obj_set_bare               (<parameter><link linkend="RegressTestObj"><type>RegressTestObj*</type></link> testobj, </parameter>
+                                                             <parameter><link linkend="GObject"><type>GObject*</type></link> bare</parameter>);
+      </programlisting>
+      <para/>
+    </refsect2>
+    <refsect2 id="skip_inout_param-function" role="struct">
+      <title>skip_inout_param</title>
+      <indexterm zone="skip_inout_param">
+        <primary>skip_inout_param</primary>
+      </indexterm>
+      <programlisting>
+<link linkend="gboolean"><returnvalue>gboolean</returnvalue></link>            regress_test_obj_skip_inout_param       (<parameter><link linkend="RegressTestObj"><type>RegressTestObj*</type></link> testobj, </parameter>
+                                                             <parameter><link linkend="gint"><type>gint</type></link> a, </parameter>
+                                                             <parameter><link linkend="gint"><type>gint*</type></link> out_b, </parameter>
+                                                             <parameter><link linkend="gdouble"><type>gdouble</type></link> c, </parameter>
+                                                             <parameter><link linkend="gint"><type>gint*</type></link> inout_d, </parameter>
+                                                             <parameter><link linkend="gint"><type>gint*</type></link> out_sum, </parameter>
+                                                             <parameter><link linkend="gint"><type>gint</type></link> num1, </parameter>
+                                                             <parameter><link linkend="gint"><type>gint</type></link> num2</parameter>);
+      </programlisting>
+      <para>Check that the out value is skipped</para>
+    </refsect2>
+    <refsect2 id="skip_out_param-function" role="struct">
+      <title>skip_out_param</title>
+      <indexterm zone="skip_out_param">
+        <primary>skip_out_param</primary>
+      </indexterm>
+      <programlisting>
+<link linkend="gboolean"><returnvalue>gboolean</returnvalue></link>            regress_test_obj_skip_out_param         (<parameter><link linkend="RegressTestObj"><type>RegressTestObj*</type></link> testobj, </parameter>
+                                                             <parameter><link linkend="gint"><type>gint</type></link> a, </parameter>
+                                                             <parameter><link linkend="gint"><type>gint*</type></link> out_b, </parameter>
+                                                             <parameter><link linkend="gdouble"><type>gdouble</type></link> c, </parameter>
+                                                             <parameter><link linkend="gint"><type>gint*</type></link> inout_d, </parameter>
+                                                             <parameter><link linkend="gint"><type>gint*</type></link> out_sum, </parameter>
+                                                             <parameter><link linkend="gint"><type>gint</type></link> num1, </parameter>
+                                                             <parameter><link linkend="gint"><type>gint</type></link> num2</parameter>);
+      </programlisting>
+      <para>Check that the out value is skipped</para>
+    </refsect2>
+    <refsect2 id="skip_param-function" role="struct">
+      <title>skip_param</title>
+      <indexterm zone="skip_param">
+        <primary>skip_param</primary>
+      </indexterm>
+      <programlisting>
+<link linkend="gboolean"><returnvalue>gboolean</returnvalue></link>            regress_test_obj_skip_param             (<parameter><link linkend="RegressTestObj"><type>RegressTestObj*</type></link> testobj, </parameter>
+                                                             <parameter><link linkend="gint"><type>gint</type></link> a, </parameter>
+                                                             <parameter><link linkend="gint"><type>gint*</type></link> out_b, </parameter>
+                                                             <parameter><link linkend="gdouble"><type>gdouble</type></link> c, </parameter>
+                                                             <parameter><link linkend="gint"><type>gint*</type></link> inout_d, </parameter>
+                                                             <parameter><link linkend="gint"><type>gint*</type></link> out_sum, </parameter>
+                                                             <parameter><link linkend="gint"><type>gint</type></link> num1, </parameter>
+                                                             <parameter><link linkend="gint"><type>gint</type></link> num2</parameter>);
+      </programlisting>
+      <para>Check that a parameter is skipped</para>
+    </refsect2>
+    <refsect2 id="skip_return_val-function" role="struct">
+      <title>skip_return_val</title>
+      <indexterm zone="skip_return_val">
+        <primary>skip_return_val</primary>
+      </indexterm>
+      <programlisting>
+<link linkend="gboolean"><returnvalue>gboolean</returnvalue></link>            regress_test_obj_skip_return_val        (<parameter><link linkend="RegressTestObj"><type>RegressTestObj*</type></link> testobj, </parameter>
+                                                             <parameter><link linkend="gint"><type>gint</type></link> a, </parameter>
+                                                             <parameter><link linkend="gint"><type>gint*</type></link> out_b, </parameter>
+                                                             <parameter><link linkend="gdouble"><type>gdouble</type></link> c, </parameter>
+                                                             <parameter><link linkend="gint"><type>gint*</type></link> inout_d, </parameter>
+                                                             <parameter><link linkend="gint"><type>gint*</type></link> out_sum, </parameter>
+                                                             <parameter><link linkend="gint"><type>gint</type></link> num1, </parameter>
+                                                             <parameter><link linkend="gint"><type>gint</type></link> num2</parameter>);
+      </programlisting>
+      <para>Check that the return value is skipped</para>
+    </refsect2>
+    <refsect2 id="torture_signature_0-function" role="struct">
+      <title>torture_signature_0</title>
+      <indexterm zone="torture_signature_0">
+        <primary>torture_signature_0</primary>
+      </indexterm>
+      <programlisting>
+<link linkend="void"><returnvalue>void</returnvalue></link>                regress_test_obj_torture_signature_0    (<parameter><link linkend="RegressTestObj"><type>RegressTestObj*</type></link> testobj, </parameter>
+                                                             <parameter><link linkend="int"><type>int</type></link> x, </parameter>
+                                                             <parameter><link linkend="double"><type>double*</type></link> y, </parameter>
+                                                             <parameter><link linkend="int"><type>int*</type></link> z, </parameter>
+                                                             <parameter><link linkend="char"><type>char*</type></link> foo, </parameter>
+                                                             <parameter><link linkend="int"><type>int*</type></link> q, </parameter>
+                                                             <parameter><link linkend="guint"><type>guint</type></link> m</parameter>);
+      </programlisting>
+      <para/>
+    </refsect2>
+    <refsect2 id="torture_signature_1-function" role="struct">
+      <title>torture_signature_1</title>
+      <indexterm zone="torture_signature_1">
+        <primary>torture_signature_1</primary>
+      </indexterm>
+      <programlisting>
+<link linkend="gboolean"><returnvalue>gboolean</returnvalue></link>            regress_test_obj_torture_signature_1    (<parameter><link linkend="RegressTestObj"><type>RegressTestObj*</type></link> testobj, </parameter>
+                                                             <parameter><link linkend="int"><type>int</type></link> x, </parameter>
+                                                             <parameter><link linkend="double"><type>double*</type></link> y, </parameter>
+                                                             <parameter><link linkend="int"><type>int*</type></link> z, </parameter>
+                                                             <parameter><link linkend="char"><type>char*</type></link> foo, </parameter>
+                                                             <parameter><link linkend="int"><type>int*</type></link> q, </parameter>
+                                                             <parameter><link linkend="guint"><type>guint</type></link> m</parameter>);
+      </programlisting>
+      <para>This function throws an error if m is odd.</para>
+    </refsect2>
+  </chapter>
+  <chapter xml:id="ch_TestObjClass">
+    <anchor id="ch_TestObjClass"/>
+    <anchor id="RegressTestObjClass"/>
+    <title>Regress TestObjClass</title>
+    <refsynopsisdiv id="TestObjClass.synopsis" role="synopsis">
+      <title role="synopsis.title">Synopsis</title>
+      <synopsis>
+      </synopsis>
+    </refsynopsisdiv>
+    <refsect1 id="TestObjClass-details" role="details">
+      <title role="details.title">Details</title>
+    </refsect1>
+  </chapter>
+  <chapter xml:id="ch_TestPrivateStruct">
+    <anchor id="ch_TestPrivateStruct"/>
+    <anchor id="RegressTestPrivateStruct"/>
+    <title>Regress TestPrivateStruct</title>
+    <refsynopsisdiv id="TestPrivateStruct.synopsis" role="synopsis">
+      <title role="synopsis.title">Synopsis</title>
+      <synopsis>
+      </synopsis>
+    </refsynopsisdiv>
+    <refsect1 id="TestPrivateStruct-details" role="details">
+      <title role="details.title">Details</title>
+    </refsect1>
+  </chapter>
+  <chapter xml:id="ch_TestSimpleBoxedA">
+    <anchor id="ch_TestSimpleBoxedA"/>
+    <anchor id="RegressTestSimpleBoxedA"/>
+    <title>Regress TestSimpleBoxedA</title>
+    <refsynopsisdiv id="TestSimpleBoxedA.synopsis" role="synopsis">
+      <title role="synopsis.title">Synopsis</title>
+      <synopsis>
+<link linkend="RegressTestSimpleBoxedA"><returnvalue>RegressTestSimpleBoxedA*</returnvalue></link><link linkend="copy-details">regress_test_simple_boxed_a_copy</link>        (<parameter><link linkend="RegressTestSimpleBoxedA"><type>RegressTestSimpleBoxedA*</type></link> testsimpleboxeda</parameter>);
+<link linkend="gboolean"><returnvalue>gboolean</returnvalue></link>            <link linkend="equals-details">regress_test_simple_boxed_a_equals</link>      (<parameter><link linkend="RegressTestSimpleBoxedA"><type>RegressTestSimpleBoxedA*</type></link> testsimpleboxeda, </parameter>
+                                                             <parameter><link linkend="RegressTestSimpleBoxedA"><type>RegressTestSimpleBoxedA*</type></link> other_a</parameter>);
+      </synopsis>
+    </refsynopsisdiv>
+    <refsect1 id="TestSimpleBoxedA-details" role="details">
+      <title role="details.title">Details</title>
+    </refsect1>
+    <refsect2 id="copy-function" role="struct">
+      <title>copy</title>
+      <indexterm zone="copy">
+        <primary>copy</primary>
+      </indexterm>
+      <programlisting>
+<link linkend="RegressTestSimpleBoxedA"><returnvalue>RegressTestSimpleBoxedA*</returnvalue></link>regress_test_simple_boxed_a_copy        (<parameter><link linkend="RegressTestSimpleBoxedA"><type>RegressTestSimpleBoxedA*</type></link> testsimpleboxeda</parameter>);
+      </programlisting>
+      <para/>
+    </refsect2>
+    <refsect2 id="equals-function" role="struct">
+      <title>equals</title>
+      <indexterm zone="equals">
+        <primary>equals</primary>
+      </indexterm>
+      <programlisting>
+<link linkend="gboolean"><returnvalue>gboolean</returnvalue></link>            regress_test_simple_boxed_a_equals      (<parameter><link linkend="RegressTestSimpleBoxedA"><type>RegressTestSimpleBoxedA*</type></link> testsimpleboxeda, </parameter>
+                                                             <parameter><link linkend="RegressTestSimpleBoxedA"><type>RegressTestSimpleBoxedA*</type></link> other_a</parameter>);
+      </programlisting>
+      <para/>
+    </refsect2>
+  </chapter>
+  <chapter xml:id="ch_TestSimpleBoxedB">
+    <anchor id="ch_TestSimpleBoxedB"/>
+    <anchor id="RegressTestSimpleBoxedB"/>
+    <title>Regress TestSimpleBoxedB</title>
+    <refsynopsisdiv id="TestSimpleBoxedB.synopsis" role="synopsis">
+      <title role="synopsis.title">Synopsis</title>
+      <synopsis>
+<link linkend="RegressTestSimpleBoxedB"><returnvalue>RegressTestSimpleBoxedB*</returnvalue></link><link linkend="copy-details">regress_test_simple_boxed_b_copy</link>        (<parameter><link linkend="RegressTestSimpleBoxedB"><type>RegressTestSimpleBoxedB*</type></link> testsimpleboxedb</parameter>);
+      </synopsis>
+    </refsynopsisdiv>
+    <refsect1 id="TestSimpleBoxedB-details" role="details">
+      <title role="details.title">Details</title>
+    </refsect1>
+    <refsect2 id="copy-function" role="struct">
+      <title>copy</title>
+      <indexterm zone="copy">
+        <primary>copy</primary>
+      </indexterm>
+      <programlisting>
+<link linkend="RegressTestSimpleBoxedB"><returnvalue>RegressTestSimpleBoxedB*</returnvalue></link>regress_test_simple_boxed_b_copy        (<parameter><link linkend="RegressTestSimpleBoxedB"><type>RegressTestSimpleBoxedB*</type></link> testsimpleboxedb</parameter>);
+      </programlisting>
+      <para/>
+    </refsect2>
+  </chapter>
+  <chapter xml:id="ch_TestStructA">
+    <anchor id="ch_TestStructA"/>
+    <anchor id="RegressTestStructA"/>
+    <title>Regress TestStructA</title>
+    <refsynopsisdiv id="TestStructA.synopsis" role="synopsis">
+      <title role="synopsis.title">Synopsis</title>
+      <synopsis>
+<link linkend="void"><returnvalue>void</returnvalue></link>                <link linkend="clone-details">regress_test_struct_a_clone</link>             (<parameter><link linkend="RegressTestStructA"><type>RegressTestStructA*</type></link> teststructa, </parameter>
+                                                             <parameter><link linkend="RegressTestStructA"><type>RegressTestStructA*</type></link> a_out</parameter>);
+      </synopsis>
+    </refsynopsisdiv>
+    <refsect1 id="TestStructA-details" role="details">
+      <title role="details.title">Details</title>
+    </refsect1>
+    <refsect2 id="clone-function" role="struct">
+      <title>clone</title>
+      <indexterm zone="clone">
+        <primary>clone</primary>
+      </indexterm>
+      <programlisting>
+<link linkend="void"><returnvalue>void</returnvalue></link>                regress_test_struct_a_clone             (<parameter><link linkend="RegressTestStructA"><type>RegressTestStructA*</type></link> teststructa, </parameter>
+                                                             <parameter><link linkend="RegressTestStructA"><type>RegressTestStructA*</type></link> a_out</parameter>);
+      </programlisting>
+      <para>Make a copy of a RegressTestStructA</para>
+    </refsect2>
+  </chapter>
+  <chapter xml:id="ch_TestStructB">
+    <anchor id="ch_TestStructB"/>
+    <anchor id="RegressTestStructB"/>
+    <title>Regress TestStructB</title>
+    <refsynopsisdiv id="TestStructB.synopsis" role="synopsis">
+      <title role="synopsis.title">Synopsis</title>
+      <synopsis>
+<link linkend="void"><returnvalue>void</returnvalue></link>                <link linkend="clone-details">regress_test_struct_b_clone</link>             (<parameter><link linkend="RegressTestStructB"><type>RegressTestStructB*</type></link> teststructb, </parameter>
+                                                             <parameter><link linkend="RegressTestStructB"><type>RegressTestStructB*</type></link> b_out</parameter>);
+      </synopsis>
+    </refsynopsisdiv>
+    <refsect1 id="TestStructB-details" role="details">
+      <title role="details.title">Details</title>
+    </refsect1>
+    <refsect2 id="clone-function" role="struct">
+      <title>clone</title>
+      <indexterm zone="clone">
+        <primary>clone</primary>
+      </indexterm>
+      <programlisting>
+<link linkend="void"><returnvalue>void</returnvalue></link>                regress_test_struct_b_clone             (<parameter><link linkend="RegressTestStructB"><type>RegressTestStructB*</type></link> teststructb, </parameter>
+                                                             <parameter><link linkend="RegressTestStructB"><type>RegressTestStructB*</type></link> b_out</parameter>);
+      </programlisting>
+      <para>Make a copy of a RegressTestStructB</para>
+    </refsect2>
+  </chapter>
+  <chapter xml:id="ch_TestStructC">
+    <anchor id="ch_TestStructC"/>
+    <anchor id="RegressTestStructC"/>
+    <title>Regress TestStructC</title>
+    <refsynopsisdiv id="TestStructC.synopsis" role="synopsis">
+      <title role="synopsis.title">Synopsis</title>
+      <synopsis>
+      </synopsis>
+    </refsynopsisdiv>
+    <refsect1 id="TestStructC-details" role="details">
+      <title role="details.title">Details</title>
+    </refsect1>
+  </chapter>
+  <chapter xml:id="ch_TestStructD">
+    <anchor id="ch_TestStructD"/>
+    <anchor id="RegressTestStructD"/>
+    <title>Regress TestStructD</title>
+    <refsynopsisdiv id="TestStructD.synopsis" role="synopsis">
+      <title role="synopsis.title">Synopsis</title>
+      <synopsis>
+      </synopsis>
+    </refsynopsisdiv>
+    <refsect1 id="TestStructD-details" role="details">
+      <title role="details.title">Details</title>
+    </refsect1>
+  </chapter>
+  <chapter xml:id="ch_TestStructFixedArray">
+    <anchor id="ch_TestStructFixedArray"/>
+    <anchor id="RegressTestStructFixedArray"/>
+    <title>Regress TestStructFixedArray</title>
+    <refsynopsisdiv id="TestStructFixedArray.synopsis" role="synopsis">
+      <title role="synopsis.title">Synopsis</title>
+      <synopsis>
+<link linkend="void"><returnvalue>void</returnvalue></link>                <link linkend="frob-details">regress_test_struct_fixed_array_frob</link>    (<parameter><link linkend="RegressTestStructFixedArray"><type>RegressTestStructFixedArray*</type></link> teststructfixedarray</parameter>);
+      </synopsis>
+    </refsynopsisdiv>
+    <refsect1 id="TestStructFixedArray-details" role="details">
+      <title role="details.title">Details</title>
+    </refsect1>
+    <refsect2 id="frob-function" role="struct">
+      <title>frob</title>
+      <indexterm zone="frob">
+        <primary>frob</primary>
+      </indexterm>
+      <programlisting>
+<link linkend="void"><returnvalue>void</returnvalue></link>                regress_test_struct_fixed_array_frob    (<parameter><link linkend="RegressTestStructFixedArray"><type>RegressTestStructFixedArray*</type></link> teststructfixedarray</parameter>);
+      </programlisting>
+      <para/>
+    </refsect2>
+  </chapter>
+  <chapter xml:id="ch_TestSubObj">
+    <anchor id="ch_TestSubObj"/>
+    <anchor id="RegressTestSubObj"/>
+    <title>Regress TestSubObj</title>
+    <refsynopsisdiv id="TestSubObj.synopsis" role="synopsis">
+      <title role="synopsis.title">Synopsis</title>
+      <synopsis>
+<link linkend="int"><returnvalue>int</returnvalue></link>                 <link linkend="instance_method-details">regress_test_sub_obj_instance_method</link>    (<parameter><link linkend="RegressTestSubObj"><type>RegressTestSubObj*</type></link> testsubobj</parameter>);
+<link linkend="void"><returnvalue>void</returnvalue></link>                <link linkend="unset_bare-details">regress_test_sub_obj_unset_bare</link>         (<parameter><link linkend="RegressTestSubObj"><type>RegressTestSubObj*</type></link> testsubobj</parameter>);
+      </synopsis>
+    </refsynopsisdiv>
+    <refsect1 id="TestSubObj-details" role="details">
+      <title role="details.title">Details</title>
+    </refsect1>
+    <refsect2 id="instance_method-function" role="struct">
+      <title>instance_method</title>
+      <indexterm zone="instance_method">
+        <primary>instance_method</primary>
+      </indexterm>
+      <programlisting>
+<link linkend="int"><returnvalue>int</returnvalue></link>                 regress_test_sub_obj_instance_method    (<parameter><link linkend="RegressTestSubObj"><type>RegressTestSubObj*</type></link> testsubobj</parameter>);
+      </programlisting>
+      <para/>
+    </refsect2>
+    <refsect2 id="unset_bare-function" role="struct">
+      <title>unset_bare</title>
+      <indexterm zone="unset_bare">
+        <primary>unset_bare</primary>
+      </indexterm>
+      <programlisting>
+<link linkend="void"><returnvalue>void</returnvalue></link>                regress_test_sub_obj_unset_bare         (<parameter><link linkend="RegressTestSubObj"><type>RegressTestSubObj*</type></link> testsubobj</parameter>);
+      </programlisting>
+      <para/>
+    </refsect2>
+  </chapter>
+  <chapter xml:id="ch_TestSubObjClass">
+    <anchor id="ch_TestSubObjClass"/>
+    <anchor id="RegressTestSubObjClass"/>
+    <title>Regress TestSubObjClass</title>
+    <refsynopsisdiv id="TestSubObjClass.synopsis" role="synopsis">
+      <title role="synopsis.title">Synopsis</title>
+      <synopsis>
+      </synopsis>
+    </refsynopsisdiv>
+    <refsect1 id="TestSubObjClass-details" role="details">
+      <title role="details.title">Details</title>
+    </refsect1>
+  </chapter>
+  <chapter xml:id="ch_TestWi8021x">
+    <anchor id="ch_TestWi8021x"/>
+    <anchor id="RegressTestWi8021x"/>
+    <title>Regress TestWi8021x</title>
+    <refsynopsisdiv id="TestWi8021x.synopsis" role="synopsis">
+      <title role="synopsis.title">Synopsis</title>
+      <synopsis>
+<link linkend="gboolean"><returnvalue>gboolean</returnvalue></link>            <link linkend="get_testbool-details">regress_test_wi_802_1x_get_testbool</link>     (<parameter><link linkend="RegressTestWi8021x"><type>RegressTestWi8021x*</type></link> testwi8021x</parameter>);
+<link linkend="void"><returnvalue>void</returnvalue></link>                <link linkend="set_testbool-details">regress_test_wi_802_1x_set_testbool</link>     (<parameter><link linkend="RegressTestWi8021x"><type>RegressTestWi8021x*</type></link> testwi8021x, </parameter>
+                                                             <parameter><link linkend="gboolean"><type>gboolean</type></link> v</parameter>);
+      </synopsis>
+    </refsynopsisdiv>
+    <refsect1 id="TestWi8021x.properties" role="properties">
+      <title role="properties.title">Properties</title>
+      <synopsis>
+  "testbool"                 gboolean              : Read / Write
+      </synopsis>
+    </refsect1>
+    <refsect1 id="TestWi8021x-details" role="details">
+      <title role="details.title">Details</title>
+    </refsect1>
+    <refsect2 id="get_testbool-function" role="struct">
+      <title>get_testbool</title>
+      <indexterm zone="get_testbool">
+        <primary>get_testbool</primary>
+      </indexterm>
+      <programlisting>
+<link linkend="gboolean"><returnvalue>gboolean</returnvalue></link>            regress_test_wi_802_1x_get_testbool     (<parameter><link linkend="RegressTestWi8021x"><type>RegressTestWi8021x*</type></link> testwi8021x</parameter>);
+      </programlisting>
+      <para/>
+    </refsect2>
+    <refsect2 id="set_testbool-function" role="struct">
+      <title>set_testbool</title>
+      <indexterm zone="set_testbool">
+        <primary>set_testbool</primary>
+      </indexterm>
+      <programlisting>
+<link linkend="void"><returnvalue>void</returnvalue></link>                regress_test_wi_802_1x_set_testbool     (<parameter><link linkend="RegressTestWi8021x"><type>RegressTestWi8021x*</type></link> testwi8021x, </parameter>
+                                                             <parameter><link linkend="gboolean"><type>gboolean</type></link> v</parameter>);
+      </programlisting>
+      <para/>
+    </refsect2>
+  </chapter>
+  <chapter xml:id="ch_TestWi8021xClass">
+    <anchor id="ch_TestWi8021xClass"/>
+    <anchor id="RegressTestWi8021xClass"/>
+    <title>Regress TestWi8021xClass</title>
+    <refsynopsisdiv id="TestWi8021xClass.synopsis" role="synopsis">
+      <title role="synopsis.title">Synopsis</title>
+      <synopsis>
+      </synopsis>
+    </refsynopsisdiv>
+    <refsect1 id="TestWi8021xClass-details" role="details">
+      <title role="details.title">Details</title>
+    </refsect1>
+  </chapter>
+</book>
