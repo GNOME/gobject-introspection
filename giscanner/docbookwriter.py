@@ -233,6 +233,16 @@ class DocBookWriter(object):
             #         self._writer.write_line(desc)
 
             with self._writer.tagcontext('refsect1',
+                                        [('id', '%s.properties' % page.name),
+                                         ('role', 'properties')]):
+                self._writer.write_tag("title", [('role', 'properties.title')],
+                                      "Properties")
+                with self._writer.tagcontext("synopsis"):
+                    self._writer.disable_whitespace()
+                    self._writer.write_line('')
+                    self._writer.enable_whitespace()
+
+            with self._writer.tagcontext('refsect1',
                                         [('id', "%s-details" % page.name),
                                          ("role", "details")]):
                 self._writer.write_tag("title", [("role", "details.title")],
