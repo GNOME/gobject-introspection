@@ -167,7 +167,8 @@ class DocBookWriter(object):
         self._formatter.set_namespace(self._namespace)
 
         for name, node in self._namespace.iteritems():
-            self._add_node(node, name)
+            if isinstance(node, (ast.Class, ast.Record, ast.Interface)):
+                self._add_node(node, name)
 
     def _add_node(self, node, name):
         page = DocBookPage(name, node.doc)
