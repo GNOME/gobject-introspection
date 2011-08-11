@@ -232,15 +232,15 @@ class DocBookWriter(object):
             #         desc = desc.replace("&", "&amp;")
             #         self._writer.write_line(desc)
 
+            with self._writer.tagcontext('refsect1',
+                                        [('id', "%s-details" % page.name),
+                                         ("role", "details")]):
+                self._writer.write_tag("title", [("role", "details.title")],
+                                      "Details")
             for entity in page.get_entities():
                 self._render_entity(entity)
 
     def _render_entity(self, entity):
-        with self._writer.tagcontext('refsect1',
-                                    [('id', "%s-details" % (entity.get_name())),
-                                     ("role", "details")]):
-            self._writer.write_tag("title", [("role", "details.title")],
-                                  "Details")
 
         self._writer.push_tag('refsect2',
                              [('id', "%s-function" % entity.get_name()),

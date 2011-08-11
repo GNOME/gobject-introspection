@@ -181,6 +181,7 @@ None."""
     @staticmethod
     def parse_from_gir(filename):
         transformer = Transformer(None)
+        transformer.set_passthrough_mode()
         transformer._parse_include(filename)
         parser = transformer._cachestore.load(filename)
         transformer._namespace = parser.get_namespace()
