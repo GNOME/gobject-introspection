@@ -90,6 +90,11 @@ class DocBookFormatter(object):
         method = entity.get_ast()
         return "%s ()" % method.symbol
 
+    def get_page_name(self, node):
+        if node.gtype_name is None:
+            return node.ctype
+        return node.gtype_name
+
     def render_method(self, entity, link=False):
         method = entity.get_ast()
         self._writer.disable_whitespace()
@@ -163,12 +168,13 @@ class DocBookFormatter(object):
 
 
 class DocBookPage(object):
-    def __init__(self, name, description=""):
+    def __init__(self, name, ast):
         self.methods = []
         self.properties = []
         self.signals = []
         self.name = name
-        self.description = description
+        self.description = ast.doc
+        self.ast = ast
 
     def add_method(self, entity):
         self.methods.append(entity)
@@ -223,10 +229,11 @@ class DocBookWriter(object):
 
         for name, node in self._namespace.iteritems():
             if isinstance(node, (ast.Class, ast.Record, ast.Interface)):
-                self._add_node(node, name)
+                page_name = self._formatter.get_page_name(node)
+                self._add_node(node, page_name)
 
     def _add_node(self, node, name):
-        page = DocBookPage(name, node.doc)
+        page = DocBookPage(name, node)
         self._add_page(page)
 
         if isinstance(node, (ast.Class, ast.Record, ast.Interface)):
@@ -261,9 +268,9 @@ class DocBookWriter(object):
             self._writer.write_tag(
                 "anchor", [("id", "ch_%s" % (page.name))])
             self._writer.write_tag(
-                "anchor", [("id", "%s%s" % (self._namespace.name, page.name))])
+                "anchor", [("id", page.name)])
             self._writer.write_tag(
-                "title", [], "%s %s" % (self._namespace.name, page.name))
+                "title", [], page.name)
 
             with self._writer.tagcontext("refsynopsisdiv", [
                     ('id', '%s.synopsis' % page.name),
