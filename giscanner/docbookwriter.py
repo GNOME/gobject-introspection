@@ -275,10 +275,9 @@ class DocBookWriter(object):
             self._writer.write_tag(
                 "title", [], page.name)
 
-            with self._writer.tagcontext("refsynopsisdiv", [
-                    ('id', '%s.synopsis' % page.name),
-                    ('role', 'synopsis')
-                    ]):
+            with self._writer.tagcontext("refsynopsisdiv",
+                    [('id', '%s.synopsis' % page.name),
+                     ('role', 'synopsis')]):
                 self._writer.write_tag(
                     "title", [("role", "synopsis.title")], "Synopsis")
                 with self._writer.tagcontext('synopsis'):
