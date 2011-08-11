@@ -164,11 +164,6 @@ class DocBookWriter(object):
         self._namespace = namespace
         self._formatter.set_namespace(namespace)
 
-        page = DocBookPage(namespace.name,
-                           ("Details about namespace should go here which are "
-                            "not currently scanned by the gir"))
-        self._add_page(page)
-
         for name, node in namespace.iteritems():
             self._add_node(node, name)
 
