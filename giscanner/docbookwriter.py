@@ -100,6 +100,19 @@ class DocBookFormatter(object):
             return node.ctype
         return node.gtype_name
 
+    def get_type_name(self, node):
+        if isinstance(node, ast.Array):
+            if node.array_type == ast.Array.C:
+                return str(node.element_type) + "[]"
+            else:
+                return "%s&lt;%s&gt;" % (node.array_type, str(node.element_type))
+        elif isinstance(node, ast.Map):
+            return "GHashTable&lt;%s, %s&gt;" % (str(node.key_type), str(node.value_type))
+        elif isinstance(node, ast.List):
+            return "GList&lt;%s&gt;" % str(node.element_type)
+        else:
+            return str(node)
+
     def render_method(self, entity, link=False):
         method = entity.get_ast()
         self._writer.disable_whitespace()
@@ -137,6 +150,7 @@ class DocBookFormatter(object):
         prop = entity.get_ast()
 
         prop_name = '"%s"' % prop.name
+        prop_type = self.get_type_name(prop.type)
 
         flags = []
         if prop.readable:
@@ -148,7 +162,7 @@ class DocBookFormatter(object):
         if prop.construct_only:
             flags.append("Construct Only")
 
-        self._render_prop_or_signal(prop_name, prop.type, flags)
+        self._render_prop_or_signal(prop_name, prop_type, flags)
 
     def _render_prop_or_signal(self, name, type_, flags):
         self._writer.disable_whitespace()
@@ -377,10 +391,10 @@ class DocBookWriter(object):
         self._writer.pop_tag()
 
     def _render_property(self, entity):
-        pass
+        self._writer.write_line("Not implemented yet")
 
     def _render_signal(self, entity):
-        pass
+        self._writer.write_line("Not implemented yet")
 
     def _render_page_object_hierarchy(self, page_node):
         parent_chain = self._get_parent_chain(page_node)
