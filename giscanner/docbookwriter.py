@@ -124,12 +124,6 @@ class DocBookFormatter(object):
         self._writer.disable_whitespace()
 
         prop_name = '"%s"' % prop.name
-        self._writer.write_line(_space(2))
-        self._writer.write_line(prop_name)
-        self._writer.write_line(_space(27 - len(prop_name)))
-
-        self._writer.write_line(str(prop.type))
-        self._writer.write_line(_space(22 - len(str(prop.type))))
 
         flags = []
         if prop.readable:
@@ -141,8 +135,25 @@ class DocBookFormatter(object):
         if prop.construct_only:
             flags.append("Construct Only")
 
-        self._writer.write_line(": " + " / ".join(flags))
-        self._writer.write_line("\n")
+        self._render_prop_or_signal(prop_name, prop.type, flags)
+
+    def _render_prop_or_signal(self, name, type_, flags):
+        line = _space(2) + name + _space(27 - len(name))
+        line += str(type_) + _space(22 - len(str(type_)))
+        line += ": " + " / ".join(flags)
+
+        self._writer.write_line(line + "\n")
+
+        self._writer.enable_whitespace()
+
+
+    def render_signal(self, entity, link=False):
+        signal = entity.get_ast()
+        self._writer.disable_whitespace()
+
+        sig_name = '"%s"' % signal.name
+        flags = ["TODO: signal flags not in GIR currently"]
+        self._render_prop_or_signal(sig_name, "", flags)
 
         self._writer.enable_whitespace()
 
@@ -287,6 +298,16 @@ class DocBookWriter(object):
                     with self._writer.tagcontext("synopsis"):
                         for entity in page.get_properties():
                             self._formatter.render_property(entity, link=True)
+
+            if page.get_signals():
+                with self._writer.tagcontext('refsect1',
+                                            [('id', '%s.signals' % page.name),
+                                             ('role', 'signal_proto')]):
+                    self._writer.write_tag('title', [('role', 'signal_proto.title')],
+                                          "Signals")
+                    with self._writer.tagcontext('synopsis'):
+                        for entity in page.get_signals():
+                            self._formatter.render_signal(entity, link=True)
 
             with self._writer.tagcontext('refsect1',
                                         [('id', "%s-details" % page.name),
