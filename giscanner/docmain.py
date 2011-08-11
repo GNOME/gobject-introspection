@@ -34,9 +34,8 @@ class GIDocGenerator(object):
         writer.add_namespace(ns)
         writer.write(output)
 
-
 def doc_main(args):
-    parser = optparse.OptionParser('%prog [options] sources')
+    parser = optparse.OptionParser('%prog [options] GIR-file')
 
     parser.add_option("-o", "--output",
                       action="store", dest="output",
@@ -51,7 +50,7 @@ def doc_main(args):
         raise SystemExit("missing output parameter")
 
     if len(args) < 2:
-        raise SystemExit("Need an input gir filename")
+        raise SystemExit("Need an input GIR filename")
 
     if options.format == "docbook":
         writer = DocBookWriter()

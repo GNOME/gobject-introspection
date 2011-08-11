@@ -86,7 +86,11 @@ class DocBookFormatter(object):
         self._writer.disable_whitespace()
 
         retval_type = method.retval.type
-        link_dest = retval_type.ctype.replace("*", "")
+        if retval_type.ctype:
+            link_dest = retval_type.ctype.replace("*", "")
+        else:
+            link_dest = str(retval_type)
+
         if retval_type.target_giname:
             ns = retval_type.target_giname.split('.')
             if ns[0] == self._namespace.name:
