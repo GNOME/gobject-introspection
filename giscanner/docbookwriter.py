@@ -178,6 +178,7 @@ class DocBookPage(object):
         self.name = name
         self.description = ast.doc
         self.ast = ast
+        self.id = None
 
     def add_method(self, entity):
         self.methods.append(entity)
@@ -240,6 +241,7 @@ class DocBookWriter(object):
         self._add_page(page)
 
         if isinstance(node, (ast.Class, ast.Record, ast.Interface)):
+            page.id = node.ctype
             for method in node.methods:
                 method.parent_class = node
                 page.add_method(DocBookEntity(method.name, "method", method))
@@ -269,9 +271,7 @@ class DocBookWriter(object):
         with self._writer.tagcontext("chapter", [("xml:id", "ch_%s" % (
                         page.name))]):
             self._writer.write_tag(
-                "anchor", [("id", "ch_%s" % (page.name))])
-            self._writer.write_tag(
-                "anchor", [("id", page.name)])
+                "refentry", [("id", "%s" % (page.id))])
             self._writer.write_tag(
                 "title", [], page.name)
 
