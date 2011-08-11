@@ -86,6 +86,10 @@ class DocBookFormatter(object):
 
         self._writer.write_line(");\n")
 
+    def get_method_as_title(self, entity):
+        method = entity.get_ast()
+        return "%s ()" % method.symbol
+
     def render_method(self, entity, link=False):
         method = entity.get_ast()
         self._writer.disable_whitespace()
@@ -320,9 +324,10 @@ class DocBookWriter(object):
     def _render_method(self, entity):
 
         self._writer.push_tag('refsect2',
-                             [('id', "%s-function" % entity.get_name()),
+                             [('id', entity.get_ast().symbol),
                               ('role', 'struct')])
-        self._writer.write_tag("title", [], entity.get_name())
+        self._writer.write_tag("title", [],
+                               self._formatter.get_method_as_title(entity))
 
         with self._writer.tagcontext("indexterm",
                                     [("zone", "%s" % entity.get_name())]):
