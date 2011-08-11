@@ -95,6 +95,11 @@ class DocBookFormatter(object):
             return node.ctype
         return node.gtype_name
 
+    def get_class_name(self, node):
+        if node.gtype_name is None:
+            return node.ctype
+        return node.gtype_name
+
     def render_method(self, entity, link=False):
         method = entity.get_ast()
         self._writer.disable_whitespace()
@@ -130,7 +135,6 @@ class DocBookFormatter(object):
 
     def render_property(self, entity, link=False):
         prop = entity.get_ast()
-        self._writer.disable_whitespace()
 
         prop_name = '"%s"' % prop.name
 
@@ -147,6 +151,8 @@ class DocBookFormatter(object):
         self._render_prop_or_signal(prop_name, prop.type, flags)
 
     def _render_prop_or_signal(self, name, type_, flags):
+        self._writer.disable_whitespace()
+
         line = _space(2) + name + _space(27 - len(name))
         line += str(type_) + _space(22 - len(str(type_)))
         line += ": " + " / ".join(flags)
@@ -158,13 +164,10 @@ class DocBookFormatter(object):
 
     def render_signal(self, entity, link=False):
         signal = entity.get_ast()
-        self._writer.disable_whitespace()
 
         sig_name = '"%s"' % signal.name
         flags = ["TODO: signal flags not in GIR currently"]
         self._render_prop_or_signal(sig_name, "", flags)
-
-        self._writer.enable_whitespace()
 
 
 class DocBookPage(object):
@@ -282,23 +285,14 @@ class DocBookWriter(object):
                     for entity in page.get_methods():
                         self._formatter.render_method(entity, link=True)
 
-            # if page.description:
-            #     with self._writer.tagcontext(
-            #         'refsect1',
-            #         [('id', '%s.description' % (page.name, )),
-            #          ]):
-            #         self._writer.write_tag(
-            #             "title", [("role", "desc.title")], "Description")
-            #         import cgi
-            #         desc = page.description
-            #         while True:
-            #             start = desc.find('|[')
-            #             if start == -1:
-            #                 break
-            #             end = desc.find(']|')
-            #             desc = desc[:start] + cgi.escape(desc[start+2:end]) + desc[end+2:]
-            #         desc = desc.replace("&", "&amp;")
-            #         self._writer.write_line(desc)
+            if isinstance(page.ast, (ast.Class, ast.Interface)):
+                with self._writer.tagcontext("refsect1",
+                                            [('id', '%s.object-hierarchy' % page.name),
+                                             ('role', 'object_hierarchy')]):
+                    self._writer.write_tag('title', [('role', 'object_hierarchy.title')],
+                                          "Object Hierarchy")
+                    with self._writer.tagcontext('synopsis'):
+                        self._render_page_object_hierarchy(page.ast)
 
             if page.get_properties():
                 with self._writer.tagcontext('refsect1',
@@ -320,13 +314,50 @@ class DocBookWriter(object):
                         for entity in page.get_signals():
                             self._formatter.render_signal(entity, link=True)
 
-            with self._writer.tagcontext('refsect1',
-                                        [('id', "%s-details" % page.name),
-                                         ("role", "details")]):
-                self._writer.write_tag("title", [("role", "details.title")],
-                                      "Details")
-            for entity in page.get_methods():
-                self._render_method(entity)
+            # if page.description:
+            #     with self._writer.tagcontext(
+            #         'refsect1',
+            #         [('id', '%s.description' % (page.name, )),
+            #          ]):
+            #         self._writer.write_tag(
+            #             "title", [("role", "desc.title")], "Description")
+            #         import cgi
+            #         desc = page.description
+            #         while True:
+            #             start = desc.find('|[')
+            #             if start == -1:
+            #                 break
+            #             end = desc.find(']|')
+            #             desc = desc[:start] + cgi.escape(desc[start+2:end]) + desc[end+2:]
+            #         desc = desc.replace("&", "&amp;")
+            #         self._writer.write_line(desc)
+
+            if page.get_methods():
+                with self._writer.tagcontext('refsect1',
+                                            [('id', "%s-details" % page.name),
+                                             ("role", "details")]):
+                    self._writer.write_tag("title", [("role", "details.title")],
+                                          "Details")
+                    for entity in page.get_methods():
+                        self._render_method(entity)
+
+            if page.get_properties():
+                with self._writer.tagcontext('refsect1',
+                                            [('id', '%s.property-details' % page.name),
+                                             ('role', 'property_details')]):
+                    self._writer.write_tag('title', [('role', 'property_details.title')],
+                                           "Property Details")
+                    for entity in page.get_properties():
+                        self._render_property(entity)
+
+            if page.get_signals():
+                with self._writer.tagcontext('refsect1',
+                                            [('id', '%s.signal-details' % page.name),
+                                             ('role', 'signals')]):
+                    self._writer.write_tag('title', [('role', 'signal.title')],
+                                           "Signal Details")
+                    for entity in page.get_signals():
+                        self._render_signal(entity)
 
     def _render_method(self, entity):
 
@@ -345,3 +376,37 @@ class DocBookWriter(object):
 
         self._writer.write_tag("para", [], entity.get_ast().doc)
         self._writer.pop_tag()
+
+    def _render_property(self, entity):
+        pass
+
+    def _render_signal(self, entity):
+        pass
+
+    def _render_page_object_hierarchy(self, page_node):
+        parent_chain = self._get_parent_chain(page_node)
+        parent_chain.append(page_node)
+        lines = []
+
+        for level, parent in enumerate(parent_chain):
+            prepend = ""
+            if level > 0:
+                prepend = _space((level - 1)* 6) + " +----"
+            lines.append(_space(2) + prepend + self._formatter.get_class_name(parent))
+
+        self._writer.disable_whitespace()
+        self._writer.write_line("\n".join(lines))
+        self._writer.enable_whitespace()
+
+    def _get_parent_chain(self, page_node):
+        parent_chain = []
+
+        node = page_node
+        while node.parent:
+            node = self._transformer.lookup_giname(str(node.parent))
+            parent_chain.append(node)
+
+        parent_chain.reverse()
+        return parent_chain
+
+
