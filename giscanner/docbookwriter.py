@@ -48,8 +48,13 @@ class DocBookFormatter(object):
 
     def _render_parameter(self, param):
         self._writer.push_tag("parameter", [])
-        self._writer.push_tag("link", [("linkend", "%s" % (
-            param.type.ctype))])
+
+        if param.type.ctype is not None:
+            link_dest = param.type.ctype.replace("*", "")
+        else:
+            link_dest = param.type.ctype
+        self._writer.push_tag("link", [("linkend", "%s" % link_dest)])
+
         self._writer.write_tag("type", [], self.get_type_string(param.type))
         self._writer.pop_tag()
 
