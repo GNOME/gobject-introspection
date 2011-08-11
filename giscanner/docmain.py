@@ -21,17 +21,15 @@
 import optparse
 
 from .docbookwriter import DocBookWriter
-from .girparser import GIRParser
+from .transformer import Transformer
 
 class GIDocGenerator(object):
 
     def parse(self, filename):
-        self.parser = GIRParser()
-        self.parser.parse(filename)
+        self.transformer = Transformer.parse_from_gir(filename)
 
     def generate(self, writer, output):
-        ns = self.parser.get_namespace()
-        writer.add_namespace(ns)
+        writer.add_transformer(self.transformer)
         writer.write(output)
 
 def doc_main(args):

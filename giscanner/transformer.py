@@ -178,6 +178,15 @@ None."""
                          % (girname, searchdirs))
         sys.exit(1)
 
+    @staticmethod
+    def parse_from_gir(filename):
+        transformer = Transformer(None)
+        transformer._parse_include(filename)
+        parser = transformer._cachestore.load(filename)
+        transformer._namespace = parser.get_namespace()
+        del transformer._includes[transformer._namespace.name]
+        return transformer
+
     def _parse_include(self, filename, uninstalled=False):
         parser = None
         if self._cachestore is not None:

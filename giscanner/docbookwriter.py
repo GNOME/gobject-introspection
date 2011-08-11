@@ -160,11 +160,13 @@ class DocBookWriter(object):
     def _add_page(self, page):
         self._pages.append(page)
 
-    def add_namespace(self, namespace):
-        self._namespace = namespace
-        self._formatter.set_namespace(namespace)
+    def add_transformer(self, transformer):
+        self._transformer = transformer
 
-        for name, node in namespace.iteritems():
+        self._namespace = self._transformer._namespace
+        self._formatter.set_namespace(self._namespace)
+
+        for name, node in self._namespace.iteritems():
             self._add_node(node, name)
 
     def _add_node(self, node, name):
