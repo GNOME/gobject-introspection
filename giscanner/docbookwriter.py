@@ -28,6 +28,11 @@ from .xmlwriter import XMLWriter
 
 XMLNS = "http://docbook.org/ns/docbook"
 XMLVERSION = "5.0"
+DOCTYPE = """<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!ENTITY % local.common.attrib "xmlns:xi  CDATA  #FIXED 'http://www.w3.org/2003/XInclude'">
+<!ENTITY version SYSTEM "version.xml">
+]>"""
 
 def _space(num):
     return " " * num
@@ -267,6 +272,7 @@ class DocBookWriter(object):
                 page.add_signal(DocBookEntity(signal.name, "signal", signal))
 
     def write(self, output):
+        self._writer.write_line(DOCTYPE)
         with self._writer.tagcontext("book", [
             ("xml:id", "page_%s" % self._namespace.name),
             ("xmlns", XMLNS),
@@ -421,5 +427,3 @@ class DocBookWriter(object):
 
         parent_chain.reverse()
         return parent_chain
-
-
