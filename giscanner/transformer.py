@@ -178,15 +178,15 @@ None."""
                          % (girname, searchdirs))
         sys.exit(1)
 
-    @staticmethod
-    def parse_from_gir(filename):
-        transformer = Transformer(None)
-        transformer.set_passthrough_mode()
-        transformer._parse_include(filename)
-        parser = transformer._cachestore.load(filename)
-        transformer._namespace = parser.get_namespace()
-        del transformer._includes[transformer._namespace.name]
-        return transformer
+    @classmethod
+    def parse_from_gir(cls, filename):
+        self = cls(None)
+        self.set_passthrough_mode()
+        self._parse_include(filename)
+        parser = self._cachestore.load(filename)
+        self._namespace = parser.get_namespace()
+        del self._includes[self._namespace.name]
+        return self
 
     def _parse_include(self, filename, uninstalled=False):
         parser = None
