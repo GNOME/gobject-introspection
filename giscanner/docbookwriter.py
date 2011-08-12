@@ -51,17 +51,15 @@ class DocBookFormatter(object):
     def render_parameter(self, param_type, param_name):
         return "%s %s" % (param_type, param_name)
 
-    def _render_parameter(self, param):
-        self._writer.push_tag("parameter", [])
-
-        if param.type.ctype is not None:
-            link_dest = param.type.ctype.replace("*", "")
-        else:
-            link_dest = param.type.ctype
-        self._writer.push_tag("link", [("linkend", "%s" % link_dest)])
-
-        self._writer.write_tag("type", [], self.get_type_string(param.type))
-        self._writer.pop_tag()
+    def _render_parameter(self, param, extra_content=''):
+        with self._writer.tagcontext("parameter"):
+            if param.type.ctype is not None:
+                link_dest = param.type.ctype.replace("*", "")
+            else:
+                link_dest = param.type.ctype
+            with self._writer.tagcontext("link", [("linkend", "%s" % link_dest)]):
+                self._writer.write_tag("type", [], self.get_type_string(param.type))
+            self._writer.write_line(extra_content)
 
     def _render_parameters(self, parent, parameters):
         self._writer.write_line(
@@ -80,14 +78,12 @@ class DocBookFormatter(object):
             else:
                 first_param = False
 
-            self._render_parameter(param)
             if not param == params[-1]:
                 comma = ", "
             else:
                 comma = ""
-
-            self._writer.write_line(" %s%s" % (param.argname, comma))
-            self._writer.pop_tag()
+            extra_content = " %s%s" % (param.argname, comma)
+            self._render_parameter(param, extra_content)
 
         self._writer.write_line(");\n")
 
@@ -150,6 +146,30 @@ class DocBookFormatter(object):
 
         self._render_parameters(method, method.parameters)
         self._writer.enable_whitespace()
+
+    def render_param_list(self, entity):
+        method = entity.get_ast()
+
+        self._render_param(method.parent_class.name.lower(), 'instance')
+        for param in method.parameters:
+            self._render_param(param.argname, param.doc)
+        self._render_param('Returns', method.retval.doc)
+
+    def _render_param(self, argname, doc):
+        with self._writer.tagcontext('varlistentry'):
+            with self._writer.tagcontext('term'):
+                self._writer.disable_whitespace()
+                try:
+                    with self._writer.tagcontext('parameter'):
+                        self._writer.write_line(argname)
+                    if doc is not None:
+                        self._writer.write_line('&#xA0;:')
+                finally:
+                    self._writer.enable_whitespace()
+            if doc is not None:
+                with self._writer.tagcontext('listitem'):
+                    with self._writer.tagcontext('simpara'):
+                        self._writer.write_line(doc)
 
     def render_property(self, entity, link=False):
         prop = entity.get_ast()
@@ -394,6 +414,10 @@ class DocBookWriter(object):
             self._formatter.render_method(entity)
 
         self._writer.write_tag("para", [], entity.get_ast().doc)
+
+        with self._writer.tagcontext("variablelist", [("role", "params")]):
+            self._formatter.render_param_list(entity)
+
         self._writer.pop_tag()
 
     def _render_property(self, entity):

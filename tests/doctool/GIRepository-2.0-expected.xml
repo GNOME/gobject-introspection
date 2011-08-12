@@ -55,6 +55,35 @@
 Using pointer comparison is not practical since many functions return
 different instances of #GIBaseInfo that refers to the same part of the
 TypeLib; use this function instead to do #GIBaseInfo comparisons.</para>
+        <variablelist role="params">
+          <varlistentry>
+            <term>
+<parameter>baseinfo</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                instance
+              </simpara>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>
+<parameter>info2</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                a #GIBaseInfo
+              </simpara>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>
+<parameter>Returns</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                %TRUE if and only if @info1 equals @info2.
+              </simpara>
+            </listitem>
+          </varlistentry>
+        </variablelist>
       </refsect2>
       <refsect2 id="g_base_info_get_attribute" role="struct">
         <title>g_base_info_get_attribute ()</title>
@@ -66,6 +95,35 @@ TypeLib; use this function instead to do #GIBaseInfo comparisons.</para>
                                                              <parameter><link linkend="gchar"><type>gchar*</type></link> name</parameter>);
         </programlisting>
         <para>Retrieve an arbitrary attribute associated with this node.</para>
+        <variablelist role="params">
+          <varlistentry>
+            <term>
+<parameter>baseinfo</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                instance
+              </simpara>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>
+<parameter>name</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                a freeform string naming an attribute
+              </simpara>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>
+<parameter>Returns</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                The value of the attribute, or %NULL if no such attribute exists
+              </simpara>
+            </listitem>
+          </varlistentry>
+        </variablelist>
       </refsect2>
       <refsect2 id="g_base_info_get_container" role="struct">
         <title>g_base_info_get_container ()</title>
@@ -78,6 +136,26 @@ TypeLib; use this function instead to do #GIBaseInfo comparisons.</para>
         <para>Obtain the container of the @info. The container is the parent
 GIBaseInfo. For instance, the parent of a #GIFunctionInfo is an
 #GIObjectInfo or #GIInterfaceInfo.</para>
+        <variablelist role="params">
+          <varlistentry>
+            <term>
+<parameter>baseinfo</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                instance
+              </simpara>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>
+<parameter>Returns</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                the container
+              </simpara>
+            </listitem>
+          </varlistentry>
+        </variablelist>
       </refsect2>
       <refsect2 id="g_base_info_get_name" role="struct">
         <title>g_base_info_get_name ()</title>
@@ -90,6 +168,26 @@ GIBaseInfo. For instance, the parent of a #GIFunctionInfo is an
         <para>Obtain the name of the @info. What the name represents depends on
 the #GIInfoType of the @info. For instance for #GIFunctionInfo it is
 the name of the function.</para>
+        <variablelist role="params">
+          <varlistentry>
+            <term>
+<parameter>baseinfo</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                instance
+              </simpara>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>
+<parameter>Returns</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                the name of @info or %NULL if it lacks a name.
+              </simpara>
+            </listitem>
+          </varlistentry>
+        </variablelist>
       </refsect2>
       <refsect2 id="g_base_info_get_namespace" role="struct">
         <title>g_base_info_get_namespace ()</title>
@@ -100,6 +198,26 @@ the name of the function.</para>
 <link linkend="gchar"><returnvalue>gchar*</returnvalue></link>              g_base_info_get_namespace               (<parameter><link linkend="GIBaseInfo"><type>GIBaseInfo*</type></link> baseinfo</parameter>);
         </programlisting>
         <para>Obtain the namespace of @info.</para>
+        <variablelist role="params">
+          <varlistentry>
+            <term>
+<parameter>baseinfo</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                instance
+              </simpara>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>
+<parameter>Returns</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                the namespace
+              </simpara>
+            </listitem>
+          </varlistentry>
+        </variablelist>
       </refsect2>
       <refsect2 id="g_base_info_get_typelib" role="struct">
         <title>g_base_info_get_typelib ()</title>
@@ -110,6 +228,26 @@ the name of the function.</para>
 <link linkend="GITypelib"><returnvalue>GITypelib*</returnvalue></link>          g_base_info_get_typelib                 (<parameter><link linkend="GIBaseInfo"><type>GIBaseInfo*</type></link> baseinfo</parameter>);
         </programlisting>
         <para>Obtain the typelib this @info belongs to</para>
+        <variablelist role="params">
+          <varlistentry>
+            <term>
+<parameter>baseinfo</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                instance
+              </simpara>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>
+<parameter>Returns</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                the typelib.
+              </simpara>
+            </listitem>
+          </varlistentry>
+        </variablelist>
       </refsect2>
       <refsect2 id="g_base_info_is_deprecated" role="struct">
         <title>g_base_info_is_deprecated ()</title>
@@ -121,6 +259,26 @@ the name of the function.</para>
         </programlisting>
         <para>Obtain whether the @info is represents a metadata which is
 deprecated or not.</para>
+        <variablelist role="params">
+          <varlistentry>
+            <term>
+<parameter>baseinfo</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                instance
+              </simpara>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>
+<parameter>Returns</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                %TRUE if deprecated
+              </simpara>
+            </listitem>
+          </varlistentry>
+        </variablelist>
       </refsect2>
       <refsect2 id="g_base_info_iterate_attributes" role="struct">
         <title>g_base_info_iterate_attributes ()</title>
@@ -153,6 +311,53 @@ while (g_base_info_iterate_attributes (info, &amp;iter, &amp;name, &amp;value))
 }
 &lt;/programlisting&gt;
 &lt;/example&gt;</para>
+        <variablelist role="params">
+          <varlistentry>
+            <term>
+<parameter>baseinfo</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                instance
+              </simpara>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>
+<parameter>iterator</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                a #GIAttributeIter structure, must be initialized; see below
+              </simpara>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>
+<parameter>name</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                Returned name, must not be freed
+              </simpara>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>
+<parameter>value</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                Returned name, must not be freed
+              </simpara>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>
+<parameter>Returns</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                %TRUE if there are more attributes
+              </simpara>
+            </listitem>
+          </varlistentry>
+        </variablelist>
       </refsect2>
       <refsect2 id="g_base_info_ref" role="struct">
         <title>g_base_info_ref ()</title>
@@ -163,6 +368,26 @@ while (g_base_info_iterate_attributes (info, &amp;iter, &amp;name, &amp;value))
 <link linkend="GIBaseInfo"><returnvalue>GIBaseInfo*</returnvalue></link>         g_base_info_ref                         (<parameter><link linkend="GIBaseInfo"><type>GIBaseInfo*</type></link> baseinfo</parameter>);
         </programlisting>
         <para>Increases the reference count of @info.</para>
+        <variablelist role="params">
+          <varlistentry>
+            <term>
+<parameter>baseinfo</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                instance
+              </simpara>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>
+<parameter>Returns</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                the same @info.
+              </simpara>
+            </listitem>
+          </varlistentry>
+        </variablelist>
       </refsect2>
       <refsect2 id="g_base_info_unref" role="struct">
         <title>g_base_info_unref ()</title>
@@ -174,6 +399,21 @@ while (g_base_info_iterate_attributes (info, &amp;iter, &amp;name, &amp;value))
         </programlisting>
         <para>Decreases the reference count of @info. When its reference count
 drops to 0, the info is freed.</para>
+        <variablelist role="params">
+          <varlistentry>
+            <term>
+<parameter>baseinfo</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                instance
+              </simpara>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>
+<parameter>Returns</parameter>            </term>
+          </varlistentry>
+        </variablelist>
       </refsect2>
     </refsect1>
   </chapter>
@@ -242,6 +482,35 @@ drops to 0, the info is freed.</para>
         </programlisting>
         <para>Obtain an unordered list of versions (either currently loaded or
 available) for @namespace_ in this @repository.</para>
+        <variablelist role="params">
+          <varlistentry>
+            <term>
+<parameter>repository</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                instance
+              </simpara>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>
+<parameter>namespace_</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                GI namespace, e.g. "Gtk"
+              </simpara>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>
+<parameter>Returns</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                the array of versions.
+              </simpara>
+            </listitem>
+          </varlistentry>
+        </variablelist>
       </refsect2>
       <refsect2 id="g_irepository_find_by_gtype" role="struct">
         <title>g_irepository_find_by_gtype ()</title>
@@ -258,6 +527,35 @@ the type must first have been loaded.  There is currently no
 mechanism for determining the namespace which corresponds to an
 arbitrary GType - thus, this function will operate most reliably
 when you know the GType to originate from be from a loaded namespace.</para>
+        <variablelist role="params">
+          <varlistentry>
+            <term>
+<parameter>repository</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                instance
+              </simpara>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>
+<parameter>gtype</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                GType to search for
+              </simpara>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>
+<parameter>Returns</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                #GIBaseInfo representing metadata about @type, or %NULL
+              </simpara>
+            </listitem>
+          </varlistentry>
+        </variablelist>
       </refsect2>
       <refsect2 id="g_irepository_find_by_name" role="struct">
         <title>g_irepository_find_by_name ()</title>
@@ -273,6 +571,44 @@ when you know the GType to originate from be from a loaded namespace.</para>
 this function for a particular namespace, you must call
 #g_irepository_require once to load the namespace, or otherwise
 ensure the namespace has already been loaded.</para>
+        <variablelist role="params">
+          <varlistentry>
+            <term>
+<parameter>repository</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                instance
+              </simpara>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>
+<parameter>namespace_</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                Namespace which will be searched
+              </simpara>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>
+<parameter>name</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                Entry name to find
+              </simpara>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>
+<parameter>Returns</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                #GIBaseInfo representing metadata about @name, or %NULL
+              </simpara>
+            </listitem>
+          </varlistentry>
+        </variablelist>
       </refsect2>
       <refsect2 id="g_irepository_get_c_prefix" role="struct">
         <title>g_irepository_get_c_prefix ()</title>
@@ -287,6 +623,35 @@ ensure the namespace has already been loaded.</para>
 associated with the given introspection namespace.  Each C symbol
 starts with this prefix, as well each #GType in the library.
 such as #g_irepository_require before calling this function.</para>
+        <variablelist role="params">
+          <varlistentry>
+            <term>
+<parameter>repository</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                instance
+              </simpara>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>
+<parameter>namespace_</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                Namespace to inspect
+              </simpara>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>
+<parameter>Returns</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                C namespace prefix, or %NULL if none associated
+              </simpara>
+            </listitem>
+          </varlistentry>
+        </variablelist>
       </refsect2>
       <refsect2 id="g_irepository_get_dependencies" role="struct">
         <title>g_irepository_get_dependencies ()</title>
@@ -300,6 +665,35 @@ such as #g_irepository_require before calling this function.</para>
         <para>Return an array of all (transitive) dependencies for namespace
 form &lt;code&gt;namespace-version&lt;/code&gt;.
 such as #g_irepository_require before calling this function.</para>
+        <variablelist role="params">
+          <varlistentry>
+            <term>
+<parameter>repository</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                instance
+              </simpara>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>
+<parameter>namespace_</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                Namespace of interest
+              </simpara>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>
+<parameter>Returns</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                Zero-terminated string array of versioned dependencies
+              </simpara>
+            </listitem>
+          </varlistentry>
+        </variablelist>
       </refsect2>
       <refsect2 id="g_irepository_get_info" role="struct">
         <title>g_irepository_get_info ()</title>
@@ -316,6 +710,44 @@ given namespace @namespace_.  The namespace must have
 already been loaded before calling this function.
 See g_irepository_get_n_infos() to find the maximum number of
 entries.</para>
+        <variablelist role="params">
+          <varlistentry>
+            <term>
+<parameter>repository</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                instance
+              </simpara>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>
+<parameter>namespace_</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                Namespace to inspect
+              </simpara>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>
+<parameter>index</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                0-based offset into namespace metadata for entry
+              </simpara>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>
+<parameter>Returns</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                #GIBaseInfo containing metadata
+              </simpara>
+            </listitem>
+          </varlistentry>
+        </variablelist>
       </refsect2>
       <refsect2 id="g_irepository_get_loaded_namespaces" role="struct">
         <title>g_irepository_get_loaded_namespaces ()</title>
@@ -326,6 +758,26 @@ entries.</para>
 <link linkend="gchar"><returnvalue>gchar**</returnvalue></link>             g_irepository_get_loaded_namespaces     (<parameter><link linkend="GIRepository"><type>GIRepository*</type></link> repository</parameter>);
         </programlisting>
         <para>Return the list of currently loaded namespaces.</para>
+        <variablelist role="params">
+          <varlistentry>
+            <term>
+<parameter>repository</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                instance
+              </simpara>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>
+<parameter>Returns</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                List of namespaces
+              </simpara>
+            </listitem>
+          </varlistentry>
+        </variablelist>
       </refsect2>
       <refsect2 id="g_irepository_get_n_infos" role="struct">
         <title>g_irepository_get_n_infos ()</title>
@@ -339,6 +791,35 @@ entries.</para>
         <para>This function returns the number of metadata entries in
 given namespace @namespace_.  The namespace must have
 already been loaded before calling this function.</para>
+        <variablelist role="params">
+          <varlistentry>
+            <term>
+<parameter>repository</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                instance
+              </simpara>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>
+<parameter>namespace_</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                Namespace to inspect
+              </simpara>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>
+<parameter>Returns</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                number of metadata entries
+              </simpara>
+            </listitem>
+          </varlistentry>
+        </variablelist>
       </refsect2>
       <refsect2 id="g_irepository_get_shared_library" role="struct">
         <title>g_irepository_get_shared_library ()</title>
@@ -354,6 +835,35 @@ associated with the given namespace @namespace_. There may be no
 shared library path associated, in which case this function will
 return %NULL.
 such as #g_irepository_require before calling this function.</para>
+        <variablelist role="params">
+          <varlistentry>
+            <term>
+<parameter>repository</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                instance
+              </simpara>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>
+<parameter>namespace_</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                Namespace to inspect
+              </simpara>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>
+<parameter>Returns</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                Full path to shared library, or %NULL if none associated
+              </simpara>
+            </listitem>
+          </varlistentry>
+        </variablelist>
       </refsect2>
       <refsect2 id="g_irepository_get_typelib_path" role="struct">
         <title>g_irepository_get_typelib_path ()</title>
@@ -368,6 +878,35 @@ such as #g_irepository_require before calling this function.</para>
 .typelib file it was loaded from.  If the typelib for
 namespace @namespace_ was included in a shared library, return
 the special string "$lt;builtin$gt;".</para>
+        <variablelist role="params">
+          <varlistentry>
+            <term>
+<parameter>repository</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                instance
+              </simpara>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>
+<parameter>namespace_</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                GI namespace to use, e.g. "Gtk"
+              </simpara>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>
+<parameter>Returns</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                Filesystem path (or $lt;builtin$gt;) if successful, %NULL if namespace is not loaded
+              </simpara>
+            </listitem>
+          </varlistentry>
+        </variablelist>
       </refsect2>
       <refsect2 id="g_irepository_get_version" role="struct">
         <title>g_irepository_get_version ()</title>
@@ -381,6 +920,35 @@ the special string "$lt;builtin$gt;".</para>
         <para>This function returns the loaded version associated with the given
 namespace @namespace_.
 such as #g_irepository_require before calling this function.</para>
+        <variablelist role="params">
+          <varlistentry>
+            <term>
+<parameter>repository</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                instance
+              </simpara>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>
+<parameter>namespace_</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                Namespace to inspect
+              </simpara>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>
+<parameter>Returns</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                Loaded version
+              </simpara>
+            </listitem>
+          </varlistentry>
+        </variablelist>
       </refsect2>
       <refsect2 id="g_irepository_is_registered" role="struct">
         <title>g_irepository_is_registered ()</title>
@@ -398,6 +966,44 @@ only be useful in unusual circumstances; in order to act upon
 metadata in the namespace, you should call #g_irepository_require
 instead which will ensure the namespace is loaded, and return as
 quickly as this function will if it has already been loaded.</para>
+        <variablelist role="params">
+          <varlistentry>
+            <term>
+<parameter>repository</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                instance
+              </simpara>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>
+<parameter>namespace_</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                Namespace of interest
+              </simpara>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>
+<parameter>version</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                Required version, may be %NULL for latest
+              </simpara>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>
+<parameter>Returns</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                %TRUE if namespace-version is loaded, %FALSE otherwise
+              </simpara>
+            </listitem>
+          </varlistentry>
+        </variablelist>
       </refsect2>
       <refsect2 id="g_irepository_load_typelib" role="struct">
         <title>g_irepository_load_typelib ()</title>
@@ -410,6 +1016,29 @@ quickly as this function will if it has already been loaded.</para>
                                                              <parameter><link linkend="GIRepositoryLoadFlags"><type>GIRepositoryLoadFlags</type></link> flags</parameter>);
         </programlisting>
         <para/>
+        <variablelist role="params">
+          <varlistentry>
+            <term>
+<parameter>repository</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                instance
+              </simpara>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>
+<parameter>typelib</parameter>            </term>
+          </varlistentry>
+          <varlistentry>
+            <term>
+<parameter>flags</parameter>            </term>
+          </varlistentry>
+          <varlistentry>
+            <term>
+<parameter>Returns</parameter>            </term>
+          </varlistentry>
+        </variablelist>
       </refsect2>
       <refsect2 id="g_irepository_require" role="struct">
         <title>g_irepository_require ()</title>
@@ -427,6 +1056,53 @@ If @namespace_ is not loaded, this function will search for a
 ".typelib" file using the repository search path.  In addition, a
 version @version of namespace may be specified.  If @version is
 not specified, the latest will be used.</para>
+        <variablelist role="params">
+          <varlistentry>
+            <term>
+<parameter>repository</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                instance
+              </simpara>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>
+<parameter>namespace_</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                GI namespace to use, e.g. "Gtk"
+              </simpara>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>
+<parameter>version</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                Version of namespace, may be %NULL for latest
+              </simpara>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>
+<parameter>flags</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                Set of %GIRepositoryLoadFlags, may be 0
+              </simpara>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>
+<parameter>Returns</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                a pointer to the #GITypelib if successful, %NULL otherwise
+              </simpara>
+            </listitem>
+          </varlistentry>
+        </variablelist>
       </refsect2>
       <refsect2 id="g_irepository_require_private" role="struct">
         <title>g_irepository_require_private ()</title>
@@ -445,6 +1121,62 @@ If @namespace_ is not loaded, this function will search for a
 ".typelib" file within the private directory only. In addition, a
 version @version of namespace should be specified.  If @version is
 not specified, the latest will be used.</para>
+        <variablelist role="params">
+          <varlistentry>
+            <term>
+<parameter>repository</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                instance
+              </simpara>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>
+<parameter>typelib_dir</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                Private directory where to find the requested typelib
+              </simpara>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>
+<parameter>namespace_</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                GI namespace to use, e.g. "Gtk"
+              </simpara>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>
+<parameter>version</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                Version of namespace, may be %NULL for latest
+              </simpara>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>
+<parameter>flags</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                Set of %GIRepositoryLoadFlags, may be 0
+              </simpara>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>
+<parameter>Returns</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                a pointer to the #GITypelib if successful, %NULL otherwise
+              </simpara>
+            </listitem>
+          </varlistentry>
+        </variablelist>
       </refsect2>
     </refsect1>
   </chapter>
@@ -490,6 +1222,21 @@ not specified, the latest will be used.</para>
 <link linkend="void"><returnvalue>void</returnvalue></link>                g_typelib_free                          (<parameter><link linkend="GITypelib"><type>GITypelib*</type></link> typelib</parameter>);
         </programlisting>
         <para/>
+        <variablelist role="params">
+          <varlistentry>
+            <term>
+<parameter>typelib</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                instance
+              </simpara>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>
+<parameter>Returns</parameter>            </term>
+          </varlistentry>
+        </variablelist>
       </refsect2>
       <refsect2 id="g_typelib_get_namespace" role="struct">
         <title>g_typelib_get_namespace ()</title>
@@ -500,6 +1247,21 @@ not specified, the latest will be used.</para>
 <link linkend="gchar"><returnvalue>gchar*</returnvalue></link>              g_typelib_get_namespace                 (<parameter><link linkend="GITypelib"><type>GITypelib*</type></link> typelib</parameter>);
         </programlisting>
         <para/>
+        <variablelist role="params">
+          <varlistentry>
+            <term>
+<parameter>typelib</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                instance
+              </simpara>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>
+<parameter>Returns</parameter>            </term>
+          </varlistentry>
+        </variablelist>
       </refsect2>
       <refsect2 id="g_typelib_symbol" role="struct">
         <title>g_typelib_symbol ()</title>
@@ -512,6 +1274,29 @@ not specified, the latest will be used.</para>
                                                              <parameter><link linkend="gpointer"><type>gpointer*</type></link> symbol</parameter>);
         </programlisting>
         <para/>
+        <variablelist role="params">
+          <varlistentry>
+            <term>
+<parameter>typelib</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                instance
+              </simpara>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>
+<parameter>symbol_name</parameter>            </term>
+          </varlistentry>
+          <varlistentry>
+            <term>
+<parameter>symbol</parameter>            </term>
+          </varlistentry>
+          <varlistentry>
+            <term>
+<parameter>Returns</parameter>            </term>
+          </varlistentry>
+        </variablelist>
       </refsect2>
     </refsect1>
   </chapter>
