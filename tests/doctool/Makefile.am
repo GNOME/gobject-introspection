@@ -1,9 +1,9 @@
 include $(top_srcdir)/common.mk
 
-Regress-1.0.gir:
-	cp ../scanner/Regress-1.0.gir .
+GIRepository-2.0.gir:
+	cp ../../GIRepository-2.0.gir .
 
-GIRS = Regress-1.0.gir
+GIRS = GIRepository-2.0.gir
 CHECKXML = $(GIRS:.gir=.xml.check)
 DOCBOOKFILES = $(GIRS:.gir=.xml)
 EXPECTEDDOCBOOKFILES = $(DOCBOOKFILES:.xml=-expected.xml)
