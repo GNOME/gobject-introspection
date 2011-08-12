@@ -116,6 +116,7 @@ GHashTable *regress_test_ghash_nested_everything_return2 (void);
 /* closure */
 int regress_test_closure (GClosure *closure);
 int regress_test_closure_one_arg (GClosure *closure, int arg);
+GVariant *regress_test_closure_variant (GClosure *closure, const GVariant* arg);
 
 /* value */
 int regress_test_int_value_arg(const GValue *v);

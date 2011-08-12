@@ -1807,6 +1807,23 @@ call and can be released on return.</doc>
         </parameter>
       </parameters>
     </function>
+    <function name="test_closure_variant"
+              c:identifier="regress_test_closure_variant">
+      <return-value transfer-ownership="full">
+        <doc xml:whitespace="preserve">the return value of @closure</doc>
+        <type name="GLib.Variant" c:type="GVariant*"/>
+      </return-value>
+      <parameters>
+        <parameter name="closure" transfer-ownership="none">
+          <doc xml:whitespace="preserve">GClosure which takes one GVariant and returns a GVariant</doc>
+          <type name="GObject.Closure" c:type="GClosure*"/>
+        </parameter>
+        <parameter name="arg" transfer-ownership="none">
+          <doc xml:whitespace="preserve">a GVariant passed as argument to @closure</doc>
+          <type name="GLib.Variant" c:type="GVariant*"/>
+        </parameter>
+      </parameters>
+    </function>
     <function name="test_date_in_gvalue"
               c:identifier="regress_test_date_in_gvalue">
       <return-value transfer-ownership="full">
