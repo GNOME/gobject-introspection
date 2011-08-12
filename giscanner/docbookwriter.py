@@ -147,15 +147,34 @@ class DocBookFormatter(object):
         self._render_parameters(method, method.parameters)
         self._writer.enable_whitespace()
 
+    def _get_annotations(self, argument):
+        annotations = {}
+
+        if hasattr(argument.type, 'element_type') and \
+           argument.type.element_type is not None:
+            annotations['element-type'] = argument.type.element_type
+
+        if argument.transfer is not None and argument.transfer != 'none':
+            annotations['transfer'] = argument.transfer
+
+        if hasattr(argument, 'allow_none') and argument.allow_none:
+            annotations['allow-none'] = None
+
+        return annotations
+
     def render_param_list(self, entity):
         method = entity.get_ast()
 
-        self._render_param(method.parent_class.name.lower(), 'instance')
-        for param in method.parameters:
-            self._render_param(param.argname, param.doc)
-        self._render_param('Returns', method.retval.doc)
+        self._render_param(method.parent_class.name.lower(), 'instance', [])
 
-    def _render_param(self, argname, doc):
+        for param in method.parameters:
+            self._render_param(param.argname, param.doc,
+                               self._get_annotations(param))
+
+        self._render_param('Returns', method.retval.doc,
+                           self._get_annotations(method.retval))
+
+    def _render_param(self, argname, doc, annotations):
         with self._writer.tagcontext('varlistentry'):
             with self._writer.tagcontext('term'):
                 self._writer.disable_whitespace()
@@ -170,6 +189,17 @@ class DocBookFormatter(object):
                 with self._writer.tagcontext('listitem'):
                     with self._writer.tagcontext('simpara'):
                         self._writer.write_line(doc)
+                        if annotations:
+                            with self._writer.tagcontext('emphasis', [('role', 'annotation')]):
+                                for key, value in annotations.iteritems():
+                                    self._writer.disable_whitespace()
+                                    try:
+                                        self._writer.write_line('[%s' % key)
+                                        if value is not None:
+                                            self._writer.write_line(' %s' % value)
+                                        self._writer.write_line(']')
+                                    finally:
+                                        self._writer.enable_whitespace()
 
     def render_property(self, entity, link=False):
         prop = entity.get_ast()

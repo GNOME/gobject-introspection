@@ -384,6 +384,8 @@ while (g_base_info_iterate_attributes (info, &amp;iter, &amp;name, &amp;value))
             <listitem>
               <simpara>
                 the same @info.
+                <emphasis role="annotation">
+[transfer full]                </emphasis>
               </simpara>
             </listitem>
           </varlistentry>
@@ -507,6 +509,8 @@ available) for @namespace_ in this @repository.</para>
             <listitem>
               <simpara>
                 the array of versions.
+                <emphasis role="annotation">
+[element-type utf8][transfer full]                </emphasis>
               </simpara>
             </listitem>
           </varlistentry>
@@ -552,6 +556,8 @@ when you know the GType to originate from be from a loaded namespace.</para>
             <listitem>
               <simpara>
                 #GIBaseInfo representing metadata about @type, or %NULL
+                <emphasis role="annotation">
+[transfer full]                </emphasis>
               </simpara>
             </listitem>
           </varlistentry>
@@ -605,6 +611,8 @@ ensure the namespace has already been loaded.</para>
             <listitem>
               <simpara>
                 #GIBaseInfo representing metadata about @name, or %NULL
+                <emphasis role="annotation">
+[transfer full]                </emphasis>
               </simpara>
             </listitem>
           </varlistentry>
@@ -690,6 +698,8 @@ such as #g_irepository_require before calling this function.</para>
             <listitem>
               <simpara>
                 Zero-terminated string array of versioned dependencies
+                <emphasis role="annotation">
+[element-type utf8][transfer full]                </emphasis>
               </simpara>
             </listitem>
           </varlistentry>
@@ -744,6 +754,8 @@ entries.</para>
             <listitem>
               <simpara>
                 #GIBaseInfo containing metadata
+                <emphasis role="annotation">
+[transfer full]                </emphasis>
               </simpara>
             </listitem>
           </varlistentry>
@@ -774,6 +786,8 @@ entries.</para>
             <listitem>
               <simpara>
                 List of namespaces
+                <emphasis role="annotation">
+[element-type utf8][transfer full]                </emphasis>
               </simpara>
             </listitem>
           </varlistentry>
@@ -991,6 +1005,8 @@ quickly as this function will if it has already been loaded.</para>
             <listitem>
               <simpara>
                 Required version, may be %NULL for latest
+                <emphasis role="annotation">
+[allow-none]                </emphasis>
               </simpara>
             </listitem>
           </varlistentry>
@@ -1081,6 +1097,8 @@ not specified, the latest will be used.</para>
             <listitem>
               <simpara>
                 Version of namespace, may be %NULL for latest
+                <emphasis role="annotation">
+[allow-none]                </emphasis>
               </simpara>
             </listitem>
           </varlistentry>
@@ -1155,6 +1173,8 @@ not specified, the latest will be used.</para>
             <listitem>
               <simpara>
                 Version of namespace, may be %NULL for latest
+                <emphasis role="annotation">
+[allow-none]                </emphasis>
               </simpara>
             </listitem>
           </varlistentry>
