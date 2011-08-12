@@ -3143,6 +3143,22 @@ regress_test_strv_in_gvalue (void)
 }
 
 /**
+ * regress_test_multiline_doc_comments:
+ *
+ * This is a function.
+ *
+ * It has multiple lines in the documentation.
+ *
+ * The sky is blue.
+ *
+ * You will give me your credit card number.
+ */
+void
+regress_test_multiline_doc_comments (void)
+{
+}
+
+/**
  * regress_introspectable_via_alias:
  *
  */

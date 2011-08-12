@@ -2342,6 +2342,19 @@ call and can be released on return.</doc>
         </parameter>
       </parameters>
     </function>
+    <function name="test_multiline_doc_comments"
+              c:identifier="regress_test_multiline_doc_comments">
+      <doc xml:whitespace="preserve">This is a function.
+
+It has multiple lines in the documentation.
+
+The sky is blue.
+
+You will give me your credit card number.</doc>
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+    </function>
     <function name="test_short" c:identifier="regress_test_short">
       <return-value transfer-ownership="none">
         <type name="gshort" c:type="gshort"/>

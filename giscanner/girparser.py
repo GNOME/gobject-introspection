@@ -199,7 +199,8 @@ class GIRParser(object):
             return
         doc = node.find(_corens('doc'))
         if doc is not None:
-            obj.doc = doc.text
+            if doc.text:
+                obj.doc = doc.text
         version = node.attrib.get('version')
         if version:
             obj.version = version

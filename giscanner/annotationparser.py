@@ -492,11 +492,18 @@ class AnnotationParser(object):
         lineno = 2
         for line in comment[pos+1:].split('\n'):
             line = line.lstrip()
-            if (not line.startswith('*') or
-                self.WHITESPACE_RE.match(line[1:])):
+            if not line.startswith('*'):
+                lineno += 1
+                continue
+            is_whitespace = self.WHITESPACE_RE.match(line[1:]) is not None
+            if parsing_parameters and is_whitespace:
                 # As soon as we find a line that's just whitespace,
                 # we're done parsing the parameters.
                 parsing_parameters = False
+                lineno += 1
+                continue
+            elif is_whitespace:
+                comment_lines.append('')
                 lineno += 1
                 continue
 
@@ -576,7 +583,7 @@ class AnnotationParser(object):
             elif (not is_parameter):
                 comment_lines.append(line)
             lineno += 1
-        block.comment = '\n'.join(comment_lines)
+        block.comment = '\n'.join(comment_lines).strip()
         block.validate()
         self._blocks[block.name] = block
 

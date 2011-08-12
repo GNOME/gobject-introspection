@@ -135,7 +135,7 @@ and/or use gtk-doc annotations. ''')
             self.write_tag('attribute', [('name', key), ('value', value)])
         if hasattr(node, 'doc') and node.doc:
             self.write_tag('doc', [('xml:whitespace', 'preserve')],
-                           node.doc.strip())
+                           node.doc)
 
     def _append_node_generic(self, node, attrs):
         if node.skip or not node.introspectable:
