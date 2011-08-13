@@ -432,7 +432,6 @@ struct               <link linkend="GIBaseInfo-struct">GIBaseInfo</link>;
                                                              <parameter><link linkend="GIBaseInfo"><type>GIBaseInfo</type></link> *info2</parameter>);
         </programlisting>
         <para>Compare two #GIBaseInfo.
-
 Using pointer comparison is not practical since many functions return
 different instances of #GIBaseInfo that refers to the same part of the
 TypeLib; use this function instead to do #GIBaseInfo comparisons.</para>
@@ -675,10 +674,8 @@ deprecated or not.</para>
         <para>Iterate over all attributes associated with this node.  The iterator
 structure is typically stack allocated, and must have its first
 member initialized to %NULL.
-
 Both the @name and @value should be treated as constants
 and must not be freed.
-
 &lt;example&gt;
 &lt;title&gt;Iterating over attributes&lt;/title&gt;
 &lt;programlisting&gt;
@@ -811,8 +808,6 @@ drops to 0, the info is freed.</para>
 struct               <link linkend="GIRepository-struct">GIRepository</link>;
 <link linkend="GList"><returnvalue>GList</returnvalue></link> *              <link linkend="g-irepository-enumerate-versions">g_irepository_enumerate_versions</link>        (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
                                                              <parameter><link linkend="gchar"><type>gchar</type></link> *namespace_</parameter>);
-<link linkend="GIEnumInfo"><returnvalue>GIEnumInfo</returnvalue></link> *         <link linkend="g-irepository-find-by-error-domain">g_irepository_find_by_error_domain</link>      (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
-                                                             <parameter><link linkend="GQuark"><type>GQuark</type></link> domain</parameter>);
 <link linkend="GIBaseInfo"><returnvalue>GIBaseInfo</returnvalue></link> *         <link linkend="g-irepository-find-by-gtype">g_irepository_find_by_gtype</link>             (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
                                                              <parameter><link linkend="GType"><type>GType</type></link> gtype</parameter>);
 <link linkend="GIBaseInfo"><returnvalue>GIBaseInfo</returnvalue></link> *         <link linkend="g-irepository-find-by-name">g_irepository_find_by_name</link>              (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
@@ -909,53 +904,6 @@ available) for @namespace_ in this @repository.</para>
           </varlistentry>
         </variablelist>
       </refsect2>
-      <refsect2 id="g-irepository-find-by-error-domain" role="function">
-        <title>g_irepository_find_by_error_domain ()</title>
-        <indexterm zone="g-irepository-find-by-error-domain">
-          <primary>find_by_error_domain</primary>
-        </indexterm>
-        <programlisting>
-<link linkend="GIEnumInfo"><returnvalue>GIEnumInfo</returnvalue></link> *         g_irepository_find_by_error_domain      (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
-                                                             <parameter><link linkend="GQuark"><type>GQuark</type></link> domain</parameter>);
-        </programlisting>
-        <para>Searches for the enum type corresponding to the given #GError
-domain. Before calling this function for a particular namespace,
-you must call g_irepository_require() once to load the namespace, or
-otherwise ensure the namespace has already been loaded.
-
-enum type, or %NULL</para>
-        <variablelist role="params">
-          <varlistentry>
-            <term>
-<parameter>repository</parameter>&#xA0;:            </term>
-            <listitem>
-              <simpara>
-                instance
-              </simpara>
-            </listitem>
-          </varlistentry>
-          <varlistentry>
-            <term>
-<parameter>domain</parameter>&#xA0;:            </term>
-            <listitem>
-              <simpara>
-                a #GError domain
-              </simpara>
-            </listitem>
-          </varlistentry>
-          <varlistentry>
-            <term>
-<parameter>Returns</parameter>&#xA0;:            </term>
-            <listitem>
-              <simpara>
-                #GIEnumInfo representing metadata about @domain's
-                <emphasis role="annotation">
-[transfer full]                </emphasis>
-              </simpara>
-            </listitem>
-          </varlistentry>
-        </variablelist>
-      </refsect2>
       <refsect2 id="g-irepository-find-by-gtype" role="function">
         <title>g_irepository_find_by_gtype ()</title>
         <indexterm zone="g-irepository-find-by-gtype">
@@ -1015,7 +963,7 @@ when you know the GType to originate from be from a loaded namespace.</para>
         </programlisting>
         <para>Searches for a particular entry in a namespace.  Before calling
 this function for a particular namespace, you must call
-g_irepository_require() once to load the namespace, or otherwise
+#g_irepository_require once to load the namespace, or otherwise
 ensure the namespace has already been loaded.</para>
         <variablelist role="params">
           <varlistentry>
@@ -1070,8 +1018,7 @@ ensure the namespace has already been loaded.</para>
         <para>This function returns the "C prefix", or the C level namespace
 associated with the given introspection namespace.  Each C symbol
 starts with this prefix, as well each #GType in the library.
-
-such as g_irepository_require() before calling this function.</para>
+such as #g_irepository_require before calling this function.</para>
         <variablelist role="params">
           <varlistentry>
             <term>
@@ -1113,8 +1060,7 @@ such as g_irepository_require() before calling this function.</para>
         </programlisting>
         <para>Return an array of all (transitive) dependencies for namespace
 form &lt;code&gt;namespace-version&lt;/code&gt;.
-
-such as g_irepository_require() before calling this function.</para>
+such as #g_irepository_require before calling this function.</para>
         <variablelist role="params">
           <varlistentry>
             <term>
@@ -1290,8 +1236,7 @@ already been loaded before calling this function.</para>
 associated with the given namespace @namespace_. There may be no
 shared library path associated, in which case this function will
 return %NULL.
-
-such as g_irepository_require() before calling this function.</para>
+such as #g_irepository_require before calling this function.</para>
         <variablelist role="params">
           <varlistentry>
             <term>
@@ -1376,8 +1321,7 @@ the special string "$lt;builtin$gt;".</para>
         </programlisting>
         <para>This function returns the loaded version associated with the given
 namespace @namespace_.
-
-such as g_irepository_require() before calling this function.</para>
+such as #g_irepository_require before calling this function.</para>
         <variablelist role="params">
           <varlistentry>
             <term>
@@ -1421,7 +1365,7 @@ such as g_irepository_require() before calling this function.</para>
         <para>Check whether a particular namespace (and optionally, a specific
 version thereof) is currently loaded.  This function is likely to
 only be useful in unusual circumstances; in order to act upon
-metadata in the namespace, you should call g_irepository_require()
+metadata in the namespace, you should call #g_irepository_require
 instead which will ensure the namespace is loaded, and return as
 quickly as this function will if it has already been loaded.</para>
         <variablelist role="params">
