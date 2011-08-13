@@ -82,12 +82,17 @@ class DocBookFormatter(object):
                 comma = ", "
             else:
                 comma = ""
-            extra_content = " "
-            if '*' in param.type.ctype:
-                extra_content += '*'
-            extra_content += param.argname
-            extra_content += comma
-            self._render_parameter(param, extra_content)
+
+            if isinstance(param.type, ast.Varargs):
+                with self._writer.tagcontext("parameter"):
+                    self._writer.write_line('...%s' % comma)
+            else:
+                extra_content = " "
+                if param.type.ctype is not None and '*' in param.type.ctype:
+                    extra_content += '*'
+                extra_content += param.argname
+                extra_content += comma
+                self._render_parameter(param, extra_content)
 
         self._writer.write_line(");\n")
 
@@ -174,8 +179,11 @@ class DocBookFormatter(object):
         self._render_param(method.parent_class.name.lower(), 'instance', [])
 
         for param in method.parameters:
-            self._render_param(param.argname, param.doc,
-                               self._get_annotations(param))
+            if isinstance(param.type, ast.Varargs):
+                argname = '...'
+            else:
+                argname = param.argname
+            self._render_param(argname, param.doc, self._get_annotations(param))
 
         self._render_param('Returns', method.retval.doc,
                            self._get_annotations(method.retval))
@@ -209,7 +217,6 @@ class DocBookFormatter(object):
 
     def render_property(self, entity, link=False):
         prop = entity.get_ast()
-
         prop_name = '"%s"' % prop.name
         prop_type = self.get_type_name(prop.type)
 
