@@ -154,7 +154,7 @@ use it should be.</doc>
         </parameter>
         <parameter name="path" transfer-ownership="none">
           <doc xml:whitespace="preserve">Path to file</doc>
-          <type name="filename"/>
+          <type name="filename" c:type="char*"/>
         </parameter>
       </parameters>
     </callback>
@@ -1135,7 +1135,7 @@ TpAccount::status-changed</doc>
       </field>
       <field name="array2" writable="1">
         <array c:type="gpointer*">
-          <type name="TestObj"/>
+          <type name="TestObj" c:type="gpointer*"/>
         </array>
       </field>
       <field name="field" writable="1">
@@ -1143,12 +1143,12 @@ TpAccount::status-changed</doc>
       </field>
       <field name="list" writable="1">
         <type name="GLib.List" c:type="GList*">
-          <type name="TestObj"/>
+          <type name="TestObj" c:type="GList*"/>
         </type>
       </field>
       <field name="garray" writable="1">
         <array name="GLib.PtrArray" c:type="GPtrArray*">
-          <type name="TestObj"/>
+          <type name="TestObj" c:type="GPtrArray*"/>
         </array>
       </field>
     </record>
@@ -1902,7 +1902,7 @@ call and can be released on return.</doc>
       <return-value transfer-ownership="full">
         <doc xml:whitespace="preserve">list of strings</doc>
         <type name="GLib.SList" c:type="GSList*">
-          <type name="filename"/>
+          <type name="filename" c:type="GSList*"/>
         </type>
       </return-value>
     </function>
@@ -1920,8 +1920,8 @@ call and can be released on return.</doc>
               c:identifier="regress_test_ghash_container_return">
       <return-value transfer-ownership="container">
         <type name="GLib.HashTable" c:type="GHashTable*">
-          <type name="utf8"/>
-          <type name="utf8"/>
+          <type name="utf8" c:type="GHashTable*"/>
+          <type name="utf8" c:type="GHashTable*"/>
         </type>
       </return-value>
     </function>
@@ -1929,8 +1929,8 @@ call and can be released on return.</doc>
               c:identifier="regress_test_ghash_everything_return">
       <return-value transfer-ownership="full">
         <type name="GLib.HashTable" c:type="GHashTable*">
-          <type name="utf8"/>
-          <type name="utf8"/>
+          <type name="utf8" c:type="GHashTable*"/>
+          <type name="utf8" c:type="GHashTable*"/>
         </type>
       </return-value>
     </function>
@@ -1938,7 +1938,7 @@ call and can be released on return.</doc>
               c:identifier="regress_test_ghash_nested_everything_return">
       <doc xml:whitespace="preserve">Specify nested parameterized types directly with the (type ) annotation.</doc>
       <return-value transfer-ownership="full">
-        <type name="GLib.HashTable">
+        <type name="GLib.HashTable" c:type="GHashTable*">
           <type name="utf8"/>
           <type name="GLib.HashTable">
             <type name="utf8"/>
@@ -1953,8 +1953,8 @@ call and can be released on return.</doc>
 element-type annotation.</doc>
       <return-value transfer-ownership="full">
         <type name="GLib.HashTable" c:type="GHashTable*">
-          <type name="utf8"/>
-          <type name="GLib.HashTable">
+          <type name="utf8" c:type="GHashTable*"/>
+          <type name="GLib.HashTable" c:type="GHashTable*">
             <type name="utf8"/>
             <type name="utf8"/>
           </type>
@@ -1969,8 +1969,8 @@ element-type annotation.</doc>
       <parameters>
         <parameter name="in" transfer-ownership="none">
           <type name="GLib.HashTable" c:type="GHashTable*">
-            <type name="utf8"/>
-            <type name="utf8"/>
+            <type name="utf8" c:type="GHashTable*"/>
+            <type name="utf8" c:type="GHashTable*"/>
           </type>
         </parameter>
       </parameters>
@@ -1983,8 +1983,8 @@ element-type annotation.</doc>
       <parameters>
         <parameter name="in" transfer-ownership="none">
           <type name="GLib.HashTable" c:type="GHashTable*">
-            <type name="utf8"/>
-            <type name="utf8"/>
+            <type name="utf8" c:type="GHashTable*"/>
+            <type name="utf8" c:type="GHashTable*"/>
           </type>
         </parameter>
       </parameters>
@@ -1993,8 +1993,8 @@ element-type annotation.</doc>
               c:identifier="regress_test_ghash_nothing_return">
       <return-value transfer-ownership="none">
         <type name="GLib.HashTable" c:type="GHashTable*">
-          <type name="utf8"/>
-          <type name="utf8"/>
+          <type name="utf8" c:type="GHashTable*"/>
+          <type name="utf8" c:type="GHashTable*"/>
         </type>
       </return-value>
     </function>
@@ -2002,8 +2002,8 @@ element-type annotation.</doc>
               c:identifier="regress_test_ghash_nothing_return2">
       <return-value transfer-ownership="none">
         <type name="GLib.HashTable" c:type="GHashTable*">
-          <type name="utf8"/>
-          <type name="utf8"/>
+          <type name="utf8" c:type="GHashTable*"/>
+          <type name="utf8" c:type="GHashTable*"/>
         </type>
       </return-value>
     </function>
@@ -2015,8 +2015,8 @@ element-type annotation.</doc>
       <parameters>
         <parameter name="in" transfer-ownership="none" allow-none="1">
           <type name="GLib.HashTable" c:type="GHashTable*">
-            <type name="utf8"/>
-            <type name="utf8"/>
+            <type name="utf8" c:type="GHashTable*"/>
+            <type name="utf8" c:type="GHashTable*"/>
           </type>
         </parameter>
       </parameters>
@@ -2033,8 +2033,8 @@ element-type annotation.</doc>
                    transfer-ownership="full"
                    allow-none="1">
           <type name="GLib.HashTable" c:type="GHashTable**">
-            <type name="utf8"/>
-            <type name="utf8"/>
+            <type name="utf8" c:type="GHashTable**"/>
+            <type name="utf8" c:type="GHashTable**"/>
           </type>
         </parameter>
       </parameters>
@@ -2043,8 +2043,8 @@ element-type annotation.</doc>
               c:identifier="regress_test_ghash_null_return">
       <return-value transfer-ownership="none">
         <type name="GLib.HashTable" c:type="GHashTable*">
-          <type name="utf8"/>
-          <type name="utf8"/>
+          <type name="utf8" c:type="GHashTable*"/>
+          <type name="utf8" c:type="GHashTable*"/>
         </type>
       </return-value>
     </function>
@@ -2052,7 +2052,7 @@ element-type annotation.</doc>
               c:identifier="regress_test_glist_container_return">
       <return-value transfer-ownership="container">
         <type name="GLib.List" c:type="GList*">
-          <type name="utf8"/>
+          <type name="utf8" c:type="GList*"/>
         </type>
       </return-value>
     </function>
@@ -2060,7 +2060,7 @@ element-type annotation.</doc>
               c:identifier="regress_test_glist_everything_return">
       <return-value transfer-ownership="full">
         <type name="GLib.List" c:type="GList*">
-          <type name="utf8"/>
+          <type name="utf8" c:type="GList*"/>
         </type>
       </return-value>
     </function>
@@ -2072,7 +2072,7 @@ element-type annotation.</doc>
       <parameters>
         <parameter name="in" transfer-ownership="none">
           <type name="GLib.List" c:type="GList*">
-            <type name="utf8"/>
+            <type name="utf8" c:type="GList*"/>
           </type>
         </parameter>
       </parameters>
@@ -2085,7 +2085,7 @@ element-type annotation.</doc>
       <parameters>
         <parameter name="in" transfer-ownership="none">
           <type name="GLib.List" c:type="GList*">
-            <type name="utf8"/>
+            <type name="utf8" c:type="GList*"/>
           </type>
         </parameter>
       </parameters>
@@ -2094,7 +2094,7 @@ element-type annotation.</doc>
               c:identifier="regress_test_glist_nothing_return">
       <return-value transfer-ownership="none">
         <type name="GLib.List" c:type="GList*">
-          <type name="utf8"/>
+          <type name="utf8" c:type="GList*"/>
         </type>
       </return-value>
     </function>
@@ -2102,7 +2102,7 @@ element-type annotation.</doc>
               c:identifier="regress_test_glist_nothing_return2">
       <return-value transfer-ownership="none">
         <type name="GLib.List" c:type="GList*">
-          <type name="utf8"/>
+          <type name="utf8" c:type="GList*"/>
         </type>
       </return-value>
     </function>
@@ -2114,7 +2114,7 @@ element-type annotation.</doc>
       <parameters>
         <parameter name="in" transfer-ownership="none" allow-none="1">
           <type name="GLib.SList" c:type="GSList*">
-            <type name="utf8"/>
+            <type name="utf8" c:type="GSList*"/>
           </type>
         </parameter>
       </parameters>
@@ -2131,7 +2131,7 @@ element-type annotation.</doc>
                    transfer-ownership="full"
                    allow-none="1">
           <type name="GLib.SList" c:type="GSList**">
-            <type name="utf8"/>
+            <type name="utf8" c:type="GSList**"/>
           </type>
         </parameter>
       </parameters>
@@ -2140,7 +2140,7 @@ element-type annotation.</doc>
               c:identifier="regress_test_gslist_container_return">
       <return-value transfer-ownership="container">
         <type name="GLib.SList" c:type="GSList*">
-          <type name="utf8"/>
+          <type name="utf8" c:type="GSList*"/>
         </type>
       </return-value>
     </function>
@@ -2148,7 +2148,7 @@ element-type annotation.</doc>
               c:identifier="regress_test_gslist_everything_return">
       <return-value transfer-ownership="full">
         <type name="GLib.SList" c:type="GSList*">
-          <type name="utf8"/>
+          <type name="utf8" c:type="GSList*"/>
         </type>
       </return-value>
     </function>
@@ -2160,7 +2160,7 @@ element-type annotation.</doc>
       <parameters>
         <parameter name="in" transfer-ownership="none">
           <type name="GLib.SList" c:type="GSList*">
-            <type name="utf8"/>
+            <type name="utf8" c:type="GSList*"/>
           </type>
         </parameter>
       </parameters>
@@ -2173,7 +2173,7 @@ element-type annotation.</doc>
       <parameters>
         <parameter name="in" transfer-ownership="none">
           <type name="GLib.SList" c:type="GSList*">
-            <type name="utf8"/>
+            <type name="utf8" c:type="GSList*"/>
           </type>
         </parameter>
       </parameters>
@@ -2182,7 +2182,7 @@ element-type annotation.</doc>
               c:identifier="regress_test_gslist_nothing_return">
       <return-value transfer-ownership="none">
         <type name="GLib.SList" c:type="GSList*">
-          <type name="utf8"/>
+          <type name="utf8" c:type="GSList*"/>
         </type>
       </return-value>
     </function>
@@ -2190,7 +2190,7 @@ element-type annotation.</doc>
               c:identifier="regress_test_gslist_nothing_return2">
       <return-value transfer-ownership="none">
         <type name="GLib.SList" c:type="GSList*">
-          <type name="utf8"/>
+          <type name="utf8" c:type="GSList*"/>
         </type>
       </return-value>
     </function>
@@ -2202,7 +2202,7 @@ element-type annotation.</doc>
       <parameters>
         <parameter name="in" transfer-ownership="none" allow-none="1">
           <type name="GLib.SList" c:type="GSList*">
-            <type name="utf8"/>
+            <type name="utf8" c:type="GSList*"/>
           </type>
         </parameter>
       </parameters>
@@ -2219,7 +2219,7 @@ element-type annotation.</doc>
                    transfer-ownership="full"
                    allow-none="1">
           <type name="GLib.SList" c:type="GSList**">
-            <type name="utf8"/>
+            <type name="utf8" c:type="GSList**"/>
           </type>
         </parameter>
       </parameters>

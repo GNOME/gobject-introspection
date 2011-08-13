@@ -297,6 +297,10 @@ usage is void (*_gtk_reserved1)(void);"""
                 text = type_str
             message.warn_node(parent, "%s: Unknown type: %r" %
                               (text, result.ctype), positions=position)
+        # If we replace a node with a new type (such as an annotated) we
+        # might lose the ctype from the original node.
+        if type_node is not None:
+            result.ctype = type_node.ctype
         return result
 
     def _get_position(self, func, param):
@@ -944,7 +948,7 @@ method or constructor of some type."""
 
         # A quick hack here...in the future we should catch C signature/GI signature
         # mismatches in a general way in finaltransformer
-        if first.type.ctype is not None and first.type.ctype.count('*') != 1:
+        if first.type.ctype is not None and first.type.ctype.count('*') > 1:
             return False
 
         if not func.is_method:

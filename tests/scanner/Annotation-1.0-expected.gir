@@ -54,14 +54,14 @@ and/or use gtk-doc annotations.  -->
       <return-value transfer-ownership="container">
         <doc xml:whitespace="preserve">list of strings</doc>
         <type name="GLib.List" c:type="GList*">
-          <type name="utf8"/>
+          <type name="utf8" c:type="GList*"/>
         </type>
       </return-value>
       <parameters>
         <parameter name="in" transfer-ownership="none">
           <doc xml:whitespace="preserve">list of strings</doc>
           <type name="GLib.List" c:type="GList*">
-            <type name="utf8"/>
+            <type name="utf8" c:type="GList*"/>
           </type>
         </parameter>
       </parameters>
@@ -238,8 +238,8 @@ objects.</doc>
         <return-value transfer-ownership="full">
           <doc xml:whitespace="preserve">hash table</doc>
           <type name="GLib.HashTable" c:type="GHashTable*">
-            <type name="utf8"/>
-            <type name="GObject.Object"/>
+            <type name="utf8" c:type="GHashTable*"/>
+            <type name="GObject.Object" c:type="GHashTable*"/>
           </type>
         </return-value>
       </method>
@@ -250,7 +250,7 @@ intentionally similar example to gtk_container_get_children</doc>
         <return-value transfer-ownership="container">
           <doc xml:whitespace="preserve">list of objects</doc>
           <type name="GLib.SList" c:type="GSList*">
-            <type name="Object"/>
+            <type name="Object" c:type="GSList*"/>
           </type>
         </return-value>
       </method>
@@ -260,7 +260,7 @@ each string needs to be freed.</doc>
         <return-value transfer-ownership="full">
           <doc xml:whitespace="preserve">list of strings</doc>
           <type name="GLib.List" c:type="GList*">
-            <type name="utf8"/>
+            <type name="utf8" c:type="GList*"/>
           </type>
         </return-value>
       </method>
@@ -410,7 +410,7 @@ each string needs to be freed.</doc>
           <parameter name="data" transfer-ownership="none">
             <doc xml:whitespace="preserve">The data</doc>
             <array length="1" zero-terminated="0" c:type="gchar*">
-              <type name="gint8"/>
+              <type name="gint8" c:type="gchar*"/>
             </array>
           </parameter>
           <parameter name="length" transfer-ownership="none">
@@ -429,7 +429,7 @@ type.</doc>
           <parameter name="data" transfer-ownership="none">
             <doc xml:whitespace="preserve">The data</doc>
             <array length="1" zero-terminated="0" c:type="gpointer">
-              <type name="guint8"/>
+              <type name="guint8" c:type="gpointer"/>
             </array>
           </parameter>
           <parameter name="length" transfer-ownership="none">
@@ -677,7 +677,7 @@ detection, and fixing it via annotations.</doc>
     <function name="get_source_file" c:identifier="annotation_get_source_file">
       <return-value transfer-ownership="full">
         <doc xml:whitespace="preserve">Source file</doc>
-        <type name="filename"/>
+        <type name="filename" c:type="char*"/>
       </return-value>
     </function>
     <function name="init" c:identifier="annotation_init">
@@ -725,7 +725,7 @@ detection, and fixing it via annotations.</doc>
         <parameter name="array" transfer-ownership="none">
           <doc xml:whitespace="preserve">the array</doc>
           <array name="GLib.PtrArray" c:type="GPtrArray*">
-            <type name="GLib.Value"/>
+            <type name="GLib.Value" c:type="GPtrArray*"/>
           </array>
         </parameter>
       </parameters>
@@ -747,6 +747,12 @@ detection, and fixing it via annotations.</doc>
         </parameter>
       </parameters>
     </function>
+    <function name="return_filename" c:identifier="annotation_return_filename">
+      <return-value transfer-ownership="full">
+        <doc xml:whitespace="preserve">An annotated filename</doc>
+        <type name="filename" c:type="gchar*"/>
+      </return-value>
+    </function>
     <function name="set_source_file" c:identifier="annotation_set_source_file">
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
@@ -754,7 +760,7 @@ detection, and fixing it via annotations.</doc>
       <parameters>
         <parameter name="fname" transfer-ownership="none">
           <doc xml:whitespace="preserve">Source file</doc>
-          <type name="filename"/>
+          <type name="filename" c:type="char*"/>
         </parameter>
       </parameters>
     </function>
@@ -776,7 +782,7 @@ detection, and fixing it via annotations.</doc>
         </parameter>
         <parameter name="properties" transfer-ownership="none">
           <array length="0" zero-terminated="0" c:type="gchar*">
-            <type name="utf8"/>
+            <type name="utf8" c:type="gchar*"/>
           </array>
         </parameter>
       </parameters>
