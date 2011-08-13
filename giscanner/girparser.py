@@ -572,3 +572,6 @@ class GIRParser(object):
             return
         for member in self._find_children(node, _corens('member')):
             members.append(self._parse_member(member))
+        for func_node in self._find_children(node, _corens('function')):
+            func = self._parse_function_common(func_node, ast.Function)
+            obj.static_methods.append(func)

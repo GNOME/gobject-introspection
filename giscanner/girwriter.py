@@ -337,6 +337,8 @@ and/or use gtk-doc annotations. ''')
             self._write_generic(enum)
             for member in enum.members:
                 self._write_member(member)
+            for method in sorted(enum.static_methods):
+                self._write_static_method(method)
 
     def _write_bitfield(self, bitfield):
         attrs = [('name', bitfield.name)]
@@ -348,6 +350,8 @@ and/or use gtk-doc annotations. ''')
             self._write_generic(bitfield)
             for member in bitfield.members:
                 self._write_member(member)
+            for method in sorted(bitfield.static_methods):
+                self._write_static_method(method)
 
     def _write_member(self, member):
         attrs = [('name', member.name),

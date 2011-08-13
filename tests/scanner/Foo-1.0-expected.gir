@@ -186,6 +186,26 @@ and/or use gtk-doc annotations.  -->
               value="2"
               c:identifier="FOO_ENUM_DELTA"
               glib:nick="delta"/>
+      <function name="method" c:identifier="foo_enum_type_method">
+        <return-value transfer-ownership="none">
+          <type name="gint" c:type="int"/>
+        </return-value>
+        <parameters>
+          <parameter name="foo_enum" transfer-ownership="none">
+            <type name="EnumType" c:type="FooEnumType"/>
+          </parameter>
+        </parameters>
+      </function>
+      <function name="returnv" c:identifier="foo_enum_type_returnv">
+        <return-value transfer-ownership="none">
+          <type name="EnumType" c:type="FooEnumType"/>
+        </return-value>
+        <parameters>
+          <parameter name="x" transfer-ownership="none">
+            <type name="gint" c:type="int"/>
+          </parameter>
+        </parameters>
+      </function>
     </enumeration>
     <enumeration name="Error"
                  glib:type-name="FooError"
@@ -204,6 +224,11 @@ and/or use gtk-doc annotations.  -->
               value="2"
               c:identifier="FOO_ERROR_UGLY"
               glib:nick="ugly"/>
+      <function name="quark" c:identifier="foo_error_quark">
+        <return-value transfer-ownership="none">
+          <type name="GLib.Quark" c:type="GQuark"/>
+        </return-value>
+      </function>
     </enumeration>
     <union name="Event" c:type="FooEvent">
       <field name="type" writable="1">
@@ -954,7 +979,9 @@ exposed to language bindings.</doc>
         </parameter>
       </parameters>
     </function>
-    <function name="enum_type_method" c:identifier="foo_enum_type_method">
+    <function name="enum_type_method"
+              c:identifier="foo_enum_type_method"
+              moved-to="EnumType.method">
       <return-value transfer-ownership="none">
         <type name="gint" c:type="int"/>
       </return-value>
@@ -964,7 +991,9 @@ exposed to language bindings.</doc>
         </parameter>
       </parameters>
     </function>
-    <function name="enum_type_returnv" c:identifier="foo_enum_type_returnv">
+    <function name="enum_type_returnv"
+              c:identifier="foo_enum_type_returnv"
+              moved-to="EnumType.returnv">
       <return-value transfer-ownership="none">
         <type name="EnumType" c:type="FooEnumType"/>
       </return-value>
@@ -974,7 +1003,9 @@ exposed to language bindings.</doc>
         </parameter>
       </parameters>
     </function>
-    <function name="error_quark" c:identifier="foo_error_quark">
+    <function name="error_quark"
+              c:identifier="foo_error_quark"
+              moved-to="Error.quark">
       <return-value transfer-ownership="none">
         <type name="GLib.Quark" c:type="GQuark"/>
       </return-value>

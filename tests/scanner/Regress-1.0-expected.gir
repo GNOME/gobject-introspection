@@ -188,6 +188,16 @@ use it should be.</doc>
               value="48"
               c:identifier="REGRESS_TEST_VALUE4"
               glib:nick="value4"/>
+      <function name="param" c:identifier="regress_test_enum_param">
+        <return-value transfer-ownership="none">
+          <type name="utf8" c:type="gchar*"/>
+        </return-value>
+        <parameters>
+          <parameter name="e" transfer-ownership="none">
+            <type name="TestEnum" c:type="RegressTestEnum"/>
+          </parameter>
+        </parameters>
+      </function>
     </enumeration>
     <enumeration name="TestEnumNoGEnum" c:type="RegressTestEnumNoGEnum">
       <member name="evalue1" value="0" c:identifier="REGRESS_TEST_EVALUE1"/>
@@ -1887,7 +1897,9 @@ call and can be released on return.</doc>
         </parameter>
       </parameters>
     </function>
-    <function name="test_enum_param" c:identifier="regress_test_enum_param">
+    <function name="test_enum_param"
+              c:identifier="regress_test_enum_param"
+              moved-to="TestEnum.param">
       <return-value transfer-ownership="none">
         <type name="utf8" c:type="gchar*"/>
       </return-value>

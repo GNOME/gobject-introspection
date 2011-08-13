@@ -736,6 +736,11 @@ class Enum(Node, Registered):
         self.members = members
         # Associated error domain name
         self.error_domain = None
+        self.static_methods = []
+
+    def _walk(self, callback, chain):
+        for meth in self.static_methods:
+            meth.walk(callback, chain)
 
 
 class Bitfield(Node, Registered):
@@ -750,6 +755,11 @@ class Bitfield(Node, Registered):
         self.ctype = ctype
         self.c_symbol_prefix = c_symbol_prefix
         self.members = members
+        self.static_methods = []
+
+    def _walk(self, callback, chain):
+        for meth in self.static_methods:
+            meth.walk(callback, chain)
 
 
 class Member(Annotated):

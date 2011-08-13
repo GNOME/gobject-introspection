@@ -1006,7 +1006,7 @@ method or constructor of some type."""
             node.static_methods.append(func)
             return True
         elif isinstance(node, (ast.Interface, ast.Record, ast.Union,
-                               ast.Boxed)):
+                               ast.Boxed, ast.Enum, ast.Bitfield)):
             # prior to the introduction of this part of the code, only
             # ast.Class could have static methods.  so for backwards
             # compatibility, instead of removing the func from the namespace,
