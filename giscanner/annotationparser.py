@@ -25,9 +25,10 @@ import re
 from . import message
 from .odict import odict
 
-# Tags - annotations applyed to comment blocks
+# Tags - annotations applied to comment blocks
 TAG_VFUNC = 'virtual'
 TAG_SINCE = 'since'
+TAG_STABILITY = 'stability'
 TAG_DEPRECATED = 'deprecated'
 TAG_RETURNS = 'returns'
 TAG_ATTRIBUTES = 'attributes'
@@ -37,6 +38,20 @@ TAG_UNREF_FUNC = 'unref func'
 TAG_REF_FUNC = 'ref func'
 TAG_SET_VALUE_FUNC = 'set value func'
 TAG_GET_VALUE_FUNC = 'get value func'
+TAG_TRANSFER = 'transfer'
+_ALL_TAGS = [TAG_VFUNC,
+             TAG_SINCE,
+             TAG_STABILITY,
+             TAG_DEPRECATED,
+             TAG_RETURNS,
+             TAG_ATTRIBUTES,
+             TAG_RENAME_TO,
+             TAG_TYPE,
+             TAG_UNREF_FUNC,
+             TAG_REF_FUNC,
+             TAG_SET_VALUE_FUNC,
+             TAG_GET_VALUE_FUNC,
+             TAG_TRANSFER]
 
 # Options - annotations for parameters and return values
 OPT_ALLOW_NONE = 'allow-none'
@@ -416,7 +431,6 @@ class AnnotationParser(object):
     COMMENT_HEADER_RE = re.compile(r'^\*[ \t]*\n[\t ]')
     COMMENT_HEADER_START_RE = re.compile(r'\n[\t ]')
     WHITESPACE_RE = re.compile(r'^\s*$')
-    ASCII_TEXT_RE = re.compile(r'\s*[A-Za-z]+')
     OPTION_RE = re.compile(r'\([A-Za-z]+[^(]*\)')
     RETURNS_RE = re.compile(r'^return(s?)( value)?:', re.IGNORECASE)
 
@@ -572,7 +586,7 @@ class AnnotationParser(object):
                 # The line is of the form "Tag: some value here", like:
                 # Since: 0.8
                 tag_name = line[:first_colonspace_index]
-                if self.ASCII_TEXT_RE.match(tag_name):
+                if tag_name.lower() in _ALL_TAGS:
                     tag_name = tag_name.lower()
                     tag = DocTag(block, tag_name)
                     tag.value = line[first_colonspace_index+2:]

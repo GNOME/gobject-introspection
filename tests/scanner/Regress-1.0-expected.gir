@@ -862,7 +862,8 @@ case.</doc>
         <type name="utf8" c:type="char*"/>
       </field>
       <glib:signal name="sig-with-array-prop">
-        <doc xml:whitespace="preserve">This test signal is like TelepathyGlib's</doc>
+        <doc xml:whitespace="preserve">This test signal is like TelepathyGlib's
+TpChannel:: group-members-changed-detailed:</doc>
         <return-value transfer-ownership="none">
           <type name="none"/>
         </return-value>
@@ -1908,7 +1909,8 @@ call and can be released on return.</doc>
     </function>
     <function name="test_ghash_nested_everything_return2"
               c:identifier="regress_test_ghash_nested_everything_return2">
-      <doc xml:whitespace="preserve">element-type annotation.</doc>
+      <doc xml:whitespace="preserve">Another way of specifying nested parameterized types: using the
+element-type annotation.</doc>
       <return-value transfer-ownership="full">
         <type name="GLib.HashTable" c:type="GHashTable*">
           <type name="utf8"/>
