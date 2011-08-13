@@ -96,7 +96,7 @@ class DocBookFormatter(object):
         return "%s ()" % method.symbol
 
     def get_page_name(self, node):
-        if node.gtype_name is None:
+        if isinstance(node, ast.Alias) or node.gtype_name is None:
             return node.ctype
         return node.gtype_name
 
@@ -307,7 +307,7 @@ class DocBookWriter(object):
         self._formatter.set_namespace(self._namespace)
 
         for name, node in self._namespace.iteritems():
-            if isinstance(node, (ast.Class, ast.Record, ast.Interface)):
+            if isinstance(node, (ast.Class, ast.Record, ast.Interface, ast.Alias)):
                 page_name = self._formatter.get_page_name(node)
                 self._add_node(node, page_name)
 
@@ -315,8 +315,10 @@ class DocBookWriter(object):
         page = DocBookPage(name, node)
         self._add_page(page)
 
-        if isinstance(node, (ast.Class, ast.Record, ast.Interface)):
+        if isinstance(node, (ast.Class, ast.Record, ast.Interface, ast.Alias)):
             page.id = node.ctype
+
+        if isinstance(node, (ast.Class, ast.Record, ast.Interface)):
             for method in node.methods:
                 method.parent_class = node
                 page.add_method(DocBookEntity(method.name, "method", method))
@@ -356,7 +358,8 @@ class DocBookWriter(object):
                 self._writer.write_tag(
                     "title", [("role", "synopsis.title")], "Synopsis")
 
-                self._writer.write_tag("anchor", [("id", page.name)])
+                if not isinstance(page.ast, ast.Alias):
+                    self._writer.write_tag("anchor", [("id", page.name)])
 
                 with self._writer.tagcontext('synopsis'):
                     self._writer.disable_whitespace()
@@ -425,7 +428,12 @@ class DocBookWriter(object):
                                          ("role", "details")]):
                 self._writer.write_tag("title", [("role", "details.title")],
                                       "Details")
-                self._render_struct(page.ast)
+
+                if isinstance(page.ast, ast.Alias):
+                    self._render_alias(page.ast)
+                else:
+                    self._render_struct(page.ast)
+
                 for entity in page.get_methods():
                     self._render_method(entity)
 
@@ -446,6 +454,19 @@ class DocBookWriter(object):
                                            "Signal Details")
                     for entity in page.get_signals():
                         self._render_signal(entity)
+
+    def _render_alias(self, alias):
+        with self._writer.tagcontext('refsect2',
+                              [('id', "%s" % alias.ctype),
+                               ('role', 'typedef')]):
+            self._writer.write_tag("title", [], "%s" % alias.ctype)
+            with self._writer.tagcontext("indexterm", [("zone", "%s" % alias.ctype)]):
+                self._writer.write_tag("primary", [("sortas", alias.name)], alias.ctype)
+            self._writer.write_tag("programlisting",
+                                   [],
+                                   "typedef %s %s" % (alias.target.ctype,
+                                                      alias.ctype))
+            self._writer.write_tag("para", [], alias.doc)
 
     def _render_struct(self, struct):
         with self._writer.tagcontext('refsect2',

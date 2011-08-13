@@ -8,21 +8,394 @@
       xmlns="http://docbook.org/ns/docbook"
       version="5.0">
   <title>GIRepository Documentation</title>
+  <chapter xml:id="ch_GIArgInfo">
+    <title>GIArgInfo</title>
+    <refsynopsisdiv id="GIArgInfo.synopsis" role="synopsis">
+      <title role="synopsis.title">Synopsis</title>
+      <synopsis>
+struct               <link linkend="GIArgInfo-struct">GIArgInfo</link>;
+      </synopsis>
+    </refsynopsisdiv>
+    <refsect1 id="giarginfo-details" role="details">
+      <title role="details.title">Details</title>
+      <refsect2 id="GIArgInfo" role="typedef">
+        <title>GIArgInfo</title>
+        <indexterm zone="GIArgInfo">
+          <primary sortas="ArgInfo">GIArgInfo</primary>
+        </indexterm>
+        <programlisting>typedef GIBaseInfo GIArgInfo</programlisting>
+        <para>Represents an argument.</para>
+      </refsect2>
+    </refsect1>
+  </chapter>
+  <chapter xml:id="ch_GICallableInfo">
+    <title>GICallableInfo</title>
+    <refsynopsisdiv id="GICallableInfo.synopsis" role="synopsis">
+      <title role="synopsis.title">Synopsis</title>
+      <synopsis>
+struct               <link linkend="GICallableInfo-struct">GICallableInfo</link>;
+      </synopsis>
+    </refsynopsisdiv>
+    <refsect1 id="gicallableinfo-details" role="details">
+      <title role="details.title">Details</title>
+      <refsect2 id="GICallableInfo" role="typedef">
+        <title>GICallableInfo</title>
+        <indexterm zone="GICallableInfo">
+          <primary sortas="CallableInfo">GICallableInfo</primary>
+        </indexterm>
+        <programlisting>typedef GIBaseInfo GICallableInfo</programlisting>
+        <para>Represents a callable, either #GIFunctionInfo, #GICallbackInfo or
+#GIVFuncInfo.</para>
+      </refsect2>
+    </refsect1>
+  </chapter>
+  <chapter xml:id="ch_GICallbackInfo">
+    <title>GICallbackInfo</title>
+    <refsynopsisdiv id="GICallbackInfo.synopsis" role="synopsis">
+      <title role="synopsis.title">Synopsis</title>
+      <synopsis>
+struct               <link linkend="GICallbackInfo-struct">GICallbackInfo</link>;
+      </synopsis>
+    </refsynopsisdiv>
+    <refsect1 id="gicallbackinfo-details" role="details">
+      <title role="details.title">Details</title>
+      <refsect2 id="GICallbackInfo" role="typedef">
+        <title>GICallbackInfo</title>
+        <indexterm zone="GICallbackInfo">
+          <primary sortas="CallbackInfo">GICallbackInfo</primary>
+        </indexterm>
+        <programlisting>typedef GIBaseInfo GICallbackInfo</programlisting>
+        <para>Represents a callback, eg arguments and return value.</para>
+      </refsect2>
+    </refsect1>
+  </chapter>
+  <chapter xml:id="ch_GIConstantInfo">
+    <title>GIConstantInfo</title>
+    <refsynopsisdiv id="GIConstantInfo.synopsis" role="synopsis">
+      <title role="synopsis.title">Synopsis</title>
+      <synopsis>
+struct               <link linkend="GIConstantInfo-struct">GIConstantInfo</link>;
+      </synopsis>
+    </refsynopsisdiv>
+    <refsect1 id="giconstantinfo-details" role="details">
+      <title role="details.title">Details</title>
+      <refsect2 id="GIConstantInfo" role="typedef">
+        <title>GIConstantInfo</title>
+        <indexterm zone="GIConstantInfo">
+          <primary sortas="ConstantInfo">GIConstantInfo</primary>
+        </indexterm>
+        <programlisting>typedef GIBaseInfo GIConstantInfo</programlisting>
+        <para>Represents a constant.</para>
+      </refsect2>
+    </refsect1>
+  </chapter>
+  <chapter xml:id="ch_GIEnumInfo">
+    <title>GIEnumInfo</title>
+    <refsynopsisdiv id="GIEnumInfo.synopsis" role="synopsis">
+      <title role="synopsis.title">Synopsis</title>
+      <synopsis>
+struct               <link linkend="GIEnumInfo-struct">GIEnumInfo</link>;
+      </synopsis>
+    </refsynopsisdiv>
+    <refsect1 id="gienuminfo-details" role="details">
+      <title role="details.title">Details</title>
+      <refsect2 id="GIEnumInfo" role="typedef">
+        <title>GIEnumInfo</title>
+        <indexterm zone="GIEnumInfo">
+          <primary sortas="EnumInfo">GIEnumInfo</primary>
+        </indexterm>
+        <programlisting>typedef GIBaseInfo GIEnumInfo</programlisting>
+        <para>Represents an enum or a flag.</para>
+      </refsect2>
+    </refsect1>
+  </chapter>
+  <chapter xml:id="ch_GIErrorDomainInfo">
+    <title>GIErrorDomainInfo</title>
+    <refsynopsisdiv id="GIErrorDomainInfo.synopsis" role="synopsis">
+      <title role="synopsis.title">Synopsis</title>
+      <synopsis>
+struct               <link linkend="GIErrorDomainInfo-struct">GIErrorDomainInfo</link>;
+      </synopsis>
+    </refsynopsisdiv>
+    <refsect1 id="gierrordomaininfo-details" role="details">
+      <title role="details.title">Details</title>
+      <refsect2 id="GIErrorDomainInfo" role="typedef">
+        <title>GIErrorDomainInfo</title>
+        <indexterm zone="GIErrorDomainInfo">
+          <primary sortas="ErrorDomainInfo">GIErrorDomainInfo</primary>
+        </indexterm>
+        <programlisting>typedef GIBaseInfo GIErrorDomainInfo</programlisting>
+        <para>Represents a #GError error domain.</para>
+      </refsect2>
+    </refsect1>
+  </chapter>
+  <chapter xml:id="ch_GIFieldInfo">
+    <title>GIFieldInfo</title>
+    <refsynopsisdiv id="GIFieldInfo.synopsis" role="synopsis">
+      <title role="synopsis.title">Synopsis</title>
+      <synopsis>
+struct               <link linkend="GIFieldInfo-struct">GIFieldInfo</link>;
+      </synopsis>
+    </refsynopsisdiv>
+    <refsect1 id="gifieldinfo-details" role="details">
+      <title role="details.title">Details</title>
+      <refsect2 id="GIFieldInfo" role="typedef">
+        <title>GIFieldInfo</title>
+        <indexterm zone="GIFieldInfo">
+          <primary sortas="FieldInfo">GIFieldInfo</primary>
+        </indexterm>
+        <programlisting>typedef GIBaseInfo GIFieldInfo</programlisting>
+        <para>Represents a field of a #GIStructInfo or a #GIUnionInfo.</para>
+      </refsect2>
+    </refsect1>
+  </chapter>
+  <chapter xml:id="ch_GIFunctionInfo">
+    <title>GIFunctionInfo</title>
+    <refsynopsisdiv id="GIFunctionInfo.synopsis" role="synopsis">
+      <title role="synopsis.title">Synopsis</title>
+      <synopsis>
+struct               <link linkend="GIFunctionInfo-struct">GIFunctionInfo</link>;
+      </synopsis>
+    </refsynopsisdiv>
+    <refsect1 id="gifunctioninfo-details" role="details">
+      <title role="details.title">Details</title>
+      <refsect2 id="GIFunctionInfo" role="typedef">
+        <title>GIFunctionInfo</title>
+        <indexterm zone="GIFunctionInfo">
+          <primary sortas="FunctionInfo">GIFunctionInfo</primary>
+        </indexterm>
+        <programlisting>typedef GIBaseInfo GIFunctionInfo</programlisting>
+        <para>Represents a function, eg arguments and return value.</para>
+      </refsect2>
+    </refsect1>
+  </chapter>
+  <chapter xml:id="ch_GIInterfaceInfo">
+    <title>GIInterfaceInfo</title>
+    <refsynopsisdiv id="GIInterfaceInfo.synopsis" role="synopsis">
+      <title role="synopsis.title">Synopsis</title>
+      <synopsis>
+struct               <link linkend="GIInterfaceInfo-struct">GIInterfaceInfo</link>;
+      </synopsis>
+    </refsynopsisdiv>
+    <refsect1 id="giinterfaceinfo-details" role="details">
+      <title role="details.title">Details</title>
+      <refsect2 id="GIInterfaceInfo" role="typedef">
+        <title>GIInterfaceInfo</title>
+        <indexterm zone="GIInterfaceInfo">
+          <primary sortas="InterfaceInfo">GIInterfaceInfo</primary>
+        </indexterm>
+        <programlisting>typedef GIBaseInfo GIInterfaceInfo</programlisting>
+        <para>Represents an interface.</para>
+      </refsect2>
+    </refsect1>
+  </chapter>
+  <chapter xml:id="ch_GIObjectInfo">
+    <title>GIObjectInfo</title>
+    <refsynopsisdiv id="GIObjectInfo.synopsis" role="synopsis">
+      <title role="synopsis.title">Synopsis</title>
+      <synopsis>
+struct               <link linkend="GIObjectInfo-struct">GIObjectInfo</link>;
+      </synopsis>
+    </refsynopsisdiv>
+    <refsect1 id="giobjectinfo-details" role="details">
+      <title role="details.title">Details</title>
+      <refsect2 id="GIObjectInfo" role="typedef">
+        <title>GIObjectInfo</title>
+        <indexterm zone="GIObjectInfo">
+          <primary sortas="ObjectInfo">GIObjectInfo</primary>
+        </indexterm>
+        <programlisting>typedef GIBaseInfo GIObjectInfo</programlisting>
+        <para>Represents an object.</para>
+      </refsect2>
+    </refsect1>
+  </chapter>
+  <chapter xml:id="ch_GIPropertyInfo">
+    <title>GIPropertyInfo</title>
+    <refsynopsisdiv id="GIPropertyInfo.synopsis" role="synopsis">
+      <title role="synopsis.title">Synopsis</title>
+      <synopsis>
+struct               <link linkend="GIPropertyInfo-struct">GIPropertyInfo</link>;
+      </synopsis>
+    </refsynopsisdiv>
+    <refsect1 id="gipropertyinfo-details" role="details">
+      <title role="details.title">Details</title>
+      <refsect2 id="GIPropertyInfo" role="typedef">
+        <title>GIPropertyInfo</title>
+        <indexterm zone="GIPropertyInfo">
+          <primary sortas="PropertyInfo">GIPropertyInfo</primary>
+        </indexterm>
+        <programlisting>typedef GIBaseInfo GIPropertyInfo</programlisting>
+        <para>Represents a property of a #GIObjectInfo or a #GIInterfaceInfo.</para>
+      </refsect2>
+    </refsect1>
+  </chapter>
+  <chapter xml:id="ch_GIRegisteredTypeInfo">
+    <title>GIRegisteredTypeInfo</title>
+    <refsynopsisdiv id="GIRegisteredTypeInfo.synopsis" role="synopsis">
+      <title role="synopsis.title">Synopsis</title>
+      <synopsis>
+struct               <link linkend="GIRegisteredTypeInfo-struct">GIRegisteredTypeInfo</link>;
+      </synopsis>
+    </refsynopsisdiv>
+    <refsect1 id="giregisteredtypeinfo-details" role="details">
+      <title role="details.title">Details</title>
+      <refsect2 id="GIRegisteredTypeInfo" role="typedef">
+        <title>GIRegisteredTypeInfo</title>
+        <indexterm zone="GIRegisteredTypeInfo">
+          <primary sortas="RegisteredTypeInfo">GIRegisteredTypeInfo</primary>
+        </indexterm>
+        <programlisting>typedef GIBaseInfo GIRegisteredTypeInfo</programlisting>
+        <para>Represent a registered type.</para>
+      </refsect2>
+    </refsect1>
+  </chapter>
+  <chapter xml:id="ch_GISignalInfo">
+    <title>GISignalInfo</title>
+    <refsynopsisdiv id="GISignalInfo.synopsis" role="synopsis">
+      <title role="synopsis.title">Synopsis</title>
+      <synopsis>
+struct               <link linkend="GISignalInfo-struct">GISignalInfo</link>;
+      </synopsis>
+    </refsynopsisdiv>
+    <refsect1 id="gisignalinfo-details" role="details">
+      <title role="details.title">Details</title>
+      <refsect2 id="GISignalInfo" role="typedef">
+        <title>GISignalInfo</title>
+        <indexterm zone="GISignalInfo">
+          <primary sortas="SignalInfo">GISignalInfo</primary>
+        </indexterm>
+        <programlisting>typedef GIBaseInfo GISignalInfo</programlisting>
+        <para>Represents a signal.</para>
+      </refsect2>
+    </refsect1>
+  </chapter>
+  <chapter xml:id="ch_GIStructInfo">
+    <title>GIStructInfo</title>
+    <refsynopsisdiv id="GIStructInfo.synopsis" role="synopsis">
+      <title role="synopsis.title">Synopsis</title>
+      <synopsis>
+struct               <link linkend="GIStructInfo-struct">GIStructInfo</link>;
+      </synopsis>
+    </refsynopsisdiv>
+    <refsect1 id="gistructinfo-details" role="details">
+      <title role="details.title">Details</title>
+      <refsect2 id="GIStructInfo" role="typedef">
+        <title>GIStructInfo</title>
+        <indexterm zone="GIStructInfo">
+          <primary sortas="StructInfo">GIStructInfo</primary>
+        </indexterm>
+        <programlisting>typedef GIBaseInfo GIStructInfo</programlisting>
+        <para>Represents a struct.</para>
+      </refsect2>
+    </refsect1>
+  </chapter>
+  <chapter xml:id="ch_GITypeInfo">
+    <title>GITypeInfo</title>
+    <refsynopsisdiv id="GITypeInfo.synopsis" role="synopsis">
+      <title role="synopsis.title">Synopsis</title>
+      <synopsis>
+struct               <link linkend="GITypeInfo-struct">GITypeInfo</link>;
+      </synopsis>
+    </refsynopsisdiv>
+    <refsect1 id="gitypeinfo-details" role="details">
+      <title role="details.title">Details</title>
+      <refsect2 id="GITypeInfo" role="typedef">
+        <title>GITypeInfo</title>
+        <indexterm zone="GITypeInfo">
+          <primary sortas="TypeInfo">GITypeInfo</primary>
+        </indexterm>
+        <programlisting>typedef GIBaseInfo GITypeInfo</programlisting>
+        <para>Represents type information, direction, transfer etc.</para>
+      </refsect2>
+    </refsect1>
+  </chapter>
+  <chapter xml:id="ch_GIUnionInfo">
+    <title>GIUnionInfo</title>
+    <refsynopsisdiv id="GIUnionInfo.synopsis" role="synopsis">
+      <title role="synopsis.title">Synopsis</title>
+      <synopsis>
+struct               <link linkend="GIUnionInfo-struct">GIUnionInfo</link>;
+      </synopsis>
+    </refsynopsisdiv>
+    <refsect1 id="giunioninfo-details" role="details">
+      <title role="details.title">Details</title>
+      <refsect2 id="GIUnionInfo" role="typedef">
+        <title>GIUnionInfo</title>
+        <indexterm zone="GIUnionInfo">
+          <primary sortas="UnionInfo">GIUnionInfo</primary>
+        </indexterm>
+        <programlisting>typedef GIBaseInfo GIUnionInfo</programlisting>
+        <para>Represents a union.</para>
+      </refsect2>
+    </refsect1>
+  </chapter>
+  <chapter xml:id="ch_GIVFuncInfo">
+    <title>GIVFuncInfo</title>
+    <refsynopsisdiv id="GIVFuncInfo.synopsis" role="synopsis">
+      <title role="synopsis.title">Synopsis</title>
+      <synopsis>
+struct               <link linkend="GIVFuncInfo-struct">GIVFuncInfo</link>;
+      </synopsis>
+    </refsynopsisdiv>
+    <refsect1 id="givfuncinfo-details" role="details">
+      <title role="details.title">Details</title>
+      <refsect2 id="GIVFuncInfo" role="typedef">
+        <title>GIVFuncInfo</title>
+        <indexterm zone="GIVFuncInfo">
+          <primary sortas="VFuncInfo">GIVFuncInfo</primary>
+        </indexterm>
+        <programlisting>typedef GIBaseInfo GIVFuncInfo</programlisting>
+        <para>Represents a virtual function.</para>
+      </refsect2>
+    </refsect1>
+  </chapter>
+  <chapter xml:id="ch_GIValueInfo">
+    <title>GIValueInfo</title>
+    <refsynopsisdiv id="GIValueInfo.synopsis" role="synopsis">
+      <title role="synopsis.title">Synopsis</title>
+      <synopsis>
+struct               <link linkend="GIValueInfo-struct">GIValueInfo</link>;
+      </synopsis>
+    </refsynopsisdiv>
+    <refsect1 id="givalueinfo-details" role="details">
+      <title role="details.title">Details</title>
+      <refsect2 id="GIValueInfo" role="typedef">
+        <title>GIValueInfo</title>
+        <indexterm zone="GIValueInfo">
+          <primary sortas="ValueInfo">GIValueInfo</primary>
+        </indexterm>
+        <programlisting>typedef GIBaseInfo GIValueInfo</programlisting>
+        <para>Represents a enum value of a #GIEnumInfo.</para>
+      </refsect2>
+    </refsect1>
+  </chapter>
   <chapter xml:id="ch_GIAttributeIter">
-    <refentry id="GIAttributeIter"/>
     <title>GIAttributeIter</title>
     <refsynopsisdiv id="GIAttributeIter.synopsis" role="synopsis">
       <title role="synopsis.title">Synopsis</title>
+      <anchor id="GIAttributeIter"/>
       <synopsis>
+struct               <link linkend="GIAttributeIter-struct">GIAttributeIter</link>;
       </synopsis>
     </refsynopsisdiv>
+    <refsect1 id="giattributeiter-details" role="details">
+      <title role="details.title">Details</title>
+      <refsect2 id="GIAttributeIter-struct" role="struct">
+        <title>struct GIAttributeIter</title>
+        <indexterm zone="GIAttributeIter-struct">
+          <primary sortas="AttributeIter">GIAttributeIter</primary>
+        </indexterm>
+        <programlisting>struct GIAttributeIter;</programlisting>
+      </refsect2>
+    </refsect1>
   </chapter>
   <chapter xml:id="ch_GIBaseInfo">
-    <refentry id="GIBaseInfo"/>
     <title>GIBaseInfo</title>
     <refsynopsisdiv id="GIBaseInfo.synopsis" role="synopsis">
       <title role="synopsis.title">Synopsis</title>
+      <anchor id="GIBaseInfo"/>
       <synopsis>
+struct               <link linkend="GIBaseInfo-struct">GIBaseInfo</link>;
 <link linkend="gboolean"><returnvalue>gboolean</returnvalue></link>            <link linkend="g-base-info-equal">g_base_info_equal</link>                       (<parameter><link linkend="GIBaseInfo"><type>GIBaseInfo</type></link> *baseinfo, </parameter>
                                                              <parameter><link linkend="GIBaseInfo"><type>GIBaseInfo</type></link> *info2</parameter>);
 <link linkend="gchar"><returnvalue>gchar</returnvalue></link> *              <link linkend="g-base-info-get-attribute">g_base_info_get_attribute</link>               (<parameter><link linkend="GIBaseInfo"><type>GIBaseInfo</type></link> *baseinfo, </parameter>
@@ -40,8 +413,15 @@
 <link linkend="void"><returnvalue>void</returnvalue></link>                <link linkend="g-base-info-unref">g_base_info_unref</link>                       (<parameter><link linkend="GIBaseInfo"><type>GIBaseInfo</type></link> *baseinfo</parameter>);
       </synopsis>
     </refsynopsisdiv>
-    <refsect1 id="GIBaseInfo-details" role="details">
+    <refsect1 id="gibaseinfo-details" role="details">
       <title role="details.title">Details</title>
+      <refsect2 id="GIBaseInfo-struct" role="struct">
+        <title>struct GIBaseInfo</title>
+        <indexterm zone="GIBaseInfo-struct">
+          <primary sortas="BaseInfo">GIBaseInfo</primary>
+        </indexterm>
+        <programlisting>struct GIBaseInfo;</programlisting>
+      </refsect2>
       <refsect2 id="g-base-info-equal" role="function">
         <title>g_base_info_equal ()</title>
         <indexterm zone="g-base-info-equal">
@@ -423,11 +803,12 @@ drops to 0, the info is freed.</para>
     </refsect1>
   </chapter>
   <chapter xml:id="ch_GIRepository">
-    <refentry id="GIRepository"/>
     <title>GIRepository</title>
     <refsynopsisdiv id="GIRepository.synopsis" role="synopsis">
       <title role="synopsis.title">Synopsis</title>
+      <anchor id="GIRepository"/>
       <synopsis>
+struct               <link linkend="GIRepository-struct">GIRepository</link>;
 <link linkend="GList"><returnvalue>GList</returnvalue></link> *              <link linkend="g-irepository-enumerate-versions">g_irepository_enumerate_versions</link>        (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
                                                              <parameter><link linkend="gchar"><type>gchar</type></link> *namespace_</parameter>);
 <link linkend="GIEnumInfo"><returnvalue>GIEnumInfo</returnvalue></link> *         <link linkend="g-irepository-find-by-error-domain">g_irepository_find_by_error_domain</link>      (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
@@ -476,8 +857,15 @@ drops to 0, the info is freed.</para>
   GObject
    +----GIRepository      </synopsis>
     </refsect1>
-    <refsect1 id="GIRepository-details" role="details">
+    <refsect1 id="girepository-details" role="details">
       <title role="details.title">Details</title>
+      <refsect2 id="GIRepository-struct" role="struct">
+        <title>struct GIRepository</title>
+        <indexterm zone="GIRepository-struct">
+          <primary sortas="Repository">GIRepository</primary>
+        </indexterm>
+        <programlisting>struct GIRepository;</programlisting>
+      </refsect2>
       <refsect2 id="g-irepository-enumerate-versions" role="function">
         <title>g_irepository_enumerate_versions ()</title>
         <indexterm zone="g-irepository-enumerate-versions">
@@ -1257,29 +1645,52 @@ not specified, the latest will be used.</para>
     </refsect1>
   </chapter>
   <chapter xml:id="ch_GIRepositoryClass">
-    <refentry id="GIRepositoryClass"/>
     <title>GIRepositoryClass</title>
     <refsynopsisdiv id="GIRepositoryClass.synopsis" role="synopsis">
       <title role="synopsis.title">Synopsis</title>
+      <anchor id="GIRepositoryClass"/>
       <synopsis>
+struct               <link linkend="GIRepositoryClass-struct">GIRepositoryClass</link>;
       </synopsis>
     </refsynopsisdiv>
+    <refsect1 id="girepositoryclass-details" role="details">
+      <title role="details.title">Details</title>
+      <refsect2 id="GIRepositoryClass-struct" role="struct">
+        <title>struct GIRepositoryClass</title>
+        <indexterm zone="GIRepositoryClass-struct">
+          <primary sortas="RepositoryClass">GIRepositoryClass</primary>
+        </indexterm>
+        <programlisting>struct GIRepositoryClass;</programlisting>
+      </refsect2>
+    </refsect1>
   </chapter>
   <chapter xml:id="ch_GIRepositoryPrivate">
-    <refentry id="GIRepositoryPrivate"/>
     <title>GIRepositoryPrivate</title>
     <refsynopsisdiv id="GIRepositoryPrivate.synopsis" role="synopsis">
       <title role="synopsis.title">Synopsis</title>
+      <anchor id="GIRepositoryPrivate"/>
       <synopsis>
+struct               <link linkend="GIRepositoryPrivate-struct">GIRepositoryPrivate</link>;
       </synopsis>
     </refsynopsisdiv>
+    <refsect1 id="girepositoryprivate-details" role="details">
+      <title role="details.title">Details</title>
+      <refsect2 id="GIRepositoryPrivate-struct" role="struct">
+        <title>struct GIRepositoryPrivate</title>
+        <indexterm zone="GIRepositoryPrivate-struct">
+          <primary sortas="RepositoryPrivate">GIRepositoryPrivate</primary>
+        </indexterm>
+        <programlisting>struct GIRepositoryPrivate;</programlisting>
+      </refsect2>
+    </refsect1>
   </chapter>
   <chapter xml:id="ch_GITypelib">
-    <refentry id="GITypelib"/>
     <title>GITypelib</title>
     <refsynopsisdiv id="GITypelib.synopsis" role="synopsis">
       <title role="synopsis.title">Synopsis</title>
+      <anchor id="GITypelib"/>
       <synopsis>
+struct               <link linkend="GITypelib-struct">GITypelib</link>;
 <link linkend="void"><returnvalue>void</returnvalue></link>                <link linkend="g-typelib-free">g_typelib_free</link>                          (<parameter><link linkend="GITypelib"><type>GITypelib</type></link> *typelib</parameter>);
 <link linkend="gchar"><returnvalue>gchar</returnvalue></link> *              <link linkend="g-typelib-get-namespace">g_typelib_get_namespace</link>                 (<parameter><link linkend="GITypelib"><type>GITypelib</type></link> *typelib</parameter>);
 <link linkend="gboolean"><returnvalue>gboolean</returnvalue></link>            <link linkend="g-typelib-symbol">g_typelib_symbol</link>                        (<parameter><link linkend="GITypelib"><type>GITypelib</type></link> *typelib, </parameter>
@@ -1287,8 +1698,15 @@ not specified, the latest will be used.</para>
                                                              <parameter><link linkend="gpointer"><type>gpointer</type></link> *symbol</parameter>);
       </synopsis>
     </refsynopsisdiv>
-    <refsect1 id="GITypelib-details" role="details">
+    <refsect1 id="gitypelib-details" role="details">
       <title role="details.title">Details</title>
+      <refsect2 id="GITypelib-struct" role="struct">
+        <title>struct GITypelib</title>
+        <indexterm zone="GITypelib-struct">
+          <primary sortas="Typelib">GITypelib</primary>
+        </indexterm>
+        <programlisting>struct GITypelib;</programlisting>
+      </refsect2>
       <refsect2 id="g-typelib-free" role="function">
         <title>g_typelib_free ()</title>
         <indexterm zone="g-typelib-free">
@@ -1377,21 +1795,43 @@ not specified, the latest will be used.</para>
     </refsect1>
   </chapter>
   <chapter xml:id="ch_GIUnresolvedInfo">
-    <refentry id="GIUnresolvedInfo"/>
     <title>GIUnresolvedInfo</title>
     <refsynopsisdiv id="GIUnresolvedInfo.synopsis" role="synopsis">
       <title role="synopsis.title">Synopsis</title>
+      <anchor id="GIUnresolvedInfo"/>
       <synopsis>
+struct               <link linkend="GIUnresolvedInfo-struct">GIUnresolvedInfo</link>;
       </synopsis>
     </refsynopsisdiv>
+    <refsect1 id="giunresolvedinfo-details" role="details">
+      <title role="details.title">Details</title>
+      <refsect2 id="GIUnresolvedInfo-struct" role="struct">
+        <title>struct GIUnresolvedInfo</title>
+        <indexterm zone="GIUnresolvedInfo-struct">
+          <primary sortas="UnresolvedInfo">GIUnresolvedInfo</primary>
+        </indexterm>
+        <programlisting>struct GIUnresolvedInfo;</programlisting>
+      </refsect2>
+    </refsect1>
   </chapter>
   <chapter xml:id="ch__GIBaseInfoStub">
-    <refentry id="_GIBaseInfoStub"/>
     <title>_GIBaseInfoStub</title>
     <refsynopsisdiv id="_GIBaseInfoStub.synopsis" role="synopsis">
       <title role="synopsis.title">Synopsis</title>
+      <anchor id="_GIBaseInfoStub"/>
       <synopsis>
+struct               <link linkend="_GIBaseInfoStub-struct">_GIBaseInfoStub</link>;
       </synopsis>
     </refsynopsisdiv>
+    <refsect1 id="_gibaseinfostub-details" role="details">
+      <title role="details.title">Details</title>
+      <refsect2 id="_GIBaseInfoStub-struct" role="struct">
+        <title>struct _GIBaseInfoStub</title>
+        <indexterm zone="_GIBaseInfoStub-struct">
+          <primary sortas="_BaseInfoStub">_GIBaseInfoStub</primary>
+        </indexterm>
+        <programlisting>struct _GIBaseInfoStub;</programlisting>
+      </refsect2>
+    </refsect1>
   </chapter>
 </book>
