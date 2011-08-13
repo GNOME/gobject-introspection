@@ -1014,6 +1014,12 @@ TpAccount::status-changed</doc>
           </parameter>
         </parameters>
       </method>
+      <function name="const_return"
+                c:identifier="regress_test_simple_boxed_a_const_return">
+        <return-value transfer-ownership="none">
+          <type name="TestSimpleBoxedA" c:type="RegressTestSimpleBoxedA*"/>
+        </return-value>
+      </function>
     </record>
     <record name="TestSimpleBoxedB"
             c:type="RegressTestSimpleBoxedB"

@@ -62,6 +62,8 @@ GType                 foo_interface_get_type       (void) G_GNUC_CONST;
 
 void foo_interface_do_foo (FooInterface *iface, int x);
 
+void foo_interface_static_method (int x);
+
 struct _FooSubInterfaceIface
 {
   GTypeInterface parent_iface;

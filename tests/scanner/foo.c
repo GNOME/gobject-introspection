@@ -53,6 +53,10 @@ void foo_interface_do_foo (FooInterface *self, int x)
   FOO_INTERFACE_GET_INTERFACE(self)->do_foo (self, x);
 }
 
+void foo_interface_static_method (int x)
+{
+}
+
 enum {
   PROP_0,
   PROP_STRING,

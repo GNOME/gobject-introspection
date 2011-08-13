@@ -272,6 +272,17 @@ and/or use gtk-doc annotations.  -->
                glib:type-name="FooInterface"
                glib:get-type="foo_interface_get_type"
                glib:type-struct="InterfaceIface">
+      <function name="static_method"
+                c:identifier="foo_interface_static_method">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <parameter name="x" transfer-ownership="none">
+            <type name="gint" c:type="int"/>
+          </parameter>
+        </parameters>
+      </function>
       <virtual-method name="do_foo" invoker="do_foo">
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
@@ -622,6 +633,27 @@ uses a C sugar return type.</doc>
           </parameter>
         </parameters>
       </method>
+      <function name="new" c:identifier="foo_rectangle_new" introspectable="0">
+        <doc xml:whitespace="preserve">This is a C convenience constructor; we have to (skip)
+it because it's not a boxed type.</doc>
+        <return-value>
+          <type name="Rectangle" c:type="FooRectangle*"/>
+        </return-value>
+        <parameters>
+          <parameter name="x" transfer-ownership="none">
+            <type name="gint" c:type="int"/>
+          </parameter>
+          <parameter name="y" transfer-ownership="none">
+            <type name="gint" c:type="int"/>
+          </parameter>
+          <parameter name="width" transfer-ownership="none">
+            <type name="gint" c:type="int"/>
+          </parameter>
+          <parameter name="height" transfer-ownership="none">
+            <type name="gint" c:type="int"/>
+          </parameter>
+        </parameters>
+      </function>
     </record>
     <constant name="SUCCESS_INT" value="4408">
       <type name="gint" c:type="gint"/>
@@ -951,6 +983,17 @@ exposed to language bindings.</doc>
       <return-value transfer-ownership="none">
         <type name="gint" c:type="gint"/>
       </return-value>
+    </function>
+    <function name="interface_static_method"
+              c:identifier="foo_interface_static_method">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="x" transfer-ownership="none">
+          <type name="gint" c:type="int"/>
+        </parameter>
+      </parameters>
     </function>
     <function name="method_external_references"
               c:identifier="foo_method_external_references">

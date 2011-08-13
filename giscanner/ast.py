@@ -19,6 +19,8 @@
 # Boston, MA 02111-1307, USA.
 #
 
+import copy
+
 from .message import Position
 from .odict import odict
 from .utils import to_underscores
@@ -567,6 +569,13 @@ class Function(Callable):
         self.is_constructor = False
         self.shadowed_by = None # C symbol string
         self.shadows = None # C symbol string
+
+    def clone(self):
+        clone = copy.copy(self)
+        # copy the parameters array so a change to self.parameters does not
+        # influence clone.parameters.
+        clone.parameters = self.parameters[:]
+        return clone
 
 
 class ErrorQuarkFunction(Function):

@@ -993,19 +993,35 @@ method or constructor of some type."""
         if split is None:
             return False
         (node, funcname) = split
-
-        # We actually should treat static methods on a wider class of objects:
-        #  ast.Class, ast.Interface, ast.Record, ast.Union, ast.Boxed
-        # But we stick to ast.Class for now for compatibility with existing code.
-        #
-        # See https://bugzilla.gnome.org/show_bug.cgi?id=572408
-        #
-        if not isinstance(node, ast.Class):
+        if funcname == '':
             return False
 
-        self._namespace.float(func)
-        func.name = funcname
-        node.static_methods.append(func)
+        if isinstance(node, ast.Class):
+            self._namespace.float(func)
+            func.name = funcname
+            node.static_methods.append(func)
+            return True
+        elif isinstance(node, (ast.Interface, ast.Record, ast.Union,
+                               ast.Boxed)):
+            # prior to the introduction of this part of the code, only
+            # ast.Class could have static methods.  so for backwards
+            # compatibility, instead of removing the func from the namespace,
+            # leave it there and get a copy instead.  modify the copy and push
+            # it onto static_methods.  we need to copy the parameters list
+            # separately, because in the third pass functions are flagged as
+            # 'throws' depending on the presence of a GError parameter which is
+            # then removed from the parameters list.  without the explicit
+            # copy, only one of the two functions would thus get flagged as
+            # 'throws'.  clone() does this for us.
+            new_func = func.clone()
+            new_func.name = funcname
+            node.static_methods.append(new_func)
+            # TODO: flag func as a backwards-comptability kludge (and maybe
+            # prune it in the introspectable pass if we would have
+            # introspectable=0 anyway).
+            return True
+
+        return False
 
     def _set_up_constructor(self, func, subsymbol):
         self._namespace.float(func)
