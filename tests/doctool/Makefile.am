@@ -12,7 +12,7 @@ BUILT_SOURCES = $(DOCBOOK_FILES)
 EXTRA_DIST = $(EXPECTEDDOCBOOKFILES)
 
 %.xml: %.gir
-	@g-ir-doc-tool $*.gir -o $*.xml && echo "  GEN  $*.xml"
+	$(INTROSPECTION_DOCTOOL) $*.gir -o $*.xml && echo "  GEN  $*.xml"
 
 %.xml.check: %.xml
 	@diff -u -U 10 $(srcdir)/$*-expected.xml $*.xml && echo "  TEST  $*.xml"
