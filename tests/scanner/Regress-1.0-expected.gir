@@ -861,7 +861,27 @@ case.</doc>
       <field name="string">
         <type name="utf8" c:type="char*"/>
       </field>
-      <glib:signal name="sig-with-array-prop">
+      <glib:signal name="all"
+                   when="first"
+                   no-recurse="1"
+                   detailed="1"
+                   action="1"
+                   no-hooks="1">
+        <return-value transfer-ownership="none">
+          <type name="none"/>
+        </return-value>
+      </glib:signal>
+      <glib:signal name="cleanup" when="cleanup">
+        <return-value transfer-ownership="none">
+          <type name="none"/>
+        </return-value>
+      </glib:signal>
+      <glib:signal name="first" when="first">
+        <return-value transfer-ownership="none">
+          <type name="none"/>
+        </return-value>
+      </glib:signal>
+      <glib:signal name="sig-with-array-prop" when="last">
         <doc xml:whitespace="preserve">This test signal is like TelepathyGlib's</doc>
         <return-value transfer-ownership="none">
           <type name="none"/>
@@ -875,7 +895,7 @@ case.</doc>
           </parameter>
         </parameters>
       </glib:signal>
-      <glib:signal name="sig-with-hash-prop">
+      <glib:signal name="sig-with-hash-prop" when="last">
         <doc xml:whitespace="preserve">This test signal is like TelepathyGlib's
 TpAccount::status-changed</doc>
         <return-value transfer-ownership="none">
@@ -890,7 +910,7 @@ TpAccount::status-changed</doc>
           </parameter>
         </parameters>
       </glib:signal>
-      <glib:signal name="sig-with-strv">
+      <glib:signal name="sig-with-strv" when="last">
         <doc xml:whitespace="preserve">Test GStrv as a param.</doc>
         <return-value transfer-ownership="none">
           <type name="none"/>
@@ -904,12 +924,15 @@ TpAccount::status-changed</doc>
           </parameter>
         </parameters>
       </glib:signal>
-      <glib:signal name="test">
+      <glib:signal name="test" when="last" no-recurse="1" no-hooks="1">
         <return-value transfer-ownership="none">
           <type name="none"/>
         </return-value>
       </glib:signal>
-      <glib:signal name="test-with-static-scope-arg">
+      <glib:signal name="test-with-static-scope-arg"
+                   when="last"
+                   no-recurse="1"
+                   no-hooks="1">
         <return-value transfer-ownership="none">
           <type name="none"/>
         </return-value>

@@ -549,7 +549,7 @@ of tabs and strings to test the tab handling capabilities of the scanner.</doc>
       <field name="parent_instance">
         <type name="GObject.Object" c:type="GObject"/>
       </field>
-      <glib:signal name="attribute-signal">
+      <glib:signal name="attribute-signal" when="last">
         <doc xml:whitespace="preserve">This signal tests a signal with attributes.</doc>
         <return-value transfer-ownership="full">
           <attribute name="some.annotation.foo3" value="val3"/>
@@ -569,7 +569,7 @@ of tabs and strings to test the tab handling capabilities of the scanner.</doc>
           </parameter>
         </parameters>
       </glib:signal>
-      <glib:signal name="doc-empty-arg-parsing">
+      <glib:signal name="doc-empty-arg-parsing" when="last">
         <doc xml:whitespace="preserve">This signal tests an empty document argument (@arg1)</doc>
         <return-value transfer-ownership="none">
           <type name="none"/>
@@ -580,7 +580,7 @@ of tabs and strings to test the tab handling capabilities of the scanner.</doc>
           </parameter>
         </parameters>
       </glib:signal>
-      <glib:signal name="list-signal">
+      <glib:signal name="list-signal" when="last">
         <doc xml:whitespace="preserve">This is a signal which takes a list of strings, but it's not
 known by GObject as it's only marked as G_TYPE_POINTER</doc>
         <return-value transfer-ownership="none">
@@ -596,6 +596,7 @@ known by GObject as it's only marked as G_TYPE_POINTER</doc>
         </parameters>
       </glib:signal>
       <glib:signal name="string-signal"
+                   when="last"
                    version="1.0"
                    deprecated="Use other-signal instead"
                    deprecated-version="1.2">

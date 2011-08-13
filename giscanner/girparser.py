@@ -268,7 +268,7 @@ class GIRParser(object):
         for prop in self._find_children(node, _corens('property')):
             obj.properties.append(self._parse_property(prop))
         for signal in self._find_children(node, _glibns('signal')):
-            obj.signals.append(self._parse_function_common(signal, ast.Function))
+            obj.signals.append(self._parse_function_common(signal, ast.Signal))
 
     def _parse_callback(self, node):
         callback = self._parse_function_common(node, ast.Callback)
@@ -298,6 +298,13 @@ class GIRParser(object):
             func = klass(name, retval, parameters, throws, identifier)
         elif klass is ast.VFunction:
             func = klass(name, retval, parameters, throws)
+        elif klass is ast.Signal:
+            func = klass(name, retval, parameters,
+                         when=node.attrib.get('when', 'first'),
+                         no_recurse=node.attrib.get('no-recurse', '0') == '1',
+                         detailed=node.attrib.get('detailed', '0') == '1',
+                         action=node.attrib.get('action', '0') == '1',
+                         no_hooks=node.attrib.get('no-hooks', '0') == '1')
         else:
             assert False
 

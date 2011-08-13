@@ -321,6 +321,12 @@ PARAM_TRANSFER_NONE = 'none'
 PARAM_TRANSFER_CONTAINER = 'container'
 PARAM_TRANSFER_FULL = 'full'
 
+SIGNAL_FIRST = 'first'
+SIGNAL_LAST = 'last'
+SIGNAL_CLEANUP = 'cleanup'
+SIGNAL_MUST_COLLECT = 'must-collect'
+
+
 class Namespace(object):
     def __init__(self, name, version,
                  identifier_prefixes=None,
@@ -858,8 +864,15 @@ class Boxed(Node, Registered):
 
 class Signal(Callable):
 
-    def __init__(self, name, retval, parameters):
+    def __init__(self, name, retval, parameters, when="first",
+                 no_recurse=False, detailed=False, action=False,
+                 no_hooks=False):
         Callable.__init__(self, name, retval, parameters, False)
+        self.when = when
+        self.no_recurse = no_recurse
+        self.detailed = detailed
+        self.action = action
+        self.no_hooks = no_hooks
 
 
 class Class(Node, Registered):
