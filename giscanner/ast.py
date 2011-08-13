@@ -864,7 +864,7 @@ class Boxed(Node, Registered):
 
 class Signal(Callable):
 
-    def __init__(self, name, retval, parameters, when="first",
+    def __init__(self, name, retval, parameters, when=None,
                  no_recurse=False, detailed=False, action=False,
                  no_hooks=False):
         Callable.__init__(self, name, retval, parameters, False)
