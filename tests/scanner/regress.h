@@ -341,6 +341,8 @@ int        regress_test_obj_instance_method (RegressTestObj *obj);
 double     regress_test_obj_static_method (int x);
 void       regress_forced_method (RegressTestObj *obj);
 
+void regress_test_array_fixed_out_objects (RegressTestObj ***objs);
+
 void regress_test_obj_torture_signature_0 (RegressTestObj    *obj,
                                    int        x,
                                    double     *y,

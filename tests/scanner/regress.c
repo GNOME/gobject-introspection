@@ -2308,6 +2308,21 @@ regress_test_obj_null_out (RegressTestObj **obj)
     *obj = NULL;
 }
 
+/**
+ * regress_test_array_fixed_out_objects:
+ * @objs: (out) (array fixed-size=2) (transfer full): An array of #RegressTestObj
+ */
+void
+regress_test_array_fixed_out_objects (RegressTestObj ***objs)
+{
+    RegressTestObj **values = g_new(gpointer, 2);
+
+    values[0] = regress_constructor();
+    values[1] = regress_constructor();
+
+    *objs = values;
+}
+
 typedef struct _CallbackInfo CallbackInfo;
 
 struct _CallbackInfo
