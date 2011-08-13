@@ -58,7 +58,7 @@ class DocBookFormatter(object):
             else:
                 link_dest = param.type.ctype
             with self._writer.tagcontext("link", [("linkend", "%s" % link_dest)]):
-                self._writer.write_tag("type", [], self.get_type_string(param.type))
+                self._writer.write_tag("type", [], link_dest)
             self._writer.write_line(extra_content)
 
     def _render_parameters(self, parent, parameters):
@@ -82,7 +82,11 @@ class DocBookFormatter(object):
                 comma = ", "
             else:
                 comma = ""
-            extra_content = " %s%s" % (param.argname, comma)
+            extra_content = " "
+            if '*' in param.type.ctype:
+                extra_content += '*'
+            extra_content += param.argname
+            extra_content += comma
             self._render_parameter(param, extra_content)
 
         self._writer.write_line(");\n")
