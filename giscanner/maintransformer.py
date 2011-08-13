@@ -1016,9 +1016,9 @@ method or constructor of some type."""
             new_func = func.clone()
             new_func.name = funcname
             node.static_methods.append(new_func)
-            # TODO: flag func as a backwards-comptability kludge (and maybe
-            # prune it in the introspectable pass if we would have
-            # introspectable=0 anyway).
+            # flag the func as a backwards-comptability kludge (thus it will
+            # get pruned in the introspectable pass if introspectable=0).
+            func.moved_to = node.name + '.' + new_func.name
             return True
 
         return False

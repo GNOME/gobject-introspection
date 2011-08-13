@@ -303,6 +303,7 @@ class GIRParser(object):
 
         func.shadows = node.attrib.get('shadows', None)
         func.shadowed_by = node.attrib.get('shadowed-by', None)
+        func.moved_to = node.attrib.get('moved-to', None)
 
         parameters_node = node.find(_corens('parameters'))
         if (parameters_node is not None):

@@ -37,6 +37,7 @@ class IntrospectablePass(object):
         self._namespace.walk(self._introspectable_callable_analysis)
         self._namespace.walk(self._introspectable_callable_analysis)
         self._namespace.walk(self._introspectable_pass3)
+        self._namespace.walk(self._remove_non_reachable_backcompat_copies)
 
     def _parameter_warning(self, parent, param, text, position=None):
         # Suppress VFunctions and Callbacks warnings for now
@@ -220,4 +221,13 @@ class IntrospectablePass(object):
                     prop.introspectable = False
             for sig in obj.signals:
                 self._introspectable_callable_analysis(sig, [obj])
+        return True
+
+    def _remove_non_reachable_backcompat_copies(self, obj, stack):
+        if obj.skip:
+            return False
+        if (isinstance(obj, ast.Function)
+            and not obj.introspectable
+            and obj.moved_to is not None):
+            self._namespace.remove(obj)
         return True

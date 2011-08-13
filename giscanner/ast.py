@@ -569,6 +569,7 @@ class Function(Callable):
         self.is_constructor = False
         self.shadowed_by = None # C symbol string
         self.shadows = None # C symbol string
+        self.moved_to = None # namespaced function name string
 
     def clone(self):
         clone = copy.copy(self)

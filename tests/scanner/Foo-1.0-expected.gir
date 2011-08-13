@@ -985,7 +985,8 @@ exposed to language bindings.</doc>
       </return-value>
     </function>
     <function name="interface_static_method"
-              c:identifier="foo_interface_static_method">
+              c:identifier="foo_interface_static_method"
+              moved-to="Interface.static_method">
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
@@ -1017,6 +1018,7 @@ exposed to language bindings.</doc>
     </function>
     <function name="rectangle_new"
               c:identifier="foo_rectangle_new"
+              moved-to="Rectangle.new"
               introspectable="0">
       <doc xml:whitespace="preserve">This is a C convenience constructor; we have to (skip)
 it because it's not a boxed type.</doc>

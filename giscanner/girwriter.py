@@ -178,6 +178,8 @@ and/or use gtk-doc annotations. ''')
             attrs.append(('shadowed-by', func.shadowed_by))
         elif func.shadows:
             attrs.append(('shadows', func.shadows))
+        if func.moved_to is not None:
+            attrs.append(('moved-to', func.moved_to))
         self._write_callable(func, tag_name, attrs)
 
     def _write_method(self, method):
