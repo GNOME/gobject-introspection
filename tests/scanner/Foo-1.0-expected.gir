@@ -532,7 +532,7 @@ uses a C sugar return type.</doc>
       <field name="some_int">
         <type name="gint" c:type="int"/>
       </field>
-      <glib:signal name="signal">
+      <glib:signal name="signal" when="last">
         <return-value transfer-ownership="full">
           <type name="utf8"/>
         </return-value>
@@ -769,7 +769,7 @@ exposed to language bindings.</doc>
           </parameter>
         </parameters>
       </method>
-      <glib:signal name="destroy-event">
+      <glib:signal name="destroy-event" when="last">
         <return-value transfer-ownership="none">
           <type name="none"/>
         </return-value>

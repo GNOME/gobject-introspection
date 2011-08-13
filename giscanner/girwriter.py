@@ -554,7 +554,17 @@ and/or use gtk-doc annotations. ''')
                 self._write_type(field.type)
 
     def _write_signal(self, signal):
-        attrs = [('name', signal.name)]
+        attrs = [('name', signal.name),
+                 ('when', signal.when)]
+        if signal.no_recurse:
+            attrs.append(('no-recurse', '1'))
+        if signal.detailed:
+            attrs.append(('detailed', '1'))
+        if signal.action:
+            attrs.append(('action', '1'))
+        if signal.no_hooks:
+            attrs.append(('no-hooks', '1'))
+
         self._append_version(signal, attrs)
         self._append_node_generic(signal, attrs)
         with self.tagcontext('glib:signal', attrs):

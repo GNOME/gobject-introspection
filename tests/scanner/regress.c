@@ -1791,6 +1791,9 @@ enum {
   REGRESS_TEST_OBJ_SIGNAL_SIG_NEW_WITH_ARRAY_PROP,
   REGRESS_TEST_OBJ_SIGNAL_SIG_WITH_HASH_PROP,
   REGRESS_TEST_OBJ_SIGNAL_SIG_WITH_STRV,
+  REGRESS_TEST_OBJ_SIGNAL_FIRST,
+  REGRESS_TEST_OBJ_SIGNAL_CLEANUP,
+  REGRESS_TEST_OBJ_SIGNAL_ALL,
   N_REGRESS_TEST_OBJ_SIGNALS
 };
 
@@ -1886,6 +1889,39 @@ regress_test_obj_class_init (RegressTestObjClass *klass)
 		  G_TYPE_NONE,
 		  1,
 		  G_TYPE_STRV);
+
+  regress_test_obj_signals[REGRESS_TEST_OBJ_SIGNAL_FIRST] =
+    g_signal_new ("first",
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_FIRST,
+		  0,
+		  NULL,
+		  NULL,
+		  g_cclosure_marshal_VOID__VOID,
+		  G_TYPE_NONE,
+                  0);
+
+    regress_test_obj_signals[REGRESS_TEST_OBJ_SIGNAL_CLEANUP] =
+    g_signal_new ("cleanup",
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_CLEANUP,
+		  0,
+		  NULL,
+		  NULL,
+		  g_cclosure_marshal_VOID__VOID,
+		  G_TYPE_NONE,
+                  0);
+
+    regress_test_obj_signals[REGRESS_TEST_OBJ_SIGNAL_ALL] =
+    g_signal_new ("all",
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE | G_SIGNAL_DETAILED | G_SIGNAL_ACTION | G_SIGNAL_NO_HOOKS,
+		  0,
+		  NULL,
+		  NULL,
+		  g_cclosure_marshal_VOID__VOID,
+		  G_TYPE_NONE,
+                  0);
 
   gobject_class->set_property = regress_test_obj_set_property;
   gobject_class->get_property = regress_test_obj_get_property;

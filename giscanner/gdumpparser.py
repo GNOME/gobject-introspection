@@ -453,6 +453,11 @@ different --identifier-prefix.""" % (xmlnode.attrib['name'], self._namespace.ide
             rtype = ast.Type.create_from_gtype_name(rctype)
             return_ = ast.Return(rtype)
             parameters = []
+            when = signal_info.attrib['when']
+            no_recurse = signal_info.attrib.get('no-recurse', '0') == '1'
+            detailed = signal_info.attrib.get('detailed', '0') == '1'
+            action = signal_info.attrib.get('action', '0') == '1'
+            no_hooks = signal_info.attrib.get('no-hooks', '0') == '1'
             for i, parameter in enumerate(signal_info.findall('param')):
                 if i == 0:
                     argname = 'object'
@@ -463,7 +468,9 @@ different --identifier-prefix.""" % (xmlnode.attrib['name'], self._namespace.ide
                 param = ast.Parameter(argname, ptype)
                 param.transfer = ast.PARAM_TRANSFER_NONE
                 parameters.append(param)
-            signal = ast.Signal(signal_info.attrib['name'], return_, parameters)
+            signal = ast.Signal(signal_info.attrib['name'], return_, parameters,
+                                when=when, no_recurse=no_recurse, detailed=detailed,
+                                action=action, no_hooks=no_hooks)
             node.signals.append(signal)
         node.signals = node.signals
 
