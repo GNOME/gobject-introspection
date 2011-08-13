@@ -239,6 +239,14 @@ class GIRParser(object):
         type_struct = node.attrib.get(_glibns('type-struct'))
         if type_struct:
             obj.glib_type_struct = self._namespace.type_from_name(type_struct)
+        if klass == ast.Class:
+            is_fundamental = node.attrib.get(_glibns('fundamental'))
+            if is_fundamental and is_fundamental != '0':
+                obj.fundamental = True
+            for func_id in ['ref-func', 'unref-func',
+                            'set-value-func', 'get-value-func']:
+                func_name = node.attrib.get(_glibns(func_id))
+                obj.__dict__[func_id.replace('-', '_')] = func_name
         self._namespace.append(obj)
 
         if self._types_only:
