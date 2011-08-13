@@ -145,7 +145,7 @@ class DocBookFormatter(object):
 
         if link:
             self._writer.write_tag("link", [("linkend",
-                                            "%s-details" % (method.name))],
+                                            method.symbol.replace("_", "-"))],
                                   method.symbol)
         else:
             self._writer.write_line(method.symbol)
@@ -436,14 +436,15 @@ class DocBookWriter(object):
 
     def _render_method(self, entity):
 
+        link_name = entity.get_ast().symbol.replace("_", "-")
+
         self._writer.push_tag('refsect2',
-                             [('id', entity.get_ast().symbol),
-                              ('role', 'struct')])
+                              [('id', link_name),
+                               ('role', 'function')])
         self._writer.write_tag("title", [],
                                self._formatter.get_method_as_title(entity))
 
-        with self._writer.tagcontext("indexterm",
-                                    [("zone", "%s" % entity.get_name())]):
+        with self._writer.tagcontext("indexterm", [("zone", link_name)]):
             self._writer.write_tag("primary", [], entity.get_name())
 
         with self._writer.tagcontext("programlisting"):
