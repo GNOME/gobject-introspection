@@ -178,6 +178,16 @@ None."""
                          % (girname, searchdirs))
         sys.exit(1)
 
+    @classmethod
+    def parse_from_gir(cls, filename):
+        self = cls(None)
+        self.set_passthrough_mode()
+        self._parse_include(filename)
+        parser = self._cachestore.load(filename)
+        self._namespace = parser.get_namespace()
+        del self._includes[self._namespace.name]
+        return self
+
     def _parse_include(self, filename, uninstalled=False):
         parser = None
         if self._cachestore is not None:

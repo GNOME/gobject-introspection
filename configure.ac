@@ -276,6 +276,7 @@ tests/offsets/Makefile
 tests/scanner/Makefile
 tests/repository/Makefile
 tests/warn/Makefile
+tests/doctool/Makefile
 docs/Makefile
 docs/reference/Makefile
 gobject-introspection-1.0.pc

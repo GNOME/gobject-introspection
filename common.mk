@@ -26,3 +26,5 @@ INTROSPECTION_COMPILER_ARGS = \
     --includedir=$(top_srcdir)/gir \
     --includedir=$(builddir) \
     --includedir=$(top_builddir)
+
+INTROSPECTION_DOCTOOL = $(top_builddir)/g-ir-doc-tool$(EXEEXT)
