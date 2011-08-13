@@ -29,6 +29,7 @@ from . import ast
 from . import message
 from . import utils
 from .transformer import TransformerException
+from .utils import to_underscores
 
 # GParamFlags
 G_PARAM_READABLE = 1 << 0
@@ -175,11 +176,7 @@ blob containing data gleaned from GObject's primitive introspection."""
     def _create_gobject(self, node):
         symbol = 'intern'
         parent_gitype = None
-        if node.name == 'ParamSpec':
-            type_name = 'GParam'
-            # Some function use g_param_value instead
-            c_symbol_prefix = 'param_spec'
-        elif node.name == 'Object':
+        if node.name == 'Object':
             type_name = 'GObject'
             c_symbol_prefix = 'object'
         elif node.name == 'InitiallyUnowned':
@@ -248,8 +245,26 @@ blob containing data gleaned from GObject's primitive introspection."""
 
     def _initparse_gobject_record(self, record):
         # Special handling for when we're parsing GObject / GLib
-        if record.name in ('Object', 'InitiallyUnowned', 'ParamSpec'):
+        if record.name in ('Object', 'InitiallyUnowned'):
             self._create_gobject(record)
+        elif (record.name.startswith('ParamSpec')
+              and not record.name in ('ParamSpecPool', 'ParamSpecClass',
+                                      'ParamSpecTypeInfo')):
+            parent = None
+            if record.name != 'ParamSpec':
+                parent = ast.Type(target_giname='GObject.ParamSpec')
+            prefix = to_underscores(record.name).lower()
+            node = ast.Class(record.name, parent,
+                             ctype=record.ctype,
+                             # GParamSpecXxx has g_type_name 'GParamXxx'
+                             gtype_name=record.ctype.replace('Spec', ''),
+                             get_type='intern',
+                             c_symbol_prefix=prefix)
+            node.fundamental = True
+            if record.name == 'ParamSpec':
+                node.is_abstract = True
+            self._add_record_fields(node)
+            self._namespace.append(node, replace=True)
         elif record.name == 'Variant':
             self._boxed_types['GVariant'] = ast.Boxed('Variant',
                                                       gtype_name='GVariant',
