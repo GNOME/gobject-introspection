@@ -135,8 +135,10 @@ class DocBookFormatter(object):
                     retval_type.ctype.replace("*", ""))
 
         with self._writer.tagcontext("link", [("linkend", link_dest)]):
-            self._writer.write_tag("returnvalue", [],
-                                   self.get_type_string(method.retval.type))
+            self._writer.write_tag("returnvalue", [], link_dest)
+
+        if '*' in retval_type.ctype:
+            self._writer.write_line(' *')
 
         self._writer.write_line(
             _space(20 - len(self.get_type_string(method.retval.type))))

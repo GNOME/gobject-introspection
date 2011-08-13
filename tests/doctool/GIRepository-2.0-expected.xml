@@ -25,18 +25,18 @@
       <synopsis>
 <link linkend="gboolean"><returnvalue>gboolean</returnvalue></link>            <link linkend="equal-details">g_base_info_equal</link>                       (<parameter><link linkend="GIBaseInfo"><type>GIBaseInfo</type></link> *baseinfo, </parameter>
                                                              <parameter><link linkend="GIBaseInfo"><type>GIBaseInfo</type></link> *info2</parameter>);
-<link linkend="gchar"><returnvalue>gchar*</returnvalue></link>              <link linkend="get_attribute-details">g_base_info_get_attribute</link>               (<parameter><link linkend="GIBaseInfo"><type>GIBaseInfo</type></link> *baseinfo, </parameter>
+<link linkend="gchar"><returnvalue>gchar</returnvalue></link>*               <link linkend="get_attribute-details">g_base_info_get_attribute</link>               (<parameter><link linkend="GIBaseInfo"><type>GIBaseInfo</type></link> *baseinfo, </parameter>
                                                              <parameter><link linkend="gchar"><type>gchar</type></link> *name</parameter>);
-<link linkend="GIBaseInfo"><returnvalue>GIBaseInfo*</returnvalue></link>         <link linkend="get_container-details">g_base_info_get_container</link>               (<parameter><link linkend="GIBaseInfo"><type>GIBaseInfo</type></link> *baseinfo</parameter>);
-<link linkend="gchar"><returnvalue>gchar*</returnvalue></link>              <link linkend="get_name-details">g_base_info_get_name</link>                    (<parameter><link linkend="GIBaseInfo"><type>GIBaseInfo</type></link> *baseinfo</parameter>);
-<link linkend="gchar"><returnvalue>gchar*</returnvalue></link>              <link linkend="get_namespace-details">g_base_info_get_namespace</link>               (<parameter><link linkend="GIBaseInfo"><type>GIBaseInfo</type></link> *baseinfo</parameter>);
-<link linkend="GITypelib"><returnvalue>GITypelib*</returnvalue></link>          <link linkend="get_typelib-details">g_base_info_get_typelib</link>                 (<parameter><link linkend="GIBaseInfo"><type>GIBaseInfo</type></link> *baseinfo</parameter>);
+<link linkend="GIBaseInfo"><returnvalue>GIBaseInfo</returnvalue></link>*          <link linkend="get_container-details">g_base_info_get_container</link>               (<parameter><link linkend="GIBaseInfo"><type>GIBaseInfo</type></link> *baseinfo</parameter>);
+<link linkend="gchar"><returnvalue>gchar</returnvalue></link>*               <link linkend="get_name-details">g_base_info_get_name</link>                    (<parameter><link linkend="GIBaseInfo"><type>GIBaseInfo</type></link> *baseinfo</parameter>);
+<link linkend="gchar"><returnvalue>gchar</returnvalue></link>*               <link linkend="get_namespace-details">g_base_info_get_namespace</link>               (<parameter><link linkend="GIBaseInfo"><type>GIBaseInfo</type></link> *baseinfo</parameter>);
+<link linkend="GITypelib"><returnvalue>GITypelib</returnvalue></link>*           <link linkend="get_typelib-details">g_base_info_get_typelib</link>                 (<parameter><link linkend="GIBaseInfo"><type>GIBaseInfo</type></link> *baseinfo</parameter>);
 <link linkend="gboolean"><returnvalue>gboolean</returnvalue></link>            <link linkend="is_deprecated-details">g_base_info_is_deprecated</link>               (<parameter><link linkend="GIBaseInfo"><type>GIBaseInfo</type></link> *baseinfo</parameter>);
 <link linkend="gboolean"><returnvalue>gboolean</returnvalue></link>            <link linkend="iterate_attributes-details">g_base_info_iterate_attributes</link>          (<parameter><link linkend="GIBaseInfo"><type>GIBaseInfo</type></link> *baseinfo, </parameter>
                                                              <parameter><link linkend="GIAttributeIter"><type>GIAttributeIter</type></link> *iterator, </parameter>
                                                              <parameter><link linkend="char"><type>char</type></link> *name, </parameter>
                                                              <parameter><link linkend="char"><type>char</type></link> *value</parameter>);
-<link linkend="GIBaseInfo"><returnvalue>GIBaseInfo*</returnvalue></link>         <link linkend="ref-details">g_base_info_ref</link>                         (<parameter><link linkend="GIBaseInfo"><type>GIBaseInfo</type></link> *baseinfo</parameter>);
+<link linkend="GIBaseInfo"><returnvalue>GIBaseInfo</returnvalue></link>*          <link linkend="ref-details">g_base_info_ref</link>                         (<parameter><link linkend="GIBaseInfo"><type>GIBaseInfo</type></link> *baseinfo</parameter>);
 <link linkend="void"><returnvalue>void</returnvalue></link>                <link linkend="unref-details">g_base_info_unref</link>                       (<parameter><link linkend="GIBaseInfo"><type>GIBaseInfo</type></link> *baseinfo</parameter>);
       </synopsis>
     </refsynopsisdiv>
@@ -91,7 +91,7 @@ TypeLib; use this function instead to do #GIBaseInfo comparisons.</para>
           <primary>get_attribute</primary>
         </indexterm>
         <programlisting>
-<link linkend="gchar"><returnvalue>gchar*</returnvalue></link>              g_base_info_get_attribute               (<parameter><link linkend="GIBaseInfo"><type>GIBaseInfo</type></link> *baseinfo, </parameter>
+<link linkend="gchar"><returnvalue>gchar</returnvalue></link>*               g_base_info_get_attribute               (<parameter><link linkend="GIBaseInfo"><type>GIBaseInfo</type></link> *baseinfo, </parameter>
                                                              <parameter><link linkend="gchar"><type>gchar</type></link> *name</parameter>);
         </programlisting>
         <para>Retrieve an arbitrary attribute associated with this node.</para>
@@ -131,7 +131,7 @@ TypeLib; use this function instead to do #GIBaseInfo comparisons.</para>
           <primary>get_container</primary>
         </indexterm>
         <programlisting>
-<link linkend="GIBaseInfo"><returnvalue>GIBaseInfo*</returnvalue></link>         g_base_info_get_container               (<parameter><link linkend="GIBaseInfo"><type>GIBaseInfo</type></link> *baseinfo</parameter>);
+<link linkend="GIBaseInfo"><returnvalue>GIBaseInfo</returnvalue></link>*          g_base_info_get_container               (<parameter><link linkend="GIBaseInfo"><type>GIBaseInfo</type></link> *baseinfo</parameter>);
         </programlisting>
         <para>Obtain the container of the @info. The container is the parent
 GIBaseInfo. For instance, the parent of a #GIFunctionInfo is an
@@ -163,7 +163,7 @@ GIBaseInfo. For instance, the parent of a #GIFunctionInfo is an
           <primary>get_name</primary>
         </indexterm>
         <programlisting>
-<link linkend="gchar"><returnvalue>gchar*</returnvalue></link>              g_base_info_get_name                    (<parameter><link linkend="GIBaseInfo"><type>GIBaseInfo</type></link> *baseinfo</parameter>);
+<link linkend="gchar"><returnvalue>gchar</returnvalue></link>*               g_base_info_get_name                    (<parameter><link linkend="GIBaseInfo"><type>GIBaseInfo</type></link> *baseinfo</parameter>);
         </programlisting>
         <para>Obtain the name of the @info. What the name represents depends on
 the #GIInfoType of the @info. For instance for #GIFunctionInfo it is
@@ -195,7 +195,7 @@ the name of the function.</para>
           <primary>get_namespace</primary>
         </indexterm>
         <programlisting>
-<link linkend="gchar"><returnvalue>gchar*</returnvalue></link>              g_base_info_get_namespace               (<parameter><link linkend="GIBaseInfo"><type>GIBaseInfo</type></link> *baseinfo</parameter>);
+<link linkend="gchar"><returnvalue>gchar</returnvalue></link>*               g_base_info_get_namespace               (<parameter><link linkend="GIBaseInfo"><type>GIBaseInfo</type></link> *baseinfo</parameter>);
         </programlisting>
         <para>Obtain the namespace of @info.</para>
         <variablelist role="params">
@@ -225,7 +225,7 @@ the name of the function.</para>
           <primary>get_typelib</primary>
         </indexterm>
         <programlisting>
-<link linkend="GITypelib"><returnvalue>GITypelib*</returnvalue></link>          g_base_info_get_typelib                 (<parameter><link linkend="GIBaseInfo"><type>GIBaseInfo</type></link> *baseinfo</parameter>);
+<link linkend="GITypelib"><returnvalue>GITypelib</returnvalue></link>*           g_base_info_get_typelib                 (<parameter><link linkend="GIBaseInfo"><type>GIBaseInfo</type></link> *baseinfo</parameter>);
         </programlisting>
         <para>Obtain the typelib this @info belongs to</para>
         <variablelist role="params">
@@ -365,7 +365,7 @@ while (g_base_info_iterate_attributes (info, &amp;iter, &amp;name, &amp;value))
           <primary>ref</primary>
         </indexterm>
         <programlisting>
-<link linkend="GIBaseInfo"><returnvalue>GIBaseInfo*</returnvalue></link>         g_base_info_ref                         (<parameter><link linkend="GIBaseInfo"><type>GIBaseInfo</type></link> *baseinfo</parameter>);
+<link linkend="GIBaseInfo"><returnvalue>GIBaseInfo</returnvalue></link>*          g_base_info_ref                         (<parameter><link linkend="GIBaseInfo"><type>GIBaseInfo</type></link> *baseinfo</parameter>);
         </programlisting>
         <para>Increases the reference count of @info.</para>
         <variablelist role="params">
@@ -425,40 +425,40 @@ drops to 0, the info is freed.</para>
     <refsynopsisdiv id="GIRepository.synopsis" role="synopsis">
       <title role="synopsis.title">Synopsis</title>
       <synopsis>
-<link linkend="GList"><returnvalue>GList*</returnvalue></link>              <link linkend="enumerate_versions-details">g_irepository_enumerate_versions</link>        (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
+<link linkend="GList"><returnvalue>GList</returnvalue></link>*               <link linkend="enumerate_versions-details">g_irepository_enumerate_versions</link>        (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
                                                              <parameter><link linkend="gchar"><type>gchar</type></link> *namespace_</parameter>);
-<link linkend="GIBaseInfo"><returnvalue>GIBaseInfo*</returnvalue></link>         <link linkend="find_by_gtype-details">g_irepository_find_by_gtype</link>             (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
+<link linkend="GIBaseInfo"><returnvalue>GIBaseInfo</returnvalue></link>*          <link linkend="find_by_gtype-details">g_irepository_find_by_gtype</link>             (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
                                                              <parameter><link linkend="GType"><type>GType</type></link> gtype</parameter>);
-<link linkend="GIBaseInfo"><returnvalue>GIBaseInfo*</returnvalue></link>         <link linkend="find_by_name-details">g_irepository_find_by_name</link>              (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
+<link linkend="GIBaseInfo"><returnvalue>GIBaseInfo</returnvalue></link>*          <link linkend="find_by_name-details">g_irepository_find_by_name</link>              (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
                                                              <parameter><link linkend="gchar"><type>gchar</type></link> *namespace_, </parameter>
                                                              <parameter><link linkend="gchar"><type>gchar</type></link> *name</parameter>);
-<link linkend="gchar"><returnvalue>gchar*</returnvalue></link>              <link linkend="get_c_prefix-details">g_irepository_get_c_prefix</link>              (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
+<link linkend="gchar"><returnvalue>gchar</returnvalue></link>*               <link linkend="get_c_prefix-details">g_irepository_get_c_prefix</link>              (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
                                                              <parameter><link linkend="gchar"><type>gchar</type></link> *namespace_</parameter>);
-<link linkend="gchar"><returnvalue>gchar**</returnvalue></link>             <link linkend="get_dependencies-details">g_irepository_get_dependencies</link>          (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
+<link linkend="gchar"><returnvalue>gchar</returnvalue></link>*              <link linkend="get_dependencies-details">g_irepository_get_dependencies</link>          (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
                                                              <parameter><link linkend="gchar"><type>gchar</type></link> *namespace_</parameter>);
-<link linkend="GIBaseInfo"><returnvalue>GIBaseInfo*</returnvalue></link>         <link linkend="get_info-details">g_irepository_get_info</link>                  (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
+<link linkend="GIBaseInfo"><returnvalue>GIBaseInfo</returnvalue></link>*          <link linkend="get_info-details">g_irepository_get_info</link>                  (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
                                                              <parameter><link linkend="gchar"><type>gchar</type></link> *namespace_, </parameter>
                                                              <parameter><link linkend="gint"><type>gint</type></link> index</parameter>);
-<link linkend="gchar"><returnvalue>gchar**</returnvalue></link>             <link linkend="get_loaded_namespaces-details">g_irepository_get_loaded_namespaces</link>     (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository</parameter>);
+<link linkend="gchar"><returnvalue>gchar</returnvalue></link>*              <link linkend="get_loaded_namespaces-details">g_irepository_get_loaded_namespaces</link>     (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository</parameter>);
 <link linkend="gint"><returnvalue>gint</returnvalue></link>                <link linkend="get_n_infos-details">g_irepository_get_n_infos</link>               (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
                                                              <parameter><link linkend="gchar"><type>gchar</type></link> *namespace_</parameter>);
-<link linkend="gchar"><returnvalue>gchar*</returnvalue></link>              <link linkend="get_shared_library-details">g_irepository_get_shared_library</link>        (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
+<link linkend="gchar"><returnvalue>gchar</returnvalue></link>*               <link linkend="get_shared_library-details">g_irepository_get_shared_library</link>        (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
                                                              <parameter><link linkend="gchar"><type>gchar</type></link> *namespace_</parameter>);
-<link linkend="gchar"><returnvalue>gchar*</returnvalue></link>              <link linkend="get_typelib_path-details">g_irepository_get_typelib_path</link>          (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
+<link linkend="gchar"><returnvalue>gchar</returnvalue></link>*               <link linkend="get_typelib_path-details">g_irepository_get_typelib_path</link>          (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
                                                              <parameter><link linkend="gchar"><type>gchar</type></link> *namespace_</parameter>);
-<link linkend="gchar"><returnvalue>gchar*</returnvalue></link>              <link linkend="get_version-details">g_irepository_get_version</link>               (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
+<link linkend="gchar"><returnvalue>gchar</returnvalue></link>*               <link linkend="get_version-details">g_irepository_get_version</link>               (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
                                                              <parameter><link linkend="gchar"><type>gchar</type></link> *namespace_</parameter>);
 <link linkend="gboolean"><returnvalue>gboolean</returnvalue></link>            <link linkend="is_registered-details">g_irepository_is_registered</link>             (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
                                                              <parameter><link linkend="gchar"><type>gchar</type></link> *namespace_, </parameter>
                                                              <parameter><link linkend="gchar"><type>gchar</type></link> *version</parameter>);
-<link linkend="char"><returnvalue>char*</returnvalue></link>               <link linkend="load_typelib-details">g_irepository_load_typelib</link>              (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
+<link linkend="char"><returnvalue>char</returnvalue></link>*                <link linkend="load_typelib-details">g_irepository_load_typelib</link>              (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
                                                              <parameter><link linkend="GITypelib"><type>GITypelib</type></link> *typelib, </parameter>
                                                              <parameter><link linkend="GIRepositoryLoadFlags"><type>GIRepositoryLoadFlags</type></link> flags</parameter>);
-<link linkend="GITypelib"><returnvalue>GITypelib*</returnvalue></link>          <link linkend="require-details">g_irepository_require</link>                   (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
+<link linkend="GITypelib"><returnvalue>GITypelib</returnvalue></link>*           <link linkend="require-details">g_irepository_require</link>                   (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
                                                              <parameter><link linkend="gchar"><type>gchar</type></link> *namespace_, </parameter>
                                                              <parameter><link linkend="gchar"><type>gchar</type></link> *version, </parameter>
                                                              <parameter><link linkend="GIRepositoryLoadFlags"><type>GIRepositoryLoadFlags</type></link> flags</parameter>);
-<link linkend="GITypelib"><returnvalue>GITypelib*</returnvalue></link>          <link linkend="require_private-details">g_irepository_require_private</link>           (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
+<link linkend="GITypelib"><returnvalue>GITypelib</returnvalue></link>*           <link linkend="require_private-details">g_irepository_require_private</link>           (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
                                                              <parameter><link linkend="gchar"><type>gchar</type></link> *typelib_dir, </parameter>
                                                              <parameter><link linkend="gchar"><type>gchar</type></link> *namespace_, </parameter>
                                                              <parameter><link linkend="gchar"><type>gchar</type></link> *version, </parameter>
@@ -479,7 +479,7 @@ drops to 0, the info is freed.</para>
           <primary>enumerate_versions</primary>
         </indexterm>
         <programlisting>
-<link linkend="GList"><returnvalue>GList*</returnvalue></link>              g_irepository_enumerate_versions        (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
+<link linkend="GList"><returnvalue>GList</returnvalue></link>*               g_irepository_enumerate_versions        (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
                                                              <parameter><link linkend="gchar"><type>gchar</type></link> *namespace_</parameter>);
         </programlisting>
         <para>Obtain an unordered list of versions (either currently loaded or
@@ -522,7 +522,7 @@ available) for @namespace_ in this @repository.</para>
           <primary>find_by_gtype</primary>
         </indexterm>
         <programlisting>
-<link linkend="GIBaseInfo"><returnvalue>GIBaseInfo*</returnvalue></link>         g_irepository_find_by_gtype             (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
+<link linkend="GIBaseInfo"><returnvalue>GIBaseInfo</returnvalue></link>*          g_irepository_find_by_gtype             (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
                                                              <parameter><link linkend="GType"><type>GType</type></link> gtype</parameter>);
         </programlisting>
         <para>Searches all loaded namespaces for a particular #GType.  Note that
@@ -569,7 +569,7 @@ when you know the GType to originate from be from a loaded namespace.</para>
           <primary>find_by_name</primary>
         </indexterm>
         <programlisting>
-<link linkend="GIBaseInfo"><returnvalue>GIBaseInfo*</returnvalue></link>         g_irepository_find_by_name              (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
+<link linkend="GIBaseInfo"><returnvalue>GIBaseInfo</returnvalue></link>*          g_irepository_find_by_name              (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
                                                              <parameter><link linkend="gchar"><type>gchar</type></link> *namespace_, </parameter>
                                                              <parameter><link linkend="gchar"><type>gchar</type></link> *name</parameter>);
         </programlisting>
@@ -624,7 +624,7 @@ ensure the namespace has already been loaded.</para>
           <primary>get_c_prefix</primary>
         </indexterm>
         <programlisting>
-<link linkend="gchar"><returnvalue>gchar*</returnvalue></link>              g_irepository_get_c_prefix              (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
+<link linkend="gchar"><returnvalue>gchar</returnvalue></link>*               g_irepository_get_c_prefix              (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
                                                              <parameter><link linkend="gchar"><type>gchar</type></link> *namespace_</parameter>);
         </programlisting>
         <para>This function returns the "C prefix", or the C level namespace
@@ -667,7 +667,7 @@ such as #g_irepository_require before calling this function.</para>
           <primary>get_dependencies</primary>
         </indexterm>
         <programlisting>
-<link linkend="gchar"><returnvalue>gchar**</returnvalue></link>             g_irepository_get_dependencies          (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
+<link linkend="gchar"><returnvalue>gchar</returnvalue></link>*              g_irepository_get_dependencies          (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
                                                              <parameter><link linkend="gchar"><type>gchar</type></link> *namespace_</parameter>);
         </programlisting>
         <para>Return an array of all (transitive) dependencies for namespace
@@ -711,7 +711,7 @@ such as #g_irepository_require before calling this function.</para>
           <primary>get_info</primary>
         </indexterm>
         <programlisting>
-<link linkend="GIBaseInfo"><returnvalue>GIBaseInfo*</returnvalue></link>         g_irepository_get_info                  (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
+<link linkend="GIBaseInfo"><returnvalue>GIBaseInfo</returnvalue></link>*          g_irepository_get_info                  (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
                                                              <parameter><link linkend="gchar"><type>gchar</type></link> *namespace_, </parameter>
                                                              <parameter><link linkend="gint"><type>gint</type></link> index</parameter>);
         </programlisting>
@@ -767,7 +767,7 @@ entries.</para>
           <primary>get_loaded_namespaces</primary>
         </indexterm>
         <programlisting>
-<link linkend="gchar"><returnvalue>gchar**</returnvalue></link>             g_irepository_get_loaded_namespaces     (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository</parameter>);
+<link linkend="gchar"><returnvalue>gchar</returnvalue></link>*              g_irepository_get_loaded_namespaces     (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository</parameter>);
         </programlisting>
         <para>Return the list of currently loaded namespaces.</para>
         <variablelist role="params">
@@ -841,7 +841,7 @@ already been loaded before calling this function.</para>
           <primary>get_shared_library</primary>
         </indexterm>
         <programlisting>
-<link linkend="gchar"><returnvalue>gchar*</returnvalue></link>              g_irepository_get_shared_library        (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
+<link linkend="gchar"><returnvalue>gchar</returnvalue></link>*               g_irepository_get_shared_library        (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
                                                              <parameter><link linkend="gchar"><type>gchar</type></link> *namespace_</parameter>);
         </programlisting>
         <para>This function returns the full path to the shared C library
@@ -885,7 +885,7 @@ such as #g_irepository_require before calling this function.</para>
           <primary>get_typelib_path</primary>
         </indexterm>
         <programlisting>
-<link linkend="gchar"><returnvalue>gchar*</returnvalue></link>              g_irepository_get_typelib_path          (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
+<link linkend="gchar"><returnvalue>gchar</returnvalue></link>*               g_irepository_get_typelib_path          (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
                                                              <parameter><link linkend="gchar"><type>gchar</type></link> *namespace_</parameter>);
         </programlisting>
         <para>If namespace @namespace_ is loaded, return the full path to the
@@ -928,7 +928,7 @@ the special string "$lt;builtin$gt;".</para>
           <primary>get_version</primary>
         </indexterm>
         <programlisting>
-<link linkend="gchar"><returnvalue>gchar*</returnvalue></link>              g_irepository_get_version               (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
+<link linkend="gchar"><returnvalue>gchar</returnvalue></link>*               g_irepository_get_version               (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
                                                              <parameter><link linkend="gchar"><type>gchar</type></link> *namespace_</parameter>);
         </programlisting>
         <para>This function returns the loaded version associated with the given
@@ -1027,7 +1027,7 @@ quickly as this function will if it has already been loaded.</para>
           <primary>load_typelib</primary>
         </indexterm>
         <programlisting>
-<link linkend="char"><returnvalue>char*</returnvalue></link>               g_irepository_load_typelib              (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
+<link linkend="char"><returnvalue>char</returnvalue></link>*                g_irepository_load_typelib              (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
                                                              <parameter><link linkend="GITypelib"><type>GITypelib</type></link> *typelib, </parameter>
                                                              <parameter><link linkend="GIRepositoryLoadFlags"><type>GIRepositoryLoadFlags</type></link> flags</parameter>);
         </programlisting>
@@ -1062,7 +1062,7 @@ quickly as this function will if it has already been loaded.</para>
           <primary>require</primary>
         </indexterm>
         <programlisting>
-<link linkend="GITypelib"><returnvalue>GITypelib*</returnvalue></link>          g_irepository_require                   (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
+<link linkend="GITypelib"><returnvalue>GITypelib</returnvalue></link>*           g_irepository_require                   (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
                                                              <parameter><link linkend="gchar"><type>gchar</type></link> *namespace_, </parameter>
                                                              <parameter><link linkend="gchar"><type>gchar</type></link> *version, </parameter>
                                                              <parameter><link linkend="GIRepositoryLoadFlags"><type>GIRepositoryLoadFlags</type></link> flags</parameter>);
@@ -1128,7 +1128,7 @@ not specified, the latest will be used.</para>
           <primary>require_private</primary>
         </indexterm>
         <programlisting>
-<link linkend="GITypelib"><returnvalue>GITypelib*</returnvalue></link>          g_irepository_require_private           (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
+<link linkend="GITypelib"><returnvalue>GITypelib</returnvalue></link>*           g_irepository_require_private           (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
                                                              <parameter><link linkend="gchar"><type>gchar</type></link> *typelib_dir, </parameter>
                                                              <parameter><link linkend="gchar"><type>gchar</type></link> *namespace_, </parameter>
                                                              <parameter><link linkend="gchar"><type>gchar</type></link> *version, </parameter>
@@ -1225,7 +1225,7 @@ not specified, the latest will be used.</para>
       <title role="synopsis.title">Synopsis</title>
       <synopsis>
 <link linkend="void"><returnvalue>void</returnvalue></link>                <link linkend="free-details">g_typelib_free</link>                          (<parameter><link linkend="GITypelib"><type>GITypelib</type></link> *typelib</parameter>);
-<link linkend="gchar"><returnvalue>gchar*</returnvalue></link>              <link linkend="get_namespace-details">g_typelib_get_namespace</link>                 (<parameter><link linkend="GITypelib"><type>GITypelib</type></link> *typelib</parameter>);
+<link linkend="gchar"><returnvalue>gchar</returnvalue></link>*               <link linkend="get_namespace-details">g_typelib_get_namespace</link>                 (<parameter><link linkend="GITypelib"><type>GITypelib</type></link> *typelib</parameter>);
 <link linkend="gboolean"><returnvalue>gboolean</returnvalue></link>            <link linkend="symbol-details">g_typelib_symbol</link>                        (<parameter><link linkend="GITypelib"><type>GITypelib</type></link> *typelib, </parameter>
                                                              <parameter><link linkend="gchar"><type>gchar</type></link> *symbol_name, </parameter>
                                                              <parameter><link linkend="gpointer"><type>gpointer</type></link> *symbol</parameter>);
@@ -1264,7 +1264,7 @@ not specified, the latest will be used.</para>
           <primary>get_namespace</primary>
         </indexterm>
         <programlisting>
-<link linkend="gchar"><returnvalue>gchar*</returnvalue></link>              g_typelib_get_namespace                 (<parameter><link linkend="GITypelib"><type>GITypelib</type></link> *typelib</parameter>);
+<link linkend="gchar"><returnvalue>gchar</returnvalue></link>*               g_typelib_get_namespace                 (<parameter><link linkend="GITypelib"><type>GITypelib</type></link> *typelib</parameter>);
         </programlisting>
         <para/>
         <variablelist role="params">
