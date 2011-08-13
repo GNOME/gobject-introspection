@@ -347,16 +347,29 @@ class DocBookWriter(object):
         with self._writer.tagcontext("chapter", [("xml:id", "ch_%s" % (
                         page.name))]):
             self._writer.write_tag(
-                "refentry", [("id", "%s" % (page.id))])
-            self._writer.write_tag(
                 "title", [], page.name)
 
             with self._writer.tagcontext("refsynopsisdiv",
                     [('id', '%s.synopsis' % page.name),
                      ('role', 'synopsis')]):
+
                 self._writer.write_tag(
                     "title", [("role", "synopsis.title")], "Synopsis")
+
+                self._writer.write_tag("anchor", [("id", page.name)])
+
                 with self._writer.tagcontext('synopsis'):
+                    self._writer.disable_whitespace()
+                    try:
+                        self._writer.write_line("struct               ")
+                        self._writer.write_tag(
+                            "link",
+                            [("linkend", "%s-struct" % page.name)],
+                            "%s" % page.name)
+                        self._writer.write_line(";\n")
+                    finally:
+                        self._writer.enable_whitespace()
+
                     for entity in page.get_methods():
                         self._formatter.render_method(entity, link=True)
 
@@ -407,14 +420,14 @@ class DocBookWriter(object):
             #         desc = desc.replace("&", "&amp;")
             #         self._writer.write_line(desc)
 
-            if page.get_methods():
-                with self._writer.tagcontext('refsect1',
-                                            [('id', "%s-details" % page.name),
-                                             ("role", "details")]):
-                    self._writer.write_tag("title", [("role", "details.title")],
-                                          "Details")
-                    for entity in page.get_methods():
-                        self._render_method(entity)
+            with self._writer.tagcontext('refsect1',
+                                        [('id', "%s-details" % page.id.lower()),
+                                         ("role", "details")]):
+                self._writer.write_tag("title", [("role", "details.title")],
+                                      "Details")
+                self._render_struct(page.ast)
+                for entity in page.get_methods():
+                    self._render_method(entity)
 
             if page.get_properties():
                 with self._writer.tagcontext('refsect1',
@@ -433,6 +446,15 @@ class DocBookWriter(object):
                                            "Signal Details")
                     for entity in page.get_signals():
                         self._render_signal(entity)
+
+    def _render_struct(self, struct):
+        with self._writer.tagcontext('refsect2',
+                              [('id', "%s-struct" % struct.ctype),
+                               ('role', 'struct')]):
+            self._writer.write_tag("title", [], "struct %s" % struct.ctype)
+            with self._writer.tagcontext("indexterm", [("zone", "%s-struct" % struct.ctype)]):
+                self._writer.write_tag("primary", [("sortas", struct.name)], struct.ctype)
+            self._writer.write_tag("programlisting", [], "struct %s;" % struct.ctype)
 
     def _render_method(self, entity):
 
