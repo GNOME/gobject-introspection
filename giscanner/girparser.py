@@ -300,7 +300,7 @@ class GIRParser(object):
             func = klass(name, retval, parameters, throws)
         elif klass is ast.Signal:
             func = klass(name, retval, parameters,
-                         when=node.attrib.get('when', 'first'),
+                         when=node.attrib.get('when'),
                          no_recurse=node.attrib.get('no-recurse', '0') == '1',
                          detailed=node.attrib.get('detailed', '0') == '1',
                          action=node.attrib.get('action', '0') == '1',

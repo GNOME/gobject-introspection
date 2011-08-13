@@ -453,7 +453,7 @@ different --identifier-prefix.""" % (xmlnode.attrib['name'], self._namespace.ide
             rtype = ast.Type.create_from_gtype_name(rctype)
             return_ = ast.Return(rtype)
             parameters = []
-            when = signal_info.attrib['when']
+            when = signal_info.attrib.get('when')
             no_recurse = signal_info.attrib.get('no-recurse', '0') == '1'
             detailed = signal_info.attrib.get('detailed', '0') == '1'
             action = signal_info.attrib.get('action', '0') == '1'

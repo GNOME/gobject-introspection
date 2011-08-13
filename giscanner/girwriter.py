@@ -554,8 +554,9 @@ and/or use gtk-doc annotations. ''')
                 self._write_type(field.type)
 
     def _write_signal(self, signal):
-        attrs = [('name', signal.name),
-                 ('when', signal.when)]
+        attrs = [('name', signal.name)]
+        if signal.when:
+            attrs.append(('when', signal.when))
         if signal.no_recurse:
             attrs.append(('no-recurse', '1'))
         if signal.detailed:
