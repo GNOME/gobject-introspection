@@ -32,7 +32,7 @@ DOCTYPE = """<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
                "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
 <!ENTITY % local.common.attrib "xmlns:xi  CDATA  #FIXED 'http://www.w3.org/2003/XInclude'">
 <!ENTITY version SYSTEM "version.xml">
-]>"""
+]>""" #"
 
 def _space(num):
     return " " * num
