@@ -1064,15 +1064,26 @@ method or constructor of some type."""
 
         return name
 
+    def _guess_constructor_by_name(self, symbol):
+        # Normal constructors, gtk_button_new etc
+        if symbol.endswith('_new'):
+            return True
+        # Alternative constructor, gtk_button_new_with_label
+        if '_new_' in symbol:
+            return True
+        # gtk_list_store_newv,gtk_tree_store_newv etc
+        if symbol.endswith('_newv'):
+            return True
+        return False
+
     def _is_constructor(self, func, subsymbol):
         if False and func.symbol == 'regress_constructor':
             import pdb
             pdb.set_trace()
         # func.is_constructor will be True if we have a (constructor) annotation
-        if not func.is_constructor and \
-                not (func.symbol.find('_new_') >= 0 or \
-                        func.symbol.endswith('_new')):
-            return False
+        if not func.is_constructor:
+            if not self._guess_constructor_by_name(func.symbol):
+                return False
         target = self._transformer.lookup_typenode(func.retval.type)
         if not (isinstance(target, ast.Class)
                 or (isinstance(target, (ast.Record, ast.Union, ast.Boxed))
