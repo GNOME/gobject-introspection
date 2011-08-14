@@ -3210,6 +3210,44 @@ regress_test_multiline_doc_comments (void)
 }
 
 /**
+ * regress_test_nested_parameter:
+ * @a: An integer
+ *
+ * <informaltable>
+ *   <tgroup cols="3">
+ *     <thead>
+ *       <row>
+ *         <entry>Syntax</entry>
+ *         <entry>Explanation</entry>
+ *         <entry>Examples</entry>
+ *       </row>
+ *     </thead>
+ *     <tbody>
+ *       <row>
+ *         <entry>rgb(@r, @g, @b)</entry>
+ *         <entry>An opaque color; @r, @g, @b can be either integers between
+ *                0 and 255 or percentages</entry>
+ *         <entry><literallayout>rgb(128, 10, 54)
+ * rgb(20%, 30%, 0%)</literallayout></entry>
+ *       </row>
+ *       <row>
+ *         <entry>rgba(@r, @g, @b, @a)</entry>
+ *         <entry>A translucent color; @r, @g, @b are as in the previous row,
+ *                @a is a floating point number between 0 and 1</entry>
+ *         <entry><literallayout>rgba(255, 255, 0, 0.5)</literallayout></entry>
+ *       </row>
+ *    </tbody>
+ *  </tgroup>
+ * </informaltable>
+ *
+ * What we're testing here is that the scanner ignores the @a nested inside XML.
+ */
+void
+regress_test_nested_parameter (int a)
+{
+}
+
+/**
  * regress_introspectable_via_alias:
  *
  */

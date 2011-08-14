@@ -611,6 +611,7 @@ GValue *regress_test_strv_in_gvalue (void);
 GObject * _regress_this_is_a_private_symbol (void);
 
 void regress_test_multiline_doc_comments (void);
+void regress_test_nested_parameter (int a);
 
 /**
  * RegressSkippedStructure: (skip)

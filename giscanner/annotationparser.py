@@ -509,7 +509,8 @@ class AnnotationParser(object):
             if not line.startswith('*'):
                 lineno += 1
                 continue
-            is_whitespace = self.WHITESPACE_RE.match(line[1:]) is not None
+            nostar_line = line[1:]
+            is_whitespace = self.WHITESPACE_RE.match(nostar_line) is not None
             if parsing_parameters and is_whitespace:
                 # As soon as we find a line that's just whitespace,
                 # we're done parsing the parameters.
@@ -521,12 +522,17 @@ class AnnotationParser(object):
                 lineno += 1
                 continue
 
-            line = line[1:].lstrip()
+            # Explicitly only accept parameters of the form "* @foo" with one space.
+            is_parameter = nostar_line.startswith(' @')
+
+            # Strip the rest of the leading whitespace for the rest of
+            # the code; may not actually be necessary, but still doing
+            # it to avoid regressions.
+            line = nostar_line.lstrip()
 
             # Look for a parameter or return value.  Both of these can
             # have parenthesized options.
             first_colonspace_index = line.find(': ')
-            is_parameter = line.startswith('@')
             is_return_value = self.RETURNS_RE.search(line)
             parse_options = True
             if ((is_parameter or is_return_value)
@@ -594,7 +600,7 @@ class AnnotationParser(object):
                     block.tags[tag_name] = tag
                 else:
                     comment_lines.append(line)
-            elif (not is_parameter):
+            elif not parsing_parameters:
                 comment_lines.append(line)
             lineno += 1
         block.comment = '\n'.join(comment_lines).strip()
