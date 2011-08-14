@@ -419,6 +419,10 @@ class DocBookWriter(object):
                                           "Properties")
                     with self._writer.tagcontext("synopsis"):
                         for entity in page.get_properties():
+                            if isinstance(entity.get_ast().type, ast.TypeUnknown):
+                                print "Warning: ignoring property '%s' for " \
+                                      "lack of type" % entity.get_ast().name
+                                continue
                             self._formatter.render_property(entity, link=True)
 
             if page.get_signals():
