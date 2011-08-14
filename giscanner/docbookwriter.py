@@ -164,7 +164,11 @@ class DocBookFormatter(object):
 
         if hasattr(argument.type, 'element_type') and \
            argument.type.element_type is not None:
-            annotations['element-type'] = argument.type.element_type
+            if isinstance(argument.type.element_type, ast.Array):
+                element_type = argument.type.element_type.array_type
+            else:
+                element_type = argument.type.element_type
+            annotations['element-type'] = element_type
 
         if argument.transfer is not None and argument.transfer != 'none':
             annotations['transfer'] = argument.transfer
