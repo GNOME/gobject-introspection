@@ -25,6 +25,7 @@ import sys
 from . import ast
 from .girparser import GIRParser
 from .xmlwriter import XMLWriter
+from .docbookdescription import get_formatted_description
 
 XMLNS = "http://docbook.org/ns/docbook"
 XMLVERSION = "5.0"
@@ -467,23 +468,12 @@ class DocBookWriter(object):
                         for entity in page.get_signals():
                             self._formatter.render_signal(entity, link=True)
 
-            # if page.description:
-            #     with self._writer.tagcontext(
-            #         'refsect1',
-            #         [('id', '%s.description' % (page.name, )),
-            #          ]):
-            #         self._writer.write_tag(
-            #             "title", [("role", "desc.title")], "Description")
-            #         import cgi
-            #         desc = page.description
-            #         while True:
-            #             start = desc.find('|[')
-            #             if start == -1:
-            #                 break
-            #             end = desc.find(']|')
-            #             desc = desc[:start] + cgi.escape(desc[start+2:end]) + desc[end+2:]
-            #         desc = desc.replace("&", "&amp;")
-            #         self._writer.write_line(desc)
+            if page.description:
+                with self._writer.tagcontext('refsect1',
+                                            [('id', '%s.description' % (page.name, ))]):
+                    self._writer.write_tag(
+                        "title", [("role", "desc.title")], "Description")
+                    self._render_description(page.description)
 
             with self._writer.tagcontext('refsect1',
                                         [('id', "%s-details" % page.id.lower()),
@@ -555,7 +545,9 @@ class DocBookWriter(object):
         with self._writer.tagcontext("programlisting"):
             self._formatter.render_method(entity)
 
-        self._writer.write_tag("para", [], entity.get_ast().doc)
+        description = entity.get_ast().doc
+        if description:
+            self._render_description(entity.get_ast().doc)
 
         with self._writer.tagcontext("variablelist", [("role", "params")]):
             self._formatter.render_param_list(entity)
@@ -582,6 +574,10 @@ class DocBookWriter(object):
         self._writer.disable_whitespace()
         self._writer.write_line("\n".join(lines))
         self._writer.enable_whitespace()
+
+    def _render_description(self, description):
+        formatted_desc = get_formatted_description(description)
+        self._writer.write_line(formatted_desc)
 
     def _get_parent_chain(self, page_node):
         parent_chain = []
