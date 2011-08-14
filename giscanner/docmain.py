@@ -23,6 +23,9 @@ import optparse
 from .docbookwriter import DocBookWriter
 from .docbookwriter import DocBookFormatterC
 from .docbookwriter import DocBookFormatterPython
+from .mallardwriter import MallardWriter
+from .mallardwriter import MallardFormatterC
+from .mallardwriter import MallardFormatterPython
 from .transformer import Transformer
 
 class GIDocGenerator(object):
@@ -56,15 +59,22 @@ def doc_main(args):
     if len(args) < 2:
         raise SystemExit("Need an input GIR filename")
 
-    if options.language == "Python":
-        formatter = DocBookFormatterPython()
-    elif options.language == "C":
-        formatter = DocBookFormatterC()
-    else:
-        raise SystemExit("Unsupported language: %s" % (options.language, ))
-
     if options.format == "docbook":
+        if options.language == "Python":
+            formatter = DocBookFormatterPython()
+        elif options.language == "C":
+            formatter = DocBookFormatterC()
+        else:
+            raise SystemExit("Unsupported language: %s" % (options.language, ))
         writer = DocBookWriter(formatter)
+    elif options.format == "mallard":
+        if options.language == "Python":
+            formatter = MallardFormatterPython()
+        elif options.language == "C":
+            formatter = MallardFormatterC()
+        else:
+            raise SystemExit("Unsupported language: %s" % (options.language, ))
+        writer = MallardWriter(formatter)
     else:
         raise SystemExit("Unsupported output format: %s" % (options.format, ))
 

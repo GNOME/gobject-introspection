@@ -42,6 +42,7 @@ pkgpyexec_PYTHON =			\
 	giscanner/gdumpparser.py 	\
 	giscanner/libtoolimporter.py	\
 	giscanner/odict.py		\
+	giscanner/mallardwriter.py	\
 	giscanner/maintransformer.py	\
 	giscanner/message.py		\
 	giscanner/shlibs.py		\
