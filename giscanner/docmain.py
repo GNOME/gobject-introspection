@@ -21,6 +21,8 @@
 import optparse
 
 from .docbookwriter import DocBookWriter
+from .docbookwriter import DocBookFormatterC
+from .docbookwriter import DocBookFormatterPython
 from .transformer import Transformer
 
 class GIDocGenerator(object):
@@ -42,6 +44,10 @@ def doc_main(args):
                       action="store", dest="format",
                       default="docbook",
                       help="Output format")
+    parser.add_option("-l", "--language",
+                      action="store", dest="language",
+                      default="Python",
+                      help="Output language")
 
     options, args = parser.parse_args(args)
     if not options.output:
@@ -50,8 +56,15 @@ def doc_main(args):
     if len(args) < 2:
         raise SystemExit("Need an input GIR filename")
 
+    if options.language == "Python":
+        formatter = DocBookFormatterPython()
+    elif options.language == "C":
+        formatter = DocBookFormatterC()
+    else:
+        raise SystemExit("Unsupported language: %s" % (options.language, ))
+
     if options.format == "docbook":
-        writer = DocBookWriter()
+        writer = DocBookWriter(formatter)
     else:
         raise SystemExit("Unsupported output format: %s" % (options.format, ))
 

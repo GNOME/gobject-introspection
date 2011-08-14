@@ -38,12 +38,15 @@ def _space(num):
     return " " * num
 
 class DocBookFormatter(object):
-    def __init__(self, writer):
-        self._namespace = None
-        self._writer = writer
+    def __init__(self):
+        self.namespace = None
+        self.writer = None
 
     def set_namespace(self, namespace):
-        self._namespace = namespace
+        self.namespace = namespace
+
+    def set_writer(self, writer):
+        self.writer = writer
 
     def get_type_string(self, type):
         return str(type.ctype)
@@ -52,17 +55,17 @@ class DocBookFormatter(object):
         return "%s %s" % (param_type, param_name)
 
     def _render_parameter(self, param, extra_content=''):
-        with self._writer.tagcontext("parameter"):
+        with self.writer.tagcontext("parameter"):
             if param.type.ctype is not None:
                 link_dest = param.type.ctype.replace("*", "")
             else:
                 link_dest = param.type.ctype
-            with self._writer.tagcontext("link", [("linkend", "%s" % link_dest)]):
-                self._writer.write_tag("type", [], link_dest)
-            self._writer.write_line(extra_content)
+            with self.writer.tagcontext("link", [("linkend", "%s" % link_dest)]):
+                self.writer.write_tag("type", [], link_dest)
+            self.writer.write_line(extra_content)
 
     def _render_parameters(self, parent, parameters):
-        self._writer.write_line(
+        self.writer.write_line(
             "%s(" % _space(40 - len(parent.symbol)))
 
         parent_class = parent.parent_class
@@ -74,7 +77,7 @@ class DocBookFormatter(object):
         first_param = True
         for param in params:
             if not first_param:
-                self._writer.write_line("\n%s" % _space(61))
+                self.writer.write_line("\n%s" % _space(61))
             else:
                 first_param = False
 
@@ -84,8 +87,8 @@ class DocBookFormatter(object):
                 comma = ""
 
             if isinstance(param.type, ast.Varargs):
-                with self._writer.tagcontext("parameter"):
-                    self._writer.write_line('...%s' % comma)
+                with self.writer.tagcontext("parameter"):
+                    self.writer.write_line('...%s' % comma)
             else:
                 extra_content = " "
                 if param.type.ctype is not None and '*' in param.type.ctype:
@@ -94,16 +97,14 @@ class DocBookFormatter(object):
                 extra_content += comma
                 self._render_parameter(param, extra_content)
 
-        self._writer.write_line(");\n")
+        self.writer.write_line(");\n")
 
     def get_method_as_title(self, entity):
         method = entity.get_ast()
         return "%s ()" % method.symbol
 
     def get_page_name(self, node):
-        if isinstance(node, ast.Alias) or node.gtype_name is None:
-            return node.ctype
-        return node.gtype_name
+        pass
 
     def get_class_name(self, node):
         if node.gtype_name is None:
@@ -125,7 +126,7 @@ class DocBookFormatter(object):
 
     def render_method(self, entity, link=False):
         method = entity.get_ast()
-        self._writer.disable_whitespace()
+        self.writer.disable_whitespace()
 
         retval_type = method.retval.type
         if retval_type.ctype:
@@ -135,28 +136,28 @@ class DocBookFormatter(object):
 
         if retval_type.target_giname:
             ns = retval_type.target_giname.split('.')
-            if ns[0] == self._namespace.name:
+            if ns[0] == self.namespace.name:
                 link_dest = "%s" % (
                     retval_type.ctype.replace("*", ""))
 
-        with self._writer.tagcontext("link", [("linkend", link_dest)]):
-            self._writer.write_tag("returnvalue", [], link_dest)
+        with self.writer.tagcontext("link", [("linkend", link_dest)]):
+            self.writer.write_tag("returnvalue", [], link_dest)
 
         if '*' in retval_type.ctype:
-            self._writer.write_line(' *')
+            self.writer.write_line(' *')
 
-        self._writer.write_line(
+        self.writer.write_line(
             _space(20 - len(self.get_type_string(method.retval.type))))
 
         if link:
-            self._writer.write_tag("link", [("linkend",
+            self.writer.write_tag("link", [("linkend",
                                             method.symbol.replace("_", "-"))],
                                   method.symbol)
         else:
-            self._writer.write_line(method.symbol)
+            self.writer.write_line(method.symbol)
 
         self._render_parameters(method, method.parameters)
-        self._writer.enable_whitespace()
+        self.writer.enable_whitespace()
 
     def _get_annotations(self, argument):
         annotations = {}
@@ -189,31 +190,31 @@ class DocBookFormatter(object):
                            self._get_annotations(method.retval))
 
     def _render_param(self, argname, doc, annotations):
-        with self._writer.tagcontext('varlistentry'):
-            with self._writer.tagcontext('term'):
-                self._writer.disable_whitespace()
+        with self.writer.tagcontext('varlistentry'):
+            with self.writer.tagcontext('term'):
+                self.writer.disable_whitespace()
                 try:
-                    with self._writer.tagcontext('parameter'):
-                        self._writer.write_line(argname)
+                    with self.writer.tagcontext('parameter'):
+                        self.writer.write_line(argname)
                     if doc is not None:
-                        self._writer.write_line('&#xA0;:')
+                        self.writer.write_line('&#xA0;:')
                 finally:
-                    self._writer.enable_whitespace()
+                    self.writer.enable_whitespace()
             if doc is not None:
-                with self._writer.tagcontext('listitem'):
-                    with self._writer.tagcontext('simpara'):
-                        self._writer.write_line(doc)
+                with self.writer.tagcontext('listitem'):
+                    with self.writer.tagcontext('simpara'):
+                        self.writer.write_line(doc)
                         if annotations:
-                            with self._writer.tagcontext('emphasis', [('role', 'annotation')]):
+                            with self.writer.tagcontext('emphasis', [('role', 'annotation')]):
                                 for key, value in annotations.iteritems():
-                                    self._writer.disable_whitespace()
+                                    self.writer.disable_whitespace()
                                     try:
-                                        self._writer.write_line('[%s' % key)
+                                        self.writer.write_line('[%s' % key)
                                         if value is not None:
-                                            self._writer.write_line(' %s' % value)
-                                        self._writer.write_line(']')
+                                            self.writer.write_line(' %s' % value)
+                                        self.writer.write_line(']')
                                     finally:
-                                        self._writer.enable_whitespace()
+                                        self.writer.enable_whitespace()
 
     def render_property(self, entity, link=False):
         prop = entity.get_ast()
@@ -233,15 +234,15 @@ class DocBookFormatter(object):
         self._render_prop_or_signal(prop_name, prop_type, flags)
 
     def _render_prop_or_signal(self, name, type_, flags):
-        self._writer.disable_whitespace()
+        self.writer.disable_whitespace()
 
         line = _space(2) + name + _space(27 - len(name))
         line += str(type_) + _space(22 - len(str(type_)))
         line += ": " + " / ".join(flags)
 
-        self._writer.write_line(line + "\n")
+        self.writer.write_line(line + "\n")
 
-        self._writer.enable_whitespace()
+        self.writer.enable_whitespace()
 
 
     def render_signal(self, entity, link=False):
@@ -250,6 +251,18 @@ class DocBookFormatter(object):
         sig_name = '"%s"' % signal.name
         flags = ["TODO: signal flags not in GIR currently"]
         self._render_prop_or_signal(sig_name, "", flags)
+
+
+class DocBookFormatterPython(DocBookFormatter):
+    def get_page_name(self, node):
+        return node.name
+
+
+class DocBookFormatterC(DocBookFormatter):
+    def get_page_name(self, node):
+        if isinstance(node, ast.Alias) or node.gtype_name is None:
+            return node.ctype
+        return node.gtype_name
 
 
 class DocBookPage(object):
@@ -297,12 +310,14 @@ class DocBookEntity(object):
 
 
 class DocBookWriter(object):
-    def __init__(self):
+    def __init__(self, formatter):
         self._namespace = None
         self._pages = []
 
         self._writer = XMLWriter()
-        self._formatter = DocBookFormatter(self._writer)
+
+        formatter.set_writer(self._writer)
+        self._formatter = formatter
 
     def _add_page(self, page):
         self._pages.append(page)
