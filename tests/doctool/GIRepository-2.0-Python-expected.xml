@@ -9,7 +9,7 @@
       version="5.0">
   <title>GIRepository Documentation</title>
   <chapter xml:id="ch_ArgInfo">
-    <title>ArgInfo</title>
+    <title>GIRepository.ArgInfo</title>
     <refsynopsisdiv id="ArgInfo.synopsis" role="synopsis">
       <title role="synopsis.title">Synopsis</title>
       <synopsis>
@@ -29,7 +29,7 @@ struct               <link linkend="ArgInfo-struct">ArgInfo</link>;
     </refsect1>
   </chapter>
   <chapter xml:id="ch_CallableInfo">
-    <title>CallableInfo</title>
+    <title>GIRepository.CallableInfo</title>
     <refsynopsisdiv id="CallableInfo.synopsis" role="synopsis">
       <title role="synopsis.title">Synopsis</title>
       <synopsis>
@@ -50,7 +50,7 @@ struct               <link linkend="CallableInfo-struct">CallableInfo</link>;
     </refsect1>
   </chapter>
   <chapter xml:id="ch_CallbackInfo">
-    <title>CallbackInfo</title>
+    <title>GIRepository.CallbackInfo</title>
     <refsynopsisdiv id="CallbackInfo.synopsis" role="synopsis">
       <title role="synopsis.title">Synopsis</title>
       <synopsis>
@@ -70,7 +70,7 @@ struct               <link linkend="CallbackInfo-struct">CallbackInfo</link>;
     </refsect1>
   </chapter>
   <chapter xml:id="ch_ConstantInfo">
-    <title>ConstantInfo</title>
+    <title>GIRepository.ConstantInfo</title>
     <refsynopsisdiv id="ConstantInfo.synopsis" role="synopsis">
       <title role="synopsis.title">Synopsis</title>
       <synopsis>
@@ -90,7 +90,7 @@ struct               <link linkend="ConstantInfo-struct">ConstantInfo</link>;
     </refsect1>
   </chapter>
   <chapter xml:id="ch_EnumInfo">
-    <title>EnumInfo</title>
+    <title>GIRepository.EnumInfo</title>
     <refsynopsisdiv id="EnumInfo.synopsis" role="synopsis">
       <title role="synopsis.title">Synopsis</title>
       <synopsis>
@@ -110,7 +110,7 @@ struct               <link linkend="EnumInfo-struct">EnumInfo</link>;
     </refsect1>
   </chapter>
   <chapter xml:id="ch_ErrorDomainInfo">
-    <title>ErrorDomainInfo</title>
+    <title>GIRepository.ErrorDomainInfo</title>
     <refsynopsisdiv id="ErrorDomainInfo.synopsis" role="synopsis">
       <title role="synopsis.title">Synopsis</title>
       <synopsis>
@@ -130,7 +130,7 @@ struct               <link linkend="ErrorDomainInfo-struct">ErrorDomainInfo</lin
     </refsect1>
   </chapter>
   <chapter xml:id="ch_FieldInfo">
-    <title>FieldInfo</title>
+    <title>GIRepository.FieldInfo</title>
     <refsynopsisdiv id="FieldInfo.synopsis" role="synopsis">
       <title role="synopsis.title">Synopsis</title>
       <synopsis>
@@ -150,7 +150,7 @@ struct               <link linkend="FieldInfo-struct">FieldInfo</link>;
     </refsect1>
   </chapter>
   <chapter xml:id="ch_FunctionInfo">
-    <title>FunctionInfo</title>
+    <title>GIRepository.FunctionInfo</title>
     <refsynopsisdiv id="FunctionInfo.synopsis" role="synopsis">
       <title role="synopsis.title">Synopsis</title>
       <synopsis>
@@ -170,7 +170,7 @@ struct               <link linkend="FunctionInfo-struct">FunctionInfo</link>;
     </refsect1>
   </chapter>
   <chapter xml:id="ch_InterfaceInfo">
-    <title>InterfaceInfo</title>
+    <title>GIRepository.InterfaceInfo</title>
     <refsynopsisdiv id="InterfaceInfo.synopsis" role="synopsis">
       <title role="synopsis.title">Synopsis</title>
       <synopsis>
@@ -190,7 +190,7 @@ struct               <link linkend="InterfaceInfo-struct">InterfaceInfo</link>;
     </refsect1>
   </chapter>
   <chapter xml:id="ch_ObjectInfo">
-    <title>ObjectInfo</title>
+    <title>GIRepository.ObjectInfo</title>
     <refsynopsisdiv id="ObjectInfo.synopsis" role="synopsis">
       <title role="synopsis.title">Synopsis</title>
       <synopsis>
@@ -210,7 +210,7 @@ struct               <link linkend="ObjectInfo-struct">ObjectInfo</link>;
     </refsect1>
   </chapter>
   <chapter xml:id="ch_PropertyInfo">
-    <title>PropertyInfo</title>
+    <title>GIRepository.PropertyInfo</title>
     <refsynopsisdiv id="PropertyInfo.synopsis" role="synopsis">
       <title role="synopsis.title">Synopsis</title>
       <synopsis>
@@ -230,7 +230,7 @@ struct               <link linkend="PropertyInfo-struct">PropertyInfo</link>;
     </refsect1>
   </chapter>
   <chapter xml:id="ch_RegisteredTypeInfo">
-    <title>RegisteredTypeInfo</title>
+    <title>GIRepository.RegisteredTypeInfo</title>
     <refsynopsisdiv id="RegisteredTypeInfo.synopsis" role="synopsis">
       <title role="synopsis.title">Synopsis</title>
       <synopsis>
@@ -250,7 +250,7 @@ struct               <link linkend="RegisteredTypeInfo-struct">RegisteredTypeInf
     </refsect1>
   </chapter>
   <chapter xml:id="ch_SignalInfo">
-    <title>SignalInfo</title>
+    <title>GIRepository.SignalInfo</title>
     <refsynopsisdiv id="SignalInfo.synopsis" role="synopsis">
       <title role="synopsis.title">Synopsis</title>
       <synopsis>
@@ -270,7 +270,7 @@ struct               <link linkend="SignalInfo-struct">SignalInfo</link>;
     </refsect1>
   </chapter>
   <chapter xml:id="ch_StructInfo">
-    <title>StructInfo</title>
+    <title>GIRepository.StructInfo</title>
     <refsynopsisdiv id="StructInfo.synopsis" role="synopsis">
       <title role="synopsis.title">Synopsis</title>
       <synopsis>
@@ -290,7 +290,7 @@ struct               <link linkend="StructInfo-struct">StructInfo</link>;
     </refsect1>
   </chapter>
   <chapter xml:id="ch_TypeInfo">
-    <title>TypeInfo</title>
+    <title>GIRepository.TypeInfo</title>
     <refsynopsisdiv id="TypeInfo.synopsis" role="synopsis">
       <title role="synopsis.title">Synopsis</title>
       <synopsis>
@@ -310,7 +310,7 @@ struct               <link linkend="TypeInfo-struct">TypeInfo</link>;
     </refsect1>
   </chapter>
   <chapter xml:id="ch_UnionInfo">
-    <title>UnionInfo</title>
+    <title>GIRepository.UnionInfo</title>
     <refsynopsisdiv id="UnionInfo.synopsis" role="synopsis">
       <title role="synopsis.title">Synopsis</title>
       <synopsis>
@@ -330,7 +330,7 @@ struct               <link linkend="UnionInfo-struct">UnionInfo</link>;
     </refsect1>
   </chapter>
   <chapter xml:id="ch_VFuncInfo">
-    <title>VFuncInfo</title>
+    <title>GIRepository.VFuncInfo</title>
     <refsynopsisdiv id="VFuncInfo.synopsis" role="synopsis">
       <title role="synopsis.title">Synopsis</title>
       <synopsis>
@@ -350,7 +350,7 @@ struct               <link linkend="VFuncInfo-struct">VFuncInfo</link>;
     </refsect1>
   </chapter>
   <chapter xml:id="ch_ValueInfo">
-    <title>ValueInfo</title>
+    <title>GIRepository.ValueInfo</title>
     <refsynopsisdiv id="ValueInfo.synopsis" role="synopsis">
       <title role="synopsis.title">Synopsis</title>
       <synopsis>
@@ -370,7 +370,7 @@ struct               <link linkend="ValueInfo-struct">ValueInfo</link>;
     </refsect1>
   </chapter>
   <chapter xml:id="ch_AttributeIter">
-    <title>AttributeIter</title>
+    <title>GIRepository.AttributeIter</title>
     <refsynopsisdiv id="AttributeIter.synopsis" role="synopsis">
       <title role="synopsis.title">Synopsis</title>
       <anchor id="AttributeIter"/>
@@ -390,7 +390,7 @@ struct               <link linkend="AttributeIter-struct">AttributeIter</link>;
     </refsect1>
   </chapter>
   <chapter xml:id="ch_BaseInfo">
-    <title>BaseInfo</title>
+    <title>GIRepository.BaseInfo</title>
     <refsynopsisdiv id="BaseInfo.synopsis" role="synopsis">
       <title role="synopsis.title">Synopsis</title>
       <anchor id="BaseInfo"/>
@@ -800,7 +800,7 @@ drops to 0, the info is freed.</para>
     </refsect1>
   </chapter>
   <chapter xml:id="ch_Repository">
-    <title>Repository</title>
+    <title>GIRepository.Repository</title>
     <refsynopsisdiv id="Repository.synopsis" role="synopsis">
       <title role="synopsis.title">Synopsis</title>
       <anchor id="Repository"/>
@@ -1589,7 +1589,7 @@ not specified, the latest will be used.</para>
     </refsect1>
   </chapter>
   <chapter xml:id="ch_RepositoryClass">
-    <title>RepositoryClass</title>
+    <title>GIRepository.RepositoryClass</title>
     <refsynopsisdiv id="RepositoryClass.synopsis" role="synopsis">
       <title role="synopsis.title">Synopsis</title>
       <anchor id="RepositoryClass"/>
@@ -1609,7 +1609,7 @@ struct               <link linkend="RepositoryClass-struct">RepositoryClass</lin
     </refsect1>
   </chapter>
   <chapter xml:id="ch_RepositoryPrivate">
-    <title>RepositoryPrivate</title>
+    <title>GIRepository.RepositoryPrivate</title>
     <refsynopsisdiv id="RepositoryPrivate.synopsis" role="synopsis">
       <title role="synopsis.title">Synopsis</title>
       <anchor id="RepositoryPrivate"/>
@@ -1629,7 +1629,7 @@ struct               <link linkend="RepositoryPrivate-struct">RepositoryPrivate<
     </refsect1>
   </chapter>
   <chapter xml:id="ch_Typelib">
-    <title>Typelib</title>
+    <title>GIRepository.Typelib</title>
     <refsynopsisdiv id="Typelib.synopsis" role="synopsis">
       <title role="synopsis.title">Synopsis</title>
       <anchor id="Typelib"/>
@@ -1739,7 +1739,7 @@ struct               <link linkend="Typelib-struct">Typelib</link>;
     </refsect1>
   </chapter>
   <chapter xml:id="ch_UnresolvedInfo">
-    <title>UnresolvedInfo</title>
+    <title>GIRepository.UnresolvedInfo</title>
     <refsynopsisdiv id="UnresolvedInfo.synopsis" role="synopsis">
       <title role="synopsis.title">Synopsis</title>
       <anchor id="UnresolvedInfo"/>
@@ -1759,7 +1759,7 @@ struct               <link linkend="UnresolvedInfo-struct">UnresolvedInfo</link>
     </refsect1>
   </chapter>
   <chapter xml:id="ch__BaseInfoStub">
-    <title>_BaseInfoStub</title>
+    <title>GIRepository._BaseInfoStub</title>
     <refsynopsisdiv id="_BaseInfoStub.synopsis" role="synopsis">
       <title role="synopsis.title">Synopsis</title>
       <anchor id="_BaseInfoStub"/>

@@ -261,12 +261,18 @@ class DocBookFormatterPython(DocBookFormatter):
     def get_page_name(self, node):
         return node.name
 
+    def get_title(self, page):
+        return "%s.%s" % (page.ast.namespace.name, page.name)
+
 
 class DocBookFormatterC(DocBookFormatter):
     def get_page_name(self, node):
         if isinstance(node, ast.Alias) or node.gtype_name is None:
             return node.ctype
         return node.gtype_name
+
+    def get_title(self, page):
+        return page.ast.ctype
 
 
 class DocBookPage(object):
@@ -375,7 +381,7 @@ class DocBookWriter(object):
         with self._writer.tagcontext("chapter", [("xml:id", "ch_%s" % (
                         page.name))]):
             self._writer.write_tag(
-                "title", [], page.name)
+                "title", [], self._formatter.get_title(page))
 
             with self._writer.tagcontext("refsynopsisdiv",
                     [('id', '%s.synopsis' % page.name),
