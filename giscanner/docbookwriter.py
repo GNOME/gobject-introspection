@@ -264,6 +264,29 @@ class DocBookFormatterPython(DocBookFormatter):
     def get_title(self, page):
         return "%s.%s" % (page.ast.namespace.name, page.name)
 
+    def render_struct(self, page):
+        class_ = page.ast
+        try:
+            self.writer.disable_whitespace()
+            self.writer.write_line("class %s" % self.get_title(page))
+
+            if hasattr(page.ast, "parent") and page.ast.parent is not None:
+                if isinstance(page.ast.parent, ast.Type):
+                    parent_name = page.ast.parent
+                else:
+                    parent_name = "%s.%s" % (page.ast.parent.namespace.name,
+                                             page.ast.parent.name)
+            elif isinstance(page.ast, ast.Interface):
+                parent_name = "GObject.Interface"
+            else:
+                parent_name = None
+            if parent_name is not None:
+                self.writer.write_line("(%s)" % (parent_name))
+
+            self.writer.write_line(":\n")
+        finally:
+            self.writer.enable_whitespace()
+
 
 class DocBookFormatterC(DocBookFormatter):
     def get_page_name(self, node):
@@ -273,6 +296,18 @@ class DocBookFormatterC(DocBookFormatter):
 
     def get_title(self, page):
         return page.ast.ctype
+
+    def render_struct(self, page):
+        try:
+            self.writer.disable_whitespace()
+            self.writer.write_line("struct               ")
+            self.writer.write_tag(
+                "link",
+                [("linkend", "%s-struct" % page.name)],
+                "%s" % page.name)
+            self.writer.write_line(";\n")
+        finally:
+            self.writer.enable_whitespace()
 
 
 class DocBookPage(object):
@@ -394,16 +429,7 @@ class DocBookWriter(object):
                     self._writer.write_tag("anchor", [("id", page.name)])
 
                 with self._writer.tagcontext('synopsis'):
-                    self._writer.disable_whitespace()
-                    try:
-                        self._writer.write_line("struct               ")
-                        self._writer.write_tag(
-                            "link",
-                            [("linkend", "%s-struct" % page.name)],
-                            "%s" % page.name)
-                        self._writer.write_line(";\n")
-                    finally:
-                        self._writer.enable_whitespace()
+                    self._formatter.render_struct(page)
 
                     for entity in page.get_methods():
                         self._formatter.render_method(entity, link=True)
@@ -466,9 +492,9 @@ class DocBookWriter(object):
                                       "Details")
 
                 if isinstance(page.ast, ast.Alias):
-                    self._render_alias(page.ast)
+                    self._render_alias_detail(page.ast)
                 else:
-                    self._render_struct(page.ast)
+                    self._render_struct_detail(page.ast)
 
                 for entity in page.get_methods():
                     self._render_method(entity)
@@ -491,7 +517,7 @@ class DocBookWriter(object):
                     for entity in page.get_signals():
                         self._render_signal(entity)
 
-    def _render_alias(self, alias):
+    def _render_alias_detail(self, alias):
         with self._writer.tagcontext('refsect2',
                               [('id', "%s" % alias.ctype),
                                ('role', 'typedef')]):
@@ -504,7 +530,7 @@ class DocBookWriter(object):
                                                       alias.ctype))
             self._writer.write_tag("para", [], alias.doc)
 
-    def _render_struct(self, struct):
+    def _render_struct_detail(self, struct):
         with self._writer.tagcontext('refsect2',
                               [('id', "%s-struct" % struct.ctype),
                                ('role', 'struct')]):
