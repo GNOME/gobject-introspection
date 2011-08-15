@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<page id="GIRepository.ScopeType"
+      type="topic"
+      style=""
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:ui="http://projectmallard.org/experimental/ui/">
+  <info>
+  </info>
+  <title>GIRepositoryScopeType</title>
+<p>Scope type of a <link xref="GIArgInfo">GIArgInfo</link> representing callback, determines how the
+callback is invoked and is used to decided when the invoke structs
+can be freed.</p></page>

@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<page id="GIRepository.interface_info_get_iface_struct"
+      type="topic"
+      style="function"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:ui="http://projectmallard.org/experimental/ui/">
+  <info>
+    <link type="guide" xref="index" group="function"/>
+  </info>
+  <title>g_interface_info_get_iface_struct</title>
+<p>Returns the layout C structure associated with this <link xref="GInterface">GInterface</link>.</p><p>g_base_info_unref() when done.</p></page>

@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<page id="GIRepository.arg_info_load_type"
+      type="topic"
+      style="function"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:ui="http://projectmallard.org/experimental/ui/">
+  <info>
+    <link type="guide" xref="index" group="function"/>
+  </info>
+  <title>g_arg_info_load_type</title>
+<p>Obtain information about a the type of given argument @info; this
+function is a variant of g_arg_info_get_type() designed for stack
+allocation.</p><p>The initialized @type must not be referenced after @info is deallocated.</p></page>

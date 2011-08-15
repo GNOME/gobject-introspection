@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<page id="GIRepository.object_info_get_abstract"
+      type="topic"
+      style="function"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:ui="http://projectmallard.org/experimental/ui/">
+  <info>
+    <link type="guide" xref="index" group="function"/>
+  </info>
+  <title>GIRepository.object_info_get_abstract</title>
+<p>Obtain if the object type is an abstract type, eg if it cannot be
+instantiated</p></page>

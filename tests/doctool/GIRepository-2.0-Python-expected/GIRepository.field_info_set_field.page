@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<page id="GIRepository.field_info_set_field"
+      type="topic"
+      style="function"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:ui="http://projectmallard.org/experimental/ui/">
+  <info>
+    <link type="guide" xref="index" group="function"/>
+  </info>
+  <title>GIRepository.field_info_set_field</title>
+<p>Writes a field identified by a <link xref="GFieldInfo">GFieldInfo</link> to a C structure or
+union.  This only handles fields of simple C types. It will fail
+for a field of a composite type like a nested structure or union
+even if that is actually writable. Note also that that it will refuse
+to write fields where memory management would by required. A field
+with a type such as 'char *' must be set with a setter function.</p></page>

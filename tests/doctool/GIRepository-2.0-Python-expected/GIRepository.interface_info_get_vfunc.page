@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<page id="GIRepository.interface_info_get_vfunc"
+      type="topic"
+      style="function"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:ui="http://projectmallard.org/experimental/ui/">
+  <info>
+    <link type="guide" xref="index" group="function"/>
+  </info>
+  <title>GIRepository.interface_info_get_vfunc</title>
+<p>Obtain an interface type virtual function at index @n.</p><p>g_base_info_unref() when done.</p></page>

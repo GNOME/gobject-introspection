@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<page id="GIRepository.vfunc_info_get_invoker"
+      type="topic"
+      style="function"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:ui="http://projectmallard.org/experimental/ui/">
+  <info>
+    <link type="guide" xref="index" group="function"/>
+  </info>
+  <title>g_vfunc_info_get_invoker</title>
+<p>If this virtual function has an associated invoker method, this
+method will return it.  An invoker method is a C entry point.</p><p>Not all virtuals will have invokers.</p><p>g_base_info_unref() when done.</p></page>

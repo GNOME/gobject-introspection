@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<page id="GIRepository.ObjectInfoUnrefFunction"
+      type="topic"
+      style=""
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:ui="http://projectmallard.org/experimental/ui/">
+  <info>
+  </info>
+  <title>GIRepository.ObjectInfoUnrefFunction</title>
+<p>Decreases the reference count of an object instance.</p></page>

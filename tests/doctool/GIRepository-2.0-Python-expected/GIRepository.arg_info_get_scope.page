@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<page id="GIRepository.arg_info_get_scope"
+      type="topic"
+      style="function"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:ui="http://projectmallard.org/experimental/ui/">
+  <info>
+    <link type="guide" xref="index" group="function"/>
+  </info>
+  <title>GIRepository.arg_info_get_scope</title>
+<p>Obtain the scope type for this argument. The scope type explains
+how a callback is going to be invoked, most importantly when
+the resources required to invoke it can be freed.
+<link xref="GIScopeType">GIScopeType</link> contains a list of possible values.</p></page>

@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<page id="GIRepository.RepositoryLoadFlags"
+      type="topic"
+      style=""
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:ui="http://projectmallard.org/experimental/ui/">
+  <info>
+  </info>
+  <title>GIRepository.RepositoryLoadFlags</title>
+<p>Flags that controlls how a typelib is loaded by
+GIRepositry, used by g_irepository_load_typelib().</p></page>

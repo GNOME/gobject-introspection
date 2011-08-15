@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<page id="GIRepository.constant_info_get_value"
+      type="topic"
+      style="function"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:ui="http://projectmallard.org/experimental/ui/">
+  <info>
+    <link type="guide" xref="index" group="function"/>
+  </info>
+  <title>g_constant_info_get_value</title>
+<p>Obtain the value associated with the <link xref="GIConstantInfo">GIConstantInfo</link> and store it in the
+@value parameter. @argument needs to be allocated before passing it in.
+The size of the constant value stored in @argument will be returned.</p></page>

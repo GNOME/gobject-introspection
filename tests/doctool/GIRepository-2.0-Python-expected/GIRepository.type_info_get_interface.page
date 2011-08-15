@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<page id="GIRepository.type_info_get_interface"
+      type="topic"
+      style="function"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:ui="http://projectmallard.org/experimental/ui/">
+  <info>
+    <link type="guide" xref="index" group="function"/>
+  </info>
+  <title>GIRepository.type_info_get_interface</title>
+<p>For types which have <link xref="GI_TYPE_TAG_INTERFACE">GI_TYPE_TAG_INTERFACE</link> such as GObjects and boxed values,
+this function returns full information about the referenced type.  You can then
+inspect the type of the returned <link xref="GIBaseInfo">GIBaseInfo</link> to further query whether it is
+a concrete GObject, a GInterface, a structure, etc. using g_base_info_get_type().</p><p>g_base_info_unref() when done.</p></page>

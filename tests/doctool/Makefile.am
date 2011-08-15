@@ -4,23 +4,23 @@ GIRepository-2.0.gir:
 	cp ../../GIRepository-2.0.gir .
 
 GIRS = GIRepository-2.0.gir
-CHECKXML = $(GIRS:.gir=-C.page.check) $(GIRS:.gir=-Python.page.check)
-MALLARDFILES = $(GIRS:.gir=-C.page) $(GIRS:.gir=-Python.page)
-EXPECTEDMALLARDFILES = $(MALLARDFILES:.page=-expected.page)
-CLEANFILES = $(MALLARD_FILES)
-BUILT_SOURCES = $(MALLARD_FILES)
-EXTRA_DIST = $(EXPECTEDMALLARDFILES)
+CHECK_TARGETS = $(GIRS:.gir=-C.page.check) $(GIRS:.gir=-Python.page.check)
+MALLARD_DIRS = $(GIRS:.gir=-C) $(GIRS:.gir=-Python)
+EXPECTED_MALLARD_DIRS = $(MALLARD_DIRS:=-expected)
+CLEANFILES = $(MALLARD_DIRS)
+BUILT_SOURCES = $(MALLARD_DIRS)
+EXTRA_DIST = $(EXPECTED_MALLARD_DIRS)
 
-%-C.page: %.gir
-	$(INTROSPECTION_DOCTOOL) --language C --format mallard $*.gir -o $*-C.page && echo "  GEN  $*-C.page"
+%-C: %.gir
+	mkdir $*-C && $(INTROSPECTION_DOCTOOL) --language C --format mallard $*.gir -o $*-C/index.page && echo "  GEN  $*-C/index.page"
 
-%-Python.page: %.gir
-	$(INTROSPECTION_DOCTOOL) --language Python --format mallard $*.gir -o $*-Python.page && echo "  GEN  $*-Python.page"
+%-Python: %.gir
+	mkdir $*-Python && $(INTROSPECTION_DOCTOOL) --language Python --format mallard $*.gir -o $*-Python/index.page && echo "  GEN  $*-Python/index.page"
 
-%-C.page.check: %-C.page
-	@diff -u -U 10 $(srcdir)/$*-C-expected.page $*-C.page && echo "  TEST  $*-C.page"
+%-C.page.check: %-C
+	@diff -u -U 10 $(srcdir)/$*-C-expected $*-C && echo "  TEST  $*-C"
 
-%-Python.page.check: %-Python.page
-	@diff -u -U 10 $(srcdir)/$*-Python-expected.page $*-Python.page && echo "  TEST  $*-Python.page"
+%-Python.page.check: %-Python
+	@diff -u -U 10 $(srcdir)/$*-Python-expected $*-Python && echo "  TEST  $*-Python"
 
-check-local: $(CHECKXML)
+check-local: $(CHECK_TARGETS)

@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<page id="GIRepository.arg_info_get_direction"
+      type="topic"
+      style="function"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:ui="http://projectmallard.org/experimental/ui/">
+  <info>
+    <link type="guide" xref="index" group="function"/>
+  </info>
+  <title>GIRepository.arg_info_get_direction</title>
+<p>Obtain the direction of the argument. Check <link xref="GIDirection">GIDirection</link> for possible
+direction values.</p></page>

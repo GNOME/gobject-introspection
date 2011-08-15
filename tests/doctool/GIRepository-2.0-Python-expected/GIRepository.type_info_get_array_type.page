@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<page id="GIRepository.type_info_get_array_type"
+      type="topic"
+      style="function"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:ui="http://projectmallard.org/experimental/ui/">
+  <info>
+    <link type="guide" xref="index" group="function"/>
+  </info>
+  <title>GIRepository.type_info_get_array_type</title>
+<p>Obtain the array type for this type. See <link xref="GIArrayType">GIArrayType</link> for a list of
+possible values. If the type tag of this type is not array, -1 will be
+returned.</p></page>

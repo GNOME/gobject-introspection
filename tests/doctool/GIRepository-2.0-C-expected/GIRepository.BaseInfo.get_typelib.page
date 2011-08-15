@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<page id="GIRepository.BaseInfo.get_typelib"
+      type="topic"
+      style="function"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:ui="http://projectmallard.org/experimental/ui/">
+  <info>
+    <link type="guide" xref="GIRepository.BaseInfo" group="function"/>
+  </info>
+  <title>g_base_info_get_typelib</title>
+<p>Obtain the typelib this @info belongs to</p></page>

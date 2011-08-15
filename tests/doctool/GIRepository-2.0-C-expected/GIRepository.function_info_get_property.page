@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<page id="GIRepository.function_info_get_property"
+      type="topic"
+      style="function"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:ui="http://projectmallard.org/experimental/ui/">
+  <info>
+    <link type="guide" xref="index" group="function"/>
+  </info>
+  <title>g_function_info_get_property</title>
+<p>Obtain the property associated with this <link xref="GIFunctionInfo">GIFunctionInfo</link>.
+Only <link xref="GIFunctionInfo">GIFunctionInfo</link> with the flag %GI_FUNCTION_IS_GETTER or
+%GI_FUNCTION_IS_SETTER have a property set. For other cases,
+%NULL will be returned.</p><p>g_base_info_unref() when done.</p></page>

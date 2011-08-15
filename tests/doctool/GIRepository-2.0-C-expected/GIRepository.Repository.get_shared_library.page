@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<page id="GIRepository.Repository.get_shared_library"
+      type="topic"
+      style="method"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:ui="http://projectmallard.org/experimental/ui/">
+  <info>
+    <link type="guide" xref="GIRepository.Repository" group="method"/>
+  </info>
+  <title>g_irepository_get_shared_library</title>
+<p>This function returns the full path to the shared C library
+associated with the given namespace @namespace_. There may be no
+shared library path associated, in which case this function will
+return %NULL.</p><p>Note: The namespace must have already been loaded using a function
+such as g_irepository_require() before calling this function.</p></page>

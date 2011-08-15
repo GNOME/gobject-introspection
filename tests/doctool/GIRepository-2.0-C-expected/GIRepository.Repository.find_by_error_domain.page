@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<page id="GIRepository.Repository.find_by_error_domain"
+      type="topic"
+      style="method"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:ui="http://projectmallard.org/experimental/ui/">
+  <info>
+    <link type="guide" xref="GIRepository.Repository" group="method"/>
+  </info>
+  <title>g_irepository_find_by_error_domain</title>
+<p>Searches for the enum type corresponding to the given <link xref="GError">GError</link>
+domain. Before calling this function for a particular namespace,
+you must call g_irepository_require() once to load the namespace, or
+otherwise ensure the namespace has already been loaded.</p><p>enum type, or %NULL</p></page>

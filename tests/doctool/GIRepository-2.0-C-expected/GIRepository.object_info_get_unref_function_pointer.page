@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<page id="GIRepository.object_info_get_unref_function_pointer"
+      type="topic"
+      style="function"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:ui="http://projectmallard.org/experimental/ui/">
+  <info>
+    <link type="guide" xref="index" group="function"/>
+  </info>
+  <title>g_object_info_get_unref_function_pointer</title>
+<p>Obtain a pointer to a function which can be used to
+decrease the reference count an instance of this object type.
+This takes derivation into account and will reversely traverse
+the base classes of this type, starting at the top type.</p></page>

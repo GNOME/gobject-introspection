@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<page id="GIRepository.field_info_get_flags"
+      type="topic"
+      style="function"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:ui="http://projectmallard.org/experimental/ui/">
+  <info>
+    <link type="guide" xref="index" group="function"/>
+  </info>
+  <title>g_field_info_get_flags</title>
+<p>Obtain the flags for this <link xref="GIFieldInfo">GIFieldInfo</link>. See <link xref="GIFieldInfoFlags">GIFieldInfoFlags</link> for possible
+flag values.</p></page>

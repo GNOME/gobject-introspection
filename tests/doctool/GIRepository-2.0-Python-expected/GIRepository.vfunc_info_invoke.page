@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<page id="GIRepository.vfunc_info_invoke"
+      type="topic"
+      style="function"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:ui="http://projectmallard.org/experimental/ui/">
+  <info>
+    <link type="guide" xref="index" group="function"/>
+  </info>
+  <title>GIRepository.vfunc_info_invoke</title>
+<p>Invokes the function described in @info with the given
+arguments. Note that inout parameters must appear in both
+argument lists.</p><p>error occurred.</p></page>

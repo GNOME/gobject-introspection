@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<page id="GIRepository.registered_type_info_get_g_type"
+      type="topic"
+      style="function"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:ui="http://projectmallard.org/experimental/ui/">
+  <info>
+    <link type="guide" xref="index" group="function"/>
+  </info>
+  <title>GIRepository.registered_type_info_get_g_type</title>
+<p>Obtain the <link xref="GType">GType</link> for this registered type or G_TYPE_NONE which a special meaning.
+It means that either there is no type information associated with this @info or
+that the shared library which provides the type_init function for this
+@info cannot be called.</p></page>

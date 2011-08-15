@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<page id="GIRepository.callable_info_iterate_return_attributes"
+      type="topic"
+      style="function"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:ui="http://projectmallard.org/experimental/ui/">
+  <info>
+    <link type="guide" xref="index" group="function"/>
+  </info>
+  <title>g_callable_info_iterate_return_attributes</title>
+<p>Iterate over all attributes associated with the return value.  The
+iterator structure is typically stack allocated, and must have its
+first member initialized to %NULL.</p><p>Both the @name and @value should be treated as constants
+and must not be freed.</p><p>See g_base_info_iterate_attributes() for an example of how to use a
+similar API.</p></page>

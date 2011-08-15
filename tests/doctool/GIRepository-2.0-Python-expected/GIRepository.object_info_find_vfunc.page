@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<page id="GIRepository.object_info_find_vfunc"
+      type="topic"
+      style="function"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:ui="http://projectmallard.org/experimental/ui/">
+  <info>
+    <link type="guide" xref="index" group="function"/>
+  </info>
+  <title>GIRepository.object_info_find_vfunc</title>
+<p>Locate a virtual function slot with name @name. Note that the namespace
+for virtuals is distinct from that of methods; there may or may not be
+a concrete method associated for a virtual. If there is one, it may
+be retrieved using g_vfunc_info_get_invoker(), otherwise %NULL will be
+returned.
+See the documentation for g_vfunc_info_get_invoker() for more
+information on invoking virtuals.</p><p>g_base_info_unref() when done.</p></page>

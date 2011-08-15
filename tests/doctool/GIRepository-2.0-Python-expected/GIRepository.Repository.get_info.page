@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<page id="GIRepository.Repository.get_info"
+      type="topic"
+      style="method"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:ui="http://projectmallard.org/experimental/ui/">
+  <info>
+    <link type="guide" xref="GIRepository.Repository" group="method"/>
+  </info>
+  <title>GIRepository.get_info</title>
+<p>This function returns a particular metadata entry in the
+given namespace @namespace_.  The namespace must have
+already been loaded before calling this function.
+See g_irepository_get_n_infos() to find the maximum number of
+entries.</p></page>

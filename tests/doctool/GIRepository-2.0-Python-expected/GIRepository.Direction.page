@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<page id="GIRepository.Direction"
+      type="topic"
+      style=""
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:ui="http://projectmallard.org/experimental/ui/">
+  <info>
+  </info>
+  <title>GIRepository.Direction</title>
+<p>The direction of a <link xref="GIArgInfo">GIArgInfo</link>.</p></page>

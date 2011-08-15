@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<page id="GIRepository.Repository.enumerate_versions"
+      type="topic"
+      style="method"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:ui="http://projectmallard.org/experimental/ui/">
+  <info>
+    <link type="guide" xref="GIRepository.Repository" group="method"/>
+  </info>
+  <title>g_irepository_enumerate_versions</title>
+<p>Obtain an unordered list of versions (either currently loaded or
+available) for @namespace_ in this @repository.</p></page>

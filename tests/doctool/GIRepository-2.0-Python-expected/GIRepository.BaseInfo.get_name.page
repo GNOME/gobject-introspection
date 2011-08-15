@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<page id="GIRepository.BaseInfo.get_name"
+      type="topic"
+      style="function"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:ui="http://projectmallard.org/experimental/ui/">
+  <info>
+    <link type="guide" xref="GIRepository.BaseInfo" group="function"/>
+  </info>
+  <title>GIRepository.get_name</title>
+<p>Obtain the name of the @info. What the name represents depends on
+the <link xref="GIInfoType">GIInfoType</link> of the @info. For instance for <link xref="GIFunctionInfo">GIFunctionInfo</link> it is
+the name of the function.</p></page>

@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<page id="GIRepository.arg_info_is_caller_allocates"
+      type="topic"
+      style="function"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:ui="http://projectmallard.org/experimental/ui/">
+  <info>
+    <link type="guide" xref="index" group="function"/>
+  </info>
+  <title>g_arg_info_is_caller_allocates</title>
+<p>Obtain if the argument is a pointer to a struct or object that will
+receive an output of a function.  The default assumption for
+%GI_DIRECTION_OUT arguments which have allocation is that the
+callee allocates; if this is %TRUE, then the caller must allocate.</p></page>

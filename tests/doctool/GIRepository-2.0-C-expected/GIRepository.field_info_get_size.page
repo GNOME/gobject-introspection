@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<page id="GIRepository.field_info_get_size"
+      type="topic"
+      style="function"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:ui="http://projectmallard.org/experimental/ui/">
+  <info>
+    <link type="guide" xref="index" group="function"/>
+  </info>
+  <title>g_field_info_get_size</title>
+<p>Obtain the size in bits of the field member, this is how
+much space you need to allocate to store the field.</p></page>

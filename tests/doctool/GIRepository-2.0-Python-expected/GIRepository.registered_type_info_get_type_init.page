@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<page id="GIRepository.registered_type_info_get_type_init"
+      type="topic"
+      style="function"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:ui="http://projectmallard.org/experimental/ui/">
+  <info>
+    <link type="guide" xref="index" group="function"/>
+  </info>
+  <title>GIRepository.registered_type_info_get_type_init</title>
+<p>Obtain the type init function for @info. The type init function is the
+function which will register the GType within the GObject type system.
+Usually this is not called by langauge bindings or applications, use
+g_registered_type_info_get_g_type() directly instead.</p><p>passing into g_module_symbol().</p></page>

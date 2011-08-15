@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<page id="GIRepository.interface_info_find_vfunc"
+      type="topic"
+      style="function"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:ui="http://projectmallard.org/experimental/ui/">
+  <info>
+    <link type="guide" xref="index" group="function"/>
+  </info>
+  <title>GIRepository.interface_info_find_vfunc</title>
+<p>Locate a virtual function slot with name @name. See the documentation
+for g_object_info_find_vfunc() for more information on virtuals.</p><p>g_base_info_unref() when done.</p></page>

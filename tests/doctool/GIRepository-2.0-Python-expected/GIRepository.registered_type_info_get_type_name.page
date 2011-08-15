@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<page id="GIRepository.registered_type_info_get_type_name"
+      type="topic"
+      style="function"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:ui="http://projectmallard.org/experimental/ui/">
+  <info>
+    <link type="guide" xref="index" group="function"/>
+  </info>
+  <title>GIRepository.registered_type_info_get_type_name</title>
+<p>Obtain the type name of the struct within the GObject type system.
+This type can be passed to g_type_name() to get a <link xref="GType">GType</link>.</p></page>

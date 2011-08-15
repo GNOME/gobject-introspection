@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<page id="GIRepository.Repository.find_by_gtype"
+      type="topic"
+      style="method"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:ui="http://projectmallard.org/experimental/ui/">
+  <info>
+    <link type="guide" xref="GIRepository.Repository" group="method"/>
+  </info>
+  <title>g_irepository_find_by_gtype</title>
+<p>Searches all loaded namespaces for a particular <link xref="GType">GType</link>.  Note that
+in order to locate the metadata, the namespace corresponding to
+the type must first have been loaded.  There is currently no
+mechanism for determining the namespace which corresponds to an
+arbitrary GType - thus, this function will operate most reliably
+when you know the GType to originate from be from a loaded namespace.</p></page>

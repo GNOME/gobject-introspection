@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<page id="GIRepository.BaseInfo.ref"
+      type="topic"
+      style="function"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:ui="http://projectmallard.org/experimental/ui/">
+  <info>
+    <link type="guide" xref="GIRepository.BaseInfo" group="function"/>
+  </info>
+  <title>GIRepository.ref</title>
+<p>Increases the reference count of @info.</p></page>

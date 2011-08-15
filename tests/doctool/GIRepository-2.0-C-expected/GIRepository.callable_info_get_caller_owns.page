@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<page id="GIRepository.callable_info_get_caller_owns"
+      type="topic"
+      style="function"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:ui="http://projectmallard.org/experimental/ui/">
+  <info>
+    <link type="guide" xref="index" group="function"/>
+  </info>
+  <title>g_callable_info_get_caller_owns</title>
+<p>See whether the caller owns the return value of this callable.
+<link xref="GITransfer">GITransfer</link> contains a list of possible transfer values.</p></page>
