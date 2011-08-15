@@ -265,7 +265,10 @@ class MallardFormatterPython(MallardFormatter):
         if isinstance(node, ast.Namespace):
             return "%s Documentation" % node.name
         elif isinstance(node, ast.Function):
-            return "%s.%s.%s" % (node.namespace.name, parent.name, node.name)
+            if node.is_method:
+                return "%s.%s.%s" % (node.namespace.name, parent.name, node.name)
+            else:
+                return "%s.%s" % (node.namespace.name, node.name)
         elif isinstance(node, ast.Property):
             return "%s" % node.name
         elif isinstance(node, ast.Signal):
