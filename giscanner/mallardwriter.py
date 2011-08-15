@@ -265,13 +265,13 @@ class MallardFormatterPython(MallardFormatter):
         if isinstance(node, ast.Namespace):
             return "%s Documentation" % node.name
         elif isinstance(node, ast.Function):
-            return "%s.%s" % (node.namespace, node.name)
+            return "%s.%s" % (node.namespace.name, node.name)
         elif isinstance(node, ast.Property):
-            return "%s" % parent.name
+            return "%s" % node.name
         elif isinstance(node, ast.Signal):
             return "%s" % node.name
         else:
-            return "%s.%s" % (node.namespace, node.name)
+            return "%s.%s" % (node.namespace.name, node.name)
 
 class MallardPage(object):
     def __init__(self, writer, node, parent):
