@@ -5,7 +5,7 @@ GIRepository-2.0.gir:
 
 GIRS = GIRepository-2.0.gir
 CHECKXML = $(GIRS:.gir=-C.xml.check) $(GIRS:.gir=-Python.xml.check)
-DOCBOOKFILES = $(GIRS:.gir=.xml)
+DOCBOOKFILES = $(GIRS:.gir=-C.xml) $(GIRS:.gir=-Python.xml)
 EXPECTEDDOCBOOKFILES = $(DOCBOOKFILES:.xml=-expected.xml)
 CLEANFILES = $(DOCBOOK_FILES)
 BUILT_SOURCES = $(DOCBOOK_FILES)
