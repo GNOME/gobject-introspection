@@ -12,10 +12,10 @@ EXTRA_DIST = $(EXPECTED_MALLARD_DIRS)
 	cp ../../$*.gir .
 
 %-C: %.gir
-	mkdir $*-C && $(INTROSPECTION_DOCTOOL) --language C --format mallard $*.gir -o $*-C/index.page && echo "  GEN  $*-C/index.page"
+	mkdir $*-C ; rm $*-C/*.page ; $(INTROSPECTION_DOCTOOL) --language C --format mallard $*.gir -o $*-C/index.page && echo "  GEN  $*-C/index.page"
 
 %-Python: %.gir
-	mkdir $*-Python && $(INTROSPECTION_DOCTOOL) --language Python --format mallard $*.gir -o $*-Python/index.page && echo "  GEN  $*-Python/index.page"
+	mkdir $*-Python ; rm $*-Python/*.page ; $(INTROSPECTION_DOCTOOL) --language Python --format mallard $*.gir -o $*-Python/index.page && echo "  GEN  $*-Python/index.page"
 
 %-C.page.check: %-C
 	@diff -u -U 10 $(srcdir)/$*-C-expected $*-C && echo "  TEST  $*-C" && rm -rf $*-C
