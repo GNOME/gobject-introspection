@@ -13,7 +13,7 @@
     <refsynopsisdiv id="ArgInfo.synopsis" role="synopsis">
       <title role="synopsis.title">Synopsis</title>
       <synopsis>
-struct               <link linkend="ArgInfo-struct">ArgInfo</link>;
+class GIRepository.ArgInfo:
       </synopsis>
     </refsynopsisdiv>
     <refsect1 id="giarginfo-details" role="details">
@@ -33,7 +33,7 @@ struct               <link linkend="ArgInfo-struct">ArgInfo</link>;
     <refsynopsisdiv id="CallableInfo.synopsis" role="synopsis">
       <title role="synopsis.title">Synopsis</title>
       <synopsis>
-struct               <link linkend="CallableInfo-struct">CallableInfo</link>;
+class GIRepository.CallableInfo:
       </synopsis>
     </refsynopsisdiv>
     <refsect1 id="gicallableinfo-details" role="details">
@@ -54,7 +54,7 @@ struct               <link linkend="CallableInfo-struct">CallableInfo</link>;
     <refsynopsisdiv id="CallbackInfo.synopsis" role="synopsis">
       <title role="synopsis.title">Synopsis</title>
       <synopsis>
-struct               <link linkend="CallbackInfo-struct">CallbackInfo</link>;
+class GIRepository.CallbackInfo:
       </synopsis>
     </refsynopsisdiv>
     <refsect1 id="gicallbackinfo-details" role="details">
@@ -74,7 +74,7 @@ struct               <link linkend="CallbackInfo-struct">CallbackInfo</link>;
     <refsynopsisdiv id="ConstantInfo.synopsis" role="synopsis">
       <title role="synopsis.title">Synopsis</title>
       <synopsis>
-struct               <link linkend="ConstantInfo-struct">ConstantInfo</link>;
+class GIRepository.ConstantInfo:
       </synopsis>
     </refsynopsisdiv>
     <refsect1 id="giconstantinfo-details" role="details">
@@ -94,7 +94,7 @@ struct               <link linkend="ConstantInfo-struct">ConstantInfo</link>;
     <refsynopsisdiv id="EnumInfo.synopsis" role="synopsis">
       <title role="synopsis.title">Synopsis</title>
       <synopsis>
-struct               <link linkend="EnumInfo-struct">EnumInfo</link>;
+class GIRepository.EnumInfo:
       </synopsis>
     </refsynopsisdiv>
     <refsect1 id="gienuminfo-details" role="details">
@@ -109,32 +109,12 @@ struct               <link linkend="EnumInfo-struct">EnumInfo</link>;
       </refsect2>
     </refsect1>
   </chapter>
-  <chapter xml:id="ch_ErrorDomainInfo">
-    <title>GIRepository.ErrorDomainInfo</title>
-    <refsynopsisdiv id="ErrorDomainInfo.synopsis" role="synopsis">
-      <title role="synopsis.title">Synopsis</title>
-      <synopsis>
-struct               <link linkend="ErrorDomainInfo-struct">ErrorDomainInfo</link>;
-      </synopsis>
-    </refsynopsisdiv>
-    <refsect1 id="gierrordomaininfo-details" role="details">
-      <title role="details.title">Details</title>
-      <refsect2 id="GIErrorDomainInfo" role="typedef">
-        <title>GIErrorDomainInfo</title>
-        <indexterm zone="GIErrorDomainInfo">
-          <primary sortas="ErrorDomainInfo">GIErrorDomainInfo</primary>
-        </indexterm>
-        <programlisting>typedef GIBaseInfo GIErrorDomainInfo</programlisting>
-        <para>Represents a #GError error domain.</para>
-      </refsect2>
-    </refsect1>
-  </chapter>
   <chapter xml:id="ch_FieldInfo">
     <title>GIRepository.FieldInfo</title>
     <refsynopsisdiv id="FieldInfo.synopsis" role="synopsis">
       <title role="synopsis.title">Synopsis</title>
       <synopsis>
-struct               <link linkend="FieldInfo-struct">FieldInfo</link>;
+class GIRepository.FieldInfo:
       </synopsis>
     </refsynopsisdiv>
     <refsect1 id="gifieldinfo-details" role="details">
@@ -154,7 +134,7 @@ struct               <link linkend="FieldInfo-struct">FieldInfo</link>;
     <refsynopsisdiv id="FunctionInfo.synopsis" role="synopsis">
       <title role="synopsis.title">Synopsis</title>
       <synopsis>
-struct               <link linkend="FunctionInfo-struct">FunctionInfo</link>;
+class GIRepository.FunctionInfo:
       </synopsis>
     </refsynopsisdiv>
     <refsect1 id="gifunctioninfo-details" role="details">
@@ -174,7 +154,7 @@ struct               <link linkend="FunctionInfo-struct">FunctionInfo</link>;
     <refsynopsisdiv id="InterfaceInfo.synopsis" role="synopsis">
       <title role="synopsis.title">Synopsis</title>
       <synopsis>
-struct               <link linkend="InterfaceInfo-struct">InterfaceInfo</link>;
+class GIRepository.InterfaceInfo:
       </synopsis>
     </refsynopsisdiv>
     <refsect1 id="giinterfaceinfo-details" role="details">
@@ -194,7 +174,7 @@ struct               <link linkend="InterfaceInfo-struct">InterfaceInfo</link>;
     <refsynopsisdiv id="ObjectInfo.synopsis" role="synopsis">
       <title role="synopsis.title">Synopsis</title>
       <synopsis>
-struct               <link linkend="ObjectInfo-struct">ObjectInfo</link>;
+class GIRepository.ObjectInfo:
       </synopsis>
     </refsynopsisdiv>
     <refsect1 id="giobjectinfo-details" role="details">
@@ -214,7 +194,7 @@ struct               <link linkend="ObjectInfo-struct">ObjectInfo</link>;
     <refsynopsisdiv id="PropertyInfo.synopsis" role="synopsis">
       <title role="synopsis.title">Synopsis</title>
       <synopsis>
-struct               <link linkend="PropertyInfo-struct">PropertyInfo</link>;
+class GIRepository.PropertyInfo:
       </synopsis>
     </refsynopsisdiv>
     <refsect1 id="gipropertyinfo-details" role="details">
@@ -234,7 +214,7 @@ struct               <link linkend="PropertyInfo-struct">PropertyInfo</link>;
     <refsynopsisdiv id="RegisteredTypeInfo.synopsis" role="synopsis">
       <title role="synopsis.title">Synopsis</title>
       <synopsis>
-struct               <link linkend="RegisteredTypeInfo-struct">RegisteredTypeInfo</link>;
+class GIRepository.RegisteredTypeInfo:
       </synopsis>
     </refsynopsisdiv>
     <refsect1 id="giregisteredtypeinfo-details" role="details">
@@ -254,7 +234,7 @@ struct               <link linkend="RegisteredTypeInfo-struct">RegisteredTypeInf
     <refsynopsisdiv id="SignalInfo.synopsis" role="synopsis">
       <title role="synopsis.title">Synopsis</title>
       <synopsis>
-struct               <link linkend="SignalInfo-struct">SignalInfo</link>;
+class GIRepository.SignalInfo:
       </synopsis>
     </refsynopsisdiv>
     <refsect1 id="gisignalinfo-details" role="details">
@@ -274,7 +254,7 @@ struct               <link linkend="SignalInfo-struct">SignalInfo</link>;
     <refsynopsisdiv id="StructInfo.synopsis" role="synopsis">
       <title role="synopsis.title">Synopsis</title>
       <synopsis>
-struct               <link linkend="StructInfo-struct">StructInfo</link>;
+class GIRepository.StructInfo:
       </synopsis>
     </refsynopsisdiv>
     <refsect1 id="gistructinfo-details" role="details">
@@ -294,7 +274,7 @@ struct               <link linkend="StructInfo-struct">StructInfo</link>;
     <refsynopsisdiv id="TypeInfo.synopsis" role="synopsis">
       <title role="synopsis.title">Synopsis</title>
       <synopsis>
-struct               <link linkend="TypeInfo-struct">TypeInfo</link>;
+class GIRepository.TypeInfo:
       </synopsis>
     </refsynopsisdiv>
     <refsect1 id="gitypeinfo-details" role="details">
@@ -314,7 +294,7 @@ struct               <link linkend="TypeInfo-struct">TypeInfo</link>;
     <refsynopsisdiv id="UnionInfo.synopsis" role="synopsis">
       <title role="synopsis.title">Synopsis</title>
       <synopsis>
-struct               <link linkend="UnionInfo-struct">UnionInfo</link>;
+class GIRepository.UnionInfo:
       </synopsis>
     </refsynopsisdiv>
     <refsect1 id="giunioninfo-details" role="details">
@@ -334,7 +314,7 @@ struct               <link linkend="UnionInfo-struct">UnionInfo</link>;
     <refsynopsisdiv id="VFuncInfo.synopsis" role="synopsis">
       <title role="synopsis.title">Synopsis</title>
       <synopsis>
-struct               <link linkend="VFuncInfo-struct">VFuncInfo</link>;
+class GIRepository.VFuncInfo:
       </synopsis>
     </refsynopsisdiv>
     <refsect1 id="givfuncinfo-details" role="details">
@@ -354,7 +334,7 @@ struct               <link linkend="VFuncInfo-struct">VFuncInfo</link>;
     <refsynopsisdiv id="ValueInfo.synopsis" role="synopsis">
       <title role="synopsis.title">Synopsis</title>
       <synopsis>
-struct               <link linkend="ValueInfo-struct">ValueInfo</link>;
+class GIRepository.ValueInfo:
       </synopsis>
     </refsynopsisdiv>
     <refsect1 id="givalueinfo-details" role="details">
@@ -375,7 +355,7 @@ struct               <link linkend="ValueInfo-struct">ValueInfo</link>;
       <title role="synopsis.title">Synopsis</title>
       <anchor id="AttributeIter"/>
       <synopsis>
-struct               <link linkend="AttributeIter-struct">AttributeIter</link>;
+class GIRepository.AttributeIter:
       </synopsis>
     </refsynopsisdiv>
     <refsect1 id="giattributeiter-details" role="details">
@@ -395,7 +375,7 @@ struct               <link linkend="AttributeIter-struct">AttributeIter</link>;
       <title role="synopsis.title">Synopsis</title>
       <anchor id="BaseInfo"/>
       <synopsis>
-struct               <link linkend="BaseInfo-struct">BaseInfo</link>;
+class GIRepository.BaseInfo:
 <link linkend="gboolean"><returnvalue>gboolean</returnvalue></link>            <link linkend="g-base-info-equal">g_base_info_equal</link>                       (<parameter><link linkend="GIBaseInfo"><type>GIBaseInfo</type></link> *baseinfo, </parameter>
                                                              <parameter><link linkend="GIBaseInfo"><type>GIBaseInfo</type></link> *info2</parameter>);
 <link linkend="gchar"><returnvalue>gchar</returnvalue></link> *              <link linkend="g-base-info-get-attribute">g_base_info_get_attribute</link>               (<parameter><link linkend="GIBaseInfo"><type>GIBaseInfo</type></link> *baseinfo, </parameter>
@@ -432,6 +412,7 @@ struct               <link linkend="BaseInfo-struct">BaseInfo</link>;
                                                              <parameter><link linkend="GIBaseInfo"><type>GIBaseInfo</type></link> *info2</parameter>);
         </programlisting>
         <para>Compare two #GIBaseInfo.
+
 Using pointer comparison is not practical since many functions return
 different instances of #GIBaseInfo that refers to the same part of the
 TypeLib; use this function instead to do #GIBaseInfo comparisons.</para>
@@ -674,8 +655,10 @@ deprecated or not.</para>
         <para>Iterate over all attributes associated with this node.  The iterator
 structure is typically stack allocated, and must have its first
 member initialized to %NULL.
+
 Both the @name and @value should be treated as constants
 and must not be freed.
+
 &lt;example&gt;
 &lt;title&gt;Iterating over attributes&lt;/title&gt;
 &lt;programlisting&gt;
@@ -687,6 +670,7 @@ char *name;
 char *value;
 while (g_base_info_iterate_attributes (info, &amp;iter, &amp;name, &amp;value))
 {
+g_print ("attribute name: %s value: %s", name, value);
 }
 }
 &lt;/programlisting&gt;
@@ -805,9 +789,11 @@ drops to 0, the info is freed.</para>
       <title role="synopsis.title">Synopsis</title>
       <anchor id="Repository"/>
       <synopsis>
-struct               <link linkend="Repository-struct">Repository</link>;
+class GIRepository.Repository(GObject.Object):
 <link linkend="GList"><returnvalue>GList</returnvalue></link> *              <link linkend="g-irepository-enumerate-versions">g_irepository_enumerate_versions</link>        (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
                                                              <parameter><link linkend="gchar"><type>gchar</type></link> *namespace_</parameter>);
+<link linkend="GIEnumInfo"><returnvalue>GIEnumInfo</returnvalue></link> *         <link linkend="g-irepository-find-by-error-domain">g_irepository_find_by_error_domain</link>      (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
+                                                             <parameter><link linkend="GQuark"><type>GQuark</type></link> domain</parameter>);
 <link linkend="GIBaseInfo"><returnvalue>GIBaseInfo</returnvalue></link> *         <link linkend="g-irepository-find-by-gtype">g_irepository_find_by_gtype</link>             (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
                                                              <parameter><link linkend="GType"><type>GType</type></link> gtype</parameter>);
 <link linkend="GIBaseInfo"><returnvalue>GIBaseInfo</returnvalue></link> *         <link linkend="g-irepository-find-by-name">g_irepository_find_by_name</link>              (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
@@ -904,6 +890,53 @@ available) for @namespace_ in this @repository.</para>
           </varlistentry>
         </variablelist>
       </refsect2>
+      <refsect2 id="g-irepository-find-by-error-domain" role="function">
+        <title>g_irepository_find_by_error_domain ()</title>
+        <indexterm zone="g-irepository-find-by-error-domain">
+          <primary>find_by_error_domain</primary>
+        </indexterm>
+        <programlisting>
+<link linkend="GIEnumInfo"><returnvalue>GIEnumInfo</returnvalue></link> *         g_irepository_find_by_error_domain      (<parameter><link linkend="GIRepository"><type>GIRepository</type></link> *repository, </parameter>
+                                                             <parameter><link linkend="GQuark"><type>GQuark</type></link> domain</parameter>);
+        </programlisting>
+        <para>Searches for the enum type corresponding to the given #GError
+domain. Before calling this function for a particular namespace,
+you must call g_irepository_require() once to load the namespace, or
+otherwise ensure the namespace has already been loaded.
+
+enum type, or %NULL</para>
+        <variablelist role="params">
+          <varlistentry>
+            <term>
+<parameter>repository</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                instance
+              </simpara>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>
+<parameter>domain</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                a #GError domain
+              </simpara>
+            </listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>
+<parameter>Returns</parameter>&#xA0;:            </term>
+            <listitem>
+              <simpara>
+                #GIEnumInfo representing metadata about @domain's
+                <emphasis role="annotation">
+[transfer full]                </emphasis>
+              </simpara>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+      </refsect2>
       <refsect2 id="g-irepository-find-by-gtype" role="function">
         <title>g_irepository_find_by_gtype ()</title>
         <indexterm zone="g-irepository-find-by-gtype">
@@ -963,7 +996,7 @@ when you know the GType to originate from be from a loaded namespace.</para>
         </programlisting>
         <para>Searches for a particular entry in a namespace.  Before calling
 this function for a particular namespace, you must call
-#g_irepository_require once to load the namespace, or otherwise
+g_irepository_require() once to load the namespace, or otherwise
 ensure the namespace has already been loaded.</para>
         <variablelist role="params">
           <varlistentry>
@@ -1018,7 +1051,9 @@ ensure the namespace has already been loaded.</para>
         <para>This function returns the "C prefix", or the C level namespace
 associated with the given introspection namespace.  Each C symbol
 starts with this prefix, as well each #GType in the library.
-such as #g_irepository_require before calling this function.</para>
+
+Note: The namespace must have already been loaded using a function
+such as g_irepository_require() before calling this function.</para>
         <variablelist role="params">
           <varlistentry>
             <term>
@@ -1059,8 +1094,11 @@ such as #g_irepository_require before calling this function.</para>
                                                              <parameter><link linkend="gchar"><type>gchar</type></link> *namespace_</parameter>);
         </programlisting>
         <para>Return an array of all (transitive) dependencies for namespace
+@namespace_, including version.  The returned strings are of the
 form &lt;code&gt;namespace-version&lt;/code&gt;.
-such as #g_irepository_require before calling this function.</para>
+
+Note: The namespace must have already been loaded using a function
+such as g_irepository_require() before calling this function.</para>
         <variablelist role="params">
           <varlistentry>
             <term>
@@ -1236,7 +1274,9 @@ already been loaded before calling this function.</para>
 associated with the given namespace @namespace_. There may be no
 shared library path associated, in which case this function will
 return %NULL.
-such as #g_irepository_require before calling this function.</para>
+
+Note: The namespace must have already been loaded using a function
+such as g_irepository_require() before calling this function.</para>
         <variablelist role="params">
           <varlistentry>
             <term>
@@ -1321,7 +1361,9 @@ the special string "$lt;builtin$gt;".</para>
         </programlisting>
         <para>This function returns the loaded version associated with the given
 namespace @namespace_.
-such as #g_irepository_require before calling this function.</para>
+
+Note: The namespace must have already been loaded using a function
+such as g_irepository_require() before calling this function.</para>
         <variablelist role="params">
           <varlistentry>
             <term>
@@ -1365,7 +1407,7 @@ such as #g_irepository_require before calling this function.</para>
         <para>Check whether a particular namespace (and optionally, a specific
 version thereof) is currently loaded.  This function is likely to
 only be useful in unusual circumstances; in order to act upon
-metadata in the namespace, you should call #g_irepository_require
+metadata in the namespace, you should call g_irepository_require()
 instead which will ensure the namespace is loaded, and return as
 quickly as this function will if it has already been loaded.</para>
         <variablelist role="params">
@@ -1594,7 +1636,7 @@ not specified, the latest will be used.</para>
       <title role="synopsis.title">Synopsis</title>
       <anchor id="RepositoryClass"/>
       <synopsis>
-struct               <link linkend="RepositoryClass-struct">RepositoryClass</link>;
+class GIRepository.RepositoryClass:
       </synopsis>
     </refsynopsisdiv>
     <refsect1 id="girepositoryclass-details" role="details">
@@ -1614,7 +1656,7 @@ struct               <link linkend="RepositoryClass-struct">RepositoryClass</lin
       <title role="synopsis.title">Synopsis</title>
       <anchor id="RepositoryPrivate"/>
       <synopsis>
-struct               <link linkend="RepositoryPrivate-struct">RepositoryPrivate</link>;
+class GIRepository.RepositoryPrivate:
       </synopsis>
     </refsynopsisdiv>
     <refsect1 id="girepositoryprivate-details" role="details">
@@ -1634,7 +1676,7 @@ struct               <link linkend="RepositoryPrivate-struct">RepositoryPrivate<
       <title role="synopsis.title">Synopsis</title>
       <anchor id="Typelib"/>
       <synopsis>
-struct               <link linkend="Typelib-struct">Typelib</link>;
+class GIRepository.Typelib:
 <link linkend="void"><returnvalue>void</returnvalue></link>                <link linkend="g-typelib-free">g_typelib_free</link>                          (<parameter><link linkend="GITypelib"><type>GITypelib</type></link> *typelib</parameter>);
 <link linkend="gchar"><returnvalue>gchar</returnvalue></link> *              <link linkend="g-typelib-get-namespace">g_typelib_get_namespace</link>                 (<parameter><link linkend="GITypelib"><type>GITypelib</type></link> *typelib</parameter>);
 <link linkend="gboolean"><returnvalue>gboolean</returnvalue></link>            <link linkend="g-typelib-symbol">g_typelib_symbol</link>                        (<parameter><link linkend="GITypelib"><type>GITypelib</type></link> *typelib, </parameter>
@@ -1744,7 +1786,7 @@ struct               <link linkend="Typelib-struct">Typelib</link>;
       <title role="synopsis.title">Synopsis</title>
       <anchor id="UnresolvedInfo"/>
       <synopsis>
-struct               <link linkend="UnresolvedInfo-struct">UnresolvedInfo</link>;
+class GIRepository.UnresolvedInfo:
       </synopsis>
     </refsynopsisdiv>
     <refsect1 id="giunresolvedinfo-details" role="details">
@@ -1764,7 +1806,7 @@ struct               <link linkend="UnresolvedInfo-struct">UnresolvedInfo</link>
       <title role="synopsis.title">Synopsis</title>
       <anchor id="_BaseInfoStub"/>
       <synopsis>
-struct               <link linkend="_BaseInfoStub-struct">_BaseInfoStub</link>;
+class GIRepository._BaseInfoStub:
       </synopsis>
     </refsynopsisdiv>
     <refsect1 id="_gibaseinfostub-details" role="details">
