@@ -281,7 +281,7 @@ class MallardPage(object):
         self.title = writer._formatter.get_title(node, parent)
         self.links = []
         self.linksels = []
-                    
+
         if isinstance(node, ast.Namespace):
             self.page_id = 'index'
         elif isinstance(node, ast.Property) and parent is not None:
@@ -340,7 +340,7 @@ class MallardPage(object):
             self.add_link('guide', self.parent.page.page_id)
         elif isinstance(self.node, ast.Interface):
             self.page_type = 'guide'
-            self.page_style = 'interface' 
+            self.page_style = 'interface'
             self.add_link('guide', self.parent.page.page_id)
         elif isinstance(self.node, ast.Function):
             if self.node.is_constructor:
@@ -364,18 +364,15 @@ class MallardPage(object):
             ('id', self.page_id),
             ('type', self.page_type),
             ('style', self.page_style),
-            ('xmlns', XMLNS), ('xmlns:ui', XMLNS_UI)
-            ]):
+            ('xmlns', XMLNS), ('xmlns:ui', XMLNS_UI)]):
             with writer.tagcontext('info'):
                 for linktype, xref, group in self.links:
                     if group is not None:
                         writer.write_tag('link', [
-                                ('type', linktype), ('xref', xref), ('group', group)
-                                ])
+                                ('type', linktype), ('xref', xref), ('group', group)])
                     else:
                         writer.write_tag('link', [
-                                ('type', linktype), ('xref', xref)
-                                ])
+                                ('type', linktype), ('xref', xref)])
             writer.write_tag('title', [], self.title)
             if isinstance(self.node, ast.Annotated):
                 self.render_doc(writer, self.node.doc)
@@ -419,7 +416,7 @@ class MallardPage(object):
         poss = []
         poss.append((text.find('#'), '#'))
         poss = [pos for pos in poss if pos[0] >= 0]
-        poss.sort(cmp=lambda x,  y: cmp(x[0], y[0]))
+        poss.sort(cmp=lambda x, y: cmp(x[0], y[0]))
         if len(poss) == 0:
             writer.write_line(text, do_escape=True)
         elif poss[0][1] == '#':
@@ -458,7 +455,7 @@ class MallardWriter(object):
             fp = open(os.path.join(os.path.dirname(output), page.page_id + '.page'), 'w')
             fp.write(xmlwriter.get_xml())
             fp.close()
-                                      
+
     def _render_page_object_hierarchy(self, page_node):
         parent_chain = self._get_parent_chain(page_node)
         parent_chain.append(page_node)
@@ -473,4 +470,3 @@ class MallardWriter(object):
         self._writer.disable_whitespace()
         self._writer.write_line("\n".join(lines))
         self._writer.enable_whitespace()
-
