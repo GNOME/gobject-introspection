@@ -532,7 +532,7 @@ class DocBookWriter(object):
         parent_chain = []
 
         node = page_node
-        while node.parent:
+        while node.parent and node.gi_name != 'GObject.Object':
             node = self._transformer.lookup_giname(str(node.parent))
             parent_chain.append(node)
 
