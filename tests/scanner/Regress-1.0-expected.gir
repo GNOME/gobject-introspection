@@ -2403,6 +2403,46 @@ You will give me your credit card number.</doc>
         <type name="none" c:type="void"/>
       </return-value>
     </function>
+    <function name="test_nested_parameter"
+              c:identifier="regress_test_nested_parameter">
+      <doc xml:whitespace="preserve">&lt;informaltable&gt;
+&lt;tgroup cols="3"&gt;
+&lt;thead&gt;
+&lt;row&gt;
+&lt;entry&gt;Syntax&lt;/entry&gt;
+&lt;entry&gt;Explanation&lt;/entry&gt;
+&lt;entry&gt;Examples&lt;/entry&gt;
+&lt;/row&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;row&gt;
+&lt;entry&gt;rgb(@r, @g, @b)&lt;/entry&gt;
+&lt;entry&gt;An opaque color; @r, @g, @b can be either integers between
+0 and 255 or percentages&lt;/entry&gt;
+&lt;entry&gt;&lt;literallayout&gt;rgb(128, 10, 54)
+rgb(20%, 30%, 0%)&lt;/literallayout&gt;&lt;/entry&gt;
+&lt;/row&gt;
+&lt;row&gt;
+&lt;entry&gt;rgba(@r, @g, @b, @a)&lt;/entry&gt;
+&lt;entry&gt;A translucent color; @r, @g, @b are as in the previous row,
+@a is a floating point number between 0 and 1&lt;/entry&gt;
+&lt;entry&gt;&lt;literallayout&gt;rgba(255, 255, 0, 0.5)&lt;/literallayout&gt;&lt;/entry&gt;
+&lt;/row&gt;
+&lt;/tbody&gt;
+&lt;/tgroup&gt;
+&lt;/informaltable&gt;
+
+What we're testing here is that the scanner ignores the @a nested inside XML.</doc>
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="a" transfer-ownership="none">
+          <doc xml:whitespace="preserve">An integer</doc>
+          <type name="gint" c:type="int"/>
+        </parameter>
+      </parameters>
+    </function>
     <function name="test_short" c:identifier="regress_test_short">
       <return-value transfer-ownership="none">
         <type name="gshort" c:type="gshort"/>
