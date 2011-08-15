@@ -179,8 +179,10 @@ None."""
         sys.exit(1)
 
     @classmethod
-    def parse_from_gir(cls, filename):
+    def parse_from_gir(cls, filename, extra_include_dirs=None):
         self = cls(None)
+        if extra_include_dirs is not None:
+            self.set_include_paths(extra_include_dirs)
         self.set_passthrough_mode()
         self._parse_include(filename)
         parser = self._cachestore.load(filename)

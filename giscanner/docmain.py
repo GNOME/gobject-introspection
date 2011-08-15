@@ -18,6 +18,7 @@
 # 02110-1301, USA.
 #
 
+import os
 import optparse
 
 from .docbookwriter import DocBookWriter
@@ -31,7 +32,13 @@ from .transformer import Transformer
 class GIDocGenerator(object):
 
     def parse(self, filename):
-        self.transformer = Transformer.parse_from_gir(filename)
+        if 'UNINSTALLED_INTROSPECTION_SRCDIR' in os.environ:
+            top_srcdir = os.environ['UNINSTALLED_INTROSPECTION_SRCDIR']
+            top_builddir = os.environ['UNINSTALLED_INTROSPECTION_BUILDDIR']
+            extra_include_dirs = [os.path.join(top_srcdir, 'gir'), top_builddir]
+        else:
+            extra_include_dirs = []
+        self.transformer = Transformer.parse_from_gir(filename, extra_include_dirs)
 
     def generate(self, writer, output):
         writer.add_transformer(self.transformer)
