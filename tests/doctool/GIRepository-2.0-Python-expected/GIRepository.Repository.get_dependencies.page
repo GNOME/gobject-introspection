@@ -7,7 +7,7 @@
   <info>
     <link type="guide" xref="GIRepository.Repository" group="method"/>
   </info>
-  <title>GIRepository.get_dependencies</title>
+  <title>GIRepository.Repository.get_dependencies</title>
 <p>Return an array of all (transitive) dependencies for namespace
 @namespace_, including version.  The returned strings are of the
 form &lt;code&gt;namespace-version&lt;/code&gt;.</p><p>Note: The namespace must have already been loaded using a function

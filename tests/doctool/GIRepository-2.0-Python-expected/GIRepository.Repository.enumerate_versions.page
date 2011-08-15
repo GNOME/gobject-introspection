@@ -7,6 +7,6 @@
   <info>
     <link type="guide" xref="GIRepository.Repository" group="method"/>
   </info>
-  <title>GIRepository.enumerate_versions</title>
+  <title>GIRepository.Repository.enumerate_versions</title>
 <p>Obtain an unordered list of versions (either currently loaded or
 available) for @namespace_ in this @repository.</p></page>

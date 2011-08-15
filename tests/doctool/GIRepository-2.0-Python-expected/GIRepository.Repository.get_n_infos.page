@@ -7,7 +7,7 @@
   <info>
     <link type="guide" xref="GIRepository.Repository" group="method"/>
   </info>
-  <title>GIRepository.get_n_infos</title>
+  <title>GIRepository.Repository.get_n_infos</title>
 <p>This function returns the number of metadata entries in
 given namespace @namespace_.  The namespace must have
 already been loaded before calling this function.</p></page>

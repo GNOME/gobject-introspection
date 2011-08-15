@@ -7,7 +7,7 @@
   <info>
     <link type="guide" xref="GIRepository.Repository" group="method"/>
   </info>
-  <title>GIRepository.find_by_gtype</title>
+  <title>GIRepository.Repository.find_by_gtype</title>
 <p>Searches all loaded namespaces for a particular <link xref="GType">GType</link>.  Note that
 in order to locate the metadata, the namespace corresponding to
 the type must first have been loaded.  There is currently no

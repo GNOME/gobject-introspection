@@ -7,7 +7,7 @@
   <info>
     <link type="guide" xref="GIRepository.Repository" group="method"/>
   </info>
-  <title>GIRepository.find_by_name</title>
+  <title>GIRepository.Repository.find_by_name</title>
 <p>Searches for a particular entry in a namespace.  Before calling
 this function for a particular namespace, you must call
 g_irepository_require() once to load the namespace, or otherwise

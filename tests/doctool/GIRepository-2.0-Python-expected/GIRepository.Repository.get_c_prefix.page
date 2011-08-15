@@ -7,7 +7,7 @@
   <info>
     <link type="guide" xref="GIRepository.Repository" group="method"/>
   </info>
-  <title>GIRepository.get_c_prefix</title>
+  <title>GIRepository.Repository.get_c_prefix</title>
 <p>This function returns the "C prefix", or the C level namespace
 associated with the given introspection namespace.  Each C symbol
 starts with this prefix, as well each <link xref="GType">GType</link> in the library.</p><p>Note: The namespace must have already been loaded using a function

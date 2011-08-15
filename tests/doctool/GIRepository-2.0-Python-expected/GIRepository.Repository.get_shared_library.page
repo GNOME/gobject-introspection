@@ -7,7 +7,7 @@
   <info>
     <link type="guide" xref="GIRepository.Repository" group="method"/>
   </info>
-  <title>GIRepository.get_shared_library</title>
+  <title>GIRepository.Repository.get_shared_library</title>
 <p>This function returns the full path to the shared C library
 associated with the given namespace @namespace_. There may be no
 shared library path associated, in which case this function will

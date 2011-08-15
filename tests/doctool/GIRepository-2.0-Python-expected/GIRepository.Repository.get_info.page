@@ -7,7 +7,7 @@
   <info>
     <link type="guide" xref="GIRepository.Repository" group="method"/>
   </info>
-  <title>GIRepository.get_info</title>
+  <title>GIRepository.Repository.get_info</title>
 <p>This function returns a particular metadata entry in the
 given namespace @namespace_.  The namespace must have
 already been loaded before calling this function.

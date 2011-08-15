@@ -7,7 +7,7 @@
   <info>
     <link type="guide" xref="GIRepository.Repository" group="method"/>
   </info>
-  <title>GIRepository.is_registered</title>
+  <title>GIRepository.Repository.is_registered</title>
 <p>Check whether a particular namespace (and optionally, a specific
 version thereof) is currently loaded.  This function is likely to
 only be useful in unusual circumstances; in order to act upon

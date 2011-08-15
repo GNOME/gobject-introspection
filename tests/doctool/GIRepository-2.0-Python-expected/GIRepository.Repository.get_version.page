@@ -7,7 +7,7 @@
   <info>
     <link type="guide" xref="GIRepository.Repository" group="method"/>
   </info>
-  <title>GIRepository.get_version</title>
+  <title>GIRepository.Repository.get_version</title>
 <p>This function returns the loaded version associated with the given
 namespace @namespace_.</p><p>Note: The namespace must have already been loaded using a function
 such as g_irepository_require() before calling this function.</p></page>
