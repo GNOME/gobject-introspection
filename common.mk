@@ -27,4 +27,9 @@ INTROSPECTION_COMPILER_ARGS = \
     --includedir=$(builddir) \
     --includedir=$(top_builddir)
 
-INTROSPECTION_DOCTOOL = $(top_builddir)/g-ir-doc-tool$(EXEEXT)
+INTROSPECTION_DOCTOOL = \
+    env LPATH=.libs \
+        PYTHONPATH=$(top_builddir):$(top_srcdir) \
+	UNINSTALLED_INTROSPECTION_SRCDIR=$(top_srcdir) \
+	UNINSTALLED_INTROSPECTION_BUILDDIR=$(top_builddir) \
+    $(top_builddir)/g-ir-doc-tool$(EXEEXT)
