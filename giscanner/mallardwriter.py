@@ -261,7 +261,17 @@ class MallardFormatterC(MallardFormatter):
             return node.c_name
 
 class MallardFormatterPython(MallardFormatter):
-    pass
+    def get_title(self, node, parent):
+        if isinstance(node, ast.Namespace):
+            return "%s Documentation" % node.name
+        elif isinstance(node, ast.Function):
+            return "%s.%s" % (node.namespace, node.name)
+        elif isinstance(node, ast.Property):
+            return "%s" % parent.name
+        elif isinstance(node, ast.Signal):
+            return "%s" % node.name
+        else:
+            return "%s.%s" % (node.namespace, node.name)
 
 class MallardPage(object):
     def __init__(self, writer, node, parent):
