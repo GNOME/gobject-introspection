@@ -4,7 +4,7 @@ GIRS = GIRepository-2.0.gir
 CHECK_TARGETS = $(GIRS:.gir=-C.page.check) $(GIRS:.gir=-Python.page.check)
 MALLARD_DIRS = $(GIRS:.gir=-C) $(GIRS:.gir=-Python)
 EXPECTED_MALLARD_DIRS = $(MALLARD_DIRS:=-expected)
-CLEANFILES = $(MALLARD_DIRS) $(GIRS)
+CLEANFILES = $(GIRS)
 BUILT_SOURCES = $(MALLARD_DIRS)
 EXTRA_DIST = $(EXPECTED_MALLARD_DIRS)
 
@@ -24,3 +24,6 @@ EXTRA_DIST = $(EXPECTED_MALLARD_DIRS)
 	@diff -u -U 10 $(srcdir)/$*-Python-expected $*-Python && echo "  TEST  $*-Python" && rm -rf $*-Python
 
 check-local: $(CHECK_TARGETS)
+
+clean-local:
+	@rm -rf $(MALLARD_DIRS)
