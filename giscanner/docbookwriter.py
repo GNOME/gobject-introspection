@@ -105,7 +105,10 @@ class DocBookFormatter(object):
         return "%s ()" % method.symbol
 
     def get_page_name(self, node):
-        pass
+        # page name is only used for xml:id (not displayed to users)
+        if isinstance(node, ast.Alias) or node.gtype_name is None:
+            return node.ctype
+        return node.gtype_name
 
     def get_class_name(self, node):
         if node.gtype_name is None:
@@ -259,11 +262,8 @@ class DocBookFormatter(object):
 
 
 class DocBookFormatterPython(DocBookFormatter):
-    def get_page_name(self, node):
-        return node.name
-
     def get_title(self, page):
-        return "%s.%s" % (page.ast.namespace.name, page.name)
+        return "%s.%s" % (page.ast.namespace.name, page.ast.name)
 
     def render_struct(self, page):
         class_ = page.ast
@@ -290,11 +290,6 @@ class DocBookFormatterPython(DocBookFormatter):
 
 
 class DocBookFormatterC(DocBookFormatter):
-    def get_page_name(self, node):
-        if isinstance(node, ast.Alias) or node.gtype_name is None:
-            return node.ctype
-        return node.gtype_name
-
     def get_title(self, page):
         return page.ast.ctype
 
