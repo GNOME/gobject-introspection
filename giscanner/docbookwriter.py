@@ -100,8 +100,7 @@ class DocBookFormatter(object):
 
         self.writer.write_line(");\n")
 
-    def get_method_as_title(self, entity):
-        method = entity.get_ast()
+    def get_method_as_title(self, method):
         return "%s ()" % method.symbol
 
     def get_page_name(self, node):
@@ -128,8 +127,7 @@ class DocBookFormatter(object):
         else:
             return str(node)
 
-    def render_method(self, entity, link=False):
-        method = entity.get_ast()
+    def render_method(self, method, link=False):
         self.writer.disable_whitespace()
 
         retval_type = method.retval.type
@@ -182,9 +180,7 @@ class DocBookFormatter(object):
 
         return annotations
 
-    def render_param_list(self, entity):
-        method = entity.get_ast()
-
+    def render_param_list(self, method):
         self._render_param(method.parent_class.name.lower(), 'instance', [])
 
         for param in method.parameters:
@@ -224,8 +220,7 @@ class DocBookFormatter(object):
                                     finally:
                                         self.writer.enable_whitespace()
 
-    def render_property(self, entity, link=False):
-        prop = entity.get_ast()
+    def render_property(self, prop, link=False):
         prop_name = '"%s"' % prop.name
         prop_type = self.get_type_name(prop.type)
 
@@ -253,9 +248,7 @@ class DocBookFormatter(object):
         self.writer.enable_whitespace()
 
 
-    def render_signal(self, entity, link=False):
-        signal = entity.get_ast()
-
+    def render_signal(self, signal, link=False):
         sig_name = '"%s"' % signal.name
         flags = ["TODO: signal flags not in GIR currently"]
         self._render_prop_or_signal(sig_name, "", flags)
@@ -307,23 +300,23 @@ class DocBookFormatterC(DocBookFormatter):
 
 
 class DocBookPage(object):
-    def __init__(self, name, ast):
+    def __init__(self, name, ast_node):
         self.methods = []
         self.properties = []
         self.signals = []
         self.name = name
-        self.description = ast.doc
-        self.ast = ast
+        self.description = ast_node.doc
+        self.ast = ast_node
         self.id = None
 
-    def add_method(self, entity):
-        self.methods.append(entity)
+        if isinstance(ast_node, (ast.Class, ast.Record, ast.Interface)):
+            for method in ast_node.methods:
+                method.parent_class = ast_node
+            self.methods = ast_node.methods
 
-    def add_property(self, entity):
-        self.properties.append(entity)
-
-    def add_signal(self, entity):
-        self.signals.append(entity)
+        if isinstance(ast_node, (ast.Class, ast.Interface)):
+            self.properties = ast_node.properties
+            self.signals = ast_node.signals
 
     def get_methods(self):
         return self.methods
@@ -333,22 +326,6 @@ class DocBookPage(object):
 
     def get_signals(self):
         return self.signals
-
-class DocBookEntity(object):
-    def __init__(self, entity_name, entity_type, entity_ast):
-        self.entity_name = entity_name
-        self.entity_type = entity_type
-        self.entity_ast = entity_ast
-
-    def get_ast(self):
-        return self.entity_ast
-
-    def get_type(self):
-        return self.entity_type
-
-    def get_name(self):
-        return self.entity_name
-
 
 class DocBookWriter(object):
     def __init__(self, formatter):
@@ -380,17 +357,6 @@ class DocBookWriter(object):
 
         if isinstance(node, (ast.Class, ast.Record, ast.Interface, ast.Alias)):
             page.id = node.ctype
-
-        if isinstance(node, (ast.Class, ast.Record, ast.Interface)):
-            for method in node.methods:
-                method.parent_class = node
-                page.add_method(DocBookEntity(method.name, "method", method))
-
-        if isinstance(node, (ast.Class, ast.Interface)):
-            for property_ in node.properties:
-                page.add_property(DocBookEntity(property_.name, "property", property_))
-            for signal in node.signals:
-                page.add_signal(DocBookEntity(signal.name, "signal", signal))
 
     def write(self, output):
         self._writer.write_line(DOCTYPE)
@@ -427,8 +393,8 @@ class DocBookWriter(object):
                 with self._writer.tagcontext('synopsis'):
                     self._formatter.render_struct(page)
 
-                    for entity in page.get_methods():
-                        self._formatter.render_method(entity, link=True)
+                    for ast_node in page.get_methods():
+                        self._formatter.render_method(ast_node, link=True)
 
             if isinstance(page.ast, (ast.Class, ast.Interface)):
                 with self._writer.tagcontext("refsect1",
@@ -446,12 +412,12 @@ class DocBookWriter(object):
                     self._writer.write_tag("title", [('role', 'properties.title')],
                                           "Properties")
                     with self._writer.tagcontext("synopsis"):
-                        for entity in page.get_properties():
-                            if isinstance(entity.get_ast().type, ast.TypeUnknown):
+                        for ast_node in page.get_properties():
+                            if isinstance(ast_node.type, ast.TypeUnknown):
                                 print "Warning: ignoring property '%s' for " \
-                                      "lack of type" % entity.get_ast().name
+                                      "lack of type" % ast_node.name
                                 continue
-                            self._formatter.render_property(entity, link=True)
+                            self._formatter.render_property(ast_node, link=True)
 
             if page.get_signals():
                 with self._writer.tagcontext('refsect1',
@@ -460,8 +426,8 @@ class DocBookWriter(object):
                     self._writer.write_tag('title', [('role', 'signal_proto.title')],
                                           "Signals")
                     with self._writer.tagcontext('synopsis'):
-                        for entity in page.get_signals():
-                            self._formatter.render_signal(entity, link=True)
+                        for ast_node in page.get_signals():
+                            self._formatter.render_signal(ast_node, link=True)
 
             if page.description:
                 with self._writer.tagcontext('refsect1',
@@ -481,8 +447,8 @@ class DocBookWriter(object):
                 else:
                     self._render_struct_detail(page.ast)
 
-                for entity in page.get_methods():
-                    self._render_method(entity)
+                for ast_node in page.get_methods():
+                    self._render_method(ast_node)
 
             if page.get_properties():
                 with self._writer.tagcontext('refsect1',
@@ -490,8 +456,8 @@ class DocBookWriter(object):
                                              ('role', 'property_details')]):
                     self._writer.write_tag('title', [('role', 'property_details.title')],
                                            "Property Details")
-                    for entity in page.get_properties():
-                        self._render_property(entity)
+                    for ast_node in page.get_properties():
+                        self._render_property(ast_node)
 
             if page.get_signals():
                 with self._writer.tagcontext('refsect1',
@@ -499,8 +465,8 @@ class DocBookWriter(object):
                                              ('role', 'signals')]):
                     self._writer.write_tag('title', [('role', 'signal.title')],
                                            "Signal Details")
-                    for entity in page.get_signals():
-                        self._render_signal(entity)
+                    for ast_node in page.get_signals():
+                        self._render_signal(ast_node)
 
     def _render_alias_detail(self, alias):
         with self._writer.tagcontext('refsect2',
@@ -524,35 +490,35 @@ class DocBookWriter(object):
                 self._writer.write_tag("primary", [("sortas", struct.name)], struct.ctype)
             self._writer.write_tag("programlisting", [], "struct %s;" % struct.ctype)
 
-    def _render_method(self, entity):
+    def _render_method(self, ast_node):
 
-        link_name = entity.get_ast().symbol.replace("_", "-")
+        link_name = ast_node.symbol.replace("_", "-")
 
         self._writer.push_tag('refsect2',
                               [('id', link_name),
                                ('role', 'function')])
         self._writer.write_tag("title", [],
-                               self._formatter.get_method_as_title(entity))
+                               self._formatter.get_method_as_title(ast_node))
 
         with self._writer.tagcontext("indexterm", [("zone", link_name)]):
-            self._writer.write_tag("primary", [], entity.get_name())
+            self._writer.write_tag("primary", [], ast_node.name)
 
         with self._writer.tagcontext("programlisting"):
-            self._formatter.render_method(entity)
+            self._formatter.render_method(ast_node)
 
-        description = entity.get_ast().doc
+        description = ast_node.doc
         if description:
-            self._render_description(entity.get_ast().doc)
+            self._render_description(ast_node.doc)
 
         with self._writer.tagcontext("variablelist", [("role", "params")]):
-            self._formatter.render_param_list(entity)
+            self._formatter.render_param_list(ast_node)
 
         self._writer.pop_tag()
 
-    def _render_property(self, entity):
+    def _render_property(self, ast_node):
         self._writer.write_line("Not implemented yet")
 
-    def _render_signal(self, entity):
+    def _render_signal(self, ast_node):
         self._writer.write_line("Not implemented yet")
 
     def _render_page_object_hierarchy(self, page_node):
