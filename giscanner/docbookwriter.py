@@ -250,7 +250,24 @@ class DocBookFormatter(object):
 
     def render_signal(self, signal, link=False):
         sig_name = '"%s"' % signal.name
-        flags = ["TODO: signal flags not in GIR currently"]
+
+        flags = []
+        if signal.when == "first":
+            flags.append("Run First")
+        elif signal.when == "last":
+            flags.append("Run Last")
+        elif signal.when == "cleanup":
+            flags.append("Cleanup")
+
+        if signal.no_recurse:
+            flags.append('No Recursion')
+        if signal.detailed:
+            flags.append("Has Details")
+        if signal.action:
+            flags.append("Action")
+        if signal.no_hooks:
+            flags.append("No Hooks")
+
         self._render_prop_or_signal(sig_name, "", flags)
 
 
