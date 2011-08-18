@@ -95,6 +95,7 @@
  *
  * Flags to be passed to g_object_bind_property() or
  * g_object_bind_property_full().
+ *
  * This enumeration can be extended at later date.
  *
  * Since: 2.26
@@ -111,6 +112,7 @@
  * A function to be called to transform the source property of @source
  * from @source_value into the target property of @target
  * using @target_value.
+ *
  * otherwise
  *
  * Returns: %TRUE if the transformation was successful, and %FALSE
@@ -200,6 +202,7 @@
  *
  * The hashing algorithm to be used by #GChecksum when performing the
  * digest of some data.
+ *
  * Note that the #GChecksumType enumeration may be extended at a later
  * date to include new hashing algorithm types.
  *
@@ -270,6 +273,7 @@
  * is performed for class initialization of derived types as well.
  * An example may help to correspond the intend of the different class
  * initializers:
+ *
  * |[
  * typedef struct {
  * GObjectClass parent_class;
@@ -291,6 +295,7 @@
  * {
  * class->static_integer = 42;
  * }
+ *
  * typedef struct {
  * TypeAClass   parent_class;
  * gfloat       static_float;
@@ -493,6 +498,17 @@
 
 
 /**
+ * GHmac:
+ *
+ * An opaque structure representing a HMAC operation.
+ * To create a new GHmac, use g_hmac_new(). To free
+ * a GHmac, use g_hmac_unref().
+ *
+ * Since: 2.30
+ */
+
+
+/**
  * GIconv:
  *
  * The <structname>GIConv</structname> struct wraps an
@@ -573,6 +589,7 @@
  *
  * Checks the version of the GLib library that is being compiled
  * against.
+ *
  * <example>
  * <title>Checking the version of the GLib library</title>
  * <programlisting>
@@ -580,7 +597,9 @@
  * g_error ("GLib version 1.2.0 or above is needed");
  * </programlisting>
  * </example>
+ *
  * See glib_check_version() for a runtime check.
+ *
  * is the same as or newer than the passed-in version.
  *
  * Returns: %TRUE if the version of the GLib header files
@@ -622,6 +641,7 @@
  *
  * A parse context is used to parse a stream of bytes that
  * you expect to contain marked-up text.
+ *
  * See g_markup_parse_context_new(), #GMarkupParser, and so
  * on for more details.
  */
@@ -707,6 +727,7 @@
  * doesn't guarantee that the value of the property has actually
  * changed, it may also be emitted when the setter for the property
  * is called to reinstate the previous value.
+ *
  * This signal is typically used to obtain change notification for a
  * single property, by specifying the property name as a detail in the
  * g_signal_connect() call, like this:
@@ -724,7 +745,7 @@
 /**
  * GObjectClass:
  * @g_type_class: the parent class
- * @constructor: the @constructor function is called by g_object_new () to complete the object initialization after all the construction properties are set. The first thing a @constructor implementation must do is chain up to the needed, e.g. to handle construct properties, or to implement singletons.
+ * @constructor: the @constructor function is called by g_object_new () to complete the object initialization after all the construction properties are set. The first thing a @constructor implementation must do is chain up to the @constructor of the parent class. Overriding @constructor should be rarely needed, e.g. to handle construct properties, or to implement singletons.
  * @set_property: the generic setter for all properties of this type. Should be overridden for every type with properties. Implementations of @set_property don't need to emit property change notification explicitly, this is handled by the type system.
  * @get_property: the generic getter for all properties of this type. Should be overridden for every type with properties.
  * @dispose: the @dispose function is supposed to drop all references to other objects, but keep the instance otherwise intact, so that client method invocations still work. It may be run multiple times (due to reference loops). Before returning, @dispose should chain up to the @dispose method of the parent class.
@@ -734,16 +755,19 @@
  * @constructed: the @constructed function is called by g_object_new() as the final step of the object creation process.  At the point of the call, all construction properties have been set on the object.  The purpose of this call is to allow for object initialisation steps that can only be performed after construction properties have been set.  @constructed implementors should chain up to the @constructed call of their parent class to allow it to complete its initialisation.
  *
  * The class structure for the <structname>GObject</structname> type.
+ *
  * <example>
  * <title>Implementing singletons using a constructor</title>
  * <programlisting>
  * static MySingleton *the_singleton = NULL;
+ *
  * static GObject*
  * my_singleton_constructor (GType                  type,
  * guint                  n_construct_params,
  * GObjectConstructParam *construct_params)
  * {
  * GObject *object;
+ *
  * if (!the_singleton)
  * {
  * object = G_OBJECT_CLASS (parent_class)->constructor (type,
@@ -753,6 +777,7 @@
  * }
  * else
  * object = g_object_ref (G_OBJECT (the_singleton));
+ *
  * return object;
  * }
  * </programlisting></example>
@@ -816,8 +841,7 @@
  * options expect to find. If an option expects an extra argument, it
  * can be specified in several ways; with a short option:
  * <option>-x arg</option>, with a long option: <option>--name arg</option>
- *
- * Or combined in a single argument: <option>--name=arg</option>.
+ * or combined in a single argument: <option>--name=arg</option>.
  */
 
 
@@ -830,6 +854,7 @@
  *
  * The type of function to be passed as callback for %G_OPTION_ARG_CALLBACK
  * options.
+ *
  * occurred, in which case @error should be set with g_set_error()
  *
  * Returns: %TRUE if the option was successfully parsed, %FALSE if an error
@@ -901,6 +926,7 @@
  *
  * A <structname>GOptionGroup</structname> struct defines the options in a single
  * group. The struct has only private fields and should not be directly accessed.
+ *
  * All options in a group share the same translation function. Libraries which
  * need to parse commandline options are expected to provide a function for
  * getting a <structname>GOptionGroup</structname> holding their options, which
@@ -916,6 +942,7 @@
  * @error: A return location for error details
  *
  * The type of function that can be called before and after parsing.
+ *
  * occurred, in which case @error should be set with g_set_error()
  *
  * Returns: %TRUE if the function completed successfully, %FALSE if an error
@@ -1262,6 +1289,7 @@
  * GPid:
  *
  * A type which is used to hold a process identification.
+ *
  * On UNIX, processes are identified by a process id (an integer),
  * while Windows uses process handles (which are pointers).
  */
@@ -1285,6 +1313,7 @@
  *
  * Specifies the type of function passed to g_main_context_set_poll_func().
  * The semantics of the function should match those of the poll() system call.
+ *
  * reported, or -1 if an error occurred.
  *
  * Returns: the number of #GPollFD elements which have events or errors
@@ -1330,8 +1359,7 @@
  * @G_REGEX_ANCHORED: The pattern is forced to be "anchored", that is, it is constrained to match only at the first matching point in the string that is being searched. This effect can also be achieved by appropriate constructs in the pattern itself such as the "^" metacharater.
  * @G_REGEX_DOLLAR_ENDONLY: A dollar metacharacter ("$") in the pattern matches only at the end of the string. Without this option, a dollar also matches immediately before the final character if it is a newline (but not before any other newlines). This option is ignored if #G_REGEX_MULTILINE is set.
  * @G_REGEX_UNGREEDY: Inverts the "greediness" of the quantifiers so that they are not greedy by default, but become greedy if followed by "?". It can also be set by a "(?U)" option setting within the pattern.
- * @G_REGEX_RAW: Usually strings must be valid UTF-8 strings, using this flag they are considered as a raw sequence of bytes.
- * @G_REGEX_NO_AUTO_CAPTURE: Disables the use of numbered capturing parentheses in the pattern. Any opening parenthesis that is not followed by "?" behaves as if it were followed by "?:" but named parentheses can still be used for capturing (and they acquire numbers in the usual way).
+ * @G_REGEX_RAW: Usually strings must be valid UTF-8 strings, using this flag they are considered as a raw sequence of bytes. @G_REGEX_NO_AUTO_CAPTURE: Disables the use of numbered capturing parentheses in the pattern. Any opening parenthesis that is not followed by "?" behaves as if it were followed by "?:" but named parentheses can still be used for capturing (and they acquire numbers in the usual way).
  * @G_REGEX_OPTIMIZE: Optimize the regular expression. If the pattern will be used many times, then it may be worth the effort to optimize it to improve the speed of matches.
  * @G_REGEX_DUPNAMES: Names used to identify capturing subpatterns need not be unique. This can be helpful for certain types of pattern when it is known that only one instance of the named subpattern can ever be matched.
  * @G_REGEX_NEWLINE_CR: Usually any newline character is recognized, if this option is set, the only recognized newline character is '\r'.
@@ -1404,6 +1432,7 @@
  * Specifies the type of the function passed to g_regex_replace_eval().
  * It is called for each occurance of the pattern in the string passed
  * to g_regex_replace_eval(), and it should append the replacement to
+ * @result.
  *
  * Returns: %FALSE to continue the replacement process, %TRUE to stop it
  * Since: 2.14
@@ -1441,6 +1470,7 @@
  * creation time, if it is left %NULL, no accumulation of callback return
  * values is performed. The return value of signal emissions is then the
  * value returned by the last callback.
+ *
  * should be aborted. Returning %FALSE means to abort the
  * current emission and %TRUE is returned for continuation.
  *
@@ -1469,7 +1499,9 @@
  * A simple function pointer to get invoked when the signal is emitted. This
  * allows you to tie a hook to the signal type, so that it will trap all
  * emissions of that signal, from any object.
+ *
  * You may not attach these to signals created with the #G_SIGNAL_NO_HOOKS flag.
+ *
  * hook is disconnected (and destroyed).
  *
  * Returns: whether it wants to stay connected. If it returns %FALSE, the signal
@@ -1527,7 +1559,7 @@
  * @signal_flags: The signal flags as passed in to g_signal_new().
  * @return_type: The return type for user callbacks.
  * @n_params: The number of parameters that user callbacks take.
- * @param_types: The individual parameter types for user callbacks, note that the effective callback signature is: <programlisting> [#param_types param_names,] #gpointer     data2); </programlisting>
+ * @param_types: The individual parameter types for user callbacks, note that the effective callback signature is: <programlisting> @return_type callback (#gpointer     data1, [#param_types param_names,] #gpointer     data2); </programlisting>
  *
  * A structure holding in-depth information for a specific signal. It is
  * filled in by the g_signal_query() function.
@@ -1546,10 +1578,9 @@
  * GSourceCallbackFuncs:
  * @ref: Called when a reference is added to the callback object
  * @unref: Called when a reference to the callback object is dropped
- * @get: Called to extract the callback function and data from the callback object.
+ * @get: Called to extract the callback function and data from the callback object. The <structname>GSourceCallbackFuncs</structname> struct contains functions for managing callback objects.
  *
- * The <structname>GSourceCallbackFuncs</structname> struct contains
- * functions for managing callback objects.
+ *
  */
 
 
@@ -1574,22 +1605,25 @@
 
 /**
  * GSourceFuncs:
- * @prepare: Called before all the file descriptors are polled. If the source can determine that it is ready here (without waiting for the results of the poll() call) it should return %TRUE. It can also return a @timeout_ value which should be the maximum timeout (in milliseconds) which should be passed to the poll() call. The actual timeout used will be -1 if all sources returned -1, or it will be the minimum of all the
+ * @prepare: Called before all the file descriptors are polled. If the source can determine that it is ready here (without waiting for the results of the poll() call) it should return %TRUE. It can also return a @timeout_ value which should be the maximum timeout (in milliseconds) which should be passed to the poll() call. The actual timeout used will be -1 if all sources returned -1, or it will be the minimum of all the @timeout_ values returned which were >= 0.
  * @check: Called after all the file descriptors are polled. The source should return %TRUE if it is ready to be dispatched. Note that some time may have passed since the previous prepare function was called, so the source should be checked again here.
  * @dispatch: Called to dispatch the event source, after it has returned %TRUE in either its @prepare or its @check function. The @dispatch function is passed in a callback function and data. The callback function may be %NULL if the source was never connected to a callback using g_source_set_callback(). The @dispatch function should call the callback function with @user_data and whatever additional parameters are needed for this type of event source.
  * @finalize: Called when the source is finalized.
  *
  * The <structname>GSourceFuncs</structname> struct contains a table of
  * functions used to handle event sources in a generic manner.
+ *
  * For idle sources, the prepare and check functions always return %TRUE
  * to indicate that the source is always ready to be processed. The prepare
  * function also returns a timeout value of 0 to ensure that the poll() call
  * doesn't block (since that would be time wasted which could have been spent
  * running the idle function).
+ *
  * For timeout sources, the prepare and check functions both return %TRUE
  * if the timeout interval has expired. The prepare function also returns
  * a timeout value to ensure that the poll() call doesn't block too long
  * and miss the next timeout.
+ *
  * For file descriptor sources, the prepare function typically returns %FALSE,
  * since it must wait until poll() has been called before it knows whether
  * any events need to be processed. It sets the returned timeout to -1 to
@@ -1608,12 +1642,15 @@
  * is called in the child after GLib has performed all the setup it plans
  * to perform but before calling exec(). On POSIX actions taken in this
  * function will thus only affect the child, not the parent.
+ *
  * Note that POSIX allows only async-signal-safe functions (see signal(7))
  * to be called in the child between fork() and exec(), which drastically
  * limits the usefulness of child setup functions.
+ *
  * Also note that modifying the environment from the child setup function
  * may not have the intended effect, since it will get overridden by
  * a non-%NULL @env argument to the <literal>g_spawn...</literal> functions.
+ *
  * On Windows the function is called in the parent. Its usefulness on
  * Windows is thus questionable. In many cases executing the child setup
  * function in the parent can have ill effects, and you should be very
@@ -1710,7 +1747,9 @@
  * @G_TIME_TYPE_UNIVERSAL: the time is in UTC
  *
  * Disambiguates a given time in two ways.
+ *
  * First, specifies if the given time is in universal or local time.
+ *
  * Second, if the time is in local time, specifies if it is local
  * standard time or local daylight time.  This is important for the case
  * where the same local time occurs twice (during daylight savings time
@@ -1736,6 +1775,7 @@
  *
  * The type of functions which are used to translate user-visible
  * strings, for <option>--help</option> output.
+ *
  * The returned string is owned by GLib and must not be freed.
  *
  * Returns: a translation of the string for the current locale.
@@ -1779,9 +1819,11 @@
  * being freed. You should not call g_type_class_unref() from a
  * #GTypeClassCacheFunc function to prevent infinite recursion, use
  * g_type_class_unref_uncached() instead.
+ *
  * The functions have to check the class id passed in to figure
  * whether they actually want to cache the class of this type, since all
  * classes are routed through the same #GTypeClassCacheFunc chain.
+ *
  * called, %FALSE to continue.
  *
  * Returns: %TRUE to stop further #GTypeClassCacheFunc<!-- -->s from being
@@ -1979,12 +2021,12 @@
  * GTypeValueTable:
  * @value_init: Default initialize @values contents by poking values directly into the value->data array. The data array of the #GValue passed into this function was zero-filled with <function>memset()</function>, so no care has to be taken to free any old contents. E.g. for the implementation of a string value that may never be %NULL, the implementation might look like: |[ value->data[0].v_pointer = g_strdup (""); ]|
  * @value_free: Free any old contents that might be left in the data array of the passed in @value. No resources may remain allocated through the #GValue contents after this function returns. E.g. for our above string type: |[ // only free strings without a specific flag for static storage if (!(value->data[1].v_uint & G_VALUE_NOCOPY_CONTENTS)) g_free (value->data[0].v_pointer); ]|
- * @value_copy: @dest_value is a #GValue with zero-filled data section and @src_value is a properly setup #GValue of same or derived type. The purpose of this function is to copy the contents of remain valid. String type example: |[ dest_value->data[0].v_pointer = g_strdup (src_value->data[0].v_pointer); ]|
+ * @value_copy: @dest_value is a #GValue with zero-filled data section and @src_value is a properly setup #GValue of same or derived type. The purpose of this function is to copy the contents of @src_value into @dest_value in a way, that even after @src_value has been freed, the contents of @dest_value remain valid. String type example: |[ dest_value->data[0].v_pointer = g_strdup (src_value->data[0].v_pointer); ]|
  * @value_peek_pointer: If the value contents fit into a pointer, such as objects or strings, return this pointer, so the caller can peek at the current contents. To extend on our above string example: |[ return value->data[0].v_pointer; ]|
  * @collect_format: A string format describing how to collect the contents of this value bit-by-bit. Each character in the format represents an argument to be collected, and the characters themselves indicate the type of the argument. Currently supported arguments are: <variablelist> <varlistentry><term /><listitem><para> 'i' - Integers. passed as collect_values[].v_int. </para></listitem></varlistentry> <varlistentry><term /><listitem><para> 'l' - Longs. passed as collect_values[].v_long. </para></listitem></varlistentry> <varlistentry><term /><listitem><para> 'd' - Doubles. passed as collect_values[].v_double. </para></listitem></varlistentry> <varlistentry><term /><listitem><para> 'p' - Pointers. passed as collect_values[].v_pointer. </para></listitem></varlistentry> </variablelist> It should be noted that for variable argument list construction, ANSI C promotes every type smaller than an integer to an int, and floats to doubles. So for collection of short int or char, 'i' needs to be used, and for collection of floats 'd'.
- * @collect_value: The collect_value() function is responsible for converting the values collected from a variable argument list into contents suitable for storage in a GValue. This function should setup does not allow %NULL pointers, it needs to either spew an error, or do an implicit conversion by storing an empty string. The @value passed in to this function has a zero-filled data array, so just like for value_init() it is guaranteed to not contain any old contents that might need freeing. and @collect_values is an array of unions #GTypeCValue with length @n_collect_values, containing the collected values according to @collect_format. It may contain the flag %G_VALUE_NOCOPY_CONTENTS indicating, that the collected value contents may be considered "static" for the duration of the @value lifetime. Thus an extra copy of the contents stored in @collect_values is not required for assignment to @value. For our above string example, we continue with: |[ if (!collect_values[0].v_pointer) value->data[0].v_pointer = g_strdup (""); else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) { value->data[0].v_pointer = collect_values[0].v_pointer; // keep a flag for the value_free() implementation to not free this string value->data[1].v_uint = G_VALUE_NOCOPY_CONTENTS; } else value->data[0].v_pointer = g_strdup (collect_values[0].v_pointer); return NULL; ]| It should be noted, that it is generally a bad idea to follow the #G_VALUE_NOCOPY_CONTENTS hint for reference counted types. Due to reentrancy requirements and reference count assertions performed by the #GSignal code, reference counts should always be incremented for reference counted contents stored in the value->data array. To deviate from our string example for a moment, and taking a look at an exemplary implementation for collect_value() of #GObject: |[ if (collect_values[0].v_pointer) { GObject *object = G_OBJECT (collect_values[0].v_pointer); // never honour G_VALUE_NOCOPY_CONTENTS for ref-counted types value->data[0].v_pointer = g_object_ref (object); return NULL; } else return g_strdup_printf ("Object passed as invalid NULL pointer"); } ]| The reference count for valid objects is always incremented, regardless of @collect_flags. For invalid objects, the example returns a newly allocated string without altering @value. Upon success, collect_value() needs to return %NULL. If, however, an error condition occurred, collect_value() may spew an error by returning a newly allocated non-%NULL string, giving a suitable description of the error condition. The calling code makes no assumptions about the @value contents being valid upon error returns, @value is simply thrown away without further freeing. As such, it is a good idea to not allocate #GValue contents, prior to returning an error, however, collect_values() is not obliged to return a correctly setup @value for error returns, simply because any non-%NULL return is considered a fatal condition so further program behaviour is undefined.
+ * @collect_value: The collect_value() function is responsible for converting the values collected from a variable argument list into contents suitable for storage in a GValue. This function should setup @value similar to value_init(); e.g. for a string value that does not allow %NULL pointers, it needs to either spew an error, or do an implicit conversion by storing an empty string. The @value passed in to this function has a zero-filled data array, so just like for value_init() it is guaranteed to not contain any old contents that might need freeing. @n_collect_values is exactly the string length of @collect_format, and @collect_values is an array of unions #GTypeCValue with length @n_collect_values, containing the collected values according to @collect_format. @collect_flags is an argument provided as a hint by the caller. It may contain the flag %G_VALUE_NOCOPY_CONTENTS indicating, that the collected value contents may be considered "static" for the duration of the @value lifetime. Thus an extra copy of the contents stored in @collect_values is not required for assignment to @value. For our above string example, we continue with: |[ if (!collect_values[0].v_pointer) value->data[0].v_pointer = g_strdup (""); else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) { value->data[0].v_pointer = collect_values[0].v_pointer; // keep a flag for the value_free() implementation to not free this string value->data[1].v_uint = G_VALUE_NOCOPY_CONTENTS; } else value->data[0].v_pointer = g_strdup (collect_values[0].v_pointer); return NULL; ]| It should be noted, that it is generally a bad idea to follow the #G_VALUE_NOCOPY_CONTENTS hint for reference counted types. Due to reentrancy requirements and reference count assertions performed by the #GSignal code, reference counts should always be incremented for reference counted contents stored in the value->data array. To deviate from our string example for a moment, and taking a look at an exemplary implementation for collect_value() of #GObject: |[ if (collect_values[0].v_pointer) { GObject *object = G_OBJECT (collect_values[0].v_pointer); // never honour G_VALUE_NOCOPY_CONTENTS for ref-counted types value->data[0].v_pointer = g_object_ref (object); return NULL; } else return g_strdup_printf ("Object passed as invalid NULL pointer"); } ]| The reference count for valid objects is always incremented, regardless of @collect_flags. For invalid objects, the example returns a newly allocated string without altering @value. Upon success, collect_value() needs to return %NULL. If, however, an error condition occurred, collect_value() may spew an error by returning a newly allocated non-%NULL string, giving a suitable description of the error condition. The calling code makes no assumptions about the @value contents being valid upon error returns, @value is simply thrown away without further freeing. As such, it is a good idea to not allocate #GValue contents, prior to returning an error, however, collect_values() is not obliged to return a correctly setup @value for error returns, simply because any non-%NULL return is considered a fatal condition so further program behaviour is undefined.
  * @lcopy_format: Format description of the arguments to collect for @lcopy_value, analogous to @collect_format. Usually, @lcopy_format string consists only of 'p's to provide lcopy_value() with pointers to storage locations.
- * @lcopy_value: This function is responsible for storing the @value contents into arguments passed through a variable argument list which got collected into @collect_values according to @lcopy_format. and @collect_flags may contain %G_VALUE_NOCOPY_CONTENTS. In contrast to collect_value(), lcopy_value() is obliged to always properly support %G_VALUE_NOCOPY_CONTENTS. Similar to collect_value() the function may prematurely abort by returning a newly allocated string describing an error condition. To complete the string example: |[ gchar **string_p = collect_values[0].v_pointer; if (!string_p) return g_strdup_printf ("string location passed as NULL"); if (collect_flags & G_VALUE_NOCOPY_CONTENTS) *string_p = value->data[0].v_pointer; else *string_p = g_strdup (value->data[0].v_pointer); ]| And an illustrative version of lcopy_value() for reference-counted types: |[ GObject **object_p = collect_values[0].v_pointer; if (!object_p) return g_strdup_printf ("object location passed as NULL"); if (!value->data[0].v_pointer) *object_p = NULL; else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) /&ast; always honour &ast;/ *object_p = value->data[0].v_pointer; else *object_p = g_object_ref (value->data[0].v_pointer); return NULL; ]|
+ * @lcopy_value: This function is responsible for storing the @value contents into arguments passed through a variable argument list which got collected into @collect_values according to @lcopy_format. @n_collect_values equals the string length of @lcopy_format, and @collect_flags may contain %G_VALUE_NOCOPY_CONTENTS. In contrast to collect_value(), lcopy_value() is obliged to always properly support %G_VALUE_NOCOPY_CONTENTS. Similar to collect_value() the function may prematurely abort by returning a newly allocated string describing an error condition. To complete the string example: |[ gchar **string_p = collect_values[0].v_pointer; if (!string_p) return g_strdup_printf ("string location passed as NULL"); if (collect_flags & G_VALUE_NOCOPY_CONTENTS) *string_p = value->data[0].v_pointer; else *string_p = g_strdup (value->data[0].v_pointer); ]| And an illustrative version of lcopy_value() for reference-counted types: |[ GObject **object_p = collect_values[0].v_pointer; if (!object_p) return g_strdup_printf ("object location passed as NULL"); if (!value->data[0].v_pointer) *object_p = NULL; else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) /&ast; always honour &ast;/ *object_p = value->data[0].v_pointer; else *object_p = g_object_ref (value->data[0].v_pointer); return NULL; ]|
  *
  * The #GTypeValueTable provides the functions required by the #GValue implementation,
  * to serve as a container for values of a type.
@@ -2032,10 +2074,12 @@
  * @G_UNICODE_BREAK_CLOSE_PARANTHESIS: Closing Parenthesis (CP). Since 2.28
  *
  * These are the possible line break classifications.
+ *
  * The five Hangul types were added in Unicode 4.1, so, has been
  * introduced in GLib 2.10. Note that new types may be added in the future.
  * Applications should be ready to handle unknown values.
  * They may be regarded as %G_UNICODE_BREAK_UNKNOWN.
+ *
  * See <ulink url="http://www.unicode.org/unicode/reports/tr14/">http://www.unicode.org/unicode/reports/tr14/</ulink>.
  */
 
@@ -2129,11 +2173,11 @@
  * @G_UNICODE_SCRIPT_BRAHMI: Brahmi. Since 2.28
  * @G_UNICODE_SCRIPT_MANDAIC: Mandaic. Since 2.28
  *
- * a value never returned from g_unichar_get_script()
  * The #GUnicodeScript enumeration identifies different writing
  * systems. The values correspond to the names as defined in the
  * Unicode standard. The enumeration has been added in GLib 2.14,
  * and is interchangeable with #PangoScript.
+ *
  * Note that new types may be added in the future. Applications
  * should be ready to handle unknown values.
  * See <ulink
@@ -2196,6 +2240,7 @@
  * These are logical ids for special directories which are defined
  * depending on the platform used. You should use g_get_user_special_dir()
  * to retrieve the full path associated to the logical id.
+ *
  * The #GUserDirectory enumeration can be extended at later date. Not
  * every platform has a directory for every logical id in this
  * enumeration.
@@ -2208,14 +2253,13 @@
  * GValue:
  *
  * An opaque structure used to hold different types of values.
+ * The data within the structure has protected scope: it is accessible only
  * to functions within a #GTypeValueTable structure, or implementations of
  * the g_value_*() API. That is, code portions which implement new fundamental
  * types.
  * #GValue users cannot make any assumptions about how data is stored
  * within the 2 element @data union, and the @g_type member should
  * only be accessed through the G_VALUE_TYPE() macro.
- *
- * The data within the structure has protected scope: it is accessible only
  */
 
 
@@ -2242,6 +2286,7 @@
  * GVariantType:
  *
  * A type in the GVariant type system.
+ *
  * Two types may not be compared by value; use g_variant_type_equal() or
  * g_variant_type_is_subtype_of().  May be copied using
  * g_variant_type_copy() and freed using g_variant_type_free().
@@ -2282,6 +2327,7 @@
  * G_BREAKPOINT:
  *
  * Inserts a breakpoint instruction into the code.
+ *
  * On x86 and alpha systems this is implemented as a soft interrupt
  * and on other architectures it raises a %SIGTRAP signal.
  */
@@ -2311,6 +2357,8 @@
  * @closure: a #GClosure
  *
  * Check if the closure still needs a marshaller. See g_closure_set_marshal().
+ *
+ * @closure.
  *
  * Returns: %TRUE if a #GClosureMarshal marshaller has not yet been set on
  */
@@ -2418,6 +2466,7 @@
  * A convenience macro for dynamic type implementations, which declares a
  * class initialization function, an instance initialization function (see
  * #GTypeInfo for information about these) and a static variable named
+ * @t_n<!-- -->_parent_class pointing to the parent class. Furthermore,
  * it defines a <function>*_get_type()</function> and a static
  * <function>*_register_type()</function> function for use in your
  * <function>module_init()</function>.
@@ -2437,6 +2486,7 @@
  *
  * A more general version of G_DEFINE_DYNAMIC_TYPE() which
  * allows to specify #GTypeFlags and custom code.
+ *
  * |[
  * G_DEFINE_DYNAMIC_TYPE_EXTENDED (GtkGadget,
  * gtk_gadget,
@@ -2450,18 +2500,22 @@
  * static void     gtk_gadget_init              (GtkGadget      *self);
  * static void     gtk_gadget_class_init        (GtkGadgetClass *klass);
  * static void     gtk_gadget_class_finalize    (GtkGadgetClass *klass);
+ *
  * static gpointer gtk_gadget_parent_class = NULL;
  * static GType    gtk_gadget_type_id = 0;
+ *
  * static void     gtk_gadget_class_intern_init (gpointer klass)
  * {
  * gtk_gadget_parent_class = g_type_class_peek_parent (klass);
  * gtk_gadget_class_init ((GtkGadgetClass*) klass);
  * }
+ *
  * GType
  * gtk_gadget_get_type (void)
  * {
  * return gtk_gadget_type_id;
  * }
+ *
  * static void
  * gtk_gadget_register_type (GTypeModule *type_module)
  * {
@@ -2504,6 +2558,7 @@
  * A convenience macro for #GTypeInterface definitions, which declares
  * a default vtable initialization function and defines a *_get_type()
  * function.
+ *
  * The macro expects the interface initialization function to have the
  * name <literal>t_n ## _default_init</literal>, and the interface
  * structure to have the name <literal>TN ## Interface</literal>.
@@ -2581,6 +2636,7 @@
  *
  * The most general convenience macro for type implementations, on which
  * G_DEFINE_TYPE(), etc are based.
+ *
  * |[
  * G_DEFINE_TYPE_EXTENDED (GtkGadget,
  * gtk_gadget,
@@ -2599,6 +2655,7 @@
  * gtk_gadget_parent_class = g_type_class_peek_parent (klass);
  * gtk_gadget_class_init ((GtkGadgetClass*) klass);
  * }
+ *
  * GType
  * gtk_gadget_get_type (void)
  * {
@@ -2712,6 +2769,7 @@
  * A convenience macro to ease interface addition in the @_C_ section
  * of G_DEFINE_TYPE_WITH_CODE() or G_DEFINE_ABSTRACT_TYPE_WITH_CODE().
  * See G_DEFINE_TYPE_EXTENDED() for an example.
+ *
  * Note that this macro can only be used together with the G_DEFINE_TYPE_*
  * macros, since it depends on variable names from those macros.
  *
@@ -2727,6 +2785,7 @@
  * A convenience macro to ease interface addition in the @_C_ section
  * of G_DEFINE_DYNAMIC_TYPE_EXTENDED(). See G_DEFINE_DYNAMIC_TYPE_EXTENDED()
  * for an example.
+ *
  * Note that this macro can only be used together with the
  * G_DEFINE_DYNAMIC_TYPE_EXTENDED macros, since it depends on variable
  * names from that macro.
@@ -3091,6 +3150,7 @@
  * @node: a #GNode
  *
  * Returns %TRUE if a #GNode is a leaf node.
+ *
  * (i.e. it has no children)
  *
  * Returns: %TRUE if the #GNode is a leaf node
@@ -3102,6 +3162,7 @@
  * @node: a #GNode
  *
  * Returns %TRUE if a #GNode is the root of a tree.
+ *
  * (i.e. it has no parent or siblings)
  *
  * Returns: %TRUE if the #GNode is the root of a tree
@@ -3131,6 +3192,7 @@
  * @class: a valid #GObjectClass
  *
  * Return the name of a class structure's type.
+ *
  * should not be freed.
  *
  * Returns: Type name of @class. The string is owned by the type system and
@@ -3172,6 +3234,7 @@
  * @object: Object to return the type name for.
  *
  * Get the name of an object's type.
+ *
  * should not be freed.
  *
  * Returns: Type name of @object. The string is owned by the type system and
@@ -3206,6 +3269,8 @@
  * otherwise be left in <literal>argv</literal>. The option must be of type
  * %G_OPTION_ARG_CALLBACK, %G_OPTION_ARG_STRING_ARRAY
  * or %G_OPTION_ARG_FILENAME_ARRAY.
+ *
+ *
  * Using #G_OPTION_REMAINING instead of simply scanning <literal>argv</literal>
  * for leftover arguments has the advantage that GOption takes care of
  * necessary encoding conversions for strings or filenames.
@@ -3471,6 +3536,7 @@
  * G_PARAM_STATIC_STRINGS:
  *
  * #GParamFlags value alias for %G_PARAM_STATIC_NAME | %G_PARAM_STATIC_NICK | %G_PARAM_STATIC_BLURB.
+ *
  * Since 2.13.0
  */
 
@@ -3487,6 +3553,7 @@
  * G_PRIORITY_DEFAULT:
  *
  * Use this for default priority event sources.
+ *
  * In GLib this priority is used when adding timeout functions
  * with g_timeout_add(). In GDK this priority is used for events
  * from the X server.
@@ -3497,6 +3564,7 @@
  * G_PRIORITY_DEFAULT_IDLE:
  *
  * Use this for default priority idle functions.
+ *
  * In GLib this priority is used when adding idle functions with
  * g_idle_add().
  */
@@ -3506,6 +3574,7 @@
  * G_PRIORITY_HIGH:
  *
  * Use this for high priority event sources.
+ *
  * It is not used within GLib or GTK+.
  */
 
@@ -3514,6 +3583,7 @@
  * G_PRIORITY_HIGH_IDLE:
  *
  * Use this for high priority idle functions.
+ *
  * GTK+ uses #G_PRIORITY_HIGH_IDLE + 10 for resizing operations,
  * and #G_PRIORITY_HIGH_IDLE + 20 for redrawing operations. (This is
  * done to ensure that any pending resizes are processed before any
@@ -3525,6 +3595,7 @@
  * G_PRIORITY_LOW:
  *
  * Use this for very low priority background tasks.
+ *
  * It is not used within GLib or GTK+.
  */
 
@@ -3536,6 +3607,7 @@
  * macro before it can be used. This macro can be used to initialize
  * a variable, but it cannot be assigned to a variable. In that case
  * you have to use g_queue_init().
+ *
  * |[
  * GQueue my_queue = G_QUEUE_INIT;
  * ]|
@@ -3575,6 +3647,7 @@
  * This macro flags signal argument types for which the signal system may
  * assume that instances thereof remain persistent across all signal emissions
  * they are used in. This is only useful for non ref-counted, value-copy types.
+ *
  * To flag a signal argument in this way, add
  * <literal>| G_SIGNAL_TYPE_STATIC_SCOPE</literal> to the corresponding argument
  * of g_signal_new().
@@ -3695,6 +3768,7 @@
  * Checks that @g_class is a class structure of the type identified by @g_type
  * and issues a warning if this is not the case. Returns @g_class casted
  * to a pointer to @c_type.
+ *
  * This macro should only be used in type implementations.
  */
 
@@ -3705,6 +3779,8 @@
  * @g_type: The type to be checked.
  *
  * Checks if @g_class is a class structure of the type identified by
+ * @g_type.
+ *
  * This macro should only be used in type implementations.
  *
  * Returns: %TRUE on success.
@@ -3717,6 +3793,7 @@
  *
  * Checks if @instance is a valid #GTypeInstance structure,
  * otherwise issues a warning and returns %FALSE.
+ *
  * This macro should only be used in type implementations.
  *
  * Returns: %TRUE on success.
@@ -3732,6 +3809,7 @@
  * Checks that @instance is an instance of the type identified by @g_type
  * and issues a warning if this is not the case. Returns @instance casted
  * to a pointer to @c_type.
+ *
  * This macro should only be used in type implementations.
  */
 
@@ -3742,6 +3820,7 @@
  * @g_type: The type to be checked
  *
  * Checks if @instance is an instance of the type identified by @g_type.
+ *
  * This macro should only be used in type implementations.
  *
  * Returns: %TRUE on success.
@@ -3754,6 +3833,7 @@
  *
  * Checks if @value has been initialized to hold values
  * of a value type.
+ *
  * This macro should only be used in type implementations.
  *
  * Returns: %TRUE on success.
@@ -3767,6 +3847,7 @@
  *
  * Checks if @value has been initialized to hold values
  * of type @g_type.
+ *
  * This macro should only be used in type implementations.
  *
  * Returns: %TRUE on success.
@@ -3782,6 +3863,7 @@
  * Gets the private class structure for a particular type.
  * The private structure must have been registered in the
  * get_type() function with g_type_add_class_private().
+ *
  * This macro should only be used in type implementations.
  *
  * Since: 2.24
@@ -3861,6 +3943,7 @@
  * @g_class: Location of a valid #GTypeClass structure.
  *
  * Get the type identifier from a given @class structure.
+ *
  * This macro should only be used in type implementations.
  *
  * Returns: the #GType
@@ -3872,6 +3955,7 @@
  * @instance: Location of a valid #GTypeInstance structure.
  *
  * Get the type identifier from a given @instance structure.
+ *
  * This macro should only be used in type implementations.
  *
  * Returns: the #GType
@@ -3883,6 +3967,7 @@
  * @g_iface: Location of a valid #GTypeInterface structure.
  *
  * Get the type identifier from a given @interface structure.
+ *
  * This macro should only be used in type implementations.
  *
  * Returns: the #GType
@@ -3962,8 +4047,10 @@
  *
  * Get the class structure of a given @instance, casted
  * to a specified ancestor type @g_type of the instance.
+ *
  * Note that while calling a GInstanceInitFunc(), the class pointer gets
  * modified, so it might not always return the expected pointer.
+ *
  * This macro should only be used in type implementations.
  *
  * Returns: a pointer to the class structure
@@ -3977,6 +4064,7 @@
  * @c_type: The C type of the interface structure.
  *
  * Get the interface structure for interface @g_type of a given @instance.
+ *
  * This macro should only be used in type implementations.
  *
  * Returns: a pointer to the interface structure
@@ -3992,6 +4080,7 @@
  * Gets the private structure for a particular type.
  * The private structure must have been registered in the
  * class_init function with g_type_class_add_private().
+ *
  * This macro should only be used in type implementations.
  *
  * Since: 2.4
@@ -4498,9 +4587,11 @@
  * G_TYPE_STRV:
  *
  * The #GType for a boxed type holding a %NULL-terminated array of strings.
+ *
  * The code fragments in the following example show the use of a property of
  * type #G_TYPE_STRV with g_object_class_install_property(), g_object_set()
  * and g_object_get().
+ *
  * |[
  * g_object_class_install_property (object_class,
  * PROP_AUTHORS,
@@ -4509,8 +4600,10 @@
  * _("List of authors"),
  * G_TYPE_STRV,
  * G_PARAM_READWRITE));
+ *
  * gchar *authors[] = { "Owen", "Tim", NULL };
  * g_object_set (obj, "authors", authors, NULL);
+ *
  * gchar *writers[];
  * g_object_get (obj, "authors", &writers, NULL);
  * /&ast; do something with writers &ast;/
@@ -4569,14 +4662,17 @@
  * G_TYPE_VARIANT:
  *
  * The fundamental type corresponding to #GVariant.
+ *
  * All floating #GVariant instances passed through the #GType system are
  * consumed.
+ *
  * Note that callbacks in closures, and signal handlers
  * for signals of return type %G_TYPE_VARIANT, must never return floating
  * variants.
- * with this fundamental type in 2.26.
  *
  * Note: GLib 2.24 did include a boxed type with this name. It was replaced
+ * with this fundamental type in 2.26.
+ *
  * Since: 2.26
  */
 
@@ -4653,10 +4749,10 @@
  * Collects a variable argument value from a va_list. We have to
  * implement the varargs collection as a macro, because on some systems
  * va_list variables cannot be passed by reference.
- * you should use the #G_VALUE_COLLECT_INIT variant and pass the unitialized
- * #GValue. That variant is faster than #G_VALUE_COLLECT.
  *
  * Note: If you are creating the @value argument just before calling this macro,
+ * you should use the #G_VALUE_COLLECT_INIT variant and pass the unitialized
+ * #GValue. That variant is faster than #G_VALUE_COLLECT.
  */
 
 
@@ -4901,6 +4997,22 @@
 
 
 /**
+ * G_VALUE_INIT:
+ *
+ * A #GValue must be initialized before it can be used.
+ * This macro can be used as initializer instead of an explicit
+ * <literal>{ 0 }</literal> when declaring a variable,
+ * but it cannot be assigned to a variable.
+ *
+ * |[
+ * GValue value = G_VALUE_INIT;
+ * ]|
+ *
+ * Since: 2.30
+ */
+
+
+/**
  * G_VALUE_LCOPY:
  * @value: a #GValue return location. @value is supposed to be initialized according to the value type to be collected
  * @var_args: the va_list variable; it may be evaluated multiple times
@@ -4948,8 +5060,10 @@
  * Converts a string to a const #GVariantType.  Depending on the
  * current debugging level, this function may perform a runtime check
  * to ensure that @string is a valid GVariant type string.
+ *
  * It is always a programmer error to use this macro with an invalid
  * type string.
+ *
  * Since 2.24
  */
 
@@ -5042,6 +5156,7 @@
  * The type of a 32bit signed integer value, that by convention, is used
  * as an index into an array of file descriptors that are sent alongside
  * a D-Bus message.
+ *
  * If you are not interacting with D-Bus, then there is no reason to make
  * use of this type.
  */
@@ -5083,6 +5198,7 @@
  * The type of a D-Bus object reference.  These are strings of a
  * specific format used to identify objects at a given destination on
  * the bus.
+ *
  * If you are not interacting with D-Bus, then there is no reason to make
  * use of this type.  If you are, then the D-Bus specification contains a
  * precise description of valid object paths.
@@ -5101,6 +5217,7 @@
  *
  * The type of a D-Bus type signature.  These are strings of a specific
  * format used as type signatures for D-Bus methods and messages.
+ *
  * If you are not interacting with D-Bus, then there is no reason to make
  * use of this type.  If you are, then the D-Bus specification contains a
  * precise description of valid signature strings.
@@ -5195,6 +5312,7 @@
  * nickname.  When an enumeration or flags type is registered with the
  * GLib type system, it can be used as value type for object
  * properties, using g_param_spec_enum() or g_param_spec_flags().
+ *
  * GObject ships with a utility called <link
  * linkend="glib-mkenums">glib-mkenums</link> that can construct
  * suitable type registration functions from C enumeration
@@ -5212,27 +5330,34 @@
  * instance (or target). Whenever the source property changes, the same
  * value is applied to the target property; for instance, the following
  * binding:
+ *
  * |[
  * g_object_bind_property (object1, "property-a",
  * object2, "property-b",
  * G_BINDING_DEFAULT);
  * ]|
+ *
  * will cause <emphasis>object2:property-b</emphasis> to be updated every
  * time g_object_set() or the specific accessor changes the value of
  * <emphasis>object1:property-a</emphasis>.
+ *
  * It is possible to create a bidirectional binding between two properties
  * of two #GObject instances, so that if either property changes, the
  * other is updated as well, for instance:
+ *
  * |[
  * g_object_bind_property (object1, "property-a",
  * object2, "property-b",
  * G_BINDING_BIDIRECTIONAL);
  * ]|
+ *
  * will keep the two properties in sync.
+ *
  * It is also possible to set a custom transformation function (in both
  * directions, in case of a bidirectional binding) to apply a custom
  * transformation from the source value to the target value before
  * applying it; for instance, the following binding:
+ *
  * |[
  * g_object_bind_property_full (adjustment1, "value",
  * adjustment2, "value",
@@ -5241,6 +5366,7 @@
  * fahrenheit_to_celsius,
  * NULL, NULL);
  * ]|
+ *
  * will keep the <emphasis>value</emphasis> property of the two adjustments
  * in sync; the <function>celsius_to_fahrenheit</function> function will be
  * called whenever the <emphasis>adjustment1:value</emphasis> property changes
@@ -5250,21 +5376,26 @@
  * the <emphasis>adjustment2:value</emphasis> property changes, and will
  * transform the current value of the property before applying it to the
  * <emphasis>adjustment1:value</emphasis>.
+ *
  * Note that #GBinding does not resolve cycles by itself; a cycle like
+ *
  * |[
  * object1:propertyA -> object2:propertyB
  * object2:propertyB -> object3:propertyC
  * object3:propertyC -> object1:propertyA
  * ]|
+ *
  * might lead to an infinite loop. The loop, in this particular case,
  * can be avoided if the objects emit the #GObject::notify signal only
  * if the value has effectively been changed. A binding is implemented
  * using the #GObject::notify signal, so it is susceptible to all the
  * various ways of blocking a signal emission, like g_signal_stop_emission()
  * or g_signal_handler_block().
+ *
  * A binding will be severed, and the resources it allocates freed, whenever
  * either one of the #GObject instances it refers to are finalized, or when
  * the #GBinding instance loses its last reference.
+ *
  * #GBinding is available since GObject 2.26
  */
 
@@ -5278,6 +5409,7 @@
  * GBoxed is a generic wrapper mechanism for arbitrary C structures. The only
  * thing the type system needs to know about the structures is how to copy and
  * free them, beyond that they are treated as opaque chunks of memory.
+ *
  * Boxed types are useful for simple value-holder structures like rectangles or
  * points. They can also be used for wrapping structures defined in non-GObject
  * based libraries.
@@ -5295,6 +5427,7 @@
  * convert the arguments for the invocation from #GValue<!-- -->s into
  * a suitable form, perform the callback on the converted arguments,
  * and transform the return value back into a #GValue.
+ *
  * In the case of C programs, a closure usually just holds a pointer
  * to a function and maybe a data argument, and the marshaller
  * converts between #GValue<!-- --> and native C types. The GObject
@@ -5302,8 +5435,10 @@
  * other languages need marshallers which convert between #GValue<!--
  * -->s and suitable representations in the runtime of the language in
  * order to use functions written in that languages as callbacks.
+ *
  * Within GObject, closures play an important role in the
  * implementation of signals. When a signal is registered, the
+ * @c_marshaller argument to g_signal_new() specifies the default C
  * marshaller for any closure which is connected to this
  * signal. GObject provides a number of C marshallers for this
  * purpose, see the g_cclosure_marshal_*() functions. Additional C
@@ -5314,6 +5449,7 @@
  * GObject create a closure automatically by using one of the
  * g_signal_connect_*() functions which take a callback function/user
  * data pair.
+ *
  * Using closures has a number of important advantages over a simple
  * callback function/data pointer combination:
  * <itemizedlist>
@@ -5352,10 +5488,13 @@
  * by the #GTypeValueTable associated with the type ID stored in the #GValue.
  * Other #GValue operations (such as converting values between types) are
  * provided by this interface.
+ *
  * The code in the example program below demonstrates #GValue's
  * features.
+ *
  * |[
  * #include &lt;glib-object.h&gt;
+ *
  * static void
  * int2string (const GValue *src_value,
  * GValue       *dest_value)
@@ -5365,33 +5504,43 @@
  * else
  * g_value_set_static_string (dest_value, "What's that?");
  * }
+ *
  * int
  * main (int   argc,
  * char *argv[])
  * {
- * /&ast; GValues must start zero-filled &ast;/
- * GValue a = {0};
- * GValue b = {0};
+ * /&ast; GValues must be initialized &ast;/
+ * GValue a = G_VALUE_INIT;
+ * GValue b = G_VALUE_INIT;
  * const gchar *message;
+ *
  * g_type_init ();
+ *
  * /&ast; The GValue starts empty &ast;/
  * g_assert (!G_VALUE_HOLDS_STRING (&amp;a));
+ *
  * /&ast; Put a string in it &ast;/
  * g_value_init (&amp;a, G_TYPE_STRING);
  * g_assert (G_VALUE_HOLDS_STRING (&amp;a));
  * g_value_set_static_string (&amp;a, "Hello, world!");
  * g_printf ("%s\n", g_value_get_string (&amp;a));
+ *
  * /&ast; Reset it to its pristine state &ast;/
  * g_value_unset (&amp;a);
+ *
  * /&ast; It can then be reused for another type &ast;/
  * g_value_init (&amp;a, G_TYPE_INT);
  * g_value_set_int (&amp;a, 42);
+ *
  * /&ast; Attempt to transform it into a GValue of type STRING &ast;/
  * g_value_init (&amp;b, G_TYPE_STRING);
+ *
  * /&ast; An INT is transformable to a STRING &ast;/
  * g_assert (g_value_type_transformable (G_TYPE_INT, G_TYPE_STRING));
+ *
  * g_value_transform (&amp;a, &amp;b);
  * g_printf ("%s\n", g_value_get_string (&amp;b));
+ *
  * /&ast; Attempt to transform it again using a custom transform function &ast;/
  * g_value_register_transform_func (G_TYPE_INT, G_TYPE_STRING, int2string);
  * g_value_transform (&amp;a, &amp;b);
@@ -5410,6 +5559,7 @@
  *
  * #GParamSpec is an object structure that encapsulates the metadata
  * required to specify parameters, such as e.g. #GObject properties.
+ *
  * <para id="canonical-parameter-name">
  * Parameter names need to start with a letter (a-z or A-Z). Subsequent
  * characters can be letters, numbers or a '-'.
@@ -5429,7 +5579,9 @@
  * user-defined object and interface types.  Before using any GType
  * or GObject functions, g_type_init() must be called to initialize the
  * type system.
+ *
  * For type creation and registration purposes, all types fall into one of
+ * two categories: static or dynamic.  Static types are never loaded or
  * unloaded at run-time as dynamic types may be.  Static types are created
  * with g_type_register_static() that gets type specific information passed
  * in via a #GTypeInfo structure.
@@ -5446,13 +5598,12 @@
  * types called g_type_register_fundamental() which requires both a #GTypeInfo
  * structure and a #GTypeFundamentalInfo structure but it is seldom used
  * since most fundamental types are predefined rather than user-defined.
+ *
  * A final word about type names.
  * Such an identifier needs to be at least three characters long. There is no
  * upper length limit. The first character needs to be a letter (a-z or A-Z)
  * or an underscore '_'. Subsequent characters can be letters, numbers or
  * any of '-_+'.
- *
- * Two categories: static or dynamic.  Static types are never loaded or
  */
 
 
@@ -5473,6 +5624,7 @@
  * will be reloaded. Note that the last unref cannot happen in module
  * code, since that would lead to the caller's code being unloaded before
  * g_object_unref() returns to it.
+ *
  * Keeping track of whether the module should be loaded or not is done by
  * using a use count - it starts at zero, and whenever it is greater than
  * zero, the module is loaded. The use count is maintained internally by
@@ -5482,6 +5634,7 @@
  * it so that it can initialize its types. At some later point, when the
  * module no longer needs to be loaded except for the type
  * implementations it contains, g_type_module_unuse() is called.
+ *
  * #GTypeModule does not actually provide any implementation of module
  * loading and unloading. To create a particular module type you must
  * derive from #GTypeModule and implement the load and unload functions
@@ -5498,6 +5651,7 @@
  * The GObject type system supports dynamic loading of types. The
  * #GTypePlugin interface is used to handle the lifecycle of
  * dynamically loaded types.  It goes as follows:
+ *
  * <orderedlist>
  * <listitem><para>
  * The type is initially introduced (usually upon loading the module
@@ -5537,6 +5691,7 @@
  * Things may repeat from the second step.
  * </para></listitem>
  * </orderedlist>
+ *
  * So basically, you need to implement a #GTypePlugin type that
  * carries a use_count, once use_count goes from zero to one, you need
  * to load the implementation to successfully handle the upcoming
@@ -5545,6 +5700,7 @@
  * unload the implementation again. The type system makes sure to call
  * g_type_plugin_use() and g_type_plugin_complete_type_info() again
  * when the type is needed again.
+ *
  * #GTypeModule is an implementation of #GTypePlugin that already
  * implements most of this except for the actual module loading and
  * unloading. It even handles multiple registered types per module.
@@ -5563,6 +5719,7 @@
  * construction and destruction, property access methods, and signal
  * support.  Signals are described in detail in <xref
  * linkend="gobject-Signals"/>.
+ *
  * <para id="floating-ref">
  * GInitiallyUnowned is derived from GObject. The only difference between
  * the two is that the initial reference of a GInitiallyUnowned is flagged
@@ -5596,9 +5753,11 @@
  * maintenance (such as smart pointers or garbage collection) should not
  * expose floating references in their API.
  * </para>
+ *
  * Some object implementations may need to save an objects floating state
  * across certain code portions (an example is #GtkMenu), to achieve this,
  * the following sequence can be used:
+ *
  * |[
  * /&ast; save floating state &ast;/
  * gboolean was_floating = g_object_is_floating (object);
@@ -5626,6 +5785,7 @@
  * specifications for most value types can be created as #GParamSpec
  * derived instances, to implement e.g. #GObject properties which
  * operate on #GValue containers.
+ *
  * Parameter names need to start with a letter (a-z or A-Z). Subsequent
  * characters can be letters, numbers or a '-'.
  * All other characters are replaced by a '-' during construction.
@@ -5657,6 +5817,7 @@
  * frequently happens at the end of an object class' creation), while user
  * provided handlers are frequently connected and disconnected to/from a certain
  * signal on certain object instances.
+ *
  * A signal emission consists of five stages, unless prematurely stopped:
  * <variablelist>
  * <varlistentry><term></term><listitem><para>
@@ -6248,11 +6409,16 @@
  * @object_ptr: a pointer to a #GObject reference
  *
  * Clears a reference to a #GObject.
+ *
+ * @object_ptr must not be %NULL.
+ *
  * If the reference is %NULL then this function does nothing.
  * Otherwise, the reference count of the object is decreased and the
  * pointer is set to %NULL.
+ *
  * This function is threadsafe and modifies the pointer atomically,
  * using memory barriers where needed.
+ *
  * A macro is also included that allows this function to be used without
  * pointer casts.
  *
@@ -6282,6 +6448,7 @@
  * @notify_func: the callback function to register
  *
  * Registers an invalidation notifier which will be called when the
+ * @closure is invalidated with g_closure_invalidate(). Invalidation
  * notifiers are invoked before finalization notifiers, in an
  * unspecified order.
  */
@@ -6315,6 +6482,7 @@
  * unref the closure and cause it to be destroyed, so if you need to
  * access the closure after calling g_closure_invalidate(), make sure
  * that you've previously called g_closure_ref().
+ *
  * Note that g_closure_invalidate() will also be called when the
  * reference count of a closure drops to zero (unless it has already
  * been invalidated before).
@@ -6339,6 +6507,8 @@
  * @object: a #GObject pointer to store in the @data field of the newly allocated #GClosure
  *
  * A variant of g_closure_new_simple() which stores @object in the
+ * @data field of the closure and calls g_object_watch_closure() on
+ * @object and the created closure. This function is mainly useful
  * when implementing new types of closures.
  *
  * Returns: (transfer full): a newly allocated #GClosure
@@ -6353,6 +6523,7 @@
  * Allocates a struct of the given size and initializes the initial
  * part as a #GClosure. This function is mainly useful when
  * implementing new types of closures.
+ *
  * |[
  * typedef struct _MyClosure MyClosure;
  * struct _MyClosure
@@ -6360,20 +6531,26 @@
  * GClosure closure;
  * // extra data goes here
  * };
+ *
  * static void
  * my_closure_finalize (gpointer  notify_data,
  * GClosure *closure)
  * {
  * MyClosure *my_closure = (MyClosure *)closure;
+ *
  * // free extra data here
  * }
+ *
  * MyClosure *my_closure_new (gpointer data)
  * {
  * GClosure *closure;
  * MyClosure *my_closure;
+ *
  * closure = g_closure_new_simple (sizeof (MyClosure), data);
  * my_closure = (MyClosure *) closure;
+ *
  * // initialize extra data here
+ *
  * g_closure_add_finalize_notifier (closure, notify_data,
  * my_closure_finalize);
  * return my_closure;
@@ -6402,6 +6579,7 @@
  * @notify_func: the callback function to remove
  *
  * Removes a finalization notifier.
+ *
  * Notice that notifiers are automatically removed after they are run.
  */
 
@@ -6413,6 +6591,7 @@
  * @notify_func: the callback function to remove
  *
  * Removes an invalidation notifier.
+ *
  * Notice that notifiers are automatically removed after they are run.
  */
 
@@ -6427,6 +6606,7 @@
  * information to the marshaller. (See g_closure_set_meta_marshal().) For
  * GObject's C predefined marshallers (the g_cclosure_marshal_*()
  * functions), what it provides is a callback function to use instead of
+ * @closure->callback.
  */
 
 
@@ -6437,6 +6617,7 @@
  * @meta_marshal: a #GClosureMarshal function
  *
  * Sets the meta marshaller of @closure.  A meta marshaller wraps
+ * @closure->marshal and modifies the way it is called in some
  * fashion. The most common use of this facility is for C callbacks.
  * The same marshallers (generated by <link
  * linkend="glib-genmarshal">glib-genmarshal</link>) are used
@@ -6444,10 +6625,12 @@
  * differs. In most cases we want to use @closure->callback, but in
  * other cases we want to use some different technique to retrieve the
  * callback function.
+ *
  * For example, class closures for signals (see
  * g_signal_type_cclosure_new()) retrieve the callback function from a
  * fixed offset in the class structure.  The meta marshaller retrieves
  * the right callback and passes it to the marshaller as the
+ * @marshal_data argument.
  */
 
 
@@ -6473,6 +6656,7 @@
  * |[
  * g_source_set_closure (source, g_cclosure_new (cb_func, cb_data));
  * ]|
+ *
  * Generally, this function is used together with g_closure_ref(). Ane example
  * of storing a closure for later notification looks like:
  * |[
@@ -6490,6 +6674,7 @@
  * }
  * }
  * ]|
+ *
  * Because g_closure_sink() may decrement the reference count of a closure
  * (if it hasn't been called on @closure yet) just like g_closure_unref(),
  * g_closure_ref() should be called prior to this function.
@@ -6515,6 +6700,7 @@
  * This function is meant to be called from the complete_type_info()
  * function of a #GTypePlugin implementation, as in the following
  * example:
+ *
  * |[
  * static void
  * my_enum_complete_type_info (GTypePlugin     *plugin,
@@ -6527,6 +6713,7 @@
  * { MY_ENUM_BAR, "MY_ENUM_BAR", "bar" },
  * { 0, NULL, NULL }
  * };
+ *
  * g_enum_complete_type_info (type, info, values);
  * }
  * ]|
@@ -6539,6 +6726,7 @@
  * @value: the value to look up
  *
  * Returns the #GEnumValue for a value.
+ *
  * member of the enumeration
  *
  * Returns: the #GEnumValue for @value, or %NULL if @value is not a
@@ -6551,6 +6739,7 @@
  * @name: the name to look up
  *
  * Looks up a #GEnumValue by name.
+ *
  * enumeration doesn't have a member with that name
  *
  * Returns: the #GEnumValue with name @name, or %NULL if the
@@ -6563,6 +6752,7 @@
  * @nick: the nickname to look up
  *
  * Looks up a #GEnumValue by nickname.
+ *
  * enumeration doesn't have a member with that nickname
  *
  * Returns: the #GEnumValue with nickname @nick, or %NULL if the
@@ -6575,6 +6765,7 @@
  * @const_static_values: An array of #GEnumValue structs for the possible enumeration values. The array is terminated by a struct with all members being 0. GObject keeps a reference to the data, so it cannot be stack-allocated.
  *
  * Registers a new static enumeration type with the name @name.
+ *
  * It is normally more convenient to let <link
  * linkend="glib-mkenums">glib-mkenums</link> generate a
  * my_enum_get_type() function from a usual C enumeration definition
@@ -6602,6 +6793,7 @@
  * @value: the value
  *
  * Returns the first #GFlagsValue which is set in @value.
+ *
  * none is set
  *
  * Returns: the first #GFlagsValue which is set in @value, or %NULL if
@@ -6614,6 +6806,7 @@
  * @name: the name to look up
  *
  * Looks up a #GFlagsValue by name.
+ *
  * flag with that name
  *
  * Returns: the #GFlagsValue with name @name, or %NULL if there is no
@@ -6626,6 +6819,7 @@
  * @nick: the nickname to look up
  *
  * Looks up a #GFlagsValue by nickname.
+ *
  * no flag with that nickname
  *
  * Returns: the #GFlagsValue with nickname @nick, or %NULL if there is
@@ -6638,6 +6832,7 @@
  * @const_static_values: An array of #GFlagsValue structs for the possible flags values. The array is terminated by a struct with all members being 0. GObject keeps a reference to the data, so it cannot be stack-allocated.
  *
  * Registers a new static flags type with the name @name.
+ *
  * It is normally more convenient to let <link
  * linkend="glib-mkenums">glib-mkenums</link> generate a
  * my_flags_get_type() function from a usual C enumeration definition
@@ -6714,8 +6909,10 @@
  * Checks if any events are pending for the default #GMainContext
  * (i.e. ready to be processed).
  *
- * Returns: %TRUE if any events are pending.
+ *
  * Deprected: 2.2: Use g_main_context_pending() instead.
+ *
+ * Returns: %TRUE if any events are pending.
  */
 
 
@@ -6760,6 +6957,7 @@
  * The returned pointer is cast to a pointer to the given type.
  * If @n_structs is 0 it returns %NULL.
  * Care is taken to avoid overflow when calculating the size of the allocated block.
+ *
  * Since the returned pointer is already casted to the right type,
  * it is normally unnecessary to cast it explicitly, and doing
  * so might hide memory allocation errors.
@@ -6777,6 +6975,7 @@
  * The returned pointer is cast to a pointer to the given type.
  * If @n_structs is 0 it returns %NULL.
  * Care is taken to avoid overflow when calculating the size of the allocated block.
+ *
  * Since the returned pointer is already casted to the right type,
  * it is normally unnecessary to cast it explicitly, and doing
  * so might hide memory allocation errors.
@@ -6823,6 +7022,7 @@
  * @node: a #GNode
  *
  * Gets the first child of a #GNode.
+ *
  * or has no children
  *
  * Returns: the first child of @node, or %NULL if @node is %NULL
@@ -6858,6 +7058,7 @@
  * @node: a #GNode
  *
  * Gets the next sibling of a #GNode.
+ *
  * or %NULL
  *
  * Returns: the next sibling of @node, or %NULL if @node is the last node
@@ -6880,6 +7081,7 @@
  * @node: a #GNode
  *
  * Gets the previous sibling of a #GNode.
+ *
  * node or %NULL
  *
  * Returns: the previous sibling of @node, or %NULL if @node is the first
@@ -6896,26 +7098,31 @@
  * callback to be called when all other references to the object are
  * dropped, or when this is already the last reference to the object
  * and another reference is established.
+ *
  * This functionality is intended for binding @object to a proxy
  * object managed by another memory manager. This is done with two
+ * paired references: the strong reference added by
  * g_object_add_toggle_ref() and a reverse reference to the proxy
  * object which is either a strong reference or weak reference.
+ *
  * The setup is that when there are no other references to @object,
  * only a weak reference is held in the reverse direction from @object
  * to the proxy object, but when there are other references held to
+ * @object, a strong reference is held. The @notify callback is called
  * when the reference from @object to the proxy object should be
  * <firstterm>toggled</firstterm> from strong to weak (@is_last_ref
  * true) or weak to strong (@is_last_ref false).
+ *
  * Since a (normal) reference must be held to the object before
  * calling g_object_toggle_ref(), the initial state of the reverse
  * link is always strong.
+ *
  * Multiple toggle references may be added to the same gobject,
  * however if there are multiple toggle references to an object, none
  * of them will ever be notified until all but one are removed.  For
  * this reason, you should only ever use a toggle reference if there
  * is important state in the proxy object.
  *
- * Paired references: the strong reference added by
  * Since: 2.8
  */
 
@@ -6928,6 +7135,7 @@
  * Adds a weak reference from weak_pointer to @object to indicate that
  * the pointer located at @weak_pointer_location is only valid during
  * the lifetime of @object. When the @object is finalized,
+ * @weak_pointer will be set to %NULL.
  */
 
 
@@ -6942,18 +7150,26 @@
  * Creates a binding between @source_property on @source and @target_property
  * on @target. Whenever the @source_property is changed the @target_property is
  * updated using the same value. For instance:
+ *
  * |[
  * g_object_bind_property (action, "active", widget, "sensitive", 0);
  * ]|
+ *
  * Will result in the "sensitive" property of the widget #GObject instance to be
  * updated with the same value of the "active" property of the action #GObject
  * instance.
+ *
  * If @flags contains %G_BINDING_BIDIRECTIONAL then the binding will be mutual:
  * if @target_property on @target changes then the @source_property on @source
  * will be updated as well.
+ *
  * The binding will automatically be removed when either the @source or the
+ * @target instances are finalized. To remove the binding without affecting the
+ * @source and the @target you can just call g_object_unref() on the returned
  * #GBinding instance.
+ *
  * A #GObject can have multiple bindings.
+ *
  * binding between the two #GObject instances. The binding is released
  * whenever the #GBinding reference count reaches zero.
  *
@@ -6975,21 +7191,29 @@
  * @notify: function to be called when disposing the binding, to free the resources used by the transformation functions
  *
  * Complete version of g_object_bind_property().
+ *
  * Creates a binding between @source_property on @source and @target_property
  * on @target, allowing you to set the transformation functions to be used by
  * the binding.
+ *
  * If @flags contains %G_BINDING_BIDIRECTIONAL then the binding will be mutual:
  * if @target_property on @target changes then the @source_property on @source
  * will be updated as well. The @transform_from function is only used in case
  * of bidirectional bindings, otherwise it will be ignored
+ *
  * The binding will automatically be removed when either the @source or the
+ * @target instances are finalized. To remove the binding without affecting the
+ * @source and the @target you can just call g_object_unref() on the returned
  * #GBinding instance.
+ *
  * A #GObject can have multiple bindings.
+ *
  * <note>The same @user_data parameter will be used for both @transform_to
  * and @transform_from transformation functions; the @notify function will
  * be called once, when the binding is removed. If you need different data
  * for each transformation function, please use
  * g_object_bind_property_with_closures() instead.</note>
+ *
  * binding between the two #GObject instances. The binding is released
  * whenever the #GBinding reference count reaches zero.
  *
@@ -7011,9 +7235,12 @@
  * Creates a binding between @source_property on @source and @target_property
  * on @target, allowing you to set the transformation functions to be used by
  * the binding.
+ *
  * This function is the language bindings friendly version of
  * g_object_bind_property_full(), using #GClosure<!-- -->s instead of
  * function pointers.
+ *
+ *
  * binding between the two #GObject instances. The binding is released
  * whenever the #GBinding reference count reaches zero.
  *
@@ -7029,6 +7256,7 @@
  * @property_name: the name of the property to look up
  *
  * Looks up the #GParamSpec for a property of a class.
+ *
  * %NULL if the class doesn't have a property of that name
  *
  * Returns: (transfer none): the #GParamSpec for the property, or
@@ -7043,31 +7271,40 @@
  *
  * Installs new properties from an array of #GParamSpec<!-- -->s. This is
  * usually done in the class initializer.
+ *
  * The property id of each property is the index of each #GParamSpec in
  * the @pspecs array.
+ *
  * The property id of 0 is treated specially by #GObject and it should not
  * be used to store a #GParamSpec.
+ *
  * This function should be used if you plan to use a static array of
  * #GParamSpec<!-- -->s and g_object_notify_by_pspec(). For instance, this
  * class initialization:
+ *
  * |[
  * enum {
  * PROP_0, PROP_FOO, PROP_BAR, N_PROPERTIES
  * };
+ *
  * static GParamSpec *obj_properties[N_PROPERTIES] = { NULL, };
+ *
  * static void
  * my_object_class_init (MyObjectClass *klass)
  * {
  * GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+ *
  * obj_properties[PROP_FOO] =
  * g_param_spec_int ("foo", "Foo", "Foo",
  * -1, G_MAXINT,
  * 0,
  * G_PARAM_READWRITE);
+ *
  * obj_properties[PROP_BAR] =
  * g_param_spec_string ("bar", "Bar", "Bar",
  * NULL,
  * G_PARAM_READWRITE);
+ *
  * gobject_class->set_property = my_object_set_property;
  * gobject_class->get_property = my_object_get_property;
  * g_object_class_install_properties (gobject_class,
@@ -7075,7 +7312,9 @@
  * obj_properties);
  * }
  * ]|
+ *
  * allows calling g_object_notify_by_pspec() to notify of property changes:
+ *
  * |[
  * void
  * my_object_set_foo (MyObject *self, gint foo)
@@ -7099,6 +7338,7 @@
  * @pspec: the #GParamSpec for the new property
  *
  * Installs a new property. This is usually done in the class initializer.
+ *
  * Note that it is possible to redefine a property in a derived class,
  * by installing a property with the same name. This can be useful at times,
  * e.g. to change the range of allowed values or the default value.
@@ -7111,6 +7351,7 @@
  * @n_properties: (out): return location for the length of the returned array
  *
  * Get an array of #GParamSpec* for all properties of a class.
+ *
  * #GParamSpec* which should be freed after use
  *
  * Returns: (array length=n_properties) (transfer container): an array of
@@ -7128,6 +7369,7 @@
  * by @oclass. This allows this class to <firstterm>override</firstterm>
  * a property implementation in a parent class or to provide
  * the implementation of a property from an interface.
+ *
  * <note>
  * Internally, overriding is implemented by creating a property of type
  * #GParamSpecOverride; generally operations that query the properties of
@@ -7152,6 +7394,7 @@
  * @...: #GCallback for the first signal, followed by data for the first signal, followed optionally by more signal spec/callback/data triples, followed by %NULL
  *
  * A convenience function to connect multiple signals at once.
+ *
  * The signal specs expected by this function have the form
  * "modifier::signal_name", where modifier can be one of the following:
  * <variablelist>
@@ -7211,6 +7454,7 @@
  * </para></listitem>
  * </varlistentry>
  * </variablelist>
+ *
  * |[
  * menu->toplevel = g_object_connect (g_object_new (GTK_TYPE_WINDOW,
  * "type", GTK_WINDOW_POPUP,
@@ -7233,6 +7477,7 @@
  * @...: #GCallback for the first signal, followed by data for the first signal, followed optionally by more signal spec/callback/data triples, followed by %NULL
  *
  * A convenience function to disconnect multiple signals at once.
+ *
  * The signal specs expected by this function have the form
  * "any_signal", which means to disconnect any signal with matching
  * callback and data, or "any_signal::signal_name", which only
@@ -7246,10 +7491,10 @@
  *
  * This function is intended for #GObject implementations to re-enforce a
  * <link linkend="floating-ref">floating</link> object reference.
+ * Doing this is seldomly required: all
  * #GInitiallyUnowned<!-- -->s are created with a floating reference which
  * usually just needs to be sunken by calling g_object_ref_sink().
  *
- * Doing this is seldomly required: all
  * Since: 2.10
  */
 
@@ -7262,6 +7507,7 @@
  * non-zero, the emission of "notify" signals on @object is
  * stopped. The signals are queued until the freeze count is decreased
  * to zero.
+ *
  * This is necessary for accessors that modify multiple properties to prevent
  * premature notification while the object is still being modified.
  */
@@ -7274,9 +7520,11 @@
  * @...: return location for the first property, followed optionally by more name/return location pairs, followed by %NULL
  *
  * Gets properties of an object.
+ *
  * In general, a copy is made of the property contents and the caller
  * is responsible for freeing the memory in the appropriate manner for
  * the type, for instance by calling g_free() or g_object_unref().
+ *
  * <example>
  * <title>Using g_object_get(<!-- -->)</title>
  * An example of using g_object_get() to get the contents
@@ -7286,12 +7534,15 @@
  * gint intval;
  * gchar *strval;
  * GObject *objval;
+ *
  * g_object_get (my_object,
  * "int-property", &intval,
  * "str-property", &strval,
  * "obj-property", &objval,
  * NULL);
+ *
  * // Do something with intval, strval, objval
+ *
  * g_free (strval);
  * g_object_unref (objval);
  * </programlisting>
@@ -7319,8 +7570,10 @@
  * Gets a property of an object. @value must have been initialized to the
  * expected type of the property (or a type to which the expected type can be
  * transformed) using g_value_init().
+ *
  * In general, a copy is made of the property contents and the caller is
  * responsible for freeing the memory by calling g_value_unset().
+ *
  * Note that g_object_get_property() is really intended for language
  * bindings, g_object_get() is much more convenient for C programming.
  */
@@ -7345,9 +7598,11 @@
  * @var_args: return location for the first property, followed optionally by more name/return location pairs, followed by %NULL
  *
  * Gets properties of an object.
+ *
  * In general, a copy is made of the property contents and the caller
  * is responsible for freeing the memory in the appropriate manner for
  * the type, for instance by calling g_free() or g_object_unref().
+ *
  * See g_object_get().
  */
 
@@ -7362,6 +7617,8 @@
  * will be the default vtable from g_type_default_interface_ref(), or,
  * if you know the interface has already been loaded,
  * g_type_default_interface_peek().
+ *
+ *
  * interface with the name @property_name, or %NULL if no
  * such property exists.
  *
@@ -7384,6 +7641,7 @@
  * class only needs to provide an implementation and inherits the
  * property description, default value, bounds, and so forth from the
  * interface property.
+ *
  * This function is meant to be called from the interface's default
  * vtable initialization function (the @class_init member of
  * #GTypeInfo.) It must not be called after after @class_init has
@@ -7402,6 +7660,8 @@
  * vtable passed in as @g_iface will be the default vtable from
  * g_type_default_interface_ref(), or, if you know the interface has
  * already been loaded, g_type_default_interface_peek().
+ *
+ *
  * pointer to an array of pointers to #GParamSpec
  * structures. The paramspecs are owned by GLib, but the
  * array should be freed with g_free() when you are done with
@@ -7431,6 +7691,7 @@
  * @...: the value of the first property, followed optionally by more name/value pairs, followed by %NULL
  *
  * Creates a new instance of a #GObject subtype and sets its properties.
+ *
  * Construction parameters (see #G_PARAM_CONSTRUCT, #G_PARAM_CONSTRUCT_ONLY)
  * which are not explicitly specified are set to their default values.
  *
@@ -7445,6 +7706,7 @@
  * @var_args: the value of the first property, followed optionally by more name/value pairs, followed by %NULL
  *
  * Creates a new instance of a #GObject subtype and sets its properties.
+ *
  * Construction parameters (see #G_PARAM_CONSTRUCT, #G_PARAM_CONSTRUCT_ONLY)
  * which are not explicitly specified are set to their default values.
  *
@@ -7459,8 +7721,11 @@
  * @parameters: (array length=n_parameters): an array of #GParameter
  *
  * Creates a new instance of a #GObject subtype and sets its properties.
+ *
  * Construction parameters (see #G_PARAM_CONSTRUCT, #G_PARAM_CONSTRUCT_ONLY)
  * which are not explicitly specified are set to their default values.
+ *
+ * @object_type
  *
  * Rename to: g_object_new
  * Returns: (type GObject.Object) (transfer full): a new instance of
@@ -7473,6 +7738,7 @@
  * @property_name: the name of a property installed on the class of @object.
  *
  * Emits a "notify" signal for the property @property_name on @object.
+ *
  * When possible, eg. when signaling a property change from within the class
  * that registered the property, you should use g_object_notify_by_pspec()
  * instead.
@@ -7485,12 +7751,15 @@
  * @pspec: the #GParamSpec of a property installed on the class of @object.
  *
  * Emits a "notify" signal for the property specified by @pspec on @object.
+ *
  * This function omits the property name lookup, hence it is faster than
  * g_object_notify().
+ *
  * One way to avoid using g_object_notify() from within the
  * class that registered the properties, and using g_object_notify_by_pspec()
  * instead, is to store the GParamSpec used with
  * g_object_class_install_property() inside a static array, e.g.:
+ *
  * |[
  * enum
  * {
@@ -7498,7 +7767,9 @@
  * PROP_FOO,
  * PROP_LAST
  * };
+ *
  * static GParamSpec *properties[PROP_LAST];
+ *
  * static void
  * my_object_class_init (MyObjectClass *klass)
  * {
@@ -7511,7 +7782,9 @@
  * properties[PROP_FOO]);
  * }
  * ]|
+ *
  * and then notify a change on the "foo" property with:
+ *
  * |[
  * g_object_notify_by_pspec (self, properties[PROP_FOO]);
  * ]|
@@ -7537,6 +7810,7 @@
  * Increase the reference count of @object, and possibly remove the
  * <link linkend="floating-ref">floating</link> reference, if @object
  * has a floating reference.
+ *
  * In other words, if the object is floating, then this call "assumes
  * ownership" of the floating reference, converting it to a normal
  * reference by clearing the floating flag while leaving the reference
@@ -7578,6 +7852,7 @@
  *
  * Releases all references to other objects. This can be used to break
  * reference cycles.
+ *
  * This functions should only be called from object system implementations.
  */
 
@@ -7600,6 +7875,7 @@
  *
  * Each object carries around a table of associations from
  * strings to pointers.  This function lets you set an association.
+ *
  * If the object already had an association with that name,
  * the old association will be destroyed.
  */
@@ -7615,6 +7891,7 @@
  * Like g_object_set_data() except it adds notification
  * for when the association is destroyed, either by setting it
  * to a different value or when the object is destroyed.
+ *
  * Note that the @destroy callback is not called if @data is %NULL.
  */
 
@@ -7703,6 +7980,7 @@
  * GQuark quark_string_list = g_quark_from_static_string ("my-string-list");
  * // retrive the old string list
  * GList *list = g_object_steal_qdata (object, quark_string_list);
+ *
  * // prepend new string
  * list = g_list_prepend (list, g_strdup (new_string));
  * // this changed 'list', so we need to set it again
@@ -7712,6 +7990,7 @@
  * free_string_list (gpointer data)
  * {
  * GList *node, *list = data;
+ *
  * for (node = list; node; node = node->next)
  * g_free (node->data);
  * g_list_free (list);
@@ -7733,6 +8012,7 @@
  * Reverts the effect of a previous call to
  * g_object_freeze_notify(). The freeze count is decreased on @object
  * and when it reaches zero, all queued "notify" signals are emitted.
+ *
  * It is an error to call this function when the freeze count is zero.
  */
 
@@ -7758,6 +8038,7 @@
  * (nonexisting) object. Also, g_object_ref() and g_object_unref() are
  * added as marshal guards to the @closure, to ensure that an extra
  * reference count is held on @object during invocation of the
+ * @closure.  Usually, this function will be called on closures that
  * use this @object as closure data.
  */
 
@@ -7796,6 +8077,7 @@
  *
  * Creates a new #GParamSpecBoolean instance specifying a %G_TYPE_BOOLEAN
  * property.
+ *
  * See g_param_spec_internal() for details on property names.
  *
  * Returns: a newly created parameter specification
@@ -7812,6 +8094,7 @@
  *
  * Creates a new #GParamSpecBoxed instance specifying a %G_TYPE_BOXED
  * derived property.
+ *
  * See g_param_spec_internal() for details on property names.
  *
  * Returns: a newly created parameter specification
@@ -7846,6 +8129,7 @@
  *
  * Creates a new #GParamSpecDouble instance specifying a %G_TYPE_DOUBLE
  * property.
+ *
  * See g_param_spec_internal() for details on property names.
  *
  * Returns: a newly created parameter specification
@@ -7863,6 +8147,7 @@
  *
  * Creates a new #GParamSpecEnum instance specifying a %G_TYPE_ENUM
  * property.
+ *
  * See g_param_spec_internal() for details on property names.
  *
  * Returns: a newly created parameter specification
@@ -7880,6 +8165,7 @@
  *
  * Creates a new #GParamSpecFlags instance specifying a %G_TYPE_FLAGS
  * property.
+ *
  * See g_param_spec_internal() for details on property names.
  *
  * Returns: a newly created parameter specification
@@ -7897,6 +8183,7 @@
  * @flags: flags for the property specified
  *
  * Creates a new #GParamSpecFloat instance specifying a %G_TYPE_FLOAT property.
+ *
  * See g_param_spec_internal() for details on property names.
  *
  * Returns: a newly created parameter specification
@@ -7918,6 +8205,7 @@
  * @pspec: a valid #GParamSpec
  *
  * Get the name of a #GParamSpec.
+ *
  * The name is always an "interned" string (as per g_intern_string()).
  * This allows for pointer-value comparisons.
  *
@@ -7957,6 +8245,8 @@
  * type. Redirection is established by creating a property
  * of type #GParamSpecOverride. See g_object_class_override_property()
  * for an example of the use of this capability.
+ *
+ *
  * paramspec should be redirected, or %NULL if none.
  *
  * Since: 2.4
@@ -7974,6 +8264,7 @@
  *
  * Creates a new #GParamSpecGType instance specifying a
  * %G_TYPE_GTYPE property.
+ *
  * See g_param_spec_internal() for details on property names.
  *
  * Since: 2.10
@@ -7992,6 +8283,7 @@
  * @flags: flags for the property specified
  *
  * Creates a new #GParamSpecInt instance specifying a %G_TYPE_INT property.
+ *
  * See g_param_spec_internal() for details on property names.
  *
  * Returns: a newly created parameter specification
@@ -8009,6 +8301,7 @@
  * @flags: flags for the property specified
  *
  * Creates a new #GParamSpecInt64 instance specifying a %G_TYPE_INT64 property.
+ *
  * See g_param_spec_internal() for details on property names.
  *
  * Returns: a newly created parameter specification
@@ -8024,17 +8317,21 @@
  * @flags: a combination of #GParamFlags
  *
  * Creates a new #GParamSpec instance.
+ *
  * A property name consists of segments consisting of ASCII letters and
  * digits, separated by either the '-' or '_' character. The first
  * character of a property name must be a letter. Names which violate these
  * rules lead to undefined behaviour.
+ *
  * When creating and looking up a #GParamSpec, either separator can be
  * used, but they cannot be mixed. Using '-' is considerably more
  * efficient and in fact required when using property names as detail
  * strings for signals.
+ *
  * Beyond the name, #GParamSpec<!-- -->s have two more descriptive
  * strings associated with them, the @nick, which should be suitable
  * for use as a label for the property in a property editor, and the
+ * @blurb, which should be a somewhat longer description, suitable for
  * e.g. a tooltip. The @nick and @blurb should ideally be localized.
  *
  * Returns: a newly allocated #GParamSpec instance
@@ -8052,6 +8349,7 @@
  * @flags: flags for the property specified
  *
  * Creates a new #GParamSpecLong instance specifying a %G_TYPE_LONG property.
+ *
  * See g_param_spec_internal() for details on property names.
  *
  * Returns: a newly created parameter specification
@@ -8068,6 +8366,7 @@
  *
  * Creates a new #GParamSpecBoxed instance specifying a %G_TYPE_OBJECT
  * derived property.
+ *
  * See g_param_spec_internal() for details on property names.
  *
  * Returns: a newly created parameter specification
@@ -8098,6 +8397,7 @@
  *
  * Creates a new #GParamSpecParam instance specifying a %G_TYPE_PARAM
  * property.
+ *
  * See g_param_spec_internal() for details on property names.
  *
  * Returns: a newly created parameter specification
@@ -8112,6 +8412,7 @@
  * @flags: flags for the property specified
  *
  * Creates a new #GParamSpecPoiner instance specifying a pointer property.
+ *
  * See g_param_spec_internal() for details on property names.
  *
  * Returns: a newly created parameter specification
@@ -8136,6 +8437,7 @@
  *
  * Gets an array of all #GParamSpec<!-- -->s owned by @owner_type in
  * the pool.
+ *
  * allocated array containing pointers to all #GParamSpecs
  * owned by @owner_type in the pool
  *
@@ -8150,6 +8452,7 @@
  *
  * Gets an #GList of all #GParamSpec<!-- -->s owned by @owner_type in
  * the pool.
+ *
  * #GList of all #GParamSpec<!-- -->s owned by @owner_type in
  * the pool#GParamSpec<!-- -->s.
  *
@@ -8165,6 +8468,7 @@
  * @walk_ancestors: If %TRUE, also try to find a #GParamSpec with @param_name owned by an ancestor of @owner_type.
  *
  * Looks up a #GParamSpec in the pool.
+ *
  * matching #GParamSpec was found.
  *
  * Returns: (transfer none): The found #GParamSpec, or %NULL if no
@@ -8176,6 +8480,7 @@
  * @type_prefixing: Whether the pool will support type-prefixed property names.
  *
  * Creates a new #GParamSpecPool.
+ *
  * If @type_prefixing is %TRUE, lookups in the newly created pool will
  * allow to specify the owner as a colon-separated prefix of the
  * property name, like "GtkContainer:border-width". This feature is
@@ -8282,6 +8587,7 @@
  * @flags: flags for the property specified
  *
  * Creates a new #GParamSpecString instance.
+ *
  * See g_param_spec_internal() for details on property names.
  *
  * Returns: a newly created parameter specification
@@ -8315,6 +8621,7 @@
  * @flags: flags for the property specified
  *
  * Creates a new #GParamSpecUInt instance specifying a %G_TYPE_UINT property.
+ *
  * See g_param_spec_internal() for details on property names.
  *
  * Returns: a newly created parameter specification
@@ -8333,6 +8640,7 @@
  *
  * Creates a new #GParamSpecUInt64 instance specifying a %G_TYPE_UINT64
  * property.
+ *
  * See g_param_spec_internal() for details on property names.
  *
  * Returns: a newly created parameter specification
@@ -8351,6 +8659,7 @@
  *
  * Creates a new #GParamSpecULong instance specifying a %G_TYPE_ULONG
  * property.
+ *
  * See g_param_spec_internal() for details on property names.
  *
  * Returns: a newly created parameter specification
@@ -8368,6 +8677,7 @@
  * Creates a new #GParamSpecUnichar instance specifying a %G_TYPE_UINT
  * property. #GValue structures for this property can be accessed with
  * g_value_set_uint() and g_value_get_uint().
+ *
  * See g_param_spec_internal() for details on property names.
  *
  * Returns: a newly created parameter specification
@@ -8394,6 +8704,7 @@
  * %G_TYPE_VALUE_ARRAY property. %G_TYPE_VALUE_ARRAY is a
  * %G_TYPE_BOXED type, as such, #GValue structures for this property
  * can be accessed with g_value_set_boxed() and g_value_get_boxed().
+ *
  * See g_param_spec_internal() for details on property names.
  *
  * Returns: a newly created parameter specification
@@ -8411,7 +8722,9 @@
  *
  * Creates a new #GParamSpecVariant instance specifying a #GVariant
  * property.
+ *
  * If @default_value is floating, it is consumed.
+ *
  * See g_param_spec_internal() for details on property names.
  *
  * Returns: the newly created #GParamSpec
@@ -8442,9 +8755,12 @@
  *
  * Transforms @src_value into @dest_value if possible, and then
  * validates @dest_value, in order for it to conform to @pspec.  If
+ * @strict_validation is %TRUE this function will only succeed if the
  * transformed @dest_value complied to @pspec without modifications.
+ *
  * See also g_value_type_transformable(), g_value_transform() and
  * g_param_value_validate().
+ *
  * %FALSE otherwise and @dest_value is left untouched.
  *
  * Returns: %TRUE if transformation and validation were successful,
@@ -8519,6 +8835,7 @@
  * @n_structs: the number of elements to allocate
  *
  * Reallocates the memory pointed to by @mem, so that it now has space for
+ * @n_structs elements of type @struct_type. It returns the new address of
  * the memory, which may have been moved.
  * Care is taken to avoid overflow when calculating the size of the allocated block.
  *
@@ -8539,10 +8856,11 @@
  * signal don't make much sense (except for the case of the default
  * handler defined in the class structure, in which case you will
  * usually want the signal connection to override the class handler).
+ *
  * This accumulator will use the return value from the first signal
  * handler that is run as the return value for the signal and not run
+ * any further handlers (ie: the first handler "wins").
  *
- * Any further handlers (ie: the first handler "wins").
  * Returns: standard #GSignalAccumulator result
  * Since: 2.28
  */
@@ -8557,12 +8875,12 @@
  *
  * A predefined #GSignalAccumulator for signals that return a
  * boolean values. The behavior that this accumulator gives is
+ * that a return of %TRUE stops the signal emission: no further
  * callbacks will be invoked, while a return of %FALSE allows
  * the emission to continue. The idea here is that a %TRUE return
  * indicates that the callback <emphasis>handled</emphasis> the signal,
  * and no further handling is needed.
  *
- * That a return of %true stops the signal emission: no further
  * Since: 2.4
  * Returns: standard #GSignalAccumulator result
  */
@@ -8618,6 +8936,7 @@
  * @data: data to pass to @c_handler calls.
  *
  * Connects a #GCallback function to a signal for a particular object.
+ *
  * The handler will be called before the default handler of the signal.
  *
  * Returns: the handler id
@@ -8632,6 +8951,7 @@
  * @data: data to pass to @c_handler calls.
  *
  * Connects a #GCallback function to a signal for a particular object.
+ *
  * The handler will be called after the default handler of the signal.
  *
  * Returns: the handler id
@@ -8695,15 +9015,18 @@
  * This is similar to g_signal_connect_data(), but uses a closure which
  * ensures that the @gobject stays alive during the call to @c_handler
  * by temporarily adding a reference count to @gobject.
+ *
  * Note that there is a bug in GObject that makes this function
  * much less useful than it might seem otherwise. Once @gobject is
  * disposed, the callback will no longer be called, but, the signal
  * handler is <emphasis>not</emphasis> currently disconnected. If the
+ * @instance is itself being freed at the same time than this doesn't
  * matter, since the signal will automatically be removed, but
  * if @instance persists, then the signal handler will leak. You
  * should not remove the signal yourself because in a future versions of
  * GObject, the handler <emphasis>will</emphasis> automatically
  * be disconnected.
+ *
  * It's possible to work around this problem in a way that will
  * continue to work with future versions of GObject by checking
  * that the signal handler is still connected before disconnected it:
@@ -8724,6 +9047,7 @@
  * @data: data to pass to @c_handler calls.
  *
  * Connects a #GCallback function to a signal for a particular object.
+ *
  * The instance on which the signal is emitted and @data will be swapped when
  * calling the handler.
  *
@@ -8739,6 +9063,7 @@
  * @...: parameters to be passed to the signal, followed by a location for the return value. If the return type of the signal is #G_TYPE_NONE, the return value location can be omitted.
  *
  * Emits a signal.
+ *
  * Note that g_signal_emit() resets the return value to the default
  * if no handlers are connected, in contrast to g_signal_emitv().
  */
@@ -8751,6 +9076,7 @@
  * @...: parameters to be passed to the signal, followed by a location for the return value. If the return type of the signal is #G_TYPE_NONE, the return value location can be omitted.
  *
  * Emits a signal.
+ *
  * Note that g_signal_emit_by_name() resets the return value to the default
  * if no handlers are connected, in contrast to g_signal_emitv().
  */
@@ -8764,6 +9090,7 @@
  * @var_args: a list of parameters to be passed to the signal, followed by a location for the return value. If the return type of the signal is #G_TYPE_NONE, the return value location can be omitted.
  *
  * Emits a signal.
+ *
  * Note that g_signal_emit_valist() resets the return value to the default
  * if no handlers are connected, in contrast to g_signal_emitv().
  */
@@ -8777,6 +9104,7 @@
  * @return_value: Location to store the return value of the signal emission.
  *
  * Emits a signal.
+ *
  * Note that g_signal_emitv() doesn't change @return_value if no handlers are
  * connected, in contrast to g_signal_emit() and g_signal_emit_valist().
  */
@@ -8802,6 +9130,7 @@
  * signal handler means to temporarily deactive it, a signal handler
  * has to be unblocked exactly the same amount of times it has been
  * blocked before to become active again.
+ *
  * The @handler_id has to be a valid signal handler id, connected to a
  * signal of @instance.
  */
@@ -8815,6 +9144,7 @@
  * Disconnects a handler from an instance so it will not be called during
  * any future or currently ongoing emissions of the signal it has been
  * connected to. The @handler_id becomes invalid and may be reused.
+ *
  * The @handler_id has to be a valid signal handler id, connected to a
  * signal of @instance.
  */
@@ -8866,6 +9196,7 @@
  * whether the unblocked handler in question is called as part of a
  * currently ongoing emission depends on how far that emission has
  * proceeded yet).
+ *
  * The @handler_id has to be a valid id of a signal handler that is
  * connected to a signal of @instance and is currently blocked.
  */
@@ -8984,10 +9315,12 @@
  *
  * Returns whether there are any handlers connected to @instance for the
  * given signal id and detail.
+ *
  * One example of when you might use this is when the arguments to the
  * signal are difficult to compute. A class implementor may opt to not
  * emit the signal if no one is attached anyway, thus saving the cost
  * of building the arguments.
+ *
  * otherwise.
  *
  * Returns: %TRUE if a handler is connected to the signal, %FALSE
@@ -9015,7 +9348,9 @@
  * Given the name of the signal and the type of object it connects to, gets
  * the signal's identifying integer. Emitting the signal by number is
  * somewhat faster than using the name each time.
+ *
  * Also tries the ancestors of the given type.
+ *
  * See g_signal_new() for details on allowed signal names.
  *
  * Returns: the signal's identifying number, or 0 if no signal was found.
@@ -9027,6 +9362,7 @@
  * @signal_id: the signal's identifying number.
  *
  * Given the signal's identifier, finds its name.
+ *
  * Two different signals may have the same name, if they have differing types.
  *
  * Returns: the signal name, or %NULL if the signal number was invalid.
@@ -9047,17 +9383,21 @@
  * @...: a list of types, one for each parameter.
  *
  * Creates a new signal. (This is usually done in the class initializer.)
+ *
  * A signal name consists of segments consisting of ASCII letters and
  * digits, separated by either the '-' or '_' character. The first
  * character of a signal name must be a letter. Names which violate these
  * rules lead to undefined behaviour of the GSignal system.
+ *
  * When registering a signal and looking up a signal, either separator can
  * be used, but they cannot be mixed.
+ *
  * If 0 is used for @class_offset subclasses cannot override the class handler
  * in their <code>class_init</code> method by doing
  * <code>super_class->signal_handler = my_signal_handler</code>. Instead they
  * will have to use g_signal_override_class_handler().
- * If c_marshaller is %NULL @g_cclosure_marshal_generic will be used as
+ *
+ * If c_marshaller is %NULL, g_cclosure_marshal_generic() will be used as
  * the marshaller for this signal.
  *
  * Returns: the signal id
@@ -9078,6 +9418,7 @@
  * @...: a list of types, one for each parameter.
  *
  * Creates a new signal. (This is usually done in the class initializer.)
+ *
  * This is a variant of g_signal_new() that takes a C callback instead
  * off a class offset for the signal's class handler. This function
  * doesn't need a function pointer exposed in the class structure of
@@ -9087,7 +9428,9 @@
  * g_signal_override_class_handler()and chained to with
  * g_signal_chain_from_overridden() or
  * g_signal_chain_from_overridden_handler().
+ *
  * See g_signal_new() for information about signal names.
+ *
  * If c_marshaller is %NULL @g_cclosure_marshal_generic will be used as
  * the marshaller for this signal.
  *
@@ -9110,8 +9453,10 @@
  * @args: va_list of #GType, one for each parameter.
  *
  * Creates a new signal. (This is usually done in the class initializer.)
+ *
  * See g_signal_new() for details on allowed signal names.
- * If c_marshaller is %NULL @g_cclosure_marshal_generic will be used as
+ *
+ * If c_marshaller is %NULL, g_cclosure_marshal_generic() will be used as
  * the marshaller for this signal.
  *
  * Returns: the signal id
@@ -9132,7 +9477,9 @@
  * @param_types: an array of types, one for each parameter
  *
  * Creates a new signal. (This is usually done in the class initializer.)
+ *
  * See g_signal_new() for details on allowed signal names.
+ *
  * If c_marshaller is %NULL @g_cclosure_marshal_generic will be used as
  * the marshaller for this signal.
  *
@@ -9149,6 +9496,7 @@
  * Overrides the class closure (i.e. the default handler) for the given signal
  * for emissions on instances of @instance_type. @instance_type must be derived
  * from the type to which the signal belongs.
+ *
  * See g_signal_chain_from_overridden() and
  * g_signal_chain_from_overridden_handler() for how to chain up to the
  * parent class closure from inside the overridden one.
@@ -9165,6 +9513,7 @@
  * given signal for emissions on instances of @instance_type with
  * callabck @class_handler. @instance_type must be derived from the
  * type to which the signal belongs.
+ *
  * See g_signal_chain_from_overridden() and
  * g_signal_chain_from_overridden_handler() for how to chain up to the
  * parent class closure from inside the overridden one.
@@ -9218,9 +9567,11 @@
  * @detail: the detail which the signal was emitted with.
  *
  * Stops a signal's current emission.
+ *
  * This will prevent the default method from running, if the signal was
  * %G_SIGNAL_RUN_LAST and you connected normally (i.e. without the "after"
  * flag).
+ *
  * Prints a warning if used on a signal which isn't being emitted.
  */
 
@@ -9231,6 +9582,7 @@
  * @detailed_signal: a string of the form "signal-name::detail".
  *
  * Stops a signal's current emission.
+ *
  * This is just like g_signal_stop_emission() except it will look up the
  * signal id for you.
  */
@@ -9242,6 +9594,7 @@
  * @struct_offset: the offset of the member function of @itype's class structure which is to be invoked by the new closure
  *
  * Creates a new closure which invokes the function found at the offset
+ * @struct_offset in the class structure of the interface or classed type
  * identified by @itype.
  *
  * Returns: a new #GCClosure
@@ -9254,6 +9607,7 @@
  * @closure: a #GClosure
  *
  * Set the callback for a source as a #GClosure.
+ *
  * If the source is not one of the standard GLib types, the @closure_callback
  * and @closure_marshal fields of the #GSourceFuncs structure must have been
  * filled in with pointers to appropriate functions.
@@ -9269,7 +9623,9 @@
  * (If the source expects any other type of return value, it will return
  * a 0/%NULL value; whatever g_value_init() initializes a #GValue to for
  * that type.)
+ *
  * If the source is not one of the standard GLib types, the
+ * @closure_callback and @closure_marshal fields of the #GSourceFuncs
  * structure must have been filled in with pointers to appropriate
  * functions.
  */
@@ -9377,6 +9733,7 @@
  * Adds a function to be called after an interface vtable is
  * initialized for any class (i.e. after the @interface_init member of
  * #GInterfaceInfo has been called).
+ *
  * This function is useful when you want to check an invariant that
  * depends on the interfaces of a class. For instance, the
  * implementation of #GObject uses this facility to check that an
@@ -9428,6 +9785,7 @@
  *
  * Return a newly allocated and 0-terminated array of type IDs, listing the
  * child types of @type. The return value has to be g_free()ed after use.
+ *
  * and 0-terminated array of child types.
  *
  * Returns: (array length=n_children) (transfer full): Newly allocated
@@ -9440,35 +9798,45 @@
  * @private_size: size of private structure.
  *
  * Registers a private structure for an instantiatable type.
+ *
  * When an object is allocated, the private structures for
  * the type and all of its parent types are allocated
  * sequentially in the same memory block as the public
  * structures.
+ *
  * Note that the accumulated size of the private structures of
  * a type and all its parent types cannot excced 64kB.
+ *
  * This function should be called in the type's class_init() function.
  * The private structure can be retrieved using the
  * G_TYPE_INSTANCE_GET_PRIVATE() macro.
+ *
  * The following example shows attaching a private structure
  * <structname>MyObjectPrivate</structname> to an object
  * <structname>MyObject</structname> defined in the standard GObject
  * fashion.
  * type's class_init() function.
+ *
  * |[
  * typedef struct _MyObject        MyObject;
  * typedef struct _MyObjectPrivate MyObjectPrivate;
+ *
  * struct _MyObject {
  * GObject parent;
+ *
  * MyObjectPrivate *priv;
  * };
+ *
  * struct _MyObjectPrivate {
  * int some_field;
  * };
+ *
  * static void
  * my_object_class_init (MyObjectClass *klass)
  * {
  * g_type_class_add_private (klass, sizeof (MyObjectPrivate));
  * }
+ *
  * static void
  * my_object_init (MyObject *my_object)
  * {
@@ -9476,10 +9844,12 @@
  * MY_TYPE_OBJECT,
  * MyObjectPrivate);
  * }
+ *
  * static int
  * my_object_get_some_field (MyObject *my_object)
  * {
  * MyObjectPrivate *priv = my_object->priv;
+ *
  * return priv->some_field;
  * }
  * ]|
@@ -9496,6 +9866,7 @@
  * the classes reference count isn't incremented. As a consequence, this function
  * may return %NULL if the class of the type passed in does not currently
  * exist (hasn't been referenced before).
+ *
  * structure for the given type ID or %NULL if the class does not
  * currently exist.
  *
@@ -9513,9 +9884,11 @@
  * their parent classes as long as they are instantiated, the returned
  * class will always exist. This function is essentially equivalent
  * to:
+ *
  * <programlisting>
  * g_type_class_peek (g_type_parent (G_TYPE_FROM_CLASS (g_class)));
  * </programlisting>
+ *
  * of @g_class.
  *
  * Returns: (type GObject.TypeClass) (transfer none): The parent class
@@ -9528,6 +9901,7 @@
  *
  * A more efficient version of g_type_class_peek() which works only for
  * static types.
+ *
  * structure for the given type ID or %NULL if the class does not
  * currently exist or is dynamically loaded.
  *
@@ -9541,7 +9915,9 @@
  * @type: Type ID of a classed type.
  *
  * Increments the reference count of the class structure belonging to
+ * @type. This function will demand-create the class if it doesn't
  * exist already.
+ *
  * structure for the given type ID.
  *
  * Returns: (type GObject.TypeClass) (transfer none): The #GTypeClass
@@ -9576,19 +9952,20 @@
  *
  * Creates and initializes an instance of @type if @type is valid and
  * can be instantiated. The type system only performs basic allocation
+ * and structure setups for instances: actual instance creation should
  * happen through functions supplied by the type's fundamental type
  * implementation.  So use of g_type_create_instance() is reserved for
  * implementators of fundamental types only. E.g. instances of the
  * #GObject hierarchy should be created via g_object_new() and
  * <emphasis>never</emphasis> directly through
  * g_type_create_instance() which doesn't handle things like singleton
+ * objects or object construction.  Note: Do <emphasis>not</emphasis>
  * use this function, unless you're implementing a fundamental
  * type. Also language bindings should <emphasis>not</emphasis> use
  * this function but g_object_new() instead.
+ *
  * treatment by the fundamental type implementation.
  *
- * And structure setups for instances: actual instance creation should
- * Objects or object construction.  note: Do <emphasis>not</emphasis>
  * Returns: An allocated and initialized instance, subject to further
  */
 
@@ -9599,6 +9976,8 @@
  *
  * If the interface type @g_type is currently in use, returns its
  * default interface vtable.
+ *
+ *
  * vtable for the interface, or %NULL if the type is not currently in
  * use.
  *
@@ -9613,6 +9992,7 @@
  *
  * Increments the reference count for the interface type @g_type,
  * and returns the default interface vtable for the type.
+ *
  * If the type is not currently in use, then the default vtable
  * for the type will be created and initalized by calling
  * the base interface init and default vtable init functions for
@@ -9621,6 +10001,8 @@
  * Calling g_type_default_interface_ref() is useful when you
  * want to make sure that signals and properties for an interface
  * have been installed.
+ *
+ *
  * vtable for the interface; call g_type_default_interface_unref()
  * when you are done using the interface.
  *
@@ -9661,6 +10043,7 @@
  *
  * Frees an instance of a type, returning it to the instance pool for
  * the type, if there is one.
+ *
  * Like g_type_create_instance(), this function is reserved for
  * implementors of fundamental types.
  */
@@ -9697,6 +10080,7 @@
  * register a new fundamental type with g_type_register_fundamental().
  * The returned type ID represents the highest currently registered
  * fundamental type identifier.
+ *
  * or 0 if the type system ran out of fundamental type IDs.
  *
  * Returns: The nextmost fundamental type ID to be registered,
@@ -9709,6 +10093,7 @@
  *
  * Returns the #GTypePlugin structure for @type or
  * %NULL if @type does not have a #GTypePlugin structure.
+ *
  * dynamic type, %NULL otherwise.
  *
  * Returns: (transfer none): The corresponding plugin if @type is a
@@ -9722,6 +10107,7 @@
  *
  * Obtains data which has previously been attached to @type
  * with g_type_set_qdata().
+ *
  * Note that this does not take subtyping into account; data
  * attached to one type with g_type_set_qdata() cannot
  * be retrieved from a subtype using g_type_get_qdata().
@@ -9737,6 +10123,7 @@
  * to initialize the type system and assorted other code portions
  * (such as the various fundamental type implementations or the signal
  * system).
+ *
  * Since version 2.24 this also initializes the thread system
  */
 
@@ -9756,6 +10143,7 @@
  *
  * Adds @prerequisite_type to the list of prerequisites of @interface_type.
  * This means that any type implementing @interface_type must also implement
+ * @prerequisite_type. Prerequisites can be thought of as an alternative to
  * interface derivation (which GType doesn't support). An interface can have
  * at most one instantiatable prerequisite type.
  */
@@ -9767,7 +10155,10 @@
  * @interface_type: the #GType value of an interface type.
  *
  * Returns the #GTypePlugin structure for the dynamic interface
+ * @interface_type which has been added to @instance_type, or %NULL if
+ * @interface_type has not been added to @instance_type or does not
  * have a #GTypePlugin structure. See g_type_add_interface_dynamic().
+ *
  * interface @interface_type of @instance_type.
  *
  * Returns: (transfer none): the #GTypePlugin for the dynamic
@@ -9781,6 +10172,7 @@
  *
  * Returns the #GTypeInterface structure of an interface to which the
  * passed in class conforms.
+ *
  * structure of iface_type if implemented by @instance_class, %NULL
  * otherwise
  *
@@ -9796,6 +10188,7 @@
  * of the instance type to which @g_iface belongs. This is useful when
  * deriving the implementation of an interface from the parent type and
  * then possibly overriding some methods.
+ *
  * corresponding #GTypeInterface structure of the parent type of the
  * instance type to which @g_iface belongs, or %NULL if the parent
  * type doesn't conform to the interface.
@@ -9810,6 +10203,8 @@
  * @n_prerequisites: (out) (allow-none): location to return the number of prerequisites, or %NULL
  *
  * Returns the prerequisites of an interfaces type.
+ *
+ *
  * newly-allocated zero-terminated array of #GType containing
  * the prerequisites of @interface_type
  *
@@ -9826,6 +10221,7 @@
  * Return a newly allocated and 0-terminated array of type IDs, listing the
  * interface types that @type conforms to. The return value has to be
  * g_free()ed after use.
+ *
  * allocated and 0-terminated array of interface types.
  *
  * Returns: (array length=n_interfaces) (transfer full): Newly
@@ -9855,6 +10251,7 @@
  * Registers an additional interface for a type, whose interface lives
  * in the given type plugin. If the interface was already registered
  * for the type in this plugin, nothing will be done.
+ *
  * As long as any instances of the type exist, the type plugin will
  * not be unloaded.
  */
@@ -9870,6 +10267,7 @@
  * type plugin. If a type with name @type_name was previously registered,
  * the #GType identifier for the type is returned, otherwise the type
  * is newly registered, and the resulting #GType identifier returned.
+ *
  * As long as any instances of the type exist, the type plugin will
  * not be unloaded.
  *
@@ -9888,6 +10286,7 @@
  * type plugin. If a type with name @type_name was previously registered,
  * the #GType identifier for the type is returned, otherwise the type
  * is newly registered, and the resulting #GType identifier returned.
+ *
  * As long as any instances of the type exist, the type plugin will
  * not be unloaded.
  *
@@ -9908,9 +10307,11 @@
  * type plugin. If a type with name @type_name was previously registered,
  * the #GType identifier for the type is returned, otherwise the type
  * is newly registered, and the resulting #GType identifier returned.
+ *
  * When reregistering a type (typically because a module is unloaded
  * then reloaded, and reinitialized), @module and @parent_type must
  * be the same as they were previously.
+ *
  * As long as any instances of the type exist, the type plugin will
  * not be unloaded.
  *
@@ -9947,6 +10348,7 @@
  * use count was zero before, the plugin will be loaded.
  * If loading the plugin fails, the use count is reset to
  * its prior value.
+ *
  * loading the plugin failed.
  *
  * Returns: %FALSE if the plugin needed to be loaded and
@@ -9976,6 +10378,7 @@
  * anchestry, return the type that @root_type is the immediate parent
  * of.  In other words, this function determines the type that is
  * derived directly from @root_type which is also a base class of
+ * @leaf_type.  Given a root type and a leaf type, this function can
  * be used to determine the types and order in which the leaf type is
  * descended from the root type.
  *
@@ -10025,6 +10428,7 @@
  * @plugin: a #GTypePlugin
  *
  * Calls the @unuse_plugin function from the #GTypePluginClass of
+ * @plugin.  There should be no need to use this function outside of
  * the GObject type system itself.
  */
 
@@ -10034,6 +10438,7 @@
  * @plugin: a #GTypePlugin
  *
  * Calls the @use_plugin function from the #GTypePluginClass of
+ * @plugin.  There should be no need to use this function outside of
  * the GObject type system itself.
  */
 
@@ -10056,6 +10461,7 @@
  * Queries the type system for information about a specific type.
  * This function will fill in a user-provided structure to hold
  * type-specific information. If an invalid #GType is passed in, the
+ * @type member of the #GTypeQuery is 0. All members filled into the
  * #GTypeQuery structure should be considered constant and have to be
  * left untouched.
  */
@@ -10069,6 +10475,7 @@
  * @flags: Bitwise combination of #GTypeFlags values.
  *
  * Registers @type_name as the name of a new dynamic type derived from
+ * @parent_type.  The type system uses the information contained in the
  * #GTypePlugin structure pointed to by @plugin to manage the type and its
  * instances (if not abstract).  The value of @flags determines the nature
  * (e.g. abstract or not) of the type.
@@ -10104,6 +10511,7 @@
  * @flags: Bitwise combination of #GTypeFlags values.
  *
  * Registers @type_name as the name of a new static type derived from
+ * @parent_type.  The type system uses the information contained in the
  * #GTypeInfo structure pointed to by @info to manage the type and its
  * instances (if not abstract).  The value of @flags determines the nature
  * (e.g. abstract or not) of the type.
@@ -10123,6 +10531,7 @@
  * @flags: Bitwise combination of #GTypeFlags values.
  *
  * Registers @type_name as the name of a new static type derived from
+ * @parent_type.  The value of @flags determines the nature (e.g.
  * abstract or not) of the type. It works by filling a #GTypeInfo
  * struct and calling g_type_register_static().
  *
@@ -10171,6 +10580,8 @@
  * Returns the location of the #GTypeValueTable associated with @type.
  * <emphasis>Note that this function should only be used from source code
  * that implements or has internal knowledge of the implementation of
+ * @type.</emphasis>
+ *
  * %NULL if there is no #GTypeValueTable associated with @type.
  *
  * Returns: Location of the #GTypeValueTable associated with @type or
@@ -10287,6 +10698,7 @@
  *
  * Sort @value_array using @compare_func to compare the elements accoring to
  * the semantics of #GCompareFunc.
+ *
  * The current implementation uses Quick-Sort as sorting algorithm.
  *
  * Returns: (transfer none): the #GValueArray passed in as @value_array
@@ -10301,6 +10713,7 @@
  *
  * Sort @value_array using @compare_func to compare the elements accoring
  * to the semantics of #GCompareDataFunc.
+ *
  * The current implementation uses Quick-Sort as sorting algorithm.
  *
  * Rename to: g_value_array_sort
@@ -10323,9 +10736,9 @@
  *
  * Get the contents of a %G_TYPE_BOXED derived #GValue.  Upon getting,
  * the boxed value is duplicated and needs to be later freed with
+ * g_boxed_free(), e.g. like: g_boxed_free (G_VALUE_TYPE (@value),
  * return_value);
  *
- * G_boxed_free(), e.g. like: g_boxed_free (G_VALUE_TYPE (@value),
  * Returns: boxed contents of @value
  */
 
@@ -10337,6 +10750,7 @@
  * Get the contents of a %G_TYPE_OBJECT derived #GValue, increasing
  * its reference count. If the contents of the #GValue are %NULL, then
  * %NULL will be returned.
+ *
  * should be unreferenced when no longer needed.
  *
  * Returns: (type GObject.Object) (transfer full): object content of @value,
@@ -10349,6 +10763,7 @@
  *
  * Get the contents of a %G_TYPE_PARAM #GValue, increasing its
  * reference count.
+ *
  * no longer needed.
  *
  * Returns: #GParamSpec content of @value, should be unreferenced when
@@ -10370,6 +10785,7 @@
  * @value: a valid #GValue of type %G_TYPE_VARIANT
  *
  * Get the contents of a variant #GValue, increasing its refcount.
+ *
  * g_variant_unref() when no longer needed
  *
  * Returns: variant contents of @value, should be unrefed using
@@ -10648,7 +11064,7 @@
 /**
  * g_value_set_boxed:
  * @value: a valid #GValue of %G_TYPE_BOXED derived type
- * @v_boxed: boxed value to be set
+ * @v_boxed: (allow-none): boxed value to be set
  *
  * Set the contents of a %G_TYPE_BOXED derived #GValue to @v_boxed.
  */
@@ -10657,7 +11073,7 @@
 /**
  * g_value_set_boxed_take_ownership:
  * @value: a valid #GValue of %G_TYPE_BOXED derived type
- * @v_boxed: duplicated unowned boxed value to be set
+ * @v_boxed: (allow-none): duplicated unowned boxed value to be set
  *
  * This is an internal function introduced mainly for C marshallers.
  *
@@ -10724,7 +11140,7 @@
 /**
  * g_value_set_instance:
  * @value: An initialized #GValue structure.
- * @instance: the instance
+ * @instance: (allow-none): the instance
  *
  * Sets @value from an instantiatable type via the
  * value_table's collect_value() function.
@@ -10761,14 +11177,16 @@
 /**
  * g_value_set_object:
  * @value: a valid #GValue of %G_TYPE_OBJECT derived type
- * @v_object: (type GObject.Object): object value to be set
+ * @v_object: (type GObject.Object) (allow-none): object value to be set
  *
  * Set the contents of a %G_TYPE_OBJECT derived #GValue to @v_object.
+ *
  * g_value_set_object() increases the reference count of @v_object
  * (the #GValue holds a reference to @v_object).  If you do not wish
  * to increase the reference count of the object (i.e. you wish to
  * pass your current reference to the #GValue because you no longer
  * need it), use g_value_take_object() instead.
+ *
  * It is important that your #GValue holds a reference to @v_object (either its
  * own, or one it has taken) to ensure that the object won't be destroyed while
  * the #GValue still exists).
@@ -10778,7 +11196,7 @@
 /**
  * g_value_set_object_take_ownership: (skip)
  * @value: a valid #GValue of %G_TYPE_OBJECT derived type
- * @v_object: object value to be set
+ * @v_object: (allow-none): object value to be set
  *
  * This is an internal function introduced mainly for C marshallers.
  *
@@ -10789,7 +11207,7 @@
 /**
  * g_value_set_param:
  * @value: a valid #GValue of type %G_TYPE_PARAM
- * @param: the #GParamSpec to be set
+ * @param: (allow-none): the #GParamSpec to be set
  *
  * Set the contents of a %G_TYPE_PARAM #GValue to @param.
  */
@@ -10798,7 +11216,7 @@
 /**
  * g_value_set_param_take_ownership: (skip)
  * @value: a valid #GValue of type %G_TYPE_PARAM
- * @param: the #GParamSpec to be set
+ * @param: (allow-none): the #GParamSpec to be set
  *
  * This is an internal function introduced mainly for C marshallers.
  *
@@ -10818,7 +11236,7 @@
 /**
  * g_value_set_static_boxed:
  * @value: a valid #GValue of %G_TYPE_BOXED derived type
- * @v_boxed: static boxed value to be set
+ * @v_boxed: (allow-none): static boxed value to be set
  *
  * Set the contents of a %G_TYPE_BOXED derived #GValue to @v_boxed.
  * The boxed value is assumed to be static, and is thus not duplicated
@@ -10896,7 +11314,7 @@
 /**
  * g_value_set_variant:
  * @value: a valid #GValue of type %G_TYPE_VARIANT
- * @variant: a #GVariant, or %NULL
+ * @variant: (allow-none): a #GVariant, or %NULL
  *
  * Set the contents of a variant #GValue to @variant.
  * If the variant is floating, it is consumed.
@@ -10908,7 +11326,7 @@
 /**
  * g_value_take_boxed:
  * @value: a valid #GValue of %G_TYPE_BOXED derived type
- * @v_boxed: duplicated unowned boxed value to be set
+ * @v_boxed: (allow-none): duplicated unowned boxed value to be set
  *
  * Sets the contents of a %G_TYPE_BOXED derived #GValue to @v_boxed
  * and takes over the ownership of the callers reference to @v_boxed;
@@ -10921,12 +11339,13 @@
 /**
  * g_value_take_object: (skip)
  * @value: a valid #GValue of %G_TYPE_OBJECT derived type
- * @v_object: object value to be set
+ * @v_object: (allow-none): object value to be set
  *
  * Sets the contents of a %G_TYPE_OBJECT derived #GValue to @v_object
  * and takes over the ownership of the callers reference to @v_object;
  * the caller doesn't have to unref it any more (i.e. the reference
  * count of the object is not increased).
+ *
  * If you want the #GValue to hold its own reference to @v_object, use
  * g_value_set_object() instead.
  *
@@ -10937,7 +11356,7 @@
 /**
  * g_value_take_param: (skip)
  * @value: a valid #GValue of type %G_TYPE_PARAM
- * @param: the #GParamSpec to be set
+ * @param: (allow-none): the #GParamSpec to be set
  *
  * Sets the contents of a %G_TYPE_PARAM #GValue to @param and takes
  * over the ownership of the callers reference to @param; the caller
@@ -10961,16 +11380,19 @@
 /**
  * g_value_take_variant:
  * @value: a valid #GValue of type %G_TYPE_VARIANT
- * @variant: a #GVariant, or %NULL
+ * @variant: (allow-none): a #GVariant, or %NULL
  *
  * Set the contents of a variant #GValue to @variant, and takes over
  * the ownership of the caller's reference to @variant;
  * the caller doesn't have to unref it any more (i.e. the reference
  * count of the variant is not increased).
+ *
  * If @variant was floating then its floating reference is converted to
  * a hard reference.
+ *
  * If you want the #GValue to hold its own reference to @variant, use
  * g_value_set_variant() instead.
+ *
  * This is an internal function introduced mainly for C marshallers.
  *
  * Since: 2.26
@@ -10989,6 +11411,7 @@
  * transformations into strings might reveal seemingly arbitrary
  * results and shouldn't be relied upon for production code (such
  * as rcfile value or object property serialization).
+ *
  * Upon failing transformations, @dest_value is left untouched.
  *
  * Returns: Whether a transformation rule was found and could be applied.
@@ -11071,11 +11494,14 @@
  *
  * A type which can hold any UTF-32 or UCS-4 character code,
  * also known as a Unicode code point.
+ *
  * If you want to produce the UTF-8 representation of a #gunichar,
  * use g_ucs4_to_utf8(). See also g_utf8_to_ucs4() for the reverse
  * process.
+ *
  * To print/scan values of this type as integer, use
  * %G_GINT32_MODIFIER and/or %G_GUINT32_FORMAT.
+ *
  * The notation to express a Unicode code point in running text is
  * as a hexadecimal number with four to six digits and uppercase
  * letters, prefixed by the string "U+". Leading zeros are omitted,
@@ -11083,6 +11509,7 @@
  * For example, "U+0041 LATIN CAPITAL LETTER A". To print a code point
  * in the U+-notation, use the format string "U+%04"G_GINT32_FORMAT"X".
  * To scan, use the format string "U+%06"G_GINT32_FORMAT"X".
+ *
  * |[
  * gunichar c;
  * sscanf ("U+0041", "U+%06"G_GINT32_FORMAT"X", &amp;c)
@@ -11100,8 +11527,10 @@
  * the BMP as pairs of 16bit numbers. Surrogate pairs cannot be stored
  * in a single gunichar2 field, but all GLib functions accepting gunichar2
  * arrays will correctly interpret surrogate pairs.</footnote>.
+ *
  * To print/scan values of this type to/from text you need to convert
  * to/from UTF-8, using g_utf16_to_utf8()/g_utf8_to_utf16().
+ *
  * To print/scan values of this type as integer, use
  * %G_GINT16_MODIFIER and/or %G_GUINT16_FORMAT.
  */
