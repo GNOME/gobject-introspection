@@ -80,6 +80,11 @@ class MallardWriter(object):
             if isinstance(node, (ast.Class, ast.Record)):
                 for method in node.methods:
                     self._render_node(method, output, node)
+            if isinstance(node, ast.Class):
+                for property_ in node.properties:
+                    self._render_node(property_, output, node)
+                for signal in node.signals:
+                    self._render_node(signal, output, node)
 
     def _render_node(self, node, output, parent=None):
         namespace = self._transformer.namespace
@@ -98,6 +103,12 @@ class MallardWriter(object):
         elif isinstance(node, ast.Function):
             template_name = 'mallard-%s-function.tmpl' % self._language
             page_id = '%s.%s' % (namespace.name, node.name)
+        elif isinstance(node, ast.Property) and parent is not None:
+            template_name = 'mallard-%s-property.tmpl' % self._language
+            page_id = '%s.%s-%s' % (namespace.name, parent.name, node.name)
+        elif isinstance(node, ast.Signal) and parent is not None:
+            template_name = 'mallard-%s-signal.tmpl' % self._language
+            page_id = '%s.%s-%s' % (namespace.name, parent.name, node.name)
         else:
             template_name = 'mallard-%s-default.tmpl' % self._language
             page_id = '%s.%s' % (namespace.name, node.name)
@@ -109,7 +120,7 @@ class MallardWriter(object):
             template_dir = 'unimplemented'
 
         file_name = os.path.join(template_dir, template_name)
-        template = Template(filename=file_name)
+        template = Template(filename=file_name, output_encoding='utf-8')
         result = template.render(namespace=namespace,
                                  node=node,
                                  format=format,
