@@ -5,7 +5,6 @@ CHECK_TARGETS = $(GIRS:.gir=-C.page.check) $(GIRS:.gir=-Python.page.check)
 MALLARD_DIRS = $(GIRS:.gir=-C) $(GIRS:.gir=-Python)
 EXPECTED_MALLARD_DIRS = $(MALLARD_DIRS:=-expected)
 CLEANFILES = $(GIRS)
-BUILT_SOURCES = $(MALLARD_DIRS)
 EXTRA_DIST = $(EXPECTED_MALLARD_DIRS)
 
 %.gir:
