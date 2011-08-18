@@ -36,6 +36,28 @@ void test_invalid_hash_element_type(GHashTable *h1, GHashTable *h2, GHashTable *
 // EXPECT:29: Warning: Test: element-type takes at maximium 2 values, 3 given
 
 /**
+ * test_invalid_bytearray_element_type:
+ * @b1: (element-type):
+ * @b2: (element-type int):
+ */
+
+void test_invalid_bytearray_element_type(GByteArray *b1, GByteArray *b2);
+
+// EXPECT:40: Warning: Test: element-type annotation needs a value
+// EXPECT:40: Warning: Test: element-type takes at least one value, none given
+
+/**
+ * test_invalid_ptrarray_element_type:
+ * @p1: (element-type):
+ * @p2: (element-type int):
+ */
+
+void test_invalid_ptrarray_element_type(GPtrArray *p1, GPtrArray *p2);
+
+// EXPECT:51: Warning: Test: element-type annotation needs a value
+// EXPECT:51: Warning: Test: element-type takes at least one value, none given
+
+/**
  * test_unresolved_element_type:
  *
  * Returns: (element-type Unresolved) (transfer full):
@@ -51,4 +73,8 @@ GList* test_unresolved_element_type(void);
 // EXPECT:27: Warning: Test: element-type annotation takes at least one option, none given
 // EXPECT:28: Warning: Test: element-type annotation for a hash table must have exactly two options, not 1 option(s)
 // EXPECT:29: Warning: Test: element-type annotation for a hash table must have exactly two options, not 3 option(s)
-// EXPECT:41: Warning: Test: test_unresolved_element_type: Unknown type: 'Unresolved'
+// EXPECT:40: Warning: Test: element-type annotation takes at least one option, none given
+// EXPECT:41: Warning: Test: invalid (element-type) for a GByteArray, must be one of guint8, gint8 or gchar
+// EXPECT:51: Warning: Test: element-type annotation takes at least one option, none given
+// EXPECT:52: Warning: Test: invalid (element-type) for a GPtrArray, must be a pointer
+// EXPECT:63: Warning: Test: test_unresolved_element_type: Unknown type: 'Unresolved'

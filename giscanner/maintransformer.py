@@ -326,9 +326,9 @@ usage is void (*_gtk_reserved1)(void);"""
         # (except enums and flags) or basic types that are
         # as big as a gpointer
         if array.array_type == ast.Array.GLIB_PTRARRAY and \
-           ((array.element_type in ast.BASIC_GIR_TYPES \
-             and not array.element_type in ast.POINTER_TYPES) or \
-            isinstance(array.element_type, ast.Enum) or \
+           ((array.element_type in ast.BASIC_GIR_TYPES
+             and not array.element_type in ast.POINTER_TYPES) or
+            isinstance(array.element_type, ast.Enum) or
             isinstance(array.element_type, ast.Bitfield)):
             message.warn("invalid (element-type) for a GPtrArray, "
                         "must be a pointer", options.position)
