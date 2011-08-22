@@ -353,11 +353,11 @@
 /**
  * GClosureMarshal:
  * @closure: the #GClosure to which the marshaller belongs
- * @return_value: a #GValue to store the return value. May be %NULL if the callback of @closure doesn't return a value.
+ * @return_value: (allow-none): a #GValue to store the return value. May be %NULL if the callback of @closure doesn't return a value.
  * @n_param_values: the length of the @param_values array
- * @param_values: an array of #GValue<!-- -->s holding the arguments on which to invoke the callback of @closure
- * @invocation_hint: the invocation hint given as the last argument to g_closure_invoke()
- * @marshal_data: additional data specified when registering the marshaller, see g_closure_set_marshal() and g_closure_set_meta_marshal()
+ * @param_values: (array length=n_param_values): an array of #GValue<!-- -->s holding the arguments on which to invoke the callback of @closure
+ * @invocation_hint: (allow-none): the invocation hint given as the last argument to g_closure_invoke()
+ * @marshal_data: (allow-none): additional data specified when registering the marshaller, see g_closure_set_marshal() and g_closure_set_meta_marshal()
  *
  * The type used for marshaller functions.
  */
@@ -1493,7 +1493,7 @@
  * GSignalEmissionHook:
  * @ihint: Signal invocation hint, see #GSignalInvocationHint.
  * @n_param_values: the number of parameters to the function, including the instance on which the signal was emitted.
- * @param_values: the instance on which the signal was emitted, followed by the parameters of the emission.
+ * @param_values: (array length=n_param_values): the instance on which the signal was emitted, followed by the parameters of the emission.
  * @data: user data associated with the hook.
  *
  * A simple function pointer to get invoked when the signal is emitted. This
@@ -6492,10 +6492,10 @@
 /**
  * g_closure_invoke:
  * @closure: a #GClosure
- * @return_value: a #GValue to store the return value. May be %NULL if the callback of @closure doesn't return a value.
+ * @return_value: (allow-none): a #GValue to store the return value. May be %NULL if the callback of @closure doesn't return a value.
  * @n_param_values: the length of the @param_values array
  * @param_values: (array length=n_param_values): an array of #GValue<!-- -->s holding the arguments on which to invoke the callback of @closure
- * @invocation_hint: a context-dependent invocation hint
+ * @invocation_hint: (allow-none): a context-dependent invocation hint
  *
  * Invokes the closure, i.e. executes the callback represented by the @closure.
  */
@@ -8904,7 +8904,7 @@
 
 /**
  * g_signal_chain_from_overridden:
- * @instance_and_params: the argument list of the signal emission. The first element in the array is a #GValue for the instance the signal is being emitted on. The rest are any arguments to be passed to the signal.
+ * @instance_and_params: (array) the argument list of the signal emission. The first element in the array is a #GValue for the instance the signal is being emitted on. The rest are any arguments to be passed to the signal.
  * @return_value: Location for the return value.
  *
  * Calls the original class closure of a signal. This function should only
@@ -9098,7 +9098,7 @@
 
 /**
  * g_signal_emitv:
- * @instance_and_params: argument list for the signal emission. The first element in the array is a #GValue for the instance the signal is being emitted on. The rest are any arguments to be passed to the signal.
+ * @instance_and_params: (array): argument list for the signal emission. The first element in the array is a #GValue for the instance the signal is being emitted on. The rest are any arguments to be passed to the signal.
  * @signal_id: the signal id
  * @detail: the detail
  * @return_value: Location to store the return value of the signal emission.
@@ -9116,7 +9116,7 @@
  *
  * Returns the invocation hint of the innermost signal emission of instance.
  *
- * Returns: the invocation hint of the innermost signal emission.
+ * Returns: (transfer none): the invocation hint of the innermost signal  emission.
  */
 
 
@@ -9156,7 +9156,7 @@
  * @mask: Mask indicating which of @signal_id, @detail, @closure, @func and/or @data the handler has to match.
  * @signal_id: Signal the handler has to be connected to.
  * @detail: Signal detail the handler has to be connected to.
- * @closure: The closure the handler will invoke.
+ * @closure: (allow-none): The closure the handler will invoke.
  * @func: The C closure callback of the handler (useless for non-C closures).
  * @data: The closure data of the handler's closure.
  *
@@ -9220,7 +9220,7 @@
  * @mask: Mask indicating which of @signal_id, @detail, @closure, @func and/or @data the handlers have to match.
  * @signal_id: Signal the handlers have to be connected to.
  * @detail: Signal detail the handlers have to be connected to.
- * @closure: The closure the handlers will invoke.
+ * @closure: (allow-none): The closure the handlers will invoke.
  * @func: The C closure callback of the handlers (useless for non-C closures).
  * @data: The closure data of the handlers' closures.
  *
@@ -9254,7 +9254,7 @@
  * @mask: Mask indicating which of @signal_id, @detail, @closure, @func and/or @data the handlers have to match.
  * @signal_id: Signal the handlers have to be connected to.
  * @detail: Signal detail the handlers have to be connected to.
- * @closure: The closure the handlers will invoke.
+ * @closure: (allow-none): The closure the handlers will invoke.
  * @func: The C closure callback of the handlers (useless for non-C closures).
  * @data: The closure data of the handlers' closures.
  *
@@ -9289,7 +9289,7 @@
  * @mask: Mask indicating which of @signal_id, @detail, @closure, @func and/or @data the handlers have to match.
  * @signal_id: Signal the handlers have to be connected to.
  * @detail: Signal detail the handlers have to be connected to.
- * @closure: The closure the handlers will invoke.
+ * @closure: (allow-none): The closure the handlers will invoke.
  * @func: The C closure callback of the handlers (useless for non-C closures).
  * @data: The closure data of the handlers' closures.
  *
@@ -9336,7 +9336,7 @@
  * created. Further information about the signals can be acquired through
  * g_signal_query().
  *
- * Returns: Newly allocated array of signal IDs.
+ * Returns: (array length=n_ids): Newly allocated array of signal IDs.
  */
 
 
@@ -9468,13 +9468,13 @@
  * @signal_name: the name for the signal
  * @itype: the type this signal pertains to. It will also pertain to types which are derived from this type
  * @signal_flags: a combination of #GSignalFlags specifying detail of when the default handler is to be invoked. You should at least specify %G_SIGNAL_RUN_FIRST or %G_SIGNAL_RUN_LAST
- * @class_closure: The closure to invoke on signal emission; may be %NULL
- * @accumulator: the accumulator for this signal; may be %NULL
+ * @class_closure: (allow-none): The closure to invoke on signal emission; may be %NULL
+ * @accumulator: (allow-none): the accumulator for this signal; may be %NULL
  * @accu_data: user data for the @accumulator
  * @c_marshaller: (allow-none): the function to translate arrays of parameter values to signal emissions into C language callback invocations or %NULL
  * @return_type: the type of return value, or #G_TYPE_NONE for a signal without a return value
  * @n_params: the length of @param_types
- * @param_types: an array of types, one for each parameter
+ * @param_types: (array length=n_params): an array of types, one for each parameter
  *
  * Creates a new signal. (This is usually done in the class initializer.)
  *
@@ -9526,8 +9526,8 @@
  * g_signal_parse_name:
  * @detailed_signal: a string of the form "signal-name::detail".
  * @itype: The interface/instance type that introduced "signal-name".
- * @signal_id_p: Location to store the signal id.
- * @detail_p: Location to store the detail quark.
+ * @signal_id_p: (out): Location to store the signal id.
+ * @detail_p: (out): Location to store the detail quark.
  * @force_detail_quark: %TRUE forces creation of a #GQuark for the detail.
  *
  * Internal function to parse a signal name into its @signal_id
@@ -9540,7 +9540,7 @@
 /**
  * g_signal_query:
  * @signal_id: The signal id of the signal to query information for.
- * @query: A user provided structure that is filled in with constant values upon success.
+ * @query: (out caller-allocates): A user provided structure that is filled in with constant values upon success.
  *
  * Queries the signal system for in-depth information about a
  * specific signal. This function will fill in a user-provided
@@ -11247,7 +11247,7 @@
 /**
  * g_value_set_static_string:
  * @value: a valid #GValue of type %G_TYPE_STRING
- * @v_string: static string to be set
+ * @v_string: (allow-none): static string to be set
  *
  * Set the contents of a %G_TYPE_STRING #GValue to @v_string.
  * The string is assumed to be static, and is thus not duplicated
@@ -11258,7 +11258,7 @@
 /**
  * g_value_set_string:
  * @value: a valid #GValue of type %G_TYPE_STRING
- * @v_string: caller-owned string to be duplicated for the #GValue
+ * @v_string: (allow-none): caller-owned string to be duplicated for the #GValue
  *
  * Set the contents of a %G_TYPE_STRING #GValue to @v_string.
  */
@@ -11267,7 +11267,7 @@
 /**
  * g_value_set_string_take_ownership:
  * @value: a valid #GValue of type %G_TYPE_STRING
- * @v_string: duplicated unowned string to be set
+ * @v_string: (allow-none): duplicated unowned string to be set
  *
  * This is an internal function introduced mainly for C marshallers.
  *
@@ -11369,7 +11369,7 @@
 /**
  * g_value_take_string:
  * @value: a valid #GValue of type %G_TYPE_STRING
- * @v_string: string to take ownership of
+ * @v_string: (allow-none): string to take ownership of
  *
  * Sets the contents of a %G_TYPE_STRING #GValue to @v_string.
  *

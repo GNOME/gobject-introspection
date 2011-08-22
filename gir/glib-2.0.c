@@ -385,11 +385,11 @@
 /**
  * GClosureMarshal:
  * @closure: the #GClosure to which the marshaller belongs
- * @return_value: a #GValue to store the return value. May be %NULL if the callback of @closure doesn't return a value.
+ * @return_value: (allow-none): a #GValue to store the return value. May be %NULL if the callback of @closure doesn't return a value.
  * @n_param_values: the length of the @param_values array
- * @param_values: an array of #GValue<!-- -->s holding the arguments on which to invoke the callback of @closure
- * @invocation_hint: the invocation hint given as the last argument to g_closure_invoke()
- * @marshal_data: additional data specified when registering the marshaller, see g_closure_set_marshal() and g_closure_set_meta_marshal()
+ * @param_values: (array length=n_param_values): an array of #GValue<!-- -->s holding the arguments on which to invoke the callback of @closure
+ * @invocation_hint: (allow-none): the invocation hint given as the last argument to g_closure_invoke()
+ * @marshal_data: (allow-none): additional data specified when registering the marshaller, see g_closure_set_marshal() and g_closure_set_meta_marshal()
  *
  * The type used for marshaller functions.
  */
@@ -2250,7 +2250,7 @@
  * GSignalEmissionHook:
  * @ihint: Signal invocation hint, see #GSignalInvocationHint.
  * @n_param_values: the number of parameters to the function, including the instance on which the signal was emitted.
- * @param_values: the instance on which the signal was emitted, followed by the parameters of the emission.
+ * @param_values: (array length=n_param_values): the instance on which the signal was emitted, followed by the parameters of the emission.
  * @data: user data associated with the hook.
  *
  * A simple function pointer to get invoked when the signal is emitted. This
@@ -12279,17 +12279,17 @@
 
 /**
  * g_checksum_get_digest:
- * @hmac: a #GHmac
+ * @checksum: a #GChecksum
  * @buffer: output buffer
- * @digest_len: an inout parameter. The caller initializes it to the size of @buffer. After the call it contains the length of the digest
+ * @digest_len: an inout parameter. The caller initializes it to the size of @buffer. After the call it contains the length of the digest.
  *
- * Gets the digest from @checksum as a raw binary array and places it
+ * Gets the digest from @checksum as a raw binary vector and places it
  * into @buffer. The size of the digest depends on the type of checksum.
  *
- * Once this function has been called, the #GHmac is closed and can
+ * Once this function has been called, the #GChecksum is closed and can
  * no longer be updated with g_checksum_update().
  *
- * Since: 2.30
+ * Since: 2.16
  */
 
 
@@ -13595,6 +13595,11 @@
  * <literal>%%t</literal>:
  * </term><listitem><simpara>
  * a tab character
+ * </simpara></listitem></varlistentry>
+ * <varlistentry><term>
+ * <literal>%%T</literal>:
+ * </term><listitem><simpara>
+ * the time in 24-hour notation with seconds (<literal>%%H:%%M:%%S</literal>)
  * </simpara></listitem></varlistentry>
  * <varlistentry><term>
  * <literal>%%u</literal>:
@@ -15310,10 +15315,13 @@
  * that probably involves returning the wall clock time (with at least
  * microsecond accuracy, subject to the limitations of the OS kernel).
  *
- * Note that, on Windows, "limitations of the OS kernel" is a rather
- * substantial statement.  Depending on the configuration of the system,
- * the wall clock time is updated as infrequently as 64 times a second
- * (which is approximately every 16ms).
+ * It's important to note that POSIX %CLOCK_MONOTONIC does not count
+ * time spent while the machine is suspended.
+ *
+ * On Windows, "limitations of the OS kernel" is a rather substantial
+ * statement.  Depending on the configuration of the system, the wall
+ * clock time is updated as infrequently as 64 times a second (which
+ * is approximately every 16ms).
  *
  * Returns: the monotonic time, in microseconds
  * Since: 2.28
@@ -16374,7 +16382,7 @@
 
 /**
  * g_intern_static_string:
- * @string: a static string
+ * @string: (allow-none): a static string
  *
  * Returns a canonical representation for @string. Interned strings can
  * be compared for equality by comparing the pointers, instead of using strcmp().
@@ -16388,7 +16396,7 @@
 
 /**
  * g_intern_string:
- * @string: a string
+ * @string: (allow-none): a string
  *
  * Returns a canonical representation for @string. Interned strings can
  * be compared for equality by comparing the pointers, instead of using strcmp().
@@ -22074,7 +22082,7 @@
 
 /**
  * g_quark_from_static_string:
- * @string: a string.
+ * @string: (allow-none): a string.
  * @Returns: the #GQuark identifying the string, or 0 if @string is %NULL.
  *
  * Gets the #GQuark identifying the given (static) string. If the
@@ -22094,7 +22102,7 @@
 
 /**
  * g_quark_from_string:
- * @string: a string.
+ * @string: (allow-none): a string.
  * @Returns: the #GQuark identifying the string, or 0 if @string is %NULL.
  *
  * Gets the #GQuark identifying the given string. If the string does
@@ -22114,7 +22122,7 @@
 
 /**
  * g_quark_try_string:
- * @string: a string.
+ * @string: (allow-none): a string.
  * @Returns: the #GQuark associated with the string, or 0 if @string is %NULL or there is no #GQuark associated with it.
  *
  * Gets the #GQuark associated with the given string, or 0 if string is
@@ -28420,12 +28428,13 @@
 /**
  * g_time_zone_new_local:
  *
- * Creates a #GTimeZone corresponding to local time.
+ * Creates a #GTimeZone corresponding to local time.  The local time
+ * zone may change between invocations to this function; for example,
+ * if the system administrator changes it.
  *
  * This is equivalent to calling g_time_zone_new() with the value of the
  * <varname>TZ</varname> environment variable (including the possibility
- * of %NULL).  Changes made to <varname>TZ</varname> after the first
- * call to this function may or may not be noticed by future calls.
+ * of %NULL).
  *
  * You should release the return value by calling g_time_zone_unref()
  * when you are done with it.
@@ -28459,24 +28468,6 @@
  *
  * Returns: a new reference to @tz.
  * Since: 2.26
- */
-
-
-/**
- * g_time_zone_refresh_local:
- *
- * Notifies #GTimeZone that the local timezone may have changed.
- *
- * In response, #GTimeZone will drop its cache of the local time zone.
- * No existing #GTimeZone will be modified and no #GDateTime will change
- * its timezone but future calls to g_time_zone_new_local() will start
- * returning the new timezone.
- *
- * #GTimeZone does no monitoring of the local timezone on its own, which
- * is why you have to call this function to notify it of the change.
- *
- * If you use #GTimeZoneMonitor to watch for changes then this function
- * will automatically be called for you.
  */
 
 
@@ -28517,6 +28508,9 @@
  * and attaches it to the main loop context using g_source_attach(). You can
  * do these steps manually if you need greater control.
  *
+ * The interval given is in terms of monotonic time, not wall clock
+ * time.  See g_get_monotonic_time().
+ *
  * Returns: the ID (greater than 0) of the event source.
  */
 
@@ -28546,6 +28540,9 @@
  * and attaches it to the main loop context using g_source_attach(). You can
  * do these steps manually if you need greater control.
  *
+ * The interval given in terms of monotonic time, not wall clock time.
+ * See g_get_monotonic_time().
+ *
  * Returns: the ID (greater than 0) of the event source.
  * Rename to: g_timeout_add
  */
@@ -28570,6 +28567,9 @@
  * Note that the first call of the timer may not be precise for timeouts
  * of one second. If you need finer precision and have such a timeout,
  * you may want to use g_timeout_add() instead.
+ *
+ * The interval given is in terms of monotonic time, not wall clock
+ * time.  See g_get_monotonic_time().
  *
  * Returns: the ID (greater than 0) of the event source.
  * Since: 2.14
@@ -28615,6 +28615,9 @@
  * using g_source_attach(). You can do these steps manually if you need
  * greater control.
  *
+ * The interval given is in terms of monotonic time, not wall clock
+ * time.  See g_get_monotonic_time().
+ *
  * Returns: the ID (greater than 0) of the event source.
  * Rename to: g_timeout_add_seconds
  * Since: 2.14
@@ -28630,6 +28633,9 @@
  * The source will not initially be associated with any #GMainContext
  * and must be added to one with g_source_attach() before it will be
  * executed.
+ *
+ * The interval given is in terms of monotonic time, not wall clock
+ * time.  See g_get_monotonic_time().
  *
  * Returns: the newly-created timeout source
  */
@@ -28647,6 +28653,9 @@
  *
  * The scheduling granularity/accuracy of this timeout source will be
  * in seconds.
+ *
+ * The interval given in terms of monotonic time, not wall clock time.
+ * See g_get_monotonic_time().
  *
  * Returns: the newly-created timeout source
  * Since: 2.14

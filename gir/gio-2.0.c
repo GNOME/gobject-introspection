@@ -897,11 +897,11 @@
 /**
  * GClosureMarshal:
  * @closure: the #GClosure to which the marshaller belongs
- * @return_value: a #GValue to store the return value. May be %NULL if the callback of @closure doesn't return a value.
+ * @return_value: (allow-none): a #GValue to store the return value. May be %NULL if the callback of @closure doesn't return a value.
  * @n_param_values: the length of the @param_values array
- * @param_values: an array of #GValue<!-- -->s holding the arguments on which to invoke the callback of @closure
- * @invocation_hint: the invocation hint given as the last argument to g_closure_invoke()
- * @marshal_data: additional data specified when registering the marshaller, see g_closure_set_marshal() and g_closure_set_meta_marshal()
+ * @param_values: (array length=n_param_values): an array of #GValue<!-- -->s holding the arguments on which to invoke the callback of @closure
+ * @invocation_hint: (allow-none): the invocation hint given as the last argument to g_closure_invoke()
+ * @marshal_data: (allow-none): additional data specified when registering the marshaller, see g_closure_set_marshal() and g_closure_set_meta_marshal()
  *
  * The type used for marshaller functions.
  */
@@ -5344,7 +5344,7 @@
  * GSignalEmissionHook:
  * @ihint: Signal invocation hint, see #GSignalInvocationHint.
  * @n_param_values: the number of parameters to the function, including the instance on which the signal was emitted.
- * @param_values: the instance on which the signal was emitted, followed by the parameters of the emission.
+ * @param_values: (array length=n_param_values): the instance on which the signal was emitted, followed by the parameters of the emission.
  * @data: user data associated with the hook.
  *
  * A simple function pointer to get invoked when the signal is emitted. This
@@ -6046,30 +6046,6 @@
  * standard time or local daylight time.  This is important for the case
  * where the same local time occurs twice (during daylight savings time
  * transitions, for example).
- */
-
-
-/**
- * GTimeZoneMonitor:
- *
- * This is an opaque structure type.
- */
-
-
-/**
- * GTimeZoneMonitor::changed:
- * @monitor: the #GTimeZoneMonitor
- *
- * Indicates that the local timezone has changed.
- *
- * The g_time_zone_refresh_local() function is called just before this
- * signal is emitted, so any new #GTimeZone or #GDateTime instances
- * created from signal handlers will be as per the new timezone.
- *
- * Note that this signal is not emitted in response to entering or
- * exiting daylight savings time within a given timezone.  It's only
- * for when the user has changed the timezone to that of a different
- * location.
  */
 
 
@@ -14361,25 +14337,6 @@
 
 
 /**
- * SECTION:gtimezonemonitor
- * @title: GTimeZoneMonitor
- * @short_description: Monitor the local timezone
- *
- * #GTimeZoneMonitor is a utility class to monitor the local timezone for
- * changes (ie: in response to the user manually changing the timezone
- * to that of a different locale).
- *
- * You must use this class in order for your program to notice changes
- * to the local timezone.  It works by monitoring the /etc/localtime
- * file.  When the timezone is found to have changed,
- * g_time_zone_refresh_local() is called and the "changed" signal is
- * emitted on the #GTimeZoneMonitor (in that order).
- *
- * Windows support is not presently working.
- */
-
-
-/**
  * SECTION:gtls
  * @title: TLS Overview
  * @short_description: TLS (aka SSL) support for GSocketConnection
@@ -17240,7 +17197,7 @@
  * and pass it to the operations.
  *
  * One #GCancellable can be used in multiple consecutive
- * operations, but not in multiple concurrent operations.
+ * operations or in multiple concurrent operations.
  *
  * Returns: a #GCancellable.
  */
@@ -17293,6 +17250,9 @@
  * @cancellable: a #GCancellable object.
  *
  * Resets @cancellable to its uncancelled state.
+ *
+ * If cancellable is currently in use by any cancellable operation
+ * then the behavior of this function is undefined.
  */
 
 
@@ -34364,25 +34324,6 @@
  *
  * Returns: a new #GSocketService.
  * Since: 2.22
- */
-
-
-/**
- * g_time_zone_monitor_get:
- *
- * Gets the singleton instance of the #GTimeZoneMonitor class, creating
- * it if required.
- *
- * You should call g_object_unref() on the result when you no longer
- * need it.  Be aware, though, that this will not destroy the instance,
- * so if you connected to the changed signal, you are required to
- * disconnect from it for yourself.
- *
- * There is only one instance of #GTimeZoneMonitor and it dispatches its
- * signals via the default #GMainContext.  There is no way to create an
- * instance that will dispatch signals using a different context.
- *
- * Returns: (transfer full): a reference to the #GTimeZoneMonitor.
  */
 
 
