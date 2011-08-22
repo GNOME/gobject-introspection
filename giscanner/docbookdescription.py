@@ -1,7 +1,7 @@
 
 TAG_PROGRAM_LISTING = '<programlisting'
 TAG_CDATA = '<![CDATA['
-TAGS =  {TAG_PROGRAM_LISTING, TAG_CDATA, ']]>', '</programlisting>'}
+TAGS = {TAG_PROGRAM_LISTING, TAG_CDATA, ']]>', '</programlisting>'}
 
 def get_formatted_description(description):
     desc = description.replace("|[", "<informalexample><programlisting>") \
@@ -177,9 +177,9 @@ def test():
     assert _is_valid_xml_tag('a href="http://www.gtk.org" title="&lt;i&gt;Our&lt;/i&gt; website"')
     assert _is_valid_xml_tag('ulink \nurl="http://www.freedesktop.org/Standards/wm-spec"')
 
-    string = 'gtk_label_set_markup (label, "Go to the <a href="http://www.gtk.org" title="&lt;i&gt;Our&lt;/i&gt; website">GTK+ website</a> for more...");'
+    string = 'gtk_label_set_markup (label, "Go to the <a href="http://www.gtk.org" ' \
+        + 'title="&lt;i&gt;Our&lt;/i&gt; website">GTK+ website</a> for more...");'
     assert _escape_lt_not_in_xml_tag(string) == string
 
 if __name__ == '__main__':
     test()
-
