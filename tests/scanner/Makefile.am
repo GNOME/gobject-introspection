@@ -3,24 +3,21 @@ include $(top_srcdir)/Makefile.introspection
 
 INTROSPECTION_SCANNER_ARGS += --warn-all --warn-error -I.
 
-# We need to build a shared library, which can be dlopened
-# it does not work with noinst_LTLIBRARIES
-testlib_LTLIBRARIES = \
+check_LTLIBRARIES = \
 	libannotation.la \
 	libtestinherit.la \
 	libfoo.la \
 	libutility.la \
 	libgtkfrob.la
 if HAVE_CAIRO
-testlib_LTLIBRARIES += libregress.la
+check_LTLIBRARIES += libregress.la
 endif
-
-testlibdir = $(prefix)/unused
-install-testlibLTLIBRARIES: # prevent it from being installed
 
 AM_CPPFLAGS = -I$(top_srcdir)/girepository
 AM_CFLAGS = $(GIO_CFLAGS) $(GOBJECT_CFLAGS) $(GTHREAD_CFLAGS)
-AM_LDFLAGS = -avoid-version
+# -rpath needed to force libtool to build a shared library for a check_LTLIBRARIES
+# target. See http://lists.gnu.org/archive/html/automake/2005-10/msg00107.html
+AM_LDFLAGS = -rpath /unused -avoid-version
 LIBS = $(GOBJECT_LIBS) $(GTHREAD_LIBS)
 
 libannotation_la_SOURCES = $(srcdir)/annotation.c $(srcdir)/annotation.h
@@ -49,7 +46,6 @@ CHECKGIRS = $(GIRS:.gir=.gir.check)
 EXPECTEDGIRS = $(GIRS:.gir=-expected.gir)
 INTROSPECTION_GIRS = $(GIRS)
 CLEANFILES = $(TYPELIBS) $(GIRS)
-BUILT_SOURCES = $(TYPELIBS) $(GIRS)
 EXTRA_DIST = $(EXPECTEDGIRS)
 
 Regress-1.0.gir: $(top_builddir)/Gio-2.0.gir libregress.la
@@ -102,7 +98,7 @@ GtkFrob_1_0_gir_FILES = $(libgtkfrob_la_SOURCES)
 GtkFrob_1_0_gir_SCANNERFLAGS = --identifier-prefix=Gtk --symbol-prefix=gtk_frob
 GIRS += GtkFrob-1.0.gir
 
-noinst_PROGRAMS = barapp
+check_PROGRAMS = barapp
 
 barapp_SOURCES = $(srcdir)/barapp.c $(srcdir)/barapp.h
 barapp_LDADD = $(top_builddir)/libgirepository-1.0.la

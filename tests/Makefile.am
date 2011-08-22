@@ -16,16 +16,14 @@ tests_DATA =		    \
     gimarshallingtests.c    \
     gimarshallingtests.h
 
-testlib_LTLIBRARIES = libeverything-1.0.la libgimarshallingtests-1.0.la
-testlibdir=$(prefix)/unused
-install-testlibLTLIBRARIES: # prevent it from being installed
+check_LTLIBRARIES = libeverything-1.0.la libgimarshallingtests-1.0.la
 
 libeverything_1_0_la_SOURCES = everything.c
 libgimarshallingtests_1_0_la_SOURCES = gimarshallingtests.c
 
 EXTRA_DIST += gimarshallingtests.h
 
-BUILT_SOURCES += everything.c everything.h Everything-1.0.gir GIMarshallingTests-1.0.gir
+BUILT_SOURCES += everything.c everything.h
 
 CLEANFILES += \
     $(BUILT_SOURCES) \

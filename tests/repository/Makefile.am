@@ -2,7 +2,7 @@ AM_CFLAGS = $(GOBJECT_CFLAGS)
 AM_LDFLAGS = -module -avoid-version
 LIBS = $(GOBJECT_LIBS)
 
-noinst_PROGRAMS = gitestrepo gitestthrows gitypelibtest
+check_PROGRAMS = gitestrepo gitestthrows gitypelibtest
 
 gitestrepo_SOURCES = $(srcdir)/gitestrepo.c
 gitestrepo_CPPFLAGS = $(GIREPO_CFLAGS) -I$(top_srcdir)/girepository
