@@ -3,11 +3,12 @@
       type="guide"
       style="class"
       xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
     <link type="guide" xref="index" group="class"/>
   </info>
-  <title>${node.namespace.name}${node.name}</title>
+  <title>${node.ctype}</title>
 ${format(node.doc)}
   <synopsis ui:expanded="no">
     <title>Hierarchy</title>
@@ -17,10 +18,14 @@ ${format(node.doc)}
       </item>
     </tree>
   </synopsis>
-  <links type="topic" ui:expanded="yes" groups="constructor" style="linklist">
+  <links type="topic" ui:expanded="yes"
+         api:type="function" api:mime="text/x-csrc"
+         groups="constructor" style="linklist">
     <title>Constructors</title>
   </links>
-  <links type="topic" ui:expanded="yes" groups="method" style="linklist">
+  <links type="topic" ui:expanded="yes"
+         api:type="function" api:mime="text/x-csrc"
+         groups="method" style="linklist">
     <title>Methods</title>
   </links>
   <links type="topic" ui:expanded="yes" groups="property" style="linklist">

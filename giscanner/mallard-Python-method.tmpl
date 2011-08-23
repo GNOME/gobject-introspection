@@ -1,13 +1,12 @@
 <?xml version="1.0"?>
-<page id="${namespace.name}.${parent.name}.${node.name}"
+<page id="${namespace.name}.${node.parent.name}.${node.name}"
       type="topic"
       style="method"
       xmlns="http://projectmallard.org/1.0/"
       xmlns:ui="http://projectmallard.org/experimental/ui/"
       xmlns:c="http://www.gtk.org/introspection/c/1.0">
   <info>
-    <link type="guide" xref="${namespace.name}.${parent.name}" group="method"/>
-    <c:identifier>${node.symbol}</c:identifier>
+    <link type="guide" xref="${namespace.name}.${node.parent.name}" group="method"/>
   </info>
   <title>${node.symbol}</title>
 ${format(node.doc)}</page>

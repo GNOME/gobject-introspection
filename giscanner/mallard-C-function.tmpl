@@ -3,9 +3,13 @@
       type="topic"
       style="function"
       xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
     <link type="guide" xref="index" group="function"/>
+    <api:function>
+      <api:name>${node.symbol}</api:name>
+    </api:function>
   </info>
   <title>${node.symbol}</title>
 ${format(node.doc)}</page>

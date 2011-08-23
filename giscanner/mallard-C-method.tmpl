@@ -1,11 +1,53 @@
 <?xml version="1.0"?>
-<page id="${namespace.name}.${parent.name}.${node.name}"
+<page id="${namespace.name}.${node.parent.name}.${node.name}"
       type="topic"
       style="method"
       xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
-    <link type="guide" xref="${namespace.name}.${parent.name}" group="method"/>
+    <link type="guide" xref="${namespace.name}.${node.parent.name}" group="method"/>
+    <api:function>
+      <api:returns>
+        <api:type>${node.retval.type.ctype}</api:type>
+      </api:returns>
+      <api:name>${node.symbol}</api:name>
+      <api:arg>
+        <api:type>${node.parent.ctype} *</api:type>
+        <api:name>self</api:name>
+      </api:arg>
+% for arg in node.parameters:
+% if arg.type.ctype == '<varargs>':
+      <api:varargs/>
+% else:
+      <api:arg>
+        <api:type>${arg.type.ctype}</api:type>
+        <api:name>${arg.argname}</api:name>
+      </api:arg>
+% endif
+% endfor
+    </api:function>
   </info>
   <title>${node.symbol}</title>
+<synopsis><code>
+${node.retval.type.ctype} ${node.symbol} (${node.parent.ctype} *self\
+% if len(node.parameters) == 0:
+);
+% else:
+,
+% endif
+% for arg, ix in zip(node.parameters, range(len(node.parameters))):
+${' ' * (len(node.retval.type.ctype) + len(node.symbol) + 3)}\
+% if arg.type.ctype == '<varargs>':
+...\
+% else:
+${arg.type.ctype} ${arg.argname}\
+% endif
+% if ix == len(node.parameters) - 1:
+);
+% else:
+,
+%endif
+% endfor
+</code></synopsis>
 ${format(node.doc)}</page>
