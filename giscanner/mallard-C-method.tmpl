@@ -9,7 +9,7 @@
     <link type="guide" xref="${namespace.name}.${node.parent.name}" group="method"/>
     <api:function>
       <api:returns>
-        <api:type>${node.retval.type.ctype}</api:type>
+        <api:type>${formatter.format_type(node.retval.type)}</api:type>
       </api:returns>
       <api:name>${node.symbol}</api:name>
       <api:arg>
@@ -21,7 +21,7 @@
       <api:varargs/>
 % else:
       <api:arg>
-        <api:type>${arg.type.ctype}</api:type>
+        <api:type>${formatter.format_type(arg.type)}</api:type>
         <api:name>${arg.argname}</api:name>
       </api:arg>
 % endif
@@ -30,18 +30,18 @@
   </info>
   <title>${node.symbol}</title>
 <synopsis><code>
-${node.retval.type.ctype} ${node.symbol} (${node.parent.ctype} *self\
+${formatter.format_type(node.retval.type)} ${node.symbol} (${node.parent.ctype} *self\
 % if len(node.parameters) == 0:
 );
 % else:
 ,
 % endif
 % for arg, ix in zip(node.parameters, range(len(node.parameters))):
-${' ' * (len(node.retval.type.ctype) + len(node.symbol) + 3)}\
+${' ' * (len(formatter.format_type(node.retval.type)) + len(node.symbol) + 3)}\
 % if arg.type.ctype == '<varargs>':
 ...\
 % else:
-${arg.type.ctype} ${arg.argname}\
+${formatter.format_type(arg.type)} ${arg.argname}\
 % endif
 % if ix == len(node.parameters) - 1:
 );
@@ -50,4 +50,4 @@ ${arg.type.ctype} ${arg.argname}\
 %endif
 % endfor
 </code></synopsis>
-${format(node.doc)}</page>
+${formatter.format(node.doc)}</page>

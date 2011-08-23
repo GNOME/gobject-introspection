@@ -30,40 +30,59 @@ from mako.runtime import supports_caller
 
 from . import ast
 
-def format(doc):
-    if doc is None:
-        return ''
+class MallardFormatter(object):
+    @classmethod
+    def escape(cls, text):
+        return saxutils.escape(text.encode('utf-8')).decode('utf-8')
 
-    result = ''
-    for para in doc.split('\n\n'):
-        result += '<p>'
-        result += format_inline(para)
-        result += '</p>'
-    return result
+    @classmethod
+    def format(cls, doc):
+        if doc is None:
+            return ''
 
-def escape(text):
-    return saxutils.escape(text.encode('utf-8')).decode('utf-8')
+        result = ''
+        for para in doc.split('\n\n'):
+            result += '<p>'
+            result += cls.format_inline(para)
+            result += '</p>'
+        return result
 
-def format_inline(para):
-    result = ''
+    @classmethod
+    def format_inline(cls, para):
+        result = ''
 
-    poss = []
-    poss.append((para.find('#'), '#'))
-    poss = [pos for pos in poss if pos[0] >= 0]
-    poss.sort(cmp=lambda x, y: cmp(x[0], y[0]))
-    if len(poss) == 0:
-        result += escape(para)
-    elif poss[0][1] == '#':
-        pos = poss[0][0]
-        result += escape(para[:pos])
-        rest = para[pos + 1:]
-        link = re.split('[^a-zA-Z_:-]', rest, maxsplit=1)[0]
-        xref = link #self.writer._xrefs.get(link, link)
-        result += '<link xref="%s">%s</link>' % (xref, link)
-        if len(link) < len(rest):
-            result += format_inline(rest[len(link):])
+        poss = []
+        poss.append((para.find('#'), '#'))
+        poss = [pos for pos in poss if pos[0] >= 0]
+        poss.sort(cmp=lambda x, y: cmp(x[0], y[0]))
+        if len(poss) == 0:
+            result += cls.escape(para)
+        elif poss[0][1] == '#':
+            pos = poss[0][0]
+            result += cls.escape(para[:pos])
+            rest = para[pos + 1:]
+            link = re.split('[^a-zA-Z_:-]', rest, maxsplit=1)[0]
+            xref = link #self.writer._xrefs.get(link, link)
+            result += '<link xref="%s">%s</link>' % (xref, link)
+            if len(link) < len(rest):
+                result += cls.format_inline(rest[len(link):])
 
-    return result
+        return result
+
+    @classmethod
+    def format_type(cls, type_):
+        raise NotImplementedError
+
+class MallardFormatterC(MallardFormatter):
+    @classmethod
+    def format_type(cls, type_):
+        if type_.ctype is not None:
+            return type_.ctype
+        else:
+            return type_.target_fundamental
+
+class MallardFormatterPython(MallardFormatter):
+    pass
 
 class MallardWriter(object):
     def __init__(self, transformer, language):
@@ -79,14 +98,14 @@ class MallardWriter(object):
             self._render_node(node, output)
             if isinstance(node, (ast.Class, ast.Record)):
                 for method in node.methods:
-                    self._render_node(method, output, node)
+                    self._render_node(method, output)
             if isinstance(node, ast.Class):
                 for property_ in node.properties:
-                    self._render_node(property_, output, node)
+                    self._render_node(property_, output)
                 for signal in node.signals:
-                    self._render_node(signal, output, node)
+                    self._render_node(signal, output)
 
-    def _render_node(self, node, output, parent=None):
+    def _render_node(self, node, output):
         namespace = self._transformer.namespace
         if isinstance(node, ast.Namespace):
             template_name = 'mallard-%s-namespace.tmpl' % self._language
@@ -97,18 +116,18 @@ class MallardWriter(object):
         elif isinstance(node, ast.Record):
             template_name = 'mallard-%s-record.tmpl' % self._language
             page_id = '%s.%s' % (namespace.name, node.name)
-        elif isinstance(node, ast.Function) and parent is not None:
+        elif isinstance(node, ast.Function) and node.parent is not None:
             template_name = 'mallard-%s-method.tmpl' % self._language
-            page_id = '%s.%s.%s' % (namespace.name, parent.name, node.name)
+            page_id = '%s.%s.%s' % (namespace.name, node.parent.name, node.name)
         elif isinstance(node, ast.Function):
             template_name = 'mallard-%s-function.tmpl' % self._language
             page_id = '%s.%s' % (namespace.name, node.name)
-        elif isinstance(node, ast.Property) and parent is not None:
+        elif isinstance(node, ast.Property) and node.parent is not None:
             template_name = 'mallard-%s-property.tmpl' % self._language
-            page_id = '%s.%s-%s' % (namespace.name, parent.name, node.name)
-        elif isinstance(node, ast.Signal) and parent is not None:
+            page_id = '%s.%s-%s' % (namespace.name, node.parent.name, node.name)
+        elif isinstance(node, ast.Signal) and node.parent is not None:
             template_name = 'mallard-%s-signal.tmpl' % self._language
-            page_id = '%s.%s-%s' % (namespace.name, parent.name, node.name)
+            page_id = '%s.%s-%s' % (namespace.name, node.parent.name, node.name)
         else:
             template_name = 'mallard-%s-default.tmpl' % self._language
             page_id = '%s.%s' % (namespace.name, node.name)
@@ -121,10 +140,15 @@ class MallardWriter(object):
 
         file_name = os.path.join(template_dir, template_name)
         template = Template(filename=file_name, output_encoding='utf-8')
+        if self._language == 'C':
+            formatter = MallardFormatterC
+        elif self._language == 'Python':
+            formatter = MallardFormatterPython
+        else:
+            formatter = MallardFormatter
         result = template.render(namespace=namespace,
                                  node=node,
-                                 format=format,
-                                 parent=parent)
+                                 formatter=formatter)
 
         output_file_name = os.path.join(os.path.dirname(output),
                                         page_id + '.page')

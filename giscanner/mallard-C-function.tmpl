@@ -12,4 +12,26 @@
     </api:function>
   </info>
   <title>${node.symbol}</title>
-${format(node.doc)}</page>
+<synopsis><code>
+${formatter.format_type(node.retval.type)} ${node.symbol} (\
+% if len(node.parameters) == 0:
+);
+% endif
+% for arg, ix in zip(node.parameters, range(len(node.parameters))):
+% if ix != 0:
+${' ' * (len(formatter.format_type(node.retval.type)) + len(node.symbol) + 3)}\
+% endif
+% if arg.type.ctype == '<varargs>':
+...\
+% else:
+${formatter.format_type(arg.type)} ${arg.argname}\
+% endif
+% if ix == len(node.parameters) - 1:
+);
+% else:
+,
+%endif
+% endfor
+</code></synopsis>
+${formatter.format(node.doc)}
+</page>
