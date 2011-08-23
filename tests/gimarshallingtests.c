@@ -1180,6 +1180,28 @@ gi_marshalling_tests_array_fixed_out (gint **ints)
 }
 
 /**
+ * gi_marshalling_tests_array_fixed_out_struct:
+ * @structs: (out) (array fixed-size=2) (transfer none):
+ */
+void
+gi_marshalling_tests_array_fixed_out_struct (GIMarshallingTestsSimpleStruct **structs)
+{
+    static GIMarshallingTestsSimpleStruct *values;
+
+    if (values == NULL) {
+        values = g_new(GIMarshallingTestsSimpleStruct, 2);
+
+        values[0].long_ = 7;
+        values[0].int8 = 6;
+
+        values[1].long_ = 6;
+        values[1].int8 = 7;
+    }
+
+    *structs = values;
+}
+
+/**
  * gi_marshalling_tests_array_fixed_inout:
  * @ints: (inout) (array fixed-size=4) (transfer none):
  */
