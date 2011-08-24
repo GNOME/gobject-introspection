@@ -27545,7 +27545,7 @@
  * If @type has already been registered as an extension for this
  * extension point, the existing #GIOExtension object is returned.
  *
- * Returns: a #GIOExtension object for #GType
+ * Returns: (transfer none): a #GIOExtension object for #GType
  */
 
 
@@ -27555,9 +27555,9 @@
  *
  * Looks up an existing extension point.
  *
- * registered extension point with the given name
+ * is no registered extension point with the given name.
  *
- * Returns: the #GIOExtensionPoint, or %NULL if there is no
+ * Returns: (transfer none): the #GIOExtensionPoint, or %NULL if there
  */
 
 
@@ -27567,9 +27567,9 @@
  *
  * Registers an extension point.
  *
- * and should not be freed
+ * owned by GIO and should not be freed.
  *
- * Returns: the new #GIOExtensionPoint. This object is owned by GIO
+ * Returns: (transfer none): the new #GIOExtensionPoint. This object is
  */
 
 

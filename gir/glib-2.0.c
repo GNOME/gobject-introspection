@@ -14343,8 +14343,7 @@
 
 /**
  * g_dir_make_tmp:
- * @tmpl: Template for directory name, as in g_mkdtemp(), basename only, or %NULL, to a default template
- * @name_used: location to store actual name used, or %NULL
+ * @tmpl: (type filename) (allow-none): Template for directory name, as in g_mkdtemp(), basename only, or %NULL for a default template
  * @error: return location for a #GError
  *
  * Creates a subdirectory in the preferred directory for temporary
@@ -14359,11 +14358,11 @@
  * Note that in contrast to g_mkdtemp() (and mkdtemp()) @tmpl is not
  * modified, and might thus be a read-only literal string.
  *
- * with g_free() when not needed any longer and is is in the GLib
- * file name encoding.  In case of errors, %NULL is returned
- * and @error will be set.
+ * should be freed with g_free() when not needed any longer and is
+ * is in the GLib file name encoding. In case of errors, %NULL is
+ * returned and @error will be set.
  *
- * Returns: The actual name used. This string should be freed
+ * Returns: (type filename): The actual name used. This string
  * Since: 2.30
  */
 
@@ -14665,8 +14664,8 @@
 
 /**
  * g_file_open_tmp:
- * @tmpl: Template for file name, as in g_mkstemp(), basename only, or %NULL, to a default template
- * @name_used: location to store actual name used, or %NULL
+ * @tmpl: (type filename) (allow-none): Template for file name, as in g_mkstemp(), basename only, or %NULL for a default template
+ * @name_used: (out) (type filename): location to store actual name used, or %NULL
  * @error: return location for a #GError
  *
  * Opens a file for writing in the preferred directory for temporary
@@ -20167,7 +20166,7 @@
 
 /**
  * g_mkdtemp:
- * @tmpl: template directory name
+ * @tmpl: (type filename): template directory name
  *
  * Creates a temporary directory. See the mkdtemp() documentation
  * on most UNIX-like systems.
@@ -20181,7 +20180,8 @@
  * The string should be in the GLib file name encoding. Most importantly,
  * on Windows it should be in UTF-8.
  *
- * to hold the directory name.  In case of errors, NULL is returned.
+ * to hold the directory name.  In case of errors, %NULL is
+ * returned and %errno will be set.
  *
  * Returns: A pointer to @tmpl, which has been modified
  * Since: 2.26
@@ -20190,7 +20190,7 @@
 
 /**
  * g_mkdtemp_full:
- * @tmpl: template directory name
+ * @tmpl: (type filename): template directory name
  * @mode: permissions to create the temporary directory with
  *
  * Creates a temporary directory. See the mkdtemp() documentation
@@ -20205,7 +20205,8 @@
  * in the GLib file name encoding. Most importantly, on Windows it
  * should be in UTF-8.
  *
- * to hold the directory name. In case of errors, %NULL is returned.
+ * to hold the directory name. In case of errors, %NULL is
+ * returned, and %errno will be set.
  *
  * Returns: A pointer to @tmpl, which has been modified
  * Since: 2.26
@@ -20214,7 +20215,7 @@
 
 /**
  * g_mkstemp:
- * @tmpl: template filename
+ * @tmpl: (type filename): template filename
  *
  * Opens a temporary file. See the mkstemp() documentation
  * on most UNIX-like systems.
@@ -20229,7 +20230,8 @@
  *
  * opened for reading and writing. The file is opened in binary
  * mode on platforms where there is a difference. The file handle
- * should be closed with close(). In case of errors, -1 is returned.
+ * should be closed with close(). In case of errors, -1 is
+ * returned and %errno will be set.
  *
  * Returns: A file handle (as from open()) to the file
  */
@@ -20237,7 +20239,7 @@
 
 /**
  * g_mkstemp_full:
- * @tmpl: template filename
+ * @tmpl: (type filename): template filename
  * @flags: flags to pass to an open() call in addition to O_EXCL and O_CREAT, which are passed automatically
  * @mode: permissions to create the temporary file with
  *
@@ -20254,7 +20256,8 @@
  * on Windows it should be in UTF-8.
  *
  * opened for reading and writing. The file handle should be
- * closed with close(). In case of errors, -1 is returned.
+ * closed with close(). In case of errors, -1 is returned
+ * and %errno will be set.
  *
  * Returns: A file handle (as from open()) to the file
  * Since: 2.22
