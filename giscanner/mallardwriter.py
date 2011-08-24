@@ -76,13 +76,25 @@ class MallardFormatter(object):
 class MallardFormatterC(MallardFormatter):
     @classmethod
     def format_type(cls, type_):
-        if type_.ctype is not None:
+        if isinstance(type_, ast.Array):
+            try:
+                return cls.format_type(type_.element_type) + '*'
+            except:
+                return type_.target_fundamental
+        elif type_.ctype is not None:
             return type_.ctype
         else:
             return type_.target_fundamental
 
 class MallardFormatterPython(MallardFormatter):
-    pass
+    @classmethod
+    def format_type(cls, type_):
+        if isinstance(type_, ast.Array):
+            return '[' + cls.format_type(type_.element_type) + ']'
+        elif type_.target_giname is not None:
+            return type_.target_giname
+        else:
+            return type_.target_fundamental
 
 class MallardWriter(object):
     def __init__(self, transformer, language):
@@ -93,17 +105,22 @@ class MallardWriter(object):
         self._language = language
 
     def write(self, output):
-        self._render_node(self._transformer.namespace, output)
+        nodes = [self._transformer.namespace]
         for node in self._transformer.namespace.itervalues():
+            if isinstance(node, ast.Function) and node.moved_to is not None:
+                continue
+            if getattr(node, 'disguised', False):
+                continue
+            nodes.append(node)
+            if isinstance(node, (ast.Class, ast.Interface, ast.Record)):
+                nodes += getattr(node, 'methods', [])
+                nodes += getattr(node, 'constructors', [])
+                nodes += getattr(node, 'static_methods', [])
+                nodes += getattr(node, 'virtual_methods', [])
+                nodes += getattr(node, 'properties', [])
+                nodes += getattr(node, 'signals', [])
+        for node in nodes:
             self._render_node(node, output)
-            if isinstance(node, (ast.Class, ast.Record)):
-                for method in node.methods:
-                    self._render_node(method, output)
-            if isinstance(node, ast.Class):
-                for property_ in node.properties:
-                    self._render_node(property_, output)
-                for signal in node.signals:
-                    self._render_node(signal, output)
 
     def _render_node(self, node, output):
         namespace = self._transformer.namespace
@@ -116,12 +133,12 @@ class MallardWriter(object):
         elif isinstance(node, ast.Record):
             template_name = 'mallard-%s-record.tmpl' % self._language
             page_id = '%s.%s' % (namespace.name, node.name)
-        elif isinstance(node, ast.Function) and node.parent is not None:
-            template_name = 'mallard-%s-method.tmpl' % self._language
-            page_id = '%s.%s.%s' % (namespace.name, node.parent.name, node.name)
         elif isinstance(node, ast.Function):
             template_name = 'mallard-%s-function.tmpl' % self._language
-            page_id = '%s.%s' % (namespace.name, node.name)
+            if node.parent is not None:
+                page_id = '%s.%s.%s' % (namespace.name, node.parent.name, node.name)
+            else:
+                page_id = '%s.%s' % (namespace.name, node.name)
         elif isinstance(node, ast.Property) and node.parent is not None:
             template_name = 'mallard-%s-property.tmpl' % self._language
             page_id = '%s.%s-%s' % (namespace.name, node.parent.name, node.name)
@@ -148,6 +165,7 @@ class MallardWriter(object):
             formatter = MallardFormatter
         result = template.render(namespace=namespace,
                                  node=node,
+                                 page_id=page_id,
                                  formatter=formatter)
 
         output_file_name = os.path.join(os.path.dirname(output),
