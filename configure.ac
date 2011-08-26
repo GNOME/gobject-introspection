@@ -17,10 +17,10 @@ AC_CONFIG_HEADER([config.h])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_AUX_DIR([build-aux])
 
-AM_INIT_AUTOMAKE([1.7 tar-ustar dist-bzip2 no-dist-gzip foreign -Wno-portability])
+AM_INIT_AUTOMAKE([1.11 tar-ustar dist-xz no-dist-gzip foreign -Wno-portability])
 AM_MAINTAINER_MODE([enable])
 
-m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])],)
+AM_SILENT_RULES([yes])
 
 # Check for Win32
 AC_CANONICAL_HOST
