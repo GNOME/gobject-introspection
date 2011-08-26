@@ -233,7 +233,7 @@ GIREPO_CFLAGS="$GIREPO_CFLAGS $FFI_CFLAGS"
 GIREPO_CFLAGS="$GIREPO_CFLAGS $GCOV_CFLAGS"
 
 # gtk-doc
-GTK_DOC_CHECK([1.12])
+GTK_DOC_CHECK([1.15],[--flavour no-tmpl])
 
 # Checks for header files.
 AC_HEADER_STDC
