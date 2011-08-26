@@ -7,17 +7,20 @@ m4_define(gi_minor_version, 29)
 m4_define(gi_micro_version, 17)
 m4_define(gi_version, gi_major_version.gi_minor_version.gi_micro_version)
 
-AC_PREREQ(2.59)
-AC_INIT(gobject-introspection, gi_version,
-        [http://bugzilla.gnome.org/enter_bug.cgi?product=glib&component=introspection])
-AM_INIT_AUTOMAKE([1.7 tar-ustar dist-bzip2 no-dist-gzip foreign -Wno-portability])
-AM_MAINTAINER_MODE
-
-m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])],)
+AC_PREREQ([2.63])
+AC_INIT([gobject-introspection],
+        [gi_version],
+        [http://bugzilla.gnome.org/enter_bug.cgi?product=glib&component=introspection],
+        [gobject-introspection])
 
 AC_CONFIG_HEADER([config.h])
-
 AC_CONFIG_MACRO_DIR([m4])
+AC_CONFIG_AUX_DIR([build-aux])
+
+AM_INIT_AUTOMAKE([1.7 tar-ustar dist-bzip2 no-dist-gzip foreign -Wno-portability])
+AM_MAINTAINER_MODE([enable])
+
+m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])],)
 
 # Check for Win32
 AC_CANONICAL_HOST
@@ -36,7 +39,11 @@ AM_CONDITIONAL(OS_WIN32, [test "$os_win32" = "yes"])
 # Checks for programs.
 AC_PROG_CC
 AM_PROG_CC_C_O
-AC_PROG_LIBTOOL
+
+# Initialize libtool
+LT_PREREQ([2.2])
+LT_INIT
+
 PKG_PROG_PKG_CONFIG
 
 AC_PROG_LEX
@@ -176,7 +183,8 @@ if test x"$have_ffi_pkgconfig" = xyes ; then
 else
   AC_MSG_CHECKING(for ffi.h)
 
-  AC_TRY_CPP([#include <ffi.h>], have_ffi_h=yes, have_ffi_h=no)
+  AC_PREPROC_IFELSE([AC_LANG_SOURCE([[#include <ffi.h>]])],
+                    [have_ffi_h=yes],[have_ffi_h=no])
   if test x"$have_ffi_h" = x"yes"; then
 
     save_LIBS=$LIBS
