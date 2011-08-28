@@ -173,40 +173,6 @@ blob containing data gleaned from GObject's primitive introspection."""
             if not utils.have_debug_flag('save-temps'):
                 shutil.rmtree(self._binary.tmpdir)
 
-    def _create_gobject(self, node):
-        symbol = 'intern'
-        parent_gitype = None
-        if node.name == 'Object':
-            type_name = 'GObject'
-            c_symbol_prefix = 'object'
-        elif node.name == 'InitiallyUnowned':
-            type_name = 'GInitiallyUnowned'
-            symbol = 'g_initially_unowned_get_type'
-            parent_gitype = ast.Type(target_giname='GObject.Object')
-            # Not really used, but otherwise InitallyUnowned
-            # gets the static methods that should be in Object
-            c_symbol_prefix = 'initially_unowned'
-        else:
-            assert False
-
-        gnode = ast.Class(node.name, parent_gitype,
-                          gtype_name=type_name,
-                          get_type=symbol,
-                          c_symbol_prefix=c_symbol_prefix,
-                          is_abstract=True)
-        if node.name == 'InitiallyUnowned':
-            # http://bugzilla.gnome.org/show_bug.cgi?id=569408
-            # GInitiallyUnowned is actually a typedef for GObject, but
-            # that's not reflected in the GIR, where it appears as a
-            # subclass (as it appears in the GType hierarchy).  So
-            # what we do here is copy all of the GObject fields into
-            # GInitiallyUnowned so that struct offset computation
-            # works correctly.
-            gnode.fields = self._namespace.get('Object').fields
-        else:
-            gnode.fields.extend(node.fields)
-        self._namespace.append(gnode, replace=True)
-
     # Parser
 
     def _initparse_function(self, func):
@@ -219,10 +185,8 @@ blob containing data gleaned from GObject's primitive introspection."""
             self._initparse_error_quark_function(func)
 
     def _initparse_get_type_function(self, func):
-        if func.symbol in ('g_object_get_type',
-                           'g_initially_unowned_get_type',
-                           'g_variant_get_gtype'):
-            # We handle these internally, see _initparse_gobject_record
+        if func.symbol == 'g_variant_get_gtype':
+            # We handle variants internally, see _initparse_gobject_record
             return True
         if func.parameters:
             return False
@@ -244,10 +208,7 @@ blob containing data gleaned from GObject's primitive introspection."""
         return True
 
     def _initparse_gobject_record(self, record):
-        # Special handling for when we're parsing GObject / GLib
-        if record.name in ('Object', 'InitiallyUnowned'):
-            self._create_gobject(record)
-        elif (record.name.startswith('ParamSpec')
+        if (record.name.startswith('ParamSpec')
               and not record.name in ('ParamSpecPool', 'ParamSpecClass',
                                       'ParamSpecTypeInfo')):
             parent = None
@@ -357,11 +318,6 @@ different --identifier-prefix.""" % (xmlnode.attrib['name'], self._namespace.ide
 
     def _introspect_object(self, xmlnode):
         type_name = xmlnode.attrib['name']
-        # We handle this specially above; in 2.16 and below there
-        # was no g_object_get_type, for later versions we need
-        # to skip it
-        if type_name == 'GObject':
-            return
         is_abstract = bool(xmlnode.attrib.get('abstract', False))
         (get_type, c_symbol_prefix) = self._split_type_and_symbol_prefix(xmlnode)
         try:
@@ -377,8 +333,18 @@ different --identifier-prefix.""" % (xmlnode.attrib['name'], self._namespace.ide
         self._introspect_properties(node, xmlnode)
         self._introspect_signals(node, xmlnode)
         self._introspect_implemented_interfaces(node, xmlnode)
-
         self._add_record_fields(node)
+
+        if node.name == 'InitiallyUnowned':
+            # http://bugzilla.gnome.org/show_bug.cgi?id=569408
+            # GInitiallyUnowned is actually a typedef for GObject, but
+            # that's not reflected in the GIR, where it appears as a
+            # subclass (as it appears in the GType hierarchy).  So
+            # what we do here is copy all of the GObject fields into
+            # GInitiallyUnowned so that struct offset computation
+            # works correctly.
+            node.fields = self._namespace.get('Object').fields
+
         self._namespace.append(node, replace=True)
 
     def _introspect_interface(self, xmlnode):
