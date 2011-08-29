@@ -79,3 +79,4 @@ tests/offsets/Offsets-1.0.gir
 tests/offsets/gitestoffsets
 tests/offsets/offsets.compiled
 tests/offsets/offsets.introspected
+.make-check-passed
