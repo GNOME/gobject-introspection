@@ -68,3 +68,19 @@ perl -e '
     }
     exit($found_bad);
 '
+
+CHECK_FILE=.make-check-passed
+if ! test -f $CHECK_FILE; then
+    echo "You need to run make check before committing"
+    exit 1
+fi
+
+# Need to run make check at least once every 20 minutes
+MODIFIED=`stat -c %Y $CHECK_FILE`
+NOW=`date +%s`
+DELTA=$(($NOW-MODIFIED))
+if test "$DELTA" -ge "1200"; then
+    echo "You haven't ran make check in $((DELTA / 60)) minutes."
+    exit 1
+fi
+
