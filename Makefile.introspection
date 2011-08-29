@@ -11,6 +11,8 @@
 #   INTROSPECTION_SCANNER - Command to invoke scanner, normally set by
 #      GOBJECT_INTROSPECTION_REQUIRE/CHECK() in introspection.m4
 #   INTROSPECTION_SCANNER_ARGS - Additional args to pass in to the scanner
+#   INTROSPECTION_SCANNER_ENV - Environment variables to set before running
+#      the scanner
 #   INTROSPECTION_COMPILER - Command to invoke compiler, normally set by
 #      GOBJECT_INTROSPECTION_REQUIRE/CHECK() in introspection.m4
 #   INTROSPECTION_COMPILER_ARGS - Additional args to pass in to the compiler
@@ -122,7 +124,7 @@ $(if $(or $($(_gir_name)_LIBS),
 # sure these are built before running the scanner. Libraries and programs
 # needs to be added manually.
 $(1): $$($(_gir_name)_FILES)
-	$(_gir_silent_scanner_prefix) $(INTROSPECTION_SCANNER) $(_gir_silent_scanner_opts) \
+	$(_gir_silent_scanner_prefix) $(INTROSPECTION_SCANNER_ENV) $(INTROSPECTION_SCANNER) $(_gir_silent_scanner_opts) \
 	$(INTROSPECTION_SCANNER_ARGS) \
 	  --namespace=$(_gir_namespace) \
 	  --nsversion=$(_gir_version) \
