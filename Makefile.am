@@ -82,7 +82,7 @@ check-pyflakes:
 
 # Customize to taste
 TAG_PREFIX=GOBJECT_INTROSPECTION_
-COMPRESSION=.bz2
+COMPRESSION=.xz
 
 
 PACKAGE=@PACKAGE@
