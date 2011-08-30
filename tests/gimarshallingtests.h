@@ -458,8 +458,6 @@ GList *gi_marshalling_tests_glist_utf8_full_return (void);
 
 void gi_marshalling_tests_glist_int_none_in (GList *list);
 void gi_marshalling_tests_glist_utf8_none_in (GList *list);
-void gi_marshalling_tests_glist_utf8_container_in (GList *list);
-void gi_marshalling_tests_glist_utf8_full_in (GList *list);
 
 void gi_marshalling_tests_glist_utf8_none_out (GList **list);
 void gi_marshalling_tests_glist_utf8_container_out (GList **list);
@@ -479,8 +477,6 @@ GSList *gi_marshalling_tests_gslist_utf8_full_return (void);
 
 void gi_marshalling_tests_gslist_int_none_in (GSList *list);
 void gi_marshalling_tests_gslist_utf8_none_in (GSList *list);
-void gi_marshalling_tests_gslist_utf8_container_in (GSList *list);
-void gi_marshalling_tests_gslist_utf8_full_in (GSList *list);
 
 void gi_marshalling_tests_gslist_utf8_none_out (GSList **list);
 void gi_marshalling_tests_gslist_utf8_container_out (GSList **list);
