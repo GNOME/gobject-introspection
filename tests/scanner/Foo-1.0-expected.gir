@@ -1117,7 +1117,7 @@ exposed to language bindings.</doc>
     <function name="test_array" c:identifier="foo_test_array">
       <return-value transfer-ownership="container">
         <array name="GLib.Array" c:type="GArray*">
-          <type name="utf8" c:type="GArray*"/>
+          <type name="utf8"/>
         </array>
       </return-value>
     </function>

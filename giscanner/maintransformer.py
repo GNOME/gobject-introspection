@@ -300,6 +300,11 @@ usage is void (*_gtk_reserved1)(void);"""
                 text = type_str
             message.warn_node(parent, "%s: Unknown type: %r" %
                               (text, result.ctype), positions=position)
+        return result
+
+    def _resolve_toplevel(self, type_str, type_node=None, node=None, parent=None):
+        """Like _resolve(), but attempt to preserve more attributes of original type."""
+        result = self._resolve(type_str, type_node=type_node, node=node, parent=parent)
         # If we replace a node with a new type (such as an annotated) we
         # might lose the ctype from the original node.
         if type_node is not None:
@@ -525,8 +530,8 @@ usage is void (*_gtk_reserved1)(void);"""
 
         param_type = options.get(OPT_TYPE)
         if param_type:
-            node.type = self._resolve(param_type.one(),
-                                      node.type, node, parent)
+            node.type = self._resolve_toplevel(param_type.one(),
+                                               node.type, node, parent)
 
         caller_allocates = False
         annotated_direction = None
@@ -753,7 +758,7 @@ usage is void (*_gtk_reserved1)(void);"""
             prop.transfer = self._get_transfer_default(parent, prop)
         type_tag = block.get(TAG_TYPE)
         if type_tag:
-            prop.type = self._resolve(type_tag.value, prop.type, prop, parent)
+            prop.type = self._resolve_toplevel(type_tag.value, prop.type, prop, parent)
 
     def _apply_annotations_signal(self, parent, signal):
         prefix = self._get_annotation_name(parent)
@@ -776,8 +781,8 @@ usage is void (*_gtk_reserved1)(void);"""
                 options = getattr(tag, 'options', {})
                 param_type = options.get(OPT_TYPE)
                 if param_type:
-                    param.type = self._resolve(param_type.one(), param.type,
-                                               param, parent)
+                    param.type = self._resolve_toplevel(param_type.one(), param.type,
+                                                        param, parent)
             else:
                 tag = None
             self._apply_annotations_param(signal, param, tag)
