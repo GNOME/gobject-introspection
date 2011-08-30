@@ -1103,9 +1103,6 @@ method or constructor of some type."""
         return False
 
     def _is_constructor(self, func, subsymbol):
-        if False and func.symbol == 'regress_constructor':
-            import pdb
-            pdb.set_trace()
         # func.is_constructor will be True if we have a (constructor) annotation
         if not func.is_constructor:
             if not self._guess_constructor_by_name(func.symbol):
