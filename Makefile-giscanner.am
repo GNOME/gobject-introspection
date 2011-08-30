@@ -33,6 +33,7 @@ pkgpyexec_PYTHON =			\
 	giscanner/ast.py		\
 	giscanner/cachestore.py		\
 	giscanner/codegen.py		\
+	giscanner/docbookdescription.py	\
 	giscanner/docbookwriter.py	\
 	giscanner/docmain.py	\
 	giscanner/dumper.py		\
