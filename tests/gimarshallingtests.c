@@ -2917,6 +2917,64 @@ gi_marshalling_tests_gvalue_inout (GValue **value)
     g_value_set_string(*value, "42");
 }
 
+/**
+ * gi_marshalling_tests_gvalue_flat_array:
+ * @n_values: number of values
+ * @values: (array length=n_values): an array containing values
+ */
+void
+gi_marshalling_tests_gvalue_flat_array (guint         n_values,
+                                        const GValue *values)
+{
+    g_assert (n_values == 3);
+
+    g_assert_cmpint (g_value_get_int (&values[0]), ==, 42);
+    g_assert_cmpstr (g_value_get_string (&values[1]), ==, "42");
+    g_assert_cmpint (g_value_get_boolean (&values[2]), ==, TRUE);
+}
+
+/**
+ * gi_marshalling_tests_return_gvalue_flat_array:
+ *
+ * Returns: (array fixed-size=3) (transfer full): a flat GValue array
+ */
+GValue *
+gi_marshalling_tests_return_gvalue_flat_array (void)
+{
+    GValue *array = g_new0 (GValue, 3);
+
+    g_value_init (&array[0], G_TYPE_INT);
+    g_value_set_int (&array[0], 42);
+
+    g_value_init (&array[1], G_TYPE_STRING);
+    g_value_set_static_string (&array[1], "42");
+
+    g_value_init (&array[2], G_TYPE_BOOLEAN);
+    g_value_set_boolean (&array[2], TRUE);
+
+    return array;
+}
+
+/**
+ * gi_marshalling_tests_gvalue_flat_array_round_trip:
+ * @one: The first GValue
+ * @two: The second GValue
+ * @three: The third GValue
+ *
+ * Returns: (array fixed-size=3) (transfer full): a flat array of [@one, @two, @three]
+ */
+GValue *
+gi_marshalling_tests_gvalue_flat_array_round_trip (const GValue one,
+                                                   const GValue two,
+                                                   const GValue three)
+{
+    GValue *array = g_new (GValue, 3);
+    array[0] = one;
+    array[1] = two;
+    array[2] = three;
+
+    return array;
+}
 
 /**
  * gi_marshalling_tests_gclosure_in:

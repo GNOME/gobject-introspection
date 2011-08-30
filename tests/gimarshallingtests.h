@@ -527,6 +527,14 @@ void gi_marshalling_tests_gvalue_out (GValue **value);
 
 void gi_marshalling_tests_gvalue_inout (GValue **value);
 
+void gi_marshalling_tests_gvalue_flat_array (guint         n_values,
+                                             const GValue *values);
+
+GValue *gi_marshalling_tests_return_gvalue_flat_array (void);
+
+GValue *gi_marshalling_tests_gvalue_flat_array_round_trip (const GValue one,
+                                                           const GValue two,
+                                                           const GValue three);
 
 /* GClosure */
 
