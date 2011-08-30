@@ -12,6 +12,7 @@ TESTS = \
 	invalid-option.h \
 	invalid-out.h \
 	invalid-transfer.h \
+	missing-element-type.h \
 	unknown-parameter.h \
 	unresolved-type.h
 

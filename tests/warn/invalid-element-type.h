@@ -78,3 +78,5 @@ GList* test_unresolved_element_type(void);
 // EXPECT:51: Warning: Test: element-type annotation takes at least one option, none given
 // EXPECT:52: Warning: Test: invalid (element-type) for a GPtrArray, must be a pointer
 // EXPECT:63: Warning: Test: test_unresolved_element_type: Unknown type: 'Unresolved'
+// EXPECT:3: Warning: Test: test_invalid_list_element_type: argument l1: Missing (element-type) annotation
+// EXPECT:3: Warning: Test: test_invalid_list_element_type: argument l2: Missing (element-type) annotation

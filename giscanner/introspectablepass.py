@@ -84,8 +84,8 @@ class IntrospectablePass(object):
             parent.introspectable = False
             return
 
-        if not isinstance(node.type, ast.List) and \
-                (node.type.target_giname == 'GLib.List'):
+        if (isinstance(node.type, ast.List)
+            and node.type.element_type == ast.TYPE_ANY):
             self._parameter_warning(parent, node, "Missing (element-type) annotation")
             parent.introspectable = False
             return
