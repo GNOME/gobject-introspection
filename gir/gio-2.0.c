@@ -758,7 +758,7 @@
  * GChildWatchFunc:
  * @pid: the process id of the child process
  * @status: Status information about the child process, see waitpid(2) for more information about this field
- * @data: user data passed to g_child_watch_add()
+ * @user_data: user data passed to g_child_watch_add()
  *
  * The type of functions to be called when a child exists.
  */
@@ -3389,9 +3389,33 @@
 
 
 /**
+ * GIOModuleScope:
+ *
+ * Represents a scope for loading IO modules. A scope can be used for blocking
+ * duplicate modules, or blocking a module you don't want to load.
+ *
+ * The scope can be used with g_io_modules_load_all_in_directory_with_scope()
+ * or g_io_modules_scan_all_in_directory_with_scope().
+ *
+ * Since: 2.30
+ */
+
+
+/**
+ * GIOModuleScopeFlags:
+ * @G_IO_MODULES_SCOPE_NONE: No module scan flags
+ * @G_IO_MODULES_SCOPE_BLOCK_DUPLICATES: When using this scope to load or scan modules, automatically block a modules which has the same base basename as previously loaded module.
+ *
+ * Flags for use with g_io_module_scope_new().
+ *
+ * Since: 2.30
+ */
+
+
+/**
  * GIOSchedulerJob:
  *
- * Opaque class for definining and scheduling IO jobs.
+ * Opaque class for defining and scheduling IO jobs.
  */
 
 
@@ -5042,7 +5066,7 @@
  * @user_data: user data passed to g_regex_replace_eval()
  *
  * Specifies the type of the function passed to g_regex_replace_eval().
- * It is called for each occurance of the pattern in the string passed
+ * It is called for each occurrence of the pattern in the string passed
  * to g_regex_replace_eval(), and it should append the replacement to
  * @result.
  *
@@ -5140,7 +5164,7 @@
  *
  * The default handler for this signal invokes the "changed" signal
  * for each affected key.  If any other connected handler returns
- * %TRUE then this default functionality will be supressed.
+ * %TRUE then this default functionality will be suppressed.
  */
 
 
@@ -5182,7 +5206,7 @@
  * changes in writability might also imply changes in value (if for
  * example, a new mandatory setting is introduced).  If any other
  * connected handler returns %TRUE then this default functionality
- * will be supressed.
+ * will be suppressed.
  */
 
 
@@ -5803,7 +5827,7 @@
 
 /**
  * GSourceFunc:
- * @data: data passed to the function, set when the source was created with one of the above functions
+ * @user_data: data passed to the function, set when the source was created with one of the above functions
  *
  * Specifies the type of function passed to g_timeout_add(),
  * g_timeout_add_full(), g_idle_add(), and g_idle_add_full().
@@ -6499,8 +6523,24 @@
 
 /**
  * GTlsInteractionClass:
+ * @ask_password: ask for a password synchronously. If the implementation returns %G_TLS_INTERACTION_HANDLED, then the password argument should have been filled in by using g_tls_password_set_value() or a similar function.
+ * @ask_password_async: ask for a password asynchronously.
+ * @ask_password_finish: complete operation to ask for a password asynchronously. If the implementation returns %G_TLS_INTERACTION_HANDLED, then the password argument of the async method should have been filled in by using g_tls_password_set_value() or a similar function.
  *
- * The class for #GTlsInteraction.
+ * The class for #GTlsInteraction. Derived classes implement the various
+ * virtual interaction methods to handle TLS interactions.
+ *
+ * Derived classes can choose to implement whichever interactions methods they'd
+ * like to support by overriding those virtual methods in their class
+ * initialization function. If a derived class implements an async method,
+ * it must also implement the corresponding finish method.
+ *
+ * The synchronous interaction methods should implement to display modal dialogs,
+ * and the asynchronous methods to display modeless dialogs.
+ *
+ * If the user cancels an interaction, then the result should be
+ * %G_TLS_INTERACTION_FAILED and the error should be set with a domain of
+ * %G_IO_ERROR and code of %G_IO_ERROR_CANCELLED.
  *
  * Since: 2.30
  */
@@ -6508,9 +6548,9 @@
 
 /**
  * GTlsInteractionResult:
- * @G_TLS_INTERACTION_HANDLED: The interaction completed, and resulting data is available.
- * @G_TLS_INTERACTION_ABORTED: The user cancelled the interaction, and requested the operation to be aborted.
  * @G_TLS_INTERACTION_UNHANDLED: The interaction was unhandled (i.e. not implemented).
+ * @G_TLS_INTERACTION_HANDLED: The interaction completed, and resulting data is available.
+ * @G_TLS_INTERACTION_FAILED: The interaction has failed, or was cancelled. and the operation should be aborted.
  *
  * #GTlsInteractionResult is returned by various functions in #GTlsInteraction
  * when finishing an interaction request.
@@ -7401,7 +7441,7 @@
  * A #GWeakNotify function can be added to an object as a callback that gets
  * triggered when the object is finalized. Since the object is already being
  * finalized when the #GWeakNotify is called, there's not much you could do
- * with the object, apart from e.g. using its adress as hash-index or the like.
+ * with the object, apart from e.g. using its address as hash-index or the like.
  */
 
 
@@ -10369,6 +10409,24 @@
 
 
 /**
+ * G_TYPE_MAIN_CONTEXT:
+ *
+ * The #GType for a boxed type holding a #GMainContext.
+ *
+ * Since: 2.30
+ */
+
+
+/**
+ * G_TYPE_MAIN_LOOP:
+ *
+ * The #GType for a boxed type holding a #GMainLoop.
+ *
+ * Since: 2.30
+ */
+
+
+/**
  * G_TYPE_MAKE_FUNDAMENTAL:
  * @x: the fundamental type number.
  *
@@ -10638,6 +10696,15 @@
  *
  * First available fundamental type number to create new fundamental
  * type id with G_TYPE_MAKE_FUNDAMENTAL().
+ */
+
+
+/**
+ * G_TYPE_SOURCE:
+ *
+ * The #GType for a boxed type holding a #GSource.
+ *
+ * Since: 2.30
  */
 
 
@@ -11409,6 +11476,14 @@
  * see <link linkend="gio-querymodules">gio-querymodules</link>.
  * You are expected to run this command after installing a
  * GIO module.
+ *
+ * The <envar>GIO_EXTRA_MODULES</envar> environment variable can be
+ * used to specify additional directories to automatically load modules
+ * from. This environment variable has the same syntax as the
+ * <envar>PATH</envar>. If two modules have the same base name in different
+ * directories, then the latter one will be ignored. If additional
+ * directories are specified GIO will load modules from the built-in
+ * directory last.
  */
 
 
@@ -12754,7 +12829,7 @@
  * %G_FILE_ATTRIBUTE_TYPE_INVALID.
  *
  * The list of possible attributes for a filesystem (pointed to by a #GFile) is
- * availible as a #GFileAttributeInfoList. This list is queryable by key names
+ * available as a #GFileAttributeInfoList. This list is queryable by key names
  * as indicated earlier.
  *
  * Classes that implement #GFileIface will create a #GFileAttributeInfoList and
@@ -13975,7 +14050,7 @@
  *
  * #GSimplePermission is a trivial implementation of #GPermission that
  * represents a permission that is either always or never allowed.  The
- * value is given at constuction and doesn't change.
+ * value is given at construction and doesn't change.
  *
  * Calling request or release will result in errors.
  */
@@ -14458,10 +14533,20 @@
  * To use a #GTlsInteraction with a TLS connection use
  * g_tls_connection_set_interaction().
  *
- * Callers should instantiate a subclass of this that implements all the
- * various callbacks to show the required dialogs, such as
- * #GtkTlsInteraction. If no interaction is desired, usually %NULL can be
- * passed, see each method taking a #GTlsInteraction for details.
+ * Callers should instantiate a derived class that implements the various
+ * interaction methods to show the required dialogs.
+ *
+ * Callers should use the 'invoke' functions like
+ * g_tls_interaction_invoke_ask_password() to run interaction methods. These
+ * functions make sure that the interaction is invoked in the main loop
+ * and not in the current thread, if the current thread is not running the
+ * main loop.
+ *
+ * Derived classes can choose to implement whichever interactions methods they'd
+ * like to support by overriding those virtual methods in their class
+ * initialization function. Any interactions not implemented will return
+ * %G_TLS_INTERACTION_UNHANDLED. If a derived class implements an async method,
+ * it must also implement the corresponding finish method.
  */
 
 
@@ -14826,7 +14911,7 @@
  *
  * xfe 'b' 'a' 'z'  x00 x00 x00 xff
  *
- * The integer immediately preceeding the match then contains the offset
+ * The integer immediately preceding the match then contains the offset
  * of the integer value of the target.  In our example, that's '3'.
  * This index is dereferenced to find the enum value of '2'.
  *
@@ -14837,7 +14922,7 @@
  * To lookup the enum nick for a given value, the value is searched for
  * in the array.  To ensure that the value isn't matching the inside of a
  * string, we must check that it is either the first item in the array or
- * immediately preceeded by the byte 0xff.  It must also be immediately
+ * immediately preceded by the byte 0xff.  It must also be immediately
  * followed by the byte 0xff.
  *
  * Because strings always take up a minimum of 2 words, because 0xff or
@@ -15320,7 +15405,7 @@
  * @commandline: the commandline to use
  * @application_name: (allow-none): the application name, or %NULL to use @commandline
  * @flags: flags that can specify details of the created #GAppInfo
- * @error: a #GError location to store the error occuring, %NULL to ignore.
+ * @error: a #GError location to store the error occurring, %NULL to ignore.
  *
  * Creates a new #GAppInfo from the given information.
  *
@@ -15872,7 +15957,7 @@
  * Gets the platform data associated with the invocation of @cmdline.
  *
  * This is a #GVariant dictionary containing information about the
- * context in which the invocation occured.  It typically contains
+ * context in which the invocation occurred.  It typically contains
  * information like the current working directory and the startup
  * notification ID.
  *
@@ -16362,7 +16447,7 @@
  * g_async_initable_init_finish:
  * @initable: a #GAsyncInitable.
  * @res: a #GAsyncResult.
- * @error: a #GError location to store the error occuring, or %NULL to ignore.
+ * @error: a #GError location to store the error occurring, or %NULL to ignore.
  *
  * Finishes asynchronous initialization and returns the result.
  * See g_async_initable_init_async().
@@ -16481,7 +16566,7 @@
  * @stream: a #GBufferedInputStream
  * @count: the number of bytes that will be read from the stream
  * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore
- * @error: location to store the error occuring, or %NULL to ignore
+ * @error: location to store the error occurring, or %NULL to ignore
  *
  * Tries to read @count bytes from the stream into the buffer.
  * Will block during this read.
@@ -16620,7 +16705,7 @@
  * g_buffered_input_stream_read_byte:
  * @stream: a #GBufferedInputStream
  * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore
- * @error: location to store the error occuring, or %NULL to ignore
+ * @error: location to store the error occurring, or %NULL to ignore
  *
  * Tries to read a single byte from the stream or the buffer. Will block
  * during this read.
@@ -17146,7 +17231,7 @@
 
 /**
  * g_cancellable_is_cancelled:
- * @cancellable: a #GCancellable or NULL.
+ * @cancellable: (allow-none): a #GCancellable or %NULL
  *
  * Checks if a cancellable job has been cancelled.
  *
@@ -17217,7 +17302,7 @@
  * @cancellable: a #GCancellable object
  *
  * Pushes @cancellable onto the cancellable stack. The current
- * cancellable can then be recieved using g_cancellable_get_current().
+ * cancellable can then be received using g_cancellable_get_current().
  *
  * This is useful when implementing cancellable operations in
  * code that does not allow you to pass down the cancellable object.
@@ -17258,13 +17343,13 @@
 
 /**
  * g_cancellable_set_error_if_cancelled:
- * @cancellable: a #GCancellable object.
- * @error: #GError to append error state to.
+ * @cancellable: (allow-none): a #GCancellable or %NULL
+ * @error: #GError to append error state to
  *
  * If the @cancellable is cancelled, sets the error to notify
  * that the operation was cancelled.
  *
- * Returns: %TRUE if @cancellable was cancelled, %FALSE if it was not.
+ * Returns: %TRUE if @cancellable was cancelled, %FALSE if it was not
  */
 
 
@@ -17496,7 +17581,7 @@
  * @flags: a #GConvertFlags controlling the conversion details
  * @bytes_read: (out): will be set to the number of bytes read from @inbuf on success
  * @bytes_written: (out): will be set to the number of bytes written to @outbuf on success
- * @error: location to store the error occuring, or %NULL to ignore
+ * @error: location to store the error occurring, or %NULL to ignore
  *
  * This is the main operation used when converting data. It is to be called
  * multiple times in a loop, and each time it will do some work, i.e.
@@ -17560,7 +17645,7 @@
  * If the flag %G_CONVERTER_FLUSH is set then conversion is modified
  * to try to write out all internal state to the output. The application
  * has to call the function multiple times with the flag set, and when
- * the availible input has been consumed and all internal state has
+ * the available input has been consumed and all internal state has
  * been produced then %G_CONVERTER_FLUSHED (or %G_CONVERTER_FINISHED if
  * really at the end) is returned instead of %G_CONVERTER_CONVERTED.
  * This is somewhat similar to what happens at the end of the input stream,
@@ -18208,7 +18293,7 @@
  *
  * Note that using G_DATA_STREAM_NEWLINE_TYPE_ANY is slightly unsafe. If a read
  * chunk ends in "CR" we must read an additional byte to know if this is "CR" or
- * "CR LF", and this might block if there is no more data availible.
+ * "CR LF", and this might block if there is no more data available.
  */
 
 
@@ -19322,7 +19407,7 @@
  * Finishes an operation started with g_dbus_connection_send_message_with_reply().
  *
  * Note that @error is only set if a local in-process error
- * occured. That is to say that the returned #GDBusMessage object may
+ * occurred. That is to say that the returned #GDBusMessage object may
  * be of type %G_DBUS_MESSAGE_TYPE_ERROR. Use
  * g_dbus_message_to_gerror() to transcode this to a #GError.
  *
@@ -19363,7 +19448,7 @@
  * the operation fails with %G_IO_ERROR_INVALID_ARGUMENT.
  *
  * Note that @error is only set if a local in-process error
- * occured. That is to say that the returned #GDBusMessage object may
+ * occurred. That is to say that the returned #GDBusMessage object may
  * be of type %G_DBUS_MESSAGE_TYPE_ERROR. Use
  * g_dbus_message_to_gerror() to transcode this to a #GError.
  *
@@ -22580,7 +22665,7 @@
  * g_drive_eject_with_operation_finish:
  * @drive: a #GDrive.
  * @result: a #GAsyncResult.
- * @error: a #GError location to store the error occuring, or %NULL to ignore.
+ * @error: a #GError location to store the error occurring, or %NULL to ignore.
  *
  * Finishes ejecting a drive. If any errors occurred during the operation,
  * @error will be set to contain the errors and %FALSE will be returned.
@@ -23592,7 +23677,7 @@
  * g_file_enumerator_close:
  * @enumerator: a #GFileEnumerator.
  * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
- * @error: location to store the error occuring, or %NULL to ignore
+ * @error: location to store the error occurring, or %NULL to ignore
  *
  * Releases all resources used by this enumerator, making the
  * enumerator return %G_IO_ERROR_CLOSED on all calls.
@@ -23626,7 +23711,7 @@
  * g_file_enumerator_close_finish:
  * @enumerator: a #GFileEnumerator.
  * @result: a #GAsyncResult.
- * @error: a #GError location to store the error occuring, or %NULL to ignore.
+ * @error: a #GError location to store the error occurring, or %NULL to ignore.
  *
  * Finishes closing a file enumerator, started from g_file_enumerator_close_async().
  *
@@ -23678,7 +23763,7 @@
  * g_file_enumerator_next_file:
  * @enumerator: a #GFileEnumerator.
  * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
- * @error: location to store the error occuring, or %NULL to ignore
+ * @error: location to store the error occurring, or %NULL to ignore
  *
  * Returns information for the next file in the enumerated object.
  * Will block until the information is available. The #GFileInfo
@@ -23727,7 +23812,7 @@
  * g_file_enumerator_next_files_finish:
  * @enumerator: a #GFileEnumerator.
  * @result: a #GAsyncResult.
- * @error: a #GError location to store the error occuring, or %NULL to ignore.
+ * @error: a #GError location to store the error occurring, or %NULL to ignore.
  *
  * Finishes the asynchronous operation started with g_file_enumerator_next_files_async().
  *
@@ -24016,7 +24101,7 @@
  * @prefix: input #GFile.
  *
  * Checks whether @file has the prefix specified by @prefix. In other word,
- * if the names of inital elements of @file<!-- -->s pathname match @prefix.
+ * if the names of initial elements of @file<!-- -->s pathname match @prefix.
  * Only full pathname elements are matched, so a path like /foo is not
  * considered a prefix of /foobar, only of /foo/bar.
  *
@@ -24766,7 +24851,7 @@
  * @stream: a #GFileInputStream.
  * @attributes: a file attribute query string.
  * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
- * @error: a #GError location to store the error occuring, or %NULL to ignore.
+ * @error: a #GError location to store the error occurring, or %NULL to ignore.
  *
  * Queries a file input stream the given @attributes. This function blocks
  * while querying the stream. For the asynchronous (non-blocking) version
@@ -24805,7 +24890,7 @@
  * g_file_input_stream_query_info_finish:
  * @stream: a #GFileInputStream.
  * @result: a #GAsyncResult.
- * @error: a #GError location to store the error occuring, or %NULL to ignore.
+ * @error: a #GError location to store the error occurring, or %NULL to ignore.
  *
  * Finishes an asynchronous info query operation.
  *
@@ -27061,7 +27146,7 @@
  * g_initable_init:
  * @initable: a #GInitable.
  * @cancellable: optional #GCancellable object, %NULL to ignore.
- * @error: a #GError location to store the error occuring, or %NULL to ignore.
+ * @error: a #GError location to store the error occurring, or %NULL to ignore.
  *
  * Initializes the object implementing the interface. This must be
  * done before any real use of the object after initial construction.
@@ -27094,7 +27179,7 @@
  * g_initable_new:
  * @object_type: a #GType supporting #GInitable.
  * @cancellable: optional #GCancellable object, %NULL to ignore.
- * @error: a #GError location to store the error occuring, or %NULL to ignore.
+ * @error: a #GError location to store the error occurring, or %NULL to ignore.
  * @first_property_name: the name of the first property, or %NULL if no properties
  * @...: the value if the first property, followed by and other property value pairs, and ended by %NULL.
  *
@@ -27113,7 +27198,7 @@
  * @first_property_name: the name of the first property, followed by the value, and other property value pairs, and ended by %NULL.
  * @var_args: The var args list generated from @first_property_name.
  * @cancellable: optional #GCancellable object, %NULL to ignore.
- * @error: a #GError location to store the error occuring, or %NULL to ignore.
+ * @error: a #GError location to store the error occurring, or %NULL to ignore.
  *
  * Helper function for constructing #GInitiable object. This is
  * similar to g_object_new_valist() but also initializes the object
@@ -27130,7 +27215,7 @@
  * @n_parameters: the number of parameters in @parameters
  * @parameters: the parameters to use to construct the object
  * @cancellable: optional #GCancellable object, %NULL to ignore.
- * @error: a #GError location to store the error occuring, or %NULL to ignore.
+ * @error: a #GError location to store the error occurring, or %NULL to ignore.
  *
  * Helper function for constructing #GInitiable object. This is
  * similar to g_object_newv() but also initializes the object
@@ -27153,7 +27238,7 @@
  * g_input_stream_close:
  * @stream: A #GInputStream.
  * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
- * @error: location to store the error occuring, or %NULL to ignore
+ * @error: location to store the error occurring, or %NULL to ignore
  *
  * Closes the stream, releasing resources related to it.
  *
@@ -27208,7 +27293,7 @@
  * g_input_stream_close_finish:
  * @stream: a #GInputStream.
  * @result: a #GAsyncResult.
- * @error: a #GError location to store the error occuring, or %NULL to ignore.
+ * @error: a #GError location to store the error occurring, or %NULL to ignore.
  *
  * Finishes closing a stream asynchronously, started from g_input_stream_close_async().
  *
@@ -27242,7 +27327,7 @@
  * @buffer: a buffer to read data into (which should be at least count bytes long).
  * @count: the number of bytes that will be read from the stream
  * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
- * @error: location to store the error occuring, or %NULL to ignore
+ * @error: location to store the error occurring, or %NULL to ignore
  *
  * Tries to read @count bytes from the stream into the buffer starting at
  * @buffer. Will block during this read.
@@ -27274,7 +27359,7 @@
  * @count: the number of bytes that will be read from the stream
  * @bytes_read: (out): location to store the number of bytes that was read from the stream
  * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
- * @error: location to store the error occuring, or %NULL to ignore
+ * @error: location to store the error occurring, or %NULL to ignore
  *
  * Tries to read @count bytes from the stream into the buffer starting at
  * @buffer. Will block during this read.
@@ -27334,7 +27419,7 @@
  * g_input_stream_read_finish:
  * @stream: a #GInputStream.
  * @result: a #GAsyncResult.
- * @error: a #GError location to store the error occuring, or %NULL to ignore.
+ * @error: a #GError location to store the error occurring, or %NULL to ignore.
  *
  * Finishes an asynchronous stream read operation.
  *
@@ -27345,7 +27430,7 @@
 /**
  * g_input_stream_set_pending:
  * @stream: input stream
- * @error: a #GError location to store the error occuring, or %NULL to ignore.
+ * @error: a #GError location to store the error occurring, or %NULL to ignore.
  *
  * Sets @stream to have actions pending. If the pending flag is
  * already set or @stream is closed, it will return %FALSE and set
@@ -27360,7 +27445,7 @@
  * @stream: a #GInputStream.
  * @count: the number of bytes that will be skipped from the stream
  * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
- * @error: location to store the error occuring, or %NULL to ignore
+ * @error: location to store the error occurring, or %NULL to ignore
  *
  * Tries to skip @count bytes from the stream. Will block during the operation.
  *
@@ -27420,7 +27505,7 @@
  * g_input_stream_skip_finish:
  * @stream: a #GInputStream.
  * @result: a #GAsyncResult.
- * @error: a #GError location to store the error occuring, or %NULL to ignore.
+ * @error: a #GError location to store the error occurring, or %NULL to ignore.
  *
  * Finishes a stream skip operation.
  *
@@ -27627,7 +27712,7 @@
  *
  * This method will not be called in normal use, however it may be
  * called when probing existing modules and recording which extension
- * points that this modle is used for. This means we won't have to
+ * points that this model is used for. This means we won't have to
  * load and initialze this module unless its needed.
  *
  * If this function is not implemented by the module the module will
@@ -27648,6 +27733,45 @@
  *
  * Returns: (transfer full): A %NULL-terminated array of strings, listing the supported
  * Since: 2.24
+ */
+
+
+/**
+ * g_io_module_scope_block:
+ * @scope: a module loading scope
+ * @basename: the basename to block
+ *
+ * Block modules with the given @basename from being loaded when
+ * this scope is used with g_io_modules_scan_all_in_directory_with_scope()
+ * or g_io_modules_load_all_in_directory_with_scope().
+ *
+ * Since: 2.30
+ */
+
+
+/**
+ * g_io_module_scope_free:
+ * @scope: a module loading scope
+ *
+ * Free a module scope.
+ *
+ * Since: 2.30
+ */
+
+
+/**
+ * g_io_module_scope_new:
+ * @flags: flags for the new scope
+ *
+ * Create a new scope for loading of IO modules. A scope can be used for
+ * blocking duplicate modules, or blocking a module you don't want to load.
+ *
+ * Specify the %G_IO_MODULES_SCOPE_BLOCK_DUPLICATES flag to block modules
+ * which have the same base name as a module that has already been seen
+ * in this scope.
+ *
+ * Returns: (transfer full): the new module scope
+ * Since: 2.30
  */
 
 
@@ -27682,6 +27806,28 @@
 
 
 /**
+ * g_io_modules_load_all_in_directory_with_scope:
+ * @dirname: pathname for a directory containing modules to load.
+ * @scope: a scope to use when scanning the modules.
+ *
+ * Loads all the modules in the specified directory.
+ *
+ * If don't require all modules to be initialized (and thus registering
+ * all gtypes) then you can use g_io_modules_scan_all_in_directory()
+ * which allows delayed/lazy loading of modules.
+ *
+ * from the directory,
+ * All the modules are loaded into memory, if you want to
+ * unload them (enabling on-demand loading) you must call
+ * g_type_module_unuse() on all the modules. Free the list
+ * with g_list_free().
+ *
+ * Returns: (element-type GIOModule) (transfer full): a list of #GIOModules loaded
+ * Since: 2.30
+ */
+
+
+/**
  * g_io_modules_scan_all_in_directory:
  * @dirname: pathname for a directory containing modules to scan.
  *
@@ -27698,6 +27844,27 @@
  * use g_io_modules_load_all_in_directory().
  *
  * Since: 2.24
+ */
+
+
+/**
+ * g_io_modules_scan_all_in_directory_with_scope:
+ * @dirname: pathname for a directory containing modules to scan.
+ * @scope: a scope to use when scanning the modules
+ *
+ * Scans all the modules in the specified directory, ensuring that
+ * any extension point implemented by a module is registered.
+ *
+ * This may not actually load and initialize all the types in each
+ * module, some modules may be lazily loaded and initialized when
+ * an extension point it implementes is used with e.g.
+ * g_io_extension_point_get_extensions() or
+ * g_io_extension_point_get_extension_by_name().
+ *
+ * If you need to guarantee that all types are loaded in all the modules,
+ * use g_io_modules_load_all_in_directory().
+ *
+ * Since: 2.30
  */
 
 
@@ -27778,7 +27945,7 @@
  * g_io_stream_close:
  * @stream: a #GIOStream
  * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore
- * @error: location to store the error occuring, or %NULL to ignore
+ * @error: location to store the error occurring, or %NULL to ignore
  *
  * Closes the stream, releasing resources related to it. This will also
  * closes the individual input and output streams, if they are not already
@@ -27846,7 +28013,7 @@
  * g_io_stream_close_finish:
  * @stream: a #GIOStream
  * @result: a #GAsyncResult
- * @error: a #GError location to store the error occuring, or %NULL to ignore
+ * @error: a #GError location to store the error occurring, or %NULL to ignore
  *
  * Closes a stream.
  *
@@ -27908,7 +28075,7 @@
 /**
  * g_io_stream_set_pending:
  * @stream: a #GIOStream
- * @error: a #GError location to store the error occuring, or %NULL to ignore
+ * @error: a #GError location to store the error occurring, or %NULL to ignore
  *
  * Sets @stream to have actions pending. If the pending flag is
  * already set or @stream is closed, it will return %FALSE and set
@@ -27944,7 +28111,7 @@
 /**
  * g_io_stream_splice_finish:
  * @result: a #GAsyncResult.
- * @error: a #GError location to store the error occuring, or %NULL to ignore.
+ * @error: a #GError location to store the error occurring, or %NULL to ignore.
  *
  * Finishes an asynchronous io stream splice operation.
  *
@@ -28013,7 +28180,7 @@
  * @size: an integer.
  * @type: (out) (allow-none): a location to store the type of the loaded icon, %NULL to ignore.
  * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
- * @error: a #GError location to store the error occuring, or %NULL to ignore.
+ * @error: a #GError location to store the error occurring, or %NULL to ignore.
  *
  * Loads a loadable icon. For the asynchronous version of this function,
  * see g_loadable_icon_load_async().
@@ -28041,7 +28208,7 @@
  * @icon: a #GLoadableIcon.
  * @res: a #GAsyncResult.
  * @type: a location to store the type of the loaded icon, %NULL to ignore.
- * @error: a #GError location to store the error occuring, or %NULL to ignore.
+ * @error: a #GError location to store the error occurring, or %NULL to ignore.
  *
  * Finishes an asynchronous icon load started in g_loadable_icon_load_async().
  *
@@ -28324,7 +28491,7 @@
  * g_mount_eject_finish:
  * @mount: a #GMount.
  * @result: a #GAsyncResult.
- * @error: a #GError location to store the error occuring, or %NULL to ignore.
+ * @error: a #GError location to store the error occurring, or %NULL to ignore.
  *
  * Finishes ejecting a mount. If any errors occurred during the operation,
  * @error will be set to contain the errors and %FALSE will be returned.
@@ -28355,7 +28522,7 @@
  * g_mount_eject_with_operation_finish:
  * @mount: a #GMount.
  * @result: a #GAsyncResult.
- * @error: a #GError location to store the error occuring, or %NULL to ignore.
+ * @error: a #GError location to store the error occurring, or %NULL to ignore.
  *
  * Finishes ejecting a mount. If any errors occurred during the operation,
  * @error will be set to contain the errors and %FALSE will be returned.
@@ -28491,9 +28658,9 @@
  * g_mount_guess_content_type_finish:
  * @mount: a #GMount
  * @result: a #GAsyncResult
- * @error: a #GError location to store the error occuring, or %NULL to ignore
+ * @error: a #GError location to store the error occurring, or %NULL to ignore
  *
- * Finishes guessing content types of @mount. If any errors occured
+ * Finishes guessing content types of @mount. If any errors occurred
  * during the operation, @error will be set to contain the errors and
  * %FALSE will be returned. In particular, you may get an
  * %G_IO_ERROR_NOT_SUPPORTED if the mount does not support content
@@ -28511,7 +28678,7 @@
  * @mount: a #GMount
  * @force_rescan: Whether to force a rescan of the content. Otherwise a cached result will be used if available
  * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore
- * @error: a #GError location to store the error occuring, or %NULL to ignore
+ * @error: a #GError location to store the error occurring, or %NULL to ignore
  *
  * Tries to guess the type of content stored on @mount. Returns one or
  * more textual identifiers of well-known content types (typically
@@ -28722,7 +28889,7 @@
  * g_mount_remount_finish:
  * @mount: a #GMount.
  * @result: a #GAsyncResult.
- * @error: a #GError location to store the error occuring, or %NULL to ignore.
+ * @error: a #GError location to store the error occurring, or %NULL to ignore.
  *
  * Finishes remounting a mount. If any errors occurred during the operation,
  * @error will be set to contain the errors and %FALSE will be returned.
@@ -28764,7 +28931,7 @@
  * g_mount_unmount_finish:
  * @mount: a #GMount.
  * @result: a #GAsyncResult.
- * @error: a #GError location to store the error occuring, or %NULL to ignore.
+ * @error: a #GError location to store the error occurring, or %NULL to ignore.
  *
  * Finishes unmounting a mount. If any errors occurred during the operation,
  * @error will be set to contain the errors and %FALSE will be returned.
@@ -28795,7 +28962,7 @@
  * g_mount_unmount_with_operation_finish:
  * @mount: a #GMount.
  * @result: a #GAsyncResult.
- * @error: a #GError location to store the error occuring, or %NULL to ignore.
+ * @error: a #GError location to store the error occurring, or %NULL to ignore.
  *
  * Finishes unmounting a mount. If any errors occurred during the operation,
  * @error will be set to contain the errors and %FALSE will be returned.
@@ -29150,7 +29317,7 @@
  * g_output_stream_close:
  * @stream: A #GOutputStream.
  * @cancellable: (allow-none): optional cancellable object
- * @error: location to store the error occuring, or %NULL to ignore
+ * @error: location to store the error occurring, or %NULL to ignore
  *
  * Closes the stream, releasing resources related to it.
  *
@@ -29211,7 +29378,7 @@
  * g_output_stream_close_finish:
  * @stream: a #GOutputStream.
  * @result: a #GAsyncResult.
- * @error: a #GError location to store the error occuring, or %NULL to ignore.
+ * @error: a #GError location to store the error occurring, or %NULL to ignore.
  *
  * Closes an output stream.
  *
@@ -29223,7 +29390,7 @@
  * g_output_stream_flush:
  * @stream: a #GOutputStream.
  * @cancellable: (allow-none): optional cancellable object
- * @error: location to store the error occuring, or %NULL to ignore
+ * @error: location to store the error occurring, or %NULL to ignore
  *
  * Flushed any outstanding buffers in the stream. Will block during
  * the operation. Closing the stream will implicitly cause a flush.
@@ -29259,11 +29426,11 @@
  * g_output_stream_flush_finish:
  * @stream: a #GOutputStream.
  * @result: a GAsyncResult.
- * @error: a #GError location to store the error occuring, or %NULL to ignore.
+ * @error: a #GError location to store the error occurring, or %NULL to ignore.
  *
  * Finishes flushing an output stream.
  *
- * Returns: %TRUE if flush operation suceeded, %FALSE otherwise.
+ * Returns: %TRUE if flush operation succeeded, %FALSE otherwise.
  */
 
 
@@ -29304,7 +29471,7 @@
 /**
  * g_output_stream_set_pending:
  * @stream: a #GOutputStream.
- * @error: a #GError location to store the error occuring, or %NULL to ignore.
+ * @error: a #GError location to store the error occurring, or %NULL to ignore.
  *
  * Sets @stream to have actions pending. If the pending flag is
  * already set or @stream is closed, it will return %FALSE and set
@@ -29320,7 +29487,7 @@
  * @source: a #GInputStream.
  * @flags: a set of #GOutputStreamSpliceFlags.
  * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
- * @error: a #GError location to store the error occuring, or %NULL to ignore.
+ * @error: a #GError location to store the error occurring, or %NULL to ignore.
  *
  * Splices an input stream into an output stream.
  *
@@ -29357,7 +29524,7 @@
  * g_output_stream_splice_finish:
  * @stream: a #GOutputStream.
  * @result: a #GAsyncResult.
- * @error: a #GError location to store the error occuring, or %NULL to ignore.
+ * @error: a #GError location to store the error occurring, or %NULL to ignore.
  *
  * Finishes an asynchronous stream splice operation.
  *
@@ -29375,7 +29542,7 @@
  * @buffer: (array length=count) (element-type guint8): the buffer containing the data to write.
  * @count: the number of bytes to write
  * @cancellable: (allow-none): optional cancellable object
- * @error: location to store the error occuring, or %NULL to ignore
+ * @error: location to store the error occurring, or %NULL to ignore
  *
  * Tries to write @count bytes from @buffer into the stream. Will block
  * during the operation.
@@ -29409,7 +29576,7 @@
  * @count: the number of bytes to write
  * @bytes_written: (out): location to store the number of bytes that was written to the stream
  * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
- * @error: location to store the error occuring, or %NULL to ignore
+ * @error: location to store the error occurring, or %NULL to ignore
  *
  * Tries to write @count bytes from @buffer into the stream. Will block
  * during the operation.
@@ -29475,7 +29642,7 @@
  * g_output_stream_write_finish:
  * @stream: a #GOutputStream.
  * @result: a #GAsyncResult.
- * @error: a #GError location to store the error occuring, or %NULL to ignore.
+ * @error: a #GError location to store the error occurring, or %NULL to ignore.
  *
  * Finishes a stream write operation.
  *
@@ -30420,7 +30587,7 @@
  * @offset: a #goffset.
  * @type: a #GSeekType.
  * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
- * @error: a #GError location to store the error occuring, or %NULL to ignore.
+ * @error: a #GError location to store the error occurring, or %NULL to ignore.
  *
  * Seeks in the stream by the given @offset, modified by @type.
  *
@@ -30450,7 +30617,7 @@
  * @seekable: a #GSeekable.
  * @offset: a #goffset.
  * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
- * @error: a #GError location to store the error occuring, or %NULL to ignore.
+ * @error: a #GError location to store the error occurring, or %NULL to ignore.
  *
  * Truncates a stream with a given #offset.
  *
@@ -30499,7 +30666,7 @@
  * dispatching the signal later.
  *
  * The implementation may call this function at any other time it likes
- * in response to other events (such as changes occuring outside of the
+ * in response to other events (such as changes occurring outside of the
  * program).  These calls may originate from a mainloop or may originate
  * in response to any other action (including from calls to
  * g_settings_backend_write()).
@@ -31354,7 +31521,7 @@
  * @returns: %TRUE, if the set succeeds
  *
  * Looks up the flags type nicks for the bits specified by @value, puts
- * them in an array of strings and writes the array to @key, withing
+ * them in an array of strings and writes the array to @key, within
  * @settings.
  *
  * It is a programmer error to give a @key that isn't contained in the
@@ -32198,7 +32365,7 @@
  * sockaddr</type>, which can be passed to low-level functions like
  * connect() or bind().
  *
- * If not enough space is availible, a %G_IO_ERROR_NO_SPACE error is
+ * If not enough space is available, a %G_IO_ERROR_NO_SPACE error is
  * returned. If the address type is not known on the system
  * then a %G_IO_ERROR_NOT_SUPPORTED error is returned.
  *
@@ -34041,7 +34208,7 @@
  *
  * Shut down part of a full-duplex connection.
  *
- * If @shutdown_read is %TRUE then the recieving side of the connection
+ * If @shutdown_read is %TRUE then the receiving side of the connection
  * is shut down, and further reading is disallowed.
  *
  * If @shutdown_write is %TRUE then the sending side of the connection
@@ -35273,14 +35440,22 @@
  * g_tls_interaction_ask_password:
  * @interaction: a #GTlsInteraction object
  * @password: a #GTlsPassword object
+ * @cancellable: an optional #GCancellable cancellation object
+ * @error: an optional location to place an error on failure
  *
- * This function is normally called by #GTlsConnection or #GTlsDatabase to
- * ask the user for a password.
+ * Run synchronous interaction to ask the user for a password. In general,
+ * g_tls_interaction_invoke_ask_password() should be used instead of this
+ * function.
  *
  * Derived subclasses usually implement a password prompt, although they may
  * also choose to provide a password from elsewhere. The @password value will
  * be filled in and then @callback will be called. Alternatively the user may
  * abort this password request, which will usually abort the TLS connection.
+ *
+ * If the interaction is cancelled by the cancellation object, or by the
+ * user then %G_TLS_INTERACTION_FAILED will be returned with an error that
+ * contains a %G_IO_ERROR_CANCELLED error code. Certain implementations may
+ * not support immediate cancellation.
  *
  * Returns: The status of the ask password interaction.
  * Since: 2.30
@@ -35291,21 +35466,25 @@
  * g_tls_interaction_ask_password_async:
  * @interaction: a #GTlsInteraction object
  * @password: a #GTlsPassword object
- * @callback: will be called when the interaction completes
+ * @cancellable: an optional #GCancellable cancellation object
+ * @callback: (allow-none): will be called when the interaction completes
  * @user_data: (allow-none): data to pass to the @callback
  *
- * This function is normally called by #GTlsConnection or #GTlsDatabase to
- * ask the user for a password.
+ * Run asynchronous interaction to ask the user for a password. In general,
+ * g_tls_interaction_invoke_ask_password() should be used instead of this
+ * function.
  *
  * Derived subclasses usually implement a password prompt, although they may
  * also choose to provide a password from elsewhere. The @password value will
  * be filled in and then @callback will be called. Alternatively the user may
  * abort this password request, which will usually abort the TLS connection.
  *
- * The @callback will be invoked on thread-default main context of the thread
- * that called this function. The @callback should call
- * g_tls_interaction_ask_password_finish() to get the status of the user
- * interaction.
+ * If the interaction is cancelled by the cancellation object, or by the
+ * user then %G_TLS_INTERACTION_FAILED will be returned with an error that
+ * contains a %G_IO_ERROR_CANCELLED error code. Certain implementations may
+ * not support immediate cancellation.
+ *
+ * Certain implementations may not support immediate cancellation.
  *
  * Since: 2.30
  */
@@ -35315,12 +35494,49 @@
  * g_tls_interaction_ask_password_finish:
  * @interaction: a #GTlsInteraction object
  * @result: the result passed to the callback
+ * @error: an optional location to place an error on failure
  *
  * Complete an ask password user interaction request. This should be once
- * the g_tls_interaction_ask_password() completion callback is called.
+ * the g_tls_interaction_ask_password_async() completion callback is called.
  *
  * If %G_TLS_INTERACTION_HANDLED is returned, then the #GTlsPassword passed
  * to g_tls_interaction_ask_password() will have its password filled in.
+ *
+ * If the interaction is cancelled by the cancellation object, or by the
+ * user then %G_TLS_INTERACTION_FAILED will be returned with an error that
+ * contains a %G_IO_ERROR_CANCELLED error code.
+ *
+ * Returns: The status of the ask password interaction.
+ * Since: 2.30
+ */
+
+
+/**
+ * g_tls_interaction_invoke_ask_password:
+ * @interaction: a #GTlsInteraction object
+ * @password: a #GTlsPassword object
+ * @cancellable: an optional #GCancellable cancellation object
+ * @error: an optional location to place an error on failure
+ *
+ * Invoke the interaction to ask the user for a password. It invokes this
+ * interaction in the main loop, specifically the #GMainContext returned by
+ * g_main_context_get_thread_default() when the interaction is created. This
+ * is called by called by #GTlsConnection or #GTlsDatabase to ask the user
+ * for a password.
+ *
+ * Derived subclasses usually implement a password prompt, although they may
+ * also choose to provide a password from elsewhere. The @password value will
+ * be filled in and then @callback will be called. Alternatively the user may
+ * abort this password request, which will usually abort the TLS connection.
+ *
+ * The implementation can either be a synchronous (eg: modal dialog) or an
+ * asynchronous one (eg: modeless dialog). This function will take care of
+ * calling which ever one correctly.
+ *
+ * If the interaction is cancelled by the cancellation object, or by the
+ * user then %G_TLS_INTERACTION_FAILED will be returned with an error that
+ * contains a %G_IO_ERROR_CANCELLED error code. Certain implementations may
+ * not support immediate cancellation.
  *
  * Returns: The status of the ask password interaction.
  * Since: 2.30
@@ -36579,7 +36795,7 @@
  * @result: a #GAsyncResult.
  * @error: a #GError location to store an error, or %NULL to ignore
  *
- * Finishes ejecting a volume. If any errors occured during the operation,
+ * Finishes ejecting a volume. If any errors occurred during the operation,
  * @error will be set to contain the errors and %FALSE will be returned.
  *
  * Returns: %TRUE, %FALSE if operation failed.
@@ -36608,7 +36824,7 @@
  * g_volume_eject_with_operation_finish:
  * @volume: a #GVolume.
  * @result: a #GAsyncResult.
- * @error: a #GError location to store the error occuring, or %NULL to ignore.
+ * @error: a #GError location to store the error occurring, or %NULL to ignore.
  *
  * Finishes ejecting a volume. If any errors occurred during the operation,
  * @error will be set to contain the errors and %FALSE will be returned.
@@ -36782,7 +36998,7 @@
  * blocks of a block device that is already represented by the native
  * volume monitor (for example a CD Audio file system driver). Such
  * a driver will generate its own #GMount object that needs to be
- * assoicated with the #GVolume object that represents the volume.
+ * associated with the #GVolume object that represents the volume.
  *
  * The other is for implementing a #GVolumeMonitor whose sole purpose
  * is to return #GVolume objects representing entries in the users
@@ -36899,7 +37115,7 @@
  * @result: a #GAsyncResult
  * @error: a #GError location to store an error, or %NULL to ignore
  *
- * Finishes mounting a volume. If any errors occured during the operation,
+ * Finishes mounting a volume. If any errors occurred during the operation,
  * @error will be set to contain the errors and %FALSE will be returned.
  *
  * If the mount operation succeeded, g_volume_get_mount() on @volume

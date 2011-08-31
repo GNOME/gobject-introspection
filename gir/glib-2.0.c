@@ -246,7 +246,7 @@
  * GChildWatchFunc:
  * @pid: the process id of the child process
  * @status: Status information about the child process, see waitpid(2) for more information about this field
- * @data: user data passed to g_child_watch_add()
+ * @user_data: user data passed to g_child_watch_add()
  *
  * The type of functions to be called when a child exists.
  */
@@ -2118,7 +2118,7 @@
  * @user_data: user data passed to g_regex_replace_eval()
  *
  * Specifies the type of the function passed to g_regex_replace_eval().
- * It is called for each occurance of the pattern in the string passed
+ * It is called for each occurrence of the pattern in the string passed
  * to g_regex_replace_eval(), and it should append the replacement to
  * @result.
  *
@@ -2351,7 +2351,7 @@
 
 /**
  * GSourceFunc:
- * @data: data passed to the function, set when the source was created with one of the above functions
+ * @user_data: data passed to the function, set when the source was created with one of the above functions
  *
  * Specifies the type of function passed to g_timeout_add(),
  * g_timeout_add_full(), g_idle_add(), and g_idle_add_full().
@@ -3565,7 +3565,7 @@
  * A #GWeakNotify function can be added to an object as a callback that gets
  * triggered when the object is finalized. Since the object is already being
  * finalized when the #GWeakNotify is called, there's not much you could do
- * with the object, apart from e.g. using its adress as hash-index or the like.
+ * with the object, apart from e.g. using its address as hash-index or the like.
  */
 
 
@@ -5780,6 +5780,24 @@
 
 
 /**
+ * G_TYPE_MAIN_CONTEXT:
+ *
+ * The #GType for a boxed type holding a #GMainContext.
+ *
+ * Since: 2.30
+ */
+
+
+/**
+ * G_TYPE_MAIN_LOOP:
+ *
+ * The #GType for a boxed type holding a #GMainLoop.
+ *
+ * Since: 2.30
+ */
+
+
+/**
  * G_TYPE_MAKE_FUNDAMENTAL:
  * @x: the fundamental type number.
  *
@@ -6049,6 +6067,15 @@
  *
  * First available fundamental type number to create new fundamental
  * type id with G_TYPE_MAKE_FUNDAMENTAL().
+ */
+
+
+/**
+ * G_TYPE_SOURCE:
+ *
+ * The #GType for a boxed type holding a #GSource.
+ *
+ * Since: 2.30
  */
 
 
@@ -8014,7 +8041,7 @@
  * then although there are 9 individual values that comprise the
  * entire dictionary (two keys, two values, two variants containing
  * the values, two dictionary entries, plus the dictionary itself),
- * only 1 #GVariant instance exists -- the one refering to the
+ * only 1 #GVariant instance exists -- the one referring to the
  * dictionary.
  * </para>
  * <para>
@@ -9192,7 +9219,7 @@
  * g_intern_static_string(). An interned string is a canonical
  * representation for a string. One important advantage of interned
  * strings is that they can be compared for equality by a simple
- * pointer comparision, rather than using strcmp().
+ * pointer comparison, rather than using strcmp().
  */
 
 
@@ -12799,7 +12826,7 @@
  * @from_codeset: character set of @str.
  * @bytes_read: (out): location to store the number of bytes in the input string that were successfully converted, or %NULL. Even if the conversion was successful, this may be less than @len if there were partial characters at the end of the input. If the error #G_CONVERT_ERROR_ILLEGAL_SEQUENCE occurs, the value stored will the byte offset after the last valid input sequence.
  * @bytes_written: (out): the number of bytes stored in the output buffer (not including the terminating nul).
- * @error: location to store the error occuring, or %NULL to ignore errors. Any of the errors in #GConvertError may occur.
+ * @error: location to store the error occurring, or %NULL to ignore errors. Any of the errors in #GConvertError may occur.
  *
  * Converts a string from one character set to another.
  *
@@ -12822,7 +12849,7 @@
  * @fallback: UTF-8 string to use in place of character not present in the target encoding. (The string must be representable in the target encoding).
  * @bytes_read: location to store the number of bytes in the input string that were successfully converted, or %NULL. Even if the conversion was successful, this may be less than @len if there were partial characters at the end of the input.
  * @bytes_written: the number of bytes stored in the output buffer (not including the terminating nul).
- * @error: location to store the error occuring, or %NULL to ignore errors. Any of the errors in #GConvertError may occur.
+ * @error: location to store the error occurring, or %NULL to ignore errors. Any of the errors in #GConvertError may occur.
  *
  * Converts a string from one character set to another, possibly
  * including fallback sequences for characters not representable
@@ -12849,7 +12876,7 @@
  * @converter: conversion descriptor from g_iconv_open()
  * @bytes_read: location to store the number of bytes in the input string that were successfully converted, or %NULL. Even if the conversion was successful, this may be less than @len if there were partial characters at the end of the input. If the error #G_CONVERT_ERROR_ILLEGAL_SEQUENCE occurs, the value stored will the byte offset after the last valid input sequence.
  * @bytes_written: the number of bytes stored in the output buffer (not including the terminating nul).
- * @error: location to store the error occuring, or %NULL to ignore errors. Any of the errors in #GConvertError may occur.
+ * @error: location to store the error occurring, or %NULL to ignore errors. Any of the errors in #GConvertError may occur.
  *
  * Converts a string from one character set to another.
  *
@@ -13855,15 +13882,15 @@
  * within a complete week (Monday to Sunday) is contained within the
  * same week-numbering year.
  *
- * For Monday, Tuesday and Wednesday occuring near the end of the year,
+ * For Monday, Tuesday and Wednesday occurring near the end of the year,
  * this may mean that the week-numbering year is one greater than the
  * calendar year (so that these days have the same week-numbering year
- * as the Thursday occuring early in the next year).
+ * as the Thursday occurring early in the next year).
  *
- * For Friday, Saturaday and Sunday occuring near the start of the year,
+ * For Friday, Saturaday and Sunday occurring near the start of the year,
  * this may mean that the week-numbering year is one less than the
  * calendar year (so that these days have the same week-numbering year
- * as the Thursday occuring late in the previous year).
+ * as the Thursday occurring late in the previous year).
  *
  * An equivalent description is that the week-numbering year is equal to
  * the calendar year containing the majority of the days in the current
@@ -13891,7 +13918,7 @@
  * that has more than 4 of its days falling within the calendar year.
  *
  * The value 0 is never returned by this function.  Days contained
- * within a year but occuring before the first ISO 8601 week of that
+ * within a year but occurring before the first ISO 8601 week of that
  * year are considered as being contained in the last week of the
  * previous year.  Similarly, the final days of a calendar year may be
  * considered as being part of the first ISO 8601 week of the next year
@@ -14171,6 +14198,46 @@
  *
  * Returns: the #GDateTime with the reference count increased
  * Since: 2.26
+ */
+
+
+/**
+ * g_date_time_source_new:
+ * @datetime: Time to await
+ * @cancel_on_set: Also invoke callback if the system clock changes discontiguously
+ *
+ * This function is designed for programs that want to schedule an
+ * event based on real (wall clock) time, as returned by
+ * g_get_real_time().  For example, HOUR:MINUTE wall-clock displays
+ * and calendaring software.  The callback will be invoked when the
+ * specified wall clock time @datetime is reached.  This includes
+ * events such as the system clock being set past the given time.
+ *
+ * Compare versus g_timeout_source_new() which is defined to use
+ * monotonic time as returned by g_get_monotonic_time().
+ *
+ * If @cancel_on_set is given, the callback will also be invoked at
+ * most a second after the system clock is changed.  This includes
+ * being set backwards or forwards, and system
+ * resume from suspend.  Not all operating systems allow detecting all
+ * relevant events efficiently - this function may cause the process
+ * to wake up once a second in those cases.
+ *
+ * A wall clock display should use @cancel_on_set; a calendaring
+ * program shouldn't need to.
+ *
+ * Note that the return value from the associated callback will be
+ * ignored; this is a one time watch.
+ *
+ * <note><para>This function currently does not detect time zone
+ * changes.  On Linux, your program should also monitor the
+ * <literal>/etc/timezone</literal> file using
+ * #GFileMonitor.</para></note>
+ *
+ * <example id="gdatetime-example-watch"><title>Clock example</title><programlisting><xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../glib/tests/glib-clock.c"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting></example>
+ *
+ * Returns: A newly-constructed #GSource
+ * Since: 2.30
  */
 
 
@@ -14740,7 +14807,7 @@
  * </listitem>
  * </itemizedlist>
  *
- * If the call was sucessful, it returns %TRUE. If the call was not successful,
+ * If the call was successful, it returns %TRUE. If the call was not successful,
  * it returns %FALSE and sets @error. The error domain is #G_FILE_ERROR.
  * Possible error codes are those in the #GFileError enumeration.
  *
@@ -14862,7 +14929,7 @@
  * g_filename_from_uri:
  * @uri: a uri describing a filename (escaped, encoded in ASCII).
  * @hostname: Location to store hostname for the URI, or %NULL. If there is no hostname in the URI, %NULL will be stored in this location.
- * @error: location to store the error occuring, or %NULL to ignore errors. Any of the errors in #GConvertError may occur.
+ * @error: location to store the error occurring, or %NULL to ignore errors. Any of the errors in #GConvertError may occur.
  *
  * Converts an escaped ASCII-encoded URI to a local filename in the
  * encoding used for filenames.
@@ -14879,7 +14946,7 @@
  * @len: the length of the string, or -1 if the string is nul-terminated.
  * @bytes_read: location to store the number of bytes in the input string that were successfully converted, or %NULL. Even if the conversion was successful, this may be less than @len if there were partial characters at the end of the input. If the error #G_CONVERT_ERROR_ILLEGAL_SEQUENCE occurs, the value stored will the byte offset after the last valid input sequence.
  * @bytes_written: the number of bytes stored in the output buffer (not including the terminating nul).
- * @error: location to store the error occuring, or %NULL to ignore errors. Any of the errors in #GConvertError may occur.
+ * @error: location to store the error occurring, or %NULL to ignore errors. Any of the errors in #GConvertError may occur.
  *
  * Converts a string from UTF-8 to the encoding GLib uses for
  * filenames. Note that on Windows GLib uses UTF-8 for filenames;
@@ -14894,7 +14961,7 @@
  * g_filename_to_uri:
  * @filename: an absolute filename specified in the GLib file name encoding, which is the on-disk file name bytes on Unix, and UTF-8 on Windows
  * @hostname: (allow-none): A UTF-8 encoded hostname, or %NULL for none.
- * @error: location to store the error occuring, or %NULL to ignore errors. Any of the errors in #GConvertError may occur.
+ * @error: location to store the error occurring, or %NULL to ignore errors. Any of the errors in #GConvertError may occur.
  *
  * Converts an absolute filename to an escaped ASCII-encoded URI, with the path
  * component following Section 3.3. of RFC 2396.
@@ -14911,7 +14978,7 @@
  * @len: the length of the string, or -1 if the string is nul-terminated<footnoteref linkend="nul-unsafe"/>.
  * @bytes_read: location to store the number of bytes in the input string that were successfully converted, or %NULL. Even if the conversion was successful, this may be less than @len if there were partial characters at the end of the input. If the error #G_CONVERT_ERROR_ILLEGAL_SEQUENCE occurs, the value stored will the byte offset after the last valid input sequence.
  * @bytes_written: the number of bytes stored in the output buffer (not including the terminating nul).
- * @error: location to store the error occuring, or %NULL to ignore errors. Any of the errors in #GConvertError may occur.
+ * @error: location to store the error occurring, or %NULL to ignore errors. Any of the errors in #GConvertError may occur.
  *
  * Converts a string which is in the encoding used by GLib for
  * filenames into a UTF-8 string. Note that on Windows GLib uses UTF-8
@@ -16031,6 +16098,22 @@
  * when finished using it.
  *
  * Returns: the copy of the passed #GHmac. Use g_hmac_unref()
+ * Since: 2.30
+ */
+
+
+/**
+ * g_hmac_get_digest:
+ * @hmac: a #GHmac
+ * @buffer: output buffer
+ * @digest_len: an inout parameter. The caller initializes it to the size of @buffer. After the call it contains the length of the digest
+ *
+ * Gets the digest from @checksum as a raw binary array and places it
+ * into @buffer. The size of the digest depends on the type of checksum.
+ *
+ * Once this function has been called, the #GHmac is closed and can
+ * no longer be updated with g_checksum_update().
+ *
  * Since: 2.30
  */
 
@@ -18337,7 +18420,7 @@
  * @len: the length of the string, or -1 if the string is nul-terminated<footnoteref linkend="nul-unsafe"/>.
  * @bytes_read: location to store the number of bytes in the input string that were successfully converted, or %NULL. Even if the conversion was successful, this may be less than @len if there were partial characters at the end of the input. If the error #G_CONVERT_ERROR_ILLEGAL_SEQUENCE occurs, the value stored will the byte offset after the last valid input sequence.
  * @bytes_written: the number of bytes stored in the output buffer (not including the terminating nul).
- * @error: location to store the error occuring, or %NULL to ignore errors. Any of the errors in #GConvertError may occur.
+ * @error: location to store the error occurring, or %NULL to ignore errors. Any of the errors in #GConvertError may occur.
  *
  * Converts a string from UTF-8 to the encoding used for strings by
  * the C runtime (usually the same as that used by the operating
@@ -18354,7 +18437,7 @@
  * @len: the length of the string, or -1 if the string is nul-terminated<footnoteref linkend="nul-unsafe"/>.
  * @bytes_read: location to store the number of bytes in the input string that were successfully converted, or %NULL. Even if the conversion was successful, this may be less than @len if there were partial characters at the end of the input. If the error #G_CONVERT_ERROR_ILLEGAL_SEQUENCE occurs, the value stored will the byte offset after the last valid input sequence.
  * @bytes_written: the number of bytes stored in the output buffer (not including the terminating nul).
- * @error: location to store the error occuring, or %NULL to ignore errors. Any of the errors in #GConvertError may occur.
+ * @error: location to store the error occurring, or %NULL to ignore errors. Any of the errors in #GConvertError may occur.
  *
  * Converts a string which is in the encoding used for strings by
  * the C runtime (usually the same as that used by the operating
@@ -18413,7 +18496,7 @@
  * @priority: the priority for this file descriptor which should be the same as the priority used for g_source_attach() to ensure that the file descriptor is polled whenever the results may be needed.
  *
  * Adds a file descriptor to the set of file descriptors polled for
- * this context. This will very seldomly be used directly. Instead
+ * this context. This will very seldom be used directly. Instead
  * a typical event source will use g_source_add_poll() instead.
  */
 
@@ -18422,7 +18505,7 @@
  * g_main_context_check:
  * @context: a #GMainContext
  * @max_priority: the maximum numerical priority of sources to check
- * @fds: array of #GPollFD's that was passed to the last call to g_main_context_query()
+ * @fds: (array length=n_fds): array of #GPollFD's that was passed to the last call to g_main_context_query()
  * @n_fds: return value of g_main_context_query()
  *
  * Passes the results of polling back to the main loop.
@@ -18439,7 +18522,7 @@
  * specified, and corresponds to the "main" main loop. See also
  * g_main_context_get_thread_default().
  *
- * Returns: the global default main context.
+ * Returns: (transfer none): the global default main context.
  */
 
 
@@ -18461,7 +18544,7 @@
  * multiple sources exist with the same source function and user data,
  * the first one found will be returned.
  *
- * Returns: the source, if one was found, otherwise %NULL
+ * Returns: (transfer none): the source, if one was found, otherwise %NULL
  */
 
 
@@ -18472,7 +18555,7 @@
  *
  * Finds a #GSource given a pair of context and ID.
  *
- * Returns: the #GSource if found, otherwise, %NULL
+ * Returns: (transfer none): the #GSource if found, otherwise, %NULL
  */
 
 
@@ -18485,7 +18568,7 @@
  * multiple sources exist with the same user data, the first
  * one found will be returned.
  *
- * Returns: the source, if one was found, otherwise %NULL
+ * Returns: (transfer none): the source, if one was found, otherwise %NULL
  */
 
 
@@ -18510,16 +18593,16 @@
  * non-default context, so it is not safe to assume that this will
  * always return %NULL if threads are not initialized.)
  *
- * thread-default context is the global default context.
+ * %NULL if the thread-default context is the global default context.
  *
- * Returns: the thread-default #GMainContext, or %NULL if the
+ * Returns: (transfer none): the thread-default #GMainContext, or
  * Since: 2.22
  */
 
 
 /**
  * g_main_context_invoke:
- * @context: a #GMainContext, or %NULL
+ * @context: (allow-none): a #GMainContext, or %NULL
  * @function: function to call
  * @data: data to pass to @function
  *
@@ -18551,7 +18634,7 @@
 
 /**
  * g_main_context_invoke_full:
- * @context: a #GMainContext, or %NULL
+ * @context: (allow-none): a #GMainContext, or %NULL
  * @priority: the priority at which to run @function
  * @function: function to call
  * @data: data to pass to @function
@@ -18692,8 +18775,8 @@
  * g_main_context_query:
  * @context: a #GMainContext
  * @max_priority: maximum priority source to check
- * @timeout_: location to store timeout to be used in polling
- * @fds: location to store #GPollFD records that need to be polled.
+ * @timeout_: (out): location to store timeout to be used in polling
+ * @fds: (out caller-allocates) (array length=n_fds): location to store #GPollFD records that need to be polled.
  * @n_fds: length of @fds.
  *
  * Determines information necessary to poll this main loop.
@@ -18791,7 +18874,7 @@
  *
  * Returns the currently firing source for this thread.
  *
- * Returns: The currently firing source or %NULL.
+ * Returns: (transfer none): The currently firing source or %NULL.
  * Since: 2.12
  */
 
@@ -18952,7 +19035,7 @@
  *
  * Returns the #GMainContext of @loop.
  *
- * Returns: the #GMainContext of @loop
+ * Returns: (transfer none): the #GMainContext of @loop
  */
 
 
@@ -19616,7 +19699,7 @@
  * g_match_info_expand_references:
  * @match_info: a #GMatchInfo or %NULL
  * @string_to_expand: the string to expand
- * @error: location to store the error occuring, or %NULL to ignore errors
+ * @error: location to store the error occurring, or %NULL to ignore errors
  *
  * Returns a new string containing the text in @string_to_expand with
  * references and escape sequences expanded. References refer to the last
@@ -19883,7 +19966,7 @@
 /**
  * g_match_info_next:
  * @match_info: a #GMatchInfo structure
- * @error: location to store the error occuring, or %NULL to ignore errors
+ * @error: location to store the error occurring, or %NULL to ignore errors
  *
  * Scans for the next match using the same parameters of the previous
  * call to g_regex_match_full() or g_regex_match() that returned
@@ -23039,10 +23122,10 @@
  * @start_position: starting index of the string to match
  * @match_options: match options
  * @match_info: (out) (allow-none): pointer to location where to store the #GMatchInfo, or %NULL if you do not need it
- * @error: location to store the error occuring, or %NULL to ignore errors
+ * @error: location to store the error occurring, or %NULL to ignore errors
  *
  * Using the standard algorithm for regular expression matching only
- * the longest match in the string is retrieved, it is not possibile
+ * the longest match in the string is retrieved, it is not possible
  * to obtain all the available matches. For instance matching
  * "&lt;a&gt; &lt;b&gt; &lt;c&gt;" against the pattern "&lt;.*&gt;"
  * you get "&lt;a&gt; &lt;b&gt; &lt;c&gt;".
@@ -23091,7 +23174,7 @@
  * @start_position: starting index of the string to match
  * @match_options: match options
  * @match_info: (out) (allow-none): pointer to location where to store the #GMatchInfo, or %NULL if you do not need it
- * @error: location to store the error occuring, or %NULL to ignore errors
+ * @error: location to store the error occurring, or %NULL to ignore errors
  *
  * Scans for a match in string for the pattern in @regex.
  * The @match_options are combined with the match options specified
@@ -23207,7 +23290,7 @@
  * @start_position: starting index of the string to match
  * @replacement: text to replace each match with
  * @match_options: options for the match
- * @error: location to store the error occuring, or %NULL to ignore errors
+ * @error: location to store the error occurring, or %NULL to ignore errors
  *
  * Replaces all occurrences of the pattern in @regex with the
  * replacement text. Backreferences of the form '\number' or
@@ -23270,7 +23353,7 @@
  * @match_options: options for the match
  * @eval: a function to call for each match
  * @user_data: user data to pass to the function
- * @error: location to store the error occuring, or %NULL to ignore errors
+ * @error: location to store the error occurring, or %NULL to ignore errors
  *
  * Replaces occurrences of the pattern in regex with the output of
  * @eval for that occurrence.
@@ -23331,7 +23414,7 @@
  * @start_position: starting index of the string to match
  * @replacement: text to replace each match with
  * @match_options: options for the match
- * @error: location to store the error occuring, or %NULL to ignore errors
+ * @error: location to store the error occurring, or %NULL to ignore errors
  *
  * Replaces all occurrences of the pattern in @regex with the
  * replacement text. @replacement is replaced literally, to
@@ -25064,10 +25147,10 @@
  * Gets the #GMainContext with which the source is associated.
  * Calling this function on a destroyed source is an error.
  *
- * or %NULL if the context has not yet been added
- * to a source.
+ * source is associated, or %NULL if the context has not
+ * yet been added to a source.
  *
- * Returns: the #GMainContext with which the source is associated,
+ * Returns: (transfer none): the #GMainContext with which the
  */
 
 
@@ -27197,7 +27280,7 @@
  * if the string is not completely converted it attempts the conversion
  * again with g_ascii_strtod(), and returns the best match.
  *
- * This function should seldomly be used. The normal situation when reading
+ * This function should seldom be used. The normal situation when reading
  * numbers not for human consumption is to use g_ascii_strtod(). Only when
  * you know that you must expect both locale formatted and C formatted numbers
  * should you use this. Make sure that you don't pass strings such as comma
@@ -28168,7 +28251,7 @@
  * just in the order in which they were added to the pool.
  *
  * Note, if the maximum number of threads is more than 1, the order
- * that threads are executed cannot be guranteed 100%. Threads are
+ * that threads are executed cannot be guaranteed 100%. Threads are
  * scheduled by the operating system and are executed at random. It
  * cannot be assumed that threads are executed in the order they are
  * created.
@@ -28322,7 +28405,7 @@
  * Otherwise @time_ is treated is local time.  The distinction between
  * %G_TIME_TYPE_STANDARD and %G_TIME_TYPE_DAYLIGHT is ignored except in
  * the case that the given @time_ is ambiguous.  In Toronto, for example,
- * 01:30 on November 7th 2010 occured twice (once inside of daylight
+ * 01:30 on November 7th 2010 occurred twice (once inside of daylight
  * savings time and the next, an hour later, outside of daylight savings
  * time).  In this case, the different value of @type would result in a
  * different interval being returned.
@@ -29158,7 +29241,7 @@
  * @len: the maximum length (number of characters) of @str to use. If @len < 0, then the string is nul-terminated.
  * @items_read: location to store number of bytes read, or %NULL. If an error occurs then the index of the invalid input is stored here.
  * @items_written: location to store number of <type>gunichar2</type> written, or %NULL. The value stored here does not include the trailing 0.
- * @error: location to store the error occuring, or %NULL to ignore errors. Any of the errors in #GConvertError other than %G_CONVERT_ERROR_NO_CONVERSION may occur.
+ * @error: location to store the error occurring, or %NULL to ignore errors. Any of the errors in #GConvertError other than %G_CONVERT_ERROR_NO_CONVERSION may occur.
  *
  * Convert a string from UCS-4 to UTF-16. A 0 character will be
  * added to the result after the converted text.
@@ -29177,7 +29260,7 @@
  * @len: the maximum length (number of characters) of @str to use. If @len < 0, then the string is nul-terminated.
  * @items_read: location to store number of characters read, or %NULL.
  * @items_written: location to store number of bytes written or %NULL. The value here stored does not include the trailing 0 byte.
- * @error: location to store the error occuring, or %NULL to ignore errors. Any of the errors in #GConvertError other than %G_CONVERT_ERROR_NO_CONVERSION may occur.
+ * @error: location to store the error occurring, or %NULL to ignore errors. Any of the errors in #GConvertError other than %G_CONVERT_ERROR_NO_CONVERSION may occur.
  *
  * Convert a string from a 32-bit fixed width representation as UCS-4.
  * to UTF-8. The result will be terminated with a 0 byte.
@@ -29781,12 +29864,10 @@
 
 
 /**
- * g_unix_signal_add_watch_full:
+ * g_unix_signal_add_full:
  * @signum: Signal number
- * @priority: the priority of the signal source. Typically this will be in the range between #G_PRIORITY_DEFAULT and #G_PRIORITY_HIGH.
  * @handler: Callback
  * @user_data: Data for @handler
- * @notify: #GDestroyNotify for @handler
  *
  * A convenience function for g_unix_signal_source_new(), which
  * attaches to the default #GMainContext.  You can remove the watch
@@ -29970,7 +30051,7 @@
  * @len: the maximum length (number of <type>gunichar2</type>) of @str to use. If @len < 0, then the string is nul-terminated.
  * @items_read: location to store number of words read, or %NULL. If %NULL, then %G_CONVERT_ERROR_PARTIAL_INPUT will be returned in case @str contains a trailing partial character. If an error occurs then the index of the invalid input is stored here.
  * @items_written: location to store number of characters written, or %NULL. The value stored here does not include the trailing 0 character.
- * @error: location to store the error occuring, or %NULL to ignore errors. Any of the errors in #GConvertError other than %G_CONVERT_ERROR_NO_CONVERSION may occur.
+ * @error: location to store the error occurring, or %NULL to ignore errors. Any of the errors in #GConvertError other than %G_CONVERT_ERROR_NO_CONVERSION may occur.
  *
  * Convert a string from UTF-16 to UCS-4. The result will be
  * nul-terminated.
@@ -29989,7 +30070,7 @@
  * @len: the maximum length (number of <type>gunichar2</type>) of @str to use. If @len < 0, then the string is nul-terminated.
  * @items_read: location to store number of words read, or %NULL. If %NULL, then %G_CONVERT_ERROR_PARTIAL_INPUT will be returned in case @str contains a trailing partial character. If an error occurs then the index of the invalid input is stored here.
  * @items_written: location to store number of bytes written, or %NULL. The value stored here does not include the trailing 0 byte.
- * @error: location to store the error occuring, or %NULL to ignore errors. Any of the errors in #GConvertError other than %G_CONVERT_ERROR_NO_CONVERSION may occur.
+ * @error: location to store the error occurring, or %NULL to ignore errors. Any of the errors in #GConvertError other than %G_CONVERT_ERROR_NO_CONVERSION may occur.
  *
  * Convert a string from UTF-16 to UTF-8. The result will be
  * terminated with a 0 byte.
@@ -30416,7 +30497,7 @@
  * @len: the maximum length of @str to use, in bytes. If @len < 0, then the string is nul-terminated.
  * @items_read: location to store number of bytes read, or %NULL. If %NULL, then %G_CONVERT_ERROR_PARTIAL_INPUT will be returned in case @str contains a trailing partial character. If an error occurs then the index of the invalid input is stored here.
  * @items_written: location to store number of characters written or %NULL. The value here stored does not include the trailing 0 character.
- * @error: location to store the error occuring, or %NULL to ignore errors. Any of the errors in #GConvertError other than %G_CONVERT_ERROR_NO_CONVERSION may occur.
+ * @error: location to store the error occurring, or %NULL to ignore errors. Any of the errors in #GConvertError other than %G_CONVERT_ERROR_NO_CONVERSION may occur.
  *
  * Convert a string from UTF-8 to a 32-bit fixed width
  * representation as UCS-4. A trailing 0 character will be added to the
@@ -30454,7 +30535,7 @@
  * @len: the maximum length (number of bytes) of @str to use. If @len < 0, then the string is nul-terminated.
  * @items_read: location to store number of bytes read, or %NULL. If %NULL, then %G_CONVERT_ERROR_PARTIAL_INPUT will be returned in case @str contains a trailing partial character. If an error occurs then the index of the invalid input is stored here.
  * @items_written: location to store number of <type>gunichar2</type> written, or %NULL. The value stored here does not include the trailing 0.
- * @error: location to store the error occuring, or %NULL to ignore errors. Any of the errors in #GConvertError other than %G_CONVERT_ERROR_NO_CONVERSION may occur.
+ * @error: location to store the error occurring, or %NULL to ignore errors. Any of the errors in #GConvertError other than %G_CONVERT_ERROR_NO_CONVERSION may occur.
  *
  * Convert a string from UTF-8 to UTF-16. A 0 character will be
  * added to the result after the converted text.
@@ -32377,7 +32458,7 @@
  * is returned.
  *
  * In case of any error, %NULL will be returned.  If @error is non-%NULL
- * then it will be set to reflect the error that occured.
+ * then it will be set to reflect the error that occurred.
  *
  * Officially, the language understood by the parser is "any string
  * produced by g_variant_print()".
@@ -33327,7 +33408,7 @@
  * on NT-based systems, so checking whether your are running on Win9x
  * in your own software is moot. The least significant byte is 4 on
  * Windows NT 4, and 5 on Windows XP. Software that needs really
- * detailled version and feature information should use Win32 API like
+ * detailed version and feature information should use Win32 API like
  * GetVersionEx() and VerifyVersionInfo().
  *
  * Returns: The version information.

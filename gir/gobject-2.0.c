@@ -214,7 +214,7 @@
  * GChildWatchFunc:
  * @pid: the process id of the child process
  * @status: Status information about the child process, see waitpid(2) for more information about this field
- * @data: user data passed to g_child_watch_add()
+ * @user_data: user data passed to g_child_watch_add()
  *
  * The type of functions to be called when a child exists.
  */
@@ -1430,7 +1430,7 @@
  * @user_data: user data passed to g_regex_replace_eval()
  *
  * Specifies the type of the function passed to g_regex_replace_eval().
- * It is called for each occurance of the pattern in the string passed
+ * It is called for each occurrence of the pattern in the string passed
  * to g_regex_replace_eval(), and it should append the replacement to
  * @result.
  *
@@ -1594,7 +1594,7 @@
 
 /**
  * GSourceFunc:
- * @data: data passed to the function, set when the source was created with one of the above functions
+ * @user_data: data passed to the function, set when the source was created with one of the above functions
  *
  * Specifies the type of function passed to g_timeout_add(),
  * g_timeout_add_full(), g_idle_add(), and g_idle_add_full().
@@ -2310,7 +2310,7 @@
  * A #GWeakNotify function can be added to an object as a callback that gets
  * triggered when the object is finalized. Since the object is already being
  * finalized when the #GWeakNotify is called, there's not much you could do
- * with the object, apart from e.g. using its adress as hash-index or the like.
+ * with the object, apart from e.g. using its address as hash-index or the like.
  */
 
 
@@ -4304,6 +4304,24 @@
 
 
 /**
+ * G_TYPE_MAIN_CONTEXT:
+ *
+ * The #GType for a boxed type holding a #GMainContext.
+ *
+ * Since: 2.30
+ */
+
+
+/**
+ * G_TYPE_MAIN_LOOP:
+ *
+ * The #GType for a boxed type holding a #GMainLoop.
+ *
+ * Since: 2.30
+ */
+
+
+/**
  * G_TYPE_MAKE_FUNDAMENTAL:
  * @x: the fundamental type number.
  *
@@ -4573,6 +4591,15 @@
  *
  * First available fundamental type number to create new fundamental
  * type id with G_TYPE_MAKE_FUNDAMENTAL().
+ */
+
+
+/**
+ * G_TYPE_SOURCE:
+ *
+ * The #GType for a boxed type holding a #GSource.
+ *
+ * Since: 2.30
  */
 
 
@@ -6644,7 +6671,7 @@
  * g_closure_sink() checks to see if the object is still floating, and
  * if so, unsets the floating state and decreases the reference
  * count. If the closure is not floating, g_closure_sink() does
- * nothing. The reason for the existance of the floating state is to
+ * nothing. The reason for the existence of the floating state is to
  * prevent cumbersome code sequences like:
  * |[
  * closure = g_cclosure_new (cb_func, cb_data);
@@ -7491,7 +7518,7 @@
  *
  * This function is intended for #GObject implementations to re-enforce a
  * <link linkend="floating-ref">floating</link> object reference.
- * Doing this is seldomly required: all
+ * Doing this is seldom required: all
  * #GInitiallyUnowned<!-- -->s are created with a floating reference which
  * usually just needs to be sunken by calling g_object_ref_sink().
  *
@@ -10696,7 +10723,7 @@
  * @value_array: #GValueArray to sort
  * @compare_func: (scope call): function to compare elements
  *
- * Sort @value_array using @compare_func to compare the elements accoring to
+ * Sort @value_array using @compare_func to compare the elements according to
  * the semantics of #GCompareFunc.
  *
  * The current implementation uses Quick-Sort as sorting algorithm.
@@ -10711,7 +10738,7 @@
  * @compare_func: (scope call): function to compare elements
  * @user_data: (closure): extra data argument provided for @compare_func
  *
- * Sort @value_array using @compare_func to compare the elements accoring
+ * Sort @value_array using @compare_func to compare the elements according
  * to the semantics of #GCompareDataFunc.
  *
  * The current implementation uses Quick-Sort as sorting algorithm.
