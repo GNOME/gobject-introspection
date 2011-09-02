@@ -224,7 +224,7 @@ regress_test_closure_variant (GClosure *closure, const GVariant* arg)
 {
   GValue return_value = {0, };
   GValue arguments[1] = {{0,} };
-  int ret;
+  GVariant *ret;
 
   g_value_init (&return_value, G_TYPE_VARIANT);
 
