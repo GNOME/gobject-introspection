@@ -11,7 +11,7 @@ INTROSPECTION_SCANNER = \
         PYTHONPATH=$(top_builddir):$(top_srcdir) \
 	UNINSTALLED_INTROSPECTION_SRCDIR=$(top_srcdir) \
 	UNINSTALLED_INTROSPECTION_BUILDDIR=$(top_builddir) \
-    $(top_builddir)/g-ir-scanner$(EXEEXT)
+    $(top_builddir)/g-ir-scanner
 INTROSPECTION_SCANNER_ARGS = \
     --verbose \
     -I$(top_srcdir) \
@@ -32,4 +32,4 @@ INTROSPECTION_DOCTOOL = \
         PYTHONPATH=$(top_builddir):$(top_srcdir) \
 	UNINSTALLED_INTROSPECTION_SRCDIR=$(top_srcdir) \
 	UNINSTALLED_INTROSPECTION_BUILDDIR=$(top_builddir) \
-    $(top_builddir)/g-ir-doc-tool$(EXEEXT)
+    $(top_builddir)/g-ir-doc-tool
