@@ -86,7 +86,7 @@ GLib_2_0_gir_FILES =  \
 
 BUILT_GIRSOURCES += GLib-2.0.gir
 
-GLib-2.0.gir: g-ir-scanner g-ir-compiler
+GLib-2.0.gir: g-ir-scanner g-ir-compiler$(EXEEXT)
 
 gir/DBusGLib-1.0.typelib: GObject-2.0.gir
 
