@@ -77,6 +77,12 @@ libgirepository_1_0_la_LDFLAGS = -no-undefined -version-number 1:0:0 -export-sym
 gdumpdir = $(datadir)/gobject-introspection-1.0/
 gdump_DATA = girepository/gdump.c
 
+noinst_PROGRAMS += gi-dump-types
+
+gi_dump_types_SOURCES = girepository/gdump.c girepository/gi-dump-types.c
+gi_dump_types_CFLAGS = $(GIO_UNIX_CFLAGS)
+gi_dump_types_LDADD = $(GIO_UNIX_LIBS)
+
 GTESTER_PROGS += gthash-test
 
 gthash_test_SOURCES = girepository/gthash.c girepository/gthash-test.c
