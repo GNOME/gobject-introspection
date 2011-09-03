@@ -24,6 +24,10 @@
 #endif
 #include <Python.h>
 #include "sourcescanner.h"
+
+#ifdef G_OS_WIN32
+#define USE_WINDOWS
+#endif
 #include "grealpath.h"
 
 #ifdef _WIN32

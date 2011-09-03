@@ -2,6 +2,9 @@
 #define __G_REALPATH_H__
 
 #include <stdlib.h>
+#ifdef USE_WINDOWS
+#include <windows.h>
+#endif
 
 /**
  * g_realpath:
@@ -24,9 +27,12 @@ g_realpath (const char *path)
 #else
 	/* We don't want to include <windows.h> as it clashes horribly
 	 * with token names from scannerparser.h. So just declare
-	 * GetFullPathNameA() here.
+	 * GetFullPathNameA() here unless we already defined it, like
+	 * in giscanner.c.
 	 */
+#ifndef USE_WINDOWS
 	extern __stdcall GetFullPathNameA(const char*, int, char*, char**);
+#endif
 	char *buffer;
 	char dummy;
 	int rc, len;
