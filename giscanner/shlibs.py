@@ -19,6 +19,7 @@
 # 02110-1301, USA.
 #
 
+import os
 import re
 import platform
 import subprocess
@@ -67,34 +68,40 @@ def _resolve_non_libtool(options, binary, libraries):
     if not libraries:
         return []
 
-    args = []
-    libtool = get_libtool_command(options)
-    if libtool:
-        args.extend(libtool)
-        args.append('--mode=execute')
-    platform_system = platform.system()
-    if platform_system == 'Darwin':
-        args.extend(['otool', '-L', binary.args[0]])
+    if os.name == 'nt':
+        shlibs = []
+
+        for library in libraries:
+            shlibs.append(library + '.dll')
     else:
-        args.extend(['ldd', binary.args[0]])
-    proc = subprocess.Popen(args, stdout=subprocess.PIPE)
-    patterns = {}
-    for library in libraries:
-        patterns[library] = _ldd_library_pattern(library)
+        args = []
+        libtool = get_libtool_command(options)
+        if libtool:
+            args.extend(libtool)
+            args.append('--mode=execute')
+        platform_system = platform.system()
+        if platform_system == 'Darwin':
+            args.extend(['otool', '-L', binary.args[0]])
+        else:
+            args.extend(['ldd', binary.args[0]])
+        proc = subprocess.Popen(args, stdout=subprocess.PIPE)
+        patterns = {}
+        for library in libraries:
+            patterns[library] = _ldd_library_pattern(library)
 
-    shlibs = []
-    for line in proc.stdout:
-        for library, pattern in patterns.iteritems():
-            m = pattern.search(line)
-            if m:
-                del patterns[library]
-                shlibs.append(m.group(1))
-                break
+        shlibs = []
+        for line in proc.stdout:
+            for library, pattern in patterns.iteritems():
+                m = pattern.search(line)
+                if m:
+                    del patterns[library]
+                    shlibs.append(m.group(1))
+                    break
 
-    if len(patterns) > 0:
-        raise SystemExit(
-            "ERROR: can't resolve libraries to shared libraries: " +
-            ", ".join(patterns.keys()))
+        if len(patterns) > 0:
+            raise SystemExit(
+                "ERROR: can't resolve libraries to shared libraries: " +
+                ", ".join(patterns.keys()))
 
     return shlibs
 
