@@ -58,16 +58,14 @@ _giscanner_la_CFLAGS = \
 	$(PYTHON_INCLUDES) \
 	$(GOBJECT_CFLAGS) \
 	-I$(top_srcdir)/giscanner
-_giscanner_la_LIBADD = libgiscanner.la $(GOBJECT_LIBS)
+_giscanner_la_LIBADD = libgiscanner.la $(GOBJECT_LIBS) $(PYTHON_LIBS)
 
 _giscanner_la_LDFLAGS = \
 	-module -avoid-version -export-symbols-regex init_giscanner
 
 if OS_WIN32
-# Yuck. Probably there is a way to get this from Python, but I don't
-# know how. Use -Wl to avoid libtool crack.
-PYVER= `echo $(PYTHON_VERSION) | sed 's/\.//g'`
-_giscanner_la_LDFLAGS += -Wl,$(pyexecdir)/../../libs/libpython$(PYVER).a -no-undefined
+_giscanner_la_LDFLAGS += \
+	-no-undefined
 endif
 
 _giscanner_la_SOURCES = giscanner/giscannermodule.c

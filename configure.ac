@@ -248,9 +248,6 @@ AC_CHECK_FUNCS([memchr strchr strspn strstr strtol strtoull])
 AC_CHECK_FUNCS([backtrace backtrace_symbols])
 
 # Python
-
-AC_MSG_CHECKING([whether Python support is requested])
-
 AM_PATH_PYTHON([2.5])
 case "$host" in
 *-*-mingw*)
@@ -259,7 +256,8 @@ case "$host" in
 	pyexecdir=`echo $pyexecdir | tr '\\\\' '/'`
 	;;
 esac
-AM_CHECK_PYTHON_HEADERS(,AC_MSG_ERROR([Python headers not found]))
+AM_CHECK_PYTHON_HEADERS(, AC_MSG_ERROR([Python headers not found]))
+AM_CHECK_PYTHON_LIBS(, AC_MSG_ERROR([Python libs not found]))
 
 # Glib documentation
 
