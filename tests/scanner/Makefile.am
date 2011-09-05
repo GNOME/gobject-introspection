@@ -27,12 +27,13 @@ libfoo_la_LIBADD = $(top_builddir)/libgirepository-1.0.la
 libutility_la_SOURCES = $(srcdir)/utility.c $(srcdir)/utility.h
 libgtkfrob_la_SOURCES = $(srcdir)/gtkfrob.c $(srcdir)/gtkfrob.h
 libregress_la_SOURCES = $(srcdir)/regress.c $(srcdir)/regress.h
+libregress_la_LIBADD = $(GIO_LIBS) $(CAIRO_LIBS)
 
 testsdir = $(datadir)/gobject-introspection-1.0/tests
 tests_DATA = $(libregress_la_SOURCES)
 
 libregress_la_CFLAGS = $(AM_CFLAGS) $(CAIRO_CFLAGS)
-libregress_la_LDFLAGS = $(AM_LDFLAGS) $(CAIRO_LIBS) 
+libregress_la_LDFLAGS = $(AM_LDFLAGS)
 
 
 if OS_WIN32
