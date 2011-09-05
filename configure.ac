@@ -24,7 +24,6 @@ AM_SILENT_RULES([yes])
 
 # Check for Win32
 AC_CANONICAL_HOST
-AC_MSG_CHECKING([for Win32])
 case "$host" in
 *-*-mingw*)
 	os_win32=yes
@@ -33,8 +32,7 @@ case "$host" in
 	os_win32=no
 	;;
 esac
-AC_MSG_RESULT([$os_win32])
-AM_CONDITIONAL(OS_WIN32, [test "$os_win32" = "yes"])
+AM_CONDITIONAL(OS_WIN32, [test x"$os_win32" = "xyes"])
 
 # Checks for programs.
 AC_PROG_CC
