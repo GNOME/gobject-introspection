@@ -23,7 +23,12 @@ import os
 import sys
 import __builtin__
 
-__builtin__.__dict__['DATADIR'] = "@datarootdir@"
+if os.name == 'nt':
+    datadir = os.path.join(os.path.dirname(__file__), '..', 'share')
+else:
+    datadir = "@datarootdir@"
+
+__builtin__.__dict__['DATADIR'] = datadir
 
 if 'GI_SCANNER_DEBUG' in os.environ:
     def on_exception(exctype, value, tb):
@@ -32,13 +37,17 @@ if 'GI_SCANNER_DEBUG' in os.environ:
         pdb.pm()
     sys.excepthook = on_exception
 
-srcdir=os.getenv('UNINSTALLED_INTROSPECTION_SRCDIR', None)
+srcdir = os.getenv('UNINSTALLED_INTROSPECTION_SRCDIR', None)
 if srcdir is not None:
     path = srcdir
 else:
     # This is a private directory, we don't want to pollute the global
     # namespace.
-    path = os.path.join('@libdir@', 'gobject-introspection')
+    if os.name == 'nt':
+        # Makes g-ir-annotation-tool 'relocatable' at runtime on Windows.
+        path = os.path.join(os.path.dirname(__file__), '..', 'lib', 'gobject-introspection')
+    else:
+        path = os.path.join('@libdir@', 'gobject-introspection')
 sys.path.insert(0, path)
 
 from giscanner.annotationmain import annotation_main
