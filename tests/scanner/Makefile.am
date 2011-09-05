@@ -99,6 +99,7 @@ GtkFrob_1_0_gir_FILES = $(libgtkfrob_la_SOURCES)
 GtkFrob_1_0_gir_SCANNERFLAGS = --identifier-prefix=Gtk --symbol-prefix=gtk_frob
 GIRS += GtkFrob-1.0.gir
 
+if !OS_WIN32
 check_PROGRAMS = barapp
 
 barapp_SOURCES = $(srcdir)/barapp.c $(srcdir)/barapp.h
@@ -112,6 +113,7 @@ Bar_1_0_gir_INCLUDES = GObject-2.0
 Bar_1_0_gir_FILES = $(barapp_SOURCES)
 Bar_1_0_gir_SCANNERFLAGS = --accept-unprefixed
 GIRS += Bar-1.0.gir
+endif
 
 %.gir.check: %.gir
 	@diff -u -U 10 $(srcdir)/$*-expected.gir $*.gir && echo "  TEST  $*.gir"
