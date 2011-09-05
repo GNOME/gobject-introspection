@@ -146,6 +146,9 @@ if test x$have_cairo_gobject = xyes; then
     *-*-darwin*)
       CAIRO_SHARED_LIBRARY="libcairo-gobject.2.dylib"
       ;;
+    *-*-mingw*)
+      CAIRO_SHARED_LIBRARY="libcairo-gobject-2.dll"
+      ;;
     *)
       CAIRO_SHARED_LIBRARY="libcairo-gobject.so.2"
       ;;
@@ -155,6 +158,9 @@ elif test x$have_cairo = xyes; then
   case "$host" in
     *-*-darwin*)
       CAIRO_SHARED_LIBRARY="libcairo.2.dylib"
+      ;;
+    *-*-mingw*)
+      CAIRO_SHARED_LIBRARY="libcairo-2.dll"
       ;;
     *)
       CAIRO_SHARED_LIBRARY="libcairo.so.2"
