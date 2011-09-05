@@ -56,6 +56,14 @@ def get_preprocessor_option_group(parser):
     group.add_option("-p", dest="", help="Ignored")
     return group
 
+def get_windows_option_group(parser):
+    group = optparse.OptionGroup(parser, "Machine Dependent Options")
+    group.add_option("-m", help="some machine dependent option",
+                     action="append", dest='m_option',
+                     default=[])
+
+    return group
+
 def _get_option_parser():
     parser = optparse.OptionParser('%prog [options] sources')
     parser.add_option('', "--quiet",
@@ -150,6 +158,10 @@ match the namespace prefix.""")
 
     group = get_preprocessor_option_group(parser)
     parser.add_option_group(group)
+
+    if os.environ.get('MSYSTEM') == 'MINGW32':
+        group = get_windows_option_group(parser)
+        parser.add_option_group(group)
 
     # Private options
     parser.add_option('', "--generate-typelib-tests",
