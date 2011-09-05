@@ -38,8 +38,12 @@ class TransformerException(Exception):
     pass
 
 
-_xdg_data_dirs = [x for x in os.environ.get('XDG_DATA_DIRS', '').split(':') \
-                      + [DATADIR, '/usr/share'] if x]
+_xdg_data_dirs = [x for x in os.environ.get('XDG_DATA_DIRS', '').split(os.pathsep)]
+_xdg_data_dirs.append(DATADIR)
+
+if os.name != 'nt':
+    _xdg_data_dirs.append('/usr/share')
+
 
 class Transformer(object):
     namespace = property(lambda self: self._namespace)
