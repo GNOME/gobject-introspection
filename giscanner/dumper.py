@@ -145,7 +145,13 @@ class DumpCompiler(object):
         f.close()
 
         o_path = self._generate_tempfile(tmpdir, '.o')
-        bin_path = self._generate_tempfile(tmpdir)
+
+        if os.name == 'nt':
+            ext = 'exe'
+        else:
+            ext = None
+
+        bin_path = self._generate_tempfile(tmpdir, ext)
 
         try:
             self._compile(o_path, c_path)
