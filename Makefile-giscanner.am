@@ -65,20 +65,8 @@ _giscanner_la_LDFLAGS = \
 
 if OS_WIN32
 _giscanner_la_LDFLAGS += \
-	-no-undefined
+	-no-undefined \
+	-shrext ".pyd"
 endif
 
 _giscanner_la_SOURCES = giscanner/giscannermodule.c
-
-if OS_WIN32
-BUILT_SOURCES += _giscanner.pyd
-CLEANFILES += _giscanner.pyd
-
-_giscanner.pyd: _giscanner.la
-	cp .libs/_giscanner.dll $@
-
-install-exec-hook:
-	mv $(pkgpyexecdir)/_giscanner.dll $(pkgpyexecdir)/_giscanner.pyd
-	rm $(pkgpyexecdir)/_giscanner.dll.a
-	rm $(pkgpyexecdir)/_giscanner.la
-endif
