@@ -225,7 +225,10 @@ class DumpCompiler(object):
         args.extend(self._linker_cmd.split())
         args.extend(['-o', output])
         if libtool:
-            args.append('-export-dynamic')
+            if os.name == 'nt':
+                args.append('-export-all-symbols')
+            else:
+                args.append('-export-dynamic')
 
         cflags = os.environ.get('CFLAGS')
         if (cflags):
