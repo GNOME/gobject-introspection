@@ -23,12 +23,6 @@ import os
 import sys
 import __builtin__
 
-if os.name == 'nt':
-    datadir = os.path.join(os.path.dirname(__file__), '..', 'share')
-else:
-    datadir = "@datarootdir@"
-
-__builtin__.__dict__['DATADIR'] = datadir
 
 if 'GI_SCANNER_DEBUG' in os.environ:
     def on_exception(exctype, value, tb):
@@ -37,19 +31,19 @@ if 'GI_SCANNER_DEBUG' in os.environ:
         pdb.pm()
     sys.excepthook = on_exception
 
+if os.name == 'nt':
+    datadir = os.path.join(os.path.dirname(__file__), '..', 'share')
+    pylibdir = os.path.join(os.path.dirname(__file__), '..', 'lib', 'gobject-introspection')
+else:
+    datadir = "@datarootdir@"
+    pylibdir = os.path.join('@libdir@', 'gobject-introspection')
+
 srcdir = os.getenv('UNINSTALLED_INTROSPECTION_SRCDIR', None)
 if srcdir is not None:
-    path = srcdir
-else:
-    # This is a private directory, we don't want to pollute the global
-    # namespace.
-    if os.name == 'nt':
-        # Makes g-ir-scanner 'relocatable' at runtime on Windows.
-        path = os.path.join(os.path.dirname(__file__), '..', 'lib', 'gobject-introspection')
-    else:
-        path = os.path.join('@libdir@', 'gobject-introspection')
-sys.path.insert(0, path)
+    pylibdir = srcdir
+
+__builtin__.__dict__['DATADIR'] = datadir
+sys.path.insert(0, pylibdir)
 
 from giscanner.scannermain import scanner_main
-
 sys.exit(scanner_main(sys.argv))
