@@ -78,6 +78,15 @@ main(int argc, char **argv)
   g_assert (siginfo != NULL);
   g_base_info_unref (siginfo);
 
+  /* Test notify on gobject */
+
+  info = g_irepository_find_by_name (repo, "GObject", "Object");
+  g_assert (info != NULL);
+  siginfo = g_object_info_find_signal (info, "notify");
+  g_assert (siginfo != NULL);
+  g_base_info_unref (siginfo);
+  g_base_info_unref (info);
+
   /* vfunc tests */
   {
     GIVFuncInfo *vfunc;

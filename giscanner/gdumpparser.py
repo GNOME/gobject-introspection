@@ -221,6 +221,9 @@ blob containing data gleaned from GObject's primitive introspection."""
                              gtype_name=record.ctype.replace('Spec', ''),
                              get_type='intern',
                              c_symbol_prefix=prefix)
+            node.signals.append(ast.Signal('notify', ast.Return(ast.TYPE_NONE), [],
+                                           detailed=True, when='first', no_recurse=True,
+                                           no_hooks=True, action=True))
             node.fundamental = True
             if record.name == 'ParamSpec':
                 node.is_abstract = True
