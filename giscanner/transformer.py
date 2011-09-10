@@ -315,7 +315,7 @@ raise ValueError."""
             return '_' + name
         return name
 
-    def _traverse_one(self, symbol, stype=None):
+    def _traverse_one(self, symbol, stype=None, parent_symbol=None):
         assert isinstance(symbol, SourceSymbol), symbol
 
         if stype is None:
@@ -329,7 +329,7 @@ raise ValueError."""
         elif stype == CSYMBOL_TYPE_ENUM:
             return self._create_enum(symbol)
         elif stype == CSYMBOL_TYPE_MEMBER:
-            return self._create_member(symbol)
+            return self._create_member(symbol, parent_symbol)
         elif stype == CSYMBOL_TYPE_UNION:
             return self._create_union(symbol)
         elif stype == CSYMBOL_TYPE_CONST:
@@ -442,7 +442,29 @@ raise ValueError."""
         for child in base_type.child_list:
             yield self._create_parameter(child)
 
-    def _create_member(self, symbol):
+    def _synthesize_union_type(self, symbol, parent_symbol):
+        # Synthesize a named union so that it can be referenced.
+        parent_ident = parent_symbol.ident
+        # FIXME: Should split_ctype_namespaces handle the hidden case?
+        hidden = parent_ident.startswith('_')
+        if hidden:
+            parent_ident = parent_ident[1:]
+        matches = self.split_ctype_namespaces(parent_ident)
+        (namespace, parent_name) = matches[-1]
+        assert namespace and parent_name
+        if hidden:
+            parent_name = '_' + parent_name
+        fake_union = ast.Union("%s__%s__union" % (parent_name, symbol.ident))
+        # _parse_fields accesses <type>.base_type.child_list, so we have to
+        # pass symbol.base_type even though that refers to the array, not the
+        # union.
+        self._parse_fields(symbol.base_type, fake_union)
+        self._append_new_node(fake_union)
+        fake_type = ast.Type(
+            target_giname="%s.%s" % (namespace.name, fake_union.name))
+        return fake_type
+
+    def _create_member(self, symbol, parent_symbol=None):
         source_type = symbol.base_type
         if (source_type.type == CTYPE_POINTER and
             symbol.base_type.base_type.type == CTYPE_FUNCTION):
@@ -455,14 +477,24 @@ raise ValueError."""
             # Special handling for fields; we don't have annotations on them
             # to apply later, yet.
             if source_type.type == CTYPE_ARRAY:
-                ctype = self._create_source_type(source_type)
-                canonical_ctype = self._canonicalize_ctype(ctype)
-                if canonical_ctype[-1] == '*':
-                    derefed_name = canonical_ctype[:-1]
+                # If the array contains anonymous unions, like in the GValue
+                # struct, we need to handle this specially.  This is necessary
+                # to be able to properly calculate the size of the compound
+                # type (e.g. GValue) that contains this array, see
+                # <https://bugzilla.gnome.org/show_bug.cgi?id=657040>.
+                if (source_type.base_type.type == CTYPE_UNION and
+                    source_type.base_type.name is None):
+                    synthesized_type = self._synthesize_union_type(symbol, parent_symbol)
+                    ftype = ast.Array(None, synthesized_type)
                 else:
-                    derefed_name = canonical_ctype
-                ftype = ast.Array(None, self.create_type_from_ctype_string(ctype),
-                                  ctype=derefed_name)
+                    ctype = self._create_source_type(source_type)
+                    canonical_ctype = self._canonicalize_ctype(ctype)
+                    if canonical_ctype[-1] == '*':
+                        derefed_name = canonical_ctype[:-1]
+                    else:
+                        derefed_name = canonical_ctype
+                    ftype = ast.Array(None, self.create_type_from_ctype_string(ctype),
+                                      ctype=derefed_name)
                 child_list = list(symbol.base_type.child_list)
                 ftype.zeroterminated = False
                 if child_list:
@@ -677,7 +709,7 @@ raise ValueError."""
 
     def _parse_fields(self, symbol, compound):
         for child in symbol.base_type.child_list:
-            child_node = self._traverse_one(child)
+            child_node = self._traverse_one(child, parent_symbol=symbol)
             if not child_node:
                 continue
             if isinstance(child_node, ast.Field):

@@ -1162,6 +1162,45 @@ TpAccount::status-changed</doc>
         </array>
       </field>
     </record>
+    <record name="TestStructE" c:type="RegressTestStructE">
+      <field name="some_type" writable="1">
+        <type name="GType" c:type="GType"/>
+      </field>
+      <field name="some_union" writable="1">
+        <array zero-terminated="0" fixed-size="2">
+          <type name="TestStructE__some_union__union"/>
+        </array>
+      </field>
+    </record>
+    <union name="TestStructE__some_union__union">
+      <field name="v_int" writable="1">
+        <type name="gint" c:type="gint"/>
+      </field>
+      <field name="v_uint" writable="1">
+        <type name="guint" c:type="guint"/>
+      </field>
+      <field name="v_long" writable="1">
+        <type name="glong" c:type="glong"/>
+      </field>
+      <field name="v_ulong" writable="1">
+        <type name="gulong" c:type="gulong"/>
+      </field>
+      <field name="v_int64" writable="1">
+        <type name="gint64" c:type="gint64"/>
+      </field>
+      <field name="v_uint64" writable="1">
+        <type name="guint64" c:type="guint64"/>
+      </field>
+      <field name="v_float" writable="1">
+        <type name="gfloat" c:type="gfloat"/>
+      </field>
+      <field name="v_double" writable="1">
+        <type name="gdouble" c:type="gdouble"/>
+      </field>
+      <field name="v_pointer" writable="1">
+        <type name="gpointer" c:type="gpointer"/>
+      </field>
+    </union>
     <record name="TestStructFixedArray" c:type="RegressTestStructFixedArray">
       <field name="just_int" writable="1">
         <type name="gint" c:type="gint"/>

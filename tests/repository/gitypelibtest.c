@@ -106,6 +106,31 @@ test_enum_and_flags_static_methods(GIRepository *repo)
     g_base_info_unref (enum_info);
 }
 
+static void
+test_size_of_struct_with_array_of_anon_unions(GIRepository *repo)
+{
+    GITypelib *ret;
+    GError *error = NULL;
+    GIBaseInfo *struct_info;
+
+    ret = g_irepository_require (repo, "Regress", NULL, 0, &error);
+    if (!ret)
+        g_error ("%s", error->message);
+
+    struct_info = g_irepository_find_by_name (repo, "Regress", "TestStructE");
+    if (!struct_info)
+        g_error ("Could not find Regress.TestStructE");
+    g_assert (g_struct_info_get_size (struct_info)
+                == sizeof (GType) + 2*sizeof (gint64));
+    g_base_info_unref (struct_info);
+
+    struct_info = g_irepository_find_by_name (repo, "GObject", "Value");
+    if (!struct_info)
+        g_error ("Could not find GObject.Value");
+    g_assert (g_struct_info_get_size (struct_info) == sizeof (GValue));
+    g_base_info_unref (struct_info);
+}
+
 int
 main(int argc, char **argv)
 {
@@ -118,6 +143,7 @@ main(int argc, char **argv)
     /* do tests */
     test_enum_and_flags_cidentifier (repo);
     test_enum_and_flags_static_methods (repo);
+    test_size_of_struct_with_array_of_anon_unions (repo);
 
     exit(0);
 }

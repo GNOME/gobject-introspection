@@ -243,6 +243,23 @@ struct _RegressTestStructD
   GPtrArray           *garray;
 };
 
+/* This one has an array of anonymous unions, inspired by GValue */
+struct RegressTestStructE
+{
+  GType some_type;
+  union {
+    gint	v_int;
+    guint	v_uint;
+    glong	v_long;
+    gulong	v_ulong;
+    gint64      v_int64;
+    guint64     v_uint64;
+    gfloat	v_float;
+    gdouble	v_double;
+    gpointer	v_pointer;
+  } some_union[2];
+};
+
 /* plain-old-data boxed types */
 typedef struct _RegressTestSimpleBoxedA RegressTestSimpleBoxedA;
 typedef struct _RegressTestSimpleBoxedB RegressTestSimpleBoxedB;
