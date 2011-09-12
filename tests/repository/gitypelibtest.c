@@ -131,6 +131,44 @@ test_size_of_struct_with_array_of_anon_unions(GIRepository *repo)
     g_base_info_unref (struct_info);
 }
 
+static void
+test_is_pointer_for_struct_arg (GIRepository *repo)
+{
+    GITypelib *ret;
+    GError *error = NULL;
+    GIStructInfo *variant_info;
+    GIFunctionInfo *equal_info;
+    GIArgInfo *arg_info;
+    GITypeInfo *type_info;
+
+    ret = g_irepository_require (repo, "GLib", NULL, 0, &error);
+    if (!ret)
+        g_error ("%s", error->message);
+
+    variant_info = g_irepository_find_by_name (repo, "GLib", "Variant");
+    if (!variant_info)
+	g_error ("Could not find GLib.Variant");
+
+    equal_info = g_struct_info_find_method (variant_info, "equal");
+    if (!equal_info)
+	g_error ("Could not find GLib.Variant.equal()");
+
+    arg_info = g_callable_info_get_arg (equal_info, 0);
+    if (!arg_info)
+	g_error ("Could not find 1st arg of GLib.Variant.equal()");
+
+    type_info = g_arg_info_get_type (arg_info);
+    if (!type_info)
+	g_error ("Could not find typeinfo of 1st arg of GLib.Variant.equal()");
+
+    g_assert (g_type_info_is_pointer (type_info));
+
+    g_base_info_unref (type_info);
+    g_base_info_unref (arg_info);
+    g_base_info_unref (equal_info);
+    g_base_info_unref (variant_info);
+}
+
 int
 main(int argc, char **argv)
 {
@@ -144,6 +182,7 @@ main(int argc, char **argv)
     test_enum_and_flags_cidentifier (repo);
     test_enum_and_flags_static_methods (repo);
     test_size_of_struct_with_array_of_anon_unions (repo);
+    test_is_pointer_for_struct_arg (repo);
 
     exit(0);
 }
