@@ -24,7 +24,7 @@ from . import message
 from .annotationparser import (TAG_VFUNC, TAG_SINCE, TAG_DEPRECATED, TAG_RETURNS,
                                TAG_ATTRIBUTES, TAG_RENAME_TO, TAG_TYPE,
                                TAG_UNREF_FUNC, TAG_REF_FUNC, TAG_SET_VALUE_FUNC,
-                               TAG_GET_VALUE_FUNC)
+                               TAG_GET_VALUE_FUNC, TAG_VALUE)
 from .annotationparser import (OPT_ALLOW_NONE, OPT_ARRAY, OPT_ATTRIBUTE,
                                OPT_ELEMENT_TYPE, OPT_IN, OPT_INOUT,
                                OPT_INOUT_ALT, OPT_OUT, OPT_SCOPE,
@@ -238,6 +238,8 @@ usage is void (*_gtk_reserved1)(void);"""
                 node.set_value_func = tag.value if tag else None
                 tag = block.get(TAG_GET_VALUE_FUNC)
                 node.get_value_func = tag.value if tag else None
+        if isinstance(node, ast.Constant):
+            self._apply_annotations_constant(node)
         return True
 
     def _adjust_container_type(self, parent, node, options):
@@ -787,6 +789,14 @@ usage is void (*_gtk_reserved1)(void);"""
                 tag = None
             self._apply_annotations_param(signal, param, tag)
         self._apply_annotations_return(signal, signal.retval, block)
+
+    def _apply_annotations_constant(self, node):
+        block = self._blocks.get(node.ctype)
+        if not block:
+            return
+        tag = block.get(TAG_VALUE)
+        if tag:
+            node.value = tag.value
 
     def _pass_read_annotations2(self, node, chain):
         if isinstance(node, ast.Function):

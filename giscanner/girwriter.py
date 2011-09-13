@@ -362,7 +362,9 @@ and/or use gtk-doc annotations. ''')
         self.write_tag('member', attrs)
 
     def _write_constant(self, constant):
-        attrs = [('name', constant.name), ('value', constant.value)]
+        attrs = [('name', constant.name),
+                 ('value', constant.value),
+                 ('c:type', constant.ctype)]
         with self.tagcontext('constant', attrs):
             self._write_type(constant.value_type)
 

@@ -672,7 +672,8 @@ raise ValueError."""
         else:
             raise AssertionError()
 
-        const = ast.Constant(name, typeval, value)
+        const = ast.Constant(name, typeval, value,
+                             symbol.ident)
         const.add_symbol_reference(symbol)
         return const
 

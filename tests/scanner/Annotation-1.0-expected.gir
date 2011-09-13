@@ -20,6 +20,21 @@ and/or use gtk-doc annotations.  -->
       <member name="foo" value="1" c:identifier="ANN_FLAG_FOO"/>
       <member name="bar" value="2" c:identifier="ANN_FLAG_BAR"/>
     </bitfield>
+    <constant name="CALCULATED_DEFINE"
+              value="100"
+              c:type="ANNOTATION_CALCULATED_DEFINE">
+      <type name="gint" c:type="gint"/>
+    </constant>
+    <constant name="CALCULATED_LARGE"
+              value="10000000000UL"
+              c:type="ANNOTATION_CALCULATED_LARGE">
+      <type name="gint" c:type="gint"/>
+    </constant>
+    <constant name="CALCULATED_LARGE_DIV"
+              value="1000000UL"
+              c:type="ANNOTATION_CALCULATED_LARGE_DIV">
+      <type name="gint" c:type="gint"/>
+    </constant>
     <callback name="Callback" c:type="AnnotationCallback">
       <doc xml:whitespace="preserve">This is a callback.</doc>
       <return-value transfer-ownership="none">

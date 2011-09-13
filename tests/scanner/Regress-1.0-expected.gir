@@ -32,19 +32,25 @@ and/or use gtk-doc annotations.  -->
       <doc xml:whitespace="preserve">Typedef'd va_list for additional reasons</doc>
       <type name="va_list" c:type="va_list"/>
     </alias>
-    <constant name="DOUBLE_CONSTANT" value="44.220000">
+    <constant name="DOUBLE_CONSTANT"
+              value="44.220000"
+              c:type="REGRESS_DOUBLE_CONSTANT">
       <type name="gdouble" c:type="gdouble"/>
     </constant>
-    <constant name="INT_CONSTANT" value="4422">
+    <constant name="INT_CONSTANT" value="4422" c:type="REGRESS_INT_CONSTANT">
       <type name="gint" c:type="gint"/>
     </constant>
     <record name="Intset" c:type="RegressIntset" disguised="1">
       <doc xml:whitespace="preserve">Like telepathy-glib's TpIntset.</doc>
     </record>
-    <constant name="Mixed_Case_Constant" value="4423">
+    <constant name="Mixed_Case_Constant"
+              value="4423"
+              c:type="REGRESS_Mixed_Case_Constant">
       <type name="gint" c:type="gint"/>
     </constant>
-    <constant name="STRING_CONSTANT" value="Some String">
+    <constant name="STRING_CONSTANT"
+              value="Some String"
+              c:type="REGRESS_STRING_CONSTANT">
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <record name="SkippedStructure"
@@ -1307,7 +1313,9 @@ TpAccount::status-changed</doc>
         <type name="GObject.ObjectClass" c:type="GObjectClass"/>
       </field>
     </record>
-    <constant name="UTF8_CONSTANT" value="const ♥ utf8">
+    <constant name="UTF8_CONSTANT"
+              value="const ♥ utf8"
+              c:type="REGRESS_UTF8_CONSTANT">
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <function name="aliased_caller_alloc"

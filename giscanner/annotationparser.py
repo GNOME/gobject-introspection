@@ -39,6 +39,7 @@ TAG_REF_FUNC = 'ref func'
 TAG_SET_VALUE_FUNC = 'set value func'
 TAG_GET_VALUE_FUNC = 'get value func'
 TAG_TRANSFER = 'transfer'
+TAG_VALUE = 'value'
 _ALL_TAGS = [TAG_VFUNC,
              TAG_SINCE,
              TAG_STABILITY,
@@ -51,7 +52,8 @@ _ALL_TAGS = [TAG_VFUNC,
              TAG_REF_FUNC,
              TAG_SET_VALUE_FUNC,
              TAG_GET_VALUE_FUNC,
-             TAG_TRANSFER]
+             TAG_TRANSFER,
+             TAG_VALUE]
 
 # Options - annotations for parameters and return values
 OPT_ALLOW_NONE = 'allow-none'

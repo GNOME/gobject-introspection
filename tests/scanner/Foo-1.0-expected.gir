@@ -156,7 +156,9 @@ and/or use gtk-doc annotations.  -->
         </return-value>
       </method>
     </record>
-    <constant name="DEFINE_SHOULD_BE_EXPOSED" value="should be exposed">
+    <constant name="DEFINE_SHOULD_BE_EXPOSED"
+              value="should be exposed"
+              c:type="FOO_DEFINE_SHOULD_BE_EXPOSED">
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <enumeration name="EnumFullname" c:type="FooEnumFullname">
@@ -631,7 +633,7 @@ uses a C sugar return type.</doc>
             disguised="1"
             glib:is-gtype-struct-for="OtherObject">
     </record>
-    <constant name="PIE_IS_TASTY" value="3.141590">
+    <constant name="PIE_IS_TASTY" value="3.141590" c:type="FOO_PIE_IS_TASTY">
       <type name="gdouble" c:type="gdouble"/>
     </constant>
     <record name="Rectangle" c:type="FooRectangle">
@@ -680,7 +682,7 @@ it because it's not a boxed type.</doc>
         </parameters>
       </function>
     </record>
-    <constant name="SUCCESS_INT" value="4408">
+    <constant name="SUCCESS_INT" value="4408" c:type="FOO_SUCCESS_INT">
       <type name="gint" c:type="gint"/>
     </constant>
     <enumeration name="Skippable" introspectable="0" c:type="FooSkippable">

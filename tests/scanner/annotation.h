@@ -169,5 +169,26 @@ void annotation_space_after_comment_bug631690 (void);
 
 gchar* annotation_return_filename (void);
 
+/* This one we can handle properly */
+#define ANNOTATION_CALCULATED_DEFINE (10 * 10)
+
+/**
+ * ANNOTATION_CALCULATED_LARGE:
+ *
+ * Constant to define a calculated large value
+ *
+ * Value: 10000000000UL
+ */
+#define ANNOTATION_CALCULATED_LARGE (1000 * G_GINT64_CONSTANT (10000000))
+
+/**
+ * ANNOTATION_CALCULATED_LARGE_DIV:
+ *
+ * Constant to define a calculated large value
+ *
+ * Value: 1000000UL
+ */
+#define ANNOTATION_CALCULATED_LARGE_DIV (1000 / G_GINT64_CONSTANT (10000000))
+
 #endif /* __ANNOTATION_OBJECT_H__ */
 

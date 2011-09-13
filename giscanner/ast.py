@@ -993,10 +993,11 @@ class Interface(Node, Registered):
 
 class Constant(Node):
 
-    def __init__(self, name, value_type, value):
+    def __init__(self, name, value_type, value, ctype):
         Node.__init__(self, name)
         self.value_type = value_type
         self.value = value
+        self.ctype = ctype
 
 
 class Property(Node):

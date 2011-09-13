@@ -543,8 +543,9 @@ class GIRParser(object):
     def _parse_constant(self, node):
         type_node = self._parse_type(node)
         constant = ast.Constant(node.attrib['name'],
-                            type_node,
-                            node.attrib['value'])
+                                type_node,
+                                node.attrib['value'],
+                                node.attrib.get(_cns('type')))
         self._parse_generic_attribs(node, constant)
         self._namespace.append(constant)
 
