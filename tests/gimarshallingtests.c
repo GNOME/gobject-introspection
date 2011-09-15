@@ -1337,6 +1337,37 @@ gi_marshalling_tests_array_struct_in (GIMarshallingTestsBoxedStruct **structs, g
 }
 
 /**
+ * gi_marshalling_tests_array_simple_struct_in:
+ * @structs: (array length=length):
+ */
+void
+gi_marshalling_tests_array_simple_struct_in (GIMarshallingTestsSimpleStruct *structs, gint length)
+{
+    g_assert(length == 3);
+    g_assert(structs[0].long_ == 1);
+    g_assert(structs[1].long_ == 2);
+    g_assert(structs[2].long_ == 3);
+}
+
+/**
+ * gi_marshalling_tests_multi_array_key_value_in:
+ * @keys: (array length=length):
+ * @values: (array length=length):
+ */
+void
+gi_marshalling_tests_multi_array_key_value_in (gint length, const gchar **keys, const GValue *values)
+{
+    g_assert(length == 3);
+    g_assert(g_strcmp0("one", keys[0]) == 0);
+    g_assert(g_value_get_int(&values[0]) == 1);
+    g_assert(g_strcmp0("two", keys[1]) == 0);
+    g_assert(g_value_get_int(&values[1]) == 2);
+    g_assert(g_strcmp0("three", keys[2]) == 0);
+    g_assert(g_value_get_int(&values[2]) == 3);
+
+}
+
+/**
  * gi_marshalling_tests_array_struct_take_in:
  * @structs: (array length=length) (transfer full):
  */
