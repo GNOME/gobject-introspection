@@ -32,7 +32,7 @@ case "$host" in
 	os_win32=no
 	;;
 esac
-AM_CONDITIONAL(OS_WIN32, [test x"$os_win32" = "xyes"])
+AM_CONDITIONAL(OS_WIN32, [test "x$os_win32" = "xyes"])
 
 # Checks for programs.
 AC_PROG_CC
@@ -261,7 +261,9 @@ case "$host" in
 	;;
 esac
 AM_CHECK_PYTHON_HEADERS(, AC_MSG_ERROR([Python headers not found]))
-AM_CHECK_PYTHON_LIBS(, AC_MSG_ERROR([Python libs not found]))
+if test "x$os_win32" = "xyes"; then
+  AM_CHECK_PYTHON_LIBS(, AC_MSG_ERROR([Python libs not found. Windows requires Python modules to be explicitly linked to libpython.]))
+fi
 
 # Glib documentation
 
