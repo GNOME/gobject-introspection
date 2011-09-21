@@ -46,6 +46,7 @@ main(int argc, char **argv)
   GIBaseInfo *siginfo;
   GIEnumInfo *errorinfo;
   GType gtype;
+  const char *prefix;
 
   g_type_init ();
 
@@ -54,6 +55,10 @@ main(int argc, char **argv)
   ret = g_irepository_require (repo, "Gio", NULL, 0, &error);
   if (!ret)
     g_error ("%s", error->message);
+
+  prefix = g_irepository_get_c_prefix (repo, "Gio");
+  g_assert (prefix != NULL);
+  g_assert_cmpstr (prefix, ==, "G");
 
   info = g_irepository_find_by_name (repo, "Gio", "Cancellable");
   g_assert (info != NULL);
