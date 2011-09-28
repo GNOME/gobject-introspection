@@ -120,14 +120,15 @@ test_size_of_struct_with_array_of_anon_unions(GIRepository *repo)
     struct_info = g_irepository_find_by_name (repo, "Regress", "TestStructE");
     if (!struct_info)
         g_error ("Could not find Regress.TestStructE");
-    g_assert (g_struct_info_get_size (struct_info)
-                == sizeof (GType) + 2*sizeof (gint64));
+    /* need to use >=, there might be padding */
+    g_assert_cmpuint (g_struct_info_get_size (struct_info),
+                >=, sizeof (GType) + 2*sizeof (gint64));
     g_base_info_unref (struct_info);
 
     struct_info = g_irepository_find_by_name (repo, "GObject", "Value");
     if (!struct_info)
         g_error ("Could not find GObject.Value");
-    g_assert (g_struct_info_get_size (struct_info) == sizeof (GValue));
+    g_assert_cmpuint (g_struct_info_get_size (struct_info), ==, sizeof (GValue));
     g_base_info_unref (struct_info);
 }
 
