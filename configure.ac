@@ -149,6 +149,9 @@ if test x$have_cairo_gobject = xyes; then
     *-*-mingw*)
       CAIRO_SHARED_LIBRARY="libcairo-gobject-2.dll"
       ;;
+    *-*-openbsd*)
+      CAIRO_SHARED_LIBRARY="libcairo-gobject.so"
+      ;;
     *)
       CAIRO_SHARED_LIBRARY="libcairo-gobject.so.2"
       ;;
@@ -161,6 +164,9 @@ elif test x$have_cairo = xyes; then
       ;;
     *-*-mingw*)
       CAIRO_SHARED_LIBRARY="libcairo-2.dll"
+      ;;
+    *-*-openbsd*)
+      CAIRO_SHARED_LIBRARY="libcairo.so"
       ;;
     *)
       CAIRO_SHARED_LIBRARY="libcairo.so.2"
