@@ -229,8 +229,8 @@ class IntrospectablePass(object):
     def _remove_non_reachable_backcompat_copies(self, obj, stack):
         if obj.skip:
             return False
-        if (isinstance(obj, ast.Function)
-            and not obj.introspectable
-            and obj.moved_to is not None):
-            self._namespace.remove(obj)
+        if (isinstance(obj, ast.Function) and obj.moved_to is not None):
+            # remove functions that are not introspectable
+            if not obj.introspectable:
+                obj.internal_skipped = True
         return True

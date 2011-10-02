@@ -613,6 +613,7 @@ class Function(Callable):
         self.shadowed_by = None # C symbol string
         self.shadows = None # C symbol string
         self.moved_to = None # namespaced function name string
+        self.internal_skipped = False # if True, this func will not be written to GIR
 
     def clone(self):
         clone = copy.copy(self)

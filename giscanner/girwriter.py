@@ -173,6 +173,8 @@ and/or use gtk-doc annotations. ''')
             self._write_parameters(callable)
 
     def _write_function(self, func, tag_name='function'):
+        if func.internal_skipped:
+            return
         attrs = []
         if hasattr(func, 'symbol'):
             attrs.append(('c:identifier', func.symbol))
