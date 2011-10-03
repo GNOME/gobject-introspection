@@ -107,6 +107,18 @@ test_enum_and_flags_static_methods(GIRepository *repo)
 }
 
 static void
+test_size_of_gvalue(GIRepository *repo)
+{
+    GIBaseInfo *struct_info;
+
+    struct_info = g_irepository_find_by_name (repo, "GObject", "Value");
+    if (!struct_info)
+        g_error ("Could not find GObject.Value");
+    g_assert_cmpuint (g_struct_info_get_size (struct_info), ==, sizeof (GValue));
+    g_base_info_unref (struct_info);
+}
+
+static void
 test_is_pointer_for_struct_arg (GIRepository *repo)
 {
     GITypelib *ret;
@@ -156,6 +168,7 @@ main(int argc, char **argv)
     /* do tests */
     test_enum_and_flags_cidentifier (repo);
     test_enum_and_flags_static_methods (repo);
+    test_size_of_gvalue (repo);
     test_is_pointer_for_struct_arg (repo);
 
     exit(0);
