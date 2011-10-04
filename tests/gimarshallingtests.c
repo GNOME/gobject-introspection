@@ -1578,18 +1578,77 @@ gi_marshalling_tests_array_zero_terminated_inout (gchar ***utf8s)
 }
 
 /**
- * gi_marshalling_tests_array_gvariant_in:
+ * gi_marshalling_tests_array_gvariant_none_in:
  * @variants: (array zero-terminated=1) (transfer none):
+ * Returns: (array zero-terminated=1) (transfer none):
  */
 GVariant **
-gi_marshalling_tests_array_gvariant_in (GVariant **variants)
+gi_marshalling_tests_array_gvariant_none_in (GVariant **variants)
 {
+    /* Use a static container to detect if someone tries to free it */
+    static GVariant *private_container[3] = { NULL, NULL, NULL };
+    
+    if (private_container[0] == NULL) {
+      private_container[0] = g_variant_new_int32 (27);
+      private_container[1] = g_variant_new_string ("Hello");
+    }
+
     g_assert (variants != NULL);
     g_assert_cmpint (g_variant_get_int32 (variants[0]), ==, 27);
     g_assert_cmpstr (g_variant_get_string (variants[1], NULL), ==, "Hello");
     g_assert (variants[2] == NULL);
 
-    return variants;
+    return private_container;
+}
+
+/**
+ * gi_marshalling_tests_array_gvariant_container_in:
+ * @variants: (array zero-terminated=1) (transfer container):
+ * Returns: (array zero-terminated=1) (transfer container):
+ */
+GVariant **
+gi_marshalling_tests_array_gvariant_container_in (GVariant **variants)
+{
+    GVariant **container;
+
+    g_assert (variants != NULL);
+    g_assert_cmpint (g_variant_get_int32 (variants[0]), ==, 27);
+    g_assert_cmpstr (g_variant_get_string (variants[1], NULL), ==, "Hello");
+    g_assert (variants[2] == NULL);
+    
+    container = g_new0 (GVariant*, 3);
+    container[0] = variants[0];
+    container[1] = variants[1];
+    g_free (variants);
+    
+    return container;
+}
+
+/**
+ * gi_marshalling_tests_array_gvariant_full_in:
+ * @variants: (array zero-terminated=1) (transfer full):
+ * Returns: (array zero-terminated=1) (transfer full):
+ */
+GVariant **
+gi_marshalling_tests_array_gvariant_full_in (GVariant **variants)
+{
+    GVariant **container;
+
+    g_assert (variants != NULL);
+    g_assert_cmpint (g_variant_get_int32 (variants[0]), ==, 27);
+    g_assert_cmpstr (g_variant_get_string (variants[1], NULL), ==, "Hello");
+    g_assert (variants[2] == NULL);
+    
+    /* To catch different behaviors we reconstruct one variant from scratch,
+     * while leaving the other untouched. Both approaches are legal with full
+     * transfer in and out */
+    container = g_new0 (GVariant*, 3);
+    container[0] = g_variant_new_int32 (g_variant_get_int32 (variants[0]));
+    g_variant_unref (variants[0]);
+    container[1] = variants[1];
+    g_free (variants);
+
+    return container;
 }
 
 /**
