@@ -45,7 +45,6 @@ main(int argc, char **argv)
   GError *error = NULL;
   const char *introspect_dump_prefix = "--introspect-dump=";
 
-  if (!g_thread_supported ()) g_thread_init (NULL);
   g_type_init ();
 
   %(init_sections)s
