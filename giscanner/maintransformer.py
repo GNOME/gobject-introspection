@@ -1166,7 +1166,7 @@ method or constructor of some type."""
                     parent = self._transformer.lookup_typenode(parent.parent)
                 else:
                     parent = None
-                if parent is None or parent.gi_name == 'GObject.Object':
+                if parent is None:
                     message.warn_node(func,
                         "Return value is not superclass for constructor; "
                         "symbol=%r constructed=%r return=%r" % (

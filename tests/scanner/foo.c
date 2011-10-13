@@ -226,6 +226,18 @@ foo_object_init (FooObject *object)
 
 }
 
+FooObject *
+foo_object_new (void)
+{
+  return g_object_new (FOO_TYPE_OBJECT, NULL);
+}
+
+GObject *
+foo_object_new_as_super (void)
+{
+  return g_object_new (FOO_TYPE_OBJECT, NULL);
+}
+
 /**
  * foo_object_external_type:
  * @object: a #FooObject

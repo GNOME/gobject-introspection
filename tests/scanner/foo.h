@@ -113,8 +113,9 @@ struct _FooObjectClass
 gint                  foo_init                     (void);
 
 GType                 foo_object_get_type          (void) G_GNUC_CONST;
-FooObject*            foo_object_new               ();
+FooObject*            foo_object_new               (void);
 UtilityObject*        foo_object_external_type     (FooObject *object);
+GObject*              foo_object_new_as_super      (void);
 
 void                  foo_object_various           (FooObject *object, void *data, GType some_type);
 

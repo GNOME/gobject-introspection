@@ -366,6 +366,11 @@ and/or use gtk-doc annotations.  -->
           <type name="Object" c:type="FooObject*"/>
         </return-value>
       </constructor>
+      <constructor name="new_as_super" c:identifier="foo_object_new_as_super">
+        <return-value transfer-ownership="full">
+          <type name="GObject.Object" c:type="GObject*"/>
+        </return-value>
+      </constructor>
       <function name="a_global_method"
                 c:identifier="foo_object_a_global_method">
         <return-value transfer-ownership="none">
