@@ -1815,6 +1815,7 @@ enum {
   REGRESS_TEST_OBJ_SIGNAL_SIG_NEW_WITH_ARRAY_PROP,
   REGRESS_TEST_OBJ_SIGNAL_SIG_WITH_HASH_PROP,
   REGRESS_TEST_OBJ_SIGNAL_SIG_WITH_STRV,
+  REGRESS_TEST_OBJ_SIGNAL_SIG_WITH_OBJ,
   REGRESS_TEST_OBJ_SIGNAL_FIRST,
   REGRESS_TEST_OBJ_SIGNAL_CLEANUP,
   REGRESS_TEST_OBJ_SIGNAL_ALL,
@@ -1913,6 +1914,26 @@ regress_test_obj_class_init (RegressTestObjClass *klass)
 		  G_TYPE_NONE,
 		  1,
 		  G_TYPE_STRV);
+
+   /**
+   * RegressTestObj::sig-with-obj:
+   * @self: an object
+   * @obj: (transfer none): A newly created RegressTestObj
+   *
+   * Test transfer none GObject as a param (tests refcounting).
+   * Use with regress_test_obj_emit_sig_with_obj
+   */
+  regress_test_obj_signals[REGRESS_TEST_OBJ_SIGNAL_SIG_WITH_OBJ] =
+    g_signal_new ("sig-with-obj",
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  0,
+		  NULL,
+		  NULL,
+		  g_cclosure_marshal_VOID__OBJECT,
+		  G_TYPE_NONE,
+		  1,
+		  G_TYPE_OBJECT);
 
   regress_test_obj_signals[REGRESS_TEST_OBJ_SIGNAL_FIRST] =
     g_signal_new ("first",
@@ -2106,6 +2127,15 @@ regress_test_obj_set_bare (RegressTestObj *obj, GObject *bare)
   obj->bare = bare;
   if (obj->bare)
     g_object_ref (obj->bare);
+}
+
+void
+regress_test_obj_emit_sig_with_obj (RegressTestObj *obj)
+{
+    RegressTestObj *obj_param = regress_constructor ();
+    g_object_set (obj_param, "int", 3, NULL);
+    g_signal_emit_by_name (obj, "sig-with-obj", obj_param);
+    g_object_unref (obj_param);
 }
 
 int

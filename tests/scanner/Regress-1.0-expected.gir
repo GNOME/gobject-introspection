@@ -515,6 +515,12 @@ case.</doc>
           </parameter>
         </parameters>
       </method>
+      <method name="emit_sig_with_obj"
+              c:identifier="regress_test_obj_emit_sig_with_obj">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+      </method>
       <method name="forced_method" c:identifier="regress_forced_method">
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
@@ -924,6 +930,19 @@ TpAccount::status-changed</doc>
               <type name="utf8"/>
               <type name="GObject.Value"/>
             </type>
+          </parameter>
+        </parameters>
+      </glib:signal>
+      <glib:signal name="sig-with-obj" when="last">
+        <doc xml:whitespace="preserve">Test transfer none GObject as a param (tests refcounting).
+Use with regress_test_obj_emit_sig_with_obj</doc>
+        <return-value transfer-ownership="none">
+          <type name="none"/>
+        </return-value>
+        <parameters>
+          <parameter name="obj" transfer-ownership="none">
+            <doc xml:whitespace="preserve">A newly created RegressTestObj</doc>
+            <type name="GObject.Object"/>
           </parameter>
         </parameters>
       </glib:signal>
