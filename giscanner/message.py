@@ -95,10 +95,10 @@ If the warning is related to a ast.Node type, see log_node_warning()."""
 
         self._warning_count += 1
 
-        if not self._enable_warnings:
-            if log_type == FATAL:
-                raise SystemExit(text)
+        if not self._enable_warnings and log_type != FATAL:
             return
+
+        # Always drop through on fatal
 
         if type(positions) == set:
             positions = list(positions)
@@ -126,10 +126,10 @@ If the warning is related to a ast.Node type, see log_node_warning()."""
             text = (
 '''%s: %s: %s: %s\n''' % (last_position, error_type, self._namespace.name, text))
 
+        self._output.write(text)
         if log_type == FATAL:
+            utils.break_on_debug_flag('fatal')
             raise SystemExit(text)
-        else:
-            self._output.write(text)
 
     def log_node(self, log_type, node, text, context=None, positions=None):
         """Log a warning, using information about file positions from
