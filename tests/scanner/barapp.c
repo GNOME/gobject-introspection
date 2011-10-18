@@ -54,7 +54,6 @@ main(int argc, char **argv)
       return 1;
     }
   g_type_init ();
-  g_thread_init (NULL);
 
   if (!g_irepository_dump (argv[1] + strlen (prefix), &error))
     {
