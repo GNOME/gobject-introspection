@@ -108,6 +108,9 @@ def _get_option_parser():
     parser.add_option("-L", "--library-path",
                       action="append", dest="library_paths", default=[],
                       help="directories to search for libraries")
+    parser.add_option("", "--header-only",
+                      action="store_true", dest="header_only", default=[],
+                      help="If specified, just generate a GIR for the given header files")
     parser.add_option("-n", "--namespace",
                       action="store", dest="namespace_name",
                       help=("name of namespace for this unit, also "
@@ -389,7 +392,9 @@ def scanner_main(args):
     else:
         _error("Unknown format: %s" % (options.format, ))
 
-    if not (options.libraries or options.program):
+    if not (options.libraries
+            or options.program
+            or options.header_only):
         _error("Must specify --program or --library")
 
     namespace = create_namespace(options)
@@ -413,7 +418,10 @@ def scanner_main(args):
     transformer.set_annotations(blocks)
     transformer.parse(ss.get_symbols())
 
-    shlibs = create_binary(transformer, options, args)
+    if not options.header_only:
+        shlibs = create_binary(transformer, options, args)
+    else:
+        shlibs = []
 
     main = MainTransformer(transformer, blocks)
     main.transform()

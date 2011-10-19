@@ -115,7 +115,10 @@ Bar_1_0_gir_SCANNERFLAGS = --accept-unprefixed
 GIRS += Bar-1.0.gir
 endif
 
+Headeronly-1.0.gir: headeronly.h
+	$(AM_V_GEN) $(INTROSPECTION_SCANNER) $(INTROSPECTION_SCANNER_ARGS) --warn-all --warn-error --reparse-validate --namespace=Headeronly --nsversion=1.0 --header-only --output=$@ $<
+
 %.gir.check: %.gir
 	@diff -u -U 10 $(srcdir)/$*-expected.gir $*.gir && echo "  TEST  $*.gir"
 
-check-local: $(CHECKGIRS) $(TYPELIBS)
+check-local: Headeronly-1.0.gir $(CHECKGIRS) $(TYPELIBS)
