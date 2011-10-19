@@ -120,7 +120,8 @@ define introspection-scanner
 
 # Basic sanity check, to make sure required variables are set
 $(if $($(_gir_name)_FILES),,$(error Need to define $(_gir_name)_FILES))
-$(if $(or $($(_gir_name)_LIBS),
+$(if $(or $(findstring --header-only,$($(_gir_name)_SCANNERFLAGS)),
+          $($(_gir_name)_LIBS),
           $($(_gir_name)_PROGRAM)),,
     $(error Need to define $(_gir_name)_LIBS or $(_gir_name)_PROGRAM))
 
