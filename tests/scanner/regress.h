@@ -392,6 +392,10 @@ gboolean regress_test_obj_skip_return_val (RegressTestObj *obj,
                                            gint            num2,
                                            GError        **error);
 
+gboolean regress_test_obj_skip_return_val_no_out (RegressTestObj *obj,
+                                                  gint            a,
+                                                  GError        **error);
+
 gboolean regress_test_obj_skip_param (RegressTestObj *obj,
                                       gint            a,
                                       gint           *out_b,

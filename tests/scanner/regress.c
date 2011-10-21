@@ -2254,6 +2254,30 @@ regress_test_obj_skip_return_val (RegressTestObj *obj,
 }
 
 /**
+ * regress_test_obj_skip_return_val_no_out:
+ * @obj: a #RegressTestObj
+ * @a: Parameter.
+ * @error: Return location for error.
+ *
+ * Check that the return value is skipped. Succeed if a is nonzero, otherwise
+ * raise an error.
+ *
+ * Returns: (skip): %TRUE if the call succeeds, %FALSE if @error is set.
+ */
+gboolean
+regress_test_obj_skip_return_val_no_out (RegressTestObj *obj,
+                                         gint            a,
+                                         GError        **error)
+{
+  if (a == 0) {
+    g_set_error (error, G_IO_ERROR, G_IO_ERROR_FAILED, "a is zero");
+    return FALSE;
+  } else {
+    return TRUE;
+  }
+}
+
+/**
  * regress_test_obj_skip_param:
  * @obj: A #RegressTestObj.
  * @a: Parameter.
