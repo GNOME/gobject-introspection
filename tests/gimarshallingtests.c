@@ -3734,9 +3734,19 @@ gi_marshalling_tests_sub_object_finalize (GObject *object)
 }
 
 static void
+method_deep_hierarchy (GIMarshallingTestsObject *self, gint8 in)
+{
+    GValue val = {0, };
+    g_value_init (&val, G_TYPE_INT);
+    g_value_set_int (&val, in);
+    g_object_set_property (G_OBJECT (self), "int", &val);
+}
+
+static void
 gi_marshalling_tests_sub_object_class_init (GIMarshallingTestsSubObjectClass *klass)
 {
 	G_OBJECT_CLASS(klass)->finalize = gi_marshalling_tests_sub_object_finalize;
+    GI_MARSHALLING_TESTS_OBJECT_CLASS(klass)->method_deep_hierarchy = method_deep_hierarchy;
 }
 
 void
@@ -3749,6 +3759,18 @@ void
 gi_marshalling_tests_sub_object_overwritten_method (GIMarshallingTestsSubObject *object)
 {
     g_assert(GI_MARSHALLING_TESTS_OBJECT(object)->int_ == 0);
+}
+
+G_DEFINE_TYPE (GIMarshallingTestsSubSubObject, gi_marshalling_tests_sub_sub_object, GI_MARSHALLING_TESTS_TYPE_SUB_OBJECT);
+
+static void
+gi_marshalling_tests_sub_sub_object_init (GIMarshallingTestsSubSubObject *object)
+{
+}
+
+static void
+gi_marshalling_tests_sub_sub_object_class_init (GIMarshallingTestsSubSubObjectClass *klass)
+{
 }
 
 /* Interfaces */

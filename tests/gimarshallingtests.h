@@ -635,6 +635,12 @@ struct _GIMarshallingTestsObjectClass
      * @in: (in):
      */
     void (* method_with_default_implementation) (GIMarshallingTestsObject *self, gint8 in);
+
+    /**
+     * GIMarshallingTestsObjectClass::method_deep_hierarchy:
+     * @in: (in):
+     */
+    void (* method_deep_hierarchy) (GIMarshallingTestsObject *self, gint8 in);
 };
 
 struct _GIMarshallingTestsObject
@@ -700,6 +706,28 @@ GType gi_marshalling_tests_sub_object_get_type (void) G_GNUC_CONST;
 
 void gi_marshalling_tests_sub_object_sub_method (GIMarshallingTestsSubObject *object);
 void gi_marshalling_tests_sub_object_overwritten_method (GIMarshallingTestsSubObject *object);
+
+#define GI_MARSHALLING_TESTS_TYPE_SUB_SUB_OBJECT             (gi_marshalling_tests_sub_sub_object_get_type ())
+#define GI_MARSHALLING_TESTS_SUB_SUB_OBJECT(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), GI_MARSHALLING_TESTS_TYPE_SUB_SUB_OBJECT, GIMarshallingTestsSubSubObject))
+#define GI_MARSHALLING_TESTS_SUB_SUB_OBJECT_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), GI_MARSHALLING_TESTS_TYPE_SUB_SUB_OBJECT, GIMarshallingTestsSubSubObjectClass))
+#define GI_MARSHALLING_TESTS_IS_SUB_SUB_OBJECT(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GI_MARSHALLING_TESTS_TYPE_SUB_SUB_OBJECT))
+#define GI_MARSHALLING_TESTS_IS_SUB_SUB_OBJECT_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), GI_MARSHALLING_TESTS_TYPE_SUB_SUB_OBJECT))
+#define GI_MARSHALLING_TESTS_SUB_SUB_OBJECT_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), GI_MARSHALLING_TESTS_TYPE_SUB_SUB_OBJECT, GIMarshallingTestsSubSubObjectClass))
+
+typedef struct _GIMarshallingTestsSubSubObjectClass GIMarshallingTestsSubSubObjectClass;
+typedef struct _GIMarshallingTestsSubSubObject GIMarshallingTestsSubSubObject;
+
+struct _GIMarshallingTestsSubSubObjectClass
+{
+	GIMarshallingTestsSubObjectClass parent_class;
+};
+
+struct _GIMarshallingTestsSubSubObject
+{
+	GIMarshallingTestsSubObject parent_instance;
+};
+
+GType gi_marshalling_tests_sub_sub_object_get_type (void) G_GNUC_CONST;
 
 /* Interfaces */
 
