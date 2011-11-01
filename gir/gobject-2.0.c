@@ -1014,7 +1014,7 @@
  * @value_type: the #GValue type for this parameter
  * @finalize: The instance finalization function (optional), should chain up to the finalize method of the parent class.
  * @value_set_default: Resets a @value to the default value for this type (recommended, the default is g_value_reset()), see g_param_value_set_default().
- * @value_validate: Ensures that the contents of @value comply with the specifications set out by this type (optional), see g_param_value_set_validate().
+ * @value_validate: Ensures that the contents of @value comply with the specifications set out by this type (optional), see g_param_value_validate().
  * @values_cmp: Compares @value1 with @value2 according to this type (recommended, the default is memcmp()), see g_param_values_cmp().
  *
  * The class structure for the <structname>GParamSpec</structname> type.
@@ -1187,7 +1187,7 @@
  * @value_type: The #GType of values conforming to this #GParamSpec
  * @finalize: The instance finalization function (optional).
  * @value_set_default: Resets a @value to the default value for @pspec (recommended, the default is g_value_reset()), see g_param_value_set_default().
- * @value_validate: Ensures that the contents of @value comply with the specifications set out by @pspec (optional), see g_param_value_set_validate().
+ * @value_validate: Ensures that the contents of @value comply with the specifications set out by @pspec (optional), see g_param_value_validate().
  * @values_cmp: Compares @value1 with @value2 according to @pspec (recommended, the default is memcmp()), see g_param_values_cmp().
  *
  * This structure is used to provide the type system with the information
@@ -1518,6 +1518,7 @@
  * @G_SIGNAL_ACTION: Action signals are signals that may freely be emitted on alive objects from user code via g_signal_emit() and friends, without the need of being embedded into extra code that performs pre or post emission adjustments on the object. They can also be thought of as object methods which can be called generically by third-party code.
  * @G_SIGNAL_NO_HOOKS: No emissions hooks are supported for this signal.
  * @G_SIGNAL_MUST_COLLECT: Varargs signal emission will always collect the arguments, even if there are no signal handlers connected.  Since 2.30.
+ * @G_SIGNAL_DEPRECATED: The signal is deprecated and will be removed in a future version. A warning will be generated if it is connected while running with G_ENABLE_DIAGNOSTIC=1.  Since 2.32.
  *
  * The signal flags are used to specify a signal's behaviour, the overall
  * signal description outlines how especially the RUN flags control the
@@ -1559,7 +1560,7 @@
  * @signal_flags: The signal flags as passed in to g_signal_new().
  * @return_type: The return type for user callbacks.
  * @n_params: The number of parameters that user callbacks take.
- * @param_types: The individual parameter types for user callbacks, note that the effective callback signature is: <programlisting> @return_type callback (#gpointer     data1, [#param_types param_names,] #gpointer     data2); </programlisting>
+ * @param_types: The individual parameter types for user callbacks, note that the effective callback signature is: <programlisting> @return_type callback (#gpointer     data1, [param_types param_names,] gpointer     data2); </programlisting>
  *
  * A structure holding in-depth information for a specific signal. It is
  * filled in by the g_signal_query() function.
@@ -1638,24 +1639,36 @@
  * @user_data: user data to pass to the function.
  *
  * Specifies the type of the setup function passed to g_spawn_async(),
- * g_spawn_sync() and g_spawn_async_with_pipes(). On POSIX platforms it
- * is called in the child after GLib has performed all the setup it plans
- * to perform but before calling exec(). On POSIX actions taken in this
- * function will thus only affect the child, not the parent.
+ * g_spawn_sync() and g_spawn_async_with_pipes(), which can, in very
+ * limited ways, be used to affect the child's execution.
  *
- * Note that POSIX allows only async-signal-safe functions (see signal(7))
- * to be called in the child between fork() and exec(), which drastically
- * limits the usefulness of child setup functions.
+ * On POSIX platforms, the function is called in the child after GLib
+ * has performed all the setup it plans to perform, but before calling
+ * exec(). Actions taken in this function will only affect the child,
+ * not the parent.
  *
- * Also note that modifying the environment from the child setup function
- * may not have the intended effect, since it will get overridden by
- * a non-%NULL @env argument to the <literal>g_spawn...</literal> functions.
- *
- * On Windows the function is called in the parent. Its usefulness on
+ * On Windows, the function is called in the parent. Its usefulness on
  * Windows is thus questionable. In many cases executing the child setup
  * function in the parent can have ill effects, and you should be very
  * careful when porting software to Windows that uses child setup
  * functions.
+ *
+ * However, even on POSIX, you are extremely limited in what you can
+ * safely do from a #GSpawnChildSetupFunc, because any mutexes that
+ * were held by other threads in the parent process at the time of the
+ * fork() will still be locked in the child process, and they will
+ * never be unlocked (since the threads that held them don't exist in
+ * the child). POSIX allows only async-signal-safe functions (see
+ * <citerefentry><refentrytitle>signal</refentrytitle><manvolnum>7</manvolnum></citerefentry>)
+ * to be called in the child between fork() and exec(), which
+ * drastically limits the usefulness of child setup functions.
+ *
+ * In particular, it is not safe to call any function which may
+ * call malloc(), which includes POSIX functions such as setenv().
+ * If you need to set up the child environment differently from
+ * the parent, you should use g_get_environ(), g_environ_setenv(),
+ * and g_environ_unsetev(), and then pass the complete environment
+ * list to the <literal>g_spawn...</literal> function.
  */
 
 
@@ -1697,16 +1710,6 @@
  * @G_SPAWN_FILE_AND_ARGV_ZERO: the first element of <literal>argv</literal> is the file to execute, while the remaining elements are the actual argument vector to pass to the file. Normally g_spawn_async_with_pipes() uses <literal>argv[0]</literal> as the file to execute, and passes all of <literal>argv</literal> to the child.
  *
  * Flags passed to g_spawn_sync(), g_spawn_async() and g_spawn_async_with_pipes().
- */
-
-
-/**
- * GString:
- * @str: points to the character data. It may move as text is added. The @str field is null-terminated and so can be used as an ordinary C string.
- * @len: contains the length of the string, not including the terminating nul byte.
- * @allocated_len: the number of bytes that can be stored in the string before it needs to be reallocated. May be larger than @len.
- *
- * The #GString struct contains the public fields of a #GString.
  */
 
 
@@ -2024,7 +2027,7 @@
  * @value_copy: @dest_value is a #GValue with zero-filled data section and @src_value is a properly setup #GValue of same or derived type. The purpose of this function is to copy the contents of @src_value into @dest_value in a way, that even after @src_value has been freed, the contents of @dest_value remain valid. String type example: |[ dest_value->data[0].v_pointer = g_strdup (src_value->data[0].v_pointer); ]|
  * @value_peek_pointer: If the value contents fit into a pointer, such as objects or strings, return this pointer, so the caller can peek at the current contents. To extend on our above string example: |[ return value->data[0].v_pointer; ]|
  * @collect_format: A string format describing how to collect the contents of this value bit-by-bit. Each character in the format represents an argument to be collected, and the characters themselves indicate the type of the argument. Currently supported arguments are: <variablelist> <varlistentry><term /><listitem><para> 'i' - Integers. passed as collect_values[].v_int. </para></listitem></varlistentry> <varlistentry><term /><listitem><para> 'l' - Longs. passed as collect_values[].v_long. </para></listitem></varlistentry> <varlistentry><term /><listitem><para> 'd' - Doubles. passed as collect_values[].v_double. </para></listitem></varlistentry> <varlistentry><term /><listitem><para> 'p' - Pointers. passed as collect_values[].v_pointer. </para></listitem></varlistentry> </variablelist> It should be noted that for variable argument list construction, ANSI C promotes every type smaller than an integer to an int, and floats to doubles. So for collection of short int or char, 'i' needs to be used, and for collection of floats 'd'.
- * @collect_value: The collect_value() function is responsible for converting the values collected from a variable argument list into contents suitable for storage in a GValue. This function should setup @value similar to value_init(); e.g. for a string value that does not allow %NULL pointers, it needs to either spew an error, or do an implicit conversion by storing an empty string. The @value passed in to this function has a zero-filled data array, so just like for value_init() it is guaranteed to not contain any old contents that might need freeing. @n_collect_values is exactly the string length of @collect_format, and @collect_values is an array of unions #GTypeCValue with length @n_collect_values, containing the collected values according to @collect_format. @collect_flags is an argument provided as a hint by the caller. It may contain the flag %G_VALUE_NOCOPY_CONTENTS indicating, that the collected value contents may be considered "static" for the duration of the @value lifetime. Thus an extra copy of the contents stored in @collect_values is not required for assignment to @value. For our above string example, we continue with: |[ if (!collect_values[0].v_pointer) value->data[0].v_pointer = g_strdup (""); else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) { value->data[0].v_pointer = collect_values[0].v_pointer; // keep a flag for the value_free() implementation to not free this string value->data[1].v_uint = G_VALUE_NOCOPY_CONTENTS; } else value->data[0].v_pointer = g_strdup (collect_values[0].v_pointer); return NULL; ]| It should be noted, that it is generally a bad idea to follow the #G_VALUE_NOCOPY_CONTENTS hint for reference counted types. Due to reentrancy requirements and reference count assertions performed by the #GSignal code, reference counts should always be incremented for reference counted contents stored in the value->data array. To deviate from our string example for a moment, and taking a look at an exemplary implementation for collect_value() of #GObject: |[ if (collect_values[0].v_pointer) { GObject *object = G_OBJECT (collect_values[0].v_pointer); // never honour G_VALUE_NOCOPY_CONTENTS for ref-counted types value->data[0].v_pointer = g_object_ref (object); return NULL; } else return g_strdup_printf ("Object passed as invalid NULL pointer"); } ]| The reference count for valid objects is always incremented, regardless of @collect_flags. For invalid objects, the example returns a newly allocated string without altering @value. Upon success, collect_value() needs to return %NULL. If, however, an error condition occurred, collect_value() may spew an error by returning a newly allocated non-%NULL string, giving a suitable description of the error condition. The calling code makes no assumptions about the @value contents being valid upon error returns, @value is simply thrown away without further freeing. As such, it is a good idea to not allocate #GValue contents, prior to returning an error, however, collect_values() is not obliged to return a correctly setup @value for error returns, simply because any non-%NULL return is considered a fatal condition so further program behaviour is undefined.
+ * @collect_value: The collect_value() function is responsible for converting the values collected from a variable argument list into contents suitable for storage in a GValue. This function should setup @value similar to value_init(); e.g. for a string value that does not allow %NULL pointers, it needs to either spew an error, or do an implicit conversion by storing an empty string. The @value passed in to this function has a zero-filled data array, so just like for value_init() it is guaranteed to not contain any old contents that might need freeing. @n_collect_values is exactly the string length of @collect_format, and @collect_values is an array of unions #GTypeCValue with length @n_collect_values, containing the collected values according to @collect_format. @collect_flags is an argument provided as a hint by the caller. It may contain the flag %G_VALUE_NOCOPY_CONTENTS indicating, that the collected value contents may be considered "static" for the duration of the @value lifetime. Thus an extra copy of the contents stored in @collect_values is not required for assignment to @value. For our above string example, we continue with: |[ if (!collect_values[0].v_pointer) value->data[0].v_pointer = g_strdup (""); else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) { value->data[0].v_pointer = collect_values[0].v_pointer; // keep a flag for the value_free() implementation to not free this string value->data[1].v_uint = G_VALUE_NOCOPY_CONTENTS; } else value->data[0].v_pointer = g_strdup (collect_values[0].v_pointer); return NULL; ]| It should be noted, that it is generally a bad idea to follow the #G_VALUE_NOCOPY_CONTENTS hint for reference counted types. Due to reentrancy requirements and reference count assertions performed by the signal emission code, reference counts should always be incremented for reference counted contents stored in the value->data array.  To deviate from our string example for a moment, and taking a look at an exemplary implementation for collect_value() of #GObject: |[ if (collect_values[0].v_pointer) { GObject *object = G_OBJECT (collect_values[0].v_pointer); // never honour G_VALUE_NOCOPY_CONTENTS for ref-counted types value->data[0].v_pointer = g_object_ref (object); return NULL; } else return g_strdup_printf ("Object passed as invalid NULL pointer"); } ]| The reference count for valid objects is always incremented, regardless of @collect_flags. For invalid objects, the example returns a newly allocated string without altering @value. Upon success, collect_value() needs to return %NULL. If, however, an error condition occurred, collect_value() may spew an error by returning a newly allocated non-%NULL string, giving a suitable description of the error condition. The calling code makes no assumptions about the @value contents being valid upon error returns, @value is simply thrown away without further freeing. As such, it is a good idea to not allocate #GValue contents, prior to returning an error, however, collect_values() is not obliged to return a correctly setup @value for error returns, simply because any non-%NULL return is considered a fatal condition so further program behaviour is undefined.
  * @lcopy_format: Format description of the arguments to collect for @lcopy_value, analogous to @collect_format. Usually, @lcopy_format string consists only of 'p's to provide lcopy_value() with pointers to storage locations.
  * @lcopy_value: This function is responsible for storing the @value contents into arguments passed through a variable argument list which got collected into @collect_values according to @lcopy_format. @n_collect_values equals the string length of @lcopy_format, and @collect_flags may contain %G_VALUE_NOCOPY_CONTENTS. In contrast to collect_value(), lcopy_value() is obliged to always properly support %G_VALUE_NOCOPY_CONTENTS. Similar to collect_value() the function may prematurely abort by returning a newly allocated string describing an error condition. To complete the string example: |[ gchar **string_p = collect_values[0].v_pointer; if (!string_p) return g_strdup_printf ("string location passed as NULL"); if (collect_flags & G_VALUE_NOCOPY_CONTENTS) *string_p = value->data[0].v_pointer; else *string_p = g_strdup (value->data[0].v_pointer); ]| And an illustrative version of lcopy_value() for reference-counted types: |[ GObject **object_p = collect_values[0].v_pointer; if (!object_p) return g_strdup_printf ("object location passed as NULL"); if (!value->data[0].v_pointer) *object_p = NULL; else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) /&ast; always honour &ast;/ *object_p = value->data[0].v_pointer; else *object_p = g_object_ref (value->data[0].v_pointer); return NULL; ]|
  *
@@ -3665,6 +3668,26 @@
 
 
 /**
+ * G_SOURCE_CONTINUE:
+ *
+ * Use this macro as the return value of a #GSourceFunc to leave
+ * the #GSource in the main loop.
+ *
+ * Since: 2.28
+ */
+
+
+/**
+ * G_SOURCE_REMOVE:
+ *
+ * Use this macro as the return value of a #GSourceFunc to remove
+ * the #GSource from the main loop.
+ *
+ * Since: 2.28
+ */
+
+
+/**
  * G_SPAWN_ERROR:
  *
  * Error domain for spawning processes. Errors in this domain will
@@ -4293,6 +4316,15 @@
  * Checks if @type is a value type and can be used with g_value_init().
  *
  * Returns: %TRUE on success.
+ */
+
+
+/**
+ * G_TYPE_KEY_FILE:
+ *
+ * The #GType for a boxed type holding a #GKeyFile.
+ *
+ * Since: 2.32
  */
 
 
@@ -5056,7 +5088,7 @@
  *
  * If passed to G_VALUE_COLLECT(), allocated data won't be copied
  * but used verbatim. This does not affect ref-counted types like
- * objects. For more details, see the #GValueTable documentation.
+ * objects.
  */
 
 
@@ -5089,7 +5121,8 @@
  * to ensure that @string is a valid GVariant type string.
  *
  * It is always a programmer error to use this macro with an invalid
- * type string.
+ * type string. If in doubt, use g_variant_type_string_is_valid() to
+ * check if the string is valid.
  *
  * Since 2.24
  */
@@ -5625,6 +5658,13 @@
  * types called g_type_register_fundamental() which requires both a #GTypeInfo
  * structure and a #GTypeFundamentalInfo structure but it is seldom used
  * since most fundamental types are predefined rather than user-defined.
+ *
+ * Type instance and class structs are limited to a total of 64 KiB,
+ * including all parent types. Similarly, type instances' private data
+ * (as created by g_type_class_add_private()) are limited to a total of
+ * 64 KiB. If a type instance needs a large static buffer, allocate it
+ * separately (typically by using #GArray or #GPtrArray) and put a pointer
+ * to the buffer in the structure.
  *
  * A final word about type names.
  * Such an identifier needs to be at least three characters long. There is no
@@ -6870,24 +6910,6 @@
 
 
 /**
- * g_hash_table_freeze:
- * @hash_table: a #GHashTable
- *
- * This function is deprecated and will be removed in the next major
- * release of GLib. It does nothing.
- */
-
-
-/**
- * g_hash_table_thaw:
- * @hash_table: a #GHashTable
- *
- * This function is deprecated and will be removed in the next major
- * release of GLib. It does nothing.
- */
-
-
-/**
  * g_main_destroy:
  * @loop: a #GMainLoop
  *
@@ -7141,7 +7163,7 @@
  * true) or weak to strong (@is_last_ref false).
  *
  * Since a (normal) reference must be held to the object before
- * calling g_object_toggle_ref(), the initial state of the reverse
+ * calling g_object_add_toggle_ref(), the initial state of the reverse
  * link is always strong.
  *
  * Multiple toggle references may be added to the same gobject,
@@ -7168,9 +7190,9 @@
 
 /**
  * g_object_bind_property:
- * @source: the source #GObject
+ * @source: (type GObject.Object): the source #GObject
  * @source_property: the property on @source to bind
- * @target: the target #GObject
+ * @target: (type GObject.Object): the target #GObject
  * @target_property: the property on @target to bind
  * @flags: flags to pass to #GBinding
  *
@@ -7207,9 +7229,9 @@
 
 /**
  * g_object_bind_property_full:
- * @source: the source #GObject
+ * @source: (type GObject.Object): the source #GObject
  * @source_property: the property on @source to bind
- * @target: the target #GObject
+ * @target: (type GObject.Object): the target #GObject
  * @target_property: the property on @target to bind
  * @flags: flags to pass to #GBinding
  * @transform_to: (scope notified) (allow-none): the transformation function from the @source to the @target, or %NULL to use the default
@@ -7251,9 +7273,9 @@
 
 /**
  * g_object_bind_property_with_closures:
- * @source: the source #GObject
+ * @source: (type GObject.Object): the source #GObject
  * @source_property: the property on @source to bind
- * @target: the target #GObject
+ * @target: (type GObject.Object): the target #GObject
  * @target_property: the property on @target to bind
  * @flags: flags to pass to #GBinding
  * @transform_to: a #GClosure wrapping the transformation function from the @source to the @target, or %NULL to use the default
@@ -8438,7 +8460,7 @@
  * @blurb: description of the property specified
  * @flags: flags for the property specified
  *
- * Creates a new #GParamSpecPoiner instance specifying a pointer property.
+ * Creates a new #GParamSpecPointer instance specifying a pointer property.
  *
  * See g_param_spec_internal() for details on property names.
  *
@@ -9037,7 +9059,7 @@
  * @detailed_signal: a string of the form "signal-name::detail".
  * @c_handler: the #GCallback to connect.
  * @gobject: the object to pass as data to @c_handler.
- * @connect_flags: a combination of #GConnnectFlags.
+ * @connect_flags: a combination of #GConnectFlags.
  *
  * This is similar to g_signal_connect_data(), but uses a closure which
  * ensures that the @gobject stays alive during the call to @c_handler
@@ -9789,9 +9811,9 @@
  * @interface_type: #GType value of an interface type.
  * @info: The #GInterfaceInfo structure for this (@instance_type, @interface_type) combination.
  *
- * Adds the static @interface_type to @instantiable_type.  The information
- * contained in the #GTypeInterfaceInfo structure pointed to by @info
- * is used to manage the relationship.
+ * Adds the static @interface_type to @instantiable_type.  The
+ * information contained in the #GInterfaceInfo structure pointed to by
+ * @info is used to manage the relationship.
  */
 
 
@@ -9832,7 +9854,7 @@
  * structures.
  *
  * Note that the accumulated size of the private structures of
- * a type and all its parent types cannot excced 64kB.
+ * a type and all its parent types cannot excced 64 KiB.
  *
  * This function should be called in the type's class_init() function.
  * The private structure can be retrieved using the
@@ -10855,9 +10877,13 @@
  * g_value_get_char:
  * @value: a valid #GValue of type %G_TYPE_CHAR
  *
+ * Do not use this function; it is broken on platforms where the %char
+ * type is unsigned, such as ARM and PowerPC.  See g_value_get_schar().
+ *
  * Get the contents of a %G_TYPE_CHAR #GValue.
  *
  * Returns: character contents of @value
+ * Deprecated: 2.32: This function's return type is broken, see g_value_get_schar()
  */
 
 
@@ -10969,6 +10995,17 @@
  * Get the contents of a pointer #GValue.
  *
  * Returns: (transfer none): pointer contents of @value
+ */
+
+
+/**
+ * g_value_get_schar:
+ * @value: a valid #GValue of type %G_TYPE_CHAR
+ *
+ * Get the contents of a %G_TYPE_CHAR #GValue.
+ *
+ * Returns: signed 8 bit integer contents of @value
+ * Since: 2.32
  */
 
 
@@ -11114,6 +11151,8 @@
  * @v_char: character value to be set
  *
  * Set the contents of a %G_TYPE_CHAR #GValue to @v_char.
+ *
+ * Deprecated: 2.32: This function's input type is broken, see g_value_set_schar()
  */
 
 
@@ -11257,6 +11296,17 @@
  * @v_pointer: pointer value to be set
  *
  * Set the contents of a pointer #GValue to @v_pointer.
+ */
+
+
+/**
+ * g_value_set_schar:
+ * @value: a valid #GValue of type %G_TYPE_CHAR
+ * @v_char: signed 8 bit integer to be set
+ *
+ * Set the contents of a %G_TYPE_CHAR #GValue to @v_char.
+ *
+ * Since: 2.32
  */
 
 
@@ -11534,8 +11584,8 @@
  * letters, prefixed by the string "U+". Leading zeros are omitted,
  * unless the code point would have fewer than four hexadecimal digits.
  * For example, "U+0041 LATIN CAPITAL LETTER A". To print a code point
- * in the U+-notation, use the format string "U+%04"G_GINT32_FORMAT"X".
- * To scan, use the format string "U+%06"G_GINT32_FORMAT"X".
+ * in the U+-notation, use the format string "U+\%04"G_GINT32_FORMAT"X".
+ * To scan, use the format string "U+\%06"G_GINT32_FORMAT"X".
  *
  * |[
  * gunichar c;

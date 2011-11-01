@@ -206,6 +206,7 @@
  * @do_delete: Deletes a #GAppInfo. Since 2.20
  * @get_commandline: Gets the commandline for the #GAppInfo. Since 2.20
  * @get_display_name: Gets the display name for the #GAppInfo. Since 2.24
+ * @set_as_last_used_for_type: Sets the application as the last used. See g_app_info_set_as_last_used_for_type().
  *
  * Application Information interface, for operating system portability.
  */
@@ -267,6 +268,15 @@
 
 
 /**
+ * GApplication::shutdown:
+ * @application: the application
+ *
+ * The ::shutdown signal is emitted only on the registered primary instance
+ * immediately after the main loop terminates.
+ */
+
+
+/**
  * GApplication::startup:
  * @application: the application
  *
@@ -278,6 +288,7 @@
 /**
  * GApplicationClass:
  * @startup: invoked on the primary instance immediately after registration
+ * @shutdown: invoked only on the registered primary instance immediately after the main loop terminates
  * @activate: invoked on the primary instance when an activation occurs
  * @open: invoked on the primary instance when there are files to open
  * @command_line: invoked on the primary instance when a command-line is not handled locally
@@ -1281,6 +1292,10 @@
  * If this is passed on construction and is a #GSocketConnection,
  * then the corresponding #GSocket will be put into non-blocking mode.
  *
+ * While the #GDBusConnection is active, it will interact with this
+ * stream from a worker thread, so it is not safe to interact with
+ * the stream directly.
+ *
  * Since: 2.26
  */
 
@@ -2058,7 +2073,7 @@
 
 
 /**
- * GDBusObjectProxy:connection:
+ * GDBusObjectProxy:g-connection:
  *
  * The connection of the proxy.
  *
@@ -2067,7 +2082,7 @@
 
 
 /**
- * GDBusObjectProxy:object-path:
+ * GDBusObjectProxy:g-object-path:
  *
  * The object path of the proxy.
  *
@@ -2116,7 +2131,7 @@
 
 
 /**
- * GDBusObjectSkeleton:object-path:
+ * GDBusObjectSkeleton:g-object-path:
  *
  * The object path where the object is exported.
  *
@@ -2253,10 +2268,33 @@
  * GDBusProxy:g-interface-info:
  *
  * Ensure that interactions with this proxy conform to the given
- * interface.  For example, when completing a method call, if the
- * type signature of the message isn't what's expected, the given
- * #GError is set.  Signals that have a type signature mismatch are
- * simply dropped.
+ * interface. This is mainly to ensure that malformed data received
+ * from the other peer is ignored. The given #GDBusInterfaceInfo is
+ * said to be the <emphasis>expected interface</emphasis>.
+ *
+ * The checks performed are:
+ * <itemizedlist>
+ * <listitem><para>
+ * When completing a method call, if the type signature of
+ * the reply message isn't what's expected, the reply is
+ * discarded and the #GError is set to %G_IO_ERROR_INVALID_ARGUMENT.
+ * </para></listitem>
+ * <listitem><para>
+ * Received signals that have a type signature mismatch are dropped and
+ * a warning is logged via g_warning().
+ * </para></listitem>
+ * <listitem><para>
+ * Properties received via the initial <literal>GetAll()</literal> call
+ * or via the <literal>::PropertiesChanged</literal> signal (on the
+ * <ulink url="http://dbus.freedesktop.org/doc/dbus-specification.html#standard-interfaces-properties">org.freedesktop.DBus.Properties</ulink> interface) or
+ * set using g_dbus_proxy_set_cached_property() with a type signature
+ * mismatch are ignored and a warning is logged via g_warning().
+ * </para></listitem>
+ * </itemizedlist>
+ * Note that these checks are never done on methods, signals and
+ * properties that are not referenced in the given
+ * #GDBusInterfaceInfo, since extending a D-Bus interface on the
+ * service-side is not considered an ABI break.
  *
  * Since: 2.26
  */
@@ -2715,6 +2753,26 @@
 
 
 /**
+ * GDesktopAppInfoLookup:
+ *
+ * Interface that is used by backends to associate default
+ * handlers with URI schemes.
+ */
+
+
+/**
+ * GDesktopAppLaunchCallback:
+ * @appinfo: a #GDesktopAppInfo
+ * @pid: Process identifier
+ * @user_data: User data
+ *
+ * During invocation, g_desktop_app_info_launch_uris_as_manager() may
+ * create one or more child processes.  This callback is invoked once
+ * for each, providing the process ID.
+ */
+
+
+/**
  * GDrive:
  *
  * Opaque drive object.
@@ -2792,6 +2850,7 @@
  * @stop_button: Signal emitted when the physical stop button (if any) of a drive have been pressed. Since 2.22.
  * @eject_with_operation: Starts ejecting a #GDrive using a #GMountOperation. Since 2.22.
  * @eject_with_operation_finish: Finishes an eject operation using a #GMountOperation. Since 2.22.
+ * @get_sort_key: Gets a key used for sorting #GDrive instances or %NULL if no such key exists. Since 2.32.
  *
  * Interface for creating #GDrive implementations.
  */
@@ -2978,6 +3037,21 @@
  * @G_FILE_CREATE_REPLACE_DESTINATION: Replace the destination as if it didn't exist before. Don't try to keep any old permissions, replace instead of following links. This is generally useful if you're doing a "copy over" rather than a "save new version of" replace operation. You can think of it as "unlink destination" before writing to it, although the implementation may not be exactly like that. Since 2.20
  *
  * Flags used when an operation may create a file.
+ */
+
+
+/**
+ * GFileDescriptorBased:
+ *
+ * An interface for file descriptor based io objects.
+ */
+
+
+/**
+ * GFileDescriptorBasedIface:
+ * @g_iface: The parent interface.
+ *
+ *
  */
 
 
@@ -3427,10 +3501,6 @@
  *
  * I/O Job function.
  *
- * Note that depending on whether threads are available, the
- * #GIOScheduler may run jobs in separate threads or in an idle
- * in the mainloop.
- *
  * Long-running jobs should periodically check the @cancellable
  * to see if they have been cancelled.
  *
@@ -3594,6 +3664,16 @@
  * See g_inet_address_get_is_loopback().
  *
  * Since: 2.22
+ */
+
+
+/**
+ * GInetAddressMask:
+ *
+ * A combination of an IPv4 or IPv6 base address and a length,
+ * representing a range of IP addresses.
+ *
+ * Since: 2.32
  */
 
 
@@ -3963,6 +4043,7 @@
  * @eject_with_operation: Starts ejecting a #GMount using a #GMountOperation. Since 2.22.
  * @eject_with_operation_finish: Finishes an eject operation using a #GMountOperation. Since 2.22.
  * @get_default_location: Gets a #GFile indication a start location that can be use as the entry point for this mount. Since 2.24.
+ * @get_sort_key: Gets a key used for sorting #GMount instance or %NULL if no such key exists. Since 2.32.
  *
  * Interface for implementing operations for mounts.
  */
@@ -4131,6 +4212,57 @@
  *
  * A #GSocketConnectable for resolving a hostname and connecting to
  * that host.
+ */
+
+
+/**
+ * GNetworkMonitor:
+ *
+ * #GNetworkMonitor monitors the status of network connections and
+ * indicates when a possibly-user-visible change has occurred.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * GNetworkMonitor::network-changed:
+ * @monitor: a #GNetworkMonitor
+ * @available: the current value of #GNetworkMonitor:network-available
+ *
+ * Emitted when the network configuration changes. If @available is
+ * %TRUE, then some hosts may be reachable that were not reachable
+ * before, while others that were reachable before may no longer be
+ * reachable. If @available is %FALSE, then no remote hosts are
+ * reachable.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * GNetworkMonitor:network-available:
+ *
+ * Whether the network is considered available. That is, whether the
+ * system has a default route for at least one of IPv4 or IPv6.
+ *
+ * Real-world networks are of course much more complicated than
+ * this; the machine may be connected to a wifi hotspot that
+ * requires payment before allowing traffic through, or may be
+ * connected to a functioning router that has lost its own upstream
+ * connectivity. Some hosts might only be accessible when a VPN is
+ * active. Other hosts might only be accessible when the VPN is
+ * <emphasis>not</emphasis> active. Thus, it is best to use
+ * g_network_monitor_can_reach() or
+ * g_network_monitor_can_reach_async() to test for reachability on a
+ * host-by-host basis. (On the other hand, when the property is
+ * %FALSE, the application can reasonably expect that no remote
+ * hosts at all are reachable, and should indicate this to the user
+ * in its UI.)
+ *
+ * See also #GNetworkMonitor::network-changed.
+ *
+ * Since: 2.32
  */
 
 
@@ -4476,7 +4608,7 @@
  * @value_type: the #GValue type for this parameter
  * @finalize: The instance finalization function (optional), should chain up to the finalize method of the parent class.
  * @value_set_default: Resets a @value to the default value for this type (recommended, the default is g_value_reset()), see g_param_value_set_default().
- * @value_validate: Ensures that the contents of @value comply with the specifications set out by this type (optional), see g_param_value_set_validate().
+ * @value_validate: Ensures that the contents of @value comply with the specifications set out by this type (optional), see g_param_value_validate().
  * @values_cmp: Compares @value1 with @value2 according to this type (recommended, the default is memcmp()), see g_param_values_cmp().
  *
  * The class structure for the <structname>GParamSpec</structname> type.
@@ -4639,7 +4771,7 @@
  * @value_type: The #GType of values conforming to this #GParamSpec
  * @finalize: The instance finalization function (optional).
  * @value_set_default: Resets a @value to the default value for @pspec (recommended, the default is g_value_reset()), see g_param_value_set_default().
- * @value_validate: Ensures that the contents of @value comply with the specifications set out by @pspec (optional), see g_param_value_set_validate().
+ * @value_validate: Ensures that the contents of @value comply with the specifications set out by @pspec (optional), see g_param_value_validate().
  * @values_cmp: Compares @value1 with @value2 according to @pspec (recommended, the default is memcmp()), see g_param_values_cmp().
  *
  * This structure is used to provide the type system with the information
@@ -5148,7 +5280,6 @@
  * @settings: the object on which the signal was emitted
  * @keys: (array length=n_keys) (element-type GQuark) (allow-none):  an array of #GQuark<!-- -->s for the changed keys, or %NULL
  * @n_keys: the length of the @keys array, or 0
- * @returns: %TRUE to stop other handlers from being invoked for the event. FALSE to propagate the event further.
  *
  * The "change-event" signal is emitted once per change event that
  * affects this settings object.  You should connect to this signal
@@ -5165,6 +5296,10 @@
  * The default handler for this signal invokes the "changed" signal
  * for each affected key.  If any other connected handler returns
  * %TRUE then this default functionality will be suppressed.
+ *
+ * event. FALSE to propagate the event further.
+ *
+ * Returns: %TRUE to stop other handlers from being invoked for the
  */
 
 
@@ -5187,7 +5322,6 @@
  * GSettings::writable-change-event:
  * @settings: the object on which the signal was emitted
  * @key: the quark of the key, or 0
- * @returns: %TRUE to stop other handlers from being invoked for the event. FALSE to propagate the event further.
  *
  * The "writable-change-event" signal is emitted once per writability
  * change event that affects this settings object.  You should connect
@@ -5207,6 +5341,10 @@
  * example, a new mandatory setting is introduced).  If any other
  * connected handler returns %TRUE then this default functionality
  * will be suppressed.
+ *
+ * event. FALSE to propagate the event further.
+ *
+ * Returns: %TRUE to stop other handlers from being invoked for the
  */
 
 
@@ -5262,6 +5400,37 @@
  *
  * The name of the schema that describes the types of keys
  * for this #GSettings object.
+ *
+ * The type of this property is *not* #GSettingsSchema.
+ * #GSettingsSchema has only existed since version 2.32 and
+ * unfortunately this name was used in previous versions to refer to
+ * the schema ID rather than the schema itself.  Take care to use the
+ * 'settings-schema' property if you wish to pass in a
+ * #GSettingsSchema.
+ *
+ * Deprecated:2.32:Use the 'schema-id' property instead.  In a future
+ * version, this property may instead refer to a #GSettingsSchema.
+ */
+
+
+/**
+ * GSettings:schema-id:
+ *
+ * The name of the schema that describes the types of keys
+ * for this #GSettings object.
+ */
+
+
+/**
+ * GSettings:settings-schema:
+ *
+ * The #GSettingsSchema describing the types of keys for this
+ * #GSettings object.
+ *
+ * Ideally, this property would be called 'schema'.  #GSettingsSchema
+ * has only existed since version 2.32, however, and before then the
+ * 'schema' property was used to refer to the ID of the schema rather
+ * than the schema itself.  Take care.
  */
 
 
@@ -5292,11 +5461,12 @@
  * @value: return location for the property value
  * @variant: the #GVariant
  * @user_data: user data that was specified when the binding was created
- * @returns: %TRUE if the conversion succeeded, %FALSE in case of an error
  *
  * The type for the function that is used to convert from #GSettings to
  * an object property. The @value is already initialized to hold values
  * of the appropriate type.
+ *
+ * Returns: %TRUE if the conversion succeeded, %FALSE in case of an error
  */
 
 
@@ -5305,10 +5475,13 @@
  * @value: a #GValue containing the property value to map
  * @expected_type: the #GVariantType to create
  * @user_data: user data that was specified when the binding was created
- * @returns: a new #GVariant holding the data from @value, or %NULL in case of an error
  *
  * The type for the function that is used to convert an object property
  * value to a #GVariant for storing it in #GSettings.
+ *
+ * or %NULL in case of an error
+ *
+ * Returns: a new #GVariant holding the data from @value,
  */
 
 
@@ -5317,7 +5490,6 @@
  * @value: the #GVariant to map, or %NULL
  * @result: (out): the result of the mapping
  * @user_data: (closure): the user data that was passed to g_settings_get_mapped()
- * @returns: %TRUE if the conversion succeeded, %FALSE in case of an error
  *
  * The type of the function that is used to convert from a value stored
  * in a #GSettings to a value that is useful to the application.
@@ -5329,6 +5501,26 @@
  * If @value is %NULL then it means that the mapping function is being
  * given a "last chance" to successfully return a valid value.  %TRUE
  * must be returned in this case.
+ *
+ * Returns: %TRUE if the conversion succeeded, %FALSE in case of an error
+ */
+
+
+/**
+ * GSettingsSchema:
+ *
+ * This is an opaque structure type.  You may not access it directly.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * GSettingsSchemaSource:
+ *
+ * This is an opaque structure type.  You may not access it directly.
+ *
+ * Since: 2.32
  */
 
 
@@ -5393,6 +5585,7 @@
  * @G_SIGNAL_ACTION: Action signals are signals that may freely be emitted on alive objects from user code via g_signal_emit() and friends, without the need of being embedded into extra code that performs pre or post emission adjustments on the object. They can also be thought of as object methods which can be called generically by third-party code.
  * @G_SIGNAL_NO_HOOKS: No emissions hooks are supported for this signal.
  * @G_SIGNAL_MUST_COLLECT: Varargs signal emission will always collect the arguments, even if there are no signal handlers connected.  Since 2.30.
+ * @G_SIGNAL_DEPRECATED: The signal is deprecated and will be removed in a future version. A warning will be generated if it is connected while running with G_ENABLE_DIAGNOSTIC=1.  Since 2.32.
  *
  * The signal flags are used to specify a signal's behaviour, the overall
  * signal description outlines how especially the RUN flags control the
@@ -5434,7 +5627,7 @@
  * @signal_flags: The signal flags as passed in to g_signal_new().
  * @return_type: The return type for user callbacks.
  * @n_params: The number of parameters that user callbacks take.
- * @param_types: The individual parameter types for user callbacks, note that the effective callback signature is: <programlisting> @return_type callback (#gpointer     data1, [#param_types param_names,] #gpointer     data2); </programlisting>
+ * @param_types: The individual parameter types for user callbacks, note that the effective callback signature is: <programlisting> @return_type callback (#gpointer     data1, [param_types param_names,] gpointer     data2); </programlisting>
  *
  * A structure holding in-depth information for a specific signal. It is
  * filled in by the g_signal_query() function.
@@ -5503,8 +5696,8 @@
  *
  * If @action is currently enabled.
  *
- * If the action is disabled then calls to g_simple_action_activate() and
- * g_simple_action_change_state() have no effect.
+ * If the action is disabled then calls to g_action_activate() and
+ * g_action_change_state() have no effect.
  *
  * Since: 2.28
  */
@@ -5871,24 +6064,36 @@
  * @user_data: user data to pass to the function.
  *
  * Specifies the type of the setup function passed to g_spawn_async(),
- * g_spawn_sync() and g_spawn_async_with_pipes(). On POSIX platforms it
- * is called in the child after GLib has performed all the setup it plans
- * to perform but before calling exec(). On POSIX actions taken in this
- * function will thus only affect the child, not the parent.
+ * g_spawn_sync() and g_spawn_async_with_pipes(), which can, in very
+ * limited ways, be used to affect the child's execution.
  *
- * Note that POSIX allows only async-signal-safe functions (see signal(7))
- * to be called in the child between fork() and exec(), which drastically
- * limits the usefulness of child setup functions.
+ * On POSIX platforms, the function is called in the child after GLib
+ * has performed all the setup it plans to perform, but before calling
+ * exec(). Actions taken in this function will only affect the child,
+ * not the parent.
  *
- * Also note that modifying the environment from the child setup function
- * may not have the intended effect, since it will get overridden by
- * a non-%NULL @env argument to the <literal>g_spawn...</literal> functions.
- *
- * On Windows the function is called in the parent. Its usefulness on
+ * On Windows, the function is called in the parent. Its usefulness on
  * Windows is thus questionable. In many cases executing the child setup
  * function in the parent can have ill effects, and you should be very
  * careful when porting software to Windows that uses child setup
  * functions.
+ *
+ * However, even on POSIX, you are extremely limited in what you can
+ * safely do from a #GSpawnChildSetupFunc, because any mutexes that
+ * were held by other threads in the parent process at the time of the
+ * fork() will still be locked in the child process, and they will
+ * never be unlocked (since the threads that held them don't exist in
+ * the child). POSIX allows only async-signal-safe functions (see
+ * <citerefentry><refentrytitle>signal</refentrytitle><manvolnum>7</manvolnum></citerefentry>)
+ * to be called in the child between fork() and exec(), which
+ * drastically limits the usefulness of child setup functions.
+ *
+ * In particular, it is not safe to call any function which may
+ * call malloc(), which includes POSIX functions such as setenv().
+ * If you need to set up the child environment differently from
+ * the parent, you should use g_get_environ(), g_environ_setenv(),
+ * and g_environ_unsetev(), and then pass the complete environment
+ * list to the <literal>g_spawn...</literal> function.
  */
 
 
@@ -5941,16 +6146,6 @@
 
 
 /**
- * GString:
- * @str: points to the character data. It may move as text is added. The @str field is null-terminated and so can be used as an ordinary C string.
- * @len: contains the length of the string, not including the terminating nul byte.
- * @allocated_len: the number of bytes that can be stored in the string before it needs to be reallocated. May be larger than @len.
- *
- * The #GString struct contains the public fields of a #GString.
- */
-
-
-/**
  * GStrv:
  *
  * A C representable type name for #G_TYPE_STRV.
@@ -5960,7 +6155,7 @@
 /**
  * GTcpConnection:
  *
- * A #GSocketConnection for TCP/IP connections.
+ * A #GSocketConnection for UNIX domain socket connections.
  *
  * Since: 2.22
  */
@@ -6025,7 +6220,7 @@
 /**
  * GThreadedSocketService:
  *
- * A helper class for handling accepting incomming connections in the
+ * A helper class for handling accepting incoming connections in the
  * glib mainloop and handling them in a thread.
  *
  * Since: 2.22
@@ -6160,9 +6355,14 @@
  * GTlsCertificate:private-key:
  *
  * The DER (binary) encoded representation of the certificate's
- * private key. This property (or the
- * #GTlsCertificate:private-key-pem property) can be set when
- * constructing a key (eg, from a file), but cannot be read.
+ * private key, in either PKCS#1 format or unencrypted PKCS#8
+ * format. This property (or the #GTlsCertificate:private-key-pem
+ * property) can be set when constructing a key (eg, from a file),
+ * but cannot be read.
+ *
+ * PKCS#8 format is supported since 2.32; earlier releases only
+ * support PKCS#1. You can use the <literal>openssl rsa</literal>
+ * tool to convert PKCS#8 keys to PKCS#1.
  *
  * Since: 2.28
  */
@@ -6172,9 +6372,15 @@
  * GTlsCertificate:private-key-pem:
  *
  * The PEM (ASCII) encoded representation of the certificate's
- * private key. This property (or the #GTlsCertificate:private-key
- * property) can be set when constructing a key (eg, from a file),
- * but cannot be read.
+ * private key in either PKCS#1 format ("<literal>BEGIN RSA PRIVATE
+ * KEY</literal>") or unencrypted PKCS#8 format ("<literal>BEGIN
+ * PRIVATE KEY</literal>"). This property (or the
+ * #GTlsCertificate:private-key property) can be set when
+ * constructing a key (eg, from a file), but cannot be read.
+ *
+ * PKCS#8 format is supported since 2.32; earlier releases only
+ * support PKCS#1. You can use the <literal>openssl rsa</literal>
+ * tool to convert PKCS#8 keys to PKCS#1.
  *
  * Since: 2.28
  */
@@ -6871,7 +7077,7 @@
  * @value_copy: @dest_value is a #GValue with zero-filled data section and @src_value is a properly setup #GValue of same or derived type. The purpose of this function is to copy the contents of @src_value into @dest_value in a way, that even after @src_value has been freed, the contents of @dest_value remain valid. String type example: |[ dest_value->data[0].v_pointer = g_strdup (src_value->data[0].v_pointer); ]|
  * @value_peek_pointer: If the value contents fit into a pointer, such as objects or strings, return this pointer, so the caller can peek at the current contents. To extend on our above string example: |[ return value->data[0].v_pointer; ]|
  * @collect_format: A string format describing how to collect the contents of this value bit-by-bit. Each character in the format represents an argument to be collected, and the characters themselves indicate the type of the argument. Currently supported arguments are: <variablelist> <varlistentry><term /><listitem><para> 'i' - Integers. passed as collect_values[].v_int. </para></listitem></varlistentry> <varlistentry><term /><listitem><para> 'l' - Longs. passed as collect_values[].v_long. </para></listitem></varlistentry> <varlistentry><term /><listitem><para> 'd' - Doubles. passed as collect_values[].v_double. </para></listitem></varlistentry> <varlistentry><term /><listitem><para> 'p' - Pointers. passed as collect_values[].v_pointer. </para></listitem></varlistentry> </variablelist> It should be noted that for variable argument list construction, ANSI C promotes every type smaller than an integer to an int, and floats to doubles. So for collection of short int or char, 'i' needs to be used, and for collection of floats 'd'.
- * @collect_value: The collect_value() function is responsible for converting the values collected from a variable argument list into contents suitable for storage in a GValue. This function should setup @value similar to value_init(); e.g. for a string value that does not allow %NULL pointers, it needs to either spew an error, or do an implicit conversion by storing an empty string. The @value passed in to this function has a zero-filled data array, so just like for value_init() it is guaranteed to not contain any old contents that might need freeing. @n_collect_values is exactly the string length of @collect_format, and @collect_values is an array of unions #GTypeCValue with length @n_collect_values, containing the collected values according to @collect_format. @collect_flags is an argument provided as a hint by the caller. It may contain the flag %G_VALUE_NOCOPY_CONTENTS indicating, that the collected value contents may be considered "static" for the duration of the @value lifetime. Thus an extra copy of the contents stored in @collect_values is not required for assignment to @value. For our above string example, we continue with: |[ if (!collect_values[0].v_pointer) value->data[0].v_pointer = g_strdup (""); else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) { value->data[0].v_pointer = collect_values[0].v_pointer; // keep a flag for the value_free() implementation to not free this string value->data[1].v_uint = G_VALUE_NOCOPY_CONTENTS; } else value->data[0].v_pointer = g_strdup (collect_values[0].v_pointer); return NULL; ]| It should be noted, that it is generally a bad idea to follow the #G_VALUE_NOCOPY_CONTENTS hint for reference counted types. Due to reentrancy requirements and reference count assertions performed by the #GSignal code, reference counts should always be incremented for reference counted contents stored in the value->data array. To deviate from our string example for a moment, and taking a look at an exemplary implementation for collect_value() of #GObject: |[ if (collect_values[0].v_pointer) { GObject *object = G_OBJECT (collect_values[0].v_pointer); // never honour G_VALUE_NOCOPY_CONTENTS for ref-counted types value->data[0].v_pointer = g_object_ref (object); return NULL; } else return g_strdup_printf ("Object passed as invalid NULL pointer"); } ]| The reference count for valid objects is always incremented, regardless of @collect_flags. For invalid objects, the example returns a newly allocated string without altering @value. Upon success, collect_value() needs to return %NULL. If, however, an error condition occurred, collect_value() may spew an error by returning a newly allocated non-%NULL string, giving a suitable description of the error condition. The calling code makes no assumptions about the @value contents being valid upon error returns, @value is simply thrown away without further freeing. As such, it is a good idea to not allocate #GValue contents, prior to returning an error, however, collect_values() is not obliged to return a correctly setup @value for error returns, simply because any non-%NULL return is considered a fatal condition so further program behaviour is undefined.
+ * @collect_value: The collect_value() function is responsible for converting the values collected from a variable argument list into contents suitable for storage in a GValue. This function should setup @value similar to value_init(); e.g. for a string value that does not allow %NULL pointers, it needs to either spew an error, or do an implicit conversion by storing an empty string. The @value passed in to this function has a zero-filled data array, so just like for value_init() it is guaranteed to not contain any old contents that might need freeing. @n_collect_values is exactly the string length of @collect_format, and @collect_values is an array of unions #GTypeCValue with length @n_collect_values, containing the collected values according to @collect_format. @collect_flags is an argument provided as a hint by the caller. It may contain the flag %G_VALUE_NOCOPY_CONTENTS indicating, that the collected value contents may be considered "static" for the duration of the @value lifetime. Thus an extra copy of the contents stored in @collect_values is not required for assignment to @value. For our above string example, we continue with: |[ if (!collect_values[0].v_pointer) value->data[0].v_pointer = g_strdup (""); else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) { value->data[0].v_pointer = collect_values[0].v_pointer; // keep a flag for the value_free() implementation to not free this string value->data[1].v_uint = G_VALUE_NOCOPY_CONTENTS; } else value->data[0].v_pointer = g_strdup (collect_values[0].v_pointer); return NULL; ]| It should be noted, that it is generally a bad idea to follow the #G_VALUE_NOCOPY_CONTENTS hint for reference counted types. Due to reentrancy requirements and reference count assertions performed by the signal emission code, reference counts should always be incremented for reference counted contents stored in the value->data array.  To deviate from our string example for a moment, and taking a look at an exemplary implementation for collect_value() of #GObject: |[ if (collect_values[0].v_pointer) { GObject *object = G_OBJECT (collect_values[0].v_pointer); // never honour G_VALUE_NOCOPY_CONTENTS for ref-counted types value->data[0].v_pointer = g_object_ref (object); return NULL; } else return g_strdup_printf ("Object passed as invalid NULL pointer"); } ]| The reference count for valid objects is always incremented, regardless of @collect_flags. For invalid objects, the example returns a newly allocated string without altering @value. Upon success, collect_value() needs to return %NULL. If, however, an error condition occurred, collect_value() may spew an error by returning a newly allocated non-%NULL string, giving a suitable description of the error condition. The calling code makes no assumptions about the @value contents being valid upon error returns, @value is simply thrown away without further freeing. As such, it is a good idea to not allocate #GValue contents, prior to returning an error, however, collect_values() is not obliged to return a correctly setup @value for error returns, simply because any non-%NULL return is considered a fatal condition so further program behaviour is undefined.
  * @lcopy_format: Format description of the arguments to collect for @lcopy_value, analogous to @collect_format. Usually, @lcopy_format string consists only of 'p's to provide lcopy_value() with pointers to storage locations.
  * @lcopy_value: This function is responsible for storing the @value contents into arguments passed through a variable argument list which got collected into @collect_values according to @lcopy_format. @n_collect_values equals the string length of @lcopy_format, and @collect_flags may contain %G_VALUE_NOCOPY_CONTENTS. In contrast to collect_value(), lcopy_value() is obliged to always properly support %G_VALUE_NOCOPY_CONTENTS. Similar to collect_value() the function may prematurely abort by returning a newly allocated string describing an error condition. To complete the string example: |[ gchar **string_p = collect_values[0].v_pointer; if (!string_p) return g_strdup_printf ("string location passed as NULL"); if (collect_flags & G_VALUE_NOCOPY_CONTENTS) *string_p = value->data[0].v_pointer; else *string_p = g_strdup (value->data[0].v_pointer); ]| And an illustrative version of lcopy_value() for reference-counted types: |[ GObject **object_p = collect_values[0].v_pointer; if (!object_p) return g_strdup_printf ("object location passed as NULL"); if (!value->data[0].v_pointer) *object_p = NULL; else if (collect_flags & G_VALUE_NOCOPY_CONTENTS) /&ast; always honour &ast;/ *object_p = value->data[0].v_pointer; else *object_p = g_object_ref (value->data[0].v_pointer); return NULL; ]|
  *
@@ -7073,11 +7279,37 @@
 
 
 /**
+ * GUnixCredentialsMessage:
+ *
+ * The #GUnixCredentialsMessage structure contains only private data
+ * and should only be accessed using the provided API.
+ *
+ * Since: 2.26
+ */
+
+
+/**
  * GUnixCredentialsMessage:credentials:
  *
  * The credentials stored in the message.
  *
  * Since: 2.26
+ */
+
+
+/**
+ * GUnixCredentialsMessageClass:
+ *
+ * Class structure for #GUnixCredentialsMessage.
+ *
+ * Since: 2.26
+ */
+
+
+/**
+ * GUnixInputStream:
+ *
+ * Implements #GInputStream for reading from selectable unix file descriptors
  */
 
 
@@ -7100,6 +7332,21 @@
 
 
 /**
+ * GUnixMountEntry:
+ *
+ * Defines a Unix mount entry (e.g. <filename>/media/cdrom</filename>).
+ * This corresponds roughly to a mtab entry.
+ */
+
+
+/**
+ * GUnixMountMonitor:
+ *
+ * Watches #GUnixMount<!-- -->s for changes.
+ */
+
+
+/**
  * GUnixMountMonitor::mountpoints-changed:
  * @monitor: the object on which the signal is emitted
  *
@@ -7112,6 +7359,21 @@
  * @monitor: the object on which the signal is emitted
  *
  * Emitted when the unix mounts have changed.
+ */
+
+
+/**
+ * GUnixMountPoint:
+ *
+ * Defines a Unix mount point (e.g. <filename>/dev</filename>).
+ * This corresponds roughly to a fstab entry.
+ */
+
+
+/**
+ * GUnixOutputStream:
+ *
+ * Implements #GOutputStream for outputting to selectable unix file descriptors
  */
 
 
@@ -7309,6 +7571,7 @@
  * @get_activation_root: Returns the activation root for the #GVolume if it is known in advance or %NULL if it is not known.
  * @eject_with_operation: Starts ejecting a #GVolume using a #GMountOperation. Since 2.22.
  * @eject_with_operation_finish: Finishes an eject operation using a #GMountOperation. Since 2.22.
+ * @get_sort_key: Gets a key used for sorting #GVolume instance or %NULL if no such key exists. Since 2.32.
  *
  * Interface for implementing operations for mountable volumes.
  */
@@ -7935,6 +8198,14 @@
  * See G_DEFINE_TYPE_EXTENDED() for an example.
  *
  * Since: 2.4
+ */
+
+
+/**
+ * G_DESKTOP_APP_INFO_LOOKUP_EXTENSION_POINT_NAME:
+ *
+ * Extension point for default handler to URI association. See
+ * <link linkend="extending-gio">Extending GIO</link>.
  */
 
 
@@ -9121,6 +9392,16 @@
 
 
 /**
+ * G_NETWORK_MONITOR_EXTENSION_POINT_NAME:
+ *
+ * Extension point for network status monitoring functionality.
+ * See <link linkend="extending-gio">Extending GIO</link>.
+ *
+ * Since: 2.30
+ */
+
+
+/**
  * G_NODE_IS_LEAF:
  * @node: a #GNode
  *
@@ -9670,6 +9951,26 @@
  * G_TYPE_NONE, 1,
  * GTK_TYPE_REQUISITION | G_SIGNAL_TYPE_STATIC_SCOPE);
  * ]|
+ */
+
+
+/**
+ * G_SOURCE_CONTINUE:
+ *
+ * Use this macro as the return value of a #GSourceFunc to leave
+ * the #GSource in the main loop.
+ *
+ * Since: 2.28
+ */
+
+
+/**
+ * G_SOURCE_REMOVE:
+ *
+ * Use this macro as the return value of a #GSourceFunc to remove
+ * the #GSource from the main loop.
+ *
+ * Since: 2.28
  */
 
 
@@ -10402,6 +10703,15 @@
 
 
 /**
+ * G_TYPE_KEY_FILE:
+ *
+ * The #GType for a boxed type holding a #GKeyFile.
+ *
+ * Since: 2.32
+ */
+
+
+/**
  * G_TYPE_LONG:
  *
  * The fundamental type corresponding to #glong.
@@ -10696,6 +11006,24 @@
  *
  * First available fundamental type number to create new fundamental
  * type id with G_TYPE_MAKE_FUNDAMENTAL().
+ */
+
+
+/**
+ * G_TYPE_SETTINGS_SCHEMA:
+ *
+ * A boxed #GType corresponding to #GSettingsSchema.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * G_TYPE_SETTINGS_SCHEMA_SOURCE:
+ *
+ * A boxed #GType corresponding to #GSettingsSchemaSource.
+ *
+ * Since: 2.32
  */
 
 
@@ -11108,7 +11436,7 @@
  *
  * If passed to G_VALUE_COLLECT(), allocated data won't be copied
  * but used verbatim. This does not affect ref-counted types like
- * objects. For more details, see the #GValueTable documentation.
+ * objects.
  */
 
 
@@ -11141,7 +11469,8 @@
  * to ensure that @string is a valid GVariant type string.
  *
  * It is always a programmer error to use this macro with an invalid
- * type string.
+ * type string. If in doubt, use g_variant_type_string_is_valid() to
+ * check if the string is valid.
  *
  * Since 2.24
  */
@@ -11804,16 +12133,6 @@
 
 
 /**
- * SECTION:gasynchelper
- * @short_description: Asynchronous Helper Functions
- * @include: gio/gio.h
- * @see_also: #GAsyncReady
- *
- * Provides helper functions for asynchronous operations.
- */
-
-
-/**
  * SECTION:gasyncinitable
  * @short_description: Asynchronously failable object initialization interface
  * @include: gio/gio.h
@@ -12005,12 +12324,6 @@
  * The callback for an asynchronous operation is called only once, and is
  * always called, even in the case of a cancelled operation. On cancellation
  * the result is a %G_IO_ERROR_CANCELLED error.
- *
- * Some asynchronous operations are implemented using synchronous calls.
- * These are run in a separate thread, if #GThread has been initialized, but
- * otherwise they are sent to the Main Event Loop and processed in an idle
- * function. So, if you truly need asynchronous operations, make sure to
- * initialize #GThread.
  */
 
 
@@ -12252,6 +12565,31 @@
  * This class is rarely used directly in D-Bus clients. If you are writing
  * an D-Bus client, it is often easier to use the g_bus_own_name(),
  * g_bus_watch_name() or g_dbus_proxy_new_for_bus() APIs.
+ *
+ * As an exception to the usual GLib rule that a particular object must not be
+ * used by two threads at the same time, #GDBusConnection's methods may be
+ * called from any thread<footnote>
+ * <para>
+ * This is so that g_bus_get() and g_bus_get_sync() can safely return the
+ * same #GDBusConnection when called from any thread.
+ * </para>
+ * </footnote>.
+ *
+ * Most of the ways to obtain a #GDBusConnection automatically initialize it
+ * (i.e. connect to D-Bus): for instance, g_dbus_connection_new() and
+ * g_bus_get(), and the synchronous versions of those methods, give you an
+ * initialized connection. Language bindings for GIO should use
+ * g_initable_new() or g_async_initable_new(), which also initialize the
+ * connection.
+ *
+ * If you construct an uninitialized #GDBusConnection, such as via
+ * g_object_new(), you must initialize it via g_initable_init() or
+ * g_async_initable_init() before using its methods or properties. Calling
+ * methods or accessing properties on a #GDBusConnection that has not completed
+ * initialization successfully is considered to be invalid, and leads to
+ * undefined behaviour. In particular, if initialization fails with a #GError,
+ * the only valid thing you can do with that #GDBusConnection is to free it
+ * with g_object_unref().
  *
  * <example id="gdbus-server"><title>D-Bus server example</title><programlisting><xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../gio/tests/gdbus-example-server.c"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting></example>
  *
@@ -13247,6 +13585,17 @@
 
 
 /**
+ * SECTION:ginetaddressmask
+ * @short_description: An IPv4/IPv6 address mask
+ *
+ * #GInetAddressMask represents a range of IPv4 or IPv6 addresses
+ * described by a base address and a length indicating how many bits
+ * of the base address are relevant for matching purposes. These are
+ * often given in string form. Eg, "10.0.0.0/8", or "fe80::/10".
+ */
+
+
+/**
  * SECTION:ginetsocketaddress
  * @short_description: Internet GSocketAddress
  *
@@ -13325,8 +13674,7 @@
  * @include: gio/gio.h
  *
  * Schedules asynchronous I/O operations. #GIOScheduler integrates
- * into the main event loop (#GMainLoop) and may use threads if they
- * are available.
+ * into the main event loop (#GMainLoop) and uses threads.
  *
  * <para id="io-priority"><indexterm><primary>I/O priority</primary></indexterm>
  * Each I/O operation has a priority, and the scheduler uses the priorities
@@ -13469,6 +13817,16 @@
  *
  * See #GSocketConnectable for and example of using the connectable
  * interface.
+ */
+
+
+/**
+ * SECTION:gnetworkmonitor
+ * @title: GNetworkMonitor
+ * @short_description: Network status monitor
+ * @include: gio/gio.h
+ *
+ *
  */
 
 
@@ -13845,6 +14203,105 @@
 
 
 /**
+ * SECTION:gsettingsschema
+ * @short_description: introspecting and controlling the loading of #GSettings schemas
+ *
+ * The #GSettingsSchemaSource and #GSettingsSchema APIs provide a
+ * mechanism for advanced control over the loading of schemas and a
+ * mechanism for introspecting their content.
+ *
+ * Plugin loading systems that wish to provide plugins a way to access
+ * settings face the problem of how to make the schemas for these
+ * settings visible to GSettings.  Typically, a plugin will want to ship
+ * the schema along with itself and it won't be installed into the
+ * standard system directories for schemas.
+ *
+ * #GSettingsSchemaSource provides a mechanism for dealing with this by
+ * allowing the creation of a new 'schema source' from which schemas can
+ * be acquired.  This schema source can then become part of the metadata
+ * associated with the plugin and queried whenever the plugin requires
+ * access to some settings.
+ *
+ * Consider the following example:
+ *
+ * |[
+ * typedef struct
+ * {
+ * ...
+ * GSettingsSchemaSource *schema_source;
+ * ...
+ * } Plugin;
+ *
+ * Plugin *
+ * initialise_plugin (const gchar *dir)
+ * {
+ * Plugin *plugin;
+ *
+ * ...
+ *
+ * plugin->schema_source =
+ * g_settings_new_schema_source_from_directory (dir,
+ * g_settings_schema_source_get_default (), FALSE, NULL);
+ *
+ * ...
+ *
+ * return plugin;
+ * }
+ *
+ * ...
+ *
+ * GSettings *
+ * plugin_get_settings (Plugin      *plugin,
+ * const gchar *schema_id)
+ * {
+ * GSettingsSchema *schema;
+ *
+ * if (schema_id == NULL)
+ * schema_id = plugin->identifier;
+ *
+ * schema = g_settings_schema_source_lookup (plugin->schema_source,
+ * schema_id, FALSE);
+ *
+ * if (schema == NULL)
+ * {
+ * ... disable the plugin or abort, etc ...
+ * }
+ *
+ * return g_settings_new_full (schema, NULL, NULL);
+ * }
+ * ]|
+ *
+ * The code above shows how hooks should be added to the code that
+ * initialises (or enables) the plugin to create the schema source and
+ * how an API can be added to the plugin system to provide a convenient
+ * way for the plugin to access its settings, using the schemas that it
+ * ships.
+ *
+ * From the standpoint of the plugin, it would need to ensure that it
+ * ships a gschemas.compiled file as part of itself, and then simply do
+ * the following:
+ *
+ * |[
+ * {
+ * GSettings *settings;
+ * gint some_value;
+ *
+ * settings = plugin_get_settings (self, NULL);
+ * some_value = g_settings_get_int (settings, "some-value");
+ * ...
+ * }
+ * ]|
+ *
+ * It's also possible that the plugin system expects the schema source
+ * files (ie: .gschema.xml files) instead of a gschemas.compiled file.
+ * In that case, the plugin loading system must compile the schemas for
+ * itself before attempting to create the settings source.
+ *
+ * Since: 2.32
+ */
+
+
+/**
  * SECTION:gsimpleaction
  * @title: GSimpleAction
  * @short_description: A simple GSimpleAction
@@ -13916,7 +14373,7 @@
  * cause a leak if cancelled before being run).
  *
  * GSimpleAsyncResult can integrate into GLib's event loop, #GMainLoop,
- * or it can use #GThread<!-- -->s if available.
+ * or it can use #GThread<!-- -->s.
  * g_simple_async_result_complete() will finish an I/O task directly
  * from the point where it is called. g_simple_async_result_complete_in_idle()
  * will finish it from an idle handler in the <link
@@ -14311,9 +14768,11 @@
  * If you are interested in writing connection handlers that contain
  * blocking code then see #GThreadedSocketService.
  *
- * The socket service runs on the main loop in the main thread, and is
- * not threadsafe in general. However, the calls to start and stop
- * the service are threadsafe so these can be used from threads that
+ * The socket service runs on the main loop of the <link
+ * linkend="g-main-context-push-thread-default-context">thread-default
+ * context</link> of the thread it is created in, and is not
+ * threadsafe in general. However, the calls to start and stop the
+ * service are thread-safe so these can be used from threads that
  * handle incoming clients.
  *
  * Since: 2.22
@@ -14663,9 +15122,11 @@
  * @include: gio/gunixinputstream.h
  * @see_also: #GInputStream
  *
- * #GUnixInputStream implements #GInputStream for reading from a
- * UNIX file descriptor, including asynchronous operations. The file
- * descriptor must be selectable, so it doesn't work with opened files.
+ * #GUnixInputStream implements #GInputStream for reading from a UNIX
+ * file descriptor, including asynchronous operations. (If the file
+ * descriptor refers to a socket or pipe, this will use poll() to do
+ * asynchronous I/O. If it refers to a regular file, it will fall back
+ * to doing asynchronous I/O in another thread.)
  *
  * Note that <filename>&lt;gio/gunixinputstream.h&gt;</filename> belongs
  * to the UNIX-specific GIO interfaces, thus you have to use the
@@ -14692,9 +15153,11 @@
  * @include: gio/gunixoutputstream.h
  * @see_also: #GOutputStream
  *
- * #GUnixOutputStream implements #GOutputStream for writing to a
- * UNIX file descriptor, including asynchronous operations. The file
- * descriptor must be selectable, so it doesn't work with opened files.
+ * #GUnixOutputStream implements #GOutputStream for writing to a UNIX
+ * file descriptor, including asynchronous operations. (If the file
+ * descriptor refers to a socket or pipe, this will use poll() to do
+ * asynchronous I/O. If it refers to a regular file, it will fall back
+ * to doing asynchronous I/O in another thread.)
  *
  * Note that <filename>&lt;gio/gunixoutputstream.h&gt;</filename> belongs
  * to the UNIX-specific GIO interfaces, thus you have to use the
@@ -14939,6 +15402,35 @@
  *
  * In the event that we are doing <choices> (ie: not an enum type) then
  * the value of each choice is set to zero and ignored.
+ */
+
+
+/**
+ * _g_io_module_get_default:
+ * @extension_point: the name of an extension point
+ * @envvar: (allow-none): the name of an environment variable to override the default implementation.
+ * @verify_func: (allow-none): a function to call to verify that a given implementation is usable in the current environment.
+ *
+ * Retrieves the default object implementing @extension_point.
+ *
+ * If @envvar is not %NULL, and the environment variable with that
+ * name is set, then the implementation it specifies will be tried
+ * first. After that, or if @envvar is not set, all other
+ * implementations will be tried in order of decreasing priority.
+ *
+ * If an extension point implementation implements #GInitable, then
+ * that implementation will only be used if it initializes
+ * successfully. Otherwise, if @verify_func is not %NULL, then it will
+ * be called on each candidate implementation after construction, to
+ * check if it is actually usable or not.
+ *
+ * The result is cached after it is generated the first time, and
+ * the function is thread-safe.
+ *
+ * @extension_point, or %NULL if there are no usable
+ * implementations.
+ *
+ * Returns: (transfer none): an object implementing
  */
 
 
@@ -15471,7 +15963,10 @@
  * g_app_info_get_all_for_type:
  * @content_type: the content type to find a #GAppInfo for
  *
- * Gets a list of all #GAppInfos for a given content type.
+ * Gets a list of all #GAppInfos for a given content type,
+ * including the recommended and fallback #GAppInfos. See
+ * g_app_info_get_recommended_for_type() and
+ * g_app_info_get_fallback_for_type().
  *
  * for given @content_type or %NULL on error.
  *
@@ -15498,7 +15993,7 @@
  * @content_type: the content type to find a #GAppInfo for
  * @must_support_uris: if %TRUE, the #GAppInfo is expected to support URIs
  *
- * Gets the #GAppInfo that corresponds to a given content type.
+ * Gets the default #GAppInfo for a given content type.
  *
  * %NULL on error.
  *
@@ -15510,8 +16005,8 @@
  * g_app_info_get_default_for_uri_scheme:
  * @uri_scheme: a string containing a URI scheme.
  *
- * Gets the default application for launching applications
- * using this URI scheme. A URI scheme is the initial part
+ * Gets the default application for handling URIs with
+ * the given URI scheme. A URI scheme is the initial part
  * of the URI, up to but not including the ':', e.g. "http",
  * "ftp" or "sip".
  *
@@ -15578,7 +16073,9 @@
  *
  * Gets the icon for the application.
  *
- * Returns: (transfer none): the default #GIcon for @appinfo.
+ * if there is no default icon.
+ *
+ * Returns: (transfer none): the default #GIcon for @appinfo or %NULL
  */
 
 
@@ -15616,7 +16113,7 @@
  * those applications which claim to support the given content type exactly,
  * and not by MIME type subclassing.
  * Note that the first application of the list is the last used one, i.e.
- * the last one for which #g_app_info_set_as_last_used_for_type has been
+ * the last one for which g_app_info_set_as_last_used_for_type() has been
  * called.
  *
  * for given @content_type or %NULL on error.
@@ -15645,9 +16142,13 @@
  * no way to detect this.
  *
  * Some URIs can be changed when passed through a GFile (for instance
- * unsupported uris with strange formats like mailto:), so if you have
- * a textual uri you want to pass in as argument, consider using
+ * unsupported URIs with strange formats like mailto:), so if you have
+ * a textual URI you want to pass in as argument, consider using
  * g_app_info_launch_uris() instead.
+ *
+ * The launched application inherits the environment of the launching
+ * process, but it can be modified with g_app_launch_context_setenv() and
+ * g_app_launch_context_unsetenv().
  *
  * On UNIX, this function sets the <envar>GIO_LAUNCHED_DESKTOP_FILE</envar>
  * environment variable with the path of the launched desktop file and
@@ -15718,7 +16219,8 @@
  * Removes all changes to the type associations done by
  * g_app_info_set_as_default_for_type(),
  * g_app_info_set_as_default_for_extension(),
- * g_app_info_add_supports_type() or g_app_info_remove_supports_type().
+ * g_app_info_add_supports_type() or
+ * g_app_info_remove_supports_type().
  *
  * Since: 2.20
  */
@@ -15809,6 +16311,22 @@
 
 
 /**
+ * g_app_launch_context_get_environment:
+ * @context: a #GAppLaunchContext
+ *
+ * Gets the complete environment variable list to be passed to
+ * the child process when @context is used to launch an application.
+ * This is a %NULL-terminated array of strings, where each string has
+ * the form <literal>KEY=VALUE</literal>.
+ *
+ * child's environment
+ *
+ * Returns: (array zero-terminated=1) (transfer full): the
+ * Since: 2.32
+ */
+
+
+/**
  * g_app_launch_context_get_startup_notify_id:
  * @context: a #GAppLaunchContext
  * @info: a #GAppInfo
@@ -15845,6 +16363,31 @@
  * instead you instantiate a subclass of this, such as #GdkAppLaunchContext.
  *
  * Returns: a #GAppLaunchContext.
+ */
+
+
+/**
+ * g_app_launch_context_setenv:
+ * @context: a #GAppLaunchContext
+ * @variable: the environment variable to set
+ * @value: the value for to set the variable to.
+ *
+ * Arranges for @variable to be set to @value in the child's
+ * environment when @context is used to launch an application.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * g_app_launch_context_unsetenv:
+ * @context: a #GAppLaunchContext
+ * @variable: the environment variable to remove
+ *
+ * Arranges for @variable to be unset in the child's environment
+ * when @context is used to launch an application.
+ *
+ * Since: 2.32
  */
 
 
@@ -16058,10 +16601,10 @@
 /**
  * g_application_get_application_id:
  * @application: a #GApplication
- * @returns: the identifier for @application, owned by @application
  *
  * Gets the unique identifier for @application.
  *
+ * Returns: the identifier for @application, owned by @application
  * Since: 2.28
  */
 
@@ -16069,12 +16612,12 @@
 /**
  * g_application_get_flags:
  * @application: a #GApplication
- * @returns: the flags for @application
  *
  * Gets the flags for @application.
  *
  * See #GApplicationFlags.
  *
+ * Returns: the flags for @application
  * Since: 2.28
  */
 
@@ -16096,13 +16639,13 @@
 /**
  * g_application_get_is_registered:
  * @application: a #GApplication
- * @returns: %TRUE if @application is registered
  *
  * Checks if @application is registered.
  *
  * An application is registered if g_application_register() has been
  * successfully called.
  *
+ * Returns: %TRUE if @application is registered
  * Since: 2.28
  */
 
@@ -16110,7 +16653,6 @@
 /**
  * g_application_get_is_remote:
  * @application: a #GApplication
- * @returns: %TRUE if @application is remote
  *
  * Checks if @application is remote.
  *
@@ -16123,6 +16665,7 @@
  * g_application_register() has been called.  See
  * g_application_get_is_registered().
  *
+ * Returns: %TRUE if @application is remote
  * Since: 2.28
  */
 
@@ -16144,7 +16687,6 @@
 /**
  * g_application_id_is_valid:
  * @application_id: a potential application identifier
- * @returns: %TRUE if @application_id is valid
  *
  * Checks if @application_id is a valid application identifier.
  *
@@ -16160,6 +16702,8 @@
  * <listitem>Application identifiers must not contain consecutive '.' (period) characters.</listitem>
  * <listitem>Application identifiers must not exceed 255 characters.</listitem>
  * </itemizedlist>
+ *
+ * Returns: %TRUE if @application_id is valid
  */
 
 
@@ -16167,13 +16711,14 @@
  * g_application_new:
  * @application_id: the application id
  * @flags: the application flags
- * @returns: a new #GApplication instance
  *
  * Creates a new #GApplication instance.
  *
  * This function calls g_type_init() for you.
  *
  * The application id must be valid.  See g_application_id_is_valid().
+ *
+ * Returns: a new #GApplication instance
  */
 
 
@@ -16208,7 +16753,6 @@
  * @application: a #GApplication
  * @cancellable: a #GCancellable, or %NULL
  * @error: a pointer to a NULL #GError, or %NULL
- * @returns: %TRUE if registration succeeded
  *
  * Attempts registration of the application.
  *
@@ -16237,6 +16781,7 @@
  * instance is or is not the primary instance of the application.  See
  * g_application_get_is_remote() for that.
  *
+ * Returns: %TRUE if registration succeeded
  * Since: 2.28
  */
 
@@ -16259,7 +16804,6 @@
  * @application: a #GApplication
  * @argc: the argc from main() (or 0 if @argv is %NULL)
  * @argv: (array length=argc) (allow-none): the argv from main(), or %NULL
- * @returns: the exit status
  *
  * Runs the application.
  *
@@ -16328,6 +16872,7 @@
  * use count of zero is delayed for a while (ie: the instance stays
  * around to provide its <emphasis>service</emphasis> to others).
  *
+ * Returns: the exit status
  * Since: 2.28
  */
 
@@ -16394,7 +16939,6 @@
  * used for next time g_application_release() drops the use count to
  * zero.  Any timeouts currently in progress are not impacted.
  *
- * Returns: the timeout, in milliseconds
  * Since: 2.28
  */
 
@@ -18631,7 +19175,7 @@
  * @flags: Flags from the #GDBusCallFlags enumeration.
  * @timeout_msec: The timeout in milliseconds, -1 to use the default timeout or %G_MAXINT for no timeout.
  * @cancellable: A #GCancellable or %NULL.
- * @callback: (allow-none): A #GAsyncReadyCallback to call when the request is satisfied or %NULL if you don't * care about the result of the method invocation.
+ * @callback: (allow-none): A #GAsyncReadyCallback to call when the request is satisfied or %NULL if you don't care about the result of the method invocation.
  * @user_data: The data to pass to @callback.
  *
  * Asynchronously invokes the @method_name method on the
@@ -19026,6 +19570,10 @@
  *
  * Gets the underlying stream used for IO.
  *
+ * While the #GDBusConnection is active, it will interact with this
+ * stream from a worker thread, so it is not safe to interact with
+ * the stream directly.
+ *
  * Returns: (transfer none): the stream used for IO
  * Since: 2.26
  */
@@ -19073,6 +19621,10 @@
  *
  * If @stream is a #GSocketConnection, then the corresponding #GSocket
  * will be put into non-blocking mode.
+ *
+ * The D-Bus connection will interact with @stream from a worker thread.
+ * As a result, the caller should not interact with @stream after this
+ * method has been called, except by calling g_object_unref() on it.
  *
  * If @observer is not %NULL it may be used to control the
  * authentication process.
@@ -19190,6 +19742,10 @@
  *
  * If @stream is a #GSocketConnection, then the corresponding #GSocket
  * will be put into non-blocking mode.
+ *
+ * The D-Bus connection will interact with @stream from a worker thread.
+ * As a result, the caller should not interact with @stream after this
+ * method has been called, except by calling g_object_unref() on it.
  *
  * If @observer is not %NULL it may be used to control the
  * authentication process.
@@ -21521,7 +22077,7 @@
  * Like g_dbus_object_manager_server_export() but appends a string of
  * the form <literal>_N</literal> (with N being a natural number) to
  * @object<!-- -->'s object path if an object with the given path
- * already exists. As such, the #GDBusObjectProxy:object-path property
+ * already exists. As such, the #GDBusObjectProxy:g-object-path property
  * of @object may be modified.
  *
  * Since: 2.30
@@ -21750,6 +22306,10 @@
  * &amp;data);
  * ]|
  *
+ * If @proxy has an expected interface (see
+ * #GDBusProxy:g-interface-info) and @method_name is referenced by it,
+ * then the return value is checked against the return type.
+ *
  * This is an asynchronous method. When the operation is finished,
  * @callback will be invoked in the
  * <link linkend="g-main-context-push-thread-default">thread-default main loop</link>
@@ -21817,6 +22377,10 @@
  * The calling thread is blocked until a reply is received. See
  * g_dbus_proxy_call() for the asynchronous version of this
  * method.
+ *
+ * If @proxy has an expected interface (see
+ * #GDBusProxy:g-interface-info) and @method_name is referenced by it,
+ * then the return value is checked against the return type.
  *
  * return values. Free with g_variant_unref().
  *
@@ -21893,8 +22457,8 @@
  * blocking IO.
  *
  * If @proxy has an expected interface (see
- * #GDBusProxy:g-interface-info), then @property_name (for existence)
- * is checked against it.
+ * #GDBusProxy:g-interface-info) and @property_name is referenced by
+ * it, then @value is checked against the type of the property.
  *
  * for @property_name or %NULL if the value is not in the cache. The
  * returned reference must be freed with g_variant_unref().
@@ -21959,10 +22523,9 @@
  * g_dbus_proxy_get_interface_info:
  * @proxy: A #GDBusProxy
  *
- * Returns the #GDBusInterfaceInfo, if any, specifying the minimal
- * interface that @proxy conforms to.
- *
- * See the #GDBusProxy:g-interface-info property for more details.
+ * Returns the #GDBusInterfaceInfo, if any, specifying the interface
+ * that @proxy conforms to. See the #GDBusProxy:g-interface-info
+ * property for more details.
  *
  * object, it is owned by @proxy.
  *
@@ -22170,8 +22733,8 @@
  * property cache.
  *
  * If @proxy has an expected interface (see
- * #GDBusProxy:g-interface-info), then @property_name (for existence)
- * and @value (for the type) is checked against it.
+ * #GDBusProxy:g-interface-info) and @property_name is referenced by
+ * it, then @value is checked against the type of the property.
  *
  * If the @value #GVariant is floating, it is consumed. This allows
  * convenient 'inline' use of g_variant_new(), e.g.
@@ -22223,12 +22786,8 @@
  * @info: (allow-none): Minimum interface this proxy conforms to or %NULL to unset.
  *
  * Ensure that interactions with @proxy conform to the given
- * interface.  For example, when completing a method call, if the type
- * signature of the message isn't what's expected, the given #GError
- * is set.  Signals that have a type signature mismatch are simply
- * dropped.
- *
- * See the #GDBusProxy:g-interface-info property for more details.
+ * interface. See the #GDBusProxy:g-interface-info property for more
+ * details.
  *
  * Since: 2.26
  */
@@ -22406,6 +22965,17 @@
 
 
 /**
+ * g_desktop_app_info_get_keywords:
+ * @info: a #GDesktopAppInfo
+ *
+ * Gets the keywords from the desktop file.
+ *
+ * Returns: (transfer none): The value of the X-GNOME-Keywords key
+ * Since: 2.32
+ */
+
+
+/**
  * g_desktop_app_info_get_nodisplay:
  * @info: a #GDesktopAppInfo
  *
@@ -22464,9 +23034,9 @@
  *
  * This guarantee allows additional control over the exact environment
  * of the child processes, which is provided via a setup function
- * @setup, as well as the process identifier of each child process via
- * @pid_callback.  See g_spawn_async() for more information about the
- * semantics of the @setup function.
+ * @user_setup, as well as the process identifier of each child process
+ * via @pid_callback. See g_spawn_async() for more information about the
+ * semantics of the @user_setup function.
  *
  * Returns: %TRUE on successful launch, %FALSE otherwise.
  */
@@ -22549,6 +23119,8 @@
  * <member>KDE</member>
  * <member>ROX</member>
  * <member>XFCE</member>
+ * <member>LXDE</member>
+ * <member>Unity</member>
  * <member>Old</member>
  * </simplelist>
  *
@@ -22725,6 +23297,17 @@
  * string should be freed when no longer needed.
  *
  * Returns: a string containing @drive's name. The returned
+ */
+
+
+/**
+ * g_drive_get_sort_key:
+ * @drive: A #GDrive.
+ *
+ * Gets the sort key for @drive, if any.
+ *
+ * Returns: Sorting key for @drive or %NULL if no such key is available.
+ * Since: 2.32
  */
 
 
@@ -23224,6 +23807,42 @@
 
 
 /**
+ * g_file_attribute_matcher_subtract:
+ * @matcher: Matcher to subtract from
+ * @subtract: The matcher to subtract
+ *
+ * Subtracts all attributes of @subtract from @matcher and returns
+ * a matcher that supports those attributes.
+ *
+ * Note that currently it is not possible to remove a single
+ * attribute when the @matcher matches the whole namespace - or remove
+ * a namespace or attribute when the matcher matches everything. This
+ * is a limitation of the current implementation, but may be fixed
+ * in the future.
+ *
+ * @matcher that are not matched by @subtract
+ *
+ * Returns: A file attribute matcher matching all attributes of
+ */
+
+
+/**
+ * g_file_attribute_matcher_to_string:
+ * @matcher: (allow-none): a #GFileAttributeMatcher.
+ *
+ * Prints what the matcher is matching against. The format will be
+ * equal to the format passed to g_file_attribute_matcher_new().
+ * The output however, might not be identical, as the matcher may
+ * decide to use a different order or omit needless parts.
+ *
+ * against or %NULL if @matcher was %NULL.
+ *
+ * Returns: a string describing the attributes the matcher matches
+ * Since: 2.32
+ */
+
+
+/**
  * g_file_attribute_matcher_unref:
  * @matcher: a #GFileAttributeMatcher.
  *
@@ -23237,8 +23856,8 @@
  * @source: input #GFile.
  * @destination: destination #GFile
  * @flags: set of #GFileCopyFlags
- * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
- * @progress_callback: (scope call): function to callback with progress information
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore
+ * @progress_callback: (allow-none) (scope call): function to callback with progress information, or %NULL if progress information is not needed
  * @progress_callback_data: (closure): user data to pass to @progress_callback
  * @error: #GError to set on error, or %NULL
  *
@@ -23272,9 +23891,9 @@
  * error is returned. If trying to overwrite a directory with a directory the
  * G_IO_ERROR_WOULD_MERGE error is returned.
  *
- * If the source is a directory and the target does not exist, or #G_FILE_COPY_OVERWRITE is
- * specified and the target is a file, then the G_IO_ERROR_WOULD_RECURSE error
- * is returned.
+ * If the source is a directory and the target does not exist, or
+ * #G_FILE_COPY_OVERWRITE is specified and the target is a file, then the
+ * G_IO_ERROR_WOULD_RECURSE error is returned.
  *
  * If you are interested in copying the #GFile object itself (not the on-disk
  * file), see g_file_dup().
@@ -23288,10 +23907,10 @@
  * @source: input #GFile.
  * @destination: destination #GFile
  * @flags: set of #GFileCopyFlags
- * @io_priority: the <link linkend="io-priority">I/O priority</link> of the request.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
- * @progress_callback: function to callback with progress information
- * @progress_callback_data: user data to pass to @progress_callback
+ * @io_priority: the <link linkend="io-priority">I/O priority</link> of the request
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore
+ * @progress_callback: (allow-none): function to callback with progress information, or %NULL if progress information is not needed
+ * @progress_callback_data: (closure): user data to pass to @progress_callback
  * @callback: a #GAsyncReadyCallback to call when the request is satisfied
  * @user_data: the data to pass to callback function
  *
@@ -24135,7 +24754,7 @@
 
 /**
  * g_file_hash:
- * @file: #gconstpointer to a #GFile.
+ * @file: (type GFile): #gconstpointer to a #GFile.
  *
  * Creates a hash value for a #GFile.
  *
@@ -24470,7 +25089,7 @@
 /**
  * g_file_info_get_modification_time:
  * @info: a #GFileInfo.
- * @result: a #GTimeVal.
+ * @result: (out caller-allocates): a #GTimeVal.
  *
  * Gets the modification time of the current @info and sets it
  * in @result.
@@ -25140,7 +25759,9 @@
  *
  * Creates a directory and any parent directories that may not exist similar to
  * 'mkdir -p'. If the file system does not support creating directories, this
- * function will fail, setting @error to %G_IO_ERROR_NOT_SUPPORTED.
+ * function will fail, setting @error to %G_IO_ERROR_NOT_SUPPORTED. If the
+ * directory itself already exists, this function will fail setting @error
+ * to %G_IO_ERROR_EXISTS, unlike the similar g_mkdir_with_parents().
  *
  * For a local #GFile the newly created directories will have the default
  * (current) ownership and permissions of the current process.
@@ -25418,6 +26039,8 @@
  * This operation never fails, but the returned object might not support any
  * I/O operation if @arg points to a malformed path.
  *
+ * Free the returned object with g_object_unref().
+ *
  * Returns: (transfer full): a new #GFile.
  */
 
@@ -25429,6 +26052,8 @@
  * Constructs a #GFile for a given path. This operation never
  * fails, but the returned object might not support any I/O
  * operation if @path is malformed.
+ *
+ * Free the returned object with g_object_unref().
  *
  * Returns: (transfer full): a new #GFile for the given @path.
  */
@@ -25443,7 +26068,9 @@
  * operation if @uri is malformed or if the uri type is
  * not supported.
  *
- * Returns: (transfer full): a #GFile for the given @uri.
+ * Free the returned object with g_object_unref().
+ *
+ * Returns: (transfer full): a new #GFile for the given @uri.
  */
 
 
@@ -26781,24 +27408,6 @@
 
 
 /**
- * g_hash_table_freeze:
- * @hash_table: a #GHashTable
- *
- * This function is deprecated and will be removed in the next major
- * release of GLib. It does nothing.
- */
-
-
-/**
- * g_hash_table_thaw:
- * @hash_table: a #GHashTable
- *
- * This function is deprecated and will be removed in the next major
- * release of GLib. It does nothing.
- */
-
-
-/**
  * g_icon_equal:
  * @icon1: pointer to the first #GIcon.
  * @icon2: pointer to the second #GIcon.
@@ -27022,6 +27631,107 @@
  *
  * Returns: the number of bytes used for the native version of @address.
  * Since: 2.22
+ */
+
+
+/**
+ * g_inet_address_mask_equal:
+ * @mask: a #GInetAddressMask
+ * @mask2: another #GInetAddressMask
+ *
+ * Tests if @mask and @mask2 are the same mask.
+ *
+ * Returns: whether @mask and @mask2 are the same mask
+ * Since: 2.32
+ */
+
+
+/**
+ * g_inet_address_mask_get_address:
+ * @mask: a #GInetAddressMask
+ *
+ * Gets @mask's base address
+ *
+ * Returns: (transfer none): @mask's base address
+ * Since: 2.32
+ */
+
+
+/**
+ * g_inet_address_mask_get_family:
+ * @mask: a #GInetAddressMask
+ *
+ * Gets the #GSocketFamily of @mask's address
+ *
+ * Returns: the #GSocketFamily of @mask's address
+ * Since: 2.32
+ */
+
+
+/**
+ * g_inet_address_mask_get_length:
+ * @mask: a #GInetAddressMask
+ *
+ * Gets @mask's length
+ *
+ * Returns: @mask's length
+ * Since: 2.32
+ */
+
+
+/**
+ * g_inet_address_mask_matches:
+ * @mask: a #GInetAddressMask
+ * @address: a #GInetAddress
+ *
+ * Tests if @address falls within the range described by @mask.
+ *
+ * @mask.
+ *
+ * Returns: whether @address falls within the range described by
+ * Since: 2.32
+ */
+
+
+/**
+ * g_inet_address_mask_new:
+ * @addr: a #GInetAddress
+ * @length: number of bits of @addr to use
+ * @error: return location for #GError, or %NULL
+ *
+ * Creates a new #GInetAddressMask representing all addresses whose
+ * first @length bits match @addr.
+ *
+ * Returns: a new #GInetAddressMask, or %NULL on error
+ * Since: 2.32
+ */
+
+
+/**
+ * g_inet_address_mask_new_from_string:
+ * @mask_string: an IP address or address/length string
+ * @error: return location for #GError, or %NULL
+ *
+ * Parses @mask_string as an IP address and (optional) length, and
+ * creates a new #GInetAddressMask. The length, if present, is
+ * delimited by a "/". If it is not present, then the length is
+ * assumed to be the full length of the address.
+ *
+ * on error.
+ *
+ * Returns: a new #GInetAddressMask corresponding to @string, or %NULL
+ * Since: 2.32
+ */
+
+
+/**
+ * g_inet_address_mask_to_string:
+ * @mask: a #GInetAddressMask
+ *
+ * Converts @mask back to its corresponding string form.
+ *
+ * Returns: a string corresponding to @mask.
+ * Since: 2.32
  */
 
 
@@ -27920,7 +28630,7 @@
  * @io_priority: the <link linkend="gioscheduler">I/O priority</link> of the request.
  * @cancellable: optional #GCancellable object, %NULL to ignore.
  *
- * Schedules the I/O job to run.
+ * Schedules the I/O job to run in another thread.
  *
  * @notify will be called on @user_data after @job_func has returned,
  * regardless whether the job was cancelled or has run to completion.
@@ -28125,7 +28835,6 @@
  * @filename: the filename of the keyfile
  * @root_path: the path under which all settings keys appear
  * @root_group: (allow-none): the group name corresponding to @root_path, or %NULL
- * @returns: (transfer full): a keyfile-backed #GSettingsBackend
  *
  * Creates a keyfile-backed #GSettingsBackend.
  *
@@ -28171,6 +28880,8 @@
  * syntax of the key file format.  For example, if you have '[' or ']'
  * characters in your path names or '=' in your key names you may be in
  * trouble.
+ *
+ * Returns: (transfer full): a keyfile-backed #GSettingsBackend
  */
 
 
@@ -28599,6 +29310,17 @@
  * g_object_unref() when no longer needed.
  *
  * Returns: (transfer full): a #GFile.
+ */
+
+
+/**
+ * g_mount_get_sort_key:
+ * @mount: A #GMount.
+ *
+ * Gets the sort key for @mount, if any.
+ *
+ * Returns: Sorting key for @mount or %NULL if no such key is available.
+ * Since: 2.32
  */
 
 
@@ -29046,8 +29768,7 @@
  * address, an IPv4 address, or a domain name (in which case a DNS
  * lookup is performed). Quoting with [] is supported for all address
  * types. A port override may be specified in the usual way with a
- * colon. Ports may be given as decimal numbers or symbolic names (in
- * which case an /etc/services lookup is performed).
+ * colon.
  *
  * If no port is specified in @host_and_port then @default_port will be
  * used as the port number to connect to.
@@ -29055,6 +29776,11 @@
  * In general, @host_and_port is expected to be provided by the user
  * (allowing them to give the hostname, and a port overide if necessary)
  * and @default_port is expected to be provided by the application.
+ *
+ * (The port component of @host_and_port can also be specified as a
+ * service name rather than as a numeric port, but this functionality
+ * is deprecated, because it depends on the contents of /etc/services,
+ * which is generally quite sparse on platforms other than Linux.)
  *
  * Returns: (transfer full): the new #GNetworkAddress, or %NULL on error
  * Since: 2.22
@@ -29076,6 +29802,89 @@
  *
  * Returns: (transfer full): the new #GNetworkAddress, or %NULL on error
  * Since: 2.26
+ */
+
+
+/**
+ * g_network_monitor_base_add_network:
+ * @monitor: the #GNetworkMonitorBase
+ * @network: a #GInetAddressMask
+ *
+ * Adds @network to @monitor's list of available networks.
+ */
+
+
+/**
+ * g_network_monitor_base_remove_network:
+ * @monitor: the #GNetworkMonitorBase
+ * @network: a #GInetAddressMask
+ *
+ * Removes @network from @monitor's list of available networks.
+ */
+
+
+/**
+ * g_network_monitor_base_set_networks:
+ * @monitor: the #GNetworkMonitorBase
+ * @networks: (array length=length): an array of #GInetAddressMask
+ * @length: length of @networks
+ *
+ * Drops @monitor's current list of available networks and replaces
+ * it with @networks.
+ */
+
+
+/**
+ * g_network_monitor_can_reach:
+ * @monitor: a #GNetworkMonitor
+ * @connectable: a #GSocketConnectable
+ * @cancellable: a #GCancellable, or %NULL
+ * @error: return location for a #GError, or %NULL
+ *
+ * Attempts to determine whether or not the host pointed to by
+ * @connectable can be reached, without actually trying to connect to
+ * it.
+ *
+ * This may return %TRUE even when #GNetworkMonitor:network-available
+ * is %FALSE, if, for example, @monitor can determine that
+ * @connectable refers to a host on a local network.
+ *
+ * If @monitor believes that an attempt to connect to @connectable
+ * will succeed, it will return %TRUE. Otherwise, it will return
+ * %FALSE and set @error to an appropriate error (such as
+ * %G_IO_ERROR_HOST_UNREACHABLE).
+ *
+ * Note that although this does not attempt to connect to
+ * @connectable, it may still block for a brief period of time (eg,
+ * trying to do multicast DNS on the local network), so if you do not
+ * want to block, you should use g_network_monitor_can_reach_async().
+ *
+ * Returns: %TRUE if @connectable is reachable, %FALSE if not.
+ * Since: 2.32
+ */
+
+
+/**
+ * g_network_monitor_get_default:
+ *
+ * Gets the default #GNetworkMonitor for the system.
+ *
+ * Returns: (transfer none): a #GNetworkMonitor
+ * Since: 2.32
+ */
+
+
+/**
+ * g_network_monitor_get_network_available:
+ * @monitor: the #GNetworkMonitor
+ *
+ * Checks if the network is available. "Available" here means that the
+ * system has a default route available for at least one of IPv4 or
+ * IPv6. It does not necessarily imply that the public Internet is
+ * reachable. See #GNetworkMonitor:network-available for more details.
+ *
+ * Returns: whether the network is available
+ * Since: 2.32
  */
 
 
@@ -29655,7 +30464,6 @@
  * @permission: a #GPermission instance
  * @cancellable: a #GCancellable, or %NULL
  * @error: a pointer to a %NULL #GError, or %NULL
- * @returns: %TRUE if the permission was successfully acquired
  *
  * Attempts to acquire the permission represented by @permission.
  *
@@ -29673,6 +30481,7 @@
  * user interaction is required).  See g_permission_acquire_async() for
  * the non-blocking version.
  *
+ * Returns: %TRUE if the permission was successfully acquired
  * Since: 2.26
  */
 
@@ -29698,7 +30507,6 @@
  * @permission: a #GPermission instance
  * @result: the #GAsyncResult given to the #GAsyncReadyCallback
  * @error: a pointer to a %NULL #GError, or %NULL
- * @returns: %TRUE if the permission was successfully acquired
  *
  * Collects the result of attempting to acquire the permission
  * represented by @permission.
@@ -29706,6 +30514,7 @@
  * This is the second half of the asynchronous version of
  * g_permission_acquire().
  *
+ * Returns: %TRUE if the permission was successfully acquired
  * Since: 2.26
  */
 
@@ -29713,12 +30522,12 @@
 /**
  * g_permission_get_allowed:
  * @permission: a #GPermission instance
- * @returns: the value of the 'allowed' property
  *
  * Gets the value of the 'allowed' property.  This property is %TRUE if
  * the caller currently has permission to perform the action that
  * @permission represents the permission to perform.
  *
+ * Returns: the value of the 'allowed' property
  * Since: 2.26
  */
 
@@ -29726,12 +30535,12 @@
 /**
  * g_permission_get_can_acquire:
  * @permission: a #GPermission instance
- * @returns: the value of the 'can-acquire' property
  *
  * Gets the value of the 'can-acquire' property.  This property is %TRUE
  * if it is generally possible to acquire the permission by calling
  * g_permission_acquire().
  *
+ * Returns: the value of the 'can-acquire' property
  * Since: 2.26
  */
 
@@ -29739,12 +30548,12 @@
 /**
  * g_permission_get_can_release:
  * @permission: a #GPermission instance
- * @returns: the value of the 'can-release' property
  *
  * Gets the value of the 'can-release' property.  This property is %TRUE
  * if it is generally possible to release the permission by calling
  * g_permission_release().
  *
+ * Returns: the value of the 'can-release' property
  * Since: 2.26
  */
 
@@ -29771,7 +30580,6 @@
  * @permission: a #GPermission instance
  * @cancellable: a #GCancellable, or %NULL
  * @error: a pointer to a %NULL #GError, or %NULL
- * @returns: %TRUE if the permission was successfully released
  *
  * Attempts to release the permission represented by @permission.
  *
@@ -29789,6 +30597,7 @@
  * user interaction is required).  See g_permission_release_async() for
  * the non-blocking version.
  *
+ * Returns: %TRUE if the permission was successfully released
  * Since: 2.26
  */
 
@@ -29814,7 +30623,6 @@
  * @permission: a #GPermission instance
  * @result: the #GAsyncResult given to the #GAsyncReadyCallback
  * @error: a pointer to a %NULL #GError, or %NULL
- * @returns: %TRUE if the permission was successfully released
  *
  * Collects the result of attempting to release the permission
  * represented by @permission.
@@ -29822,6 +30630,7 @@
  * This is the second half of the asynchronous version of
  * g_permission_release().
  *
+ * Returns: %TRUE if the permission was successfully released
  * Since: 2.26
  */
 
@@ -29854,7 +30663,7 @@
 
 
 /**
- * g_pollable_input_stream_create_source: (skip)
+ * g_pollable_input_stream_create_source:
  * @stream: a #GPollableInputStream.
  * @cancellable: (allow-none): a #GCancellable, or %NULL
  *
@@ -29939,7 +30748,7 @@
 
 
 /**
- * g_pollable_output_stream_create_source: (skip)
+ * g_pollable_output_stream_create_source:
  * @stream: a #GPollableOutputStream.
  * @cancellable: (allow-none): a #GCancellable, or %NULL
  *
@@ -30007,7 +30816,7 @@
 
 
 /**
- * g_pollable_source_new: (skip)
+ * g_pollable_source_new:
  * @pollable_stream: the stream associated with the new source
  *
  * Utility method for #GPollableInputStream and #GPollableOutputStream
@@ -30317,8 +31126,7 @@
  *
  * Gets the default #GResolver. You should unref it when you are done
  * with it. #GResolver may use its reference count as a hint about how
- * many threads/processes, etc it should allocate for concurrent DNS
- * resolutions.
+ * many threads it should allocate for concurrent DNS resolutions.
  *
  * Returns: (transfer full): the default #GResolver.
  * Since: 2.22
@@ -30714,7 +31522,6 @@
 
 /**
  * g_settings_backend_get_default:
- * @returns: (transfer full): the default #GSettingsBackend
  *
  * Returns the default #GSettingsBackend. It is possible to override
  * the default by setting the <envar>GSETTINGS_BACKEND</envar>
@@ -30722,6 +31529,7 @@
  *
  * The user gets a reference to the backend.
  *
+ * Returns: (transfer full): the default #GSettingsBackend
  * Since: 2.28
  */
 
@@ -30947,7 +31755,6 @@
  * g_settings_get_boolean:
  * @settings: a #GSettings object
  * @key: the key to get the value for
- * @returns: a boolean
  *
  * Gets the value that is stored at @key in @settings.
  *
@@ -30956,6 +31763,7 @@
  * It is a programmer error to give a @key that isn't specified as
  * having a boolean type in the schema for @settings.
  *
+ * Returns: a boolean
  * Since: 2.26
  */
 
@@ -30964,7 +31772,6 @@
  * g_settings_get_child:
  * @settings: a #GSettings object
  * @name: the name of the 'child' schema
- * @returns: (transfer full): a 'child' settings object
  *
  * Creates a 'child' settings object which has a base path of
  * <replaceable>base-path</replaceable>/@name, where
@@ -30973,6 +31780,7 @@
  * The schema for the child settings object must have been declared
  * in the schema of @settings using a <tag class="starttag">child</tag> element.
  *
+ * Returns: (transfer full): a 'child' settings object
  * Since: 2.26
  */
 
@@ -30981,7 +31789,6 @@
  * g_settings_get_double:
  * @settings: a #GSettings object
  * @key: the key to get the value for
- * @returns: a double
  *
  * Gets the value that is stored at @key in @settings.
  *
@@ -30990,6 +31797,7 @@
  * It is a programmer error to give a @key that isn't specified as
  * having a 'double' type in the schema for @settings.
  *
+ * Returns: a double
  * Since: 2.26
  */
 
@@ -30998,7 +31806,6 @@
  * g_settings_get_enum:
  * @settings: a #GSettings object
  * @key: the key to get the value for
- * @returns: the enum value
  *
  * Gets the value that is stored in @settings for @key and converts it
  * to the enum value that it represents.
@@ -31013,6 +31820,7 @@
  * value for the enumerated type then this function will return the
  * default value.
  *
+ * Returns: the enum value
  * Since: 2.26
  */
 
@@ -31021,7 +31829,6 @@
  * g_settings_get_flags:
  * @settings: a #GSettings object
  * @key: the key to get the value for
- * @returns: the flags value
  *
  * Gets the value that is stored in @settings for @key and converts it
  * to the flags value that it represents.
@@ -31036,6 +31843,7 @@
  * value for the flags type then this function will return the default
  * value.
  *
+ * Returns: the flags value
  * Since: 2.26
  */
 
@@ -31043,11 +31851,11 @@
 /**
  * g_settings_get_has_unapplied:
  * @settings: a #GSettings object
- * @returns: %TRUE if @settings has unapplied changes
  *
  * Returns whether the #GSettings object has any unapplied
  * changes.  This can only be the case if it is in 'delayed-apply' mode.
  *
+ * Returns: %TRUE if @settings has unapplied changes
  * Since: 2.26
  */
 
@@ -31056,7 +31864,6 @@
  * g_settings_get_int:
  * @settings: a #GSettings object
  * @key: the key to get the value for
- * @returns: an integer
  *
  * Gets the value that is stored at @key in @settings.
  *
@@ -31065,6 +31872,7 @@
  * It is a programmer error to give a @key that isn't specified as
  * having a int32 type in the schema for @settings.
  *
+ * Returns: an integer
  * Since: 2.26
  */
 
@@ -31075,7 +31883,6 @@
  * @key: the key to get the value for
  * @mapping: (scope call): the function to map the value in the settings database to the value used by the application
  * @user_data: user data for @mapping
- * @returns: (transfer full): the result, which may be %NULL
  *
  * Gets the value that is stored at @key in @settings, subject to
  * application-level validation/mapping.
@@ -31085,6 +31892,7 @@
  * @mapping function performs that processing.  If the function
  * indicates that the processing was unsuccessful (due to a parse error,
  * for example) then the mapping is tried again with another value.
+ *
  * This allows a robust 'fall back to defaults' behaviour to be
  * implemented somewhat automatically.
  *
@@ -31103,6 +31911,8 @@
  * to each invocation of @mapping.  The final value of that #gpointer is
  * what is returned by this function.  %NULL is valid; it is returned
  * just as any other value would be.
+ *
+ * Returns: (transfer full): the result, which may be %NULL
  */
 
 
@@ -31110,7 +31920,6 @@
  * g_settings_get_range:
  * @settings: a #GSettings
  * @key: the key to query the range of
- * @returns: a #GVariant describing the range
  *
  * Queries the range of a key.
  *
@@ -31155,6 +31964,7 @@
  * You should free the returned value with g_variant_unref() when it is
  * no longer needed.
  *
+ * Returns: a #GVariant describing the range
  * Since: 2.28
  */
 
@@ -31163,7 +31973,6 @@
  * g_settings_get_string:
  * @settings: a #GSettings object
  * @key: the key to get the value for
- * @returns: a newly-allocated string
  *
  * Gets the value that is stored at @key in @settings.
  *
@@ -31172,6 +31981,7 @@
  * It is a programmer error to give a @key that isn't specified as
  * having a string type in the schema for @settings.
  *
+ * Returns: a newly-allocated string
  * Since: 2.26
  */
 
@@ -31180,13 +31990,16 @@
  * g_settings_get_strv:
  * @settings: a #GSettings object
  * @key: the key to get the value for
- * @returns: (array zero-terminated=1) (transfer full): a newly-allocated, %NULL-terminated array of strings, the value that is stored at @key in @settings.
  *
  * A convenience variant of g_settings_get() for string arrays.
  *
  * It is a programmer error to give a @key that isn't specified as
  * having an array of strings type in the schema for @settings.
  *
+ * newly-allocated, %NULL-terminated array of strings, the value that
+ * is stored at @key in @settings.
+ *
+ * Returns: (array zero-terminated=1) (transfer full): a
  * Since: 2.26
  */
 
@@ -31195,7 +32008,6 @@
  * g_settings_get_uint:
  * @settings: a #GSettings object
  * @key: the key to get the value for
- * @returns: an unsigned integer
  *
  * Gets the value that is stored at @key in @settings.
  *
@@ -31205,6 +32017,7 @@
  * It is a programmer error to give a @key that isn't specified as
  * having a uint32 type in the schema for @settings.
  *
+ * Returns: an unsigned integer
  * Since: 2.30
  */
 
@@ -31213,13 +32026,13 @@
  * g_settings_get_value:
  * @settings: a #GSettings object
  * @key: the key to get the value for
- * @returns: a new #GVariant
  *
  * Gets the value that is stored in @settings for @key.
  *
  * It is a programmer error to give a @key that isn't contained in the
  * schema for @settings.
  *
+ * Returns: a new #GVariant
  * Since: 2.26
  */
 
@@ -31228,10 +32041,10 @@
  * g_settings_is_writable:
  * @settings: a #GSettings object
  * @name: the name of a key
- * @returns: %TRUE if the key @name is writable
  *
  * Finds out if a key can be written or not
  *
+ * Returns: %TRUE if the key @name is writable
  * Since: 2.26
  */
 
@@ -31239,7 +32052,6 @@
 /**
  * g_settings_list_children:
  * @settings: a #GSettings object
- * @returns: (transfer full) (element-type utf8): a list of the children on @settings
  *
  * Gets the list of children on @settings.
  *
@@ -31260,13 +32072,14 @@
  *
  * You should free the return value with g_strfreev() when you are done
  * with it.
+ *
+ * Returns: (transfer full) (element-type utf8): a list of the children on @settings
  */
 
 
 /**
  * g_settings_list_keys:
  * @settings: a #GSettings object
- * @returns: (transfer full) (element-type utf8): a list of the keys on @settings
  *
  * Introspects the list of keys on @settings.
  *
@@ -31276,6 +32089,8 @@
  *
  * You should free the return value with g_strfreev() when you are done
  * with it.
+ *
+ * Returns: (transfer full) (element-type utf8): a list of the keys on @settings
  */
 
 
@@ -31287,7 +32102,7 @@
  * usual to instantiate these schemas directly, but if you want to you
  * can use g_settings_new_with_path() to specify the path.
  *
- * The output of this function, tTaken together with the output of
+ * The output of this function, taken together with the output of
  * g_settings_list_schemas() represents the complete list of all
  * installed schemas.
  *
@@ -31321,27 +32136,63 @@
 
 /**
  * g_settings_new:
- * @schema: the name of the schema
- * @returns: a new #GSettings object
+ * @schema_id: the id of the schema
  *
- * Creates a new #GSettings object with a given schema.
+ * Creates a new #GSettings object with the schema specified by
+ * @schema_id.
  *
  * Signals on the newly created #GSettings object will be dispatched
  * via the thread-default #GMainContext in effect at the time of the
  * call to g_settings_new().  The new #GSettings will hold a reference
  * on the context.  See g_main_context_push_thread_default().
  *
+ * Returns: a new #GSettings object
  * Since: 2.26
  */
 
 
 /**
- * g_settings_new_with_backend:
- * @schema: the name of the schema
- * @backend: the #GSettingsBackend to use
- * @returns: a new #GSettings object
+ * g_settings_new_full:
+ * @schema: a #GSettingsSchema
+ * @backend: (allow-none): a #GSettingsBackend
+ * @path: (allow-none): the path to use
  *
- * Creates a new #GSettings object with a given schema and backend.
+ * Creates a new #GSettings object with a given schema, backend and
+ * path.
+ *
+ * It should be extremely rare that you ever want to use this function.
+ * It is made available for advanced use-cases (such as plugin systems
+ * that want to provide access to schemas loaded from custom locations,
+ * etc).
+ *
+ * At the most basic level, a #GSettings object is a pure composition of
+ * 4 things: a #GSettingsSchema, a #GSettingsBackend, a path within that
+ * backend, and a #GMainContext to which signals are dispatched.
+ *
+ * This constructor therefore gives you full control over constructing
+ * #GSettings instances.  The first 4 parameters are given directly as
+ * @schema, @backend and @path, and the main context is taken from the
+ * thread-default (as per g_settings_new()).
+ *
+ * If @backend is %NULL then the default backend is used.
+ *
+ * If @path is %NULL then the path from the schema is used.  It is an
+ * error f @path is %NULL and the schema has no path of its own or if
+ * @path is non-%NULL and not equal to the path that the schema does
+ * have.
+ *
+ * Returns: a new #GSettings object
+ * Since: 2.32
+ */
+
+
+/**
+ * g_settings_new_with_backend:
+ * @schema_id: the id of the schema
+ * @backend: the #GSettingsBackend to use
+ *
+ * Creates a new #GSettings object with the schema specified by
+ * @schema_id and a given #GSettingsBackend.
  *
  * Creating a #GSettings object with a different backend allows accessing
  * settings from a database other than the usual one. For example, it may make
@@ -31349,34 +32200,35 @@
  * the system to get a settings object that modifies the system default
  * settings instead of the settings for this user.
  *
+ * Returns: a new #GSettings object
  * Since: 2.26
  */
 
 
 /**
  * g_settings_new_with_backend_and_path:
- * @schema: the name of the schema
+ * @schema_id: the id of the schema
  * @backend: the #GSettingsBackend to use
  * @path: the path to use
- * @returns: a new #GSettings object
  *
- * Creates a new #GSettings object with a given schema, backend and
- * path.
+ * Creates a new #GSettings object with the schema specified by
+ * @schema_id and a given #GSettingsBackend and path.
  *
  * This is a mix of g_settings_new_with_backend() and
  * g_settings_new_with_path().
  *
+ * Returns: a new #GSettings object
  * Since: 2.26
  */
 
 
 /**
  * g_settings_new_with_path:
- * @schema: the name of the schema
+ * @schema_id: the id of the schema
  * @path: the path to use
- * @returns: a new #GSettings object
  *
- * Creates a new #GSettings object with a given schema and path.
+ * Creates a new #GSettings object with the relocatable schema specified
+ * by @schema_id and a given path.
  *
  * You only need to do this if you want to directly create a settings
  * object with a schema that doesn't have a specified path of its own.
@@ -31385,6 +32237,7 @@
  * It is a programmer error to call this function for a schema that
  * has an explicitly specified path.
  *
+ * Returns: a new #GSettings object
  * Since: 2.26
  */
 
@@ -31394,7 +32247,6 @@
  * @settings: a #GSettings
  * @key: the key to check
  * @value: the value to check
- * @returns: %TRUE if @value is valid for @key
  *
  * Checks if the given @value is of the correct type and within the
  * permitted range for @key.
@@ -31406,6 +32258,7 @@
  * It is a programmer error to give a @key that isn't contained in the
  * schema for @settings.
  *
+ * Returns: %TRUE if @value is valid for @key
  * Since: 2.28
  */
 
@@ -31437,12 +32290,169 @@
 
 
 /**
+ * g_settings_schema_get_id:
+ * @schema: a #GSettingsSchema
+ *
+ * Get the ID of @schema.
+ *
+ * Returns: (transfer none): the ID
+ */
+
+
+/**
+ * g_settings_schema_get_path:
+ * @schema: a #GSettingsSchema
+ *
+ * Gets the path associated with @schema, or %NULL.
+ *
+ * Schemas may be single-instance or relocatable.  Single-instance
+ * schemas correspond to exactly one set of keys in the backend
+ * database: those located at the path returned by this function.
+ *
+ * Relocatable schemas can be referenced by other schemas and can
+ * threfore describe multiple sets of keys at different locations.  For
+ * relocatable schemas, this function will return %NULL.
+ *
+ * Returns: (transfer none): the path of the schema, or %NULL
+ * Since: 2.32
+ */
+
+
+/**
+ * g_settings_schema_ref:
+ * @schema: a #GSettingsSchema
+ *
+ * Increase the reference count of @schema, returning a new reference.
+ *
+ * Returns: a new reference to @schema
+ * Since: 2.32
+ */
+
+
+/**
+ * g_settings_schema_source_get_default:
+ *
+ * Gets the default system schema source.
+ *
+ * This function is not required for normal uses of #GSettings but it
+ * may be useful to authors of plugin management systems or to those who
+ * want to introspect the content of schemas.
+ *
+ * If no schemas are installed, %NULL will be returned.
+ *
+ * The returned source may actually consist of multiple schema sources
+ * from different directories, depending on which directories were given
+ * in <envar>XDG_DATA_DIRS</envar> and
+ * <envar>GSETTINGS_SCHEMA_DIR</envar>.  For this reason, all lookups
+ * performed against the default source should probably be done
+ * recursively.
+ *
+ * Returns: (transfer none): the default schema source
+ * Since: 2.32
+ */
+
+
+/**
+ * g_settings_schema_source_lookup:
+ * @source: a #GSettingsSchemaSource
+ * @schema_id: a schema ID
+ * @recursive: %TRUE if the lookup should be recursive
+ *
+ * Looks up a schema with the identifier @schema_id in @source.
+ *
+ * This function is not required for normal uses of #GSettings but it
+ * may be useful to authors of plugin management systems or to those who
+ * want to introspect the content of schemas.
+ *
+ * If the schema isn't found directly in @source and @recursive is %TRUE
+ * then the parent sources will also be checked.
+ *
+ * If the schema isn't found, %NULL is returned.
+ *
+ * Returns: (transfer full): a new #GSettingsSchema
+ * Since: 2.32
+ */
+
+
+/**
+ * g_settings_schema_source_new_from_directory:
+ * @directory: the filename of a directory
+ * @parent: (allow-none): a #GSettingsSchemaSource, or %NULL
+ * @trusted: %TRUE, if the directory is trusted
+ * @error: a pointer to a #GError pointer set to %NULL, or %NULL
+ *
+ * Attempts to create a new schema source corresponding to the contents
+ * of the given directory.
+ *
+ * This function is not required for normal uses of #GSettings but it
+ * may be useful to authors of plugin management systems.
+ *
+ * The directory should contain a file called
+ * <filename>gschemas.compiled</filename> as produced by
+ * <command>glib-compile-schemas</command>.
+ *
+ * If @trusted is %TRUE then <filename>gschemas.compiled</filename> is
+ * trusted not to be corrupted.  This assumption has a performance
+ * advantage, but can result in crashes or inconsistent behaviour in the
+ * case of a corrupted file.  Generally, you should set @trusted to
+ * %TRUE for files installed by the system and to %FALSE for files in
+ * the home directory.
+ *
+ * If @parent is non-%NULL then there are two effects.
+ *
+ * First, if g_settings_schema_source_lookup() is called with the
+ * @recursive flag set to %TRUE and the schema can not be found in the
+ * source, the lookup will recurse to the parent.
+ *
+ * Second, any references to other schemas specified within this
+ * source (ie: <literal>child</literal> or <literal>extents</literal>)
+ * references may be resolved from the @parent.
+ *
+ * For this second reason, except in very unusual situations, the
+ * @parent should probably be given as the default schema source, as
+ * returned by g_settings_schema_source_get_default().
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * g_settings_schema_source_ref:
+ * @source: a #GSettingsSchemaSource
+ *
+ * Increase the reference count of @source, returning a new reference.
+ *
+ * Returns: a new reference to @source
+ * Since: 2.32
+ */
+
+
+/**
+ * g_settings_schema_source_unref:
+ * @source: a #GSettingsSchemaSource
+ *
+ * Decrease the reference count of @source, possibly freeing it.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * g_settings_schema_unref:
+ * @schema: a #GSettingsSchema
+ *
+ * Decrease the reference count of @schema, possibly freeing it.
+ *
+ * Since: 2.32
+ */
+
+
+/**
  * g_settings_set:
  * @settings: a #GSettings object
  * @key: the name of the key to set
  * @format: a #GVariant format string
  * @...: arguments as per @format
- * @returns: %TRUE if setting the key succeeded, %FALSE if the key was not writable
  *
  * Sets @key in @settings to @value.
  *
@@ -31453,6 +32463,9 @@
  * schema for @settings or for the #GVariantType of @format to mismatch
  * the type given in the schema.
  *
+ * %FALSE if the key was not writable
+ *
+ * Returns: %TRUE if setting the key succeeded,
  * Since: 2.26
  */
 
@@ -31462,7 +32475,6 @@
  * @settings: a #GSettings object
  * @key: the name of the key to set
  * @value: the value to set it to
- * @returns: %TRUE if setting the key succeeded, %FALSE if the key was not writable
  *
  * Sets @key in @settings to @value.
  *
@@ -31471,6 +32483,9 @@
  * It is a programmer error to give a @key that isn't specified as
  * having a boolean type in the schema for @settings.
  *
+ * %FALSE if the key was not writable
+ *
+ * Returns: %TRUE if setting the key succeeded,
  * Since: 2.26
  */
 
@@ -31480,7 +32495,6 @@
  * @settings: a #GSettings object
  * @key: the name of the key to set
  * @value: the value to set it to
- * @returns: %TRUE if setting the key succeeded, %FALSE if the key was not writable
  *
  * Sets @key in @settings to @value.
  *
@@ -31489,6 +32503,9 @@
  * It is a programmer error to give a @key that isn't specified as
  * having a 'double' type in the schema for @settings.
  *
+ * %FALSE if the key was not writable
+ *
+ * Returns: %TRUE if setting the key succeeded,
  * Since: 2.26
  */
 
@@ -31498,7 +32515,6 @@
  * @settings: a #GSettings object
  * @key: a key, within @settings
  * @value: an enumerated value
- * @returns: %TRUE, if the set succeeds
  *
  * Looks up the enumerated type nick for @value and writes it to @key,
  * within @settings.
@@ -31510,6 +32526,8 @@
  * After performing the write, accessing @key directly with
  * g_settings_get_string() will return the 'nick' associated with
  * @value.
+ *
+ * Returns: %TRUE, if the set succeeds
  */
 
 
@@ -31518,7 +32536,6 @@
  * @settings: a #GSettings object
  * @key: a key, within @settings
  * @value: a flags value
- * @returns: %TRUE, if the set succeeds
  *
  * Looks up the flags type nicks for the bits specified by @value, puts
  * them in an array of strings and writes the array to @key, within
@@ -31531,6 +32548,8 @@
  * After performing the write, accessing @key directly with
  * g_settings_get_strv() will return an array of 'nicks'; one for each
  * bit in @value.
+ *
+ * Returns: %TRUE, if the set succeeds
  */
 
 
@@ -31539,7 +32558,6 @@
  * @settings: a #GSettings object
  * @key: the name of the key to set
  * @value: the value to set it to
- * @returns: %TRUE if setting the key succeeded, %FALSE if the key was not writable
  *
  * Sets @key in @settings to @value.
  *
@@ -31548,6 +32566,9 @@
  * It is a programmer error to give a @key that isn't specified as
  * having a int32 type in the schema for @settings.
  *
+ * %FALSE if the key was not writable
+ *
+ * Returns: %TRUE if setting the key succeeded,
  * Since: 2.26
  */
 
@@ -31557,7 +32578,6 @@
  * @settings: a #GSettings object
  * @key: the name of the key to set
  * @value: the value to set it to
- * @returns: %TRUE if setting the key succeeded, %FALSE if the key was not writable
  *
  * Sets @key in @settings to @value.
  *
@@ -31566,6 +32586,9 @@
  * It is a programmer error to give a @key that isn't specified as
  * having a string type in the schema for @settings.
  *
+ * %FALSE if the key was not writable
+ *
+ * Returns: %TRUE if setting the key succeeded,
  * Since: 2.26
  */
 
@@ -31575,7 +32598,6 @@
  * @settings: a #GSettings object
  * @key: the name of the key to set
  * @value: (allow-none) (array zero-terminated=1): the value to set it to, or %NULL
- * @returns: %TRUE if setting the key succeeded, %FALSE if the key was not writable
  *
  * Sets @key in @settings to @value.
  *
@@ -31585,6 +32607,9 @@
  * It is a programmer error to give a @key that isn't specified as
  * having an array of strings type in the schema for @settings.
  *
+ * %FALSE if the key was not writable
+ *
+ * Returns: %TRUE if setting the key succeeded,
  * Since: 2.26
  */
 
@@ -31594,7 +32619,6 @@
  * @settings: a #GSettings object
  * @key: the name of the key to set
  * @value: the value to set it to
- * @returns: %TRUE if setting the key succeeded, %FALSE if the key was not writable
  *
  * Sets @key in @settings to @value.
  *
@@ -31604,6 +32628,9 @@
  * It is a programmer error to give a @key that isn't specified as
  * having a uint32 type in the schema for @settings.
  *
+ * %FALSE if the key was not writable
+ *
+ * Returns: %TRUE if setting the key succeeded,
  * Since: 2.30
  */
 
@@ -31613,7 +32640,6 @@
  * @settings: a #GSettings object
  * @key: the name of the key to set
  * @value: a #GVariant of the correct type
- * @returns: %TRUE if setting the key succeeded, %FALSE if the key was not writable
  *
  * Sets @key in @settings to @value.
  *
@@ -31623,6 +32649,9 @@
  *
  * If @value is floating then this function consumes the reference.
  *
+ * %FALSE if the key was not writable
+ *
+ * Returns: %TRUE if setting the key succeeded,
  * Since: 2.26
  */
 
@@ -31977,7 +33006,8 @@
  *
  * Completes an asynchronous function in an idle handler in the <link
  * linkend="g-main-context-push-thread-default">thread-default main
- * loop</link> of the thread that @simple was initially created in.
+ * loop</link> of the thread that @simple was initially created in
+ * (and re-pushes that context around the invocation of the callback).
  *
  * Calling this function takes a reference to @simple for as long as
  * is needed to complete the call.
@@ -32222,11 +33252,11 @@
 /**
  * g_simple_permission_new:
  * @allowed: %TRUE if the action is allowed
- * @returns: the #GSimplePermission, as a #GPermission
  *
  * Creates a new #GPermission instance that represents an action that is
  * either always or never allowed.
  *
+ * Returns: the #GSimplePermission, as a #GPermission
  * Since: 2.26
  */
 
@@ -32438,6 +33468,10 @@
  * proxy protocols that are reused between protocols. A good example
  * is HTTP. It can be used to proxy HTTP, FTP and Gopher and can also
  * be use as generic socket proxy through the HTTP CONNECT method.
+ *
+ * When the proxy is detected as being an application proxy, TLS handshake
+ * will be skipped. This is required to let the application do the proxy
+ * specific handshake.
  */
 
 
@@ -32586,7 +33620,6 @@
  * @service: the name of the service to connect to
  * @cancellable: (allow-none): a #GCancellable, or %NULL
  * @error: a pointer to a #GError, or %NULL
- * @returns: (transfer full): a #GSocketConnection if successful, or %NULL on error
  *
  * Attempts to create a TCP connection to a service.
  *
@@ -32602,6 +33635,8 @@
  * In the event of any failure (DNS error, service not found, no hosts
  * connectable) %NULL is returned and @error (if non-%NULL) is set
  * accordingly.
+ *
+ * Returns: (transfer full): a #GSocketConnection if successful, or %NULL on error
  */
 
 
@@ -34088,7 +35123,7 @@
  * Starts the service, i.e. start accepting connections
  * from the added sockets when the mainloop runs.
  *
- * This call is threadsafe, so it may be called from a thread
+ * This call is thread-safe, so it may be called from a thread
  * handling an incoming client request.
  *
  * Since: 2.22
@@ -34102,7 +35137,7 @@
  * Stops the service, i.e. stops accepting connections
  * from the added sockets when the mainloop runs.
  *
- * This call is threadsafe, so it may be called from a thread
+ * This call is thread-safe, so it may be called from a thread
  * handling an incoming client request.
  *
  * Since: 2.22
@@ -34619,7 +35654,8 @@
  *
  * Creates a #GTlsCertificate from the PEM-encoded data in @file. If
  * @file cannot be read or parsed, the function will return %NULL and
- * set @error. Otherwise, this behaves like g_tls_certificate_new().
+ * set @error. Otherwise, this behaves like
+ * g_tls_certificate_new_from_pem().
  *
  * Returns: the new certificate, or %NULL on error
  * Since: 2.28
@@ -34635,7 +35671,7 @@
  * Creates a #GTlsCertificate from the PEM-encoded data in @cert_file
  * and @key_file. If either file cannot be read or parsed, the
  * function will return %NULL and set @error. Otherwise, this behaves
- * like g_tls_certificate_new().
+ * like g_tls_certificate_new_from_pem().
  *
  * Returns: the new certificate, or %NULL on error
  * Since: 2.28
@@ -34650,7 +35686,9 @@
  *
  * Creates a new #GTlsCertificate from the PEM-encoded data in @data.
  * If @data includes both a certificate and a private key, then the
- * returned certificate will include the private key data as well.
+ * returned certificate will include the private key data as well. (See
+ * the #GTlsCertificate:private-key-pem property for information about
+ * supported formats.)
  *
  * If @data includes multiple certificates, only the first one will be
  * parsed.
@@ -36364,6 +37402,17 @@
 
 
 /**
+ * g_unix_mount_point_get_options:
+ * @mount_point: a #GUnixMountPoint.
+ *
+ * Gets the options for the mount point.
+ *
+ * Returns: a string containing the options.
+ * Since: 2.32
+ */
+
+
+/**
  * g_unix_mount_point_guess_can_eject:
  * @mount_point: a #GUnixMountPoint
  *
@@ -36956,6 +38005,17 @@
 
 
 /**
+ * g_volume_get_sort_key:
+ * @volume: A #GVolume.
+ *
+ * Gets the sort key for @volume, if any.
+ *
+ * Returns: Sorting key for @volume or %NULL if no such key is available.
+ * Since: 2.32
+ */
+
+
+/**
  * g_volume_get_uuid:
  * @volume: a #GVolume.
  *
@@ -37368,8 +38428,8 @@
  * letters, prefixed by the string "U+". Leading zeros are omitted,
  * unless the code point would have fewer than four hexadecimal digits.
  * For example, "U+0041 LATIN CAPITAL LETTER A". To print a code point
- * in the U+-notation, use the format string "U+%04"G_GINT32_FORMAT"X".
- * To scan, use the format string "U+%06"G_GINT32_FORMAT"X".
+ * in the U+-notation, use the format string "U+\%04"G_GINT32_FORMAT"X".
+ * To scan, use the format string "U+\%06"G_GINT32_FORMAT"X".
  *
  * |[
  * gunichar c;
