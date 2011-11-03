@@ -277,6 +277,11 @@ class DumpCompiler(object):
 
         for library_path in self._options.library_paths:
             args.append('-L' + library_path)
+            if libtool:
+                args.append('-rpath')
+                args.append(library_path)
+            else:
+                args.append('-Wl,-rpath=' + library_path)
 
         args.extend(self._run_pkgconfig('--libs'))
 
