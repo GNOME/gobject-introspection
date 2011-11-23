@@ -125,6 +125,7 @@ AC_DEFINE_UNQUOTED(GIR_DIR, "$GIR_DIR", [Director prefix for gir installation])
 
 PKG_CHECK_MODULES(GLIB, [glib-2.0 >= 2.29.7])
 PKG_CHECK_MODULES(GOBJECT, [gobject-2.0])
+PKG_CHECK_MODULES(GMODULE, [gmodule-2.0])
 PKG_CHECK_MODULES(GIO, [gio-2.0])
 PKG_CHECK_MODULES(GIO_UNIX, [gio-unix-2.0], have_gio_unix=true, have_gio_unix=false)
 AM_CONDITIONAL(HAVE_GIO_UNIX, test x$have_gio_unix = xtrue)

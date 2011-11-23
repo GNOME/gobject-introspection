@@ -81,8 +81,8 @@ if !OS_WIN32
 noinst_PROGRAMS += gi-dump-types
 
 gi_dump_types_SOURCES = girepository/gdump.c girepository/gi-dump-types.c
-gi_dump_types_CFLAGS = $(GIO_UNIX_CFLAGS)
-gi_dump_types_LDADD = $(GIO_UNIX_LIBS)
+gi_dump_types_CFLAGS = $(GIO_UNIX_CFLAGS) $(GMODULE_CFLAGS)
+gi_dump_types_LDADD = $(GIO_UNIX_LIBS) $(GMODULE_LIBS)
 endif
 
 GTESTER_PROGS += gthash-test
