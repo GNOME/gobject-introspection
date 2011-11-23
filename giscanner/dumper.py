@@ -86,7 +86,7 @@ class DumpCompiler(object):
 
         self._uninst_srcdir = os.environ.get(
             'UNINSTALLED_INTROSPECTION_SRCDIR')
-        self._packages = ['gio-2.0 gthread-2.0']
+        self._packages = ['gio-2.0 gthread-2.0 gmodule-2.0']
         self._packages.extend(options.packages)
 
     # Public API
