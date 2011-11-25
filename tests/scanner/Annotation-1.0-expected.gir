@@ -835,6 +835,13 @@ detection, and fixing it via annotations.</doc>
         <type name="GObject.Object" c:type="GObject*"/>
       </return-value>
     </function>
+    <function name="transfer_floating"
+              c:identifier="annotation_transfer_floating">
+      <return-value transfer-ownership="none">
+        <doc xml:whitespace="preserve">A floating object</doc>
+        <type name="GObject.Object" c:type="GObject*"/>
+      </return-value>
+    </function>
     <function name="versioned"
               c:identifier="annotation_versioned"
               version="0.6">

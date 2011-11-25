@@ -111,6 +111,7 @@ OPT_SCOPE_NOTIFIED = 'notified'
 OPT_TRANSFER_NONE = 'none'
 OPT_TRANSFER_CONTAINER = 'container'
 OPT_TRANSFER_FULL = 'full'
+OPT_TRANSFER_FLOATING = 'floating'
 
 
 class DocBlock(object):
@@ -346,7 +347,8 @@ class DocTag(object):
                     n_params=1,
                     choices=[OPT_TRANSFER_FULL,
                              OPT_TRANSFER_CONTAINER,
-                             OPT_TRANSFER_NONE])
+                             OPT_TRANSFER_NONE,
+                             OPT_TRANSFER_FLOATING])
             elif option == OPT_TYPE:
                 self._validate_option('type', value, required=True,
                                       n_params=1)

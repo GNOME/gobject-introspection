@@ -169,6 +169,8 @@ void annotation_space_after_comment_bug631690 (void);
 
 gchar* annotation_return_filename (void);
 
+GObject * annotation_transfer_floating(void);
+
 /* This one we can handle properly */
 #define ANNOTATION_CALCULATED_DEFINE (10 * 10)
 

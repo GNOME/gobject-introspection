@@ -813,7 +813,7 @@ annotation_space_after_comment_bug631690 (void)
 }
 
 /**
- * annotation_return_filename
+ * annotation_return_filename:
  *
  * Returns: (type filename): An annotated filename
  */
@@ -821,4 +821,15 @@ gchar*
 annotation_return_filename (void)
 {
   return "a utf-8 filename";
+}
+
+/**
+ * annotation_transfer_floating:
+ *
+ * Returns: (transfer floating): A floating object
+ */
+GObject *
+annotation_transfer_floating(void)
+{
+  return NULL;
 }

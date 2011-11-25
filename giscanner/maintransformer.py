@@ -32,7 +32,8 @@ from .annotationparser import (OPT_ALLOW_NONE, OPT_ARRAY, OPT_ATTRIBUTE,
                                OPT_TYPE, OPT_CLOSURE, OPT_DESTROY, OPT_TRANSFER, OPT_SKIP,
                                OPT_FOREIGN, OPT_ARRAY_FIXED_SIZE,
                                OPT_ARRAY_LENGTH, OPT_ARRAY_ZERO_TERMINATED,
-                               OPT_CONSTRUCTOR, OPT_METHOD)
+                               OPT_CONSTRUCTOR, OPT_METHOD,
+                               OPT_TRANSFER_NONE, OPT_TRANSFER_FLOATING)
 from .annotationparser import AnnotationParser
 from .transformer import TransformerException
 from .utils import to_underscores, to_underscores_noprefix
@@ -569,7 +570,10 @@ usage is void (*_gtk_reserved1)(void);"""
 
         transfer_tag = options.get(OPT_TRANSFER)
         if transfer_tag and transfer_tag.length() == 1:
-            node.transfer = transfer_tag.one()
+            transfer = transfer_tag.one()
+            if transfer == OPT_TRANSFER_FLOATING:
+                transfer = OPT_TRANSFER_NONE
+            node.transfer = transfer
 
         self._adjust_container_type(parent, node, options)
 
@@ -755,7 +759,10 @@ usage is void (*_gtk_reserved1)(void);"""
             return
         transfer_tag = block.get(OPT_TRANSFER)
         if transfer_tag is not None:
-            prop.transfer = transfer_tag.value
+            transfer = transfer_tag.value
+            if transfer == OPT_TRANSFER_FLOATING:
+                transfer = OPT_TRANSFER_NONE
+            prop.transfer = transfer
         else:
             prop.transfer = self._get_transfer_default(parent, prop)
         type_tag = block.get(TAG_TYPE)
