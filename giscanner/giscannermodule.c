@@ -569,6 +569,7 @@ static int calc_attrs_length(PyObject *attributes, int indent,
   for (i = 0; i < PyList_Size (attributes); ++i)
     {
       PyObject *tuple, *pyvalue;
+      PyObject *s = NULL;
       char *attr, *value;
       char *escaped;
 
@@ -580,12 +581,11 @@ static int calc_attrs_length(PyObject *attributes, int indent,
         return -1;
 
       if (PyUnicode_Check(pyvalue)) {
-        PyObject *s = PyUnicode_AsUTF8String(pyvalue);
+        s = PyUnicode_AsUTF8String(pyvalue);
         if (!s) {
           return -1;
         }
         value = PyString_AsString(s);
-        Py_DECREF(s);
       } else if (PyString_Check(pyvalue)) {
         value = PyString_AsString(pyvalue);
       } else {
@@ -597,6 +597,7 @@ static int calc_attrs_length(PyObject *attributes, int indent,
       escaped = g_markup_escape_text (value, -1);
       attr_length += 2 + strlen(attr) + strlen(escaped) + 2;
       g_free(escaped);
+      Py_XDECREF(s);
     }
 
   return attr_length + indent + self_indent;
@@ -641,6 +642,7 @@ pygi_collect_attributes (PyObject *self,
   for (i = 0; i < PyList_Size (attributes); ++i)
     {
       PyObject *tuple, *pyvalue;
+      PyObject *s = NULL;
       char *attr, *value, *escaped;
 
       tuple = PyList_GetItem (attributes, i);
@@ -667,11 +669,10 @@ pygi_collect_attributes (PyObject *self,
 	goto out;
 
       if (PyUnicode_Check(pyvalue)) {
-        PyObject *s = PyUnicode_AsUTF8String(pyvalue);
+        s = PyUnicode_AsUTF8String(pyvalue);
         if (!s)
 	  goto out;
         value = PyString_AsString(s);
-        Py_DECREF(s);
       } else if (PyString_Check(pyvalue)) {
         value = PyString_AsString(pyvalue);
       } else {
@@ -695,6 +696,7 @@ pygi_collect_attributes (PyObject *self,
       g_string_append_c (attr_value, '\"');
       if (first)
 	first = FALSE;
+      Py_XDECREF(s);
   }
 
   result = PyUnicode_DecodeUTF8 (attr_value->str, attr_value->len, "strict");
