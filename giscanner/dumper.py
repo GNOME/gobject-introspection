@@ -238,16 +238,16 @@ class DumpCompiler(object):
         # likely to be uninstalled yet and we want the uninstalled RPATHs have
         # priority (or we might run with installed library that is older)
 
-        if not self._options.external_library:
-            self._add_link_internal_args(args, libtool)
-        else:
-            self._add_link_external_args(args)
-
         for source in sources:
             if not os.path.exists(source):
                 raise CompilerError(
                     "Could not find object file: %s" % (source, ))
         args.extend(list(sources))
+
+        if not self._options.external_library:
+            self._add_link_internal_args(args, libtool)
+        else:
+            self._add_link_external_args(args)
 
         if not self._options.quiet:
             print "g-ir-scanner: link: %s" % (
