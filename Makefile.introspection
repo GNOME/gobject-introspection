@@ -50,7 +50,7 @@ _gir_name = $(subst /,_,$(subst -,_,$(subst .,_,$(1))))
 
 # Namespace and Version is either fetched from the gir filename
 # or the _NAMESPACE/_VERSION variable combo
-_gir_namespace = $(or $($(_gir_name)_NAMESPACE),$(firstword $(subst -, ,$(1))))
+_gir_namespace = $(or $($(_gir_name)_NAMESPACE),$(firstword $(subst -, ,$(notdir $(1)))))
 _gir_version = $(or $($(_gir_name)_VERSION),$(lastword $(subst -, ,$(1:.gir=))))
 
 # _PROGRAM is an optional variable which needs it's own --program argument
@@ -129,6 +129,7 @@ $(if $(or $(findstring --header-only,$($(_gir_name)_SCANNERFLAGS)),
 # sure these are built before running the scanner. Libraries and programs
 # needs to be added manually.
 $(1): $$($(_gir_name)_FILES)
+	@ $(MKDIR_P) $(dir $(1))
 	$(_gir_silent_scanner_prefix) $(INTROSPECTION_SCANNER_ENV) $(INTROSPECTION_SCANNER) $(_gir_silent_scanner_opts) \
 	$(INTROSPECTION_SCANNER_ARGS) \
 	  --namespace=$(_gir_namespace) \
