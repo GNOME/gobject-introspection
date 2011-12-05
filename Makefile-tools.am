@@ -17,7 +17,7 @@ g-ir-annotation-tool: tools/g-ir-annotation-tool.in _giscanner.la Makefile
 	@chmod a+x $@
 
 g-ir-doc-tool: tools/g-ir-doc-tool.in _giscanner.la Makefile
-	$(AM_V_GEN) sed -e s,@libdir\@,$(libdir), -e s,@PYTHON\@,$(PYTHON), $< > $@.tmp && mv $@.tmp $@
+	$(AM_V_GEN) $(TOOL_SUBSTITUTIONS) $< > $@.tmp && mv $@.tmp $@
 	@chmod a+x $@
 
 g_ir_compiler_SOURCES = tools/compiler.c
