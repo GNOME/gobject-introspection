@@ -596,13 +596,6 @@ class ErrorQuarkFunction(Function):
         self.error_domain = error_domain
 
 
-class ErrorQuarkFunction(Function):
-
-    def __init__(self, name, retval, parameters, throws, symbol, error_domain):
-        Function.__init__(self, name, retval, parameters, throws, symbol)
-        self.error_domain = error_domain
-
-
 class VFunction(Callable):
 
     def __init__(self, name, retval, parameters, throws):
