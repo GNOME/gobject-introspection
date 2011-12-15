@@ -1301,7 +1301,8 @@
  * @events: a bitwise combination from #GIOCondition, specifying which events should be polled for. Typically for reading from a file descriptor you would use %G_IO_IN | %G_IO_HUP | %G_IO_ERR, and for writing you would use %G_IO_OUT | %G_IO_ERR.
  * @revents: a bitwise combination of flags from #GIOCondition, returned from the poll() function to indicate which events occurred.
  *
- *
+ * Represents a file descriptor, which events to poll for, and which events
+ * occurred.
  */
 
 
@@ -1667,7 +1668,7 @@
  * call malloc(), which includes POSIX functions such as setenv().
  * If you need to set up the child environment differently from
  * the parent, you should use g_get_environ(), g_environ_setenv(),
- * and g_environ_unsetev(), and then pass the complete environment
+ * and g_environ_unsetenv(), and then pass the complete environment
  * list to the <literal>g_spawn...</literal> function.
  */
 
@@ -1677,22 +1678,22 @@
  * @G_SPAWN_ERROR_FORK: Fork failed due to lack of memory.
  * @G_SPAWN_ERROR_READ: Read or select on pipes failed.
  * @G_SPAWN_ERROR_CHDIR: Changing to working directory failed.
- * @G_SPAWN_ERROR_ACCES: execv() returned %EACCES.
- * @G_SPAWN_ERROR_PERM: execv() returned %EPERM.
- * @G_SPAWN_ERROR_2BIG: execv() returned %E2BIG.
- * @G_SPAWN_ERROR_NOEXEC: execv() returned %ENOEXEC.
- * @G_SPAWN_ERROR_NAMETOOLONG: execv() returned %ENAMETOOLONG.
- * @G_SPAWN_ERROR_NOENT: execv() returned %ENOENT.
- * @G_SPAWN_ERROR_NOMEM: execv() returned %ENOMEM.
- * @G_SPAWN_ERROR_NOTDIR: execv() returned %ENOTDIR.
- * @G_SPAWN_ERROR_LOOP: execv() returned %ELOOP.
- * @G_SPAWN_ERROR_TXTBUSY: execv() returned %ETXTBUSY.
- * @G_SPAWN_ERROR_IO: execv() returned %EIO.
- * @G_SPAWN_ERROR_NFILE: execv() returned %ENFILE.
- * @G_SPAWN_ERROR_MFILE: execv() returned %EMFILE.
- * @G_SPAWN_ERROR_INVAL: execv() returned %EINVAL.
- * @G_SPAWN_ERROR_ISDIR: execv() returned %EISDIR.
- * @G_SPAWN_ERROR_LIBBAD: execv() returned %ELIBBAD.
+ * @G_SPAWN_ERROR_ACCES: execv() returned <literal>EACCES</literal>
+ * @G_SPAWN_ERROR_PERM: execv() returned <literal>EPERM</literal>
+ * @G_SPAWN_ERROR_2BIG: execv() returned <literal>E2BIG</literal>
+ * @G_SPAWN_ERROR_NOEXEC: execv() returned <literal>ENOEXEC</literal>
+ * @G_SPAWN_ERROR_NAMETOOLONG: execv() returned <literal>ENAMETOOLONG</literal>
+ * @G_SPAWN_ERROR_NOENT: execv() returned <literal>ENOENT</literal>
+ * @G_SPAWN_ERROR_NOMEM: execv() returned <literal>ENOMEM</literal>
+ * @G_SPAWN_ERROR_NOTDIR: execv() returned <literal>ENOTDIR</literal>
+ * @G_SPAWN_ERROR_LOOP: execv() returned <literal>ELOOP</literal>
+ * @G_SPAWN_ERROR_TXTBUSY: execv() returned <literal>ETXTBUSY</literal>
+ * @G_SPAWN_ERROR_IO: execv() returned <literal>EIO</literal>
+ * @G_SPAWN_ERROR_NFILE: execv() returned <literal>ENFILE</literal>
+ * @G_SPAWN_ERROR_MFILE: execv() returned <literal>EMFILE</literal>
+ * @G_SPAWN_ERROR_INVAL: execv() returned <literal>EINVAL</literal>
+ * @G_SPAWN_ERROR_ISDIR: execv() returned <literal>EISDIR</literal>
+ * @G_SPAWN_ERROR_LIBBAD: execv() returned <literal>ELIBBAD</literal>
  * @G_SPAWN_ERROR_FAILED: Some other fatal failure, <literal>error-&gt;message</literal> should explain.
  *
  * Error codes returned by spawning processes.
@@ -2332,7 +2333,7 @@
  * Inserts a breakpoint instruction into the code.
  *
  * On x86 and alpha systems this is implemented as a soft interrupt
- * and on other architectures it raises a %SIGTRAP signal.
+ * and on other architectures it raises a <literal>SIGTRAP</literal> signal.
  */
 
 
@@ -2674,7 +2675,7 @@
  * (GInstanceInitFunc) gtk_gadget_init,
  * (GTypeFlags) flags);
  * {
- * static const GInterfaceInfo g_implement_interface_info = {
+ * const GInterfaceInfo g_implement_interface_info = {
  * (GInterfaceInitFunc) gtk_gadget_gizmo_init
  * };
  * g_type_add_interface_static (g_define_type_id, TYPE_GIZMO, &g_implement_interface_info);
@@ -3765,6 +3766,15 @@
 
 
 /**
+ * G_TYPE_BYTES:
+ *
+ * The #GType for #GBytes.
+ *
+ * Since: 2.32
+ */
+
+
+/**
  * G_TYPE_BYTE_ARRAY:
  *
  * The #GType for a boxed type holding a #GByteArray reference.
@@ -4751,6 +4761,18 @@
  * The #GType for a boxed type holding a #GVariantType.
  *
  * Since: 2.24
+ */
+
+
+/**
+ * G_UNICHAR_MAX_DECOMPOSITION_LENGTH:
+ *
+ * The maximum length (in codepoints) of a compatibility or canonical
+ * decomposition of a single Unicode character.
+ *
+ * This is as defined by Unicode 6.1.
+ *
+ * Since: 2.32
  */
 
 
@@ -5776,9 +5798,9 @@
 
 /**
  * SECTION:objects
+ * @title: GObject
  * @short_description: The base object type
  * @see_also: #GParamSpecObject, g_param_spec_object()
- * @title: The Base Object Type
  *
  * GObject is the fundamental type providing the common attributes and
  * methods for all object types in GTK+, Pango and other libraries
@@ -6764,7 +6786,7 @@
  * @info: the #GTypeInfo struct to be filled in
  * @const_values: An array of #GEnumValue structs for the possible enumeration values. The array is terminated by a struct with all members being 0.
  *
- * This function is meant to be called from the complete_type_info()
+ * This function is meant to be called from the <literal>complete_type_info</literal>
  * function of a #GTypePlugin implementation, as in the following
  * example:
  *

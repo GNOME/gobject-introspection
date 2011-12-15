@@ -209,6 +209,38 @@
 
 
 /**
+ * GBytes:
+ *
+ * A simple refcounted data type representing an immutable byte sequence
+ * from an unspecified origin.
+ *
+ * The purpose of a #GBytes is to keep the memory region that it holds
+ * alive for as long as anyone holds a reference to the bytes.  When
+ * the last reference count is dropped, the memory is released. Multiple
+ * unrelated callers can use byte data in the #GBytes without coordinating
+ * their activities, resting assured that the byte data will not change or
+ * move while they hold a reference.
+ *
+ * A #GBytes can come from many different origins that may have
+ * different procedures for freeing the memory region.  Examples are
+ * memory from g_malloc(), from memory slices, from a #GMappedFile or
+ * memory from other allocators.
+ *
+ * #GBytes work well as keys in #GHashTable. Use g_bytes_equal() and
+ * g_bytes_hash() as parameters to g_hash_table_new() or g_hash_table_new_full().
+ * #GBytes can also be used as keys in a #GTree by passing the g_bytes_compare()
+ * function to g_tree_new().
+ *
+ * The data pointed to by this bytes must not be modified. For a mutable
+ * array of bytes see #GByteArray. Use g_bytes_unref_to_array() to create a
+ * mutable array for a #GBytes sequence. To create an immutable #GBytes from
+ * a mutable #GByteArray, use the g_byte_array_free_to_bytes() function.
+ *
+ * Since: 2.32
+ */
+
+
+/**
  * GCClosure:
  * @closure: the #GClosure
  * @callback: the callback function
@@ -703,6 +735,7 @@
 
 /**
  * GDoubleIEEE754:
+ * @v_double: the double value
  *
  * The #GFloatIEEE754 and #GDoubleIEEE754 unions are used to access the sign,
  * mantissa and exponent of IEEE floats and doubles. These unions are defined
@@ -771,7 +804,7 @@
  * @G_ERR_FLOAT_MALFORMED: malformed floating point number
  *
  * The possible errors, used in the @v_error field
- * of #GTokenValue, when the token is a #G_TOKEN_ERROR.
+ * of #GTokenValue, when the token is a %G_TOKEN_ERROR.
  */
 
 
@@ -784,7 +817,8 @@
  * @G_FILE_ERROR_NOENT: No such file or directory. This is a "file doesn't exist" error for ordinary files that are referenced in contexts where they are expected to already exist.
  * @G_FILE_ERROR_NOTDIR: A file that isn't a directory was specified when a directory is required.
  * @G_FILE_ERROR_NXIO: No such device or address. The system tried to use the device represented by a file you specified, and it couldn't find the device. This can mean that the device file was installed incorrectly, or that the physical device is missing or not correctly attached to the computer.
- * @G_FILE_ERROR_NODEV: The underlying file system of the specified file does not support memory mapping. G_FILE_ERROR_ROFS: The directory containing the new link can't be modified because it's on a read-only file system.
+ * @G_FILE_ERROR_NODEV: The underlying file system of the specified file does not support memory mapping.
+ * @G_FILE_ERROR_ROFS: The directory containing the new link can't be modified because it's on a read-only file system.
  * @G_FILE_ERROR_TXTBSY: Text file busy.
  * @G_FILE_ERROR_FAULT: You passed in a pointer to bad memory. (GLib won't reliably return this, don't pass in pointers to bad memory.)
  * @G_FILE_ERROR_LOOP: Too many levels of symbolic links were encountered in looking up a file name. This often indicates a cycle of symbolic links.
@@ -854,6 +888,7 @@
 
 /**
  * GFloatIEEE754:
+ * @v_float: the double value
  *
  * The #GFloatIEEE754 and #GDoubleIEEE754 unions are used to access the sign,
  * mantissa and exponent of IEEE floats and doubles. These unions are defined
@@ -1052,7 +1087,7 @@
  * GHookFlagMask:
  * @G_HOOK_FLAG_ACTIVE: set if the hook has not been destroyed
  * @G_HOOK_FLAG_IN_CALL: set if the hook is currently being run
- * @G_HOOK_FLAG_MASK: A mask covering all bits reserved for hook flags; see #G_HOOK_FLAGS_USER_SHIFT
+ * @G_HOOK_FLAG_MASK: A mask covering all bits reserved for hook flags; see %G_HOOK_FLAG_USER_SHIFT
  *
  * Flags used internally in the #GHook implementation.
  */
@@ -1317,8 +1352,8 @@
 
 /**
  * GIOFlags:
- * @G_IO_FLAG_APPEND: turns on append mode, corresponds to %O_APPEND (see the documentation of the UNIX open() syscall).
- * @G_IO_FLAG_NONBLOCK: turns on nonblocking mode, corresponds to %O_NONBLOCK/%O_NDELAY (see the documentation of the UNIX open() syscall).
+ * @G_IO_FLAG_APPEND: turns on append mode, corresponds to <literal>O_APPEND</literal> (see the documentation of the UNIX open() syscall).
+ * @G_IO_FLAG_NONBLOCK: turns on nonblocking mode, corresponds to <literal>O_NONBLOCK</literal>/<literal>O_NDELAY</literal> (see the documentation of the UNIX open() syscall).
  * @G_IO_FLAG_IS_READABLE: indicates that the io channel is readable. This flag cannot be changed.
  * @G_IO_FLAG_IS_WRITABLE: indicates that the io channel is writable. This flag cannot be changed.
  * @G_IO_FLAG_IS_SEEKABLE: indicates that the io channel is seekable, i.e. that g_io_channel_seek_position() can be used on it.  This flag cannot be changed.
@@ -2465,7 +2500,8 @@
  * @events: a bitwise combination from #GIOCondition, specifying which events should be polled for. Typically for reading from a file descriptor you would use %G_IO_IN | %G_IO_HUP | %G_IO_ERR, and for writing you would use %G_IO_OUT | %G_IO_ERR.
  * @revents: a bitwise combination of flags from #GIOCondition, returned from the poll() function to indicate which events occurred.
  *
- *
+ * Represents a file descriptor, which events to poll for, and which events
+ * occurred.
  */
 
 
@@ -2862,6 +2898,12 @@
 
 /**
  * GScanner:
+ * @user_data: unused
+ * @max_parse_errors: unused
+ * @parse_errors: g_scanner_error() increments this field
+ * @input_name: name of input stream, featured by the default message handler
+ * @qdata: quarked data
+ * @config: link into the scanner configuration
  * @token: token parsed by the last g_scanner_get_next_token()
  * @value: value of the last token from g_scanner_get_next_token()
  * @line: line number of the last token from g_scanner_get_next_token()
@@ -2870,6 +2912,7 @@
  * @next_value: value of the last token from g_scanner_peek_next_token()
  * @next_line: line number of the last token from g_scanner_peek_next_token()
  * @next_position: char number of the last token from g_scanner_peek_next_token()
+ * @msg_handler: handler function for _warn and _error
  *
  * The data structure representing a lexical scanner.
  *
@@ -2900,7 +2943,7 @@
  * @scan_comment_multi: specifies if multi-line comments are recognized (the default is %TRUE).
  * @scan_identifier: specifies if identifiers are recognized (the default is %TRUE).
  * @scan_identifier_1char: specifies if single-character identifiers are recognized (the default is %FALSE).
- * @scan_identifier_NULL: specifies if %NULL is reported as #G_TOKEN_IDENTIFIER_NULL (the default is %FALSE).
+ * @scan_identifier_NULL: specifies if %NULL is reported as %G_TOKEN_IDENTIFIER_NULL (the default is %FALSE).
  * @scan_symbols: specifies if symbols are recognized (the default is %TRUE).
  * @scan_binary: specifies if binary numbers are recognized (the default is %FALSE).
  * @scan_octal: specifies if octal numbers are recognized (the default is %TRUE).
@@ -2910,11 +2953,12 @@
  * @scan_string_sq: specifies if strings can be enclosed in single quotes (the default is %TRUE).
  * @scan_string_dq: specifies if strings can be enclosed in double quotes (the default is %TRUE).
  * @numbers_2_int: specifies if binary, octal and hexadecimal numbers are reported as #G_TOKEN_INT (the default is %TRUE).
- * @int_2_float: specifies if all numbers are reported as #G_TOKEN_FLOAT (the default is %FALSE).
+ * @int_2_float: specifies if all numbers are reported as %G_TOKEN_FLOAT (the default is %FALSE).
  * @identifier_2_string: specifies if identifiers are reported as strings (the default is %FALSE).
- * @char_2_token: specifies if characters are reported by setting <literal>token = ch</literal> or as #G_TOKEN_CHAR (the default is %TRUE).
- * @symbol_2_token: specifies if symbols are reported by setting <literal>token = v_symbol</literal> or as #G_TOKEN_SYMBOL (the default is %FALSE).
+ * @char_2_token: specifies if characters are reported by setting <literal>token = ch</literal> or as %G_TOKEN_CHAR (the default is %TRUE).
+ * @symbol_2_token: specifies if symbols are reported by setting <literal>token = v_symbol</literal> or as %G_TOKEN_SYMBOL (the default is %FALSE).
  * @scope_0_fallback: specifies if a symbol is searched for in the default scope in addition to the current scope (the default is %FALSE).
+ * @store_int64: use value.v_int64 rather than v_int
  *
  * Specifies the #GScanner parser configuration. Most settings can
  * be changed during the parsing phase and will affect the lexical
@@ -3192,7 +3236,7 @@
  * call malloc(), which includes POSIX functions such as setenv().
  * If you need to set up the child environment differently from
  * the parent, you should use g_get_environ(), g_environ_setenv(),
- * and g_environ_unsetev(), and then pass the complete environment
+ * and g_environ_unsetenv(), and then pass the complete environment
  * list to the <literal>g_spawn...</literal> function.
  */
 
@@ -3202,22 +3246,22 @@
  * @G_SPAWN_ERROR_FORK: Fork failed due to lack of memory.
  * @G_SPAWN_ERROR_READ: Read or select on pipes failed.
  * @G_SPAWN_ERROR_CHDIR: Changing to working directory failed.
- * @G_SPAWN_ERROR_ACCES: execv() returned %EACCES.
- * @G_SPAWN_ERROR_PERM: execv() returned %EPERM.
- * @G_SPAWN_ERROR_2BIG: execv() returned %E2BIG.
- * @G_SPAWN_ERROR_NOEXEC: execv() returned %ENOEXEC.
- * @G_SPAWN_ERROR_NAMETOOLONG: execv() returned %ENAMETOOLONG.
- * @G_SPAWN_ERROR_NOENT: execv() returned %ENOENT.
- * @G_SPAWN_ERROR_NOMEM: execv() returned %ENOMEM.
- * @G_SPAWN_ERROR_NOTDIR: execv() returned %ENOTDIR.
- * @G_SPAWN_ERROR_LOOP: execv() returned %ELOOP.
- * @G_SPAWN_ERROR_TXTBUSY: execv() returned %ETXTBUSY.
- * @G_SPAWN_ERROR_IO: execv() returned %EIO.
- * @G_SPAWN_ERROR_NFILE: execv() returned %ENFILE.
- * @G_SPAWN_ERROR_MFILE: execv() returned %EMFILE.
- * @G_SPAWN_ERROR_INVAL: execv() returned %EINVAL.
- * @G_SPAWN_ERROR_ISDIR: execv() returned %EISDIR.
- * @G_SPAWN_ERROR_LIBBAD: execv() returned %ELIBBAD.
+ * @G_SPAWN_ERROR_ACCES: execv() returned <literal>EACCES</literal>
+ * @G_SPAWN_ERROR_PERM: execv() returned <literal>EPERM</literal>
+ * @G_SPAWN_ERROR_2BIG: execv() returned <literal>E2BIG</literal>
+ * @G_SPAWN_ERROR_NOEXEC: execv() returned <literal>ENOEXEC</literal>
+ * @G_SPAWN_ERROR_NAMETOOLONG: execv() returned <literal>ENAMETOOLONG</literal>
+ * @G_SPAWN_ERROR_NOENT: execv() returned <literal>ENOENT</literal>
+ * @G_SPAWN_ERROR_NOMEM: execv() returned <literal>ENOMEM</literal>
+ * @G_SPAWN_ERROR_NOTDIR: execv() returned <literal>ENOTDIR</literal>
+ * @G_SPAWN_ERROR_LOOP: execv() returned <literal>ELOOP</literal>
+ * @G_SPAWN_ERROR_TXTBUSY: execv() returned <literal>ETXTBUSY</literal>
+ * @G_SPAWN_ERROR_IO: execv() returned <literal>EIO</literal>
+ * @G_SPAWN_ERROR_NFILE: execv() returned <literal>ENFILE</literal>
+ * @G_SPAWN_ERROR_MFILE: execv() returned <literal>EMFILE</literal>
+ * @G_SPAWN_ERROR_INVAL: execv() returned <literal>EINVAL</literal>
+ * @G_SPAWN_ERROR_ISDIR: execv() returned <literal>EISDIR</literal>
+ * @G_SPAWN_ERROR_LIBBAD: execv() returned <literal>ELIBBAD</literal>
  * @G_SPAWN_ERROR_FAILED: Some other fatal failure, <literal>error-&gt;message</literal> should explain.
  *
  * Error codes returned by spawning processes.
@@ -3405,6 +3449,11 @@
 /**
  * GTime:
  *
+ * Simply a replacement for <type>time_t</type>. It has been deprecated
+ * since it is <emphasis>not</emphasis> equivalent to <type>time_t</type>
+ * on 64-bit platforms with a 64-bit <type>time_t</type>.
+ * Unrelated to #GTimer.
+ *
  * Note that <type>GTime</type> is defined to always be a 32bit integer,
  * unlike <type>time_t</type> which may be 64bit on some systems.
  * Therefore, <type>GTime</type> will overflow in the year 2038, and
@@ -3495,6 +3544,20 @@
  * @G_TOKEN_LEFT_PAREN: a '(' character
  * @G_TOKEN_LEFT_CURLY: a '{' character
  * @G_TOKEN_RIGHT_CURLY: a '}' character
+ * @G_TOKEN_RIGHT_PAREN: a ')' character
+ * @G_TOKEN_ERROR: an error occurred
+ * @G_TOKEN_CHAR: a character
+ * @G_TOKEN_BINARY: a binary integer
+ * @G_TOKEN_OCTAL: an octal integer
+ * @G_TOKEN_INT: an integer
+ * @G_TOKEN_HEX: a hex integer
+ * @G_TOKEN_FLOAT: a floating point number
+ * @G_TOKEN_STRING: a string
+ * @G_TOKEN_SYMBOL: a symbol
+ * @G_TOKEN_IDENTIFIER: an identifier
+ * @G_TOKEN_IDENTIFIER_NULL: a null identifier
+ * @G_TOKEN_COMMENT_SINGLE: one line comment
+ * @G_TOKEN_COMMENT_MULTI: multi line comment
  *
  * The possible types of token returned from each
  * g_scanner_get_next_token() call.
@@ -3503,6 +3566,18 @@
 
 /**
  * GTokenValue:
+ * @v_symbol: token symbol value
+ * @v_identifier: token identifier value
+ * @v_binary: token binary integer value
+ * @v_octal: octal integer value
+ * @v_int: integer value
+ * @v_int64: 64-bit integer value
+ * @v_float: floating point value
+ * @v_hex: hex integer value
+ * @v_string: string value
+ * @v_comment: comment value
+ * @v_char: character value
+ * @v_error: error value
  *
  * A union holding the value of the token.
  */
@@ -4531,7 +4606,7 @@
  * Inserts a breakpoint instruction into the code.
  *
  * On x86 and alpha systems this is implemented as a soft interrupt
- * and on other architectures it raises a %SIGTRAP signal.
+ * and on other architectures it raises a <literal>SIGTRAP</literal> signal.
  */
 
 
@@ -4592,7 +4667,7 @@
 /**
  * G_CONST_RETURN:
  *
- * If %G_DISABLE_CONST_RETURNS is defined, this macro expands
+ * If <literal>G_DISABLE_CONST_RETURNS</literal> is defined, this macro expands
  * to nothing. By default, the macro expands to <literal>const</literal>.
  * The macro should be used in place of <literal>const</literal> for
  * functions that return a value that should not be modified. The
@@ -4961,7 +5036,7 @@
  * (GInstanceInitFunc) gtk_gadget_init,
  * (GTypeFlags) flags);
  * {
- * static const GInterfaceInfo g_implement_interface_info = {
+ * const GInterfaceInfo g_implement_interface_info = {
  * (GInterfaceInitFunc) gtk_gadget_gizmo_init
  * };
  * g_type_add_interface_static (g_define_type_id, TYPE_GIZMO, &g_implement_interface_info);
@@ -5641,7 +5716,7 @@
  * G_HOOK_FLAGS:
  * @hook: a #GHook
  *
- * Returns the flags of a hook.
+ * Gets the flags of a hook.
  */
 
 
@@ -5767,7 +5842,7 @@
  *
  * This macro is used to export function prototypes so they can be linked
  * with an external version when no inlining is performed. The file which
- * implements the functions should define %G_IMPLEMENTS_INLINES
+ * implements the functions should define <literal>G_IMPLEMENTS_INLINES</literal>
  * before including the headers which contain %G_INLINE_FUNC declarations.
  * Since inlining is very compiler-dependent using these macros correctly
  * is very difficult. Their use is strongly discouraged.
@@ -6436,7 +6511,7 @@
  * G_LOCK_DEFINE:
  * @name: the name of the lock
  *
- * The %G_LOCK_* macros provide a convenient interface to #GMutex.
+ * The <literal>G_LOCK_*</literal> macros provide a convenient interface to #GMutex.
  * #G_LOCK_DEFINE defines a lock. It can appear in any place where
  * variable definitions may appear in programs, i.e. in the first block
  * of a function or outside of functions. The @name parameter will be
@@ -6444,10 +6519,10 @@
  * can use names of existing variables as the parameter - e.g. the name
  * of the variable you intend to protect with the lock. Look at our
  * <function>give_me_next_number()</function> example using the
- * %G_LOCK_* macros:
+ * <literal>G_LOCK_*</literal> macros:
  *
  * <example>
- * <title>Using the %G_LOCK_* convenience macros</title>
+ * <title>Using the <literal>G_LOCK_*</literal> convenience macros</title>
  * <programlisting>
  * G_LOCK_DEFINE (current_number);
  *
@@ -7730,6 +7805,15 @@
 
 
 /**
+ * G_TYPE_BYTES:
+ *
+ * The #GType for #GBytes.
+ *
+ * Since: 2.32
+ */
+
+
+/**
  * G_TYPE_BYTE_ARRAY:
  *
  * The #GType for a boxed type holding a #GByteArray reference.
@@ -8720,6 +8804,18 @@
 
 
 /**
+ * G_UNICHAR_MAX_DECOMPOSITION_LENGTH:
+ *
+ * The maximum length (in codepoints) of a compatibility or canonical
+ * decomposition of a single Unicode character.
+ *
+ * This is as defined by Unicode 6.1.
+ *
+ * Since: 2.32
+ */
+
+
+/**
  * G_UNICODE_COMBINING_MARK:
  *
  * Older name for %G_UNICODE_SPACING_MARK.
@@ -8740,8 +8836,8 @@
  * It is expected that most code will not look at %errno from these
  * APIs. Important cases where one would want to differentiate between
  * errors are already covered by existing cross-platform GLib API,
- * such as e.g. #GFile wrapping %ENOENT.  However, it is provided for
- * completeness, at least.
+ * such as e.g. #GFile wrapping <literal>ENOENT</literal>.  However, it is
+ * provided for completeness, at least.
  */
 
 
@@ -9561,15 +9657,13 @@
 /**
  * SECTION:arrays_byte
  * @title: Byte Arrays
- * @short_description: arrays of bytes, which grow automatically as elements are added
+ * @short_description: arrays of bytes
  *
- * #GByteArray is based on #GArray, to provide arrays of bytes which
- * grow automatically as elements are added.
+ * #GByteArray is a mutable array of bytes based on #GArray, to provide arrays
+ * of bytes which grow automatically as elements are added.
  *
- * To create a new #GByteArray use g_byte_array_new().
- *
- * To add elements to a #GByteArray, use g_byte_array_append(), and
- * g_byte_array_prepend().
+ * To create a new #GByteArray use g_byte_array_new(). To add elements to a
+ * #GByteArray, use g_byte_array_append(), and g_byte_array_prepend().
  *
  * To set the size of a #GByteArray, use g_byte_array_set_size().
  *
@@ -9596,6 +9690,9 @@
  * g_byte_array_free (gbarray, TRUE);
  * </programlisting>
  * </example>
+ *
+ * See #GBytes if you are interested in an immutable object representing a
+ * sequence of bytes.
  */
 
 
@@ -10400,7 +10497,7 @@
  * If there's a "generic" or "unknown" error code for unrecoverable
  * errors it doesn't make sense to distinguish with specific codes,
  * it should be called <literal>&lt;NAMESPACE&gt;_&lt;MODULE&gt;_ERROR_FAILED</literal>,
- * for example %G_SPAWN_ERROR_FAILED or %G_THREAD_ERROR_FAILED.
+ * for example %G_SPAWN_ERROR_FAILED.
  * </para></listitem>
  * </itemizedlist>
  *
@@ -12489,7 +12586,7 @@
  * Note that it is not safe to assume that your program has no threads
  * even if you don't call g_thread_new() yourself. GLib and GIO can
  * and will create threads for their own purposes in some cases, such
- * as when using g_unix_signal_source_new() or when using #GDBus.
+ * as when using g_unix_signal_source_new() or when using GDBus.
  *
  * Originally, UNIX did not have threads, and therefore some traditional
  * UNIX APIs are problematic in threaded programs. Some notable examples
@@ -13130,8 +13227,8 @@
  * greater than second arg).
  *
  * If two array elements compare equal, their order in the sorted array
- * is undefined. If you want equal elements to keep their order &#8211; i.e.
- * you want a stable sort &#8211; you can write a comparison function that,
+ * is undefined. If you want equal elements to keep their order (i.e.
+ * you want a stable sort) you can write a comparison function that,
  * if two elements would otherwise compare equal, compares them by
  * their addresses.
  */
@@ -13224,7 +13321,7 @@
  * recognizes standard ASCII letters and ignores the locale,
  * returning %FALSE for all non-ASCII characters. Also, unlike
  * the standard library function, this takes a <type>char</type>,
- * not an <type>int</type>, so don't call it on %EOF, but no need to
+ * not an <type>int</type>, so don't call it on <literal>EOF</literal>, but no need to
  * cast to #guchar before passing a possibly non-ASCII character in.
  *
  * Returns: %TRUE if @c is an ASCII alphanumeric character
@@ -13241,7 +13338,7 @@
  * recognizes standard ASCII letters and ignores the locale,
  * returning %FALSE for all non-ASCII characters. Also, unlike
  * the standard library function, this takes a <type>char</type>,
- * not an <type>int</type>, so don't call it on %EOF, but no need to
+ * not an <type>int</type>, so don't call it on <literal>EOF</literal>, but no need to
  * cast to #guchar before passing a possibly non-ASCII character in.
  *
  * Returns: %TRUE if @c is an ASCII alphabetic character
@@ -13258,7 +13355,7 @@
  * recognizes standard ASCII control characters and ignores the
  * locale, returning %FALSE for all non-ASCII characters. Also,
  * unlike the standard library function, this takes a <type>char</type>,
- * not an <type>int</type>, so don't call it on %EOF, but no need to
+ * not an <type>int</type>, so don't call it on <literal>EOF</literal>, but no need to
  * cast to #guchar before passing a possibly non-ASCII character in.
  *
  * Returns: %TRUE if @c is an ASCII control character.
@@ -13273,7 +13370,7 @@
  *
  * Unlike the standard C library isdigit() function, this takes
  * a <type>char</type>, not an <type>int</type>, so don't call it
- * on %EOF, but no need to cast to #guchar before passing a possibly
+ * on <literal>EOF</literal>, but no need to cast to #guchar before passing a possibly
  * non-ASCII character in.
  *
  * Returns: %TRUE if @c is an ASCII digit.
@@ -13290,7 +13387,7 @@
  * recognizes standard ASCII characters and ignores the locale,
  * returning %FALSE for all non-ASCII characters. Also, unlike
  * the standard library function, this takes a <type>char</type>,
- * not an <type>int</type>, so don't call it on %EOF, but no need
+ * not an <type>int</type>, so don't call it on <literal>EOF</literal>, but no need
  * to cast to #guchar before passing a possibly non-ASCII character in.
  *
  * Returns: %TRUE if @c is an ASCII printing character other than space.
@@ -13307,7 +13404,7 @@
  * recognizes standard ASCII letters and ignores the locale,
  * returning %FALSE for all non-ASCII characters. Also, unlike
  * the standard library function, this takes a <type>char</type>,
- * not an <type>int</type>, so don't call it on %EOF, but no need
+ * not an <type>int</type>, so don't call it on <literal>EOF</literal>, but no need
  * to worry about casting to #guchar before passing a possibly
  * non-ASCII character in.
  *
@@ -13325,7 +13422,7 @@
  * recognizes standard ASCII characters and ignores the locale,
  * returning %FALSE for all non-ASCII characters. Also, unlike
  * the standard library function, this takes a <type>char</type>,
- * not an <type>int</type>, so don't call it on %EOF, but no need
+ * not an <type>int</type>, so don't call it on <literal>EOF</literal>, but no need
  * to cast to #guchar before passing a possibly non-ASCII character in.
  *
  * Returns: %TRUE if @c is an ASCII printing character.
@@ -13342,7 +13439,7 @@
  * recognizes standard ASCII letters and ignores the locale,
  * returning %FALSE for all non-ASCII characters. Also, unlike
  * the standard library function, this takes a <type>char</type>,
- * not an <type>int</type>, so don't call it on %EOF, but no need to
+ * not an <type>int</type>, so don't call it on <literal>EOF</literal>, but no need to
  * cast to #guchar before passing a possibly non-ASCII character in.
  *
  * Returns: %TRUE if @c is an ASCII punctuation character.
@@ -13359,7 +13456,7 @@
  * recognizes standard ASCII white-space and ignores the locale,
  * returning %FALSE for all non-ASCII characters. Also, unlike
  * the standard library function, this takes a <type>char</type>,
- * not an <type>int</type>, so don't call it on %EOF, but no need to
+ * not an <type>int</type>, so don't call it on <literal>EOF</literal>, but no need to
  * cast to #guchar before passing a possibly non-ASCII character in.
  *
  * Returns: %TRUE if @c is an ASCII white-space character
@@ -13376,7 +13473,7 @@
  * recognizes standard ASCII letters and ignores the locale,
  * returning %FALSE for all non-ASCII characters. Also, unlike
  * the standard library function, this takes a <type>char</type>,
- * not an <type>int</type>, so don't call it on %EOF, but no need to
+ * not an <type>int</type>, so don't call it on <literal>EOF</literal>, but no need to
  * worry about casting to #guchar before passing a possibly non-ASCII
  * character in.
  *
@@ -13392,7 +13489,7 @@
  *
  * Unlike the standard C library isxdigit() function, this takes
  * a <type>char</type>, not an <type>int</type>, so don't call it
- * on %EOF, but no need to cast to #guchar before passing a
+ * on <literal>EOF</literal>, but no need to cast to #guchar before passing a
  * possibly non-ASCII character in.
  *
  * Returns: %TRUE if @c is an ASCII hexadecimal-digit character.
@@ -13484,12 +13581,12 @@
  * To convert from a #gdouble to a string in a locale-insensitive
  * way, use g_ascii_dtostr().
  *
- * If the correct value would cause overflow, plus or minus %HUGE_VAL
- * is returned (according to the sign of the value), and %ERANGE is
- * stored in %errno. If the correct value would cause underflow,
- * zero is returned and %ERANGE is stored in %errno.
+ * If the correct value would cause overflow, plus or minus <literal>HUGE_VAL</literal>
+ * is returned (according to the sign of the value), and <literal>ERANGE</literal> is
+ * stored in <literal>errno</literal>. If the correct value would cause underflow,
+ * zero is returned and <literal>ERANGE</literal> is stored in <literal>errno</literal>.
  *
- * This function resets %errno before calling strtod() so that
+ * This function resets <literal>errno</literal> before calling strtod() so that
  * you can reliably detect overflow and underflow.
  *
  * Returns: the #gdouble value.
@@ -13514,10 +13611,11 @@
  * locale-sensitive system strtoll() function.
  *
  * If the correct value would cause overflow, %G_MAXINT64 or %G_MININT64
- * is returned, and %ERANGE is stored in %errno.  If the base is
- * outside the valid range, zero is returned, and %EINVAL is stored
- * in %errno.  If the string conversion fails, zero is returned, and
- * @endptr returns @nptr (if @endptr is non-%NULL).
+ * is returned, and <literal>ERANGE</literal> is stored in <literal>errno</literal>.
+ * If the base is outside the valid range, zero is returned, and
+ * <literal>EINVAL</literal> is stored in <literal>errno</literal>. If the
+ * string conversion fails, zero is returned, and @endptr returns @nptr
+ * (if @endptr is non-%NULL).
  *
  * Returns: the #gint64 value or zero on error.
  * Since: 2.12
@@ -13542,10 +13640,11 @@
  * locale-sensitive system strtoull() function.
  *
  * If the correct value would cause overflow, %G_MAXUINT64
- * is returned, and %ERANGE is stored in %errno.  If the base is
- * outside the valid range, zero is returned, and %EINVAL is stored
- * in %errno.  If the string conversion fails, zero is returned, and
- * @endptr returns @nptr (if @endptr is non-%NULL).
+ * is returned, and <literal>ERANGE</literal> is stored in <literal>errno</literal>.
+ * If the base is outside the valid range, zero is returned, and
+ * <literal>EINVAL</literal> is stored in <literal>errno</literal>.
+ * If the string conversion fails, zero is returned, and @endptr returns
+ * @nptr (if @endptr is non-%NULL).
  *
  * Returns: the #guint64 value or zero on error.
  * Since: 2.2
@@ -13579,7 +13678,7 @@
  * all non-ASCII characters unchanged, even if they are lower case
  * letters in a particular character set. Also unlike the standard
  * library function, this takes and returns a char, not an int, so
- * don't call it on %EOF but no need to worry about casting to #guchar
+ * don't call it on <literal>EOF</literal> but no need to worry about casting to #guchar
  * before passing a possibly non-ASCII character in.
  *
  * If @c is not an ASCII upper case letter,
@@ -13600,7 +13699,7 @@
  * all non-ASCII characters unchanged, even if they are upper case
  * letters in a particular character set. Also unlike the standard
  * library function, this takes and returns a char, not an int, so
- * don't call it on %EOF but no need to worry about casting to #guchar
+ * don't call it on <literal>EOF</literal> but no need to worry about casting to #guchar
  * before passing a possibly non-ASCII character in.
  *
  * If @c is not an ASCII lower case letter,
@@ -13634,7 +13733,7 @@
  * an error message is logged and the application is terminated.
  *
  * The macro can be turned off in final releases of code by defining
- * #G_DISABLE_ASSERT when compiling the application.
+ * <envar>G_DISABLE_ASSERT</envar> when compiling the application.
  */
 
 
@@ -13778,7 +13877,7 @@
  * application is terminated.
  *
  * The macro can be turned off in final releases of code by defining
- * #G_DISABLE_ASSERT when compiling the application.
+ * <envar>G_DISABLE_ASSERT</envar> when compiling the application.
  */
 
 
@@ -15526,10 +15625,44 @@
 
 
 /**
+ * g_byte_array_free_to_bytes:
+ * @array: (transfer full): a #GByteArray
+ *
+ * Transfers the data from the #GByteArray into a new immutable #GBytes.
+ *
+ * The #GByteArray is freed unless the reference count of @array is greater
+ * than one, the #GByteArray wrapper is preserved but the size of @array
+ * will be set to zero.
+ *
+ * This is identical to using g_bytes_new_take() and g_byte_array_free()
+ * together.
+ *
+ *
+ * data that was in the array
+ *
+ * Since: 2.32
+ * Returns: (transfer full): a new immutable #GBytes representing same byte
+ */
+
+
+/**
  * g_byte_array_new:
  * @Returns: the new #GByteArray.
  *
  * Creates a new #GByteArray with a reference count of 1.
+ */
+
+
+/**
+ * g_byte_array_new_take:
+ * @data: (array length=len): byte data for the array
+ * @len: length of @data
+ *
+ * Create byte array containing the data. The data will be owned by the array
+ * and will be freed with g_free(), i.e. it could be allocated using g_strdup().
+ *
+ * Since: 2.32
+ * Returns: (transfer full): a new #GByteArray
  */
 
 
@@ -15628,8 +15761,8 @@
  * first arg is greater than second arg).
  *
  * If two array elements compare equal, their order in the sorted array
- * is undefined. If you want equal elements to keep their order &#8211; i.e.
- * you want a stable sort &#8211; you can write a comparison function that,
+ * is undefined. If you want equal elements to keep their order (i.e.
+ * you want a stable sort) you can write a comparison function that,
  * if two elements would otherwise compare equal, compares them by
  * their addresses.
  */
@@ -15656,6 +15789,223 @@
  * thread.
  *
  * Since: 2.22
+ */
+
+
+/**
+ * g_bytes_compare:
+ * @bytes1: (type GLib.Bytes): a pointer to a #GBytes
+ * @bytes2: (type GLib.Bytes): a pointer to a #GBytes to compare with @bytes1
+ *
+ * Compares the two #GBytes values.
+ *
+ * This function can be used to sort GBytes instances in lexographical order.
+ *
+ * greater, and zero if bytes2 is equal to bytes1
+ *
+ * Returns: a negative value if bytes2 is lesser, a positive value if bytes2 is
+ * Since: 2.32
+ */
+
+
+/**
+ * g_bytes_equal:
+ * @bytes1: (type GLib.Bytes): a pointer to a #GBytes
+ * @bytes2: (type GLib.Bytes): a pointer to a #GBytes to compare with @bytes1
+ *
+ * Compares the two #GBytes values being pointed to and returns
+ * %TRUE if they are equal.
+ *
+ * This function can be passed to g_hash_table_new() as the @key_equal_func
+ * parameter, when using non-%NULL #GBytes pointers as keys in a #GHashTable.
+ *
+ * Returns: %TRUE if the two keys match.
+ * Since: 2.32
+ */
+
+
+/**
+ * g_bytes_get_data:
+ * @bytes: a #GBytes
+ * @size: (out) (allow-none): location to return size of byte data
+ *
+ * Get the byte data in the #GBytes. This data should not be modified.
+ *
+ * This function will always return the same pointer for a given #GBytes.
+ *
+ * Returns: (array length=size) (type guint8): a pointer to the byte data
+ * Since: 2.32
+ */
+
+
+/**
+ * g_bytes_get_size:
+ * @bytes: a #GBytes
+ *
+ * Get the size of the byte data in the #GBytes.
+ *
+ * This function will always return the same value for a given #GBytes.
+ *
+ * Returns: the size
+ * Since: 2.32
+ */
+
+
+/**
+ * g_bytes_hash:
+ * @bytes: (type GLib.Bytes): a pointer to a #GBytes key
+ *
+ * Creates an integer hash code for the byte data in the #GBytes.
+ *
+ * This function can be passed to g_hash_table_new() as the @key_equal_func
+ * parameter, when using non-%NULL #GBytes pointers as keys in a #GHashTable.
+ *
+ * Returns: a hash value corresponding to the key.
+ * Since: 2.32
+ */
+
+
+/**
+ * g_bytes_new:
+ * @data: (array length=size): the data to be used for the bytes
+ * @size: the size of @data
+ *
+ * Creates a new #GBytes from @data.
+ *
+ * @data is copied.
+ *
+ * Returns: (transfer full): a new #GBytes
+ * Since: 2.32
+ */
+
+
+/**
+ * g_bytes_new_from_bytes:
+ * @bytes: a #GBytes
+ * @offset: offset which subsection starts at
+ * @length: length of subsection
+ *
+ * Creates a #GBytes which is a subsection of another #GBytes. The @offset +
+ * @length may not be longer than the size of @bytes.
+ *
+ * A reference to @bytes will be held by the newly created #GBytes until
+ * the byte data is no longer needed.
+ *
+ * Returns: (transfer full): a new #GBytes
+ * Since: 2.32
+ */
+
+
+/**
+ * g_bytes_new_static:
+ * @data: (array length=size): the data to be used for the bytes
+ * @size: the size of @data
+ * @data must be static (ie: never modified or freed).
+ *
+ * Creates a new #GBytes from static data.
+ *
+ * Returns: (transfer full): a new #GBytes
+ * Since: 2.32
+ */
+
+
+/**
+ * g_bytes_new_take:
+ * @data: (transfer full) (array length=size): the data to be used for the bytes
+ * @size: the size of @data
+ *
+ * Creates a new #GBytes from @data.
+ *
+ * After this call, @data belongs to the bytes and may no longer be
+ * modified by the caller.  g_free() will be called on @data when the
+ * bytes is no longer in use. Because of this @data must have been created by
+ * a call to g_malloc(), g_malloc0() or g_realloc() or by one of the many
+ * functions that wrap these calls (such as g_new(), g_strdup(), etc).
+ *
+ * For creating #GBytes with memory from other allocators, see
+ * g_bytes_new_with_free_func().
+ *
+ * Returns: (transfer full): a new #GBytes
+ * Since: 2.32
+ */
+
+
+/**
+ * g_bytes_new_with_free_func:
+ * @data: (array length=size): the data to be used for the bytes
+ * @size: the size of @data
+ * @free_func: the function to call to release the data
+ * @user_data: data to pass to @free_func
+ *
+ * Creates a #GBytes from @data.
+ *
+ * When the last reference is dropped, @free_func will be called with the
+ * @user_data argument.
+ *
+ * @data must not be modified after this call is made until @free_func has
+ * been called to indicate that the bytes is no longer in use.
+ *
+ * Returns: (transfer full): a new #GBytes
+ * Since: 2.32
+ */
+
+
+/**
+ * g_bytes_ref:
+ * @bytes: a #GBytes
+ *
+ * Increase the reference count on @bytes.
+ *
+ * Returns: the #GBytes
+ * Since: 2.32
+ */
+
+
+/**
+ * g_bytes_unref:
+ * @bytes: (allow-none): a #GBytes
+ *
+ * Releases a reference on @bytes.  This may result in the bytes being
+ * freed.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * g_bytes_unref_to_array:
+ * @bytes: (transfer full): a #GBytes
+ *
+ * Unreferences the bytes, and returns a new mutable #GByteArray containing
+ * the same byte data.
+ *
+ * As an optimization, the byte data is transferred to the array without copying
+ * if this was the last reference to bytes and bytes was created with
+ * g_bytes_new(), g_bytes_new_take() or g_byte_array_free_to_bytes(). In all
+ * other cases the data is copied.
+ *
+ * Returns: (transfer full): a new mutable #GByteArray containing the same byte data
+ * Since: 2.32
+ */
+
+
+/**
+ * g_bytes_unref_to_data:
+ * @bytes: (transfer full): a #GBytes
+ * @size: location to place the length of the returned data
+ *
+ * Unreferences the bytes, and returns a pointer the same byte data
+ * contents.
+ *
+ * As an optimization, the byte data is returned without copying if this was
+ * the last reference to bytes and bytes was created with g_bytes_new(),
+ * g_bytes_new_take() or g_byte_array_free_to_bytes(). In all other cases the
+ * data is copied.
+ *
+ * be freed with g_free()
+ *
+ * Returns: (transfer full): a pointer to the same byte data, which should
+ * Since: 2.32
  */
 
 
@@ -16265,7 +16615,7 @@
  * example.
  *
  * You can also make critical warnings fatal at runtime by
- * setting the %G_DEBUG environment variable (see
+ * setting the <envar>G_DEBUG</envar> environment variable (see
  * <ulink url="glib-running.html">Running GLib Applications</ulink>).
  */
 
@@ -16672,6 +17022,7 @@
 
 /**
  * g_date_free:
+ * @date: a #GDate to free
  *
  * Frees a #GDate returned from g_date_new().
  */
@@ -16796,6 +17147,8 @@
  * year. This function is basically telling you how many
  * Sundays are in the year, i.e. there are 53 Sundays if
  * one of the extra days happens to be a Sunday.)
+ *
+ * Returns: the number of weeks in @year
  */
 
 
@@ -16884,8 +17237,8 @@
 
 /**
  * g_date_new_julian:
+ * @julian_day: days since January 1, Year 1
  *
- * julian_day: days since January 1, Year 1
  * Like g_date_new(), but also sets the value of the date. Assuming the
  * Julian day number you pass in is valid (greater than 0, less than an
  * unreasonably large number), the returned date will be valid.
@@ -18215,7 +18568,7 @@
  * @category: a locale category
  *
  * This is a variant of g_dgettext() that allows specifying a locale
- * category instead of always using %LC_MESSAGES. See g_dgettext() for
+ * category instead of always using <envar>LC_MESSAGES</envar>. See g_dgettext() for
  * more information about how this functions differs from calling
  * dcgettext() directly.
  *
@@ -18654,9 +19007,9 @@
  * g_file_error_from_errno:
  * @err_no: an "errno" value
  *
- * Gets a #GFileError constant based on the passed-in @errno.
- * For example, if you pass in %EEXIST this function returns
- * #G_FILE_ERROR_EXIST. Unlike @errno values, you can portably
+ * Gets a #GFileError constant based on the passed-in @err_no.
+ * For example, if you pass in <literal>EEXIST</literal> this function returns
+ * #G_FILE_ERROR_EXIST. Unlike <literal>errno</literal> values, you can portably
  * assume that all #GFileError values will exist.
  *
  * Normally a #GFileError value goes into a #GError returned
@@ -18824,7 +19177,7 @@
  * %G_FILE_TEST_IS_SYMLINK will always return %FALSE. Testing for
  * %G_FILE_TEST_IS_EXECUTABLE will just check that the file exists and
  * its name indicates that it is executable, checking for well-known
- * extensions and those listed in the %PATHEXT environment variable.
+ * extensions and those listed in the <envar>PATHEXT</envar> environment variable.
  *
  * Returns: whether a test was %TRUE
  */
@@ -19101,7 +19454,7 @@
  *
  * opened, or %NULL if an error occurred.
  *
- * Returns: A <type>FILE</type> pointer if the file was successfully
+ * Returns: A <literal>FILE</literal> pointer if the file was successfully
  * Since: 2.6
  */
 
@@ -19342,13 +19695,13 @@
  *
  * Queries the system monotonic time, if available.
  *
- * On POSIX systems with clock_gettime() and %CLOCK_MONOTONIC this call
+ * On POSIX systems with clock_gettime() and <literal>CLOCK_MONOTONIC</literal> this call
  * is a very shallow wrapper for that.  Otherwise, we make a best effort
  * that probably involves returning the wall clock time (with at least
  * microsecond accuracy, subject to the limitations of the OS kernel).
  *
- * It's important to note that POSIX %CLOCK_MONOTONIC does not count
- * time spent while the machine is suspended.
+ * It's important to note that POSIX <literal>CLOCK_MONOTONIC</literal> does
+ * not count time spent while the machine is suspended.
  *
  * On Windows, "limitations of the OS kernel" is a rather substantial
  * statement.  Depending on the configuration of the system, the wall
@@ -20825,7 +21178,7 @@
 
 /**
  * g_io_channel_error_from_errno:
- * @en: an <literal>errno</literal> error number, e.g. %EINVAL
+ * @en: an <literal>errno</literal> error number, e.g. <literal>EINVAL</literal>
  *
  * Converts an <literal>errno</literal> error number to a #GIOChannelError.
  *
@@ -21213,7 +21566,7 @@
  * @flags: the flags to set on the IO channel
  * @error: A location to return an error of type #GIOChannelError
  *
- * Sets the (writeable) flags in @channel to (@flags & %G_IO_CHANNEL_SET_MASK).
+ * Sets the (writeable) flags in @channel to (@flags & %G_IO_FLAG_SET_MASK).
  *
  * Returns: the status of the operation.
  */
@@ -22802,7 +23155,7 @@
  * %G_LOG_LEVEL_ERROR is always fatal.
  *
  * You can also make some message levels fatal at runtime by setting
- * the %G_DEBUG environment variable (see
+ * the <envar>G_DEBUG</envar> environment variable (see
  * <ulink url="glib-running.html">Running GLib Applications</ulink>).
  *
  * Returns: the old fatal mask
@@ -24505,7 +24858,7 @@
  * g_mem_gc_friendly:
  *
  * This variable is %TRUE if the <envar>G_DEBUG</envar> environment variable
- * includes the key <link linkend="G_DEBUG">gc-friendly</link>.
+ * includes the key <literal>gc-friendly</literal>.
  */
 
 
@@ -26512,8 +26865,8 @@
  * greater than second arg).
  *
  * If two array elements compare equal, their order in the sorted array
- * is undefined. If you want equal elements to keep their order &#8211; i.e.
- * you want a stable sort &#8211; you can write a comparison function that,
+ * is undefined. If you want equal elements to keep their order (i.e.
+ * you want a stable sort) you can write a comparison function that,
  * if two elements would otherwise compare equal, compares them by
  * their addresses.
  *
@@ -27389,7 +27742,7 @@
 
 /**
  * g_rec_mutex_unlock:
- * @rec_mutex: a #RecGMutex
+ * @rec_mutex: a #GRecMutex
  *
  * Unlocks @rec_mutex. If another thread is blocked in a
  * g_rec_mutex_lock() call for @rec_mutex, it will become unblocked
@@ -28551,8 +28904,8 @@
  * g_scanner_unexp_token:
  * @scanner: a #GScanner
  * @expected_token: the expected token
- * @identifier_spec: a string describing how the scanner's user refers to identifiers (%NULL defaults to "identifier"). This is used if @expected_token is #G_TOKEN_IDENTIFIER or #G_TOKEN_IDENTIFIER_NULL.
- * @symbol_spec: a string describing how the scanner's user refers to symbols (%NULL defaults to "symbol"). This is used if @expected_token is #G_TOKEN_SYMBOL or any token value greater than #G_TOKEN_LAST.
+ * @identifier_spec: a string describing how the scanner's user refers to identifiers (%NULL defaults to "identifier"). This is used if @expected_token is %G_TOKEN_IDENTIFIER or %G_TOKEN_IDENTIFIER_NULL.
+ * @symbol_spec: a string describing how the scanner's user refers to symbols (%NULL defaults to "symbol"). This is used if @expected_token is %G_TOKEN_SYMBOL or any token value greater than %G_TOKEN_LAST.
  * @symbol_name: the name of the symbol, if the scanner's current token is a symbol.
  * @message: a message string to output at the end of the warning/error, or %NULL.
  * @is_error: if %TRUE it is output as an error. If %FALSE it is output as a warning.
@@ -30553,7 +30906,7 @@
  * will only be searched if you pass the %G_SPAWN_SEARCH_PATH flag.
  * If the program name is not a full path and %G_SPAWN_SEARCH_PATH flag is not
  * used, then the program will be run from the current directory (or
- * %working_directory, if specified); this might be unexpected or even
+ * @working_directory, if specified); this might be unexpected or even
  * dangerous in some cases when the current directory is world-writable.
  *
  * On Windows, note that all the string or string vector arguments to
@@ -30607,7 +30960,7 @@
  * call g_spawn_close_pid() on the @child_pid, in order to free
  * resources which may be associated with the child process. (On Unix,
  * using a child watch is equivalent to calling waitpid() or handling
- * the %SIGCHLD signal manually. On Windows, calling g_spawn_close_pid()
+ * the <literal>SIGCHLD</literal> signal manually. On Windows, calling g_spawn_close_pid()
  * is equivalent to calling CloseHandle() on the process handle returned
  * in @child_pid).  See g_child_watch_add().
  *
@@ -32210,10 +32563,10 @@
  * Create a new #GTestCase, named @test_name, this API is fairly
  * low level, calling g_test_add() or g_test_add_func() is preferable.
  * When this test is executed, a fixture structure of size @data_size
- * will be allocated and filled with 0s. Then data_setup() is called
+ * will be allocated and filled with 0s. Then @data_setup is called
  * to initialize the fixture. After fixture setup, the actual test
- * function data_test() is called. Once the test run completed, the
- * fixture structure is torn down  by calling data_teardown() and
+ * function @data_test is called. Once the test run completed, the
+ * fixture structure is torn down  by calling @data_teardown and
  * after that the memory is released.
  *
  * Splitting up a test run into fixture setup, test function and
@@ -32472,7 +32825,7 @@
  * @destroy_func: Destroy callback for teardown phase.
  * @destroy_data: Destroy callback data.
  *
- * This function enqueus a callback @destroy_func() to be executed
+ * This function enqueus a callback @destroy_func to be executed
  * during the next test case teardown phase. This is most useful
  * to auto destruct allocted test resources at the end of a test run.
  * Resources are released in reverse queue order, that means enqueueing
@@ -34320,7 +34673,8 @@
  * this may change in the future (very unlikely though).
  * At any rate, Unicode does guarantee that a buffer of length
  * 18 is always enough for both compatibility and canonical
- * decompositions.
+ * decompositions, so that is the size recommended. This is provided
+ * as %G_UNICHAR_MAX_DECOMPOSITION_LENGTH.
  *
  * See <ulink url="http://unicode.org/reports/tr15/">UAX#15</ulink>
  * for details.
@@ -34761,12 +35115,13 @@
  * Similar to the UNIX pipe() call, but on modern systems like Linux
  * uses the pipe2() system call, which atomically creates a pipe with
  * the configured flags.  The only supported flag currently is
- * %FD_CLOEXEC.  If for example you want to configure %O_NONBLOCK,
- * that must still be done separately with fcntl().
+ * <literal>FD_CLOEXEC</literal>.  If for example you want to configure
+ * <literal>O_NONBLOCK</literal>, that must still be done separately with
+ * fcntl().
  *
- * <note>This function does *not* take %O_CLOEXEC, it takes
- * %FD_CLOEXEC as if for fcntl(); these are different on
- * Linux/glibc.</note>
+ * <note>This function does *not* take <literal>O_CLOEXEC</literal>, it takes
+ * <literal>FD_CLOEXEC</literal> as if for fcntl(); these are
+ * different on Linux/glibc.</note>
  *
  * Returns: %TRUE on success, %FALSE if not (and errno will be set).
  * Since: 2.30
@@ -34780,8 +35135,8 @@
  * @error: a #GError
  *
  * Control the non-blocking state of the given file descriptor,
- * according to @nonblock.  On most systems this uses %O_NONBLOCK, but
- * on some older ones may use %O_NDELAY.
+ * according to @nonblock.  On most systems this uses <literal>O_NONBLOCK</literal>, but
+ * on some older ones may use <literal>O_NDELAY</literal>.
  *
  * Returns: %TRUE if successful
  * Since: 2.30
@@ -34825,12 +35180,13 @@
  * @signum: A signal number
  *
  * Create a #GSource that will be dispatched upon delivery of the UNIX
- * signal @signum.  Currently only %SIGHUP, %SIGINT, and %SIGTERM can
+ * signal @signum.  Currently only <literal>SIGHUP</literal>,
+ * <literal>SIGINT</literal>, and <literal>SIGTERM</literal> can
  * be monitored.  Note that unlike the UNIX default, all sources which
  * have created a watch will be dispatched, regardless of which
  * underlying thread invoked g_unix_signal_source_new().
  *
- * For example, an effective use of this function is to handle SIGTERM
+ * For example, an effective use of this function is to handle <literal>SIGTERM</literal>
  * cleanly; flushing any outstanding files, and then calling
  * g_main_loop_quit ().  It is not safe to do any of this a regular
  * UNIX signal handler; your handler may be invoked while malloc() or
@@ -38366,7 +38722,7 @@
  * A convenience function/macro to log a warning message.
  *
  * You can make warnings fatal at runtime by setting the
- * %G_DEBUG environment variable (see
+ * <envar>G_DEBUG</envar> environment variable (see
  * <ulink url="glib-running.html">Running GLib Applications</ulink>).
  */
 

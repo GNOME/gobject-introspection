@@ -62,7 +62,7 @@
  * @change_state: the callback to connect to the "change-state" signal of the action
  *
  * This struct defines a single action.  It is for use with
- * g_simple_action_group_add_entries().
+ * g_action_map_add_action_entries().
  *
  * The order of the items in the structure are intended to reflect
  * frequency of use.  It is permissible to use an incomplete initialiser
@@ -70,7 +70,7 @@
  * after @name are optional.  Additional optional fields may be added in
  * the future.
  *
- * See g_simple_action_group_add_entries() for an example.
+ * See g_action_map_add_action_entries() for an example.
  */
 
 
@@ -134,7 +134,9 @@
  * @get_action_enabled: the virtual function pointer for g_action_group_get_action_enabled()
  * @get_action_state: the virtual function pointer for g_action_group_get_action_state()
  * @set_action_state: the virtual function pointer for g_action_group_set_action_state()
+ * @query_action: the virtual function pointer for g_action_group_query_action()
  * @activate_action: the virtual function pointer for g_action_group_activate_action()
+ * @change_action_state: the virtual function pointer for g_action_group_change_action_state()
  * @action_added: the class closure for the #GActionGroup::action-added signal
  * @action_removed: the class closure for the #GActionGroup::action-removed signal
  * @action_enabled_changed: the class closure for the #GActionGroup::action-enabled-changed signal
@@ -157,9 +159,21 @@
  * @change_state: the virtual function pointer for g_action_change_state()
  * @activate: the virtual function pointer for g_action_activate().  Note that #GAction does not have an 'activate' signal but that implementations of it may have one.
  *
- *
+ * The virtual function table for #GAction.
  *
  * Since: 2.28
+ */
+
+
+/**
+ * GActionMapInterface:
+ * @lookup_action: the virtual function pointer for g_action_map_lookup_action()
+ * @add_action: the virtual function pointer for g_action_map_add_action()
+ * @remove_action: the virtual function pointer for g_action_map_remove_action()
+ *
+ * The virtual function table for #GActionMap.
+ *
+ * Since: 2.32
  */
 
 
@@ -224,8 +238,7 @@
 /**
  * GApplication:
  *
- * The <structname>GApplication</structname> structure contains private
- * data and should only be accessed using the provided API
+ *
  *
  * Since: 2.28
  */
@@ -292,24 +305,14 @@
  * @activate: invoked on the primary instance when an activation occurs
  * @open: invoked on the primary instance when there are files to open
  * @command_line: invoked on the primary instance when a command-line is not handled locally
- * @local_command_line: invoked (locally) when the process has been invoked via commandline execution.  The virtual function has the chance to inspect (and possibly replace) the list of command line arguments. See g_application_run() for more information.
+ * @local_command_line: invoked (locally) when the process has been invoked via commandline execution (as opposed to, say, D-Bus activation - which is not currently supported by GApplication). The virtual function has the chance to inspect (and possibly replace) the list of command line arguments. See g_application_run() for more information.
  * @before_emit: invoked on the primary instance before 'activate', 'open', 'command-line' or any action invocation, gets the 'platform data' from the calling instance
  * @after_emit: invoked on the primary instance after 'activate', 'open', 'command-line' or any action invocation, gets the 'platform data' from the calling instance
  * @add_platform_data: invoked (locally) to add 'platform data' to be sent to the primary instance when activating, opening or invoking actions
- * @quit_mainloop: invoked on the primary instance when the use count of the application drops to zero (and after any inactivity timeout, if requested)
- * @run_mainloop: invoked on the primary instance from g_application_run() if the use-count is non-zero
+ * @quit_mainloop: Used to be invoked on the primary instance when the use count of the application drops to zero (and after any inactivity timeout, if requested). Not used anymore since 2.32
+ * @run_mainloop: Used to be invoked on the primary instance from g_application_run() if the use-count is non-zero. Since 2.32, GApplication is iterating the main context directly and is not using @run_mainloop anymore
  *
- *
- *
- * Since: 2.28
- */
-
-
-/**
- * GApplicationCommandLine:
- *
- * The <structname>GApplicationCommandLine</structname> structure contains private
- * data and should only be accessed using the provided API
+ * Virtual function table for #GApplication.
  *
  * Since: 2.28
  */
@@ -318,8 +321,8 @@
 /**
  * GApplicationCommandLineClass:
  *
- * The <structname>GApplicationCommandLineClass</structname> structure contains
- * private data only
+ * The <structname>GApplicationCommandLineClass</structname> structure
+ * contains private data only
  *
  * Since: 2.28
  */
@@ -3979,6 +3982,86 @@
 
 
 /**
+ * GMenu:
+ *
+ * #GMenu is an opaque structure type.  You must access it using the
+ * functions below.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * GMenuAttributeIter:
+ *
+ * #GMenuAttributeIter is an opaque structure type.  You must access it
+ * using the functions below.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * GMenuItem:
+ *
+ * #GMenuItem is an opaque structure type.  You must access it using the
+ * functions below.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * GMenuLinkIter:
+ *
+ * #GMenuLinkIter is an opaque structure type.  You must access it using
+ * the functions below.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * GMenuModel:
+ *
+ * #GMenuModel is an opaque structure type.  You must access it using the
+ * functions below.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * GMenuModel::items-changed:
+ * @model: the #GMenuModel that is changing
+ * @position: the position of the change
+ * @removed: the number of items removed
+ * @added: the number of items added
+ *
+ * Emitted when a change has occured to the menu.
+ *
+ * The only changes that can occur to a menu is that items are removed
+ * or added.  Items may not change (except by being removed and added
+ * back in the same location).  This signal is capable of describing
+ * both of those changes (at the same time).
+ *
+ * The signal means that starting at the index @position, @removed
+ * items were removed and @added items were added in their place.  If
+ * @removed is zero then only items were added.  If @added is zero
+ * then only items were removed.
+ *
+ * As an example, if the menu contains items a, b, c, d (in that
+ * order) and the signal (2, 1, 3) occurs then the new composition of
+ * the menu will be a, b, _, _, _, d (with each _ representing some
+ * new item).
+ *
+ * Signal handlers may query the model (particularly the added items)
+ * and expect to see the results of the modification that is being
+ * reported.  The signal is emitted after the modification.
+ */
+
+
+/**
  * GMount:
  *
  * A handle to an object implementing the #GMountIface interface.
@@ -4930,7 +5013,8 @@
  * @events: a bitwise combination from #GIOCondition, specifying which events should be polled for. Typically for reading from a file descriptor you would use %G_IO_IN | %G_IO_HUP | %G_IO_ERR, and for writing you would use %G_IO_OUT | %G_IO_ERR.
  * @revents: a bitwise combination of flags from #GIOCondition, returned from the poll() function to indicate which events occurred.
  *
- *
+ * Represents a file descriptor, which events to poll for, and which events
+ * occurred.
  */
 
 
@@ -6092,7 +6176,7 @@
  * call malloc(), which includes POSIX functions such as setenv().
  * If you need to set up the child environment differently from
  * the parent, you should use g_get_environ(), g_environ_setenv(),
- * and g_environ_unsetev(), and then pass the complete environment
+ * and g_environ_unsetenv(), and then pass the complete environment
  * list to the <literal>g_spawn...</literal> function.
  */
 
@@ -6102,22 +6186,22 @@
  * @G_SPAWN_ERROR_FORK: Fork failed due to lack of memory.
  * @G_SPAWN_ERROR_READ: Read or select on pipes failed.
  * @G_SPAWN_ERROR_CHDIR: Changing to working directory failed.
- * @G_SPAWN_ERROR_ACCES: execv() returned %EACCES.
- * @G_SPAWN_ERROR_PERM: execv() returned %EPERM.
- * @G_SPAWN_ERROR_2BIG: execv() returned %E2BIG.
- * @G_SPAWN_ERROR_NOEXEC: execv() returned %ENOEXEC.
- * @G_SPAWN_ERROR_NAMETOOLONG: execv() returned %ENAMETOOLONG.
- * @G_SPAWN_ERROR_NOENT: execv() returned %ENOENT.
- * @G_SPAWN_ERROR_NOMEM: execv() returned %ENOMEM.
- * @G_SPAWN_ERROR_NOTDIR: execv() returned %ENOTDIR.
- * @G_SPAWN_ERROR_LOOP: execv() returned %ELOOP.
- * @G_SPAWN_ERROR_TXTBUSY: execv() returned %ETXTBUSY.
- * @G_SPAWN_ERROR_IO: execv() returned %EIO.
- * @G_SPAWN_ERROR_NFILE: execv() returned %ENFILE.
- * @G_SPAWN_ERROR_MFILE: execv() returned %EMFILE.
- * @G_SPAWN_ERROR_INVAL: execv() returned %EINVAL.
- * @G_SPAWN_ERROR_ISDIR: execv() returned %EISDIR.
- * @G_SPAWN_ERROR_LIBBAD: execv() returned %ELIBBAD.
+ * @G_SPAWN_ERROR_ACCES: execv() returned <literal>EACCES</literal>
+ * @G_SPAWN_ERROR_PERM: execv() returned <literal>EPERM</literal>
+ * @G_SPAWN_ERROR_2BIG: execv() returned <literal>E2BIG</literal>
+ * @G_SPAWN_ERROR_NOEXEC: execv() returned <literal>ENOEXEC</literal>
+ * @G_SPAWN_ERROR_NAMETOOLONG: execv() returned <literal>ENAMETOOLONG</literal>
+ * @G_SPAWN_ERROR_NOENT: execv() returned <literal>ENOENT</literal>
+ * @G_SPAWN_ERROR_NOMEM: execv() returned <literal>ENOMEM</literal>
+ * @G_SPAWN_ERROR_NOTDIR: execv() returned <literal>ENOTDIR</literal>
+ * @G_SPAWN_ERROR_LOOP: execv() returned <literal>ELOOP</literal>
+ * @G_SPAWN_ERROR_TXTBUSY: execv() returned <literal>ETXTBUSY</literal>
+ * @G_SPAWN_ERROR_IO: execv() returned <literal>EIO</literal>
+ * @G_SPAWN_ERROR_NFILE: execv() returned <literal>ENFILE</literal>
+ * @G_SPAWN_ERROR_MFILE: execv() returned <literal>EMFILE</literal>
+ * @G_SPAWN_ERROR_INVAL: execv() returned <literal>EINVAL</literal>
+ * @G_SPAWN_ERROR_ISDIR: execv() returned <literal>EISDIR</literal>
+ * @G_SPAWN_ERROR_LIBBAD: execv() returned <literal>ELIBBAD</literal>
  * @G_SPAWN_ERROR_FAILED: Some other fatal failure, <literal>error-&gt;message</literal> should explain.
  *
  * Error codes returned by spawning processes.
@@ -6655,16 +6739,6 @@
  *
  * Flags for g_tls_database_lookup_handle(), g_tls_database_lookup_issuer(),
  * and g_tls_database_lookup_issued().
- *
- * Since: 2.30
- */
-
-
-/**
- * GTlsDatabaseVerifyFlags:
- * @G_TLS_DATABASE_VERIFY_NONE: No verification flags
- *
- * Flags for g_tls_database_verify_chain().
  *
  * Since: 2.30
  */
@@ -7809,7 +7883,7 @@
  * Inserts a breakpoint instruction into the code.
  *
  * On x86 and alpha systems this is implemented as a soft interrupt
- * and on other architectures it raises a %SIGTRAP signal.
+ * and on other architectures it raises a <literal>SIGTRAP</literal> signal.
  */
 
 
@@ -8167,7 +8241,7 @@
  * (GInstanceInitFunc) gtk_gadget_init,
  * (GTypeFlags) flags);
  * {
- * static const GInterfaceInfo g_implement_interface_info = {
+ * const GInterfaceInfo g_implement_interface_info = {
  * (GInterfaceInitFunc) gtk_gadget_gizmo_init
  * };
  * g_type_add_interface_static (g_define_type_id, TYPE_GIZMO, &g_implement_interface_info);
@@ -10085,6 +10159,15 @@
 
 
 /**
+ * G_TYPE_BYTES:
+ *
+ * The #GType for #GBytes.
+ *
+ * Since: 2.32
+ */
+
+
+/**
  * G_TYPE_BYTE_ARRAY:
  *
  * The #GType for a boxed type holding a #GByteArray reference.
@@ -11156,6 +11239,18 @@
 
 
 /**
+ * G_UNICHAR_MAX_DECOMPOSITION_LENGTH:
+ *
+ * The maximum length (in codepoints) of a compatibility or canonical
+ * decomposition of a single Unicode character.
+ *
+ * This is as defined by Unicode 6.1.
+ *
+ * Since: 2.32
+ */
+
+
+/**
  * G_UNICODE_COMBINING_MARK:
  *
  * Older name for %G_UNICODE_SPACING_MARK.
@@ -11819,7 +11914,7 @@
 /**
  * SECTION:gaction
  * @title: GAction
- * @short_description: An action
+ * @short_description: An action interface
  *
  * #GAction represents a single named action.
  *
@@ -11857,8 +11952,32 @@
  * SECTION:gactiongroup
  * @title: GActionGroup
  * @short_description: A group of actions
+ * @see_also: #GAction
  *
- * #GActionGroup represents a group of actions.
+ * #GActionGroup represents a group of actions. Actions can be used to
+ * expose functionality in a structured way, either from one part of a
+ * program to another, or to the outside world. Action groups are often
+ * used together with a #GMenuModel that provides additional
+ * representation data for displaying the actions to the user, e.g. in
+ * a menu.
+ *
+ * The main way to interact with the actions in a GActionGroup is to
+ * activate them with g_action_group_activate_action(). Activating an
+ * action may require a #GVariant parameter. The required type of the
+ * parameter can be inquired with g_action_group_get_action_parameter_type().
+ * Actions may be disabled, see g_action_group_get_action_enabled().
+ * Activating a disabled action has no effect.
+ *
+ * Actions may optionally have a state in the form of a #GVariant. The
+ * current state of an action can be inquired with
+ * g_action_group_get_action_state(). Activating a stateful action may
+ * change its state, but it is also possible to set the state by calling
+ * g_action_group_change_action_state().
+ *
+ * As typical example, consider a text editing application which has an
+ * option to change the current font to 'bold'. A good way to represent
+ * this would be a stateful action, with a boolean state. Activating the
+ * action would toggle the state.
  *
  * Each action in the group has a unique name (which is a string).  All
  * method calls, except g_action_group_list_actions() take the name of
@@ -11869,11 +11988,51 @@
  * forces' (eg: UI, incoming D-Bus messages, etc.) are supposed to have
  * with actions.  'Internal' APIs (ie: ones meant only to be accessed by
  * the action group implementation) are found on subclasses.  This is
- * why you will find -- for example -- g_action_group_get_action_enabled()
+ * why you will find - for example - g_action_group_get_action_enabled()
  * but not an equivalent <function>set()</function> call.
  *
  * Signals are emitted on the action group in response to state changes
  * on individual actions.
+ *
+ * Implementations of #GActionGroup should provide implementations for
+ * the virtual functions g_action_group_list_actions() and
+ * g_action_group_query_action().  The other virtual functions should
+ * not be implemented - their "wrappers" are actually implemented with
+ * calls to g_action_group_query_action().
+ */
+
+
+/**
+ * SECTION:gactiongroupexporter
+ * @title: GActionGroup exporter
+ * @short_description: Export GActionGroups on D-Bus
+ * @see_also: #GActionGroup, #GDBusActionGroup
+ *
+ * These functions support exporting a #GActionGroup on D-Bus.
+ * The D-Bus interface that is used is a private implementation
+ * detail.
+ *
+ * To access an exported #GActionGroup remotely, use
+ * g_dbus_action_group_new() to obtain a #GDBusActionGroup.
+ */
+
+
+/**
+ * SECTION:gactionmap
+ * @title: GActionMap
+ * @short_description: Interface for action containers
+ *
+ * The GActionMap interface is implemented by #GActionGroup
+ * implementations that operate by containing a number of
+ * named #GAction instances, such as #GSimpleActionGroup.
+ *
+ * One useful application of this interface is to map the
+ * names of actions from various action groups to unique,
+ * prefixed names (e.g. by prepending "app." or "win.").
+ * This is the motivation for the 'Map' part of the interface
+ * name.
+ *
+ * Since: 2.32
  */
 
 
@@ -11953,42 +12112,48 @@
  * login.  When your application is launched again, its arguments
  * are passed through platform communication to the already running
  * program. The already running instance of the program is called the
- * <firstterm>primary instance</firstterm>.
- *
- * Before using GApplication, you must choose an "application identifier".
- * The expected form of an application identifier is very close to that of
- * of a <ulink url="http://dbus.freedesktop.org/doc/dbus-specification.html#message-protocol-names-interface">DBus bus name</ulink>.
- * Examples include: "com.example.MyApp", "org.example.internal-apps.Calculator".
- * For details on valid application identifiers, see
- * g_application_id_is_valid().
- *
- * The application identifier is claimed by the application as a
- * well-known bus name on the user's session bus.  This means that the
- * uniqueness of your application is scoped to the current session.  It
- * also means that your application may provide additional services
- * (through registration of other object paths) at that bus name.
- *
- * The registration of these object paths should be done with the shared
- * GDBus session bus.  Note that due to the internal architecture of
- * GDBus, method calls can be dispatched at any time (even if a main
- * loop is not running).  For this reason, you must ensure that any
- * object paths that you wish to register are registered before
- * #GApplication attempts to acquire the bus name of your application
- * (which happens in g_application_register()).  Unfortunately, this
- * means that you cannot use g_application_get_is_remote() to decide if
- * you want to register object paths.
+ * <firstterm>primary instance</firstterm>. On Linux, the D-Bus session
+ * bus is used for communication.
  *
  * GApplication provides convenient life cycle management by maintaining
  * a <firstterm>use count</firstterm> for the primary application instance.
  * The use count can be changed using g_application_hold() and
  * g_application_release(). If it drops to zero, the application exits.
+ * Higher-level classes such as #GtkApplication employ the use count to
+ * ensure that the application stays alive as long as it has any opened
+ * windows.
  *
- * GApplication also implements the #GActionGroup interface and lets you
- * easily export actions by adding them with g_application_set_action_group().
- * When invoking an action by calling g_action_group_activate_action() on
- * the application, it is always invoked in the primary instance.
+ * Before using GApplication, you must choose an "application identifier".
+ * The expected form of an application identifier is very close to that of
+ * of a <ulink url="http://dbus.freedesktop.org/doc/dbus-specification.html#message-protocol-names-interface">DBus bus name</ulink>.
+ * Examples include: "com.example.MyApp", "org.example.internal-apps.Calculator".
+ * For details on valid application identifiers, see g_application_id_is_valid().
  *
- * There is a number of different entry points into a #GApplication:
+ * On Linux, the application identifier is claimed as a well-known bus name
+ * on the user's session bus.  This means that the uniqueness of your
+ * application is scoped to the current session.  It also means that your
+ * application may provide additional services (through registration of other
+ * object paths) at that bus name.  The registration of these object paths
+ * should be done with the shared GDBus session bus.  Note that due to the
+ * internal architecture of GDBus, method calls can be dispatched at any time
+ * (even if a main loop is not running).  For this reason, you must ensure that
+ * any object paths that you wish to register are registered before #GApplication
+ * attempts to acquire the bus name of your application (which happens in
+ * g_application_register()).  Unfortunately, this means that you cannot use
+ * g_application_get_is_remote() to decide if you want to register object paths.
+ *
+ * GApplication also implements the #GActionGroup and #GActionMap
+ * interfaces and lets you easily export actions by adding them with
+ * g_action_map_add_action(). When invoking an action by calling
+ * g_action_group_activate_action() on the application, it is always
+ * invoked in the primary instance. The actions are also exported on
+ * the session bus, and GIO provides the #GDBusActionGroup wrapper to
+ * conveniently access them remotely. Additionally, g_application_set_app_menu()
+ * and g_application_set_menubar() can be used to export representation
+ * data for the actions, in the form of #GMenuModels. GIO provides
+ * a #GDBusMenuModel wrapper for remote access to exported #GMenuModels.
+ *
+ * There is a number of different entry points into a GApplication:
  * <itemizedlist>
  * <listitem>via 'Activate' (i.e. just starting the application)</listitem>
  * <listitem>via 'Open' (i.e. opening some files)</listitem>
@@ -12035,6 +12200,14 @@
  * <example id="gapplication-example-actions"><title>A GApplication with actions</title>
  * <programlisting>
  * <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../gio/tests/gapplication-example-actions.c">
+ * <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
+ * </xi:include>
+ * </programlisting>
+ * </example>
+ *
+ * <example id="gapplication-example-menu"><title>A GApplication with menus</title>
+ * <programlisting>
+ * <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../gio/tests/gapplication-example-menu.c">
  * <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
  * </xi:include>
  * </programlisting>
@@ -12502,6 +12675,18 @@
 
 
 /**
+ * SECTION:gdbusactiongroup
+ * @title: GDBusActionGroup
+ * @short_description: A D-Bus GActionGroup implementation
+ * @see_also: <link linkend="gio-GActionGroup-exporter">GActionGroup exporter</link>
+ *
+ * #GDBusActionGroup is an implementation of the #GActionGroup
+ * interface that can be used as a proxy for an action group
+ * that is exported over D-Bus with g_dbus_connection_export_action_group().
+ */
+
+
+/**
  * SECTION:gdbusaddress
  * @title: D-Bus Addresses
  * @short_description: D-Bus connection endpoints
@@ -12703,7 +12888,19 @@
  * used when registering objects with g_dbus_connection_register_object().
  *
  * The format of D-Bus introspection XML is specified in the
- * <link linkend="http://dbus.freedesktop.org/doc/dbus-specification.html&num;introspection-format">D-Bus specification</link>.
+ * <ulink url="http://dbus.freedesktop.org/doc/dbus-specification.html#introspection-format">D-Bus specification</ulink>.
+ */
+
+
+/**
+ * SECTION:gdbusmenumodel
+ * @title: GDBusMenuModel
+ * @short_description: A D-Bus GMenuModel implementation
+ * @see_also: <link linkend="gio-GMenuModel-exporter">GMenuModel Exporter</link>
+ *
+ * #GDBusMenuModel is an implementation of #GMenuModel that can be used
+ * as a proxy for a menu model that is exported over D-Bus with
+ * g_dbus_connection_export_menu_model().
  */
 
 
@@ -13086,6 +13283,7 @@
  * g_file_new_for_path() if you have a path.
  * g_file_new_for_uri() if you have a URI.
  * g_file_new_for_commandline_arg() for a command line argument.
+ * g_file_new_tmp() to create a temporary file from a template.
  * g_file_parse_name() from a utf8 string gotten from g_file_get_parse_name().
  *
  * One way to think of a #GFile is as an abstraction of a pathname. For normal
@@ -13611,11 +13809,16 @@
  * @see_also: #GAsyncInitable
  *
  * #GInitable is implemented by objects that can fail during
- * initialization. If an object implements this interface the
- * g_initable_init() function must be called as the first thing
- * after construction. If g_initable_init() is not called, or if
- * it returns an error, all further operations on the object
- * should fail, generally with a %G_IO_ERROR_NOT_INITIALIZED error.
+ * initialization. If an object implements this interface then
+ * it must be initialized as the first thing after construction,
+ * either via g_initable_init() or g_async_initable_init_async()
+ * (the latter is only available if it also implements #GAsyncInitable).
+ *
+ * If the object is not initialized, or initialization returns with an
+ * error, then all operations on the object except g_object_ref() and
+ * g_object_unref() are considered to be invalid, and have undefined
+ * behaviour. They will often fail with g_critical() or g_warning(), but
+ * this must not be relied on.
  *
  * Users of objects implementing this are not intended to use
  * the interface method directly, instead it will be used automatically
@@ -13752,6 +13955,221 @@
  *
  * #GMemoryOutputStream is a class for using arbitrary
  * memory chunks as output for GIO streaming output operations.
+ */
+
+
+/**
+ * SECTION:gmenu
+ * @title: GMenu
+ * @short_description: A simple implementation of GMenuModel
+ *
+ * #GMenu is a simple implementation of #GMenuModel.
+ * You populate a #GMenu by adding #GMenuItem instances to it.
+ *
+ * There are some convenience functions to allow you to directly
+ * add items (avoiding #GMenuItem) for the common cases. To add
+ * a regular item, use g_menu_insert(). To add a section, use
+ * g_menu_insert_section(). To add a submenu, use
+ * g_menu_insert_submenu().
+ *
+ * Often it is more convenient to create a #GMenu from an XML
+ * fragment, using <link linkend="gio-GMenu-Markup">GMenu Markup</link>.
+ */
+
+
+/**
+ * SECTION:gmenuexporter
+ * @title: GMenuModel exporter
+ * @short_description: Export GMenuModels on D-Bus
+ * @see_also: #GMenuModel, #GDBusMenuModel
+ *
+ * These functions support exporting a #GMenuModel on D-Bus.
+ * The D-Bus interface that is used is a private implementation
+ * detail.
+ *
+ * To access an exported #GMenuModel remotely, use
+ * g_dbus_menu_model_get() to obtain a #GDBusMenuModel.
+ */
+
+
+/**
+ * SECTION:gmenumarkup
+ * @title: GMenu Markup
+ * @short_description: parsing and printing GMenuModel XML
+ *
+ * The functions here allow to instantiate #GMenuModels by parsing
+ * fragments of an XML document.
+ * * The XML format for #GMenuModel consists of a toplevel
+ * <tag class="starttag">menu</tag> element, which contains one or more
+ * <tag class="starttag">item</tag> elements. Each <tag class="starttag">item</tag>
+ * element contains <tag class="starttag">attribute</tag> and <tag class="starttag">link</tag>
+ * elements with a mandatory name attribute.
+ * <tag class="starttag">link</tag> elements have the same content
+ * model as <tag class="starttag">menu</tag>.
+ *
+ * Here is the XML for <xref linkend="menu-example"/>:
+ * |[<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../gio/menumarkup2.xml"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include>]|
+ *
+ * The parser also understands a somewhat less verbose format, in which
+ * attributes are encoded as actual XML attributes of <tag class="starttag">item</tag>
+ * elements, and <tag class="starttag">link</tag> elements are replaced by
+ * <tag class="starttag">section</tag> and <tag class="starttag">submenu</tag> elements.
+ *
+ * Here is how the example looks in this format:
+ * |[<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../gio/menumarkup.xml"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include>]|
+ *
+ * The parser can obtaing translations for attribute values using gettext.
+ * To make use of this, the <tag class="starttag">menu</tag> element must
+ * have a domain attribute which specifies the gettext domain to use, and
+ * <tag class="starttag">attribute</tag> elements can be marked for translation
+ * with a <literal>translatable="yes"</literal> attribute. It is also possible
+ * to specify message context and translator comments, using the context
+ * and comments attributes.
+ *
+ * The following DTD describes the XML format approximately:
+ * |[<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../gio/menumarkup.dtd"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include>]|
+ *
+ * To serialize a #GMenuModel into an XML fragment, use
+ * g_menu_markup_print_string().
+ */
+
+
+/**
+ * SECTION:gmenumodel
+ * @title: GMenuModel
+ * @short_description: An abstract class representing the contents of a menu
+ * @see_also: #GActionGroup
+ *
+ * #GMenuModel represents the contents of a menu -- an ordered list of
+ * menu items. The items are associated with actions, which can be
+ * activated through them. Items can be grouped in sections, and may
+ * have submenus associated with them. Both items and sections usually
+ * have some representation data, such as labels or icons. The type of
+ * the associated action (ie whether it is stateful, and what kind of
+ * state it has) can influence the representation of the item.
+ *
+ * The conceptual model of menus in #GMenuModel is hierarchical:
+ * sections and submenus are again represented by #GMenuModels.
+ * Menus themselves do not define their own roles. Rather, the role
+ * of a particular #GMenuModel is defined by the item that references
+ * it (or, in the case of the 'root' menu, is defined by the context
+ * in which it is used).
+ *
+ * As an example, consider the visible portions of the menu in
+ * <xref linkend="menu-example"/>.
+ *
+ * <figure id="menu-example">
+ * <title>An example menu</title>
+ * <graphic fileref="menu-example.png" format="PNG"></graphic>
+ * </figure>
+ *
+ * There are 8 "menus" visible in the screenshot: one menubar, two
+ * submenus and 5 sections:
+ * <itemizedlist>
+ * <listitem>the toplevel menubar (containing 4 items)</listitem>
+ * <listitem>the View submenu (containing 3 sections)</listitem>
+ * <listitem>the first section of the View submenu (containing 2 items)</listitem>
+ * <listitem>the second section of the View submenu (containing 1 item)</listitem>
+ * <listitem>the final section of the View submenu (containing 1 item)</listitem>
+ * <listitem>the Highlight Mode submenu (containing 2 sections)</listitem>
+ * <listitem>the Sources section (containing 2 items)</listitem>
+ * <listitem>the Markup section (containing 2 items)</listitem>
+ * </itemizedlist>
+ *
+ * <xref linkend="menu-model"/> illustrates the conceptual connection between
+ * these 8 menus. Each large block in the figure represents a menu and the
+ * smaller blocks within the large block represent items in that menu. Some
+ * items contain references to other menus.
+ *
+ * <figure id="menu-model">
+ * <title>A menu model</title>
+ * <graphic fileref="menu-model.png" format="PNG"></graphic>
+ * </figure>
+ *
+ * Notice that the separators visible in <xref linkend="menu-example"/>
+ * appear nowhere in <xref linkend="menu-model"/>. This is because
+ * separators are not explicitly represented in the menu model. Instead,
+ * a separator is inserted between any two non-empty sections of a menu.
+ * Section items can have labels just like any other item. In that case,
+ * a display system may show a section header instead of a separator.
+ *
+ * The motivation for this abstract model of application controls is
+ * that modern user interfaces tend to make these controls available
+ * outside the application. Examples include global menus, jumplists,
+ * dash boards, etc. To support such uses, it is necessary to 'export'
+ * information about actions and their representation in menus, which
+ * is exactly what the
+ * <link linkend="gio-GActionGroup-exporter">GActionGroup exporter</link>
+ * and the
+ * <link linkend="gio-GMenuModel-exporter">GMenuModel exporter</link>
+ * do for #GActionGroup and #GMenuModel. The client-side counterparts
+ * to make use of the exported information are #GDBusActionGroup and
+ * #GDBusMenuModel.
+ *
+ * The API of #GMenuModel is very generic, with iterators for the
+ * attributes and links of an item, see g_menu_model_iterate_item_attributes()
+ * and g_menu_model_iterate_item_links(). The 'standard' attributes and
+ * link types have predefined names: %G_MENU_ATTRIBUTE_LABEL,
+ * %G_MENU_ATTRIBUTE_ACTION, %G_MENU_ATTRIBUTE_TARGET, %G_MENU_LINK_SECTION
+ * and %G_MENU_LINK_SUBMENU.
+ *
+ * Items in a #GMenuModel represent active controls if they refer to
+ * an action that can get activated when the user interacts with the
+ * menu item. The reference to the action is encoded by the string id
+ * in the %G_MENU_ATTRIBUTE_ACTION attribute. An action id uniquely
+ * identifies an action in an action group. Which action group(s) provide
+ * actions depends on the context in which the menu model is used.
+ * E.g. when the model is exported as the application menu of a
+ * #GtkApplication, actions can be application-wide or window-specific
+ * (and thus come from two different action groups). By convention, the
+ * application-wide actions have names that start with "app.", while the
+ * names of window-specific actions start with "win.".
+ *
+ * While a wide variety of stateful actions is possible, the following
+ * is the minimum that is expected to be supported by all users of exported
+ * menu information:
+ * <itemizedlist>
+ * <listitem>an action with no parameter type and no state</listitem>
+ * <listitem>an action with no parameter type and boolean state</listitem>
+ * <listitem>an action with string parameter type and string state</listitem>
+ * </itemizedlist>
+ *
+ * <formalpara><title>Stateless</title>
+ * <para>
+ * A stateless action typically corresponds to an ordinary menu item.
+ * </para>
+ * <para>
+ * Selecting such a menu item will activate the action (with no parameter).
+ * </para>
+ * </formalpara>
+ *
+ * <formalpara><title>Boolean State</title>
+ * <para>
+ * An action with a boolean state will most typically be used with a "toggle"
+ * or "switch" menu item. The state can be set directly, but activating the
+ * action (with no parameter) results in the state being toggled.
+ * </para>
+ * <para>
+ * Selecting a toggle menu item will activate the action. The menu item should
+ * be rendered as "checked" when the state is true.
+ * </para>
+ * </formalpara>
+ *
+ * <formalpara><title>String Parameter and State</title>
+ * <para>
+ * Actions with string parameters and state will most typically be used to
+ * represent an enumerated choice over the items available for a group of
+ * radio menu items. Activating the action with a string parameter is
+ * equivalent to setting that parameter as the state.
+ * </para>
+ * <para>
+ * Radio menu items, in addition to being associated with the action, will
+ * have a target value. Selecting that menu item will result in activation
+ * of the action with the target value as the parameter. The menu item should
+ * be rendered as "selected" when the state of the action is equal to the
+ * target value of the menu item.
+ * </para>
+ * </formalpara>
  */
 
 
@@ -14304,10 +14722,10 @@
 /**
  * SECTION:gsimpleaction
  * @title: GSimpleAction
- * @short_description: A simple GSimpleAction
+ * @short_description: A simple GAction implementation
  *
  * A #GSimpleAction is the obvious simple implementation of the #GAction
- * interface.  This is the easiest way to create an action for purposes of
+ * interface. This is the easiest way to create an action for purposes of
  * adding it to a #GSimpleActionGroup.
  *
  * See also #GtkAction.
@@ -14320,7 +14738,7 @@
  * @short_description: A simple GActionGroup implementation
  *
  * #GSimpleActionGroup is a hash table filled with #GAction objects,
- * implementing the #GActionGroup interface.
+ * implementing the #GActionGroup and #GActionMap interfaces.
  */
 
 
@@ -15816,6 +16234,144 @@
 
 
 /**
+ * g_action_group_query_action:
+ * @action_group: a #GActionGroup
+ * @action_name: the name of an action in the group
+ * @enabled: (out): if the action is presently enabled
+ * @parameter_type: (out): the parameter type, or %NULL if none needed
+ * @state_type: (out): the state type, or %NULL if stateless
+ * @state_hint: (out): the state hint, or %NULL if none
+ * @state: (out): the current state, or %NULL if stateless
+ *
+ * Queries all aspects of the named action within an @action_group.
+ *
+ * This function acquires the information available from
+ * g_action_group_has_action(), g_action_group_get_action_enabled(),
+ * g_action_group_get_action_parameter_type(),
+ * g_action_group_get_action_state_type(),
+ * g_action_group_get_action_state_hint() and
+ * g_action_group_get_state() with a single function call.
+ *
+ * This provides two main benefits.
+ *
+ * The first is the improvement in efficiency that comes with not having
+ * to perform repeated lookups of the action in order to discover
+ * different things about it.  The second is that implementing
+ * #GActionGroup can now be done by only overriding this one virtual
+ * function.
+ *
+ * The interface provides a default implementation of this function that
+ * calls the individual functions, as required, to fetch the
+ * information.  The interface also provides default implementations of
+ * those functions that call this function.  All implementations,
+ * therefore, must override either this function or all of the others.
+ *
+ * If the action exists, %TRUE is returned and any of the requested
+ * fields (as indicated by having a non-%NULL reference passed in) are
+ * filled.  If the action doesn't exist, %FALSE is returned and the
+ * fields may or may not have been modified.
+ *
+ * Returns: %TRUE if the action exists, else %FALSE
+ * Since: 2.32
+ */
+
+
+/**
+ * g_action_map_add_action:
+ * @action_map: a #GActionMap
+ * @action: a #GAction
+ *
+ * Adds an action to the @action_map.
+ *
+ * If the action map already contains an action with the same name
+ * as @action then the old action is dropped from the action map.
+ *
+ * The action map takes its own reference on @action.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * g_action_map_add_action_entries:
+ * @action_map: a #GActionMap
+ * @entries: a pointer to the first item in an array of #GActionEntry structs
+ * @n_entries: the length of @entries, or -1 if @entries is %NULL-terminated
+ * @user_data: the user data for signal connections
+ *
+ * A convenience function for creating multiple #GSimpleAction instances
+ * and adding them to a #GActionMap.
+ *
+ * Each action is constructed as per one #GActionEntry.
+ *
+ * <example>
+ * <title>Using g_action_map_add_action_entries()</title>
+ * <programlisting>
+ * static void
+ * activate_quit (GSimpleAction *simple,
+ * GVariant      *parameter,
+ * gpointer       user_data)
+ * {
+ * exit (0);
+ * }
+ *
+ * static void
+ * activate_print_string (GSimpleAction *simple,
+ * GVariant      *parameter,
+ * gpointer       user_data)
+ * {
+ * g_print ("%s\n", g_variant_get_string (parameter, NULL));
+ * }
+ *
+ * static GActionGroup *
+ * create_action_group (void)
+ * {
+ * const GActionEntry entries[] = {
+ * { "quit",         activate_quit              },
+ * { "print-string", activate_print_string, "s" }
+ * };
+ * GSimpleActionGroup *group;
+ *
+ * group = g_simple_action_group_new ();
+ * g_action_map_add_action_entries (G_ACTION_MAP (group), entries, G_N_ELEMENTS (entries), NULL);
+ *
+ * return G_ACTION_GROUP (group);
+ * }
+ * </programlisting>
+ * </example>
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * g_action_map_lookup_action:
+ * @action_map: a #GActionMap
+ * @action_name: the name of an action
+ *
+ * Looks up the action with the name @action_name in @action_map.
+ *
+ * If no such action exists, returns %NULL.
+ *
+ * Returns: (transfer none): a #GAction, or %NULL
+ * Since: 2.32
+ */
+
+
+/**
+ * g_action_map_remove_action:
+ * @action_map: a #GActionMap
+ * @action_name: the name of the action
+ *
+ * Removes the named action from the action map.
+ *
+ * If no action of this name is in the map then nothing happens.
+ *
+ * Since: 2.32
+ */
+
+
+/**
  * g_alloca:
  * @size: number of bytes to allocate.
  *
@@ -16599,6 +17155,18 @@
 
 
 /**
+ * g_application_get_app_menu:
+ * @application: a #GApplication
+ *
+ * Returns the menu model that has been set with
+ * g_application_set_app_menu().
+ *
+ * Returns: the application menu of @application
+ * Since: 2.32
+ */
+
+
+/**
  * g_application_get_application_id:
  * @application: a #GApplication
  *
@@ -16606,6 +17174,22 @@
  *
  * Returns: the identifier for @application, owned by @application
  * Since: 2.28
+ */
+
+
+/**
+ * g_application_get_default:
+ * @returns: (transfer none): the default application for this process, or %NULL
+ *
+ * Returns the default #GApplication instance for this process.
+ *
+ * Normally there is only one #GApplication per process and it becomes
+ * the default when it is created.  You can exercise more control over
+ * this by using g_application_set_default().
+ *
+ * If there is no default application then %NULL is returned.
+ *
+ * Since: 2.32
  */
 
 
@@ -16667,6 +17251,18 @@
  *
  * Returns: %TRUE if @application is remote
  * Since: 2.28
+ */
+
+
+/**
+ * g_application_get_menubar:
+ * @application: a #GApplication
+ *
+ * Returns the menu model that has been set with
+ * g_application_set_menubar().
+ *
+ * Returns: the menubar for windows of @application
+ * Since: 2.32
  */
 
 
@@ -16865,8 +17461,8 @@
  *
  * If, after the above is done, the use count of the application is zero
  * then the exit status is returned immediately.  If the use count is
- * non-zero then the mainloop is run until the use count falls to zero,
- * at which point 0 is returned.
+ * non-zero then the default main context is iterated until the use count
+ * falls to zero, at which point 0 is returned.
  *
  * If the %G_APPLICATION_IS_SERVICE flag is set, then the exiting at
  * use count of zero is delayed for a while (ie: the instance stays
@@ -16882,14 +17478,35 @@
  * @application: a #GApplication
  * @action_group: (allow-none): a #GActionGroup, or %NULL
  *
- * Sets or unsets the group of actions associated with the application.
+ * This used to be how actions were associated with a #GApplication.
+ * Now there is #GActionMap for that.
  *
- * These actions are the actions that can be remotely invoked.
  *
- * It is an error to call this function after the application has been
- * registered.
+ * Deprecated:2.32:Use the #GActionMap interface instead.  Never ever
+ * mix use of this API with use of #GActionMap on the same @application
+ * or things will go very badly wrong.
  *
  * Since: 2.28
+ */
+
+
+/**
+ * g_application_set_app_menu:
+ * @application: a #GApplication
+ * @app_menu: (allow-none): a #GMenuModel, or %NULL
+ *
+ * Sets or unsets the application menu for @application.
+ *
+ * The application menu is a single menu containing items that typically
+ * impact the application as a whole, rather than acting on a specific
+ * window or document.  For example, you would expect to see
+ * "Preferences" or "Quit" in an application menu, but not "Save" or
+ * "Print".
+ *
+ * If supported, the application menu will be rendered by the desktop
+ * environment.
+ *
+ * Since: 2.32
  */
 
 
@@ -16906,6 +17523,21 @@
  * The application id must be valid.  See g_application_id_is_valid().
  *
  * Since: 2.28
+ */
+
+
+/**
+ * g_application_set_default:
+ * @application: the application to set as default, or %NULL
+ *
+ * Sets or unsets the default application for the process, as returned
+ * by g_application_get_default().
+ *
+ * This function does not take its own reference on @application.  If
+ * @application is destroyed then the default application will revert
+ * back to %NULL.
+ *
+ * Since: 2.32
  */
 
 
@@ -16944,6 +17576,27 @@
 
 
 /**
+ * g_application_set_menubar:
+ * @application: a #GApplication
+ * @menubar: (allow-none): a #GMenuModel, or %NULL
+ *
+ * Sets or unsets the menubar for windows of @application.
+ *
+ * This is a menubar in the traditional sense.
+ *
+ * Depending on the desktop environment, this may appear at the top of
+ * each window, or at the top of the screen.  In some environments, if
+ * both the application menu and the menubar are set, the application
+ * menu will be presented as if it were the first item of the menubar.
+ * Other environments treat the two as completely separate -- for
+ * example, the application menu may be rendered by the desktop shell
+ * while the menubar (if set) remains in each individual window.
+ *
+ * Since: 2.32
+ */
+
+
+/**
  * g_async_initable_init_async:
  * @initable: a #GAsyncInitable.
  * @io_priority: the <link linkend="io-priority">I/O priority</link> of the operation.
@@ -16967,9 +17620,11 @@
  * the object doesn't support cancellable initialization, the error
  * %G_IO_ERROR_NOT_SUPPORTED will be returned.
  *
- * If this function is not called, or returns with an error, then all
- * operations on the object should fail, generally returning the
- * error %G_IO_ERROR_NOT_INITIALIZED.
+ * As with #GInitable, if the object is not initialized, or initialization
+ * returns with an error, then all operations on the object except
+ * g_object_ref() and g_object_unref() are considered to be invalid, and
+ * have undefined behaviour. They will often fail with g_critical() or
+ * g_warning(), but this must not be relied on.
  *
  * Implementations of this method must be idempotent: i.e. multiple calls
  * to this function with the same argument should return the same results.
@@ -18975,6 +19630,31 @@
 
 
 /**
+ * g_dbus_action_group_get:
+ * @connection: A #GDBusConnection
+ * @bus_name: the bus name which exports the action group
+ * @object_path: the object path at which the action group is exported
+ *
+ * Obtains a #GDBusActionGroup for the action group which is exported at
+ * the given @bus_name and @object_path.
+ *
+ * The thread default main context is taken at the time of this call.
+ * All signals on the menu model (and any linked models) are reported
+ * with respect to this context.  All calls on the returned menu model
+ * (and linked models) must also originate from this same context, with
+ * the thread default main context unchanged.
+ *
+ * This call is non-blocking.  The returned action group may or may not
+ * already be filled in.  The correct thing to do is connect the signals
+ * for the action group to monitor for changes and then to call
+ * g_action_group_list_actions() to get the initial list.
+ *
+ * Returns: (transfer full): a #GDBusActionGroup
+ * Since: 2.32
+ */
+
+
+/**
  * g_dbus_address_get_for_bus_sync:
  * @bus_type: A #GBusType.
  * @cancellable: A #GCancellable or %NULL.
@@ -19444,6 +20124,65 @@
  *
  * Returns: %TRUE unless @error is set.
  * Since: 2.26
+ */
+
+
+/**
+ * g_dbus_connection_export_action_group:
+ * @connection: a #GDBusConnection
+ * @object_path: a D-Bus object path
+ * @action_group: a #GActionGroup
+ * @error: a pointer to a %NULL #GError, or %NULL
+ *
+ * Exports @action_group on @connection at @object_path.
+ *
+ * The implemented D-Bus API should be considered private.  It is
+ * subject to change in the future.
+ *
+ * A given object path can only have one action group exported on it.
+ * If this constraint is violated, the export will fail and 0 will be
+ * returned (with @error set accordingly).
+ *
+ * You can unexport the action group using
+ * g_dbus_connection_unexport_action_group() with the return value of
+ * this function.
+ *
+ * The thread default main context is taken at the time of this call.
+ * All incoming action activations and state change requests are
+ * reported from this context.  Any changes on the action group that
+ * cause it to emit signals must also come from this same context.
+ * Since incoming action activations and state change requests are
+ * rather likely to cause changes on the action group, this effectively
+ * limits a given action group to being exported from only one main
+ * context.
+ *
+ * Returns: the ID of the export (never zero), or 0 in case of failure
+ * Since: 2.32
+ */
+
+
+/**
+ * g_dbus_connection_export_menu_model:
+ * @connection: a #GDBusConnection
+ * @object_path: a D-Bus object path
+ * @menu: a #GMenuModel
+ * @error: return location for an error, or %NULL
+ *
+ * Exports @menu on @connection at @object_path.
+ *
+ * The implemented D-Bus API should be considered private.
+ * It is subject to change in the future.
+ *
+ * An object path can only have one action group exported on it. If this
+ * constraint is violated, the export will fail and 0 will be
+ * returned (with @error set accordingly).
+ *
+ * You can unexport the menu model using
+ * g_dbus_connection_unexport_menu_model() with the return value of
+ * this function.
+ *
+ * Returns: the ID of the export (never zero), or 0 in case of failure
+ * Since: 2.32
  */
 
 
@@ -20099,6 +20838,38 @@
 
 
 /**
+ * g_dbus_connection_unexport_action_group:
+ * @connection: a #GDBusConnection
+ * @export_id: the ID from g_dbus_connection_export_action_group()
+ *
+ * Reverses the effect of a previous call to
+ * g_dbus_connection_export_action_group().
+ *
+ * It is an error to call this function with an ID that wasn't returned
+ * from g_dbus_connection_export_action_group() or to call it with the
+ * same ID more than once.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * g_dbus_connection_unexport_menu_model:
+ * @connection: a #GDBusConnection
+ * @export_id: the ID from g_dbus_connection_export_menu_model()
+ *
+ * Reverses the effect of a previous call to
+ * g_dbus_connection_export_menu_model().
+ *
+ * It is an error to call this function with an ID that wasn't returned
+ * from g_dbus_connection_export_menu_model() or to call it with the
+ * same ID more than once.
+ *
+ * Since: 2.32
+ */
+
+
+/**
  * g_dbus_connection_unregister_object:
  * @connection: A #GDBusConnection.
  * @registration_id: A registration id obtained from g_dbus_connection_register_object().
@@ -20579,11 +21350,15 @@
  *
  * Exports @interface_ at @object_path on @connection.
  *
+ * This can be called multiple times to export the same @interface_
+ * onto multiple connections however the @object_path provided must be
+ * the same for all connections.
+ *
  * Use g_dbus_interface_skeleton_unexport() to unexport the object.
  *
  * @error set.
  *
- * Returns: %TRUE if the interface was exported, other %FALSE with
+ * Returns: %TRUE if the interface was exported on @connection, otherwise %FALSE with
  * Since: 2.30
  */
 
@@ -20609,12 +21384,27 @@
  * g_dbus_interface_skeleton_get_connection:
  * @interface_: A #GDBusInterfaceSkeleton.
  *
- * Gets the connection that @interface_ is exported on, if any.
+ * Gets the first connection that @interface_ is exported on, if any.
  *
  * not exported anywhere. Do not free, the object belongs to @interface_.
  *
  * Returns: (transfer none): A #GDBusConnection or %NULL if @interface_ is
  * Since: 2.30
+ */
+
+
+/**
+ * g_dbus_interface_skeleton_get_connections:
+ * @interface_: A #GDBusInterfaceSkeleton.
+ *
+ * Gets a list of the connections that @interface_ is exported on.
+ *
+ * all the connections that @interface_ is exported on. The returned
+ * list should be freed with g_list_free() after each element has
+ * been freed with g_object_unref().
+ *
+ * Returns: (element-type GDBusConnection) (transfer full): A list of
+ * Since: 2.32
  */
 
 
@@ -20680,6 +21470,18 @@
 
 
 /**
+ * g_dbus_interface_skeleton_has_connection:
+ * @interface_: A #GDBusInterfaceSkeleton.
+ * @connection: A #GDBusConnection.
+ *
+ * Checks if @interface_ is export on @connection.
+ *
+ * Returns: %TRUE if @interface_ is exported on @connection, %FALSE otherwise.
+ * Since: 2.32
+ */
+
+
+/**
  * g_dbus_interface_skeleton_set_flags:
  * @interface_: A #GDBusInterfaceSkeleton.
  * @flags: Flags from the #GDBusInterfaceSkeletonFlags enumeration.
@@ -20694,10 +21496,26 @@
  * g_dbus_interface_skeleton_unexport:
  * @interface_: A #GDBusInterfaceSkeleton.
  *
- * Stops exporting an interface previously exported with
- * g_dbus_interface_skeleton_export().
+ * Stops exporting @interface_ on all connections it is exported on.
+ *
+ * To unexport @interface_ from only a single connection, use
+ * g_dbus_interface_skeleton_export_from_connection()
  *
  * Since: 2.30
+ */
+
+
+/**
+ * g_dbus_interface_skeleton_unexport_from_connection:
+ * @interface_: A #GDBusInterfaceSkeleton.
+ * @connection: A #GDBusConnection.
+ *
+ * Stops exporting @interface_ on @connection.
+ *
+ * To stop exporting on all connections the interface is exported on,
+ * use g_dbus_interface_skeleton_unexport().
+ *
+ * Since: 2.32
  */
 
 
@@ -20787,6 +21605,28 @@
  *
  * Returns: %TRUE if valid, %FALSE otherwise.
  * Since: 2.26
+ */
+
+
+/**
+ * g_dbus_menu_model_get:
+ * @connection: a #GDBusConnection
+ * @bus_name: the bus name which exports the menu model
+ * @object_path: the object path at which the menu model is exported
+ *
+ * Obtains a #GDBusMenuModel for the menu model which is exported
+ * at the given @bus_name and @object_path.
+ *
+ * The thread default main context is taken at the time of this call.
+ * All signals on the menu model (and any linked models) are reported
+ * with respect to this context.  All calls on the returned menu model
+ * (and linked models) must also originate from this same context, with
+ * the thread default main context unchanged.
+ *
+ * g_object_unref().
+ *
+ * Returns: (transfer full): a #GDBusMenuModel object. Free with
+ * Since: 2.32
  */
 
 
@@ -21730,6 +22570,10 @@
  * @error: Return location for error.
  *
  * Parses @xml_data and returns a #GDBusNodeInfo representing the data.
+ *
+ * Note that this routine is using a
+ * <link linkend="glib-Simple-XML-Subset-Parser.description">GMarkup</link>-based
+ * parser that only accepts a subset of valid XML documents.
  *
  * with g_dbus_node_info_unref().
  *
@@ -26075,6 +26919,30 @@
 
 
 /**
+ * g_file_new_tmp:
+ * @tmpl: (type filename) (allow-none): Template for the file name, as in g_file_open_tmp(), or %NULL for a default template.
+ * @iostream: (out): on return, a #GFileIOStream for the created file.
+ * @error: a #GError, or %NULL
+ *
+ * Opens a file in the preferred directory for temporary files (as
+ * returned by g_get_tmp_dir()) and returns a #GFile and
+ * #GFileIOStream pointing to it.
+ *
+ * @template should be a string in the GLib file name encoding
+ * containing a sequence of six 'X' characters, and containing no
+ * directory components. If it is %NULL, a default template is used.
+ *
+ * Unlike the other #GFile constructors, this will return %NULL if
+ * a temporary file could not be created.
+ *
+ * Free the returned object with g_object_unref().
+ *
+ * Returns: (transfer full): a new #GFile.
+ * Since: 2.32
+ */
+
+
+/**
  * g_file_open_readwrite:
  * @file: #GFile to open
  * @cancellable: (allow-none): a #GCancellable
@@ -26837,7 +27705,7 @@
  * @file: input #GFile.
  * @attribute: a string containing the attribute's name.
  * @type: The type of the attribute
- * @value_p: a pointer to the value (or the pointer itself if the type is a pointer type)
+ * @value_p: (allow-none): a pointer to the value (or the pointer itself if the type is a pointer type)
  * @flags: a set of #GFileQueryInfoFlags.
  * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  * @error: a #GError, or %NULL
@@ -26845,7 +27713,7 @@
  * Sets an attribute in the file with attribute name @attribute to @value.
  *
  * Some attributes can be unset by setting @attribute to
- * %G_FILE_ATTRIBUTE_TYPE_INVALID and @value to %NULL.
+ * %G_FILE_ATTRIBUTE_TYPE_INVALID and @value_p to %NULL.
  *
  * If @cancellable is not %NULL, then the operation can be cancelled by
  * triggering the cancellable object from another thread. If the operation
@@ -27858,8 +28726,10 @@
  * @cancellable: optional #GCancellable object, %NULL to ignore.
  * @error: a #GError location to store the error occurring, or %NULL to ignore.
  *
- * Initializes the object implementing the interface. This must be
- * done before any real use of the object after initial construction.
+ * Initializes the object implementing the interface.
+ *
+ * The object must be initialized before any real use after initial
+ * construction, either with this function or g_async_initable_init_async().
  *
  * Implementations may also support cancellation. If @cancellable is not %NULL,
  * then initialization can be cancelled by triggering the cancellable object
@@ -27868,14 +28738,16 @@
  * the object doesn't support cancellable initialization the error
  * %G_IO_ERROR_NOT_SUPPORTED will be returned.
  *
- * If this function is not called, or returns with an error then all
- * operations on the object should fail, generally returning the
- * error %G_IO_ERROR_NOT_INITIALIZED.
+ * If the object is not initialized, or initialization returns with an
+ * error, then all operations on the object except g_object_ref() and
+ * g_object_unref() are considered to be invalid, and have undefined
+ * behaviour. See the <xref linkend="ginitable"/> section introduction
+ * for more details.
  *
  * Implementations of this method must be idempotent, i.e. multiple calls
  * to this function with the same argument should return the same results.
  * Only the first call initializes the object, further calls return the result
- * of the first call. This is so that its safe to implement the singleton
+ * of the first call. This is so that it's safe to implement the singleton
  * pattern in the GObject constructor function.
  *
  * return %FALSE and set @error appropriately if present.
@@ -29163,6 +30035,992 @@
 
 
 /**
+ * g_menu_append:
+ * @menu: a #GMenu
+ * @label: (allow-none): the section label, or %NULL
+ * @detailed_action: (allow-none): the detailed action string, or %NULL
+ *
+ * Convenience function for appending a normal menu item to the end of
+ * @menu.  Combine g_menu_new() and g_menu_insert_item() for a more
+ * flexible alternative.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * g_menu_append_item:
+ * @menu: a #GMenu
+ * @item: a #GMenuItem to append
+ *
+ * Appends @item to the end of @menu.
+ *
+ * See g_menu_insert_item() for more information.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * g_menu_append_section:
+ * @menu: a #GMenu
+ * @label: (allow-none): the section label, or %NULL
+ * @section: a #GMenuModel with the items of the section
+ *
+ * Convenience function for appending a section menu item to the end of
+ * @menu.  Combine g_menu_new_section() and g_menu_insert_item() for a
+ * more flexible alternative.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * g_menu_append_submenu:
+ * @menu: a #GMenu
+ * @label: (allow-none): the section label, or %NULL
+ * @submenu: a #GMenuModel with the items of the submenu
+ *
+ * Convenience function for appending a submenu menu item to the end of
+ * @menu.  Combine g_menu_new_submenu() and g_menu_insert_item() for a
+ * more flexible alternative.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * g_menu_attribute_iter_get_name:
+ * @iter: a #GMenuAttributeIter
+ *
+ * Gets the name of the attribute at the current iterator position, as
+ * a string.
+ *
+ * The iterator is not advanced.
+ *
+ * Returns: the name of the attribute
+ * Since: 2.32
+ */
+
+
+/**
+ * g_menu_attribute_iter_get_next:
+ * @iter: a #GMenuAttributeIter
+ * @out_name: (out) (allow-none) (transfer none): the type of the attribute
+ * @value: (out) (allow-none) (transfer full): the attribute value
+ *
+ * This function combines g_menu_attribute_iter_next() with
+ * g_menu_attribute_iter_get_name() and g_menu_attribute_iter_get_value().
+ *
+ * First the iterator is advanced to the next (possibly first) attribute.
+ * If that fails, then %FALSE is returned and there are no other
+ * effects.
+ *
+ * If successful, @name and @value are set to the name and value of the
+ * attribute that has just been advanced to.  At this point,
+ * g_menu_item_get_name() and g_menu_item_get_value() will return the
+ * same values again.
+ *
+ * The value returned in @name remains valid for as long as the iterator
+ * remains at the current position.  The value returned in @value must
+ * be unreffed using g_variant_unref() when it is no longer in use.
+ *
+ * attribute
+ *
+ * Returns: %TRUE on success, or %FALSE if there is no additional
+ * Since: 2.32
+ */
+
+
+/**
+ * g_menu_attribute_iter_get_value:
+ * @iter: a #GMenuAttributeIter
+ *
+ * Gets the value of the attribute at the current iterator position.
+ *
+ * The iterator is not advanced.
+ *
+ * Returns: (transfer full): the value of the current attribute
+ * Since: 2.32
+ */
+
+
+/**
+ * g_menu_attribute_iter_next:
+ * @iter: a #GMenuAttributeIter
+ *
+ * Attempts to advance the iterator to the next (possibly first)
+ * attribute.
+ *
+ * %TRUE is returned on success, or %FALSE if there are no more
+ * attributes.
+ *
+ * You must call this function when you first acquire the iterator
+ * to advance it to the first attribute (and determine if the first
+ * attribute exists at all).
+ *
+ * Returns: %TRUE on success, or %FALSE when there are no more attributes
+ * Since: 2.32
+ */
+
+
+/**
+ * g_menu_freeze:
+ * @menu: a #GMenu
+ *
+ * Marks @menu as frozen.
+ *
+ * After the menu is frozen, it is an error to attempt to make any
+ * changes to it.  In effect this means that the #GMenu API must no
+ * longer be used.
+ *
+ * This function causes g_menu_model_is_mutable() to begin returning
+ * %FALSE, which has some positive performance implications.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * g_menu_insert:
+ * @menu: a #GMenu
+ * @position: the position at which to insert the item
+ * @label: (allow-none): the section label, or %NULL
+ * @detailed_action: (allow-none): the detailed action string, or %NULL
+ *
+ * Convenience function for inserting a normal menu item into @menu.
+ * Combine g_menu_new() and g_menu_insert_item() for a more flexible
+ * alternative.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * g_menu_insert_item:
+ * @menu: a #GMenu
+ * @position: the position at which to insert the item
+ * @item: the #GMenuItem to insert
+ *
+ * Inserts @item into @menu.
+ *
+ * The "insertion" is actually done by copying all of the attribute and
+ * link values of @item and using them to form a new item within @menu.
+ * As such, @item itself is not really inserted, but rather, a menu item
+ * that is exactly the same as the one presently described by @item.
+ *
+ * This means that @item is essentially useless after the insertion
+ * occurs.  Any changes you make to it are ignored unless it is inserted
+ * again (at which point its updated values will be copied).
+ *
+ * You should probably just free @item once you're done.
+ *
+ * There are many convenience functions to take care of common cases.
+ * See g_menu_insert(), g_menu_insert_section() and
+ * g_menu_insert_submenu() as well as "prepend" and "append" variants of
+ * each of these functions.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * g_menu_insert_section:
+ * @menu: a #GMenu
+ * @position: the position at which to insert the item
+ * @label: (allow-none): the section label, or %NULL
+ * @section: a #GMenuModel with the items of the section
+ *
+ * Convenience function for inserting a section menu item into @menu.
+ * Combine g_menu_new_section() and g_menu_insert_item() for a more
+ * flexible alternative.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * g_menu_insert_submenu:
+ * @menu: a #GMenu
+ * @position: the position at which to insert the item
+ * @label: (allow-none): the section label, or %NULL
+ * @submenu: a #GMenuModel with the items of the submenu
+ *
+ * Convenience function for inserting a submenu menu item into @menu.
+ * Combine g_menu_new_submenu() and g_menu_insert_item() for a more
+ * flexible alternative.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * g_menu_item_new:
+ * @label: (allow-none): the section label, or %NULL
+ * @detailed_action: (allow-none): the detailed action string, or %NULL
+ *
+ * Creates a new #GMenuItem.
+ *
+ * If @label is non-%NULL it is used to set the "label" attribute of the
+ * new item.
+ *
+ * If @detailed_action is non-%NULL it is used to set the "action" and
+ * possibly the "target" attribute of the new item.  See
+ * g_menu_item_set_detailed_action() for more information.
+ *
+ * Returns: a new #GMenuItem
+ * Since: 2.32
+ */
+
+
+/**
+ * g_menu_item_new_section:
+ * @label: (allow-none): the section label, or %NULL
+ * @section: a #GMenuModel with the items of the section
+ *
+ * Creates a new #GMenuItem representing a section.
+ *
+ * This is a convenience API around g_menu_item_new() and
+ * g_menu_item_set_section().
+ *
+ * The effect of having one menu appear as a section of another is
+ * exactly as it sounds: the items from @section become a direct part of
+ * the menu that @menu_item is added to.
+ *
+ * Visual separation is typically displayed between two non-empty
+ * sections.  If @label is non-%NULL then it will be encorporated into
+ * this visual indication.  This allows for labeled subsections of a
+ * menu.
+ *
+ * As a simple example, consider a typical "Edit" menu from a simple
+ * program.  It probably contains an "Undo" and "Redo" item, followed by
+ * a separator, followed by "Cut", "Copy" and "Paste".
+ *
+ * This would be accomplished by creating three #GMenu instances.  The
+ * first would be populated with the "Undo" and "Redo" items, and the
+ * second with the "Cut", "Copy" and "Paste" items.  The first and
+ * second menus would then be added as submenus of the third.  In XML
+ * format, this would look something like the following:
+ *
+ * <informalexample><programlisting><![CDATA[
+ * <menu id='edit-menu'>
+ * <section>
+ * <item label='Undo'/>
+ * <item label='Redo'/>
+ * </section>
+ * <section>
+ * <item label='Cut'/>
+ * <item label='Copy'/>
+ * <item label='Paste'/>
+ * </section>
+ * </menu>
+ * ]]></programlisting></informalexample>
+ *
+ * The following example is exactly equivalent.  It is more illustrative
+ * of the exact relationship between the menus and items (keeping in
+ * mind that the 'link' element defines a new menu that is linked to the
+ * containing one).  The style of the second example is more verbose and
+ * difficult to read (and therefore not recommended except for the
+ * purpose of understanding what is really going on).
+ *
+ * <informalexample><programlisting><![CDATA[
+ * <menu id='edit-menu'>
+ * <item>
+ * <link name='section'>
+ * <item label='Undo'/>
+ * <item label='Redo'/>
+ * </link>
+ * </item>
+ * <item>
+ * <link name='section'>
+ * <item label='Cut'/>
+ * <item label='Copy'/>
+ * <item label='Paste'/>
+ * </link>
+ * </item>
+ * </menu>
+ * ]]></programlisting></informalexample>
+ *
+ * Returns: a new #GMenuItem
+ * Since: 2.32
+ */
+
+
+/**
+ * g_menu_item_new_submenu:
+ * @label: (allow-none): the section label, or %NULL
+ * @submenu: a #GMenuModel with the items of the submenu
+ *
+ * Creates a new #GMenuItem representing a submenu.
+ *
+ * This is a convenience API around g_menu_item_new() and
+ * g_menu_item_set_submenu().
+ *
+ * Returns: a new #GMenuItem
+ * Since: 2.32
+ */
+
+
+/**
+ * g_menu_item_set_action_and_target:
+ * @menu_item: a #GMenuItem
+ * @action: (allow-none): the name of the action for this item
+ * @format_string: (allow-none): a GVariant format string
+ * @...: positional parameters, as per @format_string
+ *
+ * Sets or unsets the "action" and "target" attributes of @menu_item.
+ *
+ * If @action is %NULL then both the "action" and "target" attributes
+ * are unset (and @format_string is ignored along with the positional
+ * parameters).
+ *
+ * If @action is non-%NULL then the "action" attribute is set.
+ * @format_string is then inspected.  If it is non-%NULL then the proper
+ * position parameters are collected to create a #GVariant instance to
+ * use as the target value.  If it is %NULL then the positional
+ * parameters are ignored and the "target" attribute is unset.
+ *
+ * See also g_menu_item_set_action_and_target_value() for an equivalent
+ * call that directly accepts a #GVariant.  See
+ * g_menu_item_set_detailed_action() for a more convenient version that
+ * works with string-typed targets.
+ *
+ * See also g_menu_item_set_action_and_target_value() for a
+ * description of the semantics of the action and target attributes.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * g_menu_item_set_action_and_target_value:
+ * @menu_item: a #GMenuItem
+ * @action: (allow-none): the name of the action for this item
+ * @target_value: (allow-none): a #GVariant to use as the action target
+ *
+ * Sets or unsets the "action" and "target" attributes of @menu_item.
+ *
+ * If @action is %NULL then both the "action" and "target" attributes
+ * are unset (and @target_value is ignored).
+ *
+ * If @action is non-%NULL then the "action" attribute is set.  The
+ * "target" attribute is then set to the value of @target_value if it is
+ * non-%NULL or unset otherwise.
+ *
+ * Normal menu items (ie: not submenu, section or other custom item
+ * types) are expected to have the "action" attribute set to identify
+ * the action that they are associated with.  The state type of the
+ * action help to determine the disposition of the menu item.  See
+ * #GAction and #GActionGroup for an overview of actions.
+ *
+ * In general, clicking on the menu item will result in activation of
+ * the named action with the "target" attribute given as the parameter
+ * to the action invocation.  If the "target" attribute is not set then
+ * the action is invoked with no parameter.
+ *
+ * If the action has no state then the menu item is usually drawn as a
+ * plain menu item (ie: with no additional decoration).
+ *
+ * If the action has a boolean state then the menu item is usually drawn
+ * as a toggle menu item (ie: with a checkmark or equivalent
+ * indication).  The item should be marked as 'toggled' or 'checked'
+ * when the boolean state is %TRUE.
+ *
+ * If the action has a string state then the menu item is usually drawn
+ * as a radio menu item (ie: with a radio bullet or equivalent
+ * indication).  The item should be marked as 'selected' when the string
+ * state is equal to the value of the @target property.
+ *
+ * See g_menu_item_set_action_and_target() or
+ * g_menu_item_set_detailed_action() for two equivalent calls that are
+ * probably more convenient for most uses.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * g_menu_item_set_attribute:
+ * @menu_item: a #GMenuItem
+ * @attribute: the attribute to set
+ * @format_string: (allow-none): a #GVariant format string, or %NULL
+ * @...: positional parameters, as per @format_string
+ *
+ * Sets or unsets an attribute on @menu_item.
+ *
+ * The attribute to set or unset is specified by @attribute. This
+ * can be one of the standard attribute names %G_MENU_ATTRIBUTE_LABEL,
+ * %G_MENU_ATTRIBUTE_ACTION, %G_MENU_ATTRIBUTE_TARGET, or a custom
+ * attribute name.
+ * Attribute names are restricted to lowercase characters, numbers
+ * and '-'. Furthermore, the names must begin with a lowercase character,
+ * must not end with a '-', and must not contain consecutive dashes.
+ *
+ * If @format_string is non-%NULL then the proper position parameters
+ * are collected to create a #GVariant instance to use as the attribute
+ * value.  If it is %NULL then the positional parameterrs are ignored
+ * and the named attribute is unset.
+ *
+ * See also g_menu_item_set_attribute_value() for an equivalent call
+ * that directly accepts a #GVariant.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * g_menu_item_set_attribute_value:
+ * @menu_item: a #GMenuItem
+ * @attribute: the attribute to set
+ * @value: (allow-none): a #GVariant to use as the value, or %NULL
+ *
+ * Sets or unsets an attribute on @menu_item.
+ *
+ * The attribute to set or unset is specified by @attribute. This
+ * can be one of the standard attribute names %G_MENU_ATTRIBUTE_LABEL,
+ * %G_MENU_ATTRIBUTE_ACTION, %G_MENU_ATTRIBUTE_TARGET, or a custom
+ * attribute name.
+ * Attribute names are restricted to lowercase characters, numbers
+ * and '-'. Furthermore, the names must begin with a lowercase character,
+ * must not end with a '-', and must not contain consecutive dashes.
+ *
+ * must consist only of lowercase
+ * ASCII characters, digits and '-'.
+ *
+ * If @value is non-%NULL then it is used as the new value for the
+ * attribute.  If @value is %NULL then the attribute is unset. If
+ * the @value #GVariant is floating, it is consumed.
+ *
+ * See also g_menu_item_set_attribute() for a more convenient way to do
+ * the same.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * g_menu_item_set_detailed_action:
+ * @menu_item: a #GMenuItem
+ * @detailed_action: the "detailed" action string
+ *
+ * Sets the "action" and possibly the "target" attribute of @menu_item.
+ *
+ * If @detailed_action contains a double colon ("::") then it is used as
+ * a separator between an action name and a target string.  In this
+ * case, this call is equivalent to calling
+ * g_menu_item_set_action_and_target() with the part before the "::" and
+ * g_menu_item_set_target_value() with a string-type #GVariant
+ * containing the part following the "::".
+ *
+ * If @detailed_action doesn't contain "::" then the action is set to
+ * the given string (verbatim) and the target value is unset.
+ *
+ * See g_menu_item_set_action_and_target() or
+ * g_menu_item_set_action_and_target_value() for more flexible (but
+ * slightly less convenient) alternatives.
+ *
+ * See also g_menu_set_action_and_target_value() for a description of
+ * the semantics of the action and target attributes.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * g_menu_item_set_label:
+ * @menu_item: a #GMenuItem
+ * @label: (allow-none): the label to set, or %NULL to unset
+ *
+ * Sets or unsets the "label" attribute of @menu_item.
+ *
+ * If @label is non-%NULL it is used as the label for the menu item.  If
+ * it is %NULL then the label attribute is unset.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * g_menu_item_set_link:
+ * @menu_item: a #GMenuItem
+ * @link: type of link to establish or unset
+ * @model: (allow-none): the #GMenuModel to link to (or %NULL to unset)
+ *
+ * Creates a link from @menu_item to @model if non-%NULL, or unsets it.
+ *
+ * Links are used to establish a relationship between a particular menu
+ * item and another menu.  For example, %G_MENU_LINK_SUBMENU is used to
+ * associate a submenu with a particular menu item, and %G_MENU_LINK_SECTION
+ * is used to create a section. Other types of link can be used, but there
+ * is no guarantee that clients will be able to make sense of them.
+ * Link types are restricted to lowercase characters, numbers
+ * and '-'. Furthermore, the names must begin with a lowercase character,
+ * must not end with a '-', and must not contain consecutive dashes.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * g_menu_item_set_section:
+ * @menu_item: a #GMenuItem
+ * @section: (allow-none): a #GMenuModel, or %NULL
+ *
+ * Sets or unsets the "section" link of @menu_item to @section.
+ *
+ * The effect of having one menu appear as a section of another is
+ * exactly as it sounds: the items from @section become a direct part of
+ * the menu that @menu_item is added to.  See g_menu_item_new_section()
+ * for more information about what it means for a menu item to be a
+ * section.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * g_menu_item_set_submenu:
+ * @menu_item: a #GMenuItem
+ * @submenu: (allow-none): a #GMenuModel, or %NULL
+ *
+ * Sets or unsets the "submenu" link of @menu_item to @submenu.
+ *
+ * If @submenu is non-%NULL, it is linked to.  If it is %NULL then the
+ * link is unset.
+ *
+ * The effect of having one menu appear as a submenu of another is
+ * exactly as it sounds.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * g_menu_link_iter_get_name:
+ * @iter: a #GMenuLinkIter
+ *
+ * Gets the name of the link at the current iterator position.
+ *
+ * The iterator is not advanced.
+ *
+ * Returns: the type of the link
+ * Since: 2.32
+ */
+
+
+/**
+ * g_menu_link_iter_get_next:
+ * @iter: a #GMenuLinkIter
+ * @out_link: (out) (allow-none) (transfer none): the name of the link
+ * @value: (out) (allow-none) (transfer full): the linked #GMenuModel
+ *
+ * This function combines g_menu_link_iter_next() with
+ * g_menu_link_iter_get_name() and g_menu_link_iter_get_value().
+ *
+ * First the iterator is advanced to the next (possibly first) link.
+ * If that fails, then %FALSE is returned and there are no other effects.
+ *
+ * If successful, @out_link and @value are set to the name and #GMenuModel
+ * of the link that has just been advanced to.  At this point,
+ * g_menu_item_get_name() and g_menu_item_get_value() will return the
+ * same values again.
+ *
+ * The value returned in @out_link remains valid for as long as the iterator
+ * remains at the current position.  The value returned in @value must
+ * be unreffed using g_object_unref() when it is no longer in use.
+ *
+ * Returns: %TRUE on success, or %FALSE if there is no additional link
+ * Since: 2.32
+ */
+
+
+/**
+ * g_menu_link_iter_get_value:
+ * @iter: a #GMenuLinkIter
+ *
+ * Gets the linked #GMenuModel at the current iterator position.
+ *
+ * The iterator is not advanced.
+ *
+ * Returns: (transfer full): the #GMenuModel that is linked to
+ * Since: 2.32
+ */
+
+
+/**
+ * g_menu_link_iter_next:
+ * @iter: a #GMenuLinkIter
+ *
+ * Attempts to advance the iterator to the next (possibly first)
+ * link.
+ *
+ * %TRUE is returned on success, or %FALSE if there are no more links.
+ *
+ * You must call this function when you first acquire the iterator to
+ * advance it to the first link (and determine if the first link exists
+ * at all).
+ *
+ * Returns: %TRUE on success, or %FALSE when there are no more links
+ * Since: 2.32
+ */
+
+
+/**
+ * g_menu_markup_parser_end:
+ * @context: a #GMarkupParseContext
+ *
+ * Stop the parsing of a set of menus and return the #GHashTable.
+ *
+ * The #GHashTable maps strings to #GObject instances.  The parser only
+ * adds #GMenu instances to the table, but it may contain other types if
+ * a table was provided to g_menu_markup_parser_start().
+ *
+ * This call should be matched with g_menu_markup_parser_start().
+ * See that function for more information
+ *
+ * Returns: (transfer full): the #GHashTable containing the objects
+ * Since: 2.32
+ */
+
+
+/**
+ * g_menu_markup_parser_end_menu:
+ * @context: a #GMarkupParseContext
+ *
+ * Stop the parsing of a menu and return the newly-created #GMenu.
+ *
+ * This call should be matched with g_menu_markup_parser_start_menu().
+ * See that function for more information
+ *
+ * Returns: (transfer full): the newly-created #GMenu
+ * Since: 2.32
+ */
+
+
+/**
+ * g_menu_markup_parser_start:
+ * @context: a #GMarkupParseContext
+ * @domain: (allow-none): translation domain for labels, or %NULL
+ * @objects: (allow-none): a #GHashTable for the objects, or %NULL
+ *
+ * Begin parsing a group of menus in XML form.
+ *
+ * If @domain is not %NULL, it will be used to translate attributes
+ * that are marked as translatable, using gettext().
+ *
+ * If @objects is specified then it must be a #GHashTable that was
+ * created using g_hash_table_new_full() with g_str_hash(),
+ * g_str_equal(), g_free() and g_object_unref().  Any named menus (ie:
+ * those with an id='' attribute) that are encountered while parsing
+ * will be added to this table.  Each toplevel menu must be named.
+ *
+ * If @objects is %NULL then an empty hash table will be created.
+ *
+ * This function should be called from the start_element function for
+ * the element representing the group containing the menus.  In other
+ * words, the content inside of this element is expected to be a list of
+ * menus.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * g_menu_markup_parser_start_menu:
+ * @context: a #GMarkupParseContext
+ * @domain: (allow-none): translation domain for labels, or %NULL
+ * @objects: (allow-none): a #GHashTable for the objects, or %NULL
+ *
+ * Begin parsing the XML definition of a menu.
+ *
+ * This function should be called from the start_element function for
+ * the element representing the menu itself.  In other words, the
+ * content inside of this element is expected to be a list of items.
+ *
+ * If @domain is not %NULL, it will be used to translate attributes
+ * that are marked as translatable, using gettext().
+ *
+ * If @objects is specified then it must be a #GHashTable that was
+ * created using g_hash_table_new_full() with g_str_hash(),
+ * g_str_equal(), g_free() and g_object_unref().  Any named menus (ie:
+ * those with an * id='' attribute) that are encountered while parsing
+ * will be added to this table.
+ *
+ * If @objects is %NULL then named menus will not be supported.
+ *
+ * You should call g_menu_markup_parser_end_menu() from the
+ * corresponding end_element function in order to collect the newly
+ * parsed menu.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * g_menu_markup_print_stderr:
+ * @model: a #GMenuModel
+ *
+ * Print @model to stderr for debugging purposes.
+ *
+ * This debugging function will be removed in the future.
+ */
+
+
+/**
+ * g_menu_markup_print_string:
+ * @string: a #GString
+ * @model: the #GMenuModel to print
+ * @indent: the intentation level to start at
+ * @tabstop: how much to indent each level
+ *
+ * Print the contents of @model to @string.
+ * Note that you have to provide the containing
+ * <tag class="starttag">menu</tag> element yourself.
+ *
+ * Returns: @string
+ * Since: 2.32
+ */
+
+
+/**
+ * g_menu_model_get_item_attribute:
+ * @model: a #GMenuModel
+ * @item_index: the index of the item
+ * @attribute: the attribute to query
+ * @format_string: a #GVariant format string
+ * @...: positional parameters, as per @format_string
+ *
+ * Queries item at position @item_index in @model for the attribute
+ * specified by @attribute.
+ *
+ * If the attribute exists and matches the #GVariantType corresponding
+ * to @format_string then @format_string is used to deconstruct the
+ * value into the positional parameters and %TRUE is returned.
+ *
+ * If the attribute does not exist, or it does exist but has the wrong
+ * type, then the positional parameters are ignored and %FALSE is
+ * returned.
+ *
+ * type
+ *
+ * Returns: %TRUE if the named attribute was found with the expected
+ * Since: 2.32
+ */
+
+
+/**
+ * g_menu_model_get_item_attribute_value:
+ * @model: a #GMenuModel
+ * @item_index: the index of the item
+ * @attribute: the attribute to query
+ * @expected_type: (allow-none): the expected type of the attribute, or %NULL
+ *
+ * Queries the item at position @item_index in @model for the attribute
+ * specified by @attribute.
+ *
+ * If @expected_type is non-%NULL then it specifies the expected type of
+ * the attribute.  If it is %NULL then any type will be accepted.
+ *
+ * If the attribute exists and matches @expected_type (or if the
+ * expected type is unspecified) then the value is returned.
+ *
+ * If the attribute does not exist, or does not match the expected type
+ * then %NULL is returned.
+ *
+ * Returns: (transfer full): the value of the attribute
+ * Since: 2.32
+ */
+
+
+/**
+ * g_menu_model_get_item_link:
+ * @model: a #GMenuModel
+ * @item_index: the index of the item
+ * @link: the link to query
+ *
+ * Queries the item at position @item_index in @model for the link
+ * specified by @link.
+ *
+ * If the link exists, the linked #GMenuModel is returned.  If the link
+ * does not exist, %NULL is returned.
+ *
+ * Returns: (transfer full): the linked #GMenuModel, or %NULL
+ * Since: 2.32
+ */
+
+
+/**
+ * g_menu_model_get_n_items:
+ * @model: a #GMenuModel
+ *
+ * Query the number of items in @model.
+ *
+ * Returns: the number of items
+ * Since: 2.32
+ */
+
+
+/**
+ * g_menu_model_is_mutable:
+ * @model: a #GMenuModel
+ *
+ * Queries if @model is mutable.
+ *
+ * An immutable #GMenuModel will never emit the #GMenuModel::items-changed
+ * signal. Consumers of the model may make optimisations accordingly.
+ *
+ * emitted).
+ *
+ * Returns: %TRUE if the model is mutable (ie: "items-changed" may be
+ * Since: 2.32
+ */
+
+
+/**
+ * g_menu_model_items_changed:
+ * @model: a #GMenuModel
+ * @position: the position of the change
+ * @removed: the number of items removed
+ * @added: the number of items added
+ *
+ * Requests emission of the #GMenuModel::items-changed signal on @model.
+ *
+ * This function should never be called except by #GMenuModel
+ * subclasses.  Any other calls to this function will very likely lead
+ * to a violation of the interface of the model.
+ *
+ * The implementation should update its internal representation of the
+ * menu before emitting the signal.  The implementation should further
+ * expect to receive queries about the new state of the menu (and
+ * particularly added menu items) while signal handlers are running.
+ *
+ * The implementation must dispatch this call directly from a mainloop
+ * entry and not in response to calls -- particularly those from the
+ * #GMenuModel API.  Said another way: the menu must not change while
+ * user code is running without returning to the mainloop.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * g_menu_model_iterate_item_attributes:
+ * @model: a #GMenuModel
+ * @item_index: the index of the item
+ *
+ * Creates a #GMenuAttributeIter to iterate over the attributes of
+ * the item at position @item_index in @model.
+ *
+ * You must free the iterator with g_object_unref() when you are done.
+ *
+ * Returns: (transfer full): a new #GMenuAttributeIter
+ * Since: 2.32
+ */
+
+
+/**
+ * g_menu_model_iterate_item_links:
+ * @model: a #GMenuModel
+ * @item_index: the index of the item
+ *
+ * Creates a #GMenuLinkIter to iterate over the links of the item at
+ * position @item_index in @model.
+ *
+ * You must free the iterator with g_object_unref() when you are done.
+ *
+ * Returns: (transfer full): a new #GMenuLinkIter
+ * Since: 2.32
+ */
+
+
+/**
+ * g_menu_new:
+ *
+ * Creates a new #GMenu.
+ *
+ * The new menu has no items.
+ *
+ * Returns: a new #GMenu
+ * Since: 2.32
+ */
+
+
+/**
+ * g_menu_prepend:
+ * @menu: a #GMenu
+ * @label: (allow-none): the section label, or %NULL
+ * @detailed_action: (allow-none): the detailed action string, or %NULL
+ *
+ * Convenience function for prepending a normal menu item to the start
+ * of @menu.  Combine g_menu_new() and g_menu_insert_item() for a more
+ * flexible alternative.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * g_menu_prepend_item:
+ * @menu: a #GMenu
+ * @item: a #GMenuItem to prepend
+ *
+ * Prepends @item to the start of @menu.
+ *
+ * See g_menu_insert_item() for more information.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * g_menu_prepend_section:
+ * @menu: a #GMenu
+ * @label: (allow-none): the section label, or %NULL
+ * @section: a #GMenuModel with the items of the section
+ *
+ * Convenience function for prepending a section menu item to the start
+ * of @menu.  Combine g_menu_new_section() and g_menu_insert_item() for
+ * a more flexible alternative.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * g_menu_prepend_submenu:
+ * @menu: a #GMenu
+ * @label: (allow-none): the section label, or %NULL
+ * @submenu: a #GMenuModel with the items of the submenu
+ *
+ * Convenience function for prepending a submenu menu item to the start
+ * of @menu.  Combine g_menu_new_submenu() and g_menu_insert_item() for
+ * a more flexible alternative.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * g_menu_remove:
+ * @menu: a #GMenu
+ * @position: the position of the item to remove
+ *
+ * Removes an item from the menu.
+ *
+ * @position gives the index of the item to remove.
+ *
+ * It is an error if position is not in range the range from 0 to one
+ * less than the number of items in the menu.
+ *
+ * It is not possible to remove items by identity since items are added
+ * to the menu simply by copying their links and attributes (ie:
+ * identity of the item itself is not preserved).
+ *
+ * Since: 2.32
+ */
+
+
+/**
  * g_mount_can_eject:
  * @mount: a #GMount.
  *
@@ -29811,6 +31669,8 @@
  * @network: a #GInetAddressMask
  *
  * Adds @network to @monitor's list of available networks.
+ *
+ * Since: 2.32
  */
 
 
@@ -29820,6 +31680,8 @@
  * @network: a #GInetAddressMask
  *
  * Removes @network from @monitor's list of available networks.
+ *
+ * Since: 2.32
  */
 
 
@@ -30201,8 +32063,9 @@
  * @cancellable: (allow-none): optional cancellable object
  * @error: location to store the error occurring, or %NULL to ignore
  *
- * Flushed any outstanding buffers in the stream. Will block during
- * the operation. Closing the stream will implicitly cause a flush.
+ * Forces a write of all user-space buffered data for the given
+ * @stream. Will block during the operation. Closing the stream will
+ * implicitly cause a flush.
  *
  * This function is optional for inherited classes.
  *
@@ -30222,7 +32085,8 @@
  * @callback: (scope async): a #GAsyncReadyCallback to call when the request is satisfied
  * @user_data: (closure): the data to pass to callback function
  *
- * Flushes a stream asynchronously.
+ * Forces an asynchronous write of all user-space buffered data for
+ * the given @stream.
  * For behaviour details see g_output_stream_flush().
  *
  * When the operation is finished @callback will be
@@ -32779,44 +34643,6 @@
  *
  * A convenience function for creating multiple #GSimpleAction instances
  * and adding them to the action group.
- *
- * Each action is constructed as per one #GActionEntry.
- *
- * <example>
- * <title>Using g_simple_action_group_add_entries()</title>
- * <programlisting>
- * static void
- * activate_quit (GSimpleAction *simple,
- * GVariant      *parameter,
- * gpointer       user_data)
- * {
- * exit (0);
- * }
- *
- * static void
- * activate_print_string (GSimpleAction *simple,
- * GVariant      *parameter,
- * gpointer       user_data)
- * {
- * g_print ("%s\n", g_variant_get_string (parameter, NULL));
- * }
- *
- * static GActionGroup *
- * create_action_group (void)
- * {
- * const GActionEntry entries[] = {
- * { "quit",         activate_quit              },
- * { "print-string", activate_print_string, "s" }
- * };
- * GSimpleActionGroup *group;
- *
- * group = g_simple_action_group_new ();
- * g_simple_action_group_add_entries (group, entries, G_N_ELEMENTS (entries), NULL);
- *
- * return G_ACTION_GROUP (group);
- * }
- * </programlisting>
- * </example>
  *
  * Since: 2.30
  */
