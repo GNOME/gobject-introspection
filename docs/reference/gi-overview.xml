@@ -7,7 +7,7 @@
 <!--ENTITY index-Objects-Grouped SYSTEM "objects_grouped.sgml"-->
 <refentry id="gi-overview">
 <refmeta>
-  <refentrytitle role="top_of_page" id="gi-overview.top_of_page">Introspection Overivew</refentrytitle>
+  <refentrytitle role="top_of_page" id="gi-overview.top_of_page">Introspection Overview</refentrytitle>
   <manvolnum>3</manvolnum>
   <refmiscinfo>GI Library</refmiscinfo>
 </refmeta>
