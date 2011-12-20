@@ -27056,6 +27056,24 @@
  * Frees the memory allocated for the #GQueue. Only call this function if
  * @queue was created with g_queue_new(). If queue elements contain
  * dynamically-allocated memory, they should be freed first.
+ *
+ * <note><para>
+ * If queue elements contain dynamically-allocated memory,
+ * you should either use g_queue_free_full() or free them manually
+ * first.
+ * </para></note>
+ */
+
+
+/**
+ * g_queue_free_full:
+ * @queue: a pointer to a #GQueue
+ * @free_func: the function to be called to free each element's data
+ *
+ * Convenience method, which frees all the memory used by a #GQueue, and
+ * calls the specified destroy function on every element's data.
+ *
+ * Since: 2.32
  */
 
 

@@ -5310,6 +5310,17 @@
 
 
 /**
+ * GRemoteActionGroupInterface:
+ * @activate_action_full: the virtual function pointer for g_remote_action_group_activate_action_full()
+ * @change_action_state_full: the virtual function pointer for g_remote_action_group_change_action_state_full()
+ *
+ * The virtual function table for #GRemoteActionGroup.
+ *
+ * Since: 2.32
+ */
+
+
+/**
  * GResolver:
  *
  * The object that handles DNS resolution. Use g_resolver_get_default()
@@ -14369,6 +14380,37 @@
 
 
 /**
+ * SECTION:gremoteactiongroup
+ * @title: GRemoteActionGroup
+ * @short_description: a #GActionGroup that interacts with other processes
+ *
+ * The GRemoteActionGroup interface is implemented by #GActionGroup
+ * instances that either transmit action invocations to other processes
+ * or receive action invocations in the local process from other
+ * processes.
+ *
+ * The interface has <literal>_full</literal> variants of the two
+ * methods on #GActionGroup used to activate actions:
+ * g_action_group_activate_action() and
+ * g_action_group_change_action_state().  These variants allow a
+ * "platform data" #GVariant to be specified: a dictionary providing
+ * context for the action invocation (for example: timestamps, startup
+ * notification IDs, etc).
+ *
+ * #GDBusActionGroup implements #GRemoteActionGroup.  This provides a
+ * mechanism to send platform data for action invocations over D-Bus.
+ *
+ * Additionally, g_dbus_connection_export_action_group() will check if
+ * the exported #GActionGroup implements #GRemoteActionGroup and use the
+ * <literal>_full</literal> variants of the calls if available.  This
+ * provides a mechanism by which to receive platform data for action
+ * invocations that arrive by way of D-Bus.
+ *
+ * Since: 2.32
+ */
+
+
+/**
  * SECTION:gresolver
  * @short_description: Asynchronous and cancellable DNS resolver
  * @include: gio/gio.h
@@ -17155,18 +17197,6 @@
 
 
 /**
- * g_application_get_app_menu:
- * @application: a #GApplication
- *
- * Returns the menu model that has been set with
- * g_application_set_app_menu().
- *
- * Returns: the application menu of @application
- * Since: 2.32
- */
-
-
-/**
  * g_application_get_application_id:
  * @application: a #GApplication
  *
@@ -17251,18 +17281,6 @@
  *
  * Returns: %TRUE if @application is remote
  * Since: 2.28
- */
-
-
-/**
- * g_application_get_menubar:
- * @application: a #GApplication
- *
- * Returns the menu model that has been set with
- * g_application_set_menubar().
- *
- * Returns: the menubar for windows of @application
- * Since: 2.32
  */
 
 
@@ -17484,29 +17502,11 @@
  *
  * Deprecated:2.32:Use the #GActionMap interface instead.  Never ever
  * mix use of this API with use of #GActionMap on the same @application
- * or things will go very badly wrong.
+ * or things will go very badly wrong.  This function is known to
+ * introduce buggy behaviour (ie: signals not emitted on changes to the
+ * action group), so you should really use #GActionMap instead.
  *
  * Since: 2.28
- */
-
-
-/**
- * g_application_set_app_menu:
- * @application: a #GApplication
- * @app_menu: (allow-none): a #GMenuModel, or %NULL
- *
- * Sets or unsets the application menu for @application.
- *
- * The application menu is a single menu containing items that typically
- * impact the application as a whole, rather than acting on a specific
- * window or document.  For example, you would expect to see
- * "Preferences" or "Quit" in an application menu, but not "Save" or
- * "Print".
- *
- * If supported, the application menu will be rendered by the desktop
- * environment.
- *
- * Since: 2.32
  */
 
 
@@ -17572,27 +17572,6 @@
  * zero.  Any timeouts currently in progress are not impacted.
  *
  * Since: 2.28
- */
-
-
-/**
- * g_application_set_menubar:
- * @application: a #GApplication
- * @menubar: (allow-none): a #GMenuModel, or %NULL
- *
- * Sets or unsets the menubar for windows of @application.
- *
- * This is a menubar in the traditional sense.
- *
- * Depending on the desktop environment, this may appear at the top of
- * each window, or at the top of the screen.  In some environments, if
- * both the application menu and the menubar are set, the application
- * menu will be presented as if it were the first item of the menubar.
- * Other environments treat the two as completely separate -- for
- * example, the application menu may be rendered by the desktop shell
- * while the menubar (if set) remains in each individual window.
- *
- * Since: 2.32
  */
 
 
@@ -32931,6 +32910,27 @@
  *
  * Returns: %TRUE if hostname resolution is supported.
  * Since: 2.26
+ */
+
+
+/**
+ * g_remote_action_group_activate_action_full:
+ * @remote: a #GRemoteActionGroup
+ * @action_name: the name of the action to change the state of
+ * @value: the new requested value for the state
+ * @platform_data: the platform data to send
+ *
+ * Changes the state of a remote action.
+ *
+ * This is the same as g_action_group_change_action_state() except that
+ * it allows for provision of "platform data" to be sent along with the
+ * state change request.  This typically contains details such as the
+ * user interaction timestamp or startup notification information.
+ *
+ * @platform_data must be non-%NULL and must have the type
+ * %G_VARIANT_TYPE_VARDICT.  If it is floating, it will be consumed.
+ *
+ * Since: 2.32
  */
 
 
