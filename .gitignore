@@ -44,6 +44,7 @@ GModule-2.0.gir
 GObject-2.0.gir
 Gio-2.0.gir
 cmph-bdz-test
+gi-dump-types
 g-ir-annotation-tool
 g-ir-compiler
 g-ir-doc-tool
@@ -70,6 +71,7 @@ tests/scanner/Annotation-1.0.gir
 tests/scanner/Bar-1.0.gir
 tests/scanner/Foo-1.0.gir
 tests/scanner/GtkFrob-1.0.gir
+tests/scanner/Headeronly-1.0.gir
 tests/scanner/Regress-1.0.gir
 tests/scanner/TestInherit-1.0.gir
 tests/scanner/Utility-1.0.gir
