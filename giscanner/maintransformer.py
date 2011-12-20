@@ -260,11 +260,12 @@ usage is void (*_gtk_reserved1)(void);"""
             """Return a complete type, and the trailing string part after it.
             Use resolver() on each identifier, and combiner() on the parts of
             each complete type. (top_combiner is used on the top-most type.)"""
-            bits = re.split(r'([,<>])', type_str, 1)
+            bits = re.split(r'([,<>()])', type_str, 1)
             first, sep, rest = [bits[0], '', ''] if (len(bits)==1) else bits
             args = [resolver(first)]
-            if sep == '<':
-                while sep != '>':
+            if sep == '<' or sep == '(':
+                lastsep = '>' if (sep == '<') else ')'
+                while sep != lastsep:
                     next, rest = grab_one(rest, resolver, combiner, combiner)
                     args.append(next)
                     sep, rest = rest[0], rest[1:]

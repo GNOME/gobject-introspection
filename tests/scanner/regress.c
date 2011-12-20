@@ -1664,6 +1664,8 @@ enum
   PROP_TEST_OBJ_BOXED,
   PROP_TEST_OBJ_HASH_TABLE,
   PROP_TEST_OBJ_LIST,
+  PROP_TEST_OBJ_HASH_TABLE_OLD,
+  PROP_TEST_OBJ_LIST_OLD,
   PROP_TEST_OBJ_INT,
   PROP_TEST_OBJ_FLOAT,
   PROP_TEST_OBJ_DOUBLE,
@@ -1692,12 +1694,14 @@ regress_test_obj_set_property (GObject      *object,
       break;
 
     case PROP_TEST_OBJ_HASH_TABLE:
+    case PROP_TEST_OBJ_HASH_TABLE_OLD:
       if (self->hash_table)
         g_hash_table_unref (self->hash_table);
       self->hash_table = g_hash_table_ref (g_value_get_boxed (value));
       break;
 
     case PROP_TEST_OBJ_LIST:
+    case PROP_TEST_OBJ_LIST_OLD:
       if (self->list != NULL)
         {
           for (list = self->list; list != NULL; list = g_list_next (list))
@@ -1751,12 +1755,14 @@ regress_test_obj_get_property (GObject    *object,
       break;
 
     case PROP_TEST_OBJ_HASH_TABLE:
+    case PROP_TEST_OBJ_HASH_TABLE_OLD:
       if (self->hash_table != NULL)
         g_hash_table_ref (self->hash_table);
       g_value_set_boxed (value, self->hash_table);
       break;
 
     case PROP_TEST_OBJ_LIST:
+    case PROP_TEST_OBJ_LIST_OLD:
       g_value_set_pointer (value, self->list);
       break;
 
@@ -1993,7 +1999,7 @@ regress_test_obj_class_init (RegressTestObjClass *klass)
   /**
    * RegressTestObj:hash-table:
    *
-   * Type: GLib.HashTable<utf8,gint8>
+   * Type: GLib.HashTable(utf8,gint8)
    * Transfer: container
    */
   pspec = g_param_spec_boxed ("hash-table",
@@ -2008,7 +2014,7 @@ regress_test_obj_class_init (RegressTestObjClass *klass)
   /**
    * RegressTestObj:list:
    *
-   * Type: GLib.List<utf8>
+   * Type: GLib.List(utf8)
    * Transfer: none
    */
   pspec = g_param_spec_pointer ("list",
@@ -2018,6 +2024,36 @@ regress_test_obj_class_init (RegressTestObjClass *klass)
   g_object_class_install_property (gobject_class,
                                    PROP_TEST_OBJ_LIST,
                                    pspec);
+
+  /**
+   * RegressTestObj:hash-table-old:
+   *
+   * Type: GLib.HashTable<utf8,gint8>
+   * Transfer: container
+   */
+  pspec = g_param_spec_boxed ("hash-table-old",
+                              "GHashTable property with <>",
+                              "A contained GHashTable with <>",
+                              G_TYPE_HASH_TABLE,
+                              G_PARAM_READWRITE);
+  g_object_class_install_property (gobject_class,
+                                   PROP_TEST_OBJ_HASH_TABLE_OLD,
+                                   pspec);
+
+  /**
+   * RegressTestObj:list-old:
+   *
+   * Type: GLib.List<utf8>
+   * Transfer: none
+   */
+  pspec = g_param_spec_pointer ("list-old",
+                                "GList property with ()",
+                                "A contained GList with <>",
+                                G_PARAM_READWRITE);
+  g_object_class_install_property (gobject_class,
+                                   PROP_TEST_OBJ_LIST_OLD,
+                                   pspec);
+
 
 
   /**
