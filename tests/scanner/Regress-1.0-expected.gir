@@ -43,6 +43,11 @@ and/or use gtk-doc annotations.  -->
     <record name="Intset" c:type="RegressIntset" disguised="1">
       <doc xml:whitespace="preserve">Like telepathy-glib's TpIntset.</doc>
     </record>
+    <constant name="LONG_STRING_CONSTANT"
+              value="TYPE,VALUE,ENCODING,CHARSET,LANGUAGE,DOM,INTL,POSTAL,PARCEL,HOME,WORK,PREF,VOICE,FAX,MSG,CELL,PAGER,BBS,MODEM,CAR,ISDN,VIDEO,AOL,APPLELINK,ATTMAIL,CIS,EWORLD,INTERNET,IBMMAIL,MCIMAIL,POWERSHARE,PRODIGY,TLX,X400,GIF,CGM,WMF,BMP,MET,PMB,DIB,PICT,TIFF,PDF,PS,JPEG,QTIME,MPEG,MPEG2,AVI,WAVE,AIFF,PCM,X509,PGP"
+              c:type="REGRESS_LONG_STRING_CONSTANT">
+      <type name="utf8" c:type="gchar*"/>
+    </constant>
     <constant name="Mixed_Case_Constant"
               value="4423"
               c:type="REGRESS_Mixed_Case_Constant">
