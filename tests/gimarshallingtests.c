@@ -1514,6 +1514,16 @@ gi_marshalling_tests_array_zero_terminated_return (void)
 }
 
 /**
+ * gi_marshalling_tests_array_zero_terminated_return_null:
+ * Returns: (array zero-terminated=1) (transfer none):
+ */
+gchar **
+gi_marshalling_tests_array_zero_terminated_return_null (void)
+{
+    return NULL;
+}
+
+/**
  * gi_marshalling_tests_array_zero_terminated_return_struct:
  * Returns: (array zero-terminated=1) (transfer full):
  */

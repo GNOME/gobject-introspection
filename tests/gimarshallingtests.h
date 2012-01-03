@@ -395,6 +395,7 @@ void gi_marshalling_tests_array_inout_etc (gint first, gint **ints, gint *length
 /* Zero-terminated */
 
 gchar **gi_marshalling_tests_array_zero_terminated_return (void);
+gchar **gi_marshalling_tests_array_zero_terminated_return_null (void);
 GIMarshallingTestsBoxedStruct **gi_marshalling_tests_array_zero_terminated_return_struct (void);
 
 void gi_marshalling_tests_array_zero_terminated_in (gchar **utf8s);
