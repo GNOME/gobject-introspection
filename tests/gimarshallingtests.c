@@ -3810,6 +3810,76 @@ gi_marshalling_tests_object_int8_out (GIMarshallingTestsObject *object, gint8 *o
   gi_marshalling_tests_object_method_int8_out (object, out);
 }
 
+/**
+ * gi_marshalling_tests_object_vfunc_return_value_only:
+ */
+glong
+gi_marshalling_tests_object_vfunc_return_value_only (GIMarshallingTestsObject *self)
+{
+    /* make sure that local variables don't get smashed */
+    glong return_value;
+    gulong local = 0x12345678;
+    return_value = GI_MARSHALLING_TESTS_OBJECT_GET_CLASS (self)->vfunc_return_value_only (self);
+    g_assert_cmpint(local, ==, 0x12345678);
+    return return_value;
+}
+
+/**
+ * gi_marshalling_tests_object_vfunc_one_out_parameter:
+ * @a: (out):
+ */
+void
+gi_marshalling_tests_object_vfunc_one_out_parameter (GIMarshallingTestsObject *self, gfloat *a)
+{
+    /* make sure that local variables don't get smashed */
+    gulong local = 0x12345678;
+    GI_MARSHALLING_TESTS_OBJECT_GET_CLASS (self)->vfunc_one_out_parameter (self, a);
+    g_assert_cmpint(local, ==, 0x12345678);
+}
+
+/**
+ * gi_marshalling_tests_object_vfunc_multiple_out_parameters:
+ * @a: (out):
+ * @b: (out):
+ */
+void
+gi_marshalling_tests_object_vfunc_multiple_out_parameters (GIMarshallingTestsObject *self, gfloat *a, gfloat *b)
+{
+    /* make sure that local variables don't get smashed */
+    gulong local = 0x12345678;
+    GI_MARSHALLING_TESTS_OBJECT_GET_CLASS (self)->vfunc_multiple_out_parameters (self, a, b);
+    g_assert_cmpint(local, ==, 0x12345678);
+}
+
+/**
+ * gi_marshalling_tests_object_vfunc_return_value_and_one_out_parameter:
+ * @a: (out):
+ */
+glong
+gi_marshalling_tests_object_vfunc_return_value_and_one_out_parameter (GIMarshallingTestsObject *self, glong *a)
+{
+    /* make sure that local variables don't get smashed */
+    gulong return_value;
+    gulong local = 0x12345678;
+    return_value = GI_MARSHALLING_TESTS_OBJECT_GET_CLASS (self)->vfunc_return_value_and_one_out_parameter (self, a);
+    g_assert_cmpint(local, ==, 0x12345678);
+    return return_value;
+}
+
+/**
+ * gi_marshalling_tests_object_vfunc_return_value_and_multiple_out_parameters:
+ * @a: (out):
+ * @b: (out):
+ */
+glong
+gi_marshalling_tests_object_vfunc_return_value_and_multiple_out_parameters (GIMarshallingTestsObject *self, glong *a, glong *b)
+{
+    gulong return_value;
+    gulong local = 0x12345678;
+    return_value = GI_MARSHALLING_TESTS_OBJECT_GET_CLASS (self)->vfunc_return_value_and_multiple_out_parameters (self, a, b);
+    g_assert_cmpint(local, ==, 0x12345678);
+    return return_value;
+}
 
 G_DEFINE_TYPE (GIMarshallingTestsSubObject, gi_marshalling_tests_sub_object, GI_MARSHALLING_TESTS_TYPE_OBJECT);
 

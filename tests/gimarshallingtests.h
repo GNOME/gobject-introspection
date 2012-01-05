@@ -656,6 +656,38 @@ struct _GIMarshallingTestsObjectClass
      * @in: (in):
      */
     void (* method_deep_hierarchy) (GIMarshallingTestsObject *self, gint8 in);
+
+    /**
+     * GIMarshallingTestsObjectClass::vfunc_return_value_only:
+     */
+    glong (* vfunc_return_value_only) (GIMarshallingTestsObject *self);
+
+    /**
+     * GIMarshallingTestsObjectClass::vfunc_one_out_parameter:
+     * @a: (out):
+     */
+    void  (* vfunc_one_out_parameter) (GIMarshallingTestsObject *self, gfloat *a);
+
+    /**
+     * GIMarshallingTestsObjectClass::vfunc_multiple_out_parameters:
+     * @a: (out):
+     * @b: (out):
+     */
+    void  (* vfunc_multiple_out_parameters) (GIMarshallingTestsObject *self, gfloat *a, gfloat *b);
+
+    /**
+     * GIMarshallingTestsObjectClass::vfunc_return_value_and_one_out_parameter:
+     * @a: (out):
+     */
+    glong (* vfunc_return_value_and_one_out_parameter) (GIMarshallingTestsObject *self, glong *a);
+
+    /**
+     * GIMarshallingTestsObjectClass::vfunc_return_value_and_multiple_out_parameters:
+     * @a: (out):
+     * @b: (out):
+     */
+    glong (* vfunc_return_value_and_multiple_out_parameters) (GIMarshallingTestsObject *self, glong *a, glong *b);
+
 };
 
 struct _GIMarshallingTestsObject
@@ -680,6 +712,11 @@ void gi_marshalling_tests_object_method_int8_in (GIMarshallingTestsObject *objec
 void gi_marshalling_tests_object_method_int8_out (GIMarshallingTestsObject *object, gint8 *out);
 void gi_marshalling_tests_object_method_with_default_implementation (GIMarshallingTestsObject *object, gint8 in);
 
+glong gi_marshalling_tests_object_vfunc_return_value_only (GIMarshallingTestsObject *self);
+void gi_marshalling_tests_object_vfunc_one_out_parameter (GIMarshallingTestsObject *self, gfloat *a);
+void gi_marshalling_tests_object_vfunc_multiple_out_parameters (GIMarshallingTestsObject *self, gfloat *a, gfloat *b);
+glong gi_marshalling_tests_object_vfunc_return_value_and_one_out_parameter (GIMarshallingTestsObject *self, glong *a);
+glong gi_marshalling_tests_object_vfunc_return_value_and_multiple_out_parameters (GIMarshallingTestsObject *self, glong *a, glong *b);
 
 GIMarshallingTestsObject *gi_marshalling_tests_object_none_return (void);
 GIMarshallingTestsObject *gi_marshalling_tests_object_full_return (void);
