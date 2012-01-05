@@ -141,6 +141,36 @@ use it should be.</doc>
         </parameters>
       </method>
     </record>
+    <record name="TestBoxedB"
+            c:type="RegressTestBoxedB"
+            glib:type-name="RegressTestBoxedB"
+            glib:get-type="regress_test_boxed_b_get_type"
+            c:symbol-prefix="test_boxed_b">
+      <field name="some_int8" writable="1">
+        <type name="gint8" c:type="gint8"/>
+      </field>
+      <field name="some_long" writable="1">
+        <type name="glong" c:type="glong"/>
+      </field>
+      <constructor name="new" c:identifier="regress_test_boxed_b_new">
+        <return-value transfer-ownership="full">
+          <type name="TestBoxedB" c:type="RegressTestBoxedB*"/>
+        </return-value>
+        <parameters>
+          <parameter name="some_int8" transfer-ownership="none">
+            <type name="gint8" c:type="gint8"/>
+          </parameter>
+          <parameter name="some_long" transfer-ownership="none">
+            <type name="glong" c:type="glong"/>
+          </parameter>
+        </parameters>
+      </constructor>
+      <method name="copy" c:identifier="regress_test_boxed_b_copy">
+        <return-value transfer-ownership="full">
+          <type name="TestBoxedB" c:type="RegressTestBoxedB*"/>
+        </return-value>
+      </method>
+    </record>
     <record name="TestBoxedPrivate"
             c:type="RegressTestBoxedPrivate"
             disguised="1">

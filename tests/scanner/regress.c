@@ -1656,6 +1656,35 @@ regress_test_boxed_get_type (void)
   return our_type;
 }
 
+RegressTestBoxedB *
+regress_test_boxed_b_new (gint8 some_int8, glong some_long)
+{
+  RegressTestBoxedB *boxed;
+
+  boxed = g_slice_new (RegressTestBoxedB);
+  boxed->some_int8 = some_int8;
+  boxed->some_long = some_long;
+
+  return boxed;
+}
+
+RegressTestBoxedB *
+regress_test_boxed_b_copy (RegressTestBoxedB *boxed)
+{
+  return regress_test_boxed_b_new (boxed->some_int8, boxed->some_long);
+}
+
+static void
+regress_test_boxed_b_free (RegressTestBoxedB *boxed)
+{
+  g_slice_free (RegressTestBoxedB, boxed);
+}
+
+G_DEFINE_BOXED_TYPE(RegressTestBoxedB,
+                    regress_test_boxed_b,
+                    regress_test_boxed_b_copy,
+                    regress_test_boxed_b_free);
+
 G_DEFINE_TYPE(RegressTestObj, regress_test_obj, G_TYPE_OBJECT);
 
 enum
