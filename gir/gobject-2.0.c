@@ -1292,6 +1292,9 @@
  *
  * On UNIX, processes are identified by a process id (an integer),
  * while Windows uses process handles (which are pointers).
+ *
+ * GPid is used in GLib only for descendant processes spawned with
+ * the g_spawn functions.
  */
 
 
@@ -2315,6 +2318,32 @@
  * triggered when the object is finalized. Since the object is already being
  * finalized when the #GWeakNotify is called, there's not much you could do
  * with the object, apart from e.g. using its address as hash-index or the like.
+ */
+
+
+/**
+ * GWeakRef:
+ *
+ * A structure containing a weak reference to a #GObject.  It can either
+ * be empty (i.e. point to %NULL), or point to an object for as long as
+ * at least one "strong" reference to that object exists. Before the
+ * object's #GObjectClass.dispose method is called, every #GWeakRef
+ * associated with becomes empty (i.e. points to %NULL).
+ *
+ * Like #GValue, #GWeakRef can be statically allocated, stack- or
+ * heap-allocated, or embedded in larger structures.
+ *
+ * Unlike g_object_weak_ref() and g_object_add_weak_pointer(), this weak
+ * reference is thread-safe: converting a weak pointer to a reference is
+ * atomic with respect to invalidation of weak pointers to destroyed
+ * objects.
+ *
+ * If the object's #GObjectClass.dispose method results in additional
+ * references to the object being held, any #GWeakRef<!-- -->s taken
+ * before it was disposed will continue to point to %NULL.  If
+ * #GWeakRef<!-- -->s are taken after the object is disposed and
+ * re-referenced, they will continue to point to it until its refcount
+ * goes back to zero, at which point they too will be invalidated.
  */
 
 
@@ -7207,6 +7236,11 @@
  * the pointer located at @weak_pointer_location is only valid during
  * the lifetime of @object. When the @object is finalized,
  * @weak_pointer will be set to %NULL.
+ *
+ * Note that as with g_object_weak_ref(), the weak references created by
+ * this method are not thread-safe: they cannot safely be used in one
+ * thread if the object's last g_object_unref() might happen in another
+ * thread. Use #GWeakRef if thread-safety is required.
  */
 
 
@@ -8125,6 +8159,11 @@
  * "weak references" because they allow you to safely hold a pointer
  * to an object without calling g_object_ref() (g_object_ref() adds a
  * strong reference, that is, forces the object to stay alive).
+ *
+ * Note that the weak references created by this method are not
+ * thread-safe: they cannot safely be used in one thread if the
+ * object's last g_object_unref() might happen in another thread.
+ * Use #GWeakRef if thread-safety is required.
  */
 
 
@@ -11578,6 +11617,75 @@
  * Logs a critical warning.
  *
  * Since: 2.16
+ */
+
+
+/**
+ * g_weak_ref_clear: (skip)
+ * @weak_ref: (inout): location of a weak reference, which may be empty
+ *
+ * Frees resources associated with a non-statically-allocated #GWeakRef.
+ * After this call, the #GWeakRef is left in an undefined state.
+ *
+ * You should only call this on a #GWeakRef that previously had
+ * g_weak_ref_init() called on it.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * g_weak_ref_get: (skip)
+ * @weak_ref: (inout): location of a weak reference to a #GObject
+ *
+ * If @weak_ref is not empty, atomically acquire a strong
+ * reference to the object it points to, and return that reference.
+ *
+ * This function is needed because of the potential race between taking
+ * the pointer value and g_object_ref() on it, if the object was losing
+ * its last reference at the same time in a different thread.
+ *
+ * The caller should release the resulting reference in the usual way,
+ * by using g_object_unref().
+ *
+ * by @weak_ref, or %NULL if it was empty
+ *
+ * Returns: (transfer full) (type GObject.Object): the object pointed to
+ * Since: 2.32
+ */
+
+
+/**
+ * g_weak_ref_init: (skip)
+ * @weak_ref: (inout): uninitialized or empty location for a weak reference
+ * @object: (allow-none): a #GObject or %NULL
+ *
+ * Initialise a non-statically-allocated #GWeakRef.
+ *
+ * This function also calls g_weak_ref_set() with @object on the
+ * freshly-initialised weak reference.
+ *
+ * This function should always be matched with a call to
+ * g_weak_ref_clear().  It is not necessary to use this function for a
+ * #GWeakRef in static storage because it will already be
+ * properly initialised.  Just use g_weak_ref_set() directly.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * g_weak_ref_set: (skip)
+ * @weak_ref: location for a weak reference
+ * @object: (allow-none): a #GObject or %NULL
+ *
+ * Change the object to which @weak_ref points, or set it to
+ * %NULL.
+ *
+ * You must own a strong reference on @object while calling this
+ * function.
+ *
+ * Since: 2.32
  */
 
 

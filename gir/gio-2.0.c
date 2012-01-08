@@ -5004,6 +5004,9 @@
  *
  * On UNIX, processes are identified by a process id (an integer),
  * while Windows uses process handles (which are pointers).
+ *
+ * GPid is used in GLib only for descendant processes spawned with
+ * the g_spawn functions.
  */
 
 
@@ -5912,6 +5915,127 @@
  * A helper class for network servers to listen for and accept connections.
  *
  * Since: 2.22
+ */
+
+
+/**
+ * GSocketClient::event:
+ * @client: the #GSocketClient
+ * @event: the event that is occurring
+ * @connectable: the #GSocketConnectable that @event is occurring on
+ * @connection: the current representation of the connection
+ *
+ * Emitted when @client's activity on @connectable changes state.
+ * Among other things, this can be used to provide progress
+ * information about a network connection in the UI. The meanings of
+ * the different @event values are as follows:
+ *
+ * <variablelist>
+ * <varlistentry>
+ * <term>%G_SOCKET_CLIENT_RESOLVING:</term>
+ * <listitem><para>
+ * @client is about to look up @connectable in DNS.
+ * @connection will be %NULL.
+ * </para></listitem>
+ * </varlistentry>
+ * <varlistentry>
+ * <term>%G_SOCKET_CLIENT_RESOLVED:</term>
+ * <listitem><para>
+ * @client has successfully resolved @connectable in DNS.
+ * @connection will be %NULL.
+ * </para></listitem>
+ * </varlistentry>
+ * <varlistentry>
+ * <term>%G_SOCKET_CLIENT_CONNECTING:</term>
+ * <listitem><para>
+ * @client is about to make a connection to a remote host;
+ * either a proxy server or the destination server itself.
+ * @connection is the #GSocketConnection, which is not yet
+ * connected.
+ * </para></listitem>
+ * </varlistentry>
+ * <varlistentry>
+ * <term>%G_SOCKET_CLIENT_CONNECTED:</term>
+ * <listitem><para>
+ * @client has successfully connected to a remote host.
+ * @connection is the connected #GSocketConnection.
+ * </para></listitem>
+ * </varlistentry>
+ * <varlistentry>
+ * <term>%G_SOCKET_CLIENT_PROXY_NEGOTIATING:</term>
+ * <listitem><para>
+ * @client is about to negotiate with a proxy to get it to
+ * connect to @connectable. @connection is the
+ * #GSocketConnection to the proxy server.
+ * </para></listitem>
+ * </varlistentry>
+ * <varlistentry>
+ * <term>%G_SOCKET_CLIENT_PROXY_NEGOTIATED:</term>
+ * <listitem><para>
+ * @client has negotiated a connection to @connectable through
+ * a proxy server. @connection is the stream returned from
+ * g_proxy_connect(), which may or may not be a
+ * #GSocketConnection.
+ * </para></listitem>
+ * </varlistentry>
+ * <varlistentry>
+ * <term>%G_SOCKET_CLIENT_TLS_HANDSHAKING:</term>
+ * <listitem><para>
+ * @client is about to begin a TLS handshake. @connection is a
+ * #GTlsClientConnection.
+ * </para></listitem>
+ * </varlistentry>
+ * <varlistentry>
+ * <term>%G_SOCKET_CLIENT_TLS_HANDSHAKED:</term>
+ * <listitem><para>
+ * @client has successfully completed the TLS handshake.
+ * @connection is a #GTlsClientConnection.
+ * </para></listitem>
+ * </varlistentry>
+ * <varlistentry>
+ * <term>%G_SOCKET_CLIENT_COMPLETE:</term>
+ * <listitem><para>
+ * @client has either successfully connected to @connectable
+ * (in which case @connection is the #GSocketConnection that
+ * it will be returning to the caller) or has failed (in which
+ * case @connection is %NULL and the client is about to return
+ * an error).
+ * </para></listitem>
+ * </varlistentry>
+ * </variablelist>
+ *
+ * Each event except %G_SOCKET_CLIENT_COMPLETE may be emitted
+ * multiple times (or not at all) for a given connectable (in
+ * particular, if @client ends up attempting to connect to more than
+ * one address). However, if @client emits the #GSocketClient:event
+ * signal at all for a given connectable, that it will always emit
+ * it with %G_SOCKET_CLIENT_COMPLETE when it is done.
+ *
+ * Note that there may be additional #GSocketClientEvent values in
+ * the future; unrecognized @event values should be ignored.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * GSocketClientEvent:
+ * @G_SOCKET_CLIENT_RESOLVING: The client is doing a DNS lookup.
+ * @G_SOCKET_CLIENT_RESOLVED: The client has completed a DNS lookup.
+ * @G_SOCKET_CLIENT_CONNECTING: The client is connecting to a remote host (either a proxy or the destination server).
+ * @G_SOCKET_CLIENT_CONNECTED: The client has connected to a remote host.
+ * @G_SOCKET_CLIENT_PROXY_NEGOTIATING: The client is negotiating with a proxy to connect to the destination server.
+ * @G_SOCKET_CLIENT_PROXY_NEGOTIATED: The client has negotiated with the proxy server.
+ * @G_SOCKET_CLIENT_TLS_HANDSHAKING: The client is performing a TLS handshake.
+ * @G_SOCKET_CLIENT_TLS_HANDSHAKED: The client has performed a TLS handshake.
+ * @G_SOCKET_CLIENT_COMPLETE: The client is done with a particular #GSocketConnectable.
+ *
+ * Describes an event occurring on a #GSocketClient. See the
+ * #GSocketClient::event signal for more details.
+ *
+ * Additional values may be added to this type in the future.
+ *
+ * Since: 2.32
  */
 
 
@@ -18741,8 +18865,7 @@
  * Gets a list of strings containing all the registered content types
  * known to the system. The list and its data should be freed using
  * <programlisting>
- * g_list_foreach (list, g_free, NULL);
- * g_list_free (list);
+ * g_list_free_full (list, g_free);
  * </programlisting>
  *
  * Returns: (element-type utf8) (transfer full): #GList of the registered content types
@@ -23793,7 +23916,7 @@
  *
  * Gets the keywords from the desktop file.
  *
- * Returns: (transfer none): The value of the X-GNOME-Keywords key
+ * Returns: (transfer none): The value of the Keywords key
  * Since: 2.32
  */
 
@@ -30047,7 +30170,7 @@
  * @section: a #GMenuModel with the items of the section
  *
  * Convenience function for appending a section menu item to the end of
- * @menu.  Combine g_menu_new_section() and g_menu_insert_item() for a
+ * @menu.  Combine g_menu_item_new_section() and g_menu_insert_item() for a
  * more flexible alternative.
  *
  * Since: 2.32
@@ -30211,7 +30334,7 @@
  * @section: a #GMenuModel with the items of the section
  *
  * Convenience function for inserting a section menu item into @menu.
- * Combine g_menu_new_section() and g_menu_insert_item() for a more
+ * Combine g_menu_item_new_section() and g_menu_insert_item() for a more
  * flexible alternative.
  *
  * Since: 2.32
@@ -30689,9 +30812,12 @@
  *
  * If @objects is specified then it must be a #GHashTable that was
  * created using g_hash_table_new_full() with g_str_hash(),
- * g_str_equal(), g_free() and g_object_unref().  Any named menus (ie:
- * those with an id='' attribute) that are encountered while parsing
- * will be added to this table.  Each toplevel menu must be named.
+ * g_str_equal(), g_free() and g_object_unref().
+ * Any named menus (ie: <tag class="starttag">menu</tag>,
+ * <tag class="starttag">submenu</tag>,
+ * <tag class="starttag">section</tag> or <tag class="starttag">link</tag>
+ * elements with an id='' attribute) that are encountered while parsing
+ * will be added to this table. Each toplevel menu must be named.
  *
  * If @objects is %NULL then an empty hash table will be created.
  *
@@ -30721,9 +30847,13 @@
  *
  * If @objects is specified then it must be a #GHashTable that was
  * created using g_hash_table_new_full() with g_str_hash(),
- * g_str_equal(), g_free() and g_object_unref().  Any named menus (ie:
- * those with an * id='' attribute) that are encountered while parsing
+ * g_str_equal(), g_free() and g_object_unref().
+ * Any named menus (ie: <tag class="starttag">submenu</tag>,
+ * <tag class="starttag">section</tag> or <tag class="starttag">link</tag>
+ * elements with an id='' attribute) that are encountered while parsing
  * will be added to this table.
+ * Note that toplevel <tag class="starttag">menu</tag> is not added to
+ * the hash table, even if it has an id attribute.
  *
  * If @objects is %NULL then named menus will not be supported.
  *
@@ -30958,7 +31088,7 @@
  * @section: a #GMenuModel with the items of the section
  *
  * Convenience function for prepending a section menu item to the start
- * of @menu.  Combine g_menu_new_section() and g_menu_insert_item() for
+ * of @menu.  Combine g_menu_item_new_section() and g_menu_insert_item() for
  * a more flexible alternative.
  *
  * Since: 2.32
@@ -35787,6 +35917,14 @@
  * g_tcp_wrapper_connection_get_base_io_stream() on the return value
  * to extract the #GTlsClientConnection.
  *
+ * If you need to modify the behavior of the TLS handshake (eg, by
+ * setting a client-side certificate to use, or connecting to the
+ * #GTlsConnection::accept-certificate signal), you can connect to
+ * @client's #GSocketClient::event signal and wait for it to be
+ * emitted with %G_SOCKET_CLIENT_TLS_HANDSHAKING, which will give you
+ * a chance to see the #GTlsClientConnection before the handshake
+ * starts.
+ *
  * Since: 2.28
  */
 
@@ -35950,6 +36088,52 @@
 
 
 /**
+ * g_socket_connection_connect:
+ * @connection: a #GSocketConnection
+ * @address: a #GSocketAddress specifying the remote address.
+ * @cancellable: (allow-none): a %GCancellable or %NULL
+ * @error: #GError for error reporting, or %NULL to ignore.
+ *
+ * Connect @connection to the specified remote address.
+ *
+ * Returns: %TRUE if the connection succeeded, %FALSE on error
+ * Since: 2.32
+ */
+
+
+/**
+ * g_socket_connection_connect_async:
+ * @connection: a #GSocketConnection
+ * @address: a #GSocketAddress specifying the remote address.
+ * @cancellable: (allow-none): a %GCancellable or %NULL
+ * @callback: (scope async): a #GAsyncReadyCallback
+ * @user_data: (closure): user data for the callback
+ *
+ * Asynchronously connect @connection to the specified remote address.
+ *
+ * This clears the #GSocket:blocking flag on @connection's underlying
+ * socket if it is currently set.
+ *
+ * Use g_socket_connection_connect_finish() to retrieve the result.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * g_socket_connection_connect_finish:
+ * @connection: a #GSocketConnection
+ * @result: the #GAsyncResult
+ * @error: #GError for error reporting, or %NULL to ignore.
+ *
+ * Gets the result of a g_socket_connection_connect_async() call.
+ *
+ * Returns: %TRUE if the connection succeeded, %FALSE on error
+ * Since: 2.32
+ */
+
+
+/**
  * g_socket_connection_factory_create_connection:
  * @socket: a #GSocket
  *
@@ -36031,6 +36215,18 @@
  *
  * Returns: (transfer none): a #GSocketAddress or %NULL on error.
  * Since: 2.22
+ */
+
+
+/**
+ * g_socket_connection_is_connected:
+ * @connection: a #GSocketConnection
+ *
+ * Checks if @connection is connected. This is equivalent to calling
+ * g_socket_is_connected() on @connection's underlying #GSocket.
+ *
+ * Returns: whether @connection is connected
+ * Since: 2.32
  */
 
 

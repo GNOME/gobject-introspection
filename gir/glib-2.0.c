@@ -2491,6 +2491,9 @@
  *
  * On UNIX, processes are identified by a process id (an integer),
  * while Windows uses process handles (which are pointers).
+ *
+ * GPid is used in GLib only for descendant processes spawned with
+ * the g_spawn functions.
  */
 
 
@@ -11492,6 +11495,9 @@
  * }
  * </programlisting>
  * </example>
+ *
+ * As of version 2.32, there is also a g_hash_table_add() function to
+ * add a key to a #GHashTable that is being used as a set.
  */
 
 
@@ -14267,8 +14273,7 @@
  * calling g_atexit() (or atexit()) except in the main executable of a
  * program.
  *
- * Deprecated:2.32: It is best to avoid g_atexit(), for the reasons
- * outlined above.
+ * Deprecated:2.32: It is best to avoid g_atexit().
  */
 
 
@@ -16352,9 +16357,6 @@
  * If no threads are waiting for @cond, this function has no effect.
  * It is good practice to lock the same mutex as the waiting threads
  * while calling this function, though not required.
- *
- * This function can be used even if g_thread_init() has not yet been
- * called, and, in that case, will do nothing.
  */
 
 
@@ -16402,9 +16404,6 @@
  * If no threads are waiting for @cond, this function has no effect.
  * It is good practice to hold the same lock as the waiting thread
  * while calling this function, though not required.
- *
- * This function can be used even if g_thread_init() has not yet been
- * called, and, in that case, will do nothing.
  */
 
 
@@ -19984,6 +19983,34 @@
  * or g_unsetenv().
  *
  * Returns: the value of the environment variable, or %NULL if
+ */
+
+
+/**
+ * g_hash_table_add:
+ * @hash_table: a #GHashTable
+ * @key: a key to insert
+ *
+ * This is a convenience function for using a #GHashTable as a set.  It
+ * is equivalent to calling g_hash_table_replace() with @key as both the
+ * key and the value.
+ *
+ * When a hash table only ever contains keys that have themselves as the
+ * corresponding value it is able to be stored more efficiently.  See
+ * the discussion in the section description.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * g_hash_table_contains:
+ * @hash_table: a #GHashTable
+ * @key: a key to check
+ *
+ * Checks if @key is in @hash_table.
+ *
+ * Since: 2.32
  */
 
 
@@ -24998,7 +25025,7 @@
  * returned and %errno will be set.
  *
  * Returns: A pointer to @tmpl, which has been modified
- * Since: 2.26
+ * Since: 2.30
  */
 
 
@@ -25023,7 +25050,7 @@
  * returned, and %errno will be set.
  *
  * Returns: A pointer to @tmpl, which has been modified
- * Since: 2.26
+ * Since: 2.30
  */
 
 
@@ -25135,9 +25162,6 @@
  * current thread will block until @mutex is unlocked by the other
  * thread.
  *
- * This function can be used even if g_thread_init() has not yet been
- * called, and, in that case, will do nothing.
- *
  * <note>#GMutex is neither guaranteed to be recursive nor to be
  * non-recursive.  As such, calling g_mutex_lock() on a #GMutex that has
  * already been locked by the same thread results in undefined behaviour
@@ -25152,9 +25176,6 @@
  * Tries to lock @mutex. If @mutex is already locked by another thread,
  * it immediately returns %FALSE. Otherwise it locks @mutex and returns
  * %TRUE.
- *
- * This function can be used even if g_thread_init() has not yet been
- * called, and, in that case, will immediately return %TRUE.
  *
  * <note>#GMutex is neither guaranteed to be recursive nor to be
  * non-recursive.  As such, calling g_mutex_lock() on a #GMutex that has
@@ -25175,9 +25196,6 @@
  *
  * Calling g_mutex_unlock() on a mutex that is not locked by the
  * current thread leads to undefined behaviour.
- *
- * This function can be used even if g_thread_init() has not yet been
- * called, and, in that case, will do nothing.
  */
 
 
@@ -25703,11 +25721,13 @@
 
 /**
  * g_on_error_stack_trace:
- * @prg_name: the program name, needed by <command>gdb</command> for the [S]tack trace option. If @prg_name is %NULL, g_get_prgname() is called to get the program name (which will work correctly if gdk_init() or gtk_init() has been called)
+ * @prg_name: the program name, needed by <command>gdb</command> for the [S]tack trace option.
  *
  * Invokes <command>gdb</command>, which attaches to the current
  * process and shows a stack trace. Called by g_on_error_query()
- * when the [S]tack trace option is selected.
+ * when the [S]tack trace option is selected. You can get the current
+ * process's "program name" with g_get_prgname(), assuming that you
+ * have called gtk_init() or gdk_init().
  *
  * This function may cause different actions on non-UNIX platforms.
  */
@@ -31523,7 +31543,7 @@
  * @source: a string to escape
  * @exceptions: a string of characters not to escape in @source
  *
- * Escapes the special characters '\b', '\f', '\n', '\r', '\t', '\'
+ * Escapes the special characters '\b', '\f', '\n', '\r', '\t', '\v', '\'
  * and '&quot;' in the string @source by inserting a '\' before
  * them. Additionally all characters in the range 0x01-0x1F (everything
  * below SPACE) and in the range 0x7F-0xFF (all non-ASCII chars) are
@@ -32678,7 +32698,7 @@
  * </para></listitem>
  * </varlistentry>
  * <varlistentry>
- * <term><option>-m {perf|slow|thorough|quick}</option></term>
+ * <term><option>-m {perf|slow|thorough|quick|undefined|no-undefined}</option></term>
  * <listitem><para>
  * execute tests according to these test modes:
  * <variablelist>
@@ -32699,6 +32719,20 @@
  * <term>quick</term>
  * <listitem><para>
  * quick tests, should run really quickly and give good coverage.
+ * </para></listitem>
+ * </varlistentry>
+ * <varlistentry>
+ * <term>undefined</term>
+ * <listitem><para>
+ * tests for undefined behaviour, may provoke programming errors
+ * under g_test_trap_fork() to check that appropriate assertions
+ * or warnings are given
+ * </para></listitem>
+ * </varlistentry>
+ * <varlistentry>
+ * <term>no-undefined</term>
+ * <listitem><para>
+ * avoid tests for undefined behaviour
  * </para></listitem>
  * </varlistentry>
  * </variablelist>
@@ -32882,6 +32916,8 @@
  * g_test_quick:
  *
  * Returns %TRUE if tests are run in quick mode.
+ * Exactly one of g_test_quick() and g_test_slow() is active in any run;
+ * there is no "medium speed".
  *
  * Returns: %TRUE if in quick mode
  */
@@ -32891,8 +32927,9 @@
  * g_test_quiet:
  *
  * Returns %TRUE if tests are run in quiet mode.
+ * The default is neither g_test_verbose() nor g_test_quiet().
  *
- * Returns: %TRUE if in quied mode
+ * Returns: %TRUE if in quiet mode
  */
 
 
@@ -32997,8 +33034,10 @@
  * g_test_slow:
  *
  * Returns %TRUE if tests are run in slow mode.
+ * Exactly one of g_test_quick() and g_test_slow() is active in any run;
+ * there is no "medium speed".
  *
- * Returns: %TRUE if in slow mode
+ * Returns: the opposite of g_test_quick()
  */
 
 
@@ -33027,9 +33066,10 @@
 /**
  * g_test_thorough:
  *
- * Returns %TRUE if tests are run in thorough mode.
+ * Returns %TRUE if tests are run in thorough mode, equivalent to
+ * g_test_slow().
  *
- * Returns: %TRUE if in thorough mode
+ * Returns: the same thing as g_test_slow()
  */
 
 
@@ -33069,6 +33109,12 @@
  * Assert that the last forked test failed.
  * See g_test_trap_fork().
  *
+ * This is sometimes used to test situations that are formally considered to
+ * be undefined behaviour, like inputs that fail a g_return_if_fail()
+ * check. In these situations you should skip the entire test, including the
+ * call to g_test_trap_fork(), unless g_test_undefined() returns %TRUE
+ * to indicate that undefined behaviour may be tested.
+ *
  * Since: 2.16
  */
 
@@ -33089,6 +33135,12 @@
  *
  * Assert that the stderr output of the last forked test
  * matches @serrpattern. See  g_test_trap_fork().
+ *
+ * This is sometimes used to test situations that are formally considered to
+ * be undefined behaviour, like inputs that fail a g_return_if_fail()
+ * check. In these situations you should skip the entire test, including the
+ * call to g_test_trap_fork(), unless g_test_undefined() returns %TRUE
+ * to indicate that undefined behaviour may be tested.
  *
  * Since: 2.16
  */
@@ -33187,9 +33239,22 @@
 
 
 /**
+ * g_test_undefined:
+ *
+ * Returns %TRUE if tests may provoke assertions and other formally-undefined
+ * behaviour under g_test_trap_fork(), to verify that appropriate warnings
+ * are given. It can be useful to turn this off if running tests under
+ * valgrind.
+ *
+ * Returns: %TRUE if tests may provoke programming errors
+ */
+
+
+/**
  * g_test_verbose:
  *
  * Returns %TRUE if tests are run in verbose mode.
+ * The default is neither g_test_verbose() nor g_test_quiet().
  *
  * Returns: %TRUE if in verbose mode
  */
@@ -35727,10 +35792,11 @@
 /**
  * g_utf8_strlen:
  * @p: pointer to the start of a UTF-8 encoded string
- * @max: the maximum number of bytes to examine. If @max is less than 0, then the string is assumed to be nul-terminated. If @max is 0, @p will not be examined and may be %NULL.
+ * @max: the maximum number of bytes to examine. If @max is less than 0, then the string is assumed to be nul-terminated. If @max is 0, @p will not be examined and may be %NULL. If @max is greater than 0, up to @max bytes are examined
  *
  * Computes the length of the string in characters, not including
- * the terminating nul character.
+ * the terminating nul character. If the @max'th byte falls in the
+ * middle of a character, the last (partial) character is not counted.
  *
  * Returns: the length of the string in characters
  */
@@ -35899,7 +35965,7 @@
  * being validated otherwise).
  *
  * Note that g_utf8_validate() returns %FALSE if @max_len is
- * positive and NUL is met before @max_len bytes have been read.
+ * positive and any of the @max_len bytes are NUL.
  *
  * Returns %TRUE if all of @str was valid. Many GLib and GTK+
  * routines <emphasis>require</emphasis> valid UTF-8 as input;
@@ -37086,6 +37152,10 @@
  * function and g_variant_iter_next() or g_variant_iter_next_value() on
  * the same iterator causes undefined behavior.
  *
+ * If you break out of a such a while loop using g_variant_iter_loop() then
+ * you must free or unreference all the unpacked values as you would with
+ * g_variant_get(). Failure to do so will cause a memory leak.
+ *
  * See the section on <link linkend='gvariant-format-strings'>GVariant
  * Format Strings</link>.
  *
@@ -37107,6 +37177,7 @@
  * g_variant_get_type_string (value));
  *
  * /<!-- -->* no need to free 'key' and 'value' here *<!-- -->/
+ * /<!-- -->* unless breaking out of this loop *<!-- -->/
  * }
  * }
  * </programlisting>
