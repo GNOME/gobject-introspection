@@ -677,11 +677,7 @@ class List(Type):
         self.element_type = element_type
 
     def clone(self):
-        l = List(self.name, self.element_type)
-        l.zeroterminated = self.zeroterminated
-        l.length_param_name = self.length_param_name
-        l.size = self.size
-        return l
+        return List(self.name, self.element_type)
 
 class Map(Type):
 
