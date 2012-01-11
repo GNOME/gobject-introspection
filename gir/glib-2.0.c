@@ -11474,10 +11474,10 @@
  * }
  *
  * void
- * set_insert (GHashTable *set,
+ * set_add (GHashTable *set,
  * gpointer    element)
  * {
- * g_hash_table_insert (set, element, element);
+ * g_hash_table_replace (set, element, element);
  * }
  *
  * gboolean
@@ -20050,7 +20050,7 @@
  * for which @predicate evaluates to %TRUE. If no pair with the
  * requested property is found, %NULL is returned.
  *
- * Returns: The value of the first key/value pair is returned,
+ * Returns: (allow-none): The value of the first key/value pair is returned,
  * Since: 2.4
  */
 
@@ -20275,7 +20275,7 @@
  * and has the value %NULL. If you need this distinction, use
  * g_hash_table_lookup_extended().
  *
- * Returns: the associated value, or %NULL if the key is not found
+ * Returns: (allow-none): the associated value, or %NULL if the key is not found
  */
 
 
@@ -20283,8 +20283,8 @@
  * g_hash_table_lookup_extended:
  * @hash_table: a #GHashTable
  * @lookup_key: the key to look up
- * @orig_key: return location for the original key, or %NULL
- * @value: return location for the value associated with the key, or %NULL
+ * @orig_key: (allow-none): return location for the original key, or %NULL
+ * @value: (allow-none): return location for the value associated with the key, or %NULL
  *
  * Looks up a key in the #GHashTable, returning the original key and the
  * associated value and a #gboolean which is %TRUE if the key was found. This
