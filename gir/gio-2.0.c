@@ -1244,6 +1244,9 @@
  * calling <literal>raise(SIGTERM)</literal>) if the connection
  * is closed by the remote peer.
  *
+ * Note that #GDBusConnection objects returned by g_bus_get_finish() and
+ * g_bus_get_sync() will (usually) have this property set to %TRUE.
+ *
  * Since: 2.26
  */
 
@@ -3689,6 +3692,24 @@
 
 
 /**
+ * GInetSocketAddress:flowinfo:
+ *
+ * The <literal>sin6_flowinfo</literal> field, for IPv6 addresses.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * GInetSocketAddress:scope_id:
+ *
+ * The <literal>sin6_scope_id</literal> field, for IPv6 addresses.
+ *
+ * Since: 2.32
+ */
+
+
+/**
  * GInitable:
  *
  * Interface for initializable objects.
@@ -5354,6 +5375,49 @@
 
 
 /**
+ * GResource:
+ *
+ * A resource bundle.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * GResourceError:
+ * @G_RESOURCE_ERROR_NOT_FOUND: no file was found at the requested path
+ * @G_RESOURCE_ERROR_INTERNAL: unknown error
+ *
+ * An error code used with %G_RESOURCE_ERROR in a #GError returned
+ * from a #GResource routine.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * GResourceFlags:
+ * @G_RESOURCE_FLAGS_NONE: No flags set.
+ * @G_RESOURCE_FLAGS_COMPRESSED: The file is compressed.
+ *
+ * GResourceFlags give information about a particular file inside a resource
+ * bundle.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * GResourceLookupFlags:
+ * @G_RESOURCE_LOOKUP_FLAGS_NONE: No flags set.
+ *
+ * GResourceLookupFlags determine how resource path lookups are handled.
+ *
+ * Since: 2.32
+ */
+
+
+/**
  * GSeekable:
  *
  * Seek object for streaming operations.
@@ -5885,11 +5949,47 @@
 
 
 /**
+ * GSocket:broadcast:
+ *
+ * Whether the socket should allow sending to and receiving from broadcast addresses.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * GSocket:multicast-loopback:
+ *
+ * Whether outgoing multicast packets loop back to the local host.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * GSocket:multicast-ttl:
+ *
+ * Time-to-live out outgoing multicast packets
+ *
+ * Since: 2.32
+ */
+
+
+/**
  * GSocket:timeout:
  *
  * The timeout in seconds on socket I/O
  *
  * Since: 2.26
+ */
+
+
+/**
+ * GSocket:ttl:
+ *
+ * Time-to-live for outgoing unicast packets
+ *
+ * Since: 2.32
  */
 
 
@@ -6874,6 +6974,16 @@
  *
  * Flags for g_tls_database_lookup_handle(), g_tls_database_lookup_issuer(),
  * and g_tls_database_lookup_issued().
+ *
+ * Since: 2.30
+ */
+
+
+/**
+ * GTlsDatabaseVerifyFlags:
+ * @G_TLS_DATABASE_VERIFY_NONE: No verification flags
+ *
+ * Flags for g_tls_database_verify_chain().
  *
  * Since: 2.30
  */
@@ -10131,6 +10241,15 @@
 
 
 /**
+ * G_RESOURCE_ERROR:
+ *
+ * Error domain for #GResource. Errors in this domain will be from the
+ * #GResourceError enumeration. See #GError for more information on
+ * error domains.
+ */
+
+
+/**
  * G_SETTINGS_BACKEND_EXTENSION_POINT_NAME:
  *
  * Extension point for #GSettingsBackend functionality.
@@ -11235,6 +11354,13 @@
  *
  * First available fundamental type number to create new fundamental
  * type id with G_TYPE_MAKE_FUNDAMENTAL().
+ */
+
+
+/**
+ * G_TYPE_RESOURCE:
+ *
+ * The #GType for #GResource.
  */
 
 
@@ -14559,6 +14685,78 @@
  * #GNetworkAddress and #GNetworkService provide wrappers around
  * #GResolver functionality that also implement #GSocketConnectable,
  * making it easy to connect to a remote host/service.
+ */
+
+
+/**
+ * SECTION:gresource
+ * @short_description: Resource framework
+ * @include: gio/gio.h
+ *
+ * Applications and libraries often contain binary or textual data that is really part of the
+ * application, rather than user data. For instance #GtkBuilder .ui files, splashscreen images,
+ * GMenu markup xml, CSS files, icons, etc. These are often shipped as files in <filename>$datadir/appname</filename>, or
+ * manually included as literal strings in the code.
+ *
+ * The #GResource API and the <link linkend="glib-compile-schemas">glib-compile-resources</link> program
+ * provide a convenient and efficient alternative to this which has some nice properties. You
+ * maintain the files as normal files, so its easy to edit them, but during the build the files
+ * are combined into a binary bundle that is linked into the executable. This means that loading
+ * the resource files are efficient (as they are already in memory, shared with other instances) and
+ * simple (no need to check for things like I/O errors or locate the files in the filesystem). It
+ * also makes it easier to create relocatable applications.
+ *
+ * Resource files can also be marked as compresses. Such files will be included in the resource bundle
+ * in a compressed form, but will be automatically uncompressed when the resource is used. This
+ * is very useful e.g. for larger text files that are parsed once (or rarely) and then thrown away.
+ *
+ * Resource bundles are created by the <link linkend="glib-compile-schemas">glib-compile-resources</link> program
+ * which takes an xml file that describes the bundle, and a set of files that the xml references. These
+ * are combined into a binary resource bundle.
+ *
+ * <example id="resource-example"><title>Example resource description</title>
+ * <programlisting><![CDATA[
+ * <?xml version="1.0" encoding="UTF-8"?>
+ * <gresources>
+ * <gresource prefix="/org/gtk/Example">
+ * <file>data/splashscreen.png</file>
+ * <file compressed="true">dialog.ui</file>
+ * <file>menumarkup.xml</file>
+ * </gresource>
+ * </gresources>
+ * ]]></programlisting></example>
+ *
+ * This will create a resource bundle with the following files:
+ * <programlisting><![CDATA[
+ * /org/gtk/Example/data/splashscreen.png
+ * /org/gtk/Example/dialog.ui
+ * /org/gtk/Example/menumarkup.xml
+ * ]]></programlisting>
+ *
+ * Note that all resources in the process share the same namespace, so use java-style
+ * path prefixes (like in the above example) to avoid conflicts.
+ *
+ * You can then use <link linkend="glib-compile-schemas">glib-compile-resources</link> to compile the xml to a
+ * binary bundle that you can load with g_resource_load(). However, its more common to use the --generate-source and
+ * --generate-header arguments to create a source file and header to link directly into your application.
+ *
+ * Once a #GResource has been created and registered all the data in it can be accessed globally in the process by
+ * using API calls like g_resources_open_stream() to stream the data or g_resources_lookup_data() to get a direct pointer
+ * to the data. You can also use uris like "resource:///org/gtk/Example/data/splashscreen.png" with #GFile to access
+ * the resource data.
+ *
+ * There are two forms of the generated source, the default version uses the compiler support for constructor
+ * and destructor functions (where availible) to automatically create and register the #GResource on startup
+ * or library load time. If you pass --manual-register two functions to register/unregister the resource is instead
+ * created. This requires an explicit initialization call in your application/library, but it works on all platforms,
+ * even on the minor ones where this is not availible. (Constructor support is availible for at least Win32, MacOS and Linux.)
+ *
+ * Note that resource data can point directly into the data segment of e.g. a library, so if you are unloading libraries
+ * during runtime you need to be very careful with keeping around pointers to data from a resource, as this goes away
+ * when the library is unloaded. However, in practice this is not generally a problem, since most resource accesses
+ * is for your own resources, and resource data is often used once, during parsing, and then released.
+ *
+ * Since: 2.32
  */
 
 
@@ -28620,6 +28818,18 @@
 
 
 /**
+ * g_inet_address_get_scope_id:
+ * @address: a %G_SOCKET_FAMILY_IPV6 #GInetAddress
+ *
+ * Gets the <literal>sin6_scope_id</literal> field from @address,
+ * which must be an IPv6 address.
+ *
+ * Returns: the scope id field
+ * Since: 2.32
+ */
+
+
+/**
  * g_inet_address_mask_equal:
  * @mask: a #GInetAddressMask
  * @mask2: another #GInetAddressMask
@@ -28740,8 +28950,8 @@
  * @family: the address family of @bytes
  *
  * Creates a new #GInetAddress from the given @family and @bytes.
- * @bytes should be 4 bytes for %G_INET_ADDRESS_IPV4 and 16 bytes for
- * %G_INET_ADDRESS_IPV6.
+ * @bytes should be 4 bytes for %G_SOCKET_FAMILY_IPV4 and 16 bytes for
+ * %G_SOCKET_FAMILY_IPV6.
  *
  * Returns: a new #GInetAddress corresponding to @family and @bytes.
  * Since: 2.22
@@ -28811,6 +29021,18 @@
  *
  * Returns: (transfer none): the #GInetAddress for @address, which must be
  * Since: 2.22
+ */
+
+
+/**
+ * g_inet_socket_address_get_flowinfo:
+ * @address: a %G_SOCKET_FAMILY_IPV6 #GInetSocketAddress
+ *
+ * Gets the <literal>sin6_flowinfo</literal> field from @address,
+ * which must be an IPv6 address.
+ *
+ * Returns: the flowinfo field
+ * Since: 2.32
  */
 
 
@@ -33380,6 +33602,264 @@
 
 
 /**
+ * g_resource_enumerate_children:
+ * @resource: A #GResource.
+ * @path: A pathname inside the resource.
+ * @lookup_flags: A #GResourceLookupFlags.
+ * @error: return location for a #GError, or %NULL.
+ *
+ * Returns all the names of children at the specified @path in the resource.
+ * The return result is a %NULL terminated list of strings which should
+ * be released with g_strfreev().
+ *
+ * @lookup_flags controls the behaviour of the lookup.
+ *
+ * Returns: (array zero-terminated=1) (transfer full): an array of constant strings
+ * Since: 2.32
+ */
+
+
+/**
+ * g_resource_error_quark:
+ *
+ * Gets the #GResource Error Quark.
+ *
+ * Returns: a #GQuark.
+ * Since: 2.32
+ */
+
+
+/**
+ * g_resource_get_info:
+ * @resource: A #GResource.
+ * @path: A pathname inside the resource.
+ * @lookup_flags: A #GResourceLookupFlags.
+ * @size: (out) (allow-none): a location to place the length of the contents of the file, or %NULL if the length is not needed
+ * @flags: (out) (allow-none): a location to place the flags about the file, or %NULL if the length is not needed
+ * @error: return location for a #GError, or %NULL.
+ *
+ * Looks for a file at the specified @path in the resource and
+ * if found returns information about it.
+ *
+ * @lookup_flags controls the behaviour of the lookup.
+ *
+ * Returns: %TRUE if the file was found. %FALSE if there were errors.
+ * Since: 2.32
+ */
+
+
+/**
+ * g_resource_load:
+ * @filename: (type filename): the path of a filename to load, in the GLib filename encoding.
+ * @error: return location for a #GError, or %NULL.
+ *
+ * Loads a binary resource bundle and creates a #GResource representation of it, allowing
+ * you to query it for data.
+ *
+ * If you want to use this resource in the global resource namespace you need
+ * to register it with g_resources_register().
+ *
+ * Returns: (transfer full): a new #GResource, or %NULL on error.
+ * Since: 2.32
+ */
+
+
+/**
+ * g_resource_lookup_data:
+ * @resource: A #GResource.
+ * @path: A pathname inside the resource.
+ * @lookup_flags: A #GResourceLookupFlags.
+ * @error: return location for a #GError, or %NULL.
+ *
+ * Looks for a file at the specified @path in the resource and
+ * returns a #GBytes that lets you directly access the data in
+ * memory.
+ *
+ * The data is always followed by a zero byte, so you
+ * can safely use the data as a C string. However, that byte
+ * is not included in the size of the GBytes.
+ *
+ * For uncompressed resource files this is a pointer directly into
+ * the resource bundle, which is typically in some readonly data section
+ * in the program binary. For compressed files we allocate memory on
+ * the heap and automatically uncompress the data.
+ *
+ * @lookup_flags controls the behaviour of the lookup.
+ *
+ * Free the returned object with g_bytes_unref().
+ *
+ * Returns: (transfer full): #GBytes or %NULL on error.
+ * Since: 2.32
+ */
+
+
+/**
+ * g_resource_new_from_data:
+ * @data: A #GBytes.
+ * @error: return location for a #GError, or %NULL.
+ *
+ * Creates a GResource from a reference to the binary resource bundle.
+ * This will keep a reference to @data while the resource lives, so
+ * the data should not be modified or freed.
+ *
+ * If you want to use this resource in the global resource namespace you need
+ * to register it with g_resources_register().
+ *
+ * Returns: (transfer full): a new #GResource, or %NULL on error.
+ * Since: 2.32
+ */
+
+
+/**
+ * g_resource_open_stream:
+ * @resource: A #GResource.
+ * @path: A pathname inside the resource.
+ * @lookup_flags: A #GResourceLookupFlags.
+ * @error: return location for a #GError, or %NULL.
+ *
+ * Looks for a file at the specified @path in the resource and
+ * returns a #GInputStream that lets you read the data.
+ *
+ * @lookup_flags controls the behaviour of the lookup.
+ *
+ * Free the returned object with g_object_unref().
+ *
+ * Returns: (transfer full): #GInputStream or %NULL on error.
+ * Since: 2.32
+ */
+
+
+/**
+ * g_resource_ref:
+ * @resource: A #GResource.
+ *
+ * Atomically increments the reference count of @array by one. This
+ * function is MT-safe and may be called from any thread.
+ *
+ * Returns: The passed in #GResource.
+ * Since: 2.32
+ */
+
+
+/**
+ * g_resource_unref:
+ * @resource: A #GResource.
+ *
+ * Atomically decrements the reference count of @resource by one. If the
+ * reference count drops to 0, all memory allocated by the array is
+ * released. This function is MT-safe and may be called from any
+ * thread.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * g_resources_enumerate_children:
+ * @path: A pathname inside the resource.
+ * @lookup_flags: A #GResourceLookupFlags.
+ * @error: return location for a #GError, or %NULL.
+ *
+ * Returns all the names of children at the specified @path in the set of
+ * globally registred resources.
+ * The return result is a %NULL terminated list of strings which should
+ * be released with g_strfreev().
+ *
+ * @lookup_flags controls the behaviour of the lookup.
+ *
+ * Returns: (array zero-terminated=1) (transfer full): an array of constant strings
+ * Since: 2.32
+ */
+
+
+/**
+ * g_resources_get_info:
+ * @path: A pathname inside the resource.
+ * @lookup_flags: A #GResourceLookupFlags.
+ * @size: (out) (allow-none): a location to place the length of the contents of the file, or %NULL if the length is not needed
+ * @flags: (out) (allow-none): a location to place the flags about the file, or %NULL if the length is not needed
+ * @error: return location for a #GError, or %NULL.
+ *
+ * Looks for a file at the specified @path in the set of
+ * globally registred resources and if found returns information about it.
+ *
+ * @lookup_flags controls the behaviour of the lookup.
+ *
+ * Returns: %TRUE if the file was found. %FALSE if there were errors.
+ * Since: 2.32
+ */
+
+
+/**
+ * g_resources_lookup_data:
+ * @path: A pathname inside the resource.
+ * @lookup_flags: A #GResourceLookupFlags.
+ * @error: return location for a #GError, or %NULL.
+ *
+ * Looks for a file at the specified @path in the set of
+ * globally registred resources and returns a #GBytes that
+ * lets you directly access the data in memory.
+ *
+ * The data is always followed by a zero byte, so you
+ * can safely use the data as a C string. However, that byte
+ * is not included in the size of the GBytes.
+ *
+ * For uncompressed resource files this is a pointer directly into
+ * the resource bundle, which is typically in some readonly data section
+ * in the program binary. For compressed files we allocate memory on
+ * the heap and automatically uncompress the data.
+ *
+ * @lookup_flags controls the behaviour of the lookup.
+ *
+ * Free the returned object with g_bytes_unref().
+ *
+ * Returns: (transfer full): #GBytes or %NULL on error.
+ * Since: 2.32
+ */
+
+
+/**
+ * g_resources_open_stream:
+ * @path: A pathname inside the resource.
+ * @lookup_flags: A #GResourceLookupFlags.
+ * @error: return location for a #GError, or %NULL.
+ *
+ * Looks for a file at the specified @path in the set of
+ * globally registred resources and returns a #GInputStream
+ * that lets you read the data.
+ *
+ * @lookup_flags controls the behaviour of the lookup.
+ *
+ * Free the returned object with g_object_unref().
+ *
+ * Returns: (transfer full): #GInputStream or %NULL on error.
+ * Since: 2.32
+ */
+
+
+/**
+ * g_resources_register:
+ * @resource: A #GResource.
+ *
+ * Registers the resource with the process-global set of resources.
+ * Once a resource is registered the files in it can be accessed
+ * with the global resource lookup functions like g_resources_lookup_data().
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * g_resources_unregister:
+ * @resource: A #GResource.
+ *
+ * Unregisters the resource from the process-global set of resources.
+ *
+ * Since: 2.32
+ */
+
+
+/**
  * g_seekable_can_seek:
  * @seekable: a #GSeekable.
  *
@@ -36350,6 +36830,19 @@
 
 
 /**
+ * g_socket_get_available_bytes:
+ * @socket: a #GSocket
+ *
+ * Get the amount of data pending in the OS input buffer.
+ *
+ * without blocking or -1 on error.
+ *
+ * Returns: the number of bytes that can be read from the socket
+ * Since: 2.32
+ */
+
+
+/**
  * g_socket_get_blocking:
  * @socket: a #GSocket.
  *
@@ -36358,6 +36851,19 @@
  *
  * Returns: %TRUE if blocking I/O is used, %FALSE otherwise.
  * Since: 2.22
+ */
+
+
+/**
+ * g_socket_get_broadcast:
+ * @socket: a #GSocket.
+ *
+ * Gets the broadcast setting on @socket; if %TRUE,
+ * it is possible to send packets to broadcast
+ * addresses or receive from broadcast addresses.
+ *
+ * Returns: the broadcast setting on @socket
+ * Since: 2.32
  */
 
 
@@ -36453,6 +36959,31 @@
 
 
 /**
+ * g_socket_get_multicast_loopback:
+ * @socket: a #GSocket.
+ *
+ * Gets the multicast loopback setting on @socket; if %TRUE (the
+ * default), outgoing multicast packets will be looped back to
+ * multicast listeners on the same host.
+ *
+ * Returns: the multicast loopback setting on @socket
+ * Since: 2.32
+ */
+
+
+/**
+ * g_socket_get_multicast_ttl:
+ * @socket: a #GSocket.
+ *
+ * Gets the multicast time-to-live setting on @socket; see
+ * g_socket_set_multicast_ttl() for more details.
+ *
+ * Returns: the multicast time-to-live setting on @socket
+ * Since: 2.32
+ */
+
+
+/**
  * g_socket_get_protocol:
  * @socket: a #GSocket.
  *
@@ -36503,6 +37034,18 @@
 
 
 /**
+ * g_socket_get_ttl:
+ * @socket: a #GSocket.
+ *
+ * Gets the unicast time-to-live setting on @socket; see
+ * g_socket_set_ttl() for more details.
+ *
+ * Returns: the time-to-live setting on @socket
+ * Since: 2.32
+ */
+
+
+/**
  * g_socket_is_closed:
  * @socket: a #GSocket
  *
@@ -36522,6 +37065,46 @@
  *
  * Returns: %TRUE if socket is connected, %FALSE otherwise.
  * Since: 2.22
+ */
+
+
+/**
+ * g_socket_join_multicast_group:
+ * @socket: a #GSocket.
+ * @group: a #GInetAddress specifying the group address to join.
+ * @iface: Interface to use
+ * @source_specific: %TRUE if source-specific multicast should be used
+ * @error: #GError for error reporting, or %NULL to ignore.
+ *
+ * Registers @socket to receive multicast messages sent to @group.
+ * @socket must be a %G_SOCKET_TYPE_DATAGRAM socket, and must have
+ * been bound to an appropriate interface and port with
+ * g_socket_bind().
+ *
+ * If @source_specific is %TRUE, source-specific multicast as defined
+ * in RFC 4604 is used.
+ *
+ * Returns: %TRUE on success, %FALSE on error.
+ * Since: 2.32
+ */
+
+
+/**
+ * g_socket_leave_multicast_group:
+ * @socket: a #GSocket.
+ * @group: a #GInetAddress specifying the group address to leave.
+ * @iface: Interface to use
+ * @source_specific: %TRUE if source-specific multicast should be used
+ * @error: #GError for error reporting, or %NULL to ignore.
+ *
+ * Removes @socket from the multicast group @group (while still
+ * allowing it to receive unicast messages).
+ *
+ * If @source_specific is %TRUE, source-specific multicast as defined
+ * in RFC 4604 is used.
+ *
+ * Returns: %TRUE on success, %FALSE on error.
+ * Since: 2.32
  */
 
 
@@ -37201,6 +37784,18 @@
 
 
 /**
+ * g_socket_set_broadcast:
+ * @socket: a #GSocket.
+ * @loopback: whether @socket should allow sending to and receiving from broadcast addresses
+ *
+ * Sets whether @socket should allow sending to and receiving from
+ * broadcast addresses. This is %FALSE by default.
+ *
+ * Since: 2.32
+ */
+
+
+/**
  * g_socket_set_keepalive:
  * @socket: a #GSocket.
  * @keepalive: Value for the keepalive flag
@@ -37243,6 +37838,32 @@
 
 
 /**
+ * g_socket_set_multicast_loopback:
+ * @socket: a #GSocket.
+ * @loopback: whether @socket should receive messages sent to its multicast groups from the local host
+ *
+ * Sets whether outgoing multicast packets will be received by sockets
+ * listening on that multicast address on the same host. This is %TRUE
+ * by default.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * g_socket_set_multicast_ttl:
+ * @socket: a #GSocket.
+ * @ttl: the time-to-live value for all multicast datagrams on @socket
+ *
+ * Sets the time-to-live for outgoing multicast datagrams on @socket.
+ * By default, this is 1, meaning that multicast packets will not leave
+ * the local network.
+ *
+ * Since: 2.32
+ */
+
+
+/**
  * g_socket_set_timeout:
  * @socket: a #GSocket.
  * @timeout: the timeout for @socket, in seconds, or 0 for none
@@ -37269,6 +37890,18 @@
  * cause the timeout to be reset.
  *
  * Since: 2.26
+ */
+
+
+/**
+ * g_socket_set_ttl:
+ * @socket: a #GSocket.
+ * @ttl: the time-to-live value for all unicast packets on @socket
+ *
+ * Sets the time-to-live for outgoing unicast packets on @socket.
+ * By default the platform-specific default value is used.
+ *
+ * Since: 2.32
  */
 
 
@@ -38844,6 +39477,41 @@
 
 
 /**
+ * g_unix_connection_receive_credentials_async:
+ * @connection: A #GUnixConnection.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
+ * @callback: (scope async): a #GAsyncReadyCallback to call when the request is satisfied
+ * @user_data: (closure): the data to pass to callback function
+ *
+ * Asynchronously receive credentials.
+ *
+ * For more details, see g_unix_connection_receive_credentials() which is
+ * the synchronous version of this call.
+ *
+ * When the operation is finished, @callback will be called. You can then call
+ * g_unix_connection_receive_credentials_finish() to get the result of the operation.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * g_unix_connection_receive_credentials_finish:
+ * @connection: A #GUnixConnection.
+ * @result: a #GAsyncResult.
+ * @error: a #GError, or %NULL
+ *
+ * Finishes an asynchronous receive credentials operation started with
+ * g_unix_connection_receive_credentials_async().
+ *
+ * Free the returned object with g_object_unref().
+ *
+ * Returns: (transfer full): a #GCredentials, or %NULL on error.
+ * Since: 2.32
+ */
+
+
+/**
  * g_unix_connection_receive_fd:
  * @connection: a #GUnixConnection
  * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore
@@ -38882,6 +39550,39 @@
  *
  * Returns: %TRUE on success, %FALSE if @error is set.
  * Since: 2.26
+ */
+
+
+/**
+ * g_unix_connection_send_credentials_async:
+ * @connection: A #GUnixConnection.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
+ * @callback: (scope async): a #GAsyncReadyCallback to call when the request is satisfied
+ * @user_data: (closure): the data to pass to callback function
+ *
+ * Asynchronously send credentials.
+ *
+ * For more details, see g_unix_connection_send_credentials() which is
+ * the synchronous version of this call.
+ *
+ * When the operation is finished, @callback will be called. You can then call
+ * g_unix_connection_send_credentials_finish() to get the result of the operation.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * g_unix_connection_send_credentials_finish:
+ * @connection: A #GUnixConnection.
+ * @result: a #GAsyncResult.
+ * @error: a #GError, or %NULL
+ *
+ * Finishes an asynchronous send credentials operation started with
+ * g_unix_connection_send_credentials_async().
+ *
+ * Returns: %TRUE if the operation was successful, otherwise %FALSE.
+ * Since: 2.32
  */
 
 
