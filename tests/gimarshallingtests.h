@@ -801,9 +801,13 @@ gint gi_marshalling_tests_int_return_out (gint *int_);
 #define GI_MARSHALLING_TESTS_CONSTANT_GERROR_DOMAIN "gi-marshalling-tests-gerror-domain"
 #define GI_MARSHALLING_TESTS_CONSTANT_GERROR_CODE 5
 #define GI_MARSHALLING_TESTS_CONSTANT_GERROR_MESSAGE "gi-marshalling-tests-gerror-message"
+#define GI_MARSHALLING_TESTS_CONSTANT_GERROR_DEBUG_MESSAGE "we got an error, life is shit"
 
 void gi_marshalling_tests_gerror(GError **error);
 void gi_marshalling_tests_gerror_array_in(gint *in_ints, GError **error);
+void gi_marshalling_tests_gerror_out(GError **error, gchar **debug);
+void gi_marshalling_tests_gerror_out_transfer_none(GError **err, const gchar **debug);
+GError *gi_marshalling_tests_gerror_return();
 
 /* Overrides */
 

@@ -3972,6 +3972,63 @@ gi_marshalling_tests_gerror_array_in(gint *in_ints, GError **error)
                         GI_MARSHALLING_TESTS_CONSTANT_GERROR_MESSAGE);
 }
 
+/**
+ * gi_marshalling_tests_gerror_out:
+ * @error: (out) (allow-none) (transfer full): location for the GError.
+ * @debug: (out) (allow-none) (transfer full): location for the debug message
+ *
+ * Inspired by gst_message_parse_error.
+ */
+void
+gi_marshalling_tests_gerror_out(GError **error, gchar **debug)
+{
+    GQuark quark = g_quark_from_static_string(GI_MARSHALLING_TESTS_CONSTANT_GERROR_DOMAIN);
+    g_set_error_literal(error,
+                        quark,
+                        GI_MARSHALLING_TESTS_CONSTANT_GERROR_CODE,
+                        GI_MARSHALLING_TESTS_CONSTANT_GERROR_MESSAGE);
+
+    if (debug != NULL) {
+        *debug = g_strdup (GI_MARSHALLING_TESTS_CONSTANT_GERROR_DEBUG_MESSAGE);
+    }
+}
+
+/**
+ * gi_marshalling_tests_gerror_out_transfer_none:
+ * @err: (out) (allow-none) (transfer none): location for the GError.
+ * @debug: (out) (allow-none) (transfer none): location for the debug message
+ *
+ * A variant of gi_marshalling_tests_gerror_out() which returns data the caller
+ * must not free.
+ */
+void
+gi_marshalling_tests_gerror_out_transfer_none(GError **err, const gchar **debug)
+{
+    static GError error = { 0,
+                        GI_MARSHALLING_TESTS_CONSTANT_GERROR_CODE,
+                        GI_MARSHALLING_TESTS_CONSTANT_GERROR_MESSAGE };
+    error.domain = g_quark_from_static_string(GI_MARSHALLING_TESTS_CONSTANT_GERROR_DOMAIN);
+    *err = &error;
+    *debug = GI_MARSHALLING_TESTS_CONSTANT_GERROR_DEBUG_MESSAGE;
+}
+
+/**
+ * gi_marshalling_tests_gerror_return:
+ *
+ * Yet another variant of gi_marshalling_tests_gerror_out().
+ *
+ * Returns: (transfer full): a GError
+ */
+GError *
+gi_marshalling_tests_gerror_return()
+{
+    GQuark quark = g_quark_from_static_string(GI_MARSHALLING_TESTS_CONSTANT_GERROR_DOMAIN);
+
+    return g_error_new(quark,
+                       GI_MARSHALLING_TESTS_CONSTANT_GERROR_CODE,
+                       GI_MARSHALLING_TESTS_CONSTANT_GERROR_MESSAGE);
+}
+
 static GIMarshallingTestsOverridesStruct *
 gi_marshalling_tests_overrides_struct_copy (GIMarshallingTestsOverridesStruct *struct_)
 {
