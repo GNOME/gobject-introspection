@@ -995,11 +995,24 @@ gi_marshalling_tests_gtype_return (void)
     return G_TYPE_NONE;
 }
 
+GType
+gi_marshalling_tests_gtype_string_return (void)
+{
+    return G_TYPE_STRING;
+}
+
 void
 gi_marshalling_tests_gtype_in (GType gtype)
 {
     g_assert(gtype == G_TYPE_NONE);
 }
+
+void
+gi_marshalling_tests_gtype_string_in (GType gtype)
+{
+    g_assert(gtype == G_TYPE_STRING);
+}
+
 
 /**
  * gi_marshalling_tests_gtype_out:
@@ -1009,6 +1022,16 @@ void
 gi_marshalling_tests_gtype_out (GType *gtype)
 {
     *gtype = G_TYPE_NONE;
+}
+
+/**
+ * gi_marshalling_tests_gtype_string_out:
+ * @gtype: (out):
+ */
+void
+gi_marshalling_tests_gtype_string_out (GType *gtype)
+{
+    *gtype = G_TYPE_STRING;
 }
 
 /**

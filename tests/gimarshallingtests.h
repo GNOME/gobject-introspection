@@ -236,9 +236,15 @@ void gi_marshalling_tests_time_t_inout (time_t *time_t_);
 
 GType gi_marshalling_tests_gtype_return (void);
 
+GType gi_marshalling_tests_gtype_string_return (void);
+
 void gi_marshalling_tests_gtype_in (GType gtype);
 
+void gi_marshalling_tests_gtype_string_in (GType gtype);
+
 void gi_marshalling_tests_gtype_out (GType *gtype);
+
+void gi_marshalling_tests_gtype_string_out (GType *gtype);
 
 void gi_marshalling_tests_gtype_inout (GType *gtype);
 
