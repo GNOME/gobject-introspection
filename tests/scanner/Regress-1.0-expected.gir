@@ -169,6 +169,43 @@ use it should be.</doc>
         </parameter>
       </parameters>
     </callback>
+    <callback name="TestCallbackGError" c:type="RegressTestCallbackGError">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="error" transfer-ownership="none">
+          <type name="GLib.Error" c:type="GError*"/>
+        </parameter>
+      </parameters>
+    </callback>
+    <callback name="TestCallbackHashtable"
+              c:type="RegressTestCallbackHashtable">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="data" transfer-ownership="none">
+          <doc xml:whitespace="preserve">a hash table; will be modified</doc>
+          <type name="GLib.HashTable" c:type="GHashTable*">
+            <type name="utf8"/>
+            <type name="gint"/>
+          </type>
+        </parameter>
+      </parameters>
+    </callback>
+    <callback name="TestCallbackOwnedGError"
+              c:type="RegressTestCallbackOwnedGError">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="error" transfer-ownership="full">
+          <doc xml:whitespace="preserve">GError instance; must be freed by the callback</doc>
+          <type name="GLib.Error" c:type="GError*"/>
+        </parameter>
+      </parameters>
+    </callback>
     <callback name="TestCallbackUserData" c:type="RegressTestCallbackUserData">
       <return-value transfer-ownership="none">
         <type name="gint" c:type="int"/>
@@ -2036,6 +2073,17 @@ call and can be released on return.</doc>
         </array>
       </return-value>
     </function>
+    <function name="test_gerror_callback"
+              c:identifier="regress_test_gerror_callback">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="callback" transfer-ownership="none" scope="call">
+          <type name="TestCallbackGError" c:type="RegressTestCallbackGError"/>
+        </parameter>
+      </parameters>
+    </function>
     <function name="test_ghash_container_return"
               c:identifier="regress_test_ghash_container_return">
       <return-value transfer-ownership="container">
@@ -2385,6 +2433,25 @@ element-type annotation.</doc>
         <type name="GLib.Variant" c:type="GVariant*"/>
       </return-value>
     </function>
+    <function name="test_hash_table_callback"
+              c:identifier="regress_test_hash_table_callback">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="data" transfer-ownership="none">
+          <doc xml:whitespace="preserve">GHashTable that gets passed to callback</doc>
+          <type name="GLib.HashTable" c:type="GHashTable*">
+            <type name="utf8"/>
+            <type name="gint"/>
+          </type>
+        </parameter>
+        <parameter name="callback" transfer-ownership="none" scope="call">
+          <type name="TestCallbackHashtable"
+                c:type="RegressTestCallbackHashtable"/>
+        </parameter>
+      </parameters>
+    </function>
     <function name="test_int" c:identifier="regress_test_int">
       <return-value transfer-ownership="none">
         <type name="gint" c:type="gint"/>
@@ -2560,6 +2627,18 @@ What we're testing here is that the scanner ignores the @a nested inside XML.</d
         <parameter name="a" transfer-ownership="none">
           <doc xml:whitespace="preserve">An integer</doc>
           <type name="gint" c:type="int"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="test_owned_gerror_callback"
+              c:identifier="regress_test_owned_gerror_callback">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="callback" transfer-ownership="none" scope="call">
+          <type name="TestCallbackOwnedGError"
+                c:type="RegressTestCallbackOwnedGError"/>
         </parameter>
       </parameters>
     </function>

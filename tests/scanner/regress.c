@@ -3026,6 +3026,48 @@ regress_test_obj_new_callback (RegressTestCallbackUserData callback, gpointer us
   return g_object_new (REGRESS_TEST_TYPE_OBJ, NULL);
 }
 
+/**
+ * regress_test_hash_table_callback:
+ * @data: (element-type utf8 gint): GHashTable that gets passed to callback
+ * @callback: (scope call):
+ **/
+void
+regress_test_hash_table_callback (GHashTable *data, RegressTestCallbackHashtable callback)
+{
+  callback (data);
+}
+
+/**
+ * regress_test_gerror_callback:
+ * @callback: (scope call):
+ **/
+void
+regress_test_gerror_callback (RegressTestCallbackGError callback)
+{
+  GError *error;
+
+  error = g_error_new_literal (G_IO_ERROR,
+                               G_IO_ERROR_NOT_SUPPORTED,
+                               "regression test error");
+  callback (error);
+  g_error_free (error);
+}
+
+/**
+ * regress_test_owned_gerror_callback:
+ * @callback: (scope call):
+ **/
+void
+regress_test_owned_gerror_callback (RegressTestCallbackOwnedGError callback)
+{
+  GError *error;
+
+  error = g_error_new_literal (G_IO_ERROR,
+                               G_IO_ERROR_PERMISSION_DENIED,
+                               "regression test owned error");
+  callback (error);
+}
+
 /* interface */
 
 static void

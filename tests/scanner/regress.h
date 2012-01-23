@@ -521,6 +521,17 @@ typedef void (*RegressTestSimpleCallback) (void);
 typedef int (*RegressTestCallback) (void);
 typedef int (*RegressTestCallbackUserData) (gpointer user_data);
 /**
+ * RegressTestCallbackHashtable:
+ * @data: (element-type utf8 gint): a hash table; will be modified
+ */
+typedef void (*RegressTestCallbackHashtable) (GHashTable *data);
+typedef void (*RegressTestCallbackGError) (const GError *error);
+/**
+ * RegressTestCallbackOwnedGError:
+ * @error: (transfer full): GError instance; must be freed by the callback
+ */
+typedef void (*RegressTestCallbackOwnedGError) (GError *error);
+/**
  * RegressTestCallbackFull:
  * @foo: the investment rate
  * @bar: how much money
@@ -548,6 +559,9 @@ void regress_test_obj_static_method_callback (RegressTestCallback callback);
 RegressTestObj *regress_test_obj_new_callback (RegressTestCallbackUserData callback,
                                 gpointer user_data,
                                 GDestroyNotify notify);
+void regress_test_hash_table_callback (GHashTable *data, RegressTestCallbackHashtable callback);
+void regress_test_gerror_callback (RegressTestCallbackGError callback);
+void regress_test_owned_gerror_callback (RegressTestCallbackOwnedGError callback);
 
 typedef struct _RegressTestInterface RegressTestInterface;
 
