@@ -133,10 +133,9 @@
  * @get_action_state_hint: the virtual function pointer for g_action_group_get_action_state_hint()
  * @get_action_enabled: the virtual function pointer for g_action_group_get_action_enabled()
  * @get_action_state: the virtual function pointer for g_action_group_get_action_state()
- * @set_action_state: the virtual function pointer for g_action_group_set_action_state()
+ * @change_action_state: the virtual function pointer for g_action_group_change_action_state()
  * @query_action: the virtual function pointer for g_action_group_query_action()
  * @activate_action: the virtual function pointer for g_action_group_activate_action()
- * @change_action_state: the virtual function pointer for g_action_group_change_action_state()
  * @action_added: the class closure for the #GActionGroup::action-added signal
  * @action_removed: the class closure for the #GActionGroup::action-removed signal
  * @action_enabled_changed: the class closure for the #GActionGroup::action-enabled-changed signal
@@ -1397,6 +1396,7 @@
  * @get_info: Returns a #GDBusInterfaceInfo. See g_dbus_interface_get_info().
  * @get_object: Gets the enclosing #GDBusObject. See g_dbus_interface_get_object().
  * @set_object: Sets the enclosing #GDBusObject. See g_dbus_interface_set_object().
+ * @dup_object: Gets a reference to the enclosing #GDBusObject. See g_dbus_interface_dup_object(). Added in 2.32.
  *
  * Base type for D-Bus interfaces.
  *
@@ -9688,6 +9688,7 @@
  * Checks whether the given #GParamSpec is of type %G_TYPE_PARAM_VALUE_ARRAY.
  *
  * Returns: %TRUE on success.
+ * Deprecated: 2.32: Use #GArray instead of #GValueArray
  */
 
 
@@ -10097,6 +10098,8 @@
  * @pspec: a valid #GParamSpec instance
  *
  * Cast a #GParamSpec instance into a #GParamSpecValueArray.
+ *
+ * Deprecated: 2.32: Use #GArray instead of #GValueArray
  */
 
 
@@ -11282,6 +11285,8 @@
  * G_TYPE_PARAM_VALUE_ARRAY:
  *
  * The #GType of #GParamSpecValueArray.
+ *
+ * Deprecated: 2.32: Use #GArray instead of #GValueArray
  */
 
 
@@ -11470,6 +11475,8 @@
  *
  * The type ID of the "GValueArray" type which is a boxed type,
  * used to pass around pointers to GValueArrays.
+ *
+ * Deprecated: 2.32: Use #GArray instead of #GValueArray
  */
 
 
@@ -14266,48 +14273,6 @@
 
 
 /**
- * SECTION:gmenumarkup
- * @title: GMenu Markup
- * @short_description: parsing and printing GMenuModel XML
- *
- * The functions here allow to instantiate #GMenuModels by parsing
- * fragments of an XML document.
- * * The XML format for #GMenuModel consists of a toplevel
- * <tag class="starttag">menu</tag> element, which contains one or more
- * <tag class="starttag">item</tag> elements. Each <tag class="starttag">item</tag>
- * element contains <tag class="starttag">attribute</tag> and <tag class="starttag">link</tag>
- * elements with a mandatory name attribute.
- * <tag class="starttag">link</tag> elements have the same content
- * model as <tag class="starttag">menu</tag>.
- *
- * Here is the XML for <xref linkend="menu-example"/>:
- * |[<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../gio/menumarkup2.xml"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include>]|
- *
- * The parser also understands a somewhat less verbose format, in which
- * attributes are encoded as actual XML attributes of <tag class="starttag">item</tag>
- * elements, and <tag class="starttag">link</tag> elements are replaced by
- * <tag class="starttag">section</tag> and <tag class="starttag">submenu</tag> elements.
- *
- * Here is how the example looks in this format:
- * |[<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../gio/menumarkup.xml"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include>]|
- *
- * The parser can obtaing translations for attribute values using gettext.
- * To make use of this, the <tag class="starttag">menu</tag> element must
- * have a domain attribute which specifies the gettext domain to use, and
- * <tag class="starttag">attribute</tag> elements can be marked for translation
- * with a <literal>translatable="yes"</literal> attribute. It is also possible
- * to specify message context and translator comments, using the context
- * and comments attributes.
- *
- * The following DTD describes the XML format approximately:
- * |[<xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../gio/menumarkup.dtd"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include>]|
- *
- * To serialize a #GMenuModel into an XML fragment, use
- * g_menu_markup_print_string().
- */
-
-
-/**
  * SECTION:gmenumodel
  * @title: GMenuModel
  * @short_description: An abstract class representing the contents of a menu
@@ -14517,7 +14482,9 @@
  * @short_description: Network status monitor
  * @include: gio/gio.h
  *
- *
+ * #GNetworkMonitor provides an easy-to-use cross-platform API
+ * for monitoring network connectivity. On Linux, the implementation
+ * is based on the kernels netlink interface.
  */
 
 
@@ -14710,6 +14677,14 @@
  * in a compressed form, but will be automatically uncompressed when the resource is used. This
  * is very useful e.g. for larger text files that are parsed once (or rarely) and then thrown away.
  *
+ * Resource files can also be marked to be preprocessed, by setting the value of the
+ * <literal>preprocess</literal> attribute to a comma-separated list of preprocessing options.
+ * The only option currently supported is
+ * <literal>xml-stripblanks</literal> which will use <literal>xmllint</literal> to strip
+ * ignorable whitespace from the xml file. For this to work, the <envar>XMLLINT</envar>
+ * environment variable must be set to the full path to the xmllint executable;
+ * otherwise the preprocessing step is skipped.
+ *
  * Resource bundles are created by the <link linkend="glib-compile-schemas">glib-compile-resources</link> program
  * which takes an xml file that describes the bundle, and a set of files that the xml references. These
  * are combined into a binary resource bundle.
@@ -14721,7 +14696,7 @@
  * <gresource prefix="/org/gtk/Example">
  * <file>data/splashscreen.png</file>
  * <file compressed="true">dialog.ui</file>
- * <file>menumarkup.xml</file>
+ * <file preprocess="xml-stripblanks">menumarkup.xml</file>
  * </gresource>
  * </gresources>
  * ]]></programlisting></example>
@@ -17543,7 +17518,6 @@
 
 /**
  * g_application_get_default:
- * @returns: (transfer none): the default application for this process, or %NULL
  *
  * Returns the default #GApplication instance for this process.
  *
@@ -17553,6 +17527,7 @@
  *
  * If there is no default application then %NULL is returned.
  *
+ * Returns: (transfer none): the default application for this process, or %NULL
  * Since: 2.32
  */
 
@@ -21499,6 +21474,20 @@
 
 
 /**
+ * g_dbus_interface_dup_object:
+ * @interface_: An exported D-Bus interface.
+ *
+ * Gets the #GDBusObject that @interface_ belongs to, if any.
+ *
+ * reference should be freed with g_object_unref().
+ *
+ * Returns: (transfer full): A #GDBusObject or %NULL. The returned
+ * Since: 2.32
+ * Rename to: g_dbus_interface_get_object
+ */
+
+
+/**
  * g_dbus_interface_get_info:
  * @interface_: An exported D-Bus interface.
  *
@@ -21511,10 +21500,15 @@
 
 
 /**
- * g_dbus_interface_get_object:
+ * g_dbus_interface_get_object: (skip)
  * @interface_: An exported D-Bus interface.
  *
  * Gets the #GDBusObject that @interface_ belongs to, if any.
+ *
+ * <warning>It is not safe to use the returned object if @interface_
+ * or the returned object is being used from other threads. See
+ * g_dbus_interface_dup_object() for a thread-safe
+ * alternative.</warning>
  *
  * reference belongs to @interface_ and should not be freed.
  *
@@ -28818,18 +28812,6 @@
 
 
 /**
- * g_inet_address_get_scope_id:
- * @address: a %G_SOCKET_FAMILY_IPV6 #GInetAddress
- *
- * Gets the <literal>sin6_scope_id</literal> field from @address,
- * which must be an IPv6 address.
- *
- * Returns: the scope id field
- * Since: 2.32
- */
-
-
-/**
  * g_inet_address_mask_equal:
  * @mask: a #GInetAddressMask
  * @mask2: another #GInetAddressMask
@@ -29044,6 +29026,18 @@
  *
  * Returns: the port for @address
  * Since: 2.22
+ */
+
+
+/**
+ * g_inet_socket_address_get_scope_id:
+ * @address: a %G_SOCKET_FAMILY_IPV6 #GInetAddress
+ *
+ * Gets the <literal>sin6_scope_id</literal> field from @address,
+ * which must be an IPv6 address.
+ *
+ * Returns: the scope id field
+ * Since: 2.32
  */
 
 
@@ -31005,130 +30999,6 @@
 
 
 /**
- * g_menu_markup_parser_end:
- * @context: a #GMarkupParseContext
- *
- * Stop the parsing of a set of menus and return the #GHashTable.
- *
- * The #GHashTable maps strings to #GObject instances.  The parser only
- * adds #GMenu instances to the table, but it may contain other types if
- * a table was provided to g_menu_markup_parser_start().
- *
- * This call should be matched with g_menu_markup_parser_start().
- * See that function for more information
- *
- * Returns: (transfer full): the #GHashTable containing the objects
- * Since: 2.32
- */
-
-
-/**
- * g_menu_markup_parser_end_menu:
- * @context: a #GMarkupParseContext
- *
- * Stop the parsing of a menu and return the newly-created #GMenu.
- *
- * This call should be matched with g_menu_markup_parser_start_menu().
- * See that function for more information
- *
- * Returns: (transfer full): the newly-created #GMenu
- * Since: 2.32
- */
-
-
-/**
- * g_menu_markup_parser_start:
- * @context: a #GMarkupParseContext
- * @domain: (allow-none): translation domain for labels, or %NULL
- * @objects: (allow-none): a #GHashTable for the objects, or %NULL
- *
- * Begin parsing a group of menus in XML form.
- *
- * If @domain is not %NULL, it will be used to translate attributes
- * that are marked as translatable, using gettext().
- *
- * If @objects is specified then it must be a #GHashTable that was
- * created using g_hash_table_new_full() with g_str_hash(),
- * g_str_equal(), g_free() and g_object_unref().
- * Any named menus (ie: <tag class="starttag">menu</tag>,
- * <tag class="starttag">submenu</tag>,
- * <tag class="starttag">section</tag> or <tag class="starttag">link</tag>
- * elements with an id='' attribute) that are encountered while parsing
- * will be added to this table. Each toplevel menu must be named.
- *
- * If @objects is %NULL then an empty hash table will be created.
- *
- * This function should be called from the start_element function for
- * the element representing the group containing the menus.  In other
- * words, the content inside of this element is expected to be a list of
- * menus.
- *
- * Since: 2.32
- */
-
-
-/**
- * g_menu_markup_parser_start_menu:
- * @context: a #GMarkupParseContext
- * @domain: (allow-none): translation domain for labels, or %NULL
- * @objects: (allow-none): a #GHashTable for the objects, or %NULL
- *
- * Begin parsing the XML definition of a menu.
- *
- * This function should be called from the start_element function for
- * the element representing the menu itself.  In other words, the
- * content inside of this element is expected to be a list of items.
- *
- * If @domain is not %NULL, it will be used to translate attributes
- * that are marked as translatable, using gettext().
- *
- * If @objects is specified then it must be a #GHashTable that was
- * created using g_hash_table_new_full() with g_str_hash(),
- * g_str_equal(), g_free() and g_object_unref().
- * Any named menus (ie: <tag class="starttag">submenu</tag>,
- * <tag class="starttag">section</tag> or <tag class="starttag">link</tag>
- * elements with an id='' attribute) that are encountered while parsing
- * will be added to this table.
- * Note that toplevel <tag class="starttag">menu</tag> is not added to
- * the hash table, even if it has an id attribute.
- *
- * If @objects is %NULL then named menus will not be supported.
- *
- * You should call g_menu_markup_parser_end_menu() from the
- * corresponding end_element function in order to collect the newly
- * parsed menu.
- *
- * Since: 2.32
- */
-
-
-/**
- * g_menu_markup_print_stderr:
- * @model: a #GMenuModel
- *
- * Print @model to stderr for debugging purposes.
- *
- * This debugging function will be removed in the future.
- */
-
-
-/**
- * g_menu_markup_print_string:
- * @string: a #GString
- * @model: the #GMenuModel to print
- * @indent: the intentation level to start at
- * @tabstop: how much to indent each level
- *
- * Print the contents of @model to @string.
- * Note that you have to provide the containing
- * <tag class="starttag">menu</tag> element yourself.
- *
- * Returns: @string
- * Since: 2.32
- */
-
-
-/**
  * g_menu_model_get_item_attribute:
  * @model: a #GMenuModel
  * @item_index: the index of the item
@@ -32073,6 +31943,39 @@
 
 
 /**
+ * g_network_monitor_can_reach_async:
+ * @monitor: a #GNetworkMonitor
+ * @connectable: a #GSocketConnectable
+ * @cancellable: a #GCancellable, or %NULL
+ * @callback: (scope async): a #GAsyncReadyCallback to call when the request is satisfied
+ * @user_data: (closure): the data to pass to callback function
+ *
+ * Asynchronously attempts to determine whether or not the host
+ * pointed to by @connectable can be reached, without actually
+ * trying to connect to it.
+ *
+ * For more details, see g_network_monitor_can_reach().
+ *
+ * When the operation is finished, @callback will be called.
+ * You can then call g_network_monitor_can_reach_finish()
+ * to get the result of the operation.
+ */
+
+
+/**
+ * g_network_monitor_can_reach_finish:
+ * @monitor: a #GNetworkMonitor
+ * @result: a #GAsyncResult
+ * @error: return location for errors, or %NULL
+ *
+ * Finishes an async network connectivity test.
+ * See g_network_monitor_can_reach_async().
+ *
+ * Returns: %TRUE if network is reachable, %FALSE if not.
+ */
+
+
+/**
  * g_network_monitor_get_default:
  *
  * Gets the default #GNetworkMonitor for the system.
@@ -32257,6 +32160,18 @@
  * @data: the data for the new #GNode
  *
  * Inserts a new #GNode at the given position.
+ *
+ * Returns: the new #GNode
+ */
+
+
+/**
+ * g_node_insert_data_after:
+ * @parent: the #GNode to place the new #GNode under
+ * @sibling: the sibling #GNode to place the new #GNode after
+ * @data: the data for the new #GNode
+ *
+ * Inserts a new #GNode after the given sibling.
  *
  * Returns: the new #GNode
  */
@@ -33283,6 +33198,27 @@
 
 /**
  * g_remote_action_group_activate_action_full:
+ * @remote: a #GDBusActionGroup
+ * @action_name: the name of the action to activate
+ * @parameter: (allow none): the optional parameter to the activation
+ * @platform_data: the platform data to send
+ *
+ * Activates the remote action.
+ *
+ * This is the same as g_action_group_activate_action() except that it
+ * allows for provision of "platform data" to be sent along with the
+ * activation request.  This typically contains details such as the user
+ * interaction timestamp or startup notification information.
+ *
+ * @platform_data must be non-%NULL and must have the type
+ * %G_VARIANT_TYPE_VARDICT.  If it is floating, it will be consumed.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * g_remote_action_group_change_action_state_full:
  * @remote: a #GRemoteActionGroup
  * @action_name: the name of the action to change the state of
  * @value: the new requested value for the state
@@ -34206,6 +34142,31 @@
  * binding overrides the first one.
  *
  * Since: 2.26
+ */
+
+
+/**
+ * g_settings_create_action:
+ * @settings: a #GSettings
+ * @key: the name of a key in @settings
+ *
+ * Creates a #GAction corresponding to a given #GSettings key.
+ *
+ * The action has the same name as the key.
+ *
+ * The value of the key becomes the state of the action and the action
+ * is enabled when the key is writable.  Changing the state of the
+ * action results in the key being written to.  Changes to the value or
+ * writability of the key cause appropriate change notifications to be
+ * emitted for the action.
+ *
+ * For boolean-valued keys, action activations take no parameter and
+ * result in the toggling of the value.  For all other types,
+ * activations take the new value for the key (which must have the
+ * correct type).
+ *
+ * Returns: (transfer full): a new #GAction
+ * Since: 2.32
  */
 
 
@@ -35233,6 +35194,18 @@
  * Blocks all handlers on an instance that match @func and @data.
  *
  * Returns: The number of handlers that matched.
+ */
+
+
+/**
+ * g_signal_handlers_disconnect_by_data:
+ * @instance: The instance to remove handlers from
+ * @data: the closure data of the handlers' closures
+ *
+ * Disconnects all handlers on an instance that match @data.
+ *
+ * Returns: The number of handlers that matched.
+ * Since: 2.32
  */
 
 
@@ -37072,7 +37045,7 @@
  * g_socket_join_multicast_group:
  * @socket: a #GSocket.
  * @group: a #GInetAddress specifying the group address to join.
- * @iface: Interface to use
+ * @iface: (allow-none): Name of the interface to use, or %NULL
  * @source_specific: %TRUE if source-specific multicast should be used
  * @error: #GError for error reporting, or %NULL to ignore.
  *
@@ -37081,8 +37054,12 @@
  * been bound to an appropriate interface and port with
  * g_socket_bind().
  *
+ * If @iface is %NULL, the system will automatically pick an interface
+ * to bind to based on @group.
+ *
  * If @source_specific is %TRUE, source-specific multicast as defined
- * in RFC 4604 is used.
+ * in RFC 4604 is used. Note that on older platforms this may fail
+ * with a %G_IO_ERROR_NOT_SUPPORTED error.
  *
  * Returns: %TRUE on success, %FALSE on error.
  * Since: 2.32
@@ -37093,15 +37070,16 @@
  * g_socket_leave_multicast_group:
  * @socket: a #GSocket.
  * @group: a #GInetAddress specifying the group address to leave.
- * @iface: Interface to use
- * @source_specific: %TRUE if source-specific multicast should be used
+ * @iface: (allow-none): Interface used
+ * @source_specific: %TRUE if source-specific multicast was used
  * @error: #GError for error reporting, or %NULL to ignore.
  *
- * Removes @socket from the multicast group @group (while still
- * allowing it to receive unicast messages).
+ * Removes @socket from the multicast group defined by @group, @iface,
+ * and @source_specific (which must all have the same values they had
+ * when you joined the group).
  *
- * If @source_specific is %TRUE, source-specific multicast as defined
- * in RFC 4604 is used.
+ * @socket remains bound to its address and port, and can still receive
+ * unicast messages after calling this.
  *
  * Returns: %TRUE on success, %FALSE on error.
  * Since: 2.32
@@ -37786,7 +37764,7 @@
 /**
  * g_socket_set_broadcast:
  * @socket: a #GSocket.
- * @loopback: whether @socket should allow sending to and receiving from broadcast addresses
+ * @broadcast: whether @socket should allow sending to and receiving from broadcast addresses
  *
  * Sets whether @socket should allow sending to and receiving from
  * broadcast addresses. This is %FALSE by default.
@@ -39283,10 +39261,13 @@
  * @password: a #GTlsPassword object
  * @length: (allow-none): location to place the length of the password.
  *
- * Get the password value. If @length is not %NULL then it will be filled
- * in with the length of the password value.
+ * Get the password value. If @length is not %NULL then it will be
+ * filled in with the length of the password value. (Note that the
+ * password value is not nul-terminated, so you can only pass %NULL
+ * for @length in contexts where you know the password will have a
+ * certain fixed length.)
  *
- * Returns: The password value owned by the password object.
+ * Returns: The password value (owned by the password object).
  * Since: 2.30
  */
 
@@ -39346,9 +39327,10 @@
  * Set the value for this password. The @value will be copied by the password
  * object.
  *
- * Specify the @length, for a non-null-terminated password. Pass -1 as
- * @length if using a null-terminated password, and @length will be calculated
- * automatically.
+ * Specify the @length, for a non-nul-terminated password. Pass -1 as
+ * @length if using a nul-terminated password, and @length will be
+ * calculated automatically. (Note that the terminating nul is not
+ * considered part of the password in this case.)
  *
  * Since: 2.30
  */
@@ -39366,9 +39348,10 @@
  * The @value will be owned by the password object, and later freed using
  * the @destroy function callback.
  *
- * Specify the @length, for a non-null-terminated password. Pass -1 as
- * @length if using a null-terminated password, and @length will be calculated
- * automatically.
+ * Specify the @length, for a non-nul-terminated password. Pass -1 as
+ * @length if using a nul-terminated password, and @length will be
+ * calculated automatically. (Note that the terminating nul is not
+ * considered part of the password in this case.)
  *
  * Virtual: set_value
  * Since: 2.30

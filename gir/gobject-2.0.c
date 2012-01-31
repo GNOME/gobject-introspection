@@ -3145,6 +3145,7 @@
  * Checks whether the given #GParamSpec is of type %G_TYPE_PARAM_VALUE_ARRAY.
  *
  * Returns: %TRUE on success.
+ * Deprecated: 2.32: Use #GArray instead of #GValueArray
  */
 
 
@@ -3544,6 +3545,8 @@
  * @pspec: a valid #GParamSpec instance
  *
  * Cast a #GParamSpec instance into a #GParamSpecValueArray.
+ *
+ * Deprecated: 2.32: Use #GArray instead of #GValueArray
  */
 
 
@@ -4590,6 +4593,8 @@
  * G_TYPE_PARAM_VALUE_ARRAY:
  *
  * The #GType of #GParamSpecValueArray.
+ *
+ * Deprecated: 2.32: Use #GArray instead of #GValueArray
  */
 
 
@@ -4753,6 +4758,8 @@
  *
  * The type ID of the "GValueArray" type which is a boxed type,
  * used to pass around pointers to GValueArrays.
+ *
+ * Deprecated: 2.32: Use #GArray instead of #GValueArray
  */
 
 
@@ -5984,6 +5991,23 @@
  * object property that holds an array of values. A #GValueArray wraps
  * an array of #GValue elements in order for it to be used as a boxed
  * type through %G_TYPE_VALUE_ARRAY.
+ *
+ * #GValueArray is deprecated in favour of #GArray since GLib 2.32. It
+ * is possible to create a #GArray that behaves like a #GValueArray by
+ * using the size of #GValue as the element size, and by setting
+ * g_value_unset() as the clear function using g_array_set_clear_func(),
+ * for instance, the following code:
+ *
+ * |[
+ * GValueArray *array = g_value_array_new (10);
+ * ]|
+ *
+ * can be replaced by:
+ *
+ * |[
+ * GArray *array = g_array_sized_new (FALSE, TRUE, sizeof (GValue), 10);
+ * g_array_set_clear_func (array, (GDestroyNotify) g_value_unset);
+ * ]|
  */
 
 
@@ -7136,6 +7160,18 @@
  * @data: the data for the new #GNode
  *
  * Inserts a new #GNode at the given position.
+ *
+ * Returns: the new #GNode
+ */
+
+
+/**
+ * g_node_insert_data_after:
+ * @parent: the #GNode to place the new #GNode under
+ * @sibling: the sibling #GNode to place the new #GNode after
+ * @data: the data for the new #GNode
+ *
+ * Inserts a new #GNode after the given sibling.
  *
  * Returns: the new #GNode
  */
@@ -9347,6 +9383,18 @@
 
 
 /**
+ * g_signal_handlers_disconnect_by_data:
+ * @instance: The instance to remove handlers from
+ * @data: the closure data of the handlers' closures
+ *
+ * Disconnects all handlers on an instance that match @data.
+ *
+ * Returns: The number of handlers that matched.
+ * Since: 2.32
+ */
+
+
+/**
  * g_signal_handlers_disconnect_by_func:
  * @instance: The instance to remove handlers from.
  * @func: The C closure callback of the handlers (useless for non-C closures).
@@ -10720,6 +10768,7 @@
  * %NULL, an uninitialized value is appended.
  *
  * Returns: (transfer none): the #GValueArray passed in as @value_array
+ * Deprecated: 2.32: Use #GArray and g_array_append_val() instead.
  */
 
 
@@ -10731,6 +10780,7 @@
  * contents.
  *
  * Returns: (transfer full): Newly allocated copy of #GValueArray
+ * Deprecated: 2.32: Use #GArray and g_array_ref() instead.
  */
 
 
@@ -10739,6 +10789,8 @@
  * @value_array: #GValueArray to free
  *
  * Free a #GValueArray including its contents.
+ *
+ * Deprecated: 2.32: Use #GArray and g_array_unref() instead.
  */
 
 
@@ -10750,6 +10802,7 @@
  * Return a pointer to the value at @index_ containd in @value_array.
  *
  * Returns: (transfer none): pointer to a value at @index_ in @value_array
+ * Deprecated: 2.32: Use g_array_index() instead.
  */
 
 
@@ -10763,6 +10816,7 @@
  * is %NULL, an uninitialized value is inserted.
  *
  * Returns: (transfer none): the #GValueArray passed in as @value_array
+ * Deprecated: 2.32: Use #GArray and g_array_insert_val() instead.
  */
 
 
@@ -10775,6 +10829,7 @@
  * regardless of the value of @n_prealloced.
  *
  * Returns: a newly allocated #GValueArray with 0 values
+ * Deprecated: 2.32: Use #GArray and g_array_sized_new() instead.
  */
 
 
@@ -10787,6 +10842,7 @@
  * %NULL, an uninitialized value is prepended.
  *
  * Returns: (transfer none): the #GValueArray passed in as @value_array
+ * Deprecated: 2.32: Use #GArray and g_array_prepend_val() instead.
  */
 
 
@@ -10798,6 +10854,7 @@
  * Remove the value at position @index_ from @value_array.
  *
  * Returns: (transfer none): the #GValueArray passed in as @value_array
+ * Deprecated: 2.32: Use #GArray and g_array_remove_index() instead.
  */
 
 
@@ -10812,6 +10869,7 @@
  * The current implementation uses Quick-Sort as sorting algorithm.
  *
  * Returns: (transfer none): the #GValueArray passed in as @value_array
+ * Deprecated: 2.32: Use #GArray and g_array_sort().
  */
 
 
@@ -10828,6 +10886,7 @@
  *
  * Rename to: g_value_array_sort
  * Returns: (transfer none): the #GValueArray passed in as @value_array
+ * Deprecated: 2.32: Use #GArray and g_array_sort_with_data().
  */
 
 

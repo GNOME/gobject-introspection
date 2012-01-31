@@ -972,11 +972,24 @@
  * g_direct_hash() is also the appropriate hash function for keys
  * of the form <literal>GINT_TO_POINTER (n)</literal> (or similar macros).
  *
- * <!-- FIXME: Need more here. --> The hash values should be evenly
- * distributed over a fairly large range? The modulus is taken with the
- * hash table size (a prime number) to find the 'bucket' to place each
- * key into. The function should also be very fast, since it is called
- * for each key lookup.
+ * <!-- FIXME: Need more here. --> A good hash functions should produce
+ * hash values that are evenly distributed over a fairly large range.
+ * The modulus is taken with the hash table size (a prime number) to
+ * find the 'bucket' to place each key into. The function should also
+ * be very fast, since it is called for each key lookup.
+ *
+ * Note that the hash functions provided by GLib have these qualities,
+ * but are not particularly robust against manufactured keys that
+ * cause hash collisions. Therefore, you should consider choosing
+ * a more secure hash function when using a GHashTable with keys
+ * that originate in untrusted data (such as HTTP requests).
+ * Using g_str_hash() in that situation might make your application
+ * vulerable to <ulink url="https://lwn.net/Articles/474912/">Algorithmic Complexity Attacks</ulink>.
+ *
+ * The key to choosing a good hash is unpredictability.  Even
+ * cryptographic hashes are very easy to find collisions for when the
+ * remainder is taken modulo a somewhat predictable prime number.  There
+ * must be an element of randomness that an attacker is unable to guess.
  *
  * Returns: the hash value corresponding to the key
  */
@@ -6177,6 +6190,7 @@
  * Checks whether the given #GParamSpec is of type %G_TYPE_PARAM_VALUE_ARRAY.
  *
  * Returns: %TRUE on success.
+ * Deprecated: 2.32: Use #GArray instead of #GValueArray
  */
 
 
@@ -7258,6 +7272,8 @@
  * @pspec: a valid #GParamSpec instance
  *
  * Cast a #GParamSpec instance into a #GParamSpecValueArray.
+ *
+ * Deprecated: 2.32: Use #GArray instead of #GValueArray
  */
 
 
@@ -8603,6 +8619,8 @@
  * G_TYPE_PARAM_VALUE_ARRAY:
  *
  * The #GType of #GParamSpecValueArray.
+ *
+ * Deprecated: 2.32: Use #GArray instead of #GValueArray
  */
 
 
@@ -8766,6 +8784,8 @@
  *
  * The type ID of the "GValueArray" type which is a boxed type,
  * used to pass around pointers to GValueArrays.
+ *
+ * Deprecated: 2.32: Use #GArray instead of #GValueArray
  */
 
 
@@ -12750,8 +12770,9 @@
  * g_node_insert_before(), g_node_append() and g_node_prepend().
  *
  * To create a new node and insert it into a tree use
- * g_node_insert_data(), g_node_insert_data_before(),
- * g_node_append_data() and g_node_prepend_data().
+ * g_node_insert_data(), g_node_insert_data_after(),
+ * g_node_insert_data_before(), g_node_append_data()
+ * and g_node_prepend_data().
  *
  * To reverse the children of a node use g_node_reverse_children().
  *
@@ -13197,6 +13218,25 @@
  * from a #GArray.  The following elements are moved to close the gap.
  *
  * Since: 2.4
+ */
+
+
+/**
+ * g_array_set_clear_func:
+ * @array: A #GArray
+ * @clear_func: a function to clear an element of @array
+ *
+ * Sets a function to clear an element of @array.
+ *
+ * The @clear_func will be called when an element in the array
+ * data segment is removed and when the array is freed and data
+ * segment is deallocated as well.
+ *
+ * Note that in contrast with other uses of #GDestroyNotify
+ * functions, @clear_func is expected to clear the contents of
+ * the array element it is given, but not free the element itself.
+ *
+ * Since: 2.32
  */
 
 
@@ -15191,7 +15231,7 @@
  * @full_path.  If the file could not be loaded then an %error is
  * set to either a #GFileError or #GBookmarkFileError.
  *
- * Returns: %TRUE if a key file could be loaded, %FALSE othewise
+ * Returns: %TRUE if a key file could be loaded, %FALSE otherwise
  * Since: 2.12
  */
 
@@ -16485,7 +16525,7 @@
  * Notice that the end time is calculated once, before entering the
  * loop and reused.  This is the motivation behind the use of absolute
  * time on this API -- if a relative time of 5 seconds were passed
- * directly to the call and a spurious wakeup occured, the program would
+ * directly to the call and a spurious wakeup occurred, the program would
  * have to start over waiting again (which would lead to a total wait
  * time of more than 5 seconds).
  *
@@ -16657,7 +16697,7 @@
  * @key: the string identifying a data element.
  * @Returns: the data element, or %NULL if it is not found.
  *
- * Gets a data element, using its string identifer. This is slower than
+ * Gets a data element, using its string identifier. This is slower than
  * g_datalist_id_get_data() because it compares strings.
  */
 
@@ -17004,7 +17044,7 @@
  * @lhs: first date to compare
  * @rhs: second date to compare
  *
- * qsort()-style comparsion function for dates.
+ * qsort()-style comparison function for dates.
  * Both dates must be valid.
  *
  * greater than zero if @lhs is greater than @rhs
@@ -19712,8 +19752,8 @@
  * On Windows, "limitations of the OS kernel" is a rather substantial
  * statement.  Depending on the configuration of the system, the wall
  * clock time is updated as infrequently as 64 times a second (which
- * is approximately every 16ms). Also, the on XP (not on Vista or later)
- * the monitonic clock is locally monotonic, but may differ in exact
+ * is approximately every 16ms). Also, on XP (but not on Vista or later)
+ * the monotonic clock is locally monotonic, but may differ in exact
  * value between processes due to timer wrap handling.
  *
  * Returns: the monotonic time, in microseconds
@@ -25467,6 +25507,18 @@
 
 
 /**
+ * g_node_insert_data_after:
+ * @parent: the #GNode to place the new #GNode under
+ * @sibling: the sibling #GNode to place the new #GNode after
+ * @data: the data for the new #GNode
+ *
+ * Inserts a new #GNode after the given sibling.
+ *
+ * Returns: the new #GNode
+ */
+
+
+/**
  * g_node_insert_data_before:
  * @parent: the #GNode to place the new #GNode under
  * @sibling: the sibling #GNode to place the new #GNode before
@@ -29376,7 +29428,7 @@
  * Removes the item pointed to by @iter. It is an error to pass the
  * end iterator to this function.
  *
- * If the sequnce has a data destroy function associated with it, this
+ * If the sequence has a data destroy function associated with it, this
  * function is called on the data for the removed item.
  *
  * Since: 2.14
@@ -29795,6 +29847,18 @@
  * Blocks all handlers on an instance that match @func and @data.
  *
  * Returns: The number of handlers that matched.
+ */
+
+
+/**
+ * g_signal_handlers_disconnect_by_data:
+ * @instance: The instance to remove handlers from
+ * @data: the closure data of the handlers' closures
+ *
+ * Disconnects all handlers on an instance that match @data.
+ *
+ * Returns: The number of handlers that matched.
+ * Since: 2.32
  */
 
 
@@ -30623,7 +30687,7 @@
  * self->idle_id = 0;
  * GDK_THREADS_LEAVE (<!-- -->);
  *
- * return FALSE;
+ * return G_SOURCE_REMOVE;
  * }
  *
  * static void
@@ -39219,7 +39283,7 @@
  * This is an internal function and should only be used by
  * the internals of glib (such as libgio).
  *
- * Returns: the transation of @str to the current locale
+ * Returns: the translation of @str to the current locale
  */
 
 
