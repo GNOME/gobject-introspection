@@ -547,6 +547,55 @@ GValue *gi_marshalling_tests_gvalue_flat_array_round_trip (const GValue one,
 void gi_marshalling_tests_gclosure_in (GClosure *closure);
 GClosure *gi_marshalling_tests_gclosure_return (void);
 
+/* Callback return values */
+
+/**
+ * GIMarshallingTestsCallbackReturnValueOnly:
+ */
+typedef glong (* GIMarshallingTestsCallbackReturnValueOnly) ();
+
+glong gi_marshalling_tests_callback_return_value_only (GIMarshallingTestsCallbackReturnValueOnly callback);
+
+/**
+ * GIMarshallingTestsCallbackOneOutParameter:
+ * @a: (out):
+ */
+typedef void (* GIMarshallingTestsCallbackOneOutParameter) (gfloat *a);
+
+void gi_marshalling_tests_callback_one_out_parameter (GIMarshallingTestsCallbackOneOutParameter  callback,
+                                                      gfloat                                    *a);
+
+/**
+ * GIMarshallingTestsCallbackMultipleOutParameters:
+ * @a: (out):
+ * @b: (out):
+ */
+typedef void (* GIMarshallingTestsCallbackMultipleOutParameters) (gfloat *a, gfloat *b);
+
+void gi_marshalling_tests_callback_multiple_out_parameters (GIMarshallingTestsCallbackMultipleOutParameters  callback,
+                                                            gfloat                                          *a,
+                                                            gfloat                                          *b);
+
+/**
+ * GIMarshallingTestsCallbackReturnValueAndOneOutParameter:
+ * @a: (out):
+ */
+typedef glong (* GIMarshallingTestsCallbackReturnValueAndOneOutParameter) (glong *a);
+
+glong gi_marshalling_tests_callback_return_value_and_one_out_parameter (GIMarshallingTestsCallbackReturnValueAndOneOutParameter  callback,
+                                                                        glong                                                   *a);
+
+/**
+ * GIMarshallingTestsCallbackReturnValueAndMultipleOutParameters:
+ * @a: (out):
+ * @b: (out):
+ */
+typedef glong (* GIMarshallingTestsCallbackReturnValueAndMultipleOutParameters) (glong *a, glong *b);
+
+glong gi_marshalling_tests_callback_return_value_and_multiple_out_parameters (GIMarshallingTestsCallbackReturnValueAndMultipleOutParameters  callback,
+                                                                              glong                                                         *a,
+                                                                              glong                                                         *b);
+
 /* Pointer */
 
 gpointer gi_marshalling_tests_pointer_in_return (gpointer pointer);
@@ -617,7 +666,7 @@ void gi_marshalling_tests_union_inout (GIMarshallingTestsUnion **union_);
 
 void gi_marshalling_tests_union_method (GIMarshallingTestsUnion *union_);
 
-/* Object */
+ /* Object */
 
 #define GI_MARSHALLING_TESTS_TYPE_OBJECT             (gi_marshalling_tests_object_get_type ())
 #define GI_MARSHALLING_TESTS_OBJECT(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), GI_MARSHALLING_TESTS_TYPE_OBJECT, GIMarshallingTestsObject))

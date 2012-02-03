@@ -3057,6 +3057,71 @@ gi_marshalling_tests_gclosure_return (void)
     return closure;
 }
 
+
+/**
+ * gi_marshalling_tests_callback_return_value_only:
+ * @callback: (scope call):
+ */
+glong
+gi_marshalling_tests_callback_return_value_only (GIMarshallingTestsCallbackReturnValueOnly callback)
+{
+    return callback ();
+}
+
+/**
+ * gi_marshalling_tests_callback_one_out_parameter:
+ * @callback: (scope call):
+ * @a: (out):
+ */
+void
+gi_marshalling_tests_callback_one_out_parameter (GIMarshallingTestsCallbackOneOutParameter  callback,
+                                                 gfloat                                    *a)
+{
+    callback (a);
+}
+
+/**
+ * gi_marshalling_tests_callback_multiple_out_parameters:
+ * @callback: (scope call):
+ * @a: (out):
+ * @b: (out):
+ */
+void
+gi_marshalling_tests_callback_multiple_out_parameters (GIMarshallingTestsCallbackMultipleOutParameters  callback,
+                                                       gfloat                                          *a,
+                                                       gfloat                                          *b)
+{
+    callback (a, b);
+}
+
+/**
+ * gi_marshalling_tests_callback_return_value_and_one_out_parameter:
+ * @callback: (scope call):
+ * @a: (out):
+ */
+glong
+gi_marshalling_tests_callback_return_value_and_one_out_parameter (GIMarshallingTestsCallbackReturnValueAndOneOutParameter  callback,
+                                                                  glong                                                   *a)
+{
+    return callback (a);
+}
+
+/**
+ * gi_marshalling_tests_callback_return_value_and_multiple_out_parameters:
+ * @callback: (scope call):
+ * @a: (out):
+ * @b: (out):
+ */
+glong
+gi_marshalling_tests_callback_return_value_and_multiple_out_parameters (GIMarshallingTestsCallbackReturnValueAndMultipleOutParameters  callback,
+                                                                        glong                                                         *a,
+                                                                        glong                                                         *b)
+{
+    return callback (a, b);
+}
+
+
+
 /**
  * gi_marshalling_tests_pointer_in_return:
  *
