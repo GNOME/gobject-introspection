@@ -3946,6 +3946,17 @@ gi_marshalling_tests_object_vfunc_return_value_and_multiple_out_parameters (GIMa
     return return_value;
 }
 
+gboolean
+gi_marshalling_tests_object_vfunc_meth_with_error (GIMarshallingTestsObject *self,
+                                                   gint                      x,
+                                                   GError                  **error)
+{
+  gulong local = 0x12345678;
+  gboolean ret = GI_MARSHALLING_TESTS_OBJECT_GET_CLASS (self)->vfunc_meth_with_err (self, x, error);
+  g_assert_cmpint(local, ==, 0x12345678);
+  return ret;
+}
+
 G_DEFINE_TYPE (GIMarshallingTestsSubObject, gi_marshalling_tests_sub_object, GI_MARSHALLING_TESTS_TYPE_OBJECT);
 
 static void
@@ -4279,7 +4290,6 @@ gi_marshalling_tests_overrides_object_method (GIMarshallingTestsOverridesObject 
 {
     return 42;
 }
-
 
 /**
  * gi_marshalling_tests_overrides_object_returnv:
