@@ -1,3 +1,4 @@
+/* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 #include "drawable.h"
 
 G_DEFINE_ABSTRACT_TYPE (TestInheritDrawable, test_inherit_drawable, G_TYPE_OBJECT);

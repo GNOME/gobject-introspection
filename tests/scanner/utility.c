@@ -1,3 +1,4 @@
+/* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
 #include "utility.h"
 
 G_DEFINE_TYPE (UtilityObject, utility_object, G_TYPE_OBJECT);
