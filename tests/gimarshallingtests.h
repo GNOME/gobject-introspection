@@ -1,4 +1,4 @@
-/* -*- Mode: C; c-basic-offset: 4 -*-
+/* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*-
  * vim: tabstop=4 shiftwidth=4 expandtab
  */
 
@@ -899,7 +899,7 @@ void gi_marshalling_tests_gerror(GError **error);
 void gi_marshalling_tests_gerror_array_in(gint *in_ints, GError **error);
 void gi_marshalling_tests_gerror_out(GError **error, gchar **debug);
 void gi_marshalling_tests_gerror_out_transfer_none(GError **err, const gchar **debug);
-GError *gi_marshalling_tests_gerror_return();
+GError *gi_marshalling_tests_gerror_return(void);
 
 /* Overrides */
 
@@ -931,12 +931,12 @@ typedef struct _GIMarshallingTestsOverridesObject GIMarshallingTestsOverridesObj
 
 struct _GIMarshallingTestsOverridesObjectClass
 {
-	GObjectClass parent_class;
+    GObjectClass parent_class;
 };
 
 struct _GIMarshallingTestsOverridesObject
 {
-	GObject parent_instance;
+    GObject parent_instance;
 
     glong long_;
 };
@@ -946,7 +946,6 @@ GType gi_marshalling_tests_overrides_object_get_type (void) G_GNUC_CONST;
 GIMarshallingTestsOverridesObject *gi_marshalling_tests_overrides_object_new (void);
 
 glong gi_marshalling_tests_overrides_object_method (GIMarshallingTestsOverridesObject *object);
-
 
 GIMarshallingTestsOverridesObject *gi_marshalling_tests_overrides_object_returnv (void);
 

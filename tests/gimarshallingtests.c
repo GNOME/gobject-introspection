@@ -1,4 +1,4 @@
-/* -*- Mode: C; c-basic-offset: 4 -*-
+/* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*-
  * vim: tabstop=4 shiftwidth=4 expandtab
  */
 
@@ -4178,7 +4178,7 @@ gi_marshalling_tests_gerror_out_transfer_none(GError **err, const gchar **debug)
  * Returns: (transfer full): a GError
  */
 GError *
-gi_marshalling_tests_gerror_return()
+gi_marshalling_tests_gerror_return(void)
 {
     GQuark quark = g_quark_from_static_string(GI_MARSHALLING_TESTS_CONSTANT_GERROR_DOMAIN);
 
