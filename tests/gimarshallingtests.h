@@ -956,4 +956,40 @@ glong gi_marshalling_tests_overrides_object_method (GIMarshallingTestsOverridesO
 
 GIMarshallingTestsOverridesObject *gi_marshalling_tests_overrides_object_returnv (void);
 
+/* Properties Object */
+
+#define GI_MARSHALLING_TESTS_TYPE_PROPERTIES_OBJECT (gi_marshalling_tests_properties_object_get_type ())
+#define GI_MARSHALLING_TESTS_PROPERTIES_OBJECT(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), GI_MARSHALLING_TESTS_TYPE_PROPERTIES_OBJECT, GIMarshallingTestsPropertiesObject))
+#define GI_MARSHALLING_TESTS_PROPERTIES_OBJECT_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), GI_MARSHALLING_TESTS_TYPE_PROPERTIES_OBJECT, GIMarshallingTestsPropertiesObjectClass))
+#define GI_MARSHALLING_TESTS_IS_PROPERTIES_OBJECT(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GI_MARSHALLING_TESTS_TYPE_PROPERTIES_OBJECT))
+#define GI_MARSHALLING_TESTS_IS_PROPERTIES_OBJECT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GI_MARSHALLING_TESTS_TYPE_PROPERTIES_OBJECT))
+#define GI_MARSHALLING_TESTS_PROPERTIES_OBJECT_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), GI_MARSHALLING_TESTS_TYPE_PROPERTIES_OBJECT, GIMarshallingTestsPropertiesObjectClass))
+
+typedef struct _GIMarshallingTestsPropertiesObject GIMarshallingTestsPropertiesObject;
+typedef struct _GIMarshallingTestsPropertiesObjectClass GIMarshallingTestsPropertiesObjectClass;
+
+struct _GIMarshallingTestsPropertiesObject {
+    GObject parent_instance;
+
+    gboolean some_boolean;
+    gchar some_char;
+    guchar some_uchar;
+    gint some_int;
+    guint some_uint;
+    glong some_long;
+    gulong some_ulong;
+    gint64 some_int64;
+    guint64 some_uint64;
+    gfloat some_float;
+    gdouble some_double;
+};
+
+struct _GIMarshallingTestsPropertiesObjectClass {
+    GObjectClass parent_class;
+};
+
+GType gi_marshalling_tests_properties_object_get_type (void) G_GNUC_CONST;
+
+GIMarshallingTestsPropertiesObject *gi_marshalling_tests_properties_object_new (void);
+
 #endif /* _GI_MARSHALLING_TESTS_H_ */

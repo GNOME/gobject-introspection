@@ -4313,3 +4313,181 @@ gi_marshalling_tests_filename_list_return (void)
     return NULL;
 }
 
+
+enum  {
+    DUMMY_PROPERTY,
+    SOME_BOOLEAN_PROPERTY,
+    SOME_CHAR_PROPERTY,
+    SOME_UCHAR_PROPERTY,
+    SOME_INT_PROPERTY,
+    SOME_UINT_PROPERTY,
+    SOME_LONG_PROPERTY,
+    SOME_ULONG_PROPERTY,
+    SOME_INT64_PROPERTY,
+    SOME_UINT64_PROPERTY,
+    SOME_FLOAT_PROPERTY,
+    SOME_DOUBLE_PROPERTY
+};
+
+G_DEFINE_TYPE (GIMarshallingTestsPropertiesObject, gi_marshalling_tests_properties_object, G_TYPE_OBJECT);
+
+static void
+gi_marshalling_tests_properties_object_init (GIMarshallingTestsPropertiesObject * self)
+{
+}
+
+static void
+gi_marshalling_tests_properties_object_finalize (GObject* obj)
+{
+    G_OBJECT_CLASS (gi_marshalling_tests_properties_object_parent_class)->finalize (obj);
+}
+
+static void
+gi_marshalling_tests_properties_object_get_property (GObject * object, guint property_id, GValue * value, GParamSpec * pspec)
+{
+    GIMarshallingTestsPropertiesObject * self;
+    self = GI_MARSHALLING_TESTS_PROPERTIES_OBJECT (object);
+    switch (property_id) {
+        case SOME_BOOLEAN_PROPERTY:
+            g_value_set_boolean (value, self->some_boolean);
+            break;
+        case SOME_CHAR_PROPERTY:
+            g_value_set_schar (value, self->some_char);
+            break;
+        case SOME_UCHAR_PROPERTY:
+            g_value_set_uchar (value, self->some_uchar);
+            break;
+        case SOME_INT_PROPERTY:
+            g_value_set_int (value, self->some_int);
+            break;
+        case SOME_UINT_PROPERTY:
+            g_value_set_uint (value, self->some_uint);
+            break;
+        case SOME_LONG_PROPERTY:
+            g_value_set_long (value, self->some_long);
+            break;
+        case SOME_ULONG_PROPERTY:
+            g_value_set_ulong (value, self->some_ulong);
+            break;
+        case SOME_INT64_PROPERTY:
+            g_value_set_int64 (value, self->some_int64);
+            break;
+        case SOME_UINT64_PROPERTY:
+            g_value_set_uint64 (value, self->some_uint64);
+            break;
+        case SOME_FLOAT_PROPERTY:
+            g_value_set_float (value, self->some_float);
+            break;
+        case SOME_DOUBLE_PROPERTY:
+            g_value_set_double (value, self->some_double);
+            break;
+        default:
+            G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+            break;
+    }
+}
+
+static void
+gi_marshalling_tests_properties_object_set_property (GObject * object, guint property_id, const GValue * value, GParamSpec * pspec)
+{
+    GIMarshallingTestsPropertiesObject * self;
+    self = GI_MARSHALLING_TESTS_PROPERTIES_OBJECT (object);
+    switch (property_id) {
+        case SOME_BOOLEAN_PROPERTY:
+            self->some_boolean = g_value_get_boolean (value);
+            break;
+        case SOME_CHAR_PROPERTY:
+            self->some_char = g_value_get_schar (value);
+            break;
+        case SOME_UCHAR_PROPERTY:
+            self->some_uchar = g_value_get_uchar (value);
+            break;
+        case SOME_INT_PROPERTY:
+            self->some_int = g_value_get_int (value);
+            break;
+        case SOME_UINT_PROPERTY:
+            self->some_uint = g_value_get_uint (value);
+            break;
+        case SOME_LONG_PROPERTY:
+            self->some_long = g_value_get_long (value);
+            break;
+        case SOME_ULONG_PROPERTY:
+            self->some_ulong = g_value_get_ulong (value);
+            break;
+        case SOME_INT64_PROPERTY:
+            self->some_int64 = g_value_get_int64 (value);
+            break;
+        case SOME_UINT64_PROPERTY:
+            self->some_uint64 = g_value_get_uint64 (value);
+            break;
+        case SOME_FLOAT_PROPERTY:
+            self->some_float = g_value_get_float (value);
+            break;
+        case SOME_DOUBLE_PROPERTY:
+            self->some_double = g_value_get_double (value);
+            break;
+        default:
+            G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+            break;
+    }
+}
+
+static void
+gi_marshalling_tests_properties_object_class_init (GIMarshallingTestsPropertiesObjectClass * klass)
+{
+    GObjectClass* object_class = G_OBJECT_CLASS (klass);
+
+    object_class->finalize = gi_marshalling_tests_properties_object_finalize;
+    object_class->get_property = gi_marshalling_tests_properties_object_get_property;
+    object_class->set_property = gi_marshalling_tests_properties_object_set_property;
+
+    g_object_class_install_property (object_class, SOME_BOOLEAN_PROPERTY,
+        g_param_spec_boolean ("some-boolean", "some-boolean", "some-boolean", FALSE,
+            G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
+
+    g_object_class_install_property (object_class, SOME_CHAR_PROPERTY,
+        g_param_spec_char ("some-char", "some-char", "some-char", G_MININT8, G_MAXINT8, 0,
+            G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
+
+    g_object_class_install_property (object_class, SOME_UCHAR_PROPERTY,
+        g_param_spec_uchar ("some-uchar", "some-uchar", "some-uchar", 0, G_MAXUINT8, 0,
+            G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
+
+    g_object_class_install_property (object_class, SOME_INT_PROPERTY,
+        g_param_spec_int ("some-int", "some-int", "some-int", G_MININT, G_MAXINT, 0,
+            G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
+
+    g_object_class_install_property (object_class, SOME_UINT_PROPERTY,
+        g_param_spec_uint ("some-uint", "some-uint", "some-uint", 0, G_MAXUINT, 0,
+            G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
+
+    g_object_class_install_property (object_class, SOME_LONG_PROPERTY,
+        g_param_spec_long ("some-long", "some-long", "some-long", G_MINLONG, G_MAXLONG, 0,
+            G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
+
+    g_object_class_install_property (object_class, SOME_ULONG_PROPERTY,
+        g_param_spec_ulong ("some-ulong", "some-ulong", "some-ulong", 0, G_MAXULONG, 0,
+            G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
+
+    g_object_class_install_property (object_class, SOME_INT64_PROPERTY,
+        g_param_spec_int64 ("some-int64", "some-int64", "some-int64", G_MININT64, G_MAXINT64, 0,
+            G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
+
+    g_object_class_install_property (object_class, SOME_UINT64_PROPERTY,
+        g_param_spec_uint64 ("some-uint64", "some-uint64", "some-uint64", 0, G_MAXUINT64, 0,
+            G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
+
+    g_object_class_install_property (object_class, SOME_FLOAT_PROPERTY,
+        g_param_spec_float ("some-float", "some-float", "some-float", -1 * G_MAXFLOAT, G_MAXFLOAT, 0,
+            G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
+
+    g_object_class_install_property (object_class, SOME_DOUBLE_PROPERTY,
+        g_param_spec_double ("some-double", "some-double", "some-double", -1 * G_MAXDOUBLE, G_MAXDOUBLE, 0,
+            G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
+}
+
+GIMarshallingTestsPropertiesObject*
+gi_marshalling_tests_properties_object_new (void)
+{
+    return g_object_new (GI_MARSHALLING_TESTS_TYPE_PROPERTIES_OBJECT, NULL);
+}
