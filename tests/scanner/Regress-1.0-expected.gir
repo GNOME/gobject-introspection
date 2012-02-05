@@ -2660,6 +2660,17 @@ What we're testing here is that the scanner ignores the @a nested inside XML.</d
         </parameter>
       </parameters>
     </function>
+    <function name="test_null_gerror_callback"
+              c:identifier="regress_test_null_gerror_callback">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="callback" transfer-ownership="none" scope="call">
+          <type name="TestCallbackGError" c:type="RegressTestCallbackGError"/>
+        </parameter>
+      </parameters>
+    </function>
     <function name="test_owned_gerror_callback"
               c:identifier="regress_test_owned_gerror_callback">
       <return-value transfer-ownership="none">

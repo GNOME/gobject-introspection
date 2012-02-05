@@ -573,6 +573,7 @@ RegressTestObj *regress_test_obj_new_callback (RegressTestCallbackUserData callb
                                 GDestroyNotify notify);
 void regress_test_hash_table_callback (GHashTable *data, RegressTestCallbackHashtable callback);
 void regress_test_gerror_callback (RegressTestCallbackGError callback);
+void regress_test_null_gerror_callback (RegressTestCallbackGError callback);
 void regress_test_owned_gerror_callback (RegressTestCallbackOwnedGError callback);
 
 typedef struct _RegressTestInterface RegressTestInterface;

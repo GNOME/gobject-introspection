@@ -3084,6 +3084,16 @@ regress_test_gerror_callback (RegressTestCallbackGError callback)
 }
 
 /**
+ * regress_test_null_gerror_callback:
+ * @callback: (scope call):
+ **/
+void
+regress_test_null_gerror_callback (RegressTestCallbackGError callback)
+{
+  callback (NULL);
+}
+
+/**
  * regress_test_owned_gerror_callback:
  * @callback: (scope call):
  **/
