@@ -1553,6 +1553,17 @@ Use with regress_test_obj_emit_sig_with_obj</doc>
         </parameter>
       </parameters>
     </function>
+    <function name="test_array_callback"
+              c:identifier="regress_test_array_callback">
+      <return-value transfer-ownership="none">
+        <type name="gint" c:type="int"/>
+      </return-value>
+      <parameters>
+        <parameter name="callback" transfer-ownership="none" scope="call">
+          <type name="TestCallbackArray" c:type="RegressTestCallbackArray"/>
+        </parameter>
+      </parameters>
+    </function>
     <function name="test_array_fixed_out_objects"
               c:identifier="regress_test_array_fixed_out_objects">
       <return-value transfer-ownership="none">
@@ -1567,17 +1578,6 @@ Use with regress_test_obj_emit_sig_with_obj</doc>
           <array zero-terminated="0" c:type="RegressTestObj***" fixed-size="2">
             <type name="TestObj" c:type="RegressTestObj**"/>
           </array>
-        </parameter>
-      </parameters>
-    </function>
-    <function name="test_array_callback"
-              c:identifier="regress_test_array_callback">
-      <return-value transfer-ownership="none">
-        <type name="gint" c:type="int"/>
-      </return-value>
-      <parameters>
-        <parameter name="callback" transfer-ownership="none" scope="call">
-          <type name="TestCallbackArray" c:type="RegressTestCallbackArray"/>
         </parameter>
       </parameters>
     </function>
