@@ -582,6 +582,17 @@ use it should be.</doc>
           </parameter>
         </parameters>
       </function>
+      <virtual-method name="allow_none_vfunc">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <parameter name="two" transfer-ownership="none" allow-none="1">
+            <doc xml:whitespace="preserve">Another object</doc>
+            <type name="TestObj" c:type="RegressTestObj*"/>
+          </parameter>
+        </parameters>
+      </virtual-method>
       <virtual-method name="matrix" invoker="do_matrix">
         <doc xml:whitespace="preserve">This method is virtual.  Notably its name differs from the virtual
 slot name, which makes it useful for testing bindings handle this
@@ -1121,6 +1132,22 @@ Use with regress_test_obj_emit_sig_with_obj</doc>
             <parameter name="somestr" transfer-ownership="none">
               <doc xml:whitespace="preserve">Meaningless string</doc>
               <type name="utf8" c:type="char*"/>
+            </parameter>
+          </parameters>
+        </callback>
+      </field>
+      <field name="allow_none_vfunc">
+        <callback name="allow_none_vfunc">
+          <return-value transfer-ownership="none">
+            <type name="none" c:type="void"/>
+          </return-value>
+          <parameters>
+            <parameter name="obj" transfer-ownership="none">
+              <type name="TestObj" c:type="RegressTestObj*"/>
+            </parameter>
+            <parameter name="two" transfer-ownership="none" allow-none="1">
+              <doc xml:whitespace="preserve">Another object</doc>
+              <type name="TestObj" c:type="RegressTestObj*"/>
             </parameter>
           </parameters>
         </callback>

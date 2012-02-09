@@ -1224,6 +1224,10 @@ method or constructor of some type."""
             vfunc = ast.VFunction.from_callback(callback)
             vfunc.instance_parameter = callback.parameters[0]
             vfunc.inherit_file_positions(callback)
+
+            prefix = self._get_annotation_name(class_struct)
+            block = self._blocks.get('%s::%s' % (prefix, vfunc.name))
+            self._apply_annotations_callable(vfunc, [node], block)
             node.virtual_methods.append(vfunc)
 
         # Take the set of virtual methods we found, and try

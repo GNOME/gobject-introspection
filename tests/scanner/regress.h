@@ -358,6 +358,12 @@ struct _RegressTestObjClass
 
   int (*matrix) (RegressTestObj *obj, const char *somestr);
 
+  /**
+   * RegressTestObjClass::allow_none_vfunc
+   * @two: (allow-none): Another object
+   */
+  void (*allow_none_vfunc) (RegressTestObj *obj, RegressTestObj *two);
+
   guint test_signal;
   guint test_signal_with_static_scope_arg;
 
