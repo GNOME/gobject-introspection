@@ -2900,6 +2900,17 @@ gi_marshalling_tests_gvalue_in (GValue *value)
 }
 
 /**
+ * gi_marshalling_tests_gvalue_in_with_type:
+ * @value: (transfer none):
+ * @type:
+ */
+void
+gi_marshalling_tests_gvalue_in_with_type (GValue *value, GType type)
+{
+  g_assert(g_type_is_a(G_VALUE_TYPE(value), type));
+}
+
+/**
  * gi_marshalling_tests_gvalue_in_enum:
  * @value: (transfer none):
  */
