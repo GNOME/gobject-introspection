@@ -684,33 +684,36 @@ usage is void (*_gtk_reserved1)(void);"""
         self._apply_annotations_param_ret_common(parent, return_, tag)
 
     def _apply_annotations_params(self, parent, params, block):
-        allparams = []
+        declparams = set([])
         if parent.instance_parameter:
-            allparams.append(parent.instance_parameter.argname)
+            declparams.add(parent.instance_parameter.argname)
         for param in params:
             if block:
                 tag = block.get(param.argname)
             else:
                 tag = None
             self._apply_annotations_param(parent, param, tag)
-            allparams.append(param.argname)
+            declparams.add(param.argname)
 
         if not block:
             return
-        docparams = block.params[:]
-        for doc_name in docparams:
-            if doc_name in allparams:
-                continue
+        docparams = set(block.params)
+
+        unknown = docparams - declparams
+        unused = declparams - docparams
+
+        for doc_name in unknown:
             # Skip varargs, see #629759
             if doc_name.lower() in ['...', 'varargs', TAG_RETURNS]:
                 continue
-            if len(allparams) == 0:
+            if len(unused) == 0:
                 text = ''
-            elif len(allparams) == 1:
-                text = ', should be %r' % (allparams[0], )
+            elif len(unused) == 1:
+                (param, ) = unused
+                text = ', should be %r' % (param, )
             else:
                 text = ', should be one of %s' % (
-                ', '.join(repr(p) for p in allparams), )
+                ', '.join(repr(p) for p in unused), )
 
             tag = block.get(doc_name)
             message.warn(
