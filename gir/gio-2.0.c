@@ -2203,6 +2203,10 @@
  * that both @changed_properties and @invalidated_properties are
  * guaranteed to never be %NULL (either may be empty though).
  *
+ * If the proxy has the flag
+ * %G_DBUS_PROXY_FLAGS_GET_INVALIDATED_PROPERTIES set, then
+ * @invalidated_properties will always be empty.
+ *
  * This signal corresponds to the
  * <literal>PropertiesChanged</literal> D-Bus signal on the
  * <literal>org.freedesktop.DBus.Properties</literal> interface.
@@ -2361,6 +2365,7 @@
  * @G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES: Don't load properties.
  * @G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS: Don't connect to signals on the remote object.
  * @G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START: If not set and the proxy if for a well-known name, then request the bus to launch an owner for the name if no-one owns the name. This flag can only be used in proxies for well-known names.
+ * @G_DBUS_PROXY_FLAGS_GET_INVALIDATED_PROPERTIES: If set, the property value for any <emphasis>invalidated property</emphasis> will be (asynchronously) retrieved upon receiving the <ulink url="http://dbus.freedesktop.org/doc/dbus-specification.html#standard-interfaces-properties">PropertiesChanged</ulink> D-Bus signal and the property will not cause emission of the #GDBusProxy::g-properties-changed signal. When the value is received the #GDBusProxy::g-properties-changed signal is emitted for the property along with the retrieved value. Since 2.32.
  *
  * Flags used when constructing an instance of a #GDBusProxy derived class.
  *
@@ -3413,9 +3418,9 @@
 /**
  * GIOErrorEnum:
  * @G_IO_ERROR_FAILED: Generic error condition for when any operation fails.
- * @G_IO_ERROR_NOT_FOUND: File not found error.
- * @G_IO_ERROR_EXISTS: File already exists error.
- * @G_IO_ERROR_IS_DIRECTORY: File is a directory error.
+ * @G_IO_ERROR_NOT_FOUND: File not found.
+ * @G_IO_ERROR_EXISTS: File already exists.
+ * @G_IO_ERROR_IS_DIRECTORY: File is a directory.
  * @G_IO_ERROR_NOT_DIRECTORY: File is not a directory.
  * @G_IO_ERROR_NOT_EMPTY: File is a directory that isn't empty.
  * @G_IO_ERROR_NOT_REGULAR_FILE: File is not a regular file.
@@ -14665,7 +14670,7 @@
  * GMenu markup xml, CSS files, icons, etc. These are often shipped as files in <filename>$datadir/appname</filename>, or
  * manually included as literal strings in the code.
  *
- * The #GResource API and the <link linkend="glib-compile-schemas">glib-compile-resources</link> program
+ * The #GResource API and the <link linkend="glib-compile-resources">glib-compile-resources</link> program
  * provide a convenient and efficient alternative to this which has some nice properties. You
  * maintain the files as normal files, so its easy to edit them, but during the build the files
  * are combined into a binary bundle that is linked into the executable. This means that loading
@@ -14679,13 +14684,21 @@
  *
  * Resource files can also be marked to be preprocessed, by setting the value of the
  * <literal>preprocess</literal> attribute to a comma-separated list of preprocessing options.
- * The only option currently supported is
- * <literal>xml-stripblanks</literal> which will use <literal>xmllint</literal> to strip
- * ignorable whitespace from the xml file. For this to work, the <envar>XMLLINT</envar>
- * environment variable must be set to the full path to the xmllint executable;
- * otherwise the preprocessing step is skipped.
+ * The only options currently supported are:
  *
- * Resource bundles are created by the <link linkend="glib-compile-schemas">glib-compile-resources</link> program
+ * <literal>xml-stripblanks</literal> which will use <command>xmllint</command> to strip
+ * ignorable whitespace from the xml file. For this to work, the <envar>XMLLINT</envar>
+ * environment variable must be set to the full path to the xmllint executable, or xmllint
+ * must be in the PATH; otherwise the preprocessing step is skipped.
+ *
+ * <literal>to-pixdata</literal> which will use <command>gdk-pixbuf-pixdata</command> to convert
+ * images to the GdkPixdata format, which allows you to create pixbufs directly using the data inside
+ * the resource file, rather than an (uncompressed) copy if it. For this, the gdk-pixbuf-pixdata
+ * program must be in the PATH, or the <envar>GDK_PIXBUF_PIXDATA</envar> environment variable must be
+ * set to the full path to the gdk-pixbuf-pixdata executable; otherwise the resource compiler will
+ * abort.
+ *
+ * Resource bundles are created by the <link linkend="glib-compile-resources">glib-compile-resources</link> program
  * which takes an xml file that describes the bundle, and a set of files that the xml references. These
  * are combined into a binary resource bundle.
  *
@@ -14711,7 +14724,7 @@
  * Note that all resources in the process share the same namespace, so use java-style
  * path prefixes (like in the above example) to avoid conflicts.
  *
- * You can then use <link linkend="glib-compile-schemas">glib-compile-resources</link> to compile the xml to a
+ * You can then use <link linkend="glib-compile-resources">glib-compile-resources</link> to compile the xml to a
  * binary bundle that you can load with g_resource_load(). However, its more common to use the --generate-source and
  * --generate-header arguments to create a source file and header to link directly into your application.
  *
@@ -15356,8 +15369,8 @@
  * @include: gio/gio.h
  * @see_also: #GSocketConnection, #GSocketListener
  *
- * #GSocketClient is a high-level utility class for connecting to a
- * network host using a connection oriented socket type.
+ * #GSocketClient is a lightweight high-level utility class for connecting to
+ * a network host using a connection oriented socket type.
  *
  * You create a #GSocketClient object, set any options you want, and then
  * call a sync or async connect operation, which returns a #GSocketConnection
@@ -15366,6 +15379,9 @@
  * The type of the #GSocketConnection object returned depends on the type of
  * the underlying socket that is in use. For instance, for a TCP/IP connection
  * it will be a #GTcpConnection.
+ *
+ * As #GSocketClient is a lightweight object, you don't need to cache it. You
+ * can just create a new one any time you need one.
  *
  * Since: 2.22
  */
@@ -38029,6 +38045,50 @@
 
 
 /**
+ * g_static_resource_fini:
+ * @static_resource: pointer to a static #GStaticResource.
+ *
+ * Finalized a GResource initialized by g_static_resource_init ().
+ *
+ * This is normally used by code generated by
+ * <link linkend="glib-compile-resources">glib-compile-resources</link> and is
+ * not typically used by other code.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * g_static_resource_get_resource:
+ * @static_resource: pointer to a static #GStaticResource.
+ *
+ * Gets the GResource that was registred by a call to g_static_resource_init ().
+ *
+ * This is normally used by code generated by
+ * <link linkend="glib-compile-resources">glib-compile-resources</link> and is
+ * not typically used by other code.
+ *
+ * Returns: (transfer none): a #GResource.
+ * Since: 2.32
+ */
+
+
+/**
+ * g_static_resource_init:
+ * @static_resource: pointer to a static #GStaticResource.
+ *
+ * Initializes a GResource from static data using a
+ * GStaticResource.
+ *
+ * This is normally used by code generated by
+ * <link linkend="glib-compile-resources">glib-compile-resources</link> and is
+ * not typically used by other code.
+ *
+ * Since: 2.32
+ */
+
+
+/**
  * g_tcp_connection_get_graceful_disconnect:
  * @connection: a #GTcpConnection
  *
@@ -40971,9 +41031,9 @@
 /**
  * g_win32_input_stream_new:
  * @handle: a Win32 file handle
- * @close_fd: %TRUE to close the handle when done
+ * @close_handle: %TRUE to close the handle when done
  *
- * Creates a new #GWin32InputStream for the given @fd.
+ * Creates a new #GWin32InputStream for the given @handle.
  *
  * If @close_handle is %TRUE, the handle will be closed
  * when the stream is closed.

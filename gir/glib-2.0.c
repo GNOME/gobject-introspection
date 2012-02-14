@@ -9798,7 +9798,7 @@
  * available in the queue at that point, the thread is now put to sleep
  * until a message arrives. The message will be removed from the queue
  * and returned. The functions g_async_queue_try_pop() and
- * g_async_queue_timed_pop() can be used to only check for the presence
+ * g_async_queue_timeout_pop() can be used to only check for the presence
  * of messages or to only wait a certain time for messages respectively.
  *
  * For almost every function there exist two variants, one that locks
@@ -14190,6 +14190,7 @@
  * received before @end_time.
  *
  * Returns: data from the queue or %NULL, when no data is
+ * Deprecated: use g_async_queue_timeout_pop().
  */
 
 
@@ -14209,6 +14210,41 @@
  * This function must be called while holding the @queue's lock.
  *
  * received before @end_time.
+ *
+ * Returns: data from the queue or %NULL, when no data is
+ * Deprecated: use g_async_queue_timeout_pop_unlocked().
+ */
+
+
+/**
+ * g_async_queue_timeout_pop:
+ * @queue: a #GAsyncQueue
+ * @timeout: the number of microseconds to wait
+ *
+ * Pops data from the @queue. If the queue is empty, blocks for
+ * @timeout microseconds, or until data becomes available.
+ *
+ * If no data is received before the timeout, %NULL is returned.
+ *
+ * received before the timeout.
+ *
+ * Returns: data from the queue or %NULL, when no data is
+ */
+
+
+/**
+ * g_async_queue_timeout_pop_unlocked:
+ * @queue: a #GAsyncQueue
+ * @time: the number of microseconds to wait
+ *
+ * Pops data from the @queue. If the queue is empty, blocks for
+ * @timeout microseconds, or until data becomes available.
+ *
+ * If no data is received before the timeout, %NULL is returned.
+ *
+ * This function must be called while holding the @queue's lock.
+ *
+ * received before the timeout.
  *
  * Returns: data from the queue or %NULL, when no data is
  */
@@ -22261,8 +22297,8 @@
 /**
  * g_key_file_load_from_data:
  * @key_file: an empty #GKeyFile struct
- * @data: (array length=length): key file loaded in memory
- * @length: the length of @data in bytes
+ * @data: key file loaded in memory
+ * @length: the length of @data in bytes (or -1 if data is nul-terminated)
  * @flags: flags from #GKeyFileFlags
  * @error: return location for a #GError, or %NULL
  *
