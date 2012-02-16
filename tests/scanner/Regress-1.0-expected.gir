@@ -2164,6 +2164,14 @@ call and can be released on return.</doc>
         </array>
       </return-value>
     </function>
+    <function name="test_garray_full_return"
+              c:identifier="regress_test_garray_full_return">
+      <return-value transfer-ownership="full">
+        <array name="GLib.PtrArray" c:type="GPtrArray*">
+          <type name="utf8"/>
+        </array>
+      </return-value>
+    </function>
     <function name="test_gerror_callback"
               c:identifier="regress_test_gerror_callback">
       <return-value transfer-ownership="none">

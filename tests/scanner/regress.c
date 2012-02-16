@@ -1333,6 +1333,22 @@ regress_test_garray_container_return (void)
   return array;
 }
 
+/**
+ * regress_test_garray_full_return:
+ *
+ * Returns: (transfer full) (type GLib.PtrArray) (element-type utf8):
+ */
+GPtrArray *
+regress_test_garray_full_return (void)
+{
+  GPtrArray *array;
+
+  array = g_ptr_array_new ();
+  g_ptr_array_add (array, g_strdup ("regress"));
+
+  return array;
+}
+
 /************************************************************************/
 
 /* error? */

@@ -113,6 +113,7 @@ GHashTable *regress_test_ghash_nested_everything_return2 (void);
 
 /* GPtrArray */
 GPtrArray *regress_test_garray_container_return (void);
+GPtrArray *regress_test_garray_full_return (void);
 
 /* error? */
 
