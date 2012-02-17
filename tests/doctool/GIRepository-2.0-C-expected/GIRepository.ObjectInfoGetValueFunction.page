@@ -6,5 +6,6 @@
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
   </info>
-  <title>GIRepositoryObjectInfoGetValueFunction</title>
-<p>Extract an object instance out of @value</p></page>
+  <title>GIRepository.ObjectInfoGetValueFunction</title>
+<p>Extract an object instance out of @value</p>
+</page>

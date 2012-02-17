@@ -6,5 +6,6 @@
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
   </info>
-  <title>GIRepositoryObjectInfoRefFunction</title>
-<p>Increases the reference count of an object instance.</p></page>
+  <title>GIRepository.ObjectInfoRefFunction</title>
+<p>Increases the reference count of an object instance.</p>
+</page>

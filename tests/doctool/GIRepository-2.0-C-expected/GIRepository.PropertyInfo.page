@@ -6,5 +6,6 @@
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
   </info>
-  <title>GIRepositoryPropertyInfo</title>
-<p>Represents a property of a <link xref="GIObjectInfo">GIObjectInfo</link> or a <link xref="GIInterfaceInfo">GIInterfaceInfo</link>.</p></page>
+  <title>GIRepository.PropertyInfo</title>
+<p>Represents a property of a <link xref="GIObjectInfo">GIObjectInfo</link> or a <link xref="GIInterfaceInfo">GIInterfaceInfo</link>.</p>
+</page>

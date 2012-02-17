@@ -6,5 +6,6 @@
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
   </info>
-  <title>GIRepositoryRepositoryError</title>
+  <title>GIRepository.RepositoryError</title>
+
 </page>

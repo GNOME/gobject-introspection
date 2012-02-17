@@ -1,12 +1,33 @@
 <?xml version="1.0"?>
+
 <page id="GIRepository.Repository.enumerate_versions"
       type="topic"
       style="method"
       xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
     <link type="guide" xref="GIRepository.Repository" group="method"/>
+    <api:function>
+      <api:returns>
+        <api:type>GList*</api:type>
+      </api:returns>
+      <api:name>g_irepository_enumerate_versions</api:name>
+      <api:arg>
+        <api:type>GIRepository *</api:type>
+        <api:name>self</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>gchar*</api:type>
+        <api:name>namespace_</api:name>
+      </api:arg>
+    </api:function>
   </info>
   <title>g_irepository_enumerate_versions</title>
+<synopsis><code mime="text/x-csrc">
+GList* g_irepository_enumerate_versions (GIRepository *self,
+gchar* namespace_);
+</code></synopsis>
 <p>Obtain an unordered list of versions (either currently loaded or
-available) for @namespace_ in this @repository.</p></page>
+available) for @namespace_ in this @repository.</p>
+</page>

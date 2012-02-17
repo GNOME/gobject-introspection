@@ -1,16 +1,42 @@
 <?xml version="1.0"?>
+
 <page id="GIRepository.Repository.is_registered"
       type="topic"
       style="method"
       xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
     <link type="guide" xref="GIRepository.Repository" group="method"/>
+    <api:function>
+      <api:returns>
+        <api:type>gboolean</api:type>
+      </api:returns>
+      <api:name>g_irepository_is_registered</api:name>
+      <api:arg>
+        <api:type>GIRepository *</api:type>
+        <api:name>self</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>utf8</api:type>
+        <api:name>namespace_</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>utf8</api:type>
+        <api:name>version</api:name>
+      </api:arg>
+    </api:function>
   </info>
-  <title>GIRepository.Repository.is_registered</title>
+  <title>is_registered</title>
+<synopsis><code mime="text/x-python">
+@accepts(utf8, utf8)
+@returns(gboolean)
+def GIRepository.Repository.is_registered(namespace_, version)
+</code></synopsis>
 <p>Check whether a particular namespace (and optionally, a specific
 version thereof) is currently loaded.  This function is likely to
 only be useful in unusual circumstances; in order to act upon
 metadata in the namespace, you should call g_irepository_require()
 instead which will ensure the namespace is loaded, and return as
-quickly as this function will if it has already been loaded.</p></page>
+quickly as this function will if it has already been loaded.</p>
+</page>

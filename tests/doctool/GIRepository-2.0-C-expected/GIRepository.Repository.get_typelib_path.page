@@ -1,14 +1,35 @@
 <?xml version="1.0"?>
+
 <page id="GIRepository.Repository.get_typelib_path"
       type="topic"
       style="method"
       xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
     <link type="guide" xref="GIRepository.Repository" group="method"/>
+    <api:function>
+      <api:returns>
+        <api:type>gchar*</api:type>
+      </api:returns>
+      <api:name>g_irepository_get_typelib_path</api:name>
+      <api:arg>
+        <api:type>GIRepository *</api:type>
+        <api:name>self</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>gchar*</api:type>
+        <api:name>namespace_</api:name>
+      </api:arg>
+    </api:function>
   </info>
   <title>g_irepository_get_typelib_path</title>
+<synopsis><code mime="text/x-csrc">
+gchar* g_irepository_get_typelib_path (GIRepository *self,
+gchar* namespace_);
+</code></synopsis>
 <p>If namespace @namespace_ is loaded, return the full path to the
 .typelib file it was loaded from.  If the typelib for
 namespace @namespace_ was included in a shared library, return
-the special string "$lt;builtin$gt;".</p></page>
+the special string "$lt;builtin$gt;".</p>
+</page>

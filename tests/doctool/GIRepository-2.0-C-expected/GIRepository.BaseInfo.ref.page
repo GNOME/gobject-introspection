@@ -1,11 +1,23 @@
 <?xml version="1.0"?>
+
 <page id="GIRepository.BaseInfo.ref"
       type="topic"
       style="function"
       xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
     <link type="guide" xref="GIRepository.BaseInfo" group="function"/>
+    <api:function>
+      <api:returns>
+        <api:type>GIBaseInfo*</api:type>
+      </api:returns>
+      <api:name>g_base_info_ref</api:name>
+    </api:function>
   </info>
   <title>g_base_info_ref</title>
-<p>Increases the reference count of @info.</p></page>
+<synopsis><code mime="text/x-csrc">
+GIBaseInfo* g_base_info_ref (void);
+</code></synopsis>
+<p>Increases the reference count of @info.</p>
+</page>

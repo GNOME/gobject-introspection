@@ -8,4 +8,5 @@
   </info>
   <title>GIRepository.nvokeError</title>
 <p>An error occuring while invoking a function via
-g_function_info_invoke().</p></page>
+g_function_info_invoke().</p>
+</page>

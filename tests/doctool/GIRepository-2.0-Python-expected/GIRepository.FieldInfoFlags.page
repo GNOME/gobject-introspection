@@ -7,4 +7,5 @@
   <info>
   </info>
   <title>GIRepository.FieldInfoFlags</title>
-<p>Flags for a <link xref="GIFieldInfo">GIFieldInfo</link>.</p></page>
+<p>Flags for a <link xref="GIFieldInfo">GIFieldInfo</link>.</p>
+</page>

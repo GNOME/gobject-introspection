@@ -7,4 +7,5 @@
   <info>
   </info>
   <title>GIRepository.FunctionInfoFlags</title>
-<p>Flags for a <link xref="GIFunctionInfo">GIFunctionInfo</link> struct.</p></page>
+<p>Flags for a <link xref="GIFunctionInfo">GIFunctionInfo</link> struct.</p>
+</page>

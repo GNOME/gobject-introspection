@@ -6,5 +6,6 @@
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
   </info>
-  <title>GIRepositoryConstantInfo</title>
-<p>Represents a constant.</p></page>
+  <title>GIRepository.ConstantInfo</title>
+<p>Represents a constant.</p>
+</page>

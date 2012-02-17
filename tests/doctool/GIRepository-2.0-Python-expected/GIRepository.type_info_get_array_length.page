@@ -1,12 +1,30 @@
 <?xml version="1.0"?>
+
 <page id="GIRepository.type_info_get_array_length"
       type="topic"
       style="function"
       xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
     <link type="guide" xref="index" group="function"/>
+    <api:function>
+      <api:returns>
+        <api:type>gint</api:type>
+      </api:returns>
+      <api:name>g_type_info_get_array_length</api:name>
+      <api:arg>
+        <api:type>GIRepository.TypeInfo</api:type>
+        <api:name>info</api:name>
+      </api:arg>
+    </api:function>
   </info>
-  <title>GIRepository.type_info_get_array_length</title>
+  <title>type_info_get_array_length</title>
+<synopsis><code mime="text/x-python">
+@accepts(GIRepository.TypeInfo)
+@returns(gint)
+def type_info_get_array_length(info)
+</code></synopsis>
 <p>Obtain the array length of the type. The type tag must be a
-<link xref="GI_TYPE_TAG_ARRAY">GI_TYPE_TAG_ARRAY</link> or -1 will returned.</p></page>
+<link xref="GI_TYPE_TAG_ARRAY">GI_TYPE_TAG_ARRAY</link> or -1 will returned.</p>
+</page>

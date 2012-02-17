@@ -1,13 +1,34 @@
 <?xml version="1.0"?>
+
 <page id="GIRepository.callable_info_load_return_type"
       type="topic"
       style="function"
       xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
     <link type="guide" xref="index" group="function"/>
+    <api:function>
+      <api:returns>
+        <api:type>void</api:type>
+      </api:returns>
+      <api:name>g_callable_info_load_return_type</api:name>
+      <api:arg>
+        <api:type>GICallableInfo*</api:type>
+        <api:name>info</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>GITypeInfo*</api:type>
+        <api:name>type</api:name>
+      </api:arg>
+    </api:function>
   </info>
   <title>g_callable_info_load_return_type</title>
+<synopsis><code mime="text/x-csrc">
+void g_callable_info_load_return_type (GICallableInfo* info,
+                                       GITypeInfo* type);
+</code></synopsis>
 <p>Obtain information about a return value of callable; this
 function is a variant of g_callable_info_get_return_type() designed for stack
-allocation.</p><p>The initialized @type must not be referenced after @info is deallocated.</p></page>
+allocation.</p><p>The initialized @type must not be referenced after @info is deallocated.</p>
+</page>

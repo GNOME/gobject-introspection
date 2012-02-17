@@ -6,5 +6,6 @@
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
   </info>
-  <title>GIRepositoryStructInfo</title>
-<p>Represents a struct.</p></page>
+  <title>GIRepository.StructInfo</title>
+<p>Represents a struct.</p>
+</page>

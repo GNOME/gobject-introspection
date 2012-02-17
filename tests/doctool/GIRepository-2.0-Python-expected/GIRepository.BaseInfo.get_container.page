@@ -1,13 +1,26 @@
 <?xml version="1.0"?>
+
 <page id="GIRepository.BaseInfo.get_container"
       type="topic"
       style="function"
       xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
     <link type="guide" xref="GIRepository.BaseInfo" group="function"/>
+    <api:function>
+      <api:returns>
+        <api:type>GIRepository.BaseInfo</api:type>
+      </api:returns>
+      <api:name>g_base_info_get_container</api:name>
+    </api:function>
   </info>
-  <title>GIRepository.get_container</title>
+  <title>get_container</title>
+<synopsis><code mime="text/x-python">
+@returns(GIRepository.BaseInfo)
+def GIRepository.BaseInfo.get_container()
+</code></synopsis>
 <p>Obtain the container of the @info. The container is the parent
 GIBaseInfo. For instance, the parent of a <link xref="GIFunctionInfo">GIFunctionInfo</link> is an
-<link xref="GIObjectInfo">GIObjectInfo</link> or <link xref="GIInterfaceInfo">GIInterfaceInfo</link>.</p></page>
+<link xref="GIObjectInfo">GIObjectInfo</link> or <link xref="GIInterfaceInfo">GIInterfaceInfo</link>.</p>
+</page>

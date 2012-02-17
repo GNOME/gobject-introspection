@@ -1,11 +1,27 @@
 <?xml version="1.0"?>
+
 <page id="GIRepository.function_info_get_flags"
       type="topic"
       style="function"
       xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
     <link type="guide" xref="index" group="function"/>
+    <api:function>
+      <api:returns>
+        <api:type>GIFunctionInfoFlags</api:type>
+      </api:returns>
+      <api:name>g_function_info_get_flags</api:name>
+      <api:arg>
+        <api:type>GIFunctionInfo*</api:type>
+        <api:name>info</api:name>
+      </api:arg>
+    </api:function>
   </info>
   <title>g_function_info_get_flags</title>
-<p>Obtain the <link xref="GIFunctionInfoFlags">GIFunctionInfoFlags</link> for the @info.</p></page>
+<synopsis><code mime="text/x-csrc">
+GIFunctionInfoFlags g_function_info_get_flags (GIFunctionInfo* info);
+</code></synopsis>
+<p>Obtain the <link xref="GIFunctionInfoFlags">GIFunctionInfoFlags</link> for the @info.</p>
+</page>

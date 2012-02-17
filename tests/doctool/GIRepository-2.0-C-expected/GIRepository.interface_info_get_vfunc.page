@@ -1,11 +1,32 @@
 <?xml version="1.0"?>
+
 <page id="GIRepository.interface_info_get_vfunc"
       type="topic"
       style="function"
       xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
     <link type="guide" xref="index" group="function"/>
+    <api:function>
+      <api:returns>
+        <api:type>GIVFuncInfo*</api:type>
+      </api:returns>
+      <api:name>g_interface_info_get_vfunc</api:name>
+      <api:arg>
+        <api:type>GIInterfaceInfo*</api:type>
+        <api:name>info</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>gint</api:type>
+        <api:name>n</api:name>
+      </api:arg>
+    </api:function>
   </info>
   <title>g_interface_info_get_vfunc</title>
-<p>Obtain an interface type virtual function at index @n.</p><p>g_base_info_unref() when done.</p></page>
+<synopsis><code mime="text/x-csrc">
+GIVFuncInfo* g_interface_info_get_vfunc (GIInterfaceInfo* info,
+                                         gint n);
+</code></synopsis>
+<p>Obtain an interface type virtual function at index @n.</p><p>g_base_info_unref() when done.</p>
+</page>

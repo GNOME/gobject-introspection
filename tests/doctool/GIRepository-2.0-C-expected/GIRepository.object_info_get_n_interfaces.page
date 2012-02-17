@@ -1,11 +1,27 @@
 <?xml version="1.0"?>
+
 <page id="GIRepository.object_info_get_n_interfaces"
       type="topic"
       style="function"
       xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
     <link type="guide" xref="index" group="function"/>
+    <api:function>
+      <api:returns>
+        <api:type>gint</api:type>
+      </api:returns>
+      <api:name>g_object_info_get_n_interfaces</api:name>
+      <api:arg>
+        <api:type>GIObjectInfo*</api:type>
+        <api:name>info</api:name>
+      </api:arg>
+    </api:function>
   </info>
   <title>g_object_info_get_n_interfaces</title>
-<p>Obtain the number of interfaces that this object type has.</p></page>
+<synopsis><code mime="text/x-csrc">
+gint g_object_info_get_n_interfaces (GIObjectInfo* info);
+</code></synopsis>
+<p>Obtain the number of interfaces that this object type has.</p>
+</page>

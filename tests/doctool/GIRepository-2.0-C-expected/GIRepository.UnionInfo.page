@@ -6,5 +6,6 @@
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
   </info>
-  <title>GIRepositoryUnionInfo</title>
-<p>Represents a union.</p></page>
+  <title>GIRepository.UnionInfo</title>
+<p>Represents a union.</p>
+</page>

@@ -1,12 +1,34 @@
 <?xml version="1.0"?>
+
 <page id="GIRepository.object_info_find_method"
       type="topic"
       style="function"
       xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
     <link type="guide" xref="index" group="function"/>
+    <api:function>
+      <api:returns>
+        <api:type>GIRepository.FunctionInfo</api:type>
+      </api:returns>
+      <api:name>g_object_info_find_method</api:name>
+      <api:arg>
+        <api:type>GIRepository.ObjectInfo</api:type>
+        <api:name>info</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>utf8</api:type>
+        <api:name>name</api:name>
+      </api:arg>
+    </api:function>
   </info>
-  <title>GIRepository.object_info_find_method</title>
+  <title>object_info_find_method</title>
+<synopsis><code mime="text/x-python">
+@accepts(GIRepository.ObjectInfo, utf8)
+@returns(GIRepository.FunctionInfo)
+def object_info_find_method(info, name)
+</code></synopsis>
 <p>Obtain a method of the object type given a @name. %NULL will be
-returned if there's no method available with that name.</p><p>g_base_info_unref() when done.</p></page>
+returned if there's no method available with that name.</p><p>g_base_info_unref() when done.</p>
+</page>

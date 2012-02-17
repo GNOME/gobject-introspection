@@ -1,11 +1,37 @@
 <?xml version="1.0"?>
+
 <page id="GIRepository.Repository.load_typelib"
       type="topic"
       style="method"
       xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
     <link type="guide" xref="GIRepository.Repository" group="method"/>
+    <api:function>
+      <api:returns>
+        <api:type>utf8</api:type>
+      </api:returns>
+      <api:name>g_irepository_load_typelib</api:name>
+      <api:arg>
+        <api:type>GIRepository *</api:type>
+        <api:name>self</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>GIRepository.Typelib</api:type>
+        <api:name>typelib</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>GIRepository.RepositoryLoadFlags</api:type>
+        <api:name>flags</api:name>
+      </api:arg>
+    </api:function>
   </info>
-  <title>GIRepository.Repository.load_typelib</title>
+  <title>load_typelib</title>
+<synopsis><code mime="text/x-python">
+@accepts(GIRepository.Typelib, GIRepository.RepositoryLoadFlags)
+@returns(utf8)
+def GIRepository.Repository.load_typelib(typelib, flags)
+</code></synopsis>
+
 </page>

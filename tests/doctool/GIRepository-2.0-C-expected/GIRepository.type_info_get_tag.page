@@ -1,12 +1,28 @@
 <?xml version="1.0"?>
+
 <page id="GIRepository.type_info_get_tag"
       type="topic"
       style="function"
       xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
     <link type="guide" xref="index" group="function"/>
+    <api:function>
+      <api:returns>
+        <api:type>GITypeTag</api:type>
+      </api:returns>
+      <api:name>g_type_info_get_tag</api:name>
+      <api:arg>
+        <api:type>GITypeInfo*</api:type>
+        <api:name>info</api:name>
+      </api:arg>
+    </api:function>
   </info>
   <title>g_type_info_get_tag</title>
+<synopsis><code mime="text/x-csrc">
+GITypeTag g_type_info_get_tag (GITypeInfo* info);
+</code></synopsis>
 <p>Obtain the type tag for the type. See <link xref="GITypeTag">GITypeTag</link> for a list
-of type tags.</p></page>
+of type tags.</p>
+</page>

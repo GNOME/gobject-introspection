@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+
+<page id="GIRepository.enum_info_get_method"
+      type="topic"
+      style="function"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/experimental/ui/">
+  <info>
+    <link type="guide" xref="index" group="function"/>
+    <api:function>
+      <api:returns>
+        <api:type>GIRepository.FunctionInfo</api:type>
+      </api:returns>
+      <api:name>g_enum_info_get_method</api:name>
+      <api:arg>
+        <api:type>GIRepository.EnumInfo</api:type>
+        <api:name>info</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>gint</api:type>
+        <api:name>n</api:name>
+      </api:arg>
+    </api:function>
+  </info>
+  <title>enum_info_get_method</title>
+<synopsis><code mime="text/x-python">
+@accepts(GIRepository.EnumInfo, gint)
+@returns(GIRepository.FunctionInfo)
+def enum_info_get_method(info, n)
+</code></synopsis>
+<p>Obtain an enum type method at index @n.</p><p>g_base_info_unref() when done.</p>
+</page>

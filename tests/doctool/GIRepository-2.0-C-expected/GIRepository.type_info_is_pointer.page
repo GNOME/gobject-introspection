@@ -1,11 +1,27 @@
 <?xml version="1.0"?>
+
 <page id="GIRepository.type_info_is_pointer"
       type="topic"
       style="function"
       xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
     <link type="guide" xref="index" group="function"/>
+    <api:function>
+      <api:returns>
+        <api:type>gboolean</api:type>
+      </api:returns>
+      <api:name>g_type_info_is_pointer</api:name>
+      <api:arg>
+        <api:type>GITypeInfo*</api:type>
+        <api:name>info</api:name>
+      </api:arg>
+    </api:function>
   </info>
   <title>g_type_info_is_pointer</title>
-<p>Obtain if the type is passed as a reference.</p></page>
+<synopsis><code mime="text/x-csrc">
+gboolean g_type_info_is_pointer (GITypeInfo* info);
+</code></synopsis>
+<p>Obtain if the type is passed as a reference.</p>
+</page>

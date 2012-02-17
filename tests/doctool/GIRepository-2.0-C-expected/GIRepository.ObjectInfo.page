@@ -6,5 +6,6 @@
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
   </info>
-  <title>GIRepositoryObjectInfo</title>
-<p>Represents an object.</p></page>
+  <title>GIRepository.ObjectInfo</title>
+<p>Represents an object.</p>
+</page>

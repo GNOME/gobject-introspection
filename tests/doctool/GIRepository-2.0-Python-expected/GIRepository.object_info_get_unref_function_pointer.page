@@ -1,14 +1,32 @@
 <?xml version="1.0"?>
+
 <page id="GIRepository.object_info_get_unref_function_pointer"
       type="topic"
       style="function"
       xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
     <link type="guide" xref="index" group="function"/>
+    <api:function>
+      <api:returns>
+        <api:type>GIRepository.ObjectInfoUnrefFunction</api:type>
+      </api:returns>
+      <api:name>g_object_info_get_unref_function_pointer</api:name>
+      <api:arg>
+        <api:type>GIRepository.ObjectInfo</api:type>
+        <api:name>info</api:name>
+      </api:arg>
+    </api:function>
   </info>
-  <title>GIRepository.object_info_get_unref_function_pointer</title>
+  <title>object_info_get_unref_function_pointer</title>
+<synopsis><code mime="text/x-python">
+@accepts(GIRepository.ObjectInfo)
+@returns(GIRepository.ObjectInfoUnrefFunction)
+def object_info_get_unref_function_pointer(info)
+</code></synopsis>
 <p>Obtain a pointer to a function which can be used to
 decrease the reference count an instance of this object type.
 This takes derivation into account and will reversely traverse
-the base classes of this type, starting at the top type.</p></page>
+the base classes of this type, starting at the top type.</p>
+</page>

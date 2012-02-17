@@ -6,5 +6,6 @@
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
   </info>
-  <title>GIRepositoryTypeTag</title>
-<p>The type tag of a <link xref="GITypeInfo">GITypeInfo</link>.</p></page>
+  <title>GIRepository.TypeTag</title>
+<p>The type tag of a <link xref="GITypeInfo">GITypeInfo</link>.</p>
+</page>

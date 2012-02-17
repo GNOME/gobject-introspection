@@ -6,5 +6,6 @@
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
   </info>
-  <title>GIRepositoryDirection</title>
-<p>The direction of a <link xref="GIArgInfo">GIArgInfo</link>.</p></page>
+  <title>GIRepository.Direction</title>
+<p>The direction of a <link xref="GIArgInfo">GIArgInfo</link>.</p>
+</page>

@@ -1,11 +1,32 @@
 <?xml version="1.0"?>
+
 <page id="GIRepository.object_info_find_signal"
       type="topic"
       style="function"
       xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
     <link type="guide" xref="index" group="function"/>
+    <api:function>
+      <api:returns>
+        <api:type>GISignalInfo*</api:type>
+      </api:returns>
+      <api:name>g_object_info_find_signal</api:name>
+      <api:arg>
+        <api:type>GIObjectInfo*</api:type>
+        <api:name>info</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>gchar*</api:type>
+        <api:name>name</api:name>
+      </api:arg>
+    </api:function>
   </info>
   <title>g_object_info_find_signal</title>
+<synopsis><code mime="text/x-csrc">
+GISignalInfo* g_object_info_find_signal (GIObjectInfo* info,
+                                         gchar* name);
+</code></synopsis>
+
 </page>

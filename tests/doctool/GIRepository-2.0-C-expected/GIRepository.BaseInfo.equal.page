@@ -1,13 +1,29 @@
 <?xml version="1.0"?>
+
 <page id="GIRepository.BaseInfo.equal"
       type="topic"
       style="function"
       xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
     <link type="guide" xref="GIRepository.BaseInfo" group="function"/>
+    <api:function>
+      <api:returns>
+        <api:type>gboolean</api:type>
+      </api:returns>
+      <api:name>g_base_info_equal</api:name>
+      <api:arg>
+        <api:type>GIBaseInfo*</api:type>
+        <api:name>info2</api:name>
+      </api:arg>
+    </api:function>
   </info>
   <title>g_base_info_equal</title>
+<synopsis><code mime="text/x-csrc">
+gboolean g_base_info_equal (GIBaseInfo* info2);
+</code></synopsis>
 <p>Compare two <link xref="GIBaseInfo">GIBaseInfo</link>.</p><p>Using pointer comparison is not practical since many functions return
 different instances of <link xref="GIBaseInfo">GIBaseInfo</link> that refers to the same part of the
-TypeLib; use this function instead to do <link xref="GIBaseInfo">GIBaseInfo</link> comparisons.</p></page>
+TypeLib; use this function instead to do <link xref="GIBaseInfo">GIBaseInfo</link> comparisons.</p>
+</page>

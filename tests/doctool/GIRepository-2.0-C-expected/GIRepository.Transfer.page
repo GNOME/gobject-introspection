@@ -6,7 +6,7 @@
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
   </info>
-  <title>GIRepositoryTransfer</title>
+  <title>GIRepository.Transfer</title>
 <p>The transfer is the exchange of data between two parts, from the callee to
 the caller. The callee is either a function/method/signal or an
 object/interface where a property is defined. The caller is the side
@@ -16,4 +16,5 @@ ownership transfer is complete. In case of a containing type such as a list,
 an array or a hash table the container itself is specified differently from
 the items within the container itself. Each container is freed differently,
 check the documentation for the types themselves for information on how to
-free them.</p></page>
+free them.</p>
+</page>

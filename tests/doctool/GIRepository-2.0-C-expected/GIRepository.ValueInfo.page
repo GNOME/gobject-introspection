@@ -6,5 +6,6 @@
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
   </info>
-  <title>GIRepositoryValueInfo</title>
-<p>Represents a enum value of a <link xref="GIEnumInfo">GIEnumInfo</link>.</p></page>
+  <title>GIRepository.ValueInfo</title>
+<p>Represents a enum value of a <link xref="GIEnumInfo">GIEnumInfo</link>.</p>
+</page>

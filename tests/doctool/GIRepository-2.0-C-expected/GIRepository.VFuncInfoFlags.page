@@ -6,5 +6,6 @@
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
   </info>
-  <title>GIRepositoryVFuncInfoFlags</title>
-<p>Flags of a <link xref="GIVFuncInfo">GIVFuncInfo</link> struct.</p></page>
+  <title>GIRepository.VFuncInfoFlags</title>
+<p>Flags of a <link xref="GIVFuncInfo">GIVFuncInfo</link> struct.</p>
+</page>

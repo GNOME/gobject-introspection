@@ -6,5 +6,6 @@
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
   </info>
-  <title>GIRepositoryInterfaceInfo</title>
-<p>Represents an interface.</p></page>
+  <title>GIRepository.InterfaceInfo</title>
+<p>Represents an interface.</p>
+</page>

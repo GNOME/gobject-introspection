@@ -1,15 +1,45 @@
 <?xml version="1.0"?>
+
 <page id="GIRepository.Repository.require"
       type="topic"
       style="method"
       xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
     <link type="guide" xref="GIRepository.Repository" group="method"/>
+    <api:function>
+      <api:returns>
+        <api:type>GIRepository.Typelib</api:type>
+      </api:returns>
+      <api:name>g_irepository_require</api:name>
+      <api:arg>
+        <api:type>GIRepository *</api:type>
+        <api:name>self</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>utf8</api:type>
+        <api:name>namespace_</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>utf8</api:type>
+        <api:name>version</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>GIRepository.RepositoryLoadFlags</api:type>
+        <api:name>flags</api:name>
+      </api:arg>
+    </api:function>
   </info>
-  <title>GIRepository.Repository.require</title>
+  <title>require</title>
+<synopsis><code mime="text/x-python">
+@accepts(utf8, utf8, GIRepository.RepositoryLoadFlags)
+@returns(GIRepository.Typelib)
+def GIRepository.Repository.require(namespace_, version, flags)
+</code></synopsis>
 <p>Force the namespace @namespace_ to be loaded if it isn't already.
 If @namespace_ is not loaded, this function will search for a
 ".typelib" file using the repository search path.  In addition, a
 version @version of namespace may be specified.  If @version is
-not specified, the latest will be used.</p></page>
+not specified, the latest will be used.</p>
+</page>

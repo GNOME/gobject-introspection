@@ -1,12 +1,25 @@
 <?xml version="1.0"?>
+
 <page id="GIRepository.BaseInfo.is_deprecated"
       type="topic"
       style="function"
       xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
     <link type="guide" xref="GIRepository.BaseInfo" group="function"/>
+    <api:function>
+      <api:returns>
+        <api:type>gboolean</api:type>
+      </api:returns>
+      <api:name>g_base_info_is_deprecated</api:name>
+    </api:function>
   </info>
-  <title>GIRepository.is_deprecated</title>
+  <title>is_deprecated</title>
+<synopsis><code mime="text/x-python">
+@returns(gboolean)
+def GIRepository.BaseInfo.is_deprecated()
+</code></synopsis>
 <p>Obtain whether the @info is represents a metadata which is
-deprecated or not.</p></page>
+deprecated or not.</p>
+</page>

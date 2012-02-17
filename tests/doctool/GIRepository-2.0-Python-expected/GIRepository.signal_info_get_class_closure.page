@@ -1,13 +1,31 @@
 <?xml version="1.0"?>
+
 <page id="GIRepository.signal_info_get_class_closure"
       type="topic"
       style="function"
       xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
     <link type="guide" xref="index" group="function"/>
+    <api:function>
+      <api:returns>
+        <api:type>GIRepository.VFuncInfo</api:type>
+      </api:returns>
+      <api:name>g_signal_info_get_class_closure</api:name>
+      <api:arg>
+        <api:type>GIRepository.SignalInfo</api:type>
+        <api:name>info</api:name>
+      </api:arg>
+    </api:function>
   </info>
-  <title>GIRepository.signal_info_get_class_closure</title>
+  <title>signal_info_get_class_closure</title>
+<synopsis><code mime="text/x-python">
+@accepts(GIRepository.SignalInfo)
+@returns(GIRepository.VFuncInfo)
+def signal_info_get_class_closure(info)
+</code></synopsis>
 <p>Obtain the class closure for this signal if one is set. The class
 closure is a virtual function on the type that the signal belongs to.
-If the signal lacks a closure %NULL will be returned.</p></page>
+If the signal lacks a closure %NULL will be returned.</p>
+</page>

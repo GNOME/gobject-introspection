@@ -6,5 +6,6 @@
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
   </info>
-  <title>GIRepositoryInfoType</title>
-<p>The type of a GIBaseInfo struct.</p></page>
+  <title>GIRepository.InfoType</title>
+<p>The type of a GIBaseInfo struct.</p>
+</page>

@@ -1,11 +1,27 @@
 <?xml version="1.0"?>
+
 <page id="GIRepository.enum_info_get_n_values"
       type="topic"
       style="function"
       xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
     <link type="guide" xref="index" group="function"/>
+    <api:function>
+      <api:returns>
+        <api:type>gint</api:type>
+      </api:returns>
+      <api:name>g_enum_info_get_n_values</api:name>
+      <api:arg>
+        <api:type>GIEnumInfo*</api:type>
+        <api:name>info</api:name>
+      </api:arg>
+    </api:function>
   </info>
   <title>g_enum_info_get_n_values</title>
+<synopsis><code mime="text/x-csrc">
+gint g_enum_info_get_n_values (GIEnumInfo* info);
+</code></synopsis>
+
 </page>

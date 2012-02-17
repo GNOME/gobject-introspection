@@ -1,13 +1,31 @@
 <?xml version="1.0"?>
+
 <page id="GIRepository.function_info_get_symbol"
       type="topic"
       style="function"
       xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
     <link type="guide" xref="index" group="function"/>
+    <api:function>
+      <api:returns>
+        <api:type>utf8</api:type>
+      </api:returns>
+      <api:name>g_function_info_get_symbol</api:name>
+      <api:arg>
+        <api:type>GIRepository.FunctionInfo</api:type>
+        <api:name>info</api:name>
+      </api:arg>
+    </api:function>
   </info>
-  <title>GIRepository.function_info_get_symbol</title>
+  <title>function_info_get_symbol</title>
+<synopsis><code mime="text/x-python">
+@accepts(GIRepository.FunctionInfo)
+@returns(utf8)
+def function_info_get_symbol(info)
+</code></synopsis>
 <p>Obtain the symbol of the function. The symbol is the name of the
 exported function, suitable to be used as an argument to
-g_module_symbol().</p></page>
+g_module_symbol().</p>
+</page>

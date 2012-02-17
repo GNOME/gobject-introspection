@@ -6,6 +6,7 @@
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
   </info>
-  <title>GIRepositoryRepositoryLoadFlags</title>
+  <title>GIRepository.RepositoryLoadFlags</title>
 <p>Flags that controlls how a typelib is loaded by
-GIRepositry, used by g_irepository_load_typelib().</p></page>
+GIRepositry, used by g_irepository_load_typelib().</p>
+</page>

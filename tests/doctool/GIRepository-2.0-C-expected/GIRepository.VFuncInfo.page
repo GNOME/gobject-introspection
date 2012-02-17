@@ -6,5 +6,6 @@
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
   </info>
-  <title>GIRepositoryVFuncInfo</title>
-<p>Represents a virtual function.</p></page>
+  <title>GIRepository.VFuncInfo</title>
+<p>Represents a virtual function.</p>
+</page>

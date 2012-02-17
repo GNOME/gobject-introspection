@@ -6,5 +6,6 @@
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
   </info>
-  <title>GIRepositoryArrayType</title>
-<p>The type of array in a <link xref="GITypeInfo">GITypeInfo</link>.</p></page>
+  <title>GIRepository.ArrayType</title>
+<p>The type of array in a <link xref="GITypeInfo">GITypeInfo</link>.</p>
+</page>

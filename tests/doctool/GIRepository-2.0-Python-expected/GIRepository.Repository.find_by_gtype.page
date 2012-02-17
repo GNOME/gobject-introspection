@@ -1,16 +1,38 @@
 <?xml version="1.0"?>
+
 <page id="GIRepository.Repository.find_by_gtype"
       type="topic"
       style="method"
       xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
     <link type="guide" xref="GIRepository.Repository" group="method"/>
+    <api:function>
+      <api:returns>
+        <api:type>GIRepository.BaseInfo</api:type>
+      </api:returns>
+      <api:name>g_irepository_find_by_gtype</api:name>
+      <api:arg>
+        <api:type>GIRepository *</api:type>
+        <api:name>self</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>GType</api:type>
+        <api:name>gtype</api:name>
+      </api:arg>
+    </api:function>
   </info>
-  <title>GIRepository.Repository.find_by_gtype</title>
+  <title>find_by_gtype</title>
+<synopsis><code mime="text/x-python">
+@accepts(GType)
+@returns(GIRepository.BaseInfo)
+def GIRepository.Repository.find_by_gtype(gtype)
+</code></synopsis>
 <p>Searches all loaded namespaces for a particular <link xref="GType">GType</link>.  Note that
 in order to locate the metadata, the namespace corresponding to
 the type must first have been loaded.  There is currently no
 mechanism for determining the namespace which corresponds to an
 arbitrary GType - thus, this function will operate most reliably
-when you know the GType to originate from be from a loaded namespace.</p></page>
+when you know the GType to originate from be from a loaded namespace.</p>
+</page>

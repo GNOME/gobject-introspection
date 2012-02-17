@@ -6,5 +6,6 @@
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
   </info>
-  <title>GIRepositoryObjectInfoUnrefFunction</title>
-<p>Decreases the reference count of an object instance.</p></page>
+  <title>GIRepository.ObjectInfoUnrefFunction</title>
+<p>Decreases the reference count of an object instance.</p>
+</page>

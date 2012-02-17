@@ -1,12 +1,25 @@
 <?xml version="1.0"?>
+
 <page id="GIRepository.BaseInfo.unref"
       type="topic"
       style="function"
       xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
     <link type="guide" xref="GIRepository.BaseInfo" group="function"/>
+    <api:function>
+      <api:returns>
+        <api:type>none</api:type>
+      </api:returns>
+      <api:name>g_base_info_unref</api:name>
+    </api:function>
   </info>
-  <title>GIRepository.unref</title>
+  <title>unref</title>
+<synopsis><code mime="text/x-python">
+@returns(none)
+def GIRepository.BaseInfo.unref()
+</code></synopsis>
 <p>Decreases the reference count of @info. When its reference count
-drops to 0, the info is freed.</p></page>
+drops to 0, the info is freed.</p>
+</page>

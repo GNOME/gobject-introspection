@@ -1,12 +1,28 @@
 <?xml version="1.0"?>
+
 <page id="GIRepository.registered_type_info_get_type_name"
       type="topic"
       style="function"
       xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
     <link type="guide" xref="index" group="function"/>
+    <api:function>
+      <api:returns>
+        <api:type>gchar*</api:type>
+      </api:returns>
+      <api:name>g_registered_type_info_get_type_name</api:name>
+      <api:arg>
+        <api:type>GIRegisteredTypeInfo*</api:type>
+        <api:name>info</api:name>
+      </api:arg>
+    </api:function>
   </info>
   <title>g_registered_type_info_get_type_name</title>
+<synopsis><code mime="text/x-csrc">
+gchar* g_registered_type_info_get_type_name (GIRegisteredTypeInfo* info);
+</code></synopsis>
 <p>Obtain the type name of the struct within the GObject type system.
-This type can be passed to g_type_name() to get a <link xref="GType">GType</link>.</p></page>
+This type can be passed to g_type_name() to get a <link xref="GType">GType</link>.</p>
+</page>

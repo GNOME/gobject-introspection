@@ -1,13 +1,26 @@
 <?xml version="1.0"?>
+
 <page id="GIRepository.BaseInfo.get_name"
       type="topic"
       style="function"
       xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
     <link type="guide" xref="GIRepository.BaseInfo" group="function"/>
+    <api:function>
+      <api:returns>
+        <api:type>utf8</api:type>
+      </api:returns>
+      <api:name>g_base_info_get_name</api:name>
+    </api:function>
   </info>
-  <title>GIRepository.get_name</title>
+  <title>get_name</title>
+<synopsis><code mime="text/x-python">
+@returns(utf8)
+def GIRepository.BaseInfo.get_name()
+</code></synopsis>
 <p>Obtain the name of the @info. What the name represents depends on
 the <link xref="GIInfoType">GIInfoType</link> of the @info. For instance for <link xref="GIFunctionInfo">GIFunctionInfo</link> it is
-the name of the function.</p></page>
+the name of the function.</p>
+</page>

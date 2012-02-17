@@ -9,4 +9,5 @@
   <title>GIRepository.ScopeType</title>
 <p>Scope type of a <link xref="GIArgInfo">GIArgInfo</link> representing callback, determines how the
 callback is invoked and is used to decided when the invoke structs
-can be freed.</p></page>
+can be freed.</p>
+</page>

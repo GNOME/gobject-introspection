@@ -8,4 +8,5 @@
   </info>
   <title>GIRepository.CallableInfo</title>
 <p>Represents a callable, either <link xref="GIFunctionInfo">GIFunctionInfo</link>, <link xref="GICallbackInfo">GICallbackInfo</link> or
-<link xref="GIVFuncInfo">GIVFuncInfo</link>.</p></page>
+<link xref="GIVFuncInfo">GIVFuncInfo</link>.</p>
+</page>
