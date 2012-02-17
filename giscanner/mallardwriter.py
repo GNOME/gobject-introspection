@@ -162,7 +162,8 @@ class MallardWriter(object):
         elif self._language == 'Python':
             formatter = MallardFormatterPython
         else:
-            formatter = MallardFormatter
+            raise RuntimeError('Unavailable formatter for language %s',
+                               self._language)
         result = template.render(namespace=namespace,
                                  node=node,
                                  page_id=page_id,
