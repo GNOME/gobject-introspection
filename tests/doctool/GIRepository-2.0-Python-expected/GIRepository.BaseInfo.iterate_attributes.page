@@ -52,4 +52,23 @@ g_print ("attribute name: %s value: %s", name, value);
 }
 &lt;/programlisting&gt;
 &lt;/example&gt;</p>
+
+<table>
+<tr>
+<td><p>iterator :</p></td>
+<td><p>a <link xref="GIAttributeIter">GIAttributeIter</link> structure, must be initialized; see below</p></td>
+</tr>
+<tr>
+<td><p>name :</p></td>
+<td><p>Returned name, must not be freed</p></td>
+</tr>
+<tr>
+<td><p>value :</p></td>
+<td><p>Returned name, must not be freed</p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>%TRUE if there are more attributes</p></td>
+</tr>
+</table>
 </page>

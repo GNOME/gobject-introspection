@@ -29,4 +29,15 @@ def function_info_get_property(info)
 Only <link xref="GIFunctionInfo">GIFunctionInfo</link> with the flag %GI_FUNCTION_IS_GETTER or
 %GI_FUNCTION_IS_SETTER have a property set. For other cases,
 %NULL will be returned.</p><p>g_base_info_unref() when done.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIFunctionInfo">GIFunctionInfo</link></p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>the property or %NULL if not set. Free it with</p></td>
+</tr>
+</table>
 </page>

@@ -27,4 +27,15 @@ def vfunc_info_get_offset(info)
 </code></synopsis>
 <p>Obtain the offset of the function pointer in the class struct. The value
 0xFFFF indicates that the struct offset is unknown.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIVFuncInfo">GIVFuncInfo</link></p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>the struct offset or 0xFFFF if it's unknown</p></td>
+</tr>
+</table>
 </page>

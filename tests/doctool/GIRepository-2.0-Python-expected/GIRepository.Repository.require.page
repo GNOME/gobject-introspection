@@ -42,4 +42,23 @@ If @namespace_ is not loaded, this function will search for a
 ".typelib" file using the repository search path.  In addition, a
 version @version of namespace may be specified.  If @version is
 not specified, the latest will be used.</p>
+
+<table>
+<tr>
+<td><p>namespace_ :</p></td>
+<td><p>GI namespace to use, e.g. "Gtk"</p></td>
+</tr>
+<tr>
+<td><p>version :</p></td>
+<td><p>Version of namespace, may be %NULL for latest</p></td>
+</tr>
+<tr>
+<td><p>flags :</p></td>
+<td><p>Set of %GIRepositoryLoadFlags, may be 0</p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>a pointer to the <link xref="GITypelib">GITypelib</link> if successful, %NULL otherwise</p></td>
+</tr>
+</table>
 </page>

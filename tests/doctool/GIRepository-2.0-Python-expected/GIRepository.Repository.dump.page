@@ -26,4 +26,15 @@
 def GIRepository.Repository.dump(arg)
 </code></synopsis>
 
+
+<table>
+<tr>
+<td><p>arg :</p></td>
+<td></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td></td>
+</tr>
+</table>
 </page>

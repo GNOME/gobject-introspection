@@ -26,4 +26,15 @@
 def callable_info_get_n_args(info)
 </code></synopsis>
 <p>Obtain the number of arguments (both IN and OUT) for this callable.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GICallableInfo">GICallableInfo</link></p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>The number of arguments this callable expects.</p></td>
+</tr>
+</table>
 </page>

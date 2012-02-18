@@ -33,4 +33,15 @@ def GIRepository.Repository.get_dependencies(namespace_)
 @namespace_, including version.  The returned strings are of the
 form &lt;code&gt;namespace-version&lt;/code&gt;.</p><p>Note: The namespace must have already been loaded using a function
 such as g_irepository_require() before calling this function.</p>
+
+<table>
+<tr>
+<td><p>namespace_ :</p></td>
+<td><p>Namespace of interest</p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>Zero-terminated string array of versioned dependencies</p></td>
+</tr>
+</table>
 </page>

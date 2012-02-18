@@ -30,4 +30,19 @@
 def enum_info_get_value(info, n)
 </code></synopsis>
 <p>Obtain a value for this enumeration.</p><p>free the struct with g_base_info_unref() when done.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIEnumInfo">GIEnumInfo</link></p></td>
+</tr>
+<tr>
+<td><p>n :</p></td>
+<td><p>index of value to fetch</p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>the enumeration value or %NULL if type tag is wrong,</p></td>
+</tr>
+</table>
 </page>

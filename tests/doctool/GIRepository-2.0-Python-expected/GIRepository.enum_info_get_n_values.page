@@ -26,4 +26,15 @@
 def enum_info_get_n_values(info)
 </code></synopsis>
 
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td></td>
+</tr>
+</table>
 </page>

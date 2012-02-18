@@ -33,4 +33,19 @@ def constant_info_get_value(info, value)
 @value parameter. @argument needs to be allocated before passing it in.
 The size of the constant value stored in @argument will be returned.
 Free the value with g_constant_info_free_value().</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIConstantInfo">GIConstantInfo</link></p></td>
+</tr>
+<tr>
+<td><p>value :</p></td>
+<td><p>an argument</p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>size of the constant</p></td>
+</tr>
+</table>
 </page>

@@ -28,4 +28,15 @@ def vfunc_info_get_signal(info)
 <p>Obtain the signal for the virtual function if one is set.
 The signal comes from the object or interface to which
 this virtual function belongs.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIVFuncInfo">GIVFuncInfo</link></p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>the signal or %NULL if none set</p></td>
+</tr>
+</table>
 </page>

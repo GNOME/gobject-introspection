@@ -27,4 +27,15 @@ def arg_info_get_direction(info)
 </code></synopsis>
 <p>Obtain the direction of the argument. Check <link xref="GIDirection">GIDirection</link> for possible
 direction values.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIArgInfo">GIArgInfo</link></p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>the direction</p></td>
+</tr>
+</table>
 </page>

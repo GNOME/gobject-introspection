@@ -27,4 +27,15 @@ def object_info_get_class_struct(info)
 </code></synopsis>
 <p>Every <link xref="GObject">GObject</link> has two structures; an instance structure and a class
 structure.  This function returns the metadata for the class structure.</p><p>g_base_info_unref() when done.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIObjectInfo">GIObjectInfo</link></p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>the <link xref="GIStructInfo">GIStructInfo</link> or %NULL. Free with</p></td>
+</tr>
+</table>
 </page>

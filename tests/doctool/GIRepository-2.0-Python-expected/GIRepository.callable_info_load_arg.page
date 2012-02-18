@@ -36,4 +36,23 @@ def callable_info_load_arg(info, n, arg)
 <p>Obtain information about a particular argument of this callable; this
 function is a variant of g_callable_info_get_arg() designed for stack
 allocation.</p><p>The initialized @arg must not be referenced after @info is deallocated.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GICallableInfo">GICallableInfo</link></p></td>
+</tr>
+<tr>
+<td><p>n :</p></td>
+<td><p>the argument index to fetch</p></td>
+</tr>
+<tr>
+<td><p>arg :</p></td>
+<td><p>Initialize with argument number @n</p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td></td>
+</tr>
+</table>
 </page>

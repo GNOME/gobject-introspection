@@ -26,4 +26,15 @@
 def object_info_get_n_interfaces(info)
 </code></synopsis>
 <p>Obtain the number of interfaces that this object type has.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIObjectInfo">GIObjectInfo</link></p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>number of interfaces</p></td>
+</tr>
+</table>
 </page>

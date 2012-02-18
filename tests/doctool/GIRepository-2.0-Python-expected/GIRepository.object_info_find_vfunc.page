@@ -36,4 +36,19 @@ be retrieved using g_vfunc_info_get_invoker(), otherwise %NULL will be
 returned.
 See the documentation for g_vfunc_info_get_invoker() for more
 information on invoking virtuals.</p><p>g_base_info_unref() when done.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIObjectInfo">GIObjectInfo</link></p></td>
+</tr>
+<tr>
+<td><p>name :</p></td>
+<td><p>The name of a virtual function to find.</p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>the <link xref="GIVFuncInfo">GIVFuncInfo</link>, or %NULL. Free it with</p></td>
+</tr>
+</table>
 </page>

@@ -34,4 +34,19 @@
 def GIRepository.Repository.load_typelib(typelib, flags)
 </code></synopsis>
 
+
+<table>
+<tr>
+<td><p>typelib :</p></td>
+<td></td>
+</tr>
+<tr>
+<td><p>flags :</p></td>
+<td></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td></td>
+</tr>
+</table>
 </page>

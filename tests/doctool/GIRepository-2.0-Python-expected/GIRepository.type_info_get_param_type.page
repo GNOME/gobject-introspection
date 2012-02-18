@@ -30,4 +30,19 @@
 def type_info_get_param_type(info, n)
 </code></synopsis>
 <p>Obtain the parameter type @n.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GITypeInfo">GITypeInfo</link></p></td>
+</tr>
+<tr>
+<td><p>n :</p></td>
+<td><p>index of the parameter</p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>the param type info</p></td>
+</tr>
+</table>
 </page>

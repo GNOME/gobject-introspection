@@ -34,4 +34,15 @@ associated with the given namespace @namespace_. There may be no
 shared library path associated, in which case this function will
 return %NULL.</p><p>Note: The namespace must have already been loaded using a function
 such as g_irepository_require() before calling this function.</p>
+
+<table>
+<tr>
+<td><p>namespace_ :</p></td>
+<td><p>Namespace to inspect</p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>Full path to shared library, or %NULL if none associated</p></td>
+</tr>
+</table>
 </page>

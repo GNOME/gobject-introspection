@@ -26,4 +26,15 @@
 def union_info_get_size(info)
 </code></synopsis>
 <p>Obtain the total size of the union.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIUnionInfo">GIUnionInfo</link></p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>size of the union in bytes</p></td>
+</tr>
+</table>
 </page>

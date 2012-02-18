@@ -27,4 +27,15 @@ def vfunc_info_get_invoker(info)
 </code></synopsis>
 <p>If this virtual function has an associated invoker method, this
 method will return it.  An invoker method is a C entry point.</p><p>Not all virtuals will have invokers.</p><p>g_base_info_unref() when done.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIVFuncInfo">GIVFuncInfo</link></p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>the <link xref="GIVFuncInfo">GIVFuncInfo</link> or %NULL. Free it with</p></td>
+</tr>
+</table>
 </page>

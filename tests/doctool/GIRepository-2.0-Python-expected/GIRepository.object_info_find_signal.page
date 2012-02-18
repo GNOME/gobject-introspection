@@ -30,4 +30,19 @@
 def object_info_find_signal(info, name)
 </code></synopsis>
 
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIObjectInfo">GIObjectInfo</link></p></td>
+</tr>
+<tr>
+<td><p>name :</p></td>
+<td><p>Name of signal</p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>Info for the signal with name @name in @info, or %NULL on failure.</p></td>
+</tr>
+</table>
 </page>

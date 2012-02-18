@@ -33,4 +33,15 @@ def GIRepository.Repository.find_by_error_domain(domain)
 domain. Before calling this function for a particular namespace,
 you must call g_irepository_require() once to load the namespace, or
 otherwise ensure the namespace has already been loaded.</p><p>enum type, or %NULL</p>
+
+<table>
+<tr>
+<td><p>domain :</p></td>
+<td><p>a <link xref="GError">GError</link> domain</p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p><link xref="GIEnumInfo">GIEnumInfo</link> representing metadata about @domain's</p></td>
+</tr>
+</table>
 </page>

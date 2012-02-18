@@ -26,4 +26,15 @@
 def union_info_get_alignment(info)
 </code></synopsis>
 <p>Obtain the required alignment of the union.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIUnionInfo">GIUnionInfo</link></p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>required alignment in bytes</p></td>
+</tr>
+</table>
 </page>

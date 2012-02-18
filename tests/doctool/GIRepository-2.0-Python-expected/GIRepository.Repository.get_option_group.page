@@ -23,4 +23,5 @@ def GIRepository.Repository.get_option_group()
 <p>Obtain the option group for girepository, it's used
 by the dumper and for programs that wants to provide
 introspection information</p>
+
 </page>

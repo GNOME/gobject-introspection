@@ -26,4 +26,15 @@
 def interface_info_get_iface_struct(info)
 </code></synopsis>
 <p>Returns the layout C structure associated with this <link xref="GInterface">GInterface</link>.</p><p>g_base_info_unref() when done.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIInterfaceInfo">GIInterfaceInfo</link></p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>the <link xref="GIStructInfo">GIStructInfo</link> or %NULL. Free it with</p></td>
+</tr>
+</table>
 </page>

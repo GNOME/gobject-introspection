@@ -27,4 +27,15 @@ def type_info_get_array_length(info)
 </code></synopsis>
 <p>Obtain the array length of the type. The type tag must be a
 <link xref="GI_TYPE_TAG_ARRAY">GI_TYPE_TAG_ARRAY</link> or -1 will returned.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GITypeInfo">GITypeInfo</link></p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>the array length, or -1 if the type is not an array</p></td>
+</tr>
+</table>
 </page>

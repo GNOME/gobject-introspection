@@ -23,4 +23,5 @@ def GIRepository.Repository.get_search_path()
 <p>Returns the search path the GIRepository will use when looking for typelibs.
 The string is internal to GIRespository and should not be freed, nor should
 the elements.</p>
+
 </page>

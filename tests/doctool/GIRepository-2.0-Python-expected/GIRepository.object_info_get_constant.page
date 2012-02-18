@@ -30,4 +30,19 @@
 def object_info_get_constant(info, n)
 </code></synopsis>
 <p>Obtain an object type constant at index @n.</p><p>g_base_info_unref() when done.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIObjectInfo">GIObjectInfo</link></p></td>
+</tr>
+<tr>
+<td><p>n :</p></td>
+<td><p>index of constant to get</p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>the <link xref="GIConstantInfo">GIConstantInfo</link>. Free the struct by calling</p></td>
+</tr>
+</table>
 </page>

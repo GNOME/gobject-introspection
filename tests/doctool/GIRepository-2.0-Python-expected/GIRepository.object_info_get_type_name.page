@@ -26,4 +26,15 @@
 def object_info_get_type_name(info)
 </code></synopsis>
 <p>Obtain the name of the objects class/type.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIObjectInfo">GIObjectInfo</link></p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>name of the objects type</p></td>
+</tr>
+</table>
 </page>

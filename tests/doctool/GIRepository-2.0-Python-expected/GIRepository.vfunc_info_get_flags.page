@@ -27,4 +27,15 @@ def vfunc_info_get_flags(info)
 </code></synopsis>
 <p>Obtain the flags for this virtual function info. See <link xref="GIVFuncInfoFlags">GIVFuncInfoFlags</link> for
 more information about possible flag values.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIVFuncInfo">GIVFuncInfo</link></p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>the flags</p></td>
+</tr>
+</table>
 </page>

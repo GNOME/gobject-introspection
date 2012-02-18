@@ -39,4 +39,23 @@ for a field of a composite type like a nested structure or union
 even if that is actually writable. Note also that that it will refuse
 to write fields where memory management would by required. A field
 with a type such as 'char *' must be set with a setter function.</p>
+
+<table>
+<tr>
+<td><p>field_info :</p></td>
+<td><p>a <link xref="GIFieldInfo">GIFieldInfo</link></p></td>
+</tr>
+<tr>
+<td><p>mem :</p></td>
+<td><p>pointer to a block of memory representing a C structure or union</p></td>
+</tr>
+<tr>
+<td><p>value :</p></td>
+<td><p>a <link xref="GIArgument">GIArgument</link> holding the value to store</p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>%TRUE if writing the field succeeded, otherwise %FALSE</p></td>
+</tr>
+</table>
 </page>

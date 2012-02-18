@@ -29,4 +29,15 @@ def object_info_get_get_value_function_pointer(info)
 extract an instance of this object type out of a GValue.
 This takes derivation into account and will reversely traverse
 the base classes of this type, starting at the top type.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIObjectInfo">GIObjectInfo</link></p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>the function pointer or %NULL</p></td>
+</tr>
+</table>
 </page>

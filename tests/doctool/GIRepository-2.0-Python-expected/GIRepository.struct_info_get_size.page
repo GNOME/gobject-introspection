@@ -26,4 +26,15 @@
 def struct_info_get_size(info)
 </code></synopsis>
 <p>Obtain the total size of the structure.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIStructInfo">GIStructInfo</link></p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>size of the structure in bytes</p></td>
+</tr>
+</table>
 </page>

@@ -30,4 +30,19 @@
 def struct_info_find_method(info, name)
 </code></synopsis>
 <p>Obtain the type information for method named @name.</p><p>when done.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIStructInfo">GIStructInfo</link></p></td>
+</tr>
+<tr>
+<td><p>name :</p></td>
+<td><p>a method name</p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>the <link xref="GIFunctionInfo">GIFunctionInfo</link>, free it with g_base_info_unref()</p></td>
+</tr>
+</table>
 </page>

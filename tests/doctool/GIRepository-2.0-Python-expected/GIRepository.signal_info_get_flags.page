@@ -27,4 +27,15 @@ def signal_info_get_flags(info)
 </code></synopsis>
 <p>Obtain the flags for this signal info. See <link xref="GSignalFlags">GSignalFlags</link> for
 more information about possible flag values.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GISignalInfo">GISignalInfo</link></p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>the flags</p></td>
+</tr>
+</table>
 </page>

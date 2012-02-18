@@ -27,4 +27,15 @@ def field_info_get_offset(info)
 </code></synopsis>
 <p>Obtain the offset in bits of the field member, this is relative
 to the beginning of the struct or union.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIFieldInfo">GIFieldInfo</link></p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>the field offset</p></td>
+</tr>
+</table>
 </page>

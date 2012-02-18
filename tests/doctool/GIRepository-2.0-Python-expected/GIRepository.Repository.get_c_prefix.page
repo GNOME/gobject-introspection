@@ -33,4 +33,15 @@ def GIRepository.Repository.get_c_prefix(namespace_)
 associated with the given introspection namespace.  Each C symbol
 starts with this prefix, as well each <link xref="GType">GType</link> in the library.</p><p>Note: The namespace must have already been loaded using a function
 such as g_irepository_require() before calling this function.</p>
+
+<table>
+<tr>
+<td><p>namespace_ :</p></td>
+<td><p>Namespace to inspect</p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>C namespace prefix, or %NULL if none associated</p></td>
+</tr>
+</table>
 </page>

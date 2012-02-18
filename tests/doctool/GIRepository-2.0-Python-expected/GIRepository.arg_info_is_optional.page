@@ -26,4 +26,15 @@
 def arg_info_is_optional(info)
 </code></synopsis>
 <p>Obtain if the argument is optional.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIArgInfo">GIArgInfo</link></p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>%TRUE if it is an optional argument</p></td>
+</tr>
+</table>
 </page>

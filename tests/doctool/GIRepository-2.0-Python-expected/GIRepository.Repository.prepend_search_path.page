@@ -26,4 +26,15 @@
 def GIRepository.Repository.prepend_search_path(directory)
 </code></synopsis>
 
+
+<table>
+<tr>
+<td><p>directory :</p></td>
+<td></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td></td>
+</tr>
+</table>
 </page>

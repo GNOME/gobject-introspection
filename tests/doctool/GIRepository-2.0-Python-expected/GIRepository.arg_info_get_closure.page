@@ -27,4 +27,15 @@ def arg_info_get_closure(info)
 </code></synopsis>
 <p>Obtain the index of the user data argument. This is only valid
 for arguments which are callbacks.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIArgInfo">GIArgInfo</link></p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>index of the user data argument or -1 if there is none</p></td>
+</tr>
+</table>
 </page>

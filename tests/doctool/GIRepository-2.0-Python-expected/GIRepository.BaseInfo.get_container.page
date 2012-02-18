@@ -23,4 +23,5 @@ def GIRepository.BaseInfo.get_container()
 <p>Obtain the container of the @info. The container is the parent
 GIBaseInfo. For instance, the parent of a <link xref="GIFunctionInfo">GIFunctionInfo</link> is an
 <link xref="GIObjectInfo">GIObjectInfo</link> or <link xref="GIInterfaceInfo">GIInterfaceInfo</link>.</p>
+
 </page>

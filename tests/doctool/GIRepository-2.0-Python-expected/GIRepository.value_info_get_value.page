@@ -27,4 +27,15 @@ def value_info_get_value(info)
 </code></synopsis>
 <p>Obtain the enumeration value of the <link xref="GIValueInfo">GIValueInfo</link>.</p><p>as a 32-bit signed or unsigned value. The use of gint64 as the
 return type is to allow both.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIValueInfo">GIValueInfo</link></p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>the enumeration value. This will always be representable</p></td>
+</tr>
+</table>
 </page>
