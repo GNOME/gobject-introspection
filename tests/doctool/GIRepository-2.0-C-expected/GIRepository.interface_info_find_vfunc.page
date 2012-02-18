@@ -30,4 +30,19 @@ GIVFuncInfo* g_interface_info_find_vfunc (GIInterfaceInfo* info,
 </code></synopsis>
 <p>Locate a virtual function slot with name @name. See the documentation
 for g_object_info_find_vfunc() for more information on virtuals.</p><p>g_base_info_unref() when done.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIInterfaceInfo">GIInterfaceInfo</link></p></td>
+</tr>
+<tr>
+<td><p>name :</p></td>
+<td><p>The name of a virtual function to find.</p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>the <link xref="GIVFuncInfo">GIVFuncInfo</link>, or %NULL. Free it with</p></td>
+</tr>
+</table>
 </page>

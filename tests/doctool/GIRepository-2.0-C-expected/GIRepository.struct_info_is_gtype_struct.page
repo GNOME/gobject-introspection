@@ -26,4 +26,15 @@ gboolean g_struct_info_is_gtype_struct (GIStructInfo* info);
 <p>Return true if this structure represents the "class structure" for some
 <link xref="GObject">GObject</link> or <link xref="GInterface">GInterface</link>.  This function is mainly useful to hide this kind of structure
 from generated public APIs.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIStructInfo">GIStructInfo</link></p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>%TRUE if this is a class struct, %FALSE otherwise</p></td>
+</tr>
+</table>
 </page>

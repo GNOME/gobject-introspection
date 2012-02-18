@@ -43,4 +43,27 @@ iterator structure is typically stack allocated, and must have its
 first member initialized to %NULL.</p><p>Both the @name and @value should be treated as constants
 and must not be freed.</p><p>See g_base_info_iterate_attributes() for an example of how to use a
 similar API.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GICallableInfo">GICallableInfo</link></p></td>
+</tr>
+<tr>
+<td><p>iterator :</p></td>
+<td><p>a <link xref="GIAttributeIter">GIAttributeIter</link> structure, must be initialized; see below</p></td>
+</tr>
+<tr>
+<td><p>name :</p></td>
+<td><p>Returned name, must not be freed</p></td>
+</tr>
+<tr>
+<td><p>value :</p></td>
+<td><p>Returned name, must not be freed</p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>%TRUE if there are more attributes</p></td>
+</tr>
+</table>
 </page>

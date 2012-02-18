@@ -26,4 +26,15 @@ gchar* g_function_info_get_symbol (GIFunctionInfo* info);
 <p>Obtain the symbol of the function. The symbol is the name of the
 exported function, suitable to be used as an argument to
 g_module_symbol().</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIFunctionInfo">GIFunctionInfo</link></p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>the symbol</p></td>
+</tr>
+</table>
 </page>

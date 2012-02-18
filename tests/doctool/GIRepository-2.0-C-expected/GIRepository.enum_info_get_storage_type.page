@@ -28,4 +28,15 @@ will be a signed or unsigned integral type.
 Note that in the current implementation the width of the type is
 computed correctly, but the signed or unsigned nature of the type
 may not match the sign of the type used by the C compiler.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIEnumInfo">GIEnumInfo</link></p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>the storage type for the enumeration</p></td>
+</tr>
+</table>
 </page>

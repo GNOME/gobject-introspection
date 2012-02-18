@@ -24,4 +24,15 @@
 gboolean g_callable_info_may_return_null (GICallableInfo* info);
 </code></synopsis>
 <p>See if a callable could return %NULL.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GICallableInfo">GICallableInfo</link></p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>%TRUE if callable could return %NULL</p></td>
+</tr>
+</table>
 </page>

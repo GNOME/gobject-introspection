@@ -32,4 +32,15 @@ gchar* namespace_);
 .typelib file it was loaded from.  If the typelib for
 namespace @namespace_ was included in a shared library, return
 the special string "$lt;builtin$gt;".</p>
+
+<table>
+<tr>
+<td><p>namespace_ :</p></td>
+<td><p>GI namespace to use, e.g. "Gtk"</p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>Filesystem path (or $lt;builtin$gt;) if successful, %NULL if namespace is not loaded</p></td>
+</tr>
+</table>
 </page>

@@ -26,4 +26,15 @@ gint g_interface_info_get_n_prerequisites (GIInterfaceInfo* info);
 <p>Obtain the number of prerequisites for this interface type.
 A prerequisites is another interface that needs to be implemented for
 interface, similar to an base class for GObjects.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIInterfaceInfo">GIInterfaceInfo</link></p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>number of prerequisites</p></td>
+</tr>
+</table>
 </page>

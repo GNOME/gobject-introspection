@@ -29,4 +29,19 @@ GIVFuncInfo* g_interface_info_get_vfunc (GIInterfaceInfo* info,
                                          gint n);
 </code></synopsis>
 <p>Obtain an interface type virtual function at index @n.</p><p>g_base_info_unref() when done.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIInterfaceInfo">GIInterfaceInfo</link></p></td>
+</tr>
+<tr>
+<td><p>n :</p></td>
+<td><p>index of virtual function to get</p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>the <link xref="GIVFuncInfo">GIVFuncInfo</link>. Free the struct by calling</p></td>
+</tr>
+</table>
 </page>

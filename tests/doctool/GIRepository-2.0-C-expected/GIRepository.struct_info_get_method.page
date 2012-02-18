@@ -29,4 +29,19 @@ GIFunctionInfo* g_struct_info_get_method (GIStructInfo* info,
                                           gint n);
 </code></synopsis>
 <p>Obtain the type information for method with specified index.</p><p>when done.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIStructInfo">GIStructInfo</link></p></td>
+</tr>
+<tr>
+<td><p>n :</p></td>
+<td><p>a method index</p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>the <link xref="GIFunctionInfo">GIFunctionInfo</link>, free it with g_base_info_unref()</p></td>
+</tr>
+</table>
 </page>

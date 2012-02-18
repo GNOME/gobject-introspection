@@ -27,4 +27,15 @@ char* g_object_info_get_unref_function (GIObjectInfo* info);
 object type. It's mainly used fundamental types. The type signature for
 the symbol is %GIObjectInfoUnrefFunction, to fetch the function pointer
 see g_object_info_get_unref_function().</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIObjectInfo">GIObjectInfo</link></p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>the symbol or %NULL</p></td>
+</tr>
+</table>
 </page>

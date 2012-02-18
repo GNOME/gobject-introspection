@@ -25,4 +25,15 @@ gboolean g_object_info_get_abstract (GIObjectInfo* info);
 </code></synopsis>
 <p>Obtain if the object type is an abstract type, eg if it cannot be
 instantiated</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIObjectInfo">GIObjectInfo</link></p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>%TRUE if the object type is abstract</p></td>
+</tr>
+</table>
 </page>

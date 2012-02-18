@@ -24,4 +24,15 @@
 void g_irepository_prepend_search_path (char* directory);
 </code></synopsis>
 
+
+<table>
+<tr>
+<td><p>directory :</p></td>
+<td></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td></td>
+</tr>
+</table>
 </page>

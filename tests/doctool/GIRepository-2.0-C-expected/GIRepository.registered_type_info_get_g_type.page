@@ -27,4 +27,15 @@ GType g_registered_type_info_get_g_type (GIRegisteredTypeInfo* info);
 It means that either there is no type information associated with this @info or
 that the shared library which provides the type_init function for this
 @info cannot be called.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIRegisteredTypeInfo">GIRegisteredTypeInfo</link></p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>the <link xref="GType">GType</link>.</p></td>
+</tr>
+</table>
 </page>

@@ -25,4 +25,15 @@ gboolean g_type_info_is_zero_terminated (GITypeInfo* info);
 </code></synopsis>
 <p>Obtain if the last element of the array is %NULL. The type tag must be a
 <link xref="GI_TYPE_TAG_ARRAY">GI_TYPE_TAG_ARRAY</link> or %FALSE will returned.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GITypeInfo">GITypeInfo</link></p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>%TRUE if zero terminated</p></td>
+</tr>
+</table>
 </page>

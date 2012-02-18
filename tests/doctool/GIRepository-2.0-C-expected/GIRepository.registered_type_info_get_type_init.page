@@ -27,4 +27,15 @@ gchar* g_registered_type_info_get_type_init (GIRegisteredTypeInfo* info);
 function which will register the GType within the GObject type system.
 Usually this is not called by langauge bindings or applications, use
 g_registered_type_info_get_g_type() directly instead.</p><p>passing into g_module_symbol().</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIRegisteredTypeInfo">GIRegisteredTypeInfo</link></p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>the symbol name of the type init function, suitable for</p></td>
+</tr>
+</table>
 </page>

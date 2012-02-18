@@ -30,4 +30,15 @@ gchar* namespace_);
 </code></synopsis>
 <p>Obtain an unordered list of versions (either currently loaded or
 available) for @namespace_ in this @repository.</p>
+
+<table>
+<tr>
+<td><p>namespace_ :</p></td>
+<td><p>GI namespace, e.g. "Gtk"</p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>the array of versions.</p></td>
+</tr>
+</table>
 </page>

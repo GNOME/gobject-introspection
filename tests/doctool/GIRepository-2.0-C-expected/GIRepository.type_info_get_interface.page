@@ -27,4 +27,15 @@ GIBaseInfo* g_type_info_get_interface (GITypeInfo* info);
 this function returns full information about the referenced type.  You can then
 inspect the type of the returned <link xref="GIBaseInfo">GIBaseInfo</link> to further query whether it is
 a concrete GObject, a GInterface, a structure, etc. using g_base_info_get_type().</p><p>g_base_info_unref() when done.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GITypeInfo">GITypeInfo</link></p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>the <link xref="GIBaseInfo">GIBaseInfo</link>, or %NULL. Free it with</p></td>
+</tr>
+</table>
 </page>

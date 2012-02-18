@@ -24,4 +24,15 @@
 gboolean g_arg_info_may_be_null (GIArgInfo* info);
 </code></synopsis>
 <p>Obtain if the argument accepts %NULL.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIArgInfo">GIArgInfo</link></p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>%TRUE if it accepts %NULL</p></td>
+</tr>
+</table>
 </page>

@@ -37,4 +37,23 @@ gboolean g_field_info_get_field (GIFieldInfo* field_info,
 union.  This only handles fields of simple C types. It will fail
 for a field of a composite type like a nested structure or union
 even if that is actually readable.</p>
+
+<table>
+<tr>
+<td><p>field_info :</p></td>
+<td><p>a <link xref="GIFieldInfo">GIFieldInfo</link></p></td>
+</tr>
+<tr>
+<td><p>mem :</p></td>
+<td><p>pointer to a block of memory representing a C structure or union</p></td>
+</tr>
+<tr>
+<td><p>value :</p></td>
+<td><p>a <link xref="GIArgument">GIArgument</link> into which to store the value retrieved</p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>%TRUE if reading the field succeeded, otherwise %FALSE</p></td>
+</tr>
+</table>
 </page>

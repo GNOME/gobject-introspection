@@ -22,4 +22,5 @@ GOptionGroup* g_irepository_get_option_group (void);
 <p>Obtain the option group for girepository, it's used
 by the dumper and for programs that wants to provide
 introspection information</p>
+
 </page>

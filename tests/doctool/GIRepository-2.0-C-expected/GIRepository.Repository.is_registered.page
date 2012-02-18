@@ -39,4 +39,19 @@ only be useful in unusual circumstances; in order to act upon
 metadata in the namespace, you should call g_irepository_require()
 instead which will ensure the namespace is loaded, and return as
 quickly as this function will if it has already been loaded.</p>
+
+<table>
+<tr>
+<td><p>namespace_ :</p></td>
+<td><p>Namespace of interest</p></td>
+</tr>
+<tr>
+<td><p>version :</p></td>
+<td><p>Required version, may be %NULL for latest</p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>%TRUE if namespace-version is loaded, %FALSE otherwise</p></td>
+</tr>
+</table>
 </page>

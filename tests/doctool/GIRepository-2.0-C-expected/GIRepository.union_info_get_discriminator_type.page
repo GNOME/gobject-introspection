@@ -24,4 +24,15 @@
 GITypeInfo* g_union_info_get_discriminator_type (GIUnionInfo* info);
 </code></synopsis>
 <p>Obtain the type information of the union discriminator.</p><p>when done.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIUnionInfo">GIUnionInfo</link></p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>the <link xref="GITypeInfo">GITypeInfo</link>, free it with g_base_info_unref()</p></td>
+</tr>
+</table>
 </page>

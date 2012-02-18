@@ -24,4 +24,15 @@
 GIInfoType g_base_info_get_type (GIBaseInfo* info);
 </code></synopsis>
 <p>Obtain the info type of the GIBaseInfo.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIBaseInfo">GIBaseInfo</link></p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>the info type of @info</p></td>
+</tr>
+</table>
 </page>

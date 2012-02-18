@@ -29,4 +29,19 @@ GIConstantInfo* g_interface_info_get_constant (GIInterfaceInfo* info,
                                                gint n);
 </code></synopsis>
 <p>Obtain an interface type constant at index @n.</p><p>g_base_info_unref() when done.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIInterfaceInfo">GIInterfaceInfo</link></p></td>
+</tr>
+<tr>
+<td><p>n :</p></td>
+<td><p>index of constant to get</p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>the <link xref="GIConstantInfo">GIConstantInfo</link>. Free the struct by calling</p></td>
+</tr>
+</table>
 </page>

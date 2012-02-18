@@ -24,4 +24,15 @@
 gint g_interface_info_get_n_methods (GIInterfaceInfo* info);
 </code></synopsis>
 <p>Obtain the number of methods that this interface type has.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIInterfaceInfo">GIInterfaceInfo</link></p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>number of methods</p></td>
+</tr>
+</table>
 </page>

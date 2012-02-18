@@ -20,4 +20,5 @@
 GITypelib* g_base_info_get_typelib (void);
 </code></synopsis>
 <p>Obtain the typelib this @info belongs to</p>
+
 </page>

@@ -24,4 +24,15 @@
 GITypeInfo* g_constant_info_get_type (GIConstantInfo* info);
 </code></synopsis>
 <p>Obtain the type of the constant as a <link xref="GITypeInfo">GITypeInfo</link>.</p><p>g_base_info_unref() when done.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIConstantInfo">GIConstantInfo</link></p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>the <link xref="GITypeInfo">GITypeInfo</link>. Free the struct by calling</p></td>
+</tr>
+</table>
 </page>

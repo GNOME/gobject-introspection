@@ -24,4 +24,15 @@
 gchar* g_enum_info_get_error_domain (GIEnumInfo* info);
 </code></synopsis>
 
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td></td>
+</tr>
+</table>
 </page>

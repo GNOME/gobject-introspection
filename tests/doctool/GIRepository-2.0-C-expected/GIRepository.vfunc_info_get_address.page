@@ -30,4 +30,19 @@ gpointer g_vfunc_info_get_address (GIVFuncInfo* info,
 </code></synopsis>
 <p>This method will look up where inside the type struct of @implementor_gtype
 is the implementation for @info.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIVFuncInfo">GIVFuncInfo</link></p></td>
+</tr>
+<tr>
+<td><p>implementor_gtype :</p></td>
+<td><p><link xref="GType">GType</link> implementing this virtual function</p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>address to a function or %NULL if an error happened</p></td>
+</tr>
+</table>
 </page>

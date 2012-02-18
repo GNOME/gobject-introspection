@@ -25,4 +25,15 @@ GParamFlags g_property_info_get_flags (GIPropertyInfo* info);
 </code></synopsis>
 <p>Obtain the flags for this property info. See <link xref="GParamFags">GParamFags</link> for
 more information about possible flag values.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIPropertyInfo">GIPropertyInfo</link></p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>the flags</p></td>
+</tr>
+</table>
 </page>

@@ -22,4 +22,5 @@ gchar* g_base_info_get_name (void);
 <p>Obtain the name of the @info. What the name represents depends on
 the <link xref="GIInfoType">GIInfoType</link> of the @info. For instance for <link xref="GIFunctionInfo">GIFunctionInfo</link> it is
 the name of the function.</p>
+
 </page>

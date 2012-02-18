@@ -24,4 +24,15 @@
 gint g_union_info_get_discriminator_offset (GIUnionInfo* info);
 </code></synopsis>
 
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td></td>
+</tr>
+</table>
 </page>

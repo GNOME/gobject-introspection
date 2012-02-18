@@ -34,4 +34,15 @@ the type must first have been loaded.  There is currently no
 mechanism for determining the namespace which corresponds to an
 arbitrary GType - thus, this function will operate most reliably
 when you know the GType to originate from be from a loaded namespace.</p>
+
+<table>
+<tr>
+<td><p>gtype :</p></td>
+<td><p>GType to search for</p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p><link xref="GIBaseInfo">GIBaseInfo</link> representing metadata about @type, or %NULL</p></td>
+</tr>
+</table>
 </page>

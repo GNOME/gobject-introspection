@@ -25,4 +25,15 @@ gint g_field_info_get_size (GIFieldInfo* info);
 </code></synopsis>
 <p>Obtain the size in bits of the field member, this is how
 much space you need to allocate to store the field.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIFieldInfo">GIFieldInfo</link></p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>the field size</p></td>
+</tr>
+</table>
 </page>

@@ -29,4 +29,19 @@ GIPropertyInfo* g_interface_info_get_property (GIInterfaceInfo* info,
                                                gint n);
 </code></synopsis>
 <p>Obtain an interface type property at index @n.</p><p>g_base_info_unref() when done.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIInterfaceInfo">GIInterfaceInfo</link></p></td>
+</tr>
+<tr>
+<td><p>n :</p></td>
+<td><p>index of property to get</p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>the <link xref="GIPropertyInfo">GIPropertyInfo</link>. Free the struct by calling</p></td>
+</tr>
+</table>
 </page>

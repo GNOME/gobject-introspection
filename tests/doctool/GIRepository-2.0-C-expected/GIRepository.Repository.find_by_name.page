@@ -37,4 +37,19 @@ gchar* namespace_,
 this function for a particular namespace, you must call
 g_irepository_require() once to load the namespace, or otherwise
 ensure the namespace has already been loaded.</p>
+
+<table>
+<tr>
+<td><p>namespace_ :</p></td>
+<td><p>Namespace which will be searched</p></td>
+</tr>
+<tr>
+<td><p>name :</p></td>
+<td><p>Entry name to find</p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p><link xref="GIBaseInfo">GIBaseInfo</link> representing metadata about @name, or %NULL</p></td>
+</tr>
+</table>
 </page>

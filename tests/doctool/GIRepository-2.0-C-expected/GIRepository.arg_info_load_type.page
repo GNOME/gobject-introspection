@@ -31,4 +31,19 @@ void g_arg_info_load_type (GIArgInfo* info,
 <p>Obtain information about a the type of given argument @info; this
 function is a variant of g_arg_info_get_type() designed for stack
 allocation.</p><p>The initialized @type must not be referenced after @info is deallocated.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIArgInfo">GIArgInfo</link></p></td>
+</tr>
+<tr>
+<td><p>type :</p></td>
+<td><p>Initialized with information about type of @info</p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td></td>
+</tr>
+</table>
 </page>

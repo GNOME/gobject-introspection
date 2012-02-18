@@ -24,4 +24,15 @@
 gchar* g_base_info_get_attribute (gchar* name);
 </code></synopsis>
 <p>Retrieve an arbitrary attribute associated with this node.</p>
+
+<table>
+<tr>
+<td><p>name :</p></td>
+<td><p>a freeform string naming an attribute</p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>The value of the attribute, or %NULL if no such attribute exists</p></td>
+</tr>
+</table>
 </page>

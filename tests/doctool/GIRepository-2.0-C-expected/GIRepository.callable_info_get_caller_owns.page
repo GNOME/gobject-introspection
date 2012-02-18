@@ -25,4 +25,15 @@ GITransfer g_callable_info_get_caller_owns (GICallableInfo* info);
 </code></synopsis>
 <p>See whether the caller owns the return value of this callable.
 <link xref="GITransfer">GITransfer</link> contains a list of possible transfer values.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GICallableInfo">GICallableInfo</link></p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>%TRUE if the caller owns the return value, %FALSE otherwise.</p></td>
+</tr>
+</table>
 </page>

@@ -39,4 +39,27 @@ GIBaseInfo* g_info_new (GIInfoType type,
                         guint32 offset);
 </code></synopsis>
 
+
+<table>
+<tr>
+<td><p>type :</p></td>
+<td></td>
+</tr>
+<tr>
+<td><p>container :</p></td>
+<td></td>
+</tr>
+<tr>
+<td><p>typelib :</p></td>
+<td></td>
+</tr>
+<tr>
+<td><p>offset :</p></td>
+<td></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td></td>
+</tr>
+</table>
 </page>

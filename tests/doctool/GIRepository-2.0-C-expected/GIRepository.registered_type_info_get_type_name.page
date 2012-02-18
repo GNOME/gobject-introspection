@@ -25,4 +25,15 @@ gchar* g_registered_type_info_get_type_name (GIRegisteredTypeInfo* info);
 </code></synopsis>
 <p>Obtain the type name of the struct within the GObject type system.
 This type can be passed to g_type_name() to get a <link xref="GType">GType</link>.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIRegisteredTypeInfo">GIRegisteredTypeInfo</link></p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>the type name</p></td>
+</tr>
+</table>
 </page>

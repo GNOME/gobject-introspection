@@ -29,4 +29,19 @@ GIArgInfo* g_callable_info_get_arg (GICallableInfo* info,
                                     gint n);
 </code></synopsis>
 <p>Obtain information about a particular argument of this callable.</p><p>g_base_info_unref() when done.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GICallableInfo">GICallableInfo</link></p></td>
+</tr>
+<tr>
+<td><p>n :</p></td>
+<td><p>the argument index to fetch</p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>the <link xref="GIArgInfo">GIArgInfo</link>. Free it with</p></td>
+</tr>
+</table>
 </page>

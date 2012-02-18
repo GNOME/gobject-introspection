@@ -31,4 +31,15 @@ gchar* namespace_);
 <p>This function returns the loaded version associated with the given
 namespace @namespace_.</p><p>Note: The namespace must have already been loaded using a function
 such as g_irepository_require() before calling this function.</p>
+
+<table>
+<tr>
+<td><p>namespace_ :</p></td>
+<td><p>Namespace to inspect</p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>Loaded version</p></td>
+</tr>
+</table>
 </page>

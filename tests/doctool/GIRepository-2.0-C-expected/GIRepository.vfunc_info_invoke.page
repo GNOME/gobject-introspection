@@ -56,4 +56,39 @@ gboolean g_vfunc_info_invoke (GIVFuncInfo* info,
 <p>Invokes the function described in @info with the given
 arguments. Note that inout parameters must appear in both
 argument lists.</p><p>error occurred.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIVFuncInfo">GIVFuncInfo</link> describing the virtual function to invoke</p></td>
+</tr>
+<tr>
+<td><p>implementor :</p></td>
+<td><p><link xref="GType">GType</link> of the type that implements this virtual function</p></td>
+</tr>
+<tr>
+<td><p>in_args :</p></td>
+<td><p>an array of <link xref="GIArgument">GIArgument</link>&lt;!-- --&gt;s, one for each in parameter of @info. If there are no in parameter, @in_args can be %NULL</p></td>
+</tr>
+<tr>
+<td><p>n_in_args :</p></td>
+<td><p>the length of the @in_args array</p></td>
+</tr>
+<tr>
+<td><p>out_args :</p></td>
+<td><p>an array of <link xref="GIArgument">GIArgument</link>&lt;!-- --&gt;s, one for each out parameter of @info. If there are no out parameters, @out_args may be %NULL</p></td>
+</tr>
+<tr>
+<td><p>n_out_args :</p></td>
+<td><p>the length of the @out_args array</p></td>
+</tr>
+<tr>
+<td><p>return_value :</p></td>
+<td><p>return location for the return value of the function. If the function returns void, @return_value may be %NULL</p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>%TRUE if the function has been invoked, %FALSE if an</p></td>
+</tr>
+</table>
 </page>

@@ -25,4 +25,15 @@ gchar* g_object_info_get_type_init (GIObjectInfo* info);
 </code></synopsis>
 <p>Obtain the function which when called will return the GType
 function for which this object type is registered.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIObjectInfo">GIObjectInfo</link></p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>the type init function</p></td>
+</tr>
+</table>
 </page>

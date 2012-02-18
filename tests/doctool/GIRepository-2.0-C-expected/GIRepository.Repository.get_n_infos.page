@@ -31,4 +31,15 @@ gchar* namespace_);
 <p>This function returns the number of metadata entries in
 given namespace @namespace_.  The namespace must have
 already been loaded before calling this function.</p>
+
+<table>
+<tr>
+<td><p>namespace_ :</p></td>
+<td><p>Namespace to inspect</p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>number of metadata entries</p></td>
+</tr>
+</table>
 </page>

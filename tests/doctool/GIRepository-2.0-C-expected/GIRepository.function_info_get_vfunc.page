@@ -26,4 +26,15 @@ GIVFuncInfo* g_function_info_get_vfunc (GIFunctionInfo* info);
 <p>Obtain the virtual function associated with this <link xref="GIFunctionInfo">GIFunctionInfo</link>.
 Only <link xref="GIFunctionInfo">GIFunctionInfo</link> with the flag %GI_FUNCTION_WRAPS_VFUNC has
 a virtual function set. For other cases, %NULL will be returned.</p><p>Free it by calling g_base_info_unref() when done.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIFunctionInfo">GIFunctionInfo</link></p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>the virtual function or %NULL if not set.</p></td>
+</tr>
+</table>
 </page>

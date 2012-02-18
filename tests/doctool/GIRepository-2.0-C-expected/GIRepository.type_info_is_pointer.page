@@ -24,4 +24,15 @@
 gboolean g_type_info_is_pointer (GITypeInfo* info);
 </code></synopsis>
 <p>Obtain if the type is passed as a reference.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GITypeInfo">GITypeInfo</link></p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>%TRUE if it is a pointer</p></td>
+</tr>
+</table>
 </page>

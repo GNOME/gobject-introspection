@@ -37,4 +37,23 @@ GIFunctionInfo* g_object_info_find_method_using_interfaces (GIObjectInfo* info,
 object @info and any interfaces it implements.  %NULL will be
 returned if there's no method available with that name.</p><p>Note that this function does *not* search parent classes; you will have
 to chain up if that's desired.</p><p>g_base_info_unref() when done.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIObjectInfo">GIObjectInfo</link></p></td>
+</tr>
+<tr>
+<td><p>name :</p></td>
+<td><p>name of method to obtain</p></td>
+</tr>
+<tr>
+<td><p>implementor :</p></td>
+<td><p>The implementor of the interface</p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>the <link xref="GIFunctionInfo">GIFunctionInfo</link>. Free the struct by calling</p></td>
+</tr>
+</table>
 </page>
