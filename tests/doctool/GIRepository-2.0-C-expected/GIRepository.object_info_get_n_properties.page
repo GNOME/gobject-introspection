@@ -35,6 +35,4 @@ gint g_object_info_get_n_properties (GIObjectInfo* info);
 <td><p>number of properties</p></td>
 </tr>
 </table>
-
-
 </page>

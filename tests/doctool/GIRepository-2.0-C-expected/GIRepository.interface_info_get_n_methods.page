@@ -35,6 +35,4 @@ gint g_interface_info_get_n_methods (GIInterfaceInfo* info);
 <td><p>number of methods</p></td>
 </tr>
 </table>
-
-
 </page>

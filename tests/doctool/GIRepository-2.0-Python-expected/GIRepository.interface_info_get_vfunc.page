@@ -45,6 +45,4 @@ def interface_info_get_vfunc(info, n)
 <td><p>the <link xref="GIVFuncInfo">GIVFuncInfo</link>. Free the struct by calling</p></td>
 </tr>
 </table>
-
-
 </page>

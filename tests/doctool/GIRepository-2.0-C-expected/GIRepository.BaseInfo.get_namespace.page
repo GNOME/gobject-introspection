@@ -21,6 +21,4 @@ gchar* g_base_info_get_namespace (void);
 </code></synopsis>
 <p>Obtain the namespace of @info.</p>
 
-
-
 </page>

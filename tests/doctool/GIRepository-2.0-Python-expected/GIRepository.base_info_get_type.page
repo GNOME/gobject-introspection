@@ -37,6 +37,4 @@ def base_info_get_type(info)
 <td><p>the info type of @info</p></td>
 </tr>
 </table>
-
-
 </page>

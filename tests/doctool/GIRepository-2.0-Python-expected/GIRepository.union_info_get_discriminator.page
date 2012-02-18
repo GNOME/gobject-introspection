@@ -47,6 +47,4 @@ constant.</p><p>when done.</p>
 <td><p>the <link xref="GIConstantInfo">GIConstantInfo</link>, free it with g_base_info_unref()</p></td>
 </tr>
 </table>
-
-
 </page>

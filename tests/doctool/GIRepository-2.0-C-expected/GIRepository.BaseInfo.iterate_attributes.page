@@ -71,6 +71,4 @@ g_print ("attribute name: %s value: %s", name, value);
 <td><p>%TRUE if there are more attributes</p></td>
 </tr>
 </table>
-
-
 </page>

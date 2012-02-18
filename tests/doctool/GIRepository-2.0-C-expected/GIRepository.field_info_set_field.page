@@ -58,6 +58,4 @@ with a type such as 'char *' must be set with a setter function.</p>
 <td><p>%TRUE if writing the field succeeded, otherwise %FALSE</p></td>
 </tr>
 </table>
-
-
 </page>

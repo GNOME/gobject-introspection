@@ -45,6 +45,4 @@ def interface_info_get_signal(info, n)
 <td><p>the <link xref="GISignalInfo">GISignalInfo</link>. Free the struct by calling</p></td>
 </tr>
 </table>
-
-
 </page>

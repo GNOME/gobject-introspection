@@ -44,6 +44,4 @@ GISignalInfo* g_interface_info_get_signal (GIInterfaceInfo* info,
 <td><p>the <link xref="GISignalInfo">GISignalInfo</link>. Free the struct by calling</p></td>
 </tr>
 </table>
-
-
 </page>

@@ -56,6 +56,4 @@ even if that is actually readable.</p>
 <td><p>%TRUE if reading the field succeeded, otherwise %FALSE</p></td>
 </tr>
 </table>
-
-
 </page>

@@ -29,6 +29,4 @@ All methods on <link xref="GIRepository">GIRepository</link> also accept %NULL a
 parameter to mean this default repository, which is usually more
 convenient for C.</p>
 
-
-
 </page>

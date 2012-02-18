@@ -35,6 +35,4 @@ gboolean g_arg_info_may_be_null (GIArgInfo* info);
 <td><p>%TRUE if it accepts %NULL</p></td>
 </tr>
 </table>
-
-
 </page>

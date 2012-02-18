@@ -22,6 +22,4 @@ def GIRepository.BaseInfo.get_namespace()
 </code></synopsis>
 <p>Obtain the namespace of @info.</p>
 
-
-
 </page>

@@ -35,6 +35,4 @@ gboolean g_callable_info_may_return_null (GICallableInfo* info);
 <td><p>%TRUE if callable could return %NULL</p></td>
 </tr>
 </table>
-
-
 </page>

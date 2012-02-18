@@ -37,7 +37,5 @@ def enum_info_get_n_methods(info)
 <td><p>number of methods</p></td>
 </tr>
 </table>
-
 <p>Since 1.29.17</p>
-
 </page>

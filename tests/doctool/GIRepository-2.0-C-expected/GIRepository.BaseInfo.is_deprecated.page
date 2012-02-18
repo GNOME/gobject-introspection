@@ -22,6 +22,4 @@ gboolean g_base_info_is_deprecated (void);
 <p>Obtain whether the @info is represents a metadata which is
 deprecated or not.</p>
 
-
-
 </page>

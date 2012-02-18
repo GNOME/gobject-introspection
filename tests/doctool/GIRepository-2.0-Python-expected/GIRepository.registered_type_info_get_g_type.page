@@ -40,6 +40,4 @@ that the shared library which provides the type_init function for this
 <td><p>the <link xref="GType">GType</link>.</p></td>
 </tr>
 </table>
-
-
 </page>

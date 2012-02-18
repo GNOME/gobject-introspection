@@ -44,6 +44,4 @@ GIFieldInfo* g_struct_info_get_field (GIStructInfo* info,
 <td><p>the <link xref="GIFieldInfo">GIFieldInfo</link>, free it with g_base_info_unref()</p></td>
 </tr>
 </table>
-
-
 </page>

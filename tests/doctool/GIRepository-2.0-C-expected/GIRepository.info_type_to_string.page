@@ -35,6 +35,4 @@ gchar* g_info_type_to_string (GIInfoType type);
 <td><p>the string</p></td>
 </tr>
 </table>
-
-
 </page>

@@ -38,6 +38,4 @@ a concrete GObject, a GInterface, a structure, etc. using g_base_info_get_type()
 <td><p>the <link xref="GIBaseInfo">GIBaseInfo</link>, or %NULL. Free it with</p></td>
 </tr>
 </table>
-
-
 </page>

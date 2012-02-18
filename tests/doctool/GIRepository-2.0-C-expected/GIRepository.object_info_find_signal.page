@@ -44,6 +44,4 @@ GISignalInfo* g_object_info_find_signal (GIObjectInfo* info,
 <td><p>Info for the signal with name @name in @info, or %NULL on failure.</p></td>
 </tr>
 </table>
-
-
 </page>

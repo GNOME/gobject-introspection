@@ -45,6 +45,4 @@ def struct_info_get_method(info, n)
 <td><p>the <link xref="GIFunctionInfo">GIFunctionInfo</link>, free it with g_base_info_unref()</p></td>
 </tr>
 </table>
-
-
 </page>

@@ -35,6 +35,4 @@ gboolean g_type_info_is_pointer (GITypeInfo* info);
 <td><p>%TRUE if it is a pointer</p></td>
 </tr>
 </table>
-
-
 </page>

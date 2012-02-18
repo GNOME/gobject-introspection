@@ -38,6 +38,4 @@ callee allocates; if this is %TRUE, then the caller must allocate.</p>
 <td><p>%TRUE if caller is required to have allocated the argument</p></td>
 </tr>
 </table>
-
-
 </page>

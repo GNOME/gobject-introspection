@@ -37,6 +37,4 @@ def GIRepository.Repository.prepend_search_path(directory)
 <td></td>
 </tr>
 </table>
-
-
 </page>

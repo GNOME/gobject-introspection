@@ -44,6 +44,4 @@ GIVFuncInfo* g_interface_info_get_vfunc (GIInterfaceInfo* info,
 <td><p>the <link xref="GIVFuncInfo">GIVFuncInfo</link>. Free the struct by calling</p></td>
 </tr>
 </table>
-
-
 </page>

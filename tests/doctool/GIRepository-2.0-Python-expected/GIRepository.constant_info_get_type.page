@@ -37,6 +37,4 @@ def constant_info_get_type(info)
 <td><p>the <link xref="GITypeInfo">GITypeInfo</link>. Free the struct by calling</p></td>
 </tr>
 </table>
-
-
 </page>

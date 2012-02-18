@@ -37,6 +37,4 @@ def arg_info_is_optional(info)
 <td><p>%TRUE if it is an optional argument</p></td>
 </tr>
 </table>
-
-
 </page>

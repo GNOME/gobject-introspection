@@ -43,6 +43,4 @@ the special string "$lt;builtin$gt;".</p>
 <td><p>Filesystem path (or $lt;builtin$gt;) if successful, %NULL if namespace is not loaded</p></td>
 </tr>
 </table>
-
-
 </page>

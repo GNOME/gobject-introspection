@@ -44,6 +44,4 @@ GIBaseInfo* g_interface_info_get_prerequisite (GIInterfaceInfo* info,
 <td><p>the prerequisites as a <link xref="GIBaseInfo">GIBaseInfo</link>. Free the struct by calling</p></td>
 </tr>
 </table>
-
-
 </page>

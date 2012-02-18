@@ -36,6 +36,4 @@ gint g_type_info_get_array_length (GITypeInfo* info);
 <td><p>the array length, or -1 if the type is not an array</p></td>
 </tr>
 </table>
-
-
 </page>

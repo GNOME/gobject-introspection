@@ -45,6 +45,4 @@ is the implementation for @info.</p>
 <td><p>address to a function or %NULL if an error happened</p></td>
 </tr>
 </table>
-
-
 </page>

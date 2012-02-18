@@ -44,6 +44,4 @@ GIFunctionInfo* g_struct_info_find_method (GIStructInfo* info,
 <td><p>the <link xref="GIFunctionInfo">GIFunctionInfo</link>, free it with g_base_info_unref()</p></td>
 </tr>
 </table>
-
-
 </page>

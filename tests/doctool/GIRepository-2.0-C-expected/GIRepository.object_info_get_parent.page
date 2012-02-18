@@ -35,6 +35,4 @@ GIObjectInfo* g_object_info_get_parent (GIObjectInfo* info);
 <td><p>the <link xref="GIObjectInfo">GIObjectInfo</link>. Free the struct by calling</p></td>
 </tr>
 </table>
-
-
 </page>

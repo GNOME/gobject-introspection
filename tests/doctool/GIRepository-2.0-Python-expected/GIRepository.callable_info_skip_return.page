@@ -37,6 +37,4 @@ def callable_info_skip_return(info)
 <td><p>%TRUE if return value is only useful in C.</p></td>
 </tr>
 </table>
-
-
 </page>

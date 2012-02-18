@@ -36,6 +36,4 @@ gboolean g_type_info_is_zero_terminated (GITypeInfo* info);
 <td><p>%TRUE if zero terminated</p></td>
 </tr>
 </table>
-
-
 </page>

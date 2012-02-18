@@ -56,6 +56,4 @@ to chain up if that's desired.</p><p>g_base_info_unref() when done.</p>
 <td><p>the <link xref="GIFunctionInfo">GIFunctionInfo</link>. Free the struct by calling</p></td>
 </tr>
 </table>
-
-
 </page>

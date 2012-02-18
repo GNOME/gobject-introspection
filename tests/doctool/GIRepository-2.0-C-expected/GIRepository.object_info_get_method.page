@@ -44,6 +44,4 @@ GIFunctionInfo* g_object_info_get_method (GIObjectInfo* info,
 <td><p>the <link xref="GIFunctionInfo">GIFunctionInfo</link>. Free the struct by calling</p></td>
 </tr>
 </table>
-
-
 </page>

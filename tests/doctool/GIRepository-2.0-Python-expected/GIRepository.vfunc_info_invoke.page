@@ -87,6 +87,4 @@ argument lists.</p><p>error occurred.</p>
 <td><p>%TRUE if the function has been invoked, %FALSE if an</p></td>
 </tr>
 </table>
-
-
 </page>

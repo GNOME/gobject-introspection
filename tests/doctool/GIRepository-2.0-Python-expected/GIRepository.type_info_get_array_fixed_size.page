@@ -38,6 +38,4 @@ def type_info_get_array_fixed_size(info)
 <td><p>the size or -1 if it's not an array</p></td>
 </tr>
 </table>
-
-
 </page>

@@ -37,6 +37,4 @@ def info_type_to_string(type)
 <td><p>the string</p></td>
 </tr>
 </table>
-
-
 </page>

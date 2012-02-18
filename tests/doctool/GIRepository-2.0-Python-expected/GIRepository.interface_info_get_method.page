@@ -45,6 +45,4 @@ def interface_info_get_method(info, n)
 <td><p>the <link xref="GIFunctionInfo">GIFunctionInfo</link>. Free the struct by calling</p></td>
 </tr>
 </table>
-
-
 </page>

@@ -37,6 +37,4 @@ def object_info_get_n_properties(info)
 <td><p>number of properties</p></td>
 </tr>
 </table>
-
-
 </page>

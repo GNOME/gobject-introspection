@@ -35,7 +35,5 @@ gboolean g_arg_info_is_skip (GIArgInfo* info);
 <td><p>%TRUE if argument is only useful in C.</p></td>
 </tr>
 </table>
-
 <p>Since 1.29.0</p>
-
 </page>

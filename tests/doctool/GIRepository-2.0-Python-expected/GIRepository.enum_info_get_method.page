@@ -45,7 +45,5 @@ def enum_info_get_method(info, n)
 <td><p>the <link xref="GIFunctionInfo">GIFunctionInfo</link>. Free the struct by calling</p></td>
 </tr>
 </table>
-
 <p>Since 1.29.17</p>
-
 </page>

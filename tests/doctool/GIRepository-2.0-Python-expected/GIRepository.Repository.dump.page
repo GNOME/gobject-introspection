@@ -37,6 +37,4 @@ def GIRepository.Repository.dump(arg)
 <td></td>
 </tr>
 </table>
-
-
 </page>

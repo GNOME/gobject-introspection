@@ -35,6 +35,4 @@ gboolean g_struct_info_is_foreign (GIStructInfo* info);
 <td></td>
 </tr>
 </table>
-
-
 </page>

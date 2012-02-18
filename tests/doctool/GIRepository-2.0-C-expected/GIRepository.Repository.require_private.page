@@ -71,6 +71,4 @@ not specified, the latest will be used.</p>
 <td><p>a pointer to the <link xref="GITypelib">GITypelib</link> if successful, %NULL otherwise</p></td>
 </tr>
 </table>
-
-
 </page>

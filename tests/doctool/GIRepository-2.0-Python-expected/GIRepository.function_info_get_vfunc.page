@@ -39,6 +39,4 @@ a virtual function set. For other cases, %NULL will be returned.</p><p>Free it b
 <td><p>the virtual function or %NULL if not set.</p></td>
 </tr>
 </table>
-
-
 </page>

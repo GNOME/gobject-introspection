@@ -35,6 +35,4 @@ gsize g_struct_info_get_size (GIStructInfo* info);
 <td><p>size of the structure in bytes</p></td>
 </tr>
 </table>
-
-
 </page>

@@ -37,6 +37,4 @@ def arg_info_get_type(info)
 <td><p>the <link xref="GIArgInfo">GIArgInfo</link>, free it with</p></td>
 </tr>
 </table>
-
-
 </page>

@@ -37,6 +37,4 @@ def object_info_get_n_methods(info)
 <td><p>number of methods</p></td>
 </tr>
 </table>
-
-
 </page>

@@ -37,6 +37,4 @@ def property_info_get_type(info)
 <td><p>the <link xref="GITypeInfo">GITypeInfo</link>, free it with</p></td>
 </tr>
 </table>
-
-
 </page>

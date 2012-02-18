@@ -44,6 +44,4 @@ GITypeInfo* g_type_info_get_param_type (GITypeInfo* info,
 <td><p>the param type info</p></td>
 </tr>
 </table>
-
-
 </page>

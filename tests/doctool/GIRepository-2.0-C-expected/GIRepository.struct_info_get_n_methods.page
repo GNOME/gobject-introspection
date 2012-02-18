@@ -35,6 +35,4 @@ gint g_struct_info_get_n_methods (GIStructInfo* info);
 <td><p>number of methods</p></td>
 </tr>
 </table>
-
-
 </page>

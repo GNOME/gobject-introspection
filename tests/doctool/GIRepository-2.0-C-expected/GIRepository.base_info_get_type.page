@@ -35,6 +35,4 @@ GIInfoType g_base_info_get_type (GIBaseInfo* info);
 <td><p>the info type of @info</p></td>
 </tr>
 </table>
-
-
 </page>

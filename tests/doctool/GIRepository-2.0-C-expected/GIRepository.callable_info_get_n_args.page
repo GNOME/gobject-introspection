@@ -35,6 +35,4 @@ gint g_callable_info_get_n_args (GICallableInfo* info);
 <td><p>The number of arguments this callable expects.</p></td>
 </tr>
 </table>
-
-
 </page>

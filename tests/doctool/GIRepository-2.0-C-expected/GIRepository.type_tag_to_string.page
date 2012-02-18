@@ -35,6 +35,4 @@ gchar* g_type_tag_to_string (GITypeTag type);
 <td><p>the string</p></td>
 </tr>
 </table>
-
-
 </page>

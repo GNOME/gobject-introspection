@@ -38,6 +38,4 @@ see g_object_info_get_unref_function().</p>
 <td><p>the symbol or %NULL</p></td>
 </tr>
 </table>
-
-
 </page>

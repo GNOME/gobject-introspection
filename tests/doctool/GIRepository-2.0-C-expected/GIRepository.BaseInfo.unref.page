@@ -22,6 +22,4 @@ void g_base_info_unref (void);
 <p>Decreases the reference count of @info. When its reference count
 drops to 0, the info is freed.</p>
 
-
-
 </page>

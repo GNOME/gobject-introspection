@@ -44,6 +44,4 @@ GIPropertyInfo* g_interface_info_get_property (GIInterfaceInfo* info,
 <td><p>the <link xref="GIPropertyInfo">GIPropertyInfo</link>. Free the struct by calling</p></td>
 </tr>
 </table>
-
-
 </page>

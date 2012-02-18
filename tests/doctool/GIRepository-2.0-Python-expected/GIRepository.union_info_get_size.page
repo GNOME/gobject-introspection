@@ -37,6 +37,4 @@ def union_info_get_size(info)
 <td><p>size of the union in bytes</p></td>
 </tr>
 </table>
-
-
 </page>

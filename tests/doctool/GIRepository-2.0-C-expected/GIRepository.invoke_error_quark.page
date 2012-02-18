@@ -21,6 +21,4 @@ GQuark g_invoke_error_quark (void);
 </code></synopsis>
 
 
-
-
 </page>

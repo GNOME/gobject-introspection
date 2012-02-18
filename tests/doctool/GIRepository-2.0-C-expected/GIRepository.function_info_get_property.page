@@ -38,6 +38,4 @@ Only <link xref="GIFunctionInfo">GIFunctionInfo</link> with the flag %GI_FUNCTIO
 <td><p>the property or %NULL if not set. Free it with</p></td>
 </tr>
 </table>
-
-
 </page>

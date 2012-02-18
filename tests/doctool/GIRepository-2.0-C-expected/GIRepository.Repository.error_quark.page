@@ -21,6 +21,4 @@ GQuark g_irepository_error_quark (void);
 </code></synopsis>
 
 
-
-
 </page>

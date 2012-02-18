@@ -50,6 +50,4 @@ information on invoking virtuals.</p><p>g_base_info_unref() when done.</p>
 <td><p>the <link xref="GIVFuncInfo">GIVFuncInfo</link>, or %NULL. Free it with</p></td>
 </tr>
 </table>
-
-
 </page>

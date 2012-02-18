@@ -37,6 +37,4 @@ def object_info_get_parent(info)
 <td><p>the <link xref="GIObjectInfo">GIObjectInfo</link>. Free the struct by calling</p></td>
 </tr>
 </table>
-
-
 </page>
