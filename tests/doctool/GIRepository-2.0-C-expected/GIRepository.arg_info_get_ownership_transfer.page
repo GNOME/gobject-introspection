@@ -36,4 +36,6 @@ GITransfer g_arg_info_get_ownership_transfer (GIArgInfo* info);
 <td><p>the transfer</p></td>
 </tr>
 </table>
+
+
 </page>

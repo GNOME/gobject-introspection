@@ -35,4 +35,6 @@ GITypeInfo* g_property_info_get_type (GIPropertyInfo* info);
 <td><p>the <link xref="GITypeInfo">GITypeInfo</link>, free it with</p></td>
 </tr>
 </table>
+
+
 </page>

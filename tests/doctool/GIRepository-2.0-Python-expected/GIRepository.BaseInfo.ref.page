@@ -22,4 +22,6 @@ def GIRepository.BaseInfo.ref()
 </code></synopsis>
 <p>Increases the reference count of @info.</p>
 
+
+
 </page>

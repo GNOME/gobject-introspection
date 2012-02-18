@@ -44,4 +44,6 @@ such as g_irepository_require() before calling this function.</p>
 <td><p>C namespace prefix, or %NULL if none associated</p></td>
 </tr>
 </table>
+
+
 </page>

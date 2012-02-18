@@ -85,4 +85,7 @@ ${formatter.format(node.doc)}
 % endif
 </table>
 % endif
+% if node.version:
+<p>Since ${node.version}</p>
+% endif
 </page>

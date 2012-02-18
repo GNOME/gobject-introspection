@@ -36,4 +36,6 @@ This type can be passed to g_type_name() to get a <link xref="GType">GType</link
 <td><p>the type name</p></td>
 </tr>
 </table>
+
+
 </page>

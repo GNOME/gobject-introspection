@@ -46,4 +46,6 @@ returned if there's no method available with that name.</p><p>Free the struct by
 <td><p>the <link xref="GIFunctionInfo">GIFunctionInfo</link> or %NULL if none found.</p></td>
 </tr>
 </table>
+
+
 </page>

@@ -41,4 +41,6 @@ may not match the sign of the type used by the C compiler.</p>
 <td><p>the storage type for the enumeration</p></td>
 </tr>
 </table>
+
+
 </page>

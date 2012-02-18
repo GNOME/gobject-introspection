@@ -44,4 +44,6 @@ such as g_irepository_require() before calling this function.</p>
 <td><p>Zero-terminated string array of versioned dependencies</p></td>
 </tr>
 </table>
+
+
 </page>

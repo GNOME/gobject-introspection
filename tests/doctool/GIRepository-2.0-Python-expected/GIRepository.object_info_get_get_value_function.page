@@ -41,4 +41,6 @@ see g_object_info_get_get_value_function().</p>
 <td><p>the symbol or %NULL</p></td>
 </tr>
 </table>
+
+
 </page>

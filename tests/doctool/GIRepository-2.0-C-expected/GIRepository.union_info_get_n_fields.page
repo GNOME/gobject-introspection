@@ -35,4 +35,6 @@ gint g_union_info_get_n_fields (GIUnionInfo* info);
 <td><p>number of fields</p></td>
 </tr>
 </table>
+
+
 </page>

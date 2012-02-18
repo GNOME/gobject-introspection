@@ -38,4 +38,6 @@ the base classes of this type, starting at the top type.</p>
 <td><p>the function pointer or %NULL</p></td>
 </tr>
 </table>
+
+
 </page>

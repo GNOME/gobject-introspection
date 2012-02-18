@@ -24,4 +24,6 @@ def GIRepository.Repository.get_search_path()
 The string is internal to GIRespository and should not be freed, nor should
 the elements.</p>
 
+
+
 </page>

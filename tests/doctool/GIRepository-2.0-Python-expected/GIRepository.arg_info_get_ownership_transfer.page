@@ -38,4 +38,6 @@ def arg_info_get_ownership_transfer(info)
 <td><p>the transfer</p></td>
 </tr>
 </table>
+
+
 </page>

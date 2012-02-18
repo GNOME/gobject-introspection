@@ -45,4 +45,6 @@ such as g_irepository_require() before calling this function.</p>
 <td><p>Full path to shared library, or %NULL if none associated</p></td>
 </tr>
 </table>
+
+
 </page>

@@ -23,4 +23,6 @@ GSList* g_irepository_get_search_path (void);
 The string is internal to GIRespository and should not be freed, nor should
 the elements.</p>
 
+
+
 </page>

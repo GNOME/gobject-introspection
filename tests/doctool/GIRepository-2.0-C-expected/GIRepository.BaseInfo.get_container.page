@@ -23,4 +23,6 @@ GIBaseInfo* g_base_info_get_container (void);
 GIBaseInfo. For instance, the parent of a <link xref="GIFunctionInfo">GIFunctionInfo</link> is an
 <link xref="GIObjectInfo">GIObjectInfo</link> or <link xref="GIInterfaceInfo">GIInterfaceInfo</link>.</p>
 
+
+
 </page>

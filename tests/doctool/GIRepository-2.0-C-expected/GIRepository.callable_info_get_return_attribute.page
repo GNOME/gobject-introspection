@@ -44,4 +44,6 @@ gchar* g_callable_info_get_return_attribute (GICallableInfo* info,
 <td><p>The value of the attribute, or %NULL if no such attribute exists</p></td>
 </tr>
 </table>
+
+
 </page>

@@ -37,4 +37,6 @@ def type_info_is_pointer(info)
 <td><p>%TRUE if it is a pointer</p></td>
 </tr>
 </table>
+
+
 </page>

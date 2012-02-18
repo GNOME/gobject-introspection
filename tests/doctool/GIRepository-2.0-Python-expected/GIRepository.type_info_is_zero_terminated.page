@@ -38,4 +38,6 @@ def type_info_is_zero_terminated(info)
 <td><p>%TRUE if zero terminated</p></td>
 </tr>
 </table>
+
+
 </page>

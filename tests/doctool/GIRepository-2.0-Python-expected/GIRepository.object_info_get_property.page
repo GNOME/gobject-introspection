@@ -45,4 +45,6 @@ def object_info_get_property(info, n)
 <td><p>the <link xref="GIPropertyInfo">GIPropertyInfo</link>. Free the struct by calling</p></td>
 </tr>
 </table>
+
+
 </page>

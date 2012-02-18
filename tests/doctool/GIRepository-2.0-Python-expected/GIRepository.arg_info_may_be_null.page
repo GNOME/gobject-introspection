@@ -37,4 +37,6 @@ def arg_info_may_be_null(info)
 <td><p>%TRUE if it accepts %NULL</p></td>
 </tr>
 </table>
+
+
 </page>

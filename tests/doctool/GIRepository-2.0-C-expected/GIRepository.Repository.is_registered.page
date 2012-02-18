@@ -54,4 +54,6 @@ quickly as this function will if it has already been loaded.</p>
 <td><p>%TRUE if namespace-version is loaded, %FALSE otherwise</p></td>
 </tr>
 </table>
+
+
 </page>

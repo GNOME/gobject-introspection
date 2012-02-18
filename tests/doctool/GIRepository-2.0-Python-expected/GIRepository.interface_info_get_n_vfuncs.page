@@ -37,4 +37,6 @@ def interface_info_get_n_vfuncs(info)
 <td><p>number of virtual functions</p></td>
 </tr>
 </table>
+
+
 </page>

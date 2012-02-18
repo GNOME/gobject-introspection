@@ -37,4 +37,6 @@ def callable_info_may_return_null(info)
 <td><p>%TRUE if callable could return %NULL</p></td>
 </tr>
 </table>
+
+
 </page>

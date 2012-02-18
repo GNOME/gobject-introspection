@@ -35,4 +35,6 @@ GITypeInfo* g_callable_info_get_return_type (GICallableInfo* info);
 <td><p>the <link xref="GITypeInfo">GITypeInfo</link>. Free the struct by calling</p></td>
 </tr>
 </table>
+
+
 </page>

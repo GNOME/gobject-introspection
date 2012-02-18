@@ -45,4 +45,6 @@ def enum_info_get_value(info, n)
 <td><p>the enumeration value or %NULL if type tag is wrong,</p></td>
 </tr>
 </table>
+
+
 </page>

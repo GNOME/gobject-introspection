@@ -35,4 +35,6 @@ gint g_object_info_get_n_signals (GIObjectInfo* info);
 <td><p>number of signals</p></td>
 </tr>
 </table>
+
+
 </page>

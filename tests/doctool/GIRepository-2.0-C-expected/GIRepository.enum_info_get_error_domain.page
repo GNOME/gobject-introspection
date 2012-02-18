@@ -35,4 +35,6 @@ gchar* g_enum_info_get_error_domain (GIEnumInfo* info);
 <td></td>
 </tr>
 </table>
+
+
 </page>

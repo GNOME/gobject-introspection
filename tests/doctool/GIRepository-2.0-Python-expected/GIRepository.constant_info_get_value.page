@@ -48,4 +48,6 @@ Free the value with g_constant_info_free_value().</p>
 <td><p>size of the constant</p></td>
 </tr>
 </table>
+
+
 </page>

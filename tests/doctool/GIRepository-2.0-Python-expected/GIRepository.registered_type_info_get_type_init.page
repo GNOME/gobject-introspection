@@ -40,4 +40,6 @@ g_registered_type_info_get_g_type() directly instead.</p><p>passing into g_modul
 <td><p>the symbol name of the type init function, suitable for</p></td>
 </tr>
 </table>
+
+
 </page>

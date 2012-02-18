@@ -62,4 +62,6 @@ GIBaseInfo* g_info_new (GIInfoType type,
 <td></td>
 </tr>
 </table>
+
+
 </page>

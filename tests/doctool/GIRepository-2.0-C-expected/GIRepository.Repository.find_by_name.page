@@ -52,4 +52,6 @@ ensure the namespace has already been loaded.</p>
 <td><p><link xref="GIBaseInfo">GIBaseInfo</link> representing metadata about @name, or %NULL</p></td>
 </tr>
 </table>
+
+
 </page>

@@ -37,4 +37,6 @@ def union_info_get_alignment(info)
 <td><p>required alignment in bytes</p></td>
 </tr>
 </table>
+
+
 </page>

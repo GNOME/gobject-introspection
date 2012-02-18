@@ -39,4 +39,6 @@ If the signal lacks a closure %NULL will be returned.</p>
 <td><p>the class closure or %NULL</p></td>
 </tr>
 </table>
+
+
 </page>

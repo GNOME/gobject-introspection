@@ -44,4 +44,6 @@ GIValueInfo* g_enum_info_get_value (GIEnumInfo* info,
 <td><p>the enumeration value or %NULL if type tag is wrong,</p></td>
 </tr>
 </table>
+
+
 </page>

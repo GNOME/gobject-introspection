@@ -43,4 +43,6 @@ such as g_irepository_require() before calling this function.</p>
 <td><p>Loaded version</p></td>
 </tr>
 </table>
+
+
 </page>

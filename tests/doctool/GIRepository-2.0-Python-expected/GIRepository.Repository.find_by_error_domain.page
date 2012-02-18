@@ -44,4 +44,7 @@ otherwise ensure the namespace has already been loaded.</p><p>enum type, or %NUL
 <td><p><link xref="GIEnumInfo">GIEnumInfo</link> representing metadata about @domain's</p></td>
 </tr>
 </table>
+
+<p>Since 1.29.17</p>
+
 </page>

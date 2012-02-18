@@ -44,4 +44,6 @@ GIInterfaceInfo* g_object_info_get_interface (GIObjectInfo* info,
 <td><p>the <link xref="GIInterfaceInfo">GIInterfaceInfo</link>. Free the struct by calling</p></td>
 </tr>
 </table>
+
+
 </page>

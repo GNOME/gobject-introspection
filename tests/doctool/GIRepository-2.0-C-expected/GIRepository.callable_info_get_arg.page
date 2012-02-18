@@ -44,4 +44,6 @@ GIArgInfo* g_callable_info_get_arg (GICallableInfo* info,
 <td><p>the <link xref="GIArgInfo">GIArgInfo</link>. Free it with</p></td>
 </tr>
 </table>
+
+
 </page>

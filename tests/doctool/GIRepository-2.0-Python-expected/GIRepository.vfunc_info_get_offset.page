@@ -38,4 +38,6 @@ def vfunc_info_get_offset(info)
 <td><p>the struct offset or 0xFFFF if it's unknown</p></td>
 </tr>
 </table>
+
+
 </page>

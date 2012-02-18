@@ -39,4 +39,6 @@ TypeLib; use this function instead to do <link xref="GIBaseInfo">GIBaseInfo</lin
 <td><p>%TRUE if and only if @info1 equals @info2.</p></td>
 </tr>
 </table>
+
+
 </page>

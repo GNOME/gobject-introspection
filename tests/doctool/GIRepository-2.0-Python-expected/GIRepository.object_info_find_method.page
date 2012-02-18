@@ -46,4 +46,6 @@ returned if there's no method available with that name.</p><p>g_base_info_unref(
 <td><p>the <link xref="GIFunctionInfo">GIFunctionInfo</link>. Free the struct by calling</p></td>
 </tr>
 </table>
+
+
 </page>

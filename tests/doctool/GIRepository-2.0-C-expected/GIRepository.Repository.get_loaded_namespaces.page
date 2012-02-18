@@ -25,4 +25,6 @@ utf8* g_irepository_get_loaded_namespaces (GIRepository *self);
 </code></synopsis>
 <p>Return the list of currently loaded namespaces.</p>
 
+
+
 </page>

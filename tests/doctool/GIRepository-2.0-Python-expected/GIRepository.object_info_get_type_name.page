@@ -37,4 +37,6 @@ def object_info_get_type_name(info)
 <td><p>name of the objects type</p></td>
 </tr>
 </table>
+
+
 </page>

@@ -45,4 +45,6 @@ when you know the GType to originate from be from a loaded namespace.</p>
 <td><p><link xref="GIBaseInfo">GIBaseInfo</link> representing metadata about @type, or %NULL</p></td>
 </tr>
 </table>
+
+
 </page>

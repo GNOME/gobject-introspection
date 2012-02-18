@@ -35,4 +35,6 @@ gsize g_union_info_get_size (GIUnionInfo* info);
 <td><p>size of the union in bytes</p></td>
 </tr>
 </table>
+
+
 </page>

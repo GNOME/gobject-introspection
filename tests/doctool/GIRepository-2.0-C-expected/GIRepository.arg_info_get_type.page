@@ -35,4 +35,6 @@ GITypeInfo* g_arg_info_get_type (GIArgInfo* info);
 <td><p>the <link xref="GIArgInfo">GIArgInfo</link>, free it with</p></td>
 </tr>
 </table>
+
+
 </page>

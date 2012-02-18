@@ -45,4 +45,6 @@ def callable_info_get_arg(info, n)
 <td><p>the <link xref="GIArgInfo">GIArgInfo</link>. Free it with</p></td>
 </tr>
 </table>
+
+
 </page>

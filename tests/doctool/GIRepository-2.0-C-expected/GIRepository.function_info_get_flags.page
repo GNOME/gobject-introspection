@@ -35,4 +35,6 @@ GIFunctionInfoFlags g_function_info_get_flags (GIFunctionInfo* info);
 <td><p>the flags</p></td>
 </tr>
 </table>
+
+
 </page>

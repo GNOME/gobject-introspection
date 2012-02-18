@@ -35,4 +35,6 @@ gsize g_struct_info_get_alignment (GIStructInfo* info);
 <td><p>required alignment in bytes</p></td>
 </tr>
 </table>
+
+
 </page>

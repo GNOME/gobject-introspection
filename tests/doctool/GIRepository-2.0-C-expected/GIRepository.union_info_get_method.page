@@ -44,4 +44,6 @@ GIFunctionInfo* g_union_info_get_method (GIUnionInfo* info,
 <td><p>the <link xref="GIFunctionInfo">GIFunctionInfo</link>, free it with g_base_info_unref()</p></td>
 </tr>
 </table>
+
+
 </page>

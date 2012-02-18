@@ -44,4 +44,6 @@ GIConstantInfo* g_object_info_get_constant (GIObjectInfo* info,
 <td><p>the <link xref="GIConstantInfo">GIConstantInfo</link>. Free the struct by calling</p></td>
 </tr>
 </table>
+
+
 </page>

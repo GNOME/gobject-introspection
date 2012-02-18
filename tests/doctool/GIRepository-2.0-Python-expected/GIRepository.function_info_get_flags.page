@@ -37,4 +37,6 @@ def function_info_get_flags(info)
 <td><p>the flags</p></td>
 </tr>
 </table>
+
+
 </page>
