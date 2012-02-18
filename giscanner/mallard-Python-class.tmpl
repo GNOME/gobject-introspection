@@ -10,6 +10,9 @@
   </info>
   <title>${namespace.name}.${node.name}</title>
 ${formatter.format(node.doc)}
+% if node.version:
+<p>Since ${node.version}</p>
+% endif
   <synopsis ui:expanded="no">
     <title>Hierarchy</title>
     <tree>
