@@ -35,7 +35,7 @@ parameter or a return value.</p>
 </tr>
 <tr>
 <td><p>Returns :</p></td>
-<td><p>%TRUE if it is a return value</p></td>
+<td><p>True if it is a return value</p></td>
 </tr>
 </table>
 </page>

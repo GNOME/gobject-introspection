@@ -34,7 +34,7 @@ def callable_info_may_return_null(info)
 </tr>
 <tr>
 <td><p>Returns :</p></td>
-<td><p>%TRUE if callable could return None</p></td>
+<td><p>True if callable could return None</p></td>
 </tr>
 </table>
 </page>

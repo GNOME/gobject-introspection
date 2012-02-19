@@ -26,7 +26,7 @@ deprecated or not.</p>
 <table>
 <tr>
 <td><p>Returns :</p></td>
-<td><p>%TRUE if deprecated</p></td>
+<td><p>True if deprecated</p></td>
 </tr>
 </table>
 </page>

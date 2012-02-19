@@ -34,7 +34,7 @@ def arg_info_is_skip(info)
 </tr>
 <tr>
 <td><p>Returns :</p></td>
-<td><p>%TRUE if argument is only useful in C.</p></td>
+<td><p>True if argument is only useful in C.</p></td>
 </tr>
 </table>
 <p>Since 1.29.0</p>

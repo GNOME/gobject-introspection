@@ -36,7 +36,7 @@ from generated public APIs.</p>
 </tr>
 <tr>
 <td><p>Returns :</p></td>
-<td><p>%TRUE if this is a class struct, %FALSE otherwise</p></td>
+<td><p>True if this is a class struct, False otherwise</p></td>
 </tr>
 </table>
 </page>

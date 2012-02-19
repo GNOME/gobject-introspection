@@ -34,7 +34,7 @@ def union_info_is_discriminated(info)
 </tr>
 <tr>
 <td><p>Returns :</p></td>
-<td><p>%TRUE if this is a discriminated union, %FALSE otherwise</p></td>
+<td><p>True if this is a discriminated union, False otherwise</p></td>
 </tr>
 </table>
 </page>

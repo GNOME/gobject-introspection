@@ -28,7 +28,7 @@ def arg_info_is_caller_allocates(info)
 <p>Obtain if the argument is a pointer to a struct or object that will
 receive an output of a function.  The default assumption for
 %GI_DIRECTION_OUT arguments which have allocation is that the
-callee allocates; if this is %TRUE, then the caller must allocate.</p>
+callee allocates; if this is True, then the caller must allocate.</p>
 
 <table>
 <tr>
@@ -37,7 +37,7 @@ callee allocates; if this is %TRUE, then the caller must allocate.</p>
 </tr>
 <tr>
 <td><p>Returns :</p></td>
-<td><p>%TRUE if caller is required to have allocated the argument</p></td>
+<td><p>True if caller is required to have allocated the argument</p></td>
 </tr>
 </table>
 </page>

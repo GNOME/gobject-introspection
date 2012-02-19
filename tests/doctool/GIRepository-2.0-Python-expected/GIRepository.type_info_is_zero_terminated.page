@@ -26,7 +26,7 @@
 def type_info_is_zero_terminated(info)
 </code></synopsis>
 <p>Obtain if the last element of the array is None. The type tag must be a
-<link xref="GI_TYPE_TAG_ARRAY">GI_TYPE_TAG_ARRAY</link> or %FALSE will returned.</p>
+<link xref="GI_TYPE_TAG_ARRAY">GI_TYPE_TAG_ARRAY</link> or False will returned.</p>
 
 <table>
 <tr>
@@ -35,7 +35,7 @@ def type_info_is_zero_terminated(info)
 </tr>
 <tr>
 <td><p>Returns :</p></td>
-<td><p>%TRUE if zero terminated</p></td>
+<td><p>True if zero terminated</p></td>
 </tr>
 </table>
 </page>

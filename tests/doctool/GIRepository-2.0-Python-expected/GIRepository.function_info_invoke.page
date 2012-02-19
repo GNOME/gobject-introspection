@@ -79,7 +79,7 @@ have been g_module_symbol()&lt;!-- --&gt;ed before calling this function.</p><p>
 </tr>
 <tr>
 <td><p>Returns :</p></td>
-<td><p>%TRUE if the function has been invoked, %FALSE if an</p></td>
+<td><p>True if the function has been invoked, False if an</p></td>
 </tr>
 </table>
 </page>

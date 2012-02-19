@@ -55,7 +55,7 @@ with a type such as 'char *' must be set with a setter function.</p>
 </tr>
 <tr>
 <td><p>Returns :</p></td>
-<td><p>%TRUE if writing the field succeeded, otherwise %FALSE</p></td>
+<td><p>True if writing the field succeeded, otherwise False</p></td>
 </tr>
 </table>
 </page>

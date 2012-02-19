@@ -35,7 +35,7 @@ stop the emission of the signal.</p>
 </tr>
 <tr>
 <td><p>Returns :</p></td>
-<td><p>%TRUE if returning true stops the signal emission</p></td>
+<td><p>True if returning true stops the signal emission</p></td>
 </tr>
 </table>
 </page>

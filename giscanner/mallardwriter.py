@@ -101,6 +101,8 @@ class MallardFormatterPython(MallardFormatter):
     def format(cls, doc):
         doc = MallardFormatter.format(doc)
         doc = doc.replace('%NULL', 'None')
+        doc = doc.replace('%TRUE', 'True')
+        doc = doc.replace('%FALSE', 'False')
         return doc
 
 class MallardWriter(object):

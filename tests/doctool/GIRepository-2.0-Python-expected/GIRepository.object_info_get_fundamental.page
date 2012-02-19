@@ -35,7 +35,7 @@ G_TYPE_OBJECT. This is mostly for supporting GstMiniObject.</p>
 </tr>
 <tr>
 <td><p>Returns :</p></td>
-<td><p>%TRUE if the object type is a fundamental type</p></td>
+<td><p>True if the object type is a fundamental type</p></td>
 </tr>
 </table>
 </page>

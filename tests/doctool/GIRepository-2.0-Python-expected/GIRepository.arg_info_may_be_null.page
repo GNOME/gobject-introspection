@@ -34,7 +34,7 @@ def arg_info_may_be_null(info)
 </tr>
 <tr>
 <td><p>Returns :</p></td>
-<td><p>%TRUE if it accepts None</p></td>
+<td><p>True if it accepts None</p></td>
 </tr>
 </table>
 </page>

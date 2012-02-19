@@ -51,7 +51,7 @@ quickly as this function will if it has already been loaded.</p>
 </tr>
 <tr>
 <td><p>Returns :</p></td>
-<td><p>%TRUE if namespace-version is loaded, %FALSE otherwise</p></td>
+<td><p>True if namespace-version is loaded, False otherwise</p></td>
 </tr>
 </table>
 </page>

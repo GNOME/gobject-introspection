@@ -53,7 +53,7 @@ even if that is actually readable.</p>
 </tr>
 <tr>
 <td><p>Returns :</p></td>
-<td><p>%TRUE if reading the field succeeded, otherwise %FALSE</p></td>
+<td><p>True if reading the field succeeded, otherwise False</p></td>
 </tr>
 </table>
 </page>

@@ -35,7 +35,7 @@ instantiated</p>
 </tr>
 <tr>
 <td><p>Returns :</p></td>
-<td><p>%TRUE if the object type is abstract</p></td>
+<td><p>True if the object type is abstract</p></td>
 </tr>
 </table>
 </page>
