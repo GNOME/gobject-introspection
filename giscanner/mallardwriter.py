@@ -32,24 +32,24 @@ from mako.runtime import supports_caller
 from . import ast
 
 class MallardFormatter(object):
-    @classmethod
-    def escape(cls, text):
+    def __init__(self, namespace):
+        self._namespace = namespace
+
+    def escape(self, text):
         return saxutils.escape(text.encode('utf-8')).decode('utf-8')
 
-    @classmethod
-    def format(cls, doc):
+    def format(self, doc):
         if doc is None:
             return ''
 
         result = ''
         for para in doc.split('\n\n'):
             result += '<p>'
-            result += cls.format_inline(para)
+            result += self.format_inline(para)
             result += '</p>'
         return result
 
-    @classmethod
-    def format_inline(cls, para):
+    def format_inline(self, para):
         result = ''
 
         poss = []
@@ -57,29 +57,28 @@ class MallardFormatter(object):
         poss = [pos for pos in poss if pos[0] >= 0]
         poss.sort(cmp=lambda x, y: cmp(x[0], y[0]))
         if len(poss) == 0:
-            result += cls.escape(para)
+            result += self.escape(para)
         elif poss[0][1] == '#':
             pos = poss[0][0]
-            result += cls.escape(para[:pos])
+            result += self.escape(para[:pos])
             rest = para[pos + 1:]
             link = re.split('[^a-zA-Z_:-]', rest, maxsplit=1)[0]
             xref = link #self.writer._xrefs.get(link, link)
             result += '<link xref="%s">%s</link>' % (xref, link)
             if len(link) < len(rest):
-                result += cls.format_inline(rest[len(link):])
+                result += self.format_inline(rest[len(link):])
 
         return result
 
-    @classmethod
-    def format_type(cls, type_):
+    def format_type(self, type_):
         raise NotImplementedError
 
 class MallardFormatterC(MallardFormatter):
-    @classmethod
-    def format_type(cls, type_):
+
+    def format_type(self, type_):
         if isinstance(type_, ast.Array):
             try:
-                return cls.format_type(type_.element_type) + '*'
+                return self.format_type(type_.element_type) + '*'
             except:
                 return type_.target_fundamental
         elif type_.ctype is not None:
@@ -88,18 +87,17 @@ class MallardFormatterC(MallardFormatter):
             return type_.target_fundamental
 
 class MallardFormatterPython(MallardFormatter):
-    @classmethod
-    def format_type(cls, type_):
+
+    def format_type(self, type_):
         if isinstance(type_, ast.Array):
-            return '[' + cls.format_type(type_.element_type) + ']'
+            return '[' + self.format_type(type_.element_type) + ']'
         elif type_.target_giname is not None:
             return type_.target_giname
         else:
             return type_.target_fundamental
 
-    @classmethod
-    def format(cls, doc):
-        doc = MallardFormatter.format(doc)
+    def format(self, doc):
+        doc = MallardFormatter.format(self, doc)
         doc = doc.replace('%NULL', 'None')
         doc = doc.replace('%TRUE', 'True')
         doc = doc.replace('%FALSE', 'False')
@@ -107,11 +105,15 @@ class MallardFormatterPython(MallardFormatter):
 
 class MallardWriter(object):
     def __init__(self, transformer, language):
-        if language not in ["Python", "C"]:
-            raise SystemExit("Unsupported language: %s" % language)
-
         self._transformer = transformer
         self._language = language
+
+        if self._language == 'C':
+            self._formatter = MallardFormatterC(self._transformer.namespace)
+        elif self._language == 'Python':
+            self._formatter = MallardFormatterPython(self._transformer.namespace)
+        else:
+            raise SystemExit("Unsupported language: %s" % language)
 
     def write(self, output):
         nodes = [self._transformer.namespace]
@@ -168,17 +170,10 @@ class MallardWriter(object):
         file_name = os.path.abspath(file_name)
         template = Template(filename=file_name, output_encoding='utf-8',
                             module_directory=tempfile.gettempdir())
-        if self._language == 'C':
-            formatter = MallardFormatterC
-        elif self._language == 'Python':
-            formatter = MallardFormatterPython
-        else:
-            raise RuntimeError('Unavailable formatter for language %s',
-                               self._language)
         result = template.render(namespace=namespace,
                                  node=node,
                                  page_id=page_id,
-                                 formatter=formatter)
+                                 formatter=self._formatter)
 
         output_file_name = os.path.join(os.path.dirname(output),
                                         page_id + '.page')
