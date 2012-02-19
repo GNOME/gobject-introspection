@@ -7,5 +7,5 @@
   <info>
   </info>
   <title>GIRepository.TypeTag</title>
-<p>The type tag of a <link xref="GITypeInfo">GITypeInfo</link>.</p>
+<p>The type tag of a <link xref="GIRepository.TypeInfo">GITypeInfo</link>.</p>
 </page>

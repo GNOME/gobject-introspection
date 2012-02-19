@@ -33,7 +33,7 @@ that the shared library which provides the type_init function for this
 <table>
 <tr>
 <td><p>info :</p></td>
-<td><p>a <link xref="GIRegisteredTypeInfo">GIRegisteredTypeInfo</link></p></td>
+<td><p>a <link xref="GIRepository.RegisteredTypeInfo">GIRegisteredTypeInfo</link></p></td>
 </tr>
 <tr>
 <td><p>Returns :</p></td>

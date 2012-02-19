@@ -43,7 +43,7 @@ with a type such as 'char *' must be set with a setter function.</p>
 <table>
 <tr>
 <td><p>field_info :</p></td>
-<td><p>a <link xref="GIFieldInfo">GIFieldInfo</link></p></td>
+<td><p>a <link xref="GIRepository.FieldInfo">GIFieldInfo</link></p></td>
 </tr>
 <tr>
 <td><p>mem :</p></td>

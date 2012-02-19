@@ -43,7 +43,7 @@ when you know the GType to originate from be from a loaded namespace.</p>
 </tr>
 <tr>
 <td><p>Returns :</p></td>
-<td><p><link xref="GIBaseInfo">GIBaseInfo</link> representing metadata about @type, or None</p></td>
+<td><p><link xref="GIRepository.BaseInfo">GIBaseInfo</link> representing metadata about @type, or None</p></td>
 </tr>
 </table>
 </page>

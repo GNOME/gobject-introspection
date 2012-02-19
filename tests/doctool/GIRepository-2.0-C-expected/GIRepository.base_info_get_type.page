@@ -28,7 +28,7 @@ GIInfoType g_base_info_get_type (GIBaseInfo* info);
 <table>
 <tr>
 <td><p>info :</p></td>
-<td><p>a <link xref="GIBaseInfo">GIBaseInfo</link></p></td>
+<td><p>a <link xref="GIRepository.BaseInfo">GIBaseInfo</link></p></td>
 </tr>
 <tr>
 <td><p>Returns :</p></td>

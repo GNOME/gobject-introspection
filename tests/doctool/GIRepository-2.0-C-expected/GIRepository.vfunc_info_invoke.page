@@ -60,7 +60,7 @@ argument lists.</p><p>error occurred.</p>
 <table>
 <tr>
 <td><p>info :</p></td>
-<td><p>a <link xref="GIVFuncInfo">GIVFuncInfo</link> describing the virtual function to invoke</p></td>
+<td><p>a <link xref="GIRepository.VFuncInfo">GIVFuncInfo</link> describing the virtual function to invoke</p></td>
 </tr>
 <tr>
 <td><p>implementor :</p></td>

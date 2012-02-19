@@ -26,12 +26,12 @@ GIScopeType g_arg_info_get_scope (GIArgInfo* info);
 <p>Obtain the scope type for this argument. The scope type explains
 how a callback is going to be invoked, most importantly when
 the resources required to invoke it can be freed.
-<link xref="GIScopeType">GIScopeType</link> contains a list of possible values.</p>
+<link xref="GIRepository.ScopeType">GIScopeType</link> contains a list of possible values.</p>
 
 <table>
 <tr>
 <td><p>info :</p></td>
-<td><p>a <link xref="GIArgInfo">GIArgInfo</link></p></td>
+<td><p>a <link xref="GIRepository.ArgInfo">GIArgInfo</link></p></td>
 </tr>
 <tr>
 <td><p>Returns :</p></td>

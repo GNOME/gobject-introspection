@@ -29,7 +29,7 @@ instantiated</p>
 <table>
 <tr>
 <td><p>info :</p></td>
-<td><p>a <link xref="GIObjectInfo">GIObjectInfo</link></p></td>
+<td><p>a <link xref="GIRepository.ObjectInfo">GIObjectInfo</link></p></td>
 </tr>
 <tr>
 <td><p>Returns :</p></td>

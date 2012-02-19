@@ -29,7 +29,7 @@ parameter or a return value.</p>
 <table>
 <tr>
 <td><p>info :</p></td>
-<td><p>a <link xref="GIArgInfo">GIArgInfo</link></p></td>
+<td><p>a <link xref="GIRepository.ArgInfo">GIArgInfo</link></p></td>
 </tr>
 <tr>
 <td><p>Returns :</p></td>

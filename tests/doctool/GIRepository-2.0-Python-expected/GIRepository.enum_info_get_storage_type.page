@@ -34,7 +34,7 @@ may not match the sign of the type used by the C compiler.</p>
 <table>
 <tr>
 <td><p>info :</p></td>
-<td><p>a <link xref="GIEnumInfo">GIEnumInfo</link></p></td>
+<td><p>a <link xref="GIRepository.EnumInfo">GIEnumInfo</link></p></td>
 </tr>
 <tr>
 <td><p>Returns :</p></td>

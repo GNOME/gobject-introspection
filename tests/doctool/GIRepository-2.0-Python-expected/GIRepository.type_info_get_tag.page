@@ -25,13 +25,13 @@
 @returns(GIRepository.TypeTag)
 def type_info_get_tag(info)
 </code></synopsis>
-<p>Obtain the type tag for the type. See <link xref="GITypeTag">GITypeTag</link> for a list
+<p>Obtain the type tag for the type. See <link xref="GIRepository.TypeTag">GITypeTag</link> for a list
 of type tags.</p>
 
 <table>
 <tr>
 <td><p>info :</p></td>
-<td><p>a <link xref="GITypeInfo">GITypeInfo</link></p></td>
+<td><p>a <link xref="GIRepository.TypeInfo">GITypeInfo</link></p></td>
 </tr>
 <tr>
 <td><p>Returns :</p></td>

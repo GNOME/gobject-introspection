@@ -30,7 +30,7 @@ def enum_info_get_n_methods(info)
 <table>
 <tr>
 <td><p>info :</p></td>
-<td><p>a <link xref="GIEnumInfo">GIEnumInfo</link></p></td>
+<td><p>a <link xref="GIRepository.EnumInfo">GIEnumInfo</link></p></td>
 </tr>
 <tr>
 <td><p>Returns :</p></td>

@@ -31,7 +31,7 @@ g_registered_type_info_get_g_type() directly instead.</p><p>passing into g_modul
 <table>
 <tr>
 <td><p>info :</p></td>
-<td><p>a <link xref="GIRegisteredTypeInfo">GIRegisteredTypeInfo</link></p></td>
+<td><p>a <link xref="GIRepository.RegisteredTypeInfo">GIRegisteredTypeInfo</link></p></td>
 </tr>
 <tr>
 <td><p>Returns :</p></td>

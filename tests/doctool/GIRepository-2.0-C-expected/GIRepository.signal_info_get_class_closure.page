@@ -30,7 +30,7 @@ If the signal lacks a closure %NULL will be returned.</p>
 <table>
 <tr>
 <td><p>info :</p></td>
-<td><p>a <link xref="GISignalInfo">GISignalInfo</link></p></td>
+<td><p>a <link xref="GIRepository.SignalInfo">GISignalInfo</link></p></td>
 </tr>
 <tr>
 <td><p>Returns :</p></td>

@@ -28,7 +28,7 @@ gint g_interface_info_get_n_signals (GIInterfaceInfo* info);
 <table>
 <tr>
 <td><p>info :</p></td>
-<td><p>a <link xref="GIInterfaceInfo">GIInterfaceInfo</link></p></td>
+<td><p>a <link xref="GIRepository.InterfaceInfo">GIInterfaceInfo</link></p></td>
 </tr>
 <tr>
 <td><p>Returns :</p></td>

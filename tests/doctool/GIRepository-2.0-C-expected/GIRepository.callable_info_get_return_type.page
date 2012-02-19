@@ -23,16 +23,16 @@
 <synopsis><code mime="text/x-csrc">
 GITypeInfo* g_callable_info_get_return_type (GICallableInfo* info);
 </code></synopsis>
-<p>Obtain the return type of a callable item as a <link xref="GITypeInfo">GITypeInfo</link>.</p><p>g_base_info_unref() when done.</p>
+<p>Obtain the return type of a callable item as a <link xref="GIRepository.TypeInfo">GITypeInfo</link>.</p><p>g_base_info_unref() when done.</p>
 
 <table>
 <tr>
 <td><p>info :</p></td>
-<td><p>a <link xref="GICallableInfo">GICallableInfo</link></p></td>
+<td><p>a <link xref="GIRepository.CallableInfo">GICallableInfo</link></p></td>
 </tr>
 <tr>
 <td><p>Returns :</p></td>
-<td><p>the <link xref="GITypeInfo">GITypeInfo</link>. Free the struct by calling</p></td>
+<td><p>the <link xref="GIRepository.TypeInfo">GITypeInfo</link>. Free the struct by calling</p></td>
 </tr>
 </table>
 </page>

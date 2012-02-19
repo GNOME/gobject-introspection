@@ -29,7 +29,7 @@ gint g_type_info_get_array_fixed_size (GITypeInfo* info);
 <table>
 <tr>
 <td><p>info :</p></td>
-<td><p>a <link xref="GITypeInfo">GITypeInfo</link></p></td>
+<td><p>a <link xref="GIRepository.TypeInfo">GITypeInfo</link></p></td>
 </tr>
 <tr>
 <td><p>Returns :</p></td>

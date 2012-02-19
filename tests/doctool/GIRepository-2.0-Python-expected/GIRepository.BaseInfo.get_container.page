@@ -21,8 +21,8 @@
 def get_container()
 </code></synopsis>
 <p>Obtain the container of the @info. The container is the parent
-GIBaseInfo. For instance, the parent of a <link xref="GIFunctionInfo">GIFunctionInfo</link> is an
-<link xref="GIObjectInfo">GIObjectInfo</link> or <link xref="GIInterfaceInfo">GIInterfaceInfo</link>.</p>
+GIBaseInfo. For instance, the parent of a <link xref="GIRepository.FunctionInfo">GIFunctionInfo</link> is an
+<link xref="GIRepository.ObjectInfo">GIObjectInfo</link> or <link xref="GIRepository.InterfaceInfo">GIInterfaceInfo</link>.</p>
 
 <table>
 <tr>

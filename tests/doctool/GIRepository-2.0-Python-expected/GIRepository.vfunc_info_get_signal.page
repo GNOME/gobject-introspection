@@ -32,7 +32,7 @@ this virtual function belongs.</p>
 <table>
 <tr>
 <td><p>info :</p></td>
-<td><p>a <link xref="GIVFuncInfo">GIVFuncInfo</link></p></td>
+<td><p>a <link xref="GIRepository.VFuncInfo">GIVFuncInfo</link></p></td>
 </tr>
 <tr>
 <td><p>Returns :</p></td>

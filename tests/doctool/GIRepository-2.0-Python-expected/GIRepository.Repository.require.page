@@ -58,7 +58,7 @@ not specified, the latest will be used.</p>
 </tr>
 <tr>
 <td><p>Returns :</p></td>
-<td><p>a pointer to the <link xref="GITypelib">GITypelib</link> if successful, None otherwise</p></td>
+<td><p>a pointer to the <link xref="GIRepository.Typelib">GITypelib</link> if successful, None otherwise</p></td>
 </tr>
 </table>
 </page>

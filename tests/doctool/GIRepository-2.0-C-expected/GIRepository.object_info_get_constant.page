@@ -33,7 +33,7 @@ GIConstantInfo* g_object_info_get_constant (GIObjectInfo* info,
 <table>
 <tr>
 <td><p>info :</p></td>
-<td><p>a <link xref="GIObjectInfo">GIObjectInfo</link></p></td>
+<td><p>a <link xref="GIRepository.ObjectInfo">GIObjectInfo</link></p></td>
 </tr>
 <tr>
 <td><p>n :</p></td>
@@ -41,7 +41,7 @@ GIConstantInfo* g_object_info_get_constant (GIObjectInfo* info,
 </tr>
 <tr>
 <td><p>Returns :</p></td>
-<td><p>the <link xref="GIConstantInfo">GIConstantInfo</link>. Free the struct by calling</p></td>
+<td><p>the <link xref="GIRepository.ConstantInfo">GIConstantInfo</link>. Free the struct by calling</p></td>
 </tr>
 </table>
 </page>

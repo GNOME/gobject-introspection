@@ -34,7 +34,7 @@ def object_info_get_signal(info, n)
 <table>
 <tr>
 <td><p>info :</p></td>
-<td><p>a <link xref="GIObjectInfo">GIObjectInfo</link></p></td>
+<td><p>a <link xref="GIRepository.ObjectInfo">GIObjectInfo</link></p></td>
 </tr>
 <tr>
 <td><p>n :</p></td>
@@ -42,7 +42,7 @@ def object_info_get_signal(info, n)
 </tr>
 <tr>
 <td><p>Returns :</p></td>
-<td><p>the <link xref="GISignalInfo">GISignalInfo</link>. Free the struct by calling</p></td>
+<td><p>the <link xref="GIRepository.SignalInfo">GISignalInfo</link>. Free the struct by calling</p></td>
 </tr>
 </table>
 </page>

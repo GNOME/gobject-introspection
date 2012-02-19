@@ -33,7 +33,7 @@ GIFieldInfo* g_struct_info_get_field (GIStructInfo* info,
 <table>
 <tr>
 <td><p>info :</p></td>
-<td><p>a <link xref="GIStructInfo">GIStructInfo</link></p></td>
+<td><p>a <link xref="GIRepository.StructInfo">GIStructInfo</link></p></td>
 </tr>
 <tr>
 <td><p>n :</p></td>
@@ -41,7 +41,7 @@ GIFieldInfo* g_struct_info_get_field (GIStructInfo* info,
 </tr>
 <tr>
 <td><p>Returns :</p></td>
-<td><p>the <link xref="GIFieldInfo">GIFieldInfo</link>, free it with g_base_info_unref()</p></td>
+<td><p>the <link xref="GIRepository.FieldInfo">GIFieldInfo</link>, free it with g_base_info_unref()</p></td>
 </tr>
 </table>
 </page>

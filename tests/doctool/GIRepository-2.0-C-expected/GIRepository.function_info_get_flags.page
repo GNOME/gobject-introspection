@@ -23,12 +23,12 @@
 <synopsis><code mime="text/x-csrc">
 GIFunctionInfoFlags g_function_info_get_flags (GIFunctionInfo* info);
 </code></synopsis>
-<p>Obtain the <link xref="GIFunctionInfoFlags">GIFunctionInfoFlags</link> for the @info.</p>
+<p>Obtain the <link xref="GIRepository.FunctionInfoFlags">GIFunctionInfoFlags</link> for the @info.</p>
 
 <table>
 <tr>
 <td><p>info :</p></td>
-<td><p>a <link xref="GIFunctionInfo">GIFunctionInfo</link></p></td>
+<td><p>a <link xref="GIRepository.FunctionInfo">GIFunctionInfo</link></p></td>
 </tr>
 <tr>
 <td><p>Returns :</p></td>

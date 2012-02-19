@@ -50,7 +50,7 @@ entries.</p>
 </tr>
 <tr>
 <td><p>Returns :</p></td>
-<td><p><link xref="GIBaseInfo">GIBaseInfo</link> containing metadata</p></td>
+<td><p><link xref="GIRepository.BaseInfo">GIBaseInfo</link> containing metadata</p></td>
 </tr>
 </table>
 </page>

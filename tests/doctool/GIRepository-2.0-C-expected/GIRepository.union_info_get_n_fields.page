@@ -28,7 +28,7 @@ gint g_union_info_get_n_fields (GIUnionInfo* info);
 <table>
 <tr>
 <td><p>info :</p></td>
-<td><p>a <link xref="GIUnionInfo">GIUnionInfo</link></p></td>
+<td><p>a <link xref="GIRepository.UnionInfo">GIUnionInfo</link></p></td>
 </tr>
 <tr>
 <td><p>Returns :</p></td>

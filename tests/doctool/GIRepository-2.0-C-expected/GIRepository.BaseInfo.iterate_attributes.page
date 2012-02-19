@@ -56,7 +56,7 @@ g_print ("attribute name: %s value: %s", name, value);
 <table>
 <tr>
 <td><p>iterator :</p></td>
-<td><p>a <link xref="GIAttributeIter">GIAttributeIter</link> structure, must be initialized; see below</p></td>
+<td><p>a <link xref="GIRepository.AttributeIter">GIAttributeIter</link> structure, must be initialized; see below</p></td>
 </tr>
 <tr>
 <td><p>name :</p></td>

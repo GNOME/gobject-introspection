@@ -25,14 +25,14 @@
 @returns(GIRepository.VFuncInfo)
 def function_info_get_vfunc(info)
 </code></synopsis>
-<p>Obtain the virtual function associated with this <link xref="GIFunctionInfo">GIFunctionInfo</link>.
-Only <link xref="GIFunctionInfo">GIFunctionInfo</link> with the flag %GI_FUNCTION_WRAPS_VFUNC has
+<p>Obtain the virtual function associated with this <link xref="GIRepository.FunctionInfo">GIFunctionInfo</link>.
+Only <link xref="GIRepository.FunctionInfo">GIFunctionInfo</link> with the flag %GI_FUNCTION_WRAPS_VFUNC has
 a virtual function set. For other cases, None will be returned.</p><p>Free it by calling g_base_info_unref() when done.</p>
 
 <table>
 <tr>
 <td><p>info :</p></td>
-<td><p>a <link xref="GIFunctionInfo">GIFunctionInfo</link></p></td>
+<td><p>a <link xref="GIRepository.FunctionInfo">GIFunctionInfo</link></p></td>
 </tr>
 <tr>
 <td><p>Returns :</p></td>

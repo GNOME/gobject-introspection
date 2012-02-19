@@ -24,12 +24,12 @@
 GITransfer g_arg_info_get_ownership_transfer (GIArgInfo* info);
 </code></synopsis>
 <p>Obtain the ownership transfer for this argument.
-<link xref="GITransfer">GITransfer</link> contains a list of possible values.</p>
+<link xref="GIRepository.Transfer">GITransfer</link> contains a list of possible values.</p>
 
 <table>
 <tr>
 <td><p>info :</p></td>
-<td><p>a <link xref="GIArgInfo">GIArgInfo</link></p></td>
+<td><p>a <link xref="GIRepository.ArgInfo">GIArgInfo</link></p></td>
 </tr>
 <tr>
 <td><p>Returns :</p></td>

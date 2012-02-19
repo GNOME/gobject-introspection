@@ -7,5 +7,5 @@
   <info>
   </info>
   <title>GIRepository.ValueInfo</title>
-<p>Represents a enum value of a <link xref="GIEnumInfo">GIEnumInfo</link>.</p>
+<p>Represents a enum value of a <link xref="GIRepository.EnumInfo">GIEnumInfo</link>.</p>
 </page>

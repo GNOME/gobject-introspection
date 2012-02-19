@@ -30,7 +30,7 @@ def callable_info_get_n_args(info)
 <table>
 <tr>
 <td><p>info :</p></td>
-<td><p>a <link xref="GICallableInfo">GICallableInfo</link></p></td>
+<td><p>a <link xref="GIRepository.CallableInfo">GICallableInfo</link></p></td>
 </tr>
 <tr>
 <td><p>Returns :</p></td>

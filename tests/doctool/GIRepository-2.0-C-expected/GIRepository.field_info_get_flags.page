@@ -23,13 +23,13 @@
 <synopsis><code mime="text/x-csrc">
 GIFieldInfoFlags g_field_info_get_flags (GIFieldInfo* info);
 </code></synopsis>
-<p>Obtain the flags for this <link xref="GIFieldInfo">GIFieldInfo</link>. See <link xref="GIFieldInfoFlags">GIFieldInfoFlags</link> for possible
+<p>Obtain the flags for this <link xref="GIRepository.FieldInfo">GIFieldInfo</link>. See <link xref="GIRepository.FieldInfoFlags">GIFieldInfoFlags</link> for possible
 flag values.</p>
 
 <table>
 <tr>
 <td><p>info :</p></td>
-<td><p>a <link xref="GIFieldInfo">GIFieldInfo</link></p></td>
+<td><p>a <link xref="GIRepository.FieldInfo">GIFieldInfo</link></p></td>
 </tr>
 <tr>
 <td><p>Returns :</p></td>

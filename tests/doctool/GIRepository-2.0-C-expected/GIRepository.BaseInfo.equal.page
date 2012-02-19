@@ -23,14 +23,14 @@
 <synopsis><code mime="text/x-csrc">
 gboolean g_base_info_equal (GIBaseInfo* info2);
 </code></synopsis>
-<p>Compare two <link xref="GIBaseInfo">GIBaseInfo</link>.</p><p>Using pointer comparison is not practical since many functions return
-different instances of <link xref="GIBaseInfo">GIBaseInfo</link> that refers to the same part of the
-TypeLib; use this function instead to do <link xref="GIBaseInfo">GIBaseInfo</link> comparisons.</p>
+<p>Compare two <link xref="GIRepository.BaseInfo">GIBaseInfo</link>.</p><p>Using pointer comparison is not practical since many functions return
+different instances of <link xref="GIRepository.BaseInfo">GIBaseInfo</link> that refers to the same part of the
+TypeLib; use this function instead to do <link xref="GIRepository.BaseInfo">GIBaseInfo</link> comparisons.</p>
 
 <table>
 <tr>
 <td><p>info2 :</p></td>
-<td><p>a <link xref="GIBaseInfo">GIBaseInfo</link></p></td>
+<td><p>a <link xref="GIRepository.BaseInfo">GIBaseInfo</link></p></td>
 </tr>
 <tr>
 <td><p>Returns :</p></td>

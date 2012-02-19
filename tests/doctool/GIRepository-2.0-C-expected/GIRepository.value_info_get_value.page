@@ -23,13 +23,13 @@
 <synopsis><code mime="text/x-csrc">
 gint64 g_value_info_get_value (GIValueInfo* info);
 </code></synopsis>
-<p>Obtain the enumeration value of the <link xref="GIValueInfo">GIValueInfo</link>.</p><p>as a 32-bit signed or unsigned value. The use of gint64 as the
+<p>Obtain the enumeration value of the <link xref="GIRepository.ValueInfo">GIValueInfo</link>.</p><p>as a 32-bit signed or unsigned value. The use of gint64 as the
 return type is to allow both.</p>
 
 <table>
 <tr>
 <td><p>info :</p></td>
-<td><p>a <link xref="GIValueInfo">GIValueInfo</link></p></td>
+<td><p>a <link xref="GIRepository.ValueInfo">GIValueInfo</link></p></td>
 </tr>
 <tr>
 <td><p>Returns :</p></td>
