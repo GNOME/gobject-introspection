@@ -29,7 +29,7 @@
 @returns(GIRepository.FunctionInfo)
 def interface_info_find_method(info, name)
 </code></synopsis>
-<p>Obtain a method of the interface type given a @name. %NULL will be
+<p>Obtain a method of the interface type given a @name. None will be
 returned if there's no method available with that name.</p><p>Free the struct by calling g_base_info_unref() when done.</p>
 
 <table>
@@ -43,7 +43,7 @@ returned if there's no method available with that name.</p><p>Free the struct by
 </tr>
 <tr>
 <td><p>Returns :</p></td>
-<td><p>the <link xref="GIFunctionInfo">GIFunctionInfo</link> or %NULL if none found.</p></td>
+<td><p>the <link xref="GIFunctionInfo">GIFunctionInfo</link> or None if none found.</p></td>
 </tr>
 </table>
 </page>

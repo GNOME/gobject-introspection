@@ -96,6 +96,12 @@ class MallardFormatterPython(MallardFormatter):
         else:
             return type_.target_fundamental
 
+    @classmethod
+    def format(cls, doc):
+        doc = MallardFormatter.format(doc)
+        doc = doc.replace('%NULL', 'None')
+        return doc
+
 class MallardWriter(object):
     def __init__(self, transformer, language):
         if language not in ["Python", "C"]:

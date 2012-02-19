@@ -38,7 +38,7 @@ see g_object_info_get_get_value_function().</p>
 </tr>
 <tr>
 <td><p>Returns :</p></td>
-<td><p>the symbol or %NULL</p></td>
+<td><p>the symbol or None</p></td>
 </tr>
 </table>
 </page>

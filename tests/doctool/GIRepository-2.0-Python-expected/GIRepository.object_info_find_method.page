@@ -29,7 +29,7 @@
 @returns(GIRepository.FunctionInfo)
 def object_info_find_method(info, name)
 </code></synopsis>
-<p>Obtain a method of the object type given a @name. %NULL will be
+<p>Obtain a method of the object type given a @name. None will be
 returned if there's no method available with that name.</p><p>g_base_info_unref() when done.</p>
 
 <table>

@@ -41,7 +41,7 @@ the special string "$lt;builtin$gt;".</p>
 </tr>
 <tr>
 <td><p>Returns :</p></td>
-<td><p>Filesystem path (or $lt;builtin$gt;) if successful, %NULL if namespace is not loaded</p></td>
+<td><p>Filesystem path (or $lt;builtin$gt;) if successful, None if namespace is not loaded</p></td>
 </tr>
 </table>
 </page>

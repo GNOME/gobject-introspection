@@ -27,7 +27,7 @@ the name of the function.</p>
 <table>
 <tr>
 <td><p>Returns :</p></td>
-<td><p>the name of @info or %NULL if it lacks a name.</p></td>
+<td><p>the name of @info or None if it lacks a name.</p></td>
 </tr>
 </table>
 </page>

@@ -32,7 +32,7 @@ def GIRepository.Repository.find_by_error_domain(domain)
 <p>Searches for the enum type corresponding to the given <link xref="GError">GError</link>
 domain. Before calling this function for a particular namespace,
 you must call g_irepository_require() once to load the namespace, or
-otherwise ensure the namespace has already been loaded.</p><p>enum type, or %NULL</p>
+otherwise ensure the namespace has already been loaded.</p><p>enum type, or None</p>
 
 <table>
 <tr>

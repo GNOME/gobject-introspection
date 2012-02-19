@@ -47,7 +47,7 @@ quickly as this function will if it has already been loaded.</p>
 </tr>
 <tr>
 <td><p>version :</p></td>
-<td><p>Required version, may be %NULL for latest</p></td>
+<td><p>Required version, may be None for latest</p></td>
 </tr>
 <tr>
 <td><p>Returns :</p></td>

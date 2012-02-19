@@ -39,7 +39,7 @@ def callable_info_iterate_return_attributes(info, iterator, name, value)
 </code></synopsis>
 <p>Iterate over all attributes associated with the return value.  The
 iterator structure is typically stack allocated, and must have its
-first member initialized to %NULL.</p><p>Both the @name and @value should be treated as constants
+first member initialized to None.</p><p>Both the @name and @value should be treated as constants
 and must not be freed.</p><p>See g_base_info_iterate_attributes() for an example of how to use a
 similar API.</p>
 

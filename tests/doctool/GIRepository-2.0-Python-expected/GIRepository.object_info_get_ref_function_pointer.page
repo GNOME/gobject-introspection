@@ -37,7 +37,7 @@ the base classes of this type, starting at the top type.</p>
 </tr>
 <tr>
 <td><p>Returns :</p></td>
-<td><p>the function pointer or %NULL</p></td>
+<td><p>the function pointer or None</p></td>
 </tr>
 </table>
 </page>

@@ -42,7 +42,7 @@ def callable_info_get_return_attribute(info, name)
 </tr>
 <tr>
 <td><p>Returns :</p></td>
-<td><p>The value of the attribute, or %NULL if no such attribute exists</p></td>
+<td><p>The value of the attribute, or None if no such attribute exists</p></td>
 </tr>
 </table>
 </page>

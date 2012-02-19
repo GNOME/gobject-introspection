@@ -36,7 +36,7 @@ this virtual function belongs.</p>
 </tr>
 <tr>
 <td><p>Returns :</p></td>
-<td><p>the signal or %NULL if none set</p></td>
+<td><p>the signal or None if none set</p></td>
 </tr>
 </table>
 </page>

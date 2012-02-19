@@ -34,7 +34,7 @@ def GIRepository.BaseInfo.get_attribute(name)
 </tr>
 <tr>
 <td><p>Returns :</p></td>
-<td><p>The value of the attribute, or %NULL if no such attribute exists</p></td>
+<td><p>The value of the attribute, or None if no such attribute exists</p></td>
 </tr>
 </table>
 </page>

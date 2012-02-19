@@ -43,7 +43,7 @@ for g_object_info_find_vfunc() for more information on virtuals.</p><p>g_base_in
 </tr>
 <tr>
 <td><p>Returns :</p></td>
-<td><p>the <link xref="GIVFuncInfo">GIVFuncInfo</link>, or %NULL. Free it with</p></td>
+<td><p>the <link xref="GIVFuncInfo">GIVFuncInfo</link>, or None. Free it with</p></td>
 </tr>
 </table>
 </page>

@@ -43,7 +43,7 @@ is the implementation for @info.</p>
 </tr>
 <tr>
 <td><p>Returns :</p></td>
-<td><p>address to a function or %NULL if an error happened</p></td>
+<td><p>address to a function or None if an error happened</p></td>
 </tr>
 </table>
 </page>

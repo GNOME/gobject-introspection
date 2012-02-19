@@ -34,7 +34,7 @@
 def object_info_find_method_using_interfaces(info, name, implementor)
 </code></synopsis>
 <p>Obtain a method of the object given a @name, searching both the
-object @info and any interfaces it implements.  %NULL will be
+object @info and any interfaces it implements.  None will be
 returned if there's no method available with that name.</p><p>Note that this function does *not* search parent classes; you will have
 to chain up if that's desired.</p><p>g_base_info_unref() when done.</p>
 

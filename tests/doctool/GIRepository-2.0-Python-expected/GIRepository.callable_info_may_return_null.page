@@ -25,7 +25,7 @@
 @returns(gboolean)
 def callable_info_may_return_null(info)
 </code></synopsis>
-<p>See if a callable could return %NULL.</p>
+<p>See if a callable could return None.</p>
 
 <table>
 <tr>
@@ -34,7 +34,7 @@ def callable_info_may_return_null(info)
 </tr>
 <tr>
 <td><p>Returns :</p></td>
-<td><p>%TRUE if callable could return %NULL</p></td>
+<td><p>%TRUE if callable could return None</p></td>
 </tr>
 </table>
 </page>

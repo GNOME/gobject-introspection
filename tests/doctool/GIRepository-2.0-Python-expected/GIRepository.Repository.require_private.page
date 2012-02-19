@@ -58,7 +58,7 @@ not specified, the latest will be used.</p>
 </tr>
 <tr>
 <td><p>version :</p></td>
-<td><p>Version of namespace, may be %NULL for latest</p></td>
+<td><p>Version of namespace, may be None for latest</p></td>
 </tr>
 <tr>
 <td><p>flags :</p></td>
@@ -66,7 +66,7 @@ not specified, the latest will be used.</p>
 </tr>
 <tr>
 <td><p>Returns :</p></td>
-<td><p>a pointer to the <link xref="GITypelib">GITypelib</link> if successful, %NULL otherwise</p></td>
+<td><p>a pointer to the <link xref="GITypelib">GITypelib</link> if successful, None otherwise</p></td>
 </tr>
 </table>
 </page>

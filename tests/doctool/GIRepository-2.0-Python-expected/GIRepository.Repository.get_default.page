@@ -26,7 +26,7 @@ particular process, but this function is provided in the unlikely
 eventuality that it would become possible, and as a convenience for
 higher level language bindings to conform to the GObject method
 call conventions.
-All methods on <link xref="GIRepository">GIRepository</link> also accept %NULL as an instance
+All methods on <link xref="GIRepository">GIRepository</link> also accept None as an instance
 parameter to mean this default repository, which is usually more
 convenient for C.</p>
 

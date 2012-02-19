@@ -28,7 +28,7 @@ def function_info_get_property(info)
 <p>Obtain the property associated with this <link xref="GIFunctionInfo">GIFunctionInfo</link>.
 Only <link xref="GIFunctionInfo">GIFunctionInfo</link> with the flag %GI_FUNCTION_IS_GETTER or
 %GI_FUNCTION_IS_SETTER have a property set. For other cases,
-%NULL will be returned.</p><p>g_base_info_unref() when done.</p>
+None will be returned.</p><p>g_base_info_unref() when done.</p>
 
 <table>
 <tr>
@@ -37,7 +37,7 @@ Only <link xref="GIFunctionInfo">GIFunctionInfo</link> with the flag %GI_FUNCTIO
 </tr>
 <tr>
 <td><p>Returns :</p></td>
-<td><p>the property or %NULL if not set. Free it with</p></td>
+<td><p>the property or None if not set. Free it with</p></td>
 </tr>
 </table>
 </page>

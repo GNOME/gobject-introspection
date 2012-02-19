@@ -25,7 +25,7 @@
 @returns(gboolean)
 def type_info_is_zero_terminated(info)
 </code></synopsis>
-<p>Obtain if the last element of the array is %NULL. The type tag must be a
+<p>Obtain if the last element of the array is None. The type tag must be a
 <link xref="GI_TYPE_TAG_ARRAY">GI_TYPE_TAG_ARRAY</link> or %FALSE will returned.</p>
 
 <table>

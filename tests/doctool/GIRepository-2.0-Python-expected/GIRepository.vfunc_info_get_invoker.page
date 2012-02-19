@@ -35,7 +35,7 @@ method will return it.  An invoker method is a C entry point.</p><p>Not all virt
 </tr>
 <tr>
 <td><p>Returns :</p></td>
-<td><p>the <link xref="GIVFuncInfo">GIVFuncInfo</link> or %NULL. Free it with</p></td>
+<td><p>the <link xref="GIVFuncInfo">GIVFuncInfo</link> or None. Free it with</p></td>
 </tr>
 </table>
 </page>

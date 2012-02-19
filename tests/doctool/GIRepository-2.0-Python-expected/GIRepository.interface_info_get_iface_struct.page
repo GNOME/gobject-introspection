@@ -34,7 +34,7 @@ def interface_info_get_iface_struct(info)
 </tr>
 <tr>
 <td><p>Returns :</p></td>
-<td><p>the <link xref="GIStructInfo">GIStructInfo</link> or %NULL. Free it with</p></td>
+<td><p>the <link xref="GIStructInfo">GIStructInfo</link> or None. Free it with</p></td>
 </tr>
 </table>
 </page>

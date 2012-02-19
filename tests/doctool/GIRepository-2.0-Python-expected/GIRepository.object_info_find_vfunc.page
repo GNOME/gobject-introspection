@@ -32,7 +32,7 @@ def object_info_find_vfunc(info, name)
 <p>Locate a virtual function slot with name @name. Note that the namespace
 for virtuals is distinct from that of methods; there may or may not be
 a concrete method associated for a virtual. If there is one, it may
-be retrieved using g_vfunc_info_get_invoker(), otherwise %NULL will be
+be retrieved using g_vfunc_info_get_invoker(), otherwise None will be
 returned.
 See the documentation for g_vfunc_info_get_invoker() for more
 information on invoking virtuals.</p><p>g_base_info_unref() when done.</p>
@@ -48,7 +48,7 @@ information on invoking virtuals.</p><p>g_base_info_unref() when done.</p>
 </tr>
 <tr>
 <td><p>Returns :</p></td>
-<td><p>the <link xref="GIVFuncInfo">GIVFuncInfo</link>, or %NULL. Free it with</p></td>
+<td><p>the <link xref="GIVFuncInfo">GIVFuncInfo</link>, or None. Free it with</p></td>
 </tr>
 </table>
 </page>

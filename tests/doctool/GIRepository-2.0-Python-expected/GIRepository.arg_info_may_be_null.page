@@ -25,7 +25,7 @@
 @returns(gboolean)
 def arg_info_may_be_null(info)
 </code></synopsis>
-<p>Obtain if the argument accepts %NULL.</p>
+<p>Obtain if the argument accepts None.</p>
 
 <table>
 <tr>
@@ -34,7 +34,7 @@ def arg_info_may_be_null(info)
 </tr>
 <tr>
 <td><p>Returns :</p></td>
-<td><p>%TRUE if it accepts %NULL</p></td>
+<td><p>%TRUE if it accepts None</p></td>
 </tr>
 </table>
 </page>

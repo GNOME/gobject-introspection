@@ -42,7 +42,7 @@ def object_info_find_signal(info, name)
 </tr>
 <tr>
 <td><p>Returns :</p></td>
-<td><p>Info for the signal with name @name in @info, or %NULL on failure.</p></td>
+<td><p>Info for the signal with name @name in @info, or None on failure.</p></td>
 </tr>
 </table>
 </page>

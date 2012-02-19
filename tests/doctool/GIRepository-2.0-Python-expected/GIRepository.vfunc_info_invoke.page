@@ -64,7 +64,7 @@ argument lists.</p><p>error occurred.</p>
 </tr>
 <tr>
 <td><p>in_args :</p></td>
-<td><p>an array of <link xref="GIArgument">GIArgument</link>&lt;!-- --&gt;s, one for each in parameter of @info. If there are no in parameter, @in_args can be %NULL</p></td>
+<td><p>an array of <link xref="GIArgument">GIArgument</link>&lt;!-- --&gt;s, one for each in parameter of @info. If there are no in parameter, @in_args can be None</p></td>
 </tr>
 <tr>
 <td><p>n_in_args :</p></td>
@@ -72,7 +72,7 @@ argument lists.</p><p>error occurred.</p>
 </tr>
 <tr>
 <td><p>out_args :</p></td>
-<td><p>an array of <link xref="GIArgument">GIArgument</link>&lt;!-- --&gt;s, one for each out parameter of @info. If there are no out parameters, @out_args may be %NULL</p></td>
+<td><p>an array of <link xref="GIArgument">GIArgument</link>&lt;!-- --&gt;s, one for each out parameter of @info. If there are no out parameters, @out_args may be None</p></td>
 </tr>
 <tr>
 <td><p>n_out_args :</p></td>
@@ -80,7 +80,7 @@ argument lists.</p><p>error occurred.</p>
 </tr>
 <tr>
 <td><p>return_value :</p></td>
-<td><p>return location for the return value of the function. If the function returns void, @return_value may be %NULL</p></td>
+<td><p>return location for the return value of the function. If the function returns void, @return_value may be None</p></td>
 </tr>
 <tr>
 <td><p>Returns :</p></td>

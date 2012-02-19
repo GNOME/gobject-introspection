@@ -35,7 +35,7 @@ structure.  This function returns the metadata for the class structure.</p><p>g_
 </tr>
 <tr>
 <td><p>Returns :</p></td>
-<td><p>the <link xref="GIStructInfo">GIStructInfo</link> or %NULL. Free with</p></td>
+<td><p>the <link xref="GIStructInfo">GIStructInfo</link> or None. Free with</p></td>
 </tr>
 </table>
 </page>
