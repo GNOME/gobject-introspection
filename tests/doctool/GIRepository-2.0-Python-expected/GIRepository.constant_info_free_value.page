@@ -40,10 +40,6 @@ def constant_info_free_value(info, value)
 <td><p>value :</p></td>
 <td><p>the argument</p></td>
 </tr>
-<tr>
-<td><p>Returns :</p></td>
-<td></td>
-</tr>
 </table>
 <p>Since 1.30.1</p>
 </page>

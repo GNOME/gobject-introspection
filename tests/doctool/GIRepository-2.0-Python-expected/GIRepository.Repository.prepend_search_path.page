@@ -32,9 +32,5 @@ def prepend_search_path(directory)
 <td><p>directory :</p></td>
 <td></td>
 </tr>
-<tr>
-<td><p>Returns :</p></td>
-<td></td>
-</tr>
 </table>
 </page>

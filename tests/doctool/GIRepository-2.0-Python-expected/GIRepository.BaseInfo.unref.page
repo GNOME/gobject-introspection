@@ -24,9 +24,5 @@ def unref()
 drops to 0, the info is freed.</p>
 
 <table>
-<tr>
-<td><p>Returns :</p></td>
-<td></td>
-</tr>
 </table>
 </page>

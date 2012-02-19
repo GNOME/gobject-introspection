@@ -42,9 +42,5 @@ allocation.</p><p>The initialized @type must not be referenced after @info is de
 <td><p>type :</p></td>
 <td><p>Initialized with information about type of @info</p></td>
 </tr>
-<tr>
-<td><p>Returns :</p></td>
-<td></td>
-</tr>
 </table>
 </page>

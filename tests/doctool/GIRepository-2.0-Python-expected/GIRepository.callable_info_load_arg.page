@@ -50,9 +50,5 @@ allocation.</p><p>The initialized @arg must not be referenced after @info is dea
 <td><p>arg :</p></td>
 <td><p>Initialize with argument number @n</p></td>
 </tr>
-<tr>
-<td><p>Returns :</p></td>
-<td></td>
-</tr>
 </table>
 </page>

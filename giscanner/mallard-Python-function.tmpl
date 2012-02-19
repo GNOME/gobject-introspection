@@ -74,7 +74,7 @@ ${formatter.format(node.doc)}
 <td>${formatter.format(arg.doc)}</td>
 </tr>
 % endfor
-% if node.retval:
+% if node.retval and node.retval.type.ctype != 'void':
 <tr>
 <td><p>Returns :</p></td>
 <td>${formatter.format(node.retval.doc)}</td>
