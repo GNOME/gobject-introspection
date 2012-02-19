@@ -21,7 +21,7 @@
   </info>
   <title>g_irepository_get_loaded_namespaces</title>
 <synopsis><code mime="text/x-csrc">
-utf8* g_irepository_get_loaded_namespaces (GIRepository *self);
+gchar** g_irepository_get_loaded_namespaces (GIRepository *self);
 </code></synopsis>
 <p>Return the list of currently loaded namespaces.</p>
 

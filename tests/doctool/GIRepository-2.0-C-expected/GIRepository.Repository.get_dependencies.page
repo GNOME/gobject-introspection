@@ -25,7 +25,7 @@
   </info>
   <title>g_irepository_get_dependencies</title>
 <synopsis><code mime="text/x-csrc">
-utf8* g_irepository_get_dependencies (GIRepository *self,
+gchar** g_irepository_get_dependencies (GIRepository *self,
 gchar* namespace_);
 </code></synopsis>
 <p>Return an array of all (transitive) dependencies for namespace

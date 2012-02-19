@@ -43,7 +43,7 @@ elif node.is_method:
   </info>
   <title>${node.symbol}</title>
 <synopsis><code mime="text/x-csrc">
-${formatter.format_type(node.retval.type) | x} ${node.symbol} (\
+${node.retval.type.ctype} ${node.symbol} (\
 % if node.is_method:
 ${node.parent.ctype} *self\
 %endif
