@@ -23,4 +23,10 @@ def GIRepository.BaseInfo.is_deprecated()
 <p>Obtain whether the @info is represents a metadata which is
 deprecated or not.</p>
 
+<table>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>%TRUE if deprecated</p></td>
+</tr>
+</table>
 </page>

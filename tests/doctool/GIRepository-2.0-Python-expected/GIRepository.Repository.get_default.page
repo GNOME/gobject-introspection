@@ -30,4 +30,10 @@ All methods on <link xref="GIRepository">GIRepository</link> also accept %NULL a
 parameter to mean this default repository, which is usually more
 convenient for C.</p>
 
+<table>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>The global singleton <link xref="GIRepository">GIRepository</link></p></td>
+</tr>
+</table>
 </page>

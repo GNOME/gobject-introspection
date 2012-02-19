@@ -21,4 +21,10 @@ GQuark g_irepository_error_quark (void);
 </code></synopsis>
 
 
+<table>
+<tr>
+<td><p>Returns :</p></td>
+<td></td>
+</tr>
+</table>
 </page>

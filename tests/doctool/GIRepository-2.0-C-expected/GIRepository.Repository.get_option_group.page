@@ -23,4 +23,10 @@ GOptionGroup* g_irepository_get_option_group (void);
 by the dumper and for programs that wants to provide
 introspection information</p>
 
+<table>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>the option group</p></td>
+</tr>
+</table>
 </page>

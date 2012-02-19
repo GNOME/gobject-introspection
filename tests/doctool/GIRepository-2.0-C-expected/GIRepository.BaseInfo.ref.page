@@ -21,4 +21,10 @@ GIBaseInfo* g_base_info_ref (void);
 </code></synopsis>
 <p>Increases the reference count of @info.</p>
 
+<table>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>the same @info.</p></td>
+</tr>
+</table>
 </page>

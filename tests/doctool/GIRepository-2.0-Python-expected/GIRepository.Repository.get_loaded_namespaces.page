@@ -26,4 +26,10 @@ def GIRepository.Repository.get_loaded_namespaces()
 </code></synopsis>
 <p>Return the list of currently loaded namespaces.</p>
 
+<table>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>List of namespaces</p></td>
+</tr>
+</table>
 </page>

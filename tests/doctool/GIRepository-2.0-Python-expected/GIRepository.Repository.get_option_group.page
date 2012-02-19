@@ -24,4 +24,10 @@ def GIRepository.Repository.get_option_group()
 by the dumper and for programs that wants to provide
 introspection information</p>
 
+<table>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>the option group</p></td>
+</tr>
+</table>
 </page>

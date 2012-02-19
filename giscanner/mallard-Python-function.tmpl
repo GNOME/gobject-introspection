@@ -69,7 +69,7 @@ ${arg.argname}\
 </code></synopsis>
 ${formatter.format(node.doc)}
 
-% if node.parameters:
+% if node.parameters or node.retval:
 <table>
 % for arg, ix in zip(node.parameters, range(len(node.parameters))):
 <tr>
