@@ -23,6 +23,7 @@
 
 import os
 import re
+import tempfile
 
 from xml.sax import saxutils
 from mako.template import Template
@@ -162,7 +163,9 @@ class MallardWriter(object):
             template_dir = 'unimplemented'
 
         file_name = os.path.join(template_dir, template_name)
-        template = Template(filename=file_name, output_encoding='utf-8')
+        file_name = os.path.abspath(file_name)
+        template = Template(filename=file_name, output_encoding='utf-8',
+                            module_directory=tempfile.gettempdir())
         if self._language == 'C':
             formatter = MallardFormatterC
         elif self._language == 'Python':
