@@ -31,7 +31,7 @@
 <synopsis><code mime="text/x-python">
 @accepts(utf8, gint)
 @returns(GIRepository.BaseInfo)
-def GIRepository.Repository.get_info(namespace_, index)
+def get_info(namespace_, index)
 </code></synopsis>
 <p>This function returns a particular metadata entry in the
 given namespace @namespace_.  The namespace must have

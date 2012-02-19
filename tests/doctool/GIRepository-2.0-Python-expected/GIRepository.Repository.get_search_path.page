@@ -18,7 +18,7 @@
   <title>get_search_path</title>
 <synopsis><code mime="text/x-python">
 @returns(&lt;list&gt;)
-def GIRepository.Repository.get_search_path()
+def get_search_path()
 </code></synopsis>
 <p>Returns the search path the GIRepository will use when looking for typelibs.
 The string is internal to GIRespository and should not be freed, nor should

@@ -18,7 +18,7 @@
   <title>unref</title>
 <synopsis><code mime="text/x-python">
 @returns(none)
-def GIRepository.BaseInfo.unref()
+def unref()
 </code></synopsis>
 <p>Decreases the reference count of @info. When its reference count
 drops to 0, the info is freed.</p>

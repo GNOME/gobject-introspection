@@ -55,9 +55,6 @@ ${formatter.format_type(arg.type) | x}\
 % endif
 @returns(${formatter.format_type(node.retval.type) | x})
 def \
-% if node.parent is not None:
-${namespace.name}.${node.parent.name}.\
-% endif
 ${node.name}(\
 % for arg, ix in zip(node.parameters, range(len(node.parameters))):
 ${arg.argname}\

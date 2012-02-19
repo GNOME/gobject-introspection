@@ -31,7 +31,7 @@
 <synopsis><code mime="text/x-python">
 @accepts(utf8, utf8)
 @returns(GIRepository.BaseInfo)
-def GIRepository.Repository.find_by_name(namespace_, name)
+def find_by_name(namespace_, name)
 </code></synopsis>
 <p>Searches for a particular entry in a namespace.  Before calling
 this function for a particular namespace, you must call

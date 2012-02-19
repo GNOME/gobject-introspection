@@ -27,7 +27,7 @@
 <synopsis><code mime="text/x-python">
 @accepts(GLib.Quark)
 @returns(GIRepository.EnumInfo)
-def GIRepository.Repository.find_by_error_domain(domain)
+def find_by_error_domain(domain)
 </code></synopsis>
 <p>Searches for the enum type corresponding to the given <link xref="GError">GError</link>
 domain. Before calling this function for a particular namespace,

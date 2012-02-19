@@ -31,7 +31,7 @@
 <synopsis><code mime="text/x-python">
 @accepts(utf8, utf8)
 @returns(gboolean)
-def GIRepository.Repository.is_registered(namespace_, version)
+def is_registered(namespace_, version)
 </code></synopsis>
 <p>Check whether a particular namespace (and optionally, a specific
 version thereof) is currently loaded.  This function is likely to

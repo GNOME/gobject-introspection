@@ -18,7 +18,7 @@
   <title>is_deprecated</title>
 <synopsis><code mime="text/x-python">
 @returns(gboolean)
-def GIRepository.BaseInfo.is_deprecated()
+def is_deprecated()
 </code></synopsis>
 <p>Obtain whether the @info is represents a metadata which is
 deprecated or not.</p>

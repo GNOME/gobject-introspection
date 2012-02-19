@@ -27,7 +27,7 @@
 <synopsis><code mime="text/x-python">
 @accepts(utf8)
 @returns(utf8)
-def GIRepository.Repository.get_shared_library(namespace_)
+def get_shared_library(namespace_)
 </code></synopsis>
 <p>This function returns the full path to the shared C library
 associated with the given namespace @namespace_. There may be no

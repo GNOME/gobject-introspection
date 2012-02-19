@@ -27,7 +27,7 @@
 <synopsis><code mime="text/x-python">
 @accepts(utf8)
 @returns(gint)
-def GIRepository.Repository.get_n_infos(namespace_)
+def get_n_infos(namespace_)
 </code></synopsis>
 <p>This function returns the number of metadata entries in
 given namespace @namespace_.  The namespace must have

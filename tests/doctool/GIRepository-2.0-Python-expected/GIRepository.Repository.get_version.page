@@ -27,7 +27,7 @@
 <synopsis><code mime="text/x-python">
 @accepts(utf8)
 @returns(utf8)
-def GIRepository.Repository.get_version(namespace_)
+def get_version(namespace_)
 </code></synopsis>
 <p>This function returns the loaded version associated with the given
 namespace @namespace_.</p><p>Note: The namespace must have already been loaded using a function

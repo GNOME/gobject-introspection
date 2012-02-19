@@ -27,7 +27,7 @@
 <synopsis><code mime="text/x-python">
 @accepts(utf8)
 @returns(&lt;list&gt;)
-def GIRepository.Repository.enumerate_versions(namespace_)
+def enumerate_versions(namespace_)
 </code></synopsis>
 <p>Obtain an unordered list of versions (either currently loaded or
 available) for @namespace_ in this @repository.</p>

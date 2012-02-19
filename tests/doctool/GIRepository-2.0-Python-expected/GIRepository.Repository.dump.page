@@ -23,7 +23,7 @@
 <synopsis><code mime="text/x-python">
 @accepts(utf8)
 @returns(gboolean)
-def GIRepository.Repository.dump(arg)
+def dump(arg)
 </code></synopsis>
 
 

@@ -27,7 +27,7 @@
 <synopsis><code mime="text/x-python">
 @accepts(utf8)
 @returns([utf8])
-def GIRepository.Repository.get_dependencies(namespace_)
+def get_dependencies(namespace_)
 </code></synopsis>
 <p>Return an array of all (transitive) dependencies for namespace
 @namespace_, including version.  The returned strings are of the

@@ -31,7 +31,7 @@
 <synopsis><code mime="text/x-python">
 @accepts(GIRepository.Typelib, GIRepository.RepositoryLoadFlags)
 @returns(utf8)
-def GIRepository.Repository.load_typelib(typelib, flags)
+def load_typelib(typelib, flags)
 </code></synopsis>
 
 

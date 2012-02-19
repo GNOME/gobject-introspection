@@ -23,7 +23,7 @@
 <synopsis><code mime="text/x-python">
 @accepts(utf8)
 @returns(none)
-def GIRepository.Repository.prepend_search_path(directory)
+def prepend_search_path(directory)
 </code></synopsis>
 
 

@@ -18,7 +18,7 @@
   <title>error_quark</title>
 <synopsis><code mime="text/x-python">
 @returns(GLib.Quark)
-def GIRepository.Repository.error_quark()
+def error_quark()
 </code></synopsis>
 
 

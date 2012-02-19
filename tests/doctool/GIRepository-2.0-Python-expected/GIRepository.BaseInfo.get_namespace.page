@@ -18,7 +18,7 @@
   <title>get_namespace</title>
 <synopsis><code mime="text/x-python">
 @returns(utf8)
-def GIRepository.BaseInfo.get_namespace()
+def get_namespace()
 </code></synopsis>
 <p>Obtain the namespace of @info.</p>
 

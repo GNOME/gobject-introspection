@@ -31,7 +31,7 @@
 <synopsis><code mime="text/x-python">
 @accepts(GIRepository.AttributeIter, utf8, utf8)
 @returns(gboolean)
-def GIRepository.BaseInfo.iterate_attributes(iterator, name, value)
+def iterate_attributes(iterator, name, value)
 </code></synopsis>
 <p>Iterate over all attributes associated with this node.  The iterator
 structure is typically stack allocated, and must have its first

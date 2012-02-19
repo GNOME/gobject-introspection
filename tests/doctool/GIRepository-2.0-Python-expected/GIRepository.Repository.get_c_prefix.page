@@ -27,7 +27,7 @@
 <synopsis><code mime="text/x-python">
 @accepts(utf8)
 @returns(utf8)
-def GIRepository.Repository.get_c_prefix(namespace_)
+def get_c_prefix(namespace_)
 </code></synopsis>
 <p>This function returns the "C prefix", or the C level namespace
 associated with the given introspection namespace.  Each C symbol

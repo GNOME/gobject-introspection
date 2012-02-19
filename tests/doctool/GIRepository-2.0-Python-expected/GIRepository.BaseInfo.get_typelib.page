@@ -18,7 +18,7 @@
   <title>get_typelib</title>
 <synopsis><code mime="text/x-python">
 @returns(GIRepository.Typelib)
-def GIRepository.BaseInfo.get_typelib()
+def get_typelib()
 </code></synopsis>
 <p>Obtain the typelib this @info belongs to</p>
 

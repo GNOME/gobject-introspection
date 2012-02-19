@@ -27,7 +27,7 @@
 <synopsis><code mime="text/x-python">
 @accepts(GType)
 @returns(GIRepository.BaseInfo)
-def GIRepository.Repository.find_by_gtype(gtype)
+def find_by_gtype(gtype)
 </code></synopsis>
 <p>Searches all loaded namespaces for a particular <link xref="GType">GType</link>.  Note that
 in order to locate the metadata, the namespace corresponding to

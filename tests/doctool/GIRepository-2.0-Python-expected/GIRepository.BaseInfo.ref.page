@@ -18,7 +18,7 @@
   <title>ref</title>
 <synopsis><code mime="text/x-python">
 @returns(GIRepository.BaseInfo)
-def GIRepository.BaseInfo.ref()
+def ref()
 </code></synopsis>
 <p>Increases the reference count of @info.</p>
 

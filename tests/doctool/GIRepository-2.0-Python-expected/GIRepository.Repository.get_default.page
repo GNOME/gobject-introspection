@@ -18,7 +18,7 @@
   <title>get_default</title>
 <synopsis><code mime="text/x-python">
 @returns(GIRepository.Repository)
-def GIRepository.Repository.get_default()
+def get_default()
 </code></synopsis>
 <p>Returns the singleton process-global default <link xref="GIRepository">GIRepository</link>.  It is
 not currently supported to have multiple repositories in a

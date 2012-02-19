@@ -23,7 +23,7 @@
 <synopsis><code mime="text/x-python">
 @accepts(GIRepository.BaseInfo)
 @returns(gboolean)
-def GIRepository.BaseInfo.equal(info2)
+def equal(info2)
 </code></synopsis>
 <p>Compare two <link xref="GIBaseInfo">GIBaseInfo</link>.</p><p>Using pointer comparison is not practical since many functions return
 different instances of <link xref="GIBaseInfo">GIBaseInfo</link> that refers to the same part of the

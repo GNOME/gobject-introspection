@@ -39,7 +39,7 @@
 <synopsis><code mime="text/x-python">
 @accepts(utf8, utf8, utf8, GIRepository.RepositoryLoadFlags)
 @returns(GIRepository.Typelib)
-def GIRepository.Repository.require_private(typelib_dir, namespace_, version, flags)
+def require_private(typelib_dir, namespace_, version, flags)
 </code></synopsis>
 <p>Force the namespace @namespace_ to be loaded if it isn't already.
 If @namespace_ is not loaded, this function will search for a

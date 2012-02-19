@@ -22,7 +22,7 @@
   <title>get_loaded_namespaces</title>
 <synopsis><code mime="text/x-python">
 @returns([utf8])
-def GIRepository.Repository.get_loaded_namespaces()
+def get_loaded_namespaces()
 </code></synopsis>
 <p>Return the list of currently loaded namespaces.</p>
 

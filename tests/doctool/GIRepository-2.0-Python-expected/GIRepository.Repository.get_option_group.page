@@ -18,7 +18,7 @@
   <title>get_option_group</title>
 <synopsis><code mime="text/x-python">
 @returns(GLib.OptionGroup)
-def GIRepository.Repository.get_option_group()
+def get_option_group()
 </code></synopsis>
 <p>Obtain the option group for girepository, it's used
 by the dumper and for programs that wants to provide
