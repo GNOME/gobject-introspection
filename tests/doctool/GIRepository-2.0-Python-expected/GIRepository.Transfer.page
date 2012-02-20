@@ -18,7 +18,6 @@ an array or a hash table the container itself is specified differently from
 the items within the container itself. Each container is freed differently,
 check the documentation for the types themselves for information on how to
 free them.</p>
-
 <table>
 <tr>
 <td><p>Transfer.NOTHING :</p></td>

@@ -9,7 +9,6 @@
   </info>
   <title>GIRepository.TypeTag</title>
   <p>The type tag of a <link xref="GIRepository.TypeInfo">GIRepository.TypeInfo</link>.</p>
-
 <table>
 <tr>
 <td><p>TypeTag.VOID :</p></td>

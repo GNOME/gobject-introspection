@@ -9,7 +9,6 @@
   </info>
   <title>GIRepository.Direction</title>
   <p>The direction of a <link xref="GIRepository.ArgInfo">GIRepository.ArgInfo</link>.</p>
-
 <table>
 <tr>
 <td><p>Direction.IN :</p></td>

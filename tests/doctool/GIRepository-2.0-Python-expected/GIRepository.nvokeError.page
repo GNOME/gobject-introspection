@@ -10,7 +10,6 @@
   <title>GIRepository.nvokeError</title>
   <p>An error occuring while invoking a function via
 g_function_info_invoke().</p>
-
 <table>
 <tr>
 <td><p>nvokeError.FAILED :</p></td>

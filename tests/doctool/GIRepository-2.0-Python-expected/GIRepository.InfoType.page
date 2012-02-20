@@ -9,7 +9,6 @@
   </info>
   <title>GIRepository.InfoType</title>
   <p>The type of a GIBaseInfo struct.</p>
-
 <table>
 <tr>
 <td><p>InfoType.INVALID :</p></td>
