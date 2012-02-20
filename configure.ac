@@ -272,6 +272,8 @@ if test "x$os_win32" = "xyes"; then
   AM_CHECK_PYTHON_LIBS(, AC_MSG_ERROR([Python libs not found. Windows requires Python modules to be explicitly linked to libpython.]))
 fi
 
+AM_CHECK_PYMOD(mako,,,[AC_MSG_ERROR(Could not find python module: mako)])
+
 # Glib documentation
 
 GLIBSRC=
