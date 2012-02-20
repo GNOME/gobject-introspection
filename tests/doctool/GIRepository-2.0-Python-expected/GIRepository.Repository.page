@@ -18,11 +18,9 @@
       </item>
     </tree>
   </synopsis>
-  <links type="topic" ui:expanded="yes"
-         api:type="function" api:mime="text/x-python"
-         groups="constructor" style="linklist">
-    <title>Constructors</title>
-  </links>
+  <p>Constructor</p>
+  <synopsis><code mime="text/x-python">
+repository = Repository()  </code></synopsis>
   <links type="topic" ui:expanded="yes"
          api:type="function" api:mime="text/x-python"
          groups="method" style="linklist">

@@ -21,11 +21,19 @@ ${formatter.format(node.doc)}
       </item>
     </tree>
   </synopsis>
-  <links type="topic" ui:expanded="yes"
-         api:type="function" api:mime="text/x-python"
-         groups="constructor" style="linklist">
-    <title>Constructors</title>
-  </links>
+  <p>Constructor</p>
+  <synopsis><code mime="text/x-python">
+${formatter.to_underscores(node.name).lower()} = ${node.name}(\
+% for property_, ix in zip(node.properties, range(len(node.properties))):
+% if property_.construct or property_.construct_only or property_.writable:
+${property_.name.replace('-', '_')}=value\
+% if ix != len(node.properties) - 1:
+, \
+% endif
+% endif
+% endfor
+)\
+  </code></synopsis>
   <links type="topic" ui:expanded="yes"
          api:type="function" api:mime="text/x-python"
          groups="method" style="linklist">

@@ -30,6 +30,7 @@ from mako.template import Template
 from mako.runtime import supports_caller
 
 from . import ast
+from .utils import to_underscores
 
 class MallardFormatter(object):
     def __init__(self, namespace):
@@ -89,6 +90,9 @@ class MallardFormatter(object):
             flags.append("Construct Only")
 
         return " / ".join(flags)
+
+    def to_underscores(self, string):
+        return to_underscores(string)
 
 class MallardFormatterC(MallardFormatter):
 
