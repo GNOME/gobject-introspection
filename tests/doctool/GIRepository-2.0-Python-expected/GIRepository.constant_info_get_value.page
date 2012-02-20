@@ -1,13 +1,51 @@
 <?xml version="1.0"?>
+
 <page id="GIRepository.constant_info_get_value"
       type="topic"
       style="function"
       xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
     <link type="guide" xref="index" group="function"/>
+    <api:function>
+      <api:returns>
+        <api:type>gint</api:type>
+      </api:returns>
+      <api:name>g_constant_info_get_value</api:name>
+      <api:arg>
+        <api:type>GIRepository.ConstantInfo</api:type>
+        <api:name>info</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>None</api:type>
+        <api:name>value</api:name>
+      </api:arg>
+    </api:function>
   </info>
-  <title>GIRepository.constant_info_get_value</title>
-<p>Obtain the value associated with the <link xref="GIConstantInfo">GIConstantInfo</link> and store it in the
+  <title>constant_info_get_value</title>
+<synopsis><code mime="text/x-python">
+@accepts(GIRepository.ConstantInfo, None)
+@returns(gint)
+def constant_info_get_value(info, value)
+</code></synopsis>
+<p>Obtain the value associated with the <link xref="GIRepository.ConstantInfo">GIRepository.ConstantInfo</link> and store it in the
 @value parameter. @argument needs to be allocated before passing it in.
-The size of the constant value stored in @argument will be returned.</p></page>
+The size of the constant value stored in @argument will be returned.
+Free the value with g_constant_info_free_value().</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIRepository.ConstantInfo">GIRepository.ConstantInfo</link></p></td>
+</tr>
+<tr>
+<td><p>value :</p></td>
+<td><p>an argument</p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>size of the constant</p></td>
+</tr>
+</table>
+</page>

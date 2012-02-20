@@ -6,5 +6,6 @@
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
   </info>
-  <title>GIRepositoryObjectInfoSetValueFunction</title>
-<p>Update @value and attach the object instance pointer @object to it.</p></page>
+  <title>GIRepository.ObjectInfoSetValueFunction</title>
+<p>Update @value and attach the object instance pointer @object to it.</p>
+</page>

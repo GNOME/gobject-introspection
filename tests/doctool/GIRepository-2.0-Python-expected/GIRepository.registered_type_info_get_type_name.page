@@ -1,12 +1,41 @@
 <?xml version="1.0"?>
+
 <page id="GIRepository.registered_type_info_get_type_name"
       type="topic"
       style="function"
       xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
     <link type="guide" xref="index" group="function"/>
+    <api:function>
+      <api:returns>
+        <api:type>utf8</api:type>
+      </api:returns>
+      <api:name>g_registered_type_info_get_type_name</api:name>
+      <api:arg>
+        <api:type>GIRepository.RegisteredTypeInfo</api:type>
+        <api:name>info</api:name>
+      </api:arg>
+    </api:function>
   </info>
-  <title>GIRepository.registered_type_info_get_type_name</title>
+  <title>registered_type_info_get_type_name</title>
+<synopsis><code mime="text/x-python">
+@accepts(GIRepository.RegisteredTypeInfo)
+@returns(utf8)
+def registered_type_info_get_type_name(info)
+</code></synopsis>
 <p>Obtain the type name of the struct within the GObject type system.
-This type can be passed to g_type_name() to get a <link xref="GType">GType</link>.</p></page>
+This type can be passed to g_type_name() to get a <link xref="GType">GType</link>.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIRepository.RegisteredTypeInfo">GIRepository.RegisteredTypeInfo</link></p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>the type name</p></td>
+</tr>
+</table>
+</page>

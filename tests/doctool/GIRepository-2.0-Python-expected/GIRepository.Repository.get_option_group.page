@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+
+<page id="GIRepository.Repository.get_option_group"
+      type="topic"
+      style="function"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/experimental/ui/">
+  <info>
+    <link type="guide" xref="GIRepository.Repository" group="function"/>
+    <api:function>
+      <api:returns>
+        <api:type>GLib.OptionGroup</api:type>
+      </api:returns>
+      <api:name>g_irepository_get_option_group</api:name>
+    </api:function>
+  </info>
+  <title>get_option_group</title>
+<synopsis><code mime="text/x-python">
+@returns(GLib.OptionGroup)
+def get_option_group()
+</code></synopsis>
+<p>Obtain the option group for girepository, it's used
+by the dumper and for programs that wants to provide
+introspection information</p>
+
+<table>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>the option group</p></td>
+</tr>
+</table>
+</page>

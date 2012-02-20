@@ -1,11 +1,31 @@
 <?xml version="1.0"?>
+
 <page id="GIRepository.BaseInfo.get_typelib"
       type="topic"
       style="function"
       xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
     <link type="guide" xref="GIRepository.BaseInfo" group="function"/>
+    <api:function>
+      <api:returns>
+        <api:type>GIRepository.Typelib</api:type>
+      </api:returns>
+      <api:name>g_base_info_get_typelib</api:name>
+    </api:function>
   </info>
-  <title>GIRepository.get_typelib</title>
-<p>Obtain the typelib this @info belongs to</p></page>
+  <title>get_typelib</title>
+<synopsis><code mime="text/x-python">
+@returns(GIRepository.Typelib)
+def get_typelib()
+</code></synopsis>
+<p>Obtain the typelib this @info belongs to</p>
+
+<table>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>the typelib.</p></td>
+</tr>
+</table>
+</page>

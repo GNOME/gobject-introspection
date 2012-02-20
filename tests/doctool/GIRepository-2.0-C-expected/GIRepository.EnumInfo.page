@@ -6,5 +6,6 @@
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
   </info>
-  <title>GIRepositoryEnumInfo</title>
-<p>Represents an enum or a flag.</p></page>
+  <title>GIRepository.EnumInfo</title>
+<p>Represents an enum or a flag.</p>
+</page>

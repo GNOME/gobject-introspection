@@ -1,11 +1,38 @@
 <?xml version="1.0"?>
+
 <page id="GIRepository.union_info_get_alignment"
       type="topic"
       style="function"
       xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
     <link type="guide" xref="index" group="function"/>
+    <api:function>
+      <api:returns>
+        <api:type>gsize</api:type>
+      </api:returns>
+      <api:name>g_union_info_get_alignment</api:name>
+      <api:arg>
+        <api:type>GIUnionInfo*</api:type>
+        <api:name>info</api:name>
+      </api:arg>
+    </api:function>
   </info>
   <title>g_union_info_get_alignment</title>
-<p>Obtain the required alignment of the union.</p></page>
+<synopsis><code mime="text/x-csrc">
+gsize g_union_info_get_alignment (GIUnionInfo* info);
+</code></synopsis>
+<p>Obtain the required alignment of the union.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIRepository.UnionInfo">GIRepository.UnionInfo</link></p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>required alignment in bytes</p></td>
+</tr>
+</table>
+</page>

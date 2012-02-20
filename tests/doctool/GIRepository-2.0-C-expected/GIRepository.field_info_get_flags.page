@@ -1,12 +1,39 @@
 <?xml version="1.0"?>
+
 <page id="GIRepository.field_info_get_flags"
       type="topic"
       style="function"
       xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
     <link type="guide" xref="index" group="function"/>
+    <api:function>
+      <api:returns>
+        <api:type>GIFieldInfoFlags</api:type>
+      </api:returns>
+      <api:name>g_field_info_get_flags</api:name>
+      <api:arg>
+        <api:type>GIFieldInfo*</api:type>
+        <api:name>info</api:name>
+      </api:arg>
+    </api:function>
   </info>
   <title>g_field_info_get_flags</title>
-<p>Obtain the flags for this <link xref="GIFieldInfo">GIFieldInfo</link>. See <link xref="GIFieldInfoFlags">GIFieldInfoFlags</link> for possible
-flag values.</p></page>
+<synopsis><code mime="text/x-csrc">
+GIFieldInfoFlags g_field_info_get_flags (GIFieldInfo* info);
+</code></synopsis>
+<p>Obtain the flags for this <link xref="GIRepository.FieldInfo">GIRepository.FieldInfo</link>. See <link xref="GIRepository.FieldInfoFlags">GIRepository.FieldInfoFlags</link> for possible
+flag values.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIRepository.FieldInfo">GIRepository.FieldInfo</link></p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>the flags</p></td>
+</tr>
+</table>
+</page>

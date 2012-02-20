@@ -1,12 +1,39 @@
 <?xml version="1.0"?>
+
 <page id="GIRepository.object_info_get_class_struct"
       type="topic"
       style="function"
       xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
     <link type="guide" xref="index" group="function"/>
+    <api:function>
+      <api:returns>
+        <api:type>GIStructInfo*</api:type>
+      </api:returns>
+      <api:name>g_object_info_get_class_struct</api:name>
+      <api:arg>
+        <api:type>GIObjectInfo*</api:type>
+        <api:name>info</api:name>
+      </api:arg>
+    </api:function>
   </info>
   <title>g_object_info_get_class_struct</title>
+<synopsis><code mime="text/x-csrc">
+GIStructInfo* g_object_info_get_class_struct (GIObjectInfo* info);
+</code></synopsis>
 <p>Every <link xref="GObject">GObject</link> has two structures; an instance structure and a class
-structure.  This function returns the metadata for the class structure.</p><p>g_base_info_unref() when done.</p></page>
+structure.  This function returns the metadata for the class structure.</p><p>g_base_info_unref() when done.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIRepository.ObjectInfo">GIRepository.ObjectInfo</link></p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>the <link xref="GIRepository.StructInfo">GIRepository.StructInfo</link> or %NULL. Free with</p></td>
+</tr>
+</table>
+</page>

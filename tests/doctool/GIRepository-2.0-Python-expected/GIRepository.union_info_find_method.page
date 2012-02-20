@@ -1,11 +1,48 @@
 <?xml version="1.0"?>
+
 <page id="GIRepository.union_info_find_method"
       type="topic"
       style="function"
       xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
     <link type="guide" xref="index" group="function"/>
+    <api:function>
+      <api:returns>
+        <api:type>GIRepository.FunctionInfo</api:type>
+      </api:returns>
+      <api:name>g_union_info_find_method</api:name>
+      <api:arg>
+        <api:type>GIRepository.UnionInfo</api:type>
+        <api:name>info</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>utf8</api:type>
+        <api:name>name</api:name>
+      </api:arg>
+    </api:function>
   </info>
-  <title>GIRepository.union_info_find_method</title>
-<p>Obtain the type information for method named @name.</p><p>when done.</p></page>
+  <title>union_info_find_method</title>
+<synopsis><code mime="text/x-python">
+@accepts(GIRepository.UnionInfo, utf8)
+@returns(GIRepository.FunctionInfo)
+def union_info_find_method(info, name)
+</code></synopsis>
+<p>Obtain the type information for method named @name.</p><p>when done.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIRepository.UnionInfo">GIRepository.UnionInfo</link></p></td>
+</tr>
+<tr>
+<td><p>name :</p></td>
+<td><p>a method name</p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>the <link xref="GIRepository.FunctionInfo">GIRepository.FunctionInfo</link>, free it with g_base_info_unref()</p></td>
+</tr>
+</table>
+</page>

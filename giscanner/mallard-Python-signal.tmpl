@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<page id="${namespace.name}.${node.parent.name}-${node.name}"
+      type="topic"
+      style="signal"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:ui="http://projectmallard.org/experimental/ui/">
+  <info>
+    <link type="guide" xref="${namespace.name}.${node.parent.name}" group="signal"/>
+    <title type="link" role="topic">${node.name}</title>
+  </info>
+  <title>${namespace.name}.${node.parent.name}::${node.name}</title>
+<synopsis><code mime="text/x-python">
+def callback(\
+% for arg, ix in zip(node.parameters, range(len(node.parameters))):
+${arg.argname}, \
+% endfor
+user_param1, ...)
+</code></synopsis>
+${formatter.format(node.doc)}
+
+% if node.parameters or node.retval:
+<table>
+% for arg, ix in zip(node.parameters, range(len(node.parameters))):
+<tr>
+<td><p>${arg.argname} :</p></td>
+<td>${formatter.format(arg.doc)}</td>
+</tr>
+% endfor
+<tr>
+<td><p>user_param1 :</p></td>
+<td><p>first user parameter (if any) specified with the connect() method</p></td>
+</tr>
+<tr>
+<td><p>... :</p></td>
+<td><p>additional user parameters (if any)</p></td>
+</tr>
+% if node.retval and \
+     node.retval.type.ctype != 'void' and \
+     node.retval.type.ctype is not None:
+<tr>
+<td><p>Returns :</p></td>
+<td>${node.retval.type.ctype} ${formatter.format(node.retval.doc)}</td>
+</tr>
+% endif
+</table>
+% endif
+% if node.version:
+<p>Since ${node.version}</p>
+% endif
+</page>

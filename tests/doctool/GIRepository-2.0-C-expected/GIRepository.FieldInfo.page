@@ -6,5 +6,6 @@
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
   </info>
-  <title>GIRepositoryFieldInfo</title>
-<p>Represents a field of a <link xref="GIStructInfo">GIStructInfo</link> or a <link xref="GIUnionInfo">GIUnionInfo</link>.</p></page>
+  <title>GIRepository.FieldInfo</title>
+<p>Represents a field of a <link xref="GIRepository.StructInfo">GIRepository.StructInfo</link> or a <link xref="GIRepository.UnionInfo">GIRepository.UnionInfo</link>.</p>
+</page>

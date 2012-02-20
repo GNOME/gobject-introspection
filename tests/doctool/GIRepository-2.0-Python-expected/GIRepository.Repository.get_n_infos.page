@@ -1,13 +1,46 @@
 <?xml version="1.0"?>
+
 <page id="GIRepository.Repository.get_n_infos"
       type="topic"
       style="method"
       xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
     <link type="guide" xref="GIRepository.Repository" group="method"/>
+    <api:function>
+      <api:returns>
+        <api:type>gint</api:type>
+      </api:returns>
+      <api:name>g_irepository_get_n_infos</api:name>
+      <api:arg>
+        <api:type>GIRepository *</api:type>
+        <api:name>self</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>utf8</api:type>
+        <api:name>namespace_</api:name>
+      </api:arg>
+    </api:function>
   </info>
-  <title>GIRepository.Repository.get_n_infos</title>
+  <title>get_n_infos</title>
+<synopsis><code mime="text/x-python">
+@accepts(utf8)
+@returns(gint)
+def get_n_infos(namespace_)
+</code></synopsis>
 <p>This function returns the number of metadata entries in
 given namespace @namespace_.  The namespace must have
-already been loaded before calling this function.</p></page>
+already been loaded before calling this function.</p>
+
+<table>
+<tr>
+<td><p>namespace_ :</p></td>
+<td><p>Namespace to inspect</p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>number of metadata entries</p></td>
+</tr>
+</table>
+</page>

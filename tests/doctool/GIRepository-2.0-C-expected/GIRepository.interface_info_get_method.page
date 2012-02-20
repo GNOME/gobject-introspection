@@ -1,11 +1,47 @@
 <?xml version="1.0"?>
+
 <page id="GIRepository.interface_info_get_method"
       type="topic"
       style="function"
       xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
     <link type="guide" xref="index" group="function"/>
+    <api:function>
+      <api:returns>
+        <api:type>GIFunctionInfo*</api:type>
+      </api:returns>
+      <api:name>g_interface_info_get_method</api:name>
+      <api:arg>
+        <api:type>GIInterfaceInfo*</api:type>
+        <api:name>info</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>gint</api:type>
+        <api:name>n</api:name>
+      </api:arg>
+    </api:function>
   </info>
   <title>g_interface_info_get_method</title>
-<p>Obtain an interface type method at index @n.</p><p>g_base_info_unref() when done.</p></page>
+<synopsis><code mime="text/x-csrc">
+GIFunctionInfo* g_interface_info_get_method (GIInterfaceInfo* info,
+                                             gint n);
+</code></synopsis>
+<p>Obtain an interface type method at index @n.</p><p>g_base_info_unref() when done.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIRepository.InterfaceInfo">GIRepository.InterfaceInfo</link></p></td>
+</tr>
+<tr>
+<td><p>n :</p></td>
+<td><p>index of method to get</p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>the <link xref="GIRepository.FunctionInfo">GIRepository.FunctionInfo</link>. Free the struct by calling</p></td>
+</tr>
+</table>
+</page>

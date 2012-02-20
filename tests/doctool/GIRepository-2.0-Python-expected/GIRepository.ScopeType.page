@@ -1,12 +1,33 @@
 <?xml version="1.0"?>
 <page id="GIRepository.ScopeType"
-      type="topic"
-      style=""
+      type="guide"
+      style="enum"
       xmlns="http://projectmallard.org/1.0/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
+    <link type="guide" xref="index"/>
   </info>
   <title>GIRepository.ScopeType</title>
-<p>Scope type of a <link xref="GIArgInfo">GIArgInfo</link> representing callback, determines how the
+  <p>Scope type of a <link xref="GIRepository.ArgInfo">GIRepository.ArgInfo</link> representing callback, determines how the
 callback is invoked and is used to decided when the invoke structs
-can be freed.</p></page>
+can be freed.</p>
+<table>
+<tr>
+<td><p>ScopeType.INVALID :</p></td>
+<td></td>
+</tr>
+<tr>
+<td><p>ScopeType.CALL :</p></td>
+<td></td>
+</tr>
+<tr>
+<td><p>ScopeType.ASYNC :</p></td>
+<td></td>
+</tr>
+<tr>
+<td><p>ScopeType.NOTIFIED :</p></td>
+<td></td>
+</tr>
+</table>
+
+</page>

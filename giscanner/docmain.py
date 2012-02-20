@@ -21,28 +21,8 @@
 import os
 import optparse
 
-from .docbookwriter import DocBookWriter
-from .docbookwriter import DocBookFormatterC
-from .docbookwriter import DocBookFormatterPython
 from .mallardwriter import MallardWriter
-from .mallardwriter import MallardFormatterC
-from .mallardwriter import MallardFormatterPython
 from .transformer import Transformer
-
-class GIDocGenerator(object):
-
-    def parse(self, filename):
-        if 'UNINSTALLED_INTROSPECTION_SRCDIR' in os.environ:
-            top_srcdir = os.environ['UNINSTALLED_INTROSPECTION_SRCDIR']
-            top_builddir = os.environ['UNINSTALLED_INTROSPECTION_BUILDDIR']
-            extra_include_dirs = [os.path.join(top_srcdir, 'gir'), top_builddir]
-        else:
-            extra_include_dirs = []
-        self.transformer = Transformer.parse_from_gir(filename, extra_include_dirs)
-
-    def generate(self, writer, output):
-        writer.add_transformer(self.transformer)
-        writer.write(output)
 
 def doc_main(args):
     parser = optparse.OptionParser('%prog [options] GIR-file')
@@ -50,10 +30,6 @@ def doc_main(args):
     parser.add_option("-o", "--output",
                       action="store", dest="output",
                       help="Filename to write output")
-    parser.add_option("-f", "--format",
-                      action="store", dest="format",
-                      default="docbook",
-                      help="Output format")
     parser.add_option("-l", "--language",
                       action="store", dest="language",
                       default="Python",
@@ -66,28 +42,15 @@ def doc_main(args):
     if len(args) < 2:
         raise SystemExit("Need an input GIR filename")
 
-    if options.format == "docbook":
-        if options.language == "Python":
-            formatter = DocBookFormatterPython()
-        elif options.language == "C":
-            formatter = DocBookFormatterC()
-        else:
-            raise SystemExit("Unsupported language: %s" % (options.language, ))
-        writer = DocBookWriter(formatter)
-    elif options.format == "mallard":
-        if options.language == "Python":
-            formatter = MallardFormatterPython()
-        elif options.language == "C":
-            formatter = MallardFormatterC()
-        else:
-            raise SystemExit("Unsupported language: %s" % (options.language, ))
-        writer = MallardWriter(formatter)
+    if 'UNINSTALLED_INTROSPECTION_SRCDIR' in os.environ:
+        top_srcdir = os.environ['UNINSTALLED_INTROSPECTION_SRCDIR']
+        top_builddir = os.environ['UNINSTALLED_INTROSPECTION_BUILDDIR']
+        extra_include_dirs = [os.path.join(top_srcdir, 'gir'), top_builddir]
     else:
-        raise SystemExit("Unsupported output format: %s" % (options.format, ))
+        extra_include_dirs = []
+    transformer = Transformer.parse_from_gir(args[1], extra_include_dirs)
 
-    generator = GIDocGenerator()
-    generator.parse(args[1])
-
-    generator.generate(writer, options.output)
+    writer = MallardWriter(transformer, options.language)
+    writer.write(options.output)
 
     return 0

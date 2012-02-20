@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+
+<page id="GIRepository.enum_info_get_n_methods"
+      type="topic"
+      style="function"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/experimental/ui/">
+  <info>
+    <link type="guide" xref="index" group="function"/>
+    <api:function>
+      <api:returns>
+        <api:type>gint</api:type>
+      </api:returns>
+      <api:name>g_enum_info_get_n_methods</api:name>
+      <api:arg>
+        <api:type>GIRepository.EnumInfo</api:type>
+        <api:name>info</api:name>
+      </api:arg>
+    </api:function>
+  </info>
+  <title>enum_info_get_n_methods</title>
+<synopsis><code mime="text/x-python">
+@accepts(GIRepository.EnumInfo)
+@returns(gint)
+def enum_info_get_n_methods(info)
+</code></synopsis>
+<p>Obtain the number of methods that this enum type has.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIRepository.EnumInfo">GIRepository.EnumInfo</link></p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>number of methods</p></td>
+</tr>
+</table>
+<p>Since 1.29.17</p>
+</page>

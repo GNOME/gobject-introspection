@@ -1,11 +1,38 @@
 <?xml version="1.0"?>
+
 <page id="GIRepository.BaseInfo.get_attribute"
       type="topic"
       style="function"
       xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
     <link type="guide" xref="GIRepository.BaseInfo" group="function"/>
+    <api:function>
+      <api:returns>
+        <api:type>gchar*</api:type>
+      </api:returns>
+      <api:name>g_base_info_get_attribute</api:name>
+      <api:arg>
+        <api:type>gchar*</api:type>
+        <api:name>name</api:name>
+      </api:arg>
+    </api:function>
   </info>
   <title>g_base_info_get_attribute</title>
-<p>Retrieve an arbitrary attribute associated with this node.</p></page>
+<synopsis><code mime="text/x-csrc">
+gchar* g_base_info_get_attribute (gchar* name);
+</code></synopsis>
+<p>Retrieve an arbitrary attribute associated with this node.</p>
+
+<table>
+<tr>
+<td><p>name :</p></td>
+<td><p>a freeform string naming an attribute</p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>The value of the attribute, or %NULL if no such attribute exists</p></td>
+</tr>
+</table>
+</page>

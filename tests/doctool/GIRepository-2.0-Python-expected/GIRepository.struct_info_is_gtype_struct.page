@@ -1,13 +1,42 @@
 <?xml version="1.0"?>
+
 <page id="GIRepository.struct_info_is_gtype_struct"
       type="topic"
       style="function"
       xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
     <link type="guide" xref="index" group="function"/>
+    <api:function>
+      <api:returns>
+        <api:type>gboolean</api:type>
+      </api:returns>
+      <api:name>g_struct_info_is_gtype_struct</api:name>
+      <api:arg>
+        <api:type>GIRepository.StructInfo</api:type>
+        <api:name>info</api:name>
+      </api:arg>
+    </api:function>
   </info>
-  <title>GIRepository.struct_info_is_gtype_struct</title>
+  <title>struct_info_is_gtype_struct</title>
+<synopsis><code mime="text/x-python">
+@accepts(GIRepository.StructInfo)
+@returns(gboolean)
+def struct_info_is_gtype_struct(info)
+</code></synopsis>
 <p>Return true if this structure represents the "class structure" for some
 <link xref="GObject">GObject</link> or <link xref="GInterface">GInterface</link>.  This function is mainly useful to hide this kind of structure
-from generated public APIs.</p></page>
+from generated public APIs.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIRepository.StructInfo">GIRepository.StructInfo</link></p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>True if this is a class struct, False otherwise</p></td>
+</tr>
+</table>
+</page>

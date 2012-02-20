@@ -1,11 +1,47 @@
 <?xml version="1.0"?>
+
 <page id="GIRepository.type_info_get_param_type"
       type="topic"
       style="function"
       xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
     <link type="guide" xref="index" group="function"/>
+    <api:function>
+      <api:returns>
+        <api:type>GITypeInfo*</api:type>
+      </api:returns>
+      <api:name>g_type_info_get_param_type</api:name>
+      <api:arg>
+        <api:type>GITypeInfo*</api:type>
+        <api:name>info</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>gint</api:type>
+        <api:name>n</api:name>
+      </api:arg>
+    </api:function>
   </info>
   <title>g_type_info_get_param_type</title>
-<p>Obtain the parameter type @n.</p></page>
+<synopsis><code mime="text/x-csrc">
+GITypeInfo* g_type_info_get_param_type (GITypeInfo* info,
+                                        gint n);
+</code></synopsis>
+<p>Obtain the parameter type @n.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIRepository.TypeInfo">GIRepository.TypeInfo</link></p></td>
+</tr>
+<tr>
+<td><p>n :</p></td>
+<td><p>index of the parameter</p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>the param type info</p></td>
+</tr>
+</table>
+</page>

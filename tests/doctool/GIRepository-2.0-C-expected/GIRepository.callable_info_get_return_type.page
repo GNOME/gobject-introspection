@@ -1,11 +1,38 @@
 <?xml version="1.0"?>
+
 <page id="GIRepository.callable_info_get_return_type"
       type="topic"
       style="function"
       xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
     <link type="guide" xref="index" group="function"/>
+    <api:function>
+      <api:returns>
+        <api:type>GITypeInfo*</api:type>
+      </api:returns>
+      <api:name>g_callable_info_get_return_type</api:name>
+      <api:arg>
+        <api:type>GICallableInfo*</api:type>
+        <api:name>info</api:name>
+      </api:arg>
+    </api:function>
   </info>
   <title>g_callable_info_get_return_type</title>
-<p>Obtain the return type of a callable item as a <link xref="GITypeInfo">GITypeInfo</link>.</p><p>g_base_info_unref() when done.</p></page>
+<synopsis><code mime="text/x-csrc">
+GITypeInfo* g_callable_info_get_return_type (GICallableInfo* info);
+</code></synopsis>
+<p>Obtain the return type of a callable item as a <link xref="GIRepository.TypeInfo">GIRepository.TypeInfo</link>.</p><p>g_base_info_unref() when done.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIRepository.CallableInfo">GIRepository.CallableInfo</link></p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>the <link xref="GIRepository.TypeInfo">GIRepository.TypeInfo</link>. Free the struct by calling</p></td>
+</tr>
+</table>
+</page>

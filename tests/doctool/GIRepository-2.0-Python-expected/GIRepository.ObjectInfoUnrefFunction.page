@@ -7,4 +7,5 @@
   <info>
   </info>
   <title>GIRepository.ObjectInfoUnrefFunction</title>
-<p>Decreases the reference count of an object instance.</p></page>
+<p>Decreases the reference count of an object instance.</p>
+</page>

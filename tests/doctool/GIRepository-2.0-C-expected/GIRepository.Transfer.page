@@ -1,19 +1,21 @@
 <?xml version="1.0"?>
 <page id="GIRepository.Transfer"
-      type="topic"
-      style=""
+      type="guide"
+      style="enum"
       xmlns="http://projectmallard.org/1.0/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
+    <link type="guide" xref="index"/>
   </info>
-  <title>GIRepositoryTransfer</title>
+  <title>GIRepository.Transfer</title>
 <p>The transfer is the exchange of data between two parts, from the callee to
 the caller. The callee is either a function/method/signal or an
 object/interface where a property is defined. The caller is the side
 accessing a property or calling a function.
-<link xref="GITransfer">GITransfer</link> specifies who's responsible for freeing the resources after the
+<link xref="GIRepository.Transfer">GIRepository.Transfer</link> specifies who's responsible for freeing the resources after the
 ownership transfer is complete. In case of a containing type such as a list,
 an array or a hash table the container itself is specified differently from
 the items within the container itself. Each container is freed differently,
 check the documentation for the types themselves for information on how to
-free them.</p></page>
+free them.</p>
+</page>

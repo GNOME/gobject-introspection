@@ -6,5 +6,6 @@
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
   </info>
-  <title>GIRepositoryTypeInfo</title>
-<p>Represents type information, direction, transfer etc.</p></page>
+  <title>GIRepository.TypeInfo</title>
+<p>Represents type information, direction, transfer etc.</p>
+</page>

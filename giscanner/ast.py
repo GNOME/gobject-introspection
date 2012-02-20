@@ -556,6 +556,7 @@ class Callable(Node):
         self.parameters = parameters
         self.throws = not not throws
         self.instance_parameter = None # Parameter
+        self.parent = None # A Class or Interface
 
     def get_parameter_index(self, name):
         for i, parameter in enumerate(self.parameters):
@@ -1007,6 +1008,7 @@ class Property(Node):
             self.transfer = PARAM_TRANSFER_NONE
         else:
             self.transfer = transfer
+        self.parent = None # A Class or Interface
 
 
 class Callback(Callable):

@@ -1,11 +1,38 @@
 <?xml version="1.0"?>
+
 <page id="GIRepository.constant_info_get_type"
       type="topic"
       style="function"
       xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
     <link type="guide" xref="index" group="function"/>
+    <api:function>
+      <api:returns>
+        <api:type>GITypeInfo*</api:type>
+      </api:returns>
+      <api:name>g_constant_info_get_type</api:name>
+      <api:arg>
+        <api:type>GIConstantInfo*</api:type>
+        <api:name>info</api:name>
+      </api:arg>
+    </api:function>
   </info>
   <title>g_constant_info_get_type</title>
-<p>Obtain the type of the constant as a <link xref="GITypeInfo">GITypeInfo</link>.</p><p>g_base_info_unref() when done.</p></page>
+<synopsis><code mime="text/x-csrc">
+GITypeInfo* g_constant_info_get_type (GIConstantInfo* info);
+</code></synopsis>
+<p>Obtain the type of the constant as a <link xref="GIRepository.TypeInfo">GIRepository.TypeInfo</link>.</p><p>g_base_info_unref() when done.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIRepository.ConstantInfo">GIRepository.ConstantInfo</link></p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>the <link xref="GIRepository.TypeInfo">GIRepository.TypeInfo</link>. Free the struct by calling</p></td>
+</tr>
+</table>
+</page>

@@ -1,11 +1,40 @@
 <?xml version="1.0"?>
+
 <page id="GIRepository.union_info_get_discriminator_type"
       type="topic"
       style="function"
       xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
     <link type="guide" xref="index" group="function"/>
+    <api:function>
+      <api:returns>
+        <api:type>GIRepository.TypeInfo</api:type>
+      </api:returns>
+      <api:name>g_union_info_get_discriminator_type</api:name>
+      <api:arg>
+        <api:type>GIRepository.UnionInfo</api:type>
+        <api:name>info</api:name>
+      </api:arg>
+    </api:function>
   </info>
-  <title>GIRepository.union_info_get_discriminator_type</title>
-<p>Obtain the type information of the union discriminator.</p><p>when done.</p></page>
+  <title>union_info_get_discriminator_type</title>
+<synopsis><code mime="text/x-python">
+@accepts(GIRepository.UnionInfo)
+@returns(GIRepository.TypeInfo)
+def union_info_get_discriminator_type(info)
+</code></synopsis>
+<p>Obtain the type information of the union discriminator.</p><p>when done.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIRepository.UnionInfo">GIRepository.UnionInfo</link></p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>the <link xref="GIRepository.TypeInfo">GIRepository.TypeInfo</link>, free it with g_base_info_unref()</p></td>
+</tr>
+</table>
+</page>

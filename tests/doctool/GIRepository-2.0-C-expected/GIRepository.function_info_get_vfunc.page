@@ -1,13 +1,40 @@
 <?xml version="1.0"?>
+
 <page id="GIRepository.function_info_get_vfunc"
       type="topic"
       style="function"
       xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
     <link type="guide" xref="index" group="function"/>
+    <api:function>
+      <api:returns>
+        <api:type>GIVFuncInfo*</api:type>
+      </api:returns>
+      <api:name>g_function_info_get_vfunc</api:name>
+      <api:arg>
+        <api:type>GIFunctionInfo*</api:type>
+        <api:name>info</api:name>
+      </api:arg>
+    </api:function>
   </info>
   <title>g_function_info_get_vfunc</title>
-<p>Obtain the virtual function associated with this <link xref="GIFunctionInfo">GIFunctionInfo</link>.
-Only <link xref="GIFunctionInfo">GIFunctionInfo</link> with the flag %GI_FUNCTION_WRAPS_VFUNC has
-a virtual function set. For other cases, %NULL will be returned.</p><p>Free it by calling g_base_info_unref() when done.</p></page>
+<synopsis><code mime="text/x-csrc">
+GIVFuncInfo* g_function_info_get_vfunc (GIFunctionInfo* info);
+</code></synopsis>
+<p>Obtain the virtual function associated with this <link xref="GIRepository.FunctionInfo">GIRepository.FunctionInfo</link>.
+Only <link xref="GIRepository.FunctionInfo">GIRepository.FunctionInfo</link> with the flag %GI_FUNCTION_WRAPS_VFUNC has
+a virtual function set. For other cases, %NULL will be returned.</p><p>Free it by calling g_base_info_unref() when done.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIRepository.FunctionInfo">GIRepository.FunctionInfo</link></p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>the virtual function or %NULL if not set.</p></td>
+</tr>
+</table>
+</page>

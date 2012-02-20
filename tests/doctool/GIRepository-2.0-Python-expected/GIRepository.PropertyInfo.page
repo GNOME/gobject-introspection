@@ -7,4 +7,5 @@
   <info>
   </info>
   <title>GIRepository.PropertyInfo</title>
-<p>Represents a property of a <link xref="GIObjectInfo">GIObjectInfo</link> or a <link xref="GIInterfaceInfo">GIInterfaceInfo</link>.</p></page>
+<p>Represents a property of a <link xref="GIRepository.ObjectInfo">GIRepository.ObjectInfo</link> or a <link xref="GIRepository.InterfaceInfo">GIRepository.InterfaceInfo</link>.</p>
+</page>

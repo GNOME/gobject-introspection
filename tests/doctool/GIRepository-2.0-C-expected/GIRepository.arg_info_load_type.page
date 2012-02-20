@@ -1,13 +1,49 @@
 <?xml version="1.0"?>
+
 <page id="GIRepository.arg_info_load_type"
       type="topic"
       style="function"
       xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
     <link type="guide" xref="index" group="function"/>
+    <api:function>
+      <api:returns>
+        <api:type>void</api:type>
+      </api:returns>
+      <api:name>g_arg_info_load_type</api:name>
+      <api:arg>
+        <api:type>GIArgInfo*</api:type>
+        <api:name>info</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>GITypeInfo*</api:type>
+        <api:name>type</api:name>
+      </api:arg>
+    </api:function>
   </info>
   <title>g_arg_info_load_type</title>
+<synopsis><code mime="text/x-csrc">
+void g_arg_info_load_type (GIArgInfo* info,
+                           GITypeInfo* type);
+</code></synopsis>
 <p>Obtain information about a the type of given argument @info; this
 function is a variant of g_arg_info_get_type() designed for stack
-allocation.</p><p>The initialized @type must not be referenced after @info is deallocated.</p></page>
+allocation.</p><p>The initialized @type must not be referenced after @info is deallocated.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIRepository.ArgInfo">GIRepository.ArgInfo</link></p></td>
+</tr>
+<tr>
+<td><p>type :</p></td>
+<td><p>Initialized with information about type of @info</p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td></td>
+</tr>
+</table>
+</page>

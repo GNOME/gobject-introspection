@@ -7,6 +7,7 @@
   <info>
     <link type="guide" xref="index"/>
   </info>
-  <title>GIRepository.AttributeIter</title>
-<p>An opaque structure used to iterate over attributes
-in a <link xref="GIBaseInfo">GIBaseInfo</link> struct.</p></page>
+  <title>GIRepositoryAttributeIter</title>
+  <p>An opaque structure used to iterate over attributes
+in a #GIBaseInfo struct.</p>
+</page>

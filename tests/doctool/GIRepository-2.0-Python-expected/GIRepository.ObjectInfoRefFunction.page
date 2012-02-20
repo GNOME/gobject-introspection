@@ -7,4 +7,5 @@
   <info>
   </info>
   <title>GIRepository.ObjectInfoRefFunction</title>
-<p>Increases the reference count of an object instance.</p></page>
+<p>Increases the reference count of an object instance.</p>
+</page>

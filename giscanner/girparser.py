@@ -256,27 +256,27 @@ class GIRParser(object):
         for iface in self._find_children(node, _corens('prerequisite')):
             obj.prerequisites.append(self._namespace.type_from_name(iface.attrib['name']))
         for func_node in self._find_children(node, _corens('function')):
-            func = self._parse_function_common(func_node, ast.Function)
+            func = self._parse_function_common(func_node, ast.Function, obj)
             obj.static_methods.append(func)
         for method in self._find_children(node, _corens('method')):
-            func = self._parse_function_common(method, ast.Function)
+            func = self._parse_function_common(method, ast.Function, obj)
             func.is_method = True
             obj.methods.append(func)
         for method in self._find_children(node, _corens('virtual-method')):
-            func = self._parse_function_common(method, ast.VFunction)
+            func = self._parse_function_common(method, ast.VFunction, obj)
             self._parse_generic_attribs(method, func)
             func.is_method = True
             func.invoker = method.get('invoker')
             obj.virtual_methods.append(func)
         for ctor in self._find_children(node, _corens('constructor')):
-            func = self._parse_function_common(ctor, ast.Function)
+            func = self._parse_function_common(ctor, ast.Function, obj)
             func.is_constructor = True
             obj.constructors.append(func)
         obj.fields.extend(self._parse_fields(node))
         for prop in self._find_children(node, _corens('property')):
-            obj.properties.append(self._parse_property(prop))
+            obj.properties.append(self._parse_property(prop, obj))
         for signal in self._find_children(node, _glibns('signal')):
-            obj.signals.append(self._parse_function_common(signal, ast.Signal))
+            obj.signals.append(self._parse_function_common(signal, ast.Signal, obj))
 
     def _parse_callback(self, node):
         callback = self._parse_function_common(node, ast.Callback)
@@ -286,7 +286,7 @@ class GIRParser(object):
         function = self._parse_function_common(node, ast.Function)
         self._namespace.append(function)
 
-    def _parse_function_common(self, node, klass):
+    def _parse_function_common(self, node, klass, parent=None):
         name = node.attrib['name']
         returnnode = node.find(_corens('return-value'))
         if not returnnode:
@@ -319,6 +319,7 @@ class GIRParser(object):
         func.shadows = node.attrib.get('shadows', None)
         func.shadowed_by = node.attrib.get('shadowed-by', None)
         func.moved_to = node.attrib.get('moved-to', None)
+        func.parent = parent
 
         parameters_node = node.find(_corens('parameters'))
         if (parameters_node is not None):
@@ -377,13 +378,13 @@ class GIRParser(object):
             compound.fields.extend(self._parse_fields(node))
             for method in self._find_children(node, _corens('method')):
                 compound.methods.append(
-                    self._parse_function_common(method, ast.Function))
+                    self._parse_function_common(method, ast.Function, compound))
             for func in self._find_children(node, _corens('function')):
                 compound.static_methods.append(
-                    self._parse_function_common(func, ast.Function))
+                    self._parse_function_common(func, ast.Function, compound))
             for ctor in self._find_children(node, _corens('constructor')):
                 compound.constructors.append(
-                    self._parse_function_common(ctor, ast.Function))
+                    self._parse_function_common(ctor, ast.Function, compound))
         return compound
 
     def _parse_record(self, node, anonymous=False):
@@ -482,15 +483,15 @@ class GIRParser(object):
         if self._types_only:
             return
         for method in self._find_children(node, _corens('method')):
-            func = self._parse_function_common(method, ast.Function)
+            func = self._parse_function_common(method, ast.Function, obj)
             func.is_method = True
             obj.methods.append(func)
         for ctor in self._find_children(node, _corens('constructor')):
             obj.constructors.append(
-                self._parse_function_common(ctor, ast.Function))
+                self._parse_function_common(ctor, ast.Function, obj))
         for callback in self._find_children(node, _corens('callback')):
             obj.fields.append(
-                self._parse_function_common(callback, ast.Callback))
+                self._parse_function_common(callback, ast.Callback, obj))
 
     def _parse_field(self, node):
         type_node = None
@@ -521,7 +522,7 @@ class GIRParser(object):
         self._parse_generic_attribs(node, field)
         return field
 
-    def _parse_property(self, node):
+    def _parse_property(self, node, parent):
         prop = ast.Property(node.attrib['name'],
                         self._parse_type(node),
                         node.attrib.get('readable') != '0',
@@ -530,6 +531,7 @@ class GIRParser(object):
                         node.attrib.get('construct-only') == '1',
                         node.attrib.get('transfer-ownership'))
         self._parse_generic_attribs(node, prop)
+        prop.parent = parent
         return prop
 
     def _parse_member(self, node):

@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+
+<page id="GIRepository.Repository.get_default"
+      type="topic"
+      style="function"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/experimental/ui/">
+  <info>
+    <link type="guide" xref="GIRepository.Repository" group="function"/>
+    <api:function>
+      <api:returns>
+        <api:type>GIRepository*</api:type>
+      </api:returns>
+      <api:name>g_irepository_get_default</api:name>
+    </api:function>
+  </info>
+  <title>g_irepository_get_default</title>
+<synopsis><code mime="text/x-csrc">
+GIRepository* g_irepository_get_default (void);
+</code></synopsis>
+<p>Returns the singleton process-global default <link xref="GIRepository.Repository">GIRepository.Repository</link>.  It is
+not currently supported to have multiple repositories in a
+particular process, but this function is provided in the unlikely
+eventuality that it would become possible, and as a convenience for
+higher level language bindings to conform to the GObject method
+call conventions.
+All methods on <link xref="GIRepository.Repository">GIRepository.Repository</link> also accept %NULL as an instance
+parameter to mean this default repository, which is usually more
+convenient for C.</p>
+
+<table>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>The global singleton <link xref="GIRepository.Repository">GIRepository.Repository</link></p></td>
+</tr>
+</table>
+</page>

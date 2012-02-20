@@ -1,15 +1,74 @@
 <?xml version="1.0"?>
+
 <page id="GIRepository.Repository.require_private"
       type="topic"
       style="method"
       xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
     <link type="guide" xref="GIRepository.Repository" group="method"/>
+    <api:function>
+      <api:returns>
+        <api:type>GITypelib*</api:type>
+      </api:returns>
+      <api:name>g_irepository_require_private</api:name>
+      <api:arg>
+        <api:type>GIRepository *</api:type>
+        <api:name>self</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>gchar*</api:type>
+        <api:name>typelib_dir</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>gchar*</api:type>
+        <api:name>namespace_</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>gchar*</api:type>
+        <api:name>version</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>GIRepositoryLoadFlags</api:type>
+        <api:name>flags</api:name>
+      </api:arg>
+    </api:function>
   </info>
   <title>g_irepository_require_private</title>
+<synopsis><code mime="text/x-csrc">
+GITypelib* g_irepository_require_private (GIRepository *self,
+gchar* typelib_dir,
+                                          gchar* namespace_,
+                                          gchar* version,
+                                          GIRepositoryLoadFlags flags);
+</code></synopsis>
 <p>Force the namespace @namespace_ to be loaded if it isn't already.
 If @namespace_ is not loaded, this function will search for a
 ".typelib" file within the private directory only. In addition, a
 version @version of namespace should be specified.  If @version is
-not specified, the latest will be used.</p></page>
+not specified, the latest will be used.</p>
+
+<table>
+<tr>
+<td><p>typelib_dir :</p></td>
+<td><p>Private directory where to find the requested typelib</p></td>
+</tr>
+<tr>
+<td><p>namespace_ :</p></td>
+<td><p>GI namespace to use, e.g. "Gtk"</p></td>
+</tr>
+<tr>
+<td><p>version :</p></td>
+<td><p>Version of namespace, may be %NULL for latest</p></td>
+</tr>
+<tr>
+<td><p>flags :</p></td>
+<td><p>Set of %GIRepositoryLoadFlags, may be 0</p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>a pointer to the <link xref="GIRepository.Typelib">GIRepository.Typelib</link> if successful, %NULL otherwise</p></td>
+</tr>
+</table>
+</page>

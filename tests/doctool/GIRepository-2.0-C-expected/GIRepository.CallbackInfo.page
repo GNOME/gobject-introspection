@@ -6,5 +6,6 @@
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
   </info>
-  <title>GIRepositoryCallbackInfo</title>
-<p>Represents a callback, eg arguments and return value.</p></page>
+  <title>GIRepository.CallbackInfo</title>
+<p>Represents a callback, eg arguments and return value.</p>
+</page>

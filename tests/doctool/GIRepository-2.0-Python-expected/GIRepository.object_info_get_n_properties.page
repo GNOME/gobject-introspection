@@ -1,11 +1,40 @@
 <?xml version="1.0"?>
+
 <page id="GIRepository.object_info_get_n_properties"
       type="topic"
       style="function"
       xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
     <link type="guide" xref="index" group="function"/>
+    <api:function>
+      <api:returns>
+        <api:type>gint</api:type>
+      </api:returns>
+      <api:name>g_object_info_get_n_properties</api:name>
+      <api:arg>
+        <api:type>GIRepository.ObjectInfo</api:type>
+        <api:name>info</api:name>
+      </api:arg>
+    </api:function>
   </info>
-  <title>GIRepository.object_info_get_n_properties</title>
-<p>Obtain the number of properties that this object type has.</p></page>
+  <title>object_info_get_n_properties</title>
+<synopsis><code mime="text/x-python">
+@accepts(GIRepository.ObjectInfo)
+@returns(gint)
+def object_info_get_n_properties(info)
+</code></synopsis>
+<p>Obtain the number of properties that this object type has.</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIRepository.ObjectInfo">GIRepository.ObjectInfo</link></p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>number of properties</p></td>
+</tr>
+</table>
+</page>

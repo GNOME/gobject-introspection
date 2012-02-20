@@ -1,14 +1,47 @@
 <?xml version="1.0"?>
+
 <page id="GIRepository.Repository.get_c_prefix"
       type="topic"
       style="method"
       xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
     <link type="guide" xref="GIRepository.Repository" group="method"/>
+    <api:function>
+      <api:returns>
+        <api:type>utf8</api:type>
+      </api:returns>
+      <api:name>g_irepository_get_c_prefix</api:name>
+      <api:arg>
+        <api:type>GIRepository *</api:type>
+        <api:name>self</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>utf8</api:type>
+        <api:name>namespace_</api:name>
+      </api:arg>
+    </api:function>
   </info>
-  <title>GIRepository.Repository.get_c_prefix</title>
+  <title>get_c_prefix</title>
+<synopsis><code mime="text/x-python">
+@accepts(utf8)
+@returns(utf8)
+def get_c_prefix(namespace_)
+</code></synopsis>
 <p>This function returns the "C prefix", or the C level namespace
 associated with the given introspection namespace.  Each C symbol
 starts with this prefix, as well each <link xref="GType">GType</link> in the library.</p><p>Note: The namespace must have already been loaded using a function
-such as g_irepository_require() before calling this function.</p></page>
+such as g_irepository_require() before calling this function.</p>
+
+<table>
+<tr>
+<td><p>namespace_ :</p></td>
+<td><p>Namespace to inspect</p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>C namespace prefix, or None if none associated</p></td>
+</tr>
+</table>
+</page>

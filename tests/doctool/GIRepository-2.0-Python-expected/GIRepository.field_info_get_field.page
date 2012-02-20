@@ -1,14 +1,59 @@
 <?xml version="1.0"?>
+
 <page id="GIRepository.field_info_get_field"
       type="topic"
       style="function"
       xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
     <link type="guide" xref="index" group="function"/>
+    <api:function>
+      <api:returns>
+        <api:type>gboolean</api:type>
+      </api:returns>
+      <api:name>g_field_info_get_field</api:name>
+      <api:arg>
+        <api:type>GIRepository.FieldInfo</api:type>
+        <api:name>field_info</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>gpointer</api:type>
+        <api:name>mem</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>None</api:type>
+        <api:name>value</api:name>
+      </api:arg>
+    </api:function>
   </info>
-  <title>GIRepository.field_info_get_field</title>
+  <title>field_info_get_field</title>
+<synopsis><code mime="text/x-python">
+@accepts(GIRepository.FieldInfo, gpointer, None)
+@returns(gboolean)
+def field_info_get_field(field_info, mem, value)
+</code></synopsis>
 <p>Reads a field identified by a <link xref="GFieldInfo">GFieldInfo</link> from a C structure or
 union.  This only handles fields of simple C types. It will fail
 for a field of a composite type like a nested structure or union
-even if that is actually readable.</p></page>
+even if that is actually readable.</p>
+
+<table>
+<tr>
+<td><p>field_info :</p></td>
+<td><p>a <link xref="GIRepository.FieldInfo">GIRepository.FieldInfo</link></p></td>
+</tr>
+<tr>
+<td><p>mem :</p></td>
+<td><p>pointer to a block of memory representing a C structure or union</p></td>
+</tr>
+<tr>
+<td><p>value :</p></td>
+<td><p>a <link xref="GIArgument">GIArgument</link> into which to store the value retrieved</p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>True if reading the field succeeded, otherwise False</p></td>
+</tr>
+</table>
+</page>

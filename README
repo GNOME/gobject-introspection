@@ -37,6 +37,8 @@ Three tools are shipped with GObject Introspection:
   typelib blob.
 - g-ir-scanner, a tool which generates GIR XML files by parsing headers
   and introspecting GObject based libraries.
+- g-ir-doc-tool, generates Mallard files that can be viewed with yelp or
+  rendered to HTML with yelp-build from yelp-tools.
 
 API library
 ===========

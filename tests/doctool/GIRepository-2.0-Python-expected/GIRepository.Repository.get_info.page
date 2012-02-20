@@ -1,15 +1,56 @@
 <?xml version="1.0"?>
+
 <page id="GIRepository.Repository.get_info"
       type="topic"
       style="method"
       xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
     <link type="guide" xref="GIRepository.Repository" group="method"/>
+    <api:function>
+      <api:returns>
+        <api:type>GIRepository.BaseInfo</api:type>
+      </api:returns>
+      <api:name>g_irepository_get_info</api:name>
+      <api:arg>
+        <api:type>GIRepository *</api:type>
+        <api:name>self</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>utf8</api:type>
+        <api:name>namespace_</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>gint</api:type>
+        <api:name>index</api:name>
+      </api:arg>
+    </api:function>
   </info>
-  <title>GIRepository.Repository.get_info</title>
+  <title>get_info</title>
+<synopsis><code mime="text/x-python">
+@accepts(utf8, gint)
+@returns(GIRepository.BaseInfo)
+def get_info(namespace_, index)
+</code></synopsis>
 <p>This function returns a particular metadata entry in the
 given namespace @namespace_.  The namespace must have
 already been loaded before calling this function.
 See g_irepository_get_n_infos() to find the maximum number of
-entries.</p></page>
+entries.</p>
+
+<table>
+<tr>
+<td><p>namespace_ :</p></td>
+<td><p>Namespace to inspect</p></td>
+</tr>
+<tr>
+<td><p>index :</p></td>
+<td><p>0-based offset into namespace metadata for entry</p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p><link xref="GIRepository.BaseInfo">GIRepository.BaseInfo</link> containing metadata</p></td>
+</tr>
+</table>
+</page>

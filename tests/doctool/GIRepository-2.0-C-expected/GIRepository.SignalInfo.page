@@ -6,5 +6,6 @@
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
   </info>
-  <title>GIRepositorySignalInfo</title>
-<p>Represents a signal.</p></page>
+  <title>GIRepository.SignalInfo</title>
+<p>Represents a signal.</p>
+</page>

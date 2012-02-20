@@ -21,465 +21,225 @@
 # 02110-1301, USA.
 #
 
-import os.path
+import os
 import re
-import sys
+import tempfile
+
+from xml.sax import saxutils
+from mako.template import Template
+from mako.runtime import supports_caller
 
 from . import ast
-from .girparser import GIRParser
-from .xmlwriter import XMLWriter
-
-XMLNS = "http://projectmallard.org/1.0/"
-XMLNS_UI = "http://projectmallard.org/experimental/ui/"
+from .utils import to_underscores
 
 def _space(num):
     return " " * num
 
 class MallardFormatter(object):
-    def __init__(self):
-        pass
+    def __init__(self, transformer):
+        self._transformer = transformer
 
-    def get_title(self, node, parent):
-        raise NotImplementedError('get_title not implemented')
+    def escape(self, text):
+        return saxutils.escape(text.encode('utf-8')).decode('utf-8')
 
-    # FIXME
-    def render_parameter(self, param_type, param_name):
-        return "%s %s" % (param_type, param_name)
+    def format(self, doc):
+        if doc is None:
+            return ''
 
-    def _render_parameter(self, param, extra_content=''):
-        with self._writer.tagcontext("parameter"):
-            if param.type.ctype is not None:
-                link_dest = param.type.ctype.replace("*", "")
-            else:
-                link_dest = param.type.ctype
-            with self._writer.tagcontext("link", [("linkend", "%s" % link_dest)]):
-                self._writer.write_tag("type", [], link_dest)
-            self._writer.write_line(extra_content)
+        result = ''
+        for para in doc.split('\n\n'):
+            result += '<p>'
+            result += self.format_inline(para)
+            result += '</p>'
+        return result
 
-    def _render_parameters(self, parent, parameters):
-        self._writer.write_line(
-            "%s(" % _space(40 - len(parent.symbol)))
+    def format_inline(self, para):
+        result = ''
 
-        parent_class = parent.parent_class
-        ctype = ast.Type(parent.parent_class.ctype + '*')
-        params = []
-        params.append(ast.Parameter(parent_class.name.lower(), ctype))
-        params.extend(parameters)
-
-        first_param = True
-        for param in params:
-            if not first_param:
-                self._writer.write_line("\n%s" % _space(61))
-            else:
-                first_param = False
-
-            if not param == params[-1]:
-                comma = ", "
-            else:
-                comma = ""
-            if param.type.target_fundamental == '<varargs>':
-                extra_content = "..."
-                continue
-            extra_content = " "
-            if param.type.ctype is not None and '*' in param.type.ctype:
-                extra_content += '*'
-            if param.argname is None:
-                import pdb
-                pdb.set_trace()
-            extra_content += param.argname
-            extra_content += comma
-            self._render_parameter(param, extra_content)
-
-        self._writer.write_line(");\n")
-
-    def get_method_as_title(self, entity):
-        method = entity.get_ast()
-        return "%s ()" % method.symbol
-
-    def get_page_name(self, node):
-        if node.gtype_name is None:
-            return node.ctype
-        return node.gtype_name
-
-    def get_class_name(self, node):
-        if node.gtype_name is None:
-            return node.ctype
-        return node.gtype_name
-
-    def get_type_name(self, node):
-        if isinstance(node, ast.Array):
-            if node.array_type == ast.Array.C:
-                return str(node.element_type) + "[]"
-            else:
-                return "%s&lt;%s&gt;" % (node.array_type, str(node.element_type))
-        elif isinstance(node, ast.Map):
-            return "GHashTable&lt;%s, %s&gt;" % (str(node.key_type), str(node.value_type))
-        elif isinstance(node, ast.List):
-            return "GList&lt;%s&gt;" % str(node.element_type)
-        else:
-            return str(node)
-
-    def render_method(self, entity, link=False):
-        method = entity.get_ast()
-        self._writer.disable_whitespace()
-
-        retval_type = method.retval.type
-        if retval_type.ctype:
-            link_dest = retval_type.ctype.replace("*", "")
-        else:
-            link_dest = str(retval_type)
-
-        if retval_type.target_giname:
-            ns = retval_type.target_giname.split('.')
-            if ns[0] == self._namespace.name:
-                link_dest = "%s" % (
-                    retval_type.ctype.replace("*", ""))
-
-        with self._writer.tagcontext("link", [("linkend", link_dest)]):
-            self._writer.write_tag("returnvalue", [], link_dest)
-
-        if retval_type.ctype is not None and '*' in retval_type.ctype:
-            self._writer.write_line(' *')
-
-        self._writer.write_line(
-            _space(20 - len(self.get_type_string(method.retval.type))))
-
-        if link:
-            self._writer.write_tag("link", [("linkend",
-                                            method.symbol.replace("_", "-"))],
-                                  method.symbol)
-        else:
-            self._writer.write_line(method.symbol)
-
-        self._render_parameters(method, method.parameters)
-        self._writer.enable_whitespace()
-
-    def _get_annotations(self, argument):
-        annotations = {}
-
-        if hasattr(argument.type, 'element_type') and \
-           argument.type.element_type is not None:
-            annotations['element-type'] = argument.type.element_type
-
-        if argument.transfer is not None and argument.transfer != 'none':
-            annotations['transfer'] = argument.transfer
-
-        if hasattr(argument, 'allow_none') and argument.allow_none:
-            annotations['allow-none'] = None
-
-        return annotations
-
-    def render_param_list(self, entity):
-        method = entity.get_ast()
-
-        self._render_param(method.parent_class.name.lower(), 'instance', [])
-
-        for param in method.parameters:
-            self._render_param(param.argname, param.doc,
-                               self._get_annotations(param))
-
-        self._render_param('Returns', method.retval.doc,
-                           self._get_annotations(method.retval))
-
-    def _render_param(self, argname, doc, annotations):
-        if argname is None:
-            return
-        with self._writer.tagcontext('varlistentry'):
-            with self._writer.tagcontext('term'):
-                self._writer.disable_whitespace()
-                try:
-                    with self._writer.tagcontext('parameter'):
-                        self._writer.write_line(argname)
-                    if doc is not None:
-                        self._writer.write_line('&#xA0;:')
-                finally:
-                    self._writer.enable_whitespace()
-            if doc is not None:
-                with self._writer.tagcontext('listitem'):
-                    with self._writer.tagcontext('simpara'):
-                        self._writer.write_line(doc)
-                        if annotations:
-                            with self._writer.tagcontext('emphasis', [('role', 'annotation')]):
-                                for key, value in annotations.iteritems():
-                                    self._writer.disable_whitespace()
-                                    try:
-                                        self._writer.write_line('[%s' % key)
-                                        if value is not None:
-                                            self._writer.write_line(' %s' % value)
-                                        self._writer.write_line(']')
-                                    finally:
-                                        self._writer.enable_whitespace()
-
-    def render_property(self, entity, link=False):
-        prop = entity.get_ast()
-
-        prop_name = '"%s"' % prop.name
-        prop_type = self.get_type_name(prop.type)
-
-        flags = []
-        if prop.readable:
-            flags.append("Read")
-        if prop.writable:
-            flags.append("Write")
-        if prop.construct:
-            flags.append("Construct")
-        if prop.construct_only:
-            flags.append("Construct Only")
-
-        self._render_prop_or_signal(prop_name, prop_type, flags)
-
-    def _render_prop_or_signal(self, name, type_, flags):
-        self._writer.disable_whitespace()
-
-        line = _space(2) + name + _space(27 - len(name))
-        line += str(type_) + _space(22 - len(str(type_)))
-        line += ": " + " / ".join(flags)
-
-        self._writer.write_line(line + "\n")
-
-        self._writer.enable_whitespace()
-
-
-    def render_signal(self, entity, link=False):
-        signal = entity.get_ast()
-
-        sig_name = '"%s"' % signal.name
-        flags = ["TODO: signal flags not in GIR currently"]
-        self._render_prop_or_signal(sig_name, "", flags)
-
-class MallardFormatterC(MallardFormatter):
-    def get_title(self, node, parent):
-        if isinstance(node, ast.Namespace):
-            return "%s Documentation" % node.name
-        elif isinstance(node, ast.Function):
-            return node.symbol
-        elif isinstance(node, ast.Property):
-            return parent.c_name + ':' + node.name
-        elif isinstance(node, ast.Signal):
-            return parent.c_name + '::' + node.name
-        else:
-            return node.c_name
-
-class MallardFormatterPython(MallardFormatter):
-    def get_title(self, node, parent):
-        if isinstance(node, ast.Namespace):
-            return "%s Documentation" % node.name
-        elif isinstance(node, ast.Function):
-            if node.is_method or node.is_constructor:
-                return "%s.%s.%s" % (node.namespace.name, parent.name, node.name)
-            else:
-                return "%s.%s" % (node.namespace.name, node.name)
-        elif isinstance(node, ast.Property):
-            return "%s" % node.name
-        elif isinstance(node, ast.Signal):
-            return "%s" % node.name
-        else:
-            return "%s.%s" % (node.namespace.name, node.name)
-
-class MallardPage(object):
-    def __init__(self, writer, node, parent):
-        self.writer = writer
-        self.node = node
-        self.parent = parent
-        self.page_id = None
-        self.page_type = 'topic'
-        self.page_style = ''
-
-        node.page = self
-        if not isinstance(node, ast.Namespace):
-            if node.namespace is None:
-                if parent is not None and parent.namespace is not None:
-                    node.namespace = parent.namespace
-
-        self.title = writer._formatter.get_title(node, parent)
-        self.links = []
-        self.linksels = []
-
-        if isinstance(node, ast.Namespace):
-            self.page_id = 'index'
-        elif isinstance(node, ast.Property) and parent is not None:
-            self.page_id = node.namespace.name + '.' + parent.name + '-' + node.name
-        elif isinstance(node, ast.Signal) and parent is not None:
-            self.page_id = node.namespace.name + '.' + parent.name + '--' + node.name
-        elif parent is not None and not isinstance(parent, ast.Namespace):
-            self.page_id = node.namespace.name + '.' + parent.name + '.' + node.name
-        else:
-            self.page_id = node.namespace.name + '.' + node.name
-
-        if getattr(node, 'symbol', None) is not None:
-            self.writer._xrefs[node.symbol] = self.page_id
-        elif isinstance(node, ast.Class):
-            self.writer._xrefs[node.c_name] = self.page_id
-
-        self.create_content()
-        self.add_child_nodes()
-
-    def add_link(self, linktype, xref, group=None):
-        self.links.append((linktype, xref, group))
-
-    def add_child_nodes(self):
-        children = []
-        if isinstance(self.node, ast.Namespace):
-            children = [node for node in self.node.itervalues()]
-        elif isinstance(self.node, (ast.Class, ast.Record)):
-            children = self.node.methods + self.node.constructors
-        elif isinstance(self.node, ast.Interface):
-            children = self.node.methods
-
-        if isinstance(self.node, (ast.Class, ast.Interface)):
-            children += self.node.properties + self.node.signals
-        for child in children:
-            self.writer._pages.append(MallardPage(self.writer, child, self.node))
-
-    def create_content(self):
-        if isinstance(self.node, ast.Namespace):
-            self.page_type = 'guide'
-            self.page_style = 'namespace'
-            self.linksels = (('class', 'Classes'),
-                             ('function', 'Functions'),
-                             ('#first #default #last', 'Other'))
-        elif isinstance(self.node, ast.Class):
-            self.page_type = 'guide'
-            self.page_style = 'class'
-            self.linksels = (('constructor', 'Constructors'),
-                             ('method', 'Methods'),
-                             ('property', 'Properties'),
-                             ('signal', 'Signals'),
-                             ('#first #default #last', 'Other'))
-            self.add_link('guide', self.parent.page.page_id, 'class')
-        elif isinstance(self.node, ast.Record):
-            self.page_type = 'guide'
-            self.page_style = 'record'
-            self.add_link('guide', self.parent.page.page_id)
-        elif isinstance(self.node, ast.Interface):
-            self.page_type = 'guide'
-            self.page_style = 'interface'
-            self.add_link('guide', self.parent.page.page_id)
-        elif isinstance(self.node, ast.Function):
-            if self.node.is_constructor:
-                self.page_style = 'constructor'
-                self.add_link('guide', self.parent.page.page_id, 'constructor')
-            elif self.node.is_method:
-                self.page_style = 'method'
-                self.add_link('guide', self.parent.page.page_id, 'method')
-            else:
-                self.page_style = 'function'
-                self.add_link('guide', self.parent.page.page_id, 'function')
-        elif isinstance(self.node, ast.Property):
-            self.page_style = 'property'
-            self.add_link('guide', self.parent.page.page_id, 'property')
-        elif isinstance(self.node, ast.Signal):
-            self.page_style = 'signal'
-            self.add_link('guide', self.parent.page.page_id, 'signal')
-
-    def render(self, writer):
-        with writer.tagcontext('page', [
-            ('id', self.page_id),
-            ('type', self.page_type),
-            ('style', self.page_style),
-            ('xmlns', XMLNS), ('xmlns:ui', XMLNS_UI)]):
-            with writer.tagcontext('info'):
-                for linktype, xref, group in self.links:
-                    if group is not None:
-                        writer.write_tag('link', [
-                                ('type', linktype), ('xref', xref), ('group', group)])
-                    else:
-                        writer.write_tag('link', [
-                                ('type', linktype), ('xref', xref)])
-            writer.write_tag('title', [], self.title)
-            if isinstance(self.node, ast.Annotated):
-                self.render_doc(writer, self.node.doc)
-            if isinstance(self.node, ast.Class):
-                parent_chain = []
-                node = self.node
-                while node.parent:
-                    node = self.writer._transformer.lookup_giname(str(node.parent))
-                    parent_chain.append(node)
-                    if node.namespace.name == 'GObject' and node.name == 'Object':
-                        break
-                parent_chain.reverse()
-                def print_chain(chain):
-                    with writer.tagcontext('item', []):
-                        attrs = []
-                        title = self.writer._formatter.get_title(chain[0], None)
-                        if hasattr(chain[0], 'page'):
-                            attrs.append(('xref', chain[0].page.page_id))
-                        writer.write_tag('code', attrs, title)
-                        if len(chain) > 1:
-                            print_chain(chain[1:])
-                with writer.tagcontext('synopsis', [('ui:expanded', 'no')]):
-                    writer.write_tag('title', [], 'Hierarchy')
-                    with writer.tagcontext('tree', []):
-                        print_chain(parent_chain)
-            for linkstype, title in self.linksels:
-                with writer.tagcontext('links', [
-                        ('type', 'topic'), ('ui:expanded', 'yes'),
-                        ('groups', linkstype)]):
-                    writer.write_tag('title', [], title)
-
-    def render_doc(self, writer, doc):
-        if doc is not None:
-            for para in doc.split('\n\n'):
-                writer.disable_whitespace()
-                with writer.tagcontext('p', []):
-                    self.render_doc_inline(writer, para)
-                writer.enable_whitespace()
-
-    def render_doc_inline(self, writer, text):
         poss = []
-        poss.append((text.find('#'), '#'))
+        poss.append((para.find('#'), '#'))
         poss = [pos for pos in poss if pos[0] >= 0]
         poss.sort(cmp=lambda x, y: cmp(x[0], y[0]))
         if len(poss) == 0:
-            writer.write_line(text, do_escape=True)
+            result += self.escape(para)
         elif poss[0][1] == '#':
             pos = poss[0][0]
-            writer.write_line(text[:pos], do_escape=True)
-            rest = text[pos + 1:]
+            result += self.escape(para[:pos])
+            rest = para[pos + 1:]
             link = re.split('[^a-zA-Z_:-]', rest, maxsplit=1)[0]
-            xref = self.writer._xrefs.get(link, link)
-            writer.write_tag('link', [('xref', xref)], link)
+            if link.endswith(':'):
+                link = link[:-1]
+            namespace = self._transformer.namespace
+            if '::' in link:
+                type_name, signal_name = link.split('::')
+                if type_name in namespace.ctypes:
+                    type_ = namespace.get_by_ctype(type_name)
+                    xref = '%s.%s-%s' % (namespace.name, type_.name, signal_name)
+                    xref_name = '%s.%s::%s' % (namespace.name, type_.name, signal_name)
+                else:
+                    xref = link
+                    xref_name = link
+            elif ':' in link:
+                type_name, property_name = link.split(':')
+                if type_name in namespace.ctypes:
+                    type_ = namespace.get_by_ctype(type_name)
+                    xref = '%s.%s-%s' % (namespace.name, type_.name, property_name)
+                    xref_name = '%s.%s:%s' % (namespace.name, type_.name, property_name)
+                else:
+                    xref = link
+                    xref_name = link
+            elif link in namespace.ctypes:
+                type_ = namespace.get_by_ctype(link)
+                xref = '%s.%s' % (namespace.name, type_.name)
+                xref_name = xref
+            else:
+                xref = link
+                xref_name = link
+            result += '<link xref="%s">%s</link>' % (xref, xref_name)
             if len(link) < len(rest):
-                self.render_doc_inline(writer, rest[len(link):])
+                result += self.format_inline(rest[len(link):])
+
+        return result
+
+    def format_type(self, type_):
+        raise NotImplementedError
+
+    def format_property_flags(self, property_):
+        flags = []
+        if property_.readable:
+            flags.append("Read")
+        if property_.writable:
+            flags.append("Write")
+        if property_.construct:
+            flags.append("Construct")
+        if property_.construct_only:
+            flags.append("Construct Only")
+
+        return " / ".join(flags)
+
+    def to_underscores(self, string):
+        return to_underscores(string)
+
+    def get_class_hierarchy(self, node):
+        parent_chain = []
+
+        while node.parent:
+            node = self._transformer.lookup_giname(str(node.parent))
+            parent_chain.append(node)
+
+        parent_chain.reverse()
+        return parent_chain
+
+class MallardFormatterC(MallardFormatter):
+
+    def format_type(self, type_):
+        if isinstance(type_, ast.Array):
+            try:
+                return self.format_type(type_.element_type) + '*'
+            except:
+                return type_.target_fundamental
+        elif type_.ctype is not None:
+            return type_.ctype
+        else:
+            return type_.target_fundamental
+
+class MallardFormatterPython(MallardFormatter):
+
+    def format_type(self, type_):
+        if isinstance(type_, ast.Array):
+            return '[' + self.format_type(type_.element_type) + ']'
+        elif isinstance(type_, ast.Map):
+            return '{%s: %s}' % (self.format_type(type_.key_type),
+                                 self.format_type(type_.value_type))
+        elif type_.target_giname is not None:
+            return type_.target_giname
+        else:
+            return type_.target_fundamental
+
+    def format(self, doc):
+        doc = MallardFormatter.format(self, doc)
+        doc = doc.replace('%NULL', 'None')
+        doc = doc.replace('%TRUE', 'True')
+        doc = doc.replace('%FALSE', 'False')
+        return doc
 
 class MallardWriter(object):
-    def __init__(self, formatter):
-        self._namespace = None
-        self._index = None
-        self._pages = []
-        self._formatter = formatter
-        self._xrefs = {}
-
-    def add_transformer(self, transformer):
+    def __init__(self, transformer, language):
         self._transformer = transformer
-        self._namespace = self._transformer._namespace
-        self._index = MallardPage(self, self._namespace, None)
+        self._language = language
+
+        if self._language == 'C':
+            self._formatter = MallardFormatterC(self._transformer)
+        elif self._language == 'Python':
+            self._formatter = MallardFormatterPython(self._transformer)
+        else:
+            raise SystemExit("Unsupported language: %s" % language)
 
     def write(self, output):
-        xmlwriter = XMLWriter()
-        self._index.render(xmlwriter)
-        fp = open(output, 'w')
-        fp.write(xmlwriter.get_xml())
+        nodes = [self._transformer.namespace]
+        for node in self._transformer.namespace.itervalues():
+            if isinstance(node, ast.Function) and node.moved_to is not None:
+                continue
+            if getattr(node, 'disguised', False):
+                continue
+            nodes.append(node)
+            if isinstance(node, (ast.Class, ast.Interface, ast.Record)):
+                nodes += getattr(node, 'methods', [])
+                nodes += getattr(node, 'constructors', [])
+                nodes += getattr(node, 'static_methods', [])
+                nodes += getattr(node, 'virtual_methods', [])
+                nodes += getattr(node, 'properties', [])
+                nodes += getattr(node, 'signals', [])
+        for node in nodes:
+            self._render_node(node, output)
+
+    def _render_node(self, node, output):
+        namespace = self._transformer.namespace
+        if isinstance(node, ast.Namespace):
+            template_name = 'mallard-%s-namespace.tmpl' % self._language
+            page_id = 'index'
+        elif isinstance(node, (ast.Class, ast.Interface)):
+            template_name = 'mallard-%s-class.tmpl' % self._language
+            page_id = '%s.%s' % (namespace.name, node.name)
+        elif isinstance(node, ast.Record):
+            template_name = 'mallard-%s-record.tmpl' % self._language
+            page_id = '%s.%s' % (namespace.name, node.name)
+        elif isinstance(node, ast.Function):
+            template_name = 'mallard-%s-function.tmpl' % self._language
+            if node.parent is not None:
+                page_id = '%s.%s.%s' % (namespace.name, node.parent.name, node.name)
+            else:
+                page_id = '%s.%s' % (namespace.name, node.name)
+        elif isinstance(node, ast.Enum):
+            template_name = 'mallard-%s-enum.tmpl' % self._language
+            page_id = '%s.%s' % (namespace.name, node.name)
+        elif isinstance(node, ast.Property) and node.parent is not None:
+            template_name = 'mallard-%s-property.tmpl' % self._language
+            page_id = '%s.%s-%s' % (namespace.name, node.parent.name, node.name)
+        elif isinstance(node, ast.Signal) and node.parent is not None:
+            template_name = 'mallard-%s-signal.tmpl' % self._language
+            page_id = '%s.%s-%s' % (namespace.name, node.parent.name, node.name)
+        else:
+            template_name = 'mallard-%s-default.tmpl' % self._language
+            page_id = '%s.%s' % (namespace.name, node.name)
+
+        if 'UNINSTALLED_INTROSPECTION_SRCDIR' in os.environ:
+            top_srcdir = os.environ['UNINSTALLED_INTROSPECTION_SRCDIR']
+            template_dir = os.path.join(top_srcdir, 'giscanner')
+        else:
+            template_dir = os.path.dirname(__file__)
+
+        file_name = os.path.join(template_dir, template_name)
+        file_name = os.path.abspath(file_name)
+        template = Template(filename=file_name, output_encoding='utf-8',
+                            module_directory=tempfile.gettempdir())
+        result = template.render(namespace=namespace,
+                                 node=node,
+                                 page_id=page_id,
+                                 formatter=self._formatter)
+
+        output_file_name = os.path.join(os.path.dirname(output),
+                                        page_id + '.page')
+        fp = open(output_file_name, 'w')
+        fp.write(result)
         fp.close()
-
-        for page in self._pages:
-            xmlwriter = XMLWriter()
-            page.render(xmlwriter)
-            fp = open(os.path.join(os.path.dirname(output), page.page_id + '.page'), 'w')
-            fp.write(xmlwriter.get_xml())
-            fp.close()
-
-    def _render_page_object_hierarchy(self, page_node):
-        parent_chain = self._get_parent_chain(page_node)
-        parent_chain.append(page_node)
-        lines = []
-
-        for level, parent in enumerate(parent_chain):
-            prepend = ""
-            if level > 0:
-                prepend = _space((level - 1)* 6) + " +----"
-            lines.append(_space(2) + prepend + self._formatter.get_class_name(parent))
-
-        self._writer.disable_whitespace()
-        self._writer.write_line("\n".join(lines))
-        self._writer.enable_whitespace()

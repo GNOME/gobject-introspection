@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+
+<page id="GIRepository.constant_info_free_value"
+      type="topic"
+      style="function"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/experimental/ui/">
+  <info>
+    <link type="guide" xref="index" group="function"/>
+    <api:function>
+      <api:returns>
+        <api:type>void</api:type>
+      </api:returns>
+      <api:name>g_constant_info_free_value</api:name>
+      <api:arg>
+        <api:type>GIConstantInfo*</api:type>
+        <api:name>info</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>GIArgument*</api:type>
+        <api:name>value</api:name>
+      </api:arg>
+    </api:function>
+  </info>
+  <title>g_constant_info_free_value</title>
+<synopsis><code mime="text/x-csrc">
+void g_constant_info_free_value (GIConstantInfo* info,
+                                 GIArgument* value);
+</code></synopsis>
+<p>Free the value returned from g_constant_info_get_value().</p>
+
+<table>
+<tr>
+<td><p>info :</p></td>
+<td><p>a <link xref="GIRepository.ConstantInfo">GIRepository.ConstantInfo</link></p></td>
+</tr>
+<tr>
+<td><p>value :</p></td>
+<td><p>the argument</p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td></td>
+</tr>
+</table>
+<p>Since 1.30.1</p>
+</page>

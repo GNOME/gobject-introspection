@@ -6,5 +6,6 @@
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
   </info>
-  <title>GIRepositoryFunctionInfo</title>
-<p>Represents a function, eg arguments and return value.</p></page>
+  <title>GIRepository.FunctionInfo</title>
+<p>Represents a function, eg arguments and return value.</p>
+</page>
