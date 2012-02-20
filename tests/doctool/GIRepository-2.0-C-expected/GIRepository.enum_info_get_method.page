@@ -33,7 +33,7 @@ GIFunctionInfo* g_enum_info_get_method (GIEnumInfo* info,
 <table>
 <tr>
 <td><p>info :</p></td>
-<td><p>a <link xref="GIRepository.EnumInfo">GIEnumInfo</link></p></td>
+<td><p>a <link xref="GIRepository.EnumInfo">GIRepository.EnumInfo</link></p></td>
 </tr>
 <tr>
 <td><p>n :</p></td>
@@ -41,7 +41,7 @@ GIFunctionInfo* g_enum_info_get_method (GIEnumInfo* info,
 </tr>
 <tr>
 <td><p>Returns :</p></td>
-<td><p>the <link xref="GIRepository.FunctionInfo">GIFunctionInfo</link>. Free the struct by calling</p></td>
+<td><p>the <link xref="GIRepository.FunctionInfo">GIRepository.FunctionInfo</link>. Free the struct by calling</p></td>
 </tr>
 </table>
 <p>Since 1.29.17</p>

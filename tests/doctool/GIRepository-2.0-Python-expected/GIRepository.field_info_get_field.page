@@ -41,7 +41,7 @@ even if that is actually readable.</p>
 <table>
 <tr>
 <td><p>field_info :</p></td>
-<td><p>a <link xref="GIRepository.FieldInfo">GIFieldInfo</link></p></td>
+<td><p>a <link xref="GIRepository.FieldInfo">GIRepository.FieldInfo</link></p></td>
 </tr>
 <tr>
 <td><p>mem :</p></td>

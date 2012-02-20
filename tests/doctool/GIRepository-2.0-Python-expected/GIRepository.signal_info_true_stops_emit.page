@@ -31,7 +31,7 @@ stop the emission of the signal.</p>
 <table>
 <tr>
 <td><p>info :</p></td>
-<td><p>a <link xref="GIRepository.SignalInfo">GISignalInfo</link></p></td>
+<td><p>a <link xref="GIRepository.SignalInfo">GIRepository.SignalInfo</link></p></td>
 </tr>
 <tr>
 <td><p>Returns :</p></td>

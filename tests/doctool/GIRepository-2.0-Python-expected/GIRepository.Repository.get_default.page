@@ -20,20 +20,20 @@
 @returns(GIRepository.Repository)
 def get_default()
 </code></synopsis>
-<p>Returns the singleton process-global default <link xref="GIRepository.Repository">GIRepository</link>.  It is
+<p>Returns the singleton process-global default <link xref="GIRepository.Repository">GIRepository.Repository</link>.  It is
 not currently supported to have multiple repositories in a
 particular process, but this function is provided in the unlikely
 eventuality that it would become possible, and as a convenience for
 higher level language bindings to conform to the GObject method
 call conventions.
-All methods on <link xref="GIRepository.Repository">GIRepository</link> also accept None as an instance
+All methods on <link xref="GIRepository.Repository">GIRepository.Repository</link> also accept None as an instance
 parameter to mean this default repository, which is usually more
 convenient for C.</p>
 
 <table>
 <tr>
 <td><p>Returns :</p></td>
-<td><p>The global singleton <link xref="GIRepository.Repository">GIRepository</link></p></td>
+<td><p>The global singleton <link xref="GIRepository.Repository">GIRepository.Repository</link></p></td>
 </tr>
 </table>
 </page>

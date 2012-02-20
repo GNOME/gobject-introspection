@@ -30,7 +30,7 @@ def union_info_get_size(info)
 <table>
 <tr>
 <td><p>info :</p></td>
-<td><p>a <link xref="GIRepository.UnionInfo">GIUnionInfo</link></p></td>
+<td><p>a <link xref="GIRepository.UnionInfo">GIRepository.UnionInfo</link></p></td>
 </tr>
 <tr>
 <td><p>Returns :</p></td>

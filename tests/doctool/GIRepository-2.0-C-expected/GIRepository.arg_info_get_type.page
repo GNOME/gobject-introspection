@@ -28,11 +28,11 @@ GITypeInfo* g_arg_info_get_type (GIArgInfo* info);
 <table>
 <tr>
 <td><p>info :</p></td>
-<td><p>a <link xref="GIRepository.ArgInfo">GIArgInfo</link></p></td>
+<td><p>a <link xref="GIRepository.ArgInfo">GIRepository.ArgInfo</link></p></td>
 </tr>
 <tr>
 <td><p>Returns :</p></td>
-<td><p>the <link xref="GIRepository.ArgInfo">GIArgInfo</link>, free it with</p></td>
+<td><p>the <link xref="GIRepository.ArgInfo">GIRepository.ArgInfo</link>, free it with</p></td>
 </tr>
 </table>
 </page>

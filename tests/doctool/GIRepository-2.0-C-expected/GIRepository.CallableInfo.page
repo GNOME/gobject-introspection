@@ -7,6 +7,6 @@
   <info>
   </info>
   <title>GIRepository.CallableInfo</title>
-<p>Represents a callable, either <link xref="GIRepository.FunctionInfo">GIFunctionInfo</link>, <link xref="GIRepository.CallbackInfo">GICallbackInfo</link> or
-<link xref="GIRepository.VFuncInfo">GIVFuncInfo</link>.</p>
+<p>Represents a callable, either <link xref="GIRepository.FunctionInfo">GIRepository.FunctionInfo</link>, <link xref="GIRepository.CallbackInfo">GIRepository.CallbackInfo</link> or
+<link xref="GIRepository.VFuncInfo">GIRepository.VFuncInfo</link>.</p>
 </page>

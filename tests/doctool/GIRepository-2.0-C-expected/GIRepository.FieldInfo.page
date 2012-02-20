@@ -7,5 +7,5 @@
   <info>
   </info>
   <title>GIRepository.FieldInfo</title>
-<p>Represents a field of a <link xref="GIRepository.StructInfo">GIStructInfo</link> or a <link xref="GIRepository.UnionInfo">GIUnionInfo</link>.</p>
+<p>Represents a field of a <link xref="GIRepository.StructInfo">GIRepository.StructInfo</link> or a <link xref="GIRepository.UnionInfo">GIRepository.UnionInfo</link>.</p>
 </page>

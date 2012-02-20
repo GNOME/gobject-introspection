@@ -29,7 +29,7 @@ gint g_vfunc_info_get_offset (GIVFuncInfo* info);
 <table>
 <tr>
 <td><p>info :</p></td>
-<td><p>a <link xref="GIRepository.VFuncInfo">GIVFuncInfo</link></p></td>
+<td><p>a <link xref="GIRepository.VFuncInfo">GIRepository.VFuncInfo</link></p></td>
 </tr>
 <tr>
 <td><p>Returns :</p></td>

@@ -30,7 +30,7 @@ def struct_info_get_size(info)
 <table>
 <tr>
 <td><p>info :</p></td>
-<td><p>a <link xref="GIRepository.StructInfo">GIStructInfo</link></p></td>
+<td><p>a <link xref="GIRepository.StructInfo">GIRepository.StructInfo</link></p></td>
 </tr>
 <tr>
 <td><p>Returns :</p></td>

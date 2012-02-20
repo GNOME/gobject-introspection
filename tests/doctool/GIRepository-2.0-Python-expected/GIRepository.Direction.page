@@ -7,5 +7,5 @@
   <info>
   </info>
   <title>GIRepository.Direction</title>
-<p>The direction of a <link xref="GIRepository.ArgInfo">GIArgInfo</link>.</p>
+<p>The direction of a <link xref="GIRepository.ArgInfo">GIRepository.ArgInfo</link>.</p>
 </page>

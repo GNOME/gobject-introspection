@@ -46,11 +46,11 @@ similar API.</p>
 <table>
 <tr>
 <td><p>info :</p></td>
-<td><p>a <link xref="GIRepository.CallableInfo">GICallableInfo</link></p></td>
+<td><p>a <link xref="GIRepository.CallableInfo">GIRepository.CallableInfo</link></p></td>
 </tr>
 <tr>
 <td><p>iterator :</p></td>
-<td><p>a <link xref="GIRepository.AttributeIter">GIAttributeIter</link> structure, must be initialized; see below</p></td>
+<td><p>a <link xref="GIRepository.AttributeIter">GIRepository.AttributeIter</link> structure, must be initialized; see below</p></td>
 </tr>
 <tr>
 <td><p>name :</p></td>

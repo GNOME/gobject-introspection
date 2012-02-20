@@ -25,14 +25,14 @@
 @returns(GIRepository.ArrayType)
 def type_info_get_array_type(info)
 </code></synopsis>
-<p>Obtain the array type for this type. See <link xref="GIRepository.ArrayType">GIArrayType</link> for a list of
+<p>Obtain the array type for this type. See <link xref="GIRepository.ArrayType">GIRepository.ArrayType</link> for a list of
 possible values. If the type tag of this type is not array, -1 will be
 returned.</p>
 
 <table>
 <tr>
 <td><p>info :</p></td>
-<td><p>a <link xref="GIRepository.TypeInfo">GITypeInfo</link></p></td>
+<td><p>a <link xref="GIRepository.TypeInfo">GIRepository.TypeInfo</link></p></td>
 </tr>
 <tr>
 <td><p>Returns :</p></td>

@@ -20,8 +20,8 @@
 GIBaseInfo* g_base_info_get_container (void);
 </code></synopsis>
 <p>Obtain the container of the @info. The container is the parent
-GIBaseInfo. For instance, the parent of a <link xref="GIRepository.FunctionInfo">GIFunctionInfo</link> is an
-<link xref="GIRepository.ObjectInfo">GIObjectInfo</link> or <link xref="GIRepository.InterfaceInfo">GIInterfaceInfo</link>.</p>
+GIBaseInfo. For instance, the parent of a <link xref="GIRepository.FunctionInfo">GIRepository.FunctionInfo</link> is an
+<link xref="GIRepository.ObjectInfo">GIRepository.ObjectInfo</link> or <link xref="GIRepository.InterfaceInfo">GIRepository.InterfaceInfo</link>.</p>
 
 <table>
 <tr>

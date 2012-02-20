@@ -7,5 +7,5 @@
   <info>
   </info>
   <title>GIRepository.VFuncInfoFlags</title>
-<p>Flags of a <link xref="GIRepository.VFuncInfo">GIVFuncInfo</link> struct.</p>
+<p>Flags of a <link xref="GIRepository.VFuncInfo">GIRepository.VFuncInfo</link> struct.</p>
 </page>

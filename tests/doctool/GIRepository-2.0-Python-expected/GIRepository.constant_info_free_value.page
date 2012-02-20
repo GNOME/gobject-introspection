@@ -34,7 +34,7 @@ def constant_info_free_value(info, value)
 <table>
 <tr>
 <td><p>info :</p></td>
-<td><p>a <link xref="GIRepository.ConstantInfo">GIConstantInfo</link></p></td>
+<td><p>a <link xref="GIRepository.ConstantInfo">GIRepository.ConstantInfo</link></p></td>
 </tr>
 <tr>
 <td><p>value :</p></td>

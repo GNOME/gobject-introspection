@@ -9,5 +9,5 @@
   </info>
   <title>GIRepositoryAttributeIter</title>
 <p>An opaque structure used to iterate over attributes
-in a <link xref="GIRepository.BaseInfo">GIBaseInfo</link> struct.</p>
+in a <link xref="GIRepository.BaseInfo">GIRepository.BaseInfo</link> struct.</p>
 </page>

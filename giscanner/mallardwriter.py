@@ -69,14 +69,18 @@ class MallardFormatter(object):
                 if type_name in self._namespace.ctypes:
                     type_ = self._namespace.get_by_ctype(type_name)
                     xref = '%s.%s-%s' % (self._namespace.name, type_.name, signal_name)
+                    xref_name = '%s.%s::%s' % (self._namespace.name, type_.name, signal_name)
                 else:
                     xref = link
+                    xref_name = link
             elif link in self._namespace.ctypes:
                 type_ = self._namespace.get_by_ctype(link)
                 xref = '%s.%s' % (self._namespace.name, type_.name)
+                xref_name = xref
             else:
                 xref = link
-            result += '<link xref="%s">%s</link>' % (xref, link)
+                xref_name = link
+            result += '<link xref="%s">%s</link>' % (xref, xref_name)
             if len(link) < len(rest):
                 result += self.format_inline(rest[len(link):])
 

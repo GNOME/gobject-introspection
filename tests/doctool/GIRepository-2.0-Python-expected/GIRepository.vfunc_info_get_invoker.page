@@ -31,11 +31,11 @@ method will return it.  An invoker method is a C entry point.</p><p>Not all virt
 <table>
 <tr>
 <td><p>info :</p></td>
-<td><p>a <link xref="GIRepository.VFuncInfo">GIVFuncInfo</link></p></td>
+<td><p>a <link xref="GIRepository.VFuncInfo">GIRepository.VFuncInfo</link></p></td>
 </tr>
 <tr>
 <td><p>Returns :</p></td>
-<td><p>the <link xref="GIRepository.VFuncInfo">GIVFuncInfo</link> or None. Free it with</p></td>
+<td><p>the <link xref="GIRepository.VFuncInfo">GIRepository.VFuncInfo</link> or None. Free it with</p></td>
 </tr>
 </table>
 </page>

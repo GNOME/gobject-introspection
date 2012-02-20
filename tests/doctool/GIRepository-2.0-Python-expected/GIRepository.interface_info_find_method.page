@@ -35,7 +35,7 @@ returned if there's no method available with that name.</p><p>Free the struct by
 <table>
 <tr>
 <td><p>info :</p></td>
-<td><p>a <link xref="GIRepository.InterfaceInfo">GIInterfaceInfo</link></p></td>
+<td><p>a <link xref="GIRepository.InterfaceInfo">GIRepository.InterfaceInfo</link></p></td>
 </tr>
 <tr>
 <td><p>name :</p></td>
@@ -43,7 +43,7 @@ returned if there's no method available with that name.</p><p>Free the struct by
 </tr>
 <tr>
 <td><p>Returns :</p></td>
-<td><p>the <link xref="GIRepository.FunctionInfo">GIFunctionInfo</link> or None if none found.</p></td>
+<td><p>the <link xref="GIRepository.FunctionInfo">GIRepository.FunctionInfo</link> or None if none found.</p></td>
 </tr>
 </table>
 </page>

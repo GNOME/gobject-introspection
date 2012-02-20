@@ -28,11 +28,11 @@ GITypeInfo* g_property_info_get_type (GIPropertyInfo* info);
 <table>
 <tr>
 <td><p>info :</p></td>
-<td><p>a <link xref="GIRepository.PropertyInfo">GIPropertyInfo</link></p></td>
+<td><p>a <link xref="GIRepository.PropertyInfo">GIRepository.PropertyInfo</link></p></td>
 </tr>
 <tr>
 <td><p>Returns :</p></td>
-<td><p>the <link xref="GIRepository.TypeInfo">GITypeInfo</link>, free it with</p></td>
+<td><p>the <link xref="GIRepository.TypeInfo">GIRepository.TypeInfo</link>, free it with</p></td>
 </tr>
 </table>
 </page>

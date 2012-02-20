@@ -31,7 +31,7 @@ def type_info_get_array_length(info)
 <table>
 <tr>
 <td><p>info :</p></td>
-<td><p>a <link xref="GIRepository.TypeInfo">GITypeInfo</link></p></td>
+<td><p>a <link xref="GIRepository.TypeInfo">GIRepository.TypeInfo</link></p></td>
 </tr>
 <tr>
 <td><p>Returns :</p></td>

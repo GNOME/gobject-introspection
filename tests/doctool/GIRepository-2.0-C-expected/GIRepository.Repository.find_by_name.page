@@ -49,7 +49,7 @@ ensure the namespace has already been loaded.</p>
 </tr>
 <tr>
 <td><p>Returns :</p></td>
-<td><p><link xref="GIRepository.BaseInfo">GIBaseInfo</link> representing metadata about @name, or %NULL</p></td>
+<td><p><link xref="GIRepository.BaseInfo">GIRepository.BaseInfo</link> representing metadata about @name, or %NULL</p></td>
 </tr>
 </table>
 </page>

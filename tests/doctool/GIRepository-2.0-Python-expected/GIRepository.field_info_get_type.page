@@ -25,16 +25,16 @@
 @returns(GIRepository.TypeInfo)
 def field_info_get_type(info)
 </code></synopsis>
-<p>Obtain the type of a field as a <link xref="GIRepository.TypeInfo">GITypeInfo</link>.</p><p>g_base_info_unref() when done.</p>
+<p>Obtain the type of a field as a <link xref="GIRepository.TypeInfo">GIRepository.TypeInfo</link>.</p><p>g_base_info_unref() when done.</p>
 
 <table>
 <tr>
 <td><p>info :</p></td>
-<td><p>a <link xref="GIRepository.FieldInfo">GIFieldInfo</link></p></td>
+<td><p>a <link xref="GIRepository.FieldInfo">GIRepository.FieldInfo</link></p></td>
 </tr>
 <tr>
 <td><p>Returns :</p></td>
-<td><p>the <link xref="GIRepository.TypeInfo">GITypeInfo</link>. Free the struct by calling</p></td>
+<td><p>the <link xref="GIRepository.TypeInfo">GIRepository.TypeInfo</link>. Free the struct by calling</p></td>
 </tr>
 </table>
 </page>

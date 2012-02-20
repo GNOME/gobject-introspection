@@ -23,13 +23,13 @@
 <synopsis><code mime="text/x-csrc">
 GITransfer g_property_info_get_ownership_transfer (GIPropertyInfo* info);
 </code></synopsis>
-<p>Obtain the ownership transfer for this property. See <link xref="GIRepository.Transfer">GITransfer</link> for more
+<p>Obtain the ownership transfer for this property. See <link xref="GIRepository.Transfer">GIRepository.Transfer</link> for more
 information about transfer values.</p>
 
 <table>
 <tr>
 <td><p>info :</p></td>
-<td><p>a <link xref="GIRepository.PropertyInfo">GIPropertyInfo</link></p></td>
+<td><p>a <link xref="GIRepository.PropertyInfo">GIRepository.PropertyInfo</link></p></td>
 </tr>
 <tr>
 <td><p>Returns :</p></td>

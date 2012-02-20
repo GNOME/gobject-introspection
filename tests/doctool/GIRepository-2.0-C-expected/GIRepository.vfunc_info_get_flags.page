@@ -23,13 +23,13 @@
 <synopsis><code mime="text/x-csrc">
 GIVFuncInfoFlags g_vfunc_info_get_flags (GIVFuncInfo* info);
 </code></synopsis>
-<p>Obtain the flags for this virtual function info. See <link xref="GIRepository.VFuncInfoFlags">GIVFuncInfoFlags</link> for
+<p>Obtain the flags for this virtual function info. See <link xref="GIRepository.VFuncInfoFlags">GIRepository.VFuncInfoFlags</link> for
 more information about possible flag values.</p>
 
 <table>
 <tr>
 <td><p>info :</p></td>
-<td><p>a <link xref="GIRepository.VFuncInfo">GIVFuncInfo</link></p></td>
+<td><p>a <link xref="GIRepository.VFuncInfo">GIRepository.VFuncInfo</link></p></td>
 </tr>
 <tr>
 <td><p>Returns :</p></td>

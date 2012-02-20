@@ -34,7 +34,7 @@ def callable_info_get_arg(info, n)
 <table>
 <tr>
 <td><p>info :</p></td>
-<td><p>a <link xref="GIRepository.CallableInfo">GICallableInfo</link></p></td>
+<td><p>a <link xref="GIRepository.CallableInfo">GIRepository.CallableInfo</link></p></td>
 </tr>
 <tr>
 <td><p>n :</p></td>
@@ -42,7 +42,7 @@ def callable_info_get_arg(info, n)
 </tr>
 <tr>
 <td><p>Returns :</p></td>
-<td><p>the <link xref="GIRepository.ArgInfo">GIArgInfo</link>. Free it with</p></td>
+<td><p>the <link xref="GIRepository.ArgInfo">GIRepository.ArgInfo</link>. Free it with</p></td>
 </tr>
 </table>
 </page>

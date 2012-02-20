@@ -28,7 +28,7 @@ gint g_struct_info_get_n_fields (GIStructInfo* info);
 <table>
 <tr>
 <td><p>info :</p></td>
-<td><p>a <link xref="GIRepository.StructInfo">GIStructInfo</link></p></td>
+<td><p>a <link xref="GIRepository.StructInfo">GIRepository.StructInfo</link></p></td>
 </tr>
 <tr>
 <td><p>Returns :</p></td>

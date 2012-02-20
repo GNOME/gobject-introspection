@@ -30,7 +30,7 @@ g_module_symbol().</p>
 <table>
 <tr>
 <td><p>info :</p></td>
-<td><p>a <link xref="GIRepository.FunctionInfo">GIFunctionInfo</link></p></td>
+<td><p>a <link xref="GIRepository.FunctionInfo">GIRepository.FunctionInfo</link></p></td>
 </tr>
 <tr>
 <td><p>Returns :</p></td>

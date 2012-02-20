@@ -21,7 +21,7 @@
 def get_name()
 </code></synopsis>
 <p>Obtain the name of the @info. What the name represents depends on
-the <link xref="GIRepository.InfoType">GIInfoType</link> of the @info. For instance for <link xref="GIRepository.FunctionInfo">GIFunctionInfo</link> it is
+the <link xref="GIRepository.InfoType">GIRepository.InfoType</link> of the @info. For instance for <link xref="GIRepository.FunctionInfo">GIRepository.FunctionInfo</link> it is
 the name of the function.</p>
 
 <table>

@@ -34,7 +34,7 @@ def interface_info_get_prerequisite(info, n)
 <table>
 <tr>
 <td><p>info :</p></td>
-<td><p>a <link xref="GIRepository.InterfaceInfo">GIInterfaceInfo</link></p></td>
+<td><p>a <link xref="GIRepository.InterfaceInfo">GIRepository.InterfaceInfo</link></p></td>
 </tr>
 <tr>
 <td><p>n :</p></td>
@@ -42,7 +42,7 @@ def interface_info_get_prerequisite(info, n)
 </tr>
 <tr>
 <td><p>Returns :</p></td>
-<td><p>the prerequisites as a <link xref="GIRepository.BaseInfo">GIBaseInfo</link>. Free the struct by calling</p></td>
+<td><p>the prerequisites as a <link xref="GIRepository.BaseInfo">GIRepository.BaseInfo</link>. Free the struct by calling</p></td>
 </tr>
 </table>
 </page>

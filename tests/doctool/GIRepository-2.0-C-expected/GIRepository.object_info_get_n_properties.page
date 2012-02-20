@@ -28,7 +28,7 @@ gint g_object_info_get_n_properties (GIObjectInfo* info);
 <table>
 <tr>
 <td><p>info :</p></td>
-<td><p>a <link xref="GIRepository.ObjectInfo">GIObjectInfo</link></p></td>
+<td><p>a <link xref="GIRepository.ObjectInfo">GIRepository.ObjectInfo</link></p></td>
 </tr>
 <tr>
 <td><p>Returns :</p></td>
