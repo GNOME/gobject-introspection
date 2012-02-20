@@ -19,7 +19,7 @@
     </tree>
   </synopsis>
   <p>Constructor</p>
-  <synopsis><code mime="text/x-python">
+  <synopsis><code>
 repository = Repository()  </code></synopsis>
   <links type="topic" ui:expanded="yes"
          api:type="function" api:mime="text/x-python"

@@ -22,11 +22,11 @@ ${formatter.format(node.doc)}
     </tree>
   </synopsis>
   <p>Constructor</p>
-  <synopsis><code mime="text/x-python">
+  <synopsis><code>
 ${formatter.to_underscores(node.name).lower()} = ${node.name}(\
 % for property_, ix in zip(node.properties, range(len(node.properties))):
 % if property_.construct or property_.construct_only or property_.writable:
-${property_.name.replace('-', '_')}=value\
+<link xref='${namespace.name}.${node.name}-${property_.name}'>${property_.name.replace('-', '_')}</link>=value\
 % if ix != len(node.properties) - 1:
 , \
 % endif
