@@ -64,12 +64,23 @@ class MallardFormatter(object):
             result += self.escape(para[:pos])
             rest = para[pos + 1:]
             link = re.split('[^a-zA-Z_:-]', rest, maxsplit=1)[0]
+            if link.endswith(':'):
+                link = link[:-1]
             if '::' in link:
                 type_name, signal_name = link.split('::')
                 if type_name in self._namespace.ctypes:
                     type_ = self._namespace.get_by_ctype(type_name)
                     xref = '%s.%s-%s' % (self._namespace.name, type_.name, signal_name)
                     xref_name = '%s.%s::%s' % (self._namespace.name, type_.name, signal_name)
+                else:
+                    xref = link
+                    xref_name = link
+            elif ':' in link:
+                type_name, property_name = link.split(':')
+                if type_name in self._namespace.ctypes:
+                    type_ = self._namespace.get_by_ctype(type_name)
+                    xref = '%s.%s-%s' % (self._namespace.name, type_.name, property_name)
+                    xref_name = '%s.%s:%s' % (self._namespace.name, type_.name, property_name)
                 else:
                     xref = link
                     xref_name = link
