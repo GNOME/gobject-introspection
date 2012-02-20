@@ -32,9 +32,12 @@ from mako.runtime import supports_caller
 from . import ast
 from .utils import to_underscores
 
+def _space(num):
+    return " " * num
+
 class MallardFormatter(object):
-    def __init__(self, namespace):
-        self._namespace = namespace
+    def __init__(self, transformer):
+        self._transformer = transformer
 
     def escape(self, text):
         return saxutils.escape(text.encode('utf-8')).decode('utf-8')
@@ -66,27 +69,28 @@ class MallardFormatter(object):
             link = re.split('[^a-zA-Z_:-]', rest, maxsplit=1)[0]
             if link.endswith(':'):
                 link = link[:-1]
+            namespace = self._transformer.namespace
             if '::' in link:
                 type_name, signal_name = link.split('::')
-                if type_name in self._namespace.ctypes:
-                    type_ = self._namespace.get_by_ctype(type_name)
-                    xref = '%s.%s-%s' % (self._namespace.name, type_.name, signal_name)
-                    xref_name = '%s.%s::%s' % (self._namespace.name, type_.name, signal_name)
+                if type_name in namespace.ctypes:
+                    type_ = namespace.get_by_ctype(type_name)
+                    xref = '%s.%s-%s' % (namespace.name, type_.name, signal_name)
+                    xref_name = '%s.%s::%s' % (namespace.name, type_.name, signal_name)
                 else:
                     xref = link
                     xref_name = link
             elif ':' in link:
                 type_name, property_name = link.split(':')
-                if type_name in self._namespace.ctypes:
-                    type_ = self._namespace.get_by_ctype(type_name)
-                    xref = '%s.%s-%s' % (self._namespace.name, type_.name, property_name)
-                    xref_name = '%s.%s:%s' % (self._namespace.name, type_.name, property_name)
+                if type_name in namespace.ctypes:
+                    type_ = namespace.get_by_ctype(type_name)
+                    xref = '%s.%s-%s' % (namespace.name, type_.name, property_name)
+                    xref_name = '%s.%s:%s' % (namespace.name, type_.name, property_name)
                 else:
                     xref = link
                     xref_name = link
-            elif link in self._namespace.ctypes:
-                type_ = self._namespace.get_by_ctype(link)
-                xref = '%s.%s' % (self._namespace.name, type_.name)
+            elif link in namespace.ctypes:
+                type_ = namespace.get_by_ctype(link)
+                xref = '%s.%s' % (namespace.name, type_.name)
                 xref_name = xref
             else:
                 xref = link
@@ -115,6 +119,16 @@ class MallardFormatter(object):
 
     def to_underscores(self, string):
         return to_underscores(string)
+
+    def get_class_hierarchy(self, node):
+        parent_chain = []
+
+        while node.parent:
+            node = self._transformer.lookup_giname(str(node.parent))
+            parent_chain.append(node)
+
+        parent_chain.reverse()
+        return parent_chain
 
 class MallardFormatterC(MallardFormatter):
 
@@ -155,9 +169,9 @@ class MallardWriter(object):
         self._language = language
 
         if self._language == 'C':
-            self._formatter = MallardFormatterC(self._transformer.namespace)
+            self._formatter = MallardFormatterC(self._transformer)
         elif self._language == 'Python':
-            self._formatter = MallardFormatterPython(self._transformer.namespace)
+            self._formatter = MallardFormatterPython(self._transformer)
         else:
             raise SystemExit("Unsupported language: %s" % language)
 
@@ -226,18 +240,3 @@ class MallardWriter(object):
         fp = open(output_file_name, 'w')
         fp.write(result)
         fp.close()
-
-    def _render_page_object_hierarchy(self, page_node):
-        parent_chain = self._get_parent_chain(page_node)
-        parent_chain.append(page_node)
-        lines = []
-
-        for level, parent in enumerate(parent_chain):
-            prepend = ""
-            if level > 0:
-                prepend = _space((level - 1)* 6) + " +----"
-            lines.append(_space(2) + prepend + self._formatter.get_class_name(parent))
-
-        self._writer.disable_whitespace()
-        self._writer.write_line("\n".join(lines))
-        self._writer.enable_whitespace()

@@ -16,7 +16,7 @@ from gi.repository import GIRepository
 
 repository = GIRepository.Repository()  </code></synopsis>
 
-  <synopsis ui:expanded="no">
+  <synopsis>
     <title>Hierarchy</title>
     <tree>
       <item>

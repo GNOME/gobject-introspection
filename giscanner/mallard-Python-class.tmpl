@@ -29,12 +29,16 @@ ${formatter.to_underscores(node.name).lower()} = ${namespace.name}.${node.name}(
 % if node.version:
 <p>Since ${node.version}</p>
 % endif
-  <synopsis ui:expanded="no">
+  <synopsis>
     <title>Hierarchy</title>
     <tree>
+% for class_ in formatter.get_class_hierarchy(node):
       <item>
-        <code>GObject.Object</code>
+        <code>${class_.namespace.name}.${class_.name}</code>
+% endfor
+% for class_ in formatter.get_class_hierarchy(node):
       </item>
+% endfor
     </tree>
   </synopsis>
   <links type="topic" ui:expanded="yes"
