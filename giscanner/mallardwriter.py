@@ -210,6 +210,9 @@ class MallardWriter(object):
                 page_id = '%s.%s.%s' % (namespace.name, node.parent.name, node.name)
             else:
                 page_id = '%s.%s' % (namespace.name, node.name)
+        elif isinstance(node, ast.Enum):
+            template_name = 'mallard-%s-enum.tmpl' % self._language
+            page_id = '%s.%s' % (namespace.name, node.name)
         elif isinstance(node, ast.Property) and node.parent is not None:
             template_name = 'mallard-%s-property.tmpl' % self._language
             page_id = '%s.%s-%s' % (namespace.name, node.parent.name, node.name)

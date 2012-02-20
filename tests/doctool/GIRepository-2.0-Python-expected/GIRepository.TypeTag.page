@@ -1,11 +1,104 @@
 <?xml version="1.0"?>
 <page id="GIRepository.TypeTag"
-      type="topic"
-      style=""
+      type="guide"
+      style="enum"
       xmlns="http://projectmallard.org/1.0/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
+    <link type="guide" xref="index"/>
   </info>
   <title>GIRepository.TypeTag</title>
-<p>The type tag of a <link xref="GIRepository.TypeInfo">GIRepository.TypeInfo</link>.</p>
+  <p>The type tag of a <link xref="GIRepository.TypeInfo">GIRepository.TypeInfo</link>.</p>
+
+<table>
+<tr>
+<td><p>TypeTag.VOID :</p></td>
+<td></td>
+</tr>
+<tr>
+<td><p>TypeTag.BOOLEAN :</p></td>
+<td></td>
+</tr>
+<tr>
+<td><p>TypeTag.INT8 :</p></td>
+<td></td>
+</tr>
+<tr>
+<td><p>TypeTag.UINT8 :</p></td>
+<td></td>
+</tr>
+<tr>
+<td><p>TypeTag.INT16 :</p></td>
+<td></td>
+</tr>
+<tr>
+<td><p>TypeTag.UINT16 :</p></td>
+<td></td>
+</tr>
+<tr>
+<td><p>TypeTag.INT32 :</p></td>
+<td></td>
+</tr>
+<tr>
+<td><p>TypeTag.UINT32 :</p></td>
+<td></td>
+</tr>
+<tr>
+<td><p>TypeTag.INT64 :</p></td>
+<td></td>
+</tr>
+<tr>
+<td><p>TypeTag.UINT64 :</p></td>
+<td></td>
+</tr>
+<tr>
+<td><p>TypeTag.FLOAT :</p></td>
+<td></td>
+</tr>
+<tr>
+<td><p>TypeTag.DOUBLE :</p></td>
+<td></td>
+</tr>
+<tr>
+<td><p>TypeTag.GTYPE :</p></td>
+<td></td>
+</tr>
+<tr>
+<td><p>TypeTag.UTF8 :</p></td>
+<td></td>
+</tr>
+<tr>
+<td><p>TypeTag.FILENAME :</p></td>
+<td></td>
+</tr>
+<tr>
+<td><p>TypeTag.ARRAY :</p></td>
+<td></td>
+</tr>
+<tr>
+<td><p>TypeTag.INTERFACE :</p></td>
+<td></td>
+</tr>
+<tr>
+<td><p>TypeTag.GLIST :</p></td>
+<td></td>
+</tr>
+<tr>
+<td><p>TypeTag.GSLIST :</p></td>
+<td></td>
+</tr>
+<tr>
+<td><p>TypeTag.GHASH :</p></td>
+<td></td>
+</tr>
+<tr>
+<td><p>TypeTag.ERROR :</p></td>
+<td></td>
+</tr>
+<tr>
+<td><p>TypeTag.UNICHAR :</p></td>
+<td></td>
+</tr>
+</table>
+
 </page>

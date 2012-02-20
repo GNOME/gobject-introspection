@@ -1,11 +1,96 @@
 <?xml version="1.0"?>
 <page id="GIRepository.InfoType"
-      type="topic"
-      style=""
+      type="guide"
+      style="enum"
       xmlns="http://projectmallard.org/1.0/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
+    <link type="guide" xref="index"/>
   </info>
   <title>GIRepository.InfoType</title>
-<p>The type of a GIBaseInfo struct.</p>
+  <p>The type of a GIBaseInfo struct.</p>
+
+<table>
+<tr>
+<td><p>InfoType.INVALID :</p></td>
+<td></td>
+</tr>
+<tr>
+<td><p>InfoType.FUNCTION :</p></td>
+<td></td>
+</tr>
+<tr>
+<td><p>InfoType.CALLBACK :</p></td>
+<td></td>
+</tr>
+<tr>
+<td><p>InfoType.STRUCT :</p></td>
+<td></td>
+</tr>
+<tr>
+<td><p>InfoType.BOXED :</p></td>
+<td></td>
+</tr>
+<tr>
+<td><p>InfoType.ENUM :</p></td>
+<td></td>
+</tr>
+<tr>
+<td><p>InfoType.FLAGS :</p></td>
+<td></td>
+</tr>
+<tr>
+<td><p>InfoType.OBJECT :</p></td>
+<td></td>
+</tr>
+<tr>
+<td><p>InfoType.INTERFACE :</p></td>
+<td></td>
+</tr>
+<tr>
+<td><p>InfoType.CONSTANT :</p></td>
+<td></td>
+</tr>
+<tr>
+<td><p>InfoType.INVALID_0 :</p></td>
+<td></td>
+</tr>
+<tr>
+<td><p>InfoType.UNION :</p></td>
+<td></td>
+</tr>
+<tr>
+<td><p>InfoType.VALUE :</p></td>
+<td></td>
+</tr>
+<tr>
+<td><p>InfoType.SIGNAL :</p></td>
+<td></td>
+</tr>
+<tr>
+<td><p>InfoType.VFUNC :</p></td>
+<td></td>
+</tr>
+<tr>
+<td><p>InfoType.PROPERTY :</p></td>
+<td></td>
+</tr>
+<tr>
+<td><p>InfoType.FIELD :</p></td>
+<td></td>
+</tr>
+<tr>
+<td><p>InfoType.ARG :</p></td>
+<td></td>
+</tr>
+<tr>
+<td><p>InfoType.TYPE :</p></td>
+<td></td>
+</tr>
+<tr>
+<td><p>InfoType.UNRESOLVED :</p></td>
+<td></td>
+</tr>
+</table>
+
 </page>

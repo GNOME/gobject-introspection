@@ -1,10 +1,11 @@
 <?xml version="1.0"?>
 <page id="GIRepository.Direction"
-      type="topic"
-      style=""
+      type="guide"
+      style="enum"
       xmlns="http://projectmallard.org/1.0/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
+    <link type="guide" xref="index"/>
   </info>
   <title>GIRepository.Direction</title>
 <p>The direction of a <link xref="GIRepository.ArgInfo">GIRepository.ArgInfo</link>.</p>
