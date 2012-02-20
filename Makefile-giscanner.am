@@ -44,6 +44,7 @@ pkgpyexec_PYTHON =			\
 	giscanner/mallardwriter.py	\
 	giscanner/mallard-C-class.tmpl	\
 	giscanner/mallard-C-default.tmpl	\
+	giscanner/mallard-C-enum.tmpl	\
 	giscanner/mallard-C-function.tmpl	\
 	giscanner/mallard-C-namespace.tmpl	\
 	giscanner/mallard-C-property.tmpl	\
@@ -51,6 +52,7 @@ pkgpyexec_PYTHON =			\
 	giscanner/mallard-C-signal.tmpl	\
 	giscanner/mallard-Python-class.tmpl	\
 	giscanner/mallard-Python-default.tmpl	\
+	giscanner/mallard-Python-enum.tmpl	\
 	giscanner/mallard-Python-function.tmpl	\
 	giscanner/mallard-Python-namespace.tmpl	\
 	giscanner/mallard-Python-property.tmpl	\
