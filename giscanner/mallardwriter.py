@@ -210,7 +210,7 @@ class MallardWriter(object):
             top_srcdir = os.environ['UNINSTALLED_INTROSPECTION_SRCDIR']
             template_dir = os.path.join(top_srcdir, 'giscanner')
         else:
-            template_dir = 'unimplemented'
+            template_dir = os.path.dirname(__file__)
 
         file_name = os.path.join(template_dir, template_name)
         file_name = os.path.abspath(file_name)
