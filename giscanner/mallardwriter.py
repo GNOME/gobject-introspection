@@ -77,6 +77,19 @@ class MallardFormatter(object):
     def format_type(self, type_):
         raise NotImplementedError
 
+    def format_property_flags(self, property_):
+        flags = []
+        if property_.readable:
+            flags.append("Read")
+        if property_.writable:
+            flags.append("Write")
+        if property_.construct:
+            flags.append("Construct")
+        if property_.construct_only:
+            flags.append("Construct Only")
+
+        return " / ".join(flags)
+
 class MallardFormatterC(MallardFormatter):
 
     def format_type(self, type_):
@@ -95,6 +108,9 @@ class MallardFormatterPython(MallardFormatter):
     def format_type(self, type_):
         if isinstance(type_, ast.Array):
             return '[' + self.format_type(type_.element_type) + ']'
+        elif isinstance(type_, ast.Map):
+            return '{%s: %s}' % (self.format_type(type_.key_type),
+                                 self.format_type(type_.value_type))
         elif type_.target_giname is not None:
             return type_.target_giname
         else:
