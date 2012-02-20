@@ -20,7 +20,7 @@
   </synopsis>
   <p>Constructor</p>
   <synopsis><code>
-repository = Repository()  </code></synopsis>
+repository = GIRepository.Repository()  </code></synopsis>
   <links type="topic" ui:expanded="yes"
          api:type="function" api:mime="text/x-python"
          groups="method" style="linklist">

@@ -23,7 +23,7 @@ ${formatter.format(node.doc)}
   </synopsis>
   <p>Constructor</p>
   <synopsis><code>
-${formatter.to_underscores(node.name).lower()} = ${node.name}(\
+${formatter.to_underscores(node.name).lower()} = ${namespace.name}.${node.name}(\
 % for property_, ix in zip(node.properties, range(len(node.properties))):
 % if property_.construct or property_.construct_only or property_.writable:
 <link xref='${namespace.name}.${node.name}-${property_.name}'>${property_.name.replace('-', '_')}</link>=value\
