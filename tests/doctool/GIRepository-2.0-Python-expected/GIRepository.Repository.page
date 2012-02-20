@@ -10,6 +10,12 @@
   </info>
   <title>GIRepository.Repository</title>
 
+
+  <synopsis><code>
+from gi.repository import GIRepository
+
+repository = GIRepository.Repository()  </code></synopsis>
+
   <synopsis ui:expanded="no">
     <title>Hierarchy</title>
     <tree>
@@ -18,9 +24,6 @@
       </item>
     </tree>
   </synopsis>
-  <p>Constructor</p>
-  <synopsis><code>
-repository = GIRepository.Repository()  </code></synopsis>
   <links type="topic" ui:expanded="yes"
          api:type="function" api:mime="text/x-python"
          groups="method" style="linklist">
