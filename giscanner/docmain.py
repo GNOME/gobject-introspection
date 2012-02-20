@@ -29,7 +29,7 @@ def doc_main(args):
 
     parser.add_option("-o", "--output",
                       action="store", dest="output",
-                      help="Filename to write output")
+                      help="Directory to write output to")
     parser.add_option("-l", "--language",
                       action="store", dest="language",
                       default="Python",
@@ -38,6 +38,8 @@ def doc_main(args):
     options, args = parser.parse_args(args)
     if not options.output:
         raise SystemExit("missing output parameter")
+    if not os.path.isdir(options.output):
+        raise SystemExit("wrong output parameter: %s", options.output)
 
     if len(args) < 2:
         raise SystemExit("Need an input GIR filename")
