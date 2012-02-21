@@ -32,12 +32,9 @@ G_BEGIN_DECLS
 typedef struct _DocExamplesObj DocExamplesObj;
 typedef struct _DocExamplesObjClass DocExamplesObjClass;
 
-
 struct _DocExamplesObj
 {
   GObject parent;
-
-
 };
 
 struct _DocExamplesObjClass
@@ -48,6 +45,7 @@ struct _DocExamplesObjClass
 GType doc_examples_obj_get_type (void) G_GNUC_CONST;
 
 DocExamplesObj *doc_examples_obj_new (void);
+void doc_examples_obj_method (DocExamplesObj *self, gint first_arg, gfloat second_arg);
 
 G_END_DECLS
 

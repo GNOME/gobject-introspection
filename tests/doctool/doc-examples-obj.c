@@ -99,3 +99,18 @@ doc_examples_obj_new (void)
 {
   return g_object_new (DOC_EXAMPLES_TYPE_OBJ, NULL);
 }
+
+/**
+ * doc_examples_obj_method:
+ * @first_arg: first argument
+ * @second_arg: second argument
+ *
+ * This is an example of how to document a method.
+ *
+ * Since: 0.99
+ */
+void
+doc_examples_obj_method (DocExamplesObj *self, gint first_arg, gfloat second_arg)
+{
+
+}

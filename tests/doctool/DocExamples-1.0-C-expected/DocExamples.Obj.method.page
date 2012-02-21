@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+
+<page id="DocExamples.Obj.method"
+      type="topic"
+      style="method"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/experimental/ui/">
+  <info>
+    <link type="guide" xref="DocExamples.Obj" group="method"/>
+    <api:function>
+      <api:returns>
+        <api:type>void</api:type>
+      </api:returns>
+      <api:name>doc_examples_obj_method</api:name>
+      <api:arg>
+        <api:type>DocExamplesObj *</api:type>
+        <api:name>self</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>gint</api:type>
+        <api:name>first_arg</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>gfloat</api:type>
+        <api:name>second_arg</api:name>
+      </api:arg>
+    </api:function>
+  </info>
+  <title>doc_examples_obj_method</title>
+<synopsis><code mime="text/x-csrc">
+void doc_examples_obj_method (DocExamplesObj *self,
+gint first_arg,
+                              gfloat second_arg);
+</code></synopsis>
+<p>This is an example of how to document a method.</p>
+
+<table>
+<tr>
+<td><p>first_arg :</p></td>
+<td><p>first argument</p></td>
+</tr>
+<tr>
+<td><p>second_arg :</p></td>
+<td><p>second argument</p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td></td>
+</tr>
+</table>
+<p>Since 0.99</p>
+</page>
