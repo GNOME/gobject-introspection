@@ -182,6 +182,10 @@ class MallardWriter(object):
                 continue
             if getattr(node, 'disguised', False):
                 continue
+            if isinstance(node, ast.Record) and \
+               self._language == 'Python' and \
+               node.is_gtype_struct_for is not None:
+                continue
             nodes.append(node)
             if isinstance(node, (ast.Class, ast.Interface, ast.Record)):
                 nodes += getattr(node, 'methods', [])
