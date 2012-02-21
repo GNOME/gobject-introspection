@@ -220,6 +220,9 @@ class MallardWriter(object):
         elif isinstance(node, ast.Signal) and node.parent is not None:
             template_name = 'mallard-%s-signal.tmpl' % self._language
             page_id = '%s.%s-%s' % (namespace.name, node.parent.name, node.name)
+        elif isinstance(node, ast.VFunction) and node.parent is not None:
+            template_name = 'mallard-%s-vfunc.tmpl' % self._language
+            page_id = '%s.%s-%s' % (namespace.name, node.parent.name, node.name)
         else:
             template_name = 'mallard-%s-default.tmpl' % self._language
             page_id = '%s.%s' % (namespace.name, node.name)

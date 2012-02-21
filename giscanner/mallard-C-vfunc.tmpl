@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<page id="${page_id}"
+      type="topic"
+      style="vfunc"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/experimental/ui/">
+  <info>
+    <link type="guide" xref="${namespace.name}.${node.parent.name}" group="vfunc"/>
+  </info>
+  <title>${node.name}</title>
+<synopsis><code mime="text/x-csrc">
+</code></synopsis>
+${formatter.format(node.doc)}
+
+% if node.parameters or node.retval:
+<table>
+% for arg, ix in zip(node.parameters, range(len(node.parameters))):
+<tr>
+<td><p>${arg.argname} :</p></td>
+<td>${formatter.format(arg.doc)}</td>
+</tr>
+% endfor
+% if node.retval:
+<tr>
+<td><p>Returns :</p></td>
+<td>${formatter.format(node.retval.doc)}</td>
+</tr>
+% endif
+</table>
+% endif
+% if node.version:
+<p>Since ${node.version}</p>
+% endif
+</page>

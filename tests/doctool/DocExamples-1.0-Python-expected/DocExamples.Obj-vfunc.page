@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<page id="DocExamples.Obj-vfunc"
+      type="topic"
+      style="vfunc"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/experimental/ui/">
+  <info>
+    <link type="guide" xref="DocExamples.Obj" group="vfunc"/>
+    <title type="link" role="topic">vfunc</title>
+  </info>
+  <title>DocExamples.Obj.vfunc</title>
+<synopsis><code mime="text/x-python">
+@accepts(gint)
+@returns(none)
+def do_vfunc(self, first_arg):
+</code></synopsis>
+<p>This is an example of how to document a vfunc.</p>
+
+<table>
+<tr>
+<td><p>first_arg :</p></td>
+<td><p>first argument</p></td>
+</tr>
+</table>
+<p>Since 0.99</p>
+</page>

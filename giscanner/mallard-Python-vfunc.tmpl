@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<page id="${page_id}"
+      type="topic"
+      style="vfunc"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/experimental/ui/">
+  <info>
+    <link type="guide" xref="${namespace.name}.${node.parent.name}" group="vfunc"/>
+    <title type="link" role="topic">${node.name}</title>
+  </info>
+  <title>${namespace.name}.${node.parent.name}.${node.name}</title>
+<synopsis><code mime="text/x-python">
+% if len(node.parameters) != 0:
+@accepts(\
+% for arg, ix in zip(node.parameters, range(len(node.parameters))):
+${formatter.format_type(arg.type) | x}\
+% if ix != len(node.parameters) - 1:
+, \
+%endif
+% endfor
+)
+% endif
+@returns(${formatter.format_type(node.retval.type) | x})
+def \
+do_${node.name}(self, \
+% for arg, ix in zip(node.parameters, range(len(node.parameters))):
+${arg.argname}\
+% if ix != len(node.parameters) - 1:
+, \
+%endif
+% endfor
+):
+</code></synopsis>
+${formatter.format(node.doc)}
+
+% if node.parameters or node.retval:
+<table>
+% for arg, ix in zip(node.parameters, range(len(node.parameters))):
+<tr>
+<td><p>${arg.argname} :</p></td>
+<td>${formatter.format(arg.doc)}</td>
+</tr>
+% endfor
+% if node.retval and node.retval.type.ctype != 'void':
+<tr>
+<td><p>Returns :</p></td>
+<td>${formatter.format(node.retval.doc)}</td>
+</tr>
+% endif
+</table>
+% endif
+% if node.version:
+<p>Since ${node.version}</p>
+% endif
+</page>

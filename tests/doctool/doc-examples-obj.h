@@ -40,6 +40,17 @@ struct _DocExamplesObj
 struct _DocExamplesObjClass
 {
   GObjectClass parent_class;
+
+  /**
+   * DocExamplesObjClass::vfunc:
+   * @self:
+   * @first_arg: first argument
+   *
+   * This is an example of how to document a vfunc.
+   *
+   * Since: 0.99
+   */
+  void (*vfunc) (DocExamplesObj *self, gint first_arg);
 };
 
 GType doc_examples_obj_get_type (void) G_GNUC_CONST;
