@@ -22,6 +22,9 @@ obj = DocExamples.Obj(<link xref='DocExamples.Obj-property-example'>property_exa
     <tree>
       <item>
         <code>GObject.Object</code>
+      <item>
+        <code>DocExamples.Obj</code>
+      </item>
       </item>
     </tree>
   </synopsis>

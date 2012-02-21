@@ -121,7 +121,7 @@ class MallardFormatter(object):
         return to_underscores(string)
 
     def get_class_hierarchy(self, node):
-        parent_chain = []
+        parent_chain = [node]
 
         while node.parent:
             node = self._transformer.lookup_giname(str(node.parent))
