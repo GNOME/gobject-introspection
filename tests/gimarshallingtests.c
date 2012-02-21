@@ -3772,6 +3772,35 @@ gi_marshalling_tests_object_real_method_with_default_implementation (GIMarshalli
     g_object_set_property (G_OBJECT (self), "int", &val);
 }
 
+/**
+ * gi_marshalling_tests_object_vfunc_with_callback:
+ * @callback: (scope call) (closure callback_data):
+ * @callback_data: (allow-none):
+ *
+ * Virtual: vfunc_with_callback
+ */
+void
+gi_marshalling_tests_object_vfunc_with_callback (GIMarshallingTestsObject *object,
+                                                 GIMarshallingTestsCallbackIntInt callback,
+                                                 void *callback_data)
+{
+
+}
+
+static int
+_callback (int val, void *user_data)
+{
+    g_assert(user_data == 0xdeadbeef);
+    return val;
+}
+
+void
+gi_marshalling_tests_object_call_vfunc_with_callback (GIMarshallingTestsObject *object)
+{
+    GI_MARSHALLING_TESTS_OBJECT_GET_CLASS (object)->vfunc_with_callback (object,
+                                                                         _callback,
+                                                                         (void *) 0xdeadbeef);
+}
 
 /**
  * gi_marshalling_tests_object_none_return:

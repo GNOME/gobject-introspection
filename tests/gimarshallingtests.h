@@ -679,6 +679,8 @@ void gi_marshalling_tests_union_method (GIMarshallingTestsUnion *union_);
 typedef struct _GIMarshallingTestsObjectClass GIMarshallingTestsObjectClass;
 typedef struct _GIMarshallingTestsObject GIMarshallingTestsObject;
 
+typedef int (* GIMarshallingTestsCallbackIntInt) (int val, void *user_data);
+
 struct _GIMarshallingTestsObjectClass
 {
 	GObjectClass parent_class;
@@ -706,6 +708,10 @@ struct _GIMarshallingTestsObjectClass
      * @in: (in):
      */
     void (* method_deep_hierarchy) (GIMarshallingTestsObject *self, gint8 in);
+
+    void (* vfunc_with_callback) (GIMarshallingTestsObject *self,
+                                  GIMarshallingTestsCallbackIntInt callback,
+                                  void *callback_data);
 
     /**
      * GIMarshallingTestsObjectClass::vfunc_return_value_only:
@@ -790,6 +796,11 @@ void gi_marshalling_tests_object_inout_same (GIMarshallingTestsObject **object);
 
 void gi_marshalling_tests_object_int8_in (GIMarshallingTestsObject *object, gint8 in);
 void gi_marshalling_tests_object_int8_out (GIMarshallingTestsObject *object, gint8 *out);
+
+void gi_marshalling_tests_object_vfunc_with_callback (GIMarshallingTestsObject *object,
+                                                      GIMarshallingTestsCallbackIntInt callback,
+                                                      void *callback_data);
+void gi_marshalling_tests_object_call_vfunc_with_callback (GIMarshallingTestsObject *object);
 
 #define GI_MARSHALLING_TESTS_TYPE_SUB_OBJECT             (gi_marshalling_tests_sub_object_get_type ())
 #define GI_MARSHALLING_TESTS_SUB_OBJECT(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), GI_MARSHALLING_TESTS_TYPE_SUB_OBJECT, GIMarshallingTestsSubObject))
