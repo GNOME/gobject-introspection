@@ -3559,8 +3559,13 @@
  * @G_TOKEN_EOF: the end of the file
  * @G_TOKEN_LEFT_PAREN: a '(' character
  * @G_TOKEN_LEFT_CURLY: a '{' character
+ * @G_TOKEN_LEFT_BRACE: a '[' character
  * @G_TOKEN_RIGHT_CURLY: a '}' character
  * @G_TOKEN_RIGHT_PAREN: a ')' character
+ * @G_TOKEN_RIGHT_BRACE: a ']' character
+ * @G_TOKEN_EQUAL_SIGN: a '=' character
+ * @G_TOKEN_COMMA: a ',' character
+ * @G_TOKEN_NONE: not a token
  * @G_TOKEN_ERROR: an error occurred
  * @G_TOKEN_CHAR: a character
  * @G_TOKEN_BINARY: a binary integer
@@ -5333,6 +5338,27 @@
 
 
 /**
+ * G_GNUC_BEGIN_IGNORE_DEPRECATIONS:
+ *
+ * Tells <command>gcc</command> (if it is a new enough version) to
+ * temporarily stop emitting warnings when functions marked with
+ * %G_GNUC_DEPRECATED or %G_GNUC_DEPRECATED_FOR are called. This is
+ * useful for when you have one deprecated function calling another
+ * one, or when you still have regression tests for deprecated
+ * functions.
+ *
+ * Use %G_GNUC_END_IGNORE_DEPRECATIONS to begin warning again. (If you
+ * are not compiling with <literal>-Wdeprecated-declarations</literal>
+ * then neither macro has any effect.)
+ *
+ * This macro can be used either inside or outside of a function body,
+ * but must appear on a line by itself.
+ *
+ * Since: 2.32
+ */
+
+
+/**
  * G_GNUC_CONST:
  *
  * Expands to the GNU C <literal>const</literal> function attribute if
@@ -5378,6 +5404,20 @@
  * in the warning, but it's better than showing the macro expansion.)
  *
  * Since: 2.26
+ */
+
+
+/**
+ * G_GNUC_END_IGNORE_DEPRECATIONS:
+ *
+ * Undoes the effect of %G_GNUC_BEGIN_IGNORE_DEPRECATIONS, telling
+ * <command>gcc</command> to begin outputting warnings again
+ * (assuming those warnings had been enabled to begin with).
+ *
+ * This macro can be used either inside or outside of a function body,
+ * but must appear on a line by itself.
+ *
+ * Since: 2.32
  */
 
 
@@ -14235,7 +14275,7 @@
 /**
  * g_async_queue_timeout_pop_unlocked:
  * @queue: a #GAsyncQueue
- * @time: the number of microseconds to wait
+ * @timeout: the number of microseconds to wait
  *
  * Pops data from the @queue. If the queue is empty, blocks for
  * @timeout microseconds, or until data becomes available.
@@ -18961,7 +19001,7 @@
 
 /**
  * g_environ_setenv:
- * @envp: (array zero-terminated=1) (transfer full): an environment list (eg, as returned from g_get_environ())
+ * @envp: (array zero-terminated=1) (transfer full): an environment list that can be freed using g_strfreev() (e.g., as returned from g_get_environ())
  * @variable: the environment variable to set, must not contain '='
  * @value: the value for to set the variable to
  * @overwrite: whether to change the variable if it already exists
@@ -18973,7 +19013,7 @@
  * file name encoding. On UNIX, this means that they can be
  * arbitrary byte strings. On Windows, they should be in UTF-8.
  *
- * updated environment
+ * updated environment list. Free it using g_strfreev().
  *
  * Returns: (array zero-terminated=1) (transfer full): the
  * Since: 2.32
@@ -18982,13 +19022,13 @@
 
 /**
  * g_environ_unsetenv:
- * @envp: (array zero-terminated=1) (transfer full): an environment list (eg, as returned from g_get_environ())
+ * @envp: (array zero-terminated=1) (transfer full): an environment list that can be freed using g_strfreev() (e.g., as returned from g_get_environ())
  * @variable: the environment variable to remove, must not contain '='
  *
  * Removes the environment variable @variable from the provided
  * environment @envp.
  *
- * updated environment
+ * updated environment list. Free it using g_strfreev().
  *
  * Returns: (array zero-terminated=1) (transfer full): the
  * Since: 2.32
@@ -22357,7 +22397,7 @@
  * @error: return location for a #GError, or %NULL
  *
  * Loads a key file into an empty #GKeyFile structure.
- * If the file could not be loaded then %error is set to
+ * If the file could not be loaded then @error is set to
  * either a #GFileError or #GKeyFileError.
  *
  * Returns: %TRUE if a key file could be loaded, %FALSE otherwise

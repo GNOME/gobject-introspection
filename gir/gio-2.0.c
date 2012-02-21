@@ -259,7 +259,7 @@
  *
  * The ::command-line signal is emitted on the primary instance when
  * a commandline is not handled locally. See g_application_run() and
- * the #GApplicationCommandline documentation for more information.
+ * the #GApplicationCommandLine documentation for more information.
  *
  * process. See g_application_command_line_set_exit_status().
  *
@@ -2331,7 +2331,7 @@
 /**
  * GDBusProxy:g-name-owner:
  *
- * The unique name that owns #GDBusProxy:name or %NULL if no-one
+ * The unique name that owns #GDBusProxy:g-name or %NULL if no-one
  * currently owns that name. You may connect to #GObject::notify signal to
  * track changes to this property.
  *
@@ -3488,8 +3488,8 @@
 
 /**
  * GIOModuleScopeFlags:
- * @G_IO_MODULES_SCOPE_NONE: No module scan flags
- * @G_IO_MODULES_SCOPE_BLOCK_DUPLICATES: When using this scope to load or scan modules, automatically block a modules which has the same base basename as previously loaded module.
+ * @G_IO_MODULE_SCOPE_NONE: No module scan flags
+ * @G_IO_MODULE_SCOPE_BLOCK_DUPLICATES: When using this scope to load or scan modules, automatically block a modules which has the same base basename as previously loaded module.
  *
  * Flags for use with g_io_module_scope_new().
  *
@@ -4129,7 +4129,7 @@
  * @g_iface: The parent interface.
  * @changed: Changed signal that is emitted when the mount's state has changed.
  * @unmounted: The unmounted signal that is emitted when the #GMount have been unmounted. If the recipient is holding references to the object they should release them so the object can be finalized.
- * @pre_unmount: The pre_unmout signal that is emitted when the #GMount will soon be emitted. If the recipient is somehow holding the mount open by keeping an open file on it it should close the file.
+ * @pre_unmount: The ::pre-unmount signal that is emitted when the #GMount will soon be emitted. If the recipient is somehow holding the mount open by keeping an open file on it it should close the file.
  * @get_root: Gets a #GFile to the root directory of the #GMount.
  * @get_name: Gets a string containing the name of the #GMount.
  * @get_icon: Gets a #GIcon for the #GMount.
@@ -4145,7 +4145,7 @@
  * @remount: Starts remounting a #GMount.
  * @remount_finish: Finishes a remounting operation.
  * @guess_content_type: Starts guessing the type of the content of a #GMount. See g_mount_guess_content_type() for more information on content type guessing. This operation was added in 2.18.
- * @guess_content_type_finish: Finishes a contenet type guessing operation. Added in 2.18.
+ * @guess_content_type_finish: Finishes a content type guessing operation. Added in 2.18.
  * @guess_content_type_sync: Synchronous variant of @guess_content_type. Added in 2.18
  * @unmount_with_operation: Starts unmounting a #GMount using a #GMountOperation. Since 2.22.
  * @unmount_with_operation_finish: Finishes an unmounting operation using a #GMountOperation. Since 2.22.
@@ -5180,8 +5180,9 @@
  * GProxyInterface:
  * @g_iface: The parent interface.
  * @connect: Connect to proxy server and wrap (if required) the #connection to handle payload.
- * @connect_async: Same has connect() but asynchronous.
+ * @connect_async: Same as connect() but asynchronous.
  * @connect_finish: Returns the result of connect_async()
+ * @supports_hostname: Returns whether the proxy supports hostname lookups.
  *
  * Provides an interface for handling proxy connection and payload.
  *
@@ -5435,7 +5436,7 @@
  * @tell: Tells the current location within a stream.
  * @can_seek: Checks if seeking is supported by the stream.
  * @seek: Seeks to a location within a stream.
- * @can_truncate: Chekcs if truncation is suppored by the stream.
+ * @can_truncate: Checks if truncation is supported by the stream.
  * @truncate_fn: Truncates a stream.
  *
  * Provides an interface for implementing seekable functionality on I/O Streams.
@@ -6112,7 +6113,7 @@
  * Each event except %G_SOCKET_CLIENT_COMPLETE may be emitted
  * multiple times (or not at all) for a given connectable (in
  * particular, if @client ends up attempting to connect to more than
- * one address). However, if @client emits the #GSocketClient:event
+ * one address). However, if @client emits the #GSocketClient::event
  * signal at all for a given connectable, that it will always emit
  * it with %G_SOCKET_CLIENT_COMPLETE when it is done.
  *
@@ -6977,8 +6978,9 @@
  * @G_TLS_DATABASE_LOOKUP_NONE: No lookup flags
  * @G_TLS_DATABASE_LOOKUP_KEYPAIR: Restrict lookup to certificates that have a private key.
  *
- * Flags for g_tls_database_lookup_handle(), g_tls_database_lookup_issuer(),
- * and g_tls_database_lookup_issued().
+ * Flags for g_tls_database_lookup_certificate_handle(),
+ * g_tls_database_lookup_certificate_issuer(),
+ * and g_tls_database_lookup_certificates_issued_by().
  *
  * Since: 2.30
  */
@@ -12297,7 +12299,7 @@
  * detail.
  *
  * To access an exported #GActionGroup remotely, use
- * g_dbus_action_group_new() to obtain a #GDBusActionGroup.
+ * g_dbus_action_group_get() to obtain a #GDBusActionGroup.
  */
 
 
@@ -12432,10 +12434,8 @@
  * g_action_group_activate_action() on the application, it is always
  * invoked in the primary instance. The actions are also exported on
  * the session bus, and GIO provides the #GDBusActionGroup wrapper to
- * conveniently access them remotely. Additionally, g_application_set_app_menu()
- * and g_application_set_menubar() can be used to export representation
- * data for the actions, in the form of #GMenuModels. GIO provides
- * a #GDBusMenuModel wrapper for remote access to exported #GMenuModels.
+ * conveniently access them remotely. GIO provides a #GDBusMenuModel wrapper
+ * for remote access to exported #GMenuModels.
  *
  * There is a number of different entry points into a GApplication:
  * <itemizedlist>
@@ -12453,7 +12453,7 @@
  * in the form of a #GVariant dictionary mapping strings to variants.
  * To use platform data, override the @before_emit or @after_emit virtual
  * functions in your #GApplication subclass. When dealing with
- * #GApplicationCommandline objects, the platform data is directly
+ * #GApplicationCommandLine objects, the platform data is directly
  * available via g_application_command_line_get_cwd(),
  * g_application_command_line_get_environ() and
  * g_application_command_line_get_platform_data().
@@ -12463,7 +12463,7 @@
  * "cwd"), and optionally the environment (ie the set of environment
  * variables and their values) of the calling process (key "environ").
  * The environment is only added to the platform data if the
- * #G_APPLICATION_SEND_ENVIONMENT flag is set. GApplication subclasses
+ * %G_APPLICATION_SEND_ENVIRONMENT flag is set. #GApplication subclasses
  * can add their own platform data by overriding the @add_platform_data
  * virtual function. For instance, #GtkApplication adds startup notification
  * data in this way.
@@ -12526,7 +12526,7 @@
  * of this object (ie: the process exits when the last reference is
  * dropped).
  *
- * The main use for #GApplicationCommandline (and the
+ * The main use for #GApplicationCommandLine (and the
  * #GApplication::command-line signal) is 'Emacs server' like use cases:
  * You can set the <envar>EDITOR</envar> environment variable to have
  * e.g. git use your favourite editor to edit commit messages, and if you
@@ -12568,7 +12568,7 @@
  * <para>
  * An example of deferred commandline handling. Here, the commandline is
  * not completely handled before the #GApplication::command-line handler
- * returns. Instead, we keep a reference to the GApplicationCommandline
+ * returns. Instead, we keep a reference to the GApplicationCommandLine
  * object and handle it later(in this example, in an idle). Note that it
  * is necessary to hold the application until you are done with the
  * commandline.
@@ -13048,17 +13048,17 @@
  * (i.e. connect to D-Bus): for instance, g_dbus_connection_new() and
  * g_bus_get(), and the synchronous versions of those methods, give you an
  * initialized connection. Language bindings for GIO should use
- * g_initable_new() or g_async_initable_new(), which also initialize the
+ * g_initable_new() or g_async_initable_new_async(), which also initialize the
  * connection.
  *
  * If you construct an uninitialized #GDBusConnection, such as via
  * g_object_new(), you must initialize it via g_initable_init() or
- * g_async_initable_init() before using its methods or properties. Calling
- * methods or accessing properties on a #GDBusConnection that has not completed
- * initialization successfully is considered to be invalid, and leads to
- * undefined behaviour. In particular, if initialization fails with a #GError,
- * the only valid thing you can do with that #GDBusConnection is to free it
- * with g_object_unref().
+ * g_async_initable_init_async() before using its methods or properties.
+ * Calling methods or accessing properties on a #GDBusConnection that has not
+ * completed initialization successfully is considered to be invalid, and leads
+ * to undefined behaviour. In particular, if initialization fails with a
+ * #GError, the only valid thing you can do with that #GDBusConnection is to
+ * free it with g_object_unref().
  *
  * <example id="gdbus-server"><title>D-Bus server example</title><programlisting><xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../gio/tests/gdbus-example-server.c"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting></example>
  *
@@ -13643,14 +13643,14 @@
  * using wildcards, e.g. "standard::*" will return all of the keys in the
  * "standard" namespace.
  *
- * Values are stored within the list in #GFileAttributeValue structures.
- * Values can store different types, listed in the enum #GFileAttributeType.
- * Upon creation of a #GFileAttributeValue, the type will be set to
- * %G_FILE_ATTRIBUTE_TYPE_INVALID.
- *
  * The list of possible attributes for a filesystem (pointed to by a #GFile) is
  * available as a #GFileAttributeInfoList. This list is queryable by key names
  * as indicated earlier.
+ *
+ * Information is stored within the list in #GFileAttributeInfo structures.
+ * The info structure can store different types, listed in the enum
+ * #GFileAttributeType. Upon creation of a #GFileAttributeInfo, the type will
+ * be set to %G_FILE_ATTRIBUTE_TYPE_INVALID.
  *
  * Classes that implement #GFileIface will create a #GFileAttributeInfoList and
  * install default keys and values for their given file system, architecture,
@@ -13908,7 +13908,7 @@
  * stream to jump to arbitrary positions in the file, provided the
  * filesystem of the file allows it. To find the position of a file
  * input stream, use g_seekable_tell(). To find out if a file input
- * stream supports seeking, use g_seekable_stream_can_seek().
+ * stream supports seeking, use g_seekable_can_seek().
  * To position a file input stream, use g_seekable_seek().
  */
 
@@ -14256,9 +14256,6 @@
  * a regular item, use g_menu_insert(). To add a section, use
  * g_menu_insert_section(). To add a submenu, use
  * g_menu_insert_submenu().
- *
- * Often it is more convenient to create a #GMenu from an XML
- * fragment, using <link linkend="gio-GMenu-Markup">GMenu Markup</link>.
  */
 
 
@@ -14420,7 +14417,7 @@
  * SECTION:gmount
  * @short_description: Mount management
  * @include: gio/gio.h
- * @see_also: GVolume, GUnixMount
+ * @see_also: GVolume, GUnixMountEntry, GUnixMountPoint
  *
  * The #GMount interface represents user-visible mounts. Note, when
  * porting from GnomeVFS, #GMount is the moral equivalent of #GnomeVFSVolume.
@@ -14431,8 +14428,8 @@
  * might not be related to a volume object.
  *
  * Unmounting a #GMount instance is an asynchronous operation. For
- * more information about asynchronous operations, see #GAsyncReady
- * and #GSimpleAsyncReady. To unmount a #GMount instance, first call
+ * more information about asynchronous operations, see #GAsyncResult
+ * and #GSimpleAsyncResult. To unmount a #GMount instance, first call
  * g_mount_unmount_with_operation() with (at least) the #GMount instance and a
  * #GAsyncReadyCallback.  The callback will be fired when the
  * operation has resolved (either with success or failure), and a
@@ -15991,8 +15988,8 @@
  * equivalent of #GnomeVFSDrive.
  *
  * Mounting a #GVolume instance is an asynchronous operation. For more
- * information about asynchronous operations, see #GAsyncReady and
- * #GSimpleAsyncReady. To mount a #GVolume, first call
+ * information about asynchronous operations, see #GAsyncResult and
+ * #GSimpleAsyncResult. To mount a #GVolume, first call
  * g_volume_mount() with (at least) the #GVolume instance, optionally
  * a #GMountOperation object and a #GAsyncReadyCallback.
  *
@@ -16026,7 +16023,7 @@
  * when the gvfs hal volume monitor is in use. Other volume monitors
  * will generally be able to provide the #G_VOLUME_IDENTIFIER_KIND_UNIX_DEVICE
  * identifier, which can be used to obtain a hal device by means of
- * libhal_manger_find_device_string_match().
+ * libhal_manager_find_device_string_match().
  */
 
 
@@ -16617,7 +16614,7 @@
  * g_action_group_get_action_parameter_type(),
  * g_action_group_get_action_state_type(),
  * g_action_group_get_action_state_hint() and
- * g_action_group_get_state() with a single function call.
+ * g_action_group_get_action_state() with a single function call.
  *
  * This provides two main benefits.
  *
@@ -17320,7 +17317,7 @@
  *
  * Activates the application.
  *
- * In essence, this results in the #GApplication::activate() signal being
+ * In essence, this results in the #GApplication::activate signal being
  * emitted in the primary instance.
  *
  * The application must be registered before calling this function.
@@ -17688,6 +17685,24 @@
 
 
 /**
+ * g_application_quit:
+ * @application: a #GApplication
+ *
+ * Immediately quits the application.
+ *
+ * Upon return to the mainloop, g_application_run() will return,
+ * calling only the 'shutdown' function before doing so.
+ *
+ * The hold count is ignored.
+ *
+ * The result of calling g_application_run() again after it returns is
+ * unspecified.
+ *
+ * Since: 2.32
+ */
+
+
+/**
  * g_application_register:
  * @application: a #GApplication
  * @cancellable: a #GCancellable, or %NULL
@@ -17771,7 +17786,7 @@
  * If local_command_line() returns %FALSE then the application is registered
  * and the #GApplication::command-line signal is emitted in the primary
  * instance (which may or may not be this instance). The signal handler
- * gets passed a #GApplicationCommandline object that (among other things)
+ * gets passed a #GApplicationCommandLine object that (among other things)
  * contains the remaining commandline arguments that have not been handled
  * by local_command_line().
  *
@@ -17791,7 +17806,7 @@
  *
  * If you need to handle commandline arguments that are not filenames,
  * and you don't mind commandline handling to happen in the primary
- * instance, you should set %G_APPLICATION_HANDLED_COMMAND_LINE and
+ * instance, you should set %G_APPLICATION_HANDLES_COMMAND_LINE and
  * process the commandline arguments in your #GApplication::command-line
  * signal handler, either manually or using the #GOptionContext API.
  *
@@ -19080,7 +19095,7 @@
  * @inbuf_size: the number of bytes in @inbuf
  * @outbuf: a buffer to write converted data in.
  * @outbuf_size: the number of bytes in @outbuf, must be at least one
- * @flags: a #GConvertFlags controlling the conversion details
+ * @flags: a #GConverterFlags controlling the conversion details
  * @bytes_read: (out): will be set to the number of bytes read from @inbuf on success
  * @bytes_written: (out): will be set to the number of bytes written to @outbuf on success
  * @error: location to store the error occurring, or %NULL to ignore
@@ -21821,7 +21836,7 @@
  * Stops exporting @interface_ on all connections it is exported on.
  *
  * To unexport @interface_ from only a single connection, use
- * g_dbus_interface_skeleton_export_from_connection()
+ * g_dbus_interface_skeleton_unexport_from_connection()
  *
  * Since: 2.30
  */
@@ -24419,7 +24434,7 @@
  * @drive: a #GDrive
  *
  * Gets the kinds of identifiers that @drive has.
- * Use g_drive_get_identifer() to obtain the identifiers
+ * Use g_drive_get_identifier() to obtain the identifiers
  * themselves.
  *
  * array of strings containing kinds of identifiers. Use g_strfreev()
@@ -25971,7 +25986,8 @@
  * @src_info: source to copy attributes from.
  * @dest_info: destination to copy attributes to.
  *
- * Copies all of the #GFileAttribute<!-- -->s from @src_info to @dest_info.
+ * Copies all of the <link linkend="gio-GFileAttribute">GFileAttribute</link>s
+ * from @src_info to @dest_info.
  */
 
 
@@ -29114,7 +29130,7 @@
  * @first_property_name: the name of the first property, or %NULL if no properties
  * @...: the value if the first property, followed by and other property value pairs, and ended by %NULL.
  *
- * Helper function for constructing #GInitiable object. This is
+ * Helper function for constructing #GInitable object. This is
  * similar to g_object_new() but also initializes the object
  * and returns %NULL, setting an error on failure.
  *
@@ -29131,7 +29147,7 @@
  * @cancellable: optional #GCancellable object, %NULL to ignore.
  * @error: a #GError location to store the error occurring, or %NULL to ignore.
  *
- * Helper function for constructing #GInitiable object. This is
+ * Helper function for constructing #GInitable object. This is
  * similar to g_object_new_valist() but also initializes the object
  * and returns %NULL, setting an error on failure.
  *
@@ -29148,7 +29164,7 @@
  * @cancellable: optional #GCancellable object, %NULL to ignore.
  * @error: a #GError location to store the error occurring, or %NULL to ignore.
  *
- * Helper function for constructing #GInitiable object. This is
+ * Helper function for constructing #GInitable object. This is
  * similar to g_object_newv() but also initializes the object
  * and returns %NULL, setting an error on failure.
  *
@@ -29697,7 +29713,7 @@
  * Create a new scope for loading of IO modules. A scope can be used for
  * blocking duplicate modules, or blocking a module you don't want to load.
  *
- * Specify the %G_IO_MODULES_SCOPE_BLOCK_DUPLICATES flag to block modules
+ * Specify the %G_IO_MODULE_SCOPE_BLOCK_DUPLICATES flag to block modules
  * which have the same base name as a module that has already been seen
  * in this scope.
  *
@@ -30431,7 +30447,7 @@
  * @submenu: a #GMenuModel with the items of the submenu
  *
  * Convenience function for appending a submenu menu item to the end of
- * @menu.  Combine g_menu_new_submenu() and g_menu_insert_item() for a
+ * @menu.  Combine g_menu_item_new_submenu() and g_menu_insert_item() for a
  * more flexible alternative.
  *
  * Since: 2.32
@@ -30467,8 +30483,8 @@
  *
  * If successful, @name and @value are set to the name and value of the
  * attribute that has just been advanced to.  At this point,
- * g_menu_item_get_name() and g_menu_item_get_value() will return the
- * same values again.
+ * g_menu_attribute_iter_get_name() and g_menu_attribute_iter_get_value() will
+ * return the same values again.
  *
  * The value returned in @name remains valid for as long as the iterator
  * remains at the current position.  The value returned in @value must
@@ -30596,7 +30612,7 @@
  * @submenu: a #GMenuModel with the items of the submenu
  *
  * Convenience function for inserting a submenu menu item into @menu.
- * Combine g_menu_new_submenu() and g_menu_insert_item() for a more
+ * Combine g_menu_item_new_submenu() and g_menu_insert_item() for a more
  * flexible alternative.
  *
  * Since: 2.32
@@ -30858,8 +30874,7 @@
  * a separator between an action name and a target string.  In this
  * case, this call is equivalent to calling
  * g_menu_item_set_action_and_target() with the part before the "::" and
- * g_menu_item_set_target_value() with a string-type #GVariant
- * containing the part following the "::".
+ * with a string-type #GVariant containing the part following the "::".
  *
  * If @detailed_action doesn't contain "::" then the action is set to
  * the given string (verbatim) and the target value is unset.
@@ -30868,7 +30883,7 @@
  * g_menu_item_set_action_and_target_value() for more flexible (but
  * slightly less convenient) alternatives.
  *
- * See also g_menu_set_action_and_target_value() for a description of
+ * See also g_menu_item_set_action_and_target_value() for a description of
  * the semantics of the action and target attributes.
  *
  * Since: 2.32
@@ -30971,7 +30986,7 @@
  *
  * If successful, @out_link and @value are set to the name and #GMenuModel
  * of the link that has just been advanced to.  At this point,
- * g_menu_item_get_name() and g_menu_item_get_value() will return the
+ * g_menu_link_iter_get_name() and g_menu_link_iter_get_value() will return the
  * same values again.
  *
  * The value returned in @out_link remains valid for as long as the iterator
@@ -31225,7 +31240,7 @@
  * @submenu: a #GMenuModel with the items of the submenu
  *
  * Convenience function for prepending a submenu menu item to the start
- * of @menu.  Combine g_menu_new_submenu() and g_menu_insert_item() for
+ * of @menu.  Combine g_menu_item_new_submenu() and g_menu_insert_item() for
  * a more flexible alternative.
  *
  * Since: 2.32
@@ -31887,7 +31902,7 @@
  * @uri. May fail and return %NULL in case parsing @uri fails.
  *
  * Using this rather than g_network_address_new() or
- * g_network_address_parse_host() allows #GSocketClient to determine
+ * g_network_address_parse() allows #GSocketClient to determine
  * when to use application-specific proxy protocols.
  *
  * Returns: (transfer full): the new #GNetworkAddress, or %NULL on error
@@ -36495,6 +36510,36 @@
 
 
 /**
+ * g_socket_condition_timed_wait:
+ * @socket: a #GSocket
+ * @condition: a #GIOCondition mask to wait for
+ * @timeout: the maximum time (in microseconds) to wait, or -1
+ * @cancellable: (allow-none): a #GCancellable, or %NULL
+ * @error: a #GError pointer, or %NULL
+ *
+ * Waits for up to @timeout microseconds for @condition to become true
+ * on @socket. If the condition is met, %TRUE is returned.
+ *
+ * If @cancellable is cancelled before the condition is met, or if
+ * @timeout (or the socket's #GSocket:timeout) is reached before the
+ * condition is met, then %FALSE is returned and @error, if non-%NULL,
+ * is set to the appropriate value (%G_IO_ERROR_CANCELLED or
+ * %G_IO_ERROR_TIMED_OUT).
+ *
+ * If you don't want a timeout, use g_socket_condition_wait().
+ * (Alternatively, you can pass -1 for @timeout.)
+ *
+ * Note that although @timeout is in microseconds for consistency with
+ * other GLib APIs, this function actually only has millisecond
+ * resolution, and the behavior is undefined if @timeout is not an
+ * exact number of milliseconds.
+ *
+ * Returns: %TRUE if the condition was met, %FALSE otherwise
+ * Since: 2.32
+ */
+
+
+/**
  * g_socket_condition_wait:
  * @socket: a #GSocket
  * @condition: a #GIOCondition mask to wait for
@@ -36509,6 +36554,8 @@
  * met, then %FALSE is returned and @error, if non-%NULL, is set to
  * the appropriate value (%G_IO_ERROR_CANCELLED or
  * %G_IO_ERROR_TIMED_OUT).
+ *
+ * See also g_socket_condition_timed_wait().
  *
  * Returns: %TRUE if the condition was met, %FALSE otherwise
  * Since: 2.22
@@ -38291,7 +38338,7 @@
  * g_tls_backend_get_file_database_type:
  * @backend: the #GTlsBackend
  *
- * Gets the #GTyep of @backend's #GTlsFileDatabase implementation.
+ * Gets the #GType of @backend's #GTlsFileDatabase implementation.
  *
  * Returns: the #GType of backend's #GTlsFileDatabase implementation.
  * Since: 2.30
@@ -38913,9 +38960,10 @@
  *
  * Lookup a certificate by its handle.
  *
- * The handle should have been created by calling g_tls_database_create_handle()
- * on a #GTlsDatabase object of the same TLS backend. The handle is designed
- * to remain valid across instantiations of the database.
+ * The handle should have been created by calling
+ * g_tls_database_create_certificate_handle() on a #GTlsDatabase object of
+ * the same TLS backend. The handle is designed to remain valid across
+ * instantiations of the database.
  *
  * If the handle is no longer valid, or does not point to a certificate in
  * this database, then %NULL will be returned.
@@ -38941,7 +38989,7 @@
  * @user_data: the data to pass to the callback function
  *
  * Asynchronously lookup a certificate by its handle in the database. See
- * g_tls_database_lookup_handle() for more information.
+ * g_tls_database_lookup_certificate_for_handle() for more information.
  *
  * Since: 2.30
  */
@@ -38954,7 +39002,7 @@
  * @error: a #GError pointer, or %NULL
  *
  * Finish an asynchronous lookup of a certificate by its handle. See
- * g_tls_database_lookup_handle() for more information.
+ * g_tls_database_lookup_certificate_handle() for more information.
  *
  * If the handle is no longer valid, or does not point to a certificate in
  * this database, then %NULL will be returned.
@@ -40016,7 +40064,7 @@
 
 /**
  * g_unix_mount_free:
- * @mount_entry: a #GUnixMount.
+ * @mount_entry: a #GUnixMountEntry.
  *
  * Frees a unix mount.
  */
@@ -40677,7 +40725,7 @@
  * @volume: a #GVolume
  *
  * Gets the kinds of <link linkend="volume-identifier">identifiers</link>
- * that @volume has. Use g_volume_get_identifer() to obtain
+ * that @volume has. Use g_volume_get_identifier() to obtain
  * the identifiers themselves.
  *
  * of strings containing kinds of identifiers. Use g_strfreev() to free.
