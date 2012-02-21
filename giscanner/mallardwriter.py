@@ -185,11 +185,12 @@ class MallardWriter(object):
             nodes.append(node)
             if isinstance(node, (ast.Class, ast.Interface, ast.Record)):
                 nodes += getattr(node, 'methods', [])
-                nodes += getattr(node, 'constructors', [])
                 nodes += getattr(node, 'static_methods', [])
                 nodes += getattr(node, 'virtual_methods', [])
                 nodes += getattr(node, 'properties', [])
                 nodes += getattr(node, 'signals', [])
+                if self._language == 'C':
+                    nodes += getattr(node, 'constructors', [])
         for node in nodes:
             self._render_node(node, output)
 
