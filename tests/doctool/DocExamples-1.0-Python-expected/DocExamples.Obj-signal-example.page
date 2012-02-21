@@ -12,9 +12,7 @@
 <synopsis><code mime="text/x-python">
 def callback(obj, float_param, since, user_param1, ...)
 </code></synopsis>
-<p>Emitted when the connection status on the account changes.</p><p>The @dbus_error_name and @details parameters were present, but
-non-functional (always None), in older versions. They have been
-available with their current behaviour since version 0.11.7.</p>
+<p>This is an example of how to document a signal.</p>
 
 <table>
 <tr>

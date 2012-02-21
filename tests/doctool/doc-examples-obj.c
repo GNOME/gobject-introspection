@@ -53,15 +53,11 @@ doc_examples_obj_class_init (DocExamplesObjClass *klass)
 
   /**
    * DocExamplesObj::signal-example:
-   * @object:
+   * @obj:
    * @int_param: a parameter of type int
    * @float_param: a parameter of type float
    *
-   * Emitted when the connection status on the account changes.
-   *
-   * The @dbus_error_name and @details parameters were present, but
-   * non-functional (always %NULL), in older versions. They have been
-   * available with their current behaviour since version 0.11.7.
+   * This is an example of how to document a signal.
    *
    * Since: 0.99
    */
@@ -79,6 +75,8 @@ doc_examples_obj_class_init (DocExamplesObjClass *klass)
    *
    * Type: GLib.HashTable(utf8,gint8)
    * Transfer: container
+   *
+   * Since: 0.99
    */
   pspec = g_param_spec_boxed ("property-example",
                               "Example property",

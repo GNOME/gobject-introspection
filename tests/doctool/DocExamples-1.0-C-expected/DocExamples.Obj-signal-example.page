@@ -9,7 +9,5 @@
     <title type="link" role="topic">signal-example</title>
   </info>
   <title>DocExamplesObj::signal-example</title>
-<p>Emitted when the connection status on the account changes.</p><p>The @dbus_error_name and @details parameters were present, but
-non-functional (always %NULL), in older versions. They have been
-available with their current behaviour since version 0.11.7.</p>
+<p>This is an example of how to document a signal.</p>
 </page>
