@@ -10,7 +10,7 @@
   </info>
   <title>${namespace.name}.${node.parent.name}::${node.name}</title>
 <synopsis><code mime="text/x-python">
-def callback(\
+def callback(${formatter.to_underscores(node.parent.name).lower()}, \
 % for arg, ix in zip(node.parameters, range(len(node.parameters))):
 ${arg.argname}, \
 % endfor
@@ -18,8 +18,11 @@ user_param1, ...)
 </code></synopsis>
 ${formatter.format(node.doc)}
 
-% if node.parameters or node.retval:
 <table>
+<tr>
+<td><p>${formatter.to_underscores(node.parent.name).lower()} :</p></td>
+<td><p>instance of ${namespace.name}.${node.parent.name} that is emitting the signal</p></td>
+</tr>
 % for arg, ix in zip(node.parameters, range(len(node.parameters))):
 <tr>
 <td><p>${arg.argname} :</p></td>
@@ -43,7 +46,6 @@ ${formatter.format(node.doc)}
 </tr>
 % endif
 </table>
-% endif
 % if node.version:
 <p>Since ${node.version}</p>
 % endif
