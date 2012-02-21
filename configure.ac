@@ -272,7 +272,11 @@ if test "x$os_win32" = "xyes"; then
   AM_CHECK_PYTHON_LIBS(, AC_MSG_ERROR([Python libs not found. Windows requires Python modules to be explicitly linked to libpython.]))
 fi
 
-AM_CHECK_PYMOD(mako,,,[AC_MSG_ERROR(Could not find python module: mako)])
+AC_ARG_ENABLE(doctool,[  --enable-doctool           enable g-ir-doctool ], enable_doctool=$enableval,enable_doctool=no)
+if test x$enable_doctool != xno; then
+   AM_CHECK_PYMOD(mako,,,[AC_MSG_ERROR(Could not find python module: mako)])
+fi
+AM_CONDITIONAL(BUILD_DOCTOOL, test x$enable_doctool != xno)
 
 # Glib documentation
 

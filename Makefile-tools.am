@@ -1,5 +1,9 @@
 bin_PROGRAMS += g-ir-compiler g-ir-generate
-bin_SCRIPTS += g-ir-scanner g-ir-annotation-tool g-ir-doc-tool
+bin_SCRIPTS += g-ir-scanner g-ir-annotation-tool
+
+if BUILD_DOCTOOL
+bin_SCRIPTS += g-ir-doc-tool
+endif
 
 EXTRA_DIST += 				\
 	tools/g-ir-scanner.in 		\
