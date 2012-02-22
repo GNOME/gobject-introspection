@@ -50,6 +50,7 @@ pkgpyexec_PYTHON =			\
 	giscanner/mallard-C-property.tmpl	\
 	giscanner/mallard-C-record.tmpl	\
 	giscanner/mallard-C-signal.tmpl	\
+	giscanner/mallard-C-vfunc.tmpl	\
 	giscanner/mallard-Python-class.tmpl	\
 	giscanner/mallard-Python-default.tmpl	\
 	giscanner/mallard-Python-enum.tmpl	\
@@ -58,6 +59,7 @@ pkgpyexec_PYTHON =			\
 	giscanner/mallard-Python-property.tmpl	\
 	giscanner/mallard-Python-record.tmpl	\
 	giscanner/mallard-Python-signal.tmpl	\
+	giscanner/mallard-Python-vfunc.tmpl	\
 	giscanner/maintransformer.py	\
 	giscanner/message.py		\
 	giscanner/shlibs.py		\
