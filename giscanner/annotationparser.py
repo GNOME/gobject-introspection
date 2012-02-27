@@ -285,7 +285,7 @@ class DocTag(object):
         for option in self.options:
             value = self.options[option]
             if option == OPT_ALLOW_NONE:
-                self._validate_option('allow-none', value, n_params=0)
+                self._validate_option(option, value, n_params=0)
             elif option == OPT_ARRAY:
                 if value is None:
                     continue
@@ -317,7 +317,7 @@ class DocTag(object):
                             name, ), self.position)
 
             elif option == OPT_ATTRIBUTE:
-                self._validate_option('attribute', value, n_params=2)
+                self._validate_option(option, value, n_params=2)
             elif option == OPT_CLOSURE:
                 if value is not None and value.length() > 1:
                     message.warn(
@@ -325,9 +325,9 @@ class DocTag(object):
                         value.length()), self.position)
                     continue
             elif option == OPT_DESTROY:
-                self._validate_option('destroy', value, n_params=1)
+                self._validate_option(option, value, n_params=1)
             elif option == OPT_ELEMENT_TYPE:
-                self._validate_option('element-type', value, required=True)
+                self._validate_option(option, value, required=True)
                 if value is None:
                     message.warn(
                         'element-type takes at least one value, none given',
@@ -339,11 +339,11 @@ class DocTag(object):
                         value.length()), self.position)
                     continue
             elif option == OPT_FOREIGN:
-                self._validate_option('foreign', value, n_params=0)
+                self._validate_option(option, value, n_params=0)
             elif option == OPT_IN:
-                self._validate_option('in', value, n_params=0)
+                self._validate_option(option, value, n_params=0)
             elif option in [OPT_INOUT, OPT_INOUT_ALT]:
-                self._validate_option('inout', value, n_params=0)
+                self._validate_option(option, value, n_params=0)
             elif option == OPT_OUT:
                 if value is None:
                     continue
@@ -360,28 +360,28 @@ class DocTag(object):
                     continue
             elif option == OPT_SCOPE:
                 self._validate_option(
-                    'scope', value, required=True,
+                    option, value, required=True,
                     n_params=1,
                     choices=[OPT_SCOPE_ASYNC,
                              OPT_SCOPE_CALL,
                              OPT_SCOPE_NOTIFIED])
             elif option == OPT_SKIP:
-                self._validate_option('skip', value, n_params=0)
+                self._validate_option(option, value, n_params=0)
             elif option == OPT_TRANSFER:
                 self._validate_option(
-                    'transfer', value, required=True,
+                    option, value, required=True,
                     n_params=1,
                     choices=[OPT_TRANSFER_FULL,
                              OPT_TRANSFER_CONTAINER,
                              OPT_TRANSFER_NONE,
                              OPT_TRANSFER_FLOATING])
             elif option == OPT_TYPE:
-                self._validate_option('type', value, required=True,
+                self._validate_option(option, value, required=True,
                                       n_params=1)
             elif option == OPT_CONSTRUCTOR:
-                self._validate_option('constructor', value, n_params=0)
+                self._validate_option(option, value, n_params=0)
             elif option == OPT_METHOD:
-                self._validate_option('method', value, n_params=0)
+                self._validate_option(option, value, n_params=0)
             else:
                 message.warn('invalid annotation option: %s' % (option, ),
                              self.position)
