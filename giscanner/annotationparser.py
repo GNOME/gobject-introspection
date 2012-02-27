@@ -246,6 +246,69 @@ class DocTag(object):
                     name, valuestr, ), self.position)
                 return
 
+    def _validate_array(self, option, value):
+        if value is None:
+            return
+
+        for name, v in value.all().iteritems():
+            if name in [OPT_ARRAY_ZERO_TERMINATED, OPT_ARRAY_FIXED_SIZE]:
+                try:
+                    int(v)
+                except (TypeError, ValueError):
+                    if v is None:
+                        message.warn(
+                            'array option %s needs a value' % (
+                            name, ),
+                            positions=self.position)
+                    else:
+                        message.warn(
+                            'invalid array %s option value %r, '
+                            'must be an integer' % (name, v, ),
+                            positions=self.position)
+            elif name == OPT_ARRAY_LENGTH:
+                if v is None:
+                    message.warn(
+                        'array option length needs a value',
+                        positions=self.position)
+            else:
+                message.warn(
+                    'invalid array annotation value: %r' % (
+                    name, ), self.position)
+
+    def _validate_closure(self, option, value):
+        if value is not None and value.length() > 1:
+            message.warn(
+                'closure takes at most 1 value, %d given' % (
+                value.length()), self.position)
+
+    def _validate_element_type(self, option, value):
+        self._validate_option(option, value, required=True)
+        if value is None:
+            message.warn(
+                'element-type takes at least one value, none given',
+                self.position)
+            return
+        if value.length() > 2:
+            message.warn(
+                'element-type takes at most 2 values, %d given' % (
+                value.length()), self.position)
+            return
+
+    def _validate_out(self, option, value):
+        if value is None:
+            return
+        if value.length() > 1:
+            message.warn(
+                'out annotation takes at most 1 value, %d given' % (
+                value.length()), self.position)
+            return
+        value_str = value.one()
+        if value_str not in [OPT_OUT_CALLEE_ALLOCATES,
+                             OPT_OUT_CALLER_ALLOCATES]:
+            message.warn("out annotation value is invalid: %r" % (
+                value_str), self.position)
+            return
+
     def set_position(self, position):
         self.position = position
         self.options.position = position
@@ -287,57 +350,15 @@ class DocTag(object):
             if option == OPT_ALLOW_NONE:
                 self._validate_option(option, value, n_params=0)
             elif option == OPT_ARRAY:
-                if value is None:
-                    continue
-                for name, v in value.all().iteritems():
-                    if name in [OPT_ARRAY_ZERO_TERMINATED, OPT_ARRAY_FIXED_SIZE]:
-                        try:
-                            int(v)
-                        except (TypeError, ValueError):
-                            if v is None:
-                                message.warn(
-                                    'array option %s needs a value' % (
-                                    name, ),
-                                    positions=self.position)
-                            else:
-                                message.warn(
-                                    'invalid array %s option value %r, '
-                                    'must be an integer' % (name, v, ),
-                                    positions=self.position)
-                            continue
-                    elif name == OPT_ARRAY_LENGTH:
-                        if v is None:
-                            message.warn(
-                                'array option length needs a value',
-                                positions=self.position)
-                            continue
-                    else:
-                        message.warn(
-                            'invalid array annotation value: %r' % (
-                            name, ), self.position)
-
+                self._validate_array(option, value)
             elif option == OPT_ATTRIBUTE:
                 self._validate_option(option, value, n_params=2)
             elif option == OPT_CLOSURE:
-                if value is not None and value.length() > 1:
-                    message.warn(
-                        'closure takes at most 1 value, %d given' % (
-                        value.length()), self.position)
-                    continue
+                self._validate_closure(option, value)
             elif option == OPT_DESTROY:
                 self._validate_option(option, value, n_params=1)
             elif option == OPT_ELEMENT_TYPE:
-                self._validate_option(option, value, required=True)
-                if value is None:
-                    message.warn(
-                        'element-type takes at least one value, none given',
-                        self.position)
-                    continue
-                if value.length() > 2:
-                    message.warn(
-                        'element-type takes at most 2 values, %d given' % (
-                        value.length()), self.position)
-                    continue
+                self._validate_element_type(option, value)
             elif option == OPT_FOREIGN:
                 self._validate_option(option, value, n_params=0)
             elif option == OPT_IN:
@@ -345,19 +366,7 @@ class DocTag(object):
             elif option in [OPT_INOUT, OPT_INOUT_ALT]:
                 self._validate_option(option, value, n_params=0)
             elif option == OPT_OUT:
-                if value is None:
-                    continue
-                if value.length() > 1:
-                    message.warn(
-                        'out annotation takes at most 1 value, %d given' % (
-                        value.length()), self.position)
-                    continue
-                value_str = value.one()
-                if value_str not in [OPT_OUT_CALLEE_ALLOCATES,
-                                     OPT_OUT_CALLER_ALLOCATES]:
-                    message.warn("out annotation value is invalid: %r" % (
-                        value_str), self.position)
-                    continue
+                self._validate_out(option, value)
             elif option == OPT_SCOPE:
                 self._validate_option(
                     option, value, required=True,
