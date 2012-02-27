@@ -33,7 +33,7 @@ void test_invalid_hash_element_type(GHashTable *h1, GHashTable *h2, GHashTable *
 
 // EXPECT:27: Warning: Test: element-type annotation needs a value
 // EXPECT:27: Warning: Test: element-type takes at least one value, none given
-// EXPECT:29: Warning: Test: element-type takes at maximium 2 values, 3 given
+// EXPECT:29: Warning: Test: element-type takes at most 2 values, 3 given
 
 /**
  * test_invalid_bytearray_element_type:

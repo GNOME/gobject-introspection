@@ -5,4 +5,4 @@
  */
 void test_invalid_closure(int param);
 
-// EXPECT:4: Warning: Test: closure takes at maximium 1 value, 2 given
+// EXPECT:4: Warning: Test: closure takes at most 1 value, 2 given

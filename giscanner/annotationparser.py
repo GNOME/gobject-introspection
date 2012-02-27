@@ -321,7 +321,7 @@ class DocTag(object):
             elif option == OPT_CLOSURE:
                 if value is not None and value.length() > 1:
                     message.warn(
-                        'closure takes at maximium 1 value, %d given' % (
+                        'closure takes at most 1 value, %d given' % (
                         value.length()), self.position)
                     continue
             elif option == OPT_DESTROY:
@@ -335,7 +335,7 @@ class DocTag(object):
                     continue
                 if value.length() > 2:
                     message.warn(
-                        'element-type takes at maximium 2 values, %d given' % (
+                        'element-type takes at most 2 values, %d given' % (
                         value.length()), self.position)
                     continue
             elif option == OPT_FOREIGN:
@@ -349,7 +349,7 @@ class DocTag(object):
                     continue
                 if value.length() > 1:
                     message.warn(
-                        'out annotation takes at maximium 1 value, %d given' % (
+                        'out annotation takes at most 1 value, %d given' % (
                         value.length()), self.position)
                     continue
                 value_str = value.one()
