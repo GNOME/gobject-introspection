@@ -1550,6 +1550,15 @@
 
 
 /**
+ * GLIB_DISABLE_DEPRECATION_WARNINGS:
+ *
+ * A macro that should be defined before including the glib.h header.
+ * If it is defined, no compiler warnings will be produced for uses
+ * of deprecated GLib APIs.
+ */
+
+
+/**
  * GLIB_MAJOR_VERSION:
  *
  * The major version number of the GLib library.
@@ -1579,6 +1588,82 @@
  * Like #gtk_minor_version, but from the headers used at
  * application compile time, rather than from the library
  * linked against at application run time.
+ */
+
+
+/**
+ * GLIB_VERSION_2_26:
+ *
+ * A macro that evaluates to the 2.26 version of GLib, in a format
+ * that can be used by the C pre-processor.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * GLIB_VERSION_2_28:
+ *
+ * A macro that evaluates to the 2.28 version of GLib, in a format
+ * that can be used by the C pre-processor.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * GLIB_VERSION_2_30:
+ *
+ * A macro that evaluates to the 2.30 version of GLib, in a format
+ * that can be used by the C pre-processor.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * GLIB_VERSION_2_32:
+ *
+ * A macro that evaluates to the 2.32 version of GLib, in a format
+ * that can be used by the C pre-processor.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * GLIB_VERSION_MAX_ALLOWED:
+ *
+ * A macro that should be defined by the user prior to including
+ * the glib.h header.
+ * The definition should be one of the predefined GLib version
+ * macros: %GLIB_VERSION_2_26, %GLIB_VERSION_2_28,...
+ *
+ * This macro defines the upper bound for the GLib API to use.
+ *
+ * If a function has been introduced in a newer version of GLib,
+ * it is possible to use this symbol to get compiler warnings when
+ * trying to use that function.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * GLIB_VERSION_MIN_REQUIRED:
+ *
+ * A macro that should be defined by the user prior to including
+ * the glib.h header.
+ * The definition should be one of the predefined GLib version
+ * macros: %GLIB_VERSION_2_26, %GLIB_VERSION_2_28,...
+ *
+ * This macro defines the lower bound for the GLib API to use.
+ *
+ * If a function has been deprecated in a newer version of GLib,
+ * it is possible to use this symbol to avoid the compiler warnings
+ * without disabling warning for every deprecated function.
+ *
+ * Since: 2.32
  */
 
 
@@ -3075,6 +3160,15 @@
 
 
 /**
+ * GSignalCVaMarshaller:
+ *
+ * This is the signature of va_list marshaller functions, an optional
+ * marshaller that can be used in some situations to avoid
+ * marshalling the signal argument into GValues.
+ */
+
+
+/**
  * GSignalEmissionHook:
  * @ihint: Signal invocation hint, see #GSignalInvocationHint.
  * @n_param_values: the number of parameters to the function, including the instance on which the signal was emitted.
@@ -3264,7 +3358,8 @@
  * @G_SPAWN_ERROR_CHDIR: Changing to working directory failed.
  * @G_SPAWN_ERROR_ACCES: execv() returned <literal>EACCES</literal>
  * @G_SPAWN_ERROR_PERM: execv() returned <literal>EPERM</literal>
- * @G_SPAWN_ERROR_2BIG: execv() returned <literal>E2BIG</literal>
+ * @G_SPAWN_ERROR_TOO_BIG: execv() returned <literal>E2BIG</literal>
+ * @G_SPAWN_ERROR_2BIG: deprecated alias for %G_SPAWN_ERROR_TOO_BIG
  * @G_SPAWN_ERROR_NOEXEC: execv() returned <literal>ENOEXEC</literal>
  * @G_SPAWN_ERROR_NAMETOOLONG: execv() returned <literal>ENAMETOOLONG</literal>
  * @G_SPAWN_ERROR_NOENT: execv() returned <literal>ENOENT</literal>
@@ -4240,6 +4335,8 @@
  * @G_UNICODE_BREAK_HANGUL_LV_SYLLABLE: Hangul LV Syllable (H2)
  * @G_UNICODE_BREAK_HANGUL_LVT_SYLLABLE: Hangul LVT Syllable (H3)
  * @G_UNICODE_BREAK_CLOSE_PARANTHESIS: Closing Parenthesis (CP). Since 2.28
+ * @G_UNICODE_BREAK_CONDITIONAL_JAPANESE_STARTER: Conditional Japanese Starter (CJ). Since: 2.32
+ * @G_UNICODE_BREAK_HEBREW_LETTER: Hebrew Letter (HL). Since: 2.32
  *
  * These are the possible line break classifications.
  *
@@ -4340,6 +4437,13 @@
  * @G_UNICODE_SCRIPT_BATAK: Batak. Since 2.28
  * @G_UNICODE_SCRIPT_BRAHMI: Brahmi. Since 2.28
  * @G_UNICODE_SCRIPT_MANDAIC: Mandaic. Since 2.28
+ * @G_UNICODE_SCRIPT_CHAKMA: Chakma. Since: 2.32
+ * @G_UNICODE_SCRIPT_MEROITIC_CURSIVE: Meroitic Cursive. Since: 2.32
+ * @G_UNICODE_SCRIPT_MEROITIC_HIEROGLYPHS, Meroitic Hieroglyphs. Since: 2.32
+ * @G_UNICODE_SCRIPT_MIAO: Miao. Since: 2.32
+ * @G_UNICODE_SCRIPT_SHARADA: Sharada. Since: 2.32
+ * @G_UNICODE_SCRIPT_SORA_SOMPENG: Sora Sompeng. Since: 2.32
+ * @G_UNICODE_SCRIPT_TAKRI: Takri. Since: 2.32
  *
  * The #GUnicodeScript enumeration identifies different writing
  * systems. The values correspond to the names as defined in the
@@ -5088,6 +5192,30 @@
  * See G_DEFINE_TYPE_EXTENDED() for an example.
  *
  * Since: 2.4
+ */
+
+
+/**
+ * G_DEPRECATED:
+ *
+ * This macro is similar to %G_GNUC_DEPRECATED, and can be used to mark
+ * functions declarations as deprecated. Unlike %G_GNUC_DEPRECATED, it is
+ * meant to be portable across different compilers and must be placed
+ * before the function declaration.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * G_DEPRECATED_FOR:
+ *
+ * This macro is similar to %G_GNUC_DEPRECATED_FOR, and can be used to mark
+ * functions declarations as deprecated. Unlike %G_GNUC_DEPRECATED_FOR, it is
+ * meant to be portable across different compilers and must be placed
+ * before the function declaration.
+ *
+ * Since: 2.32
  */
 
 
@@ -8863,6 +8991,17 @@
  * The #GType for a boxed type holding a #GVariantType.
  *
  * Since: 2.24
+ */
+
+
+/**
+ * G_UNAVAILABLE:
+ *
+ * This macro can be used to mark a function declaration as unavailable.
+ * It must be placed before the function declaration. Use of a function
+ * that has been annotated with this macros will produce a compiler warning.
+ *
+ * Since: 2.32
  */
 
 
@@ -12934,6 +13073,18 @@
  * GLib provides version information, primarily useful in configure
  * checks for builds that have a configure script. Applications will
  * not typically use the features described here.
+ *
+ * The GLib headers annotate deprecated APIs in a way that produces
+ * compiler warnings if these deprecated APIs are used. The warnings
+ * can be turned off by defining the macro %GLIB_DISABLE_DEPRECATION_WARNINGS
+ * before including the glib.h header.
+ *
+ * GLib also provides support for building applications against
+ * defined subsets of deprecated or new GLib APIs. Define the macro
+ * %GLIB_VERSION_MIN_REQUIRED to specify up to what version of GLib
+ * you want to receive warnings about deprecated APIs. Define the
+ * macro %GLIB_VERSION_MAX_ALLOWED to specify the newest version of
+ * GLib whose API you want to use.
  */
 
 
@@ -24269,7 +24420,7 @@
  * with g_mapped_file_unref(), or %NULL if the mapping failed.
  *
  * Returns: a newly allocated #GMappedFile which must be unref'd
- * Since: 2.30
+ * Since: 2.32
  */
 
 
@@ -29390,6 +29541,14 @@
  * the first item comes before the second, and a positive value if
  * the second item comes before the first.
  *
+ * <note><para>
+ * This function will fail if the data contained in the sequence is
+ * unsorted.  Use g_sequence_insert_sorted() or
+ * g_sequence_insert_sorted_iter() to add data to your sequence or, if
+ * you want to add a large amount of data, call g_sequence_sort() after
+ * doing unsorted insertions.
+ * </para></note>
+ *
  * first item found equal to @data according to @cmp_func and @cmp_data.
  *
  * Returns: an #GSequenceIter pointing to the position of the
@@ -29411,6 +29570,14 @@
  * It should return 0 if the iterators are equal, a negative value
  * if the first iterator comes before the second, and a positive
  * value if the second iterator comes before the first.
+ *
+ * <note><para>
+ * This function will fail if the data contained in the sequence is
+ * unsorted.  Use g_sequence_insert_sorted() or
+ * g_sequence_insert_sorted_iter() to add data to your sequence or, if
+ * you want to add a large amount of data, call g_sequence_sort() after
+ * doing unsorted insertions.
+ * </para></note>
  *
  * the first item found equal to @data according to @cmp_func
  * and @cmp_data.
@@ -29543,6 +29710,14 @@
  * If you are simply searching for an existing element of the sequence,
  * consider using g_sequence_lookup().
  *
+ * <note><para>
+ * This function will fail if the data contained in the sequence is
+ * unsorted.  Use g_sequence_insert_sorted() or
+ * g_sequence_insert_sorted_iter() to add data to your sequence or, if
+ * you want to add a large amount of data, call g_sequence_sort() after
+ * doing unsorted insertions.
+ * </para></note>
+ *
  * would have been inserted according to @cmp_func and @cmp_data.
  *
  * Returns: an #GSequenceIter pointing to the position where @data
@@ -29567,6 +29742,14 @@
  *
  * If you are simply searching for an existing element of the sequence,
  * consider using g_sequence_lookup_iter().
+ *
+ * <note><para>
+ * This function will fail if the data contained in the sequence is
+ * unsorted.  Use g_sequence_insert_sorted() or
+ * g_sequence_insert_sorted_iter() to add data to your sequence or, if
+ * you want to add a large amount of data, call g_sequence_sort() after
+ * doing unsorted insertions.
+ * </para></note>
  *
  * where @data would have been inserted according to @iter_cmp
  * and @cmp_data.
@@ -35541,9 +35724,9 @@
 
 /**
  * g_uri_unescape_segment:
- * @escaped_string: a string.
- * @escaped_string_end: a string.
- * @illegal_characters: an optional string of illegal characters not to be allowed.
+ * @escaped_string: (allow-none): A string, may be %NULL
+ * @escaped_string_end: (allow-none): Pointer to end of @escaped_string, may be %NULL
+ * @illegal_characters: (allow-none): An optional string of illegal characters not to be allowed, may be %NULL
  *
  * Unescapes a segment of an escaped string.
  *
@@ -35553,7 +35736,9 @@
  * slash being expanded in an escaped path element, which might confuse pathname
  * handling.
  *
- * The returned string should be freed when no longer needed.
+ * The returned string should be freed when no longer needed.  As a
+ * special case if %NULL is given for @escaped_string, this function
+ * will return %NULL.
  *
  * Returns: an unescaped version of @escaped_string or %NULL on error.
  * Since: 2.16

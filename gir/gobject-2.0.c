@@ -607,6 +607,82 @@
 
 
 /**
+ * GLIB_VERSION_2_26:
+ *
+ * A macro that evaluates to the 2.26 version of GLib, in a format
+ * that can be used by the C pre-processor.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * GLIB_VERSION_2_28:
+ *
+ * A macro that evaluates to the 2.28 version of GLib, in a format
+ * that can be used by the C pre-processor.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * GLIB_VERSION_2_30:
+ *
+ * A macro that evaluates to the 2.30 version of GLib, in a format
+ * that can be used by the C pre-processor.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * GLIB_VERSION_2_32:
+ *
+ * A macro that evaluates to the 2.32 version of GLib, in a format
+ * that can be used by the C pre-processor.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * GLIB_VERSION_MAX_ALLOWED:
+ *
+ * A macro that should be defined by the user prior to including
+ * the glib.h header.
+ * The definition should be one of the predefined GLib version
+ * macros: %GLIB_VERSION_2_26, %GLIB_VERSION_2_28,...
+ *
+ * This macro defines the upper bound for the GLib API to use.
+ *
+ * If a function has been introduced in a newer version of GLib,
+ * it is possible to use this symbol to get compiler warnings when
+ * trying to use that function.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * GLIB_VERSION_MIN_REQUIRED:
+ *
+ * A macro that should be defined by the user prior to including
+ * the glib.h header.
+ * The definition should be one of the predefined GLib version
+ * macros: %GLIB_VERSION_2_26, %GLIB_VERSION_2_28,...
+ *
+ * This macro defines the lower bound for the GLib API to use.
+ *
+ * If a function has been deprecated in a newer version of GLib,
+ * it is possible to use this symbol to avoid the compiler warnings
+ * without disabling warning for every deprecated function.
+ *
+ * Since: 2.32
+ */
+
+
+/**
  * GMainContext:
  *
  * The <structname>GMainContext</structname> struct is an opaque data
@@ -1494,6 +1570,15 @@
 
 
 /**
+ * GSignalCVaMarshaller:
+ *
+ * This is the signature of va_list marshaller functions, an optional
+ * marshaller that can be used in some situations to avoid
+ * marshalling the signal argument into GValues.
+ */
+
+
+/**
  * GSignalEmissionHook:
  * @ihint: Signal invocation hint, see #GSignalInvocationHint.
  * @n_param_values: the number of parameters to the function, including the instance on which the signal was emitted.
@@ -1683,7 +1768,8 @@
  * @G_SPAWN_ERROR_CHDIR: Changing to working directory failed.
  * @G_SPAWN_ERROR_ACCES: execv() returned <literal>EACCES</literal>
  * @G_SPAWN_ERROR_PERM: execv() returned <literal>EPERM</literal>
- * @G_SPAWN_ERROR_2BIG: execv() returned <literal>E2BIG</literal>
+ * @G_SPAWN_ERROR_TOO_BIG: execv() returned <literal>E2BIG</literal>
+ * @G_SPAWN_ERROR_2BIG: deprecated alias for %G_SPAWN_ERROR_TOO_BIG
  * @G_SPAWN_ERROR_NOEXEC: execv() returned <literal>ENOEXEC</literal>
  * @G_SPAWN_ERROR_NAMETOOLONG: execv() returned <literal>ENAMETOOLONG</literal>
  * @G_SPAWN_ERROR_NOENT: execv() returned <literal>ENOENT</literal>
@@ -2079,6 +2165,8 @@
  * @G_UNICODE_BREAK_HANGUL_LV_SYLLABLE: Hangul LV Syllable (H2)
  * @G_UNICODE_BREAK_HANGUL_LVT_SYLLABLE: Hangul LVT Syllable (H3)
  * @G_UNICODE_BREAK_CLOSE_PARANTHESIS: Closing Parenthesis (CP). Since 2.28
+ * @G_UNICODE_BREAK_CONDITIONAL_JAPANESE_STARTER: Conditional Japanese Starter (CJ). Since: 2.32
+ * @G_UNICODE_BREAK_HEBREW_LETTER: Hebrew Letter (HL). Since: 2.32
  *
  * These are the possible line break classifications.
  *
@@ -2179,6 +2267,13 @@
  * @G_UNICODE_SCRIPT_BATAK: Batak. Since 2.28
  * @G_UNICODE_SCRIPT_BRAHMI: Brahmi. Since 2.28
  * @G_UNICODE_SCRIPT_MANDAIC: Mandaic. Since 2.28
+ * @G_UNICODE_SCRIPT_CHAKMA: Chakma. Since: 2.32
+ * @G_UNICODE_SCRIPT_MEROITIC_CURSIVE: Meroitic Cursive. Since: 2.32
+ * @G_UNICODE_SCRIPT_MEROITIC_HIEROGLYPHS, Meroitic Hieroglyphs. Since: 2.32
+ * @G_UNICODE_SCRIPT_MIAO: Miao. Since: 2.32
+ * @G_UNICODE_SCRIPT_SHARADA: Sharada. Since: 2.32
+ * @G_UNICODE_SCRIPT_SORA_SOMPENG: Sora Sompeng. Since: 2.32
+ * @G_UNICODE_SCRIPT_TAKRI: Takri. Since: 2.32
  *
  * The #GUnicodeScript enumeration identifies different writing
  * systems. The values correspond to the names as defined in the
@@ -9974,6 +10069,8 @@
  * <structname>MyObject</structname> defined in the standard GObject
  * fashion.
  * type's class_init() function.
+ * Note the use of a structure member "priv" to avoid the overhead
+ * of repeatedly calling MY_OBJECT_GET_PRIVATE().
  *
  * |[
  * typedef struct _MyObject        MyObject;
@@ -10006,7 +10103,11 @@
  * static int
  * my_object_get_some_field (MyObject *my_object)
  * {
- * MyObjectPrivate *priv = my_object->priv;
+ * MyObjectPrivate *priv;
+ *
+ * g_return_val_if_fail (MY_IS_OBJECT (my_object), 0);
+ *
+ * priv = my_object->priv;
  *
  * return priv->some_field;
  * }
@@ -10651,10 +10752,11 @@
  * @flags: Bitwise combination of #GTypeFlags values.
  *
  * Registers @type_id as the predefined identifier and @type_name as the
- * name of a fundamental type.  The type system uses the information
- * contained in the #GTypeInfo structure pointed to by @info and the
- * #GTypeFundamentalInfo structure pointed to by @finfo to manage the
- * type and its instances.  The value of @flags determines additional
+ * name of a fundamental type. If @type_id is already registered, or a type
+ * named @type_name is already registered, the behaviour is undefined. The type
+ * system uses the information contained in the #GTypeInfo structure pointed to
+ * by @info and the #GTypeFundamentalInfo structure pointed to by @finfo to
+ * manage the type and its instances. The value of @flags determines additional
  * characteristics of the fundamental type.
  *
  * Returns: The predefined type identifier.

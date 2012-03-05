@@ -3846,6 +3846,82 @@
 
 
 /**
+ * GLIB_VERSION_2_26:
+ *
+ * A macro that evaluates to the 2.26 version of GLib, in a format
+ * that can be used by the C pre-processor.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * GLIB_VERSION_2_28:
+ *
+ * A macro that evaluates to the 2.28 version of GLib, in a format
+ * that can be used by the C pre-processor.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * GLIB_VERSION_2_30:
+ *
+ * A macro that evaluates to the 2.30 version of GLib, in a format
+ * that can be used by the C pre-processor.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * GLIB_VERSION_2_32:
+ *
+ * A macro that evaluates to the 2.32 version of GLib, in a format
+ * that can be used by the C pre-processor.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * GLIB_VERSION_MAX_ALLOWED:
+ *
+ * A macro that should be defined by the user prior to including
+ * the glib.h header.
+ * The definition should be one of the predefined GLib version
+ * macros: %GLIB_VERSION_2_26, %GLIB_VERSION_2_28,...
+ *
+ * This macro defines the upper bound for the GLib API to use.
+ *
+ * If a function has been introduced in a newer version of GLib,
+ * it is possible to use this symbol to get compiler warnings when
+ * trying to use that function.
+ *
+ * Since: 2.32
+ */
+
+
+/**
+ * GLIB_VERSION_MIN_REQUIRED:
+ *
+ * A macro that should be defined by the user prior to including
+ * the glib.h header.
+ * The definition should be one of the predefined GLib version
+ * macros: %GLIB_VERSION_2_26, %GLIB_VERSION_2_28,...
+ *
+ * This macro defines the lower bound for the GLib API to use.
+ *
+ * If a function has been deprecated in a newer version of GLib,
+ * it is possible to use this symbol to avoid the compiler warnings
+ * without disabling warning for every deprecated function.
+ *
+ * Since: 2.32
+ */
+
+
+/**
  * GLoadableIcon:
  *
  * Generic type for all kinds of icons that can be loaded
@@ -5725,6 +5801,15 @@
 
 
 /**
+ * GSignalCVaMarshaller:
+ *
+ * This is the signature of va_list marshaller functions, an optional
+ * marshaller that can be used in some situations to avoid
+ * marshalling the signal argument into GValues.
+ */
+
+
+/**
  * GSignalEmissionHook:
  * @ihint: Signal invocation hint, see #GSignalInvocationHint.
  * @n_param_values: the number of parameters to the function, including the instance on which the signal was emitted.
@@ -6429,7 +6514,8 @@
  * @G_SPAWN_ERROR_CHDIR: Changing to working directory failed.
  * @G_SPAWN_ERROR_ACCES: execv() returned <literal>EACCES</literal>
  * @G_SPAWN_ERROR_PERM: execv() returned <literal>EPERM</literal>
- * @G_SPAWN_ERROR_2BIG: execv() returned <literal>E2BIG</literal>
+ * @G_SPAWN_ERROR_TOO_BIG: execv() returned <literal>E2BIG</literal>
+ * @G_SPAWN_ERROR_2BIG: deprecated alias for %G_SPAWN_ERROR_TOO_BIG
  * @G_SPAWN_ERROR_NOEXEC: execv() returned <literal>ENOEXEC</literal>
  * @G_SPAWN_ERROR_NAMETOOLONG: execv() returned <literal>ENAMETOOLONG</literal>
  * @G_SPAWN_ERROR_NOENT: execv() returned <literal>ENOENT</literal>
@@ -7451,6 +7537,8 @@
  * @G_UNICODE_BREAK_HANGUL_LV_SYLLABLE: Hangul LV Syllable (H2)
  * @G_UNICODE_BREAK_HANGUL_LVT_SYLLABLE: Hangul LVT Syllable (H3)
  * @G_UNICODE_BREAK_CLOSE_PARANTHESIS: Closing Parenthesis (CP). Since 2.28
+ * @G_UNICODE_BREAK_CONDITIONAL_JAPANESE_STARTER: Conditional Japanese Starter (CJ). Since: 2.32
+ * @G_UNICODE_BREAK_HEBREW_LETTER: Hebrew Letter (HL). Since: 2.32
  *
  * These are the possible line break classifications.
  *
@@ -7551,6 +7639,13 @@
  * @G_UNICODE_SCRIPT_BATAK: Batak. Since 2.28
  * @G_UNICODE_SCRIPT_BRAHMI: Brahmi. Since 2.28
  * @G_UNICODE_SCRIPT_MANDAIC: Mandaic. Since 2.28
+ * @G_UNICODE_SCRIPT_CHAKMA: Chakma. Since: 2.32
+ * @G_UNICODE_SCRIPT_MEROITIC_CURSIVE: Meroitic Cursive. Since: 2.32
+ * @G_UNICODE_SCRIPT_MEROITIC_HIEROGLYPHS, Meroitic Hieroglyphs. Since: 2.32
+ * @G_UNICODE_SCRIPT_MIAO: Miao. Since: 2.32
+ * @G_UNICODE_SCRIPT_SHARADA: Sharada. Since: 2.32
+ * @G_UNICODE_SCRIPT_SORA_SOMPENG: Sora Sompeng. Since: 2.32
+ * @G_UNICODE_SCRIPT_TAKRI: Takri. Since: 2.32
  *
  * The #GUnicodeScript enumeration identifies different writing
  * systems. The values correspond to the names as defined in the
@@ -12091,6 +12186,24 @@
  *
  * Extension point for #GVfs functionality.
  * See <link linkend="extending-gio">Extending GIO</link>.
+ */
+
+
+/**
+ * G_VOLUME_IDENTIFIER_KIND_CLASS:
+ *
+ * The string used to obtain the volume <emphasis>class</emphasis>
+ * with g_volume_get_identifier().
+ *
+ * Known volume classes include <literal>device</literal> and
+ * <literal>network</literal>. Other classes may be added in the
+ * future.
+ *
+ * This is intended to be used by applications to classify #GVolume
+ * instances into different sections - for example a file manager or
+ * file chooser can use this information to show
+ * <literal>network</literal> volumes under a "Network" heading and
+ * <literal>device</literal> volumes under a "Devices" heading.
  */
 
 
@@ -26389,7 +26502,8 @@
  * @type: a #GFileAttributeType
  * @value_p: pointer to the value
  *
- * Sets the @attribute to contain the given value, if possible.
+ * Sets the @attribute to contain the given value, if possible. To unset the
+ * attribute, use %G_ATTRIBUTE_TYPE_INVALID for @type.
  */
 
 
@@ -27269,7 +27383,7 @@
  * returned by g_get_tmp_dir()) and returns a #GFile and
  * #GFileIOStream pointing to it.
  *
- * @template should be a string in the GLib file name encoding
+ * @tmpl should be a string in the GLib file name encoding
  * containing a sequence of six 'X' characters, and containing no
  * directory components. If it is %NULL, a default template is used.
  *
