@@ -955,10 +955,11 @@ _split_uscored_by_type(text_buffer_try_new) -> (ast.Class(TextBuffer), 'try_new'
     def _pair_function(self, func):
         """Check to see whether a toplevel function should be a
 method or constructor of some type."""
-        if (func.symbol.endswith('_get_type')
-            or func.symbol.endswith('_get_gtype')
-            or func.symbol.startswith('_')):
+
+        # Ignore internal symbols and type metadata functions
+        if func.symbol.startswith('_') or func.is_type_meta_function():
             return
+
         (ns, subsymbol) = self._transformer.split_csymbol(func.symbol)
         assert ns == self._namespace
         if self._is_constructor(func, subsymbol):

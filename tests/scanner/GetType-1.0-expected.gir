@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<!-- This file was automatically generated from C sources - DO NOT EDIT!
+To affect the contents of this file, edit the original C definitions,
+and/or use gtk-doc annotations.  -->
+<repository version="1.2"
+            xmlns="http://www.gtk.org/introspection/core/1.0"
+            xmlns:c="http://www.gtk.org/introspection/c/1.0"
+            xmlns:glib="http://www.gtk.org/introspection/glib/1.0">
+  <include name="GLib" version="2.0"/>
+  <include name="GObject" version="2.0"/>
+  <package name="gobject-2.0"/>
+  <c:include name="gettype.h"/>
+  <namespace name="GetType"
+             version="1.0"
+             shared-library="libgettype.so"
+             c:identifier-prefixes="GetType"
+             c:symbol-prefixes="gettype">
+    <class name="Object"
+           c:symbol-prefix="object"
+           c:type="GetTypeObject"
+           parent="GObject.Object"
+           glib:type-name="GetTypeObject"
+           glib:get-type="gettype_object_get_type"
+           glib:type-struct="ObjectClass">
+      <constructor name="new" c:identifier="gettype_object_new">
+        <return-value transfer-ownership="full">
+          <type name="Object" c:type="GetTypeObject*"/>
+        </return-value>
+      </constructor>
+      <function name="nonmeta2_get_type"
+                c:identifier="gettype_object_nonmeta2_get_type">
+        <doc xml:whitespace="preserve">This shouldn't be scanned as a *_get_type function because it doesn't return
+a GType. It will generate a warning.</doc>
+        <return-value transfer-ownership="none">
+          <doc xml:whitespace="preserve">true</doc>
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+      </function>
+      <function name="nonmeta_get_gtype"
+                c:identifier="gettype_object_nonmeta_get_gtype">
+        <doc xml:whitespace="preserve">This shouldn't be scanned as a *_get_type function because it doesn't return
+a GType. It will generate a warning.</doc>
+        <return-value transfer-ownership="none">
+          <doc xml:whitespace="preserve">true</doc>
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+      </function>
+      <method name="nonmeta1_get_type"
+              c:identifier="gettype_object_nonmeta1_get_type">
+        <doc xml:whitespace="preserve">This shouldn't be scanned as a *_get_type function because it takes
+arguments.</doc>
+        <return-value transfer-ownership="none">
+          <doc xml:whitespace="preserve">0</doc>
+          <type name="GType" c:type="GType"/>
+        </return-value>
+      </method>
+      <field name="parent_instance">
+        <type name="GObject.Object" c:type="GObject"/>
+      </field>
+    </class>
+    <record name="ObjectClass"
+            c:type="GetTypeObjectClass"
+            glib:is-gtype-struct-for="Object">
+      <field name="parent_class">
+        <type name="GObject.ObjectClass" c:type="GObjectClass"/>
+      </field>
+    </record>
+  </namespace>
+</repository>

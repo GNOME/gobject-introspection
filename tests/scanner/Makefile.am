@@ -1,14 +1,15 @@
 include $(top_srcdir)/common.mk
 include $(top_srcdir)/Makefile.introspection
 
-INTROSPECTION_SCANNER_ARGS += --warn-all --warn-error -I.
+INTROSPECTION_SCANNER_ARGS += --warn-all
 
 check_LTLIBRARIES = \
 	libannotation.la \
 	libtestinherit.la \
 	libfoo.la \
 	libutility.la \
-	libgtkfrob.la
+	libgtkfrob.la \
+	libgettype.la
 if HAVE_CAIRO
 check_LTLIBRARIES += libregress.la
 endif
@@ -28,6 +29,7 @@ libutility_la_SOURCES = $(srcdir)/utility.c $(srcdir)/utility.h
 libgtkfrob_la_SOURCES = $(srcdir)/gtkfrob.c $(srcdir)/gtkfrob.h
 libregress_la_SOURCES = $(srcdir)/regress.c $(srcdir)/regress.h
 libregress_la_LIBADD = $(GIO_LIBS) $(CAIRO_LIBS)
+libgettype_la_SOURCES = $(srcdir)/gettype.c $(srcdir)/gettype.h
 
 testsdir = $(datadir)/gobject-introspection-1.0/tests
 tests_DATA = $(libregress_la_SOURCES)
@@ -53,7 +55,7 @@ Regress-1.0.gir: $(top_builddir)/Gio-2.0.gir libregress.la
 Regress_1_0_gir_LIBS = libregress.la
 Regress_1_0_gir_INCLUDES = cairo-1.0 Gio-2.0
 Regress_1_0_gir_FILES = $(libregress_la_SOURCES)
-Regress_1_0_gir_SCANNERFLAGS = --c-include="regress.h"
+Regress_1_0_gir_SCANNERFLAGS = --c-include="regress.h" --warn-error
 if HAVE_CAIRO
 GIRS += Regress-1.0.gir
 endif
@@ -63,7 +65,7 @@ Annotation_1_0_gir_PACKAGES = gobject-2.0
 Annotation_1_0_gir_LIBS = libannotation.la
 Annotation_1_0_gir_INCLUDES = GObject-2.0 Utility-1.0
 Annotation_1_0_gir_FILES = $(libannotation_la_SOURCES)
-Annotation_1_0_gir_SCANNERFLAGS = --c-include="annotation.h"
+Annotation_1_0_gir_SCANNERFLAGS = --c-include="annotation.h" --warn-error
 GIRS += Annotation-1.0.gir
 
 TestInherit-1.0.gir: Utility-1.0.gir libtestinherit.la
@@ -71,7 +73,7 @@ TestInherit_1_0_gir_PACKAGES = gobject-2.0
 TestInherit_1_0_gir_LIBS = libtestinherit.la
 TestInherit_1_0_gir_INCLUDES = GObject-2.0 Utility-1.0
 TestInherit_1_0_gir_FILES = $(libtestinherit_la_SOURCES)
-TestInherit_1_0_gir_SCANNERFLAGS = --c-include="drawable.h"
+TestInherit_1_0_gir_SCANNERFLAGS = --c-include="drawable.h" --warn-error
 GIRS += TestInherit-1.0.gir
 
 Foo-1.0.gir: Utility-1.0.gir libfoo.la
@@ -79,7 +81,7 @@ Foo_1_0_gir_PACKAGES = gobject-2.0
 Foo_1_0_gir_LIBS = libfoo.la
 Foo_1_0_gir_INCLUDES = GObject-2.0 Gio-2.0 Utility-1.0
 Foo_1_0_gir_FILES = $(srcdir)/foo.h $(srcdir)/foo.c
-Foo_1_0_gir_SCANNERFLAGS = --c-include="foo.h"
+Foo_1_0_gir_SCANNERFLAGS = --c-include="foo.h" --warn-error
 GIRS += Foo-1.0.gir
 
 Utility-1.0.gir: libutility.la
@@ -87,7 +89,7 @@ Utility_1_0_gir_PACKAGES = gobject-2.0
 Utility_1_0_gir_LIBS = libutility.la
 Utility_1_0_gir_INCLUDES = GObject-2.0
 Utility_1_0_gir_FILES = $(libutility_la_SOURCES)
-Utility_1_0_gir_SCANNERFLAGS = --c-include="utility.h"
+Utility_1_0_gir_SCANNERFLAGS = --c-include="utility.h" --warn-error
 GIRS += Utility-1.0.gir
 
 # This one tests different --namespace and --strip-prefix
@@ -96,8 +98,18 @@ GtkFrob_1_0_gir_PACKAGES = gobject-2.0
 GtkFrob_1_0_gir_LIBS = libgtkfrob.la
 GtkFrob_1_0_gir_INCLUDES = GObject-2.0
 GtkFrob_1_0_gir_FILES = $(libgtkfrob_la_SOURCES)
-GtkFrob_1_0_gir_SCANNERFLAGS = --identifier-prefix=Gtk --symbol-prefix=gtk_frob
+GtkFrob_1_0_gir_SCANNERFLAGS = --identifier-prefix=Gtk --symbol-prefix=gtk_frob --warn-error
 GIRS += GtkFrob-1.0.gir
+
+# This tests that functions called _get_type are only matched if they have no
+# arguments and return GType
+GetType-1.0.gir: libgettype.la
+GetType_1_0_gir_PACKAGES = gobject-2.0
+GetType_1_0_gir_LIBS = libgettype.la
+GetType_1_0_gir_INCLUDES = GObject-2.0
+GetType_1_0_gir_FILES = $(libgettype_la_SOURCES)
+GetType_1_0_gir_SCANNERFLAGS = --c-include="gettype.h" --identifier-prefix=GetType --symbol-prefix=gettype
+GIRS += GetType-1.0.gir
 
 if !OS_WIN32
 check_PROGRAMS = barapp

@@ -21,6 +21,8 @@
 
 import copy
 
+from . import message
+
 from .message import Position
 from .odict import odict
 from .utils import to_underscores
@@ -589,6 +591,25 @@ class Function(Callable):
         clone.parameters = self.parameters[:]
         return clone
 
+    def is_type_meta_function(self):
+        # Named correctly
+        if not (self.name.endswith('_get_type') or
+                self.name.endswith('_get_gtype')):
+                return False
+
+        # Doesn't have any parameters
+        if self.parameters:
+            return False
+
+        # Returns GType
+        rettype = self.retval.type
+        if (not rettype.is_equiv(TYPE_GTYPE) and
+           rettype.target_giname != 'Gtk.Type'):
+            message.warn("function '%s' returns '%r', not a GType" %
+                         (self.name, rettype))
+            return False
+
+        return True
 
 class ErrorQuarkFunction(Function):
 

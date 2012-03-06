@@ -188,18 +188,12 @@ blob containing data gleaned from GObject's primitive introspection."""
         if func.symbol == 'g_variant_get_gtype':
             # We handle variants internally, see _initparse_gobject_record
             return True
-        if func.parameters:
-            return False
-        # GType *_get_type(void)
-        rettype = func.retval.type
-        if not (rettype.is_equiv(ast.TYPE_GTYPE)
-                or rettype.target_giname == 'Gtk.Type'):
-            message.warn("function returns '%r', not a GType" % (
-                func.retval.type, ))
-            return False
 
-        self._get_type_functions.append(func.symbol)
-        return True
+        if func.is_type_meta_function():
+            self._get_type_functions.append(func.symbol)
+            return True
+
+        return False
 
     def _initparse_error_quark_function(self, func):
         if (func.retval.type.ctype != 'GQuark'):
