@@ -272,6 +272,8 @@ if test "x$os_win32" = "xyes"; then
   AM_CHECK_PYTHON_LIBS(, AC_MSG_ERROR([Python libs not found. Windows requires Python modules to be explicitly linked to libpython.]))
 fi
 
+dnl Not enabled by default until 3.6 cycle when we can propose mako as
+dnl an external dependency
 AC_ARG_ENABLE(doctool,[  --enable-doctool           enable g-ir-doctool ], enable_doctool=$enableval,enable_doctool=no)
 if test x$enable_doctool != xno; then
    AM_CHECK_PYMOD(mako,,,[AC_MSG_ERROR(Could not find python module: mako)])
