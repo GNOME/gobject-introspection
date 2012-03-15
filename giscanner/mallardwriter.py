@@ -246,7 +246,7 @@ class MallardWriter(object):
                                  page_id=page_id,
                                  formatter=self._formatter)
 
-        output_file_name = os.path.join(os.path.dirname(output),
+        output_file_name = os.path.join(os.path.abspath(output),
                                         page_id + '.page')
         fp = open(output_file_name, 'w')
         fp.write(result)
