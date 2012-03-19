@@ -24,12 +24,21 @@ import sys
 import __builtin__
 
 
-if 'GI_SCANNER_DEBUG' in os.environ:
-    def on_exception(exctype, value, tb):
-        print "Caught exception: %r %r" % (exctype, value)
-        import pdb
-        pdb.pm()
-    sys.excepthook = on_exception
+debug = os.getenv('GI_SCANNER_DEBUG', '').split(',')
+if debug:
+    if 'pydevd' in debug:
+        # http://pydev.org/manual_adv_remote_debugger.html
+        pydevdpath = os.getenv('PYDEVDPATH', None)
+        if pydevdpath is not None and os.path.isdir(pydevdpath):
+            sys.path.insert(0, pydevdpath)
+            import pydevd
+            pydevd.settrace()
+    else:
+        def on_exception(exctype, value, tb):
+            print "Caught exception: %r %r" % (exctype, value)
+            import pdb
+            pdb.pm()
+        sys.excepthook = on_exception
 
 if os.name == 'nt':
     datadir = os.path.join(os.path.dirname(__file__), '..', 'share')
