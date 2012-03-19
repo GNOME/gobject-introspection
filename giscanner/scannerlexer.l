@@ -222,7 +222,7 @@ parse_comment (GISourceScanner *scanner)
   c1 = input();
   c2 = input();
 
-  string = g_string_new ("");
+  string = g_string_new ("/*");
 
   comment_lineno = lineno;
 
@@ -235,8 +235,8 @@ parse_comment (GISourceScanner *scanner)
 
       c1 = c2;
       c2 = input();
-
     }
+  g_string_append (string, "*/");
 
   comment = g_slice_new (GISourceComment);
   comment->comment = g_string_free (string, FALSE);
