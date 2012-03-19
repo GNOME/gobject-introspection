@@ -75,7 +75,7 @@ stringtext				([^\\\"])|(\\.)
 
 "/*"					{ parse_comment(scanner); }
 "/*"[\t ]?<[\t ,=A-Za-z0-9_]+>[\t ]?"*/" { parse_trigraph(scanner); }
-"//".*					{ }
+"//".*					{ /* Ignore C++ style comments. */ }
 
 "#define "[a-zA-Z_][a-zA-Z_0-9]*"("	{ yyless (yyleng - 1); return FUNCTION_MACRO; }
 "#define "[a-zA-Z_][a-zA-Z_0-9]*	{ return OBJECT_MACRO; }
