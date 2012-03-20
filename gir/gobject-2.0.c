@@ -10383,6 +10383,8 @@
  * (such as the various fundamental type implementations or the signal
  * system).
  *
+ * This function is idempotent.
+ *
  * Since version 2.24 this also initializes the thread system
  */
 
@@ -10392,6 +10394,8 @@
  * @debug_flags: Bitwise combination of #GTypeDebugFlags values for debugging purposes.
  *
  * Similar to g_type_init(), but additionally sets debug flags.
+ *
+ * This function is idempotent.
  */
 
 

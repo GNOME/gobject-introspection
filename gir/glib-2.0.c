@@ -13467,11 +13467,7 @@
  * than second arg, zero for equal, greater zero if first arg is
  * greater than second arg).
  *
- * If two array elements compare equal, their order in the sorted array
- * is undefined. If you want equal elements to keep their order (i.e.
- * you want a stable sort) you can write a comparison function that,
- * if two elements would otherwise compare equal, compares them by
- * their addresses.
+ * This is guaranteed to be a stable sort since version 2.32.
  */
 
 
@@ -13483,6 +13479,12 @@
  *
  * Like g_array_sort(), but the comparison function receives an extra
  * user data argument.
+ *
+ * This is guaranteed to be a stable sort since version 2.32.
+ *
+ * There used to be a comment here about making the sort stable by
+ * using the addresses of the elements in the comparison function.
+ * This did not actually work, so any such code should be removed.
  */
 
 
@@ -27170,15 +27172,11 @@
  * than second arg, zero for equal, greater than zero if irst arg is
  * greater than second arg).
  *
- * If two array elements compare equal, their order in the sorted array
- * is undefined. If you want equal elements to keep their order (i.e.
- * you want a stable sort) you can write a comparison function that,
- * if two elements would otherwise compare equal, compares them by
- * their addresses.
- *
  * <note><para>The comparison function for g_ptr_array_sort() doesn't
  * take the pointers from the array as arguments, it takes pointers to
  * the pointers in the array.</para></note>
+ *
+ * This is guaranteed to be a stable sort since version 2.32.
  */
 
 
@@ -27194,6 +27192,8 @@
  * <note><para>The comparison function for g_ptr_array_sort_with_data()
  * doesn't take the pointers from the array as arguments, it takes
  * pointers to the pointers in the array.</para></note>
+ *
+ * This is guaranteed to be a stable sort since version 2.32.
  */
 
 
@@ -27220,6 +27220,8 @@
  *
  * This is just like the standard C qsort() function, but
  * the comparison routine accepts a user data argument.
+ *
+ * This is guaranteed to be a stable sort since version 2.32.
  */
 
 
