@@ -2201,6 +2201,30 @@ call and can be released on return.</doc>
         </type>
       </return-value>
     </function>
+    <function name="test_ghash_gvalue_in"
+              c:identifier="regress_test_ghash_gvalue_in">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="hash" transfer-ownership="none">
+          <doc xml:whitespace="preserve">the hash table returned by regress_test_ghash_gvalue_return().</doc>
+          <type name="GLib.HashTable" c:type="GHashTable*">
+            <type name="utf8"/>
+            <type name="GObject.Value"/>
+          </type>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="test_ghash_gvalue_return"
+              c:identifier="regress_test_ghash_gvalue_return">
+      <return-value transfer-ownership="none">
+        <type name="GLib.HashTable" c:type="GHashTable*">
+          <type name="utf8"/>
+          <type name="GObject.Value"/>
+        </type>
+      </return-value>
+    </function>
     <function name="test_ghash_nested_everything_return"
               c:identifier="regress_test_ghash_nested_everything_return">
       <doc xml:whitespace="preserve">Specify nested parameterized types directly with the (type ) annotation.</doc>

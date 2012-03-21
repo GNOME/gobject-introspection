@@ -102,6 +102,8 @@ void regress_test_gslist_null_out(GSList **out_list);
 const GHashTable *regress_test_ghash_null_return (void);
 const GHashTable *regress_test_ghash_nothing_return (void);
 GHashTable *regress_test_ghash_nothing_return2 (void);
+GHashTable *regress_test_ghash_gvalue_return (void);
+void regress_test_ghash_gvalue_in (GHashTable *hash);
 GHashTable *regress_test_ghash_container_return (void);
 GHashTable *regress_test_ghash_everything_return (void);
 void regress_test_ghash_null_in (const GHashTable *in);

@@ -1205,6 +1205,98 @@ regress_test_ghash_nothing_return2 (void)
   return regress_test_table_ghash_const ();
 }
 
+static GValue *
+g_value_new (GType type)
+{
+  GValue *value = g_slice_new0(GValue);
+  g_value_init(value, type);
+  return value;
+}
+
+static void
+g_value_free (GValue *value)
+{
+  g_value_unset(value);
+  g_slice_free(GValue, value);
+}
+
+static const gchar *string_array[] = {
+  "first",
+  "second",
+  "third",
+  NULL
+};
+
+/**
+ * regress_test_ghash_gvalue_return:
+ *
+ * Return value: (element-type utf8 GValue) (transfer none):
+ */
+GHashTable *
+regress_test_ghash_gvalue_return (void)
+{
+  GHashTable *hash;
+  GValue *value;
+  hash = g_hash_table_new_full(g_str_hash, g_str_equal,
+                               g_free, (GDestroyNotify)g_value_free);
+
+  value = g_value_new(G_TYPE_INT);
+  g_value_set_int(value, 12);
+  g_hash_table_insert(hash, g_strdup("integer"), value);
+
+  value = g_value_new(G_TYPE_BOOLEAN);
+  g_value_set_boolean(value, TRUE);
+  g_hash_table_insert(hash, g_strdup("boolean"), value);
+
+  value = g_value_new(G_TYPE_STRING);
+  g_value_set_string(value, "some text");
+  g_hash_table_insert(hash, g_strdup("string"), value);
+
+  value = g_value_new(G_TYPE_STRV);
+  g_value_set_boxed(value, string_array);
+  g_hash_table_insert(hash, g_strdup("strings"), value);
+
+  return hash;
+}
+
+/**
+ * regress_test_ghash_gvalue_in:
+ * @hash: (element-type utf8 GValue): the hash table returned by
+ * regress_test_ghash_gvalue_return().
+ */
+void
+regress_test_ghash_gvalue_in (GHashTable *hash)
+{
+  GValue *value;
+  const gchar **strings;
+  int i;
+
+  g_assert(hash != NULL);
+
+  value = g_hash_table_lookup(hash, "integer");
+  g_assert(value != NULL);
+  g_assert(G_VALUE_HOLDS_INT(value));
+  g_assert(g_value_get_int(value) == 12);
+
+  value = g_hash_table_lookup(hash, "boolean");
+  g_assert(value != NULL);
+  g_assert(G_VALUE_HOLDS_BOOLEAN(value));
+  g_assert(g_value_get_boolean(value) == TRUE);
+
+  value = g_hash_table_lookup(hash, "string");
+  g_assert(value != NULL);
+  g_assert(G_VALUE_HOLDS_STRING(value));
+  g_assert(strcmp(g_value_get_string(value), "some text") == 0);
+
+  value = g_hash_table_lookup(hash, "strings");
+  g_assert(value != NULL);
+  g_assert(G_VALUE_HOLDS(value, G_TYPE_STRV));
+  strings = g_value_get_boxed(value);
+  g_assert(strings != NULL);
+  for (i = 0; string_array[i] != NULL; i++)
+    g_assert(strcmp(strings[i], string_array[i]) == 0);
+}
+
 /**
  * regress_test_ghash_container_return:
  *
