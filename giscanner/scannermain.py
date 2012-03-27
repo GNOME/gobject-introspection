@@ -405,9 +405,10 @@ def scanner_main(args):
 
     packages = set(options.packages)
     packages.update(transformer.get_pkgconfig_packages())
-    exit_code = process_packages(options, packages)
-    if exit_code:
-        return exit_code
+    if packages:
+        exit_code = process_packages(options, packages)
+        if exit_code:
+            return exit_code
 
     ss = create_source_scanner(options, args)
 
