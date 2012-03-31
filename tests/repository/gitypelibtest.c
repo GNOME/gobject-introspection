@@ -156,6 +156,18 @@ test_is_pointer_for_struct_arg (GIRepository *repo)
     g_base_info_unref (variant_info);
 }
 
+static void
+test_fundamental_get_ref_function_pointer (GIRepository *repo)
+{
+    GIObjectInfo *info;
+
+    g_assert (g_irepository_require (repo, "Regress", NULL, 0, NULL));
+    info = g_irepository_find_by_name (repo, "Regress",
+                                       "TestFundamentalObject");
+    g_object_info_get_ref_function_pointer (info);
+    g_base_info_unref (info);
+}
+
 int
 main(int argc, char **argv)
 {
@@ -170,6 +182,7 @@ main(int argc, char **argv)
     test_enum_and_flags_static_methods (repo);
     test_size_of_gvalue (repo);
     test_is_pointer_for_struct_arg (repo);
+    test_fundamental_get_ref_function_pointer (repo);
 
     exit(0);
 }
