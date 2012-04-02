@@ -1113,7 +1113,7 @@
  * GDBusAuthObserver::authorize-authenticated-peer:
  * @observer: The #GDBusAuthObserver emitting the signal.
  * @stream: A #GIOStream for the #GDBusConnection.
- * @credentials: Credentials received from the peer or %NULL.
+ * @credentials: (allow-none): Credentials received from the peer or %NULL.
  *
  * Emitted to check if a peer that is successfully authenticated
  * is authorized.
@@ -2218,7 +2218,7 @@
 /**
  * GDBusProxy::g-signal:
  * @proxy: The #GDBusProxy emitting the signal.
- * @sender_name: The sender of the signal or %NULL if the connection is not a bus connection.
+ * @sender_name: (allow-none): The sender of the signal or %NULL if the connection is not a bus connection.
  * @signal_name: The name of the signal.
  * @parameters: A #GVariant tuple with parameters for the signal.
  *
@@ -3239,7 +3239,7 @@
  * Emitted when @file has been changed.
  *
  * If using #G_FILE_MONITOR_SEND_MOVED flag and @event_type is
- * #G_FILE_MONITOR_SEND_MOVED, @file will be set to a #GFile containing the
+ * #G_FILE_MONITOR_EVENT_MOVED, @file will be set to a #GFile containing the
  * old path, and @other_file will be set to a #GFile containing the new path.
  *
  * In all the other cases, @other_file will be set to #NULL.
@@ -14844,10 +14844,10 @@
  * the resource data.
  *
  * There are two forms of the generated source, the default version uses the compiler support for constructor
- * and destructor functions (where availible) to automatically create and register the #GResource on startup
+ * and destructor functions (where available) to automatically create and register the #GResource on startup
  * or library load time. If you pass --manual-register two functions to register/unregister the resource is instead
  * created. This requires an explicit initialization call in your application/library, but it works on all platforms,
- * even on the minor ones where this is not availible. (Constructor support is availible for at least Win32, MacOS and Linux.)
+ * even on the minor ones where this is not available. (Constructor support is available for at least Win32, MacOS and Linux.)
  *
  * Note that resource data can point directly into the data segment of e.g. a library, so if you are unloading libraries
  * during runtime you need to be very careful with keeping around pointers to data from a resource, as this goes away
@@ -16715,10 +16715,10 @@
  * @action_group: a #GActionGroup
  * @action_name: the name of an action in the group
  * @enabled: (out): if the action is presently enabled
- * @parameter_type: (out): the parameter type, or %NULL if none needed
- * @state_type: (out): the state type, or %NULL if stateless
- * @state_hint: (out): the state hint, or %NULL if none
- * @state: (out): the current state, or %NULL if stateless
+ * @parameter_type: (out) (allow-none): the parameter type, or %NULL if none needed
+ * @state_type: (out) (allow-none): the state type, or %NULL if stateless
+ * @state_hint: (out) (allow-none): the state hint, or %NULL if none
+ * @state: (out) (allow-none): the current state, or %NULL if stateless
  *
  * Queries all aspects of the named action within an @action_group.
  *
@@ -17442,7 +17442,7 @@
 /**
  * g_application_command_line_get_arguments:
  * @cmdline: a #GApplicationCommandLine
- * @argc: (out): the length of the arguments array, or %NULL
+ * @argc: (out) (allow-none): the length of the arguments array, or %NULL
  *
  * Gets the list of arguments that was passed on the command line.
  *
@@ -17818,7 +17818,7 @@
 /**
  * g_application_register:
  * @application: a #GApplication
- * @cancellable: a #GCancellable, or %NULL
+ * @cancellable: (allow-none): a #GCancellable, or %NULL
  * @error: a pointer to a NULL #GError, or %NULL
  *
  * Attempts registration of the application.
@@ -17981,7 +17981,7 @@
 
 /**
  * g_application_set_default:
- * @application: the application to set as default, or %NULL
+ * @application: (allow-none): the application to set as default, or %NULL
  *
  * Sets or unsets the default application for the process, as returned
  * by g_application_get_default().
@@ -18097,7 +18097,7 @@
  * @cancellable: optional #GCancellable object, %NULL to ignore.
  * @callback: a #GAsyncReadyCallback to call when the initialization is finished
  * @user_data: the data to pass to callback function
- * @first_property_name: the name of the first property, or %NULL if no properties
+ * @first_property_name: (allow-none): the name of the first property, or %NULL if no properties
  * @...: the value of the first property, followed by other property value pairs, and ended by %NULL.
  *
  * Helper function for constructing #GAsyncInitable object. This is
@@ -18434,7 +18434,7 @@
 /**
  * g_bus_get:
  * @bus_type: A #GBusType.
- * @cancellable: A #GCancellable or %NULL.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
  * @callback: A #GAsyncReadyCallback to call when the request is satisfied.
  * @user_data: The data to pass to @callback.
  *
@@ -18474,7 +18474,7 @@
 /**
  * g_bus_get_sync:
  * @bus_type: A #GBusType.
- * @cancellable: A #GCancellable or %NULL.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
  *
  * Synchronously connects to the message bus specified by @bus_type.
@@ -18504,11 +18504,11 @@
  * @bus_type: The type of bus to own a name on.
  * @name: The well-known name to own.
  * @flags: A set of flags from the #GBusNameOwnerFlags enumeration.
- * @bus_acquired_handler: Handler to invoke when connected to the bus of type @bus_type or %NULL.
- * @name_acquired_handler: Handler to invoke when @name is acquired or %NULL.
- * @name_lost_handler: Handler to invoke when @name is lost or %NULL.
+ * @bus_acquired_handler: (allow-none): Handler to invoke when connected to the bus of type @bus_type or %NULL.
+ * @name_acquired_handler: (allow-none): Handler to invoke when @name is acquired or %NULL.
+ * @name_lost_handler: (allow-none): Handler to invoke when @name is lost or %NULL.
  * @user_data: User data to pass to handlers.
- * @user_data_free_func: Function for freeing @user_data or %NULL.
+ * @user_data_free_func: (allow-none): Function for freeing @user_data or %NULL.
  *
  * Starts acquiring @name on the bus specified by @bus_type and calls
  * @name_acquired_handler and @name_lost_handler when the name is
@@ -18573,10 +18573,10 @@
  * @connection: A #GDBusConnection.
  * @name: The well-known name to own.
  * @flags: A set of flags from the #GBusNameOwnerFlags enumeration.
- * @name_acquired_handler: Handler to invoke when @name is acquired or %NULL.
- * @name_lost_handler: Handler to invoke when @name is lost or %NULL.
+ * @name_acquired_handler: (allow-none): Handler to invoke when @name is acquired or %NULL.
+ * @name_lost_handler: (allow-none): Handler to invoke when @name is lost or %NULL.
  * @user_data: User data to pass to handlers.
- * @user_data_free_func: Function for freeing @user_data or %NULL.
+ * @user_data_free_func: (allow-none): Function for freeing @user_data or %NULL.
  *
  * Like g_bus_own_name() but takes a #GDBusConnection instead of a
  * #GBusType.
@@ -18652,10 +18652,10 @@
  * @bus_type: The type of bus to watch a name on.
  * @name: The name (well-known or unique) to watch.
  * @flags: Flags from the #GBusNameWatcherFlags enumeration.
- * @name_appeared_handler: Handler to invoke when @name is known to exist or %NULL.
- * @name_vanished_handler: Handler to invoke when @name is known to not exist or %NULL.
+ * @name_appeared_handler: (allow-none): Handler to invoke when @name is known to exist or %NULL.
+ * @name_vanished_handler: (allow-none): Handler to invoke when @name is known to not exist or %NULL.
  * @user_data: User data to pass to handlers.
- * @user_data_free_func: Function for freeing @user_data or %NULL.
+ * @user_data_free_func: (allow-none): Function for freeing @user_data or %NULL.
  *
  * Starts watching @name on the bus specified by @bus_type and calls
  * @name_appeared_handler and @name_vanished_handler when the name is
@@ -18699,10 +18699,10 @@
  * @connection: A #GDBusConnection.
  * @name: The name (well-known or unique) to watch.
  * @flags: Flags from the #GBusNameWatcherFlags enumeration.
- * @name_appeared_handler: Handler to invoke when @name is known to exist or %NULL.
- * @name_vanished_handler: Handler to invoke when @name is known to not exist or %NULL.
+ * @name_appeared_handler: (allow-none): Handler to invoke when @name is known to exist or %NULL.
+ * @name_vanished_handler: (allow-none): Handler to invoke when @name is known to not exist or %NULL.
  * @user_data: User data to pass to handlers.
- * @user_data_free_func: Function for freeing @user_data or %NULL.
+ * @user_data_free_func: (allow-none): Function for freeing @user_data or %NULL.
  *
  * Like g_bus_watch_name() but takes a #GDBusConnection instead of a
  * #GBusType.
@@ -18778,7 +18778,7 @@
  * @cancellable: A #GCancellable.
  * @callback: The #GCallback to connect.
  * @data: Data to pass to @callback.
- * @data_destroy_func: Free function for @data or %NULL.
+ * @data_destroy_func: (allow-none): Free function for @data or %NULL.
  *
  * Convenience function to connect to the #GCancellable::cancelled
  * signal. Also handles the race condition that may happen
@@ -18803,7 +18803,7 @@
 
 /**
  * g_cancellable_disconnect:
- * @cancellable: A #GCancellable or %NULL.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
  * @handler_id: Handler id of the handler to be disconnected, or %0.
  *
  * Disconnects a handler from a cancellable instance similar to
@@ -18874,7 +18874,7 @@
 
 /**
  * g_cancellable_make_pollfd:
- * @cancellable: a #GCancellable or %NULL
+ * @cancellable: (allow-none): a #GCancellable or %NULL
  * @pollfd: a pointer to a #GPollFD
  *
  * Creates a #GPollFD corresponding to @cancellable; this can be passed
@@ -18986,7 +18986,7 @@
 
 /**
  * g_cancellable_source_new: (skip)
- * @cancellable: a #GCancellable, or %NULL
+ * @cancellable: (allow-none): a #GCancellable, or %NULL
  *
  * Creates a source that triggers if @cancellable is cancelled and
  * calls its callback of type #GCancellableSourceFunc. This is
@@ -20088,7 +20088,7 @@
 /**
  * g_dbus_address_get_for_bus_sync:
  * @bus_type: A #GBusType.
- * @cancellable: A #GCancellable or %NULL.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
  *
  * Synchronously looks up the D-Bus address for the well-known message
@@ -20103,7 +20103,7 @@
 /**
  * g_dbus_address_get_stream:
  * @address: A valid D-Bus address.
- * @cancellable: A #GCancellable or %NULL.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
  * @callback: A #GAsyncReadyCallback to call when the request is satisfied.
  * @user_data: Data to pass to @callback.
  *
@@ -20139,7 +20139,7 @@
  * g_dbus_address_get_stream_sync:
  * @address: A valid D-Bus address.
  * @out_guid: %NULL or return location to store the GUID extracted from @address, if any.
- * @cancellable: A #GCancellable or %NULL.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
  *
  * Synchronously connects to an endpoint specified by @address and
@@ -20156,7 +20156,7 @@
 
 /**
  * g_dbus_annotation_info_lookup:
- * @annotations: (array zero-terminated=1): A %NULL-terminated array of annotations or %NULL.
+ * @annotations: (array zero-terminated=1) (allow-none): A %NULL-terminated array of annotations or %NULL.
  * @name: The name of the annotation to look up.
  *
  * Looks up the value of an annotation.
@@ -20220,7 +20220,7 @@
  * g_dbus_auth_observer_authorize_authenticated_peer:
  * @observer: A #GDBusAuthObserver.
  * @stream: A #GIOStream for the #GDBusConnection.
- * @credentials: Credentials received from the peer or %NULL.
+ * @credentials: (allow-none): Credentials received from the peer or %NULL.
  *
  * Emits the #GDBusAuthObserver::authorize-authenticated-peer signal on @observer.
  *
@@ -20285,7 +20285,7 @@
  * @reply_type: (allow-none): The expected type of the reply, or %NULL.
  * @flags: Flags from the #GDBusCallFlags enumeration.
  * @timeout_msec: The timeout in milliseconds, -1 to use the default timeout or %G_MAXINT for no timeout.
- * @cancellable: A #GCancellable or %NULL.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
  * @callback: (allow-none): A #GAsyncReadyCallback to call when the request is satisfied or %NULL if you don't care about the result of the method invocation.
  * @user_data: The data to pass to @callback.
  *
@@ -20362,7 +20362,7 @@
  * @reply_type: (allow-none): The expected type of the reply, or %NULL.
  * @flags: Flags from the #GDBusCallFlags enumeration.
  * @timeout_msec: The timeout in milliseconds, -1 to use the default timeout or %G_MAXINT for no timeout.
- * @cancellable: A #GCancellable or %NULL.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
  *
  * Synchronously invokes the @method_name method on the
@@ -20420,7 +20420,7 @@
  * @flags: Flags from the #GDBusCallFlags enumeration.
  * @timeout_msec: The timeout in milliseconds, -1 to use the default timeout or %G_MAXINT for no timeout.
  * @fd_list: (allow-none): A #GUnixFDList or %NULL.
- * @cancellable: A #GCancellable or %NULL.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
  * @callback: (allow-none): A #GAsyncReadyCallback to call when the request is satisfied or %NULL if you don't * care about the result of the method invocation.
  * @user_data: The data to pass to @callback.
  *
@@ -20435,7 +20435,7 @@
 /**
  * g_dbus_connection_call_with_unix_fd_list_finish:
  * @connection: A #GDBusConnection.
- * @out_fd_list: (out): Return location for a #GUnixFDList or %NULL.
+ * @out_fd_list: (out) (allow-none): Return location for a #GUnixFDList or %NULL.
  * @res: A #GAsyncResult obtained from the #GAsyncReadyCallback passed to g_dbus_connection_call_with_unix_fd_list().
  * @error: Return location for error or %NULL.
  *
@@ -20460,8 +20460,8 @@
  * @flags: Flags from the #GDBusCallFlags enumeration.
  * @timeout_msec: The timeout in milliseconds, -1 to use the default timeout or %G_MAXINT for no timeout.
  * @fd_list: (allow-none): A #GUnixFDList or %NULL.
- * @out_fd_list: (out): Return location for a #GUnixFDList or %NULL.
- * @cancellable: A #GCancellable or %NULL.
+ * @out_fd_list: (out) (allow-none): Return location for a #GUnixFDList or %NULL.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
  *
  * Like g_dbus_connection_call_sync() but also takes and returns #GUnixFDList objects.
@@ -20478,7 +20478,7 @@
 /**
  * g_dbus_connection_close:
  * @connection: A #GDBusConnection.
- * @cancellable: A #GCancellable or %NULL.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
  * @callback: (allow-none): A #GAsyncReadyCallback to call when the request is satisfied or %NULL if you don't care about the result.
  * @user_data: The data to pass to @callback.
  *
@@ -20527,7 +20527,7 @@
 /**
  * g_dbus_connection_close_sync:
  * @connection: A #GDBusConnection.
- * @cancellable: A #GCancellable or %NULL.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
  *
  * Synchronously closees @connection. The calling thread is blocked
@@ -20623,7 +20623,7 @@
 /**
  * g_dbus_connection_flush:
  * @connection: A #GDBusConnection.
- * @cancellable: A #GCancellable or %NULL.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
  * @callback: (allow-none): A #GAsyncReadyCallback to call when the request is satisfied or %NULL if you don't care about the result.
  * @user_data: The data to pass to @callback.
  *
@@ -20663,7 +20663,7 @@
 /**
  * g_dbus_connection_flush_sync:
  * @connection: A #GDBusConnection.
- * @cancellable: A #GCancellable or %NULL.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
  *
  * Synchronously flushes @connection. The calling thread is blocked
@@ -20785,7 +20785,7 @@
  * @guid: (allow-none): The GUID to use if a authenticating as a server or %NULL.
  * @flags: Flags describing how to make the connection.
  * @observer: (allow-none): A #GDBusAuthObserver or %NULL.
- * @cancellable: A #GCancellable or %NULL.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
  * @callback: A #GAsyncReadyCallback to call when the request is satisfied.
  * @user_data: The data to pass to @callback.
  *
@@ -20831,7 +20831,7 @@
  * @address: A D-Bus address.
  * @flags: Flags describing how to make the connection.
  * @observer: (allow-none): A #GDBusAuthObserver or %NULL.
- * @cancellable: A #GCancellable or %NULL.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
  * @callback: A #GAsyncReadyCallback to call when the request is satisfied.
  * @user_data: The data to pass to @callback.
  *
@@ -20877,7 +20877,7 @@
  * @address: A D-Bus address.
  * @flags: Flags describing how to make the connection.
  * @observer: (allow-none): A #GDBusAuthObserver or %NULL.
- * @cancellable: A #GCancellable or %NULL.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
  *
  * Synchronously connects and sets up a D-Bus client connection for
@@ -20907,7 +20907,7 @@
  * @guid: (allow-none): The GUID to use if a authenticating as a server or %NULL.
  * @flags: Flags describing how to make the connection.
  * @observer: (allow-none): A #GDBusAuthObserver or %NULL.
- * @cancellable: A #GCancellable or %NULL.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
  *
  * Synchronously sets up a D-Bus connection for exchanging D-Bus messages
@@ -21092,7 +21092,7 @@
  * @flags: Flags affecting how the message is sent.
  * @timeout_msec: The timeout in milliseconds, -1 to use the default timeout or %G_MAXINT for no timeout.
  * @out_serial: (out) (allow-none): Return location for serial number assigned to @message when sending it or %NULL.
- * @cancellable: A #GCancellable or %NULL.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
  * @callback: (allow-none): A #GAsyncReadyCallback to call when the request is satisfied or %NULL if you don't care about the result.
  * @user_data: The data to pass to @callback.
  *
@@ -21156,7 +21156,7 @@
  * @flags: Flags affecting how the message is sent.
  * @timeout_msec: The timeout in milliseconds, -1 to use the default timeout or %G_MAXINT for no timeout.
  * @out_serial: (out) (allow-none): Return location for serial number assigned to @message when sending it or %NULL.
- * @cancellable: A #GCancellable or %NULL.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
  *
  * Synchronously sends @message to the peer represented by @connection
@@ -21452,7 +21452,7 @@
  * @error: A pointer to a #GError or %NULL.
  * @dbus_error_name: D-Bus error name.
  * @dbus_error_message: D-Bus error message.
- * @format: printf()-style format to prepend to @dbus_error_message or %NULL.
+ * @format: (allow-none): printf()-style format to prepend to @dbus_error_message or %NULL.
  * @...: Arguments for @format.
  *
  * Does nothing if @error is %NULL. Otherwise sets *@error to
@@ -21468,7 +21468,7 @@
  * @error: A pointer to a #GError or %NULL.
  * @dbus_error_name: D-Bus error name.
  * @dbus_error_message: D-Bus error message.
- * @format: printf()-style format to prepend to @dbus_error_message or %NULL.
+ * @format: (allow-none): printf()-style format to prepend to @dbus_error_message or %NULL.
  * @var_args: Arguments for @format.
  *
  * Like g_dbus_error_set_dbus_error() but intended for language bindings.
@@ -21784,7 +21784,7 @@
 /**
  * g_dbus_interface_set_object:
  * @interface_: An exported D-Bus interface.
- * @object: A #GDBusObject or %NULL.
+ * @object: (allow-none): A #GDBusObject or %NULL.
  *
  * Sets the #GDBusObject for @interface_ to @object.
  *
@@ -22381,9 +22381,9 @@
 
 /**
  * g_dbus_message_new_method_call:
- * @name: A valid D-Bus name or %NULL.
+ * @name: (allow-none): A valid D-Bus name or %NULL.
  * @path: A valid object path.
- * @interface_: A valid D-Bus interface name or %NULL.
+ * @interface_: (allow-none): A valid D-Bus interface name or %NULL.
  * @method: A valid method name.
  *
  * Creates a new #GDBusMessage for a method call.
@@ -22563,7 +22563,7 @@
  * g_dbus_message_set_header:
  * @message: A #GDBusMessage.
  * @header_field: A 8-bit unsigned integer (typically a value from the #GDBusMessageHeaderField enumeration)
- * @value: A #GVariant to set the header field or %NULL to clear the header field.
+ * @value: (allow-none): A #GVariant to set the header field or %NULL to clear the header field.
  *
  * Sets a header field on @message.
  *
@@ -23161,10 +23161,10 @@
  * @flags: Zero or more flags from the #GDBusObjectManagerClientFlags enumeration.
  * @name: The owner of the control object (unique or well-known name).
  * @object_path: The object path of the control object.
- * @get_proxy_type_func: A #GDBusProxyTypeFunc function or %NULL to always construct #GDBusProxy proxies.
+ * @get_proxy_type_func: (allow-none): A #GDBusProxyTypeFunc function or %NULL to always construct #GDBusProxy proxies.
  * @get_proxy_type_user_data: User data to pass to @get_proxy_type_func.
  * @get_proxy_type_destroy_notify: (allow-none): Free function for @get_proxy_type_user_data or %NULL.
- * @cancellable: A #GCancellable or %NULL
+ * @cancellable: (allow-none): A #GCancellable or %NULL
  * @callback: A #GAsyncReadyCallback to call when the request is satisfied.
  * @user_data: The data to pass to @callback.
  *
@@ -23202,10 +23202,10 @@
  * @flags: Zero or more flags from the #GDBusObjectManagerClientFlags enumeration.
  * @name: The owner of the control object (unique or well-known name).
  * @object_path: The object path of the control object.
- * @get_proxy_type_func: A #GDBusProxyTypeFunc function or %NULL to always construct #GDBusProxy proxies.
+ * @get_proxy_type_func: (allow-none): A #GDBusProxyTypeFunc function or %NULL to always construct #GDBusProxy proxies.
  * @get_proxy_type_user_data: User data to pass to @get_proxy_type_func.
  * @get_proxy_type_destroy_notify: (allow-none): Free function for @get_proxy_type_user_data or %NULL.
- * @cancellable: A #GCancellable or %NULL
+ * @cancellable: (allow-none): A #GCancellable or %NULL
  * @callback: A #GAsyncReadyCallback to call when the request is satisfied.
  * @user_data: The data to pass to @callback.
  *
@@ -23244,10 +23244,10 @@
  * @flags: Zero or more flags from the #GDBusObjectManagerClientFlags enumeration.
  * @name: The owner of the control object (unique or well-known name).
  * @object_path: The object path of the control object.
- * @get_proxy_type_func: A #GDBusProxyTypeFunc function or %NULL to always construct #GDBusProxy proxies.
+ * @get_proxy_type_func: (allow-none): A #GDBusProxyTypeFunc function or %NULL to always construct #GDBusProxy proxies.
  * @get_proxy_type_user_data: User data to pass to @get_proxy_type_func.
  * @get_proxy_type_destroy_notify: (allow-none): Free function for @get_proxy_type_user_data or %NULL.
- * @cancellable: A #GCancellable or %NULL
+ * @cancellable: (allow-none): A #GCancellable or %NULL
  * @error: Return location for error or %NULL.
  *
  * Like g_dbus_object_manager_client_new_sync() but takes a #GBusType instead
@@ -23271,10 +23271,10 @@
  * @flags: Zero or more flags from the #GDBusObjectManagerClientFlags enumeration.
  * @name: The owner of the control object (unique or well-known name).
  * @object_path: The object path of the control object.
- * @get_proxy_type_func: A #GDBusProxyTypeFunc function or %NULL to always construct #GDBusProxy proxies.
+ * @get_proxy_type_func: (allow-none): A #GDBusProxyTypeFunc function or %NULL to always construct #GDBusProxy proxies.
  * @get_proxy_type_user_data: User data to pass to @get_proxy_type_func.
  * @get_proxy_type_destroy_notify: (allow-none): Free function for @get_proxy_type_user_data or %NULL.
- * @cancellable: A #GCancellable or %NULL
+ * @cancellable: (allow-none): A #GCancellable or %NULL
  * @error: Return location for error or %NULL.
  *
  * Creates a new #GDBusObjectManagerClient object.
@@ -23572,8 +23572,8 @@
  * @parameters: (allow-none): A #GVariant tuple with parameters for the signal or %NULL if not passing parameters.
  * @flags: Flags from the #GDBusCallFlags enumeration.
  * @timeout_msec: The timeout in milliseconds (with %G_MAXINT meaning "infinite") or -1 to use the proxy default timeout.
- * @cancellable: A #GCancellable or %NULL.
- * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL if you don't care about the result of the method invocation.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @callback: (allow-none): A #GAsyncReadyCallback to call when the request is satisfied or %NULL if you don't care about the result of the method invocation.
  * @user_data: The data to pass to @callback.
  *
  * Asynchronously invokes the @method_name method on @proxy.
@@ -23645,7 +23645,7 @@
  * @parameters: (allow-none): A #GVariant tuple with parameters for the signal or %NULL if not passing parameters.
  * @flags: Flags from the #GDBusCallFlags enumeration.
  * @timeout_msec: The timeout in milliseconds (with %G_MAXINT meaning "infinite") or -1 to use the proxy default timeout.
- * @cancellable: A #GCancellable or %NULL.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
  *
  * Synchronously invokes the @method_name method on @proxy.
@@ -23698,8 +23698,8 @@
  * @flags: Flags from the #GDBusCallFlags enumeration.
  * @timeout_msec: The timeout in milliseconds (with %G_MAXINT meaning "infinite") or -1 to use the proxy default timeout.
  * @fd_list: (allow-none): A #GUnixFDList or %NULL.
- * @cancellable: A #GCancellable or %NULL.
- * @callback: A #GAsyncReadyCallback to call when the request is satisfied or %NULL if you don't care about the result of the method invocation.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
+ * @callback: (allow-none): A #GAsyncReadyCallback to call when the request is satisfied or %NULL if you don't care about the result of the method invocation.
  * @user_data: The data to pass to @callback.
  *
  * Like g_dbus_proxy_call() but also takes a #GUnixFDList object.
@@ -23713,7 +23713,7 @@
 /**
  * g_dbus_proxy_call_with_unix_fd_list_finish:
  * @proxy: A #GDBusProxy.
- * @out_fd_list: (out): Return location for a #GUnixFDList or %NULL.
+ * @out_fd_list: (out) (allow-none): Return location for a #GUnixFDList or %NULL.
  * @res: A #GAsyncResult obtained from the #GAsyncReadyCallback passed to g_dbus_proxy_call_with_unix_fd_list().
  * @error: Return location for error or %NULL.
  *
@@ -23734,8 +23734,8 @@
  * @flags: Flags from the #GDBusCallFlags enumeration.
  * @timeout_msec: The timeout in milliseconds (with %G_MAXINT meaning "infinite") or -1 to use the proxy default timeout.
  * @fd_list: (allow-none): A #GUnixFDList or %NULL.
- * @out_fd_list: (out): Return location for a #GUnixFDList or %NULL.
- * @cancellable: A #GCancellable or %NULL.
+ * @out_fd_list: (out) (allow-none): Return location for a #GUnixFDList or %NULL.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
  *
  * Like g_dbus_proxy_call_sync() but also takes and returns #GUnixFDList objects.
@@ -23890,7 +23890,7 @@
  * @name: (allow-none): A bus name (well-known or unique) or %NULL if @connection is not a message bus connection.
  * @object_path: An object path.
  * @interface_name: A D-Bus interface name.
- * @cancellable: A #GCancellable or %NULL.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
  * @callback: Callback function to invoke when the proxy is ready.
  * @user_data: User data to pass to @callback.
  *
@@ -23942,7 +23942,7 @@
  * @name: A bus name (well-known or unique).
  * @object_path: An object path.
  * @interface_name: A D-Bus interface name.
- * @cancellable: A #GCancellable or %NULL.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
  * @callback: Callback function to invoke when the proxy is ready.
  * @user_data: User data to pass to @callback.
  *
@@ -23974,7 +23974,7 @@
  * @name: A bus name (well-known or unique).
  * @object_path: An object path.
  * @interface_name: A D-Bus interface name.
- * @cancellable: A #GCancellable or %NULL.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
  * @error: Return location for error or %NULL.
  *
  * Like g_dbus_proxy_new_sync() but takes a #GBusType instead of a #GDBusConnection.
@@ -24147,7 +24147,7 @@
  * @flags: Flags from the #GDBusServerFlags enumeration.
  * @guid: A D-Bus GUID.
  * @observer: (allow-none): A #GDBusAuthObserver or %NULL.
- * @cancellable: A #GCancellable or %NULL.
+ * @cancellable: (allow-none): A #GCancellable or %NULL.
  * @error: Return location for server or %NULL.
  *
  * Creates a new D-Bus server that listens on the first address in
@@ -25452,7 +25452,7 @@
  * @file: input #GFile.
  * @flags: flags affecting the operation
  * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
- * @callback: (scope async): a #GAsyncReadyCallback to call when the request is satisfied, or %NULL.
+ * @callback: (scope async) (allow-none): a #GAsyncReadyCallback to call when the request is satisfied, or %NULL.
  * @user_data: (closure): the data to pass to callback function
  *
  * Starts an asynchronous eject on a mountable.
@@ -25490,7 +25490,7 @@
  * @flags: flags affecting the operation
  * @mount_operation: (allow-none): a #GMountOperation, or %NULL to avoid user interaction.
  * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
- * @callback: (scope async): a #GAsyncReadyCallback to call when the request is satisfied, or %NULL.
+ * @callback: (scope async) (allow-none): a #GAsyncReadyCallback to call when the request is satisfied, or %NULL.
  * @user_data: (closure): the data to pass to callback function
  *
  * Starts an asynchronous eject on a mountable.
@@ -27215,7 +27215,7 @@
  * @flags: flags affecting the operation
  * @mount_operation: (allow-none): a #GMountOperation or %NULL to avoid user interaction.
  * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
- * @callback: a #GAsyncReadyCallback to call when the request is satisfied, or %NULL.
+ * @callback: (allow-none): a #GAsyncReadyCallback to call when the request is satisfied, or %NULL.
  * @user_data: the data to pass to callback function
  *
  * Starts a @mount_operation, mounting the volume that contains the file @location.
@@ -27251,7 +27251,7 @@
  * @flags: flags affecting the operation
  * @mount_operation: (allow-none): a #GMountOperation, or %NULL to avoid user interaction.
  * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
- * @callback: (scope async): a #GAsyncReadyCallback to call when the request is satisfied, or %NULL.
+ * @callback: (scope async) (allow-none): a #GAsyncReadyCallback to call when the request is satisfied, or %NULL.
  * @user_data: (closure): the data to pass to callback function
  *
  * Mounts a file of type G_FILE_TYPE_MOUNTABLE.
@@ -27554,7 +27554,7 @@
  * g_file_poll_mountable:
  * @file: input #GFile.
  * @cancellable: optional #GCancellable object, %NULL to ignore.
- * @callback: a #GAsyncReadyCallback to call when the request is satisfied, or %NULL.
+ * @callback: (allow-none): a #GAsyncReadyCallback to call when the request is satisfied, or %NULL.
  * @user_data: the data to pass to callback function
  *
  * Polls a file of type G_FILE_TYPE_MOUNTABLE.
@@ -28439,8 +28439,8 @@
  * @file: input #GFile.
  * @flags: flags affecting the operation
  * @start_operation: (allow-none): a #GMountOperation, or %NULL to avoid user interaction.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
- * @callback: a #GAsyncReadyCallback to call when the request is satisfied, or %NULL.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
+ * @callback: (allow-none): a #GAsyncReadyCallback to call when the request is satisfied, or %NULL.
  * @user_data: the data to pass to callback function
  *
  * Starts a file of type G_FILE_TYPE_MOUNTABLE.
@@ -28481,8 +28481,8 @@
  * @file: input #GFile.
  * @flags: flags affecting the operation
  * @mount_operation: (allow-none): a #GMountOperation, or %NULL to avoid user interaction.
- * @cancellable: optional #GCancellable object, %NULL to ignore.
- * @callback: a #GAsyncReadyCallback to call when the request is satisfied, or %NULL.
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
+ * @callback: (allow-none): a #GAsyncReadyCallback to call when the request is satisfied, or %NULL.
  * @user_data: the data to pass to callback function
  *
  * Stops a file of type G_FILE_TYPE_MOUNTABLE.
@@ -28556,7 +28556,7 @@
  * @file: input #GFile.
  * @flags: flags affecting the operation
  * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
- * @callback: (scope async): a #GAsyncReadyCallback to call when the request is satisfied, or %NULL.
+ * @callback: (scope async) (allow-none): a #GAsyncReadyCallback to call when the request is satisfied, or %NULL.
  * @user_data: (closure): the data to pass to callback function
  *
  * Unmounts a file of type G_FILE_TYPE_MOUNTABLE.
@@ -28596,7 +28596,7 @@
  * @flags: flags affecting the operation
  * @mount_operation: (allow-none): a #GMountOperation, or %NULL to avoid user interaction.
  * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
- * @callback: (scope async): a #GAsyncReadyCallback to call when the request is satisfied, or %NULL.
+ * @callback: (scope async) (allow-none): a #GAsyncReadyCallback to call when the request is satisfied, or %NULL.
  * @user_data: (closure): the data to pass to callback function
  *
  * Unmounts a file of type G_FILE_TYPE_MOUNTABLE.
@@ -29247,7 +29247,7 @@
  * @object_type: a #GType supporting #GInitable.
  * @cancellable: optional #GCancellable object, %NULL to ignore.
  * @error: a #GError location to store the error occurring, or %NULL to ignore.
- * @first_property_name: the name of the first property, or %NULL if no properties
+ * @first_property_name: (allow-none): the name of the first property, or %NULL if no properties
  * @...: the value if the first property, followed by and other property value pairs, and ended by %NULL.
  *
  * Helper function for constructing #GInitable object. This is
@@ -29950,7 +29950,7 @@
  * @job: a #GIOSchedulerJob
  * @func: a #GSourceFunc callback that will be called in the original thread
  * @user_data: data to pass to @func
- * @notify: a #GDestroyNotify for @user_data, or %NULL
+ * @notify: (allow-none): a #GDestroyNotify for @user_data, or %NULL
  *
  * Used from an I/O job to send a callback to be run in the thread
  * that the job was started from, waiting for the result (and thus
@@ -29965,7 +29965,7 @@
  * @job: a #GIOSchedulerJob
  * @func: a #GSourceFunc callback that will be called in the original thread
  * @user_data: data to pass to @func
- * @notify: a #GDestroyNotify for @user_data, or %NULL
+ * @notify: (allow-none): a #GDestroyNotify for @user_data, or %NULL
  *
  * Used from an I/O job to send a callback to be run asynchronously in
  * the thread that the job was started from. The callback will be run
@@ -29983,7 +29983,7 @@
  * g_io_scheduler_push_job:
  * @job_func: a #GIOSchedulerJobFunc.
  * @user_data: data to pass to @job_func
- * @notify: a #GDestroyNotify for @user_data, or %NULL
+ * @notify: (allow-none): a #GDestroyNotify for @user_data, or %NULL
  * @io_priority: the <link linkend="gioscheduler">I/O priority</link> of the request.
  * @cancellable: optional #GCancellable object, %NULL to ignore.
  *
@@ -30461,10 +30461,10 @@
 
 /**
  * g_memory_output_stream_new: (skip)
- * @data: pointer to a chunk of memory to use, or %NULL
+ * @data: (allow-none): pointer to a chunk of memory to use, or %NULL
  * @size: the size of @data
- * @realloc_function: a function with realloc() semantics (like g_realloc()) to be called when @data needs to be grown, or %NULL
- * @destroy_function: a function to be called on @data when the stream is finalized, or %NULL
+ * @realloc_function: (allow-none): a function with realloc() semantics (like g_realloc()) to be called when @data needs to be grown, or %NULL
+ * @destroy_function: (allow-none): a function to be called on @data when the stream is finalized, or %NULL
  *
  * Creates a new #GMemoryOutputStream.
  *
@@ -32067,7 +32067,7 @@
  * g_network_monitor_can_reach:
  * @monitor: a #GNetworkMonitor
  * @connectable: a #GSocketConnectable
- * @cancellable: a #GCancellable, or %NULL
+ * @cancellable: (allow-none): a #GCancellable, or %NULL
  * @error: return location for a #GError, or %NULL
  *
  * Attempts to determine whether or not the host pointed to by
@@ -32097,7 +32097,7 @@
  * g_network_monitor_can_reach_async:
  * @monitor: a #GNetworkMonitor
  * @connectable: a #GSocketConnectable
- * @cancellable: a #GCancellable, or %NULL
+ * @cancellable: (allow-none): a #GCancellable, or %NULL
  * @callback: (scope async): a #GAsyncReadyCallback to call when the request is satisfied
  * @user_data: (closure): the data to pass to callback function
  *
@@ -32739,7 +32739,7 @@
 /**
  * g_permission_acquire:
  * @permission: a #GPermission instance
- * @cancellable: a #GCancellable, or %NULL
+ * @cancellable: (allow-none): a #GCancellable, or %NULL
  * @error: a pointer to a %NULL #GError, or %NULL
  *
  * Attempts to acquire the permission represented by @permission.
@@ -32766,7 +32766,7 @@
 /**
  * g_permission_acquire_async:
  * @permission: a #GPermission instance
- * @cancellable: a #GCancellable, or %NULL
+ * @cancellable: (allow-none): a #GCancellable, or %NULL
  * @callback: the #GAsyncReadyCallback to call when done
  * @user_data: the user data to pass to @callback
  *
@@ -32855,7 +32855,7 @@
 /**
  * g_permission_release:
  * @permission: a #GPermission instance
- * @cancellable: a #GCancellable, or %NULL
+ * @cancellable: (allow-none): a #GCancellable, or %NULL
  * @error: a pointer to a %NULL #GError, or %NULL
  *
  * Attempts to release the permission represented by @permission.
@@ -32882,7 +32882,7 @@
 /**
  * g_permission_release_async:
  * @permission: a #GPermission instance
- * @cancellable: a #GCancellable, or %NULL
+ * @cancellable: (allow-none): a #GCancellable, or %NULL
  * @callback: the #GAsyncReadyCallback to call when done
  * @user_data: the user data to pass to @callback
  *
@@ -35757,7 +35757,7 @@
 /**
  * g_simple_async_result_set_check_cancellable:
  * @simple: a #GSimpleAsyncResult
- * @check_cancellable: a #GCancellable to check, or %NULL to unset
+ * @check_cancellable: (allow-none): a #GCancellable to check, or %NULL to unset
  *
  * Sets a #GCancellable to check before dispatching results.
  *
@@ -36501,7 +36501,7 @@
 /**
  * g_socket_client_set_local_address:
  * @client: a #GSocketClient.
- * @address: a #GSocketAddress, or %NULL
+ * @address: (allow-none): a #GSocketAddress, or %NULL
  *
  * Sets the local address of the socket client.
  * The sockets created by this object will bound to the
@@ -37818,7 +37818,7 @@
 /**
  * g_socket_send_message:
  * @socket: a #GSocket
- * @address: a #GSocketAddress, or %NULL
+ * @address: (allow-none): a #GSocketAddress, or %NULL
  * @vectors: (array length=num_vectors): an array of #GOutputVector structs
  * @num_vectors: the number of elements in @vectors, or -1
  * @messages: (array length=num_messages) (allow-none): a pointer to an array of #GSocketControlMessages, or %NULL.
@@ -37875,7 +37875,7 @@
 /**
  * g_socket_send_to:
  * @socket: a #GSocket
- * @address: a #GSocketAddress, or %NULL
+ * @address: (allow-none): a #GSocketAddress, or %NULL
  * @buffer: (array length=size) (element-type guint8): the buffer containing the data to send.
  * @size: the number of bytes to send
  * @cancellable: (allow-none): a %GCancellable or %NULL
@@ -38885,7 +38885,7 @@
 /**
  * g_tls_connection_handshake:
  * @conn: a #GTlsConnection
- * @cancellable: a #GCancellable, or %NULL
+ * @cancellable: (allow-none): a #GCancellable, or %NULL
  * @error: a #GError, or %NULL
  *
  * Attempts a TLS handshake on @conn.
@@ -38920,7 +38920,7 @@
  * g_tls_connection_handshake_async:
  * @conn: a #GTlsConnection
  * @io_priority: the <link linkend="io-priority">I/O priority</link> of the request.
- * @cancellable: a #GCancellable, or %NULL
+ * @cancellable: (allow-none): a #GCancellable, or %NULL
  * @callback: callback to call when the handshake is complete
  * @user_data: the data to pass to the callback function
  *
@@ -40857,7 +40857,7 @@
  * @flags: flags affecting the unmount if required for eject
  * @mount_operation: (allow-none): a #GMountOperation or %NULL to avoid user interaction.
  * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
- * @callback: a #GAsyncReadyCallback, or %NULL.
+ * @callback: (allow-none): a #GAsyncReadyCallback, or %NULL.
  * @user_data: user data passed to @callback.
  *
  * Ejects a volume. This is an asynchronous operation, and is
