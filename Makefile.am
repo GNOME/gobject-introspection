@@ -61,8 +61,10 @@ check-local:
 	pre-commit hook.\n\ncopy misc/pre-commit to .git/hooks"; false))
 	@test ! -d $(top_srcdir)/.git || (test -x $(top_srcdir)/.git/hooks/pre-commit || (echo -e "ERROR: pre-commit \
 	is not executable\n\nrun chmod +x .git/hooks/pre-commit"; false))
-	@echo "  PEP-8 INQUISITION"
+	@echo "TEST: PEP-8 INQUISITION"
 	@find $(top_srcdir)/giscanner -name \*.py | sort | uniq | xargs $(PYTHON) $(top_srcdir)/misc/pep8.py --repeat --exclude=config.py
+	@echo "TEST: Annotation pattern programs"
+	$(PYTHON) $(top_srcdir)/giscanner/annotationpatterns.py
 	@touch $(top_builddir)/.make-check-passed
 
 check-pyflakes:

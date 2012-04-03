@@ -52,7 +52,7 @@ def annotation_main(args):
     if options.packages:
         process_packages(options, options.packages)
 
-    logger = message.MessageLogger.get(namespace='')
+    logger = message.MessageLogger.get(namespace=None)
 
     ss = create_source_scanner(options, args)
 

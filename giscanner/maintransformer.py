@@ -607,7 +607,9 @@ usage is void (*_gtk_reserved1)(void);"""
         if deprecated_tag is not None:
             value = deprecated_tag.value
             if ': ' in value:
-                version, desc = value.split(': ')
+                colon = value.find(': ')
+                version = value[:colon]
+                desc = value[colon+2:]
             else:
                 desc = value
                 version = None
@@ -617,8 +619,7 @@ usage is void (*_gtk_reserved1)(void);"""
 
         annos_tag = block.get(TAG_ATTRIBUTES)
         if annos_tag is not None:
-            options = AnnotationParser.parse_options(annos_tag, annos_tag.value)
-            for key, value in options.iteritems():
+            for key, value in annos_tag.options.iteritems():
                 if value:
                     node.attributes.append((key, value.one()))
 

@@ -1,6 +1,7 @@
 # -*- Mode: Python -*-
 # GObject-Introspection - a framework for introspecting GObject libraries
 # Copyright (C) 2008-2010 Johan Dahlin
+# Copyright (C) 2012 Dieter Verfaillie <dieterv@optionexplicit.be>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -18,12 +19,32 @@
 # 02110-1301, USA.
 #
 
+
 # AnnotationParser - extract annotations from gtk-doc comments
+
 
 import re
 
 from . import message
+from .annotationpatterns import (COMMENT_START_RE, COMMENT_END_RE,
+                                 COMMENT_STAR_RE, EMPTY_LINE_RE,
+                                 SECTION_RE, SYMBOL_RE, PROPERTY_RE, SIGNAL_RE,
+                                 PARAMETER_RE, DESCRIPTION_TAG_RE, TAG_RE,
+                                 MULTILINE_ANNOTATION_CONTINUATION_RE)
 from .odict import odict
+
+
+# GTK-Doc comment block parts
+PART_IDENTIFIER = 'identifier'
+PART_PARAMETERS = 'parameters'
+PART_DESCRIPTION = 'description'
+PART_TAGS = 'tags'
+
+# Identifiers
+IDENTIFIER_SECTION = 'section'
+IDENTIFIER_SYMBOL = 'symbol'
+IDENTIFIER_PROPERTY = 'property'
+IDENTIFIER_SIGNAL = 'signal'
 
 # Tags - annotations applied to comment blocks
 TAG_VFUNC = 'virtual'
@@ -31,6 +52,7 @@ TAG_SINCE = 'since'
 TAG_STABILITY = 'stability'
 TAG_DEPRECATED = 'deprecated'
 TAG_RETURNS = 'returns'
+TAG_RETURNVALUE = 'return value'
 TAG_ATTRIBUTES = 'attributes'
 TAG_RENAME_TO = 'rename to'
 TAG_TYPE = 'type'
@@ -45,6 +67,7 @@ _ALL_TAGS = [TAG_VFUNC,
              TAG_STABILITY,
              TAG_DEPRECATED,
              TAG_RETURNS,
+             TAG_RETURNVALUE,
              TAG_ATTRIBUTES,
              TAG_RENAME_TO,
              TAG_TYPE,
@@ -163,9 +186,6 @@ class DocBlock(object):
                 lines.append(tag.to_gtk_doc_tag())
 
         comment = ''
-        #comment += '# %d \"%s\"\n' % (
-        #    self.position.line,
-        #    self.position.filename)
         comment += '/**\n'
         for line in lines:
             line = line.rstrip()
@@ -256,6 +276,11 @@ class DocTag(object):
                              self.comment or '')
 
     def validate(self):
+        if self.name == TAG_ATTRIBUTES:
+            # The 'Attributes:' tag allows free form annotations so the
+            # validation below is most certainly going to fail.
+            return
+
         for option in self.options:
             value = self.options[option]
             if option == OPT_ALLOW_NONE:
@@ -432,250 +457,447 @@ class DocOption(object):
 
 
 class AnnotationParser(object):
-    PARAM_FIELD_COUNT = 2
+    '''
+    GTK-Doc comment block parser.
 
-    COMMENT_BLOCK_RE = re.compile(r'^\s*/\*\*\s')
-    COMMENT_BLOCK_END_RE = re.compile(r'^\s*\*+/')
-    COMMENT_STAR_RE = re.compile(r'^\s*\*\s?')
-    SYMBOL_SECTION_RE = re.compile(r'^\s*(SECTION:\s*\S+)')
-    SYMBOL_RE = re.compile(r'^\s*([\w:-]*\w)\s*:?\s*(\([a-z ]+\)\s*)*$')
-    DESCRIPTION_RE = re.compile(r'^\s*Description:')
-    RETURNS_RE = re.compile(r'^\s*(returns:|return\s+value:)', re.IGNORECASE)
-    BROKEN_RETURNS_RE = re.compile(r'^\s*(returns\b\s*)', re.IGNORECASE)
-    SINCE_RE = re.compile(r'^\s*since:', re.IGNORECASE)
-    DEPRECATED_RE = re.compile(r'^\s*deprecated:', re.IGNORECASE)
-    STABILITY_RE = re.compile(r'^\s*stability:', re.IGNORECASE)
-    EMPTY_LINE_RE = re.compile(r'^\s*$')
-    PARAMETER_NAME_RE = re.compile(r'^\s*@(\S+)\s*:\s*')
-    VARARGS_RE = re.compile(r'^.*\.\.\.$')
+    Parses GTK-Doc comment blocks into a parse tree built out of :class:`DockBlock`,
+    :class:`DocTag`, :class:`DocOptions` and :class:`DocOption` objects. This
+    parser tries to accept malformed input whenever possible and does not emit
+    syntax errors. However, it does emit warnings at the slightest indication
+    of malformed input when possible.
 
-    def __init__(self):
-        self._blocks = {}
+    A GTK-Doc comment block can be constructed out of multiple parts that can
+    be combined to write different types of documentation.
+    See `GTK-Doc's documentation`_ to learn more about possible valid combinations.
+    Each part can be further divided into fields which are separated by `:` characters.
+
+    Possible parts and the fields they are constructed from look like the
+    following (optional fields are enclosed in square brackets):
+
+    .. code-block:: c
+        /**
+         * identifier_name: [annotations]
+         * @parameter_name: [annotations:] [description]
+         *
+         * description
+         * tag_name: [annotations:] [description]
+         */
+
+    - Parts and fields cannot span multiple lines, except for parameter descriptions,
+      tag descriptions and comment block descriptions.
+    - There has to be exactly 1 `identifier` part on the first line of the
+      comment block which consists of:
+          * an `identifier_name` field
+          * an optional `annotations` field
+    - There can be 0 or more `parameter` parts following the `identifier` part,
+      each consisting of:
+          * a `parameter_name` filed
+          * an optional `annotations` field
+          * an optional `description` field
+    - An empty lines signals the end of the `parameter` parts and the beginning
+      of the (free form) comment block `description` part.
+    - There can be 0 or 1 `description` parts following the `description` part.
+    - There can be 0 or more `tag` parts following the `description` part,
+      each consisting of:
+          * a `tag_name` field
+          * an optional `annotations` field
+          * an optional `description` field
+
+    .. NOTE:: :class:`AnnotationParser` functionality is heavily based on gtkdoc-mkdb's
+        `ScanSourceFile()`_ function and is currently in sync with gtk-doc
+        commit `b41641b`_.
+
+    .. _types of documentation:
+            http://developer.gnome.org/gtk-doc-manual/1.18/documenting.html.en
+    .. _ScanSourceFile():
+            http://git.gnome.org/browse/gtk-doc/tree/gtkdoc-mkdb.in#n3722
+    .. _b41641b: b41641bd75f870afff7561ceed8a08456da57565
+    '''
 
     def parse(self, comments):
-        in_comment_block = False
-        symbol = ''
-        symbol_options = ''
-        in_description = False
-        in_return = False
-        in_since = False
-        in_stability = False
-        in_deprecated = False
-        in_part = ''
-        description = ''
-        return_desc = ''
-        return_start = ''
-        return_style = ''
-        since_desc = ''
-        deprecated_desc = ''
-        stability_desc = ''
-        deprecated_desc = ''
-        current_param = 0
-        ignore_broken_returns = False
-        params = odict()
+        '''
+        Parses multiple GTK-Doc comment blocks.
+
+        :param comments: a list of (comment, filename, lineno) tuples
+        :returns: a list of :class:`DocBlock` or ``None`` objects
+        '''
+
+        comment_blocks = {}
 
         for comment in comments:
-            comment, filename, lineno = comment
+            comment_block = self.parse_comment_block(comment)
 
-            for line in comment.split('\n'):
-                line += '\n'
+            if comment_block is not None:
+                if comment_block.name in comment_blocks:
+                    message.warn("multiple comment blocks documenting '%s:' identifier." %
+                                 (comment_block.name),
+                                 comment_block.position)
 
-                # Check if we are at the start of a comment block
-                if not in_comment_block:
-                    if self.COMMENT_BLOCK_RE.search(line):
-                        in_comment_block = True
+                # Always store the block even if it's a duplicate for
+                # backward compatibility...
+                comment_blocks[comment_block.name] = comment_block
 
-                        # Reset all the symbol data
-                        symbol = ''
-                        symbol_options = ''
-                        in_description = False
-                        in_return = False
-                        in_since = False
-                        in_stability = False
-                        in_deprecated = False
-                        in_part = ''
-                        description = ''
-                        return_desc = ''
-                        return_start = ''
-                        return_style = ''
-                        since_desc = ''
-                        deprecated_desc = ''
-                        stability_desc = ''
-                        deprecated_desc = ''
-                        current_param = 0
-                        ignore_broken_returns = False
-                        params = odict()
+        return comment_blocks
 
+    def parse_comment_block(self, comment):
+        '''
+        Parses a single GTK-Doc comment block.
+
+        :param comment: a (comment, filename, lineno) tuple
+        :returns: a :class:`DocBlock` object or ``None``
+        '''
+
+        comment, filename, lineno = comment
+        comment_lines = list(enumerate(comment.split('\n')))
+
+        # Check for the start the comment block.
+        if COMMENT_START_RE.search(comment_lines[0][1]):
+            del comment_lines[0]
+        else:
+            # Not a GTK-Doc comment block.
+            return None
+
+        # Check for the end the comment block.
+        if COMMENT_END_RE.search(comment_lines[-1][1]):
+            del comment_lines[-1]
+
+        # If we get this far, we are inside a GTK-Doc comment block.
+        return self._parse_comment_block(comment_lines, filename, lineno)
+
+    def _parse_comment_block(self, comment_lines, filename, lineno):
+        '''
+        Parses a single GTK-Doc comment block stripped from it's
+        comment start (/**) and comment end (*/) marker lines.
+
+        :param comment_lines: GTK-Doc comment block stripped from it's comment
+                              start (/**) and comment end (*/) marker lines
+        :param filename: source file name where the comment block originated from
+        :param lineno:  line in the source file where the comment block starts
+        :returns: a :class:`DocBlock` object or ``None``
+
+        .. NOTE:: If you are tempted to refactor this method and split it
+            further up (for example into _parse_identifier(), _parse_parameters(),
+            _parse_description(), _parse_tags() methods) then please resist the
+            urge. It is considered important that this method should be more or
+            less easily comparable with gtkdoc-mkdb's `ScanSourceFile()`_ function.
+
+            The different parsing steps are marked with a comment surrounded
+            by `#` characters in an attempt to make it clear what is going on.
+
+        .. _ScanSourceFile():
+                http://git.gnome.org/browse/gtk-doc/tree/gtkdoc-mkdb.in#n3722
+        '''
+        comment_block = None
+        in_part = None
+        identifier = None
+        current_param = None
+        current_tag = None
+        returns_seen = False
+
+        for line_offset, line in comment_lines:
+            position = message.Position(filename, line_offset + lineno)
+
+            result = COMMENT_STAR_RE.match(line)
+            if result:
+                # Store the original line (without \n) and column offset
+                # so we can generate meaningful warnings later on.
+                original_line = line
+                column_offset = result.end(0)
+
+                # Get rid of ' * ' at start of the line.
+                line = line[result.end(0):]
+
+            ####################################################################
+            # Check for GTK-Doc comment block identifier.
+            ####################################################################
+            if not comment_block:
+                # The correct identifier name would have the colon at the end
+                # but maintransformer.py does not expect us to do that. So
+                # make sure to compute an identifier_name without the colon and
+                # a real_identifier_name with the colon.
+
+                if not identifier:
+                    result = SECTION_RE.search(line)
+                    if result:
+                        identifier = IDENTIFIER_SECTION
+                        real_identifier_name = 'SECTION:%s' % (result.group('section_name'))
+                        identifier_name = real_identifier_name
+                        column = result.start('section_name') + column_offset
+
+                if not identifier:
+                    result = SYMBOL_RE.search(line)
+                    if result:
+                        identifier = IDENTIFIER_SYMBOL
+                        real_identifier_name = '%s:' % (result.group('symbol_name'))
+                        identifier_name = '%s' % (result.group('symbol_name'))
+                        column = result.start('symbol_name') + column_offset
+
+                if not identifier:
+                    result = PROPERTY_RE.search(line)
+                    if result:
+                        identifier = IDENTIFIER_PROPERTY
+                        real_identifier_name = '%s:%s:' % (result.group('class_name'),
+                                                           result.group('property_name'))
+                        identifier_name = '%s:%s' % (result.group('class_name'),
+                                                     result.group('property_name'))
+                        column = result.start('property_name') + column_offset
+
+                if not identifier:
+                    result = SIGNAL_RE.search(line)
+                    if result:
+                        identifier = IDENTIFIER_SIGNAL
+                        real_identifier_name = '%s::%s:' % (result.group('class_name'),
+                                                            result.group('signal_name'))
+                        identifier_name = '%s::%s' % (result.group('class_name'),
+                                                      result.group('signal_name'))
+                        column = result.start('signal_name') + column_offset
+
+                if identifier:
+                    in_part = PART_IDENTIFIER
+
+                    comment_block = DocBlock(identifier_name)
+                    comment_block.set_position(position)
+
+                    if 'annotations' in result.groupdict():
+                        comment_block.options = self.parse_options(comment_block,
+                                                                   result.group('annotations'))
+
+                    if 'colon' in result.groupdict() and result.group('colon') != ':':
+                        colon_start = result.start('colon')
+                        colon_column = column_offset + colon_start
+                        marker = ' '*colon_column + '^'
+                        message.warn("missing ':' at column %s:\n%s\n%s" %
+                                     (colon_start, original_line, marker),
+                                     position)
                     continue
-
-                # Check if we are at the end of a comment block
-                if self.COMMENT_BLOCK_END_RE.search(line):
-                    if not symbol:
-                        # maybe its not even meant to be a gtk-doc comment?
-                        pass
-                    else:
-                        block = DocBlock(symbol)
-                        block.set_position(message.Position(filename, lineno))
-                        block.comment = description.strip()
-
-                        if symbol_options:
-                            block.options = self.parse_options(block, symbol_options)
-
-                        for param_name, param_desc in params.iteritems():
-                            tag = DocTag(block, param_name)
-                            tag.set_position(lineno)
-                            block.tags[param_name] = tag
-
-                        # Add the return value description onto the end of the params.
-                        if return_desc:
-                            tag = DocTag(block, TAG_RETURNS)
-                            tag.value = return_desc.strip()
-                            block.tags[TAG_RETURNS] = tag
-
-                            if return_style == 'broken':
-                                pass
-
-                        # gtk-doc handles Section docs here, but we have no need
-                        # for them...
-
-                        if since_desc:
-                            tag = DocTag(block, TAG_SINCE)
-                            tag.value = since_desc.strip()
-                            block.tags[TAG_SINCE] = tag
-
-                        if stability_desc:
-                            tag = DocTag(block, TAG_STABILITY)
-                            tag.value = stability_desc.strip()
-                            block.tags[TAG_STABILITY] = tag
-
-                        if deprecated_desc:
-                            tag = DocTag(block, TAG_DEPRECATED)
-                            tag.value = deprecated_desc.strip()
-                            block.tags[TAG_DEPRECATED] = tag
-
-                        block.validate()
-                        self._blocks[symbol] = block
-
-                        in_comment_block = False
-                        continue
-
-                # Get rid of ' * ' at start of every line in the comment block.
-                line = re.sub(self.COMMENT_STAR_RE, '', line)
-                # But make sure we don't get rid of the newline at the end.
-                if not line.endswith('\n'):
-                    line += '\n'
-
-                # If we haven't found the symbol name yet, look for it.
-                if not symbol:
-                    symbol_section_match = self.SECTION_RE.search(line)
-                    symbol_match = self.SYMBOL_RE.search(line)
-
-                    if symbol_section_match:
-                        symbol = symbol_section_match.group(1)
-                        ignore_broken_returns = True
-                    elif symbol_match:
-                        symbol = symbol_match.group(1).strip()
-                        symbol_options = line[symbol_match.end(0):].strip()
-
-                    continue
-
-                return_match = self.RETURNS_RE.search(line)
-                broken_return_match = self.BROKEN_RETURNS_RE.search(line)
-                since_match = self.SINCE_RE.search(line)
-                deprecated_match = self.DEPRECATED_RE.search(line)
-                stability_match = self.STABILITY_RE.search(line)
-
-                if return_match:
-                    if return_style == 'broken':
-                        description += return_start + return_desc
-
-                    return_start = return_match.group(0)
-
-                    if return_style == 'sane':
-                        pass
-
-                    return_style = 'sane'
-                    ignore_broken_returns = True
-                    return_desc = line[return_match.end(0):]
-                    in_part = 'return'
-                    continue
-                elif not ignore_broken_returns and broken_return_match:
-                    return_start = broken_return_match.group(0)
-                    return_style = 'broken'
-                    return_desc = line[broken_return_match.end(0):]
-                    in_part = 'return'
-                    continue
-                elif since_match:
-                    since_desc = line[since_match.end(0):]
-                    in_part = 'since'
-                    continue
-                elif deprecated_match:
-                    deprecated_desc = line[deprecated_match.end(0):]
-                    in_part = 'deprecated'
-                    continue
-                elif stability_match:
-                    stability_desc = line[stability_match.end(0):]
-                    in_part = 'stability'
-                    continue
-
-                if in_part == 'description':
-                    # Get rid of 'Description:'
-                    line = re.sub(self.DESCRIPTION_RE, '', line)
-                    description += line
-                    continue
-                elif in_part == 'return':
-                    return_desc += line
-                    continue
-                elif in_part == 'since':
-                    since_desc += line
-                    continue
-                elif in_part == 'stability':
-                    stability_desc += line
-                    continue
-                elif in_part == 'deprecated':
-                    deprecated_desc += line
-                    continue
-
-                # We must be in the parameters. Check for the empty line below them.
-                if self.EMPTY_LINE_RE.search(line):
-                    in_part = 'description'
-                    continue
-
-                # Look for a parameter name.
-                match = self.PARAMETER_NAME_RE.search(line)
-                if match:
-                    param_name = match.group(1)
-                    param_desc = line[match.end(0):]
-
-                    # Allow varargs variations
-                    if self.VARARGS_RE.search(param_name):
-                        param_name = '...'
-                    if param_name.lower() == 'returns':
-                        return_style = 'sane'
-                        ignore_broken_returns = True
-
-                    params[param_name] = param_desc
-                    current_param += 1
-                    continue
-
-                # We must be in the middle of a parameter description, so add it on
-                # to the last element in @params.
-                if current_param:
-                    params[params.keys()[-1]] += line
                 else:
-                    pass
+                    # If we get here, the identifier was not recognized, so
+                    # ignore the rest of the block just like the old annotation
+                    # parser did. Doing this is a bit more strict than
+                    # gtkdoc-mkdb (which continues to search for the identifier
+                    # until either it is found or the end of the block is
+                    # reached). In practice, however, ignoring the block is the
+                    # right thing to do because sooner or later some long
+                    # descriptions will contain something matching an identifier
+                    # pattern by accident.
+                    marker = ' '*column_offset + '^'
+                    message.warn('ignoring unrecognized GTK-Doc comment block, identifier not '
+                                 'found:\n%s\n%s' % (original_line, marker),
+                                 position)
 
-        return self._blocks
+                    return None
 
+            ####################################################################
+            # Check for comment block parameters.
+            ####################################################################
+            result = PARAMETER_RE.search(line)
+            if result:
+                param_name = result.group('parameter_name')
+                param_annotations = result.group('annotations')
+                param_description = result.group('description')
+
+                if in_part == PART_IDENTIFIER:
+                    in_part = PART_PARAMETERS
+
+                if in_part != PART_PARAMETERS:
+                    column = result.start('parameter_name') + column_offset
+                    marker = ' '*column + '^'
+                    message.warn("'@%s' parameter unexpected at this location:\n%s\n%s" %
+                                 (param_name, original_line, marker),
+                                 position)
+
+                # Old style GTK-Doc allowed return values to be specified as
+                # parameters instead of tags.
+                if param_name.lower() == TAG_RETURNS:
+                    param_name = TAG_RETURNS
+
+                    if not returns_seen:
+                        returns_seen = True
+                    else:
+                        message.warn("encountered multiple 'Returns' parameters or tags for "
+                                     "'%s'." % (comment_block.name),
+                                     position)
+                elif param_name in comment_block.tags.keys():
+                    column = result.start('parameter_name') + column_offset
+                    marker = ' '*column + '^'
+                    message.warn("multiple '@%s' parameters for identifier '%s':\n%s\n%s" %
+                                 (param_name, comment_block.name, original_line, marker),
+                                 position)
+
+                tag = DocTag(comment_block, param_name)
+                tag.set_position(position)
+                tag.comment = param_description
+                if param_annotations:
+                    tag.options = self.parse_options(tag, param_annotations)
+                comment_block.tags[param_name] = tag
+                if not param_name == TAG_RETURNS:
+                    comment_block.params.append(param_name)
+                current_param = tag
+                continue
+
+            ####################################################################
+            # Check for comment block description.
+            #
+            # When we are parsing comment block parameters or the comment block
+            # identifier (when there are no parameters) and encounter an empty
+            # line, we must be parsing the comment block description
+            ####################################################################
+            if (EMPTY_LINE_RE.search(line)
+            and (in_part == PART_IDENTIFIER or in_part == PART_PARAMETERS)):
+                in_part = PART_DESCRIPTION
+                continue
+
+            ####################################################################
+            # Check for GTK-Doc comment block tags.
+            ####################################################################
+            result = TAG_RE.search(line)
+            if result:
+                tag_name = result.group('tag_name')
+                tag_annotations = result.group('annotations')
+                tag_description = result.group('description')
+
+                if in_part == PART_DESCRIPTION:
+                    in_part = PART_TAGS
+
+                if in_part != PART_TAGS:
+                    column = result.start('tag_name') + column_offset
+                    marker = ' '*column + '^'
+                    message.warn("'%s:' tag unexpected at this location:\n%s\n%s" %
+                                 (tag_name, original_line, marker),
+                                 position)
+
+                if tag_name.lower() in [TAG_RETURNS, TAG_RETURNVALUE]:
+                    if not returns_seen:
+                        returns_seen = True
+                    else:
+                        message.warn("encountered multiple 'Returns' parameters or tags for "
+                                     "'%s'." % (comment_block.name),
+                                     position)
+
+                    tag = DocTag(comment_block, TAG_RETURNS)
+                    tag.position = position
+                    tag.comment = tag_description
+                    if tag_annotations:
+                        tag.options = self.parse_options(tag, tag_annotations)
+                    comment_block.tags[TAG_RETURNS] = tag
+                    current_tag = tag
+                    continue
+                elif tag_name.lower() in _ALL_TAGS:
+                    if tag_name.lower() in comment_block.tags.keys():
+                        column = result.start('tag_name') + column_offset
+                        marker = ' '*column + '^'
+                        message.warn("multiple '%s:' tags for identifier '%s':\n%s\n%s" %
+                                     (tag_name, comment_block.name, original_line, marker),
+                                     position)
+
+                    tag = DocTag(comment_block, tag_name.lower())
+                    tag.position = position
+                    tag.value = tag_description
+                    if tag_annotations:
+                        if tag_name.lower() == TAG_ATTRIBUTES:
+                            tag.options = self.parse_options(tag, tag_annotations)
+                        else:
+                            message.warn("annotations not supported for tag '%s'." %
+                                         (tag_name),
+                                         position)
+                    comment_block.tags[tag_name.lower()] = tag
+                    current_tag = tag
+                    continue
+
+            ####################################################################
+            # If we get here, we must be in the middle of a multiline
+            # comment block, parameter or tag description.
+            ####################################################################
+            if in_part == PART_DESCRIPTION:
+                if not comment_block.comment:
+                    # Backwards compatibility with old style GTK-Doc
+                    # comment blocks where Description used to be a comment
+                    # block tag. Simply get rid of 'Description:'.
+                    line = re.sub(DESCRIPTION_TAG_RE, '', line)
+                    comment_block.comment = line
+                else:
+                    comment_block.comment += '\n' + line
+                continue
+            elif in_part == PART_PARAMETERS:
+                if not current_param:
+                    message.warn('parameter expected:\n%s' %
+                                 (line),
+                                 position)
+                else:
+                    self._validate_multiline_annotation_continuation(line, original_line,
+                                                                     column_offset, position)
+
+                    # Append to parameter description.
+                    current_param.comment += ' ' + line.strip()
+            elif in_part == PART_TAGS:
+                if not current_tag:
+                    message.warn('tag expected:\n%s' %
+                                 (line),
+                                 position)
+                else:
+                    self._validate_multiline_annotation_continuation(line, original_line,
+                                                                     column_offset, position)
+
+                    # Append to tag description.
+                    if current_tag.name.lower() in [TAG_RETURNS, TAG_RETURNVALUE]:
+                        current_tag.comment += ' ' + line.strip()
+                    else:
+                        current_tag.value += ' ' + line.strip()
+
+        ########################################################################
+        # Finished parsing this comment block.
+        ########################################################################
+        # We have picked up a couple of \n characters that where not
+        # intended. Strip those.
+        if comment_block.comment:
+            comment_block.comment = comment_block.comment.strip()
+        else:
+            comment_block.comment = ''
+
+        for tag in comment_block.tags.itervalues():
+            if tag.comment:
+                tag.comment = tag.comment.strip()
+            else:
+                tag.comment = None
+
+            if tag.value:
+                tag.value = tag.value.strip()
+            else:
+                tag.value = ''
+
+        # Validate and store block.
+        comment_block.validate()
+        return comment_block
+
+    def _validate_multiline_annotation_continuation(self, line, original_line,
+                                                          column_offset, position):
+        '''
+        Validate parameters and tags (except the first line) and generate
+        warnings about invalid annotations spanning multiple lines.
+
+        :param line: line to validate, stripped from ' * ' at start of the line.
+        :param original_line: original line to validate (used in warning messages)
+        :param column_offset: column width of ' * ' at the time it was stripped from `line`
+        :param position: position of `line` in the source file
+        '''
+
+        result = MULTILINE_ANNOTATION_CONTINUATION_RE.search(line)
+        if result:
+            line = result.group('description')
+            column = result.start('annotations') + column_offset
+            marker = ' '*column + '^'
+            message.warn('ignoring invalid multiline annotation continuation:\n'
+                         '%s\n%s' % (original_line, marker),
+                         position)
 
     @classmethod
     def parse_options(cls, tag, value):
         # (foo)
-        # (bar opt1 opt2...)
+        # (bar opt1 opt2 ...)
         opened = -1
         options = DocOptions()
         options.position = tag.position
-        last = None
+
         for i, c in enumerate(value):
             if c == '(' and opened == -1:
                 opened = i+1
@@ -692,7 +914,6 @@ class AnnotationParser(object):
                 if option is not None:
                     option = DocOption(tag, option)
                 options.add(name, option)
-                last = i + 2
                 opened = -1
 
         return options

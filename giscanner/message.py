@@ -90,7 +90,7 @@ class MessageLogger(object):
 
     def log(self, log_type, text, positions=None, prefix=None):
         """Log a warning, using optional file positioning information.
-If the warning is related to a ast.Node type, see log_node_warning()."""
+If the warning is related to a ast.Node type, see log_node()."""
         utils.break_on_debug_flag('warning')
 
         self._warning_count += 1
@@ -123,8 +123,12 @@ If the warning is related to a ast.Node type, see log_node_warning()."""
 '''%s: %s: %s: %s: %s\n''' % (last_position, error_type, self._namespace.name,
                             prefix, text))
         else:
-            text = (
+            if self._namespace:
+                text = (
 '''%s: %s: %s: %s\n''' % (last_position, error_type, self._namespace.name, text))
+            else:
+                text = (
+'''%s: %s: %s\n''' % (last_position, error_type, text))
 
         self._output.write(text)
         if log_type == FATAL:
