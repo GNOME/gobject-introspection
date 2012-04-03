@@ -79,7 +79,7 @@ struct _FooSubInterfaceIface
   /* explicitly test un-named parameters */
   void (*do_moo) (FooSubInterface *self, int, gpointer);
 
-  void (*do_baz) (FooSubInterface *self, GCallback callback, gpointer data);
+  void (*do_baz) (FooSubInterface *self, GCallback callback, gpointer user_data);
 };
 
 GType                 foo_sub_interface_get_type       (void) G_GNUC_CONST;
@@ -88,7 +88,7 @@ void foo_sub_interface_do_bar (FooSubInterface *self);
 void foo_sub_interface_do_moo (FooSubInterface *self, int, gpointer);
 void foo_sub_interface_do_baz (FooSubInterface *self,
                                GCallback callback,
-                               gpointer data);
+                               gpointer user_data);
 
 struct _FooObject
 {

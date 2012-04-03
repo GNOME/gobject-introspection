@@ -137,7 +137,6 @@ foo_sub_interface_do_moo (FooSubInterface *self, int x, gpointer y)
  * @self:
  * @callback: (scope call):
  * @user_data:
- *
  */
 void
 foo_sub_interface_do_baz (FooSubInterface *self, GCallback callback, gpointer user_data)
@@ -523,6 +522,7 @@ foo_test_string_array_with_g (gchar **array)
 
 /**
  * foo_test_array:
+ *
  * Returns: (element-type utf8) (transfer container):
  */
 GArray *

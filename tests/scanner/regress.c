@@ -284,6 +284,7 @@ regress_test_value_return(int i)
 
 /**
  * regress_test_cairo_context_full_return:
+ *
  * Returns: (transfer full):
  */
 cairo_t *
@@ -311,6 +312,7 @@ regress_test_cairo_context_none_in (cairo_t *context)
 
 /**
  * regress_test_cairo_surface_none_return:
+ *
  * Returns: (transfer none):
  */
 cairo_surface_t *
@@ -327,6 +329,7 @@ regress_test_cairo_surface_none_return (void)
 
 /**
  * regress_test_cairo_surface_full_return:
+ *
  * Returns: (transfer full):
  */
 cairo_surface_t *
@@ -429,6 +432,7 @@ static const char utf8_nonconst[] = "nonconst \xe2\x99\xa5 utf8";
 
 /**
  * regress_test_utf8_const_return:
+ *
  * Return value: UTF-8 string
  */
 const char *
@@ -709,7 +713,7 @@ regress_test_strv_in (char **arr)
  * @types: (array length=n_types): List of types
  *
  * Return value: (transfer full): string representation of provided types
- * */
+ */
 char *
 regress_test_array_gtype_in (int n_types, GType *types)
 {
@@ -808,6 +812,7 @@ regress_test_array_fixed_size_int_out (int **ints)
 
 /**
  * regress_test_array_fixed_size_int_return:
+ *
  * Returns: (array fixed-size=5) (transfer full): a list of 5 integers ranging from 0 to 4
  */
 int *
@@ -839,6 +844,7 @@ regress_test_strv_out_c (void)
 /**
  * regress_test_array_int_full_out:
  * @len: length of the returned array.
+ *
  * Returns: (array length=len) (transfer full): a new array of integers.
  */
 int *
@@ -855,6 +861,7 @@ regress_test_array_int_full_out(int *len)
 /**
  * regress_test_array_int_none_out:
  * @len: length of the returned array.
+ *
  * Returns: (array length=len) (transfer none): a static array of integers.
  */
 int *

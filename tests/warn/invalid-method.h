@@ -9,7 +9,7 @@ void test_method_no_parameters();
 // EXPECT:7: Warning: Test: test_method_no_parameters: Methods must have parameters
 
 /**
- * test_method_invalid_first_parameter: (method):
+ * test_method_invalid_first_parameter: (method)
  *
  */
 void test_method_invalid_first_parameter(int param);
@@ -17,7 +17,7 @@ void test_method_invalid_first_parameter(int param);
 // EXPECT:15: Warning: Test: test_method_invalid_first_parameter: Methods must have a pointer as their first parameter
 
 /**
- * test_method_invalid_namespace: (method):
+ * test_method_invalid_namespace: (method)
  *
  */
 void test_method_invalid_namespace(GClosure *param);

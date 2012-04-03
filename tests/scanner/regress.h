@@ -362,7 +362,7 @@ struct _RegressTestObjClass
   int (*matrix) (RegressTestObj *obj, const char *somestr);
 
   /**
-   * RegressTestObjClass::allow_none_vfunc
+   * RegressTestObjClass::allow_none_vfunc:
    * @two: (allow-none): Another object
    */
   void (*allow_none_vfunc) (RegressTestObj *obj, RegressTestObj *two);

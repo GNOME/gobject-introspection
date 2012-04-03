@@ -212,10 +212,10 @@ annotation_object_method (AnnotationObject *object)
 /**
  * annotation_object_out:
  * @object: a #GObject
+ * @outarg: (out): This is an argument test
  *
  * This is a test for out arguments
  *
- * @outarg: (out): This is an argument test
  * Return value: an int
  */
 gint
@@ -228,10 +228,10 @@ annotation_object_out (AnnotationObject *object, int *outarg)
 /**
  * annotation_object_in:
  * @object: a #GObject
+ * @inarg: (in) (transfer none): This is an argument test
  *
  * This is a test for in arguments
  *
- * @inarg: (in) (transfer none): This is an argument test
  * Return value: an int
  */
 gint
@@ -244,10 +244,10 @@ annotation_object_in (AnnotationObject *object, int *inarg)
 /**
  * annotation_object_inout:
  * @object: a #GObject
+ * @inoutarg: (inout): This is an argument test
  *
  * This is a test for out arguments
  *
- * @inoutarg: (inout): This is an argument test
  * Return value: an int
  */
 gint
@@ -259,10 +259,10 @@ annotation_object_inout (AnnotationObject *object, int *inoutarg)
 /**
  * annotation_object_inout2:
  * @object: a #GObject
+ * @inoutarg: (inout): This is an argument test
  *
  * This is a second test for out arguments
  *
- * @inoutarg: (inout): This is an argument test
  * Return value: an int
  */
 gint
@@ -275,10 +275,10 @@ annotation_object_inout2 (AnnotationObject *object, int *inoutarg)
 /**
  * annotation_object_inout3:
  * @object: a #GObject
+ * @inoutarg: (inout) (allow-none): This is an argument test
  *
  * This is a 3th test for out arguments
  *
- * @inoutarg: (inout) (allow-none): This is an argument test
  * Return value: an int
  */
 gint
@@ -292,10 +292,10 @@ annotation_object_inout3 (AnnotationObject *object, int *inoutarg)
 /**
  * annotation_object_calleeowns:
  * @object: a #GObject
+ * @toown: (out): a #GObject
  *
  * This is a test for out arguments; GObject defaults to transfer
  *
- * @toown: (out): a #GObject
  * Return value: an int
  */
 gint
@@ -308,11 +308,11 @@ annotation_object_calleeowns (AnnotationObject *object, GObject **toown)
 /**
  * annotation_object_calleesowns:
  * @object: a #GObject
+ * @toown1: (out) (transfer full): a #GObject
+ * @toown2: (out) (transfer none): a #GObject
  *
  * This is a test for out arguments, one transferred, other not
  *
- * @toown1: (out) (transfer full): a #GObject
- * @toown2: (out) (transfer none): a #GObject
  * Return value: an int
  */
 gint
@@ -362,7 +362,7 @@ annotation_object_get_hash (AnnotationObject *object)
 }
 
 /**
- * annotation_object_with_voidp
+ * annotation_object_with_voidp:
  * @data: Opaque pointer handle
  */
 void
@@ -718,7 +718,6 @@ annotation_object_extra_annos (AnnotationObject *object)
 
 /**
  * annotation_custom_destroy:
- *
  * @callback: (destroy destroy) (closure data): Destroy notification
  *
  * Test messing up the heuristic of closure/destroy-notification

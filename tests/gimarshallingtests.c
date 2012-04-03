@@ -1145,6 +1145,7 @@ gi_marshalling_tests_init_function (gint *n_args, char ***argv)
 
 /**
  * gi_marshalling_tests_array_fixed_int_return:
+ *
  * Returns: (array fixed-size=4):
  */
 const gint *
@@ -1156,6 +1157,7 @@ gi_marshalling_tests_array_fixed_int_return (void)
 
 /**
  * gi_marshalling_tests_array_fixed_short_return:
+ *
  * Returns: (array fixed-size=4):
  */
 const gshort *
@@ -1244,6 +1246,7 @@ gi_marshalling_tests_array_fixed_inout (gint **ints)
 
 /**
  * gi_marshalling_tests_array_return:
+ *
  * Returns: (array length=length):
  */
 const gint *
@@ -1261,6 +1264,7 @@ gi_marshalling_tests_array_return (gint *length)
  * @length: (out):
  * @last:
  * @sum: (out):
+ *
  * Returns: (array length=length):
  */
 const gint *
@@ -1527,6 +1531,7 @@ gi_marshalling_tests_array_inout_etc (gint first, gint **ints, gint *length, gin
 
 /**
  * gi_marshalling_tests_array_zero_terminated_return:
+ *
  * Returns: (array zero-terminated=1) (transfer none):
  */
 gchar **
@@ -1538,6 +1543,7 @@ gi_marshalling_tests_array_zero_terminated_return (void)
 
 /**
  * gi_marshalling_tests_array_zero_terminated_return_null:
+ *
  * Returns: (array zero-terminated=1) (transfer none):
  */
 gchar **
@@ -1548,6 +1554,7 @@ gi_marshalling_tests_array_zero_terminated_return_null (void)
 
 /**
  * gi_marshalling_tests_array_zero_terminated_return_struct:
+ *
  * Returns: (array zero-terminated=1) (transfer full):
  */
 GIMarshallingTestsBoxedStruct **
@@ -1613,6 +1620,7 @@ gi_marshalling_tests_array_zero_terminated_inout (gchar ***utf8s)
 /**
  * gi_marshalling_tests_array_gvariant_none_in:
  * @variants: (array zero-terminated=1) (transfer none):
+ *
  * Returns: (array zero-terminated=1) (transfer none):
  */
 GVariant **
@@ -1637,6 +1645,7 @@ gi_marshalling_tests_array_gvariant_none_in (GVariant **variants)
 /**
  * gi_marshalling_tests_array_gvariant_container_in:
  * @variants: (array zero-terminated=1) (transfer container):
+ *
  * Returns: (array zero-terminated=1) (transfer container):
  */
 GVariant **
@@ -1660,6 +1669,7 @@ gi_marshalling_tests_array_gvariant_container_in (GVariant **variants)
 /**
  * gi_marshalling_tests_array_gvariant_full_in:
  * @variants: (array zero-terminated=1) (transfer full):
+ *
  * Returns: (array zero-terminated=1) (transfer full):
  */
 GVariant **
@@ -1686,6 +1696,7 @@ gi_marshalling_tests_array_gvariant_full_in (GVariant **variants)
 
 /**
  * gi_marshalling_tests_garray_int_none_return:
+ *
  * Returns: (element-type gint) (transfer none):
  */
 GArray *
@@ -1705,6 +1716,7 @@ gi_marshalling_tests_garray_int_none_return (void)
 
 /**
  * gi_marshalling_tests_garray_utf8_none_return:
+ *
  * Returns: (element-type utf8) (transfer none):
  */
 GArray *
@@ -1725,6 +1737,7 @@ gi_marshalling_tests_garray_utf8_none_return (void)
 
 /**
  * gi_marshalling_tests_garray_utf8_container_return:
+ *
  * Returns: (element-type utf8) (transfer container):
  */
 GArray *
@@ -1743,6 +1756,7 @@ gi_marshalling_tests_garray_utf8_container_return (void)
 
 /**
  * gi_marshalling_tests_garray_utf8_full_return:
+ *
  * Returns: (element-type utf8) (transfer full):
  */
 GArray *
@@ -1928,6 +1942,7 @@ gi_marshalling_tests_garray_utf8_full_inout (GArray **array_)
 
 /**
  * gi_marshalling_tests_gptrarray_utf8_none_return:
+ *
  * Returns: (element-type utf8) (transfer none):
  */
 GPtrArray *
@@ -1948,6 +1963,7 @@ gi_marshalling_tests_gptrarray_utf8_none_return (void)
 
 /**
  * gi_marshalling_tests_gptrarray_utf8_container_return:
+ *
  * Returns: (element-type utf8) (transfer container):
  */
 GPtrArray *
@@ -1966,6 +1982,7 @@ gi_marshalling_tests_gptrarray_utf8_container_return (void)
 
 /**
  * gi_marshalling_tests_gptrarray_utf8_full_return:
+ *
  * Returns: (element-type utf8) (transfer full):
  */
 GPtrArray *
@@ -2137,6 +2154,7 @@ gi_marshalling_tests_gptrarray_utf8_full_inout (GPtrArray **parray_)
 
 /**
  * gi_marshalling_tests_bytearray_full_return:
+ *
  * Returns: (transfer full):
  */
 GByteArray *
@@ -2225,6 +2243,7 @@ gi_marshalling_tests_gstrv_inout (GStrv *g_strv)
 
 /**
  * gi_marshalling_tests_glist_int_none_return:
+ *
  * Returns: (element-type gint) (transfer none):
  */
 GList *
@@ -2244,6 +2263,7 @@ gi_marshalling_tests_glist_int_none_return (void)
 
 /**
  * gi_marshalling_tests_glist_utf8_none_return:
+ *
  * Returns: (element-type utf8) (transfer none):
  */
 GList *
@@ -2262,6 +2282,7 @@ gi_marshalling_tests_glist_utf8_none_return (void)
 
 /**
  * gi_marshalling_tests_glist_utf8_container_return:
+ *
  * Returns: (element-type utf8) (transfer container):
  */
 GList *
@@ -2278,6 +2299,7 @@ gi_marshalling_tests_glist_utf8_container_return (void)
 
 /**
  * gi_marshalling_tests_glist_utf8_full_return:
+ *
  * Returns: (element-type utf8) (transfer full):
  */
 GList *
@@ -2436,6 +2458,7 @@ gi_marshalling_tests_glist_utf8_full_inout (GList **list)
 
 /**
  * gi_marshalling_tests_gslist_int_none_return:
+ *
  * Returns: (element-type gint) (transfer none):
  */
 GSList *
@@ -2456,6 +2479,7 @@ gi_marshalling_tests_gslist_int_none_return (void)
 
 /**
  * gi_marshalling_tests_gslist_utf8_none_return:
+ *
  * Returns: (element-type utf8) (transfer none):
  */
 GSList *
@@ -2475,6 +2499,7 @@ gi_marshalling_tests_gslist_utf8_none_return (void)
 
 /**
  * gi_marshalling_tests_gslist_utf8_container_return:
+ *
  * Returns: (element-type utf8) (transfer container):
  */
 GSList *
@@ -2492,6 +2517,7 @@ gi_marshalling_tests_gslist_utf8_container_return (void)
 
 /**
  * gi_marshalling_tests_gslist_utf8_full_return:
+ *
  * Returns: (element-type utf8) (transfer full):
  */
 GSList *
@@ -2655,6 +2681,7 @@ gi_marshalling_tests_gslist_utf8_full_inout (GSList **list)
 
 /**
  * gi_marshalling_tests_ghashtable_int_none_return:
+ *
  * Returns: (element-type gint gint) (transfer none):
  */
 GHashTable *
@@ -2675,6 +2702,7 @@ gi_marshalling_tests_ghashtable_int_none_return (void)
 
 /**
  * gi_marshalling_tests_ghashtable_utf8_none_return:
+ *
  * Returns: (element-type utf8 utf8) (transfer none):
  */
 GHashTable *
@@ -2695,6 +2723,7 @@ gi_marshalling_tests_ghashtable_utf8_none_return (void)
 
 /**
  * gi_marshalling_tests_ghashtable_utf8_container_return:
+ *
  * Returns: (element-type utf8 utf8) (transfer container):
  */
 GHashTable *
@@ -2713,6 +2742,7 @@ gi_marshalling_tests_ghashtable_utf8_container_return (void)
 
 /**
  * gi_marshalling_tests_ghashtable_utf8_full_return:
+ *
  * Returns: (element-type utf8 utf8) (transfer full):
  */
 GHashTable *
@@ -2873,6 +2903,7 @@ gi_marshalling_tests_ghashtable_utf8_full_inout (GHashTable **hash_table)
 
 /**
  * gi_marshalling_tests_gvalue_return:
+ *
  * Returns: (transfer none):
  */
 GValue *
@@ -3330,6 +3361,7 @@ gi_marshalling_tests_no_type_flags_inout (GIMarshallingTestsNoTypeFlags *flags_)
 
 /**
  * gi_marshalling_tests_simple_struct_returnv:
+ *
  * Returns: (transfer none):
  */
 GIMarshallingTestsSimpleStruct *
@@ -3380,6 +3412,7 @@ gi_marshalling_tests_pointer_struct_get_type (void)
 
 /**
  * gi_marshalling_tests_pointer_struct_returnv:
+ *
  * Returns: (transfer none):
  */
 GIMarshallingTestsPointerStruct *
@@ -3446,6 +3479,7 @@ gi_marshalling_tests_boxed_struct_new (void)
 
 /**
  * gi_marshalling_tests_boxed_struct_returnv:
+ *
  * Returns: (transfer none):
  */
 GIMarshallingTestsBoxedStruct *
@@ -3542,6 +3576,7 @@ gi_marshalling_tests_union_get_type (void)
 
 /**
  * gi_marshalling_tests_union_returnv:
+ *
  * Returns: (transfer none):
  */
 GIMarshallingTestsUnion *
@@ -3722,6 +3757,7 @@ gi_marshalling_tests_object_method_array_inout (GIMarshallingTestsObject *object
 
 /**
  * gi_marshalling_tests_object_method_array_return:
+ *
  * Returns: (array length=length):
  */
 const gint *
@@ -3804,6 +3840,7 @@ gi_marshalling_tests_object_call_vfunc_with_callback (GIMarshallingTestsObject *
 
 /**
  * gi_marshalling_tests_object_none_return:
+ *
  * Returns: (transfer none):
  */
 GIMarshallingTestsObject *
@@ -3820,6 +3857,7 @@ gi_marshalling_tests_object_none_return (void)
 
 /**
  * gi_marshalling_tests_object_full_return:
+ *
  * Returns: (transfer full):
  */
 GIMarshallingTestsObject *

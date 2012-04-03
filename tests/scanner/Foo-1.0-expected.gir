@@ -749,7 +749,7 @@ exposed to language bindings.</doc>
                      closure="1">
             <type name="GObject.Callback" c:type="GCallback"/>
           </parameter>
-          <parameter name="data" transfer-ownership="none">
+          <parameter name="user_data" transfer-ownership="none" closure="1">
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
         </parameters>
@@ -783,7 +783,7 @@ exposed to language bindings.</doc>
                      closure="1">
             <type name="GObject.Callback" c:type="GCallback"/>
           </parameter>
-          <parameter name="data" transfer-ownership="none">
+          <parameter name="user_data" transfer-ownership="none">
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
         </parameters>
@@ -870,7 +870,7 @@ exposed to language bindings.</doc>
                        closure="2">
               <type name="GObject.Callback" c:type="GCallback"/>
             </parameter>
-            <parameter name="data" transfer-ownership="none">
+            <parameter name="user_data" transfer-ownership="none" closure="2">
               <type name="gpointer" c:type="gpointer"/>
             </parameter>
           </parameters>
