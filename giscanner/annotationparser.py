@@ -432,184 +432,241 @@ class DocOption(object):
 
 
 class AnnotationParser(object):
-    COMMENT_HEADER_RE = re.compile(r'^\*[ \t]*\n[\t ]')
-    COMMENT_HEADER_START_RE = re.compile(r'\n[\t ]')
-    WHITESPACE_RE = re.compile(r'^\s*$')
-    OPTION_RE = re.compile(r'\([A-Za-z]+[^(]*\)')
-    RETURNS_RE = re.compile(r'^return(s?)( value)?:', re.IGNORECASE)
+    PARAM_FIELD_COUNT = 2
+
+    COMMENT_BLOCK_RE = re.compile(r'^\s*/\*\*\s')
+    COMMENT_BLOCK_END_RE = re.compile(r'^\s*\*+/')
+    COMMENT_STAR_RE = re.compile(r'^\s*\*\s?')
+    SYMBOL_SECTION_RE = re.compile(r'^\s*(SECTION:\s*\S+)')
+    SYMBOL_RE = re.compile(r'^\s*([\w:-]*\w)\s*:?\s*(\([a-z ]+\)\s*)*$')
+    DESCRIPTION_RE = re.compile(r'^\s*Description:')
+    RETURNS_RE = re.compile(r'^\s*(returns:|return\s+value:)', re.IGNORECASE)
+    BROKEN_RETURNS_RE = re.compile(r'^\s*(returns\b\s*)', re.IGNORECASE)
+    SINCE_RE = re.compile(r'^\s*since:', re.IGNORECASE)
+    DEPRECATED_RE = re.compile(r'^\s*deprecated:', re.IGNORECASE)
+    STABILITY_RE = re.compile(r'^\s*stability:', re.IGNORECASE)
+    EMPTY_LINE_RE = re.compile(r'^\s*$')
+    PARAMETER_NAME_RE = re.compile(r'^\s*@(\S+)\s*:\s*')
+    VARARGS_RE = re.compile(r'^.*\.\.\.$')
 
     def __init__(self):
         self._blocks = {}
 
     def parse(self, comments):
+        in_comment_block = False
+        symbol = ''
+        symbol_options = ''
+        in_description = False
+        in_return = False
+        in_since = False
+        in_stability = False
+        in_deprecated = False
+        in_part = ''
+        description = ''
+        return_desc = ''
+        return_start = ''
+        return_style = ''
+        since_desc = ''
+        deprecated_desc = ''
+        stability_desc = ''
+        deprecated_desc = ''
+        current_param = 0
+        ignore_broken_returns = False
+        params = odict()
+
         for comment in comments:
-            self._parse_comment(comment)
+            comment, filename, lineno = comment
+
+            for line in comment.split('\n'):
+                line += '\n'
+
+                # Check if we are at the start of a comment block
+                if not in_comment_block:
+                    if self.COMMENT_BLOCK_RE.search(line):
+                        in_comment_block = True
+
+                        # Reset all the symbol data
+                        symbol = ''
+                        symbol_options = ''
+                        in_description = False
+                        in_return = False
+                        in_since = False
+                        in_stability = False
+                        in_deprecated = False
+                        in_part = ''
+                        description = ''
+                        return_desc = ''
+                        return_start = ''
+                        return_style = ''
+                        since_desc = ''
+                        deprecated_desc = ''
+                        stability_desc = ''
+                        deprecated_desc = ''
+                        current_param = 0
+                        ignore_broken_returns = False
+                        params = odict()
+
+                    continue
+
+                # Check if we are at the end of a comment block
+                if self.COMMENT_BLOCK_END_RE.search(line):
+                    if not symbol:
+                        # maybe its not even meant to be a gtk-doc comment?
+                        pass
+                    else:
+                        block = DocBlock(symbol)
+                        block.set_position(message.Position(filename, lineno))
+                        block.comment = description.strip()
+
+                        if symbol_options:
+                            block.options = self.parse_options(block, symbol_options)
+
+                        for param_name, param_desc in params.iteritems():
+                            tag = DocTag(block, param_name)
+                            tag.set_position(lineno)
+                            block.tags[param_name] = tag
+
+                        # Add the return value description onto the end of the params.
+                        if return_desc:
+                            tag = DocTag(block, TAG_RETURNS)
+                            tag.value = return_desc.strip()
+                            block.tags[TAG_RETURNS] = tag
+
+                            if return_style == 'broken':
+                                pass
+
+                        # gtk-doc handles Section docs here, but we have no need
+                        # for them...
+
+                        if since_desc:
+                            tag = DocTag(block, TAG_SINCE)
+                            tag.value = since_desc.strip()
+                            block.tags[TAG_SINCE] = tag
+
+                        if stability_desc:
+                            tag = DocTag(block, TAG_STABILITY)
+                            tag.value = stability_desc.strip()
+                            block.tags[TAG_STABILITY] = tag
+
+                        if deprecated_desc:
+                            tag = DocTag(block, TAG_DEPRECATED)
+                            tag.value = deprecated_desc.strip()
+                            block.tags[TAG_DEPRECATED] = tag
+
+                        block.validate()
+                        self._blocks[symbol] = block
+
+                        in_comment_block = False
+                        continue
+
+                # Get rid of ' * ' at start of every line in the comment block.
+                line = re.sub(self.COMMENT_STAR_RE, '', line)
+                # But make sure we don't get rid of the newline at the end.
+                if not line.endswith('\n'):
+                    line += '\n'
+
+                # If we haven't found the symbol name yet, look for it.
+                if not symbol:
+                    symbol_section_match = self.SECTION_RE.search(line)
+                    symbol_match = self.SYMBOL_RE.search(line)
+
+                    if symbol_section_match:
+                        symbol = symbol_section_match.group(1)
+                        ignore_broken_returns = True
+                    elif symbol_match:
+                        symbol = symbol_match.group(1).strip()
+                        symbol_options = line[symbol_match.end(0):].strip()
+
+                    continue
+
+                return_match = self.RETURNS_RE.search(line)
+                broken_return_match = self.BROKEN_RETURNS_RE.search(line)
+                since_match = self.SINCE_RE.search(line)
+                deprecated_match = self.DEPRECATED_RE.search(line)
+                stability_match = self.STABILITY_RE.search(line)
+
+                if return_match:
+                    if return_style == 'broken':
+                        description += return_start + return_desc
+
+                    return_start = return_match.group(0)
+
+                    if return_style == 'sane':
+                        pass
+
+                    return_style = 'sane'
+                    ignore_broken_returns = True
+                    return_desc = line[return_match.end(0):]
+                    in_part = 'return'
+                    continue
+                elif not ignore_broken_returns and broken_return_match:
+                    return_start = broken_return_match.group(0)
+                    return_style = 'broken'
+                    return_desc = line[broken_return_match.end(0):]
+                    in_part = 'return'
+                    continue
+                elif since_match:
+                    since_desc = line[since_match.end(0):]
+                    in_part = 'since'
+                    continue
+                elif deprecated_match:
+                    deprecated_desc = line[deprecated_match.end(0):]
+                    in_part = 'deprecated'
+                    continue
+                elif stability_match:
+                    stability_desc = line[stability_match.end(0):]
+                    in_part = 'stability'
+                    continue
+
+                if in_part == 'description':
+                    # Get rid of 'Description:'
+                    line = re.sub(self.DESCRIPTION_RE, '', line)
+                    description += line
+                    continue
+                elif in_part == 'return':
+                    return_desc += line
+                    continue
+                elif in_part == 'since':
+                    since_desc += line
+                    continue
+                elif in_part == 'stability':
+                    stability_desc += line
+                    continue
+                elif in_part == 'deprecated':
+                    deprecated_desc += line
+                    continue
+
+                # We must be in the parameters. Check for the empty line below them.
+                if self.EMPTY_LINE_RE.search(line):
+                    in_part = 'description'
+                    continue
+
+                # Look for a parameter name.
+                match = self.PARAMETER_NAME_RE.search(line)
+                if match:
+                    param_name = match.group(1)
+                    param_desc = line[match.end(0):]
+
+                    # Allow varargs variations
+                    if self.VARARGS_RE.search(param_name):
+                        param_name = '...'
+                    if param_name.lower() == 'returns':
+                        return_style = 'sane'
+                        ignore_broken_returns = True
+
+                    params[param_name] = param_desc
+                    current_param += 1
+                    continue
+
+                # We must be in the middle of a parameter description, so add it on
+                # to the last element in @params.
+                if current_param:
+                    params[params.keys()[-1]] += line
+                else:
+                    pass
+
         return self._blocks
 
-    def _parse_comment(self, cmt):
-        # We're looking for gtk-doc comments here, they look like this:
-        # /**
-        #   * symbol:
-        #
-        # Or, alternatively, with options:
-        # /**
-        #   * symbol: (name value) ...
-        #
-        # symbol is currently one of:
-        #  - function: gtk_widget_show
-        #  - signal:   GtkWidget::destroy
-        #  - property: GtkWidget:visible
-        #
-        comment, filename, lineno = cmt
-        comment = comment.lstrip()
-        if not self.COMMENT_HEADER_RE.search(comment):
-            return
-        comment = self.COMMENT_HEADER_RE.sub('', comment, count=1)
-        comment = comment.strip()
-        if not comment.startswith('* '):
-            return
-        comment = comment[2:]
-
-        match = self.COMMENT_HEADER_START_RE.search(comment)
-        if match is None:
-            return
-        pos = match.start()
-        block_header = comment[:pos]
-        block_header = block_header.strip()
-        cpos = block_header.find(': ')
-        block_name = block_header
-        raw_name = block_header
-        if cpos != -1:
-            block_name = block_name[:cpos].strip()
-        if block_name.endswith(':'):
-            block_name = block_name[:-1]
-        block = DocBlock(block_name)
-        block.set_position(message.Position(filename, lineno))
-
-        if cpos:
-            block.options = self.parse_options(block, block_header[cpos+2:])
-        comment_lines = []
-        parsing_parameters = True
-        last_param_tag = None
-
-        # Second phase: parse parameters, return values, Tag: format
-        # annotations.
-        #
-        # Valid lines look like:
-        # * @foo: some comment here
-        # * @baz: (inout): This has an annotation
-        # * @bar: (out) (allow-none): this is a long parameter comment
-        # *  that gets wrapped to the next line.
-        # *
-        # * Some documentation for the function.
-        # *
-        # * Returns: (transfer none): A value
-
-        # offset of the first doctag in relation to the start of
-        # the docblock, we parsed /** and the xxx: lines already
-        lineno = 2
-        for line in comment[pos+1:].split('\n'):
-            line = line.lstrip()
-            if not line.startswith('*'):
-                lineno += 1
-                continue
-            nostar_line = line[1:]
-            is_whitespace = self.WHITESPACE_RE.match(nostar_line) is not None
-            if parsing_parameters and is_whitespace:
-                # As soon as we find a line that's just whitespace,
-                # we're done parsing the parameters.
-                parsing_parameters = False
-                lineno += 1
-                continue
-            elif is_whitespace:
-                comment_lines.append('')
-                lineno += 1
-                continue
-
-            # Explicitly only accept parameters of the form "* @foo" with one space.
-            is_parameter = nostar_line.startswith(' @')
-
-            # Strip the rest of the leading whitespace for the rest of
-            # the code; may not actually be necessary, but still doing
-            # it to avoid regressions.
-            line = nostar_line.lstrip()
-
-            # Look for a parameter or return value.  Both of these can
-            # have parenthesized options.
-            first_colonspace_index = line.find(': ')
-            is_return_value = self.RETURNS_RE.search(line)
-            parse_options = True
-            if ((is_parameter or is_return_value)
-                and first_colonspace_index > 0):
-                # Skip lines which has non-whitespace before first (
-                first_paren = line[first_colonspace_index+1:].find('(')
-                if (first_paren != -1 and
-                    line[first_colonspace_index+1:first_paren].strip()):
-                    parse_options = False
-
-                if is_parameter:
-                    argname = line[1:first_colonspace_index]
-                else:
-                    argname = TAG_RETURNS
-                tag = DocTag(block, argname)
-                tag.set_position(block.position.offset(lineno))
-                line_after_first_colon_space = line[first_colonspace_index + 2:]
-                second_colon_index = line_after_first_colon_space.find(':')
-                if second_colon_index >= 0:
-                    second_colon_index += first_colonspace_index + 2
-                    assert line[second_colon_index] == ':'
-                found_options = False
-                if second_colon_index > first_colonspace_index:
-                    value_line = \
-                      line[first_colonspace_index+2:second_colon_index]
-                    if ')' in value_line:
-                        after_last_paren = value_line[value_line.rfind(')'):]
-                        if not after_last_paren.rstrip().endswith(')'):
-                            parse_options = False
-                    if parse_options and self.OPTION_RE.search(value_line):
-                        # The OPTION_RE is a little bit heuristic.  If
-                        # we found two colons, we scan inside for something
-                        # that looks like (foo).
-                        # *Ideally* we'd change the gtk-doc format to
-                        # require double colons, and then there'd be
-                        # no ambiguity.  I.e.:
-                        # @foo:: Some documentation here
-                        # But that'd be a rather incompatible change.
-                        found_options = True
-                        tag.comment = line[second_colon_index+1:].strip()
-                        tag.options = self.parse_options(tag, value_line)
-                if not found_options:
-                    # We didn't find any options, so just take the whole thing
-                    # as documentation.
-                    tag.comment = line[first_colonspace_index+2:].strip()
-                block.tags[argname] = tag
-                last_param_tag = tag
-                if is_parameter:
-                    block.params.append(argname)
-            elif (not is_parameter) and parsing_parameters and last_param_tag:
-                # We need to handle continuation lines on parameters.  The
-                # conditional above - if a line doesn't start with '@', we're
-                # not yet in the documentation block for the whole function,
-                # and we've seen at least one parameter.
-                last_param_tag.comment += (' ' + line.strip())
-            elif first_colonspace_index > 0:
-                # The line is of the form "Tag: some value here", like:
-                # Since: 0.8
-                tag_name = line[:first_colonspace_index]
-                if tag_name.lower() in _ALL_TAGS:
-                    tag_name = tag_name.lower()
-                    tag = DocTag(block, tag_name)
-                    tag.value = line[first_colonspace_index+2:]
-                    tag.position = block.position.offset(lineno)
-                    block.tags[tag_name] = tag
-                else:
-                    comment_lines.append(line)
-            elif not parsing_parameters:
-                comment_lines.append(line)
-            lineno += 1
-        block.comment = '\n'.join(comment_lines).strip()
-        block.validate()
-        self._blocks[block.name] = block
 
     @classmethod
     def parse_options(cls, tag, value):
