@@ -261,9 +261,7 @@
  * a commandline is not handled locally. See g_application_run() and
  * the #GApplicationCommandLine documentation for more information.
  *
- * process. See g_application_command_line_set_exit_status().
- *
- * Returns: An integer that is set as the exit status for the calling
+ * Returns: An integer that is set as the exit status for the calling process. See g_application_command_line_set_exit_status().
  */
 
 
@@ -472,9 +470,7 @@
  * from @source_value into the target property of @target
  * using @target_value.
  *
- * otherwise
- *
- * Returns: %TRUE if the transformation was successful, and %FALSE
+ * Returns: %TRUE if the transformation was successful, and %FALSE otherwise
  * Since: 2.26
  */
 
@@ -691,27 +687,27 @@
  *
  * An example of how to us this:
  * |[
- * /<!-- -->* Make sure we don't do any unnecessary work if already cancelled *<!-- -->/
- * if (g_cancellable_set_error_if_cancelled (cancellable))
- * return;
+ *     /<!-- -->* Make sure we don't do any unnecessary work if already cancelled *<!-- -->/
+ *     if (g_cancellable_set_error_if_cancelled (cancellable))
+ *       return;
  *
- * /<!-- -->* Set up all the data needed to be able to
- * * handle cancellation of the operation *<!-- -->/
- * my_data = my_data_new (...);
+ *     /<!-- -->* Set up all the data needed to be able to
+ *      * handle cancellation of the operation *<!-- -->/
+ *     my_data = my_data_new (...);
  *
- * id = 0;
- * if (cancellable)
- * id = g_cancellable_connect (cancellable,
- * G_CALLBACK (cancelled_handler)
- * data, NULL);
+ *     id = 0;
+ *     if (cancellable)
+ *       id = g_cancellable_connect (cancellable,
+ *     			      G_CALLBACK (cancelled_handler)
+ *     			      data, NULL);
  *
- * /<!-- -->* cancellable operation here... *<!-- -->/
+ *     /<!-- -->* cancellable operation here... *<!-- -->/
  *
- * g_cancellable_disconnect (cancellable, id);
+ *     g_cancellable_disconnect (cancellable, id);
  *
- * /<!-- -->* cancelled_handler is never called after this, it
- * * is now safe to free the data *<!-- -->/
- * my_data_free (my_data);
+ *     /<!-- -->* cancelled_handler is never called after this, it
+ *      * is now safe to free the data *<!-- -->/
+ *     my_data_free (my_data);
  * ]|
  *
  * Note that the cancelled signal is emitted in the thread that
@@ -803,19 +799,19 @@
  * The initialization process of a class involves:
  * <itemizedlist>
  * <listitem><para>
- * 1 - Copying common members from the parent class over to the
- * derived class structure.
+ * 	1 - Copying common members from the parent class over to the
+ * 	derived class structure.
  * </para></listitem>
  * <listitem><para>
- * 2 -  Zero initialization of the remaining members not copied
- * over from the parent class.
+ * 	2 -  Zero initialization of the remaining members not copied
+ * 	over from the parent class.
  * </para></listitem>
  * <listitem><para>
- * 3 - Invocation of the GBaseInitFunc() initializers of all parent
- * types and the class' type.
+ * 	3 - Invocation of the GBaseInitFunc() initializers of all parent
+ * 	types and the class' type.
  * </para></listitem>
  * <listitem><para>
- * 4 - Invocation of the class' GClassInitFunc() initializer.
+ * 	4 - Invocation of the class' GClassInitFunc() initializer.
  * </para></listitem>
  * </itemizedlist>
  * Since derived classes are partially initialized through a memory copy
@@ -833,45 +829,45 @@
  *
  * |[
  * typedef struct {
- * GObjectClass parent_class;
- * gint         static_integer;
- * gchar       *dynamic_string;
+ *   GObjectClass parent_class;
+ *   gint         static_integer;
+ *   gchar       *dynamic_string;
  * } TypeAClass;
  * static void
  * type_a_base_class_init (TypeAClass *class)
  * {
- * class->dynamic_string = g_strdup ("some string");
+ *   class->dynamic_string = g_strdup ("some string");
  * }
  * static void
  * type_a_base_class_finalize (TypeAClass *class)
  * {
- * g_free (class->dynamic_string);
+ *   g_free (class->dynamic_string);
  * }
  * static void
  * type_a_class_init (TypeAClass *class)
  * {
- * class->static_integer = 42;
+ *   class->static_integer = 42;
  * }
  *
  * typedef struct {
- * TypeAClass   parent_class;
- * gfloat       static_float;
- * GString     *dynamic_gstring;
+ *   TypeAClass   parent_class;
+ *   gfloat       static_float;
+ *   GString     *dynamic_gstring;
  * } TypeBClass;
  * static void
  * type_b_base_class_init (TypeBClass *class)
  * {
- * class->dynamic_gstring = g_string_new ("some other string");
+ *   class->dynamic_gstring = g_string_new ("some other string");
  * }
  * static void
  * type_b_base_class_finalize (TypeBClass *class)
  * {
- * g_string_free (class->dynamic_gstring);
+ *   g_string_free (class->dynamic_gstring);
  * }
  * static void
  * type_b_class_init (TypeBClass *class)
  * {
- * class->static_float = 3.14159265358979323846;
+ *   class->static_float = 3.14159265358979323846;
  * }
  * ]|
  * Initialization of TypeBClass will first cause initialization of
@@ -1176,17 +1172,17 @@
  * The cause of this event can be
  * <itemizedlist>
  * <listitem><para>
- * If g_dbus_connection_close() is called. In this case
- * @remote_peer_vanished is set to %FALSE and @error is %NULL.
+ *    If g_dbus_connection_close() is called. In this case
+ *    @remote_peer_vanished is set to %FALSE and @error is %NULL.
  * </para></listitem>
  * <listitem><para>
- * If the remote peer closes the connection. In this case
- * @remote_peer_vanished is set to %TRUE and @error is set.
+ *    If the remote peer closes the connection. In this case
+ *    @remote_peer_vanished is set to %TRUE and @error is set.
  * </para></listitem>
  * <listitem><para>
- * If the remote peer sends invalid or malformed data. In this
- * case @remote_peer_vanished is set to %FALSE and @error
- * is set.
+ *    If the remote peer sends invalid or malformed data. In this
+ *    case @remote_peer_vanished is set to %FALSE and @error
+ *    is set.
  * </para></listitem>
  * </itemizedlist>
  *
@@ -1342,8 +1338,48 @@
 
 /**
  * GDBusError:
+ * @G_DBUS_ERROR_FAILED: A generic error; "something went wrong" - see the error message for more.
+ * @G_DBUS_ERROR_NO_MEMORY: There was not enough memory to complete an operation.
+ * @G_DBUS_ERROR_SERVICE_UNKNOWN: The bus doesn't know how to launch a service to supply the bus name you wanted.
+ * @G_DBUS_ERROR_NAME_HAS_NO_OWNER: The bus name you referenced doesn't exist (i.e. no application owns it).
+ * @G_DBUS_ERROR_NO_REPLY: No reply to a message expecting one, usually means a timeout occurred.
+ * @G_DBUS_ERROR_IO_ERROR: Something went wrong reading or writing to a socket, for example.
+ * @G_DBUS_ERROR_BAD_ADDRESS: A D-Bus bus address was malformed.
+ * @G_DBUS_ERROR_NOT_SUPPORTED: Requested operation isn't supported (like ENOSYS on UNIX).
+ * @G_DBUS_ERROR_LIMITS_EXCEEDED: Some limited resource is exhausted.
+ * @G_DBUS_ERROR_ACCESS_DENIED: Security restrictions don't allow doing what you're trying to do.
+ * @G_DBUS_ERROR_AUTH_FAILED: Authentication didn't work.
+ * @G_DBUS_ERROR_NO_SERVER: Unable to connect to server (probably caused by ECONNREFUSED on a socket).
+ * @G_DBUS_ERROR_TIMEOUT: Certain timeout errors, possibly ETIMEDOUT on a socket.  Note that %G_DBUS_ERROR_NO_REPLY is used for message reply timeouts. Warning: this is confusingly-named given that %G_DBUS_ERROR_TIMED_OUT also exists. We can't fix it for compatibility reasons so just be careful.
+ * @G_DBUS_ERROR_NO_NETWORK: No network access (probably ENETUNREACH on a socket).
+ * @G_DBUS_ERROR_ADDRESS_IN_USE: Can't bind a socket since its address is in use (i.e. EADDRINUSE).
+ * @G_DBUS_ERROR_DISCONNECTED: The connection is disconnected and you're trying to use it.
+ * @G_DBUS_ERROR_INVALID_ARGS: Invalid arguments passed to a method call.
+ * @G_DBUS_ERROR_FILE_NOT_FOUND: Missing file.
+ * @G_DBUS_ERROR_FILE_EXISTS: Existing file and the operation you're using does not silently overwrite.
+ * @G_DBUS_ERROR_UNKNOWN_METHOD: Method name you invoked isn't known by the object you invoked it on.
+ * @G_DBUS_ERROR_TIMED_OUT: Certain timeout errors, e.g. while starting a service. Warning: this is confusingly-named given that %G_DBUS_ERROR_TIMEOUT also exists. We can't fix it for compatibility reasons so just be careful.
+ * @G_DBUS_ERROR_MATCH_RULE_NOT_FOUND: Tried to remove or modify a match rule that didn't exist.
+ * @G_DBUS_ERROR_MATCH_RULE_INVALID: The match rule isn't syntactically valid.
+ * @G_DBUS_ERROR_SPAWN_EXEC_FAILED: While starting a new process, the exec() call failed.
+ * @G_DBUS_ERROR_SPAWN_FORK_FAILED: While starting a new process, the fork() call failed.
+ * @G_DBUS_ERROR_SPAWN_CHILD_EXITED: While starting a new process, the child exited with a status code.
+ * @G_DBUS_ERROR_SPAWN_CHILD_SIGNALED: While starting a new process, the child exited on a signal.
+ * @G_DBUS_ERROR_SPAWN_FAILED: While starting a new process, something went wrong.
+ * @G_DBUS_ERROR_SPAWN_SETUP_FAILED: We failed to setup the environment correctly.
+ * @G_DBUS_ERROR_SPAWN_CONFIG_INVALID: We failed to setup the config parser correctly.
+ * @G_DBUS_ERROR_SPAWN_SERVICE_INVALID: Bus name was not valid.
+ * @G_DBUS_ERROR_SPAWN_SERVICE_NOT_FOUND: Service file not found in system-services directory.
+ * @G_DBUS_ERROR_SPAWN_PERMISSIONS_INVALID: Permissions are incorrect on the setuid helper.
+ * @G_DBUS_ERROR_SPAWN_FILE_INVALID: Service file invalid (Name, User or Exec missing).
+ * @G_DBUS_ERROR_SPAWN_NO_MEMORY: Tried to get a UNIX process ID and it wasn't available.
+ * @G_DBUS_ERROR_UNIX_PROCESS_ID_UNKNOWN: Tried to get a UNIX process ID and it wasn't available.
+ * @G_DBUS_ERROR_INVALID_SIGNATURE: A type signature is not valid.
+ * @G_DBUS_ERROR_INVALID_FILE_CONTENT: A file contains invalid syntax or is otherwise broken.
+ * @G_DBUS_ERROR_SELINUX_SECURITY_CONTEXT_UNKNOWN: Asked for SELinux security context and it wasn't available.
+ * @G_DBUS_ERROR_ADT_AUDIT_DATA_UNKNOWN: Asked for ADT audit data and it wasn't available.
+ * @G_DBUS_ERROR_OBJECT_PATH_IN_USE: There's already an object with the requested object path.
  *
- * Certain timeout errors, e.g. while starting a service. Warning: this is
  * Error codes for the %G_DBUS_ERROR error domain.
  *
  * Since: 2.26
@@ -1382,10 +1418,7 @@
  *
  * The type of the @get_property function in #GDBusInterfaceVTable.
  *
- * @error is set. If the returned #GVariant is floating, it is
- * consumed - otherwise its reference count is decreased by one.
- *
- * Returns: A #GVariant with the value for @property_name or %NULL if
+ * Returns: A #GVariant with the value for @property_name or %NULL if @error is set. If the returned #GVariant is floating, it is consumed - otherwise its reference count is decreased by one.
  * Since: 2.26
  */
 
@@ -1605,49 +1638,49 @@
  * |[
  * static GDBusMessage *
  * passive_filter (GDBusConnection *connection
- * GDBusMessage    *message,
- * gboolean         incoming,
- * gpointer         user_data)
+ *                 GDBusMessage    *message,
+ *                 gboolean         incoming,
+ *                 gpointer         user_data)
  * {
- * /<!-- -->* inspect @message *<!-- -->/
- * return message;
+ *   /<!-- -->* inspect @message *<!-- -->/
+ *   return message;
  * }
  * ]|
  * Filter functions that wants to drop a message can simply return %NULL:
  * |[
  * static GDBusMessage *
  * drop_filter (GDBusConnection *connection
- * GDBusMessage    *message,
- * gboolean         incoming,
- * gpointer         user_data)
+ *              GDBusMessage    *message,
+ *              gboolean         incoming,
+ *              gpointer         user_data)
  * {
- * if (should_drop_message)
- * {
- * g_object_unref (message);
- * message = NULL;
- * }
- * return message;
+ *   if (should_drop_message)
+ *     {
+ *       g_object_unref (message);
+ *       message = NULL;
+ *     }
+ *   return message;
  * }
  * ]|
  * Finally, a filter function may modify a message by copying it:
  * |[
  * static GDBusMessage *
  * modifying_filter (GDBusConnection *connection
- * GDBusMessage    *message,
- * gboolean         incoming,
- * gpointer         user_data)
+ *                   GDBusMessage    *message,
+ *                   gboolean         incoming,
+ *                   gpointer         user_data)
  * {
- * GDBusMessage *copy;
- * GError *error;
+ *   GDBusMessage *copy;
+ *   GError *error;
  *
- * error = NULL;
- * copy = g_dbus_message_copy (message, &error);
- * /<!-- -->* handle @error being is set *<!-- -->/
- * g_object_unref (message);
+ *   error = NULL;
+ *   copy = g_dbus_message_copy (message, &error);
+ *   /<!-- -->* handle @error being is set *<!-- -->/
+ *   g_object_unref (message);
  *
- * /<!-- -->* modify @copy *<!-- -->/
+ *   /<!-- -->* modify @copy *<!-- -->/
  *
- * return copy;
+ *   return copy;
  * }
  * ]|
  * If the returned #GDBusMessage is different from @message and cannot
@@ -1657,10 +1690,7 @@
  * check this ahead of time using g_dbus_message_to_blob() passing a
  * #GDBusCapabilityFlags value obtained from @connection.
  *
- * g_object_unref() or %NULL to drop the message. Passive filter
- * functions can simply return the passed @message object.
- *
- * Returns: (transfer full) (allow-none): A #GDBusMessage that will be freed with
+ * Returns: (transfer full) (allow-none): A #GDBusMessage that will be freed with g_object_unref() or %NULL to drop the message. Passive filter functions can simply return the passed @message object.
  * Since: 2.26
  */
 
@@ -2284,22 +2314,22 @@
  *
  * The checks performed are:
  * <itemizedlist>
- * <listitem><para>
- * When completing a method call, if the type signature of
- * the reply message isn't what's expected, the reply is
- * discarded and the #GError is set to %G_IO_ERROR_INVALID_ARGUMENT.
- * </para></listitem>
- * <listitem><para>
- * Received signals that have a type signature mismatch are dropped and
- * a warning is logged via g_warning().
- * </para></listitem>
- * <listitem><para>
- * Properties received via the initial <literal>GetAll()</literal> call
- * or via the <literal>::PropertiesChanged</literal> signal (on the
- * <ulink url="http://dbus.freedesktop.org/doc/dbus-specification.html#standard-interfaces-properties">org.freedesktop.DBus.Properties</ulink> interface) or
- * set using g_dbus_proxy_set_cached_property() with a type signature
- * mismatch are ignored and a warning is logged via g_warning().
- * </para></listitem>
+ *   <listitem><para>
+ *     When completing a method call, if the type signature of
+ *     the reply message isn't what's expected, the reply is
+ *     discarded and the #GError is set to %G_IO_ERROR_INVALID_ARGUMENT.
+ *   </para></listitem>
+ *   <listitem><para>
+ *     Received signals that have a type signature mismatch are dropped and
+ *     a warning is logged via g_warning().
+ *   </para></listitem>
+ *   <listitem><para>
+ *     Properties received via the initial <literal>GetAll()</literal> call
+ *     or via the <literal>::PropertiesChanged</literal> signal (on the
+ *     <ulink url="http://dbus.freedesktop.org/doc/dbus-specification.html#standard-interfaces-properties">org.freedesktop.DBus.Properties</ulink> interface) or
+ *     set using g_dbus_proxy_set_cached_property() with a type signature
+ *     mismatch are ignored and a warning is logged via g_warning().
+ *   </para></listitem>
  * </itemizedlist>
  * Note that these checks are never done on methods, signals and
  * properties that are not referenced in the given
@@ -2388,10 +2418,7 @@
  * <link linkend="g-main-context-push-thread-default">thread-default main loop</link>
  * that @manager was constructed in.
  *
- * must be a #GDBusProxy<!-- -->- or #GDBusObjectProxy<!-- -->-derived
- * type.
- *
- * Returns: A #GType to use for the remote object. The returned type
+ * Returns: A #GType to use for the remote object. The returned type must be a #GDBusProxy<!-- -->- or #GDBusObjectProxy<!-- -->-derived type.
  * Since: 2.30
  */
 
@@ -2444,9 +2471,7 @@
  * that it's suitable to call g_dbus_connection_register_object() or
  * similar from the signal handler.
  *
- * run.
- *
- * Returns: %TRUE to claim @connection, %FALSE to let other handlers
+ * Returns: %TRUE to claim @connection, %FALSE to let other handlers run.
  * Since: 2.26
  */
 
@@ -3515,9 +3540,7 @@
  * Long-running jobs should periodically check the @cancellable
  * to see if they have been cancelled.
  *
- * complete the job, %FALSE if the job is complete (or cancelled)
- *
- * Returns: %TRUE if this function should be called again to
+ * Returns: %TRUE if this function should be called again to complete the job, %FALSE if the job is complete (or cancelled)
  */
 
 
@@ -3817,31 +3840,6 @@
  * A callback function used by the type system to initialize a new
  * interface.  This function should initialize all internal data and
  * allocate any resources required by the interface.
- */
-
-
-/**
- * GLIB_CHECK_VERSION:
- * @major: the major version to check for
- * @minor: the minor version to check for
- * @micro: the micro version to check for
- *
- * Checks the version of the GLib library that is being compiled
- * against.
- *
- * <example>
- * <title>Checking the version of the GLib library</title>
- * <programlisting>
- * if (!GLIB_CHECK_VERSION (1, 2, 0))
- * g_error ("GLib version 1.2.0 or above is needed");
- * </programlisting>
- * </example>
- *
- * See glib_check_version() for a runtime check.
- *
- * is the same as or newer than the passed-in version.
- *
- * Returns: %TRUE if the version of the GLib header files
  */
 
 
@@ -4507,22 +4505,22 @@
  *
  * static GObject*
  * my_singleton_constructor (GType                  type,
- * guint                  n_construct_params,
- * GObjectConstructParam *construct_params)
+ *                           guint                  n_construct_params,
+ *                           GObjectConstructParam *construct_params)
  * {
- * GObject *object;
+ *   GObject *object;
  *
- * if (!the_singleton)
- * {
- * object = G_OBJECT_CLASS (parent_class)->constructor (type,
- * n_construct_params,
- * construct_params);
- * the_singleton = MY_SINGLETON (object);
- * }
- * else
- * object = g_object_ref (G_OBJECT (the_singleton));
+ *   if (!the_singleton)
+ *     {
+ *       object = G_OBJECT_CLASS (parent_class)->constructor (type,
+ *                                                            n_construct_params,
+ *                                                            construct_params);
+ *       the_singleton = MY_SINGLETON (object);
+ *     }
+ *   else
+ *     object = g_object_ref (G_OBJECT (the_singleton));
  *
- * return object;
+ *   return object;
  * }
  * </programlisting></example>
  */
@@ -4599,9 +4597,7 @@
  * The type of function to be passed as callback for %G_OPTION_ARG_CALLBACK
  * options.
  *
- * occurred, in which case @error should be set with g_set_error()
- *
- * Returns: %TRUE if the option was successfully parsed, %FALSE if an error
+ * Returns: %TRUE if the option was successfully parsed, %FALSE if an error occurred, in which case @error should be set with g_set_error()
  */
 
 
@@ -4687,9 +4683,7 @@
  *
  * The type of function that can be called before and after parsing.
  *
- * occurred, in which case @error should be set with g_set_error()
- *
- * Returns: %TRUE if the function completed successfully, %FALSE if an error
+ * Returns: %TRUE if the function completed successfully, %FALSE if an error occurred, in which case @error should be set with g_set_error()
  */
 
 
@@ -4739,7 +4733,7 @@
  * @G_PARAM_STATIC_NICK: the string used as nick when constructing the parameter is guaranteed to remain valid and unmmodified for the lifetime of the parameter. Since 2.8
  * @G_PARAM_STATIC_BLURB: the string used as blurb when constructing the parameter is guaranteed to remain valid and unmodified for the lifetime of the parameter. Since 2.8
  * @G_PARAM_PRIVATE: internal
- * @G_PARAM_DEPRECATED: the parameter is deprecated and will be removed in a future version. A warning will be generated if it is used while running with G_ENABLE_DIAGNOSTIC=1. Since: 2.26
+ * @G_PARAM_DEPRECATED: the parameter is deprecated and will be removed in a future version. A warning will be generated if it is used while running with G_ENABLE_DIAGNOSTIC=1. Since 2.26
  *
  * Through the #GParamFlags flag values, certain aspects of parameters
  * can be configured.
@@ -5132,9 +5126,7 @@
  * Specifies the type of function passed to g_main_context_set_poll_func().
  * The semantics of the function should match those of the poll() system call.
  *
- * reported, or -1 if an error occurred.
- *
- * Returns: the number of #GPollFD elements which have events or errors
+ * Returns: the number of #GPollFD elements which have events or errors reported, or -1 if an error occurred.
  */
 
 
@@ -5269,7 +5261,9 @@
 /**
  * GProxyResolver:
  *
- * Interface that can be used to resolve proxy address.
+ * A helper class to enumerate proxies base on URI.
+ *
+ * Since: 2.26
  */
 
 
@@ -5317,7 +5311,8 @@
  * @G_REGEX_ANCHORED: The pattern is forced to be "anchored", that is, it is constrained to match only at the first matching point in the string that is being searched. This effect can also be achieved by appropriate constructs in the pattern itself such as the "^" metacharater.
  * @G_REGEX_DOLLAR_ENDONLY: A dollar metacharacter ("$") in the pattern matches only at the end of the string. Without this option, a dollar also matches immediately before the final character if it is a newline (but not before any other newlines). This option is ignored if #G_REGEX_MULTILINE is set.
  * @G_REGEX_UNGREEDY: Inverts the "greediness" of the quantifiers so that they are not greedy by default, but become greedy if followed by "?". It can also be set by a "(?U)" option setting within the pattern.
- * @G_REGEX_RAW: Usually strings must be valid UTF-8 strings, using this flag they are considered as a raw sequence of bytes. @G_REGEX_NO_AUTO_CAPTURE: Disables the use of numbered capturing parentheses in the pattern. Any opening parenthesis that is not followed by "?" behaves as if it were followed by "?:" but named parentheses can still be used for capturing (and they acquire numbers in the usual way).
+ * @G_REGEX_RAW: Usually strings must be valid UTF-8 strings, using this flag they are considered as a raw sequence of bytes.
+ * @G_REGEX_NO_AUTO_CAPTURE: Disables the use of numbered capturing parentheses in the pattern. Any opening parenthesis that is not followed by "?" behaves as if it were followed by "?:" but named parentheses can still be used for capturing (and they acquire numbers in the usual way).
  * @G_REGEX_OPTIMIZE: Optimize the regular expression. If the pattern will be used many times, then it may be worth the effort to optimize it to improve the speed of matches.
  * @G_REGEX_DUPNAMES: Names used to identify capturing subpatterns need not be unique. This can be helpful for certain types of pattern when it is known that only one instance of the named subpattern can ever be matched.
  * @G_REGEX_NEWLINE_CR: Usually any newline character is recognized, if this option is set, the only recognized newline character is '\r'.
@@ -5522,7 +5517,7 @@
 /**
  * GSettings::change-event:
  * @settings: the object on which the signal was emitted
- * @keys: (array length=n_keys) (element-type GQuark) (allow-none):  an array of #GQuark<!-- -->s for the changed keys, or %NULL
+ * @keys: (array length=n_keys) (element-type GQuark) (allow-none): an array of #GQuark<!-- -->s for the changed keys, or %NULL
  * @n_keys: the length of the @keys array, or 0
  *
  * The "change-event" signal is emitted once per change event that
@@ -5541,9 +5536,7 @@
  * for each affected key.  If any other connected handler returns
  * %TRUE then this default functionality will be suppressed.
  *
- * event. FALSE to propagate the event further.
- *
- * Returns: %TRUE to stop other handlers from being invoked for the
+ * Returns: %TRUE to stop other handlers from being invoked for the event. FALSE to propagate the event further.
  */
 
 
@@ -5586,9 +5579,7 @@
  * connected handler returns %TRUE then this default functionality
  * will be suppressed.
  *
- * event. FALSE to propagate the event further.
- *
- * Returns: %TRUE to stop other handlers from being invoked for the
+ * Returns: %TRUE to stop other handlers from being invoked for the event. FALSE to propagate the event further.
  */
 
 
@@ -5652,8 +5643,7 @@
  * 'settings-schema' property if you wish to pass in a
  * #GSettingsSchema.
  *
- * Deprecated:2.32:Use the 'schema-id' property instead.  In a future
- * version, this property may instead refer to a #GSettingsSchema.
+ * Deprecated: 2.32:Use the 'schema-id' property instead.  In a future version, this property may instead refer to a #GSettingsSchema.
  */
 
 
@@ -5723,9 +5713,7 @@
  * The type for the function that is used to convert an object property
  * value to a #GVariant for storing it in #GSettings.
  *
- * or %NULL in case of an error
- *
- * Returns: a new #GVariant holding the data from @value,
+ * Returns: a new #GVariant holding the data from @value, or %NULL in case of an error
  */
 
 
@@ -5782,10 +5770,7 @@
  * values is performed. The return value of signal emissions is then the
  * value returned by the last callback.
  *
- * should be aborted. Returning %FALSE means to abort the
- * current emission and %TRUE is returned for continuation.
- *
- * Returns: The accumulator function returns whether the signal emission
+ * Returns: The accumulator function returns whether the signal emission should be aborted. Returning %FALSE means to abort the current emission and %TRUE is returned for continuation.
  */
 
 
@@ -5822,9 +5807,7 @@
  *
  * You may not attach these to signals created with the #G_SIGNAL_NO_HOOKS flag.
  *
- * hook is disconnected (and destroyed).
- *
- * Returns: whether it wants to stay connected. If it returns %FALSE, the signal
+ * Returns: whether it wants to stay connected. If it returns %FALSE, the signal hook is disconnected (and destroyed).
  */
 
 
@@ -5923,16 +5906,16 @@
  * <programlisting>
  * static void
  * change_volume_state (GSimpleAction *action,
- * GVariant      *value,
- * gpointer       user_data)
+ *                      GVariant      *value,
+ *                      gpointer       user_data)
  * {
- * gint requested;
+ *   gint requested;
  *
- * requested = g_variant_get_int32 (value);
+ *   requested = g_variant_get_int32 (value);
  *
- * // Volume only goes from 0 to 10
- * if (0 <= requested && requested <= 10)
- * g_simple_action_set_state (action, value);
+ *   // Volume only goes from 0 to 10
+ *   if (0 <= requested && requested <= 10)
+ *     g_simple_action_set_state (action, value);
  * }
  * </programlisting>
  * </example>
@@ -6103,7 +6086,7 @@
 /**
  * GSocketClient:
  *
- * A helper class for network servers to listen for and accept connections.
+ * A helper class for network clients to make connections.
  *
  * Since: 2.22
  */
@@ -6122,77 +6105,77 @@
  * the different @event values are as follows:
  *
  * <variablelist>
- * <varlistentry>
- * <term>%G_SOCKET_CLIENT_RESOLVING:</term>
- * <listitem><para>
- * @client is about to look up @connectable in DNS.
- * @connection will be %NULL.
- * </para></listitem>
- * </varlistentry>
- * <varlistentry>
- * <term>%G_SOCKET_CLIENT_RESOLVED:</term>
- * <listitem><para>
- * @client has successfully resolved @connectable in DNS.
- * @connection will be %NULL.
- * </para></listitem>
- * </varlistentry>
- * <varlistentry>
- * <term>%G_SOCKET_CLIENT_CONNECTING:</term>
- * <listitem><para>
- * @client is about to make a connection to a remote host;
- * either a proxy server or the destination server itself.
- * @connection is the #GSocketConnection, which is not yet
- * connected.
- * </para></listitem>
- * </varlistentry>
- * <varlistentry>
- * <term>%G_SOCKET_CLIENT_CONNECTED:</term>
- * <listitem><para>
- * @client has successfully connected to a remote host.
- * @connection is the connected #GSocketConnection.
- * </para></listitem>
- * </varlistentry>
- * <varlistentry>
- * <term>%G_SOCKET_CLIENT_PROXY_NEGOTIATING:</term>
- * <listitem><para>
- * @client is about to negotiate with a proxy to get it to
- * connect to @connectable. @connection is the
- * #GSocketConnection to the proxy server.
- * </para></listitem>
- * </varlistentry>
- * <varlistentry>
- * <term>%G_SOCKET_CLIENT_PROXY_NEGOTIATED:</term>
- * <listitem><para>
- * @client has negotiated a connection to @connectable through
- * a proxy server. @connection is the stream returned from
- * g_proxy_connect(), which may or may not be a
- * #GSocketConnection.
- * </para></listitem>
- * </varlistentry>
- * <varlistentry>
- * <term>%G_SOCKET_CLIENT_TLS_HANDSHAKING:</term>
- * <listitem><para>
- * @client is about to begin a TLS handshake. @connection is a
- * #GTlsClientConnection.
- * </para></listitem>
- * </varlistentry>
- * <varlistentry>
- * <term>%G_SOCKET_CLIENT_TLS_HANDSHAKED:</term>
- * <listitem><para>
- * @client has successfully completed the TLS handshake.
- * @connection is a #GTlsClientConnection.
- * </para></listitem>
- * </varlistentry>
- * <varlistentry>
- * <term>%G_SOCKET_CLIENT_COMPLETE:</term>
- * <listitem><para>
- * @client has either successfully connected to @connectable
- * (in which case @connection is the #GSocketConnection that
- * it will be returning to the caller) or has failed (in which
- * case @connection is %NULL and the client is about to return
- * an error).
- * </para></listitem>
- * </varlistentry>
+ *   <varlistentry>
+ *     <term>%G_SOCKET_CLIENT_RESOLVING:</term>
+ *     <listitem><para>
+ *       @client is about to look up @connectable in DNS.
+ *       @connection will be %NULL.
+ *     </para></listitem>
+ *   </varlistentry>
+ *   <varlistentry>
+ *     <term>%G_SOCKET_CLIENT_RESOLVED:</term>
+ *     <listitem><para>
+ *       @client has successfully resolved @connectable in DNS.
+ *       @connection will be %NULL.
+ *     </para></listitem>
+ *   </varlistentry>
+ *   <varlistentry>
+ *     <term>%G_SOCKET_CLIENT_CONNECTING:</term>
+ *     <listitem><para>
+ *       @client is about to make a connection to a remote host;
+ *       either a proxy server or the destination server itself.
+ *       @connection is the #GSocketConnection, which is not yet
+ *       connected.
+ *     </para></listitem>
+ *   </varlistentry>
+ *   <varlistentry>
+ *     <term>%G_SOCKET_CLIENT_CONNECTED:</term>
+ *     <listitem><para>
+ *       @client has successfully connected to a remote host.
+ *       @connection is the connected #GSocketConnection.
+ *     </para></listitem>
+ *   </varlistentry>
+ *   <varlistentry>
+ *     <term>%G_SOCKET_CLIENT_PROXY_NEGOTIATING:</term>
+ *     <listitem><para>
+ *       @client is about to negotiate with a proxy to get it to
+ *       connect to @connectable. @connection is the
+ *       #GSocketConnection to the proxy server.
+ *     </para></listitem>
+ *   </varlistentry>
+ *   <varlistentry>
+ *     <term>%G_SOCKET_CLIENT_PROXY_NEGOTIATED:</term>
+ *     <listitem><para>
+ *       @client has negotiated a connection to @connectable through
+ *       a proxy server. @connection is the stream returned from
+ *       g_proxy_connect(), which may or may not be a
+ *       #GSocketConnection.
+ *     </para></listitem>
+ *   </varlistentry>
+ *   <varlistentry>
+ *     <term>%G_SOCKET_CLIENT_TLS_HANDSHAKING:</term>
+ *     <listitem><para>
+ *       @client is about to begin a TLS handshake. @connection is a
+ *       #GTlsClientConnection.
+ *     </para></listitem>
+ *   </varlistentry>
+ *   <varlistentry>
+ *     <term>%G_SOCKET_CLIENT_TLS_HANDSHAKED:</term>
+ *     <listitem><para>
+ *       @client has successfully completed the TLS handshake.
+ *       @connection is a #GTlsClientConnection.
+ *     </para></listitem>
+ *   </varlistentry>
+ *   <varlistentry>
+ *     <term>%G_SOCKET_CLIENT_COMPLETE:</term>
+ *     <listitem><para>
+ *       @client has either successfully connected to @connectable
+ *       (in which case @connection is the #GSocketConnection that
+ *       it will be returning to the caller) or has failed (in which
+ *       case @connection is %NULL and the client is about to return
+ *       an error).
+ *     </para></listitem>
+ *   </varlistentry>
  * </variablelist>
  *
  * Each event except %G_SOCKET_CLIENT_COMPLETE may be emitted
@@ -6287,6 +6270,15 @@
  * The protocol family of a #GSocketAddress. (These values are
  * identical to the system defines %AF_INET, %AF_INET6 and %AF_UNIX,
  * if available.)
+ *
+ * Since: 2.22
+ */
+
+
+/**
+ * GSocketListener:
+ *
+ * A helper class for network servers to listen for and accept connections.
  *
  * Since: 2.22
  */
@@ -6414,9 +6406,10 @@
  * GSourceCallbackFuncs:
  * @ref: Called when a reference is added to the callback object
  * @unref: Called when a reference to the callback object is dropped
- * @get: Called to extract the callback function and data from the callback object. The <structname>GSourceCallbackFuncs</structname> struct contains functions for managing callback objects.
+ * @get: Called to extract the callback function and data from the callback object.
  *
- *
+ * The <structname>GSourceCallbackFuncs</structname> struct contains
+ * functions for managing callback objects.
  */
 
 
@@ -6566,7 +6559,7 @@
 /**
  * GTcpConnection:
  *
- * A #GSocketConnection for UNIX domain socket connections.
+ * A #GSocketConnection for TCP/IP connections.
  *
  * Since: 2.22
  */
@@ -6618,11 +6611,11 @@
  * would become
  * |[
  * {
- * "gnome-dev-cdrom-audio",
- * "gnome-dev-cdrom",
- * "gnome-dev",
- * "gnome",
- * NULL
+ *   "gnome-dev-cdrom-audio",
+ *   "gnome-dev-cdrom",
+ *   "gnome-dev",
+ *   "gnome",
+ *   NULL
  * };
  * ]|
  */
@@ -6821,8 +6814,8 @@
 /**
  * GTlsClientConnection:
  *
- * TLS client-side connection; the client-side implementation of a
- * #GTlsConnection
+ * Abstract base class for the backend-specific client connection
+ * type.
  *
  * Since: 2.28
  */
@@ -6893,8 +6886,8 @@
 /**
  * GTlsConnection:
  *
- * TLS connection. This is an abstract type that will be subclassed by
- * a TLS-library-specific subtype.
+ * Abstract base class for the backend-specific #GTlsClientConnection
+ * and #GTlsServerConnection types.
  *
  * Since: 2.28
  */
@@ -6940,11 +6933,7 @@
  * need to worry about this, and can simply block in the signal
  * handler until the UI thread returns an answer.
  *
- * immediately end the signal emission). %FALSE to allow the signal
- * emission to continue, which will cause the handshake to fail if
- * no one else overrides it.
- *
- * Returns: %TRUE to accept @peer_cert (which will also
+ * Returns: %TRUE to accept @peer_cert (which will also immediately end the signal emission). %FALSE to allow the signal emission to continue, which will cause the handshake to fail if no one else overrides it.
  * Since: 2.28
  */
 
@@ -7253,9 +7242,7 @@
  * The type of functions which are used to translate user-visible
  * strings, for <option>--help</option> output.
  *
- * The returned string is owned by GLib and must not be freed.
- *
- * Returns: a translation of the string for the current locale.
+ * Returns: a translation of the string for the current locale. The returned string is owned by GLib and must not be freed.
  */
 
 
@@ -7289,9 +7276,7 @@
  * whether they actually want to cache the class of this type, since all
  * classes are routed through the same #GTypeClassCacheFunc chain.
  *
- * called, %FALSE to continue.
- *
- * Returns: %TRUE to stop further #GTypeClassCacheFunc<!-- -->s from being
+ * Returns: %TRUE to stop further #GTypeClassCacheFunc<!-- -->s from being called, %FALSE to continue.
  */
 
 
@@ -7553,6 +7538,7 @@
 
 /**
  * GUnicodeScript:
+ * @G_UNICODE_SCRIPT_INVALID_CODE: a value never returned from g_unichar_get_script()
  * @G_UNICODE_SCRIPT_COMMON: a character used by multiple different scripts
  * @G_UNICODE_SCRIPT_INHERITED: a mark glyph that takes its script from the i                             base glyph to which it is attached
  * @G_UNICODE_SCRIPT_ARABIC: Arabic
@@ -7592,7 +7578,8 @@
  * @G_UNICODE_SCRIPT_TELUGU: Telugu
  * @G_UNICODE_SCRIPT_THAANA: Thaana
  * @G_UNICODE_SCRIPT_THAI: Thai
- * @G_UNICODE_SCRIPT_TIBETAN: Tibetan Canadian Aboriginal
+ * @G_UNICODE_SCRIPT_TIBETAN: Tibetan
+ * @G_UNICODE_SCRIPT_CANADIAN_ABORIGINAL: Canadian Aboriginal
  * @G_UNICODE_SCRIPT_YI: Yi
  * @G_UNICODE_SCRIPT_TAGALOG: Tagalog
  * @G_UNICODE_SCRIPT_HANUNOO: Hanunoo
@@ -7605,10 +7592,13 @@
  * @G_UNICODE_SCRIPT_SHAVIAN: Shavian
  * @G_UNICODE_SCRIPT_LINEAR_B: Linear B
  * @G_UNICODE_SCRIPT_TAI_LE: Tai Le
- * @G_UNICODE_SCRIPT_UGARITIC: Ugaritic New Tai Lue
+ * @G_UNICODE_SCRIPT_UGARITIC: Ugaritic
+ * @G_UNICODE_SCRIPT_NEW_TAI_LUE: New Tai Lue
  * @G_UNICODE_SCRIPT_BUGINESE: Buginese
  * @G_UNICODE_SCRIPT_GLAGOLITIC: Glagolitic
- * @G_UNICODE_SCRIPT_TIFINAGH: Tifinagh Syloti Nagri Old Persian
+ * @G_UNICODE_SCRIPT_TIFINAGH: Tifinagh
+ * @G_UNICODE_SCRIPT_SYLOTI_NAGRI: Syloti Nagri
+ * @G_UNICODE_SCRIPT_OLD_PERSIAN: Old Persian
  * @G_UNICODE_SCRIPT_KHAROSHTHI: Kharoshthi
  * @G_UNICODE_SCRIPT_UNKNOWN: an unassigned code point
  * @G_UNICODE_SCRIPT_BALINESE: Balinese
@@ -7628,10 +7618,16 @@
  * @G_UNICODE_SCRIPT_LYCIAN: Lycian. Since 2.16.3
  * @G_UNICODE_SCRIPT_LYDIAN: Lydian. Since 2.16.3
  * @G_UNICODE_SCRIPT_AVESTAN: Avestan. Since 2.26
- * @G_UNICODE_SCRIPT_BAMUM: Bamum. Since 2.26 Egyptian Hieroglpyhs. Since 2.26 Imperial Aramaic. Since 2.26 Inscriptional Pahlavi. Since 2.26 Inscriptional Parthian. Since 2.26
+ * @G_UNICODE_SCRIPT_BAMUM: Bamum. Since 2.26
+ * @G_UNICODE_SCRIPT_EGYPTIAN_HIEROGLYPHS: Egyptian Hieroglpyhs. Since 2.26
+ * @G_UNICODE_SCRIPT_IMPERIAL_ARAMAIC: Imperial Aramaic. Since 2.26
+ * @G_UNICODE_SCRIPT_INSCRIPTIONAL_PAHLAVI: Inscriptional Pahlavi. Since 2.26
+ * @G_UNICODE_SCRIPT_INSCRIPTIONAL_PARTHIAN: Inscriptional Parthian. Since 2.26
  * @G_UNICODE_SCRIPT_JAVANESE: Javanese. Since 2.26
  * @G_UNICODE_SCRIPT_KAITHI: Kaithi. Since 2.26
- * @G_UNICODE_SCRIPT_LISU: Lisu. Since 2.26 Meetei Mayek. Since 2.26 Old South Arabian. Since 2.26
+ * @G_UNICODE_SCRIPT_LISU: Lisu. Since 2.26
+ * @G_UNICODE_SCRIPT_MEETEI_MAYEK: Meetei Mayek. Since 2.26
+ * @G_UNICODE_SCRIPT_OLD_SOUTH_ARABIAN: Old South Arabian. Since 2.26
  * @G_UNICODE_SCRIPT_OLD_TURKIC: Old Turkic. Since 2.28
  * @G_UNICODE_SCRIPT_SAMARITAN: Samaritan. Since 2.26
  * @G_UNICODE_SCRIPT_TAI_THAM: Tai Tham. Since 2.26
@@ -7640,8 +7636,7 @@
  * @G_UNICODE_SCRIPT_BRAHMI: Brahmi. Since 2.28
  * @G_UNICODE_SCRIPT_MANDAIC: Mandaic. Since 2.28
  * @G_UNICODE_SCRIPT_CHAKMA: Chakma. Since: 2.32
- * @G_UNICODE_SCRIPT_MEROITIC_CURSIVE: Meroitic Cursive. Since: 2.32
- * @G_UNICODE_SCRIPT_MEROITIC_HIEROGLYPHS, Meroitic Hieroglyphs. Since: 2.32
+ * @G_UNICODE_SCRIPT_MEROITIC_CURSIVE: Meroitic Cursive. Since: 2.32 @G_UNICODE_SCRIPT_MEROITIC_HIEROGLYPHS, Meroitic Hieroglyphs. Since: 2.32
  * @G_UNICODE_SCRIPT_MIAO: Miao. Since: 2.32
  * @G_UNICODE_SCRIPT_SHARADA: Sharada. Since: 2.32
  * @G_UNICODE_SCRIPT_SORA_SOMPENG: Sora Sompeng. Since: 2.32
@@ -7829,10 +7824,7 @@
  *
  * Whether or not this is an abstract address
  *
- * distinguishes between zero-padded and non-zero-padded
- * abstract addresses.
- *
- * Deprecated: Use #GUnixSocketAddress:address-type, which
+ * Deprecated: Use #GUnixSocketAddress:address-type, which distinguishes between zero-padded and non-zero-padded abstract addresses.
  */
 
 
@@ -8259,9 +8251,7 @@
  *
  * Check if the closure still needs a marshaller. See g_closure_set_marshal().
  *
- * @closure.
- *
- * Returns: %TRUE if a #GClosureMarshal marshaller has not yet been set on
+ * Returns: %TRUE if a #GClosureMarshal marshaller has not yet been set on @closure.
  */
 
 
@@ -8406,11 +8396,11 @@
  *
  * |[
  * G_DEFINE_DYNAMIC_TYPE_EXTENDED (GtkGadget,
- * gtk_gadget,
- * GTK_TYPE_THING,
- * 0,
- * G_IMPLEMENT_INTERFACE_DYNAMIC (TYPE_GIZMO,
- * gtk_gadget_gizmo_init));
+ *                                 gtk_gadget,
+ *                                 GTK_TYPE_THING,
+ *                                 0,
+ *                                 G_IMPLEMENT_INTERFACE_DYNAMIC (TYPE_GIZMO,
+ *                                                                gtk_gadget_gizmo_init));
  * ]|
  * expands to
  * |[
@@ -8423,42 +8413,42 @@
  *
  * static void     gtk_gadget_class_intern_init (gpointer klass)
  * {
- * gtk_gadget_parent_class = g_type_class_peek_parent (klass);
- * gtk_gadget_class_init ((GtkGadgetClass*) klass);
+ *   gtk_gadget_parent_class = g_type_class_peek_parent (klass);
+ *   gtk_gadget_class_init ((GtkGadgetClass*) klass);
  * }
  *
  * GType
  * gtk_gadget_get_type (void)
  * {
- * return gtk_gadget_type_id;
+ *   return gtk_gadget_type_id;
  * }
  *
  * static void
  * gtk_gadget_register_type (GTypeModule *type_module)
  * {
- * const GTypeInfo g_define_type_info = {
- * sizeof (GtkGadgetClass),
- * (GBaseInitFunc) NULL,
- * (GBaseFinalizeFunc) NULL,
- * (GClassInitFunc) gtk_gadget_class_intern_init,
- * (GClassFinalizeFunc) gtk_gadget_class_finalize,
- * NULL,   // class_data
- * sizeof (GtkGadget),
- * 0,      // n_preallocs
- * (GInstanceInitFunc) gtk_gadget_init,
- * NULL    // value_table
- * };
- * gtk_gadget_type_id = g_type_module_register_type (type_module,
- * GTK_TYPE_THING,
- * GtkGadget,
- * &g_define_type_info,
- * (GTypeFlags) flags);
- * {
- * const GInterfaceInfo g_implement_interface_info = {
- * (GInterfaceInitFunc) gtk_gadget_gizmo_init
- * };
- * g_type_module_add_interface (type_module, g_define_type_id, TYPE_GIZMO, &g_implement_interface_info);
- * }
+ *   const GTypeInfo g_define_type_info = {
+ *     sizeof (GtkGadgetClass),
+ *     (GBaseInitFunc) NULL,
+ *     (GBaseFinalizeFunc) NULL,
+ *     (GClassInitFunc) gtk_gadget_class_intern_init,
+ *     (GClassFinalizeFunc) gtk_gadget_class_finalize,
+ *     NULL,   // class_data
+ *     sizeof (GtkGadget),
+ *     0,      // n_preallocs
+ *     (GInstanceInitFunc) gtk_gadget_init,
+ *     NULL    // value_table
+ *   };
+ *   gtk_gadget_type_id = g_type_module_register_type (type_module,
+ *                                                     GTK_TYPE_THING,
+ *                                                     GtkGadget,
+ *                                                     &g_define_type_info,
+ *                                                     (GTypeFlags) flags);
+ *   {
+ *     const GInterfaceInfo g_implement_interface_info = {
+ *       (GInterfaceInitFunc) gtk_gadget_gizmo_init
+ *     };
+ *     g_type_module_add_interface (type_module, g_define_type_id, TYPE_GIZMO, &g_implement_interface_info);
+ *   }
  * }
  * ]|
  *
@@ -8556,11 +8546,11 @@
  *
  * |[
  * G_DEFINE_TYPE_EXTENDED (GtkGadget,
- * gtk_gadget,
- * GTK_TYPE_WIDGET,
- * 0,
- * G_IMPLEMENT_INTERFACE (TYPE_GIZMO,
- * gtk_gadget_gizmo_init));
+ *                         gtk_gadget,
+ *                         GTK_TYPE_WIDGET,
+ *                         0,
+ *                         G_IMPLEMENT_INTERFACE (TYPE_GIZMO,
+ *                                                gtk_gadget_gizmo_init));
  * ]|
  * expands to
  * |[
@@ -8569,33 +8559,33 @@
  * static gpointer gtk_gadget_parent_class = NULL;
  * static void     gtk_gadget_class_intern_init (gpointer klass)
  * {
- * gtk_gadget_parent_class = g_type_class_peek_parent (klass);
- * gtk_gadget_class_init ((GtkGadgetClass*) klass);
+ *   gtk_gadget_parent_class = g_type_class_peek_parent (klass);
+ *   gtk_gadget_class_init ((GtkGadgetClass*) klass);
  * }
  *
  * GType
  * gtk_gadget_get_type (void)
  * {
- * static volatile gsize g_define_type_id__volatile = 0;
- * if (g_once_init_enter (&g_define_type_id__volatile))
- * {
- * GType g_define_type_id =
- * g_type_register_static_simple (GTK_TYPE_WIDGET,
- * g_intern_static_string ("GtkGadget"),
- * sizeof (GtkGadgetClass),
- * (GClassInitFunc) gtk_gadget_class_intern_init,
- * sizeof (GtkGadget),
- * (GInstanceInitFunc) gtk_gadget_init,
- * (GTypeFlags) flags);
- * {
- * const GInterfaceInfo g_implement_interface_info = {
- * (GInterfaceInitFunc) gtk_gadget_gizmo_init
- * };
- * g_type_add_interface_static (g_define_type_id, TYPE_GIZMO, &g_implement_interface_info);
- * }
- * g_once_init_leave (&g_define_type_id__volatile, g_define_type_id);
- * }
- * return g_define_type_id__volatile;
+ *   static volatile gsize g_define_type_id__volatile = 0;
+ *   if (g_once_init_enter (&g_define_type_id__volatile))
+ *     {
+ *       GType g_define_type_id =
+ *         g_type_register_static_simple (GTK_TYPE_WIDGET,
+ *                                        g_intern_static_string ("GtkGadget"),
+ *                                        sizeof (GtkGadgetClass),
+ *                                        (GClassInitFunc) gtk_gadget_class_intern_init,
+ *                                        sizeof (GtkGadget),
+ *                                        (GInstanceInitFunc) gtk_gadget_init,
+ *                                        (GTypeFlags) flags);
+ *       {
+ *         const GInterfaceInfo g_implement_interface_info = {
+ *           (GInterfaceInitFunc) gtk_gadget_gizmo_init
+ *         };
+ *         g_type_add_interface_static (g_define_type_id, TYPE_GIZMO, &g_implement_interface_info);
+ *       }
+ *       g_once_init_leave (&g_define_type_id__volatile, g_define_type_id);
+ *     }
+ *   return g_define_type_id__volatile;
  * }
  * ]|
  * The only pieces which have to be manually provided are the definitions of
@@ -9840,9 +9830,7 @@
  *
  * Returns %TRUE if a #GNode is a leaf node.
  *
- * (i.e. it has no children)
- *
- * Returns: %TRUE if the #GNode is a leaf node
+ * Returns: %TRUE if the #GNode is a leaf node (i.e. it has no children)
  */
 
 
@@ -9852,9 +9840,7 @@
  *
  * Returns %TRUE if a #GNode is the root of a tree.
  *
- * (i.e. it has no parent or siblings)
- *
- * Returns: %TRUE if the #GNode is the root of a tree
+ * Returns: %TRUE if the #GNode is the root of a tree (i.e. it has no parent or siblings)
  */
 
 
@@ -9882,9 +9868,7 @@
  *
  * Return the name of a class structure's type.
  *
- * should not be freed.
- *
- * Returns: Type name of @class. The string is owned by the type system and
+ * Returns: Type name of @class. The string is owned by the type system and should not be freed.
  */
 
 
@@ -9924,9 +9908,7 @@
  *
  * Get the name of an object's type.
  *
- * should not be freed.
- *
- * Returns: Type name of @object. The string is owned by the type system and
+ * Returns: Type name of @object. The string is owned by the type system and should not be freed.
  */
 
 
@@ -10387,13 +10369,13 @@
  * of g_signal_new().
  * |[
  * g_signal_new ("size_request",
- * G_TYPE_FROM_CLASS (gobject_class),
- * G_SIGNAL_RUN_FIRST,
- * G_STRUCT_OFFSET (GtkWidgetClass, size_request),
- * NULL, NULL,
- * _gtk_marshal_VOID__BOXED,
- * G_TYPE_NONE, 1,
- * GTK_TYPE_REQUISITION | G_SIGNAL_TYPE_STATIC_SCOPE);
+ *   G_TYPE_FROM_CLASS (gobject_class),
+ * 	 G_SIGNAL_RUN_FIRST,
+ * 	 G_STRUCT_OFFSET (GtkWidgetClass, size_request),
+ * 	 NULL, NULL,
+ * 	 _gtk_marshal_VOID__BOXED,
+ * 	 G_TYPE_NONE, 1,
+ * 	 GTK_TYPE_REQUISITION | G_SIGNAL_TYPE_STATIC_SCOPE);
  * ]|
  */
 
@@ -11516,12 +11498,12 @@
  *
  * |[
  * g_object_class_install_property (object_class,
- * PROP_AUTHORS,
- * g_param_spec_boxed ("authors",
- * _("Authors"),
- * _("List of authors"),
- * G_TYPE_STRV,
- * G_PARAM_READWRITE));
+ *                                  PROP_AUTHORS,
+ *                                  g_param_spec_boxed ("authors",
+ *                                                      _("Authors"),
+ *                                                      _("List of authors"),
+ *                                                      G_TYPE_STRV,
+ *                                                      G_PARAM_READWRITE));
  *
  * gchar *authors[] = { "Owen", "Tim", NULL };
  * g_object_set (obj, "authors", authors, NULL);
@@ -11900,7 +11882,7 @@
  * but it cannot be assigned to a variable.
  *
  * |[
- * GValue value = G_VALUE_INIT;
+ *   GValue value = G_VALUE_INIT;
  * ]|
  *
  * Since: 2.30
@@ -12271,42 +12253,42 @@
  * of an extension point has a name, and a priority. Use
  * g_io_extension_point_implement() to implement an extension point.
  *
- * |[
- * GIOExtensionPoint *ep;
+ *  |[
+ *  GIOExtensionPoint *ep;
  *
- * /&ast; Register an extension point &ast;/
- * ep = g_io_extension_point_register ("my-extension-point");
- * g_io_extension_point_set_required_type (ep, MY_TYPE_EXAMPLE);
- * ]|
+ *  /&ast; Register an extension point &ast;/
+ *  ep = g_io_extension_point_register ("my-extension-point");
+ *  g_io_extension_point_set_required_type (ep, MY_TYPE_EXAMPLE);
+ *  ]|
  *
- * |[
- * /&ast; Implement an extension point &ast;/
- * G_DEFINE_TYPE (MyExampleImpl, my_example_impl, MY_TYPE_EXAMPLE);
- * g_io_extension_point_implement ("my-extension-point",
- * my_example_impl_get_type (),
- * "my-example",
- * 10);
- * ]|
+ *  |[
+ *  /&ast; Implement an extension point &ast;/
+ *  G_DEFINE_TYPE (MyExampleImpl, my_example_impl, MY_TYPE_EXAMPLE);
+ *  g_io_extension_point_implement ("my-extension-point",
+ *                                  my_example_impl_get_type (),
+ *                                  "my-example",
+ *                                  10);
+ *  ]|
  *
- * It is up to the code that registered the extension point how
- * it uses the implementations that have been associated with it.
- * Depending on the use case, it may use all implementations, or
- * only the one with the highest priority, or pick a specific
- * one by name.
+ *  It is up to the code that registered the extension point how
+ *  it uses the implementations that have been associated with it.
+ *  Depending on the use case, it may use all implementations, or
+ *  only the one with the highest priority, or pick a specific
+ *  one by name.
  *
- * To avoid opening all modules just to find out what extension
- * points they implement, GIO makes use of a caching mechanism,
- * see <link linkend="gio-querymodules">gio-querymodules</link>.
- * You are expected to run this command after installing a
- * GIO module.
+ *  To avoid opening all modules just to find out what extension
+ *  points they implement, GIO makes use of a caching mechanism,
+ *  see <link linkend="gio-querymodules">gio-querymodules</link>.
+ *  You are expected to run this command after installing a
+ *  GIO module.
  *
- * The <envar>GIO_EXTRA_MODULES</envar> environment variable can be
- * used to specify additional directories to automatically load modules
- * from. This environment variable has the same syntax as the
- * <envar>PATH</envar>. If two modules have the same base name in different
- * directories, then the latter one will be ignored. If additional
- * directories are specified GIO will load modules from the built-in
- * directory last.
+ *  The <envar>GIO_EXTRA_MODULES</envar> environment variable can be
+ *  used to specify additional directories to automatically load modules
+ *  from. This environment variable has the same syntax as the
+ *  <envar>PATH</envar>. If two modules have the same base name in different
+ *  directories, then the latter one will be ignored. If additional
+ *  directories are specified GIO will load modules from the built-in
+ *  directory last.
  */
 
 
@@ -12478,9 +12460,9 @@
  * g_free (uri);
  *
  * if (g_file_has_uri_scheme (file, "cdda"))
- * {
- * // do something special with uri
- * }
+ *   {
+ *     // do something special with uri
+ *   }
  * g_object_unref (file);
  * </programlisting>
  *
@@ -12589,7 +12571,7 @@
  * <example id="gapplication-example-open"><title>Opening files with a GApplication</title>
  * <programlisting>
  * <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../gio/tests/gapplication-example-open.c">
- * <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
+ *   <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
  * </xi:include>
  * </programlisting>
  * </example>
@@ -12597,7 +12579,7 @@
  * <example id="gapplication-example-actions"><title>A GApplication with actions</title>
  * <programlisting>
  * <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../gio/tests/gapplication-example-actions.c">
- * <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
+ *   <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
  * </xi:include>
  * </programlisting>
  * </example>
@@ -12605,7 +12587,7 @@
  * <example id="gapplication-example-menu"><title>A GApplication with menus</title>
  * <programlisting>
  * <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../gio/tests/gapplication-example-menu.c">
- * <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
+ *   <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
  * </xi:include>
  * </programlisting>
  * </example>
@@ -12658,7 +12640,7 @@
  * </para>
  * <programlisting>
  * <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../gio/tests/gapplication-example-cmdline.c">
- * <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
+ *   <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
  * </xi:include>
  * </programlisting>
  * </example>
@@ -12672,7 +12654,7 @@
  * </para>
  * <programlisting>
  * <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../gio/tests/gapplication-example-cmdline2.c">
- * <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
+ *   <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
  * </xi:include>
  * </programlisting>
  * </example>
@@ -12695,7 +12677,7 @@
  * </para>
  * <programlisting>
  * <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../gio/tests/gapplication-example-cmdline3.c">
- * <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
+ *   <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
  * </xi:include>
  * </programlisting>
  * </example>
@@ -12725,93 +12707,93 @@
  *
  * |[
  * enum {
- * NOT_INITIALIZED,
- * INITIALIZING,
- * INITIALIZED
+ *    NOT_INITIALIZED,
+ *    INITIALIZING,
+ *    INITIALIZED
  * };
  *
  * static void
  * _foo_ready_cb (Foo *self)
  * {
- * GList *l;
+ *   GList *l;
  *
- * self->priv->state = INITIALIZED;
+ *   self->priv->state = INITIALIZED;
  *
- * for (l = self->priv->init_results; l != NULL; l = l->next)
- * {
- * GSimpleAsyncResult *simple = l->data;
+ *   for (l = self->priv->init_results; l != NULL; l = l->next)
+ *     {
+ *       GSimpleAsyncResult *simple = l->data;
  *
- * if (!self->priv->success)
- * g_simple_async_result_set_error (simple, ...);
+ *       if (!self->priv->success)
+ *         g_simple_async_result_set_error (simple, ...);
  *
- * g_simple_async_result_complete (simple);
- * g_object_unref (simple);
- * }
+ *       g_simple_async_result_complete (simple);
+ *       g_object_unref (simple);
+ *     }
  *
- * g_list_free (self->priv->init_results);
- * self->priv->init_results = NULL;
+ *   g_list_free (self->priv->init_results);
+ *   self->priv->init_results = NULL;
  * }
  *
  * static void
  * foo_init_async (GAsyncInitable       *initable,
- * int                   io_priority,
- * GCancellable         *cancellable,
- * GAsyncReadyCallback   callback,
- * gpointer              user_data)
+ *                 int                   io_priority,
+ *                 GCancellable         *cancellable,
+ *                 GAsyncReadyCallback   callback,
+ *                 gpointer              user_data)
  * {
- * Foo *self = FOO (initable);
- * GSimpleAsyncResult *simple;
+ *   Foo *self = FOO (initable);
+ *   GSimpleAsyncResult *simple;
  *
- * simple = g_simple_async_result_new (G_OBJECT (initable)
- * callback,
- * user_data,
- * foo_init_async);
+ *   simple = g_simple_async_result_new (G_OBJECT (initable)
+ *                                       callback,
+ *                                       user_data,
+ *                                       foo_init_async);
  *
- * switch (self->priv->state)
- * {
- * case NOT_INITIALIZED:
- * _foo_get_ready (self);
- * self->priv->init_results = g_list_append (self->priv->init_results,
- * simple);
- * self->priv->state = INITIALIZING;
- * break;
- * case INITIALIZING:
- * self->priv->init_results = g_list_append (self->priv->init_results,
- * simple);
- * break;
- * case INITIALIZED:
- * if (!self->priv->success)
- * g_simple_async_result_set_error (simple, ...);
+ *   switch (self->priv->state)
+ *     {
+ *       case NOT_INITIALIZED:
+ *         _foo_get_ready (self);
+ *         self->priv->init_results = g_list_append (self->priv->init_results,
+ *                                                   simple);
+ *         self->priv->state = INITIALIZING;
+ *         break;
+ *       case INITIALIZING:
+ *         self->priv->init_results = g_list_append (self->priv->init_results,
+ *                                                   simple);
+ *         break;
+ *       case INITIALIZED:
+ *         if (!self->priv->success)
+ *           g_simple_async_result_set_error (simple, ...);
  *
- * g_simple_async_result_complete_in_idle (simple);
- * g_object_unref (simple);
- * break;
- * }
+ *         g_simple_async_result_complete_in_idle (simple);
+ *         g_object_unref (simple);
+ *         break;
+ *     }
  * }
  *
  * static gboolean
  * foo_init_finish (GAsyncInitable       *initable,
- * GAsyncResult         *result,
- * GError              **error)
+ *                  GAsyncResult         *result,
+ *                  GError              **error)
  * {
- * g_return_val_if_fail (g_simple_async_result_is_valid (result,
- * G_OBJECT (initable), foo_init_async), FALSE);
+ *   g_return_val_if_fail (g_simple_async_result_is_valid (result,
+ *       G_OBJECT (initable), foo_init_async), FALSE);
  *
- * if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result),
- * error))
- * return FALSE;
+ *   if (g_simple_async_result_propagate_error (G_SIMPLE_ASYNC_RESULT (result),
+ *           error))
+ *     return FALSE;
  *
- * return TRUE;
+ *   return TRUE;
  * }
  *
  * static void
  * foo_async_initable_iface_init (gpointer g_iface,
- * gpointer data)
+ *                                gpointer data)
  * {
- * GAsyncInitableIface *iface = g_iface;
+ *   GAsyncInitableIface *iface = g_iface;
  *
- * iface->init_async = foo_init_async;
- * iface->init_finish = foo_init_finish;
+ *   iface->init_async = foo_init_async;
+ *   iface->init_finish = foo_init_finish;
  * }
  * ]|
  */
@@ -12852,42 +12834,42 @@
  * Example of a typical asynchronous operation flow:
  * |[
  * void _theoretical_frobnitz_async (Theoretical         *t,
- * GCancellable        *c,
- * GAsyncReadyCallback *cb,
- * gpointer             u);
+ *                                   GCancellable        *c,
+ *                                   GAsyncReadyCallback *cb,
+ *                                   gpointer             u);
  *
  * gboolean _theoretical_frobnitz_finish (Theoretical   *t,
- * GAsyncResult  *res,
- * GError       **e);
+ *                                        GAsyncResult  *res,
+ *                                        GError       **e);
  *
  * static void
  * frobnitz_result_func (GObject      *source_object,
- * GAsyncResult *res,
- * gpointer      user_data)
+ * 		 GAsyncResult *res,
+ * 		 gpointer      user_data)
  * {
- * gboolean success = FALSE;
+ *   gboolean success = FALSE;
  *
- * success = _theoretical_frobnitz_finish (source_object, res, NULL);
+ *   success = _theoretical_frobnitz_finish (source_object, res, NULL);
  *
- * if (success)
- * g_printf ("Hurray!\n");
- * else
- * g_printf ("Uh oh!\n");
+ *   if (success)
+ *     g_printf ("Hurray!\n");
+ *   else
+ *     g_printf ("Uh oh!\n");
  *
- * /<!-- -->* ... *<!-- -->/
+ *   /<!-- -->* ... *<!-- -->/
  *
  * }
  *
  * int main (int argc, void *argv[])
  * {
- * /<!-- -->* ... *<!-- -->/
+ *    /<!-- -->* ... *<!-- -->/
  *
- * _theoretical_frobnitz_async (theoretical_data,
- * NULL,
- * frobnitz_result_func,
- * NULL);
+ *    _theoretical_frobnitz_async (theoretical_data,
+ *                                 NULL,
+ *                                 frobnitz_result_func,
+ *                                 NULL);
  *
- * /<!-- -->* ... *<!-- -->/
+ *    /<!-- -->* ... *<!-- -->/
  * }
  * ]|
  *
@@ -13112,23 +13094,23 @@
  * <example id="auth-observer"><title>Controlling Authentication</title><programlisting>
  * static gboolean
  * on_authorize_authenticated_peer (GDBusAuthObserver *observer,
- * GIOStream         *stream,
- * GCredentials      *credentials,
- * gpointer           user_data)
+ *                                  GIOStream         *stream,
+ *                                  GCredentials      *credentials,
+ *                                  gpointer           user_data)
  * {
- * gboolean authorized;
+ *   gboolean authorized;
  *
- * authorized = FALSE;
- * if (credentials != NULL)
- * {
- * GCredentials *own_credentials;
- * own_credentials = g_credentials_new ();
- * if (g_credentials_is_same_user (credentials, own_credentials, NULL))
- * authorized = TRUE;
- * g_object_unref (own_credentials);
- * }
+ *   authorized = FALSE;
+ *   if (credentials != NULL)
+ *     {
+ *       GCredentials *own_credentials;
+ *       own_credentials = g_credentials_new ();
+ *       if (g_credentials_is_same_user (credentials, own_credentials, NULL))
+ *         authorized = TRUE;
+ *       g_object_unref (own_credentials);
+ *     }
  *
- * return authorized;
+ *   return authorized;
  * }
  * </programlisting></example>
  */
@@ -13152,8 +13134,8 @@
  * used by two threads at the same time, #GDBusConnection's methods may be
  * called from any thread<footnote>
  * <para>
- * This is so that g_bus_get() and g_bus_get_sync() can safely return the
- * same #GDBusConnection when called from any thread.
+ *   This is so that g_bus_get() and g_bus_get_sync() can safely return the
+ *   same #GDBusConnection when called from any thread.
  * </para>
  * </footnote>.
  *
@@ -13215,30 +13197,30 @@
  *
  * typedef enum
  * {
- * FOO_BAR_ERROR_FAILED,
- * FOO_BAR_ERROR_ANOTHER_ERROR,
- * FOO_BAR_ERROR_SOME_THIRD_ERROR,
+ *   FOO_BAR_ERROR_FAILED,
+ *   FOO_BAR_ERROR_ANOTHER_ERROR,
+ *   FOO_BAR_ERROR_SOME_THIRD_ERROR,
  * } FooBarError;
  *
  * /<!-- -->* foo-bar-error.c: *<!-- -->/
  *
  * static const GDBusErrorEntry foo_bar_error_entries[] =
  * {
- * {FOO_BAR_ERROR_FAILED,           "org.project.Foo.Bar.Error.Failed"},
- * {FOO_BAR_ERROR_ANOTHER_ERROR,    "org.project.Foo.Bar.Error.AnotherError"},
- * {FOO_BAR_ERROR_SOME_THIRD_ERROR, "org.project.Foo.Bar.Error.SomeThirdError"},
+ *   {FOO_BAR_ERROR_FAILED,           "org.project.Foo.Bar.Error.Failed"},
+ *   {FOO_BAR_ERROR_ANOTHER_ERROR,    "org.project.Foo.Bar.Error.AnotherError"},
+ *   {FOO_BAR_ERROR_SOME_THIRD_ERROR, "org.project.Foo.Bar.Error.SomeThirdError"},
  * };
  *
  * GQuark
  * foo_bar_error_quark (void)
  * {
- * static volatile gsize quark_volatile = 0;
- * g_dbus_error_register_error_domain ("foo-bar-error-quark",
- * &quark_volatile,
- * foo_bar_error_entries,
- * G_N_ELEMENTS (foo_bar_error_entries));
- * G_STATIC_ASSERT (G_N_ELEMENTS (foo_bar_error_entries) - 1 == FOO_BAR_ERROR_SOME_THIRD_ERROR);
- * return (GQuark) quark_volatile;
+ *   static volatile gsize quark_volatile = 0;
+ *   g_dbus_error_register_error_domain ("foo-bar-error-quark",
+ *                                       &quark_volatile,
+ *                                       foo_bar_error_entries,
+ *                                       G_N_ELEMENTS (foo_bar_error_entries));
+ *   G_STATIC_ASSERT (G_N_ELEMENTS (foo_bar_error_entries) - 1 == FOO_BAR_ERROR_SOME_THIRD_ERROR);
+ *   return (GQuark) quark_volatile;
  * }
  * </programlisting></example>
  * With this setup, a D-Bus peer can transparently pass e.g. %FOO_BAR_ERROR_ANOTHER_ERROR and
@@ -14412,8 +14394,8 @@
  * <xref linkend="menu-example"/>.
  *
  * <figure id="menu-example">
- * <title>An example menu</title>
- * <graphic fileref="menu-example.png" format="PNG"></graphic>
+ *   <title>An example menu</title>
+ *   <graphic fileref="menu-example.png" format="PNG"></graphic>
  * </figure>
  *
  * There are 8 "menus" visible in the screenshot: one menubar, two
@@ -14435,8 +14417,8 @@
  * items contain references to other menus.
  *
  * <figure id="menu-model">
- * <title>A menu model</title>
- * <graphic fileref="menu-model.png" format="PNG"></graphic>
+ *   <title>A menu model</title>
+ *   <graphic fileref="menu-model.png" format="PNG"></graphic>
  * </figure>
  *
  * Notice that the separators visible in <xref linkend="menu-example"/>
@@ -14816,11 +14798,11 @@
  * <programlisting><![CDATA[
  * <?xml version="1.0" encoding="UTF-8"?>
  * <gresources>
- * <gresource prefix="/org/gtk/Example">
- * <file>data/splashscreen.png</file>
- * <file compressed="true">dialog.ui</file>
- * <file preprocess="xml-stripblanks">menumarkup.xml</file>
- * </gresource>
+ *   <gresource prefix="/org/gtk/Example">
+ *     <file>data/splashscreen.png</file>
+ *     <file compressed="true">dialog.ui</file>
+ *     <file preprocess="xml-stripblanks">menumarkup.xml</file>
+ *   </gresource>
  * </gresources>
  * ]]></programlisting></example>
  *
@@ -14948,21 +14930,21 @@
  * <example id="schema-default-values"><title>Default values</title>
  * <programlisting><![CDATA[
  * <schemalist>
- * <schema id="org.gtk.Test" path="/tests/" gettext-domain="test">
+ *   <schema id="org.gtk.Test" path="/tests/" gettext-domain="test">
  *
- * <key name="greeting" type="s">
- * <default l10n="messages">"Hello, earthlings"</default>
- * <summary>A greeting</summary>
- * <description>
- * Greeting of the invading martians
- * </description>
- * </key>
+ *     <key name="greeting" type="s">
+ *       <default l10n="messages">"Hello, earthlings"</default>
+ *       <summary>A greeting</summary>
+ *       <description>
+ *         Greeting of the invading martians
+ *       </description>
+ *     </key>
  *
- * <key name="box" type="(ii)">
- * <default>(20,30)</default>
- * </key>
+ *     <key name="box" type="(ii)">
+ *       <default>(20,30)</default>
+ *     </key>
  *
- * </schema>
+ *   </schema>
  * </schemalist>
  * ]]></programlisting></example>
  *
@@ -14970,90 +14952,90 @@
  * <programlisting><![CDATA[
  * <schemalist>
  *
- * <enum id="org.gtk.Test.myenum">
- * <value nick="first" value="1"/>
- * <value nick="second" value="2"/>
- * </enum>
+ *   <enum id="org.gtk.Test.myenum">
+ *     <value nick="first" value="1"/>
+ *     <value nick="second" value="2"/>
+ *   </enum>
  *
- * <flags id="org.gtk.Test.myflags">
- * <value nick="flag1" value="1"/>
- * <value nick="flag2" value="2"/>
- * <value nick="flag3" value="4"/>
- * </flags>
+ *   <flags id="org.gtk.Test.myflags">
+ *     <value nick="flag1" value="1"/>
+ *     <value nick="flag2" value="2"/>
+ *     <value nick="flag3" value="4"/>
+ *   </flags>
  *
- * <schema id="org.gtk.Test">
+ *   <schema id="org.gtk.Test">
  *
- * <key name="key-with-range" type="i">
- * <range min="1" max="100"/>
- * <default>10</default>
- * </key>
+ *     <key name="key-with-range" type="i">
+ *       <range min="1" max="100"/>
+ *       <default>10</default>
+ *     </key>
  *
- * <key name="key-with-choices" type="s">
- * <choices>
- * <choice value='Elisabeth'/>
- * <choice value='Annabeth'/>
- * <choice value='Joe'/>
- * </choices>
- * <aliases>
- * <alias value='Anna' target='Annabeth'/>
- * <alias value='Beth' target='Elisabeth'/>
- * </aliases>
- * <default>'Joe'</default>
- * </key>
+ *     <key name="key-with-choices" type="s">
+ *       <choices>
+ *         <choice value='Elisabeth'/>
+ *         <choice value='Annabeth'/>
+ *         <choice value='Joe'/>
+ *       </choices>
+ *       <aliases>
+ *         <alias value='Anna' target='Annabeth'/>
+ *         <alias value='Beth' target='Elisabeth'/>
+ *       </aliases>
+ *       <default>'Joe'</default>
+ *     </key>
  *
- * <key name='enumerated-key' enum='org.gtk.Test.myenum'>
- * <default>'first'</default>
- * </key>
+ *     <key name='enumerated-key' enum='org.gtk.Test.myenum'>
+ *       <default>'first'</default>
+ *     </key>
  *
- * <key name='flags-key' flags='org.gtk.Test.myflags'>
- * <default>["flag1",flag2"]</default>
- * </key>
- * </schema>
+ *     <key name='flags-key' flags='org.gtk.Test.myflags'>
+ *       <default>["flag1",flag2"]</default>
+ *     </key>
+ *   </schema>
  * </schemalist>
  * ]]></programlisting></example>
  *
  * <refsect2>
- * <title>Vendor overrides</title>
- * <para>
- * Default values are defined in the schemas that get installed by
- * an application. Sometimes, it is necessary for a vendor or distributor
- * to adjust these defaults. Since patching the XML source for the schema
- * is inconvenient and error-prone,
- * <link linkend="glib-compile-schemas">glib-compile-schemas</link> reads
- * so-called 'vendor override' files. These are keyfiles in the same
- * directory as the XML schema sources which can override default values.
- * The schema id serves as the group name in the key file, and the values
- * are expected in serialized GVariant form, as in the following example:
- * <informalexample><programlisting>
- * [org.gtk.Example]
- * key1='string'
- * key2=1.5
- * </programlisting></informalexample>
- * </para>
- * <para>
- * glib-compile-schemas expects schema files to have the extension
- * <filename>.gschema.override</filename>
- * </para>
+ *   <title>Vendor overrides</title>
+ *   <para>
+ *     Default values are defined in the schemas that get installed by
+ *     an application. Sometimes, it is necessary for a vendor or distributor
+ *     to adjust these defaults. Since patching the XML source for the schema
+ *     is inconvenient and error-prone,
+ *     <link linkend="glib-compile-schemas">glib-compile-schemas</link> reads
+ *     so-called 'vendor override' files. These are keyfiles in the same
+ *     directory as the XML schema sources which can override default values.
+ *     The schema id serves as the group name in the key file, and the values
+ *     are expected in serialized GVariant form, as in the following example:
+ *     <informalexample><programlisting>
+ *     [org.gtk.Example]
+ *     key1='string'
+ *     key2=1.5
+ *     </programlisting></informalexample>
+ *   </para>
+ *   <para>
+ *     glib-compile-schemas expects schema files to have the extension
+ *     <filename>.gschema.override</filename>
+ *   </para>
  * </refsect2>
  *
  * <refsect2>
- * <title>Binding</title>
- * <para>
- * A very convenient feature of GSettings lets you bind #GObject properties
- * directly to settings, using g_settings_bind(). Once a GObject property
- * has been bound to a setting, changes on either side are automatically
- * propagated to the other side. GSettings handles details like
- * mapping between GObject and GVariant types, and preventing infinite
- * cycles.
- * </para>
- * <para>
- * This makes it very easy to hook up a preferences dialog to the
- * underlying settings. To make this even more convenient, GSettings
- * looks for a boolean property with the name "sensitivity" and
- * automatically binds it to the writability of the bound setting.
- * If this 'magic' gets in the way, it can be suppressed with the
- * #G_SETTINGS_BIND_NO_SENSITIVITY flag.
- * </para>
+ *   <title>Binding</title>
+ *   <para>
+ *     A very convenient feature of GSettings lets you bind #GObject properties
+ *     directly to settings, using g_settings_bind(). Once a GObject property
+ *     has been bound to a setting, changes on either side are automatically
+ *     propagated to the other side. GSettings handles details like
+ *     mapping between GObject and GVariant types, and preventing infinite
+ *     cycles.
+ *   </para>
+ *   <para>
+ *     This makes it very easy to hook up a preferences dialog to the
+ *     underlying settings. To make this even more convenient, GSettings
+ *     looks for a boolean property with the name "sensitivity" and
+ *     automatically binds it to the writability of the bound setting.
+ *     If this 'magic' gets in the way, it can be suppressed with the
+ *     #G_SETTINGS_BIND_NO_SENSITIVITY flag.
+ *   </para>
  * </refsect2>
  */
 
@@ -15119,47 +15101,47 @@
  * |[
  * typedef struct
  * {
- * ...
- * GSettingsSchemaSource *schema_source;
- * ...
+ *    ...
+ *    GSettingsSchemaSource *schema_source;
+ *    ...
  * } Plugin;
  *
  * Plugin *
  * initialise_plugin (const gchar *dir)
  * {
- * Plugin *plugin;
+ *   Plugin *plugin;
  *
- * ...
+ *   ...
  *
- * plugin->schema_source =
- * g_settings_new_schema_source_from_directory (dir,
- * g_settings_schema_source_get_default (), FALSE, NULL);
+ *   plugin->schema_source =
+ *     g_settings_new_schema_source_from_directory (dir,
+ *       g_settings_schema_source_get_default (), FALSE, NULL);
  *
- * ...
+ *   ...
  *
- * return plugin;
+ *   return plugin;
  * }
  *
  * ...
  *
  * GSettings *
  * plugin_get_settings (Plugin      *plugin,
- * const gchar *schema_id)
+ *                      const gchar *schema_id)
  * {
- * GSettingsSchema *schema;
+ *   GSettingsSchema *schema;
  *
- * if (schema_id == NULL)
- * schema_id = plugin->identifier;
+ *   if (schema_id == NULL)
+ *     schema_id = plugin->identifier;
  *
- * schema = g_settings_schema_source_lookup (plugin->schema_source,
- * schema_id, FALSE);
+ *   schema = g_settings_schema_source_lookup (plugin->schema_source,
+ *                                             schema_id, FALSE);
  *
- * if (schema == NULL)
- * {
- * ... disable the plugin or abort, etc ...
- * }
+ *   if (schema == NULL)
+ *     {
+ *       ... disable the plugin or abort, etc ...
+ *     }
  *
- * return g_settings_new_full (schema, NULL, NULL);
+ *   return g_settings_new_full (schema, NULL, NULL);
  * }
  * ]|
  *
@@ -15175,12 +15157,12 @@
  *
  * |[
  * {
- * GSettings *settings;
- * gint some_value;
+ *   GSettings *settings;
+ *   gint some_value;
  *
- * settings = plugin_get_settings (self, NULL);
- * some_value = g_settings_get_int (settings, "some-value");
- * ...
+ *   settings = plugin_get_settings (self, NULL);
+ *   some_value = g_settings_get_int (settings, "some-value");
+ *   ...
  * }
  * ]|
  *
@@ -15295,98 +15277,98 @@
  * |[
  * static void
  * baked_cb (Cake    *cake,
- * gpointer user_data)
+ *           gpointer user_data)
  * {
- * /&ast; In this example, this callback is not given a reference to the cake, so
- * &ast; the GSimpleAsyncResult has to take a reference to it.
- * &ast;/
- * GSimpleAsyncResult *result = user_data;
+ *   /&ast; In this example, this callback is not given a reference to the cake, so
+ *    &ast; the GSimpleAsyncResult has to take a reference to it.
+ *    &ast;/
+ *   GSimpleAsyncResult *result = user_data;
  *
- * if (cake == NULL)
- * g_simple_async_result_set_error (result,
- * BAKER_ERRORS,
- * BAKER_ERROR_NO_FLOUR,
- * "Go to the supermarket");
- * else
- * g_simple_async_result_set_op_res_gpointer (result,
- * g_object_ref (cake),
- * g_object_unref);
+ *   if (cake == NULL)
+ *     g_simple_async_result_set_error (result,
+ *                                      BAKER_ERRORS,
+ *                                      BAKER_ERROR_NO_FLOUR,
+ *                                      "Go to the supermarket");
+ *   else
+ *     g_simple_async_result_set_op_res_gpointer (result,
+ *                                                g_object_ref (cake),
+ *                                                g_object_unref);
  *
  *
- * /&ast; In this example, we assume that baked_cb is called as a callback from
- * &ast; the mainloop, so it's safe to complete the operation synchronously here.
- * &ast; If, however, _baker_prepare_cake () might call its callback without
- * &ast; first returning to the mainloop — inadvisable, but some APIs do so —
- * &ast; we would need to use g_simple_async_result_complete_in_idle().
- * &ast;/
- * g_simple_async_result_complete (result);
- * g_object_unref (result);
+ *   /&ast; In this example, we assume that baked_cb is called as a callback from
+ *    &ast; the mainloop, so it's safe to complete the operation synchronously here.
+ *    &ast; If, however, _baker_prepare_cake () might call its callback without
+ *    &ast; first returning to the mainloop — inadvisable, but some APIs do so —
+ *    &ast; we would need to use g_simple_async_result_complete_in_idle().
+ *    &ast;/
+ *   g_simple_async_result_complete (result);
+ *   g_object_unref (result);
  * }
  *
  * void
  * baker_bake_cake_async (Baker              *self,
- * guint               radius,
- * GAsyncReadyCallback callback,
- * gpointer            user_data)
+ *                        guint               radius,
+ *                        GAsyncReadyCallback callback,
+ *                        gpointer            user_data)
  * {
- * GSimpleAsyncResult *simple;
- * Cake               *cake;
+ *   GSimpleAsyncResult *simple;
+ *   Cake               *cake;
  *
- * if (radius < 3)
- * {
- * g_simple_async_report_error_in_idle (G_OBJECT (self),
- * callback,
- * user_data,
- * BAKER_ERRORS,
- * BAKER_ERROR_TOO_SMALL,
- * "%ucm radius cakes are silly",
- * radius);
- * return;
- * }
+ *   if (radius < 3)
+ *     {
+ *       g_simple_async_report_error_in_idle (G_OBJECT (self),
+ *                                            callback,
+ *                                            user_data,
+ *                                            BAKER_ERRORS,
+ *                                            BAKER_ERROR_TOO_SMALL,
+ *                                            "%ucm radius cakes are silly",
+ *                                            radius);
+ *       return;
+ *     }
  *
- * simple = g_simple_async_result_new (G_OBJECT (self),
- * callback,
- * user_data,
- * baker_bake_cake_async);
- * cake = _baker_get_cached_cake (self, radius);
+ *   simple = g_simple_async_result_new (G_OBJECT (self),
+ *                                       callback,
+ *                                       user_data,
+ *                                       baker_bake_cake_async);
+ *   cake = _baker_get_cached_cake (self, radius);
  *
- * if (cake != NULL)
- * {
- * g_simple_async_result_set_op_res_gpointer (simple,
- * g_object_ref (cake),
- * g_object_unref);
- * g_simple_async_result_complete_in_idle (simple);
- * g_object_unref (simple);
- * /&ast; Drop the reference returned by _baker_get_cached_cake(); the
- * &ast; GSimpleAsyncResult has taken its own reference.
- * &ast;/
- * g_object_unref (cake);
- * return;
- * }
+ *   if (cake != NULL)
+ *     {
+ *       g_simple_async_result_set_op_res_gpointer (simple,
+ *                                                  g_object_ref (cake),
+ *                                                  g_object_unref);
+ *       g_simple_async_result_complete_in_idle (simple);
+ *       g_object_unref (simple);
+ *       /&ast; Drop the reference returned by _baker_get_cached_cake(); the
+ *        &ast; GSimpleAsyncResult has taken its own reference.
+ *        &ast;/
+ *       g_object_unref (cake);
+ *       return;
+ *     }
  *
- * _baker_prepare_cake (self, radius, baked_cb, simple);
+ *   _baker_prepare_cake (self, radius, baked_cb, simple);
  * }
  *
  * Cake *
  * baker_bake_cake_finish (Baker        *self,
- * GAsyncResult *result,
- * GError      **error)
+ *                         GAsyncResult *result,
+ *                         GError      **error)
  * {
- * GSimpleAsyncResult *simple;
- * Cake               *cake;
+ *   GSimpleAsyncResult *simple;
+ *   Cake               *cake;
  *
- * g_return_val_if_fail (g_simple_async_result_is_valid (result,
- * G_OBJECT (self),
- * baker_bake_cake_async),
- * NULL);
+ *   g_return_val_if_fail (g_simple_async_result_is_valid (result,
+ *                                                         G_OBJECT (self),
+ *                                                         baker_bake_cake_async),
+ *                         NULL);
  *
- * simple = (GSimpleAsyncResult *) result;
+ *   simple = (GSimpleAsyncResult *) result;
  *
- * if (g_simple_async_result_propagate_error (simple, error))
- * return NULL;
+ *   if (g_simple_async_result_propagate_error (simple, error))
+ *     return NULL;
  *
- * cake = CAKE (g_simple_async_result_get_op_res_gpointer (simple));
- * return g_object_ref (cake);
+ *   cake = CAKE (g_simple_async_result_get_op_res_gpointer (simple));
+ *   return g_object_ref (cake);
  * }
  * ]|
  */
@@ -15510,56 +15492,56 @@
  * |[
  * MyConnectionType *
  * connect_to_host (const char    *hostname,
- * guint16        port,
- * GCancellable  *cancellable,
- * GError       **error)
+ *                  guint16        port,
+ *                  GCancellable  *cancellable,
+ *                  GError       **error)
  * {
- * MyConnection *conn = NULL;
- * GSocketConnectable *addr;
- * GSocketAddressEnumerator *enumerator;
- * GSocketAddress *sockaddr;
- * GError *conn_error = NULL;
+ *   MyConnection *conn = NULL;
+ *   GSocketConnectable *addr;
+ *   GSocketAddressEnumerator *enumerator;
+ *   GSocketAddress *sockaddr;
+ *   GError *conn_error = NULL;
  *
- * addr = g_network_address_new ("www.gnome.org", 80);
- * enumerator = g_socket_connectable_enumerate (addr);
- * g_object_unref (addr);
+ *   addr = g_network_address_new ("www.gnome.org", 80);
+ *   enumerator = g_socket_connectable_enumerate (addr);
+ *   g_object_unref (addr);
  *
- * /<!-- -->* Try each sockaddr until we succeed. Record the first
- * * connection error, but not any further ones (since they'll probably
- * * be basically the same as the first).
- * *<!-- -->/
- * while (!conn && (sockaddr = g_socket_address_enumerator_next (enumerator, cancellable, error))
- * {
- * conn = connect_to_sockaddr (sockaddr, conn_error ? NULL : &conn_error);
- * g_object_unref (sockaddr);
- * }
- * g_object_unref (enumerator);
+ *   /<!-- -->* Try each sockaddr until we succeed. Record the first
+ *    * connection error, but not any further ones (since they'll probably
+ *    * be basically the same as the first).
+ *    *<!-- -->/
+ *   while (!conn && (sockaddr = g_socket_address_enumerator_next (enumerator, cancellable, error))
+ *     {
+ *       conn = connect_to_sockaddr (sockaddr, conn_error ? NULL : &conn_error);
+ *       g_object_unref (sockaddr);
+ *     }
+ *   g_object_unref (enumerator);
  *
- * if (conn)
- * {
- * if (conn_error)
- * {
- * /<!-- -->* We couldn't connect to the first address, but we succeeded
- * * in connecting to a later address.
- * *<!-- -->/
- * g_error_free (conn_error);
- * }
- * return conn;
- * }
- * else if (error)
- * {
- * /<!-- -->* Either the initial lookup failed, or else the caller
- * * cancelled us.
- * *<!-- -->/
- * if (conn_error)
- * g_error_free (conn_error);
- * return NULL;
- * }
- * else
- * {
- * g_error_propagate (error, conn_error);
- * return NULL;
- * }
+ *   if (conn)
+ *     {
+ *       if (conn_error)
+ *         {
+ *           /<!-- -->* We couldn't connect to the first address, but we succeeded
+ *            * in connecting to a later address.
+ *            *<!-- -->/
+ *           g_error_free (conn_error);
+ *         }
+ *       return conn;
+ *     }
+ *   else if (error)
+ *     {
+ *       /<!-- -->* Either the initial lookup failed, or else the caller
+ *        * cancelled us.
+ *        *<!-- -->/
+ *       if (conn_error)
+ *         g_error_free (conn_error);
+ *       return NULL;
+ *     }
+ *   else
+ *     {
+ *       g_error_propagate (error, conn_error);
+ *       return NULL;
+ *     }
  * }
  * ]|
  */
@@ -16208,99 +16190,6 @@
 
 
 /**
- * The string info map is an efficient data structure designed to be:
- *
- * 1) Implement <choices> with a list of valid strings
- *
- * 2) Implement <alias> by mapping one string to another
- *
- * 3) Implement enumerated types by mapping strings to integer values
- * (and back).
- *
- * The map is made out of an array of uint32s.  Each entry in the array
- * is an integer value, followed by a specially formatted string value:
- *
- * The string starts with the byte 0xff or 0xfe, followed by the
- * content of the string, followed by a nul byte, followed by
- * additional nul bytes for padding, followed by a 0xff byte.
- *
- * Padding is added so that the entire formatted string takes up a
- * multiple of 4 bytes, and not less than 8 bytes.  The requirement
- * for a string to take up 8 bytes is so that the scanner doesn't lose
- * synch and mistake a string for an integer value.
- *
- * The first byte of the formatted string depends on if the integer is
- * an enum value (0xff) or an alias (0xfe).  If it is an alias then the
- * number refers to the word offset within the info map at which the
- * integer corresponding to the "target" value is stored.
- *
- * For example, consider the case of the string info map representing an
- * enumerated type of 'foo' (value 1) and 'bar' (value 2) and 'baz'
- * (alias for 'bar').  Note that string info maps are always little
- * endian.
- *
- * x01 x00 x00 x00   xff 'f' 'o' 'o'   x00 x00 x00 xff   x02 x00 x00 x00
- * xff 'b' 'a' 'r'   x00 x00 x00 xff   x03 x00 x00 x00   xfe 'b' 'a' 'z'
- * x00 x00 x00 xff
- *
- *
- * The operations that someone may want to perform with the map:
- *
- * - lookup if a string is valid (and not an alias)
- * - lookup the integer value for a enum 'nick'
- * - lookup the integer value for the target of an alias
- * - lookup an alias and convert it to its target string
- * - lookup the enum nick for a given value
- *
- * In order to lookup if a string is valid, it is padded on either side
- * (as described) and scanned for in the array.  For example, you might
- * look for "foo":
- *
- * xff 'f' 'o' 'o'   x00 x00 x00 xff
- *
- * In order to lookup the integer value for a nick, the string is padded
- * on either side and scanned for in the array, as above.  Instead of
- * merely succeeding, we look at the integer value to the left of the
- * match.  This is the enum value.
- *
- * In order to lookup an alias and convert it to its target enum value,
- * the string is padded on either side (as described, with 0xfe) and
- * scanned for.  For example, you might look for "baz":
- *
- * xfe 'b' 'a' 'z'  x00 x00 x00 xff
- *
- * The integer immediately preceding the match then contains the offset
- * of the integer value of the target.  In our example, that's '3'.
- * This index is dereferenced to find the enum value of '2'.
- *
- * To convert the alias to its target string, 5 bytes just need to be
- * added past the start of the integer value to find the start of the
- * string.
- *
- * To lookup the enum nick for a given value, the value is searched for
- * in the array.  To ensure that the value isn't matching the inside of a
- * string, we must check that it is either the first item in the array or
- * immediately preceded by the byte 0xff.  It must also be immediately
- * followed by the byte 0xff.
- *
- * Because strings always take up a minimum of 2 words, because 0xff or
- * 0xfe never appear inside of a utf-8 string and because no two integer
- * values ever appear in sequence, the only way we can have the
- * sequence:
- *
- * xff __ __ __ __ xff (or 0xfe)
- *
- * is in the event of an integer nested between two strings.
- *
- * For implementation simplicity/efficiency, strings may not be more
- * than 65 characters in length (ie: 17 32bit words after padding).
- *
- * In the event that we are doing <choices> (ie: not an enum type) then
- * the value of each choice is set to zero and ignored.
- */
-
-
-/**
  * _g_io_module_get_default:
  * @extension_point: the name of an extension point
  * @envvar: (allow-none): the name of an environment variable to override the default implementation.
@@ -16322,10 +16211,7 @@
  * The result is cached after it is generated the first time, and
  * the function is thread-safe.
  *
- * @extension_point, or %NULL if there are no usable
- * implementations.
- *
- * Returns: (transfer none): an object implementing
+ * Returns: (transfer none): an object implementing @extension_point, or %NULL if there are no usable implementations.
  */
 
 
@@ -16703,9 +16589,7 @@
  * The caller is responsible for freeing the list with g_strfreev() when
  * it is no longer required.
  *
- * actions in the groupb
- *
- * Returns: (transfer full): a %NULL-terminated array of the names of the
+ * Returns: (transfer full): a %NULL-terminated array of the names of the actions in the groupb
  * Since: 2.28
  */
 
@@ -16786,33 +16670,33 @@
  * <programlisting>
  * static void
  * activate_quit (GSimpleAction *simple,
- * GVariant      *parameter,
- * gpointer       user_data)
+ *                GVariant      *parameter,
+ *                gpointer       user_data)
  * {
- * exit (0);
+ *   exit (0);
  * }
  *
  * static void
  * activate_print_string (GSimpleAction *simple,
- * GVariant      *parameter,
- * gpointer       user_data)
+ *                        GVariant      *parameter,
+ *                        gpointer       user_data)
  * {
- * g_print ("%s\n", g_variant_get_string (parameter, NULL));
+ *   g_print ("%s\n", g_variant_get_string (parameter, NULL));
  * }
  *
  * static GActionGroup *
  * create_action_group (void)
  * {
- * const GActionEntry entries[] = {
- * { "quit",         activate_quit              },
- * { "print-string", activate_print_string, "s" }
- * };
- * GSimpleActionGroup *group;
+ *   const GActionEntry entries[] = {
+ *     { "quit",         activate_quit              },
+ *     { "print-string", activate_print_string, "s" }
+ *   };
+ *   GSimpleActionGroup *group;
  *
- * group = g_simple_action_group_new ();
- * g_action_map_add_action_entries (G_ACTION_MAP (group), entries, G_N_ELEMENTS (entries), NULL);
+ *   group = g_simple_action_group_new ();
+ *   g_action_map_add_action_entries (G_ACTION_MAP (group), entries, G_N_ELEMENTS (entries), NULL);
  *
- * return G_ACTION_GROUP (group);
+ *   return G_ACTION_GROUP (group);
  * }
  * </programlisting>
  * </example>
@@ -16857,31 +16741,31 @@
  * function present on most UNIX variants.
  * Thus it provides the same advantages and pitfalls as alloca():
  * <variablelist>
- * <varlistentry><term></term><listitem><para>
- * + alloca() is very fast, as on most systems it's implemented by just adjusting
- * the stack pointer register.
- * </para></listitem></varlistentry>
- * <varlistentry><term></term><listitem><para>
- * + It doesn't cause any memory fragmentation, within its scope, separate alloca()
- * blocks just build up and are released together at function end.
- * </para></listitem></varlistentry>
- * <varlistentry><term></term><listitem><para>
- * - Allocation sizes have to fit into the current stack frame. For instance in a
- * threaded environment on Linux, the per-thread stack size is limited to 2 Megabytes,
- * so be sparse with alloca() uses.
- * </para></listitem></varlistentry>
- * <varlistentry><term></term><listitem><para>
- * - Allocation failure due to insufficient stack space is not indicated with a %NULL
- * return like e.g. with malloc(). Instead, most systems probably handle it the same
- * way as out of stack space situations from infinite function recursion, i.e.
- * with a segmentation fault.
- * </para></listitem></varlistentry>
- * <varlistentry><term></term><listitem><para>
- * - Special care has to be taken when mixing alloca() with GNU C variable sized arrays.
- * Stack space allocated with alloca() in the same scope as a variable sized array
- * will be freed together with the variable sized array upon exit of that scope, and
- * not upon exit of the enclosing function scope.
- * </para></listitem></varlistentry>
+ *   <varlistentry><term></term><listitem><para>
+ *     + alloca() is very fast, as on most systems it's implemented by just adjusting
+ *     the stack pointer register.
+ *   </para></listitem></varlistentry>
+ *   <varlistentry><term></term><listitem><para>
+ *     + It doesn't cause any memory fragmentation, within its scope, separate alloca()
+ *     blocks just build up and are released together at function end.
+ *   </para></listitem></varlistentry>
+ *   <varlistentry><term></term><listitem><para>
+ *     - Allocation sizes have to fit into the current stack frame. For instance in a
+ *       threaded environment on Linux, the per-thread stack size is limited to 2 Megabytes,
+ *       so be sparse with alloca() uses.
+ *   </para></listitem></varlistentry>
+ *   <varlistentry><term></term><listitem><para>
+ *     - Allocation failure due to insufficient stack space is not indicated with a %NULL
+ *       return like e.g. with malloc(). Instead, most systems probably handle it the same
+ *       way as out of stack space situations from infinite function recursion, i.e.
+ *       with a segmentation fault.
+ *   </para></listitem></varlistentry>
+ *   <varlistentry><term></term><listitem><para>
+ *     - Special care has to be taken when mixing alloca() with GNU C variable sized arrays.
+ *       Stack space allocated with alloca() in the same scope as a variable sized array
+ *       will be freed together with the variable sized array upon exit of that scope, and
+ *       not upon exit of the enclosing function scope.
+ *   </para></listitem></varlistentry>
  * </variablelist>
  *
  * Returns: space for @size bytes, allocated on the stack
@@ -16919,9 +16803,7 @@
  *
  * Checks if a supported content type can be removed from an application.
  *
- * content types from a given @appinfo, %FALSE if not.
- *
- * Returns: %TRUE if it is possible to remove supported
+ * Returns: %TRUE if it is possible to remove supported content types from a given @appinfo, %FALSE if not.
  */
 
 
@@ -17001,9 +16883,7 @@
  * g_app_info_get_recommended_for_type() and
  * g_app_info_get_fallback_for_type().
  *
- * for given @content_type or %NULL on error.
- *
- * Returns: (element-type GAppInfo) (transfer full): #GList of #GAppInfos
+ * Returns: (element-type GAppInfo) (transfer full): #GList of #GAppInfos for given @content_type or %NULL on error.
  */
 
 
@@ -17014,9 +16894,7 @@
  * Gets the commandline with which the application will be
  * started.
  *
- * or %NULL if this information is not available
- *
- * Returns: a string containing the @appinfo's commandline,
+ * Returns: a string containing the @appinfo's commandline, or %NULL if this information is not available
  * Since: 2.20
  */
 
@@ -17028,9 +16906,7 @@
  *
  * Gets the default #GAppInfo for a given content type.
  *
- * %NULL on error.
- *
- * Returns: (transfer full): #GAppInfo for given @content_type or
+ * Returns: (transfer full): #GAppInfo for given @content_type or %NULL on error.
  */
 
 
@@ -17053,9 +16929,7 @@
  *
  * Gets a human-readable description of an installed application.
  *
- * application @appinfo, or %NULL if none.
- *
- * Returns: a string containing a description of the
+ * Returns: a string containing a description of the application @appinfo, or %NULL if none.
  */
 
 
@@ -17066,9 +16940,7 @@
  * Gets the display name of the application. The display name is often more
  * descriptive to the user than the name itself.
  *
- * no display name is available.
- *
- * Returns: the display name of the application for @appinfo, or the name if
+ * Returns: the display name of the application for @appinfo, or the name if no display name is available.
  * Since: 2.24
  */
 
@@ -17079,9 +16951,7 @@
  *
  * Gets the executable's name for the installed application.
  *
- * binaries name
- *
- * Returns: a string containing the @appinfo's application
+ * Returns: a string containing the @appinfo's application binaries name
  */
 
 
@@ -17093,9 +16963,7 @@
  * those applications which claim to support the given content type
  * by MIME type subclassing and not directly.
  *
- * for given @content_type or %NULL on error.
- *
- * Returns: (element-type GAppInfo) (transfer full): #GList of #GAppInfos
+ * Returns: (element-type GAppInfo) (transfer full): #GList of #GAppInfos for given @content_type or %NULL on error.
  * Since: 2.28
  */
 
@@ -17106,9 +16974,7 @@
  *
  * Gets the icon for the application.
  *
- * if there is no default icon.
- *
- * Returns: (transfer none): the default #GIcon for @appinfo or %NULL
+ * Returns: (transfer none): the default #GIcon for @appinfo or %NULL if there is no default icon.
  */
 
 
@@ -17149,9 +17015,7 @@
  * the last one for which g_app_info_set_as_last_used_for_type() has been
  * called.
  *
- * for given @content_type or %NULL on error.
- *
- * Returns: (element-type GAppInfo) (transfer full): #GList of #GAppInfos
+ * Returns: (element-type GAppInfo) (transfer full): #GList of #GAppInfos for given @content_type or %NULL on error.
  * Since: 2.28
  */
 
@@ -17352,9 +17216,7 @@
  * This is a %NULL-terminated array of strings, where each string has
  * the form <literal>KEY=VALUE</literal>.
  *
- * child's environment
- *
- * Returns: (array zero-terminated=1) (transfer full): the
+ * Returns: (array zero-terminated=1) (transfer full): the child's environment
  * Since: 2.32
  */
 
@@ -17373,9 +17235,7 @@
  * url="http://standards.freedesktop.org/startup-notification-spec/startup-notification-latest.txt">
  * FreeDesktop.Org Startup Notifications standard</ulink>.
  *
- * not supported.
- *
- * Returns: a startup notification ID for the application, or %NULL if
+ * Returns: a startup notification ID for the application, or %NULL if not supported.
  */
 
 
@@ -17451,9 +17311,7 @@
  * The return value is %NULL-terminated and should be freed using
  * g_strfreev().
  *
- * containing the arguments (the argv)
- *
- * Returns: (array length=argc) (transfer full): the string array
+ * Returns: (array length=argc) (transfer full): the string array containing the arguments (the argv)
  * Since: 2.28
  */
 
@@ -17496,9 +17354,7 @@
  * See g_application_command_line_getenv() if you are only interested
  * in the value of a single environment variable.
  *
- * strings, or %NULL if they were not sent
- *
- * Returns: (array zero-terminated=1) (transfer none): the environment
+ * Returns: (array zero-terminated=1) (transfer none): the environment strings, or %NULL if they were not sent
  * Since: 2.28
  */
 
@@ -17745,11 +17601,11 @@
  * For convenience, the restrictions on application identifiers are
  * reproduced here:
  * <itemizedlist>
- * <listitem>Application identifiers must contain only the ASCII characters "[A-Z][a-z][0-9]_-." and must not begin with a digit.</listitem>
- * <listitem>Application identifiers must contain at least one '.' (period) character (and thus at least three elements).</listitem>
- * <listitem>Application identifiers must not begin or end with a '.' (period) character.</listitem>
- * <listitem>Application identifiers must not contain consecutive '.' (period) characters.</listitem>
- * <listitem>Application identifiers must not exceed 255 characters.</listitem>
+ *   <listitem>Application identifiers must contain only the ASCII characters "[A-Z][a-z][0-9]_-." and must not begin with a digit.</listitem>
+ *   <listitem>Application identifiers must contain at least one '.' (period) character (and thus at least three elements).</listitem>
+ *   <listitem>Application identifiers must not begin or end with a '.' (period) character.</listitem>
+ *   <listitem>Application identifiers must not contain consecutive '.' (period) characters.</listitem>
+ *   <listitem>Application identifiers must not exceed 255 characters.</listitem>
  * </itemizedlist>
  *
  * Returns: %TRUE if @application_id is valid
@@ -17952,14 +17808,8 @@
  * This used to be how actions were associated with a #GApplication.
  * Now there is #GActionMap for that.
  *
- *
- * Deprecated:2.32:Use the #GActionMap interface instead.  Never ever
- * mix use of this API with use of #GActionMap on the same @application
- * or things will go very badly wrong.  This function is known to
- * introduce buggy behaviour (ie: signals not emitted on changes to the
- * action group), so you should really use #GActionMap instead.
- *
  * Since: 2.28
+ * Deprecated: 2.32:Use the #GActionMap interface instead.  Never ever mix use of this API with use of #GActionMap on the same @application or things will go very badly wrong.  This function is known to introduce buggy behaviour (ie: signals not emitted on changes to the action group), so you should really use #GActionMap instead.
  */
 
 
@@ -18083,9 +17933,7 @@
  * Finishes asynchronous initialization and returns the result.
  * See g_async_initable_init_async().
  *
- * will return %FALSE and set @error appropriately if present.
- *
- * Returns: %TRUE if successful. If an error has occurred, this function
+ * Returns: %TRUE if successful. If an error has occurred, this function will return %FALSE and set @error appropriately if present.
  * Since: 2.22
  */
 
@@ -18120,9 +17968,7 @@
  * Finishes the async construction for the various g_async_initable_new
  * calls, returning the created object or %NULL on error.
  *
- * Free with g_object_unref().
- *
- * Returns: (transfer full): a newly created #GObject, or %NULL on error.
+ * Returns: (transfer full): a newly created #GObject, or %NULL on error. Free with g_object_unref().
  * Since: 2.22
  */
 
@@ -18176,9 +18022,7 @@
  *
  * Gets the source object from a #GAsyncResult.
  *
- * or %NULL if there is none.
- *
- * Returns: (transfer full): a new reference to the source object for the @res,
+ * Returns: (transfer full): a new reference to the source object for the @res, or %NULL if there is none.
  */
 
 
@@ -18224,9 +18068,7 @@
  * For the asynchronous, non-blocking, version of this function, see
  * g_buffered_input_stream_fill_async().
  *
- * or -1 on error.
- *
- * Returns: the number of bytes read into @stream's buffer, up to @count,
+ * Returns: the number of bytes read into @stream's buffer, up to @count, or -1 on error.
  */
 
 
@@ -18326,9 +18168,7 @@
  * buffer must not be modified and will become invalid when reading from
  * the stream or filling the buffer.
  *
- * read-only buffer
- *
- * Returns: (array length=count) (element-type guint8) (transfer none):
+ * Returns: (array length=count) (element-type guint8) (transfer none): read-only buffer
  */
 
 
@@ -18373,9 +18213,7 @@
  *
  * Checks if the buffer automatically grows as data is added.
  *
- * %FALSE otherwise.
- *
- * Returns: %TRUE if the @stream's buffer automatically grows,
+ * Returns: %TRUE if the @stream's buffer automatically grows, %FALSE otherwise.
  */
 
 
@@ -18520,15 +18358,15 @@
  * callbacks will be invoked after calling this function - there are three
  * possible cases:
  * <itemizedlist>
- * <listitem><para>
- * @name_lost_handler with a %NULL connection (if a connection to the bus can't be made).
- * </para></listitem>
- * <listitem><para>
- * @bus_acquired_handler then @name_lost_handler (if the name can't be obtained)
- * </para></listitem>
- * <listitem><para>
- * @bus_acquired_handler then @name_acquired_handler (if the name was obtained).
- * </para></listitem>
+ *   <listitem><para>
+ *     @name_lost_handler with a %NULL connection (if a connection to the bus can't be made).
+ *   </para></listitem>
+ *   <listitem><para>
+ *     @bus_acquired_handler then @name_lost_handler (if the name can't be obtained)
+ *   </para></listitem>
+ *   <listitem><para>
+ *     @bus_acquired_handler then @name_acquired_handler (if the name was obtained).
+ *   </para></listitem>
  * </itemizedlist>
  * When you are done owning the name, just call g_bus_unown_name()
  * with the owner id this function returns.
@@ -18561,9 +18399,7 @@
  * Simply register objects to be exported in @bus_acquired_handler and
  * unregister the objects (if any) in @name_lost_handler.
  *
- * g_bus_unown_name() to stop owning the name.
- *
- * Returns: An identifier (never 0) that an be used with
+ * Returns: An identifier (never 0) that an be used with g_bus_unown_name() to stop owning the name.
  * Since: 2.26
  */
 
@@ -18581,9 +18417,7 @@
  * Like g_bus_own_name() but takes a #GDBusConnection instead of a
  * #GBusType.
  *
- * g_bus_unown_name() to stop owning the name.
- *
- * Returns: An identifier (never 0) that an be used with
+ * Returns: An identifier (never 0) that an be used with g_bus_unown_name() to stop owning the name.
  * Since: 2.26
  */
 
@@ -18599,9 +18433,7 @@
  * Version of g_bus_own_name_on_connection() using closures instead of callbacks for
  * easier binding in other languages.
  *
- * g_bus_unown_name() to stop owning the name.
- *
- * Returns: An identifier (never 0) that an be used with
+ * Returns: An identifier (never 0) that an be used with g_bus_unown_name() to stop owning the name.
  * Rename to: g_bus_own_name_on_connection
  * Since: 2.26
  */
@@ -18619,9 +18451,7 @@
  * Version of g_bus_own_name() using closures instead of callbacks for
  * easier binding in other languages.
  *
- * g_bus_unown_name() to stop owning the name.
- *
- * Returns: An identifier (never 0) that an be used with
+ * Returns: An identifier (never 0) that an be used with g_bus_unown_name() to stop owning the name.
  * Rename to: g_bus_own_name
  * Since: 2.26
  */
@@ -18687,9 +18517,7 @@
  * should create object proxies in @name_appeared_handler and destroy
  * them again (if any) in @name_vanished_handler.
  *
- * g_bus_unwatch_name() to stop watching the name.
- *
- * Returns: An identifier (never 0) that an be used with
+ * Returns: An identifier (never 0) that an be used with g_bus_unwatch_name() to stop watching the name.
  * Since: 2.26
  */
 
@@ -18707,9 +18535,7 @@
  * Like g_bus_watch_name() but takes a #GDBusConnection instead of a
  * #GBusType.
  *
- * g_bus_unwatch_name() to stop watching the name.
- *
- * Returns: An identifier (never 0) that an be used with
+ * Returns: An identifier (never 0) that an be used with g_bus_unwatch_name() to stop watching the name.
  * Since: 2.26
  */
 
@@ -18725,9 +18551,7 @@
  * Version of g_bus_watch_name_on_connection() using closures instead of callbacks for
  * easier binding in other languages.
  *
- * g_bus_unwatch_name() to stop watching the name.
- *
- * Returns: An identifier (never 0) that an be used with
+ * Returns: An identifier (never 0) that an be used with g_bus_unwatch_name() to stop watching the name.
  * Rename to: g_bus_watch_name_on_connection
  * Since: 2.26
  */
@@ -18744,9 +18568,7 @@
  * Version of g_bus_watch_name() using closures instead of callbacks for
  * easier binding in other languages.
  *
- * g_bus_unwatch_name() to stop watching the name.
- *
- * Returns: An identifier (never 0) that an be used with
+ * Returns: An identifier (never 0) that an be used with g_bus_unwatch_name() to stop watching the name.
  * Rename to: g_bus_watch_name
  * Since: 2.26
  */
@@ -18794,9 +18616,7 @@
  *
  * See #GCancellable::cancelled for details on how to use this.
  *
- * been cancelled.
- *
- * Returns: The id of the signal handler or 0 if @cancellable has already
+ * Returns: The id of the signal handler or 0 if @cancellable has already been cancelled.
  * Since: 2.22
  */
 
@@ -18830,9 +18650,7 @@
  *
  * Gets the top cancellable from the stack.
  *
- * if the stack is empty.
- *
- * Returns: (transfer none): a #GCancellable from the top of the stack, or %NULL
+ * Returns: (transfer none): a #GCancellable from the top of the stack, or %NULL if the stack is empty.
  */
 
 
@@ -18854,9 +18672,7 @@
  *
  * See also g_cancellable_make_pollfd().
  *
- * is not supported, or on errors.
- *
- * Returns: A valid file descriptor. %-1 if the file descriptor
+ * Returns: A valid file descriptor. %-1 if the file descriptor is not supported, or on errors.
  */
 
 
@@ -18866,9 +18682,7 @@
  *
  * Checks if a cancellable job has been cancelled.
  *
- * FALSE if called with %NULL or if item is not cancelled.
- *
- * Returns: %TRUE if @cancellable is cancelled,
+ * Returns: %TRUE if @cancellable is cancelled, FALSE if called with %NULL or if item is not cancelled.
  */
 
 
@@ -18896,9 +18710,7 @@
  * readable status. Reading to unset the readable status is done
  * with g_cancellable_reset().
  *
- * failure to prepare the cancellable.
- *
- * Returns: %TRUE if @pollfd was successfully initialized, %FALSE on
+ * Returns: %TRUE if @pollfd was successfully initialized, %FALSE on failure to prepare the cancellable.
  * Since: 2.22
  */
 
@@ -19054,9 +18866,7 @@
  * Checks if a content type can be executable. Note that for instance
  * things like text files can be executables (i.e. scripts and batch files).
  *
- * can be executable, %FALSE otherwise.
- *
- * Returns: %TRUE if the file type corresponds to a type that
+ * Returns: %TRUE if the file type corresponds to a type that can be executable, %FALSE otherwise.
  */
 
 
@@ -19067,9 +18877,7 @@
  *
  * Compares two content types for equality.
  *
- * %FALSE otherwise.
- *
- * Returns: %TRUE if the two strings are identical or equivalent,
+ * Returns: %TRUE if the two strings are identical or equivalent, %FALSE otherwise.
  */
 
 
@@ -19079,9 +18887,7 @@
  *
  * Tries to find a content type based on the mime type name.
  *
- * or %NULL. Free with g_free()
- *
- * Returns: (allow-none): Newly allocated string with content type
+ * Returns: (allow-none): Newly allocated string with content type or %NULL. Free with g_free()
  * Since: 2.18
  */
 
@@ -19092,9 +18898,7 @@
  *
  * Gets the human readable description of the content type.
  *
- * returned string with g_free()
- *
- * Returns: a short description of the content type @type. Free the
+ * Returns: a short description of the content type @type. Free the returned string with g_free()
  */
 
 
@@ -19104,9 +18908,7 @@
  *
  * Gets the icon for a content type.
  *
- * object with g_object_unref()
- *
- * Returns: (transfer full): #GIcon corresponding to the content type. Free the returned
+ * Returns: (transfer full): #GIcon corresponding to the content type. Free the returned object with g_object_unref()
  */
 
 
@@ -19116,9 +18918,7 @@
  *
  * Gets the mime type for the content type, if one is registered.
  *
- * or %NULL if unknown.
- *
- * Returns: (allow-none): the registered mime type for the given @type,
+ * Returns: (allow-none): the registered mime type for the given @type, or %NULL if unknown.
  */
 
 
@@ -19134,9 +18934,7 @@
  * or @data may be %NULL, in which case the guess will be based solely
  * on the other argument.
  *
- * given data. Free with g_free()
- *
- * Returns: a string indicating a guessed content type for the
+ * Returns: a string indicating a guessed content type for the given data. Free with g_free()
  */
 
 
@@ -19156,9 +18954,7 @@
  * This function is useful in the implementation of
  * g_mount_guess_content_type().
  *
- * array of zero or more content types. Free with g_strfreev()
- *
- * Returns: (transfer full) (array zero-terminated=1): an %NULL-terminated
+ * Returns: (transfer full) (array zero-terminated=1): an %NULL-terminated array of zero or more content types. Free with g_strfreev()
  * Since: 2.18
  */
 
@@ -19170,9 +18966,7 @@
  *
  * Determines if @type is a subset of @supertype.
  *
- * %FALSE otherwise.
- *
- * Returns: %TRUE if @type is a kind of @supertype,
+ * Returns: %TRUE if @type is a kind of @supertype, %FALSE otherwise.
  */
 
 
@@ -19369,11 +19163,7 @@
  * logged) to use this method if there is no #GCredentials support for
  * the OS or if @native_type isn't supported by the OS.
  *
- * operation there is no #GCredentials support for the OS or if
- * @native_type isn't supported by the OS. Do not free the returned
- * data, it is owned by @credentials.
- *
- * Returns: The pointer to native credentials or %NULL if the
+ * Returns: The pointer to native credentials or %NULL if the operation there is no #GCredentials support for the OS or if @native_type isn't supported by the OS. Do not free the returned data, it is owned by @credentials.
  * Since: 2.26
  */
 
@@ -19406,9 +19196,7 @@
  * This operation can fail if #GCredentials is not supported on the
  * the OS.
  *
- * user, %FALSE otherwise or if @error is set.
- *
- * Returns: %TRUE if @credentials and @other_credentials has the same
+ * Returns: %TRUE if @credentials and @other_credentials has the same user, %FALSE otherwise or if @error is set.
  * Since: 2.26
  */
 
@@ -19510,9 +19298,7 @@
  *
  * Reads an unsigned 8-bit/1-byte value from @stream.
  *
- * if an error occurred.
- *
- * Returns: an unsigned 8-bit/1-byte value read from the @stream or %0
+ * Returns: an unsigned 8-bit/1-byte value read from the @stream or %0 if an error occurred.
  */
 
 
@@ -19527,9 +19313,7 @@
  * In order to get the correct byte order for this read operation,
  * see g_data_input_stream_get_byte_order() and g_data_input_stream_set_byte_order().
  *
- * an error occurred.
- *
- * Returns: a signed 16-bit/2-byte value read from @stream or %0 if
+ * Returns: a signed 16-bit/2-byte value read from @stream or %0 if an error occurred.
  */
 
 
@@ -19548,9 +19332,7 @@
  * triggering the cancellable object from another thread. If the operation
  * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned.
  *
- * an error occurred.
- *
- * Returns: a signed 32-bit/4-byte value read from the @stream or %0 if
+ * Returns: a signed 32-bit/4-byte value read from the @stream or %0 if an error occurred.
  */
 
 
@@ -19569,9 +19351,7 @@
  * triggering the cancellable object from another thread. If the operation
  * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned.
  *
- * an error occurred.
- *
- * Returns: a signed 64-bit/8-byte value read from @stream or %0 if
+ * Returns: a signed 64-bit/8-byte value read from @stream or %0 if an error occurred.
  */
 
 
@@ -19590,13 +19370,7 @@
  * triggering the cancellable object from another thread. If the operation
  * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned.
  *
- * NUL terminated byte array with the line that was read in (without
- * the newlines).  Set @length to a #gsize to get the length of the
- * read line.  On an error, it will return %NULL and @error will be
- * set. If there's no content to read, it will still return %NULL,
- * but @error won't be set.
- *
- * Returns: (transfer full) (array zero-terminated=1) (element-type guint8): a
+ * Returns: (transfer full) (array zero-terminated=1) (element-type guint8): a NUL terminated byte array with the line that was read in (without the newlines).  Set @length to a #gsize to get the length of the read line.  On an error, it will return %NULL and @error will be set. If there's no content to read, it will still return %NULL, but @error won't be set.
  */
 
 
@@ -19631,13 +19405,7 @@
  * string encoding in g_data_input_stream_read_line() applies here as
  * well.
  *
- * NUL-terminated byte array with the line that was read in
- * (without the newlines).  Set @length to a #gsize to get the
- * length of the read line.  On an error, it will return %NULL and
- * @error will be set. If there's no content to read, it will
- * still return %NULL, but @error won't be set.
- *
- * Returns: (transfer full) (array zero-terminated=1) (element-type guint8): a
+ * Returns: (transfer full) (array zero-terminated=1) (element-type guint8): a NUL-terminated byte array with the line that was read in (without the newlines).  Set @length to a #gsize to get the length of the read line.  On an error, it will return %NULL and @error will be set. If there's no content to read, it will still return %NULL, but @error won't be set.
  * Since: 2.20
  */
 
@@ -19652,13 +19420,7 @@
  * Finish an asynchronous call started by
  * g_data_input_stream_read_line_async().
  *
- * (without the newlines).  Set @length to a #gsize to get the length
- * of the read line.  On an error, it will return %NULL and @error
- * will be set. For UTF-8 conversion errors, the set error domain is
- * %G_CONVERT_ERROR.  If there's no content to read, it will still
- * return %NULL, but @error won't be set.
- *
- * Returns: (transfer full): a string with the line that was read in
+ * Returns: (transfer full): a string with the line that was read in (without the newlines).  Set @length to a #gsize to get the length of the read line.  On an error, it will return %NULL and @error will be set. For UTF-8 conversion errors, the set error domain is %G_CONVERT_ERROR.  If there's no content to read, it will still return %NULL, but @error won't be set.
  * Since: 2.30
  */
 
@@ -19676,13 +19438,7 @@
  * triggering the cancellable object from another thread. If the operation
  * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned.
  *
- * line that was read in (without the newlines).  Set @length to a
- * #gsize to get the length of the read line.  On an error, it will
- * return %NULL and @error will be set.  For UTF-8 conversion errors,
- * the set error domain is %G_CONVERT_ERROR.  If there's no content to
- * read, it will still return %NULL, but @error won't be set.
- *
- * Returns: (transfer full): a NUL terminated UTF-8 string with the
+ * Returns: (transfer full): a NUL terminated UTF-8 string with the line that was read in (without the newlines).  Set @length to a #gsize to get the length of the read line.  On an error, it will return %NULL and @error will be set.  For UTF-8 conversion errors, the set error domain is %G_CONVERT_ERROR.  If there's no content to read, it will still return %NULL, but @error won't be set.
  * Since: 2.30
  */
 
@@ -19698,9 +19454,7 @@
  * In order to get the correct byte order for this read operation,
  * see g_data_input_stream_get_byte_order() and g_data_input_stream_set_byte_order().
  *
- * an error occurred.
- *
- * Returns: an unsigned 16-bit/2-byte value read from the @stream or %0 if
+ * Returns: an unsigned 16-bit/2-byte value read from the @stream or %0 if an error occurred.
  */
 
 
@@ -19719,9 +19473,7 @@
  * triggering the cancellable object from another thread. If the operation
  * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned.
  *
- * an error occurred.
- *
- * Returns: an unsigned 32-bit/4-byte value read from the @stream or %0 if
+ * Returns: an unsigned 32-bit/4-byte value read from the @stream or %0 if an error occurred.
  */
 
 
@@ -19740,9 +19492,7 @@
  * triggering the cancellable object from another thread. If the operation
  * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned.
  *
- * an error occurred.
- *
- * Returns: an unsigned 64-bit/8-byte read from @stream or %0 if
+ * Returns: an unsigned 64-bit/8-byte read from @stream or %0 if an error occurred.
  */
 
 
@@ -19766,11 +19516,7 @@
  * g_data_input_stream_read_upto() instead, but note that that function
  * does not consume the stop character.
  *
- * before encountering any of the stop characters. Set @length to
- * a #gsize to get the length of the string. This function will
- * return %NULL on an error.
- *
- * Returns: (transfer full): a string with the data that was read
+ * Returns: (transfer full): a string with the data that was read before encountering any of the stop characters. Set @length to a #gsize to get the length of the string. This function will return %NULL on an error.
  */
 
 
@@ -19813,13 +19559,8 @@
  * Finish an asynchronous call started by
  * g_data_input_stream_read_until_async().
  *
- *
- * before encountering any of the stop characters. Set @length to
- * a #gsize to get the length of the string. This function will
- * return %NULL on an error.
- *
  * Since: 2.20
- * Returns: (transfer full): a string with the data that was read
+ * Returns: (transfer full): a string with the data that was read before encountering any of the stop characters. Set @length to a #gsize to get the length of the string. This function will return %NULL on an error.
  */
 
 
@@ -19843,11 +19584,7 @@
  * Note that @stop_chars may contain '\0' if @stop_chars_len is
  * specified.
  *
- * before encountering any of the stop characters. Set @length to
- * a #gsize to get the length of the string. This function will
- * return %NULL on an error
- *
- * Returns: (transfer full): a string with the data that was read
+ * Returns: (transfer full): a string with the data that was read before encountering any of the stop characters. Set @length to a #gsize to get the length of the string. This function will return %NULL on an error
  * Since: 2.26
  */
 
@@ -19895,11 +19632,7 @@
  * stop character. You have to use g_data_input_stream_read_byte() to
  * get it before calling g_data_input_stream_read_upto_async() again.
  *
- * before encountering any of the stop characters. Set @length to
- * a #gsize to get the length of the string. This function will
- * return %NULL on an error.
- *
- * Returns: (transfer full): a string with the data that was read
+ * Returns: (transfer full): a string with the data that was read before encountering any of the stop characters. Set @length to a #gsize to get the length of the string. This function will return %NULL on an error.
  * Since: 2.24
  */
 
@@ -20267,9 +20000,7 @@
  * message. Similary, if a filter consumes an outgoing message, the
  * message will not be sent to the other peer.
  *
- * g_dbus_connection_remove_filter().
- *
- * Returns: A filter identifier that can be used with
+ * Returns: A filter identifier that can be used with g_dbus_connection_remove_filter().
  * Since: 2.26
  */
 
@@ -20306,20 +20037,20 @@
  * If the @parameters #GVariant is floating, it is consumed. This allows
  * convenient 'inline' use of g_variant_new(), e.g.:
  * |[
- * g_dbus_connection_call (connection,
- * "org.freedesktop.StringThings",
- * "/org/freedesktop/StringThings",
- * "org.freedesktop.StringThings",
- * "TwoStrings",
- * g_variant_new ("(ss)",
- * "Thing One",
- * "Thing Two"),
- * NULL,
- * G_DBUS_CALL_FLAGS_NONE,
- * -1,
- * NULL,
- * (GAsyncReadyCallback) two_strings_done,
- * NULL);
+ *  g_dbus_connection_call (connection,
+ *                          "org.freedesktop.StringThings",
+ *                          "/org/freedesktop/StringThings",
+ *                          "org.freedesktop.StringThings",
+ *                          "TwoStrings",
+ *                          g_variant_new ("(ss)",
+ *                                         "Thing One",
+ *                                         "Thing Two"),
+ *                          NULL,
+ *                          G_DBUS_CALL_FLAGS_NONE,
+ *                          -1,
+ *                          NULL,
+ *                          (GAsyncReadyCallback) two_strings_done,
+ *                          NULL);
  * ]|
  *
  * This is an asynchronous method. When the operation is finished, @callback will be invoked
@@ -20344,9 +20075,7 @@
  *
  * Finishes an operation started with g_dbus_connection_call().
  *
- * return values. Free with g_variant_unref().
- *
- * Returns: %NULL if @error is set. Otherwise a #GVariant tuple with
+ * Returns: %NULL if @error is set. Otherwise a #GVariant tuple with return values. Free with g_variant_unref().
  * Since: 2.26
  */
 
@@ -20374,6 +20103,7 @@
  * operation will fail with %G_IO_ERROR_CANCELLED. If @parameters
  * contains a value not compatible with the D-Bus protocol, the operation
  * fails with %G_IO_ERROR_INVALID_ARGUMENT.
+ *
  * If @reply_type is non-%NULL then the reply will be checked for having
  * this type and an error will be raised if it does not match.  Said
  * another way, if you give a @reply_type then any non-%NULL return
@@ -20382,28 +20112,26 @@
  * If the @parameters #GVariant is floating, it is consumed.
  * This allows convenient 'inline' use of g_variant_new(), e.g.:
  * |[
- * g_dbus_connection_call_sync (connection,
- * "org.freedesktop.StringThings",
- * "/org/freedesktop/StringThings",
- * "org.freedesktop.StringThings",
- * "TwoStrings",
- * g_variant_new ("(ss)",
- * "Thing One",
- * "Thing Two"),
- * NULL,
- * G_DBUS_CALL_FLAGS_NONE,
- * -1,
- * NULL,
- * &amp;error);
+ *  g_dbus_connection_call_sync (connection,
+ *                               "org.freedesktop.StringThings",
+ *                               "/org/freedesktop/StringThings",
+ *                               "org.freedesktop.StringThings",
+ *                               "TwoStrings",
+ *                               g_variant_new ("(ss)",
+ *                                              "Thing One",
+ *                                              "Thing Two"),
+ *                               NULL,
+ *                               G_DBUS_CALL_FLAGS_NONE,
+ *                               -1,
+ *                               NULL,
+ *                               &amp;error);
  * ]|
  *
  * The calling thread is blocked until a reply is received. See
  * g_dbus_connection_call() for the asynchronous version of
  * this method.
  *
- * return values. Free with g_variant_unref().
- *
- * Returns: %NULL if @error is set. Otherwise a #GVariant tuple with
+ * Returns: %NULL if @error is set. Otherwise a #GVariant tuple with return values. Free with g_variant_unref().
  * Since: 2.26
  */
 
@@ -20441,9 +20169,7 @@
  *
  * Finishes an operation started with g_dbus_connection_call_with_unix_fd_list().
  *
- * return values. Free with g_variant_unref().
- *
- * Returns: %NULL if @error is set. Otherwise a #GVariant tuple with
+ * Returns: %NULL if @error is set. Otherwise a #GVariant tuple with return values. Free with g_variant_unref().
  * Since: 2.30
  */
 
@@ -20468,9 +20194,7 @@
  *
  * This method is only available on UNIX.
  *
- * return values. Free with g_variant_unref().
- *
- * Returns: %NULL if @error is set. Otherwise a #GVariant tuple with
+ * Returns: %NULL if @error is set. Otherwise a #GVariant tuple with return values. Free with g_variant_unref().
  * Since: 2.30
  */
 
@@ -20695,9 +20419,7 @@
  * closed by the remote peer. See
  * #GDBusConnection:exit-on-close for more details.
  *
- * closed by the remote peer.
- *
- * Returns: Whether the process is terminated when @connection is
+ * Returns: Whether the process is terminated when @connection is closed by the remote peer.
  * Since: 2.26
  */
 
@@ -20709,9 +20431,7 @@
  * The GUID of the peer performing the role of server when
  * authenticating. See #GDBusConnection:guid for more details.
  *
- * @connection.
- *
- * Returns: The GUID. Do not free this string, it is owned by
+ * Returns: The GUID. Do not free this string, it is owned by @connection.
  * Since: 2.26
  */
 
@@ -20730,9 +20450,7 @@
  * each application is a client. So this method will always return
  * %NULL for message bus clients.
  *
- * this object, it is owned by @connection.
- *
- * Returns: (transfer none): A #GCredentials or %NULL if not available. Do not free
+ * Returns: (transfer none): A #GCredentials or %NULL if not available. Do not free this object, it is owned by @connection.
  * Since: 2.26
  */
 
@@ -20760,10 +20478,7 @@
  * bus. This can also be used to figure out if @connection is a
  * message bus connection.
  *
- * bus connection. Do not free this string, it is owned by
- * @connection.
- *
- * Returns: The unique name or %NULL if @connection is not a message
+ * Returns: The unique name or %NULL if @connection is not a message bus connection. Do not free this string, it is owned by @connection.
  * Since: 2.26
  */
 
@@ -20980,9 +20695,7 @@
  *
  * See <xref linkend="gdbus-server"/> for an example of how to use this method.
  *
- * that can be used with g_dbus_connection_unregister_object() .
- *
- * Returns: 0 if @error is set, otherwise a registration id (never 0)
+ * Returns: 0 if @error is set, otherwise a registration id (never 0) that can be used with g_dbus_connection_unregister_object() .
  * Since: 2.26
  */
 
@@ -21032,9 +20745,7 @@
  *
  * See <xref linkend="gdbus-subtree-server"/> for an example of how to use this method.
  *
- * that can be used with g_dbus_connection_unregister_subtree() .
- *
- * Returns: 0 if @error is set, otherwise a subtree registration id (never 0)
+ * Returns: 0 if @error is set, otherwise a subtree registration id (never 0) that can be used with g_dbus_connection_unregister_subtree() .
  * Since: 2.26
  */
 
@@ -21078,9 +20789,7 @@
  * Note that @message must be unlocked, unless @flags contain the
  * %G_DBUS_SEND_MESSAGE_FLAGS_PRESERVE_SERIAL flag.
  *
- * transmission, %FALSE if @error is set.
- *
- * Returns: %TRUE if the message was well-formed and queued for
+ * Returns: %TRUE if the message was well-formed and queued for transmission, %FALSE if @error is set.
  * Since: 2.26
  */
 
@@ -21371,9 +21080,7 @@
  * Checks if @error represents an error received via D-Bus from a remote peer. If so,
  * use g_dbus_error_get_remote_error() to get the name of the error.
  *
- * %FALSE otherwise.
- *
- * Returns: %TRUE if @error represents an error from a remote peer,
+ * Returns: %TRUE if @error represents an error from a remote peer, %FALSE otherwise.
  * Since: 2.26
  */
 
@@ -21427,9 +21134,7 @@
  * This is typically done in the routine that returns the #GQuark for
  * an error domain.
  *
- * exists.
- *
- * Returns: %TRUE if the association was created, %FALSE if it already
+ * Returns: %TRUE if the association was created, %FALSE if it already exists.
  * Since: 2.26
  */
 
@@ -21529,57 +21234,57 @@
  *
  * The conversion is using the following rules:
  * <table frame='all'>
- * <title>#GValue / #GVariant conversion rules</title>
- * <tgroup cols='2' align='left' colsep='1' rowsep='1'>
- * <thead>
- * <row>
- * <entry>If the #GType for @gvalue is...</entry>
- * <entry>... then @type must be</entry>
- * </row>
- * </thead>
- * <tbody>
- * <row>
- * <entry>#G_TYPE_STRING</entry>
- * <entry><link linkend="G-VARIANT-TYPE-STRING:CAPS">'s'</link>, <link linkend="G-VARIANT-TYPE-OBJECT-PATH:CAPS">'o'</link>, <link linkend="G-VARIANT-TYPE-SIGNATURE:CAPS">'g'</link> or <link linkend="G-VARIANT-TYPE-BYTESTRING:CAPS">'ay'</link></entry>
- * </row>
- * <row>
- * <entry>#G_TYPE_STRV</entry>
- * <entry><link linkend="G-VARIANT-TYPE-STRING-ARRAY:CAPS">'as'</link>, <link linkend="G-VARIANT-TYPE-OBJECT-PATH-ARRAY:CAPS">'ao'</link> or <link linkend="G-VARIANT-TYPE-BYTESTRING-ARRAY:CAPS">'aay'</link></entry>
- * </row>
- * <row>
- * <entry>#G_TYPE_BOOLEAN</entry>
- * <entry><link linkend="G-VARIANT-TYPE-BOOLEAN:CAPS">'b'</link></entry>
- * </row>
- * <row>
- * <entry>#G_TYPE_UCHAR</entry>
- * <entry><link linkend="G-VARIANT-TYPE-BYTE:CAPS">'y'</link></entry>
- * </row>
- * <row>
- * <entry>#G_TYPE_INT</entry>
- * <entry><link linkend="G-VARIANT-TYPE-INT32:CAPS">'i'</link> or <link linkend="G-VARIANT-TYPE-INT16:CAPS">'n'</link></entry>
- * </row>
- * <row>
- * <entry>#G_TYPE_UINT</entry>
- * <entry><link linkend="G-VARIANT-TYPE-UINT32:CAPS">'u'</link> or <link linkend="G-VARIANT-TYPE-UINT16:CAPS">'q'</link></entry>
- * </row>
- * <row>
- * <entry>#G_TYPE_INT64</entry>
- * <entry><link linkend="G-VARIANT-TYPE-INT64:CAPS">'x'</link></entry>
- * </row>
- * <row>
- * <entry>#G_TYPE_UINT64</entry>
- * <entry><link linkend="G-VARIANT-TYPE-UINT64:CAPS">'t'</link></entry>
- * </row>
- * <row>
- * <entry>#G_TYPE_DOUBLE</entry>
- * <entry><link linkend="G-VARIANT-TYPE-DOUBLE:CAPS">'d'</link></entry>
- * </row>
- * <row>
- * <entry>#G_TYPE_VARIANT</entry>
- * <entry>Any #GVariantType</entry>
- * </row>
- * </tbody>
- * </tgroup>
+ *   <title>#GValue / #GVariant conversion rules</title>
+ *   <tgroup cols='2' align='left' colsep='1' rowsep='1'>
+ *     <thead>
+ *       <row>
+ *         <entry>If the #GType for @gvalue is...</entry>
+ *         <entry>... then @type must be</entry>
+ *       </row>
+ *     </thead>
+ *     <tbody>
+ *       <row>
+ *         <entry>#G_TYPE_STRING</entry>
+ *         <entry><link linkend="G-VARIANT-TYPE-STRING:CAPS">'s'</link>, <link linkend="G-VARIANT-TYPE-OBJECT-PATH:CAPS">'o'</link>, <link linkend="G-VARIANT-TYPE-SIGNATURE:CAPS">'g'</link> or <link linkend="G-VARIANT-TYPE-BYTESTRING:CAPS">'ay'</link></entry>
+ *       </row>
+ *       <row>
+ *         <entry>#G_TYPE_STRV</entry>
+ *         <entry><link linkend="G-VARIANT-TYPE-STRING-ARRAY:CAPS">'as'</link>, <link linkend="G-VARIANT-TYPE-OBJECT-PATH-ARRAY:CAPS">'ao'</link> or <link linkend="G-VARIANT-TYPE-BYTESTRING-ARRAY:CAPS">'aay'</link></entry>
+ *       </row>
+ *       <row>
+ *         <entry>#G_TYPE_BOOLEAN</entry>
+ *         <entry><link linkend="G-VARIANT-TYPE-BOOLEAN:CAPS">'b'</link></entry>
+ *       </row>
+ *       <row>
+ *         <entry>#G_TYPE_UCHAR</entry>
+ *         <entry><link linkend="G-VARIANT-TYPE-BYTE:CAPS">'y'</link></entry>
+ *       </row>
+ *       <row>
+ *         <entry>#G_TYPE_INT</entry>
+ *         <entry><link linkend="G-VARIANT-TYPE-INT32:CAPS">'i'</link> or <link linkend="G-VARIANT-TYPE-INT16:CAPS">'n'</link></entry>
+ *       </row>
+ *       <row>
+ *         <entry>#G_TYPE_UINT</entry>
+ *         <entry><link linkend="G-VARIANT-TYPE-UINT32:CAPS">'u'</link> or <link linkend="G-VARIANT-TYPE-UINT16:CAPS">'q'</link></entry>
+ *       </row>
+ *       <row>
+ *         <entry>#G_TYPE_INT64</entry>
+ *         <entry><link linkend="G-VARIANT-TYPE-INT64:CAPS">'x'</link></entry>
+ *       </row>
+ *       <row>
+ *         <entry>#G_TYPE_UINT64</entry>
+ *         <entry><link linkend="G-VARIANT-TYPE-UINT64:CAPS">'t'</link></entry>
+ *       </row>
+ *       <row>
+ *         <entry>#G_TYPE_DOUBLE</entry>
+ *         <entry><link linkend="G-VARIANT-TYPE-DOUBLE:CAPS">'d'</link></entry>
+ *       </row>
+ *       <row>
+ *         <entry>#G_TYPE_VARIANT</entry>
+ *         <entry>Any #GVariantType</entry>
+ *       </row>
+ *     </tbody>
+ *   </tgroup>
  * </table>
  * This can fail if e.g. @gvalue is of type #G_TYPE_STRING and @type
  * is <link linkend="G-VARIANT-TYPE-INT32:CAPS">'i'</link>. It will
@@ -21595,10 +21300,7 @@
  * See the g_dbus_gvariant_to_gvalue() function for how to convert a
  * #GVariant to a #GValue.
  *
- * @type holding the data from @gvalue or %NULL in case of
- * failure. Free with g_variant_unref().
- *
- * Returns: A #GVariant (never floating) of #GVariantType
+ * Returns: A #GVariant (never floating) of #GVariantType @type holding the data from @gvalue or %NULL in case of failure. Free with g_variant_unref().
  * Since: 2.30
  */
 
@@ -21626,9 +21328,7 @@
  *
  * Gets the #GDBusObject that @interface_ belongs to, if any.
  *
- * reference should be freed with g_object_unref().
- *
- * Returns: (transfer full): A #GDBusObject or %NULL. The returned
+ * Returns: (transfer full): A #GDBusObject or %NULL. The returned reference should be freed with g_object_unref().
  * Since: 2.32
  * Rename to: g_dbus_interface_get_object
  */
@@ -21657,9 +21357,7 @@
  * g_dbus_interface_dup_object() for a thread-safe
  * alternative.</warning>
  *
- * reference belongs to @interface_ and should not be freed.
- *
- * Returns: (transfer none): A #GDBusObject or %NULL. The returned
+ * Returns: (transfer none): A #GDBusObject or %NULL. The returned reference belongs to @interface_ and should not be freed.
  * Since: 2.30
  */
 
@@ -21809,9 +21507,7 @@
  *
  * Use g_dbus_interface_skeleton_unexport() to unexport the object.
  *
- * @error set.
- *
- * Returns: %TRUE if the interface was exported on @connection, otherwise %FALSE with
+ * Returns: %TRUE if the interface was exported on @connection, otherwise %FALSE with @error set.
  * Since: 2.30
  */
 
@@ -21839,9 +21535,7 @@
  *
  * Gets the first connection that @interface_ is exported on, if any.
  *
- * not exported anywhere. Do not free, the object belongs to @interface_.
- *
- * Returns: (transfer none): A #GDBusConnection or %NULL if @interface_ is
+ * Returns: (transfer none): A #GDBusConnection or %NULL if @interface_ is not exported anywhere. Do not free, the object belongs to @interface_.
  * Since: 2.30
  */
 
@@ -21852,11 +21546,7 @@
  *
  * Gets a list of the connections that @interface_ is exported on.
  *
- * all the connections that @interface_ is exported on. The returned
- * list should be freed with g_list_free() after each element has
- * been freed with g_object_unref().
- *
- * Returns: (element-type GDBusConnection) (transfer full): A list of
+ * Returns: (element-type GDBusConnection) (transfer full): A list of all the connections that @interface_ is exported on. The returned list should be freed with g_list_free() after each element has been freed with g_object_unref().
  * Since: 2.32
  */
 
@@ -21891,9 +21581,7 @@
  *
  * Gets the object path that @interface_ is exported on, if any.
  *
- * anywhere. Do not free, the string belongs to @interface_.
- *
- * Returns: A string owned by @interface_ or %NULL if @interface_ is not exported
+ * Returns: A string owned by @interface_ or %NULL if @interface_ is not exported anywhere. Do not free, the string belongs to @interface_.
  * Since: 2.30
  */
 
@@ -22043,9 +21731,7 @@
  * transports in @string and that key/value pairs for each transport
  * are valid.
  *
- * supported by this library, %FALSE if @error is set.
- *
- * Returns: %TRUE if @string is a valid D-Bus address that is
+ * Returns: %TRUE if @string is a valid D-Bus address that is supported by this library, %FALSE if @error is set.
  * Since: 2.26
  */
 
@@ -22076,9 +21762,7 @@
  * (and linked models) must also originate from this same context, with
  * the thread default main context unchanged.
  *
- * g_object_unref().
- *
- * Returns: (transfer full): a #GDBusMenuModel object. Free with
+ * Returns: (transfer full): a #GDBusMenuModel object. Free with g_object_unref().
  * Since: 2.32
  */
 
@@ -22092,10 +21776,7 @@
  * Utility function to calculate how many bytes are needed to
  * completely deserialize the D-Bus message stored at @blob.
  *
- * @blob contains invalid data or not enough data is available to
- * determine the size).
- *
- * Returns: Number of bytes needed or -1 if @error is set (e.g. if
+ * Returns: Number of bytes needed or -1 if @error is set (e.g. if @blob contains invalid data or not enough data is available to determine the size).
  * Since: 2.26
  */
 
@@ -22112,9 +21793,7 @@
  * This operation can fail if e.g. @message contains file descriptors
  * and the per-process or system-wide open files limit is reached.
  *
- * Free with g_object_unref().
- *
- * Returns: (transfer full): A new #GDBusMessage or %NULL if @error is set.
+ * Returns: (transfer full): A new #GDBusMessage or %NULL if @error is set. Free with g_object_unref().
  * Since: 2.26
  */
 
@@ -22125,9 +21804,7 @@
  *
  * Convenience to get the first item in the body of @message.
  *
- * @message is not a string.
- *
- * Returns: The string item or %NULL if the first item in the body of
+ * Returns: The string item or %NULL if the first item in the body of @message is not a string.
  * Since: 2.26
  */
 
@@ -22193,9 +21870,7 @@
  *
  * Gets a header field on @message.
  *
- * otherwise. Do not free, it is owned by @message.
- *
- * Returns: A #GVariant with the value if the header was found, %NULL
+ * Returns: A #GVariant with the value if the header was found, %NULL otherwise. Do not free, it is owned by @message.
  * Since: 2.26
  */
 
@@ -22206,10 +21881,7 @@
  *
  * Gets an array of all header fields on @message that are set.
  *
- * terminated by %G_DBUS_MESSAGE_HEADER_FIELD_INVALID.  Each element
- * is a #guchar. Free with g_free().
- *
- * Returns: (array zero-terminated=1): An array of header fields
+ * Returns: (array zero-terminated=1): An array of header fields terminated by %G_DBUS_MESSAGE_HEADER_FIELD_INVALID.  Each element is a #guchar. Free with g_free().
  * Since: 2.26
  */
 
@@ -22334,9 +22006,7 @@
  *
  * This method is only available on UNIX.
  *
- * associated. Do not free, this object is owned by @message.
- *
- * Returns: (transfer none): A #GUnixFDList or %NULL if no file descriptors are
+ * Returns: (transfer none): A #GUnixFDList or %NULL if no file descriptors are associated. Do not free, this object is owned by @message.
  * Since: 2.26
  */
 
@@ -22372,9 +22042,7 @@
  * order that the message was in can be retrieved using
  * g_dbus_message_get_byte_order().
  *
- * g_object_unref().
- *
- * Returns: A new #GDBusMessage or %NULL if @error is set. Free with
+ * Returns: A new #GDBusMessage or %NULL if @error is set. Free with g_object_unref().
  * Since: 2.26
  */
 
@@ -22469,34 +22137,35 @@
  * and formatting is subject to change at any time. Typical output
  * looks something like this:
  * <programlisting>
- * Flags:   none
- * Version: 0
- * Serial:  4
- * Headers:
- * path -> objectpath '/org/gtk/GDBus/TestObject'
- * interface -> 'org.gtk.GDBus.TestInterface'
- * member -> 'GimmeStdout'
- * destination -> ':1.146'
- * Body: ()
+ * Type&colon;    method-call
+ * Flags&colon;   none
+ * Version&colon; 0
+ * Serial&colon;  4
+ * Headers&colon;
+ *   path -> objectpath '/org/gtk/GDBus/TestObject'
+ *   interface -> 'org.gtk.GDBus.TestInterface'
+ *   member -> 'GimmeStdout'
+ *   destination -> ':1.146'
+ * Body&colon; ()
  * UNIX File Descriptors:
- * (none)
+ *   (none)
  * </programlisting>
  * or
  * <programlisting>
- * Flags:   no-reply-expected
- * Version: 0
- * Serial:  477
- * Headers:
- * reply-serial -> uint32 4
- * destination -> ':1.159'
- * sender -> ':1.146'
- * num-unix-fds -> uint32 1
- * Body: ()
- * UNIX File Descriptors:
- * fd 12: dev=0:10,mode=020620,ino=5,uid=500,gid=5,rdev=136:2,size=0,atime=1273085037,mtime=1273085851,ctime=1272982635
+ * Type&colon;    method-return
+ * Flags&colon;   no-reply-expected
+ * Version&colon; 0
+ * Serial&colon;  477
+ * Headers&colon;
+ *   reply-serial -> uint32 4
+ *   destination -> ':1.159'
+ *   sender -> ':1.146'
+ *   num-unix-fds -> uint32 1
+ * Body&colon; ()
+ * UNIX File Descriptors&colon;
+ *   fd 12: dev=0:10,mode=020620,ino=5,uid=500,gid=5,rdev=136:2,size=0,atime=1273085037,mtime=1273085851,ctime=1272982635
  * </programlisting>
  *
- * Type:    method-return
  * Returns: A string that should be freed with g_free().
  * Since: 2.26
  */
@@ -22698,10 +22367,7 @@
  * Serializes @message to a blob. The byte order returned by
  * g_dbus_message_get_byte_order() will be used.
  *
- * valid binary D-Bus message of @out_size bytes generated by @message
- * or %NULL if @error is set. Free with g_free().
- *
- * Returns: (array length=out_size) (transfer full): A pointer to a
+ * Returns: (array length=out_size) (transfer full): A pointer to a valid binary D-Bus message of @out_size bytes generated by @message or %NULL if @error is set. Free with g_free().
  * Since: 2.26
  */
 
@@ -23029,9 +22695,7 @@
  * <link linkend="glib-Simple-XML-Subset-Parser.description">GMarkup</link>-based
  * parser that only accepts a subset of valid XML documents.
  *
- * with g_dbus_node_info_unref().
- *
- * Returns: A #GDBusNodeInfo structure or %NULL if @error is set. Free
+ * Returns: A #GDBusNodeInfo structure or %NULL if @error is set. Free with g_dbus_node_info_unref().
  * Since: 2.26
  */
 
@@ -23068,9 +22732,7 @@
  * Gets the D-Bus interface with name @interface_name associated with
  * @object, if any.
  *
- * #GDBusInterface that must be freed with g_object_unref().
- *
- * Returns: (transfer full): %NULL if not found, otherwise a
+ * Returns: (transfer full): %NULL if not found, otherwise a #GDBusInterface that must be freed with g_object_unref().
  * Since: 2.30
  */
 
@@ -23081,10 +22743,7 @@
  *
  * Gets the D-Bus interfaces associated with @object.
  *
- * The returned list must be freed by g_list_free() after each element has been freed
- * with g_object_unref().
- *
- * Returns: (element-type GDBusInterface) (transfer full): A list of #GDBusInterface instances.
+ * Returns: (element-type GDBusInterface) (transfer full): A list of #GDBusInterface instances. The returned list must be freed by g_list_free() after each element has been freed with g_object_unref().
  * Since: 2.30
  */
 
@@ -23106,9 +22765,7 @@
  *
  * Gets the #GDBusConnection used by @manager.
  *
- * the object belongs to @manager.
- *
- * Returns: (transfer none): A #GDBusConnection object. Do not free,
+ * Returns: (transfer none): A #GDBusConnection object. Do not free, the object belongs to @manager.
  * Since: 2.30
  */
 
@@ -23119,9 +22776,7 @@
  *
  * Gets the flags that @manager was constructed with.
  *
- * enumeration.
- *
- * Returns: Zero of more flags from the #GDBusObjectManagerClientFlags
+ * Returns: Zero of more flags from the #GDBusObjectManagerClientFlags enumeration.
  * Since: 2.30
  */
 
@@ -23132,9 +22787,7 @@
  *
  * Gets the name that @manager is for.
  *
- * belongs to @manager.
- *
- * Returns: A unique or well-known name. Do not free, the string
+ * Returns: A unique or well-known name. Do not free, the string belongs to @manager.
  * Since: 2.30
  */
 
@@ -23148,9 +22801,7 @@
  * #GObject::notify signal to track changes to the
  * #GDBusObjectManagerClient:name-owner property.
  *
- * g_free().
- *
- * Returns: The name owner or %NULL if no name owner exists. Free with
+ * Returns: The name owner or %NULL if no name owner exists. Free with g_free().
  * Since: 2.30
  */
 
@@ -23188,10 +22839,7 @@
  *
  * Finishes an operation started with g_dbus_object_manager_client_new().
  *
- * #GDBusObjectManagerClient object or %NULL if @error is set. Free
- * with g_object_unref().
- *
- * Returns: (transfer full) (type GDBusObjectManagerClient): A
+ * Returns: (transfer full) (type GDBusObjectManagerClient): A #GDBusObjectManagerClient object or %NULL if @error is set. Free with g_object_unref().
  * Since: 2.30
  */
 
@@ -23230,10 +22878,7 @@
  *
  * Finishes an operation started with g_dbus_object_manager_client_new_for_bus().
  *
- * #GDBusObjectManagerClient object or %NULL if @error is set. Free
- * with g_object_unref().
- *
- * Returns: (transfer full) (type GDBusObjectManagerClient): A
+ * Returns: (transfer full) (type GDBusObjectManagerClient): A #GDBusObjectManagerClient object or %NULL if @error is set. Free with g_object_unref().
  * Since: 2.30
  */
 
@@ -23257,10 +22902,7 @@
  * blocked until a reply is received. See g_dbus_object_manager_client_new_for_bus()
  * for the asynchronous version.
  *
- * #GDBusObjectManagerClient object or %NULL if @error is set. Free
- * with g_object_unref().
- *
- * Returns: (transfer full) (type GDBusObjectManagerClient): A
+ * Returns: (transfer full) (type GDBusObjectManagerClient): A #GDBusObjectManagerClient object or %NULL if @error is set. Free with g_object_unref().
  * Since: 2.30
  */
 
@@ -23283,10 +22925,7 @@
  * blocked until a reply is received. See g_dbus_object_manager_client_new()
  * for the asynchronous version.
  *
- * #GDBusObjectManagerClient object or %NULL if @error is set. Free
- * with g_object_unref().
- *
- * Returns: (transfer full) (type GDBusObjectManagerClient): A
+ * Returns: (transfer full) (type GDBusObjectManagerClient): A #GDBusObjectManagerClient object or %NULL if @error is set. Free with g_object_unref().
  * Since: 2.30
  */
 
@@ -23300,9 +22939,7 @@
  * Gets the interface proxy for @interface_name at @object_path, if
  * any.
  *
- * with g_object_unref().
- *
- * Returns: (transfer full): A #GDBusInterface instance or %NULL. Free
+ * Returns: (transfer full): A #GDBusInterface instance or %NULL. Free with g_object_unref().
  * Since: 2.30
  */
 
@@ -23314,9 +22951,7 @@
  *
  * Gets the #GDBusObjectProxy at @object_path, if any.
  *
- * g_object_unref().
- *
- * Returns: (transfer full): A #GDBusObject or %NULL. Free with
+ * Returns: (transfer full): A #GDBusObject or %NULL. Free with g_object_unref().
  * Since: 2.30
  */
 
@@ -23338,11 +22973,7 @@
  *
  * Gets all #GDBusObject objects known to @manager.
  *
- * #GDBusObject objects. The returned list should be freed with
- * g_list_free() after each element has been freed with
- * g_object_unref().
- *
- * Returns: (transfer full) (element-type GDBusObject): A list of
+ * Returns: (transfer full) (element-type GDBusObject): A list of #GDBusObject objects. The returned list should be freed with g_list_free() after each element has been freed with g_object_unref().
  * Since: 2.30
  */
 
@@ -23388,10 +23019,7 @@
  *
  * Gets the #GDBusConnection used by @manager.
  *
- * @manager isn't exported on a connection. The returned object should
- * be freed with g_object_unref().
- *
- * Returns: (transfer full): A #GDBusConnection object or %NULL if
+ * Returns: (transfer full): A #GDBusConnection object or %NULL if @manager isn't exported on a connection. The returned object should be freed with g_object_unref().
  * Since: 2.30
  */
 
@@ -23445,9 +23073,7 @@
  *
  * Gets the connection that @proxy is for.
  *
- * object is owned by @proxy.
- *
- * Returns: (transfer none): A #GDBusConnection. Do not free, the
+ * Returns: (transfer none): A #GDBusConnection. Do not free, the object is owned by @proxy.
  * Since: 2.30
  */
 
@@ -23592,16 +23218,16 @@
  * If the @parameters #GVariant is floating, it is consumed. This allows
  * convenient 'inline' use of g_variant_new(), e.g.:
  * |[
- * g_dbus_proxy_call (proxy,
- * "TwoStrings",
- * g_variant_new ("(ss)",
- * "Thing One",
- * "Thing Two"),
- * G_DBUS_CALL_FLAGS_NONE,
- * -1,
- * NULL,
- * (GAsyncReadyCallback) two_strings_done,
- * &amp;data);
+ *  g_dbus_proxy_call (proxy,
+ *                     "TwoStrings",
+ *                     g_variant_new ("(ss)",
+ *                                    "Thing One",
+ *                                    "Thing Two"),
+ *                     G_DBUS_CALL_FLAGS_NONE,
+ *                     -1,
+ *                     NULL,
+ *                     (GAsyncReadyCallback) two_strings_done,
+ *                     &amp;data);
  * ]|
  *
  * If @proxy has an expected interface (see
@@ -23631,9 +23257,7 @@
  *
  * Finishes an operation started with g_dbus_proxy_call().
  *
- * return values. Free with g_variant_unref().
- *
- * Returns: %NULL if @error is set. Otherwise a #GVariant tuple with
+ * Returns: %NULL if @error is set. Otherwise a #GVariant tuple with return values. Free with g_variant_unref().
  * Since: 2.26
  */
 
@@ -23664,15 +23288,15 @@
  * If the @parameters #GVariant is floating, it is consumed. This allows
  * convenient 'inline' use of g_variant_new(), e.g.:
  * |[
- * g_dbus_proxy_call_sync (proxy,
- * "TwoStrings",
- * g_variant_new ("(ss)",
- * "Thing One",
- * "Thing Two"),
- * G_DBUS_CALL_FLAGS_NONE,
- * -1,
- * NULL,
- * &amp;error);
+ *  g_dbus_proxy_call_sync (proxy,
+ *                          "TwoStrings",
+ *                          g_variant_new ("(ss)",
+ *                                         "Thing One",
+ *                                         "Thing Two"),
+ *                          G_DBUS_CALL_FLAGS_NONE,
+ *                          -1,
+ *                          NULL,
+ *                          &amp;error);
  * ]|
  *
  * The calling thread is blocked until a reply is received. See
@@ -23683,9 +23307,7 @@
  * #GDBusProxy:g-interface-info) and @method_name is referenced by it,
  * then the return value is checked against the return type.
  *
- * return values. Free with g_variant_unref().
- *
- * Returns: %NULL if @error is set. Otherwise a #GVariant tuple with
+ * Returns: %NULL if @error is set. Otherwise a #GVariant tuple with return values. Free with g_variant_unref().
  * Since: 2.26
  */
 
@@ -23719,9 +23341,7 @@
  *
  * Finishes an operation started with g_dbus_proxy_call_with_unix_fd_list().
  *
- * return values. Free with g_variant_unref().
- *
- * Returns: %NULL if @error is set. Otherwise a #GVariant tuple with
+ * Returns: %NULL if @error is set. Otherwise a #GVariant tuple with return values. Free with g_variant_unref().
  * Since: 2.30
  */
 
@@ -23742,9 +23362,7 @@
  *
  * This method is only available on UNIX.
  *
- * return values. Free with g_variant_unref().
- *
- * Returns: %NULL if @error is set. Otherwise a #GVariant tuple with
+ * Returns: %NULL if @error is set. Otherwise a #GVariant tuple with return values. Free with g_variant_unref().
  * Since: 2.30
  */
 
@@ -23761,10 +23379,7 @@
  * #GDBusProxy:g-interface-info) and @property_name is referenced by
  * it, then @value is checked against the type of the property.
  *
- * for @property_name or %NULL if the value is not in the cache. The
- * returned reference must be freed with g_variant_unref().
- *
- * Returns: A reference to the #GVariant instance that holds the value
+ * Returns: A reference to the #GVariant instance that holds the value for @property_name or %NULL if the value is not in the cache. The returned reference must be freed with g_variant_unref().
  * Since: 2.26
  */
 
@@ -23775,10 +23390,7 @@
  *
  * Gets the names of all cached properties on @proxy.
  *
- * @proxy has no cached properties. Free the returned array with
- * g_strfreev().
- *
- * Returns: (transfer full): A %NULL-terminated array of strings or %NULL if
+ * Returns: (transfer full): A %NULL-terminated array of strings or %NULL if @proxy has no cached properties. Free the returned array with g_strfreev().
  * Since: 2.26
  */
 
@@ -23828,9 +23440,7 @@
  * that @proxy conforms to. See the #GDBusProxy:g-interface-info
  * property for more details.
  *
- * object, it is owned by @proxy.
- *
- * Returns: A #GDBusInterfaceInfo or %NULL. Do not unref the returned
+ * Returns: A #GDBusInterfaceInfo or %NULL. Do not unref the returned object, it is owned by @proxy.
  * Since: 2.26
  */
 
@@ -24040,11 +23650,11 @@
  * If the @value #GVariant is floating, it is consumed. This allows
  * convenient 'inline' use of g_variant_new(), e.g.
  * |[
- * g_dbus_proxy_set_cached_property (proxy,
- * "SomeProperty",
- * g_variant_new ("(si)",
- * "A String",
- * 42));
+ *  g_dbus_proxy_set_cached_property (proxy,
+ *                                    "SomeProperty",
+ *                                    g_variant_new ("(si)",
+ *                                                  "A String",
+ *                                                  42));
  * ]|
  *
  * Normally you will not need to use this method since @proxy is
@@ -24101,9 +23711,7 @@
  * Gets a D-Bus address string that can be used by clients to connect
  * to @server.
  *
- * by @server.
- *
- * Returns: A D-Bus address string. Do not free, the string is owned
+ * Returns: A D-Bus address string. Do not free, the string is owned by @server.
  * Since: 2.26
  */
 
@@ -24168,9 +23776,7 @@
  * This is a synchronous failable constructor. See
  * g_dbus_server_new() for the asynchronous version.
  *
- * g_object_unref().
- *
- * Returns: A #GDBusServer or %NULL if @error is set. Free with
+ * Returns: A #GDBusServer or %NULL if @error is set. Free with g_object_unref().
  * Since: 2.26
  */
 
@@ -24225,9 +23831,7 @@
  *
  * Gets the categories from the desktop file.
  *
- * i.e. no attempt is made to split it by ';' or validate it.
- *
- * Returns: The unparsed Categories key from the desktop file;
+ * Returns: The unparsed Categories key from the desktop file; i.e. no attempt is made to split it by ';' or validate it.
  */
 
 
@@ -24304,10 +23908,7 @@
  * Note that g_app_info_should_show() for @info will include this check (with
  * %NULL for @desktop_env) as well as additional checks.
  *
- * <literal>OnlyShowIn</literal> and <literal>NotShowIn</literal> keys, %FALSE
- * otherwise.
- *
- * Returns: %TRUE if the @info should be shown in @desktop_env according to the
+ * Returns: %TRUE if the @info should be shown in @desktop_env according to the <literal>OnlyShowIn</literal> and <literal>NotShowIn</literal> keys, %FALSE otherwise.
  * Since: 2.30
  */
 
@@ -24416,13 +24017,13 @@
  * The <ulink url="http://standards.freedesktop.org/menu-spec/latest/">Desktop
  * Menu specification</ulink> recognizes the following:
  * <simplelist>
- * <member>GNOME</member>
- * <member>KDE</member>
- * <member>ROX</member>
- * <member>XFCE</member>
- * <member>LXDE</member>
- * <member>Unity</member>
- * <member>Old</member>
+ *   <member>GNOME</member>
+ *   <member>KDE</member>
+ *   <member>ROX</member>
+ *   <member>XFCE</member>
+ *   <member>LXDE</member>
+ *   <member>Unity</member>
+ *   <member>Old</member>
  * </simplelist>
  *
  * Should be called only once; subsequent calls are ignored.
@@ -24445,9 +24046,7 @@
  *
  * Checks if a drive can be polled for media changes.
  *
- * %FALSE otherwise.
- *
- * Returns: %TRUE if the @drive can be polled for media changes,
+ * Returns: %TRUE if the @drive can be polled for media changes, %FALSE otherwise.
  */
 
 
@@ -24510,9 +24109,7 @@
  *
  * Finishes ejecting a drive.
  *
- * %FALSE otherwise.
- *
- * Returns: %TRUE if the drive has been ejected successfully,
+ * Returns: %TRUE if the drive has been ejected successfully, %FALSE otherwise.
  * Deprecated: 2.22: Use g_drive_eject_with_operation_finish() instead.
  */
 
@@ -24556,10 +24153,7 @@
  * Use g_drive_get_identifier() to obtain the identifiers
  * themselves.
  *
- * array of strings containing kinds of identifiers. Use g_strfreev()
- * to free.
- *
- * Returns: (transfer full) (array zero-terminated=1): a %NULL-terminated
+ * Returns: (transfer full) (array zero-terminated=1): a %NULL-terminated array of strings containing kinds of identifiers. Use g_strfreev() to free.
  */
 
 
@@ -24569,9 +24163,7 @@
  *
  * Gets the icon for @drive.
  *
- * Free the returned object with g_object_unref().
- *
- * Returns: (transfer full): #GIcon for the @drive.
+ * Returns: (transfer full): #GIcon for the @drive. Free the returned object with g_object_unref().
  */
 
 
@@ -24582,10 +24174,7 @@
  *
  * Gets the identifier of the given kind for @drive.
  *
- * requested identfier, or %NULL if the #GDrive
- * doesn't have this kind of identifier.
- *
- * Returns: a newly allocated string containing the
+ * Returns: a newly allocated string containing the requested identfier, or %NULL if the #GDrive doesn't have this kind of identifier.
  */
 
 
@@ -24595,9 +24184,7 @@
  *
  * Gets the name of @drive.
  *
- * string should be freed when no longer needed.
- *
- * Returns: a string containing @drive's name. The returned
+ * Returns: a string containing @drive's name. The returned string should be freed when no longer needed.
  */
 
 
@@ -24664,9 +24251,7 @@
  *
  * Checks if @drive is capabable of automatically detecting media changes.
  *
- * media changes, %FALSE otherwise.
- *
- * Returns: %TRUE if the @drive is capabable of automatically detecting
+ * Returns: %TRUE if the @drive is capabable of automatically detecting media changes, %FALSE otherwise.
  */
 
 
@@ -24703,9 +24288,7 @@
  *
  * Finishes an operation started with g_drive_poll_for_media() on a drive.
  *
- * %FALSE otherwise.
- *
- * Returns: %TRUE if the drive has been poll_for_mediaed successfully,
+ * Returns: %TRUE if the drive has been poll_for_mediaed successfully, %FALSE otherwise.
  */
 
 
@@ -24736,9 +24319,7 @@
  *
  * Finishes starting a drive.
  *
- * %FALSE otherwise.
- *
- * Returns: %TRUE if the drive has been started successfully,
+ * Returns: %TRUE if the drive has been started successfully, %FALSE otherwise.
  * Since: 2.22
  */
 
@@ -24770,9 +24351,7 @@
  *
  * Finishes stopping a drive.
  *
- * %FALSE otherwise.
- *
- * Returns: %TRUE if the drive has been stopped successfully,
+ * Returns: %TRUE if the drive has been stopped successfully, %FALSE otherwise.
  * Since: 2.22
  */
 
@@ -24783,9 +24362,7 @@
  *
  * Gives back the icon from @emblem.
  *
- * the emblem and should not be modified or freed.
- *
- * Returns: (transfer none): a #GIcon. The returned object belongs to
+ * Returns: (transfer none): a #GIcon. The returned object belongs to the emblem and should not be modified or freed.
  * Since: 2.18
  */
 
@@ -24851,9 +24428,7 @@
  *
  * Gets the list of emblems for the @icon.
  *
- * #GEmblem <!-- -->s that is owned by @emblemed
- *
- * Returns: (element-type Gio.Emblem) (transfer none): a #GList of
+ * Returns: (element-type Gio.Emblem) (transfer none): a #GList of #GEmblem <!-- -->s that is owned by @emblemed
  * Since: 2.18
  */
 
@@ -24906,9 +24481,7 @@
  * returned. Other errors are possible too, and depend on what kind of
  * filesystem the file is on.
  *
- * Free the returned object with g_object_unref().
- *
- * Returns: (transfer full): a #GFileOutputStream, or %NULL on error.
+ * Returns: (transfer full): a #GFileOutputStream, or %NULL on error. Free the returned object with g_object_unref().
  */
 
 
@@ -24940,9 +24513,7 @@
  * Finishes an asynchronous file append operation started with
  * g_file_append_to_async().
  *
- * Free the returned object with g_object_unref().
- *
- * Returns: (transfer full): a valid #GFileOutputStream or %NULL on error.
+ * Returns: (transfer full): a valid #GFileOutputStream or %NULL on error. Free the returned object with g_object_unref().
  */
 
 
@@ -24975,9 +24546,7 @@
  *
  * Gets the file attribute with the name @name from @list.
  *
- * attribute isn't found.
- *
- * Returns: a #GFileAttributeInfo for the @name, or %NULL if an
+ * Returns: a #GFileAttributeInfo for the @name, or %NULL if an attribute isn't found.
  */
 
 
@@ -25021,9 +24590,7 @@
  *
  * TODO: this is awkwardly worded.
  *
- * in the given @ns, %FALSE otherwise.
- *
- * Returns: %TRUE if the matcher matches all of the entries
+ * Returns: %TRUE if the matcher matches all of the entries in the given @ns, %FALSE otherwise.
  */
 
 
@@ -25033,9 +24600,7 @@
  *
  * Gets the next matched attribute from a #GFileAttributeMatcher.
  *
- * no more attribute exist.
- *
- * Returns: a string containing the next attribute or %NULL if
+ * Returns: a string containing the next attribute or %NULL if no more attribute exist.
  */
 
 
@@ -25121,9 +24686,7 @@
  * is a limitation of the current implementation, but may be fixed
  * in the future.
  *
- * @matcher that are not matched by @subtract
- *
- * Returns: A file attribute matcher matching all attributes of
+ * Returns: A file attribute matcher matching all attributes of @matcher that are not matched by @subtract
  */
 
 
@@ -25136,9 +24699,7 @@
  * The output however, might not be identical, as the matcher may
  * decide to use a different order or omit needless parts.
  *
- * against or %NULL if @matcher was %NULL.
- *
- * Returns: a string describing the attributes the matcher matches
+ * Returns: a string describing the attributes the matcher matches against or %NULL if @matcher was %NULL.
  * Since: 2.32
  */
 
@@ -25288,10 +24849,7 @@
  * Other errors are possible too, and depend on what kind of
  * filesystem the file is on.
  *
- * %NULL on error.
- * Free the returned object with g_object_unref().
- *
- * Returns: (transfer full): a #GFileOutputStream for the newly created file, or
+ * Returns: (transfer full): a #GFileOutputStream for the newly created file, or %NULL on error. Free the returned object with g_object_unref().
  */
 
 
@@ -25324,9 +24882,7 @@
  * Finishes an asynchronous file create operation started with
  * g_file_create_async().
  *
- * Free the returned object with g_object_unref().
- *
- * Returns: (transfer full): a #GFileOutputStream or %NULL on error.
+ * Returns: (transfer full): a #GFileOutputStream or %NULL on error. Free the returned object with g_object_unref().
  */
 
 
@@ -25359,9 +24915,7 @@
  * supported, so make sure you really need to do read and write streaming,
  * rather than just opening for reading or writing.
  *
- * Free the returned object with g_object_unref().
- *
- * Returns: (transfer full): a #GFileIOStream for the newly created file, or %NULL on error.
+ * Returns: (transfer full): a #GFileIOStream for the newly created file, or %NULL on error. Free the returned object with g_object_unref().
  * Since: 2.22
  */
 
@@ -25397,9 +24951,7 @@
  * Finishes an asynchronous file create operation started with
  * g_file_create_readwrite_async().
  *
- * Free the returned object with g_object_unref().
- *
- * Returns: (transfer full): a #GFileIOStream or %NULL on error.
+ * Returns: (transfer full): a #GFileIOStream or %NULL on error. Free the returned object with g_object_unref().
  * Since: 2.22
  */
 
@@ -25477,9 +25029,7 @@
  * Finishes an asynchronous eject operation started by
  * g_file_eject_mountable().
  *
- * otherwise.
- *
- * Returns: %TRUE if the @file was ejected successfully. %FALSE
+ * Returns: %TRUE if the @file was ejected successfully. %FALSE otherwise.
  * Deprecated: 2.22: Use g_file_eject_mountable_with_operation_finish() instead.
  */
 
@@ -25515,9 +25065,7 @@
  * Finishes an asynchronous eject operation started by
  * g_file_eject_mountable_with_operation().
  *
- * otherwise.
- *
- * Returns: %TRUE if the @file was ejected successfully. %FALSE
+ * Returns: %TRUE if the @file was ejected successfully. %FALSE otherwise.
  * Since: 2.22
  */
 
@@ -25550,9 +25098,7 @@
  * If the file is not a directory, the G_FILE_ERROR_NOTDIR error will be returned.
  * Other errors are possible too.
  *
- * Free the returned object with g_object_unref().
- *
- * Returns: (transfer full): A #GFileEnumerator if successful, %NULL on error.
+ * Returns: (transfer full): A #GFileEnumerator if successful, %NULL on error. Free the returned object with g_object_unref().
  */
 
 
@@ -25587,9 +25133,7 @@
  * Finishes an async enumerate children operation.
  * See g_file_enumerate_children_async().
  *
- * Free the returned object with g_object_unref().
- *
- * Returns: (transfer full): a #GFileEnumerator or %NULL if an error occurred.
+ * Returns: (transfer full): a #GFileEnumerator or %NULL if an error occurred. Free the returned object with g_object_unref().
  */
 
 
@@ -25694,9 +25238,7 @@
  * enumerator is at the end, %NULL will be returned and @error will
  * be unset.
  *
- * Free the returned object with g_object_unref() when no longer needed.
- *
- * Returns: (transfer full): A #GFileInfo or %NULL on error or end of enumerator.
+ * Returns: (transfer full): A #GFileInfo or %NULL on error or end of enumerator. Free the returned object with g_object_unref() when no longer needed.
  */
 
 
@@ -25736,10 +25278,7 @@
  *
  * Finishes the asynchronous operation started with g_file_enumerator_next_files_async().
  *
- * g_list_free() and unref the infos with g_object_unref() when you're
- * done with them.
- *
- * Returns: (transfer full) (element-type Gio.FileInfo): a #GList of #GFileInfo<!---->s. You must free the list with
+ * Returns: (transfer full) (element-type Gio.FileInfo): a #GList of #GFileInfo<!---->s. You must free the list with g_list_free() and unref the infos with g_object_unref() when you're done with them.
  */
 
 
@@ -25764,9 +25303,7 @@
  *
  * This call does no blocking i/o.
  *
- * %FALSE if either is not a #GFile.
- *
- * Returns: %TRUE if @file1 and @file2 are equal.
+ * Returns: %TRUE if @file1 and @file2 are equal. %FALSE if either is not a #GFile.
  */
 
 
@@ -25786,9 +25323,7 @@
  * triggering the cancellable object from another thread. If the operation
  * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned.
  *
- * Free the returned object with g_object_unref().
- *
- * Returns: (transfer full): a #GMount where the @file is located or %NULL on error.
+ * Returns: (transfer full): a #GMount where the @file is located or %NULL on error. Free the returned object with g_object_unref().
  */
 
 
@@ -25819,9 +25354,7 @@
  * Finishes an asynchronous find mount request.
  * See g_file_find_enclosing_mount_async().
  *
- * Free the returned object with g_object_unref().
- *
- * Returns: (transfer full): #GMount for given @file or %NULL on error.
+ * Returns: (transfer full): #GMount for given @file or %NULL on error. Free the returned object with g_object_unref().
  */
 
 
@@ -25843,10 +25376,7 @@
  *
  * This call does no blocking i/o.
  *
- * if given #GFile is invalid. The returned string should be
- * freed with g_free() when no longer needed.
- *
- * Returns: string containing the #GFile's base name, or %NULL
+ * Returns: string containing the #GFile's base name, or %NULL if given #GFile is invalid. The returned string should be freed with g_free() when no longer needed.
  */
 
 
@@ -25863,9 +25393,7 @@
  *
  * This call does no blocking i/o.
  *
- * Free the returned object with g_object_unref().
- *
- * Returns: (transfer full): a #GFile to a child specified by @name.
+ * Returns: (transfer full): a #GFile to a child specified by @name. Free the returned object with g_object_unref().
  */
 
 
@@ -25883,10 +25411,7 @@
  *
  * This call does no blocking i/o.
  *
- * %NULL if the display name couldn't be converted.
- * Free the returned object with g_object_unref().
- *
- * Returns: (transfer full): a #GFile to the specified child, or
+ * Returns: (transfer full): a #GFile to the specified child, or %NULL if the display name couldn't be converted. Free the returned object with g_object_unref().
  */
 
 
@@ -25900,10 +25425,7 @@
  *
  * This call does no blocking i/o.
  *
- * #GFile or %NULL if there is no parent.
- * Free the returned object with g_object_unref().
- *
- * Returns: (transfer full): a #GFile structure to the parent of the given
+ * Returns: (transfer full): a #GFile structure to the parent of the given #GFile or %NULL if there is no parent. Free the returned object with g_object_unref().
  */
 
 
@@ -25926,9 +25448,7 @@
  *
  * This call does no blocking i/o.
  *
- * string should be freed with g_free() when no longer needed.
- *
- * Returns: a string containing the #GFile's parse name. The returned
+ * Returns: a string containing the #GFile's parse name. The returned string should be freed with g_free() when no longer needed.
  */
 
 
@@ -25940,10 +25460,7 @@
  *
  * This call does no blocking i/o.
  *
- * no such path exists. The returned string should be
- * freed with g_free() when no longer needed.
- *
- * Returns: string containing the #GFile's path, or %NULL if
+ * Returns: string containing the #GFile's path, or %NULL if no such path exists. The returned string should be freed with g_free() when no longer needed.
  */
 
 
@@ -25956,10 +25473,7 @@
  *
  * This call does no blocking i/o.
  *
- * to @parent, or %NULL if @descendant doesn't have @parent as prefix.
- * The returned string should be freed with g_free() when no longer needed.
- *
- * Returns: string with the relative path from @descendant
+ * Returns: string with the relative path from @descendant to @parent, or %NULL if @descendant doesn't have @parent as prefix. The returned string should be freed with g_free() when no longer needed.
  */
 
 
@@ -25971,9 +25485,7 @@
  *
  * This call does no blocking i/o.
  *
- * The returned string should be freed with g_free() when no longer needed.
- *
- * Returns: a string containing the #GFile's URI.
+ * Returns: a string containing the #GFile's URI. The returned string should be freed with g_free() when no longer needed.
  */
 
 
@@ -25990,10 +25502,7 @@
  *
  * This call does no blocking i/o.
  *
- * #GFile. The returned string should be freed with g_free()
- * when no longer needed.
- *
- * Returns: a string containing the URI scheme for the given
+ * Returns: a string containing the URI scheme for the given #GFile. The returned string should be freed with g_free() when no longer needed.
  */
 
 
@@ -26008,9 +25517,7 @@
  * parent at all.  If @parent is non-%NULL then %TRUE is only returned
  * if @file is a child of @parent.
  *
- * case that @parent is %NULL).
- *
- * Returns: %TRUE if @file is a child of @parent (or any parent in the
+ * Returns: %TRUE if @file is a child of @parent (or any parent in the case that @parent is %NULL).
  * Since: 2.24
  */
 
@@ -26030,10 +25537,8 @@
  * filesystem point of view), because the prefix of @file is an alias
  * of @prefix.
  *
- * %FALSE otherwise.
- *
  * Virtual: prefix_matches
- * Returns: %TRUE if the @files's parent, grandparent, etc is @prefix.
+ * Returns: %TRUE if the @files's parent, grandparent, etc is @prefix. %FALSE otherwise.
  */
 
 
@@ -26046,10 +25551,7 @@
  *
  * This call does no blocking i/o.
  *
- * given URI scheme, %FALSE if URI scheme is %NULL,
- * not supported, or #GFile is invalid.
- *
- * Returns: %TRUE if #GFile's backend supports the
+ * Returns: %TRUE if #GFile's backend supports the given URI scheme, %FALSE if URI scheme is %NULL, not supported, or #GFile is invalid.
  */
 
 
@@ -26061,12 +25563,8 @@
  *
  * This call does no blocking i/o.
  *
- * integer that can be used as hash value for the #GFile.
- * This function is intended for easily hashing a #GFile to
- * add to a #GHashTable or similar data structure.
- *
  * Virtual: hash
- * Returns: 0 if @file is not a valid #GFile, otherwise an
+ * Returns: 0 if @file is not a valid #GFile, otherwise an integer that can be used as hash value for the #GFile. This function is intended for easily hashing a #GFile to add to a #GHashTable or similar data structure.
  */
 
 
@@ -26086,9 +25584,7 @@
  *
  * Creates a new icon for a file.
  *
- * @file, or %NULL on error.
- *
- * Returns: (transfer full) (type GFileIcon): a #GIcon for the given
+ * Returns: (transfer full) (type GFileIcon): a #GIcon for the given @file, or %NULL on error.
  */
 
 
@@ -26129,9 +25625,7 @@
  * This escapes things as needed to make the string valid
  * utf8.
  *
- * When you're done with the string it must be freed with g_free().
- *
- * Returns: a UTF-8 string associated with the given @attribute.
+ * Returns: a UTF-8 string associated with the given @attribute. When you're done with the string it must be freed with g_free().
  */
 
 
@@ -26155,9 +25649,7 @@
  * Gets the value of a byte string attribute. If the attribute does
  * not contain a byte string, %NULL will be returned.
  *
- * %NULL otherwise.
- *
- * Returns: the contents of the @attribute value as a byte string, or
+ * Returns: the contents of the @attribute value as a byte string, or %NULL otherwise.
  */
 
 
@@ -26171,9 +25663,7 @@
  *
  * Gets the attribute type, value and status for an attribute key.
  *
- * %FALSE otherwise.
- *
- * Returns: (transfer none): %TRUE if @info has an attribute named @attribute,
+ * Returns: (transfer none): %TRUE if @info has an attribute named @attribute, %FALSE otherwise.
  */
 
 
@@ -26211,9 +25701,7 @@
  * Gets the value of a #GObject attribute. If the attribute does
  * not contain a #GObject, %NULL will be returned.
  *
- * %NULL otherwise.
- *
- * Returns: (transfer none): a #GObject associated with the given @attribute, or
+ * Returns: (transfer none): a #GObject associated with the given @attribute, or %NULL otherwise.
  */
 
 
@@ -26224,9 +25712,7 @@
  *
  * Gets the attribute status for an attribute key.
  *
- * %G_FILE_ATTRIBUTE_STATUS_UNSET if the key is invalid.
- *
- * Returns: a #GFileAttributeStatus for the given @attribute, or
+ * Returns: a #GFileAttributeStatus for the given @attribute, or %G_FILE_ATTRIBUTE_STATUS_UNSET if the key is invalid.
  */
 
 
@@ -26238,9 +25724,7 @@
  * Gets the value of a string attribute. If the attribute does
  * not contain a string, %NULL will be returned.
  *
- * %NULL otherwise.
- *
- * Returns: the contents of the @attribute value as a UTF-8 string, or
+ * Returns: the contents of the @attribute value as a UTF-8 string, or %NULL otherwise.
  */
 
 
@@ -26252,9 +25736,7 @@
  * Gets the value of a stringv attribute. If the attribute does
  * not contain a stringv, %NULL will be returned.
  *
- * %NULL otherwise. Do not free. These returned strings are UTF-8.
- *
- * Returns: (transfer none): the contents of the @attribute value as a stringv, or
+ * Returns: (transfer none): the contents of the @attribute value as a stringv, or %NULL otherwise. Do not free. These returned strings are UTF-8.
  * Since: 2.22
  */
 
@@ -26266,9 +25748,7 @@
  *
  * Gets the attribute type for an attribute key.
  *
- * %G_FILE_ATTRIBUTE_TYPE_INVALID if the key is not set.
- *
- * Returns: a #GFileAttributeType for the given @attribute, or
+ * Returns: a #GFileAttributeType for the given @attribute, or %G_FILE_ATTRIBUTE_TYPE_INVALID if the key is not set.
  */
 
 
@@ -26448,9 +25928,7 @@
  *
  * Checks if a file info structure has an attribute named @attribute.
  *
- * %FALSE otherwise.
- *
- * Returns: %TRUE if @Ginfo has an attribute named @attribute,
+ * Returns: %TRUE if @Ginfo has an attribute named @attribute, %FALSE otherwise.
  */
 
 
@@ -26462,9 +25940,7 @@
  * Checks if a file info structure has an attribute in the
  * specified @name_space.
  *
- * %FALSE otherwise.
- *
- * Returns: %TRUE if @Ginfo has an attribute in @name_space,
+ * Returns: %TRUE if @Ginfo has an attribute in @name_space, %FALSE otherwise.
  * Since: 2.22
  */
 
@@ -26476,10 +25952,7 @@
  *
  * Lists the file info structure's attributes.
  *
- * possible attribute types for the given @name_space, or
- * %NULL on error.
- *
- * Returns: (array zero-terminated=1) (transfer full): a null-terminated array of strings of all of the
+ * Returns: (array zero-terminated=1) (transfer full): a null-terminated array of strings of all of the possible attribute types for the given @name_space, or %NULL on error.
  */
 
 
@@ -26938,9 +26411,7 @@
  * triggering the cancellable object from another thread. If the operation
  * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned.
  *
- * %FALSE if there were errors.
- *
- * Returns: %TRUE if the @file's contents were successfully loaded.
+ * Returns: %TRUE if the @file's contents were successfully loaded. %FALSE if there were errors.
  */
 
 
@@ -26982,9 +26453,7 @@
  * g_free() when no longer needed. If @etag_out is present, it will be
  * set to the new entity tag for the @file.
  *
- * present, it will be set appropriately.
- *
- * Returns: %TRUE if the load was successful. If %FALSE and @error is
+ * Returns: %TRUE if the load was successful. If %FALSE and @error is present, it will be set appropriately.
  */
 
 
@@ -27025,9 +26494,7 @@
  * The returned @content should be freed with g_free() when no longer
  * needed.
  *
- * present, it will be set appropriately.
- *
- * Returns: %TRUE if the load was successful. If %FALSE and @error is
+ * Returns: %TRUE if the load was successful. If %FALSE and @error is present, it will be set appropriately.
  */
 
 
@@ -27075,9 +26542,7 @@
  * triggering the cancellable object from another thread. If the operation
  * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned.
  *
- * otherwise.
- *
- * Returns: %TRUE if all directories have been successfully created, %FALSE
+ * Returns: %TRUE if all directories have been successfully created, %FALSE otherwise.
  * Since: 2.18
  */
 
@@ -27114,9 +26579,7 @@
  * triggering the cancellable object from another thread. If the operation
  * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned.
  *
- * Free the returned object with g_object_unref().
- *
- * Returns: (transfer full): a #GFileMonitor for the given @file, or %NULL on error.
+ * Returns: (transfer full): a #GFileMonitor for the given @file, or %NULL on error. Free the returned object with g_object_unref().
  * Since: 2.18
  */
 
@@ -27145,10 +26608,8 @@
  * triggering the cancellable object from another thread. If the operation
  * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned.
  *
- * Free the returned object with g_object_unref().
- *
  * Virtual: monitor_dir
- * Returns: (transfer full): a #GFileMonitor for the given @file, or %NULL on error.
+ * Returns: (transfer full): a #GFileMonitor for the given @file, or %NULL on error. Free the returned object with g_object_unref().
  */
 
 
@@ -27183,9 +26644,7 @@
  * triggering the cancellable object from another thread. If the operation
  * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned.
  *
- * Free the returned object with g_object_unref().
- *
- * Returns: (transfer full): a #GFileMonitor for the given @file, or %NULL on error.
+ * Returns: (transfer full): a #GFileMonitor for the given @file, or %NULL on error. Free the returned object with g_object_unref().
  */
 
 
@@ -27238,10 +26697,7 @@
  *
  * Finishes a mount operation started by g_file_mount_enclosing_volume().
  *
- * has occurred, this function will return %FALSE and set @error
- * appropriately if present.
- *
- * Returns: %TRUE if successful. If an error
+ * Returns: %TRUE if successful. If an error has occurred, this function will return %FALSE and set @error appropriately if present.
  */
 
 
@@ -27278,9 +26734,7 @@
  * Finish an asynchronous mount operation that was started
  * with g_file_mount_mountable().
  *
- * Free the returned object with g_object_unref().
- *
- * Returns: (transfer full): a #GFile or %NULL on error.
+ * Returns: (transfer full): a #GFile or %NULL on error. Free the returned object with g_object_unref().
  */
 
 
@@ -27344,9 +26798,7 @@
  * This operation never fails, but the returned object might not support any
  * I/O operation if @arg points to a malformed path.
  *
- * Free the returned object with g_object_unref().
- *
- * Returns: (transfer full): a new #GFile.
+ * Returns: (transfer full): a new #GFile. Free the returned object with g_object_unref().
  */
 
 
@@ -27358,9 +26810,7 @@
  * fails, but the returned object might not support any I/O
  * operation if @path is malformed.
  *
- * Free the returned object with g_object_unref().
- *
- * Returns: (transfer full): a new #GFile for the given @path.
+ * Returns: (transfer full): a new #GFile for the given @path. Free the returned object with g_object_unref().
  */
 
 
@@ -27373,9 +26823,7 @@
  * operation if @uri is malformed or if the uri type is
  * not supported.
  *
- * Free the returned object with g_object_unref().
- *
- * Returns: (transfer full): a new #GFile for the given @uri.
+ * Returns: (transfer full): a new #GFile for the given @uri. Free the returned object with g_object_unref().
  */
 
 
@@ -27396,9 +26844,7 @@
  * Unlike the other #GFile constructors, this will return %NULL if
  * a temporary file could not be created.
  *
- * Free the returned object with g_object_unref().
- *
- * Returns: (transfer full): a new #GFile.
+ * Returns: (transfer full): a new #GFile. Free the returned object with g_object_unref().
  * Since: 2.32
  */
 
@@ -27423,9 +26869,7 @@
  * so make sure you really need to do read and write streaming, rather than
  * just opening for reading or writing.
  *
- * Free the returned object with g_object_unref().
- *
- * Returns: (transfer full): #GFileIOStream or %NULL on error.
+ * Returns: (transfer full): #GFileIOStream or %NULL on error. Free the returned object with g_object_unref().
  * Since: 2.22
  */
 
@@ -27459,9 +26903,7 @@
  * Finishes an asynchronous file read operation started with
  * g_file_open_readwrite_async().
  *
- * Free the returned object with g_object_unref().
- *
- * Returns: (transfer full): a #GFileIOStream or %NULL on error.
+ * Returns: (transfer full): a #GFileIOStream or %NULL on error. Free the returned object with g_object_unref().
  * Since: 2.22
  */
 
@@ -27581,9 +27023,7 @@
  * Finish an asynchronous poll operation that was polled
  * with g_file_poll_mountable().
  *
- * otherwise.
- *
- * Returns: %TRUE if the operation finished successfully. %FALSE
+ * Returns: %TRUE if the operation finished successfully. %FALSE otherwise.
  * Since: 2.22
  */
 
@@ -27601,9 +27041,7 @@
  * triggering the cancellable object from another thread. If the operation
  * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned.
  *
- * When you are done with it, release it with g_object_unref()
- *
- * Returns: (transfer full): a #GAppInfo if the handle was found, %NULL if there were errors.
+ * Returns: (transfer full): a #GAppInfo if the handle was found, %NULL if there were errors. When you are done with it, release it with g_object_unref()
  */
 
 
@@ -27651,9 +27089,7 @@
  * The primary use case of this method is to check if a file is a regular file,
  * directory, or symlink.
  *
- * does not exist
- *
- * Returns: The #GFileType of the file and #G_FILE_TYPE_UNKNOWN if the file
+ * Returns: The #GFileType of the file and #G_FILE_TYPE_UNKNOWN if the file does not exist
  * Since: 2.18
  */
 
@@ -27687,9 +27123,7 @@
  * If the file does not exist, the G_IO_ERROR_NOT_FOUND error will be returned.
  * Other errors are possible too, and depend on what kind of filesystem the file is on.
  *
- * Free the returned object with g_object_unref().
- *
- * Returns: (transfer full): a #GFileInfo or %NULL if there was an error.
+ * Returns: (transfer full): a #GFileInfo or %NULL if there was an error. Free the returned object with g_object_unref().
  */
 
 
@@ -27725,9 +27159,7 @@
  * Finishes an asynchronous filesystem info query.  See
  * g_file_query_filesystem_info_async().
  *
- * Free the returned object with g_object_unref().
- *
- * Returns: (transfer full): #GFileInfo for given @file or %NULL on error.
+ * Returns: (transfer full): #GFileInfo for given @file or %NULL on error. Free the returned object with g_object_unref().
  */
 
 
@@ -27765,9 +27197,7 @@
  * If the file does not exist, the G_IO_ERROR_NOT_FOUND error will be returned.
  * Other errors are possible too, and depend on what kind of filesystem the file is on.
  *
- * Free the returned object with g_object_unref().
- *
- * Returns: (transfer full): a #GFileInfo for the given @file, or %NULL on error.
+ * Returns: (transfer full): a #GFileInfo for the given @file, or %NULL on error. Free the returned object with g_object_unref().
  */
 
 
@@ -27802,9 +27232,7 @@
  * Finishes an asynchronous file info query.
  * See g_file_query_info_async().
  *
- * Free the returned object with g_object_unref().
- *
- * Returns: (transfer full): #GFileInfo for given @file or %NULL on error.
+ * Returns: (transfer full): #GFileInfo for given @file or %NULL on error. Free the returned object with g_object_unref().
  */
 
 
@@ -27825,9 +27253,7 @@
  * triggering the cancellable object from another thread. If the operation
  * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned.
  *
- * When you are done with it, release it with g_file_attribute_info_list_unref()
- *
- * Returns: a #GFileAttributeInfoList describing the settable attributes.
+ * Returns: a #GFileAttributeInfoList describing the settable attributes. When you are done with it, release it with g_file_attribute_info_list_unref()
  */
 
 
@@ -27845,9 +27271,7 @@
  * triggering the cancellable object from another thread. If the operation
  * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned.
  *
- * When you are done with it, release it with g_file_attribute_info_list_unref()
- *
- * Returns: a #GFileAttributeInfoList describing the writable namespaces.
+ * Returns: a #GFileAttributeInfoList describing the writable namespaces. When you are done with it, release it with g_file_attribute_info_list_unref()
  */
 
 
@@ -27868,10 +27292,8 @@
  * If the file is a directory, the G_IO_ERROR_IS_DIRECTORY error will be returned.
  * Other errors are possible too, and depend on what kind of filesystem the file is on.
  *
- * Free the returned object with g_object_unref().
- *
  * Virtual: read_fn
- * Returns: (transfer full): #GFileInputStream or %NULL on error.
+ * Returns: (transfer full): #GFileInputStream or %NULL on error. Free the returned object with g_object_unref().
  */
 
 
@@ -27902,9 +27324,7 @@
  * Finishes an asynchronous file read operation started with
  * g_file_read_async().
  *
- * Free the returned object with g_object_unref().
- *
- * Returns: (transfer full): a #GFileInputStream or %NULL on error.
+ * Returns: (transfer full): a #GFileInputStream or %NULL on error. Free the returned object with g_object_unref().
  */
 
 
@@ -27959,9 +27379,7 @@
  * Other errors are possible too, and depend on what kind of
  * filesystem the file is on.
  *
- * Free the returned object with g_object_unref().
- *
- * Returns: (transfer full): a #GFileOutputStream or %NULL on error.
+ * Returns: (transfer full): a #GFileOutputStream or %NULL on error. Free the returned object with g_object_unref().
  */
 
 
@@ -28000,6 +27418,7 @@
  * @error: a #GError, or %NULL
  *
  * Replaces the contents of @file with @contents of @length bytes.
+ *
  * If @etag is specified (not %NULL) any existing file must have that etag, or
  * the error %G_IO_ERROR_WRONG_ETAG will be returned.
  *
@@ -28012,10 +27431,7 @@
  * The returned @new_etag can be used to verify that the file hasn't changed the
  * next time it is saved over.
  *
- * has occurred, this function will return %FALSE and set @error
- * appropriately if present.
- *
- * Returns: %TRUE if successful. If an error
+ * Returns: %TRUE if successful. If an error has occurred, this function will return %FALSE and set @error appropriately if present.
  */
 
 
@@ -28072,9 +27488,7 @@
  * Finishes an asynchronous file replace operation started with
  * g_file_replace_async().
  *
- * Free the returned object with g_object_unref().
- *
- * Returns: (transfer full): a #GFileOutputStream, or %NULL on error.
+ * Returns: (transfer full): a #GFileOutputStream, or %NULL on error. Free the returned object with g_object_unref().
  */
 
 
@@ -28098,9 +27512,7 @@
  * supported, so make sure you really need to do read and write streaming,
  * rather than just opening for reading or writing.
  *
- * Free the returned object with g_object_unref().
- *
- * Returns: (transfer full): a #GFileIOStream or %NULL on error.
+ * Returns: (transfer full): a #GFileIOStream or %NULL on error. Free the returned object with g_object_unref().
  * Since: 2.22
  */
 
@@ -28138,9 +27550,7 @@
  * Finishes an asynchronous file replace operation started with
  * g_file_replace_readwrite_async().
  *
- * Free the returned object with g_object_unref().
- *
- * Returns: (transfer full): a #GFileIOStream, or %NULL on error.
+ * Returns: (transfer full): a #GFileIOStream, or %NULL on error. Free the returned object with g_object_unref().
  * Since: 2.22
  */
 
@@ -28154,10 +27564,7 @@
  *
  * This call does no blocking i/o.
  *
- * is %NULL or if @file is invalid.
- * Free the returned object with g_object_unref().
- *
- * Returns: (transfer full): #GFile to the resolved path. %NULL if @relative_path
+ * Returns: (transfer full): #GFile to the resolved path. %NULL if @relative_path is %NULL or if @file is invalid. Free the returned object with g_object_unref().
  */
 
 
@@ -28201,9 +27608,7 @@
  * triggering the cancellable object from another thread. If the operation
  * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned.
  *
- * in the @file, %FALSE otherwise.
- *
- * Returns: %TRUE if the @attribute was successfully set to @value
+ * Returns: %TRUE if the @attribute was successfully set to @value in the @file, %FALSE otherwise.
  */
 
 
@@ -28223,9 +27628,7 @@
  * triggering the cancellable object from another thread. If the operation
  * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned.
  *
- * in the @file, %FALSE otherwise.
- *
- * Returns: %TRUE if the @attribute was successfully set to @value
+ * Returns: %TRUE if the @attribute was successfully set to @value in the @file, %FALSE otherwise.
  */
 
 
@@ -28285,9 +27688,7 @@
  * triggering the cancellable object from another thread. If the operation
  * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned.
  *
- * in the @file, %FALSE otherwise.
- *
- * Returns: %TRUE if the @attribute was successfully set to @value
+ * Returns: %TRUE if the @attribute was successfully set to @value in the @file, %FALSE otherwise.
  */
 
 
@@ -28307,9 +27708,7 @@
  * triggering the cancellable object from another thread. If the operation
  * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned.
  *
- * in the @file, %FALSE otherwise.
- *
- * Returns: %TRUE if the @attribute was successfully set to @value
+ * Returns: %TRUE if the @attribute was successfully set to @value in the @file, %FALSE otherwise.
  */
 
 
@@ -28393,10 +27792,7 @@
  * triggering the cancellable object from another thread. If the operation
  * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned.
  *
- * if there was an error.
- * Free the returned object with g_object_unref().
- *
- * Returns: (transfer full): a #GFile specifying what @file was renamed to, or %NULL
+ * Returns: (transfer full): a #GFile specifying what @file was renamed to, or %NULL if there was an error. Free the returned object with g_object_unref().
  */
 
 
@@ -28428,9 +27824,7 @@
  * Finishes setting a display name started with
  * g_file_set_display_name_async().
  *
- * Free the returned object with g_object_unref().
- *
- * Returns: (transfer full): a #GFile or %NULL on error.
+ * Returns: (transfer full): a #GFile or %NULL on error. Free the returned object with g_object_unref().
  */
 
 
@@ -28469,9 +27863,7 @@
  * Finish an asynchronous start operation that was started
  * with g_file_start_mountable().
  *
- * otherwise.
- *
- * Returns: %TRUE if the operation finished successfully. %FALSE
+ * Returns: %TRUE if the operation finished successfully. %FALSE otherwise.
  * Since: 2.22
  */
 
@@ -28509,9 +27901,7 @@
  * Finish an asynchronous stop operation that was started
  * with g_file_stop_mountable().
  *
- * otherwise.
- *
- * Returns: %TRUE if the operation finished successfully. %FALSE
+ * Returns: %TRUE if the operation finished successfully. %FALSE otherwise.
  * Since: 2.22
  */
 
@@ -28583,9 +27973,7 @@
  * Finish an asynchronous unmount operation that was started
  * with g_file_unmount_mountable().
  *
- * otherwise.
- *
- * Returns: %TRUE if the operation finished successfully. %FALSE
+ * Returns: %TRUE if the operation finished successfully. %FALSE otherwise.
  * Deprecated: 2.22: Use g_file_unmount_mountable_with_operation_finish() instead.
  */
 
@@ -28623,9 +28011,7 @@
  * Finish an asynchronous unmount operation that was started
  * with g_file_unmount_mountable_with_operation().
  *
- * otherwise.
- *
- * Returns: %TRUE if the operation finished successfully. %FALSE
+ * Returns: %TRUE if the operation finished successfully. %FALSE otherwise.
  * Since: 2.22
  */
 
@@ -28637,10 +28023,7 @@
  *
  * Obtains a completion for @initial_text from @completer.
  *
- * This string is not owned by GIO, so remember to g_free() it
- * when finished.
- *
- * Returns: a completed string, or %NULL if no completion exists.
+ * Returns: a completed string, or %NULL if no completion exists. This string is not owned by GIO, so remember to g_free() it when finished.
  */
 
 
@@ -28651,9 +28034,7 @@
  *
  * Gets an array of completion strings for a given initial text.
  *
- * This array must be freed by g_strfreev() when finished.
- *
- * Returns: (array zero-terminated=1) (transfer full): array of strings with possible completions for @initial_text.
+ * Returns: (array zero-terminated=1) (transfer full): array of strings with possible completions for @initial_text. This array must be freed by g_strfreev() when finished.
  */
 
 
@@ -28753,10 +28134,8 @@
  *
  * Gets a hash for an icon.
  *
- * use in a #GHashTable or similar data structure.
- *
  * Virtual: hash
- * Returns: a #guint containing a hash for the @icon, suitable for
+ * Returns: a #guint containing a hash for the @icon, suitable for use in a #GHashTable or similar data structure.
  */
 
 
@@ -28772,9 +28151,7 @@
  * implementations you need to ensure that each #GType is registered
  * with the type system prior to calling g_icon_new_for_string().
  *
- * interface or %NULL if @error is set.
- *
- * Returns: (transfer full): An object implementing the #GIcon
+ * Returns: (transfer full): An object implementing the #GIcon interface or %NULL if @error is set.
  * Since: 2.20
  */
 
@@ -28793,22 +28170,20 @@
  *
  * <itemizedlist>
  * <listitem><para>
- * If @icon is a #GFileIcon, the returned string is a native path
- * (such as <literal>/path/to/my icon.png</literal>) without escaping
- * if the #GFile for @icon is a native file.  If the file is not
- * native, the returned string is the result of g_file_get_uri()
- * (such as <literal>sftp://path/to/my&percnt;20icon.png</literal>).
+ *     If @icon is a #GFileIcon, the returned string is a native path
+ *     (such as <literal>/path/to/my icon.png</literal>) without escaping
+ *     if the #GFile for @icon is a native file.  If the file is not
+ *     native, the returned string is the result of g_file_get_uri()
+ *     (such as <literal>sftp://path/to/my&percnt;20icon.png</literal>).
  * </para></listitem>
  * <listitem><para>
- * If @icon is a #GThemedIcon with exactly one name, the encoding is
- * simply the name (such as <literal>network-server</literal>).
+ *    If @icon is a #GThemedIcon with exactly one name, the encoding is
+ *    simply the name (such as <literal>network-server</literal>).
  * </para></listitem>
  * </itemizedlist>
  *
- * be serialized. Use g_free() to free.
- *
  * Virtual: to_tokens
- * Returns: An allocated NUL-terminated UTF8 string or %NULL if @icon can't
+ * Returns: An allocated NUL-terminated UTF8 string or %NULL if @icon can't be serialized. Use g_free() to free.
  * Since: 2.20
  */
 
@@ -29015,9 +28390,7 @@
  *
  * Tests if @address falls within the range described by @mask.
  *
- * @mask.
- *
- * Returns: whether @address falls within the range described by
+ * Returns: whether @address falls within the range described by @mask.
  * Since: 2.32
  */
 
@@ -29046,9 +28419,7 @@
  * delimited by a "/". If it is not present, then the length is
  * assumed to be the full length of the address.
  *
- * on error.
- *
- * Returns: a new #GInetAddressMask corresponding to @string, or %NULL
+ * Returns: a new #GInetAddressMask corresponding to @string, or %NULL on error.
  * Since: 2.32
  */
 
@@ -29071,9 +28442,7 @@
  * Creates a #GInetAddress for the "any" address (unassigned/"don't
  * care") for @family.
  *
- * for @family.
- *
- * Returns: a new #GInetAddress corresponding to the "any" address
+ * Returns: a new #GInetAddress corresponding to the "any" address for @family.
  * Since: 2.22
  */
 
@@ -29098,9 +28467,7 @@
  *
  * Parses @string as an IP address and creates a new #GInetAddress.
  *
- * @string could not be parsed.
- *
- * Returns: a new #GInetAddress corresponding to @string, or %NULL if
+ * Returns: a new #GInetAddress corresponding to @string, or %NULL if @string could not be parsed.
  * Since: 2.22
  */
 
@@ -29111,9 +28478,7 @@
  *
  * Creates a #GInetAddress for the loopback address for @family.
  *
- * for @family.
- *
- * Returns: a new #GInetAddress corresponding to the loopback address
+ * Returns: a new #GInetAddress corresponding to the loopback address for @family.
  * Since: 2.22
  */
 
@@ -29124,10 +28489,7 @@
  *
  * Gets the raw binary address data from @address.
  *
- * which should not be modified, stored, or freed. The size of this
- * array can be gotten with g_inet_address_get_native_size().
- *
- * Returns: a pointer to an internal array of the bytes in @address,
+ * Returns: a pointer to an internal array of the bytes in @address, which should not be modified, stored, or freed. The size of this array can be gotten with g_inet_address_get_native_size().
  * Since: 2.22
  */
 
@@ -29138,9 +28500,7 @@
  *
  * Converts @address to string form.
  *
- * freed after use.
- *
- * Returns: a representation of @address as a string, which should be
+ * Returns: a representation of @address as a string, which should be freed after use.
  * Since: 2.22
  */
 
@@ -29151,9 +28511,7 @@
  *
  * Gets @address's #GInetAddress.
  *
- * g_object_ref()'d if it will be stored
- *
- * Returns: (transfer none): the #GInetAddress for @address, which must be
+ * Returns: (transfer none): the #GInetAddress for @address, which must be g_object_ref()'d if it will be stored
  * Since: 2.22
  */
 
@@ -29235,9 +28593,7 @@
  * of the first call. This is so that it's safe to implement the singleton
  * pattern in the GObject constructor function.
  *
- * return %FALSE and set @error appropriately if present.
- *
- * Returns: %TRUE if successful. If an error has occurred, this function will
+ * Returns: %TRUE if successful. If an error has occurred, this function will return %FALSE and set @error appropriately if present.
  * Since: 2.22
  */
 
@@ -29652,9 +29008,7 @@
  *
  * Finds a #GIOExtension for an extension point by name.
  *
- * given name, or %NULL if there is no extension with that name
- *
- * Returns: (transfer none): the #GIOExtension for @extension_point that has the
+ * Returns: (transfer none): the #GIOExtension for @extension_point that has the given name, or %NULL if there is no extension with that name
  */
 
 
@@ -29665,10 +29019,7 @@
  * Gets a list of all extensions that implement this extension point.
  * The list is sorted by priority, beginning with the highest priority.
  *
- * #GIOExtension<!-- -->s. The list is owned by GIO and should not be
- * modified.
- *
- * Returns: (element-type GIOExtension) (transfer none): a #GList of
+ * Returns: (element-type GIOExtension) (transfer none): a #GList of #GIOExtension<!-- -->s. The list is owned by GIO and should not be modified.
  */
 
 
@@ -29678,9 +29029,7 @@
  *
  * Gets the required type for @extension_point.
  *
- * or #G_TYPE_INVALID if the extension point has no required type
- *
- * Returns: the #GType that all implementations must have,
+ * Returns: the #GType that all implementations must have, or #G_TYPE_INVALID if the extension point has no required type
  */
 
 
@@ -29707,9 +29056,7 @@
  *
  * Looks up an existing extension point.
  *
- * is no registered extension point with the given name.
- *
- * Returns: (transfer none): the #GIOExtensionPoint, or %NULL if there
+ * Returns: (transfer none): the #GIOExtensionPoint, or %NULL if there is no registered extension point with the given name.
  */
 
 
@@ -29719,9 +29066,7 @@
  *
  * Registers an extension point.
  *
- * owned by GIO and should not be freed.
- *
- * Returns: (transfer none): the new #GIOExtensionPoint. This object is
+ * Returns: (transfer none): the new #GIOExtensionPoint. This object is owned by GIO and should not be freed.
  */
 
 
@@ -29763,9 +29108,7 @@
  * Creates a new GIOModule that will load the specific
  * shared library when in use.
  *
- * or %NULL on error.
- *
- * Returns: a #GIOModule from given @filename,
+ * Returns: a #GIOModule from given @filename, or %NULL on error.
  */
 
 
@@ -29795,10 +29138,7 @@
  * run gio-querymodules in order to build the cache files required for
  * lazy loading.
  *
- * extension points of the module. The array must be suitable for
- * freeing with g_strfreev().
- *
- * Returns: (transfer full): A %NULL-terminated array of strings, listing the supported
+ * Returns: (transfer full): A %NULL-terminated array of strings, listing the supported extension points of the module. The array must be suitable for freeing with g_strfreev().
  * Since: 2.24
  */
 
@@ -29862,13 +29202,7 @@
  * all gtypes) then you can use g_io_modules_scan_all_in_directory()
  * which allows delayed/lazy loading of modules.
  *
- * from the directory,
- * All the modules are loaded into memory, if you want to
- * unload them (enabling on-demand loading) you must call
- * g_type_module_unuse() on all the modules. Free the list
- * with g_list_free().
- *
- * Returns: (element-type GIOModule) (transfer full): a list of #GIOModules loaded
+ * Returns: (element-type GIOModule) (transfer full): a list of #GIOModules loaded from the directory, All the modules are loaded into memory, if you want to unload them (enabling on-demand loading) you must call g_type_module_unuse() on all the modules. Free the list with g_list_free().
  */
 
 
@@ -29883,13 +29217,7 @@
  * all gtypes) then you can use g_io_modules_scan_all_in_directory()
  * which allows delayed/lazy loading of modules.
  *
- * from the directory,
- * All the modules are loaded into memory, if you want to
- * unload them (enabling on-demand loading) you must call
- * g_type_module_unuse() on all the modules. Free the list
- * with g_list_free().
- *
- * Returns: (element-type GIOModule) (transfer full): a list of #GIOModules loaded
+ * Returns: (element-type GIOModule) (transfer full): a list of #GIOModules loaded from the directory, All the modules are loaded into memory, if you want to unload them (enabling on-demand loading) you must call g_type_module_unuse() on all the modules. Free the list with g_list_free().
  * Since: 2.30
  */
 
@@ -30096,9 +29424,7 @@
  * Gets the input stream for this object. This is used
  * for reading.
  *
- * Do not free.
- *
- * Returns: (transfer none): a #GInputStream, owned by the #GIOStream.
+ * Returns: (transfer none): a #GInputStream, owned by the #GIOStream. Do not free.
  * Since: 2.22
  */
 
@@ -30110,9 +29436,7 @@
  * Gets the output stream for this object. This is used for
  * writing.
  *
- * Do not free.
- *
- * Returns: (transfer none): a #GOutputStream, owned by the #GIOStream.
+ * Returns: (transfer none): a #GOutputStream, owned by the #GIOStream. Do not free.
  * Since: 2.22
  */
 
@@ -30208,8 +29532,8 @@
  * of %TRUE will cause the following to appear in the keyfile:
  *
  * |[
- * [toplevel]
- * enabled=true
+ *   [toplevel]
+ *   enabled=true
  * ]|
  *
  * If @root_group is %NULL then it is not permitted to store keys
@@ -30222,8 +29546,8 @@
  * 12 then the following would appear in the keyfile:
  *
  * |[
- * [profiles/default]
- * font-size=12
+ *   [profiles/default]
+ *   font-size=12
  * ]|
  *
  * The backend will refuse writes (and return writability as being
@@ -30342,10 +29666,7 @@
  * Checks if any events are pending for the default #GMainContext
  * (i.e. ready to be processed).
  *
- *
- * Deprected: 2.2: Use g_main_context_pending() instead.
- *
- * Returns: %TRUE if any events are pending.
+ * Returns: %TRUE if any events are pending.  Deprected: 2.2: Use g_main_context_pending() instead.
  */
 
 
@@ -30610,9 +29931,7 @@
  * remains at the current position.  The value returned in @value must
  * be unreffed using g_variant_unref() when it is no longer in use.
  *
- * attribute
- *
- * Returns: %TRUE on success, or %FALSE if there is no additional
+ * Returns: %TRUE on success, or %FALSE if there is no additional attribute
  * Since: 2.32
  */
 
@@ -30789,15 +30108,15 @@
  *
  * <informalexample><programlisting><![CDATA[
  * <menu id='edit-menu'>
- * <section>
- * <item label='Undo'/>
- * <item label='Redo'/>
- * </section>
- * <section>
- * <item label='Cut'/>
- * <item label='Copy'/>
- * <item label='Paste'/>
- * </section>
+ *   <section>
+ *     <item label='Undo'/>
+ *     <item label='Redo'/>
+ *   </section>
+ *   <section>
+ *     <item label='Cut'/>
+ *     <item label='Copy'/>
+ *     <item label='Paste'/>
+ *   </section>
  * </menu>
  * ]]></programlisting></informalexample>
  *
@@ -30810,19 +30129,19 @@
  *
  * <informalexample><programlisting><![CDATA[
  * <menu id='edit-menu'>
- * <item>
- * <link name='section'>
- * <item label='Undo'/>
- * <item label='Redo'/>
- * </link>
- * </item>
- * <item>
- * <link name='section'>
- * <item label='Cut'/>
- * <item label='Copy'/>
- * <item label='Paste'/>
- * </link>
- * </item>
+ *   <item>
+ *     <link name='section'>
+ *       <item label='Undo'/>
+ *       <item label='Redo'/>
+ *     </link>
+ *   </item>
+ *   <item>
+ *     <link name='section'>
+ *       <item label='Cut'/>
+ *       <item label='Copy'/>
+ *       <item label='Paste'/>
+ *     </link>
+ *   </item>
  * </menu>
  * ]]></programlisting></informalexample>
  *
@@ -31168,9 +30487,7 @@
  * type, then the positional parameters are ignored and %FALSE is
  * returned.
  *
- * type
- *
- * Returns: %TRUE if the named attribute was found with the expected
+ * Returns: %TRUE if the named attribute was found with the expected type
  * Since: 2.32
  */
 
@@ -31236,9 +30553,7 @@
  * An immutable #GMenuModel will never emit the #GMenuModel::items-changed
  * signal. Consumers of the model may make optimisations accordingly.
  *
- * emitted).
- *
- * Returns: %TRUE if the model is mutable (ie: "items-changed" may be
+ * Returns: %TRUE if the model is mutable (ie: "items-changed" may be emitted).
  * Since: 2.32
  */
 
@@ -31476,10 +30791,7 @@
  * @mount is a path that reflects the main entry point for the user (e.g.
  * the home directory, or the root of the volume).
  *
- * The returned object should be unreffed with
- * g_object_unref() when no longer needed.
- *
- * Returns: (transfer full): a #GFile.
+ * Returns: (transfer full): a #GFile. The returned object should be unreffed with g_object_unref() when no longer needed.
  */
 
 
@@ -31492,10 +30804,7 @@
  * This is a convenience method for getting the #GVolume and then
  * using that object to get the #GDrive.
  *
- * The returned object should be unreffed with
- * g_object_unref() when no longer needed.
- *
- * Returns: (transfer full): a #GDrive or %NULL if @mount is not associated with a volume or a drive.
+ * Returns: (transfer full): a #GDrive or %NULL if @mount is not associated with a volume or a drive. The returned object should be unreffed with g_object_unref() when no longer needed.
  */
 
 
@@ -31505,10 +30814,7 @@
  *
  * Gets the icon for @mount.
  *
- * The returned object should be unreffed with
- * g_object_unref() when no longer needed.
- *
- * Returns: (transfer full): a #GIcon.
+ * Returns: (transfer full): a #GIcon. The returned object should be unreffed with g_object_unref() when no longer needed.
  */
 
 
@@ -31518,10 +30824,7 @@
  *
  * Gets the name of @mount.
  *
- * The returned string should be freed with g_free()
- * when no longer needed.
- *
- * Returns: the name for the given @mount.
+ * Returns: the name for the given @mount. The returned string should be freed with g_free() when no longer needed.
  */
 
 
@@ -31531,10 +30834,7 @@
  *
  * Gets the root directory on @mount.
  *
- * The returned object should be unreffed with
- * g_object_unref() when no longer needed.
- *
- * Returns: (transfer full): a #GFile.
+ * Returns: (transfer full): a #GFile. The returned object should be unreffed with g_object_unref() when no longer needed.
  */
 
 
@@ -31558,10 +30858,7 @@
  * considered an opaque string. Returns %NULL if there is no UUID
  * available.
  *
- * The returned string should be freed with g_free()
- * when no longer needed.
- *
- * Returns: the UUID for @mount or %NULL if no UUID can be computed.
+ * Returns: the UUID for @mount or %NULL if no UUID can be computed. The returned string should be freed with g_free() when no longer needed.
  */
 
 
@@ -31571,10 +30868,7 @@
  *
  * Gets the volume for the @mount.
  *
- * The returned object should be unreffed with
- * g_object_unref() when no longer needed.
- *
- * Returns: (transfer full): a #GVolume or %NULL if @mount is not associated with a volume.
+ * Returns: (transfer full): a #GVolume or %NULL if @mount is not associated with a volume. The returned object should be unreffed with g_object_unref() when no longer needed.
  */
 
 
@@ -31613,9 +30907,7 @@
  * %G_IO_ERROR_NOT_SUPPORTED if the mount does not support content
  * guessing.
  *
- * Caller should free this array with g_strfreev() when done with it.
- *
- * Returns: (transfer full) (element-type utf8): a %NULL-terminated array of content types or %NULL on error.
+ * Returns: (transfer full) (element-type utf8): a %NULL-terminated array of content types or %NULL on error. Caller should free this array with g_strfreev() when done with it.
  * Since: 2.18
  */
 
@@ -31636,9 +30928,7 @@
  * This is an synchronous operation and as such may block doing IO;
  * see g_mount_guess_content_type() for the asynchronous version.
  *
- * Caller should free this array with g_strfreev() when done with it.
- *
- * Returns: (transfer full) (element-type utf8): a %NULL-terminated array of content types or %NULL on error.
+ * Returns: (transfer full) (element-type utf8): a %NULL-terminated array of content types or %NULL on error. Caller should free this array with g_strfreev() when done with it.
  * Since: 2.18
  */
 
@@ -31693,9 +30983,7 @@
  *
  * Gets a choice from the mount operation.
  *
- * the choice's list, or %0.
- *
- * Returns: an integer containing an index of the user's choice from
+ * Returns: an integer containing an index of the user's choice from the choice's list, or %0.
  */
 
 
@@ -32298,9 +31586,7 @@
  *
  * Gets the first child of a #GNode.
  *
- * or has no children
- *
- * Returns: the first child of @node, or %NULL if @node is %NULL
+ * Returns: the first child of @node, or %NULL if @node is %NULL or has no children
  */
 
 
@@ -32346,9 +31632,7 @@
  *
  * Gets the next sibling of a #GNode.
  *
- * or %NULL
- *
- * Returns: the next sibling of @node, or %NULL if @node is the last node
+ * Returns: the next sibling of @node, or %NULL if @node is the last node or %NULL
  */
 
 
@@ -32369,9 +31653,7 @@
  *
  * Gets the previous sibling of a #GNode.
  *
- * node or %NULL
- *
- * Returns: the previous sibling of @node, or %NULL if @node is the first
+ * Returns: the previous sibling of @node, or %NULL if @node is the first node or %NULL
  */
 
 
@@ -32576,12 +31858,7 @@
  *
  * Splices an input stream into an output stream.
  *
- * -1 if an error occurred. Note that if the number of bytes
- * spliced is greater than %G_MAXSSIZE, then that will be
- * returned, and there is no way to determine the actual number
- * of bytes spliced.
- *
- * Returns: a #gssize containing the size of the data spliced, or
+ * Returns: a #gssize containing the size of the data spliced, or -1 if an error occurred. Note that if the number of bytes spliced is greater than %G_MAXSSIZE, then that will be returned, and there is no way to determine the actual number of bytes spliced.
  */
 
 
@@ -32613,11 +31890,7 @@
  *
  * Finishes an asynchronous stream splice operation.
  *
- * number of bytes spliced is greater than %G_MAXSSIZE, then that
- * will be returned, and there is no way to determine the actual
- * number of bytes spliced.
- *
- * Returns: a #gssize of the number of bytes spliced. Note that if the
+ * Returns: a #gssize of the number of bytes spliced. Note that if the number of bytes spliced is greater than %G_MAXSSIZE, then that will be returned, and there is no way to determine the actual number of bytes spliced.
  */
 
 
@@ -32971,11 +32244,7 @@
  * g_pollable_input_stream_read_nonblocking(), which will return a
  * %G_IO_ERROR_WOULD_BLOCK error rather than blocking.
  *
- * has occurred on @stream, this will result in
- * g_pollable_input_stream_is_readable() returning %TRUE, and the
- * next attempt to read will return the error.
- *
- * Returns: %TRUE if @stream is readable, %FALSE if not. If an error
+ * Returns: %TRUE if @stream is readable, %FALSE if not. If an error has occurred on @stream, this will result in g_pollable_input_stream_is_readable() returning %TRUE, and the next attempt to read will return the error.
  * Since: 2.28
  */
 
@@ -33000,10 +32269,8 @@
  * may happen if you call this method after a source triggers due
  * to having been cancelled.
  *
- * %G_IO_ERROR_WOULD_BLOCK).
- *
  * Virtual: read_nonblocking
- * Returns: the number of bytes read, or -1 on error (including
+ * Returns: the number of bytes read, or -1 on error (including %G_IO_ERROR_WOULD_BLOCK).
  */
 
 
@@ -33056,11 +32323,7 @@
  * g_pollable_output_stream_write_nonblocking(), which will return a
  * %G_IO_ERROR_WOULD_BLOCK error rather than blocking.
  *
- * has occurred on @stream, this will result in
- * g_pollable_output_stream_is_writable() returning %TRUE, and the
- * next attempt to write will return the error.
- *
- * Returns: %TRUE if @stream is writable, %FALSE if not. If an error
+ * Returns: %TRUE if @stream is writable, %FALSE if not. If an error has occurred on @stream, this will result in g_pollable_output_stream_is_writable() returning %TRUE, and the next attempt to write will return the error.
  * Since: 2.28
  */
 
@@ -33085,10 +32348,8 @@
  * may happen if you call this method after a source triggers due
  * to having been cancelled.
  *
- * %G_IO_ERROR_WOULD_BLOCK).
- *
  * Virtual: write_nonblocking
- * Returns: the number of bytes written, or -1 on error (including
+ * Returns: the number of bytes written, or -1 on error (including %G_IO_ERROR_WOULD_BLOCK).
  */
 
 
@@ -33193,10 +32454,7 @@
  * does the necessary handshake to connect to @proxy_address, and if
  * required, wraps the #GIOStream to handle proxy payload.
  *
- * be the same as @connection, in which case a reference
- * will be added.
- *
- * Returns: (transfer full): a #GIOStream that will replace @connection. This might
+ * Returns: (transfer full): a #GIOStream that will replace @connection. This might be the same as @connection, in which case a reference will be added.
  * Since: 2.26
  */
 
@@ -33236,9 +32494,7 @@
  * Lookup "gio-proxy" extension point for a proxy implementation that supports
  * specified protocol.
  *
- * is not supported.
- *
- * Returns: (transfer full): return a #GProxy or NULL if protocol
+ * Returns: (transfer full): return a #GProxy or NULL if protocol is not supported.
  * Since: 2.26
  */
 
@@ -33289,10 +32545,7 @@
  * Direct connection should not be attempted unless it is part of the
  * returned array of proxies.
  *
- * NULL-terminated array of proxy URIs. Must be freed
- * with g_strfreev().
- *
- * Returns: (transfer full) (array zero-terminated=1): A
+ * Returns: (transfer full) (array zero-terminated=1): A NULL-terminated array of proxy URIs. Must be freed with g_strfreev().
  * Since: 2.26
  */
 
@@ -33322,10 +32575,7 @@
  * g_proxy_resolver_lookup_async() is complete. See
  * g_proxy_resolver_lookup() for more details.
  *
- * NULL-terminated array of proxy URIs. Must be freed
- * with g_strfreev().
- *
- * Returns: (transfer full) (array zero-terminated=1): A
+ * Returns: (transfer full) (array zero-terminated=1): A NULL-terminated array of proxy URIs. Must be freed with g_strfreev().
  * Since: 2.26
  */
 
@@ -33351,7 +32601,7 @@
  * g_remote_action_group_activate_action_full:
  * @remote: a #GDBusActionGroup
  * @action_name: the name of the action to activate
- * @parameter: (allow none): the optional parameter to the activation
+ * @parameter: (allow-none): the optional parameter to the activation
  * @platform_data: the platform data to send
  *
  * Activates the remote action.
@@ -33469,9 +32719,7 @@
  * operation, in which case @error (if non-%NULL) will be set to
  * %G_IO_ERROR_CANCELLED.
  *
- * form), or %NULL on error.
- *
- * Returns: a hostname (either ASCII-only, or in ASCII-encoded
+ * Returns: a hostname (either ASCII-only, or in ASCII-encoded form), or %NULL on error.
  * Since: 2.22
  */
 
@@ -33505,9 +32753,7 @@
  * a value from #GResolverError. If the operation was cancelled,
  * @error will be set to %G_IO_ERROR_CANCELLED.
  *
- * form), or %NULL on error.
- *
- * Returns: a hostname (either ASCII-only, or in ASCII-encoded
+ * Returns: a hostname (either ASCII-only, or in ASCII-encoded form), or %NULL on error.
  * Since: 2.22
  */
 
@@ -33543,11 +32789,7 @@
  * address, it may be easier to create a #GNetworkAddress and use its
  * #GSocketConnectable interface.
  *
- * of #GInetAddress, or %NULL on error. You
- * must unref each of the addresses and free the list when you are
- * done with it. (You can use g_resolver_free_addresses() to do this.)
- *
- * Returns: (element-type GInetAddress) (transfer full): a #GList
+ * Returns: (element-type GInetAddress) (transfer full): a #GList of #GInetAddress, or %NULL on error. You must unref each of the addresses and free the list when you are done with it. (You can use g_resolver_free_addresses() to do this.)
  * Since: 2.22
  */
 
@@ -33582,10 +32824,7 @@
  * a value from #GResolverError. If the operation was cancelled,
  * @error will be set to %G_IO_ERROR_CANCELLED.
  *
- * of #GInetAddress, or %NULL on error. See g_resolver_lookup_by_name()
- * for more details.
- *
- * Returns: (element-type GInetAddress) (transfer full): a #GList
+ * Returns: (element-type GInetAddress) (transfer full): a #GList of #GInetAddress, or %NULL on error. See g_resolver_lookup_by_name() for more details.
  * Since: 2.22
  */
 
@@ -33622,10 +32861,7 @@
  * to create a #GNetworkService and use its #GSocketConnectable
  * interface.
  *
- * or %NULL on error. You must free each of the targets and the list when you are
- * done with it. (You can use g_resolver_free_targets() to do this.)
- *
- * Returns: (element-type GSrvTarget) (transfer full): a #GList of #GSrvTarget,
+ * Returns: (element-type GSrvTarget) (transfer full): a #GList of #GSrvTarget, or %NULL on error. You must free each of the targets and the list when you are done with it. (You can use g_resolver_free_targets() to do this.)
  * Since: 2.22
  */
 
@@ -33663,9 +32899,7 @@
  * a value from #GResolverError. If the operation was cancelled,
  * @error will be set to %G_IO_ERROR_CANCELLED.
  *
- * or %NULL on error. See g_resolver_lookup_service() for more details.
- *
- * Returns: (element-type GSrvTarget) (transfer full): a #GList of #GSrvTarget,
+ * Returns: (element-type GSrvTarget) (transfer full): a #GList of #GSrvTarget, or %NULL on error. See g_resolver_lookup_service() for more details.
  * Since: 2.22
  */
 
@@ -33773,9 +33007,7 @@
  *
  * @lookup_flags controls the behaviour of the lookup.
  *
- * Free the returned object with g_bytes_unref().
- *
- * Returns: (transfer full): #GBytes or %NULL on error.
+ * Returns: (transfer full): #GBytes or %NULL on error. Free the returned object with g_bytes_unref().
  * Since: 2.32
  */
 
@@ -33809,9 +33041,7 @@
  *
  * @lookup_flags controls the behaviour of the lookup.
  *
- * Free the returned object with g_object_unref().
- *
- * Returns: (transfer full): #GInputStream or %NULL on error.
+ * Returns: (transfer full): #GInputStream or %NULL on error. Free the returned object with g_object_unref().
  * Since: 2.32
  */
 
@@ -33898,9 +33128,7 @@
  *
  * @lookup_flags controls the behaviour of the lookup.
  *
- * Free the returned object with g_bytes_unref().
- *
- * Returns: (transfer full): #GBytes or %NULL on error.
+ * Returns: (transfer full): #GBytes or %NULL on error. Free the returned object with g_bytes_unref().
  * Since: 2.32
  */
 
@@ -33917,9 +33145,7 @@
  *
  * @lookup_flags controls the behaviour of the lookup.
  *
- * Free the returned object with g_object_unref().
- *
- * Returns: (transfer full): #GInputStream or %NULL on error.
+ * Returns: (transfer full): #GInputStream or %NULL on error. Free the returned object with g_object_unref().
  * Since: 2.32
  */
 
@@ -33980,10 +33206,7 @@
  * triggering the cancellable object from another thread. If the operation
  * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned.
  *
- * has occurred, this function will return %FALSE and set @error
- * appropriately if present.
- *
- * Returns: %TRUE if successful. If an error
+ * Returns: %TRUE if successful. If an error has occurred, this function will return %FALSE and set @error appropriately if present.
  */
 
 
@@ -34012,11 +33235,8 @@
  * operation was partially finished when the operation was cancelled the
  * partial result will be returned, without an error.
  *
- * has occurred, this function will return %FALSE and set @error
- * appropriately if present.
- *
  * Virtual: truncate_fn
- * Returns: %TRUE if successful. If an error
+ * Returns: %TRUE if successful. If an error has occurred, this function will return %FALSE and set @error appropriately if present.
  */
 
 
@@ -34083,7 +33303,7 @@
  * @tree: a #GTree containing the changes
  * @path: (out): the location to save the path
  * @keys: (out) (transfer container) (array zero-terminated=1): the location to save the relative keys
- * @values: (out) (allow-none) (transfer container) (array zero-terminated=1):  the location to save the values, or %NULL
+ * @values: (out) (allow-none) (transfer container) (array zero-terminated=1): the location to save the values, or %NULL
  *
  * Calculate the longest common prefix of all keys in a tree and write
  * out an array of the key names relative to that prefix and,
@@ -34598,10 +33818,7 @@
  * It is a programmer error to give a @key that isn't specified as
  * having an array of strings type in the schema for @settings.
  *
- * newly-allocated, %NULL-terminated array of strings, the value that
- * is stored at @key in @settings.
- *
- * Returns: (array zero-terminated=1) (transfer full): a
+ * Returns: (array zero-terminated=1) (transfer full): a newly-allocated, %NULL-terminated array of strings, the value that is stored at @key in @settings.
  * Since: 2.26
  */
 
@@ -34708,10 +33925,7 @@
  * g_settings_list_schemas() represents the complete list of all
  * installed schemas.
  *
- * #GSettings schemas that are available.  The list must not be
- * modified or freed.
- *
- * Returns: (element-type utf8) (transfer none): a list of relocatable
+ * Returns: (element-type utf8) (transfer none): a list of relocatable #GSettings schemas that are available.  The list must not be modified or freed.
  * Since: 2.28
  */
 
@@ -34728,10 +33942,7 @@
  * g_settings_new_with_path()).  See
  * g_settings_list_relocatable_schemas() for that.
  *
- * schemas that are available.  The list must not be modified or
- * freed.
- *
- * Returns: (element-type utf8) (transfer none): a list of #GSettings
+ * Returns: (element-type utf8) (transfer none): a list of #GSettings schemas that are available.  The list must not be modified or freed.
  * Since: 2.26
  */
 
@@ -35065,9 +34276,7 @@
  * schema for @settings or for the #GVariantType of @format to mismatch
  * the type given in the schema.
  *
- * %FALSE if the key was not writable
- *
- * Returns: %TRUE if setting the key succeeded,
+ * Returns: %TRUE if setting the key succeeded, %FALSE if the key was not writable
  * Since: 2.26
  */
 
@@ -35085,9 +34294,7 @@
  * It is a programmer error to give a @key that isn't specified as
  * having a boolean type in the schema for @settings.
  *
- * %FALSE if the key was not writable
- *
- * Returns: %TRUE if setting the key succeeded,
+ * Returns: %TRUE if setting the key succeeded, %FALSE if the key was not writable
  * Since: 2.26
  */
 
@@ -35105,9 +34312,7 @@
  * It is a programmer error to give a @key that isn't specified as
  * having a 'double' type in the schema for @settings.
  *
- * %FALSE if the key was not writable
- *
- * Returns: %TRUE if setting the key succeeded,
+ * Returns: %TRUE if setting the key succeeded, %FALSE if the key was not writable
  * Since: 2.26
  */
 
@@ -35168,9 +34373,7 @@
  * It is a programmer error to give a @key that isn't specified as
  * having a int32 type in the schema for @settings.
  *
- * %FALSE if the key was not writable
- *
- * Returns: %TRUE if setting the key succeeded,
+ * Returns: %TRUE if setting the key succeeded, %FALSE if the key was not writable
  * Since: 2.26
  */
 
@@ -35188,9 +34391,7 @@
  * It is a programmer error to give a @key that isn't specified as
  * having a string type in the schema for @settings.
  *
- * %FALSE if the key was not writable
- *
- * Returns: %TRUE if setting the key succeeded,
+ * Returns: %TRUE if setting the key succeeded, %FALSE if the key was not writable
  * Since: 2.26
  */
 
@@ -35209,9 +34410,7 @@
  * It is a programmer error to give a @key that isn't specified as
  * having an array of strings type in the schema for @settings.
  *
- * %FALSE if the key was not writable
- *
- * Returns: %TRUE if setting the key succeeded,
+ * Returns: %TRUE if setting the key succeeded, %FALSE if the key was not writable
  * Since: 2.26
  */
 
@@ -35230,9 +34429,7 @@
  * It is a programmer error to give a @key that isn't specified as
  * having a uint32 type in the schema for @settings.
  *
- * %FALSE if the key was not writable
- *
- * Returns: %TRUE if setting the key succeeded,
+ * Returns: %TRUE if setting the key succeeded, %FALSE if the key was not writable
  * Since: 2.30
  */
 
@@ -35251,9 +34448,7 @@
  *
  * If @value is floating then this function consumes the reference.
  *
- * %FALSE if the key was not writable
- *
- * Returns: %TRUE if setting the key succeeded,
+ * Returns: %TRUE if setting the key succeeded, %FALSE if the key was not writable
  * Since: 2.26
  */
 
@@ -35596,9 +34791,7 @@
  *
  * Gets the operation result boolean from within the asynchronous result.
  *
- * if the operation's result was %FALSE.
- *
- * Returns: %TRUE if the operation's result was %TRUE, %FALSE
+ * Returns: %TRUE if the operation's result was %TRUE, %FALSE if the operation's result was %FALSE.
  */
 
 
@@ -35896,9 +35089,7 @@
  * or return %G_IO_ERROR_WOULD_BLOCK if non-blocking I/O is enabled.
  * To be notified of an incoming connection, wait for the %G_IO_IN condition.
  *
- * Free the returned object with g_object_unref().
- *
- * Returns: (transfer full): a new #GSocket, or %NULL on error.
+ * Returns: (transfer full): a new #GSocket, or %NULL on error. Free the returned object with g_object_unref().
  * Since: 2.22
  */
 
@@ -35923,10 +35114,7 @@
  * internal errors (other than @cancellable being triggered) will be
  * ignored.
  *
- * error (in which case *@error will be set) or if there are no
- * more addresses.
- *
- * Returns: (transfer full): a #GSocketAddress (owned by the caller), or %NULL on
+ * Returns: (transfer full): a #GSocketAddress (owned by the caller), or %NULL on error (in which case *@error will be set) or if there are no more addresses.
  */
 
 
@@ -35954,10 +35142,7 @@
  * g_socket_address_enumerator_next() for more information about
  * error handling.
  *
- * error (in which case *@error will be set) or if there are no
- * more addresses.
- *
- * Returns: (transfer full): a #GSocketAddress (owned by the caller), or %NULL on
+ * Returns: (transfer full): a #GSocketAddress (owned by the caller), or %NULL on error (in which case *@error will be set) or if there are no more addresses.
  */
 
 
@@ -35980,9 +35165,7 @@
  * You can use this to allocate memory to pass to
  * g_socket_address_to_native().
  *
- * @address represents
- *
- * Returns: the size of the native <type>struct sockaddr</type> that
+ * Returns: the size of the native <type>struct sockaddr</type> that @address represents
  * Since: 2.22
  */
 
@@ -35995,9 +35178,7 @@
  * Creates a #GSocketAddress subclass corresponding to the native
  * <type>struct sockaddr</type> @native.
  *
- * otherwise %NULL.
- *
- * Returns: a new #GSocketAddress if @native could successfully be converted,
+ * Returns: a new #GSocketAddress if @native could successfully be converted, otherwise %NULL.
  * Since: 2.22
  */
 
@@ -36459,9 +35640,7 @@
  *
  * Creates a new #GSocketClient with the default options.
  *
- * Free the returned object with g_object_unref().
- *
- * Returns: a #GSocketClient.
+ * Returns: a #GSocketClient. Free the returned object with g_object_unref().
  * Since: 2.22
  */
 
@@ -36878,9 +36057,7 @@
  *
  * Try to get the local address of a socket connection.
  *
- * Free the returned object with g_object_unref().
- *
- * Returns: (transfer full): a #GSocketAddress or %NULL on error.
+ * Returns: (transfer full): a #GSocketAddress or %NULL on error. Free the returned object with g_object_unref().
  * Since: 2.22
  */
 
@@ -36892,9 +36069,7 @@
  *
  * Try to get the remote address of a socket connection.
  *
- * Free the returned object with g_object_unref().
- *
- * Returns: (transfer full): a #GSocketAddress or %NULL on error.
+ * Returns: (transfer full): a #GSocketAddress or %NULL on error. Free the returned object with g_object_unref().
  * Since: 2.22
  */
 
@@ -37033,9 +36208,7 @@
  *
  * Get the amount of data pending in the OS input buffer.
  *
- * without blocking or -1 on error.
- *
- * Returns: the number of bytes that can be read from the socket
+ * Returns: the number of bytes that can be read from the socket without blocking or -1 on error.
  * Since: 2.32
  */
 
@@ -37083,9 +36256,7 @@
  * g_unix_connection_send_credentials() /
  * g_unix_connection_receive_credentials() functions.
  *
- * that must be freed with g_object_unref().
- *
- * Returns: (transfer full): %NULL if @error is set, otherwise a #GCredentials object
+ * Returns: (transfer full): %NULL if @error is set, otherwise a #GCredentials object that must be freed with g_object_unref().
  * Since: 2.26
  */
 
@@ -37149,9 +36320,7 @@
  * useful if the socket has been bound to a local address,
  * either explicitly or implicitly when connecting.
  *
- * Free the returned object with g_object_unref().
- *
- * Returns: (transfer full): a #GSocketAddress or %NULL on error.
+ * Returns: (transfer full): a #GSocketAddress or %NULL on error. Free the returned object with g_object_unref().
  * Since: 2.22
  */
 
@@ -37201,9 +36370,7 @@
  * Try to get the remove address of a connected socket. This is only
  * useful for connection oriented sockets that have been connected.
  *
- * Free the returned object with g_object_unref().
- *
- * Returns: (transfer full): a #GSocketAddress or %NULL on error.
+ * Returns: (transfer full): a #GSocketAddress or %NULL on error. Free the returned object with g_object_unref().
  * Since: 2.22
  */
 
@@ -37598,9 +36765,7 @@
  * system, so you can use protocols not listed in #GSocketProtocol if you
  * know the protocol number used for it.
  *
- * Free the returned object with g_object_unref().
- *
- * Returns: a #GSocket or %NULL on error.
+ * Returns: a #GSocket or %NULL on error. Free the returned object with g_object_unref().
  * Since: 2.22
  */
 
@@ -37618,9 +36783,7 @@
  * will be set to non-blocking mode, independent on the blocking
  * mode of the #GSocket.
  *
- * Free the returned object with g_object_unref().
- *
- * Returns: a #GSocket or %NULL on error.
+ * Returns: a #GSocket or %NULL on error. Free the returned object with g_object_unref().
  * Since: 2.22
  */
 
@@ -37657,9 +36820,7 @@
  *
  * On error -1 is returned and @error is set accordingly.
  *
- * the peer, or -1 on error
- *
- * Returns: Number of bytes read, or 0 if the connection was closed by
+ * Returns: Number of bytes read, or 0 if the connection was closed by the peer, or -1 on error
  * Since: 2.22
  */
 
@@ -37681,9 +36842,7 @@
  *
  * See g_socket_receive() for additional information.
  *
- * the peer, or -1 on error
- *
- * Returns: Number of bytes read, or 0 if the connection was closed by
+ * Returns: Number of bytes read, or 0 if the connection was closed by the peer, or -1 on error
  * Since: 2.22
  */
 
@@ -37758,9 +36917,7 @@
  *
  * On error -1 is returned and @error is set accordingly.
  *
- * the peer, or -1 on error
- *
- * Returns: Number of bytes read, or 0 if the connection was closed by
+ * Returns: Number of bytes read, or 0 if the connection was closed by the peer, or -1 on error
  * Since: 2.22
  */
 
@@ -37778,9 +36935,7 @@
  * the choice of blocking or non-blocking behavior is determined by
  * the @blocking argument rather than by @socket's properties.
  *
- * the peer, or -1 on error
- *
- * Returns: Number of bytes read, or 0 if the connection was closed by
+ * Returns: Number of bytes read, or 0 if the connection was closed by the peer, or -1 on error
  * Since: 2.26
  */
 
@@ -37808,9 +36963,7 @@
  *
  * On error -1 is returned and @error is set accordingly.
  *
- * on error
- *
- * Returns: Number of bytes written (which may be less than @size), or -1
+ * Returns: Number of bytes written (which may be less than @size), or -1 on error
  * Since: 2.22
  */
 
@@ -37865,9 +37018,7 @@
  *
  * On error -1 is returned and @error is set accordingly.
  *
- * on error
- *
- * Returns: Number of bytes written (which may be less than @size), or -1
+ * Returns: Number of bytes written (which may be less than @size), or -1 on error
  * Since: 2.22
  */
 
@@ -37887,9 +37038,7 @@
  *
  * See g_socket_send() for additional information.
  *
- * on error
- *
- * Returns: Number of bytes written (which may be less than @size), or -1
+ * Returns: Number of bytes written (which may be less than @size), or -1 on error
  * Since: 2.22
  */
 
@@ -37907,9 +37056,7 @@
  * the choice of blocking or non-blocking behavior is determined by
  * the @blocking argument rather than by @socket's properties.
  *
- * on error
- *
- * Returns: Number of bytes written (which may be less than @size), or -1
+ * Returns: Number of bytes written (which may be less than @size), or -1 on error
  * Since: 2.26
  */
 
@@ -38405,10 +37552,10 @@
  * In the following example, @icon1 and @icon2 are equivalent:
  * |[
  * const char *names[] = {
- * "gnome-dev-cdrom-audio",
- * "gnome-dev-cdrom",
- * "gnome-dev",
- * "gnome"
+ *   "gnome-dev-cdrom-audio",
+ *   "gnome-dev-cdrom",
+ *   "gnome-dev",
+ *   "gnome"
  * };
  *
  * icon1 = g_themed_icon_new_from_names (names, 4);
@@ -38453,9 +37600,7 @@
  *
  * Gets the #GType of @backend's #GTlsCertificate implementation.
  *
- * implementation.
- *
- * Returns: the #GType of @backend's #GTlsCertificate
+ * Returns: the #GType of @backend's #GTlsCertificate implementation.
  * Since: 2.28
  */
 
@@ -38466,9 +37611,7 @@
  *
  * Gets the #GType of @backend's #GTlsClientConnection implementation.
  *
- * implementation.
- *
- * Returns: the #GType of @backend's #GTlsClientConnection
+ * Returns: the #GType of @backend's #GTlsClientConnection implementation.
  * Since: 2.28
  */
 
@@ -38489,9 +37632,7 @@
  *
  * Gets the default #GTlsDatabase used to verify TLS connections.
  *
- * unreffed when done.
- *
- * Returns: (transfer full): the default database, which should be
+ * Returns: (transfer full): the default database, which should be unreffed when done.
  * Since: 2.30
  */
 
@@ -38513,9 +37654,7 @@
  *
  * Gets the #GType of @backend's #GTlsServerConnection implementation.
  *
- * implementation.
- *
- * Returns: the #GType of @backend's #GTlsServerConnection
+ * Returns: the #GType of @backend's #GTlsServerConnection implementation.
  * Since: 2.28
  */
 
@@ -38538,10 +37677,7 @@
  *
  * Gets the #GTlsCertificate representing @cert's issuer, if known
  *
- * or %NULL if @cert is self-signed or signed with an unknown
- * certificate.
- *
- * Returns: (transfer none): The certificate of @cert's issuer,
+ * Returns: (transfer none): The certificate of @cert's issuer, or %NULL if @cert is self-signed or signed with an unknown certificate.
  * Since: 2.28
  */
 
@@ -38557,10 +37693,7 @@
  * PEM-encoded certificates, this will return an empty list and not
  * set @error.
  *
- * #GList containing #GTlsCertificate objects. You must free the list
- * and its contents when you are done with it.
- *
- * Returns: (element-type Gio.TlsCertificate) (transfer full): a
+ * Returns: (element-type Gio.TlsCertificate) (transfer full): a #GList containing #GTlsCertificate objects. You must free the list and its contents when you are done with it.
  * Since: 2.28
  */
 
@@ -38659,10 +37792,7 @@
  * Each item in the list is a #GByteArray which contains the complete
  * subject DN of the certificate authority.
  *
- * CA DNs. You should unref each element with g_byte_array_unref() and then
- * the free the list with g_list_free().
- *
- * Returns: (element-type GByteArray) (transfer full): the list of
+ * Returns: (element-type GByteArray) (transfer full): the list of CA DNs. You should unref each element with g_byte_array_unref() and then the free the list with g_list_free().
  * Since: 2.28
  */
 
@@ -38673,10 +37803,7 @@
  *
  * Gets @conn's expected server identity
  *
- * expected server identity, or %NULL if the expected identity is not
- * known.
- *
- * Returns: (transfer none): a #GSocketConnectable describing the
+ * Returns: (transfer none): a #GSocketConnectable describing the expected server identity, or %NULL if the expected identity is not known.
  * Since: 2.28
  */
 
@@ -38715,9 +37842,7 @@
  * must have pollable input and output streams) which is assumed to
  * communicate with the server identified by @server_identity.
  *
- * #GTlsClientConnection, or %NULL on error
- *
- * Returns: (transfer full) (type GTlsClientConnection): the new
+ * Returns: (transfer full) (type GTlsClientConnection): the new #GTlsClientConnection, or %NULL on error
  * Since: 2.28
  */
 
@@ -38773,9 +37898,7 @@
  * Used by #GTlsConnection implementations to emit the
  * #GTlsConnection::accept-certificate signal.
  *
- * %TRUE to accept @peer_cert
- *
- * Returns: %TRUE if one of the signal handlers has returned
+ * Returns: %TRUE if one of the signal handlers has returned %TRUE to accept @peer_cert
  * Since: 2.28
  */
 
@@ -38863,9 +37986,7 @@
  * when the connection is closed. See
  * g_tls_connection_set_require_close_notify() for details.
  *
- * notification.
- *
- * Returns: %TRUE if @conn requires a proper TLS close
+ * Returns: %TRUE if @conn requires a proper TLS close notification.
  * Since: 2.28
  */
 
@@ -38940,9 +38061,7 @@
  * Finish an asynchronous TLS handshake operation. See
  * g_tls_connection_handshake() for more information.
  *
- * case @error will be set.
- *
- * Returns: %TRUE on success, %FALSE on failure, in which
+ * Returns: %TRUE on success, %FALSE on failure, in which case @error will be set.
  * Since: 2.28
  */
 
@@ -39133,9 +38252,7 @@
  * This function can block, use g_tls_database_lookup_certificate_for_handle_async() to perform
  * the lookup operation asynchronously.
  *
- * #GTlsCertificate, or %NULL. Use g_object_unref() to release the certificate.
- *
- * Returns: (transfer full) (allow-none): a newly allocated
+ * Returns: (transfer full) (allow-none): a newly allocated #GTlsCertificate, or %NULL. Use g_object_unref() to release the certificate.
  * Since: 2.30
  */
 
@@ -39169,9 +38286,7 @@
  * If the handle is no longer valid, or does not point to a certificate in
  * this database, then %NULL will be returned.
  *
- * Use g_object_unref() to release the certificate.
- *
- * Returns: (transfer full): a newly allocated #GTlsCertificate object.
+ * Returns: (transfer full): a newly allocated #GTlsCertificate object. Use g_object_unref() to release the certificate.
  * Since: 2.30
  */
 
@@ -39194,9 +38309,7 @@
  * This function can block, use g_tls_database_lookup_certificate_issuer_async() to perform
  * the lookup operation asynchronously.
  *
- * or %NULL. Use g_object_unref() to release the certificate.
- *
- * Returns: (transfer full): a newly allocated issuer #GTlsCertificate,
+ * Returns: (transfer full): a newly allocated issuer #GTlsCertificate, or %NULL. Use g_object_unref() to release the certificate.
  * Since: 2.30
  */
 
@@ -39227,9 +38340,7 @@
  * Finish an asynchronous lookup issuer operation. See
  * g_tls_database_lookup_certificate_issuer() for more information.
  *
- * or %NULL. Use g_object_unref() to release the certificate.
- *
- * Returns: (transfer full): a newly allocated issuer #GTlsCertificate,
+ * Returns: (transfer full): a newly allocated issuer #GTlsCertificate, or %NULL. Use g_object_unref() to release the certificate.
  * Since: 2.30
  */
 
@@ -39248,9 +38359,7 @@
  * This function can block, use g_tls_database_lookup_certificates_issued_by_async() to perform
  * the lookup operation asynchronously.
  *
- * objects. Use g_object_unref() on each certificate, and g_list_free() on the release the list.
- *
- * Returns: (transfer full) (element-type GTlsCertificate): a newly allocated list of #GTlsCertificate
+ * Returns: (transfer full) (element-type GTlsCertificate): a newly allocated list of #GTlsCertificate objects. Use g_object_unref() on each certificate, and g_list_free() on the release the list.
  * Since: 2.30
  */
 
@@ -39285,9 +38394,7 @@
  * Finish an asynchronous lookup of certificates. See
  * g_tls_database_lookup_certificates_issued_by() for more information.
  *
- * Use g_object_unref() on each certificate, and g_list_free() on the release the list.
- *
- * Returns: (transfer full): a newly allocated list of #GTlsCertificate objects.
+ * Returns: (transfer full): a newly allocated list of #GTlsCertificate objects. Use g_object_unref() on each certificate, and g_list_free() on the release the list.
  * Since: 2.30
  */
 
@@ -39328,9 +38435,7 @@
  * This function can block, use g_tls_database_verify_chain_async() to perform
  * the verification operation asynchronously.
  *
- * result of verification.
- *
- * Returns: the appropriate #GTlsCertificateFlags which represents the
+ * Returns: the appropriate #GTlsCertificateFlags which represents the result of verification.
  * Since: 2.30
  */
 
@@ -39363,9 +38468,8 @@
  *
  * Finish an asynchronous verify chain operation. See
  * g_tls_database_verify_chain() for more information. *
- * result of verification.
  *
- * Returns: the appropriate #GTlsCertificateFlags which represents the
+ * Returns: the appropriate #GTlsCertificateFlags which represents the result of verification.
  * Since: 2.30
  */
 
@@ -39390,9 +38494,7 @@
  *
  * The certificates in @anchors must be PEM encoded.
  *
- * #GTlsFileDatabase, or %NULL on error
- *
- * Returns: (transfer full) (type GTlsFileDatabase): the new
+ * Returns: (transfer full) (type GTlsFileDatabase): the new #GTlsFileDatabase, or %NULL on error
  * Since: 2.30
  */
 
@@ -39650,9 +38752,7 @@
  * Creates a new #GTlsServerConnection wrapping @base_io_stream (which
  * must have pollable input and output streams).
  *
- * #GTlsServerConnection, or %NULL on error
- *
- * Returns: (transfer full) (type GTlsServerConnection): the new
+ * Returns: (transfer full) (type GTlsServerConnection): the new #GTlsServerConnection, or %NULL on error
  * Since: 2.28
  */
 
@@ -39722,9 +38822,7 @@
  * Other ways to exchange credentials with a foreign peer includes the
  * #GUnixCredentialsMessage type and g_socket_get_credentials() function.
  *
- * g_object_unref()), %NULL if @error is set.
- *
- * Returns: (transfer full): Received credentials on success (free with
+ * Returns: (transfer full): Received credentials on success (free with g_object_unref()), %NULL if @error is set.
  * Since: 2.26
  */
 
@@ -39757,9 +38855,7 @@
  * Finishes an asynchronous receive credentials operation started with
  * g_unix_connection_receive_credentials_async().
  *
- * Free the returned object with g_object_unref().
- *
- * Returns: (transfer full): a #GCredentials, or %NULL on error.
+ * Returns: (transfer full): a #GCredentials, or %NULL on error. Free the returned object with g_object_unref().
  * Since: 2.32
  */
 
@@ -39920,9 +39016,7 @@
  * this index with g_unix_fd_list_get() then you will receive back a
  * duplicated copy of the same file descriptor.
  *
- * (and @error is set)
- *
- * Returns: the index of the appended fd in case of success, else -1
+ * Returns: the index of the appended fd in case of success, else -1 (and @error is set)
  * Since: 2.24
  */
 
@@ -40011,9 +39105,7 @@
  * This function never returns %NULL. In case there are no file
  * descriptors contained in @list, an empty array is returned.
  *
- * descriptors
- *
- * Returns: (array length=length) (transfer none): an array of file
+ * Returns: (array length=length) (transfer none): an array of file descriptors
  * Since: 2.24
  */
 
@@ -40042,9 +39134,7 @@
  * This function never returns %NULL. In case there are no file
  * descriptors contained in @list, an empty array is returned.
  *
- * descriptors
- *
- * Returns: (array length=length) (transfer full): an array of file
+ * Returns: (array length=length) (transfer full): an array of file descriptors
  * Since: 2.24
  */
 
@@ -40127,9 +39217,7 @@
  * This function never returns %NULL. In case there are no file
  * descriptors contained in @message, an empty array is returned.
  *
- * descriptors
- *
- * Returns: (array length=length) (transfer full): an array of file
+ * Returns: (array length=length) (transfer full): an array of file descriptors
  * Since: 2.22
  */
 
@@ -40192,9 +39280,7 @@
  * that only are used in the OS and has little to no relevance to the
  * casual user.
  *
- * of the OS.
- *
- * Returns: %TRUE if @mount_path is considered an implementation detail
+ * Returns: %TRUE if @mount_path is considered an implementation detail of the OS.
  */
 
 
@@ -40218,9 +39304,7 @@
  *
  * Compares two unix mounts.
  *
- * or less than @mount2, respectively.
- *
- * Returns: 1, 0 or -1 if @mount1 is greater than, equal to,
+ * Returns: 1, 0 or -1 if @mount1 is greater than, equal to, or less than @mount2, respectively.
  */
 
 
@@ -40289,9 +39373,7 @@
  * Guesses the name of a Unix mount.
  * The result is a translated string.
  *
- * be freed with g_free()
- *
- * Returns: A newly allocated string that must
+ * Returns: A newly allocated string that must be freed with g_free()
  */
 
 
@@ -40356,9 +39438,7 @@
  *
  * Compares two unix mount points.
  *
- * or less than @mount2, respectively.
- *
- * Returns: 1, 0 or -1 if @mount1 is greater than, equal to,
+ * Returns: 1, 0 or -1 if @mount1 is greater than, equal to, or less than @mount2, respectively.
  */
 
 
@@ -40438,9 +39518,7 @@
  * Guesses the name of a Unix mount point.
  * The result is a translated string.
  *
- * be freed with g_free()
- *
- * Returns: A newly allocated string that must
+ * Returns: A newly allocated string that must be freed with g_free()
  */
 
 
@@ -40493,9 +39571,7 @@
  * allowing for checking if the mounts have changed with
  * g_unix_mount_points_changed_since().
  *
- * a #GList of the UNIX mountpoints.
- *
- * Returns: (element-type GUnixMountPoint) (transfer full):
+ * Returns: (element-type GUnixMountPoint) (transfer full): a #GList of the UNIX mountpoints.
  */
 
 
@@ -40518,9 +39594,7 @@
  * timestamp, allowing for checking if the mounts have changed
  * with g_unix_mounts_changed_since().
  *
- * a #GList of the UNIX mounts.
- *
- * Returns: (element-type GUnixMountEntry) (transfer full):
+ * Returns: (element-type GUnixMountEntry) (transfer full): a #GList of the UNIX mounts.
  */
 
 
@@ -40731,9 +39805,7 @@
  *
  * Gets a #GFile for @path.
  *
- * Free the returned object with g_object_unref().
- *
- * Returns: (transfer full): a #GFile.
+ * Returns: (transfer full): a #GFile. Free the returned object with g_object_unref().
  */
 
 
@@ -40748,9 +39820,7 @@
  * might not support any I/O operation if the URI
  * is malformed or if the URI scheme is not supported.
  *
- * Free the returned object with g_object_unref().
- *
- * Returns: (transfer full): a #GFile.
+ * Returns: (transfer full): a #GFile. Free the returned object with g_object_unref().
  */
 
 
@@ -40769,10 +39839,7 @@
  *
  * Gets a list of URI schemes supported by @vfs.
  *
- * The returned array belongs to GIO and must
- * not be freed or modified.
- *
- * Returns: (transfer none): a %NULL-terminated array of strings.
+ * Returns: (transfer none): a %NULL-terminated array of strings. The returned array belongs to GIO and must not be freed or modified.
  */
 
 
@@ -40795,9 +39862,7 @@
  * not support any I/O operations if the @parse_name cannot
  * be parsed by the #GVfs module.
  *
- * Free the returned object with g_object_unref().
- *
- * Returns: (transfer full): a #GFile for the given @parse_name.
+ * Returns: (transfer full): a #GFile for the given @parse_name. Free the returned object with g_object_unref().
  */
 
 
@@ -40890,9 +39955,7 @@
  * that @volume has. Use g_volume_get_identifier() to obtain
  * the identifiers themselves.
  *
- * of strings containing kinds of identifiers. Use g_strfreev() to free.
- *
- * Returns: (array zero-terminated=1) (transfer full): a %NULL-terminated array
+ * Returns: (array zero-terminated=1) (transfer full): a %NULL-terminated array of strings containing kinds of identifiers. Use g_strfreev() to free.
  */
 
 
@@ -40908,19 +39971,20 @@
  * other words, in code
  *
  * <programlisting>
- * GMount *mount;
- * GFile *mount_root
- * GFile *volume_activation_root;
+ *   GMount *mount;
+ *   GFile *mount_root
+ *   GFile *volume_activation_root;
  *
- * mount = g_volume_get_mount (volume); /&ast; mounted, so never NULL &ast;/
- * mount_root = g_mount_get_root (mount);
- * volume_activation_root = g_volume_get_activation_root(volume); /&ast; assume not NULL &ast;/
+ *   mount = g_volume_get_mount (volume); /&ast; mounted, so never NULL &ast;/
+ *   mount_root = g_mount_get_root (mount);
+ *   volume_activation_root = g_volume_get_activation_root(volume); /&ast; assume not NULL &ast;/
  * </programlisting>
  *
  * then the expression
  *
  * <programlisting>
- * (g_file_has_prefix (volume_activation_root, mount_root) ||
+ *   (g_file_has_prefix (volume_activation_root, mount_root) ||
+ *       g_file_equal (volume_activation_root, mount_root))
  * </programlisting>
  *
  * will always be %TRUE.
@@ -40929,9 +39993,7 @@
  * implementations to find the underlying mount to shadow, see
  * g_mount_is_shadowed() for more details.
  *
- * g_object_unref() to free.
- *
- * Returns: (transfer full): the activation root of @volume or %NULL. Use
+ * Returns: (transfer full): the activation root of @volume or %NULL. Use g_object_unref() to free.
  * Since: 2.18
  */
 
@@ -40942,10 +40004,7 @@
  *
  * Gets the drive for the @volume.
  *
- * The returned object should be unreffed with g_object_unref()
- * when no longer needed.
- *
- * Returns: (transfer full): a #GDrive or %NULL if @volume is not associated with a drive.
+ * Returns: (transfer full): a #GDrive or %NULL if @volume is not associated with a drive. The returned object should be unreffed with g_object_unref() when no longer needed.
  */
 
 
@@ -40955,10 +40014,7 @@
  *
  * Gets the icon for @volume.
  *
- * The returned object should be unreffed with g_object_unref()
- * when no longer needed.
- *
- * Returns: (transfer full): a #GIcon.
+ * Returns: (transfer full): a #GIcon. The returned object should be unreffed with g_object_unref() when no longer needed.
  */
 
 
@@ -40971,10 +40027,7 @@
  * See the <link linkend="volume-identifier">introduction</link>
  * for more information about volume identifiers.
  *
- * requested identfier, or %NULL if the #GVolume
- * doesn't have this kind of identifier
- *
- * Returns: a newly allocated string containing the
+ * Returns: a newly allocated string containing the requested identfier, or %NULL if the #GVolume doesn't have this kind of identifier
  */
 
 
@@ -40984,10 +40037,7 @@
  *
  * Gets the mount for the @volume.
  *
- * The returned object should be unreffed with g_object_unref()
- * when no longer needed.
- *
- * Returns: (transfer full): a #GMount or %NULL if @volume isn't mounted.
+ * Returns: (transfer full): a #GMount or %NULL if @volume isn't mounted. The returned object should be unreffed with g_object_unref() when no longer needed.
  */
 
 
@@ -40997,9 +40047,7 @@
  *
  * Gets the name of @volume.
  *
- * be freed with g_free() when no longer needed.
- *
- * Returns: the name for the given @volume. The returned string should
+ * Returns: the name for the given @volume. The returned string should be freed with g_free() when no longer needed.
  */
 
 
@@ -41023,10 +40071,7 @@
  * considered an opaque string. Returns %NULL if there is no UUID
  * available.
  *
- * The returned string should be freed with g_free()
- * when no longer needed.
- *
- * Returns: the UUID for @volume or %NULL if no UUID can be computed.
+ * Returns: the UUID for @volume or %NULL if no UUID can be computed. The returned string should be freed with g_free() when no longer needed.
  */
 
 
@@ -41063,15 +40108,8 @@
  * is to return #GVolume objects representing entries in the users
  * "favorite servers" list or similar.
  *
- * if no wants to adopt the #GMount.
- *
- * implementations should instead create shadow mounts with the URI of
- * the mount they intend to adopt. See the proxy volume monitor in
- * gvfs for an example of this. Also see g_mount_is_shadowed(),
- * g_mount_shadow() and g_mount_unshadow() functions.
- *
- * Returns: (transfer full): the #GVolume object that is the parent for @mount or %NULL
- * Deprecated: 2.20: Instead of using this function, #GVolumeMonitor
+ * Returns: (transfer full): the #GVolume object that is the parent for @mount or %NULL if no wants to adopt the #GMount.
+ * Deprecated: 2.20: Instead of using this function, #GVolumeMonitor implementations should instead create shadow mounts with the URI of the mount they intend to adopt. See the proxy volume monitor in gvfs for an example of this. Also see g_mount_is_shadowed(), g_mount_shadow() and g_mount_unshadow() functions.
  */
 
 
@@ -41080,9 +40118,7 @@
  *
  * Gets the volume monitor used by gio.
  *
- * g_object_unref() when done with it.
- *
- * Returns: (transfer full): a reference to the #GVolumeMonitor used by gio. Call
+ * Returns: (transfer full): a reference to the #GVolumeMonitor used by gio. Call g_object_unref() when done with it.
  */
 
 
@@ -41106,9 +40142,7 @@
  *
  * Finds a #GMount object by its UUID (see g_mount_get_uuid())
  *
- * Free the returned object with g_object_unref().
- *
- * Returns: (transfer full): a #GMount or %NULL if no such mount is available.
+ * Returns: (transfer full): a #GMount or %NULL if no such mount is available. Free the returned object with g_object_unref().
  */
 
 
@@ -41132,9 +40166,7 @@
  *
  * Finds a #GVolume object by its UUID (see g_volume_get_uuid())
  *
- * Free the returned object with g_object_unref().
- *
- * Returns: (transfer full): a #GVolume or %NULL if no such volume is available.
+ * Returns: (transfer full): a #GVolume or %NULL if no such volume is available. Free the returned object with g_object_unref().
  */
 
 
@@ -41403,9 +40435,7 @@
  *
  * Optionally doesn't list the desktop ids given in the @except
  *
- * to handle @mime_type.
- *
- * Returns: a #GList containing the desktop ids which claim
+ * Returns: a #GList containing the desktop ids which claim to handle @mime_type.
  */
 
 
