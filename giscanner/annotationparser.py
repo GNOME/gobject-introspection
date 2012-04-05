@@ -457,7 +457,7 @@ class DocOption(object):
 
 
 class AnnotationParser(object):
-    '''
+    """
     GTK-Doc comment block parser.
 
     Parses GTK-Doc comment blocks into a parse tree built out of :class:`DockBlock`,
@@ -512,15 +512,15 @@ class AnnotationParser(object):
     .. _ScanSourceFile():
             http://git.gnome.org/browse/gtk-doc/tree/gtkdoc-mkdb.in#n3722
     .. _b41641b: b41641bd75f870afff7561ceed8a08456da57565
-    '''
+    """
 
     def parse(self, comments):
-        '''
+        """
         Parses multiple GTK-Doc comment blocks.
 
         :param comments: a list of (comment, filename, lineno) tuples
         :returns: a list of :class:`DocBlock` or ``None`` objects
-        '''
+        """
 
         comment_blocks = {}
 
@@ -540,12 +540,12 @@ class AnnotationParser(object):
         return comment_blocks
 
     def parse_comment_block(self, comment):
-        '''
+        """
         Parses a single GTK-Doc comment block.
 
         :param comment: a (comment, filename, lineno) tuple
         :returns: a :class:`DocBlock` object or ``None``
-        '''
+        """
 
         comment, filename, lineno = comment
         comment_lines = list(enumerate(comment.split('\n')))
@@ -565,7 +565,7 @@ class AnnotationParser(object):
         return self._parse_comment_block(comment_lines, filename, lineno)
 
     def _parse_comment_block(self, comment_lines, filename, lineno):
-        '''
+        """
         Parses a single GTK-Doc comment block stripped from it's
         comment start (/**) and comment end (*/) marker lines.
 
@@ -586,7 +586,7 @@ class AnnotationParser(object):
 
         .. _ScanSourceFile():
                 http://git.gnome.org/browse/gtk-doc/tree/gtkdoc-mkdb.in#n3722
-        '''
+        """
         comment_block = None
         in_part = None
         identifier = None
