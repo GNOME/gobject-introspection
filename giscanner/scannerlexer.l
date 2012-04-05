@@ -214,21 +214,29 @@ yywrap (void)
 static void
 parse_comment (GISourceScanner *scanner)
 {
-  GString *string;
+  GString *string = NULL;
   int c1, c2;
   GISourceComment *comment;
   int comment_lineno;
+  int skip = FALSE;
+
+  if (!g_list_find_custom (scanner->filenames,
+                           scanner->current_filename,
+                           (GCompareFunc)g_strcmp0)) {
+      skip = TRUE;
+  } else {
+      string = g_string_new ("/*");
+  }
 
   c1 = input();
   c2 = input();
-
-  string = g_string_new ("/*");
 
   comment_lineno = lineno;
 
   while (c2 != EOF && !(c1 == '*' && c2 == '/'))
     {
-      g_string_append_c (string, c1);
+      if (!skip)
+        g_string_append_c (string, c1);
 
       if (c1 == '\n')
         lineno++;
@@ -236,6 +244,11 @@ parse_comment (GISourceScanner *scanner)
       c1 = c2;
       c2 = input();
     }
+
+  if (skip) {
+      return;
+  }
+
   g_string_append (string, "*/");
 
   comment = g_slice_new (GISourceComment);

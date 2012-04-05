@@ -259,10 +259,7 @@ class SourceScanner(object):
             yield SourceSymbol(self._scanner, symbol)
 
     def get_comments(self):
-        for comment in self._scanner.get_comments():
-            filename = comment[-2]
-            if filename in self._filenames:
-                yield comment
+        return self._scanner.get_comments()
 
     def dump(self):
         print '-'*30
