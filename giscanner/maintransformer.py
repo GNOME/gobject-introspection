@@ -24,7 +24,7 @@ from . import message
 from .annotationparser import (TAG_VFUNC, TAG_SINCE, TAG_DEPRECATED, TAG_RETURNS,
                                TAG_ATTRIBUTES, TAG_RENAME_TO, TAG_TYPE,
                                TAG_UNREF_FUNC, TAG_REF_FUNC, TAG_SET_VALUE_FUNC,
-                               TAG_GET_VALUE_FUNC, TAG_VALUE)
+                               TAG_GET_VALUE_FUNC, TAG_VALUE, TAG_TRANSFER)
 from .annotationparser import (OPT_ALLOW_NONE, OPT_ARRAY, OPT_ATTRIBUTE,
                                OPT_ELEMENT_TYPE, OPT_IN, OPT_INOUT,
                                OPT_INOUT_ALT, OPT_OUT, OPT_SCOPE,
@@ -141,7 +141,7 @@ usage is void (*_gtk_reserved1)(void);"""
     def _apply_annotation_rename_to(self, node, chain, block):
         if not block:
             return
-        rename_to = block.get(TAG_RENAME_TO)
+        rename_to = block.get_tag(TAG_RENAME_TO)
         if not rename_to:
             return
         rename_to = rename_to.value
@@ -231,13 +231,13 @@ usage is void (*_gtk_reserved1)(void);"""
         if isinstance(node, ast.Class):
             block = self._get_block(node)
             if block:
-                tag = block.get(TAG_UNREF_FUNC)
+                tag = block.get_tag(TAG_UNREF_FUNC)
                 node.unref_func = tag.value if tag else None
-                tag = block.get(TAG_REF_FUNC)
+                tag = block.get_tag(TAG_REF_FUNC)
                 node.ref_func = tag.value if tag else None
-                tag = block.get(TAG_SET_VALUE_FUNC)
+                tag = block.get_tag(TAG_SET_VALUE_FUNC)
                 node.set_value_func = tag.value if tag else None
-                tag = block.get(TAG_GET_VALUE_FUNC)
+                tag = block.get_tag(TAG_GET_VALUE_FUNC)
                 node.get_value_func = tag.value if tag else None
         if isinstance(node, ast.Constant):
             self._apply_annotations_constant(node)
@@ -319,7 +319,7 @@ usage is void (*_gtk_reserved1)(void);"""
         block = self._blocks.get(func.symbol)
         if block:
             if isinstance(param, ast.Parameter):
-                tag = block.tags.get(param.argname)
+                tag = block.params.get(param.argname)
             elif isinstance(param, ast.Return):
                 tag = block.tags.get(TAG_RETURNS)
             else:
@@ -599,11 +599,11 @@ usage is void (*_gtk_reserved1)(void);"""
 
         node.doc = block.comment
 
-        since_tag = block.get(TAG_SINCE)
+        since_tag = block.get_tag(TAG_SINCE)
         if since_tag is not None:
             node.version = since_tag.value
 
-        deprecated_tag = block.get(TAG_DEPRECATED)
+        deprecated_tag = block.get_tag(TAG_DEPRECATED)
         if deprecated_tag is not None:
             value = deprecated_tag.value
             if ': ' in value:
@@ -617,7 +617,7 @@ usage is void (*_gtk_reserved1)(void);"""
             if version is not None:
                 node.deprecated_version = version
 
-        annos_tag = block.get(TAG_ATTRIBUTES)
+        annos_tag = block.get_tag(TAG_ATTRIBUTES)
         if annos_tag is not None:
             for key, value in annos_tag.options.iteritems():
                 if value:
@@ -679,7 +679,7 @@ usage is void (*_gtk_reserved1)(void);"""
 
     def _apply_annotations_return(self, parent, return_, block):
         if block:
-            tag = block.get(TAG_RETURNS)
+            tag = block.get_tag(TAG_RETURNS)
         else:
             tag = None
         self._apply_annotations_param_ret_common(parent, return_, tag)
@@ -690,7 +690,7 @@ usage is void (*_gtk_reserved1)(void);"""
             declparams.add(parent.instance_parameter.argname)
         for param in params:
             if block:
-                tag = block.get(param.argname)
+                tag = block.get_param(param.argname)
             else:
                 tag = None
             self._apply_annotations_param(parent, param, tag)
@@ -716,7 +716,7 @@ usage is void (*_gtk_reserved1)(void);"""
                 text = ', should be one of %s' % (
                 ', '.join(repr(p) for p in unused), )
 
-            tag = block.get(doc_name)
+            tag = block.get_param(doc_name)
             message.warn(
                 '%s: unknown parameter %r in documentation comment%s' % (
                 block.name, doc_name, text),
@@ -744,7 +744,7 @@ usage is void (*_gtk_reserved1)(void);"""
     def _apply_annotations_field(self, parent, block, field):
         if not block:
             return
-        tag = block.get(field.name)
+        tag = block.get_param(field.name)
         if not tag:
             return
         t = tag.options.get(OPT_TYPE)
@@ -762,7 +762,7 @@ usage is void (*_gtk_reserved1)(void);"""
         self._apply_annotations_annotated(prop, block)
         if not block:
             return
-        transfer_tag = block.get(OPT_TRANSFER)
+        transfer_tag = block.get_tag(TAG_TRANSFER)
         if transfer_tag is not None:
             transfer = transfer_tag.value
             if transfer == OPT_TRANSFER_FLOATING:
@@ -770,7 +770,7 @@ usage is void (*_gtk_reserved1)(void);"""
             prop.transfer = transfer
         else:
             prop.transfer = self._get_transfer_default(parent, prop)
-        type_tag = block.get(TAG_TYPE)
+        type_tag = block.get_tag(TAG_TYPE)
         if type_tag:
             prop.type = self._resolve_toplevel(type_tag.value, prop.type, prop, parent)
 
@@ -781,8 +781,8 @@ usage is void (*_gtk_reserved1)(void);"""
         # We're only attempting to name the signal parameters if
         # the number of parameter tags (@foo) is the same or greater
         # than the number of signal parameters
-        if block and len(block.tags) > len(signal.parameters):
-            names = block.tags.items()
+        if block and len(block.params) > len(signal.parameters):
+            names = block.params.items()
             # Resolve real parameter names early, so that in later
             # phase we can refer to them while resolving annotations.
             for i, param in enumerate(signal.parameters):
@@ -806,7 +806,7 @@ usage is void (*_gtk_reserved1)(void);"""
         block = self._blocks.get(node.ctype)
         if not block:
             return
-        tag = block.get(TAG_VALUE)
+        tag = block.get_tag(TAG_VALUE)
         if tag:
             node.value = tag.value
 
@@ -824,7 +824,7 @@ usage is void (*_gtk_reserved1)(void);"""
         parent = chain[-1] if chain else None
         if not (block and parent):
             return
-        virtual = block.get(TAG_VFUNC)
+        virtual = block.get_tag(TAG_VFUNC)
         if not virtual:
             return
         invoker_name = virtual.value

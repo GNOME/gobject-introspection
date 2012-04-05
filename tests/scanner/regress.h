@@ -783,4 +783,7 @@ void regress_test_struct_fixed_array_frob (RegressTestStructFixedArray *str);
 	"POWERSHARE,PRODIGY,TLX,X400,GIF,CGM,WMF,BMP,MET,PMB,DIB,PICT,TIFF," \
 	"PDF,PS,JPEG,QTIME,MPEG,MPEG2,AVI,WAVE,AIFF,PCM,X509,PGP"
 
+void regress_has_parameter_named_attrs (int        foo,
+                                        gpointer   attributes);
+
 #endif /* __GITESTTYPES_H__ */

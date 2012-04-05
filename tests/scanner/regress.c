@@ -3610,3 +3610,17 @@ regress_test_struct_fixed_array_frob (RegressTestStructFixedArray *str)
   for (i = 0; i < G_N_ELEMENTS(str->array); i++)
     str->array[i] = 42 + i;
 }
+
+/**
+ * regress_has_parameter_named_attrs:
+ * @foo: some int
+ * @attributes: (type guint32) (array fixed-size=32): list of attributes
+ *
+ * This test case mirrors GnomeKeyringPasswordSchema from
+ * libgnome-keyring.
+ */
+void
+regress_has_parameter_named_attrs (int        foo,
+                                   gpointer   attributes)
+{
+}

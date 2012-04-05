@@ -145,7 +145,7 @@ class DocBlock(object):
         self.value = None
         self.tags = odict()
         self.comment = None
-        self.params = []
+        self.params = odict()
         self.position = None
 
     def __cmp__(self, other):
@@ -158,8 +158,11 @@ class DocBlock(object):
         self.position = position
         self.options.position = position
 
-    def get(self, name):
+    def get_tag(self, name):
         return self.tags.get(name)
+
+    def get_param(self, name):
+        return self.params.get(name)
 
     def to_gtk_doc(self):
         options = ''
@@ -170,19 +173,14 @@ class DocBlock(object):
         if 'SECTION' not in self.name:
             lines[0] += ':'
         lines[0] += options
-        tags = []
-        for name, tag in self.tags.iteritems():
-            if name in self.params:
-                lines.append(tag.to_gtk_doc_param())
-            else:
-                tags.append(tag)
-
+        for param in self.params.values():
+            lines.append(param.to_gtk_doc_param())
         lines.append('')
         for l in self.comment.split('\n'):
             lines.append(l)
-        if tags:
+        if self.tags:
             lines.append('')
-            for tag in tags:
+            for tag in self.tags.values():
                 lines.append(tag.to_gtk_doc_tag())
 
         comment = ''
@@ -197,6 +195,9 @@ class DocBlock(object):
         return comment
 
     def validate(self):
+        for param in self.params.values():
+            param.validate()
+
         for tag in self.tags.values():
             tag.validate()
 
@@ -720,7 +721,7 @@ class AnnotationParser(object):
                         message.warn("encountered multiple 'Returns' parameters or tags for "
                                      "'%s'." % (comment_block.name),
                                      position)
-                elif param_name in comment_block.tags.keys():
+                elif param_name in comment_block.params.keys():
                     column = result.start('parameter_name') + column_offset
                     marker = ' '*column + '^'
                     message.warn("multiple '@%s' parameters for identifier '%s':\n%s\n%s" %
@@ -732,9 +733,10 @@ class AnnotationParser(object):
                 tag.comment = param_description
                 if param_annotations:
                     tag.options = self.parse_options(tag, param_annotations)
-                comment_block.tags[param_name] = tag
-                if not param_name == TAG_RETURNS:
-                    comment_block.params.append(param_name)
+                if param_name == TAG_RETURNS:
+                    comment_block.tags[param_name] = tag
+                else:
+                    comment_block.params[param_name] = tag
                 current_param = tag
                 continue
 
@@ -785,7 +787,7 @@ class AnnotationParser(object):
                     comment_block.tags[TAG_RETURNS] = tag
                     current_tag = tag
                     continue
-                elif tag_name.lower() in _ALL_TAGS:
+                else:
                     if tag_name.lower() in comment_block.tags.keys():
                         column = result.start('tag_name') + column_offset
                         marker = ' '*column + '^'
@@ -858,19 +860,25 @@ class AnnotationParser(object):
             comment_block.comment = ''
 
         for tag in comment_block.tags.itervalues():
-            if tag.comment:
-                tag.comment = tag.comment.strip()
-            else:
-                tag.comment = None
+            self._clean_comment_block_part(tag)
 
-            if tag.value:
-                tag.value = tag.value.strip()
-            else:
-                tag.value = ''
+        for param in comment_block.params.itervalues():
+            self._clean_comment_block_part(param)
 
         # Validate and store block.
         comment_block.validate()
         return comment_block
+
+    def _clean_comment_block_part(self, part):
+        if part.comment:
+            part.comment = part.comment.strip()
+        else:
+            part.comment = None
+
+        if part.value:
+            part.value = part.value.strip()
+        else:
+            part.value = ''
 
     def _validate_multiline_annotation_continuation(self, line, original_line,
                                                           column_offset, position):

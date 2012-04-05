@@ -1528,6 +1528,26 @@ Use with regress_test_obj_emit_sig_with_obj</doc>
         </parameter>
       </parameters>
     </function>
+    <function name="has_parameter_named_attrs"
+              c:identifier="regress_has_parameter_named_attrs">
+      <doc xml:whitespace="preserve">This test case mirrors GnomeKeyringPasswordSchema from
+libgnome-keyring.</doc>
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="foo" transfer-ownership="none">
+          <doc xml:whitespace="preserve">some int</doc>
+          <type name="gint" c:type="int"/>
+        </parameter>
+        <parameter name="attributes" transfer-ownership="none">
+          <doc xml:whitespace="preserve">list of attributes</doc>
+          <array zero-terminated="0" c:type="gpointer" fixed-size="32">
+            <type name="guint32" c:type="gpointer"/>
+          </array>
+        </parameter>
+      </parameters>
+    </function>
     <function name="introspectable_via_alias"
               c:identifier="regress_introspectable_via_alias">
       <return-value transfer-ownership="none">
