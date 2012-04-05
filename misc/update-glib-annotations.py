@@ -39,21 +39,8 @@ def directory_includes(dirs, srcdir, builddir):
 def extract_annotations(module, srcdir, builddir, outfile):
     sources = []
     subdir = os.path.join(srcdir, module['name'])
-    headersfile = os.path.join(builddir,
-                               module['name'],
-                               module['name'] + '-public-headers.txt')
     includes = directory_includes(module['includes'],
                                   srcdir, builddir)
-
-    f = open(headersfile)
-    line = f.read()
-    f.close()
-
-    for headername in line.split(' '):
-        headername = headername.strip()
-        if headername in module['skip_headers']:
-            continue
-        sources.append(os.path.join(subdir, headername))
 
     for sourcename in os.listdir(subdir):
         if sourcename.endswith('.c'):
@@ -77,19 +64,16 @@ if __name__ == '__main__':
 
     modules = [{'name':         'glib',
                 'srcname':      '../gir/glib-2.0.c',
-                'skip_headers': ['gi18n-lib.h'],
                 'includes':     ['glib', 'gmodule'],
                 'defines':      ['-DGLIB_COMPILATION']},
 
                {'name':         'gobject',
                 'srcname':      '../gir/gobject-2.0.c',
-                'skip_headers': [],
                 'includes':     ['glib', 'gobject', 'gmodule'],
                 'defines':      ['-DGOBJECT_COMPILATION']},
 
                {'name':         'gio',
                 'srcname':      '../gir/gio-2.0.c',
-                'skip_headers': [],
                 'includes':     ['glib', 'gmodule', 'gobject', 'gio'],
                 'defines':      ['-DGOBJECT_COMPILATION', '-DGIO_COMPILATION']}]
 
