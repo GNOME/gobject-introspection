@@ -390,6 +390,9 @@ class DocOptions(object):
     def __init__(self):
         self.values = []
 
+    def __repr__(self):
+        return '<DocOptions %r>' % (self.values, )
+
     def __getitem__(self, item):
         for key, value in self.values:
             if key == item:

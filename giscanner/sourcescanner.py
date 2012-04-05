@@ -236,6 +236,7 @@ class SourceScanner(object):
         for filename in filenames:
             filename = os.path.abspath(filename)
             self._scanner.append_filename(filename)
+            self._filenames.append(filename)
 
         headers = []
         for filename in filenames:
@@ -247,7 +248,6 @@ class SourceScanner(object):
                 headers.append(filename)
 
         self._parse(headers)
-        self._filenames.extend(headers)
 
     def parse_macros(self, filenames):
         self._scanner.set_macro_scan(True)
@@ -259,7 +259,10 @@ class SourceScanner(object):
             yield SourceSymbol(self._scanner, symbol)
 
     def get_comments(self):
-        return self._scanner.get_comments()
+        for comment in self._scanner.get_comments():
+            filename = comment[-2]
+            if filename in self._filenames:
+                yield comment
 
     def dump(self):
         print '-'*30
