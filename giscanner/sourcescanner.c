@@ -22,6 +22,7 @@
 
 #include "sourcescanner.h"
 #include <string.h>
+#include <gio/gio.h>
 
 GISourceSymbol *
 gi_source_symbol_new (GISourceSymbolType type, const gchar *filename, int line)
@@ -242,15 +243,22 @@ gi_source_scanner_add_symbol (GISourceScanner  *scanner,
 {
   gboolean found_filename = FALSE;
   GList *l;
+  GFile *current_file;
 
   g_assert (scanner->current_filename);
+  current_file = g_file_new_for_path (scanner->current_filename);
+
   for (l = scanner->filenames; l != NULL; l = l->next)
     {
-      if (strcmp (l->data, scanner->current_filename) == 0)
+      GFile *file = g_file_new_for_path (l->data);
+
+      if (g_file_equal (file, current_file))
 	{
 	  found_filename = TRUE;
+          g_object_unref (file);
 	  break;
 	}
+      g_object_unref (file);
     }
 
   if (found_filename || scanner->macro_scan)
@@ -275,6 +283,8 @@ gi_source_scanner_add_symbol (GISourceScanner  *scanner,
     default:
       break;
     }
+
+    g_object_unref (current_file);
 }
 
 GSList *
