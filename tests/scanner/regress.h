@@ -786,4 +786,12 @@ void regress_test_struct_fixed_array_frob (RegressTestStructFixedArray *str);
 void regress_has_parameter_named_attrs (int        foo,
                                         gpointer   attributes);
 
+/**
+
+ * regress_test_invalid_comment:
+ * @foo: a param
+ *
+ * invalid comment with a line without
+ * https://bugzilla.gnome.org/show_bug.cgi?id=673806
+ */
 #endif /* __GITESTTYPES_H__ */
