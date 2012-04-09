@@ -190,10 +190,9 @@ class DumpCompiler(object):
             args.append('-Wall')
         pkgconfig_flags = self._run_pkgconfig('--cflags')
         args.extend(pkgconfig_flags)
-        cflags = os.environ.get('CFLAGS')
-        if (cflags):
-            for iflag in cflags.split():
-                args.append(iflag)
+        cflags = os.environ.get('CFLAGS', '')
+        for cflag in cflags.split():
+            args.append(cflag)
         for include in self._options.cpp_includes:
             args.append('-I' + include)
         args.extend(['-c', '-o', output])
@@ -229,10 +228,12 @@ class DumpCompiler(object):
             else:
                 args.append('-export-dynamic')
 
-        cflags = os.environ.get('CFLAGS')
-        if (cflags):
-            for iflag in cflags.split():
-                args.append(iflag)
+        cflags = os.environ.get('CFLAGS', '')
+        for cflag in cflags.split():
+            args.append(cflag)
+        ldflags = os.environ.get('LDFLAGS', '')
+        for ldflag in ldflags.split():
+            args.append(ldflag)
 
         # Make sure to list the library to be introspected first since it's
         # likely to be uninstalled yet and we want the uninstalled RPATHs have
