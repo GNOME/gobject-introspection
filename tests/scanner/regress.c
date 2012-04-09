@@ -226,11 +226,12 @@ regress_test_closure_variant (GClosure *closure, const GVariant* arg)
   GValue return_value = {0, };
   GValue arguments[1] = {{0,} };
   GVariant *ret;
+  GVariant *local_arg = (GVariant*)g_memdup(arg, sizeof (GVariant*));
 
   g_value_init (&return_value, G_TYPE_VARIANT);
 
   g_value_init (&arguments[0], G_TYPE_VARIANT);
-  g_value_set_variant (&arguments[0], arg);
+  g_value_set_variant (&arguments[0], local_arg);
 
   g_closure_invoke (closure,
                     &return_value,
@@ -239,6 +240,7 @@ regress_test_closure_variant (GClosure *closure, const GVariant* arg)
 
   ret = g_value_get_variant (&return_value);
 
+  g_free (local_arg);
   g_value_unset (&return_value);
   g_value_unset (&arguments[0]);
 
@@ -2610,7 +2612,7 @@ regress_test_obj_null_out (RegressTestObj **obj)
 void
 regress_test_array_fixed_out_objects (RegressTestObj ***objs)
 {
-    RegressTestObj **values = g_new(gpointer, 2);
+    RegressTestObj **values = (RegressTestObj**)g_new(gpointer, 2);
 
     values[0] = regress_constructor();
     values[1] = regress_constructor();
