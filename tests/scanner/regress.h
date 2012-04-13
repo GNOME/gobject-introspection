@@ -888,7 +888,6 @@ void regress_test_struct_fixed_array_frob (RegressTestStructFixedArray *str);
 void regress_has_parameter_named_attrs (int        foo,
                                         gpointer   attributes);
 
-
 typedef struct {
   int dummy;
   struct {
@@ -898,5 +897,10 @@ typedef struct {
 
   double dummy2;
 } RegressLikeGnomeKeyringPasswordSchema;
+
+/* Ensure we ignore symbols that start with _; in particular we don't
+ * want to issue a namespace warning.
+ */
+#define _DONTSCANTHIS 1
 
 #endif /* __GITESTTYPES_H__ */

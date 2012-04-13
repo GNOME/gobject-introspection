@@ -710,6 +710,9 @@ raise ValueError."""
         return ast.Return(typeval)
 
     def _create_const(self, symbol):
+        if symbol.ident.startswith('_'):
+            return None
+
         # Don't create constants for non-public things
         # http://bugzilla.gnome.org/show_bug.cgi?id=572790
         if (symbol.source_filename is None or
