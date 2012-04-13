@@ -182,7 +182,7 @@ AM_CONDITIONAL(BUILD_TESTS, test x$enable_tests != xno)
 AM_CONDITIONAL(HAVE_CAIRO, test x$have_cairo != xno)
 AM_CONDITIONAL(HAVE_CAIRO_GOBJECT, test x$have_cairo_gobject != xno)
 
-PKG_CHECK_MODULES(SCANNER, [gobject-2.0 gthread-2.0 gio-2.0])
+PKG_CHECK_MODULES(SCANNER, [gobject-2.0 gio-2.0])
 
 dnl libffi
 PKG_CHECK_MODULES(FFI, libffi, have_ffi_pkgconfig=yes, have_ffi_pkgconfig=no)
