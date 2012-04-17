@@ -1,6 +1,7 @@
 include $(top_srcdir)/common.mk
 
 TESTS = \
+	annotationparser.h \
 	callback-invalid-scope.h \
 	callback-missing-scope.h \
 	return-gobject.h \
@@ -19,4 +20,3 @@ TESTS = \
 EXTRA_DIST = warningtester.py common.h $(TESTS)
 
 TESTS_ENVIRONMENT = PYTHONPATH=$(top_builddir):$(top_srcdir) TOP_BUILDDIR=$(top_builddir) UNINSTALLED_INTROSPECTION_SRCDIR=$(top_srcdir) $(PYTHON) $(srcdir)/warningtester.py
-

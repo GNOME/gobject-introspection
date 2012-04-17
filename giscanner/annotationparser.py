@@ -27,7 +27,7 @@ import re
 
 from . import message
 from .annotationpatterns import (COMMENT_START_RE, COMMENT_END_RE,
-                                 COMMENT_STAR_RE, EMPTY_LINE_RE,
+                                 COMMENT_ASTERISK_RE, EMPTY_LINE_RE,
                                  SECTION_RE, SYMBOL_RE, PROPERTY_RE, SIGNAL_RE,
                                  PARAMETER_RE, DESCRIPTION_TAG_RE, TAG_RE,
                                  MULTILINE_ANNOTATION_CONTINUATION_RE)
@@ -616,7 +616,7 @@ class AnnotationParser(object):
             column_offset = 0
 
             # Get rid of ' * ' at start of the line.
-            result = COMMENT_STAR_RE.match(line)
+            result = COMMENT_ASTERISK_RE.match(line)
             if result:
                 column_offset = result.end(0)
                 line = line[result.end(0):]
@@ -672,17 +672,18 @@ class AnnotationParser(object):
                     comment_block = DocBlock(identifier_name)
                     comment_block.set_position(position)
 
-                    if 'annotations' in result.groupdict():
-                        comment_block.options = self.parse_options(comment_block,
-                                                                   result.group('annotations'))
-
                     if 'colon' in result.groupdict() and result.group('colon') != ':':
                         colon_start = result.start('colon')
                         colon_column = column_offset + colon_start
                         marker = ' '*colon_column + '^'
                         message.warn("missing ':' at column %s:\n%s\n%s" %
-                                     (colon_start, original_line, marker),
+                                     (colon_column + 1, original_line, marker),
                                      position)
+
+                    if 'annotations' in result.groupdict():
+                        comment_block.options = self.parse_options(comment_block,
+                                                                   result.group('annotations'))
+
                     continue
                 else:
                     # If we get here, the identifier was not recognized, so
@@ -812,7 +813,7 @@ class AnnotationParser(object):
                         if tag_name.lower() == TAG_ATTRIBUTES:
                             tag.options = self.parse_options(tag, tag_annotations)
                         else:
-                            message.warn("annotations not supported for tag '%s'." %
+                            message.warn("annotations not supported for tag '%s:'." %
                                          (tag_name),
                                          position)
                     comment_block.tags[tag_name.lower()] = tag
@@ -823,7 +824,7 @@ class AnnotationParser(object):
             # If we get here, we must be in the middle of a multiline
             # comment block, parameter or tag description.
             ####################################################################
-            if in_part == PART_DESCRIPTION:
+            if in_part == PART_DESCRIPTION or in_part == PART_IDENTIFIER:
                 if not comment_block.comment:
                     # Backwards compatibility with old style GTK-Doc
                     # comment blocks where Description used to be a comment
@@ -834,30 +835,20 @@ class AnnotationParser(object):
                     comment_block.comment += '\n' + line
                 continue
             elif in_part == PART_PARAMETERS:
-                if not current_param:
-                    message.warn('parameter expected:\n%s' %
-                                 (line),
-                                 position)
-                else:
-                    self._validate_multiline_annotation_continuation(line, original_line,
-                                                                     column_offset, position)
+                self._validate_multiline_annotation_continuation(line, original_line,
+                                                                 column_offset, position)
 
-                    # Append to parameter description.
-                    current_param.comment += ' ' + line.strip()
+                # Append to parameter description.
+                current_param.comment += ' ' + line.strip()
             elif in_part == PART_TAGS:
-                if not current_tag:
-                    message.warn('tag expected:\n%s' %
-                                 (line),
-                                 position)
-                else:
-                    self._validate_multiline_annotation_continuation(line, original_line,
-                                                                     column_offset, position)
+                self._validate_multiline_annotation_continuation(line, original_line,
+                                                                 column_offset, position)
 
-                    # Append to tag description.
-                    if current_tag.name.lower() in [TAG_RETURNS, TAG_RETURNVALUE]:
-                        current_tag.comment += ' ' + line.strip()
-                    else:
-                        current_tag.value += ' ' + line.strip()
+                # Append to tag description.
+                if current_tag.name.lower() in [TAG_RETURNS, TAG_RETURNVALUE]:
+                    current_tag.comment += ' ' + line.strip()
+                else:
+                    current_tag.value += ' ' + line.strip()
 
         ########################################################################
         # Finished parsing this comment block.

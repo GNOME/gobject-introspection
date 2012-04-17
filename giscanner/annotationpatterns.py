@@ -61,7 +61,7 @@ COMMENT_END_RE = re.compile(r'''
 # line inside a comment block.
 #
 # Results in 0 symbolic groups.
-COMMENT_STAR_RE = re.compile(r'''
+COMMENT_ASTERISK_RE = re.compile(r'''
     ^                                        # start
     [^\S\n\r]*                               # 0 or more whitespace characters
     \*                                       # 1 asterisk character
