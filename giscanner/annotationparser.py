@@ -610,95 +610,96 @@ class AnnotationParser(object):
         for line_offset, line in comment_lines:
             position = message.Position(filename, line_offset + lineno)
 
+            # Store the original line (without \n) and column offset
+            # so we can generate meaningful warnings later on.
+            original_line = line
+            column_offset = 0
+
+            # Get rid of ' * ' at start of the line.
             result = COMMENT_STAR_RE.match(line)
             if result:
-                # Store the original line (without \n) and column offset
-                # so we can generate meaningful warnings later on.
-                original_line = line
                 column_offset = result.end(0)
-
-                # Get rid of ' * ' at start of the line.
                 line = line[result.end(0):]
 
-		####################################################################
-		# Check for GTK-Doc comment block identifier.
-		####################################################################
-		if not comment_block:
-		    # The correct identifier name would have the colon at the end
-		    # but maintransformer.py does not expect us to do that. So
-		    # make sure to compute an identifier_name without the colon and
-		    # a real_identifier_name with the colon.
+            ####################################################################
+            # Check for GTK-Doc comment block identifier.
+            ####################################################################
+            if not comment_block:
+                # The correct identifier name would have the colon at the end
+                # but maintransformer.py does not expect us to do that. So
+                # make sure to compute an identifier_name without the colon and
+                # a real_identifier_name with the colon.
 
-		    if not identifier:
-			result = SECTION_RE.search(line)
-			if result:
-			    identifier = IDENTIFIER_SECTION
-			    real_identifier_name = 'SECTION:%s' % (result.group('section_name'))
-			    identifier_name = real_identifier_name
-			    column = result.start('section_name') + column_offset
+                if not identifier:
+                    result = SECTION_RE.search(line)
+                    if result:
+                        identifier = IDENTIFIER_SECTION
+                        real_identifier_name = 'SECTION:%s' % (result.group('section_name'))
+                        identifier_name = real_identifier_name
+                        column = result.start('section_name') + column_offset
 
-		    if not identifier:
-			result = SYMBOL_RE.search(line)
-			if result:
-			    identifier = IDENTIFIER_SYMBOL
-			    real_identifier_name = '%s:' % (result.group('symbol_name'))
-			    identifier_name = '%s' % (result.group('symbol_name'))
-			    column = result.start('symbol_name') + column_offset
+                if not identifier:
+                    result = SYMBOL_RE.search(line)
+                    if result:
+                        identifier = IDENTIFIER_SYMBOL
+                        real_identifier_name = '%s:' % (result.group('symbol_name'))
+                        identifier_name = '%s' % (result.group('symbol_name'))
+                        column = result.start('symbol_name') + column_offset
 
-		    if not identifier:
-			result = PROPERTY_RE.search(line)
-			if result:
-			    identifier = IDENTIFIER_PROPERTY
-			    real_identifier_name = '%s:%s:' % (result.group('class_name'),
-							       result.group('property_name'))
-			    identifier_name = '%s:%s' % (result.group('class_name'),
-							 result.group('property_name'))
-			    column = result.start('property_name') + column_offset
+                if not identifier:
+                    result = PROPERTY_RE.search(line)
+                    if result:
+                        identifier = IDENTIFIER_PROPERTY
+                        real_identifier_name = '%s:%s:' % (result.group('class_name'),
+                                                           result.group('property_name'))
+                        identifier_name = '%s:%s' % (result.group('class_name'),
+                                                     result.group('property_name'))
+                        column = result.start('property_name') + column_offset
 
-		    if not identifier:
-			result = SIGNAL_RE.search(line)
-			if result:
-			    identifier = IDENTIFIER_SIGNAL
-			    real_identifier_name = '%s::%s:' % (result.group('class_name'),
-								result.group('signal_name'))
-			    identifier_name = '%s::%s' % (result.group('class_name'),
-							  result.group('signal_name'))
-			    column = result.start('signal_name') + column_offset
+                if not identifier:
+                    result = SIGNAL_RE.search(line)
+                    if result:
+                        identifier = IDENTIFIER_SIGNAL
+                        real_identifier_name = '%s::%s:' % (result.group('class_name'),
+                                                            result.group('signal_name'))
+                        identifier_name = '%s::%s' % (result.group('class_name'),
+                                                      result.group('signal_name'))
+                        column = result.start('signal_name') + column_offset
 
-		    if identifier:
-			in_part = PART_IDENTIFIER
+                if identifier:
+                    in_part = PART_IDENTIFIER
 
-			comment_block = DocBlock(identifier_name)
-			comment_block.set_position(position)
+                    comment_block = DocBlock(identifier_name)
+                    comment_block.set_position(position)
 
-			if 'annotations' in result.groupdict():
-			    comment_block.options = self.parse_options(comment_block,
-								       result.group('annotations'))
+                    if 'annotations' in result.groupdict():
+                        comment_block.options = self.parse_options(comment_block,
+                                                                   result.group('annotations'))
 
-			if 'colon' in result.groupdict() and result.group('colon') != ':':
-			    colon_start = result.start('colon')
-			    colon_column = column_offset + colon_start
-			    marker = ' '*colon_column + '^'
-			    message.warn("missing ':' at column %s:\n%s\n%s" %
-					 (colon_start, original_line, marker),
-					 position)
-			continue
-		    else:
-			# If we get here, the identifier was not recognized, so
-			# ignore the rest of the block just like the old annotation
-			# parser did. Doing this is a bit more strict than
-			# gtkdoc-mkdb (which continues to search for the identifier
-			# until either it is found or the end of the block is
-			# reached). In practice, however, ignoring the block is the
-			# right thing to do because sooner or later some long
-			# descriptions will contain something matching an identifier
-			# pattern by accident.
-			marker = ' '*column_offset + '^'
-			message.warn('ignoring unrecognized GTK-Doc comment block, identifier not '
-				     'found:\n%s\n%s' % (original_line, marker),
-				     position)
+                    if 'colon' in result.groupdict() and result.group('colon') != ':':
+                        colon_start = result.start('colon')
+                        colon_column = column_offset + colon_start
+                        marker = ' '*colon_column + '^'
+                        message.warn("missing ':' at column %s:\n%s\n%s" %
+                                     (colon_start, original_line, marker),
+                                     position)
+                    continue
+                else:
+                    # If we get here, the identifier was not recognized, so
+                    # ignore the rest of the block just like the old annotation
+                    # parser did. Doing this is a bit more strict than
+                    # gtkdoc-mkdb (which continues to search for the identifier
+                    # until either it is found or the end of the block is
+                    # reached). In practice, however, ignoring the block is the
+                    # right thing to do because sooner or later some long
+                    # descriptions will contain something matching an identifier
+                    # pattern by accident.
+                    marker = ' '*column_offset + '^'
+                    message.warn('ignoring unrecognized GTK-Doc comment block, identifier not '
+                                 'found:\n%s\n%s' % (original_line, marker),
+                                 position)
 
-			return None
+                    return None
 
             ####################################################################
             # Check for comment block parameters.
@@ -863,20 +864,19 @@ class AnnotationParser(object):
         ########################################################################
         # We have picked up a couple of \n characters that where not
         # intended. Strip those.
-        if comment_block is not None:
-	    if comment_block.comment:
-		comment_block.comment = comment_block.comment.strip()
-	    else:
-		comment_block.comment = ''
+        if comment_block.comment:
+            comment_block.comment = comment_block.comment.strip()
+        else:
+            comment_block.comment = ''
 
-	    for tag in comment_block.tags.itervalues():
-		self._clean_comment_block_part(tag)
+        for tag in comment_block.tags.itervalues():
+            self._clean_comment_block_part(tag)
 
-	    for param in comment_block.params.itervalues():
-		self._clean_comment_block_part(param)
+        for param in comment_block.params.itervalues():
+            self._clean_comment_block_part(param)
 
-	    # Validate and store block.
-	    comment_block.validate()
+        # Validate and store block.
+        comment_block.validate()
         return comment_block
 
     def _clean_comment_block_part(self, part):
