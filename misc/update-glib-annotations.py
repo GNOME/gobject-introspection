@@ -9,6 +9,11 @@ import sys
 
 import subprocess
 
+path=os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+for k in ['UNINSTALLED_INTROSPECTION_SRCDIR',
+          'UNINSTALLED_INTROSPECTION_BUILDDIR']:
+    if k not in os.environ:
+        os.environ[k] = path
 
 possible_builddirs = ['../_build/', '..', '../../build/']
 builddir = None
