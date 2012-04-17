@@ -1,11 +1,9 @@
-import difflib
-import os
-import os.path
-import sys
-from StringIO import StringIO
 import __builtin__
+import os
+import sys
+import difflib
 
-path=os.getenv('UNINSTALLED_INTROSPECTION_SRCDIR', None)
+path = os.getenv('UNINSTALLED_INTROSPECTION_SRCDIR', None)
 assert path is not None
 sys.path.insert(0, path)
 
@@ -21,11 +19,24 @@ from giscanner.sourcescanner import SourceScanner
 from giscanner.transformer import Transformer
 from giscanner.scannermain import process_packages
 
+
 currentdir = os.path.dirname(os.path.abspath(sys.argv[0]))
 current_name = os.path.basename(currentdir)
 path = os.path.abspath(os.path.join(currentdir, '..', ''))
 top_srcdir = os.environ['UNINSTALLED_INTROSPECTION_SRCDIR']
 top_builddir = os.environ['TOP_BUILDDIR']
+
+
+class ChunkedIO(object):
+    def __init__(self):
+        self.buffer = []
+
+    def write(self, s):
+        self.buffer.append(s)
+
+    def getvalue(self):
+        return self.buffer
+
 
 class Options:
     def __init__(self):
@@ -34,54 +45,64 @@ class Options:
         self.cpp_undefines = []
         self.library_paths = []
 
-def _diff(orig, new, short):
-    def _tolines(s):
-        return [s + '\n' for line in s.split('\n')]
-    lines = difflib.unified_diff(_tolines(orig),
-                                 _tolines(new))
-    if not lines:
-        return
 
-    diff = False
-    try:
-        first = lines.next()
-        diff = True
-    except StopIteration:
-        pass
-    else:
-        print 'ERROR: while comparing %s:' % (short, )
-        for line in list(lines)[2:]:
-            print '%s: %r' % (short, line[:-1])
+def _diff(a, b):
+    retval = ''
+    started = False
 
-    return diff
+    for group in difflib.SequenceMatcher(None, a, b).get_grouped_opcodes(3):
+        if not started:
+            started = True
+            retval += '--- expected\n'
+            retval += '+++ emitted\n'
+
+        for tag, i1, i2, j1, j2 in group:
+            if tag == 'equal':
+                for line in a[i1:i2]:
+                    for l in line.split('\n'):
+                        if l != '':
+                            retval +=  ' ' + l + '\n'
+                continue
+
+            if tag in ('replace', 'delete'):
+                for line in a[i1:i2]:
+                    for l in line.split('\n'):
+                        if l != '':
+                            retval +=  '-' + l + '\n'
+
+            if tag in ('replace', 'insert'):
+                for line in b[j1:j2]:
+                    for l in line.split('\n'):
+                        if l != '':
+                            retval +=  '+' + l + '\n'
+
+    return retval
 
 def _extract_expected(filename):
-    fd = open(filename)
+    fd = open(filename, 'rU')
     data = fd.read()
+    fd.close()
 
     retval = []
     for line in data.split('\n'):
         if line.startswith('// EXPECT:'):
-            sort_key = None
-            if ":" in line:
-                try:
-                    sort_key = int(line.split(":")[1])
-                except ValueError:
-                    pass
-            retval.append((sort_key, line[10:]))
+            retval.append(line[10:] + '\n')
+        elif line.startswith('//+'):
+            retval[-1] += line[3:] + '\n'
+
     return retval
 
 def check(args):
     filename = args[0]
 
-    output = StringIO()
-    namespace = Namespace("Test", "1.0")
-    logger = MessageLogger.get(namespace=namespace,
-                               output=output)
+    output = ChunkedIO()
+    namespace = Namespace('Test', '1.0')
+    logger = MessageLogger.get(namespace=namespace, output=output)
     logger.enable_warnings(True)
+
     transformer = Transformer(namespace)
     transformer.set_include_paths([os.path.join(top_srcdir, 'gir'), top_builddir])
-    transformer.register_include(Include.from_string("GObject-2.0"))
+    transformer.register_include(Include.from_string('GObject-2.0'))
 
     ss = SourceScanner()
 
@@ -89,9 +110,7 @@ def check(args):
     exit_code = process_packages(options, ['gobject-2.0'])
     if exit_code:
         sys.exit(exit_code)
-    ss.set_cpp_options(options.cpp_includes,
-                       options.cpp_defines,
-                       options.cpp_undefines)
+    ss.set_cpp_options(options.cpp_includes, options.cpp_defines, options.cpp_undefines)
     ss.parse_files([filename])
     ss.parse_macros([filename])
     transformer.parse(ss.get_symbols())
@@ -105,26 +124,21 @@ def check(args):
     final = IntrospectablePass(transformer, blocks)
     final.validate()
 
-    raw = output.getvalue()
-    if raw.endswith('\n'):
-        raw = raw[:-1]
-    warnings = raw.split('\n')
+    emitted_warnings = [w[w.find(':') + 1:] for w in output.getvalue()]
 
-    failed_tests = 0
     expected_warnings = _extract_expected(filename)
-    if '' in warnings:
-        warnings.remove('')
-    if len(expected_warnings) != len(warnings):
-        raise SystemExit(
-            "ERROR in %r: expected %d warnings, but got %d:\n"
-            "----\nexpected:\n%s\n----\ngot:\n%s\n----" % (
-            os.path.basename(filename),
-            len(expected_warnings), len(warnings),
-            '\n'.join([w[1] for w in expected_warnings]),
-            '\n'.join([w.split(':', 2)[2][1:] for w in warnings])))
-    for warning, (sort_key, expected) in zip(warnings, expected_warnings):
-        actual = warning.split(":", 1)[1]
-        if _diff(expected, actual, filename):
-            raise SystemExit("ERROR: tests %r failed" % (filename, ))
+
+    if len(expected_warnings) != len(emitted_warnings):
+        raise SystemExit('ERROR in %r: %d warnings were emitted, '
+                         'expected %d:\n%s' %(os.path.basename(filename),
+                                              len(emitted_warnings),
+                                              len(expected_warnings),
+                                              _diff(expected_warnings, emitted_warnings)))
+
+    for emitted_warning, expected_warning in zip(emitted_warnings, expected_warnings):
+        if expected_warning != emitted_warning:
+            raise SystemExit('ERROR in %r: expected warning does not match emitted '
+                             'warning:\n%s' % (filename,
+                                               _diff([expected_warning], [emitted_warning])))
 
 sys.exit(check(sys.argv[1:]))
