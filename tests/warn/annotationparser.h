@@ -189,3 +189,17 @@ void test_symbol_twice_documented();
 // EXPECT:186: Warning: Test: ignoring invalid multiline annotation continuation:
 //+ * (transfer full): something
 //+   ^
+
+
+/**
+
+ * regress_test_invalid_comment:
+ * @foo: a param
+ *
+ * invalid comment with a line without
+ * https://bugzilla.gnome.org/show_bug.cgi?id=673806
+ */
+
+// EXPECT:195: Warning: Test: ignoring unrecognized GTK-Doc comment block, identifier not found:
+//+
+//+^
