@@ -582,31 +582,6 @@
 
 
 /**
- * GLIB_CHECK_VERSION:
- * @major: the major version to check for
- * @minor: the minor version to check for
- * @micro: the micro version to check for
- *
- * Checks the version of the GLib library that is being compiled
- * against.
- *
- * <example>
- * <title>Checking the version of the GLib library</title>
- * <programlisting>
- * if (!GLIB_CHECK_VERSION (1, 2, 0))
- * g_error ("GLib version 1.2.0 or above is needed");
- * </programlisting>
- * </example>
- *
- * See glib_check_version() for a runtime check.
- *
- * is the same as or newer than the passed-in version.
- *
- * Returns: %TRUE if the version of the GLib header files
- */
-
-
-/**
  * GLIB_VERSION_2_26:
  *
  * A macro that evaluates to the 2.26 version of GLib, in a format
@@ -1036,7 +1011,7 @@
  * @G_PARAM_STATIC_NICK: the string used as nick when constructing the parameter is guaranteed to remain valid and unmmodified for the lifetime of the parameter. Since 2.8
  * @G_PARAM_STATIC_BLURB: the string used as blurb when constructing the parameter is guaranteed to remain valid and unmodified for the lifetime of the parameter. Since 2.8
  * @G_PARAM_PRIVATE: internal
- * @G_PARAM_DEPRECATED: the parameter is deprecated and will be removed in a future version. A warning will be generated if it is used while running with G_ENABLE_DIAGNOSTIC=1. Since: 2.26
+ * @G_PARAM_DEPRECATED: the parameter is deprecated and will be removed in a future version. A warning will be generated if it is used while running with G_ENABLE_DIAGNOSTIC=1. Since 2.26
  *
  * Through the #GParamFlags flag values, certain aspects of parameters
  * can be configured.
@@ -10024,10 +9999,11 @@
 /**
  * g_type_check_instance:
  * @instance: A valid #GTypeInstance structure.
- * @Returns: #TRUE if @instance is valid, #FALSE otherwise.
  *
  * Private helper function to aid implementation of the G_TYPE_CHECK_INSTANCE()
  * macro.
+ *
+ * Returns: %TRUE if @instance is valid, %FALSE otherwise.
  */
 
 

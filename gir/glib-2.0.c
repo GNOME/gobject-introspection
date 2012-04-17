@@ -1397,7 +1397,7 @@
  * GIOFuncs:
  * @io_read: reads raw bytes from the channel.  This is called from various functions such as g_io_channel_read_chars() to read raw bytes from the channel.  Encoding and buffering issues are dealt with at a higher level.
  * @io_write: writes raw bytes to the channel.  This is called from various functions such as g_io_channel_write_chars() to write raw bytes to the channel.  Encoding and buffering issues are dealt with at a higher level.
- * @io_seek: (optional) seeks the channel.  This is called from g_io_channel_seek() on channels that support it.
+ * @io_seek: &lpar;optional&rpar; seeks the channel.  This is called from g_io_channel_seek() on channels that support it.
  * @io_close: closes the channel.  This is called from g_io_channel_close() after flushing the buffers.
  * @io_create_watch: creates a watch on the channel.  This call corresponds directly to g_io_create_watch().
  * @io_free: called from g_io_channel_unref() when the channel needs to be freed.  This function must free the memory associated with the channel, including freeing the #GIOChannel structure itself.  The channel buffers have been flushed and possibly @io_close has been called by the time this function is called.
@@ -2258,7 +2258,7 @@
  * @G_PARAM_STATIC_NICK: the string used as nick when constructing the parameter is guaranteed to remain valid and unmmodified for the lifetime of the parameter. Since 2.8
  * @G_PARAM_STATIC_BLURB: the string used as blurb when constructing the parameter is guaranteed to remain valid and unmodified for the lifetime of the parameter. Since 2.8
  * @G_PARAM_PRIVATE: internal
- * @G_PARAM_DEPRECATED: the parameter is deprecated and will be removed in a future version. A warning will be generated if it is used while running with G_ENABLE_DIAGNOSTIC=1. Since: 2.26
+ * @G_PARAM_DEPRECATED: the parameter is deprecated and will be removed in a future version. A warning will be generated if it is used while running with G_ENABLE_DIAGNOSTIC=1. Since 2.26
  *
  * Through the #GParamFlags flag values, certain aspects of parameters
  * can be configured.
@@ -14305,12 +14305,13 @@
 /**
  * g_async_queue_ref_unlocked:
  * @queue: a #GAsyncQueue
- * @Deprecated: Since 2.8, reference counting is done atomically
  *
  * Increases the reference count of the asynchronous @queue by 1.
  *
  * so g_async_queue_ref() can be used regardless of the @queue's
  * lock.
+ *
+ * Deprecated: 2.8: Reference counting is done atomically.
  */
 
 
@@ -14499,7 +14500,6 @@
 /**
  * g_async_queue_unref_and_unlock:
  * @queue: a #GAsyncQueue
- * @Deprecated: Since 2.8, reference counting is done atomically
  *
  * Decreases the reference count of the asynchronous @queue by 1
  * and releases the lock. This function must be called while holding
@@ -14508,6 +14508,8 @@
  *
  * so g_async_queue_unref() can be used regardless of the @queue's
  * lock.
+ *
+ * Deprecated: 2.8: Reference counting is done atomically.
  */
 
 
@@ -32860,7 +32862,7 @@
 
 /**
  * g_test_add_data_func:
- * @testpath: Slash-separated test case path name for the test.
+ * @testpath: /-separated test case path name for the test.
  * @test_data: Test data argument for the test function.
  * @test_func: The test function to invoke for this test.
  *
@@ -32876,7 +32878,7 @@
 
 /**
  * g_test_add_func:
- * @testpath: Slash-separated test case path name for the test.
+ * @testpath: /-separated test case path name for the test.
  * @test_func: The test function to invoke for this test.
  *
  * Create a new test case, similar to g_test_create_case(). However
@@ -36659,9 +36661,9 @@
  *
  * The return value must be freed using g_free().
  *
- * (element-type guint8): a newly allocated string
+ * a newly allocated string
  *
- * Returns: (transfer full) (array zero-terminated=1 length=length)
+ * Returns: (transfer full) (array length=length zero-terminated=1) (element-type guint8):
  * Since: 2.26
  */
 

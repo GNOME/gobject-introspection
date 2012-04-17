@@ -3821,31 +3821,6 @@
 
 
 /**
- * GLIB_CHECK_VERSION:
- * @major: the major version to check for
- * @minor: the minor version to check for
- * @micro: the micro version to check for
- *
- * Checks the version of the GLib library that is being compiled
- * against.
- *
- * <example>
- * <title>Checking the version of the GLib library</title>
- * <programlisting>
- * if (!GLIB_CHECK_VERSION (1, 2, 0))
- * g_error ("GLib version 1.2.0 or above is needed");
- * </programlisting>
- * </example>
- *
- * See glib_check_version() for a runtime check.
- *
- * is the same as or newer than the passed-in version.
- *
- * Returns: %TRUE if the version of the GLib header files
- */
-
-
-/**
  * GLIB_VERSION_2_26:
  *
  * A macro that evaluates to the 2.26 version of GLib, in a format
@@ -4739,7 +4714,7 @@
  * @G_PARAM_STATIC_NICK: the string used as nick when constructing the parameter is guaranteed to remain valid and unmmodified for the lifetime of the parameter. Since 2.8
  * @G_PARAM_STATIC_BLURB: the string used as blurb when constructing the parameter is guaranteed to remain valid and unmodified for the lifetime of the parameter. Since 2.8
  * @G_PARAM_PRIVATE: internal
- * @G_PARAM_DEPRECATED: the parameter is deprecated and will be removed in a future version. A warning will be generated if it is used while running with G_ENABLE_DIAGNOSTIC=1. Since: 2.26
+ * @G_PARAM_DEPRECATED: the parameter is deprecated and will be removed in a future version. A warning will be generated if it is used while running with G_ENABLE_DIAGNOSTIC=1. Since 2.26
  *
  * Through the #GParamFlags flag values, certain aspects of parameters
  * can be configured.
@@ -5269,7 +5244,9 @@
 /**
  * GProxyResolver:
  *
- * Interface that can be used to resolve proxy address.
+ * A helper class to enumerate proxies base on URI.
+ *
+ * Since: 2.26
  */
 
 
@@ -6103,7 +6080,7 @@
 /**
  * GSocketClient:
  *
- * A helper class for network servers to listen for and accept connections.
+ * A helper class for network clients to make connections.
  *
  * Since: 2.22
  */
@@ -6287,6 +6264,15 @@
  * The protocol family of a #GSocketAddress. (These values are
  * identical to the system defines %AF_INET, %AF_INET6 and %AF_UNIX,
  * if available.)
+ *
+ * Since: 2.22
+ */
+
+
+/**
+ * GSocketListener:
+ *
+ * A helper class for network servers to listen for and accept connections.
  *
  * Since: 2.22
  */
@@ -6566,7 +6552,7 @@
 /**
  * GTcpConnection:
  *
- * A #GSocketConnection for UNIX domain socket connections.
+ * A #GSocketConnection for TCP/IP connections.
  *
  * Since: 2.22
  */
@@ -6821,8 +6807,8 @@
 /**
  * GTlsClientConnection:
  *
- * TLS client-side connection; the client-side implementation of a
- * #GTlsConnection
+ * Abstract base class for the backend-specific client connection
+ * type.
  *
  * Since: 2.28
  */
@@ -6893,8 +6879,8 @@
 /**
  * GTlsConnection:
  *
- * TLS connection. This is an abstract type that will be subclassed by
- * a TLS-library-specific subtype.
+ * Abstract base class for the backend-specific #GTlsClientConnection
+ * and #GTlsServerConnection types.
  *
  * Since: 2.28
  */
@@ -14238,7 +14224,7 @@
  * @short_description: Base class for implementing streaming input
  * @include: gio/gio.h
  *
- * GInputStream has functions to read from a stream (g_input_stream_read()),
+ * #GInputStream has functions to read from a stream (g_input_stream_read()),
  * to close a stream (g_input_stream_close()) and to skip some content
  * (g_input_stream_skip()).
  *
@@ -14625,7 +14611,7 @@
  * @short_description: Base class for implementing streaming output
  * @include: gio/gio.h
  *
- * GOutputStream has functions to write to a stream (g_output_stream_write()),
+ * #GOutputStream has functions to write to a stream (g_output_stream_write()),
  * to close a stream (g_output_stream_close()) and to flush pending writes
  * (g_output_stream_flush()).
  *
@@ -14788,7 +14774,7 @@
  * simple (no need to check for things like I/O errors or locate the files in the filesystem). It
  * also makes it easier to create relocatable applications.
  *
- * Resource files can also be marked as compresses. Such files will be included in the resource bundle
+ * Resource files can also be marked as compressed. Such files will be included in the resource bundle
  * in a compressed form, but will be automatically uncompressed when the resource is used. This
  * is very useful e.g. for larger text files that are parsed once (or rarely) and then thrown away.
  *
@@ -14903,6 +14889,14 @@
  * useful e.g. when the schema describes an 'account', and you want to be
  * able to store a arbitrary number of accounts.
  *
+ * Paths must start with and end with a forward slash character ('/')
+ * and must not contain two sequential slash characters.  Paths should
+ * be chosen based on a domain name associated with the program or
+ * library to which the settings belong.  Examples of paths are
+ * "/org/gtk/settings/file-chooser/" and "/ca/desrt/dconf-editor/".
+ * Paths should not start with "/apps/", "/desktop/" or "/system/" as
+ * they often did in GConf.
+ *
  * Unlike other configuration systems (like GConf), GSettings does not
  * restrict keys to basic types like strings and numbers. GSettings stores
  * values as #GVariant, and allows any #GVariantType for keys. Key names
@@ -14948,7 +14942,7 @@
  * <example id="schema-default-values"><title>Default values</title>
  * <programlisting><![CDATA[
  * <schemalist>
- * <schema id="org.gtk.Test" path="/tests/" gettext-domain="test">
+ * <schema id="org.gtk.Test" path="/org/gtk/Test/" gettext-domain="test">
  *
  * <key name="greeting" type="s">
  * <default l10n="messages">"Hello, earthlings"</default>
@@ -16204,99 +16198,6 @@
  *
  * #GZlibDecompressor is an implementation of #GConverter that
  * decompresses data compressed with zlib.
- */
-
-
-/**
- * The string info map is an efficient data structure designed to be:
- *
- * 1) Implement <choices> with a list of valid strings
- *
- * 2) Implement <alias> by mapping one string to another
- *
- * 3) Implement enumerated types by mapping strings to integer values
- * (and back).
- *
- * The map is made out of an array of uint32s.  Each entry in the array
- * is an integer value, followed by a specially formatted string value:
- *
- * The string starts with the byte 0xff or 0xfe, followed by the
- * content of the string, followed by a nul byte, followed by
- * additional nul bytes for padding, followed by a 0xff byte.
- *
- * Padding is added so that the entire formatted string takes up a
- * multiple of 4 bytes, and not less than 8 bytes.  The requirement
- * for a string to take up 8 bytes is so that the scanner doesn't lose
- * synch and mistake a string for an integer value.
- *
- * The first byte of the formatted string depends on if the integer is
- * an enum value (0xff) or an alias (0xfe).  If it is an alias then the
- * number refers to the word offset within the info map at which the
- * integer corresponding to the "target" value is stored.
- *
- * For example, consider the case of the string info map representing an
- * enumerated type of 'foo' (value 1) and 'bar' (value 2) and 'baz'
- * (alias for 'bar').  Note that string info maps are always little
- * endian.
- *
- * x01 x00 x00 x00   xff 'f' 'o' 'o'   x00 x00 x00 xff   x02 x00 x00 x00
- * xff 'b' 'a' 'r'   x00 x00 x00 xff   x03 x00 x00 x00   xfe 'b' 'a' 'z'
- * x00 x00 x00 xff
- *
- *
- * The operations that someone may want to perform with the map:
- *
- * - lookup if a string is valid (and not an alias)
- * - lookup the integer value for a enum 'nick'
- * - lookup the integer value for the target of an alias
- * - lookup an alias and convert it to its target string
- * - lookup the enum nick for a given value
- *
- * In order to lookup if a string is valid, it is padded on either side
- * (as described) and scanned for in the array.  For example, you might
- * look for "foo":
- *
- * xff 'f' 'o' 'o'   x00 x00 x00 xff
- *
- * In order to lookup the integer value for a nick, the string is padded
- * on either side and scanned for in the array, as above.  Instead of
- * merely succeeding, we look at the integer value to the left of the
- * match.  This is the enum value.
- *
- * In order to lookup an alias and convert it to its target enum value,
- * the string is padded on either side (as described, with 0xfe) and
- * scanned for.  For example, you might look for "baz":
- *
- * xfe 'b' 'a' 'z'  x00 x00 x00 xff
- *
- * The integer immediately preceding the match then contains the offset
- * of the integer value of the target.  In our example, that's '3'.
- * This index is dereferenced to find the enum value of '2'.
- *
- * To convert the alias to its target string, 5 bytes just need to be
- * added past the start of the integer value to find the start of the
- * string.
- *
- * To lookup the enum nick for a given value, the value is searched for
- * in the array.  To ensure that the value isn't matching the inside of a
- * string, we must check that it is either the first item in the array or
- * immediately preceded by the byte 0xff.  It must also be immediately
- * followed by the byte 0xff.
- *
- * Because strings always take up a minimum of 2 words, because 0xff or
- * 0xfe never appear inside of a utf-8 string and because no two integer
- * values ever appear in sequence, the only way we can have the
- * sequence:
- *
- * xff __ __ __ __ xff (or 0xfe)
- *
- * is in the event of an integer nested between two strings.
- *
- * For implementation simplicity/efficiency, strings may not be more
- * than 65 characters in length (ie: 17 32bit words after padding).
- *
- * In the event that we are doing <choices> (ie: not an enum type) then
- * the value of each choice is set to zero and ignored.
  */
 
 
@@ -22469,34 +22370,35 @@
  * and formatting is subject to change at any time. Typical output
  * looks something like this:
  * <programlisting>
- * Flags:   none
- * Version: 0
- * Serial:  4
- * Headers:
+ * Type&colon;    method-call
+ * Flags&colon;   none
+ * Version&colon; 0
+ * Serial&colon;  4
+ * Headers&colon;
  * path -> objectpath '/org/gtk/GDBus/TestObject'
  * interface -> 'org.gtk.GDBus.TestInterface'
  * member -> 'GimmeStdout'
  * destination -> ':1.146'
- * Body: ()
+ * Body&colon; ()
  * UNIX File Descriptors:
  * (none)
  * </programlisting>
  * or
  * <programlisting>
- * Flags:   no-reply-expected
- * Version: 0
- * Serial:  477
- * Headers:
+ * Type&colon;    method-return
+ * Flags&colon;   no-reply-expected
+ * Version&colon; 0
+ * Serial&colon;  477
+ * Headers&colon;
  * reply-serial -> uint32 4
  * destination -> ':1.159'
  * sender -> ':1.146'
  * num-unix-fds -> uint32 1
- * Body: ()
- * UNIX File Descriptors:
+ * Body&colon; ()
+ * UNIX File Descriptors&colon;
  * fd 12: dev=0:10,mode=020620,ino=5,uid=500,gid=5,rdev=136:2,size=0,atime=1273085037,mtime=1273085851,ctime=1272982635
  * </programlisting>
  *
- * Type:    method-return
  * Returns: A string that should be freed with g_free().
  * Since: 2.26
  */
@@ -29325,7 +29227,7 @@
  * close will still return %G_IO_ERROR_CLOSED for all operations. Still, it
  * is important to check and report the error to the user.
  *
- * If @cancellable is not NULL, then the operation can be cancelled by
+ * If @cancellable is not %NULL, then the operation can be cancelled by
  * triggering the cancellable object from another thread. If the operation
  * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned.
  * Cancelling a close will still leave the stream closed, but some streams
@@ -29407,15 +29309,15 @@
  * can happen e.g. near the end of a file. Zero is returned on end of file
  * (or if @count is zero),  but never otherwise.
  *
- * If @cancellable is not NULL, then the operation can be cancelled by
+ * If @cancellable is not %NULL, then the operation can be cancelled by
  * triggering the cancellable object from another thread. If the operation
- * was cancelled, the error G_IO_ERROR_CANCELLED will be returned. If an
+ * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned. If an
  * operation was partially finished when the operation was cancelled the
  * partial result will be returned, without an error.
  *
  * On error -1 is returned and @error is set accordingly.
  *
- * Returns: Number of bytes read, or -1 on error
+ * Returns: Number of bytes read, or -1 on error, or 0 on end of file.
  */
 
 
@@ -29490,7 +29392,7 @@
  *
  * Finishes an asynchronous stream read operation.
  *
- * Returns: number of bytes read in, or -1 on error.
+ * Returns: number of bytes read in, or -1 on error, or 0 on end of file.
  */
 
 
@@ -32424,7 +32326,7 @@
  * is important to check and report the error to the user, otherwise
  * there might be a loss of data as all data might not be written.
  *
- * If @cancellable is not NULL, then the operation can be cancelled by
+ * If @cancellable is not %NULL, then the operation can be cancelled by
  * triggering the cancellable object from another thread. If the operation
  * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned.
  * Cancelling a close will still leave the stream closed, but there some streams
@@ -32642,7 +32544,7 @@
  * is written or an error occurs; 0 is never returned (unless
  * @count is 0).
  *
- * If @cancellable is not NULL, then the operation can be cancelled by
+ * If @cancellable is not %NULL, then the operation can be cancelled by
  * triggering the cancellable object from another thread. If the operation
  * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned. If an
  * operation was partially finished when the operation was cancelled the
@@ -32673,7 +32575,7 @@
  * On a successful write of @count bytes, %TRUE is returned, and @bytes_written
  * is set to @count.
  *
- * If there is an error during the operation FALSE is returned and @error
+ * If there is an error during the operation %FALSE is returned and @error
  * is set to indicate the error status, @bytes_written is updated to contain
  * the number of bytes written into the stream before the error occurred.
  *
@@ -33351,7 +33253,7 @@
  * g_remote_action_group_activate_action_full:
  * @remote: a #GDBusActionGroup
  * @action_name: the name of the action to activate
- * @parameter: (allow none): the optional parameter to the activation
+ * @parameter: (allow-none): the optional parameter to the activation
  * @platform_data: the platform data to send
  *
  * Activates the remote action.
@@ -33690,10 +33592,10 @@
 
 /**
  * g_resource_enumerate_children:
- * @resource: A #GResource.
- * @path: A pathname inside the resource.
- * @lookup_flags: A #GResourceLookupFlags.
- * @error: return location for a #GError, or %NULL.
+ * @resource: A #GResource
+ * @path: A pathname inside the resource
+ * @lookup_flags: A #GResourceLookupFlags
+ * @error: return location for a #GError, or %NULL
  *
  * Returns all the names of children at the specified @path in the resource.
  * The return result is a %NULL terminated list of strings which should
@@ -33711,34 +33613,34 @@
  *
  * Gets the #GResource Error Quark.
  *
- * Returns: a #GQuark.
+ * Returns: a #GQuark
  * Since: 2.32
  */
 
 
 /**
  * g_resource_get_info:
- * @resource: A #GResource.
- * @path: A pathname inside the resource.
- * @lookup_flags: A #GResourceLookupFlags.
+ * @resource: A #GResource
+ * @path: A pathname inside the resource
+ * @lookup_flags: A #GResourceLookupFlags
  * @size: (out) (allow-none): a location to place the length of the contents of the file, or %NULL if the length is not needed
  * @flags: (out) (allow-none): a location to place the flags about the file, or %NULL if the length is not needed
- * @error: return location for a #GError, or %NULL.
+ * @error: return location for a #GError, or %NULL
  *
  * Looks for a file at the specified @path in the resource and
  * if found returns information about it.
  *
  * @lookup_flags controls the behaviour of the lookup.
  *
- * Returns: %TRUE if the file was found. %FALSE if there were errors.
+ * Returns: %TRUE if the file was found. %FALSE if there were errors
  * Since: 2.32
  */
 
 
 /**
  * g_resource_load:
- * @filename: (type filename): the path of a filename to load, in the GLib filename encoding.
- * @error: return location for a #GError, or %NULL.
+ * @filename: (type filename): the path of a filename to load, in the GLib filename encoding
+ * @error: return location for a #GError, or %NULL
  *
  * Loads a binary resource bundle and creates a #GResource representation of it, allowing
  * you to query it for data.
@@ -33746,17 +33648,17 @@
  * If you want to use this resource in the global resource namespace you need
  * to register it with g_resources_register().
  *
- * Returns: (transfer full): a new #GResource, or %NULL on error.
+ * Returns: (transfer full): a new #GResource, or %NULL on error
  * Since: 2.32
  */
 
 
 /**
  * g_resource_lookup_data:
- * @resource: A #GResource.
- * @path: A pathname inside the resource.
- * @lookup_flags: A #GResourceLookupFlags.
- * @error: return location for a #GError, or %NULL.
+ * @resource: A #GResource
+ * @path: A pathname inside the resource
+ * @lookup_flags: A #GResourceLookupFlags
+ * @error: return location for a #GError, or %NULL
  *
  * Looks for a file at the specified @path in the resource and
  * returns a #GBytes that lets you directly access the data in
@@ -33773,7 +33675,7 @@
  *
  * @lookup_flags controls the behaviour of the lookup.
  *
- * Free the returned object with g_bytes_unref().
+ * Free the returned object with g_bytes_unref()
  *
  * Returns: (transfer full): #GBytes or %NULL on error.
  * Since: 2.32
@@ -33782,8 +33684,8 @@
 
 /**
  * g_resource_new_from_data:
- * @data: A #GBytes.
- * @error: return location for a #GError, or %NULL.
+ * @data: A #GBytes
+ * @error: return location for a #GError, or %NULL
  *
  * Creates a GResource from a reference to the binary resource bundle.
  * This will keep a reference to @data while the resource lives, so
@@ -33792,24 +33694,24 @@
  * If you want to use this resource in the global resource namespace you need
  * to register it with g_resources_register().
  *
- * Returns: (transfer full): a new #GResource, or %NULL on error.
+ * Returns: (transfer full): a new #GResource, or %NULL on error
  * Since: 2.32
  */
 
 
 /**
  * g_resource_open_stream:
- * @resource: A #GResource.
- * @path: A pathname inside the resource.
- * @lookup_flags: A #GResourceLookupFlags.
- * @error: return location for a #GError, or %NULL.
+ * @resource: A #GResource
+ * @path: A pathname inside the resource
+ * @lookup_flags: A #GResourceLookupFlags
+ * @error: return location for a #GError, or %NULL
  *
  * Looks for a file at the specified @path in the resource and
  * returns a #GInputStream that lets you read the data.
  *
  * @lookup_flags controls the behaviour of the lookup.
  *
- * Free the returned object with g_object_unref().
+ * Free the returned object with g_object_unref()
  *
  * Returns: (transfer full): #GInputStream or %NULL on error.
  * Since: 2.32
@@ -33818,19 +33720,19 @@
 
 /**
  * g_resource_ref:
- * @resource: A #GResource.
+ * @resource: A #GResource
  *
  * Atomically increments the reference count of @array by one. This
  * function is MT-safe and may be called from any thread.
  *
- * Returns: The passed in #GResource.
+ * Returns: The passed in #GResource
  * Since: 2.32
  */
 
 
 /**
  * g_resource_unref:
- * @resource: A #GResource.
+ * @resource: A #GResource
  *
  * Atomically decrements the reference count of @resource by one. If the
  * reference count drops to 0, all memory allocated by the array is
@@ -33843,9 +33745,9 @@
 
 /**
  * g_resources_enumerate_children:
- * @path: A pathname inside the resource.
- * @lookup_flags: A #GResourceLookupFlags.
- * @error: return location for a #GError, or %NULL.
+ * @path: A pathname inside the resource
+ * @lookup_flags: A #GResourceLookupFlags
+ * @error: return location for a #GError, or %NULL
  *
  * Returns all the names of children at the specified @path in the set of
  * globally registred resources.
@@ -33861,27 +33763,27 @@
 
 /**
  * g_resources_get_info:
- * @path: A pathname inside the resource.
- * @lookup_flags: A #GResourceLookupFlags.
+ * @path: A pathname inside the resource
+ * @lookup_flags: A #GResourceLookupFlags
  * @size: (out) (allow-none): a location to place the length of the contents of the file, or %NULL if the length is not needed
  * @flags: (out) (allow-none): a location to place the flags about the file, or %NULL if the length is not needed
- * @error: return location for a #GError, or %NULL.
+ * @error: return location for a #GError, or %NULL
  *
  * Looks for a file at the specified @path in the set of
  * globally registred resources and if found returns information about it.
  *
  * @lookup_flags controls the behaviour of the lookup.
  *
- * Returns: %TRUE if the file was found. %FALSE if there were errors.
+ * Returns: %TRUE if the file was found. %FALSE if there were errors
  * Since: 2.32
  */
 
 
 /**
  * g_resources_lookup_data:
- * @path: A pathname inside the resource.
- * @lookup_flags: A #GResourceLookupFlags.
- * @error: return location for a #GError, or %NULL.
+ * @path: A pathname inside the resource
+ * @lookup_flags: A #GResourceLookupFlags
+ * @error: return location for a #GError, or %NULL
  *
  * Looks for a file at the specified @path in the set of
  * globally registred resources and returns a #GBytes that
@@ -33898,7 +33800,7 @@
  *
  * @lookup_flags controls the behaviour of the lookup.
  *
- * Free the returned object with g_bytes_unref().
+ * Free the returned object with g_bytes_unref()
  *
  * Returns: (transfer full): #GBytes or %NULL on error.
  * Since: 2.32
@@ -33907,9 +33809,9 @@
 
 /**
  * g_resources_open_stream:
- * @path: A pathname inside the resource.
- * @lookup_flags: A #GResourceLookupFlags.
- * @error: return location for a #GError, or %NULL.
+ * @path: A pathname inside the resource
+ * @lookup_flags: A #GResourceLookupFlags
+ * @error: return location for a #GError, or %NULL
  *
  * Looks for a file at the specified @path in the set of
  * globally registred resources and returns a #GInputStream
@@ -33917,7 +33819,7 @@
  *
  * @lookup_flags controls the behaviour of the lookup.
  *
- * Free the returned object with g_object_unref().
+ * Free the returned object with g_object_unref()
  *
  * Returns: (transfer full): #GInputStream or %NULL on error.
  * Since: 2.32
@@ -33926,7 +33828,7 @@
 
 /**
  * g_resources_register:
- * @resource: A #GResource.
+ * @resource: A #GResource
  *
  * Registers the resource with the process-global set of resources.
  * Once a resource is registered the files in it can be accessed
@@ -33938,7 +33840,7 @@
 
 /**
  * g_resources_unregister:
- * @resource: A #GResource.
+ * @resource: A #GResource
  *
  * Unregisters the resource from the process-global set of resources.
  *
@@ -38255,13 +38157,13 @@
 
 /**
  * g_static_resource_fini:
- * @static_resource: pointer to a static #GStaticResource.
+ * @static_resource: pointer to a static #GStaticResource
  *
- * Finalized a GResource initialized by g_static_resource_init ().
+ * Finalized a GResource initialized by g_static_resource_init().
  *
  * This is normally used by code generated by
- * <link linkend="glib-compile-resources">glib-compile-resources</link> and is
- * not typically used by other code.
+ * <link linkend="glib-compile-resources">glib-compile-resources</link>
+ * and is not typically used by other code.
  *
  * Since: 2.32
  */
@@ -38269,29 +38171,29 @@
 
 /**
  * g_static_resource_get_resource:
- * @static_resource: pointer to a static #GStaticResource.
+ * @static_resource: pointer to a static #GStaticResource
  *
- * Gets the GResource that was registred by a call to g_static_resource_init ().
+ * Gets the GResource that was registred by a call to g_static_resource_init().
  *
  * This is normally used by code generated by
- * <link linkend="glib-compile-resources">glib-compile-resources</link> and is
- * not typically used by other code.
+ * <link linkend="glib-compile-resources">glib-compile-resources</link>
+ * and is not typically used by other code.
  *
- * Returns: (transfer none): a #GResource.
+ * Returns: (transfer none): a #GResource
  * Since: 2.32
  */
 
 
 /**
  * g_static_resource_init:
- * @static_resource: pointer to a static #GStaticResource.
+ * @static_resource: pointer to a static #GStaticResource
  *
  * Initializes a GResource from static data using a
  * GStaticResource.
  *
  * This is normally used by code generated by
- * <link linkend="glib-compile-resources">glib-compile-resources</link> and is
- * not typically used by other code.
+ * <link linkend="glib-compile-resources">glib-compile-resources</link>
+ * and is not typically used by other code.
  *
  * Since: 2.32
  */
