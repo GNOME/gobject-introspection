@@ -366,6 +366,18 @@
 
 
 /**
+ * GDBusAuthObserver::allow-mechanism:
+ * @observer: The #GDBusAuthObserver emitting the signal.
+ * @mechanism: The name of the mechanism, e.g. <literal>DBUS_COOKIE_SHA1</literal>.
+ *
+ * Emitted to check if @mechanism is allowed to be used.
+ *
+ * Returns: %TRUE if @mechanism can be used to authenticate the other peer, %FALSE if not.
+ * Since: 2.34
+ */
+
+
+/**
  * GDBusAuthObserver::authorize-authenticated-peer:
  * @observer: The #GDBusAuthObserver emitting the signal.
  * @stream: A #GIOStream for the #GDBusConnection.
@@ -3850,6 +3862,9 @@
  *
  * Converter input stream implements #GInputStream and allows
  * conversion of data of various types during reading.
+ *
+ * As of GLib 2.34, #GConverterInputStream implements
+ * #GPollableInputStream.
  */
 
 
@@ -3861,6 +3876,9 @@
  *
  * Converter output stream implements #GOutputStream and allows
  * conversion of data of various types during reading.
+ *
+ * As of GLib 2.34, #GConverterOutputStream implements
+ * #GPollableOutputStream.
  */
 
 
@@ -5189,6 +5207,9 @@
  *
  * #GMemoryInputStream is a class for using arbitrary
  * memory chunks as input for GIO streaming input operations.
+ *
+ * As of GLib 2.34, #GMemoryInputStream implements
+ * #GPollableInputStream.
  */
 
 
@@ -5200,6 +5221,9 @@
  *
  * #GMemoryOutputStream is a class for using arbitrary
  * memory chunks as output for GIO streaming output operations.
+ *
+ * As of GLib 2.34, #GMemoryOutputStream implements
+ * #GPollableOutputStream.
  */
 
 
@@ -5537,6 +5561,16 @@
 
 
 /**
+ * SECTION:gpollableutils
+ * @short_description: #GPollableInputStream / #GPollableOutputStream utilities
+ * @include: gio/gio.h
+ *
+ * Utility functions for #GPollableInputStream and
+ * #GPollableOutputStream implementations.
+ */
+
+
+/**
  * SECTION:gproxy
  * @short_description: Interface for proxy handling
  *
@@ -5635,7 +5669,7 @@
  * simple (no need to check for things like I/O errors or locate the files in the filesystem). It
  * also makes it easier to create relocatable applications.
  *
- * Resource files can also be marked as compresses. Such files will be included in the resource bundle
+ * Resource files can also be marked as compressed. Such files will be included in the resource bundle
  * in a compressed form, but will be automatically uncompressed when the resource is used. This
  * is very useful e.g. for larger text files that are parsed once (or rarely) and then thrown away.
  *
@@ -5750,6 +5784,14 @@
  * useful e.g. when the schema describes an 'account', and you want to be
  * able to store a arbitrary number of accounts.
  *
+ * Paths must start with and end with a forward slash character ('/')
+ * and must not contain two sequential slash characters.  Paths should
+ * be chosen based on a domain name associated with the program or
+ * library to which the settings belong.  Examples of paths are
+ * "/org/gtk/settings/file-chooser/" and "/ca/desrt/dconf-editor/".
+ * Paths should not start with "/apps/", "/desktop/" or "/system/" as
+ * they often did in GConf.
+ *
  * Unlike other configuration systems (like GConf), GSettings does not
  * restrict keys to basic types like strings and numbers. GSettings stores
  * values as #GVariant, and allows any #GVariantType for keys. Key names
@@ -5795,7 +5837,7 @@
  * <example id="schema-default-values"><title>Default values</title>
  * <programlisting><![CDATA[
  * <schemalist>
- *   <schema id="org.gtk.Test" path="/tests/" gettext-domain="test">
+ *   <schema id="org.gtk.Test" path="/org/gtk/Test/" gettext-domain="test">
  *
  *     <key name="greeting" type="s">
  *       <default l10n="messages">"Hello, earthlings"</default>
@@ -10775,6 +10817,18 @@
 
 
 /**
+ * g_dbus_auth_observer_allow_mechanism:
+ * @observer: A #GDBusAuthObserver.
+ * @mechanism: The name of the mechanism, e.g. <literal>DBUS_COOKIE_SHA1</literal>.
+ *
+ * Emits the #GDBusAuthObserver::allow-mechanism signal on @observer.
+ *
+ * Returns: %TRUE if @mechanism can be used to authenticate the other peer, %FALSE if not.
+ * Since: 2.34
+ */
+
+
+/**
  * g_dbus_auth_observer_authorize_authenticated_peer:
  * @observer: A #GDBusAuthObserver.
  * @stream: A #GIOStream for the #GDBusConnection.
@@ -14735,6 +14789,19 @@
  *
  * Returns: %TRUE if the @info should be shown in @desktop_env according to the <literal>OnlyShowIn</literal> and <literal>NotShowIn</literal> keys, %FALSE otherwise.
  * Since: 2.30
+ */
+
+
+/**
+ * g_desktop_app_info_get_startup_wm_class:
+ * @app_info: a #GDesktopAppInfo that supports startup notify
+ *
+ * Retrieves the StartupWMClass field from @app_info. This represents the
+ * WM_CLASS property of the main window of the application, if launched through
+ * @app_info.
+ *
+ * Returns: (transfer none): the startup WM class, or %NULL if none is set in the desktop file.
+ * Since: 2.34
  */
 
 
@@ -22795,12 +22862,12 @@
 /**
  * g_pollable_input_stream_read_nonblocking:
  * @stream: a #GPollableInputStream
- * @buffer: a buffer to read data into (which should be at least @size bytes long).
- * @size: the number of bytes you want to read
+ * @buffer: a buffer to read data into (which should be at least @count bytes long).
+ * @count: the number of bytes you want to read
  * @cancellable: (allow-none): a #GCancellable, or %NULL
  * @error: #GError for error reporting, or %NULL to ignore.
  *
- * Attempts to read up to @size bytes from @stream into @buffer, as
+ * Attempts to read up to @count bytes from @stream into @buffer, as
  * with g_input_stream_read(). If @stream is not currently readable,
  * this will immediately return %G_IO_ERROR_WOULD_BLOCK, and you can
  * use g_pollable_input_stream_create_source() to create a #GSource
@@ -22874,12 +22941,12 @@
 /**
  * g_pollable_output_stream_write_nonblocking:
  * @stream: a #GPollableOutputStream
- * @buffer: (array length=size) (element-type guint8): a buffer to write data from
- * @size: the number of bytes you want to write
+ * @buffer: (array length=count) (element-type guint8): a buffer to write data from
+ * @count: the number of bytes you want to write
  * @cancellable: (allow-none): a #GCancellable, or %NULL
  * @error: #GError for error reporting, or %NULL to ignore.
  *
- * Attempts to write up to @size bytes from @buffer to @stream, as
+ * Attempts to write up to @count bytes from @buffer to @stream, as
  * with g_output_stream_write(). If @stream is not currently writable,
  * this will immediately return %G_IO_ERROR_WOULD_BLOCK, and you can
  * use g_pollable_output_stream_create_source() to create a #GSource
@@ -22908,6 +22975,105 @@
  *
  * Returns: (transfer full): the new #GSource.
  * Since: 2.28
+ */
+
+
+/**
+ * g_pollable_source_new_full:
+ * @pollable_stream: (type GObject): the stream associated with the new source
+ * @child_source: (allow-none): optional child source to attach
+ * @cancellable: (allow-none): optional #GCancellable to attach
+ *
+ * Utility method for #GPollableInputStream and #GPollableOutputStream
+ * implementations. Creates a new #GSource, as with
+ * g_pollable_source_new(), but also attaching @child_source (with a
+ * dummy callback), and @cancellable, if they are non-%NULL.
+ *
+ * Returns: (transfer full): the new #GSource.
+ * Since: 2.34
+ */
+
+
+/**
+ * g_pollable_stream_read:
+ * @stream: a #GInputStream
+ * @buffer: a buffer to read data into
+ * @count: the number of bytes to read
+ * @blocking: whether to do blocking I/O
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
+ * @error: location to store the error occurring, or %NULL to ignore
+ *
+ * Tries to read from @stream, as with g_input_stream_read() (if
+ * @blocking is %TRUE) or g_pollable_input_stream_read_nonblocking()
+ * (if @blocking is %FALSE). This can be used to more easily share
+ * code between blocking and non-blocking implementations of a method.
+ *
+ * If @blocking is %FALSE, then @stream must be a
+ * #GPollableInputStream for which g_pollable_input_stream_can_poll()
+ * returns %TRUE, or else the behavior is undefined. If @blocking is
+ * %TRUE, then @stream does not need to be a #GPollableInputStream.
+ *
+ * Returns: the number of bytes read, or -1 on error.
+ * Since: 2.34
+ */
+
+
+/**
+ * g_pollable_stream_write:
+ * @stream: a #GOutputStream.
+ * @buffer: (array length=count) (element-type guint8): the buffer containing the data to write.
+ * @count: the number of bytes to write
+ * @blocking: whether to do blocking I/O
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
+ * @error: location to store the error occurring, or %NULL to ignore
+ *
+ * Tries to write to @stream, as with g_output_stream_write() (if
+ * @blocking is %TRUE) or g_pollable_output_stream_write_nonblocking()
+ * (if @blocking is %FALSE). This can be used to more easily share
+ * code between blocking and non-blocking implementations of a method.
+ *
+ * If @blocking is %FALSE, then @stream must be a
+ * #GPollableOutputStream for which
+ * g_pollable_output_stream_can_poll() returns %TRUE or else the
+ * behavior is undefined. If @blocking is %TRUE, then @stream does not
+ * need to be a #GPollableOutputStream.
+ *
+ * Returns: the number of bytes written, or -1 on error.
+ * Since: 2.34
+ */
+
+
+/**
+ * g_pollable_stream_write_all:
+ * @stream: a #GOutputStream.
+ * @buffer: (array length=count) (element-type guint8): the buffer containing the data to write.
+ * @count: the number of bytes to write
+ * @blocking: whether to do blocking I/O
+ * @bytes_written: (out): location to store the number of bytes that was written to the stream
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
+ * @error: location to store the error occurring, or %NULL to ignore
+ *
+ * Tries to write @count bytes to @stream, as with
+ * g_output_stream_write_all(), but using g_pollable_stream_write()
+ * rather than g_output_stream_write().
+ *
+ * On a successful write of @count bytes, %TRUE is returned, and
+ * @bytes_written is set to @count.
+ *
+ * If there is an error during the operation (including
+ * %G_IO_ERROR_WOULD_BLOCK in the non-blocking case), %FALSE is
+ * returned and @error is set to indicate the error status,
+ * @bytes_written is updated to contain the number of bytes written
+ * into the stream before the error occurred.
+ *
+ * As with g_pollable_stream_write(), if @blocking is %FALSE, then
+ * @stream must be a #GPollableOutputStream for which
+ * g_pollable_output_stream_can_poll() returns %TRUE or else the
+ * behavior is undefined. If @blocking is %TRUE, then @stream does not
+ * need to be a #GPollableOutputStream.
+ *
+ * Returns: %TRUE on success, %FALSE if there was an error
+ * Since: 2.34
  */
 
 
@@ -23358,6 +23524,67 @@
 
 
 /**
+ * g_resolver_lookup_records:
+ * @resolver: a #GResolver
+ * @rrname: the DNS name to lookup the record for
+ * @record_type: the type of DNS record to lookup
+ * @cancellable: (allow-none): a #GCancellable, or %NULL
+ * @error: return location for a #GError, or %NULL
+ *
+ * Synchronously performs a DNS record lookup for the given @rrname and returns
+ * a list of records as #GVariant tuples. See #GResolverRecordType for
+ * information on what the records contain for each @record_type.
+ *
+ * If the DNS resolution fails, @error (if non-%NULL) will be set to
+ * a value from #GResolverError.
+ *
+ * If @cancellable is non-%NULL, it can be used to cancel the
+ * operation, in which case @error (if non-%NULL) will be set to
+ * %G_IO_ERROR_CANCELLED.
+ *
+ * Returns: (element-type GVariant) (transfer full): a #GList of #GVariant, or %NULL on error. You must free each of the records and the list when you are done with it. (You can use g_list_free_full() with g_variant_unref() to do this.)
+ * Since: 2.34
+ */
+
+
+/**
+ * g_resolver_lookup_records_async:
+ * @resolver: a #GResolver
+ * @rrname: the DNS name to lookup the record for
+ * @record_type: the type of DNS record to lookup
+ * @cancellable: (allow-none): a #GCancellable, or %NULL
+ * @callback: (scope async): callback to call after resolution completes
+ * @user_data: (closure): data for @callback
+ *
+ * Begins asynchronously performing a DNS lookup for the given
+ * @rrname, and eventually calls @callback, which must call
+ * g_resolver_lookup_records_finish() to get the final result. See
+ * g_resolver_lookup_records() for more details.
+ *
+ * Since: 2.34
+ */
+
+
+/**
+ * g_resolver_lookup_records_finish:
+ * @resolver: a #GResolver
+ * @result: the result passed to your #GAsyncReadyCallback
+ * @error: return location for a #GError, or %NULL
+ *
+ * Retrieves the result of a previous call to
+ * g_resolver_lookup_records_async(). Returns a list of records as #GVariant
+ * tuples. See #GResolverRecordType for information on what the records contain.
+ *
+ * If the DNS resolution failed, @error (if non-%NULL) will be set to
+ * a value from #GResolverError. If the operation was cancelled,
+ * @error will be set to %G_IO_ERROR_CANCELLED.
+ *
+ * Returns: (element-type GVariant) (transfer full): a #GList of #GVariant, or %NULL on error. You must free each of the records and the list when you are done with it. (You can use g_list_free_full() with g_variant_unref() to do this.)
+ * Since: 2.34
+ */
+
+
+/**
  * g_resolver_lookup_service:
  * @resolver: a #GResolver
  * @service: the service type to look up (eg, "ldap")
@@ -23452,10 +23679,10 @@
 
 /**
  * g_resource_enumerate_children:
- * @resource: A #GResource.
- * @path: A pathname inside the resource.
- * @lookup_flags: A #GResourceLookupFlags.
- * @error: return location for a #GError, or %NULL.
+ * @resource: A #GResource
+ * @path: A pathname inside the resource
+ * @lookup_flags: A #GResourceLookupFlags
+ * @error: return location for a #GError, or %NULL
  *
  * Returns all the names of children at the specified @path in the resource.
  * The return result is a %NULL terminated list of strings which should
@@ -23473,34 +23700,34 @@
  *
  * Gets the #GResource Error Quark.
  *
- * Returns: a #GQuark.
+ * Returns: a #GQuark
  * Since: 2.32
  */
 
 
 /**
  * g_resource_get_info:
- * @resource: A #GResource.
- * @path: A pathname inside the resource.
- * @lookup_flags: A #GResourceLookupFlags.
+ * @resource: A #GResource
+ * @path: A pathname inside the resource
+ * @lookup_flags: A #GResourceLookupFlags
  * @size: (out) (allow-none): a location to place the length of the contents of the file, or %NULL if the length is not needed
  * @flags: (out) (allow-none): a location to place the flags about the file, or %NULL if the length is not needed
- * @error: return location for a #GError, or %NULL.
+ * @error: return location for a #GError, or %NULL
  *
  * Looks for a file at the specified @path in the resource and
  * if found returns information about it.
  *
  * @lookup_flags controls the behaviour of the lookup.
  *
- * Returns: %TRUE if the file was found. %FALSE if there were errors.
+ * Returns: %TRUE if the file was found. %FALSE if there were errors
  * Since: 2.32
  */
 
 
 /**
  * g_resource_load:
- * @filename: (type filename): the path of a filename to load, in the GLib filename encoding.
- * @error: return location for a #GError, or %NULL.
+ * @filename: (type filename): the path of a filename to load, in the GLib filename encoding
+ * @error: return location for a #GError, or %NULL
  *
  * Loads a binary resource bundle and creates a #GResource representation of it, allowing
  * you to query it for data.
@@ -23508,17 +23735,17 @@
  * If you want to use this resource in the global resource namespace you need
  * to register it with g_resources_register().
  *
- * Returns: (transfer full): a new #GResource, or %NULL on error.
+ * Returns: (transfer full): a new #GResource, or %NULL on error
  * Since: 2.32
  */
 
 
 /**
  * g_resource_lookup_data:
- * @resource: A #GResource.
- * @path: A pathname inside the resource.
- * @lookup_flags: A #GResourceLookupFlags.
- * @error: return location for a #GError, or %NULL.
+ * @resource: A #GResource
+ * @path: A pathname inside the resource
+ * @lookup_flags: A #GResourceLookupFlags
+ * @error: return location for a #GError, or %NULL
  *
  * Looks for a file at the specified @path in the resource and
  * returns a #GBytes that lets you directly access the data in
@@ -23535,15 +23762,15 @@
  *
  * @lookup_flags controls the behaviour of the lookup.
  *
- * Returns: (transfer full): #GBytes or %NULL on error. Free the returned object with g_bytes_unref().
+ * Returns: (transfer full): #GBytes or %NULL on error. Free the returned object with g_bytes_unref()
  * Since: 2.32
  */
 
 
 /**
  * g_resource_new_from_data:
- * @data: A #GBytes.
- * @error: return location for a #GError, or %NULL.
+ * @data: A #GBytes
+ * @error: return location for a #GError, or %NULL
  *
  * Creates a GResource from a reference to the binary resource bundle.
  * This will keep a reference to @data while the resource lives, so
@@ -23552,43 +23779,43 @@
  * If you want to use this resource in the global resource namespace you need
  * to register it with g_resources_register().
  *
- * Returns: (transfer full): a new #GResource, or %NULL on error.
+ * Returns: (transfer full): a new #GResource, or %NULL on error
  * Since: 2.32
  */
 
 
 /**
  * g_resource_open_stream:
- * @resource: A #GResource.
- * @path: A pathname inside the resource.
- * @lookup_flags: A #GResourceLookupFlags.
- * @error: return location for a #GError, or %NULL.
+ * @resource: A #GResource
+ * @path: A pathname inside the resource
+ * @lookup_flags: A #GResourceLookupFlags
+ * @error: return location for a #GError, or %NULL
  *
  * Looks for a file at the specified @path in the resource and
  * returns a #GInputStream that lets you read the data.
  *
  * @lookup_flags controls the behaviour of the lookup.
  *
- * Returns: (transfer full): #GInputStream or %NULL on error. Free the returned object with g_object_unref().
+ * Returns: (transfer full): #GInputStream or %NULL on error. Free the returned object with g_object_unref()
  * Since: 2.32
  */
 
 
 /**
  * g_resource_ref:
- * @resource: A #GResource.
+ * @resource: A #GResource
  *
  * Atomically increments the reference count of @array by one. This
  * function is MT-safe and may be called from any thread.
  *
- * Returns: The passed in #GResource.
+ * Returns: The passed in #GResource
  * Since: 2.32
  */
 
 
 /**
  * g_resource_unref:
- * @resource: A #GResource.
+ * @resource: A #GResource
  *
  * Atomically decrements the reference count of @resource by one. If the
  * reference count drops to 0, all memory allocated by the array is
@@ -23601,9 +23828,9 @@
 
 /**
  * g_resources_enumerate_children:
- * @path: A pathname inside the resource.
- * @lookup_flags: A #GResourceLookupFlags.
- * @error: return location for a #GError, or %NULL.
+ * @path: A pathname inside the resource
+ * @lookup_flags: A #GResourceLookupFlags
+ * @error: return location for a #GError, or %NULL
  *
  * Returns all the names of children at the specified @path in the set of
  * globally registred resources.
@@ -23619,27 +23846,27 @@
 
 /**
  * g_resources_get_info:
- * @path: A pathname inside the resource.
- * @lookup_flags: A #GResourceLookupFlags.
+ * @path: A pathname inside the resource
+ * @lookup_flags: A #GResourceLookupFlags
  * @size: (out) (allow-none): a location to place the length of the contents of the file, or %NULL if the length is not needed
  * @flags: (out) (allow-none): a location to place the flags about the file, or %NULL if the length is not needed
- * @error: return location for a #GError, or %NULL.
+ * @error: return location for a #GError, or %NULL
  *
  * Looks for a file at the specified @path in the set of
  * globally registred resources and if found returns information about it.
  *
  * @lookup_flags controls the behaviour of the lookup.
  *
- * Returns: %TRUE if the file was found. %FALSE if there were errors.
+ * Returns: %TRUE if the file was found. %FALSE if there were errors
  * Since: 2.32
  */
 
 
 /**
  * g_resources_lookup_data:
- * @path: A pathname inside the resource.
- * @lookup_flags: A #GResourceLookupFlags.
- * @error: return location for a #GError, or %NULL.
+ * @path: A pathname inside the resource
+ * @lookup_flags: A #GResourceLookupFlags
+ * @error: return location for a #GError, or %NULL
  *
  * Looks for a file at the specified @path in the set of
  * globally registred resources and returns a #GBytes that
@@ -23656,16 +23883,16 @@
  *
  * @lookup_flags controls the behaviour of the lookup.
  *
- * Returns: (transfer full): #GBytes or %NULL on error. Free the returned object with g_bytes_unref().
+ * Returns: (transfer full): #GBytes or %NULL on error. Free the returned object with g_bytes_unref()
  * Since: 2.32
  */
 
 
 /**
  * g_resources_open_stream:
- * @path: A pathname inside the resource.
- * @lookup_flags: A #GResourceLookupFlags.
- * @error: return location for a #GError, or %NULL.
+ * @path: A pathname inside the resource
+ * @lookup_flags: A #GResourceLookupFlags
+ * @error: return location for a #GError, or %NULL
  *
  * Looks for a file at the specified @path in the set of
  * globally registred resources and returns a #GInputStream
@@ -23673,14 +23900,14 @@
  *
  * @lookup_flags controls the behaviour of the lookup.
  *
- * Returns: (transfer full): #GInputStream or %NULL on error. Free the returned object with g_object_unref().
+ * Returns: (transfer full): #GInputStream or %NULL on error. Free the returned object with g_object_unref()
  * Since: 2.32
  */
 
 
 /**
  * g_resources_register:
- * @resource: A #GResource.
+ * @resource: A #GResource
  *
  * Registers the resource with the process-global set of resources.
  * Once a resource is registered the files in it can be accessed
@@ -23692,7 +23919,7 @@
 
 /**
  * g_resources_unregister:
- * @resource: A #GResource.
+ * @resource: A #GResource
  *
  * Unregisters the resource from the process-global set of resources.
  *
@@ -27836,13 +28063,13 @@
 
 /**
  * g_static_resource_fini:
- * @static_resource: pointer to a static #GStaticResource.
+ * @static_resource: pointer to a static #GStaticResource
  *
- * Finalized a GResource initialized by g_static_resource_init ().
+ * Finalized a GResource initialized by g_static_resource_init().
  *
  * This is normally used by code generated by
- * <link linkend="glib-compile-resources">glib-compile-resources</link> and is
- * not typically used by other code.
+ * <link linkend="glib-compile-resources">glib-compile-resources</link>
+ * and is not typically used by other code.
  *
  * Since: 2.32
  */
@@ -27850,29 +28077,29 @@
 
 /**
  * g_static_resource_get_resource:
- * @static_resource: pointer to a static #GStaticResource.
+ * @static_resource: pointer to a static #GStaticResource
  *
- * Gets the GResource that was registred by a call to g_static_resource_init ().
+ * Gets the GResource that was registred by a call to g_static_resource_init().
  *
  * This is normally used by code generated by
- * <link linkend="glib-compile-resources">glib-compile-resources</link> and is
- * not typically used by other code.
+ * <link linkend="glib-compile-resources">glib-compile-resources</link>
+ * and is not typically used by other code.
  *
- * Returns: (transfer none): a #GResource.
+ * Returns: (transfer none): a #GResource
  * Since: 2.32
  */
 
 
 /**
  * g_static_resource_init:
- * @static_resource: pointer to a static #GStaticResource.
+ * @static_resource: pointer to a static #GStaticResource
  *
  * Initializes a GResource from static data using a
  * GStaticResource.
  *
  * This is normally used by code generated by
- * <link linkend="glib-compile-resources">glib-compile-resources</link> and is
- * not typically used by other code.
+ * <link linkend="glib-compile-resources">glib-compile-resources</link>
+ * and is not typically used by other code.
  *
  * Since: 2.32
  */

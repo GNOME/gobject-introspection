@@ -26647,7 +26647,7 @@
 
 /**
  * g_test_add_data_func:
- * @testpath: Slash-separated test case path name for the test.
+ * @testpath: /-separated test case path name for the test.
  * @test_data: Test data argument for the test function.
  * @test_func: The test function to invoke for this test.
  *
@@ -26663,7 +26663,7 @@
 
 /**
  * g_test_add_func:
- * @testpath: Slash-separated test case path name for the test.
+ * @testpath: /-separated test case path name for the test.
  * @test_func: The test function to invoke for this test.
  *
  * Create a new test case, similar to g_test_create_case(). However
