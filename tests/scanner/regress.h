@@ -353,6 +353,7 @@ struct _RegressTestObj
   float some_float;
   double some_double;
   char* string;
+  GType gtype;
 };
 
 struct _RegressTestObjClass

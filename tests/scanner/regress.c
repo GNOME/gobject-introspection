@@ -1816,7 +1816,8 @@ enum
   PROP_TEST_OBJ_INT,
   PROP_TEST_OBJ_FLOAT,
   PROP_TEST_OBJ_DOUBLE,
-  PROP_TEST_OBJ_STRING
+  PROP_TEST_OBJ_STRING,
+  PROP_TEST_OBJ_GTYPE
 };
 
 static void
@@ -1876,6 +1877,10 @@ regress_test_obj_set_property (GObject      *object,
       self->string = g_value_dup_string (value);
       break;
 
+    case PROP_TEST_OBJ_GTYPE:
+      self->gtype = g_value_get_gtype (value);
+      break;
+
     default:
       /* We don't have any other property... */
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -1927,6 +1932,10 @@ regress_test_obj_get_property (GObject    *object,
 
     case PROP_TEST_OBJ_STRING:
       g_value_set_string (value, self->string);
+      break;
+
+    case PROP_TEST_OBJ_GTYPE:
+      g_value_set_gtype (value, self->gtype);
       break;
 
     default:
@@ -2258,6 +2267,18 @@ regress_test_obj_class_init (RegressTestObjClass *klass)
                                    pspec);
 
 
+  /**
+   * TestObj:gtype:
+   */
+  pspec = g_param_spec_gtype ("gtype",
+                              "GType property",
+                              "A GType property",
+                              G_TYPE_NONE,
+                              G_PARAM_READWRITE);
+  g_object_class_install_property (gobject_class,
+                                   PROP_TEST_OBJ_GTYPE,
+                                   pspec);
+
   klass->matrix = regress_test_obj_default_matrix;
 }
 
@@ -2267,6 +2288,7 @@ regress_test_obj_init (RegressTestObj *obj)
   obj->bare = NULL;
   obj->boxed = NULL;
   obj->hash_table = NULL;
+  obj->gtype = G_TYPE_INVALID;
 }
 
 /**

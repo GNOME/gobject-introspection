@@ -956,6 +956,9 @@ raise an error.</doc>
       <property name="float" writable="1" transfer-ownership="none">
         <type name="gfloat"/>
       </property>
+      <property name="gtype" writable="1" transfer-ownership="none">
+        <type name="GType"/>
+      </property>
       <property name="hash-table" writable="1" transfer-ownership="container">
         <type name="GLib.HashTable">
           <type name="utf8"/>
@@ -1017,6 +1020,9 @@ raise an error.</doc>
       </field>
       <field name="string">
         <type name="utf8" c:type="char*"/>
+      </field>
+      <field name="gtype">
+        <type name="GType" c:type="GType"/>
       </field>
       <glib:signal name="all"
                    when="first"
