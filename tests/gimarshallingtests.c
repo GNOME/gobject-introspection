@@ -1530,6 +1530,20 @@ gi_marshalling_tests_array_inout_etc (gint first, gint **ints, gint *length, gin
 }
 
 /**
+ * gi_marshalling_tests_array_in_nonzero_nonlen:
+ * @first:
+ * @chars: (array):
+ */
+void
+gi_marshalling_tests_array_in_nonzero_nonlen (gint first, const guint8 *chars)
+{
+    g_assert(chars[0] == 'a');
+    g_assert(chars[1] == 'b');
+    g_assert(chars[2] == 'c');
+    g_assert(chars[3] == 'd');
+}
+
+/**
  * gi_marshalling_tests_array_zero_terminated_return:
  *
  * Returns: (array zero-terminated=1) (transfer none):

@@ -398,6 +398,8 @@ void gi_marshalling_tests_array_out_etc (gint first, gint **ints, gint *length, 
 void gi_marshalling_tests_array_inout (gint **ints, gint *length);
 void gi_marshalling_tests_array_inout_etc (gint first, gint **ints, gint *length, gint last, gint *sum);
 
+void gi_marshalling_tests_array_in_nonzero_nonlen (gint first, const guint8 *chars);
+
 /* Zero-terminated */
 
 gchar **gi_marshalling_tests_array_zero_terminated_return (void);
