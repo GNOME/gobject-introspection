@@ -1265,6 +1265,14 @@ regress_test_ghash_gvalue_return (void)
   g_value_set_boxed(value, string_array);
   g_hash_table_insert(hash, g_strdup("strings"), value);
 
+  value = g_value_new(REGRESS_TEST_TYPE_FLAGS);
+  g_value_set_flags(value, REGRESS_TEST_FLAG1 | REGRESS_TEST_FLAG3);
+  g_hash_table_insert(hash, g_strdup("flags"), value);
+
+  value = g_value_new(regress_test_enum_get_type());
+  g_value_set_enum(value, REGRESS_TEST_VALUE2);
+  g_hash_table_insert(hash, g_strdup("enum"), value);
+
   return hash;
 }
 
@@ -1304,6 +1312,16 @@ regress_test_ghash_gvalue_in (GHashTable *hash)
   g_assert(strings != NULL);
   for (i = 0; string_array[i] != NULL; i++)
     g_assert(strcmp(strings[i], string_array[i]) == 0);
+
+  value = g_hash_table_lookup(hash, "flags");
+  g_assert(value != NULL);
+  g_assert(G_VALUE_HOLDS_FLAGS(value));
+  g_assert(g_value_get_flags(value) == REGRESS_TEST_FLAG1 | REGRESS_TEST_FLAG3);
+
+  value = g_hash_table_lookup(hash, "enum");
+  g_assert(value != NULL);
+  g_assert(G_VALUE_HOLDS_ENUM(value));
+  g_assert(g_value_get_enum(value) == REGRESS_TEST_VALUE2);
 }
 
 /**
