@@ -265,6 +265,15 @@ type_names['void*'] = TYPE_ANY
 type_names['void'] = TYPE_NONE
 # Also alias the signed one here
 type_names['signed long long'] = TYPE_LONG_LONG
+# C99 stdint exact width types
+type_names['int8_t'] = TYPE_INT8
+type_names['uint8_t'] = TYPE_UINT8
+type_names['int16_t'] = TYPE_INT16
+type_names['uint16_t'] = TYPE_UINT16
+type_names['int32_t'] = TYPE_INT32
+type_names['uint32_t'] = TYPE_UINT32
+type_names['int64_t'] = TYPE_INT64
+type_names['uint64_t'] = TYPE_UINT64
 
 # A few additional GLib type aliases
 type_names['guchar'] = TYPE_UINT8
