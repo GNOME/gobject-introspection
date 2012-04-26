@@ -13079,7 +13079,7 @@
  * zone returned by g_time_zone_new_local().
  *
  * Returns: a #GDateTime, or %NULL
- * Since: 2.26.
+ * Since: 2.26
  */
 
 
@@ -13146,7 +13146,7 @@
  * zone returned by g_time_zone_new_utc().
  *
  * Returns: a #GDateTime, or %NULL
- * Since: 2.26.
+ * Since: 2.26
  */
 
 
