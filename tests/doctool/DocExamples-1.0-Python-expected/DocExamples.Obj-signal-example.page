@@ -10,7 +10,7 @@
   </info>
   <title>DocExamples.Obj::signal-example</title>
 <synopsis><code mime="text/x-python">
-def callback(obj, float_param, since, user_param1, ...)
+def callback(obj, int_param, float_param, user_param1, ...)
 </code></synopsis>
 <p>This is an example of how to document a signal.</p>
 
@@ -20,12 +20,12 @@ def callback(obj, float_param, since, user_param1, ...)
 <td><p>instance of DocExamples.Obj that is emitting the signal</p></td>
 </tr>
 <tr>
-<td><p>float_param :</p></td>
-<td><p>a parameter of type float</p></td>
+<td><p>int_param :</p></td>
+<td><p>a parameter of type int</p></td>
 </tr>
 <tr>
-<td><p>since :</p></td>
-<td></td>
+<td><p>float_param :</p></td>
+<td><p>a parameter of type float</p></td>
 </tr>
 <tr>
 <td><p>user_param1 :</p></td>
