@@ -122,7 +122,7 @@ GPtrArray *regress_test_garray_full_return (void);
 /* closure */
 int regress_test_closure (GClosure *closure);
 int regress_test_closure_one_arg (GClosure *closure, int arg);
-GVariant *regress_test_closure_variant (GClosure *closure, const GVariant* arg);
+GVariant *regress_test_closure_variant (GClosure *closure, GVariant* arg);
 
 /* value */
 int regress_test_int_value_arg(const GValue *v);

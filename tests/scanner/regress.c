@@ -221,17 +221,16 @@ regress_test_closure_one_arg (GClosure *closure, int arg)
  * Return value: (transfer full): the return value of @closure
  */
 GVariant*
-regress_test_closure_variant (GClosure *closure, const GVariant* arg)
+regress_test_closure_variant (GClosure *closure, GVariant* arg)
 {
   GValue return_value = {0, };
   GValue arguments[1] = {{0,} };
   GVariant *ret;
-  GVariant *local_arg = (GVariant*)g_memdup(arg, sizeof (GVariant*));
 
   g_value_init (&return_value, G_TYPE_VARIANT);
 
   g_value_init (&arguments[0], G_TYPE_VARIANT);
-  g_value_set_variant (&arguments[0], local_arg);
+  g_value_set_variant (&arguments[0], arg);
 
   g_closure_invoke (closure,
                     &return_value,
@@ -240,7 +239,6 @@ regress_test_closure_variant (GClosure *closure, const GVariant* arg)
 
   ret = g_value_get_variant (&return_value);
 
-  g_free (local_arg);
   g_value_unset (&return_value);
   g_value_unset (&arguments[0]);
 
