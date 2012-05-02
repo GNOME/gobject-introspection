@@ -11113,6 +11113,29 @@
 
 
 /**
+ * g_clear_pointer: (skip)
+ * @pp: a pointer to a variable, struct member etc. holding a pointer
+ * @destroy: a function to which a gpointer can be passed, to destroy *@pp
+ *
+ * Clears a reference to a variable.
+ *
+ * @pp must not be %NULL.
+ *
+ * If the reference is %NULL then this function does nothing.
+ * Otherwise, the variable is destroyed using @destroy and the
+ * pointer is set to %NULL.
+ *
+ * This function is threadsafe and modifies the pointer atomically,
+ * using memory barriers where needed.
+ *
+ * A macro is also included that allows this function to be used without
+ * pointer casts.
+ *
+ * Since: 2.34
+ */
+
+
+/**
  * g_compute_checksum_for_data:
  * @checksum_type: a #GChecksumType
  * @data: binary blob to compute the digest of
