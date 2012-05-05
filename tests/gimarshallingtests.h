@@ -996,6 +996,7 @@ struct _GIMarshallingTestsPropertiesObject {
     guint64 some_uint64;
     gfloat some_float;
     gdouble some_double;
+    gchar **some_strv;
 };
 
 struct _GIMarshallingTestsPropertiesObjectClass {
