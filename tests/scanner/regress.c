@@ -216,7 +216,7 @@ regress_test_closure_one_arg (GClosure *closure, int arg)
 /**
  * regress_test_closure_variant:
  * @closure: GClosure which takes one GVariant and returns a GVariant
- * @arg: (transfer none): a GVariant passed as argument to @closure
+ * @arg: (allow-none) (transfer none): a GVariant passed as argument to @closure
  *
  * Return value: (transfer full): the return value of @closure
  */
@@ -238,6 +238,8 @@ regress_test_closure_variant (GClosure *closure, GVariant* arg)
                     NULL);
 
   ret = g_value_get_variant (&return_value);
+  if (ret != NULL)
+    g_variant_ref (ret);
 
   g_value_unset (&return_value);
   g_value_unset (&arguments[0]);

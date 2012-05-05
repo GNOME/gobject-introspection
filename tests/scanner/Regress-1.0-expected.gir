@@ -2129,7 +2129,7 @@ call and can be released on return.</doc>
           <doc xml:whitespace="preserve">GClosure which takes one GVariant and returns a GVariant</doc>
           <type name="GObject.Closure" c:type="GClosure*"/>
         </parameter>
-        <parameter name="arg" transfer-ownership="none">
+        <parameter name="arg" transfer-ownership="none" allow-none="1">
           <doc xml:whitespace="preserve">a GVariant passed as argument to @closure</doc>
           <type name="GLib.Variant" c:type="GVariant*"/>
         </parameter>
