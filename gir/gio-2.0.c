@@ -7733,6 +7733,12 @@
  *
  * Creates a new #GAppInfo from the given information.
  *
+ * Note that for @commandline, the quoting rules of the Exec key of the
+ * <ulink url="http://freedesktop.org/Standards/desktop-entry-spec">freedesktop.org Desktop
+ * Entry Specification</ulink> are applied. For example, if the @commandline contains
+ * percent-encoded URIs, the percent-character must be doubled in order to prevent it from
+ * being swallowed by Exec key unquoting. See the specification for exact quoting rules.
+ *
  * Returns: (transfer full): new #GAppInfo for given command.
  */
 
@@ -7934,6 +7940,22 @@
  *
  * Returns: (element-type GAppInfo) (transfer full): #GList of #GAppInfos for given @content_type or %NULL on error.
  * Since: 2.28
+ */
+
+
+/**
+ * g_app_info_get_supported_types:
+ * @info: a #GAppInfo that can handle files
+ *
+ * Retrieves the list of content types that @app_info claims to support.
+ * If this information is not provided by the environment, this function
+ * will return %NULL.
+ * This function does not take in consideration associations added with
+ * g_app_info_add_supports_type(), but only those exported directly by
+ * the application.
+ *
+ * Returns: (transfer none) (array zero-terminated=1) (element-type utf8): a list of content types.
+ * Since: 2.34
  */
 
 
@@ -20565,6 +20587,17 @@
 
 
 /**
+ * g_memory_input_stream_add_bytes:
+ * @stream: a #GMemoryInputStream
+ * @bytes: input data
+ *
+ * Appends @bytes to data that can be read from the input stream.
+ *
+ * Since: 2.34
+ */
+
+
+/**
  * g_memory_input_stream_add_data:
  * @stream: a #GMemoryInputStream
  * @data: (array length=len) (element-type guint8) (transfer full): input data
@@ -20581,6 +20614,17 @@
  * Creates a new empty #GMemoryInputStream.
  *
  * Returns: a new #GInputStream
+ */
+
+
+/**
+ * g_memory_input_stream_new_from_bytes:
+ * @bytes: a #GBytes
+ *
+ * Creates a new #GMemoryInputStream with data from the given @bytes.
+ *
+ * Returns: new #GInputStream read from @bytes
+ * Since: 2.34
  */
 
 
@@ -20673,6 +20717,18 @@
 
 
 /**
+ * g_memory_output_stream_steal_as_bytes:
+ * @ostream: a #GMemoryOutputStream
+ *
+ * Returns data from the @ostream as a #GBytes. @ostream must be
+ * closed before calling this function.
+ *
+ * Returns: (transfer full): the stream's data
+ * Since: 2.34
+ */
+
+
+/**
  * g_memory_output_stream_steal_data:
  * @ostream: a #GMemoryOutputStream
  *
@@ -20709,7 +20765,7 @@
  * @detailed_action: (allow-none): the detailed action string, or %NULL
  *
  * Convenience function for appending a normal menu item to the end of
- * @menu.  Combine g_menu_new() and g_menu_insert_item() for a more
+ * @menu.  Combine g_menu_item_new() and g_menu_insert_item() for a more
  * flexible alternative.
  *
  * Since: 2.32
@@ -20855,7 +20911,7 @@
  * @detailed_action: (allow-none): the detailed action string, or %NULL
  *
  * Convenience function for inserting a normal menu item into @menu.
- * Combine g_menu_new() and g_menu_insert_item() for a more flexible
+ * Combine g_menu_item_new() and g_menu_insert_item() for a more flexible
  * alternative.
  *
  * Since: 2.32
@@ -21496,7 +21552,7 @@
  * @detailed_action: (allow-none): the detailed action string, or %NULL
  *
  * Convenience function for prepending a normal menu item to the start
- * of @menu.  Combine g_menu_new() and g_menu_insert_item() for a more
+ * of @menu.  Combine g_menu_item_new() and g_menu_insert_item() for a more
  * flexible alternative.
  *
  * Since: 2.32

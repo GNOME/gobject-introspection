@@ -13662,7 +13662,7 @@
 
 /**
  * g_environ_getenv:
- * @envp: (array zero-terminated=1) (transfer none): an environment list (eg, as returned from g_get_environ())
+ * @envp: (allow-none) (array zero-terminated=1) (transfer none): an environment list (eg, as returned from g_get_environ()), or %NULL for an empty environment list
  * @variable: the environment variable to get, in the GLib file name encoding
  *
  * Returns the value of the environment variable @variable in the
@@ -13682,7 +13682,7 @@
 
 /**
  * g_environ_setenv:
- * @envp: (array zero-terminated=1) (transfer full): an environment list that can be freed using g_strfreev() (e.g., as returned from g_get_environ())
+ * @envp: (allow-none) (array zero-terminated=1) (transfer full): an environment list that can be freed using g_strfreev() (e.g., as returned from g_get_environ()), or %NULL for an empty environment list
  * @variable: the environment variable to set, must not contain '='
  * @value: the value for to set the variable to
  * @overwrite: whether to change the variable if it already exists
@@ -13701,7 +13701,7 @@
 
 /**
  * g_environ_unsetenv:
- * @envp: (array zero-terminated=1) (transfer full): an environment list that can be freed using g_strfreev() (e.g., as returned from g_get_environ())
+ * @envp: (allow-none) (array zero-terminated=1) (transfer full): an environment list that can be freed using g_strfreev() (e.g., as returned from g_get_environ()), or %NULL for an empty environment list
  * @variable: the environment variable to remove, must not contain '='
  *
  * Removes the environment variable @variable from the provided
@@ -16871,7 +16871,7 @@
 /**
  * g_key_file_load_from_data:
  * @key_file: an empty #GKeyFile struct
- * @data: key file loaded in memory
+ * @data: (length length): key file loaded in memory
  * @length: the length of @data in bytes (or -1 if data is nul-terminated)
  * @flags: flags from #GKeyFileFlags
  * @error: return location for a #GError, or %NULL
@@ -25161,8 +25161,15 @@
  * should be a %NULL-terminated array of strings, to be passed as the
  * argument vector for the child. The first string in @argv is of
  * course the name of the program to execute. By default, the name of
- * the program must be a full path; the <envar>PATH</envar> shell variable
- * will only be searched if you pass the %G_SPAWN_SEARCH_PATH flag.
+ * the program must be a full path. If @flags contains the
+ * %G_SPAWN_SEARCH_PATH flag, the <envar>PATH</envar> environment variable
+ * is used to search for the executable. If @flags contains the
+ * %G_SPAWN_SEARCH_PATH_FROM_ENVP flag, the <envar>PATH</envar> variable from
+ * @envp is used to search for the executable.
+ * If both the %G_SPAWN_SEARCH_PATH and %G_SPAWN_SEARCH_PATH_FROM_ENVP
+ * flags are set, the <envar>PATH</envar> variable from @envp takes precedence
+ * over the environment variable.
+ *
  * If the program name is not a full path and %G_SPAWN_SEARCH_PATH flag is not
  * used, then the program will be run from the current directory (or
  * @working_directory, if specified); this might be unexpected or even
@@ -25228,7 +25235,11 @@
  * descriptors except stdin/stdout/stderr will be closed before
  * calling exec() in the child. %G_SPAWN_SEARCH_PATH
  * means that <literal>argv[0]</literal> need not be an absolute path, it
- * will be looked for in the user's <envar>PATH</envar>.
+ * will be looked for in the <envar>PATH</envar> environment variable.
+ * %G_SPAWN_SEARCH_PATH_FROM_ENVP means need not be an absolute path, it
+ * will be looked for in the <envar>PATH</envar> variable from @envp. If
+ * both %G_SPAWN_SEARCH_PATH and %G_SPAWN_SEARCH_PATH_FROM_ENVP are used,
+ * the value from @envp takes precedence over the environment.
  * %G_SPAWN_STDOUT_TO_DEV_NULL means that the child's standard output will
  * be discarded, instead of going to the same location as the parent's
  * standard output. If you use this flag, @standard_output must be %NULL.
@@ -29927,7 +29938,7 @@
 
 /**
  * g_utf8_validate:
- * @str: a pointer to character data
+ * @str: (array length=max_len) (element-type guint8): a pointer to character data
  * @max_len: max bytes to validate, or -1 to go until NUL
  * @end: (allow-none) (out): return location for end of valid data
  *
