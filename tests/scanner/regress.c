@@ -1316,7 +1316,7 @@ regress_test_ghash_gvalue_in (GHashTable *hash)
   value = g_hash_table_lookup(hash, "flags");
   g_assert(value != NULL);
   g_assert(G_VALUE_HOLDS_FLAGS(value));
-  g_assert(g_value_get_flags(value) == REGRESS_TEST_FLAG1 | REGRESS_TEST_FLAG3);
+  g_assert(g_value_get_flags(value) == (REGRESS_TEST_FLAG1 | REGRESS_TEST_FLAG3));
 
   value = g_hash_table_lookup(hash, "enum");
   g_assert(value != NULL);
