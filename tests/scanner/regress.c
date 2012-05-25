@@ -294,8 +294,11 @@ cairo_t *
 regress_test_cairo_context_full_return (void)
 {
   cairo_surface_t *surface;
+  cairo_t *cr;
   surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 10, 10);
-  return cairo_create (surface);
+  cr = cairo_create (surface);
+  cairo_surface_destroy (surface);
+  return cr;
 }
 
 /**
