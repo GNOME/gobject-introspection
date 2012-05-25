@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <glib-object.h>
 #include <gobject/gvaluecollector.h>
+#include <cairo-gobject.h>
 
 #include "regress.h"
 
@@ -1996,6 +1997,7 @@ enum {
   REGRESS_TEST_OBJ_SIGNAL_SIG_WITH_HASH_PROP,
   REGRESS_TEST_OBJ_SIGNAL_SIG_WITH_STRV,
   REGRESS_TEST_OBJ_SIGNAL_SIG_WITH_OBJ,
+  REGRESS_TEST_OBJ_SIGNAL_SIG_WITH_FOREIGN_STRUCT,
   REGRESS_TEST_OBJ_SIGNAL_FIRST,
   REGRESS_TEST_OBJ_SIGNAL_CLEANUP,
   REGRESS_TEST_OBJ_SIGNAL_ALL,
@@ -2114,6 +2116,23 @@ regress_test_obj_class_init (RegressTestObjClass *klass)
 		  G_TYPE_NONE,
 		  1,
 		  G_TYPE_OBJECT);
+
+   /**
+   * RegressTestObj::sig-with-foreign-struct:
+   * @self: an object
+   * @cr: (transfer none): A cairo context.
+   */
+  regress_test_obj_signals[REGRESS_TEST_OBJ_SIGNAL_SIG_WITH_FOREIGN_STRUCT] =
+    g_signal_new ("sig-with-foreign-struct",
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  0,
+		  NULL,
+		  NULL,
+                  NULL,
+		  G_TYPE_NONE,
+		  1,
+		  CAIRO_GOBJECT_TYPE_CONTEXT);
 
   regress_test_obj_signals[REGRESS_TEST_OBJ_SIGNAL_FIRST] =
     g_signal_new ("first",
@@ -2359,6 +2378,14 @@ regress_test_obj_emit_sig_with_obj (RegressTestObj *obj)
     g_object_set (obj_param, "int", 3, NULL);
     g_signal_emit_by_name (obj, "sig-with-obj", obj_param);
     g_object_unref (obj_param);
+}
+
+void
+regress_test_obj_emit_sig_with_foreign_struct (RegressTestObj *obj)
+{
+  cairo_t *cr = regress_test_cairo_context_full_return ();
+  g_signal_emit_by_name (obj, "sig-with-foreign-struct", cr);
+  cairo_destroy (cr);
 }
 
 int

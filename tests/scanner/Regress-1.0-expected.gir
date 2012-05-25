@@ -621,6 +621,12 @@ case.</doc>
           </parameter>
         </parameters>
       </method>
+      <method name="emit_sig_with_foreign_struct"
+              c:identifier="regress_test_obj_emit_sig_with_foreign_struct">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+      </method>
       <method name="emit_sig_with_obj"
               c:identifier="regress_test_obj_emit_sig_with_obj">
         <return-value transfer-ownership="none">
@@ -1056,6 +1062,17 @@ raise an error.</doc>
             <array name="GLib.Array">
               <type name="guint"/>
             </array>
+          </parameter>
+        </parameters>
+      </glib:signal>
+      <glib:signal name="sig-with-foreign-struct" when="last">
+        <return-value transfer-ownership="none">
+          <type name="none"/>
+        </return-value>
+        <parameters>
+          <parameter name="cr" transfer-ownership="none">
+            <doc xml:whitespace="preserve">A cairo context.</doc>
+            <type name="cairo.Context"/>
           </parameter>
         </parameters>
       </glib:signal>

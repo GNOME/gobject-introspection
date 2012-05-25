@@ -132,7 +132,7 @@ AM_CONDITIONAL(HAVE_GIO_UNIX, test x$have_gio_unix = xtrue)
 
 AC_ARG_ENABLE(tests,[  --disable-tests           disable test libraries ], enable_tests=$enableval,enable_tests=yes)
 have_cairo=no
-PKG_CHECK_MODULES(CAIRO, [cairo], have_cairo=yes, have_cairo=no)
+PKG_CHECK_MODULES(CAIRO, [cairo cairo-gobject], have_cairo=yes, have_cairo=no)
 if test x$have_cairo != xyes && test x$enable_tests != xno; then
   AC_MSG_ERROR([Tests enabled but cairo not found; pass --disable-tests or install cairo])
 fi
