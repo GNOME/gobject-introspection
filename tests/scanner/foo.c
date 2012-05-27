@@ -782,3 +782,17 @@ foo_object_append_new_stack_layer (FooObject *obj, int x)
 {
   return NULL;
 }
+
+/**
+ * foo_not_a_constructor_new:
+ *
+ * This should be scanned as a top-level function, and shouldn't cause
+ * a "Can't find matching type for constructor" warning.
+ *
+ * Returns: (transfer none):
+ */
+FooObject *
+foo_not_a_constructor_new (void)
+{
+  return NULL;
+}

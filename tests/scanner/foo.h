@@ -162,6 +162,8 @@ void                  foo_buffer_some_method       (FooBuffer *buffer);
 
 GType                 foo_other_object_get_type    (void) G_GNUC_CONST;
 
+FooObject *           foo_not_a_constructor_new    (void);
+
 typedef enum
 {
   FOO_ENUM_ALPHA,

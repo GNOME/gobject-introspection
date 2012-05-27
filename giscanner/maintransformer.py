@@ -1147,9 +1147,10 @@ method or constructor of some type."""
 
         origin_node = self._get_constructor_class(func, subsymbol)
         if origin_node is None:
-            message.warn_node(func,
-                "Can't find matching type for constructor; symbol=%r" \
-                % (func.symbol, ))
+            if func.is_constructor:
+                message.warn_node(func,
+                    "Can't find matching type for constructor; symbol=%r" \
+                    % (func.symbol, ))
             return False
 
         # Some sanity checks; only objects and boxeds can have ctors
