@@ -2984,6 +2984,17 @@ gi_marshalling_tests_gvalue_out (GValue **value)
 }
 
 /**
+ * gi_marshalling_tests_gvalue_out_caller_allocates:
+ * @value: (out) (transfer none):
+ */
+void
+gi_marshalling_tests_gvalue_out_caller_allocates (GValue *value)
+{
+    g_value_init(value, G_TYPE_INT);
+    g_value_set_int(value, 42);
+}
+
+/**
  * gi_marshalling_tests_gvalue_inout:
  * @value: (inout) (transfer none):
  */

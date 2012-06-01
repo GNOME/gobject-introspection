@@ -533,6 +533,7 @@ void gi_marshalling_tests_gvalue_in_with_type (GValue *value, GType type);
 void gi_marshalling_tests_gvalue_in_enum (GValue *value);
 
 void gi_marshalling_tests_gvalue_out (GValue **value);
+void gi_marshalling_tests_gvalue_out_caller_allocates (GValue *value);
 
 void gi_marshalling_tests_gvalue_inout (GValue **value);
 
