@@ -735,6 +735,12 @@ struct _GIMarshallingTestsObjectClass
     void  (* vfunc_multiple_out_parameters) (GIMarshallingTestsObject *self, gfloat *a, gfloat *b);
 
     /**
+     * GIMarshallingTestsObjectClass::vfunc_caller_allocated_out_parameter:
+     * @a: (out):
+     */
+    void  (* vfunc_caller_allocated_out_parameter) (GIMarshallingTestsObject *self, GValue *a);
+
+    /**
      * GIMarshallingTestsObjectClass::vfunc_return_value_and_one_out_parameter:
      * @a: (out):
      */
@@ -780,6 +786,7 @@ void gi_marshalling_tests_object_method_with_default_implementation (GIMarshalli
 glong gi_marshalling_tests_object_vfunc_return_value_only (GIMarshallingTestsObject *self);
 void gi_marshalling_tests_object_vfunc_one_out_parameter (GIMarshallingTestsObject *self, gfloat *a);
 void gi_marshalling_tests_object_vfunc_multiple_out_parameters (GIMarshallingTestsObject *self, gfloat *a, gfloat *b);
+void gi_marshalling_tests_object_vfunc_caller_allocated_out_parameter (GIMarshallingTestsObject *self, GValue *a);
 glong gi_marshalling_tests_object_vfunc_return_value_and_one_out_parameter (GIMarshallingTestsObject *self, glong *a);
 glong gi_marshalling_tests_object_vfunc_return_value_and_multiple_out_parameters (GIMarshallingTestsObject *self, glong *a, glong *b);
 gboolean gi_marshalling_tests_object_vfunc_meth_with_error (GIMarshallingTestsObject *object, gint x, GError **error);
