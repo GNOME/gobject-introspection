@@ -1825,6 +1825,38 @@ G_DEFINE_BOXED_TYPE(RegressTestBoxedB,
                     regress_test_boxed_b_copy,
                     regress_test_boxed_b_free);
 
+RegressTestBoxedC *
+regress_test_boxed_c_new (void)
+{
+  RegressTestBoxedC *boxed;
+
+  boxed = g_slice_new (RegressTestBoxedC);
+  boxed->refcount = 1;
+  boxed->another_thing = 42; /* what else */
+
+  return boxed;
+}
+
+static RegressTestBoxedC *
+regress_test_boxed_c_ref (RegressTestBoxedC *boxed)
+{
+  g_atomic_int_inc (&boxed->refcount);
+  return boxed;
+}
+
+static void
+regress_test_boxed_c_unref (RegressTestBoxedC *boxed)
+{
+  if (g_atomic_int_dec_and_test (&boxed->refcount)) {
+    g_slice_free (RegressTestBoxedC, boxed);
+  }
+}
+
+G_DEFINE_BOXED_TYPE(RegressTestBoxedC,
+                    regress_test_boxed_c,
+                    regress_test_boxed_c_ref,
+                    regress_test_boxed_c_unref);
+
 G_DEFINE_TYPE(RegressTestObj, regress_test_obj, G_TYPE_OBJECT);
 
 enum

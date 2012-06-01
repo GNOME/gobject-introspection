@@ -171,6 +171,23 @@ use it should be.</doc>
         </return-value>
       </method>
     </record>
+    <record name="TestBoxedC"
+            c:type="RegressTestBoxedC"
+            glib:type-name="RegressTestBoxedC"
+            glib:get-type="regress_test_boxed_c_get_type"
+            c:symbol-prefix="test_boxed_c">
+      <field name="refcount" writable="1">
+        <type name="guint" c:type="guint"/>
+      </field>
+      <field name="another_thing" writable="1">
+        <type name="guint" c:type="guint"/>
+      </field>
+      <constructor name="new" c:identifier="regress_test_boxed_c_new">
+        <return-value transfer-ownership="full">
+          <type name="TestBoxedC" c:type="RegressTestBoxedC*"/>
+        </return-value>
+      </constructor>
+    </record>
     <record name="TestBoxedPrivate"
             c:type="RegressTestBoxedPrivate"
             disguised="1">

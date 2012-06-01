@@ -328,6 +328,17 @@ GType regress_test_boxed_b_get_type (void);
 RegressTestBoxedB *regress_test_boxed_b_new (gint8 some_int8, glong some_long);
 RegressTestBoxedB *regress_test_boxed_b_copy (RegressTestBoxedB *boxed);
 
+typedef struct _RegressTestBoxedC RegressTestBoxedC;
+
+struct _RegressTestBoxedC
+{
+  guint refcount;
+  guint another_thing;
+};
+
+GType regress_test_boxed_c_get_type (void);
+RegressTestBoxedC *regress_test_boxed_c_new (void);
+
 /* gobject */
 #define REGRESS_TEST_TYPE_OBJ              (regress_test_obj_get_type ())
 #define REGRESS_TEST_OBJECT(object)        (G_TYPE_CHECK_INSTANCE_CAST ((object), REGRESS_TEST_TYPE_OBJ, RegressTestObj))
