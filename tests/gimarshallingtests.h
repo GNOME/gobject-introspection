@@ -1005,6 +1005,7 @@ struct _GIMarshallingTestsPropertiesObject {
     gfloat some_float;
     gdouble some_double;
     gchar **some_strv;
+    GIMarshallingTestsBoxedStruct* some_boxed_struct; 
 };
 
 struct _GIMarshallingTestsPropertiesObjectClass {
