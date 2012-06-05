@@ -241,6 +241,8 @@
  * @add_platform_data: invoked (locally) to add 'platform data' to be sent to the primary instance when activating, opening or invoking actions
  * @quit_mainloop: Used to be invoked on the primary instance when the use count of the application drops to zero (and after any inactivity timeout, if requested). Not used anymore since 2.32
  * @run_mainloop: Used to be invoked on the primary instance from g_application_run() if the use-count is non-zero. Since 2.32, GApplication is iterating the main context directly and is not using @run_mainloop anymore
+ * @dbus_register: invoked locally during registration, if the application is using its D-Bus backend. You can use this to export extra objects on the bus, that need to exist before the application tries to own the bus name. The function is passed the #GDBusConnection to to session bus, and the object path that #GApplication will use to export is D-Bus API. If this function returns %TRUE, registration will proceed; otherwise registration will abort. Since: 2.34
+ * @dbus_unregister: invoked locally during unregistration, if the application is using its D-Bus backend. Use this to undo anything done by the @dbus_register vfunc. Since: 2.34
  *
  * Virtual function table for #GApplication.
  *
@@ -3514,6 +3516,14 @@
  * <example id="gapplication-example-menu"><title>A GApplication with menus</title>
  * <programlisting>
  * <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../gio/tests/gapplication-example-menu.c">
+ *   <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
+ * </xi:include>
+ * </programlisting>
+ * </example>
+ *
+ * <example id="gapplication-example-dbushooks"><title>Using extra D-Bus hooks with a GApplication</title>
+ * <programlisting>
+ * <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" parse="text" href="../../../../gio/tests/gapplication-example-dbushooks.c">
  *   <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
  * </xi:include>
  * </programlisting>

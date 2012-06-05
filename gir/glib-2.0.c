@@ -30424,6 +30424,11 @@
  * Please note that the syntax of the format string is very likely to be
  * extended in the future.
  *
+ * @format_string determines the C types that are used for unpacking
+ * the values and also determines if the values are copied or borrowed,
+ * see the section on
+ * <link linkend='gvariant-format-strings-pointers'>GVariant Format Strings</link>.
+ *
  * Since: 2.24
  */
 
@@ -30513,6 +30518,11 @@
  * deconstructs it according to @format_string.  This call is
  * essentially a combination of g_variant_get_child_value() and
  * g_variant_get().
+ *
+ * @format_string determines the C types that are used for unpacking
+ * the values and also determines if the values are copied or borrowed,
+ * see the section on
+ * <link linkend='gvariant-format-strings-pointers'>GVariant Format Strings</link>.
  *
  * Since: 2.24
  */
@@ -30921,6 +30931,11 @@
  * g_variant_new_va() and g_variant_get_va() within a single actual
  * varargs call by the user.
  *
+ * @format_string determines the C types that are used for unpacking
+ * the values and also determines if the values are copied or borrowed,
+ * see the section on
+ * <link linkend='gvariant-format-strings-pointers'>GVariant Format Strings</link>.
+ *
  * Since: 2.24
  */
 
@@ -31169,6 +31184,11 @@
  * types, use the '&' prefix to avoid allocating any memory at all (and
  * thereby avoiding the need to free anything as well).
  *
+ * @format_string determines the C types that are used for unpacking
+ * the values and also determines if the values are copied or borrowed,
+ * see the section on
+ * <link linkend='gvariant-format-strings-pointers'>GVariant Format Strings</link>.
+ *
  * Returns: %TRUE if a value was unpacked, or %FALSE if there was no value
  * Since: 2.24
  */
@@ -31254,6 +31274,11 @@
  * For a solution that is likely to be more convenient to C programmers
  * when dealing with loops, see g_variant_iter_loop().
  *
+ * @format_string determines the C types that are used for unpacking
+ * the values and also determines if the values are copied or borrowed,
+ * see the section on
+ * <link linkend='gvariant-format-strings-pointers'>GVariant Format Strings</link>.
+ *
  * Returns: %TRUE if a value was unpacked, or %FALSE if there as no value
  * Since: 2.24
  */
@@ -31312,7 +31337,10 @@
  * this function returns %FALSE.  Otherwise, it unpacks the returned
  * value and returns %TRUE.
  *
- * See g_variant_get() for information about @format_string.
+ * @format_string determines the C types that are used for unpacking
+ * the values and also determines if the values are copied or borrowed,
+ * see the section on
+ * <link linkend='gvariant-format-strings-pointers'>GVariant Format Strings</link>.
  *
  * Returns: %TRUE if a value was unpacked
  * Since: 2.28
