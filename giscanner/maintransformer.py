@@ -917,15 +917,17 @@ the ones that failed to resolve removed."""
         for node in self._namespace.itervalues():
             if not isinstance(node, ast.ErrorQuarkFunction):
                 continue
-            short = node.symbol[:-len('_quark')]
-            if short == "g_io_error":
+            full = node.symbol[:-len('_quark')]
+            ns, short = self._transformer.split_csymbol(node.symbol)
+            short = short[:-len('_quark')]
+            if full == "g_io_error":
                 # Special case; GIOError was already taken forcing GIOErrorEnum
                 assert self._namespace.name == 'Gio'
                 enum = self._namespace.get('IOErrorEnum')
             else:
                 enum = self._uscore_type_names.get(short)
                 if enum is None:
-                    enum = uscore_enums.get(short)
+                    enum = uscore_enums.get(full)
             if enum is not None:
                 enum.error_domain = node.error_domain
             else:
