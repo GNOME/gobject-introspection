@@ -1572,6 +1572,90 @@ regress_global_get_flags_out (RegressTestFlags *v)
   *v = REGRESS_TEST_FLAG1 | REGRESS_TEST_FLAG3;
 }
 
+/* error domains */
+
+GType
+regress_test_error_get_type (void)
+{
+    static GType etype = 0;
+    if (G_UNLIKELY(etype == 0)) {
+        static const GEnumValue values[] = {
+            { REGRESS_TEST_ERROR_CODE1, "REGRESS_TEST_ERROR_CODE1", "code1" },
+            { REGRESS_TEST_ERROR_CODE2, "REGRESS_TEST_ERROR_CODE2", "code2" },
+            { REGRESS_TEST_ERROR_CODE3, "REGRESS_TEST_ERROR_CODE3", "code3" },
+            { 0, NULL, NULL }
+        };
+        etype = g_enum_register_static (g_intern_static_string ("RegressTestError"), values);
+    }
+
+    return etype;
+}
+
+GQuark
+regress_test_error_quark (void)
+{
+  return g_quark_from_static_string ("regress-test-error");
+}
+
+GType
+regress_test_abc_error_get_type (void)
+{
+    static GType etype = 0;
+    if (G_UNLIKELY(etype == 0)) {
+        static const GEnumValue values[] = {
+            { REGRESS_TEST_ABC_ERROR_CODE1, "REGRESS_TEST_ABC_ERROR_CODE1", "code1" },
+            { REGRESS_TEST_ABC_ERROR_CODE2, "REGRESS_TEST_ABC_ERROR_CODE2", "code2" },
+            { REGRESS_TEST_ABC_ERROR_CODE3, "REGRESS_TEST_ABC_ERROR_CODE3", "code3" },
+            { 0, NULL, NULL }
+        };
+        etype = g_enum_register_static (g_intern_static_string ("RegressTestABCError"), values);
+    }
+
+    return etype;
+}
+
+GQuark
+regress_test_abc_error_quark (void)
+{
+  return g_quark_from_static_string ("regress-test-abc-error");
+}
+
+GType
+regress_test_unconventional_error_get_type (void)
+{
+    static GType etype = 0;
+    if (G_UNLIKELY(etype == 0)) {
+        static const GEnumValue values[] = {
+            { REGRESS_TEST_OTHER_ERROR_CODE1, "REGRESS_TEST_OTHER_ERROR_CODE1", "code1" },
+            { REGRESS_TEST_OTHER_ERROR_CODE2, "REGRESS_TEST_OTHER_ERROR_CODE2", "code2" },
+            { REGRESS_TEST_OTHER_ERROR_CODE3, "REGRESS_TEST_OTHER_ERROR_CODE3", "code3" },
+            { 0, NULL, NULL }
+        };
+        etype = g_enum_register_static (g_intern_static_string ("RegressTestOtherError"), values);
+    }
+
+    return etype;
+}
+
+GQuark
+regress_test_unconventional_error_quark (void)
+{
+  return g_quark_from_static_string ("regress-test-other-error");
+}
+
+
+GQuark
+regress_test_def_error_quark (void)
+{
+  return g_quark_from_static_string ("regress-test-def-error");
+}
+
+GQuark
+regress_atest_error_quark (void)
+{
+  return g_quark_from_static_string ("regress-atest-error");
+}
+
 /* structures */
 
 /**

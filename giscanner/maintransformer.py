@@ -901,7 +901,7 @@ the ones that failed to resolve removed."""
             if not isinstance(enum, ast.Enum):
                 continue
             type_name = enum.ctype
-            uscored = to_underscores(type_name).lower()
+            uscored = to_underscores_noprefix(type_name).lower()
 
             uscore_enums[uscored] = enum
 

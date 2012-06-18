@@ -188,6 +188,68 @@ const gchar * regress_test_unsigned_enum_param(RegressTestEnumUnsigned e);
 
 void regress_global_get_flags_out (RegressTestFlags *v);
 
+/* error domains */
+
+typedef enum
+{
+  REGRESS_TEST_ERROR_CODE1 = 1,
+  REGRESS_TEST_ERROR_CODE2 = 2,
+  REGRESS_TEST_ERROR_CODE3 = 3
+} RegressTestError;
+
+GType regress_test_error_get_type (void);
+GQuark regress_test_error_quark (void);
+
+/* Test weird names, with and without
+   c_symbol_prefix given by a GType
+*/
+typedef enum
+{
+  REGRESS_TEST_ABC_ERROR_CODE1 = 1,
+  REGRESS_TEST_ABC_ERROR_CODE2 = 2,
+  REGRESS_TEST_ABC_ERROR_CODE3 = 3
+} RegressTestABCError;
+
+GType regress_test_abc_error_get_type (void);
+GQuark regress_test_abc_error_quark (void);
+
+typedef enum
+{
+  REGRESS_TEST_OTHER_ERROR_CODE1 = 1,
+  REGRESS_TEST_OTHER_ERROR_CODE2 = 2,
+  REGRESS_TEST_OTHER_ERROR_CODE3 = 3
+} RegressTestOtherError;
+
+/* This returns a GType for RegressTestOtherError.
+   The difference is intentional, although it
+   is mainly meant for capitalization problems.
+*/
+GType regress_test_unconventional_error_get_type (void);
+GQuark regress_test_unconventional_error_quark (void);
+
+typedef enum
+{
+  REGRESS_TEST_DEF_ERROR_CODE0 = 0,
+  REGRESS_TEST_DEF_ERROR_CODE1 = 1,
+  REGRESS_TEST_DEF_ERROR_CODE2 = 2
+} RegressTestDEFError;
+
+GQuark regress_test_def_error_quark (void);
+
+/* the scanner used to have problem
+   with two uppercase letter right after
+   the identifier prefix, that's why
+   we break the RegressTest convention */
+typedef enum
+{
+  REGRESS_ATEST_ERROR_CODE0 = 0,
+  REGRESS_ATEST_ERROR_CODE1 = 1,
+  REGRESS_ATEST_ERROR_CODE2 = 2
+} RegressATestError;
+
+GQuark regress_atest_error_quark (void);
+
+
 /* constants */
 
 #define REGRESS_INT_CONSTANT 4422

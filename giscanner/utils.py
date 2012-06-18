@@ -52,7 +52,10 @@ _upperstr_pat3 = re.compile(r'^([A-Z])([A-Z])')
 def to_underscores(name):
     """Converts a typename to the equivalent underscores name.
     This is used to form the type conversion macros and enum/flag
-    name variables"""
+    name variables.
+    In particular, and differently from to_underscores_noprefix(),
+    this function treats the first character differently if it is
+    uppercase and followed by another uppercase letter."""
     name = _upperstr_pat1.sub(r'\1_\2', name)
     name = _upperstr_pat2.sub(r'\1_\2', name)
     name = _upperstr_pat3.sub(r'\1_\2', name, count=1)

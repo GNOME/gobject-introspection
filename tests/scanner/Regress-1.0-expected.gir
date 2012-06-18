@@ -32,6 +32,13 @@ and/or use gtk-doc annotations.  -->
       <doc xml:whitespace="preserve">Typedef'd va_list for additional reasons</doc>
       <type name="va_list" c:type="va_list"/>
     </alias>
+    <enumeration name="ATestError"
+                 c:type="RegressATestError"
+                 glib:error-domain="regress-atest-error">
+      <member name="code0" value="0" c:identifier="REGRESS_ATEST_ERROR_CODE0"/>
+      <member name="code1" value="1" c:identifier="REGRESS_ATEST_ERROR_CODE1"/>
+      <member name="code2" value="2" c:identifier="REGRESS_ATEST_ERROR_CODE2"/>
+    </enumeration>
     <constant name="DOUBLE_CONSTANT"
               value="44.220000"
               c:type="REGRESS_DOUBLE_CONSTANT">
@@ -70,6 +77,29 @@ use it should be.</doc>
         <type name="gdouble" c:type="double"/>
       </field>
     </record>
+    <enumeration name="TestABCError"
+                 glib:type-name="RegressTestABCError"
+                 glib:get-type="regress_test_abc_error_get_type"
+                 c:type="RegressTestABCError"
+                 glib:error-domain="regress-test-abc-error">
+      <member name="code1"
+              value="1"
+              c:identifier="REGRESS_TEST_ABC_ERROR_CODE1"
+              glib:nick="code1"/>
+      <member name="code2"
+              value="2"
+              c:identifier="REGRESS_TEST_ABC_ERROR_CODE2"
+              glib:nick="code2"/>
+      <member name="code3"
+              value="3"
+              c:identifier="REGRESS_TEST_ABC_ERROR_CODE3"
+              glib:nick="code3"/>
+      <function name="quark" c:identifier="regress_test_abc_error_quark">
+        <return-value transfer-ownership="none">
+          <type name="GLib.Quark" c:type="GQuark"/>
+        </return-value>
+      </function>
+    </enumeration>
     <record name="TestBoxed"
             c:type="RegressTestBoxed"
             glib:type-name="RegressTestBoxed"
@@ -286,6 +316,19 @@ use it should be.</doc>
         </parameter>
       </parameters>
     </callback>
+    <enumeration name="TestDEFError"
+                 c:type="RegressTestDEFError"
+                 glib:error-domain="regress-test-def-error">
+      <member name="code0"
+              value="0"
+              c:identifier="REGRESS_TEST_DEF_ERROR_CODE0"/>
+      <member name="code1"
+              value="1"
+              c:identifier="REGRESS_TEST_DEF_ERROR_CODE1"/>
+      <member name="code2"
+              value="2"
+              c:identifier="REGRESS_TEST_DEF_ERROR_CODE2"/>
+    </enumeration>
     <enumeration name="TestEnum"
                  glib:type-name="RegressTestEnum"
                  glib:get-type="regress_test_enum_get_type"
@@ -334,6 +377,29 @@ use it should be.</doc>
               value="2147483648"
               c:identifier="REGRESS_TEST_UNSIGNED_VALUE2"
               glib:nick="value2"/>
+    </enumeration>
+    <enumeration name="TestError"
+                 glib:type-name="RegressTestError"
+                 glib:get-type="regress_test_error_get_type"
+                 c:type="RegressTestError"
+                 glib:error-domain="regress-test-error">
+      <member name="code1"
+              value="1"
+              c:identifier="REGRESS_TEST_ERROR_CODE1"
+              glib:nick="code1"/>
+      <member name="code2"
+              value="2"
+              c:identifier="REGRESS_TEST_ERROR_CODE2"
+              glib:nick="code2"/>
+      <member name="code3"
+              value="3"
+              c:identifier="REGRESS_TEST_ERROR_CODE3"
+              glib:nick="code3"/>
+      <function name="quark" c:identifier="regress_test_error_quark">
+        <return-value transfer-ownership="none">
+          <type name="GLib.Quark" c:type="GQuark"/>
+        </return-value>
+      </function>
     </enumeration>
     <bitfield name="TestFlags"
               glib:type-name="RegressTestFlags"
@@ -1213,6 +1279,30 @@ Use with regress_test_obj_emit_sig_with_obj</doc>
         </callback>
       </field>
     </record>
+    <enumeration name="TestOtherError"
+                 glib:type-name="RegressTestOtherError"
+                 glib:get-type="regress_test_unconventional_error_get_type"
+                 c:type="RegressTestOtherError"
+                 glib:error-domain="regress-test-other-error">
+      <member name="code1"
+              value="1"
+              c:identifier="REGRESS_TEST_OTHER_ERROR_CODE1"
+              glib:nick="code1"/>
+      <member name="code2"
+              value="2"
+              c:identifier="REGRESS_TEST_OTHER_ERROR_CODE2"
+              glib:nick="code2"/>
+      <member name="code3"
+              value="3"
+              c:identifier="REGRESS_TEST_OTHER_ERROR_CODE3"
+              glib:nick="code3"/>
+      <function name="quark"
+                c:identifier="regress_test_unconventional_error_quark">
+        <return-value transfer-ownership="none">
+          <type name="GLib.Quark" c:type="GQuark"/>
+        </return-value>
+      </function>
+    </enumeration>
     <bitfield name="TestPrivateEnum" c:type="RegressTestPrivateEnum">
       <member name="public_enum_before"
               value="1"
@@ -1542,6 +1632,12 @@ Use with regress_test_obj_emit_sig_with_obj</doc>
         </parameter>
       </parameters>
     </function>
+    <function name="atest_error_quark"
+              c:identifier="regress_atest_error_quark">
+      <return-value transfer-ownership="none">
+        <type name="GLib.Quark" c:type="GQuark"/>
+      </return-value>
+    </function>
     <function name="func_obj_null_in" c:identifier="regress_func_obj_null_in">
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
@@ -1639,6 +1735,13 @@ libgnome-keyring.</doc>
           <type name="gboolean" c:type="gboolean"/>
         </parameter>
       </parameters>
+    </function>
+    <function name="test_abc_error_quark"
+              c:identifier="regress_test_abc_error_quark"
+              moved-to="TestABCError.quark">
+      <return-value transfer-ownership="none">
+        <type name="GLib.Quark" c:type="GQuark"/>
+      </return-value>
     </function>
     <function name="test_array_callback"
               c:identifier="regress_test_array_callback">
@@ -2175,6 +2278,12 @@ call and can be released on return.</doc>
         <type name="GObject.Value" c:type="GValue*"/>
       </return-value>
     </function>
+    <function name="test_def_error_quark"
+              c:identifier="regress_test_def_error_quark">
+      <return-value transfer-ownership="none">
+        <type name="GLib.Quark" c:type="GQuark"/>
+      </return-value>
+    </function>
     <function name="test_double" c:identifier="regress_test_double">
       <return-value transfer-ownership="none">
         <type name="gdouble" c:type="gdouble"/>
@@ -2196,6 +2305,13 @@ call and can be released on return.</doc>
           <type name="TestEnum" c:type="RegressTestEnum"/>
         </parameter>
       </parameters>
+    </function>
+    <function name="test_error_quark"
+              c:identifier="regress_test_error_quark"
+              moved-to="TestError.quark">
+      <return-value transfer-ownership="none">
+        <type name="GLib.Quark" c:type="GQuark"/>
+      </return-value>
     </function>
     <function name="test_filename_return"
               c:identifier="regress_test_filename_return">
@@ -3132,6 +3248,13 @@ What we're testing here is that the scanner ignores the @a nested inside XML.</d
           <type name="gulong" c:type="gulong"/>
         </parameter>
       </parameters>
+    </function>
+    <function name="test_unconventional_error_quark"
+              c:identifier="regress_test_unconventional_error_quark"
+              moved-to="TestOtherError.quark">
+      <return-value transfer-ownership="none">
+        <type name="GLib.Quark" c:type="GQuark"/>
+      </return-value>
     </function>
     <function name="test_unichar" c:identifier="regress_test_unichar">
       <return-value transfer-ownership="none">
