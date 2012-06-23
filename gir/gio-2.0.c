@@ -12906,6 +12906,21 @@
 
 
 /**
+ * g_dbus_connection_get_last_serial:
+ * @connection: A #GDBusConnection.
+ *
+ * Retrieves the last serial number assigned to a #GDBusMessage on
+ * the current thread. This includes messages sent via both low-level
+ * API such as g_dbus_connection_send_message() as well as
+ * high-level API such as g_dbus_connection_emit_signal(),
+ * g_dbus_connection_call() or g_dbus_proxy_call().
+ *
+ * Returns: the last used serial or zero when no message has been sent within the current thread.
+ * Since: 2.34
+ */
+
+
+/**
  * g_dbus_connection_get_peer_credentials:
  * @connection: A #GDBusConnection.
  *
@@ -13777,7 +13792,7 @@
 /**
  * g_dbus_gvariant_to_gvalue:
  * @value: A #GVariant.
- * @out_gvalue: Return location pointing to a zero-filled (uninitialized) #GValue.
+ * @out_gvalue: (out): Return location pointing to a zero-filled (uninitialized) #GValue.
  *
  * Converts a #GVariant to a #GValue. If @value is floating, it is consumed.
  *
@@ -15490,6 +15505,18 @@
  *
  * Returns: (transfer full): A #GDBusConnection object or %NULL if @manager isn't exported on a connection. The returned object should be freed with g_object_unref().
  * Since: 2.30
+ */
+
+
+/**
+ * g_dbus_object_manager_server_is_exported:
+ * @manager: A #GDBusObjectManagerServer.
+ * @object: An object.
+ *
+ * Returns whether @object is currently exported on @manager.
+ *
+ * Returns: %TRUE if @object is exported
+ * Since: 2.34
  */
 
 

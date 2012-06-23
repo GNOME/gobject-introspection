@@ -14109,7 +14109,7 @@
  * variable. If the program is found, the return value contains the
  * full name including the type suffix.
  *
- * Returns: absolute path, or %NULL
+ * Returns: a newly-allocated string with the absolute path, or %NULL
  */
 
 
@@ -17334,10 +17334,41 @@
  * <note><para>
  * Note that this is a "shallow" copy. If the list elements
  * consist of pointers to data, the pointers are copied but
- * the actual data is not.
+ * the actual data is not. See g_list_copy_deep() if you need
+ * to copy the data as well.
  * </para></note>
  *
  * Returns: a copy of @list
+ */
+
+
+/**
+ * g_list_copy_deep:
+ * @list: a #GList
+ * @func: a copy function used to copy every element in the list
+ * @user_data: user data passed to the copy function @func, or #NULL
+ *
+ * Makes a full (deep) copy of a #GList.
+ *
+ * In contrast with g_list_copy(), this function uses @func to make a copy of
+ * each list element, in addition to copying the list container itself.
+ *
+ * @func, as a #GCopyFunc, takes two arguments, the data to be copied and a user
+ * pointer. It's safe to pass #NULL as user_data, if the copy function takes only
+ * one argument.
+ *
+ * For instance, if @list holds a list of GObjects, you can do:
+ * |[
+ * another_list = g_list_copy_deep (list, (GCopyFunc) g_object_ref, NULL);
+ * ]|
+ *
+ * And, to entirely free the new list, you could do:
+ * |[
+ * g_list_free_full (another_list, g_object_unref);
+ * ]|
+ *
+ * Returns: a full copy of @list, use #g_list_free_full to free it
+ * Since: 2.34
  */
 
 
@@ -24303,10 +24334,41 @@
  * <note><para>
  * Note that this is a "shallow" copy. If the list elements
  * consist of pointers to data, the pointers are copied but
- * the actual data isn't.
+ * the actual data isn't. See g_slist_copy_deep() if you need
+ * to copy the data as well.
  * </para></note>
  *
  * Returns: a copy of @list
+ */
+
+
+/**
+ * g_slist_copy_deep:
+ * @list: a #GSList
+ * @func: a copy function used to copy every element in the list
+ * @user_data: user data passed to the copy function @func, or #NULL
+ *
+ * Makes a full (deep) copy of a #GSList.
+ *
+ * In contrast with g_slist_copy(), this function uses @func to make a copy of
+ * each list element, in addition to copying the list container itself.
+ *
+ * @func, as a #GCopyFunc, takes two arguments, the data to be copied and a user
+ * pointer. It's safe to pass #NULL as user_data, if the copy function takes only
+ * one argument.
+ *
+ * For instance, if @list holds a list of GObjects, you can do:
+ * |[
+ * another_list = g_slist_copy_deep (list, (GCopyFunc) g_object_ref, NULL);
+ * ]|
+ *
+ * And, to entirely free the new list, you could do:
+ * |[
+ * g_slist_free_full (another_list, g_object_unref);
+ * ]|
+ *
+ * Returns: a full copy of @list, use #g_slist_free_full to free it
+ * Since: 2.34
  */
 
 
@@ -27882,7 +27944,7 @@
  *
  * This function may, however, modify @time_ in order to deal with
  * non-existent times.  If the non-existent local @time_ of 02:30 were
- * requested on March 13th 2010 in Toronto then this function would
+ * requested on March 14th 2010 in Toronto then this function would
  * adjust @time_ to be 03:00 and return the interval containing the
  * adjusted time.
  *
@@ -29940,7 +30002,7 @@
  * g_utf8_validate:
  * @str: (array length=max_len) (element-type guint8): a pointer to character data
  * @max_len: max bytes to validate, or -1 to go until NUL
- * @end: (allow-none) (out): return location for end of valid data
+ * @end: (allow-none) (out) (transfer none): return location for end of valid data
  *
  * Validates UTF-8 encoded text. @str is the text to validate;
  * if @str is nul-terminated, then @max_len can be -1, otherwise
