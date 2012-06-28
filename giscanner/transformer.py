@@ -719,7 +719,10 @@ raise ValueError."""
             typeval = ast.TYPE_STRING
             value = unicode(symbol.const_string, 'utf-8')
         elif symbol.const_int is not None:
-            typeval = ast.TYPE_INT
+            if symbol.base_type is not None:
+                typeval = self._create_type_from_base(symbol.base_type)
+            else:
+                typeval = ast.TYPE_INT
             value = '%d' % (symbol.const_int, )
         elif symbol.const_double is not None:
             typeval = ast.TYPE_DOUBLE

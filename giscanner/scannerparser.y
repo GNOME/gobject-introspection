@@ -150,6 +150,7 @@ out:
 
 %token INTEGER FLOATING CHARACTER STRING
 
+%token INTL_CONST INTUL_CONST
 %token ELLIPSIS ADDEQ SUBEQ MULEQ DIVEQ MODEQ XOREQ ANDEQ OREQ SL SR
 %token SLEQ SREQ EQ NOTEQ LTEQ GTEQ ANDAND OROR PLUSPLUS MINUSMINUS ARROW
 
@@ -377,6 +378,20 @@ unary_expression
 			break;
 		}
 	  }
+	| INTL_CONST '(' unary_expression ')'
+	  {
+		$$ = $3;
+		if ($$->const_int_set) {
+			$$->base_type = gi_source_basic_type_new ("gint64");
+		}
+	  }
+	| INTUL_CONST '(' unary_expression ')'
+	  {
+		$$ = $3;
+		if ($$->const_int_set) {
+			$$->base_type = gi_source_basic_type_new ("guint64");
+		}
+	  }
 	| SIZEOF unary_expression
 	  {
 		$$ = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_filename, lineno);
@@ -419,8 +434,12 @@ cast_expression
 	: unary_expression
 	| '(' type_name ')' cast_expression
 	  {
-		ctype_free ($2);
 		$$ = $4;
+		if ($$->const_int_set || $$->const_double_set || $$->const_string != NULL) {
+			$$->base_type = $2;
+		} else {
+			ctype_free ($2);
+		}
 	  }
 	;
 
@@ -588,7 +607,7 @@ logical_or_expression
 
 conditional_expression
 	: logical_or_expression
-	| logical_or_expression '?' expression ':' conditional_expression
+	| logical_or_expression '?' expression ':' expression
 	  {
 		$$ = gi_source_symbol_get_const_boolean ($1) ? $3 : $5;
 	  }
