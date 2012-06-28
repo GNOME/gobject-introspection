@@ -836,13 +836,10 @@ Note that type resolution may not succeed."""
     def _resolve_type_from_gtype_name(self, typeval):
         assert typeval.gtype_name is not None
         for ns in self._iter_namespaces():
-            for node in ns.itervalues():
-                if not (isinstance(node, (ast.Class, ast.Interface))
-                        or (isinstance(node, ast.Registered) and node.get_type is not None)):
-                    continue
-                if node.gtype_name == typeval.gtype_name:
-                    typeval.target_giname = '%s.%s' % (ns.name, node.name)
-                    return True
+            node = ns.type_names.get(typeval.gtype_name, None)
+            if node is not None:
+                typeval.target_giname = '%s.%s' % (ns.name, node.name)
+                return True
         return False
 
     def resolve_type(self, typeval):

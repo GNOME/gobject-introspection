@@ -822,6 +822,7 @@ class Compound(Node, Registered):
     def add_gtype(self, gtype_name, get_type):
         self.gtype_name = gtype_name
         self.get_type = get_type
+        self.namespace.type_names[gtype_name] = self
 
     def _walk(self, callback, chain):
         for ctor in self.constructors:
