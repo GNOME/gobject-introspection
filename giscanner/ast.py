@@ -361,27 +361,11 @@ class Namespace(object):
             self.symbol_prefixes = [to_underscores(p).lower() for p in ps]
         # cache upper-cased versions
         self._ucase_symbol_prefixes = [p.upper() for p in self.symbol_prefixes]
-        self._names = odict() # Maps from GIName -> node
-        self._aliases = {} # Maps from GIName -> GIName
-        self._type_names = {} # Maps from GTName -> node
-        self._ctypes = {} # Maps from CType -> node
-        self._symbols = {} # Maps from function symbols -> Function
-
-    @property
-    def names(self):
-        return self._names
-
-    @property
-    def aliases(self):
-        return self._aliases
-
-    @property
-    def type_names(self):
-        return self._type_names
-
-    @property
-    def ctypes(self):
-        return self._ctypes
+        self.names = odict() # Maps from GIName -> node
+        self.aliases = {} # Maps from GIName -> GIName
+        self.type_names = {} # Maps from GTName -> node
+        self.ctypes = {} # Maps from CType -> node
+        self.symbols = {} # Maps from function symbols -> Function
 
     def type_from_name(self, name, ctype=None):
         """Backwards compatibility method for older .gir files, which
@@ -399,38 +383,38 @@ returned."""
         return Type(target_giname=target, ctype=ctype)
 
     def append(self, node, replace=False):
-        previous = self._names.get(node.name)
+        previous = self.names.get(node.name)
         if previous is not None:
             if not replace:
                 raise ValueError("Namespace conflict: %r" % (node, ))
             self.remove(previous)
         # A layering violation...but oh well.
         if isinstance(node, Alias):
-            self._aliases[node.name] = node
+            self.aliases[node.name] = node
         elif isinstance(node, Registered) and node.gtype_name is not None:
-            self._type_names[node.gtype_name] = node
+            self.type_names[node.gtype_name] = node
         elif isinstance(node, Function):
-            self._symbols[node.symbol] = node
+            self.symbols[node.symbol] = node
         assert isinstance(node, Node)
         assert node.namespace is None
         node.namespace = self
-        self._names[node.name] = node
+        self.names[node.name] = node
         if hasattr(node, 'ctype'):
-            self._ctypes[node.ctype] = node
+            self.ctypes[node.ctype] = node
         if hasattr(node, 'symbol'):
-            self._ctypes[node.symbol] = node
+            self.ctypes[node.symbol] = node
 
     def remove(self, node):
         if isinstance(node, Alias):
-            del self._aliases[node.name]
+            del self.aliases[node.name]
         elif isinstance(node, Registered) and node.gtype_name is not None:
-            del self._type_names[node.gtype_name]
-        del self._names[node.name]
+            del self.type_names[node.gtype_name]
+        del self.names[node.name]
         node.namespace = None
         if hasattr(node, 'ctype'):
-            del self._ctypes[node.ctype]
+            del self.ctypes[node.ctype]
         if isinstance(node, Function):
-            del self._symbols[node.symbol]
+            del self.symbols[node.symbol]
 
     def float(self, node):
         """Like remove(), but doesn't unset the node's namespace
@@ -439,26 +423,26 @@ functions via get_by_symbol()."""
         if isinstance(node, Function):
             symbol = node.symbol
         self.remove(node)
-        self._symbols[symbol] = node
+        self.symbols[symbol] = node
         node.namespace = self
 
     def __iter__(self):
-        return iter(self._names)
+        return iter(self.names)
 
     def iteritems(self):
-        return self._names.iteritems()
+        return self.names.iteritems()
 
     def itervalues(self):
-        return self._names.itervalues()
+        return self.names.itervalues()
 
     def get(self, name):
-        return self._names.get(name)
+        return self.names.get(name)
 
     def get_by_ctype(self, ctype):
-        return self._ctypes.get(ctype)
+        return self.ctypes.get(ctype)
 
     def get_by_symbol(self, symbol):
-        return self._symbols.get(symbol)
+        return self.symbols.get(symbol)
 
     def walk(self, callback):
         for node in self.itervalues():
