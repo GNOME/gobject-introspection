@@ -125,7 +125,7 @@ usage is void (*_gtk_reserved1)(void);"""
     def _get_validate_parameter_name(self, parent, param_name, origin):
         try:
             param = parent.get_parameter(param_name)
-        except ValueError, e:
+        except ValueError:
             param = None
         if param is None:
             if isinstance(origin, ast.Parameter):
@@ -888,11 +888,10 @@ the ones that failed to resolve removed."""
                 else:
                     self._transformer.resolve_type(field.type)
         if isinstance(node, (ast.Class, ast.Interface)):
-            resolved_parent = None
             for parent in node.parent_chain:
                 try:
                     self._transformer.resolve_type(parent)
-                except ValueError, e:
+                except ValueError:
                     continue
                 target = self._transformer.lookup_typenode(parent)
                 if target:
@@ -1293,7 +1292,7 @@ method or constructor of some type."""
         params = node.parameters
 
         # First, do defaults for well-known callback types
-        for i, param in enumerate(params):
+        for param in params:
             argnode = self._transformer.lookup_typenode(param.type)
             if isinstance(argnode, ast.Callback):
                 if param.type.target_giname in ('Gio.AsyncReadyCallback',
@@ -1302,7 +1301,7 @@ method or constructor of some type."""
                     param.transfer = ast.PARAM_TRANSFER_NONE
 
         callback_param = None
-        for i, param in enumerate(params):
+        for param in params:
             argnode = self._transformer.lookup_typenode(param.type)
             is_destroynotify = False
             if isinstance(argnode, ast.Callback):

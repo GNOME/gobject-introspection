@@ -310,7 +310,6 @@ def create_transformer(namespace, options):
         transformer.disable_cache()
         transformer.set_passthrough_mode()
 
-    shown_include_warning = False
     for include in options.includes:
         if os.sep in include:
             _error("Invalid include path %r" % (include, ))

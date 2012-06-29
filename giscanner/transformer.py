@@ -903,9 +903,8 @@ Note that type resolution may not succeed."""
         pointer_stripped = typeval.ctype.replace('*', '')
         try:
             matches = self.split_ctype_namespaces(pointer_stripped)
-        except ValueError, e:
+        except ValueError:
             return self._resolve_type_from_ctype_all_namespaces(typeval, pointer_stripped)
-        target_giname = None
         for namespace, name in matches:
             target = namespace.get(name)
             if not target:

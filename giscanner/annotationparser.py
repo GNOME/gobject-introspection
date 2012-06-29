@@ -644,24 +644,17 @@ class AnnotationParser(object):
             # Check for GTK-Doc comment block identifier.
             ####################################################################
             if not comment_block:
-                # The correct identifier name would have the colon at the end
-                # but maintransformer.py does not expect us to do that. So
-                # make sure to compute an identifier_name without the colon and
-                # a real_identifier_name with the colon.
-
                 if not identifier:
                     result = SECTION_RE.search(line)
                     if result:
                         identifier = IDENTIFIER_SECTION
-                        real_identifier_name = 'SECTION:%s' % (result.group('section_name'))
-                        identifier_name = real_identifier_name
+                        identifier_name = 'SECTION:%s' % (result.group('section_name'))
                         column = result.start('section_name') + column_offset
 
                 if not identifier:
                     result = SYMBOL_RE.search(line)
                     if result:
                         identifier = IDENTIFIER_SYMBOL
-                        real_identifier_name = '%s:' % (result.group('symbol_name'))
                         identifier_name = '%s' % (result.group('symbol_name'))
                         column = result.start('symbol_name') + column_offset
 
@@ -669,8 +662,6 @@ class AnnotationParser(object):
                     result = PROPERTY_RE.search(line)
                     if result:
                         identifier = IDENTIFIER_PROPERTY
-                        real_identifier_name = '%s:%s:' % (result.group('class_name'),
-                                                           result.group('property_name'))
                         identifier_name = '%s:%s' % (result.group('class_name'),
                                                      result.group('property_name'))
                         column = result.start('property_name') + column_offset
@@ -679,8 +670,6 @@ class AnnotationParser(object):
                     result = SIGNAL_RE.search(line)
                     if result:
                         identifier = IDENTIFIER_SIGNAL
-                        real_identifier_name = '%s::%s:' % (result.group('class_name'),
-                                                            result.group('signal_name'))
                         identifier_name = '%s::%s' % (result.group('class_name'),
                                                       result.group('signal_name'))
                         column = result.start('signal_name') + column_offset
@@ -914,7 +903,6 @@ class AnnotationParser(object):
 
         result = MULTILINE_ANNOTATION_CONTINUATION_RE.search(line)
         if result:
-            line = result.group('description')
             column = result.start('annotations') + column_offset
             marker = ' '*column + '^'
             message.warn('ignoring invalid multiline annotation continuation:\n'

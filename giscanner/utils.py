@@ -121,7 +121,7 @@ def get_libtool_command(options):
     try:
         subprocess.check_call(['libtool', '--version'],
                               stdout=open(os.devnull))
-    except (subprocess.CalledProcessError, OSError), e:
+    except (subprocess.CalledProcessError, OSError):
         # If libtool's not installed, assume we don't need it
         return None
 
