@@ -575,14 +575,14 @@ class AnnotationParser(object):
         comment_lines = list(enumerate(comment.split('\n')))
 
         # Check for the start the comment block.
-        if COMMENT_START_RE.search(comment_lines[0][1]):
+        if COMMENT_START_RE.match(comment_lines[0][1]):
             del comment_lines[0]
         else:
             # Not a GTK-Doc comment block.
             return None
 
         # Check for the end the comment block.
-        if COMMENT_END_RE.search(comment_lines[-1][1]):
+        if COMMENT_END_RE.match(comment_lines[-1][1]):
             del comment_lines[-1]
 
         # If we get this far, we are inside a GTK-Doc comment block.
@@ -638,21 +638,21 @@ class AnnotationParser(object):
             ####################################################################
             if not comment_block:
                 if not identifier:
-                    result = SECTION_RE.search(line)
+                    result = SECTION_RE.match(line)
                     if result:
                         identifier = IDENTIFIER_SECTION
                         identifier_name = 'SECTION:%s' % (result.group('section_name'))
                         column = result.start('section_name') + column_offset
 
                 if not identifier:
-                    result = SYMBOL_RE.search(line)
+                    result = SYMBOL_RE.match(line)
                     if result:
                         identifier = IDENTIFIER_SYMBOL
                         identifier_name = '%s' % (result.group('symbol_name'))
                         column = result.start('symbol_name') + column_offset
 
                 if not identifier:
-                    result = PROPERTY_RE.search(line)
+                    result = PROPERTY_RE.match(line)
                     if result:
                         identifier = IDENTIFIER_PROPERTY
                         identifier_name = '%s:%s' % (result.group('class_name'),
@@ -660,7 +660,7 @@ class AnnotationParser(object):
                         column = result.start('property_name') + column_offset
 
                 if not identifier:
-                    result = SIGNAL_RE.search(line)
+                    result = SIGNAL_RE.match(line)
                     if result:
                         identifier = IDENTIFIER_SIGNAL
                         identifier_name = '%s::%s' % (result.group('class_name'),
@@ -706,7 +706,7 @@ class AnnotationParser(object):
             ####################################################################
             # Check for comment block parameters.
             ####################################################################
-            result = PARAMETER_RE.search(line)
+            result = PARAMETER_RE.match(line)
             if result:
                 param_name = result.group('parameter_name')
                 param_annotations = result.group('annotations')
@@ -759,7 +759,7 @@ class AnnotationParser(object):
             # identifier (when there are no parameters) and encounter an empty
             # line, we must be parsing the comment block description.
             ####################################################################
-            if (EMPTY_LINE_RE.search(line)
+            if (EMPTY_LINE_RE.match(line)
             and in_part in [PART_IDENTIFIER, PART_PARAMETERS]):
                 in_part = PART_DESCRIPTION
                 continue
@@ -767,7 +767,7 @@ class AnnotationParser(object):
             ####################################################################
             # Check for GTK-Doc comment block tags.
             ####################################################################
-            result = TAG_RE.search(line)
+            result = TAG_RE.match(line)
             if result:
                 tag_name = result.group('tag_name')
                 tag_annotations = result.group('annotations')
@@ -894,7 +894,7 @@ class AnnotationParser(object):
         :param position: position of `line` in the source file
         '''
 
-        result = MULTILINE_ANNOTATION_CONTINUATION_RE.search(line)
+        result = MULTILINE_ANNOTATION_CONTINUATION_RE.match(line)
         if result:
             column = result.start('annotations') + column_offset
             marker = ' '*column + '^'
