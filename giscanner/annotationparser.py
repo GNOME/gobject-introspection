@@ -398,6 +398,7 @@ class DocTag(object):
 class DocOptions(object):
     def __init__(self):
         self.values = []
+        self.position = None
 
     def __repr__(self):
         return '<DocOptions %r>' % (self.values, )
