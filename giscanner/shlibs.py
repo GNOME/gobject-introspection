@@ -20,10 +20,9 @@
 #
 
 import os
-import re
 import platform
+import re
 import subprocess
-import os
 
 from .utils import get_libtool_command, extract_libtool_shlib
 
