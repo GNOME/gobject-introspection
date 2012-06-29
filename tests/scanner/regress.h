@@ -260,6 +260,7 @@ GQuark regress_atest_error_quark (void);
 #define REGRESS_STRING_CONSTANT "Some String"
 #define REGRESS_Mixed_Case_Constant 4423
 #define REGRESS_G_GINT64_CONSTANT (G_GINT64_CONSTANT (1000))
+#define REGRESS_GUINT64_CONSTANT ((guint64) -1)
 
 /* structures */
 typedef struct _RegressTestStructA RegressTestStructA;

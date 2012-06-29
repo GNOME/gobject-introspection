@@ -723,7 +723,23 @@ raise ValueError."""
                 typeval = self._create_type_from_base(symbol.base_type)
             else:
                 typeval = ast.TYPE_INT
-            value = '%d' % (symbol.const_int, )
+            unaliased = typeval
+            self._resolve_type_from_ctype(unaliased)
+            if typeval.target_giname and typeval.ctype:
+                target = self.lookup_giname(typeval.target_giname)
+                target = self.resolve_aliases(target)
+                if isinstance(target, ast.Type):
+                    unaliased = target
+            if unaliased == ast.TYPE_UINT64:
+                value = str(symbol.const_int % 2**64)
+            elif unaliased == ast.TYPE_UINT32:
+                value = str(symbol.const_int % 2**32)
+            elif unaliased == ast.TYPE_UINT16:
+                value = str(symbol.const_int % 2**16)
+            elif unaliased == ast.TYPE_UINT8:
+                value = str(symbol.const_int % 2**16)
+            else:
+                value = str(symbol.const_int)
         elif symbol.const_double is not None:
             typeval = ast.TYPE_DOUBLE
             value = '%f' % (symbol.const_double, )
