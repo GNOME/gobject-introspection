@@ -4,6 +4,7 @@ include $(top_srcdir)/Makefile.introspection
 INTROSPECTION_SCANNER_ARGS += --warn-all
 
 check_LTLIBRARIES = \
+	libsletter.la \
 	libannotation.la \
 	libtestinherit.la \
 	libfoo.la \
@@ -20,6 +21,11 @@ AM_CFLAGS = $(GIO_CFLAGS) $(GOBJECT_CFLAGS) $(GTHREAD_CFLAGS)
 # target. See http://lists.gnu.org/archive/html/automake/2005-10/msg00107.html
 AM_LDFLAGS = -rpath /unused -avoid-version
 LIBS = $(GOBJECT_LIBS) $(GTHREAD_LIBS)
+
+libsletter_la_SOURCES = $(srcdir)/sletter.c $(srcdir)/sletter.h
+libsletter_la_LIBADD = $(GIO_LIBS)
+libsletter_la_CFLAGS = $(AM_CFLAGS)
+libsletter_la_LDFLAGS = $(AM_LDFLAGS)
 
 libannotation_la_SOURCES = $(srcdir)/annotation.c $(srcdir)/annotation.h
 libtestinherit_la_SOURCES = $(srcdir)/drawable.c $(srcdir)/drawable.h
@@ -50,6 +56,13 @@ EXPECTEDGIRS = $(GIRS:.gir=-expected.gir)
 INTROSPECTION_GIRS = $(GIRS)
 CLEANFILES = $(TYPELIBS) $(GIRS)
 EXTRA_DIST = $(EXPECTEDGIRS)
+
+SLetter-1.0.gir: $(top_builddir)/Gio-2.0.gir libsletter.la
+SLetter_1_0_gir_LIBS = libsletter.la
+SLetter_1_0_gir_INCLUDES = Gio-2.0
+SLetter_1_0_gir_FILES = $(libsletter_la_SOURCES)
+SLetter_1_0_gir_SCANNERFLAGS = --identifier-prefix=S --c-include="sletter.h" --warn-error
+GIRS += SLetter-1.0.gir
 
 Regress-1.0.gir: $(top_builddir)/Gio-2.0.gir libregress.la
 Regress_1_0_gir_LIBS = libregress.la
