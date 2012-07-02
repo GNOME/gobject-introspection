@@ -7,3 +7,9 @@ s_hello (void)
 {
   g_print ("hello world\n");
 }
+
+GQuark
+s_spawn_error_quark (void)
+{
+  return g_quark_from_static_string ("s-spawn-error");
+}
