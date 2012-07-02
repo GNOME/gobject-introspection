@@ -19,4 +19,13 @@ typedef enum
 } SSpawnError;
 GQuark s_spawn_error_quark (void);
 
+/* Like GDBusError but not registered with GType */
+typedef enum
+{
+  S_DBUS_ERROR_CODE1 = 1,
+  S_DBUS_ERROR_CODE2 = 2,
+  S_DBUS_ERROR_CODE3 = 3
+} SDBusError;
+GQuark s_dbus_error_quark (void);
+
 #endif

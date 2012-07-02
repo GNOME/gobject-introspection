@@ -900,19 +900,9 @@ the ones that failed to resolve removed."""
         for enum in self._namespace.itervalues():
             if not isinstance(enum, ast.Enum):
                 continue
-            type_name = enum.ctype
-            uscored = to_underscores(type_name).lower()
-
+            uscored = to_underscores_noprefix(enum.name).lower()
             uscore_enums[uscored] = enum
-
-            try:
-                no_uscore_prefixed = self._transformer.strip_identifier(type_name)
-            except TransformerException, e:
-                message.warn(e)
-                no_uscore_prefixed = None
-
-            if no_uscore_prefixed not in uscore_enums:
-                uscore_enums[no_uscore_prefixed] = enum
+            uscore_enums[enum.name] = enum
 
         for node in self._namespace.itervalues():
             if not isinstance(node, ast.ErrorQuarkFunction):
@@ -927,7 +917,7 @@ the ones that failed to resolve removed."""
             else:
                 enum = self._uscore_type_names.get(short)
                 if enum is None:
-                    enum = uscore_enums.get(full)
+                    enum = uscore_enums.get(short)
             if enum is not None:
                 enum.error_domain = node.error_domain
             else:

@@ -15,6 +15,13 @@ and/or use gtk-doc annotations.  -->
              shared-library="libsletter.so"
              c:identifier-prefixes="S"
              c:symbol-prefixes="s">
+    <enumeration name="DBusError"
+                 c:type="SDBusError"
+                 glib:error-domain="s-dbus-error">
+      <member name="code1" value="1" c:identifier="S_DBUS_ERROR_CODE1"/>
+      <member name="code2" value="2" c:identifier="S_DBUS_ERROR_CODE2"/>
+      <member name="code3" value="3" c:identifier="S_DBUS_ERROR_CODE3"/>
+    </enumeration>
     <record name="Point" c:type="SPoint">
       <field name="x" writable="1">
         <type name="gdouble" c:type="double"/>
@@ -30,6 +37,11 @@ and/or use gtk-doc annotations.  -->
       <member name="code2" value="2" c:identifier="S_SPAWN_ERROR_CODE2"/>
       <member name="code3" value="3" c:identifier="S_SPAWN_ERROR_CODE3"/>
     </enumeration>
+    <function name="dbus_error_quark" c:identifier="s_dbus_error_quark">
+      <return-value transfer-ownership="none">
+        <type name="GLib.Quark" c:type="GQuark"/>
+      </return-value>
+    </function>
     <function name="hello" c:identifier="s_hello">
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
