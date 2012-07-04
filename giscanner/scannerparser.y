@@ -1088,12 +1088,24 @@ pointer
 	  }
 	| '*' type_qualifier_list pointer
 	  {
-		$$ = gi_source_pointer_new ($3);
-		$$->type_qualifier = $2;
+		GISourceType **base = &($3->base_type);
+
+		while (*base != NULL) {
+			base = &((*base)->base_type);
+		}
+		*base = gi_source_pointer_new (NULL);
+		(*base)->type_qualifier = $2;
+		$$ = $3;
 	  }
 	| '*' pointer
 	  {
-		$$ = gi_source_pointer_new ($2);
+		GISourceType **base = &($2->base_type);
+
+		while (*base != NULL) {
+			base = &((*base)->base_type);
+		}
+		*base = gi_source_pointer_new (NULL);
+		$$ = $2;
 	  }
 	;
 
