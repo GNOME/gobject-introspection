@@ -136,8 +136,7 @@ OPT_TRANSFER_FLOATING = 'floating'
 
 #The following regular expression programs are built to:
 # - match (or substitute) a single comment block line at a time;
-# - support MULTILINE mode and should support (but remains untested)
-#   LOCALE and UNICODE modes.
+# - support (but remains untested) LOCALE and UNICODE modes.
 
 # Program matching the start of a comment block.
 #
@@ -150,7 +149,7 @@ COMMENT_START_RE = re.compile(r'''
     [^\S\n\r]*                               # 0 or more whitespace characters
     $                                        # end
     ''',
-    re.VERBOSE | re.MULTILINE)
+    re.VERBOSE)
 
 # Program matching the end of a comment block.
 #
@@ -162,7 +161,7 @@ COMMENT_END_RE = re.compile(r'''
     /                                        # 1 forward slash character
     $                                        # end
     ''',
-    re.VERBOSE | re.MULTILINE)
+    re.VERBOSE)
 
 # Program matching the ' * ' at the beginning of every
 # line inside a comment block.
@@ -187,7 +186,7 @@ EMPTY_LINE_RE = re.compile(r'''
     [^\S\n\r]*                               # 0 or more whitespace characters
     $                                        # end
     ''',
-    re.VERBOSE | re.MULTILINE)
+    re.VERBOSE)
 
 # Program matching SECTION identifiers.
 #
@@ -205,7 +204,7 @@ SECTION_RE = re.compile(r'''
     [^\S\n\r]*                               # 0 or more whitespace characters
     $
     ''',
-    re.VERBOSE | re.MULTILINE)
+    re.VERBOSE)
 
 # Program matching symbol (function, constant, struct and enum) identifiers.
 #
@@ -224,7 +223,7 @@ SYMBOL_RE = re.compile(r'''
     [^\S\n\r]*                               # 0 or more whitespace characters
     $                                        # end
     ''',
-    re.VERBOSE | re.MULTILINE)
+    re.VERBOSE)
 
 # Program matching property identifiers.
 #
@@ -248,7 +247,7 @@ PROPERTY_RE = re.compile(r'''
     [^\S\n\r]*                               # 0 or more whitespace characters
     $                                        # end
     ''',
-    re.VERBOSE | re.MULTILINE)
+    re.VERBOSE)
 
 # Program matching signal identifiers.
 #
@@ -272,7 +271,7 @@ SIGNAL_RE = re.compile(r'''
     [^\S\n\r]*                               # 0 or more whitespace characters
     $                                        # end
     ''',
-    re.VERBOSE | re.MULTILINE)
+    re.VERBOSE)
 
 # Program matching parameters.
 #
@@ -296,7 +295,7 @@ PARAMETER_RE = re.compile(r'''
     [^\S\n\r]*                               # 0 or more whitespace characters
     $                                        # end
     ''',
-    re.VERBOSE | re.MULTILINE)
+    re.VERBOSE)
 
 # Program matching tags.
 #
@@ -320,7 +319,7 @@ TAG_RE = re.compile(r'''
     [^\S\n\r]*                               # 0 or more whitespace characters
     $                                        # end
     ''',
-    re.VERBOSE | re.MULTILINE | re.IGNORECASE)
+    re.VERBOSE | re.IGNORECASE)
 
 # Program matching multiline annotation continuations.
 # This is used on multiline parameters and tags (but not on the first line) to
@@ -340,7 +339,7 @@ MULTILINE_ANNOTATION_CONTINUATION_RE = re.compile(r'''
     [^\S\n\r]*                               # 0 or more whitespace characters
     $                                        # end
     ''',
-    re.VERBOSE | re.MULTILINE)
+    re.VERBOSE)
 
 
 class DocBlock(object):
