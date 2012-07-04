@@ -446,7 +446,7 @@ uses a C sugar return type.</doc>
       </method>
       <method name="get_name" c:identifier="foo_object_get_name">
         <return-value transfer-ownership="none">
-          <type name="utf8" c:type="char*"/>
+          <type name="utf8" c:type="const char*"/>
         </return-value>
       </method>
       <method name="handle_glyph" c:identifier="foo_object_handle_glyph">
@@ -478,7 +478,7 @@ uses a C sugar return type.</doc>
         </return-value>
         <parameters>
           <parameter name="target" transfer-ownership="none">
-            <type name="utf8" c:type="char*"/>
+            <type name="utf8" c:type="const char*"/>
           </parameter>
         </parameters>
       </method>
@@ -661,7 +661,7 @@ uses a C sugar return type.</doc>
         <parameters>
           <parameter name="r2" transfer-ownership="none">
             <doc xml:whitespace="preserve">source rectangle</doc>
-            <type name="Rectangle" c:type="FooRectangle*"/>
+            <type name="Rectangle" c:type="const FooRectangle*"/>
           </parameter>
         </parameters>
       </method>
@@ -910,7 +910,7 @@ exposed to language bindings.</doc>
         <type name="gint" c:type="int"/>
       </field>
       <field name="lines" writable="1">
-        <array zero-terminated="0" c:type="gchar" fixed-size="80">
+        <array zero-terminated="0" c:type="char" fixed-size="80">
           <type name="gchar" c:type="char"/>
         </array>
       </field>
@@ -936,7 +936,7 @@ exposed to language bindings.</doc>
       </return-value>
       <parameters>
         <parameter name="param" transfer-ownership="none">
-          <type name="utf8" c:type="char*"/>
+          <type name="utf8" c:type="const char*"/>
         </parameter>
         <parameter transfer-ownership="none">
           <varargs>
@@ -1143,14 +1143,14 @@ exposed to language bindings.</doc>
       </return-value>
       <parameters>
         <parameter name="param" transfer-ownership="none">
-          <type name="utf8" c:type="char*"/>
+          <type name="utf8" c:type="const char*"/>
         </parameter>
       </parameters>
     </function>
     <function name="test_const_char_retval"
               c:identifier="foo_test_const_char_retval">
       <return-value transfer-ownership="none">
-        <type name="utf8" c:type="char*"/>
+        <type name="utf8" c:type="const char*"/>
       </return-value>
     </function>
     <function name="test_const_struct_param"
@@ -1160,14 +1160,14 @@ exposed to language bindings.</doc>
       </return-value>
       <parameters>
         <parameter name="param" transfer-ownership="none">
-          <type name="Struct" c:type="FooStruct*"/>
+          <type name="Struct" c:type="const FooStruct*"/>
         </parameter>
       </parameters>
     </function>
     <function name="test_const_struct_retval"
               c:identifier="foo_test_const_struct_retval">
       <return-value transfer-ownership="none">
-        <type name="Struct" c:type="FooStruct*"/>
+        <type name="Struct" c:type="const FooStruct*"/>
       </return-value>
     </function>
     <function name="test_string_array" c:identifier="foo_test_string_array">

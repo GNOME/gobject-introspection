@@ -45,7 +45,8 @@ from a C type string, or a gtype_name (from g_type_name()).
                  target_foreign=None,
                  _target_unknown=False,
                  is_const=False,
-                 origin_symbol=None):
+                 origin_symbol=None,
+                 complete_ctype=None):
         self.ctype = ctype
         self.gtype_name = gtype_name
         self.origin_symbol = origin_symbol
@@ -68,6 +69,7 @@ from a C type string, or a gtype_name (from g_type_name()).
         self.target_giname = target_giname
         self.target_foreign = target_foreign
         self.is_const = is_const
+        self.complete_ctype = complete_ctype
 
     @property
     def resolved(self):

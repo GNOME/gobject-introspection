@@ -272,7 +272,9 @@ and/or use gtk-doc annotations. ''')
     def _write_type(self, ntype, relation=None, function=None):
         assert isinstance(ntype, ast.Type), ntype
         attrs = []
-        if ntype.ctype:
+        if ntype.complete_ctype:
+            attrs.append(('c:type', ntype.complete_ctype))
+        elif ntype.ctype:
             attrs.append(('c:type', ntype.ctype))
         if isinstance(ntype, ast.Varargs):
             with self.tagcontext('varargs', []):

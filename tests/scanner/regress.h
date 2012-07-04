@@ -262,6 +262,7 @@ typedef struct _RegressTestStructA RegressTestStructA;
 typedef struct _RegressTestStructB RegressTestStructB;
 typedef struct _RegressTestStructC RegressTestStructC;
 typedef struct _RegressTestStructD RegressTestStructD;
+typedef struct _RegressTestStructF RegressTestStructF;
 
 struct _RegressTestStructA
 {
@@ -298,6 +299,7 @@ struct _RegressTestStructC
  * @field: (type RegressTestObj):
  * @list: (element-type RegressTestObj):
  * @garray: (element-type RegressTestObj):
+ * @ref_count:
  */
 struct _RegressTestStructD
 {
@@ -323,6 +325,18 @@ struct RegressTestStructE
     gdouble	v_double;
     gpointer	v_pointer;
   } some_union[2];
+};
+
+/* This one has members with const or volatile modifiers. */
+struct _RegressTestStructF
+{
+  volatile gint   ref_count;
+  const gint     *data1;
+  const gint     *const data2;
+  const gint     *const *const data3;
+  const gint    **const* data4;
+  volatile gint  *const data5;
+  const gint     *volatile data6;
 };
 
 /* plain-old-data boxed types */

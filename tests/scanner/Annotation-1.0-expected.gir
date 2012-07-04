@@ -39,12 +39,12 @@ and/or use gtk-doc annotations.  -->
       <doc xml:whitespace="preserve">This is a callback.</doc>
       <return-value transfer-ownership="none">
         <doc xml:whitespace="preserve">array of ints</doc>
-        <type name="gint" c:type="gint*"/>
+        <type name="gint" c:type="const gint*"/>
       </return-value>
       <parameters>
         <parameter name="in" transfer-ownership="none">
           <doc xml:whitespace="preserve">array of ints</doc>
-          <type name="gint" c:type="gint*"/>
+          <type name="gint" c:type="const gint*"/>
         </parameter>
       </parameters>
     </callback>
@@ -57,7 +57,7 @@ and/or use gtk-doc annotations.  -->
           <type name="Object" c:type="AnnotationObject*"/>
         </parameter>
         <parameter name="item" transfer-ownership="none">
-          <type name="utf8" c:type="char*"/>
+          <type name="utf8" c:type="const char*"/>
         </parameter>
         <parameter name="user_data" transfer-ownership="none" closure="2">
           <type name="gpointer" c:type="gpointer"/>
@@ -110,7 +110,7 @@ and/or use gtk-doc annotations.  -->
         </return-value>
         <parameters>
           <parameter name="somearg" transfer-ownership="none" allow-none="1">
-            <type name="utf8" c:type="gchar*"/>
+            <type name="utf8" c:type="const gchar*"/>
           </parameter>
         </parameters>
       </method>
@@ -659,7 +659,7 @@ it says it's pointer but it's actually a string.</doc>
           <attribute name="some.annotation" value="value"/>
           <attribute name="another.annotation" value="blahvalue"/>
           <doc xml:whitespace="preserve">Some data.</doc>
-          <type name="utf8" c:type="gchar*"/>
+          <type name="utf8" c:type="const gchar*"/>
         </parameter>
       </parameters>
     </function>

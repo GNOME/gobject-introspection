@@ -32,7 +32,7 @@ from .sourcescanner import (
     CSYMBOL_TYPE_FUNCTION, CSYMBOL_TYPE_TYPEDEF, CSYMBOL_TYPE_STRUCT,
     CSYMBOL_TYPE_ENUM, CSYMBOL_TYPE_UNION, CSYMBOL_TYPE_OBJECT,
     CSYMBOL_TYPE_MEMBER, CSYMBOL_TYPE_ELLIPSIS, CSYMBOL_TYPE_CONST,
-    TYPE_QUALIFIER_CONST)
+    TYPE_QUALIFIER_CONST, TYPE_QUALIFIER_VOLATILE)
 
 class TransformerException(Exception):
     pass
@@ -435,6 +435,45 @@ raise ValueError."""
             value = 'gpointer'
         return value
 
+    def _create_complete_source_type(self, source_type):
+        assert source_type is not None
+
+        const = (source_type.type_qualifier & TYPE_QUALIFIER_CONST)
+        volatile = (source_type.type_qualifier & TYPE_QUALIFIER_VOLATILE)
+
+        if source_type.type == CTYPE_VOID:
+            return 'void'
+        elif source_type.type in [CTYPE_BASIC_TYPE,
+                                  CTYPE_TYPEDEF,
+                                  CTYPE_STRUCT,
+                                  CTYPE_UNION,
+                                  CTYPE_ENUM]:
+            value = source_type.name
+            if const:
+                value = 'const ' + value
+            if volatile:
+                value = 'volatile ' + value
+        elif source_type.type == CTYPE_ARRAY:
+            return self._create_complete_source_type(source_type.base_type)
+        elif source_type.type == CTYPE_POINTER:
+            value = self._create_complete_source_type(source_type.base_type) + '*'
+            # TODO: handle pointer to function as a special case?
+            if const:
+                value += ' const'
+            if volatile:
+                value += ' volatile'
+
+        else:
+            if const:
+                value = 'gconstpointer'
+            else:
+                value = 'gpointer'
+            if volatile:
+                value = 'volatile ' + value
+            return value
+
+        return value
+
     def _create_parameters(self, base_type):
         # warn if we see annotations for unknown parameters
         param_names = set(child.ident for child in base_type.child_list)
@@ -476,6 +515,7 @@ raise ValueError."""
             # Special handling for fields; we don't have annotations on them
             # to apply later, yet.
             if source_type.type == CTYPE_ARRAY:
+                complete_ctype = self._create_complete_source_type(source_type)
                 # If the array contains anonymous unions, like in the GValue
                 # struct, we need to handle this specially.  This is necessary
                 # to be able to properly calculate the size of the compound
@@ -484,7 +524,7 @@ raise ValueError."""
                 if (source_type.base_type.type == CTYPE_UNION and
                     source_type.base_type.name is None):
                     synthesized_type = self._synthesize_union_type(symbol, parent_symbol)
-                    ftype = ast.Array(None, synthesized_type)
+                    ftype = ast.Array(None, synthesized_type, complete_ctype=complete_ctype)
                 else:
                     ctype = self._create_source_type(source_type)
                     canonical_ctype = self._canonicalize_ctype(ctype)
@@ -492,8 +532,15 @@ raise ValueError."""
                         derefed_name = canonical_ctype[:-1]
                     else:
                         derefed_name = canonical_ctype
-                    ftype = ast.Array(None, self.create_type_from_ctype_string(ctype),
-                                      ctype=derefed_name)
+                    if complete_ctype[-1] == '*':
+                        derefed_complete_ctype = complete_ctype[:-1]
+                    else:
+                        derefed_complete_ctype = complete_ctype
+                    from_ctype = self.create_type_from_ctype_string(ctype,
+                                                                    complete_ctype=complete_ctype)
+                    ftype = ast.Array(None, from_ctype,
+                                      ctype=derefed_name,
+                                      complete_ctype=derefed_complete_ctype)
                 child_list = list(symbol.base_type.child_list)
                 ftype.zeroterminated = False
                 if child_list:
@@ -535,7 +582,9 @@ raise ValueError."""
                 message.warn(e)
                 return None
             if symbol.base_type.name:
-                target = self.create_type_from_ctype_string(symbol.base_type.name)
+                complete_ctype = self._create_complete_source_type(symbol.base_type)
+                target = self.create_type_from_ctype_string(symbol.base_type.name,
+                                                            complete_ctype=complete_ctype)
             else:
                 target = ast.TYPE_ANY
             if name in ast.type_names:
@@ -588,20 +637,22 @@ raise ValueError."""
 
     def _create_type_from_base(self, source_type, is_parameter=False, is_return=False):
         ctype = self._create_source_type(source_type)
+        complete_ctype = self._create_complete_source_type(source_type)
         const = ((source_type.type == CTYPE_POINTER) and
                  (source_type.base_type.type_qualifier & TYPE_QUALIFIER_CONST))
         return self.create_type_from_ctype_string(ctype, is_const=const,
-                                                  is_parameter=is_parameter, is_return=is_return)
+                                                  is_parameter=is_parameter, is_return=is_return,
+                                                  complete_ctype=complete_ctype)
 
     def _create_bare_container_type(self, base, ctype=None,
-                                    is_const=False):
+                                    is_const=False, complete_ctype=None):
         if base in ('GList', 'GSList', 'GLib.List', 'GLib.SList'):
             if base in ('GList', 'GSList'):
                 name = 'GLib.' + base[1:]
             else:
                 name = base
             return ast.List(name, ast.TYPE_ANY, ctype=ctype,
-                        is_const=is_const)
+                        is_const=is_const, complete_ctype=complete_ctype)
         elif base in ('GArray', 'GPtrArray', 'GByteArray',
                       'GLib.Array', 'GLib.PtrArray', 'GLib.ByteArray',
                       'GObject.Array', 'GObject.PtrArray', 'GObject.ByteArray'):
@@ -610,13 +661,15 @@ raise ValueError."""
             else:
                 name = 'GLib.' + base[1:]
             return ast.Array(name, ast.TYPE_ANY, ctype=ctype,
-                         is_const=is_const)
+                         is_const=is_const, complete_ctype=complete_ctype)
         elif base in ('GHashTable', 'GLib.HashTable', 'GObject.HashTable'):
-            return ast.Map(ast.TYPE_ANY, ast.TYPE_ANY, ctype=ctype, is_const=is_const)
+            return ast.Map(ast.TYPE_ANY, ast.TYPE_ANY, ctype=ctype, is_const=is_const,
+                           complete_ctype=complete_ctype)
         return None
 
     def create_type_from_ctype_string(self, ctype, is_const=False,
-                                      is_parameter=False, is_return=False):
+                                      is_parameter=False, is_return=False,
+                                      complete_ctype=None):
         canonical = self._canonicalize_ctype(ctype)
         base = canonical.replace('*', '')
 
@@ -625,17 +678,18 @@ raise ValueError."""
             bare_utf8 = ast.TYPE_STRING.clone()
             bare_utf8.ctype = None
             return ast.Array(None, bare_utf8, ctype=ctype,
-                             is_const=is_const)
+                             is_const=is_const, complete_ctype=complete_ctype)
 
         fundamental = ast.type_names.get(base)
         if fundamental is not None:
             return ast.Type(target_fundamental=fundamental.target_fundamental,
                         ctype=ctype,
-                        is_const=is_const)
-        container = self._create_bare_container_type(base, ctype=ctype, is_const=is_const)
+                        is_const=is_const, complete_ctype=complete_ctype)
+        container = self._create_bare_container_type(base, ctype=ctype, is_const=is_const,
+                                                     complete_ctype=complete_ctype)
         if container:
             return container
-        return ast.Type(ctype=ctype, is_const=is_const)
+        return ast.Type(ctype=ctype, is_const=is_const, complete_ctype=complete_ctype)
 
     def _create_parameter(self, symbol):
         if symbol.type == CSYMBOL_TYPE_ELLIPSIS:

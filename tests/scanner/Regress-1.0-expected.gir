@@ -275,7 +275,7 @@ use it should be.</doc>
       </return-value>
       <parameters>
         <parameter name="error" transfer-ownership="none">
-          <type name="GLib.Error" c:type="GError*"/>
+          <type name="GLib.Error" c:type="const GError*"/>
         </parameter>
       </parameters>
     </callback>
@@ -351,7 +351,7 @@ use it should be.</doc>
               glib:nick="value4"/>
       <function name="param" c:identifier="regress_test_enum_param">
         <return-value transfer-ownership="none">
-          <type name="utf8" c:type="gchar*"/>
+          <type name="utf8" c:type="const gchar*"/>
         </return-value>
         <parameters>
           <parameter name="e" transfer-ownership="none">
@@ -502,7 +502,7 @@ use it should be.</doc>
       <parameters>
         <parameter name="obj" transfer-ownership="none">
           <type name="TestFundamentalObject"
-                c:type="RegressTestFundamentalObject*"/>
+                c:type="const RegressTestFundamentalObject*"/>
         </parameter>
       </parameters>
     </callback>
@@ -534,7 +534,7 @@ use it should be.</doc>
         </return-value>
         <parameters>
           <parameter name="data" transfer-ownership="none">
-            <type name="utf8" c:type="char*"/>
+            <type name="utf8" c:type="const char*"/>
           </parameter>
         </parameters>
       </constructor>
@@ -621,7 +621,7 @@ use it should be.</doc>
         </return-value>
         <parameters>
           <parameter name="x" transfer-ownership="none">
-            <type name="utf8" c:type="char*"/>
+            <type name="utf8" c:type="const char*"/>
           </parameter>
         </parameters>
       </constructor>
@@ -686,7 +686,7 @@ case.</doc>
         <parameters>
           <parameter name="somestr" transfer-ownership="none">
             <doc xml:whitespace="preserve">Meaningless string</doc>
-            <type name="utf8" c:type="char*"/>
+            <type name="utf8" c:type="const char*"/>
           </parameter>
         </parameters>
       </virtual-method>
@@ -700,7 +700,7 @@ case.</doc>
         <parameters>
           <parameter name="somestr" transfer-ownership="none">
             <doc xml:whitespace="preserve">Meaningless string</doc>
-            <type name="utf8" c:type="char*"/>
+            <type name="utf8" c:type="const char*"/>
           </parameter>
         </parameters>
       </method>
@@ -983,7 +983,7 @@ raise an error.</doc>
             <type name="gint" c:type="int*"/>
           </parameter>
           <parameter name="foo" transfer-ownership="none">
-            <type name="utf8" c:type="char*"/>
+            <type name="utf8" c:type="const char*"/>
           </parameter>
           <parameter name="q"
                      direction="out"
@@ -1020,7 +1020,7 @@ raise an error.</doc>
             <type name="gint" c:type="int*"/>
           </parameter>
           <parameter name="foo" transfer-ownership="none">
-            <type name="utf8" c:type="char*"/>
+            <type name="utf8" c:type="const char*"/>
           </parameter>
           <parameter name="q"
                      direction="out"
@@ -1237,7 +1237,7 @@ Use with regress_test_obj_emit_sig_with_obj</doc>
             </parameter>
             <parameter name="somestr" transfer-ownership="none">
               <doc xml:whitespace="preserve">Meaningless string</doc>
-              <type name="utf8" c:type="char*"/>
+              <type name="utf8" c:type="const char*"/>
             </parameter>
           </parameters>
         </callback>
@@ -1357,7 +1357,8 @@ Use with regress_test_obj_emit_sig_with_obj</doc>
       <function name="const_return"
                 c:identifier="regress_test_simple_boxed_a_const_return">
         <return-value transfer-ownership="none">
-          <type name="TestSimpleBoxedA" c:type="RegressTestSimpleBoxedA*"/>
+          <type name="TestSimpleBoxedA"
+                c:type="const RegressTestSimpleBoxedA*"/>
         </return-value>
       </function>
     </record>
@@ -1507,6 +1508,29 @@ Use with regress_test_obj_emit_sig_with_obj</doc>
         <type name="gpointer" c:type="gpointer"/>
       </field>
     </union>
+    <record name="TestStructF" c:type="RegressTestStructF">
+      <field name="ref_count" writable="1">
+        <type name="gint" c:type="volatile gint"/>
+      </field>
+      <field name="data1" writable="1">
+        <type name="gint" c:type="const gint*"/>
+      </field>
+      <field name="data2" writable="1">
+        <type name="gint" c:type="const gint* const"/>
+      </field>
+      <field name="data3" writable="1">
+        <type name="gint" c:type="const gint* const* const"/>
+      </field>
+      <field name="data4" writable="1">
+        <type name="gint" c:type="const gint** const*"/>
+      </field>
+      <field name="data5" writable="1">
+        <type name="gint" c:type="volatile gint* const"/>
+      </field>
+      <field name="data6" writable="1">
+        <type name="gint" c:type="const gint* volatile"/>
+      </field>
+    </record>
     <record name="TestStructFixedArray" c:type="RegressTestStructFixedArray">
       <field name="just_int" writable="1">
         <type name="gint" c:type="gint"/>
@@ -2298,7 +2322,7 @@ call and can be released on return.</doc>
               c:identifier="regress_test_enum_param"
               moved-to="TestEnum.param">
       <return-value transfer-ownership="none">
-        <type name="utf8" c:type="gchar*"/>
+        <type name="utf8" c:type="const gchar*"/>
       </return-value>
       <parameters>
         <parameter name="e" transfer-ownership="none">
@@ -2435,7 +2459,7 @@ element-type annotation.</doc>
       </return-value>
       <parameters>
         <parameter name="in" transfer-ownership="none">
-          <type name="GLib.HashTable" c:type="GHashTable*">
+          <type name="GLib.HashTable" c:type="const GHashTable*">
             <type name="utf8"/>
             <type name="utf8"/>
           </type>
@@ -2459,7 +2483,7 @@ element-type annotation.</doc>
     <function name="test_ghash_nothing_return"
               c:identifier="regress_test_ghash_nothing_return">
       <return-value transfer-ownership="none">
-        <type name="GLib.HashTable" c:type="GHashTable*">
+        <type name="GLib.HashTable" c:type="const GHashTable*">
           <type name="utf8"/>
           <type name="utf8"/>
         </type>
@@ -2481,7 +2505,7 @@ element-type annotation.</doc>
       </return-value>
       <parameters>
         <parameter name="in" transfer-ownership="none" allow-none="1">
-          <type name="GLib.HashTable" c:type="GHashTable*">
+          <type name="GLib.HashTable" c:type="const GHashTable*">
             <type name="utf8"/>
             <type name="utf8"/>
           </type>
@@ -2499,7 +2523,7 @@ element-type annotation.</doc>
                    caller-allocates="0"
                    transfer-ownership="full"
                    allow-none="1">
-          <type name="GLib.HashTable" c:type="GHashTable**">
+          <type name="GLib.HashTable" c:type="const GHashTable**">
             <type name="utf8"/>
             <type name="utf8"/>
           </type>
@@ -2509,7 +2533,7 @@ element-type annotation.</doc>
     <function name="test_ghash_null_return"
               c:identifier="regress_test_ghash_null_return">
       <return-value transfer-ownership="none">
-        <type name="GLib.HashTable" c:type="GHashTable*">
+        <type name="GLib.HashTable" c:type="const GHashTable*">
           <type name="utf8"/>
           <type name="utf8"/>
         </type>
@@ -2538,7 +2562,7 @@ element-type annotation.</doc>
       </return-value>
       <parameters>
         <parameter name="in" transfer-ownership="none">
-          <type name="GLib.List" c:type="GList*">
+          <type name="GLib.List" c:type="const GList*">
             <type name="utf8"/>
           </type>
         </parameter>
@@ -2560,7 +2584,7 @@ element-type annotation.</doc>
     <function name="test_glist_nothing_return"
               c:identifier="regress_test_glist_nothing_return">
       <return-value transfer-ownership="none">
-        <type name="GLib.List" c:type="GList*">
+        <type name="GLib.List" c:type="const GList*">
           <type name="utf8"/>
         </type>
       </return-value>
@@ -2626,7 +2650,7 @@ element-type annotation.</doc>
       </return-value>
       <parameters>
         <parameter name="in" transfer-ownership="none">
-          <type name="GLib.SList" c:type="GSList*">
+          <type name="GLib.SList" c:type="const GSList*">
             <type name="utf8"/>
           </type>
         </parameter>
@@ -2648,7 +2672,7 @@ element-type annotation.</doc>
     <function name="test_gslist_nothing_return"
               c:identifier="regress_test_gslist_nothing_return">
       <return-value transfer-ownership="none">
-        <type name="GLib.SList" c:type="GSList*">
+        <type name="GLib.SList" c:type="const GSList*">
           <type name="utf8"/>
         </type>
       </return-value>
@@ -2814,7 +2838,7 @@ element-type annotation.</doc>
           <type name="gint" c:type="int*"/>
         </parameter>
         <parameter name="in" transfer-ownership="none">
-          <type name="utf8" c:type="char*"/>
+          <type name="utf8" c:type="const char*"/>
         </parameter>
       </parameters>
     </function>
@@ -2825,7 +2849,7 @@ element-type annotation.</doc>
       </return-value>
       <parameters>
         <parameter name="v" transfer-ownership="none">
-          <type name="GObject.Value" c:type="GValue*"/>
+          <type name="GObject.Value" c:type="const GValue*"/>
         </parameter>
       </parameters>
     </function>
@@ -2966,7 +2990,7 @@ What we're testing here is that the scanner ignores the @a nested inside XML.</d
               c:identifier="regress_test_simple_boxed_a_const_return"
               moved-to="TestSimpleBoxedA.const_return">
       <return-value transfer-ownership="none">
-        <type name="TestSimpleBoxedA" c:type="RegressTestSimpleBoxedA*"/>
+        <type name="TestSimpleBoxedA" c:type="const RegressTestSimpleBoxedA*"/>
       </return-value>
     </function>
     <function name="test_simple_callback"
@@ -3030,7 +3054,7 @@ What we're testing here is that the scanner ignores the @a nested inside XML.</d
     </function>
     <function name="test_strv_out_c" c:identifier="regress_test_strv_out_c">
       <return-value transfer-ownership="none">
-        <array c:type="char**">
+        <array c:type="const char* const*">
           <type name="utf8"/>
         </array>
       </return-value>
@@ -3090,7 +3114,7 @@ What we're testing here is that the scanner ignores the @a nested inside XML.</d
           <type name="gint" c:type="int*"/>
         </parameter>
         <parameter name="foo" transfer-ownership="none">
-          <type name="utf8" c:type="char*"/>
+          <type name="utf8" c:type="const char*"/>
         </parameter>
         <parameter name="q"
                    direction="out"
@@ -3127,7 +3151,7 @@ What we're testing here is that the scanner ignores the @a nested inside XML.</d
           <type name="gint" c:type="int*"/>
         </parameter>
         <parameter name="foo" transfer-ownership="none">
-          <type name="utf8" c:type="char*"/>
+          <type name="utf8" c:type="const char*"/>
         </parameter>
         <parameter name="q"
                    direction="out"
@@ -3176,7 +3200,7 @@ What we're testing here is that the scanner ignores the @a nested inside XML.</d
           <type name="gint" c:type="int*"/>
         </parameter>
         <parameter name="foo" transfer-ownership="none">
-          <type name="utf8" c:type="char*"/>
+          <type name="utf8" c:type="const char*"/>
         </parameter>
         <parameter name="q"
                    direction="out"
@@ -3269,7 +3293,7 @@ What we're testing here is that the scanner ignores the @a nested inside XML.</d
     <function name="test_unsigned_enum_param"
               c:identifier="regress_test_unsigned_enum_param">
       <return-value transfer-ownership="none">
-        <type name="utf8" c:type="gchar*"/>
+        <type name="utf8" c:type="const gchar*"/>
       </return-value>
       <parameters>
         <parameter name="e" transfer-ownership="none">
@@ -3294,7 +3318,7 @@ What we're testing here is that the scanner ignores the @a nested inside XML.</d
       </return-value>
       <parameters>
         <parameter name="in" transfer-ownership="none">
-          <type name="utf8" c:type="char*"/>
+          <type name="utf8" c:type="const char*"/>
         </parameter>
       </parameters>
     </function>
@@ -3302,7 +3326,7 @@ What we're testing here is that the scanner ignores the @a nested inside XML.</d
               c:identifier="regress_test_utf8_const_return">
       <return-value transfer-ownership="none">
         <doc xml:whitespace="preserve">UTF-8 string</doc>
-        <type name="utf8" c:type="char*"/>
+        <type name="utf8" c:type="const char*"/>
       </return-value>
     </function>
     <function name="test_utf8_inout" c:identifier="regress_test_utf8_inout">
@@ -3411,7 +3435,7 @@ What we're testing here is that the scanner ignores the @a nested inside XML.</d
       </return-value>
       <parameters>
         <parameter name="value" transfer-ownership="none">
-          <type name="GObject.Value" c:type="GValue*"/>
+          <type name="GObject.Value" c:type="const GValue*"/>
         </parameter>
       </parameters>
     </function>
@@ -3419,7 +3443,7 @@ What we're testing here is that the scanner ignores the @a nested inside XML.</d
               c:identifier="regress_test_value_return">
       <return-value transfer-ownership="none">
         <doc xml:whitespace="preserve">the int wrapped in a GValue.</doc>
-        <type name="GObject.Value" c:type="GValue*"/>
+        <type name="GObject.Value" c:type="const GValue*"/>
       </return-value>
       <parameters>
         <parameter name="i" transfer-ownership="none">
