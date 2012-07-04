@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<tests>
+
+<test>
+  <commentblock>/**
+ * AnnotationObject::list-signal:
+ * @annotation: the annotation object
+ * @list: (type GLib.List) (element-type utf8) (transfer container): a list of strings
+ *
+ * This is a signal which takes a list of strings, but it's not
+ * known by GObject as it's only marked as G_TYPE_POINTER
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>AnnotationObject::list-signal</name>
+    </identifier>
+    <parameters>
+      <parameter>
+        <name>annotation</name>
+        <description>the annotation object</description>
+      </parameter>
+      <parameter>
+        <name>list</name>
+        <annotations>
+          <annotation>
+            <name>type</name>
+            <options>
+              <option>
+                <name>GLib.List</name>
+              </option>
+            </options>
+          </annotation>
+          <annotation>
+            <name>element-type</name>
+            <options>
+              <option>
+                <name>utf8</name>
+              </option>
+            </options>
+          </annotation>
+          <annotation>
+            <name>transfer</name>
+            <options>
+              <option>
+                <name>container</name>
+              </option>
+            </options>
+          </annotation>
+        </annotations>
+        <description>a list of strings</description>
+      </parameter>
+    </parameters>
+    <description>This is a signal which takes a list of strings, but it's not
+known by GObject as it's only marked as G_TYPE_POINTER</description>
+  </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+ * annotation_object_in:
+ * @object: a #GObject
+ * @inarg: (in) (transfer none): This is an argument test
+ *
+ * This is a test for in arguments
+ *
+ * Return value: an int
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>annotation_object_in</name>
+    </identifier>
+    <parameters>
+      <parameter>
+        <name>object</name>
+        <description>a #GObject</description>
+      </parameter>
+      <parameter>
+        <name>inarg</name>
+        <annotations>
+          <annotation>
+            <name>in</name>
+          </annotation>
+          <annotation>
+            <name>transfer</name>
+            <options>
+              <option>
+                <name>none</name>
+              </option>
+            </options>
+          </annotation>
+        </annotations>
+        <description>This is an argument test</description>
+      </parameter>
+    </parameters>
+    <description>This is a test for in arguments</description>
+    <tags>
+      <tag>
+        <name>returns</name>
+        <description>an int</description>
+      </tag>
+    </tags>
+  </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+ * annotation_transfer_floating:
+ *
+ * Returns: (transfer floating): A floating object
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>annotation_transfer_floating</name>
+    </identifier>
+    <tags>
+      <tag>
+        <name>returns</name>
+        <annotations>
+          <annotation>
+            <name>transfer</name>
+            <options>
+              <option>
+                <name>floating</name>
+              </option>
+            </options>
+          </annotation>
+        </annotations>
+        <description>A floating object</description>
+      </tag>
+    </tags>
+  </docblock>
+</test>
+
+<test>
+  <!--
+  "Transfer:" tag syntax
+  -->
+  <commentblock>/**
+ * FsSession:codecs-without-config:
+ *
+ * This is the same list of codecs as #FsSession:codecs
+ * without....
+ *
+ * Transfer: full
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>FsSession:codecs-without-config</name>
+    </identifier>
+    <description>This is the same list of codecs as #FsSession:codecs
+without....</description>
+    <tags>
+      <tag>
+        <name>transfer</name>
+        <description>full</description>
+      </tag>
+    </tags>
+  </docblock>
+</test>
+
+</tests>

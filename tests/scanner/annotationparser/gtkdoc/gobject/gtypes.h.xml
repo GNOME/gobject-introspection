@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<tests>
+
+<test>
+  <commentblock>/**
+ * GtkdocPlainOldData:
+ * @n: Some integer member.
+ * @x: Some floating point member.
+ *
+ * Unboxed plain old data that should default to public members.
+ **/</commentblock>
+  <docblock>
+    <identifier>
+      <name>GtkdocPlainOldData</name>
+    </identifier>
+    <parameters>
+      <parameter>
+        <name>n</name>
+        <description>Some integer member.</description>
+      </parameter>
+      <parameter>
+        <name>x</name>
+        <description>Some floating point member.</description>
+      </parameter>
+    </parameters>
+    <description>Unboxed plain old data that should default to public members.</description>
+  </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+ * GtkdocBoxedPlainOldData:
+ * @n: Some integer member.
+ * @x: Some floating point member.
+ *
+ * Boxed plain old data that should default to public members.
+ **/</commentblock>
+  <docblock>
+    <identifier>
+      <name>GtkdocBoxedPlainOldData</name>
+    </identifier>
+    <parameters>
+      <parameter>
+        <name>n</name>
+        <description>Some integer member.</description>
+      </parameter>
+      <parameter>
+        <name>x</name>
+        <description>Some floating point member.</description>
+      </parameter>
+    </parameters>
+    <description>Boxed plain old data that should default to public members.</description>
+  </docblock>
+</test>
+
+</tests>

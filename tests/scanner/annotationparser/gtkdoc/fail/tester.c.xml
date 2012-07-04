@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<tests>
+
+<test>
+  <commentblock>/*
+ * SECTION:tester_nodocs
+ * @short_description: module for gtk-doc unit test
+ * @title: GtkdocTesterNoDocs
+ *
+ * This file contains non-sense code for the sole purpose of testing the docs.
+ */</commentblock>
+</test>
+
+<test>
+  <commentblock>/**
+ * SECTION:tester_nolongdesc
+ * @short_description: module for gtk-doc unit test
+ * @title: GtkdocTesterNoLongDesc
+ */</commentblock>
+ <docblock>
+   <identifier>
+     <name>SECTION:tester_nolongdesc</name>
+   </identifier>
+   <parameters>
+     <parameter>
+       <name>short_description</name>
+       <description>module for gtk-doc unit test</description>
+     </parameter>
+     <parameter>
+       <name>title</name>
+       <description>GtkdocTesterNoLongDesc</description>
+     </parameter>
+   </parameters>
+ </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+ * SECTION:tester_noshortdesc
+ * @title: GtkdocTesterNoShortDesc
+ *
+ * This file contains non-sense code for the sole purpose of testing the docs.
+ */</commentblock>
+ <docblock>
+   <identifier>
+     <name>SECTION:tester_noshortdesc</name>
+   </identifier>
+   <parameters>
+     <parameter>
+       <name>title</name>
+       <description>GtkdocTesterNoShortDesc</description>
+     </parameter>
+   </parameters>
+   <description>This file contains non-sense code for the sole purpose of testing the docs.</description>
+ </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+ * SECTION:tester_brokendocs
+ * @short_description: module for gtk-doc unit test
+ * @title: GtkdocTesterBrokenDocs
+ *
+ * This file contains non-sense code for the sole purpose of testing the docs.
+ */</commentblock>
+ <docblock>
+   <identifier>
+     <name>SECTION:tester_brokendocs</name>
+   </identifier>
+   <parameters>
+     <parameter>
+       <name>short_description</name>
+       <description>module for gtk-doc unit test</description>
+     </parameter>
+     <parameter>
+       <name>title</name>
+       <description>GtkdocTesterBrokenDocs</description>
+     </parameter>
+   </parameters>
+   <description>This file contains non-sense code for the sole purpose of testing the docs.</description>
+ </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+ * func_no_docs:
+ */</commentblock>
+ <docblock>
+   <identifier>
+     <name>func_no_docs</name>
+   </identifier>
+ </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+ * func_no_item_docs:
+ *
+ * Here we document the function but not the parameters.
+ */</commentblock>
+ <docblock>
+   <identifier>
+     <name>func_no_item_docs</name>
+   </identifier>
+   <description>Here we document the function but not the parameters.</description>
+ </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+ * func_incomplete_docs:
+ * @a: a value
+ *
+ * Here we document the function but not all the parameters.
+ */</commentblock>
+ <docblock>
+   <identifier>
+     <name>func_incomplete_docs</name>
+   </identifier>
+   <parameters>
+     <parameter>
+       <name>a</name>
+       <description>a value</description>
+     </parameter>
+   </parameters>
+   <description>Here we document the function but not all the parameters.</description>
+ </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+ * func_unused_docs:
+ * @a: a value
+ * @b: a value
+ * @c: an unexisting value
+ *
+ * Here we document the function and more than the actual parameters.
+ */</commentblock>
+ <docblock>
+   <identifier>
+     <name>func_unused_docs</name>
+   </identifier>
+   <parameters>
+     <parameter>
+       <name>a</name>
+       <description>a value</description>
+     </parameter>
+     <parameter>
+       <name>b</name>
+       <description>a value</description>
+     </parameter>
+     <parameter>
+       <name>c</name>
+       <description>an unexisting value</description>
+     </parameter>
+   </parameters>
+   <description>Here we document the function and more than the actual parameters.</description>
+ </docblock>
+</test>
+
+</tests>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<tests>
+
+<test>
+  <commentblock>/**
+ * annotation_object_string_out:
+ *
+ * Test returning a string as an out parameter
+ *
+ * Returns: some boolean
+ **/</commentblock>
+  <docblock>
+    <identifier>
+      <name>annotation_object_string_out</name>
+    </identifier>
+    <tags>
+      <tag>
+        <name>returns</name>
+        <description>some boolean</description>
+      </tag>
+    </tags>
+    <description>Test returning a string as an out parameter</description>
+  </docblock>
+</test>
+
+<test>
+  <!--
+  Deprecated "Return value:" tag
+  -->
+  <commentblock>/**
+ * annotation_object_string_out:
+ *
+ * Test returning a string as an out parameter
+ *
+ * Return value: some boolean
+ **/</commentblock>
+  <docblock>
+    <identifier>
+      <name>annotation_object_string_out</name>
+    </identifier>
+    <tags>
+      <tag>
+        <name>returns</name>
+        <description>some boolean</description>
+      </tag>
+    </tags>
+    <description>Test returning a string as an out parameter</description>
+  </docblock>
+</test>
+
+<test>
+  <!--
+  Deprecated "@returns" as a parameter
+  -->
+  <commentblock>/**
+ * annotation_object_string_out:
+ * @returns: some boolean
+ *
+ * Test returning a string as an out parameter
+ **/</commentblock>
+  <docblock>
+    <identifier>
+      <name>annotation_object_string_out</name>
+    </identifier>
+    <tags>
+      <tag>
+        <name>returns</name>
+        <description>some boolean</description>
+      </tag>
+    </tags>
+    <description>Test returning a string as an out parameter</description>
+  </docblock>
+</test>
+
+</tests>

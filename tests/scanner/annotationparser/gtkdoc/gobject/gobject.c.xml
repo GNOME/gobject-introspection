@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<tests>
+
+<test>
+  <commentblock><![CDATA[/**
+ * SECTION:object
+ * @title: GtkdocObject
+ * @short_description: class for gtk-doc unit test
+ * @see_also: #GtkdocIface
+ * @Image: object.png
+ *
+ * This file contains non-sense code for the sole purpose of testing the docs.
+ * We can link to the #GtkdocObject:otest property and the #GtkdocObject::otest
+ * signal.
+ *
+ * When subclassing it is useful to override the #GtkdocObjectClass.test()
+ * method. The #GtkdocObjectClass.foo_bar() vmethod lets you refine your
+ * frobnicator.
+ *
+ * A new instance can be created using the gtkdoc_object_new() function. The
+ * whole lifecycle usualy looks like shown in this example:
+ * |[{{!-- language="C" --!}}
+ * GObject *myobj;
+ *
+ * myobj = gtkdoc_object_new();
+ * // do somehing
+ * g_object_unref (myobj);
+ * ]|
+ *
+ * # Examples #
+ *
+ * You can also change parameters:
+ * <informalexample>
+ * <programlisting language="c"><xi:include xmlns:xi="http://www.w3.org/2003/XInclude" parse="text" href="../../examples/gobject.c" /></programlisting>
+ * </informalexample>
+ *
+ * This example serves two main purposes:
+ * - testing conversion (long description
+ *   follows here)
+ * - catching bugs
+ * - having an example
+ *
+ * Nothing more to say.
+ */]]></commentblock>
+  <docblock>
+    <identifier>
+      <name>SECTION:object</name>
+    </identifier>
+    <parameters>
+      <parameter>
+        <name>title</name>
+        <description>GtkdocObject</description>
+      </parameter>
+      <parameter>
+        <name>short_description</name>
+        <description>class for gtk-doc unit test</description>
+      </parameter>
+      <parameter>
+        <name>see_also</name>
+        <description>#GtkdocIface</description>
+      </parameter>
+      <parameter>
+        <name>Image</name>
+        <description>object.png</description>
+      </parameter>
+    </parameters>
+    <description><![CDATA[This file contains non-sense code for the sole purpose of testing the docs.
+We can link to the #GtkdocObject:otest property and the #GtkdocObject::otest
+signal.
+
+When subclassing it is useful to override the #GtkdocObjectClass.test()
+method. The #GtkdocObjectClass.foo_bar() vmethod lets you refine your
+frobnicator.
+
+A new instance can be created using the gtkdoc_object_new() function. The
+whole lifecycle usualy looks like shown in this example:
+|[{{!-- language="C" --!}}
+GObject *myobj;
+
+myobj = gtkdoc_object_new();
+// do somehing
+g_object_unref (myobj);
+]|
+
+# Examples #
+
+You can also change parameters:
+<informalexample>
+<programlisting language="c"><xi:include xmlns:xi="http://www.w3.org/2003/XInclude" parse="text" href="../../examples/gobject.c" /></programlisting>
+</informalexample>
+
+This example serves two main purposes:
+- testing conversion (long description
+  follows here)
+- catching bugs
+- having an example
+
+Nothing more to say.]]></description>
+  </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+ * SECTION:object2
+ * @title: GtkdocObject2
+ * @short_description: class with interface for gtk-doc unit test
+ * @see_also: #GtkdocIface
+ *
+ * This file contains non-sense code for the sole purpose of testing the docs.
+ *
+ * Internals
+ * =========
+ *
+ * All the internal details go here or not:
+ * - single item list
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>SECTION:object2</name>
+    </identifier>
+    <parameters>
+      <parameter>
+        <name>title</name>
+        <description>GtkdocObject2</description>
+      </parameter>
+      <parameter>
+        <name>short_description</name>
+        <description>class with interface for gtk-doc unit test</description>
+      </parameter>
+      <parameter>
+        <name>see_also</name>
+        <description>#GtkdocIface</description>
+      </parameter>
+    </parameters>
+    <description>This file contains non-sense code for the sole purpose of testing the docs.
+
+Internals
+=========
+
+All the internal details go here or not:
+- single item list</description>
+  </docblock>
+</test>
+
+<test>
+  <commentblock><![CDATA[/**
+ * gtkdoc_object_new:
+ *
+ * Create a new instance
+ * <note><para>
+ *   This will only work if you have called g_type_init() before.
+ * </para></note>
+ * Returns: the instance or %NULL in case of an error
+ *
+ * Since: 0.1
+ */]]></commentblock>
+  <docblock>
+    <identifier>
+      <name>gtkdoc_object_new</name>
+    </identifier>
+    <description><![CDATA[Create a new instance
+<note><para>
+  This will only work if you have called g_type_init() before.
+</para></note>]]></description>
+    <tags>
+      <tag>
+        <name>returns</name>
+        <description>the instance or %NULL in case of an error</description>
+      </tag>
+      <tag>
+        <name>since</name>
+        <description>0.1</description>
+      </tag>
+    </tags>
+  </docblock>
+</test>
+
+<test>
+  <commentblock><![CDATA[/**
+ * gtkdoc_object_set_otest:
+ * @self: the object
+ * @value: the new otest value, whose description extends further than one
+ *  line will allow
+ *
+ * Set the #GtkdocObject:otest property.
+ *
+ * Deprecated: Use g_object_set(obj,&quot;otest&quot;,value,NULL); instead.
+ *
+ * Since: 0.5
+ */]]></commentblock>
+  <docblock>
+    <identifier>
+      <name>gtkdoc_object_set_otest</name>
+    </identifier>
+    <parameters>
+      <parameter>
+        <name>self</name>
+        <description>the object</description>
+      </parameter>
+      <parameter>
+        <name>value</name>
+        <description>the new otest value, whose description extends further than one line will allow</description>
+      </parameter>
+    </parameters>
+    <description>Set the #GtkdocObject:otest property.</description>
+    <tags>
+      <tag>
+        <name>deprecated</name>
+        <description><![CDATA[Use g_object_set(obj,&quot;otest&quot;,value,NULL); instead.]]></description>
+      </tag>
+      <tag>
+        <name>since</name>
+        <description>0.5</description>
+      </tag>
+    </tags>
+  </docblock>
+</test>
+
+<test>
+  <commentblock><![CDATA[/**
+ * gtkdoc_object_frobnicate:
+ * @self: the object
+ * @n: number of iterations
+ *
+ * Frobnicate the content of @self @n times. This implements a
+ * complex algorithm (http://en.wikipedia.org/wiki/Algorithm).
+ * <footnote>
+ *  <para>
+ *    Negative frobnication can lead to unexpected behaviour.
+ *  </para>
+ * </footnote>
+ *
+ * Since: 0.5
+ */]]></commentblock>
+  <docblock>
+    <identifier>
+      <name>gtkdoc_object_frobnicate</name>
+    </identifier>
+    <parameters>
+      <parameter>
+        <name>self</name>
+        <description>the object</description>
+      </parameter>
+      <parameter>
+        <name>n</name>
+        <description>number of iterations</description>
+      </parameter>
+    </parameters>
+    <description><![CDATA[Frobnicate the content of @self @n times. This implements a
+complex algorithm (http://en.wikipedia.org/wiki/Algorithm).
+<footnote>
+ <para>
+   Negative frobnication can lead to unexpected behaviour.
+ </para>
+</footnote>]]></description>
+    <tags>
+      <tag>
+        <name>since</name>
+        <description>0.5</description>
+      </tag>
+    </tags>
+  </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+ * gtkdoc_object_fooify:
+ * @self: the object
+ * @...: a NULL terminated list of arguments
+ *
+ * Fooify the content of @self.
+ *
+ * Returns: %TRUE for success
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>gtkdoc_object_fooify</name>
+    </identifier>
+    <parameters>
+      <parameter>
+        <name>self</name>
+        <description>the object</description>
+      </parameter>
+      <parameter>
+        <name>...</name>
+        <description>a NULL terminated list of arguments</description>
+      </parameter>
+    </parameters>
+    <description>Fooify the content of @self.</description>
+    <tags>
+      <tag>
+        <name>returns</name>
+        <description>%TRUE for success</description>
+      </tag>
+    </tags>
+  </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+   * GtkdocObject::otest:
+   * @self: myself
+   *
+   * The event has been triggered.
+   */</commentblock>
+  <docblock>
+    <identifier>
+      <name>GtkdocObject::otest</name>
+    </identifier>
+    <parameters>
+      <parameter>
+        <name>self</name>
+        <description>myself</description>
+      </parameter>
+    </parameters>
+    <description>The event has been triggered.</description>
+  </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+   * GtkdocObject::dep-otest:
+   * @self: myself
+   *
+   * The event has been triggered.
+   *
+   * Deprecated: Use the #GtkdocObject::otest signal instead.
+   */</commentblock>
+  <docblock>
+    <identifier>
+      <name>GtkdocObject::dep-otest</name>
+    </identifier>
+    <parameters>
+      <parameter>
+        <name>self</name>
+        <description>myself</description>
+      </parameter>
+    </parameters>
+    <description>The event has been triggered.</description>
+    <tags>
+      <tag>
+        <name>deprecated</name>
+        <description>Use the #GtkdocObject::otest signal instead.</description>
+      </tag>
+    </tags>
+  </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+   * GtkdocObject::strings-changed:
+   *
+   * Something has happened.
+   */</commentblock>
+  <docblock>
+    <identifier>
+      <name>GtkdocObject::strings-changed</name>
+    </identifier>
+    <description>Something has happened.</description>
+  </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+   * GtkdocObject::variant-changed:
+   *
+   * Something has happened.
+   */</commentblock>
+  <docblock>
+    <identifier>
+      <name>GtkdocObject::variant-changed</name>
+    </identifier>
+    <description>Something has happened.</description>
+  </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+   * GtkdocObject:otest:
+   *
+   * Since: 0.1
+   */</commentblock>
+  <docblock>
+    <identifier>
+      <name>GtkdocObject:otest</name>
+    </identifier>
+    <tags>
+      <tag>
+        <name>since</name>
+        <description>0.1</description>
+      </tag>
+    </tags>
+  </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+   * GtkdocObject:dep-otest:
+   *
+   * Deprecated: use #GtkdocObject:otest property
+   */</commentblock>
+  <docblock>
+    <identifier>
+      <name>GtkdocObject:dep-otest</name>
+    </identifier>
+    <tags>
+      <tag>
+        <name>deprecated</name>
+        <description>use #GtkdocObject:otest property</description>
+      </tag>
+    </tags>
+  </docblock>
+</test>
+
+</tests>

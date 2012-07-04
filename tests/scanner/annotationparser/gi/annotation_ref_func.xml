@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<tests>
+
+<test>
+  <!--
+  "Ref func:" tag syntax
+  -->
+  <commentblock>/**
+ * RegressTestFundamentalObject:
+ *
+ * This object tests regressions...
+ *
+ * Ref func: regress_test_fundamental_object_ref
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>RegressTestFundamentalObject</name>
+    </identifier>
+    <description>This object tests regressions...</description>
+    <tags>
+      <tag>
+        <name>ref func</name>
+        <description>regress_test_fundamental_object_ref</description>
+      </tag>
+    </tags>
+  </docblock>
+</test>
+
+</tests>

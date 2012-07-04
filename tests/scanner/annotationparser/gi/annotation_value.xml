@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<tests>
+
+<test>
+  <!--
+  "Value:" tag syntax
+  -->
+  <commentblock>/**
+ * ANNOTATION_CALCULATED_LARGE:
+ *
+ * Constant to define a calculated large value
+ *
+ * Value: 10000000000UL
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>ANNOTATION_CALCULATED_LARGE</name>
+    </identifier>
+    <description>Constant to define a calculated large value</description>
+    <tags>
+      <tag>
+       <name>value</name>
+       <description>10000000000UL</description>
+      </tag>
+    </tags>
+  </docblock>
+</test>
+
+</tests>

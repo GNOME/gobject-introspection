@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<tests>
+
+<test>
+  <commentblock>/**
+ * shiny_function:
+ *
+ * Description: This is a callback with a 'closure' argument that is not named
+ * 'user_data' and hence has to be annotated.
+ **/</commentblock>
+  <docblock>
+    <identifier>
+      <name>shiny_function</name>
+    </identifier>
+    <description>This is a callback with a 'closure' argument that is not named
+'user_data' and hence has to be annotated.</description>
+  </docblock>
+</test>
+
+</tests>

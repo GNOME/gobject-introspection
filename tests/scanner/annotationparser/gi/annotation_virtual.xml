@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<tests>
+
+<test>
+  <!--
+  "Virtual:" tag syntax
+  -->
+  <commentblock>/**
+ * foo_object_read:
+ * @object: obj
+ * @offset: offset
+ * @length: length
+ *
+ * Read some stuff.
+ *
+ * Virtual: read_fn
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>foo_object_read</name>
+    </identifier>
+    <parameters>
+      <parameter>
+        <name>object</name>
+        <description>obj</description>
+      </parameter>
+      <parameter>
+        <name>offset</name>
+        <description>offset</description>
+      </parameter>
+      <parameter>
+        <name>length</name>
+        <description>length</description>
+      </parameter>
+    </parameters>
+    <description>Read some stuff.</description>
+    <tags>
+      <tag>
+        <name>virtual</name>
+        <description>read_fn</description>
+      </tag>
+    </tags>
+  </docblock>
+</test>
+
+</tests>

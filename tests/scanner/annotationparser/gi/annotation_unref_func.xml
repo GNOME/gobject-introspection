@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<tests>
+
+<test>
+  <!--
+  "Unref func:" tag syntax
+  -->
+  <commentblock>/**
+ * RegressTestFundamentalObject:
+ *
+ * This object tests regressions...
+ *
+ * Unref func: regress_test_fundamental_object_unref
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>RegressTestFundamentalObject</name>
+    </identifier>
+    <description>This object tests regressions...</description>
+    <tags>
+      <tag>
+        <name>unref func</name>
+        <description>regress_test_fundamental_object_unref</description>
+      </tag>
+    </tags>
+  </docblock>
+</test>
+
+</tests>

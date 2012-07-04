@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<tests>
+
+<test>
+  <commentblock>/**
+ * GtkdocAnnotation:
+ * @that: (allow-none): eventualy points to something
+ *
+ * small struct
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>GtkdocAnnotation</name>
+    </identifier>
+    <parameters>
+      <parameter>
+        <name>that</name>
+        <annotations>
+          <annotation>
+            <name>allow-none</name>
+          </annotation>
+        </annotations>
+        <description>eventualy points to something</description>
+      </parameter>
+    </parameters>
+    <description>small struct</description>
+  </docblock>
+</test>
+
+</tests>

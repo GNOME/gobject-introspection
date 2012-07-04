@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<tests>
+
+<test>
+  <commentblock>/**
+ * FooForeignStruct: (foreign)
+ *
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>FooForeignStruct</name>
+      <annotations>
+        <annotation>
+          <name>foreign</name>
+        </annotation>
+      </annotations>
+    </identifier>
+  </docblock>
+</test>
+
+</tests>

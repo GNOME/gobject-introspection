@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<tests>
+
+<test>
+  <commentblock>/**
+ * GtkdocObject:
+ *
+ * instance data of gtk-doc unit test class
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>GtkdocObject</name>
+    </identifier>
+    <description>instance data of gtk-doc unit test class</description>
+  </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+ * GtkdocObjectClass:
+ * @parent: this is a bug :/
+ * @test: overideable method
+ * @ping: can be used before calling the @test() function
+ * @foo_bar: lets you refine your frobnicator
+ *
+ * class data of gtk-doc unit test class
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>GtkdocObjectClass</name>
+    </identifier>
+    <parameters>
+      <parameter>
+        <name>parent</name>
+        <description>this is a bug :/</description>
+      </parameter>
+      <parameter>
+        <name>test</name>
+        <description>overideable method</description>
+      </parameter>
+      <parameter>
+        <name>ping</name>
+        <description>can be used before calling the @test() function</description>
+      </parameter>
+      <parameter>
+        <name>foo_bar</name>
+        <description>lets you refine your frobnicator</description>
+      </parameter>
+    </parameters>
+    <description>class data of gtk-doc unit test class</description>
+  </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+ * GtkdocObject2:
+ *
+ * instance data of gtk-doc unit test class
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>GtkdocObject2</name>
+    </identifier>
+    <description>instance data of gtk-doc unit test class</description>
+  </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+ * GtkdocObject2Class:
+ * @parent: this is a bug :/
+ *
+ * class data of gtk-doc unit test class
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>GtkdocObject2Class</name>
+    </identifier>
+    <parameters>
+      <parameter>
+        <name>parent</name>
+        <description>this is a bug :/</description>
+      </parameter>
+    </parameters>
+    <description>class data of gtk-doc unit test class</description>
+  </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+ * GTKDOC_OBJECT_MACRO_DUMMY:
+ * @parameter_1: first arg
+ * @parameter_2: second arg
+ *
+ * This macro does nothing.
+ *
+ * Since: 0.1
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>GTKDOC_OBJECT_MACRO_DUMMY</name>
+    </identifier>
+    <parameters>
+      <parameter>
+        <name>parameter_1</name>
+        <description>first arg</description>
+      </parameter>
+      <parameter>
+        <name>parameter_2</name>
+        <description>second arg</description>
+      </parameter>
+    </parameters>
+    <description>This macro does nothing.</description>
+    <tags>
+      <tag>
+        <name>since</name>
+        <description>0.1</description>
+      </tag>
+    </tags>
+  </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+ * GTKDOC_OBJECT_MACRO_SUM:
+ * @parameter_1: first arg
+ * @parameter_2: second arg
+ *
+ * This macro adds its args.
+ *
+ * Returns: the sum of @parameter_1 and @parameter_2
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>GTKDOC_OBJECT_MACRO_SUM</name>
+    </identifier>
+    <parameters>
+      <parameter>
+        <name>parameter_1</name>
+        <description>first arg</description>
+      </parameter>
+      <parameter>
+        <name>parameter_2</name>
+        <description>second arg</description>
+      </parameter>
+    </parameters>
+    <description>This macro adds its args.</description>
+    <tags>
+      <tag>
+        <name>returns</name>
+        <description>the sum of @parameter_1 and @parameter_2</description>
+      </tag>
+    </tags>
+  </docblock>
+</test>
+
+</tests>

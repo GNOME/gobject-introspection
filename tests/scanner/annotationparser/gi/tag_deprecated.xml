@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<tests>
+
+<test>
+  <commentblock>/**
+ * annotation_versioned:
+ *
+ * Deprecated: 0.6: Use something else instead
+ **/</commentblock>
+  <docblock>
+    <identifier>
+      <name>annotation_versioned</name>
+    </identifier>
+    <tags>
+      <tag>
+        <name>deprecated</name>
+        <description>0.6: Use something else instead</description>
+      </tag>
+    </tags>
+  </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+ * annotation_versioned:
+ *
+ * Deprecated: 0.6
+ **/</commentblock>
+  <docblock>
+    <identifier>
+      <name>annotation_versioned</name>
+    </identifier>
+    <tags>
+      <tag>
+        <name>deprecated</name>
+        <description>0.6</description>
+      </tag>
+    </tags>
+  </docblock>
+</test>
+
+</tests>

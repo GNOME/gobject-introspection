@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<tests>
+
+<test>
+  <!--
+  "Rename to:" tag syntax
+  -->
+  <commentblock>/**
+ * annotation_object_watch_full:
+ * @object: A #AnnotationObject
+ * @func: The callback
+ * @user_data: The callback data
+ * @destroy: Destroy notification
+ *
+ * Test overriding via the "Rename To" annotation.
+ *
+ * Rename to: annotation_object_watch
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>annotation_object_watch_full</name>
+    </identifier>
+    <parameters>
+      <parameter>
+        <name>object</name>
+        <description>A #AnnotationObject</description>
+      </parameter>
+      <parameter>
+        <name>func</name>
+        <description>The callback</description>
+      </parameter>
+      <parameter>
+        <name>user_data</name>
+        <description>The callback data</description>
+      </parameter>
+      <parameter>
+        <name>destroy</name>
+        <description>Destroy notification</description>
+      </parameter>
+    </parameters>
+    <description>Test overriding via the "Rename To" annotation.</description>
+    <tags>
+      <tag>
+        <name>rename to</name>
+        <description>annotation_object_watch</description>
+      </tag>
+    </tags>
+  </docblock>
+</test>
+
+</tests>

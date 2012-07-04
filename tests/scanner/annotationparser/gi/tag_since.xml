@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<tests>
+
+<test>
+  <commentblock>/**
+ * annotation_versioned:
+ *
+ * Since: 0.6
+ **/</commentblock>
+  <docblock>
+    <identifier>
+      <name>annotation_versioned</name>
+    </identifier>
+    <tags>
+      <tag>
+        <name>since</name>
+        <description>0.6</description>
+      </tag>
+    </tags>
+  </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+ * annotation_versioned:
+ *
+ * Since: this function is available since version 0.6
+ **/</commentblock>
+  <docblock>
+    <identifier>
+      <name>annotation_versioned</name>
+    </identifier>
+    <tags>
+      <tag>
+        <name>since</name>
+        <description>this function is available since version 0.6</description>
+      </tag>
+    </tags>
+  </docblock>
+</test>
+
+</tests>

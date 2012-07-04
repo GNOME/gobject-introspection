@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<tests>
+
+<test>
+<commentblock>/**
+ * MACRO_NO_ITEM_DOCS:
+ *
+ * Here we document the macro but not the parameters.
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>MACRO_NO_ITEM_DOCS</name>
+    </identifier>
+    <description>Here we document the macro but not the parameters.</description>
+  </docblock>
+</test>
+
+<test>
+<commentblock>/**
+ * MACRO_INCOMPLETE_DOCS:
+ * @a: a value
+ *
+ * Here we document the macro but not all the parameters.
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>MACRO_INCOMPLETE_DOCS</name>
+    </identifier>
+    <parameters>
+      <parameter>
+        <name>a</name>
+        <description>a value</description>
+      </parameter>
+    </parameters>
+    <description>Here we document the macro but not all the parameters.</description>
+  </docblock>
+</test>
+
+<test>
+<commentblock>/**
+ * MACRO_UNUSED_DOCS:
+ * @a: a value
+ * @b: a value
+ * @c: an unexisting value
+ *
+ * Here we document the macro and more than the actual parameters.
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>MACRO_UNUSED_DOCS</name>
+    </identifier>
+    <parameters>
+      <parameter>
+        <name>a</name>
+        <description>a value</description>
+      </parameter>
+      <parameter>
+        <name>b</name>
+        <description>a value</description>
+      </parameter>
+      <parameter>
+        <name>c</name>
+        <description>an unexisting value</description>
+      </parameter>
+    </parameters>
+    <description>Here we document the macro and more than the actual parameters.</description>
+  </docblock>
+</test>
+
+<test>
+<commentblock>/**
+ * EnumNoItemDocs:
+ *
+ * Here we document the enum but not the values.
+ * http://bugzilla.gnome.org/show_bug.cgi?id=568711
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>EnumNoItemDocs</name>
+    </identifier>
+    <description>Here we document the enum but not the values.
+http://bugzilla.gnome.org/show_bug.cgi?id=568711</description>
+  </docblock>
+</test>
+
+<test>
+<commentblock>/**
+ * EnumIncompleteDocs:
+ * @ENUM_INCOMPLETE_DOCS_1: a value
+ *
+ * Here we document the enum but not all the values.
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>EnumIncompleteDocs</name>
+    </identifier>
+    <parameters>
+      <parameter>
+        <name>ENUM_INCOMPLETE_DOCS_1</name>
+        <description>a value</description>
+      </parameter>
+    </parameters>
+    <description>Here we document the enum but not all the values.</description>
+  </docblock>
+</test>
+
+<test>
+<commentblock>/**
+ * EnumUnusedDocs:
+ * @ENUM_UNUSED_DOCS_1: a value
+ * @ENUM_UNUSED_DOCS_2: a value
+ * @ENUM_UNUSED_DOCS_3: an unexisting value
+ *
+ * Here we document the enum and more than the actual values.
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>EnumUnusedDocs</name>
+    </identifier>
+    <parameters>
+      <parameter>
+        <name>ENUM_UNUSED_DOCS_1</name>
+        <description>a value</description>
+      </parameter>
+      <parameter>
+        <name>ENUM_UNUSED_DOCS_2</name>
+        <description>a value</description>
+      </parameter>
+      <parameter>
+        <name>ENUM_UNUSED_DOCS_3</name>
+        <description>an unexisting value</description>
+      </parameter>
+    </parameters>
+    <description>Here we document the enum and more than the actual values.</description>
+  </docblock>
+</test>
+
+<test>
+<commentblock>/**
+ * StructNoItemDocs:
+ *
+ * Here we document the struct but not the values.
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>StructNoItemDocs</name>
+    </identifier>
+    <description>Here we document the struct but not the values.</description>
+  </docblock>
+</test>
+
+<test>
+<commentblock>/**
+ * StructIncompleteDocs:
+ * @a: a value
+ *
+ * Here we document the struct but not all the values.
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>StructIncompleteDocs</name>
+    </identifier>
+    <parameters>
+      <parameter>
+        <name>a</name>
+        <description>a value</description>
+      </parameter>
+    </parameters>
+    <description>Here we document the struct but not all the values.</description>
+  </docblock>
+</test>
+
+<test>
+<commentblock>/**
+ * StructUnusedDocs:
+ * @a: a value
+ * @b: a value
+ * @c: an unexisting value
+ *
+ * Here we document the struct and more than the actual values.
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>StructUnusedDocs</name>
+    </identifier>
+    <parameters>
+      <parameter>
+        <name>a</name>
+        <description>a value</description>
+      </parameter>
+      <parameter>
+        <name>b</name>
+        <description>a value</description>
+      </parameter>
+      <parameter>
+        <name>c</name>
+        <description>an unexisting value</description>
+      </parameter>
+    </parameters>
+    <description>Here we document the struct and more than the actual values.</description>
+  </docblock>
+</test>
+
+</tests>

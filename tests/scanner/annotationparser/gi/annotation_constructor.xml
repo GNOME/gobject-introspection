@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<tests>
+
+<test>
+  <commentblock>/**
+ * regress_constructor: (constructor)
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>regress_constructor</name>
+      <annotations>
+        <annotation>
+          <name>constructor</name>
+        </annotation>
+      </annotations>
+    </identifier>
+  </docblock>
+</test>
+
+</tests>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<tests>
+
+<test>
+  <!--
+  Not GTK-Doc
+  -->
+  <commentblock>//Test</commentblock>
+</test>
+
+<test>
+  <!--
+  Not GTK-Doc
+  -->
+  <commentblock>// Test</commentblock>
+</test>
+
+<test>
+  <!--
+  Not GTK-Doc
+  -->
+  <commentblock>/*Test*/</commentblock>
+</test>
+
+<test>
+  <!--
+  Not GTK-Doc
+  -->
+  <commentblock>/* Test */</commentblock>
+</test>
+
+<test>
+  <!--
+  Not GTK-Doc
+  -->
+  <commentblock>/* Test
+something */</commentblock>
+</test>
+
+<test>
+  <!--
+  Not GTK-Doc
+  -->
+  <commentblock>/*
+Test
+something */</commentblock>
+</test>
+
+<test>
+  <!--
+  Not GTK-Doc
+  -->
+  <commentblock>/**Test*/</commentblock>
+</test>
+
+<test>
+  <!--
+  Not GTK-Doc
+  -->
+  <commentblock>/** Test */</commentblock>
+</test>
+
+<test>
+  <!--
+  Not GTK-Doc
+  -->
+  <commentblock>/** Test
+something */</commentblock>
+</test>
+
+<test>
+  <!--
+  Broken comment block, signal the start of the comment block description followed
+  by a parameter instead.
+  -->
+  <commentblock>/**
+ * SECTION:meepapp
+ *
+ * @short_description: the application class
+ *
+ * The application class handles ...
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>SECTION:meepapp</name>
+    </identifier>
+    <parameters>
+      <parameter>
+        <name>short_description</name>
+        <description>the application class</description>
+      </parameter>
+    </parameters>
+    <description>The application class handles ...</description>
+  </docblock>
+</test>
+
+</tests>

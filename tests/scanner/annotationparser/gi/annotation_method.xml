@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<tests>
+
+<test>
+  <commentblock>/**
+ * regress_forced_method: (method)
+ * @obj: A #RegressTestObj
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>regress_forced_method</name>
+      <annotations>
+        <annotation>
+          <name>method</name>
+        </annotation>
+      </annotations>
+    </identifier>
+    <parameters>
+      <parameter>
+        <name>obj</name>
+        <description>A #RegressTestObj</description>
+      </parameter>
+    </parameters>
+  </docblock>
+</test>
+
+</tests>

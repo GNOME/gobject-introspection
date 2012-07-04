@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<tests>
+
+<test>
+  <!--
+  "Set value func:" tag syntax
+  -->
+  <commentblock>/**
+ * RegressTestFundamentalObject:
+ *
+ * This object tests regressions...
+ *
+ * Set value func: regress_test_value_set_fundamental_object
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>RegressTestFundamentalObject</name>
+    </identifier>
+    <description>This object tests regressions...</description>
+    <tags>
+      <tag>
+        <name>set value func</name>
+        <description>regress_test_value_set_fundamental_object</description>
+      </tag>
+    </tags>
+  </docblock>
+</test>
+
+</tests>

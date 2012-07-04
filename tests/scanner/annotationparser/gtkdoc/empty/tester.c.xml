@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<tests>
+
+<test>
+  <commentblock><![CDATA[/**
+ * SECTION:tester
+ * @short_description: module for gtk-doc unit test
+ *
+ * This file contains non-sense code for the sole purpose of testing the docs.
+ *
+ * As described in http://bugzilla.gnome.org/show_bug.cgi?id=457077 it
+ * returns nothing.
+ */]]></commentblock>
+  <docblock>
+    <identifier>
+      <name>SECTION:tester</name>
+    </identifier>
+    <parameters>
+      <parameter>
+        <name>short_description</name>
+        <description>module for gtk-doc unit test</description>
+      </parameter>
+    </parameters>
+    <description><![CDATA[This file contains non-sense code for the sole purpose of testing the docs.
+
+As described in http://bugzilla.gnome.org/show_bug.cgi?id=457077 it
+returns nothing.]]></description>
+  </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+ * test:
+ * @a: arg
+ *
+ * lonely function
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>test</name>
+    </identifier>
+    <parameters>
+      <parameter>
+        <name>a</name>
+        <description>arg</description>
+      </parameter>
+    </parameters>
+    <description>lonely function</description>
+  </docblock>
+ </test>
+
+</tests>

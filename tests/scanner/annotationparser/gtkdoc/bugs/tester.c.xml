@@ -1,0 +1,765 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<tests>
+
+<test>
+  <commentblock><![CDATA[/**
+ * SECTION:tester
+ * @short_description: module for gtk-doc unit test
+ *
+ * This file contains non-sense code for the sole purpose of testing the docs.
+ *
+ * As described in http://bugzilla.gnome.org/show_bug.cgi?id=457077 it
+ * returns nothing.
+ *
+ * Some special characters need escaping. The tests should pass 100\%.
+ * Try a <ulink url="http://www.gtk.org/gtk-doc/#Top">link containing a # char</ulink>.
+ *
+ * <refsect2 id="dummy-id">
+ * <title>more details</title>
+ * <para>
+ * Second paragraph inside subsection.
+ * </para>
+ * </refsect2>
+ */]]></commentblock>
+  <docblock>
+    <identifier>
+      <name>SECTION:tester</name>
+    </identifier>
+    <parameters>
+      <parameter>
+        <name>short_description</name>
+        <description>module for gtk-doc unit test</description>
+      </parameter>
+    </parameters>
+    <description><![CDATA[This file contains non-sense code for the sole purpose of testing the docs.
+
+As described in http://bugzilla.gnome.org/show_bug.cgi?id=457077 it
+returns nothing.
+
+Some special characters need escaping. The tests should pass 100\%.
+Try a <ulink url="http://www.gtk.org/gtk-doc/#Top">link containing a # char</ulink>.
+
+<refsect2 id="dummy-id">
+<title>more details</title>
+<para>
+Second paragraph inside subsection.
+</para>
+</refsect2>]]></description>
+  </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+ * bug_141869_a:
+ * @pid: arg
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=141869
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>bug_141869_a</name>
+    </identifier>
+    <parameters>
+      <parameter>
+        <name>pid</name>
+        <description>arg</description>
+      </parameter>
+    </parameters>
+    <description>http://bugzilla.gnome.org/show_bug.cgi?id=141869</description>
+  </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+ * bug_141869_b:
+ * @pid: arg
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=141869
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>bug_141869_b</name>
+    </identifier>
+    <parameters>
+      <parameter>
+        <name>pid</name>
+        <description>arg</description>
+      </parameter>
+    </parameters>
+    <description>http://bugzilla.gnome.org/show_bug.cgi?id=141869</description>
+  </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+ * bug_379466:
+ * @pid: arg
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=379466
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>bug_379466</name>
+    </identifier>
+    <parameters>
+      <parameter>
+        <name>pid</name>
+        <description>arg</description>
+      </parameter>
+    </parameters>
+    <description>http://bugzilla.gnome.org/show_bug.cgi?id=379466</description>
+  </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+ * bug_380824:
+ * @arg: arg
+ *
+ * Returns a value.
+ * http://bugzilla.gnome.org/show_bug.cgi?id=380824
+ *
+ * Since: 0.1
+ *
+ * Returns: result
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>bug_380824</name>
+    </identifier>
+    <parameters>
+      <parameter>
+        <name>arg</name>
+        <description>arg</description>
+      </parameter>
+    </parameters>
+    <description>Returns a value.
+http://bugzilla.gnome.org/show_bug.cgi?id=380824</description>
+    <tags>
+      <tag>
+        <name>since</name>
+        <description>0.1</description>
+      </tag>
+      <tag>
+        <name>returns</name>
+        <description>result</description>
+      </tag>
+    </tags>
+  </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+ * bug_411739:
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=411739
+ *
+ * Returns: result
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>bug_411739</name>
+    </identifier>
+    <description>http://bugzilla.gnome.org/show_bug.cgi?id=411739</description>
+    <tags>
+      <tag>
+        <name>returns</name>
+        <description>result</description>
+      </tag>
+    </tags>
+  </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+ * bug_419997:
+ * @const_values: arg
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=419997
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>bug_419997</name>
+    </identifier>
+    <parameters>
+      <parameter>
+        <name>const_values</name>
+        <description>arg</description>
+      </parameter>
+    </parameters>
+    <description>http://bugzilla.gnome.org/show_bug.cgi?id=419997</description>
+  </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+ * bug_445693:
+ * @pid: arg
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=445693
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>bug_445693</name>
+    </identifier>
+    <parameters>
+      <parameter>
+        <name>pid</name>
+        <description>arg</description>
+      </parameter>
+    </parameters>
+    <description>http://bugzilla.gnome.org/show_bug.cgi?id=445693</description>
+  </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+ * bug_471014:
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=471014
+ *
+ * Returns: result
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>bug_471014</name>
+    </identifier>
+    <description>http://bugzilla.gnome.org/show_bug.cgi?id=471014</description>
+    <tags>
+      <tag>
+        <name>returns</name>
+        <description>result</description>
+      </tag>
+    </tags>
+  </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+ * Bug446648:
+ * @BUG_446648_FOO: foo
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=446648
+ **/</commentblock>
+  <docblock>
+    <identifier>
+      <name>Bug446648</name>
+    </identifier>
+    <parameters>
+      <parameter>
+        <name>BUG_446648_FOO</name>
+        <description>foo</description>
+      </parameter>
+    </parameters>
+    <description>http://bugzilla.gnome.org/show_bug.cgi?id=446648</description>
+  </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+ * bug_552602:
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=552602
+ *
+ * Returns: result
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>bug_552602</name>
+    </identifier>
+    <description>http://bugzilla.gnome.org/show_bug.cgi?id=552602</description>
+    <tags>
+      <tag>
+        <name>returns</name>
+        <description>result</description>
+      </tag>
+    </tags>
+  </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+ * bug_574654a:
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=574654
+ *
+ * Returns: result
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>bug_574654a</name>
+    </identifier>
+    <description>http://bugzilla.gnome.org/show_bug.cgi?id=574654</description>
+    <tags>
+      <tag>
+        <name>returns</name>
+        <description>result</description>
+      </tag>
+    </tags>
+  </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+ * bug_574654b:
+ * @offset: skip this many items
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=574654
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>bug_574654b</name>
+    </identifier>
+    <parameters>
+      <parameter>
+        <name>offset</name>
+        <description>skip this many items</description>
+      </parameter>
+    </parameters>
+    <description>http://bugzilla.gnome.org/show_bug.cgi?id=574654</description>
+  </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+ * bug_580300a_get_type:
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=580300
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>bug_580300a_get_type</name>
+    </identifier>
+    <description>http://bugzilla.gnome.org/show_bug.cgi?id=580300</description>
+  </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+ * bug_580300b_get_type:
+ * @a: value
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=580300
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>bug_580300b_get_type</name>
+    </identifier>
+    <parameters>
+      <parameter>
+        <name>a</name>
+        <description>value</description>
+      </parameter>
+    </parameters>
+    <description>http://bugzilla.gnome.org/show_bug.cgi?id=580300</description>
+  </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+ * bug_580300c_get_type:
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=580300
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>bug_580300c_get_type</name>
+    </identifier>
+    <description>http://bugzilla.gnome.org/show_bug.cgi?id=580300</description>
+  </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+ * bug_580300d_get_type:
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=580300
+ *
+ * Returns: result
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>bug_580300d_get_type</name>
+    </identifier>
+    <description>http://bugzilla.gnome.org/show_bug.cgi?id=580300</description>
+    <tags>
+      <tag>
+        <name>returns</name>
+        <description>result</description>
+      </tag>
+    </tags>
+  </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+ * bug_597937:
+ * @function_arg: value
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=597937
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>bug_597937</name>
+    </identifier>
+    <parameters>
+      <parameter>
+        <name>function_arg</name>
+        <description>value</description>
+      </parameter>
+    </parameters>
+    <description>http://bugzilla.gnome.org/show_bug.cgi?id=597937</description>
+  </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+ * bug_602518a:
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=602518
+ *
+ * Returns: result
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>bug_602518a</name>
+    </identifier>
+    <description>http://bugzilla.gnome.org/show_bug.cgi?id=602518</description>
+    <tags>
+      <tag>
+        <name>returns</name>
+        <description>result</description>
+      </tag>
+    </tags>
+  </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+ * bug_602518b:
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=602518
+ *
+ * Returns: result
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>bug_602518b</name>
+    </identifier>
+    <description>http://bugzilla.gnome.org/show_bug.cgi?id=602518</description>
+    <tags>
+      <tag>
+        <name>returns</name>
+        <description>result</description>
+      </tag>
+    </tags>
+  </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+ * bug_602518c:
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=602518
+ *
+ * Returns: result
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>bug_602518c</name>
+    </identifier>
+    <description>http://bugzilla.gnome.org/show_bug.cgi?id=602518</description>
+    <tags>
+      <tag>
+        <name>returns</name>
+        <description>result</description>
+      </tag>
+    </tags>
+  </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+ * bug_607445:
+ * @a: parameter
+ * @n: parameter
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=607445
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>bug_607445</name>
+    </identifier>
+    <parameters>
+      <parameter>
+        <name>a</name>
+        <description>parameter</description>
+      </parameter>
+      <parameter>
+        <name>n</name>
+        <description>parameter</description>
+      </parameter>
+    </parameters>
+    <description>http://bugzilla.gnome.org/show_bug.cgi?id=607445</description>
+  </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+ * bug_610257:
+ * @der: parameter
+ * @len: parameter
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=610257
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>bug_610257</name>
+    </identifier>
+    <parameters>
+      <parameter>
+        <name>der</name>
+        <description>parameter</description>
+      </parameter>
+      <parameter>
+        <name>len</name>
+        <description>parameter</description>
+      </parameter>
+    </parameters>
+    <description>http://bugzilla.gnome.org/show_bug.cgi?id=610257</description>
+  </docblock>
+</test>
+
+<test>
+  <commentblock><![CDATA[/**
+ * bug_623968a:
+ *
+ * <para>test</para>
+ * <refsect3>
+ *   <title>subsect</title>
+ *   <para>test</para>
+ * </refsect3>
+ **/]]></commentblock>
+  <docblock>
+    <identifier>
+      <name>bug_623968a</name>
+    </identifier>
+    <description><![CDATA[<para>test</para>
+<refsect3>
+  <title>subsect</title>
+  <para>test</para>
+</refsect3>]]></description>
+  </docblock>
+</test>
+
+<test>
+  <commentblock><![CDATA[/**
+ * bug_623968b:
+ *
+ * test
+ *
+ * <refsect3>
+ *   <title>subsect</title>
+ *   <para>test</para>
+ * </refsect3>
+ **/]]></commentblock>
+  <docblock>
+    <identifier>
+      <name>bug_623968b</name>
+    </identifier>
+    <description><![CDATA[test
+
+<refsect3>
+  <title>subsect</title>
+  <para>test</para>
+</refsect3>]]></description>
+  </docblock>
+</test>
+
+<test>
+  <commentblock><![CDATA[/**
+ * bug_623968c:
+ *
+ * <para>test</para>
+ **/]]></commentblock>
+  <docblock>
+    <identifier>
+      <name>bug_623968c</name>
+    </identifier>
+    <description><![CDATA[<para>test</para>]]></description>
+  </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+ * bug_624200a:
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=624200
+ *
+ * Returns: result
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>bug_624200a</name>
+    </identifier>
+    <description>http://bugzilla.gnome.org/show_bug.cgi?id=624200</description>
+    <tags>
+      <tag>
+        <name>returns</name>
+        <description>result</description>
+      </tag>
+    </tags>
+  </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+ * bug_624200b:
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=624200
+ *
+ * Returns: result
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>bug_624200b</name>
+    </identifier>
+    <description>http://bugzilla.gnome.org/show_bug.cgi?id=624200</description>
+    <tags>
+      <tag>
+        <name>returns</name>
+        <description>result</description>
+      </tag>
+    </tags>
+  </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+ * bug_638330:
+ * @arg1: arg1
+ * @data: data
+ * @length: length
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=638330
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>bug_638330</name>
+    </identifier>
+    <parameters>
+      <parameter>
+        <name>arg1</name>
+        <description>arg1</description>
+      </parameter>
+      <parameter>
+        <name>data</name>
+        <description>data</description>
+      </parameter>
+      <parameter>
+        <name>length</name>
+        <description>length</description>
+      </parameter>
+    </parameters>
+    <description>http://bugzilla.gnome.org/show_bug.cgi?id=638330</description>
+  </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+ * bug_000000_va1:
+ * @name: a name
+ * @...: A printf-style message to output
+ *
+ * Outputs a message.
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>bug_000000_va1</name>
+    </identifier>
+    <parameters>
+      <parameter>
+        <name>name</name>
+        <description>a name</description>
+      </parameter>
+      <parameter>
+        <name>...</name>
+        <description>A printf-style message to output</description>
+      </parameter>
+    </parameters>
+    <description>Outputs a message.</description>
+  </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+ * bug_624001a:
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=624001
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>bug_624001a</name>
+    </identifier>
+    <description>http://bugzilla.gnome.org/show_bug.cgi?id=624001</description>
+  </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+ * bug_624001b:
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=624001
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>bug_624001b</name>
+    </identifier>
+    <description>http://bugzilla.gnome.org/show_bug.cgi?id=624001</description>
+  </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+ * bug_624001c:
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=624001
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>bug_624001c</name>
+    </identifier>
+    <description>http://bugzilla.gnome.org/show_bug.cgi?id=624001</description>
+  </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+ * bug_624001d:
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=624001
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>bug_624001d</name>
+    </identifier>
+    <description>http://bugzilla.gnome.org/show_bug.cgi?id=624001</description>
+  </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+ * bug_624001e:
+ *
+ * http://bugzilla.gnome.org/show_bug.cgi?id=624001
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>bug_624001e</name>
+    </identifier>
+    <description>http://bugzilla.gnome.org/show_bug.cgi?id=624001</description>
+  </docblock>
+</test>
+
+</tests>

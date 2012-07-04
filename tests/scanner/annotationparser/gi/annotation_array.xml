@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<tests>
+
+<test>
+  <commentblock>/**
+ * annotation_object_compute_sum:
+ * @nums: (array): Sequence of numbers
+ *
+ * Test taking a zero-terminated array
+ **/</commentblock>
+  <docblock>
+    <identifier>
+      <name>annotation_object_compute_sum</name>
+    </identifier>
+    <parameters>
+      <parameter>
+        <name>nums</name>
+        <annotations>
+          <annotation>
+            <name>array</name>
+          </annotation>
+        </annotations>
+        <description>Sequence of numbers</description>
+      </parameter>
+    </parameters>
+    <description>Test taking a zero-terminated array</description>
+  </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+ * annotation_object_compute_sum_n:
+ * @object: a #AnnotationObject
+ * @nums: (array length=n_nums zero-terminated=0): Sequence of
+ *   numbers that are zero-terminated
+ * @n_nums: Length of number array
+ *
+ * Test taking an array with length parameter
+ **/</commentblock>
+  <docblock>
+    <identifier>
+      <name>annotation_object_compute_sum_n</name>
+    </identifier>
+    <parameters>
+      <parameter>
+        <name>object</name>
+        <description>a #AnnotationObject</description>
+      </parameter>
+      <parameter>
+        <name>nums</name>
+        <annotations>
+          <annotation>
+            <name>array</name>
+            <options>
+              <option>
+                <name>length</name>
+                <value>n_nums</value>
+              </option>
+              <option>
+                <name>zero-terminated</name>
+                <value>0</value>
+              </option>
+            </options>
+          </annotation>
+        </annotations>
+        <description>Sequence of numbers that are zero-terminated</description>
+      </parameter>
+      <parameter>
+        <name>n_nums</name>
+        <description>Length of number array</description>
+      </parameter>
+    </parameters>
+    <description>Test taking an array with length parameter</description>
+  </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+ * annotation_object_compute_sum_nz:
+ * @object: a #AnnotationObject
+ * @nums: (array length=n_nums zero-terminated=1): Sequence of numbers that
+ * are zero-terminated
+ * @n_nums: Length of number array
+ *
+ * Test taking a zero-terminated array with length parameter
+ **/</commentblock>
+  <docblock>
+    <identifier>
+      <name>annotation_object_compute_sum_nz</name>
+    </identifier>
+    <parameters>
+      <parameter>
+        <name>object</name>
+        <description>a #AnnotationObject</description>
+      </parameter>
+      <parameter>
+        <name>nums</name>
+        <annotations>
+          <annotation>
+            <name>array</name>
+            <options>
+              <option>
+                <name>length</name>
+                <value>n_nums</value>
+              </option>
+              <option>
+                <name>zero-terminated</name>
+                <value>1</value>
+              </option>
+            </options>
+          </annotation>
+        </annotations>
+        <description>Sequence of numbers that are zero-terminated</description>
+      </parameter>
+      <parameter>
+        <name>n_nums</name>
+        <description>Length of number array</description>
+      </parameter>
+    </parameters>
+    <description>Test taking a zero-terminated array with length parameter</description>
+  </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+ * annotation_object_parse_args:
+ * @object: a #AnnotationObject
+ * @argc: (inout): Length of the argument vector
+ * @argv: (inout) (array length=argc zero-terminated=1): Argument vector
+ *
+ * Test taking a zero-terminated array with length parameter
+ **/</commentblock>
+  <docblock>
+    <identifier>
+      <name>annotation_object_parse_args</name>
+    </identifier>
+    <parameters>
+      <parameter>
+        <name>object</name>
+        <description>a #AnnotationObject</description>
+      </parameter>
+      <parameter>
+        <name>argc</name>
+        <annotations>
+          <annotation>
+            <name>inout</name>
+          </annotation>
+        </annotations>
+        <description>Length of the argument vector</description>
+      </parameter>
+      <parameter>
+        <name>argv</name>
+        <annotations>
+          <annotation>
+            <name>inout</name>
+          </annotation>
+          <annotation>
+            <name>array</name>
+            <options>
+              <option>
+                <name>length</name>
+                <value>argc</value>
+              </option>
+              <option>
+                <name>zero-terminated</name>
+                <value>1</value>
+              </option>
+            </options>
+          </annotation>
+        </annotations>
+        <description>Argument vector</description>
+      </parameter>
+    </parameters>
+    <description>Test taking a zero-terminated array with length parameter</description>
+  </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+ * annotation_object_set_data:
+ * @object: a #AnnotationObject
+ * @data: (array length=length): The data
+ * @length: Length of the data
+ *
+ * Test taking a guchar * with a length.
+ **/</commentblock>
+  <docblock>
+    <identifier>
+      <name>annotation_object_set_data</name>
+    </identifier>
+    <parameters>
+      <parameter>
+        <name>object</name>
+        <description>a #AnnotationObject</description>
+      </parameter>
+      <parameter>
+        <name>data</name>
+        <annotations>
+          <annotation>
+            <name>array</name>
+            <options>
+              <option>
+                <name>length</name>
+                <value>length</value>
+              </option>
+            </options>
+          </annotation>
+        </annotations>
+        <description>The data</description>
+      </parameter>
+      <parameter>
+        <name>length</name>
+        <description>Length of the data</description>
+      </parameter>
+    </parameters>
+    <description>Test taking a guchar * with a length.</description>
+  </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+ * annotation_string_zero_terminated:
+ * @data: (array fixed-size=2): a third value
+ *
+ * Return value: (transfer full) (array zero-terminated=1): The return value
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>annotation_string_zero_terminated</name>
+    </identifier>
+    <parameters>
+      <parameter>
+        <name>data</name>
+        <annotations>
+          <annotation>
+            <name>array</name>
+            <options>
+              <option>
+                <name>fixed-size</name>
+                <value>2</value>
+              </option>
+            </options>
+          </annotation>
+        </annotations>
+        <description>a third value</description>
+      </parameter>
+    </parameters>
+    <tags>
+      <tag>
+        <name>returns</name>
+        <annotations>
+          <annotation>
+            <name>transfer</name>
+            <options>
+              <option>
+                <name>full</name>
+              </option>
+            </options>
+          </annotation>
+          <annotation>
+            <name>array</name>
+            <options>
+              <option>
+                <name>zero-terminated</name>
+                <value>1</value>
+              </option>
+            </options>
+          </annotation>
+        </annotations>
+        <description>The return value</description>
+      </tag>
+    </tags>
+  </docblock>
+</test>
+
+</tests>

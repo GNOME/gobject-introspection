@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<tests>
+
+<test>
+  <commentblock>/**
+ * annotation_versioned:
+ *
+ * Stability: Stable
+ **/</commentblock>
+  <docblock>
+    <identifier>
+      <name>annotation_versioned</name>
+    </identifier>
+    <tags>
+      <tag>
+        <name>stability</name>
+        <description>Stable</description>
+      </tag>
+    </tags>
+  </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+ * annotation_versioned:
+ *
+ * Stability: Unstable
+ **/</commentblock>
+  <docblock>
+    <identifier>
+      <name>annotation_versioned</name>
+    </identifier>
+    <tags>
+      <tag>
+        <name>stability</name>
+        <description>Unstable</description>
+      </tag>
+    </tags>
+  </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+ * annotation_versioned:
+ *
+ * Stability: Private
+ **/</commentblock>
+  <docblock>
+    <identifier>
+      <name>annotation_versioned</name>
+    </identifier>
+    <tags>
+      <tag>
+        <name>stability</name>
+        <description>Private</description>
+      </tag>
+    </tags>
+  </docblock>
+</test>
+
+<test>
+  <commentblock>/**
+ * annotation_versioned:
+ *
+ * Stability: behavior tends to vary depending on the phase of the moon.
+ **/</commentblock>
+  <docblock>
+    <identifier>
+      <name>annotation_versioned</name>
+    </identifier>
+    <tags>
+      <tag>
+        <name>stability</name>
+        <description>behavior tends to vary depending on the phase of the moon.</description>
+      </tag>
+    </tags>
+  </docblock>
+</test>
+
+</tests>
