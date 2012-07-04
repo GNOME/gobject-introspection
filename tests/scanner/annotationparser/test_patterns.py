@@ -31,8 +31,8 @@ against the expected output.
 '''
 
 
-from giscanner.annotationpatterns import (SECTION_RE, SYMBOL_RE, PROPERTY_RE,
-                                          SIGNAL_RE, PARAMETER_RE, TAG_RE)
+from giscanner.annotationparser import (SECTION_RE, SYMBOL_RE, PROPERTY_RE,
+                                        SIGNAL_RE, PARAMETER_RE, TAG_RE)
 from unittest import (TestCase, main)
 
 
