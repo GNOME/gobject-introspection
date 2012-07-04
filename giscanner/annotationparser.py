@@ -790,6 +790,9 @@ class AnnotationParser(object):
         # Check for the end the comment block.
         if COMMENT_END_RE.match(comment_lines[-1][1]):
             del comment_lines[-1]
+        else:
+            # Not a GTK-Doc comment block.
+            return None
 
         # If we get this far, we are inside a GTK-Doc comment block.
         return self._parse_comment_block(comment_lines, filename, lineno)

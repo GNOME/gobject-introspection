@@ -71,6 +71,25 @@ something */</commentblock>
 
 <test>
   <!--
+  Not GTK-Doc
+  -->
+  <commentblock>/**
+Test
+something */</commentblock>
+</test>
+
+<test>
+  <!--
+  Not GTK-Doc
+  -->
+  <commentblock>/**
+Test
+something **/</commentblock>
+</test>
+
+
+<test>
+  <!--
   Broken comment block, signal the start of the comment block description followed
   by a parameter instead.
   -->
