@@ -420,8 +420,7 @@ raise ValueError."""
         return func
 
     def _create_source_type(self, source_type):
-        if source_type is None:
-            return 'None'
+        assert source_type is not None
         if source_type.type == CTYPE_VOID:
             value = 'void'
         elif source_type.type == CTYPE_BASIC_TYPE:
