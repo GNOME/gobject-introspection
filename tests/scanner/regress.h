@@ -875,4 +875,15 @@ void regress_test_struct_fixed_array_frob (RegressTestStructFixedArray *str);
 void regress_has_parameter_named_attrs (int        foo,
                                         gpointer   attributes);
 
+
+typedef struct {
+  int dummy;
+  struct {
+    const char *name;
+    guint x;
+  } attributes[32];
+
+  double dummy2;
+} RegressLikeGnomeKeyringPasswordSchema;
+
 #endif /* __GITESTTYPES_H__ */

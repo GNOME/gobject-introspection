@@ -55,6 +55,20 @@ and/or use gtk-doc annotations.  -->
               c:type="REGRESS_LONG_STRING_CONSTANT">
       <type name="utf8" c:type="gchar*"/>
     </constant>
+    <record name="LikeGnomeKeyringPasswordSchema"
+            c:type="RegressLikeGnomeKeyringPasswordSchema">
+      <field name="dummy" writable="1">
+        <type name="gint" c:type="int"/>
+      </field>
+      <field name="attributes" writable="1">
+        <array zero-terminated="0" c:type="gpointer" fixed-size="32">
+          <type name="gpointer" c:type="gpointer"/>
+        </array>
+      </field>
+      <field name="dummy2" writable="1">
+        <type name="gdouble" c:type="double"/>
+      </field>
+    </record>
     <constant name="Mixed_Case_Constant"
               value="4423"
               c:type="REGRESS_Mixed_Case_Constant">
@@ -1474,7 +1488,7 @@ Use with regress_test_obj_emit_sig_with_obj</doc>
         <type name="GType" c:type="GType"/>
       </field>
       <field name="some_union" writable="1">
-        <array zero-terminated="0" fixed-size="2">
+        <array zero-terminated="0" c:type="gpointer" fixed-size="2">
           <type name="TestStructE__some_union__union"/>
         </array>
       </field>

@@ -449,6 +449,8 @@ raise ValueError."""
                                   CTYPE_UNION,
                                   CTYPE_ENUM]:
             value = source_type.name
+            if not value:
+                value = 'gpointer'
             if const:
                 value = 'const ' + value
             if volatile:
