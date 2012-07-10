@@ -145,6 +145,8 @@ and/or use gtk-doc annotations. ''')
             if node.deprecated_version:
                 attrs.append(('deprecated-version',
                               node.deprecated_version))
+        if node.stability:
+            attrs.append(('stability', node.stability))
 
     def _append_throws(self, func, attrs):
         if func.throws:

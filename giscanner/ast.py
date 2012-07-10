@@ -480,6 +480,7 @@ properties."""
         self.skip = False
         self.introspectable = True
         self.attributes = [] # (key, value)*
+        self.stability = None
         self.deprecated = None
         self.deprecated_version = None
         self.doc = None

@@ -3482,5 +3482,15 @@ What we're testing here is that the scanner ignores the @a nested inside XML.</d
         </parameter>
       </parameters>
     </function>
+    <function name="test_versioning"
+              c:identifier="regress_test_versioning"
+              version="1.32.1"
+              deprecated="Use foobar instead"
+              deprecated-version="1.33.3"
+              stability="Unstable">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+    </function>
   </namespace>
 </repository>

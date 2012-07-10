@@ -137,6 +137,9 @@ cairo_surface_t *regress_test_cairo_surface_full_return (void);
 void regress_test_cairo_surface_none_in (cairo_surface_t *surface);
 void regress_test_cairo_surface_full_out (cairo_surface_t **surface);
 
+/* versioning (deprecated, since, stability) */
+void regress_test_versioning ();
+
 GVariant *regress_test_gvariant_i (void);
 GVariant *regress_test_gvariant_s (void);
 GVariant *regress_test_gvariant_asv (void);

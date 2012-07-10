@@ -3812,3 +3812,15 @@ regress_has_parameter_named_attrs (int        foo,
                                    gpointer   attributes)
 {
 }
+
+/**
+ * regress_test_versioning:
+ *
+ * Since: 1.32.1
+ * Deprecated: 1.33.3: Use foobar instead
+ * Stability: Unstable
+ */
+void
+regress_test_versioning ()
+{
+}

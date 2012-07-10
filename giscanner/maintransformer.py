@@ -24,7 +24,8 @@ from . import message
 from .annotationparser import (TAG_VFUNC, TAG_SINCE, TAG_DEPRECATED, TAG_RETURNS,
                                TAG_ATTRIBUTES, TAG_RENAME_TO, TAG_TYPE,
                                TAG_UNREF_FUNC, TAG_REF_FUNC, TAG_SET_VALUE_FUNC,
-                               TAG_GET_VALUE_FUNC, TAG_VALUE, TAG_TRANSFER)
+                               TAG_GET_VALUE_FUNC, TAG_VALUE, TAG_TRANSFER,
+                               TAG_STABILITY)
 from .annotationparser import (OPT_ALLOW_NONE, OPT_ARRAY, OPT_ATTRIBUTE,
                                OPT_ELEMENT_TYPE, OPT_IN, OPT_INOUT,
                                OPT_INOUT_ALT, OPT_OUT, OPT_SCOPE,
@@ -616,6 +617,15 @@ usage is void (*_gtk_reserved1)(void);"""
             node.deprecated = desc
             if version is not None:
                 node.deprecated_version = version
+
+        stability_tag = block.get_tag(TAG_STABILITY)
+        if stability_tag is not None:
+            stability = stability_tag.value.capitalize()
+            if stability in ["Stable", "Unstable", "Private", "Internal"]:
+                node.stability = stability
+            else:
+                message.warn('unknown value "%s" for Stability tag' % (
+                    stability_tag.value), stability_tag.position)
 
         annos_tag = block.get_tag(TAG_ATTRIBUTES)
         if annos_tag is not None:
