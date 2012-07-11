@@ -417,7 +417,7 @@
  * GDBusConnection::closed:
  * @connection: The #GDBusConnection emitting the signal.
  * @remote_peer_vanished: %TRUE if @connection is closed because the remote peer closed its end of the connection.
- * @error: A #GError with more details about the event or %NULL.
+ * @error: (allow-none): A #GError with more details about the event or %NULL.
  *
  * Emitted when the connection is closed.
  *
@@ -10490,6 +10490,41 @@
  * Gets the user data from a #GAsyncResult.
  *
  * Returns: (transfer full): the user data for @res.
+ */
+
+
+/**
+ * g_async_result_is_tagged:
+ * @result: a #GAsyncResult
+ * @source_tag: an application-defined tag
+ *
+ * Checks if @result has the given @source_tag (generally a function
+ * pointer indicating the function @result was created by).
+ *
+ * Returns: %TRUE if @result has the indicated @source_tag, %FALSE if not.
+ * Since: 2.34
+ */
+
+
+/**
+ * g_async_result_legacy_propagate_error:
+ * @result: a #GAsyncResult
+ * @dest: (out): a location to propagate the error to.
+ *
+ * If @result is a #GSimpleAsyncResult, this is equivalent to
+ * g_simple_async_result_propagate_error(). Otherwise it returns
+ * %FALSE.
+ *
+ * This can be used for legacy error handling in async
+ * <literal>_finish ()</literal> wrapper functions that traditionally
+ * handled #GSimpleAsyncResult error returns themselves rather than
+ * calling into the virtual method. This should not be used in new
+ * code; #GAsyncResult errors that are set by virtual methods should
+ * also be extracted by virtual methods, to enable subclasses to chain
+ * up correctly.
+ *
+ * Returns: %TRUE if @error is has been filled in with an error from @res, %FALSE if not.
+ * Since: 2.34
  */
 
 

@@ -2522,6 +2522,7 @@
 
 /**
  * G_DEPRECATED_FOR:
+ * @f: the name of the function that this function was deprecated for
  *
  * This macro is similar to %G_GNUC_DEPRECATED_FOR, and can be used to mark
  * functions declarations as deprecated. Unlike %G_GNUC_DEPRECATED_FOR, it is
@@ -4248,6 +4249,8 @@
 
 /**
  * G_UNAVAILABLE:
+ * @maj: the major version that introduced the symbol
+ * @min: the minor version that introduced the symbol
  *
  * This macro can be used to mark a function declaration as unavailable.
  * It must be placed before the function declaration. Use of a function
@@ -5541,6 +5544,18 @@
  * relevant when compiling a pattern if #G_REGEX_EXTENDED is set, and an
  * unescaped "#" outside a character class is encountered. This indicates
  * a comment that lasts until after the next newline.
+ *
+ * When setting the %G_REGEX_JAVASCRIPT_COMPAT flag, pattern syntax and pattern
+ * matching is changed to be compatible with the way that regular expressions
+ * work in JavaScript. More precisely, a lonely ']' character in the pattern
+ * is a syntax error; the '\x' escape only allows 0 to 2 hexadecimal digits, and
+ * you must use the '\u' escape sequence with 4 hex digits to specify a unicode
+ * codepoint instead of '\x' or 'x{....}'. If '\x' or '\u' are not followed by
+ * the specified number of hex digits, they match 'x' and 'u' literally; also
+ * '\U' always matches 'U' instead of being an error in the pattern. Finally,
+ * pattern matching is modified so that back references to an unset subpattern
+ * group produces a match with the empty string instead of an error. See
+ * <ulink>man:pcreapi(3)<ulink> for more information.
  *
  * Creating and manipulating the same #GRegex structure from different
  * threads is not a problem as #GRegex does not modify its internal
@@ -7334,12 +7349,17 @@
  * @title: Strings
  * @short_description: text buffers which grow automatically as text is added
  *
- * A #GString is an object that handles the memory management
- * of a C string for you. You can think of it as similar to a
- * Java StringBuffer. In addition to the string itself, GString
- * stores the length of the string, so can be used for binary
- * data with embedded nul bytes. To access the C string managed
- * by the GString @string, simply use @string->str.
+ * A #GString is an object that handles the memory management of a C
+ * string for you.  The emphasis of #GString is on text, typically
+ * UTF-8.  Crucially, the "str" member of a #GString is guaranteed to
+ * have a trailing nul character, and it is therefore always safe to
+ * call functions such as strchr() or g_strdup() on it.
+ *
+ * However, a #GString can also hold arbitrary binary data, because it
+ * has a "len" member, which includes any possible embedded nul
+ * characters in the data.  Conceptually then, #GString is like a
+ * #GByteArray with the addition of many convenience methods for text,
+ * and a guaranteed nul terminator.
  */
 
 
@@ -11035,10 +11055,14 @@
  * you will need to pass #G_SPAWN_DO_NOT_REAP_CHILD as flag to
  * the spawn function for the child watching to work.
  *
- * Note that on platforms where #GPid must be explicitly closed
- * (see g_spawn_close_pid()) @pid must not be closed while the
- * source is still active. Typically, you will want to call
- * g_spawn_close_pid() in the callback function for the source.
+ * In many programs, you will want to call g_spawn_check_exit_status()
+ * in the callback to determine whether or not the child exited
+ * successfully.
+ *
+ * Also, note that on platforms where #GPid must be explicitly closed
+ * (see g_spawn_close_pid()) @pid must not be closed while the source
+ * is still active.  Typically, you should invoke g_spawn_close_pid()
+ * in the callback function for the source.
  *
  * GLib supports only a single callback per process id.
  *
@@ -13497,6 +13521,10 @@
  * The order of entries returned from this function is not defined,
  * and may vary by file system or other operating-system dependent
  * factors.
+ *
+ * %NULL may also be returned in case of errors. On Unix, you can
+ * check <literal>errno</literal> to find out if %NULL was returned
+ * because of an error.
  *
  * On Unix, the '.' and '..' entries are omitted, and the returned
  * name is in the on-disk encoding.
@@ -16871,7 +16899,7 @@
 /**
  * g_key_file_load_from_data:
  * @key_file: an empty #GKeyFile struct
- * @data: (length length): key file loaded in memory
+ * @data: (array length=length): key file loaded in memory
  * @length: the length of @data in bytes (or -1 if data is nul-terminated)
  * @flags: flags from #GKeyFileFlags
  * @error: return location for a #GError, or %NULL
@@ -19349,13 +19377,21 @@
  * able to raise an error as soon as a mistake is made.
  *
  * GRegex supports the concept of partial matching by means of the
- * #G_REGEX_MATCH_PARTIAL flag. When this is set the return code for
+ * #G_REGEX_MATCH_PARTIAL_SOFT and #G_REGEX_MATCH_PARTIAL_HARD flags.
+ * When they are used, the return code for
  * g_regex_match() or g_regex_match_full() is, as usual, %TRUE
  * for a complete match, %FALSE otherwise. But, when these functions
  * return %FALSE, you can check if the match was partial calling
  * g_match_info_is_partial_match().
  *
- * When using partial matching you cannot use g_match_info_fetch*().
+ * The difference between #G_REGEX_MATCH_PARTIAL_SOFT and
+ * #G_REGEX_MATCH_PARTIAL_HARD is that when a partial match is encountered
+ * with #G_REGEX_MATCH_PARTIAL_SOFT, matching continues to search for a
+ * possible complete match, while with #G_REGEX_MATCH_PARTIAL_HARD matching
+ * stops at the partial match.
+ * When both #G_REGEX_MATCH_PARTIAL_SOFT and #G_REGEX_MATCH_PARTIAL_HARD
+ * are set, the latter takes precedence.
+ * See <ulink>man:pcrepartial</ulink> for more information on partial matching.
  *
  * Because of the way certain internal optimizations are implemented
  * the partial matching algorithm cannot be used with all patterns.
@@ -19364,7 +19400,8 @@
  * of occurrences is greater than one. Optional items such as "\d?"
  * (where the maximum is one) are permitted. Quantifiers with any values
  * are permitted after parentheses, so the invalid examples above can be
- * coded thus "(a){2,4}" and "(\d)+". If #G_REGEX_MATCH_PARTIAL is set
+ * coded thus "(a){2,4}" and "(\d)+". If #G_REGEX_MATCH_PARTIAL or
+ * #G_REGEX_MATCH_PARTIAL_HARD is set
  * for a pattern that does not conform to the restrictions, matching
  * functions return an error.
  *
@@ -22233,6 +22270,17 @@
 
 
 /**
+ * g_regex_get_has_cr_or_lf:
+ * @regex: a #GRegex structure
+ *
+ * Checks whether the pattern contains explicit CR or LF references.
+ *
+ * Returns: %TRUE if the pattern contains explicit CR or LF references
+ * Since: 2.34
+ */
+
+
+/**
  * g_regex_get_match_flags:
  * @regex: a #GRegex
  *
@@ -24381,6 +24429,12 @@
  * Compare this to g_slist_remove_link() which removes the node
  * without freeing it.
  *
+ * <note>Removing arbitrary nodes from a singly-linked list
+ * requires time that is proportional to the length of the list
+ * (ie. O(n)). If you find yourself using g_slist_delete_link()
+ * frequently, you should consider a different data structure, such
+ * as the doubly-linked #GList.</note>
+ *
  * Returns: the new head of @list
  */
 
@@ -24665,6 +24719,12 @@
  * freeing the element. The removed element's next
  * link is set to %NULL, so that it becomes a
  * self-contained list with one element.
+ *
+ * <note>Removing arbitrary nodes from a singly-linked list
+ * requires time that is proportional to the length of the list
+ * (ie. O(n)). If you find yourself using g_slist_remove_link()
+ * frequently, you should consider a different data structure, such
+ * as the doubly-linked #GList.</note>
  *
  * Returns: the new start of the #GSList, without the element
  */
@@ -25385,6 +25445,56 @@
 
 
 /**
+ * g_spawn_check_exit_status:
+ * @exit_status: An exit code as returned from g_spawn_sync()
+ * @error: a #GError
+ *
+ * Set @error if @exit_status indicates the child exited abnormally
+ * (e.g. with a nonzero exit code, or via a fatal signal).
+ *
+ * The g_spawn_sync() and g_child_watch_add() family of APIs return an
+ * exit status for subprocesses encoded in a platform-specific way.
+ * On Unix, this is guaranteed to be in the same format
+ * <literal>waitpid(2)</literal> returns, and on Windows it is
+ * guaranteed to be the result of
+ * <literal>GetExitCodeProcess()</literal>.  Prior to the introduction
+ * of this function in GLib 2.34, interpreting @exit_status required
+ * use of platform-specific APIs, which is problematic for software
+ * using GLib as a cross-platform layer.
+ *
+ * Additionally, many programs simply want to determine whether or not
+ * the child exited successfully, and either propagate a #GError or
+ * print a message to standard error.  In that common case, this
+ * function can be used.  Note that the error message in @error will
+ * contain human-readable information about the exit status.
+ *
+ * The <literal>domain</literal> and <literal>code</literal> of @error
+ * have special semantics in the case where the process has an "exit
+ * code", as opposed to being killed by a signal.  On Unix, this
+ * happens if <literal>WIFEXITED</literal> would be true of
+ * @exit_status.  On Windows, it is always the case.
+ *
+ * The special semantics are that the actual exit code will be the
+ * code set in @error, and the domain will be %G_SPAWN_EXIT_ERROR.
+ * This allows you to differentiate between different exit codes.
+ *
+ * If the process was terminated by some means other than an exit
+ * status, the domain will be %G_SPAWN_ERROR, and the code will be
+ * %G_SPAWN_ERROR_FAILED.
+ *
+ * This function just offers convenience; you can of course also check
+ * the available platform via a macro such as %G_OS_UNIX, and use
+ * <literal>WIFEXITED()</literal> and <literal>WEXITSTATUS()</literal>
+ * on @exit_status directly.  Do not attempt to scan or parse the
+ * error message string; it may be translated and/or change in future
+ * versions of GLib.
+ *
+ * Returns: %TRUE if child exited successfully, %FALSE otherwise (and @error will be set)
+ * Since: 2.34
+ */
+
+
+/**
  * g_spawn_close_pid:
  * @pid: The process reference to close
  *
@@ -25431,9 +25541,9 @@
  * appropriate. Possible errors are those from g_spawn_sync() and those
  * from g_shell_parse_argv().
  *
- * If @exit_status is non-%NULL, the exit status of the child is stored there as
- * it would be returned by waitpid(); standard UNIX macros such as WIFEXITED()
- * and WEXITSTATUS() must be used to evaluate the exit status.
+ * If @exit_status is non-%NULL, the platform-specific exit status of
+ * the child is stored there; see the documentation of
+ * g_spawn_check_exit_status() for how to use and interpret this.
  *
  * On Windows, please note the implications of g_shell_parse_argv()
  * parsing @command_line. Parsing is done according to Unix shell rules, not
@@ -25467,11 +25577,13 @@
  * if those parameters are non-%NULL. Note that you must set the
  * %G_SPAWN_STDOUT_TO_DEV_NULL and %G_SPAWN_STDERR_TO_DEV_NULL flags when
  * passing %NULL for @standard_output and @standard_error.
- * If @exit_status is non-%NULL, the exit status of the child is stored
- * there as it would be returned by waitpid(); standard UNIX macros such
- * as WIFEXITED() and WEXITSTATUS() must be used to evaluate the exit status.
- * Note that this function call waitpid() even if @exit_status is %NULL, and
- * does not accept the %G_SPAWN_DO_NOT_REAP_CHILD flag.
+ *
+ * If @exit_status is non-%NULL, the platform-specific exit status of
+ * the child is stored there; see the doucumentation of
+ * g_spawn_check_exit_status() for how to use and interpret this.
+ * Note that it is invalid to pass %G_SPAWN_DO_NOT_REAP_CHILD in
+ * @flags.
+ *
  * If an error occurs, no data is returned in @standard_output,
  * @standard_error, or @exit_status.
  *
@@ -26119,6 +26231,24 @@
  * free it after use with g_free().
  *
  * Returns: the character data of @string (i.e. %NULL if @free_segment is %TRUE)
+ */
+
+
+/**
+ * g_string_free_to_bytes:
+ * @string: (transfer full): a #GString
+ *
+ * Transfers ownership of the contents of @string to a newly allocated
+ * #GBytes.  The #GString structure itself is deallocated, and it is
+ * therefore invalid to use @string after invoking this function.
+ *
+ * Note that while #GString ensures that its buffer always has a
+ * trailing nul character (not reflected in its "len"), the returned
+ * #GBytes does not include this extra nul; i.e. it has length exactly
+ * equal to the "len" member.
+ *
+ * Returns: A newly allocated #GBytes containing contents of @string; @string itself is freed
+ * Since: 2.34
  */
 
 
