@@ -891,7 +891,7 @@ void gi_marshalling_tests_test_interface_test_int8_in (GIMarshallingTestsInterfa
 #define GI_MARSHALLING_TESTS_TYPE_INTERFACE2              (gi_marshalling_tests_interface2_get_type ())
 #define GI_MARSHALLING_TESTS_INTERFACE2(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GI_MARSHALLING_TESTS_TYPE_INTERFACE2, GIMarshallingTestsInterface2))
 #define GI_MARSHALLING_TESTS_IS_INTERFACE2(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GI_MARSHALLING_TESTS_TYPE_INTERFACE2))
-#define GI_MARSHALLING_TESTS_INTERFACE2_GET_IFACE(obj)    (G_TYPE_INSTANCE_GET_INTERFACE2 ((obj), GI_MARSHALLING_TESTS_TYPE_INTERFACE2, GIMarshallingTestsInterface2Iface))
+#define GI_MARSHALLING_TESTS_INTERFACE2_GET_IFACE(obj)    (G_TYPE_INSTANCE_GET_INTERFACE ((obj), GI_MARSHALLING_TESTS_TYPE_INTERFACE2, GIMarshallingTestsInterface2Iface))
 
 typedef struct _GIMarshallingTestsInterface2 GIMarshallingTestsInterface2;
 typedef struct _GIMarshallingTestsInterface2Iface GIMarshallingTestsInterface2Iface;
