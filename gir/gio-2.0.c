@@ -1696,6 +1696,34 @@
 
 
 /**
+ * GMountOperation::show-unmount-progress:
+ * @op: a #GMountOperation:
+ * @message: string containing a mesage to display to the user
+ * @time_left: the estimated time left before the operation completes, or -1
+ * @bytes_left: the amount of bytes to be written before the operation completes (or -1 if such amount is not known), or zero if the operation is completed
+ *
+ * Emitted when an unmount operation has been busy for more than some time
+ * (typically 1.5 seconds).
+ *
+ * When unmounting or ejecting a volume, the kernel might need to flush
+ * pending data in its buffers to the volume stable storage, and this operation
+ * can take a considerable amount of time. This signal may be emitted several
+ * times as long as the unmount operation is outstanding, and then one
+ * last time when the operation is completed, with @bytes_left set to zero.
+ *
+ * Implementations of GMountOperation should handle this signal by
+ * showing an UI notification, and then dismiss it, or show another notification
+ * of completion, when @bytes_left reaches zero.
+ *
+ * If the message contains a line break, the first line should be
+ * presented as a heading. For example, it may be used as the
+ * primary text in a #GtkMessageDialog.
+ *
+ * Since: 2.34
+ */
+
+
+/**
  * GMountOperation:anonymous:
  *
  * Whether to use an anonymous user when authenticating.
@@ -15209,6 +15237,9 @@
  * @error: Return location for error.
  *
  * Parses @xml_data and returns a #GDBusNodeInfo representing the data.
+ *
+ * The introspection XML must contain exactly one top-level
+ * <tag class="starttag">node</tag> element.
  *
  * Note that this routine is using a
  * <link linkend="glib-Simple-XML-Subset-Parser.description">GMarkup</link>-based
