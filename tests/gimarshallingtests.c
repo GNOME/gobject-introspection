@@ -4193,6 +4193,38 @@ gi_marshalling_tests_interface2_get_type(void)
     return type;
 }
 
+static void
+gi_marshalling_tests_interface3_class_init(void *g_iface)
+{
+}
+
+GType
+gi_marshalling_tests_interface3_get_type(void)
+{
+    static GType type = 0;
+    if (type == 0) {
+        type = g_type_register_static_simple (G_TYPE_INTERFACE,
+                                              "GIMarshallingTestsInterface3",
+                                              sizeof (GIMarshallingTestsInterface3Iface),
+                                              (GClassInitFunc) gi_marshalling_tests_interface3_class_init,
+                                              0, NULL, 0);
+    }
+
+    return type;
+}
+
+/**
+ * gi_marshalling_tests_interface3_test_variant_array_in:
+ * @in: (array length=n_in):
+ * @n_in:
+ */
+void
+gi_marshalling_tests_interface3_test_variant_array_in (GIMarshallingTestsInterface3 *self,
+                                                       GVariant **in,
+                                                       gsize n_in)
+{
+  GI_MARSHALLING_TESTS_INTERFACE3_GET_IFACE (self)->test_variant_array_in (self, in, n_in);
+}
 
 /**
  * gi_marshalling_tests_int_out_out:

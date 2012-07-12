@@ -782,6 +782,7 @@ const gint *gi_marshalling_tests_object_method_array_return (GIMarshallingTestsO
 void gi_marshalling_tests_object_method_int8_in (GIMarshallingTestsObject *object, gint8 in);
 void gi_marshalling_tests_object_method_int8_out (GIMarshallingTestsObject *object, gint8 *out);
 void gi_marshalling_tests_object_method_with_default_implementation (GIMarshallingTestsObject *object, gint8 in);
+void gi_marshalling_tests_object_method_variant_array_in (GIMarshallingTestsObject *object, GVariant **in, gsize n_in);
 
 glong gi_marshalling_tests_object_vfunc_return_value_only (GIMarshallingTestsObject *self);
 void gi_marshalling_tests_object_vfunc_one_out_parameter (GIMarshallingTestsObject *self, gfloat *a);
@@ -908,6 +909,29 @@ struct _GIMarshallingTestsInterface2Iface {
 
 GType gi_marshalling_tests_interface2_get_type (void) G_GNUC_CONST;
 
+/* GIMarshallingTestsInterface3 tests passing arrays of variants from C to @lang */
+
+#define GI_MARSHALLING_TESTS_TYPE_INTERFACE3              (gi_marshalling_tests_interface3_get_type ())
+#define GI_MARSHALLING_TESTS_INTERFACE3(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GI_MARSHALLING_TESTS_TYPE_INTERFACE3, GIMarshallingTestsInterface3))
+#define GI_MARSHALLING_TESTS_IS_INTERFACE3(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GI_MARSHALLING_TESTS_TYPE_INTERFACE3))
+#define GI_MARSHALLING_TESTS_INTERFACE3_GET_IFACE(obj)    (G_TYPE_INSTANCE_GET_INTERFACE ((obj), GI_MARSHALLING_TESTS_TYPE_INTERFACE3, GIMarshallingTestsInterface3Iface))
+
+typedef struct _GIMarshallingTestsInterface3 GIMarshallingTestsInterface3;
+typedef struct _GIMarshallingTestsInterface3Iface GIMarshallingTestsInterface3Iface;
+
+struct _GIMarshallingTestsInterface3Iface {
+    GTypeInterface base_iface;
+ 
+    /**
+     * GIMarshallingTestsInterface3::test_variant_array_in:
+     * @in: (in) (array length=n_in):
+     */
+    void (* test_variant_array_in) (GIMarshallingTestsInterface3 *self, GVariant **in, gsize n_in);
+};
+
+GType gi_marshalling_tests_interface3_get_type (void) G_GNUC_CONST;
+
+void gi_marshalling_tests_interface3_test_variant_array_in (GIMarshallingTestsInterface3 *self, GVariant **in, gsize n_in);
 
 /* Multiple output arguments */
 
