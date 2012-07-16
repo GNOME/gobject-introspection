@@ -5555,7 +5555,7 @@
  * '\U' always matches 'U' instead of being an error in the pattern. Finally,
  * pattern matching is modified so that back references to an unset subpattern
  * group produces a match with the empty string instead of an error. See
- * <ulink>man:pcreapi(3)<ulink> for more information.
+ * <ulink>man:pcreapi(3)</ulink> for more information.
  *
  * Creating and manipulating the same #GRegex structure from different
  * threads is not a problem as #GRegex does not modify its internal
@@ -19236,7 +19236,7 @@
  * The strings are fetched from the string passed to the match function,
  * so you cannot call this function after freeing the string.
  *
- * Returns: (allow-none): a %NULL-terminated array of gchar * pointers. It must be freed using g_strfreev(). If the previous match failed %NULL is returned
+ * Returns: (transfer full): a %NULL-terminated array of gchar * pointers.  It must be freed using g_strfreev(). If the previous match failed %NULL is returned
  * Since: 2.14
  */
 
@@ -22744,7 +22744,7 @@
  * For example splitting "ab c" using as a separator "\s*", you will get
  * "a", "b" and "c".
  *
- * Returns: a %NULL-terminated gchar ** array. Free it using g_strfreev()
+ * Returns: (transfer full): a %NULL-terminated gchar ** array. Free it using g_strfreev()
  * Since: 2.14
  */
 
@@ -22781,7 +22781,7 @@
  * string and setting #G_REGEX_MATCH_NOTBOL in the case of a pattern
  * that begins with any kind of lookbehind assertion, such as "\b".
  *
- * Returns: a %NULL-terminated gchar ** array. Free it using g_strfreev()
+ * Returns: (transfer full): a %NULL-terminated gchar ** array. Free it using g_strfreev()
  * Since: 2.14
  */
 
@@ -22821,7 +22821,7 @@
  * characters. For example splitting "ab c" using as a separator
  * "\s*", you will get "a", "b" and "c".
  *
- * Returns: a %NULL-terminated array of strings. Free it using g_strfreev()
+ * Returns: (transfer full): a %NULL-terminated array of strings. Free it using g_strfreev()
  * Since: 2.14
  */
 
@@ -29613,7 +29613,7 @@
  * mime type defined in RFC 2483 into individual URIs,
  * discarding any comments. The URIs are not validated.
  *
- * Returns: a newly allocated %NULL-terminated list of strings holding the individual URIs. The array should be freed with g_strfreev().
+ * Returns: (transfer full): a newly allocated %NULL-terminated list of strings holding the individual URIs. The array should be freed with g_strfreev().
  * Since: 2.6
  */
 
