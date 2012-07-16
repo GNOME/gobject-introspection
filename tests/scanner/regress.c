@@ -3429,24 +3429,13 @@ regress_test_owned_gerror_callback (RegressTestCallbackOwnedGError callback)
 /* interface */
 
 static void
-regress_test_interface_class_init(void *g_iface)
+regress_test_interface_default_init(RegressTestInterfaceIface *iface)
 {
 }
 
-GType
-regress_test_interface_get_type(void)
-{
-    static GType type = 0;
-    if (type == 0) {
-        type = g_type_register_static_simple (G_TYPE_INTERFACE,
-                                              "RegressTestInterface",
-                                              sizeof (RegressTestInterfaceIface),
-                                              (GClassInitFunc) regress_test_interface_class_init,
-                                              0, NULL, 0);
-    }
+typedef RegressTestInterfaceIface RegressTestInterfaceInterface;
+G_DEFINE_INTERFACE (RegressTestInterface, regress_test_interface, G_TYPE_OBJECT)
 
-    return type;
-}
 
 /* gobject with non-standard prefix */
 G_DEFINE_TYPE(RegressTestWi8021x, regress_test_wi_802_1x, G_TYPE_OBJECT);
