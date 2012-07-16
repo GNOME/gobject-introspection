@@ -3821,6 +3821,6 @@ regress_has_parameter_named_attrs (int        foo,
  * Stability: Unstable
  */
 void
-regress_test_versioning ()
+regress_test_versioning (void)
 {
 }
