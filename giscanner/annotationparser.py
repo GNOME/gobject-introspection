@@ -20,7 +20,7 @@
 #
 
 
-# AnnotationParser - extract annotations from gtk-doc comments
+# AnnotationParser - extract annotations from GTK-Doc comment blocks
 
 
 import re
@@ -477,7 +477,8 @@ class AnnotationParser(object):
     :class:`DocTag`, :class:`DocOptions` and :class:`DocOption` objects. This
     parser tries to accept malformed input whenever possible and does not emit
     syntax errors. However, it does emit warnings at the slightest indication
-    of malformed input when possible.
+    of malformed input when possible. It is usually a good idea to heed these
+    warnings as malformed input is known to result in invalid GTK-Doc output.
 
     A GTK-Doc comment block can be constructed out of multiple parts that can
     be combined to write different types of documentation.
@@ -489,38 +490,48 @@ class AnnotationParser(object):
 
     .. code-block:: c
         /**
-         * identifier_name: [annotations]
-         * @parameter_name: [annotations:] [description]
+         * identifier_name [:annotations]
+         * @parameter_name [:annotations] [:description]
          *
-         * description
-         * tag_name: [annotations:] [description]
+         * comment_block_description
+         * tag_name [:annotations] [:description]
          */
 
-    - Parts and fields cannot span multiple lines, except for parameter descriptions,
-      tag descriptions and comment block descriptions.
-    - There has to be exactly 1 `identifier` part on the first line of the
-      comment block which consists of:
-          * an `identifier_name` field
-          * an optional `annotations` field
-    - There can be 0 or more `parameter` parts following the `identifier` part,
-      each consisting of:
-          * a `parameter_name` filed
-          * an optional `annotations` field
-          * an optional `description` field
-    - An empty lines signals the end of the `parameter` parts and the beginning
-      of the (free form) comment block `description` part.
-    - There can be 0 or 1 `description` parts following the `description` part.
-    - There can be 0 or more `tag` parts following the `description` part,
-      each consisting of:
-          * a `tag_name` field
-          * an optional `annotations` field
-          * an optional `description` field
+    The order in which the different parts have to be specified is important::
+
+        - There has to be exactly 1 `identifier` part on the first line of the
+          comment block which consists of:
+              * an `identifier_name` field
+              * an optional `annotations` field
+        - Followed by 0 or more `parameters` parts, each consisting of:
+              * a `parameter_name` field
+              * an optional `annotations` field
+              * an optional `description` field
+        - Followed by at least 1 empty line signaling the beginning of
+          the `comment_block_description` part
+        - Followed by an optional `comment block description` part.
+        - Followed by 0 or more `tag` parts, each consisting of:
+              * a `tag_name` field
+              * an optional `annotations` field
+              * an optional `description` field
+
+    Additionally, the following restrictions are in effect::
+
+        - Parts can optionally be separated by an empty line, except between
+          the `parameter` parts and the `comment block description` part where
+          an empty line is required (see above).
+        - Parts and fields cannot span multiple lines, except for
+          `parameter descriptions`, `tag descriptions` and the
+          `comment_block_description` fields.
+        - `parameter descriptions` fields can not span multiple paragraphs.
+        - `tag descriptions` and `comment block description` fields can
+          span multiple paragraphs.
 
     .. NOTE:: :class:`AnnotationParser` functionality is heavily based on gtkdoc-mkdb's
-        `ScanSourceFile()`_ function and is currently in sync with gtk-doc
+        `ScanSourceFile()`_ function and is currently in sync with GTK-Doc
         commit `b41641b`_.
 
-    .. _types of documentation:
+    .. _GTK-Doc's documentation:
             http://developer.gnome.org/gtk-doc-manual/1.18/documenting.html.en
     .. _ScanSourceFile():
             http://git.gnome.org/browse/gtk-doc/tree/gtkdoc-mkdb.in#n3722
@@ -532,7 +543,7 @@ class AnnotationParser(object):
         Parses multiple GTK-Doc comment blocks.
 
         :param comments: a list of (comment, filename, lineno) tuples
-        :returns: a list of :class:`DocBlock` or ``None`` objects
+        :returns: a dictionary mapping identifier names to :class:`DocBlock` objects
         """
 
         comment_blocks = {}
@@ -541,13 +552,17 @@ class AnnotationParser(object):
             comment_block = self.parse_comment_block(comment)
 
             if comment_block is not None:
+                # Note: previous versions of this parser did not check
+                # if an identifier was already stored in comment_blocks,
+                # so when multiple comment blocks where encountered documenting
+                # the same identifier the last one seen "wins".
+                # Keep this behavior for backwards compatibility, but
+                # emit a warning.
                 if comment_block.name in comment_blocks:
                     message.warn("multiple comment blocks documenting '%s:' identifier." %
                                  (comment_block.name),
                                  comment_block.position)
 
-                # Always store the block even if it's a duplicate for
-                # backward compatibility...
                 comment_blocks[comment_block.name] = comment_block
 
         return comment_blocks
@@ -561,6 +576,10 @@ class AnnotationParser(object):
         """
 
         comment, filename, lineno = comment
+
+        # Assign line numbers to each line of the comment block,
+        # which will later be used as the offset to calculate the
+        # real line number in the source file
         comment_lines = list(enumerate(comment.split('\n')))
 
         # Check for the start the comment block.
@@ -579,11 +598,12 @@ class AnnotationParser(object):
 
     def _parse_comment_block(self, comment_lines, filename, lineno):
         """
-        Parses a single GTK-Doc comment block stripped from it's
+        Parses a single GTK-Doc comment block already stripped from its
         comment start (/**) and comment end (*/) marker lines.
 
-        :param comment_lines: GTK-Doc comment block stripped from it's comment
-                              start (/**) and comment end (*/) marker lines
+        :param comment_lines: list of (line_offset, line) tuples representing a
+                              GTK-Doc comment block already stripped from it's
+                              start (/**) and end (*/) marker lines
         :param filename: source file name where the comment block originated from
         :param lineno:  line in the source file where the comment block starts
         :returns: a :class:`DocBlock` object or ``None``
@@ -756,7 +776,7 @@ class AnnotationParser(object):
             #
             # When we are parsing comment block parameters or the comment block
             # identifier (when there are no parameters) and encounter an empty
-            # line, we must be parsing the comment block description
+            # line, we must be parsing the comment block description.
             ####################################################################
             if (EMPTY_LINE_RE.search(line)
             and (in_part == PART_IDENTIFIER or in_part == PART_PARAMETERS)):
@@ -904,8 +924,9 @@ class AnnotationParser(object):
 
     @classmethod
     def parse_options(cls, tag, value):
-        # (foo)
-        # (bar opt1 opt2 ...)
+        # (annotation)
+        # (annotation opt1 opt2 ...)
+        # (annotation opt1=value1 opt2=value2 ...)
         opened = -1
         options = DocOptions()
         options.position = tag.position

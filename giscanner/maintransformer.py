@@ -791,7 +791,7 @@ usage is void (*_gtk_reserved1)(void);"""
         block = self._blocks.get('%s::%s' % (prefix, signal.name))
         self._apply_annotations_annotated(signal, block)
         # We're only attempting to name the signal parameters if
-        # the number of parameter tags (@foo) is the same or greater
+        # the number of parameters (@foo) is the same or greater
         # than the number of signal parameters
         if block and len(block.params) > len(signal.parameters):
             names = block.params.items()
