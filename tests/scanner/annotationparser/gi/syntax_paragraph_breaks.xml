@@ -26,12 +26,55 @@ So this is considered a new paragraph.</description>
 
 <test>
   <!--
+  Description: tag, all lines (outside program- listings and CDATA sections) just containing
+  a ' *' (blank-asterisk) are converted to paragraph breaks.
+  -->
+  <commentblock>/**
+ * SECTION:test
+ *
+ * Description: The following line is ' *' (blank-asterisk).
+ *
+ * So this is considered a new paragraph.
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>SECTION:test</name>
+    </identifier>
+    <description>The following line is ' *' (blank-asterisk).
+
+So this is considered a new paragraph.</description>
+  </docblock>
+</test>
+
+<test>
+  <!--
   ' * ' (blank-asterisk-blank) are also converted to paragraph breaks.
   -->
   <commentblock>/**
  * SECTION:test
  *
  * The following line is ' * ' (blank-asterisk-blank).
+ * 
+ * So this is considered a new paragraph.
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>SECTION:test</name>
+    </identifier>
+    <description>The following line is ' * ' (blank-asterisk-blank).
+
+So this is considered a new paragraph.</description>
+  </docblock>
+</test>
+
+<test>
+  <!--
+  Description: tag, ' * ' (blank-asterisk-blank) are also converted to paragraph breaks.
+  -->
+  <commentblock>/**
+ * SECTION:test
+ *
+ * Description: The following line is ' * ' (blank-asterisk-blank).
  * 
  * So this is considered a new paragraph.
  */</commentblock>
@@ -70,6 +113,29 @@ So this is preceded by an empty line and is not considered a new paragraph.</des
 
 <test>
   <!--
+  Description: tag, if you want an "empty line" but not a paragraph break, change that into ' *  '
+  (blank-asterisk-blank-blank). The "empty line" can be easily recognized in the
+  output as it contains a single space character.
+  -->
+  <commentblock>/**
+ * SECTION:test
+ *
+ * Description: The following line is (blank-asterisk-blank-blank).
+ *  
+ * So this is preceded by an empty line and is not considered a new paragraph.
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>SECTION:test</name>
+    </identifier>
+    <description>The following line is (blank-asterisk-blank-blank).
+ 
+So this is preceded by an empty line and is not considered a new paragraph.</description>
+  </docblock>
+</test>
+
+<test>
+  <!--
   If you want an "empty line" but not a paragraph break, change that into ' *  '
   (blank-asterisk-blank-blank). The "empty line" can be easily recognized in the
   output as it contains a single space character.
@@ -78,6 +144,57 @@ So this is preceded by an empty line and is not considered a new paragraph.</des
  * SECTION:test
  *
  * <example>
+ * <title>Iterating over attributes</title>
+ * <programlisting>
+ * void
+ * print_attributes (GIBaseInfo *info)
+ * {
+ *   GIAttributeIter iter = { 0, };
+ *   char *name;
+ *   char *value;
+ *  
+ *   while (g_base_info_iterate_attributes (info, &iter, &name, &value))
+ *     {
+ *       g_print ("attribute name: %s value: %s", name, value);
+ *     }
+ * }
+ * </programlisting>
+ * </example>
+ */]]></commentblock>
+  <docblock>
+    <identifier>
+      <name>SECTION:test</name>
+    </identifier>
+    <description><![CDATA[<example>
+<title>Iterating over attributes</title>
+<programlisting>
+void
+print_attributes (GIBaseInfo *info)
+{
+  GIAttributeIter iter = { 0, };
+  char *name;
+  char *value;
+ 
+  while (g_base_info_iterate_attributes (info, &iter, &name, &value))
+    {
+      g_print ("attribute name: %s value: %s", name, value);
+    }
+}
+</programlisting>
+</example>]]></description>
+  </docblock>
+</test>
+
+<test>
+  <!--
+  Description: tag, if you want an "empty line" but not a paragraph break, change that into ' *  '
+  (blank-asterisk-blank-blank). The "empty line" can be easily recognized in the
+  output as it contains a single space character.
+  -->
+  <commentblock><![CDATA[/**
+ * SECTION:test
+ *
+ * Description: <example>
  * <title>Iterating over attributes</title>
  * <programlisting>
  * void

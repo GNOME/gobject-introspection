@@ -48,6 +48,7 @@ TAG_STABILITY = 'stability'
 TAG_DEPRECATED = 'deprecated'
 TAG_RETURNS = 'returns'
 TAG_RETURNVALUE = 'return value'
+TAG_DESCRIPTION = 'description'
 TAG_ATTRIBUTES = 'attributes'
 TAG_RENAME_TO = 'rename to'
 TAG_TYPE = 'type'
@@ -63,6 +64,7 @@ _ALL_TAGS = [TAG_VFUNC,
              TAG_DEPRECATED,
              TAG_RETURNS,
              TAG_RETURNVALUE,
+             TAG_DESCRIPTION,
              TAG_ATTRIBUTES,
              TAG_RENAME_TO,
              TAG_TYPE,
@@ -293,16 +295,6 @@ PARAMETER_RE = re.compile(r'''
     (?P<description>.*?)                     # description
     [^\S\n\r]*                               # 0 or more whitespace characters
     $                                        # end
-    ''',
-    re.VERBOSE | re.MULTILINE)
-
-# Program matching old style "Description:" tag.
-#
-# Results in 0 symbolic groups.
-DESCRIPTION_TAG_RE = re.compile(r'''
-    ^                                        # start
-    [^\S\n\r]*                               # 0 or more whitespace characters
-    Description:                             # 'Description:' literal
     ''',
     re.VERBOSE | re.MULTILINE)
 
@@ -987,6 +979,23 @@ class AnnotationParser(object):
                 tag_annotations = result.group('annotations')
                 tag_description = result.group('description')
 
+                marker = ' '*(result.start('tag_name') + column_offset) + '^'
+
+                # Deprecated GTK-Doc Description: tag
+                if tag_name.lower() == TAG_DESCRIPTION:
+                    message.warn("GTK-Doc tag \"Description:\" has been deprecated:\n%s\n%s" %
+                                 (original_line, marker),
+                                 position)
+
+                    in_part = PART_DESCRIPTION
+
+                    if not comment_block.comment:
+                        comment_block.comment = tag_description
+                    else:
+                        comment_block.comment += '\n' + tag_description
+                    continue
+
+                # Now that the deprecated stuff is out of the way, continue parsing real tags
                 if in_part == PART_DESCRIPTION:
                     in_part = PART_TAGS
 
@@ -1041,10 +1050,6 @@ class AnnotationParser(object):
             ####################################################################
             if in_part in [PART_IDENTIFIER, PART_DESCRIPTION]:
                 if not comment_block.comment:
-                    # Backwards compatibility with old style GTK-Doc
-                    # comment blocks where Description used to be a comment
-                    # block tag. Simply get rid of 'Description:'.
-                    line = re.sub(DESCRIPTION_TAG_RE, '', line)
                     comment_block.comment = line
                 else:
                     comment_block.comment += '\n' + line
