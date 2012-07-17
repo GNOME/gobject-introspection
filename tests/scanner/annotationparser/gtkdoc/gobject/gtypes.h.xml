@@ -4,6 +4,33 @@
 
 <test>
   <commentblock>/**
+ * GtkdocEnum:
+ * @GTKDOC_ENUM_V1: first
+ * @GTKDOC_ENUM_V2: second
+ *    Since: 0.10
+ *
+ * Enum values for the #GtkdocEnum type.
+ */</commentblock>
+  <docblock>
+    <identifier>
+      <name>GtkdocEnum</name>
+    </identifier>
+    <parameters>
+      <parameter>
+        <name>GTKDOC_ENUM_V1</name>
+        <description>first</description>
+      </parameter>
+      <parameter>
+        <name>GTKDOC_ENUM_V2</name>
+        <description>second Since: 0.10</description>
+      </parameter>
+    </parameters>
+    <description>Enum values for the #GtkdocEnum type.</description>
+  </docblock>
+</test>
+
+<test>
+  <commentblock>/**
  * GtkdocPlainOldData:
  * @n: Some integer member.
  * @x: Some floating point member.

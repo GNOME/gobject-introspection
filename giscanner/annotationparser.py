@@ -178,6 +178,19 @@ COMMENT_ASTERISK_RE = re.compile(r'''
     ''',
     re.VERBOSE)
 
+# Program matching the indentation at the beginning of every
+# line (stripped from the ' * ') inside a comment block.
+#
+# Results in 1 symbolic group:
+#   - group 1 = indentation
+COMMENT_INDENTATION_RE = re.compile(r'''
+    ^
+    (?P<indentation>[^\S\n\r]*)              # 0 or more whitespace characters
+    .*
+    $
+    ''',
+    re.VERBOSE)
+
 # Program matching an empty line.
 #
 # Results in 0 symbolic groups.
@@ -726,13 +739,13 @@ class AnnotationParser(object):
 
     .. NOTE:: :class:`AnnotationParser` functionality is heavily based on gtkdoc-mkdb's
         `ScanSourceFile()`_ function and is currently in sync with GTK-Doc
-        commit `b41641b`_.
+        commit `47abcd5`_.
 
     .. _GTK-Doc's documentation:
             http://developer.gnome.org/gtk-doc-manual/1.18/documenting.html.en
     .. _ScanSourceFile():
             http://git.gnome.org/browse/gtk-doc/tree/gtkdoc-mkdb.in#n3722
-    .. _b41641b: b41641bd75f870afff7561ceed8a08456da57565
+    .. _47abcd5: 47abcd53b8489ebceec9e394676512a181c1f1f6
     """
 
     def parse(self, comments):
@@ -821,6 +834,8 @@ class AnnotationParser(object):
                 http://git.gnome.org/browse/gtk-doc/tree/gtkdoc-mkdb.in#n3722
         """
         comment_block = None
+        part_indent = None
+        line_indent = None
         in_part = None
         identifier = None
         current_param = None
@@ -840,6 +855,10 @@ class AnnotationParser(object):
             if result:
                 column_offset = result.end(0)
                 line = line[result.end(0):]
+
+            # Store indentation level of the line.
+            result = COMMENT_INDENTATION_RE.match(line)
+            line_indent = len(result.group('indentation').replace('\t', '  '))
 
             ####################################################################
             # Check for GTK-Doc comment block identifier.
@@ -877,6 +896,7 @@ class AnnotationParser(object):
 
                 if identifier:
                     in_part = PART_IDENTIFIER
+                    part_indent = line_indent
 
                     comment_block = DocBlock(identifier_name)
                     comment_block.position = position
@@ -922,6 +942,8 @@ class AnnotationParser(object):
 
                 if in_part == PART_IDENTIFIER:
                     in_part = PART_PARAMETERS
+
+                part_indent = line_indent
 
                 if in_part != PART_PARAMETERS:
                     column = result.start('parameter_name') + column_offset
@@ -970,13 +992,14 @@ class AnnotationParser(object):
             if (EMPTY_LINE_RE.match(line)
             and in_part in [PART_IDENTIFIER, PART_PARAMETERS]):
                 in_part = PART_DESCRIPTION
+                part_indent = line_indent
                 continue
 
             ####################################################################
             # Check for GTK-Doc comment block tags.
             ####################################################################
             result = TAG_RE.match(line)
-            if result:
+            if result and line_indent <= part_indent:
                 tag_name = result.group('tag_name')
                 tag_annotations = result.group('annotations')
                 tag_description = result.group('description')
@@ -990,6 +1013,7 @@ class AnnotationParser(object):
                                  position)
 
                     in_part = PART_DESCRIPTION
+                    part_indent = line_indent
 
                     if not comment_block.comment:
                         comment_block.comment = tag_description
@@ -1000,6 +1024,8 @@ class AnnotationParser(object):
                 # Now that the deprecated stuff is out of the way, continue parsing real tags
                 if in_part == PART_DESCRIPTION:
                     in_part = PART_TAGS
+
+                part_indent = line_indent
 
                 if in_part != PART_TAGS:
                     column = result.start('tag_name') + column_offset
