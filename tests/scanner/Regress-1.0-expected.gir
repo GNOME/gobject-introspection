@@ -28,6 +28,9 @@ and/or use gtk-doc annotations.  -->
       <doc xml:whitespace="preserve">Typedef'd GPtrArray for some reason</doc>
       <type name="GLib.PtrArray" c:type="GPtrArray"/>
     </alias>
+    <alias name="TestTypeGUInt64" c:type="RegressTestTypeGUInt64">
+      <type name="guint64" c:type="guint64"/>
+    </alias>
     <alias name="VaListAlias" c:type="RegressVaListAlias" introspectable="0">
       <doc xml:whitespace="preserve">Typedef'd va_list for additional reasons</doc>
       <type name="va_list" c:type="va_list"/>
@@ -48,6 +51,11 @@ and/or use gtk-doc annotations.  -->
               value="18446744073709551615"
               c:type="REGRESS_GUINT64_CONSTANT">
       <type name="guint64" c:type="guint64"/>
+    </constant>
+    <constant name="GUINT64_CONSTANTA"
+              value="18446744073709551615"
+              c:type="REGRESS_GUINT64_CONSTANTA">
+      <type name="TestTypeGUInt64" c:type="RegressTestTypeGUInt64"/>
     </constant>
     <constant name="G_GINT64_CONSTANT"
               value="1000"
