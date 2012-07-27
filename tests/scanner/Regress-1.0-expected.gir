@@ -74,6 +74,13 @@ and/or use gtk-doc annotations.  -->
               c:type="REGRESS_Mixed_Case_Constant">
       <type name="gint" c:type="gint"/>
     </constant>
+    <record name="Object" c:type="RegressRenameToStruct">
+      <doc xml:whitespace="preserve">A type with the same name as the library prefix. With the following
+directive, should be available as RegressRenameToStruct.Object</doc>
+      <field name="data" writable="1">
+        <type name="gpointer" c:type="gpointer"/>
+      </field>
+    </record>
     <constant name="STRING_CONSTANT"
               value="Some String"
               c:type="REGRESS_STRING_CONSTANT">
@@ -1760,6 +1767,28 @@ libgnome-keyring.</doc>
         </parameter>
         <parameter name="v" transfer-ownership="none">
           <type name="gdouble" c:type="double"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="rename_to_struct_new"
+              c:identifier="regress_rename_to_struct_new"
+              introspectable="0">
+      <return-value transfer-ownership="full">
+        <type name="Object" c:type="RegressRenameToStruct*"/>
+      </return-value>
+    </function>
+    <function name="rename_to_struct_set_data"
+              c:identifier="regress_rename_to_struct_set_data"
+              introspectable="0">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="self" transfer-ownership="none">
+          <type name="Object" c:type="RegressRenameToStruct*"/>
+        </parameter>
+        <parameter name="data" transfer-ownership="none">
+          <type name="gpointer" c:type="gpointer"/>
         </parameter>
       </parameters>
     </function>
