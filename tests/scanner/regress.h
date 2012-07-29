@@ -895,7 +895,7 @@ typedef struct {
  * RegressRenameToStruct:
  * 
  * A type with the same name as the library prefix. With the following
- * directive, should be available as RegressRenameToStruct.Object
+ * directive, should be available as Regress.Object
  *
  * Rename to: Object
  **/
