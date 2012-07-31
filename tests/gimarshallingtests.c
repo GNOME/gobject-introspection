@@ -3855,8 +3855,8 @@ gi_marshalling_tests_object_vfunc_with_callback (GIMarshallingTestsObject *objec
 static int
 _callback (int val, void *user_data)
 {
-    g_assert((int)user_data == (int)0xdeadbeef);
-    return val;
+  g_assert (user_data == (gpointer)0xdeadbeef);
+  return val;
 }
 
 void
