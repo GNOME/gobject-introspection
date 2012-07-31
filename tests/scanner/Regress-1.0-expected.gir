@@ -76,7 +76,7 @@ and/or use gtk-doc annotations.  -->
     </constant>
     <record name="Object" c:type="RegressRenameToStruct">
       <doc xml:whitespace="preserve">A type with the same name as the library prefix. With the following
-directive, should be available as RegressRenameToStruct.Object</doc>
+directive, should be available as Regress.Object</doc>
       <field name="data" writable="1">
         <type name="gpointer" c:type="gpointer"/>
       </field>
