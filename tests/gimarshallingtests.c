@@ -94,13 +94,13 @@ gi_marshalling_tests_int8_return_min (void)
 void
 gi_marshalling_tests_int8_in_max (gint8 int8)
 {
-    g_assert(int8 == G_MAXINT8);
+    g_assert_cmpint(int8, ==, G_MAXINT8);
 }
 
 void
 gi_marshalling_tests_int8_in_min (gint8 int8)
 {
-    g_assert(int8 == G_MININT8);
+    g_assert_cmpint(int8, ==, G_MININT8);
 }
 
 /**
@@ -130,7 +130,7 @@ gi_marshalling_tests_int8_out_min (gint8 *int8)
 void
 gi_marshalling_tests_int8_inout_max_min (gint8 *int8)
 {
-    g_assert(*int8 == G_MAXINT8);
+    g_assert_cmpint(*int8, ==, G_MAXINT8);
     *int8 = G_MININT8;
 }
 
@@ -141,7 +141,7 @@ gi_marshalling_tests_int8_inout_max_min (gint8 *int8)
 void
 gi_marshalling_tests_int8_inout_min_max (gint8 *int8)
 {
-    g_assert(*int8 == G_MININT8);
+    g_assert_cmpint(*int8, ==, G_MININT8);
     *int8 = G_MAXINT8;
 }
 
@@ -155,7 +155,7 @@ gi_marshalling_tests_uint8_return (void)
 void
 gi_marshalling_tests_uint8_in (guint8 uint8)
 {
-    g_assert(uint8 == G_MAXUINT8);
+    g_assert_cmpuint(uint8, ==, G_MAXUINT8);
 }
 
 /**
@@ -175,7 +175,7 @@ gi_marshalling_tests_uint8_out (guint8 *uint8)
 void
 gi_marshalling_tests_uint8_inout (guint8 *uint8)
 {
-    g_assert(*uint8 == G_MAXUINT8);
+    g_assert_cmpuint(*uint8, ==, G_MAXUINT8);
     *uint8 = 0;
 }
 
@@ -195,13 +195,13 @@ gi_marshalling_tests_int16_return_min (void)
 void
 gi_marshalling_tests_int16_in_max (gint16 int16)
 {
-    g_assert(int16 == G_MAXINT16);
+    g_assert_cmpint(int16, ==, G_MAXINT16);
 }
 
 void
 gi_marshalling_tests_int16_in_min (gint16 int16)
 {
-    g_assert(int16 == G_MININT16);
+    g_assert_cmpint(int16, ==, G_MININT16);
 }
 
 /**
@@ -231,7 +231,7 @@ gi_marshalling_tests_int16_out_min (gint16 *int16)
 void
 gi_marshalling_tests_int16_inout_max_min (gint16 *int16)
 {
-    g_assert(*int16 == G_MAXINT16);
+    g_assert_cmpint(*int16, ==, G_MAXINT16);
     *int16 = G_MININT16;
 }
 
@@ -242,7 +242,7 @@ gi_marshalling_tests_int16_inout_max_min (gint16 *int16)
 void
 gi_marshalling_tests_int16_inout_min_max (gint16 *int16)
 {
-    g_assert(*int16 == G_MININT16);
+    g_assert_cmpint(*int16, ==, G_MININT16);
     *int16 = G_MAXINT16;
 }
 
@@ -256,7 +256,7 @@ gi_marshalling_tests_uint16_return (void)
 void
 gi_marshalling_tests_uint16_in (guint16 uint16)
 {
-    g_assert(uint16 == G_MAXUINT16);
+    g_assert_cmpuint(uint16, ==, G_MAXUINT16);
 }
 
 /**
@@ -276,7 +276,7 @@ gi_marshalling_tests_uint16_out (guint16 *uint16)
 void
 gi_marshalling_tests_uint16_inout (guint16 *uint16)
 {
-    g_assert(*uint16 == G_MAXUINT16);
+    g_assert_cmpuint(*uint16, ==, G_MAXUINT16);
     *uint16 = 0;
 }
 
@@ -296,13 +296,13 @@ gi_marshalling_tests_int32_return_min (void)
 void
 gi_marshalling_tests_int32_in_max (gint32 int32)
 {
-    g_assert(int32 == G_MAXINT32);
+    g_assert_cmpint(int32, ==, G_MAXINT32);
 }
 
 void
 gi_marshalling_tests_int32_in_min (gint32 int32)
 {
-    g_assert(int32 == G_MININT32);
+    g_assert_cmpint(int32, ==, G_MININT32);
 }
 
 /**
@@ -332,7 +332,7 @@ gi_marshalling_tests_int32_out_min (gint32 *int32)
 void
 gi_marshalling_tests_int32_inout_max_min (gint32 *int32)
 {
-    g_assert(*int32 == G_MAXINT32);
+    g_assert_cmpint(*int32, ==, G_MAXINT32);
     *int32 = G_MININT32;
 }
 
@@ -343,7 +343,7 @@ gi_marshalling_tests_int32_inout_max_min (gint32 *int32)
 void
 gi_marshalling_tests_int32_inout_min_max (gint32 *int32)
 {
-    g_assert(*int32 == G_MININT32);
+    g_assert_cmpint(*int32, ==, G_MININT32);
     *int32 = G_MAXINT32;
 }
 
@@ -357,7 +357,7 @@ gi_marshalling_tests_uint32_return (void)
 void
 gi_marshalling_tests_uint32_in (guint32 uint32)
 {
-    g_assert(uint32 == G_MAXUINT32);
+    g_assert_cmpuint(uint32, ==, G_MAXUINT32);
 }
 
 /**
@@ -377,7 +377,7 @@ gi_marshalling_tests_uint32_out (guint32 *uint32)
 void
 gi_marshalling_tests_uint32_inout (guint32 *uint32)
 {
-    g_assert(*uint32 == G_MAXUINT32);
+    g_assert_cmpuint(*uint32, ==, G_MAXUINT32);
     *uint32 = 0;
 }
 
@@ -397,13 +397,13 @@ gi_marshalling_tests_int64_return_min (void)
 void
 gi_marshalling_tests_int64_in_max (gint64 int64)
 {
-    g_assert(int64 == G_MAXINT64);
+    g_assert_cmpint(int64, ==, G_MAXINT64);
 }
 
 void
 gi_marshalling_tests_int64_in_min (gint64 int64)
 {
-    g_assert(int64 == G_MININT64);
+    g_assert_cmpint(int64, ==, G_MININT64);
 }
 
 /**
@@ -433,7 +433,7 @@ gi_marshalling_tests_int64_out_min (gint64 *int64)
 void
 gi_marshalling_tests_int64_inout_max_min (gint64 *int64)
 {
-    g_assert(*int64 == G_MAXINT64);
+    g_assert_cmpint(*int64, ==, G_MAXINT64);
     *int64 = G_MININT64;
 }
 
@@ -444,7 +444,7 @@ gi_marshalling_tests_int64_inout_max_min (gint64 *int64)
 void
 gi_marshalling_tests_int64_inout_min_max (gint64 *int64)
 {
-    g_assert(*int64 == G_MININT64);
+    g_assert_cmpint(*int64, ==, G_MININT64);
     *int64 = G_MAXINT64;
 }
 
@@ -458,7 +458,7 @@ gi_marshalling_tests_uint64_return (void)
 void
 gi_marshalling_tests_uint64_in (guint64 uint64)
 {
-    g_assert(uint64 == G_MAXUINT64);
+    g_assert_cmpuint(uint64, ==, G_MAXUINT64);
 }
 
 /**
@@ -478,7 +478,7 @@ gi_marshalling_tests_uint64_out (guint64 *uint64)
 void
 gi_marshalling_tests_uint64_inout (guint64 *uint64)
 {
-    g_assert(*uint64 == G_MAXUINT64);
+    g_assert_cmpuint(*uint64, ==, G_MAXUINT64);
     *uint64 = 0;
 }
 
@@ -498,13 +498,13 @@ gi_marshalling_tests_short_return_min (void)
 void
 gi_marshalling_tests_short_in_max (gshort short_)
 {
-    g_assert(short_ == G_MAXSHORT);
+    g_assert_cmpint(short_, ==, G_MAXSHORT);
 }
 
 void
 gi_marshalling_tests_short_in_min (gshort short_)
 {
-    g_assert(short_ == G_MINSHORT);
+    g_assert_cmpint(short_, ==, G_MINSHORT);
 }
 
 /**
@@ -534,7 +534,7 @@ gi_marshalling_tests_short_out_min (gshort *short_)
 void
 gi_marshalling_tests_short_inout_max_min (gshort *short_)
 {
-    g_assert(*short_ == G_MAXSHORT);
+    g_assert_cmpint(*short_, ==, G_MAXSHORT);
     *short_ = G_MINSHORT;
 }
 
@@ -545,7 +545,7 @@ gi_marshalling_tests_short_inout_max_min (gshort *short_)
 void
 gi_marshalling_tests_short_inout_min_max (gshort *short_)
 {
-    g_assert(*short_ == G_MINSHORT);
+    g_assert_cmpint(*short_, ==, G_MINSHORT);
     *short_ = G_MAXSHORT;
 }
 
@@ -559,7 +559,7 @@ gi_marshalling_tests_ushort_return (void)
 void
 gi_marshalling_tests_ushort_in (gushort ushort_)
 {
-    g_assert(ushort_ == G_MAXUSHORT);
+    g_assert_cmpuint(ushort_, ==, G_MAXUSHORT);
 }
 
 /**
@@ -579,7 +579,7 @@ gi_marshalling_tests_ushort_out (gushort *ushort_)
 void
 gi_marshalling_tests_ushort_inout (gushort *ushort_)
 {
-    g_assert(*ushort_ == G_MAXUSHORT);
+    g_assert_cmpuint(*ushort_, ==, G_MAXUSHORT);
     *ushort_ = 0;
 }
 
@@ -599,13 +599,13 @@ gi_marshalling_tests_int_return_min (void)
 void
 gi_marshalling_tests_int_in_max (gint int_)
 {
-    g_assert(int_ == G_MAXINT);
+    g_assert_cmpint(int_, ==, G_MAXINT);
 }
 
 void
 gi_marshalling_tests_int_in_min (gint int_)
 {
-    g_assert(int_ == G_MININT);
+    g_assert_cmpint(int_, ==, G_MININT);
 }
 
 /**
@@ -635,7 +635,7 @@ gi_marshalling_tests_int_out_min (gint *int_)
 void
 gi_marshalling_tests_int_inout_max_min (gint *int_)
 {
-    g_assert(*int_ == G_MAXINT);
+    g_assert_cmpint(*int_, ==, G_MAXINT);
     *int_ = G_MININT;
 }
 
@@ -646,7 +646,7 @@ gi_marshalling_tests_int_inout_max_min (gint *int_)
 void
 gi_marshalling_tests_int_inout_min_max (gint *int_)
 {
-    g_assert(*int_ == G_MININT);
+    g_assert_cmpint(*int_, ==, G_MININT);
     *int_ = G_MAXINT;
 }
 
@@ -660,7 +660,7 @@ gi_marshalling_tests_uint_return (void)
 void
 gi_marshalling_tests_uint_in (guint uint_)
 {
-    g_assert(uint_ == G_MAXUINT);
+    g_assert_cmpuint(uint_, ==, G_MAXUINT);
 }
 
 /**
@@ -680,7 +680,7 @@ gi_marshalling_tests_uint_out (guint *uint_)
 void
 gi_marshalling_tests_uint_inout (guint *uint_)
 {
-    g_assert(*uint_ == G_MAXUINT);
+    g_assert_cmpuint(*uint_, ==, G_MAXUINT);
     *uint_ = 0;
 }
 
@@ -700,13 +700,13 @@ gi_marshalling_tests_long_return_min (void)
 void
 gi_marshalling_tests_long_in_max (glong long_)
 {
-    g_assert(long_ == G_MAXLONG);
+    g_assert_cmpint(long_, ==, G_MAXLONG);
 }
 
 void
 gi_marshalling_tests_long_in_min (glong long_)
 {
-    g_assert(long_ == G_MINLONG);
+    g_assert_cmpint(long_, ==, G_MINLONG);
 }
 
 /**
@@ -736,7 +736,7 @@ gi_marshalling_tests_long_out_min (glong *long_)
 void
 gi_marshalling_tests_long_inout_max_min (glong *long_)
 {
-    g_assert(*long_ == G_MAXLONG);
+    g_assert_cmpint(*long_, ==, G_MAXLONG);
     *long_ = G_MINLONG;
 }
 
@@ -747,7 +747,7 @@ gi_marshalling_tests_long_inout_max_min (glong *long_)
 void
 gi_marshalling_tests_long_inout_min_max (glong *long_)
 {
-    g_assert(*long_ == G_MINLONG);
+    g_assert_cmpint(*long_, ==, G_MINLONG);
     *long_ = G_MAXLONG;
 }
 
@@ -761,7 +761,7 @@ gi_marshalling_tests_ulong_return (void)
 void
 gi_marshalling_tests_ulong_in (gulong ulong_)
 {
-    g_assert(ulong_ == G_MAXULONG);
+    g_assert_cmpuint(ulong_, ==, G_MAXULONG);
 }
 
 /**
@@ -781,7 +781,7 @@ gi_marshalling_tests_ulong_out (gulong *ulong_)
 void
 gi_marshalling_tests_ulong_inout (gulong *ulong_)
 {
-    g_assert(*ulong_ == G_MAXULONG);
+    g_assert_cmpuint(*ulong_, ==, G_MAXULONG);
     *ulong_ = 0;
 }
 
@@ -801,13 +801,13 @@ gi_marshalling_tests_ssize_return_min (void)
 void
 gi_marshalling_tests_ssize_in_max (gssize ssize)
 {
-    g_assert(ssize == G_MAXSSIZE);
+    g_assert_cmpint(ssize, ==, G_MAXSSIZE);
 }
 
 void
 gi_marshalling_tests_ssize_in_min (gssize ssize)
 {
-    g_assert(ssize == G_MINSSIZE);
+    g_assert_cmpint(ssize, ==, G_MINSSIZE);
 }
 
 /**
@@ -837,7 +837,7 @@ gi_marshalling_tests_ssize_out_min (gssize *ssize)
 void
 gi_marshalling_tests_ssize_inout_max_min (gssize *ssize)
 {
-    g_assert(*ssize == G_MAXSSIZE);
+    g_assert_cmpint(*ssize, ==, G_MAXSSIZE);
     *ssize = G_MINSSIZE;
 }
 
@@ -848,7 +848,7 @@ gi_marshalling_tests_ssize_inout_max_min (gssize *ssize)
 void
 gi_marshalling_tests_ssize_inout_min_max (gssize *ssize)
 {
-    g_assert(*ssize == G_MINSSIZE);
+    g_assert_cmpint(*ssize, ==, G_MINSSIZE);
     *ssize = G_MAXSSIZE;
 }
 
@@ -862,7 +862,7 @@ gi_marshalling_tests_size_return (void)
 void
 gi_marshalling_tests_size_in (gsize size)
 {
-    g_assert(size == G_MAXSIZE);
+    g_assert_cmpuint(size, ==, G_MAXSIZE);
 }
 
 /**
@@ -882,7 +882,7 @@ gi_marshalling_tests_size_out (gsize *size)
 void
 gi_marshalling_tests_size_inout (gsize *size)
 {
-    g_assert(*size == G_MAXSIZE);
+    g_assert_cmpuint(*size, ==, G_MAXSIZE);
     *size = 0;
 }
 
@@ -896,7 +896,7 @@ gi_marshalling_tests_float_return (void)
 void
 gi_marshalling_tests_float_in (gfloat float_)
 {
-    g_assert(float_ == G_MAXFLOAT);
+    g_assert_cmpfloat(float_, ==, G_MAXFLOAT);
 }
 
 /**
@@ -916,7 +916,7 @@ gi_marshalling_tests_float_out (gfloat *float_)
 void
 gi_marshalling_tests_float_inout (gfloat *float_)
 {
-    g_assert(*float_ == G_MAXFLOAT);
+    g_assert_cmpfloat(*float_, ==, G_MAXFLOAT);
     *float_ = G_MINFLOAT;
 }
 
@@ -930,7 +930,7 @@ gi_marshalling_tests_double_return (void)
 void
 gi_marshalling_tests_double_in (gdouble double_)
 {
-    g_assert(double_ == G_MAXDOUBLE);
+    g_assert_cmpfloat(double_, ==, G_MAXDOUBLE);
 }
 
 /**
@@ -950,7 +950,7 @@ gi_marshalling_tests_double_out (gdouble *double_)
 void
 gi_marshalling_tests_double_inout (gdouble *double_)
 {
-    g_assert(*double_ == G_MAXDOUBLE);
+    g_assert_cmpfloat(*double_, ==, G_MAXDOUBLE);
     *double_ = G_MINDOUBLE;
 }
 
@@ -964,7 +964,7 @@ gi_marshalling_tests_time_t_return (void)
 void
 gi_marshalling_tests_time_t_in (time_t time_t_)
 {
-    g_assert(time_t_ == 1234567890);
+    g_assert_cmpuint(time_t_, ==, 1234567890);
 }
 
 /**
@@ -984,7 +984,7 @@ gi_marshalling_tests_time_t_out (time_t *time_t_)
 void
 gi_marshalling_tests_time_t_inout (time_t *time_t_)
 {
-    g_assert(*time_t_ == 1234567890);
+    g_assert_cmpuint(*time_t_, ==, 1234567890);
     *time_t_ = 0;
 }
 
@@ -1061,7 +1061,7 @@ gi_marshalling_tests_utf8_full_return (void)
 void
 gi_marshalling_tests_utf8_none_in (const gchar *utf8)
 {
-    g_assert(strcmp(GI_MARSHALLING_TESTS_CONSTANT_UTF8, utf8) == 0);
+    g_assert_cmpstr(GI_MARSHALLING_TESTS_CONSTANT_UTF8, ==, utf8);
 }
 
 /**
@@ -1105,7 +1105,7 @@ gi_marshalling_tests_utf8_dangling_out (gchar **utf8)
 void
 gi_marshalling_tests_utf8_none_inout (gchar **utf8)
 {
-    g_assert(strcmp(GI_MARSHALLING_TESTS_CONSTANT_UTF8, *utf8) == 0);
+    g_assert_cmpstr(GI_MARSHALLING_TESTS_CONSTANT_UTF8, ==, *utf8);
     *utf8 = "";
 }
 
@@ -1116,7 +1116,7 @@ gi_marshalling_tests_utf8_none_inout (gchar **utf8)
 void
 gi_marshalling_tests_utf8_full_inout (gchar **utf8)
 {
-    g_assert(strcmp(GI_MARSHALLING_TESTS_CONSTANT_UTF8, *utf8) == 0);
+    g_assert_cmpstr(GI_MARSHALLING_TESTS_CONSTANT_UTF8, ==, *utf8);
     g_free(*utf8);
     *utf8 = g_strdup("");
 }
@@ -1174,10 +1174,10 @@ gi_marshalling_tests_array_fixed_short_return (void)
 void
 gi_marshalling_tests_array_fixed_int_in (const gint *ints)
 {
-    g_assert(ints[0] == -1);
-    g_assert(ints[1] == 0);
-    g_assert(ints[2] == 1);
-    g_assert(ints[3] == 2);
+    g_assert_cmpint(ints[0], ==, -1);
+    g_assert_cmpint(ints[1], ==, 0);
+    g_assert_cmpint(ints[2], ==, 1);
+    g_assert_cmpint(ints[3], ==, 2);
 }
 
 /**
@@ -1187,10 +1187,10 @@ gi_marshalling_tests_array_fixed_int_in (const gint *ints)
 void
 gi_marshalling_tests_array_fixed_short_in (const gshort *shorts)
 {
-    g_assert(shorts[0] == -1);
-    g_assert(shorts[1] == 0);
-    g_assert(shorts[2] == 1);
-    g_assert(shorts[3] == 2);
+    g_assert_cmpint(shorts[0], ==, -1);
+    g_assert_cmpint(shorts[1], ==, 0);
+    g_assert_cmpint(shorts[2], ==, 1);
+    g_assert_cmpint(shorts[3], ==, 2);
 }
 
 /**
@@ -1235,10 +1235,10 @@ gi_marshalling_tests_array_fixed_inout (gint **ints)
 {
     static gint values[] = {2, 1, 0, -1};
 
-    g_assert((*ints)[0] == -1);
-    g_assert((*ints)[1] == 0);
-    g_assert((*ints)[2] == 1);
-    g_assert((*ints)[3] == 2);
+    g_assert_cmpint((*ints)[0], ==, -1);
+    g_assert_cmpint((*ints)[1], ==, 0);
+    g_assert_cmpint((*ints)[2], ==, 1);
+    g_assert_cmpint((*ints)[3], ==, 2);
 
     *ints = values;
 }
@@ -1287,11 +1287,11 @@ gi_marshalling_tests_array_return_etc (gint first, gint *length, gint last, gint
 void
 gi_marshalling_tests_array_in (const gint *ints, gint length)
 {
-    g_assert(length == 4);
-    g_assert(ints[0] == -1);
-    g_assert(ints[1] == 0);
-    g_assert(ints[2] == 1);
-    g_assert(ints[3] == 2);
+    g_assert_cmpint(length, ==, 4);
+    g_assert_cmpint(ints[0], ==, -1);
+    g_assert_cmpint(ints[1], ==, 0);
+    g_assert_cmpint(ints[2], ==, 1);
+    g_assert_cmpint(ints[3], ==, 2);
 }
 
 /**
@@ -1313,15 +1313,15 @@ gi_marshalling_tests_array_in_len_before (gint length, const gint *ints)
 void
 gi_marshalling_tests_array_in_len_zero_terminated (const gint *ints, gint length)
 {
-    g_assert (length == 4);
+    g_assert_cmpint(length, ==, 4);
 
-    g_assert (ints[0] == -1);
-    g_assert (ints[1] == 0);
-    g_assert (ints[2] == 1);
-    g_assert (ints[3] == 2);
+    g_assert_cmpint(ints[0], ==, -1);
+    g_assert_cmpint(ints[1], ==, 0);
+    g_assert_cmpint(ints[2], ==, 1);
+    g_assert_cmpint(ints[3], ==, 2);
 
     /* One past the end, null terminator */
-    g_assert (ints[4] == 0);
+    g_assert_cmpint(ints[4], ==, 0);
 }
 
 /**
@@ -1331,9 +1331,9 @@ gi_marshalling_tests_array_in_len_zero_terminated (const gint *ints, gint length
 void
 gi_marshalling_tests_array_string_in (const gchar **strings, gint length)
 {
-    g_assert(length == 2);
-    g_assert(g_strcmp0(strings[0], "foo") == 0);
-    g_assert(g_strcmp0(strings[1], "bar") == 0);
+    g_assert_cmpint(length, ==, 2);
+    g_assert_cmpstr(strings[0], ==, "foo");
+    g_assert_cmpstr(strings[1], ==, "bar");
 }
 
 /**
@@ -1343,7 +1343,7 @@ gi_marshalling_tests_array_string_in (const gchar **strings, gint length)
 void
 gi_marshalling_tests_array_uint8_in (const guint8 *chars, gint length)
 {
-    g_assert(length == 4);
+    g_assert_cmpint(length, ==, 4);
     g_assert(chars[0] == 'a');
     g_assert(chars[1] == 'b');
     g_assert(chars[2] == 'c');
@@ -1357,10 +1357,10 @@ gi_marshalling_tests_array_uint8_in (const guint8 *chars, gint length)
 void
 gi_marshalling_tests_array_struct_in (GIMarshallingTestsBoxedStruct **structs, gint length)
 {
-    g_assert(length == 3);
-    g_assert(structs[0]->long_ == 1);
-    g_assert(structs[1]->long_ == 2);
-    g_assert(structs[2]->long_ == 3);
+    g_assert_cmpint(length, ==, 3);
+    g_assert_cmpint(structs[0]->long_, ==, 1);
+    g_assert_cmpint(structs[1]->long_, ==, 2);
+    g_assert_cmpint(structs[2]->long_, ==, 3);
 }
 
 /**
@@ -1370,10 +1370,10 @@ gi_marshalling_tests_array_struct_in (GIMarshallingTestsBoxedStruct **structs, g
 void
 gi_marshalling_tests_array_simple_struct_in (GIMarshallingTestsSimpleStruct *structs, gint length)
 {
-    g_assert(length == 3);
-    g_assert(structs[0].long_ == 1);
-    g_assert(structs[1].long_ == 2);
-    g_assert(structs[2].long_ == 3);
+    g_assert_cmpint(length, ==, 3);
+    g_assert_cmpint(structs[0].long_, ==, 1);
+    g_assert_cmpint(structs[1].long_, ==, 2);
+    g_assert_cmpint(structs[2].long_, ==, 3);
 }
 
 /**
@@ -1384,13 +1384,13 @@ gi_marshalling_tests_array_simple_struct_in (GIMarshallingTestsSimpleStruct *str
 void
 gi_marshalling_tests_multi_array_key_value_in (gint length, const gchar **keys, const GValue *values)
 {
-    g_assert(length == 3);
-    g_assert(g_strcmp0("one", keys[0]) == 0);
-    g_assert(g_value_get_int(&values[0]) == 1);
-    g_assert(g_strcmp0("two", keys[1]) == 0);
-    g_assert(g_value_get_int(&values[1]) == 2);
-    g_assert(g_strcmp0("three", keys[2]) == 0);
-    g_assert(g_value_get_int(&values[2]) == 3);
+    g_assert_cmpint(length, ==, 3);
+    g_assert_cmpstr("one", ==, keys[0]);
+    g_assert_cmpint(g_value_get_int(&values[0]), ==, 1);
+    g_assert_cmpstr("two", ==, keys[1]);
+    g_assert_cmpint(g_value_get_int(&values[1]), ==, 2);
+    g_assert_cmpstr("three", ==, keys[2]);
+    g_assert_cmpint(g_value_get_int(&values[2]), ==, 3);
 
 }
 
@@ -1418,10 +1418,10 @@ gi_marshalling_tests_array_struct_take_in (GIMarshallingTestsBoxedStruct **struc
 void
 gi_marshalling_tests_array_enum_in (GIMarshallingTestsEnum *_enum, gint length)
 {
-    g_assert (length == 3);
-    g_assert (_enum[0] == GI_MARSHALLING_TESTS_ENUM_VALUE1);
-    g_assert (_enum[1] == GI_MARSHALLING_TESTS_ENUM_VALUE2);
-    g_assert (_enum[2] == GI_MARSHALLING_TESTS_ENUM_VALUE3);
+    g_assert_cmpint(length, ==, 3);
+    g_assert_cmpint(_enum[0], ==, GI_MARSHALLING_TESTS_ENUM_VALUE1);
+    g_assert_cmpint(_enum[1], ==, GI_MARSHALLING_TESTS_ENUM_VALUE2);
+    g_assert_cmpint(_enum[2], ==, GI_MARSHALLING_TESTS_ENUM_VALUE3);
 }
 
 /**
@@ -1432,7 +1432,7 @@ gi_marshalling_tests_array_enum_in (GIMarshallingTestsEnum *_enum, gint length)
 void
 gi_marshalling_tests_array_in_guint64_len (const gint *ints, guint64 length)
 {
-    g_assert (length == 4);
+    g_assert_cmpint(length, ==, 4);
 
     gi_marshalling_tests_array_in (ints, length);
 }
@@ -1445,7 +1445,7 @@ gi_marshalling_tests_array_in_guint64_len (const gint *ints, guint64 length)
 void
 gi_marshalling_tests_array_in_guint8_len (const gint *ints, guint8 length)
 {
-    g_assert (length == 4);
+    g_assert_cmpint(length, ==, 4);
 
     gi_marshalling_tests_array_in (ints, length);
 }
@@ -1493,11 +1493,11 @@ gi_marshalling_tests_array_inout (gint **ints, gint *length)
 {
     static gint values[] = {-2, -1, 0, 1, 2};
 
-    g_assert(*length == 4);
-    g_assert((*ints)[0] == -1);
-    g_assert((*ints)[1] == 0);
-    g_assert((*ints)[2] == 1);
-    g_assert((*ints)[3] == 2);
+    g_assert_cmpint(*length, ==, 4);
+    g_assert_cmpint((*ints)[0], ==, -1);
+    g_assert_cmpint((*ints)[1], ==, 0);
+    g_assert_cmpint((*ints)[2], ==, 1);
+    g_assert_cmpint((*ints)[3], ==, 2);
 
     *length = 5;
     *ints = values;
@@ -1516,11 +1516,11 @@ gi_marshalling_tests_array_inout_etc (gint first, gint **ints, gint *length, gin
 {
     static gint values[] = {-2, -1, 0, 1, 2};
 
-    g_assert(*length == 4);
-    g_assert((*ints)[0] == -1);
-    g_assert((*ints)[1] == 0);
-    g_assert((*ints)[2] == 1);
-    g_assert((*ints)[3] == 2);
+    g_assert_cmpint(*length, ==, 4);
+    g_assert_cmpint((*ints)[0], ==, -1);
+    g_assert_cmpint((*ints)[1], ==, 0);
+    g_assert_cmpint((*ints)[2], ==, 1);
+    g_assert_cmpint((*ints)[3], ==, 2);
 
     values[0] = first;
     values[4] = last;
@@ -1598,9 +1598,9 @@ void
 gi_marshalling_tests_array_zero_terminated_in (gchar **utf8s)
 {
     g_assert(g_strv_length(utf8s));
-    g_assert(strcmp(utf8s[0], "0") == 0);
-    g_assert(strcmp(utf8s[1], "1") == 0);
-    g_assert(strcmp(utf8s[2], "2") == 0);
+    g_assert_cmpstr(utf8s[0], ==, "0");
+    g_assert_cmpstr(utf8s[1], ==, "1");
+    g_assert_cmpstr(utf8s[2], ==, "2");
 }
 
 /**
@@ -1624,9 +1624,9 @@ gi_marshalling_tests_array_zero_terminated_inout (gchar ***utf8s)
     static gchar *values[] = {"-1", "0", "1", "2", NULL};
 
     g_assert(g_strv_length(*utf8s));
-    g_assert(strcmp((*utf8s)[0], "0") == 0);
-    g_assert(strcmp((*utf8s)[1], "1") == 0);
-    g_assert(strcmp((*utf8s)[2], "2") == 0);
+    g_assert_cmpstr((*utf8s)[0], ==, "0");
+    g_assert_cmpstr((*utf8s)[1], ==, "1");
+    g_assert_cmpstr((*utf8s)[2], ==, "2");
 
     *utf8s = values;
 }
@@ -1796,11 +1796,11 @@ gi_marshalling_tests_garray_utf8_full_return (void)
 void
 gi_marshalling_tests_garray_int_none_in (GArray *array_)
 {
-    g_assert (array_->len == 4);
-    g_assert (g_array_index (array_, gint, 0) == -1);
-    g_assert (g_array_index (array_, gint, 1) == 0);
-    g_assert (g_array_index (array_, gint, 2) == 1);
-    g_assert (g_array_index (array_, gint, 3) == 2);
+    g_assert_cmpint(array_->len, ==, 4);
+    g_assert_cmpint(g_array_index (array_, gint, 0), ==, -1);
+    g_assert_cmpint(g_array_index (array_, gint, 1), ==, 0);
+    g_assert_cmpint(g_array_index (array_, gint, 2), ==, 1);
+    g_assert_cmpint(g_array_index (array_, gint, 3), ==, 2);
 }
 
 /**
@@ -1810,10 +1810,10 @@ gi_marshalling_tests_garray_int_none_in (GArray *array_)
 void
 gi_marshalling_tests_garray_utf8_none_in (GArray *array_)
 {
-    g_assert (array_->len == 3);
-    g_assert (strcmp (g_array_index (array_, gchar*, 0), "0") == 0);
-    g_assert (strcmp (g_array_index (array_, gchar*, 1), "1") == 0);
-    g_assert (strcmp (g_array_index (array_, gchar*, 2), "2") == 0);
+    g_assert_cmpint(array_->len, ==, 3);
+    g_assert_cmpstr(g_array_index (array_, gchar*, 0), ==, "0");
+    g_assert_cmpstr(g_array_index (array_, gchar*, 1), ==, "1");
+    g_assert_cmpstr(g_array_index (array_, gchar*, 2), ==, "2");
 }
 
 /**
@@ -1883,10 +1883,10 @@ gi_marshalling_tests_garray_utf8_none_inout (GArray **array_)
     static gchar *values[] = {"-2", "-1", "0", "1", NULL};
     gint i;
 
-    g_assert ((*array_)->len == 3);
-    g_assert (strcmp (g_array_index (*array_, gchar*, 0), "0") == 0);
-    g_assert (strcmp (g_array_index (*array_, gchar*, 1), "1") == 0);
-    g_assert (strcmp (g_array_index (*array_, gchar*, 2), "2") == 0);
+    g_assert_cmpint((*array_)->len, ==, 3);
+    g_assert_cmpstr(g_array_index (*array_, gchar*, 0), ==, "0");
+    g_assert_cmpstr(g_array_index (*array_, gchar*, 1), ==, "1");
+    g_assert_cmpstr(g_array_index (*array_, gchar*, 2), ==, "2");
 
     if (internal == NULL) {
         internal = g_array_new (TRUE, TRUE, sizeof (gchar *));
@@ -1910,10 +1910,10 @@ gi_marshalling_tests_garray_utf8_container_inout (GArray **array_)
     static gchar *val4 = "1";
     GArray *result;
 
-    g_assert ((*array_)->len == 3);
-    g_assert (strcmp (g_array_index (*array_, gchar*, 0), "0") == 0);
-    g_assert (strcmp (g_array_index (*array_, gchar*, 1), "1") == 0);
-    g_assert (strcmp (g_array_index (*array_, gchar*, 2), "2") == 0);
+    g_assert_cmpint((*array_)->len, ==, 3);
+    g_assert_cmpstr(g_array_index (*array_, gchar*, 0), ==, "0");
+    g_assert_cmpstr(g_array_index (*array_, gchar*, 1), ==, "1");
+    g_assert_cmpstr(g_array_index (*array_, gchar*, 2), ==, "2");
 
     result = g_array_new (TRUE, TRUE, sizeof (gchar *));
     g_array_append_val (result, val1);
@@ -1936,10 +1936,10 @@ gi_marshalling_tests_garray_utf8_full_inout (GArray **array_)
     gchar *val;
     GArray *result;
 
-    g_assert ((*array_)->len == 3);
-    g_assert (strcmp (g_array_index (*array_, gchar*, 0), "0") == 0);
-    g_assert (strcmp (g_array_index (*array_, gchar*, 1), "1") == 0);
-    g_assert (strcmp (g_array_index (*array_, gchar*, 2), "2") == 0);
+    g_assert_cmpint((*array_)->len, ==, 3);
+    g_assert_cmpstr(g_array_index (*array_, gchar*, 0), ==, "0");
+    g_assert_cmpstr(g_array_index (*array_, gchar*, 1), ==, "1");
+    g_assert_cmpstr(g_array_index (*array_, gchar*, 2), ==, "2");
 
     result = g_array_new (TRUE, TRUE, sizeof (gchar *));
     val = g_strdup (val2);
@@ -2022,10 +2022,10 @@ gi_marshalling_tests_gptrarray_utf8_full_return (void)
 void
 gi_marshalling_tests_gptrarray_utf8_none_in (GPtrArray *parray_)
 {
-    g_assert (parray_->len == 3);
-    g_assert (strcmp (g_ptr_array_index (parray_, 0), "0") == 0);
-    g_assert (strcmp (g_ptr_array_index (parray_, 1), "1") == 0);
-    g_assert (strcmp (g_ptr_array_index (parray_, 2), "2") == 0);
+    g_assert_cmpint(parray_->len, ==, 3);
+    g_assert_cmpstr(g_ptr_array_index (parray_, 0), ==, "0");
+    g_assert_cmpstr(g_ptr_array_index (parray_, 1), ==, "1");
+    g_assert_cmpstr(g_ptr_array_index (parray_, 2), ==, "2");
 }
 
 /**
@@ -2095,10 +2095,10 @@ gi_marshalling_tests_gptrarray_utf8_none_inout (GPtrArray **parray_)
     static gchar *values[] = {"-2", "-1", "0", "1", NULL};
     gint i;
 
-    g_assert ((*parray_)->len == 3);
-    g_assert (strcmp (g_ptr_array_index (*parray_, 0), "0") == 0);
-    g_assert (strcmp (g_ptr_array_index (*parray_, 1), "1") == 0);
-    g_assert (strcmp (g_ptr_array_index (*parray_, 2), "2") == 0);
+    g_assert_cmpint((*parray_)->len, ==, 3);
+    g_assert_cmpstr(g_ptr_array_index (*parray_, 0), ==, "0");
+    g_assert_cmpstr(g_ptr_array_index (*parray_, 1), ==, "1");
+    g_assert_cmpstr(g_ptr_array_index (*parray_, 2), ==, "2");
 
     if (internal == NULL) {
         internal = g_ptr_array_new ();
@@ -2122,10 +2122,10 @@ gi_marshalling_tests_gptrarray_utf8_container_inout (GPtrArray **parray_)
     static gchar *val4 = "1";
     GPtrArray *result;
 
-    g_assert ((*parray_)->len == 3);
-    g_assert (strcmp (g_ptr_array_index (*parray_, 0), "0") == 0);
-    g_assert (strcmp (g_ptr_array_index (*parray_, 1), "1") == 0);
-    g_assert (strcmp (g_ptr_array_index (*parray_, 2), "2") == 0);
+    g_assert_cmpint((*parray_)->len, ==, 3);
+    g_assert_cmpstr(g_ptr_array_index (*parray_, 0), ==, "0");
+    g_assert_cmpstr(g_ptr_array_index (*parray_, 1), ==, "1");
+    g_assert_cmpstr(g_ptr_array_index (*parray_, 2), ==, "2");
 
     result = g_ptr_array_new ();
     g_ptr_array_add (result, (gpointer) val1);
@@ -2148,10 +2148,10 @@ gi_marshalling_tests_gptrarray_utf8_full_inout (GPtrArray **parray_)
     gchar *val;
     GPtrArray *result;
 
-    g_assert ((*parray_)->len == 3);
-    g_assert (strcmp (g_ptr_array_index (*parray_, 0), "0") == 0);
-    g_assert (strcmp (g_ptr_array_index (*parray_, 1), "1") == 0);
-    g_assert (strcmp (g_ptr_array_index (*parray_, 2), "2") == 0);
+    g_assert_cmpint((*parray_)->len, ==, 3);
+    g_assert_cmpstr(g_ptr_array_index (*parray_, 0), ==, "0");
+    g_assert_cmpstr(g_ptr_array_index (*parray_, 1), ==, "1");
+    g_assert_cmpstr(g_ptr_array_index (*parray_, 2), ==, "2");
 
     result = g_ptr_array_new ();
     val = g_strdup (val2);
@@ -2221,10 +2221,10 @@ gi_marshalling_tests_gstrv_return (void)
 void
 gi_marshalling_tests_gstrv_in (GStrv g_strv)
 {
-    g_assert(g_strv_length(g_strv) == 3);
-    g_assert(strcmp(g_strv[0], "0") == 0);
-    g_assert(strcmp(g_strv[1], "1") == 0);
-    g_assert(strcmp(g_strv[2], "2") == 0);
+    g_assert_cmpint(g_strv_length(g_strv), ==, 3);
+    g_assert_cmpstr(g_strv[0], ==, "0");
+    g_assert_cmpstr(g_strv[1], ==, "1");
+    g_assert_cmpstr(g_strv[2], ==, "2");
 }
 
 /**
@@ -2335,11 +2335,11 @@ gi_marshalling_tests_glist_utf8_full_return (void)
 void
 gi_marshalling_tests_glist_int_none_in (GList *list)
 {
-    g_assert(g_list_length(list) == 4);
-    g_assert(GPOINTER_TO_INT(g_list_nth_data(list, 0)) == -1);
-    g_assert(GPOINTER_TO_INT(g_list_nth_data(list, 1)) == 0);
-    g_assert(GPOINTER_TO_INT(g_list_nth_data(list, 2)) == 1);
-    g_assert(GPOINTER_TO_INT(g_list_nth_data(list, 3)) == 2);
+    g_assert_cmpint(g_list_length(list), ==, 4);
+    g_assert_cmpint(GPOINTER_TO_INT(g_list_nth_data(list, 0)), ==, -1);
+    g_assert_cmpint(GPOINTER_TO_INT(g_list_nth_data(list, 1)), ==, 0);
+    g_assert_cmpint(GPOINTER_TO_INT(g_list_nth_data(list, 2)), ==, 1);
+    g_assert_cmpint(GPOINTER_TO_INT(g_list_nth_data(list, 3)), ==, 2);
 }
 
 /**
@@ -2349,10 +2349,10 @@ gi_marshalling_tests_glist_int_none_in (GList *list)
 void
 gi_marshalling_tests_glist_utf8_none_in (GList *list)
 {
-    g_assert(g_list_length(list) == 3);
-    g_assert(strcmp(g_list_nth_data(list, 0), "0") == 0);
-    g_assert(strcmp(g_list_nth_data(list, 1), "1") == 0);
-    g_assert(strcmp(g_list_nth_data(list, 2), "2") == 0);
+    g_assert_cmpint(g_list_length(list), ==, 3);
+    g_assert_cmpint(strcmp(g_list_nth_data(list, 0), "0"), ==, 0);
+    g_assert_cmpint(strcmp(g_list_nth_data(list, 1), "1"), ==, 0);
+    g_assert_cmpint(strcmp(g_list_nth_data(list, 2), "2"), ==, 0);
 }
 
 /**
@@ -2410,10 +2410,10 @@ gi_marshalling_tests_glist_utf8_none_inout (GList **list)
 {
     static GList *values = NULL;
 
-    g_assert(g_list_length(*list) == 3);
-    g_assert(strcmp(g_list_nth_data(*list, 0), "0") == 0);
-    g_assert(strcmp(g_list_nth_data(*list, 1), "1") == 0);
-    g_assert(strcmp(g_list_nth_data(*list, 2), "2") == 0);
+    g_assert_cmpint(g_list_length(*list), ==, 3);
+    g_assert_cmpstr(g_list_nth_data(*list, 0), ==, "0");
+    g_assert_cmpstr(g_list_nth_data(*list, 1), ==, "1");
+    g_assert_cmpstr(g_list_nth_data(*list, 2), ==, "2");
 
     if (values == NULL) {
         values = g_list_append(values, "-2");
@@ -2434,10 +2434,10 @@ gi_marshalling_tests_glist_utf8_container_inout (GList **list)
 {
     GList *result = NULL;
 
-    g_assert(g_list_length(*list) == 3);
-    g_assert(strcmp(g_list_nth_data(*list, 0), "0") == 0);
-    g_assert(strcmp(g_list_nth_data(*list, 1), "1") == 0);
-    g_assert(strcmp(g_list_nth_data(*list, 2), "2") == 0);
+    g_assert_cmpint(g_list_length(*list), ==, 3);
+    g_assert_cmpstr(g_list_nth_data(*list, 0), ==, "0");
+    g_assert_cmpstr(g_list_nth_data(*list, 1), ==, "1");
+    g_assert_cmpstr(g_list_nth_data(*list, 2), ==, "2");
 
     result = g_list_prepend(result, "1");
     result = g_list_prepend(result, "0");
@@ -2456,10 +2456,10 @@ gi_marshalling_tests_glist_utf8_full_inout (GList **list)
 {
     GList *result = NULL;
 
-    g_assert(g_list_length(*list) == 3);
-    g_assert(strcmp(g_list_nth_data(*list, 0), "0") == 0);
-    g_assert(strcmp(g_list_nth_data(*list, 1), "1") == 0);
-    g_assert(strcmp(g_list_nth_data(*list, 2), "2") == 0);
+    g_assert_cmpint(g_list_length(*list), ==, 3);
+    g_assert_cmpstr(g_list_nth_data(*list, 0), ==, "0");
+    g_assert_cmpstr(g_list_nth_data(*list, 1), ==, "1");
+    g_assert_cmpstr(g_list_nth_data(*list, 2), ==, "2");
 
     result = g_list_prepend(result, g_strdup("1"));
     result = g_list_prepend(result, g_strdup("0"));
@@ -2554,11 +2554,11 @@ gi_marshalling_tests_gslist_utf8_full_return (void)
 void
 gi_marshalling_tests_gslist_int_none_in (GSList *list)
 {
-    g_assert(g_slist_length(list) == 4);
-    g_assert(GPOINTER_TO_INT(g_slist_nth_data(list, 0)) == -1);
-    g_assert(GPOINTER_TO_INT(g_slist_nth_data(list, 1)) == 0);
-    g_assert(GPOINTER_TO_INT(g_slist_nth_data(list, 2)) == 1);
-    g_assert(GPOINTER_TO_INT(g_slist_nth_data(list, 3)) == 2);
+    g_assert_cmpint(g_slist_length(list), ==, 4);
+    g_assert_cmpint(GPOINTER_TO_INT(g_slist_nth_data(list, 0)), ==, -1);
+    g_assert_cmpint(GPOINTER_TO_INT(g_slist_nth_data(list, 1)), ==, 0);
+    g_assert_cmpint(GPOINTER_TO_INT(g_slist_nth_data(list, 2)), ==, 1);
+    g_assert_cmpint(GPOINTER_TO_INT(g_slist_nth_data(list, 3)), ==, 2);
 }
 
 /**
@@ -2568,10 +2568,10 @@ gi_marshalling_tests_gslist_int_none_in (GSList *list)
 void
 gi_marshalling_tests_gslist_utf8_none_in (GSList *list)
 {
-    g_assert(g_slist_length(list) == 3);
-    g_assert(strcmp(g_slist_nth_data(list, 0), "0") == 0);
-    g_assert(strcmp(g_slist_nth_data(list, 1), "1") == 0);
-    g_assert(strcmp(g_slist_nth_data(list, 2), "2") == 0);
+    g_assert_cmpint(g_slist_length(list), ==, 3);
+    g_assert_cmpstr(g_slist_nth_data(list, 0), ==, "0");
+    g_assert_cmpstr(g_slist_nth_data(list, 1), ==, "1");
+    g_assert_cmpstr(g_slist_nth_data(list, 2), ==, "2");
 }
 
 /**
@@ -2632,10 +2632,10 @@ gi_marshalling_tests_gslist_utf8_none_inout (GSList **list)
 {
     static GSList *values = NULL;
 
-    g_assert(g_slist_length(*list) == 3);
-    g_assert(strcmp(g_slist_nth_data(*list, 0), "0") == 0);
-    g_assert(strcmp(g_slist_nth_data(*list, 1), "1") == 0);
-    g_assert(strcmp(g_slist_nth_data(*list, 2), "2") == 0);
+    g_assert_cmpint(g_slist_length(*list), ==, 3);
+    g_assert_cmpstr(g_slist_nth_data(*list, 0), ==, "0");
+    g_assert_cmpstr(g_slist_nth_data(*list, 1), ==, "1");
+    g_assert_cmpstr(g_slist_nth_data(*list, 2), ==, "2");
 
     if (values == NULL) {
         values = g_slist_prepend(values, "-2");
@@ -2657,10 +2657,10 @@ gi_marshalling_tests_gslist_utf8_container_inout (GSList **list)
 {
     GSList *result = NULL;
 
-    g_assert(g_slist_length(*list) == 3);
-    g_assert(strcmp(g_slist_nth_data(*list, 0), "0") == 0);
-    g_assert(strcmp(g_slist_nth_data(*list, 1), "1") == 0);
-    g_assert(strcmp(g_slist_nth_data(*list, 2), "2") == 0);
+    g_assert_cmpint(g_slist_length(*list), ==, 3);
+    g_assert_cmpstr(g_slist_nth_data(*list, 0), ==, "0");
+    g_assert_cmpstr(g_slist_nth_data(*list, 1), ==, "1");
+    g_assert_cmpstr(g_slist_nth_data(*list, 2), ==, "2");
 
     result = g_slist_prepend(result, "1");
     result = g_slist_prepend(result, "0");
@@ -2679,10 +2679,10 @@ gi_marshalling_tests_gslist_utf8_full_inout (GSList **list)
 {
     GSList *result = NULL;
 
-    g_assert(g_slist_length(*list) == 3);
-    g_assert(strcmp(g_slist_nth_data(*list, 0), "0") == 0);
-    g_assert(strcmp(g_slist_nth_data(*list, 1), "1") == 0);
-    g_assert(strcmp(g_slist_nth_data(*list, 2), "2") == 0);
+    g_assert_cmpint(g_slist_length(*list), ==, 3);
+    g_assert_cmpstr(g_slist_nth_data(*list, 0), ==, "0");
+    g_assert_cmpstr(g_slist_nth_data(*list, 1), ==, "1");
+    g_assert_cmpstr(g_slist_nth_data(*list, 2), ==, "2");
 
     result = g_slist_prepend(result, g_strdup("1"));
     result = g_slist_prepend(result, g_strdup("0"));
@@ -2780,10 +2780,10 @@ gi_marshalling_tests_ghashtable_utf8_full_return (void)
 void
 gi_marshalling_tests_ghashtable_int_none_in (GHashTable *hash_table)
 {
-    g_assert(GPOINTER_TO_INT(g_hash_table_lookup(hash_table, GINT_TO_POINTER(-1))) == 1);
-    g_assert(GPOINTER_TO_INT(g_hash_table_lookup(hash_table, GINT_TO_POINTER(0))) == 0);
-    g_assert(GPOINTER_TO_INT(g_hash_table_lookup(hash_table, GINT_TO_POINTER(1))) == -1);
-    g_assert(GPOINTER_TO_INT(g_hash_table_lookup(hash_table, GINT_TO_POINTER(2))) == -2);
+    g_assert_cmpint(GPOINTER_TO_INT(g_hash_table_lookup(hash_table, GINT_TO_POINTER(-1))), ==, 1);
+    g_assert_cmpint(GPOINTER_TO_INT(g_hash_table_lookup(hash_table, GINT_TO_POINTER(0))), ==, 0);
+    g_assert_cmpint(GPOINTER_TO_INT(g_hash_table_lookup(hash_table, GINT_TO_POINTER(1))), ==, -1);
+    g_assert_cmpint(GPOINTER_TO_INT(g_hash_table_lookup(hash_table, GINT_TO_POINTER(2))), ==, -2);
 }
 
 /**
@@ -2793,10 +2793,10 @@ gi_marshalling_tests_ghashtable_int_none_in (GHashTable *hash_table)
 void
 gi_marshalling_tests_ghashtable_utf8_none_in (GHashTable *hash_table)
 {
-    g_assert(strcmp(g_hash_table_lookup(hash_table, "-1"), "1") == 0);
-    g_assert(strcmp(g_hash_table_lookup(hash_table, "0"), "0") == 0);
-    g_assert(strcmp(g_hash_table_lookup(hash_table, "1"), "-1") == 0);
-    g_assert(strcmp(g_hash_table_lookup(hash_table, "2"), "-2") == 0);
+    g_assert_cmpstr(g_hash_table_lookup(hash_table, "-1"), ==, "1");
+    g_assert_cmpstr(g_hash_table_lookup(hash_table, "0"), ==, "0");
+    g_assert_cmpstr(g_hash_table_lookup(hash_table, "1"), ==, "-1");
+    g_assert_cmpstr(g_hash_table_lookup(hash_table, "2"), ==, "-2");
 }
 
 /**
@@ -2856,10 +2856,10 @@ gi_marshalling_tests_ghashtable_utf8_none_inout (GHashTable **hash_table)
 {
     static GHashTable *new_hash_table = NULL;
 
-    g_assert(strcmp(g_hash_table_lookup(*hash_table, "-1"), "1") == 0);
-    g_assert(strcmp(g_hash_table_lookup(*hash_table, "0"), "0") == 0);
-    g_assert(strcmp(g_hash_table_lookup(*hash_table, "1"), "-1") == 0);
-    g_assert(strcmp(g_hash_table_lookup(*hash_table, "2"), "-2") == 0);
+    g_assert_cmpstr(g_hash_table_lookup(*hash_table, "-1"), ==, "1");
+    g_assert_cmpstr(g_hash_table_lookup(*hash_table, "0"), ==, "0");
+    g_assert_cmpstr(g_hash_table_lookup(*hash_table, "1"), ==, "-1");
+    g_assert_cmpstr(g_hash_table_lookup(*hash_table, "2"), ==, "-2");
 
     if (new_hash_table == NULL) {
         new_hash_table = g_hash_table_new(g_str_hash, g_str_equal);
@@ -2880,10 +2880,10 @@ gi_marshalling_tests_ghashtable_utf8_container_inout (GHashTable **hash_table)
 {
     GHashTable *result = g_hash_table_new(g_str_hash, g_str_equal);
 
-    g_assert(strcmp(g_hash_table_lookup(*hash_table, "-1"), "1") == 0);
-    g_assert(strcmp(g_hash_table_lookup(*hash_table, "0"), "0") == 0);
-    g_assert(strcmp(g_hash_table_lookup(*hash_table, "1"), "-1") == 0);
-    g_assert(strcmp(g_hash_table_lookup(*hash_table, "2"), "-2") == 0);
+    g_assert_cmpstr(g_hash_table_lookup(*hash_table, "-1"), ==, "1");
+    g_assert_cmpstr(g_hash_table_lookup(*hash_table, "0"), ==, "0");
+    g_assert_cmpstr(g_hash_table_lookup(*hash_table, "1"), ==, "-1");
+    g_assert_cmpstr(g_hash_table_lookup(*hash_table, "2"), ==, "-2");
 
     g_hash_table_insert(result, "-1", "1");
     g_hash_table_insert(result, "0", "0");
@@ -2902,10 +2902,10 @@ gi_marshalling_tests_ghashtable_utf8_full_inout (GHashTable **hash_table)
     GHashTable *result = g_hash_table_new_full(g_str_hash, g_str_equal,
 					       g_free, g_free);
 
-    g_assert(strcmp(g_hash_table_lookup(*hash_table, "-1"), "1") == 0);
-    g_assert(strcmp(g_hash_table_lookup(*hash_table, "0"), "0") == 0);
-    g_assert(strcmp(g_hash_table_lookup(*hash_table, "1"), "-1") == 0);
-    g_assert(strcmp(g_hash_table_lookup(*hash_table, "2"), "-2") == 0);
+    g_assert_cmpstr(g_hash_table_lookup(*hash_table, "-1"), ==, "1");
+    g_assert_cmpstr(g_hash_table_lookup(*hash_table, "0"), ==, "0");
+    g_assert_cmpstr(g_hash_table_lookup(*hash_table, "1"), ==, "-1");
+    g_assert_cmpstr(g_hash_table_lookup(*hash_table, "2"), ==, "-2");
 
     g_hash_table_insert(result, g_strdup("-1"), g_strdup("1"));
     g_hash_table_insert(result, g_strdup("0"), g_strdup("0"));
@@ -2941,7 +2941,7 @@ gi_marshalling_tests_gvalue_return (void)
 void
 gi_marshalling_tests_gvalue_in (GValue *value)
 {
-    g_assert(g_value_get_int(value) == 42);
+    g_assert_cmpint(g_value_get_int(value), ==, 42);
 }
 
 /**
@@ -3001,7 +3001,7 @@ gi_marshalling_tests_gvalue_out_caller_allocates (GValue *value)
 void
 gi_marshalling_tests_gvalue_inout (GValue **value)
 {
-    g_assert(g_value_get_int(*value) == 42);
+    g_assert_cmpint(g_value_get_int(*value), ==, 42);
     g_value_unset(*value);
     g_value_init(*value, G_TYPE_STRING);
     g_value_set_string(*value, "42");
@@ -3082,7 +3082,7 @@ gi_marshalling_tests_gclosure_in (GClosure *closure)
             0, NULL,
             NULL);
 
-    g_assert(g_value_get_int (&return_value) == 42);
+    g_assert_cmpint(g_value_get_int (&return_value), ==, 42);
 
     g_value_unset(&return_value);
 }
@@ -3226,7 +3226,7 @@ gi_marshalling_tests_genum_returnv (void)
 void
 gi_marshalling_tests_genum_in (GIMarshallingTestsGEnum enum_)
 {
-    g_assert(enum_ == GI_MARSHALLING_TESTS_GENUM_VALUE3);
+    g_assert_cmpint(enum_, ==, GI_MARSHALLING_TESTS_GENUM_VALUE3);
 }
 
 /**
@@ -3246,7 +3246,7 @@ gi_marshalling_tests_genum_out (GIMarshallingTestsGEnum *enum_)
 void
 gi_marshalling_tests_genum_inout (GIMarshallingTestsGEnum *enum_)
 {
-    g_assert(*enum_ == GI_MARSHALLING_TESTS_GENUM_VALUE3);
+    g_assert_cmpint(*enum_, ==, GI_MARSHALLING_TESTS_GENUM_VALUE3);
     *enum_ = GI_MARSHALLING_TESTS_GENUM_VALUE1;
 }
 
@@ -3260,7 +3260,7 @@ gi_marshalling_tests_enum_returnv (void)
 void
 gi_marshalling_tests_enum_in (GIMarshallingTestsEnum enum_)
 {
-    g_assert(enum_ == GI_MARSHALLING_TESTS_ENUM_VALUE3);
+    g_assert_cmpint(enum_, ==, GI_MARSHALLING_TESTS_ENUM_VALUE3);
 }
 
 /**
@@ -3280,7 +3280,7 @@ gi_marshalling_tests_enum_out (GIMarshallingTestsEnum *enum_)
 void
 gi_marshalling_tests_enum_inout (GIMarshallingTestsEnum *enum_)
 {
-    g_assert(*enum_ == GI_MARSHALLING_TESTS_ENUM_VALUE3);
+    g_assert_cmpint(*enum_, ==, GI_MARSHALLING_TESTS_ENUM_VALUE3);
     *enum_ = GI_MARSHALLING_TESTS_ENUM_VALUE1;
 }
 
@@ -3411,15 +3411,15 @@ gi_marshalling_tests_simple_struct_returnv (void)
 void
 gi_marshalling_tests_simple_struct_inv (GIMarshallingTestsSimpleStruct *struct_)
 {
-    g_assert(struct_->long_ == 6);
-    g_assert(struct_->int8 == 7);
+    g_assert_cmpint(struct_->long_, ==, 6);
+    g_assert_cmpint(struct_->int8, ==, 7);
 }
 
 void
 gi_marshalling_tests_simple_struct_method (GIMarshallingTestsSimpleStruct *struct_)
 {
-    g_assert(struct_->long_ == 6);
-    g_assert(struct_->int8 == 7);
+    g_assert_cmpint(struct_->long_, ==, 6);
+    g_assert_cmpint(struct_->int8, ==, 7);
 }
 
 
@@ -3461,7 +3461,7 @@ gi_marshalling_tests_pointer_struct_returnv (void)
 void
 gi_marshalling_tests_pointer_struct_inv (GIMarshallingTestsPointerStruct *struct_)
 {
-    g_assert(struct_->long_ == 42);
+    g_assert_cmpint(struct_->long_, ==, 42);
 }
 
 static GIMarshallingTestsBoxedStruct *
@@ -3537,7 +3537,7 @@ gi_marshalling_tests_boxed_struct_returnv (void)
 void
 gi_marshalling_tests_boxed_struct_inv (GIMarshallingTestsBoxedStruct *struct_)
 {
-    g_assert(struct_->long_ == 42);
+    g_assert_cmpint(struct_->long_, ==, 42);
 }
 
 /**
@@ -3565,7 +3565,7 @@ gi_marshalling_tests_boxed_struct_out (GIMarshallingTestsBoxedStruct **struct_)
 void
 gi_marshalling_tests_boxed_struct_inout (GIMarshallingTestsBoxedStruct **struct_)
 {
-    g_assert((*struct_)->long_ == 42);
+    g_assert_cmpint((*struct_)->long_, ==, 42);
 
     (*struct_) = g_slice_new (GIMarshallingTestsBoxedStruct);
     (*struct_)->long_ = 0;
@@ -3629,13 +3629,13 @@ gi_marshalling_tests_union_returnv (void)
 void
 gi_marshalling_tests_union_inv (GIMarshallingTestsUnion *union_)
 {
-    g_assert(union_->long_ == 42);
+    g_assert_cmpint(union_->long_, ==, 42);
 }
 
 void
 gi_marshalling_tests_union_method (GIMarshallingTestsUnion *union_)
 {
-    g_assert(union_->long_ == 42);
+    g_assert_cmpint(union_->long_, ==, 42);
 }
 
 
@@ -3721,14 +3721,14 @@ void
 gi_marshalling_tests_object_method (GIMarshallingTestsObject *object)
 {
 	g_return_if_fail (GI_MARSHALLING_TESTS_IS_OBJECT (object));
-    g_assert (object->int_ == 42);
+    g_assert_cmpint (object->int_, ==, 42);
 }
 
 void
 gi_marshalling_tests_object_overridden_method (GIMarshallingTestsObject *object)
 {
 	g_return_if_fail (GI_MARSHALLING_TESTS_IS_OBJECT (object));
-    g_assert (object->int_ == 0);
+    g_assert_cmpint (object->int_, ==, 0);
 }
 
 GIMarshallingTestsObject *
@@ -3744,11 +3744,11 @@ gi_marshalling_tests_object_new (gint int_)
 void
 gi_marshalling_tests_object_method_array_in (GIMarshallingTestsObject *object, const gint *ints, gint length)
 {
-    g_assert(length == 4);
-    g_assert(ints[0] == -1);
-    g_assert(ints[1] == 0);
-    g_assert(ints[2] == 1);
-    g_assert(ints[3] == 2);
+    g_assert_cmpint(length, ==, 4);
+    g_assert_cmpint(ints[0], ==, -1);
+    g_assert_cmpint(ints[1], ==, 0);
+    g_assert_cmpint(ints[2], ==, 1);
+    g_assert_cmpint(ints[3], ==, 2);
 }
 
 /**
@@ -3774,11 +3774,11 @@ gi_marshalling_tests_object_method_array_inout (GIMarshallingTestsObject *object
 {
     static gint values[] = {-2, -1, 0, 1, 2};
 
-    g_assert(*length == 4);
-    g_assert((*ints)[0] == -1);
-    g_assert((*ints)[1] == 0);
-    g_assert((*ints)[2] == 1);
-    g_assert((*ints)[3] == 2);
+    g_assert_cmpint(*length, ==, 4);
+    g_assert_cmpint((*ints)[0], ==, -1);
+    g_assert_cmpint((*ints)[1], ==, 0);
+    g_assert_cmpint((*ints)[2], ==, 1);
+    g_assert_cmpint((*ints)[3], ==, 2);
 
     *length = 5;
     *ints = values;
@@ -3902,7 +3902,7 @@ gi_marshalling_tests_object_full_return (void)
 void
 gi_marshalling_tests_object_none_in (GIMarshallingTestsObject *object)
 {
-    g_assert(object->int_ == 42);
+    g_assert_cmpint(object->int_, ==, 42);
 }
 
 /**
@@ -3940,7 +3940,7 @@ gi_marshalling_tests_object_none_inout (GIMarshallingTestsObject **object)
 {
     static GIMarshallingTestsObject *new_object = NULL;
 
-    g_assert((*object)->int_ == 42);
+    g_assert_cmpint((*object)->int_, ==, 42);
 
     if (new_object == NULL) {
         new_object = g_object_new(GI_MARSHALLING_TESTS_TYPE_OBJECT, NULL);
@@ -3957,7 +3957,7 @@ gi_marshalling_tests_object_none_inout (GIMarshallingTestsObject **object)
 void
 gi_marshalling_tests_object_full_inout (GIMarshallingTestsObject **object)
 {
-    g_assert((*object)->int_ == 42);
+    g_assert_cmpint((*object)->int_, ==, 42);
 
     *object = g_object_new(GI_MARSHALLING_TESTS_TYPE_OBJECT, NULL);
 }
@@ -4109,13 +4109,13 @@ gi_marshalling_tests_sub_object_class_init (GIMarshallingTestsSubObjectClass *kl
 void
 gi_marshalling_tests_sub_object_sub_method (GIMarshallingTestsSubObject *object)
 {
-    g_assert(GI_MARSHALLING_TESTS_OBJECT(object)->int_ == 0);
+    g_assert_cmpint(GI_MARSHALLING_TESTS_OBJECT(object)->int_, ==, 0);
 }
 
 void
 gi_marshalling_tests_sub_object_overwritten_method (GIMarshallingTestsSubObject *object)
 {
-    g_assert(GI_MARSHALLING_TESTS_OBJECT(object)->int_ == 0);
+    g_assert_cmpint(GI_MARSHALLING_TESTS_OBJECT(object)->int_, ==, 0);
 }
 
 G_DEFINE_TYPE (GIMarshallingTestsSubSubObject, gi_marshalling_tests_sub_sub_object, GI_MARSHALLING_TESTS_TYPE_SUB_OBJECT);
