@@ -3819,11 +3819,14 @@ regress_test_versioning (void)
  *
  * Returns: (transfer full):
  */
-RegressRenameToStruct * regress_rename_to_struct_new()
+RegressRenameToStruct *
+regress_rename_to_struct_new (void)
 {
-    return g_new0(RegressRenameToStruct, 1);
+    return g_new0 (RegressRenameToStruct, 1);
 }
-void regress_rename_to_struct_set_data(RegressRenameToStruct *self, gpointer data)
+
+void
+regress_rename_to_struct_set_data (RegressRenameToStruct *self, gpointer data)
 {
     self->data = data;
 }

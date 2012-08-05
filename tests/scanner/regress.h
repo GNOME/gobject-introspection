@@ -908,7 +908,7 @@ typedef struct {
     gpointer data;
 } RegressRenameToStruct;
 
-RegressRenameToStruct * regress_rename_to_struct_new();
-void regress_rename_to_struct_set_data(RegressRenameToStruct *self, gpointer data);
+RegressRenameToStruct * regress_rename_to_struct_new (void);
+void regress_rename_to_struct_set_data (RegressRenameToStruct *self, gpointer data);
 
 #endif /* __GITESTTYPES_H__ */
