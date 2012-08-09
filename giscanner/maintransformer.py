@@ -60,13 +60,13 @@ class MainTransformer(object):
         # Some initial namespace surgery
         self._namespace.walk(self._pass_fixup_hidden_fields)
 
-        # Read in annotations needed early
-        self._namespace.walk(self._pass_read_annotations_early)
-
         # We have a rough tree which should have most of of the types
         # we know about.  Let's attempt closure; walk over all of the
         # Type() types and see if they match up with something.
         self._namespace.walk(self._pass_type_resolution)
+
+        # Read in annotations needed early
+        self._namespace.walk(self._pass_read_annotations_early)
 
         # Determine some default values for transfer etc.
         # based on the current tree.
@@ -139,16 +139,7 @@ usage is void (*_gtk_reserved1)(void);"""
 
         return param.argname
 
-    def _apply_annotation_rename_to_record(self, node, chain, block):
-        if not block:
-            return
-        rename_to = block.get_tag(TAG_RENAME_TO)
-        if not rename_to:
-            return
-
-        node.name = rename_to.value
-
-    def _apply_annotation_rename_to_function(self, node, chain, block):
+    def _apply_annotation_rename_to(self, node, chain, block):
         if not block:
             return
         rename_to = block.get_tag(TAG_RENAME_TO)
@@ -186,7 +177,6 @@ usage is void (*_gtk_reserved1)(void);"""
                 block = self._blocks.get(node.ctype)
             else:
                 block = self._blocks.get(node.c_name)
-            self._apply_annotation_rename_to_record(node, chain, block)
             self._apply_annotations_annotated(node, block)
         return True
 
@@ -838,7 +828,7 @@ usage is void (*_gtk_reserved1)(void);"""
     def _apply_annotations2_function(self, node, chain):
         block = self._blocks.get(node.symbol)
 
-        self._apply_annotation_rename_to_function(node, chain, block)
+        self._apply_annotation_rename_to(node, chain, block)
 
         # Handle virtual invokers
         parent = chain[-1] if chain else None

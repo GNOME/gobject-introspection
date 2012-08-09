@@ -894,21 +894,4 @@ typedef struct {
   double dummy2;
 } RegressLikeGnomeKeyringPasswordSchema;
 
-
-
-/**
- * RegressRenameToStruct:
- * 
- * A type with the same name as the library prefix. With the following
- * directive, should be available as Regress.Object
- *
- * Rename to: Object
- **/
-typedef struct {
-    gpointer data;
-} RegressRenameToStruct;
-
-RegressRenameToStruct * regress_rename_to_struct_new (void);
-void regress_rename_to_struct_set_data (RegressRenameToStruct *self, gpointer data);
-
 #endif /* __GITESTTYPES_H__ */
