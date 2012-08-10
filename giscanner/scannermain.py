@@ -158,6 +158,9 @@ match the namespace prefix.""")
     parser.add_option("", "--c-include",
                       action="append", dest="c_includes", default=[],
                       help="headers which should be included in C programs")
+    parser.add_option("", "--filelist",
+                      action="store", dest="filelist", default=[],
+                      help="file containing headers and sources to be scanned")
 
     group = get_preprocessor_option_group(parser)
     parser.add_option_group(group)
@@ -250,6 +253,27 @@ def extract_filenames(args):
             filenames.append(os.path.abspath(arg))
     return filenames
 
+def extract_filelist(options):
+    filenames = []
+    if not os.path.exists(options.filelist):
+        _error('%s: no such filelist file' % (options.filelist, ))
+    filelist_file = open(options.filelist, "r")
+    lines = filelist_file.readlines()
+    for line in lines:
+        # We don't support real C++ parsing yet, but we should be able
+        # to understand C API implemented in C++ files.
+        filename = line.strip()
+        if (filename.endswith('.c') or filename.endswith('.cpp') or
+            filename.endswith('.cc') or filename.endswith('.cxx') or
+            filename.endswith('.h') or filename.endswith('.hpp') or
+            filename.endswith('.hxx')):
+            if not os.path.exists(filename):
+                _error('%s: Invalid filelist entry-no such file or directory' % (line, ))
+            # Make absolute, because we do comparisons inside scannerparser.c
+            # against the absolute path that cpp will give us
+            filenames.append(os.path.abspath(filename))
+    return filenames
+
 def create_namespace(options):
     if options.strip_prefix:
         print """g-ir-scanner: warning: Option --strip-prefix has been deprecated;
@@ -324,7 +348,10 @@ def create_binary(transformer, options, args):
     return shlibs
 
 def create_source_scanner(options, args):
-    filenames = extract_filenames(args)
+    if options.filelist:
+        filenames = extract_filelist(options)
+    else:
+        filenames = extract_filenames(args)
 
     # Run the preprocessor, tokenize and construct simple
     # objects representing the raw C symbols
@@ -381,8 +408,9 @@ def scanner_main(args):
     if options.test_codegen:
         return test_codegen(options.test_codegen)
 
-    if len(args) <= 1:
-        _error('Need at least one filename')
+    if not options.filelist:
+        if len(args) <= 1:
+            _error('Need at least one filename')
 
     if not options.namespace_name:
         _error('Namespace name missing')
