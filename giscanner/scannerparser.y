@@ -814,11 +814,12 @@ type_specifier
 struct_or_union_specifier
 	: struct_or_union identifier_or_typedef_name '{' struct_declaration_list '}'
 	  {
+		GISourceSymbol *sym;
 		$$ = $1;
 		$$->name = $2;
 		$$->child_list = $4;
 
-		GISourceSymbol *sym = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_filename, lineno);
+		sym = gi_source_symbol_new (CSYMBOL_TYPE_INVALID, scanner->current_filename, lineno);
 		if ($$->type == CTYPE_STRUCT) {
 			sym->type = CSYMBOL_TYPE_STRUCT;
 		} else if ($$->type == CTYPE_UNION) {
@@ -1468,9 +1469,9 @@ gi_source_scanner_parse_macros (GISourceScanner *scanner, GList *filenames)
   FILE *fmacros =
     fdopen (g_file_open_tmp ("gen-introspect-XXXXXX.h", &tmp_name, &error),
             "w+");
+  GList *l;
   g_unlink (tmp_name);
 
-  GList *l;
   for (l = filenames; l != NULL; l = l->next)
     {
       FILE *f = fopen (l->data, "r");
