@@ -1,0 +1,136 @@
+/* config.h.in.  Generated from configure.ac by autoheader.  */
+
+/* Director prefix for gir installation */
+#define GIR_DIR "/some/dynamically/constructed/dir"
+
+/* Name of the gir directory */
+#define GIR_SUFFIX "@GIR_SUFFIX@"
+
+/* Directory prefix for typelib installation */
+#define GOBJECT_INTROSPECTION_LIBDIR "/some/dynamically/constructed/dir"
+
+/* Define to 1 if you have the `backtrace' function. */
+/* #undef HAVE_BACKTRACE */
+
+/* Define to 1 if you have the `backtrace_symbols' function. */
+/* #undef HAVE_BACKTRACE_SYMBOLS */
+
+/* Define to 1 if you have the <dlfcn.h> header file. */
+/* #undef HAVE_DLFCN_H */
+
+/* Define to 1 if you have the <fcntl.h> header file. */
+#define HAVE_FCNTL_H 1
+
+/* Define to 1 if you have the <inttypes.h> header file. */
+#ifndef _MSC_VER
+#define HAVE_INTTYPES_H 1
+#endif
+
+/* Define to 1 if you have the `dl' library (-ldl). */
+/* #undef HAVE_LIBDL */
+
+/* Define to 1 if you have the `memchr' function. */
+#define HAVE_MEMCHR 1
+
+/* Define to 1 if you have the <memory.h> header file. */
+#define HAVE_MEMORY_H 1
+
+/* Define to 1 if you have the <stdint.h> header file. */
+#if (!defined (_MSC_VER) || (_MSC_VER >= 1600))
+#define HAVE_STDINT_H 1
+#endif
+
+/* Define to 1 if you have the <stdlib.h> header file. */
+#define HAVE_STDLIB_H 1
+
+/* Define to 1 if you have the `strchr' function. */
+#define HAVE_STRCHR 1
+
+/* Define to 1 if you have the <strings.h> header file. */
+#ifndef _MSC_VER
+#define HAVE_STRINGS_H 1
+#endif
+
+/* Define to 1 if you have the <string.h> header file. */
+#define HAVE_STRING_H 1
+
+/* Define to 1 if you have the `strspn' function. */
+#define HAVE_STRSPN 1
+
+/* Define to 1 if you have the `strstr' function. */
+#define HAVE_STRSTR 1
+
+/* Define to 1 if you have the `strtol' function. */
+#define HAVE_STRTOL 1
+
+/* Define to 1 if you have the `strtoull' function. */
+#ifndef _MSC_VER
+#define HAVE_STRTOULL 1
+#endif
+
+/* Define to 1 if you have the <sys/stat.h> header file. */
+#define HAVE_SYS_STAT_H 1
+
+/* Define to 1 if you have the <sys/types.h> header file. */
+#define HAVE_SYS_TYPES_H 1
+
+/* Define to 1 if you have the <unistd.h> header file. */
+#ifndef _MSC_VER
+#define HAVE_UNISTD_H 1
+#endif
+
+/* Define to the sub-directory in which libtool stores uninstalled libraries.
+   */
+#define LT_OBJDIR ".libs/"
+
+/* Define to 1 if your C compiler doesn't accept -c and -o together. */
+/* #undef NO_MINUS_C_MINUS_O
+
+/* Name of package */
+#define PACKAGE "gobject-introspection"
+
+/* Define to the address where bug reports for this package should be sent. */
+#define PACKAGE_BUGREPORT "@PACKAGE_BUGREPORT@"
+
+/* Define to the full name of this package. */
+#define PACKAGE_NAME "gobject-introspection"
+
+/* Define to the full name and version of this package. */
+#define PACKAGE_STRING "gojbect-introspection @PACKAGE_VERSION@"
+
+/* Define to the one symbol short name of this package. */
+#define PACKAGE_TARNAME "gobject-introspection"
+
+/* Define to the home page for this package. */
+#define PACKAGE_URL ""
+
+/* Define to the version of this package. */
+#define PACKAGE_VERSION "@PACKAGE_VERSION@"
+
+/* Define to the platform's shared library suffix */
+#define SHLIB_SUFFIX ".dll"
+
+/* The size of `char', as computed by sizeof. */
+#define SIZEOF_CHAR 1
+
+/* The size of `int', as computed by sizeof. */
+#define SIZEOF_INT 4
+
+/* The size of `long', as computed by sizeof. */
+#define SIZEOF_LONG 4
+
+/* The size of `short', as computed by sizeof. */
+#define SIZEOF_SHORT 2
+
+/* Define to 1 if you have the ANSI C header files. */
+#define STDC_HEADERS 1
+
+/* Version number of package */
+#define VERSION "@PACKAGE_VERSION@"
+
+/* Define to 1 if `lex' declares `yytext' as a `char *' by default, not a
+   `char[]'. */
+#define YYTEXT_POINTER 1
+
+/* Define to empty if `const' does not conform to ANSI C. */
+/* #undef const */
