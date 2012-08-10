@@ -42,8 +42,8 @@
 
 DL_EXPORT(void) init_giscanner(void);
 
-#define NEW_CLASS(ctype, name, cname)	      \
-static const PyMethodDef _Py##cname##_methods[];    \
+#define NEW_CLASS(ctype, name, cname, num_methods)	      \
+static const PyMethodDef _Py##cname##_methods[num_methods];    \
 PyTypeObject Py##cname##_Type = {             \
     PyObject_HEAD_INIT(NULL)                  \
     0,			                      \
@@ -86,9 +86,9 @@ typedef struct {
   GISourceScanner *scanner;
 } PyGISourceScanner;
 
-NEW_CLASS (PyGISourceSymbol, "SourceSymbol", GISourceSymbol);
-NEW_CLASS (PyGISourceType, "SourceType", GISourceType);
-NEW_CLASS (PyGISourceScanner, "SourceScanner", GISourceScanner);
+NEW_CLASS (PyGISourceSymbol, "SourceSymbol", GISourceSymbol, 10);
+NEW_CLASS (PyGISourceType, "SourceType", GISourceType, 9);
+NEW_CLASS (PyGISourceScanner, "SourceScanner", GISourceScanner, 8);
 
 
 /* Symbol */
@@ -411,43 +411,79 @@ pygi_source_scanner_parse_file (PyGISourceScanner *self,
 
 #ifdef _WIN32
   /* The file descriptor passed to us is from the C library Python
-   * uses. That is msvcr71.dll at least for Python 2.5. This code, at
-   * least if compiled with mingw, uses msvcrt.dll, so we cannot use
-   * the file descriptor directly. So perform appropriate magic.
+   * uses. That is msvcr71.dll for Python 2.5 and msvcr90.dll for
+   * Python 2.6, 2.7, 3.2 etc; and msvcr100.dll for Python 3.3 and later.
+   * This code, at least if compiled with mingw, uses
+   * msvcrt.dll, so we cannot use the file descriptor directly. So
+   * perform appropriate magic.
    */
+
+  /* If we are using the following combinations,
+   * we can use the file descriptors directly
+   * (Not if a build using WDK is used):
+   * Python 2.6.x/2.7.x with Visual C++ 2008
+   * Python 3.1.x/3.2.x with Visual C++ 2008
+   * Python 3.3+ with Visual C++ 2010
+   */
+
+#if (defined(_MSC_VER) && !defined(USE_WIN_DDK))
+#if (PY_MAJOR_VERSION==2 && PY_MINOR_VERSION>=6 && (_MSC_VER >= 1500 && _MSC_VER < 1600))
+#define MSVC_USE_FD_DIRECTLY 1
+#elif (PY_MAJOR_VERSION==3 && PY_MINOR_VERSION<=2 && (_MSC_VER >= 1500 && _MSC_VER < 1600))
+#define MSVC_USE_FD_DIRECTLY 1
+#elif (PY_MAJOR_VERSION==3 && PY_MINOR_VERSION>=3 && (_MSC_VER >= 1600 && _MSC_VER < 1700))
+#define MSVC_USE_FD_DIRECTLY 1
+#endif
+#endif
+
+#ifndef MSVC_USE_FD_DIRECTLY
   {
-    HMODULE msvcr71;
-    int (*p__get_osfhandle) (int);
+#if defined(PY_MAJOR_VERSION) && PY_MAJOR_VERSION==2 && PY_MINOR_VERSION==5
+#define PYTHON_MSVCRXX_DLL "msvcr71.dll"
+#elif defined(PY_MAJOR_VERSION) && PY_MAJOR_VERSION==2 && PY_MINOR_VERSION==6
+#define PYTHON_MSVCRXX_DLL "msvcr90.dll"
+#elif defined(PY_MAJOR_VERSION) && PY_MAJOR_VERSION==2 && PY_MINOR_VERSION==7
+#define PYTHON_MSVCRXX_DLL "msvcr90.dll"
+#elif defined(PY_MAJOR_VERSION) && PY_MAJOR_VERSION==3 && PY_MINOR_VERSION==2
+#define PYTHON_MSVCRXX_DLL "msvcr90.dll"
+#elif defined(PY_MAJOR_VERSION) && PY_MAJOR_VERSION==3 && PY_MINOR_VERSION>=3
+#define PYTHON_MSVCRXX_DLL "msvcr100.dll"
+#else
+#error This Python version not handled
+#endif
+    HMODULE msvcrxx;
+    intptr_t (*p__get_osfhandle) (int);
     HANDLE handle;
 
-    msvcr71 = GetModuleHandle ("msvcr71.dll");
-    if (!msvcr71)
-      {
-	g_print ("No msvcr71.dll loaded.\n");
-	return NULL;
-      }
+    msvcrxx = GetModuleHandle (PYTHON_MSVCRXX_DLL);
+    if (!msvcrxx)
+    {
+      g_print ("No " PYTHON_MSVCRXX_DLL " loaded.\n");
+      return NULL;
+    }
 
-    p__get_osfhandle = GetProcAddress (msvcr71, "_get_osfhandle");
+    p__get_osfhandle = (intptr_t (*) (int)) GetProcAddress (msvcrxx, "_get_osfhandle");
     if (!p__get_osfhandle)
-      {
-	g_print ("No _get_osfhandle found in msvcr71.dll.\n");
-	return NULL;
-      }
+    {
+      g_print ("No _get_osfhandle found in " PYTHON_MSVCRXX_DLL ".\n");
+      return NULL;
+    }
 
-    handle = p__get_osfhandle (fd);
+    handle = (HANDLE) p__get_osfhandle (fd);
     if (!p__get_osfhandle)
-      {
-	g_print ("Could not get OS handle from msvcr71 fd.\n");
-	return NULL;
-      }
+    {
+      g_print ("Could not get OS handle from " PYTHON_MSVCRXX_DLL " fd.\n");
+      return NULL;
+    }
 
-    fd = _open_osfhandle (handle, _O_RDONLY);
+    fd = _open_osfhandle ((intptr_t) handle, _O_RDONLY);
     if (fd == -1)
-      {
-	g_print ("Could not open C fd from OS handle.\n");
-	return NULL;
-      }
+    {
+      g_print ("Could not open C fd from OS handle.\n");
+      return NULL;
+    }
   }
+#endif
 #endif
 
   fp = fdopen (fd, "r");
