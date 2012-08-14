@@ -300,7 +300,12 @@ tests/doctool/Makefile
 docs/Makefile
 docs/reference/Makefile
 gobject-introspection-1.0.pc
-gobject-introspection-no-export-1.0.pc])
+gobject-introspection-no-export-1.0.pc
+config.h.win32
+build/Makefile
+build/win32/Makefile
+build/win32/vs9/Makefile
+build/win32/vs10/Makefile])
 AC_OUTPUT
 
 echo "
