@@ -1,0 +1,224 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="UserMacros">
+    <GlibEtcInstallRoot>$(SolutionDir)\..\..\..\..\vs10\$(Platform)</GlibEtcInstallRoot>
+    <VSVER>10</VSVER>
+    <BASE_GI_DIR>$(SolutionDir)\..\..\..</BASE_GI_DIR>
+    <CopyDir>$(GlibEtcInstallRoot)</CopyDir>
+    <GIApiVersion>1.0</GIApiVersion>
+    <DefDir>$(SolutionDir)$(Configuration)\$(Platform)\obj\$(ProjectName)</DefDir>
+    <GenerateGIRDef>
+        echo EXPORTS &gt; $(DefDir)\girepository.def
+
+        cl -EP ..\..\..\girepository\girepository.symbols &gt;&gt; $(DefDir)\girepository.def
+    </GenerateGIRDef>
+    <GenEverythingH>
+if exist ..\..\..\tests\everything.h goto DONE_GEN_EVERYTHING_C
+
+cd ..\..\..\tests
+
+set PATH=$(GlibEtcInstallRoot)\bin;$(SolutionDir)$(Configuration)\$(PlatformName)\bin;%PYTHONDIR%;%PATH%
+
+set PYTHONPATH=$(SolutionDir)$(Configuration)\$(PlatformName)\bin;$(BASE_GI_DIR)
+
+set UNINSTALLED_INTROSPECTION_SRCDIR=$(BASE_GI_DIR)
+
+python ..\tools\g-ir-scanner --verbose -I. --add-include-path=..\ --add-include-path=..\gir --generate-typelib-tests=Everything,everything.h,everything.c
+
+cd $(SolutionDir)
+
+:DONE_GEN_EVERYTHING_C
+	</GenEverythingH>
+    <GenerateGIR>
+@echo off
+
+set CC=cl
+
+if "$(MINGWDIR)" == "" goto ERR_NOGCC
+
+if "$(PYTHONDIR)" == "" goto ERR_NOPYPATH
+
+if "$(PKG_CONFIG_PATH)" == "" goto ERR_NOPKGCONFIG
+
+
+set PYTHONPATH=$(SolutionDir)$(Configuration)\$(PlatformName)\bin\;$(BASE_GI_DIR)
+
+set UNINSTALLED_INTROSPECTION_SRCDIR=$(BASE_GI_DIR)
+
+set PATH=$(GlibEtcInstallRoot)\bin;$(SolutionDir)$(Configuration)\$(PlatformName)\bin\;$(PATH);$(PYTHONDIR);$(MINGWDIR)\bin
+
+set LIB=$(GlibEtcInstallRoot)\lib;$(SolutionDir)$(Configuration)\$(PlatformName)\bin\;$(LIB);$(PYTHONDIR)\libs
+
+set INCLUDE=$(GlibEtcInstallRoot)\include;$(GlibEtcInstallRoot)\lib\glib-2.0\include;$(INCLUDE);$(PYTHONDIR)\include
+
+
+set PLAT=$(Platform)
+
+set CONF=$(Configuration)
+
+set BASEDIR=$(GlibEtcInstallRoot)
+
+set VSVER=$(VSVER)
+
+
+cd ..
+
+call gengir.bat
+
+cd .\vs$(VSVER)
+
+goto DONE
+
+
+:ERR_NOGCC
+
+echo You need a Windows GCC installation to preprocess the headers to generate .gir files
+
+echo Please set MINGWDIR accordingly before launching the Project
+
+goto DONE
+
+
+:ERR_NOPYPATH
+
+echo You need a Python installation to build the Python module and run the Python scripts to generate .gir files
+
+echo The Python installation needs to correspond to the configuration of your build, i.e. Win32 or x64
+
+echo Please set PYTHONDIR accordingly before launching the Project
+
+goto DONE
+
+
+:ERR_NOPKGCONFIG
+
+echo You need pkg-config and need to set PKG_CONFIG_PATH to point to pkgconfig (.pc) files to generate .gir files
+
+echo Please set PKG_CONFIG_PATH accordingly before launching the Project
+
+goto DONE
+
+
+:DONE
+
+     </GenerateGIR>
+    <LibGILibtoolCompatibleDllPrefix>lib</LibGILibtoolCompatibleDllPrefix>
+    <LibGILibtoolCompatibleDllSuffix>-$(GIApiVersion)-0</LibGILibtoolCompatibleDllSuffix>
+    <LibGISeparateVS10DllPrefix />
+    <LibGISeparateVS10DllSuffix>-1-vs10</LibGISeparateVS10DllSuffix>
+    <LibGIDllPrefix>$(LibGISeparateVS10DllPrefix)</LibGIDllPrefix>
+    <LibGIDllSuffix>$(LibGISeparateVS10DllSuffix)</LibGIDllSuffix>
+    <GIDoInstall>
+mkdir $(CopyDir)
+
+mkdir $(CopyDir)\bin
+
+copy $(SolutionDir)$(Configuration)\$(Platform)\bin\$(LibGIDllPrefix)girepository$(LibGIDllSuffix).dll $(CopyDir)\bin
+
+copy $(SolutionDir)$(Configuration)\$(Platform)\bin\g-ir-compiler.exe $(CopyDir)\bin
+
+copy $(SolutionDir)$(Configuration)\$(Platform)\bin\g-ir-generate.exe $(CopyDir)\bin
+
+copy ..\..\..\tools\g-ir-annotation-tool $(CopyDir)\bin
+
+copy ..\..\..\tools\g-ir-doc-tool $(CopyDir)\bin
+
+copy ..\..\..\tools\g-ir-scanner $(CopyDir)\bin
+
+
+#include "gir.vs10.install"
+
+copy $(SolutionDir)$(Configuration)\$(Platform)\bin\_giscanner.pyd $(CopyDir)\lib\gobject-introspection\giscanner
+
+
+mkdir $(CopyDir)\share\gir-$(GIApiVersion)
+
+copy $(SolutionDir)$(Configuration)\$(Platform)\share\gir-$(GIApiVersion)\*.gir $(CopyDir)\share\gir-$(GIApiVersion)
+
+
+mkdir $(CopyDir)\lib\girepository-$(GIApiVersion)
+
+copy $(SolutionDir)$(Configuration)\$(Platform)\bin\girepository-$(GIApiVersion).lib $(CopyDir)\lib
+
+copy $(SolutionDir)$(Configuration)\$(Platform)\lib\girepository-$(GIApiVersion)\*.typelib $(CopyDir)\lib\girepository-$(GIApiVersion)
+
+</GIDoInstall>
+  </PropertyGroup>
+  <PropertyGroup>
+    <_PropertySheetDisplayName>giprops</_PropertySheetDisplayName>
+    <OutDir>$(SolutionDir)$(Configuration)\$(PlatformName)\bin\</OutDir>
+    <IntDir>$(SolutionDir)$(Configuration)\$(PlatformName)\obj\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\..;..\..\..\girepository;$(GlibEtcInstallRoot)\include;$(GlibEtcInstallRoot)\include\glib-2.0;$(GlibEtcInstallRoot)\lib\glib-2.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>HAVE_CONFIG_H;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ForcedIncludeFiles>msvc_recommended_pragmas.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>gio-2.0.lib;gobject-2.0.lib;gmodule-2.0.lib;gthread-2.0.lib;glib-2.0.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(GlibEtcInstallRoot)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <PreBuildEvent>
+      <Command>
+if not exist ..\..\..\config.h copy ..\..\..\config.h.win32 ..\..\..\config.h
+
+if not exist ..\..\..\tools\g-ir-scanner copy ..\..\..\tools\g-ir-scanner.in ..\..\..\tools\g-ir-scanner
+
+if not exist ..\..\..\tools\g-ir-doc-tool copy ..\..\..\tools\g-ir-doc-tool.in ..\..\..\tools\g-ir-doc-tool
+
+if not exist ..\..\..\tools\g-ir-annotation-tool copy ..\..\..\tools\g-ir-annotation-tool.in ..\..\..\tools\g-ir-annotation-tool
+</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <BuildMacro Include="GlibEtcInstallRoot">
+      <Value>$(GlibEtcInstallRoot)</Value>
+    </BuildMacro>
+    <BuildMacro Include="VSVER">
+      <Value>$(VSVER)</Value>
+    </BuildMacro>
+    <BuildMacro Include="BASE_GI_DIR">
+      <Value>$(BASE_GI_DIR)</Value>
+    </BuildMacro>
+    <BuildMacro Include="CopyDir">
+      <Value>$(CopyDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GIApiVersion">
+      <Value>$(GIApiVersion)</Value>
+    </BuildMacro>
+    <BuildMacro Include="DefDir">
+      <Value>$(DefDir)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GenerateGIRDef">
+      <Value>$(GenerateGIRDef)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GenEverythingH">
+      <Value>$(GenEverythingH)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GenerateGIR">
+      <Value>$(GenerateGIR)</Value>
+    </BuildMacro>
+    <BuildMacro Include="LibGILibtoolCompatibleDllPrefix">
+      <Value>$(LibGILibtoolCompatibleDllPrefix)</Value>
+    </BuildMacro>
+    <BuildMacro Include="LibGILibtoolCompatibleDllSuffix">
+      <Value>$(LibGILibtoolCompatibleDllSuffix)</Value>
+    </BuildMacro>
+    <BuildMacro Include="LibGISeparateVS10DllPrefix">
+      <Value>$(LibGISeparateVS10DllPrefix)</Value>
+    </BuildMacro>
+    <BuildMacro Include="LibGISeparateVS10DllSuffix">
+      <Value>$(LibGISeparateVS10DllSuffix)</Value>
+    </BuildMacro>
+    <BuildMacro Include="LibGIDllPrefix">
+      <Value>$(LibGIDllPrefix)</Value>
+    </BuildMacro>
+    <BuildMacro Include="LibGIDllSuffix">
+      <Value>$(LibGIDllSuffix)</Value>
+    </BuildMacro>
+    <BuildMacro Include="GIDoInstall">
+      <Value>$(GIDoInstall)</Value>
+    </BuildMacro>
+  </ItemGroup>
+</Project>
