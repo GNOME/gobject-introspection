@@ -1,0 +1,6 @@
+EXPORTS
+gettype_object_get_type
+gettype_object_new
+gettype_object_nonmeta1_get_type
+gettype_object_nonmeta2_get_type
+gettype_object_nonmeta_get_gtype
