@@ -26,6 +26,7 @@
 # Add this to Makefile.am where your library/program is built:
 #   include $(INTROSPECTION_MAKEFILE)
 #   INTROSPECTION_GIRS = YourLib-1.0.gir
+#   YourLib-1.0.gir: libyourlib.la
 #   YourLib_1_0_gir_NAMESPACE = YourLib
 #   YourLib_1_0_gir_VERSION = 1.0
 #   YourLib_1_0_gir_LIBS = libyourlib.la
