@@ -1,3 +1,5 @@
+NULL ?=
+
 include $(top_srcdir)/common.mk
 include $(top_srcdir)/Makefile.introspection
 
@@ -10,10 +12,9 @@ check_LTLIBRARIES = \
 	libfoo.la \
 	libutility.la \
 	libgtkfrob.la \
-	libgettype.la
-if HAVE_CAIRO
-check_LTLIBRARIES += libregress.la
-endif
+	libgettype.la \
+	libregress.la \
+	$(NULL)
 
 AM_CPPFLAGS = -I$(top_srcdir)/girepository
 AM_CFLAGS = $(GIO_CFLAGS) $(GOBJECT_CFLAGS) $(GTHREAD_CFLAGS)
@@ -69,9 +70,7 @@ Regress_1_0_gir_LIBS = libregress.la
 Regress_1_0_gir_INCLUDES = cairo-1.0 Gio-2.0
 Regress_1_0_gir_FILES = $(libregress_la_SOURCES)
 Regress_1_0_gir_SCANNERFLAGS = --c-include="regress.h" --warn-error
-if HAVE_CAIRO
 GIRS += Regress-1.0.gir
-endif
 
 Annotation-1.0.gir: Utility-1.0.gir libannotation.la
 Annotation_1_0_gir_PACKAGES = gobject-2.0

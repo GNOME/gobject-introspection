@@ -130,57 +130,44 @@ PKG_CHECK_MODULES(GIO, [gio-2.0])
 PKG_CHECK_MODULES(GIO_UNIX, [gio-unix-2.0], have_gio_unix=true, have_gio_unix=false)
 AM_CONDITIONAL(HAVE_GIO_UNIX, test x$have_gio_unix = xtrue)
 
-AC_ARG_ENABLE(tests,[  --disable-tests           disable test libraries ], enable_tests=$enableval,enable_tests=yes)
-have_cairo=no
-PKG_CHECK_MODULES(CAIRO, [cairo cairo-gobject], have_cairo=yes, have_cairo=no)
-if test x$have_cairo != xyes && test x$enable_tests != xno; then
-  AC_MSG_ERROR([Tests enabled but cairo not found; pass --disable-tests or install cairo])
-fi
+AC_ARG_ENABLE(tests,
+	AS_HELP_STRING([--disable-tests], [disable test libraries]),
+	enable_tests=$enableval,
+	enable_tests=maybe)
 
-have_cairo_gobject=no
-if test x$have_cairo = xyes; then
-  PKG_CHECK_MODULES(CAIRO_GOBJECT, [cairo-gobject], have_cairo_gobject=yes, have_cairo_gobject=no)
-fi
+AS_IF([test x${enable_tests} != xno], [
+  PKG_CHECK_MODULES(CAIRO, [cairo cairo-gobject], have_cairo=yes, have_cairo=no)
+  AS_IF([test x$have_cairo != xyes], [
+    AS_IF([ test x$enable_tests = xmaybe ], [
+      enable_tests=no
+    ], [
+      AC_MSG_ERROR([Tests enabled but cairo not found; pass --disable-tests or install cairo])
+    ])
+  ], [
+    enable_tests=yes
+  ])
+])
+AM_CONDITIONAL(BUILD_TESTS, test x$enable_tests != xno)
 
-if test x$have_cairo_gobject = xyes; then
-  case "$host" in
-    *-*-darwin*)
-      CAIRO_SHARED_LIBRARY="libcairo-gobject.2.dylib"
-      ;;
-    *-*-mingw*)
-      CAIRO_SHARED_LIBRARY="libcairo-gobject-2.dll"
-      ;;
-    *-*-openbsd*)
-      CAIRO_SHARED_LIBRARY="libcairo-gobject.so"
-      ;;
-    *)
-      CAIRO_SHARED_LIBRARY="libcairo-gobject.so.2"
-      ;;
-  esac
-  CAIRO_GIR_PACKAGE="cairo-gobject"
-elif test x$have_cairo = xyes; then
-  case "$host" in
-    *-*-darwin*)
-      CAIRO_SHARED_LIBRARY="libcairo.2.dylib"
-      ;;
-    *-*-mingw*)
-      CAIRO_SHARED_LIBRARY="libcairo-2.dll"
-      ;;
-    *-*-openbsd*)
-      CAIRO_SHARED_LIBRARY="libcairo.so"
-      ;;
-    *)
-      CAIRO_SHARED_LIBRARY="libcairo.so.2"
-      ;;
-  esac
-  CAIRO_GIR_PACKAGE="cairo"
-fi
+case "$host" in
+  *-*-darwin*)
+    CAIRO_SHARED_LIBRARY="libcairo-gobject.2.dylib"
+    ;;
+  *-*-mingw*)
+    CAIRO_SHARED_LIBRARY="libcairo-gobject-2.dll"
+    ;;
+  *-*-openbsd*)
+    CAIRO_SHARED_LIBRARY="libcairo-gobject.so"
+    ;;
+  *)
+    CAIRO_SHARED_LIBRARY="libcairo-gobject.so.2"
+    ;;
+esac
+CAIRO_GIR_PACKAGE="cairo-gobject"
+
 AC_SUBST(CAIRO_SHARED_LIBRARY)
 AC_SUBST(CAIRO_GIR_PACKAGE)
 
-AM_CONDITIONAL(BUILD_TESTS, test x$enable_tests != xno)
-AM_CONDITIONAL(HAVE_CAIRO, test x$have_cairo != xno)
-AM_CONDITIONAL(HAVE_CAIRO_GOBJECT, test x$have_cairo_gobject != xno)
 
 PKG_CHECK_MODULES(SCANNER, [gobject-2.0 gio-2.0])
 
@@ -309,3 +296,10 @@ docs/reference/Makefile
 gobject-introspection-1.0.pc
 gobject-introspection-no-export-1.0.pc])
 AC_OUTPUT
+
+echo "
+    gobject-introspection $VERSION
+    ===============
+
+    tests: ${enable_tests}
+"
