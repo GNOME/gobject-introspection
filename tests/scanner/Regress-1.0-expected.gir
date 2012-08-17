@@ -1444,6 +1444,24 @@ Use with regress_test_obj_emit_sig_with_obj</doc>
           </parameter>
         </parameters>
       </method>
+      <function name="parse" c:identifier="regress_test_struct_a_parse">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <parameter name="a_out"
+                     direction="out"
+                     caller-allocates="1"
+                     transfer-ownership="none">
+            <doc xml:whitespace="preserve">the structure that is to be filled</doc>
+            <type name="TestStructA" c:type="RegressTestStructA*"/>
+          </parameter>
+          <parameter name="string" transfer-ownership="none">
+            <doc xml:whitespace="preserve">ignored</doc>
+            <type name="utf8" c:type="const gchar*"/>
+          </parameter>
+        </parameters>
+      </function>
     </record>
     <record name="TestStructB" c:type="RegressTestStructB">
       <field name="some_int8" writable="1">
@@ -3056,6 +3074,26 @@ What we're testing here is that the scanner ignores the @a nested inside XML.</d
       <parameters>
         <parameter name="in" transfer-ownership="none">
           <type name="gssize" c:type="gssize"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="test_struct_a_parse"
+              c:identifier="regress_test_struct_a_parse"
+              moved-to="TestStructA.parse">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="a_out"
+                   direction="out"
+                   caller-allocates="1"
+                   transfer-ownership="none">
+          <doc xml:whitespace="preserve">the structure that is to be filled</doc>
+          <type name="TestStructA" c:type="RegressTestStructA*"/>
+        </parameter>
+        <parameter name="string" transfer-ownership="none">
+          <doc xml:whitespace="preserve">ignored</doc>
+          <type name="utf8" c:type="const gchar*"/>
         </parameter>
       </parameters>
     </function>

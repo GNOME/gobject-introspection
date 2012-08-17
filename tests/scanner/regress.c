@@ -1673,6 +1673,18 @@ regress_test_struct_a_clone (RegressTestStructA *a,
 }
 
 /**
+ * regress_test_struct_a_parse:
+ * @a_out: (out caller-allocates): the structure that is to be filled
+ * @string: ignored
+ */
+void
+regress_test_struct_a_parse (RegressTestStructA *a_out,
+                             const gchar *string)
+{
+	a_out->some_int = 23;
+}
+
+/**
  * regress_test_struct_b_clone:
  * @b: the structure
  * @b_out: (out): the cloned structure

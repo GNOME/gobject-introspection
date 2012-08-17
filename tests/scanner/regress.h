@@ -282,6 +282,7 @@ struct _RegressTestStructA
 
 void regress_test_struct_a_clone (RegressTestStructA *a,
 				  RegressTestStructA *a_out);
+void regress_test_struct_a_parse (RegressTestStructA *a_out, const gchar *string);
 
 struct _RegressTestStructB
 {
