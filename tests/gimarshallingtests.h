@@ -954,6 +954,10 @@ void gi_marshalling_tests_gerror_out(GError **error, gchar **debug);
 void gi_marshalling_tests_gerror_out_transfer_none(GError **err, const gchar **debug);
 GError *gi_marshalling_tests_gerror_return(void);
 
+/* GParamSpec */
+GParamSpec *gi_marshalling_tests_param_spec_return();
+void gi_marshalling_tests_param_spec_out(GParamSpec **param);
+
 /* Overrides */
 
 #define GI_MARSHALLING_TESTS_OVERRIDES_CONSTANT 42

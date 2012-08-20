@@ -4465,6 +4465,27 @@ gi_marshalling_tests_filename_list_return (void)
     return NULL;
 }
 
+/**
+ * gi_marshalling_tests_param_spec_return:
+ *
+ * Returns: (transfer full): a #GParamSpec
+ */
+GParamSpec *
+gi_marshalling_tests_param_spec_return()
+{
+  return g_param_spec_string("test-param", "test", "This is a test", "42", G_PARAM_READABLE);
+}
+
+/**
+ * gi_marshalling_tests_param_spec_out:
+ * @param: (out):
+ */
+void
+gi_marshalling_tests_param_spec_out(GParamSpec **param)
+{
+  *param = g_param_spec_string("test-param", "test", "This is a test", "42", G_PARAM_READABLE);
+}
+
 
 enum  {
     DUMMY_PROPERTY,
