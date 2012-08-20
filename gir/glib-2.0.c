@@ -1157,7 +1157,7 @@
  * @G_MARKUP_COLLECT_OPTIONAL: can be bitwise ORed with the other fields. If present, allows the attribute not to appear. A default value is set depending on what value type is used
  *
  * A mixed enumerated type and flags field. You must specify one type
- * (string, strdup, boolean, tristate).  Additionally, you may  optionally
+ * (string, strdup, boolean, tristate). Additionally, you may optionally
  * bitwise OR the type with the flag %G_MARKUP_COLLECT_OPTIONAL.
  *
  * It is likely that this enum will be extended in the future to
@@ -2702,7 +2702,11 @@
  * if the compiler is a new enough <command>gcc</command>. This attribute
  * tells the compiler that the function returns a pointer to memory of a
  * size that is specified by the @x<!-- -->th function parameter.
- * See the GNU C documentation for details.
+ *
+ * Place the attribute after the function declaration, just before the
+ * semicolon.
+ *
+ * See the GNU C documentation for more details.
  *
  * Since: 2.18
  */
@@ -2717,7 +2721,11 @@
  * if the compiler is a new enough <command>gcc</command>. This attribute
  * tells the compiler that the function returns a pointer to memory of a
  * size that is specified by the product of two function parameters.
- * See the GNU C documentation for details.
+ *
+ * Place the attribute after the function declaration, just before the
+ * semicolon.
+ *
+ * See the GNU C documentation for more details.
  *
  * Since: 2.18
  */
@@ -2751,7 +2759,11 @@
  * the compiler is <command>gcc</command>. Declaring a function as const
  * enables better optimization of calls to the function. A const function
  * doesn't examine any values except its parameters, and has no effects
- * except its return value. See the GNU C documentation for details.
+ * except its return value.
+ *
+ * Place the attribute after the declaration, just before the semicolon.
+ *
+ * See the GNU C documentation for more details.
  *
  * <note><para>
  * A function that has pointer arguments and examines the data pointed to
@@ -2770,7 +2782,10 @@
  * variables and functions as deprecated. When called with the
  * <option>-Wdeprecated-declarations</option> option, the compiler will
  * generate warnings when deprecated interfaces are used.
- * See the GNU C documentation for details.
+ *
+ * Place the attribute after the declaration, just before the semicolon.
+ *
+ * See the GNU C documentation for more details.
  *
  * Since: 2.2
  */
@@ -2783,7 +2798,10 @@
  * Like %G_GNUC_DEPRECATED, but names the intended replacement for the
  * deprecated symbol if the version of <command>gcc</command> in use is
  * new enough to support custom deprecation messages.
- * See the GNU C documentation for details.
+ *
+ * Place the attribute after the declaration, just before the semicolon.
+ *
+ * See the GNU C documentation for more details.
  *
  * Note that if @f is a macro, it will be expanded in the warning message.
  * You can enclose it in quotes to prevent this. (The quotes will show up
@@ -2828,7 +2846,12 @@
  * so that the result can be passed to a printf(), scanf(), strftime()
  * or strfmon() style function (with the remaining arguments to the
  * format function the same as they would have been for the unmodified
- * string). See the GNU C documentation for details.
+ * string).
+ *
+ * Place the attribute after the function declaration, just after the
+ * semicolon.
+ *
+ * See the GNU C documentation for more details.
  *
  * |[
  * gchar *g_dgettext (gchar *domain_name, gchar *msgid) G_GNUC_FORMAT (2);
@@ -2884,7 +2907,11 @@
  * better optimization of the function. A function can have the malloc
  * attribute if it returns a pointer which is guaranteed to not alias with
  * any other pointer when the function returns (in practice, this means newly
- * allocated memory). See the GNU C documentation for details.
+ * allocated memory).
+ *
+ * Place the attribute after the declaration, just before the semicolon.
+ *
+ * See the GNU C documentation for more details.
  *
  * Since: 2.6
  */
@@ -2909,8 +2936,11 @@
  * Expands to the GNU C <literal>noreturn</literal> function attribute
  * if the compiler is <command>gcc</command>. It is used for declaring
  * functions which never return. It enables optimization of the function,
- * and avoids possible compiler warnings. See the GNU C documentation for
- * details.
+ * and avoids possible compiler warnings.
+ *
+ * Place the attribute after the declaration, just before the semicolon.
+ *
+ * See the GNU C documentation for more details.
  */
 
 
@@ -2921,7 +2951,10 @@
  * attribute if the compiler is <command>gcc</command>. Functions with this
  * attribute will not be instrumented for profiling, when the compiler is
  * called with the <option>-finstrument-functions</option> option.
- * See the GNU C documentation for details.
+ *
+ * Place the attribute after the declaration, just before the semicolon.
+ *
+ * See the GNU C documentation for more details.
  */
 
 
@@ -2932,7 +2965,11 @@
  * if the compiler is <command>gcc</command>, or "" if it isn't. This
  * function attribute only applies to variadic functions and instructs
  * the compiler to check that the argument list is terminated with an
- * explicit %NULL. See the GNU C documentation for details.
+ * explicit %NULL.
+ *
+ * Place the attribute after the declaration, just before the semicolon.
+ *
+ * See the GNU C documentation for more details.
  *
  * Since: 2.8
  */
@@ -2958,7 +2995,12 @@
  * if the compiler is <command>gcc</command>. This is used for declaring
  * functions which take a variable number of arguments, with the same
  * syntax as printf(). It allows the compiler to type-check the arguments
- * passed to the function. See the GNU C documentation for details.
+ * passed to the function.
+ *
+ * Place the attribute after the function declaration, just before the
+ * semicolon.
+ *
+ * See the GNU C documentation for more details.
  *
  * |[
  * gint g_snprintf (gchar  *string,
@@ -2976,8 +3018,11 @@
  * compiler is <command>gcc</command>. Declaring a function as pure enables
  * better optimization of calls to the function. A pure function has no
  * effects except its return value and the return value depends only on
- * the parameters and/or global variables. See the GNU C documentation
- * for details.
+ * the parameters and/or global variables.
+ *
+ * Place the attribute after the declaration, just before the semicolon.
+ *
+ * See the GNU C documentation for more details.
  */
 
 
@@ -2999,8 +3044,19 @@
  *
  * Expands to the GNU C <literal>unused</literal> function attribute if
  * the compiler is <command>gcc</command>. It is used for declaring
- * functions which may never be used. It avoids possible compiler warnings.
- * See the GNU C documentation for details.
+ * functions and arguments which may never be used. It avoids possible compiler
+ * warnings.
+ *
+ * For functions, place the attribute after the declaration, just before the
+ * semicolon. For arguments, place the attribute at the beginning of the
+ * argument declaration.
+ *
+ * |[
+ * void my_unused_function (G_GNUC_UNUSED gint unused_argument,
+ *                          gint other_argument) G_GNUC_UNUSED;
+ * ]|
+ *
+ * See the GNU C documentation for more details.
  */
 
 
@@ -3010,7 +3066,11 @@
  * Expands to the GNU C <literal>warn_unused_result</literal> function
  * attribute if the compiler is <command>gcc</command>, or "" if it isn't.
  * This function attribute makes the compiler emit a warning if the result
- * of a function call is ignored. See the GNU C documentation for details.
+ * of a function call is ignored.
+ *
+ * Place the attribute after the declaration, just before the semicolon.
+ *
+ * See the GNU C documentation for more details.
  *
  * Since: 2.10
  */
@@ -11160,6 +11220,22 @@
 
 
 /**
+ * g_compute_checksum_for_bytes:
+ * @checksum_type: a #GChecksumType
+ * @data: binary blob to compute the digest of
+ *
+ * Computes the checksum for a binary @data. This is a
+ * convenience wrapper for g_checksum_new(), g_checksum_get_string()
+ * and g_checksum_free().
+ *
+ * The hexadecimal string returned will be in lower case.
+ *
+ * Returns: the digest of the binary data as a string in hexadecimal. The returned string should be freed with g_free() when done using it.
+ * Since: 2.34
+ */
+
+
+/**
  * g_compute_checksum_for_data:
  * @checksum_type: a #GChecksumType
  * @data: binary blob to compute the digest of
@@ -16899,7 +16975,7 @@
 /**
  * g_key_file_load_from_data:
  * @key_file: an empty #GKeyFile struct
- * @data: (array length=length): key file loaded in memory
+ * @data: key file loaded in memory
  * @length: the length of @data in bytes (or -1 if data is nul-terminated)
  * @flags: flags from #GKeyFileFlags
  * @error: return location for a #GError, or %NULL
@@ -18208,7 +18284,7 @@
  * given moment without further waiting.
  *
  * Note that even when @may_block is %TRUE, it is still possible for
- * g_main_context_iteration() to return %FALSE, since the the wait may
+ * g_main_context_iteration() to return %FALSE, since the wait may
  * be interrupted for other reasons than an event source becoming ready.
  *
  * Returns: %TRUE if events were dispatched.
@@ -18665,6 +18741,19 @@
 
 
 /**
+ * g_mapped_file_get_bytes:
+ * @file: a #GMappedFile
+ *
+ * Creates a new #GBytes which references the data mapped from @file.
+ * The mapped contents of the file must not be modified after creating this
+ * bytes object, because a #GBytes should be immutable.
+ *
+ * Returns: (transfer full): A newly allocated #GBytes referencing data from @file
+ * Since: 2.34
+ */
+
+
+/**
  * g_mapped_file_get_contents:
  * @file: a #GMappedFile
  *
@@ -18812,6 +18901,34 @@
  *
  * Returns: %TRUE if successful
  * Since: 2.16
+ */
+
+
+/**
+ * g_markup_collect_known_attributes:
+ * @element_name: the current tag name
+ * @attribute_names: (array zero-terminated=1): the attribute names
+ * @attribute_values: (array zero-terminated=1): the attribute values
+ * @error: (allow-none): a pointer to a #GError or %NULL
+ * @first_type: the #GMarkupCollectType of the first attribute
+ * @first_attr: the name of the first attribute
+ * @...: a pointer to the storage location of the first attribute (or %NULL), followed by more types names and pointers, ending with %G_MARKUP_COLLECT_INVALID
+ *
+ * Collects the attributes of the element from the data passed to the
+ * #GMarkupParser start_element function, dealing with common error
+ * conditions and supporting boolean values.
+ *
+ * This is a more relaxed version of g_markup_collect_attributes(), which
+ * ignores attributes found in @attribute_names but not listed in @first_attr
+ * or @...; by comparison g_markup_collect_attributes() will return
+ * %G_MARKUP_ERROR_UNKNOWN_ATTRIBUTE instead. Otherwise, this function behaves
+ * identically.
+ *
+ * This is intended for situations where the markup being parsed may use
+ * extensions in other namespaces and thus contain extra, unknown, attributes.
+ *
+ * Returns: %TRUE if successful
+ * Since: 2.34
  */
 
 
@@ -24867,7 +24984,13 @@
  * @source: a #GSource
  *
  * Gets the #GMainContext with which the source is associated.
- * Calling this function on a destroyed source is an error.
+ *
+ * You can call this on a source that has been destroyed, provided
+ * that the #GMainContext it was attached to still exists (in which
+ * case it will return that #GMainContext). In particular, you can
+ * always call this function on the source returned from
+ * g_main_current_source(). But calling this function on a source
+ * whose #GMainContext has been destroyed is an error.
  *
  * Returns: (transfer none) (allow-none): the #GMainContext with which the source is associated, or %NULL if the context has not yet been added to a source.
  */
@@ -27019,57 +27142,57 @@
  *   <varlistentry>
  *     <term><option>-l</option></term>
  *     <listitem><para>
- *       list test cases available in a test executable.
+ *       List test cases available in a test executable.
  *     </para></listitem>
  *   </varlistentry>
  *   <varlistentry>
  *     <term><option>--seed=<replaceable>RANDOMSEED</replaceable></option></term>
  *     <listitem><para>
- *       provide a random seed to reproduce test runs using random numbers.
+ *       Provide a random seed to reproduce test runs using random numbers.
  *     </para></listitem>
  *     </varlistentry>
  *     <varlistentry>
  *       <term><option>--verbose</option></term>
- *       <listitem><para>run tests verbosely.</para></listitem>
+ *       <listitem><para>Run tests verbosely.</para></listitem>
  *     </varlistentry>
  *     <varlistentry>
  *       <term><option>-q</option>, <option>--quiet</option></term>
- *       <listitem><para>run tests quietly.</para></listitem>
+ *       <listitem><para>Run tests quietly.</para></listitem>
  *     </varlistentry>
  *     <varlistentry>
  *       <term><option>-p <replaceable>TESTPATH</replaceable></option></term>
  *       <listitem><para>
- *         execute all tests matching <replaceable>TESTPATH</replaceable>.
+ *         Execute all tests matching <replaceable>TESTPATH</replaceable>.
  *       </para></listitem>
  *     </varlistentry>
  *     <varlistentry>
  *       <term><option>-m {perf|slow|thorough|quick|undefined|no-undefined}</option></term>
  *       <listitem><para>
- *         execute tests according to these test modes:
+ *         Execute tests according to these test modes:
  *         <variablelist>
  *           <varlistentry>
  *             <term>perf</term>
  *             <listitem><para>
- *               performance tests, may take long and report results.
+ *               Performance tests, may take long and report results.
  *             </para></listitem>
  *           </varlistentry>
  *           <varlistentry>
  *             <term>slow, thorough</term>
  *             <listitem><para>
- *               slow and thorough tests, may take quite long and
+ *               Slow and thorough tests, may take quite long and
  *               maximize coverage.
  *             </para></listitem>
  *           </varlistentry>
  *           <varlistentry>
  *             <term>quick</term>
  *             <listitem><para>
- *               quick tests, should run really quickly and give good coverage.
+ *               Quick tests, should run really quickly and give good coverage.
  *             </para></listitem>
  *           </varlistentry>
  *           <varlistentry>
  *             <term>undefined</term>
  *             <listitem><para>
- *               tests for undefined behaviour, may provoke programming errors
+ *               Tests for undefined behaviour, may provoke programming errors
  *               under g_test_trap_fork() to check that appropriate assertions
  *               or warnings are given
  *             </para></listitem>
@@ -27077,7 +27200,7 @@
  *           <varlistentry>
  *             <term>no-undefined</term>
  *             <listitem><para>
- *               avoid tests for undefined behaviour
+ *               Avoid tests for undefined behaviour
  *             </para></listitem>
  *           </varlistentry>
  *         </variablelist>
@@ -27085,19 +27208,7 @@
  *     </varlistentry>
  *     <varlistentry>
  *       <term><option>--debug-log</option></term>
- *       <listitem><para>debug test logging output.</para></listitem>
- *     </varlistentry>
- *     <varlistentry>
- *       <term><option>-k</option>, <option>--keep-going</option></term>
- *       <listitem><para>gtester-specific argument.</para></listitem>
- *     </varlistentry>
- *     <varlistentry>
- *       <term><option>--GTestLogFD <replaceable>N</replaceable></option></term>
- *       <listitem><para>gtester-specific argument.</para></listitem>
- *     </varlistentry>
- *     <varlistentry>
- *       <term><option>--GTestSkipCount <replaceable>N</replaceable></option></term>
- *       <listitem><para>gtester-specific argument.</para></listitem>
+ *       <listitem><para>Debug test logging output.</para></listitem>
  *     </varlistentry>
  *  </variablelist>
  *
@@ -27826,8 +27937,7 @@
  *
  * By setting @interval to 0, idle threads will not be stopped.
  *
- * This function makes use of g_async_queue_timed_pop () using
- * @interval.
+ * The default value is 15000 (15 seconds).
  *
  * Since: 2.10
  */
@@ -27871,6 +27981,8 @@
  * Sets the maximal number of unused threads to @max_threads.
  * If @max_threads is -1, no limit is imposed on the number
  * of unused threads.
+ *
+ * The default value is 2.
  */
 
 
@@ -32594,7 +32706,7 @@
 
 
 /**
- * g_variant_type_new_array:
+ * g_variant_type_new_array: (constructor)
  * @element: a #GVariantType
  *
  * Constructs the type corresponding to an array of elements of the
@@ -32607,7 +32719,7 @@
 
 
 /**
- * g_variant_type_new_dict_entry:
+ * g_variant_type_new_dict_entry: (constructor)
  * @key: a basic #GVariantType
  * @value: a #GVariantType
  *
@@ -32621,7 +32733,7 @@
 
 
 /**
- * g_variant_type_new_maybe:
+ * g_variant_type_new_maybe: (constructor)
  * @element: a #GVariantType
  *
  * Constructs the type corresponding to a maybe instance containing

@@ -2483,21 +2483,33 @@
 /**
  * GTlsCertificate:certificate:
  *
- * The DER (binary) encoded representation of the certificate's
- * public key. This property and the
- * #GTlsCertificate:certificate-pem property represent the same
- * data, just in different forms.
+ * The DER (binary) encoded representation of the certificate.
+ * This property and the #GTlsCertificate:certificate-bytes contain
+ * the same data. The #GTlsCertificate:certificate-pem property
+ * represents the same data, just in different forms.
  *
  * Since: 2.28
  */
 
 
 /**
+ * GTlsCertificate:certificate-bytes:
+ *
+ * The DER (binary) encoded representation of the certificate as
+ * a #GBytes. The #GTlsCertificate:certificate property contains
+ * the same data. The #GTlsCertificate:certificate-pem property
+ * contains the same data as this property in a different form.
+ *
+ * Since: 2.34
+ */
+
+
+/**
  * GTlsCertificate:certificate-pem:
  *
- * The PEM (ASCII) encoded representation of the certificate's
- * public key. This property and the #GTlsCertificate:certificate
- * property represent the same data, just in different forms.
+ * The PEM (ASCII) encoded representation of the certificate.
+ * The #GTlsCertificate:certificate and #GTlsCertificate:certificate-bytes
+ * properties represent the same data, just in a different form.
  *
  * Since: 2.28
  */
@@ -2529,6 +2541,17 @@
  * tool to convert PKCS#8 keys to PKCS#1.
  *
  * Since: 2.28
+ */
+
+
+/**
+ * GTlsCertificate:private-key-bytes:
+ *
+ * The DER (binary) encoded representation of the certificate's
+ * private key. This property and the #GtlsCertificate:private-key
+ * property contain the same data.
+ *
+ * Since: 2.34
  */
 
 
@@ -3119,7 +3142,7 @@
  *
  * If set to a non-%NULL #GFileInfo object, and #GZlibCompressor:format is
  * %G_ZLIB_COMPRESSOR_FORMAT_GZIP, the compressor will write the file name
- * and modification time from the file info to the the GZIP header.
+ * and modification time from the file info to the GZIP header.
  *
  * Since: 2.26
  */
@@ -4171,6 +4194,7 @@
  *   FOO_BAR_ERROR_FAILED,
  *   FOO_BAR_ERROR_ANOTHER_ERROR,
  *   FOO_BAR_ERROR_SOME_THIRD_ERROR,
+ *   FOO_BAR_N_ERRORS /<!-- -->*< skip >*<!-- -->/
  * } FooBarError;
  *
  * /<!-- -->* foo-bar-error.c: *<!-- -->/
@@ -4182,6 +4206,9 @@
  *   {FOO_BAR_ERROR_SOME_THIRD_ERROR, "org.project.Foo.Bar.Error.SomeThirdError"},
  * };
  *
+ * /<!-- -->* Ensure that every error code has an associated D-Bus error name *<!-- -->/
+ * G_STATIC_ASSERT (G_N_ELEMENTS (foo_bar_error_entries) == FOO_BAR_N_ERRORS);
+ *
  * GQuark
  * foo_bar_error_quark (void)
  * {
@@ -4190,7 +4217,6 @@
  *                                       &quark_volatile,
  *                                       foo_bar_error_entries,
  *                                       G_N_ELEMENTS (foo_bar_error_entries));
- *   G_STATIC_ASSERT (G_N_ELEMENTS (foo_bar_error_entries) - 1 == FOO_BAR_ERROR_SOME_THIRD_ERROR);
  *   return (GQuark) quark_volatile;
  * }
  * </programlisting></example>
@@ -5624,7 +5650,7 @@
  * @include: gio/gio.h
  * @see_also: #GInputStream, #GPollableOutputStream, #GFileDescriptorBased
  *
- * #GPollableInputStream is implemented by #GInputStream<!-- -->s that
+ * #GPollableInputStream is implemented by #GInputStreams that
  * can be polled for readiness to read. This can be used when
  * interfacing with a non-GIO API that expects
  * UNIX-file-descriptor-style asynchronous I/O rather than GIO-style.
@@ -5639,7 +5665,7 @@
  * @include: gio/gio.h
  * @see_also: #GOutputStream, #GFileDescriptorBased, #GPollableInputStream
  *
- * #GPollableOutputStream is implemented by #GOutputStream<!-- -->s that
+ * #GPollableOutputStream is implemented by #GOutputStreams that
  * can be polled for readiness to write. This can be used when
  * interfacing with a non-GIO API that expects
  * UNIX-file-descriptor-style asynchronous I/O rather than GIO-style.
@@ -6073,7 +6099,7 @@
 
 /**
  * SECTION:gsettingsschema
- * @short_description: introspecting and controlling the loading of #GSettings schemas
+ * @short_description: introspecting and controlling the loading of GSettings schemas
  *
  * The #GSettingsSchemaSource and #GSettingsSchema APIs provide a
  * mechanism for advanced control over the loading of schemas and a
@@ -6800,9 +6826,9 @@
  * @see_also: #GTlsConnection
  *
  * A certificate used for TLS authentication and encryption.
- * This can represent either a public key only (eg, the certificate
+ * This can represent either a certificate only (eg, the certificate
  * received by a client from a server), or the combination of
- * a public key and a private key (which is needed when acting as a
+ * a certificate and a private key (which is needed when acting as a
  * #GTlsServerConnection).
  *
  * Since: 2.28
@@ -17538,7 +17564,7 @@
  * @error: a #GError, or %NULL
  *
  * Deletes a file. If the @file is a directory, it will only be deleted if it
- * is empty.
+ * is empty.  This has the same semantics as g_unlink().
  *
  * If @cancellable is not %NULL, then the operation can be cancelled by
  * triggering the cancellable object from another thread. If the operation
@@ -17546,6 +17572,37 @@
  *
  * Virtual: delete_file
  * Returns: %TRUE if the file was deleted. %FALSE otherwise.
+ */
+
+
+/**
+ * g_file_delete_async:
+ * @file: input #GFile.
+ * @io_priority: the <link linkend="io-priority">I/O priority</link> of the request
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
+ * @callback: a #GAsyncReadyCallback to call when the request is satisfied
+ * @user_data: the data to pass to callback function
+ *
+ * Asynchronously delete a file. If the @file is a directory, it will
+ * only be deleted if it is empty.  This has the same semantics as
+ * g_unlink().
+ *
+ * Virtual: delete_file_async
+ * Since: 2.34
+ */
+
+
+/**
+ * g_file_delete_finish:
+ * @file: input #GFile.
+ * @res: a #GAsyncResult.
+ * @error: a #GError, or %NULL
+ *
+ * Finishes deleting a file started with
+ * g_file_delete_async().
+ *
+ * Virtual: delete_file_finish
+ * Since: 2.34
  */
 
 
@@ -25042,7 +25099,7 @@
  * @inetaddr: The proxy server #GInetAddress.
  * @port: The proxy server port.
  * @protocol: The proxy protocol to support, in lower case (e.g. socks, http).
- * @dest_hostname: The destination hostname the the proxy should tunnel to.
+ * @dest_hostname: The destination hostname the proxy should tunnel to.
  * @dest_port: The destination port to tunnel to.
  * @username: (allow-none): The username to authenticate to the proxy server (or %NULL).
  * @password: (allow-none): The password to authenticate to the proxy server (or %NULL).
@@ -25742,7 +25799,7 @@
  * @error: return location for a #GError, or %NULL
  *
  * Returns all the names of children at the specified @path in the set of
- * globally registred resources.
+ * globally registered resources.
  * The return result is a %NULL terminated list of strings which should
  * be released with g_strfreev().
  *
@@ -25762,7 +25819,7 @@
  * @error: return location for a #GError, or %NULL
  *
  * Looks for a file at the specified @path in the set of
- * globally registred resources and if found returns information about it.
+ * globally registered resources and if found returns information about it.
  *
  * @lookup_flags controls the behaviour of the lookup.
  *
@@ -25778,7 +25835,7 @@
  * @error: return location for a #GError, or %NULL
  *
  * Looks for a file at the specified @path in the set of
- * globally registred resources and returns a #GBytes that
+ * globally registered resources and returns a #GBytes that
  * lets you directly access the data in memory.
  *
  * The data is always followed by a zero byte, so you
@@ -25804,7 +25861,7 @@
  * @error: return location for a #GError, or %NULL
  *
  * Looks for a file at the specified @path in the set of
- * globally registred resources and returns a #GInputStream
+ * globally registered resources and returns a #GInputStream
  * that lets you read the data.
  *
  * @lookup_flags controls the behaviour of the lookup.
@@ -26882,7 +26939,7 @@
  * source, the lookup will recurse to the parent.
  *
  * Second, any references to other schemas specified within this
- * source (ie: <literal>child</literal> or <literal>extents</literal>)
+ * source (ie: <literal>child</literal> or <literal>extends</literal>)
  * references may be resolved from the @parent.
  *
  * For this second reason, except in very unusual situations, the
@@ -28847,7 +28904,7 @@
  * @socket: a #GSocket.
  *
  * Returns the underlying OS socket object. On unix this
- * is a socket file descriptor, and on windows this is
+ * is a socket file descriptor, and on Windows this is
  * a Winsock2 SOCKET handle. This may be useful for
  * doing platform specific or otherwise unusual operations
  * on the socket.
@@ -29988,7 +30045,7 @@
  * g_static_resource_get_resource:
  * @static_resource: pointer to a static #GStaticResource
  *
- * Gets the GResource that was registred by a call to g_static_resource_init().
+ * Gets the GResource that was registered by a call to g_static_resource_init().
  *
  * This is normally used by code generated by
  * <link linkend="glib-compile-resources">glib-compile-resources</link>
@@ -30343,6 +30400,22 @@
  *
  * Returns: (transfer none): The certificate of @cert's issuer, or %NULL if @cert is self-signed or signed with an unknown certificate.
  * Since: 2.28
+ */
+
+
+/**
+ * g_tls_certificate_is_same:
+ * @cert_one: first certificate to compare
+ * @cert_two: second certificate to compare
+ *
+ * Check if two #GTlsCertificate objects represent the same certificate.
+ * The raw DER byte data of the two certificates are checked for equality.
+ * This has the effect that two certificates may compare equal even if
+ * their #GTlsCertificate:issuer, #GTlsCertificate:private-key, or
+ * #GTlsCertificate:private-key-pem properties differ.
+ *
+ * Returns: whether the same or not
+ * Since: 2.34
  */
 
 
@@ -32266,7 +32339,7 @@
 /**
  * g_unix_socket_address_abstract_names_supported:
  *
- * Checks if abstract unix domain socket names are supported.
+ * Checks if abstract UNIX domain socket names are supported.
  *
  * Returns: %TRUE if supported, %FALSE otherwise
  * Since: 2.22
