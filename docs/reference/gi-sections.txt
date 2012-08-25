@@ -135,6 +135,7 @@ g_interface_info_get_method
 g_interface_info_find_method
 g_interface_info_get_n_signals
 g_interface_info_get_signal
+g_interface_info_find_signal
 g_interface_info_get_n_vfuncs
 g_interface_info_get_vfunc
 g_interface_info_get_n_constants
