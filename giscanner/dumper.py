@@ -85,7 +85,12 @@ class DumpCompiler(object):
         self._compiler_cmd = os.environ.get('CC', 'gcc')
         self._linker_cmd = os.environ.get('CC', self._compiler_cmd)
         self._pkgconfig_cmd = os.environ.get('PKG_CONFIG', 'pkg-config')
-
+        self._pkgconfig_msvc_flags = ''
+        # Enable the --msvc-syntax pkg-config flag when
+        # the Microsoft compiler is used
+        # (This is the other way to check whether Visual C++ is used subsequently)
+        if 'cl' in self._compiler_cmd:
+            self._pkgconfig_msvc_flags = '--msvc-syntax'
         self._uninst_srcdir = os.environ.get(
             'UNINSTALLED_INTROSPECTION_SRCDIR')
         self._packages = ['gio-2.0 gmodule-2.0']
@@ -145,7 +150,12 @@ class DumpCompiler(object):
             f.write("\n};\n")
         f.close()
 
-        o_path = self._generate_tempfile(tmpdir, '.o')
+        # Microsoft compilers generate intermediate .obj files
+        # during compilation, unlike .o files like GCC and others
+        if self._pkgconfig_msvc_flags:
+            o_path = self._generate_tempfile(tmpdir, '.obj')
+        else:
+            o_path = self._generate_tempfile(tmpdir, '.o')
 
         if os.name == 'nt':
             ext = 'exe'
@@ -178,8 +188,14 @@ class DumpCompiler(object):
         return os.path.join(tmpdir, tmpl)
 
     def _run_pkgconfig(self, flag):
+        # Enable the --msvc-syntax pkg-config flag when
+        # the Microsoft compiler is used
+        if self._pkgconfig_msvc_flags:
+            cmd = [self._pkgconfig_cmd, self._pkgconfig_msvc_flags, flag]
+        else:
+            cmd = [self._pkgconfig_cmd, flag]
         proc = subprocess.Popen(
-            [self._pkgconfig_cmd, flag] + self._packages,
+            cmd + self._packages,
             stdout=subprocess.PIPE)
         return proc.communicate()[0].split()
 
@@ -197,7 +213,12 @@ class DumpCompiler(object):
             args.append(cflag)
         for include in self._options.cpp_includes:
             args.append('-I' + include)
-        args.extend(['-c', '-o', output])
+        # The Microsoft compiler uses different option flags for
+        # compilation result output
+        if self._pkgconfig_msvc_flags:
+            args.extend(['-c', '-Fe'+output, '-Fo'+output])
+        else:
+            args.extend(['-c', '-o', output])
         for source in sources:
             if not os.path.exists(source):
                 raise CompilerError(
@@ -223,7 +244,12 @@ class DumpCompiler(object):
                 args.append('--silent')
 
         args.extend(self._linker_cmd.split())
-        args.extend(['-o', output])
+        # We can use -o for the Microsoft compiler/linker,
+        # but it is considered deprecated usage with that
+        if self._pkgconfig_msvc_flags:
+            args.extend(['-Fe'+output])
+        else:
+            args.extend(['-o', output])
         if libtool:
             if os.name == 'nt':
                 args.append('-export-all-symbols')
@@ -266,26 +292,47 @@ class DumpCompiler(object):
         # is being built in the current directory.
 
         # Search the current directory first
-        args.append('-L.')
+        # (This flag is not supported nor needed for Visual C++)
+        if self._pkgconfig_msvc_flags == '':
+            args.append('-L.')
 
         # https://bugzilla.gnome.org/show_bug.cgi?id=625195
         if not libtool:
-            args.append('-Wl,-rpath=.')
+            # We don't have -Wl,-rpath for Visual C++, and that's
+            # going to cause a problem.  Instead, link to internal
+            # libraries by deducing the .lib file name using
+            # the namespace name and version
+            if self._pkgconfig_msvc_flags:
+                if self._options.namespace_version:
+                    args.append(str.lower(self._options.namespace_name) +
+                                '-' +
+                                self._options.namespace_version+'.lib')
+                else:
+                    args.append(str.lower(self._options.namespace_name)+'.lib')
+            else:
+                args.append('-Wl,-rpath=.')
 
         for library in self._options.libraries:
-            if library.endswith(".la"): # explicitly specified libtool library
-                args.append(library)
-            else:
-                args.append('-l' + library)
+            # Visual C++: We have the needed .lib files now, and we need to link
+            # to .lib files, not the .dll as the --library option specifies the
+            # .dll(s) the .gir file refers to
+            if self._pkgconfig_msvc_flags == '':
+                if library.endswith(".la"): # explicitly specified libtool library
+                    args.append(library)
+                else:
+                    args.append('-l' + library)
 
         for library_path in self._options.library_paths:
-            args.append('-L' + library_path)
-            if os.path.isabs(library_path):
-                if libtool:
-                    args.append('-rpath')
-                    args.append(library_path)
-                else:
-                    args.append('-Wl,-rpath=' + library_path)
+            # Not used/needed on Visual C++, and -Wl,-rpath options
+            # will cause grief
+            if self._pkgconfig_msvc_flags == '':
+                args.append('-L' + library_path)
+                if os.path.isabs(library_path):
+                    if libtool:
+                        args.append('-rpath')
+                        args.append(library_path)
+                    else:
+                        args.append('-Wl,-rpath=' + library_path)
 
         args.extend(self._run_pkgconfig('--libs'))
 
@@ -296,10 +343,13 @@ class DumpCompiler(object):
 
         args.extend(self._run_pkgconfig('--libs'))
         for library in self._options.libraries:
-            if library.endswith(".la"): # explicitly specified libtool library
-                args.append(library)
-            else:
-                args.append('-l' + library)
+            # The --library option on Windows pass in the .dll file(s) the
+            # .gir files refer to, so don't link to them on Visual C++
+            if self._pkgconfig_msvc_flags == '':
+                if library.endswith(".la"): # explicitly specified libtool library
+                    args.append(library)
+                else:
+                    args.append('-l' + library)
 
 def compile_introspection_binary(options, get_type_functions,
                                  error_quark_functions):
