@@ -215,6 +215,8 @@ usage is void (*_gtk_reserved1)(void);"""
         if isinstance(node, (ast.Class, ast.Interface, ast.Union, ast.Enum,
                              ast.Bitfield, ast.Callback)):
             self._apply_annotations_annotated(node, self._get_block(node))
+        if isinstance(node, (ast.Enum, ast.Bitfield)):
+            self._apply_annotations_enum_members(node, self._get_block(node))
         if isinstance(node, (ast.Class, ast.Interface, ast.Record, ast.Union)):
             block = self._get_block(node)
             for field in node.fields:
@@ -819,6 +821,15 @@ usage is void (*_gtk_reserved1)(void);"""
         tag = block.get_tag(TAG_VALUE)
         if tag:
             node.value = tag.value
+
+    def _apply_annotations_enum_members(self, node, block):
+        if block is None:
+            return
+
+        for m in node.members:
+            tag = block.params.get(m.symbol, None)
+            if tag is not None:
+                m.doc = tag.comment
 
     def _pass_read_annotations2(self, node, chain):
         if isinstance(node, ast.Function):

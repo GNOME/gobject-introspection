@@ -17,8 +17,10 @@ and/or use gtk-doc annotations.  -->
              c:identifier-prefixes="Annotation"
              c:symbol-prefixes="annotation">
     <bitfield name="Bitfield" c:type="AnnotationBitfield">
-      <member name="foo" value="1" c:identifier="ANN_FLAG_FOO"/>
-      <member name="bar" value="2" c:identifier="ANN_FLAG_BAR"/>
+      <member name="foo" value="1" c:identifier="ANN_FLAG_FOO">
+      </member>
+      <member name="bar" value="2" c:identifier="ANN_FLAG_BAR">
+      </member>
     </bitfield>
     <constant name="CALCULATED_DEFINE"
               value="100"

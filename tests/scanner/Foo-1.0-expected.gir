@@ -26,12 +26,16 @@ and/or use gtk-doc annotations.  -->
     <enumeration name="ASingle" c:type="FooASingle">
       <member name="some_single_enum"
               value="0"
-              c:identifier="FOO_SOME_SINGLE_ENUM"/>
+              c:identifier="FOO_SOME_SINGLE_ENUM">
+      </member>
     </enumeration>
     <enumeration name="AddressType" c:type="FooAddressType">
-      <member name="invalid" value="0" c:identifier="FOO_ADDRESS_INVALID"/>
-      <member name="ipv4" value="1" c:identifier="FOO_ADDRESS_IPV4"/>
-      <member name="ipv6" value="2" c:identifier="FOO_ADDRESS_IPV6"/>
+      <member name="invalid" value="0" c:identifier="FOO_ADDRESS_INVALID">
+      </member>
+      <member name="ipv4" value="1" c:identifier="FOO_ADDRESS_IPV4">
+      </member>
+      <member name="ipv6" value="2" c:identifier="FOO_ADDRESS_IPV6">
+      </member>
     </enumeration>
     <record name="BRect"
             c:type="FooBRect"
@@ -162,15 +166,22 @@ and/or use gtk-doc annotations.  -->
       <type name="utf8" c:type="gchar*"/>
     </constant>
     <enumeration name="EnumFullname" c:type="FooEnumFullname">
-      <member name="one" value="1" c:identifier="FOO_ENUM_FULLNAME_ONE"/>
-      <member name="two" value="2" c:identifier="FOO_ENUM_FULLNAME_TWO"/>
-      <member name="three" value="3" c:identifier="FOO_ENUM_FULLNAME_THREE"/>
+      <member name="one" value="1" c:identifier="FOO_ENUM_FULLNAME_ONE">
+      </member>
+      <member name="two" value="2" c:identifier="FOO_ENUM_FULLNAME_TWO">
+      </member>
+      <member name="three" value="3" c:identifier="FOO_ENUM_FULLNAME_THREE">
+      </member>
     </enumeration>
     <enumeration name="EnumNoType" c:type="FooEnumNoType">
-      <member name="un" value="1" c:identifier="FOO_ENUM_UN"/>
-      <member name="deux" value="2" c:identifier="FOO_ENUM_DEUX"/>
-      <member name="trois" value="3" c:identifier="FOO_ENUM_TROIS"/>
-      <member name="neuf" value="9" c:identifier="FOO_ENUM_NEUF"/>
+      <member name="un" value="1" c:identifier="FOO_ENUM_UN">
+      </member>
+      <member name="deux" value="2" c:identifier="FOO_ENUM_DEUX">
+      </member>
+      <member name="trois" value="3" c:identifier="FOO_ENUM_TROIS">
+      </member>
+      <member name="neuf" value="9" c:identifier="FOO_ENUM_NEUF">
+      </member>
     </enumeration>
     <enumeration name="EnumType"
                  glib:type-name="FooEnumType"
@@ -179,15 +190,18 @@ and/or use gtk-doc annotations.  -->
       <member name="alpha"
               value="0"
               c:identifier="FOO_ENUM_ALPHA"
-              glib:nick="alpha"/>
+              glib:nick="alpha">
+      </member>
       <member name="beta"
               value="1"
               c:identifier="FOO_ENUM_BETA"
-              glib:nick="beta"/>
+              glib:nick="beta">
+      </member>
       <member name="delta"
               value="2"
               c:identifier="FOO_ENUM_DELTA"
-              glib:nick="delta"/>
+              glib:nick="delta">
+      </member>
       <function name="method" c:identifier="foo_enum_type_method">
         <return-value transfer-ownership="none">
           <type name="gint" c:type="int"/>
@@ -217,15 +231,18 @@ and/or use gtk-doc annotations.  -->
       <member name="good"
               value="0"
               c:identifier="FOO_ERROR_GOOD"
-              glib:nick="good"/>
+              glib:nick="good">
+      </member>
       <member name="bad"
               value="1"
               c:identifier="FOO_ERROR_BAD"
-              glib:nick="bad"/>
+              glib:nick="bad">
+      </member>
       <member name="ugly"
               value="2"
               c:identifier="FOO_ERROR_UGLY"
-              glib:nick="ugly"/>
+              glib:nick="ugly">
+      </member>
       <function name="quark" c:identifier="foo_error_quark">
         <return-value transfer-ownership="none">
           <type name="GLib.Quark" c:type="GQuark"/>
@@ -257,9 +274,12 @@ and/or use gtk-doc annotations.  -->
       </field>
     </record>
     <bitfield name="FlagsNoType" c:type="FooFlagsNoType">
-      <member name="ett" value="1" c:identifier="FOO_FLAGS_ETT"/>
-      <member name="tva" value="2" c:identifier="FOO_FLAGS_TVA"/>
-      <member name="fyra" value="4" c:identifier="FOO_FLAGS_FYRA"/>
+      <member name="ett" value="1" c:identifier="FOO_FLAGS_ETT">
+      </member>
+      <member name="tva" value="2" c:identifier="FOO_FLAGS_TVA">
+      </member>
+      <member name="fyra" value="4" c:identifier="FOO_FLAGS_FYRA">
+      </member>
     </bitfield>
     <bitfield name="FlagsType"
               glib:type-name="FooFlagsType"
@@ -268,15 +288,18 @@ and/or use gtk-doc annotations.  -->
       <member name="first"
               value="1"
               c:identifier="FOO_FLAGS_FIRST"
-              glib:nick="first"/>
+              glib:nick="first">
+      </member>
       <member name="second"
               value="2"
               c:identifier="FOO_FLAGS_SECOND"
-              glib:nick="second"/>
+              glib:nick="second">
+      </member>
       <member name="third"
               value="4"
               c:identifier="FOO_FLAGS_THIRD"
-              glib:nick="third"/>
+              glib:nick="third">
+      </member>
     </bitfield>
     <record name="ForeignStruct" c:type="FooForeignStruct" foreign="1">
       <field name="foo" writable="1">
@@ -693,23 +716,36 @@ it because it's not a boxed type.</doc>
     <enumeration name="Skippable" introspectable="0" c:type="FooSkippable">
       <doc xml:whitespace="preserve">Some type that is only interesting from C and should not be
 exposed to language bindings.</doc>
-      <member name="one" value="0" c:identifier="FOO_SKIPPABLE_ONE"/>
-      <member name="two" value="1" c:identifier="FOO_SKIPPABLE_TWO"/>
+      <member name="one" value="0" c:identifier="FOO_SKIPPABLE_ONE">
+        <doc xml:whitespace="preserve">a skippable enum value</doc>
+      </member>
+      <member name="two" value="1" c:identifier="FOO_SKIPPABLE_TWO">
+        <doc xml:whitespace="preserve">another skippable enum value</doc>
+      </member>
     </enumeration>
     <enumeration name="StackLayer" c:type="FooStackLayer">
-      <member name="desktop" value="0" c:identifier="FOO_LAYER_DESKTOP"/>
-      <member name="bottom" value="1" c:identifier="FOO_LAYER_BOTTOM"/>
-      <member name="normal" value="2" c:identifier="FOO_LAYER_NORMAL"/>
-      <member name="top" value="4" c:identifier="FOO_LAYER_TOP"/>
-      <member name="dock" value="4" c:identifier="FOO_LAYER_DOCK"/>
-      <member name="fullscreen" value="5" c:identifier="FOO_LAYER_FULLSCREEN"/>
+      <member name="desktop" value="0" c:identifier="FOO_LAYER_DESKTOP">
+      </member>
+      <member name="bottom" value="1" c:identifier="FOO_LAYER_BOTTOM">
+      </member>
+      <member name="normal" value="2" c:identifier="FOO_LAYER_NORMAL">
+      </member>
+      <member name="top" value="4" c:identifier="FOO_LAYER_TOP">
+      </member>
+      <member name="dock" value="4" c:identifier="FOO_LAYER_DOCK">
+      </member>
+      <member name="fullscreen" value="5" c:identifier="FOO_LAYER_FULLSCREEN">
+      </member>
       <member name="focused_window"
               value="6"
-              c:identifier="FOO_LAYER_FOCUSED_WINDOW"/>
+              c:identifier="FOO_LAYER_FOCUSED_WINDOW">
+      </member>
       <member name="override_redirect"
               value="7"
-              c:identifier="FOO_LAYER_OVERRIDE_REDIRECT"/>
-      <member name="last" value="8" c:identifier="FOO_LAYER_LAST"/>
+              c:identifier="FOO_LAYER_OVERRIDE_REDIRECT">
+      </member>
+      <member name="last" value="8" c:identifier="FOO_LAYER_LAST">
+      </member>
     </enumeration>
     <record name="Struct" c:type="FooStruct">
       <field name="priv" writable="1">

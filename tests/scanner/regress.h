@@ -150,6 +150,13 @@ GVariant *regress_test_gvariant_as (void);
 
 #define NUM_REGRESS_FOO
 
+/**
+ * RegressTestEnum:
+ * @REGRESS_TEST_VALUE1: value 1
+ * @REGRESS_TEST_VALUE2: value 2
+ *
+ * By purpose, not all members have documentation
+ */
 typedef enum
 {
   REGRESS_TEST_VALUE1,

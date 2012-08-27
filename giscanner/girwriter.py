@@ -363,7 +363,8 @@ and/or use gtk-doc annotations. ''')
                  ('c:identifier', member.symbol)]
         if member.nick is not None:
             attrs.append(('glib:nick', member.nick))
-        self.write_tag('member', attrs)
+        with self.tagcontext('member', attrs):
+            self._write_generic(member)
 
     def _write_constant(self, constant):
         attrs = [('name', constant.name),

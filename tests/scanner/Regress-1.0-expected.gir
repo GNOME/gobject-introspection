@@ -38,9 +38,12 @@ and/or use gtk-doc annotations.  -->
     <enumeration name="ATestError"
                  c:type="RegressATestError"
                  glib:error-domain="regress-atest-error">
-      <member name="code0" value="0" c:identifier="REGRESS_ATEST_ERROR_CODE0"/>
-      <member name="code1" value="1" c:identifier="REGRESS_ATEST_ERROR_CODE1"/>
-      <member name="code2" value="2" c:identifier="REGRESS_ATEST_ERROR_CODE2"/>
+      <member name="code0" value="0" c:identifier="REGRESS_ATEST_ERROR_CODE0">
+      </member>
+      <member name="code1" value="1" c:identifier="REGRESS_ATEST_ERROR_CODE1">
+      </member>
+      <member name="code2" value="2" c:identifier="REGRESS_ATEST_ERROR_CODE2">
+      </member>
     </enumeration>
     <constant name="DOUBLE_CONSTANT"
               value="44.220000"
@@ -117,15 +120,18 @@ use it should be.</doc>
       <member name="code1"
               value="1"
               c:identifier="REGRESS_TEST_ABC_ERROR_CODE1"
-              glib:nick="code1"/>
+              glib:nick="code1">
+      </member>
       <member name="code2"
               value="2"
               c:identifier="REGRESS_TEST_ABC_ERROR_CODE2"
-              glib:nick="code2"/>
+              glib:nick="code2">
+      </member>
       <member name="code3"
               value="3"
               c:identifier="REGRESS_TEST_ABC_ERROR_CODE3"
-              glib:nick="code3"/>
+              glib:nick="code3">
+      </member>
       <function name="quark" c:identifier="regress_test_abc_error_quark">
         <return-value transfer-ownership="none">
           <type name="GLib.Quark" c:type="GQuark"/>
@@ -353,34 +359,44 @@ use it should be.</doc>
                  glib:error-domain="regress-test-def-error">
       <member name="code0"
               value="0"
-              c:identifier="REGRESS_TEST_DEF_ERROR_CODE0"/>
+              c:identifier="REGRESS_TEST_DEF_ERROR_CODE0">
+      </member>
       <member name="code1"
               value="1"
-              c:identifier="REGRESS_TEST_DEF_ERROR_CODE1"/>
+              c:identifier="REGRESS_TEST_DEF_ERROR_CODE1">
+      </member>
       <member name="code2"
               value="2"
-              c:identifier="REGRESS_TEST_DEF_ERROR_CODE2"/>
+              c:identifier="REGRESS_TEST_DEF_ERROR_CODE2">
+      </member>
     </enumeration>
     <enumeration name="TestEnum"
                  glib:type-name="RegressTestEnum"
                  glib:get-type="regress_test_enum_get_type"
                  c:type="RegressTestEnum">
+      <doc xml:whitespace="preserve">By purpose, not all members have documentation</doc>
       <member name="value1"
               value="0"
               c:identifier="REGRESS_TEST_VALUE1"
-              glib:nick="value1"/>
+              glib:nick="value1">
+        <doc xml:whitespace="preserve">value 1</doc>
+      </member>
       <member name="value2"
               value="1"
               c:identifier="REGRESS_TEST_VALUE2"
-              glib:nick="value2"/>
+              glib:nick="value2">
+        <doc xml:whitespace="preserve">value 2</doc>
+      </member>
       <member name="value3"
               value="-1"
               c:identifier="REGRESS_TEST_VALUE3"
-              glib:nick="value3"/>
+              glib:nick="value3">
+      </member>
       <member name="value4"
               value="48"
               c:identifier="REGRESS_TEST_VALUE4"
-              glib:nick="value4"/>
+              glib:nick="value4">
+      </member>
       <function name="param" c:identifier="regress_test_enum_param">
         <return-value transfer-ownership="none">
           <type name="utf8" c:type="const gchar*"/>
@@ -393,9 +409,12 @@ use it should be.</doc>
       </function>
     </enumeration>
     <enumeration name="TestEnumNoGEnum" c:type="RegressTestEnumNoGEnum">
-      <member name="evalue1" value="0" c:identifier="REGRESS_TEST_EVALUE1"/>
-      <member name="evalue2" value="42" c:identifier="REGRESS_TEST_EVALUE2"/>
-      <member name="evalue3" value="48" c:identifier="REGRESS_TEST_EVALUE3"/>
+      <member name="evalue1" value="0" c:identifier="REGRESS_TEST_EVALUE1">
+      </member>
+      <member name="evalue2" value="42" c:identifier="REGRESS_TEST_EVALUE2">
+      </member>
+      <member name="evalue3" value="48" c:identifier="REGRESS_TEST_EVALUE3">
+      </member>
     </enumeration>
     <enumeration name="TestEnumUnsigned"
                  glib:type-name="RegressTestEnumUnsigned"
@@ -404,11 +423,13 @@ use it should be.</doc>
       <member name="value1"
               value="1"
               c:identifier="REGRESS_TEST_UNSIGNED_VALUE1"
-              glib:nick="value1"/>
+              glib:nick="value1">
+      </member>
       <member name="value2"
               value="2147483648"
               c:identifier="REGRESS_TEST_UNSIGNED_VALUE2"
-              glib:nick="value2"/>
+              glib:nick="value2">
+      </member>
     </enumeration>
     <enumeration name="TestError"
                  glib:type-name="RegressTestError"
@@ -418,15 +439,18 @@ use it should be.</doc>
       <member name="code1"
               value="1"
               c:identifier="REGRESS_TEST_ERROR_CODE1"
-              glib:nick="code1"/>
+              glib:nick="code1">
+      </member>
       <member name="code2"
               value="2"
               c:identifier="REGRESS_TEST_ERROR_CODE2"
-              glib:nick="code2"/>
+              glib:nick="code2">
+      </member>
       <member name="code3"
               value="3"
               c:identifier="REGRESS_TEST_ERROR_CODE3"
-              glib:nick="code3"/>
+              glib:nick="code3">
+      </member>
       <function name="quark" c:identifier="regress_test_error_quark">
         <return-value transfer-ownership="none">
           <type name="GLib.Quark" c:type="GQuark"/>
@@ -440,15 +464,18 @@ use it should be.</doc>
       <member name="flag1"
               value="1"
               c:identifier="TEST_FLAG1"
-              glib:nick="flag1"/>
+              glib:nick="flag1">
+      </member>
       <member name="flag2"
               value="2"
               c:identifier="TEST_FLAG2"
-              glib:nick="flag2"/>
+              glib:nick="flag2">
+      </member>
       <member name="flag3"
               value="4"
               c:identifier="TEST_FLAG3"
-              glib:nick="flag3"/>
+              glib:nick="flag3">
+      </member>
     </bitfield>
     <class name="TestFloating"
            c:symbol-prefix="test_floating"
@@ -1357,15 +1384,18 @@ the introspection client langage.</doc>
       <member name="code1"
               value="1"
               c:identifier="REGRESS_TEST_OTHER_ERROR_CODE1"
-              glib:nick="code1"/>
+              glib:nick="code1">
+      </member>
       <member name="code2"
               value="2"
               c:identifier="REGRESS_TEST_OTHER_ERROR_CODE2"
-              glib:nick="code2"/>
+              glib:nick="code2">
+      </member>
       <member name="code3"
               value="3"
               c:identifier="REGRESS_TEST_OTHER_ERROR_CODE3"
-              glib:nick="code3"/>
+              glib:nick="code3">
+      </member>
       <function name="quark"
                 c:identifier="regress_test_unconventional_error_quark">
         <return-value transfer-ownership="none">
@@ -1376,10 +1406,12 @@ the introspection client langage.</doc>
     <bitfield name="TestPrivateEnum" c:type="RegressTestPrivateEnum">
       <member name="public_enum_before"
               value="1"
-              c:identifier="REGRESS_TEST_PUBLIC_ENUM_BEFORE"/>
+              c:identifier="REGRESS_TEST_PUBLIC_ENUM_BEFORE">
+      </member>
       <member name="public_enum_after"
               value="4"
-              c:identifier="REGRESS_TEST_PUBLIC_ENUM_AFTER"/>
+              c:identifier="REGRESS_TEST_PUBLIC_ENUM_AFTER">
+      </member>
     </bitfield>
     <record name="TestPrivateStruct" c:type="RegressTestPrivateStruct">
       <field name="this_is_public_before" writable="1">

@@ -40,9 +40,12 @@ and/or use gtk-doc annotations.  -->
       </record>
     </union>
     <enumeration name="EnumType" c:type="UtilityEnumType">
-      <member name="a" value="0" c:identifier="UTILITY_ENUM_A"/>
-      <member name="b" value="1" c:identifier="UTILITY_ENUM_B"/>
-      <member name="c" value="2" c:identifier="UTILITY_ENUM_C"/>
+      <member name="a" value="0" c:identifier="UTILITY_ENUM_A">
+      </member>
+      <member name="b" value="1" c:identifier="UTILITY_ENUM_B">
+      </member>
+      <member name="c" value="2" c:identifier="UTILITY_ENUM_C">
+      </member>
     </enumeration>
     <callback name="FileFunc" c:type="UtilityFileFunc">
       <return-value transfer-ownership="none">
@@ -58,9 +61,12 @@ and/or use gtk-doc annotations.  -->
       </parameters>
     </callback>
     <bitfield name="FlagType" c:type="UtilityFlagType">
-      <member name="a" value="1" c:identifier="UTILITY_FLAG_A"/>
-      <member name="b" value="2" c:identifier="UTILITY_FLAG_B"/>
-      <member name="c" value="4" c:identifier="UTILITY_FLAG_C"/>
+      <member name="a" value="1" c:identifier="UTILITY_FLAG_A">
+      </member>
+      <member name="b" value="2" c:identifier="UTILITY_FLAG_B">
+      </member>
+      <member name="c" value="4" c:identifier="UTILITY_FLAG_C">
+      </member>
     </bitfield>
     <class name="Object"
            c:symbol-prefix="object"
