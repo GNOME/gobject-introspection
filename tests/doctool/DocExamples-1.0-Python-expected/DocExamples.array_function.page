@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+
+<page id="DocExamples.array_function"
+      type="topic"
+      style="function"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/experimental/ui/">
+  <info>
+    <link type="guide" xref="index" group="function"/>
+    <api:function>
+      <api:returns>
+        <api:type>[gint]</api:type>
+      </api:returns>
+      <api:name>doc_examples_array_function</api:name>
+      <api:arg>
+        <api:type>gint</api:type>
+        <api:name>out_len</api:name>
+      </api:arg>
+    </api:function>
+  </info>
+  <title>array_function</title>
+<synopsis><code mime="text/x-python">
+@accepts(gint)
+@returns([gint])
+def array_function(out_len)
+</code></synopsis>
+<p>This function returns an array with an explicit length,
+and the length should be invisible in most introspected bindings.</p>
+
+<table>
+<tr>
+<td><p>out_len :</p></td>
+<td><p>the length of the returned array</p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>an array of numbers.</p></td>
+</tr>
+</table>
+</page>

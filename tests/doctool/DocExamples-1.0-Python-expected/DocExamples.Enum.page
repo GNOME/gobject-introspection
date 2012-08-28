@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<page id="DocExamples.Enum"
+      type="guide"
+      style="enum"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:ui="http://projectmallard.org/experimental/ui/">
+  <info>
+    <link type="guide" xref="index"/>
+  </info>
+  <title>DocExamples.Enum</title>
+  <p>This is an example to document an enumeration.</p>
+<table>
+<tr>
+<td><p>Enum.FOO :</p></td>
+<td><p>a foo</p></td>
+</tr>
+<tr>
+<td><p>Enum.BAR :</p></td>
+<td><p>a bar</p></td>
+</tr>
+</table>
+
+</page>

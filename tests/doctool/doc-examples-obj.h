@@ -59,6 +59,35 @@ DocExamplesObj *doc_examples_obj_new (void);
 gboolean doc_examples_obj_method (DocExamplesObj *self, gint first_arg, gfloat second_arg,
                                   gboolean boolean_arg, gpointer pointer_arg, gchar *string);
 
+gboolean doc_examples_obj_static_method (gint *out_arg);
+
+gint *doc_examples_array_function (gint *out_len);
+
+/**
+ * DocExamplesEnum:
+ * @DOC_EXAMPLES_FOO: a foo
+ * @DOC_EXAMPLES_BAR: a bar
+ *
+ * This is an example to document an enumeration.
+ */
+typedef enum {
+  DOC_EXAMPLES_FOO,
+  DOC_EXAMPLES_BAR
+} DocExamplesEnum;
+
+/**
+ * DocExamplesCallback:
+ * @one: first parameter
+ * @two: second parameter
+ *
+ * Returns: something
+ */
+typedef gchar * (*DocExamplesCallback) (int one, int two);
+
+void doc_examples_callback_function (DocExamplesCallback callback,
+                                     gpointer            user_data,
+                                     GDestroyNotify      destroy_notify);
+
 G_END_DECLS
 
 #endif /* _DOC_EXAMPLES_OBJ_H */

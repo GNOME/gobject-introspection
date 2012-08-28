@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+
+<page id="DocExamples.Obj.static_method"
+      type="topic"
+      style="function"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/experimental/ui/">
+  <info>
+    <link type="guide" xref="DocExamples.Obj" group="function"/>
+    <api:function>
+      <api:returns>
+        <api:type>gboolean</api:type>
+      </api:returns>
+      <api:name>doc_examples_obj_static_method</api:name>
+      <api:arg>
+        <api:type>gint</api:type>
+        <api:name>out_arg</api:name>
+      </api:arg>
+    </api:function>
+  </info>
+  <title>static_method</title>
+<synopsis><code mime="text/x-python">
+@accepts(gint)
+@returns(gboolean)
+def static_method(out_arg)
+</code></synopsis>
+<p>This is an example of a function with an out argument
+and a return value.</p>
+
+<table>
+<tr>
+<td><p>out_arg :</p></td>
+<td><p>a pointer to int, or None to ignore</p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>True if @out_arg is valid, False otherwise</p></td>
+</tr>
+</table>
+</page>

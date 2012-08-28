@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+
+<page id="DocExamples.callback_function"
+      type="topic"
+      style="function"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/experimental/ui/">
+  <info>
+    <link type="guide" xref="index" group="function"/>
+    <api:function>
+      <api:returns>
+        <api:type>none</api:type>
+      </api:returns>
+      <api:name>doc_examples_callback_function</api:name>
+      <api:arg>
+        <api:type>DocExamples.Callback</api:type>
+        <api:name>callback</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>gpointer</api:type>
+        <api:name>user_data</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>GLib.DestroyNotify</api:type>
+        <api:name>destroy_notify</api:name>
+      </api:arg>
+    </api:function>
+  </info>
+  <title>callback_function</title>
+<synopsis><code mime="text/x-python">
+@accepts(DocExamples.Callback, gpointer, GLib.DestroyNotify)
+@returns(none)
+def callback_function(callback, user_data, destroy_notify)
+</code></synopsis>
+<p>This is a function that takes a callback. Different languages
+will expose this in different ways (e.g. Python keeps the
+@user_data parameter, while JS doesn't)</p>
+
+<table>
+<tr>
+<td><p>callback :</p></td>
+<td><p>Just Call Me Maybe</p></td>
+</tr>
+<tr>
+<td><p>user_data :</p></td>
+<td><p>your stuff</p></td>
+</tr>
+<tr>
+<td><p>destroy_notify :</p></td>
+<td><p>how to get rid of @user_data</p></td>
+</tr>
+</table>
+</page>

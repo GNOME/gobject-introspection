@@ -125,3 +125,68 @@ doc_examples_obj_method (DocExamplesObj *self, gint first_arg, gfloat second_arg
 {
   return FALSE;
 }
+
+/**
+ * doc_examples_obj_static_method:
+ * @out_arg: (out) (allow-none): a pointer to int, or %NULL to ignore
+ *
+ * This is an example of a function with an out argument
+ * and a return value.
+ *
+ * Returns: %TRUE if @out_arg is valid, %FALSE otherwise
+ */
+gboolean
+doc_examples_obj_static_method (gint *out_arg)
+{
+  if (out_arg)
+    *out_arg = 42;
+
+  return TRUE;
+}
+
+/**
+ * doc_examples_array_function:
+ * @out_len: (out): the length of the returned array
+ *
+ * This function returns an array with an explicit length,
+ * and the length should be invisible in most introspected bindings.
+ *
+ * Returns: (array length=out_len) (transfer full): an array of numbers.
+ */
+gint *
+doc_examples_array_function (gint *out_len)
+{
+  gint *array;
+  int i, n = 3;
+
+  array = g_new(int, n);
+  for (i = 0; i < n; i++)
+    array[i] = i;
+
+  *out_len = n;
+  return array;
+}
+
+/**
+ * doc_examples_callback_function:
+ * @callback: Just Call Me Maybe
+ * @user_data: your stuff
+ * @destroy_notify: how to get rid of @user_data
+ *
+ * This is a function that takes a callback. Different languages
+ * will expose this in different ways (e.g. Python keeps the
+ * @user_data parameter, while JS doesn't)
+ */
+void
+doc_examples_callback_function (DocExamplesCallback callback,
+                                gpointer            user_data,
+                                GDestroyNotify      destroy_notify)
+{
+  gchar *result;
+
+  result = callback (42, 17);
+  g_free (result);
+
+  if (user_data && destroy_notify)
+    destroy_notify (user_data);
+}
