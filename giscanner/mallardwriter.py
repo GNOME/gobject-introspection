@@ -127,6 +127,8 @@ class MallardFormatter(object):
         return parent_chain
 
 class MallardFormatterC(MallardFormatter):
+    language = "C"
+
     def format_type(self, type_):
         if isinstance(type_, ast.Array):
             try:
@@ -139,6 +141,8 @@ class MallardFormatterC(MallardFormatter):
             return type_.target_fundamental
 
 class MallardFormatterPython(MallardFormatter):
+    language = "Python"
+
     def format_type(self, type_):
         if isinstance(type_, ast.Array):
             return '[' + self.format_type(type_.element_type) + ']'
@@ -157,17 +161,22 @@ class MallardFormatterPython(MallardFormatter):
         doc = doc.replace('%FALSE', 'False')
         return doc
 
+LANGUAGES = {
+    "c": MallardFormatterC,
+    "python": MallardFormatterPython,
+}
+
 class MallardWriter(object):
     def __init__(self, transformer, language):
         self._transformer = transformer
-        self._language = language
 
-        if self._language == 'C':
-            self._formatter = MallardFormatterC(self._transformer)
-        elif self._language == 'Python':
-            self._formatter = MallardFormatterPython(self._transformer)
-        else:
-            raise SystemExit("Unsupported language: %s" % language)
+        try:
+            formatter_class = LANGUAGES[language.lower()]
+        except KeyError:
+            raise SystemExit("Unsupported language: %s" % (language,))
+
+        self._formatter = formatter_class(self._transformer)
+        self._language = self._formatter.language
 
     def write(self, output):
         nodes = [self._transformer.namespace]
