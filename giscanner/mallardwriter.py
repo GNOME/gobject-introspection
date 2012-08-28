@@ -27,13 +27,9 @@ import tempfile
 
 from xml.sax import saxutils
 from mako.template import Template
-from mako.runtime import supports_caller
 
 from . import ast
 from .utils import to_underscores
-
-def _space(num):
-    return " " * num
 
 class MallardFormatter(object):
     def __init__(self, transformer):
@@ -131,7 +127,6 @@ class MallardFormatter(object):
         return parent_chain
 
 class MallardFormatterC(MallardFormatter):
-
     def format_type(self, type_):
         if isinstance(type_, ast.Array):
             try:
@@ -144,7 +139,6 @@ class MallardFormatterC(MallardFormatter):
             return type_.target_fundamental
 
 class MallardFormatterPython(MallardFormatter):
-
     def format_type(self, type_):
         if isinstance(type_, ast.Array):
             return '[' + self.format_type(type_.element_type) + ']'
