@@ -131,10 +131,7 @@ class MallardFormatterC(MallardFormatter):
 
     def format_type(self, type_):
         if isinstance(type_, ast.Array):
-            try:
-                return self.format_type(type_.element_type) + '*'
-            except:
-                return type_.target_fundamental
+            return self.format_type(type_.element_type) + '*'
         elif type_.ctype is not None:
             return type_.ctype
         else:
