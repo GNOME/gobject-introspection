@@ -247,10 +247,11 @@ class GIRParser(object):
                             'set-value-func', 'get-value-func']:
                 func_name = node.attrib.get(_glibns(func_id))
                 obj.__dict__[func_id.replace('-', '_')] = func_name
-        self._namespace.append(obj)
 
         if self._types_only:
+            self._namespace.append(obj)
             return
+
         for iface in self._find_children(node, _corens('implements')):
             obj.interfaces.append(self._namespace.type_from_name(iface.attrib['name']))
         for iface in self._find_children(node, _corens('prerequisite')):
@@ -277,6 +278,8 @@ class GIRParser(object):
             obj.properties.append(self._parse_property(prop, obj))
         for signal in self._find_children(node, _glibns('signal')):
             obj.signals.append(self._parse_function_common(signal, ast.Signal, obj))
+
+        self._namespace.append(obj)
 
     def _parse_callback(self, node):
         callback = self._parse_function_common(node, ast.Callback)
@@ -480,9 +483,11 @@ class GIRParser(object):
                         get_type=node.attrib[_glibns('get-type')],
                         c_symbol_prefix=node.attrib.get(_cns('symbol-prefix')))
         self._parse_generic_attribs(node, obj)
-        self._namespace.append(obj)
+
         if self._types_only:
+            self._namespace.append(obj)
             return
+
         for method in self._find_children(node, _corens('method')):
             func = self._parse_function_common(method, ast.Function, obj)
             func.is_method = True
@@ -493,6 +498,7 @@ class GIRParser(object):
         for callback in self._find_children(node, _corens('callback')):
             obj.fields.append(
                 self._parse_function_common(callback, ast.Callback, obj))
+        self._namespace.append(obj)
 
     def _parse_field(self, node):
         type_node = None
@@ -570,12 +576,14 @@ class GIRParser(object):
         obj.error_domain = glib_error_domain
         obj.ctype = ctype
         self._parse_generic_attribs(node, obj)
-        self._namespace.append(obj)
 
         if self._types_only:
+            self._namespace.append(obj)
             return
+
         for member in self._find_children(node, _corens('member')):
             members.append(self._parse_member(member))
         for func_node in self._find_children(node, _corens('function')):
             func = self._parse_function_common(func_node, ast.Function)
             obj.static_methods.append(func)
+        self._namespace.append(obj)

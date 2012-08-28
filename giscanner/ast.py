@@ -20,6 +20,7 @@
 #
 
 import copy
+from itertools import chain
 
 from . import message
 
@@ -399,6 +400,21 @@ but adds it to things like ctypes, symbols, and type_names.
             self.type_names[node.gtype_name] = node
         elif isinstance(node, Function):
             self.symbols[node.symbol] = node
+        if isinstance(node, (Compound, Class, Interface)):
+            for fn in chain(node.methods, node.static_methods, node.constructors):
+                if not isinstance(fn, Function):
+                    continue
+                fn.namespace = self
+                self.symbols[fn.symbol] = fn
+        if isinstance(node, (Class, Interface)):
+            for m in chain(node.signals, node.properties):
+                m.namespace = self
+        if isinstance(node, Enum) or isinstance(node, Bitfield):
+            for fn in node.static_methods:
+                if not isinstance(fn, Function):
+                    continue
+                fn.namespace = self
+                self.symbols[fn.symbol] = fn
         if hasattr(node, 'ctype'):
             self.ctypes[node.ctype] = node
 
@@ -990,6 +1006,9 @@ class Interface(Node, Registered):
         self.properties = []
         self.fields = []
         self.prerequisites = []
+        # Not used yet, exists just to avoid an exception in
+        # Namespace.append()
+        self.constructors = []
 
     def _walk(self, callback, chain):
         for meth in self.methods:
