@@ -175,6 +175,28 @@ class MallardFormatter(object):
     def _process_other(self, namespace, match, props):
         return self.escape(match)
 
+    def _resolve_type(self, ident):
+        try:
+            matches = self._transformer.split_ctype_namespaces(ident)
+        except ValueError:
+            return None
+        for namespace, name in matches:
+            node = namespace.get(name)
+            if node:
+                return node
+        return None
+
+    def _resolve_symbol(self, symbol):
+        try:
+            matches = self._transformer.split_csymbol_namespaces(symbol)
+        except ValueError:
+            return None
+        for namespace, name in matches:
+            node = namespace.get_by_symbol(symbol)
+            if node:
+                return node
+        return None
+
     def _find_thing(self, list_, name):
         for item in list_:
             if item.name == name:
@@ -182,7 +204,7 @@ class MallardFormatter(object):
         raise KeyError("Could not find %s" % (name, ))
 
     def _process_property(self, namespace, match, props):
-        type_node = namespace.get_by_ctype(props['type_name'])
+        type_node = self._resolve_type(props['type_name'])
         if type_node is None:
             return match
 
@@ -195,7 +217,7 @@ class MallardFormatter(object):
         return '<link xref="%s">%s</link>' % (make_page_id(namespace, node), xref_name)
 
     def _process_signal(self, namespace, match, props):
-        type_node = namespace.get_by_ctype(props['type_name'])
+        type_node = self._resolve_type(props['type_name'])
         if type_node is None:
             return match
 
@@ -204,22 +226,22 @@ class MallardFormatter(object):
         except (AttributeError, KeyError), e:
             return match
 
-        xref_name = "%s.%s::%s" % (namespace.name, type_node.name, node.name)
-        return '<link xref="%s">%s</link>' % (make_page_id(namespace, node), xref_name)
+        xref_name = "%s.%s::%s" % (node.namespace.name, type_node.name, node.name)
+        return '<link xref="%s">%s</link>' % (make_page_id(node.namespace, node), xref_name)
 
     def _process_type_name(self, namespace, match, props):
-        node = namespace.get_by_ctype(props['type_name'])
+        node = self._resolve_type(props['type_name'])
         if node is None:
             return match
-        xref_name = "%s.%s" % (namespace.name, node.name)
-        return '<link xref="%s">%s</link>' % (make_page_id(namespace, node), xref_name)
+        xref_name = "%s.%s" % (node.namespace.name, node.name)
+        return '<link xref="%s">%s</link>' % (make_page_id(node.namespace, node), xref_name)
 
     def _process_function_call(self, namespace, match, props):
-        node = namespace.get_by_symbol(props['symbol_name'])
+        node = self._resolve_symbol(props['symbol_name'])
         if node is None:
             return match
 
-        return '<link xref="%s">%s</link>' % (make_page_id(namespace, node),
+        return '<link xref="%s">%s</link>' % (make_page_id(node.namespace, node),
                                               self.format_function_name(node))
 
     def _process_fundamental(self, namespace, match, props):
@@ -252,11 +274,11 @@ class MallardFormatter(object):
     def format_type(self, type_):
         raise NotImplementedError
 
-    def format_property_flags(self, property_):
+    def format_property_flags(self, property_, construct_only=False):
         flags = []
-        if property_.readable:
+        if property_.readable and not construct_only:
             flags.append("Read")
-        if property_.writable:
+        if property_.writable and not construct_only:
             flags.append("Write")
         if property_.construct:
             flags.append("Construct")
