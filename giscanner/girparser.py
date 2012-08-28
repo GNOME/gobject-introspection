@@ -273,7 +273,7 @@ class GIRParser(object):
             func = self._parse_function_common(ctor, ast.Function, obj)
             func.is_constructor = True
             obj.constructors.append(func)
-        obj.fields.extend(self._parse_fields(node))
+        obj.fields.extend(self._parse_fields(node, obj))
         for prop in self._find_children(node, _corens('property')):
             obj.properties.append(self._parse_property(prop, obj))
         for signal in self._find_children(node, _glibns('signal')):
@@ -359,12 +359,12 @@ class GIRParser(object):
         self._namespace.track(func)
         return func
 
-    def _parse_fields(self, node):
+    def _parse_fields(self, node, obj):
         res = []
         names = (_corens('field'), _corens('record'), _corens('union'), _corens('callback'))
         for child in node.getchildren():
             if child.tag in names:
-                fieldobj = self._parse_field(child)
+                fieldobj = self._parse_field(child, obj)
                 res.append(fieldobj)
         return res
 
@@ -379,16 +379,18 @@ class GIRParser(object):
             compound.foreign = True
         self._parse_generic_attribs(node, compound)
         if not self._types_only:
-            compound.fields.extend(self._parse_fields(node))
+            compound.fields.extend(self._parse_fields(node, compound))
             for method in self._find_children(node, _corens('method')):
-                compound.methods.append(
-                    self._parse_function_common(method, ast.Function, compound))
+                func = self._parse_function_common(method, ast.Function, compound)
+                func.is_method = True
+                compound.methods.append(func)
             for func in self._find_children(node, _corens('function')):
                 compound.static_methods.append(
                     self._parse_function_common(func, ast.Function, compound))
             for ctor in self._find_children(node, _corens('constructor')):
-                compound.constructors.append(
-                    self._parse_function_common(ctor, ast.Function, compound))
+                func = self._parse_function_common(ctor, ast.Function, compound)
+                func.is_constructor = True
+                compound.constructors.append(func)
         return compound
 
     def _parse_record(self, node, anonymous=False):
@@ -500,7 +502,7 @@ class GIRParser(object):
                 self._parse_function_common(callback, ast.Callback, obj))
         self._namespace.append(obj)
 
-    def _parse_field(self, node):
+    def _parse_field(self, node, parent):
         type_node = None
         anonymous_node = None
         if node.tag in map(_corens, ('record', 'union')):
@@ -526,6 +528,7 @@ class GIRParser(object):
                       node.attrib.get('bits'),
                       anonymous_node=anonymous_node)
         field.private = node.attrib.get('private') == '1'
+        field.parent = parent
         self._parse_generic_attribs(node, field)
         return field
 

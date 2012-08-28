@@ -857,6 +857,7 @@ class Field(Annotated):
         self.bits = bits
         self.anonymous_node = anonymous_node
         self.private = False
+        self.parent = None # a compound
 
     def __cmp__(self, other):
         return cmp(self.name, other.name)
