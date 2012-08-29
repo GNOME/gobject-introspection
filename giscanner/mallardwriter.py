@@ -223,7 +223,7 @@ class MallardFormatter(object):
                                               self.format_function_name(node))
 
     def _process_fundamental(self, namespace, match, props):
-        raise NotImplementedError
+        return self.fundamentals.get(props['fundamental'], match)
 
     def _process_token(self, tok):
         namespace = self._transformer.namespace
@@ -281,6 +281,12 @@ class MallardFormatter(object):
 class MallardFormatterC(MallardFormatter):
     language = "C"
 
+    fundamentals = {
+        "TRUE": "TRUE",
+        "FALSE": "FALSE",
+        "NULL": "NULL",
+    }
+
     def format_type(self, type_):
         if isinstance(type_, ast.Array):
             return self.format_type(type_.element_type) + '*'
@@ -292,11 +298,14 @@ class MallardFormatterC(MallardFormatter):
     def format_function_name(self, func):
         return func.symbol
 
-    def _process_fundamental(self, namespace, match, props):
-        return props['fundamental']
-
 class MallardFormatterPython(MallardFormatter):
     language = "Python"
+
+    fundamentals = {
+        "TRUE": "True",
+        "FALSE": "False",
+        "NULL": "None",
+    }
 
     def format_type(self, type_):
         if isinstance(type_, ast.Array):
@@ -314,15 +323,6 @@ class MallardFormatterPython(MallardFormatter):
             return "%s.%s" % (func.parent.name, func.name)
         else:
             return func.name
-
-    def _process_fundamental(self, namespace, match, props):
-        translation = {
-            "NULL": "None",
-            "TRUE": "True",
-            "FALSE": "False",
-        }
-
-        return translation.get(props['fundamental'], match)
 
 LANGUAGES = {
     "c": MallardFormatterC,
