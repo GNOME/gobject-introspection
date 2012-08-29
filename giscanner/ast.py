@@ -384,37 +384,45 @@ returned."""
             target = '%s.%s' % (self.name, name)
         return Type(target_giname=target, ctype=ctype)
 
-    def append(self, node, replace=False):
-        previous = self.names.get(node.name)
-        if previous is not None:
-            if not replace:
-                raise ValueError("Namespace conflict: %r" % (node, ))
-            self.remove(previous)
-        # A layering violation...but oh well.
+    def track(self, node):
+        """Doesn't directly append the function to our own namespace,
+but adds it to things like ctypes, symbols, and type_names.
+"""
+        assert isinstance(node, Node)
+        if node.namespace is self:
+            return
+        assert node.namespace is None
+        node.namespace = self
         if isinstance(node, Alias):
             self.aliases[node.name] = node
         elif isinstance(node, Registered) and node.gtype_name is not None:
             self.type_names[node.gtype_name] = node
         elif isinstance(node, Function):
             self.symbols[node.symbol] = node
-        assert isinstance(node, Node)
-        assert node.namespace is None
-        node.namespace = self
-        self.names[node.name] = node
         if hasattr(node, 'ctype'):
             self.ctypes[node.ctype] = node
+
+    def append(self, node, replace=False):
+        previous = self.names.get(node.name)
+        if previous is not None:
+            if not replace:
+                raise ValueError("Namespace conflict: %r" % (node, ))
+            self.remove(previous)
+
+        self.track(node)
+        self.names[node.name] = node
 
     def remove(self, node):
         if isinstance(node, Alias):
             del self.aliases[node.name]
         elif isinstance(node, Registered) and node.gtype_name is not None:
             del self.type_names[node.gtype_name]
-        del self.names[node.name]
-        node.namespace = None
         if hasattr(node, 'ctype'):
             del self.ctypes[node.ctype]
         if isinstance(node, Function):
             del self.symbols[node.symbol]
+        node.namespace = None
+        self.names.pop(node.name, None)
 
     def float(self, node):
         """Like remove(), but doesn't unset the node's namespace

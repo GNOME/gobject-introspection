@@ -353,6 +353,7 @@ class GIRParser(object):
 
         self._parse_generic_attribs(node, func)
 
+        self._namespace.track(func)
         return func
 
     def _parse_fields(self, node):
