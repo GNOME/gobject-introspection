@@ -403,8 +403,6 @@ returned."""
         self.names[node.name] = node
         if hasattr(node, 'ctype'):
             self.ctypes[node.ctype] = node
-        if hasattr(node, 'symbol'):
-            self.ctypes[node.symbol] = node
 
     def remove(self, node):
         if isinstance(node, Alias):
