@@ -311,7 +311,7 @@ class MallardFormatterPython(MallardFormatter):
 
     def format_function_name(self, func):
         if func.parent is not None:
-            return "%s.%s" % (self.format_type(func.parent), func.name)
+            return "%s.%s" % (func.parent.name, func.name)
         else:
             return func.name
 

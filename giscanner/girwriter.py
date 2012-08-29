@@ -473,8 +473,8 @@ and/or use gtk-doc annotations. ''')
 
     def _write_callback(self, callback):
         attrs = []
-        if callback.namespace:
-            attrs.append(('c:type', callback.ctype or callback.c_name))
+        if callback.ctype != callback.name:
+            attrs.append(('c:type', callback.ctype))
         self._write_callable(callback, 'callback', attrs)
 
     def _write_record(self, record, extra_attrs=[]):
