@@ -83,4 +83,6 @@ tests/offsets/Offsets-1.0.gir
 tests/offsets/gitestoffsets
 tests/offsets/offsets.compiled
 tests/offsets/offsets.introspected
+tests/doctool/DocExamples-1.0-C
+tests/doctool/DocExamples-1.0-Python
 .make-check-passed
