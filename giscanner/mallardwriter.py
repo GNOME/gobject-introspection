@@ -243,8 +243,7 @@ class MallardFormatter(object):
 
     def format_inline(self, para):
         tokens = self._scanner.scan(para)
-        words = [(tok, self._process_token(tok)) for tok in tokens]
-        words = [w[1] for w in words]
+        words = [self._process_token(tok) for tok in tokens]
         return ''.join(words)
 
     def format_function_name(self, func):
