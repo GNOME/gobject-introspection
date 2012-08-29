@@ -107,12 +107,13 @@ class TemplatedScanner(object):
         return [(name, unmangle(spec, name)) for name, spec in specs]
 
     def make_regex(self, specs):
-        regex = '|'.join('(?P<%s>%s)' % (name, spec) for name, spec in specs if not name.startswith('!'))
+        regex = '|'.join('(?P<%s>%s)' % (name, spec) for name, spec in specs
+                         if not name.startswith('!'))
         return re.compile(regex)
 
     def get_properties(self, name, match):
         groupdict = match.groupdict()
-        properties = { name: groupdict.pop(name) }
+        properties = {name: groupdict.pop(name)}
         name = name + "_"
         for group, value in groupdict.iteritems():
             if group.startswith(name):
@@ -141,13 +142,13 @@ class TemplatedScanner(object):
 class DocstringScanner(TemplatedScanner):
     def __init__(self):
         specs = [
-            ('!alpha'        , r'[a-zA-Z0-9_]+'),
-            ('!alpha_dash'   , r'[a-zA-Z0-9_-]+'),
-            ('property'      , r'<<type_name:type_name>>:(<<property_name:alpha_dash>>)'),
-            ('signal'        , r'<<type_name:type_name>>::(<<signal_name:alpha_dash>>)'),
-            ('type_name'     , r'#(<<type_name:alpha>>)'),
-            ('fundamental'   , r'%(<<fundamental:alpha>>)'),
-            ('function_call' , r'<<symbol_name:alpha>>\(\)'),
+            ('!alpha', r'[a-zA-Z0-9_]+'),
+            ('!alpha_dash', r'[a-zA-Z0-9_-]+'),
+            ('property', r'<<type_name:type_name>>:(<<property_name:alpha_dash>>)'),
+            ('signal', r'<<type_name:type_name>>::(<<signal_name:alpha_dash>>)'),
+            ('type_name', r'#(<<type_name:alpha>>)'),
+            ('fundamental', r'%(<<fundamental:alpha>>)'),
+            ('function_call', r'<<symbol_name:alpha>>\(\)'),
         ]
 
         super(DocstringScanner, self).__init__(specs)
@@ -212,7 +213,8 @@ class MallardFormatter(object):
         if node is None:
             return match
 
-        return '<link xref="%s">%s</link>' % (make_page_id(namespace, node), self.format_function_name(node))
+        return '<link xref="%s">%s</link>' % (make_page_id(namespace, node),
+                                              self.format_function_name(node))
 
     def _process_fundamental(self, namespace, match, props):
         raise NotImplementedError
@@ -329,7 +331,7 @@ class MallardWriter(object):
         try:
             formatter_class = LANGUAGES[language.lower()]
         except KeyError:
-            raise SystemExit("Unsupported language: %s" % (language,))
+            raise SystemExit("Unsupported language: %s" % (language, ))
 
         self._formatter = formatter_class(self._transformer)
         self._language = self._formatter.language
