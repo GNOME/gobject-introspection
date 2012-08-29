@@ -102,15 +102,26 @@ doc_examples_obj_new (void)
 
 /**
  * doc_examples_obj_method:
- * @first_arg: first argument
+ * @first_arg: A #DocExamplesObj.
  * @second_arg: second argument
+ * @boolean_arg: You should always pass %TRUE.
+ * @pointer_arg: (allow-none): If not %NULL, do a thing.
+ * @string: A %NULL-terminated string.
  *
  * This is an example of how to document a method.
  *
+ * You should call this on a #DocExamplesObj that was
+ * created with doc_examples_obj_new().
+ *
+ * This should be a %FALSEALARM.
+ *
  * Since: 0.99
+ *
+ * Returns: Either %FALSE or something %FALSE-y.
  */
-void
-doc_examples_obj_method (DocExamplesObj *self, gint first_arg, gfloat second_arg)
+gboolean
+doc_examples_obj_method (DocExamplesObj *self, gint first_arg, gfloat second_arg,
+                         gboolean boolean_arg, gpointer pointer_arg, gchar *string)
 {
-
+  return FALSE;
 }

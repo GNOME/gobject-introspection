@@ -10,7 +10,7 @@
     <link type="guide" xref="DocExamples.Obj" group="method"/>
     <api:function>
       <api:returns>
-        <api:type>none</api:type>
+        <api:type>gboolean</api:type>
       </api:returns>
       <api:name>doc_examples_obj_method</api:name>
       <api:arg>
@@ -25,24 +25,53 @@
         <api:type>gfloat</api:type>
         <api:name>second_arg</api:name>
       </api:arg>
+      <api:arg>
+        <api:type>gboolean</api:type>
+        <api:name>boolean_arg</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>gpointer</api:type>
+        <api:name>pointer_arg</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>utf8</api:type>
+        <api:name>string</api:name>
+      </api:arg>
     </api:function>
   </info>
   <title>method</title>
 <synopsis><code mime="text/x-python">
-@accepts(gint, gfloat)
-@returns(none)
-def method(first_arg, second_arg)
+@accepts(gint, gfloat, gboolean, gpointer, utf8)
+@returns(gboolean)
+def method(first_arg, second_arg, boolean_arg, pointer_arg, string)
 </code></synopsis>
-<p>This is an example of how to document a method.</p>
+<p>This is an example of how to document a method.</p><p>You should call this on a <link xref="DocExamples.Obj">DocExamples.Obj</link> that was
+created with <link xref="DocExamples.Obj.new">Obj.new</link>.</p><p>This should be a %FALSEALARM.</p>
 
 <table>
 <tr>
 <td><p>first_arg :</p></td>
-<td><p>first argument</p></td>
+<td><p>A <link xref="DocExamples.Obj">DocExamples.Obj</link>.</p></td>
 </tr>
 <tr>
 <td><p>second_arg :</p></td>
 <td><p>second argument</p></td>
+</tr>
+<tr>
+<td><p>boolean_arg :</p></td>
+<td><p>You should always pass True.</p></td>
+</tr>
+<tr>
+<td><p>pointer_arg :</p></td>
+<td><p>If not None, do a thing.</p></td>
+</tr>
+<tr>
+<td><p>string :</p></td>
+<td><p>A None-terminated string.</p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p>Either False or something False-y.</p></td>
 </tr>
 </table>
 <p>Since 0.99</p>
