@@ -31,12 +31,134 @@ from mako.template import Template
 from . import ast
 from .utils import to_underscores
 
+def make_page_id(namespace, node):
+    if isinstance(node, ast.Namespace):
+        return 'index'
+    elif isinstance(node, (ast.Class, ast.Interface)):
+        return '%s.%s' % (namespace.name, node.name)
+    elif isinstance(node, ast.Record):
+        return '%s.%s' % (namespace.name, node.name)
+    elif isinstance(node, ast.Function):
+        if node.parent is not None:
+            return '%s.%s.%s' % (namespace.name, node.parent.name, node.name)
+        else:
+            return '%s.%s' % (namespace.name, node.name)
+    elif isinstance(node, ast.Enum):
+        return '%s.%s' % (namespace.name, node.name)
+    elif isinstance(node, ast.Property) and node.parent is not None:
+        return '%s.%s-%s' % (namespace.name, node.parent.name, node.name)
+    elif isinstance(node, ast.Signal) and node.parent is not None:
+        return '%s.%s-%s' % (namespace.name, node.parent.name, node.name)
+    elif isinstance(node, ast.VFunction) and node.parent is not None:
+        return '%s.%s-%s' % (namespace.name, node.parent.name, node.name)
+    else:
+        return '%s.%s' % (namespace.name, node.name)
+
+def make_template_name(node, language):
+    if isinstance(node, ast.Namespace):
+        node_kind = 'namespace'
+    elif isinstance(node, (ast.Class, ast.Interface)):
+        node_kind = 'class'
+    elif isinstance(node, ast.Record):
+        node_kind = 'record'
+    elif isinstance(node, ast.Function):
+        node_kind = 'function'
+    elif isinstance(node, ast.Enum):
+        node_kind = 'enum'
+    elif isinstance(node, ast.Property) and node.parent is not None:
+        node_kind = 'property'
+    elif isinstance(node, ast.Signal) and node.parent is not None:
+        node_kind = 'signal'
+    elif isinstance(node, ast.VFunction) and node.parent is not None:
+        node_kind = 'vfunc'
+    else:
+        node_kind = 'default'
+
+    return 'mallard-%s-%s.tmpl' % (language, node_kind)
+
+class TemplatedScanner(object):
+    def __init__(self, specs):
+        self.specs = self.unmangle_specs(specs)
+        self.regex = self.make_regex(self.specs)
+
+    def unmangle_specs(self, specs):
+        mangled = re.compile('<<([a-zA-Z_:]+)>>')
+        specdict = dict((name.lstrip('!'), spec) for name, spec in specs)
+
+        def unmangle(spec, name=None):
+            def replace_func(match):
+                child_spec_name = match.group(1)
+
+                if ':' in child_spec_name:
+                    pattern_name, child_spec_name = child_spec_name.split(':', 1)
+                else:
+                    pattern_name = None
+
+                child_spec = specdict[child_spec_name]
+                # Force all child specs of this one to be unnamed
+                unmangled = unmangle(child_spec, None)
+                if pattern_name and name:
+                    return '(?P<%s_%s>%s)' % (name, pattern_name, unmangled)
+                else:
+                    return unmangled
+
+            return mangled.sub(replace_func, spec)
+
+        return [(name, unmangle(spec, name)) for name, spec in specs]
+
+    def make_regex(self, specs):
+        regex = '|'.join('(?P<%s>%s)' % (name, spec) for name, spec in specs if not name.startswith('!'))
+        return re.compile(regex)
+
+    def get_properties(self, name, match):
+        groupdict = match.groupdict()
+        properties = { name: groupdict.pop(name) }
+        name = name + "_"
+        for group, value in groupdict.iteritems():
+            if group.startswith(name):
+                key = group[len(name):]
+                properties[key] = value
+        return properties
+
+    def scan(self, text):
+        pos = 0
+        while True:
+            match = self.regex.search(text, pos)
+            if match is None:
+                break
+
+            start = match.start()
+            if start > pos:
+                yield ('other', text[pos:start], None)
+
+            pos = match.end()
+            name = match.lastgroup
+            yield (name, match.group(0), self.get_properties(name, match))
+
+        if pos < len(text):
+            yield ('other', text[pos:], None)
+
+class DocstringScanner(TemplatedScanner):
+    def __init__(self):
+        specs = [
+            ('!alpha'        , r'[a-zA-Z0-9_]+'),
+            ('!alpha_dash'   , r'[a-zA-Z0-9_-]+'),
+            ('property'      , r'<<type_name:type_name>>:(<<property_name:alpha_dash>>)'),
+            ('signal'        , r'<<type_name:type_name>>::(<<signal_name:alpha_dash>>)'),
+            ('type_name'     , r'#(<<type_name:alpha>>)'),
+            ('fundamental'   , r'%(<<fundamental:alpha>>)'),
+            ('function_call' , r'<<symbol_name:alpha>>\(\)'),
+        ]
+
+        super(DocstringScanner, self).__init__(specs)
+
 class MallardFormatter(object):
     def __init__(self, transformer):
         self._transformer = transformer
+        self._scanner = DocstringScanner()
 
     def escape(self, text):
-        return saxutils.escape(text.encode('utf-8')).decode('utf-8')
+        return saxutils.escape(text)
 
     def format(self, doc):
         if doc is None:
@@ -49,53 +171,76 @@ class MallardFormatter(object):
             result += '</p>'
         return result
 
+    def _process_other(self, namespace, match, props):
+        return self.escape(match)
+
+    def _process_property(self, namespace, match, props):
+        type_node = namespace.get_by_ctype(props['type_name'])
+        if type_node is None:
+            return match
+
+        try:
+            node = type_node.properties[props['property_name']]
+        except (AttributeError, KeyError), e:
+            return match
+
+        xref_name = "%s.%s:%s" % (namespace.name, type_node.name, node.name)
+        return '<link xref="%s">%s</link>' % (make_page_id(namespace, node), xref_name)
+
+    def _process_signal(self, namespace, match, props):
+        type_node = namespace.get_by_ctype(props['type_name'])
+        if type_node is None:
+            return match
+
+        try:
+            node = type_node.signals[props['signal_name']]
+        except (AttributeError, KeyError), e:
+            return match
+
+        xref_name = "%s.%s::%s" % (namespace.name, type_node.name, node.name)
+        return '<link xref="%s">%s</link>' % (make_page_id(namespace, node), xref_name)
+
+    def _process_type_name(self, namespace, match, props):
+        node = namespace.get_by_ctype(props['type_name'])
+        if node is None:
+            return match
+        xref_name = "%s.%s" % (namespace.name, node.name)
+        return '<link xref="%s">%s</link>' % (make_page_id(namespace, node), xref_name)
+
+    def _process_function_call(self, namespace, match, props):
+        node = namespace.get_by_symbol(props['symbol_name'])
+        if node is None:
+            return match
+
+        return '<link xref="%s">%s</link>' % (make_page_id(namespace, node), self.format_function_name(node))
+
+    def _process_fundamental(self, namespace, match, props):
+        raise NotImplementedError
+
+    def _process_token(self, tok):
+        namespace = self._transformer.namespace
+
+        kind, match, props = tok
+
+        dispatch = {
+            'other': self._process_other,
+            'property': self._process_property,
+            'signal': self._process_signal,
+            'type_name': self._process_type_name,
+            'function_call': self._process_function_call,
+            'fundamental': self._process_fundamental,
+        }
+
+        return dispatch[kind](namespace, match, props)
+
     def format_inline(self, para):
-        result = ''
+        tokens = self._scanner.scan(para)
+        words = [(tok, self._process_token(tok)) for tok in tokens]
+        words = [w[1] for w in words]
+        return ' '.join(words)
 
-        poss = []
-        poss.append((para.find('#'), '#'))
-        poss = [pos for pos in poss if pos[0] >= 0]
-        poss.sort(cmp=lambda x, y: cmp(x[0], y[0]))
-        if len(poss) == 0:
-            result += self.escape(para)
-        elif poss[0][1] == '#':
-            pos = poss[0][0]
-            result += self.escape(para[:pos])
-            rest = para[pos + 1:]
-            link = re.split('[^a-zA-Z_:-]', rest, maxsplit=1)[0]
-            if link.endswith(':'):
-                link = link[:-1]
-            namespace = self._transformer.namespace
-            if '::' in link:
-                type_name, signal_name = link.split('::')
-                if type_name in namespace.ctypes:
-                    type_ = namespace.get_by_ctype(type_name)
-                    xref = '%s.%s-%s' % (namespace.name, type_.name, signal_name)
-                    xref_name = '%s.%s::%s' % (namespace.name, type_.name, signal_name)
-                else:
-                    xref = link
-                    xref_name = link
-            elif ':' in link:
-                type_name, property_name = link.split(':')
-                if type_name in namespace.ctypes:
-                    type_ = namespace.get_by_ctype(type_name)
-                    xref = '%s.%s-%s' % (namespace.name, type_.name, property_name)
-                    xref_name = '%s.%s:%s' % (namespace.name, type_.name, property_name)
-                else:
-                    xref = link
-                    xref_name = link
-            elif link in namespace.ctypes:
-                type_ = namespace.get_by_ctype(link)
-                xref = '%s.%s' % (namespace.name, type_.name)
-                xref_name = xref
-            else:
-                xref = link
-                xref_name = link
-            result += '<link xref="%s">%s</link>' % (xref, xref_name)
-            if len(link) < len(rest):
-                result += self.format_inline(rest[len(link):])
-
-        return result
+    def format_function_name(self, func):
+        raise NotImplementedError
 
     def format_type(self, type_):
         raise NotImplementedError
@@ -137,6 +282,12 @@ class MallardFormatterC(MallardFormatter):
         else:
             return type_.target_fundamental
 
+    def format_function_name(self, func):
+        return func.symbol
+
+    def _process_fundamental(self, namespace, match, props):
+        return props['fundamental']
+
 class MallardFormatterPython(MallardFormatter):
     language = "Python"
 
@@ -151,12 +302,20 @@ class MallardFormatterPython(MallardFormatter):
         else:
             return type_.target_fundamental
 
-    def format(self, doc):
-        doc = MallardFormatter.format(self, doc)
-        doc = doc.replace('%NULL', 'None')
-        doc = doc.replace('%TRUE', 'True')
-        doc = doc.replace('%FALSE', 'False')
-        return doc
+    def format_function_name(self, func):
+        if func.parent is not None:
+            return "%s.%s" % (self.format_type(func.parent), func.name)
+        else:
+            return func.name
+
+    def _process_fundamental(self, namespace, match, props):
+        translation = {
+            "NULL": "None",
+            "TRUE": "True",
+            "FALSE": "False",
+        }
+
+        return translation.get(props['fundamental'], match)
 
 LANGUAGES = {
     "c": MallardFormatterC,
@@ -200,42 +359,15 @@ class MallardWriter(object):
 
     def _render_node(self, node, output):
         namespace = self._transformer.namespace
-        if isinstance(node, ast.Namespace):
-            template_name = 'mallard-%s-namespace.tmpl' % self._language
-            page_id = 'index'
-        elif isinstance(node, (ast.Class, ast.Interface)):
-            template_name = 'mallard-%s-class.tmpl' % self._language
-            page_id = '%s.%s' % (namespace.name, node.name)
-        elif isinstance(node, ast.Record):
-            template_name = 'mallard-%s-record.tmpl' % self._language
-            page_id = '%s.%s' % (namespace.name, node.name)
-        elif isinstance(node, ast.Function):
-            template_name = 'mallard-%s-function.tmpl' % self._language
-            if node.parent is not None:
-                page_id = '%s.%s.%s' % (namespace.name, node.parent.name, node.name)
-            else:
-                page_id = '%s.%s' % (namespace.name, node.name)
-        elif isinstance(node, ast.Enum):
-            template_name = 'mallard-%s-enum.tmpl' % self._language
-            page_id = '%s.%s' % (namespace.name, node.name)
-        elif isinstance(node, ast.Property) and node.parent is not None:
-            template_name = 'mallard-%s-property.tmpl' % self._language
-            page_id = '%s.%s-%s' % (namespace.name, node.parent.name, node.name)
-        elif isinstance(node, ast.Signal) and node.parent is not None:
-            template_name = 'mallard-%s-signal.tmpl' % self._language
-            page_id = '%s.%s-%s' % (namespace.name, node.parent.name, node.name)
-        elif isinstance(node, ast.VFunction) and node.parent is not None:
-            template_name = 'mallard-%s-vfunc.tmpl' % self._language
-            page_id = '%s.%s-%s' % (namespace.name, node.parent.name, node.name)
-        else:
-            template_name = 'mallard-%s-default.tmpl' % self._language
-            page_id = '%s.%s' % (namespace.name, node.name)
 
         if 'UNINSTALLED_INTROSPECTION_SRCDIR' in os.environ:
             top_srcdir = os.environ['UNINSTALLED_INTROSPECTION_SRCDIR']
             template_dir = os.path.join(top_srcdir, 'giscanner')
         else:
             template_dir = os.path.dirname(__file__)
+
+        template_name = make_template_name(node, self._language)
+        page_id = make_page_id(namespace, node)
 
         file_name = os.path.join(template_dir, template_name)
         file_name = os.path.abspath(file_name)
