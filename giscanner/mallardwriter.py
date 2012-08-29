@@ -245,7 +245,7 @@ class MallardFormatter(object):
         tokens = self._scanner.scan(para)
         words = [(tok, self._process_token(tok)) for tok in tokens]
         words = [w[1] for w in words]
-        return ' '.join(words)
+        return ''.join(words)
 
     def format_function_name(self, func):
         raise NotImplementedError
