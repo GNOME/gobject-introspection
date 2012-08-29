@@ -144,8 +144,8 @@ class DocstringScanner(TemplatedScanner):
         specs = [
             ('!alpha', r'[a-zA-Z0-9_]+'),
             ('!alpha_dash', r'[a-zA-Z0-9_-]+'),
-            ('property', r'<<type_name:type_name>>:(<<property_name:alpha_dash>>)'),
-            ('signal', r'<<type_name:type_name>>::(<<signal_name:alpha_dash>>)'),
+            ('property', r'#<<type_name:alpha>>:(<<property_name:alpha_dash>>)'),
+            ('signal', r'#<<type_name:alpha>>::(<<signal_name:alpha_dash>>)'),
             ('type_name', r'#(<<type_name:alpha>>)'),
             ('fundamental', r'%(<<fundamental:alpha>>)'),
             ('function_call', r'<<symbol_name:alpha>>\(\)'),
@@ -175,13 +175,19 @@ class MallardFormatter(object):
     def _process_other(self, namespace, match, props):
         return self.escape(match)
 
+    def _find_thing(self, list_, name):
+        for item in list_:
+            if item.name == name:
+                return item
+        raise KeyError("Could not find %s" % (name, ))
+
     def _process_property(self, namespace, match, props):
         type_node = namespace.get_by_ctype(props['type_name'])
         if type_node is None:
             return match
 
         try:
-            node = type_node.properties[props['property_name']]
+            node = self._find_thing(type_node.properties, props['property_name'])
         except (AttributeError, KeyError), e:
             return match
 
@@ -194,7 +200,7 @@ class MallardFormatter(object):
             return match
 
         try:
-            node = type_node.signals[props['signal_name']]
+            node = self._find_thing(type_node.signals, props['signal_name'])
         except (AttributeError, KeyError), e:
             return match
 
