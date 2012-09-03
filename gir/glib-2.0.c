@@ -367,6 +367,19 @@
 
 
 /**
+ * GDuplicateFunc:
+ * @data: the data to duplicate
+ *
+ * The type of functions that are used to 'duplicate' an object.
+ * What this means depends on the context, it could just be
+ * incrementing the reference count, if @data is a ref-counted
+ * object.
+ *
+ * Returns: a duplicate of data
+ */
+
+
+/**
  * GEqualFunc:
  * @a: a value
  * @b: a value to compare with
@@ -1157,7 +1170,7 @@
  * @G_MARKUP_COLLECT_OPTIONAL: can be bitwise ORed with the other fields. If present, allows the attribute not to appear. A default value is set depending on what value type is used
  *
  * A mixed enumerated type and flags field. You must specify one type
- * (string, strdup, boolean, tristate). Additionally, you may optionally
+ * (string, strdup, boolean, tristate).  Additionally, you may  optionally
  * bitwise OR the type with the flag %G_MARKUP_COLLECT_OPTIONAL.
  *
  * It is likely that this enum will be extended in the future to
@@ -2505,6 +2518,21 @@
  * G_DATE_BAD_YEAR:
  *
  * Represents an invalid year.
+ */
+
+
+/**
+ * G_DEFINE_QUARK:
+ * @QN: the name to return a #GQuark for
+ * @q_n: prefix for the function name
+ *
+ * A convenience macro which defines a function returning the
+ * #GQuark for the name @QN. The function will be named
+ * @q_n<!-- -->_quark().
+ * Note that the quark name will be stringified automatically in the
+ * macro, so you shouldn't use double quotes.
+ *
+ * Since: 2.34
  */
 
 
@@ -11613,6 +11641,32 @@
 
 
 /**
+ * g_datalist_id_dup_data:
+ * @datalist: location of a datalist
+ * @key_id: the #GQuark identifying a data element
+ * @dup_func: (allow-none): function to duplicate the old value
+ * @user_data: (allow-none): passed as user_data to @dup_func
+ *
+ * This is a variant of g_datalist_id_get_data() which
+ * returns a 'duplicate' of the value. @dup_func defines the
+ * meaning of 'duplicate' in this context, it could e.g.
+ * take a reference on a ref-counted object.
+ *
+ * If the @key_id is not set in the datalist then @dup_func
+ * will be called with a %NULL argument.
+ *
+ * Note that @dup_func is called while the datalist is locked, so it
+ * is not allowed to read or modify the datalist.
+ *
+ * This function can be useful to avoid races when multiple
+ * threads are using the same datalist and the same key.
+ *
+ * Returns: the result of calling @dup_func on the value associated with @key_id in @datalist, or %NULL if not set. If @dup_func is %NULL, the value is returned unmodified.
+ * Since: 2.34
+ */
+
+
+/**
  * g_datalist_id_get_data:
  * @datalist: a datalist.
  * @key_id: the #GQuark identifying a data element.
@@ -11641,6 +11695,36 @@
  * function.
  *
  * Returns: the data previously stored at @key_id, or %NULL if none.
+ */
+
+
+/**
+ * g_datalist_id_replace_data:
+ * @datalist: location of a datalist
+ * @key_id: the #GQuark identifying a data element
+ * @oldval: (allow-none): the old value to compare against
+ * @newval: (allow-none): the new value to replace it with
+ * @destroy: (allow-none): destroy notify for the new value
+ * @old_destroy: (allow-none): destroy notify for the existing value
+ *
+ * Compares the member that is associated with @key_id in
+ * @datalist to @oldval, and if they are the same, replace
+ * @oldval with @newval.
+ *
+ * This is like a typical atomic compare-and-exchange
+ * operation, for a member of @datalist.
+ *
+ * If the previous value was replaced then ownership of the
+ * old value (@oldval) is passed to the caller, including
+ * the registred destroy notify for it (passed out in @old_destroy).
+ * Its up to the caller to free this as he wishes, which may
+ * or may not include using @old_destroy as sometimes replacement
+ * should not destroy the object in the normal way.
+ *
+ * Return: %TRUE if the existing value for @key_id was replaced
+ *  by @newval, %FALSE otherwise.
+ *
+ * Since: 2.34
  */
 
 
@@ -15951,10 +16035,10 @@
  * g_intern_static_string:
  * @string: (allow-none): a static string
  *
- * Returns a canonical representation for @string. Interned strings can
- * be compared for equality by comparing the pointers, instead of using strcmp().
- * g_intern_static_string() does not copy the string, therefore @string must
- * not be freed or modified.
+ * Returns a canonical representation for @string. Interned strings
+ * can be compared for equality by comparing the pointers, instead of
+ * using strcmp(). g_intern_static_string() does not copy the string,
+ * therefore @string must not be freed or modified.
  *
  * Returns: a canonical representation for the string
  * Since: 2.10
@@ -15965,8 +16049,9 @@
  * g_intern_string:
  * @string: (allow-none): a string
  *
- * Returns a canonical representation for @string. Interned strings can
- * be compared for equality by comparing the pointers, instead of using strcmp().
+ * Returns a canonical representation for @string. Interned strings
+ * can be compared for equality by comparing the pointers, instead of
+ * using strcmp().
  *
  * Returns: a canonical representation for the string
  * Since: 2.10
@@ -18905,34 +18990,6 @@
 
 
 /**
- * g_markup_collect_known_attributes:
- * @element_name: the current tag name
- * @attribute_names: (array zero-terminated=1): the attribute names
- * @attribute_values: (array zero-terminated=1): the attribute values
- * @error: (allow-none): a pointer to a #GError or %NULL
- * @first_type: the #GMarkupCollectType of the first attribute
- * @first_attr: the name of the first attribute
- * @...: a pointer to the storage location of the first attribute (or %NULL), followed by more types names and pointers, ending with %G_MARKUP_COLLECT_INVALID
- *
- * Collects the attributes of the element from the data passed to the
- * #GMarkupParser start_element function, dealing with common error
- * conditions and supporting boolean values.
- *
- * This is a more relaxed version of g_markup_collect_attributes(), which
- * ignores attributes found in @attribute_names but not listed in @first_attr
- * or @...; by comparison g_markup_collect_attributes() will return
- * %G_MARKUP_ERROR_UNKNOWN_ATTRIBUTE instead. Otherwise, this function behaves
- * identically.
- *
- * This is intended for situations where the markup being parsed may use
- * extensions in other namespaces and thus contain extra, unknown, attributes.
- *
- * Returns: %TRUE if successful
- * Since: 2.34
- */
-
-
-/**
  * g_markup_escape_text:
  * @text: some valid UTF-8 text
  * @length: length of @text in bytes, or -1 if the text is nul-terminated
@@ -19805,7 +19862,7 @@
  * This function is useful to initialize a mutex that has been
  * allocated on the stack, or as part of a larger structure.
  * It is not necessary to initialize a mutex that has been
- * created that has been statically allocated.
+ * statically allocated.
  *
  * |[
  *   typedef struct {
@@ -21504,7 +21561,7 @@
  *
  * Gets the string associated with the given #GQuark.
  *
- * Returns: the string associated with the #GQuark.
+ * Returns: the string associated with the #GQuark
  */
 
 
@@ -27011,6 +27068,20 @@
 
 
 /**
+ * g_test_add_data_func_full:
+ * @testpath: /-separated test case path name for the test.
+ * @test_data: Test data argument for the test function.
+ * @test_func: The test function to invoke for this test.
+ * @data_free_func: #GDestroyNotify for @test_data.
+ *
+ * Create a new test case, as with g_test_add_data_func(), but freeing
+ * @test_data after the test run is complete.
+ *
+ * Since: 2.34
+ */
+
+
+/**
  * g_test_add_func:
  * @testpath: /-separated test case path name for the test.
  * @test_func: The test function to invoke for this test.
@@ -27021,6 +27092,16 @@
  * slash-separated portions of @testpath.
  *
  * Since: 2.16
+ */
+
+
+/**
+ * g_test_assert_expected_messages:
+ *
+ * Asserts that all messages previously indicated via
+ * g_test_expect_message() have been seen and suppressed.
+ *
+ * Since: 2.34
  */
 
 
@@ -27094,6 +27175,45 @@
  *
  * Returns: A newly allocated #GTestSuite instance.
  * Since: 2.16
+ */
+
+
+/**
+ * g_test_expect_message:
+ * @log_domain: the log domain of the message
+ * @log_level: the log level of the message
+ * @pattern: a glob-style <link linkend="glib-Glob-style-pattern-matching">pattern</link>
+ *
+ * Indicates that a message with the given @log_domain and @log_level,
+ * with text matching @pattern, is expected to be logged. When this
+ * message is logged, it will not be printed, and the test case will
+ * not abort.
+ *
+ * Use g_test_assert_expected_messages() to assert that all
+ * previously-expected messages have been seen and suppressed.
+ *
+ * You can call this multiple times in a row, if multiple messages are
+ * expected as a result of a single call. (The messages must appear in
+ * the same order as the calls to g_test_expect_message().)
+ *
+ * For example:
+ *
+ * |[
+ *   /&ast; g_main_context_push_thread_default() should fail if the
+ *    &ast; context is already owned by another thread.
+ *    &ast;/
+ *   g_test_expect_message (G_LOG_DOMAIN,
+ *                          G_LOG_LEVEL_CRITICIAL,
+ *                          "assertion.*acquired_context.*failed");
+ *   g_main_context_push_thread_default (bad_context);
+ *   g_test_assert_expected_messages ();
+ * ]|
+ *
+ * Note that you cannot use this to test g_error() messages, since
+ * g_error() intentionally never returns even if the program doesn't
+ * abort; use g_test_trap_fork() in this case.
+ *
+ * Since: 2.34
  */
 
 
@@ -30556,6 +30676,32 @@
  *
  * Returns: (transfer full): the byteswapped form of @value
  * Since: 2.24
+ */
+
+
+/**
+ * g_variant_check_format_string:
+ * @value: a #GVariant
+ * @format_string: a valid #GVariant format string
+ * @copy_only: %TRUE to ensure the format string makes deep copies
+ *
+ * Checks if calling g_variant_get() with @format_string on @value would
+ * be valid from a type-compatibility standpoint.  @format_string is
+ * assumed to be a valid format string (from a syntactic standpoint).
+ *
+ * If @copy_only is %TRUE then this function additionally checks that it
+ * would be safe to call g_variant_unref() on @value immediately after
+ * the call to g_variant_get() without invalidating the result.  This is
+ * only possible if deep copies are made (ie: there are no pointers to
+ * the data inside of the soon-to-be-freed #GVariant instance).  If this
+ * check fails then a g_critical() is printed and %FALSE is returned.
+ *
+ * This function is meant to be used by functions that wish to provide
+ * varargs accessors to #GVariant values of uncertain values (eg:
+ * g_variant_lookup() or g_menu_model_get_item_attribute()).
+ *
+ * Returns: %TRUE if @format_string is safe to use
+ * Since: 2.34
  */
 
 
