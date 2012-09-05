@@ -83,6 +83,9 @@ GLib_2_0_gir_FILES =  \
 		$(GLIB_INCLUDEDIR)/glib/*.h \
 		$(GLIB_INCLUDEDIR)/gobject/glib-types.h \
                 gir/glib-2.0.c
+if HAVE_GIO_UNIX
+GLib_2_0_gir_FILES += $(GLIB_INCLUDEDIR)/glib-unix.h
+endif
 
 BUILT_GIRSOURCES += GLib-2.0.gir
 
