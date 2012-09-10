@@ -2945,6 +2945,16 @@ gi_marshalling_tests_gvalue_in (GValue *value)
 }
 
 /**
+ * gi_marshalling_tests_gvalue_int64_in:
+ * @value: (transfer none):
+ */
+void
+gi_marshalling_tests_gvalue_int64_in (GValue *value)
+{
+    g_assert_cmpint(g_value_get_int64(value), ==, G_MAXINT64);
+}
+
+/**
  * gi_marshalling_tests_gvalue_in_with_type:
  * @value: (transfer none):
  * @type:
@@ -2978,6 +2988,24 @@ gi_marshalling_tests_gvalue_out (GValue **value)
         new_value = g_new0(GValue, 1);
         g_value_init(new_value, G_TYPE_INT);
         g_value_set_int(new_value, 42);
+    }
+
+    *value = new_value;
+}
+
+/**
+ * gi_marshalling_tests_gvalue_int64_out:
+ * @value: (out) (transfer none):
+ */
+void
+gi_marshalling_tests_gvalue_int64_out (GValue **value)
+{
+    static GValue *new_value = NULL;
+
+    if (new_value == NULL) {
+        new_value = g_new0(GValue, 1);
+        g_value_init(new_value, G_TYPE_INT64);
+        g_value_set_int64(new_value, G_MAXINT64);
     }
 
     *value = new_value;
