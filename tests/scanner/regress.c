@@ -2132,6 +2132,8 @@ enum {
   REGRESS_TEST_OBJ_SIGNAL_FIRST,
   REGRESS_TEST_OBJ_SIGNAL_CLEANUP,
   REGRESS_TEST_OBJ_SIGNAL_ALL,
+  REGRESS_TEST_OBJ_SIGNAL_SIG_WITH_INT64_PROP,
+  REGRESS_TEST_OBJ_SIGNAL_SIG_WITH_UINT64_PROP,
   N_REGRESS_TEST_OBJ_SIGNALS
 };
 
@@ -2297,6 +2299,46 @@ regress_test_obj_class_init (RegressTestObjClass *klass)
 		  g_cclosure_marshal_VOID__VOID,
 		  G_TYPE_NONE,
                   0);
+
+  /**
+   * RegressTestObj::sig-with-int64-prop:
+   * @self: an object
+   * @i: an integer
+   *
+   * You can use this with regress_test_obj_emit_sig_with_int64, or raise from
+   * the introspection client langage.
+   */
+  regress_test_obj_signals[REGRESS_TEST_OBJ_SIGNAL_SIG_WITH_INT64_PROP] =
+    g_signal_new ("sig-with-int64-prop",
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  0,
+		  NULL,
+		  NULL,
+		  g_cclosure_marshal_VOID__BOXED,
+		  G_TYPE_INT64,
+		  1,
+		  G_TYPE_INT64);
+
+  /**
+   * RegressTestObj::sig-with-uint64-prop:
+   * @self: an object
+   * @i: an integer
+   *
+   * You can use this with regress_test_obj_emit_sig_with_uint64, or raise from
+   * the introspection client langage.
+   */
+  regress_test_obj_signals[REGRESS_TEST_OBJ_SIGNAL_SIG_WITH_UINT64_PROP] =
+    g_signal_new ("sig-with-uint64-prop",
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  0,
+		  NULL,
+		  NULL,
+		  g_cclosure_marshal_VOID__BOXED,
+		  G_TYPE_UINT64,
+		  1,
+		  G_TYPE_UINT64);
 
   gobject_class->set_property = regress_test_obj_set_property;
   gobject_class->get_property = regress_test_obj_get_property;
@@ -2517,6 +2559,26 @@ regress_test_obj_emit_sig_with_foreign_struct (RegressTestObj *obj)
   cairo_t *cr = regress_test_cairo_context_full_return ();
   g_signal_emit_by_name (obj, "sig-with-foreign-struct", cr);
   cairo_destroy (cr);
+}
+
+void
+regress_test_obj_emit_sig_with_int64 (RegressTestObj *obj)
+{
+  gint64 ret = 0;
+  RegressTestObj *obj_param = regress_constructor ();
+  g_signal_emit_by_name (obj, "sig-with-int64-prop", G_MAXINT64, &ret);
+  g_object_unref (obj_param);
+  g_assert (ret == G_MAXINT64);
+}
+
+void
+regress_test_obj_emit_sig_with_uint64 (RegressTestObj *obj)
+{
+  guint64 ret = 0;
+  RegressTestObj *obj_param = regress_constructor ();
+  g_signal_emit_by_name (obj, "sig-with-uint64-prop", G_MAXUINT64, &ret);
+  g_object_unref (obj_param);
+  g_assert (ret == G_MAXUINT64);
 }
 
 int

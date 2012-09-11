@@ -742,8 +742,20 @@ case.</doc>
           <type name="none" c:type="void"/>
         </return-value>
       </method>
+      <method name="emit_sig_with_int64"
+              c:identifier="regress_test_obj_emit_sig_with_int64">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+      </method>
       <method name="emit_sig_with_obj"
               c:identifier="regress_test_obj_emit_sig_with_obj">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+      </method>
+      <method name="emit_sig_with_uint64"
+              c:identifier="regress_test_obj_emit_sig_with_uint64">
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -1206,6 +1218,19 @@ raise an error.</doc>
           </parameter>
         </parameters>
       </glib:signal>
+      <glib:signal name="sig-with-int64-prop" when="last">
+        <doc xml:whitespace="preserve">You can use this with regress_test_obj_emit_sig_with_int64, or raise from
+the introspection client langage.</doc>
+        <return-value transfer-ownership="none">
+          <type name="gint64"/>
+        </return-value>
+        <parameters>
+          <parameter name="i" transfer-ownership="none">
+            <doc xml:whitespace="preserve">an integer</doc>
+            <type name="gint64"/>
+          </parameter>
+        </parameters>
+      </glib:signal>
       <glib:signal name="sig-with-obj" when="last">
         <doc xml:whitespace="preserve">Test transfer none GObject as a param (tests refcounting).
 Use with regress_test_obj_emit_sig_with_obj</doc>
@@ -1230,6 +1255,19 @@ Use with regress_test_obj_emit_sig_with_obj</doc>
             <array>
               <type name="utf8"/>
             </array>
+          </parameter>
+        </parameters>
+      </glib:signal>
+      <glib:signal name="sig-with-uint64-prop" when="last">
+        <doc xml:whitespace="preserve">You can use this with regress_test_obj_emit_sig_with_uint64, or raise from
+the introspection client langage.</doc>
+        <return-value transfer-ownership="none">
+          <type name="guint64"/>
+        </return-value>
+        <parameters>
+          <parameter name="i" transfer-ownership="none">
+            <doc xml:whitespace="preserve">an integer</doc>
+            <type name="guint64"/>
           </parameter>
         </parameters>
       </glib:signal>

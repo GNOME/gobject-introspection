@@ -479,6 +479,8 @@ RegressTestObj*   regress_test_obj_new_from_file (const char *x, GError **error)
 void       regress_test_obj_set_bare (RegressTestObj *obj, GObject *bare);
 void       regress_test_obj_emit_sig_with_obj (RegressTestObj *obj);
 void       regress_test_obj_emit_sig_with_foreign_struct (RegressTestObj *obj);
+void       regress_test_obj_emit_sig_with_int64 (RegressTestObj *obj);
+void       regress_test_obj_emit_sig_with_uint64 (RegressTestObj *obj);
 int        regress_test_obj_instance_method (RegressTestObj *obj);
 double     regress_test_obj_static_method (int x);
 void       regress_forced_method (RegressTestObj *obj);
