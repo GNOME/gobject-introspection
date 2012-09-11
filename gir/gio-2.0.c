@@ -12635,7 +12635,7 @@
 /**
  * g_dbus_connection_call_sync:
  * @connection: A #GDBusConnection.
- * @bus_name: A unique or well-known bus name.
+ * @bus_name: (allow-none): A unique or well-known bus name or %NULL if @connection is not a message bus connection.
  * @object_path: Path of remote object.
  * @interface_name: D-Bus interface to invoke method on.
  * @method_name: The name of the method to invoke.
@@ -12729,7 +12729,7 @@
 /**
  * g_dbus_connection_call_with_unix_fd_list_sync:
  * @connection: A #GDBusConnection.
- * @bus_name: A unique or well-known bus name.
+ * @bus_name: (allow-none): A unique or well-known bus name or %NULL if @connection is not a message bus connection.
  * @object_path: Path of remote object.
  * @interface_name: D-Bus interface to invoke method on.
  * @method_name: The name of the method to invoke.
