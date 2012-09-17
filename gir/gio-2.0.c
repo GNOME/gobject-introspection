@@ -11432,6 +11432,20 @@
 
 
 /**
+ * g_content_type_get_generic_icon_name:
+ * @type: a content type string
+ *
+ * Gets the generic icon name for a content type.
+ *
+ * See the <ulink url="http://www.freedesktop.org/wiki/Specifications/shared-mime-info-spec">shared-mime-info</ulink>
+ * specification for more on the generic icon name.
+ *
+ * Returns: (allow-none): the registered generic icon name for the given @type, or %NULL if unknown. Free with g_free()
+ * Since: 2.34
+ */
+
+
+/**
  * g_content_type_get_icon:
  * @type: a content type string
  *
