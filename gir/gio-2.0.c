@@ -3460,6 +3460,19 @@
  * applications this is the always the current instance.
  * On Linux, the D-Bus session bus is used for communication.
  *
+ * The use of #GApplication differs from some other commonly-used
+ * uniqueness libraries (such as libunique) in important ways.  The
+ * application is not expected to manually register itself and check if
+ * it is the primary instance.  Instead, the <code>main()</code>
+ * function of a #GApplication should do very little more than
+ * instantiating the application instance, possibly connecting signal
+ * handlers, then calling g_application_run().  All checks for
+ * uniqueness are done internally.  If the application is the primary
+ * instance then the startup signal is emitted and the mainloop runs.
+ * If the application is not the primary instance then a signal is sent
+ * to the primary instance and g_application_run() promptly returns.
+ * See the code examples below.
+ *
  * If used, the expected form of an application identifier is very close
  * to that of of a
  * <ulink url="http://dbus.freedesktop.org/doc/dbus-specification.html#message-protocol-names-interface">DBus bus name</ulink>.
@@ -10532,23 +10545,23 @@
 
 /**
  * g_async_result_is_tagged:
- * @result: a #GAsyncResult
+ * @res: a #GAsyncResult
  * @source_tag: an application-defined tag
  *
- * Checks if @result has the given @source_tag (generally a function
- * pointer indicating the function @result was created by).
+ * Checks if @res has the given @source_tag (generally a function
+ * pointer indicating the function @res was created by).
  *
- * Returns: %TRUE if @result has the indicated @source_tag, %FALSE if not.
+ * Returns: %TRUE if @res has the indicated @source_tag, %FALSE if not.
  * Since: 2.34
  */
 
 
 /**
  * g_async_result_legacy_propagate_error:
- * @result: a #GAsyncResult
- * @dest: (out): a location to propagate the error to.
+ * @res: a #GAsyncResult
+ * @error: (out): a location to propagate the error to.
  *
- * If @result is a #GSimpleAsyncResult, this is equivalent to
+ * If @res is a #GSimpleAsyncResult, this is equivalent to
  * g_simple_async_result_propagate_error(). Otherwise it returns
  * %FALSE.
  *
@@ -16511,11 +16524,11 @@
 
 /**
  * g_desktop_app_info_get_startup_wm_class:
- * @app_info: a #GDesktopAppInfo that supports startup notify
+ * @info: a #GDesktopAppInfo that supports startup notify
  *
- * Retrieves the StartupWMClass field from @app_info. This represents the
- * WM_CLASS property of the main window of the application, if launched through
- * @app_info.
+ * Retrieves the StartupWMClass field from @info. This represents the
+ * WM_CLASS property of the main window of the application, if launched
+ * through @info.
  *
  * Returns: (transfer none): the startup WM class, or %NULL if none is set in the desktop file.
  * Since: 2.34
@@ -17618,7 +17631,7 @@
 /**
  * g_file_delete_finish:
  * @file: input #GFile
- * @res: a #GAsyncResult
+ * @result: a #GAsyncResult
  * @error: a #GError, or %NULL
  *
  * Finishes deleting a file started with g_file_delete_async().
@@ -30333,7 +30346,7 @@
  * g_test_dbus_get_flags:
  * @self: a #GTestDBus
  *
- *
+ * Gets the flags of the #GTestDBus object.
  *
  * Returns: the value of #GTestDBus:flags property
  */
@@ -32395,6 +32408,7 @@
 
 /**
  * g_unix_mount_point_guess_symbolic_icon:
+ * @mount_point: a #GUnixMountPoint
  *
  * Guesses the symbolic icon of a Unix mount point.
  *
