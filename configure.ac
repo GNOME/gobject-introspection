@@ -231,7 +231,13 @@ GIREPO_CFLAGS="$GIREPO_CFLAGS $FFI_CFLAGS"
 GIREPO_CFLAGS="$GIREPO_CFLAGS $GCOV_CFLAGS"
 
 # gtk-doc
-GTK_DOC_CHECK([1.15],[--flavour no-tmpl])
+# gtkdocize greps for ^GTK_DOC_CHECK and parses it, so you need to have
+# it on it's own line.
+m4_ifdef([GTK_DOC_CHECK], [
+GTK_DOC_CHECK([1.15], [--flavour no-tmpl])
+],[
+AM_CONDITIONAL([ENABLE_GTK_DOC],[false])
+])
 
 # Checks for header files.
 AC_HEADER_STDC
