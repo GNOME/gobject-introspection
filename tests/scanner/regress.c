@@ -3324,6 +3324,20 @@ regress_test_callback_destroy_notify (RegressTestCallbackUserData callback,
 }
 
 /**
+ * regress_test_callback_destroy_notify_no_user_data:
+ * @callback: (scope notified):
+ *
+ * Adds a scope notified callback with no user data. This can invoke an error
+ * condition in bindings which needs to be tested.
+ **/
+int
+regress_test_callback_destroy_notify_no_user_data (RegressTestCallbackUserData callback,
+                              GDestroyNotify notify)
+{
+  return regress_test_callback_destroy_notify(callback, NULL, notify);
+}
+
+/**
  * regress_test_callback_thaw_notifications:
  *
  * Invokes all callbacks installed by #test_callback_destroy_notify(),

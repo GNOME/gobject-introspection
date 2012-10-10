@@ -677,6 +677,8 @@ int regress_test_callback_user_data (RegressTestCallbackUserData callback,
 int regress_test_callback_destroy_notify (RegressTestCallbackUserData callback,
                                   gpointer user_data,
                                   GDestroyNotify notify);
+int regress_test_callback_destroy_notify_no_user_data (RegressTestCallbackUserData callback,
+                                  GDestroyNotify notify);
 int regress_test_callback_thaw_notifications (void);
 
 void regress_test_callback_async (RegressTestCallbackUserData callback, gpointer user_data);
