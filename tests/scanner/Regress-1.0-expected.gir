@@ -2307,6 +2307,26 @@ is invoked.</doc>
         </parameter>
       </parameters>
     </function>
+    <function name="test_callback_destroy_notify_no_user_data"
+              c:identifier="regress_test_callback_destroy_notify_no_user_data">
+      <doc xml:whitespace="preserve">Adds a scope notified callback with no user data. This can invoke an error
+condition in bindings which needs to be tested.</doc>
+      <return-value transfer-ownership="none">
+        <type name="gint" c:type="int"/>
+      </return-value>
+      <parameters>
+        <parameter name="callback"
+                   transfer-ownership="none"
+                   scope="notified"
+                   destroy="1">
+          <type name="TestCallbackUserData"
+                c:type="RegressTestCallbackUserData"/>
+        </parameter>
+        <parameter name="notify" transfer-ownership="none" scope="async">
+          <type name="GLib.DestroyNotify" c:type="GDestroyNotify"/>
+        </parameter>
+      </parameters>
+    </function>
     <function name="test_callback_thaw_async"
               c:identifier="regress_test_callback_thaw_async">
       <return-value transfer-ownership="none">
