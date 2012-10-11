@@ -422,11 +422,13 @@ GVariant **gi_marshalling_tests_array_gvariant_full_in (GVariant **variants);
 /* GArray */
 
 GArray *gi_marshalling_tests_garray_int_none_return (void);
+GArray *gi_marshalling_tests_garray_uint64_none_return (void);
 GArray *gi_marshalling_tests_garray_utf8_none_return (void);
 GArray *gi_marshalling_tests_garray_utf8_container_return (void);
 GArray *gi_marshalling_tests_garray_utf8_full_return (void);
 
 void gi_marshalling_tests_garray_int_none_in (GArray *array_);
+void gi_marshalling_tests_garray_uint64_none_in (GArray *array_);
 void gi_marshalling_tests_garray_utf8_none_in (GArray *array_);
 
 void gi_marshalling_tests_garray_utf8_none_out (GArray **array_);
@@ -467,11 +469,13 @@ void gi_marshalling_tests_gstrv_inout (GStrv *g_strv);
 /* GList */
 
 GList *gi_marshalling_tests_glist_int_none_return (void);
+GList *gi_marshalling_tests_glist_uint32_none_return (void);
 GList *gi_marshalling_tests_glist_utf8_none_return (void);
 GList *gi_marshalling_tests_glist_utf8_container_return (void);
 GList *gi_marshalling_tests_glist_utf8_full_return (void);
 
 void gi_marshalling_tests_glist_int_none_in (GList *list);
+void gi_marshalling_tests_glist_uint32_none_in (GList *list);
 void gi_marshalling_tests_glist_utf8_none_in (GList *list);
 
 void gi_marshalling_tests_glist_utf8_none_out (GList **list);

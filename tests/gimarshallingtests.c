@@ -1729,6 +1729,28 @@ gi_marshalling_tests_garray_int_none_return (void)
 }
 
 /**
+ * gi_marshalling_tests_garray_uint64_none_return:
+ *
+ * Returns: (element-type guint64) (transfer none):
+ */
+GArray *
+gi_marshalling_tests_garray_uint64_none_return (void)
+{
+    static GArray *array = NULL;
+    guint64 i;
+
+    if (array == NULL) {
+        array = g_array_new (TRUE, TRUE, sizeof (guint64));
+        i = 0;
+        g_array_append_val (array, i);
+        i = G_MAXUINT64;
+        g_array_append_val (array, i);
+    }
+
+    return array;
+}
+
+/**
  * gi_marshalling_tests_garray_utf8_none_return:
  *
  * Returns: (element-type utf8) (transfer none):
@@ -1801,6 +1823,18 @@ gi_marshalling_tests_garray_int_none_in (GArray *array_)
     g_assert_cmpint(g_array_index (array_, gint, 1), ==, 0);
     g_assert_cmpint(g_array_index (array_, gint, 2), ==, 1);
     g_assert_cmpint(g_array_index (array_, gint, 3), ==, 2);
+}
+
+/**
+ * gi_marshalling_tests_garray_uint64_none_in:
+ * @array_: (element-type guint64) (transfer none):
+ */
+void
+gi_marshalling_tests_garray_uint64_none_in (GArray *array_)
+{
+    g_assert_cmpint(array_->len, ==, 2);
+    g_assert_cmpint(g_array_index (array_, guint64, 0), ==, 0);
+    g_assert_cmpint(g_array_index (array_, guint64, 1), ==, G_MAXUINT64);
 }
 
 /**
@@ -2276,6 +2310,24 @@ gi_marshalling_tests_glist_int_none_return (void)
 }
 
 /**
+ * gi_marshalling_tests_glist_uint32_none_return:
+ *
+ * Returns: (element-type guint32) (transfer none):
+ */
+GList *
+gi_marshalling_tests_glist_uint32_none_return (void)
+{
+    static GList *list = NULL;
+
+    if (list == NULL) {
+        list = g_list_append(list, GUINT_TO_POINTER(0));
+        list = g_list_append(list, GUINT_TO_POINTER(G_MAXUINT32));
+    }
+
+    return list;
+}
+
+/**
  * gi_marshalling_tests_glist_utf8_none_return:
  *
  * Returns: (element-type utf8) (transfer none):
@@ -2340,6 +2392,18 @@ gi_marshalling_tests_glist_int_none_in (GList *list)
     g_assert_cmpint(GPOINTER_TO_INT(g_list_nth_data(list, 1)), ==, 0);
     g_assert_cmpint(GPOINTER_TO_INT(g_list_nth_data(list, 2)), ==, 1);
     g_assert_cmpint(GPOINTER_TO_INT(g_list_nth_data(list, 3)), ==, 2);
+}
+
+/**
+ * gi_marshalling_tests_glist_uint32_none_in:
+ * @list: (element-type guint32) (transfer none):
+ */
+void
+gi_marshalling_tests_glist_uint32_none_in (GList *list)
+{
+    g_assert_cmpint(g_list_length(list), ==, 2);
+    g_assert_cmpint(GPOINTER_TO_UINT(g_list_nth_data(list, 0)), ==, 0);
+    g_assert_cmpint(GPOINTER_TO_UINT(g_list_nth_data(list, 1)), ==, G_MAXUINT32);
 }
 
 /**
