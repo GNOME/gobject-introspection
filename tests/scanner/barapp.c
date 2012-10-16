@@ -54,7 +54,6 @@ main(int argc, char **argv)
       g_printerr ("usage: barapp --introspect-dump=types.txt,out.xml\\n");
       return 1;
     }
-  g_type_init ();
 
   if (!g_irepository_dump (argv[1] + strlen (prefix), &error))
     {

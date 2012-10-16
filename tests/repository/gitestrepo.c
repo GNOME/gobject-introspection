@@ -48,8 +48,6 @@ main(int argc, char **argv)
   GType gtype;
   const char *prefix;
 
-  g_type_init ();
-
   repo = g_irepository_get_default ();
 
   ret = g_irepository_require (repo, "Gio", NULL, 0, &error);

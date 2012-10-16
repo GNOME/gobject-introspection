@@ -183,8 +183,6 @@ main(int argc, char **argv)
 {
     GIRepository *repo;
 
-    g_type_init ();
-
     repo = g_irepository_get_default ();
 
     /* do tests */

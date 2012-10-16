@@ -8,8 +8,6 @@ int main(void)
     GIArgument in_args[5];
     GIArgument retval;
 
-    g_type_init();
-
     repository = g_irepository_get_default();
     g_irepository_require(repository, "GLib", "2.0", 0, &error);
     if (error) {

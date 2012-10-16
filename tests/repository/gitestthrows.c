@@ -16,8 +16,6 @@ main(int argc, char **argv)
   GError *error;
   gboolean invoke_return;
 
-  g_type_init ();
-
   repo = g_irepository_get_default ();
 
   error = NULL;

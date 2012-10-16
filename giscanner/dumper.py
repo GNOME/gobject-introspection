@@ -45,7 +45,9 @@ main(int argc, char **argv)
   GError *error = NULL;
   const char *introspect_dump_prefix = "--introspect-dump=";
 
+#if !GLIB_CHECK_VERSION(2,35,0)
   g_type_init ();
+#endif
 
   %(init_sections)s
 

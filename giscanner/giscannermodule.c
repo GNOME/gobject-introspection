@@ -722,8 +722,6 @@ init_giscanner(void)
     PyObject *m, *d;
     gboolean is_uninstalled;
 
-    g_type_init ();
-
     /* Hack to avoid having to create a fake directory structure; when
      * running uninstalled, the module will be in the top builddir,
      * with no _giscanner prefix.
