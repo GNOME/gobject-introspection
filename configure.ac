@@ -5,7 +5,9 @@ dnl the gi version number
 m4_define(gi_major_version, 1)
 m4_define(gi_minor_version, 34)
 m4_define(gi_micro_version, 1)
-m4_define(gi_version, gi_major_version.gi_minor_version.gi_micro_version)
+dnl If set, leave this empty after bumping gi_micro_version
+m4_define(gi_oops_version, 1)
+m4_define(gi_version, [gi_major_version.gi_minor_version.gi_micro_version]m4_ifval(gi_oops_version, .gi_oops_version))
 
 AC_PREREQ([2.63])
 AC_INIT([gobject-introspection],
