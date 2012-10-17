@@ -328,8 +328,6 @@
  *   GValue b = G_VALUE_INIT;
  *   const gchar *message;
  *
- *   g_type_init ();
- *
  *   /&ast; The GValue starts empty &ast;/
  *   g_assert (!G_VALUE_HOLDS_STRING (&amp;a));
  *
@@ -391,9 +389,7 @@
  *
  * The GType API is the foundation of the GObject system.  It provides the
  * facilities for registering and managing all fundamental data types,
- * user-defined object and interface types.  Before using any GType
- * or GObject functions, g_type_init() must be called to initialize the
- * type system.
+ * user-defined object and interface types.
  *
  * For type creation and registration purposes, all types fall into one of
  * two categories: static or dynamic.  Static types are never loaded or
@@ -3591,24 +3587,10 @@
  * ensures that the @gobject stays alive during the call to @c_handler
  * by temporarily adding a reference count to @gobject.
  *
- * Note that there is a bug in GObject that makes this function
- * much less useful than it might seem otherwise. Once @gobject is
- * disposed, the callback will no longer be called, but, the signal
- * handler is <emphasis>not</emphasis> currently disconnected. If the
- * @instance is itself being freed at the same time than this doesn't
- * matter, since the signal will automatically be removed, but
- * if @instance persists, then the signal handler will leak. You
- * should not remove the signal yourself because in a future versions of
- * GObject, the handler <emphasis>will</emphasis> automatically
- * be disconnected.
- *
- * It's possible to work around this problem in a way that will
- * continue to work with future versions of GObject by checking
- * that the signal handler is still connected before disconnected it:
- * <informalexample><programlisting>
- *  if (g_signal_handler_is_connected (instance, id))
- *    g_signal_handler_disconnect (instance, id);
- * </programlisting></informalexample>
+ * When the object is destroyed the signal handler will be automatically
+ * disconnected.  Note that this is not currently threadsafe (ie:
+ * emitting a signal while @gobject is being destroyed in another thread
+ * is not safe).
  *
  * Returns: the handler id.
  */
@@ -4594,17 +4576,11 @@
 /**
  * g_type_init:
  *
- * Prior to any use of the type system, g_type_init() has to be called
- * to initialize the type system and assorted other code portions
- * (such as the various fundamental type implementations or the signal
- * system).
+ * This function used to initialise the type system.  Since GLib 2.36,
+ * the type system is initialised automatically and this function does
+ * nothing.
  *
- * This function is idempotent: If you call it multiple times, all but
- * the first calls will be silently ignored.
- *
- * There is no way to undo the effect of g_type_init().
- *
- * Since version 2.24 this also initializes the thread system
+ * Deprecated: 2.36: the type system is now initialised automatically
  */
 
 
@@ -4612,9 +4588,14 @@
  * g_type_init_with_debug_flags:
  * @debug_flags: Bitwise combination of #GTypeDebugFlags values for debugging purposes.
  *
- * Similar to g_type_init(), but additionally sets debug flags.
+ * This function used to initialise the type system with debugging
+ * flags.  Since GLib 2.36, the type system is initialised automatically
+ * and this function does nothing.
  *
- * This function is idempotent.
+ * If you need to enable debugging features, use the GOBJECT_DEBUG
+ * environment variable.
+ *
+ * Deprecated: 2.36: the type system is now initialised automatically
  */
 
 

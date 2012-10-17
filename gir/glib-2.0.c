@@ -6434,50 +6434,14 @@
  *
  * To destroy a #GHashTable use g_hash_table_destroy().
  *
- * <example>
- * <title>Using a GHashTable as a set</title>
- * <para>
- * A common use-case for hash tables is to store information about
- * a set of keys, without associating any particular value with each
+ * A common use-case for hash tables is to store information about a
+ * set of keys, without associating any particular value with each
  * key. GHashTable optimizes one way of doing so: If you store only
  * key-value pairs where key == value, then GHashTable does not
  * allocate memory to store the values, which can be a considerable
- * space saving, if your set is large.
- * </para>
- * <programlisting>
- * GHashTable *
- * set_new (GHashFunc      hash_func,
- *          GEqualFunc     equal_func,
- *          GDestroyNotify destroy)
- * {
- *   return g_hash_table_new_full (hash_func, equal_func, destroy, NULL);
- * }
- *
- * void
- * set_add (GHashTable *set,
- *          gpointer    element)
- * {
- *   g_hash_table_replace (set, element, element);
- * }
- *
- * gboolean
- * set_contains (GHashTable *set,
- *               gpointer    element)
- * {
- *   return g_hash_table_lookup_extended (set, element, NULL, NULL);
- * }
- *
- * gboolean
- * set_remove (GHashTable *set,
- *             gpointer    element)
- * {
- *   return g_hash_table_remove (set, element);
- * }
- * </programlisting>
- * </example>
- *
- * As of version 2.32, there is also a g_hash_table_add() function to
- * add a key to a #GHashTable that is being used as a set.
+ * space saving, if your set is large. The functions
+ * g_hash_table_add() and g_hash_table_contains() are designed to be
+ * used when using #GHashTable this way.
  */
 
 
@@ -25975,7 +25939,7 @@
  * gracefully by sorting it before non-%NULL strings.
  * Comparing two %NULL pointers returns 0.
  *
- * Returns: -1, 0 or 1, if @str1 is <, == or > than @str2.
+ * Returns: an integer less than, equal to, or greater than zero, if @str1 is <, == or > than @str2.
  * Since: 2.16
  */
 
