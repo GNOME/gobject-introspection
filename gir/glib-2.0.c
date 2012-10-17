@@ -25975,7 +25975,7 @@
  * gracefully by sorting it before non-%NULL strings.
  * Comparing two %NULL pointers returns 0.
  *
- * Returns: -1, 0 or 1, if @str1 is <, == or > than @str2.
+ * Returns: an integer less than, equal to, or greater than zero, if @str1 is <, == or > than @str2.
  * Since: 2.16
  */
 
