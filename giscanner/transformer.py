@@ -151,11 +151,15 @@ namespaces."""
         if '.' not in name:
             return self._namespace.get(name)
         else:
-            (ns, name) = name.split('.', 1)
+            (ns, giname) = name.split('.', 1)
             if ns == self._namespace.name:
-                return self._namespace.get(name)
+                return self._namespace.get(giname)
+            if ns in self._namespace.identifier_prefixes:
+                message.warn(("Deprecated reference to identifier " +
+                              "prefix %s in GIName %s") % (ns, name))
+                return self._namespace.get(giname)
             include = self._includes[ns]
-            return include.get(name)
+            return include.get(giname)
 
     def lookup_typenode(self, typeobj):
         """Given a Type object, if it points to a giname,
