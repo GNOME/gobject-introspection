@@ -154,7 +154,8 @@ namespaces."""
             (ns, giname) = name.split('.', 1)
             if ns == self._namespace.name:
                 return self._namespace.get(giname)
-            if ns in self._namespace.identifier_prefixes:
+            # Fallback to the main namespace if not a dependency and matches a prefix
+            if ns in self._namespace.identifier_prefixes and not ns in self._includes:
                 message.warn(("Deprecated reference to identifier " +
                               "prefix %s in GIName %s") % (ns, name))
                 return self._namespace.get(giname)
