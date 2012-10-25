@@ -13023,7 +13023,7 @@
  *
  * Looks up the value of an annotation.
  *
- * This cost of this function is O(n) in number of annotations.
+ * The cost of this function is O(n) in number of annotations.
  *
  * Returns: The value or %NULL if not found. Do not free, it is owned by @annotations.
  * Since: 2.26
@@ -14573,7 +14573,7 @@
  *
  * Looks up information about a method.
  *
- * This cost of this function is O(n) in number of methods unless
+ * The cost of this function is O(n) in number of methods unless
  * g_dbus_interface_info_cache_build() has been used on @info.
  *
  * Returns: (transfer none): A #GDBusMethodInfo or %NULL if not found. Do not free, it is owned by @info.
@@ -14588,7 +14588,7 @@
  *
  * Looks up information about a property.
  *
- * This cost of this function is O(n) in number of properties unless
+ * The cost of this function is O(n) in number of properties unless
  * g_dbus_interface_info_cache_build() has been used on @info.
  *
  * Returns: (transfer none): A #GDBusPropertyInfo or %NULL if not found. Do not free, it is owned by @info.
@@ -14603,7 +14603,7 @@
  *
  * Looks up information about a signal.
  *
- * This cost of this function is O(n) in number of signals unless
+ * The cost of this function is O(n) in number of signals unless
  * g_dbus_interface_info_cache_build() has been used on @info.
  *
  * Returns: (transfer none): A #GDBusSignalInfo or %NULL if not found. Do not free, it is owned by @info.
@@ -15833,7 +15833,7 @@
  *
  * Looks up information about an interface.
  *
- * This cost of this function is O(n) in number of interfaces.
+ * The cost of this function is O(n) in number of interfaces.
  *
  * Returns: (transfer none): A #GDBusInterfaceInfo or %NULL if not found. Do not free, it is owned by @info.
  * Since: 2.26

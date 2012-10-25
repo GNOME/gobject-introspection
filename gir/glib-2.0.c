@@ -16386,7 +16386,7 @@
 /**
  * g_io_channel_set_encoding:
  * @channel: a #GIOChannel
- * @encoding: the encoding type
+ * @encoding: (allow-none): the encoding type
  * @error: location to store an error of type #GConvertError
  *
  * Sets the encoding for the input/output of the channel.
@@ -16452,7 +16452,7 @@
 /**
  * g_io_channel_set_line_term:
  * @channel: a #GIOChannel
- * @line_term: The line termination string. Use %NULL for autodetect. Autodetection breaks on "\n", "\r\n", "\r", "\0", and the Unicode paragraph separator. Autodetection should not be used for anything other than file-based channels.
+ * @line_term: (allow-none): The line termination string. Use %NULL for autodetect.  Autodetection breaks on "\n", "\r\n", "\r", "\0", and the Unicode paragraph separator. Autodetection should not be used for anything other than file-based channels.
  * @length: The length of the termination string. If -1 is passed, the string is assumed to be nul-terminated. This option allows termination strings with embedded nuls.
  *
  * This sets the string that #GIOChannel uses to determine
@@ -31002,6 +31002,20 @@
 
 
 /**
+ * g_variant_get_data_as_bytes:
+ * @value: a #GVariant
+ *
+ * Returns a pointer to the serialised form of a #GVariant instance.
+ * The semantics of this function are exactly the same as
+ * g_variant_get_data(), except that the returned #GBytes holds
+ * a reference to the variant data.
+ *
+ * Returns: (transfer full): A new #GBytes representing the variant data
+ * Since: 2.36
+ */
+
+
+/**
  * g_variant_get_double:
  * @value: a double #GVariant instance
  *
@@ -31971,6 +31985,23 @@
  *
  * Returns: (transfer none): a floating reference to a new array #GVariant instance
  * Since: 2.32
+ */
+
+
+/**
+ * g_variant_new_from_bytes:
+ * @type: a #GVariantType
+ * @bytes: a #GBytes
+ * @trusted: if the contents of @bytes are trusted
+ *
+ * Constructs a new serialised-mode #GVariant instance.  This is the
+ * inner interface for creation of new serialised values that gets
+ * called from various functions in gvariant.c.
+ *
+ * A reference is taken on @bytes.
+ *
+ * Returns: a new #GVariant with a floating reference
+ * Since: 2.36
  */
 
 
