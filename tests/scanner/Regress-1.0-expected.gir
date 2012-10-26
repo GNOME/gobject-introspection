@@ -90,9 +90,24 @@ and/or use gtk-doc annotations.  -->
         <type name="gdouble" c:type="double"/>
       </field>
     </record>
+    <constant name="MAXUINT64"
+              value="18446744073709551615"
+              c:type="REGRESS_MAXUINT64">
+      <type name="gint64" c:type="gint64"/>
+    </constant>
+    <constant name="MININT64"
+              value="-9223372036854775808"
+              c:type="REGRESS_MININT64">
+      <type name="gint64" c:type="gint64"/>
+    </constant>
     <constant name="Mixed_Case_Constant"
               value="4423"
               c:type="REGRESS_Mixed_Case_Constant">
+      <type name="gint" c:type="gint"/>
+    </constant>
+    <constant name="NEGATIVE_INT_CONSTANT"
+              value="-42"
+              c:type="REGRESS_NEGATIVE_INT_CONSTANT">
       <type name="gint" c:type="gint"/>
     </constant>
     <constant name="STRING_CONSTANT"

@@ -162,7 +162,10 @@ symbol_get_const_int (PyGISourceSymbol *self,
       return Py_None;
     }
 
-  return PyLong_FromLongLong ((long long)self->symbol->const_int);
+  if (self->symbol->const_int_is_unsigned)
+    return PyLong_FromUnsignedLongLong ((unsigned long long)self->symbol->const_int);
+  else
+    return PyLong_FromLongLong ((long long)self->symbol->const_int);
 }
 
 static PyObject *

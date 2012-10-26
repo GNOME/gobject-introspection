@@ -262,6 +262,7 @@ GQuark regress_atest_error_quark (void);
 
 /* constants */
 
+#define REGRESS_NEGATIVE_INT_CONSTANT -42
 #define REGRESS_INT_CONSTANT 4422
 #define REGRESS_DOUBLE_CONSTANT 44.22
 #define REGRESS_STRING_CONSTANT "Some String"
@@ -911,5 +912,9 @@ typedef struct {
  * want to issue a namespace warning.
  */
 #define _DONTSCANTHIS 1
+
+/* https://bugzilla.gnome.org/show_bug.cgi?id=685022 */
+#define REGRESS_MININT64 ((gint64) G_GINT64_CONSTANT(0x8000000000000000))
+#define REGRESS_MAXUINT64 (G_GINT64_CONSTANT(0xffffffffffffffffU))
 
 #endif /* __GITESTTYPES_H__ */
