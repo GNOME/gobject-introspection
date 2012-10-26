@@ -9,6 +9,7 @@
 INTROSPECTION_SCANNER = \
     env PATH=.libs:$(PATH) \
         LPATH=.libs \
+        CC=$(CC) \
         PYTHONPATH=$(top_builddir):$(top_srcdir) \
         UNINSTALLED_INTROSPECTION_SRCDIR=$(top_srcdir) \
         UNINSTALLED_INTROSPECTION_BUILDDIR=$(top_builddir) \
