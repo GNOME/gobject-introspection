@@ -4563,9 +4563,9 @@ gi_marshalling_tests_filename_list_return (void)
  * Returns: (transfer full): a #GParamSpec
  */
 GParamSpec *
-gi_marshalling_tests_param_spec_return()
+gi_marshalling_tests_param_spec_return (void)
 {
-  return g_param_spec_string("test-param", "test", "This is a test", "42", G_PARAM_READABLE);
+  return g_param_spec_string ("test-param", "test", "This is a test", "42", G_PARAM_READABLE);
 }
 
 /**
