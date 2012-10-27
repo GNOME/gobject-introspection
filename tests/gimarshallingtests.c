@@ -6,7 +6,7 @@
 
 #include <string.h>
 
-static void gi_marshalling_tests_boxed_struct_free (GIMarshallingTestsBoxedStruct *struct_);
+static void gi_marshalling_tests_boxed_struct_free (GIMarshallingTestsBoxedStruct *v);
 
 /* Booleans */
 
@@ -23,57 +23,57 @@ gi_marshalling_tests_boolean_return_false (void)
 }
 
 void
-gi_marshalling_tests_boolean_in_true (gboolean bool_)
+gi_marshalling_tests_boolean_in_true (gboolean v)
 {
-    g_assert (bool_ == TRUE);
+    g_assert (v == TRUE);
 }
 
 void
-gi_marshalling_tests_boolean_in_false (gboolean bool_)
+gi_marshalling_tests_boolean_in_false (gboolean v)
 {
-    g_assert (bool_ == FALSE);
+    g_assert (v == FALSE);
 }
 
 /**
  * gi_marshalling_tests_boolean_out_true:
- * @bool_: (out):
+ * @v: (out):
  */
 void
-gi_marshalling_tests_boolean_out_true (gboolean *bool_)
+gi_marshalling_tests_boolean_out_true (gboolean *v)
 {
-    *bool_ = TRUE;
+    *v = TRUE;
 }
 
 /**
  * gi_marshalling_tests_boolean_out_false:
- * @bool_: (out):
+ * @v: (out):
  */
 void
-gi_marshalling_tests_boolean_out_false (gboolean *bool_)
+gi_marshalling_tests_boolean_out_false (gboolean *v)
 {
-    *bool_ = FALSE;
+    *v = FALSE;
 }
 
 /**
  * gi_marshalling_tests_boolean_inout_true_false:
- * @bool_: (inout):
+ * @v: (inout):
  */
 void
-gi_marshalling_tests_boolean_inout_true_false (gboolean *bool_)
+gi_marshalling_tests_boolean_inout_true_false (gboolean *v)
 {
-    g_assert (*bool_ == TRUE);
-    *bool_ = FALSE;
+    g_assert (*v == TRUE);
+    *v = FALSE;
 }
 
 /**
  * gi_marshalling_tests_boolean_inout_false_true:
- * @bool_: (inout):
+ * @v: (inout):
  */
 void
-gi_marshalling_tests_boolean_inout_false_true (gboolean *bool_)
+gi_marshalling_tests_boolean_inout_false_true (gboolean *v)
 {
-    g_assert (*bool_ == FALSE);
-    *bool_ = TRUE;
+    g_assert (*v == FALSE);
+    *v = TRUE;
 }
 
 
@@ -92,57 +92,57 @@ gi_marshalling_tests_int8_return_min (void)
 }
 
 void
-gi_marshalling_tests_int8_in_max (gint8 int8)
+gi_marshalling_tests_int8_in_max (gint8 v)
 {
-    g_assert_cmpint(int8, ==, G_MAXINT8);
+    g_assert_cmpint(v, ==, G_MAXINT8);
 }
 
 void
-gi_marshalling_tests_int8_in_min (gint8 int8)
+gi_marshalling_tests_int8_in_min (gint8 v)
 {
-    g_assert_cmpint(int8, ==, G_MININT8);
+    g_assert_cmpint(v, ==, G_MININT8);
 }
 
 /**
  * gi_marshalling_tests_int8_out_max:
- * @int8: (out):
+ * @v: (out):
  */
 void
-gi_marshalling_tests_int8_out_max (gint8 *int8)
+gi_marshalling_tests_int8_out_max (gint8 *v)
 {
-    *int8 = G_MAXINT8;
+    *v = G_MAXINT8;
 }
 
 /**
  * gi_marshalling_tests_int8_out_min:
- * @int8: (out):
+ * @v: (out):
  */
 void
-gi_marshalling_tests_int8_out_min (gint8 *int8)
+gi_marshalling_tests_int8_out_min (gint8 *v)
 {
-    *int8 = G_MININT8;
+    *v = G_MININT8;
 }
 
 /**
  * gi_marshalling_tests_int8_inout_max_min:
- * @int8: (inout):
+ * @v: (inout):
  */
 void
-gi_marshalling_tests_int8_inout_max_min (gint8 *int8)
+gi_marshalling_tests_int8_inout_max_min (gint8 *v)
 {
-    g_assert_cmpint(*int8, ==, G_MAXINT8);
-    *int8 = G_MININT8;
+    g_assert_cmpint(*v, ==, G_MAXINT8);
+    *v = G_MININT8;
 }
 
 /**
  * gi_marshalling_tests_int8_inout_min_max:
- * @int8: (inout):
+ * @v: (inout):
  */
 void
-gi_marshalling_tests_int8_inout_min_max (gint8 *int8)
+gi_marshalling_tests_int8_inout_min_max (gint8 *v)
 {
-    g_assert_cmpint(*int8, ==, G_MININT8);
-    *int8 = G_MAXINT8;
+    g_assert_cmpint(*v, ==, G_MININT8);
+    *v = G_MAXINT8;
 }
 
 
@@ -153,30 +153,30 @@ gi_marshalling_tests_uint8_return (void)
 }
 
 void
-gi_marshalling_tests_uint8_in (guint8 uint8)
+gi_marshalling_tests_uint8_in (guint8 v)
 {
-    g_assert_cmpuint(uint8, ==, G_MAXUINT8);
+    g_assert_cmpuint(v, ==, G_MAXUINT8);
 }
 
 /**
  * gi_marshalling_tests_uint8_out:
- * @uint8: (out):
+ * @v: (out):
  */
 void
-gi_marshalling_tests_uint8_out (guint8 *uint8)
+gi_marshalling_tests_uint8_out (guint8 *v)
 {
-    *uint8 = G_MAXUINT8;
+    *v = G_MAXUINT8;
 }
 
 /**
  * gi_marshalling_tests_uint8_inout:
- * @uint8: (inout):
+ * @v: (inout):
  */
 void
-gi_marshalling_tests_uint8_inout (guint8 *uint8)
+gi_marshalling_tests_uint8_inout (guint8 *v)
 {
-    g_assert_cmpuint(*uint8, ==, G_MAXUINT8);
-    *uint8 = 0;
+    g_assert_cmpuint(*v, ==, G_MAXUINT8);
+    *v = 0;
 }
 
 
@@ -193,57 +193,57 @@ gi_marshalling_tests_int16_return_min (void)
 }
 
 void
-gi_marshalling_tests_int16_in_max (gint16 int16)
+gi_marshalling_tests_int16_in_max (gint16 v)
 {
-    g_assert_cmpint(int16, ==, G_MAXINT16);
+    g_assert_cmpint(v, ==, G_MAXINT16);
 }
 
 void
-gi_marshalling_tests_int16_in_min (gint16 int16)
+gi_marshalling_tests_int16_in_min (gint16 v)
 {
-    g_assert_cmpint(int16, ==, G_MININT16);
+    g_assert_cmpint(v, ==, G_MININT16);
 }
 
 /**
  * gi_marshalling_tests_int16_out_max:
- * @int16: (out):
+ * @v: (out):
  */
 void
-gi_marshalling_tests_int16_out_max (gint16 *int16)
+gi_marshalling_tests_int16_out_max (gint16 *v)
 {
-    *int16 = G_MAXINT16;
+    *v = G_MAXINT16;
 }
 
 /**
  * gi_marshalling_tests_int16_out_min:
- * @int16: (out):
+ * @v: (out):
  */
 void
-gi_marshalling_tests_int16_out_min (gint16 *int16)
+gi_marshalling_tests_int16_out_min (gint16 *v)
 {
-    *int16 = G_MININT16;
+    *v = G_MININT16;
 }
 
 /**
  * gi_marshalling_tests_int16_inout_max_min:
- * @int16: (inout):
+ * @v: (inout):
  */
 void
-gi_marshalling_tests_int16_inout_max_min (gint16 *int16)
+gi_marshalling_tests_int16_inout_max_min (gint16 *v)
 {
-    g_assert_cmpint(*int16, ==, G_MAXINT16);
-    *int16 = G_MININT16;
+    g_assert_cmpint(*v, ==, G_MAXINT16);
+    *v = G_MININT16;
 }
 
 /**
  * gi_marshalling_tests_int16_inout_min_max:
- * @int16: (inout):
+ * @v: (inout):
  */
 void
-gi_marshalling_tests_int16_inout_min_max (gint16 *int16)
+gi_marshalling_tests_int16_inout_min_max (gint16 *v)
 {
-    g_assert_cmpint(*int16, ==, G_MININT16);
-    *int16 = G_MAXINT16;
+    g_assert_cmpint(*v, ==, G_MININT16);
+    *v = G_MAXINT16;
 }
 
 
@@ -254,30 +254,30 @@ gi_marshalling_tests_uint16_return (void)
 }
 
 void
-gi_marshalling_tests_uint16_in (guint16 uint16)
+gi_marshalling_tests_uint16_in (guint16 v)
 {
-    g_assert_cmpuint(uint16, ==, G_MAXUINT16);
+    g_assert_cmpuint(v, ==, G_MAXUINT16);
 }
 
 /**
  * gi_marshalling_tests_uint16_out:
- * @uint16: (out):
+ * @v: (out):
  */
 void
-gi_marshalling_tests_uint16_out (guint16 *uint16)
+gi_marshalling_tests_uint16_out (guint16 *v)
 {
-    *uint16 = G_MAXUINT16;
+    *v = G_MAXUINT16;
 }
 
 /**
  * gi_marshalling_tests_uint16_inout:
- * @uint16: (inout):
+ * @v: (inout):
  */
 void
-gi_marshalling_tests_uint16_inout (guint16 *uint16)
+gi_marshalling_tests_uint16_inout (guint16 *v)
 {
-    g_assert_cmpuint(*uint16, ==, G_MAXUINT16);
-    *uint16 = 0;
+    g_assert_cmpuint(*v, ==, G_MAXUINT16);
+    *v = 0;
 }
 
 
@@ -294,57 +294,57 @@ gi_marshalling_tests_int32_return_min (void)
 }
 
 void
-gi_marshalling_tests_int32_in_max (gint32 int32)
+gi_marshalling_tests_int32_in_max (gint32 v)
 {
-    g_assert_cmpint(int32, ==, G_MAXINT32);
+    g_assert_cmpint(v, ==, G_MAXINT32);
 }
 
 void
-gi_marshalling_tests_int32_in_min (gint32 int32)
+gi_marshalling_tests_int32_in_min (gint32 v)
 {
-    g_assert_cmpint(int32, ==, G_MININT32);
+    g_assert_cmpint(v, ==, G_MININT32);
 }
 
 /**
  * gi_marshalling_tests_int32_out_max:
- * @int32: (out):
+ * @v: (out):
  */
 void
-gi_marshalling_tests_int32_out_max (gint32 *int32)
+gi_marshalling_tests_int32_out_max (gint32 *v)
 {
-    *int32 = G_MAXINT32;
+    *v = G_MAXINT32;
 }
 
 /**
  * gi_marshalling_tests_int32_out_min:
- * @int32: (out):
+ * @v: (out):
  */
 void
-gi_marshalling_tests_int32_out_min (gint32 *int32)
+gi_marshalling_tests_int32_out_min (gint32 *v)
 {
-    *int32 = G_MININT32;
+    *v = G_MININT32;
 }
 
 /**
  * gi_marshalling_tests_int32_inout_max_min:
- * @int32: (inout):
+ * @v: (inout):
  */
 void
-gi_marshalling_tests_int32_inout_max_min (gint32 *int32)
+gi_marshalling_tests_int32_inout_max_min (gint32 *v)
 {
-    g_assert_cmpint(*int32, ==, G_MAXINT32);
-    *int32 = G_MININT32;
+    g_assert_cmpint(*v, ==, G_MAXINT32);
+    *v = G_MININT32;
 }
 
 /**
  * gi_marshalling_tests_int32_inout_min_max:
- * @int32: (inout):
+ * @v: (inout):
  */
 void
-gi_marshalling_tests_int32_inout_min_max (gint32 *int32)
+gi_marshalling_tests_int32_inout_min_max (gint32 *v)
 {
-    g_assert_cmpint(*int32, ==, G_MININT32);
-    *int32 = G_MAXINT32;
+    g_assert_cmpint(*v, ==, G_MININT32);
+    *v = G_MAXINT32;
 }
 
 
@@ -355,30 +355,30 @@ gi_marshalling_tests_uint32_return (void)
 }
 
 void
-gi_marshalling_tests_uint32_in (guint32 uint32)
+gi_marshalling_tests_uint32_in (guint32 v)
 {
-    g_assert_cmpuint(uint32, ==, G_MAXUINT32);
+    g_assert_cmpuint(v, ==, G_MAXUINT32);
 }
 
 /**
  * gi_marshalling_tests_uint32_out:
- * @uint32: (out):
+ * @v: (out):
  */
 void
-gi_marshalling_tests_uint32_out (guint32 *uint32)
+gi_marshalling_tests_uint32_out (guint32 *v)
 {
-    *uint32 = G_MAXUINT32;
+    *v = G_MAXUINT32;
 }
 
 /**
  * gi_marshalling_tests_uint32_inout:
- * @uint32: (inout):
+ * @v: (inout):
  */
 void
-gi_marshalling_tests_uint32_inout (guint32 *uint32)
+gi_marshalling_tests_uint32_inout (guint32 *v)
 {
-    g_assert_cmpuint(*uint32, ==, G_MAXUINT32);
-    *uint32 = 0;
+    g_assert_cmpuint(*v, ==, G_MAXUINT32);
+    *v = 0;
 }
 
 
@@ -395,57 +395,57 @@ gi_marshalling_tests_int64_return_min (void)
 }
 
 void
-gi_marshalling_tests_int64_in_max (gint64 int64)
+gi_marshalling_tests_int64_in_max (gint64 v)
 {
-    g_assert_cmpint(int64, ==, G_MAXINT64);
+    g_assert_cmpint(v, ==, G_MAXINT64);
 }
 
 void
-gi_marshalling_tests_int64_in_min (gint64 int64)
+gi_marshalling_tests_int64_in_min (gint64 v)
 {
-    g_assert_cmpint(int64, ==, G_MININT64);
+    g_assert_cmpint(v, ==, G_MININT64);
 }
 
 /**
  * gi_marshalling_tests_int64_out_max:
- * @int64: (out):
+ * @v: (out):
  */
 void
-gi_marshalling_tests_int64_out_max (gint64 *int64)
+gi_marshalling_tests_int64_out_max (gint64 *v)
 {
-    *int64 = G_MAXINT64;
+    *v = G_MAXINT64;
 }
 
 /**
  * gi_marshalling_tests_int64_out_min:
- * @int64: (out):
+ * @v: (out):
  */
 void
-gi_marshalling_tests_int64_out_min (gint64 *int64)
+gi_marshalling_tests_int64_out_min (gint64 *v)
 {
-    *int64 = G_MININT64;
+    *v = G_MININT64;
 }
 
 /**
  * gi_marshalling_tests_int64_inout_max_min:
- * @int64: (inout):
+ * @v: (inout):
  */
 void
-gi_marshalling_tests_int64_inout_max_min (gint64 *int64)
+gi_marshalling_tests_int64_inout_max_min (gint64 *v)
 {
-    g_assert_cmpint(*int64, ==, G_MAXINT64);
-    *int64 = G_MININT64;
+    g_assert_cmpint(*v, ==, G_MAXINT64);
+    *v = G_MININT64;
 }
 
 /**
  * gi_marshalling_tests_int64_inout_min_max:
- * @int64: (inout):
+ * @v: (inout):
  */
 void
-gi_marshalling_tests_int64_inout_min_max (gint64 *int64)
+gi_marshalling_tests_int64_inout_min_max (gint64 *v)
 {
-    g_assert_cmpint(*int64, ==, G_MININT64);
-    *int64 = G_MAXINT64;
+    g_assert_cmpint(*v, ==, G_MININT64);
+    *v = G_MAXINT64;
 }
 
 
@@ -456,30 +456,30 @@ gi_marshalling_tests_uint64_return (void)
 }
 
 void
-gi_marshalling_tests_uint64_in (guint64 uint64)
+gi_marshalling_tests_uint64_in (guint64 v)
 {
-    g_assert_cmpuint(uint64, ==, G_MAXUINT64);
+    g_assert_cmpuint(v, ==, G_MAXUINT64);
 }
 
 /**
  * gi_marshalling_tests_uint64_out:
- * @uint64: (out):
+ * @v: (out):
  */
 void
-gi_marshalling_tests_uint64_out (guint64 *uint64)
+gi_marshalling_tests_uint64_out (guint64 *v)
 {
-    *uint64 = G_MAXUINT64;
+    *v = G_MAXUINT64;
 }
 
 /**
  * gi_marshalling_tests_uint64_inout:
- * @uint64: (inout):
+ * @v: (inout):
  */
 void
-gi_marshalling_tests_uint64_inout (guint64 *uint64)
+gi_marshalling_tests_uint64_inout (guint64 *v)
 {
-    g_assert_cmpuint(*uint64, ==, G_MAXUINT64);
-    *uint64 = 0;
+    g_assert_cmpuint(*v, ==, G_MAXUINT64);
+    *v = 0;
 }
 
 
@@ -894,30 +894,30 @@ gi_marshalling_tests_float_return (void)
 }
 
 void
-gi_marshalling_tests_float_in (gfloat float_)
+gi_marshalling_tests_float_in (gfloat v)
 {
-    g_assert_cmpfloat(float_, ==, G_MAXFLOAT);
+    g_assert_cmpfloat(v, ==, G_MAXFLOAT);
 }
 
 /**
  * gi_marshalling_tests_float_out:
- * @float_: (out):
+ * @v: (out):
  */
 void
-gi_marshalling_tests_float_out (gfloat *float_)
+gi_marshalling_tests_float_out (gfloat *v)
 {
-    *float_ = G_MAXFLOAT;
+    *v = G_MAXFLOAT;
 }
 
 /**
  * gi_marshalling_tests_float_inout:
- * @float_: (inout):
+ * @v: (inout):
  */
 void
-gi_marshalling_tests_float_inout (gfloat *float_)
+gi_marshalling_tests_float_inout (gfloat *v)
 {
-    g_assert_cmpfloat(*float_, ==, G_MAXFLOAT);
-    *float_ = G_MINFLOAT;
+    g_assert_cmpfloat(*v, ==, G_MAXFLOAT);
+    *v = G_MINFLOAT;
 }
 
 
@@ -928,30 +928,30 @@ gi_marshalling_tests_double_return (void)
 }
 
 void
-gi_marshalling_tests_double_in (gdouble double_)
+gi_marshalling_tests_double_in (gdouble v)
 {
-    g_assert_cmpfloat(double_, ==, G_MAXDOUBLE);
+    g_assert_cmpfloat(v, ==, G_MAXDOUBLE);
 }
 
 /**
  * gi_marshalling_tests_double_out:
- * @double_: (out):
+ * @v: (out):
  */
 void
-gi_marshalling_tests_double_out (gdouble *double_)
+gi_marshalling_tests_double_out (gdouble *v)
 {
-    *double_ = G_MAXDOUBLE;
+    *v = G_MAXDOUBLE;
 }
 
 /**
  * gi_marshalling_tests_double_inout:
- * @double_: (inout):
+ * @v: (inout):
  */
 void
-gi_marshalling_tests_double_inout (gdouble *double_)
+gi_marshalling_tests_double_inout (gdouble *v)
 {
-    g_assert_cmpfloat(*double_, ==, G_MAXDOUBLE);
-    *double_ = G_MINDOUBLE;
+    g_assert_cmpfloat(*v, ==, G_MAXDOUBLE);
+    *v = G_MINDOUBLE;
 }
 
 
@@ -962,30 +962,30 @@ gi_marshalling_tests_time_t_return (void)
 }
 
 void
-gi_marshalling_tests_time_t_in (time_t time_t_)
+gi_marshalling_tests_time_t_in (time_t v)
 {
-    g_assert_cmpuint(time_t_, ==, 1234567890);
+    g_assert_cmpuint(v, ==, 1234567890);
 }
 
 /**
  * gi_marshalling_tests_time_t_out:
- * @time_t_: (out):
+ * @v: (out):
  */
 void
-gi_marshalling_tests_time_t_out (time_t *time_t_)
+gi_marshalling_tests_time_t_out (time_t *v)
 {
-    *time_t_ = 1234567890;
+    *v = 1234567890;
 }
 
 /**
  * gi_marshalling_tests_time_t_inout:
- * @time_t_: (inout):
+ * @v: (inout):
  */
 void
-gi_marshalling_tests_time_t_inout (time_t *time_t_)
+gi_marshalling_tests_time_t_inout (time_t *v)
 {
-    g_assert_cmpuint(*time_t_, ==, 1234567890);
-    *time_t_ = 0;
+    g_assert_cmpuint(*v, ==, 1234567890);
+    *v = 0;
 }
 
 
@@ -1416,12 +1416,12 @@ gi_marshalling_tests_array_struct_take_in (GIMarshallingTestsBoxedStruct **struc
  * @length:
  */
 void
-gi_marshalling_tests_array_enum_in (GIMarshallingTestsEnum *_enum, gint length)
+gi_marshalling_tests_array_enum_in (GIMarshallingTestsEnum *v, gint length)
 {
     g_assert_cmpint(length, ==, 3);
-    g_assert_cmpint(_enum[0], ==, GI_MARSHALLING_TESTS_ENUM_VALUE1);
-    g_assert_cmpint(_enum[1], ==, GI_MARSHALLING_TESTS_ENUM_VALUE2);
-    g_assert_cmpint(_enum[2], ==, GI_MARSHALLING_TESTS_ENUM_VALUE3);
+    g_assert_cmpint(v[0], ==, GI_MARSHALLING_TESTS_ENUM_VALUE1);
+    g_assert_cmpint(v[1], ==, GI_MARSHALLING_TESTS_ENUM_VALUE2);
+    g_assert_cmpint(v[2], ==, GI_MARSHALLING_TESTS_ENUM_VALUE3);
 }
 
 /**
@@ -1716,16 +1716,16 @@ gi_marshalling_tests_array_gvariant_full_in (GVariant **variants)
 GArray *
 gi_marshalling_tests_garray_int_none_return (void)
 {
-    static GArray *array = NULL;
+    static GArray *v = NULL;
     gint i;
 
-    if (array == NULL) {
-        array = g_array_new (TRUE, TRUE, sizeof (gint));
+    if (v == NULL) {
+        v = g_array_new (TRUE, TRUE, sizeof (gint));
         for (i = -1; i < 3; i++)
-            g_array_append_val (array, i);
+            g_array_append_val (v, i);
     }
 
-    return array;
+    return v;
 }
 
 /**
@@ -2220,16 +2220,16 @@ gi_marshalling_tests_bytearray_full_return (void)
 
 /**
  * gi_marshalling_tests_bytearray_none_in:
- * @array_: (element-type gint8) (transfer none):
+ * @v: (element-type gint8) (transfer none):
  */
 void
-gi_marshalling_tests_bytearray_none_in (GByteArray *array_)
+gi_marshalling_tests_bytearray_none_in (GByteArray *v)
 {
-    g_assert_cmpuint (array_->len, ==, 4);
-    g_assert_cmpuint (g_array_index (array_, unsigned char, 0), ==, 0);
-    g_assert_cmpuint (g_array_index (array_, unsigned char, 1), ==, 49);
-    g_assert_cmpuint (g_array_index (array_, unsigned char, 2), ==, 0xFF);
-    g_assert_cmpuint (g_array_index (array_, unsigned char, 3), ==, 51);
+    g_assert_cmpuint (v->len, ==, 4);
+    g_assert_cmpuint (g_array_index (v, unsigned char, 0), ==, 0);
+    g_assert_cmpuint (g_array_index (v, unsigned char, 1), ==, 49);
+    g_assert_cmpuint (g_array_index (v, unsigned char, 2), ==, 0xFF);
+    g_assert_cmpuint (g_array_index (v, unsigned char, 3), ==, 51);
 }
 
 /**
@@ -3316,30 +3316,30 @@ gi_marshalling_tests_genum_returnv (void)
 }
 
 void
-gi_marshalling_tests_genum_in (GIMarshallingTestsGEnum enum_)
+gi_marshalling_tests_genum_in (GIMarshallingTestsGEnum v)
 {
-    g_assert_cmpint(enum_, ==, GI_MARSHALLING_TESTS_GENUM_VALUE3);
+    g_assert_cmpint(v, ==, GI_MARSHALLING_TESTS_GENUM_VALUE3);
 }
 
 /**
  * gi_marshalling_tests_genum_out:
- * @enum_: (out):
+ * @v: (out):
  */
 void
-gi_marshalling_tests_genum_out (GIMarshallingTestsGEnum *enum_)
+gi_marshalling_tests_genum_out (GIMarshallingTestsGEnum *v)
 {
-    *enum_ = GI_MARSHALLING_TESTS_GENUM_VALUE3;
+    *v = GI_MARSHALLING_TESTS_GENUM_VALUE3;
 }
 
 /**
  * gi_marshalling_tests_genum_inout:
- * @enum_: (inout):
+ * @v: (inout):
  */
 void
-gi_marshalling_tests_genum_inout (GIMarshallingTestsGEnum *enum_)
+gi_marshalling_tests_genum_inout (GIMarshallingTestsGEnum *v)
 {
-    g_assert_cmpint(*enum_, ==, GI_MARSHALLING_TESTS_GENUM_VALUE3);
-    *enum_ = GI_MARSHALLING_TESTS_GENUM_VALUE1;
+    g_assert_cmpint(*v, ==, GI_MARSHALLING_TESTS_GENUM_VALUE3);
+    *v = GI_MARSHALLING_TESTS_GENUM_VALUE1;
 }
 
 
@@ -3350,30 +3350,30 @@ gi_marshalling_tests_enum_returnv (void)
 }
 
 void
-gi_marshalling_tests_enum_in (GIMarshallingTestsEnum enum_)
+gi_marshalling_tests_enum_in (GIMarshallingTestsEnum v)
 {
-    g_assert_cmpint(enum_, ==, GI_MARSHALLING_TESTS_ENUM_VALUE3);
+    g_assert_cmpint(v, ==, GI_MARSHALLING_TESTS_ENUM_VALUE3);
 }
 
 /**
  * gi_marshalling_tests_enum_out:
- * @enum_: (out):
+ * @v: (out):
  */
 void
-gi_marshalling_tests_enum_out (GIMarshallingTestsEnum *enum_)
+gi_marshalling_tests_enum_out (GIMarshallingTestsEnum *v)
 {
-    *enum_ = GI_MARSHALLING_TESTS_ENUM_VALUE3;
+    *v = GI_MARSHALLING_TESTS_ENUM_VALUE3;
 }
 
 /**
  * gi_marshalling_tests_enum_inout:
- * @enum_: (inout):
+ * @v: (inout):
  */
 void
-gi_marshalling_tests_enum_inout (GIMarshallingTestsEnum *enum_)
+gi_marshalling_tests_enum_inout (GIMarshallingTestsEnum *v)
 {
-    g_assert_cmpint(*enum_, ==, GI_MARSHALLING_TESTS_ENUM_VALUE3);
-    *enum_ = GI_MARSHALLING_TESTS_ENUM_VALUE1;
+    g_assert_cmpint(*v, ==, GI_MARSHALLING_TESTS_ENUM_VALUE3);
+    *v = GI_MARSHALLING_TESTS_ENUM_VALUE1;
 }
 
 
@@ -3403,36 +3403,36 @@ gi_marshalling_tests_flags_returnv (void)
 }
 
 void
-gi_marshalling_tests_flags_in (GIMarshallingTestsFlags flags_)
+gi_marshalling_tests_flags_in (GIMarshallingTestsFlags v)
 {
-    g_assert(flags_ == GI_MARSHALLING_TESTS_FLAGS_VALUE2);
+    g_assert(v == GI_MARSHALLING_TESTS_FLAGS_VALUE2);
 }
 
 void
-gi_marshalling_tests_flags_in_zero (GIMarshallingTestsFlags flags)
+gi_marshalling_tests_flags_in_zero (GIMarshallingTestsFlags v)
 {
-    g_assert(flags == 0);
+    g_assert(v == 0);
 }
 
 /**
  * gi_marshalling_tests_flags_out:
- * @flags_: (out):
+ * @v: (out):
  */
 void
-gi_marshalling_tests_flags_out (GIMarshallingTestsFlags *flags_)
+gi_marshalling_tests_flags_out (GIMarshallingTestsFlags *v)
 {
-    *flags_ = GI_MARSHALLING_TESTS_FLAGS_VALUE2;
+    *v = GI_MARSHALLING_TESTS_FLAGS_VALUE2;
 }
 
 /**
  * gi_marshalling_tests_flags_inout:
- * @flags_: (inout):
+ * @v: (inout):
  */
 void
-gi_marshalling_tests_flags_inout (GIMarshallingTestsFlags *flags_)
+gi_marshalling_tests_flags_inout (GIMarshallingTestsFlags *v)
 {
-    g_assert(*flags_ == GI_MARSHALLING_TESTS_FLAGS_VALUE2);
-    *flags_ = GI_MARSHALLING_TESTS_FLAGS_VALUE1;
+    g_assert(*v == GI_MARSHALLING_TESTS_FLAGS_VALUE2);
+    *v = GI_MARSHALLING_TESTS_FLAGS_VALUE1;
 }
 
 
@@ -3443,36 +3443,36 @@ gi_marshalling_tests_no_type_flags_returnv (void)
 }
 
 void
-gi_marshalling_tests_no_type_flags_in (GIMarshallingTestsNoTypeFlags flags_)
+gi_marshalling_tests_no_type_flags_in (GIMarshallingTestsNoTypeFlags v)
 {
-    g_assert(flags_ == GI_MARSHALLING_TESTS_NO_TYPE_FLAGS_VALUE2);
+    g_assert(v == GI_MARSHALLING_TESTS_NO_TYPE_FLAGS_VALUE2);
 }
 
 void
-gi_marshalling_tests_no_type_flags_in_zero (GIMarshallingTestsNoTypeFlags flags)
+gi_marshalling_tests_no_type_flags_in_zero (GIMarshallingTestsNoTypeFlags v)
 {
-    g_assert(flags == 0);
+    g_assert(v == 0);
 }
 
 /**
  * gi_marshalling_tests_no_type_flags_out:
- * @flags_: (out):
+ * @v: (out):
  */
 void
-gi_marshalling_tests_no_type_flags_out (GIMarshallingTestsNoTypeFlags *flags_)
+gi_marshalling_tests_no_type_flags_out (GIMarshallingTestsNoTypeFlags *v)
 {
-    *flags_ = GI_MARSHALLING_TESTS_NO_TYPE_FLAGS_VALUE2;
+    *v = GI_MARSHALLING_TESTS_NO_TYPE_FLAGS_VALUE2;
 }
 
 /**
  * gi_marshalling_tests_no_type_flags_inout:
- * @flags_: (inout):
+ * @v: (inout):
  */
 void
-gi_marshalling_tests_no_type_flags_inout (GIMarshallingTestsNoTypeFlags *flags_)
+gi_marshalling_tests_no_type_flags_inout (GIMarshallingTestsNoTypeFlags *v)
 {
-    g_assert(*flags_ == GI_MARSHALLING_TESTS_NO_TYPE_FLAGS_VALUE2);
-    *flags_ = GI_MARSHALLING_TESTS_NO_TYPE_FLAGS_VALUE1;
+    g_assert(*v == GI_MARSHALLING_TESTS_NO_TYPE_FLAGS_VALUE2);
+    *v = GI_MARSHALLING_TESTS_NO_TYPE_FLAGS_VALUE1;
 }
 
 
