@@ -3125,6 +3125,21 @@ What we're testing here is that the scanner ignores the @a nested inside XML.</d
         </parameter>
       </parameters>
     </function>
+    <function name="test_skip_unannotated_callback"
+              c:identifier="regress_test_skip_unannotated_callback"
+              introspectable="0">
+      <doc xml:whitespace="preserve">Should not emit a warning:
+https://bugzilla.gnome.org/show_bug.cgi?id=685399</doc>
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="callback" transfer-ownership="none">
+          <doc xml:whitespace="preserve">No annotation here</doc>
+          <type name="TestCallback" c:type="RegressTestCallback"/>
+        </parameter>
+      </parameters>
+    </function>
     <function name="test_ssize" c:identifier="regress_test_ssize">
       <return-value transfer-ownership="none">
         <type name="gssize" c:type="gssize"/>

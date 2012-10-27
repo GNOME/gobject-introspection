@@ -696,6 +696,8 @@ void regress_test_gerror_callback (RegressTestCallbackGError callback);
 void regress_test_null_gerror_callback (RegressTestCallbackGError callback);
 void regress_test_owned_gerror_callback (RegressTestCallbackOwnedGError callback);
 
+void regress_test_skip_unannotated_callback (RegressTestCallback callback);
+
 typedef struct _RegressTestInterface RegressTestInterface;
 
 /* interface */

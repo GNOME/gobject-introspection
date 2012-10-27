@@ -3514,6 +3514,18 @@ regress_test_owned_gerror_callback (RegressTestCallbackOwnedGError callback)
   callback (error);
 }
 
+/**
+ * regress_test_skip_unannotated_callback: (skip)
+ * @callback: No annotation here
+ *
+ * Should not emit a warning:
+ * https://bugzilla.gnome.org/show_bug.cgi?id=685399
+ */
+void
+regress_test_skip_unannotated_callback (RegressTestCallback callback)
+{
+}
+
 /* interface */
 
 static void
