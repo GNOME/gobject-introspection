@@ -389,9 +389,10 @@ class DocBlock(object):
         lines[0] += options
         for param in self.params.values():
             lines.append(param.to_gtk_doc_param())
-        lines.append('')
-        for l in self.comment.split('\n'):
-            lines.append(l)
+        if self.comment:
+            lines.append('')
+            for l in self.comment.split('\n'):
+                lines.append(l)
         if self.tags:
             lines.append('')
             for tag in self.tags.values():
@@ -1105,8 +1106,6 @@ class AnnotationParser(object):
         # intended. Strip those.
         if comment_block.comment:
             comment_block.comment = comment_block.comment.strip()
-        else:
-            comment_block.comment = ''
 
         for tag in comment_block.tags.values():
             self._clean_comment_block_part(tag)

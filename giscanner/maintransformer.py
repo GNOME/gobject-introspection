@@ -225,7 +225,7 @@ usage is void (*_gtk_reserved1)(void);"""
             section_name = 'SECTION:' + name.lower()
             block = self._blocks.get(section_name)
             if block:
-                node.doc = block.comment
+                node.doc = block.comment if block.comment else ''
         if isinstance(node, (ast.Class, ast.Interface)):
             for prop in node.properties:
                 self._apply_annotations_property(node, prop)
@@ -600,7 +600,7 @@ usage is void (*_gtk_reserved1)(void);"""
         if block is None:
             return
 
-        node.doc = block.comment
+        node.doc = block.comment if block.comment else ''
 
         since_tag = block.get_tag(TAG_SINCE)
         if since_tag is not None:

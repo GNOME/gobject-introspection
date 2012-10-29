@@ -7319,8 +7319,6 @@
  * SECTION:shell
  * @title: Shell-related Utilities
  * @short_description: shell-like commandline handling
- *
- *
  */
 
 
@@ -7328,8 +7326,6 @@
  * SECTION:spawn
  * @Short_description: process launching
  * @Title: Spawning Processes
- *
- *
  */
 
 
@@ -16082,8 +16078,6 @@
 
 /**
  * g_io_channel_error_quark:
- *
- *
  *
  * Returns: the quark used as %G_IO_CHANNEL_ERROR
  */

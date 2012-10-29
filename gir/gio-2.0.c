@@ -7377,8 +7377,6 @@
  * @title: GTlsBackend
  * @short_description: TLS backend implementation
  * @include: gio/gio.h
- *
- *
  */
 
 

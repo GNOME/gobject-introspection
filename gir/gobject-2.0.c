@@ -5473,8 +5473,6 @@
  * g_value_peek_pointer:
  * @value: An initialized #GValue structure.
  *
- *
- *
  * Returns: (transfer none): the value contents as pointer. This function asserts that g_value_fits_pointer() returned %TRUE for the passed in value.  This is an internal function introduced mainly for C marshallers.
  */
 
@@ -5916,8 +5914,6 @@
 
 /**
  * g_variant_get_gtype:
- *
- *
  *
  * Since: 2.24
  * Deprecated: 2.26
