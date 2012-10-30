@@ -101,3 +101,7 @@ docs/reference/gi-undeclared.txt
 docs/reference/gi-undocumented.txt
 docs/reference/gi-unused.txt
 docs/reference/version.xml
+
+#g-ir-doc-tool tests
+tests/doctool/DocExamples-1.0-C
+tests/doctool/DocExamples-1.0-Python
