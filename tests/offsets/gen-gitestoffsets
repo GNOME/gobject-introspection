@@ -209,8 +209,6 @@ output({}, r'''
 |  if (argc != 3)
 |    g_error ("Usage: gitestoffsets COMPILED_OFFSETS_FILE INTROSPECTED_OFFSETS_FILE");
 |
-|  g_type_init ();
-|
 |  repository = g_irepository_get_default ();
 |  if (!g_irepository_require (repository, namespace, version, 0, &error))
 |     g_error ("Failed to load %%s-%%s.typelib: %%s", namespace, version, error->message);
