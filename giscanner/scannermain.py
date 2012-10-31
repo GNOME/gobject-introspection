@@ -393,7 +393,7 @@ def write_output(data, options):
         os.unlink(temp_f_name)
         try:
             shutil.move(main_f_name, options.output)
-        except OSError, e:
+        except OSError as e:
             if e.errno == errno.EPERM:
                 os.unlink(main_f_name)
                 return 0
@@ -402,12 +402,12 @@ def write_output(data, options):
     else:
         try:
             output = open(options.output, "w")
-        except IOError, e:
+        except IOError as e:
             _error("opening output for writing: %s" % (e.strerror, ))
 
     try:
         output.write(data)
-    except IOError, e:
+    except IOError as e:
         _error("while writing output: %s" % (e.strerror, ))
 
 def scanner_main(args):

@@ -73,7 +73,7 @@ class CacheStore(object):
     def __init__(self):
         try:
             self._directory = _get_cachedir()
-        except OSError, e:
+        except OSError as e:
             if e.errno != errno.EPERM:
                 raise
             self._directory = None
@@ -88,7 +88,7 @@ class CacheStore(object):
         version = os.path.join(self._directory, _CACHE_VERSION_FILENAME)
         try:
             cache_hash = open(version).read()
-        except IOError, e:
+        except IOError as e:
             # File does not exist
             if e.errno == errno.ENOENT:
                 cache_hash = 0
@@ -101,7 +101,7 @@ class CacheStore(object):
         self._clean()
         try:
             fp = open(version, 'w')
-        except IOError, e:
+        except IOError as e:
             # Permission denied
             if e.errno == errno.EACCES:
                 return
@@ -126,13 +126,13 @@ class CacheStore(object):
     def _remove_filename(self, filename):
         try:
             os.unlink(filename)
-        except IOError, e:
+        except IOError as e:
             # Permission denied
             if e.errno == errno.EACCES:
                 return
             else:
                 raise
-        except OSError, e:
+        except OSError as e:
             # File does not exist
             if e.errno == errno.ENOENT:
                 return
@@ -157,7 +157,7 @@ class CacheStore(object):
         tmp_fd, tmp_filename = tempfile.mkstemp(prefix='g-ir-scanner-cache-')
         try:
             cPickle.dump(data, os.fdopen(tmp_fd, 'w'))
-        except IOError, e:
+        except IOError as e:
             # No space left on device
             if e.errno == errno.ENOSPC:
                 self._remove_filename(tmp_filename)
@@ -167,7 +167,7 @@ class CacheStore(object):
 
         try:
             shutil.move(tmp_filename, store_filename)
-        except IOError, e:
+        except IOError as e:
             # Permission denied
             if e.errno == errno.EACCES:
                 self._remove_filename(tmp_filename)
@@ -180,7 +180,7 @@ class CacheStore(object):
             return
         try:
             fd = open(store_filename)
-        except IOError, e:
+        except IOError as e:
             if e.errno == errno.ENOENT:
                 return None
             else:

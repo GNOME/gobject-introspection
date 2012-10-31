@@ -165,7 +165,7 @@ blob containing data gleaned from GObject's primitive introspection."""
         try:
             try:
                 subprocess.check_call(args, stdout=sys.stdout, stderr=sys.stderr)
-            except subprocess.CalledProcessError, e:
+            except subprocess.CalledProcessError as e:
                 # Clean up temporaries
                 raise SystemExit(e)
             return parse(out_path)
@@ -251,7 +251,7 @@ blob containing data gleaned from GObject's primitive introspection."""
         (get_type, c_symbol_prefix) = self._split_type_and_symbol_prefix(xmlnode)
         try:
             enum_name = self._transformer.strip_identifier(type_name)
-        except TransformerException, e:
+        except TransformerException as e:
             message.fatal(e)
 
         # The scanned member values are more accurate than the values that the
@@ -316,7 +316,7 @@ different --identifier-prefix.""" % (xmlnode.attrib['name'], self._namespace.ide
         (get_type, c_symbol_prefix) = self._split_type_and_symbol_prefix(xmlnode)
         try:
             object_name = self._transformer.strip_identifier(type_name)
-        except TransformerException, e:
+        except TransformerException as e:
             message.fatal(e)
         node = ast.Class(object_name, None,
                          gtype_name=type_name,
@@ -346,7 +346,7 @@ different --identifier-prefix.""" % (xmlnode.attrib['name'], self._namespace.ide
         (get_type, c_symbol_prefix) = self._split_type_and_symbol_prefix(xmlnode)
         try:
             interface_name = self._transformer.strip_identifier(type_name)
-        except TransformerException, e:
+        except TransformerException as e:
             message.fatal(e)
         node = ast.Interface(interface_name, None,
                              gtype_name=type_name,
@@ -391,7 +391,7 @@ different --identifier-prefix.""" % (xmlnode.attrib['name'], self._namespace.ide
 
         try:
             name = self._transformer.strip_identifier(type_name)
-        except TransformerException, e:
+        except TransformerException as e:
             message.fatal(e)
         # This one doesn't go in the main namespace; we associate it with
         # the struct or union
@@ -465,7 +465,7 @@ different --identifier-prefix.""" % (xmlnode.attrib['name'], self._namespace.ide
         (get_type, c_symbol_prefix) = self._split_type_and_symbol_prefix(xmlnode)
         try:
             fundamental_name = self._transformer.strip_identifier(type_name)
-        except TransformerException, e:
+        except TransformerException as e:
             message.warn(e)
             return
 
@@ -509,7 +509,7 @@ different --identifier-prefix.""" % (xmlnode.attrib['name'], self._namespace.ide
     def _pair_boxed_type(self, boxed):
         try:
             name = self._transformer.strip_identifier(boxed.gtype_name)
-        except TransformerException, e:
+        except TransformerException as e:
             message.fatal(e)
         pair_node = self._namespace.get(name)
         if not pair_node:

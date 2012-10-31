@@ -289,7 +289,7 @@ raise ValueError."""
             ident = ident[1:]
         try:
             matches = self.split_ctype_namespaces(ident)
-        except ValueError, e:
+        except ValueError as e:
             raise TransformerException(str(e))
         for ns, name in matches:
             if ns is self._namespace:
@@ -309,7 +309,7 @@ raise ValueError."""
             ident = ident[1:]
         try:
             (ns, name) = self.split_csymbol(ident)
-        except ValueError, e:
+        except ValueError as e:
             raise TransformerException(str(e))
         if ns != self._namespace:
             raise TransformerException(
@@ -383,7 +383,7 @@ raise ValueError."""
                 # prefix.
                 try:
                     name = self._strip_symbol(child)
-                except TransformerException, e:
+                except TransformerException as e:
                     message.warn_symbol(symbol, e)
                     return None
             members.append(ast.Member(name.lower(),
@@ -393,7 +393,7 @@ raise ValueError."""
 
         try:
             enum_name = self.strip_identifier(symbol.ident)
-        except TransformerException, e:
+        except TransformerException as e:
             message.warn_symbol(symbol, e)
             return None
         if symbol.base_type.is_bitfield:
@@ -412,7 +412,7 @@ raise ValueError."""
         return_ = self._create_return(symbol.base_type.base_type)
         try:
             name = self._strip_symbol(symbol)
-        except TransformerException, e:
+        except TransformerException as e:
             message.warn_symbol(symbol, e)
             return None
         func = ast.Function(name, return_, parameters, False, symbol.ident)
@@ -580,7 +580,7 @@ raise ValueError."""
                        CTYPE_VOID):
             try:
                 name = self.strip_identifier(symbol.ident)
-            except TransformerException, e:
+            except TransformerException as e:
                 message.warn(e)
                 return None
             if symbol.base_type.name:
@@ -723,7 +723,7 @@ raise ValueError."""
             return None
         try:
             name = self._strip_symbol(symbol)
-        except TransformerException, e:
+        except TransformerException as e:
             message.warn_symbol(symbol, e)
             return None
         if symbol.const_string is not None:
@@ -765,7 +765,7 @@ raise ValueError."""
     def _create_typedef_struct(self, symbol, disguised=False):
         try:
             name = self.strip_identifier(symbol.ident)
-        except TransformerException, e:
+        except TransformerException as e:
             message.warn_symbol(symbol, e)
             return None
         struct = ast.Record(name, symbol.ident, disguised=disguised)
@@ -777,7 +777,7 @@ raise ValueError."""
     def _create_typedef_union(self, symbol):
         try:
             name = self.strip_identifier(symbol.ident)
-        except TransformerException, e:
+        except TransformerException as e:
             message.warn(e)
             return None
         union = ast.Union(name, symbol.ident)
@@ -825,7 +825,7 @@ raise ValueError."""
                 else:
                     try:
                         name = self.strip_identifier(symbol.ident)
-                    except TransformerException, e:
+                    except TransformerException as e:
                         message.warn(e)
                         return None
                 compound = klass(name, symbol.ident)
@@ -855,13 +855,13 @@ raise ValueError."""
         elif symbol.ident.find('_') > 0:
             try:
                 name = self._strip_symbol(symbol)
-            except TransformerException, e:
+            except TransformerException as e:
                 message.warn_symbol(symbol, e)
                 return None
         else:
             try:
                 name = self.strip_identifier(symbol.ident)
-            except TransformerException, e:
+            except TransformerException as e:
                 message.warn(e)
                 return None
         callback = ast.Callback(name, retval, parameters, False,

@@ -166,14 +166,14 @@ class DumpCompiler(object):
 
         try:
             self._compile(o_path, c_path)
-        except CompilerError, e:
+        except CompilerError as e:
             if not utils.have_debug_flag('save-temps'):
                 shutil.rmtree(tmpdir)
             raise SystemExit('compilation of temporary binary failed:' + str(e))
 
         try:
             self._link(bin_path, o_path)
-        except LinkerError, e:
+        except LinkerError as e:
             if not utils.have_debug_flag('save-temps'):
                 shutil.rmtree(tmpdir)
             raise SystemExit('linking of temporary binary failed: ' + str(e))
@@ -236,7 +236,7 @@ class DumpCompiler(object):
             sys.stdout.flush()
         try:
             subprocess.check_call(args)
-        except subprocess.CalledProcessError, e:
+        except subprocess.CalledProcessError as e:
             raise CompilerError(e)
 
     def _link(self, output, *sources):
@@ -290,7 +290,7 @@ class DumpCompiler(object):
             sys.stdout.flush()
         try:
             subprocess.check_call(args)
-        except subprocess.CalledProcessError, e:
+        except subprocess.CalledProcessError as e:
             raise LinkerError(e)
 
     def _add_link_internal_args(self, args, libtool):
