@@ -11150,9 +11150,9 @@
  * g_spawn_close_pid() in the callback function for the source.
  *
  * Note further that using g_child_watch_source_new() is not
- * compatible with calling <literal>waitpid(-1)</literal> in
- * the application. Calling waitpid() for individual pids will
- * still work fine.
+ * compatible with calling <literal>waitpid</literal> with a
+ * nonpositive first argument in the application. Calling waitpid()
+ * for individual pids will still work fine.
  *
  * Returns: the newly-created child watch source
  * Since: 2.4
@@ -14183,13 +14183,13 @@
 /**
  * g_filename_from_uri:
  * @uri: a uri describing a filename (escaped, encoded in ASCII).
- * @hostname: (allow-none): Location to store hostname for the URI, or %NULL. If there is no hostname in the URI, %NULL will be stored in this location.
+ * @hostname: (out) (allow-none): Location to store hostname for the URI, or %NULL. If there is no hostname in the URI, %NULL will be stored in this location.
  * @error: location to store the error occurring, or %NULL to ignore errors. Any of the errors in #GConvertError may occur.
  *
  * Converts an escaped ASCII-encoded URI to a local filename in the
  * encoding used for filenames.
  *
- * Returns: a newly-allocated string holding the resulting filename, or %NULL on an error.
+ * Returns: (type filename): a newly-allocated string holding the resulting filename, or %NULL on an error.
  */
 
 
@@ -14197,8 +14197,8 @@
  * g_filename_from_utf8:
  * @utf8string: a UTF-8 encoded string.
  * @len: the length of the string, or -1 if the string is nul-terminated.
- * @bytes_read: location to store the number of bytes in the input string that were successfully converted, or %NULL. Even if the conversion was successful, this may be less than @len if there were partial characters at the end of the input. If the error #G_CONVERT_ERROR_ILLEGAL_SEQUENCE occurs, the value stored will the byte offset after the last valid input sequence.
- * @bytes_written: the number of bytes stored in the output buffer (not including the terminating nul).
+ * @bytes_read: (out) (allow-none): location to store the number of bytes in the input string that were successfully converted, or %NULL. Even if the conversion was successful, this may be less than @len if there were partial characters at the end of the input. If the error #G_CONVERT_ERROR_ILLEGAL_SEQUENCE occurs, the value stored will the byte offset after the last valid input sequence.
+ * @bytes_written: (out): the number of bytes stored in the output buffer (not including the terminating nul).
  * @error: location to store the error occurring, or %NULL to ignore errors. Any of the errors in #GConvertError may occur.
  *
  * Converts a string from UTF-8 to the encoding GLib uses for
@@ -14206,7 +14206,7 @@
  * on other platforms, this function indirectly depends on the
  * <link linkend="setlocale">current locale</link>.
  *
- * Returns: The converted string, or %NULL on an error.
+ * Returns: (array length=bytes_written) (element-type guint8) (transfer full): The converted string, or %NULL on an error.
  */
 
 
@@ -27168,7 +27168,7 @@
  *    &ast; context is already owned by another thread.
  *    &ast;/
  *   g_test_expect_message (G_LOG_DOMAIN,
- *                          G_LOG_LEVEL_CRITICIAL,
+ *                          G_LOG_LEVEL_CRITICAL,
  *                          "assertion.*acquired_context.*failed");
  *   g_main_context_push_thread_default (bad_context);
  *   g_test_assert_expected_messages ();
@@ -29710,11 +29710,15 @@
  * @signum: A signal number
  *
  * Create a #GSource that will be dispatched upon delivery of the UNIX
- * signal @signum.  Currently only <literal>SIGHUP</literal>,
- * <literal>SIGINT</literal>, and <literal>SIGTERM</literal> can
- * be monitored.  Note that unlike the UNIX default, all sources which
- * have created a watch will be dispatched, regardless of which
- * underlying thread invoked g_unix_signal_source_new().
+ * signal @signum.  In GLib versions before 2.36, only
+ * <literal>SIGHUP</literal>, <literal>SIGINT</literal>,
+ * <literal>SIGTERM</literal> can be monitored.  In GLib 2.36,
+ * <literal>SIGUSR1</literal> and <literal>SIGUSR2</literal> were
+ * added.
+ *
+ * Note that unlike the UNIX default, all sources which have created a
+ * watch will be dispatched, regardless of which underlying thread
+ * invoked g_unix_signal_source_new().
  *
  * For example, an effective use of this function is to handle <literal>SIGTERM</literal>
  * cleanly; flushing any outstanding files, and then calling

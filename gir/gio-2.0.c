@@ -5613,7 +5613,7 @@
  *
  * #GNetworkMonitor provides an easy-to-use cross-platform API
  * for monitoring network connectivity. On Linux, the implementation
- * is based on the kernels netlink interface.
+ * is based on the kernel's netlink interface.
  */
 
 
@@ -15944,7 +15944,8 @@
  * g_dbus_object_manager_client_get_name:
  * @manager: A #GDBusObjectManagerClient
  *
- * Gets the name that @manager is for.
+ * Gets the name that @manager is for, or %NULL if not a message bus
+ * connection.
  *
  * Returns: A unique or well-known name. Do not free, the string belongs to @manager.
  * Since: 2.30
@@ -16070,7 +16071,7 @@
  * g_dbus_object_manager_client_new_sync:
  * @connection: A #GDBusConnection.
  * @flags: Zero or more flags from the #GDBusObjectManagerClientFlags enumeration.
- * @name: The owner of the control object (unique or well-known name).
+ * @name: (allow-none): The owner of the control object (unique or well-known name), or %NULL when not using a message bus connection.
  * @object_path: The object path of the control object.
  * @get_proxy_type_func: (allow-none): A #GDBusProxyTypeFunc function or %NULL to always construct #GDBusProxy proxies.
  * @get_proxy_type_user_data: User data to pass to @get_proxy_type_func.
