@@ -459,6 +459,11 @@ void gi_marshalling_tests_gptrarray_utf8_full_inout (GPtrArray **parray_);
 GByteArray *gi_marshalling_tests_bytearray_full_return (void);
 void gi_marshalling_tests_bytearray_none_in (GByteArray* v);
 
+/* GBytes */
+
+GBytes *gi_marshalling_tests_gbytes_full_return (void);
+void gi_marshalling_tests_gbytes_none_in (GBytes* v);
+
 /* GStrv */
 
 GStrv gi_marshalling_tests_gstrv_return (void);

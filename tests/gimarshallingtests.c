@@ -2233,6 +2233,36 @@ gi_marshalling_tests_bytearray_none_in (GByteArray *v)
 }
 
 /**
+ * gi_marshalling_tests_gbytes_full_return:
+ *
+ * Returns: (transfer full):
+ */
+GBytes *
+gi_marshalling_tests_gbytes_full_return (void)
+{
+  static guint8 data[] = {0, 49, 0xFF, 51};
+
+  return g_bytes_new_static (data, G_N_ELEMENTS(data));
+}
+
+/**
+ * gi_marshalling_tests_gbytes_none_in:
+ */
+void
+gi_marshalling_tests_gbytes_none_in (GBytes *v)
+{
+  const guint8 *data;
+  gsize len;
+  data = g_bytes_get_data (v, &len);
+
+  g_assert_cmpuint (len, ==, 4);
+  g_assert_cmpuint (data[0], ==, 0);
+  g_assert_cmpuint (data[1], ==, 49);
+  g_assert_cmpuint (data[2], ==, 0xFF);
+  g_assert_cmpuint (data[3], ==, 51);
+}
+
+/**
  * gi_marshalling_tests_gstrv_return:
  *
  * Returns: (transfer full): an array of strings
