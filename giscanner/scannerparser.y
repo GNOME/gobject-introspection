@@ -386,7 +386,7 @@ unary_expression
 	  {
 		$$ = $3;
 		if ($$->const_int_set) {
-			$$->base_type = gi_source_basic_type_new ("gint64");
+			$$->base_type = gi_source_basic_type_new ($$->const_int_is_unsigned ? "guint64" : "gint64");
 		}
 	  }
 	| INTUL_CONST '(' unary_expression ')'

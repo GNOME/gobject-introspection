@@ -93,7 +93,7 @@ and/or use gtk-doc annotations.  -->
     <constant name="MAXUINT64"
               value="18446744073709551615"
               c:type="REGRESS_MAXUINT64">
-      <type name="gint64" c:type="gint64"/>
+      <type name="guint64" c:type="guint64"/>
     </constant>
     <constant name="MININT64"
               value="-9223372036854775808"
