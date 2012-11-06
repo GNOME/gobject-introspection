@@ -1,4 +1,4 @@
-/* GObject introspection: C parser
+/* GObject introspection: C parser -*- indent-tabs-mode: t; tab-width: 8 -*-
  *
  * Copyright (c) 1997 Sandro Sigala  <ssigala@globalnet.it>
  * Copyright (c) 2007-2008 Jürg Billeter  <j@bitron.ch>
@@ -232,15 +232,19 @@ primary_expression
 	  }
 	| INTEGER
 	  {
+		char *rest;
+		guint64 value;
 		$$ = gi_source_symbol_new (CSYMBOL_TYPE_CONST, scanner->current_filename, lineno);
 		$$->const_int_set = TRUE;
 		if (g_str_has_prefix (yytext, "0x") && strlen (yytext) > 2) {
-			$$->const_int = g_ascii_strtoll (yytext + 2, NULL, 16);
+			value = g_ascii_strtoull (yytext + 2, &rest, 16);
 		} else if (g_str_has_prefix (yytext, "0") && strlen (yytext) > 1) {
-			$$->const_int = g_ascii_strtoll (yytext + 1, NULL, 8);
+			value = g_ascii_strtoull (yytext + 1, &rest, 8);
 		} else {
-			$$->const_int = g_ascii_strtoll (yytext, NULL, 10);
+			value = g_ascii_strtoull (yytext, &rest, 10);
 		}
+		$$->const_int = value;
+		$$->const_int_is_unsigned = (rest && (rest[0] == 'U'));
 	  }
 	| CHARACTER
 	  {
@@ -382,7 +386,7 @@ unary_expression
 	  {
 		$$ = $3;
 		if ($$->const_int_set) {
-			$$->base_type = gi_source_basic_type_new ("gint64");
+			$$->base_type = gi_source_basic_type_new ($$->const_int_is_unsigned ? "guint64" : "gint64");
 		}
 	  }
 	| INTUL_CONST '(' unary_expression ')'
