@@ -3339,7 +3339,7 @@ gi_marshalling_tests_genum_get_type (void)
     return type;
 }
 
-GIMarshallingTestsEnum
+GIMarshallingTestsGEnum
 gi_marshalling_tests_genum_returnv (void)
 {
     return GI_MARSHALLING_TESTS_GENUM_VALUE3;

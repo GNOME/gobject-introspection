@@ -303,7 +303,7 @@ typedef enum
 GType gi_marshalling_tests_genum_get_type (void) G_GNUC_CONST;
 #define GI_MARSHALLING_TESTS_TYPE_GENUM (gi_marshalling_tests_genum_get_type ())
 
-GIMarshallingTestsEnum gi_marshalling_tests_genum_returnv (void);
+GIMarshallingTestsGEnum gi_marshalling_tests_genum_returnv (void);
 
 void gi_marshalling_tests_genum_in (GIMarshallingTestsGEnum v);
 
