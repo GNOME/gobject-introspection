@@ -348,7 +348,7 @@ def create_binary(transformer, options, args):
     return shlibs
 
 def create_source_scanner(options, args):
-    if options.filelist:
+    if hasattr(options, 'filelist') and options.filelist:
         filenames = extract_filelist(options)
     else:
         filenames = extract_filenames(args)
@@ -408,7 +408,7 @@ def scanner_main(args):
     if options.test_codegen:
         return test_codegen(options.test_codegen)
 
-    if not options.filelist:
+    if hasattr(options, 'filelist') and not options.filelist:
         if len(args) <= 1:
             _error('Need at least one filename')
 
