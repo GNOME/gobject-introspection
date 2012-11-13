@@ -10610,13 +10610,13 @@
  *
  * Creates a new #GByteArray with a reference count of 1.
  *
- * Returns: the new #GByteArray.
+ * Returns: (transfer full): the new #GByteArray.
  */
 
 
 /**
  * g_byte_array_new_take:
- * @data: (array length=len): byte data for the array
+ * @data: (transfer full) (array length=len): byte data for the array
  * @len: length of @data
  *
  * Create byte array containing the data. The data will be owned by the array
@@ -10797,7 +10797,7 @@
  *
  * This function will always return the same pointer for a given #GBytes.
  *
- * Returns: (array length=size) (type guint8): a pointer to the byte data
+ * Returns: (transfer none) (array length=size) (type guint8): a pointer to the byte data
  * Since: 2.32
  */
 
@@ -10831,7 +10831,7 @@
 
 /**
  * g_bytes_new:
- * @data: (array length=size): the data to be used for the bytes
+ * @data: (transfer none) (array length=size) (element-type guint8): the data to be used for the bytes
  * @size: the size of @data
  *
  * Creates a new #GBytes from @data.
@@ -10861,8 +10861,8 @@
 
 
 /**
- * g_bytes_new_static:
- * @data: (array length=size): the data to be used for the bytes
+ * g_bytes_new_static: (skip)
+ * @data: (transfer full) (array length=size) (element-type guint8): the data to be used for the bytes
  * @size: the size of @data
  *
  * Creates a new #GBytes from static data.
@@ -10876,7 +10876,7 @@
 
 /**
  * g_bytes_new_take:
- * @data: (transfer full) (array length=size): the data to be used for the bytes
+ * @data: (transfer full) (array length=size) (element-type guint8): the data to be used for the bytes
  * @size: the size of @data
  *
  * Creates a new #GBytes from @data.
@@ -14219,13 +14219,13 @@
 /**
  * g_filename_from_uri:
  * @uri: a uri describing a filename (escaped, encoded in ASCII).
- * @hostname: (allow-none): Location to store hostname for the URI, or %NULL. If there is no hostname in the URI, %NULL will be stored in this location.
+ * @hostname: (out) (allow-none): Location to store hostname for the URI, or %NULL. If there is no hostname in the URI, %NULL will be stored in this location.
  * @error: location to store the error occurring, or %NULL to ignore errors. Any of the errors in #GConvertError may occur.
  *
  * Converts an escaped ASCII-encoded URI to a local filename in the
  * encoding used for filenames.
  *
- * Returns: a newly-allocated string holding the resulting filename, or %NULL on an error.
+ * Returns: (type filename): a newly-allocated string holding the resulting filename, or %NULL on an error.
  */
 
 
@@ -14233,8 +14233,8 @@
  * g_filename_from_utf8:
  * @utf8string: a UTF-8 encoded string.
  * @len: the length of the string, or -1 if the string is nul-terminated.
- * @bytes_read: location to store the number of bytes in the input string that were successfully converted, or %NULL. Even if the conversion was successful, this may be less than @len if there were partial characters at the end of the input. If the error #G_CONVERT_ERROR_ILLEGAL_SEQUENCE occurs, the value stored will the byte offset after the last valid input sequence.
- * @bytes_written: the number of bytes stored in the output buffer (not including the terminating nul).
+ * @bytes_read: (out) (allow-none): location to store the number of bytes in the input string that were successfully converted, or %NULL. Even if the conversion was successful, this may be less than @len if there were partial characters at the end of the input. If the error #G_CONVERT_ERROR_ILLEGAL_SEQUENCE occurs, the value stored will the byte offset after the last valid input sequence.
+ * @bytes_written: (out): the number of bytes stored in the output buffer (not including the terminating nul).
  * @error: location to store the error occurring, or %NULL to ignore errors. Any of the errors in #GConvertError may occur.
  *
  * Converts a string from UTF-8 to the encoding GLib uses for
@@ -14242,7 +14242,7 @@
  * on other platforms, this function indirectly depends on the
  * <link linkend="setlocale">current locale</link>.
  *
- * Returns: The converted string, or %NULL on an error.
+ * Returns: (array length=bytes_written) (element-type guint8) (transfer full): The converted string, or %NULL on an error.
  */
 
 
@@ -16269,9 +16269,9 @@
 /**
  * g_io_channel_read_chars:
  * @channel: a #GIOChannel
- * @buf: a buffer to read data into
- * @count: the size of the buffer. Note that the buffer may not be complelely filled even if there is data in the buffer if the remaining data is not a complete character.
- * @bytes_read: (allow-none): The number of bytes read. This may be zero even on success if count < 6 and the channel's encoding is non-%NULL. This indicates that the next UTF-8 character is too wide for the buffer.
+ * @buf: (out caller-allocates) (array length=count) (element-type guint8): a buffer to read data into
+ * @count: (in): the size of the buffer. Note that the buffer may not be complelely filled even if there is data in the buffer if the remaining data is not a complete character.
+ * @bytes_read: (allow-none) (out): The number of bytes read. This may be zero even on success if count < 6 and the channel's encoding is non-%NULL. This indicates that the next UTF-8 character is too wide for the buffer.
  * @error: a location to return an error of type #GConvertError or #GIOChannelError.
  *
  * Replacement for g_io_channel_read() with the new API.
@@ -16283,9 +16283,9 @@
 /**
  * g_io_channel_read_line:
  * @channel: a #GIOChannel
- * @str_return: The line read from the #GIOChannel, including the line terminator. This data should be freed with g_free() when no longer needed. This is a nul-terminated string. If a @length of zero is returned, this will be %NULL instead.
- * @length: (allow-none): location to store length of the read data, or %NULL
- * @terminator_pos: (allow-none): location to store position of line terminator, or %NULL
+ * @str_return: (out): The line read from the #GIOChannel, including the line terminator. This data should be freed with g_free() when no longer needed. This is a nul-terminated string. If a @length of zero is returned, this will be %NULL instead.
+ * @length: (allow-none) (out): location to store length of the read data, or %NULL
+ * @terminator_pos: (allow-none) (out): location to store position of line terminator, or %NULL
  * @error: A location to return an error of type #GConvertError or #GIOChannelError
  *
  * Reads a line, including the terminating character(s),
@@ -16313,8 +16313,8 @@
 /**
  * g_io_channel_read_to_end:
  * @channel: a #GIOChannel
- * @str_return: Location to store a pointer to a string holding the remaining data in the #GIOChannel. This data should be freed with g_free() when no longer needed. This data is terminated by an extra nul character, but there may be other nuls in the intervening data.
- * @length: location to store length of the data
+ * @str_return: (out) (array length=length) (element-type guint8): Location to store a pointer to a string holding the remaining data in the #GIOChannel. This data should be freed with g_free() when no longer needed. This data is terminated by an extra nul character, but there may be other nuls in the intervening data.
+ * @length: (out): location to store length of the data
  * @error: location to return an error of type #GConvertError or #GIOChannelError
  *
  * Reads all the remaining data from the file.
@@ -16422,7 +16422,7 @@
 /**
  * g_io_channel_set_encoding:
  * @channel: a #GIOChannel
- * @encoding: the encoding type
+ * @encoding: (allow-none): the encoding type
  * @error: location to store an error of type #GConvertError
  *
  * Sets the encoding for the input/output of the channel.
@@ -16488,7 +16488,7 @@
 /**
  * g_io_channel_set_line_term:
  * @channel: a #GIOChannel
- * @line_term: The line termination string. Use %NULL for autodetect. Autodetection breaks on "\n", "\r\n", "\r", "\0", and the Unicode paragraph separator. Autodetection should not be used for anything other than file-based channels.
+ * @line_term: (allow-none): The line termination string. Use %NULL for autodetect.  Autodetection breaks on "\n", "\r\n", "\r", "\0", and the Unicode paragraph separator. Autodetection should not be used for anything other than file-based channels.
  * @length: The length of the termination string. If -1 is passed, the string is assumed to be nul-terminated. This option allows termination strings with embedded nuls.
  *
  * This sets the string that #GIOChannel uses to determine
@@ -16638,9 +16638,9 @@
 /**
  * g_io_channel_write_chars:
  * @channel: a #GIOChannel
- * @buf: a buffer to write data from
+ * @buf: (array) (element-type guint8): a buffer to write data from
  * @count: the size of the buffer. If -1, the buffer is taken to be a nul-terminated string.
- * @bytes_written: The number of bytes written. This can be nonzero even if the return value is not %G_IO_STATUS_NORMAL. If the return value is %G_IO_STATUS_NORMAL and the channel is blocking, this will always be equal to @count if @count >= 0.
+ * @bytes_written: (out): The number of bytes written. This can be nonzero even if the return value is not %G_IO_STATUS_NORMAL. If the return value is %G_IO_STATUS_NORMAL and the channel is blocking, this will always be equal to @count if @count >= 0.
  * @error: a location to return an error of type #GConvertError or #GIOChannelError
  *
  * Replacement for g_io_channel_write() with the new API.

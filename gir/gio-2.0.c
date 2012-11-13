@@ -5580,7 +5580,7 @@
  *
  * #GNetworkMonitor provides an easy-to-use cross-platform API
  * for monitoring network connectivity. On Linux, the implementation
- * is based on the kernels netlink interface.
+ * is based on the kernel's netlink interface.
  */
 
 
@@ -29017,7 +29017,10 @@
  * g_socket_get_available_bytes:
  * @socket: a #GSocket
  *
- * Get the amount of data pending in the OS input buffer.
+ * Get the amount of data that can be read from the socket without
+ * blocking. In the case of datagram sockets this returns the size
+ * of the first datagram and not the sum of the sizes of all currently
+ * queued datagrams.
  *
  * Returns: the number of bytes that can be read from the socket without blocking or -1 on error.
  * Since: 2.32
