@@ -4624,6 +4624,7 @@ enum  {
     SOME_DOUBLE_PROPERTY,
     SOME_STRV_PROPERTY,
     SOME_BOXED_STRUCT_PROPERTY,
+    SOME_VARIANT_PROPERTY,
 };
 
 G_DEFINE_TYPE (GIMarshallingTestsPropertiesObject, gi_marshalling_tests_properties_object, G_TYPE_OBJECT);
@@ -4684,6 +4685,9 @@ gi_marshalling_tests_properties_object_get_property (GObject * object, guint pro
         case SOME_BOXED_STRUCT_PROPERTY:
             g_value_set_boxed (value, self->some_boxed_struct);
             break;
+        case SOME_VARIANT_PROPERTY:
+            g_value_set_variant (value, self->some_variant);
+            break;
         default:
             G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
             break;
@@ -4736,6 +4740,13 @@ gi_marshalling_tests_properties_object_set_property (GObject * object, guint pro
         case SOME_BOXED_STRUCT_PROPERTY:
             gi_marshalling_tests_boxed_struct_free (self->some_boxed_struct);
             self->some_boxed_struct = gi_marshalling_tests_boxed_struct_copy (g_value_get_boxed (value));
+            break;
+        case SOME_VARIANT_PROPERTY:
+            if (self->some_variant != NULL)
+                g_variant_unref (self->some_variant);
+            self->some_variant = g_value_get_variant (value);
+            if (self->some_variant != NULL)
+                g_variant_ref (self->some_variant);
             break;
         default:
             G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -4803,6 +4814,11 @@ gi_marshalling_tests_properties_object_class_init (GIMarshallingTestsPropertiesO
     g_object_class_install_property (object_class, SOME_BOXED_STRUCT_PROPERTY,
         g_param_spec_boxed ("some-boxed-struct", "some-boxed-struct", "some-boxed-struct", 
             gi_marshalling_tests_boxed_struct_get_type(),
+            G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
+
+    g_object_class_install_property (object_class, SOME_VARIANT_PROPERTY,
+        g_param_spec_variant ("some-variant", "some-variant", "some-variant", 
+            G_VARIANT_TYPE_ANY, NULL,
             G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
 }
 

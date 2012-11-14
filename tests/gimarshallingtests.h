@@ -1045,6 +1045,7 @@ struct _GIMarshallingTestsPropertiesObject {
     gdouble some_double;
     gchar **some_strv;
     GIMarshallingTestsBoxedStruct* some_boxed_struct; 
+    GVariant *some_variant;
 };
 
 struct _GIMarshallingTestsPropertiesObjectClass {
