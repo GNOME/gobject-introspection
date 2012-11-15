@@ -86,3 +86,18 @@ tests/offsets/offsets.introspected
 tests/doctool/DocExamples-1.0-C
 tests/doctool/DocExamples-1.0-Python
 .make-check-passed
+
+#GTK-Doc output
+docs/reference/html
+docs/reference/xml
+docs/reference/gi.args
+docs/reference/gi.hierarchy
+docs/reference/gi.interfaces
+docs/reference/gi.prerequisites
+docs/reference/gi.signals
+docs/reference/gi-decl.txt
+docs/reference/gi-decl-list.txt
+docs/reference/gi-undeclared.txt
+docs/reference/gi-undocumented.txt
+docs/reference/gi-unused.txt
+docs/reference/version.xml
