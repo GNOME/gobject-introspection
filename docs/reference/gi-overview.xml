@@ -4,7 +4,6 @@
 <!ENTITY % local.common.attrib "xmlns:xi  CDATA  #FIXED 'http://www.w3.org/2003/XInclude'">
 <!ENTITY version SYSTEM "version.xml">
 ]>
-<!--ENTITY index-Objects-Grouped SYSTEM "objects_grouped.sgml"-->
 <refentry id="gi-overview">
 <refmeta>
   <refentrytitle role="top_of_page" id="gi-overview.top_of_page">Introspection Overview</refentrytitle>
