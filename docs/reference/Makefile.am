@@ -13,7 +13,7 @@ DOC_SOURCE_DIR=$(top_srcdir)/girepository
 SCAN_OPTIONS=
 
 # Extra options to supply to gtkdoc-mkdb
-MKDB_OPTIONS=--sgml-mode --output-format=xml --name-space=g
+MKDB_OPTIONS=--sgml-mode --output-format=xml --name-space=g --ignore-files=cmph
 
 # Used for dependencies
 HFILE_GLOB=$(top_srcdir)/girepository/*.h
