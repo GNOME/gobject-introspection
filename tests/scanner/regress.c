@@ -1953,6 +1953,53 @@ G_DEFINE_BOXED_TYPE(RegressTestBoxedC,
                     regress_test_boxed_c_ref,
                     regress_test_boxed_c_unref);
 
+struct _RegressTestBoxedD {
+  char *a_string;
+  gint a_int;
+};
+
+RegressTestBoxedD *
+regress_test_boxed_d_new (const char *a_string, int a_int)
+{
+  RegressTestBoxedD *boxed;
+
+  boxed = g_slice_new (RegressTestBoxedD);
+  boxed->a_string = g_strdup (a_string);
+  boxed->a_int = a_int;
+
+  return boxed;
+}
+
+RegressTestBoxedD *
+regress_test_boxed_d_copy (RegressTestBoxedD *boxed)
+{
+  RegressTestBoxedD *ret;
+
+  ret = g_slice_new (RegressTestBoxedD);
+  ret->a_string = g_strdup (boxed->a_string);
+  ret->a_int = boxed->a_int;
+
+  return ret;
+}
+
+void
+regress_test_boxed_d_free (RegressTestBoxedD *boxed)
+{
+  g_free (boxed->a_string);
+  g_slice_free (RegressTestBoxedD, boxed);
+}
+
+int
+regress_test_boxed_d_get_magic (RegressTestBoxedD *boxed)
+{
+  return strlen (boxed->a_string) + boxed->a_int;
+}
+
+G_DEFINE_BOXED_TYPE(RegressTestBoxedD,
+                    regress_test_boxed_d,
+                    regress_test_boxed_d_copy,
+                    regress_test_boxed_d_free);
+
 G_DEFINE_TYPE(RegressTestObj, regress_test_obj, G_TYPE_OBJECT);
 
 enum

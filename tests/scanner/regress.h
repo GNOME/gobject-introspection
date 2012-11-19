@@ -432,6 +432,16 @@ struct _RegressTestBoxedC
 GType regress_test_boxed_c_get_type (void);
 RegressTestBoxedC *regress_test_boxed_c_new (void);
 
+typedef struct _RegressTestBoxedD RegressTestBoxedD;
+
+GType regress_test_boxed_d_get_type (void);
+
+RegressTestBoxedD *regress_test_boxed_d_new (const char *a_string, int a_int);
+RegressTestBoxedD *regress_test_boxed_d_copy (RegressTestBoxedD *boxed);
+void regress_test_boxed_d_free (RegressTestBoxedD *boxed);
+
+int regress_test_boxed_d_get_magic (RegressTestBoxedD *boxed);
+
 /* gobject */
 #define REGRESS_TEST_TYPE_OBJ              (regress_test_obj_get_type ())
 #define REGRESS_TEST_OBJECT(object)        (G_TYPE_CHECK_INSTANCE_CAST ((object), REGRESS_TEST_TYPE_OBJ, RegressTestObj))
