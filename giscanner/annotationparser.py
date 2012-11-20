@@ -779,7 +779,7 @@ class AnnotationParser(object):
             # line, we must be parsing the comment block description.
             ####################################################################
             if (EMPTY_LINE_RE.search(line)
-            and (in_part == PART_IDENTIFIER or in_part == PART_PARAMETERS)):
+            and in_part in [PART_IDENTIFIER, PART_PARAMETERS]):
                 in_part = PART_DESCRIPTION
                 continue
 
@@ -844,7 +844,7 @@ class AnnotationParser(object):
             # If we get here, we must be in the middle of a multiline
             # comment block, parameter or tag description.
             ####################################################################
-            if in_part == PART_DESCRIPTION or in_part == PART_IDENTIFIER:
+            if in_part in [PART_IDENTIFIER, PART_DESCRIPTION]:
                 if not comment_block.comment:
                     # Backwards compatibility with old style GTK-Doc
                     # comment blocks where Description used to be a comment
