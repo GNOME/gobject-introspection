@@ -3941,6 +3941,38 @@ gi_marshalling_tests_object_method_int8_out (GIMarshallingTestsObject *self, gin
 }
 
 /**
+ * gi_marshalling_tests_object_method_int8_arg_and_out_caller:
+ * @out: (out caller-allocates):
+ */
+void
+gi_marshalling_tests_object_method_int8_arg_and_out_caller (GIMarshallingTestsObject *self, gint8 arg, gint8 *out)
+{
+  GI_MARSHALLING_TESTS_OBJECT_GET_CLASS (self)->method_int8_arg_and_out_caller (self, arg, out);
+}
+
+/**
+ * gi_marshalling_tests_object_method_int8_arg_and_out_callee:
+ * @out: (out):
+ */
+void
+gi_marshalling_tests_object_method_int8_arg_and_out_callee (GIMarshallingTestsObject *self, gint8 arg, gint8 **out)
+{
+  GI_MARSHALLING_TESTS_OBJECT_GET_CLASS (self)->method_int8_arg_and_out_callee (self, arg, out);
+}
+
+/**
+ * gi_marshalling_tests_object_method_str_arg_out_ret:
+ * @out: (out caller-allocates):
+ *
+ * Returns: (transfer none)
+ */
+const gchar*
+gi_marshalling_tests_object_method_str_arg_out_ret (GIMarshallingTestsObject *self, const gchar* arg, guint *out)
+{
+  return GI_MARSHALLING_TESTS_OBJECT_GET_CLASS (self)->method_str_arg_out_ret (self, arg, out);
+}
+
+/**
  * gi_marshalling_tests_object_method_with_default_implementation:
  * @in: (in):
  */

@@ -712,6 +712,26 @@ struct _GIMarshallingTestsObjectClass
     void (* method_int8_out) (GIMarshallingTestsObject *self, gint8 *out);
 
     /**
+     * GIMarshallingTestsObjectClass::method_int8_arg_and_out_caller:
+     * @out: (out caller-allocates):
+     */
+    void (* method_int8_arg_and_out_caller) (GIMarshallingTestsObject *self, gint8 arg, gint8 *out);
+
+    /**
+     * GIMarshallingTestsObjectClass::method_int8_arg_and_out_callee:
+     * @out: (out):
+     */
+    void (* method_int8_arg_and_out_callee) (GIMarshallingTestsObject *self, gint8 arg, gint8 **out);
+
+    /**
+     * GIMarshallingTestsObjectClass::method_str_arg_out_ret:
+     * @out: (out caller-allocates):
+     *
+     * Returns: (transfer none)
+     */
+    const gchar* (* method_str_arg_out_ret) (GIMarshallingTestsObject *self, const gchar* arg, guint *out);
+
+    /**
      * GIMarshallingTestsObjectClass::method_with_default_implementation:
      * @in: (in):
      */
@@ -792,6 +812,9 @@ const gint *gi_marshalling_tests_object_method_array_return (GIMarshallingTestsO
 
 void gi_marshalling_tests_object_method_int8_in (GIMarshallingTestsObject *object, gint8 in);
 void gi_marshalling_tests_object_method_int8_out (GIMarshallingTestsObject *object, gint8 *out);
+void gi_marshalling_tests_object_method_int8_arg_and_out_caller (GIMarshallingTestsObject *object, gint8 arg, gint8 *out);
+void gi_marshalling_tests_object_method_int8_arg_and_out_callee (GIMarshallingTestsObject *object, gint8 arg, gint8 **out);
+const gchar* gi_marshalling_tests_object_method_str_arg_out_ret (GIMarshallingTestsObject *object, const gchar* arg, guint *out);
 void gi_marshalling_tests_object_method_with_default_implementation (GIMarshallingTestsObject *object, gint8 in);
 void gi_marshalling_tests_object_method_variant_array_in (GIMarshallingTestsObject *object, GVariant **in, gsize n_in);
 
