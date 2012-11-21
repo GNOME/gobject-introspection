@@ -271,6 +271,40 @@ use it should be.</doc>
         </return-value>
       </constructor>
     </record>
+    <record name="TestBoxedD"
+            c:type="RegressTestBoxedD"
+            glib:type-name="RegressTestBoxedD"
+            glib:get-type="regress_test_boxed_d_get_type"
+            c:symbol-prefix="test_boxed_d">
+      <constructor name="new" c:identifier="regress_test_boxed_d_new">
+        <return-value transfer-ownership="full">
+          <type name="TestBoxedD" c:type="RegressTestBoxedD*"/>
+        </return-value>
+        <parameters>
+          <parameter name="a_string" transfer-ownership="none">
+            <type name="utf8" c:type="const char*"/>
+          </parameter>
+          <parameter name="a_int" transfer-ownership="none">
+            <type name="gint" c:type="int"/>
+          </parameter>
+        </parameters>
+      </constructor>
+      <method name="copy" c:identifier="regress_test_boxed_d_copy">
+        <return-value transfer-ownership="full">
+          <type name="TestBoxedD" c:type="RegressTestBoxedD*"/>
+        </return-value>
+      </method>
+      <method name="free" c:identifier="regress_test_boxed_d_free">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+      </method>
+      <method name="get_magic" c:identifier="regress_test_boxed_d_get_magic">
+        <return-value transfer-ownership="none">
+          <type name="gint" c:type="int"/>
+        </return-value>
+      </method>
+    </record>
     <record name="TestBoxedPrivate"
             c:type="RegressTestBoxedPrivate"
             disguised="1">
