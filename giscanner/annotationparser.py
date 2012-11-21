@@ -154,10 +154,6 @@ class DocBlock(object):
     def __repr__(self):
         return '<DocBlock %r %r>' % (self.name, self.options)
 
-    def set_position(self, position):
-        self.position = position
-        self.options.position = position
-
     def get_tag(self, name):
         return self.tags.get(name)
 
@@ -308,10 +304,6 @@ class DocTag(object):
             message.warn("out annotation value is invalid: %r" % (
                 value_str), self.position)
             return
-
-    def set_position(self, position):
-        self.position = position
-        self.options.position = position
 
     def _get_gtk_doc_value(self):
         def serialize_one(option, value, fmt, fmt2):
@@ -679,7 +671,7 @@ class AnnotationParser(object):
                     in_part = PART_IDENTIFIER
 
                     comment_block = DocBlock(identifier_name)
-                    comment_block.set_position(position)
+                    comment_block.position = position
 
                     if 'colon' in result.groupdict() and result.group('colon') != ':':
                         colon_start = result.start('colon')
@@ -749,7 +741,7 @@ class AnnotationParser(object):
                                  position)
 
                 tag = DocTag(comment_block, param_name)
-                tag.set_position(position)
+                tag.position = position
                 tag.comment = param_description
                 if param_annotations:
                     tag.options = self.parse_options(tag, param_annotations)
