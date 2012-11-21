@@ -437,7 +437,7 @@ class DocOption(object):
     def __init__(self, tag, option):
         self.tag = tag
         self._array = []
-        self._dict = {}
+        self._dict = odict()
         # (annotation option1=value1 option2=value2) etc
         for p in option.split(' '):
             if '=' in p:

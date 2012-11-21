@@ -16894,7 +16894,7 @@
  * returned array is %NULL-terminated, so @length may optionally
  * be %NULL.
  *
- * Returns: (array length=length zero-terminated=1) (element-type utf8) (transfer full): a newly allocated %NULL-terminated string array or %NULL if the key isn't found. The string array should be freed with g_strfreev().
+ * Returns: (array zero-terminated=1 length=length) (element-type utf8) (transfer full): a newly allocated %NULL-terminated string array or %NULL if the key isn't found. The string array should be freed with g_strfreev().
  * Since: 2.6
  */
 
@@ -16946,7 +16946,7 @@
  * event that the @group_name cannot be found, %NULL is returned
  * and @error is set to #G_KEY_FILE_ERROR_GROUP_NOT_FOUND.
  *
- * Returns: (array length=length zero-terminated=1) (element-type utf8) (transfer full): a %NULL-terminated string array or %NULL if the specified key cannot be found. The array should be freed with g_strfreev().
+ * Returns: (array zero-terminated=1 length=length) (element-type utf8) (transfer full): a %NULL-terminated string array or %NULL if the specified key cannot be found. The array should be freed with g_strfreev().
  * Since: 2.6
  */
 
@@ -17316,7 +17316,7 @@
  * @group_name: a group name
  * @key: a key
  * @locale: a locale identifier
- * @list: (array length=length zero-terminated=1): a %NULL-terminated array of locale string values
+ * @list: (array zero-terminated=1 length=length): a %NULL-terminated array of locale string values
  * @length: the length of @list
  *
  * Associates a list of string values for @key and @locale under
@@ -17349,7 +17349,7 @@
  * @key_file: a #GKeyFile
  * @group_name: a group name
  * @key: a key
- * @list: (array length=length zero-terminated=1) (element-type utf8): an array of string values
+ * @list: (array zero-terminated=1 length=length) (element-type utf8): an array of string values
  * @length: number of string values in @list
  *
  * Associates a list of string values for @key under @group_name.
@@ -30725,7 +30725,7 @@
  *
  * The return value must be freed using g_free().
  *
- * Returns: (transfer full) (array length=length zero-terminated=1) (element-type guint8): a newly allocated string
+ * Returns: (transfer full) (array zero-terminated=1 length=length) (element-type guint8): a newly allocated string
  * Since: 2.26
  */
 
