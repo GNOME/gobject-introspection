@@ -1086,18 +1086,18 @@ class AnnotationParser(object):
             elif in_part == PART_PARAMETERS:
                 self._validate_multiline_annotation_continuation(line, original_line,
                                                                  column_offset, position)
-
                 # Append to parameter description.
                 current_param.comment += ' ' + line.strip()
+                continue
             elif in_part == PART_TAGS:
                 self._validate_multiline_annotation_continuation(line, original_line,
                                                                  column_offset, position)
-
                 # Append to tag description.
                 if current_tag.name.lower() in [TAG_RETURNS, TAG_RETURNVALUE]:
                     current_tag.comment += ' ' + line.strip()
                 else:
                     current_tag.value += ' ' + line.strip()
+                continue
 
         ########################################################################
         # Finished parsing this comment block.
