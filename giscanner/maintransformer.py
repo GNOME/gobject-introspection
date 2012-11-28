@@ -631,7 +631,7 @@ usage is void (*_gtk_reserved1)(void);"""
 
         annos_tag = block.get_tag(TAG_ATTRIBUTES)
         if annos_tag is not None:
-            for key, value in annos_tag.options.iteritems():
+            for key, value in annos_tag.options.items():
                 if value:
                     node.attributes.append((key, value.one()))
 

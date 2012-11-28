@@ -250,7 +250,7 @@ class DocTag(object):
         if value is None:
             return
 
-        for name, v in value.all().iteritems():
+        for name, v in value.all().items():
             if name in [OPT_ARRAY_ZERO_TERMINATED, OPT_ARRAY_FIXED_SIZE]:
                 try:
                     int(v)
@@ -318,12 +318,12 @@ class DocTag(object):
             if value:
                 if type(value) != str:
                     value = ' '.join((serialize_one(k, v, '%s=%s', '%s')
-                                      for k, v in value.all().iteritems()))
+                                      for k, v in value.all().items()))
                 return fmt % (option, value)
             else:
                 return fmt2 % (option, )
         annotations = []
-        for option, value in self.options.iteritems():
+        for option, value in self.options.items():
             annotations.append(
                 serialize_one(option, value, '(%s %s)', '(%s)'))
         if annotations:
@@ -345,8 +345,7 @@ class DocTag(object):
             # validation below is most certainly going to fail.
             return
 
-        for option in self.options:
-            value = self.options[option]
+        for option, value in self.options.items():
             if option == OPT_ALLOW_NONE:
                 self._validate_option(option, value, n_params=0)
             elif option == OPT_ARRAY:
@@ -429,7 +428,7 @@ class DocOptions(object):
             if key == item:
                 yield value
 
-    def iteritems(self):
+    def items(self):
         return iter(self.values)
 
 
