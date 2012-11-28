@@ -879,10 +879,10 @@ class AnnotationParser(object):
         else:
             comment_block.comment = ''
 
-        for tag in comment_block.tags.itervalues():
+        for tag in comment_block.tags.values():
             self._clean_comment_block_part(tag)
 
-        for param in comment_block.params.itervalues():
+        for param in comment_block.params.values():
             self._clean_comment_block_part(param)
 
         # Validate and store block.
