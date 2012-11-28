@@ -1,3 +1,14 @@
+test_patterns.py
+================
+
+Notes
+-----
+
+The tests included within test_patterns.py are designed to torture the regular
+expression programs used to match different parts of GTK-Doc comment blocks
+by giscanner/annotationparser.py
+
+
 test_parser.py
 ==============
 

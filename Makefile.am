@@ -65,7 +65,7 @@ check-local:
 	@echo "TEST: PEP-8 INQUISITION"
 	@find $(top_srcdir)/giscanner -name \*.py | sort | uniq | xargs $(PYTHON) $(top_srcdir)/misc/pep8.py --repeat --exclude=config.py
 	@echo "TEST: Annotation pattern programs"
-	$(PYTHON) $(top_srcdir)/giscanner/annotationpatterns.py
+	PYTHONPATH="$(top_builddir):$(top_srcdir)" $(PYTHON) $(top_srcdir)/tests/scanner/annotationparser/test_patterns.py
 	@echo "TEST: GTK-Doc Annotation Parser"
 	PYTHONPATH="$(top_builddir):$(top_srcdir)" $(PYTHON) $(top_srcdir)/tests/scanner/annotationparser/test_parser.py
 	@touch $(top_builddir)/.make-check-passed
