@@ -29,10 +29,10 @@ DocExamples_1_0_gir_FILES = $(libdocexamples_la_SOURCES)
 GIRS += DocExamples-1.0.gir
 
 %-C: %.gir
-	mkdir $*-C ; rm -f $*-C/*.page ; $(INTROSPECTION_DOCTOOL) --language C $*.gir -o $*-C/ && echo "  GEN  $*-C/index.page"
+	$(MKDIR_P) $*-C ; rm -f $*-C/*.page ; $(INTROSPECTION_DOCTOOL) --language C $*.gir -o $*-C/ && echo "  GEN  $*-C/index.page"
 
 %-Python: %.gir
-	mkdir $*-Python ; rm -f $*-Python/*.page ; $(INTROSPECTION_DOCTOOL) --language Python $*.gir -o $*-Python/ && echo "  GEN  $*-Python/index.page"
+	$(MKDIR_P) $*-Python ; rm -f $*-Python/*.page ; $(INTROSPECTION_DOCTOOL) --language Python $*.gir -o $*-Python/ && echo "  GEN  $*-Python/index.page"
 
 %-C.page.check: %-C
 	@diff -u -U 10 $(srcdir)/$*-C-expected $*-C && echo "  TEST  $*-C" && rm -rf $*-C

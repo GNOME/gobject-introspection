@@ -37,6 +37,7 @@ AM_CONDITIONAL(OS_WIN32, [test "x$os_win32" = "xyes"])
 # Checks for programs.
 AC_PROG_CC
 AM_PROG_CC_C_O
+AC_PROG_MKDIR_P
 
 # Initialize libtool
 LT_PREREQ([2.2])
