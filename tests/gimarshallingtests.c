@@ -1065,6 +1065,24 @@ gi_marshalling_tests_utf8_none_in (const gchar *utf8)
 }
 
 /**
+ * gi_marshalling_tests_utf8_as_uint8array_in:
+ * @array: (array length=len) (element-type guint8): Byte data that happens to be UTF-8
+ * @len: Length
+ *
+ * Takes data that happens to be UTF-8 as a byte array, to test
+ * binding conversion from their string type (e.g. JavaScript's
+ * UTF-16) to UTF-8.
+ */
+void
+gi_marshalling_tests_utf8_as_uint8array_in (const guint8 *array,
+                                            gsize         len)
+{
+  gsize orig_len = strlen (GI_MARSHALLING_TESTS_CONSTANT_UTF8);
+  g_assert_cmpint (orig_len, ==, len);
+  g_assert (memcmp (GI_MARSHALLING_TESTS_CONSTANT_UTF8, array, len) == 0);
+}
+
+/**
  * gi_marshalling_tests_utf8_none_out:
  * @utf8: (out) (transfer none):
  */

@@ -267,6 +267,10 @@ void gi_marshalling_tests_utf8_full_inout (gchar **utf8);
 
 GSList *gi_marshalling_tests_filename_list_return (void);
 
+void gi_marshalling_tests_utf8_as_uint8array_in (const guint8 *array,
+                                                 gsize         len);
+
+
 /* Enum */
 
 typedef enum
