@@ -151,14 +151,20 @@ COMMENT_START_RE = re.compile(r'''
     ''',
     re.VERBOSE)
 
-# Program matching the end of a comment block.
+# Program matching the end of a comment block. We need to take care
+# of comment ends that aren't on their own line for legacy support
+# reasons. See https://bugzilla.gnome.org/show_bug.cgi?id=689354
 #
-# Results in 0 symbolic groups.
+# Results in 1 symbolic group:
+#    - group 1 = description
 COMMENT_END_RE = re.compile(r'''
     ^                                        # start
     [^\S\n\r]*                               # 0 or more whitespace characters
+    (?P<description>.*?)                     # description text
+    [^\S\n\r]*                               # 0 or more whitespace characters
     \*+                                      # 1 or more asterisk characters
     /                                        # 1 forward slash character
+    [^\S\n\r]*                               # 0 or more whitespace characters
     $                                        # end
     ''',
     re.VERBOSE)
@@ -801,8 +807,19 @@ class AnnotationParser(object):
             return None
 
         # Check for the end the comment block.
-        if COMMENT_END_RE.match(comment_lines[-1][1]):
-            del comment_lines[-1]
+        line_offset, line = comment_lines[-1]
+        result = COMMENT_END_RE.match(line)
+        if result:
+            description = result.group('description')
+            if description:
+                comment_lines[-1] = (line_offset, description)
+                position = message.Position(filename, lineno + line_offset)
+                marker = ' '*result.end('description') + '^'
+                message.warn("Comments should end with */ on a new line:\n%s\n%s" %
+                             (line, marker),
+                             position)
+            else:
+                del comment_lines[-1]
         else:
             # Not a GTK-Doc comment block.
             return None

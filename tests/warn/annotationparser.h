@@ -203,3 +203,14 @@ void test_symbol_twice_documented();
 // EXPECT:195: Warning: Test: ignoring unrecognized GTK-Doc comment block, identifier not found:
 //+
 //+^
+
+/**
+ * regress_test_invalid_comment_end:
+ * @foo: a param
+ *
+ * invalid comment with a line without
+ * https://bugzilla.gnome.org/show_bug.cgi?id=689354 */
+
+// EXPECT:212: Warning: Test: Comments should end with */ on a new line:
+//+ * https://bugzilla.gnome.org/show_bug.cgi?id=689354 */
+//+                                                    ^

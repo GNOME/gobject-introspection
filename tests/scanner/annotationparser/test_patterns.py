@@ -32,7 +32,8 @@ against the expected output.
 
 
 from giscanner.annotationparser import (SECTION_RE, SYMBOL_RE, PROPERTY_RE,
-                                        SIGNAL_RE, PARAMETER_RE, TAG_RE)
+                                        SIGNAL_RE, PARAMETER_RE, TAG_RE,
+                                        COMMENT_END_RE)
 from unittest import (TestCase, main)
 
 
@@ -544,6 +545,32 @@ tag_tests = [
           'colon': ':',
           'description': ''})]
 
+comment_end_tests = [
+    (COMMENT_END_RE, '*/',
+         {'description': ''}),
+    (COMMENT_END_RE, '   */',
+         {'description': ''}),
+    (COMMENT_END_RE, ' */ ',
+         {'description': ''}),
+    (COMMENT_END_RE, '**/',
+         {'description': ''}),
+    (COMMENT_END_RE, ' **/',
+         {'description': ''}),
+    (COMMENT_END_RE, ' **/ ',
+         {'description': ''}),
+    (COMMENT_END_RE, 'test */',
+         {'description': 'test'}),
+    (COMMENT_END_RE, ' test*/',
+         {'description': 'test'}),
+    (COMMENT_END_RE, 'test **/',
+         {'description': 'test'}),
+    (COMMENT_END_RE, ' test**/',
+         {'description': 'test'}),
+    (COMMENT_END_RE, 'test *****/',
+         {'description': 'test'}),
+    (COMMENT_END_RE, ' test*****/',
+         {'description': 'test'})]
+
 
 def create_tests(tests_name, testcases):
     for (index, testcase) in enumerate(testcases):
@@ -585,6 +612,7 @@ if __name__ == '__main__':
     create_tests('test_identifier_signal', identifier_signal_tests)
     create_tests('test_parameter', parameter_tests)
     create_tests('test_tag', tag_tests)
+    create_tests('test_comment_end', comment_end_tests)
 
     # Run test suite
     main()

@@ -71,22 +71,33 @@ something */</commentblock>
 
 <test>
   <!--
-  Not GTK-Doc
+  Technically not GTK-Doc, but we need to support this for backwards compatibility
   -->
   <commentblock>/**
 Test
 something */</commentblock>
+  <docblock>
+    <identifier>
+      <name>Test</name>
+    </identifier>
+    <description>something</description>
+  </docblock>
 </test>
 
 <test>
   <!--
-  Not GTK-Doc
+  Technically not GTK-Doc, but we need to support this for backwards compatibility
   -->
   <commentblock>/**
 Test
 something **/</commentblock>
+  <docblock>
+    <identifier>
+      <name>Test</name>
+    </identifier>
+    <description>something</description>
+  </docblock>
 </test>
-
 
 <test>
   <!--
