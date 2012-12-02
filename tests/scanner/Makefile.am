@@ -14,6 +14,7 @@ check_LTLIBRARIES = \
 	libgtkfrob.la \
 	libgettype.la \
 	libregress.la \
+	libwarnlib.la \
 	$(NULL)
 
 AM_CPPFLAGS = -I$(top_srcdir)/girepository
@@ -36,10 +37,14 @@ libutility_la_SOURCES = $(srcdir)/utility.c $(srcdir)/utility.h
 libgtkfrob_la_SOURCES = $(srcdir)/gtkfrob.c $(srcdir)/gtkfrob.h
 libregress_la_SOURCES = $(srcdir)/regress.c $(srcdir)/regress.h
 libregress_la_LIBADD = $(GIO_LIBS) $(CAIRO_LIBS)
+libwarnlib_la_CFLAGS = $(AM_CFLAGS)
+libwarnlib_la_SOURCES = $(srcdir)/warnlib.c $(srcdir)/warnlib.h
+libwarnlib_la_LIBADD = $(GIO_LIBS)
+libwarnlib_la_LDFLAGS = -export-symbols-regex '^warnlib_' -no-undefined
 libgettype_la_SOURCES = $(srcdir)/gettype.c $(srcdir)/gettype.h
 
 testsdir = $(datadir)/gobject-introspection-1.0/tests
-tests_DATA = $(libregress_la_SOURCES)
+tests_DATA = $(libregress_la_SOURCES) $(libwarnlib_la_SOURCES)
 
 libregress_la_CFLAGS = $(AM_CFLAGS) $(CAIRO_CFLAGS)
 libregress_la_LDFLAGS = $(AM_LDFLAGS)
@@ -71,6 +76,13 @@ Regress_1_0_gir_INCLUDES = cairo-1.0 Gio-2.0
 Regress_1_0_gir_FILES = $(libregress_la_SOURCES)
 Regress_1_0_gir_SCANNERFLAGS = --c-include="regress.h" --warn-error
 GIRS += Regress-1.0.gir
+
+WarnLib-1.0.gir: $(top_builddir)/Gio-2.0.gir libwarnlib.la
+WarnLib_1_0_gir_LIBS = libwarnlib.la
+WarnLib_1_0_gir_INCLUDES = Gio-2.0
+WarnLib_1_0_gir_FILES = $(libwarnlib_la_SOURCES)
+WarnLib_1_0_gir_SCANNERFLAGS = --c-include="warnlib.h"
+GIRS += WarnLib-1.0.gir
 
 Annotation-1.0.gir: Utility-1.0.gir libannotation.la
 Annotation_1_0_gir_PACKAGES = gobject-2.0
