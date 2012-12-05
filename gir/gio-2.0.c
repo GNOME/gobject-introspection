@@ -2402,7 +2402,7 @@
 /**
  * GTaskThreadFunc:
  * @task: the #GTask
- * @source_object: @task's source object
+ * @source_object: (type GObject): @task's source object
  * @task_data: @task's task data
  * @cancellable: @task's #GCancellable, or %NULL
  *
@@ -10316,6 +10316,23 @@
 
 
 /**
+ * g_application_command_line_create_file_for_arg:
+ * @cmdline: a #GApplicationCommandLine
+ * @arg: an argument from @cmdline
+ *
+ * Creates a #GFile corresponding to a filename that was given as part
+ * of the invocation of @cmdline.
+ *
+ * This differs from g_file_new_for_commandline_arg() in that it
+ * resolves relative pathnames using the current working directory of
+ * the invoking process rather than the local process.
+ *
+ * Returns: (transfer full): a new #GFile
+ * Since: 2.36
+ */
+
+
+/**
  * g_application_command_line_get_arguments:
  * @cmdline: a #GApplicationCommandLine
  * @argc: (out) (allow-none): the length of the arguments array, or %NULL
@@ -16999,6 +17016,20 @@
 
 
 /**
+ * g_desktop_app_info_get_boolean:
+ * @info: a #GDesktopAppInfo
+ * @key: the key to look up
+ *
+ * Looks up a boolean value in the keyfile backing @info.
+ *
+ * The @key is looked up in the "Desktop Entry" group.
+ *
+ * Returns: the boolean value, or %FALSE if the key is not found
+ * Since: 2.36
+ */
+
+
+/**
  * g_desktop_app_info_get_categories:
  * @info: a #GDesktopAppInfo
  *
@@ -17096,6 +17127,33 @@
  *
  * Returns: (transfer none): the startup WM class, or %NULL if none is set in the desktop file.
  * Since: 2.34
+ */
+
+
+/**
+ * g_desktop_app_info_get_string:
+ * @info: a #GDesktopAppInfo
+ * @key: the key to look up
+ *
+ * Looks up a string value in the keyfile backing @info.
+ *
+ * The @key is looked up in the "Desktop Entry" group.
+ *
+ * Returns: a newly allocated string, or %NULL if the key is not found
+ * Since: 2.36
+ */
+
+
+/**
+ * g_desktop_app_info_has_key:
+ * @info: a #GDesktopAppInfo
+ * @key: the key to look up
+ *
+ * Returns whether @key exists in the "Desktop Entry" group
+ * of the keyfile backing @info.
+ *
+ * Returns: %TRUE if the @key exists
+ * Since: 2.26
  */
 
 
@@ -18330,7 +18388,7 @@
  * returned.
  *
  * If the file does not exist, the %G_IO_ERROR_NOT_FOUND error will
- * be returned. If the file is not a directory, the %G_FILE_ERROR_NOTDIR
+ * be returned. If the file is not a directory, the %G_IO_ERROR_NOT_DIRECTORY
  * error will be returned. Other errors are possible too.
  *
  * Returns: (transfer full): A #GFileEnumerator if successful, %NULL on error. Free the returned object with g_object_unref().
@@ -19026,6 +19084,19 @@
  * Gets the file's content type.
  *
  * Returns: a string containing the file's content type.
+ */
+
+
+/**
+ * g_file_info_get_deletion_date:
+ * @info: a #GFileInfo.
+ *
+ * Returns the #GDateTime representing the deletion date of the file, as
+ * available in G_FILE_ATTRIBUTE_TRASH_DELETION_DATE. If the
+ * G_FILE_ATTRIBUTE_TRASH_DELETION_DATE attribute is unset, %NULL is returned.
+ *
+ * Returns: a #GDateTime, or %NULL.
+ * Since: 2.36
  */
 
 
@@ -20067,6 +20138,28 @@
  * support any I/O operation if @arg points to a malformed path.
  *
  * Returns: (transfer full): a new #GFile. Free the returned object with g_object_unref().
+ */
+
+
+/**
+ * g_file_new_for_commandline_arg_and_cwd:
+ * @arg: a command line string
+ * @cwd: the current working directory of the commandline
+ *
+ * Creates a #GFile with the given argument from the command line.
+ *
+ * This function is similar to g_file_new_for_commandline_arg() except
+ * that it allows for passing the current working directory as an
+ * argument instead of using the current working directory of the
+ * process.
+ *
+ * This is useful if the commandline argument was given in a context
+ * other than the invocation of the current process.
+ *
+ * See also g_application_command_line_create_file_for_arg().
+ *
+ * Returns: (transfer full): a new #GFile
+ * Since: 2.36
  */
 
 
@@ -23075,6 +23168,16 @@
  * ]|
  *
  * Returns: A newly created #GMemoryOutputStream object.
+ */
+
+
+/**
+ * g_memory_output_stream_new_resizable:
+ *
+ * Creates a new #GMemoryOutputStream, using g_realloc() and g_free()
+ * for memory allocation.
+ *
+ * Since: 2.36
  */
 
 
@@ -30913,7 +31016,7 @@
  * Gets the source object from @task. Like
  * g_async_result_get_source_object(), but does not ref the object.
  *
- * Returns: (transfer none): @task's source object, or %NULL
+ * Returns: (transfer none) (type GObject): @task's source object, or %NULL
  * Since: 2.36
  */
 
@@ -30954,7 +31057,7 @@
 /**
  * g_task_is_valid:
  * @result: (type Gio.AsyncResult): A #GAsyncResult
- * @source_object: (allow-none): the source object expected to be associated with the task
+ * @source_object: (allow-none) (type GObject): the source object expected to be associated with the task
  *
  * Checks that @result is a #GTask, and that @source_object is its
  * source object (or that @source_object is %NULL and @result has no
@@ -30967,7 +31070,7 @@
 
 /**
  * g_task_new:
- * @source_object: (allow-none): the #GObject that owns this task, or %NULL.
+ * @source_object: (allow-none) (type GObject): the #GObject that owns this task, or %NULL.
  * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  * @callback: (scope async): a #GAsyncReadyCallback.
  * @callback_data: (closure): user data passed to @callback.
@@ -31052,7 +31155,7 @@
 
 /**
  * g_task_report_error:
- * @source_object: (allow-none): the #GObject that owns this task, or %NULL.
+ * @source_object: (allow-none) (type GObject): the #GObject that owns this task, or %NULL.
  * @callback: (scope async): a #GAsyncReadyCallback.
  * @callback_data: (closure): user data passed to @callback.
  * @source_tag: an opaque pointer indicating the source of this task
@@ -31073,7 +31176,7 @@
 
 /**
  * g_task_report_new_error:
- * @source_object: (allow-none): the #GObject that owns this task, or %NULL.
+ * @source_object: (allow-none) (type GObject): the #GObject that owns this task, or %NULL.
  * @callback: (scope async): a #GAsyncReadyCallback.
  * @callback_data: (closure): user data passed to @callback.
  * @source_tag: an opaque pointer indicating the source of this task

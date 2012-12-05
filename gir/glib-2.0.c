@@ -6486,16 +6486,21 @@
  * easy-to-use form.
  *
  * In order to use these macros in an application, you must include
- * <filename>glib/gi18n.h</filename>. For use in a library, must include
+ * <filename>glib/gi18n.h</filename>. For use in a library, you must include
  * <filename>glib/gi18n-lib.h</filename> <emphasis>after</emphasis> defining
  * the GETTEXT_PACKAGE macro suitably for your library:
  * |[
  * &num;define GETTEXT_PACKAGE "gtk20"
  * &num;include &lt;glib/gi18n-lib.h&gt;
  * ]|
- * Note that you also have to call setlocale() and textdomain() (as well as
- * bindtextdomain() and bind_textdomain_codeset()) early on in your main()
- * to make gettext() work.
+ * For an application, note that you also have to call bindtextdomain(),
+ * bind_textdomain_codeset(), textdomain() and setlocale() early on in your
+ * main() to make gettext() work.
+ *
+ * For a library, you only have to call bindtextdomain() and
+ * bind_textdomain_codeset() in your initialization function. If your library
+ * doesn't have an initialization function, you can call the functions before
+ * the first translated message.
  *
  * The gettext manual covers details of how to set up message extraction
  * with xgettext.
@@ -12565,7 +12570,7 @@
  *
  * Calculates the difference in time between @end and @begin.  The
  * #GTimeSpan that is returned is effectively @end - @begin (ie:
- * positive if the first simparameter is larger).
+ * positive if the first parameter is larger).
  *
  * Returns: the difference between the two #GDateTime, as a time span expressed in microseconds.
  * Since: 2.26
@@ -27163,7 +27168,7 @@
  *    &ast;/
  *   g_test_expect_message (G_LOG_DOMAIN,
  *                          G_LOG_LEVEL_CRITICAL,
- *                          "assertion.*acquired_context.*failed");
+ *                          "assertion*acquired_context*failed");
  *   g_main_context_push_thread_default (bad_context);
  *   g_test_assert_expected_messages ();
  * ]|
@@ -27292,6 +27297,16 @@
  *  </variablelist>
  *
  * Since: 2.16
+ */
+
+
+/**
+ * g_test_initialized:
+ *
+ * Returns %TRUE if g_test_init() has been called.
+ *
+ * Returns: %TRUE if g_test_init() has been called.
+ * Since: 2.36
  */
 
 
@@ -29695,6 +29710,7 @@
  * using g_source_remove().
  *
  * Returns: An ID (greater than 0) for the event source
+ * Rename to: g_unix_signal_add
  * Since: 2.30
  */
 
