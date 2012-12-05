@@ -160,3 +160,52 @@ Headeronly-1.0.gir: headeronly.h
 	@diff -u -U 10 $(srcdir)/$*-expected.gir $*.gir && echo "  TEST  $*.gir"
 
 check-local: Headeronly-1.0.gir $(CHECKGIRS) $(TYPELIBS)
+
+EXTRA_DIST += \
+	annotationparser/README					\
+	annotationparser/test_parser.py				\
+	annotationparser/test_patterns.py			\
+	annotationparser/gi/annotation_allow_none.xml		\
+	annotationparser/gi/annotation_array.xml		\
+	annotationparser/gi/annotation_closure.xml		\
+	annotationparser/gi/annotation_constructor.xml		\
+	annotationparser/gi/annotation_destroy.xml		\
+	annotationparser/gi/annotation_element_type.xml		\
+	annotationparser/gi/annotation_foreign.xml		\
+	annotationparser/gi/annotation_get_value_func.xml	\
+	annotationparser/gi/annotation_in.xml			\
+	annotationparser/gi/annotation_in_out.xml		\
+	annotationparser/gi/annotation_method.xml		\
+	annotationparser/gi/annotation_out.xml			\
+	annotationparser/gi/annotation_ref_func.xml		\
+	annotationparser/gi/annotation_rename_to.xml		\
+	annotationparser/gi/annotation_scope.xml		\
+	annotationparser/gi/annotation_set_value_func.xml	\
+	annotationparser/gi/annotation_skip.xml			\
+	annotationparser/gi/annotation_transfer.xml		\
+	annotationparser/gi/annotation_type.xml			\
+	annotationparser/gi/annotation_unref_func.xml		\
+	annotationparser/gi/annotation_value.xml		\
+	annotationparser/gi/annotation_virtual.xml		\
+	annotationparser/gi/syntax.xml				\
+	annotationparser/gi/syntax_identifier.xml		\
+	annotationparser/gi/syntax_nested_tags.xml		\
+	annotationparser/gi/syntax_paragraph_breaks.xml		\
+	annotationparser/gi/tag_deprecated.xml			\
+	annotationparser/gi/tag_description.xml			\
+	annotationparser/gi/tag_returns.xml			\
+	annotationparser/gi/tag_since.xml			\
+	annotationparser/gi/tag_stability.xml			\
+	annotationparser/gtkdoc/gobject/gtypes.h.xml		\
+	annotationparser/gtkdoc/gobject/gtypes.c.xml		\
+	annotationparser/gtkdoc/gobject/giface.h.xml		\
+	annotationparser/gtkdoc/gobject/giface.c.xml		\
+	annotationparser/gtkdoc/fail/tester.h.xml		\
+	annotationparser/gtkdoc/fail/tester.c.xml		\
+	annotationparser/gtkdoc/empty/tester.c.xml		\
+	annotationparser/gtkdoc/bugs/tester.h.xml		\
+	annotationparser/gtkdoc/bugs/tester.c.xml		\
+	annotationparser/gtkdoc/annotations/tester.h.xml	\
+	annotationparser/gtkdoc/annotations/tester.c.xml	\
+	annotationparser/gtkdoc/gobject/gobject.h.xml		\
+	annotationparser/gtkdoc/gobject/gobject.c.xml
