@@ -81,7 +81,7 @@ WarnLib-1.0.gir: $(top_builddir)/Gio-2.0.gir libwarnlib.la
 WarnLib_1_0_gir_LIBS = libwarnlib.la
 WarnLib_1_0_gir_INCLUDES = Gio-2.0
 WarnLib_1_0_gir_FILES = $(libwarnlib_la_SOURCES)
-WarnLib_1_0_gir_SCANNERFLAGS = --c-include="warnlib.h"
+WarnLib_1_0_gir_SCANNERFLAGS = --c-include="warnlib.h" --symbol-prefix=warnlib_
 GIRS += WarnLib-1.0.gir
 
 Annotation-1.0.gir: Utility-1.0.gir libannotation.la

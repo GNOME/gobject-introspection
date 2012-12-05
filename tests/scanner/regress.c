@@ -1656,20 +1656,6 @@ regress_atest_error_quark (void)
   return g_quark_from_static_string ("regress-atest-error");
 }
 
-GQuark
-regress_unpaired_error_quark (void)
-{
-  return g_quark_from_static_string ("regress-unpaired-error");
-}
-
-gboolean
-regress_throw_unpaired (GError **error)
-{
-  g_set_error_literal (error, regress_unpaired_error_quark (), 0,
-                       "Unpaired error");
-  return FALSE;
-}
-
 /* structures */
 
 /**
