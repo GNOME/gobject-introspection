@@ -80,3 +80,4 @@ GList* test_unresolved_element_type(void);
 // EXPECT:63: Warning: Test: test_unresolved_element_type: Unknown type: 'Unresolved'
 // EXPECT:4: Warning: Test: test_invalid_list_element_type: argument l1: Missing (element-type) annotation
 // EXPECT:4: Warning: Test: test_invalid_list_element_type: argument l2: Missing (element-type) annotation
+// EXPECT:50: Warning: Test: test_invalid_ptrarray_element_type: argument p1: Missing (element-type) annotation
