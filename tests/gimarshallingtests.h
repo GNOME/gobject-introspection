@@ -438,6 +438,7 @@ void gi_marshalling_tests_garray_utf8_none_in (GArray *array_);
 void gi_marshalling_tests_garray_utf8_none_out (GArray **array_);
 void gi_marshalling_tests_garray_utf8_container_out (GArray **array_);
 void gi_marshalling_tests_garray_utf8_full_out (GArray **array_);
+void gi_marshalling_tests_garray_utf8_full_out_caller_allocated (GArray *array_);
 
 void gi_marshalling_tests_garray_utf8_none_inout (GArray **array_);
 void gi_marshalling_tests_garray_utf8_container_inout (GArray **array_);

@@ -1925,6 +1925,23 @@ gi_marshalling_tests_garray_utf8_full_out (GArray **array_)
 }
 
 /**
+ * gi_marshalling_tests_garray_utf8_full_out_caller_allocated:
+ * @array_: (out caller-allocates) (array) (element-type utf8) (transfer full):
+ */
+void
+gi_marshalling_tests_garray_utf8_full_out_caller_allocated (GArray *array_)
+{
+    static gchar *values[] = {"0", "1", "2", NULL};
+    gint i;
+
+    g_array_set_size (array_, 0);
+    for (i = 0; values[i]; i++) {
+        gchar *str = g_strdup (values[i]);
+        g_array_append_val (array_, str);
+    }
+}
+
+/**
  * gi_marshalling_tests_garray_utf8_none_inout:
  * @array_: (inout) (element-type utf8) (transfer none):
  */
