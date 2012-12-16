@@ -10975,7 +10975,7 @@
 
 
 /**
- * g_checksum_get_digest:
+ * g_checksum_get_digest: (skip)
  * @checksum: a #GChecksum
  * @buffer: output buffer
  * @digest_len: an inout parameter. The caller initializes it to the size of @buffer. After the call it contains the length of the digest.
@@ -11024,7 +11024,7 @@
  * will be closed and it won't be possible to call g_checksum_update()
  * on it anymore.
  *
- * Returns: the newly created #GChecksum, or %NULL. Use g_checksum_free() to free the memory allocated by it.
+ * Returns: (transfer full): the newly created #GChecksum, or %NULL. Use g_checksum_free() to free the memory allocated by it.
  * Since: 2.16
  */
 
@@ -11053,7 +11053,7 @@
 /**
  * g_checksum_update:
  * @checksum: a #GChecksum
- * @data: buffer used to compute the checksum
+ * @data: (array length=length) (element-type guint8): buffer used to compute the checksum
  * @length: size of the buffer, or -1 if it is a null-terminated string.
  *
  * Feeds @data into an existing #GChecksum. The checksum must still be
@@ -11232,7 +11232,7 @@
 /**
  * g_compute_checksum_for_data:
  * @checksum_type: a #GChecksumType
- * @data: binary blob to compute the digest of
+ * @data: (array length=length) (element-type guint8): binary blob to compute the digest of
  * @length: length of @data
  *
  * Computes the checksum for a binary @data of @length. This is a
@@ -14516,31 +14516,31 @@
 /**
  * g_get_home_dir:
  *
- * Gets the current user's home directory as defined in the
- * password database.
+ * Gets the current user's home directory.
  *
- * Note that in contrast to traditional UNIX tools, this function
- * prefers <filename>passwd</filename> entries over the <envar>HOME</envar>
- * environment variable.
+ * As with most UNIX tools, this function will return the value of the
+ * <envar>HOME</envar> environment variable if it is set to an existing
+ * absolute path name, falling back to the <filename>passwd</filename>
+ * file in the case that it is unset.
  *
- * One of the reasons for this decision is that applications in many
- * cases need special handling to deal with the case where
- * <envar>HOME</envar> is
- * <simplelist>
- *   <member>Not owned by the user</member>
- *   <member>Not writeable</member>
- *   <member>Not even readable</member>
- * </simplelist>
- * Since applications are in general <emphasis>not</emphasis> written
- * to deal with these situations it was considered better to make
- * g_get_home_dir() not pay attention to <envar>HOME</envar> and to
- * return the real home directory for the user. If applications
- * want to pay attention to <envar>HOME</envar>, they can do:
- * |[
- *  const char *homedir = g_getenv ("HOME");
- *   if (!homedir)
- *      homedir = g_get_home_dir (<!-- -->);
- * ]|
+ * If the path given in <envar>HOME</envar> is non-absolute, does not
+ * exist, or is not a directory, the result is undefined.
+ *
+ * <note><para>
+ *   Before version 2.36 this function would ignore the
+ *   <envar>HOME</envar> environment variable, taking the value from the
+ *   <filename>passwd</filename> database instead.  This was changed to
+ *   increase the compatibility of GLib with other programs (and the XDG
+ *   basedir specification) and to increase testability of programs
+ *   based on GLib (by making it easier to run them from test
+ *   frameworks).
+ * </para><para>
+ *   If your program has a strong requirement for either the new or the
+ *   old behaviour (and if you don't wish to increase your GLib
+ *   dependency to ensure that the new behaviour is in effect) then you
+ *   should either directly check the <envar>HOME</envar> environment
+ *   variable yourself or unset it before calling any functions in GLib.
+ * </para></note>
  *
  * Returns: the current user's home directory
  */

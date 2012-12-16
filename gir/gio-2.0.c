@@ -5609,6 +5609,33 @@
 
 
 /**
+ * SECTION:gnetworking
+ * @title: gnetworking.h
+ * @short_description: System networking includes
+ * @include: gio/gnetworking.h
+ *
+ * The <literal>gnetworking.h</literal> header can be included to get
+ * various low-level networking-related system headers, automatically
+ * taking care of certain portability issues for you.
+ *
+ * This can be used, for example, if you want to call setsockopt()
+ * on a #GSocket.
+ *
+ * Note that while WinSock has many of the same APIs as the
+ * traditional UNIX socket API, most of them behave at least slightly
+ * differently (particularly with respect to error handling). If you
+ * want your code to work under both UNIX and Windows, you will need
+ * to take these differences into account.
+ *
+ * Also, under glibc, certain non-portable functions are only visible
+ * in the headers if you define <literal>_GNU_SOURCE</literal> before
+ * including them. Note that this symbol must be defined before
+ * including <emphasis>any</emphasis> headers, or it may not take
+ * effect.
+ */
+
+
+/**
  * SECTION:gnetworkmonitor
  * @title: GNetworkMonitor
  * @short_description: Network status monitor
@@ -6446,7 +6473,7 @@
  * SECTION:gsocket
  * @short_description: Low-level socket object
  * @include: gio/gio.h
- * @see_also: #GInitable
+ * @see_also: #GInitable, <link linkend="gio-gnetworking.h">gnetworking.h</link>
  *
  * A #GSocket is a low-level networking primitive. It is a more or less
  * direct mapping of the BSD socket API in a portable GObject based API.
@@ -18487,6 +18514,27 @@
 
 
 /**
+ * g_file_enumerator_get_child:
+ * @enumerator: a #GFileEnumerator
+ * @info: a #GFileInfo gotten from g_file_enumerator_next_file() or the async equivalents.
+ *
+ * Return a new #GFile which refers to the file named by @info in the source
+ * directory of @enumerator.  This function is primarily intended to be used
+ * inside loops with g_file_enumerator_next_file().
+ *
+ * This is a convenience method that's equivalent to:
+ * |[
+ *   gchar *name = g_file_info_get_name (info);
+ *   GFile *child = g_file_get_child (g_file_enumerator_get_container (enumr),
+ *                                    name);
+ * ]|
+ *
+ * Returns: (transfer full): a #GFile for the #GFileInfo passed it.
+ * Since: 2.36
+ */
+
+
+/**
  * g_file_enumerator_get_container:
  * @enumerator: a #GFileEnumerator
  *
@@ -21149,7 +21197,7 @@
  * triggering the cancellable object from another thread. If the operation
  * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned.
  *
- * Returns: %TRUE if there was any error, %FALSE otherwise.
+ * Returns: %FALSE if there was any error, %TRUE otherwise.
  */
 
 
@@ -24975,6 +25023,18 @@
  * is used as scheme.
  *
  * Since: 2.26
+ */
+
+
+/**
+ * g_networking_init:
+ *
+ * Initializes the platform networking libraries (eg, on Windows, this
+ * calls WSAStartup()). GLib will call this itself if it is needed, so
+ * you only need to call it if you directly call system networking
+ * functions (without calling any GLib networking functions first).
+ *
+ * Since: 2.36
  */
 
 
@@ -29836,6 +29896,34 @@
 
 
 /**
+ * g_socket_get_option:
+ * @socket: a #GSocket
+ * @level: the "API level" of the option (eg, <literal>SOL_SOCKET</literal>)
+ * @optname: the "name" of the option (eg, <literal>SO_BROADCAST</literal>)
+ * @value: (out): return location for the option value
+ * @error: #GError for error reporting, or %NULL to ignore.
+ *
+ * Gets the value of an integer-valued option on @socket, as with
+ * <literal>getsockopt ()</literal>. (If you need to fetch a
+ * non-integer-valued option, you will need to call
+ * <literal>getsockopt ()</literal> directly.)
+ *
+ * The <link linkend="gio-gnetworking.h"><literal>&lt;gio/gnetworking.h&gt;</literal></link>
+ * header pulls in system headers that will define most of the
+ * standard/portable socket options. For unusual socket protocols or
+ * platform-dependent options, you may need to include additional
+ * headers.
+ *
+ * Note that even for socket options that are a single byte in size,
+ * @value is still a pointer to a #gint variable, not a #guchar;
+ * g_socket_get_option() will handle the conversion internally.
+ *
+ * Returns: success or failure. On failure, @error will be set, and the system error value (<literal>errno</literal> or <literal>WSAGetLastError ()</literal>) will still be set to the result of the <literal>getsockopt ()</literal> call.
+ * Since: 2.36
+ */
+
+
+/**
  * g_socket_get_protocol:
  * @socket: a #GSocket.
  *
@@ -30695,6 +30783,30 @@
  * the local network.
  *
  * Since: 2.32
+ */
+
+
+/**
+ * g_socket_set_option:
+ * @socket: a #GSocket
+ * @level: the "API level" of the option (eg, <literal>SOL_SOCKET</literal>)
+ * @optname: the "name" of the option (eg, <literal>SO_BROADCAST</literal>)
+ * @value: the value to set the option to
+ * @error: #GError for error reporting, or %NULL to ignore.
+ *
+ * Sets the value of an integer-valued option on @socket, as with
+ * <literal>setsockopt ()</literal>. (If you need to set a
+ * non-integer-valued option, you will need to call
+ * <literal>setsockopt ()</literal> directly.)
+ *
+ * The <link linkend="gio-gnetworking.h"><literal>&lt;gio/gnetworking.h&gt;</literal></link>
+ * header pulls in system headers that will define most of the
+ * standard/portable socket options. For unusual socket protocols or
+ * platform-dependent options, you may need to include additional
+ * headers.
+ *
+ * Returns: success or failure. On failure, @error will be set, and the system error value (<literal>errno</literal> or <literal>WSAGetLastError ()</literal>) will still be set to the result of the <literal>setsockopt ()</literal> call.
+ * Since: 2.36
  */
 
 
