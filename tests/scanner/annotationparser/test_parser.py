@@ -145,12 +145,12 @@ def expected2tree(docblock):
             annotations = docblock.find('identifier/annotations')
             if annotations is not None:
                 expected += '    <annotations>\n'
-                for annotation in annotations.iterfind('annotation'):
+                for annotation in annotations.findall('annotation'):
                     expected += '      <annotation>\n'
                     expected += '        <name>%s</name>\n' % (annotation.find('name').text, )
                     if annotation.find('options') is not None:
                         expected += '        <options>\n'
-                        for option in annotation.iterfind('options/option'):
+                        for option in annotation.findall('options/option'):
                             expected += '          <option>\n'
                             expected += '            <name>%s</name>\n' % (option.find('name').text, )
                             if option.find('value') is not None:
@@ -164,18 +164,18 @@ def expected2tree(docblock):
         parameters = docblock.find('parameters')
         if parameters is not None:
             expected += '  <parameters>\n'
-            for parameter in parameters.iterfind('parameter'):
+            for parameter in parameters.findall('parameter'):
                 expected += '    <parameter>\n'
                 expected += '      <name>%s</name>\n' % (parameter.find('name').text, )
                 annotations = parameter.find('annotations')
                 if annotations is not None:
                     expected += '      <annotations>\n'
-                    for annotation in parameter.iterfind('annotations/annotation'):
+                    for annotation in parameter.findall('annotations/annotation'):
                         expected += '        <annotation>\n'
                         expected += '          <name>%s</name>\n' % (annotation.find('name').text, )
                         if annotation.find('options') is not None:
                             expected += '          <options>\n'
-                            for option in annotation.iterfind('options/option'):
+                            for option in annotation.findall('options/option'):
                                 expected += '            <option>\n'
                                 expected += '              <name>%s</name>\n' % (option.find('name').text, )
                                 if option.find('value') is not None:
@@ -196,18 +196,18 @@ def expected2tree(docblock):
         tags = docblock.find('tags')
         if tags is not None:
             expected += '  <tags>\n'
-            for tag in tags.iterfind('tag'):
+            for tag in tags.findall('tag'):
                 expected += '    <tag>\n'
                 expected += '      <name>%s</name>\n' % (tag.find('name').text, )
                 annotations = tag.find('annotations')
                 if annotations is not None:
                     expected += '      <annotations>\n'
-                    for annotation in tag.iterfind('annotations/annotation'):
+                    for annotation in tag.findall('annotations/annotation'):
                         expected += '        <annotation>\n'
                         expected += '          <name>%s</name>\n' % (annotation.find('name').text, )
                         if annotation.find('options') is not None:
                             expected += '          <options>\n'
-                            for option in annotation.iterfind('options/option'):
+                            for option in annotation.findall('options/option'):
                                 expected += '            <option>\n'
                                 expected += '              <name>%s</name>\n' % (option.find('name').text, )
                                 if option.find('value') is not None:
