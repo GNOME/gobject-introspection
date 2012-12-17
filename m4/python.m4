@@ -43,14 +43,7 @@ AC_DEFUN([AM_CHECK_PYTHON_HEADERS],
 [AC_REQUIRE([AM_PATH_PYTHON])
 AC_MSG_CHECKING(for headers required to compile python extensions)
 dnl deduce PYTHON_INCLUDES
-py_prefix=`$PYTHON -c "import sys; print(sys.prefix)"`
-py_exec_prefix=`$PYTHON -c "import sys; print(sys.exec_prefix)"`
-if test "x$PYTHON_INCLUDES" == x; then
-  PYTHON_INCLUDES="-I${py_prefix}/include/python${PYTHON_VERSION}"
-  if test "$py_prefix" != "$py_exec_prefix"; then
-    PYTHON_INCLUDES="$PYTHON_INCLUDES -I${py_exec_prefix}/include/python${PYTHON_VERSION}"
-  fi
-fi
+PYTHON_INCLUDES=`$PYTHON-config --includes`
 AC_SUBST(PYTHON_INCLUDES)
 dnl check if the headers exist:
 save_CPPFLAGS="$CPPFLAGS"
@@ -71,13 +64,9 @@ AC_DEFUN([AM_CHECK_PYTHON_LIBS],
 AC_MSG_CHECKING(for libraries required to link against libpython)
 dnl deduce PYTHON_LIBS
 if test "x$PYTHON_LIBS" == x; then
-	PYTHON_LIBS="-L${py_prefix}/lib -lpython${PYTHON_VERSION}"
-fi
-if test "x$PYTHON_LIB_LOC" == x; then
-	PYTHON_LIB_LOC="${py_prefix}/lib"
+	PYTHON_LIBS=`$PYTHON-config --ldflags --libs`
 fi
 AC_SUBST(PYTHON_LIBS)
-AC_SUBST(PYTHON_LIB_LOC)
 dnl check if libpython exist:
 save_LIBS="$LIBS"
 LIBS="$LIBS $PYTHON_LIBS"
