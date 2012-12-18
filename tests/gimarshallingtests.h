@@ -389,6 +389,7 @@ void gi_marshalling_tests_array_in_len_zero_terminated (const gint *ints, gint l
 void gi_marshalling_tests_array_string_in (const gchar **strings, gint length);
 void gi_marshalling_tests_array_uint8_in (const guint8 *chars, gint length);
 void gi_marshalling_tests_array_struct_in (GIMarshallingTestsBoxedStruct **structs, gint length);
+void gi_marshalling_tests_array_struct_value_in (GIMarshallingTestsBoxedStruct *structs, gint length);
 void gi_marshalling_tests_array_struct_take_in (GIMarshallingTestsBoxedStruct **structs, gint length);
 void gi_marshalling_tests_array_simple_struct_in (GIMarshallingTestsSimpleStruct *structs, gint length);
 void gi_marshalling_tests_multi_array_key_value_in (gint length, const gchar **keys, const GValue *values);

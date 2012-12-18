@@ -1382,6 +1382,19 @@ gi_marshalling_tests_array_struct_in (GIMarshallingTestsBoxedStruct **structs, g
 }
 
 /**
+ * gi_marshalling_tests_array_struct_value_in:
+ * @structs: (array length=length):
+ */
+void
+gi_marshalling_tests_array_struct_value_in (GIMarshallingTestsBoxedStruct *structs, gint length)
+{
+    g_assert_cmpint(length, ==, 3);
+    g_assert_cmpint(structs[0].long_, ==, 1);
+    g_assert_cmpint(structs[1].long_, ==, 2);
+    g_assert_cmpint(structs[2].long_, ==, 3);
+}
+
+/**
  * gi_marshalling_tests_array_simple_struct_in:
  * @structs: (array length=length):
  */
