@@ -126,7 +126,7 @@ and/or use gtk-doc annotations. ''')
         for key, value in node.attributes:
             self.write_tag('attribute', [('name', key), ('value', value)])
         if hasattr(node, 'doc') and node.doc:
-            self.write_tag('doc', [('xml:whitespace', 'preserve')],
+            self.write_tag('doc', [('xml:space', 'preserve')],
                            node.doc)
 
     def _append_node_generic(self, node, attrs):

@@ -440,10 +440,10 @@ and/or use gtk-doc annotations.  -->
         </parameters>
       </function>
       <function name="get_default" c:identifier="foo_object_get_default">
-        <doc xml:whitespace="preserve">This function is intended to match clutter_stage_get_default which
+        <doc xml:space="preserve">This function is intended to match clutter_stage_get_default which
 uses a C sugar return type.</doc>
         <return-value transfer-ownership="none">
-          <doc xml:whitespace="preserve">The global #FooSubobject</doc>
+          <doc xml:space="preserve">The global #FooSubobject</doc>
           <type name="Subobject" c:type="FooObject*"/>
         </return-value>
       </function>
@@ -453,7 +453,7 @@ uses a C sugar return type.</doc>
         </return-value>
       </function>
       <virtual-method name="read_fn" invoker="read">
-        <doc xml:whitespace="preserve">Read some stuff.</doc>
+        <doc xml:space="preserve">Read some stuff.</doc>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -462,11 +462,11 @@ uses a C sugar return type.</doc>
             <type name="Object" c:type="FooObject*"/>
           </instance-parameter>
           <parameter name="offset" transfer-ownership="none">
-            <doc xml:whitespace="preserve">offset</doc>
+            <doc xml:space="preserve">offset</doc>
             <type name="gint" c:type="int"/>
           </parameter>
           <parameter name="length" transfer-ownership="none">
-            <doc xml:whitespace="preserve">length</doc>
+            <doc xml:space="preserve">length</doc>
             <type name="gint" c:type="int"/>
           </parameter>
         </parameters>
@@ -486,7 +486,7 @@ uses a C sugar return type.</doc>
       </virtual-method>
       <method name="append_new_stack_layer"
               c:identifier="foo_object_append_new_stack_layer">
-        <doc xml:whitespace="preserve">This shouldn't be scanned as a constructor.</doc>
+        <doc xml:space="preserve">This shouldn't be scanned as a constructor.</doc>
         <return-value transfer-ownership="none">
           <type name="OtherObject" c:type="FooOtherObject*"/>
         </return-value>
@@ -511,12 +511,12 @@ uses a C sugar return type.</doc>
       </method>
       <method name="external_type" c:identifier="foo_object_external_type">
         <return-value transfer-ownership="none">
-          <doc xml:whitespace="preserve">%NULL always</doc>
+          <doc xml:space="preserve">%NULL always</doc>
           <type name="Utility.Object" c:type="UtilityObject*"/>
         </return-value>
         <parameters>
           <instance-parameter name="object" transfer-ownership="none">
-            <doc xml:whitespace="preserve">a #FooObject</doc>
+            <doc xml:space="preserve">a #FooObject</doc>
             <type name="Object" c:type="FooObject*"/>
           </instance-parameter>
         </parameters>
@@ -560,7 +560,7 @@ uses a C sugar return type.</doc>
       <method name="new_cookie"
               c:identifier="foo_object_new_cookie"
               introspectable="0">
-        <doc xml:whitespace="preserve">Not sure why this test is here...</doc>
+        <doc xml:space="preserve">Not sure why this test is here...</doc>
         <return-value>
           <type name="ObjectCookie" c:type="FooObjectCookie"/>
         </return-value>
@@ -574,21 +574,21 @@ uses a C sugar return type.</doc>
         </parameters>
       </method>
       <method name="read" c:identifier="foo_object_read">
-        <doc xml:whitespace="preserve">Read some stuff.</doc>
+        <doc xml:space="preserve">Read some stuff.</doc>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
           <instance-parameter name="object" transfer-ownership="none">
-            <doc xml:whitespace="preserve">obj</doc>
+            <doc xml:space="preserve">obj</doc>
             <type name="Object" c:type="FooObject*"/>
           </instance-parameter>
           <parameter name="offset" transfer-ownership="none">
-            <doc xml:whitespace="preserve">offset</doc>
+            <doc xml:space="preserve">offset</doc>
             <type name="gint" c:type="int"/>
           </parameter>
           <parameter name="length" transfer-ownership="none">
-            <doc xml:whitespace="preserve">length</doc>
+            <doc xml:space="preserve">length</doc>
             <type name="gint" c:type="int"/>
           </parameter>
         </parameters>
@@ -596,13 +596,13 @@ uses a C sugar return type.</doc>
       <method name="skipped_method"
               c:identifier="foo_object_skipped_method"
               introspectable="0">
-        <doc xml:whitespace="preserve">This is only useful from C.</doc>
+        <doc xml:space="preserve">This is only useful from C.</doc>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
           <instance-parameter name="object" transfer-ownership="none">
-            <doc xml:whitespace="preserve">obj</doc>
+            <doc xml:space="preserve">obj</doc>
             <type name="Object" c:type="FooObject*"/>
           </instance-parameter>
         </parameters>
@@ -719,11 +719,11 @@ uses a C sugar return type.</doc>
               <type name="Object" c:type="FooObject*"/>
             </parameter>
             <parameter name="offset" transfer-ownership="none">
-              <doc xml:whitespace="preserve">offset</doc>
+              <doc xml:space="preserve">offset</doc>
               <type name="gint" c:type="int"/>
             </parameter>
             <parameter name="length" transfer-ownership="none">
-              <doc xml:whitespace="preserve">length</doc>
+              <doc xml:space="preserve">length</doc>
               <type name="gint" c:type="int"/>
             </parameter>
           </parameters>
@@ -773,17 +773,17 @@ uses a C sugar return type.</doc>
                               direction="inout"
                               caller-allocates="0"
                               transfer-ownership="full">
-            <doc xml:whitespace="preserve">add to this rect</doc>
+            <doc xml:space="preserve">add to this rect</doc>
             <type name="Rectangle" c:type="FooRectangle*"/>
           </instance-parameter>
           <parameter name="r2" transfer-ownership="none">
-            <doc xml:whitespace="preserve">source rectangle</doc>
+            <doc xml:space="preserve">source rectangle</doc>
             <type name="Rectangle" c:type="const FooRectangle*"/>
           </parameter>
         </parameters>
       </method>
       <function name="new" c:identifier="foo_rectangle_new" introspectable="0">
-        <doc xml:whitespace="preserve">This is a C convenience constructor; we have to (skip)
+        <doc xml:space="preserve">This is a C convenience constructor; we have to (skip)
 it because it's not a boxed type.</doc>
         <return-value>
           <type name="Rectangle" c:type="FooRectangle*"/>
@@ -808,13 +808,13 @@ it because it's not a boxed type.</doc>
       <type name="gint" c:type="gint"/>
     </constant>
     <enumeration name="Skippable" introspectable="0" c:type="FooSkippable">
-      <doc xml:whitespace="preserve">Some type that is only interesting from C and should not be
+      <doc xml:space="preserve">Some type that is only interesting from C and should not be
 exposed to language bindings.</doc>
       <member name="one" value="0" c:identifier="FOO_SKIPPABLE_ONE">
-        <doc xml:whitespace="preserve">a skippable enum value</doc>
+        <doc xml:space="preserve">a skippable enum value</doc>
       </member>
       <member name="two" value="1" c:identifier="FOO_SKIPPABLE_TWO">
-        <doc xml:whitespace="preserve">another skippable enum value</doc>
+        <doc xml:space="preserve">another skippable enum value</doc>
       </member>
     </enumeration>
     <enumeration name="StackLayer" c:type="FooStackLayer">
@@ -1213,7 +1213,7 @@ exposed to language bindings.</doc>
     </function>
     <function name="not_a_constructor_new"
               c:identifier="foo_not_a_constructor_new">
-      <doc xml:whitespace="preserve">This should be scanned as a top-level function, and shouldn't cause
+      <doc xml:space="preserve">This should be scanned as a top-level function, and shouldn't cause
 a "Can't find matching type for constructor" warning.</doc>
       <return-value transfer-ownership="none">
         <type name="Object" c:type="FooObject*"/>
@@ -1223,7 +1223,7 @@ a "Can't find matching type for constructor" warning.</doc>
               c:identifier="foo_rectangle_new"
               moved-to="Rectangle.new"
               introspectable="0">
-      <doc xml:whitespace="preserve">This is a C convenience constructor; we have to (skip)
+      <doc xml:space="preserve">This is a C convenience constructor; we have to (skip)
 it because it's not a boxed type.</doc>
       <return-value>
         <type name="Rectangle" c:type="FooRectangle*"/>
@@ -1244,14 +1244,14 @@ it because it's not a boxed type.</doc>
       </parameters>
     </function>
     <function name="skip_me" c:identifier="foo_skip_me" introspectable="0">
-      <doc xml:whitespace="preserve">Does something that's only interesting from C and should not be
+      <doc xml:space="preserve">Does something that's only interesting from C and should not be
 exposed to language bindings.</doc>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
         <parameter name="fs" transfer-ownership="none">
-          <doc xml:whitespace="preserve">a #FooSkippable</doc>
+          <doc xml:space="preserve">a #FooSkippable</doc>
           <type name="Skippable" c:type="FooSkippable"/>
         </parameter>
       </parameters>
