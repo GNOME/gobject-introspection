@@ -1,8 +1,8 @@
 BUILT_GIRSOURCES =
 SUBSTITUTED_GIRSOURCES =
 
-STATIC_GIRSOURCES =               \
-        gir/DBus-1.0.gir           \
+STATIC_GIRSOURCES =                 \
+        gir/DBus-1.0.gir            \
         gir/DBusGLib-1.0.gir        \
         gir/fontconfig-2.0.gir      \
         gir/freetype2-2.0.gir       \
