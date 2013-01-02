@@ -4310,6 +4310,144 @@ gi_marshalling_tests_object_vfunc_meth_with_error (GIMarshallingTestsObject *sel
   return ret;
 }
 
+/* NOTE:
+ *
+ * The following (get_ref_info_for_*) methods are designed to call vfuncs related
+ * to object argument marshaling. They do not pass the resulting objects through them
+ * as regular vfunc wrapper method do, but rather return reference count and floating
+ * information back to the callers. This is useful because callers can do testing of
+ * expected reference counts in isolation and from the perspective of C. This is important
+ * because if there are bugs in the reverse marshaling, they can obfuscate or compound
+ * bugs in marshaling from the vfuncs.
+ */
+
+/**
+ * gi_marshalling_tests_object_get_ref_info_for_vfunc_return_object_transfer_none:
+ * @ref_count: (out): Ref count of the object returned from the vfunc directly after vfunc call.
+ * @is_floating: (out): Floating state object returned from the vfunc directly after vfunc call.
+ */
+void
+gi_marshalling_tests_object_get_ref_info_for_vfunc_return_object_transfer_none (GIMarshallingTestsObject *self, guint *ref_count, gboolean *is_floating)
+{
+    GObject *object = GI_MARSHALLING_TESTS_OBJECT_GET_CLASS (self)->vfunc_return_object_transfer_none (self);
+    *ref_count = object->ref_count;
+    *is_floating = g_object_is_floating(object);
+
+    /* Attempt to sink and unref the returned object and avoid any potential leaks */
+    g_object_ref_sink(object);
+    g_object_unref(object);
+}
+
+/**
+ * gi_marshalling_tests_object_get_ref_info_for_vfunc_return_object_transfer_full:
+ * @ref_count: (out): Ref count of the object returned from the vfunc directly after vfunc call.
+ * @is_floating: (out): Floating state object returned from the vfunc directly after vfunc call.
+ */
+void
+gi_marshalling_tests_object_get_ref_info_for_vfunc_return_object_transfer_full (GIMarshallingTestsObject *self, guint *ref_count, gboolean *is_floating)
+{
+    GObject *object = GI_MARSHALLING_TESTS_OBJECT_GET_CLASS (self)->vfunc_return_object_tansfer_full (self);
+    *ref_count = object->ref_count;
+    *is_floating = g_object_is_floating(object);
+    g_object_unref(object);
+}
+
+/**
+ * gi_marshalling_tests_object_get_ref_info_for_vfunc_out_object_transfer_none:
+ * @ref_count: (out): Ref count of the object returned from the vfunc directly after vfunc call.
+ * @is_floating: (out): Floating state object returned from the vfunc directly after vfunc call.
+ */
+void
+gi_marshalling_tests_object_get_ref_info_for_vfunc_out_object_transfer_none (GIMarshallingTestsObject *self, guint *ref_count, gboolean *is_floating)
+{
+    GObject *object = NULL;
+    GI_MARSHALLING_TESTS_OBJECT_GET_CLASS (self)->vfunc_out_object_transfer_none (self, &object);
+    *ref_count = object->ref_count;
+    *is_floating = g_object_is_floating(object);
+
+    /* Attempt to sink and unref the returned object and avoid any potential leaks */
+    g_object_ref_sink(object);
+    g_object_unref(object);
+}
+
+/**
+ * gi_marshalling_tests_object_get_ref_info_for_vfunc_out_object_transfer_full:
+ * @ref_count: (out): Ref count of the object returned from the vfunc directly after vfunc call.
+ * @is_floating: (out): Floating state object returned from the vfunc directly after vfunc call.
+ */
+void
+gi_marshalling_tests_object_get_ref_info_for_vfunc_out_object_transfer_full (GIMarshallingTestsObject *self, guint *ref_count, gboolean *is_floating)
+{
+    GObject *object = NULL;
+    GI_MARSHALLING_TESTS_OBJECT_GET_CLASS (self)->vfunc_out_object_tansfer_full (self, &object);
+    *ref_count = object->ref_count;
+    *is_floating = g_object_is_floating(object);
+    g_object_unref(object);
+}
+
+static void
+_vfunc_in_object_destroy_callback(gboolean *destroy_called, GObject *where_the_object_was) {
+  *destroy_called = TRUE;
+}
+
+/**
+ * gi_marshalling_tests_object_get_ref_info_for_vfunc_in_object_transfer_none:
+ * @type: GType of object to create and pass as in argument to the vfunc
+ * @ref_count: (out): Ref count of the in object directly after vfunc call.
+ * @is_floating: (out): Floating state of in object directly after vfunc call.
+ *
+ * Calls vfunc_in_object_tansfer_none with a new object of the given type.
+ */
+void
+gi_marshalling_tests_object_get_ref_info_for_vfunc_in_object_transfer_none (GIMarshallingTestsObject *self, GType type, guint *ref_count, gboolean *is_floating)
+{
+    static gboolean destroy_called;
+    destroy_called = FALSE;
+
+    GObject *object = g_object_new(type, NULL);
+    g_object_weak_ref (object, (GWeakNotify)_vfunc_in_object_destroy_callback, &destroy_called);
+
+    GI_MARSHALLING_TESTS_OBJECT_GET_CLASS (self)->vfunc_in_object_tansfer_none (self, object);
+    if (destroy_called) {
+        *ref_count = 0;
+        *is_floating = FALSE;
+    } else {
+        *ref_count = object->ref_count;
+        *is_floating = g_object_is_floating (object);
+        g_object_unref (object);
+    }
+}
+
+
+/**
+ * gi_marshalling_tests_object_get_ref_info_for_vfunc_in_object_transfer_full:
+ * @type: GType of object to create and pass as in argument to the vfunc
+ * @ref_count: (out): Ref count of the in object directly after vfunc call.
+ * @is_floating: (out): Floating state of in object directly after vfunc call.
+ */
+void
+gi_marshalling_tests_object_get_ref_info_for_vfunc_in_object_transfer_full (GIMarshallingTestsObject *self, GType type, guint *ref_count, gboolean *is_floating)
+{
+    static gboolean destroy_called;
+    destroy_called = FALSE;
+
+    GObject *object = g_object_new(type, NULL);
+    g_object_weak_ref (object, (GWeakNotify)_vfunc_in_object_destroy_callback, &destroy_called);
+
+    /* Calling the vfunc takes ownership of the object, so we use a weak_ref to determine
+     * if the object gets destroyed after the call and appropriately return 0 as the ref count.
+     */
+    GI_MARSHALLING_TESTS_OBJECT_GET_CLASS (self)->vfunc_in_object_tansfer_full (self, object);
+    if (destroy_called) {
+        *ref_count = 0;
+        *is_floating = FALSE;
+    } else {
+        *ref_count = object->ref_count;
+        *is_floating = g_object_is_floating (object);
+    }
+}
+
+
 G_DEFINE_TYPE (GIMarshallingTestsSubObject, gi_marshalling_tests_sub_object, GI_MARSHALLING_TESTS_TYPE_OBJECT);
 
 static void
@@ -4748,6 +4886,7 @@ enum  {
     SOME_BOXED_STRUCT_PROPERTY,
     SOME_VARIANT_PROPERTY,
     SOME_BOXED_GLIST_PROPERTY,
+    SOME_OBJECT_PROPERTY,
 };
 
 G_DEFINE_TYPE (GIMarshallingTestsPropertiesObject, gi_marshalling_tests_properties_object, G_TYPE_OBJECT);
@@ -4814,6 +4953,9 @@ gi_marshalling_tests_properties_object_get_property (GObject * object, guint pro
         case SOME_VARIANT_PROPERTY:
             g_value_set_variant (value, self->some_variant);
             break;
+        case SOME_OBJECT_PROPERTY:
+            g_value_set_object (value, self->some_object);
+            break;
         default:
             G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
             break;
@@ -4877,6 +5019,11 @@ gi_marshalling_tests_properties_object_set_property (GObject * object, guint pro
             self->some_variant = g_value_get_variant (value);
             if (self->some_variant != NULL)
                 g_variant_ref (self->some_variant);
+            break;
+        case SOME_OBJECT_PROPERTY:
+            if (self->some_object != NULL)
+                g_object_unref (self->some_object);
+            self->some_object = g_value_dup_object (value);
             break;
         default:
             G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -4960,6 +5107,10 @@ gi_marshalling_tests_properties_object_class_init (GIMarshallingTestsPropertiesO
     g_object_class_install_property (object_class, SOME_VARIANT_PROPERTY,
         g_param_spec_variant ("some-variant", "some-variant", "some-variant", 
             G_VARIANT_TYPE_ANY, NULL,
+            G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
+
+    g_object_class_install_property (object_class, SOME_OBJECT_PROPERTY,
+        g_param_spec_object ("some-object", "some-object", "some-object", G_TYPE_OBJECT,
             G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
 }
 

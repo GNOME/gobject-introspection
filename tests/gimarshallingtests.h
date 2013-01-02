@@ -803,6 +803,47 @@ struct _GIMarshallingTestsObjectClass
      * @error: A #GError
      */
     gboolean (*vfunc_meth_with_err) (GIMarshallingTestsObject *object, gint x, GError **error);
+
+
+    /**
+     * GIMarshallingTestsObjectClass::vfunc_return_object_transfer_none:
+     *
+     * Returns: (transfer none)
+     */
+    GObject* (* vfunc_return_object_transfer_none) (GIMarshallingTestsObject *self);
+
+    /**
+     * GIMarshallingTestsObjectClass::vfunc_return_object_tansfer_full:
+     *
+     * Returns: (transfer full)
+     */
+    GObject* (* vfunc_return_object_tansfer_full) (GIMarshallingTestsObject *self);
+
+    /**
+     * GIMarshallingTestsObjectClass::vfunc_out_object_transfer_none:
+     * @object: (out) (transfer none):
+     */
+    void (* vfunc_out_object_transfer_none) (GIMarshallingTestsObject *self, GObject **object);
+
+    /**
+     * GIMarshallingTestsObjectClass::vfunc_out_object_tansfer_full:
+     * @object: (out) (transfer full):
+     */
+    void (* vfunc_out_object_tansfer_full) (GIMarshallingTestsObject *self, GObject **object);
+
+    /**
+     * GIMarshallingTestsObjectClass::vfunc_in_object_tansfer_none:
+     * @object: (in) (transfer none):
+     */
+    void (* vfunc_in_object_tansfer_none) (GIMarshallingTestsObject *self, GObject *object);
+
+    /**
+     * GIMarshallingTestsObjectClass::vfunc_in_object_tansfer_full:
+     * @object: (in) (transfer full):
+     */
+    void (* vfunc_in_object_tansfer_full) (GIMarshallingTestsObject *self, GObject *object);
+
+
 };
 
 struct _GIMarshallingTestsObject
@@ -839,6 +880,13 @@ void gi_marshalling_tests_object_vfunc_array_out_parameter (GIMarshallingTestsOb
 glong gi_marshalling_tests_object_vfunc_return_value_and_one_out_parameter (GIMarshallingTestsObject *self, glong *a);
 glong gi_marshalling_tests_object_vfunc_return_value_and_multiple_out_parameters (GIMarshallingTestsObject *self, glong *a, glong *b);
 gboolean gi_marshalling_tests_object_vfunc_meth_with_error (GIMarshallingTestsObject *object, gint x, GError **error);
+
+void gi_marshalling_tests_object_get_ref_info_for_vfunc_return_object_transfer_none (GIMarshallingTestsObject *self, guint *ref_count, gboolean *is_floating);
+void gi_marshalling_tests_object_get_ref_info_for_vfunc_return_object_transfer_full (GIMarshallingTestsObject *self, guint *ref_count, gboolean *is_floating);
+void gi_marshalling_tests_object_get_ref_info_for_vfunc_out_object_transfer_none (GIMarshallingTestsObject *self, guint *ref_count, gboolean *is_floating);
+void gi_marshalling_tests_object_get_ref_info_for_vfunc_out_object_transfer_full (GIMarshallingTestsObject *self, guint *ref_count, gboolean *is_floating);
+void gi_marshalling_tests_object_get_ref_info_for_vfunc_in_object_transfer_none (GIMarshallingTestsObject *self, GType type, guint *ref_count, gboolean *is_floating);
+void gi_marshalling_tests_object_get_ref_info_for_vfunc_in_object_transfer_full (GIMarshallingTestsObject *self, GType type, guint *ref_count, gboolean *is_floating);
 
 GIMarshallingTestsObject *gi_marshalling_tests_object_none_return (void);
 GIMarshallingTestsObject *gi_marshalling_tests_object_full_return (void);
@@ -1085,6 +1133,7 @@ struct _GIMarshallingTestsPropertiesObject {
     GIMarshallingTestsBoxedStruct* some_boxed_struct;
     GList* some_boxed_glist;
     GVariant *some_variant;
+    GObject *some_object;
 };
 
 struct _GIMarshallingTestsPropertiesObjectClass {
