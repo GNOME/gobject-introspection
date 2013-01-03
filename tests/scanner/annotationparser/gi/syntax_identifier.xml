@@ -283,4 +283,22 @@ returns nothing.</description>
   </docblock>
 </test>
 
+<test>
+  <!--
+  Invalid identifier
+  -->
+  <commentblock>/**
+ * gnm_cell_set_expr_and_value: Stores (WITHOUT COPYING) the supplied value, and
+ *        references the supplied expression and links it into the expression
+ *        list.  It marks the sheet as dirty. It is intended for use by import
+ *        routines or operations that do bulk assignment.
+ *
+ * WARNING : This is an internal routine that does not queue redraws,
+ *           does not auto-resize, does not calculate spans, and does
+ *           not render the value.
+ *
+ * NOTE : This DOES check for array partitioning.
+ */</commentblock>
+</test>
+
 </tests>
