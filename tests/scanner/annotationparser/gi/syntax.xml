@@ -71,6 +71,14 @@ something */</commentblock>
 
 <test>
   <!--
+  Not GTK-Doc
+  -->
+  <commentblock>/**
+*/</commentblock>
+</test>
+
+<test>
+  <!--
   Technically not GTK-Doc, but we need to support this for backwards compatibility
   -->
   <commentblock>/**

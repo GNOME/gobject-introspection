@@ -1119,20 +1119,23 @@ class AnnotationParser(object):
         ########################################################################
         # Finished parsing this comment block.
         ########################################################################
-        # We have picked up a couple of \n characters that where not
-        # intended. Strip those.
-        if comment_block.comment:
-            comment_block.comment = comment_block.comment.strip()
+        if comment_block:
+            # We have picked up a couple of \n characters that where not
+            # intended. Strip those.
+            if comment_block.comment:
+                comment_block.comment = comment_block.comment.strip()
 
-        for tag in comment_block.tags.values():
-            self._clean_comment_block_part(tag)
+            for tag in comment_block.tags.values():
+                self._clean_comment_block_part(tag)
 
-        for param in comment_block.params.values():
-            self._clean_comment_block_part(param)
+            for param in comment_block.params.values():
+                self._clean_comment_block_part(param)
 
-        # Validate and store block.
-        comment_block.validate()
-        return comment_block
+            # Validate and store block.
+            comment_block.validate()
+            return comment_block
+        else:
+            return None
 
     def _clean_comment_block_part(self, part):
         if part.comment:
