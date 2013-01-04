@@ -1307,6 +1307,19 @@ the introspection client langage.</doc>
           </parameter>
         </parameters>
       </glib:signal>
+      <glib:signal name="sig-with-intarray-ret" when="last">
+        <return-value transfer-ownership="full">
+          <array name="GLib.Array">
+            <type name="gint"/>
+          </array>
+        </return-value>
+        <parameters>
+          <parameter name="i" transfer-ownership="none">
+            <doc xml:whitespace="preserve">an integer</doc>
+            <type name="gint"/>
+          </parameter>
+        </parameters>
+      </glib:signal>
       <glib:signal name="sig-with-obj" when="last">
         <doc xml:whitespace="preserve">Test transfer none GObject as a param (tests refcounting).
 Use with regress_test_obj_emit_sig_with_obj</doc>

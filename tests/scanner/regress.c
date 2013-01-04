@@ -2181,6 +2181,7 @@ enum {
   REGRESS_TEST_OBJ_SIGNAL_ALL,
   REGRESS_TEST_OBJ_SIGNAL_SIG_WITH_INT64_PROP,
   REGRESS_TEST_OBJ_SIGNAL_SIG_WITH_UINT64_PROP,
+  REGRESS_TEST_OBJ_SIGNAL_SIG_WITH_INTARRAY_RET,
   N_REGRESS_TEST_OBJ_SIGNALS
 };
 
@@ -2386,6 +2387,25 @@ regress_test_obj_class_init (RegressTestObjClass *klass)
 		  G_TYPE_UINT64,
 		  1,
 		  G_TYPE_UINT64);
+
+  /**
+   * RegressTestObj::sig-with-intarray-ret:
+   * @self: an object
+   * @i: an integer
+   *
+   * Returns: (array zero-terminated=1) (element-type gint) (transfer full):
+   */
+  regress_test_obj_signals[REGRESS_TEST_OBJ_SIGNAL_SIG_WITH_INTARRAY_RET] =
+    g_signal_new ("sig-with-intarray-ret",
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  0,
+		  NULL,
+		  NULL,
+		  g_cclosure_marshal_VOID__BOXED,
+		  G_TYPE_ARRAY,
+		  1,
+		  G_TYPE_INT);
 
   gobject_class->set_property = regress_test_obj_set_property;
   gobject_class->get_property = regress_test_obj_get_property;
