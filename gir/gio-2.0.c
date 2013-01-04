@@ -5559,7 +5559,7 @@
  *
  * Unmounting a #GMount instance is an asynchronous operation. For
  * more information about asynchronous operations, see #GAsyncResult
- * and #GSimpleAsyncResult. To unmount a #GMount instance, first call
+ * and #GTask. To unmount a #GMount instance, first call
  * g_mount_unmount_with_operation() with (at least) the #GMount instance and a
  * #GAsyncReadyCallback.  The callback will be fired when the
  * operation has resolved (either with success or failure), and a
@@ -7702,9 +7702,9 @@
  *
  * Mounting a #GVolume instance is an asynchronous operation. For more
  * information about asynchronous operations, see #GAsyncResult and
- * #GSimpleAsyncResult. To mount a #GVolume, first call
- * g_volume_mount() with (at least) the #GVolume instance, optionally
- * a #GMountOperation object and a #GAsyncReadyCallback.
+ * #GTask. To mount a #GVolume, first call g_volume_mount() with (at
+ * least) the #GVolume instance, optionally a #GMountOperation object
+ * and a #GAsyncReadyCallback.
  *
  * Typically, one will only want to pass %NULL for the
  * #GMountOperation if automounting all volumes when a desktop session
@@ -10461,6 +10461,26 @@
 
 
 /**
+ * g_application_command_line_get_stdin_data:
+ * @cmdline: a #GApplicationCommandLine
+ *
+ * Gets the stdin of the invoking process.
+ *
+ * The #GInputStream can be used to read data passed to the standard
+ * input of the invoking process.
+ * This doesn't work on all platforms.  Presently, it is only available
+ * on UNIX when using a DBus daemon capable of passing file descriptors.
+ * If stdin is not available then %NULL will be returned.  In the
+ * future, support may be expanded to other platforms.
+ *
+ * You must only call this function once per commandline invocation.
+ *
+ * Returns: (transfer full): a #GInputStream for stdin
+ * Since: 2.34
+ */
+
+
+/**
  * g_application_command_line_getenv:
  * @cmdline: a #GApplicationCommandLine
  * @name: the environment variable to get
@@ -12339,6 +12359,23 @@
  *
  * Returns: The pointer to native credentials or %NULL if the operation there is no #GCredentials support for the OS or if @native_type isn't supported by the OS. Do not free the returned data, it is owned by @credentials.
  * Since: 2.26
+ */
+
+
+/**
+ * g_credentials_get_unix_pid:
+ * @credentials: A #GCredentials
+ * @error: Return location for error or %NULL.
+ *
+ * Tries to get the UNIX process identifier from @credentials. This
+ * method is only available on UNIX platforms.
+ *
+ * This operation can fail if #GCredentials is not supported on the
+ * OS or if the native credentials type does not contain information
+ * about the UNIX process ID.
+ *
+ * Returns: The UNIX process ID, or -1 if @error is set.
+ * Since: 2.36
  */
 
 
@@ -19991,6 +20028,12 @@
  * triggering the cancellable object from another thread. If the operation
  * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned.
  *
+ * It does not make sense for @flags to contain
+ * %G_FILE_MONITOR_WATCH_HARD_LINKS, since hard links can not be made to
+ * directories.  It is not possible to monitor all the files in a
+ * directory for changes made via hard links; if you want to do this then
+ * you must register individual watches with g_file_monitor().
+ *
  * Virtual: monitor_dir
  * Returns: (transfer full): a #GFileMonitor for the given @file, or %NULL on error. Free the returned object with g_object_unref().
  */
@@ -20026,6 +20069,14 @@
  * If @cancellable is not %NULL, then the operation can be cancelled by
  * triggering the cancellable object from another thread. If the operation
  * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned.
+ *
+ * If @flags contains %G_FILE_MONITOR_WATCH_HARD_LINKS then the monitor
+ * will also attempt to report changes made to the file via another
+ * filename (ie, a hard link). Without this flag, you can only rely on
+ * changes made through the filename contained in @file to be
+ * reported. Using this flag may result in an increase in resource
+ * usage, and may not have any effect depending on the #GFileMonitor
+ * backend and/or filesystem type.
  *
  * Returns: (transfer full): a #GFileMonitor for the given @file, or %NULL on error. Free the returned object with g_object_unref().
  */

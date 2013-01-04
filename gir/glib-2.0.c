@@ -11361,6 +11361,8 @@
  * @mutex: a #GMutex that is currently locked
  *
  * Atomically releases @mutex and waits until @cond is signalled.
+ * When this function returns, @mutex is locked again and owned by the
+ * calling thread.
  *
  * When using condition variables, it is possible that a spurious wakeup
  * may occur (ie: g_cond_wait() returns even though g_cond_signal() was
@@ -14629,6 +14631,19 @@
  *
  * Returns: the monotonic time, in microseconds
  * Since: 2.28
+ */
+
+
+/**
+ * g_get_num_processors:
+ *
+ * Determine the approximate number of threads that the system will
+ * schedule simultaneously for this process.  This is intended to be
+ * used as a parameter to g_thread_pool_new() for CPU bound tasks and
+ * similar cases.
+ *
+ * Returns: Number of schedulable threads, always greater than 0
+ * Since: 2.36
  */
 
 
@@ -19251,6 +19266,28 @@
  * ]|
  *
  * Since: 2.18
+ */
+
+
+/**
+ * g_markup_parse_context_ref:
+ * @context: a #GMarkupParseContext
+ *
+ * Increases the reference count of @context.
+ *
+ * Returns: the same @context
+ * Since: 2.36
+ */
+
+
+/**
+ * g_markup_parse_context_unref:
+ * @context: a #GMarkupParseContext
+ *
+ * Decreases the reference count of @context.  When its reference count
+ * drops to 0, it is freed.
+ *
+ * Since: 2.36
  */
 
 
@@ -28376,20 +28413,50 @@
  * something that would pass as a valid value for the
  * <varname>TZ</varname> environment variable (including %NULL).
  *
+ * In Windows, @identifier can also be the unlocalized name of a time
+ * zone for standard time, for example "Pacific Standard Time".
+ *
  * Valid RFC3339 time offsets are <literal>"Z"</literal> (for UTC) or
  * <literal>"±hh:mm"</literal>.  ISO 8601 additionally specifies
- * <literal>"±hhmm"</literal> and <literal>"±hh"</literal>.
+ * <literal>"±hhmm"</literal> and <literal>"±hh"</literal>.  Offsets are
+ * time values to be added to Coordinated Universal Time (UTC) to get
+ * the local time.
  *
- * The <varname>TZ</varname> environment variable typically corresponds
- * to the name of a file in the zoneinfo database, but there are many
- * other possibilities.  Note that those other possibilities are not
- * currently implemented, but are planned.
+ * In Unix, the <varname>TZ</varname> environment variable typically
+ * corresponds to the name of a file in the zoneinfo database, or
+ * string in "std offset [dst [offset],start[/time],end[/time]]"
+ * (POSIX) format.  There  are  no spaces in the specification.  The
+ * name of standard and daylight savings time zone must be three or more
+ * alphabetic characters.  Offsets are time values to be added to local
+ * time to get Coordinated Universal Time (UTC) and should be
+ * <literal>"[±]hh[[:]mm[:ss]]"</literal>.  Dates are either
+ * <literal>"Jn"</literal> (Julian day with n between 1 and 365, leap
+ * years not counted), <literal>"n"</literal> (zero-based Julian day
+ * with n between 0 and 365) or <literal>"Mm.w.d"</literal> (day d
+ * (0 <= d <= 6) of week w (1 <= w <= 5) of month m (1 <= m <= 12), day
+ * 0 is a Sunday).  Times are in local wall clock time, the default is
+ * 02:00:00.
+ *
+ * In Windows, the "tzn[+|–]hh[:mm[:ss]][dzn]" format is used, but also
+ * accepts POSIX format.  The Windows format uses US rules for all time
+ * zones; daylight savings time is 60 minutes behind the standard time
+ * with date and time of change taken from Pacific Standard Time.
+ * Offsets are time values to be added to the local time to get
+ * Coordinated Universal Time (UTC).
  *
  * g_time_zone_new_local() calls this function with the value of the
  * <varname>TZ</varname> environment variable.  This function itself is
  * independent of the value of <varname>TZ</varname>, but if @identifier
  * is %NULL then <filename>/etc/localtime</filename> will be consulted
- * to discover the correct timezone.
+ * to discover the correct time zone on Unix and the registry will be
+ * consulted or GetTimeZoneInformation() will be used to get the local
+ * time zone on Windows.
+ *
+ * If intervals are not available, only time zone rules from
+ * <varname>TZ</varname> environment variable or other means, then they
+ * will be computed from year 1900 to 2037.  If the maximum year for the
+ * rules is available and it is greater than 2037, then it will followed
+ * instead.
  *
  * See <ulink
  * url='http://tools.ietf.org/html/rfc3339#section-5.6'>RFC3339
@@ -28398,7 +28465,10 @@
  * full list of valid time offsets.  See <ulink
  * url='http://www.gnu.org/s/libc/manual/html_node/TZ-Variable.html'>The
  * GNU C Library manual</ulink> for an explanation of the possible
- * values of the <varname>TZ</varname> environment variable.
+ * values of the <varname>TZ</varname> environment variable.  See <ulink
+ * url='http://msdn.microsoft.com/en-us/library/ms912391%28v=winembedded.11%29.aspx'>
+ * Microsoft Time Zone Index Values</ulink> for the list of time zones
+ * on Windows.
  *
  * You should release the return value by calling g_time_zone_unref()
  * when you are done with it.
