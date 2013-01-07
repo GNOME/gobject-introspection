@@ -131,24 +131,20 @@ PKG_CHECK_MODULES(GIO, [gio-2.0])
 PKG_CHECK_MODULES(GIO_UNIX, [gio-unix-2.0], have_gio_unix=true, have_gio_unix=false)
 AM_CONDITIONAL(HAVE_GIO_UNIX, test x$have_gio_unix = xtrue)
 
-AC_ARG_ENABLE(tests,
-	AS_HELP_STRING([--disable-tests], [disable test libraries]),
-	enable_tests=$enableval,
-	enable_tests=maybe)
+# Prefer cairo-gobject if we have it
+AC_ARG_WITH(cairo,
+	    AS_HELP_STRING([--with-cairo], [Use cairo @<:@default=maybe@:>@]),
+	    [], [with_cairo=maybe])
 
-AS_IF([test x${enable_tests} != xno], [
+AS_IF([test x${with_cairo} != xno], [
   PKG_CHECK_MODULES(CAIRO, [cairo cairo-gobject], have_cairo=yes, have_cairo=no)
-  AS_IF([test x$have_cairo != xyes], [
-    AS_IF([ test x$enable_tests = xmaybe ], [
-      enable_tests=no
-    ], [
-      AC_MSG_ERROR([Tests enabled but cairo not found; pass --disable-tests or install cairo])
-    ])
-  ], [
-    enable_tests=yes
+  AS_IF([ test x$have_cairo = xyes && test x$with_cairo = xmaybe ], [
+    have_cairo=no
+  ], [ test x$have_cairo = xno && test x$with_cairo = xyes ], [
+    AC_MSG_ERROR([cairo enabled but not found])
   ])
 ])
-AM_CONDITIONAL(BUILD_TESTS, test x$enable_tests != xno)
+AM_CONDITIONAL(HAVE_CAIRO, test x$have_cairo = xyes)
 
 case "$host" in
   *-*-darwin*)

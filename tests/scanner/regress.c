@@ -3,7 +3,6 @@
 #include <stdlib.h>
 #include <glib-object.h>
 #include <gobject/gvaluecollector.h>
-#include <cairo-gobject.h>
 
 #include "regress.h"
 
@@ -285,6 +284,7 @@ regress_test_value_return(int i)
 /************************************************************************/
 /* foreign structs */
 
+#ifndef _GI_DISABLE_CAIRO
 /**
  * regress_test_cairo_context_full_return:
  *
@@ -365,6 +365,7 @@ regress_test_cairo_surface_full_out (cairo_surface_t **surface)
 {
   *surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 10, 10);
 }
+#endif
 
 /**
  * regress_test_gvariant_i:
@@ -2298,6 +2299,7 @@ regress_test_obj_class_init (RegressTestObjClass *klass)
 		  1,
 		  G_TYPE_OBJECT);
 
+#ifndef _GI_DISABLE_CAIRO
    /**
    * RegressTestObj::sig-with-foreign-struct:
    * @self: an object
@@ -2314,6 +2316,7 @@ regress_test_obj_class_init (RegressTestObjClass *klass)
 		  G_TYPE_NONE,
 		  1,
 		  CAIRO_GOBJECT_TYPE_CONTEXT);
+#endif
 
   regress_test_obj_signals[REGRESS_TEST_OBJ_SIGNAL_FIRST] =
     g_signal_new ("first",
@@ -2620,6 +2623,7 @@ regress_test_obj_emit_sig_with_obj (RegressTestObj *obj)
     g_object_unref (obj_param);
 }
 
+#ifndef _GI_DISABLE_CAIRO
 void
 regress_test_obj_emit_sig_with_foreign_struct (RegressTestObj *obj)
 {
@@ -2627,6 +2631,7 @@ regress_test_obj_emit_sig_with_foreign_struct (RegressTestObj *obj)
   g_signal_emit_by_name (obj, "sig-with-foreign-struct", cr);
   cairo_destroy (cr);
 }
+#endif
 
 void
 regress_test_obj_emit_sig_with_int64 (RegressTestObj *obj)

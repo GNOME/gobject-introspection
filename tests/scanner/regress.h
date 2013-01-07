@@ -1,7 +1,9 @@
 #ifndef __GITESTTYPES_H__
 #define __GITESTTYPES_H__
 
-#include <cairo.h>
+#ifndef _GI_DISABLE_CAIRO
+#include <cairo-gobject.h>
+#endif
 #include <glib-object.h>
 #include <gio/gio.h>
 #include <time.h>
@@ -129,6 +131,7 @@ int regress_test_int_value_arg(const GValue *v);
 const GValue *regress_test_value_return(int i);
 
 /* foreign structs */
+#ifndef _GI_DISABLE_CAIRO
 cairo_t *regress_test_cairo_context_full_return (void);
 void regress_test_cairo_context_none_in (cairo_t *context);
 
@@ -136,6 +139,7 @@ cairo_surface_t *regress_test_cairo_surface_none_return (void);
 cairo_surface_t *regress_test_cairo_surface_full_return (void);
 void regress_test_cairo_surface_none_in (cairo_surface_t *surface);
 void regress_test_cairo_surface_full_out (cairo_surface_t **surface);
+#endif
 
 /* versioning (deprecated, since, stability) */
 void regress_test_versioning (void);

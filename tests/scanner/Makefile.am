@@ -36,7 +36,10 @@ libfoo_la_LIBADD = $(top_builddir)/libgirepository-1.0.la
 libutility_la_SOURCES = $(srcdir)/utility.c $(srcdir)/utility.h
 libgtkfrob_la_SOURCES = $(srcdir)/gtkfrob.c $(srcdir)/gtkfrob.h
 libregress_la_SOURCES = $(srcdir)/regress.c $(srcdir)/regress.h
-libregress_la_LIBADD = $(GIO_LIBS) $(CAIRO_LIBS)
+libregress_la_LIBADD = $(GIO_LIBS)
+if HAVE_CAIRO
+libregress_la_LIBADD += $(CAIRO_LIBS)
+endif
 libwarnlib_la_CFLAGS = $(AM_CFLAGS)
 libwarnlib_la_SOURCES = $(srcdir)/warnlib.c $(srcdir)/warnlib.h
 libwarnlib_la_LIBADD = $(GIO_LIBS)
@@ -46,7 +49,14 @@ libgettype_la_SOURCES = $(srcdir)/gettype.c $(srcdir)/gettype.h
 testsdir = $(datadir)/gobject-introspection-1.0/tests
 tests_DATA = $(libregress_la_SOURCES) $(libwarnlib_la_SOURCES)
 
-libregress_la_CFLAGS = $(AM_CFLAGS) $(CAIRO_CFLAGS)
+libregress_la_CPPFLAGS =
+if !HAVE_CAIRO
+libregress_la_CPPFLAGS += -D_GI_DISABLE_CAIRO
+endif
+libregress_la_CFLAGS = $(AM_CFLAGS)
+if HAVE_CAIRO
+libregress_la_CFLAGS += $(CAIRO_CFLAGS)
+endif
 libregress_la_LDFLAGS = $(AM_LDFLAGS)
 
 
@@ -72,9 +82,12 @@ GIRS += SLetter-1.0.gir
 
 Regress-1.0.gir: $(top_builddir)/Gio-2.0.gir libregress.la
 Regress_1_0_gir_LIBS = libregress.la
-Regress_1_0_gir_INCLUDES = cairo-1.0 Gio-2.0
+Regress_1_0_gir_INCLUDES = Gio-2.0
+if HAVE_CAIRO
+Regress_1_0_gir_INCLUDES += cairo-1.0 
+endif
 Regress_1_0_gir_FILES = $(libregress_la_SOURCES)
-Regress_1_0_gir_SCANNERFLAGS = --c-include="regress.h" --warn-error
+Regress_1_0_gir_SCANNERFLAGS = --c-include="regress.h" --warn-error $(libregress_la_CPPFLAGS)
 GIRS += Regress-1.0.gir
 
 WarnLib-1.0.gir: $(top_builddir)/Gio-2.0.gir libwarnlib.la
