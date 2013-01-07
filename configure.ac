@@ -138,9 +138,7 @@ AC_ARG_WITH(cairo,
 
 AS_IF([test x${with_cairo} != xno], [
   PKG_CHECK_MODULES(CAIRO, [cairo cairo-gobject], have_cairo=yes, have_cairo=no)
-  AS_IF([ test x$have_cairo = xyes && test x$with_cairo = xmaybe ], [
-    have_cairo=no
-  ], [ test x$have_cairo = xno && test x$with_cairo = xyes ], [
+  AS_IF([ test x$have_cairo = xno && test x$with_cairo = xyes ], [
     AC_MSG_ERROR([cairo enabled but not found])
   ])
 ])
