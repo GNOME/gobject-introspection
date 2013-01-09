@@ -35,7 +35,7 @@ def callback_function(callback, user_data, destroy_notify)
 </code></synopsis>
 <p>This is a function that takes a callback. Different languages
 will expose this in different ways (e.g. Python keeps the
-@user_data parameter, while JS doesn't)</p>
+<code>user_data</code> parameter, while JS doesn't)</p>
 
 <table>
 <tr>
@@ -48,7 +48,7 @@ will expose this in different ways (e.g. Python keeps the
 </tr>
 <tr>
 <td><p>destroy_notify :</p></td>
-<td><p>how to get rid of @user_data</p></td>
+<td><p>how to get rid of <code>user_data</code></p></td>
 </tr>
 </table>
 </page>

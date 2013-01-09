@@ -56,6 +56,8 @@ doc_examples_obj_class_init (DocExamplesObjClass *klass)
    * @obj:
    * @int_param: a parameter of type int
    * @float_param: a parameter of type float
+   * @pointer_param: A pointer to @obj's thingy --
+   *   pass @int_param if you really want to.
    *
    * This is an example of how to document a signal.
    *
@@ -66,7 +68,7 @@ doc_examples_obj_class_init (DocExamplesObjClass *klass)
       G_SIGNAL_RUN_LAST,
       0, NULL, NULL,
       NULL,
-      G_TYPE_NONE, 2, G_TYPE_UINT, G_TYPE_UINT);
+      G_TYPE_NONE, 3, G_TYPE_UINT, G_TYPE_UINT, G_TYPE_POINTER);
 
   /**
    * DocExamplesObj:property-example:
@@ -106,6 +108,8 @@ doc_examples_obj_new (void)
  * @second_arg: second argument
  * @boolean_arg: You should always pass %TRUE.
  * @pointer_arg: (allow-none): If not %NULL, do a thing.
+ *   Pass @first_arg if you want to sometimes. You can
+ *   also pass @second_arg, or even @boolean_arg.
  * @string: A %NULL-terminated string.
  *
  * This is an example of how to document a method.

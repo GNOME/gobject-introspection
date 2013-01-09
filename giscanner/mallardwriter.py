@@ -150,6 +150,7 @@ class DocstringScanner(TemplatedScanner):
             ('signal', r'#<<type_name:alpha>>::(<<signal_name:alpha_dash>>)'),
             ('type_name', r'#(<<type_name:alpha>>)'),
             ('fundamental', r'%(<<fundamental:alpha>>)'),
+            ('parameter', r'@<<param_name:alpha>>'),
             ('function_call', r'<<symbol_name:alpha>>\(\)'),
         ]
 
@@ -239,6 +240,14 @@ class MallardFormatter(object):
     def _process_fundamental(self, node, match, props):
         return self.fundamentals.get(props['fundamental'], match)
 
+    def _process_parameter(self, node, match, props):
+        try:
+            parameter = node.get_parameter(props['param_name'])
+        except (AttributeError, ValueError), e:
+            return match
+
+        return '<code>%s</code>' % (self.format_parameter_name(node, parameter), )
+
     def _process_function_call(self, node, match, props):
         func = self._resolve_symbol(props['symbol_name'])
         if func is None:
@@ -255,6 +264,7 @@ class MallardFormatter(object):
             'signal': self._process_signal,
             'type_name': self._process_type_name,
             'fundamental': self._process_fundamental,
+            'parameter': self._process_parameter,
             'function_call': self._process_function_call,
         }
 
@@ -264,6 +274,9 @@ class MallardFormatter(object):
         tokens = self._scanner.scan(para)
         words = [self._process_token(node, tok) for tok in tokens]
         return ''.join(words)
+
+    def format_parameter_name(self, node, parameter):
+        return parameter.argname
 
     def format_function_name(self, func):
         raise NotImplementedError
@@ -343,6 +356,22 @@ class MallardFormatterPython(MallardFormatter):
         "FALSE": "False",
         "NULL": "None",
     }
+
+    def is_method(self, node):
+        if getattr(node, "is_method", False):
+            return True
+
+        if isinstance(node, (ast.VFunction)):
+            return True
+
+        return False
+
+    def format_parameter_name(self, node, parameter):
+        # Force "self" for the first parameter of a method
+        if self.is_method(node) and parameter is node.parameters[0]:
+            return "self"
+        else:
+            return parameter.argname
 
     def format_type(self, type_):
         if isinstance(type_, ast.Array):

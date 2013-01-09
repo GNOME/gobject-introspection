@@ -66,7 +66,7 @@ created with <link xref="DocExamples.Obj.new">doc_examples_obj_new</link>.</p><p
 </tr>
 <tr>
 <td><p>pointer_arg :</p></td>
-<td><p>If not NULL, do a thing.</p></td>
+<td><p>If not NULL, do a thing. Pass <code>first_arg</code> if you want to sometimes. You can also pass <code>second_arg</code>, or even <code>boolean_arg</code>.</p></td>
 </tr>
 <tr>
 <td><p>string :</p></td>

@@ -35,7 +35,7 @@ and a return value.</p>
 </tr>
 <tr>
 <td><p>Returns :</p></td>
-<td><p>True if @out_arg is valid, False otherwise</p></td>
+<td><p>True if <code>out_arg</code> is valid, False otherwise</p></td>
 </tr>
 </table>
 </page>

@@ -63,7 +63,7 @@ created with <link xref="DocExamples.Obj.new">Obj.new</link>.</p><p>This should 
 </tr>
 <tr>
 <td><p>pointer_arg :</p></td>
-<td><p>If not None, do a thing.</p></td>
+<td><p>If not None, do a thing. Pass <code>self</code> if you want to sometimes. You can also pass <code>second_arg</code>, or even <code>boolean_arg</code>.</p></td>
 </tr>
 <tr>
 <td><p>string :</p></td>

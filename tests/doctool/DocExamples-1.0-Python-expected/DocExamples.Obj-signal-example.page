@@ -10,7 +10,7 @@
   </info>
   <title>DocExamples.Obj::signal-example</title>
 <synopsis><code mime="text/x-python">
-def callback(obj, int_param, float_param, user_param1, ...)
+def callback(obj, int_param, float_param, pointer_param, user_param1, ...)
 </code></synopsis>
 <p>This is an example of how to document a signal.</p>
 
@@ -26,6 +26,10 @@ def callback(obj, int_param, float_param, user_param1, ...)
 <tr>
 <td><p>float_param :</p></td>
 <td><p>a parameter of type float</p></td>
+</tr>
+<tr>
+<td><p>pointer_param :</p></td>
+<td><p>A pointer to @obj's thingy -- pass <code>int_param</code> if you really want to.</p></td>
 </tr>
 <tr>
 <td><p>user_param1 :</p></td>
