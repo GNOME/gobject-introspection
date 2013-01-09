@@ -31,10 +31,12 @@ from mako.template import Template
 from . import ast
 from .utils import to_underscores
 
-def make_page_id(namespace, node):
+def make_page_id(node):
     if isinstance(node, ast.Namespace):
         return 'index'
-    elif isinstance(node, (ast.Class, ast.Interface)):
+
+    namespace = node.namespace
+    if isinstance(node, (ast.Class, ast.Interface)):
         return '%s.%s' % (namespace.name, node.name)
     elif isinstance(node, ast.Record):
         return '%s.%s' % (namespace.name, node.name)
@@ -214,7 +216,7 @@ class MallardFormatter(object):
             return match
 
         xref_name = "%s.%s:%s" % (namespace.name, type_node.name, node.name)
-        return '<link xref="%s">%s</link>' % (make_page_id(namespace, node), xref_name)
+        return '<link xref="%s">%s</link>' % (make_page_id(node), xref_name)
 
     def _process_signal(self, namespace, match, props):
         type_node = self._resolve_type(props['type_name'])
@@ -227,21 +229,21 @@ class MallardFormatter(object):
             return match
 
         xref_name = "%s.%s::%s" % (node.namespace.name, type_node.name, node.name)
-        return '<link xref="%s">%s</link>' % (make_page_id(node.namespace, node), xref_name)
+        return '<link xref="%s">%s</link>' % (make_page_id(node), xref_name)
 
     def _process_type_name(self, namespace, match, props):
         node = self._resolve_type(props['type_name'])
         if node is None:
             return match
         xref_name = "%s.%s" % (node.namespace.name, node.name)
-        return '<link xref="%s">%s</link>' % (make_page_id(node.namespace, node), xref_name)
+        return '<link xref="%s">%s</link>' % (make_page_id(node), xref_name)
 
     def _process_function_call(self, namespace, match, props):
         node = self._resolve_symbol(props['symbol_name'])
         if node is None:
             return match
 
-        return '<link xref="%s">%s</link>' % (make_page_id(node.namespace, node),
+        return '<link xref="%s">%s</link>' % (make_page_id(node),
                                               self.format_function_name(node))
 
     def _process_fundamental(self, namespace, match, props):
@@ -396,7 +398,7 @@ class MallardWriter(object):
             template_dir = os.path.dirname(__file__)
 
         template_name = make_template_name(node, self._language)
-        page_id = make_page_id(namespace, node)
+        page_id = make_page_id(node)
 
         file_name = os.path.join(template_dir, template_name)
         file_name = os.path.abspath(file_name)
