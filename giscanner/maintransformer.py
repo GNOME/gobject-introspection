@@ -780,20 +780,26 @@ usage is void (*_gtk_reserved1)(void);"""
             prop.type = self._resolve_toplevel(type_tag.value, prop.type, prop, parent)
 
     def _apply_annotations_signal(self, parent, signal):
+        names = []
         prefix = self._get_annotation_name(parent)
         block = self._blocks.get('%s::%s' % (prefix, signal.name))
-        self._apply_annotations_annotated(signal, block)
-        # We're only attempting to name the signal parameters if
-        # the number of parameters (@foo) is the same or greater
-        # than the number of signal parameters
-        if block and len(block.params) > len(signal.parameters):
-            names = block.params.items()
-            # Resolve real parameter names early, so that in later
-            # phase we can refer to them while resolving annotations.
-            for i, param in enumerate(signal.parameters):
-                param.argname, tag = names[i+1]
-        else:
-            names = []
+
+        if block:
+            self._apply_annotations_annotated(signal, block)
+
+            # We're only attempting to name the signal parameters if
+            # the number of parameters (@foo) is the same or greater
+            # than the number of signal parameters
+            if len(block.params) > len(signal.parameters):
+                names = block.params.items()
+                # Resolve real parameter names early, so that in later
+                # phase we can refer to them while resolving annotations.
+                for i, param in enumerate(signal.parameters):
+                    param.argname, tag = names[i+1]
+            else:
+                message.warn("incorrect number of parameters in comment block, "
+                             "parameter annotations will be ignored.", block.position)
+
         for i, param in enumerate(signal.parameters):
             if names:
                 name, tag = names[i+1]
