@@ -13,23 +13,13 @@
 <synopsis><code mime="text/x-python">
 % if len(node.parameters) != 0:
 @accepts(\
-% for arg, ix in zip(node.parameters, range(len(node.parameters))):
-${formatter.format_type(arg.type) | x}\
-% if ix != len(node.parameters) - 1:
-, \
-%endif
-% endfor
+${', '.join((formatter.format_type(arg.type) for arg in node.parameters))}\
 )
 % endif
 @returns(${formatter.format_type(node.retval.type) | x})
 def \
 do_${node.name}(self, \
-% for arg, ix in zip(node.parameters, range(len(node.parameters))):
-${arg.argname}\
-% if ix != len(node.parameters) - 1:
-, \
-%endif
-% endfor
+${', '.join((arg.argname for arg in node.parameters))}\
 ):
 </code></synopsis>
 ${formatter.format(node, node.doc)}
