@@ -110,7 +110,7 @@ doc_examples_obj_new (void)
  * @pointer_arg: (allow-none): If not %NULL, do a thing.
  *   Pass @first_arg if you want to sometimes. You can
  *   also pass @second_arg, or even @boolean_arg.
- * @string: A %NULL-terminated string.
+ * @string: A NUL-terminated string.
  *
  * This is an example of how to document a method.
  *

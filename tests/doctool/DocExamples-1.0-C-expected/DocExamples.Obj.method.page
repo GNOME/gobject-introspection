@@ -70,7 +70,7 @@ created with <link xref="DocExamples.Obj.new">doc_examples_obj_new</link>.</p><p
 </tr>
 <tr>
 <td><p>string :</p></td>
-<td><p>A NULL-terminated string.</p></td>
+<td><p>A NUL-terminated string.</p></td>
 </tr>
 <tr>
 <td><p>Returns :</p></td>

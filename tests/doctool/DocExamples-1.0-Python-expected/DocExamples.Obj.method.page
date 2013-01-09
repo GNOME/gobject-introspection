@@ -68,7 +68,7 @@ created with <link xref="DocExamples.Obj.new">Obj.new</link>.</p><p>This should 
 </tr>
 <tr>
 <td><p>string :</p></td>
-<td><p>A None-terminated string.</p></td>
+<td><p>A NUL-terminated string.</p></td>
 </tr>
 <tr>
 <td><p>Returns :</p></td>
