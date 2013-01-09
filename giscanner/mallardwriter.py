@@ -202,10 +202,10 @@ class MallardFormatter(object):
                 return item
         raise KeyError("Could not find %s" % (name, ))
 
-    def _process_other(self, namespace, match, props):
+    def _process_other(self, match, props):
         return self.escape(match)
 
-    def _process_property(self, namespace, match, props):
+    def _process_property(self, match, props):
         type_node = self._resolve_type(props['type_name'])
         if type_node is None:
             return match
@@ -215,10 +215,10 @@ class MallardFormatter(object):
         except (AttributeError, KeyError), e:
             return match
 
-        xref_name = "%s.%s:%s" % (namespace.name, type_node.name, node.name)
+        xref_name = "%s.%s:%s" % (node.namespace.name, type_node.name, node.name)
         return '<link xref="%s">%s</link>' % (make_page_id(node), xref_name)
 
-    def _process_signal(self, namespace, match, props):
+    def _process_signal(self, match, props):
         type_node = self._resolve_type(props['type_name'])
         if type_node is None:
             return match
@@ -231,14 +231,14 @@ class MallardFormatter(object):
         xref_name = "%s.%s::%s" % (node.namespace.name, type_node.name, node.name)
         return '<link xref="%s">%s</link>' % (make_page_id(node), xref_name)
 
-    def _process_type_name(self, namespace, match, props):
+    def _process_type_name(self, match, props):
         node = self._resolve_type(props['type_name'])
         if node is None:
             return match
         xref_name = "%s.%s" % (node.namespace.name, node.name)
         return '<link xref="%s">%s</link>' % (make_page_id(node), xref_name)
 
-    def _process_function_call(self, namespace, match, props):
+    def _process_function_call(self, match, props):
         node = self._resolve_symbol(props['symbol_name'])
         if node is None:
             return match
@@ -246,12 +246,10 @@ class MallardFormatter(object):
         return '<link xref="%s">%s</link>' % (make_page_id(node),
                                               self.format_function_name(node))
 
-    def _process_fundamental(self, namespace, match, props):
+    def _process_fundamental(self, match, props):
         return self.fundamentals.get(props['fundamental'], match)
 
     def _process_token(self, tok):
-        namespace = self._transformer.namespace
-
         kind, match, props = tok
 
         dispatch = {
@@ -263,7 +261,7 @@ class MallardFormatter(object):
             'fundamental': self._process_fundamental,
         }
 
-        return dispatch[kind](namespace, match, props)
+        return dispatch[kind](match, props)
 
     def format_inline(self, para):
         tokens = self._scanner.scan(para)
