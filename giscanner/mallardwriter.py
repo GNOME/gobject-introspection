@@ -27,6 +27,7 @@ import tempfile
 
 from xml.sax import saxutils
 from mako.template import Template
+from mako.lookup import TemplateLookup
 
 from . import ast
 from .utils import to_underscores
@@ -407,6 +408,19 @@ class MallardWriter(object):
         self._formatter = formatter_class(self._transformer)
         self._language = self._formatter.language
 
+        self._lookup = self._get_template_lookup()
+
+    def _get_template_lookup(self):
+        if 'UNINSTALLED_INTROSPECTION_SRCDIR' in os.environ:
+            top_srcdir = os.environ['UNINSTALLED_INTROSPECTION_SRCDIR']
+            template_dir = os.path.join(top_srcdir, 'giscanner')
+        else:
+            template_dir = os.path.dirname(__file__)
+
+        return TemplateLookup(directories=[template_dir],
+                              module_directory=tempfile.gettempdir(),
+                              output_encoding='utf-8')
+
     def write(self, output):
         nodes = [self._transformer.namespace]
         for node in self._transformer.namespace.itervalues():
@@ -433,19 +447,10 @@ class MallardWriter(object):
     def _render_node(self, node, output):
         namespace = self._transformer.namespace
 
-        if 'UNINSTALLED_INTROSPECTION_SRCDIR' in os.environ:
-            top_srcdir = os.environ['UNINSTALLED_INTROSPECTION_SRCDIR']
-            template_dir = os.path.join(top_srcdir, 'giscanner')
-        else:
-            template_dir = os.path.dirname(__file__)
-
         template_name = make_template_name(node, self._language)
         page_id = make_page_id(node)
 
-        file_name = os.path.join(template_dir, template_name)
-        file_name = os.path.abspath(file_name)
-        template = Template(filename=file_name, output_encoding='utf-8',
-                            module_directory=tempfile.gettempdir())
+        template = self._lookup.get_template(template_name)
         result = template.render(namespace=namespace,
                                  node=node,
                                  page_id=page_id,
