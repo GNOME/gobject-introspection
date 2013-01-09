@@ -413,9 +413,11 @@ class MallardWriter(object):
     def _get_template_lookup(self):
         if 'UNINSTALLED_INTROSPECTION_SRCDIR' in os.environ:
             top_srcdir = os.environ['UNINSTALLED_INTROSPECTION_SRCDIR']
-            template_dir = os.path.join(top_srcdir, 'giscanner')
+            srcdir = os.path.join(top_srcdir, 'giscanner')
         else:
-            template_dir = os.path.dirname(__file__)
+            srcdir = os.path.dirname(__file__)
+
+        template_dir = os.path.join(srcdir, 'doctemplates', self._language)
 
         return TemplateLookup(directories=[template_dir],
                               module_directory=tempfile.gettempdir(),

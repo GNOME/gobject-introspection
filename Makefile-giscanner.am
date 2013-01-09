@@ -42,24 +42,24 @@ pkgpyexec_PYTHON =			\
 	giscanner/libtoolimporter.py	\
 	giscanner/odict.py		\
 	giscanner/mallardwriter.py	\
-	giscanner/mallard-C-class.tmpl	\
-	giscanner/mallard-C-default.tmpl	\
-	giscanner/mallard-C-enum.tmpl	\
-	giscanner/mallard-C-function.tmpl	\
-	giscanner/mallard-C-namespace.tmpl	\
-	giscanner/mallard-C-property.tmpl	\
-	giscanner/mallard-C-record.tmpl	\
-	giscanner/mallard-C-signal.tmpl	\
-	giscanner/mallard-C-vfunc.tmpl	\
-	giscanner/mallard-Python-class.tmpl	\
-	giscanner/mallard-Python-default.tmpl	\
-	giscanner/mallard-Python-enum.tmpl	\
-	giscanner/mallard-Python-function.tmpl	\
-	giscanner/mallard-Python-namespace.tmpl	\
-	giscanner/mallard-Python-property.tmpl	\
-	giscanner/mallard-Python-record.tmpl	\
-	giscanner/mallard-Python-signal.tmpl	\
-	giscanner/mallard-Python-vfunc.tmpl	\
+	giscanner/doctemplates/C/mallard-C-class.tmpl	\
+	giscanner/doctemplates/C/mallard-C-default.tmpl	\
+	giscanner/doctemplates/C/mallard-C-enum.tmpl	\
+	giscanner/doctemplates/C/mallard-C-function.tmpl	\
+	giscanner/doctemplates/C/mallard-C-namespace.tmpl	\
+	giscanner/doctemplates/C/mallard-C-property.tmpl	\
+	giscanner/doctemplates/C/mallard-C-record.tmpl	\
+	giscanner/doctemplates/C/mallard-C-signal.tmpl	\
+	giscanner/doctemplates/C/mallard-C-vfunc.tmpl	\
+	giscanner/doctemplates/Python/mallard-Python-class.tmpl	\
+	giscanner/doctemplates/Python/mallard-Python-default.tmpl	\
+	giscanner/doctemplates/Python/mallard-Python-enum.tmpl	\
+	giscanner/doctemplates/Python/mallard-Python-function.tmpl	\
+	giscanner/doctemplates/Python/mallard-Python-namespace.tmpl	\
+	giscanner/doctemplates/Python/mallard-Python-property.tmpl	\
+	giscanner/doctemplates/Python/mallard-Python-record.tmpl	\
+	giscanner/doctemplates/Python/mallard-Python-signal.tmpl	\
+	giscanner/doctemplates/Python/mallard-Python-vfunc.tmpl	\
 	giscanner/maintransformer.py	\
 	giscanner/message.py		\
 	giscanner/shlibs.py		\
