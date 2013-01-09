@@ -236,15 +236,15 @@ class MallardFormatter(object):
 
         return self.format_xref(type_)
 
+    def _process_fundamental(self, node, match, props):
+        return self.fundamentals.get(props['fundamental'], match)
+
     def _process_function_call(self, node, match, props):
         func = self._resolve_symbol(props['symbol_name'])
         if func is None:
             return match
 
         return self.format_xref(func)
-
-    def _process_fundamental(self, node, match, props):
-        return self.fundamentals.get(props['fundamental'], match)
 
     def _process_token(self, node, tok):
         kind, match, props = tok
@@ -254,8 +254,8 @@ class MallardFormatter(object):
             'property': self._process_property,
             'signal': self._process_signal,
             'type_name': self._process_type_name,
-            'function_call': self._process_function_call,
             'fundamental': self._process_fundamental,
+            'function_call': self._process_function_call,
         }
 
         return dispatch[kind](node, match, props)
