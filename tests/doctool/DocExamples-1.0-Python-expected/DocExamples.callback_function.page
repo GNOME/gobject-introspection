@@ -31,7 +31,8 @@
 <synopsis><code mime="text/x-python">
 @accepts(DocExamples.Callback, gpointer, GLib.DestroyNotify)
 @returns(none)
-def callback_function(callback, user_data, destroy_notify)
+def callback_function(callback, user_data, destroy_notify):
+    # Python wrapper for doc_examples_callback_function()
 </code></synopsis>
 <p>This is a function that takes a callback. Different languages
 will expose this in different ways (e.g. Python keeps the
