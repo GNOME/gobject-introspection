@@ -56,6 +56,9 @@ ${formatter.format_type(arg.type) | x}\
 @returns(${formatter.format_type(node.retval.type) | x})
 def \
 ${node.name}(\
+% if node.is_method:
+self, \
+% endif
 % for arg, ix in zip(node.parameters, range(len(node.parameters))):
 ${arg.argname}\
 % if ix != len(node.parameters) - 1:
