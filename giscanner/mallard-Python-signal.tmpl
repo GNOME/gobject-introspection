@@ -16,7 +16,7 @@ ${arg.argname}, \
 % endfor
 user_param1, ...)
 </code></synopsis>
-${formatter.format(node.doc)}
+${formatter.format(node, node.doc)}
 
 <table>
 <tr>
@@ -26,7 +26,7 @@ ${formatter.format(node.doc)}
 % for arg, ix in zip(node.parameters, range(len(node.parameters))):
 <tr>
 <td><p>${arg.argname} :</p></td>
-<td>${formatter.format(arg.doc)}</td>
+<td>${formatter.format(node, arg.doc)}</td>
 </tr>
 % endfor
 <tr>
@@ -42,7 +42,7 @@ ${formatter.format(node.doc)}
      node.retval.type.ctype is not None:
 <tr>
 <td><p>Returns :</p></td>
-<td>${node.retval.type.ctype} ${formatter.format(node.retval.doc)}</td>
+<td>${node.retval.type.ctype} ${formatter.format(node, node.retval.doc)}</td>
 </tr>
 % endif
 </table>

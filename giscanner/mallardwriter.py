@@ -163,14 +163,14 @@ class MallardFormatter(object):
     def escape(self, text):
         return saxutils.escape(text)
 
-    def format(self, doc):
+    def format(self, node, doc):
         if doc is None:
             return ''
 
         result = ''
         for para in doc.split('\n\n'):
             result += '<p>'
-            result += self.format_inline(para)
+            result += self.format_inline(node, para)
             result += '</p>'
         return result
 
@@ -202,51 +202,51 @@ class MallardFormatter(object):
                 return item
         raise KeyError("Could not find %s" % (name, ))
 
-    def _process_other(self, match, props):
+    def _process_other(self, node, match, props):
         return self.escape(match)
 
-    def _process_property(self, match, props):
+    def _process_property(self, node, match, props):
         type_node = self._resolve_type(props['type_name'])
         if type_node is None:
             return match
 
         try:
-            node = self._find_thing(type_node.properties, props['property_name'])
+            prop = self._find_thing(type_node.properties, props['property_name'])
         except (AttributeError, KeyError), e:
             return match
 
-        return self.format_xref(node)
+        return self.format_xref(prop)
 
-    def _process_signal(self, match, props):
+    def _process_signal(self, node, match, props):
         type_node = self._resolve_type(props['type_name'])
         if type_node is None:
             return match
 
         try:
-            node = self._find_thing(type_node.signals, props['signal_name'])
+            signal = self._find_thing(type_node.signals, props['signal_name'])
         except (AttributeError, KeyError), e:
             return match
 
-        return self.format_xref(node)
+        return self.format_xref(signal)
 
-    def _process_type_name(self, match, props):
-        node = self._resolve_type(props['type_name'])
-        if node is None:
+    def _process_type_name(self, node, match, props):
+        type_ = self._resolve_type(props['type_name'])
+        if type_ is None:
             return match
 
-        return self.format_xref(node)
+        return self.format_xref(type_)
 
-    def _process_function_call(self, match, props):
-        node = self._resolve_symbol(props['symbol_name'])
-        if node is None:
+    def _process_function_call(self, node, match, props):
+        func = self._resolve_symbol(props['symbol_name'])
+        if func is None:
             return match
 
-        return self.format_xref(node)
+        return self.format_xref(func)
 
-    def _process_fundamental(self, match, props):
+    def _process_fundamental(self, node, match, props):
         return self.fundamentals.get(props['fundamental'], match)
 
-    def _process_token(self, tok):
+    def _process_token(self, node, tok):
         kind, match, props = tok
 
         dispatch = {
@@ -258,11 +258,11 @@ class MallardFormatter(object):
             'fundamental': self._process_fundamental,
         }
 
-        return dispatch[kind](match, props)
+        return dispatch[kind](node, match, props)
 
-    def format_inline(self, para):
+    def format_inline(self, node, para):
         tokens = self._scanner.scan(para)
-        words = [self._process_token(tok) for tok in tokens]
+        words = [self._process_token(node, tok) for tok in tokens]
         return ''.join(words)
 
     def format_function_name(self, func):

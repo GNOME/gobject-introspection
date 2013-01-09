@@ -8,13 +8,13 @@
     <link type="guide" xref="index"/>
   </info>
   <title>${node.namespace.name}.${node.name}</title>
-  ${formatter.format(node.doc)}
+  ${formatter.format(node, node.doc)}
 % if node.members:
 <table>
 % for member, ix in zip(node.members, range(len(node.members))):
 <tr>
 <td><p>${node.name}.${member.name.upper()} :</p></td>
-<td>${formatter.format(member.doc)}</td>
+<td>${formatter.format(node, member.doc)}</td>
 </tr>
 % endfor
 </table>

@@ -9,7 +9,7 @@
     <link type="guide" xref="index" group="class"/>
   </info>
   <title>${node.ctype}</title>
-${formatter.format(node.doc)}
+${formatter.format(node, node.doc)}
 % if node.version:
 <p>Since ${node.version}</p>
 % endif
