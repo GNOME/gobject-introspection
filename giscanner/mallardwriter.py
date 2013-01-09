@@ -215,8 +215,7 @@ class MallardFormatter(object):
         except (AttributeError, KeyError), e:
             return match
 
-        xref_name = "%s.%s:%s" % (node.namespace.name, type_node.name, node.name)
-        return '<link xref="%s">%s</link>' % (make_page_id(node), xref_name)
+        return self.format_xref(node)
 
     def _process_signal(self, match, props):
         type_node = self._resolve_type(props['type_name'])
@@ -228,23 +227,21 @@ class MallardFormatter(object):
         except (AttributeError, KeyError), e:
             return match
 
-        xref_name = "%s.%s::%s" % (node.namespace.name, type_node.name, node.name)
-        return '<link xref="%s">%s</link>' % (make_page_id(node), xref_name)
+        return self.format_xref(node)
 
     def _process_type_name(self, match, props):
         node = self._resolve_type(props['type_name'])
         if node is None:
             return match
-        xref_name = "%s.%s" % (node.namespace.name, node.name)
-        return '<link xref="%s">%s</link>' % (make_page_id(node), xref_name)
+
+        return self.format_xref(node)
 
     def _process_function_call(self, match, props):
         node = self._resolve_symbol(props['symbol_name'])
         if node is None:
             return match
 
-        return '<link xref="%s">%s</link>' % (make_page_id(node),
-                                              self.format_function_name(node))
+        return self.format_xref(node)
 
     def _process_fundamental(self, match, props):
         return self.fundamentals.get(props['fundamental'], match)
@@ -273,6 +270,24 @@ class MallardFormatter(object):
 
     def format_type(self, type_):
         raise NotImplementedError
+
+    def format_page_name(self, node):
+        namespace = node.namespace
+        if isinstance(node, ast.Namespace):
+            return 'Index'
+        elif isinstance(node, ast.Function):
+            return self.format_function_name(node)
+        elif isinstance(node, ast.Property) and node.parent is not None:
+            return '%s.%s:%s' % (namespace.name, node.parent.name, node.name)
+        elif isinstance(node, ast.Signal) and node.parent is not None:
+            return '%s.%s::%s' % (namespace.name, node.parent.name, node.name)
+        elif isinstance(node, ast.VFunction) and node.parent is not None:
+            return '%s.%s::%s' % (namespace.name, node.parent.name, node.name)
+        else:
+            return make_page_id(node)
+
+    def format_xref(self, node):
+        return '<link xref="%s">%s</link>' % (make_page_id(node), self.format_page_name(node))
 
     def format_property_flags(self, property_, construct_only=False):
         flags = []
