@@ -766,7 +766,13 @@ class AnnotationParser(object):
         comment_blocks = {}
 
         for comment in comments:
-            comment_block = self.parse_comment_block(comment)
+            try:
+                comment_block = self.parse_comment_block(comment)
+            except Exception:
+                message.warn('unrecoverable parse error, please file a GObject-Introspection '
+                             'bug report including the complete comment block at the '
+                             'indicated location.', message.Position(comment[1], comment[2]))
+                continue
 
             if comment_block is not None:
                 # Note: previous versions of this parser did not check
