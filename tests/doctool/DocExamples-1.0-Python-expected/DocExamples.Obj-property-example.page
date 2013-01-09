@@ -10,7 +10,7 @@
   </info>
   <title>DocExamples.Obj:property-example</title>
 <synopsis><code mime="text/x-python">
-"property-example"             {utf8: gint8}                : Read / Write
+"property-example"             {unicode: gint8}                : Read / Write
 </code></synopsis>
 <p>This is an example of how to document a property.</p>
 </page>

@@ -374,6 +374,30 @@ class MallardFormatterPython(MallardFormatter):
         else:
             return parameter.argname
 
+    def format_fundamental_type(self, name):
+        fundamental_types = {
+            "utf8": "unicode",
+            "gunichar": "unicode",
+            "gchar": "str",
+            "guchar": "str",
+            "gboolean": "bool",
+            "gint": "int",
+            "guint": "int",
+            "glong": "int",
+            "gulong": "int",
+            "gint64": "int",
+            "guint64": "int",
+            "gfloat": "float",
+            "gdouble": "float",
+            "gchararray": "str",
+            "GParam": "GLib.Param",
+            "PyObject": "object",
+            "GStrv": "[str]",
+            "GVariant": "GLib.Variant",
+            }
+
+        return fundamental_types.get(name, name)
+
     def format_type(self, type_):
         if isinstance(type_, ast.Array):
             return '[' + self.format_type(type_.element_type) + ']'
@@ -383,7 +407,7 @@ class MallardFormatterPython(MallardFormatter):
         elif type_.target_giname is not None:
             return type_.target_giname
         else:
-            return type_.target_fundamental
+            return self.format_fundamental_type(type_.target_fundamental)
 
     def format_function_name(self, func):
         if func.parent is not None:

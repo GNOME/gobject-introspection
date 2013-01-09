@@ -11,7 +11,7 @@
   </info>
   <title>DocExamples.Obj.vfunc</title>
 <synopsis><code mime="text/x-python">
-@accepts(gint)
+@accepts(int)
 @returns(none)
 def do_vfunc(self, first_arg):
 </code></synopsis>

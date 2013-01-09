@@ -10,7 +10,7 @@
     <link type="guide" xref="DocExamples.Obj" group="method"/>
     <api:function>
       <api:returns>
-        <api:type>gboolean</api:type>
+        <api:type>bool</api:type>
       </api:returns>
       <api:name>doc_examples_obj_method</api:name>
       <api:arg>
@@ -18,15 +18,15 @@
         <api:name>self</api:name>
       </api:arg>
       <api:arg>
-        <api:type>gint</api:type>
+        <api:type>int</api:type>
         <api:name>first_arg</api:name>
       </api:arg>
       <api:arg>
-        <api:type>gfloat</api:type>
+        <api:type>float</api:type>
         <api:name>second_arg</api:name>
       </api:arg>
       <api:arg>
-        <api:type>gboolean</api:type>
+        <api:type>bool</api:type>
         <api:name>boolean_arg</api:name>
       </api:arg>
       <api:arg>
@@ -34,15 +34,15 @@
         <api:name>pointer_arg</api:name>
       </api:arg>
       <api:arg>
-        <api:type>utf8</api:type>
+        <api:type>unicode</api:type>
         <api:name>string</api:name>
       </api:arg>
     </api:function>
   </info>
   <title>method</title>
 <synopsis><code mime="text/x-python">
-@accepts(gint, gfloat, gboolean, gpointer, utf8)
-@returns(gboolean)
+@accepts(int, float, bool, gpointer, unicode)
+@returns(bool)
 def method(self, first_arg, second_arg, boolean_arg, pointer_arg, string):
     # Python wrapper for doc_examples_obj_method()
 </code></synopsis>

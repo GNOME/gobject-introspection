@@ -10,19 +10,19 @@
     <link type="guide" xref="DocExamples.Obj" group="function"/>
     <api:function>
       <api:returns>
-        <api:type>gboolean</api:type>
+        <api:type>bool</api:type>
       </api:returns>
       <api:name>doc_examples_obj_static_method</api:name>
       <api:arg>
-        <api:type>gint</api:type>
+        <api:type>int</api:type>
         <api:name>out_arg</api:name>
       </api:arg>
     </api:function>
   </info>
   <title>static_method</title>
 <synopsis><code mime="text/x-python">
-@accepts(gint)
-@returns(gboolean)
+@accepts(int)
+@returns(bool)
 def static_method(out_arg):
     # Python wrapper for doc_examples_obj_static_method()
 </code></synopsis>
