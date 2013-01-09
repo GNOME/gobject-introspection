@@ -174,9 +174,6 @@ class MallardFormatter(object):
             result += '</p>'
         return result
 
-    def _process_other(self, namespace, match, props):
-        return self.escape(match)
-
     def _resolve_type(self, ident):
         try:
             matches = self._transformer.split_ctype_namespaces(ident)
@@ -204,6 +201,9 @@ class MallardFormatter(object):
             if item.name == name:
                 return item
         raise KeyError("Could not find %s" % (name, ))
+
+    def _process_other(self, namespace, match, props):
+        return self.escape(match)
 
     def _process_property(self, namespace, match, props):
         type_node = self._resolve_type(props['type_name'])
