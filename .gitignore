@@ -104,5 +104,5 @@ docs/reference/gi-unused.txt
 docs/reference/version.xml
 
 #g-ir-doc-tool tests
-tests/doctool/DocExamples-1.0-C
-tests/doctool/DocExamples-1.0-Python
+*.page
+!tests/doctool/*-expected/*.page
