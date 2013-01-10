@@ -4239,6 +4239,19 @@ gi_marshalling_tests_object_vfunc_caller_allocated_out_parameter (GIMarshallingT
 }
 
 /**
+ * gi_marshalling_tests_object_vfunc_array_out_parameter:
+ * @a: (out) (array zero-terminated=1):
+ */
+void
+gi_marshalling_tests_object_vfunc_array_out_parameter (GIMarshallingTestsObject *self, gfloat **a)
+{
+    /* make sure that local variables don't get smashed */
+    gulong local = 0x12345678;
+    GI_MARSHALLING_TESTS_OBJECT_GET_CLASS (self)->vfunc_array_out_parameter (self, a);
+    g_assert_cmpint(local, ==, 0x12345678);
+}
+
+/**
  * gi_marshalling_tests_object_vfunc_return_value_and_one_out_parameter:
  * @a: (out):
  */
