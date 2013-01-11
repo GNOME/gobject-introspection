@@ -178,6 +178,60 @@ test_hash_with_cairo_typelib (GIRepository *repo)
     g_assert (info == NULL);
 }
 
+static GIPropertyInfo *
+lookup_property (GIObjectInfo *info, const gchar *name)
+{
+    gssize n_props;
+    gssize i;
+    GIPropertyInfo *property_info;
+
+    n_props = g_object_info_get_n_properties (info);
+    for (i = 0; i < n_props; i++) {
+        property_info = g_object_info_get_property (info, i);
+        if (strcmp (name, g_base_info_get_name (property_info)) == 0)
+            return property_info;
+        g_base_info_unref (property_info);
+    }
+
+    return NULL;
+}
+
+static void
+test_char_types (GIRepository *repo)
+{
+    GITypelib *ret;
+    GError *error = NULL;
+    GIBaseInfo *prop_obj;
+    GIPropertyInfo *prop_info;
+    GITypeInfo *type_info;
+
+    ret = g_irepository_require (repo, "GIMarshallingTests", NULL, 0, &error);
+    if (!ret)
+        g_error ("%s", error->message);
+
+    prop_obj = g_irepository_find_by_name (repo, "GIMarshallingTests", "PropertiesObject");
+    g_assert (prop_obj != NULL);
+    g_assert (GI_IS_OBJECT_INFO (prop_obj));
+
+    /* unsigned char */
+    prop_info = lookup_property ((GIObjectInfo *) prop_obj, "some-uchar");
+    g_assert (prop_info != NULL);
+    type_info = g_property_info_get_type (prop_info);
+    g_assert_cmpuint (g_type_info_get_tag (type_info), ==, GI_TYPE_TAG_UINT8);
+    g_base_info_unref (type_info);
+    g_base_info_unref (prop_info);
+
+    /* signed char */
+    prop_info = lookup_property ((GIObjectInfo *) prop_obj, "some-char");
+    g_assert (prop_info != NULL);
+    type_info = g_property_info_get_type (prop_info);
+    g_assert_cmpuint (g_type_info_get_tag (type_info), ==, GI_TYPE_TAG_INT8);
+    g_base_info_unref (type_info);
+    g_base_info_unref (prop_info);
+
+    g_base_info_unref (prop_obj);
+}
+
 int
 main(int argc, char **argv)
 {
@@ -192,6 +246,7 @@ main(int argc, char **argv)
     test_is_pointer_for_struct_arg (repo);
     test_fundamental_get_ref_function_pointer (repo);
     test_hash_with_cairo_typelib (repo);
+    test_char_types (repo);
 
     exit(0);
 }
