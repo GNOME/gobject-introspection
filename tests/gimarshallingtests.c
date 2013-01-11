@@ -3645,6 +3645,7 @@ gi_marshalling_tests_boxed_struct_copy (GIMarshallingTestsBoxedStruct *struct_)
     new_struct = g_slice_new (GIMarshallingTestsBoxedStruct);
 
     *new_struct = *struct_;
+    new_struct->string_ = g_strdup (struct_->string_);
 
     return new_struct;
 }
@@ -3652,8 +3653,10 @@ gi_marshalling_tests_boxed_struct_copy (GIMarshallingTestsBoxedStruct *struct_)
 static void
 gi_marshalling_tests_boxed_struct_free (GIMarshallingTestsBoxedStruct *struct_)
 {
-    if (struct_ != NULL)
+    if (struct_ != NULL) {
+        g_free (struct_->string_);
         g_slice_free (GIMarshallingTestsBoxedStruct, struct_);
+    }
 }
 
 GType
@@ -3690,6 +3693,7 @@ gi_marshalling_tests_boxed_struct_returnv (void)
         struct_ = g_new(GIMarshallingTestsBoxedStruct, 1);
 
         struct_->long_ = 42;
+        struct_->string_ = g_strdup("hello");
         struct_->g_strv = g_new0(gchar*, 4);
         struct_->g_strv[0] = g_strdup("0");
         struct_->g_strv[1] = g_strdup("1");

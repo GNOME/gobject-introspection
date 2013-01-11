@@ -656,6 +656,7 @@ void gi_marshalling_tests_pointer_struct_inv (GIMarshallingTestsPointerStruct *s
 
 struct _GIMarshallingTestsBoxedStruct {
     glong long_;
+    gchar *string_;
     GStrv g_strv;
 };
 
@@ -968,7 +969,7 @@ typedef struct _GIMarshallingTestsInterface3Iface GIMarshallingTestsInterface3If
 
 struct _GIMarshallingTestsInterface3Iface {
     GTypeInterface base_iface;
- 
+
     /**
      * GIMarshallingTestsInterface3::test_variant_array_in:
      * @in: (in) (array length=n_in):
@@ -1080,7 +1081,7 @@ struct _GIMarshallingTestsPropertiesObject {
     gfloat some_float;
     gdouble some_double;
     gchar **some_strv;
-    GIMarshallingTestsBoxedStruct* some_boxed_struct; 
+    GIMarshallingTestsBoxedStruct* some_boxed_struct;
     GVariant *some_variant;
 };
 
