@@ -1082,6 +1082,7 @@ struct _GIMarshallingTestsPropertiesObject {
     gdouble some_double;
     gchar **some_strv;
     GIMarshallingTestsBoxedStruct* some_boxed_struct;
+    GList* some_boxed_glist;
     GVariant *some_variant;
 };
 

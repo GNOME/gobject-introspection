@@ -3673,6 +3673,20 @@ gi_marshalling_tests_boxed_struct_get_type (void)
     return type;
 }
 
+static GType
+gi_marshalling_tests_boxed_glist_get_type (void)
+{
+    static GType type = 0;
+
+    if (type == 0) {
+        type = g_boxed_type_register_static ("GIMarshallingTestsBoxedGList",
+                (GBoxedCopyFunc) g_list_copy,
+                (GBoxedFreeFunc) g_list_free);
+    }
+
+    return type;
+}
+
 GIMarshallingTestsBoxedStruct *
 gi_marshalling_tests_boxed_struct_new (void)
 {
@@ -4722,6 +4736,7 @@ enum  {
     SOME_STRV_PROPERTY,
     SOME_BOXED_STRUCT_PROPERTY,
     SOME_VARIANT_PROPERTY,
+    SOME_BOXED_GLIST_PROPERTY,
 };
 
 G_DEFINE_TYPE (GIMarshallingTestsPropertiesObject, gi_marshalling_tests_properties_object, G_TYPE_OBJECT);
@@ -4782,6 +4797,9 @@ gi_marshalling_tests_properties_object_get_property (GObject * object, guint pro
         case SOME_BOXED_STRUCT_PROPERTY:
             g_value_set_boxed (value, self->some_boxed_struct);
             break;
+        case SOME_BOXED_GLIST_PROPERTY:
+            g_value_set_boxed (value, self->some_boxed_glist);
+            break;
         case SOME_VARIANT_PROPERTY:
             g_value_set_variant (value, self->some_variant);
             break;
@@ -4837,6 +4855,10 @@ gi_marshalling_tests_properties_object_set_property (GObject * object, guint pro
         case SOME_BOXED_STRUCT_PROPERTY:
             gi_marshalling_tests_boxed_struct_free (self->some_boxed_struct);
             self->some_boxed_struct = gi_marshalling_tests_boxed_struct_copy (g_value_get_boxed (value));
+            break;
+        case SOME_BOXED_GLIST_PROPERTY:
+            g_list_free (self->some_boxed_glist);
+            self->some_boxed_glist = g_list_copy (g_value_get_boxed (value));
             break;
         case SOME_VARIANT_PROPERTY:
             if (self->some_variant != NULL)
@@ -4911,6 +4933,17 @@ gi_marshalling_tests_properties_object_class_init (GIMarshallingTestsPropertiesO
     g_object_class_install_property (object_class, SOME_BOXED_STRUCT_PROPERTY,
         g_param_spec_boxed ("some-boxed-struct", "some-boxed-struct", "some-boxed-struct", 
             gi_marshalling_tests_boxed_struct_get_type(),
+            G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
+
+    /**
+     * GIMarshallingTestsPropertiesObject:some-boxed-glist:
+     *
+     * Type: GLib.List(gint)
+     * Transfer: none
+     */
+    g_object_class_install_property (object_class, SOME_BOXED_GLIST_PROPERTY,
+        g_param_spec_boxed ("some-boxed-glist", "some-boxed-glist", "some-boxed-glist", 
+            gi_marshalling_tests_boxed_glist_get_type(),
             G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
 
     g_object_class_install_property (object_class, SOME_VARIANT_PROPERTY,
