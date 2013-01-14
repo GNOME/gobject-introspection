@@ -1003,6 +1003,7 @@ void gi_marshalling_tests_gerror_out_transfer_none(GError **err, const gchar **d
 GError *gi_marshalling_tests_gerror_return(void);
 
 /* GParamSpec */
+void gi_marshalling_tests_param_spec_in_bool(const GParamSpec *param);
 GParamSpec *gi_marshalling_tests_param_spec_return (void);
 void gi_marshalling_tests_param_spec_out(GParamSpec **param);
 

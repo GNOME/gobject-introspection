@@ -4699,6 +4699,17 @@ gi_marshalling_tests_filename_list_return (void)
 }
 
 /**
+ * gi_marshalling_tests_param_spec_in_bool:
+ */
+void
+gi_marshalling_tests_param_spec_in_bool (const GParamSpec *param)
+{
+    g_assert (G_IS_PARAM_SPEC (param));
+    g_assert_cmpint (G_PARAM_SPEC_TYPE (param), ==, G_TYPE_BOOLEAN);
+    g_assert_cmpstr (g_param_spec_get_name(param), ==, "mybool");
+}
+
+/**
  * gi_marshalling_tests_param_spec_return:
  *
  * Returns: (transfer full): a #GParamSpec
@@ -4706,7 +4717,7 @@ gi_marshalling_tests_filename_list_return (void)
 GParamSpec *
 gi_marshalling_tests_param_spec_return (void)
 {
-  return g_param_spec_string ("test-param", "test", "This is a test", "42", G_PARAM_READABLE);
+    return g_param_spec_string ("test-param", "test", "This is a test", "42", G_PARAM_READABLE);
 }
 
 /**
@@ -4716,7 +4727,7 @@ gi_marshalling_tests_param_spec_return (void)
 void
 gi_marshalling_tests_param_spec_out(GParamSpec **param)
 {
-  *param = g_param_spec_string("test-param", "test", "This is a test", "42", G_PARAM_READABLE);
+    *param = g_param_spec_string("test-param", "test", "This is a test", "42", G_PARAM_READABLE);
 }
 
 
