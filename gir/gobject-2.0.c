@@ -2698,7 +2698,7 @@
 
 
 /**
- * g_param_spec_boolean: (skip)
+ * g_param_spec_boolean:
  * @name: canonical name of the property specified
  * @nick: nick name for the property specified
  * @blurb: description of the property specified
@@ -2710,12 +2710,12 @@
  *
  * See g_param_spec_internal() for details on property names.
  *
- * Returns: a newly created parameter specification
+ * Returns: (transfer full): a newly created parameter specification
  */
 
 
 /**
- * g_param_spec_boxed: (skip)
+ * g_param_spec_boxed:
  * @name: canonical name of the property specified
  * @nick: nick name for the property specified
  * @blurb: description of the property specified
@@ -2727,12 +2727,12 @@
  *
  * See g_param_spec_internal() for details on property names.
  *
- * Returns: a newly created parameter specification
+ * Returns: (transfer full): a newly created parameter specification
  */
 
 
 /**
- * g_param_spec_char: (skip)
+ * g_param_spec_char:
  * @name: canonical name of the property specified
  * @nick: nick name for the property specified
  * @blurb: description of the property specified
@@ -2743,12 +2743,12 @@
  *
  * Creates a new #GParamSpecChar instance specifying a %G_TYPE_CHAR property.
  *
- * Returns: a newly created parameter specification
+ * Returns: (transfer full): a newly created parameter specification
  */
 
 
 /**
- * g_param_spec_double: (skip)
+ * g_param_spec_double:
  * @name: canonical name of the property specified
  * @nick: nick name for the property specified
  * @blurb: description of the property specified
@@ -2762,12 +2762,12 @@
  *
  * See g_param_spec_internal() for details on property names.
  *
- * Returns: a newly created parameter specification
+ * Returns: (transfer full): a newly created parameter specification
  */
 
 
 /**
- * g_param_spec_enum: (skip)
+ * g_param_spec_enum:
  * @name: canonical name of the property specified
  * @nick: nick name for the property specified
  * @blurb: description of the property specified
@@ -2780,12 +2780,12 @@
  *
  * See g_param_spec_internal() for details on property names.
  *
- * Returns: a newly created parameter specification
+ * Returns: (transfer full): a newly created parameter specification
  */
 
 
 /**
- * g_param_spec_flags: (skip)
+ * g_param_spec_flags:
  * @name: canonical name of the property specified
  * @nick: nick name for the property specified
  * @blurb: description of the property specified
@@ -2798,12 +2798,12 @@
  *
  * See g_param_spec_internal() for details on property names.
  *
- * Returns: a newly created parameter specification
+ * Returns: (transfer full): a newly created parameter specification
  */
 
 
 /**
- * g_param_spec_float: (skip)
+ * g_param_spec_float:
  * @name: canonical name of the property specified
  * @nick: nick name for the property specified
  * @blurb: description of the property specified
@@ -2816,7 +2816,7 @@
  *
  * See g_param_spec_internal() for details on property names.
  *
- * Returns: a newly created parameter specification
+ * Returns: (transfer full): a newly created parameter specification
  */
 
 
@@ -2882,7 +2882,7 @@
 
 
 /**
- * g_param_spec_gtype: (skip)
+ * g_param_spec_gtype:
  * @name: canonical name of the property specified
  * @nick: nick name for the property specified
  * @blurb: description of the property specified
@@ -2895,12 +2895,12 @@
  * See g_param_spec_internal() for details on property names.
  *
  * Since: 2.10
- * Returns: a newly created parameter specification
+ * Returns: (transfer full): a newly created parameter specification
  */
 
 
 /**
- * g_param_spec_int: (skip)
+ * g_param_spec_int:
  * @name: canonical name of the property specified
  * @nick: nick name for the property specified
  * @blurb: description of the property specified
@@ -2913,12 +2913,12 @@
  *
  * See g_param_spec_internal() for details on property names.
  *
- * Returns: a newly created parameter specification
+ * Returns: (transfer full): a newly created parameter specification
  */
 
 
 /**
- * g_param_spec_int64: (skip)
+ * g_param_spec_int64:
  * @name: canonical name of the property specified
  * @nick: nick name for the property specified
  * @blurb: description of the property specified
@@ -2931,7 +2931,7 @@
  *
  * See g_param_spec_internal() for details on property names.
  *
- * Returns: a newly created parameter specification
+ * Returns: (transfer full): a newly created parameter specification
  */
 
 
@@ -2966,7 +2966,7 @@
 
 
 /**
- * g_param_spec_long: (skip)
+ * g_param_spec_long:
  * @name: canonical name of the property specified
  * @nick: nick name for the property specified
  * @blurb: description of the property specified
@@ -2979,12 +2979,12 @@
  *
  * See g_param_spec_internal() for details on property names.
  *
- * Returns: a newly created parameter specification
+ * Returns: (transfer full): a newly created parameter specification
  */
 
 
 /**
- * g_param_spec_object: (skip)
+ * g_param_spec_object:
  * @name: canonical name of the property specified
  * @nick: nick name for the property specified
  * @blurb: description of the property specified
@@ -2996,7 +2996,7 @@
  *
  * See g_param_spec_internal() for details on property names.
  *
- * Returns: a newly created parameter specification
+ * Returns: (transfer full): a newly created parameter specification
  */
 
 
@@ -3015,7 +3015,7 @@
 
 
 /**
- * g_param_spec_param: (skip)
+ * g_param_spec_param:
  * @name: canonical name of the property specified
  * @nick: nick name for the property specified
  * @blurb: description of the property specified
@@ -3027,12 +3027,12 @@
  *
  * See g_param_spec_internal() for details on property names.
  *
- * Returns: a newly created parameter specification
+ * Returns: (transfer full): a newly created parameter specification
  */
 
 
 /**
- * g_param_spec_pointer: (skip)
+ * g_param_spec_pointer:
  * @name: canonical name of the property specified
  * @nick: nick name for the property specified
  * @blurb: description of the property specified
@@ -3042,7 +3042,7 @@
  *
  * See g_param_spec_internal() for details on property names.
  *
- * Returns: a newly created parameter specification
+ * Returns: (transfer full): a newly created parameter specification
  */
 
 
@@ -3198,7 +3198,7 @@
 
 
 /**
- * g_param_spec_string: (skip)
+ * g_param_spec_string:
  * @name: canonical name of the property specified
  * @nick: nick name for the property specified
  * @blurb: description of the property specified
@@ -3209,12 +3209,12 @@
  *
  * See g_param_spec_internal() for details on property names.
  *
- * Returns: a newly created parameter specification
+ * Returns: (transfer full): a newly created parameter specification
  */
 
 
 /**
- * g_param_spec_uchar: (skip)
+ * g_param_spec_uchar:
  * @name: canonical name of the property specified
  * @nick: nick name for the property specified
  * @blurb: description of the property specified
@@ -3225,12 +3225,12 @@
  *
  * Creates a new #GParamSpecUChar instance specifying a %G_TYPE_UCHAR property.
  *
- * Returns: a newly created parameter specification
+ * Returns: (transfer full): a newly created parameter specification
  */
 
 
 /**
- * g_param_spec_uint: (skip)
+ * g_param_spec_uint:
  * @name: canonical name of the property specified
  * @nick: nick name for the property specified
  * @blurb: description of the property specified
@@ -3243,12 +3243,12 @@
  *
  * See g_param_spec_internal() for details on property names.
  *
- * Returns: a newly created parameter specification
+ * Returns: (transfer full): a newly created parameter specification
  */
 
 
 /**
- * g_param_spec_uint64: (skip)
+ * g_param_spec_uint64:
  * @name: canonical name of the property specified
  * @nick: nick name for the property specified
  * @blurb: description of the property specified
@@ -3262,12 +3262,12 @@
  *
  * See g_param_spec_internal() for details on property names.
  *
- * Returns: a newly created parameter specification
+ * Returns: (transfer full): a newly created parameter specification
  */
 
 
 /**
- * g_param_spec_ulong: (skip)
+ * g_param_spec_ulong:
  * @name: canonical name of the property specified
  * @nick: nick name for the property specified
  * @blurb: description of the property specified
@@ -3281,12 +3281,12 @@
  *
  * See g_param_spec_internal() for details on property names.
  *
- * Returns: a newly created parameter specification
+ * Returns: (transfer full): a newly created parameter specification
  */
 
 
 /**
- * g_param_spec_unichar: (skip)
+ * g_param_spec_unichar:
  * @name: canonical name of the property specified
  * @nick: nick name for the property specified
  * @blurb: description of the property specified
@@ -3299,7 +3299,7 @@
  *
  * See g_param_spec_internal() for details on property names.
  *
- * Returns: a newly created parameter specification
+ * Returns: (transfer full): a newly created parameter specification
  */
 
 
@@ -3331,12 +3331,12 @@
 
 
 /**
- * g_param_spec_variant: (skip)
+ * g_param_spec_variant:
  * @name: canonical name of the property specified
  * @nick: nick name for the property specified
  * @blurb: description of the property specified
  * @type: a #GVariantType
- * @default_value: (allow-none): a #GVariant of type @type to use as the default value, or %NULL
+ * @default_value: (allow-none) (transfer full): a #GVariant of type @type to use as the default value, or %NULL
  * @flags: flags for the property specified
  *
  * Creates a new #GParamSpecVariant instance specifying a #GVariant
@@ -3346,7 +3346,7 @@
  *
  * See g_param_spec_internal() for details on property names.
  *
- * Returns: the newly created #GParamSpec
+ * Returns: (transfer full): the newly created #GParamSpec
  * Since: 2.26
  */
 

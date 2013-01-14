@@ -9717,7 +9717,7 @@
 /**
  * g_action_map_add_action_entries:
  * @action_map: a #GActionMap
- * @entries: a pointer to the first item in an array of #GActionEntry structs
+ * @entries: (array length=n_entries) (element-type GActionEntry): a pointer to the first item in an array of #GActionEntry structs
  * @n_entries: the length of @entries, or -1 if @entries is %NULL-terminated
  * @user_data: the user data for signal connections
  *
@@ -22235,7 +22235,7 @@
 /**
  * g_input_stream_read:
  * @stream: a #GInputStream.
- * @buffer: a buffer to read data into (which should be at least count bytes long).
+ * @buffer: (array length=count) (element-type guint8): a buffer to read data into (which should be at least count bytes long).
  * @count: the number of bytes that will be read from the stream
  * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
  * @error: location to store the error occurring, or %NULL to ignore
@@ -22266,7 +22266,7 @@
 /**
  * g_input_stream_read_all:
  * @stream: a #GInputStream.
- * @buffer: a buffer to read data into (which should be at least count bytes long).
+ * @buffer: (array length=count) (element-type guint8): a buffer to read data into (which should be at least count bytes long).
  * @count: the number of bytes that will be read from the stream
  * @bytes_read: (out): location to store the number of bytes that was read from the stream
  * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
@@ -22293,7 +22293,7 @@
 /**
  * g_input_stream_read_async:
  * @stream: A #GInputStream.
- * @buffer: a buffer to read data into (which should be at least count bytes long).
+ * @buffer: (array length=count) (element-type guint8): a buffer to read data into (which should be at least count bytes long).
  * @count: the number of bytes that will be read from the stream
  * @io_priority: the <link linkend="io-priority">I/O priority</link> of the request.
  * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore.
@@ -30415,7 +30415,7 @@
 /**
  * g_socket_receive:
  * @socket: a #GSocket
- * @buffer: a buffer to read data into (which should be at least @size bytes long).
+ * @buffer: (array length=size) (element-type guint8): a buffer to read data into (which should be at least @size bytes long).
  * @size: the number of bytes you want to read from the socket
  * @cancellable: (allow-none): a %GCancellable or %NULL
  * @error: #GError for error reporting, or %NULL to ignore.
@@ -30549,7 +30549,7 @@
 /**
  * g_socket_receive_with_blocking:
  * @socket: a #GSocket
- * @buffer: a buffer to read data into (which should be at least @size bytes long).
+ * @buffer: (array length=size) (element-type guint8): a buffer to read data into (which should be at least @size bytes long).
  * @size: the number of bytes you want to read from the socket
  * @blocking: whether to do blocking or non-blocking I/O
  * @cancellable: (allow-none): a %GCancellable or %NULL
@@ -32674,7 +32674,7 @@
  * Finish an asynchronous lookup of certificates. See
  * g_tls_database_lookup_certificates_issued_by() for more information.
  *
- * Returns: (transfer full): a newly allocated list of #GTlsCertificate objects. Use g_object_unref() on each certificate, and g_list_free() on the release the list.
+ * Returns: (transfer full) (element-type GTlsCertificate): a newly allocated list of #GTlsCertificate objects. Use g_object_unref() on each certificate, and g_list_free() on the release the list.
  * Since: 2.30
  */
 
