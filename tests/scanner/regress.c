@@ -908,7 +908,7 @@ regress_test_array_int_null_out (int **arr, int *len)
 /* GList */
 
 static /*const*/ GList *
-regress_test_sequence_list()
+regress_test_sequence_list (void)
 {
     static GList *list = NULL;
     if (!list) {
@@ -1029,7 +1029,7 @@ regress_test_glist_null_out (GSList **out_list)
 /* GSList */
 
 static /*const*/ GSList *
-regress_test_sequence_slist()
+regress_test_sequence_slist (void)
 {
     static GSList *list = NULL;
     if (!list) {
@@ -1153,7 +1153,7 @@ static char *table_data[3][2] = {
 };
 
 static GHashTable *
-regress_test_table_ghash_new_container()
+regress_test_table_ghash_new_container (void)
 {
   GHashTable *hash;
   int i;
@@ -1164,7 +1164,7 @@ regress_test_table_ghash_new_container()
 }
 
 static GHashTable *
-regress_test_table_ghash_new_full()
+regress_test_table_ghash_new_full (void)
 {
   GHashTable *hash;
   int i;
@@ -1177,7 +1177,7 @@ regress_test_table_ghash_new_full()
 }
 
 static /*const*/ GHashTable *
-regress_test_table_ghash_const()
+regress_test_table_ghash_const (void)
 {
   static GHashTable *hash = NULL;
   if (!hash) {

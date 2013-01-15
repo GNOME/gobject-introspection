@@ -573,7 +573,7 @@ GClosure *gi_marshalling_tests_gclosure_return (void);
 /**
  * GIMarshallingTestsCallbackReturnValueOnly:
  */
-typedef glong (* GIMarshallingTestsCallbackReturnValueOnly) ();
+typedef glong (* GIMarshallingTestsCallbackReturnValueOnly) (void);
 
 glong gi_marshalling_tests_callback_return_value_only (GIMarshallingTestsCallbackReturnValueOnly callback);
 

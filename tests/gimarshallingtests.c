@@ -4706,7 +4706,7 @@ gi_marshalling_tests_param_spec_in_bool (const GParamSpec *param)
 {
     g_assert (G_IS_PARAM_SPEC (param));
     g_assert_cmpint (G_PARAM_SPEC_TYPE (param), ==, G_TYPE_BOOLEAN);
-    g_assert_cmpstr (g_param_spec_get_name(param), ==, "mybool");
+    g_assert_cmpstr (g_param_spec_get_name((GParamSpec*) param), ==, "mybool");
 }
 
 /**
