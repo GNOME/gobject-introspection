@@ -26,7 +26,7 @@ libgiscanner_la_CFLAGS = $(GOBJECT_CFLAGS) $(GIO_CFLAGS)
 # Python module
 pkgpyexecdir = $(pkglibdir)/giscanner
 pkgpyexec_LTLIBRARIES = _giscanner.la
-pkgpyexec_PYTHON =			\
+pkgpyexec_PYTHON =		\
 	giscanner/__init__.py		\
 	giscanner/annotationmain.py	\
 	giscanner/annotationparser.py	\
@@ -42,6 +42,18 @@ pkgpyexec_PYTHON =			\
 	giscanner/libtoolimporter.py	\
 	giscanner/odict.py		\
 	giscanner/mallardwriter.py	\
+	giscanner/maintransformer.py	\
+	giscanner/message.py		\
+	giscanner/shlibs.py		\
+	giscanner/scannermain.py	\
+	giscanner/sourcescanner.py	\
+	giscanner/testcodegen.py	\
+	giscanner/transformer.py	\
+	giscanner/utils.py		\
+	giscanner/xmlwriter.py
+
+templatedir = $(pkglibdir)
+nobase_template_DATA =		\
 	giscanner/doctemplates/C/mallard-C-class.tmpl	\
 	giscanner/doctemplates/C/mallard-C-default.tmpl	\
 	giscanner/doctemplates/C/mallard-C-enum.tmpl	\
@@ -59,16 +71,7 @@ pkgpyexec_PYTHON =			\
 	giscanner/doctemplates/Python/mallard-Python-property.tmpl	\
 	giscanner/doctemplates/Python/mallard-Python-record.tmpl	\
 	giscanner/doctemplates/Python/mallard-Python-signal.tmpl	\
-	giscanner/doctemplates/Python/mallard-Python-vfunc.tmpl	\
-	giscanner/maintransformer.py	\
-	giscanner/message.py		\
-	giscanner/shlibs.py		\
-	giscanner/scannermain.py	\
-	giscanner/sourcescanner.py	\
-	giscanner/testcodegen.py	\
-	giscanner/transformer.py	\
-	giscanner/utils.py		\
-	giscanner/xmlwriter.py
+	giscanner/doctemplates/Python/mallard-Python-vfunc.tmpl
 
 _giscanner_la_CFLAGS = \
 	$(PYTHON_INCLUDES) \
