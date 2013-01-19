@@ -3738,7 +3738,7 @@ gi_marshalling_tests_boxed_struct_out (GIMarshallingTestsBoxedStruct **struct_)
     static GIMarshallingTestsBoxedStruct *new_struct = NULL;
 
     if (new_struct == NULL) {
-        new_struct = g_new(GIMarshallingTestsBoxedStruct, 1);
+        new_struct = g_new0(GIMarshallingTestsBoxedStruct, 1);
 
         new_struct->long_ = 42;
     }
@@ -3755,7 +3755,7 @@ gi_marshalling_tests_boxed_struct_inout (GIMarshallingTestsBoxedStruct **struct_
 {
     g_assert_cmpint((*struct_)->long_, ==, 42);
 
-    (*struct_) = g_slice_new (GIMarshallingTestsBoxedStruct);
+    (*struct_) = g_slice_new0 (GIMarshallingTestsBoxedStruct);
     (*struct_)->long_ = 0;
 }
 
