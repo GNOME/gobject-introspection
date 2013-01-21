@@ -63,10 +63,12 @@ Please note that due to numerous possible configurations on Python, some environ
 variables need to be set before launching the gobject-introsection.sln solution file.
 
 These variables are namely:
-PYTHONDIR: Root installation folder of your Python interpretor.
+PYTHONDIR: Root installation folder of your Python interpretor, where python.exe is
+           located.  Currently only Python 2.6.x and 2.7.x is supported.
            It must match your build configuration (Win32 or x64/amd64)
 PKG_CONFIG_PATH: Location of the .pc (pkg-config) files, especially for the GLib .pc files.
-MINGWDIR: Root installation folder for your Windows GCC (such as MinGW).
+MINGWDIR: Root installation folder for your Windows GCC (such as MinGW).  For example,
+          if your gcc executable (gcc.exe) is in c:\mingw\bin, use "set MINGWDIR=c:\mingw"
 *** End of Note! ***
 
 The "install" project will copy build results and headers into their
