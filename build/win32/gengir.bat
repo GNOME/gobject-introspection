@@ -256,12 +256,24 @@ g-ir-compiler --includedir=. --debug --verbose GObject-2.0.gir -o GObject-2.0.ty
 g-ir-compiler --includedir=. --debug --verbose Gio-2.0.gir -o Gio-2.0.typelib
 g-ir-compiler --includedir=. --debug --verbose GIRepository-2.0.gir -o GIRepository-2.0.typelib
 
+rem Now process the bundled .gir files
+set CURRDIR=%CD%
+cd ..\..\gir
+g-ir-compiler --includedir=. --debug --verbose freetype2-2.0.gir -o freetype2-2.0.typelib
+g-ir-compiler --includedir=. --debug --verbose GL-1.0.gir -o GL-1.0.typelib
+g-ir-compiler --includedir=. --debug --verbose libxml2-2.0.gir -o libxml2-2.0.typelib
+cd %CURRDIR%
+
 rem Copy the generated .girs and .typelibs to their appropriate places
 
 mkdir ..\..\build\win32\vs%VSVER%\%CONF%\%PLAT%\share\gir-1.0
 move /y *.gir ..\..\build\win32\vs%VSVER%\%CONF%\%PLAT%\share\gir-1.0\
+copy /y ..\..\gir\freetype2-2.0.gir ..\..\build\win32\vs%VSVER%\%CONF%\%PLAT%\share\gir-1.0\
+copy /y ..\..\gir\GL-1.0.gir ..\..\build\win32\vs%VSVER%\%CONF%\%PLAT%\share\gir-1.0\
+copy /y ..\..\gir\libxml2-2.0.gir ..\..\build\win32\vs%VSVER%\%CONF%\%PLAT%\share\gir-1.0\
 
 mkdir ..\..\build\win32\vs%VSVER%\%CONF%\%PLAT%\lib\girepository-1.0
 move /y *.typelib ..\..\build\win32\vs%VSVER%\%CONF%\%PLAT%\lib\girepository-1.0\
+move /y ..\..\gir\*.typelib ..\..\build\win32\vs%VSVER%\%CONF%\%PLAT%\lib\girepository-1.0\
 :DONE
 
