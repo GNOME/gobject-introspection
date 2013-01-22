@@ -135,6 +135,10 @@ mkdir $(CopyDir)\share\gir-$(GIApiVersion)
 
 copy $(SolutionDir)$(Configuration)\$(Platform)\share\gir-$(GIApiVersion)\*.gir $(CopyDir)\share\gir-$(GIApiVersion)
 
+mkdir $(CopyDir)\share\gobject-introspection-$(GIApiVersion)
+
+copy ..\..\..\girepository\gdump.c $(CopyDir)\share\gobject-introspection-$(GIApiVersion)
+
 
 mkdir $(CopyDir)\lib\girepository-$(GIApiVersion)
 

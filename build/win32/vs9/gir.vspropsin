@@ -159,6 +159,9 @@ copy $(SolutionDir)$(ConfigurationName)\$(PlatformName)\bin\_giscanner.pyd $(Cop
 mkdir $(CopyDir)\share\gir-$(GIApiVersion)&#x0D;&#x0A;
 copy $(SolutionDir)$(ConfigurationName)\$(PlatformName)\share\gir-$(GIApiVersion)\*.gir $(CopyDir)\share\gir-$(GIApiVersion)&#x0D;&#x0A;
 
+mkdir $(CopyDir)\share\gobject-introspection-$(GIApiVersion)&#x0D;&#x0A;
+copy ..\..\..\girepository\gdump.c $(CopyDir)\share\gobject-introspection-$(GIApiVersion)&#x0D;&#x0A;
+
 mkdir $(CopyDir)\lib\girepository-$(GIApiVersion)&#x0D;&#x0A;
 copy $(SolutionDir)$(ConfigurationName)\$(PlatformName)\bin\girepository-$(GIApiVersion).lib $(CopyDir)\lib&#x0D;&#x0A;
 copy $(SolutionDir)$(ConfigurationName)\$(PlatformName)\lib\girepository-$(GIApiVersion)\*.typelib $(CopyDir)\lib\girepository-$(GIApiVersion)&#x0D;&#x0A;
