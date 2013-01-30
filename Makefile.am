@@ -58,7 +58,6 @@ EXTRA_DIST += 			\
 
 check-local:
 	gtester --verbose $(GTESTER_PROGS)
-	@test ! -d $(top_srcdir)/.git || (test -f $(top_srcdir)/.git/hooks/pre-commit || install misc/pre-commit .git/hooks/pre-commit)
 	@echo "TEST: PEP-8 INQUISITION"
 	@find $(top_srcdir)/giscanner -name \*.py | sort | uniq | xargs $(PYTHON) $(top_srcdir)/misc/pep8.py --repeat --exclude=config.py
 	@echo "TEST: Annotation pattern programs"
