@@ -16,6 +16,7 @@ compile
 config.guess
 config.h
 config.h.in
+config.h.win32
 config.log
 config.status
 config.sub
@@ -58,6 +59,7 @@ gthash-test
 scannerlexer.c
 scannerparser.c
 scannerparser.h
+test-driver
 tests/Everything-1.0.gir
 tests/GIMarshallingTests-1.0.gir
 tests/everything-stamp.h
