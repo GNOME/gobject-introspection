@@ -90,9 +90,6 @@ class GIRParser(object):
             self._pkgconfig_packages = []
         return self._pkgconfig_packages
 
-    def get_doc(self):
-        return parse(self._filename)
-
     # Private
 
     def _find_first_child(self, node, name_or_names):
