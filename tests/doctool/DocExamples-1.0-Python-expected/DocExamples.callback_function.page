@@ -10,7 +10,7 @@
     <link type="guide" xref="index" group="function"/>
     <api:function>
       <api:returns>
-        <api:type>none</api:type>
+        <api:type>DocExamples.Enum</api:type>
       </api:returns>
       <api:name>doc_examples_callback_function</api:name>
       <api:arg>
@@ -30,7 +30,7 @@
   <title>callback_function</title>
 <synopsis><code mime="text/x-python">
 @accepts(DocExamples.Callback, gpointer, GLib.DestroyNotify)
-@returns(none)
+@returns(DocExamples.Enum)
 def callback_function(callback, user_data, destroy_notify):
     # Python wrapper for doc_examples_callback_function()
 </code></synopsis>
@@ -50,6 +50,10 @@ will expose this in different ways (e.g. Python keeps the
 <tr>
 <td><p>destroy_notify :</p></td>
 <td><p>how to get rid of <code>user_data</code></p></td>
+</tr>
+<tr>
+<td><p>Returns :</p></td>
+<td><p><link xref="DocExamples.Enum">DocExamples.Enum</link>.foo sometimes, <link xref="DocExamples.Enum">DocExamples.Enum</link>.bar other times.</p></td>
 </tr>
 </table>
 </page>

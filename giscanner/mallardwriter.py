@@ -150,7 +150,7 @@ class DocstringScanner(TemplatedScanner):
             ('property', r'#<<type_name:alpha>>:(<<property_name:alpha_dash>>)'),
             ('signal', r'#<<type_name:alpha>>::(<<signal_name:alpha_dash>>)'),
             ('type_name', r'#(<<type_name:alpha>>)'),
-            ('fundamental', r'%(<<fundamental:alpha>>)'),
+            ('enum_value', r'%(<<member_name:alpha>>)'),
             ('parameter', r'@<<param_name:alpha>>'),
             ('function_call', r'<<symbol_name:alpha>>\(\)'),
         ]
@@ -238,12 +238,19 @@ class MallardFormatter(object):
 
         return self.format_xref(type_)
 
-    def _process_fundamental(self, node, match, props):
-        fundamental = props['fundamental']
+    def _process_enum_value(self, node, match, props):
+        member_name = props['member_name']
+
         try:
-            return '<code>%s</code>' % (self.fundamentals[fundamental],)
+            return '<code>%s</code>' % (self.fundamentals[member_name], )
         except KeyError:
-            return match
+            pass
+
+        enum_value = self._resolve_symbol(member_name)
+        if enum_value:
+            return self.format_xref(enum_value)
+
+        return match
 
     def _process_parameter(self, node, match, props):
         try:
@@ -268,7 +275,7 @@ class MallardFormatter(object):
             'property': self._process_property,
             'signal': self._process_signal,
             'type_name': self._process_type_name,
-            'fundamental': self._process_fundamental,
+            'enum_value': self._process_enum_value,
             'parameter': self._process_parameter,
             'function_call': self._process_function_call,
         }
@@ -305,7 +312,11 @@ class MallardFormatter(object):
             return make_page_id(node)
 
     def format_xref(self, node):
-        return '<link xref="%s">%s</link>' % (make_page_id(node), self.format_page_name(node))
+        if isinstance(node, ast.Member):
+            # Enum/BitField members are linked to the main enum page.
+            return self.format_xref(node.parent) + '.' + node.name
+        else:
+            return '<link xref="%s">%s</link>' % (make_page_id(node), self.format_page_name(node))
 
     def format_property_flags(self, property_, construct_only=False):
         flags = []

@@ -84,9 +84,9 @@ typedef enum {
  */
 typedef gchar * (*DocExamplesCallback) (int one, int two);
 
-void doc_examples_callback_function (DocExamplesCallback callback,
-                                     gpointer            user_data,
-                                     GDestroyNotify      destroy_notify);
+DocExamplesEnum doc_examples_callback_function (DocExamplesCallback callback,
+                                                gpointer            user_data,
+                                                GDestroyNotify      destroy_notify);
 
 G_END_DECLS
 

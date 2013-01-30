@@ -10,7 +10,7 @@
     <link type="guide" xref="index" group="function"/>
     <api:function>
       <api:returns>
-        <api:type>void</api:type>
+        <api:type>DocExamplesEnum</api:type>
       </api:returns>
       <api:name>doc_examples_callback_function</api:name>
       <api:arg>
@@ -29,9 +29,9 @@
   </info>
   <title>doc_examples_callback_function</title>
 <synopsis><code mime="text/x-csrc">
-void doc_examples_callback_function (DocExamplesCallback callback,
-                                     gpointer user_data,
-                                     GDestroyNotify destroy_notify);
+DocExamplesEnum doc_examples_callback_function (DocExamplesCallback callback,
+                                                gpointer user_data,
+                                                GDestroyNotify destroy_notify);
 </code></synopsis>
 <p>This is a function that takes a callback. Different languages
 will expose this in different ways (e.g. Python keeps the
@@ -52,7 +52,7 @@ will expose this in different ways (e.g. Python keeps the
 </tr>
 <tr>
 <td><p>Returns :</p></td>
-<td></td>
+<td><p><link xref="DocExamples.Enum">DocExamples.Enum</link>.foo sometimes, <link xref="DocExamples.Enum">DocExamples.Enum</link>.bar other times.</p></td>
 </tr>
 </table>
 </page>

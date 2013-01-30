@@ -180,8 +180,11 @@ doc_examples_array_function (gint *out_len)
  * This is a function that takes a callback. Different languages
  * will expose this in different ways (e.g. Python keeps the
  * @user_data parameter, while JS doesn't)
+ *
+ * Returns: %DOC_EXAMPLES_FOO sometimes, %DOC_EXAMPLES_BAR
+ *   other times.
  */
-void
+DocExamplesEnum
 doc_examples_callback_function (DocExamplesCallback callback,
                                 gpointer            user_data,
                                 GDestroyNotify      destroy_notify)
@@ -193,4 +196,6 @@ doc_examples_callback_function (DocExamplesCallback callback,
 
   if (user_data && destroy_notify)
     destroy_notify (user_data);
+
+  return DOC_EXAMPLES_FOO;
 }
