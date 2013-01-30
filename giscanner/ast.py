@@ -770,6 +770,8 @@ class Enum(Node, Registered):
         self.c_symbol_prefix = c_symbol_prefix
         self.ctype = ctype
         self.members = members
+        for member in members:
+            member.parent = self
         # Associated error domain name
         self.error_domain = None
         self.static_methods = []
@@ -791,6 +793,8 @@ class Bitfield(Node, Registered):
         self.ctype = ctype
         self.c_symbol_prefix = c_symbol_prefix
         self.members = members
+        for member in members:
+            member.parent = self
         self.static_methods = []
 
     def _walk(self, callback, chain):
@@ -806,6 +810,7 @@ class Member(Annotated):
         self.value = value
         self.symbol = symbol
         self.nick = nick
+        self.parent = None
 
     def __cmp__(self, other):
         return cmp(self.name, other.name)
