@@ -239,7 +239,11 @@ class MallardFormatter(object):
         return self.format_xref(type_)
 
     def _process_fundamental(self, node, match, props):
-        return self.fundamentals.get(props['fundamental'], match)
+        fundamental = props['fundamental']
+        try:
+            return '<code>%s</code>' % (self.fundamentals[fundamental],)
+        except KeyError:
+            return match
 
     def _process_parameter(self, node, match, props):
         try:

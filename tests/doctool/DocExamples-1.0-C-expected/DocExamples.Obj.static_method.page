@@ -29,11 +29,11 @@ and a return value.</p>
 <table>
 <tr>
 <td><p>out_arg :</p></td>
-<td><p>a pointer to int, or NULL to ignore</p></td>
+<td><p>a pointer to int, or <code>NULL</code> to ignore</p></td>
 </tr>
 <tr>
 <td><p>Returns :</p></td>
-<td><p>TRUE if <code>out_arg</code> is valid, FALSE otherwise</p></td>
+<td><p><code>TRUE</code> if <code>out_arg</code> is valid, <code>FALSE</code> otherwise</p></td>
 </tr>
 </table>
 </page>

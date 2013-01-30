@@ -60,11 +60,11 @@ created with <link xref="DocExamples.Obj.new">Obj.new</link>.</p><p>This should 
 </tr>
 <tr>
 <td><p>boolean_arg :</p></td>
-<td><p>You should always pass True.</p></td>
+<td><p>You should always pass <code>True</code>.</p></td>
 </tr>
 <tr>
 <td><p>pointer_arg :</p></td>
-<td><p>If not None, do a thing. Pass <code>self</code> if you want to sometimes. You can also pass <code>second_arg</code>, or even <code>boolean_arg</code>.</p></td>
+<td><p>If not <code>None</code>, do a thing. Pass <code>self</code> if you want to sometimes. You can also pass <code>second_arg</code>, or even <code>boolean_arg</code>.</p></td>
 </tr>
 <tr>
 <td><p>string :</p></td>
@@ -72,7 +72,7 @@ created with <link xref="DocExamples.Obj.new">Obj.new</link>.</p><p>This should 
 </tr>
 <tr>
 <td><p>Returns :</p></td>
-<td><p>Either False or something False-y.</p></td>
+<td><p>Either <code>False</code> or something <code>False</code>-y.</p></td>
 </tr>
 </table>
 <p>Since 0.99</p>
