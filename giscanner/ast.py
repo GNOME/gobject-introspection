@@ -415,6 +415,9 @@ but adds it to things like ctypes, symbols, and type_names.
                     continue
                 fn.namespace = self
                 self.symbols[fn.symbol] = fn
+            for member in node.members:
+                member.namespace = self
+                self.symbols[member.symbol] = member
         if hasattr(node, 'ctype'):
             self.ctypes[node.ctype] = node
 
