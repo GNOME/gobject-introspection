@@ -9,7 +9,7 @@
     <link type="guide" xref="${namespace.name}.${node.parent.name}" group="vfunc"/>
     <title type="link" role="topic">${node.name}</title>
   </info>
-  <title>${namespace.name}.${node.parent.name}.${node.name}</title>
+  <title>${formatter.format_page_name(node)}</title>
 <synopsis><code mime="text/x-python">
 % if len(node.parameters) != 0:
 @accepts(\

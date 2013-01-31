@@ -8,7 +8,7 @@
     <link type="guide" xref="${namespace.name}.${node.parent.name}" group="signal"/>
     <title type="link" role="topic">${node.name}</title>
   </info>
-  <title>${namespace.name}.${node.parent.name}::${node.name}</title>
+  <title>${formatter.format_page_name(node)}</title>
 <synopsis><code mime="text/x-python">
 def callback(${formatter.to_underscores(node.parent.name).lower()}, \
 % for arg, ix in zip(node.parameters, range(len(node.parameters))):

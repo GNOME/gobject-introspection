@@ -8,6 +8,6 @@
     <link type="guide" xref="${namespace.name}.${node.parent.name}" group="property"/>
     <title type="link" role="topic">${node.name}</title>
   </info>
-  <title>${node.parent.ctype}:${node.name}</title>
+  <title>${formatter.format_page_name(node)}</title>
 ${formatter.format(node, node.doc)}
 </page>

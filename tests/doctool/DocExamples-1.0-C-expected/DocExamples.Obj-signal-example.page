@@ -8,6 +8,6 @@
     <link type="guide" xref="DocExamples.Obj" group="signal"/>
     <title type="link" role="topic">signal-example</title>
   </info>
-  <title>DocExamplesObj::signal-example</title>
+  <title>DocExamples.Obj::signal-example</title>
 <p>This is an example of how to document a signal.</p>
 </page>

@@ -34,7 +34,7 @@
 % endfor
     </api:function>
   </info>
-  <title>${node.name}</title>
+  <title>${formatter.format_page_name(node)}</title>
 <synopsis><code mime="text/x-python">
 % if len(node.parameters) != 0:
 @accepts(\

@@ -38,7 +38,7 @@
       </api:arg>
     </api:function>
   </info>
-  <title>method</title>
+  <title>Obj.method</title>
 <synopsis><code mime="text/x-python">
 @accepts(int, float, bool, gpointer, unicode)
 @returns(bool)

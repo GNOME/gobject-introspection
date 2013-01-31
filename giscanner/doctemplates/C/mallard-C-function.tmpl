@@ -34,7 +34,7 @@
 % endfor
     </api:function>
   </info>
-  <title>${node.symbol}</title>
+  <title>${formatter.format_page_name(node)}</title>
 <synopsis><code mime="text/x-csrc">
 ${node.retval.type.ctype} ${node.symbol} (\
 % if node.is_method:

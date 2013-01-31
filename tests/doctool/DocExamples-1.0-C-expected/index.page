@@ -6,7 +6,7 @@
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
   </info>
-  <title>DocExamples Documentation</title>
+  <title>Index</title>
   <links type="topic" ui:expanded="yes" groups="class" style="linklist">
     <title>Classes</title>
   </links>

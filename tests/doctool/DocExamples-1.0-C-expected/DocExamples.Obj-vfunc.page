@@ -8,7 +8,7 @@
   <info>
     <link type="guide" xref="DocExamples.Obj" group="vfunc"/>
   </info>
-  <title>vfunc</title>
+  <title>DocExamples.Obj::vfunc</title>
 <synopsis><code mime="text/x-csrc">
 </code></synopsis>
 <p>This is an example of how to document a vfunc.</p>

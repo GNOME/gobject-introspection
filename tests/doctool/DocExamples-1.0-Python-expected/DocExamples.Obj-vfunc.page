@@ -9,7 +9,7 @@
     <link type="guide" xref="DocExamples.Obj" group="vfunc"/>
     <title type="link" role="topic">vfunc</title>
   </info>
-  <title>DocExamples.Obj.vfunc</title>
+  <title>DocExamples.Obj::vfunc</title>
 <synopsis><code mime="text/x-python">
 @accepts(int)
 @returns(none)

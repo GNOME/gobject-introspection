@@ -8,6 +8,6 @@
     <link type="guide" xref="DocExamples.Obj" group="property"/>
     <title type="link" role="topic">property-example</title>
   </info>
-  <title>DocExamplesObj:property-example</title>
+  <title>DocExamples.Obj:property-example</title>
 <p>This is an example of how to document a property.</p>
 </page>
