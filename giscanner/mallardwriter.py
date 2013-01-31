@@ -341,7 +341,7 @@ class MallardFormatter(object):
         parent_chain = [node]
 
         while node.parent:
-            node = self._transformer.lookup_giname(str(node.parent))
+            node = self._transformer.lookup_typenode(node.parent)
             parent_chain.append(node)
 
         parent_chain.reverse()
