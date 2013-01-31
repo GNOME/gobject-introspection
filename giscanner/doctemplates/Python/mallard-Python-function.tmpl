@@ -1,11 +1,5 @@
-<?xml version="1.0"?>
-<page id="${page_id}"
-      type="topic"
-      style="${page_style}"
-      xmlns="http://projectmallard.org/1.0/"
-      xmlns:api="http://projectmallard.org/experimental/api/"
-      xmlns:ui="http://projectmallard.org/experimental/ui/">
-  <info>
+<%inherit file="mallard-base.tmpl"/>
+<%block name="info">
 % if node.parent is not None:
     <link type="guide" xref="${namespace.name}.${node.parent.name}" group="${page_style}"/>
 % else:
@@ -33,8 +27,8 @@
 % endif
 % endfor
     </api:function>
-  </info>
-  <title>${formatter.format_page_name(node)}</title>
+</%block>
+<%block name="content">
 <synopsis><code mime="text/x-python">
 % if len(node.parameters) != 0:
 @accepts(\
@@ -51,7 +45,7 @@ ${', '.join((arg.argname for arg in node.parameters))}\
 ):
     # Python wrapper for ${node.symbol}()
 </code></synopsis>
-${formatter.format(node, node.doc)}
+${parent.content()}
 
 % if node.parameters or node.retval:
 <table>
@@ -69,7 +63,5 @@ ${formatter.format(node, node.doc)}
 % endif
 </table>
 % endif
-% if node.version:
-<p>Since ${node.version}</p>
-% endif
-</page>
+${self.since_version()}
+</%block>

@@ -1,13 +1,17 @@
 <?xml version="1.0"?>
 <page id="DocExamples.Enum"
-      type="guide"
+      type="topic"
       style="enum"
       xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
-    <link type="guide" xref="index"/>
+    
+      <link type="guide" xref="index"/>
+    
   </info>
   <title>DocExamples.Enum</title>
+  
   <p>This is an example to document an enumeration.</p>
 <table>
 <tr>
@@ -20,4 +24,5 @@
 </tr>
 </table>
 
+  
 </page>

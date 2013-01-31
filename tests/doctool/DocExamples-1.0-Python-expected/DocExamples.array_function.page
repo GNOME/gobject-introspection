@@ -6,6 +6,7 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
+    
     <link type="guide" xref="index" group="function"/>
     <api:function>
       <api:returns>
@@ -17,16 +18,20 @@
         <api:name>out_len</api:name>
       </api:arg>
     </api:function>
+
   </info>
   <title>array_function</title>
+  
 <synopsis><code mime="text/x-python">
 @accepts(int)
 @returns([int])
 def array_function(out_len):
     # Python wrapper for doc_examples_array_function()
 </code></synopsis>
-<p>This function returns an array with an explicit length,
+
+    <p>This function returns an array with an explicit length,
 and the length should be invisible in most introspected bindings.</p>
+  
 
 <table>
 <tr>
@@ -38,4 +43,8 @@ and the length should be invisible in most introspected bindings.</p>
 <td><p>an array of numbers.</p></td>
 </tr>
 </table>
+
+  
+
+  
 </page>

@@ -6,13 +6,17 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
+    
     <link type="guide" xref="DocExamples.Obj" group="vfunc"/>
+
   </info>
   <title>DocExamples.Obj::vfunc</title>
+  
 <synopsis><code mime="text/x-csrc">
 </code></synopsis>
-<p>This is an example of how to document a vfunc.</p>
 
+    <p>This is an example of how to document a vfunc.</p>
+  
 <table>
 <tr>
 <td><p>first_arg :</p></td>
@@ -23,5 +27,9 @@
 <td></td>
 </tr>
 </table>
-<p>Since 0.99</p>
+
+    <p>Since 0.99</p>
+  
+
+  
 </page>

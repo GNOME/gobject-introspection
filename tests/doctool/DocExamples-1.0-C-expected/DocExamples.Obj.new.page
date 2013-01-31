@@ -6,6 +6,7 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
+    
     <link type="guide" xref="DocExamples.Obj" group="constructor"/>
     <api:function>
       <api:returns>
@@ -13,17 +14,24 @@
       </api:returns>
       <api:name>doc_examples_obj_new</api:name>
     </api:function>
+
   </info>
   <title>doc_examples_obj_new</title>
+  
 <synopsis><code mime="text/x-csrc">
 DocExamplesObj* doc_examples_obj_new (void);
 </code></synopsis>
 
-
+    
+  
 <table>
 <tr>
 <td><p>Returns :</p></td>
 <td></td>
 </tr>
 </table>
+
+  
+
+  
 </page>

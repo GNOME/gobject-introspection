@@ -462,9 +462,10 @@ class MallardWriter(object):
         else:
             srcdir = os.path.dirname(__file__)
 
-        template_dir = os.path.join(srcdir, 'doctemplates', self._language)
+        template_dir = os.path.join(srcdir, 'doctemplates')
+        language_dir = os.path.join(template_dir, self._language)
 
-        return TemplateLookup(directories=[template_dir],
+        return TemplateLookup(directories=[template_dir, language_dir],
                               module_directory=tempfile.mkdtemp(),
                               output_encoding='utf-8')
 

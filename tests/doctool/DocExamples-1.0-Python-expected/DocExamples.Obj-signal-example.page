@@ -3,12 +3,16 @@
       type="topic"
       style="signal"
       xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
+    
     <link type="guide" xref="DocExamples.Obj" group="signal"/>
     <title type="link" role="topic">signal-example</title>
+
   </info>
   <title>DocExamples.Obj::signal-example</title>
+  
 <synopsis><code mime="text/x-python">
 def callback(obj, int_param, float_param, pointer_param, user_param1, ...)
 </code></synopsis>
@@ -40,5 +44,9 @@ def callback(obj, int_param, float_param, pointer_param, user_param1, ...)
 <td><p>additional user parameters (if any)</p></td>
 </tr>
 </table>
-<p>Since 0.99</p>
+
+    <p>Since 0.99</p>
+  
+
+  
 </page>

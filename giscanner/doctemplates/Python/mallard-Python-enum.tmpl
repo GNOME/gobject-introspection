@@ -1,13 +1,5 @@
-<?xml version="1.0"?>
-<page id="${node.namespace.name}.${node.name}"
-      type="guide"
-      style="${page_style}"
-      xmlns="http://projectmallard.org/1.0/"
-      xmlns:ui="http://projectmallard.org/experimental/ui/">
-  <info>
-    <link type="guide" xref="index"/>
-  </info>
-  <title>${formatter.format_page_name(node)}</title>
+<%inherit file="mallard-base.tmpl"/>
+<%block name="content">
   ${formatter.format(node, node.doc)}
 % if node.members:
 <table>
@@ -19,5 +11,4 @@
 % endfor
 </table>
 % endif
-
-</page>
+</%block>

@@ -3,9 +3,16 @@
       type="topic"
       style="default"
       xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
+    
+      <link type="guide" xref="index"/>
+    
   </info>
   <title>DocExamples.Callback</title>
-
+  
+    
+  
+  
 </page>

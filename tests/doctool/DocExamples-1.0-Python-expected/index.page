@@ -3,17 +3,24 @@
       type="guide"
       style="namespace"
       xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
+    
+      <link type="guide" xref="index"/>
+    
   </info>
   <title>Index</title>
-  <links type="topic" ui:expanded="yes" groups="class">
+  
+  <links type="topic" ui:expanded="yes" groups="class" style="linklist">
     <title>Classes</title>
   </links>
-  <links type="topic" ui:expanded="yes" groups="function">
+  <links type="topic" ui:expanded="yes" groups="function" style="linklist">
     <title>Functions</title>
   </links>
-  <links type="topic" ui:expanded="yes" groups="#first #default #last">
+  <links type="topic" ui:expanded="yes" groups="#first #default #last" style="linklist">
     <title>Other</title>
   </links>
+
+  
 </page>

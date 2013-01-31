@@ -1,16 +1,6 @@
-<?xml version="1.0"?>
-<page id="${node.namespace.name}.${node.name}"
-      type="guide"
-      style="${page_style}"
-      xmlns="http://projectmallard.org/1.0/"
-      xmlns:api="http://projectmallard.org/experimental/api/"
-      xmlns:ui="http://projectmallard.org/experimental/ui/">
-  <info>
-    <link type="guide" xref="index" group="class"/>
-  </info>
-  <title>${formatter.format_page_name(node)}</title>
-${formatter.format(node, node.doc)}
-
+<%inherit file="mallard-base.tmpl"/>
+<%block name="content">
+  ${parent.content()}
   <synopsis><code>
 from gi.repository import ${namespace.name}
 
@@ -26,9 +16,7 @@ ${formatter.to_underscores(node.name).lower()} = ${namespace.name}.${node.name}(
 )\
   </code></synopsis>
 
-% if node.version:
-<p>Since ${node.version}</p>
-% endif
+  ${self.since_version()}
   <synopsis>
     <title>Hierarchy</title>
     <tree>
@@ -63,4 +51,4 @@ ${formatter.to_underscores(node.name).lower()} = ${namespace.name}.${node.name}(
   <links type="topic" ui:expanded="yes" groups="#first #default #last" style="linklist">
     <title>Other</title>
   </links>
-</page>
+</%block>

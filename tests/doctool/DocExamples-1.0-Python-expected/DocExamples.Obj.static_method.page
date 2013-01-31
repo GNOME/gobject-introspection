@@ -6,6 +6,7 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
+    
     <link type="guide" xref="DocExamples.Obj" group="function"/>
     <api:function>
       <api:returns>
@@ -17,16 +18,20 @@
         <api:name>out_arg</api:name>
       </api:arg>
     </api:function>
+
   </info>
   <title>Obj.static_method</title>
+  
 <synopsis><code mime="text/x-python">
 @accepts(int)
 @returns(bool)
 def static_method(out_arg):
     # Python wrapper for doc_examples_obj_static_method()
 </code></synopsis>
-<p>This is an example of a function with an out argument
+
+    <p>This is an example of a function with an out argument
 and a return value.</p>
+  
 
 <table>
 <tr>
@@ -38,4 +43,8 @@ and a return value.</p>
 <td><p><code>True</code> if <code>out_arg</code> is valid, <code>False</code> otherwise</p></td>
 </tr>
 </table>
+
+  
+
+  
 </page>

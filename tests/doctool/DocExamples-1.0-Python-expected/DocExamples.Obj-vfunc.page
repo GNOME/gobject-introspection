@@ -6,16 +6,20 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
-    <link type="guide" xref="DocExamples.Obj" group="vfunc"/>
-    <title type="link" role="topic">vfunc</title>
+    
+      <link type="guide" xref="index"/>
+    
   </info>
   <title>DocExamples.Obj::vfunc</title>
+  
 <synopsis><code mime="text/x-python">
 @accepts(int)
 @returns(none)
 def do_vfunc(self, first_arg):
 </code></synopsis>
-<p>This is an example of how to document a vfunc.</p>
+
+    <p>This is an example of how to document a vfunc.</p>
+  
 
 <table>
 <tr>
@@ -23,5 +27,9 @@ def do_vfunc(self, first_arg):
 <td><p>first argument</p></td>
 </tr>
 </table>
-<p>Since 0.99</p>
+
+    <p>Since 0.99</p>
+  
+
+  
 </page>

@@ -54,6 +54,7 @@ pkgpyexec_PYTHON =		\
 
 templatedir = $(pkglibdir)
 nobase_template_DATA =		\
+	giscanner/doctemplates/mallard-base.tmpl	\
 	giscanner/doctemplates/C/mallard-C-class.tmpl	\
 	giscanner/doctemplates/C/mallard-C-constructor.tmpl	\
 	giscanner/doctemplates/C/mallard-C-default.tmpl	\

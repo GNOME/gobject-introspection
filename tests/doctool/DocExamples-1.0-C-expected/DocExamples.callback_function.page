@@ -6,6 +6,7 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
+    
     <link type="guide" xref="index" group="function"/>
     <api:function>
       <api:returns>
@@ -25,17 +26,20 @@
         <api:name>destroy_notify</api:name>
       </api:arg>
     </api:function>
+
   </info>
   <title>doc_examples_callback_function</title>
+  
 <synopsis><code mime="text/x-csrc">
 DocExamplesEnum doc_examples_callback_function (DocExamplesCallback callback,
                                                 gpointer user_data,
                                                 GDestroyNotify destroy_notify);
 </code></synopsis>
-<p>This is a function that takes a callback. Different languages
+
+    <p>This is a function that takes a callback. Different languages
 will expose this in different ways (e.g. Python keeps the
 <code>user_data</code> parameter, while JS doesn't)</p>
-
+  
 <table>
 <tr>
 <td><p>callback :</p></td>
@@ -54,4 +58,8 @@ will expose this in different ways (e.g. Python keeps the
 <td><p><link xref="DocExamples.Enum">DocExamples.Enum</link>.foo sometimes, <link xref="DocExamples.Enum">DocExamples.Enum</link>.bar other times.</p></td>
 </tr>
 </table>
+
+  
+
+  
 </page>

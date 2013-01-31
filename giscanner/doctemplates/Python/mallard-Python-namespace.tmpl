@@ -1,19 +1,13 @@
-<?xml version="1.0"?>
-<page id="index"
-      type="guide"
-      style="${page_style}"
-      xmlns="http://projectmallard.org/1.0/"
-      xmlns:ui="http://projectmallard.org/experimental/ui/">
-  <info>
-  </info>
-  <title>${formatter.format_page_name(node)}</title>
-  <links type="topic" ui:expanded="yes" groups="class">
+<%! page_type="guide" %>\
+<%inherit file="mallard-base.tmpl"/>
+<%block name="content">
+  <links type="topic" ui:expanded="yes" groups="class" style="linklist">
     <title>Classes</title>
   </links>
-  <links type="topic" ui:expanded="yes" groups="function">
+  <links type="topic" ui:expanded="yes" groups="function" style="linklist">
     <title>Functions</title>
   </links>
-  <links type="topic" ui:expanded="yes" groups="#first #default #last">
+  <links type="topic" ui:expanded="yes" groups="#first #default #last" style="linklist">
     <title>Other</title>
   </links>
-</page>
+</%block>

@@ -1,18 +1,8 @@
-<?xml version="1.0"?>
-<page id="${node.namespace.name}.${node.name}"
-      type="guide"
-      style="${page_style}"
-      xmlns="http://projectmallard.org/1.0/"
-      xmlns:api="http://projectmallard.org/experimental/api/"
-      xmlns:ui="http://projectmallard.org/experimental/ui/">
-  <info>
-    <link type="guide" xref="index" group="class"/>
-  </info>
-  <title>${formatter.format_page_name(node)}</title>
-${formatter.format(node, node.doc)}
-% if node.version:
-<p>Since ${node.version}</p>
-% endif
+<%! page_type="guide" %>\
+<%inherit file="mallard-base.tmpl"/>
+<%block name="content">
+${parent.content()}
+${self.since_version()}
   <synopsis ui:expanded="no">
     <title>Hierarchy</title>
     <tree>
@@ -45,4 +35,4 @@ ${formatter.format(node, node.doc)}
   <links type="topic" ui:expanded="yes" groups="#first #default #last" style="linklist">
     <title>Other</title>
   </links>
-</page>
+</%block>

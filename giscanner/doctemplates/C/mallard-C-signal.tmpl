@@ -1,13 +1,5 @@
-<?xml version="1.0"?>
-<page id="${namespace.name}.${node.name}"
-      type="topic"
-      style="${page_style}"
-      xmlns="http://projectmallard.org/1.0/"
-      xmlns:ui="http://projectmallard.org/experimental/ui/">
-  <info>
-    <link type="guide" xref="${namespace.name}.${node.parent.name}" group="signal"/>
+<%inherit file="mallard-base.tmpl"/>
+<%block name="info">
+    <link type="guide" xref="${namespace.name}.${node.parent.name}" group="property"/>
     <title type="link" role="topic">${node.name}</title>
-  </info>
-  <title>${formatter.format_page_name(node)}</title>
-${formatter.format(node, node.doc)}
-</page>
+</%block>

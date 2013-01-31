@@ -1,13 +1,19 @@
 <?xml version="1.0"?>
-<page id="DocExamples.signal-example"
+<page id="DocExamples.Obj-signal-example"
       type="topic"
       style="signal"
       xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
-    <link type="guide" xref="DocExamples.Obj" group="signal"/>
+    
+    <link type="guide" xref="DocExamples.Obj" group="property"/>
     <title type="link" role="topic">signal-example</title>
+
   </info>
   <title>DocExamples.Obj::signal-example</title>
-<p>This is an example of how to document a signal.</p>
+  
+    <p>This is an example of how to document a signal.</p>
+  
+  
 </page>

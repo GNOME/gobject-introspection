@@ -6,6 +6,7 @@
       xmlns:api="http://projectmallard.org/experimental/api/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>
+    
     <link type="guide" xref="DocExamples.Obj" group="method"/>
     <api:function>
       <api:returns>
@@ -37,16 +38,20 @@
         <api:name>string</api:name>
       </api:arg>
     </api:function>
+
   </info>
   <title>Obj.method</title>
+  
 <synopsis><code mime="text/x-python">
 @accepts(int, float, bool, gpointer, unicode)
 @returns(bool)
 def method(self, first_arg, second_arg, boolean_arg, pointer_arg, string):
     # Python wrapper for doc_examples_obj_method()
 </code></synopsis>
-<p>This is an example of how to document a method.</p><p>You should call this on a <link xref="DocExamples.Obj">DocExamples.Obj</link> that was
+
+    <p>This is an example of how to document a method.</p><p>You should call this on a <link xref="DocExamples.Obj">DocExamples.Obj</link> that was
 created with <link xref="DocExamples.Obj.new">Obj.new</link>.</p><p>This should be a %FALSEALARM.</p>
+  
 
 <table>
 <tr>
@@ -74,5 +79,9 @@ created with <link xref="DocExamples.Obj.new">Obj.new</link>.</p><p>This should 
 <td><p>Either <code>False</code> or something <code>False</code>-y.</p></td>
 </tr>
 </table>
-<p>Since 0.99</p>
+
+    <p>Since 0.99</p>
+  
+
+  
 </page>
