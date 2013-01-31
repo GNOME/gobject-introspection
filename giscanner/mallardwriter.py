@@ -303,17 +303,14 @@ class MallardFormatter(object):
     def format_page_name(self, node):
         if isinstance(node, ast.Namespace):
             return 'Index'
-
-        namespace = node.namespace
-
-        if isinstance(node, ast.Function):
+        elif isinstance(node, ast.Function):
             return self.format_function_name(node)
         elif isinstance(node, ast.Property) and node.parent is not None:
-            return '%s.%s:%s' % (namespace.name, node.parent.name, node.name)
+            return '%s:%s' % (self.format_page_name(node.parent), node.name)
         elif isinstance(node, ast.Signal) and node.parent is not None:
-            return '%s.%s::%s' % (namespace.name, node.parent.name, node.name)
+            return '%s::%s' % (self.format_page_name(node.parent), node.name)
         elif isinstance(node, ast.VFunction) and node.parent is not None:
-            return '%s.%s::%s' % (namespace.name, node.parent.name, node.name)
+            return '%s::%s' % (self.format_page_name(node.parent), node.name)
         else:
             return make_page_id(node)
 
