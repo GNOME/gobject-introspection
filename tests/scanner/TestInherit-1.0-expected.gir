@@ -29,6 +29,9 @@ and/or use gtk-doc annotations.  -->
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
+          <instance-parameter name="drawable" transfer-ownership="none">
+            <type name="Drawable" c:type="TestInheritDrawable*"/>
+          </instance-parameter>
           <parameter name="x" transfer-ownership="none">
             <type name="gint" c:type="int"/>
           </parameter>
@@ -41,6 +44,9 @@ and/or use gtk-doc annotations.  -->
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
+          <instance-parameter name="drawable" transfer-ownership="none">
+            <type name="Drawable" c:type="TestInheritDrawable*"/>
+          </instance-parameter>
           <parameter name="x" transfer-ownership="none">
             <type name="gint" c:type="int"/>
           </parameter>
@@ -52,6 +58,9 @@ and/or use gtk-doc annotations.  -->
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
+          <instance-parameter name="drawable" transfer-ownership="none">
+            <type name="Drawable" c:type="TestInheritDrawable*"/>
+          </instance-parameter>
           <parameter name="x"
                      direction="out"
                      caller-allocates="0"
@@ -71,6 +80,9 @@ and/or use gtk-doc annotations.  -->
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
+          <instance-parameter name="drawable" transfer-ownership="none">
+            <type name="Drawable" c:type="TestInheritDrawable*"/>
+          </instance-parameter>
           <parameter name="width"
                      direction="out"
                      caller-allocates="0"

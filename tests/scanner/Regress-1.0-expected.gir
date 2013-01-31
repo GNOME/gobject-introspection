@@ -212,12 +212,20 @@ use it should be.</doc>
         <return-value transfer-ownership="full">
           <type name="TestBoxed" c:type="RegressTestBoxed*"/>
         </return-value>
+        <parameters>
+          <instance-parameter name="boxed" transfer-ownership="none">
+            <type name="TestBoxed" c:type="RegressTestBoxed*"/>
+          </instance-parameter>
+        </parameters>
       </method>
       <method name="equals" c:identifier="regress_test_boxed_equals">
         <return-value transfer-ownership="none">
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
+          <instance-parameter name="boxed" transfer-ownership="none">
+            <type name="TestBoxed" c:type="RegressTestBoxed*"/>
+          </instance-parameter>
           <parameter name="other" transfer-ownership="none">
             <type name="TestBoxed" c:type="RegressTestBoxed*"/>
           </parameter>
@@ -252,6 +260,11 @@ use it should be.</doc>
         <return-value transfer-ownership="full">
           <type name="TestBoxedB" c:type="RegressTestBoxedB*"/>
         </return-value>
+        <parameters>
+          <instance-parameter name="boxed" transfer-ownership="none">
+            <type name="TestBoxedB" c:type="RegressTestBoxedB*"/>
+          </instance-parameter>
+        </parameters>
       </method>
     </record>
     <record name="TestBoxedC"
@@ -293,16 +306,31 @@ use it should be.</doc>
         <return-value transfer-ownership="full">
           <type name="TestBoxedD" c:type="RegressTestBoxedD*"/>
         </return-value>
+        <parameters>
+          <instance-parameter name="boxed" transfer-ownership="none">
+            <type name="TestBoxedD" c:type="RegressTestBoxedD*"/>
+          </instance-parameter>
+        </parameters>
       </method>
       <method name="free" c:identifier="regress_test_boxed_d_free">
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
+        <parameters>
+          <instance-parameter name="boxed" transfer-ownership="none">
+            <type name="TestBoxedD" c:type="RegressTestBoxedD*"/>
+          </instance-parameter>
+        </parameters>
       </method>
       <method name="get_magic" c:identifier="regress_test_boxed_d_get_magic">
         <return-value transfer-ownership="none">
           <type name="gint" c:type="int"/>
         </return-value>
+        <parameters>
+          <instance-parameter name="boxed" transfer-ownership="none">
+            <type name="TestBoxedD" c:type="RegressTestBoxedD*"/>
+          </instance-parameter>
+        </parameters>
       </method>
     </record>
     <record name="TestBoxedPrivate"
@@ -569,12 +597,26 @@ use it should be.</doc>
           <type name="TestFundamentalObject"
                 c:type="RegressTestFundamentalObject*"/>
         </return-value>
+        <parameters>
+          <instance-parameter name="fundamental_object"
+                              transfer-ownership="none">
+            <type name="TestFundamentalObject"
+                  c:type="RegressTestFundamentalObject*"/>
+          </instance-parameter>
+        </parameters>
       </method>
       <method name="unref"
               c:identifier="regress_test_fundamental_object_unref">
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
+        <parameters>
+          <instance-parameter name="fundamental_object"
+                              transfer-ownership="none">
+            <type name="TestFundamentalObject"
+                  c:type="RegressTestFundamentalObject*"/>
+          </instance-parameter>
+        </parameters>
       </method>
       <field name="instance">
         <type name="GObject.TypeInstance" c:type="GTypeInstance"/>
@@ -778,6 +820,9 @@ use it should be.</doc>
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
+          <instance-parameter name="obj" transfer-ownership="none">
+            <type name="TestObj" c:type="RegressTestObj*"/>
+          </instance-parameter>
           <parameter name="two" transfer-ownership="none" allow-none="1">
             <doc xml:whitespace="preserve">Another object</doc>
             <type name="TestObj" c:type="RegressTestObj*"/>
@@ -792,6 +837,9 @@ case.</doc>
           <type name="gint" c:type="int"/>
         </return-value>
         <parameters>
+          <instance-parameter name="obj" transfer-ownership="none">
+            <type name="TestObj" c:type="RegressTestObj*"/>
+          </instance-parameter>
           <parameter name="somestr" transfer-ownership="none">
             <doc xml:whitespace="preserve">Meaningless string</doc>
             <type name="utf8" c:type="const char*"/>
@@ -806,6 +854,10 @@ case.</doc>
           <type name="gint" c:type="int"/>
         </return-value>
         <parameters>
+          <instance-parameter name="obj" transfer-ownership="none">
+            <doc xml:whitespace="preserve">A #RegressTestObj</doc>
+            <type name="TestObj" c:type="RegressTestObj*"/>
+          </instance-parameter>
           <parameter name="somestr" transfer-ownership="none">
             <doc xml:whitespace="preserve">Meaningless string</doc>
             <type name="utf8" c:type="const char*"/>
@@ -817,35 +869,66 @@ case.</doc>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
+        <parameters>
+          <instance-parameter name="obj" transfer-ownership="none">
+            <type name="TestObj" c:type="RegressTestObj*"/>
+          </instance-parameter>
+        </parameters>
       </method>
       <method name="emit_sig_with_int64"
               c:identifier="regress_test_obj_emit_sig_with_int64">
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
+        <parameters>
+          <instance-parameter name="obj" transfer-ownership="none">
+            <type name="TestObj" c:type="RegressTestObj*"/>
+          </instance-parameter>
+        </parameters>
       </method>
       <method name="emit_sig_with_obj"
               c:identifier="regress_test_obj_emit_sig_with_obj">
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
+        <parameters>
+          <instance-parameter name="obj" transfer-ownership="none">
+            <type name="TestObj" c:type="RegressTestObj*"/>
+          </instance-parameter>
+        </parameters>
       </method>
       <method name="emit_sig_with_uint64"
               c:identifier="regress_test_obj_emit_sig_with_uint64">
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
+        <parameters>
+          <instance-parameter name="obj" transfer-ownership="none">
+            <type name="TestObj" c:type="RegressTestObj*"/>
+          </instance-parameter>
+        </parameters>
       </method>
       <method name="forced_method" c:identifier="regress_forced_method">
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
+        <parameters>
+          <instance-parameter name="obj" transfer-ownership="none">
+            <doc xml:whitespace="preserve">A #RegressTestObj</doc>
+            <type name="TestObj" c:type="RegressTestObj*"/>
+          </instance-parameter>
+        </parameters>
       </method>
       <method name="instance_method"
               c:identifier="regress_test_obj_instance_method">
         <return-value transfer-ownership="none">
           <type name="gint" c:type="int"/>
         </return-value>
+        <parameters>
+          <instance-parameter name="obj" transfer-ownership="none">
+            <type name="TestObj" c:type="RegressTestObj*"/>
+          </instance-parameter>
+        </parameters>
       </method>
       <method name="instance_method_callback"
               c:identifier="regress_test_obj_instance_method_callback">
@@ -853,6 +936,9 @@ case.</doc>
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
+          <instance-parameter name="obj" transfer-ownership="none">
+            <type name="TestObj" c:type="RegressTestObj*"/>
+          </instance-parameter>
           <parameter name="callback"
                      transfer-ownership="none"
                      allow-none="1"
@@ -866,6 +952,9 @@ case.</doc>
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
+          <instance-parameter name="obj" transfer-ownership="none">
+            <type name="TestObj" c:type="RegressTestObj*"/>
+          </instance-parameter>
           <parameter name="bare" transfer-ownership="none" allow-none="1">
             <type name="GObject.Object" c:type="GObject*"/>
           </parameter>
@@ -880,6 +969,10 @@ case.</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
+          <instance-parameter name="obj" transfer-ownership="none">
+            <doc xml:whitespace="preserve">A #RegressTestObj.</doc>
+            <type name="TestObj" c:type="RegressTestObj*"/>
+          </instance-parameter>
           <parameter name="a" transfer-ownership="none">
             <doc xml:whitespace="preserve">Parameter.</doc>
             <type name="gint" c:type="gint"/>
@@ -929,6 +1022,10 @@ case.</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
+          <instance-parameter name="obj" transfer-ownership="none">
+            <doc xml:whitespace="preserve">A #RegressTestObj.</doc>
+            <type name="TestObj" c:type="RegressTestObj*"/>
+          </instance-parameter>
           <parameter name="a" transfer-ownership="none">
             <doc xml:whitespace="preserve">Parameter.</doc>
             <type name="gint" c:type="gint"/>
@@ -978,6 +1075,10 @@ case.</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
+          <instance-parameter name="obj" transfer-ownership="none">
+            <doc xml:whitespace="preserve">A #RegressTestObj.</doc>
+            <type name="TestObj" c:type="RegressTestObj*"/>
+          </instance-parameter>
           <parameter name="a" transfer-ownership="none">
             <doc xml:whitespace="preserve">Parameter.</doc>
             <type name="gint" c:type="gint"/>
@@ -1026,6 +1127,10 @@ case.</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
+          <instance-parameter name="obj" transfer-ownership="none">
+            <doc xml:whitespace="preserve">a #RegressTestObj</doc>
+            <type name="TestObj" c:type="RegressTestObj*"/>
+          </instance-parameter>
           <parameter name="a" transfer-ownership="none">
             <doc xml:whitespace="preserve">Parameter.</doc>
             <type name="gint" c:type="gint"/>
@@ -1075,6 +1180,10 @@ raise an error.</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
+          <instance-parameter name="obj" transfer-ownership="none">
+            <doc xml:whitespace="preserve">a #RegressTestObj</doc>
+            <type name="TestObj" c:type="RegressTestObj*"/>
+          </instance-parameter>
           <parameter name="a" transfer-ownership="none">
             <doc xml:whitespace="preserve">Parameter.</doc>
             <type name="gint" c:type="gint"/>
@@ -1087,6 +1196,10 @@ raise an error.</doc>
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
+          <instance-parameter name="obj" transfer-ownership="none">
+            <doc xml:whitespace="preserve">A #RegressTestObj</doc>
+            <type name="TestObj" c:type="RegressTestObj*"/>
+          </instance-parameter>
           <parameter name="x" transfer-ownership="none">
             <type name="gint" c:type="int"/>
           </parameter>
@@ -1124,6 +1237,10 @@ raise an error.</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
+          <instance-parameter name="obj" transfer-ownership="none">
+            <doc xml:whitespace="preserve">A #RegressTestObj</doc>
+            <type name="TestObj" c:type="RegressTestObj*"/>
+          </instance-parameter>
           <parameter name="x" transfer-ownership="none">
             <type name="gint" c:type="int"/>
           </parameter>
@@ -1507,12 +1624,20 @@ the introspection client langage.</doc>
         <return-value transfer-ownership="full">
           <type name="TestSimpleBoxedA" c:type="RegressTestSimpleBoxedA*"/>
         </return-value>
+        <parameters>
+          <instance-parameter name="a" transfer-ownership="none">
+            <type name="TestSimpleBoxedA" c:type="RegressTestSimpleBoxedA*"/>
+          </instance-parameter>
+        </parameters>
       </method>
       <method name="equals" c:identifier="regress_test_simple_boxed_a_equals">
         <return-value transfer-ownership="none">
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
+          <instance-parameter name="a" transfer-ownership="none">
+            <type name="TestSimpleBoxedA" c:type="RegressTestSimpleBoxedA*"/>
+          </instance-parameter>
           <parameter name="other_a" transfer-ownership="none">
             <type name="TestSimpleBoxedA" c:type="RegressTestSimpleBoxedA*"/>
           </parameter>
@@ -1541,6 +1666,11 @@ the introspection client langage.</doc>
         <return-value transfer-ownership="full">
           <type name="TestSimpleBoxedB" c:type="RegressTestSimpleBoxedB*"/>
         </return-value>
+        <parameters>
+          <instance-parameter name="b" transfer-ownership="none">
+            <type name="TestSimpleBoxedB" c:type="RegressTestSimpleBoxedB*"/>
+          </instance-parameter>
+        </parameters>
       </method>
     </record>
     <callback name="TestSimpleCallback" c:type="RegressTestSimpleCallback">
@@ -1567,6 +1697,10 @@ the introspection client langage.</doc>
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
+          <instance-parameter name="a" transfer-ownership="none">
+            <doc xml:whitespace="preserve">the structure</doc>
+            <type name="TestStructA" c:type="RegressTestStructA*"/>
+          </instance-parameter>
           <parameter name="a_out"
                      direction="out"
                      caller-allocates="1"
@@ -1608,6 +1742,10 @@ the introspection client langage.</doc>
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
+          <instance-parameter name="b" transfer-ownership="none">
+            <doc xml:whitespace="preserve">the structure</doc>
+            <type name="TestStructB" c:type="RegressTestStructB*"/>
+          </instance-parameter>
           <parameter name="b_out"
                      direction="out"
                      caller-allocates="1"
@@ -1726,6 +1864,12 @@ the introspection client langage.</doc>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
+        <parameters>
+          <instance-parameter name="str" transfer-ownership="none">
+            <type name="TestStructFixedArray"
+                  c:type="RegressTestStructFixedArray*"/>
+          </instance-parameter>
+        </parameters>
       </method>
     </record>
     <class name="TestSubObj"
@@ -1745,11 +1889,21 @@ the introspection client langage.</doc>
         <return-value transfer-ownership="none">
           <type name="gint" c:type="int"/>
         </return-value>
+        <parameters>
+          <instance-parameter name="obj" transfer-ownership="none">
+            <type name="TestSubObj" c:type="RegressTestSubObj*"/>
+          </instance-parameter>
+        </parameters>
       </method>
       <method name="unset_bare" c:identifier="regress_test_sub_obj_unset_bare">
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
+        <parameters>
+          <instance-parameter name="obj" transfer-ownership="none">
+            <type name="TestSubObj" c:type="RegressTestSubObj*"/>
+          </instance-parameter>
+        </parameters>
       </method>
       <field name="parent_instance">
         <type name="TestObj" c:type="RegressTestObj"/>
@@ -1790,6 +1944,11 @@ the introspection client langage.</doc>
         <return-value transfer-ownership="none">
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
+        <parameters>
+          <instance-parameter name="obj" transfer-ownership="none">
+            <type name="TestWi8021x" c:type="RegressTestWi8021x*"/>
+          </instance-parameter>
+        </parameters>
       </method>
       <method name="set_testbool"
               c:identifier="regress_test_wi_802_1x_set_testbool">
@@ -1797,6 +1956,9 @@ the introspection client langage.</doc>
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
+          <instance-parameter name="obj" transfer-ownership="none">
+            <type name="TestWi8021x" c:type="RegressTestWi8021x*"/>
+          </instance-parameter>
           <parameter name="v" transfer-ownership="none">
             <type name="gboolean" c:type="gboolean"/>
           </parameter>

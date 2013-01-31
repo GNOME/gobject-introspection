@@ -170,7 +170,7 @@ and/or use gtk-doc annotations. ''')
         with self.tagcontext(tag_name, attrs):
             self._write_generic(callable)
             self._write_return_type(callable.retval, parent=callable)
-            self._write_parameters(callable, callable.parameters)
+            self._write_parameters(callable)
 
     def _write_function(self, func, tag_name='function'):
         attrs = []
@@ -206,14 +206,16 @@ and/or use gtk-doc annotations. ''')
             self._write_generic(return_)
             self._write_type(return_.type, function=parent)
 
-    def _write_parameters(self, parent, parameters):
-        if not parameters:
+    def _write_parameters(self, callable):
+        if not callable.parameters and callable.instance_parameter is None:
             return
         with self.tagcontext('parameters'):
-            for parameter in parameters:
-                self._write_parameter(parent, parameter)
+            if callable.instance_parameter:
+                self._write_parameter(callable, callable.instance_parameter, 'instance-parameter')
+            for parameter in callable.parameters:
+                self._write_parameter(callable, parameter)
 
-    def _write_parameter(self, parent, parameter):
+    def _write_parameter(self, parent, parameter, nodename='parameter'):
         attrs = []
         if parameter.argname is not None:
             attrs.append(('name', parameter.argname))
@@ -236,7 +238,7 @@ and/or use gtk-doc annotations. ''')
             attrs.append(('destroy', '%d' % (idx, )))
         if parameter.skip:
             attrs.append(('skip', '1'))
-        with self.tagcontext('parameter', attrs):
+        with self.tagcontext(nodename, attrs):
             self._write_generic(parameter)
             self._write_type(parameter.type, function=parent)
 
@@ -585,4 +587,4 @@ and/or use gtk-doc annotations. ''')
         with self.tagcontext('glib:signal', attrs):
             self._write_generic(signal)
             self._write_return_type(signal.retval)
-            self._write_parameters(signal, signal.parameters)
+            self._write_parameters(signal)

@@ -286,6 +286,18 @@ class GIRParser(object):
         function = self._parse_function_common(node, ast.Function)
         self._namespace.append(function)
 
+    def _parse_parameter(self, node):
+        typeval = self._parse_type(node)
+        param = ast.Parameter(node.attrib.get('name'),
+                              typeval,
+                              node.attrib.get('direction') or ast.PARAM_DIRECTION_IN,
+                              node.attrib.get('transfer-ownership'),
+                              node.attrib.get('allow-none') == '1',
+                              node.attrib.get('scope'),
+                              node.attrib.get('caller-allocates') == '1')
+        self._parse_generic_attribs(node, param)
+        return param
+
     def _parse_function_common(self, node, klass, parent=None):
         name = node.attrib['name']
         returnnode = node.find(_corens('return-value'))
@@ -323,17 +335,11 @@ class GIRParser(object):
 
         parameters_node = node.find(_corens('parameters'))
         if (parameters_node is not None):
+            paramnode = self._find_first_child(parameters_node, _corens('instance-parameter'))
+            if paramnode:
+                func.instance_parameter = self._parse_parameter(paramnode)
             for paramnode in self._find_children(parameters_node, _corens('parameter')):
-                typeval = self._parse_type(paramnode)
-                param = ast.Parameter(paramnode.attrib.get('name'),
-                                  typeval,
-                                  paramnode.attrib.get('direction') or ast.PARAM_DIRECTION_IN,
-                                  paramnode.attrib.get('transfer-ownership'),
-                                  paramnode.attrib.get('allow-none') == '1',
-                                  paramnode.attrib.get('scope'),
-                                  paramnode.attrib.get('caller-allocates') == '1')
-                self._parse_generic_attribs(paramnode, param)
-                parameters.append(param)
+                parameters.append(self._parse_parameter(paramnode))
             for i, paramnode in enumerate(self._find_children(parameters_node,
                                                               _corens('parameter'))):
                 param = parameters[i]

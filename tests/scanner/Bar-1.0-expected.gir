@@ -44,6 +44,9 @@ and/or use gtk-doc annotations.  -->
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
+          <instance-parameter name="window" transfer-ownership="none">
+            <type name="MutterWindow" c:type="MutterWindow*"/>
+          </instance-parameter>
           <parameter name="v" transfer-ownership="none">
             <type name="guint" c:type="guint"/>
           </parameter>

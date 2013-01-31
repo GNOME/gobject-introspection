@@ -114,6 +114,10 @@ and/or use gtk-doc annotations.  -->
           <type name="GObject.Object" c:type="GObject*"/>
         </return-value>
         <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <doc xml:whitespace="preserve">a #GObject</doc>
+            <type name="Object" c:type="AnnotationObject*"/>
+          </instance-parameter>
           <parameter name="somearg" transfer-ownership="none" allow-none="1">
             <type name="utf8" c:type="const gchar*"/>
           </parameter>
@@ -126,6 +130,10 @@ and/or use gtk-doc annotations.  -->
           <type name="gint" c:type="gint"/>
         </return-value>
         <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <doc xml:whitespace="preserve">a #GObject</doc>
+            <type name="Object" c:type="AnnotationObject*"/>
+          </instance-parameter>
           <parameter name="toown"
                      direction="out"
                      caller-allocates="0"
@@ -142,6 +150,10 @@ and/or use gtk-doc annotations.  -->
           <type name="gint" c:type="gint"/>
         </return-value>
         <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <doc xml:whitespace="preserve">a #GObject</doc>
+            <type name="Object" c:type="AnnotationObject*"/>
+          </instance-parameter>
           <parameter name="toown1"
                      direction="out"
                      caller-allocates="0"
@@ -164,6 +176,10 @@ and/or use gtk-doc annotations.  -->
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <doc xml:whitespace="preserve">a #GObject</doc>
+            <type name="Object" c:type="AnnotationObject*"/>
+          </instance-parameter>
           <parameter name="nums" transfer-ownership="none">
             <doc xml:whitespace="preserve">Sequence of numbers</doc>
             <array zero-terminated="0" c:type="int*">
@@ -179,6 +195,10 @@ and/or use gtk-doc annotations.  -->
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <doc xml:whitespace="preserve">a #GObject</doc>
+            <type name="Object" c:type="AnnotationObject*"/>
+          </instance-parameter>
           <parameter name="nums" transfer-ownership="none">
             <doc xml:whitespace="preserve">Sequence of numbers that are zero-terminated</doc>
             <array length="1" zero-terminated="0" c:type="int*">
@@ -198,6 +218,10 @@ and/or use gtk-doc annotations.  -->
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <doc xml:whitespace="preserve">a #AnnotationObject</doc>
+            <type name="Object" c:type="AnnotationObject*"/>
+          </instance-parameter>
           <parameter name="nums" transfer-ownership="none">
             <doc xml:whitespace="preserve">Sequence of numbers that are zero-terminated</doc>
             <array length="1" zero-terminated="1" c:type="int*">
@@ -217,6 +241,12 @@ and/or use gtk-doc annotations.  -->
           <doc xml:whitespace="preserve">The object</doc>
           <type name="GObject.Object" c:type="GObject*"/>
         </return-value>
+        <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <doc xml:whitespace="preserve">a #GObject</doc>
+            <type name="Object" c:type="AnnotationObject*"/>
+          </instance-parameter>
+        </parameters>
       </method>
       <method name="do_not_use"
               c:identifier="annotation_object_do_not_use"
@@ -226,12 +256,23 @@ and/or use gtk-doc annotations.  -->
           <doc xml:whitespace="preserve">%NULL always</doc>
           <type name="GObject.Object" c:type="GObject*"/>
         </return-value>
+        <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <doc xml:whitespace="preserve">a #GObject</doc>
+            <type name="Object" c:type="AnnotationObject*"/>
+          </instance-parameter>
+        </parameters>
       </method>
       <method name="extra_annos" c:identifier="annotation_object_extra_annos">
         <attribute name="org.foobar" value="testvalue"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
+        <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <type name="Object" c:type="AnnotationObject*"/>
+          </instance-parameter>
+        </parameters>
       </method>
       <method name="foreach" c:identifier="annotation_object_foreach">
         <doc xml:whitespace="preserve">Test taking a call-scoped callback</doc>
@@ -239,6 +280,10 @@ and/or use gtk-doc annotations.  -->
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <doc xml:whitespace="preserve">a #AnnotationObject</doc>
+            <type name="Object" c:type="AnnotationObject*"/>
+          </instance-parameter>
           <parameter name="func"
                      transfer-ownership="none"
                      scope="call"
@@ -262,6 +307,12 @@ objects.</doc>
             <type name="GObject.Object"/>
           </type>
         </return-value>
+        <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <doc xml:whitespace="preserve">a #GObject</doc>
+            <type name="Object" c:type="AnnotationObject*"/>
+          </instance-parameter>
+        </parameters>
       </method>
       <method name="get_objects" c:identifier="annotation_object_get_objects">
         <doc xml:whitespace="preserve">This is a test for returning a list of objects.
@@ -273,6 +324,12 @@ intentionally similar example to gtk_container_get_children</doc>
             <type name="Object"/>
           </type>
         </return-value>
+        <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <doc xml:whitespace="preserve">a #GObject</doc>
+            <type name="Object" c:type="AnnotationObject*"/>
+          </instance-parameter>
+        </parameters>
       </method>
       <method name="get_strings" c:identifier="annotation_object_get_strings">
         <doc xml:whitespace="preserve">This is a test for returning a list of strings, where
@@ -283,11 +340,23 @@ each string needs to be freed.</doc>
             <type name="utf8"/>
           </type>
         </return-value>
+        <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <doc xml:whitespace="preserve">a #GObject</doc>
+            <type name="Object" c:type="AnnotationObject*"/>
+          </instance-parameter>
+        </parameters>
       </method>
       <method name="hidden_self" c:identifier="annotation_object_hidden_self">
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
+        <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <doc xml:whitespace="preserve">A #AnnotationObject</doc>
+            <type name="Object" c:type="gpointer"/>
+          </instance-parameter>
+        </parameters>
       </method>
       <method name="in" c:identifier="annotation_object_in">
         <doc xml:whitespace="preserve">This is a test for in arguments</doc>
@@ -296,6 +365,10 @@ each string needs to be freed.</doc>
           <type name="gint" c:type="gint"/>
         </return-value>
         <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <doc xml:whitespace="preserve">a #GObject</doc>
+            <type name="Object" c:type="AnnotationObject*"/>
+          </instance-parameter>
           <parameter name="inarg" transfer-ownership="none">
             <doc xml:whitespace="preserve">This is an argument test</doc>
             <type name="gint" c:type="int*"/>
@@ -309,6 +382,10 @@ each string needs to be freed.</doc>
           <type name="gint" c:type="gint"/>
         </return-value>
         <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <doc xml:whitespace="preserve">a #GObject</doc>
+            <type name="Object" c:type="AnnotationObject*"/>
+          </instance-parameter>
           <parameter name="inoutarg"
                      direction="inout"
                      caller-allocates="0"
@@ -325,6 +402,10 @@ each string needs to be freed.</doc>
           <type name="gint" c:type="gint"/>
         </return-value>
         <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <doc xml:whitespace="preserve">a #GObject</doc>
+            <type name="Object" c:type="AnnotationObject*"/>
+          </instance-parameter>
           <parameter name="inoutarg"
                      direction="inout"
                      caller-allocates="0"
@@ -341,6 +422,10 @@ each string needs to be freed.</doc>
           <type name="gint" c:type="gint"/>
         </return-value>
         <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <doc xml:whitespace="preserve">a #GObject</doc>
+            <type name="Object" c:type="AnnotationObject*"/>
+          </instance-parameter>
           <parameter name="inoutarg"
                      direction="inout"
                      caller-allocates="0"
@@ -356,12 +441,24 @@ each string needs to be freed.</doc>
           <doc xml:whitespace="preserve">an int</doc>
           <type name="gint" c:type="gint"/>
         </return-value>
+        <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <doc xml:whitespace="preserve">a #GObject</doc>
+            <type name="Object" c:type="AnnotationObject*"/>
+          </instance-parameter>
+        </parameters>
       </method>
       <method name="notrans" c:identifier="annotation_object_notrans">
         <return-value transfer-ownership="none">
           <doc xml:whitespace="preserve">An object, not referenced</doc>
           <type name="GObject.Object" c:type="GObject*"/>
         </return-value>
+        <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <doc xml:whitespace="preserve">a #GObject</doc>
+            <type name="Object" c:type="AnnotationObject*"/>
+          </instance-parameter>
+        </parameters>
       </method>
       <method name="out" c:identifier="annotation_object_out">
         <doc xml:whitespace="preserve">This is a test for out arguments</doc>
@@ -370,6 +467,10 @@ each string needs to be freed.</doc>
           <type name="gint" c:type="gint"/>
         </return-value>
         <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <doc xml:whitespace="preserve">a #GObject</doc>
+            <type name="Object" c:type="AnnotationObject*"/>
+          </instance-parameter>
           <parameter name="outarg"
                      direction="out"
                      caller-allocates="0"
@@ -385,6 +486,10 @@ each string needs to be freed.</doc>
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <doc xml:whitespace="preserve">a #AnnotationObject</doc>
+            <type name="Object" c:type="AnnotationObject*"/>
+          </instance-parameter>
           <parameter name="argc"
                      direction="inout"
                      caller-allocates="0"
@@ -409,6 +514,10 @@ each string needs to be freed.</doc>
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <doc xml:whitespace="preserve">a #AnnotationObject</doc>
+            <type name="Object" c:type="AnnotationObject*"/>
+          </instance-parameter>
           <parameter name="data" transfer-ownership="none">
             <doc xml:whitespace="preserve">The data</doc>
             <array length="1" zero-terminated="0" c:type="guchar*">
@@ -427,6 +536,10 @@ each string needs to be freed.</doc>
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <doc xml:whitespace="preserve">a #AnnotationObject</doc>
+            <type name="Object" c:type="AnnotationObject*"/>
+          </instance-parameter>
           <parameter name="data" transfer-ownership="none">
             <doc xml:whitespace="preserve">The data</doc>
             <array length="1" zero-terminated="0" c:type="gchar*">
@@ -446,6 +559,10 @@ type.</doc>
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <doc xml:whitespace="preserve">a #AnnotationObject</doc>
+            <type name="Object" c:type="AnnotationObject*"/>
+          </instance-parameter>
           <parameter name="data" transfer-ownership="none">
             <doc xml:whitespace="preserve">The data</doc>
             <array length="1" zero-terminated="0" c:type="gpointer">
@@ -465,6 +582,10 @@ type.</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <doc xml:whitespace="preserve">a #AnnotationObject</doc>
+            <type name="Object" c:type="AnnotationObject*"/>
+          </instance-parameter>
           <parameter name="str_out"
                      direction="out"
                      caller-allocates="0"
@@ -479,6 +600,10 @@ type.</doc>
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <doc xml:whitespace="preserve">a #GObject</doc>
+            <type name="Object" c:type="AnnotationObject*"/>
+          </instance-parameter>
           <parameter name="bytes" transfer-ownership="none">
             <type name="guint8" c:type="guchar*"/>
           </parameter>
@@ -494,6 +619,10 @@ annotation_object_watch_full().</doc>
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <doc xml:whitespace="preserve">A #AnnotationObject</doc>
+            <type name="Object" c:type="AnnotationObject*"/>
+          </instance-parameter>
           <parameter name="func" transfer-ownership="none" closure="1">
             <doc xml:whitespace="preserve">The callback</doc>
             <type name="ForeachFunc" c:type="AnnotationForeachFunc"/>
@@ -512,6 +641,10 @@ annotation_object_watch_full().</doc>
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <doc xml:whitespace="preserve">A #AnnotationObject</doc>
+            <type name="Object" c:type="AnnotationObject*"/>
+          </instance-parameter>
           <parameter name="func"
                      transfer-ownership="none"
                      scope="notified"
@@ -535,6 +668,9 @@ annotation_object_watch_full().</doc>
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <type name="Object" c:type="AnnotationObject*"/>
+          </instance-parameter>
           <parameter name="data" transfer-ownership="none">
             <doc xml:whitespace="preserve">Opaque pointer handle</doc>
             <type name="gpointer" c:type="void*"/>

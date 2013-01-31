@@ -53,6 +53,12 @@ arguments.</doc>
           <doc xml:whitespace="preserve">0</doc>
           <type name="GType" c:type="GType"/>
         </return-value>
+        <parameters>
+          <instance-parameter name="obj" transfer-ownership="none">
+            <doc xml:whitespace="preserve">self</doc>
+            <type name="Object" c:type="GetTypeObject*"/>
+          </instance-parameter>
+        </parameters>
       </method>
       <field name="parent_instance">
         <type name="GObject.Object" c:type="GObject"/>

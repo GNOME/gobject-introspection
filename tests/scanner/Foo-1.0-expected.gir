@@ -66,6 +66,9 @@ and/or use gtk-doc annotations.  -->
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
+          <instance-parameter name="b1" transfer-ownership="none">
+            <type name="BRect" c:type="FooBRect*"/>
+          </instance-parameter>
           <parameter name="b2" transfer-ownership="none">
             <type name="BRect" c:type="FooBRect*"/>
           </parameter>
@@ -96,6 +99,11 @@ and/or use gtk-doc annotations.  -->
         <return-value transfer-ownership="none">
           <type name="gint" c:type="int"/>
         </return-value>
+        <parameters>
+          <instance-parameter name="bunion" transfer-ownership="none">
+            <type name="BUnion" c:type="FooBUnion*"/>
+          </instance-parameter>
+        </parameters>
       </method>
     </union>
     <record name="Boxed"
@@ -112,6 +120,11 @@ and/or use gtk-doc annotations.  -->
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
+        <parameters>
+          <instance-parameter name="boxed" transfer-ownership="none">
+            <type name="Boxed" c:type="FooBoxed*"/>
+          </instance-parameter>
+        </parameters>
       </method>
     </record>
     <class name="Buffer"
@@ -126,6 +139,11 @@ and/or use gtk-doc annotations.  -->
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
+        <parameters>
+          <instance-parameter name="buffer" transfer-ownership="none">
+            <type name="Buffer" c:type="FooBuffer*"/>
+          </instance-parameter>
+        </parameters>
       </method>
     </class>
     <record name="BufferClass"
@@ -158,6 +176,11 @@ and/or use gtk-doc annotations.  -->
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
+        <parameters>
+          <instance-parameter name="dbusdata" transfer-ownership="none">
+            <type name="DBusData" c:type="FooDBusData*"/>
+          </instance-parameter>
+        </parameters>
       </method>
     </record>
     <constant name="DEFINE_SHOULD_BE_EXPOSED"
@@ -314,6 +337,11 @@ and/or use gtk-doc annotations.  -->
         <return-value transfer-ownership="full">
           <type name="ForeignStruct" c:type="FooForeignStruct*"/>
         </return-value>
+        <parameters>
+          <instance-parameter name="original" transfer-ownership="none">
+            <type name="ForeignStruct" c:type="FooForeignStruct*"/>
+          </instance-parameter>
+        </parameters>
       </method>
     </record>
     <interface name="Interface"
@@ -338,6 +366,9 @@ and/or use gtk-doc annotations.  -->
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
+          <instance-parameter name="self" transfer-ownership="none">
+            <type name="Interface" c:type="FooInterface*"/>
+          </instance-parameter>
           <parameter name="x" transfer-ownership="none">
             <type name="gint" c:type="int"/>
           </parameter>
@@ -348,6 +379,9 @@ and/or use gtk-doc annotations.  -->
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
+          <instance-parameter name="iface" transfer-ownership="none">
+            <type name="Interface" c:type="FooInterface*"/>
+          </instance-parameter>
           <parameter name="x" transfer-ownership="none">
             <type name="gint" c:type="int"/>
           </parameter>
@@ -424,6 +458,9 @@ uses a C sugar return type.</doc>
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <type name="Object" c:type="FooObject*"/>
+          </instance-parameter>
           <parameter name="offset" transfer-ownership="none">
             <doc xml:whitespace="preserve">offset</doc>
             <type name="gint" c:type="int"/>
@@ -439,6 +476,9 @@ uses a C sugar return type.</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <type name="Object" c:type="FooObject*"/>
+          </instance-parameter>
           <parameter name="first_param" transfer-ownership="none">
             <type name="gint" c:type="int"/>
           </parameter>
@@ -451,6 +491,9 @@ uses a C sugar return type.</doc>
           <type name="OtherObject" c:type="FooOtherObject*"/>
         </return-value>
         <parameters>
+          <instance-parameter name="obj" transfer-ownership="none">
+            <type name="Object" c:type="FooObject*"/>
+          </instance-parameter>
           <parameter name="x" transfer-ownership="none">
             <type name="gint" c:type="int"/>
           </parameter>
@@ -460,23 +503,42 @@ uses a C sugar return type.</doc>
         <return-value transfer-ownership="full">
           <type name="utf8" c:type="char*"/>
         </return-value>
+        <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <type name="Object" c:type="FooObject*"/>
+          </instance-parameter>
+        </parameters>
       </method>
       <method name="external_type" c:identifier="foo_object_external_type">
         <return-value transfer-ownership="none">
           <doc xml:whitespace="preserve">%NULL always</doc>
           <type name="Utility.Object" c:type="UtilityObject*"/>
         </return-value>
+        <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <doc xml:whitespace="preserve">a #FooObject</doc>
+            <type name="Object" c:type="FooObject*"/>
+          </instance-parameter>
+        </parameters>
       </method>
       <method name="get_name" c:identifier="foo_object_get_name">
         <return-value transfer-ownership="none">
           <type name="utf8" c:type="const char*"/>
         </return-value>
+        <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <type name="Object" c:type="FooObject*"/>
+          </instance-parameter>
+        </parameters>
       </method>
       <method name="handle_glyph" c:identifier="foo_object_handle_glyph">
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <type name="Object" c:type="FooObject*"/>
+          </instance-parameter>
           <parameter name="glyph" transfer-ownership="none">
             <type name="Utility.Glyph" c:type="UtilityGlyph"/>
           </parameter>
@@ -487,6 +549,9 @@ uses a C sugar return type.</doc>
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <type name="Object" c:type="FooObject*"/>
+          </instance-parameter>
           <parameter name="time" transfer-ownership="none">
             <type name="glong" c:type="time_t"/>
           </parameter>
@@ -500,6 +565,9 @@ uses a C sugar return type.</doc>
           <type name="ObjectCookie" c:type="FooObjectCookie"/>
         </return-value>
         <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <type name="Object" c:type="FooObject*"/>
+          </instance-parameter>
           <parameter name="target" transfer-ownership="none">
             <type name="utf8" c:type="const char*"/>
           </parameter>
@@ -511,6 +579,10 @@ uses a C sugar return type.</doc>
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <doc xml:whitespace="preserve">obj</doc>
+            <type name="Object" c:type="FooObject*"/>
+          </instance-parameter>
           <parameter name="offset" transfer-ownership="none">
             <doc xml:whitespace="preserve">offset</doc>
             <type name="gint" c:type="int"/>
@@ -528,6 +600,12 @@ uses a C sugar return type.</doc>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
+        <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <doc xml:whitespace="preserve">obj</doc>
+            <type name="Object" c:type="FooObject*"/>
+          </instance-parameter>
+        </parameters>
       </method>
       <method name="take_all"
               c:identifier="foo_object_take_all"
@@ -536,6 +614,9 @@ uses a C sugar return type.</doc>
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <type name="Object" c:type="FooObject*"/>
+          </instance-parameter>
           <parameter name="x" transfer-ownership="none">
             <type name="gint" c:type="int"/>
           </parameter>
@@ -550,6 +631,9 @@ uses a C sugar return type.</doc>
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <type name="Object" c:type="FooObject*"/>
+          </instance-parameter>
           <parameter name="data" transfer-ownership="none">
             <type name="gpointer" c:type="void*"/>
           </parameter>
@@ -563,6 +647,9 @@ uses a C sugar return type.</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <type name="Object" c:type="FooObject*"/>
+          </instance-parameter>
           <parameter name="first_param" transfer-ownership="none">
             <type name="gint" c:type="int"/>
           </parameter>
@@ -682,6 +769,13 @@ uses a C sugar return type.</doc>
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
+          <instance-parameter name="r1"
+                              direction="inout"
+                              caller-allocates="0"
+                              transfer-ownership="full">
+            <doc xml:whitespace="preserve">add to this rect</doc>
+            <type name="Rectangle" c:type="FooRectangle*"/>
+          </instance-parameter>
           <parameter name="r2" transfer-ownership="none">
             <doc xml:whitespace="preserve">source rectangle</doc>
             <type name="Rectangle" c:type="const FooRectangle*"/>
@@ -768,17 +862,30 @@ exposed to language bindings.</doc>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
+        <parameters>
+          <instance-parameter name="self" transfer-ownership="none">
+            <type name="SubInterface" c:type="FooSubInterface*"/>
+          </instance-parameter>
+        </parameters>
       </virtual-method>
       <virtual-method name="do_bar" invoker="do_bar">
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
+        <parameters>
+          <instance-parameter name="self" transfer-ownership="none">
+            <type name="SubInterface" c:type="FooSubInterface*"/>
+          </instance-parameter>
+        </parameters>
       </virtual-method>
       <virtual-method name="do_baz" invoker="do_baz">
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
+          <instance-parameter name="self" transfer-ownership="none">
+            <type name="SubInterface" c:type="FooSubInterface*"/>
+          </instance-parameter>
           <parameter name="callback"
                      transfer-ownership="none"
                      scope="call"
@@ -795,6 +902,9 @@ exposed to language bindings.</doc>
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
+          <instance-parameter name="self" transfer-ownership="none">
+            <type name="SubInterface" c:type="FooSubInterface*"/>
+          </instance-parameter>
           <parameter transfer-ownership="none">
             <type name="gint" c:type="int"/>
           </parameter>
@@ -807,12 +917,20 @@ exposed to language bindings.</doc>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
+        <parameters>
+          <instance-parameter name="self" transfer-ownership="none">
+            <type name="SubInterface" c:type="FooSubInterface*"/>
+          </instance-parameter>
+        </parameters>
       </method>
       <method name="do_baz" c:identifier="foo_sub_interface_do_baz">
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
+          <instance-parameter name="self" transfer-ownership="none">
+            <type name="SubInterface" c:type="FooSubInterface*"/>
+          </instance-parameter>
           <parameter name="callback"
                      transfer-ownership="none"
                      scope="call"
@@ -829,6 +947,9 @@ exposed to language bindings.</doc>
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
+          <instance-parameter name="self" transfer-ownership="none">
+            <type name="SubInterface" c:type="FooSubInterface*"/>
+          </instance-parameter>
           <parameter transfer-ownership="none">
             <type name="gint" c:type="int"/>
           </parameter>
