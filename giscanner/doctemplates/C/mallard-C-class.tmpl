@@ -1,8 +1,6 @@
 <%! page_type="guide" %>\
 <%inherit file="mallard-base.tmpl"/>
-<%block name="content">
-${parent.content()}
-${self.since_version()}
+<%block name="synopsis">
   <synopsis ui:expanded="no">
     <title>Hierarchy</title>
     <tree>
@@ -11,6 +9,8 @@ ${self.since_version()}
       </item>
     </tree>
   </synopsis>
+</%block>
+<%block name="links">
   <links type="topic" ui:expanded="yes"
          api:type="function" api:mime="text/x-csrc"
          groups="constructor" style="linklist">

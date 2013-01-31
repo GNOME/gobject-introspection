@@ -12,7 +12,13 @@
   </info>
   <title>DocExamples.Enum</title>
   
-  <p>This is an example to document an enumeration.</p>
+  
+  
+    <p>This is an example to document an enumeration.</p>
+  
+  
+  
+  
 <table>
 <tr>
 <td><p>Enum.FOO :</p></td>
@@ -24,5 +30,6 @@
 </tr>
 </table>
 
+  
   
 </page>

@@ -26,8 +26,12 @@
 gint* doc_examples_array_function (gint* out_len);
 </code></synopsis>
 
+  
     <p>This function returns an array with an explicit length,
 and the length should be invisible in most introspected bindings.</p>
+  
+  
+  
   
 <table>
 <tr>
@@ -41,6 +45,5 @@ and the length should be invisible in most introspected bindings.</p>
 </table>
 
   
-
   
 </page>

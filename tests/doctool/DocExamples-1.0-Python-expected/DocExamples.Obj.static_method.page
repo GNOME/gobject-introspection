@@ -29,10 +29,13 @@ def static_method(out_arg):
     # Python wrapper for doc_examples_obj_static_method()
 </code></synopsis>
 
+  
     <p>This is an example of a function with an out argument
 and a return value.</p>
   
-
+  
+  
+  
 <table>
 <tr>
 <td><p>out_arg :</p></td>
@@ -45,6 +48,5 @@ and a return value.</p>
 </table>
 
   
-
   
 </page>

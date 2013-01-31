@@ -37,11 +37,14 @@ def callback_function(callback, user_data, destroy_notify):
     # Python wrapper for doc_examples_callback_function()
 </code></synopsis>
 
+  
     <p>This is a function that takes a callback. Different languages
 will expose this in different ways (e.g. Python keeps the
 <code>user_data</code> parameter, while JS doesn't)</p>
   
-
+  
+  
+  
 <table>
 <tr>
 <td><p>callback :</p></td>
@@ -62,6 +65,5 @@ will expose this in different ways (e.g. Python keeps the
 </table>
 
   
-
   
 </page>

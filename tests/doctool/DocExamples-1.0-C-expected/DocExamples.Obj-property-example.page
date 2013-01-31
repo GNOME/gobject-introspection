@@ -13,7 +13,15 @@
   </info>
   <title>DocExamples.Obj:property-example</title>
   
+  
+  
     <p>This is an example of how to document a property.</p>
+  
+  
+    <p>Since 0.99</p>
+  
+  
+  
   
   
 </page>

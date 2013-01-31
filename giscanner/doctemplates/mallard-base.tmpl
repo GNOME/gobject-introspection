@@ -12,12 +12,18 @@
     </%block>
   </info>
   <title><%block name="title">${formatter.format_page_name(node)}</%block></title>
-  <%block name="content">
+  <%block name="synopsis">
+  </%block>
+  <%block name="doc">
     ${formatter.format(node, node.doc)}
   </%block>
-  <%def name="since_version()">
+  <%block name="since_version">
     % if node.version:
     <p>Since ${node.version}</p>
     % endif
-  </%def>
+  </%block>
+  <%block name="details">
+  </%block>
+  <%block name="links">
+  </%block>
 </page>

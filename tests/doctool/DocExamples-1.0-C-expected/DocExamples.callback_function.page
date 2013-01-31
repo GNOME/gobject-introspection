@@ -36,9 +36,13 @@ DocExamplesEnum doc_examples_callback_function (DocExamplesCallback callback,
                                                 GDestroyNotify destroy_notify);
 </code></synopsis>
 
+  
     <p>This is a function that takes a callback. Different languages
 will expose this in different ways (e.g. Python keeps the
 <code>user_data</code> parameter, while JS doesn't)</p>
+  
+  
+  
   
 <table>
 <tr>
@@ -60,6 +64,5 @@ will expose this in different ways (e.g. Python keeps the
 </table>
 
   
-
   
 </page>

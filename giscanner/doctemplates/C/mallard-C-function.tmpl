@@ -28,7 +28,7 @@
 % endfor
     </api:function>
 </%block>
-<%block name="content">
+<%block name="synopsis">
 <synopsis><code mime="text/x-csrc">
 ${node.retval.type.ctype} ${node.symbol} (\
 % if node.is_method:
@@ -58,7 +58,8 @@ ${formatter.format_type(arg.type) | x} ${arg.argname}\
 %endif
 % endfor
 </code></synopsis>
-${parent.content()}
+</%block>
+<%block name="details">
 % if node.parameters or node.retval:
 <table>
 % for arg, ix in zip(node.parameters, range(len(node.parameters))):
@@ -75,5 +76,4 @@ ${parent.content()}
 % endif
 </table>
 % endif
-${self.since_version()}
 </%block>

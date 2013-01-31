@@ -12,12 +12,6 @@
   </info>
   <title>DocExamples.Obj</title>
   
-
-    <p>This is an example of how to document a class</p><p>This class has a signal: <link xref="DocExamples.Obj-signal-example">DocExamples.Obj::signal-example</link>.</p><p>And also has a property: <link xref="DocExamples.Obj-property-example">DocExamples.Obj:property-example</link>.</p>
-  
-
-    <p>Since 0.99</p>
-  
   <synopsis ui:expanded="no">
     <title>Hierarchy</title>
     <tree>
@@ -26,6 +20,16 @@
       </item>
     </tree>
   </synopsis>
+
+  
+    <p>This is an example of how to document a class</p><p>This class has a signal: <link xref="DocExamples.Obj-signal-example">DocExamples.Obj::signal-example</link>.</p><p>And also has a property: <link xref="DocExamples.Obj-property-example">DocExamples.Obj:property-example</link>.</p>
+  
+  
+    <p>Since 0.99</p>
+  
+  
+  
+  
   <links type="topic" ui:expanded="yes"
          api:type="function" api:mime="text/x-csrc"
          groups="constructor" style="linklist">
@@ -51,5 +55,4 @@
     <title>Other</title>
   </links>
 
-  
 </page>

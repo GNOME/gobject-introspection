@@ -1,6 +1,5 @@
 <%inherit file="mallard-base.tmpl"/>
-<%block name="content">
-  ${formatter.format(node, node.doc)}
+<%block name="details">
 % if node.members:
 <table>
 % for member, ix in zip(node.members, range(len(node.members))):

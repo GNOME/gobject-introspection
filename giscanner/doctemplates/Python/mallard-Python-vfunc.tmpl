@@ -1,5 +1,5 @@
 <%inherit file="mallard-base.tmpl"/>
-<%block name="content">
+<%block name="synopsis">
 <synopsis><code mime="text/x-python">
 % if len(node.parameters) != 0:
 @accepts(\
@@ -12,8 +12,8 @@ do_${node.name}(self, \
 ${', '.join((arg.argname for arg in node.parameters))}\
 ):
 </code></synopsis>
-${parent.content()}
-
+</%block>
+<%block name="details">
 % if node.parameters or node.retval:
 <table>
 % for arg, ix in zip(node.parameters, range(len(node.parameters))):
@@ -30,5 +30,4 @@ ${parent.content()}
 % endif
 </table>
 % endif
-${self.since_version()}
 </%block>

@@ -26,8 +26,12 @@
 gboolean doc_examples_obj_static_method (gint* out_arg);
 </code></synopsis>
 
+  
     <p>This is an example of a function with an out argument
 and a return value.</p>
+  
+  
+  
   
 <table>
 <tr>
@@ -41,6 +45,5 @@ and a return value.</p>
 </table>
 
   
-
   
 </page>

@@ -18,9 +18,13 @@
 def do_vfunc(self, first_arg):
 </code></synopsis>
 
+  
     <p>This is an example of how to document a vfunc.</p>
   
-
+  
+    <p>Since 0.99</p>
+  
+  
 <table>
 <tr>
 <td><p>first_arg :</p></td>
@@ -28,8 +32,6 @@ def do_vfunc(self, first_arg):
 </tr>
 </table>
 
-    <p>Since 0.99</p>
   
-
   
 </page>

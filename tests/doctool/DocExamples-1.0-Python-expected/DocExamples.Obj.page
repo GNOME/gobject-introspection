@@ -12,16 +12,17 @@
   </info>
   <title>DocExamples.Obj</title>
   
-  
-    <p>This is an example of how to document a class</p><p>This class has a signal: <link xref="DocExamples.Obj-signal-example">DocExamples.Obj::signal-example</link>.</p><p>And also has a property: <link xref="DocExamples.Obj-property-example">DocExamples.Obj:property-example</link>.</p>
-  
   <synopsis><code>
 from gi.repository import DocExamples
 
 obj = DocExamples.Obj(<link xref='DocExamples.Obj-property-example'>property_example</link>=value)  </code></synopsis>
 
   
+    <p>This is an example of how to document a class</p><p>This class has a signal: <link xref="DocExamples.Obj-signal-example">DocExamples.Obj::signal-example</link>.</p><p>And also has a property: <link xref="DocExamples.Obj-property-example">DocExamples.Obj:property-example</link>.</p>
+  
+  
     <p>Since 0.99</p>
+  
   
   <synopsis>
     <title>Hierarchy</title>
@@ -34,6 +35,8 @@ obj = DocExamples.Obj(<link xref='DocExamples.Obj-property-example'>property_exa
       </item>
     </tree>
   </synopsis>
+
+  
   <links type="topic" ui:expanded="yes"
          api:type="function" api:mime="text/x-python"
          groups="method" style="linklist">
@@ -57,5 +60,4 @@ obj = DocExamples.Obj(<link xref='DocExamples.Obj-property-example'>property_exa
     <title>Other</title>
   </links>
 
-  
 </page>

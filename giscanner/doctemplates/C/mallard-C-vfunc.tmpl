@@ -2,10 +2,11 @@
 <%block name="info">
     <link type="guide" xref="${namespace.name}.${node.parent.name}" group="vfunc"/>
 </%block>
-<%block name="content">
+<%block name="synopsis">
 <synopsis><code mime="text/x-csrc">
 </code></synopsis>
-${parent.content()}
+</%block>
+<%block name="details">
 % if node.parameters or node.retval:
 <table>
 % for arg, ix in zip(node.parameters, range(len(node.parameters))):
@@ -22,5 +23,4 @@ ${parent.content()}
 % endif
 </table>
 % endif
-${self.since_version()}
 </%block>

@@ -3,7 +3,7 @@
     <link type="guide" xref="${namespace.name}.${node.parent.name}" group="signal"/>
     <title type="link" role="topic">${node.name}</title>
 </%block>
-<%block name="content">
+<%block name="synopsis">
 <synopsis><code mime="text/x-python">
 def callback(${formatter.to_underscores(node.parent.name).lower()}, \
 % for arg, ix in zip(node.parameters, range(len(node.parameters))):
@@ -11,8 +11,8 @@ ${arg.argname}, \
 % endfor
 user_param1, ...)
 </code></synopsis>
-${formatter.format(node, node.doc)}
-
+</%block>
+<%block name="details">
 <table>
 <tr>
 <td><p>${formatter.to_underscores(node.parent.name).lower()} :</p></td>
@@ -41,6 +41,5 @@ ${formatter.format(node, node.doc)}
 </tr>
 % endif
 </table>
-${self.since_version()}
 </%block>
 

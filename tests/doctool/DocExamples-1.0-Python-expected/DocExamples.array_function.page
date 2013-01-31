@@ -29,10 +29,13 @@ def array_function(out_len):
     # Python wrapper for doc_examples_array_function()
 </code></synopsis>
 
+  
     <p>This function returns an array with an explicit length,
 and the length should be invisible in most introspected bindings.</p>
   
-
+  
+  
+  
 <table>
 <tr>
 <td><p>out_len :</p></td>
@@ -45,6 +48,5 @@ and the length should be invisible in most introspected bindings.</p>
 </table>
 
   
-
   
 </page>

@@ -13,7 +13,15 @@
   </info>
   <title>DocExamples.Obj::signal-example</title>
   
+  
+  
     <p>This is an example of how to document a signal.</p>
+  
+  
+    <p>Since 0.99</p>
+  
+  
+  
   
   
 </page>

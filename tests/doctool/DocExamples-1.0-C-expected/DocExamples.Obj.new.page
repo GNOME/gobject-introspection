@@ -22,7 +22,11 @@
 DocExamplesObj* doc_examples_obj_new (void);
 </code></synopsis>
 
+  
     
+  
+  
+  
   
 <table>
 <tr>
@@ -32,6 +36,5 @@ DocExamplesObj* doc_examples_obj_new (void);
 </table>
 
   
-
   
 </page>

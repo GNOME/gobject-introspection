@@ -16,8 +16,14 @@
 <synopsis><code mime="text/x-python">
 def callback(obj, int_param, float_param, pointer_param, user_param1, ...)
 </code></synopsis>
-<p>This is an example of how to document a signal.</p>
 
+  
+    <p>This is an example of how to document a signal.</p>
+  
+  
+    <p>Since 0.99</p>
+  
+  
 <table>
 <tr>
 <td><p>obj :</p></td>
@@ -45,8 +51,6 @@ def callback(obj, int_param, float_param, pointer_param, user_param1, ...)
 </tr>
 </table>
 
-    <p>Since 0.99</p>
   
-
   
 </page>
