@@ -33,16 +33,12 @@ and the length should be invisible in most introspected bindings.</p>
   
   
   
-<table>
-<tr>
-<td><p>out_len :</p></td>
-<td><p>the length of the returned array</p></td>
-</tr>
-<tr>
-<td><p>Returns :</p></td>
-<td><p>an array of numbers.</p></td>
-</tr>
-</table>
+<dl>
+<dt><p>out_len :</p></dt>
+<dd><p>the length of the returned array</p></dd>
+<dt><p>Returns :</p></dt>
+<dd><p>an array of numbers.</p></dd>
+</dl>
 
   
   

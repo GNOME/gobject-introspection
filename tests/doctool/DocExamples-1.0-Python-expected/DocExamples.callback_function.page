@@ -45,24 +45,16 @@ will expose this in different ways (e.g. Python keeps the
   
   
   
-<table>
-<tr>
-<td><p>callback :</p></td>
-<td><p>Just Call Me Maybe</p></td>
-</tr>
-<tr>
-<td><p>user_data :</p></td>
-<td><p>your stuff</p></td>
-</tr>
-<tr>
-<td><p>destroy_notify :</p></td>
-<td><p>how to get rid of <code>user_data</code></p></td>
-</tr>
-<tr>
-<td><p>Returns :</p></td>
-<td><p><link xref="DocExamples.Enum">DocExamples.Enum</link>.foo sometimes, <link xref="DocExamples.Enum">DocExamples.Enum</link>.bar other times.</p></td>
-</tr>
-</table>
+<dl>
+<dt><p>callback :</p></dt>
+<dd><p>Just Call Me Maybe</p></dd>
+<dt><p>user_data :</p></dt>
+<dd><p>your stuff</p></dd>
+<dt><p>destroy_notify :</p></dt>
+<dd><p>how to get rid of <code>user_data</code></p></dd>
+<dt><p>Returns :</p></dt>
+<dd><p><link xref="DocExamples.Enum">DocExamples.Enum</link>.foo sometimes, <link xref="DocExamples.Enum">DocExamples.Enum</link>.bar other times.</p></dd>
+</dl>
 
   
   

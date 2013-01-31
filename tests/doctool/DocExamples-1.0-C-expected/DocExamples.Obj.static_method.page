@@ -33,16 +33,12 @@ and a return value.</p>
   
   
   
-<table>
-<tr>
-<td><p>out_arg :</p></td>
-<td><p>a pointer to int, or <code>NULL</code> to ignore</p></td>
-</tr>
-<tr>
-<td><p>Returns :</p></td>
-<td><p><code>TRUE</code> if <code>out_arg</code> is valid, <code>FALSE</code> otherwise</p></td>
-</tr>
-</table>
+<dl>
+<dt><p>out_arg :</p></dt>
+<dd><p>a pointer to int, or <code>NULL</code> to ignore</p></dd>
+<dt><p>Returns :</p></dt>
+<dd><p><code>TRUE</code> if <code>out_arg</code> is valid, <code>FALSE</code> otherwise</p></dd>
+</dl>
 
   
   

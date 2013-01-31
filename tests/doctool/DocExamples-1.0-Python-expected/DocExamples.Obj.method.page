@@ -57,32 +57,20 @@ created with <link xref="DocExamples.Obj.new">Obj.new</link>.</p><p>This should 
     <p>Since 0.99</p>
   
   
-<table>
-<tr>
-<td><p>first_arg :</p></td>
-<td><p>A <link xref="DocExamples.Obj">DocExamples.Obj</link>.</p></td>
-</tr>
-<tr>
-<td><p>second_arg :</p></td>
-<td><p>second argument</p></td>
-</tr>
-<tr>
-<td><p>boolean_arg :</p></td>
-<td><p>You should always pass <code>True</code>.</p></td>
-</tr>
-<tr>
-<td><p>pointer_arg :</p></td>
-<td><p>If not <code>None</code>, do a thing. Pass <code>self</code> if you want to sometimes. You can also pass <code>second_arg</code>, or even <code>boolean_arg</code>.</p></td>
-</tr>
-<tr>
-<td><p>string :</p></td>
-<td><p>A NUL-terminated string.</p></td>
-</tr>
-<tr>
-<td><p>Returns :</p></td>
-<td><p>Either <code>False</code> or something <code>False</code>-y.</p></td>
-</tr>
-</table>
+<dl>
+<dt><p>first_arg :</p></dt>
+<dd><p>A <link xref="DocExamples.Obj">DocExamples.Obj</link>.</p></dd>
+<dt><p>second_arg :</p></dt>
+<dd><p>second argument</p></dd>
+<dt><p>boolean_arg :</p></dt>
+<dd><p>You should always pass <code>True</code>.</p></dd>
+<dt><p>pointer_arg :</p></dt>
+<dd><p>If not <code>None</code>, do a thing. Pass <code>self</code> if you want to sometimes. You can also pass <code>second_arg</code>, or even <code>boolean_arg</code>.</p></dd>
+<dt><p>string :</p></dt>
+<dd><p>A NUL-terminated string.</p></dd>
+<dt><p>Returns :</p></dt>
+<dd><p>Either <code>False</code> or something <code>False</code>-y.</p></dd>
+</dl>
 
   
   

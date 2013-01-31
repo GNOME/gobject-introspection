@@ -1,13 +1,11 @@
 <%inherit file="mallard-base.tmpl"/>
 <%block name="details">
 % if node.members:
-<table>
+<dl>
 % for member, ix in zip(node.members, range(len(node.members))):
-<tr>
-<td><p>${node.name}.${member.name.upper()} :</p></td>
-<td>${formatter.format(node, member.doc)}</td>
-</tr>
+<dt><p>${node.name}.${member.name.upper()} :</p></dt>
+<dd>${formatter.format(node, member.doc)}</dd>
 % endfor
-</table>
+</dl>
 % endif
 </%block>

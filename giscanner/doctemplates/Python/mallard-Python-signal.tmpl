@@ -13,33 +13,23 @@ user_param1, ...)
 </code></synopsis>
 </%block>
 <%block name="details">
-<table>
-<tr>
-<td><p>${formatter.to_underscores(node.parent.name).lower()} :</p></td>
-<td><p>instance of ${namespace.name}.${node.parent.name} that is emitting the signal</p></td>
-</tr>
+<dl>
+<dt><p>${formatter.to_underscores(node.parent.name).lower()} :</p></dt>
+<dd><p>instance of ${namespace.name}.${node.parent.name} that is emitting the signal</p></dd>
 % for arg, ix in zip(node.parameters, range(len(node.parameters))):
-<tr>
-<td><p>${arg.argname} :</p></td>
-<td>${formatter.format(node, arg.doc)}</td>
-</tr>
+<dt><p>${arg.argname} :</p></dt>
+<dd>${formatter.format(node, arg.doc)}</dd>
 % endfor
-<tr>
-<td><p>user_param1 :</p></td>
-<td><p>first user parameter (if any) specified with the connect() method</p></td>
-</tr>
-<tr>
-<td><p>... :</p></td>
-<td><p>additional user parameters (if any)</p></td>
-</tr>
+<dt><p>user_param1 :</p></dt>
+<dd><p>first user parameter (if any) specified with the connect() method</p></dd>
+<dt><p>... :</p></dt>
+<dd><p>additional user parameters (if any)</p></dd>
 % if node.retval and \
      node.retval.type.ctype != 'void' and \
      node.retval.type.ctype is not None:
-<tr>
-<td><p>Returns :</p></td>
-<td>${node.retval.type.ctype} ${formatter.format(node, node.retval.doc)}</td>
-</tr>
+<dt><p>Returns :</p></dt>
+<dd>${node.retval.type.ctype} ${formatter.format(node, node.retval.doc)}</dd>
 % endif
-</table>
+</dl>
 </%block>
 

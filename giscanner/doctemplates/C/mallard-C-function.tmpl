@@ -61,19 +61,15 @@ ${formatter.format_type(arg.type) | x} ${arg.argname}\
 </%block>
 <%block name="details">
 % if node.parameters or node.retval:
-<table>
+<dl>
 % for arg, ix in zip(node.parameters, range(len(node.parameters))):
-<tr>
-<td><p>${arg.argname} :</p></td>
-<td>${formatter.format(node, arg.doc)}</td>
-</tr>
+<dt><p>${arg.argname} :</p></dt>
+<dd>${formatter.format(node, arg.doc)}</dd>
 % endfor
 % if node.retval:
-<tr>
-<td><p>Returns :</p></td>
-<td>${formatter.format(node, node.retval.doc)}</td>
-</tr>
+<dt><p>Returns :</p></dt>
+<dd>${formatter.format(node, node.retval.doc)}</dd>
 % endif
-</table>
+</dl>
 % endif
 </%block>

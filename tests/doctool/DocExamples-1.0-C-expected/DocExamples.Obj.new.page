@@ -28,12 +28,10 @@ DocExamplesObj* doc_examples_obj_new (void);
   
   
   
-<table>
-<tr>
-<td><p>Returns :</p></td>
-<td></td>
-</tr>
-</table>
+<dl>
+<dt><p>Returns :</p></dt>
+<dd></dd>
+</dl>
 
   
   

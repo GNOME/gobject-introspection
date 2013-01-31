@@ -22,16 +22,12 @@
     <p>Since 0.99</p>
   
   
-<table>
-<tr>
-<td><p>first_arg :</p></td>
-<td><p>first argument</p></td>
-</tr>
-<tr>
-<td><p>Returns :</p></td>
-<td></td>
-</tr>
-</table>
+<dl>
+<dt><p>first_arg :</p></dt>
+<dd><p>first argument</p></dd>
+<dt><p>Returns :</p></dt>
+<dd></dd>
+</dl>
 
   
   

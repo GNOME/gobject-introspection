@@ -19,16 +19,12 @@
   
   
   
-<table>
-<tr>
-<td><p>Enum.FOO :</p></td>
-<td><p>a foo</p></td>
-</tr>
-<tr>
-<td><p>Enum.BAR :</p></td>
-<td><p>a bar</p></td>
-</tr>
-</table>
+<dl>
+<dt><p>Enum.FOO :</p></dt>
+<dd><p>a foo</p></dd>
+<dt><p>Enum.BAR :</p></dt>
+<dd><p>a bar</p></dd>
+</dl>
 
   
   

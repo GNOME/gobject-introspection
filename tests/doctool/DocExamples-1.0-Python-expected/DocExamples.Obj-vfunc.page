@@ -25,12 +25,10 @@ def do_vfunc(self, first_arg):
     <p>Since 0.99</p>
   
   
-<table>
-<tr>
-<td><p>first_arg :</p></td>
-<td><p>first argument</p></td>
-</tr>
-</table>
+<dl>
+<dt><p>first_arg :</p></dt>
+<dd><p>first argument</p></dd>
+</dl>
 
   
   
