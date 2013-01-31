@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <page id="DocExamples.Callback"
       type="topic"
-      style=""
+      style="default"
       xmlns="http://projectmallard.org/1.0/"
       xmlns:ui="http://projectmallard.org/experimental/ui/">
   <info>

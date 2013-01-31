@@ -56,7 +56,7 @@ def make_page_id(node):
     else:
         return '%s.%s' % (namespace.name, node.name)
 
-def make_template_name(node, language):
+def get_node_kind(node):
     if isinstance(node, ast.Namespace):
         node_kind = 'namespace'
     elif isinstance(node, (ast.Class, ast.Interface)):
@@ -64,7 +64,12 @@ def make_template_name(node, language):
     elif isinstance(node, ast.Record):
         node_kind = 'record'
     elif isinstance(node, ast.Function):
-        node_kind = 'function'
+        if node.is_method:
+            node_kind = 'method'
+        elif node.is_constructor:
+            node_kind = 'constructor'
+        else:
+            node_kind = 'function'
     elif isinstance(node, ast.Enum):
         node_kind = 'enum'
     elif isinstance(node, ast.Property) and node.parent is not None:
@@ -76,7 +81,7 @@ def make_template_name(node, language):
     else:
         node_kind = 'default'
 
-    return 'mallard-%s-%s.tmpl' % (language, node_kind)
+    return node_kind
 
 class TemplatedScanner(object):
     def __init__(self, specs):
@@ -487,13 +492,15 @@ class MallardWriter(object):
     def _render_node(self, node, output):
         namespace = self._transformer.namespace
 
-        template_name = make_template_name(node, self._language)
+        node_kind = get_node_kind(node)
+        template_name = 'mallard-%s-%s.tmpl' % (self._language, node_kind)
         page_id = make_page_id(node)
 
         template = self._lookup.get_template(template_name)
         result = template.render(namespace=namespace,
                                  node=node,
                                  page_id=page_id,
+                                 page_style=node_kind,
                                  formatter=self._formatter)
 
         output_file_name = os.path.join(os.path.abspath(output),
