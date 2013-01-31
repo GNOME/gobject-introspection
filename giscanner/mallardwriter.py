@@ -368,7 +368,10 @@ class MallardFormatterC(MallardFormatter):
             return type_.target_fundamental
 
     def format_function_name(self, func):
-        return func.symbol
+        if isinstance(func, (ast.Function)):
+            return func.symbol
+        else:
+            return func.name
 
 class MallardFormatterPython(MallardFormatter):
     language = "Python"
