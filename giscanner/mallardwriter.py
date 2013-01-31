@@ -349,6 +349,7 @@ class MallardFormatter(object):
 
 class MallardFormatterC(MallardFormatter):
     language = "C"
+    mime_type = "text/x-csrc"
 
     fundamentals = {
         "TRUE": "TRUE",
@@ -372,6 +373,7 @@ class MallardFormatterC(MallardFormatter):
 
 class MallardFormatterPython(MallardFormatter):
     language = "Python"
+    mime_type = "text/python"
 
     fundamentals = {
         "TRUE": "True",

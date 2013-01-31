@@ -55,6 +55,8 @@ pkgpyexec_PYTHON =		\
 templatedir = $(pkglibdir)
 nobase_template_DATA =		\
 	giscanner/doctemplates/base.tmpl	\
+	giscanner/doctemplates/class.tmpl	\
+	giscanner/doctemplates/namespace.tmpl	\
 	giscanner/doctemplates/C/class.tmpl	\
 	giscanner/doctemplates/C/constructor.tmpl	\
 	giscanner/doctemplates/C/default.tmpl	\

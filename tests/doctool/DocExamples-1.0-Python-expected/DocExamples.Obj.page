@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <page id="DocExamples.Obj"
-      type="topic"
+      type="guide"
       style="class"
       xmlns="http://projectmallard.org/1.0/"
       xmlns:api="http://projectmallard.org/experimental/api/"
@@ -38,12 +38,12 @@ obj = DocExamples.Obj(<link xref='DocExamples.Obj-property-example'>property_exa
 
   
   <links type="topic" ui:expanded="yes"
-         api:type="function" api:mime="text/x-python"
+         api:type="function" api:mime="text/python"
          groups="method" style="linklist">
     <title>Methods</title>
   </links>
   <links type="topic" ui:expanded="yes"
-         api:type="function" api:mime="text/x-python"
+         api:type="function" api:mime="text/python"
          groups="function" style="linklist">
     <title>Functions</title>
   </links>
