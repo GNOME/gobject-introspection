@@ -463,9 +463,8 @@ class MallardWriter(object):
             srcdir = os.path.dirname(__file__)
 
         template_dir = os.path.join(srcdir, 'doctemplates')
-        language_dir = os.path.join(template_dir, self._language)
 
-        return TemplateLookup(directories=[template_dir, language_dir],
+        return TemplateLookup(directories=[template_dir],
                               module_directory=tempfile.mkdtemp(),
                               output_encoding='utf-8')
 
@@ -496,7 +495,7 @@ class MallardWriter(object):
         namespace = self._transformer.namespace
 
         node_kind = get_node_kind(node)
-        template_name = 'mallard-%s-%s.tmpl' % (self._language, node_kind)
+        template_name = '%s/%s.tmpl' % (self._language, node_kind)
         page_id = make_page_id(node)
 
         template = self._lookup.get_template(template_name)

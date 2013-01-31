@@ -54,29 +54,29 @@ pkgpyexec_PYTHON =		\
 
 templatedir = $(pkglibdir)
 nobase_template_DATA =		\
-	giscanner/doctemplates/mallard-base.tmpl	\
-	giscanner/doctemplates/C/mallard-C-class.tmpl	\
-	giscanner/doctemplates/C/mallard-C-constructor.tmpl	\
-	giscanner/doctemplates/C/mallard-C-default.tmpl	\
-	giscanner/doctemplates/C/mallard-C-enum.tmpl	\
-	giscanner/doctemplates/C/mallard-C-function.tmpl	\
-	giscanner/doctemplates/C/mallard-C-method.tmpl		\
-	giscanner/doctemplates/C/mallard-C-namespace.tmpl	\
-	giscanner/doctemplates/C/mallard-C-property.tmpl	\
-	giscanner/doctemplates/C/mallard-C-record.tmpl	\
-	giscanner/doctemplates/C/mallard-C-signal.tmpl	\
-	giscanner/doctemplates/C/mallard-C-vfunc.tmpl	\
-	giscanner/doctemplates/Python/mallard-Python-class.tmpl	\
-	giscanner/doctemplates/Python/mallard-Python-constructor.tmpl	\
-	giscanner/doctemplates/Python/mallard-Python-default.tmpl	\
-	giscanner/doctemplates/Python/mallard-Python-enum.tmpl	\
-	giscanner/doctemplates/Python/mallard-Python-function.tmpl	\
-	giscanner/doctemplates/Python/mallard-Python-method.tmpl	\
-	giscanner/doctemplates/Python/mallard-Python-namespace.tmpl	\
-	giscanner/doctemplates/Python/mallard-Python-property.tmpl	\
-	giscanner/doctemplates/Python/mallard-Python-record.tmpl	\
-	giscanner/doctemplates/Python/mallard-Python-signal.tmpl	\
-	giscanner/doctemplates/Python/mallard-Python-vfunc.tmpl
+	giscanner/doctemplates/base.tmpl	\
+	giscanner/doctemplates/C/class.tmpl	\
+	giscanner/doctemplates/C/constructor.tmpl	\
+	giscanner/doctemplates/C/default.tmpl	\
+	giscanner/doctemplates/C/enum.tmpl	\
+	giscanner/doctemplates/C/function.tmpl	\
+	giscanner/doctemplates/C/method.tmpl		\
+	giscanner/doctemplates/C/namespace.tmpl	\
+	giscanner/doctemplates/C/property.tmpl	\
+	giscanner/doctemplates/C/record.tmpl	\
+	giscanner/doctemplates/C/signal.tmpl	\
+	giscanner/doctemplates/C/vfunc.tmpl	\
+	giscanner/doctemplates/Python/class.tmpl	\
+	giscanner/doctemplates/Python/constructor.tmpl	\
+	giscanner/doctemplates/Python/default.tmpl	\
+	giscanner/doctemplates/Python/enum.tmpl	\
+	giscanner/doctemplates/Python/function.tmpl	\
+	giscanner/doctemplates/Python/method.tmpl	\
+	giscanner/doctemplates/Python/namespace.tmpl	\
+	giscanner/doctemplates/Python/property.tmpl	\
+	giscanner/doctemplates/Python/record.tmpl	\
+	giscanner/doctemplates/Python/signal.tmpl	\
+	giscanner/doctemplates/Python/vfunc.tmpl
 
 _giscanner_la_CFLAGS = \
 	$(PYTHON_INCLUDES) \

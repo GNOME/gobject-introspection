@@ -1,4 +1,4 @@
-<%inherit file="mallard-base.tmpl"/>
+<%inherit file="/base.tmpl"/>
 <%block name="info">
 % if node.parent is not None:
     <link type="guide" xref="${namespace.name}.${node.parent.name}" group="${page_style}"/>
@@ -29,34 +29,21 @@
     </api:function>
 </%block>
 <%block name="synopsis">
-<synopsis><code mime="text/x-csrc">
-${node.retval.type.ctype} ${node.symbol} (\
+<synopsis><code mime="text/x-python">
+% if len(node.parameters) != 0:
+@accepts(\
+${', '.join((formatter.format_type(arg.type) for arg in node.parameters))}\
+)
+% endif
+@returns(${formatter.format_type(node.retval.type) | x})
+def \
+${node.name}(\
 % if node.is_method:
-${node.parent.ctype} *self\
-%endif
-% if len(node.parameters) == 0:
-% if not node.is_method:
-void\
-%endif
-);
-% elif node.is_method:
-,
+self, \
 % endif
-% for arg, ix in zip(node.parameters, range(len(node.parameters))):
-% if ix != 0:
-${' ' * (len(formatter.format_type(node.retval.type)) + len(node.symbol) + 3)}\
-% endif
-% if arg.type.ctype == '<varargs>':
-...\
-% else:
-${formatter.format_type(arg.type) | x} ${arg.argname}\
-% endif
-% if ix == len(node.parameters) - 1:
-);
-% else:
-,
-%endif
-% endfor
+${', '.join((arg.argname for arg in node.parameters))}\
+):
+    # Python wrapper for ${node.symbol}()
 </code></synopsis>
 </%block>
 <%block name="details">
@@ -66,7 +53,7 @@ ${formatter.format_type(arg.type) | x} ${arg.argname}\
 <dt><p>${arg.argname} :</p></dt>
 <dd>${formatter.format(node, arg.doc)}</dd>
 % endfor
-% if node.retval:
+% if node.retval and node.retval.type.ctype != 'void':
 <dt><p>Returns :</p></dt>
 <dd>${formatter.format(node, node.retval.doc)}</dd>
 % endif
