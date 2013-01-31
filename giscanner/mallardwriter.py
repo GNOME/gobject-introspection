@@ -444,7 +444,7 @@ class MallardWriter(object):
         template_dir = os.path.join(srcdir, 'doctemplates', self._language)
 
         return TemplateLookup(directories=[template_dir],
-                              module_directory=tempfile.gettempdir(),
+                              module_directory=tempfile.mkdtemp(),
                               output_encoding='utf-8')
 
     def write(self, output):
