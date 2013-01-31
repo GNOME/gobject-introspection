@@ -301,10 +301,12 @@ class MallardFormatter(object):
         raise NotImplementedError
 
     def format_page_name(self, node):
-        namespace = node.namespace
         if isinstance(node, ast.Namespace):
             return 'Index'
-        elif isinstance(node, ast.Function):
+
+        namespace = node.namespace
+
+        if isinstance(node, ast.Function):
             return self.format_function_name(node)
         elif isinstance(node, ast.Property) and node.parent is not None:
             return '%s.%s:%s' % (namespace.name, node.parent.name, node.name)
