@@ -26,7 +26,6 @@ import re
 import tempfile
 
 from xml.sax import saxutils
-from mako.template import Template
 from mako.lookup import TemplateLookup
 
 from . import ast
