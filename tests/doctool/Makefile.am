@@ -41,10 +41,10 @@ GIRS += DocExamples-1.0.gir
 	$(AM_V_at)$(INTROSPECTION_DOCTOOL) --language Python $*.gir -o $*-Python/
 
 %-C.page.check: %-C
-	@diff -u -U 10 $(srcdir)/$*-C-expected $*-C && echo "  TEST  $*-C" && rm -rf $*-C
+	@diff -u -w -B -U 10 $(srcdir)/$*-C-expected $*-C && echo "  TEST  $*-C" && rm -rf $*-C
 
 %-Python.page.check: %-Python
-	@diff -u -U 10 $(srcdir)/$*-Python-expected $*-Python && echo "  TEST  $*-Python" && rm -rf $*-Python
+	@diff -u -w -B -U 10 $(srcdir)/$*-Python-expected $*-Python && echo "  TEST  $*-Python" && rm -rf $*-Python
 
 check-local: $(CHECK_TARGETS) $(TYPELIBS)
 clean-local:
