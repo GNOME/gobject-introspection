@@ -666,7 +666,7 @@ uses a C sugar return type.</doc>
                 writable="1"
                 construct="1"
                 transfer-ownership="none">
-        <type name="utf8"/>
+        <type name="utf8" c:type="gchar*"/>
       </property>
       <field name="parent_instance">
         <type name="GObject.Object" c:type="GObject"/>
@@ -676,14 +676,14 @@ uses a C sugar return type.</doc>
       </field>
       <glib:signal name="signal" when="last">
         <return-value transfer-ownership="full">
-          <type name="utf8"/>
+          <type name="utf8" c:type="gchar*"/>
         </return-value>
         <parameters>
           <parameter name="object" transfer-ownership="none">
             <type name="GObject.Object"/>
           </parameter>
           <parameter name="p0" transfer-ownership="none">
-            <type name="gpointer"/>
+            <type name="gpointer" c:type="gpointer"/>
           </parameter>
         </parameters>
       </glib:signal>
@@ -960,7 +960,7 @@ exposed to language bindings.</doc>
       </method>
       <glib:signal name="destroy-event" when="last">
         <return-value transfer-ownership="none">
-          <type name="none"/>
+          <type name="none" c:type="void"/>
         </return-value>
       </glib:signal>
     </interface>

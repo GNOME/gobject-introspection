@@ -95,7 +95,8 @@ in contrast to the other create_type() functions."""
         # First, is it a fundamental?
         fundamental = type_names.get(gtype_name)
         if fundamental is not None:
-            return cls(target_fundamental=fundamental.target_fundamental)
+            return cls(target_fundamental=fundamental.target_fundamental,
+                       ctype=fundamental.ctype)
         if gtype_name == 'GHashTable':
             return Map(TYPE_ANY, TYPE_ANY, gtype_name=gtype_name)
         elif gtype_name in ('GArray', 'GPtrArray', 'GByteArray'):

@@ -681,7 +681,7 @@ annotation_object_watch_full().</doc>
                 writable="1"
                 construct="1"
                 transfer-ownership="none">
-        <type name="Callback"/>
+        <type name="Callback" c:type="gpointer"/>
       </property>
       <property name="string-property"
                 version="1.0"
@@ -691,7 +691,7 @@ annotation_object_watch_full().</doc>
                 construct="1"
                 transfer-ownership="none">
         <doc xml:whitespace="preserve">This is a property which is a string</doc>
-        <type name="utf8"/>
+        <type name="utf8" c:type="gchar*"/>
       </property>
       <property name="tab-property"
                 version="1.2"
@@ -700,7 +700,7 @@ annotation_object_watch_full().</doc>
                 transfer-ownership="none">
         <doc xml:whitespace="preserve">This is a property annotation intentionally indented with a mix
 of tabs and strings to test the tab handling capabilities of the scanner.</doc>
-        <type name="utf8"/>
+        <type name="utf8" c:type="gchar*"/>
       </property>
       <field name="parent_instance">
         <type name="GObject.Object" c:type="GObject"/>
@@ -710,29 +710,29 @@ of tabs and strings to test the tab handling capabilities of the scanner.</doc>
         <return-value transfer-ownership="full">
           <attribute name="some.annotation.foo3" value="val3"/>
           <doc xml:whitespace="preserve">the return value</doc>
-          <type name="utf8"/>
+          <type name="utf8" c:type="gchar*"/>
         </return-value>
         <parameters>
           <parameter name="arg1" transfer-ownership="none">
             <attribute name="some.annotation.foo1" value="val1"/>
             <doc xml:whitespace="preserve">a value</doc>
-            <type name="utf8"/>
+            <type name="utf8" c:type="gchar*"/>
           </parameter>
           <parameter name="arg2" transfer-ownership="none">
             <attribute name="some.annotation.foo2" value="val2"/>
             <doc xml:whitespace="preserve">another value</doc>
-            <type name="utf8"/>
+            <type name="utf8" c:type="gchar*"/>
           </parameter>
         </parameters>
       </glib:signal>
       <glib:signal name="doc-empty-arg-parsing" when="last">
         <doc xml:whitespace="preserve">This signal tests an empty document argument (@arg1)</doc>
         <return-value transfer-ownership="none">
-          <type name="none"/>
+          <type name="none" c:type="void"/>
         </return-value>
         <parameters>
           <parameter name="arg1" transfer-ownership="none">
-            <type name="gpointer"/>
+            <type name="gpointer" c:type="gpointer"/>
           </parameter>
         </parameters>
       </glib:signal>
@@ -740,12 +740,12 @@ of tabs and strings to test the tab handling capabilities of the scanner.</doc>
         <doc xml:whitespace="preserve">This is a signal which takes a list of strings, but it's not
 known by GObject as it's only marked as G_TYPE_POINTER</doc>
         <return-value transfer-ownership="none">
-          <type name="none"/>
+          <type name="none" c:type="void"/>
         </return-value>
         <parameters>
           <parameter name="list" transfer-ownership="container">
             <doc xml:whitespace="preserve">a list of strings</doc>
-            <type name="GLib.List">
+            <type name="GLib.List" c:type="gpointer">
               <type name="utf8"/>
             </type>
           </parameter>
@@ -759,12 +759,12 @@ known by GObject as it's only marked as G_TYPE_POINTER</doc>
         <doc xml:whitespace="preserve">This is a signal which has a broken signal handler,
 it says it's pointer but it's actually a string.</doc>
         <return-value transfer-ownership="none">
-          <type name="none"/>
+          <type name="none" c:type="void"/>
         </return-value>
         <parameters>
           <parameter name="string" transfer-ownership="none">
             <doc xml:whitespace="preserve">a string</doc>
-            <type name="utf8"/>
+            <type name="utf8" c:type="gpointer"/>
           </parameter>
         </parameters>
       </glib:signal>

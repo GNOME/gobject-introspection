@@ -1277,13 +1277,13 @@ raise an error.</doc>
         <type name="TestBoxed"/>
       </property>
       <property name="double" writable="1" transfer-ownership="none">
-        <type name="gdouble"/>
+        <type name="gdouble" c:type="gdouble"/>
       </property>
       <property name="float" writable="1" transfer-ownership="none">
-        <type name="gfloat"/>
+        <type name="gfloat" c:type="gfloat"/>
       </property>
       <property name="gtype" writable="1" transfer-ownership="none">
-        <type name="GType"/>
+        <type name="GType" c:type="GType"/>
       </property>
       <property name="hash-table" writable="1" transfer-ownership="container">
         <type name="GLib.HashTable">
@@ -1300,20 +1300,20 @@ raise an error.</doc>
         </type>
       </property>
       <property name="int" writable="1" transfer-ownership="none">
-        <type name="gint"/>
+        <type name="gint" c:type="gint"/>
       </property>
       <property name="list" writable="1" transfer-ownership="none">
-        <type name="GLib.List">
+        <type name="GLib.List" c:type="gpointer">
           <type name="utf8"/>
         </type>
       </property>
       <property name="list-old" writable="1" transfer-ownership="none">
-        <type name="GLib.List">
+        <type name="GLib.List" c:type="gpointer">
           <type name="utf8"/>
         </type>
       </property>
       <property name="string" writable="1" transfer-ownership="none">
-        <type name="utf8"/>
+        <type name="utf8" c:type="gchar*"/>
       </property>
       <field name="parent_instance">
         <type name="GObject.Object" c:type="GObject"/>
@@ -1357,24 +1357,24 @@ raise an error.</doc>
                    action="1"
                    no-hooks="1">
         <return-value transfer-ownership="none">
-          <type name="none"/>
+          <type name="none" c:type="void"/>
         </return-value>
       </glib:signal>
       <glib:signal name="cleanup" when="cleanup">
         <return-value transfer-ownership="none">
-          <type name="none"/>
+          <type name="none" c:type="void"/>
         </return-value>
       </glib:signal>
       <glib:signal name="first" when="first">
         <return-value transfer-ownership="none">
-          <type name="none"/>
+          <type name="none" c:type="void"/>
         </return-value>
       </glib:signal>
       <glib:signal name="sig-with-array-prop" when="last">
         <doc xml:whitespace="preserve">This test signal is like TelepathyGlib's
  TpChannel:: group-members-changed-detailed:</doc>
         <return-value transfer-ownership="none">
-          <type name="none"/>
+          <type name="none" c:type="void"/>
         </return-value>
         <parameters>
           <parameter name="arr" transfer-ownership="none">
@@ -1387,7 +1387,7 @@ raise an error.</doc>
       </glib:signal>
       <glib:signal name="sig-with-foreign-struct" when="last">
         <return-value transfer-ownership="none">
-          <type name="none"/>
+          <type name="none" c:type="void"/>
         </return-value>
         <parameters>
           <parameter name="cr" transfer-ownership="none">
@@ -1400,7 +1400,7 @@ raise an error.</doc>
         <doc xml:whitespace="preserve">This test signal is like TelepathyGlib's
  TpAccount::status-changed</doc>
         <return-value transfer-ownership="none">
-          <type name="none"/>
+          <type name="none" c:type="void"/>
         </return-value>
         <parameters>
           <parameter name="hash" transfer-ownership="none">
@@ -1415,12 +1415,12 @@ raise an error.</doc>
         <doc xml:whitespace="preserve">You can use this with regress_test_obj_emit_sig_with_int64, or raise from
 the introspection client langage.</doc>
         <return-value transfer-ownership="none">
-          <type name="gint64"/>
+          <type name="gint64" c:type="gint64"/>
         </return-value>
         <parameters>
           <parameter name="i" transfer-ownership="none">
             <doc xml:whitespace="preserve">an integer</doc>
-            <type name="gint64"/>
+            <type name="gint64" c:type="gint64"/>
           </parameter>
         </parameters>
       </glib:signal>
@@ -1433,7 +1433,7 @@ the introspection client langage.</doc>
         <parameters>
           <parameter name="i" transfer-ownership="none">
             <doc xml:whitespace="preserve">an integer</doc>
-            <type name="gint"/>
+            <type name="gint" c:type="gint"/>
           </parameter>
         </parameters>
       </glib:signal>
@@ -1441,7 +1441,7 @@ the introspection client langage.</doc>
         <doc xml:whitespace="preserve">Test transfer none GObject as a param (tests refcounting).
 Use with regress_test_obj_emit_sig_with_obj</doc>
         <return-value transfer-ownership="none">
-          <type name="none"/>
+          <type name="none" c:type="void"/>
         </return-value>
         <parameters>
           <parameter name="obj" transfer-ownership="none">
@@ -1453,7 +1453,7 @@ Use with regress_test_obj_emit_sig_with_obj</doc>
       <glib:signal name="sig-with-strv" when="last">
         <doc xml:whitespace="preserve">Test GStrv as a param.</doc>
         <return-value transfer-ownership="none">
-          <type name="none"/>
+          <type name="none" c:type="void"/>
         </return-value>
         <parameters>
           <parameter name="strs" transfer-ownership="none">
@@ -1468,18 +1468,18 @@ Use with regress_test_obj_emit_sig_with_obj</doc>
         <doc xml:whitespace="preserve">You can use this with regress_test_obj_emit_sig_with_uint64, or raise from
 the introspection client langage.</doc>
         <return-value transfer-ownership="none">
-          <type name="guint64"/>
+          <type name="guint64" c:type="guint64"/>
         </return-value>
         <parameters>
           <parameter name="i" transfer-ownership="none">
             <doc xml:whitespace="preserve">an integer</doc>
-            <type name="guint64"/>
+            <type name="guint64" c:type="guint64"/>
           </parameter>
         </parameters>
       </glib:signal>
       <glib:signal name="test" when="last" no-recurse="1" no-hooks="1">
         <return-value transfer-ownership="none">
-          <type name="none"/>
+          <type name="none" c:type="void"/>
         </return-value>
       </glib:signal>
       <glib:signal name="test-with-static-scope-arg"
@@ -1487,7 +1487,7 @@ the introspection client langage.</doc>
                    no-recurse="1"
                    no-hooks="1">
         <return-value transfer-ownership="none">
-          <type name="none"/>
+          <type name="none" c:type="void"/>
         </return-value>
         <parameters>
           <parameter name="object" transfer-ownership="none">
@@ -1965,7 +1965,7 @@ the introspection client langage.</doc>
         </parameters>
       </method>
       <property name="testbool" writable="1" transfer-ownership="none">
-        <type name="gboolean"/>
+        <type name="gboolean" c:type="gboolean"/>
       </property>
       <field name="parent_instance">
         <type name="GObject.Object" c:type="GObject"/>
