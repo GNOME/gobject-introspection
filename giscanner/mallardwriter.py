@@ -28,7 +28,7 @@ import tempfile
 from xml.sax import saxutils
 from mako.lookup import TemplateLookup
 
-from . import ast
+from . import ast, xmlwriter
 from .utils import to_underscores
 
 def make_page_id(node):
@@ -319,7 +319,9 @@ class MallardFormatter(object):
             # Enum/BitField members are linked to the main enum page.
             return self.format_xref(node.parent) + '.' + node.name
         else:
-            return '<link xref="%s">%s</link>' % (make_page_id(node), self.format_page_name(node))
+            return xmlwriter.build_xml_tag('link',
+                                           [('xref', make_page_id(node))],
+                                           self.format_page_name(node))
 
     def format_property_flags(self, property_, construct_only=False):
         flags = []
