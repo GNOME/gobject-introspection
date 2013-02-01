@@ -4,7 +4,7 @@
       style="signal"
       xmlns="http://projectmallard.org/1.0/"
       xmlns:api="http://projectmallard.org/experimental/api/"
-      xmlns:ui="http://projectmallard.org/experimental/ui/">
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
     
     <link type="guide" xref="DocExamples.Obj" group="signal"/>
@@ -14,7 +14,7 @@
   <title>DocExamples.Obj::signal-example</title>
   
 <synopsis><code mime="text/x-python">
-def callback(obj, int_param, float_param, pointer_param, user_param1, ...)
+function callback(obj, int_param:Number, float_param:Number, pointer_param:gpointer, user_param1, ...):void;
 </code></synopsis>
 
   

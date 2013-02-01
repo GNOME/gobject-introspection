@@ -4,7 +4,7 @@
       style="function"
       xmlns="http://projectmallard.org/1.0/"
       xmlns:api="http://projectmallard.org/experimental/api/"
-      xmlns:ui="http://projectmallard.org/experimental/ui/">
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
     
     <link type="guide" xref="index" group="function"/>
@@ -30,11 +30,10 @@
   </info>
   <title>callback_function</title>
   
-<synopsis><code mime="text/x-python">
-@accepts(DocExamples.Callback, gpointer, GLib.DestroyNotify)
-@returns(DocExamples.Enum)
-def callback_function(callback, user_data, destroy_notify):
-    # Python wrapper for doc_examples_callback_function()
+<synopsis><code mime="text/x-gjs">
+function callback_function(callback:DocExamples.Callback, user_data:gpointer, destroy_notify:GLib.DestroyNotify):DocExamples.Enum {
+    // Gjs wrapper for doc_examples_callback_function()
+}
 </code></synopsis>
 
   

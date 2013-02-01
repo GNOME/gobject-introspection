@@ -4,7 +4,7 @@
       style="function"
       xmlns="http://projectmallard.org/1.0/"
       xmlns:api="http://projectmallard.org/experimental/api/"
-      xmlns:ui="http://projectmallard.org/experimental/ui/">
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
     
     <link type="guide" xref="DocExamples.Obj" group="function"/>
@@ -22,11 +22,10 @@
   </info>
   <title>static_method</title>
   
-<synopsis><code mime="text/x-python">
-@accepts(Number)
-@returns(Boolean)
-def static_method(out_arg):
-    # Python wrapper for doc_examples_obj_static_method()
+<synopsis><code mime="text/x-gjs">
+function static_method(out_arg:Number):Boolean {
+    // Gjs wrapper for doc_examples_obj_static_method()
+}
 </code></synopsis>
 
   

@@ -4,7 +4,7 @@
       style="vfunc"
       xmlns="http://projectmallard.org/1.0/"
       xmlns:api="http://projectmallard.org/experimental/api/"
-      xmlns:ui="http://projectmallard.org/experimental/ui/">
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
     
       <link type="guide" xref="index"/>
@@ -12,10 +12,9 @@
   </info>
   <title>DocExamples.Obj::vfunc</title>
   
-<synopsis><code mime="text/x-python">
-@accepts(Number)
-@returns(none)
-def do_vfunc(self, first_arg):
+<synopsis><code mime="text/x-gjs">
+function vfunc_vfunc(first_arg:Number):void {
+}
 </code></synopsis>
 
   

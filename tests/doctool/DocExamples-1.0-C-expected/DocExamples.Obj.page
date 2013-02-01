@@ -4,7 +4,7 @@
       style="class"
       xmlns="http://projectmallard.org/1.0/"
       xmlns:api="http://projectmallard.org/experimental/api/"
-      xmlns:ui="http://projectmallard.org/experimental/ui/">
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
     
       <link type="guide" xref="index"/>
@@ -33,26 +33,26 @@
   </synopsis>
 
   
-  <links type="topic" ui:expanded="yes"
+  <links type="topic" ui:expanded="true"
          api:type="function" api:mime="text/x-csrc"
          groups="method" style="linklist">
     <title>Methods</title>
   </links>
-  <links type="topic" ui:expanded="yes"
+  <links type="topic" ui:expanded="true"
          api:type="function" api:mime="text/x-csrc"
          groups="function" style="linklist">
     <title>Functions</title>
   </links>
-  <links type="topic" ui:expanded="yes" groups="property" style="linklist">
+  <links type="topic" ui:expanded="true" groups="property" style="linklist">
     <title>Properties</title>
   </links>
-  <links type="topic" ui:expanded="yes" groups="signal" style="linklist">
+  <links type="topic" ui:expanded="true" groups="signal" style="linklist">
     <title>Signals</title>
   </links>
-  <links type="topic" ui:expanded="yes" groups="vfunc" style="linklist">
+  <links type="topic" ui:expanded="true" groups="vfunc" style="linklist">
     <title>Virtual functions</title>
   </links>
-  <links type="topic" ui:expanded="yes" groups="#first #default #last" style="linklist">
+  <links type="topic" ui:expanded="true" groups="#first #default #last" style="linklist">
     <title>Other</title>
   </links>
 

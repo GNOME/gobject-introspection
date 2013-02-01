@@ -4,7 +4,7 @@
       style="method"
       xmlns="http://projectmallard.org/1.0/"
       xmlns:api="http://projectmallard.org/experimental/api/"
-      xmlns:ui="http://projectmallard.org/experimental/ui/">
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
     
     <link type="guide" xref="DocExamples.Obj" group="method"/>
@@ -42,11 +42,10 @@
   </info>
   <title>Obj.prototype.method</title>
   
-<synopsis><code mime="text/x-python">
-@accepts(Number, Number, Boolean, gpointer, String)
-@returns(Boolean)
-def method(self, first_arg, second_arg, boolean_arg, pointer_arg, string):
-    # Python wrapper for doc_examples_obj_method()
+<synopsis><code mime="text/x-gjs">
+function method(first_arg:Number, second_arg:Number, boolean_arg:Boolean, pointer_arg:gpointer, string:String):Boolean {
+    // Gjs wrapper for doc_examples_obj_method()
+}
 </code></synopsis>
 
   
