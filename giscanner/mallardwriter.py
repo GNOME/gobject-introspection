@@ -169,6 +169,9 @@ class MallardFormatter(object):
     def escape(self, text):
         return saxutils.escape(text)
 
+    def should_render_node(self, node):
+        return True
+
     def format(self, node, doc):
         if doc is None:
             return ''
@@ -381,6 +384,15 @@ class MallardFormatterPython(MallardFormatter):
         "NULL": "None",
     }
 
+    def should_render_node(self, node):
+        if getattr(node, "is_constructor", False):
+            return False
+
+        if isinstance(node, ast.Record) and node.is_gtype_struct_for is not None:
+            return False
+
+        return True
+
     def is_method(self, node):
         if getattr(node, "is_method", False):
             return True
@@ -477,10 +489,6 @@ class MallardWriter(object):
                 continue
             if getattr(node, 'disguised', False):
                 continue
-            if isinstance(node, ast.Record) and \
-               self._language == 'Python' and \
-               node.is_gtype_struct_for is not None:
-                continue
             nodes.append(node)
             if isinstance(node, (ast.Class, ast.Interface, ast.Record)):
                 nodes += getattr(node, 'methods', [])
@@ -488,10 +496,10 @@ class MallardWriter(object):
                 nodes += getattr(node, 'virtual_methods', [])
                 nodes += getattr(node, 'properties', [])
                 nodes += getattr(node, 'signals', [])
-                if self._language == 'C':
-                    nodes += getattr(node, 'constructors', [])
+                nodes += getattr(node, 'constructors', [])
         for node in nodes:
-            self._render_node(node, output)
+            if self._formatter.should_render_node(node):
+                self._render_node(node, output)
 
     def _render_node(self, node, output):
         namespace = self._transformer.namespace
