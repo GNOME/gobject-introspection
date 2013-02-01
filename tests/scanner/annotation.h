@@ -180,6 +180,8 @@ GObject * annotation_transfer_floating(void);
  * Constant to define a calculated large value
  *
  * Value: 10000000000UL
+ *
+ * Since: 1.4
  */
 #define ANNOTATION_CALCULATED_LARGE (1000 * G_GINT64_CONSTANT (10000000))
 

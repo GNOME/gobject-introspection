@@ -192,7 +192,7 @@ usage is void (*_gtk_reserved1)(void);"""
     def _get_annotation_name(self, node):
         if isinstance(node, (ast.Class, ast.Interface, ast.Record,
                              ast.Union, ast.Enum, ast.Bitfield,
-                             ast.Callback, ast.Alias)):
+                             ast.Callback, ast.Alias, ast.Constant)):
             if node.ctype is not None:
                 return node.ctype
             elif isinstance(node, ast.Registered) and node.gtype_name is not None:
@@ -815,9 +815,12 @@ usage is void (*_gtk_reserved1)(void);"""
         self._apply_annotations_return(signal, signal.retval, block)
 
     def _apply_annotations_constant(self, node):
-        block = self._blocks.get(node.ctype)
-        if not block:
+        block = self._get_block(node)
+        if block is None:
             return
+
+        self._apply_annotations_annotated(node, block)
+
         tag = block.get_tag(TAG_VALUE)
         if tag:
             node.value = tag.value

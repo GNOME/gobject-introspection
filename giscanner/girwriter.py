@@ -370,7 +370,10 @@ and/or use gtk-doc annotations. ''')
         attrs = [('name', constant.name),
                  ('value', constant.value),
                  ('c:type', constant.ctype)]
+        self._append_version(constant, attrs)
+        self._append_node_generic(constant, attrs)
         with self.tagcontext('constant', attrs):
+            self._write_generic(constant)
             self._write_type(constant.value_type)
 
     def _write_class(self, node):

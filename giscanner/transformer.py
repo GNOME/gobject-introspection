@@ -338,10 +338,7 @@ raise ValueError."""
         elif stype == CSYMBOL_TYPE_UNION:
             return self._create_union(symbol)
         elif stype == CSYMBOL_TYPE_CONST:
-            # Don't parse constants which are marked (skip)
-            docblock = self._annotations.get(symbol.ident)
-            if not docblock or not 'skip' in docblock.options:
-                return self._create_const(symbol)
+            return self._create_const(symbol)
         # Ignore variable declarations in the header
         elif stype == CSYMBOL_TYPE_OBJECT:
             pass

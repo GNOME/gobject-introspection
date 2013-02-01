@@ -29,12 +29,15 @@ and/or use gtk-doc annotations.  -->
     </constant>
     <constant name="CALCULATED_LARGE"
               value="10000000000UL"
-              c:type="ANNOTATION_CALCULATED_LARGE">
+              c:type="ANNOTATION_CALCULATED_LARGE"
+              version="1.4">
+      <doc xml:whitespace="preserve">Constant to define a calculated large value</doc>
       <type name="gint" c:type="gint"/>
     </constant>
     <constant name="CALCULATED_LARGE_DIV"
               value="1000000UL"
               c:type="ANNOTATION_CALCULATED_LARGE_DIV">
+      <doc xml:whitespace="preserve">Constant to define a calculated large value</doc>
       <type name="gint" c:type="gint"/>
     </constant>
     <callback name="Callback" c:type="AnnotationCallback">
