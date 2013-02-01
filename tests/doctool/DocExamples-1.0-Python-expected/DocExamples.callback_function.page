@@ -53,7 +53,7 @@ will expose this in different ways (e.g. Python keeps the
 <dt><p>destroy_notify :</p></dt>
 <dd><p>how to get rid of <code>user_data</code></p></dd>
 <dt><p>Returns :</p></dt>
-<dd><p><link xref="DocExamples.Enum">DocExamples.Enum</link>.foo sometimes, <link xref="DocExamples.Enum">DocExamples.Enum</link>.bar other times.</p></dd>
+<dd><p><link xref="DocExamples.Enum"/>.foo sometimes, <link xref="DocExamples.Enum"/>.bar other times.</p></dd>
 </dl>
 
   

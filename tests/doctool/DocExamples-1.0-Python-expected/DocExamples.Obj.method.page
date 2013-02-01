@@ -50,8 +50,8 @@ def method(self, first_arg, second_arg, boolean_arg, pointer_arg, string):
 </code></synopsis>
 
   
-    <p>This is an example of how to document a method.</p><p>You should call this on a <link xref="DocExamples.Obj">DocExamples.Obj</link> that was
-created with <link xref="DocExamples.Obj.new">Obj.new</link>.</p><p>This should be a %FALSEALARM.</p>
+    <p>This is an example of how to document a method.</p><p>You should call this on a <link xref="DocExamples.Obj"/> that was
+created with <link xref="DocExamples.Obj.new"/>.</p><p>This should be a %FALSEALARM.</p>
   
   
     <p>Since 0.99</p>
@@ -59,7 +59,7 @@ created with <link xref="DocExamples.Obj.new">Obj.new</link>.</p><p>This should 
   
 <dl>
 <dt><p>first_arg :</p></dt>
-<dd><p>A <link xref="DocExamples.Obj">DocExamples.Obj</link>.</p></dd>
+<dd><p>A <link xref="DocExamples.Obj"/>.</p></dd>
 <dt><p>second_arg :</p></dt>
 <dd><p>second argument</p></dd>
 <dt><p>boolean_arg :</p></dt>

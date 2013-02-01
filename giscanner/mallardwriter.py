@@ -319,9 +319,7 @@ class MallardFormatter(object):
             # Enum/BitField members are linked to the main enum page.
             return self.format_xref(node.parent) + '.' + node.name
         else:
-            return xmlwriter.build_xml_tag('link',
-                                           [('xref', make_page_id(node))],
-                                           self.format_page_name(node))
+            return xmlwriter.build_xml_tag('link', [('xref', make_page_id(node))])
 
     def format_property_flags(self, property_, construct_only=False):
         flags = []

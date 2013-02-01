@@ -18,7 +18,7 @@ from gi.repository import DocExamples
 obj = DocExamples.Obj(<link xref='DocExamples.Obj-property-example'>property_example</link>=value)  </code></synopsis>
 
   
-    <p>This is an example of how to document a class</p><p>This class has a signal: <link xref="DocExamples.Obj-signal-example">DocExamples.Obj::signal-example</link>.</p><p>And also has a property: <link xref="DocExamples.Obj-property-example">DocExamples.Obj:property-example</link>.</p>
+    <p>This is an example of how to document a class</p><p>This class has a signal: <link xref="DocExamples.Obj-signal-example"/>.</p><p>And also has a property: <link xref="DocExamples.Obj-property-example"/>.</p>
   
   
     <p>Since 0.99</p>
