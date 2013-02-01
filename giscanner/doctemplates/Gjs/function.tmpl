@@ -1,0 +1,54 @@
+<%inherit file="/base.tmpl"/>
+<%block name="info">
+% if node.parent is not None:
+    <link type="guide" xref="${namespace.name}.${node.parent.name}" group="${page_style}"/>
+% else:
+    <link type="guide" xref="index" group="${page_style}"/>
+% endif
+    <api:function>
+      <api:returns>
+        <api:type>${formatter.format_type(node.retval.type) | x}</api:type>
+      </api:returns>
+      <api:name>${node.symbol}</api:name>
+% if node.is_method:
+      <api:arg>
+        <api:type>${node.parent.ctype} *</api:type>
+        <api:name>self</api:name>
+      </api:arg>
+% endif
+% for arg in node.parameters:
+% if arg.type.ctype == '<varargs>':
+      <api:varargs/>
+% else:
+      <api:arg>
+        <api:type>${formatter.format_type(arg.type) | x}</api:type>
+        <api:name>${arg.argname}</api:name>
+      </api:arg>
+% endif
+% endfor
+    </api:function>
+</%block>
+<%block name="synopsis">
+<synopsis><code mime="text/x-gjs">
+function \
+${node.name}(\
+${', '.join('%s:%s' % (arg.argname, formatter.format_type(arg.type)) for arg in node.parameters)}\
+):${formatter.format_type(node.retval.type)} {
+    // Gjs wrapper for ${node.symbol}()
+}
+</code></synopsis>
+</%block>
+<%block name="details">
+% if node.parameters or node.retval:
+<dl>
+% for arg, ix in zip(node.parameters, range(len(node.parameters))):
+<dt><p>${arg.argname} :</p></dt>
+<dd>${formatter.format(node, arg.doc)}</dd>
+% endfor
+% if node.retval and node.retval.type.ctype != 'void':
+<dt><p>Returns :</p></dt>
+<dd>${formatter.format(node, node.retval.doc)}</dd>
+% endif
+</dl>
+% endif
+</%block>

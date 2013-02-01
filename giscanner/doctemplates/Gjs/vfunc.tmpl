@@ -1,0 +1,23 @@
+<%inherit file="/base.tmpl"/>
+<%block name="synopsis">
+<synopsis><code mime="text/x-gjs">
+function vfunc_${node.name}(\
+${', '.join('%s:%s' % (arg.argname, formatter.format_type(arg.type)) for arg in node.parameters)}\
+):${formatter.format_type(node.retval.type)} {
+}
+</code></synopsis>
+</%block>
+<%block name="details">
+% if node.parameters or node.retval:
+<dl>
+% for arg, ix in zip(node.parameters, range(len(node.parameters))):
+<dt><p>${arg.argname} :</p></dt>
+<dd>${formatter.format(node, arg.doc)}</dd>
+% endfor
+% if node.retval and node.retval.type.ctype != 'void':
+<dt><p>Returns :</p></dt>
+<dd>${formatter.format(node, node.retval.doc)}</dd>
+% endif
+</dl>
+% endif
+</%block>

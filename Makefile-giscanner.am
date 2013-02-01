@@ -78,7 +78,18 @@ nobase_template_DATA =		\
 	giscanner/doctemplates/Python/property.tmpl	\
 	giscanner/doctemplates/Python/record.tmpl	\
 	giscanner/doctemplates/Python/signal.tmpl	\
-	giscanner/doctemplates/Python/vfunc.tmpl
+	giscanner/doctemplates/Python/vfunc.tmpl	\
+	giscanner/doctemplates/Gjs/class.tmpl	\
+	giscanner/doctemplates/Gjs/constructor.tmpl	\
+	giscanner/doctemplates/Gjs/default.tmpl	\
+	giscanner/doctemplates/Gjs/enum.tmpl	\
+	giscanner/doctemplates/Gjs/function.tmpl	\
+	giscanner/doctemplates/Gjs/method.tmpl	\
+	giscanner/doctemplates/Gjs/namespace.tmpl	\
+	giscanner/doctemplates/Gjs/property.tmpl	\
+	giscanner/doctemplates/Gjs/record.tmpl	\
+	giscanner/doctemplates/Gjs/signal.tmpl	\
+	giscanner/doctemplates/Gjs/vfunc.tmpl
 
 _giscanner_la_CFLAGS = \
 	$(PYTHON_INCLUDES) \

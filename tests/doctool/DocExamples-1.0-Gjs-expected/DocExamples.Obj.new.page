@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<page id="DocExamples.Obj.new"
+      type="topic"
+      style="constructor"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/experimental/ui/">
+  <info>
+    
+    <link type="guide" xref="DocExamples.Obj" group="constructor"/>
+    <api:function>
+      <api:returns>
+        <api:type>DocExamples.Obj</api:type>
+      </api:returns>
+      <api:name>doc_examples_obj_new</api:name>
+    </api:function>
+
+  </info>
+  <title>Obj.new</title>
+  
+<synopsis><code mime="text/x-python">
+@returns(DocExamples.Obj)
+def new():
+    # Python wrapper for doc_examples_obj_new()
+</code></synopsis>
+
+  
+    
+  
+  
+  
+  
+<dl>
+<dt><p>Returns :</p></dt>
+<dd></dd>
+</dl>
+
+  
+  
+</page>

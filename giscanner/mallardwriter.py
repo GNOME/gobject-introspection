@@ -450,9 +450,80 @@ class MallardFormatterPython(MallardFormatter):
         else:
             return func.name
 
+class MallardFormatterGjs(MallardFormatter):
+    language = "Gjs"
+    mime_type = "text/x-gjs"
+
+    fundamentals = {
+        "TRUE": "true",
+        "FALSE": "false",
+        "NULL": "null",
+    }
+
+    def should_render_node(self, node):
+        if isinstance(node, ast.Record) and node.is_gtype_struct_for is not None:
+            return False
+
+        return True
+
+    def is_method(self, node):
+        if getattr(node, "is_method", False):
+            return True
+
+        if isinstance(node, (ast.VFunction)):
+            return True
+
+        return False
+
+    def format_fundamental_type(self, name):
+        fundamental_types = {
+            "utf8": "String",
+            "gunichar": "String",
+            "gchar": "String",
+            "guchar": "String",
+            "gboolean": "Boolean",
+            "gint": "Number",
+            "guint": "Number",
+            "glong": "Number",
+            "gulong": "Number",
+            "gint64": "Number",
+            "guint64": "Number",
+            "gfloat": "Number",
+            "gdouble": "Number",
+            "gchararray": "String",
+            "GParam": "GLib.Param",
+            "PyObject": "Object",
+            "GStrv": "[String]",
+            "GVariant": "GLib.Variant",
+            }
+
+        return fundamental_types.get(name, name)
+
+    def format_type(self, type_):
+        if isinstance(type_, ast.Array):
+            return '[' + self.format_type(type_.element_type) + ']'
+        elif isinstance(type_, ast.Map):
+            return '{%s: %s}' % (self.format_type(type_.key_type),
+                                 self.format_type(type_.value_type))
+        elif type_.target_fundamental == "none":
+            return "void"
+        elif type_.target_giname is not None:
+            return type_.target_giname
+        else:
+            return self.format_fundamental_type(type_.target_fundamental)
+
+    def format_function_name(self, func):
+        if func.is_method:
+            return "%s.prototype.%s" % (func.parent.name, func.name)
+        elif func.is_constructor:
+            return "%s.%s" % (func.parent.name, func.name)
+        else:
+            return func.name
+
 LANGUAGES = {
     "c": MallardFormatterC,
     "python": MallardFormatterPython,
+    "gjs": MallardFormatterGjs,
 }
 
 class MallardWriter(object):

@@ -14,8 +14,8 @@ libdocexamples_la_SOURCES = $(srcdir)/doc-examples-obj.c $(srcdir)/doc-examples-
 GIRS = 
 TYPELIBS = $(GIRS:.gir=.typelib)
 INTROSPECTION_GIRS = $(GIRS)
-CHECK_TARGETS = $(GIRS:.gir=-C.page.check) $(GIRS:.gir=-Python.page.check)
-MALLARD_DIRS = $(GIRS:.gir=-C) $(GIRS:.gir=-Python)
+CHECK_TARGETS = $(GIRS:.gir=-C.page.check) $(GIRS:.gir=-Python.page.check) $(GIRS:.gir=-Gjs.page.check)
+MALLARD_DIRS = $(GIRS:.gir=-C) $(GIRS:.gir=-Python) $(GIRS:.gir=-Gjs)
 EXPECTED_MALLARD_DIRS = $(MALLARD_DIRS:=-expected)
 CLEANFILES = $(TYPELIBS) $(GIRS)
 BUILT_SOURCES = $(MALLARD_DIRS)
@@ -40,11 +40,20 @@ GIRS += DocExamples-1.0.gir
 	$(AM_V_at)rm -f $*-Python/*.page
 	$(AM_V_at)$(INTROSPECTION_DOCTOOL) --language Python $*.gir -o $*-Python/
 
+%-Gjs: %.gir
+	$(AM_V_GEN)
+	$(AM_V_at)$(MKDIR_P) $*-Gjs
+	$(AM_V_at)rm -f $*-Gjs/*.page
+	$(AM_V_at)$(INTROSPECTION_DOCTOOL) --language Gjs $*.gir -o $*-Gjs/
+
 %-C.page.check: %-C
 	@diff -u -w -B -U 10 $(srcdir)/$*-C-expected $*-C && echo "  TEST  $*-C"
 
 %-Python.page.check: %-Python
 	@diff -u -w -B -U 10 $(srcdir)/$*-Python-expected $*-Python && echo "  TEST  $*-Python"
+
+%-Gjs.page.check: %-Gjs
+	@diff -u -w -B -U 10 $(srcdir)/$*-Gjs-expected $*-Gjs && echo "  TEST  $*-Gjs"
 
 check-local: $(CHECK_TARGETS) $(TYPELIBS)
 clean-local:
