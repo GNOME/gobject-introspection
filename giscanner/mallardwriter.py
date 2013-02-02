@@ -404,7 +404,7 @@ class MallardFormatterPython(MallardFormatter):
 
     def format_parameter_name(self, node, parameter):
         # Force "self" for the first parameter of a method
-        if self.is_method(node) and parameter is node.parameters[0]:
+        if self.is_method(node) and parameter is node.instance_parameter:
             return "self"
         else:
             return parameter.argname
