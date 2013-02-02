@@ -61,7 +61,7 @@ created with <link xref="DocExamples.Obj.new"/>.</p><p>This should be a %FALSEAL
   
 <dl>
 <dt><p>first_arg :</p></dt>
-<dd><p>A <link xref="DocExamples.Obj"/>.</p></dd>
+<dd><p>first argument</p></dd>
 <dt><p>second_arg :</p></dt>
 <dd><p>second argument</p></dd>
 <dt><p>boolean_arg :</p></dt>

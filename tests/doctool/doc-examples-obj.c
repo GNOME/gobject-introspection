@@ -104,7 +104,8 @@ doc_examples_obj_new (void)
 
 /**
  * doc_examples_obj_method:
- * @first_arg: A #DocExamplesObj.
+ * @self: A #DocExamplesObj.
+ * @first_arg: first argument
  * @second_arg: second argument
  * @boolean_arg: You should always pass %TRUE.
  * @pointer_arg: (allow-none): If not %NULL, do a thing.
