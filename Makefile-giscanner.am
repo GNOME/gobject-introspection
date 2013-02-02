@@ -46,6 +46,7 @@ pkgpyexec_PYTHON =		\
 	giscanner/message.py		\
 	giscanner/shlibs.py		\
 	giscanner/scannermain.py	\
+	giscanner/sectionparser.py	\
 	giscanner/sourcescanner.py	\
 	giscanner/testcodegen.py	\
 	giscanner/transformer.py	\
