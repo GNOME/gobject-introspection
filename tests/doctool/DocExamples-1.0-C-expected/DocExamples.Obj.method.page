@@ -14,8 +14,8 @@
       </api:returns>
       <api:name>doc_examples_obj_method</api:name>
       <api:arg>
-        <api:type>DocExamplesObj *</api:type>
-        <api:name>self</api:name>
+        <api:type>DocExamplesObj*</api:type>
+        <api:name>obj</api:name>
       </api:arg>
       <api:arg>
         <api:type>gint</api:type>
@@ -43,8 +43,8 @@
   <title>doc_examples_obj_method</title>
   
 <synopsis><code mime="text/x-csrc">
-gboolean doc_examples_obj_method (DocExamplesObj *self,
-gint first_arg,
+gboolean doc_examples_obj_method (DocExamplesObj* obj,
+                                  gint first_arg,
                                   gfloat second_arg,
                                   gboolean boolean_arg,
                                   gpointer pointer_arg,

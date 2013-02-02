@@ -14,10 +14,6 @@
       </api:returns>
       <api:name>doc_examples_obj_method</api:name>
       <api:arg>
-        <api:type>DocExamplesObj *</api:type>
-        <api:name>self</api:name>
-      </api:arg>
-      <api:arg>
         <api:type>Number</api:type>
         <api:name>first_arg</api:name>
       </api:arg>

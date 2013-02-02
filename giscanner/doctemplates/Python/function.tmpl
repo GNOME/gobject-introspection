@@ -10,19 +10,13 @@
         <api:type>${formatter.format_type(node.retval.type) | x}</api:type>
       </api:returns>
       <api:name>${node.symbol}</api:name>
-% if node.is_method:
-      <api:arg>
-        <api:type>${node.parent.ctype} *</api:type>
-        <api:name>self</api:name>
-      </api:arg>
-% endif
-% for arg in node.parameters:
+% for arg in node.all_parameters:
 % if arg.type.ctype == '<varargs>':
       <api:varargs/>
 % else:
       <api:arg>
         <api:type>${formatter.format_type(arg.type) | x}</api:type>
-        <api:name>${arg.argname}</api:name>
+        <api:name>${formatter.format_parameter_name(node, arg)}</api:name>
       </api:arg>
 % endif
 % endfor
@@ -30,27 +24,24 @@
 </%block>
 <%block name="synopsis">
 <synopsis><code mime="text/x-python">
-% if len(node.parameters) != 0:
+% if len(node.all_parameters) != 0:
 @accepts(\
-${', '.join((formatter.format_type(arg.type) for arg in node.parameters))}\
+${', '.join((formatter.format_type(arg.type) for arg in node.all_parameters))}\
 )
 % endif
 @returns(${formatter.format_type(node.retval.type) | x})
 def \
 ${node.name}(\
-% if node.is_method:
-self, \
-% endif
-${', '.join((arg.argname for arg in node.parameters))}\
+${', '.join((formatter.format_parameter_name(node, arg) for arg in node.all_parameters))}\
 ):
     # Python wrapper for ${node.symbol}()
 </code></synopsis>
 </%block>
 <%block name="details">
-% if node.parameters or node.retval:
+% if node.all_parameters or node.retval:
 <dl>
-% for arg, ix in zip(node.parameters, range(len(node.parameters))):
-<dt><p>${arg.argname} :</p></dt>
+% for arg, ix in zip(node.all_parameters, range(len(node.all_parameters))):
+<dt><p>${formatter.format_parameter_name(node, arg)} :</p></dt>
 <dd>${formatter.format(node, arg.doc)}</dd>
 % endfor
 % if node.retval and node.retval.type.ctype != 'void':

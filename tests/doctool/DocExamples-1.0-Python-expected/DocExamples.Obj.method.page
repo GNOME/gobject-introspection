@@ -14,7 +14,7 @@
       </api:returns>
       <api:name>doc_examples_obj_method</api:name>
       <api:arg>
-        <api:type>DocExamplesObj *</api:type>
+        <api:type>DocExamples.Obj</api:type>
         <api:name>self</api:name>
       </api:arg>
       <api:arg>
@@ -43,7 +43,7 @@
   <title>Obj.method</title>
   
 <synopsis><code mime="text/x-python">
-@accepts(int, float, bool, gpointer, unicode)
+@accepts(DocExamples.Obj, int, float, bool, gpointer, unicode)
 @returns(bool)
 def method(self, first_arg, second_arg, boolean_arg, pointer_arg, string):
     # Python wrapper for doc_examples_obj_method()
@@ -59,6 +59,8 @@ in as <code>self</code>.</p><p>This should be a %FALSEALARM.</p>
   
   
 <dl>
+<dt><p>self :</p></dt>
+<dd><p>A <link xref="DocExamples.Obj"/>.</p></dd>
 <dt><p>first_arg :</p></dt>
 <dd><p>first argument</p></dd>
 <dt><p>second_arg :</p></dt>

@@ -10,19 +10,13 @@
         <api:type>${formatter.format_type(node.retval.type) | x}</api:type>
       </api:returns>
       <api:name>${node.symbol}</api:name>
-% if node.is_method:
-      <api:arg>
-        <api:type>${node.parent.ctype} *</api:type>
-        <api:name>self</api:name>
-      </api:arg>
-% endif
 % for arg in node.parameters:
 % if arg.type.ctype == '<varargs>':
       <api:varargs/>
 % else:
       <api:arg>
         <api:type>${formatter.format_type(arg.type) | x}</api:type>
-        <api:name>${arg.argname}</api:name>
+        <api:name>${formatter.format_parameter_name(node, arg)}</api:name>
       </api:arg>
 % endif
 % endfor
