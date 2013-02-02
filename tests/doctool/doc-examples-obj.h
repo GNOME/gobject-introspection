@@ -56,7 +56,7 @@ struct _DocExamplesObjClass
 GType doc_examples_obj_get_type (void) G_GNUC_CONST;
 
 DocExamplesObj *doc_examples_obj_new (void);
-gboolean doc_examples_obj_method (DocExamplesObj *self, gint first_arg, gfloat second_arg,
+gboolean doc_examples_obj_method (DocExamplesObj *obj, gint first_arg, gfloat second_arg,
                                   gboolean boolean_arg, gpointer pointer_arg, gchar *string);
 
 gboolean doc_examples_obj_static_method (gint *out_arg);

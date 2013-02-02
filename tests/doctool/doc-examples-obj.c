@@ -104,7 +104,7 @@ doc_examples_obj_new (void)
 
 /**
  * doc_examples_obj_method:
- * @self: A #DocExamplesObj.
+ * @obj: A #DocExamplesObj.
  * @first_arg: first argument
  * @second_arg: second argument
  * @boolean_arg: You should always pass %TRUE.
@@ -117,7 +117,7 @@ doc_examples_obj_new (void)
  *
  * You should call this on a #DocExamplesObj that was
  * created with doc_examples_obj_new(), by passing it
- * in as @self.
+ * in as @obj.
  *
  * This should be a %FALSEALARM.
  *
@@ -126,7 +126,7 @@ doc_examples_obj_new (void)
  * Returns: Either %FALSE or something %FALSE-y.
  */
 gboolean
-doc_examples_obj_method (DocExamplesObj *self, gint first_arg, gfloat second_arg,
+doc_examples_obj_method (DocExamplesObj *obj, gint first_arg, gfloat second_arg,
                          gboolean boolean_arg, gpointer pointer_arg, gchar *string)
 {
   return FALSE;

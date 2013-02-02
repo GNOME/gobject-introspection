@@ -54,7 +54,7 @@ gint first_arg,
   
     <p>This is an example of how to document a method.</p><p>You should call this on a <link xref="DocExamples.Obj"/> that was
 created with <link xref="DocExamples.Obj.new"/>, by passing it
-in as <code>self</code>.</p><p>This should be a %FALSEALARM.</p>
+in as <code>obj</code>.</p><p>This should be a %FALSEALARM.</p>
   
   
     <p>Since 0.99</p>
