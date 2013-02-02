@@ -6,7 +6,7 @@
 <%block name="synopsis">
 <synopsis><code mime="text/x-python">
 def callback(${formatter.to_underscores(node.parent.name).lower()}, \
-% for arg in node.parameters:
+% for arg in formatter.get_parameters(node):
 ${arg.argname}, \
 % endfor
 user_param1, ...)
@@ -16,7 +16,7 @@ user_param1, ...)
 <dl>
 <dt><p>${formatter.to_underscores(node.parent.name).lower()} :</p></dt>
 <dd><p>instance of ${namespace.name}.${node.parent.name} that is emitting the signal</p></dd>
-% for arg in node.parameters:
+% for arg in formatter.get_parameters(node):
 <dt><p>${arg.argname} :</p></dt>
 <dd>${formatter.format(node, arg.doc)}</dd>
 % endfor

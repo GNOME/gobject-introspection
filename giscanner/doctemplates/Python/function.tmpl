@@ -10,7 +10,7 @@
         <api:type>${formatter.format_type(node.retval.type) | x}</api:type>
       </api:returns>
       <api:name>${node.symbol}</api:name>
-% for arg in node.all_parameters:
+% for arg in formatter.get_parameters(node):
 % if arg.type.ctype == '<varargs>':
       <api:varargs/>
 % else:
@@ -24,23 +24,23 @@
 </%block>
 <%block name="synopsis">
 <synopsis><code mime="text/x-python">
-% if node.all_parameters:
+% if formatter.get_parameters(node):
 @accepts(\
-${', '.join((formatter.format_type(arg.type) for arg in node.all_parameters))}\
+${', '.join((formatter.format_type(arg.type) for arg in formatter.get_parameters(node)))}\
 )
 % endif
 @returns(${formatter.format_type(node.retval.type) | x})
 def \
 ${node.name}(\
-${', '.join((formatter.format_parameter_name(node, arg) for arg in node.all_parameters))}\
+${', '.join((formatter.format_parameter_name(node, arg) for arg in formatter.get_parameters(node)))}\
 ):
     # Python wrapper for ${node.symbol}()
 </code></synopsis>
 </%block>
 <%block name="details">
-% if node.all_parameters or node.retval:
+% if formatter.get_parameters(node) or node.retval:
 <dl>
-% for ix, arg in enumerate(node.all_parameters):
+% for ix, arg in enumerate(formatter.get_parameters(node)):
 <dt><p>${formatter.format_parameter_name(node, arg)} :</p></dt>
 <dd>${formatter.format(node, arg.doc)}</dd>
 % endfor

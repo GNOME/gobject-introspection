@@ -25,6 +25,8 @@ void vfunc (DocExamplesObj* self,
   
   
 <dl>
+<dt><p>self :</p></dt>
+<dd></dd>
 <dt><p>first_arg :</p></dt>
 <dd><p>first argument</p></dd>
 <dt><p>Returns :</p></dt>

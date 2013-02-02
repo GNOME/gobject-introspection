@@ -289,6 +289,9 @@ class DocFormatter(object):
 
         return dispatch[kind](node, match, props)
 
+    def get_parameters(self, node):
+        raise NotImplementedError
+
     def format_inline(self, node, para):
         tokens = self._scanner.scan(para)
         words = [self._process_token(node, tok) for tok in tokens]
@@ -374,6 +377,9 @@ class DocFormatterC(DocFormatter):
         else:
             return func.name
 
+    def get_parameters(self, node):
+        return node.all_parameters
+
 class DocFormatterPython(DocFormatter):
     language = "Python"
     mime_type = "text/python"
@@ -450,6 +456,9 @@ class DocFormatterPython(DocFormatter):
         else:
             return func.name
 
+    def get_parameters(self, node):
+        return node.all_parameters
+
 class DocFormatterGjs(DocFormatter):
     language = "Gjs"
     mime_type = "text/x-gjs"
@@ -519,6 +528,9 @@ class DocFormatterGjs(DocFormatter):
             return "%s.%s" % (func.parent.name, func.name)
         else:
             return func.name
+
+    def get_parameters(self, node):
+        return node.parameters
 
 LANGUAGES = {
     "c": DocFormatterC,

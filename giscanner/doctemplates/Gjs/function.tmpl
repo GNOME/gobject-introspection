@@ -10,7 +10,7 @@
         <api:type>${formatter.format_type(node.retval.type) | x}</api:type>
       </api:returns>
       <api:name>${node.symbol}</api:name>
-% for arg in node.parameters:
+% for arg in formatter.get_parameters(node):
 % if arg.type.ctype == '<varargs>':
       <api:varargs/>
 % else:
@@ -26,16 +26,16 @@
 <synopsis><code mime="text/x-gjs">
 function \
 ${node.name}(\
-${', '.join('%s:%s' % (arg.argname, formatter.format_type(arg.type)) for arg in node.parameters)}\
+${', '.join('%s:%s' % (arg.argname, formatter.format_type(arg.type)) for arg in formatter.get_parameters(node))}\
 ):${formatter.format_type(node.retval.type)} {
     // Gjs wrapper for ${node.symbol}()
 }
 </code></synopsis>
 </%block>
 <%block name="details">
-% if node.parameters or node.retval:
+% if formatter.get_parameters(node) or node.retval:
 <dl>
-% for arg in node.parameters:
+% for arg in formatter.get_parameters(node):
 <dt><p>${arg.argname} :</p></dt>
 <dd>${formatter.format(node, arg.doc)}</dd>
 % endfor

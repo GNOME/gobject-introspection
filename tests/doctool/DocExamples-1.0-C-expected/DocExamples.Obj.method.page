@@ -61,6 +61,8 @@ in as <code>obj</code>.</p><p>This should be a %FALSEALARM.</p>
   
   
 <dl>
+<dt><p>obj :</p></dt>
+<dd><p>A <link xref="DocExamples.Obj"/>.</p></dd>
 <dt><p>first_arg :</p></dt>
 <dd><p>first argument</p></dd>
 <dt><p>second_arg :</p></dt>
