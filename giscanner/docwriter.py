@@ -530,7 +530,22 @@ class DocFormatterGjs(DocFormatter):
             return func.name
 
     def get_parameters(self, node):
-        return node.parameters
+        skip = []
+        for param in node.parameters:
+            if param.direction == ast.PARAM_DIRECTION_OUT:
+                skip.append(param)
+            if param.closure_name is not None:
+                skip.append(node.get_parameter(param.closure_name))
+            if param.destroy_name is not None:
+                skip.append(node.get_parameter(param.destroy_name))
+            if isinstance(param.type, ast.Array) and param.type.length_param_name is not None:
+                skip.append(node.get_parameter(param.type.length_param_name))
+
+        params = []
+        for param in node.parameters:
+            if param not in skip:
+                params.append(param)
+        return params
 
 LANGUAGES = {
     "c": DocFormatterC,

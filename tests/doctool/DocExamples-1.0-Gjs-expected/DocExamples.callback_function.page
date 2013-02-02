@@ -17,21 +17,13 @@
         <api:type>DocExamples.Callback</api:type>
         <api:name>callback</api:name>
       </api:arg>
-      <api:arg>
-        <api:type>gpointer</api:type>
-        <api:name>user_data</api:name>
-      </api:arg>
-      <api:arg>
-        <api:type>GLib.DestroyNotify</api:type>
-        <api:name>destroy_notify</api:name>
-      </api:arg>
     </api:function>
 
   </info>
   <title>callback_function</title>
   
 <synopsis><code mime="text/x-gjs">
-function callback_function(callback:DocExamples.Callback, user_data:gpointer, destroy_notify:GLib.DestroyNotify):DocExamples.Enum {
+function callback_function(callback:DocExamples.Callback):DocExamples.Enum {
     // Gjs wrapper for doc_examples_callback_function()
 }
 </code></synopsis>
@@ -47,10 +39,6 @@ will expose this in different ways (e.g. Python keeps the
 <dl>
 <dt><p>callback :</p></dt>
 <dd><p>Just Call Me Maybe</p></dd>
-<dt><p>user_data :</p></dt>
-<dd><p>your stuff</p></dd>
-<dt><p>destroy_notify :</p></dt>
-<dd><p>how to get rid of <code>user_data</code></p></dd>
 <dt><p>Returns :</p></dt>
 <dd><p><link xref="DocExamples.Enum"/>.foo sometimes, <link xref="DocExamples.Enum"/>.bar other times.</p></dd>
 </dl>
