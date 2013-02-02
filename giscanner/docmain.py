@@ -21,7 +21,7 @@
 import os
 import optparse
 
-from .mallardwriter import MallardWriter
+from .docwriter import DocWriter
 from .transformer import Transformer
 
 def doc_main(args):
@@ -52,7 +52,7 @@ def doc_main(args):
         extra_include_dirs = []
     transformer = Transformer.parse_from_gir(args[1], extra_include_dirs)
 
-    writer = MallardWriter(transformer, options.language)
+    writer = DocWriter(transformer, options.language)
     writer.write(options.output)
 
     return 0

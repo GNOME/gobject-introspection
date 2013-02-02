@@ -161,7 +161,7 @@ class DocstringScanner(TemplatedScanner):
 
         super(DocstringScanner, self).__init__(specs)
 
-class MallardFormatter(object):
+class DocFormatter(object):
     def __init__(self, transformer):
         self._transformer = transformer
         self._scanner = DocstringScanner()
@@ -350,7 +350,7 @@ class MallardFormatter(object):
         parent_chain.reverse()
         return parent_chain
 
-class MallardFormatterC(MallardFormatter):
+class DocFormatterC(DocFormatter):
     language = "C"
     mime_type = "text/x-csrc"
 
@@ -374,7 +374,7 @@ class MallardFormatterC(MallardFormatter):
         else:
             return func.name
 
-class MallardFormatterPython(MallardFormatter):
+class DocFormatterPython(DocFormatter):
     language = "Python"
     mime_type = "text/python"
 
@@ -450,7 +450,7 @@ class MallardFormatterPython(MallardFormatter):
         else:
             return func.name
 
-class MallardFormatterGjs(MallardFormatter):
+class DocFormatterGjs(DocFormatter):
     language = "Gjs"
     mime_type = "text/x-gjs"
 
@@ -521,12 +521,12 @@ class MallardFormatterGjs(MallardFormatter):
             return func.name
 
 LANGUAGES = {
-    "c": MallardFormatterC,
-    "python": MallardFormatterPython,
-    "gjs": MallardFormatterGjs,
+    "c": DocFormatterC,
+    "python": DocFormatterPython,
+    "gjs": DocFormatterGjs,
 }
 
-class MallardWriter(object):
+class DocWriter(object):
     def __init__(self, transformer, language):
         self._transformer = transformer
 
