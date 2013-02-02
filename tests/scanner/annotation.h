@@ -1,5 +1,5 @@
-#ifndef __ANNOTATION_OBJECT_H__
-#define __ANNOTATION_OBJECT_H__
+#ifndef __REGRESS_ANNOTATION_OBJECT_H__
+#define __REGRESS_ANNOTATION_OBJECT_H__
 
 #include <glib-object.h>
 
@@ -7,175 +7,175 @@ typedef enum /*< flags,prefix=ANN >*/
 {
   ANN_FLAG_FOO = 1,
   ANN_FLAG_BAR = 2
-} AnnotationBitfield;
+} RegressAnnotationBitfield;
 
 /**
- * AnnotationCallback:
+ * RegressAnnotationCallback:
  * @in: (in) (transfer none): array of ints
  *
  * This is a callback.
  * Return value: (transfer none): array of ints
  */
-typedef const gint* (*AnnotationCallback) (const gint *in);
+typedef const gint* (*RegressAnnotationCallback) (const gint *in);
 
 /**
- * AnnotationListCallback:
+ * RegressAnnotationListCallback:
  * @in: (in) (transfer none) (element-type utf8): list of strings
  *
  * This is a callback taking a list.
  * Return value: (transfer container) (element-type utf8): list of strings
  */
-typedef GList* (*AnnotationListCallback) (GList *in);
+typedef GList* (*RegressAnnotationListCallback) (GList *in);
 
 /**
- * AnnotationNotifyFunc:
+ * RegressAnnotationNotifyFunc:
  * @data: (closure): The user data
  *
  * This is a callback with a 'closure' argument that is not named
  * 'user_data' and hence has to be annotated.
  */
-typedef void (*AnnotationNotifyFunc) (gpointer data);
+typedef void (*RegressAnnotationNotifyFunc) (gpointer data);
 
 /**
- * AnnotationObject:
+ * RegressAnnotationObject:
  *
- * This is an object used to test annotations.
+ * This is an object used to test regress_annotations.
  *
  * Attributes: (org.example.Test cows)
  */
-typedef struct _AnnotationObject          AnnotationObject;
-typedef struct _AnnotationObjectClass     AnnotationObjectClass;
+typedef struct _RegressAnnotationObject          RegressAnnotationObject;
+typedef struct _RegressAnnotationObjectClass     RegressAnnotationObjectClass;
 
-typedef void (*AnnotationForeachFunc) (AnnotationObject *object,
+typedef void (*RegressAnnotationForeachFunc) (RegressAnnotationObject *object,
                                        const char *item,
                                        gpointer user_data);
 
-struct _AnnotationObject
+struct _RegressAnnotationObject
 {
   GObject parent_instance;
 };
 
-struct _AnnotationObjectClass
+struct _RegressAnnotationObjectClass
 {
   GObjectClass parent_class;
 };
 
-GType    annotation_object_get_type (void);
+GType    regress_annotation_object_get_type (void);
 
-gint     annotation_object_method       (AnnotationObject *object);
-gint     annotation_object_out          (AnnotationObject *object,
+gint     regress_annotation_object_method       (RegressAnnotationObject *object);
+gint     regress_annotation_object_out          (RegressAnnotationObject *object,
 					 int              *outarg);
-GObject* annotation_object_create_object(AnnotationObject *object);
-GObject* annotation_object_allow_none   (AnnotationObject *object,
+GObject* regress_annotation_object_create_object(RegressAnnotationObject *object);
+GObject* regress_annotation_object_allow_none   (RegressAnnotationObject *object,
 					 const gchar      *somearg);
-GObject* annotation_object_notrans      (AnnotationObject *object);
-gint     annotation_object_inout        (AnnotationObject *object,
+GObject* regress_annotation_object_notrans      (RegressAnnotationObject *object);
+gint     regress_annotation_object_inout        (RegressAnnotationObject *object,
 					 int              *inoutarg);
-gint     annotation_object_inout2       (AnnotationObject *object,
+gint     regress_annotation_object_inout2       (RegressAnnotationObject *object,
 					 int              *inoutarg);
-gint     annotation_object_inout3       (AnnotationObject *object,
+gint     regress_annotation_object_inout3       (RegressAnnotationObject *object,
 					 int              *inoutarg);
-gint     annotation_object_in           (AnnotationObject *object,
+gint     regress_annotation_object_in           (RegressAnnotationObject *object,
 					 int              *inarg);
-gint     annotation_object_calleeowns   (AnnotationObject *object,
+gint     regress_annotation_object_calleeowns   (RegressAnnotationObject *object,
 					 GObject          **toown);
-gint     annotation_object_calleesowns  (AnnotationObject *object,
+gint     regress_annotation_object_calleesowns  (RegressAnnotationObject *object,
 					 GObject          **toown1,
 					 GObject          **toown2);
-GList*   annotation_object_get_strings  (AnnotationObject *object);
-GHashTable*annotation_object_get_hash   (AnnotationObject *object);
-void     annotation_object_with_voidp   (AnnotationObject *object,
+GList*   regress_annotation_object_get_strings  (RegressAnnotationObject *object);
+GHashTable*regress_annotation_object_get_hash   (RegressAnnotationObject *object);
+void     regress_annotation_object_with_voidp   (RegressAnnotationObject *object,
 					 void             *data);
-GSList*  annotation_object_get_objects  (AnnotationObject *object);
+GSList*  regress_annotation_object_get_objects  (RegressAnnotationObject *object);
 
-void     annotation_object_use_buffer   (AnnotationObject *object,
+void     regress_annotation_object_use_buffer   (RegressAnnotationObject *object,
 					 guchar           *bytes);
 
-void     annotation_object_compute_sum  (AnnotationObject *object,
+void     regress_annotation_object_compute_sum  (RegressAnnotationObject *object,
 					 int              *nums);
 
-void     annotation_object_compute_sum_n(AnnotationObject *object,
+void     regress_annotation_object_compute_sum_n(RegressAnnotationObject *object,
 					 int              *nums,
 					 int               n_nums);
-void     annotation_object_compute_sum_nz(AnnotationObject *object,
+void     regress_annotation_object_compute_sum_nz(RegressAnnotationObject *object,
                                           int             *nums,
                                           int              n_nums);
-void     annotation_object_parse_args   (AnnotationObject *object,
+void     regress_annotation_object_parse_args   (RegressAnnotationObject *object,
                                          int              *argc,
                                          char           ***argv);
-gboolean annotation_object_string_out   (AnnotationObject *object,
+gboolean regress_annotation_object_string_out   (RegressAnnotationObject *object,
                                          char            **str_out);
-void     annotation_object_foreach      (AnnotationObject *object,
-                                         AnnotationForeachFunc func,
+void     regress_annotation_object_foreach      (RegressAnnotationObject *object,
+                                         RegressAnnotationForeachFunc func,
                                          gpointer user_data);
 
-void     annotation_object_set_data     (AnnotationObject *object,
+void     regress_annotation_object_set_data     (RegressAnnotationObject *object,
                                          const guchar     *data,
                                          gsize             length);
-void     annotation_object_set_data2    (AnnotationObject *object,
+void     regress_annotation_object_set_data2    (RegressAnnotationObject *object,
                                          const gchar      *data,
                                          gsize             length);
-void     annotation_object_set_data3    (AnnotationObject *object,
+void     regress_annotation_object_set_data3    (RegressAnnotationObject *object,
                                          gpointer          data,
                                          gsize             length);
 
-GObject* annotation_object_do_not_use   (AnnotationObject *object);
-void     annotation_object_watch        (AnnotationObject *object,
-                                         AnnotationForeachFunc func,
+GObject* regress_annotation_object_do_not_use   (RegressAnnotationObject *object);
+void     regress_annotation_object_watch        (RegressAnnotationObject *object,
+                                         RegressAnnotationForeachFunc func,
                                          gpointer user_data);
-void     annotation_object_watch_full   (AnnotationObject *object,
-                                         AnnotationForeachFunc func,
+void     regress_annotation_object_watch_full   (RegressAnnotationObject *object,
+                                         RegressAnnotationForeachFunc func,
                                          gpointer user_data,
                                          GDestroyNotify destroy);
-void     annotation_object_hidden_self  (gpointer object);
+void     regress_annotation_object_hidden_self  (gpointer object);
 
-void     annotation_init                (int              *argc, 
+void     regress_annotation_init                (int              *argc, 
 					 char           ***argv);
-char **  annotation_return_array        (int             *length);
-void     annotation_versioned           (void);
-char **  annotation_string_zero_terminated (void);
-void     annotation_string_zero_terminated_out (char ***out);
+char **  regress_annotation_return_array        (int             *length);
+void     regress_annotation_versioned           (void);
+char **  regress_annotation_string_zero_terminated (void);
+void     regress_annotation_string_zero_terminated_out (char ***out);
 
-void     annotation_string_array_length (guint n_properties, const gchar * const properties[]);
+void     regress_annotation_string_array_length (guint n_properties, const gchar * const properties[]);
 
-void     annotation_object_extra_annos (AnnotationObject *object);
+void     regress_annotation_object_extra_annos (RegressAnnotationObject *object);
 
-void     annotation_custom_destroy (AnnotationCallback callback,
-                                    AnnotationNotifyFunc destroy,
+void     regress_annotation_custom_destroy (RegressAnnotationCallback callback,
+                                    RegressAnnotationNotifyFunc destroy,
                                     gpointer data);
-char *   annotation_get_source_file (void);
-void     annotation_set_source_file (const char *fname);
+char *   regress_annotation_get_source_file (void);
+void     regress_annotation_set_source_file (const char *fname);
 
-gint     annotation_attribute_func (AnnotationObject *object,
+gint     regress_annotation_attribute_func (RegressAnnotationObject *object,
                                     const gchar      *data);
 
-void     annotation_invalid_annotation (int foo);
+void     regress_annotation_invalid_regress_annotation (int foo);
 
 /**
- * AnnotationStruct:
+ * RegressAnnotationStruct:
  *
  * This is a test of an array of object in an field of a struct.
  */
-struct AnnotationStruct
+struct RegressAnnotationStruct
 {
-  AnnotationObject *objects[10];
+  RegressAnnotationObject *objects[10];
 };
 
-void    annotation_ptr_array (GPtrArray *array);
+void    regress_annotation_ptr_array (GPtrArray *array);
 
-GObject  * annotation_test_parsing_bug630862 (void);
+GObject  * regress_annotation_test_parsing_bug630862 (void);
 
-void annotation_space_after_comment_bug631690 (void);
+void regress_annotation_space_after_comment_bug631690 (void);
 
-gchar* annotation_return_filename (void);
+gchar* regress_annotation_return_filename (void);
 
-GObject * annotation_transfer_floating(void);
+GObject * regress_annotation_transfer_floating(void);
 
 /* This one we can handle properly */
-#define ANNOTATION_CALCULATED_DEFINE (10 * 10)
+#define REGRESS_ANNOTATION_CALCULATED_DEFINE (10 * 10)
 
 /**
- * ANNOTATION_CALCULATED_LARGE:
+ * REGRESS_ANNOTATION_CALCULATED_LARGE:
  *
  * Constant to define a calculated large value
  *
@@ -183,16 +183,16 @@ GObject * annotation_transfer_floating(void);
  *
  * Since: 1.4
  */
-#define ANNOTATION_CALCULATED_LARGE (1000 * G_GINT64_CONSTANT (10000000))
+#define REGRESS_ANNOTATION_CALCULATED_LARGE (1000 * G_GINT64_CONSTANT (10000000))
 
 /**
- * ANNOTATION_CALCULATED_LARGE_DIV:
+ * REGRESS_ANNOTATION_CALCULATED_LARGE_DIV:
  *
  * Constant to define a calculated large value
  *
  * Value: 1000000UL
  */
-#define ANNOTATION_CALCULATED_LARGE_DIV (1000 / G_GINT64_CONSTANT (10000000))
+#define REGRESS_ANNOTATION_CALCULATED_LARGE_DIV (1000 / G_GINT64_CONSTANT (10000000))
 
-#endif /* __ANNOTATION_OBJECT_H__ */
+#endif /* __REGRESS_ANNOTATION_OBJECT_H__ */
 
