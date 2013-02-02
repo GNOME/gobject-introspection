@@ -7,7 +7,6 @@ INTROSPECTION_SCANNER_ARGS += --warn-all
 
 check_LTLIBRARIES = \
 	libsletter.la \
-	libtestinherit.la \
 	libutility.la \
 	libgtkfrob.la \
 	libgettype.la \
@@ -27,13 +26,13 @@ libsletter_la_LIBADD = $(GIO_LIBS)
 libsletter_la_CFLAGS = $(AM_CFLAGS)
 libsletter_la_LDFLAGS = $(AM_LDFLAGS)
 
-libtestinherit_la_SOURCES = $(srcdir)/drawable.c $(srcdir)/drawable.h
 libutility_la_SOURCES = $(srcdir)/utility.c $(srcdir)/utility.h
 libgtkfrob_la_SOURCES = $(srcdir)/gtkfrob.c $(srcdir)/gtkfrob.h
 libregress_la_SOURCES = \
 	$(srcdir)/regress.c $(srcdir)/regress.h \
 	$(srcdir)/annotation.c $(srcdir)/annotation.h \
 	$(srcdir)/foo.c $(srcdir)/foo.h \
+	$(srcdir)/drawable.c $(srcdir)/drawable.h \
 	$(NULL)
 libregress_la_LIBADD = $(GIO_LIBS)
 if HAVE_CAIRO
@@ -95,14 +94,6 @@ WarnLib_1_0_gir_INCLUDES = Gio-2.0
 WarnLib_1_0_gir_FILES = $(libwarnlib_la_SOURCES)
 WarnLib_1_0_gir_SCANNERFLAGS = --c-include="warnlib.h" --symbol-prefix=warnlib_
 GIRS += WarnLib-1.0.gir
-
-TestInherit-1.0.gir: Utility-1.0.gir libtestinherit.la
-TestInherit_1_0_gir_PACKAGES = gobject-2.0
-TestInherit_1_0_gir_LIBS = libtestinherit.la
-TestInherit_1_0_gir_INCLUDES = GObject-2.0 Utility-1.0
-TestInherit_1_0_gir_FILES = $(libtestinherit_la_SOURCES)
-TestInherit_1_0_gir_SCANNERFLAGS = --c-include="drawable.h" --warn-error
-GIRS += TestInherit-1.0.gir
 
 Utility-1.0.gir: libutility.la
 Utility_1_0_gir_PACKAGES = gobject-2.0

@@ -75,7 +75,6 @@ tests/scanner/GtkFrob-1.0.gir
 tests/scanner/Headeronly-1.0.gir
 tests/scanner/Regress-1.0.gir
 tests/scanner/SLetter-1.0.gir
-tests/scanner/TestInherit-1.0.gir
 tests/scanner/Utility-1.0.gir
 tests/scanner/WarnLib-1.0.gir
 tests/scanner/barapp
