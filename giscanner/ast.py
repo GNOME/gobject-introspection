@@ -582,6 +582,14 @@ class Callable(Node):
         self.instance_parameter = None # Parameter
         self.parent = None # A Class or Interface
 
+    # Returns all parameters, including the instance parameter
+    @property
+    def all_parameters(self):
+        if self.instance_parameter is not None:
+            return [self.instance_parameter] + self.parameters
+        else:
+            return self.parameters
+
     def get_parameter_index(self, name):
         for i, parameter in enumerate(self.parameters):
             if parameter.argname == name:
