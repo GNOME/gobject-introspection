@@ -10,7 +10,7 @@ ${', '.join('%s:%s' % (arg.argname, formatter.format_type(arg.type)) for arg in 
 <%block name="details">
 % if node.parameters or node.retval:
 <dl>
-% for arg, ix in zip(node.parameters, range(len(node.parameters))):
+% for arg in node.parameters:
 <dt><p>${arg.argname} :</p></dt>
 <dd>${formatter.format(node, arg.doc)}</dd>
 % endfor

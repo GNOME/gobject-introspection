@@ -1,7 +1,7 @@
 <%inherit file="/base.tmpl"/>
 <%block name="synopsis">
 <synopsis><code mime="text/x-python">
-% if len(node.parameters) != 0:
+% if node.parameters:
 @accepts(\
 ${', '.join((formatter.format_type(arg.type) for arg in node.parameters))}\
 )
@@ -16,7 +16,7 @@ ${', '.join((arg.argname for arg in node.parameters))}\
 <%block name="details">
 % if node.parameters or node.retval:
 <dl>
-% for arg, ix in zip(node.parameters, range(len(node.parameters))):
+% for arg in node.parameters:
 <dt><p>${arg.argname} :</p></dt>
 <dd>${formatter.format(node, arg.doc)}</dd>
 % endfor

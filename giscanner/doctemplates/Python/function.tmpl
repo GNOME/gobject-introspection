@@ -24,7 +24,7 @@
 </%block>
 <%block name="synopsis">
 <synopsis><code mime="text/x-python">
-% if len(node.all_parameters) != 0:
+% if node.all_parameters:
 @accepts(\
 ${', '.join((formatter.format_type(arg.type) for arg in node.all_parameters))}\
 )
@@ -40,7 +40,7 @@ ${', '.join((formatter.format_parameter_name(node, arg) for arg in node.all_para
 <%block name="details">
 % if node.all_parameters or node.retval:
 <dl>
-% for arg, ix in zip(node.all_parameters, range(len(node.all_parameters))):
+% for ix, arg in enumerate(node.all_parameters):
 <dt><p>${formatter.format_parameter_name(node, arg)} :</p></dt>
 <dd>${formatter.format(node, arg.doc)}</dd>
 % endfor

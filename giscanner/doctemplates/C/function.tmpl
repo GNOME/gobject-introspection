@@ -25,10 +25,10 @@
 <%block name="synopsis">
 <synopsis><code mime="text/x-csrc">
 ${node.retval.type.ctype} ${formatter.format_function_name(node)} (\
-% if len(node.all_parameters) == 0:
+% if not node.all_parameters:
 void\
 % else:
-% for arg, ix in zip(node.all_parameters, range(len(node.all_parameters))):
+% for ix, arg in enumerate(node.all_parameters):
 % if ix != 0:
 ${' ' * (len(formatter.format_type(node.retval.type)) + len(formatter.format_function_name(node)) + 3)}\
 % endif
@@ -48,7 +48,7 @@ ${formatter.format_type(arg.type) | x} ${arg.argname}\
 <%block name="details">
 % if node.all_parameters or node.retval:
 <dl>
-% for arg, ix in zip(node.parameters, range(len(node.parameters))):
+% for arg in node.parameters:
 <dt><p>${arg.argname} :</p></dt>
 <dd>${formatter.format(node, arg.doc)}</dd>
 % endfor
