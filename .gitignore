@@ -70,7 +70,6 @@ tests/repository/gitestrepo
 tests/repository/gitestthrows
 tests/repository/gitypelibtest
 tests/scanner/Bar-1.0.gir
-tests/scanner/Foo-1.0.gir
 tests/scanner/GetType-1.0.gir
 tests/scanner/GtkFrob-1.0.gir
 tests/scanner/Headeronly-1.0.gir

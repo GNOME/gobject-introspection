@@ -9,6 +9,7 @@ and/or use gtk-doc annotations.  -->
   <include name="GLib" version="2.0"/>
   <include name="GObject" version="2.0"/>
   <include name="Gio" version="2.0"/>
+  <include name="Utility" version="1.0"/>
   <include name="cairo" version="1.0"/>
   <c:include name="regress.h"/>
   <namespace name="Regress"
@@ -19,6 +20,12 @@ and/or use gtk-doc annotations.  -->
     <alias name="AliasedTestBoxed" c:type="RegressAliasedTestBoxed">
       <doc xml:whitespace="preserve">Typedef TestBoxed to test caller-allocates correctness</doc>
       <type name="TestBoxed" c:type="RegressTestBoxed"/>
+    </alias>
+    <alias name="FooObjectCookie" c:type="RegressFooObjectCookie">
+      <type name="gpointer" c:type="gpointer"/>
+    </alias>
+    <alias name="FooXEvent" c:type="RegressFooXEvent">
+      <type name="gpointer" c:type="gpointer"/>
     </alias>
     <alias name="IntSet" c:type="RegressIntSet" introspectable="0">
       <doc xml:whitespace="preserve">Compatibility typedef, like telepathy-glib's TpIntSet</doc>
@@ -841,6 +848,1116 @@ it says it's pointer but it's actually a string.</doc>
               c:type="REGRESS_DOUBLE_CONSTANT">
       <type name="gdouble" c:type="gdouble"/>
     </constant>
+    <constant name="FOO_DEFINE_SHOULD_BE_EXPOSED"
+              value="should be exposed"
+              c:type="REGRESS_FOO_DEFINE_SHOULD_BE_EXPOSED">
+      <type name="utf8" c:type="gchar*"/>
+    </constant>
+    <constant name="FOO_PIE_IS_TASTY"
+              value="3.141590"
+              c:type="REGRESS_FOO_PIE_IS_TASTY">
+      <type name="gdouble" c:type="gdouble"/>
+    </constant>
+    <constant name="FOO_SUCCESS_INT"
+              value="4408"
+              c:type="REGRESS_FOO_SUCCESS_INT">
+      <type name="gint" c:type="gint"/>
+    </constant>
+    <enumeration name="FooASingle" c:type="RegressFooASingle">
+      <member name="foo_some_single_enum"
+              value="0"
+              c:identifier="REGRESS_FOO_SOME_SINGLE_ENUM">
+      </member>
+    </enumeration>
+    <enumeration name="FooAddressType" c:type="RegressFooAddressType">
+      <member name="invalid"
+              value="0"
+              c:identifier="REGRESS_FOO_ADDRESS_INVALID">
+      </member>
+      <member name="ipv4" value="1" c:identifier="REGRESS_FOO_ADDRESS_IPV4">
+      </member>
+      <member name="ipv6" value="2" c:identifier="REGRESS_FOO_ADDRESS_IPV6">
+      </member>
+    </enumeration>
+    <record name="FooBRect"
+            c:type="RegressFooBRect"
+            glib:type-name="RegressFooBRect"
+            glib:get-type="regress_foo_brect_get_type"
+            c:symbol-prefix="foo_brect">
+      <field name="x" writable="1">
+        <type name="gdouble" c:type="double"/>
+      </field>
+      <field name="y" writable="1">
+        <type name="gdouble" c:type="double"/>
+      </field>
+      <constructor name="new" c:identifier="regress_foo_brect_new">
+        <return-value transfer-ownership="full">
+          <type name="FooBRect" c:type="RegressFooBRect*"/>
+        </return-value>
+        <parameters>
+          <parameter name="x" transfer-ownership="none">
+            <type name="gdouble" c:type="double"/>
+          </parameter>
+          <parameter name="y" transfer-ownership="none">
+            <type name="gdouble" c:type="double"/>
+          </parameter>
+        </parameters>
+      </constructor>
+      <method name="add" c:identifier="regress_foo_brect_add">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="b1" transfer-ownership="none">
+            <type name="FooBRect" c:type="RegressFooBRect*"/>
+          </instance-parameter>
+          <parameter name="b2" transfer-ownership="none">
+            <type name="FooBRect" c:type="RegressFooBRect*"/>
+          </parameter>
+        </parameters>
+      </method>
+    </record>
+    <union name="FooBUnion"
+           c:type="RegressFooBUnion"
+           glib:type-name="RegressFooBUnion"
+           glib:get-type="regress_foo_bunion_get_type"
+           c:symbol-prefix="foo_bunion">
+      <field name="type" writable="1">
+        <type name="gint" c:type="int"/>
+      </field>
+      <field name="v" writable="1">
+        <type name="gdouble" c:type="double"/>
+      </field>
+      <field name="rect" writable="1">
+        <type name="FooBRect" c:type="RegressFooBRect*"/>
+      </field>
+      <constructor name="new" c:identifier="regress_foo_bunion_new">
+        <return-value transfer-ownership="full">
+          <type name="FooBUnion" c:type="RegressFooBUnion*"/>
+        </return-value>
+      </constructor>
+      <method name="get_contained_type"
+              c:identifier="regress_foo_bunion_get_contained_type">
+        <return-value transfer-ownership="none">
+          <type name="gint" c:type="int"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="bunion" transfer-ownership="none">
+            <type name="FooBUnion" c:type="RegressFooBUnion*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
+    </union>
+    <record name="FooBoxed"
+            c:type="RegressFooBoxed"
+            glib:type-name="RegressFooBoxed"
+            glib:get-type="regress_foo_boxed_get_type"
+            c:symbol-prefix="foo_boxed">
+      <constructor name="new" c:identifier="regress_foo_boxed_new">
+        <return-value transfer-ownership="full">
+          <type name="FooBoxed" c:type="RegressFooBoxed*"/>
+        </return-value>
+      </constructor>
+      <method name="method" c:identifier="regress_foo_boxed_method">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="boxed" transfer-ownership="none">
+            <type name="FooBoxed" c:type="RegressFooBoxed*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
+    </record>
+    <class name="FooBuffer"
+           c:symbol-prefix="foo_buffer"
+           c:type="RegressFooBuffer"
+           parent="FooObject"
+           glib:type-name="RegressFooBuffer"
+           glib:get-type="regress_foo_buffer_get_type"
+           glib:type-struct="FooBufferClass">
+      <implements name="FooInterface"/>
+      <method name="some_method" c:identifier="regress_foo_buffer_some_method">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="buffer" transfer-ownership="none">
+            <type name="FooBuffer" c:type="RegressFooBuffer*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
+    </class>
+    <record name="FooBufferClass"
+            c:type="RegressFooBufferClass"
+            disguised="1"
+            glib:is-gtype-struct-for="FooBuffer">
+    </record>
+    <callback name="FooCallback" c:type="RegressFooCallback">
+      <return-value transfer-ownership="none">
+        <type name="gboolean" c:type="gboolean"/>
+      </return-value>
+      <parameters>
+        <parameter name="regress_foo" transfer-ownership="none">
+          <type name="FooObject" c:type="RegressFooObject*"/>
+        </parameter>
+        <parameter name="b" transfer-ownership="none">
+          <type name="gboolean" c:type="gboolean"/>
+        </parameter>
+        <parameter name="data" transfer-ownership="none">
+          <type name="gpointer" c:type="gpointer"/>
+        </parameter>
+      </parameters>
+    </callback>
+    <record name="FooDBusData"
+            c:type="RegressFooDBusData"
+            glib:type-name="RegressFooDBusData"
+            glib:get-type="regress_foo_dbus_data_get_type"
+            c:symbol-prefix="foo_dbus_data">
+      <method name="method" c:identifier="regress_foo_dbus_data_method">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="dbusdata" transfer-ownership="none">
+            <type name="FooDBusData" c:type="RegressFooDBusData*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
+    </record>
+    <enumeration name="FooEnumFullname" c:type="RegressFooEnumFullname">
+      <member name="one"
+              value="1"
+              c:identifier="REGRESS_FOO_ENUM_FULLNAME_ONE">
+      </member>
+      <member name="two"
+              value="2"
+              c:identifier="REGRESS_FOO_ENUM_FULLNAME_TWO">
+      </member>
+      <member name="three"
+              value="3"
+              c:identifier="REGRESS_FOO_ENUM_FULLNAME_THREE">
+      </member>
+    </enumeration>
+    <enumeration name="FooEnumNoType" c:type="RegressFooEnumNoType">
+      <member name="un" value="1" c:identifier="REGRESS_FOO_ENUM_UN">
+      </member>
+      <member name="deux" value="2" c:identifier="REGRESS_FOO_ENUM_DEUX">
+      </member>
+      <member name="trois" value="3" c:identifier="REGRESS_FOO_ENUM_TROIS">
+      </member>
+      <member name="neuf" value="9" c:identifier="REGRESS_FOO_ENUM_NEUF">
+      </member>
+    </enumeration>
+    <enumeration name="FooEnumType"
+                 glib:type-name="RegressFooEnumType"
+                 glib:get-type="regress_foo_enum_type_get_type"
+                 c:type="RegressFooEnumType">
+      <member name="alpha"
+              value="0"
+              c:identifier="REGRESS_FOO_ENUM_ALPHA"
+              glib:nick="alpha">
+      </member>
+      <member name="beta"
+              value="1"
+              c:identifier="REGRESS_FOO_ENUM_BETA"
+              glib:nick="beta">
+      </member>
+      <member name="delta"
+              value="2"
+              c:identifier="REGRESS_FOO_ENUM_DELTA"
+              glib:nick="delta">
+      </member>
+      <function name="method" c:identifier="regress_foo_enum_type_method">
+        <return-value transfer-ownership="none">
+          <type name="gint" c:type="int"/>
+        </return-value>
+        <parameters>
+          <parameter name="regress_foo_enum" transfer-ownership="none">
+            <type name="FooEnumType" c:type="RegressFooEnumType"/>
+          </parameter>
+        </parameters>
+      </function>
+      <function name="returnv" c:identifier="regress_foo_enum_type_returnv">
+        <return-value transfer-ownership="none">
+          <type name="FooEnumType" c:type="RegressFooEnumType"/>
+        </return-value>
+        <parameters>
+          <parameter name="x" transfer-ownership="none">
+            <type name="gint" c:type="int"/>
+          </parameter>
+        </parameters>
+      </function>
+    </enumeration>
+    <enumeration name="FooError"
+                 glib:type-name="RegressFooError"
+                 glib:get-type="regress_foo_error_get_type"
+                 c:type="RegressFooError"
+                 glib:error-domain="regress_foo-error-quark">
+      <member name="good"
+              value="0"
+              c:identifier="REGRESS_FOO_ERROR_GOOD"
+              glib:nick="good">
+      </member>
+      <member name="bad"
+              value="1"
+              c:identifier="REGRESS_FOO_ERROR_BAD"
+              glib:nick="bad">
+      </member>
+      <member name="ugly"
+              value="2"
+              c:identifier="REGRESS_FOO_ERROR_UGLY"
+              glib:nick="ugly">
+      </member>
+      <function name="quark" c:identifier="regress_foo_error_quark">
+        <return-value transfer-ownership="none">
+          <type name="GLib.Quark" c:type="GQuark"/>
+        </return-value>
+      </function>
+    </enumeration>
+    <union name="FooEvent" c:type="RegressFooEvent">
+      <field name="type" writable="1">
+        <type name="gint" c:type="int"/>
+      </field>
+      <field name="any" writable="1">
+        <type name="FooEventAny" c:type="RegressFooEventAny"/>
+      </field>
+      <field name="expose" writable="1">
+        <type name="FooEventExpose" c:type="RegressFooEventExpose"/>
+      </field>
+    </union>
+    <record name="FooEventAny" c:type="RegressFooEventAny">
+      <field name="send_event" writable="1">
+        <type name="gint8" c:type="gint8"/>
+      </field>
+    </record>
+    <record name="FooEventExpose" c:type="RegressFooEventExpose">
+      <field name="send_event" writable="1">
+        <type name="gint8" c:type="gint8"/>
+      </field>
+      <field name="count" writable="1">
+        <type name="gint" c:type="gint"/>
+      </field>
+    </record>
+    <bitfield name="FooFlagsNoType" c:type="RegressFooFlagsNoType">
+      <member name="ett" value="1" c:identifier="REGRESS_FOO_FLAGS_ETT">
+      </member>
+      <member name="tva" value="2" c:identifier="REGRESS_FOO_FLAGS_TVA">
+      </member>
+      <member name="fyra" value="4" c:identifier="REGRESS_FOO_FLAGS_FYRA">
+      </member>
+    </bitfield>
+    <bitfield name="FooFlagsType"
+              glib:type-name="RegressFooFlagsType"
+              glib:get-type="regress_foo_flags_type_get_type"
+              c:type="RegressFooFlagsType">
+      <member name="first"
+              value="1"
+              c:identifier="REGRESS_FOO_FLAGS_FIRST"
+              glib:nick="first">
+      </member>
+      <member name="second"
+              value="2"
+              c:identifier="REGRESS_FOO_FLAGS_SECOND"
+              glib:nick="second">
+      </member>
+      <member name="third"
+              value="4"
+              c:identifier="REGRESS_FOO_FLAGS_THIRD"
+              glib:nick="third">
+      </member>
+    </bitfield>
+    <record name="FooForeignStruct"
+            c:type="RegressFooForeignStruct"
+            foreign="1">
+      <field name="regress_foo" writable="1">
+        <type name="gint" c:type="int"/>
+      </field>
+      <constructor name="new" c:identifier="regress_foo_foreign_struct_new">
+        <return-value transfer-ownership="full">
+          <type name="FooForeignStruct" c:type="RegressFooForeignStruct*"/>
+        </return-value>
+      </constructor>
+      <method name="copy" c:identifier="regress_foo_foreign_struct_copy">
+        <return-value transfer-ownership="full">
+          <type name="FooForeignStruct" c:type="RegressFooForeignStruct*"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="original" transfer-ownership="none">
+            <type name="FooForeignStruct" c:type="RegressFooForeignStruct*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
+    </record>
+    <interface name="FooInterface"
+               c:symbol-prefix="foo_interface"
+               c:type="RegressFooInterface"
+               glib:type-name="RegressFooInterface"
+               glib:get-type="regress_foo_interface_get_type"
+               glib:type-struct="FooInterfaceIface">
+      <function name="static_method"
+                c:identifier="regress_foo_interface_static_method">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <parameter name="x" transfer-ownership="none">
+            <type name="gint" c:type="int"/>
+          </parameter>
+        </parameters>
+      </function>
+      <virtual-method name="do_regress_foo" invoker="do_regress_foo">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="self" transfer-ownership="none">
+            <type name="FooInterface" c:type="RegressFooInterface*"/>
+          </instance-parameter>
+          <parameter name="x" transfer-ownership="none">
+            <type name="gint" c:type="int"/>
+          </parameter>
+        </parameters>
+      </virtual-method>
+      <method name="do_regress_foo"
+              c:identifier="regress_foo_interface_do_regress_foo">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="iface" transfer-ownership="none">
+            <type name="FooInterface" c:type="RegressFooInterface*"/>
+          </instance-parameter>
+          <parameter name="x" transfer-ownership="none">
+            <type name="gint" c:type="int"/>
+          </parameter>
+        </parameters>
+      </method>
+    </interface>
+    <record name="FooInterfaceIface"
+            c:type="RegressFooInterfaceIface"
+            glib:is-gtype-struct-for="FooInterface">
+      <field name="parent_iface">
+        <type name="GObject.TypeInterface" c:type="GTypeInterface"/>
+      </field>
+      <field name="do_regress_foo">
+        <callback name="do_regress_foo">
+          <return-value transfer-ownership="none">
+            <type name="none" c:type="void"/>
+          </return-value>
+          <parameters>
+            <parameter name="self" transfer-ownership="none">
+              <type name="FooInterface" c:type="RegressFooInterface*"/>
+            </parameter>
+            <parameter name="x" transfer-ownership="none">
+              <type name="gint" c:type="int"/>
+            </parameter>
+          </parameters>
+        </callback>
+      </field>
+    </record>
+    <class name="FooObject"
+           c:symbol-prefix="foo_object"
+           c:type="RegressFooObject"
+           parent="GObject.Object"
+           glib:type-name="RegressFooObject"
+           glib:get-type="regress_foo_object_get_type"
+           glib:type-struct="FooObjectClass">
+      <implements name="FooInterface"/>
+      <constructor name="new" c:identifier="regress_foo_object_new">
+        <return-value transfer-ownership="full">
+          <type name="FooObject" c:type="RegressFooObject*"/>
+        </return-value>
+      </constructor>
+      <constructor name="new_as_super"
+                   c:identifier="regress_foo_object_new_as_super">
+        <return-value transfer-ownership="full">
+          <type name="GObject.Object" c:type="GObject*"/>
+        </return-value>
+      </constructor>
+      <function name="a_global_method"
+                c:identifier="regress_foo_object_a_global_method">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <parameter name="obj" transfer-ownership="none">
+            <type name="Utility.Object" c:type="UtilityObject*"/>
+          </parameter>
+        </parameters>
+      </function>
+      <function name="get_default"
+                c:identifier="regress_foo_object_get_default">
+        <doc xml:whitespace="preserve">This function is intended to match clutter_stage_get_default which
+uses a C sugar return type.</doc>
+        <return-value transfer-ownership="none">
+          <doc xml:whitespace="preserve">The global #RegressFooSubobject</doc>
+          <type name="FooSubobject" c:type="RegressFooObject*"/>
+        </return-value>
+      </function>
+      <function name="static_meth"
+                c:identifier="regress_foo_object_static_meth">
+        <return-value transfer-ownership="none">
+          <type name="gint" c:type="int"/>
+        </return-value>
+      </function>
+      <virtual-method name="read_fn" invoker="read">
+        <doc xml:whitespace="preserve">Read some stuff.</doc>
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <type name="FooObject" c:type="RegressFooObject*"/>
+          </instance-parameter>
+          <parameter name="offset" transfer-ownership="none">
+            <doc xml:whitespace="preserve">offset</doc>
+            <type name="gint" c:type="int"/>
+          </parameter>
+          <parameter name="length" transfer-ownership="none">
+            <doc xml:whitespace="preserve">length</doc>
+            <type name="gint" c:type="int"/>
+          </parameter>
+        </parameters>
+      </virtual-method>
+      <virtual-method name="virtual_method" invoker="virtual_method">
+        <return-value transfer-ownership="none">
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <type name="FooObject" c:type="RegressFooObject*"/>
+          </instance-parameter>
+          <parameter name="first_param" transfer-ownership="none">
+            <type name="gint" c:type="int"/>
+          </parameter>
+        </parameters>
+      </virtual-method>
+      <method name="append_new_stack_layer"
+              c:identifier="regress_foo_object_append_new_stack_layer">
+        <doc xml:whitespace="preserve">This shouldn't be scanned as a constructor.</doc>
+        <return-value transfer-ownership="none">
+          <type name="FooOtherObject" c:type="RegressFooOtherObject*"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="obj" transfer-ownership="none">
+            <type name="FooObject" c:type="RegressFooObject*"/>
+          </instance-parameter>
+          <parameter name="x" transfer-ownership="none">
+            <type name="gint" c:type="int"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="dup_name" c:identifier="regress_foo_object_dup_name">
+        <return-value transfer-ownership="full">
+          <type name="utf8" c:type="char*"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <type name="FooObject" c:type="RegressFooObject*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
+      <method name="external_type"
+              c:identifier="regress_foo_object_external_type">
+        <return-value transfer-ownership="none">
+          <doc xml:whitespace="preserve">%NULL always</doc>
+          <type name="Utility.Object" c:type="UtilityObject*"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <doc xml:whitespace="preserve">a #RegressFooObject</doc>
+            <type name="FooObject" c:type="RegressFooObject*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
+      <method name="get_name" c:identifier="regress_foo_object_get_name">
+        <return-value transfer-ownership="none">
+          <type name="utf8" c:type="const char*"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <type name="FooObject" c:type="RegressFooObject*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
+      <method name="handle_glyph"
+              c:identifier="regress_foo_object_handle_glyph">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <type name="FooObject" c:type="RegressFooObject*"/>
+          </instance-parameter>
+          <parameter name="glyph" transfer-ownership="none">
+            <type name="Utility.Glyph" c:type="UtilityGlyph"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="is_it_time_yet"
+              c:identifier="regress_foo_object_is_it_time_yet">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <type name="FooObject" c:type="RegressFooObject*"/>
+          </instance-parameter>
+          <parameter name="time" transfer-ownership="none">
+            <type name="glong" c:type="time_t"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="new_cookie"
+              c:identifier="regress_foo_object_new_cookie"
+              introspectable="0">
+        <doc xml:whitespace="preserve">Not sure why this test is here...</doc>
+        <return-value>
+          <type name="FooObjectCookie" c:type="RegressFooObjectCookie"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <type name="FooObject" c:type="RegressFooObject*"/>
+          </instance-parameter>
+          <parameter name="target" transfer-ownership="none">
+            <type name="utf8" c:type="const char*"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="read" c:identifier="regress_foo_object_read">
+        <doc xml:whitespace="preserve">Read some stuff.</doc>
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <doc xml:whitespace="preserve">obj</doc>
+            <type name="FooObject" c:type="RegressFooObject*"/>
+          </instance-parameter>
+          <parameter name="offset" transfer-ownership="none">
+            <doc xml:whitespace="preserve">offset</doc>
+            <type name="gint" c:type="int"/>
+          </parameter>
+          <parameter name="length" transfer-ownership="none">
+            <doc xml:whitespace="preserve">length</doc>
+            <type name="gint" c:type="int"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="skipped_method"
+              c:identifier="regress_foo_object_skipped_method"
+              introspectable="0">
+        <doc xml:whitespace="preserve">This is only useful from C.</doc>
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <doc xml:whitespace="preserve">obj</doc>
+            <type name="FooObject" c:type="RegressFooObject*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
+      <method name="take_all"
+              c:identifier="regress_foo_object_take_all"
+              introspectable="0">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <type name="FooObject" c:type="RegressFooObject*"/>
+          </instance-parameter>
+          <parameter name="x" transfer-ownership="none">
+            <type name="gint" c:type="int"/>
+          </parameter>
+          <parameter transfer-ownership="none">
+            <varargs>
+            </varargs>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="various" c:identifier="regress_foo_object_various">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <type name="FooObject" c:type="RegressFooObject*"/>
+          </instance-parameter>
+          <parameter name="data" transfer-ownership="none">
+            <type name="gpointer" c:type="void*"/>
+          </parameter>
+          <parameter name="some_type" transfer-ownership="none">
+            <type name="GType" c:type="GType"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="virtual_method"
+              c:identifier="regress_foo_object_virtual_method">
+        <return-value transfer-ownership="none">
+          <type name="gboolean" c:type="gboolean"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="object" transfer-ownership="none">
+            <type name="FooObject" c:type="RegressFooObject*"/>
+          </instance-parameter>
+          <parameter name="first_param" transfer-ownership="none">
+            <type name="gint" c:type="int"/>
+          </parameter>
+        </parameters>
+      </method>
+      <property name="hidden"
+                introspectable="0"
+                writable="1"
+                construct-only="1"
+                transfer-ownership="none">
+        <type/>
+      </property>
+      <property name="string"
+                writable="1"
+                construct="1"
+                transfer-ownership="none">
+        <type name="utf8" c:type="gchar*"/>
+      </property>
+      <field name="parent_instance">
+        <type name="GObject.Object" c:type="GObject"/>
+      </field>
+      <field name="some_int">
+        <type name="gint" c:type="int"/>
+      </field>
+      <glib:signal name="signal" when="last">
+        <return-value transfer-ownership="full">
+          <type name="utf8" c:type="gchar*"/>
+        </return-value>
+        <parameters>
+          <parameter name="object" transfer-ownership="none">
+            <type name="GObject.Object"/>
+          </parameter>
+          <parameter name="p0" transfer-ownership="none">
+            <type name="gpointer" c:type="gpointer"/>
+          </parameter>
+        </parameters>
+      </glib:signal>
+    </class>
+    <record name="FooObjectClass"
+            c:type="RegressFooObjectClass"
+            glib:is-gtype-struct-for="FooObject">
+      <field name="parent_class">
+        <type name="GObject.ObjectClass" c:type="GObjectClass"/>
+      </field>
+      <field name="virtual_method">
+        <callback name="virtual_method">
+          <return-value transfer-ownership="none">
+            <type name="gboolean" c:type="gboolean"/>
+          </return-value>
+          <parameters>
+            <parameter name="object" transfer-ownership="none">
+              <type name="FooObject" c:type="RegressFooObject*"/>
+            </parameter>
+            <parameter name="first_param" transfer-ownership="none">
+              <type name="gint" c:type="int"/>
+            </parameter>
+          </parameters>
+        </callback>
+      </field>
+      <field name="read_fn">
+        <callback name="read_fn">
+          <return-value transfer-ownership="none">
+            <type name="none" c:type="void"/>
+          </return-value>
+          <parameters>
+            <parameter name="object" transfer-ownership="none">
+              <type name="FooObject" c:type="RegressFooObject*"/>
+            </parameter>
+            <parameter name="offset" transfer-ownership="none">
+              <doc xml:whitespace="preserve">offset</doc>
+              <type name="gint" c:type="int"/>
+            </parameter>
+            <parameter name="length" transfer-ownership="none">
+              <doc xml:whitespace="preserve">length</doc>
+              <type name="gint" c:type="int"/>
+            </parameter>
+          </parameters>
+        </callback>
+      </field>
+      <field name="_reserved">
+        <array zero-terminated="0" c:type="GCallback" fixed-size="4">
+          <type name="GObject.Callback" c:type="GCallback"/>
+        </array>
+      </field>
+    </record>
+    <class name="FooOtherObject"
+           c:symbol-prefix="foo_other_object"
+           c:type="RegressFooOtherObject"
+           parent="GObject.Object"
+           glib:type-name="RegressFooOtherObject"
+           glib:get-type="regress_foo_other_object_get_type"
+           glib:type-struct="FooOtherObjectClass">
+    </class>
+    <record name="FooOtherObjectClass"
+            c:type="RegressFooOtherObjectClass"
+            disguised="1"
+            glib:is-gtype-struct-for="FooOtherObject">
+    </record>
+    <record name="FooRectangle" c:type="RegressFooRectangle">
+      <field name="x" writable="1">
+        <type name="gint" c:type="gint"/>
+      </field>
+      <field name="y" writable="1">
+        <type name="gint" c:type="gint"/>
+      </field>
+      <field name="width" writable="1">
+        <type name="gint" c:type="gint"/>
+      </field>
+      <field name="height" writable="1">
+        <type name="gint" c:type="gint"/>
+      </field>
+      <method name="add" c:identifier="regress_foo_rectangle_add">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="r1"
+                              direction="inout"
+                              caller-allocates="0"
+                              transfer-ownership="full">
+            <doc xml:whitespace="preserve">add to this rect</doc>
+            <type name="FooRectangle" c:type="RegressFooRectangle*"/>
+          </instance-parameter>
+          <parameter name="r2" transfer-ownership="none">
+            <doc xml:whitespace="preserve">source rectangle</doc>
+            <type name="FooRectangle" c:type="const RegressFooRectangle*"/>
+          </parameter>
+        </parameters>
+      </method>
+      <function name="new"
+                c:identifier="regress_foo_rectangle_new"
+                introspectable="0">
+        <doc xml:whitespace="preserve">This is a C convenience constructor; we have to (skip)
+it because it's not a boxed type.</doc>
+        <return-value>
+          <type name="FooRectangle" c:type="RegressFooRectangle*"/>
+        </return-value>
+        <parameters>
+          <parameter name="x" transfer-ownership="none">
+            <type name="gint" c:type="int"/>
+          </parameter>
+          <parameter name="y" transfer-ownership="none">
+            <type name="gint" c:type="int"/>
+          </parameter>
+          <parameter name="width" transfer-ownership="none">
+            <type name="gint" c:type="int"/>
+          </parameter>
+          <parameter name="height" transfer-ownership="none">
+            <type name="gint" c:type="int"/>
+          </parameter>
+        </parameters>
+      </function>
+    </record>
+    <enumeration name="FooSkippable"
+                 introspectable="0"
+                 c:type="RegressFooSkippable">
+      <doc xml:whitespace="preserve">Some type that is only interesting from C and should not be
+exposed to language bindings.</doc>
+      <member name="one" value="0" c:identifier="REGRESS_FOO_SKIPPABLE_ONE">
+        <doc xml:whitespace="preserve">a skippable enum value</doc>
+      </member>
+      <member name="two" value="1" c:identifier="REGRESS_FOO_SKIPPABLE_TWO">
+        <doc xml:whitespace="preserve">another skippable enum value</doc>
+      </member>
+    </enumeration>
+    <enumeration name="FooStackLayer" c:type="RegressFooStackLayer">
+      <member name="desktop"
+              value="0"
+              c:identifier="REGRESS_FOO_LAYER_DESKTOP">
+      </member>
+      <member name="bottom" value="1" c:identifier="REGRESS_FOO_LAYER_BOTTOM">
+      </member>
+      <member name="normal" value="2" c:identifier="REGRESS_FOO_LAYER_NORMAL">
+      </member>
+      <member name="top" value="4" c:identifier="REGRESS_FOO_LAYER_TOP">
+      </member>
+      <member name="dock" value="4" c:identifier="REGRESS_FOO_LAYER_DOCK">
+      </member>
+      <member name="fullscreen"
+              value="5"
+              c:identifier="REGRESS_FOO_LAYER_FULLSCREEN">
+      </member>
+      <member name="focused_window"
+              value="6"
+              c:identifier="REGRESS_FOO_LAYER_FOCUSED_WINDOW">
+      </member>
+      <member name="override_redirect"
+              value="7"
+              c:identifier="REGRESS_FOO_LAYER_OVERRIDE_REDIRECT">
+      </member>
+      <member name="last" value="8" c:identifier="REGRESS_FOO_LAYER_LAST">
+      </member>
+    </enumeration>
+    <record name="FooStruct" c:type="RegressFooStruct">
+      <field name="priv" writable="1">
+        <type name="FooStructPrivate" c:type="RegressFooStructPrivate*"/>
+      </field>
+      <field name="member" writable="1">
+        <type name="gint" c:type="int"/>
+      </field>
+    </record>
+    <record name="FooStructPrivate"
+            c:type="RegressFooStructPrivate"
+            disguised="1">
+    </record>
+    <interface name="FooSubInterface"
+               c:symbol-prefix="foo_sub_interface"
+               c:type="RegressFooSubInterface"
+               glib:type-name="RegressFooSubInterface"
+               glib:get-type="regress_foo_sub_interface_get_type"
+               glib:type-struct="FooSubInterfaceIface">
+      <prerequisite name="FooInterface"/>
+      <virtual-method name="destroy_event">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="self" transfer-ownership="none">
+            <type name="FooSubInterface" c:type="RegressFooSubInterface*"/>
+          </instance-parameter>
+        </parameters>
+      </virtual-method>
+      <virtual-method name="do_bar" invoker="do_bar">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="self" transfer-ownership="none">
+            <type name="FooSubInterface" c:type="RegressFooSubInterface*"/>
+          </instance-parameter>
+        </parameters>
+      </virtual-method>
+      <virtual-method name="do_baz" invoker="do_baz">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="self" transfer-ownership="none">
+            <type name="FooSubInterface" c:type="RegressFooSubInterface*"/>
+          </instance-parameter>
+          <parameter name="callback"
+                     transfer-ownership="none"
+                     scope="call"
+                     closure="1">
+            <type name="GObject.Callback" c:type="GCallback"/>
+          </parameter>
+          <parameter name="user_data" transfer-ownership="none" closure="1">
+            <type name="gpointer" c:type="gpointer"/>
+          </parameter>
+        </parameters>
+      </virtual-method>
+      <virtual-method name="do_moo" invoker="do_moo">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="self" transfer-ownership="none">
+            <type name="FooSubInterface" c:type="RegressFooSubInterface*"/>
+          </instance-parameter>
+          <parameter transfer-ownership="none">
+            <type name="gint" c:type="int"/>
+          </parameter>
+          <parameter transfer-ownership="none">
+            <type name="gpointer" c:type="gpointer"/>
+          </parameter>
+        </parameters>
+      </virtual-method>
+      <method name="do_bar" c:identifier="regress_foo_sub_interface_do_bar">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="self" transfer-ownership="none">
+            <type name="FooSubInterface" c:type="RegressFooSubInterface*"/>
+          </instance-parameter>
+        </parameters>
+      </method>
+      <method name="do_baz" c:identifier="regress_foo_sub_interface_do_baz">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="self" transfer-ownership="none">
+            <type name="FooSubInterface" c:type="RegressFooSubInterface*"/>
+          </instance-parameter>
+          <parameter name="callback"
+                     transfer-ownership="none"
+                     scope="call"
+                     closure="1">
+            <type name="GObject.Callback" c:type="GCallback"/>
+          </parameter>
+          <parameter name="user_data" transfer-ownership="none">
+            <type name="gpointer" c:type="gpointer"/>
+          </parameter>
+        </parameters>
+      </method>
+      <method name="do_moo" c:identifier="regress_foo_sub_interface_do_moo">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="self" transfer-ownership="none">
+            <type name="FooSubInterface" c:type="RegressFooSubInterface*"/>
+          </instance-parameter>
+          <parameter transfer-ownership="none">
+            <type name="gint" c:type="int"/>
+          </parameter>
+          <parameter transfer-ownership="none">
+            <type name="gpointer" c:type="gpointer"/>
+          </parameter>
+        </parameters>
+      </method>
+      <glib:signal name="destroy-event" when="last">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+      </glib:signal>
+    </interface>
+    <record name="FooSubInterfaceIface"
+            c:type="RegressFooSubInterfaceIface"
+            glib:is-gtype-struct-for="FooSubInterface">
+      <field name="parent_iface">
+        <type name="GObject.TypeInterface" c:type="GTypeInterface"/>
+      </field>
+      <field name="destroy_event">
+        <callback name="destroy_event">
+          <return-value transfer-ownership="none">
+            <type name="none" c:type="void"/>
+          </return-value>
+          <parameters>
+            <parameter name="self" transfer-ownership="none">
+              <type name="FooSubInterface" c:type="RegressFooSubInterface*"/>
+            </parameter>
+          </parameters>
+        </callback>
+      </field>
+      <field name="do_bar">
+        <callback name="do_bar">
+          <return-value transfer-ownership="none">
+            <type name="none" c:type="void"/>
+          </return-value>
+          <parameters>
+            <parameter name="self" transfer-ownership="none">
+              <type name="FooSubInterface" c:type="RegressFooSubInterface*"/>
+            </parameter>
+          </parameters>
+        </callback>
+      </field>
+      <field name="do_moo">
+        <callback name="do_moo">
+          <return-value transfer-ownership="none">
+            <type name="none" c:type="void"/>
+          </return-value>
+          <parameters>
+            <parameter name="self" transfer-ownership="none">
+              <type name="FooSubInterface" c:type="RegressFooSubInterface*"/>
+            </parameter>
+            <parameter transfer-ownership="none">
+              <type name="gint" c:type="int"/>
+            </parameter>
+            <parameter transfer-ownership="none">
+              <type name="gpointer" c:type="gpointer"/>
+            </parameter>
+          </parameters>
+        </callback>
+      </field>
+      <field name="do_baz">
+        <callback name="do_baz">
+          <return-value transfer-ownership="none">
+            <type name="none" c:type="void"/>
+          </return-value>
+          <parameters>
+            <parameter name="self" transfer-ownership="none">
+              <type name="FooSubInterface" c:type="RegressFooSubInterface*"/>
+            </parameter>
+            <parameter name="callback"
+                       transfer-ownership="none"
+                       scope="call"
+                       closure="2">
+              <type name="GObject.Callback" c:type="GCallback"/>
+            </parameter>
+            <parameter name="user_data" transfer-ownership="none" closure="2">
+              <type name="gpointer" c:type="gpointer"/>
+            </parameter>
+          </parameters>
+        </callback>
+      </field>
+    </record>
+    <class name="FooSubobject"
+           c:symbol-prefix="foo_subobject"
+           c:type="RegressFooSubobject"
+           parent="FooObject"
+           abstract="1"
+           glib:type-name="RegressFooSubobject"
+           glib:get-type="regress_foo_subobject_get_type"
+           glib:type-struct="FooSubobjectClass">
+      <implements name="FooInterface"/>
+      <constructor name="new" c:identifier="regress_foo_subobject_new">
+        <return-value transfer-ownership="full">
+          <type name="FooSubobject" c:type="RegressFooSubobject*"/>
+        </return-value>
+      </constructor>
+      <field name="parent_instance">
+        <type name="FooObject" c:type="RegressFooObject"/>
+      </field>
+    </class>
+    <record name="FooSubobjectClass"
+            c:type="RegressFooSubobjectClass"
+            glib:is-gtype-struct-for="FooSubobject">
+      <field name="parent_class">
+        <type name="FooObjectClass" c:type="RegressFooObjectClass"/>
+      </field>
+    </record>
+    <record name="FooThingWithArray" c:type="RegressFooThingWithArray">
+      <field name="x" writable="1">
+        <type name="gint" c:type="int"/>
+      </field>
+      <field name="y" writable="1">
+        <type name="gint" c:type="int"/>
+      </field>
+      <field name="lines" writable="1">
+        <array zero-terminated="0" c:type="char" fixed-size="80">
+          <type name="gchar" c:type="char"/>
+        </array>
+      </field>
+      <field name="data" writable="1">
+        <type name="guint8" c:type="guchar*"/>
+      </field>
+    </record>
+    <union name="FooUnion" c:type="RegressFooUnion">
+      <field name="regress_foo" writable="1">
+        <type name="gint" c:type="int"/>
+      </field>
+    </union>
+    <record name="FooUtilityStruct" c:type="RegressFooUtilityStruct">
+      <field name="bar" writable="1">
+        <type name="Utility.Struct" c:type="UtilityStruct"/>
+      </field>
+    </record>
+    <callback name="FooVarargsCallback"
+              c:type="RegressFooVarargsCallback"
+              introspectable="0">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="param" transfer-ownership="none">
+          <type name="utf8" c:type="const char*"/>
+        </parameter>
+        <parameter transfer-ownership="none">
+          <varargs>
+          </varargs>
+        </parameter>
+      </parameters>
+    </callback>
     <constant name="GUINT64_CONSTANT"
               value="18446744073709551615"
               c:type="REGRESS_GUINT64_CONSTANT">
@@ -3010,6 +4127,324 @@ detection, and fixing it via regress_annotations.</doc>
       <return-value transfer-ownership="none">
         <type name="GLib.Quark" c:type="GQuark"/>
       </return-value>
+    </function>
+    <function name="foo_async_ready_callback"
+              c:identifier="regress_foo_async_ready_callback">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="cancellable" transfer-ownership="none" allow-none="1">
+          <type name="Gio.Cancellable" c:type="GCancellable*"/>
+        </parameter>
+        <parameter name="callback"
+                   transfer-ownership="none"
+                   allow-none="1"
+                   scope="async"
+                   closure="2">
+          <type name="Gio.AsyncReadyCallback" c:type="GAsyncReadyCallback"/>
+        </parameter>
+        <parameter name="user_data" transfer-ownership="none">
+          <type name="gpointer" c:type="gpointer"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="foo_destroy_notify_callback"
+              c:identifier="regress_foo_destroy_notify_callback">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="callback"
+                   transfer-ownership="none"
+                   scope="notified"
+                   closure="1"
+                   destroy="2">
+          <type name="FooCallback" c:type="RegressFooCallback"/>
+        </parameter>
+        <parameter name="data" transfer-ownership="none">
+          <type name="gpointer" c:type="gpointer"/>
+        </parameter>
+        <parameter name="destroy" transfer-ownership="none" scope="async">
+          <type name="GLib.DestroyNotify" c:type="GDestroyNotify"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="foo_enum_type_method"
+              c:identifier="regress_foo_enum_type_method"
+              moved-to="FooEnumType.method">
+      <return-value transfer-ownership="none">
+        <type name="gint" c:type="int"/>
+      </return-value>
+      <parameters>
+        <parameter name="regress_foo_enum" transfer-ownership="none">
+          <type name="FooEnumType" c:type="RegressFooEnumType"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="foo_enum_type_returnv"
+              c:identifier="regress_foo_enum_type_returnv"
+              moved-to="FooEnumType.returnv">
+      <return-value transfer-ownership="none">
+        <type name="FooEnumType" c:type="RegressFooEnumType"/>
+      </return-value>
+      <parameters>
+        <parameter name="x" transfer-ownership="none">
+          <type name="gint" c:type="int"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="foo_error_quark"
+              c:identifier="regress_foo_error_quark"
+              moved-to="FooError.quark">
+      <return-value transfer-ownership="none">
+        <type name="GLib.Quark" c:type="GQuark"/>
+      </return-value>
+    </function>
+    <function name="foo_init" c:identifier="regress_foo_init">
+      <return-value transfer-ownership="none">
+        <type name="gint" c:type="gint"/>
+      </return-value>
+    </function>
+    <function name="foo_interface_static_method"
+              c:identifier="regress_foo_interface_static_method"
+              moved-to="FooInterface.static_method">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="x" transfer-ownership="none">
+          <type name="gint" c:type="int"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="foo_method_external_references"
+              c:identifier="regress_foo_method_external_references">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="object" transfer-ownership="none">
+          <type name="Utility.Object" c:type="UtilityObject*"/>
+        </parameter>
+        <parameter name="e" transfer-ownership="none">
+          <type name="Utility.EnumType" c:type="UtilityEnumType"/>
+        </parameter>
+        <parameter name="f" transfer-ownership="none">
+          <type name="Utility.FlagType" c:type="UtilityFlagType"/>
+        </parameter>
+        <parameter name="s" transfer-ownership="none">
+          <type name="Utility.Struct" c:type="UtilityStruct"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="foo_not_a_constructor_new"
+              c:identifier="regress_foo_not_a_constructor_new">
+      <doc xml:whitespace="preserve">This should be scanned as a top-level function, and shouldn't cause
+a "Can't find matching type for constructor" warning.</doc>
+      <return-value transfer-ownership="none">
+        <type name="FooObject" c:type="RegressFooObject*"/>
+      </return-value>
+    </function>
+    <function name="foo_rectangle_new"
+              c:identifier="regress_foo_rectangle_new"
+              moved-to="FooRectangle.new"
+              introspectable="0">
+      <doc xml:whitespace="preserve">This is a C convenience constructor; we have to (skip)
+it because it's not a boxed type.</doc>
+      <return-value>
+        <type name="FooRectangle" c:type="RegressFooRectangle*"/>
+      </return-value>
+      <parameters>
+        <parameter name="x" transfer-ownership="none">
+          <type name="gint" c:type="int"/>
+        </parameter>
+        <parameter name="y" transfer-ownership="none">
+          <type name="gint" c:type="int"/>
+        </parameter>
+        <parameter name="width" transfer-ownership="none">
+          <type name="gint" c:type="int"/>
+        </parameter>
+        <parameter name="height" transfer-ownership="none">
+          <type name="gint" c:type="int"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="foo_skip_me"
+              c:identifier="regress_foo_skip_me"
+              introspectable="0">
+      <doc xml:whitespace="preserve">Does something that's only interesting from C and should not be
+exposed to language bindings.</doc>
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="fs" transfer-ownership="none">
+          <doc xml:whitespace="preserve">a #RegressFooSkippable</doc>
+          <type name="FooSkippable" c:type="RegressFooSkippable"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="foo_some_variant"
+              c:identifier="regress_foo_some_variant"
+              introspectable="0">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="x" transfer-ownership="none">
+          <type name="guint" c:type="guint"/>
+        </parameter>
+        <parameter name="args" transfer-ownership="none">
+          <type name="va_list" c:type="va_list"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="foo_some_variant_ptr"
+              c:identifier="regress_foo_some_variant_ptr"
+              introspectable="0">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="x" transfer-ownership="none">
+          <type name="guint" c:type="guint"/>
+        </parameter>
+        <parameter name="args" transfer-ownership="none">
+          <type name="va_list" c:type="va_list*"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="foo_test_array" c:identifier="regress_foo_test_array">
+      <return-value transfer-ownership="container">
+        <array name="GLib.Array" c:type="GArray*">
+          <type name="utf8"/>
+        </array>
+      </return-value>
+    </function>
+    <function name="foo_test_const_char_param"
+              c:identifier="regress_foo_test_const_char_param">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="param" transfer-ownership="none">
+          <type name="utf8" c:type="const char*"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="foo_test_const_char_retval"
+              c:identifier="regress_foo_test_const_char_retval">
+      <return-value transfer-ownership="none">
+        <type name="utf8" c:type="const char*"/>
+      </return-value>
+    </function>
+    <function name="foo_test_const_struct_param"
+              c:identifier="regress_foo_test_const_struct_param">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="param" transfer-ownership="none">
+          <type name="FooStruct" c:type="const RegressFooStruct*"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="foo_test_const_struct_retval"
+              c:identifier="regress_foo_test_const_struct_retval">
+      <return-value transfer-ownership="none">
+        <type name="FooStruct" c:type="const RegressFooStruct*"/>
+      </return-value>
+    </function>
+    <function name="foo_test_string_array"
+              c:identifier="regress_foo_test_string_array">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="array" transfer-ownership="none">
+          <array c:type="char**">
+            <type name="utf8" c:type="char*"/>
+          </array>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="foo_test_string_array_with_g"
+              c:identifier="regress_foo_test_string_array_with_g">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="array" transfer-ownership="none">
+          <array c:type="gchar**">
+            <type name="utf8" c:type="gchar*"/>
+          </array>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="foo_test_unsigned_qualifier"
+              c:identifier="regress_foo_test_unsigned_qualifier">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="unsigned_param" transfer-ownership="none">
+          <type name="guint" c:type="unsigned int"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="foo_test_unsigned_type"
+              c:identifier="regress_foo_test_unsigned_type">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="unsigned_param" transfer-ownership="none">
+          <type name="guint" c:type="unsigned"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="foo_test_varargs_callback"
+              c:identifier="regress_foo_test_varargs_callback"
+              introspectable="0">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="i" transfer-ownership="none">
+          <type name="gint" c:type="gint"/>
+        </parameter>
+        <parameter name="callback" transfer-ownership="none">
+          <type name="FooVarargsCallback" c:type="RegressFooVarargsCallback"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="foo_test_varargs_callback2"
+              c:identifier="regress_foo_test_varargs_callback2"
+              introspectable="0">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="callback" transfer-ownership="none">
+          <type name="FooVarargsCallback" c:type="RegressFooVarargsCallback"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function name="foo_test_varargs_callback3"
+              c:identifier="regress_foo_test_varargs_callback3"
+              introspectable="0">
+      <return-value transfer-ownership="none">
+        <type name="none" c:type="void"/>
+      </return-value>
+      <parameters>
+        <parameter name="callback" transfer-ownership="none">
+          <type name="FooVarargsCallback" c:type="RegressFooVarargsCallback"/>
+        </parameter>
+        <parameter name="callback2" transfer-ownership="none">
+          <type name="FooVarargsCallback" c:type="RegressFooVarargsCallback"/>
+        </parameter>
+      </parameters>
     </function>
     <function name="func_obj_null_in" c:identifier="regress_func_obj_null_in">
       <return-value transfer-ownership="none">

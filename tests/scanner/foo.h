@@ -1,257 +1,257 @@
-#ifndef __FOO_OBJECT_H__
-#define __FOO_OBJECT_H__
+#ifndef __REGRESS_FOO_OBJECT_H__
+#define __REGRESS_FOO_OBJECT_H__
 
 #include <glib-object.h>
 #include <gio/gio.h> /* GAsyncReadyCallback */
 #include "utility.h"
 
-#define FOO_SUCCESS_INT 0x1138
+#define REGRESS_FOO_SUCCESS_INT 0x1138
 
-#define FOO_DEFINE_SHOULD_BE_EXPOSED "should be exposed"
+#define REGRESS_FOO_DEFINE_SHOULD_BE_EXPOSED "should be exposed"
 
-#define FOO_PIE_IS_TASTY 3.14159
+#define REGRESS_FOO_PIE_IS_TASTY 3.14159
 
-#define FOO_TYPE_INTERFACE           (foo_interface_get_type ())
-#define FOO_INTERFACE(object)        (G_TYPE_CHECK_INSTANCE_CAST ((object), FOO_TYPE_INTERFACE, FooInterface))
-#define FOO_IS_INTERFACE(object)     (G_TYPE_CHECK_INSTANCE_TYPE ((object), FOO_TYPE_INTERFACE))
-#define FOO_INTERFACE_GET_INTERFACE(inst) (G_TYPE_INSTANCE_GET_INTERFACE ((inst), FOO_TYPE_INTERFACE, FooInterfaceIface))
+#define REGRESS_FOO_TYPE_INTERFACE           (regress_foo_interface_get_type ())
+#define REGRESS_FOO_INTERFACE(object)        (G_TYPE_CHECK_INSTANCE_CAST ((object), REGRESS_FOO_TYPE_INTERFACE, RegressFooInterface))
+#define REGRESS_FOO_IS_INTERFACE(object)     (G_TYPE_CHECK_INSTANCE_TYPE ((object), REGRESS_FOO_TYPE_INTERFACE))
+#define REGRESS_FOO_INTERFACE_GET_INTERFACE(inst) (G_TYPE_INSTANCE_GET_INTERFACE ((inst), REGRESS_FOO_TYPE_INTERFACE, RegressFooInterfaceIface))
 
-#define FOO_TYPE_SUBINTERFACE           (foo_sub_interface_get_type ())
-#define FOO_SUBINTERFACE(object)        (G_TYPE_CHECK_INSTANCE_CAST ((object), FOO_TYPE_SUBINTERFACE, FooSubInterface))
-#define FOO_IS_SUBINTERFACE(object)     (G_TYPE_CHECK_INSTANCE_TYPE ((object), FOO_TYPE_SUBINTERFACE))
-#define FOO_SUBINTERFACE_GET_INTERFACE(inst) (G_TYPE_INSTANCE_GET_INTERFACE ((inst), FOO_TYPE_SUBINTERFACE, FooSubInterfaceIface))
+#define REGRESS_FOO_TYPE_SUBINTERFACE           (regress_foo_sub_interface_get_type ())
+#define REGRESS_FOO_SUBINTERFACE(object)        (G_TYPE_CHECK_INSTANCE_CAST ((object), REGRESS_FOO_TYPE_SUBINTERFACE, RegressFooSubInterface))
+#define REGRESS_FOO_IS_SUBINTERFACE(object)     (G_TYPE_CHECK_INSTANCE_TYPE ((object), REGRESS_FOO_TYPE_SUBINTERFACE))
+#define REGRESS_FOO_SUBINTERFACE_GET_INTERFACE(inst) (G_TYPE_INSTANCE_GET_INTERFACE ((inst), REGRESS_FOO_TYPE_SUBINTERFACE, RegressFooSubInterfaceIface))
 
 
-#define FOO_TYPE_OBJECT              (foo_object_get_type ())
-#define FOO_OBJECT(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), FOO_TYPE_OBJECT, FooObject))
-#define FOO_IS_OBJECT(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), FOO_TYPE_OBJECT))
+#define REGRESS_FOO_TYPE_OBJECT              (regress_foo_object_get_type ())
+#define REGRESS_FOO_OBJECT(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), REGRESS_FOO_TYPE_OBJECT, RegressFooObject))
+#define REGRESS_FOO_IS_OBJECT(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), REGRESS_FOO_TYPE_OBJECT))
 
-#define FOO_TYPE_SUBOBJECT           (foo_subobject_get_type ())
-#define FOO_SUBOBJECT(subobject)     (G_TYPE_CHECK_INSTANCE_CAST ((subobject), FOO_TYPE_SUBOBJECT, FooSubobject))
-#define FOO_IS_SUBOBJECT(subobject)  (G_TYPE_CHECK_INSTANCE_TYPE ((subobject), FOO_TYPE_SUBOBJECT))
+#define REGRESS_FOO_TYPE_SUBOBJECT           (regress_foo_subobject_get_type ())
+#define REGRESS_FOO_SUBOBJECT(subobject)     (G_TYPE_CHECK_INSTANCE_CAST ((subobject), REGRESS_FOO_TYPE_SUBOBJECT, RegressFooSubobject))
+#define REGRESS_FOO_IS_SUBOBJECT(subobject)  (G_TYPE_CHECK_INSTANCE_TYPE ((subobject), REGRESS_FOO_TYPE_SUBOBJECT))
 
-#define FOO_TYPE_BUFFER        (foo_buffer_get_type ())
-#define FOO_BUFFER(object)     (G_TYPE_CHECK_INSTANCE_CAST ((object), FOO_TYPE_BUFFER, FooBuffer))
-#define FOO_IS_BUFFER(object)  (G_TYPE_CHECK_INSTANCE_TYPE ((object), FOO_TYPE_BUFFER))
+#define REGRESS_FOO_TYPE_BUFFER        (regress_foo_buffer_get_type ())
+#define REGRESS_FOO_BUFFER(object)     (G_TYPE_CHECK_INSTANCE_CAST ((object), REGRESS_FOO_TYPE_BUFFER, RegressFooBuffer))
+#define REGRESS_FOO_IS_BUFFER(object)  (G_TYPE_CHECK_INSTANCE_TYPE ((object), REGRESS_FOO_TYPE_BUFFER))
 
-#define FOO_TYPE_OTHER_OBJECT  (foo_other_object_get_type ())
-#define FOO_OTHER_OBJECT(object)     (G_TYPE_CHECK_INSTANCE_CAST ((object), FOO_TYPE_OTHER_OBJECT, FooOtherObject))
-#define FOO_IS_OTHER_OBJECT(object)  (G_TYPE_CHECK_INSTANCE_TYPE ((object), FOO_TYPE_OTHER_OBJECT))
+#define REGRESS_FOO_TYPE_OTHER_OBJECT  (regress_foo_other_object_get_type ())
+#define REGRESS_FOO_OTHER_OBJECT(object)     (G_TYPE_CHECK_INSTANCE_CAST ((object), REGRESS_FOO_TYPE_OTHER_OBJECT, RegressFooOtherObject))
+#define REGRESS_FOO_IS_OTHER_OBJECT(object)  (G_TYPE_CHECK_INSTANCE_TYPE ((object), REGRESS_FOO_TYPE_OTHER_OBJECT))
 
-typedef struct _FooInterface       FooInterface;
-typedef struct _FooInterfaceIface  FooInterfaceIface;
-typedef struct _FooSubInterface       FooSubInterface;
-typedef struct _FooSubInterfaceIface  FooSubInterfaceIface;
-typedef struct _FooObject          FooObject;
-typedef struct _FooObjectClass     FooObjectClass;
-typedef struct _FooSubobject       FooSubobject;
-typedef struct _FooSubobjectClass  FooSubobjectClass;
-typedef struct _FooBuffer          FooBuffer;
-typedef struct _FooBufferClass     FooBufferClass;
-typedef struct _FooOtherObject          FooOtherObject;
-typedef struct _FooOtherObjectClass     FooOtherObjectClass;
+typedef struct _RegressFooInterface       RegressFooInterface;
+typedef struct _RegressFooInterfaceIface  RegressFooInterfaceIface;
+typedef struct _RegressFooSubInterface       RegressFooSubInterface;
+typedef struct _RegressFooSubInterfaceIface  RegressFooSubInterfaceIface;
+typedef struct _RegressFooObject          RegressFooObject;
+typedef struct _RegressFooObjectClass     RegressFooObjectClass;
+typedef struct _RegressFooSubobject       RegressFooSubobject;
+typedef struct _RegressFooSubobjectClass  RegressFooSubobjectClass;
+typedef struct _RegressFooBuffer          RegressFooBuffer;
+typedef struct _RegressFooBufferClass     RegressFooBufferClass;
+typedef struct _RegressFooOtherObject          RegressFooOtherObject;
+typedef struct _RegressFooOtherObjectClass     RegressFooOtherObjectClass;
 
-struct _FooInterfaceIface
+struct _RegressFooInterfaceIface
 {
   GTypeInterface parent_iface;
 
-  void (*do_foo) (FooInterface *self, int x);
+  void (*do_regress_foo) (RegressFooInterface *self, int x);
 };
 
-GType                 foo_interface_get_type       (void) G_GNUC_CONST;
+GType                 regress_foo_interface_get_type       (void) G_GNUC_CONST;
 
-void foo_interface_do_foo (FooInterface *iface, int x);
+void regress_foo_interface_do_regress_foo (RegressFooInterface *iface, int x);
 
-void foo_interface_static_method (int x);
+void regress_foo_interface_static_method (int x);
 
-struct _FooSubInterfaceIface
+struct _RegressFooSubInterfaceIface
 {
   GTypeInterface parent_iface;
 
   /* signals */
 
-  void (*destroy_event) (FooSubInterface *self);
+  void (*destroy_event) (RegressFooSubInterface *self);
 
   /* virtual table */
 
-  void (*do_bar) (FooSubInterface *self);
+  void (*do_bar) (RegressFooSubInterface *self);
 
   /* explicitly test un-named parameters */
-  void (*do_moo) (FooSubInterface *self, int, gpointer);
+  void (*do_moo) (RegressFooSubInterface *self, int, gpointer);
 
-  void (*do_baz) (FooSubInterface *self, GCallback callback, gpointer user_data);
+  void (*do_baz) (RegressFooSubInterface *self, GCallback callback, gpointer user_data);
 };
 
-GType                 foo_sub_interface_get_type       (void) G_GNUC_CONST;
+GType                 regress_foo_sub_interface_get_type       (void) G_GNUC_CONST;
 
-void foo_sub_interface_do_bar (FooSubInterface *self);
-void foo_sub_interface_do_moo (FooSubInterface *self, int, gpointer);
-void foo_sub_interface_do_baz (FooSubInterface *self,
-                               GCallback callback,
-                               gpointer user_data);
+void regress_foo_sub_interface_do_bar (RegressFooSubInterface *self);
+void regress_foo_sub_interface_do_moo (RegressFooSubInterface *self, int, gpointer);
+void regress_foo_sub_interface_do_baz (RegressFooSubInterface *self,
+                                       GCallback callback,
+                                       gpointer user_data);
 
-struct _FooObject
+struct _RegressFooObject
 {
   GObject parent_instance;
 
   int some_int;
 };
 
-struct _FooObjectClass
+struct _RegressFooObjectClass
 {
   GObjectClass parent_class;
 
-  gboolean (* virtual_method) (FooObject *object, int first_param);
+  gboolean (* virtual_method) (RegressFooObject *object, int first_param);
 
   /* Intended to match GFile */
-  void (*read_fn) (FooObject *object, int offset, int length);
+  void (*read_fn) (RegressFooObject *object, int offset, int length);
   
   /* Test reserved stuff */
   GCallback _reserved[4];
 };
 
-gint                  foo_init                     (void);
+gint                  regress_foo_init                     (void);
 
-GType                 foo_object_get_type          (void) G_GNUC_CONST;
-FooObject*            foo_object_new               (void);
-UtilityObject*        foo_object_external_type     (FooObject *object);
-GObject*              foo_object_new_as_super      (void);
+GType                 regress_foo_object_get_type          (void) G_GNUC_CONST;
+RegressFooObject*            regress_foo_object_new               (void);
+UtilityObject*        regress_foo_object_external_type     (RegressFooObject *object);
+GObject*              regress_foo_object_new_as_super      (void);
 
-void                  foo_object_various           (FooObject *object, void *data, GType some_type);
+void                  regress_foo_object_various           (RegressFooObject *object, void *data, GType some_type);
 
-void                  foo_object_take_all          (FooObject *object, int x, ...);
+void                  regress_foo_object_take_all          (RegressFooObject *object, int x, ...);
 
-typedef gpointer FooObjectCookie;
+typedef gpointer RegressFooObjectCookie;
 
-FooObjectCookie       foo_object_new_cookie        (FooObject *object, const char *target);
+RegressFooObjectCookie       regress_foo_object_new_cookie        (RegressFooObject *object, const char *target);
 
-void                  foo_object_is_it_time_yet    (FooObject *object, time_t time);
+void                  regress_foo_object_is_it_time_yet    (RegressFooObject *object, time_t time);
 
-const char *          foo_object_get_name          (FooObject *object);
+const char *          regress_foo_object_get_name          (RegressFooObject *object);
 
-char *                foo_object_dup_name          (FooObject *object);
+char *                regress_foo_object_dup_name          (RegressFooObject *object);
 
-void                  foo_object_handle_glyph      (FooObject *object, UtilityGlyph glyph);
+void                  regress_foo_object_handle_glyph      (RegressFooObject *object, UtilityGlyph glyph);
 
-gboolean              foo_object_virtual_method    (FooObject *object, int first_param);
+gboolean              regress_foo_object_virtual_method    (RegressFooObject *object, int first_param);
 
-void                  foo_object_read              (FooObject *object, int offset, int length);
+void                  regress_foo_object_read              (RegressFooObject *object, int offset, int length);
 
-int                   foo_object_static_meth       (void);
+int                   regress_foo_object_static_meth       (void);
 
-void                  foo_object_skipped_method    (FooObject *object);
+void                  regress_foo_object_skipped_method    (RegressFooObject *object);
 
-struct _FooSubobject
+struct _RegressFooSubobject
 {
-  FooObject parent_instance;
+  RegressFooObject parent_instance;
 };
 
-struct _FooSubobjectClass
+struct _RegressFooSubobjectClass
 {
-  FooObjectClass parent_class;
+  RegressFooObjectClass parent_class;
 };
 
-GType                 foo_subobject_get_type       (void) G_GNUC_CONST;
-FooSubobject*         foo_subobject_new            (void);
+GType                 regress_foo_subobject_get_type       (void) G_GNUC_CONST;
+RegressFooSubobject*         regress_foo_subobject_new            (void);
 
-FooObject *           foo_object_get_default       (void);
+RegressFooObject *           regress_foo_object_get_default       (void);
 
-GType                 foo_buffer_get_type          (void);
+GType                 regress_foo_buffer_get_type          (void);
 
-void                  foo_buffer_some_method       (FooBuffer *buffer);
+void                  regress_foo_buffer_some_method       (RegressFooBuffer *buffer);
 
-GType                 foo_other_object_get_type    (void) G_GNUC_CONST;
+GType                 regress_foo_other_object_get_type    (void) G_GNUC_CONST;
 
-FooObject *           foo_not_a_constructor_new    (void);
-
-typedef enum
-{
-  FOO_ENUM_ALPHA,
-  FOO_ENUM_BETA,
-  FOO_ENUM_DELTA
-} FooEnumType;
-
-GType foo_enum_type_get_type (void);
-
-int                   foo_enum_type_method         (FooEnumType foo_enum);
-
-FooEnumType           foo_enum_type_returnv        (int x);
+RegressFooObject *           regress_foo_not_a_constructor_new    (void);
 
 typedef enum
 {
-  FOO_FLAGS_FIRST  = 1 << 0,
-  FOO_FLAGS_SECOND = 1 << 1,
-  FOO_FLAGS_THIRD  = 1 << 2
-} FooFlagsType;
+  REGRESS_FOO_ENUM_ALPHA,
+  REGRESS_FOO_ENUM_BETA,
+  REGRESS_FOO_ENUM_DELTA
+} RegressFooEnumType;
 
-GType foo_flags_type_get_type (void);
+GType regress_foo_enum_type_get_type (void);
 
-typedef enum
-{
-  FOO_ENUM_UN = 1,
-  FOO_ENUM_DEUX = 2,
-  FOO_ENUM_TROIS = 3,
-  FOO_ENUM_NEUF = 9
-} FooEnumNoType;
+int                   regress_foo_enum_type_method         (RegressFooEnumType regress_foo_enum);
+
+RegressFooEnumType           regress_foo_enum_type_returnv        (int x);
 
 typedef enum
 {
-  FOO_FLAGS_ETT  = 1 << 0,
-  FOO_FLAGS_TVA = 1 << 1,
-  FOO_FLAGS_FYRA  = 1 << 2
-} FooFlagsNoType;
+  REGRESS_FOO_FLAGS_FIRST  = 1 << 0,
+  REGRESS_FOO_FLAGS_SECOND = 1 << 1,
+  REGRESS_FOO_FLAGS_THIRD  = 1 << 2
+} RegressFooFlagsType;
+
+GType regress_foo_flags_type_get_type (void);
 
 typedef enum
 {
-  FOO_ENUM_FULLNAME_ONE = 1,
-  FOO_ENUM_FULLNAME_TWO,
-  FOO_ENUM_FULLNAME_THREE
-} FooEnumFullname;
+  REGRESS_FOO_ENUM_UN = 1,
+  REGRESS_FOO_ENUM_DEUX = 2,
+  REGRESS_FOO_ENUM_TROIS = 3,
+  REGRESS_FOO_ENUM_NEUF = 9
+} RegressFooEnumNoType;
 
 typedef enum
 {
-  FOO_ADDRESS_INVALID,
-  FOO_ADDRESS_IPV4,
-  FOO_ADDRESS_IPV6
-} FooAddressType;
+  REGRESS_FOO_FLAGS_ETT  = 1 << 0,
+  REGRESS_FOO_FLAGS_TVA = 1 << 1,
+  REGRESS_FOO_FLAGS_FYRA  = 1 << 2
+} RegressFooFlagsNoType;
 
-typedef struct _FooBoxed FooBoxed;
+typedef enum
+{
+  REGRESS_FOO_ENUM_FULLNAME_ONE = 1,
+  REGRESS_FOO_ENUM_FULLNAME_TWO,
+  REGRESS_FOO_ENUM_FULLNAME_THREE
+} RegressFooEnumFullname;
 
-GType                 foo_boxed_get_type       (void) G_GNUC_CONST;
-FooBoxed*             foo_boxed_new            (void);
-void                  foo_boxed_method         (FooBoxed* boxed);
+typedef enum
+{
+  REGRESS_FOO_ADDRESS_INVALID,
+  REGRESS_FOO_ADDRESS_IPV4,
+  REGRESS_FOO_ADDRESS_IPV6
+} RegressFooAddressType;
+
+typedef struct _RegressFooBoxed RegressFooBoxed;
+
+GType                 regress_foo_boxed_get_type       (void) G_GNUC_CONST;
+RegressFooBoxed*             regress_foo_boxed_new            (void);
+void                  regress_foo_boxed_method         (RegressFooBoxed* boxed);
 
 /* This one tests capitalization handling with respect to DBus */
-typedef struct _FooDBusData FooDBusData;
-GType                 foo_dbus_data_get_type       (void) G_GNUC_CONST;
-void                  foo_dbus_data_method         (FooDBusData* dbusdata);
+typedef struct _RegressFooDBusData RegressFooDBusData;
+GType                 regress_foo_dbus_data_get_type       (void) G_GNUC_CONST;
+void                  regress_foo_dbus_data_method         (RegressFooDBusData* dbusdata);
 
 /* FIXME: Scanner does not support this yet
-const char *FOO_CONSTANT_STR = "foo-constant-str";
-const int FOO_CONSTANT_INT = 10;
-const float FOO_CONSTANT_FLOAT = 10;
+const char *REGRESS_FOO_CONSTANT_STR = "regress_foo-constant-str";
+const int REGRESS_FOO_CONSTANT_INT = 10;
+const float REGRESS_FOO_CONSTANT_FLOAT = 10;
 */
 
 /* Callback */
-typedef gboolean (* FooCallback) (FooObject *foo, gboolean b, gpointer data);
+typedef gboolean (* RegressFooCallback) (RegressFooObject *regress_foo, gboolean b, gpointer data);
 
 /* Invalid comments, should be ignored */
 
 /* @ */
 /* @: */
 
-typedef struct _FooStruct           FooStruct; 
-typedef struct _FooStructPrivate    FooStructPrivate; 
+typedef struct _RegressFooStruct           RegressFooStruct; 
+typedef struct _RegressFooStructPrivate    RegressFooStructPrivate; 
 
-struct _FooStruct
+struct _RegressFooStruct
 {
-  FooStructPrivate *priv;
+  RegressFooStructPrivate *priv;
   int member;
 };
 
-typedef struct _FooRectangle          FooRectangle;
+typedef struct _RegressFooRectangle          RegressFooRectangle;
 
-struct _FooRectangle
+struct _RegressFooRectangle
 {
   gint x;
   gint y;
@@ -260,81 +260,81 @@ struct _FooRectangle
 };
 
 void
-foo_method_external_references (UtilityObject *object,
-				UtilityEnumType e,
-				UtilityFlagType f,
-				UtilityStruct s);
+regress_foo_method_external_references (UtilityObject *object,
+                                        UtilityEnumType e,
+                                        UtilityFlagType f,
+                                        UtilityStruct s);
 
-void foo_rectangle_add(FooRectangle *r1, const FooRectangle *r2);
+void regress_foo_rectangle_add(RegressFooRectangle *r1, const RegressFooRectangle *r2);
 
-FooRectangle * foo_rectangle_new (int x, int y, int width, int height);
+RegressFooRectangle * regress_foo_rectangle_new (int x, int y, int width, int height);
 
 
-typedef struct _FooEventAny FooEventAny;
-typedef struct _FooEventExpose FooEventExpose;
+typedef struct _RegressFooEventAny RegressFooEventAny;
+typedef struct _RegressFooEventExpose RegressFooEventExpose;
 
-typedef union  _FooEvent FooEvent;
+typedef union  _RegressFooEvent RegressFooEvent;
 
-struct _FooEventAny
+struct _RegressFooEventAny
 {
   gint8 send_event;
 };
 
-struct _FooEventExpose
+struct _RegressFooEventExpose
 {
   gint8 send_event;
   gint count;
 };
   
-union _FooEvent
+union _RegressFooEvent
 {
   int type;
-  FooEventAny any;
-  FooEventExpose expose;
+  RegressFooEventAny any;
+  RegressFooEventExpose expose;
 };
 
-typedef void FooXEvent;
+typedef void RegressFooXEvent;
 
 /* And now some boxed variants */
 
-typedef struct _FooBRect          FooBRect;
+typedef struct _RegressFooBRect          RegressFooBRect;
 
-struct _FooBRect
+struct _RegressFooBRect
 {
   double x;
   double y;
 };
 
-GType foo_brect_get_type (void);
+GType regress_foo_brect_get_type (void);
 
-FooBRect *foo_brect_new (double x, double y);
+RegressFooBRect *regress_foo_brect_new (double x, double y);
 
-void foo_brect_add (FooBRect *b1, FooBRect *b2);
+void regress_foo_brect_add (RegressFooBRect *b1, RegressFooBRect *b2);
 
-typedef union _FooBUnion FooBUnion;
+typedef union _RegressFooBUnion RegressFooBUnion;
 
-union _FooBUnion
+union _RegressFooBUnion
 {
   int type;
   double v;
-  FooBRect *rect;
+  RegressFooBRect *rect;
 };
 
-typedef union _FooUnion FooUnion;
+typedef union _RegressFooUnion RegressFooUnion;
 
-union _FooUnion
+union _RegressFooUnion
 {
-  int foo;
+  int regress_foo;
 };
 
-typedef struct _FooUtilityStruct FooUtilityStruct;
-struct _FooUtilityStruct
+typedef struct _RegressFooUtilityStruct RegressFooUtilityStruct;
+struct _RegressFooUtilityStruct
 {
   UtilityStruct bar;
 };
 
-typedef struct _FooThingWithArray FooThingWithArray;
-struct _FooThingWithArray
+typedef struct _RegressFooThingWithArray RegressFooThingWithArray;
+struct _RegressFooThingWithArray
 {
   int x;
   int y;
@@ -342,100 +342,100 @@ struct _FooThingWithArray
   guchar *data;
 } ;
 
-FooBUnion *foo_bunion_new (void);
+RegressFooBUnion *regress_foo_bunion_new (void);
 
-GType foo_bunion_get_type (void);
+GType regress_foo_bunion_get_type (void);
 
-int foo_bunion_get_contained_type (FooBUnion *bunion);
+int regress_foo_bunion_get_contained_type (RegressFooBUnion *bunion);
 
-void foo_test_unsigned_qualifier (unsigned int unsigned_param);
-void foo_test_unsigned_type (unsigned unsigned_param);
+void regress_foo_test_unsigned_qualifier (unsigned int unsigned_param);
+void regress_foo_test_unsigned_type (unsigned unsigned_param);
 
-void foo_test_string_array (char **array);
+void regress_foo_test_string_array (char **array);
 
-void foo_test_string_array_with_g (gchar **array);
+void regress_foo_test_string_array_with_g (gchar **array);
 
-GArray *foo_test_array (void);
+GArray *regress_foo_test_array (void);
 
-const char * foo_test_const_char_retval (void);
-const FooStruct * foo_test_const_struct_retval (void);
-void foo_test_const_char_param (const char * param);
-void foo_test_const_struct_param (const FooStruct * param);
+const char * regress_foo_test_const_char_retval (void);
+const RegressFooStruct * regress_foo_test_const_struct_retval (void);
+void regress_foo_test_const_char_param (const char * param);
+void regress_foo_test_const_struct_param (const RegressFooStruct * param);
 
-typedef void (*FooVarargsCallback) (const char * param, ...);
-void foo_test_varargs_callback (gint i, FooVarargsCallback callback);
-void foo_test_varargs_callback2 (FooVarargsCallback callback);
-void foo_test_varargs_callback3 (FooVarargsCallback callback,
-				 FooVarargsCallback callback2);
+typedef void (*RegressFooVarargsCallback) (const char * param, ...);
+void regress_foo_test_varargs_callback (gint i, RegressFooVarargsCallback callback);
+void regress_foo_test_varargs_callback2 (RegressFooVarargsCallback callback);
+void regress_foo_test_varargs_callback3 (RegressFooVarargsCallback callback,
+                                         RegressFooVarargsCallback callback2);
 
 /* Make sure callbacks get the right scope by default */
-void foo_async_ready_callback(GCancellable *cancellable,
-                              GAsyncReadyCallback callback,
-                              gpointer user_data);
-void foo_destroy_notify_callback(FooCallback callback,
-                                 gpointer data,
-                                 GDestroyNotify destroy);
+void regress_foo_async_ready_callback(GCancellable *cancellable,
+                                      GAsyncReadyCallback callback,
+                                      gpointer user_data);
+void regress_foo_destroy_notify_callback(RegressFooCallback callback,
+                                         gpointer data,
+                                         GDestroyNotify destroy);
 
 typedef enum {
-  FOO_ERROR_GOOD,
-  FOO_ERROR_BAD,
-  FOO_ERROR_UGLY
-} FooError;
-GType foo_error_get_type (void);
+  REGRESS_FOO_ERROR_GOOD,
+  REGRESS_FOO_ERROR_BAD,
+  REGRESS_FOO_ERROR_UGLY
+} RegressFooError;
+GType regress_foo_error_get_type (void);
 
-GQuark foo_error_quark (void);
-
-typedef enum
-{
-  FOO_LAYER_DESKTOP        = 0,
-  FOO_LAYER_BOTTOM        = 1,
-  FOO_LAYER_NORMAL        = 2,
-  FOO_LAYER_TOP        = 4, /* Same as DOCK; see EWMH and bug 330717 */
-  FOO_LAYER_DOCK        = 4,
-  FOO_LAYER_FULLSCREEN        = 5,
-  FOO_LAYER_FOCUSED_WINDOW    = 6,
-  FOO_LAYER_OVERRIDE_REDIRECT = 7,
-  FOO_LAYER_LAST        = 8
-} FooStackLayer;
+GQuark regress_foo_error_quark (void);
 
 typedef enum
 {
-  FOO_SOME_SINGLE_ENUM
-} FooASingle;
+  REGRESS_FOO_LAYER_DESKTOP        = 0,
+  REGRESS_FOO_LAYER_BOTTOM        = 1,
+  REGRESS_FOO_LAYER_NORMAL        = 2,
+  REGRESS_FOO_LAYER_TOP        = 4, /* Same as DOCK; see EWMH and bug 330717 */
+  REGRESS_FOO_LAYER_DOCK        = 4,
+  REGRESS_FOO_LAYER_FULLSCREEN        = 5,
+  REGRESS_FOO_LAYER_FOCUSED_WINDOW    = 6,
+  REGRESS_FOO_LAYER_OVERRIDE_REDIRECT = 7,
+  REGRESS_FOO_LAYER_LAST        = 8
+} RegressFooStackLayer;
+
+typedef enum
+{
+  REGRESS_FOO_SOME_SINGLE_ENUM
+} RegressFooASingle;
 
 /* Should be skipped */
-void foo_some_variant (guint x, va_list args);
-void foo_some_variant_ptr (guint x, va_list *args);
+void regress_foo_some_variant (guint x, va_list args);
+void regress_foo_some_variant_ptr (guint x, va_list *args);
 
 /**
- * FooSkippable: (skip)
- * @FOO_SKIPPABLE_ONE: a skippable enum value
- * @FOO_SKIPPABLE_TWO: another skippable enum value
+ * RegressFooSkippable: (skip)
+ * @REGRESS_FOO_SKIPPABLE_ONE: a skippable enum value
+ * @REGRESS_FOO_SKIPPABLE_TWO: another skippable enum value
  *
  * Some type that is only interesting from C and should not be
  * exposed to language bindings.
  */
 typedef enum {
-  FOO_SKIPPABLE_ONE,
-  FOO_SKIPPABLE_TWO
-} FooSkippable;
-void foo_skip_me (FooSkippable fs);
+  REGRESS_FOO_SKIPPABLE_ONE,
+  REGRESS_FOO_SKIPPABLE_TWO
+} RegressFooSkippable;
+void regress_foo_skip_me (RegressFooSkippable fs);
 
-typedef struct _FooForeignStruct           FooForeignStruct;
+typedef struct _RegressFooForeignStruct           RegressFooForeignStruct;
 
-struct _FooForeignStruct
+struct _RegressFooForeignStruct
 {
-  int foo;
+  int regress_foo;
 };
 
-FooForeignStruct* foo_foreign_struct_new (void);
-FooForeignStruct* foo_foreign_struct_copy (FooForeignStruct *original);
+RegressFooForeignStruct* regress_foo_foreign_struct_new (void);
+RegressFooForeignStruct* regress_foo_foreign_struct_copy (RegressFooForeignStruct *original);
 
 /* This one should be a global, not a method on UtilityObject since
  * it's a separate namespace.
  */
-void foo_object_a_global_method (UtilityObject *obj);
+void regress_foo_object_a_global_method (UtilityObject *obj);
 
-FooOtherObject * foo_object_append_new_stack_layer (FooObject *obj, int x);
+RegressFooOtherObject * regress_foo_object_append_new_stack_layer (RegressFooObject *obj, int x);
 
-#endif /* __FOO_OBJECT_H__ */
+#endif /* __REGRESS_FOO_OBJECT_H__ */

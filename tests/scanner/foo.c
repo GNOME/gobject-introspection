@@ -1,45 +1,44 @@
 #include "foo.h"
-#include "girepository.h"
 
 /* A hidden type not exposed publicly, similar to GUPNP's XML wrapper
    object */
-typedef struct _FooHidden FooHidden;
+typedef struct _RegressFooHidden RegressFooHidden;
 
-int foo_init_argv (int argc, char **argv);
-int foo_init_argv_address (int *argc, char ***argv);
-void foo_private_function (FooObject *foo);
-void foo_test_unsigned (unsigned int uint);
-void foo_interface_do_foo (FooInterface *self, int x);
-void foo_do_foo (FooInterface *self, int x);
-int foo_enum_method (FooEnumType foo_enum);
-FooHidden * foo_hidden_copy (const FooHidden *boxed);
-void foo_hidden_free (FooHidden *boxed);
-GType foo_hidden_get_type (void);
-FooBoxed *foo_boxed_copy (const FooBoxed *boxed);
-void foo_boxed_free (FooBoxed *boxed);
-void foo_dbus_data_free (FooDBusData *boxed);
-FooDBusData *foo_dbus_data_copy (const FooDBusData *boxed);
+int regress_foo_init_argv (int argc, char **argv);
+int regress_foo_init_argv_address (int *argc, char ***argv);
+void regress_foo_private_function (RegressFooObject *regress_foo);
+void regress_foo_test_unsigned (unsigned int uint);
+void regress_foo_interface_do_regress_foo (RegressFooInterface *self, int x);
+void regress_foo_do_regress_foo (RegressFooInterface *self, int x);
+int regress_foo_enum_method (RegressFooEnumType regress_foo_enum);
+RegressFooHidden * regress_foo_hidden_copy (const RegressFooHidden *boxed);
+void regress_foo_hidden_free (RegressFooHidden *boxed);
+GType regress_foo_hidden_get_type (void);
+RegressFooBoxed *regress_foo_boxed_copy (const RegressFooBoxed *boxed);
+void regress_foo_boxed_free (RegressFooBoxed *boxed);
+void regress_foo_dbus_data_free (RegressFooDBusData *boxed);
+RegressFooDBusData *regress_foo_dbus_data_copy (const RegressFooDBusData *boxed);
 
 typedef struct
 {
   int i;
 } PrivateStruct;
 
-void foo_private_function (FooObject *foo)
+void regress_foo_private_function (RegressFooObject *regress_foo)
 {
 
 }
 
 GType
-foo_interface_get_type (void)
+regress_foo_interface_get_type (void)
 {
   static GType object_type = 0;
 
   if (!object_type)
     {
       object_type = g_type_register_static_simple (G_TYPE_INTERFACE,
-                                                   "FooInterface",
-                                                   sizeof (FooInterfaceIface),
+                                                   "RegressFooInterface",
+                                                   sizeof (RegressFooInterfaceIface),
                                                    NULL, 0, NULL, 0);
 
       g_type_interface_add_prerequisite (object_type, G_TYPE_OBJECT);
@@ -48,12 +47,12 @@ foo_interface_get_type (void)
   return object_type;
 }
 
-void foo_interface_do_foo (FooInterface *self, int x)
+void regress_foo_interface_do_regress_foo (RegressFooInterface *self, int x)
 {
-  FOO_INTERFACE_GET_INTERFACE(self)->do_foo (self, x);
+  REGRESS_FOO_INTERFACE_GET_INTERFACE(self)->do_regress_foo (self, x);
 }
 
-void foo_interface_static_method (int x)
+void regress_foo_interface_static_method (int x)
 {
 }
 
@@ -68,14 +67,14 @@ enum {
   LAST_SIGNAL
 };
 
-static guint foo_object_signals[LAST_SIGNAL] = { 0 };
+static guint regress_foo_object_signals[LAST_SIGNAL] = { 0 };
 
 static void
-foo_foo_interface_init (gpointer         g_iface,
-			gpointer         iface_data)
+regress_foo_regress_foo_interface_init (gpointer         g_iface,
+                                        gpointer         iface_data)
 {
-  FooInterfaceIface *iface = (FooInterfaceIface *)g_iface;
-  iface->do_foo = foo_do_foo;
+  RegressFooInterfaceIface *iface = (RegressFooInterfaceIface *)g_iface;
+  iface->do_regress_foo = regress_foo_do_regress_foo;
 }
 
 enum {
@@ -84,93 +83,74 @@ enum {
 };
 
 static void
-foo_sub_interface_class_init (gpointer g_class, gpointer class_data);
+regress_foo_sub_interface_class_init (gpointer g_class, gpointer class_data);
 
-static guint foo_subiface_signals[SUBIFACE_LAST_SIGNAL] = { 0 };
+static guint regress_foo_subiface_signals[SUBIFACE_LAST_SIGNAL] = { 0 };
 
 GType
-foo_sub_interface_get_type (void)
+regress_foo_sub_interface_get_type (void)
 {
   static GType object_type = 0;
 
   if (!object_type)
     {
       object_type = g_type_register_static_simple (G_TYPE_INTERFACE,
-                                                   "FooSubInterface",
-                                                   sizeof (FooSubInterfaceIface),
-                                                   foo_sub_interface_class_init, 0, NULL, 0);
+                                                   "RegressFooSubInterface",
+                                                   sizeof (RegressFooSubInterfaceIface),
+                                                   regress_foo_sub_interface_class_init, 0, NULL, 0);
 
-      g_type_interface_add_prerequisite (object_type, FOO_TYPE_INTERFACE);
+      g_type_interface_add_prerequisite (object_type, REGRESS_FOO_TYPE_INTERFACE);
     }
 
   return object_type;
 }
 
 static void
-foo_sub_interface_class_init (gpointer g_class, gpointer class_data)
+regress_foo_sub_interface_class_init (gpointer g_class, gpointer class_data)
 {
-  foo_subiface_signals[SUBIFACE_DESTROY_EVENT] =
-    g_signal_new ("destroy-event", FOO_TYPE_SUBINTERFACE,
+  regress_foo_subiface_signals[SUBIFACE_DESTROY_EVENT] =
+    g_signal_new ("destroy-event", REGRESS_FOO_TYPE_SUBINTERFACE,
                   G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (FooSubInterfaceIface, destroy_event),
-                  NULL, NULL,
-                  gi_cclosure_marshal_generic,
+                  G_STRUCT_OFFSET (RegressFooSubInterfaceIface, destroy_event),
+                  NULL, NULL, NULL,
                   G_TYPE_NONE,
                   0,
                   G_TYPE_NONE);
 }
 
 void
-foo_sub_interface_do_bar (FooSubInterface *self)
+regress_foo_sub_interface_do_bar (RegressFooSubInterface *self)
 {
-  FOO_SUBINTERFACE_GET_INTERFACE(self)->do_bar (self);
+  REGRESS_FOO_SUBINTERFACE_GET_INTERFACE(self)->do_bar (self);
 }
 
 void
-foo_sub_interface_do_moo (FooSubInterface *self, int x, gpointer y)
+regress_foo_sub_interface_do_moo (RegressFooSubInterface *self, int x, gpointer y)
 {
-  FOO_SUBINTERFACE_GET_INTERFACE(self)->do_moo (self, x, y);
+  REGRESS_FOO_SUBINTERFACE_GET_INTERFACE(self)->do_moo (self, x, y);
 }
 
 /**
- * foo_sub_interface_do_baz:
+ * regress_foo_sub_interface_do_baz:
  * @self:
  * @callback: (scope call):
  * @user_data:
  */
 void
-foo_sub_interface_do_baz (FooSubInterface *self, GCallback callback, gpointer user_data)
+regress_foo_sub_interface_do_baz (RegressFooSubInterface *self, GCallback callback, gpointer user_data)
 {
-  FOO_SUBINTERFACE_GET_INTERFACE(self)->do_baz (self, callback, user_data);
+  REGRESS_FOO_SUBINTERFACE_GET_INTERFACE(self)->do_baz (self, callback, user_data);
 }
 
-G_DEFINE_TYPE_EXTENDED (FooObject, foo_object, G_TYPE_OBJECT,
-			0, G_IMPLEMENT_INTERFACE (FOO_TYPE_INTERFACE,
-						  foo_foo_interface_init));
+G_DEFINE_TYPE_EXTENDED (RegressFooObject, regress_foo_object, G_TYPE_OBJECT,
+			0, G_IMPLEMENT_INTERFACE (REGRESS_FOO_TYPE_INTERFACE,
+						  regress_foo_regress_foo_interface_init));
 
 static void
-foo_object_set_property (GObject         *object,
-                         guint            prop_id,
-                         const GValue    *value,
-                         GParamSpec      *pspec)
-{
-  switch (prop_id)
-    {
-    case PROP_STRING:
-      break;
-    case PROP_HIDDEN:
-      break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-      break;
-    }
-}
-
-static void
-foo_object_get_property (GObject         *object,
-                         guint            prop_id,
-                         GValue          *value,
-                         GParamSpec      *pspec)
+regress_foo_object_set_property (GObject         *object,
+                                 guint            prop_id,
+                                 const GValue    *value,
+                                 GParamSpec      *pspec)
 {
   switch (prop_id)
     {
@@ -185,14 +165,32 @@ foo_object_get_property (GObject         *object,
 }
 
 static void
-foo_object_class_init (FooObjectClass *klass)
+regress_foo_object_get_property (GObject         *object,
+                                 guint            prop_id,
+                                 GValue          *value,
+                                 GParamSpec      *pspec)
+{
+  switch (prop_id)
+    {
+    case PROP_STRING:
+      break;
+    case PROP_HIDDEN:
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+regress_foo_object_class_init (RegressFooObjectClass *klass)
 {
   GObjectClass *gobject_class;
 
   gobject_class = G_OBJECT_CLASS (klass);
 
-  gobject_class->set_property = foo_object_set_property;
-  gobject_class->get_property = foo_object_get_property;
+  gobject_class->set_property = regress_foo_object_set_property;
+  gobject_class->get_property = regress_foo_object_get_property;
 
   g_object_class_install_property (gobject_class,
                                    PROP_STRING,
@@ -206,9 +204,9 @@ foo_object_class_init (FooObjectClass *klass)
                                    g_param_spec_boxed ("hidden",
 						       "hidden property",
 						       "should not be exposed",
-						       foo_hidden_get_type (),
+						       regress_foo_hidden_get_type (),
 						       G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
-  foo_object_signals[SIGNAL] =
+  regress_foo_object_signals[SIGNAL] =
     g_signal_new ("signal",
 		  G_OBJECT_CLASS_TYPE (gobject_class),
 		  G_SIGNAL_RUN_LAST,
@@ -220,80 +218,80 @@ foo_object_class_init (FooObjectClass *klass)
 }
 
 static void
-foo_object_init (FooObject *object)
+regress_foo_object_init (RegressFooObject *object)
 {
 
 }
 
-FooObject *
-foo_object_new (void)
+RegressFooObject *
+regress_foo_object_new (void)
 {
-  return g_object_new (FOO_TYPE_OBJECT, NULL);
+  return g_object_new (REGRESS_FOO_TYPE_OBJECT, NULL);
 }
 
 GObject *
-foo_object_new_as_super (void)
+regress_foo_object_new_as_super (void)
 {
-  return g_object_new (FOO_TYPE_OBJECT, NULL);
+  return g_object_new (REGRESS_FOO_TYPE_OBJECT, NULL);
 }
 
 /**
- * foo_object_external_type:
- * @object: a #FooObject
+ * regress_foo_object_external_type:
+ * @object: a #RegressFooObject
  *
  * Returns: (transfer none): %NULL always
  */
 UtilityObject*
-foo_object_external_type (FooObject *object)
+regress_foo_object_external_type (RegressFooObject *object)
 {
   return NULL;
 }
 
 void                  
-foo_object_take_all (FooObject *object, int x, ...)
+regress_foo_object_take_all (RegressFooObject *object, int x, ...)
 {
 
 }
 
 void
-foo_do_foo (FooInterface *self, int x)
+regress_foo_do_regress_foo (RegressFooInterface *self, int x)
 {
 
 
 }
 
 void
-foo_object_is_it_time_yet (FooObject *object, time_t time)
+regress_foo_object_is_it_time_yet (RegressFooObject *object, time_t time)
 {
 }
 
 /**
- * foo_object_new_cookie: (skip)
+ * regress_foo_object_new_cookie: (skip)
  * @object:
  * @target:
  *
  * Not sure why this test is here...
  */
-FooObjectCookie
-foo_object_new_cookie (FooObject *object, const char *target)
+RegressFooObjectCookie
+regress_foo_object_new_cookie (RegressFooObject *object, const char *target)
 {
   return NULL;
 }
 
 const char *
-foo_object_get_name (FooObject *object)
+regress_foo_object_get_name (RegressFooObject *object)
 {
-  return "foo";
+  return "regress_foo";
 }
 
 char *
-foo_object_dup_name (FooObject *object)
+regress_foo_object_dup_name (RegressFooObject *object)
 {
-  return g_strdup ("foo");
+  return g_strdup ("regress_foo");
 }
 
 /**
- * foo_object_read:
+ * regress_foo_object_read:
  * @object: obj
  * @offset: offset
  * @length: length
@@ -303,244 +301,244 @@ foo_object_dup_name (FooObject *object)
  * Virtual: read_fn
  */
 void
-foo_object_read (FooObject *object, int offset, int length)
+regress_foo_object_read (RegressFooObject *object, int offset, int length)
 {
 
 }
 
 /**
- * foo_object_skipped_method: (skip)
+ * regress_foo_object_skipped_method: (skip)
  * @object: obj
  *
  * This is only useful from C.
  */
 void
-foo_object_skipped_method (FooObject *object)
+regress_foo_object_skipped_method (RegressFooObject *object)
 {
 }
 
-G_DEFINE_ABSTRACT_TYPE (FooSubobject, foo_subobject, FOO_TYPE_OBJECT);
+G_DEFINE_ABSTRACT_TYPE (RegressFooSubobject, regress_foo_subobject, REGRESS_FOO_TYPE_OBJECT);
 
 static void
-foo_subobject_class_init (FooSubobjectClass *klass)
+regress_foo_subobject_class_init (RegressFooSubobjectClass *klass)
 {
 
 }
 
 static void
-foo_subobject_init (FooSubobject *object)
+regress_foo_subobject_init (RegressFooSubobject *object)
 {
 
 }
 
 /**
- * foo_object_get_default:
+ * regress_foo_object_get_default:
  *
  * This function is intended to match clutter_stage_get_default which
  * uses a C sugar return type.
  *
- * Return value: (type FooSubobject) (transfer none): The global #FooSubobject
+ * Return value: (type RegressFooSubobject) (transfer none): The global #RegressFooSubobject
  */
-FooObject *
-foo_object_get_default ()
+RegressFooObject *
+regress_foo_object_get_default ()
 {
   return NULL;
 }
 
-int foo_init (void)
+int regress_foo_init (void)
 {
-  return FOO_SUCCESS_INT;
+  return REGRESS_FOO_SUCCESS_INT;
 }
 
-int foo_init_argv (int argc, char **argv)
+int regress_foo_init_argv (int argc, char **argv)
 {
-  return FOO_SUCCESS_INT;
+  return REGRESS_FOO_SUCCESS_INT;
 }
 
-int foo_init_argv_address (int *argc, char ***argv)
+int regress_foo_init_argv_address (int *argc, char ***argv)
 {
-  return FOO_SUCCESS_INT;
+  return REGRESS_FOO_SUCCESS_INT;
 }
 
 GType
-foo_enum_type_get_type (void)
+regress_foo_enum_type_get_type (void)
 {
-    static GType etype = 0;
-    if (G_UNLIKELY(etype == 0)) {
-        static const GEnumValue values[] = {
-            { FOO_ENUM_ALPHA, "FOO_ENUM_ALPHA", "alpha" },
-            { FOO_ENUM_BETA, "FOO_ENUM_BETA", "beta" },
-            { FOO_ENUM_DELTA, "FOO_ENUM_DELTA", "delta" },
-            { 0, NULL, NULL }
-        };
-        etype = g_enum_register_static (g_intern_static_string ("FooEnumType"), values);
-    }
-    return etype;
+  static GType etype = 0;
+  if (G_UNLIKELY(etype == 0)) {
+    static const GEnumValue values[] = {
+      { REGRESS_FOO_ENUM_ALPHA, "REGRESS_FOO_ENUM_ALPHA", "alpha" },
+      { REGRESS_FOO_ENUM_BETA, "REGRESS_FOO_ENUM_BETA", "beta" },
+      { REGRESS_FOO_ENUM_DELTA, "REGRESS_FOO_ENUM_DELTA", "delta" },
+      { 0, NULL, NULL }
+    };
+    etype = g_enum_register_static (g_intern_static_string ("RegressFooEnumType"), values);
+  }
+  return etype;
 }
 
-int foo_enum_method (FooEnumType foo_enum)
+int regress_foo_enum_method (RegressFooEnumType regress_foo_enum)
 {
   return 0;
 }
 
 
 GType
-foo_flags_type_get_type (void)
+regress_foo_flags_type_get_type (void)
 {
-    static GType etype = 0;
-    if (G_UNLIKELY(etype == 0)) {
-        static const GFlagsValue values[] = {
-            { FOO_FLAGS_FIRST, "FOO_FLAGS_FIRST", "first" },
-            { FOO_FLAGS_SECOND, "FOO_FLAGS_SECOND", "second" },
-            { FOO_FLAGS_THIRD, "FOO_FLAGS_THIRD", "third" },
-            { 0, NULL, NULL }
-        };
-        etype = g_flags_register_static (g_intern_static_string ("FooFlagsType"), values);
-    }
-    return etype;
+  static GType etype = 0;
+  if (G_UNLIKELY(etype == 0)) {
+    static const GFlagsValue values[] = {
+      { REGRESS_FOO_FLAGS_FIRST, "REGRESS_FOO_FLAGS_FIRST", "first" },
+      { REGRESS_FOO_FLAGS_SECOND, "REGRESS_FOO_FLAGS_SECOND", "second" },
+      { REGRESS_FOO_FLAGS_THIRD, "REGRESS_FOO_FLAGS_THIRD", "third" },
+      { 0, NULL, NULL }
+    };
+    etype = g_flags_register_static (g_intern_static_string ("RegressFooFlagsType"), values);
+  }
+  return etype;
 }
 
-struct _FooBoxed
+struct _RegressFooBoxed
 {
   int private;
 };
 
 
-FooBoxed *
-foo_boxed_copy (const FooBoxed *boxed)
+RegressFooBoxed *
+regress_foo_boxed_copy (const RegressFooBoxed *boxed)
 {
-  return (FooBoxed *)g_memdup (boxed, sizeof (FooBoxed));
+  return (RegressFooBoxed *)g_memdup (boxed, sizeof (RegressFooBoxed));
 }
 
 void
-foo_boxed_free (FooBoxed *boxed)
+regress_foo_boxed_free (RegressFooBoxed *boxed)
 {
-  g_slice_free (FooBoxed, boxed);
+  g_slice_free (RegressFooBoxed, boxed);
 }
 
 
 GType
-foo_boxed_get_type (void)
+regress_foo_boxed_get_type (void)
 {
   static GType our_type = 0;
   
   if (our_type == 0)
-    our_type = g_boxed_type_register_static ("FooBoxed",
-					     (GBoxedCopyFunc) foo_boxed_copy,
-					     (GBoxedFreeFunc) foo_boxed_free);
+    our_type = g_boxed_type_register_static ("RegressFooBoxed",
+					     (GBoxedCopyFunc) regress_foo_boxed_copy,
+					     (GBoxedFreeFunc) regress_foo_boxed_free);
   return our_type;
 }
 
-FooBoxed *
-foo_boxed_new (void)
+RegressFooBoxed *
+regress_foo_boxed_new (void)
 {
-  return g_slice_new0 (FooBoxed);
+  return g_slice_new0 (RegressFooBoxed);
 }
 
 void
-foo_boxed_method (FooBoxed *boxed)
+regress_foo_boxed_method (RegressFooBoxed *boxed)
 {
 
 }
 
-/* FooDbus */
-struct _FooDBusData
+/* RegressFooDbus */
+struct _RegressFooDBusData
 {
   double private;
 };
 
-FooDBusData *
-foo_dbus_data_copy (const FooDBusData *boxed)
+RegressFooDBusData *
+regress_foo_dbus_data_copy (const RegressFooDBusData *boxed)
 {
-  return (FooDBusData *)g_memdup (boxed, sizeof (FooDBusData));
+  return (RegressFooDBusData *)g_memdup (boxed, sizeof (RegressFooDBusData));
 }
 
 void
-foo_dbus_data_free (FooDBusData *boxed)
+regress_foo_dbus_data_free (RegressFooDBusData *boxed)
 {
-  g_slice_free (FooDBusData, boxed);
+  g_slice_free (RegressFooDBusData, boxed);
 }
 
 
 GType
-foo_dbus_data_get_type (void)
+regress_foo_dbus_data_get_type (void)
 {
   static GType our_type = 0;
   
   if (our_type == 0)
-    our_type = g_boxed_type_register_static ("FooDBusData",
-					     (GBoxedCopyFunc) foo_dbus_data_copy,
-					     (GBoxedFreeFunc) foo_dbus_data_free);
+    our_type = g_boxed_type_register_static ("RegressFooDBusData",
+					     (GBoxedCopyFunc) regress_foo_dbus_data_copy,
+					     (GBoxedFreeFunc) regress_foo_dbus_data_free);
   return our_type;
 }
 
 GType
-foo_brect_get_type (void)
+regress_foo_brect_get_type (void)
 {
   static GType our_type = 0;
   
   if (our_type == 0)
-    our_type = g_boxed_type_register_static ("FooBRect",
+    our_type = g_boxed_type_register_static ("RegressFooBRect",
 					     (GBoxedCopyFunc) g_memdup, /* Won't work */
 					     (GBoxedFreeFunc) g_free);
   return our_type;
 }
 
 GType
-foo_bunion_get_type (void)
+regress_foo_bunion_get_type (void)
 {
   static GType our_type = 0;
   
   if (our_type == 0)
-    our_type = g_boxed_type_register_static ("FooBUnion",
+    our_type = g_boxed_type_register_static ("RegressFooBUnion",
 					     (GBoxedCopyFunc) g_memdup, /* Won't work */
 					     (GBoxedFreeFunc) g_free);
   return our_type;
 }
 
-void foo_test_unsigned (unsigned int uint)
+void regress_foo_test_unsigned (unsigned int uint)
 {
 }
 
 /**
- * foo_test_string_array:
+ * regress_foo_test_string_array:
  * @array: (array zero-terminated=1):
  */
 void
-foo_test_string_array (char **array)
+regress_foo_test_string_array (char **array)
 {
 }
 
 /**
- * foo_test_string_array_with_g:
+ * regress_foo_test_string_array_with_g:
  * @array: (array zero-terminated=1):
  */
 void
-foo_test_string_array_with_g (gchar **array)
+regress_foo_test_string_array_with_g (gchar **array)
 {
 }
 
 /**
- * foo_test_array:
+ * regress_foo_test_array:
  *
  * Returns: (element-type utf8) (transfer container):
  */
 GArray *
-foo_test_array (void)
+regress_foo_test_array (void)
 {
   return NULL;
 }
 
 /**
- * foo_rectangle_new: (skip)
+ * regress_foo_rectangle_new: (skip)
  *
  * This is a C convenience constructor; we have to (skip)
  * it because it's not a boxed type.
  */
-FooRectangle *
-foo_rectangle_new (int x, int y, int width, int height)
+RegressFooRectangle *
+regress_foo_rectangle_new (int x, int y, int width, int height)
 {
-  FooRectangle *r = g_slice_new (FooRectangle);
+  RegressFooRectangle *r = g_slice_new (RegressFooRectangle);
   r->x = x;
   r->y = y;
   r->width = width;
@@ -549,250 +547,250 @@ foo_rectangle_new (int x, int y, int width, int height)
 }
 
 /**
- * foo_rectangle_add:
+ * regress_foo_rectangle_add:
  * @r1: (inout): add to this rect
  * @r2: source rectangle
  */
 void
-foo_rectangle_add(FooRectangle *r1, const FooRectangle *r2)
+regress_foo_rectangle_add(RegressFooRectangle *r1, const RegressFooRectangle *r2)
 {
 
 }
 
-/* FooHidden */
+/* RegressFooHidden */
 
-struct _FooHidden
+struct _RegressFooHidden
 {
   char *frob;
 };
 
-FooHidden *
-foo_hidden_copy (const FooHidden *boxed)
+RegressFooHidden *
+regress_foo_hidden_copy (const RegressFooHidden *boxed)
 {
-  return (FooHidden *)g_memdup (boxed, sizeof (FooHidden));
+  return (RegressFooHidden *)g_memdup (boxed, sizeof (RegressFooHidden));
 }
 
 void
-foo_hidden_free (FooHidden *boxed)
+regress_foo_hidden_free (RegressFooHidden *boxed)
 {
-  g_slice_free (FooHidden, boxed);
+  g_slice_free (RegressFooHidden, boxed);
 }
 
 GType
-foo_hidden_get_type (void)
+regress_foo_hidden_get_type (void)
 {
   static GType our_type = 0;
 
   if (our_type == 0)
-    our_type = g_boxed_type_register_static ("FooHidden",
-					     (GBoxedCopyFunc) foo_hidden_copy,
-					     (GBoxedFreeFunc) foo_hidden_free);
+    our_type = g_boxed_type_register_static ("RegressFooHidden",
+					     (GBoxedCopyFunc) regress_foo_hidden_copy,
+					     (GBoxedFreeFunc) regress_foo_hidden_free);
   return our_type;
 }
 
 GType
-foo_error_get_type (void)
+regress_foo_error_get_type (void)
 {
-    static GType etype = 0;
-    if (G_UNLIKELY(etype == 0)) {
-        static const GEnumValue values[] = {
-            { FOO_ERROR_GOOD, "FOO_ERROR_GOOD", "good" },
-            { FOO_ERROR_BAD, "FOO_ERROR_BAD", "bad" },
-            { FOO_ERROR_UGLY, "FOO_ERROR_UGLY", "ugly" },
-            { 0, NULL, NULL }
-        };
-        etype = g_enum_register_static (g_intern_static_string ("FooError"), values);
-    }
-    return etype;
+  static GType etype = 0;
+  if (G_UNLIKELY(etype == 0)) {
+    static const GEnumValue values[] = {
+      { REGRESS_FOO_ERROR_GOOD, "REGRESS_FOO_ERROR_GOOD", "good" },
+      { REGRESS_FOO_ERROR_BAD, "REGRESS_FOO_ERROR_BAD", "bad" },
+      { REGRESS_FOO_ERROR_UGLY, "REGRESS_FOO_ERROR_UGLY", "ugly" },
+      { 0, NULL, NULL }
+    };
+    etype = g_enum_register_static (g_intern_static_string ("RegressFooError"), values);
+  }
+  return etype;
 }
 
 GQuark
-foo_error_quark (void)
+regress_foo_error_quark (void)
 {
-  return g_quark_from_static_string ("foo-error-quark");
+  return g_quark_from_static_string ("regress_foo-error-quark");
 }
 
 void
-foo_some_variant (guint x, va_list args)
+regress_foo_some_variant (guint x, va_list args)
 {
 }
 
-GType foo_tile_handler_get_type(void);
+GType regress_foo_tile_handler_get_type(void);
 
 /* This setup of a totally hidden parent class matches
  * http://bugzilla.gnome.org/show_bug.cgi?id=561360
  */
-#define FOO_TYPE_TILE_HANDLER        (foo_tile_handler_get_type ())
-#define FOO_TILE_HANDLER(object)     (G_TYPE_CHECK_INSTANCE_CAST ((object), FOO_TYPE_TILE_HANDLER, FooTileHandler))
-#define FOO_IS_TILE_HANDLER(object)  (G_TYPE_CHECK_INSTANCE_TYPE ((object), FOO_TYPE_TILE_HANDLER))
+#define REGRESS_FOO_TYPE_TILE_HANDLER        (regress_foo_tile_handler_get_type ())
+#define REGRESS_FOO_TILE_HANDLER(object)     (G_TYPE_CHECK_INSTANCE_CAST ((object), REGRESS_FOO_TYPE_TILE_HANDLER, RegressFooTileHandler))
+#define REGRESS_FOO_IS_TILE_HANDLER(object)  (G_TYPE_CHECK_INSTANCE_TYPE ((object), REGRESS_FOO_TYPE_TILE_HANDLER))
 
-struct _FooTileHandler
+struct _RegressFooTileHandler
 {
-  FooObject parent_instance;
+  RegressFooObject parent_instance;
 };
 
 
-struct _FooTileHandlerClass
+struct _RegressFooTileHandlerClass
 {
-  FooObjectClass parent_class;
+  RegressFooObjectClass parent_class;
 };
 
-typedef struct _FooTileHandler          FooTileHandler;
-typedef struct _FooTileHandlerClass     FooTileHandlerClass;
+typedef struct _RegressFooTileHandler          RegressFooTileHandler;
+typedef struct _RegressFooTileHandlerClass     RegressFooTileHandlerClass;
 
-G_DEFINE_TYPE(FooTileHandler, foo_tile_handler, FOO_TYPE_OBJECT);
+G_DEFINE_TYPE(RegressFooTileHandler, regress_foo_tile_handler, REGRESS_FOO_TYPE_OBJECT);
 
 static void
-foo_tile_handler_class_init (FooTileHandlerClass *klass)
+regress_foo_tile_handler_class_init (RegressFooTileHandlerClass *klass)
 {
 
 }
 
 static void
-foo_tile_handler_init (FooTileHandler *object)
+regress_foo_tile_handler_init (RegressFooTileHandler *object)
 {
 
 }
 
-struct _FooBuffer
+struct _RegressFooBuffer
 {
-  FooTileHandler parent_instance;
+  RegressFooTileHandler parent_instance;
 };
 
-struct _FooBufferClass
+struct _RegressFooBufferClass
 {
-  FooTileHandlerClass parent_class;
+  RegressFooTileHandlerClass parent_class;
 };
 
-G_DEFINE_TYPE(FooBuffer, foo_buffer, FOO_TYPE_TILE_HANDLER);
+G_DEFINE_TYPE(RegressFooBuffer, regress_foo_buffer, REGRESS_FOO_TYPE_TILE_HANDLER);
 
 static void
-foo_buffer_class_init (FooBufferClass *klass)
+regress_foo_buffer_class_init (RegressFooBufferClass *klass)
 {
 
 }
 
 static void
-foo_buffer_init (FooBuffer *object)
+regress_foo_buffer_init (RegressFooBuffer *object)
 {
 
 }
 
 void
-foo_buffer_some_method (FooBuffer *buffer)
+regress_foo_buffer_some_method (RegressFooBuffer *buffer)
 {
 }
 
-struct _FooOtherObject
+struct _RegressFooOtherObject
 {
   GObject parent_instance;
 };
 
-struct _FooOtherObjectClass
+struct _RegressFooOtherObjectClass
 {
   GObjectClass parent_class;
 };
 
-G_DEFINE_TYPE(FooOtherObject, foo_other_object, G_TYPE_OBJECT);
+G_DEFINE_TYPE(RegressFooOtherObject, regress_foo_other_object, G_TYPE_OBJECT);
 
 static void
-foo_other_object_class_init (FooOtherObjectClass *klass)
+regress_foo_other_object_class_init (RegressFooOtherObjectClass *klass)
 {
 
 }
 
 static void
-foo_other_object_init (FooOtherObject *object)
+regress_foo_other_object_init (RegressFooOtherObject *object)
 {
 
 }
 
 
-#define FOO_DEFINE_SHOULD_NOT_BE_EXPOSED "should not be exposed"
+#define REGRESS_FOO_DEFINE_SHOULD_NOT_BE_EXPOSED "should not be exposed"
 
 /**
- * foo_skip_me: (skip)
- * @fs: a #FooSkippable
+ * regress_foo_skip_me: (skip)
+ * @fs: a #RegressFooSkippable
  *
  * Does something that's only interesting from C and should not be
  * exposed to language bindings.
  */
 void
-foo_skip_me (FooSkippable fs)
+regress_foo_skip_me (RegressFooSkippable fs)
 {
 }
 
 /**
- * FooForeignStruct: (foreign)
+ * RegressFooForeignStruct: (foreign)
  *
  */
 
-FooForeignStruct*
-foo_foreign_struct_new (void)
+RegressFooForeignStruct*
+regress_foo_foreign_struct_new (void)
 {
-  return g_slice_new0 (FooForeignStruct);
+  return g_slice_new0 (RegressFooForeignStruct);
 }
 
-FooForeignStruct*
-foo_foreign_struct_copy (FooForeignStruct *original)
+RegressFooForeignStruct*
+regress_foo_foreign_struct_copy (RegressFooForeignStruct *original)
 {
-    FooForeignStruct *copy;
-    copy = foo_foreign_struct_new ();
-    copy->foo = original->foo;
-    return copy;
-}
-
-/**
- * foo_test_varargs_callback: (skip)
- *
- */
-void
-foo_test_varargs_callback (gint i, FooVarargsCallback callback)
-{
+  RegressFooForeignStruct *copy;
+  copy = regress_foo_foreign_struct_new ();
+  copy->regress_foo = original->regress_foo;
+  return copy;
 }
 
 /**
- * foo_test_varargs_callback2: (skip)
+ * regress_foo_test_varargs_callback: (skip)
  *
  */
 void
-foo_test_varargs_callback2 (FooVarargsCallback callback)
+regress_foo_test_varargs_callback (gint i, RegressFooVarargsCallback callback)
 {
 }
 
 /**
- * foo_test_varargs_callback3: (skip)
+ * regress_foo_test_varargs_callback2: (skip)
  *
  */
 void
-foo_test_varargs_callback3 (FooVarargsCallback callback,
-			    FooVarargsCallback callback2)
+regress_foo_test_varargs_callback2 (RegressFooVarargsCallback callback)
 {
 }
 
 /**
- * foo_object_append_new_stack_layer:
+ * regress_foo_test_varargs_callback3: (skip)
+ *
+ */
+void
+regress_foo_test_varargs_callback3 (RegressFooVarargsCallback callback,
+                                    RegressFooVarargsCallback callback2)
+{
+}
+
+/**
+ * regress_foo_object_append_new_stack_layer:
  *
  * This shouldn't be scanned as a constructor.
  *
  * Returns: (transfer none):
  */
-FooOtherObject *
-foo_object_append_new_stack_layer (FooObject *obj, int x)
+RegressFooOtherObject *
+regress_foo_object_append_new_stack_layer (RegressFooObject *obj, int x)
 {
   return NULL;
 }
 
 /**
- * foo_not_a_constructor_new:
+ * regress_foo_not_a_constructor_new:
  *
  * This should be scanned as a top-level function, and shouldn't cause
  * a "Can't find matching type for constructor" warning.
  *
  * Returns: (transfer none):
  */
-FooObject *
-foo_not_a_constructor_new (void)
+RegressFooObject *
+regress_foo_not_a_constructor_new (void)
 {
   return NULL;
 }

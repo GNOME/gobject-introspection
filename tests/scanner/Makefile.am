@@ -8,7 +8,6 @@ INTROSPECTION_SCANNER_ARGS += --warn-all
 check_LTLIBRARIES = \
 	libsletter.la \
 	libtestinherit.la \
-	libfoo.la \
 	libutility.la \
 	libgtkfrob.la \
 	libgettype.la \
@@ -29,11 +28,13 @@ libsletter_la_CFLAGS = $(AM_CFLAGS)
 libsletter_la_LDFLAGS = $(AM_LDFLAGS)
 
 libtestinherit_la_SOURCES = $(srcdir)/drawable.c $(srcdir)/drawable.h
-libfoo_la_SOURCES = $(srcdir)/foo.c $(srcdir)/foo.h
-libfoo_la_LIBADD = $(top_builddir)/libgirepository-1.0.la
 libutility_la_SOURCES = $(srcdir)/utility.c $(srcdir)/utility.h
 libgtkfrob_la_SOURCES = $(srcdir)/gtkfrob.c $(srcdir)/gtkfrob.h
-libregress_la_SOURCES = $(srcdir)/regress.c $(srcdir)/regress.h $(srcdir)/annotation.c $(srcdir)/annotation.h
+libregress_la_SOURCES = \
+	$(srcdir)/regress.c $(srcdir)/regress.h \
+	$(srcdir)/annotation.c $(srcdir)/annotation.h \
+	$(srcdir)/foo.c $(srcdir)/foo.h \
+	$(NULL)
 libregress_la_LIBADD = $(GIO_LIBS)
 if HAVE_CAIRO
 libregress_la_LIBADD += $(CAIRO_LIBS)
@@ -78,9 +79,9 @@ SLetter_1_0_gir_FILES = $(libsletter_la_SOURCES)
 SLetter_1_0_gir_SCANNERFLAGS = --identifier-prefix=S --c-include="sletter.h" --warn-error
 GIRS += SLetter-1.0.gir
 
-Regress-1.0.gir: $(top_builddir)/Gio-2.0.gir libregress.la
+Regress-1.0.gir: $(top_builddir)/Gio-2.0.gir Utility-1.0.gir libregress.la
 Regress_1_0_gir_LIBS = libregress.la
-Regress_1_0_gir_INCLUDES = Gio-2.0
+Regress_1_0_gir_INCLUDES = Gio-2.0 Utility-1.0
 if HAVE_CAIRO
 Regress_1_0_gir_INCLUDES += cairo-1.0 
 endif
@@ -102,14 +103,6 @@ TestInherit_1_0_gir_INCLUDES = GObject-2.0 Utility-1.0
 TestInherit_1_0_gir_FILES = $(libtestinherit_la_SOURCES)
 TestInherit_1_0_gir_SCANNERFLAGS = --c-include="drawable.h" --warn-error
 GIRS += TestInherit-1.0.gir
-
-Foo-1.0.gir: Utility-1.0.gir libfoo.la
-Foo_1_0_gir_PACKAGES = gobject-2.0
-Foo_1_0_gir_LIBS = libfoo.la
-Foo_1_0_gir_INCLUDES = GObject-2.0 Gio-2.0 Utility-1.0
-Foo_1_0_gir_FILES = $(srcdir)/foo.h $(srcdir)/foo.c
-Foo_1_0_gir_SCANNERFLAGS = --c-include="foo.h" --warn-error
-GIRS += Foo-1.0.gir
 
 Utility-1.0.gir: libutility.la
 Utility_1_0_gir_PACKAGES = gobject-2.0
