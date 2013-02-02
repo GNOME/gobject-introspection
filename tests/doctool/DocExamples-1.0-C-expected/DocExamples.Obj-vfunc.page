@@ -13,6 +13,8 @@
   <title>DocExamples.Obj::vfunc</title>
   
 <synopsis><code mime="text/x-csrc">
+void vfunc (DocExamplesObj* self,
+            gint first_arg);
 </code></synopsis>
 
   

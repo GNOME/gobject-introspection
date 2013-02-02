@@ -9,7 +9,7 @@
       <api:returns>
         <api:type>${formatter.format_type(node.retval.type) | x}</api:type>
       </api:returns>
-      <api:name>${node.symbol}</api:name>
+      <api:name>${formatter.format_function_name(node)}</api:name>
 % for arg in node.all_parameters:
 % if arg.type.ctype == '<varargs>':
       <api:varargs/>
@@ -24,13 +24,13 @@
 </%block>
 <%block name="synopsis">
 <synopsis><code mime="text/x-csrc">
-${node.retval.type.ctype} ${node.symbol} (\
+${node.retval.type.ctype} ${formatter.format_function_name(node)} (\
 % if len(node.all_parameters) == 0:
 void\
 % else:
 % for arg, ix in zip(node.all_parameters, range(len(node.all_parameters))):
 % if ix != 0:
-${' ' * (len(formatter.format_type(node.retval.type)) + len(node.symbol) + 3)}\
+${' ' * (len(formatter.format_type(node.retval.type)) + len(formatter.format_function_name(node)) + 3)}\
 % endif
 % if arg.type.ctype == '<varargs>':
 ...\

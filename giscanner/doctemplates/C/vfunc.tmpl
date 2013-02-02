@@ -1,22 +1,4 @@
-<%inherit file="/base.tmpl"/>
+<%inherit file="./function.tmpl"/>
 <%block name="info">
     <link type="guide" xref="${namespace.name}.${node.parent.name}" group="vfunc"/>
-</%block>
-<%block name="synopsis">
-<synopsis><code mime="text/x-csrc">
-</code></synopsis>
-</%block>
-<%block name="details">
-% if node.parameters or node.retval:
-<dl>
-% for arg, ix in zip(node.parameters, range(len(node.parameters))):
-<dt><p>${arg.argname} :</p></dt>
-<dd>${formatter.format(node, arg.doc)}</dd>
-% endfor
-% if node.retval:
-<dt><p>Returns :</p></dt>
-<dd>${formatter.format(node, node.retval.doc)}</dd>
-% endif
-</dl>
-% endif
 </%block>
