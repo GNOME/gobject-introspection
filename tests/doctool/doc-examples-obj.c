@@ -116,7 +116,8 @@ doc_examples_obj_new (void)
  * This is an example of how to document a method.
  *
  * You should call this on a #DocExamplesObj that was
- * created with doc_examples_obj_new().
+ * created with doc_examples_obj_new(), by passing it
+ * in as @self.
  *
  * This should be a %FALSEALARM.
  *

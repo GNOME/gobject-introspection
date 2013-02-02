@@ -597,7 +597,7 @@ class Callable(Node):
         raise ValueError("Unknown argument %s" % (name, ))
 
     def get_parameter(self, name):
-        for parameter in self.parameters:
+        for parameter in self.all_parameters:
             if parameter.argname == name:
                 return parameter
         raise ValueError("Unknown argument %s" % (name, ))
