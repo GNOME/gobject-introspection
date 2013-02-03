@@ -753,7 +753,7 @@ regress_annotation_set_source_file (const char *fname)
 
 /**
  * regress_annotation_ptr_array:
- * @array: (element-type GLib.Value): the array
+ * @array: (element-type GObject.Value): the array
  */
 void
 regress_annotation_ptr_array (GPtrArray *array)
