@@ -824,6 +824,8 @@ class Member(Annotated):
     def __cmp__(self, other):
         return cmp(self.name, other.name)
 
+    def __repr__(self):
+        return '%s(%r)' % (self.__class__.__name__, self.name)
 
 
 class Compound(Node, Registered):
@@ -878,6 +880,9 @@ class Field(Annotated):
 
     def __cmp__(self, other):
         return cmp(self.name, other.name)
+
+    def __repr__(self):
+        return '%s(%r)' % (self.__class__.__name__, self.name)
 
 
 class Record(Compound):
