@@ -877,9 +877,12 @@ Note that type resolution may not succeed."""
         if '.' in typestr:
             container = self._create_bare_container_type(typestr)
             if container:
-                return container
-            return self._namespace.type_from_name(typestr)
-        typeval = self.create_type_from_ctype_string(typestr)
+                typeval = container
+            else:
+                typeval = self._namespace.type_from_name(typestr)
+        else:
+            typeval = self.create_type_from_ctype_string(typestr)
+
         self.resolve_type(typeval)
         if typeval.resolved:
             # Explicitly clear out the c_type; there isn't one in this case.
@@ -924,7 +927,7 @@ Note that type resolution may not succeed."""
                 return True
         return False
 
-    def resolve_type(self, typeval):
+    def _resolve_type_internal(self, typeval):
         if isinstance(typeval, (ast.Array, ast.List)):
             return self.resolve_type(typeval.element_type)
         elif isinstance(typeval, ast.Map):
@@ -937,6 +940,25 @@ Note that type resolution may not succeed."""
             return self._resolve_type_from_ctype(typeval)
         elif typeval.gtype_name:
             return self._resolve_type_from_gtype_name(typeval)
+
+    def resolve_type(self, typeval):
+        if not self._resolve_type_internal(typeval):
+            return False
+
+        if typeval.target_fundamental or typeval.target_foreign:
+            return True
+
+        assert typeval.target_giname is not None
+
+        try:
+            type_ = self.lookup_giname(typeval.target_giname)
+        except KeyError:
+            typeval.target_giname = None
+
+        if type_ is None:
+            typeval.target_giname = None
+
+        return typeval.resolved
 
     def _typepair_to_str(self, item):
         nsname, item = item

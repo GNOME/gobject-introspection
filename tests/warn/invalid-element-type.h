@@ -65,6 +65,14 @@ void test_invalid_ptrarray_element_type(GPtrArray *p1, GPtrArray *p2);
 
 GList* test_unresolved_element_type(void);
 
+/**
+ * test_unresolved_value_element_type:
+ *
+ * Returns: (element-type GLib.Value) (transfer full):
+ */
+
+GPtrArray* test_unresolved_value_element_type(void);
+
 
 // EXPECT:5: Warning: Test: element-type annotation takes at least one option, none given
 // EXPECT:6: Warning: Test: element-type annotation for a list must have exactly one option, not 2 options
@@ -78,6 +86,7 @@ GList* test_unresolved_element_type(void);
 // EXPECT:51: Warning: Test: element-type annotation takes at least one option, none given
 // EXPECT:52: Warning: Test: invalid (element-type) for a GPtrArray, must be a pointer
 // EXPECT:63: Warning: Test: test_unresolved_element_type: Unknown type: 'Unresolved'
+// EXPECT:71: Warning: Test: test_unresolved_value_element_type: Unknown type: 'GLib.Value'
 // EXPECT:4: Warning: Test: test_invalid_list_element_type: argument l1: Missing (element-type) annotation
 // EXPECT:4: Warning: Test: test_invalid_list_element_type: argument l2: Missing (element-type) annotation
 // EXPECT:50: Warning: Test: test_invalid_ptrarray_element_type: argument p1: Missing (element-type) annotation

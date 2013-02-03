@@ -306,7 +306,7 @@ usage is void (*_gtk_reserved1)(void);"""
             else:
                 text = type_str
             message.warn_node(parent, "%s: Unknown type: %r" %
-                              (text, result.ctype), positions=position)
+                              (text, type_str), positions=position)
         return result
 
     def _resolve_toplevel(self, type_str, type_node=None, node=None, parent=None):
