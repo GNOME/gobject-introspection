@@ -410,7 +410,7 @@ raise ValueError."""
         # Drop functions that start with _ very early on here
         if symbol.ident.startswith('_'):
             return None
-        parameters = list(self._create_parameters(symbol.base_type))
+        parameters = list(self._create_parameters(symbol, symbol.base_type))
         return_ = self._create_return(symbol.base_type.base_type)
         try:
             name = self._strip_symbol(symbol)
@@ -478,11 +478,11 @@ raise ValueError."""
 
         return value
 
-    def _create_parameters(self, base_type):
+    def _create_parameters(self, symbol, base_type):
         # warn if we see annotations for unknown parameters
         param_names = set(child.ident for child in base_type.child_list)
         for child in base_type.child_list:
-            yield self._create_parameter(child)
+            yield self._create_parameter(symbol, child)
 
     def _synthesize_union_type(self, symbol, parent_symbol):
         # Synthesize a named union so that it can be referenced.
@@ -695,11 +695,15 @@ raise ValueError."""
             return container
         return ast.Type(ctype=ctype, is_const=is_const, complete_ctype=complete_ctype)
 
-    def _create_parameter(self, symbol):
+    def _create_parameter(self, parent_symbol, symbol):
         if symbol.type == CSYMBOL_TYPE_ELLIPSIS:
             ptype = ast.Varargs()
         else:
             ptype = self._create_type_from_base(symbol.base_type, is_parameter=True)
+
+        if symbol.ident is None and symbol.base_type and symbol.base_type.type != CTYPE_VOID:
+            message.warn_symbol(parent_symbol, "missing parameter name; undocumentable")
+
         return ast.Parameter(symbol.ident, ptype)
 
     def _create_return(self, source_type):
@@ -835,7 +839,7 @@ raise ValueError."""
         return self._create_compound(ast.Union, symbol, anonymous)
 
     def _create_callback(self, symbol, member=False):
-        parameters = list(self._create_parameters(symbol.base_type.base_type))
+        parameters = list(self._create_parameters(symbol, symbol.base_type.base_type))
         retval = self._create_return(symbol.base_type.base_type.base_type)
 
         # Mark the 'user_data' arguments

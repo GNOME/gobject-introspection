@@ -46,3 +46,23 @@ void test_param_missing(void);
 void test_param_varargs(int i, ...);
 
 // Should not warn
+
+/**
+ * test_undocumentable_param:
+ */
+void test_undocumentable_param(int);
+
+// EXPECT:53: Warning: Test: symbol='test_undocumentable_param': missing parameter name; undocumentable
+
+void test_undocumentable_param_2(int a, int);
+
+// EXPECT:57: Warning: Test: symbol='test_undocumentable_param_2': missing parameter name; undocumentable
+
+void test_undocumentable_param_3(int, int);
+
+// EXPECT:61: Warning: Test: symbol='test_undocumentable_param_3': missing parameter name; undocumentable
+// EXPECT:61: Warning: Test: symbol='test_undocumentable_param_3': missing parameter name; undocumentable
+
+void test_void(void);
+
+// Should not warn
