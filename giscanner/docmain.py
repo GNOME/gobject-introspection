@@ -34,6 +34,9 @@ def doc_main(args):
                       action="store", dest="language",
                       default="Python",
                       help="Output language")
+    parser.add_option("", "--add-include-path",
+                      action="append", dest="include_paths", default=[],
+                      help="include paths for other GIR files")
 
     options, args = parser.parse_args(args)
     if not options.output:
@@ -50,6 +53,7 @@ def doc_main(args):
         extra_include_dirs = [os.path.join(top_srcdir, 'gir'), top_builddir]
     else:
         extra_include_dirs = []
+    extra_include_dirs.extend(options.include_paths)
     transformer = Transformer.parse_from_gir(args[1], extra_include_dirs)
 
     writer = DocWriter(transformer, options.language)
