@@ -371,8 +371,11 @@ class DocFormatterC(DocFormatter):
             return self.format_type(type_.element_type) + '*'
         elif type_.ctype is not None:
             return type_.ctype
-        else:
+        elif type_.target_fundamental:
             return type_.target_fundamental
+        else:
+            node = self._transformer.lookup_typenode(type_)
+            return getattr(node, 'ctype')
 
     def format_function_name(self, func):
         if isinstance(func, (ast.Function)):
