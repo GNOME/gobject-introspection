@@ -106,4 +106,4 @@ docs/reference/version.xml
 
 #g-ir-doc-tool tests
 *.page
-!tests/doctool/*-expected/*.page
+!tests/scanner/*-expected/*.page

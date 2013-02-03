@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<page id="Regress.AnnotationObject-attribute-signal"
+      type="topic"
+      style="signal"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+    <link type="guide" xref="Regress.AnnotationObject" group="signal"/>
+    <title type="link" role="topic">attribute-signal</title>
+
+  </info>
+  <title>Regress.AnnotationObject::attribute-signal</title>
+  
+<synopsis><code mime="text/x-python">
+def callback(annotation_object, arg1, arg2, user_param1, ...)
+</code></synopsis>
+
+  
+    <p>This signal tests a signal with attributes.</p>
+  
+  
+  
+  
+<dl>
+<dt><p>annotation_object :</p></dt>
+<dd><p>instance of Regress.AnnotationObject that is emitting the signal</p></dd>
+<dt><p>arg1 :</p></dt>
+<dd><p>a value</p></dd>
+<dt><p>arg2 :</p></dt>
+<dd><p>another value</p></dd>
+<dt><p>user_param1 :</p></dt>
+<dd><p>first user parameter (if any) specified with the connect() method</p></dd>
+<dt><p>... :</p></dt>
+<dd><p>additional user parameters (if any)</p></dd>
+<dt><p>Returns :</p></dt>
+<dd>gchar* <p>the return value</p></dd>
+</dl>
+
+  
+  
+</page>

@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<page id="Regress.AnnotationObject-string-signal"
+      type="topic"
+      style="signal"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+    <link type="guide" xref="Regress.AnnotationObject" group="property"/>
+    <title type="link" role="topic">string-signal</title>
+
+  </info>
+  <title>Regress.AnnotationObject::string-signal</title>
+  
+<synopsis><code mime="text/x-csrc">
+void string-signal (gpointer string);
+</code></synopsis>
+
+  
+    <p>This is a signal which has a broken signal handler,
+it says it's pointer but it's actually a string.</p>
+  
+  
+    <p>Since 1.0</p>
+  
+  
+<dl>
+<dt><p>string :</p></dt>
+<dd><p>a string</p></dd>
+<dt><p>Returns :</p></dt>
+<dd></dd>
+</dl>
+
+  
+  
+</page>

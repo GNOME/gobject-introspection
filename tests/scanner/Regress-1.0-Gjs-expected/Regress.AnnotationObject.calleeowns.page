@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<page id="Regress.AnnotationObject.calleeowns"
+      type="topic"
+      style="method"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+    <link type="guide" xref="Regress.AnnotationObject" group="method"/>
+    <api:function>
+      <api:returns>
+        <api:type>Number</api:type>
+      </api:returns>
+      <api:name>regress_annotation_object_calleeowns</api:name>
+    </api:function>
+
+  </info>
+  <title>AnnotationObject.prototype.calleeowns</title>
+  
+<synopsis><code mime="text/x-gjs">
+function calleeowns():Number {
+    // Gjs wrapper for regress_annotation_object_calleeowns()
+}
+</code></synopsis>
+
+  
+    <p>This is a test for out arguments; GObject defaults to transfer</p>
+  
+  
+  
+  
+<dl>
+<dt><p>Returns :</p></dt>
+<dd><p>an int</p></dd>
+</dl>
+
+  
+  
+</page>

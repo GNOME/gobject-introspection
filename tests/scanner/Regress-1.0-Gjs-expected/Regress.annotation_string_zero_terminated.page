@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<page id="Regress.annotation_string_zero_terminated"
+      type="topic"
+      style="function"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+    <link type="guide" xref="index" group="function"/>
+    <api:function>
+      <api:returns>
+        <api:type>[String]</api:type>
+      </api:returns>
+      <api:name>regress_annotation_string_zero_terminated</api:name>
+    </api:function>
+
+  </info>
+  <title>annotation_string_zero_terminated</title>
+  
+<synopsis><code mime="text/x-gjs">
+function annotation_string_zero_terminated():[String] {
+    // Gjs wrapper for regress_annotation_string_zero_terminated()
+}
+</code></synopsis>
+
+  
+    
+  
+  
+  
+  
+<dl>
+<dt><p>Returns :</p></dt>
+<dd><p>The return value</p></dd>
+</dl>
+
+  
+  
+</page>

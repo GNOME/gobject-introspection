@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<page id="Regress.TestObj-test-with-static-scope-arg"
+      type="topic"
+      style="signal"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+    <link type="guide" xref="Regress.TestObj" group="property"/>
+    <title type="link" role="topic">test-with-static-scope-arg</title>
+
+  </info>
+  <title>Regress.TestObj::test-with-static-scope-arg</title>
+  
+<synopsis><code mime="text/x-csrc">
+void test-with-static-scope-arg (RegressTestSimpleBoxedA object);
+</code></synopsis>
+
+  
+    
+  
+  
+  
+  
+<dl>
+<dt><p>object :</p></dt>
+<dd></dd>
+<dt><p>Returns :</p></dt>
+<dd></dd>
+</dl>
+
+  
+  
+</page>

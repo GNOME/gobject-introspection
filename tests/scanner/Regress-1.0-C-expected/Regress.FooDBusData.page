@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<page id="Regress.FooDBusData"
+      type="topic"
+      style="record"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+      <link type="guide" xref="index"/>
+    
+  </info>
+  <title>Regress.FooDBusData</title>
+  
+  
+  
+    
+  
+  
+  
+  
+  
+  
+  
+</page>

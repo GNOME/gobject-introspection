@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<page id="Regress.FooError"
+      type="topic"
+      style="enum"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+      <link type="guide" xref="index"/>
+    
+  </info>
+  <title>Regress.FooError</title>
+  
+  
+  
+    
+  
+  
+  
+  
+<dl>
+<dt><p>FooError.GOOD :</p></dt>
+<dd></dd>
+<dt><p>FooError.BAD :</p></dt>
+<dd></dd>
+<dt><p>FooError.UGLY :</p></dt>
+<dd></dd>
+</dl>
+
+  
+  
+</page>

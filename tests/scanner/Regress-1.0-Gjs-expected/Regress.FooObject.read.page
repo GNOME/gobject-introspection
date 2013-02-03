@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<page id="Regress.FooObject.read"
+      type="topic"
+      style="method"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+    <link type="guide" xref="Regress.FooObject" group="method"/>
+    <api:function>
+      <api:returns>
+        <api:type>void</api:type>
+      </api:returns>
+      <api:name>regress_foo_object_read</api:name>
+      <api:arg>
+        <api:type>Number</api:type>
+        <api:name>offset</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>Number</api:type>
+        <api:name>length</api:name>
+      </api:arg>
+    </api:function>
+
+  </info>
+  <title>FooObject.prototype.read</title>
+  
+<synopsis><code mime="text/x-gjs">
+function read(offset:Number, length:Number):void {
+    // Gjs wrapper for regress_foo_object_read()
+}
+</code></synopsis>
+
+  
+    <p>Read some stuff.</p>
+  
+  
+  
+  
+<dl>
+<dt><p>offset :</p></dt>
+<dd><p>offset</p></dd>
+<dt><p>length :</p></dt>
+<dd><p>length</p></dd>
+</dl>
+
+  
+  
+</page>

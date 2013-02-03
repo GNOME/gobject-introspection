@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<page id="Regress.FooInterface-do_regress_foo"
+      type="topic"
+      style="vfunc"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+    <link type="guide" xref="Regress.FooInterface" group="vfunc"/>
+
+  </info>
+  <title>Regress.FooInterface::do_regress_foo</title>
+  
+<synopsis><code mime="text/x-csrc">
+void do_regress_foo (RegressFooInterface* self,
+                     int x);
+</code></synopsis>
+
+  
+    
+  
+  
+  
+  
+<dl>
+<dt><p>self :</p></dt>
+<dd></dd>
+<dt><p>x :</p></dt>
+<dd></dd>
+<dt><p>Returns :</p></dt>
+<dd></dd>
+</dl>
+
+  
+  
+</page>

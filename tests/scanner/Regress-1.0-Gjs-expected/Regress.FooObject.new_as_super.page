@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<page id="Regress.FooObject.new_as_super"
+      type="topic"
+      style="constructor"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+    <link type="guide" xref="Regress.FooObject" group="constructor"/>
+    <api:function>
+      <api:returns>
+        <api:type>GObject.Object</api:type>
+      </api:returns>
+      <api:name>regress_foo_object_new_as_super</api:name>
+    </api:function>
+
+  </info>
+  <title>FooObject.new_as_super</title>
+  
+<synopsis><code mime="text/x-gjs">
+function new_as_super():GObject.Object {
+    // Gjs wrapper for regress_foo_object_new_as_super()
+}
+</code></synopsis>
+
+  
+    
+  
+  
+  
+  
+<dl>
+<dt><p>Returns :</p></dt>
+<dd></dd>
+</dl>
+
+  
+  
+</page>

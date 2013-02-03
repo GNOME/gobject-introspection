@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<page id="Regress.AnnotationObject-attribute-signal"
+      type="topic"
+      style="signal"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+    <link type="guide" xref="Regress.AnnotationObject" group="property"/>
+    <title type="link" role="topic">attribute-signal</title>
+
+  </info>
+  <title>Regress.AnnotationObject::attribute-signal</title>
+  
+<synopsis><code mime="text/x-csrc">
+gchar* attribute-signal (gchar* arg1,
+                         gchar* arg2);
+</code></synopsis>
+
+  
+    <p>This signal tests a signal with attributes.</p>
+  
+  
+  
+  
+<dl>
+<dt><p>arg1 :</p></dt>
+<dd><p>a value</p></dd>
+<dt><p>arg2 :</p></dt>
+<dd><p>another value</p></dd>
+<dt><p>Returns :</p></dt>
+<dd><p>the return value</p></dd>
+</dl>
+
+  
+  
+</page>

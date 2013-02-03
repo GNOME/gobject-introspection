@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<page id="Regress.FooObject.new_cookie"
+      type="topic"
+      style="method"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+    <link type="guide" xref="Regress.FooObject" group="method"/>
+    <api:function>
+      <api:returns>
+        <api:type>RegressFooObjectCookie</api:type>
+      </api:returns>
+      <api:name>regress_foo_object_new_cookie</api:name>
+      <api:arg>
+        <api:type>RegressFooObject*</api:type>
+        <api:name>object</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>const char*</api:type>
+        <api:name>target</api:name>
+      </api:arg>
+    </api:function>
+
+  </info>
+  <title>regress_foo_object_new_cookie</title>
+  
+<synopsis><code mime="text/x-csrc">
+RegressFooObjectCookie regress_foo_object_new_cookie (RegressFooObject* object,
+                                                      const char* target);
+</code></synopsis>
+
+  
+    <p>Not sure why this test is here...</p>
+  
+  
+  
+  
+<dl>
+<dt><p>object :</p></dt>
+<dd></dd>
+<dt><p>target :</p></dt>
+<dd></dd>
+<dt><p>Returns :</p></dt>
+<dd></dd>
+</dl>
+
+  
+  
+</page>

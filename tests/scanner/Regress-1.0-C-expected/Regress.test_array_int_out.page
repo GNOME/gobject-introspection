@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<page id="Regress.test_array_int_out"
+      type="topic"
+      style="function"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+    <link type="guide" xref="index" group="function"/>
+    <api:function>
+      <api:returns>
+        <api:type>void</api:type>
+      </api:returns>
+      <api:name>regress_test_array_int_out</api:name>
+      <api:arg>
+        <api:type>int*</api:type>
+        <api:name>n_ints</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>int**</api:type>
+        <api:name>ints</api:name>
+      </api:arg>
+    </api:function>
+
+  </info>
+  <title>regress_test_array_int_out</title>
+  
+<synopsis><code mime="text/x-csrc">
+void regress_test_array_int_out (int* n_ints,
+                                 int** ints);
+</code></synopsis>
+
+  
+    
+  
+  
+  
+  
+<dl>
+<dt><p>n_ints :</p></dt>
+<dd><p>the length of <code>ints</code></p></dd>
+<dt><p>ints :</p></dt>
+<dd><p>a list of 5 integers, from 0 to 4 in consecutive order</p></dd>
+<dt><p>Returns :</p></dt>
+<dd></dd>
+</dl>
+
+  
+  
+</page>

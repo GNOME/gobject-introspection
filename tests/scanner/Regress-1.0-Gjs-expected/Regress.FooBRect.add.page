@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<page id="Regress.FooBRect.add"
+      type="topic"
+      style="method"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+    <link type="guide" xref="Regress.FooBRect" group="method"/>
+    <api:function>
+      <api:returns>
+        <api:type>void</api:type>
+      </api:returns>
+      <api:name>regress_foo_brect_add</api:name>
+      <api:arg>
+        <api:type>Regress.FooBRect</api:type>
+        <api:name>b2</api:name>
+      </api:arg>
+    </api:function>
+
+  </info>
+  <title>FooBRect.prototype.add</title>
+  
+<synopsis><code mime="text/x-gjs">
+function add(b2:Regress.FooBRect):void {
+    // Gjs wrapper for regress_foo_brect_add()
+}
+</code></synopsis>
+
+  
+    
+  
+  
+  
+  
+<dl>
+<dt><p>b2 :</p></dt>
+<dd></dd>
+</dl>
+
+  
+  
+</page>

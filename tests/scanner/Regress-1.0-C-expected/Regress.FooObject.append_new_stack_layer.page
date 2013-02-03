@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<page id="Regress.FooObject.append_new_stack_layer"
+      type="topic"
+      style="method"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+    <link type="guide" xref="Regress.FooObject" group="method"/>
+    <api:function>
+      <api:returns>
+        <api:type>RegressFooOtherObject*</api:type>
+      </api:returns>
+      <api:name>regress_foo_object_append_new_stack_layer</api:name>
+      <api:arg>
+        <api:type>RegressFooObject*</api:type>
+        <api:name>obj</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>int</api:type>
+        <api:name>x</api:name>
+      </api:arg>
+    </api:function>
+
+  </info>
+  <title>regress_foo_object_append_new_stack_layer</title>
+  
+<synopsis><code mime="text/x-csrc">
+RegressFooOtherObject* regress_foo_object_append_new_stack_layer (RegressFooObject* obj,
+                                                                  int x);
+</code></synopsis>
+
+  
+    <p>This shouldn't be scanned as a constructor.</p>
+  
+  
+  
+  
+<dl>
+<dt><p>obj :</p></dt>
+<dd></dd>
+<dt><p>x :</p></dt>
+<dd></dd>
+<dt><p>Returns :</p></dt>
+<dd></dd>
+</dl>
+
+  
+  
+</page>

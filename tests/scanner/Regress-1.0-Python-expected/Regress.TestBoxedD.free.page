@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<page id="Regress.TestBoxedD.free"
+      type="topic"
+      style="method"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+    <link type="guide" xref="Regress.TestBoxedD" group="method"/>
+    <api:function>
+      <api:returns>
+        <api:type>none</api:type>
+      </api:returns>
+      <api:name>regress_test_boxed_d_free</api:name>
+      <api:arg>
+        <api:type>Regress.TestBoxedD</api:type>
+        <api:name>self</api:name>
+      </api:arg>
+    </api:function>
+
+  </info>
+  <title>TestBoxedD.free</title>
+  
+<synopsis><code mime="text/x-python">
+@accepts(Regress.TestBoxedD)
+@returns(none)
+def free(self):
+    # Python wrapper for regress_test_boxed_d_free()
+</code></synopsis>
+
+  
+    
+  
+  
+  
+  
+<dl>
+<dt><p>self :</p></dt>
+<dd></dd>
+</dl>
+
+  
+  
+</page>

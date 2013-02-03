@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<page id="Regress.AnnotationObject.string_out"
+      type="topic"
+      style="method"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+    <link type="guide" xref="Regress.AnnotationObject" group="method"/>
+    <api:function>
+      <api:returns>
+        <api:type>Boolean</api:type>
+      </api:returns>
+      <api:name>regress_annotation_object_string_out</api:name>
+    </api:function>
+
+  </info>
+  <title>AnnotationObject.prototype.string_out</title>
+  
+<synopsis><code mime="text/x-gjs">
+function string_out():Boolean {
+    // Gjs wrapper for regress_annotation_object_string_out()
+}
+</code></synopsis>
+
+  
+    <p>Test returning a string as an out parameter</p>
+  
+  
+  
+  
+<dl>
+<dt><p>Returns :</p></dt>
+<dd><p>some boolean</p></dd>
+</dl>
+
+  
+  
+</page>

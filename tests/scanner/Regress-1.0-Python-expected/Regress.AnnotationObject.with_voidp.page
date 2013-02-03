@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<page id="Regress.AnnotationObject.with_voidp"
+      type="topic"
+      style="method"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+    <link type="guide" xref="Regress.AnnotationObject" group="method"/>
+    <api:function>
+      <api:returns>
+        <api:type>none</api:type>
+      </api:returns>
+      <api:name>regress_annotation_object_with_voidp</api:name>
+      <api:arg>
+        <api:type>Regress.AnnotationObject</api:type>
+        <api:name>self</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>gpointer</api:type>
+        <api:name>data</api:name>
+      </api:arg>
+    </api:function>
+
+  </info>
+  <title>AnnotationObject.with_voidp</title>
+  
+<synopsis><code mime="text/x-python">
+@accepts(Regress.AnnotationObject, gpointer)
+@returns(none)
+def with_voidp(self, data):
+    # Python wrapper for regress_annotation_object_with_voidp()
+</code></synopsis>
+
+  
+    
+  
+  
+  
+  
+<dl>
+<dt><p>self :</p></dt>
+<dd></dd>
+<dt><p>data :</p></dt>
+<dd><p>Opaque pointer handle</p></dd>
+</dl>
+
+  
+  
+</page>

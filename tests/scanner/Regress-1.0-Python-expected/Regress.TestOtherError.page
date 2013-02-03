@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<page id="Regress.TestOtherError"
+      type="topic"
+      style="enum"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+      <link type="guide" xref="index"/>
+    
+  </info>
+  <title>Regress.TestOtherError</title>
+  
+  
+  
+    
+  
+  
+  
+  
+<dl>
+<dt><p>TestOtherError.CODE1 :</p></dt>
+<dd></dd>
+<dt><p>TestOtherError.CODE2 :</p></dt>
+<dd></dd>
+<dt><p>TestOtherError.CODE3 :</p></dt>
+<dd></dd>
+</dl>
+
+  
+  
+</page>

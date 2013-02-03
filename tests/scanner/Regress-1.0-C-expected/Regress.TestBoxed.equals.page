@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<page id="Regress.TestBoxed.equals"
+      type="topic"
+      style="method"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+    <link type="guide" xref="Regress.TestBoxed" group="method"/>
+    <api:function>
+      <api:returns>
+        <api:type>gboolean</api:type>
+      </api:returns>
+      <api:name>regress_test_boxed_equals</api:name>
+      <api:arg>
+        <api:type>RegressTestBoxed*</api:type>
+        <api:name>boxed</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>RegressTestBoxed*</api:type>
+        <api:name>other</api:name>
+      </api:arg>
+    </api:function>
+
+  </info>
+  <title>regress_test_boxed_equals</title>
+  
+<synopsis><code mime="text/x-csrc">
+gboolean regress_test_boxed_equals (RegressTestBoxed* boxed,
+                                    RegressTestBoxed* other);
+</code></synopsis>
+
+  
+    
+  
+  
+  
+  
+<dl>
+<dt><p>boxed :</p></dt>
+<dd></dd>
+<dt><p>other :</p></dt>
+<dd></dd>
+<dt><p>Returns :</p></dt>
+<dd></dd>
+</dl>
+
+  
+  
+</page>

@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<page id="Regress.AnnotationObject-string-signal"
+      type="topic"
+      style="signal"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+    <link type="guide" xref="Regress.AnnotationObject" group="signal"/>
+    <title type="link" role="topic">string-signal</title>
+
+  </info>
+  <title>Regress.AnnotationObject::string-signal</title>
+  
+<synopsis><code mime="text/x-python">
+def callback(annotation_object, string, user_param1, ...)
+</code></synopsis>
+
+  
+    <p>This is a signal which has a broken signal handler,
+it says it's pointer but it's actually a string.</p>
+  
+  
+    <p>Since 1.0</p>
+  
+  
+<dl>
+<dt><p>annotation_object :</p></dt>
+<dd><p>instance of Regress.AnnotationObject that is emitting the signal</p></dd>
+<dt><p>string :</p></dt>
+<dd><p>a string</p></dd>
+<dt><p>user_param1 :</p></dt>
+<dd><p>first user parameter (if any) specified with the connect() method</p></dd>
+<dt><p>... :</p></dt>
+<dd><p>additional user parameters (if any)</p></dd>
+</dl>
+
+  
+  
+</page>

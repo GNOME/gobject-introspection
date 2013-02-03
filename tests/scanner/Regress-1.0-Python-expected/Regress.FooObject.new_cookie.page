@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<page id="Regress.FooObject.new_cookie"
+      type="topic"
+      style="method"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+    <link type="guide" xref="Regress.FooObject" group="method"/>
+    <api:function>
+      <api:returns>
+        <api:type>Regress.FooObjectCookie</api:type>
+      </api:returns>
+      <api:name>regress_foo_object_new_cookie</api:name>
+      <api:arg>
+        <api:type>Regress.FooObject</api:type>
+        <api:name>self</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>unicode</api:type>
+        <api:name>target</api:name>
+      </api:arg>
+    </api:function>
+
+  </info>
+  <title>FooObject.new_cookie</title>
+  
+<synopsis><code mime="text/x-python">
+@accepts(Regress.FooObject, unicode)
+@returns(Regress.FooObjectCookie)
+def new_cookie(self, target):
+    # Python wrapper for regress_foo_object_new_cookie()
+</code></synopsis>
+
+  
+    <p>Not sure why this test is here...</p>
+  
+  
+  
+  
+<dl>
+<dt><p>self :</p></dt>
+<dd></dd>
+<dt><p>target :</p></dt>
+<dd></dd>
+<dt><p>Returns :</p></dt>
+<dd></dd>
+</dl>
+
+  
+  
+</page>

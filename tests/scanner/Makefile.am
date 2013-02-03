@@ -146,7 +146,43 @@ Headeronly-1.0.gir: headeronly.h
 %.gir.check: %.gir
 	@diff -u -U 10 $(srcdir)/$*-expected.gir $*.gir && echo "  TEST  $*.gir"
 
-check-local: Headeronly-1.0.gir $(CHECKGIRS) $(TYPELIBS)
+if BUILD_DOCTOOL
+DOCGIRS = Regress-1.0.gir
+CHECKDOCS = $(DOCGIRS:.gir=-C.page.check) $(DOCGIRS:.gir=-Python.page.check) $(DOCGIRS:.gir=-Gjs.page.check)
+MALLARD_DIRS = $(DOCGIRS:.gir=-C) $(DOCGIRS:.gir=-Python) $(DOCGIRS:.gir=-Gjs)
+EXPECTED_MALLARD_DIRS = $(MALLARD_DIRS:=-expected)
+
+%-C: %.gir
+	$(AM_V_GEN)
+	$(AM_V_at)$(MKDIR_P) $*-C
+	$(AM_V_at)rm -f $*-C/*.page
+	$(AM_V_at)$(INTROSPECTION_DOCTOOL) $(INTROSPECTION_DOCTOOL_ARGS) --language C $*.gir -o $*-C/
+
+%-Python: %.gir
+	$(AM_V_GEN)
+	$(AM_V_at)$(MKDIR_P) $*-Python
+	$(AM_V_at)rm -f $*-Python/*.page
+	$(AM_V_at)$(INTROSPECTION_DOCTOOL) $(INTROSPECTION_DOCTOOL_ARGS) --language Python $*.gir -o $*-Python/
+
+%-Gjs: %.gir
+	$(AM_V_GEN)
+	$(AM_V_at)$(MKDIR_P) $*-Gjs
+	$(AM_V_at)rm -f $*-Gjs/*.page
+	$(AM_V_at)$(INTROSPECTION_DOCTOOL) $(INTROSPECTION_DOCTOOL_ARGS) --language Gjs $*.gir -o $*-Gjs/
+
+%-C.page.check: %-C
+	@diff -u -w -B -U 10 $(srcdir)/$*-C-expected $*-C && echo "  TEST  $*-C"
+
+%-Python.page.check: %-Python
+	@diff -u -w -B -U 10 $(srcdir)/$*-Python-expected $*-Python && echo "  TEST  $*-Python"
+
+%-Gjs.page.check: %-Gjs
+	@diff -u -w -B -U 10 $(srcdir)/$*-Gjs-expected $*-Gjs && echo "  TEST  $*-Gjs"
+else
+CHECKDOCS =
+endif
+
+check-local: Headeronly-1.0.gir $(CHECKGIRS) $(CHECKDOCS) $(TYPELIBS)
 
 EXTRA_DIST += \
 	annotationparser/README					\

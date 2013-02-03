@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<page id="Regress.test_ghash_nested_everything_return2"
+      type="topic"
+      style="function"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+    <link type="guide" xref="index" group="function"/>
+    <api:function>
+      <api:returns>
+        <api:type>{unicode: {unicode: unicode}}</api:type>
+      </api:returns>
+      <api:name>regress_test_ghash_nested_everything_return2</api:name>
+    </api:function>
+
+  </info>
+  <title>test_ghash_nested_everything_return2</title>
+  
+<synopsis><code mime="text/x-python">
+@returns({unicode: {unicode: unicode}})
+def test_ghash_nested_everything_return2():
+    # Python wrapper for regress_test_ghash_nested_everything_return2()
+</code></synopsis>
+
+  
+    <p>Another way of specifying nested parameterized types: using the
+element-type annotation.</p>
+  
+  
+  
+  
+<dl>
+<dt><p>Returns :</p></dt>
+<dd></dd>
+</dl>
+
+  
+  
+</page>

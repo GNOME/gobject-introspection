@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<page id="Regress.TestObj-matrix"
+      type="topic"
+      style="vfunc"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+    <link type="guide" xref="Regress.TestObj" group="vfunc"/>
+
+  </info>
+  <title>Regress.TestObj::matrix</title>
+  
+<synopsis><code mime="text/x-csrc">
+int matrix (RegressTestObj* obj,
+            const char* somestr);
+</code></synopsis>
+
+  
+    <p>This method is virtual.  Notably its name differs from the virtual
+slot name, which makes it useful for testing bindings handle this
+case.</p>
+  
+  
+  
+  
+<dl>
+<dt><p>obj :</p></dt>
+<dd></dd>
+<dt><p>somestr :</p></dt>
+<dd><p>Meaningless string</p></dd>
+<dt><p>Returns :</p></dt>
+<dd></dd>
+</dl>
+
+  
+  
+</page>

@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<page id="Regress.TestObj-list"
+      type="topic"
+      style="property"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+    <link type="guide" xref="Regress.TestObj" group="property"/>
+    <title type="link" role="topic">list</title>
+
+  </info>
+  <title>Regress.TestObj:list</title>
+  
+<synopsis><code mime="text/x-python">
+"list"             <list>                : Read / Write
+</code></synopsis>
+
+  
+    
+  
+  
+  
+  
+  
+  
+  
+</page>

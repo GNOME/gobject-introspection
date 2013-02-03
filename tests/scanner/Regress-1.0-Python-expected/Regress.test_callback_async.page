@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<page id="Regress.test_callback_async"
+      type="topic"
+      style="function"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+    <link type="guide" xref="index" group="function"/>
+    <api:function>
+      <api:returns>
+        <api:type>none</api:type>
+      </api:returns>
+      <api:name>regress_test_callback_async</api:name>
+      <api:arg>
+        <api:type>Regress.TestCallbackUserData</api:type>
+        <api:name>callback</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>gpointer</api:type>
+        <api:name>user_data</api:name>
+      </api:arg>
+    </api:function>
+
+  </info>
+  <title>test_callback_async</title>
+  
+<synopsis><code mime="text/x-python">
+@accepts(Regress.TestCallbackUserData, gpointer)
+@returns(none)
+def test_callback_async(callback, user_data):
+    # Python wrapper for regress_test_callback_async()
+</code></synopsis>
+
+  
+    
+  
+  
+  
+  
+<dl>
+<dt><p>callback :</p></dt>
+<dd></dd>
+<dt><p>user_data :</p></dt>
+<dd></dd>
+</dl>
+
+  
+  
+</page>

@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<page id="Regress.FooObject-signal"
+      type="topic"
+      style="signal"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+    <link type="guide" xref="Regress.FooObject" group="signal"/>
+    <title type="link" role="topic">signal</title>
+
+  </info>
+  <title>Regress.FooObject::signal</title>
+  
+<synopsis><code mime="text/x-python">
+def callback(foo_object, object, p0, user_param1, ...)
+</code></synopsis>
+
+  
+    
+  
+  
+  
+  
+<dl>
+<dt><p>foo_object :</p></dt>
+<dd><p>instance of Regress.FooObject that is emitting the signal</p></dd>
+<dt><p>object :</p></dt>
+<dd></dd>
+<dt><p>p0 :</p></dt>
+<dd></dd>
+<dt><p>user_param1 :</p></dt>
+<dd><p>first user parameter (if any) specified with the connect() method</p></dd>
+<dt><p>... :</p></dt>
+<dd><p>additional user parameters (if any)</p></dd>
+<dt><p>Returns :</p></dt>
+<dd>gchar* </dd>
+</dl>
+
+  
+  
+</page>

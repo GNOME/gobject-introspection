@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<page id="Regress.FooObject-virtual_method"
+      type="topic"
+      style="vfunc"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+    <link type="guide" xref="Regress.FooObject" group="vfunc"/>
+
+  </info>
+  <title>Regress.FooObject::virtual_method</title>
+  
+<synopsis><code mime="text/x-csrc">
+gboolean virtual_method (RegressFooObject* object,
+                         int first_param);
+</code></synopsis>
+
+  
+    
+  
+  
+  
+  
+<dl>
+<dt><p>object :</p></dt>
+<dd></dd>
+<dt><p>first_param :</p></dt>
+<dd></dd>
+<dt><p>Returns :</p></dt>
+<dd></dd>
+</dl>
+
+  
+  
+</page>

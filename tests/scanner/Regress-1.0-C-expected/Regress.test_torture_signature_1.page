@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<page id="Regress.test_torture_signature_1"
+      type="topic"
+      style="function"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+    <link type="guide" xref="index" group="function"/>
+    <api:function>
+      <api:returns>
+        <api:type>gboolean</api:type>
+      </api:returns>
+      <api:name>regress_test_torture_signature_1</api:name>
+      <api:arg>
+        <api:type>int</api:type>
+        <api:name>x</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>double*</api:type>
+        <api:name>y</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>int*</api:type>
+        <api:name>z</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>const char*</api:type>
+        <api:name>foo</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>int*</api:type>
+        <api:name>q</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>guint</api:type>
+        <api:name>m</api:name>
+      </api:arg>
+    </api:function>
+
+  </info>
+  <title>regress_test_torture_signature_1</title>
+  
+<synopsis><code mime="text/x-csrc">
+gboolean regress_test_torture_signature_1 (int x,
+                                           double* y,
+                                           int* z,
+                                           const char* foo,
+                                           int* q,
+                                           guint m);
+</code></synopsis>
+
+  
+    <p>This function throws an error if m is odd.</p>
+  
+  
+  
+  
+<dl>
+<dt><p>x :</p></dt>
+<dd></dd>
+<dt><p>y :</p></dt>
+<dd></dd>
+<dt><p>z :</p></dt>
+<dd></dd>
+<dt><p>foo :</p></dt>
+<dd></dd>
+<dt><p>q :</p></dt>
+<dd></dd>
+<dt><p>m :</p></dt>
+<dd></dd>
+<dt><p>Returns :</p></dt>
+<dd></dd>
+</dl>
+
+  
+  
+</page>

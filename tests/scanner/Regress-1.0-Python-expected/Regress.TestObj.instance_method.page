@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<page id="Regress.TestObj.instance_method"
+      type="topic"
+      style="method"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+    <link type="guide" xref="Regress.TestObj" group="method"/>
+    <api:function>
+      <api:returns>
+        <api:type>int</api:type>
+      </api:returns>
+      <api:name>regress_test_obj_instance_method</api:name>
+      <api:arg>
+        <api:type>Regress.TestObj</api:type>
+        <api:name>self</api:name>
+      </api:arg>
+    </api:function>
+
+  </info>
+  <title>TestObj.instance_method</title>
+  
+<synopsis><code mime="text/x-python">
+@accepts(Regress.TestObj)
+@returns(int)
+def instance_method(self):
+    # Python wrapper for regress_test_obj_instance_method()
+</code></synopsis>
+
+  
+    
+  
+  
+  
+  
+<dl>
+<dt><p>self :</p></dt>
+<dd></dd>
+<dt><p>Returns :</p></dt>
+<dd></dd>
+</dl>
+
+  
+  
+</page>

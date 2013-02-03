@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<page id="Regress.TestObj-allow_none_vfunc"
+      type="topic"
+      style="vfunc"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+      <link type="guide" xref="index"/>
+    
+  </info>
+  <title>Regress.TestObj::allow_none_vfunc</title>
+  
+<synopsis><code mime="text/x-gjs">
+function vfunc_allow_none_vfunc(two:Regress.TestObj):void {
+}
+</code></synopsis>
+
+  
+    
+  
+  
+  
+  
+<dl>
+<dt><p>two :</p></dt>
+<dd><p>Another object</p></dd>
+</dl>
+
+  
+  
+</page>

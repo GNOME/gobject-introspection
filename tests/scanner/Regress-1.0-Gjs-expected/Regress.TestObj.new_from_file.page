@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<page id="Regress.TestObj.new_from_file"
+      type="topic"
+      style="constructor"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+    <link type="guide" xref="Regress.TestObj" group="constructor"/>
+    <api:function>
+      <api:returns>
+        <api:type>Regress.TestObj</api:type>
+      </api:returns>
+      <api:name>regress_test_obj_new_from_file</api:name>
+      <api:arg>
+        <api:type>String</api:type>
+        <api:name>x</api:name>
+      </api:arg>
+    </api:function>
+
+  </info>
+  <title>TestObj.new_from_file</title>
+  
+<synopsis><code mime="text/x-gjs">
+function new_from_file(x:String):Regress.TestObj {
+    // Gjs wrapper for regress_test_obj_new_from_file()
+}
+</code></synopsis>
+
+  
+    
+  
+  
+  
+  
+<dl>
+<dt><p>x :</p></dt>
+<dd></dd>
+<dt><p>Returns :</p></dt>
+<dd></dd>
+</dl>
+
+  
+  
+</page>

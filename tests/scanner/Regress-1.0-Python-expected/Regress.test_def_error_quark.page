@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<page id="Regress.test_def_error_quark"
+      type="topic"
+      style="function"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+    <link type="guide" xref="index" group="function"/>
+    <api:function>
+      <api:returns>
+        <api:type>GLib.Quark</api:type>
+      </api:returns>
+      <api:name>regress_test_def_error_quark</api:name>
+    </api:function>
+
+  </info>
+  <title>test_def_error_quark</title>
+  
+<synopsis><code mime="text/x-python">
+@returns(GLib.Quark)
+def test_def_error_quark():
+    # Python wrapper for regress_test_def_error_quark()
+</code></synopsis>
+
+  
+    
+  
+  
+  
+  
+<dl>
+<dt><p>Returns :</p></dt>
+<dd></dd>
+</dl>
+
+  
+  
+</page>

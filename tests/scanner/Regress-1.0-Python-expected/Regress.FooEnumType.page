@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<page id="Regress.FooEnumType"
+      type="topic"
+      style="enum"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+      <link type="guide" xref="index"/>
+    
+  </info>
+  <title>Regress.FooEnumType</title>
+  
+  
+  
+    
+  
+  
+  
+  
+<dl>
+<dt><p>FooEnumType.ALPHA :</p></dt>
+<dd></dd>
+<dt><p>FooEnumType.BETA :</p></dt>
+<dd></dd>
+<dt><p>FooEnumType.DELTA :</p></dt>
+<dd></dd>
+</dl>
+
+  
+  
+</page>

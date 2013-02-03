@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<page id="Regress.test_closure_variant"
+      type="topic"
+      style="function"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+    <link type="guide" xref="index" group="function"/>
+    <api:function>
+      <api:returns>
+        <api:type>GLib.Variant</api:type>
+      </api:returns>
+      <api:name>regress_test_closure_variant</api:name>
+      <api:arg>
+        <api:type>GObject.Closure</api:type>
+        <api:name>closure</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>GLib.Variant</api:type>
+        <api:name>arg</api:name>
+      </api:arg>
+    </api:function>
+
+  </info>
+  <title>test_closure_variant</title>
+  
+<synopsis><code mime="text/x-gjs">
+function test_closure_variant(closure:GObject.Closure, arg:GLib.Variant):GLib.Variant {
+    // Gjs wrapper for regress_test_closure_variant()
+}
+</code></synopsis>
+
+  
+    
+  
+  
+  
+  
+<dl>
+<dt><p>closure :</p></dt>
+<dd><p>GClosure which takes one GVariant and returns a GVariant</p></dd>
+<dt><p>arg :</p></dt>
+<dd><p>a GVariant passed as argument to <code>closure</code></p></dd>
+<dt><p>Returns :</p></dt>
+<dd><p>the return value of <code>closure</code></p></dd>
+</dl>
+
+  
+  
+</page>

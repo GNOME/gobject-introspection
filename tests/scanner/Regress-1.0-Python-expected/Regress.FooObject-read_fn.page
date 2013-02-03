@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<page id="Regress.FooObject-read_fn"
+      type="topic"
+      style="vfunc"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+      <link type="guide" xref="index"/>
+    
+  </info>
+  <title>Regress.FooObject::read_fn</title>
+  
+<synopsis><code mime="text/x-python">
+@accepts(Regress.FooObject, int, int)
+@returns(none)
+def do_read_fn(object, offset, length):
+</code></synopsis>
+
+  
+    <p>Read some stuff.</p>
+  
+  
+  
+  
+<dl>
+<dt><p>object :</p></dt>
+<dd></dd>
+<dt><p>offset :</p></dt>
+<dd><p>offset</p></dd>
+<dt><p>length :</p></dt>
+<dd><p>length</p></dd>
+</dl>
+
+  
+  
+</page>

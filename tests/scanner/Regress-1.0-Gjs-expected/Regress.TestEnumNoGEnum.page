@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<page id="Regress.TestEnumNoGEnum"
+      type="topic"
+      style="enum"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+      <link type="guide" xref="index"/>
+    
+  </info>
+  <title>Regress.TestEnumNoGEnum</title>
+  
+  
+  
+    
+  
+  
+  
+  
+<dl>
+<dt><p>TestEnumNoGEnum.EVALUE1 :</p></dt>
+<dd></dd>
+<dt><p>TestEnumNoGEnum.EVALUE2 :</p></dt>
+<dd></dd>
+<dt><p>TestEnumNoGEnum.EVALUE3 :</p></dt>
+<dd></dd>
+</dl>
+
+  
+  
+</page>

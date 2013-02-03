@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<page id="Regress.TestBoxed.equals"
+      type="topic"
+      style="method"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+    <link type="guide" xref="Regress.TestBoxed" group="method"/>
+    <api:function>
+      <api:returns>
+        <api:type>bool</api:type>
+      </api:returns>
+      <api:name>regress_test_boxed_equals</api:name>
+      <api:arg>
+        <api:type>Regress.TestBoxed</api:type>
+        <api:name>self</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>Regress.TestBoxed</api:type>
+        <api:name>other</api:name>
+      </api:arg>
+    </api:function>
+
+  </info>
+  <title>TestBoxed.equals</title>
+  
+<synopsis><code mime="text/x-python">
+@accepts(Regress.TestBoxed, Regress.TestBoxed)
+@returns(bool)
+def equals(self, other):
+    # Python wrapper for regress_test_boxed_equals()
+</code></synopsis>
+
+  
+    
+  
+  
+  
+  
+<dl>
+<dt><p>self :</p></dt>
+<dd></dd>
+<dt><p>other :</p></dt>
+<dd></dd>
+<dt><p>Returns :</p></dt>
+<dd></dd>
+</dl>
+
+  
+  
+</page>

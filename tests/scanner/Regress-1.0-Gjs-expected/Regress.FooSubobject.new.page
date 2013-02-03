@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<page id="Regress.FooSubobject.new"
+      type="topic"
+      style="constructor"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+    <link type="guide" xref="Regress.FooSubobject" group="constructor"/>
+    <api:function>
+      <api:returns>
+        <api:type>Regress.FooSubobject</api:type>
+      </api:returns>
+      <api:name>regress_foo_subobject_new</api:name>
+    </api:function>
+
+  </info>
+  <title>FooSubobject.new</title>
+  
+<synopsis><code mime="text/x-gjs">
+function new():Regress.FooSubobject {
+    // Gjs wrapper for regress_foo_subobject_new()
+}
+</code></synopsis>
+
+  
+    
+  
+  
+  
+  
+<dl>
+<dt><p>Returns :</p></dt>
+<dd></dd>
+</dl>
+
+  
+  
+</page>

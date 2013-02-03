@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<page id="Regress.AnnotationStruct"
+      type="guide"
+      style="record"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+      <link type="guide" xref="index"/>
+    
+  </info>
+  <title>Regress.AnnotationStruct</title>
+  
+  
+  
+    <p>This is a test of an array of object in an field of a struct.</p>
+  
+  
+  
+  
+  
+  
+  
+</page>

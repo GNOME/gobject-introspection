@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<page id="Regress.AnnotationObject.hidden_self"
+      type="topic"
+      style="method"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+    <link type="guide" xref="Regress.AnnotationObject" group="method"/>
+    <api:function>
+      <api:returns>
+        <api:type>none</api:type>
+      </api:returns>
+      <api:name>regress_annotation_object_hidden_self</api:name>
+      <api:arg>
+        <api:type>Regress.AnnotationObject</api:type>
+        <api:name>self</api:name>
+      </api:arg>
+    </api:function>
+
+  </info>
+  <title>AnnotationObject.hidden_self</title>
+  
+<synopsis><code mime="text/x-python">
+@accepts(Regress.AnnotationObject)
+@returns(none)
+def hidden_self(self):
+    # Python wrapper for regress_annotation_object_hidden_self()
+</code></synopsis>
+
+  
+    
+  
+  
+  
+  
+<dl>
+<dt><p>self :</p></dt>
+<dd><p>A <link xref="Regress.AnnotationObject"/></p></dd>
+</dl>
+
+  
+  
+</page>

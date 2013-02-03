@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<page id="Regress.TestBoxed.new"
+      type="topic"
+      style="constructor"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+    <link type="guide" xref="Regress.TestBoxed" group="constructor"/>
+    <api:function>
+      <api:returns>
+        <api:type>Regress.TestBoxed</api:type>
+      </api:returns>
+      <api:name>regress_test_boxed_new</api:name>
+    </api:function>
+
+  </info>
+  <title>TestBoxed.new</title>
+  
+<synopsis><code mime="text/x-gjs">
+function new():Regress.TestBoxed {
+    // Gjs wrapper for regress_test_boxed_new()
+}
+</code></synopsis>
+
+  
+    
+  
+  
+  
+  
+<dl>
+<dt><p>Returns :</p></dt>
+<dd></dd>
+</dl>
+
+  
+  
+</page>

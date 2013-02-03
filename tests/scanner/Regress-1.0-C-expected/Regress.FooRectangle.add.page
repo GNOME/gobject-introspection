@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<page id="Regress.FooRectangle.add"
+      type="topic"
+      style="method"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+    <link type="guide" xref="Regress.FooRectangle" group="method"/>
+    <api:function>
+      <api:returns>
+        <api:type>void</api:type>
+      </api:returns>
+      <api:name>regress_foo_rectangle_add</api:name>
+      <api:arg>
+        <api:type>RegressFooRectangle*</api:type>
+        <api:name>r1</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>const RegressFooRectangle*</api:type>
+        <api:name>r2</api:name>
+      </api:arg>
+    </api:function>
+
+  </info>
+  <title>regress_foo_rectangle_add</title>
+  
+<synopsis><code mime="text/x-csrc">
+void regress_foo_rectangle_add (RegressFooRectangle* r1,
+                                const RegressFooRectangle* r2);
+</code></synopsis>
+
+  
+    
+  
+  
+  
+  
+<dl>
+<dt><p>r1 :</p></dt>
+<dd><p>add to this rect</p></dd>
+<dt><p>r2 :</p></dt>
+<dd><p>source rectangle</p></dd>
+<dt><p>Returns :</p></dt>
+<dd></dd>
+</dl>
+
+  
+  
+</page>

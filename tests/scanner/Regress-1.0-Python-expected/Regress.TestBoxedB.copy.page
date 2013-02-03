@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<page id="Regress.TestBoxedB.copy"
+      type="topic"
+      style="method"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+    <link type="guide" xref="Regress.TestBoxedB" group="method"/>
+    <api:function>
+      <api:returns>
+        <api:type>Regress.TestBoxedB</api:type>
+      </api:returns>
+      <api:name>regress_test_boxed_b_copy</api:name>
+      <api:arg>
+        <api:type>Regress.TestBoxedB</api:type>
+        <api:name>self</api:name>
+      </api:arg>
+    </api:function>
+
+  </info>
+  <title>TestBoxedB.copy</title>
+  
+<synopsis><code mime="text/x-python">
+@accepts(Regress.TestBoxedB)
+@returns(Regress.TestBoxedB)
+def copy(self):
+    # Python wrapper for regress_test_boxed_b_copy()
+</code></synopsis>
+
+  
+    
+  
+  
+  
+  
+<dl>
+<dt><p>self :</p></dt>
+<dd></dd>
+<dt><p>Returns :</p></dt>
+<dd></dd>
+</dl>
+
+  
+  
+</page>

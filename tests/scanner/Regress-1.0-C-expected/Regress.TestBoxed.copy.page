@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<page id="Regress.TestBoxed.copy"
+      type="topic"
+      style="method"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+    <link type="guide" xref="Regress.TestBoxed" group="method"/>
+    <api:function>
+      <api:returns>
+        <api:type>RegressTestBoxed*</api:type>
+      </api:returns>
+      <api:name>regress_test_boxed_copy</api:name>
+      <api:arg>
+        <api:type>RegressTestBoxed*</api:type>
+        <api:name>boxed</api:name>
+      </api:arg>
+    </api:function>
+
+  </info>
+  <title>regress_test_boxed_copy</title>
+  
+<synopsis><code mime="text/x-csrc">
+RegressTestBoxed* regress_test_boxed_copy (RegressTestBoxed* boxed);
+</code></synopsis>
+
+  
+    
+  
+  
+  
+  
+<dl>
+<dt><p>boxed :</p></dt>
+<dd></dd>
+<dt><p>Returns :</p></dt>
+<dd></dd>
+</dl>
+
+  
+  
+</page>

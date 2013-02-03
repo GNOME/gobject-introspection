@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<page id="Regress.FooObject-virtual_method"
+      type="topic"
+      style="vfunc"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+      <link type="guide" xref="index"/>
+    
+  </info>
+  <title>Regress.FooObject::virtual_method</title>
+  
+<synopsis><code mime="text/x-python">
+@accepts(Regress.FooObject, int)
+@returns(bool)
+def do_virtual_method(object, first_param):
+</code></synopsis>
+
+  
+    
+  
+  
+  
+  
+<dl>
+<dt><p>object :</p></dt>
+<dd></dd>
+<dt><p>first_param :</p></dt>
+<dd></dd>
+<dt><p>Returns :</p></dt>
+<dd></dd>
+</dl>
+
+  
+  
+</page>

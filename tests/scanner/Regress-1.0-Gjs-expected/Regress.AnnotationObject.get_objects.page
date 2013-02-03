@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<page id="Regress.AnnotationObject.get_objects"
+      type="topic"
+      style="method"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+    <link type="guide" xref="Regress.AnnotationObject" group="method"/>
+    <api:function>
+      <api:returns>
+        <api:type>&lt;list&gt;</api:type>
+      </api:returns>
+      <api:name>regress_annotation_object_get_objects</api:name>
+    </api:function>
+
+  </info>
+  <title>AnnotationObject.prototype.get_objects</title>
+  
+<synopsis><code mime="text/x-gjs">
+function get_objects():<list> {
+    // Gjs wrapper for regress_annotation_object_get_objects()
+}
+</code></synopsis>
+
+  
+    <p>This is a test for returning a list of objects.
+The list itself should be freed, but not the internal objects,
+intentionally similar example to gtk_container_get_children</p>
+  
+  
+  
+  
+<dl>
+<dt><p>Returns :</p></dt>
+<dd><p>list of objects</p></dd>
+</dl>
+
+  
+  
+</page>

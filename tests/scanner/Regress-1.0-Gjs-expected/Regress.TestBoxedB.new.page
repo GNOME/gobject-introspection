@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<page id="Regress.TestBoxedB.new"
+      type="topic"
+      style="constructor"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+    <link type="guide" xref="Regress.TestBoxedB" group="constructor"/>
+    <api:function>
+      <api:returns>
+        <api:type>Regress.TestBoxedB</api:type>
+      </api:returns>
+      <api:name>regress_test_boxed_b_new</api:name>
+      <api:arg>
+        <api:type>gint8</api:type>
+        <api:name>some_int8</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>Number</api:type>
+        <api:name>some_long</api:name>
+      </api:arg>
+    </api:function>
+
+  </info>
+  <title>TestBoxedB.new</title>
+  
+<synopsis><code mime="text/x-gjs">
+function new(some_int8:gint8, some_long:Number):Regress.TestBoxedB {
+    // Gjs wrapper for regress_test_boxed_b_new()
+}
+</code></synopsis>
+
+  
+    
+  
+  
+  
+  
+<dl>
+<dt><p>some_int8 :</p></dt>
+<dd></dd>
+<dt><p>some_long :</p></dt>
+<dd></dd>
+<dt><p>Returns :</p></dt>
+<dd></dd>
+</dl>
+
+  
+  
+</page>

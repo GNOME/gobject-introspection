@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<page id="Regress.TestSimpleBoxedA.copy"
+      type="topic"
+      style="method"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+    <link type="guide" xref="Regress.TestSimpleBoxedA" group="method"/>
+    <api:function>
+      <api:returns>
+        <api:type>Regress.TestSimpleBoxedA</api:type>
+      </api:returns>
+      <api:name>regress_test_simple_boxed_a_copy</api:name>
+    </api:function>
+
+  </info>
+  <title>TestSimpleBoxedA.prototype.copy</title>
+  
+<synopsis><code mime="text/x-gjs">
+function copy():Regress.TestSimpleBoxedA {
+    // Gjs wrapper for regress_test_simple_boxed_a_copy()
+}
+</code></synopsis>
+
+  
+    
+  
+  
+  
+  
+<dl>
+<dt><p>Returns :</p></dt>
+<dd></dd>
+</dl>
+
+  
+  
+</page>

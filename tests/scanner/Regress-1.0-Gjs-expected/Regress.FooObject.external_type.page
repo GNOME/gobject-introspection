@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<page id="Regress.FooObject.external_type"
+      type="topic"
+      style="method"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+    <link type="guide" xref="Regress.FooObject" group="method"/>
+    <api:function>
+      <api:returns>
+        <api:type>Utility.Object</api:type>
+      </api:returns>
+      <api:name>regress_foo_object_external_type</api:name>
+    </api:function>
+
+  </info>
+  <title>FooObject.prototype.external_type</title>
+  
+<synopsis><code mime="text/x-gjs">
+function external_type():Utility.Object {
+    // Gjs wrapper for regress_foo_object_external_type()
+}
+</code></synopsis>
+
+  
+    
+  
+  
+  
+  
+<dl>
+<dt><p>Returns :</p></dt>
+<dd><p><code>null</code> always</p></dd>
+</dl>
+
+  
+  
+</page>

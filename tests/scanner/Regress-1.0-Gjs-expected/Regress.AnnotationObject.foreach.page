@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<page id="Regress.AnnotationObject.foreach"
+      type="topic"
+      style="method"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+    <link type="guide" xref="Regress.AnnotationObject" group="method"/>
+    <api:function>
+      <api:returns>
+        <api:type>void</api:type>
+      </api:returns>
+      <api:name>regress_annotation_object_foreach</api:name>
+      <api:arg>
+        <api:type>Regress.AnnotationForeachFunc</api:type>
+        <api:name>func</api:name>
+      </api:arg>
+    </api:function>
+
+  </info>
+  <title>AnnotationObject.prototype.foreach</title>
+  
+<synopsis><code mime="text/x-gjs">
+function foreach(func:Regress.AnnotationForeachFunc):void {
+    // Gjs wrapper for regress_annotation_object_foreach()
+}
+</code></synopsis>
+
+  
+    <p>Test taking a call-scoped callback</p>
+  
+  
+  
+  
+<dl>
+<dt><p>func :</p></dt>
+<dd><p>Callback to invoke</p></dd>
+</dl>
+
+  
+  
+</page>

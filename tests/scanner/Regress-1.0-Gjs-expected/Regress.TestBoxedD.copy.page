@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<page id="Regress.TestBoxedD.copy"
+      type="topic"
+      style="method"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+    <link type="guide" xref="Regress.TestBoxedD" group="method"/>
+    <api:function>
+      <api:returns>
+        <api:type>Regress.TestBoxedD</api:type>
+      </api:returns>
+      <api:name>regress_test_boxed_d_copy</api:name>
+    </api:function>
+
+  </info>
+  <title>TestBoxedD.prototype.copy</title>
+  
+<synopsis><code mime="text/x-gjs">
+function copy():Regress.TestBoxedD {
+    // Gjs wrapper for regress_test_boxed_d_copy()
+}
+</code></synopsis>
+
+  
+    
+  
+  
+  
+  
+<dl>
+<dt><p>Returns :</p></dt>
+<dd></dd>
+</dl>
+
+  
+  
+</page>

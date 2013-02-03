@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<page id="Regress.TestFloating.new"
+      type="topic"
+      style="constructor"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+    <link type="guide" xref="Regress.TestFloating" group="constructor"/>
+    <api:function>
+      <api:returns>
+        <api:type>RegressTestFloating*</api:type>
+      </api:returns>
+      <api:name>regress_test_floating_new</api:name>
+    </api:function>
+
+  </info>
+  <title>regress_test_floating_new</title>
+  
+<synopsis><code mime="text/x-csrc">
+RegressTestFloating* regress_test_floating_new (void);
+</code></synopsis>
+
+  
+    
+  
+  
+  
+  
+<dl>
+<dt><p>Returns :</p></dt>
+<dd><p>A new floating <link xref="Regress.TestFloating"/></p></dd>
+</dl>
+
+  
+  
+</page>

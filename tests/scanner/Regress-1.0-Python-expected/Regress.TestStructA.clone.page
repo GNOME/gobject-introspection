@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<page id="Regress.TestStructA.clone"
+      type="topic"
+      style="method"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+    <link type="guide" xref="Regress.TestStructA" group="method"/>
+    <api:function>
+      <api:returns>
+        <api:type>none</api:type>
+      </api:returns>
+      <api:name>regress_test_struct_a_clone</api:name>
+      <api:arg>
+        <api:type>Regress.TestStructA</api:type>
+        <api:name>self</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>Regress.TestStructA</api:type>
+        <api:name>a_out</api:name>
+      </api:arg>
+    </api:function>
+
+  </info>
+  <title>TestStructA.clone</title>
+  
+<synopsis><code mime="text/x-python">
+@accepts(Regress.TestStructA, Regress.TestStructA)
+@returns(none)
+def clone(self, a_out):
+    # Python wrapper for regress_test_struct_a_clone()
+</code></synopsis>
+
+  
+    <p>Make a copy of a RegressTestStructA</p>
+  
+  
+  
+  
+<dl>
+<dt><p>self :</p></dt>
+<dd><p>the structure</p></dd>
+<dt><p>a_out :</p></dt>
+<dd><p>the cloned structure</p></dd>
+</dl>
+
+  
+  
+</page>

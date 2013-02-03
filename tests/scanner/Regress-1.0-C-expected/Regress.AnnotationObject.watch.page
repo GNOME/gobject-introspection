@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<page id="Regress.AnnotationObject.watch"
+      type="topic"
+      style="method"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+    <link type="guide" xref="Regress.AnnotationObject" group="method"/>
+    <api:function>
+      <api:returns>
+        <api:type>void</api:type>
+      </api:returns>
+      <api:name>regress_annotation_object_watch</api:name>
+      <api:arg>
+        <api:type>RegressAnnotationObject*</api:type>
+        <api:name>object</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>RegressAnnotationForeachFunc</api:type>
+        <api:name>func</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>gpointer</api:type>
+        <api:name>user_data</api:name>
+      </api:arg>
+    </api:function>
+
+  </info>
+  <title>regress_annotation_object_watch</title>
+  
+<synopsis><code mime="text/x-csrc">
+void regress_annotation_object_watch (RegressAnnotationObject* object,
+                                      RegressAnnotationForeachFunc func,
+                                      gpointer user_data);
+</code></synopsis>
+
+  
+    <p>This is here just for the sake of being overriden by its
+<link xref="Regress.AnnotationObject.watch_full"/>.</p>
+  
+  
+  
+  
+<dl>
+<dt><p>object :</p></dt>
+<dd><p>A <link xref="Regress.AnnotationObject"/></p></dd>
+<dt><p>func :</p></dt>
+<dd><p>The callback</p></dd>
+<dt><p>user_data :</p></dt>
+<dd><p>The callback data</p></dd>
+<dt><p>Returns :</p></dt>
+<dd></dd>
+</dl>
+
+  
+  
+</page>

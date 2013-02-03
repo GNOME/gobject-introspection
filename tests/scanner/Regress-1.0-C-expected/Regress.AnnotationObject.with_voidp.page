@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<page id="Regress.AnnotationObject.with_voidp"
+      type="topic"
+      style="method"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+    <link type="guide" xref="Regress.AnnotationObject" group="method"/>
+    <api:function>
+      <api:returns>
+        <api:type>void</api:type>
+      </api:returns>
+      <api:name>regress_annotation_object_with_voidp</api:name>
+      <api:arg>
+        <api:type>RegressAnnotationObject*</api:type>
+        <api:name>object</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>void*</api:type>
+        <api:name>data</api:name>
+      </api:arg>
+    </api:function>
+
+  </info>
+  <title>regress_annotation_object_with_voidp</title>
+  
+<synopsis><code mime="text/x-csrc">
+void regress_annotation_object_with_voidp (RegressAnnotationObject* object,
+                                           void* data);
+</code></synopsis>
+
+  
+    
+  
+  
+  
+  
+<dl>
+<dt><p>object :</p></dt>
+<dd></dd>
+<dt><p>data :</p></dt>
+<dd><p>Opaque pointer handle</p></dd>
+<dt><p>Returns :</p></dt>
+<dd></dd>
+</dl>
+
+  
+  
+</page>

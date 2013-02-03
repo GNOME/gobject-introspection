@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<page id="Regress.FooSubInterface-destroy-event"
+      type="topic"
+      style="signal"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+    <link type="guide" xref="Regress.FooSubInterface" group="property"/>
+    <title type="link" role="topic">destroy-event</title>
+
+  </info>
+  <title>Regress.FooSubInterface::destroy-event</title>
+  
+<synopsis><code mime="text/x-csrc">
+void destroy-event (void);
+</code></synopsis>
+
+  
+    
+  
+  
+  
+  
+<dl>
+<dt><p>Returns :</p></dt>
+<dd></dd>
+</dl>
+
+  
+  
+</page>

@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<page id="Regress.FooRectangle.add"
+      type="topic"
+      style="method"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+    <link type="guide" xref="Regress.FooRectangle" group="method"/>
+    <api:function>
+      <api:returns>
+        <api:type>none</api:type>
+      </api:returns>
+      <api:name>regress_foo_rectangle_add</api:name>
+      <api:arg>
+        <api:type>Regress.FooRectangle</api:type>
+        <api:name>self</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>Regress.FooRectangle</api:type>
+        <api:name>r2</api:name>
+      </api:arg>
+    </api:function>
+
+  </info>
+  <title>FooRectangle.add</title>
+  
+<synopsis><code mime="text/x-python">
+@accepts(Regress.FooRectangle, Regress.FooRectangle)
+@returns(none)
+def add(self, r2):
+    # Python wrapper for regress_foo_rectangle_add()
+</code></synopsis>
+
+  
+    
+  
+  
+  
+  
+<dl>
+<dt><p>self :</p></dt>
+<dd><p>add to this rect</p></dd>
+<dt><p>r2 :</p></dt>
+<dd><p>source rectangle</p></dd>
+</dl>
+
+  
+  
+</page>

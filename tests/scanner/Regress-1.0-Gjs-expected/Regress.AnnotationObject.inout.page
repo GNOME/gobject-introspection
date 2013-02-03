@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<page id="Regress.AnnotationObject.inout"
+      type="topic"
+      style="method"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+    <link type="guide" xref="Regress.AnnotationObject" group="method"/>
+    <api:function>
+      <api:returns>
+        <api:type>Number</api:type>
+      </api:returns>
+      <api:name>regress_annotation_object_inout</api:name>
+      <api:arg>
+        <api:type>Number</api:type>
+        <api:name>inoutarg</api:name>
+      </api:arg>
+    </api:function>
+
+  </info>
+  <title>AnnotationObject.prototype.inout</title>
+  
+<synopsis><code mime="text/x-gjs">
+function inout(inoutarg:Number):Number {
+    // Gjs wrapper for regress_annotation_object_inout()
+}
+</code></synopsis>
+
+  
+    <p>This is a test for out arguments</p>
+  
+  
+  
+  
+<dl>
+<dt><p>inoutarg :</p></dt>
+<dd><p>This is an argument test</p></dd>
+<dt><p>Returns :</p></dt>
+<dd><p>an int</p></dd>
+</dl>
+
+  
+  
+</page>

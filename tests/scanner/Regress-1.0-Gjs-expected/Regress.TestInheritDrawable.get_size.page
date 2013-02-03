@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<page id="Regress.TestInheritDrawable.get_size"
+      type="topic"
+      style="method"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+    <link type="guide" xref="Regress.TestInheritDrawable" group="method"/>
+    <api:function>
+      <api:returns>
+        <api:type>void</api:type>
+      </api:returns>
+      <api:name>regress_test_inherit_drawable_get_size</api:name>
+    </api:function>
+
+  </info>
+  <title>TestInheritDrawable.prototype.get_size</title>
+  
+<synopsis><code mime="text/x-gjs">
+function get_size():void {
+    // Gjs wrapper for regress_test_inherit_drawable_get_size()
+}
+</code></synopsis>
+
+  
+    
+  
+  
+  
+  
+<dl>
+</dl>
+
+  
+  
+</page>

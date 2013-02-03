@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<page id="Regress.AnnotationObject.create_object"
+      type="topic"
+      style="method"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+    <link type="guide" xref="Regress.AnnotationObject" group="method"/>
+    <api:function>
+      <api:returns>
+        <api:type>GObject.Object</api:type>
+      </api:returns>
+      <api:name>regress_annotation_object_create_object</api:name>
+    </api:function>
+
+  </info>
+  <title>AnnotationObject.prototype.create_object</title>
+  
+<synopsis><code mime="text/x-gjs">
+function create_object():GObject.Object {
+    // Gjs wrapper for regress_annotation_object_create_object()
+}
+</code></synopsis>
+
+  
+    <p>Test returning a caller-owned object</p>
+  
+  
+  
+  
+<dl>
+<dt><p>Returns :</p></dt>
+<dd><p>The object</p></dd>
+</dl>
+
+  
+  
+</page>

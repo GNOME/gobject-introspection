@@ -1,12 +1,6 @@
 include $(top_srcdir)/common.mk
 
 SUBDIRS = . scanner repository offsets warn
-DIST_SUBDIRS = $(SUBDIRS)
-if BUILD_DOCTOOL
-SUBDIRS += doctool
-else
-DIST_SUBDIRS += doctool
-endif
 
 EXTRA_DIST=
 BUILT_SOURCES=

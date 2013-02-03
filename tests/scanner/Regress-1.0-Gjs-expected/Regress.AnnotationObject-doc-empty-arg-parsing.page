@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<page id="Regress.AnnotationObject-doc-empty-arg-parsing"
+      type="topic"
+      style="signal"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+    <link type="guide" xref="Regress.AnnotationObject" group="signal"/>
+    <title type="link" role="topic">doc-empty-arg-parsing</title>
+
+  </info>
+  <title>Regress.AnnotationObject::doc-empty-arg-parsing</title>
+  
+<synopsis><code mime="text/x-python">
+function callback(annotation_object, arg1:gpointer, user_param1, ...):void;
+</code></synopsis>
+
+  
+    <p>This signal tests an empty document argument (<code>arg1</code>)</p>
+  
+  
+  
+  
+<dl>
+<dt><p>annotation_object :</p></dt>
+<dd><p>instance of Regress.AnnotationObject that is emitting the signal</p></dd>
+<dt><p>arg1 :</p></dt>
+<dd></dd>
+<dt><p>user_param1 :</p></dt>
+<dd><p>first user parameter (if any) specified with the connect() method</p></dd>
+<dt><p>... :</p></dt>
+<dd><p>additional user parameters (if any)</p></dd>
+</dl>
+
+  
+  
+</page>

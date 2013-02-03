@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<page id="Regress.AnnotationObject.inout3"
+      type="topic"
+      style="method"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+    <link type="guide" xref="Regress.AnnotationObject" group="method"/>
+    <api:function>
+      <api:returns>
+        <api:type>int</api:type>
+      </api:returns>
+      <api:name>regress_annotation_object_inout3</api:name>
+      <api:arg>
+        <api:type>Regress.AnnotationObject</api:type>
+        <api:name>self</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>int</api:type>
+        <api:name>inoutarg</api:name>
+      </api:arg>
+    </api:function>
+
+  </info>
+  <title>AnnotationObject.inout3</title>
+  
+<synopsis><code mime="text/x-python">
+@accepts(Regress.AnnotationObject, int)
+@returns(int)
+def inout3(self, inoutarg):
+    # Python wrapper for regress_annotation_object_inout3()
+</code></synopsis>
+
+  
+    <p>This is a 3th test for out arguments</p>
+  
+  
+  
+  
+<dl>
+<dt><p>self :</p></dt>
+<dd><p>a <link xref="GObject.Object"/></p></dd>
+<dt><p>inoutarg :</p></dt>
+<dd><p>This is an argument test</p></dd>
+<dt><p>Returns :</p></dt>
+<dd><p>an int</p></dd>
+</dl>
+
+  
+  
+</page>

@@ -40,3 +40,9 @@ INTROSPECTION_DOCTOOL = \
         UNINSTALLED_INTROSPECTION_SRCDIR=$(top_srcdir) \
         UNINSTALLED_INTROSPECTION_BUILDDIR=$(top_builddir) \
         $(top_builddir)/g-ir-doc-tool
+
+INTROSPECTION_DOCTOOL_ARGS = \
+    --add-include-path=$(srcdir) \
+    --add-include-path=$(top_srcdir)/gir \
+    --add-include-path=$(builddir) \
+    --add-include-path=$(top_builddir)

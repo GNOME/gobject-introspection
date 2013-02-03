@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<page id="Regress.TestObj-allow_none_vfunc"
+      type="topic"
+      style="vfunc"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+    <link type="guide" xref="Regress.TestObj" group="vfunc"/>
+
+  </info>
+  <title>Regress.TestObj::allow_none_vfunc</title>
+  
+<synopsis><code mime="text/x-csrc">
+void allow_none_vfunc (RegressTestObj* obj,
+                       RegressTestObj* two);
+</code></synopsis>
+
+  
+    
+  
+  
+  
+  
+<dl>
+<dt><p>obj :</p></dt>
+<dd></dd>
+<dt><p>two :</p></dt>
+<dd><p>Another object</p></dd>
+<dt><p>Returns :</p></dt>
+<dd></dd>
+</dl>
+
+  
+  
+</page>

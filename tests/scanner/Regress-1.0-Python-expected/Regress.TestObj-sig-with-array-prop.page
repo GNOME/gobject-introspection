@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<page id="Regress.TestObj-sig-with-array-prop"
+      type="topic"
+      style="signal"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+    <link type="guide" xref="Regress.TestObj" group="signal"/>
+    <title type="link" role="topic">sig-with-array-prop</title>
+
+  </info>
+  <title>Regress.TestObj::sig-with-array-prop</title>
+  
+<synopsis><code mime="text/x-python">
+def callback(test_obj, arr, user_param1, ...)
+</code></synopsis>
+
+  
+    <p>This test signal is like TelepathyGlib's
+ TpChannel:: group-members-changed-detailed:</p>
+  
+  
+  
+  
+<dl>
+<dt><p>test_obj :</p></dt>
+<dd><p>instance of Regress.TestObj that is emitting the signal</p></dd>
+<dt><p>arr :</p></dt>
+<dd><p>numbers</p></dd>
+<dt><p>user_param1 :</p></dt>
+<dd><p>first user parameter (if any) specified with the connect() method</p></dd>
+<dt><p>... :</p></dt>
+<dd><p>additional user parameters (if any)</p></dd>
+</dl>
+
+  
+  
+</page>

@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<page id="Regress.TestObj.skip_return_val_no_out"
+      type="topic"
+      style="method"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+    <link type="guide" xref="Regress.TestObj" group="method"/>
+    <api:function>
+      <api:returns>
+        <api:type>bool</api:type>
+      </api:returns>
+      <api:name>regress_test_obj_skip_return_val_no_out</api:name>
+      <api:arg>
+        <api:type>Regress.TestObj</api:type>
+        <api:name>self</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>int</api:type>
+        <api:name>a</api:name>
+      </api:arg>
+    </api:function>
+
+  </info>
+  <title>TestObj.skip_return_val_no_out</title>
+  
+<synopsis><code mime="text/x-python">
+@accepts(Regress.TestObj, int)
+@returns(bool)
+def skip_return_val_no_out(self, a):
+    # Python wrapper for regress_test_obj_skip_return_val_no_out()
+</code></synopsis>
+
+  
+    <p>Check that the return value is skipped. Succeed if a is nonzero, otherwise
+raise an error.</p>
+  
+  
+  
+  
+<dl>
+<dt><p>self :</p></dt>
+<dd><p>a <link xref="Regress.TestObj"/></p></dd>
+<dt><p>a :</p></dt>
+<dd><p>Parameter.</p></dd>
+<dt><p>Returns :</p></dt>
+<dd><p><code>True</code> if the call succeeds, <code>False</code> if @error is set.</p></dd>
+</dl>
+
+  
+  
+</page>

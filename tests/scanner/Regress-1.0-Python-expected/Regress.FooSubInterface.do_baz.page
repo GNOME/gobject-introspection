@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<page id="Regress.FooSubInterface.do_baz"
+      type="topic"
+      style="method"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+    <link type="guide" xref="Regress.FooSubInterface" group="method"/>
+    <api:function>
+      <api:returns>
+        <api:type>none</api:type>
+      </api:returns>
+      <api:name>regress_foo_sub_interface_do_baz</api:name>
+      <api:arg>
+        <api:type>Regress.FooSubInterface</api:type>
+        <api:name>self</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>GObject.Callback</api:type>
+        <api:name>callback</api:name>
+      </api:arg>
+      <api:arg>
+        <api:type>gpointer</api:type>
+        <api:name>user_data</api:name>
+      </api:arg>
+    </api:function>
+
+  </info>
+  <title>FooSubInterface.do_baz</title>
+  
+<synopsis><code mime="text/x-python">
+@accepts(Regress.FooSubInterface, GObject.Callback, gpointer)
+@returns(none)
+def do_baz(self, callback, user_data):
+    # Python wrapper for regress_foo_sub_interface_do_baz()
+</code></synopsis>
+
+  
+    
+  
+  
+  
+  
+<dl>
+<dt><p>self :</p></dt>
+<dd></dd>
+<dt><p>callback :</p></dt>
+<dd></dd>
+<dt><p>user_data :</p></dt>
+<dd></dd>
+</dl>
+
+  
+  
+</page>

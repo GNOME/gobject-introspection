@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<page id="Regress.TestBoxedD.get_magic"
+      type="topic"
+      style="method"
+      xmlns="http://projectmallard.org/1.0/"
+      xmlns:api="http://projectmallard.org/experimental/api/"
+      xmlns:ui="http://projectmallard.org/1.0/ui/">
+  <info>
+    
+    <link type="guide" xref="Regress.TestBoxedD" group="method"/>
+    <api:function>
+      <api:returns>
+        <api:type>int</api:type>
+      </api:returns>
+      <api:name>regress_test_boxed_d_get_magic</api:name>
+      <api:arg>
+        <api:type>Regress.TestBoxedD</api:type>
+        <api:name>self</api:name>
+      </api:arg>
+    </api:function>
+
+  </info>
+  <title>TestBoxedD.get_magic</title>
+  
+<synopsis><code mime="text/x-python">
+@accepts(Regress.TestBoxedD)
+@returns(int)
+def get_magic(self):
+    # Python wrapper for regress_test_boxed_d_get_magic()
+</code></synopsis>
+
+  
+    
+  
+  
+  
+  
+<dl>
+<dt><p>self :</p></dt>
+<dd></dd>
+<dt><p>Returns :</p></dt>
+<dd></dd>
+</dl>
+
+  
+  
+</page>
