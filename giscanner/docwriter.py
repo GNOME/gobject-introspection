@@ -298,7 +298,10 @@ class DocFormatter(object):
         return ''.join(words)
 
     def format_parameter_name(self, node, parameter):
-        return parameter.argname
+        if isinstance(parameter.type, ast.Varargs):
+            return "..."
+        else:
+            return parameter.argname
 
     def format_function_name(self, func):
         raise NotImplementedError
@@ -412,6 +415,8 @@ class DocFormatterPython(DocFormatter):
         # Force "self" for the first parameter of a method
         if self.is_method(node) and parameter is node.instance_parameter:
             return "self"
+        elif isinstance(parameter.type, ast.Varargs):
+            return "..."
         else:
             return parameter.argname
 
