@@ -10,4 +10,27 @@ GQuark warnlib_unpaired_error_quark (void);
 
 gboolean warnlib_throw_unpaired (GError **error);
 
+/* interface */
+#define WARNLIB_TYPE_WHATEVER              (warnlib_whatever_get_type ())
+#define WARNLIB_WHATEVER(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), WARNLIB_TYPE_WHATEVER, WarnLibWhatever))
+#define WARNLIB_IS_WHATEVER(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), WARNLIB_TYPE_WHATEVER))
+#define WARNLIB_WHATEVER_GET_IFACE(obj)    (G_TYPE_INSTANCE_GET_INTERFACE ((obj), WARNLIB_TYPE_WHATEVER, WarnLibWhateverIface))
+
+typedef struct _WarnLibWhateverIface WarnLibWhateverIface;
+typedef struct _WarnLibWhatever WarnLibWhatever;
+
+struct _WarnLibWhateverIface
+{
+  GTypeInterface parent_iface;
+
+  /* virtual table */
+
+  /* explicitly test un-named parameters */
+  void (*do_moo) (WarnLibWhatever *self, int, gpointer);
+};
+
+void warnlib_whatever_do_moo (WarnLibWhatever *self, int, gpointer);
+
+GType warnlib_whatever_get_type (void) G_GNUC_CONST;
+
 #endif

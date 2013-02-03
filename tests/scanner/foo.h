@@ -76,16 +76,12 @@ struct _RegressFooSubInterfaceIface
 
   void (*do_bar) (RegressFooSubInterface *self);
 
-  /* explicitly test un-named parameters */
-  void (*do_moo) (RegressFooSubInterface *self, int, gpointer);
-
   void (*do_baz) (RegressFooSubInterface *self, GCallback callback, gpointer user_data);
 };
 
 GType                 regress_foo_sub_interface_get_type       (void) G_GNUC_CONST;
 
 void regress_foo_sub_interface_do_bar (RegressFooSubInterface *self);
-void regress_foo_sub_interface_do_moo (RegressFooSubInterface *self, int, gpointer);
 void regress_foo_sub_interface_do_baz (RegressFooSubInterface *self,
                                        GCallback callback,
                                        gpointer user_data);

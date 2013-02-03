@@ -15,6 +15,70 @@ and/or use gtk-doc annotations.  -->
              shared-library=""
              c:identifier-prefixes="WarnLib"
              c:symbol-prefixes="warnlib_">
+    <interface name="Whatever"
+               c:symbol-prefix="whatever"
+               c:type="WarnLibWhatever"
+               glib:type-name="WarnLibWhatever"
+               glib:get-type="warnlib_whatever_get_type"
+               glib:type-struct="WhateverIface">
+      <virtual-method name="do_moo" invoker="do_moo">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="self" transfer-ownership="none">
+            <type name="Whatever" c:type="WarnLibWhatever*"/>
+          </instance-parameter>
+          <parameter transfer-ownership="none">
+            <type name="gint" c:type="int"/>
+          </parameter>
+          <parameter transfer-ownership="none">
+            <type name="gpointer" c:type="gpointer"/>
+          </parameter>
+        </parameters>
+      </virtual-method>
+      <method name="do_moo" c:identifier="warnlib_whatever_do_moo">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="self" transfer-ownership="none">
+            <type name="Whatever" c:type="WarnLibWhatever*"/>
+          </instance-parameter>
+          <parameter transfer-ownership="none">
+            <type name="gint" c:type="int"/>
+          </parameter>
+          <parameter transfer-ownership="none">
+            <type name="gpointer" c:type="gpointer"/>
+          </parameter>
+        </parameters>
+      </method>
+    </interface>
+    <record name="WhateverIface"
+            c:type="WarnLibWhateverIface"
+            glib:is-gtype-struct-for="Whatever">
+      <field name="parent_iface">
+        <type name="GObject.TypeInterface" c:type="GTypeInterface"/>
+      </field>
+      <field name="do_moo">
+        <callback name="do_moo">
+          <return-value transfer-ownership="none">
+            <type name="none" c:type="void"/>
+          </return-value>
+          <parameters>
+            <parameter name="self" transfer-ownership="none">
+              <type name="Whatever" c:type="WarnLibWhatever*"/>
+            </parameter>
+            <parameter transfer-ownership="none">
+              <type name="gint" c:type="int"/>
+            </parameter>
+            <parameter transfer-ownership="none">
+              <type name="gpointer" c:type="gpointer"/>
+            </parameter>
+          </parameters>
+        </callback>
+      </field>
+    </record>
     <function name="throw_unpaired"
               c:identifier="warnlib_throw_unpaired"
               throws="1">

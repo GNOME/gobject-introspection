@@ -1754,22 +1754,6 @@ exposed to language bindings.</doc>
           </parameter>
         </parameters>
       </virtual-method>
-      <virtual-method name="do_moo" invoker="do_moo">
-        <return-value transfer-ownership="none">
-          <type name="none" c:type="void"/>
-        </return-value>
-        <parameters>
-          <instance-parameter name="self" transfer-ownership="none">
-            <type name="FooSubInterface" c:type="RegressFooSubInterface*"/>
-          </instance-parameter>
-          <parameter transfer-ownership="none">
-            <type name="gint" c:type="int"/>
-          </parameter>
-          <parameter transfer-ownership="none">
-            <type name="gpointer" c:type="gpointer"/>
-          </parameter>
-        </parameters>
-      </virtual-method>
       <method name="do_bar" c:identifier="regress_foo_sub_interface_do_bar">
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
@@ -1795,22 +1779,6 @@ exposed to language bindings.</doc>
             <type name="GObject.Callback" c:type="GCallback"/>
           </parameter>
           <parameter name="user_data" transfer-ownership="none">
-            <type name="gpointer" c:type="gpointer"/>
-          </parameter>
-        </parameters>
-      </method>
-      <method name="do_moo" c:identifier="regress_foo_sub_interface_do_moo">
-        <return-value transfer-ownership="none">
-          <type name="none" c:type="void"/>
-        </return-value>
-        <parameters>
-          <instance-parameter name="self" transfer-ownership="none">
-            <type name="FooSubInterface" c:type="RegressFooSubInterface*"/>
-          </instance-parameter>
-          <parameter transfer-ownership="none">
-            <type name="gint" c:type="int"/>
-          </parameter>
-          <parameter transfer-ownership="none">
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
         </parameters>
@@ -1847,24 +1815,6 @@ exposed to language bindings.</doc>
           <parameters>
             <parameter name="self" transfer-ownership="none">
               <type name="FooSubInterface" c:type="RegressFooSubInterface*"/>
-            </parameter>
-          </parameters>
-        </callback>
-      </field>
-      <field name="do_moo">
-        <callback name="do_moo">
-          <return-value transfer-ownership="none">
-            <type name="none" c:type="void"/>
-          </return-value>
-          <parameters>
-            <parameter name="self" transfer-ownership="none">
-              <type name="FooSubInterface" c:type="RegressFooSubInterface*"/>
-            </parameter>
-            <parameter transfer-ownership="none">
-              <type name="gint" c:type="int"/>
-            </parameter>
-            <parameter transfer-ownership="none">
-              <type name="gpointer" c:type="gpointer"/>
             </parameter>
           </parameters>
         </callback>

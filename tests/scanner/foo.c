@@ -124,12 +124,6 @@ regress_foo_sub_interface_do_bar (RegressFooSubInterface *self)
   REGRESS_FOO_SUBINTERFACE_GET_INTERFACE(self)->do_bar (self);
 }
 
-void
-regress_foo_sub_interface_do_moo (RegressFooSubInterface *self, int x, gpointer y)
-{
-  REGRESS_FOO_SUBINTERFACE_GET_INTERFACE(self)->do_moo (self, x, y);
-}
-
 /**
  * regress_foo_sub_interface_do_baz:
  * @self:
