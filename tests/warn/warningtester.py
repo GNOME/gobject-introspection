@@ -128,6 +128,9 @@ def check(args):
 
     expected_warnings = _extract_expected(filename)
 
+    expected_warnings.sort()
+    emitted_warnings.sort()
+
     if len(expected_warnings) != len(emitted_warnings):
         raise SystemExit('ERROR in %r: %d warnings were emitted, '
                          'expected %d:\n%s' %(os.path.basename(filename),
