@@ -9277,6 +9277,31 @@
 
 
 /**
+ * _g_io_module_get_default_type:
+ * @extension_point: the name of an extension point
+ * @envvar: (allow-none): the name of an environment variable to override the default implementation.
+ * @is_supported_offset: a vtable offset, or zero
+ *
+ * Retrieves the default class implementing @extension_point.
+ *
+ * If @envvar is not %NULL, and the environment variable with that
+ * name is set, then the implementation it specifies will be tried
+ * first. After that, or if @envvar is not set, all other
+ * implementations will be tried in order of decreasing priority.
+ *
+ * If @is_supported_offset is non-zero, then it is the offset into the
+ * class vtable at which there is a function that takes no arguments and
+ * returns a boolean.  This function will be called on each candidate
+ * implementation to check if it is actually usable or not.
+ *
+ * The result is cached after it is generated the first time, and
+ * the function is thread-safe.
+ *
+ * Returns: (transfer none): an object implementing @extension_point, or %NULL if there are no usable implementations.
+ */
+
+
+/**
  * g_action_activate:
  * @action: a #GAction
  * @parameter: (allow-none): the parameter to the activation
@@ -10461,7 +10486,7 @@
 
 
 /**
- * g_application_command_line_get_stdin_data:
+ * g_application_command_line_get_stdin:
  * @cmdline: a #GApplicationCommandLine
  *
  * Gets the stdin of the invoking process.
@@ -13554,7 +13579,7 @@
  * The implemented D-Bus API should be considered private.
  * It is subject to change in the future.
  *
- * An object path can only have one action group exported on it. If this
+ * An object path can only have one menu model exported on it. If this
  * constraint is violated, the export will fail and 0 will be
  * returned (with @error set accordingly).
  *

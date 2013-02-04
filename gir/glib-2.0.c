@@ -11214,6 +11214,21 @@
 
 
 /**
+ * g_close:
+ * @fd: A file descriptor
+ * @error: a #GError
+ *
+ * This wraps the close() call; in case of error, %errno will be
+ * preserved, but the error will also be stored as a #GError in @error.
+ *
+ * Besides using #GError, there is another major reason to prefer this
+ * function over the call provided by the system; on Unix, it will
+ * attempt to correctly handle %EINTR, which has platform-specific
+ * semantics.
+ */
+
+
+/**
  * g_compute_checksum_for_bytes:
  * @checksum_type: a #GChecksumType
  * @data: binary blob to compute the digest of
@@ -18160,7 +18175,7 @@
  *
  * Adds a file descriptor to the set of file descriptors polled for
  * this context. This will very seldom be used directly. Instead
- * a typical event source will use g_source_add_poll() instead.
+ * a typical event source will use g_source_add_unix_fd() instead.
  */
 
 
@@ -23815,7 +23830,7 @@
  * doing unsorted insertions.
  * </para></note>
  *
- * Returns: an #GSequenceIter pointing to the position of the first item found equal to @data according to @cmp_func and @cmp_data.
+ * Returns: an #GSequenceIter pointing to the position of the first item found equal to @data according to @cmp_func and @cmp_data, or %NULL if no such item exists.
  * Since: 2.28
  */
 
@@ -23843,7 +23858,7 @@
  * doing unsorted insertions.
  * </para></note>
  *
- * Returns: an #GSequenceIter pointing to the position of the first item found equal to @data according to @cmp_func and @cmp_data.
+ * Returns: an #GSequenceIter pointing to the position of the first item found equal to @data according to @cmp_func and @cmp_data, or %NULL if no such item exists.
  * Since: 2.28
  */
 
@@ -25001,6 +25016,32 @@
  * event source. The event source's check function will typically test
  * the @revents field in the #GPollFD struct and return %TRUE if events need
  * to be processed.
+ *
+ * Using this API forces the linear scanning of event sources on each
+ * main loop iteration.  Newly-written event sources should try to use
+ * g_source_add_unix_fd() instead of this API.
+ */
+
+
+/**
+ * g_source_add_unix_fd:
+ * @source: a #GSource
+ * @fd: the fd to monitor
+ * @events: an event mask
+ *
+ * Monitors @fd for the IO events in @events.
+ *
+ * The tag returned by this function can be used to remove or modify the
+ * monitoring of the fd using g_source_remove_unix_fd() or
+ * g_source_modify_unix_fd().
+ *
+ * It is not necessary to remove the fd before destroying the source; it
+ * will be cleaned up automatically.
+ *
+ * As the name suggests, this function is not available on Windows.
+ *
+ * Returns: an opaque tag
+ * Since: 2.36
  */
 
 
@@ -25103,6 +25144,20 @@
 
 
 /**
+ * g_source_get_ready_time:
+ * @source: a #GSource
+ *
+ * Gets the "ready time" of @source, as set by
+ * g_source_set_ready_time().
+ *
+ * Any time before the current monotonic time (including 0) is an
+ * indication that the source will fire immediately.
+ *
+ * Returns: the monotonic ready time, -1 for "never"
+ */
+
+
+/**
  * g_source_get_time:
  * @source: a #GSource
  *
@@ -25190,6 +25245,25 @@
 
 
 /**
+ * g_source_modify_unix_fd:
+ * @source: a #GSource
+ * @tag: the tag from g_source_add_unix_fd()
+ * @new_events: the new event mask to watch
+ *
+ * Updates the event mask to watch for the fd identified by @tag.
+ *
+ * @tag is the tag returned from g_source_add_unix_fd().
+ *
+ * If you want to remove a fd, don't set its event mask to zero.
+ * Instead, call g_source_remove_unix_fd().
+ *
+ * As the name suggests, this function is not available on Windows.
+ *
+ * Since: 2.36
+ */
+
+
+/**
  * g_source_new:
  * @source_funcs: structure containing functions that implement the sources behavior.
  * @struct_size: size of the #GSource structure to create.
@@ -25204,6 +25278,24 @@
  * executed.
  *
  * Returns: the newly-created #GSource.
+ */
+
+
+/**
+ * g_source_query_unix_fd:
+ * @source: a #GSource
+ * @tag: the tag from g_source_add_unix_fd()
+ *
+ * Queries the events reported for the fd corresponding to @tag on
+ * @source during the last poll.
+ *
+ * The return value of this function is only defined when the function
+ * is called from the check or dispatch functions for @source.
+ *
+ * As the name suggests, this function is not available on Windows.
+ *
+ * Returns: the conditions reported on the fd
+ * Since: 2.36
  */
 
 
@@ -25278,6 +25370,23 @@
  *
  * Removes a file descriptor from the set of file descriptors polled for
  * this source.
+ */
+
+
+/**
+ * g_source_remove_unix_fd:
+ * @source: a #GSource
+ * @tag: the tag from g_source_add_unix_fd()
+ *
+ * Reverses the effect of a previous call to g_source_add_unix_fd().
+ *
+ * You only need to call this if you want to remove an fd from being
+ * watched while keeping the same source around.  In the normal case you
+ * will just want to destroy the source.
+ *
+ * As the name suggests, this function is not available on Windows.
+ *
+ * Since: 2.36
  */
 
 
@@ -25383,6 +25492,32 @@
  * source will be dispatched if it is ready to be dispatched and no
  * sources at a higher (numerically smaller) priority are ready to be
  * dispatched.
+ */
+
+
+/**
+ * g_source_set_ready_time:
+ * @source: a #GSource
+ * @ready_time: the monotonic time at which the source will be ready, 0 for "immediately", -1 for "never"
+ *
+ * Sets a #GSource to be dispatched when the given monotonic time is
+ * reached (or passed).  If the monotonic time is in the past (as it
+ * always will be if @ready_time is 0) then the source will be
+ * dispatched immediately.
+ *
+ * If @ready_time is -1 then the source is never woken up on the basis
+ * of the passage of time.
+ *
+ * Dispatching the source does not reset the ready time.  You should do
+ * so yourself, from the source dispatch function.
+ *
+ * Note that if you have a pair of sources where the ready time of one
+ * suggests that it will be delivered first but the priority for the
+ * other suggests that it would be delivered first, and the ready time
+ * for both sources is reached during the same main context iteration
+ * then the order of dispatch is undefined.
+ *
+ * Since: 2.36
  */
 
 
@@ -29712,6 +29847,68 @@
  *
  * Returns: the ISO 15924 code for @script, encoded as an integer, of zero if @script is %G_UNICODE_SCRIPT_INVALID_CODE or ISO 15924 code 'Zzzz' (script code for UNKNOWN) if @script is not understood.
  * Since: 2.30
+ */
+
+
+/**
+ * g_unix_fd_add:
+ * @fd: a file descriptor
+ * @condition: IO conditions to watch for on @fd
+ * @function: a #GPollFDFunc
+ * @user_data: data to pass to @function
+ *
+ * Sets a function to be called when the IO condition, as specified by
+ * @condition becomes true for @fd.
+ *
+ * @function will be called when the specified IO condition becomes
+ * %TRUE.  The function is expected to clear whatever event caused the
+ * IO condition to become true and return %TRUE in order to be notified
+ * when it happens again.  If @function returns %FALSE then the watch
+ * will be cancelled.
+ *
+ * The return value of this function can be passed to g_source_remove()
+ * to cancel the watch at any time that it exists.
+ *
+ * The source will never close the fd -- you must do it yourself.
+ *
+ * Returns: the ID (greater than 0) of the event source
+ * Since: 2.36
+ */
+
+
+/**
+ * g_unix_fd_add_full:
+ * @priority: the priority of the source
+ * @fd: a file descriptor
+ * @condition: IO conditions to watch for on @fd
+ * @function: a #GUnixFDSourceFunc
+ * @user_data: data to pass to @function
+ * @notify: function to call when the idle is removed, or %NULL
+ *
+ * Sets a function to be called when the IO condition, as specified by
+ * @condition becomes true for @fd.
+ *
+ * This is the same as g_unix_fd_add(), except that it allows you to
+ * specify a non-default priority and a provide a #GDestroyNotify for
+ * @user_data.
+ *
+ * Returns: the ID (greater than 0) of the event source
+ * Since: 2.36
+ */
+
+
+/**
+ * g_unix_fd_source_new:
+ * @fd: a file descriptor
+ * @condition: IO conditions to watch for on @fd
+ *
+ * Creates a #GSource to watch for a particular IO condition on a file
+ * descriptor.
+ *
+ * The source will never close the fd -- you must do it yourself.
+ *
+ * Returns: the newly created #GSource
+ * Since: 2.36
  */
 
 
