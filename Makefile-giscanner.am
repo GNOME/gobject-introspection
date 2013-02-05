@@ -54,7 +54,7 @@ pkgpyexec_PYTHON =		\
 	giscanner/xmlwriter.py
 
 templatedir = $(pkglibdir)
-nobase_template_DATA =		\
+nobase_dist_template_DATA =		\
 	giscanner/doctemplates/base.tmpl	\
 	giscanner/doctemplates/class.tmpl	\
 	giscanner/doctemplates/namespace.tmpl	\
