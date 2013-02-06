@@ -813,11 +813,11 @@ struct _GIMarshallingTestsObjectClass
     GObject* (* vfunc_return_object_transfer_none) (GIMarshallingTestsObject *self);
 
     /**
-     * GIMarshallingTestsObjectClass::vfunc_return_object_tansfer_full:
+     * GIMarshallingTestsObjectClass::vfunc_return_object_transfer_full:
      *
      * Returns: (transfer full)
      */
-    GObject* (* vfunc_return_object_tansfer_full) (GIMarshallingTestsObject *self);
+    GObject* (* vfunc_return_object_transfer_full) (GIMarshallingTestsObject *self);
 
     /**
      * GIMarshallingTestsObjectClass::vfunc_out_object_transfer_none:
@@ -826,22 +826,22 @@ struct _GIMarshallingTestsObjectClass
     void (* vfunc_out_object_transfer_none) (GIMarshallingTestsObject *self, GObject **object);
 
     /**
-     * GIMarshallingTestsObjectClass::vfunc_out_object_tansfer_full:
+     * GIMarshallingTestsObjectClass::vfunc_out_object_transfer_full:
      * @object: (out) (transfer full):
      */
-    void (* vfunc_out_object_tansfer_full) (GIMarshallingTestsObject *self, GObject **object);
+    void (* vfunc_out_object_transfer_full) (GIMarshallingTestsObject *self, GObject **object);
 
     /**
-     * GIMarshallingTestsObjectClass::vfunc_in_object_tansfer_none:
+     * GIMarshallingTestsObjectClass::vfunc_in_object_transfer_none:
      * @object: (in) (transfer none):
      */
-    void (* vfunc_in_object_tansfer_none) (GIMarshallingTestsObject *self, GObject *object);
+    void (* vfunc_in_object_transfer_none) (GIMarshallingTestsObject *self, GObject *object);
 
     /**
-     * GIMarshallingTestsObjectClass::vfunc_in_object_tansfer_full:
+     * GIMarshallingTestsObjectClass::vfunc_in_object_transfer_full:
      * @object: (in) (transfer full):
      */
-    void (* vfunc_in_object_tansfer_full) (GIMarshallingTestsObject *self, GObject *object);
+    void (* vfunc_in_object_transfer_full) (GIMarshallingTestsObject *self, GObject *object);
 
 
 };

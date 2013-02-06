@@ -4346,7 +4346,7 @@ gi_marshalling_tests_object_get_ref_info_for_vfunc_return_object_transfer_none (
 void
 gi_marshalling_tests_object_get_ref_info_for_vfunc_return_object_transfer_full (GIMarshallingTestsObject *self, guint *ref_count, gboolean *is_floating)
 {
-    GObject *object = GI_MARSHALLING_TESTS_OBJECT_GET_CLASS (self)->vfunc_return_object_tansfer_full (self);
+    GObject *object = GI_MARSHALLING_TESTS_OBJECT_GET_CLASS (self)->vfunc_return_object_transfer_full (self);
     *ref_count = object->ref_count;
     *is_floating = g_object_is_floating(object);
     g_object_unref(object);
@@ -4379,7 +4379,7 @@ void
 gi_marshalling_tests_object_get_ref_info_for_vfunc_out_object_transfer_full (GIMarshallingTestsObject *self, guint *ref_count, gboolean *is_floating)
 {
     GObject *object = NULL;
-    GI_MARSHALLING_TESTS_OBJECT_GET_CLASS (self)->vfunc_out_object_tansfer_full (self, &object);
+    GI_MARSHALLING_TESTS_OBJECT_GET_CLASS (self)->vfunc_out_object_transfer_full (self, &object);
     *ref_count = object->ref_count;
     *is_floating = g_object_is_floating(object);
     g_object_unref(object);
@@ -4396,7 +4396,7 @@ _vfunc_in_object_destroy_callback(gboolean *destroy_called, GObject *where_the_o
  * @ref_count: (out): Ref count of the in object directly after vfunc call.
  * @is_floating: (out): Floating state of in object directly after vfunc call.
  *
- * Calls vfunc_in_object_tansfer_none with a new object of the given type.
+ * Calls vfunc_in_object_transfer_none with a new object of the given type.
  */
 void
 gi_marshalling_tests_object_get_ref_info_for_vfunc_in_object_transfer_none (GIMarshallingTestsObject *self, GType type, guint *ref_count, gboolean *is_floating)
@@ -4407,7 +4407,7 @@ gi_marshalling_tests_object_get_ref_info_for_vfunc_in_object_transfer_none (GIMa
     GObject *object = g_object_new(type, NULL);
     g_object_weak_ref (object, (GWeakNotify)_vfunc_in_object_destroy_callback, &destroy_called);
 
-    GI_MARSHALLING_TESTS_OBJECT_GET_CLASS (self)->vfunc_in_object_tansfer_none (self, object);
+    GI_MARSHALLING_TESTS_OBJECT_GET_CLASS (self)->vfunc_in_object_transfer_none (self, object);
     if (destroy_called) {
         *ref_count = 0;
         *is_floating = FALSE;
@@ -4437,7 +4437,7 @@ gi_marshalling_tests_object_get_ref_info_for_vfunc_in_object_transfer_full (GIMa
     /* Calling the vfunc takes ownership of the object, so we use a weak_ref to determine
      * if the object gets destroyed after the call and appropriately return 0 as the ref count.
      */
-    GI_MARSHALLING_TESTS_OBJECT_GET_CLASS (self)->vfunc_in_object_tansfer_full (self, object);
+    GI_MARSHALLING_TESTS_OBJECT_GET_CLASS (self)->vfunc_in_object_transfer_full (self, object);
     if (destroy_called) {
         *ref_count = 0;
         *is_floating = FALSE;
