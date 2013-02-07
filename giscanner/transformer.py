@@ -953,7 +953,7 @@ Note that type resolution may not succeed."""
         try:
             type_ = self.lookup_giname(typeval.target_giname)
         except KeyError:
-            typeval.target_giname = None
+            type_ = None
 
         if type_ is None:
             typeval.target_giname = None
