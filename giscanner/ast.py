@@ -84,6 +84,8 @@ from a C type string, or a gtype_name (from g_type_name()).
             return self.ctype
         elif self.gtype_name:
             return self.gtype_name
+        elif self.target_giname:
+            return self.target_giname
         else:
             assert False
 
