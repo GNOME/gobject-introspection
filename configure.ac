@@ -262,10 +262,16 @@ fi
 
 dnl Not enabled by default until 3.6 cycle when we can propose mako as
 dnl an external dependency
-AC_ARG_ENABLE(doctool,[  --enable-doctool           enable g-ir-doctool ], enable_doctool=$enableval,enable_doctool=no)
-if test x$enable_doctool != xno; then
-   AM_CHECK_PYMOD(mako,,,[AC_MSG_ERROR(Could not find python module: mako)])
-fi
+AC_ARG_ENABLE(doctool,[  --disable-doctool           disable g-ir-doctool ],,enable_doctool=auto)
+AS_IF([ test x$enable_doctool != xno], [
+   AM_CHECK_PYMOD(mako,,have_python_mako=yes,have_python_mako=no)
+])
+AS_IF([ test x$enable_doctool = xauto && test x$have_python_mako = xyes ],
+      [ enable_doctool=yes ],
+      [ test x$enable_doctool = xauto && test x$have_python_mako = xno ],
+      [ enable_doctool=no ],
+      [ test x$enable_doctool = xyes && test x$have_python_mako = xno ],
+      [ AC_MSG_ERROR([Python mako module not found]) ])
 AM_CONDITIONAL(BUILD_DOCTOOL, test x$enable_doctool != xno)
 
 # Glib documentation
