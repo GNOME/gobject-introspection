@@ -231,4 +231,7 @@ EXTRA_DIST += \
 	annotationparser/gtkdoc/annotations/tester.h.xml	\
 	annotationparser/gtkdoc/annotations/tester.c.xml	\
 	annotationparser/gtkdoc/gobject/gobject.h.xml		\
-	annotationparser/gtkdoc/gobject/gobject.c.xml
+	annotationparser/gtkdoc/gobject/gobject.c.xml		\
+	Regress-1.0-C-expected					\
+	Regress-1.0-Gjs-expected				\
+	Regress-1.0-Python-expected
