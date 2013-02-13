@@ -72,5 +72,5 @@ class LibtoolImporter(object):
         sys.meta_path.append(cls)
 
     @classmethod
-    def __exit__(cls, type, value, traceback):
+    def __exit__(cls, exc_type, exc_val, exc_tb):
         sys.meta_path.remove(cls)
