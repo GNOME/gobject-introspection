@@ -206,6 +206,7 @@ class DumpCompiler(object):
         # header of the library being introspected
         if self._compiler_cmd == 'gcc' and not self._options.init_sections:
             args.append('-Wall')
+        args.append("-Wno-deprecated-declarations")
         pkgconfig_flags = self._run_pkgconfig('--cflags')
         args.extend(pkgconfig_flags)
         cflags = os.environ.get('CFLAGS', '')
