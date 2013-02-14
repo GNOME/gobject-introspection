@@ -25,7 +25,7 @@ from itertools import chain
 from . import message
 
 from .message import Position
-from .odict import odict
+from .odict import OrderedDict
 from .utils import to_underscores
 
 class Type(object):
@@ -367,7 +367,7 @@ class Namespace(object):
             self.symbol_prefixes = [to_underscores(p).lower() for p in ps]
         # cache upper-cased versions
         self._ucase_symbol_prefixes = [p.upper() for p in self.symbol_prefixes]
-        self.names = odict() # Maps from GIName -> node
+        self.names = OrderedDict() # Maps from GIName -> node
         self.aliases = {} # Maps from GIName -> GIName
         self.type_names = {} # Maps from GTName -> node
         self.ctypes = {} # Maps from CType -> node

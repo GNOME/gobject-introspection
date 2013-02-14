@@ -26,7 +26,7 @@
 import re
 
 from . import message
-from .odict import odict
+from .odict import OrderedDict
 
 
 # GTK-Doc comment block parts
@@ -367,9 +367,9 @@ class DocBlock(object):
         self.name = name
         self.options = DocOptions()
         self.value = None
-        self.tags = odict()
+        self.tags = OrderedDict()
         self.comment = None
-        self.params = odict()
+        self.params = OrderedDict()
         self.position = None
 
     def __cmp__(self, other):
@@ -655,7 +655,7 @@ class DocOption(object):
     def __init__(self, tag, option):
         self.tag = tag
         self._array = []
-        self._dict = odict()
+        self._dict = OrderedDict()
         # (annotation option1=value1 option2=value2) etc
         for p in option.split(' '):
             if '=' in p:
