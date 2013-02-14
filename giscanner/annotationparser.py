@@ -500,7 +500,7 @@ class DocTag(object):
         if value is not None and value.length() > 1:
             message.warn(
                 'closure takes at most 1 value, %d given' % (
-                value.length()), self.position)
+                value.length(), ), self.position)
 
     def _validate_element_type(self, option, value):
         self._validate_option(option, value, required=True)
@@ -512,7 +512,7 @@ class DocTag(object):
         if value.length() > 2:
             message.warn(
                 'element-type takes at most 2 values, %d given' % (
-                value.length()), self.position)
+                value.length(), ), self.position)
             return
 
     def _validate_out(self, option, value):
@@ -521,13 +521,13 @@ class DocTag(object):
         if value.length() > 1:
             message.warn(
                 'out annotation takes at most 1 value, %d given' % (
-                value.length()), self.position)
+                value.length(), ), self.position)
             return
         value_str = value.one()
         if value_str not in [OPT_OUT_CALLEE_ALLOCATES,
                              OPT_OUT_CALLER_ALLOCATES]:
             message.warn("out annotation value is invalid: %r" % (
-                value_str), self.position)
+                value_str, ), self.position)
             return
 
     def _get_gtk_doc_value(self):
@@ -783,7 +783,7 @@ class AnnotationParser(object):
                 # emit a warning.
                 if comment_block.name in comment_blocks:
                     message.warn("multiple comment blocks documenting '%s:' identifier." %
-                                 (comment_block.name),
+                                 (comment_block.name, ),
                                  comment_block.position)
 
                 comment_blocks[comment_block.name] = comment_block
@@ -892,14 +892,14 @@ class AnnotationParser(object):
                     result = SECTION_RE.match(line)
                     if result:
                         identifier = IDENTIFIER_SECTION
-                        identifier_name = 'SECTION:%s' % (result.group('section_name'))
+                        identifier_name = 'SECTION:%s' % (result.group('section_name'), )
                         column = result.start('section_name') + column_offset
 
                 if not identifier:
                     result = SYMBOL_RE.match(line)
                     if result:
                         identifier = IDENTIFIER_SYMBOL
-                        identifier_name = '%s' % (result.group('symbol_name'))
+                        identifier_name = '%s' % (result.group('symbol_name'), )
                         column = result.start('symbol_name') + column_offset
 
                 if not identifier:
@@ -985,7 +985,7 @@ class AnnotationParser(object):
                         returns_seen = True
                     else:
                         message.warn("encountered multiple 'Returns' parameters or tags for "
-                                     "'%s'." % (comment_block.name),
+                                     "'%s'." % (comment_block.name, ),
                                      position)
                 elif param_name in comment_block.params.keys():
                     column = result.start('parameter_name') + column_offset
@@ -1063,7 +1063,7 @@ class AnnotationParser(object):
                         returns_seen = True
                     else:
                         message.warn("encountered multiple 'Returns' parameters or tags for "
-                                     "'%s'." % (comment_block.name),
+                                     "'%s'." % (comment_block.name, ),
                                      position)
 
                     tag = DocTag(comment_block, TAG_RETURNS)
@@ -1090,7 +1090,7 @@ class AnnotationParser(object):
                             tag.options = self.parse_options(tag, tag_annotations)
                         else:
                             message.warn("annotations not supported for tag '%s:'." %
-                                         (tag_name),
+                                         (tag_name, ),
                                          position)
                     comment_block.tags[tag_name.lower()] = tag
                     current_tag = tag
