@@ -15,7 +15,7 @@
   <synopsis><code>
 const Regress = imports.gi.Regress;
 
-let test_obj = Regress.TestObj({
+let test_obj = new Regress.TestObj({
     <link xref='Regress.TestObj-bare'>bare</link>: value,
     <link xref='Regress.TestObj-boxed'>boxed</link>: value,
     <link xref='Regress.TestObj-double'>double</link>: value,

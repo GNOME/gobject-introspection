@@ -15,7 +15,7 @@
   <synopsis><code>
 const Regress = imports.gi.Regress;
 
-let test_floating = Regress.TestFloating();
+let test_floating = new Regress.TestFloating();
   </code></synopsis>
 
   

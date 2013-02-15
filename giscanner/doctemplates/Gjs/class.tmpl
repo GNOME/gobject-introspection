@@ -3,7 +3,7 @@
   <synopsis><code>
 const ${namespace.name} = imports.gi.${namespace.name};
 
-let ${formatter.to_underscores(node.name).lower()} = ${namespace.name}.${node.name}(\
+let ${formatter.to_underscores(node.name).lower()} = new ${namespace.name}.${node.name}(\
 % if len(node.properties) > 0:
 {
 % for ix, property_ in enumerate(node.properties):

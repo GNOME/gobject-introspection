@@ -15,7 +15,7 @@
   <synopsis><code>
 const Regress = imports.gi.Regress;
 
-let test_wi8021x = Regress.TestWi8021x({
+let test_wi8021x = new Regress.TestWi8021x({
     <link xref='Regress.TestWi8021x-testbool'>testbool</link>: value,
 });
   </code></synopsis>

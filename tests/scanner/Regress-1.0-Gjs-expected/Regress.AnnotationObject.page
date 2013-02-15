@@ -15,7 +15,7 @@
   <synopsis><code>
 const Regress = imports.gi.Regress;
 
-let annotation_object = Regress.AnnotationObject({
+let annotation_object = new Regress.AnnotationObject({
     <link xref='Regress.AnnotationObject-function-property'>function_property</link>: value,
     <link xref='Regress.AnnotationObject-string-property'>string_property</link>: value,
     <link xref='Regress.AnnotationObject-tab-property'>tab_property</link>: value,
