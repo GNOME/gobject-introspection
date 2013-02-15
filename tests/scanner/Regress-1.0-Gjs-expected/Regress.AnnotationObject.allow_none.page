@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>AnnotationObject.prototype.allow_none</title>
+  <title>Regress.AnnotationObject.prototype.allow_none</title>
   
 <synopsis><code mime="text/x-gjs">
 function allow_none(somearg:String):GObject.Object {

@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>AnnotationObject.prototype.foreach</title>
+  <title>Regress.AnnotationObject.prototype.foreach</title>
   
 <synopsis><code mime="text/x-gjs">
 function foreach(func:Regress.AnnotationForeachFunc):void {

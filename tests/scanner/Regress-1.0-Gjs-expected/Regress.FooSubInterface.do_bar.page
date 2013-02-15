@@ -16,7 +16,7 @@
     </api:function>
 
   </info>
-  <title>FooSubInterface.prototype.do_bar</title>
+  <title>Regress.FooSubInterface.prototype.do_bar</title>
   
 <synopsis><code mime="text/x-gjs">
 function do_bar():void {

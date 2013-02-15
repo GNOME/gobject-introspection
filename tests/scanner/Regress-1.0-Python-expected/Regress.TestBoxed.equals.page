@@ -24,7 +24,7 @@
     </api:function>
 
   </info>
-  <title>TestBoxed.equals</title>
+  <title>Regress.TestBoxed.equals</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(Regress.TestBoxed, Regress.TestBoxed)

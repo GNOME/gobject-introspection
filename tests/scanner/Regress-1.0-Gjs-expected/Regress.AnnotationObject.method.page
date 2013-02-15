@@ -16,7 +16,7 @@
     </api:function>
 
   </info>
-  <title>AnnotationObject.prototype.method</title>
+  <title>Regress.AnnotationObject.prototype.method</title>
   
 <synopsis><code mime="text/x-gjs">
 function method():Number {

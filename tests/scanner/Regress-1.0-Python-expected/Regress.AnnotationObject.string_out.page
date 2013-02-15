@@ -24,7 +24,7 @@
     </api:function>
 
   </info>
-  <title>AnnotationObject.string_out</title>
+  <title>Regress.AnnotationObject.string_out</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(Regress.AnnotationObject, unicode)

@@ -32,7 +32,7 @@
     </api:function>
 
   </info>
-  <title>Regress.foo_method_external_references</title>
+  <title>Index.foo_method_external_references</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(Utility.Object, Utility.EnumType, Utility.FlagType, Utility.Struct)

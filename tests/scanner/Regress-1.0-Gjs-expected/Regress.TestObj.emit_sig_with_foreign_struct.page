@@ -16,7 +16,7 @@
     </api:function>
 
   </info>
-  <title>TestObj.prototype.emit_sig_with_foreign_struct</title>
+  <title>Regress.TestObj.prototype.emit_sig_with_foreign_struct</title>
   
 <synopsis><code mime="text/x-gjs">
 function emit_sig_with_foreign_struct():void {

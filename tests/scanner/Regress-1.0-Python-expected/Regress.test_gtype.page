@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>Regress.test_gtype</title>
+  <title>Index.test_gtype</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(GType)

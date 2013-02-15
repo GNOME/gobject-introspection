@@ -24,7 +24,7 @@
     </api:function>
 
   </info>
-  <title>TestObj.do_matrix</title>
+  <title>Regress.TestObj.do_matrix</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(Regress.TestObj, unicode)

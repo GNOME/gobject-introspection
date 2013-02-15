@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>Regress.test_cairo_context_none_in</title>
+  <title>Index.test_cairo_context_none_in</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(cairo.Context)

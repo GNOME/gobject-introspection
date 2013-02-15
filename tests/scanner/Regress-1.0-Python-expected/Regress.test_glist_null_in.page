@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>Regress.test_glist_null_in</title>
+  <title>Index.test_glist_null_in</title>
   
 <synopsis><code mime="text/x-python">
 @accepts([unicode])

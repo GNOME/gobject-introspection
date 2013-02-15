@@ -16,7 +16,7 @@
     </api:function>
 
   </info>
-  <title>FooObject.get_default</title>
+  <title>Regress.FooObject.get_default</title>
   
 <synopsis><code mime="text/x-python">
 @returns(Regress.FooSubobject)

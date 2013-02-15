@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>FooObject.prototype.handle_glyph</title>
+  <title>Regress.FooObject.prototype.handle_glyph</title>
   
 <synopsis><code mime="text/x-gjs">
 function handle_glyph(glyph:Utility.Glyph):void {

@@ -28,7 +28,7 @@
     </api:function>
 
   </info>
-  <title>Regress.foo_destroy_notify_callback</title>
+  <title>Index.foo_destroy_notify_callback</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(Regress.FooCallback, gpointer, GLib.DestroyNotify)

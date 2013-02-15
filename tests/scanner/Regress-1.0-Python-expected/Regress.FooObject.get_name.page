@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>FooObject.get_name</title>
+  <title>Regress.FooObject.get_name</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(Regress.FooObject)

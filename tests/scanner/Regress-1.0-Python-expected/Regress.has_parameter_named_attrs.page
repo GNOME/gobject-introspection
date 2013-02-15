@@ -24,7 +24,7 @@
     </api:function>
 
   </info>
-  <title>Regress.has_parameter_named_attrs</title>
+  <title>Index.has_parameter_named_attrs</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(int, [guint32])

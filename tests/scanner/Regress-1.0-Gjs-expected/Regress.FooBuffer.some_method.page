@@ -16,7 +16,7 @@
     </api:function>
 
   </info>
-  <title>FooBuffer.prototype.some_method</title>
+  <title>Regress.FooBuffer.prototype.some_method</title>
   
 <synopsis><code mime="text/x-gjs">
 function some_method():void {

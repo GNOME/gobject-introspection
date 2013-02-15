@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>Regress.test_ghash_nothing_in2</title>
+  <title>Index.test_ghash_nothing_in2</title>
   
 <synopsis><code mime="text/x-python">
 @accepts({unicode: unicode})

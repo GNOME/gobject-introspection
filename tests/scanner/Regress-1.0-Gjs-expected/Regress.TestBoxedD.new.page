@@ -24,7 +24,7 @@
     </api:function>
 
   </info>
-  <title>TestBoxedD.new</title>
+  <title>Regress.TestBoxedD.new</title>
   
 <synopsis><code mime="text/x-gjs">
 function new(a_string:String, a_int:Number):Regress.TestBoxedD {

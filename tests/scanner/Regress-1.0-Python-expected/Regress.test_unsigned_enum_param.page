@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>Regress.test_unsigned_enum_param</title>
+  <title>Index.test_unsigned_enum_param</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(Regress.TestEnumUnsigned)

@@ -16,7 +16,7 @@
     </api:function>
 
   </info>
-  <title>Regress.foo_not_a_constructor_new</title>
+  <title>Index.foo_not_a_constructor_new</title>
   
 <synopsis><code mime="text/x-python">
 @returns(Regress.FooObject)

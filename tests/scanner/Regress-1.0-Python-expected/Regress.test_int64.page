@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>Regress.test_int64</title>
+  <title>Index.test_int64</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(int)

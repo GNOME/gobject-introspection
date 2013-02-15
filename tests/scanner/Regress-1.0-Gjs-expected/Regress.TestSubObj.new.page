@@ -16,7 +16,7 @@
     </api:function>
 
   </info>
-  <title>TestSubObj.new</title>
+  <title>Regress.TestSubObj.new</title>
   
 <synopsis><code mime="text/x-gjs">
 function new():Regress.TestObj {

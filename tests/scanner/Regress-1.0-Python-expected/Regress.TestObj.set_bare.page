@@ -24,7 +24,7 @@
     </api:function>
 
   </info>
-  <title>TestObj.set_bare</title>
+  <title>Regress.TestObj.set_bare</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(Regress.TestObj, GObject.Object)

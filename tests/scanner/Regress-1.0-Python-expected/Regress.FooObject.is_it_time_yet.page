@@ -24,7 +24,7 @@
     </api:function>
 
   </info>
-  <title>FooObject.is_it_time_yet</title>
+  <title>Regress.FooObject.is_it_time_yet</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(Regress.FooObject, int)

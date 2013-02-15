@@ -36,7 +36,7 @@
     </api:function>
 
   </info>
-  <title>TestObj.prototype.skip_inout_param</title>
+  <title>Regress.TestObj.prototype.skip_inout_param</title>
   
 <synopsis><code mime="text/x-gjs">
 function skip_inout_param(a:Number, c:Number, inout_d:Number, num1:Number, num2:Number):Boolean {

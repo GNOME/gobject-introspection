@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>TestObj.prototype.set_bare</title>
+  <title>Regress.TestObj.prototype.set_bare</title>
   
 <synopsis><code mime="text/x-gjs">
 function set_bare(bare:GObject.Object):void {

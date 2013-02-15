@@ -28,7 +28,7 @@
     </api:function>
 
   </info>
-  <title>Regress.annotation_custom_destroy</title>
+  <title>Index.annotation_custom_destroy</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(Regress.AnnotationCallback, Regress.AnnotationNotifyFunc, gpointer)

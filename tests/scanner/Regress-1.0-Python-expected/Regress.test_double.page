@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>Regress.test_double</title>
+  <title>Index.test_double</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(float)

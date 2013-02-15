@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>Regress.test_array_fixed_size_int_in</title>
+  <title>Index.test_array_fixed_size_int_in</title>
   
 <synopsis><code mime="text/x-python">
 @accepts([int])

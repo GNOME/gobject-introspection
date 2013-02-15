@@ -28,7 +28,7 @@
     </api:function>
 
   </info>
-  <title>TestObj.prototype.torture_signature_1</title>
+  <title>Regress.TestObj.prototype.torture_signature_1</title>
   
 <synopsis><code mime="text/x-gjs">
 function torture_signature_1(x:Number, foo:String, m:Number):Boolean {

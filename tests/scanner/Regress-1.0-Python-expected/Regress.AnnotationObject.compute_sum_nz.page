@@ -28,7 +28,7 @@
     </api:function>
 
   </info>
-  <title>AnnotationObject.compute_sum_nz</title>
+  <title>Regress.AnnotationObject.compute_sum_nz</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(Regress.AnnotationObject, [int], int)

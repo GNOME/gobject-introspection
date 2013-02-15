@@ -16,7 +16,7 @@
     </api:function>
 
   </info>
-  <title>Regress.annotation_return_filename</title>
+  <title>Index.annotation_return_filename</title>
   
 <synopsis><code mime="text/x-python">
 @returns(filename)

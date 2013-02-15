@@ -24,7 +24,7 @@
     </api:function>
 
   </info>
-  <title>TestStructA.parse</title>
+  <title>Regress.TestStructA.parse</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(Regress.TestStructA, unicode)

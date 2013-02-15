@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>TestObj.new</title>
+  <title>Regress.TestObj.new</title>
   
 <synopsis><code mime="text/x-gjs">
 function new(obj:Regress.TestObj):Regress.TestObj {

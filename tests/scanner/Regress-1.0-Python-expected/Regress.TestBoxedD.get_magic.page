@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>TestBoxedD.get_magic</title>
+  <title>Regress.TestBoxedD.get_magic</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(Regress.TestBoxedD)

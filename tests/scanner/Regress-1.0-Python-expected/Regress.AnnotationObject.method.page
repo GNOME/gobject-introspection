@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>AnnotationObject.method</title>
+  <title>Regress.AnnotationObject.method</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(Regress.AnnotationObject)

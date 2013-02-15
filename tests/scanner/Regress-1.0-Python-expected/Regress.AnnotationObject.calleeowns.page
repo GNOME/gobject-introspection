@@ -24,7 +24,7 @@
     </api:function>
 
   </info>
-  <title>AnnotationObject.calleeowns</title>
+  <title>Regress.AnnotationObject.calleeowns</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(Regress.AnnotationObject, GObject.Object)

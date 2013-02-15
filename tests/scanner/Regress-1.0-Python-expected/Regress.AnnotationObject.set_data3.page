@@ -28,7 +28,7 @@
     </api:function>
 
   </info>
-  <title>AnnotationObject.set_data3</title>
+  <title>Regress.AnnotationObject.set_data3</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(Regress.AnnotationObject, [guint8], gsize)

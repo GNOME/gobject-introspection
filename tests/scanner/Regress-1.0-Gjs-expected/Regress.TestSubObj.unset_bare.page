@@ -16,7 +16,7 @@
     </api:function>
 
   </info>
-  <title>TestSubObj.prototype.unset_bare</title>
+  <title>Regress.TestSubObj.prototype.unset_bare</title>
   
 <synopsis><code mime="text/x-gjs">
 function unset_bare():void {

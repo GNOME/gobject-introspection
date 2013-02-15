@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>TestWi8021x.static_method</title>
+  <title>Regress.TestWi8021x.static_method</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(int)

@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>Regress.func_obj_null_in</title>
+  <title>Index.func_obj_null_in</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(Regress.TestObj)

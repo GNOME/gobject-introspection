@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>FooDBusData.method</title>
+  <title>Regress.FooDBusData.method</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(Regress.FooDBusData)

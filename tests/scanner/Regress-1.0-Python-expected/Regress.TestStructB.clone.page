@@ -24,7 +24,7 @@
     </api:function>
 
   </info>
-  <title>TestStructB.clone</title>
+  <title>Regress.TestStructB.clone</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(Regress.TestStructB, Regress.TestStructB)

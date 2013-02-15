@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>AnnotationObject.extra_annos</title>
+  <title>Regress.AnnotationObject.extra_annos</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(Regress.AnnotationObject)

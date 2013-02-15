@@ -24,7 +24,7 @@
     </api:function>
 
   </info>
-  <title>Regress.test_callback_destroy_notify_no_user_data</title>
+  <title>Index.test_callback_destroy_notify_no_user_data</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(Regress.TestCallbackUserData, GLib.DestroyNotify)

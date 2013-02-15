@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>FooRectangle.prototype.add</title>
+  <title>Regress.FooRectangle.prototype.add</title>
   
 <synopsis><code mime="text/x-gjs">
 function add(r2:Regress.FooRectangle):void {

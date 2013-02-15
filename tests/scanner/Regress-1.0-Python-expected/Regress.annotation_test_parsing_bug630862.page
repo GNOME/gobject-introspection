@@ -16,7 +16,7 @@
     </api:function>
 
   </info>
-  <title>Regress.annotation_test_parsing_bug630862</title>
+  <title>Index.annotation_test_parsing_bug630862</title>
   
 <synopsis><code mime="text/x-python">
 @returns(GObject.Object)

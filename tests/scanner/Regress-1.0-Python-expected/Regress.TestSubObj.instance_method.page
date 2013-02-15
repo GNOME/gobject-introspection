@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>TestSubObj.instance_method</title>
+  <title>Regress.TestSubObj.instance_method</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(Regress.TestSubObj)

@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>TestInheritDrawable.prototype.do_foo_maybe_throw</title>
+  <title>Regress.TestInheritDrawable.prototype.do_foo_maybe_throw</title>
   
 <synopsis><code mime="text/x-gjs">
 function do_foo_maybe_throw(x:Number):void {

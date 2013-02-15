@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>FooInterface.static_method</title>
+  <title>Regress.FooInterface.static_method</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(int)

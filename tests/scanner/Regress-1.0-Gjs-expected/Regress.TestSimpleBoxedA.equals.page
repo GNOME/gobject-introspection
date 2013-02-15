@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>TestSimpleBoxedA.prototype.equals</title>
+  <title>Regress.TestSimpleBoxedA.prototype.equals</title>
   
 <synopsis><code mime="text/x-gjs">
 function equals(other_a:Regress.TestSimpleBoxedA):Boolean {

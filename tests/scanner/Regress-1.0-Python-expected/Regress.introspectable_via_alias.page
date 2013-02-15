@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>Regress.introspectable_via_alias</title>
+  <title>Index.introspectable_via_alias</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(Regress.PtrArrayAlias)

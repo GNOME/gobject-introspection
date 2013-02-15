@@ -16,7 +16,7 @@
     </api:function>
 
   </info>
-  <title>TestFundamentalObject.prototype.ref</title>
+  <title>Regress.TestFundamentalObject.prototype.ref</title>
   
 <synopsis><code mime="text/x-gjs">
 function ref():Regress.TestFundamentalObject {

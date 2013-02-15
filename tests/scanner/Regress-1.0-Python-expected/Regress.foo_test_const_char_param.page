@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>Regress.foo_test_const_char_param</title>
+  <title>Index.foo_test_const_char_param</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(unicode)

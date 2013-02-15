@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>Regress.foo_test_unsigned_type</title>
+  <title>Index.foo_test_unsigned_type</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(int)

@@ -28,7 +28,7 @@
     </api:function>
 
   </info>
-  <title>Regress.test_multi_double_args</title>
+  <title>Index.test_multi_double_args</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(float, float, float)

@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>Regress.set_abort_on_error</title>
+  <title>Index.set_abort_on_error</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(bool)

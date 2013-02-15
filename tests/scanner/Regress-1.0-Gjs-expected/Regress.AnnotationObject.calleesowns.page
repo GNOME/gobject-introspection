@@ -16,7 +16,7 @@
     </api:function>
 
   </info>
-  <title>AnnotationObject.prototype.calleesowns</title>
+  <title>Regress.AnnotationObject.prototype.calleesowns</title>
   
 <synopsis><code mime="text/x-gjs">
 function calleesowns():Number {

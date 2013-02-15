@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>AnnotationObject.prototype.set_data</title>
+  <title>Regress.AnnotationObject.prototype.set_data</title>
   
 <synopsis><code mime="text/x-gjs">
 function set_data(data:[guint8]):void {

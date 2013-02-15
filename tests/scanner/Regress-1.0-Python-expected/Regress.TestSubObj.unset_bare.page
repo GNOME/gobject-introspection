@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>TestSubObj.unset_bare</title>
+  <title>Regress.TestSubObj.unset_bare</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(Regress.TestSubObj)

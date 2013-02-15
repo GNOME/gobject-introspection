@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>AnnotationObject.prototype.use_buffer</title>
+  <title>Regress.AnnotationObject.prototype.use_buffer</title>
   
 <synopsis><code mime="text/x-gjs">
 function use_buffer(bytes:guint8):void {

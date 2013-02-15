@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>Regress.test_multi_callback</title>
+  <title>Index.test_multi_callback</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(Regress.TestCallback)

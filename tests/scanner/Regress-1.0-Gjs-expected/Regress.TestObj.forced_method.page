@@ -16,7 +16,7 @@
     </api:function>
 
   </info>
-  <title>TestObj.prototype.forced_method</title>
+  <title>Regress.TestObj.prototype.forced_method</title>
   
 <synopsis><code mime="text/x-gjs">
 function forced_method():void {

@@ -28,7 +28,7 @@
     </api:function>
 
   </info>
-  <title>FooObject.read</title>
+  <title>Regress.FooObject.read</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(Regress.FooObject, int, int)

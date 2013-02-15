@@ -16,7 +16,7 @@
     </api:function>
 
   </info>
-  <title>Regress.annotation_space_after_comment_bug631690</title>
+  <title>Index.annotation_space_after_comment_bug631690</title>
   
 <synopsis><code mime="text/x-python">
 @returns(none)

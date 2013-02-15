@@ -16,7 +16,7 @@
     </api:function>
 
   </info>
-  <title>AnnotationObject.prototype.do_not_use</title>
+  <title>Regress.AnnotationObject.prototype.do_not_use</title>
   
 <synopsis><code mime="text/x-gjs">
 function do_not_use():GObject.Object {

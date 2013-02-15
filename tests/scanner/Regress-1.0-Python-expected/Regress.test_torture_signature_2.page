@@ -52,7 +52,7 @@
     </api:function>
 
   </info>
-  <title>Regress.test_torture_signature_2</title>
+  <title>Index.test_torture_signature_2</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(int, Regress.TestCallbackUserData, gpointer, GLib.DestroyNotify, float, int, unicode, int, int)

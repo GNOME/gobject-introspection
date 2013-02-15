@@ -16,7 +16,7 @@
     </api:function>
 
   </info>
-  <title>Regress.foo_test_const_char_retval</title>
+  <title>Index.foo_test_const_char_retval</title>
   
 <synopsis><code mime="text/x-python">
 @returns(unicode)

@@ -28,7 +28,7 @@
     </api:function>
 
   </info>
-  <title>TestInheritDrawable.get_origin</title>
+  <title>Regress.TestInheritDrawable.get_origin</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(Regress.TestInheritDrawable, int, int)

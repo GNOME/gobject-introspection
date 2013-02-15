@@ -24,7 +24,7 @@
     </api:function>
 
   </info>
-  <title>Regress.test_hash_table_callback</title>
+  <title>Index.test_hash_table_callback</title>
   
 <synopsis><code mime="text/x-python">
 @accepts({unicode: int}, Regress.TestCallbackHashtable)

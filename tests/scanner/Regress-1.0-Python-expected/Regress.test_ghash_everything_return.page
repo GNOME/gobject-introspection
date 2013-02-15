@@ -16,7 +16,7 @@
     </api:function>
 
   </info>
-  <title>Regress.test_ghash_everything_return</title>
+  <title>Index.test_ghash_everything_return</title>
   
 <synopsis><code mime="text/x-python">
 @returns({unicode: unicode})

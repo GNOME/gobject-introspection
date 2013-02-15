@@ -16,7 +16,7 @@
     </api:function>
 
   </info>
-  <title>FooObject.new_as_super</title>
+  <title>Regress.FooObject.new_as_super</title>
   
 <synopsis><code mime="text/x-gjs">
 function new_as_super():GObject.Object {

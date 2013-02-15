@@ -28,7 +28,7 @@
     </api:function>
 
   </info>
-  <title>AnnotationObject.foreach</title>
+  <title>Regress.AnnotationObject.foreach</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(Regress.AnnotationObject, Regress.AnnotationForeachFunc, gpointer)

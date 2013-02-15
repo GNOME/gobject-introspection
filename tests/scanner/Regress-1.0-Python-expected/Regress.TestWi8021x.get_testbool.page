@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>TestWi8021x.get_testbool</title>
+  <title>Regress.TestWi8021x.get_testbool</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(Regress.TestWi8021x)

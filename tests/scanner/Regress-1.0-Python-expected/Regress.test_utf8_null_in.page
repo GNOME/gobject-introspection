@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>Regress.test_utf8_null_in</title>
+  <title>Index.test_utf8_null_in</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(unicode)

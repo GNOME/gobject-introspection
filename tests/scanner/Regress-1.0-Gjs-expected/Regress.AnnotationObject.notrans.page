@@ -16,7 +16,7 @@
     </api:function>
 
   </info>
-  <title>AnnotationObject.prototype.notrans</title>
+  <title>Regress.AnnotationObject.prototype.notrans</title>
   
 <synopsis><code mime="text/x-gjs">
 function notrans():GObject.Object {

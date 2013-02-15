@@ -24,7 +24,7 @@
     </api:function>
 
   </info>
-  <title>FooObject.handle_glyph</title>
+  <title>Regress.FooObject.handle_glyph</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(Regress.FooObject, Utility.Glyph)

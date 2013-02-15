@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>TestBoxed.prototype.equals</title>
+  <title>Regress.TestBoxed.prototype.equals</title>
   
 <synopsis><code mime="text/x-gjs">
 function equals(other:Regress.TestBoxed):Boolean {

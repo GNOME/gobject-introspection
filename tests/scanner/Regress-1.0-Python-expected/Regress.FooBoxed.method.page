@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>FooBoxed.method</title>
+  <title>Regress.FooBoxed.method</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(Regress.FooBoxed)

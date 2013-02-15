@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>TestWi8021x.prototype.set_testbool</title>
+  <title>Regress.TestWi8021x.prototype.set_testbool</title>
   
 <synopsis><code mime="text/x-gjs">
 function set_testbool(v:Boolean):void {

@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>Regress.aliased_caller_alloc</title>
+  <title>Index.aliased_caller_alloc</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(Regress.AliasedTestBoxed)

@@ -16,7 +16,7 @@
     </api:function>
 
   </info>
-  <title>FooForeignStruct.prototype.copy</title>
+  <title>Regress.FooForeignStruct.prototype.copy</title>
   
 <synopsis><code mime="text/x-gjs">
 function copy():Regress.FooForeignStruct {

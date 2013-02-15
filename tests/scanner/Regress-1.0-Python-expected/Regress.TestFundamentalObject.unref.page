@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>TestFundamentalObject.unref</title>
+  <title>Regress.TestFundamentalObject.unref</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(Regress.TestFundamentalObject)

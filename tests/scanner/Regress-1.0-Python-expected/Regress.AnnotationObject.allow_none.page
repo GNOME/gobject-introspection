@@ -24,7 +24,7 @@
     </api:function>
 
   </info>
-  <title>AnnotationObject.allow_none</title>
+  <title>Regress.AnnotationObject.allow_none</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(Regress.AnnotationObject, unicode)

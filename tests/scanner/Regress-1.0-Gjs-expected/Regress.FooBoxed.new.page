@@ -16,7 +16,7 @@
     </api:function>
 
   </info>
-  <title>FooBoxed.new</title>
+  <title>Regress.FooBoxed.new</title>
   
 <synopsis><code mime="text/x-gjs">
 function new():Regress.FooBoxed {

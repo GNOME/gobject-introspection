@@ -16,7 +16,7 @@
     </api:function>
 
   </info>
-  <title>TestWi8021x.prototype.get_testbool</title>
+  <title>Regress.TestWi8021x.prototype.get_testbool</title>
   
 <synopsis><code mime="text/x-gjs">
 function get_testbool():Boolean {

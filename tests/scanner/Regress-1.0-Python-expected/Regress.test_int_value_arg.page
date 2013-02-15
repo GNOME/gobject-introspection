@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>Regress.test_int_value_arg</title>
+  <title>Index.test_int_value_arg</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(GObject.Value)

@@ -16,7 +16,7 @@
     </api:function>
 
   </info>
-  <title>TestStructFixedArray.prototype.frob</title>
+  <title>Regress.TestStructFixedArray.prototype.frob</title>
   
 <synopsis><code mime="text/x-gjs">
 function frob():void {

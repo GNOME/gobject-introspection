@@ -24,7 +24,7 @@
     </api:function>
 
   </info>
-  <title>Regress.test_int_out_utf8</title>
+  <title>Index.test_int_out_utf8</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(int, unicode)

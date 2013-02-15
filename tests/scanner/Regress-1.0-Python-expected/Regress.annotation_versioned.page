@@ -16,7 +16,7 @@
     </api:function>
 
   </info>
-  <title>Regress.annotation_versioned</title>
+  <title>Index.annotation_versioned</title>
   
 <synopsis><code mime="text/x-python">
 @returns(none)

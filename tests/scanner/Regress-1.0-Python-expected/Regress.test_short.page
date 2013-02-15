@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>Regress.test_short</title>
+  <title>Index.test_short</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(gshort)

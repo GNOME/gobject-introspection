@@ -48,7 +48,7 @@
     </api:function>
 
   </info>
-  <title>TestObj.skip_out_param</title>
+  <title>Regress.TestObj.skip_out_param</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(Regress.TestObj, int, int, float, int, int, int, int)

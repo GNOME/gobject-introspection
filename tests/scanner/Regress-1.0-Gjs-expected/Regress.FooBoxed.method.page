@@ -16,7 +16,7 @@
     </api:function>
 
   </info>
-  <title>FooBoxed.prototype.method</title>
+  <title>Regress.FooBoxed.prototype.method</title>
   
 <synopsis><code mime="text/x-gjs">
 function method():void {

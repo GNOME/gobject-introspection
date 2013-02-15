@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>Regress.annotation_return_array</title>
+  <title>Index.annotation_return_array</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(int)

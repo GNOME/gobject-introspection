@@ -24,7 +24,7 @@
     </api:function>
 
   </info>
-  <title>TestObj.skip_return_val_no_out</title>
+  <title>Regress.TestObj.skip_return_val_no_out</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(Regress.TestObj, int)

@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>TestBoxed.new_alternative_constructor3</title>
+  <title>Regress.TestBoxed.new_alternative_constructor3</title>
   
 <synopsis><code mime="text/x-gjs">
 function new_alternative_constructor3(s:String):Regress.TestBoxed {

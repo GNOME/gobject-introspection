@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>AnnotationObject.prototype.with_voidp</title>
+  <title>Regress.AnnotationObject.prototype.with_voidp</title>
   
 <synopsis><code mime="text/x-gjs">
 function with_voidp(data:gpointer):void {

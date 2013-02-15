@@ -16,7 +16,7 @@
     </api:function>
 
   </info>
-  <title>TestWi8021x.new</title>
+  <title>Regress.TestWi8021x.new</title>
   
 <synopsis><code mime="text/x-gjs">
 function new():Regress.TestWi8021x {

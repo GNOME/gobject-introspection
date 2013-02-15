@@ -22,7 +22,7 @@
     </api:function>
 
   </info>
-  <title>TestFundamentalSubObject.new</title>
+  <title>Regress.TestFundamentalSubObject.new</title>
   
 <synopsis><code mime="text/x-gjs">
 function new(data:String):Regress.TestFundamentalSubObject {

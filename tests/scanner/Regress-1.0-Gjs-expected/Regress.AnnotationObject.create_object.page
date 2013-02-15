@@ -16,7 +16,7 @@
     </api:function>
 
   </info>
-  <title>AnnotationObject.prototype.create_object</title>
+  <title>Regress.AnnotationObject.prototype.create_object</title>
   
 <synopsis><code mime="text/x-gjs">
 function create_object():GObject.Object {

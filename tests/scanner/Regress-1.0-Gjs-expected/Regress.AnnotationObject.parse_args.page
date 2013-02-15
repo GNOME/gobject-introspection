@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>AnnotationObject.prototype.parse_args</title>
+  <title>Regress.AnnotationObject.prototype.parse_args</title>
   
 <synopsis><code mime="text/x-gjs">
 function parse_args(argv:[String]):void {

@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>TestObj.prototype.instance_method_callback</title>
+  <title>Regress.TestObj.prototype.instance_method_callback</title>
   
 <synopsis><code mime="text/x-gjs">
 function instance_method_callback(callback:Regress.TestCallback):void {

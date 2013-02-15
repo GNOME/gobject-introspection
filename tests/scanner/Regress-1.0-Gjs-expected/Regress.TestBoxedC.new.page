@@ -16,7 +16,7 @@
     </api:function>
 
   </info>
-  <title>TestBoxedC.new</title>
+  <title>Regress.TestBoxedC.new</title>
   
 <synopsis><code mime="text/x-gjs">
 function new():Regress.TestBoxedC {

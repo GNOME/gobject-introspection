@@ -16,7 +16,7 @@
     </api:function>
 
   </info>
-  <title>Regress.test_gvariant_i</title>
+  <title>Index.test_gvariant_i</title>
   
 <synopsis><code mime="text/x-python">
 @returns(GLib.Variant)

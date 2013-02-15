@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>Regress.annotation_ptr_array</title>
+  <title>Index.annotation_ptr_array</title>
   
 <synopsis><code mime="text/x-python">
 @accepts([GObject.Value])

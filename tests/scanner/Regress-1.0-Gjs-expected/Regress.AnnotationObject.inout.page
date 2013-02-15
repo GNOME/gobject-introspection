@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>AnnotationObject.prototype.inout</title>
+  <title>Regress.AnnotationObject.prototype.inout</title>
   
 <synopsis><code mime="text/x-gjs">
 function inout(inoutarg:Number):Number {

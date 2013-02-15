@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>FooSubInterface.prototype.do_baz</title>
+  <title>Regress.FooSubInterface.prototype.do_baz</title>
   
 <synopsis><code mime="text/x-gjs">
 function do_baz(callback:GObject.Callback):void {

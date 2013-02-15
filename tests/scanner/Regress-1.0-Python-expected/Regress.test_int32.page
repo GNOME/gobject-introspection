@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>Regress.test_int32</title>
+  <title>Index.test_int32</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(gint32)

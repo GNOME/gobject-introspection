@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>TestStructFixedArray.frob</title>
+  <title>Regress.TestStructFixedArray.frob</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(Regress.TestStructFixedArray)

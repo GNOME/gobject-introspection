@@ -24,7 +24,7 @@
     </api:function>
 
   </info>
-  <title>TestWi8021x.set_testbool</title>
+  <title>Regress.TestWi8021x.set_testbool</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(Regress.TestWi8021x, bool)

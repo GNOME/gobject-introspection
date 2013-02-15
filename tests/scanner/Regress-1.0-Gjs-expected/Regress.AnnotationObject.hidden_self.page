@@ -16,7 +16,7 @@
     </api:function>
 
   </info>
-  <title>AnnotationObject.prototype.hidden_self</title>
+  <title>Regress.AnnotationObject.prototype.hidden_self</title>
   
 <synopsis><code mime="text/x-gjs">
 function hidden_self():void {

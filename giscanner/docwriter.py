@@ -458,7 +458,7 @@ class DocFormatterPython(DocFormatterIntrospectableBase):
 
     def format_function_name(self, func):
         if func.parent is not None:
-            return "%s.%s" % (func.parent.name, func.name)
+            return "%s.%s" % (self.format_page_name(func.parent), func.name)
         else:
             return func.name
 
@@ -523,9 +523,9 @@ class DocFormatterGjs(DocFormatterIntrospectableBase):
 
     def format_function_name(self, func):
         if func.is_method:
-            return "%s.prototype.%s" % (func.parent.name, func.name)
+            return "%s.prototype.%s" % (self.format_page_name(func.parent), func.name)
         elif func.is_constructor:
-            return "%s.%s" % (func.parent.name, func.name)
+            return "%s.%s" % (self.format_page_name(func.parent), func.name)
         else:
             return func.name
 

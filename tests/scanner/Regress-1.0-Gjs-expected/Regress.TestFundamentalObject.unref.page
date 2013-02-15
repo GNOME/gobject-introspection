@@ -16,7 +16,7 @@
     </api:function>
 
   </info>
-  <title>TestFundamentalObject.prototype.unref</title>
+  <title>Regress.TestFundamentalObject.prototype.unref</title>
   
 <synopsis><code mime="text/x-gjs">
 function unref():void {

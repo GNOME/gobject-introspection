@@ -28,7 +28,7 @@
     </api:function>
 
   </info>
-  <title>FooSubInterface.do_baz</title>
+  <title>Regress.FooSubInterface.do_baz</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(Regress.FooSubInterface, GObject.Callback, gpointer)

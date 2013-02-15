@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>TestObj.emit_sig_with_int64</title>
+  <title>Regress.TestObj.emit_sig_with_int64</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(Regress.TestObj)

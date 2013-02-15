@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>FooBRect.prototype.add</title>
+  <title>Regress.FooBRect.prototype.add</title>
   
 <synopsis><code mime="text/x-gjs">
 function add(b2:Regress.FooBRect):void {

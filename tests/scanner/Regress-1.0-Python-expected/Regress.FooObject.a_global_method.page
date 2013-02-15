@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>FooObject.a_global_method</title>
+  <title>Regress.FooObject.a_global_method</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(Utility.Object)

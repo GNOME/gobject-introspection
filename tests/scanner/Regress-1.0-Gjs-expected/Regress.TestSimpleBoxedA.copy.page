@@ -16,7 +16,7 @@
     </api:function>
 
   </info>
-  <title>TestSimpleBoxedA.prototype.copy</title>
+  <title>Regress.TestSimpleBoxedA.prototype.copy</title>
   
 <synopsis><code mime="text/x-gjs">
 function copy():Regress.TestSimpleBoxedA {

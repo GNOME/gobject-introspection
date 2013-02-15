@@ -28,7 +28,7 @@
     </api:function>
 
   </info>
-  <title>FooObject.various</title>
+  <title>Regress.FooObject.various</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(Regress.FooObject, gpointer, GType)

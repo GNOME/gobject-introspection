@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>Regress.test_nested_parameter</title>
+  <title>Index.test_nested_parameter</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(int)

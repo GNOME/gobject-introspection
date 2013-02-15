@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>Regress.test_array_fixed_out_objects</title>
+  <title>Index.test_array_fixed_out_objects</title>
   
 <synopsis><code mime="text/x-python">
 @accepts([Regress.TestObj])

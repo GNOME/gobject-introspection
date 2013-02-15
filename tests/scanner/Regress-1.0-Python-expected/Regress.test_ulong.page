@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>Regress.test_ulong</title>
+  <title>Index.test_ulong</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(int)

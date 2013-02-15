@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>Regress.global_get_flags_out</title>
+  <title>Index.global_get_flags_out</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(Regress.TestFlags)

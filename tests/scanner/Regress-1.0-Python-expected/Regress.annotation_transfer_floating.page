@@ -16,7 +16,7 @@
     </api:function>
 
   </info>
-  <title>Regress.annotation_transfer_floating</title>
+  <title>Index.annotation_transfer_floating</title>
   
 <synopsis><code mime="text/x-python">
 @returns(GObject.Object)

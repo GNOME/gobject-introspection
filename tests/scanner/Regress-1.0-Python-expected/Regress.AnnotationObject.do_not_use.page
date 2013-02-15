@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>AnnotationObject.do_not_use</title>
+  <title>Regress.AnnotationObject.do_not_use</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(Regress.AnnotationObject)

@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>AnnotationObject.prototype.in</title>
+  <title>Regress.AnnotationObject.prototype.in</title>
   
 <synopsis><code mime="text/x-gjs">
 function in(inarg:Number):Number {

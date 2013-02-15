@@ -24,7 +24,7 @@
     </api:function>
 
   </info>
-  <title>Regress.annotation_attribute_func</title>
+  <title>Index.annotation_attribute_func</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(Regress.AnnotationObject, unicode)

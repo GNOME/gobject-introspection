@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>Regress.test_ssize</title>
+  <title>Index.test_ssize</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(gssize)

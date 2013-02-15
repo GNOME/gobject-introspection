@@ -16,7 +16,7 @@
     </api:function>
 
   </info>
-  <title>AnnotationObject.prototype.get_hash</title>
+  <title>Regress.AnnotationObject.prototype.get_hash</title>
   
 <synopsis><code mime="text/x-gjs">
 function get_hash():{String: GObject.Object} {

@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>AnnotationObject.prototype.compute_sum</title>
+  <title>Regress.AnnotationObject.prototype.compute_sum</title>
   
 <synopsis><code mime="text/x-gjs">
 function compute_sum(nums:[Number]):void {

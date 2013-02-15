@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>AnnotationObject.prototype.compute_sum_nz</title>
+  <title>Regress.AnnotationObject.prototype.compute_sum_nz</title>
   
 <synopsis><code mime="text/x-gjs">
 function compute_sum_nz(nums:[Number]):void {

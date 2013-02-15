@@ -16,7 +16,7 @@
     </api:function>
 
   </info>
-  <title>TestObj.constructor</title>
+  <title>Regress.TestObj.constructor</title>
   
 <synopsis><code mime="text/x-gjs">
 function constructor():Regress.TestObj {

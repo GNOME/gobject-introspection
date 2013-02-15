@@ -16,7 +16,7 @@
     </api:function>
 
   </info>
-  <title>AnnotationObject.prototype.string_out</title>
+  <title>Regress.AnnotationObject.prototype.string_out</title>
   
 <synopsis><code mime="text/x-gjs">
 function string_out():Boolean {

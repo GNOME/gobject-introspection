@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>AnnotationObject.get_strings</title>
+  <title>Regress.AnnotationObject.get_strings</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(Regress.AnnotationObject)

@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>AnnotationObject.prototype.watch_full</title>
+  <title>Regress.AnnotationObject.prototype.watch_full</title>
   
 <synopsis><code mime="text/x-gjs">
 function watch_full(func:Regress.AnnotationForeachFunc):void {

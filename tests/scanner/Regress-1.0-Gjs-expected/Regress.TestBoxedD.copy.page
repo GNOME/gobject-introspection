@@ -16,7 +16,7 @@
     </api:function>
 
   </info>
-  <title>TestBoxedD.prototype.copy</title>
+  <title>Regress.TestBoxedD.prototype.copy</title>
   
 <synopsis><code mime="text/x-gjs">
 function copy():Regress.TestBoxedD {

@@ -24,7 +24,7 @@
     </api:function>
 
   </info>
-  <title>TestInheritDrawable.do_foo_maybe_throw</title>
+  <title>Regress.TestInheritDrawable.do_foo_maybe_throw</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(Regress.TestInheritDrawable, int)

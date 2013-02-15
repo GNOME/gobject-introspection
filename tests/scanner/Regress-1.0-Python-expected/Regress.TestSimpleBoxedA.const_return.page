@@ -16,7 +16,7 @@
     </api:function>
 
   </info>
-  <title>TestSimpleBoxedA.const_return</title>
+  <title>Regress.TestSimpleBoxedA.const_return</title>
   
 <synopsis><code mime="text/x-python">
 @returns(Regress.TestSimpleBoxedA)

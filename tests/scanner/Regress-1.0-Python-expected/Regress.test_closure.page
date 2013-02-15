@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>Regress.test_closure</title>
+  <title>Index.test_closure</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(GObject.Closure)

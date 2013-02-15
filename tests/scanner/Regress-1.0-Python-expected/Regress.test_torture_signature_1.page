@@ -40,7 +40,7 @@
     </api:function>
 
   </info>
-  <title>Regress.test_torture_signature_1</title>
+  <title>Index.test_torture_signature_1</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(int, float, int, unicode, int, int)

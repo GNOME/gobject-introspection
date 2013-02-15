@@ -16,7 +16,7 @@
     </api:function>
 
   </info>
-  <title>TestInheritDrawable.prototype.get_size</title>
+  <title>Regress.TestInheritDrawable.prototype.get_size</title>
   
 <synopsis><code mime="text/x-gjs">
 function get_size():void {

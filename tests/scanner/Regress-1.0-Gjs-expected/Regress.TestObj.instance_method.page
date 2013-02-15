@@ -16,7 +16,7 @@
     </api:function>
 
   </info>
-  <title>TestObj.prototype.instance_method</title>
+  <title>Regress.TestObj.prototype.instance_method</title>
   
 <synopsis><code mime="text/x-gjs">
 function instance_method():Number {

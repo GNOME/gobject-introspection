@@ -44,7 +44,7 @@
     </api:function>
 
   </info>
-  <title>TestObj.torture_signature_1</title>
+  <title>Regress.TestObj.torture_signature_1</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(Regress.TestObj, int, float, int, unicode, int, int)

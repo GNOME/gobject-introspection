@@ -32,7 +32,7 @@
     </api:function>
 
   </info>
-  <title>AnnotationObject.watch_full</title>
+  <title>Regress.AnnotationObject.watch_full</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(Regress.AnnotationObject, Regress.AnnotationForeachFunc, gpointer, GLib.DestroyNotify)

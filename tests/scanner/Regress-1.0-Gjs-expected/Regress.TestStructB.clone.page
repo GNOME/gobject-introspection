@@ -16,7 +16,7 @@
     </api:function>
 
   </info>
-  <title>TestStructB.prototype.clone</title>
+  <title>Regress.TestStructB.prototype.clone</title>
   
 <synopsis><code mime="text/x-gjs">
 function clone():void {

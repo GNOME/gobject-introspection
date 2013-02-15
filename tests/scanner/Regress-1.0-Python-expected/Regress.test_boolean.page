@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>Regress.test_boolean</title>
+  <title>Index.test_boolean</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(bool)

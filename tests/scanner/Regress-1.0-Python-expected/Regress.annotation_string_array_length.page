@@ -24,7 +24,7 @@
     </api:function>
 
   </info>
-  <title>Regress.annotation_string_array_length</title>
+  <title>Index.annotation_string_array_length</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(int, [unicode])

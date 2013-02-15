@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>TestBoxedD.copy</title>
+  <title>Regress.TestBoxedD.copy</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(Regress.TestBoxedD)

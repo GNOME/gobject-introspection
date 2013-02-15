@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>TestObj.new_from_file</title>
+  <title>Regress.TestObj.new_from_file</title>
   
 <synopsis><code mime="text/x-gjs">
 function new_from_file(x:String):Regress.TestObj {

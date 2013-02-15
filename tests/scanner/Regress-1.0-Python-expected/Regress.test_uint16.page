@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>Regress.test_uint16</title>
+  <title>Index.test_uint16</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(guint16)

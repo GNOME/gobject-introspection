@@ -24,7 +24,7 @@
     </api:function>
 
   </info>
-  <title>AnnotationObject.inout3</title>
+  <title>Regress.AnnotationObject.inout3</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(Regress.AnnotationObject, int)

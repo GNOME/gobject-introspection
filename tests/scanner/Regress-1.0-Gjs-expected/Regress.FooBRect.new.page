@@ -24,7 +24,7 @@
     </api:function>
 
   </info>
-  <title>FooBRect.new</title>
+  <title>Regress.FooBRect.new</title>
   
 <synopsis><code mime="text/x-gjs">
 function new(x:Number, y:Number):Regress.FooBRect {

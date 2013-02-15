@@ -24,7 +24,7 @@
     </api:function>
 
   </info>
-  <title>Regress.annotation_init</title>
+  <title>Index.annotation_init</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(int, [unicode])

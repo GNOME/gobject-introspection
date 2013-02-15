@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>Regress.annotation_string_zero_terminated_out</title>
+  <title>Index.annotation_string_zero_terminated_out</title>
   
 <synopsis><code mime="text/x-python">
 @accepts([unicode])

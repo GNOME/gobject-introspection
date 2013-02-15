@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>TestBoxedD.free</title>
+  <title>Regress.TestBoxedD.free</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(Regress.TestBoxedD)

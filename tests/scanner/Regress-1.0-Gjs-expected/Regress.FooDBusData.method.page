@@ -16,7 +16,7 @@
     </api:function>
 
   </info>
-  <title>FooDBusData.prototype.method</title>
+  <title>Regress.FooDBusData.prototype.method</title>
   
 <synopsis><code mime="text/x-gjs">
 function method():void {

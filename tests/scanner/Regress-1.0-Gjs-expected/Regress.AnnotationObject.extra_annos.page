@@ -16,7 +16,7 @@
     </api:function>
 
   </info>
-  <title>AnnotationObject.prototype.extra_annos</title>
+  <title>Regress.AnnotationObject.prototype.extra_annos</title>
   
 <synopsis><code mime="text/x-gjs">
 function extra_annos():void {

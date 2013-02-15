@@ -20,7 +20,7 @@
     </api:function>
 
   </info>
-  <title>Regress.test_utf8_out_nonconst_return</title>
+  <title>Index.test_utf8_out_nonconst_return</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(unicode)

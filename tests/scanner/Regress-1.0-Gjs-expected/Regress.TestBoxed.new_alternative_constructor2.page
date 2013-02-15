@@ -24,7 +24,7 @@
     </api:function>
 
   </info>
-  <title>TestBoxed.new_alternative_constructor2</title>
+  <title>Regress.TestBoxed.new_alternative_constructor2</title>
   
 <synopsis><code mime="text/x-gjs">
 function new_alternative_constructor2(i:Number, j:Number):Regress.TestBoxed {

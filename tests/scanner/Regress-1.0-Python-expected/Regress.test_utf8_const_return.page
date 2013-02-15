@@ -16,7 +16,7 @@
     </api:function>
 
   </info>
-  <title>Regress.test_utf8_const_return</title>
+  <title>Index.test_utf8_const_return</title>
   
 <synopsis><code mime="text/x-python">
 @returns(unicode)

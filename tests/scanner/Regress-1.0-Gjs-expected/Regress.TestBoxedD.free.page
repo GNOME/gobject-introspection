@@ -16,7 +16,7 @@
     </api:function>
 
   </info>
-  <title>TestBoxedD.prototype.free</title>
+  <title>Regress.TestBoxedD.prototype.free</title>
   
 <synopsis><code mime="text/x-gjs">
 function free():void {
