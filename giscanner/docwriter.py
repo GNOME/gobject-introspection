@@ -31,30 +31,17 @@ from mako.lookup import TemplateLookup
 from . import ast, xmlwriter
 from .utils import to_underscores
 
-def make_page_id(node):
+def make_page_id(node, recursive=False):
     if isinstance(node, ast.Namespace):
-        return 'index'
-
-    namespace = node.namespace
-    if isinstance(node, (ast.Class, ast.Interface)):
-        return '%s.%s' % (namespace.name, node.name)
-    elif isinstance(node, ast.Record):
-        return '%s.%s' % (namespace.name, node.name)
-    elif isinstance(node, ast.Function):
-        if node.parent is not None:
-            return '%s.%s.%s' % (namespace.name, node.parent.name, node.name)
+        if recursive:
+            return node.name
         else:
-            return '%s.%s' % (namespace.name, node.name)
-    elif isinstance(node, ast.Enum):
-        return '%s.%s' % (namespace.name, node.name)
-    elif isinstance(node, ast.Property) and node.parent is not None:
-        return '%s.%s-%s' % (namespace.name, node.parent.name, node.name)
-    elif isinstance(node, ast.Signal) and node.parent is not None:
-        return '%s.%s-%s' % (namespace.name, node.parent.name, node.name)
-    elif isinstance(node, ast.VFunction) and node.parent is not None:
-        return '%s.%s-%s' % (namespace.name, node.parent.name, node.name)
+            return 'index'
+
+    if isinstance(node, (ast.Property, ast.Signal, ast.VFunction)):
+        return '%s-%s' % (make_page_id(node.parent, recursive=True), node.name)
     else:
-        return '%s.%s' % (namespace.name, node.name)
+        return '%s.%s' % (make_page_id(node.parent, recursive=True), node.name)
 
 def get_node_kind(node):
     if isinstance(node, ast.Namespace):
