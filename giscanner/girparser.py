@@ -216,7 +216,7 @@ class GIRParser(object):
             parent_type = None
 
         ctor_kwargs = {'name': node.attrib['name'],
-                       'parent': parent_type,
+                       'parent_type': parent_type,
                        'gtype_name': node.attrib[_glibns('type-name')],
                        'get_type': node.attrib[_glibns('get-type')],
                        'c_symbol_prefix': node.attrib.get(_cns('symbol-prefix')),

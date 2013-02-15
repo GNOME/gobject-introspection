@@ -479,8 +479,8 @@ usage is void (*_gtk_reserved1)(void);"""
         assert supercls
         if cls is supercls:
             return True
-        if cls.parent and cls.parent.target_giname != 'GObject.Object':
-            return self._is_gi_subclass(cls.parent, supercls_type)
+        if cls.parent_type and cls.parent_type.target_giname != 'GObject.Object':
+            return self._is_gi_subclass(cls.parent_type, supercls_type)
         return False
 
     def _get_transfer_default_return(self, parent, node):
@@ -898,11 +898,11 @@ the ones that failed to resolve removed."""
                     continue
                 target = self._transformer.lookup_typenode(parent)
                 if target:
-                    node.parent = parent
+                    node.parent_type = parent
                     break
             else:
                 if isinstance(node, ast.Interface):
-                    node.parent = ast.Type(target_giname='GObject.Object')
+                    node.parent_type = ast.Type(target_giname='GObject.Object')
             for prop in node.properties:
                 self._transformer.resolve_type(prop.type)
             for sig in node.signals:
@@ -1197,8 +1197,8 @@ method or constructor of some type."""
             while parent and (not parent.gi_name == 'GObject.Object'):
                 if parent == target:
                     break
-                if parent.parent:
-                    parent = self._transformer.lookup_typenode(parent.parent)
+                if parent.parent_type:
+                    parent = self._transformer.lookup_typenode(parent.parent_type)
                 else:
                     parent = None
                 if parent is None:

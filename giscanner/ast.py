@@ -964,7 +964,7 @@ class Signal(Callable):
 
 class Class(Node, Registered):
 
-    def __init__(self, name, parent,
+    def __init__(self, name, parent_type,
                  ctype=None,
                  gtype_name=None,
                  get_type=None,
@@ -974,7 +974,7 @@ class Class(Node, Registered):
         Registered.__init__(self, gtype_name, get_type)
         self.ctype = ctype
         self.c_symbol_prefix = c_symbol_prefix
-        self.parent = parent
+        self.parent_type = parent_type
         self.fundamental = False
         self.unref_func = None
         self.ref_func = None
@@ -1013,7 +1013,7 @@ class Class(Node, Registered):
 
 class Interface(Node, Registered):
 
-    def __init__(self, name, parent,
+    def __init__(self, name, parent_type,
                  ctype=None,
                  gtype_name=None,
                  get_type=None,
@@ -1022,7 +1022,7 @@ class Interface(Node, Registered):
         Registered.__init__(self, gtype_name, get_type)
         self.ctype = ctype
         self.c_symbol_prefix = c_symbol_prefix
-        self.parent = parent
+        self.parent_type = parent_type
         self.parent_chain = []
         self.methods = []
         self.signals = []

@@ -388,9 +388,9 @@ and/or use gtk-doc annotations. ''')
         self._append_node_generic(node, attrs)
         if isinstance(node, ast.Class):
             tag_name = 'class'
-            if node.parent is not None:
+            if node.parent_type is not None:
                 attrs.append(('parent',
-                              self._type_to_name(node.parent)))
+                              self._type_to_name(node.parent_type)))
             if node.is_abstract:
                 attrs.append(('abstract', '1'))
         else:

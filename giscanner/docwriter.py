@@ -352,8 +352,8 @@ class DocFormatter(object):
     def get_class_hierarchy(self, node):
         parent_chain = [node]
 
-        while node.parent:
-            node = self._transformer.lookup_typenode(node.parent)
+        while node.parent_type:
+            node = self._transformer.lookup_typenode(node.parent_type)
             parent_chain.append(node)
 
         parent_chain.reverse()
