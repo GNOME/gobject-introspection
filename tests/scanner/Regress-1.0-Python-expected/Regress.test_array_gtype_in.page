@@ -7,7 +7,7 @@
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
     
-    <link type="guide" xref="index" group="function"/>
+    <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
         <api:type>unicode</api:type>
@@ -24,7 +24,7 @@
     </api:function>
 
   </info>
-  <title>test_array_gtype_in</title>
+  <title>Regress.test_array_gtype_in</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(int, [GType])

@@ -7,7 +7,7 @@
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
     
-    <link type="guide" xref="Regress.TestObj" group="vfunc"/>
+    <link xref="Regress.TestObj" group="vfunc" type="guide"/>
 
   </info>
   <title>Regress.TestObj::allow_none_vfunc</title>

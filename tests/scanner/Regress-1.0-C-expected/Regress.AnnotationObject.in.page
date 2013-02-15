@@ -7,7 +7,7 @@
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
     
-    <link type="guide" xref="Regress.AnnotationObject" group="method"/>
+    <link xref="Regress.AnnotationObject" group="method" type="guide"/>
     <api:function>
       <api:returns>
         <api:type>gint</api:type>

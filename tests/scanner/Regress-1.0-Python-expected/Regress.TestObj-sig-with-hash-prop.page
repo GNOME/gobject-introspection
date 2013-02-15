@@ -7,7 +7,7 @@
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
     
-    <link type="guide" xref="Regress.TestObj" group="signal"/>
+    <link xref="Regress.TestObj" group="signal" type="guide"/>
     <title type="link" role="topic">sig-with-hash-prop</title>
 
   </info>

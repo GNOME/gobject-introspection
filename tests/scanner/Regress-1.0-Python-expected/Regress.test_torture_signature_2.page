@@ -7,7 +7,7 @@
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
     
-    <link type="guide" xref="index" group="function"/>
+    <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
         <api:type>none</api:type>
@@ -52,7 +52,7 @@
     </api:function>
 
   </info>
-  <title>test_torture_signature_2</title>
+  <title>Regress.test_torture_signature_2</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(int, Regress.TestCallbackUserData, gpointer, GLib.DestroyNotify, float, int, unicode, int, int)

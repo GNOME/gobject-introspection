@@ -8,7 +8,7 @@
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
     <%block name="info">
-      <link type="guide" xref="index"/>
+      ${formatter.format_xref(node.parent, type="guide", group=page_kind)}
     </%block>
   </info>
   <title><%block name="title">${formatter.format_page_name(node)}</%block></title>

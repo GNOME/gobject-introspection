@@ -7,7 +7,7 @@
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
     
-    <link type="guide" xref="Regress.TestWi8021x" group="method"/>
+    <link xref="Regress.TestWi8021x" group="method" type="guide"/>
     <api:function>
       <api:returns>
         <api:type>gboolean</api:type>

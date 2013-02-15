@@ -1,10 +1,6 @@
 <%inherit file="/base.tmpl"/>
 <%block name="info">
-% if node.parent is not None:
-    <link type="guide" xref="${namespace.name}.${node.parent.name}" group="${page_kind}"/>
-% else:
-    <link type="guide" xref="index" group="${page_kind}"/>
-% endif
+    ${formatter.format_xref(node.parent, type="guide", group=page_kind)}
     <api:function>
       <api:returns>
         <api:type>${formatter.format_type(node.retval.type) | x}</api:type>

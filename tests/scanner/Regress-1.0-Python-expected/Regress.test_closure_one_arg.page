@@ -7,7 +7,7 @@
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
     
-    <link type="guide" xref="index" group="function"/>
+    <link xref="index" group="function" type="guide"/>
     <api:function>
       <api:returns>
         <api:type>int</api:type>
@@ -24,7 +24,7 @@
     </api:function>
 
   </info>
-  <title>test_closure_one_arg</title>
+  <title>Regress.test_closure_one_arg</title>
   
 <synopsis><code mime="text/x-python">
 @accepts(GObject.Closure, int)

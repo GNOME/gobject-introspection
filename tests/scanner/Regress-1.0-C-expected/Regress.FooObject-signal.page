@@ -7,7 +7,7 @@
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
     
-    <link type="guide" xref="Regress.FooObject" group="property"/>
+    <link xref="Regress.FooObject" group="signal" type="guide"/>
     <title type="link" role="topic">signal</title>
 
   </info>

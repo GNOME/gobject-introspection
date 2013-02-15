@@ -7,7 +7,9 @@
       xmlns:ui="http://projectmallard.org/1.0/ui/">
   <info>
     
-    <link type="guide" xref="Regress.TestFundamentalSubObject" group="constructor"/>
+    <link xref="Regress.TestFundamentalSubObject"
+      group="constructor"
+      type="guide"/>
     <api:function>
       <api:returns>
         <api:type>RegressTestFundamentalSubObject*</api:type>
