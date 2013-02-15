@@ -1897,6 +1897,15 @@
 
 
 /**
+ * GProxyAddressEnumerator:proxy-resolver:
+ *
+ * The proxy resolver to use.
+ *
+ * Since: 2.36
+ */
+
+
+/**
  * GRemoteActionGroupInterface:
  * @activate_action_full: the virtual function pointer for g_remote_action_group_activate_action_full()
  * @change_action_state_full: the virtual function pointer for g_remote_action_group_change_action_state_full()
@@ -2213,6 +2222,75 @@
 
 
 /**
+ * GSimpleProxyResolver:default-proxy:
+ *
+ * The default proxy URI that will be used for any URI that doesn't
+ * match #GSimpleProxyResolver:ignore-hosts, and doesn't match any
+ * of the schemes set with g_simple_proxy_resolver_set_uri_proxy().
+ *
+ * Note that as a special case, if this URI starts with
+ * "<literal>socks://</literal>", #GSimpleProxyResolver will treat
+ * it as referring to all three of the <literal>socks5</literal>,
+ * <literal>socks4a</literal>, and <literal>socks4</literal> proxy
+ * types.
+ */
+
+
+/**
+ * GSimpleProxyResolver:ignore-hosts:
+ *
+ * A list of hostnames and IP addresses that the resolver should
+ * allow direct connections to.
+ *
+ * Entries can be in one of 4 formats:
+ *
+ * <itemizedlist>
+ *   <listitem>
+ *     A hostname, such as "<literal>example.com</literal>",
+ *     "<literal>.example.com</literal>", or
+ *     "<literal>*.example.com</literal>", any of which match
+ *     "<literal>example.com</literal>" or any subdomain of it.
+ *   </listitem>
+ *   <listitem>
+ *     An IPv4 or IPv6 address, such as
+ *     "<literal>192.168.1.1</literal>", which matches only
+ *     that address.
+ *   </listitem>
+ *   <listitem>
+ *     A hostname or IP address followed by a port, such as
+ *     "<literal>example.com:80</literal>", which matches whatever
+ *     the hostname or IP address would match, but only for URLs
+ *     with the (explicitly) indicated port. In the case of an IPv6
+ *     address, the address part must appear in brackets:
+ *     "<literal>[::1]:443</literal>"
+ *   </listitem>
+ *   <listitem>
+ *     An IP address range, given by a base address and prefix length,
+ *     such as "<literal>fe80::/10</literal>", which matches any
+ *     address in that range.
+ *   </listitem>
+ * </itemizedlist>
+ *
+ * Note that when dealing with Unicode hostnames, the matching is
+ * done against the ASCII form of the name.
+ *
+ * Also note that hostname exclusions apply only to connections made
+ * to hosts identified by name, and IP address exclusions apply only
+ * to connections made to hosts identified by address. That is, if
+ * <literal>example.com</literal> has an address of
+ * <literal>192.168.1.1</literal>, and the :ignore-hosts list
+ * contains only "<literal>192.168.1.1</literal>", then a connection
+ * to "<literal>example.com</literal>" (eg, via a #GNetworkAddress)
+ * will use the proxy, and a connection to
+ * "<literal>192.168.1.1</literal>" (eg, via a #GInetSocketAddress)
+ * will not.
+ *
+ * These rules match the "ignore-hosts"/"noproxy" rules most
+ * commonly used by other applications.
+ */
+
+
+/**
  * GSocket:broadcast:
  *
  * Whether the socket should allow sending to and receiving from broadcast addresses.
@@ -2362,6 +2440,15 @@
  * the future; unrecognized @event values should be ignored.
  *
  * Since: 2.32
+ */
+
+
+/**
+ * GSocketClient:proxy-resolver:
+ *
+ * The proxy resolver to use
+ *
+ * Since: 2.36
  */
 
 
@@ -4766,7 +4853,7 @@
  * File attributes in GIO consist of a list of key-value pairs.
  *
  * Keys are strings that contain a key namespace and a key name, separated
- * by a colon, e.g. "namespace:keyname". Namespaces are included to sort
+ * by a colon, e.g. "namespace::keyname". Namespaces are included to sort
  * key-value pairs by namespaces for relevance. Keys can be retrived
  * using wildcards, e.g. "standard::*" will return all of the keys in the
  * "standard" namespace.
@@ -4860,7 +4947,7 @@
  * <para><table>
  * <title>GFileAttributes Built-in Keys and Value Types</title>
  * <tgroup cols='3' align='left'><thead>
- * <row><entry>Enum Value</entry><entry>Namespace:Key</entry><entry>Value Type</entry></row>
+ * <row><entry>Enum Value</entry><entry>Namespace::Key</entry><entry>Value Type</entry></row>
  * </thead><tbody>
  * <row><entry>%G_FILE_ATTRIBUTE_STANDARD_TYPE</entry><entry>standard::type</entry><entry>uint32 (#GFileType)</entry></row>
  * <row><entry>%G_FILE_ATTRIBUTE_STANDARD_IS_HIDDEN</entry><entry>standard::is-hidden</entry><entry>boolean</entry></row>
@@ -6466,6 +6553,25 @@
  * value is given at construction and doesn't change.
  *
  * Calling request or release will result in errors.
+ */
+
+
+/**
+ * SECTION:gsimpleproxyresolver
+ * @short_description: Simple proxy resolver implementation
+ * @include: gio/gio.h
+ * @see_also: g_socket_client_set_proxy_resolver()
+ *
+ * #GSimpleProxyResolver is a simple #GProxyResolver implementation
+ * that handles a single default proxy, multiple URI-scheme-specific
+ * proxies, and a list of hosts that proxies should not be used for.
+ *
+ * #GSimpleProxyResolver is never the default proxy resolver, but it
+ * can be used as the base class for another proxy resolver
+ * implementation, or it can be created and used manually, such as
+ * with g_socket_client_set_proxy_resolver().
+ *
+ * Since: 2.36
  */
 
 
@@ -11127,7 +11233,7 @@
  * Finishes the async construction for the various g_async_initable_new
  * calls, returning the created object or %NULL on error.
  *
- * Returns: (transfer full): a newly created #GObject, or %NULL on error. Free with g_object_unref().
+ * Returns: (type GObject.Object) (transfer full): a newly created #GObject, or %NULL on error. Free with g_object_unref().
  * Since: 2.22
  */
 
@@ -13051,6 +13157,23 @@
  *
  * Returns: (transfer full): a #GDBusActionGroup
  * Since: 2.32
+ */
+
+
+/**
+ * g_dbus_address_escape_value:
+ * @string: an unescaped string to be included in a D-Bus address as the value in a key-value pair
+ *
+ * Escape @string so it can appear in a D-Bus address as the value
+ * part of a key-value pair.
+ *
+ * For instance, if @string is <code>/run/bus-for-:0</code>,
+ * this function would return <code>/run/bus-for-%3A0</code>,
+ * which could be used in a D-Bus address like
+ * <code>unix:nonce-tcp:host=127.0.0.1,port=42,noncefile=/run/bus-for-%3A0</code>.
+ *
+ * Returns: (transfer full): a copy of @string with all non-optionally-escaped bytes escaped
+ * Since: 2.36
  */
 
 
@@ -22123,7 +22246,7 @@
  * similar to g_object_new() but also initializes the object
  * and returns %NULL, setting an error on failure.
  *
- * Returns: (transfer full): a newly allocated #GObject, or %NULL on error
+ * Returns: (type GObject.Object) (transfer full): a newly allocated #GObject, or %NULL on error
  * Since: 2.22
  */
 
@@ -22140,7 +22263,7 @@
  * similar to g_object_new_valist() but also initializes the object
  * and returns %NULL, setting an error on failure.
  *
- * Returns: (transfer full): a newly allocated #GObject, or %NULL on error
+ * Returns: (type GObject.Object) (transfer full): a newly allocated #GObject, or %NULL on error
  * Since: 2.22
  */
 
@@ -22157,7 +22280,7 @@
  * similar to g_object_newv() but also initializes the object
  * and returns %NULL, setting an error on failure.
  *
- * Returns: (transfer full): a newly allocated #GObject, or %NULL on error
+ * Returns: (type GObject.Object) (transfer full): a newly allocated #GObject, or %NULL on error
  * Since: 2.22
  */
 
@@ -28694,6 +28817,59 @@
 
 
 /**
+ * g_simple_proxy_resolver_new:
+ * @default_proxy: (allow-none): the default proxy to use, eg "socks://192.168.1.1"
+ * @ignore_hosts: (allow-none): an optional list of hosts/IP addresses to not use a proxy for.
+ *
+ * Creates a new #GSimpleProxyResolver. See
+ * #GSimpleProxyResolver:default-proxy and
+ * #GSimpleProxyResolver:ignore-hosts for more details on how the
+ * arguments are interpreted.
+ *
+ * Returns: a new #GSimpleProxyResolver
+ * Since: 2.36
+ */
+
+
+/**
+ * g_simple_proxy_resolver_set_default_proxy:
+ * @resolver: a #GSimpleProxyResolver
+ * @default_proxy: the default proxy to use
+ *
+ * Sets the default proxy on @resolver, to be used for any URIs that
+ * don't match #GSimpleProxyResolver:ignore-hosts or a proxy set
+ * via g_simple_proxy_resolver_set_uri_proxy().
+ *
+ * If @default_proxy starts with "<literal>socks://</literal>",
+ * #GSimpleProxyResolver will treat it as referring to all three of
+ * the <literal>socks5</literal>, <literal>socks4a</literal>, and
+ * <literal>socks4</literal> proxy types.
+ *
+ * Since: 2.36
+ */
+
+
+/**
+ * g_simple_proxy_resolver_set_uri_proxy:
+ * @resolver: a #GSimpleProxyResolver
+ * @uri_scheme: the URI scheme to add a proxy for
+ * @proxy: the proxy to use for @uri_scheme
+ *
+ * Adds a URI-scheme-specific proxy to @resolver; URIs whose scheme
+ * matches @uri_scheme (and which don't match
+ * #GSimpleProxyResolver:ignore-hosts) will be proxied via @proxy.
+ *
+ * As with #GSimpleProxyResolver:default-proxy, if @proxy starts with
+ * "<literal>socks://</literal>", #GSimpleProxyResolver will treat it
+ * as referring to all three of the <literal>socks5</literal>,
+ * <literal>socks4a</literal>, and <literal>socks4</literal> proxy
+ * types.
+ *
+ * Since: 2.36
+ */
+
+
+/**
  * g_socket_accept:
  * @socket: a #GSocket.
  * @cancellable: (allow-none): a %GCancellable or %NULL
@@ -29207,6 +29383,19 @@
 
 
 /**
+ * g_socket_client_get_proxy_resolver:
+ * @client: a #GSocketClient.
+ *
+ * Gets the #GProxyResolver being used by @client. Normally, this will
+ * be the resolver returned by g_proxy_resolver_get_default(), but you
+ * can override it with g_socket_client_set_proxy_resolver().
+ *
+ * Returns: (transfer none): The #GProxyResolver being used by @client.
+ * Since: 2.36
+ */
+
+
+/**
  * g_socket_client_get_socket_type:
  * @client: a #GSocketClient.
  *
@@ -29276,6 +29465,8 @@
  * #GProxyResolver to determine if a proxy protocol such as SOCKS is
  * needed, and automatically do the necessary proxy negotiation.
  *
+ * See also g_socket_client_set_proxy_resolver().
+ *
  * Since: 2.26
  */
 
@@ -29328,6 +29519,23 @@
  * protocol for the socket family and type.
  *
  * Since: 2.22
+ */
+
+
+/**
+ * g_socket_client_set_proxy_resolver:
+ * @client: a #GSocketClient.
+ * @proxy_resolver: (allow-none): a #GProxyResolver, or %NULL for the default.
+ *
+ * Overrides the #GProxyResolver used by @client. You can call this if
+ * you want to use specific proxies, rather than using the system
+ * default proxy settings.
+ *
+ * Note that whether or not the proxy resolver is actually used
+ * depends on the setting of #GSocketClient:enable-proxy, which is not
+ * changed by this function (but which is %TRUE by default)
+ *
+ * Since: 2.36
  */
 
 
