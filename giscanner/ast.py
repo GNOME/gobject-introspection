@@ -639,7 +639,7 @@ class Function(Callable):
         # Named correctly
         if not (self.name.endswith('_get_type') or
                 self.name.endswith('_get_gtype')):
-                return False
+            return False
 
         # Doesn't have any parameters
         if self.parameters:
