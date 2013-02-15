@@ -89,6 +89,16 @@ tests/*/*.log
 tests/*/*.trs
 .make-check-passed
 
+#yelp-build
+*.html
+C.css
+jquery.js
+jquery.syntax.js
+jquery.syntax.core.js
+jquery.syntax.brush.python.js
+jquery.syntax.layout.yelp.js
+yelp.js
+
 #GTK-Doc output
 docs/reference/html
 docs/reference/xml
