@@ -38,7 +38,7 @@ function callback(annotation_object, arg1:String, arg2:String, ):String;
 </item>
 <item>
 <title><code>Returns</code></title>
-<p><p>the return value</p></p>
+<p>the return value</p>
 </item>
 </terms>
 

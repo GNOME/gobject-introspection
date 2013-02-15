@@ -38,7 +38,7 @@ function callback(foo_object, object:GObject.Object, p0:gpointer, ):String;
 </item>
 <item>
 <title><code>Returns</code></title>
-<p></p>
+
 </item>
 </terms>
 
