@@ -170,6 +170,9 @@ class DocFormatter(object):
         return saxutils.escape(text)
 
     def should_render_node(self, node):
+        if isinstance(node, ast.Constant):
+            return False
+
         return True
 
     def format(self, node, doc):
@@ -394,7 +397,7 @@ class DocFormatterIntrospectableBase(DocFormatter):
         if not getattr(node, "introspectable", True):
             return False
 
-        return True
+        return super(DocFormatterIntrospectableBase, self).should_render_node(node)
 
 class DocFormatterPython(DocFormatterIntrospectableBase):
     language = "Python"
