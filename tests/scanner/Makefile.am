@@ -154,19 +154,16 @@ EXPECTED_MALLARD_DIRS = $(MALLARD_DIRS:=-expected)
 
 %-C: %.gir
 	$(AM_V_GEN)
-	$(AM_V_at)$(MKDIR_P) $*-C
 	$(AM_V_at)rm -f $*-C/*.page
 	$(AM_V_at)$(INTROSPECTION_DOCTOOL) $(INTROSPECTION_DOCTOOL_ARGS) --language C $*.gir -o $*-C/
 
 %-Python: %.gir
 	$(AM_V_GEN)
-	$(AM_V_at)$(MKDIR_P) $*-Python
 	$(AM_V_at)rm -f $*-Python/*.page
 	$(AM_V_at)$(INTROSPECTION_DOCTOOL) $(INTROSPECTION_DOCTOOL_ARGS) --language Python $*.gir -o $*-Python/
 
 %-Gjs: %.gir
 	$(AM_V_GEN)
-	$(AM_V_at)$(MKDIR_P) $*-Gjs
 	$(AM_V_at)rm -f $*-Gjs/*.page
 	$(AM_V_at)$(INTROSPECTION_DOCTOOL) $(INTROSPECTION_DOCTOOL_ARGS) --language Gjs $*.gir -o $*-Gjs/
 
