@@ -620,15 +620,15 @@ class DocWriter(object):
     def _render_node(self, node, output):
         namespace = self._transformer.namespace
 
-        node_kind = get_node_kind(node)
-        template_name = '%s/%s.tmpl' % (self._language, node_kind)
+        page_kind = get_node_kind(node)
+        template_name = '%s/%s.tmpl' % (self._language, page_kind)
         page_id = make_page_id(node)
 
         template = self._lookup.get_template(template_name)
         result = template.render(namespace=namespace,
                                  node=node,
                                  page_id=page_id,
-                                 page_style=node_kind,
+                                 page_kind=page_kind,
                                  formatter=self._formatter)
 
         output_file_name = os.path.join(os.path.abspath(output),

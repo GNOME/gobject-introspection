@@ -1,9 +1,9 @@
 <%inherit file="/base.tmpl"/>
 <%block name="info">
 % if node.parent is not None:
-    <link type="guide" xref="${namespace.name}.${node.parent.name}" group="${page_style}"/>
+    <link type="guide" xref="${namespace.name}.${node.parent.name}" group="${page_kind}"/>
 % else:
-    <link type="guide" xref="index" group="${page_style}"/>
+    <link type="guide" xref="index" group="${page_kind}"/>
 % endif
     <api:function>
       <api:returns>
