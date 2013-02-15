@@ -13,9 +13,22 @@
   <title>Regress.TestObj</title>
   
   <synopsis><code>
-from gi.repository import Regress
+const Regress = imports.gi.Regress;
 
-test_obj = Regress.TestObj(<link xref='Regress.TestObj-bare'>bare</link>=value, <link xref='Regress.TestObj-boxed'>boxed</link>=value, <link xref='Regress.TestObj-double'>double</link>=value, <link xref='Regress.TestObj-float'>float</link>=value, <link xref='Regress.TestObj-gtype'>gtype</link>=value, <link xref='Regress.TestObj-hash-table'>hash_table</link>=value, <link xref='Regress.TestObj-hash-table-old'>hash_table_old</link>=value, <link xref='Regress.TestObj-int'>int</link>=value, <link xref='Regress.TestObj-list'>list</link>=value, <link xref='Regress.TestObj-list-old'>list_old</link>=value, <link xref='Regress.TestObj-string'>string</link>=value)  </code></synopsis>
+let test_obj = Regress.TestObj({
+    <link xref='Regress.TestObj-bare'>bare</link>: value,
+    <link xref='Regress.TestObj-boxed'>boxed</link>: value,
+    <link xref='Regress.TestObj-double'>double</link>: value,
+    <link xref='Regress.TestObj-float'>float</link>: value,
+    <link xref='Regress.TestObj-gtype'>gtype</link>: value,
+    <link xref='Regress.TestObj-hash-table'>hash_table</link>: value,
+    <link xref='Regress.TestObj-hash-table-old'>hash_table_old</link>: value,
+    <link xref='Regress.TestObj-int'>int</link>: value,
+    <link xref='Regress.TestObj-list'>list</link>: value,
+    <link xref='Regress.TestObj-list-old'>list_old</link>: value,
+    <link xref='Regress.TestObj-string'>string</link>: value,
+});
+  </code></synopsis>
 
   
     

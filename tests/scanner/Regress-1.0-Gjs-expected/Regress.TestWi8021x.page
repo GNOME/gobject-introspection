@@ -13,9 +13,12 @@
   <title>Regress.TestWi8021x</title>
   
   <synopsis><code>
-from gi.repository import Regress
+const Regress = imports.gi.Regress;
 
-test_wi8021x = Regress.TestWi8021x(<link xref='Regress.TestWi8021x-testbool'>testbool</link>=value)  </code></synopsis>
+let test_wi8021x = Regress.TestWi8021x({
+    <link xref='Regress.TestWi8021x-testbool'>testbool</link>: value,
+});
+  </code></synopsis>
 
   
     

@@ -13,9 +13,11 @@
   <title>Regress.FooInterface</title>
   
   <synopsis><code>
-from gi.repository import Regress
+const Regress = imports.gi.Regress;
 
-foo_interface = Regress.FooInterface()  </code></synopsis>
+let foo_interface = Regress.FooInterface({
+});
+  </code></synopsis>
 
   
     

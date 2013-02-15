@@ -13,9 +13,11 @@
   <title>Regress.FooOtherObject</title>
   
   <synopsis><code>
-from gi.repository import Regress
+const Regress = imports.gi.Regress;
 
-foo_other_object = Regress.FooOtherObject()  </code></synopsis>
+let foo_other_object = Regress.FooOtherObject({
+});
+  </code></synopsis>
 
   
     

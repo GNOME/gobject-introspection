@@ -13,9 +13,11 @@
   <title>Regress.FooBuffer</title>
   
   <synopsis><code>
-from gi.repository import Regress
+const Regress = imports.gi.Regress;
 
-foo_buffer = Regress.FooBuffer()  </code></synopsis>
+let foo_buffer = Regress.FooBuffer({
+});
+  </code></synopsis>
 
   
     

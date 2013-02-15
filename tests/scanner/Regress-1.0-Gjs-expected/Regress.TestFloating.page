@@ -13,9 +13,11 @@
   <title>Regress.TestFloating</title>
   
   <synopsis><code>
-from gi.repository import Regress
+const Regress = imports.gi.Regress;
 
-test_floating = Regress.TestFloating()  </code></synopsis>
+let test_floating = Regress.TestFloating({
+});
+  </code></synopsis>
 
   
     

@@ -13,9 +13,11 @@
   <title>Regress.FooSubobject</title>
   
   <synopsis><code>
-from gi.repository import Regress
+const Regress = imports.gi.Regress;
 
-foo_subobject = Regress.FooSubobject()  </code></synopsis>
+let foo_subobject = Regress.FooSubobject({
+});
+  </code></synopsis>
 
   
     

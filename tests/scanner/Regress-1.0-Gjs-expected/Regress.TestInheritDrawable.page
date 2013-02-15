@@ -13,9 +13,11 @@
   <title>Regress.TestInheritDrawable</title>
   
   <synopsis><code>
-from gi.repository import Regress
+const Regress = imports.gi.Regress;
 
-test_inherit_drawable = Regress.TestInheritDrawable()  </code></synopsis>
+let test_inherit_drawable = Regress.TestInheritDrawable({
+});
+  </code></synopsis>
 
   
     

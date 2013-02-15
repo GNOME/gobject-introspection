@@ -13,9 +13,13 @@
   <title>Regress.FooObject</title>
   
   <synopsis><code>
-from gi.repository import Regress
+const Regress = imports.gi.Regress;
 
-foo_object = Regress.FooObject(<link xref='Regress.FooObject-hidden'>hidden</link>=value, <link xref='Regress.FooObject-string'>string</link>=value)  </code></synopsis>
+let foo_object = Regress.FooObject({
+    <link xref='Regress.FooObject-hidden'>hidden</link>: value,
+    <link xref='Regress.FooObject-string'>string</link>: value,
+});
+  </code></synopsis>
 
   
     

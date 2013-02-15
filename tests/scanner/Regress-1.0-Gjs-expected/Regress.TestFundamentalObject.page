@@ -13,9 +13,11 @@
   <title>Regress.TestFundamentalObject</title>
   
   <synopsis><code>
-from gi.repository import Regress
+const Regress = imports.gi.Regress;
 
-test_fundamental_object = Regress.TestFundamentalObject()  </code></synopsis>
+let test_fundamental_object = Regress.TestFundamentalObject({
+});
+  </code></synopsis>
 
   
     
