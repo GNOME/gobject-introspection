@@ -527,6 +527,17 @@ GIName.  It's possible for nodes to contain or point to other nodes."""
         self.name = name
         self.foreign = False
         self.file_positions = set()
+        self._parent = None
+
+    def _get_parent(self):
+        if self._parent is not None:
+            return self._parent
+        else:
+            return self.namespace
+
+    def _set_parent(self, value):
+        self._parent = value
+    parent = property(_get_parent, _set_parent)
 
     def create_type(self):
         """Create a Type object referencing this node."""
