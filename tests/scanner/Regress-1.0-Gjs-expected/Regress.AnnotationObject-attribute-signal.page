@@ -26,7 +26,7 @@ function callback(annotation_object, arg1:String, arg2:String, ):String;
 <terms>
 <item>
 <title><code>annotation_object</code></title>
-<p>instance of Regress.AnnotationObject that is emitting the signal</p>
+<p>instance of <link xref="Regress.AnnotationObject"/> that is emitting the signal</p>
 </item>
 <item>
 <title><code>arg1</code></title>

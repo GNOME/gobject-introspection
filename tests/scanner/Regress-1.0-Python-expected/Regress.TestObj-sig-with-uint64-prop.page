@@ -27,7 +27,7 @@ the introspection client langage.</p>
 <terms>
 <item>
 <title><code>test_obj</code></title>
-<p>instance of Regress.TestObj that is emitting the signal</p>
+<p>instance of <link xref="Regress.TestObj"/> that is emitting the signal</p>
 </item>
 <item>
 <title><code>i</code></title>

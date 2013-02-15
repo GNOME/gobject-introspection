@@ -26,7 +26,7 @@ function callback(test_obj, cr:cairo.Context, ):void;
 <terms>
 <item>
 <title><code>test_obj</code></title>
-<p>instance of Regress.TestObj that is emitting the signal</p>
+<p>instance of <link xref="Regress.TestObj"/> that is emitting the signal</p>
 </item>
 <item>
 <title><code>cr</code></title>

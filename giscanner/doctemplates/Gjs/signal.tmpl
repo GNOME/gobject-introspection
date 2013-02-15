@@ -16,7 +16,7 @@ ${arg.argname}:${formatter.format_type(arg.type)}, \
 <terms>
 <item>
 <title><code>${formatter.to_underscores(node.parent.name).lower()}</code></title>
-<p>instance of ${namespace.name}.${node.parent.name} that is emitting the signal</p>
+<p>instance of ${formatter.format_xref(node.parent)} that is emitting the signal</p>
 </item>
 % for arg in formatter.get_parameters(node):
 <item>

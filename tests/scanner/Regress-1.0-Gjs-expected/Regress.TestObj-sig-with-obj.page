@@ -27,7 +27,7 @@ Use with regress_test_obj_emit_sig_with_obj</p>
 <terms>
 <item>
 <title><code>test_obj</code></title>
-<p>instance of Regress.TestObj that is emitting the signal</p>
+<p>instance of <link xref="Regress.TestObj"/> that is emitting the signal</p>
 </item>
 <item>
 <title><code>obj</code></title>

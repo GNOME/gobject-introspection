@@ -28,7 +28,7 @@ it says it's pointer but it's actually a string.</p>
 <terms>
 <item>
 <title><code>annotation_object</code></title>
-<p>instance of Regress.AnnotationObject that is emitting the signal</p>
+<p>instance of <link xref="Regress.AnnotationObject"/> that is emitting the signal</p>
 </item>
 <item>
 <title><code>string</code></title>

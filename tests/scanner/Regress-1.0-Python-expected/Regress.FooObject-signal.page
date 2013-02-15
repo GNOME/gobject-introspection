@@ -26,7 +26,7 @@ def callback(foo_object, object, p0, user_param1, ...)
 <terms>
 <item>
 <title><code>foo_object</code></title>
-<p>instance of Regress.FooObject that is emitting the signal</p>
+<p>instance of <link xref="Regress.FooObject"/> that is emitting the signal</p>
 </item>
 <item>
 <title><code>object</code></title>
