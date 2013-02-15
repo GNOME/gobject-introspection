@@ -44,7 +44,7 @@ def callback(annotation_object, arg1, arg2, user_param1, ...)
 </item>
 <item>
 <title><code>Returns</code></title>
-<p>gchar* <p>the return value</p></p>
+<p><p>the return value</p></p>
 </item>
 </terms>
 
