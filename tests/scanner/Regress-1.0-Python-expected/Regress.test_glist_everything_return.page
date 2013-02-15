@@ -10,7 +10,7 @@
     <link type="guide" xref="index" group="function"/>
     <api:function>
       <api:returns>
-        <api:type>&lt;list&gt;</api:type>
+        <api:type>[unicode]</api:type>
       </api:returns>
       <api:name>regress_test_glist_everything_return</api:name>
     </api:function>
@@ -19,7 +19,7 @@
   <title>test_glist_everything_return</title>
   
 <synopsis><code mime="text/x-python">
-@returns(&lt;list&gt;)
+@returns([unicode])
 def test_glist_everything_return():
     # Python wrapper for regress_test_glist_everything_return()
 </code></synopsis>

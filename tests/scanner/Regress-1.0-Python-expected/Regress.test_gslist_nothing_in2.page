@@ -14,7 +14,7 @@
       </api:returns>
       <api:name>regress_test_gslist_nothing_in2</api:name>
       <api:arg>
-        <api:type>&lt;list&gt;</api:type>
+        <api:type>[unicode]</api:type>
         <api:name>in</api:name>
       </api:arg>
     </api:function>
@@ -23,7 +23,7 @@
   <title>test_gslist_nothing_in2</title>
   
 <synopsis><code mime="text/x-python">
-@accepts(<list>)
+@accepts([unicode])
 @returns(none)
 def test_gslist_nothing_in2(in):
     # Python wrapper for regress_test_gslist_nothing_in2()

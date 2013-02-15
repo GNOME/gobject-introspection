@@ -14,7 +14,7 @@
   <title>Regress.TestObj:list-old</title>
   
 <synopsis><code mime="text/x-python">
-"list-old"             <list>                : Read / Write
+"list-old"             [unicode]                : Read / Write
 </code></synopsis>
 
   

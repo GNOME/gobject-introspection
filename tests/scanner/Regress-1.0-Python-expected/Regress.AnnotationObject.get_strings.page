@@ -10,7 +10,7 @@
     <link type="guide" xref="Regress.AnnotationObject" group="method"/>
     <api:function>
       <api:returns>
-        <api:type>&lt;list&gt;</api:type>
+        <api:type>[unicode]</api:type>
       </api:returns>
       <api:name>regress_annotation_object_get_strings</api:name>
       <api:arg>
@@ -24,7 +24,7 @@
   
 <synopsis><code mime="text/x-python">
 @accepts(Regress.AnnotationObject)
-@returns(&lt;list&gt;)
+@returns([unicode])
 def get_strings(self):
     # Python wrapper for regress_annotation_object_get_strings()
 </code></synopsis>

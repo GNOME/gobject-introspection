@@ -14,7 +14,7 @@
   <title>Regress.AnnotationObject::list-signal</title>
   
 <synopsis><code mime="text/x-python">
-function callback(annotation_object, list:<list>, user_param1, ...):void;
+function callback(annotation_object, list:[String], user_param1, ...):void;
 </code></synopsis>
 
   

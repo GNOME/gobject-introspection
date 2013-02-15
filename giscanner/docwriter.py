@@ -448,7 +448,7 @@ class DocFormatterPython(DocFormatter):
         return fundamental_types.get(name, name)
 
     def format_type(self, type_):
-        if isinstance(type_, ast.Array):
+        if isinstance(type_, (ast.List, ast.Array)):
             return '[' + self.format_type(type_.element_type) + ']'
         elif isinstance(type_, ast.Map):
             return '{%s: %s}' % (self.format_type(type_.key_type),
@@ -517,7 +517,7 @@ class DocFormatterGjs(DocFormatter):
         return fundamental_types.get(name, name)
 
     def format_type(self, type_):
-        if isinstance(type_, ast.Array):
+        if isinstance(type_, (ast.List, ast.Array)):
             return '[' + self.format_type(type_.element_type) + ']'
         elif isinstance(type_, ast.Map):
             return '{%s: %s}' % (self.format_type(type_.key_type),

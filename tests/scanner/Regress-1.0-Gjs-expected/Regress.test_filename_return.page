@@ -10,7 +10,7 @@
     <link type="guide" xref="index" group="function"/>
     <api:function>
       <api:returns>
-        <api:type>&lt;list&gt;</api:type>
+        <api:type>[filename]</api:type>
       </api:returns>
       <api:name>regress_test_filename_return</api:name>
     </api:function>
@@ -19,7 +19,7 @@
   <title>test_filename_return</title>
   
 <synopsis><code mime="text/x-gjs">
-function test_filename_return():<list> {
+function test_filename_return():[filename] {
     // Gjs wrapper for regress_test_filename_return()
 }
 </code></synopsis>

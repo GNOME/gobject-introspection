@@ -14,7 +14,7 @@
       </api:returns>
       <api:name>regress_test_gslist_nothing_in</api:name>
       <api:arg>
-        <api:type>&lt;list&gt;</api:type>
+        <api:type>[String]</api:type>
         <api:name>in</api:name>
       </api:arg>
     </api:function>
@@ -23,7 +23,7 @@
   <title>test_gslist_nothing_in</title>
   
 <synopsis><code mime="text/x-gjs">
-function test_gslist_nothing_in(in:<list>):void {
+function test_gslist_nothing_in(in:[String]):void {
     // Gjs wrapper for regress_test_gslist_nothing_in()
 }
 </code></synopsis>
