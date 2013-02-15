@@ -391,6 +391,9 @@ class DocFormatterIntrospectableBase(DocFormatter):
         if isinstance(node, ast.Record) and node.is_gtype_struct_for is not None:
             return False
 
+        if not getattr(node, "introspectable", True):
+            return False
+
         return True
 
 class DocFormatterPython(DocFormatterIntrospectableBase):
