@@ -14,7 +14,7 @@
   <title>Regress.TestObj::sig-with-strv</title>
   
 <synopsis><code mime="text/x-python">
-function callback(test_obj, strs:[String], user_param1, ...):void;
+function callback(test_obj, strs:[String], ):void;
 </code></synopsis>
 
   
@@ -31,14 +31,6 @@ function callback(test_obj, strs:[String], user_param1, ...):void;
 <item>
 <title><code>strs</code></title>
 <p>strings</p>
-</item>
-<item>
-<title><code>user_param1</code></title>
-<p>first user parameter (if any) specified with the connect() method</p>
-</item>
-<item>
-<title><code>...</code></title>
-<p>additional user parameters (if any)</p>
 </item>
 </terms>
 

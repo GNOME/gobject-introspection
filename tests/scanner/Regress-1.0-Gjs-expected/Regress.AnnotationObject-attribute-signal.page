@@ -14,7 +14,7 @@
   <title>Regress.AnnotationObject::attribute-signal</title>
   
 <synopsis><code mime="text/x-python">
-function callback(annotation_object, arg1:String, arg2:String, user_param1, ...):String;
+function callback(annotation_object, arg1:String, arg2:String, ):String;
 </code></synopsis>
 
   
@@ -35,14 +35,6 @@ function callback(annotation_object, arg1:String, arg2:String, user_param1, ...)
 <item>
 <title><code>arg2</code></title>
 <p>another value</p>
-</item>
-<item>
-<title><code>user_param1</code></title>
-<p>first user parameter (if any) specified with the connect() method</p>
-</item>
-<item>
-<title><code>...</code></title>
-<p>additional user parameters (if any)</p>
 </item>
 <item>
 <title><code>Returns</code></title>

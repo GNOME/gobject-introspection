@@ -14,7 +14,7 @@
   <title>Regress.TestObj::sig-with-array-prop</title>
   
 <synopsis><code mime="text/x-python">
-function callback(test_obj, arr:[Number], user_param1, ...):void;
+function callback(test_obj, arr:[Number], ):void;
 </code></synopsis>
 
   
@@ -32,14 +32,6 @@ function callback(test_obj, arr:[Number], user_param1, ...):void;
 <item>
 <title><code>arr</code></title>
 <p>numbers</p>
-</item>
-<item>
-<title><code>user_param1</code></title>
-<p>first user parameter (if any) specified with the connect() method</p>
-</item>
-<item>
-<title><code>...</code></title>
-<p>additional user parameters (if any)</p>
 </item>
 </terms>
 
