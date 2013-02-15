@@ -41,8 +41,6 @@ def doc_main(args):
     options, args = parser.parse_args(args)
     if not options.output:
         raise SystemExit("missing output parameter")
-    if not os.path.isdir(options.output):
-        raise SystemExit("wrong output parameter: %s" % (options.output, ))
 
     if len(args) < 2:
         raise SystemExit("Need an input GIR filename")

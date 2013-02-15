@@ -593,6 +593,12 @@ class DocWriter(object):
                               output_encoding='utf-8')
 
     def write(self, output):
+        try:
+            os.makedirs(output)
+        except OSError:
+            # directory already made
+            pass
+
         nodes = [self._transformer.namespace]
         for node in self._transformer.namespace.itervalues():
             if isinstance(node, ast.Function) and node.moved_to is not None:
