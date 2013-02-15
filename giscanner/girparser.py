@@ -215,9 +215,9 @@ class GIRParser(object):
         else:
             parent_type = None
 
-        ctor_args = [node.attrib['name'],
-                     parent_type]
-        ctor_kwargs = {'gtype_name': node.attrib[_glibns('type-name')],
+        ctor_kwargs = {'name': node.attrib['name'],
+                       'parent': parent_type,
+                       'gtype_name': node.attrib[_glibns('type-name')],
                        'get_type': node.attrib[_glibns('get-type')],
                        'c_symbol_prefix': node.attrib.get(_cns('symbol-prefix')),
                        'ctype': node.attrib.get(_cns('type'))}
@@ -231,7 +231,7 @@ class GIRParser(object):
         else:
             raise AssertionError(node)
 
-        obj = klass(*ctor_args, **ctor_kwargs)
+        obj = klass(**ctor_kwargs)
         self._parse_generic_attribs(node, obj)
         type_struct = node.attrib.get(_glibns('type-struct'))
         if type_struct:
