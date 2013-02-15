@@ -18,7 +18,6 @@
 #
 
 import re
-import sys
 
 class SectionFile(object):
     def __init__(self, sections):

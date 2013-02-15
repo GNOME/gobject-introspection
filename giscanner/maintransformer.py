@@ -35,9 +35,7 @@ from .annotationparser import (OPT_ALLOW_NONE, OPT_ARRAY, OPT_ATTRIBUTE,
                                OPT_ARRAY_LENGTH, OPT_ARRAY_ZERO_TERMINATED,
                                OPT_CONSTRUCTOR, OPT_METHOD,
                                OPT_TRANSFER_NONE, OPT_TRANSFER_FLOATING)
-from .annotationparser import AnnotationParser
-from .transformer import TransformerException
-from .utils import to_underscores, to_underscores_noprefix
+from .utils import to_underscores_noprefix
 
 class MainTransformer(object):
 

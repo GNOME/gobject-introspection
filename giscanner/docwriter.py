@@ -219,7 +219,7 @@ class DocFormatter(object):
 
         try:
             prop = self._find_thing(type_node.properties, props['property_name'])
-        except (AttributeError, KeyError), e:
+        except (AttributeError, KeyError):
             return match
 
         return self.format_xref(prop)
@@ -231,7 +231,7 @@ class DocFormatter(object):
 
         try:
             signal = self._find_thing(type_node.signals, props['signal_name'])
-        except (AttributeError, KeyError), e:
+        except (AttributeError, KeyError):
             return match
 
         return self.format_xref(signal)
@@ -260,7 +260,7 @@ class DocFormatter(object):
     def _process_parameter(self, node, match, props):
         try:
             parameter = node.get_parameter(props['param_name'])
-        except (AttributeError, ValueError), e:
+        except (AttributeError, ValueError):
             return match
 
         return '<code>%s</code>' % (self.format_parameter_name(node, parameter), )
