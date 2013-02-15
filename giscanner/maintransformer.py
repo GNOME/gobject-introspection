@@ -108,16 +108,13 @@ class MainTransformer(object):
     def _pass_fixup_hidden_fields(self, node, chain):
         """Hide all callbacks starting with _; the typical
 usage is void (*_gtk_reserved1)(void);"""
-        if not isinstance(node, (ast.Class, ast.Interface,
-                                 ast.Record, ast.Union)):
-            return True
-        for field in node.fields:
-            if field is None:
-                continue
-            if (field.name.startswith('_')
+        if isinstance(node, (ast.Class, ast.Interface, ast.Record, ast.Union)):
+            for field in node.fields:
+                if (field
+                and field.name.startswith('_')
                 and field.anonymous_node is not None
                 and isinstance(field.anonymous_node, ast.Callback)):
-                field.introspectable = False
+                    field.introspectable = False
         return True
 
     def _get_validate_parameter_name(self, parent, param_name, origin):
