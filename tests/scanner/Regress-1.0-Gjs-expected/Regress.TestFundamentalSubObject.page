@@ -15,8 +15,7 @@
   <synopsis><code>
 const Regress = imports.gi.Regress;
 
-let test_fundamental_sub_object = Regress.TestFundamentalSubObject({
-});
+let test_fundamental_sub_object = Regress.TestFundamentalSubObject();
   </code></synopsis>
 
   

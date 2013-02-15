@@ -15,8 +15,7 @@
   <synopsis><code>
 const Regress = imports.gi.Regress;
 
-let foo_buffer = Regress.FooBuffer({
-});
+let foo_buffer = Regress.FooBuffer();
   </code></synopsis>
 
   

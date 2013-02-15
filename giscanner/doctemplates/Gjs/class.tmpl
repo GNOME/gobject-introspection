@@ -3,12 +3,16 @@
   <synopsis><code>
 const ${namespace.name} = imports.gi.${namespace.name};
 
-let ${formatter.to_underscores(node.name).lower()} = ${namespace.name}.${node.name}({
+let ${formatter.to_underscores(node.name).lower()} = ${namespace.name}.${node.name}(\
+% if len(node.properties) > 0:
+{
 % for ix, property_ in enumerate(node.properties):
 % if property_.construct or property_.construct_only or property_.writable:
     <link xref='${namespace.name}.${node.name}-${property_.name}'>${property_.name.replace('-', '_')}</link>: value,
 % endif
 % endfor
-});
+}\
+% endif
+);
   </code></synopsis>
 </%block>

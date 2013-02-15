@@ -15,8 +15,7 @@
   <synopsis><code>
 const Regress = imports.gi.Regress;
 
-let test_inherit_drawable = Regress.TestInheritDrawable({
-});
+let test_inherit_drawable = Regress.TestInheritDrawable();
   </code></synopsis>
 
   

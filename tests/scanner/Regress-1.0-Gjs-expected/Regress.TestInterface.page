@@ -15,8 +15,7 @@
   <synopsis><code>
 const Regress = imports.gi.Regress;
 
-let test_interface = Regress.TestInterface({
-});
+let test_interface = Regress.TestInterface();
   </code></synopsis>
 
   

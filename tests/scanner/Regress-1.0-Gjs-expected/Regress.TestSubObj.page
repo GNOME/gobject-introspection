@@ -15,8 +15,7 @@
   <synopsis><code>
 const Regress = imports.gi.Regress;
 
-let test_sub_obj = Regress.TestSubObj({
-});
+let test_sub_obj = Regress.TestSubObj();
   </code></synopsis>
 
   

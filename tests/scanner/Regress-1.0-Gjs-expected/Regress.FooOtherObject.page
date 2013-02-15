@@ -15,8 +15,7 @@
   <synopsis><code>
 const Regress = imports.gi.Regress;
 
-let foo_other_object = Regress.FooOtherObject({
-});
+let foo_other_object = Regress.FooOtherObject();
   </code></synopsis>
 
   
