@@ -313,12 +313,13 @@ class DocFormatter(object):
         else:
             return make_page_id(node)
 
-    def format_xref(self, node):
+    def format_xref(self, node, **attrdict):
         if isinstance(node, ast.Member):
             # Enum/BitField members are linked to the main enum page.
-            return self.format_xref(node.parent) + '.' + node.name
+            return self.format_xref(node.parent, **attrdict) + '.' + node.name
         else:
-            return xmlwriter.build_xml_tag('link', [('xref', make_page_id(node))])
+            attrs = [('xref', make_page_id(node))] + attrdict.items()
+            return xmlwriter.build_xml_tag('link', attrs)
 
     def format_property_flags(self, property_, construct_only=False):
         flags = []
