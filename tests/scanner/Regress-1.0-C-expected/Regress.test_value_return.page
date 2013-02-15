@@ -32,12 +32,16 @@ const GValue* regress_test_value_return (int i);
   
   
   
-<dl>
-<dt><p>i :</p></dt>
-<dd><p>an int</p></dd>
-<dt><p>Returns :</p></dt>
-<dd><p>the int wrapped in a GValue.</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>i</code></title>
+<p>an int</p>
+</item>
+<item>
+<title><code>Returns</code></title>
+<p>the int wrapped in a GValue.</p>
+</item>
+</terms>
 
   
   

@@ -34,10 +34,12 @@ function test_cairo_surface_none_in(surface:cairo.Surface):void {
   
   
   
-<dl>
-<dt><p>surface :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>surface</code></title>
+
+</item>
+</terms>
 
   
   

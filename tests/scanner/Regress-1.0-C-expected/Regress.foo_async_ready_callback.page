@@ -42,16 +42,24 @@ void regress_foo_async_ready_callback (GCancellable* cancellable,
   
   
   
-<dl>
-<dt><p>cancellable :</p></dt>
-<dd></dd>
-<dt><p>callback :</p></dt>
-<dd></dd>
-<dt><p>user_data :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>cancellable</code></title>
+
+</item>
+<item>
+<title><code>callback</code></title>
+
+</item>
+<item>
+<title><code>user_data</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

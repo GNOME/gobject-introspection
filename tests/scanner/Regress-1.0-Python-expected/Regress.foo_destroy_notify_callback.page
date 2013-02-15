@@ -43,14 +43,20 @@ def foo_destroy_notify_callback(callback, data, destroy):
   
   
   
-<dl>
-<dt><p>callback :</p></dt>
-<dd></dd>
-<dt><p>data :</p></dt>
-<dd></dd>
-<dt><p>destroy :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>callback</code></title>
+
+</item>
+<item>
+<title><code>data</code></title>
+
+</item>
+<item>
+<title><code>destroy</code></title>
+
+</item>
+</terms>
 
   
   

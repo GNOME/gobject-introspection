@@ -35,12 +35,16 @@ def test_value_return(i):
   
   
   
-<dl>
-<dt><p>i :</p></dt>
-<dd><p>an int</p></dd>
-<dt><p>Returns :</p></dt>
-<dd><p>the int wrapped in a GValue.</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>i</code></title>
+<p>an int</p>
+</item>
+<item>
+<title><code>Returns</code></title>
+{formatter.format(node, node.retval.doc)}
+</item>
+</terms>
 
   
   

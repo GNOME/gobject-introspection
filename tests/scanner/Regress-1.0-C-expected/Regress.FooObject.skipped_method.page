@@ -32,12 +32,16 @@ void regress_foo_object_skipped_method (RegressFooObject* object);
   
   
   
-<dl>
-<dt><p>object :</p></dt>
-<dd><p>obj</p></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>object</code></title>
+<p>obj</p>
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

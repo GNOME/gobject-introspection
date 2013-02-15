@@ -34,12 +34,16 @@ function inout3(inoutarg:Number):Number {
   
   
   
-<dl>
-<dt><p>inoutarg :</p></dt>
-<dd><p>This is an argument test</p></dd>
-<dt><p>Returns :</p></dt>
-<dd><p>an int</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>inoutarg</code></title>
+<p>This is an argument test</p>
+</item>
+<item>
+<title><code>Returns</code></title>
+<p>an int</p>
+</item>
+</terms>
 
   
   

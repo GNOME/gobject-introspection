@@ -37,14 +37,20 @@ RegressTestBoxedD* regress_test_boxed_d_new (const char* a_string,
   
   
   
-<dl>
-<dt><p>a_string :</p></dt>
-<dd></dd>
-<dt><p>a_int :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>a_string</code></title>
+
+</item>
+<item>
+<title><code>a_int</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

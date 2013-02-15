@@ -38,12 +38,16 @@ function various(data:gpointer, some_type:GType):void {
   
   
   
-<dl>
-<dt><p>data :</p></dt>
-<dd></dd>
-<dt><p>some_type :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>data</code></title>
+
+</item>
+<item>
+<title><code>some_type</code></title>
+
+</item>
+</terms>
 
   
   

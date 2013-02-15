@@ -23,14 +23,20 @@ void allow_none_vfunc (RegressTestObj* obj,
   
   
   
-<dl>
-<dt><p>obj :</p></dt>
-<dd></dd>
-<dt><p>two :</p></dt>
-<dd><p>Another object</p></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>obj</code></title>
+
+</item>
+<item>
+<title><code>two</code></title>
+<p>Another object</p>
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

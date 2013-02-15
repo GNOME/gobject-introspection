@@ -35,10 +35,12 @@ def static_method(x):
   
   
   
-<dl>
-<dt><p>x :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>x</code></title>
+
+</item>
+</terms>
 
   
   

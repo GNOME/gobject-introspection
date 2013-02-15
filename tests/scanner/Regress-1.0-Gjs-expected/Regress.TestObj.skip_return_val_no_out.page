@@ -35,12 +35,16 @@ raise an error.</p>
   
   
   
-<dl>
-<dt><p>a :</p></dt>
-<dd><p>Parameter.</p></dd>
-<dt><p>Returns :</p></dt>
-<dd><p><code>true</code> if the call succeeds, <code>false</code> if @error is set.</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>a</code></title>
+<p>Parameter.</p>
+</item>
+<item>
+<title><code>Returns</code></title>
+<p><code>true</code> if the call succeeds, <code>false</code> if @error is set.</p>
+</item>
+</terms>
 
   
   

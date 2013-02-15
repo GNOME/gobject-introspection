@@ -37,14 +37,20 @@ gboolean regress_annotation_object_string_out (RegressAnnotationObject* object,
   
   
   
-<dl>
-<dt><p>object :</p></dt>
-<dd><p>a <link xref="Regress.AnnotationObject"/></p></dd>
-<dt><p>str_out :</p></dt>
-<dd><p>string return value</p></dd>
-<dt><p>Returns :</p></dt>
-<dd><p>some boolean</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>object</code></title>
+<p>a <link xref="Regress.AnnotationObject"/></p>
+</item>
+<item>
+<title><code>str_out</code></title>
+<p>string return value</p>
+</item>
+<item>
+<title><code>Returns</code></title>
+<p>some boolean</p>
+</item>
+</terms>
 
   
   

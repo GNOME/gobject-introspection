@@ -30,8 +30,8 @@ def annotation_space_after_comment_bug631690():
   
   
   
-<dl>
-</dl>
+<terms>
+</terms>
 
   
   

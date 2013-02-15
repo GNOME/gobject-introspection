@@ -39,14 +39,20 @@ def virtual_method(self, first_param):
   
   
   
-<dl>
-<dt><p>self :</p></dt>
-<dd></dd>
-<dt><p>first_param :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>self</code></title>
+
+</item>
+<item>
+<title><code>first_param</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+{formatter.format(node, node.retval.doc)}
+</item>
+</terms>
 
   
   

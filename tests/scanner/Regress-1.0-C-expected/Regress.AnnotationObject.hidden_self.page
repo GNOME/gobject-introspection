@@ -32,12 +32,16 @@ void regress_annotation_object_hidden_self (gpointer object);
   
   
   
-<dl>
-<dt><p>object :</p></dt>
-<dd><p>A <link xref="Regress.AnnotationObject"/></p></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>object</code></title>
+<p>A <link xref="Regress.AnnotationObject"/></p>
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

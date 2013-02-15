@@ -41,14 +41,20 @@ case.</p>
   
   
   
-<dl>
-<dt><p>self :</p></dt>
-<dd><p>A <link xref="Regress.TestObj"/></p></dd>
-<dt><p>somestr :</p></dt>
-<dd><p>Meaningless string</p></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>self</code></title>
+<p>A <link xref="Regress.TestObj"/></p>
+</item>
+<item>
+<title><code>somestr</code></title>
+<p>Meaningless string</p>
+</item>
+<item>
+<title><code>Returns</code></title>
+{formatter.format(node, node.retval.doc)}
+</item>
+</terms>
 
   
   

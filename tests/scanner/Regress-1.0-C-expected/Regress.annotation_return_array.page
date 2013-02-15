@@ -32,12 +32,16 @@ char** regress_annotation_return_array (int* length);
   
   
   
-<dl>
-<dt><p>length :</p></dt>
-<dd><p>Number of return values</p></dd>
-<dt><p>Returns :</p></dt>
-<dd><p>The return value</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>length</code></title>
+<p>Number of return values</p>
+</item>
+<item>
+<title><code>Returns</code></title>
+<p>The return value</p>
+</item>
+</terms>
 
   
   

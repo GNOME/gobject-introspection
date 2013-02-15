@@ -32,12 +32,16 @@ void regress_test_utf8_inout (char** inout);
   
   
   
-<dl>
-<dt><p>inout :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>inout</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

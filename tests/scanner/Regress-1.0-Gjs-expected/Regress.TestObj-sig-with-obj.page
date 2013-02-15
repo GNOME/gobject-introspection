@@ -24,16 +24,24 @@ Use with regress_test_obj_emit_sig_with_obj</p>
   
   
   
-<dl>
-<dt><p>test_obj :</p></dt>
-<dd><p>instance of Regress.TestObj that is emitting the signal</p></dd>
-<dt><p>obj :</p></dt>
-<dd><p>A newly created RegressTestObj</p></dd>
-<dt><p>user_param1 :</p></dt>
-<dd><p>first user parameter (if any) specified with the connect() method</p></dd>
-<dt><p>... :</p></dt>
-<dd><p>additional user parameters (if any)</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>test_obj</code></title>
+<p>instance of Regress.TestObj that is emitting the signal</p>
+</item>
+<item>
+<title><code>obj</code></title>
+<p>A newly created RegressTestObj</p>
+</item>
+<item>
+<title><code>user_param1</code></title>
+<p>first user parameter (if any) specified with the connect() method</p>
+</item>
+<item>
+<title><code>...</code></title>
+<p>additional user parameters (if any)</p>
+</item>
+</terms>
 
   
   

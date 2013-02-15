@@ -28,10 +28,12 @@ GObject* regress_annotation_transfer_floating (void);
   
   
   
-<dl>
-<dt><p>Returns :</p></dt>
-<dd><p>A floating object</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>Returns</code></title>
+<p>A floating object</p>
+</item>
+</terms>
 
   
   

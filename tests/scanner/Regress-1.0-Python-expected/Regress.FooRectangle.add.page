@@ -39,12 +39,16 @@ def add(self, r2):
   
   
   
-<dl>
-<dt><p>self :</p></dt>
-<dd><p>add to this rect</p></dd>
-<dt><p>r2 :</p></dt>
-<dd><p>source rectangle</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>self</code></title>
+<p>add to this rect</p>
+</item>
+<item>
+<title><code>r2</code></title>
+<p>source rectangle</p>
+</item>
+</terms>
 
   
   

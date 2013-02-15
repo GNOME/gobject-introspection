@@ -47,16 +47,24 @@ def foo_method_external_references(object, e, f, s):
   
   
   
-<dl>
-<dt><p>object :</p></dt>
-<dd></dd>
-<dt><p>e :</p></dt>
-<dd></dd>
-<dt><p>f :</p></dt>
-<dd></dd>
-<dt><p>s :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>object</code></title>
+
+</item>
+<item>
+<title><code>e</code></title>
+
+</item>
+<item>
+<title><code>f</code></title>
+
+</item>
+<item>
+<title><code>s</code></title>
+
+</item>
+</terms>
 
   
   

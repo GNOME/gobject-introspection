@@ -34,10 +34,12 @@ function compute_sum_n(nums:[Number]):void {
   
   
   
-<dl>
-<dt><p>nums :</p></dt>
-<dd><p>Sequence of numbers that are zero-terminated</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>nums</code></title>
+<p>Sequence of numbers that are zero-terminated</p>
+</item>
+</terms>
 
   
   

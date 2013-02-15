@@ -37,14 +37,20 @@ void regress_test_inherit_drawable_do_foo_maybe_throw (RegressTestInheritDrawabl
   
   
   
-<dl>
-<dt><p>drawable :</p></dt>
-<dd></dd>
-<dt><p>x :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>drawable</code></title>
+
+</item>
+<item>
+<title><code>x</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

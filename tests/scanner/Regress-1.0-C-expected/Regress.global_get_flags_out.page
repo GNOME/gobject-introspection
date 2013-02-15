@@ -32,12 +32,16 @@ void regress_global_get_flags_out (RegressTestFlags* v);
   
   
   
-<dl>
-<dt><p>v :</p></dt>
-<dd><p>A flags value</p></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>v</code></title>
+<p>A flags value</p>
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

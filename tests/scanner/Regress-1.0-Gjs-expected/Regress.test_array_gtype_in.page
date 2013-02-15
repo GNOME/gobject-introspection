@@ -34,12 +34,16 @@ function test_array_gtype_in(types:[GType]):String {
   
   
   
-<dl>
-<dt><p>types :</p></dt>
-<dd><p>List of types</p></dd>
-<dt><p>Returns :</p></dt>
-<dd><p>string representation of provided types</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>types</code></title>
+<p>List of types</p>
+</item>
+<item>
+<title><code>Returns</code></title>
+<p>string representation of provided types</p>
+</item>
+</terms>
 
   
   

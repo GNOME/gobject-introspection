@@ -37,14 +37,20 @@ void regress_foo_rectangle_add (RegressFooRectangle* r1,
   
   
   
-<dl>
-<dt><p>r1 :</p></dt>
-<dd><p>add to this rect</p></dd>
-<dt><p>r2 :</p></dt>
-<dd><p>source rectangle</p></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>r1</code></title>
+<p>add to this rect</p>
+</item>
+<item>
+<title><code>r2</code></title>
+<p>source rectangle</p>
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

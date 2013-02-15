@@ -35,10 +35,12 @@ def test_cairo_surface_none_in(surface):
   
   
   
-<dl>
-<dt><p>surface :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>surface</code></title>
+
+</item>
+</terms>
 
   
   

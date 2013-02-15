@@ -35,10 +35,12 @@ type.</p>
   
   
   
-<dl>
-<dt><p>data :</p></dt>
-<dd><p>The data</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>data</code></title>
+<p>The data</p>
+</item>
+</terms>
 
   
   

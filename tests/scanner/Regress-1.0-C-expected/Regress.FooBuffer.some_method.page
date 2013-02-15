@@ -32,12 +32,16 @@ void regress_foo_buffer_some_method (RegressFooBuffer* buffer);
   
   
   
-<dl>
-<dt><p>buffer :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>buffer</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

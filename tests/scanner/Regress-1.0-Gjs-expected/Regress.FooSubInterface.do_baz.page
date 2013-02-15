@@ -34,10 +34,12 @@ function do_baz(callback:GObject.Callback):void {
   
   
   
-<dl>
-<dt><p>callback :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>callback</code></title>
+
+</item>
+</terms>
 
   
   

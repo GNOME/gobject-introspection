@@ -43,14 +43,20 @@ def set_data(self, data, length):
   
   
   
-<dl>
-<dt><p>self :</p></dt>
-<dd><p>a <link xref="Regress.AnnotationObject"/></p></dd>
-<dt><p>data :</p></dt>
-<dd><p>The data</p></dd>
-<dt><p>length :</p></dt>
-<dd><p>Length of the data</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>self</code></title>
+<p>a <link xref="Regress.AnnotationObject"/></p>
+</item>
+<item>
+<title><code>data</code></title>
+<p>The data</p>
+</item>
+<item>
+<title><code>length</code></title>
+<p>Length of the data</p>
+</item>
+</terms>
 
   
   

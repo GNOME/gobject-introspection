@@ -30,10 +30,12 @@ def test_utf8_const_return():
   
   
   
-<dl>
-<dt><p>Returns :</p></dt>
-<dd><p>UTF-8 string</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>Returns</code></title>
+{formatter.format(node, node.retval.doc)}
+</item>
+</terms>
 
   
   

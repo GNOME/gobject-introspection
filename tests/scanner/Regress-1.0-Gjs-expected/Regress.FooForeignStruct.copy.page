@@ -30,10 +30,12 @@ function copy():Regress.FooForeignStruct {
   
   
   
-<dl>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

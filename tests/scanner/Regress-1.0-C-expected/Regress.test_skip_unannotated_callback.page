@@ -33,12 +33,16 @@ https://bugzilla.gnome.org/show_bug.cgi?id=685399</p>
   
   
   
-<dl>
-<dt><p>callback :</p></dt>
-<dd><p>No annotation here</p></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>callback</code></title>
+<p>No annotation here</p>
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

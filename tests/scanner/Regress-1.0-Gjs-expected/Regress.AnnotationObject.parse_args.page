@@ -34,10 +34,12 @@ function parse_args(argv:[String]):void {
   
   
   
-<dl>
-<dt><p>argv :</p></dt>
-<dd><p>Argument vector</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>argv</code></title>
+<p>Argument vector</p>
+</item>
+</terms>
 
   
   

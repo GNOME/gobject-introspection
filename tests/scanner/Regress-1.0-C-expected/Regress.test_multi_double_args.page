@@ -42,16 +42,24 @@ void regress_test_multi_double_args (gdouble in,
   
   
   
-<dl>
-<dt><p>in :</p></dt>
-<dd></dd>
-<dt><p>one :</p></dt>
-<dd></dd>
-<dt><p>two :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>in</code></title>
+
+</item>
+<item>
+<title><code>one</code></title>
+
+</item>
+<item>
+<title><code>two</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

@@ -42,16 +42,24 @@ void regress_foo_sub_interface_do_baz (RegressFooSubInterface* self,
   
   
   
-<dl>
-<dt><p>self :</p></dt>
-<dd></dd>
-<dt><p>callback :</p></dt>
-<dd></dd>
-<dt><p>user_data :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>self</code></title>
+
+</item>
+<item>
+<title><code>callback</code></title>
+
+</item>
+<item>
+<title><code>user_data</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

@@ -34,10 +34,12 @@ function test_array_int_inout(ints:[Number]):void {
   
   
   
-<dl>
-<dt><p>ints :</p></dt>
-<dd><p>a list of integers whose items will be increased by 1, except the first that will be dropped</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>ints</code></title>
+<p>a list of integers whose items will be increased by 1, except the first that will be dropped</p>
+</item>
+</terms>
 
   
   

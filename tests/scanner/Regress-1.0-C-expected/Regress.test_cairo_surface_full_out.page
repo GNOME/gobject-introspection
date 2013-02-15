@@ -32,12 +32,16 @@ void regress_test_cairo_surface_full_out (cairo_surface_t** surface);
   
   
   
-<dl>
-<dt><p>surface :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>surface</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

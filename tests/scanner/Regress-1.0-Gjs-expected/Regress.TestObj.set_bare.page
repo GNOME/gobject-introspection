@@ -34,10 +34,12 @@ function set_bare(bare:GObject.Object):void {
   
   
   
-<dl>
-<dt><p>bare :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>bare</code></title>
+
+</item>
+</terms>
 
   
   

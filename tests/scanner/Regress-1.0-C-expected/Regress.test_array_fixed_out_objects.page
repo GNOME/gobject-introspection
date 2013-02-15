@@ -32,12 +32,16 @@ void regress_test_array_fixed_out_objects (RegressTestObj*** objs);
   
   
   
-<dl>
-<dt><p>objs :</p></dt>
-<dd><p>An array of <link xref="Regress.TestObj"/></p></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>objs</code></title>
+<p>An array of <link xref="Regress.TestObj"/></p>
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

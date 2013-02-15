@@ -30,10 +30,12 @@ def annotation_return_filename():
   
   
   
-<dl>
-<dt><p>Returns :</p></dt>
-<dd><p>An annotated filename</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>Returns</code></title>
+{formatter.format(node, node.retval.doc)}
+</item>
+</terms>
 
   
   

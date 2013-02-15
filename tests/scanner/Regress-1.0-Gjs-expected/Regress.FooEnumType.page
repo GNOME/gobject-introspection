@@ -19,14 +19,20 @@
   
   
   
-<dl>
-<dt><p>FooEnumType.ALPHA :</p></dt>
-<dd></dd>
-<dt><p>FooEnumType.BETA :</p></dt>
-<dd></dd>
-<dt><p>FooEnumType.DELTA :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>FooEnumType.ALPHA</code></title>
+
+</item>
+<item>
+<title><code>FooEnumType.BETA</code></title>
+
+</item>
+<item>
+<title><code>FooEnumType.DELTA</code></title>
+
+</item>
+</terms>
 
   
   

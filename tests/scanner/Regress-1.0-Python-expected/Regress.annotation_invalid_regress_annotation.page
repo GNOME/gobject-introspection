@@ -35,10 +35,12 @@ def annotation_invalid_regress_annotation(foo):
   
   
   
-<dl>
-<dt><p>foo :</p></dt>
-<dd><p>some text (e.g. example) or else</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>foo</code></title>
+<p>some text (e.g. example) or else</p>
+</item>
+</terms>
 
   
   

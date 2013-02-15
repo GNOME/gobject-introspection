@@ -23,10 +23,12 @@ function vfunc_allow_none_vfunc(two:Regress.TestObj):void {
   
   
   
-<dl>
-<dt><p>two :</p></dt>
-<dd><p>Another object</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>two</code></title>
+<p>Another object</p>
+</item>
+</terms>
 
   
   

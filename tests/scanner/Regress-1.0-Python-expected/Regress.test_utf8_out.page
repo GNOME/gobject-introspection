@@ -35,10 +35,12 @@ def test_utf8_out(out):
   
   
   
-<dl>
-<dt><p>out :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>out</code></title>
+
+</item>
+</terms>
 
   
   

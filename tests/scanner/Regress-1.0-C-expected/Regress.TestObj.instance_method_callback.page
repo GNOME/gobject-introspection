@@ -37,14 +37,20 @@ void regress_test_obj_instance_method_callback (RegressTestObj* obj,
   
   
   
-<dl>
-<dt><p>obj :</p></dt>
-<dd></dd>
-<dt><p>callback :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>obj</code></title>
+
+</item>
+<item>
+<title><code>callback</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

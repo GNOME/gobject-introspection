@@ -35,10 +35,12 @@ def introspectable_via_alias(data):
   
   
   
-<dl>
-<dt><p>data :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>data</code></title>
+
+</item>
+</terms>
 
   
   

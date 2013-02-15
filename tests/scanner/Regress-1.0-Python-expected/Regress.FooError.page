@@ -19,14 +19,20 @@
   
   
   
-<dl>
-<dt><p>FooError.GOOD :</p></dt>
-<dd></dd>
-<dt><p>FooError.BAD :</p></dt>
-<dd></dd>
-<dt><p>FooError.UGLY :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>FooError.GOOD</code></title>
+
+</item>
+<item>
+<title><code>FooError.BAD</code></title>
+
+</item>
+<item>
+<title><code>FooError.UGLY</code></title>
+
+</item>
+</terms>
 
   
   

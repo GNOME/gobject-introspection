@@ -62,24 +62,40 @@ void regress_test_obj_torture_signature_0 (RegressTestObj* obj,
   
   
   
-<dl>
-<dt><p>obj :</p></dt>
-<dd><p>A <link xref="Regress.TestObj"/></p></dd>
-<dt><p>x :</p></dt>
-<dd></dd>
-<dt><p>y :</p></dt>
-<dd></dd>
-<dt><p>z :</p></dt>
-<dd></dd>
-<dt><p>foo :</p></dt>
-<dd></dd>
-<dt><p>q :</p></dt>
-<dd></dd>
-<dt><p>m :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>obj</code></title>
+<p>A <link xref="Regress.TestObj"/></p>
+</item>
+<item>
+<title><code>x</code></title>
+
+</item>
+<item>
+<title><code>y</code></title>
+
+</item>
+<item>
+<title><code>z</code></title>
+
+</item>
+<item>
+<title><code>foo</code></title>
+
+</item>
+<item>
+<title><code>q</code></title>
+
+</item>
+<item>
+<title><code>m</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

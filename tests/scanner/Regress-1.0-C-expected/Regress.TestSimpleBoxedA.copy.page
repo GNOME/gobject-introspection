@@ -32,12 +32,16 @@ RegressTestSimpleBoxedA* regress_test_simple_boxed_a_copy (RegressTestSimpleBoxe
   
   
   
-<dl>
-<dt><p>a :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>a</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

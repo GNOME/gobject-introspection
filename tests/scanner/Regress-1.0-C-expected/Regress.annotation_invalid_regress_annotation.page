@@ -32,12 +32,16 @@ void regress_annotation_invalid_regress_annotation (int foo);
   
   
   
-<dl>
-<dt><p>foo :</p></dt>
-<dd><p>some text (e.g. example) or else</p></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>foo</code></title>
+<p>some text (e.g. example) or else</p>
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

@@ -32,12 +32,16 @@ RegressFooForeignStruct* regress_foo_foreign_struct_copy (RegressFooForeignStruc
   
   
   
-<dl>
-<dt><p>original :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>original</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

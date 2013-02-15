@@ -23,12 +23,16 @@ function vfunc_virtual_method(first_param:Number):Boolean {
   
   
   
-<dl>
-<dt><p>first_param :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>first_param</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

@@ -34,10 +34,12 @@ function add(b2:Regress.FooBRect):void {
   
   
   
-<dl>
-<dt><p>b2 :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>b2</code></title>
+
+</item>
+</terms>
 
   
   

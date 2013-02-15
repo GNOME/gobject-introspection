@@ -39,14 +39,20 @@ def equals(self, other):
   
   
   
-<dl>
-<dt><p>self :</p></dt>
-<dd></dd>
-<dt><p>other :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>self</code></title>
+
+</item>
+<item>
+<title><code>other</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+{formatter.format(node, node.retval.doc)}
+</item>
+</terms>
 
   
   

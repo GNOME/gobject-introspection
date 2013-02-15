@@ -63,26 +63,44 @@ def skip_param(self, a, out_b, c, inout_d, out_sum, num1, num2):
   
   
   
-<dl>
-<dt><p>self :</p></dt>
-<dd><p>A <link xref="Regress.TestObj"/>.</p></dd>
-<dt><p>a :</p></dt>
-<dd><p>Parameter.</p></dd>
-<dt><p>out_b :</p></dt>
-<dd><p>Return value.</p></dd>
-<dt><p>c :</p></dt>
-<dd><p>Other parameter.</p></dd>
-<dt><p>inout_d :</p></dt>
-<dd><p>Will be incremented.</p></dd>
-<dt><p>out_sum :</p></dt>
-<dd><p>Return value.</p></dd>
-<dt><p>num1 :</p></dt>
-<dd><p>Number.</p></dd>
-<dt><p>num2 :</p></dt>
-<dd><p>Number.</p></dd>
-<dt><p>Returns :</p></dt>
-<dd><p><code>True</code> if the call succeeds, <code>False</code> if @error is set.</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>self</code></title>
+<p>A <link xref="Regress.TestObj"/>.</p>
+</item>
+<item>
+<title><code>a</code></title>
+<p>Parameter.</p>
+</item>
+<item>
+<title><code>out_b</code></title>
+<p>Return value.</p>
+</item>
+<item>
+<title><code>c</code></title>
+<p>Other parameter.</p>
+</item>
+<item>
+<title><code>inout_d</code></title>
+<p>Will be incremented.</p>
+</item>
+<item>
+<title><code>out_sum</code></title>
+<p>Return value.</p>
+</item>
+<item>
+<title><code>num1</code></title>
+<p>Number.</p>
+</item>
+<item>
+<title><code>num2</code></title>
+<p>Number.</p>
+</item>
+<item>
+<title><code>Returns</code></title>
+{formatter.format(node, node.retval.doc)}
+</item>
+</terms>
 
   
   

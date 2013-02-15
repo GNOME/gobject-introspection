@@ -32,12 +32,16 @@ void regress_foo_boxed_method (RegressFooBoxed* boxed);
   
   
   
-<dl>
-<dt><p>boxed :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>boxed</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

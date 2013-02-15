@@ -30,10 +30,12 @@ function calleesowns():Number {
   
   
   
-<dl>
-<dt><p>Returns :</p></dt>
-<dd><p>an int</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>Returns</code></title>
+<p>an int</p>
+</item>
+</terms>
 
   
   

@@ -39,12 +39,16 @@ libgnome-keyring.</p>
   
   
   
-<dl>
-<dt><p>foo :</p></dt>
-<dd><p>some int</p></dd>
-<dt><p>attributes :</p></dt>
-<dd><p>list of attributes</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>foo</code></title>
+<p>some int</p>
+</item>
+<item>
+<title><code>attributes</code></title>
+<p>list of attributes</p>
+</item>
+</terms>
 
   
   

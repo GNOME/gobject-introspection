@@ -37,14 +37,20 @@ RegressTestBoxedB* regress_test_boxed_b_new (gint8 some_int8,
   
   
   
-<dl>
-<dt><p>some_int8 :</p></dt>
-<dd></dd>
-<dt><p>some_long :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>some_int8</code></title>
+
+</item>
+<item>
+<title><code>some_long</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

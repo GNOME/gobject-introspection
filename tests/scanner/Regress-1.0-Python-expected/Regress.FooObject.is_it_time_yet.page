@@ -39,12 +39,16 @@ def is_it_time_yet(self, time):
   
   
   
-<dl>
-<dt><p>self :</p></dt>
-<dd></dd>
-<dt><p>time :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>self</code></title>
+
+</item>
+<item>
+<title><code>time</code></title>
+
+</item>
+</terms>
 
   
   

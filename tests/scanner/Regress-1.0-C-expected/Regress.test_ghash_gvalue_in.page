@@ -32,12 +32,16 @@ void regress_test_ghash_gvalue_in (GHashTable* hash);
   
   
   
-<dl>
-<dt><p>hash :</p></dt>
-<dd><p>the hash table returned by <link xref="Regress.test_ghash_gvalue_return"/>.</p></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>hash</code></title>
+<p>the hash table returned by <link xref="Regress.test_ghash_gvalue_return"/>.</p>
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

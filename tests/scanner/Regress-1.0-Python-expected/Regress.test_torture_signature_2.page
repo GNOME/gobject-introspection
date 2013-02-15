@@ -67,26 +67,44 @@ def test_torture_signature_2(x, callback, user_data, notify, y, z, foo, q, m):
   
   
   
-<dl>
-<dt><p>x :</p></dt>
-<dd></dd>
-<dt><p>callback :</p></dt>
-<dd></dd>
-<dt><p>user_data :</p></dt>
-<dd></dd>
-<dt><p>notify :</p></dt>
-<dd></dd>
-<dt><p>y :</p></dt>
-<dd></dd>
-<dt><p>z :</p></dt>
-<dd></dd>
-<dt><p>foo :</p></dt>
-<dd></dd>
-<dt><p>q :</p></dt>
-<dd></dd>
-<dt><p>m :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>x</code></title>
+
+</item>
+<item>
+<title><code>callback</code></title>
+
+</item>
+<item>
+<title><code>user_data</code></title>
+
+</item>
+<item>
+<title><code>notify</code></title>
+
+</item>
+<item>
+<title><code>y</code></title>
+
+</item>
+<item>
+<title><code>z</code></title>
+
+</item>
+<item>
+<title><code>foo</code></title>
+
+</item>
+<item>
+<title><code>q</code></title>
+
+</item>
+<item>
+<title><code>m</code></title>
+
+</item>
+</terms>
 
   
   

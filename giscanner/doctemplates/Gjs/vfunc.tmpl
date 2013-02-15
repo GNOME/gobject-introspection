@@ -9,15 +9,19 @@ ${', '.join('%s:%s' % (arg.argname, formatter.format_type(arg.type)) for arg in 
 </%block>
 <%block name="details">
 % if formatter.get_parameters(node) or node.retval:
-<dl>
+<terms>
 % for arg in formatter.get_parameters(node):
-<dt><p>${arg.argname} :</p></dt>
-<dd>${formatter.format(node, arg.doc)}</dd>
+<item>
+<title><code>${arg.argname}</code></title>
+${formatter.format(node, arg.doc)}
+</item>
 % endfor
 % if node.retval and node.retval.type.ctype != 'void':
-<dt><p>Returns :</p></dt>
-<dd>${formatter.format(node, node.retval.doc)}</dd>
+<item>
+<title><code>Returns</code></title>
+${formatter.format(node, node.retval.doc)}
+</item>
 % endif
-</dl>
+</terms>
 % endif
 </%block>

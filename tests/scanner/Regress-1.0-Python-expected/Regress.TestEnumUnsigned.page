@@ -19,12 +19,16 @@
   
   
   
-<dl>
-<dt><p>TestEnumUnsigned.VALUE1 :</p></dt>
-<dd></dd>
-<dt><p>TestEnumUnsigned.VALUE2 :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>TestEnumUnsigned.VALUE1</code></title>
+
+</item>
+<item>
+<title><code>TestEnumUnsigned.VALUE2</code></title>
+
+</item>
+</terms>
 
   
   

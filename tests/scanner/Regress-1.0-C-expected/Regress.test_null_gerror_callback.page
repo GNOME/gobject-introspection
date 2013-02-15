@@ -32,12 +32,16 @@ void regress_test_null_gerror_callback (RegressTestCallbackGError callback);
   
   
   
-<dl>
-<dt><p>callback :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>callback</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

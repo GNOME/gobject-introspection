@@ -43,14 +43,20 @@ def compute_sum_nz(self, nums, n_nums):
   
   
   
-<dl>
-<dt><p>self :</p></dt>
-<dd><p>a <link xref="Regress.AnnotationObject"/></p></dd>
-<dt><p>nums :</p></dt>
-<dd><p>Sequence of numbers that are zero-terminated</p></dd>
-<dt><p>n_nums :</p></dt>
-<dd><p>Length of number array</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>self</code></title>
+<p>a <link xref="Regress.AnnotationObject"/></p>
+</item>
+<item>
+<title><code>nums</code></title>
+<p>Sequence of numbers that are zero-terminated</p>
+</item>
+<item>
+<title><code>n_nums</code></title>
+<p>Length of number array</p>
+</item>
+</terms>
 
   
   

@@ -32,12 +32,16 @@ RegressTestBoxed* regress_test_boxed_new_alternative_constructor3 (char* s);
   
   
   
-<dl>
-<dt><p>s :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>s</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

@@ -35,10 +35,12 @@ def global_get_flags_out(v):
   
   
   
-<dl>
-<dt><p>v :</p></dt>
-<dd><p>A flags value</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>v</code></title>
+<p>A flags value</p>
+</item>
+</terms>
 
   
   

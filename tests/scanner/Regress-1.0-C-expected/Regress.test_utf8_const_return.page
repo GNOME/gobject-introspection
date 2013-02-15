@@ -28,10 +28,12 @@ const char* regress_test_utf8_const_return (void);
   
   
   
-<dl>
-<dt><p>Returns :</p></dt>
-<dd><p>UTF-8 string</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>Returns</code></title>
+<p>UTF-8 string</p>
+</item>
+</terms>
 
   
   

@@ -42,16 +42,24 @@ void regress_foo_object_read (RegressFooObject* object,
   
   
   
-<dl>
-<dt><p>object :</p></dt>
-<dd><p>obj</p></dd>
-<dt><p>offset :</p></dt>
-<dd><p>offset</p></dd>
-<dt><p>length :</p></dt>
-<dd><p>length</p></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>object</code></title>
+<p>obj</p>
+</item>
+<item>
+<title><code>offset</code></title>
+<p>offset</p>
+</item>
+<item>
+<title><code>length</code></title>
+<p>length</p>
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

@@ -28,10 +28,12 @@ GValue* regress_test_date_in_gvalue (void);
   
   
   
-<dl>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

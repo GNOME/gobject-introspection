@@ -34,10 +34,12 @@ function test_gslist_nothing_in(in:[String]):void {
   
   
   
-<dl>
-<dt><p>in :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>in</code></title>
+
+</item>
+</terms>
 
   
   

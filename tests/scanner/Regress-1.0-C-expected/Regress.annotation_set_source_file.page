@@ -32,12 +32,16 @@ void regress_annotation_set_source_file (char* fname);
   
   
   
-<dl>
-<dt><p>fname :</p></dt>
-<dd><p>Source file</p></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>fname</code></title>
+<p>Source file</p>
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

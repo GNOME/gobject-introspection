@@ -34,10 +34,12 @@ function foo_test_const_struct_param(param:Regress.FooStruct):void {
   
   
   
-<dl>
-<dt><p>param :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>param</code></title>
+
+</item>
+</terms>
 
   
   

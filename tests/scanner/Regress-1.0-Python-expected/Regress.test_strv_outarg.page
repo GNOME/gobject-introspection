@@ -35,10 +35,12 @@ def test_strv_outarg(retp):
   
   
   
-<dl>
-<dt><p>retp :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>retp</code></title>
+
+</item>
+</terms>
 
   
   

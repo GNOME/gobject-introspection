@@ -24,12 +24,16 @@ def do_allow_none_vfunc(obj, two):
   
   
   
-<dl>
-<dt><p>obj :</p></dt>
-<dd></dd>
-<dt><p>two :</p></dt>
-<dd><p>Another object</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>obj</code></title>
+
+</item>
+<item>
+<title><code>two</code></title>
+<p>Another object</p>
+</item>
+</terms>
 
   
   

@@ -35,10 +35,12 @@ detection, and fixing it via regress_annotations.</p>
   
   
   
-<dl>
-<dt><p>callback :</p></dt>
-<dd><p>Destroy notification</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>callback</code></title>
+<p>Destroy notification</p>
+</item>
+</terms>
 
   
   

@@ -42,16 +42,24 @@ void regress_foo_object_various (RegressFooObject* object,
   
   
   
-<dl>
-<dt><p>object :</p></dt>
-<dd></dd>
-<dt><p>data :</p></dt>
-<dd></dd>
-<dt><p>some_type :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>object</code></title>
+
+</item>
+<item>
+<title><code>data</code></title>
+
+</item>
+<item>
+<title><code>some_type</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

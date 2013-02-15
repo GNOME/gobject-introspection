@@ -32,12 +32,16 @@ void regress_test_ghash_null_out (const GHashTable** out);
   
   
   
-<dl>
-<dt><p>out :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>out</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

@@ -34,10 +34,12 @@ function annotation_string_array_length(properties:[String]):void {
   
   
   
-<dl>
-<dt><p>properties :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>properties</code></title>
+
+</item>
+</terms>
 
   
   

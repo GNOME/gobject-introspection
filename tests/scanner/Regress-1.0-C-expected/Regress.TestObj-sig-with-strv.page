@@ -23,12 +23,16 @@ void sig-with-strv (utf8* strs);
   
   
   
-<dl>
-<dt><p>strs :</p></dt>
-<dd><p>strings</p></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>strs</code></title>
+<p>strings</p>
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

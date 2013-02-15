@@ -23,12 +23,16 @@ void sig-with-foreign-struct (cairo_t cr);
   
   
   
-<dl>
-<dt><p>cr :</p></dt>
-<dd><p>A cairo context.</p></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>cr</code></title>
+<p>A cairo context.</p>
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

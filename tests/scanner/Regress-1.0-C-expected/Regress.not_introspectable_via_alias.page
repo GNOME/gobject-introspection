@@ -32,12 +32,16 @@ void regress_not_introspectable_via_alias (RegressVaListAlias ok);
   
   
   
-<dl>
-<dt><p>ok :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>ok</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

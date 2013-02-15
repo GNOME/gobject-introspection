@@ -34,12 +34,16 @@ function equals(other:Regress.TestBoxed):Boolean {
   
   
   
-<dl>
-<dt><p>other :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>other</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

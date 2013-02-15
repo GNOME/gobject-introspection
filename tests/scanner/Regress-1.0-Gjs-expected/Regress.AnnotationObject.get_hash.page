@@ -31,10 +31,12 @@ objects.</p>
   
   
   
-<dl>
-<dt><p>Returns :</p></dt>
-<dd><p>hash table</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>Returns</code></title>
+<p>hash table</p>
+</item>
+</terms>
 
   
   

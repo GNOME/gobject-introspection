@@ -28,10 +28,12 @@ const char* regress_foo_test_const_char_retval (void);
   
   
   
-<dl>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

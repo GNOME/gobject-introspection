@@ -43,14 +43,20 @@ def test_multi_double_args(in, one, two):
   
   
   
-<dl>
-<dt><p>in :</p></dt>
-<dd></dd>
-<dt><p>one :</p></dt>
-<dd></dd>
-<dt><p>two :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>in</code></title>
+
+</item>
+<item>
+<title><code>one</code></title>
+
+</item>
+<item>
+<title><code>two</code></title>
+
+</item>
+</terms>
 
   
   

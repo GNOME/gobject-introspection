@@ -19,14 +19,20 @@
   
   
   
-<dl>
-<dt><p>ATestError.CODE0 :</p></dt>
-<dd></dd>
-<dt><p>ATestError.CODE1 :</p></dt>
-<dd></dd>
-<dt><p>ATestError.CODE2 :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>ATestError.CODE0</code></title>
+
+</item>
+<item>
+<title><code>ATestError.CODE1</code></title>
+
+</item>
+<item>
+<title><code>ATestError.CODE2</code></title>
+
+</item>
+</terms>
 
   
   

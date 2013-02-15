@@ -34,12 +34,16 @@ function new(obj:Regress.TestObj):Regress.TestObj {
   
   
   
-<dl>
-<dt><p>obj :</p></dt>
-<dd><p>A <link xref="Regress.TestObj"/></p></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>obj</code></title>
+<p>A <link xref="Regress.TestObj"/></p>
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

@@ -42,16 +42,24 @@ void regress_annotation_object_compute_sum_nz (RegressAnnotationObject* object,
   
   
   
-<dl>
-<dt><p>object :</p></dt>
-<dd><p>a <link xref="Regress.AnnotationObject"/></p></dd>
-<dt><p>nums :</p></dt>
-<dd><p>Sequence of numbers that are zero-terminated</p></dd>
-<dt><p>n_nums :</p></dt>
-<dd><p>Length of number array</p></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>object</code></title>
+<p>a <link xref="Regress.AnnotationObject"/></p>
+</item>
+<item>
+<title><code>nums</code></title>
+<p>Sequence of numbers that are zero-terminated</p>
+</item>
+<item>
+<title><code>n_nums</code></title>
+<p>Length of number array</p>
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

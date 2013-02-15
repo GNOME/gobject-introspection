@@ -42,16 +42,24 @@ void regress_random_function_with_skipped_structure (int x,
   
   
   
-<dl>
-<dt><p>x :</p></dt>
-<dd></dd>
-<dt><p>foo :</p></dt>
-<dd></dd>
-<dt><p>v :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>x</code></title>
+
+</item>
+<item>
+<title><code>foo</code></title>
+
+</item>
+<item>
+<title><code>v</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

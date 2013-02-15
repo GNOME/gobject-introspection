@@ -37,14 +37,20 @@ gboolean regress_test_boxed_equals (RegressTestBoxed* boxed,
   
   
   
-<dl>
-<dt><p>boxed :</p></dt>
-<dd></dd>
-<dt><p>other :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>boxed</code></title>
+
+</item>
+<item>
+<title><code>other</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

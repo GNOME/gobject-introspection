@@ -30,10 +30,12 @@ function test_array_int_none_out():[Number] {
   
   
   
-<dl>
-<dt><p>Returns :</p></dt>
-<dd><p>a static array of integers.</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>Returns</code></title>
+<p>a static array of integers.</p>
+</item>
+</terms>
 
   
   

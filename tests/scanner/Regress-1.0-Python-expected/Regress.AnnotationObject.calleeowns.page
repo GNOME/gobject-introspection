@@ -39,14 +39,20 @@ def calleeowns(self, toown):
   
   
   
-<dl>
-<dt><p>self :</p></dt>
-<dd><p>a <link xref="GObject.Object"/></p></dd>
-<dt><p>toown :</p></dt>
-<dd><p>a <link xref="GObject.Object"/></p></dd>
-<dt><p>Returns :</p></dt>
-<dd><p>an int</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>self</code></title>
+<p>a <link xref="GObject.Object"/></p>
+</item>
+<item>
+<title><code>toown</code></title>
+<p>a <link xref="GObject.Object"/></p>
+</item>
+<item>
+<title><code>Returns</code></title>
+{formatter.format(node, node.retval.doc)}
+</item>
+</terms>
 
   
   

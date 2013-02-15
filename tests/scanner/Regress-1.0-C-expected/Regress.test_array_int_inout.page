@@ -37,14 +37,20 @@ void regress_test_array_int_inout (int* n_ints,
   
   
   
-<dl>
-<dt><p>n_ints :</p></dt>
-<dd><p>the length of <code>ints</code></p></dd>
-<dt><p>ints :</p></dt>
-<dd><p>a list of integers whose items will be increased by 1, except the first that will be dropped</p></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>n_ints</code></title>
+<p>the length of <code>ints</code></p>
+</item>
+<item>
+<title><code>ints</code></title>
+<p>a list of integers whose items will be increased by 1, except the first that will be dropped</p>
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

@@ -38,12 +38,16 @@ function foo_async_ready_callback(cancellable:Gio.Cancellable, callback:Gio.Asyn
   
   
   
-<dl>
-<dt><p>cancellable :</p></dt>
-<dd></dd>
-<dt><p>callback :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>cancellable</code></title>
+
+</item>
+<item>
+<title><code>callback</code></title>
+
+</item>
+</terms>
 
   
   

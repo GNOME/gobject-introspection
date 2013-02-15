@@ -44,14 +44,20 @@ detection, and fixing it via regress_annotations.</p>
   
   
   
-<dl>
-<dt><p>callback :</p></dt>
-<dd><p>Destroy notification</p></dd>
-<dt><p>destroy :</p></dt>
-<dd></dd>
-<dt><p>data :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>callback</code></title>
+<p>Destroy notification</p>
+</item>
+<item>
+<title><code>destroy</code></title>
+
+</item>
+<item>
+<title><code>data</code></title>
+
+</item>
+</terms>
 
   
   

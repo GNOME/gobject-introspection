@@ -47,18 +47,28 @@ void regress_foo_method_external_references (UtilityObject* object,
   
   
   
-<dl>
-<dt><p>object :</p></dt>
-<dd></dd>
-<dt><p>e :</p></dt>
-<dd></dd>
-<dt><p>f :</p></dt>
-<dd></dd>
-<dt><p>s :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>object</code></title>
+
+</item>
+<item>
+<title><code>e</code></title>
+
+</item>
+<item>
+<title><code>f</code></title>
+
+</item>
+<item>
+<title><code>s</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

@@ -32,12 +32,16 @@ void regress_annotation_ptr_array (GValue* array);
   
   
   
-<dl>
-<dt><p>array :</p></dt>
-<dd><p>the array</p></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>array</code></title>
+<p>the array</p>
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

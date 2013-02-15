@@ -32,12 +32,16 @@ GObject* regress_annotation_object_create_object (RegressAnnotationObject* objec
   
   
   
-<dl>
-<dt><p>object :</p></dt>
-<dd><p>a <link xref="GObject.Object"/></p></dd>
-<dt><p>Returns :</p></dt>
-<dd><p>The object</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>object</code></title>
+<p>a <link xref="GObject.Object"/></p>
+</item>
+<item>
+<title><code>Returns</code></title>
+<p>The object</p>
+</item>
+</terms>
 
   
   

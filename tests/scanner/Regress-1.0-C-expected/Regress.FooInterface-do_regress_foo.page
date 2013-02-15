@@ -23,14 +23,20 @@ void do_regress_foo (RegressFooInterface* self,
   
   
   
-<dl>
-<dt><p>self :</p></dt>
-<dd></dd>
-<dt><p>x :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>self</code></title>
+
+</item>
+<item>
+<title><code>x</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

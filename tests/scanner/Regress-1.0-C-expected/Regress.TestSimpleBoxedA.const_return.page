@@ -28,10 +28,12 @@ const RegressTestSimpleBoxedA* regress_test_simple_boxed_a_const_return (void);
   
   
   
-<dl>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

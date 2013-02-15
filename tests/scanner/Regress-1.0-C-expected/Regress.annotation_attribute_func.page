@@ -37,14 +37,20 @@ gint regress_annotation_attribute_func (RegressAnnotationObject* object,
   
   
   
-<dl>
-<dt><p>object :</p></dt>
-<dd><p>A <link xref="Regress.AnnotationObject"/>.</p></dd>
-<dt><p>data :</p></dt>
-<dd><p>Some data.</p></dd>
-<dt><p>Returns :</p></dt>
-<dd><p>The return value.</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>object</code></title>
+<p>A <link xref="Regress.AnnotationObject"/>.</p>
+</item>
+<item>
+<title><code>data</code></title>
+<p>Some data.</p>
+</item>
+<item>
+<title><code>Returns</code></title>
+<p>The return value.</p>
+</item>
+</terms>
 
   
   

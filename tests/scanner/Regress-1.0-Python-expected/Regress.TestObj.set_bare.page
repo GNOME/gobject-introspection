@@ -39,12 +39,16 @@ def set_bare(self, bare):
   
   
   
-<dl>
-<dt><p>self :</p></dt>
-<dd></dd>
-<dt><p>bare :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>self</code></title>
+
+</item>
+<item>
+<title><code>bare</code></title>
+
+</item>
+</terms>
 
   
   

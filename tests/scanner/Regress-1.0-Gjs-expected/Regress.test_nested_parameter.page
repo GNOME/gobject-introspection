@@ -59,10 +59,12 @@ rgb(20%, 30%, 0%)&lt;/literallayout&gt;&lt;/entry&gt;
   
   
   
-<dl>
-<dt><p>a :</p></dt>
-<dd><p>An integer</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>a</code></title>
+<p>An integer</p>
+</item>
+</terms>
 
   
   

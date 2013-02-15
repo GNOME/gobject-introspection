@@ -30,10 +30,12 @@ function test_gvariant_i():GLib.Variant {
   
   
   
-<dl>
-<dt><p>Returns :</p></dt>
-<dd><p>New variant</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>Returns</code></title>
+<p>New variant</p>
+</item>
+</terms>
 
   
   

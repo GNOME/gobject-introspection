@@ -34,10 +34,12 @@ function a_global_method(obj:Utility.Object):void {
   
   
   
-<dl>
-<dt><p>obj :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>obj</code></title>
+
+</item>
+</terms>
 
   
   

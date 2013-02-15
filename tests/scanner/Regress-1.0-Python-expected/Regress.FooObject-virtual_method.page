@@ -24,14 +24,20 @@ def do_virtual_method(object, first_param):
   
   
   
-<dl>
-<dt><p>object :</p></dt>
-<dd></dd>
-<dt><p>first_param :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>object</code></title>
+
+</item>
+<item>
+<title><code>first_param</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

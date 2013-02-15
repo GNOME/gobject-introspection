@@ -47,15 +47,19 @@ ${formatter.format_type(arg.type) | x} ${arg.argname}\
 </%block>
 <%block name="details">
 % if formatter.get_parameters(node) or node.retval:
-<dl>
+<terms>
 % for arg in formatter.get_parameters(node):
-<dt><p>${arg.argname} :</p></dt>
-<dd>${formatter.format(node, arg.doc)}</dd>
+<item>
+<title><code>${arg.argname}</code></title>
+${formatter.format(node, arg.doc)}
+</item>
 % endfor
 % if node.retval:
-<dt><p>Returns :</p></dt>
-<dd>${formatter.format(node, node.retval.doc)}</dd>
+<item>
+<title><code>Returns</code></title>
+${formatter.format(node, node.retval.doc)}
+</item>
 % endif
-</dl>
+</terms>
 % endif
 </%block>

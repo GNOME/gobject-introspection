@@ -28,10 +28,12 @@ const char* const* regress_test_strv_out_c (void);
   
   
   
-<dl>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

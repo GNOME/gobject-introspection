@@ -34,10 +34,12 @@ function annotation_init(argv:[String]):void {
   
   
   
-<dl>
-<dt><p>argv :</p></dt>
-<dd><p>The arguments.</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>argv</code></title>
+<p>The arguments.</p>
+</item>
+</terms>
 
   
   

@@ -34,12 +34,16 @@ function test_int_value_arg(v:GObject.Value):Number {
   
   
   
-<dl>
-<dt><p>v :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>v</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

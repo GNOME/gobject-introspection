@@ -36,12 +36,16 @@ case.</p>
   
   
   
-<dl>
-<dt><p>somestr :</p></dt>
-<dd><p>Meaningless string</p></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>somestr</code></title>
+<p>Meaningless string</p>
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

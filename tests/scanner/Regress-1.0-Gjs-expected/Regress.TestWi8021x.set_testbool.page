@@ -34,10 +34,12 @@ function set_testbool(v:Boolean):void {
   
   
   
-<dl>
-<dt><p>v :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>v</code></title>
+
+</item>
+</terms>
 
   
   

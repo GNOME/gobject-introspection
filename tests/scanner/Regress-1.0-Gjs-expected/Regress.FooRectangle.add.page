@@ -34,10 +34,12 @@ function add(r2:Regress.FooRectangle):void {
   
   
   
-<dl>
-<dt><p>r2 :</p></dt>
-<dd><p>source rectangle</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>r2</code></title>
+<p>source rectangle</p>
+</item>
+</terms>
 
   
   

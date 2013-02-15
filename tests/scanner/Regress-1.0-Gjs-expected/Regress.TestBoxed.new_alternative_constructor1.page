@@ -34,12 +34,16 @@ function new_alternative_constructor1(i:Number):Regress.TestBoxed {
   
   
   
-<dl>
-<dt><p>i :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>i</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

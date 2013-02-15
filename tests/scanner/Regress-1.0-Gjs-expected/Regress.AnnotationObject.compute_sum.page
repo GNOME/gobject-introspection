@@ -34,10 +34,12 @@ function compute_sum(nums:[Number]):void {
   
   
   
-<dl>
-<dt><p>nums :</p></dt>
-<dd><p>Sequence of numbers</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>nums</code></title>
+<p>Sequence of numbers</p>
+</item>
+</terms>
 
   
   

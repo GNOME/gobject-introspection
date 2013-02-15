@@ -24,14 +24,20 @@ def do_read_fn(object, offset, length):
   
   
   
-<dl>
-<dt><p>object :</p></dt>
-<dd></dd>
-<dt><p>offset :</p></dt>
-<dd><p>offset</p></dd>
-<dt><p>length :</p></dt>
-<dd><p>length</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>object</code></title>
+
+</item>
+<item>
+<title><code>offset</code></title>
+<p>offset</p>
+</item>
+<item>
+<title><code>length</code></title>
+<p>length</p>
+</item>
+</terms>
 
   
   

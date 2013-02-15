@@ -39,12 +39,16 @@ def annotation_init(argc, argv):
   
   
   
-<dl>
-<dt><p>argc :</p></dt>
-<dd><p>The number of args.</p></dd>
-<dt><p>argv :</p></dt>
-<dd><p>The arguments.</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>argc</code></title>
+<p>The number of args.</p>
+</item>
+<item>
+<title><code>argv</code></title>
+<p>The arguments.</p>
+</item>
+</terms>
 
   
   

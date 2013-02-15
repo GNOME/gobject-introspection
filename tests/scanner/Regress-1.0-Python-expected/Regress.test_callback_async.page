@@ -39,12 +39,16 @@ def test_callback_async(callback, user_data):
   
   
   
-<dl>
-<dt><p>callback :</p></dt>
-<dd></dd>
-<dt><p>user_data :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>callback</code></title>
+
+</item>
+<item>
+<title><code>user_data</code></title>
+
+</item>
+</terms>
 
   
   

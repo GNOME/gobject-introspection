@@ -37,14 +37,20 @@ void regress_foo_some_variant (guint x,
   
   
   
-<dl>
-<dt><p>x :</p></dt>
-<dd></dd>
-<dt><p>args :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>x</code></title>
+
+</item>
+<item>
+<title><code>args</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

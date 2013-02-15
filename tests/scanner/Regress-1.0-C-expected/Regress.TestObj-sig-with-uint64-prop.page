@@ -24,12 +24,16 @@ the introspection client langage.</p>
   
   
   
-<dl>
-<dt><p>i :</p></dt>
-<dd><p>an integer</p></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>i</code></title>
+<p>an integer</p>
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

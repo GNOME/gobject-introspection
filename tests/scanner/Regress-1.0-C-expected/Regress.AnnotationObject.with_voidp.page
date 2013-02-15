@@ -37,14 +37,20 @@ void regress_annotation_object_with_voidp (RegressAnnotationObject* object,
   
   
   
-<dl>
-<dt><p>object :</p></dt>
-<dd></dd>
-<dt><p>data :</p></dt>
-<dd><p>Opaque pointer handle</p></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>object</code></title>
+
+</item>
+<item>
+<title><code>data</code></title>
+<p>Opaque pointer handle</p>
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

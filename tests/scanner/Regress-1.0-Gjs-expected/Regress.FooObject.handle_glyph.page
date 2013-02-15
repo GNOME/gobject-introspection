@@ -34,10 +34,12 @@ function handle_glyph(glyph:Utility.Glyph):void {
   
   
   
-<dl>
-<dt><p>glyph :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>glyph</code></title>
+
+</item>
+</terms>
 
   
   

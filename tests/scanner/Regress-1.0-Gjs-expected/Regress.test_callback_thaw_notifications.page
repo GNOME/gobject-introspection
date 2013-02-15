@@ -32,10 +32,12 @@ corresponding destroy notfications.</p>
   
   
   
-<dl>
-<dt><p>Returns :</p></dt>
-<dd><p>Sum of the return values of the invoked callbacks.</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>Returns</code></title>
+<p>Sum of the return values of the invoked callbacks.</p>
+</item>
+</terms>
 
   
   

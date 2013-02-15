@@ -31,10 +31,12 @@ uses a C sugar return type.</p>
   
   
   
-<dl>
-<dt><p>Returns :</p></dt>
-<dd><p>The global <link xref="Regress.FooSubobject"/></p></dd>
-</dl>
+<terms>
+<item>
+<title><code>Returns</code></title>
+<p>The global <link xref="Regress.FooSubobject"/></p>
+</item>
+</terms>
 
   
   

@@ -35,10 +35,12 @@ def test_ghash_gvalue_in(hash):
   
   
   
-<dl>
-<dt><p>hash :</p></dt>
-<dd><p>the hash table returned by <link xref="Regress.test_ghash_gvalue_return"/>.</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>hash</code></title>
+<p>the hash table returned by <link xref="Regress.test_ghash_gvalue_return"/>.</p>
+</item>
+</terms>
 
   
   

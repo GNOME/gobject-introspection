@@ -40,14 +40,20 @@ condition in bindings which needs to be tested.</p>
   
   
   
-<dl>
-<dt><p>callback :</p></dt>
-<dd></dd>
-<dt><p>notify :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>callback</code></title>
+
+</item>
+<item>
+<title><code>notify</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+{formatter.format(node, node.retval.doc)}
+</item>
+</terms>
 
   
   

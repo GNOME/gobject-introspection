@@ -43,14 +43,20 @@ def get_origin(self, x, y):
   
   
   
-<dl>
-<dt><p>self :</p></dt>
-<dd></dd>
-<dt><p>x :</p></dt>
-<dd></dd>
-<dt><p>y :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>self</code></title>
+
+</item>
+<item>
+<title><code>x</code></title>
+
+</item>
+<item>
+<title><code>y</code></title>
+
+</item>
+</terms>
 
   
   

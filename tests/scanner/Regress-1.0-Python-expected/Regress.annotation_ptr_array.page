@@ -35,10 +35,12 @@ def annotation_ptr_array(array):
   
   
   
-<dl>
-<dt><p>array :</p></dt>
-<dd><p>the array</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>array</code></title>
+<p>the array</p>
+</item>
+</terms>
 
   
   

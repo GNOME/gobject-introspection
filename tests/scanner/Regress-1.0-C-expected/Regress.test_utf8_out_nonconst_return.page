@@ -32,12 +32,16 @@ char* regress_test_utf8_out_nonconst_return (char** out);
   
   
   
-<dl>
-<dt><p>out :</p></dt>
-<dd><p>a copy of "second"</p></dd>
-<dt><p>Returns :</p></dt>
-<dd><p>a copy of "first"</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>out</code></title>
+<p>a copy of "second"</p>
+</item>
+<item>
+<title><code>Returns</code></title>
+<p>a copy of "first"</p>
+</item>
+</terms>
 
   
   

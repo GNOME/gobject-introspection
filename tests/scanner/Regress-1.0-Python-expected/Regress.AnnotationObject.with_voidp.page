@@ -39,12 +39,16 @@ def with_voidp(self, data):
   
   
   
-<dl>
-<dt><p>self :</p></dt>
-<dd></dd>
-<dt><p>data :</p></dt>
-<dd><p>Opaque pointer handle</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>self</code></title>
+
+</item>
+<item>
+<title><code>data</code></title>
+<p>Opaque pointer handle</p>
+</item>
+</terms>
 
   
   

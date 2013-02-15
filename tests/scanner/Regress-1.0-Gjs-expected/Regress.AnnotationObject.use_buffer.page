@@ -34,10 +34,12 @@ function use_buffer(bytes:guint8):void {
   
   
   
-<dl>
-<dt><p>bytes :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>bytes</code></title>
+
+</item>
+</terms>
 
   
   

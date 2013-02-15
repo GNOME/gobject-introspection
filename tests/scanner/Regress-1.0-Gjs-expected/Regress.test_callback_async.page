@@ -34,10 +34,12 @@ function test_callback_async(callback:Regress.TestCallbackUserData):void {
   
   
   
-<dl>
-<dt><p>callback :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>callback</code></title>
+
+</item>
+</terms>
 
   
   

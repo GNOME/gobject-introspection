@@ -32,12 +32,16 @@ void regress_set_abort_on_error (gboolean abort_on_error);
   
   
   
-<dl>
-<dt><p>abort_on_error :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>abort_on_error</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

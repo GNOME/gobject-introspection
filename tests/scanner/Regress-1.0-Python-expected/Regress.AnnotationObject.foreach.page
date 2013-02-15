@@ -43,14 +43,20 @@ def foreach(self, func, user_data):
   
   
   
-<dl>
-<dt><p>self :</p></dt>
-<dd><p>a <link xref="Regress.AnnotationObject"/></p></dd>
-<dt><p>func :</p></dt>
-<dd><p>Callback to invoke</p></dd>
-<dt><p>user_data :</p></dt>
-<dd><p>Callback user data</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>self</code></title>
+<p>a <link xref="Regress.AnnotationObject"/></p>
+</item>
+<item>
+<title><code>func</code></title>
+<p>Callback to invoke</p>
+</item>
+<item>
+<title><code>user_data</code></title>
+<p>Callback user data</p>
+</item>
+</terms>
 
   
   

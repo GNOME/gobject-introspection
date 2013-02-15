@@ -19,14 +19,20 @@
   
   
   
-<dl>
-<dt><p>FooEnumFullname.ONE :</p></dt>
-<dd></dd>
-<dt><p>FooEnumFullname.TWO :</p></dt>
-<dd></dd>
-<dt><p>FooEnumFullname.THREE :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>FooEnumFullname.ONE</code></title>
+
+</item>
+<item>
+<title><code>FooEnumFullname.TWO</code></title>
+
+</item>
+<item>
+<title><code>FooEnumFullname.THREE</code></title>
+
+</item>
+</terms>
 
   
   

@@ -30,8 +30,8 @@ def test_multiline_doc_comments():
   
   
   
-<dl>
-</dl>
+<terms>
+</terms>
 
   
   

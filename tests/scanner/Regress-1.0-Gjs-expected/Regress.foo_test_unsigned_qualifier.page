@@ -34,10 +34,12 @@ function foo_test_unsigned_qualifier(unsigned_param:Number):void {
   
   
   
-<dl>
-<dt><p>unsigned_param :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>unsigned_param</code></title>
+
+</item>
+</terms>
 
   
   

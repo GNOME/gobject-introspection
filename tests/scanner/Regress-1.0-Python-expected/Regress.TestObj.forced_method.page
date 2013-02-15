@@ -35,10 +35,12 @@ def forced_method(self):
   
   
   
-<dl>
-<dt><p>self :</p></dt>
-<dd><p>A <link xref="Regress.TestObj"/></p></dd>
-</dl>
+<terms>
+<item>
+<title><code>self</code></title>
+<p>A <link xref="Regress.TestObj"/></p>
+</item>
+</terms>
 
   
   

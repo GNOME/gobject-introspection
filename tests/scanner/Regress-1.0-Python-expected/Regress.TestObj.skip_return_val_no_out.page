@@ -40,14 +40,20 @@ raise an error.</p>
   
   
   
-<dl>
-<dt><p>self :</p></dt>
-<dd><p>a <link xref="Regress.TestObj"/></p></dd>
-<dt><p>a :</p></dt>
-<dd><p>Parameter.</p></dd>
-<dt><p>Returns :</p></dt>
-<dd><p><code>True</code> if the call succeeds, <code>False</code> if @error is set.</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>self</code></title>
+<p>a <link xref="Regress.TestObj"/></p>
+</item>
+<item>
+<title><code>a</code></title>
+<p>Parameter.</p>
+</item>
+<item>
+<title><code>Returns</code></title>
+{formatter.format(node, node.retval.doc)}
+</item>
+</terms>
 
   
   

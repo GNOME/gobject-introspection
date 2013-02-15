@@ -30,10 +30,12 @@ function annotation_return_array():[String] {
   
   
   
-<dl>
-<dt><p>Returns :</p></dt>
-<dd><p>The return value</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>Returns</code></title>
+<p>The return value</p>
+</item>
+</terms>
 
   
   

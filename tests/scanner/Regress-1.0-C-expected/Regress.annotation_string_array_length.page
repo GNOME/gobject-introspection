@@ -37,14 +37,20 @@ void regress_annotation_string_array_length (guint n_properties,
   
   
   
-<dl>
-<dt><p>n_properties :</p></dt>
-<dd></dd>
-<dt><p>properties :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>n_properties</code></title>
+
+</item>
+<item>
+<title><code>properties</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

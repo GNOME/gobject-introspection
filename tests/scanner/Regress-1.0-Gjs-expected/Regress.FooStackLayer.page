@@ -19,26 +19,44 @@
   
   
   
-<dl>
-<dt><p>FooStackLayer.DESKTOP :</p></dt>
-<dd></dd>
-<dt><p>FooStackLayer.BOTTOM :</p></dt>
-<dd></dd>
-<dt><p>FooStackLayer.NORMAL :</p></dt>
-<dd></dd>
-<dt><p>FooStackLayer.TOP :</p></dt>
-<dd></dd>
-<dt><p>FooStackLayer.DOCK :</p></dt>
-<dd></dd>
-<dt><p>FooStackLayer.FULLSCREEN :</p></dt>
-<dd></dd>
-<dt><p>FooStackLayer.FOCUSED_WINDOW :</p></dt>
-<dd></dd>
-<dt><p>FooStackLayer.OVERRIDE_REDIRECT :</p></dt>
-<dd></dd>
-<dt><p>FooStackLayer.LAST :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>FooStackLayer.DESKTOP</code></title>
+
+</item>
+<item>
+<title><code>FooStackLayer.BOTTOM</code></title>
+
+</item>
+<item>
+<title><code>FooStackLayer.NORMAL</code></title>
+
+</item>
+<item>
+<title><code>FooStackLayer.TOP</code></title>
+
+</item>
+<item>
+<title><code>FooStackLayer.DOCK</code></title>
+
+</item>
+<item>
+<title><code>FooStackLayer.FULLSCREEN</code></title>
+
+</item>
+<item>
+<title><code>FooStackLayer.FOCUSED_WINDOW</code></title>
+
+</item>
+<item>
+<title><code>FooStackLayer.OVERRIDE_REDIRECT</code></title>
+
+</item>
+<item>
+<title><code>FooStackLayer.LAST</code></title>
+
+</item>
+</terms>
 
   
   

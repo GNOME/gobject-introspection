@@ -19,16 +19,24 @@
   
   
   
-<dl>
-<dt><p>FooEnumNoType.UN :</p></dt>
-<dd></dd>
-<dt><p>FooEnumNoType.DEUX :</p></dt>
-<dd></dd>
-<dt><p>FooEnumNoType.TROIS :</p></dt>
-<dd></dd>
-<dt><p>FooEnumNoType.NEUF :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>FooEnumNoType.UN</code></title>
+
+</item>
+<item>
+<title><code>FooEnumNoType.DEUX</code></title>
+
+</item>
+<item>
+<title><code>FooEnumNoType.TROIS</code></title>
+
+</item>
+<item>
+<title><code>FooEnumNoType.NEUF</code></title>
+
+</item>
+</terms>
 
   
   

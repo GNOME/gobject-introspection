@@ -46,16 +46,24 @@ function test_torture_signature_2(x:Number, callback:Regress.TestCallbackUserDat
   
   
   
-<dl>
-<dt><p>x :</p></dt>
-<dd></dd>
-<dt><p>callback :</p></dt>
-<dd></dd>
-<dt><p>foo :</p></dt>
-<dd></dd>
-<dt><p>m :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>x</code></title>
+
+</item>
+<item>
+<title><code>callback</code></title>
+
+</item>
+<item>
+<title><code>foo</code></title>
+
+</item>
+<item>
+<title><code>m</code></title>
+
+</item>
+</terms>
 
   
   

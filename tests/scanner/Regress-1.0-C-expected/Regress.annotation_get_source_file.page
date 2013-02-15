@@ -28,10 +28,12 @@ char* regress_annotation_get_source_file (void);
   
   
   
-<dl>
-<dt><p>Returns :</p></dt>
-<dd><p>Source file</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>Returns</code></title>
+<p>Source file</p>
+</item>
+</terms>
 
   
   

@@ -47,16 +47,24 @@ def watch_full(self, func, user_data, destroy):
   
   
   
-<dl>
-<dt><p>self :</p></dt>
-<dd><p>A <link xref="Regress.AnnotationObject"/></p></dd>
-<dt><p>func :</p></dt>
-<dd><p>The callback</p></dd>
-<dt><p>user_data :</p></dt>
-<dd><p>The callback data</p></dd>
-<dt><p>destroy :</p></dt>
-<dd><p>Destroy notification</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>self</code></title>
+<p>A <link xref="Regress.AnnotationObject"/></p>
+</item>
+<item>
+<title><code>func</code></title>
+<p>The callback</p>
+</item>
+<item>
+<title><code>user_data</code></title>
+<p>The callback data</p>
+</item>
+<item>
+<title><code>destroy</code></title>
+<p>Destroy notification</p>
+</item>
+</terms>
 
   
   

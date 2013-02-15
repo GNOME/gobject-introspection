@@ -43,16 +43,24 @@ void regress_annotation_object_watch (RegressAnnotationObject* object,
   
   
   
-<dl>
-<dt><p>object :</p></dt>
-<dd><p>A <link xref="Regress.AnnotationObject"/></p></dd>
-<dt><p>func :</p></dt>
-<dd><p>The callback</p></dd>
-<dt><p>user_data :</p></dt>
-<dd><p>The callback data</p></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>object</code></title>
+<p>A <link xref="Regress.AnnotationObject"/></p>
+</item>
+<item>
+<title><code>func</code></title>
+<p>The callback</p>
+</item>
+<item>
+<title><code>user_data</code></title>
+<p>The callback data</p>
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

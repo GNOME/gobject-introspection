@@ -23,12 +23,16 @@ function vfunc_read_fn(offset:Number, length:Number):void {
   
   
   
-<dl>
-<dt><p>offset :</p></dt>
-<dd><p>offset</p></dd>
-<dt><p>length :</p></dt>
-<dd><p>length</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>offset</code></title>
+<p>offset</p>
+</item>
+<item>
+<title><code>length</code></title>
+<p>length</p>
+</item>
+</terms>
 
   
   

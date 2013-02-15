@@ -34,10 +34,12 @@ function is_it_time_yet(time:Number):void {
   
   
   
-<dl>
-<dt><p>time :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>time</code></title>
+
+</item>
+</terms>
 
   
   

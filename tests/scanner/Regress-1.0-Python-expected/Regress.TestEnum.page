@@ -19,16 +19,24 @@
   
   
   
-<dl>
-<dt><p>TestEnum.VALUE1 :</p></dt>
-<dd><p>value 1</p></dd>
-<dt><p>TestEnum.VALUE2 :</p></dt>
-<dd><p>value 2</p></dd>
-<dt><p>TestEnum.VALUE3 :</p></dt>
-<dd></dd>
-<dt><p>TestEnum.VALUE4 :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>TestEnum.VALUE1</code></title>
+<p>value 1</p>
+</item>
+<item>
+<title><code>TestEnum.VALUE2</code></title>
+<p>value 2</p>
+</item>
+<item>
+<title><code>TestEnum.VALUE3</code></title>
+
+</item>
+<item>
+<title><code>TestEnum.VALUE4</code></title>
+
+</item>
+</terms>
 
   
   

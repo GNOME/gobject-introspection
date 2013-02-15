@@ -19,14 +19,20 @@
   
   
   
-<dl>
-<dt><p>TestOtherError.CODE1 :</p></dt>
-<dd></dd>
-<dt><p>TestOtherError.CODE2 :</p></dt>
-<dd></dd>
-<dt><p>TestOtherError.CODE3 :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>TestOtherError.CODE1</code></title>
+
+</item>
+<item>
+<title><code>TestOtherError.CODE2</code></title>
+
+</item>
+<item>
+<title><code>TestOtherError.CODE3</code></title>
+
+</item>
+</terms>
 
   
   

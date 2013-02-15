@@ -25,12 +25,16 @@ it says it's pointer but it's actually a string.</p>
     <p>Since 1.0</p>
   
   
-<dl>
-<dt><p>string :</p></dt>
-<dd><p>a string</p></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>string</code></title>
+<p>a string</p>
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

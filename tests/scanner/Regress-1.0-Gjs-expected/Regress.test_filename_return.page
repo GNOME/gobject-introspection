@@ -30,10 +30,12 @@ function test_filename_return():[filename] {
   
   
   
-<dl>
-<dt><p>Returns :</p></dt>
-<dd><p>list of strings</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>Returns</code></title>
+<p>list of strings</p>
+</item>
+</terms>
 
   
   

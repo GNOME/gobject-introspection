@@ -32,12 +32,16 @@ void regress_test_array_fixed_size_int_out (int** ints);
   
   
   
-<dl>
-<dt><p>ints :</p></dt>
-<dd><p>a list of 5 integers ranging from 0 to 4</p></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>ints</code></title>
+<p>a list of 5 integers ranging from 0 to 4</p>
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

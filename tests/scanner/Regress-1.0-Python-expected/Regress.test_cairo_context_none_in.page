@@ -35,10 +35,12 @@ def test_cairo_context_none_in(context):
   
   
   
-<dl>
-<dt><p>context :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>context</code></title>
+
+</item>
+</terms>
 
   
   

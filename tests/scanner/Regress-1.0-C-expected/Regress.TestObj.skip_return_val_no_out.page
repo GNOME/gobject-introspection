@@ -38,14 +38,20 @@ raise an error.</p>
   
   
   
-<dl>
-<dt><p>obj :</p></dt>
-<dd><p>a <link xref="Regress.TestObj"/></p></dd>
-<dt><p>a :</p></dt>
-<dd><p>Parameter.</p></dd>
-<dt><p>Returns :</p></dt>
-<dd><p><code>TRUE</code> if the call succeeds, <code>FALSE</code> if @error is set.</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>obj</code></title>
+<p>a <link xref="Regress.TestObj"/></p>
+</item>
+<item>
+<title><code>a</code></title>
+<p>Parameter.</p>
+</item>
+<item>
+<title><code>Returns</code></title>
+<p><code>TRUE</code> if the call succeeds, <code>FALSE</code> if @error is set.</p>
+</item>
+</terms>
 
   
   

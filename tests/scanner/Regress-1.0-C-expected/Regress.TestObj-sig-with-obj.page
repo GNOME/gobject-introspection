@@ -24,12 +24,16 @@ Use with regress_test_obj_emit_sig_with_obj</p>
   
   
   
-<dl>
-<dt><p>obj :</p></dt>
-<dd><p>A newly created RegressTestObj</p></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>obj</code></title>
+<p>A newly created RegressTestObj</p>
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

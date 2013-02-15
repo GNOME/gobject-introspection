@@ -35,10 +35,12 @@ def test_utf8_inout(inout):
   
   
   
-<dl>
-<dt><p>inout :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>inout</code></title>
+
+</item>
+</terms>
 
   
   

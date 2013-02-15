@@ -37,14 +37,20 @@ void regress_test_array_int_null_in (int* arr,
   
   
   
-<dl>
-<dt><p>arr :</p></dt>
-<dd></dd>
-<dt><p>len :</p></dt>
-<dd><p>length</p></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>arr</code></title>
+
+</item>
+<item>
+<title><code>len</code></title>
+<p>length</p>
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

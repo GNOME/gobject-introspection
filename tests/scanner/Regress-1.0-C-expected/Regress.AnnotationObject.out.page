@@ -37,14 +37,20 @@ gint regress_annotation_object_out (RegressAnnotationObject* object,
   
   
   
-<dl>
-<dt><p>object :</p></dt>
-<dd><p>a <link xref="GObject.Object"/></p></dd>
-<dt><p>outarg :</p></dt>
-<dd><p>This is an argument test</p></dd>
-<dt><p>Returns :</p></dt>
-<dd><p>an int</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>object</code></title>
+<p>a <link xref="GObject.Object"/></p>
+</item>
+<item>
+<title><code>outarg</code></title>
+<p>This is an argument test</p>
+</item>
+<item>
+<title><code>Returns</code></title>
+<p>an int</p>
+</item>
+</terms>
 
   
   

@@ -32,12 +32,16 @@ void regress_foo_dbus_data_method (RegressFooDBusData* dbusdata);
   
   
   
-<dl>
-<dt><p>dbusdata :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>dbusdata</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

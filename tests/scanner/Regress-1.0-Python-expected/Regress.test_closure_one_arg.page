@@ -39,14 +39,20 @@ def test_closure_one_arg(closure, arg):
   
   
   
-<dl>
-<dt><p>closure :</p></dt>
-<dd></dd>
-<dt><p>arg :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>closure</code></title>
+
+</item>
+<item>
+<title><code>arg</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+{formatter.format(node, node.retval.doc)}
+</item>
+</terms>
 
   
   

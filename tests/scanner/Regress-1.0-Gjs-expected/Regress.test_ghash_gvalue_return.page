@@ -30,10 +30,12 @@ function test_ghash_gvalue_return():{String: GObject.Value} {
   
   
   
-<dl>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

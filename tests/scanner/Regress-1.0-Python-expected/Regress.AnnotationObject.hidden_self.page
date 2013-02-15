@@ -35,10 +35,12 @@ def hidden_self(self):
   
   
   
-<dl>
-<dt><p>self :</p></dt>
-<dd><p>A <link xref="Regress.AnnotationObject"/></p></dd>
-</dl>
+<terms>
+<item>
+<title><code>self</code></title>
+<p>A <link xref="Regress.AnnotationObject"/></p>
+</item>
+</terms>
 
   
   

@@ -32,12 +32,16 @@ void regress_introspectable_via_alias (RegressPtrArrayAlias* data);
   
   
   
-<dl>
-<dt><p>data :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>data</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

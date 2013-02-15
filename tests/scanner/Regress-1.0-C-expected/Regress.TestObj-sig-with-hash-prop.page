@@ -24,12 +24,16 @@ void sig-with-hash-prop (&lt;map&gt; hash);
   
   
   
-<dl>
-<dt><p>hash :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>hash</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

@@ -39,12 +39,16 @@ def annotation_string_array_length(n_properties, properties):
   
   
   
-<dl>
-<dt><p>n_properties :</p></dt>
-<dd></dd>
-<dt><p>properties :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>n_properties</code></title>
+
+</item>
+<item>
+<title><code>properties</code></title>
+
+</item>
+</terms>
 
   
   

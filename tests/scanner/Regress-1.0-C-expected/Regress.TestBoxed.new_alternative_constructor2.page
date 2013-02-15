@@ -37,14 +37,20 @@ RegressTestBoxed* regress_test_boxed_new_alternative_constructor2 (int i,
   
   
   
-<dl>
-<dt><p>i :</p></dt>
-<dd></dd>
-<dt><p>j :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>i</code></title>
+
+</item>
+<item>
+<title><code>j</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

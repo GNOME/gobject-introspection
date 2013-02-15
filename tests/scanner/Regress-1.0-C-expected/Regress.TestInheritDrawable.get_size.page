@@ -42,16 +42,24 @@ void regress_test_inherit_drawable_get_size (RegressTestInheritDrawable* drawabl
   
   
   
-<dl>
-<dt><p>drawable :</p></dt>
-<dd></dd>
-<dt><p>width :</p></dt>
-<dd></dd>
-<dt><p>height :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>drawable</code></title>
+
+</item>
+<item>
+<title><code>width</code></title>
+
+</item>
+<item>
+<title><code>height</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

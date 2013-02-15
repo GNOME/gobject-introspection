@@ -34,10 +34,12 @@ function annotation_set_source_file(fname:filename):void {
   
   
   
-<dl>
-<dt><p>fname :</p></dt>
-<dd><p>Source file</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>fname</code></title>
+<p>Source file</p>
+</item>
+</terms>
 
   
   

@@ -32,12 +32,16 @@ void regress_test_struct_fixed_array_frob (RegressTestStructFixedArray* str);
   
   
   
-<dl>
-<dt><p>str :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>str</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

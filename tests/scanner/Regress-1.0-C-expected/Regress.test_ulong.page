@@ -32,12 +32,16 @@ gulong regress_test_ulong (gulong in);
   
   
   
-<dl>
-<dt><p>in :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>in</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

@@ -28,10 +28,12 @@ gchar* regress_annotation_return_filename (void);
   
   
   
-<dl>
-<dt><p>Returns :</p></dt>
-<dd><p>An annotated filename</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>Returns</code></title>
+<p>An annotated filename</p>
+</item>
+</terms>
 
   
   

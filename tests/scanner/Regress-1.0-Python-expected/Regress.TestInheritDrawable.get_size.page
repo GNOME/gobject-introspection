@@ -43,14 +43,20 @@ def get_size(self, width, height):
   
   
   
-<dl>
-<dt><p>self :</p></dt>
-<dd></dd>
-<dt><p>width :</p></dt>
-<dd></dd>
-<dt><p>height :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>self</code></title>
+
+</item>
+<item>
+<title><code>width</code></title>
+
+</item>
+<item>
+<title><code>height</code></title>
+
+</item>
+</terms>
 
   
   

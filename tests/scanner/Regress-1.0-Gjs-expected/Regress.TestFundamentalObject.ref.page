@@ -30,10 +30,12 @@ function ref():Regress.TestFundamentalObject {
   
   
   
-<dl>
-<dt><p>Returns :</p></dt>
-<dd><p>A new <link xref="Regress.TestFundamentalObject"/></p></dd>
-</dl>
+<terms>
+<item>
+<title><code>Returns</code></title>
+<p>A new <link xref="Regress.TestFundamentalObject"/></p>
+</item>
+</terms>
 
   
   

@@ -32,12 +32,16 @@ void regress_foo_interface_static_method (int x);
   
   
   
-<dl>
-<dt><p>x :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>x</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

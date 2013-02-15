@@ -30,10 +30,12 @@ function create_object():GObject.Object {
   
   
   
-<dl>
-<dt><p>Returns :</p></dt>
-<dd><p>The object</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>Returns</code></title>
+<p>The object</p>
+</item>
+</terms>
 
   
   

@@ -39,12 +39,16 @@ def test_utf8_out_out(out0, out1):
   
   
   
-<dl>
-<dt><p>out0 :</p></dt>
-<dd><p>a copy of "first"</p></dd>
-<dt><p>out1 :</p></dt>
-<dd><p>a copy of "second"</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>out0</code></title>
+<p>a copy of "first"</p>
+</item>
+<item>
+<title><code>out1</code></title>
+<p>a copy of "second"</p>
+</item>
+</terms>
 
   
   

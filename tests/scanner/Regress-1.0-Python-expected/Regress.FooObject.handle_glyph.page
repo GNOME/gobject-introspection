@@ -39,12 +39,16 @@ def handle_glyph(self, glyph):
   
   
   
-<dl>
-<dt><p>self :</p></dt>
-<dd></dd>
-<dt><p>glyph :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>self</code></title>
+
+</item>
+<item>
+<title><code>glyph</code></title>
+
+</item>
+</terms>
 
   
   

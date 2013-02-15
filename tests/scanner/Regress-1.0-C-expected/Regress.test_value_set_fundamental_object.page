@@ -37,14 +37,20 @@ void regress_test_value_set_fundamental_object (GValue* value,
   
   
   
-<dl>
-<dt><p>value :</p></dt>
-<dd></dd>
-<dt><p>fundamental_object :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>value</code></title>
+
+</item>
+<item>
+<title><code>fundamental_object</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

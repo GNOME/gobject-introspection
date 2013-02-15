@@ -34,10 +34,12 @@ function do_foo_maybe_throw(x:Number):void {
   
   
   
-<dl>
-<dt><p>x :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>x</code></title>
+
+</item>
+</terms>
 
   
   

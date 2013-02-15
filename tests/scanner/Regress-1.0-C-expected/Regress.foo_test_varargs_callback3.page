@@ -37,14 +37,20 @@ void regress_foo_test_varargs_callback3 (RegressFooVarargsCallback callback,
   
   
   
-<dl>
-<dt><p>callback :</p></dt>
-<dd></dd>
-<dt><p>callback2 :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>callback</code></title>
+
+</item>
+<item>
+<title><code>callback2</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

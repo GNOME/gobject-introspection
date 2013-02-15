@@ -35,10 +35,12 @@ def aliased_caller_alloc(boxed):
   
   
   
-<dl>
-<dt><p>boxed :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>boxed</code></title>
+
+</item>
+</terms>
 
   
   

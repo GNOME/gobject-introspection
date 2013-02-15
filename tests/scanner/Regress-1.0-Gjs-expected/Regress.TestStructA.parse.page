@@ -34,10 +34,12 @@ function parse(string:String):void {
   
   
   
-<dl>
-<dt><p>string :</p></dt>
-<dd><p>ignored</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>string</code></title>
+<p>ignored</p>
+</item>
+</terms>
 
   
   

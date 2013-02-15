@@ -39,12 +39,16 @@ def test_hash_table_callback(data, callback):
   
   
   
-<dl>
-<dt><p>data :</p></dt>
-<dd><p>GHashTable that gets passed to callback</p></dd>
-<dt><p>callback :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>data</code></title>
+<p>GHashTable that gets passed to callback</p>
+</item>
+<item>
+<title><code>callback</code></title>
+
+</item>
+</terms>
 
   
   

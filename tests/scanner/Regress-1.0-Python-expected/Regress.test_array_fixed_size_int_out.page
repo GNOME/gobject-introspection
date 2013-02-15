@@ -35,10 +35,12 @@ def test_array_fixed_size_int_out(ints):
   
   
   
-<dl>
-<dt><p>ints :</p></dt>
-<dd><p>a list of 5 integers ranging from 0 to 4</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>ints</code></title>
+<p>a list of 5 integers ranging from 0 to 4</p>
+</item>
+</terms>
 
   
   

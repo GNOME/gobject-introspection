@@ -29,10 +29,12 @@ void regress_annotation_versioned (void);
     <p>Since 0.6</p>
   
   
-<dl>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

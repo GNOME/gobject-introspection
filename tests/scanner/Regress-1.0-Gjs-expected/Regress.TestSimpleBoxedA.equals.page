@@ -34,12 +34,16 @@ function equals(other_a:Regress.TestSimpleBoxedA):Boolean {
   
   
   
-<dl>
-<dt><p>other_a :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>other_a</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

@@ -30,10 +30,12 @@ function external_type():Utility.Object {
   
   
   
-<dl>
-<dt><p>Returns :</p></dt>
-<dd><p><code>null</code> always</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>Returns</code></title>
+<p><code>null</code> always</p>
+</item>
+</terms>
 
   
   

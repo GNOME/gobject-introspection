@@ -34,12 +34,16 @@ function test_array_fixed_size_int_in(ints:[Number]):Number {
   
   
   
-<dl>
-<dt><p>ints :</p></dt>
-<dd><p>a list of 5 integers</p></dd>
-<dt><p>Returns :</p></dt>
-<dd><p>the sum of the items in <code>ints</code></p></dd>
-</dl>
+<terms>
+<item>
+<title><code>ints</code></title>
+<p>a list of 5 integers</p>
+</item>
+<item>
+<title><code>Returns</code></title>
+<p>the sum of the items in <code>ints</code></p>
+</item>
+</terms>
 
   
   

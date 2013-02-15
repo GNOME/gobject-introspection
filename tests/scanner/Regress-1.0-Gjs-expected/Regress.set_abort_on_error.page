@@ -34,10 +34,12 @@ function set_abort_on_error(abort_on_error:Boolean):void {
   
   
   
-<dl>
-<dt><p>abort_on_error :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>abort_on_error</code></title>
+
+</item>
+</terms>
 
   
   

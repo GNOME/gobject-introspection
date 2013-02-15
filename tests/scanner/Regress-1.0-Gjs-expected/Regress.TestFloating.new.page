@@ -30,10 +30,12 @@ function new():Regress.TestFloating {
   
   
   
-<dl>
-<dt><p>Returns :</p></dt>
-<dd><p>A new floating <link xref="Regress.TestFloating"/></p></dd>
-</dl>
+<terms>
+<item>
+<title><code>Returns</code></title>
+<p>A new floating <link xref="Regress.TestFloating"/></p>
+</item>
+</terms>
 
   
   

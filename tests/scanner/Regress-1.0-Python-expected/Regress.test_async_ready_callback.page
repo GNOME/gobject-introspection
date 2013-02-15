@@ -35,10 +35,12 @@ def test_async_ready_callback(callback):
   
   
   
-<dl>
-<dt><p>callback :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>callback</code></title>
+
+</item>
+</terms>
 
   
   

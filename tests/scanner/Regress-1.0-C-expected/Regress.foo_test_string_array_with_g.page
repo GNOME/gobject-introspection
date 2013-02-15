@@ -32,12 +32,16 @@ void regress_foo_test_string_array_with_g (gchar** array);
   
   
   
-<dl>
-<dt><p>array :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>array</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

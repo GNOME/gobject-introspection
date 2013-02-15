@@ -24,12 +24,16 @@ known by GObject as it's only marked as G_TYPE_POINTER</p>
   
   
   
-<dl>
-<dt><p>list :</p></dt>
-<dd><p>a list of strings</p></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>list</code></title>
+<p>a list of strings</p>
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

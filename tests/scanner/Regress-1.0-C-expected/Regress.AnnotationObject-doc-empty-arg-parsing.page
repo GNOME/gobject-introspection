@@ -23,12 +23,16 @@ void doc-empty-arg-parsing (gpointer arg1);
   
   
   
-<dl>
-<dt><p>arg1 :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>arg1</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

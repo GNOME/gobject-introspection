@@ -32,12 +32,16 @@ void regress_test_strv_outarg (char*** retp);
   
   
   
-<dl>
-<dt><p>retp :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>retp</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

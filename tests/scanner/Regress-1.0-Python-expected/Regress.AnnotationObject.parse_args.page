@@ -43,14 +43,20 @@ def parse_args(self, argc, argv):
   
   
   
-<dl>
-<dt><p>self :</p></dt>
-<dd><p>a <link xref="Regress.AnnotationObject"/></p></dd>
-<dt><p>argc :</p></dt>
-<dd><p>Length of the argument vector</p></dd>
-<dt><p>argv :</p></dt>
-<dd><p>Argument vector</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>self</code></title>
+<p>a <link xref="Regress.AnnotationObject"/></p>
+</item>
+<item>
+<title><code>argc</code></title>
+<p>Length of the argument vector</p>
+</item>
+<item>
+<title><code>argv</code></title>
+<p>Argument vector</p>
+</item>
+</terms>
 
   
   

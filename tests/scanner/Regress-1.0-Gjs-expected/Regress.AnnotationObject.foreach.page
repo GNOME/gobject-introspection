@@ -34,10 +34,12 @@ function foreach(func:Regress.AnnotationForeachFunc):void {
   
   
   
-<dl>
-<dt><p>func :</p></dt>
-<dd><p>Callback to invoke</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>func</code></title>
+<p>Callback to invoke</p>
+</item>
+</terms>
 
   
   

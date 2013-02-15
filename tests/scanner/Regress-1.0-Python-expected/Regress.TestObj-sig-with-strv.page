@@ -23,16 +23,22 @@ def callback(test_obj, strs, user_param1, ...)
   
   
   
-<dl>
-<dt><p>test_obj :</p></dt>
-<dd><p>instance of Regress.TestObj that is emitting the signal</p></dd>
-<dt><p>strs :</p></dt>
-<dd><p>strings</p></dd>
-<dt><p>user_param1 :</p></dt>
-<dd><p>first user parameter (if any) specified with the connect() method</p></dd>
-<dt><p>... :</p></dt>
-<dd><p>additional user parameters (if any)</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>test_obj</code></title>
+<p>instance of Regress.TestObj that is emitting the signal</p>
+</item>
+<item>
+<title><code>strs</code></title>
+<p>strings</p>
+</item>
+<title><code>user_param1</code></title>
+<p>first user parameter (if any) specified with the connect() method</p>
+<item>
+<title><code>...</code></title>
+<p>additional user parameters (if any)</p>
+</item>
+</terms>
 
   
   

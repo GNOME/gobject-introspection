@@ -42,16 +42,24 @@ RegressTestObj* regress_test_obj_new_callback (RegressTestCallbackUserData callb
   
   
   
-<dl>
-<dt><p>callback :</p></dt>
-<dd></dd>
-<dt><p>user_data :</p></dt>
-<dd></dd>
-<dt><p>notify :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>callback</code></title>
+
+</item>
+<item>
+<title><code>user_data</code></title>
+
+</item>
+<item>
+<title><code>notify</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

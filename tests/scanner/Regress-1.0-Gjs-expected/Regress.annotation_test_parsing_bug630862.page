@@ -30,10 +30,12 @@ function annotation_test_parsing_bug630862():GObject.Object {
   
   
   
-<dl>
-<dt><p>Returns :</p></dt>
-<dd><p>An object, note the colon:in here</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>Returns</code></title>
+<p>An object, note the colon:in here</p>
+</item>
+</terms>
 
   
   

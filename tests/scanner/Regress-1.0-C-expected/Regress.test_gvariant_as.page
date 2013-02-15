@@ -28,10 +28,12 @@ GVariant* regress_test_gvariant_as (void);
   
   
   
-<dl>
-<dt><p>Returns :</p></dt>
-<dd><p>New variant</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>Returns</code></title>
+<p>New variant</p>
+</item>
+</terms>
 
   
   

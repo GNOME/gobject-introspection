@@ -59,22 +59,36 @@ def torture_signature_0(self, x, y, z, foo, q, m):
   
   
   
-<dl>
-<dt><p>self :</p></dt>
-<dd><p>A <link xref="Regress.TestObj"/></p></dd>
-<dt><p>x :</p></dt>
-<dd></dd>
-<dt><p>y :</p></dt>
-<dd></dd>
-<dt><p>z :</p></dt>
-<dd></dd>
-<dt><p>foo :</p></dt>
-<dd></dd>
-<dt><p>q :</p></dt>
-<dd></dd>
-<dt><p>m :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>self</code></title>
+<p>A <link xref="Regress.TestObj"/></p>
+</item>
+<item>
+<title><code>x</code></title>
+
+</item>
+<item>
+<title><code>y</code></title>
+
+</item>
+<item>
+<title><code>z</code></title>
+
+</item>
+<item>
+<title><code>foo</code></title>
+
+</item>
+<item>
+<title><code>q</code></title>
+
+</item>
+<item>
+<title><code>m</code></title>
+
+</item>
+</terms>
 
   
   

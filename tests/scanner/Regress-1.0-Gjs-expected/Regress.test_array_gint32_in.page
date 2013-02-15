@@ -34,12 +34,16 @@ function test_array_gint32_in(ints:[gint32]):gint32 {
   
   
   
-<dl>
-<dt><p>ints :</p></dt>
-<dd><p>List of ints</p></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>ints</code></title>
+<p>List of ints</p>
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

@@ -35,10 +35,12 @@ def some_method(self):
   
   
   
-<dl>
-<dt><p>self :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>self</code></title>
+
+</item>
+</terms>
 
   
   

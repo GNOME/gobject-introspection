@@ -30,8 +30,8 @@ function test_multiline_doc_comments():void {
   
   
   
-<dl>
-</dl>
+<terms>
+</terms>
 
   
   

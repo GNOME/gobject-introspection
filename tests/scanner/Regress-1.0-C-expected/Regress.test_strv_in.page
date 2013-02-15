@@ -32,12 +32,16 @@ gboolean regress_test_strv_in (char** arr);
   
   
   
-<dl>
-<dt><p>arr :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>arr</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

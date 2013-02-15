@@ -37,14 +37,20 @@ void regress_annotation_object_use_buffer (RegressAnnotationObject* object,
   
   
   
-<dl>
-<dt><p>object :</p></dt>
-<dd><p>a <link xref="GObject.Object"/></p></dd>
-<dt><p>bytes :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>object</code></title>
+<p>a <link xref="GObject.Object"/></p>
+</item>
+<item>
+<title><code>bytes</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

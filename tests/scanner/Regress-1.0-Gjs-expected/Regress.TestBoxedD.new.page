@@ -38,14 +38,20 @@ function new(a_string:String, a_int:Number):Regress.TestBoxedD {
   
   
   
-<dl>
-<dt><p>a_string :</p></dt>
-<dd></dd>
-<dt><p>a_int :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>a_string</code></title>
+
+</item>
+<item>
+<title><code>a_int</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

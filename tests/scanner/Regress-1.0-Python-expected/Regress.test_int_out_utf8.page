@@ -39,12 +39,16 @@ def test_int_out_utf8(length, in):
   
   
   
-<dl>
-<dt><p>length :</p></dt>
-<dd></dd>
-<dt><p>in :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>length</code></title>
+
+</item>
+<item>
+<title><code>in</code></title>
+
+</item>
+</terms>
 
   
   

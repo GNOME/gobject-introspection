@@ -42,14 +42,20 @@ function torture_signature_0(x:Number, foo:String, m:Number):void {
   
   
   
-<dl>
-<dt><p>x :</p></dt>
-<dd></dd>
-<dt><p>foo :</p></dt>
-<dd></dd>
-<dt><p>m :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>x</code></title>
+
+</item>
+<item>
+<title><code>foo</code></title>
+
+</item>
+<item>
+<title><code>m</code></title>
+
+</item>
+</terms>
 
   
   

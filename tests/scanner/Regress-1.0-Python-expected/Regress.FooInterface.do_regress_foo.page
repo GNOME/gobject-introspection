@@ -39,12 +39,16 @@ def do_regress_foo(self, x):
   
   
   
-<dl>
-<dt><p>self :</p></dt>
-<dd></dd>
-<dt><p>x :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>self</code></title>
+
+</item>
+<item>
+<title><code>x</code></title>
+
+</item>
+</terms>
 
   
   

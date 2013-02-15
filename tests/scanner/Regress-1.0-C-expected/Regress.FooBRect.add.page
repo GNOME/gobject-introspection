@@ -37,14 +37,20 @@ void regress_foo_brect_add (RegressFooBRect* b1,
   
   
   
-<dl>
-<dt><p>b1 :</p></dt>
-<dd></dd>
-<dt><p>b2 :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>b1</code></title>
+
+</item>
+<item>
+<title><code>b2</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

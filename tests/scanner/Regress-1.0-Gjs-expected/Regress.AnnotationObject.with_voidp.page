@@ -34,10 +34,12 @@ function with_voidp(data:gpointer):void {
   
   
   
-<dl>
-<dt><p>data :</p></dt>
-<dd><p>Opaque pointer handle</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>data</code></title>
+<p>Opaque pointer handle</p>
+</item>
+</terms>
 
   
   

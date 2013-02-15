@@ -32,12 +32,16 @@ RegressTestFundamentalObject* regress_test_value_get_fundamental_object (const G
   
   
   
-<dl>
-<dt><p>value :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>value</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

@@ -34,12 +34,16 @@ function test_closure(closure:GObject.Closure):Number {
   
   
   
-<dl>
-<dt><p>closure :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>closure</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

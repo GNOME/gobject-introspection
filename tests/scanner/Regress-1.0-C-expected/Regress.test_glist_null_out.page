@@ -32,12 +32,16 @@ void regress_test_glist_null_out (GSList** out_list);
   
   
   
-<dl>
-<dt><p>out_list :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>out_list</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

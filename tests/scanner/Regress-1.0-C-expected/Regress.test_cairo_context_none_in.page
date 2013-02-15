@@ -32,12 +32,16 @@ void regress_test_cairo_context_none_in (cairo_t* context);
   
   
   
-<dl>
-<dt><p>context :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>context</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

@@ -34,12 +34,16 @@ function test_size(in:gsize):gsize {
   
   
   
-<dl>
-<dt><p>in :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>in</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

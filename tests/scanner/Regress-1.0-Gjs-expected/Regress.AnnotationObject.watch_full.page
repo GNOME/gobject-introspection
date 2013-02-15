@@ -34,10 +34,12 @@ function watch_full(func:Regress.AnnotationForeachFunc):void {
   
   
   
-<dl>
-<dt><p>func :</p></dt>
-<dd><p>The callback</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>func</code></title>
+<p>The callback</p>
+</item>
+</terms>
 
   
   

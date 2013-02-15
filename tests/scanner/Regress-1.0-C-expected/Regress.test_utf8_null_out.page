@@ -32,12 +32,16 @@ void regress_test_utf8_null_out (char** char_out);
   
   
   
-<dl>
-<dt><p>char_out :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>char_out</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

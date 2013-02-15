@@ -34,10 +34,12 @@ function test_array_int_null_in(arr:[Number]):void {
   
   
   
-<dl>
-<dt><p>arr :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>arr</code></title>
+
+</item>
+</terms>
 
   
   

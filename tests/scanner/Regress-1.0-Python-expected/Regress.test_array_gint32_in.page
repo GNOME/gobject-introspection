@@ -39,14 +39,20 @@ def test_array_gint32_in(n_ints, ints):
   
   
   
-<dl>
-<dt><p>n_ints :</p></dt>
-<dd></dd>
-<dt><p>ints :</p></dt>
-<dd><p>List of ints</p></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>n_ints</code></title>
+
+</item>
+<item>
+<title><code>ints</code></title>
+<p>List of ints</p>
+</item>
+<item>
+<title><code>Returns</code></title>
+{formatter.format(node, node.retval.doc)}
+</item>
+</terms>
 
   
   

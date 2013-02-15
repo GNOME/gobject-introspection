@@ -37,14 +37,20 @@ void regress_test_obj_set_bare (RegressTestObj* obj,
   
   
   
-<dl>
-<dt><p>obj :</p></dt>
-<dd></dd>
-<dt><p>bare :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>obj</code></title>
+
+</item>
+<item>
+<title><code>bare</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

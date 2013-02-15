@@ -30,8 +30,8 @@ function annotation_space_after_comment_bug631690():void {
   
   
   
-<dl>
-</dl>
+<terms>
+</terms>
 
   
   

@@ -35,10 +35,12 @@ def foo_test_const_char_param(param):
   
   
   
-<dl>
-<dt><p>param :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>param</code></title>
+
+</item>
+</terms>
 
   
   

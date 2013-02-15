@@ -32,12 +32,16 @@ void regress_foo_test_const_struct_param (const RegressFooStruct* param);
   
   
   
-<dl>
-<dt><p>param :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>param</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

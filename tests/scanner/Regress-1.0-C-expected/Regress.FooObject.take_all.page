@@ -39,16 +39,24 @@ void regress_foo_object_take_all (RegressFooObject* object,
   
   
   
-<dl>
-<dt><p>object :</p></dt>
-<dd></dd>
-<dt><p>x :</p></dt>
-<dd></dd>
-<dt><p>None :</p></dt>
-<dd></dd>
-<dt><p>Returns :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>object</code></title>
+
+</item>
+<item>
+<title><code>x</code></title>
+
+</item>
+<item>
+<title><code>None</code></title>
+
+</item>
+<item>
+<title><code>Returns</code></title>
+
+</item>
+</terms>
 
   
   

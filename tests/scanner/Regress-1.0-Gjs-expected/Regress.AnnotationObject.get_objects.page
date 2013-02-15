@@ -32,10 +32,12 @@ intentionally similar example to gtk_container_get_children</p>
   
   
   
-<dl>
-<dt><p>Returns :</p></dt>
-<dd><p>list of objects</p></dd>
-</dl>
+<terms>
+<item>
+<title><code>Returns</code></title>
+<p>list of objects</p>
+</item>
+</terms>
 
   
   

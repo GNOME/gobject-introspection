@@ -35,10 +35,12 @@ def emit_sig_with_foreign_struct(self):
   
   
   
-<dl>
-<dt><p>self :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>self</code></title>
+
+</item>
+</terms>
 
   
   

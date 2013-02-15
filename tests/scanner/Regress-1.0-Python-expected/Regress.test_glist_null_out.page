@@ -35,10 +35,12 @@ def test_glist_null_out(out_list):
   
   
   
-<dl>
-<dt><p>out_list :</p></dt>
-<dd></dd>
-</dl>
+<terms>
+<item>
+<title><code>out_list</code></title>
+
+</item>
+</terms>
 
   
   
