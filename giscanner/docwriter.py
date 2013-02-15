@@ -386,7 +386,14 @@ class DocFormatterC(DocFormatter):
     def get_parameters(self, node):
         return node.all_parameters
 
-class DocFormatterPython(DocFormatter):
+class DocFormatterIntrospectableBase(DocFormatter):
+    def should_render_node(self, node):
+        if isinstance(node, ast.Record) and node.is_gtype_struct_for is not None:
+            return False
+
+        return True
+
+class DocFormatterPython(DocFormatterIntrospectableBase):
     language = "Python"
     mime_type = "text/python"
 
@@ -400,10 +407,7 @@ class DocFormatterPython(DocFormatter):
         if getattr(node, "is_constructor", False):
             return False
 
-        if isinstance(node, ast.Record) and node.is_gtype_struct_for is not None:
-            return False
-
-        return True
+        return super(DocFormatterPython, self).should_render_node(node)
 
     def is_method(self, node):
         if getattr(node, "is_method", False):
@@ -467,7 +471,7 @@ class DocFormatterPython(DocFormatter):
     def get_parameters(self, node):
         return node.all_parameters
 
-class DocFormatterGjs(DocFormatter):
+class DocFormatterGjs(DocFormatterIntrospectableBase):
     language = "Gjs"
     mime_type = "text/x-gjs"
 
@@ -476,12 +480,6 @@ class DocFormatterGjs(DocFormatter):
         "FALSE": "false",
         "NULL": "null",
     }
-
-    def should_render_node(self, node):
-        if isinstance(node, ast.Record) and node.is_gtype_struct_for is not None:
-            return False
-
-        return True
 
     def is_method(self, node):
         if getattr(node, "is_method", False):
