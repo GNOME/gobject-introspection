@@ -189,6 +189,16 @@ GType regress_test_enum_unsigned_get_type (void) G_GNUC_CONST;
 GType regress_test_flags_get_type (void) G_GNUC_CONST;
 #define REGRESS_TEST_TYPE_FLAGS (regress_test_flags_get_type ())
 
+typedef enum
+{
+  REGRESS_TEST_REFERENCE_0 = 2 + 2,
+  REGRESS_TEST_REFERENCE_1 = 1 + 1,
+  REGRESS_TEST_REFERENCE_2 = 6 * 9,
+  REGRESS_TEST_REFERENCE_3 = REGRESS_TEST_REFERENCE_1 + REGRESS_TEST_REFERENCE_1,
+  REGRESS_TEST_REFERENCE_4 = REGRESS_TEST_REFERENCE_2 * REGRESS_TEST_REFERENCE_3,
+  REGRESS_TEST_REFERENCE_5 = ~REGRESS_TEST_REFERENCE_4,
+} RegressTestReferenceEnum;
+
 /* this is not registered with GType */
 typedef enum
 {

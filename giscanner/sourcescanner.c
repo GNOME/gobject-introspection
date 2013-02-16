@@ -45,6 +45,26 @@ ctype_free (GISourceType * type)
 }
 
 GISourceSymbol *
+gi_source_symbol_copy (GISourceSymbol * symbol)
+{
+  GISourceSymbol *new_symbol = gi_source_symbol_new (symbol->type,
+                                                     symbol->source_filename,
+                                                     symbol->line);
+  new_symbol->ident = g_strdup (symbol->ident);
+
+  if (symbol->base_type)
+    new_symbol->base_type = gi_source_type_copy (symbol->base_type);
+  if (symbol->const_int_set)
+    new_symbol->const_int = symbol->const_int;
+  else if (symbol->const_double_set)
+    new_symbol->const_double = symbol->const_double_set;
+  else if (symbol->const_string != NULL)
+    new_symbol->const_string = g_strdup (symbol->const_string);
+
+  return new_symbol;
+}
+
+GISourceSymbol *
 gi_source_symbol_ref (GISourceSymbol * symbol)
 {
   symbol->ref_count++;

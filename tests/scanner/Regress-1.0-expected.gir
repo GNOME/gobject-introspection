@@ -1908,16 +1908,6 @@ exposed to language bindings.</doc>
         </parameter>
       </parameters>
     </callback>
-    <constant name="GUINT64_CONSTANT"
-              value="18446744073709551615"
-              c:type="REGRESS_GUINT64_CONSTANT">
-      <type name="guint64" c:type="guint64"/>
-    </constant>
-    <constant name="GUINT64_CONSTANTA"
-              value="18446744073709551615"
-              c:type="REGRESS_GUINT64_CONSTANTA">
-      <type name="TestTypeGUInt64" c:type="RegressTestTypeGUInt64"/>
-    </constant>
     <constant name="G_GINT64_CONSTANT"
               value="1000"
               c:type="REGRESS_G_GINT64_CONSTANT">
@@ -1961,11 +1951,6 @@ exposed to language bindings.</doc>
     <constant name="Mixed_Case_Constant"
               value="4423"
               c:type="REGRESS_Mixed_Case_Constant">
-      <type name="gint" c:type="gint"/>
-    </constant>
-    <constant name="NEGATIVE_INT_CONSTANT"
-              value="-42"
-              c:type="REGRESS_NEGATIVE_INT_CONSTANT">
       <type name="gint" c:type="gint"/>
     </constant>
     <constant name="STRING_CONSTANT"
@@ -3566,6 +3551,20 @@ the introspection client langage.</doc>
         <type name="gint" c:type="gint"/>
       </field>
     </record>
+    <enumeration name="TestReferenceEnum" c:type="RegressTestReferenceEnum">
+      <member name="0" value="4" c:identifier="REGRESS_TEST_REFERENCE_0">
+      </member>
+      <member name="1" value="2" c:identifier="REGRESS_TEST_REFERENCE_1">
+      </member>
+      <member name="2" value="54" c:identifier="REGRESS_TEST_REFERENCE_2">
+      </member>
+      <member name="3" value="4" c:identifier="REGRESS_TEST_REFERENCE_3">
+      </member>
+      <member name="4" value="216" c:identifier="REGRESS_TEST_REFERENCE_4">
+      </member>
+      <member name="5" value="-217" c:identifier="REGRESS_TEST_REFERENCE_5">
+      </member>
+    </enumeration>
     <record name="TestSimpleBoxedA"
             c:type="RegressTestSimpleBoxedA"
             glib:type-name="RegressTestSimpleBoxedA"

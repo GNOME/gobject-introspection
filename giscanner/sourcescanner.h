@@ -162,6 +162,7 @@ GISourceSymbol *    gi_source_symbol_new               (GISourceSymbolType  type
 gboolean            gi_source_symbol_get_const_boolean (GISourceSymbol     *symbol);
 GISourceSymbol *    gi_source_symbol_ref               (GISourceSymbol     *symbol);
 void                gi_source_symbol_unref             (GISourceSymbol     *symbol);
+GISourceSymbol *    gi_source_symbol_copy              (GISourceSymbol     *symbol);
 
 /* Private */
 void                gi_source_scanner_add_symbol       (GISourceScanner  *scanner,

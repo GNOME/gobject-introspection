@@ -366,15 +366,15 @@ unary_expression
 			$$ = $2;
 			break;
 		case UNARY_MINUS:
-			$$ = $2;
+			$$ = gi_source_symbol_copy ($2);
 			$$->const_int = -$2->const_int;
 			break;
 		case UNARY_BITWISE_COMPLEMENT:
-			$$ = $2;
+			$$ = gi_source_symbol_copy ($2);
 			$$->const_int = ~$2->const_int;
 			break;
 		case UNARY_LOGICAL_NEGATION:
-			$$ = $2;
+			$$ = gi_source_symbol_copy ($2);
 			$$->const_int = !gi_source_symbol_get_const_boolean ($2);
 			break;
 		default:
