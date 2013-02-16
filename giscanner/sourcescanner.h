@@ -120,7 +120,6 @@ struct _GISourceSymbol
 {
   int ref_count;
   GISourceSymbolType type;
-  int id;
   char *ident;
   GISourceType *base_type;
   gboolean const_int_set;
