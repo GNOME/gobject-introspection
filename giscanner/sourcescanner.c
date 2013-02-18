@@ -57,6 +57,7 @@ gi_source_symbol_copy (GISourceSymbol * symbol)
 
   if (symbol->const_int_set) {
     new_symbol->const_int = symbol->const_int;
+    new_symbol->const_int_is_unsigned = symbol->const_int_is_unsigned;
     new_symbol->const_int_set = TRUE;
   } else if (symbol->const_double_set) {
     new_symbol->const_double = symbol->const_double;
