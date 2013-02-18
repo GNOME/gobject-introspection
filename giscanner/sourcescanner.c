@@ -57,7 +57,7 @@ gi_source_symbol_copy (GISourceSymbol * symbol)
   if (symbol->const_int_set)
     new_symbol->const_int = symbol->const_int;
   else if (symbol->const_double_set)
-    new_symbol->const_double = symbol->const_double_set;
+    new_symbol->const_double = symbol->const_double;
   else if (symbol->const_string != NULL)
     new_symbol->const_string = g_strdup (symbol->const_string);
 
