@@ -19,5 +19,4 @@ TESTS = \
 
 EXTRA_DIST = warningtester.py common.h $(TESTS)
 
-TESTS_ENVIRONMENT = PYTHONPATH=$(top_builddir):$(top_srcdir) TOP_BUILDDIR=$(top_builddir) UNINSTALLED_INTROSPECTION_SRCDIR=$(top_srcdir)
-LOG_COMPILER =  $(PYTHON) $(srcdir)/warningtester.py
+TESTS_ENVIRONMENT = PYTHONPATH=$(top_builddir):$(top_srcdir) TOP_BUILDDIR=$(top_builddir) UNINSTALLED_INTROSPECTION_SRCDIR=$(top_srcdir) $(PYTHON) $(srcdir)/warningtester.py
