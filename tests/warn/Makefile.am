@@ -1,6 +1,8 @@
 include $(top_srcdir)/common.mk
 
-TESTS = \
+TESTS = warntestrunner
+
+alltests = \
 	annotationparser.h \
 	callback-invalid-scope.h \
 	callback-missing-scope.h \
@@ -17,6 +19,6 @@ TESTS = \
 	unknown-parameter.h \
 	unresolved-type.h
 
-EXTRA_DIST = warningtester.py common.h $(TESTS)
+EXTRA_DIST = warningtester.py warntestrunner common.h $(TESTS)
 
-TESTS_ENVIRONMENT = PYTHONPATH=$(top_builddir):$(top_srcdir) TOP_BUILDDIR=$(top_builddir) UNINSTALLED_INTROSPECTION_SRCDIR=$(top_srcdir) $(PYTHON) $(srcdir)/warningtester.py
+TESTS_ENVIRONMENT = PYTHONPATH=$(top_builddir):$(top_srcdir) TOP_BUILDDIR=$(top_builddir) UNINSTALLED_INTROSPECTION_SRCDIR=$(top_srcdir) PYTHON=$(PYTHON) srcdir=$(srcdir) alltests="$(alltests)"
