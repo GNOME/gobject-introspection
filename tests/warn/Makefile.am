@@ -19,6 +19,6 @@ alltests = \
 	unknown-parameter.h \
 	unresolved-type.h
 
-EXTRA_DIST = warningtester.py warntestrunner common.h $(TESTS)
+EXTRA_DIST = warningtester.py warntestrunner $(alltests) common.h $(TESTS)
 
 TESTS_ENVIRONMENT = PYTHONPATH=$(top_builddir):$(top_srcdir) TOP_BUILDDIR=$(top_builddir) UNINSTALLED_INTROSPECTION_SRCDIR=$(top_srcdir) PYTHON=$(PYTHON) srcdir=$(srcdir) alltests="$(alltests)"
