@@ -45,7 +45,7 @@ libwarnlib_la_LDFLAGS = -export-symbols-regex '^warnlib_' -no-undefined
 libgettype_la_SOURCES = $(srcdir)/gettype.c $(srcdir)/gettype.h
 
 testsdir = $(datadir)/gobject-introspection-1.0/tests
-tests_DATA = $(libregress_la_SOURCES) $(libwarnlib_la_SOURCES)
+tests_DATA = $(libregress_la_SOURCES) $(libwarnlib_la_SOURCES) $(libutility_la_SOURCES)
 
 libregress_la_CPPFLAGS =
 if !HAVE_CAIRO
