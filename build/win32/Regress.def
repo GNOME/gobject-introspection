@@ -138,6 +138,7 @@ regress_test_unsigned_enum_param
 
 regress_global_get_flags_out
 regress_test_struct_a_clone
+regress_test_struct_a_parse
 
 regress_test_struct_b_clone
 
@@ -163,6 +164,14 @@ regress_test_boxed_b_get_type
 regress_test_boxed_b_new
 regress_test_boxed_b_copy
 
+regress_test_boxed_c_get_type
+regress_test_boxed_c_new
+
+regress_test_boxed_d_get_type
+regress_test_boxed_d_new
+regress_test_boxed_d_copy
+regress_test_boxed_d_free
+regress_test_boxed_d_get_magic
 
 regress_test_obj_get_type
 regress_test_obj_new
@@ -170,6 +179,9 @@ regress_constructor
 regress_test_obj_new_from_file
 regress_test_obj_set_bare
 regress_test_obj_emit_sig_with_obj
+regress_test_obj_emit_sig_with_foreign_struct
+regress_test_obj_emit_sig_with_int64
+regress_test_obj_emit_sig_with_uint64
 regress_test_obj_instance_method
 regress_test_obj_static_method
 regress_forced_method
@@ -189,6 +201,7 @@ regress_test_sub_obj_get_type
 regress_test_sub_obj_new
 regress_test_sub_obj_unset_bare
 regress_test_sub_obj_instance_method
+regress_test_skip_unannotated_callback
 
 regress_test_fundamental_object_get_type
 regress_test_fundamental_object_ref
@@ -206,6 +219,7 @@ regress_test_multi_callback
 regress_test_array_callback
 regress_test_callback_user_data
 regress_test_callback_destroy_notify
+regress_test_callback_destroy_notify_no_user_data
 regress_test_callback_thaw_notifications
 
 regress_test_callback_async
@@ -253,3 +267,6 @@ regress_test_boxed_c_get_type
 regress_test_unconventional_error_get_type
 regress_test_abc_error_get_type
 regress_test_error_get_type
+
+
+regress_test_versioning
