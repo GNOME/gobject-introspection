@@ -4402,9 +4402,10 @@ void
 gi_marshalling_tests_object_get_ref_info_for_vfunc_in_object_transfer_none (GIMarshallingTestsObject *self, GType type, guint *ref_count, gboolean *is_floating)
 {
     static gboolean destroy_called;
+    GObject *object;
     destroy_called = FALSE;
 
-    GObject *object = g_object_new(type, NULL);
+    object = g_object_new(type, NULL);
     g_object_weak_ref (object, (GWeakNotify)_vfunc_in_object_destroy_callback, &destroy_called);
 
     GI_MARSHALLING_TESTS_OBJECT_GET_CLASS (self)->vfunc_in_object_transfer_none (self, object);
@@ -4429,9 +4430,10 @@ void
 gi_marshalling_tests_object_get_ref_info_for_vfunc_in_object_transfer_full (GIMarshallingTestsObject *self, GType type, guint *ref_count, gboolean *is_floating)
 {
     static gboolean destroy_called;
+    GObject *object;
     destroy_called = FALSE;
 
-    GObject *object = g_object_new(type, NULL);
+    object = g_object_new(type, NULL);
     g_object_weak_ref (object, (GWeakNotify)_vfunc_in_object_destroy_callback, &destroy_called);
 
     /* Calling the vfunc takes ownership of the object, so we use a weak_ref to determine
