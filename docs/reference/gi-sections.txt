@@ -7,6 +7,7 @@ GIRepositoryLoadFlags
 GITypelib
 g_irepository_get_default
 g_irepository_prepend_search_path
+g_irepository_prepend_library_path
 g_irepository_get_search_path
 g_irepository_load_typelib
 g_irepository_is_registered
