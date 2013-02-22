@@ -206,7 +206,12 @@ class DumpCompiler(object):
         # header of the library being introspected
         if self._compiler_cmd == 'gcc' and not self._options.init_sections:
             args.append('-Wall')
-        args.append("-Wno-deprecated-declarations")
+        # The Microsoft compiler uses different option flags for
+        # silencing warnings on deprecated function usage
+        if self._pkgconfig_msvc_flags:
+            args.append("-wd4996")
+        else:
+            args.append("-Wno-deprecated-declarations")
         pkgconfig_flags = self._run_pkgconfig('--cflags')
         args.extend(pkgconfig_flags)
         cflags = os.environ.get('CFLAGS', '')
