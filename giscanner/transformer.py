@@ -481,8 +481,8 @@ raise ValueError."""
     def _create_parameters(self, symbol, base_type):
         # warn if we see annotations for unknown parameters
         param_names = set(child.ident for child in base_type.child_list)
-        for child in base_type.child_list:
-            yield self._create_parameter(symbol, child)
+        for i, child in enumerate(base_type.child_list):
+            yield self._create_parameter(symbol, i, child)
 
     def _synthesize_union_type(self, symbol, parent_symbol):
         # Synthesize a named union so that it can be referenced.
@@ -695,16 +695,20 @@ raise ValueError."""
             return container
         return ast.Type(ctype=ctype, is_const=is_const, complete_ctype=complete_ctype)
 
-    def _create_parameter(self, parent_symbol, symbol):
+    def _create_parameter(self, parent_symbol, index, symbol):
         if symbol.type == CSYMBOL_TYPE_ELLIPSIS:
             ptype = ast.Varargs()
         else:
             ptype = self._create_type_from_base(symbol.base_type, is_parameter=True)
 
-        if symbol.ident is None and symbol.base_type and symbol.base_type.type != CTYPE_VOID:
-            message.warn_symbol(parent_symbol, "missing parameter name; undocumentable")
+        if symbol.ident is None:
+            if symbol.base_type and symbol.base_type.type != CTYPE_VOID:
+                message.warn_symbol(parent_symbol, "missing parameter name; undocumentable")
+            ident = 'arg%d' % (index, )
+        else:
+            ident = symbol.ident
 
-        return ast.Parameter(symbol.ident, ptype)
+        return ast.Parameter(ident, ptype)
 
     def _create_return(self, source_type):
         typeval = self._create_type_from_base(source_type, is_return=True)

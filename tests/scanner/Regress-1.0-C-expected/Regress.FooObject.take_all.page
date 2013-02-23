@@ -49,7 +49,7 @@ void regress_foo_object_take_all (RegressFooObject* object,
 
 </item>
 <item>
-<title><code>None</code></title>
+<title><code>arg2</code></title>
 
 </item>
 <item>

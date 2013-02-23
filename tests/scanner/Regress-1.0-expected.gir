@@ -1472,7 +1472,7 @@ uses a C sugar return type.</doc>
           <parameter name="x" transfer-ownership="none">
             <type name="gint" c:type="int"/>
           </parameter>
-          <parameter transfer-ownership="none">
+          <parameter name="arg2" transfer-ownership="none">
             <varargs>
             </varargs>
           </parameter>
@@ -1902,7 +1902,7 @@ exposed to language bindings.</doc>
         <parameter name="param" transfer-ownership="none">
           <type name="utf8" c:type="const char*"/>
         </parameter>
-        <parameter transfer-ownership="none">
+        <parameter name="arg1" transfer-ownership="none">
           <varargs>
           </varargs>
         </parameter>

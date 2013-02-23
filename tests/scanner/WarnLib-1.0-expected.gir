@@ -29,10 +29,10 @@ and/or use gtk-doc annotations.  -->
           <instance-parameter name="self" transfer-ownership="none">
             <type name="Whatever" c:type="WarnLibWhatever*"/>
           </instance-parameter>
-          <parameter transfer-ownership="none">
+          <parameter name="arg1" transfer-ownership="none">
             <type name="gint" c:type="int"/>
           </parameter>
-          <parameter transfer-ownership="none">
+          <parameter name="arg2" transfer-ownership="none">
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
         </parameters>
@@ -45,10 +45,10 @@ and/or use gtk-doc annotations.  -->
           <instance-parameter name="self" transfer-ownership="none">
             <type name="Whatever" c:type="WarnLibWhatever*"/>
           </instance-parameter>
-          <parameter transfer-ownership="none">
+          <parameter name="arg1" transfer-ownership="none">
             <type name="gint" c:type="int"/>
           </parameter>
-          <parameter transfer-ownership="none">
+          <parameter name="arg2" transfer-ownership="none">
             <type name="gpointer" c:type="gpointer"/>
           </parameter>
         </parameters>
@@ -69,10 +69,10 @@ and/or use gtk-doc annotations.  -->
             <parameter name="self" transfer-ownership="none">
               <type name="Whatever" c:type="WarnLibWhatever*"/>
             </parameter>
-            <parameter transfer-ownership="none">
+            <parameter name="arg1" transfer-ownership="none">
               <type name="gint" c:type="int"/>
             </parameter>
-            <parameter transfer-ownership="none">
+            <parameter name="arg2" transfer-ownership="none">
               <type name="gpointer" c:type="gpointer"/>
             </parameter>
           </parameters>
