@@ -38,7 +38,7 @@ void regress_annotation_object_watch (RegressAnnotationObject* object,
 
   
     <p>This is here just for the sake of being overriden by its
-<link xref="Regress.AnnotationObject.watch_full"/>.</p>
+<link xref="Regress.watch_full"/>.</p>
   
   
   

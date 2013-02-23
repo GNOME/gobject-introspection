@@ -38,10 +38,18 @@ def make_page_id(node, recursive=False):
         else:
             return 'index'
 
-    if isinstance(node, (ast.Property, ast.Signal, ast.VFunction)):
-        return '%s-%s' % (make_page_id(node.parent, recursive=True), node.name)
+    if hasattr(node, '_chain') and node._chain:
+        parent = node._chain[-1]
     else:
-        return '%s.%s' % (make_page_id(node.parent, recursive=True), node.name)
+        parent = None
+
+    if parent is None:
+        return '%s.%s' % (node.namespace.name, node.name)
+
+    if isinstance(node, (ast.Property, ast.Signal, ast.VFunction)):
+        return '%s-%s' % (make_page_id(parent, recursive=True), node.name)
+    else:
+        return '%s.%s' % (make_page_id(parent, recursive=True), node.name)
 
 def get_node_kind(node):
     if isinstance(node, ast.Namespace):
@@ -314,7 +322,10 @@ class DocFormatter(object):
             return make_page_id(node)
 
     def format_xref(self, node, **attrdict):
-        if isinstance(node, ast.Member):
+        if node is None:
+            attrs = [('xref', 'index')] + attrdict.items()
+            return xmlwriter.build_xml_tag('link', attrs)
+        elif isinstance(node, ast.Member):
             # Enum/BitField members are linked to the main enum page.
             return self.format_xref(node.parent, **attrdict) + '.' + node.name
         else:
@@ -587,26 +598,24 @@ class DocWriter(object):
             # directory already made
             pass
 
-        nodes = [self._transformer.namespace]
-        for node in self._transformer.namespace.itervalues():
-            if isinstance(node, ast.Function) and node.moved_to is not None:
-                continue
-            if getattr(node, 'disguised', False):
-                continue
-            nodes.append(node)
-            if isinstance(node, (ast.Class, ast.Interface, ast.Record)):
-                nodes += getattr(node, 'methods', [])
-                nodes += getattr(node, 'static_methods', [])
-                nodes += getattr(node, 'virtual_methods', [])
-                nodes += getattr(node, 'properties', [])
-                nodes += getattr(node, 'signals', [])
-                nodes += getattr(node, 'constructors', [])
-        for node in nodes:
-            if self._formatter.should_render_node(node):
-                self._render_node(node, output)
+        self._walk_node(output, self._transformer.namespace, [])
+        self._transformer.namespace.walk(lambda node, chain: self._walk_node(output, node, chain))
 
-    def _render_node(self, node, output):
+    def _walk_node(self, output, node, chain):
+        if isinstance(node, ast.Function) and node.moved_to is not None:
+            return False
+        if getattr(node, 'disguised', False):
+            return False
+        if self._formatter.should_render_node(node):
+            self._render_node(node, chain, output)
+            return True
+        return False
+
+    def _render_node(self, node, chain, output):
         namespace = self._transformer.namespace
+
+        # A bit of a hack...maybe this should be an official API
+        node._chain = list(chain)
 
         page_kind = get_node_kind(node)
         template_name = '%s/%s.tmpl' % (self._language, page_kind)
