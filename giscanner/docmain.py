@@ -32,7 +32,7 @@ def doc_main(args):
                       help="Directory to write output to")
     parser.add_option("-l", "--language",
                       action="store", dest="language",
-                      default="Python",
+                      default="c",
                       help="Output language")
     parser.add_option("", "--add-include-path",
                       action="append", dest="include_paths", default=[],
