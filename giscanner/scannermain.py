@@ -44,6 +44,9 @@ from . import utils
 
 def get_preprocessor_option_group(parser):
     group = optparse.OptionGroup(parser, "Preprocessor options")
+    group.add_option("--cflags", help="Pre-processor cflags",
+                     action="store", dest="cpp_cflags",
+                     default="")
     group.add_option("-I", help="Pre-processor include file",
                      action="append", dest="cpp_includes",
                      default=[])
@@ -351,7 +354,8 @@ def create_source_scanner(options, args):
     # Run the preprocessor, tokenize and construct simple
     # objects representing the raw C symbols
     ss = SourceScanner()
-    ss.set_cpp_options(options.cpp_includes,
+    ss.set_cpp_options(options.cpp_cflags,
+                       options.cpp_includes,
                        options.cpp_defines,
                        options.cpp_undefines)
     ss.parse_files(filenames)

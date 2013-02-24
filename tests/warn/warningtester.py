@@ -40,6 +40,7 @@ class ChunkedIO(object):
 
 class Options:
     def __init__(self):
+        self.cpp_cflags = ""
         self.cpp_includes = []
         self.cpp_defines = []
         self.cpp_undefines = []
@@ -110,7 +111,7 @@ def check(args):
     exit_code = process_packages(options, ['gobject-2.0'])
     if exit_code:
         sys.exit(exit_code)
-    ss.set_cpp_options(options.cpp_includes, options.cpp_defines, options.cpp_undefines)
+    ss.set_cpp_options(options.cpp_cflags, options.cpp_includes, options.cpp_defines, options.cpp_undefines)
     ss.parse_files([filename])
     ss.parse_macros([filename])
     transformer.parse(ss.get_symbols())
