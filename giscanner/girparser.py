@@ -46,7 +46,6 @@ class GIRParser(object):
 
     def __init__(self, types_only=False):
         self._types_only = types_only
-        self._shared_libraries = []
         self._pkgconfig_packages = set()
         self._namespace = None
         self._filename_stack = []
@@ -62,7 +61,6 @@ class GIRParser(object):
 
     def parse_tree(self, tree):
         self._namespace = None
-        self._shared_libraries = []
         self._pkgconfig_packages = set()
         self._includes = set()
         self._c_includes = set()
@@ -71,9 +69,6 @@ class GIRParser(object):
 
     def get_namespace(self):
         return self._namespace
-
-    def get_shared_libraries(self):
-        return self._shared_libraries
 
     def get_c_includes(self):
         return self._c_includes
@@ -140,8 +135,7 @@ class GIRParser(object):
                                     identifier_prefixes=identifier_prefixes,
                                     symbol_prefixes=symbol_prefixes)
         if 'shared-library' in ns.attrib:
-            self._shared_libraries.extend(
-                ns.attrib['shared-library'].split(','))
+            self._namespace.shared_libraries = ns.attrib['shared-library'].split(',')
         self._namespace.includes = self._includes
 
         parser_methods = {

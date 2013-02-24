@@ -30,16 +30,16 @@ COMPATIBLE_GIR_VERSION = '1.2'
 
 class GIRWriter(XMLWriter):
 
-    def __init__(self, namespace, shlibs, pkgs, c_includes):
+    def __init__(self, namespace, pkgs, c_includes):
         super(GIRWriter, self).__init__()
         self.write_comment(
 '''This file was automatically generated from C sources - DO NOT EDIT!
 To affect the contents of this file, edit the original C definitions,
 and/or use gtk-doc annotations. ''')
-        self._write_repository(namespace, shlibs, pkgs,
+        self._write_repository(namespace, pkgs,
                                c_includes)
 
-    def _write_repository(self, namespace, shlibs,
+    def _write_repository(self, namespace,
                           packages=None, c_includes=None):
         if packages is None:
             packages = frozenset()
@@ -59,7 +59,7 @@ and/or use gtk-doc annotations. ''')
             for c_include in sorted(set(c_includes)):
                 self._write_c_include(c_include)
             self._namespace = namespace
-            self._write_namespace(namespace, shlibs)
+            self._write_namespace(namespace)
             self._namespace = None
 
     def _write_include(self, include):
@@ -74,10 +74,10 @@ and/or use gtk-doc annotations. ''')
         attrs = [('name', c_include)]
         self.write_tag('c:include', attrs)
 
-    def _write_namespace(self, namespace, shlibs):
+    def _write_namespace(self, namespace):
         attrs = [('name', namespace.name),
                  ('version', namespace.version),
-                 ('shared-library', ','.join(shlibs)),
+                 ('shared-library', ','.join(namespace.shared_libraries)),
                  ('c:identifier-prefixes', ','.join(namespace.identifier_prefixes)),
                  ('c:symbol-prefixes', ','.join(namespace.symbol_prefixes))]
         with self.tagcontext('namespace', attrs):

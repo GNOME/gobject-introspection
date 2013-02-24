@@ -194,7 +194,6 @@ def passthrough_gir(path, f):
     parser.parse(path)
 
     writer = GIRWriter(parser.get_namespace(),
-                       parser.get_shared_libraries(),
                        parser.get_pkgconfig_packages(),
                        parser.get_c_includes())
     f.write(writer.get_xml())
@@ -450,6 +449,8 @@ def scanner_main(args):
     else:
         shlibs = []
 
+    transformer.namespace.shared_libraries = shlibs
+
     main = MainTransformer(transformer, blocks)
     main.transform()
 
@@ -472,7 +473,7 @@ def scanner_main(args):
     else:
         exported_packages = options.packages
 
-    writer = Writer(transformer.namespace, shlibs,
+    writer = Writer(transformer.namespace,
                     exported_packages, options.c_includes)
     data = writer.get_xml()
 
