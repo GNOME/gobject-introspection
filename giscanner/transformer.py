@@ -54,14 +54,10 @@ class Transformer(object):
         self._namespace = namespace
         self._pkg_config_packages = set()
         self._typedefs_ns = {}
-        self._includes = {} # <string namespace -> Namespace>
-        self._include_names = set() # string namespace
+        self._parsed_includes = {} # <string namespace -> Namespace>
         self._includepaths = []
         self._passthrough_mode = False
         self._annotations = {}
-
-    def get_includes(self):
-        return self._include_names
 
     def get_pkgconfig_packages(self):
         return self._pkg_config_packages
@@ -125,11 +121,11 @@ class Transformer(object):
         self._includepaths = list(paths)
 
     def register_include(self, include):
-        if include in self._include_names:
+        if include in self._namespace.includes:
             return
+        self._namespace.includes.add(include)
         filename = self._find_include(include)
         self._parse_include(filename)
-        self._include_names.add(include)
 
     def register_include_uninstalled(self, include_path):
         basename = os.path.basename(include_path)
@@ -138,10 +134,10 @@ class Transformer(object):
 "Include path %r must be a filename path ending in .gir" % (include_path, ))
         girname = basename[:-4]
         include = ast.Include.from_string(girname)
-        if include in self._include_names:
+        if include in self._namespace.includes:
             return
+        self._namespace.includes.add(include)
         self._parse_include(include_path, uninstalled=True)
-        self._include_names.add(include)
 
     def lookup_giname(self, name):
         """Given a name of the form Foo or Bar.Foo,
@@ -155,11 +151,11 @@ namespaces."""
             if ns == self._namespace.name:
                 return self._namespace.get(giname)
             # Fallback to the main namespace if not a dependency and matches a prefix
-            if ns in self._namespace.identifier_prefixes and not ns in self._includes:
+            if ns in self._namespace.identifier_prefixes and not ns in self._parsed_includes:
                 message.warn(("Deprecated reference to identifier " +
                               "prefix %s in GIName %s") % (ns, name))
                 return self._namespace.get(giname)
-            include = self._includes[ns]
+            include = self._parsed_includes[ns]
             return include.get(giname)
 
     def lookup_typenode(self, typeobj):
@@ -196,7 +192,7 @@ None."""
         self._parse_include(filename)
         parser = self._cachestore.load(filename)
         self._namespace = parser.get_namespace()
-        del self._includes[self._namespace.name]
+        del self._parsed_includes[self._namespace.name]
         return self
 
     def _parse_include(self, filename, uninstalled=False):
@@ -209,20 +205,21 @@ None."""
             if self._cachestore is not None:
                 self._cachestore.store(filename, parser)
 
-        for include in parser.get_includes():
-            self.register_include(include)
+        for include in parser.get_namespace().includes:
+            dep_filename = self._find_include(include)
+            self._parse_include(dep_filename)
 
         if not uninstalled:
             for pkg in parser.get_pkgconfig_packages():
                 self._pkg_config_packages.add(pkg)
         namespace = parser.get_namespace()
-        self._includes[namespace.name] = namespace
+        self._parsed_includes[namespace.name] = namespace
 
     def _iter_namespaces(self):
         """Return an iterator over all included namespaces; the
 currently-scanned namespace is first."""
         yield self._namespace
-        for ns in self._includes.itervalues():
+        for ns in self._parsed_includes.itervalues():
             yield ns
 
     def _sort_matches(self, x, y):
@@ -899,7 +896,7 @@ Note that type resolution may not succeed."""
         # which has nominal namespace of "Meta", but a few classes are
         # "Mutter".  We don't export that data in introspection currently.
         # Basically the library should be fixed, but we'll hack around it here.
-        for namespace in self._includes.itervalues():
+        for namespace in self._parsed_includes.itervalues():
             target = namespace.get_by_ctype(pointer_stripped)
             if target:
                 typeval.target_giname = '%s.%s' % (namespace.name, target.name)
