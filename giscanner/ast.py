@@ -1020,6 +1020,8 @@ class Class(Node, Registered):
                 field.anonymous_node.walk(callback, chain)
         for sig in self.signals:
             sig.walk(callback, chain)
+        for prop in self.properties:
+            prop.walk(callback, chain)
 
 
 class Interface(Node, Registered):
