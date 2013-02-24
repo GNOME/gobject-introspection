@@ -374,6 +374,7 @@ class Namespace(object):
         self.symbols = {} # Maps from function symbols -> Function
         self.includes = set() # Include
         self.shared_libraries = [] # str
+        self.c_includes = [] # str
 
     def type_from_name(self, name, ctype=None):
         """Backwards compatibility method for older .gir files, which

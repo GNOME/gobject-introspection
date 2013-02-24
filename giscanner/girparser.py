@@ -70,9 +70,6 @@ class GIRParser(object):
     def get_namespace(self):
         return self._namespace
 
-    def get_c_includes(self):
-        return self._c_includes
-
     def get_c_prefix(self):
         return self._c_prefix
 
@@ -137,6 +134,7 @@ class GIRParser(object):
         if 'shared-library' in ns.attrib:
             self._namespace.shared_libraries = ns.attrib['shared-library'].split(',')
         self._namespace.includes = self._includes
+        self._namespace.c_includes = self._c_includes
 
         parser_methods = {
             _corens('alias'): self._parse_alias,
