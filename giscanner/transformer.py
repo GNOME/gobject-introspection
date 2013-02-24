@@ -210,7 +210,7 @@ None."""
             self._parse_include(dep_filename)
 
         if not uninstalled:
-            for pkg in parser.get_pkgconfig_packages():
+            for pkg in parser.get_namespace().exported_packages:
                 self._pkg_config_packages.add(pkg)
         namespace = parser.get_namespace()
         self._parsed_includes[namespace.name] = namespace

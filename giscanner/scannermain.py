@@ -193,8 +193,7 @@ def passthrough_gir(path, f):
     parser = GIRParser()
     parser.parse(path)
 
-    writer = GIRWriter(parser.get_namespace(),
-                       parser.get_pkgconfig_packages())
+    writer = GIRWriter(parser.get_namespace())
     f.write(writer.get_xml())
 
 def test_codegen(optstring):
@@ -473,8 +472,8 @@ def scanner_main(args):
         exported_packages = options.packages
 
     transformer.namespace.c_includes = options.c_includes
-    writer = Writer(transformer.namespace,
-                    exported_packages)
+    transformer.namespace.exported_packages = exported_packages
+    writer = Writer(transformer.namespace)
     data = writer.get_xml()
 
     write_output(data, options)

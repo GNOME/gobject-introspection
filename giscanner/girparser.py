@@ -46,7 +46,6 @@ class GIRParser(object):
 
     def __init__(self, types_only=False):
         self._types_only = types_only
-        self._pkgconfig_packages = set()
         self._namespace = None
         self._filename_stack = []
 
@@ -72,11 +71,6 @@ class GIRParser(object):
 
     def get_c_prefix(self):
         return self._c_prefix
-
-    def get_pkgconfig_packages(self):
-        if not hasattr(self, '_pkgconfig_packages'):
-            self._pkgconfig_packages = []
-        return self._pkgconfig_packages
 
     # Private
 
@@ -135,6 +129,7 @@ class GIRParser(object):
             self._namespace.shared_libraries = ns.attrib['shared-library'].split(',')
         self._namespace.includes = self._includes
         self._namespace.c_includes = self._c_includes
+        self._namespace.exported_packages = self._pkgconfig_packages
 
         parser_methods = {
             _corens('alias'): self._parse_alias,

@@ -375,6 +375,7 @@ class Namespace(object):
         self.includes = set() # Include
         self.shared_libraries = [] # str
         self.c_includes = [] # str
+        self.exported_packages = [] # str
 
     def type_from_name(self, name, ctype=None):
         """Backwards compatibility method for older .gir files, which

@@ -30,17 +30,15 @@ COMPATIBLE_GIR_VERSION = '1.2'
 
 class GIRWriter(XMLWriter):
 
-    def __init__(self, namespace, pkgs):
+    def __init__(self, namespace):
         super(GIRWriter, self).__init__()
         self.write_comment(
 '''This file was automatically generated from C sources - DO NOT EDIT!
 To affect the contents of this file, edit the original C definitions,
 and/or use gtk-doc annotations. ''')
-        self._write_repository(namespace, pkgs)
+        self._write_repository(namespace)
 
-    def _write_repository(self, namespace, packages=None):
-        if packages is None:
-            packages = frozenset()
+    def _write_repository(self, namespace):
         attrs = [
             ('version', COMPATIBLE_GIR_VERSION),
             ('xmlns', 'http://www.gtk.org/introspection/core/1.0'),
@@ -50,7 +48,7 @@ and/or use gtk-doc annotations. ''')
         with self.tagcontext('repository', attrs):
             for include in sorted(namespace.includes):
                 self._write_include(include)
-            for pkg in sorted(set(packages)):
+            for pkg in sorted(set(namespace.exported_packages)):
                 self._write_pkgconfig_pkg(pkg)
             for c_include in sorted(set(namespace.c_includes)):
                 self._write_c_include(c_include)
