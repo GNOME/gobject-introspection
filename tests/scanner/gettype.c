@@ -1,14 +1,14 @@
 #include "gettype.h"
 
-G_DEFINE_TYPE(GetTypeObject, gettype_object, G_TYPE_OBJECT);
+G_DEFINE_TYPE (GetTypeObject, gettype_object, G_TYPE_OBJECT);
 
 static void
-gettype_object_class_init (GetTypeObjectClass *klass)
+gettype_object_class_init (GetTypeObjectClass * klass)
 {
 }
 
 static void
-gettype_object_init (GetTypeObject *object)
+gettype_object_init (GetTypeObject * object)
 {
 }
 
@@ -28,9 +28,9 @@ gettype_object_new (void)
  * Returns: 0
  */
 GType
-gettype_object_nonmeta1_get_type (GetTypeObject *obj)
+gettype_object_nonmeta1_get_type (GetTypeObject * obj)
 {
-    return 0;
+  return 0;
 }
 
 /**
@@ -44,7 +44,7 @@ gettype_object_nonmeta1_get_type (GetTypeObject *obj)
 gboolean
 gettype_object_nonmeta2_get_type (void)
 {
-    return TRUE;
+  return TRUE;
 }
 
 /**
@@ -58,5 +58,5 @@ gettype_object_nonmeta2_get_type (void)
 gboolean
 gettype_object_nonmeta_get_gtype (void)
 {
-    return TRUE;
+  return TRUE;
 }
