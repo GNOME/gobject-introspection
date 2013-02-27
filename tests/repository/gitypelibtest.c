@@ -232,6 +232,48 @@ test_char_types (GIRepository *repo)
     g_base_info_unref (prop_obj);
 }
 
+static void
+test_signal_array_len (GIRepository *repo)
+{
+    GIObjectInfo *testobj_info;
+    GISignalInfo *sig_info;
+    GIArgInfo arg_info;
+    GITypeInfo type_info;
+    int i;
+
+    g_assert (g_irepository_require (repo, "Regress", NULL, 0, NULL));
+    testobj_info = g_irepository_find_by_name (repo, "Regress", "TestObj");
+    g_assert (testobj_info != NULL);
+
+    /* find sig-with-array-len-prop signal */
+    for (i = g_object_info_get_n_signals (testobj_info) - 1; i >= 0; --i) {
+        sig_info = g_object_info_get_signal (testobj_info, i);
+        g_assert (sig_info != NULL);
+        if (strcmp (g_base_info_get_name (sig_info), "sig-with-array-len-prop") == 0)
+            break;
+        g_base_info_unref (sig_info);
+    }
+    g_assert (i >= 0);
+
+    g_assert_cmpint (g_callable_info_get_n_args (sig_info), ==, 2);
+
+    /* verify array argument */
+    g_callable_info_load_arg (sig_info, 0, &arg_info);
+    g_assert_cmpstr (g_base_info_get_name (&arg_info), ==, "arr");
+    g_arg_info_load_type (&arg_info, &type_info);
+    g_assert_cmpint (g_type_info_get_tag (&type_info), ==, GI_TYPE_TAG_ARRAY);
+    g_assert_cmpint (g_type_info_get_array_type (&type_info), ==, GI_ARRAY_TYPE_C);
+    g_assert (!g_type_info_is_zero_terminated (&type_info));
+    g_assert_cmpint (g_type_info_get_array_length (&type_info), ==, 1);
+
+    /* verify array length argument */
+    g_callable_info_load_arg (sig_info, 1, &arg_info);
+    g_assert_cmpstr (g_base_info_get_name (&arg_info), ==, "len");
+
+    g_base_info_unref (sig_info);
+    g_base_info_unref (testobj_info);
+}
+
 int
 main(int argc, char **argv)
 {
@@ -247,6 +289,7 @@ main(int argc, char **argv)
     test_fundamental_get_ref_function_pointer (repo);
     test_hash_with_cairo_typelib (repo);
     test_char_types (repo);
+    test_signal_array_len (repo);
 
     exit(0);
 }

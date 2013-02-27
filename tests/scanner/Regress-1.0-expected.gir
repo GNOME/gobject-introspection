@@ -3331,6 +3331,24 @@ raise an error.</doc>
           <type name="none" c:type="void"/>
         </return-value>
       </glib:signal>
+      <glib:signal name="sig-with-array-len-prop" when="last">
+        <doc xml:whitespace="preserve">This test signal similar to GSettings::change-event</doc>
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <parameter name="arr" transfer-ownership="none" allow-none="1">
+            <doc xml:whitespace="preserve">numbers, or %NULL</doc>
+            <array length="1" zero-terminated="0" c:type="gpointer">
+              <type name="guint"/>
+            </array>
+          </parameter>
+          <parameter name="len" transfer-ownership="none">
+            <doc xml:whitespace="preserve">length of @arr, or 0</doc>
+            <type name="gint" c:type="gint"/>
+          </parameter>
+        </parameters>
+      </glib:signal>
       <glib:signal name="sig-with-array-prop" when="last">
         <doc xml:whitespace="preserve">This test signal is like TelepathyGlib's
  TpChannel:: group-members-changed-detailed:</doc>

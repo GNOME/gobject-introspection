@@ -2173,6 +2173,7 @@ regress_test_obj_default_matrix (RegressTestObj *obj, const char *somestr)
 
 enum {
   REGRESS_TEST_OBJ_SIGNAL_SIG_NEW_WITH_ARRAY_PROP,
+  REGRESS_TEST_OBJ_SIGNAL_SIG_NEW_WITH_ARRAY_LEN_PROP,
   REGRESS_TEST_OBJ_SIGNAL_SIG_WITH_HASH_PROP,
   REGRESS_TEST_OBJ_SIGNAL_SIG_WITH_STRV,
   REGRESS_TEST_OBJ_SIGNAL_SIG_WITH_OBJ,
@@ -2239,6 +2240,27 @@ regress_test_obj_class_init (RegressTestObjClass *klass)
 		  G_TYPE_NONE,
 		  1,
 		  G_TYPE_ARRAY);
+
+  /**
+   * RegressTestObj::sig-with-array-len-prop:
+   * @self: an object
+   * @arr: (array length=len) (element-type uint) (allow-none): numbers, or %NULL
+   * @len: length of @arr, or 0
+   *
+   * This test signal similar to GSettings::change-event
+   */
+  regress_test_obj_signals[REGRESS_TEST_OBJ_SIGNAL_SIG_NEW_WITH_ARRAY_LEN_PROP] =
+    g_signal_new ("sig-with-array-len-prop",
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  0,
+		  NULL,
+		  NULL,
+		  NULL,
+		  G_TYPE_NONE,
+		  2,
+		  G_TYPE_POINTER,
+		  G_TYPE_INT);
 
   /**
    * RegressTestObj::sig-with-hash-prop:
