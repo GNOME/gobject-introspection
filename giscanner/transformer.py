@@ -206,8 +206,9 @@ None."""
                 self._cachestore.store(filename, parser)
 
         for include in parser.get_namespace().includes:
-            dep_filename = self._find_include(include)
-            self._parse_include(dep_filename)
+            if include.name not in self._parsed_includes:
+                dep_filename = self._find_include(include)
+                self._parse_include(dep_filename)
 
         if not uninstalled:
             for pkg in parser.get_namespace().exported_packages:
