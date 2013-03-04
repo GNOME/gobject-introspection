@@ -4948,6 +4948,14 @@ static void gi_marshalling_tests_properties_object_init (GIMarshallingTestsPrope
 static void
 gi_marshalling_tests_properties_object_finalize (GObject *obj)
 {
+  GIMarshallingTestsPropertiesObject *self;
+  self = GI_MARSHALLING_TESTS_PROPERTIES_OBJECT (obj);
+
+  if (self->some_strv != NULL) {
+    g_strfreev (self->some_strv);
+    self->some_strv = NULL;
+  }
+
   G_OBJECT_CLASS (gi_marshalling_tests_properties_object_parent_class)->finalize (obj);
 }
 
