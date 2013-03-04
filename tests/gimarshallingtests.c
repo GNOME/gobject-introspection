@@ -2933,7 +2933,7 @@ gi_marshalling_tests_ghashtable_utf8_full_return (void)
 {
   GHashTable *hash_table = NULL;
 
-  hash_table = g_hash_table_new (g_str_hash, g_str_equal);
+  hash_table = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
   g_hash_table_insert (hash_table, g_strdup ("-1"), g_strdup ("1"));
   g_hash_table_insert (hash_table, g_strdup ("0"), g_strdup ("0"));
   g_hash_table_insert (hash_table, g_strdup ("1"), g_strdup ("-1"));
