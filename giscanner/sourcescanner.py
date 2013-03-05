@@ -223,9 +223,7 @@ class SourceScanner(object):
 
     # Public API
 
-    def set_cpp_options(self, cflags, includes, defines, undefines):
-        if cflags:
-            self._cpp_options = cflags.split()
+    def set_cpp_options(self, includes, defines, undefines):
         for prefix, args in [('-I', includes),
                              ('-D', defines),
                              ('-U', undefines)]:
