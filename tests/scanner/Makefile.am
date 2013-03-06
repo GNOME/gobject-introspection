@@ -34,7 +34,7 @@ libregress_la_SOURCES = \
 	$(srcdir)/foo.c $(srcdir)/foo.h \
 	$(srcdir)/drawable.c $(srcdir)/drawable.h \
 	$(NULL)
-REGRESS_PRINT_PREVIEW_COMMAND="evince --unlink-tempfile --preview --print-settings %s %f"
+REGRESS_PRINT_PREVIEW_COMMAND="evince --unlink-tempfile --preview --print-settings '%s' '%f'"
 libregress_la_CPPFLAGS = -DREGRESS_PRINT_PREVIEW_COMMAND=\"$(REGRESS_PRINT_PREVIEW_COMMAND)\"
 libregress_la_LIBADD = $(GIO_LIBS)
 if HAVE_CAIRO
@@ -87,7 +87,7 @@ if HAVE_CAIRO
 Regress_1_0_gir_INCLUDES += cairo-1.0 
 endif
 Regress_1_0_gir_FILES = $(libregress_la_SOURCES)
-Regress_1_0_gir_SCANNERFLAGS = --c-include="regress.h" --warn-error $(libregress_la_CPPFLAGS)
+Regress_1_0_gir_SCANNERFLAGS = --c-include="regress.h" --warn-error
 GIRS += Regress-1.0.gir
 
 WarnLib-1.0.gir: $(top_builddir)/Gio-2.0.gir libwarnlib.la
