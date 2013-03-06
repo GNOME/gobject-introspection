@@ -142,7 +142,9 @@ $(1): $$($(_gir_name)_FILES)
 	  $(_gir_program) \
 	  $(_gir_libraries) \
 	  $($(_gir_name)_SCANNERFLAGS) \
+	  --cflags-begin \
 	  $($(_gir_name)_CFLAGS) \
+	  --cflags-end \
 	  $($(_gir_name)_LDFLAGS) \
 	  $$^ \
 	  --output $(1)

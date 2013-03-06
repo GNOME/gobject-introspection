@@ -42,8 +42,23 @@ from giscanner.sourcescanner import SourceScanner
 from giscanner.transformer import Transformer
 from . import utils
 
+def process_cflags_begin(option, opt, value, parser):
+    cflags = getattr(parser.values, option.dest)
+    while len(parser.rargs) > 0 and parser.rargs[0] != '--cflags-end':
+        cflags.append(parser.rargs.pop(0))
+
+def process_cflags_end(option, opt, value, parser):
+    pass
+
 def get_preprocessor_option_group(parser):
     group = optparse.OptionGroup(parser, "Preprocessor options")
+    group.add_option("", "--cflags-begin",
+                     help="Start preprocessor/compiler flags",
+                     dest="cflags", default=[],
+                     action="callback", callback=process_cflags_begin)
+    group.add_option("", "--cflags-end",
+                     help="End preprocessor/compiler flags",
+                     action="callback", callback=process_cflags_end)
     group.add_option("-I", help="Pre-processor include file",
                      action="append", dest="cpp_includes",
                      default=[])
@@ -353,7 +368,8 @@ def create_source_scanner(options, args):
     ss = SourceScanner()
     ss.set_cpp_options(options.cpp_includes,
                        options.cpp_defines,
-                       options.cpp_undefines)
+                       options.cpp_undefines,
+                       cflags=options.cflags)
     ss.parse_files(filenames)
     ss.parse_macros(filenames)
     return ss
