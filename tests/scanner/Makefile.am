@@ -34,8 +34,9 @@ libregress_la_SOURCES = \
 	$(srcdir)/foo.c $(srcdir)/foo.h \
 	$(srcdir)/drawable.c $(srcdir)/drawable.h \
 	$(NULL)
-REGRESS_PRINT_PREVIEW_COMMAND="evince --unlink-tempfile --preview --print-settings '%s' '%f'"
-libregress_la_CPPFLAGS = -DREGRESS_PRINT_PREVIEW_COMMAND=\"$(REGRESS_PRINT_PREVIEW_COMMAND)\"
+REGRESS_PRINT_PREVIEW_COMMAND="evince --unlink-tempfile --preview --print-settings %s %f"
+libregress_la_CPPFLAGS = -DREGRESS_PRINT_PREVIEW_COMMAND=\"$(REGRESS_PRINT_PREVIEW_COMMAND)\" \
+                         -DREGRESS_SOME_CHAR=\'c\'
 libregress_la_LIBADD = $(GIO_LIBS)
 if HAVE_CAIRO
 libregress_la_LIBADD += $(CAIRO_LIBS)
@@ -81,7 +82,7 @@ GIRS += SLetter-1.0.gir
 
 Regress-1.0.gir: $(top_builddir)/Gio-2.0.gir Utility-1.0.gir libregress.la
 Regress_1_0_gir_LIBS = libregress.la
-Regress_1_0_gir_CFLAGS = $(libregress_la_CPPFLAGS) $(libregress_la_CFLAGS)
+Regress_1_0_gir_CFLAGS = $(libregress_la_CPPFLAGS) $(libregress_la_CFLAGS) -include "glib.h"
 Regress_1_0_gir_INCLUDES = Gio-2.0 Utility-1.0
 if HAVE_CAIRO
 Regress_1_0_gir_INCLUDES += cairo-1.0 
