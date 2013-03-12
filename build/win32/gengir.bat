@@ -257,8 +257,10 @@ g-ir-compiler --includedir=. --debug --verbose Gio-2.0.gir -o Gio-2.0.typelib
 g-ir-compiler --includedir=. --debug --verbose GIRepository-2.0.gir -o GIRepository-2.0.typelib
 
 rem Now process the bundled .gir files
+python create_nonglib_gir.py --vsver=%VSVER%
 set CURRDIR=%CD%
 cd ..\..\gir
+g-ir-compiler --includedir=. --debug --verbose cairo-1.0.gir -o cairo-1.0.typelib
 g-ir-compiler --includedir=. --debug --verbose freetype2-2.0.gir -o freetype2-2.0.typelib
 g-ir-compiler --includedir=. --debug --verbose GL-1.0.gir -o GL-1.0.typelib
 g-ir-compiler --includedir=. --debug --verbose libxml2-2.0.gir -o libxml2-2.0.typelib
