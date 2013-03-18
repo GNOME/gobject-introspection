@@ -804,6 +804,16 @@ struct _GIMarshallingTestsObjectClass
      */
     gboolean (*vfunc_meth_with_err) (GIMarshallingTestsObject *object, gint x, GError **error);
 
+    /**
+     * GIMarshallingTestsObjectClass::vfunc_return_enum:
+     */
+    GIMarshallingTestsFlags (* vfunc_return_enum) (GIMarshallingTestsObject *self);
+
+    /**
+     * GIMarshallingTestsObjectClass::vfunc_out_enum:
+     * @_enum: (out):
+     */
+    void (* vfunc_out_enum) (GIMarshallingTestsObject *self, GIMarshallingTestsEnum *_enum);
 
     /**
      * GIMarshallingTestsObjectClass::vfunc_return_object_transfer_none:
@@ -842,8 +852,6 @@ struct _GIMarshallingTestsObjectClass
      * @object: (in) (transfer full):
      */
     void (* vfunc_in_object_transfer_full) (GIMarshallingTestsObject *self, GObject *object);
-
-
 };
 
 struct _GIMarshallingTestsObject
@@ -880,6 +888,9 @@ void gi_marshalling_tests_object_vfunc_array_out_parameter (GIMarshallingTestsOb
 glong gi_marshalling_tests_object_vfunc_return_value_and_one_out_parameter (GIMarshallingTestsObject *self, glong *a);
 glong gi_marshalling_tests_object_vfunc_return_value_and_multiple_out_parameters (GIMarshallingTestsObject *self, glong *a, glong *b);
 gboolean gi_marshalling_tests_object_vfunc_meth_with_error (GIMarshallingTestsObject *object, gint x, GError **error);
+
+GIMarshallingTestsEnum gi_marshalling_tests_object_vfunc_return_enum (GIMarshallingTestsObject *self);
+void gi_marshalling_tests_object_vfunc_out_enum (GIMarshallingTestsObject *self, GIMarshallingTestsEnum *_enum);
 
 void gi_marshalling_tests_object_get_ref_info_for_vfunc_return_object_transfer_none (GIMarshallingTestsObject *self, guint *ref_count, gboolean *is_floating);
 void gi_marshalling_tests_object_get_ref_info_for_vfunc_return_object_transfer_full (GIMarshallingTestsObject *self, guint *ref_count, gboolean *is_floating);
