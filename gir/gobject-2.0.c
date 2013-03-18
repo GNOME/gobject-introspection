@@ -3588,7 +3588,7 @@
  * ensures that the @gobject stays alive during the call to @c_handler
  * by temporarily adding a reference count to @gobject.
  *
- * When the object is destroyed the signal handler will be automatically
+ * When the @gobject is destroyed the signal handler will be automatically
  * disconnected.  Note that this is not currently threadsafe (ie:
  * emitting a signal while @gobject is being destroyed in another thread
  * is not safe).

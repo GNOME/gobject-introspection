@@ -9522,7 +9522,9 @@
  * @text: zero-terminated string with base64 text to decode
  * @out_len: (out): The length of the decoded data is written here
  *
- * Decode a sequence of Base-64 encoded text into binary data
+ * Decode a sequence of Base-64 encoded text into binary data.  Note
+ * that the returned binary data is not necessarily zero-terminated,
+ * so it should not be used as a character string.
  *
  * Returns: (transfer full) (array length=out_len) (element-type guint8): newly allocated buffer containing the binary data that @text represents. The returned buffer must be freed with g_free().
  * Since: 2.12
@@ -15049,8 +15051,8 @@
  * g_hash_table_get_keys:
  * @hash_table: a #GHashTable
  *
- * Retrieves every key inside @hash_table. The returned data
- * is valid until @hash_table is modified.
+ * Retrieves every key inside @hash_table. The returned data is valid
+ * until changes to the hash release those keys.
  *
  * Returns: a #GList containing all the keys inside the hash table. The content of the list is owned by the hash table and should not be modified or freed. Use g_list_free() when done using the list.
  * Since: 2.14
@@ -26953,7 +26955,7 @@
  * characters of the strings.
  *
  * Returns: 0 if the strings match, a negative value if @s1 &lt; @s2, or a positive value if @s1 &gt; @s2.
- * Deprecated: 2.2: The problem with g_strncasecmp() is that it does the comparison by calling toupper()/tolower(). These functions are locale-specific and operate on single bytes. However, it is impossible to handle things correctly from an I18N standpoint by operating on bytes, since characters may be multibyte. Thus g_strncasecmp() is broken if your string is guaranteed to be ASCII, since it's locale-sensitive, and it's broken if your string is localized, since it doesn't work on many encodings at all, including UTF-8, EUC-JP, etc.  There are therefore two replacement functions: g_ascii_strncasecmp(), which only works on ASCII and is not locale-sensitive, and g_utf8_casefold(), which is good for case-insensitive sorting of UTF-8.
+ * Deprecated: 2.2: The problem with g_strncasecmp() is that it does the comparison by calling toupper()/tolower(). These functions are locale-specific and operate on single bytes. However, it is impossible to handle things correctly from an I18N standpoint by operating on bytes, since characters may be multibyte. Thus g_strncasecmp() is broken if your string is guaranteed to be ASCII, since it's locale-sensitive, and it's broken if your string is localized, since it doesn't work on many encodings at all, including UTF-8, EUC-JP, etc.  There are therefore two replacement techniques: g_ascii_strncasecmp(), which only works on ASCII and is not locale-sensitive, and g_utf8_casefold() followed by strcmp() on the resulting strings, which is good for case-insensitive sorting of UTF-8.
  */
 
 
