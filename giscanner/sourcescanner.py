@@ -303,8 +303,8 @@ class SourceScanner(object):
             proc.stdin.write('#include <%s>\n' % (filename, ))
         proc.stdin.close()
 
-        tmp = tempfile.mktemp()
-        fp = open(tmp, 'w+')
+        tmp_fd, tmp_name = tempfile.mkstemp()
+        fp = os.fdopen(tmp_fd, 'w+b')
         while True:
             data = proc.stdout.read(4096)
             if data is None:
@@ -321,4 +321,4 @@ class SourceScanner(object):
 
         self._scanner.parse_file(fp.fileno())
         fp.close()
-        os.unlink(tmp)
+        os.unlink(tmp_name)
