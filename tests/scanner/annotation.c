@@ -174,14 +174,14 @@ regress_annotation_object_class_init (RegressAnnotationObjectClass *klass)
                                                          "This property is a function pointer",
                                                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT));
 
-  /**
-   * RegressAnnotationObject:tab-property:
-   *
-   * This is a property regress_annotation intentionally indented with a mix
-   * of tabs and strings to test the tab handling capabilities of the scanner.
-   *
-   * Since: 1.2
-   */
+	  /**
+	   * RegressAnnotationObject:tab-property:
+	   *
+	   * This is a property regress_annotation intentionally indented with a mix
+	   * of tabs and strings to test the tab handling capabilities of the scanner.
+	   *
+	   * Since: 1.2
+	   */
   g_object_class_install_property (gobject_class,
                                    PROP_TAB_PROPERTY,
                                    g_param_spec_string ("tab-property",
