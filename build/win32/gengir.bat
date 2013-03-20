@@ -273,6 +273,7 @@ move /y *.gir ..\..\build\win32\vs%VSVER%\%CONF%\%PLAT%\share\gir-1.0\
 copy /y ..\..\gir\freetype2-2.0.gir ..\..\build\win32\vs%VSVER%\%CONF%\%PLAT%\share\gir-1.0\
 copy /y ..\..\gir\GL-1.0.gir ..\..\build\win32\vs%VSVER%\%CONF%\%PLAT%\share\gir-1.0\
 copy /y ..\..\gir\libxml2-2.0.gir ..\..\build\win32\vs%VSVER%\%CONF%\%PLAT%\share\gir-1.0\
+copy /y ..\..\gir\cairo-1.0.gir ..\..\build\win32\vs%VSVER%\%CONF%\%PLAT%\share\gir-1.0\
 
 mkdir ..\..\build\win32\vs%VSVER%\%CONF%\%PLAT%\lib\girepository-1.0
 move /y *.typelib ..\..\build\win32\vs%VSVER%\%CONF%\%PLAT%\lib\girepository-1.0\
