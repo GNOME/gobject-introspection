@@ -128,12 +128,12 @@ regress_annotation_object_class_init (RegressAnnotationObjectClass *klass)
   /**
    * RegressAnnotationObject::attribute-signal:
    * @regress_annotation: the regress_annotation object
-   * @arg1: (attribute some.regress_annotation.foo1 val1): a value
-   * @arg2: (attribute some.regress_annotation.foo2 val2): another value
+   * @arg1: (attribute some.annotation.foo1 val1): a value
+   * @arg2: (attribute some.annotation.foo2 val2): another value
    *
    * This signal tests a signal with attributes.
    *
-   * Returns: (attribute some.regress_annotation.foo3 val3): the return value
+   * Returns: (attribute some.annotation.foo3 val3): the return value
    */
   regress_annotation_object_signals[ATTRIBUTE_SIGNAL] =
     g_signal_new ("attribute-signal",
@@ -177,7 +177,7 @@ regress_annotation_object_class_init (RegressAnnotationObjectClass *klass)
 	  /**
 	   * RegressAnnotationObject:tab-property:
 	   *
-	   * This is a property regress_annotation intentionally indented with a mix
+	   * This is a property annotation intentionally indented with a mix
 	   * of tabs and strings to test the tab handling capabilities of the scanner.
 	   *
 	   * Since: 1.2
@@ -622,7 +622,7 @@ regress_annotation_object_watch (RegressAnnotationObject *object,
  * @user_data: The callback data
  * @destroy: Destroy notification
  *
- * Test overriding via the "Rename To" regress_annotation.
+ * Test overriding via the "Rename To" annotation.
  *
  * Rename to: regress_annotation_object_watch
  */
@@ -721,7 +721,7 @@ regress_annotation_object_extra_annos (RegressAnnotationObject *object)
  * @callback: (destroy destroy) (closure data): Destroy notification
  *
  * Test messing up the heuristic of closure/destroy-notification
- * detection, and fixing it via regress_annotations.
+ * detection, and fixing it via annotations.
  */
 void
 regress_annotation_custom_destroy (RegressAnnotationCallback callback,
@@ -763,9 +763,9 @@ regress_annotation_ptr_array (GPtrArray *array)
 /**
  * regress_annotation_attribute_func:
  * @object: A #RegressAnnotationObject.
- * @data: (attribute some.regress_annotation value) (attribute another.regress_annotation blahvalue): Some data.
+ * @data: (attribute some.annotation value) (attribute another.annotation blahvalue): Some data.
  *
- * Returns: (attribute some.other.regress_annotation value2) (attribute yet.another.regress_annotation another_value): The return value.
+ * Returns: (attribute some.other.annotation value2) (attribute yet.another.annotation another_value): The return value.
  */
 gint
 regress_annotation_attribute_func (RegressAnnotationObject *object,

@@ -18,7 +18,7 @@
 </code></synopsis>
 
   
-    <p>This is a property regress_annotation intentionally indented with a mix
+    <p>This is a property annotation intentionally indented with a mix
 of tabs and strings to test the tab handling capabilities of the scanner.</p>
   
   

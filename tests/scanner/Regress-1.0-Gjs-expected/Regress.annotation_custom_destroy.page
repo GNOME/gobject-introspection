@@ -30,7 +30,7 @@ function annotation_custom_destroy(callback:Regress.AnnotationCallback):void {
 
   
     <p>Test messing up the heuristic of closure/destroy-notification
-detection, and fixing it via regress_annotations.</p>
+detection, and fixing it via annotations.</p>
   
   
   

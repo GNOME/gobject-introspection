@@ -18,7 +18,7 @@ from gi.repository import Regress
 annotation_object = Regress.AnnotationObject(<link xref='Regress.AnnotationObject-function-property'>function_property</link>=value, <link xref='Regress.AnnotationObject-string-property'>string_property</link>=value, <link xref='Regress.AnnotationObject-tab-property'>tab_property</link>=value)  </code></synopsis>
 
   
-    <p>This is an object used to test regress_annotations.</p>
+    <p>This is an object used to test annotations.</p>
   
   
   

@@ -42,7 +42,7 @@ void regress_annotation_object_watch_full (RegressAnnotationObject* object,
 </code></synopsis>
 
   
-    <p>Test overriding via the "Rename To" regress_annotation.</p>
+    <p>Test overriding via the "Rename To" annotation.</p>
   
   
   

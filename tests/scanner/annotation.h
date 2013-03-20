@@ -39,7 +39,7 @@ typedef void (*RegressAnnotationNotifyFunc) (gpointer data);
 /**
  * RegressAnnotationObject:
  *
- * This is an object used to test regress_annotations.
+ * This is an object used to test annotations.
  *
  * Attributes: (org.example.Test cows)
  */

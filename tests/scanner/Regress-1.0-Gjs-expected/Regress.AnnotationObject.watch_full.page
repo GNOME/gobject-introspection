@@ -29,7 +29,7 @@ function watch_full(func:Regress.AnnotationForeachFunc):void {
 </code></synopsis>
 
   
-    <p>Test overriding via the "Rename To" regress_annotation.</p>
+    <p>Test overriding via the "Rename To" annotation.</p>
   
   
   

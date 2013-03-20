@@ -42,7 +42,7 @@ def watch_full(self, func, user_data, destroy):
 </code></synopsis>
 
   
-    <p>Test overriding via the "Rename To" regress_annotation.</p>
+    <p>Test overriding via the "Rename To" annotation.</p>
   
   
   

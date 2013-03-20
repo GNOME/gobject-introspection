@@ -23,7 +23,7 @@ let annotation_object = new Regress.AnnotationObject({
   </code></synopsis>
 
   
-    <p>This is an object used to test regress_annotations.</p>
+    <p>This is an object used to test annotations.</p>
   
   
   

@@ -143,7 +143,7 @@ and/or use gtk-doc annotations.  -->
            glib:get-type="regress_annotation_object_get_type"
            glib:type-struct="AnnotationObjectClass">
       <attribute name="org.example.Test" value="cows"/>
-      <doc xml:whitespace="preserve">This is an object used to test regress_annotations.</doc>
+      <doc xml:whitespace="preserve">This is an object used to test annotations.</doc>
       <method name="allow_none"
               c:identifier="regress_annotation_object_allow_none">
         <return-value transfer-ownership="none">
@@ -689,7 +689,7 @@ regress_annotation_object_watch_full().</doc>
       <method name="watch_full"
               c:identifier="regress_annotation_object_watch_full"
               shadows="watch">
-        <doc xml:whitespace="preserve">Test overriding via the "Rename To" regress_annotation.</doc>
+        <doc xml:whitespace="preserve">Test overriding via the "Rename To" annotation.</doc>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
@@ -753,7 +753,7 @@ regress_annotation_object_watch_full().</doc>
                 writable="1"
                 construct="1"
                 transfer-ownership="none">
-        <doc xml:whitespace="preserve">This is a property regress_annotation intentionally indented with a mix
+        <doc xml:whitespace="preserve">This is a property annotation intentionally indented with a mix
 of tabs and strings to test the tab handling capabilities of the scanner.</doc>
         <type name="utf8" c:type="gchar*"/>
       </property>
@@ -763,18 +763,18 @@ of tabs and strings to test the tab handling capabilities of the scanner.</doc>
       <glib:signal name="attribute-signal" when="last">
         <doc xml:whitespace="preserve">This signal tests a signal with attributes.</doc>
         <return-value transfer-ownership="full">
-          <attribute name="some.regress_annotation.foo3" value="val3"/>
+          <attribute name="some.annotation.foo3" value="val3"/>
           <doc xml:whitespace="preserve">the return value</doc>
           <type name="utf8" c:type="gchar*"/>
         </return-value>
         <parameters>
           <parameter name="arg1" transfer-ownership="none">
-            <attribute name="some.regress_annotation.foo1" value="val1"/>
+            <attribute name="some.annotation.foo1" value="val1"/>
             <doc xml:whitespace="preserve">a value</doc>
             <type name="utf8" c:type="gchar*"/>
           </parameter>
           <parameter name="arg2" transfer-ownership="none">
-            <attribute name="some.regress_annotation.foo2" value="val2"/>
+            <attribute name="some.annotation.foo2" value="val2"/>
             <doc xml:whitespace="preserve">another value</doc>
             <type name="utf8" c:type="gchar*"/>
           </parameter>
@@ -3996,9 +3996,8 @@ the introspection client langage.</doc>
     <function name="annotation_attribute_func"
               c:identifier="regress_annotation_attribute_func">
       <return-value transfer-ownership="none">
-        <attribute name="some.other.regress_annotation" value="value2"/>
-        <attribute name="yet.another.regress_annotation"
-                   value="another_value"/>
+        <attribute name="some.other.annotation" value="value2"/>
+        <attribute name="yet.another.annotation" value="another_value"/>
         <doc xml:whitespace="preserve">The return value.</doc>
         <type name="gint" c:type="gint"/>
       </return-value>
@@ -4008,8 +4007,8 @@ the introspection client langage.</doc>
           <type name="AnnotationObject" c:type="RegressAnnotationObject*"/>
         </parameter>
         <parameter name="data" transfer-ownership="none">
-          <attribute name="some.regress_annotation" value="value"/>
-          <attribute name="another.regress_annotation" value="blahvalue"/>
+          <attribute name="some.annotation" value="value"/>
+          <attribute name="another.annotation" value="blahvalue"/>
           <doc xml:whitespace="preserve">Some data.</doc>
           <type name="utf8" c:type="const gchar*"/>
         </parameter>
@@ -4018,7 +4017,7 @@ the introspection client langage.</doc>
     <function name="annotation_custom_destroy"
               c:identifier="regress_annotation_custom_destroy">
       <doc xml:whitespace="preserve">Test messing up the heuristic of closure/destroy-notification
-detection, and fixing it via regress_annotations.</doc>
+detection, and fixing it via annotations.</doc>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
