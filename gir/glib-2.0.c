@@ -20573,7 +20573,7 @@
 
 /**
  * g_option_context_new:
- * @parameter_string: a string which is displayed in the first line of <option>--help</option> output, after the usage summary <literal><replaceable>programname</replaceable> [OPTION...]</literal>
+ * @parameter_string: (allow-none): a string which is displayed in the first line of <option>--help</option> output, after the usage summary <literal><replaceable>programname</replaceable> [OPTION...]</literal>
  *
  * Creates a new option context.
  *
