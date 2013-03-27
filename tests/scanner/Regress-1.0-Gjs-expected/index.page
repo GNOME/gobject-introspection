@@ -17,7 +17,135 @@
   
 
   
+<terms>
+
+<item>
+  <title><code>Regress.ANNOTATION_CALCULATED_DEFINE = "100";</code></title>
   
+</item>
+
+
+<item>
+  <title><code>Regress.ANNOTATION_CALCULATED_LARGE = "10000000000UL";</code></title>
+  <p>Constant to define a calculated large value</p>
+</item>
+
+
+<item>
+  <title><code>Regress.ANNOTATION_CALCULATED_LARGE_DIV = "1000000UL";</code></title>
+  <p>Constant to define a calculated large value</p>
+</item>
+
+
+<item>
+  <title><code>Regress.BOOL_CONSTANT = "true";</code></title>
+  
+</item>
+
+
+<item>
+  <title><code>Regress.DOUBLE_CONSTANT = "44.220000";</code></title>
+  
+</item>
+
+
+<item>
+  <title><code>Regress.FOO_DEFINE_SHOULD_BE_EXPOSED = "should be exposed";</code></title>
+  
+</item>
+
+
+<item>
+  <title><code>Regress.FOO_PIE_IS_TASTY = "3.141590";</code></title>
+  
+</item>
+
+
+<item>
+  <title><code>Regress.FOO_SUCCESS_INT = "4408";</code></title>
+  
+</item>
+
+
+<item>
+  <title><code>Regress.GI_SCANNER_ELSE = "3";</code></title>
+  
+</item>
+
+
+<item>
+  <title><code>Regress.GI_SCANNER_IFDEF = "3";</code></title>
+  
+</item>
+
+
+<item>
+  <title><code>Regress.GUINT64_CONSTANT = "18446744073709551615";</code></title>
+  
+</item>
+
+
+<item>
+  <title><code>Regress.GUINT64_CONSTANTA = "18446744073709551615";</code></title>
+  
+</item>
+
+
+<item>
+  <title><code>Regress.G_GINT64_CONSTANT = "1000";</code></title>
+  
+</item>
+
+
+<item>
+  <title><code>Regress.INT_CONSTANT = "4422";</code></title>
+  
+</item>
+
+
+<item>
+  <title><code>Regress.LONG_STRING_CONSTANT = "TYPE,VALUE,ENCODING,CHARSET,LANGUAGE,DOM,INTL,POSTAL,PARCEL,HOME,WORK,PREF,VOICE,FAX,MSG,CELL,PAGER,BBS,MODEM,CAR,ISDN,VIDEO,AOL,APPLELINK,ATTMAIL,CIS,EWORLD,INTERNET,IBMMAIL,MCIMAIL,POWERSHARE,PRODIGY,TLX,X400,GIF,CGM,WMF,BMP,MET,PMB,DIB,PICT,TIFF,PDF,PS,JPEG,QTIME,MPEG,MPEG2,AVI,WAVE,AIFF,PCM,X509,PGP";</code></title>
+  
+</item>
+
+
+<item>
+  <title><code>Regress.MAXUINT64 = "18446744073709551615";</code></title>
+  
+</item>
+
+
+<item>
+  <title><code>Regress.MININT64 = "-9223372036854775808";</code></title>
+  
+</item>
+
+
+<item>
+  <title><code>Regress.Mixed_Case_Constant = "4423";</code></title>
+  
+</item>
+
+
+<item>
+  <title><code>Regress.NEGATIVE_INT_CONSTANT = "-42";</code></title>
+  
+</item>
+
+
+<item>
+  <title><code>Regress.STRING_CONSTANT = "Some String";</code></title>
+  
+</item>
+
+
+<item>
+  <title><code>Regress.UTF8_CONSTANT = "const \u2665 utf8";</code></title>
+  
+</item>
+
+</terms>
+
   
   <links type="topic" ui:expanded="true" groups="class" style="linklist">
     <title>Classes</title>

@@ -1,0 +1,5 @@
+<%page args="constant"/>
+<item>
+  <title><code>#define ${constant.ctype} ${formatter.format_value(constant.value)}</code></title>
+  ${formatter.format(constant, constant.doc)}
+</item>

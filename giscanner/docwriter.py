@@ -21,6 +21,8 @@
 # 02110-1301, USA.
 #
 
+import itertools
+import json
 import os
 import re
 import tempfile
@@ -178,6 +180,13 @@ class DocFormatter(object):
 
         return True
 
+    def collect(self, type_name):
+        namespace = self._transformer.namespace
+        type_ = {'constant': ast.Constant}[type_name]
+        for item in namespace.itervalues():
+            if isinstance(item, type_):
+                yield item
+
     def format(self, node, doc):
         if doc is None:
             return ''
@@ -309,6 +318,9 @@ class DocFormatter(object):
         else:
             return parameter.argname
 
+    def format_value(self, value):
+        raise NotImplementedError
+
     def format_function_name(self, func):
         raise NotImplementedError
 
@@ -377,6 +389,45 @@ class DocFormatterC(DocFormatter):
         "NULL": "NULL",
     }
 
+    def _c_escape_dictionary():
+        escapes = {
+            '\\': '\\\\',
+            '"': '\\"',
+            '\b': '\\b',
+            '\f': '\\f',
+            '\n': '\\n',
+            '\r': '\\r',
+            '\t': '\\t',
+            }
+        for i in itertools.chain(xrange(0, 0x20), xrange(0x80, 0x100)):
+            escapes[chr(i)] = '\\x%x' % (i, )
+        return escapes
+
+    def format_value(self, value, escapes=_c_escape_dictionary()):
+        def format_bytes(v):
+            return '"' + ''.join(escapes.get(c, c) for c in v) + '"'
+
+        def format_unicode(v):
+            # Assume UTF8 encoding
+            return format_bytes(v.encode('utf8'))
+
+        def format_integer(v):
+            return "%d" % (v, )
+
+        def format_float(v):
+            return "%g" % (v, )
+
+        if isinstance(value, str):
+            return format_bytes(value)
+        if isinstance(value, unicode):
+            return format_unicode(value)
+        elif isinstance(value, (int, long)):
+            return format_integer(value)
+        elif isinstance(value, float):
+            return format_float(value)
+        else:
+            raise NotImplementedError(type(value))
+
     def format_type(self, type_):
         if isinstance(type_, ast.Array):
             return self.format_type(type_.element_type) + '*'
@@ -433,6 +484,9 @@ class DocFormatterPython(DocFormatterIntrospectableBase):
             return True
 
         return False
+
+    def format_value(self, value):
+        return "%r" % (value, )
 
     def format_parameter_name(self, node, parameter):
         # Force "self" for the first parameter of a method
@@ -505,6 +559,9 @@ class DocFormatterGjs(DocFormatterIntrospectableBase):
             return True
 
         return False
+
+    def format_value(self, value):
+        return json.dumps(value)
 
     def format_fundamental_type(self, name):
         fundamental_types = {
@@ -637,6 +694,7 @@ class DocWriter(object):
 
         template = self._lookup.get_template(template_name)
         result = template.render(namespace=namespace,
+                                 language=self._language,
                                  node=node,
                                  page_id=page_id,
                                  page_kind=page_kind,

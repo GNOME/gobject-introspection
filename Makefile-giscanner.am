@@ -63,6 +63,7 @@ nobase_dist_template_DATA =		\
 	giscanner/doctemplates/class.tmpl	\
 	giscanner/doctemplates/namespace.tmpl	\
 	giscanner/doctemplates/C/class.tmpl	\
+	giscanner/doctemplates/C/constant.tmpl	\
 	giscanner/doctemplates/C/constructor.tmpl	\
 	giscanner/doctemplates/C/default.tmpl	\
 	giscanner/doctemplates/C/enum.tmpl	\
@@ -74,6 +75,7 @@ nobase_dist_template_DATA =		\
 	giscanner/doctemplates/C/signal.tmpl	\
 	giscanner/doctemplates/C/vfunc.tmpl	\
 	giscanner/doctemplates/Python/class.tmpl	\
+	giscanner/doctemplates/Python/constant.tmpl	\
 	giscanner/doctemplates/Python/constructor.tmpl	\
 	giscanner/doctemplates/Python/default.tmpl	\
 	giscanner/doctemplates/Python/enum.tmpl	\
@@ -85,6 +87,7 @@ nobase_dist_template_DATA =		\
 	giscanner/doctemplates/Python/signal.tmpl	\
 	giscanner/doctemplates/Python/vfunc.tmpl	\
 	giscanner/doctemplates/Gjs/class.tmpl	\
+	giscanner/doctemplates/Gjs/constant.tmpl	\
 	giscanner/doctemplates/Gjs/constructor.tmpl	\
 	giscanner/doctemplates/Gjs/default.tmpl	\
 	giscanner/doctemplates/Gjs/enum.tmpl	\

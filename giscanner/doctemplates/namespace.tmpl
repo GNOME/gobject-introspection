@@ -15,5 +15,13 @@
     <title>Other</title>
   </links>
 </%block>
+<%block name="details">
+<terms>
+% for constant in formatter.collect('constant'):
+<%include file="${language}/constant.tmpl" args="constant=constant"/>
+% endfor
+</terms>
+</%block>
+
 <%block name="since_version">
 </%block>
