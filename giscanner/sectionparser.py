@@ -19,7 +19,7 @@
 
 import re
 
-class SectionFile(object):
+class SectionsFile(object):
     def __init__(self, sections):
         self.sections = sections
 
@@ -74,4 +74,4 @@ def parse_sections_file(lines):
 
         current_subsection.symbols.append(line)
 
-    return SectionFile(sections)
+    return SectionsFile(sections)
