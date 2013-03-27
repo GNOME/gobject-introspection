@@ -66,7 +66,7 @@ def parse_sections_file(lines):
             current_section.title = match.groupdict['contents']
             continue
 
-        match = re.match(r"<SUBSECTION (?P<name>).*>", line)
+        match = re.match(r"<SUBSECTION (?P<name>.*)>", line)
         if match:
             current_subsection = Subsection(match.groupdict['name'])
             current_section.subsections.append(current_subsection)
