@@ -57,7 +57,6 @@ class Transformer(object):
         self._parsed_includes = {} # <string namespace -> Namespace>
         self._includepaths = []
         self._passthrough_mode = False
-        self._annotations = {}
 
     def get_pkgconfig_packages(self):
         return self._pkg_config_packages
@@ -67,9 +66,6 @@ class Transformer(object):
 
     def set_passthrough_mode(self):
         self._passthrough_mode = True
-
-    def set_annotations(self, annotations):
-        self._annotations = annotations
 
     def _append_new_node(self, node):
         original = self._namespace.get(node.name)

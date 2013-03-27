@@ -452,7 +452,6 @@ def scanner_main(args):
     blocks = ap.parse(ss.get_comments())
 
     # Transform the C symbols into AST nodes
-    transformer.set_annotations(blocks)
     transformer.parse(ss.get_symbols())
 
     if not options.header_only:
