@@ -115,6 +115,8 @@ class GIRWriter(XMLWriter):
             self._write_alias(node)
         elif isinstance(node, ast.Constant):
             self._write_constant(node)
+        elif isinstance(node, ast.Section):
+            self._write_section(node)
         else:
             print 'WRITER: Unhandled node', node
 
@@ -393,6 +395,25 @@ class GIRWriter(XMLWriter):
         with self.tagcontext('constant', attrs):
             self._write_generic(constant)
             self._write_type(constant.value_type)
+
+    def _write_section(self, section):
+        attrs = [('name', section.name),
+                 ('title', section.title),
+                 ('include', section.include),
+                 ('image', section.image),
+                 ('section-id', section.section_id)]
+        self._append_node_generic(section, attrs)
+
+        with self.tagcontext('section', attrs):
+            self._write_generic(section)
+
+            def write_child(name, content):
+                if content:
+                    self.write_tag(name, [('xml:whitespace', 'preserve')], content)
+
+            write_child('short-description', section.short_description)
+            write_child('long-description', section.long_description)
+            write_child('see-also', section.see_also)
 
     def _write_class(self, node):
         attrs = [('name', node.name),

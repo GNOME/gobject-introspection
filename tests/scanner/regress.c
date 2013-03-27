@@ -6,6 +6,28 @@
 
 #include "regress.h"
 
+/**
+ * SECTION:one
+ * @Short_description: One test section
+ * @Title: Test One!
+ * @See_also: two
+ *
+ * Testing some docs.
+ *
+ * Do not sound the alarm.
+ */
+
+/**
+ * SECTION:two
+ * @Short_description: Another test section
+ * @Title: Test Another!
+ * @See_also: one
+ *
+ * Testing some more docs.
+ *
+ * Oh hey, this is still a test!
+ */
+
 static gboolean abort_on_error = TRUE;
 
 #define ASSERT_VALUE(condition)  \

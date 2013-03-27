@@ -979,8 +979,8 @@ class GtkDocCommentBlock(GtkDocAnnotatable):
     Represents a GTK-Doc comment block.
     '''
 
-    __slots__ = ('code_before', 'code_after', 'indentation',
-                 'name', 'params', 'description', 'tags')
+    __slots__ = ('code_before', 'code_after', 'indentation', 'name',
+                 'params', 'lower_params', 'description', 'tags')
 
     #: Valid annotation names for the GTK-Doc comment block identifier part.
     valid_annotations = (ANN_ATTRIBUTES, ANN_CONSTRUCTOR, ANN_FOREIGN, ANN_GET_VALUE_FUNC,
@@ -1006,6 +1006,9 @@ class GtkDocCommentBlock(GtkDocAnnotatable):
         #: Ordered dictionary mapping parameter names to :class:`GtkDocParameter` instances
         #: applied to this :class:`GtkDocCommentBlock`.
         self.params = OrderedDict()
+
+        #: Like params, but all of its keys are in lower-case.
+        self.lower_params = OrderedDict()
 
         #: The GTK-Doc comment block description part.
         self.description = None
@@ -1377,6 +1380,7 @@ class GtkDocCommentBlockParser(object):
                         parameter.description = result.description
 
                 comment_block.params[param_name] = parameter
+                comment_block.lower_params[param_name.lower()] = parameter
                 current_part = parameter
                 continue
 

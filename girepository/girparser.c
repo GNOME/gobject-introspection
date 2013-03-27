@@ -2988,6 +2988,13 @@ start_element_handler (GMarkupParseContext *context,
 	goto out;
       break;
 
+    case 's':
+      if (strcmp (element_name, "section") == 0)
+        {
+          state_switch (ctx, STATE_PASSTHROUGH);
+          goto out;
+        }
+
     case 'u':
       if (start_union (context, element_name,
 		       attribute_names, attribute_values,

@@ -2042,6 +2042,14 @@ exposed to language bindings.</doc>
               c:type="REGRESS_NEGATIVE_INT_CONSTANT">
       <type name="gint" c:type="gint"/>
     </constant>
+    <section name="SECTION:one" title="Test One!">
+      <short-description xml:whitespace="preserve">One test section</short-description>
+      <see-also xml:whitespace="preserve">two</see-also>
+    </section>
+    <section name="SECTION:two" title="Test Another!">
+      <short-description xml:whitespace="preserve">Another test section</short-description>
+      <see-also xml:whitespace="preserve">one</see-also>
+    </section>
     <constant name="STRING_CONSTANT"
               value="Some String"
               c:type="REGRESS_STRING_CONSTANT">

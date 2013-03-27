@@ -136,7 +136,9 @@ class GIRParser(object):
             _corens('interface'): self._parse_object_interface,
             _corens('record'): self._parse_record,
             _corens('union'): self._parse_union,
-            _glibns('boxed'): self._parse_boxed}
+            _corens('section'): self._parse_section,
+            _glibns('boxed'): self._parse_boxed,
+        }
 
         if not self._types_only:
             parser_methods[_corens('constant')] = self._parse_constant
@@ -555,6 +557,28 @@ class GIRParser(object):
                                 node.attrib.get(_cns('type')))
         self._parse_generic_attribs(node, constant)
         self._namespace.append(constant)
+
+    def _parse_section(self, node):
+        def find_child(name):
+            child = node.find(_corens(name))
+            if child is not None:
+                return child.text
+            else:
+                return None
+
+        long_description = find_child('long-description')
+        short_description = find_child('short-description')
+        see_also = find_child('see-also')
+        section = ast.Section(node.attrib['name'],
+                              short_description,
+                              long_description,
+                              see_also,
+                              node.attrib.get('title'),
+                              node.attrib.get('stability'),
+                              node.attrib.get('section-id'),
+                              node.attrib.get('include'),
+                              node.attrib.get('image'))
+        self._namespace.append(section)
 
     def _parse_enumeration_bitfield(self, node):
         name = node.attrib.get('name')

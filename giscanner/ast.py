@@ -1124,3 +1124,19 @@ class Callback(Callable):
     def __init__(self, name, retval, parameters, throws, ctype=None):
         Callable.__init__(self, name, retval, parameters, throws)
         self.ctype = ctype
+
+
+class Section(Node):
+
+    def __init__(self, name, short_description, long_description,
+                 see_also, title, stability, section_id, include,
+                 image):
+        Node.__init__(self, name)
+        self.short_description = short_description
+        self.long_description = long_description
+        self.see_also = see_also
+        self.title = title
+        self.stability = stability
+        self.section_id = section_id
+        self.include = include
+        self.image = image

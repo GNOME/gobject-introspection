@@ -614,6 +614,8 @@ class DocWriter(object):
         self._transformer.namespace.walk(lambda node, chain: self._walk_node(output, node, chain))
 
     def _walk_node(self, output, node, chain):
+        if isinstance(node, ast.Section):
+            return False
         if isinstance(node, ast.Function) and node.moved_to is not None:
             return False
         if getattr(node, 'disguised', False):
