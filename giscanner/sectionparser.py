@@ -27,6 +27,7 @@ class Section(object):
     def __init__(self):
         self.file = None
         self.title = None
+        self.includes = None
         self.main_subsection = Subsection(None)
         self.subsections = []
 
@@ -64,6 +65,11 @@ def parse_sections_file(lines):
         match = re.match(r"<TITLE>(?P<contents>.*)</TITLE>", line)
         if match:
             current_section.title = match.groupdict['contents']
+            continue
+
+        match = re.match(r"<INCLUDE>(?P<contents>.*)</INCLUDE>", line)
+        if match:
+            current_section.includes = match.groupdict['contents']
             continue
 
         match = re.match(r"<SUBSECTION(?: (?P<name>.*))?>", line)
