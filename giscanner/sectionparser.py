@@ -56,17 +56,17 @@ def parse_sections_file(lines):
             current_section = None
             continue
 
-        match = re.match(line, r"<FILE>(?P<contents>.*)</FILE>")
+        match = re.match(r"<FILE>(?P<contents>.*)</FILE>", line)
         if match:
             current_section.file = match.groupdict['contents']
             continue
 
-        match = re.match(line, r"<TITLE>(?P<contents>.*)</TITLE>")
+        match = re.match(r"<TITLE>(?P<contents>.*)</TITLE>", line)
         if match:
             current_section.title = match.groupdict['contents']
             continue
 
-        match = re.match(line, r"<SUBSECTION (?P<name>).*>")
+        match = re.match(r"<SUBSECTION (?P<name>).*>", line)
         if match:
             current_subsection = Subsection(match.groupdict['name'])
             current_section.subsections.append(current_subsection)
