@@ -378,12 +378,6 @@ class DocBlock(object):
     def __repr__(self):
         return '<DocBlock %r %r>' % (self.name, self.options)
 
-    def get_tag(self, name):
-        return self.tags.get(name)
-
-    def get_param(self, name):
-        return self.params.get(name)
-
     def to_gtk_doc(self):
         options = ''
         if self.options:

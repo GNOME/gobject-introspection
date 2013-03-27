@@ -135,7 +135,7 @@ usage is void (*_gtk_reserved1)(void);"""
     def _apply_annotation_rename_to(self, node, chain, block):
         if not block:
             return
-        rename_to = block.get_tag(TAG_RENAME_TO)
+        rename_to = block.tags.get(TAG_RENAME_TO)
         if not rename_to:
             return
         rename_to = rename_to.value
@@ -227,13 +227,13 @@ usage is void (*_gtk_reserved1)(void);"""
         if isinstance(node, ast.Class):
             block = self._get_block(node)
             if block:
-                tag = block.get_tag(TAG_UNREF_FUNC)
+                tag = block.tags.get(TAG_UNREF_FUNC)
                 node.unref_func = tag.value if tag else None
-                tag = block.get_tag(TAG_REF_FUNC)
+                tag = block.tags.get(TAG_REF_FUNC)
                 node.ref_func = tag.value if tag else None
-                tag = block.get_tag(TAG_SET_VALUE_FUNC)
+                tag = block.tags.get(TAG_SET_VALUE_FUNC)
                 node.set_value_func = tag.value if tag else None
-                tag = block.get_tag(TAG_GET_VALUE_FUNC)
+                tag = block.tags.get(TAG_GET_VALUE_FUNC)
                 node.get_value_func = tag.value if tag else None
         if isinstance(node, ast.Constant):
             self._apply_annotations_constant(node)
@@ -595,11 +595,11 @@ usage is void (*_gtk_reserved1)(void);"""
 
         node.doc = block.comment if block.comment else ''
 
-        since_tag = block.get_tag(TAG_SINCE)
+        since_tag = block.tags.get(TAG_SINCE)
         if since_tag is not None:
             node.version = since_tag.value
 
-        deprecated_tag = block.get_tag(TAG_DEPRECATED)
+        deprecated_tag = block.tags.get(TAG_DEPRECATED)
         if deprecated_tag is not None:
             value = deprecated_tag.value
             if ': ' in value:
@@ -613,7 +613,7 @@ usage is void (*_gtk_reserved1)(void);"""
             if version is not None:
                 node.deprecated_version = version
 
-        stability_tag = block.get_tag(TAG_STABILITY)
+        stability_tag = block.tags.get(TAG_STABILITY)
         if stability_tag is not None:
             stability = stability_tag.value.capitalize()
             if stability in ["Stable", "Unstable", "Private", "Internal"]:
@@ -622,7 +622,7 @@ usage is void (*_gtk_reserved1)(void);"""
                 message.warn('unknown value "%s" for Stability tag' % (
                     stability_tag.value), stability_tag.position)
 
-        annos_tag = block.get_tag(TAG_ATTRIBUTES)
+        annos_tag = block.tags.get(TAG_ATTRIBUTES)
         if annos_tag is not None:
             for key, value in annos_tag.options.items():
                 if value:
@@ -684,7 +684,7 @@ usage is void (*_gtk_reserved1)(void);"""
 
     def _apply_annotations_return(self, parent, return_, block):
         if block:
-            tag = block.get_tag(TAG_RETURNS)
+            tag = block.tags.get(TAG_RETURNS)
         else:
             tag = None
         self._apply_annotations_param_ret_common(parent, return_, tag)
@@ -695,7 +695,7 @@ usage is void (*_gtk_reserved1)(void);"""
             declparams.add(parent.instance_parameter.argname)
         for param in params:
             if block:
-                tag = block.get_param(param.argname)
+                tag = block.params.get(param.argname)
             else:
                 tag = None
             self._apply_annotations_param(parent, param, tag)
@@ -721,7 +721,7 @@ usage is void (*_gtk_reserved1)(void);"""
                 text = ', should be one of %s' % (
                 ', '.join(repr(p) for p in unused), )
 
-            tag = block.get_param(doc_name)
+            tag = block.params.get(doc_name)
             message.warn(
                 '%s: unknown parameter %r in documentation comment%s' % (
                 block.name, doc_name, text),
@@ -749,7 +749,7 @@ usage is void (*_gtk_reserved1)(void);"""
     def _apply_annotations_field(self, parent, block, field):
         if not block:
             return
-        tag = block.get_param(field.name)
+        tag = block.params.get(field.name)
         if not tag:
             return
         t = tag.options.get(OPT_TYPE)
@@ -767,7 +767,7 @@ usage is void (*_gtk_reserved1)(void);"""
         self._apply_annotations_annotated(prop, block)
         if not block:
             return
-        transfer_tag = block.get_tag(TAG_TRANSFER)
+        transfer_tag = block.tags.get(TAG_TRANSFER)
         if transfer_tag is not None:
             transfer = transfer_tag.value
             if transfer == OPT_TRANSFER_FLOATING:
@@ -775,7 +775,7 @@ usage is void (*_gtk_reserved1)(void);"""
             prop.transfer = transfer
         else:
             prop.transfer = self._get_transfer_default(parent, prop)
-        type_tag = block.get_tag(TAG_TYPE)
+        type_tag = block.tags.get(TAG_TYPE)
         if type_tag:
             prop.type = self._resolve_toplevel(type_tag.value, prop.type, prop, parent)
 
@@ -814,7 +814,7 @@ usage is void (*_gtk_reserved1)(void);"""
 
         self._apply_annotations_annotated(node, block)
 
-        tag = block.get_tag(TAG_VALUE)
+        tag = block.tags.get(TAG_VALUE)
         if tag:
             node.value = tag.value
 
@@ -836,7 +836,7 @@ usage is void (*_gtk_reserved1)(void);"""
             # Handle virtual invokers
             parent = chain[-1] if chain else None
             if (block and parent):
-                virtual_annotation = block.get_tag(TAG_VFUNC)
+                virtual_annotation = block.tags.get(TAG_VFUNC)
                 if virtual_annotation:
                     invoker_name = virtual_annotation.value
                     matched = False

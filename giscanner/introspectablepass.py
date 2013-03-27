@@ -58,7 +58,7 @@ class IntrospectablePass(object):
         else:
             context = "return value: "
             if block:
-                return_tag = block.get_tag(TAG_RETURNS)
+                return_tag = block.tags.get(TAG_RETURNS)
                 if return_tag:
                     position = return_tag.position
         message.warn_node(parent, prefix + context + text,
