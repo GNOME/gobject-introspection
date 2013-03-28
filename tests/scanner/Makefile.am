@@ -152,7 +152,7 @@ Headeronly-1.0.gir: headeronly.h
 
 if BUILD_DOCTOOL
 DOCGIRS = Regress-1.0.gir
-CHECKDOCS = $(DOCGIRS:.gir=-C.page.check) $(DOCGIRS:.gir=-Python.page.check) $(DOCGIRS:.gir=-Gjs.page.check)
+CHECKDOCS = $(DOCGIRS:.gir=-C.page.check) $(DOCGIRS:.gir=-Python.page.check) $(DOCGIRS:.gir=-Gjs.page.check) $(DOCGIRS:.gir=-sections.txt.page.check)
 MALLARD_DIRS = $(DOCGIRS:.gir=-C) $(DOCGIRS:.gir=-Python) $(DOCGIRS:.gir=-Gjs)
 MALLARD_CLEAN = $(DOCGIRS:.gir=-C)/* $(DOCGIRS:.gir=-Python)/* $(DOCGIRS:.gir=-Gjs)/*
 EXPECTED_MALLARD_DIRS = $(MALLARD_DIRS:=-expected)
@@ -173,6 +173,10 @@ CLEANFILES += $(MALLARD_CLEAN)
 	$(AM_V_at)-rm -rf $(builddir)/$*-Gjs
 	$(AM_V_at)$(INTROSPECTION_DOCTOOL) $(INTROSPECTION_DOCTOOL_ARGS) --language Gjs $*.gir -o $(builddir)/$*-Gjs/
 
+%-sections.txt: %.gir
+	$(AM_V_GEN)
+	$(AM_V_at)$(INTROSPECTION_DOCTOOL) $(INTROSPECTION_DOCTOOL_ARGS) --write-sections-file $*.gir -o $@
+
 %-C.page.check: %-C
 	@diff -r -u -w -B -U 10 $(srcdir)/$*-C-expected $(builddir)/$*-C && echo "  TEST  $*-C"
 
@@ -181,6 +185,10 @@ CLEANFILES += $(MALLARD_CLEAN)
 
 %-Gjs.page.check: %-Gjs
 	@diff -r -u -w -B -U 10 $(srcdir)/$*-Gjs-expected $(builddir)/$*-Gjs && echo "  TEST  $*-Gjs"
+
+%-sections.txt.page.check: %-sections.txt
+	@diff -u -w -B -U 10 $(srcdir)/$*-sections-expected.txt $*-sections.txt && echo "  TEST  $*-C"
+
 else
 CHECKDOCS =
 endif

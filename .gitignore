@@ -133,3 +133,5 @@ docs/reference/version.xml
 #g-ir-doc-tool tests
 *.page
 !tests/scanner/*-expected/*.page
+*-sections.txt
+!tests/scanner/*-sections-expected.txt
