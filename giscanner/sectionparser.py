@@ -28,7 +28,6 @@ class Section(object):
         self.file = None
         self.title = None
         self.includes = None
-        self.main_subsection = Subsection(None)
         self.subsections = []
 
 class Subsection(object):
@@ -50,7 +49,8 @@ def parse_sections_file(lines):
         if line == "<SECTION>":
             current_section = Section()
             sections.append(current_section)
-            current_subsection = current_section.main_subsection
+            current_subsection = Subsection(None)
+            current_section.subsections.append(current_subsection)
             continue
 
         if line == "</SECTION>":
