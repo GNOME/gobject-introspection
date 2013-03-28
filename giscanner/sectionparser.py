@@ -78,6 +78,10 @@ def parse_sections_file(lines):
             current_section.subsections.append(current_subsection)
             continue
 
+        if line.startswith("<") and line.endswith(">"):
+            # Other directive to gtk-doc, not a symbol.
+            continue
+
         current_subsection.symbols.append(line)
 
     return SectionsFile(sections)
