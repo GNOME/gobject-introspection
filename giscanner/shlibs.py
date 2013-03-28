@@ -68,7 +68,7 @@ def _resolve_non_libtool(options, binary, libraries):
     if not libraries:
         return []
 
-    if os.name == 'OpenBSD':
+    if platform.platform().startswith('OpenBSD'):
         # Hack for OpenBSD when using the ports' libtool which uses slightly
         # different directories to store the libraries in. So rewite binary.args[0]
         # by inserting '.libs/'.
