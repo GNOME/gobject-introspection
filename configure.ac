@@ -328,10 +328,3 @@ build/win32/Makefile
 build/win32/vs9/Makefile
 build/win32/vs10/Makefile])
 AC_OUTPUT
-
-echo "
-    gobject-introspection $VERSION
-    ===============
-
-    tests: ${enable_tests}
-"
