@@ -807,7 +807,7 @@ struct _GIMarshallingTestsObjectClass
     /**
      * GIMarshallingTestsObjectClass::vfunc_return_enum:
      */
-    GIMarshallingTestsFlags (* vfunc_return_enum) (GIMarshallingTestsObject *self);
+    GIMarshallingTestsEnum (* vfunc_return_enum) (GIMarshallingTestsObject *self);
 
     /**
      * GIMarshallingTestsObjectClass::vfunc_out_enum:
