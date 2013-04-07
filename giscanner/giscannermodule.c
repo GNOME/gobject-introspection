@@ -695,7 +695,7 @@ pygi_collect_attributes (PyObject *self,
 	  goto out;
         }
 
-      if (!PyTuple_Size (tuple) == 2)
+      if (PyTuple_Size (tuple) != 2)
         {
           PyErr_SetString(PyExc_IndexError,
                           "attribute item must be a tuple of length 2");
