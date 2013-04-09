@@ -29,7 +29,7 @@ ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
 SUBDIRS = . docs tests build
 
 DIST_SUBDIRS = m4 $(SUBDIRS)
-DISTCHECK_CONFIGURE_FLAGS = --enable-gtk-doc
+DISTCHECK_CONFIGURE_FLAGS = --enable-gtk-doc --enable-doctool
 
 man_MANS += 			\
 	docs/g-ir-compiler.1	\
@@ -63,7 +63,6 @@ check-local:
 	PYTHONPATH="$(top_builddir):$(top_srcdir)" $(PYTHON) $(top_srcdir)/tests/scanner/annotationparser/test_patterns.py
 	@echo "TEST: GTK-Doc Annotation Parser"
 	PYTHONPATH="$(top_builddir):$(top_srcdir)" $(PYTHON) $(top_srcdir)/tests/scanner/annotationparser/test_parser.py
-	@touch $(top_builddir)/.make-check-passed
 
 check-pyflakes:
 	@echo "  CHECK Pyflakes"

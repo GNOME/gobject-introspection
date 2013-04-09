@@ -28,7 +28,9 @@ BUILT_SOURCES += everything.c everything.h
 CLEANFILES += \
     $(BUILT_SOURCES) \
     everything-stamp.h \
+    Everything-1.0.gir \
     Everything-1.0.typelib \
+    GIMarshallingTests-1.0.gir \
     GIMarshallingTests-1.0.typelib
 
 everything-stamp.h: Makefile

@@ -142,6 +142,7 @@ GIRS += Bar-1.0.gir
 endif
 
 EXTRA_DIST += headeronly.h
+CLEANFILES += Headeronly-1.0.gir
 
 Headeronly-1.0.gir: headeronly.h
 	$(AM_V_GEN) $(INTROSPECTION_SCANNER) $(INTROSPECTION_SCANNER_ARGS) --warn-all --warn-error --reparse-validate --namespace=Headeronly --nsversion=1.0 --header-only --output=$@ $<
@@ -153,21 +154,23 @@ if BUILD_DOCTOOL
 DOCGIRS = Regress-1.0.gir
 CHECKDOCS = $(DOCGIRS:.gir=-C.page.check) $(DOCGIRS:.gir=-Python.page.check) $(DOCGIRS:.gir=-Gjs.page.check)
 MALLARD_DIRS = $(DOCGIRS:.gir=-C) $(DOCGIRS:.gir=-Python) $(DOCGIRS:.gir=-Gjs)
+MALLARD_CLEAN = $(DOCGIRS:.gir=-C)/* $(DOCGIRS:.gir=-Python)/* $(DOCGIRS:.gir=-Gjs)/*
 EXPECTED_MALLARD_DIRS = $(MALLARD_DIRS:=-expected)
+CLEANFILES += $(MALLARD_CLEAN)
 
 %-C: %.gir
 	$(AM_V_GEN)
-	$(AM_V_at)rm -f $*-C/*.page
+	$(AM_V_at)rm -rf $*-C
 	$(AM_V_at)$(INTROSPECTION_DOCTOOL) $(INTROSPECTION_DOCTOOL_ARGS) --language C $*.gir -o $*-C/
 
 %-Python: %.gir
 	$(AM_V_GEN)
-	$(AM_V_at)rm -f $*-Python/*.page
+	$(AM_V_at)rm -rf $*-Python
 	$(AM_V_at)$(INTROSPECTION_DOCTOOL) $(INTROSPECTION_DOCTOOL_ARGS) --language Python $*.gir -o $*-Python/
 
 %-Gjs: %.gir
 	$(AM_V_GEN)
-	$(AM_V_at)rm -f $*-Gjs/*.page
+	$(AM_V_at)rm -rf $*-Gjs
 	$(AM_V_at)$(INTROSPECTION_DOCTOOL) $(INTROSPECTION_DOCTOOL_ARGS) --language Gjs $*.gir -o $*-Gjs/
 
 %-C.page.check: %-C
