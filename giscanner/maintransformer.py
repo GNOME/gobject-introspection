@@ -831,33 +831,29 @@ usage is void (*_gtk_reserved1)(void);"""
 
     def _pass_read_annotations2(self, node, chain):
         if isinstance(node, ast.Function):
-            self._apply_annotations2_function(node, chain)
+            block = self._blocks.get(node.symbol)
+
+            self._apply_annotation_rename_to(node, chain, block)
+
+            # Handle virtual invokers
+            parent = chain[-1] if chain else None
+            if (block and parent):
+                virtual_annotation = block.get_tag(TAG_VFUNC)
+                if virtual_annotation:
+                    invoker_name = virtual_annotation.value
+                    matched = False
+                    for vfunc in parent.virtual_methods:
+                        if vfunc.name == invoker_name:
+                            matched = True
+                            vfunc.invoker = node.name
+                            # Also merge in annotations
+                            self._apply_annotations_callable(vfunc, [parent], block)
+                            break
+                    if not matched:
+                        message.warn_node(node,
+                            "Virtual slot %r not found for %r annotation" % (invoker_name,
+                                                                             TAG_VFUNC))
         return True
-
-    def _apply_annotations2_function(self, node, chain):
-        block = self._blocks.get(node.symbol)
-
-        self._apply_annotation_rename_to(node, chain, block)
-
-        # Handle virtual invokers
-        parent = chain[-1] if chain else None
-        if not (block and parent):
-            return
-        virtual = block.get_tag(TAG_VFUNC)
-        if not virtual:
-            return
-        invoker_name = virtual.value
-        matched = False
-        for vfunc in parent.virtual_methods:
-            if vfunc.name == invoker_name:
-                matched = True
-                vfunc.invoker = node.name
-                # Also merge in annotations
-                self._apply_annotations_callable(vfunc, [parent], block)
-                break
-        if not matched:
-            message.warn_node(node,
-                "Virtual slot %r not found for %r annotation" % (invoker_name, TAG_VFUNC))
 
     def _resolve_and_filter_type_list(self, typelist):
         """Given a list of Type instances, return a new list of types with
