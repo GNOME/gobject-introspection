@@ -278,19 +278,17 @@ class SourceScanner(object):
 
         defines = ['__GI_SCANNER__']
         undefs = []
-        cpp_exec = os.environ.get('CC', 'cc').split()
-        # The Microsoft compiler/preprocessor (cl) does not accept
-        # source input from stdin (the '-' flag), so we need
-        # some help from gcc from MinGW/Cygwin or so.
-        # Note that the generated dumper program is
-        # still built and linked by Visual C++.
-        if 'cl' in cpp_exec:
-            cpp_args = 'gcc'.split()
-        else:
-            cpp_args = cpp_exec
+        cpp_args = os.environ.get('CC', 'cc').split()  # support CC="ccache gcc"
+        if 'cl' in cpp_args:
+            # The Microsoft compiler/preprocessor (cl) does not accept
+            # source input from stdin (the '-' flag), so we need
+            # some help from gcc from MinGW/Cygwin or so.
+            # Note that the generated dumper program is
+            # still built and linked by Visual C++.
+            cpp_args = ['gcc']
         cpp_args += ['-E', '-C', '-I.', '-']
-
         cpp_args += self._cpp_options
+
         proc = subprocess.Popen(cpp_args,
                                 stdin=subprocess.PIPE,
                                 stdout=subprocess.PIPE)
