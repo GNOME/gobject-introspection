@@ -130,6 +130,9 @@ docs/reference/gi-undocumented.txt
 docs/reference/gi-unused.txt
 docs/reference/version.xml
 
+#Shinx documentation output
+docs/giscanner/_build/*
+
 #g-ir-doc-tool tests
 *.page
 !tests/scanner/*-expected/*.page
