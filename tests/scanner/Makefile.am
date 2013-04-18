@@ -174,13 +174,13 @@ CLEANFILES += $(MALLARD_CLEAN)
 	$(AM_V_at)$(INTROSPECTION_DOCTOOL) $(INTROSPECTION_DOCTOOL_ARGS) --language Gjs $*.gir -o $(builddir)/$*-Gjs/
 
 %-C.page.check: %-C
-	@diff -u -w -B -U 10 $(srcdir)/$*-C-expected $*-C && echo "  TEST  $*-C"
+	@diff -r -u -w -B -U 10 $(srcdir)/$*-C-expected $(builddir)/$*-C && echo "  TEST  $*-C"
 
 %-Python.page.check: %-Python
-	@diff -u -w -B -U 10 $(srcdir)/$*-Python-expected $*-Python && echo "  TEST  $*-Python"
+	@diff -r -u -w -B -U 10 $(srcdir)/$*-Python-expected $(builddir)/$*-Python && echo "  TEST  $*-Python"
 
 %-Gjs.page.check: %-Gjs
-	@diff -u -w -B -U 10 $(srcdir)/$*-Gjs-expected $*-Gjs && echo "  TEST  $*-Gjs"
+	@diff -r -u -w -B -U 10 $(srcdir)/$*-Gjs-expected $(builddir)/$*-Gjs && echo "  TEST  $*-Gjs"
 else
 CHECKDOCS =
 endif
