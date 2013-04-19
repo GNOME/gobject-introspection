@@ -905,6 +905,13 @@ typedef struct {
 
 void regress_test_struct_fixed_array_frob (RegressTestStructFixedArray *str);
 
+typedef struct {
+  gchar name[32];
+} RegressLikeXklConfigItem;
+
+void regress_like_xkl_config_item_set_name (RegressLikeXklConfigItem *self,
+                                            const char *name);
+
 #define REGRESS_UTF8_CONSTANT "const \xe2\x99\xa5 utf8"
 
 #ifdef __GNUC__

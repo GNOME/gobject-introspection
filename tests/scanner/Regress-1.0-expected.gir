@@ -1946,6 +1946,27 @@ exposed to language bindings.</doc>
         <type name="gdouble" c:type="double"/>
       </field>
     </record>
+    <record name="LikeXklConfigItem" c:type="RegressLikeXklConfigItem">
+      <field name="name" writable="1">
+        <array zero-terminated="0" c:type="gchar" fixed-size="32">
+          <type name="gchar" c:type="gchar"/>
+        </array>
+      </field>
+      <method name="set_name"
+              c:identifier="regress_like_xkl_config_item_set_name">
+        <return-value transfer-ownership="none">
+          <type name="none" c:type="void"/>
+        </return-value>
+        <parameters>
+          <instance-parameter name="self" transfer-ownership="none">
+            <type name="LikeXklConfigItem" c:type="RegressLikeXklConfigItem*"/>
+          </instance-parameter>
+          <parameter name="name" transfer-ownership="none">
+            <type name="utf8" c:type="const char*"/>
+          </parameter>
+        </parameters>
+      </method>
+    </record>
     <constant name="MAXUINT64"
               value="18446744073709551615"
               c:type="REGRESS_MAXUINT64">
