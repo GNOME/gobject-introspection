@@ -950,4 +950,16 @@ typedef struct {
 #define REGRESS_MININT64 ((gint64) G_GINT64_CONSTANT(0x8000000000000000))
 #define REGRESS_MAXUINT64 (G_GINT64_CONSTANT(0xffffffffffffffffU))
 
+/* https://bugzilla.gnome.org/show_bug.cgi?id=698367 */
+#ifndef __GI_SCANNER__
+#define REGRESS_DONTSCANTHIS 1
+#else
+#define REGRESS_GI_SCANNER_ELSE 3
+#endif
+#ifndef BLAH
+#ifdef __GI_SCANNER__
+#define REGRESS_GI_SCANNER_IFDEF 3
+#endif
+#endif
+
 #endif /* __GITESTTYPES_H__ */

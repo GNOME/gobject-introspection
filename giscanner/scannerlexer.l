@@ -80,6 +80,14 @@ stringtext				([^\\\"])|(\\.)
 
 "#define "[a-zA-Z_][a-zA-Z_0-9]*"("	{ yyless (yyleng - 1); return FUNCTION_MACRO; }
 "#define "[a-zA-Z_][a-zA-Z_0-9]*	{ return OBJECT_MACRO; }
+"#ifdef"[\t ]+"__GI_SCANNER__"[\t ]?.*"\n" { return IFDEF_GI_SCANNER; }
+"#ifndef"[\t ]+"__GI_SCANNER__"[\t ]?.*"\n" { return IFNDEF_GI_SCANNER; }
+"#ifndef ".*"\n"			{ return IFNDEF_COND; }
+"#ifdef ".*"\n"				{ return IFDEF_COND; }
+"#if ".*"\n"				{ return IF_COND; }
+"#elif ".*"\n"				{ return ELIF_COND; }
+"#else".*"\n"				{ return ELSE_COND; }
+"#endif".*"\n"				{ return ENDIF_COND; }
 "#pragma ".*"\n"			{ /* Ignore pragma. */ }
 
 "# "[0-9]+" ".*"\n"			{ process_linemarks(scanner); }
@@ -269,7 +277,7 @@ parse_comment (GISourceScanner *scanner)
     comment->line = comment_lineno;
     comment->filename = g_file_get_parse_name (scanner->current_file);
 
-    scanner->comments = g_slist_prepend (scanner->comments, comment);
+    gi_source_scanner_take_comment (scanner, comment);
   } else {
     /*
      * Ignore all other comment blocks

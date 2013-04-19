@@ -221,6 +221,7 @@ gi_source_scanner_new (void)
 
   scanner->files = g_hash_table_new_full (g_file_hash, (GEqualFunc)g_file_equal,
                                           g_object_unref, NULL);
+  g_queue_init (&scanner->conditionals);
   return scanner;
 }
 
@@ -247,6 +248,7 @@ gi_source_scanner_free (GISourceScanner *scanner)
 
   g_hash_table_unref (scanner->files);
 
+  g_queue_clear (&scanner->conditionals);
 }
 
 gboolean
@@ -268,6 +270,12 @@ void
 gi_source_scanner_add_symbol (GISourceScanner  *scanner,
 			      GISourceSymbol   *symbol)
 {
+  if (scanner->skipping)
+    {
+      g_debug ("skipping symbol due to __GI_SCANNER__ cond: %s", symbol->ident);
+      return;
+    }
+
   g_assert (scanner->current_file);
 
   if (scanner->macro_scan || g_hash_table_contains (scanner->files, scanner->current_file))
@@ -293,6 +301,21 @@ gi_source_scanner_add_symbol (GISourceScanner  *scanner,
     default:
       break;
     }
+}
+
+void
+gi_source_scanner_take_comment (GISourceScanner *scanner,
+                                GISourceComment *comment)
+{
+  if (scanner->skipping)
+    {
+      g_debug ("skipping comment due to __GI_SCANNER__ cond");
+      gi_source_comment_free (comment);
+      return;
+    }
+
+  scanner->comments = g_slist_prepend (scanner->comments,
+                                       comment);
 }
 
 GSList *

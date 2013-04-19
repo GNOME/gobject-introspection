@@ -115,6 +115,8 @@ struct _GISourceScanner
   GSList *comments; /* _GIComment */
   GHashTable *typedef_table;
   GHashTable *struct_or_union_or_enum_table;
+  gboolean skipping;
+  GQueue conditionals;
 };
 
 struct _GISourceSymbol
@@ -168,6 +170,8 @@ GISourceSymbol *    gi_source_symbol_copy              (GISourceSymbol     *symb
 /* Private */
 void                gi_source_scanner_add_symbol       (GISourceScanner  *scanner,
 							GISourceSymbol   *symbol);
+void                gi_source_scanner_take_comment     (GISourceScanner *scanner,
+                                                        GISourceComment *comment);
 gboolean            gi_source_scanner_is_typedef       (GISourceScanner  *scanner,
 							const char       *name);
 void                gi_source_symbol_merge_type        (GISourceSymbol   *symbol,

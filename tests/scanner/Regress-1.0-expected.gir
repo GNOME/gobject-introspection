@@ -1911,6 +1911,16 @@ exposed to language bindings.</doc>
         </parameter>
       </parameters>
     </callback>
+    <constant name="GI_SCANNER_ELSE"
+              value="3"
+              c:type="REGRESS_GI_SCANNER_ELSE">
+      <type name="gint" c:type="gint"/>
+    </constant>
+    <constant name="GI_SCANNER_IFDEF"
+              value="3"
+              c:type="REGRESS_GI_SCANNER_IFDEF">
+      <type name="gint" c:type="gint"/>
+    </constant>
     <constant name="GUINT64_CONSTANT"
               value="18446744073709551615"
               c:type="REGRESS_GUINT64_CONSTANT">

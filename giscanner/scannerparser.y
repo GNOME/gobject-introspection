@@ -128,6 +128,84 @@ out:
   return dest;
 }
 
+enum {
+  IRRELEVANT = 1,
+  NOT_GI_SCANNER = 2,
+  FOR_GI_SCANNER = 3,
+};
+
+static void
+update_skipping (GISourceScanner *scanner)
+{
+  GList *l;
+  for (l = scanner->conditionals.head; l != NULL; l = g_list_next (l))
+    {
+      if (GPOINTER_TO_INT (l->data) == NOT_GI_SCANNER)
+        {
+           scanner->skipping = TRUE;
+           return;
+        }
+    }
+
+  scanner->skipping = FALSE;
+}
+
+static void
+push_conditional (GISourceScanner *scanner,
+                  gint type)
+{
+  g_assert (type != 0);
+  g_queue_push_head (&scanner->conditionals, GINT_TO_POINTER (type));
+}
+
+static gint
+pop_conditional (GISourceScanner *scanner)
+{
+  gint type = GPOINTER_TO_INT (g_queue_pop_head (&scanner->conditionals));
+
+  if (type == 0)
+    {
+      gchar *filename = g_file_get_path (scanner->current_file);
+      fprintf (stderr, "%s:%d: mismatched %s", filename, lineno, yytext);
+      g_free (filename);
+    }
+
+  return type;
+}
+
+static void
+warn_if_cond_has_gi_scanner (GISourceScanner *scanner,
+                             const gchar *text)
+{
+  /* Some other conditional that is not __GI_SCANNER__ */
+  if (strstr (text, "__GI_SCANNER__"))
+    {
+      gchar *filename = g_file_get_path (scanner->current_file);
+      fprintf (stderr, "%s:%d: the __GI_SCANNER__ constant should only be used with simple #ifdef or #endif: %s",
+               filename, lineno, text);
+      g_free (filename);
+    }
+}
+
+static void
+toggle_conditional (GISourceScanner *scanner)
+{
+  switch (pop_conditional (scanner))
+    {
+    case FOR_GI_SCANNER:
+      push_conditional (scanner, NOT_GI_SCANNER);
+      break;
+    case NOT_GI_SCANNER:
+      push_conditional (scanner, FOR_GI_SCANNER);
+      break;
+    case 0:
+      break;
+    default:
+      push_conditional (scanner, IRRELEVANT);
+      break;
+    }
+}
+
 %}
 
 %error-verbose
@@ -160,6 +238,8 @@ out:
 %token VOID VOLATILE WHILE
 
 %token FUNCTION_MACRO OBJECT_MACRO
+%token IFDEF_GI_SCANNER IFNDEF_GI_SCANNER
+%token IFDEF_COND IFNDEF_COND IF_COND ELIF_COND ELSE_COND ENDIF_COND
 
 %start translation_unit
 
@@ -1403,9 +1483,55 @@ object_macro_define
 	  }
 	;
 
+preproc_conditional
+	: IFDEF_GI_SCANNER 
+	  {
+		push_conditional (scanner, FOR_GI_SCANNER);
+		update_skipping (scanner);
+	  }
+	| IFNDEF_GI_SCANNER
+	  {
+		push_conditional (scanner, NOT_GI_SCANNER);
+		update_skipping (scanner);
+	  }
+	| IFDEF_COND 
+	  {
+	 	warn_if_cond_has_gi_scanner (scanner, yytext);
+		push_conditional (scanner, IRRELEVANT);
+	  }
+	| IFNDEF_COND
+	  {
+		warn_if_cond_has_gi_scanner (scanner, yytext);
+		push_conditional (scanner, IRRELEVANT);
+	  }
+	| IF_COND 
+	  {
+		warn_if_cond_has_gi_scanner (scanner, yytext);
+		push_conditional (scanner, IRRELEVANT);
+	  }
+	| ELIF_COND
+	  {
+		warn_if_cond_has_gi_scanner (scanner, yytext);
+		pop_conditional (scanner);
+		push_conditional (scanner, IRRELEVANT);
+		update_skipping (scanner);
+	  }
+	| ELSE_COND
+	  {
+		toggle_conditional (scanner);
+		update_skipping (scanner);
+	  }
+	| ENDIF_COND
+	  {
+		pop_conditional (scanner);
+		update_skipping (scanner);
+	  }
+	;
+
 macro
 	: function_macro_define
 	| object_macro_define
+	| preproc_conditional
 	| error
 	;
 
@@ -1435,14 +1561,19 @@ eat_hspace (FILE * f)
 }
 
 static int
-eat_line (FILE * f, int c)
+pass_line (FILE * f, int c,
+           FILE *out)
 {
   while (c != EOF && c != '\n')
     {
+      if (out)
+        fputc (c, out);
       c = fgetc (f);
     }
   if (c == '\n')
     {
+      if (out)
+        fputc (c, out);
       c = fgetc (f);
       if (c == ' ' || c == '\t')
         {
@@ -1450,6 +1581,12 @@ eat_line (FILE * f, int c)
         }
     }
   return c;
+}
+
+static int
+eat_line (FILE * f, int c)
+{
+  return pass_line (f, c, NULL);
 }
 
 static int
@@ -1484,6 +1621,7 @@ gi_source_scanner_parse_macros (GISourceScanner *scanner, GList *filenames)
       GString *define_line;
       char *str;
       gboolean error_line = FALSE;
+      gboolean end_of_word;
       int c = eat_hspace (f);
       while (c != EOF)
         {
@@ -1502,7 +1640,22 @@ gi_source_scanner_parse_macros (GISourceScanner *scanner, GList *filenames)
 
           c = eat_hspace (f);
           c = read_identifier (f, c, &str);
-          if (strcmp (str, "define") != 0 || (c != ' ' && c != '\t'))
+          end_of_word = (c == ' ' || c == '\t' || c == '\n' || c == EOF);
+          if (end_of_word &&
+              (g_str_equal (str, "if") ||
+               g_str_equal (str, "endif") ||
+               g_str_equal (str, "ifndef") ||
+               g_str_equal (str, "ifdef") ||
+               g_str_equal (str, "else") ||
+               g_str_equal (str, "elif")))
+            {
+              fprintf (fmacros, "#%s ", str);
+              g_free (str);
+              c = pass_line (f, c, fmacros);
+              line++;
+              continue;
+            }
+          else if (strcmp (str, "define") != 0 || !end_of_word)
             {
               g_free (str);
               /* ignore line */
