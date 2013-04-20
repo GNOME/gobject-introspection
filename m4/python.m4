@@ -63,7 +63,7 @@ AC_DEFUN([AM_CHECK_PYTHON_LIBS],
 [AC_REQUIRE([AM_CHECK_PYTHON_HEADERS])
 AC_MSG_CHECKING(for libraries required to link against libpython)
 dnl deduce PYTHON_LIBS
-if test "x$PYTHON_LIBS" == x; then
+if test "x$PYTHON_LIBS" = x; then
 	PYTHON_LIBS=`$PYTHON-config --ldflags --libs`
 fi
 AC_SUBST(PYTHON_LIBS)
