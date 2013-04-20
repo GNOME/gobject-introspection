@@ -137,6 +137,8 @@ stringtext				([^\\\"])|(\\.)
 ","					{ return ','; }
 "->"					{ return ARROW; }
 
+"__asm"[\t\f\v\r ]+"volatile"  	        { if (!parse_ignored_macro()) REJECT; }
+"__asm__"[\t\f\v\r ]+"volatile"	        { if (!parse_ignored_macro()) REJECT; }
 "__asm" 	        	        { if (!parse_ignored_macro()) REJECT; }
 "__asm__" 	        	        { if (!parse_ignored_macro()) REJECT; }
 "__attribute__" 		        { if (!parse_ignored_macro()) REJECT; }
@@ -148,6 +150,8 @@ stringtext				([^\\\"])|(\\.)
 "__signed__"				{ return SIGNED; }
 "__restrict"				{ return RESTRICT; }
 "__typeof"				{ if (!parse_ignored_macro()) REJECT; }
+"__volatile"	        	        { if (!parse_ignored_macro()) REJECT; }
+"__volatile__"	        	        { if (!parse_ignored_macro()) REJECT; }
 "_Bool"					{ return BOOL; }
 
 "G_GINT64_CONSTANT"			{ return INTL_CONST; }
