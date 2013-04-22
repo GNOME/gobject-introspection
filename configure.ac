@@ -247,7 +247,7 @@ AC_CHECK_FUNCS([memchr strchr strspn strstr strtol strtoull])
 AC_CHECK_FUNCS([backtrace backtrace_symbols])
 
 # Python
-AM_PATH_PYTHON([2.5])
+AM_PATH_PYTHON([2.6])
 case "$host" in
 *-*-mingw*)
 	# Change backslashes to forward slashes in pyexecdir to avoid
