@@ -910,7 +910,6 @@ void gi_marshalling_tests_object_full_out (GIMarshallingTestsObject **object);
 
 void gi_marshalling_tests_object_none_inout (GIMarshallingTestsObject **object);
 void gi_marshalling_tests_object_full_inout (GIMarshallingTestsObject **object);
-void gi_marshalling_tests_object_inout_same (GIMarshallingTestsObject **object);
 
 void gi_marshalling_tests_object_int8_in (GIMarshallingTestsObject *object, gint8 in);
 void gi_marshalling_tests_object_int8_out (GIMarshallingTestsObject *object, gint8 *out);
