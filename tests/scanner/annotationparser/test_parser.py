@@ -108,7 +108,7 @@ def parsed2tree(docblock):
                     parsed += '      <annotations>\n'
                     for key, value in tag.options.values:
                         parsed += '        <annotation>\n'
-                        parsed += '          <name>%s</name>\n' %(key, )
+                        parsed += '          <name>%s</name>\n' % (key, )
                         if value is not None:
                             options = value.all()
                             parsed += '          <options>\n'
@@ -129,6 +129,7 @@ def parsed2tree(docblock):
         parsed += '<docblock>'
 
     return parsed
+
 
 def expected2tree(docblock):
     # Note: this sucks, but we can't rely on etree.tostring() to generate useable output :(

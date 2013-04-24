@@ -37,6 +37,7 @@ from .annotationparser import (OPT_ALLOW_NONE, OPT_ARRAY, OPT_ATTRIBUTE,
                                OPT_TRANSFER_NONE, OPT_TRANSFER_FLOATING)
 from .utils import to_underscores_noprefix
 
+
 class MainTransformer(object):
 
     def __init__(self, transformer, blocks):
@@ -105,7 +106,7 @@ class MainTransformer(object):
 
     def _pass_fixup_hidden_fields(self, node, chain):
         """Hide all callbacks starting with _; the typical
-usage is void (*_gtk_reserved1)(void);"""
+        usage is void (*_gtk_reserved1)(void);"""
         if isinstance(node, (ast.Class, ast.Interface, ast.Record, ast.Union)):
             for field in node.fields:
                 if (field
@@ -204,7 +205,7 @@ usage is void (*_gtk_reserved1)(void);"""
         if isinstance(node, ast.Function):
             self._apply_annotations_function(node, chain)
         if isinstance(node, ast.Callback):
-            self._apply_annotations_callable(node, chain, block = self._get_block(node))
+            self._apply_annotations_callable(node, chain, block=self._get_block(node))
         if isinstance(node, (ast.Class, ast.Interface, ast.Union, ast.Enum,
                              ast.Bitfield, ast.Callback)):
             self._apply_annotations_annotated(node, self._get_block(node))
@@ -257,7 +258,7 @@ usage is void (*_gtk_reserved1)(void);"""
             Use resolver() on each identifier, and combiner() on the parts of
             each complete type. (top_combiner is used on the top-most type.)"""
             bits = re.split(r'([,<>()])', type_str, 1)
-            first, sep, rest = [bits[0], '', ''] if (len(bits)==1) else bits
+            first, sep, rest = [bits[0], '', ''] if (len(bits) == 1) else bits
             args = [resolver(first)]
             if sep == '<' or sep == '(':
                 lastsep = '>' if (sep == '<') else ')'
@@ -268,9 +269,11 @@ usage is void (*_gtk_reserved1)(void);"""
             else:
                 rest = sep + rest
             return top_combiner(*args), rest
+
         def resolver(ident):
             res = self._transformer.create_type_from_user_string(ident)
             return res
+
         def combiner(base, *rest):
             if not rest:
                 return base
@@ -281,6 +284,7 @@ usage is void (*_gtk_reserved1)(void);"""
             message.warn(
                 "Too many parameters in type specification %r" % (type_str, ))
             return base
+
         def top_combiner(base, *rest):
             if type_node is not None and isinstance(type_node, ast.Type):
                 base.is_const = type_node.is_const
@@ -327,24 +331,23 @@ usage is void (*_gtk_reserved1)(void);"""
         return block.position
 
     def _check_array_element_type(self, array, options):
+        array_type = array.array_type
+        element_type = array.element_type
+
         # GPtrArrays are allowed to contain non basic types
         # (except enums and flags) or basic types that are
         # as big as a gpointer
-        if array.array_type == ast.Array.GLIB_PTRARRAY and \
-           ((array.element_type in ast.BASIC_GIR_TYPES
-             and not array.element_type in ast.POINTER_TYPES) or
-            isinstance(array.element_type, ast.Enum) or
-            isinstance(array.element_type, ast.Bitfield)):
-            message.warn("invalid (element-type) for a GPtrArray, "
-                        "must be a pointer", options.position)
+        if array_type == ast.Array.GLIB_PTRARRAY:
+            if ((element_type in ast.BASIC_GIR_TYPES and not element_type in ast.POINTER_TYPES)
+            or isinstance(element_type, (ast.Enum, ast.Bitfield))):
+                message.warn("invalid (element-type) for a GPtrArray, "
+                             "must be a pointer", options.position)
 
         # GByteArrays have (element-type) guint8 by default
-        if array.array_type == ast.Array.GLIB_BYTEARRAY:
-            if array.element_type == ast.TYPE_ANY:
+        if array_type == ast.Array.GLIB_BYTEARRAY:
+            if element_type == ast.TYPE_ANY:
                 array.element_type = ast.TYPE_UINT8
-            elif not array.element_type in [ast.TYPE_UINT8,
-                                            ast.TYPE_INT8,
-                                            ast.TYPE_CHAR]:
+            elif not element_type in [ast.TYPE_UINT8, ast.TYPE_INT8, ast.TYPE_CHAR]:
                 message.warn("invalid (element-type) for a GByteArray, "
                              "must be one of guint8, gint8 or gchar",
                              options.position)
@@ -454,8 +457,8 @@ usage is void (*_gtk_reserved1)(void);"""
 
     def _get_transfer_default_returntype_basic(self, typeval):
         if (typeval.is_equiv(ast.BASIC_GIR_TYPES)
-            or typeval.is_const
-            or typeval.is_equiv(ast.TYPE_NONE)):
+        or typeval.is_const
+        or typeval.is_equiv(ast.TYPE_NONE)):
             return ast.PARAM_TRANSFER_NONE
         elif typeval.is_equiv(ast.TYPE_STRING):
             # Non-const strings default to FULL
@@ -535,8 +538,7 @@ usage is void (*_gtk_reserved1)(void);"""
 
         caller_allocates = False
         annotated_direction = None
-        if (OPT_INOUT in options or
-            OPT_INOUT_ALT in options):
+        if (OPT_INOUT in options or OPT_INOUT_ALT in options):
             annotated_direction = ast.PARAM_DIRECTION_INOUT
         elif OPT_OUT in options:
             subtype = options[OPT_OUT]
@@ -574,9 +576,9 @@ usage is void (*_gtk_reserved1)(void);"""
 
         self._adjust_container_type(parent, node, options)
 
-        if (OPT_ALLOW_NONE in options or
-            node.type.target_giname == 'Gio.AsyncReadyCallback' or
-            node.type.target_giname == 'Gio.Cancellable'):
+        if (OPT_ALLOW_NONE in options
+        or node.type.target_giname == 'Gio.AsyncReadyCallback'
+        or node.type.target_giname == 'Gio.Cancellable'):
             node.allow_none = True
 
         if tag is not None and tag.comment is not None:
@@ -605,7 +607,7 @@ usage is void (*_gtk_reserved1)(void);"""
             if ': ' in value:
                 colon = value.find(': ')
                 version = value[:colon]
-                desc = value[colon+2:]
+                desc = value[colon + 2:]
             else:
                 desc = value
                 version = None
@@ -718,8 +720,7 @@ usage is void (*_gtk_reserved1)(void);"""
                 (param, ) = unused
                 text = ', should be %r' % (param, )
             else:
-                text = ', should be one of %s' % (
-                ', '.join(repr(p) for p in unused), )
+                text = ', should be one of %s' % (', '.join(repr(p) for p in unused), )
 
             tag = block.params.get(doc_name)
             message.warn(
@@ -795,14 +796,14 @@ usage is void (*_gtk_reserved1)(void);"""
                 # Resolve real parameter names early, so that in later
                 # phase we can refer to them while resolving annotations.
                 for i, param in enumerate(signal.parameters):
-                    param.argname, tag = names[i+1]
+                    param.argname, tag = names[i + 1]
             else:
                 message.warn("incorrect number of parameters in comment block, "
                              "parameter annotations will be ignored.", block.position)
 
         for i, param in enumerate(signal.parameters):
             if names:
-                name, tag = names[i+1]
+                name, tag = names[i + 1]
                 options = getattr(tag, 'options', {})
                 param_type = options.get(OPT_TYPE)
                 if param_type:
@@ -1164,9 +1165,9 @@ method or constructor of some type."""
         origin_node = self._get_constructor_class(func, subsymbol)
         if origin_node is None:
             if func.is_constructor:
-                message.warn_node(func,
-                    "Can't find matching type for constructor; symbol=%r" \
-                    % (func.symbol, ))
+                message.warn_node(
+                    func,
+                    "Can't find matching type for constructor; symbol=%r" % (func.symbol, ))
             return False
 
         # Some sanity checks; only objects and boxeds can have ctors

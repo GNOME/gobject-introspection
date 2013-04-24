@@ -61,22 +61,23 @@ def _diff(a, b):
                 for line in a[i1:i2]:
                     for l in line.split('\n'):
                         if l != '':
-                            retval +=  ' ' + l + '\n'
+                            retval += ' ' + l + '\n'
                 continue
 
             if tag in ('replace', 'delete'):
                 for line in a[i1:i2]:
                     for l in line.split('\n'):
                         if l != '':
-                            retval +=  '-' + l + '\n'
+                            retval += '-' + l + '\n'
 
             if tag in ('replace', 'insert'):
                 for line in b[j1:j2]:
                     for l in line.split('\n'):
                         if l != '':
-                            retval +=  '+' + l + '\n'
+                            retval += '+' + l + '\n'
 
     return retval
+
 
 def _extract_expected(filename):
     fd = open(filename, 'rU')
@@ -91,6 +92,7 @@ def _extract_expected(filename):
             retval[-1] += line[3:] + '\n'
 
     return retval
+
 
 def check(args):
     filename = args[0]
@@ -133,10 +135,10 @@ def check(args):
 
     if len(expected_warnings) != len(emitted_warnings):
         raise SystemExit('ERROR in %r: %d warnings were emitted, '
-                         'expected %d:\n%s' %(os.path.basename(filename),
-                                              len(emitted_warnings),
-                                              len(expected_warnings),
-                                              _diff(expected_warnings, emitted_warnings)))
+                         'expected %d:\n%s' % (os.path.basename(filename),
+                                               len(emitted_warnings),
+                                               len(expected_warnings),
+                                               _diff(expected_warnings, emitted_warnings)))
 
     for emitted_warning, expected_warning in zip(emitted_warnings, expected_warnings):
         if expected_warning != emitted_warning:

@@ -223,7 +223,7 @@ class DumpCompiler(object):
         # The Microsoft compiler uses different option flags for
         # compilation result output
         if self._pkgconfig_msvc_flags:
-            args.extend(['-c', '-Fe'+output, '-Fo'+output])
+            args.extend(['-c', '-Fe' + output, '-Fo' + output])
         else:
             args.extend(['-c', '-o', output])
         for source in sources:
@@ -254,7 +254,7 @@ class DumpCompiler(object):
         # We can use -o for the Microsoft compiler/linker,
         # but it is considered deprecated usage with that
         if self._pkgconfig_msvc_flags:
-            args.extend(['-Fe'+output])
+            args.extend(['-Fe' + output])
         else:
             args.extend(['-o', output])
         if libtool:
@@ -313,9 +313,9 @@ class DumpCompiler(object):
                 if self._options.namespace_version:
                     args.append(str.lower(self._options.namespace_name) +
                                 '-' +
-                                self._options.namespace_version+'.lib')
+                                self._options.namespace_version + '.lib')
                 else:
-                    args.append(str.lower(self._options.namespace_name)+'.lib')
+                    args.append(str.lower(self._options.namespace_name) + '.lib')
             else:
                 args.append('-Wl,-rpath=.')
 
@@ -329,7 +329,7 @@ class DumpCompiler(object):
             # to .lib files, not the .dll as the --library option specifies the
             # .dll(s) the .gir file refers to
             if self._pkgconfig_msvc_flags == '':
-                if library.endswith(".la"): # explicitly specified libtool library
+                if library.endswith(".la"):  # explicitly specified libtool library
                     args.append(library)
                 else:
                     args.append('-l' + library)
@@ -358,10 +358,11 @@ class DumpCompiler(object):
             # The --library option on Windows pass in the .dll file(s) the
             # .gir files refer to, so don't link to them on Visual C++
             if self._pkgconfig_msvc_flags == '':
-                if library.endswith(".la"): # explicitly specified libtool library
+                if library.endswith(".la"):  # explicitly specified libtool library
                     args.append(library)
                 else:
                     args.append('-l' + library)
+
 
 def compile_introspection_binary(options, get_type_functions,
                                  error_quark_functions):

@@ -28,15 +28,17 @@ from .collections import OrderedDict
 from .message import Position
 from .utils import to_underscores
 
+
 class Type(object):
-    """A Type can be either:
-* A reference to a node (target_giname)
-* A reference to a "fundamental" type like 'utf8'
-* A "foreign" type - this can be any string."
-If none are specified, then it's in an "unresolved" state.  An
-unresolved type can have two data sources; a "ctype" which comes
-from a C type string, or a gtype_name (from g_type_name()).
-""" # '''
+    """
+    A Type can be either:
+    * A reference to a node (target_giname)
+    * A reference to a "fundamental" type like 'utf8'
+    * A "foreign" type - this can be any string."
+    If none are specified, then it's in an "unresolved" state.  An
+    unresolved type can have two data sources; a "ctype" which comes
+    from a C type string, or a gtype_name (from g_type_name()).
+    """
 
     def __init__(self,
                  ctype=None,
@@ -125,11 +127,12 @@ in contrast to the other create_type() functions."""
     def __cmp__(self, other):
         if self.target_fundamental:
             return cmp(self.target_fundamental, other.target_fundamental)
-        if self.target_giname:
+        elif self.target_giname:
             return cmp(self.target_giname, other.target_giname)
-        if self.target_foreign:
+        elif self.target_foreign:
             return cmp(self.target_foreign, other.target_foreign)
-        return cmp(self.ctype, other.ctype)
+        else:
+            return cmp(self.ctype, other.ctype)
 
     def is_equiv(self, typeval):
         """Return True if the specified types are compatible at
@@ -169,6 +172,7 @@ in contrast to the other create_type() functions."""
         else:
             data = ''
         return '%s(%sctype=%s)' % (self.__class__.__name__, data, self.ctype)
+
 
 class TypeUnknown(Type):
     def __init__(self):
@@ -351,9 +355,7 @@ SIGNAL_MUST_COLLECT = 'must-collect'
 
 
 class Namespace(object):
-    def __init__(self, name, version,
-                 identifier_prefixes=None,
-                 symbol_prefixes=None):
+    def __init__(self, name, version, identifier_prefixes=None, symbol_prefixes=None):
         self.name = name
         self.version = version
         if identifier_prefixes is not None:
@@ -367,15 +369,15 @@ class Namespace(object):
             self.symbol_prefixes = [to_underscores(p).lower() for p in ps]
         # cache upper-cased versions
         self._ucase_symbol_prefixes = [p.upper() for p in self.symbol_prefixes]
-        self.names = OrderedDict() # Maps from GIName -> node
-        self.aliases = {} # Maps from GIName -> GIName
-        self.type_names = {} # Maps from GTName -> node
-        self.ctypes = {} # Maps from CType -> node
-        self.symbols = {} # Maps from function symbols -> Function
-        self.includes = set() # Include
-        self.shared_libraries = [] # str
-        self.c_includes = [] # str
-        self.exported_packages = [] # str
+        self.names = OrderedDict()   # Maps from GIName -> node
+        self.aliases = {}            # Maps from GIName -> GIName
+        self.type_names = {}         # Maps from GTName -> node
+        self.ctypes = {}             # Maps from CType -> node
+        self.symbols = {}            # Maps from function symbols -> Function
+        self.includes = set()        # Include
+        self.shared_libraries = []   # str
+        self.c_includes = []         # str
+        self.exported_packages = []  # str
 
     def type_from_name(self, name, ctype=None):
         """Backwards compatibility method for older .gir files, which
@@ -416,7 +418,7 @@ but adds it to things like ctypes, symbols, and type_names.
         if isinstance(node, (Class, Interface)):
             for m in chain(node.signals, node.properties):
                 m.namespace = self
-        if isinstance(node, Enum) or isinstance(node, Bitfield):
+        if isinstance(node, (Enum, Bitfield)):
             for fn in node.static_methods:
                 if not isinstance(fn, Function):
                     continue
@@ -482,6 +484,7 @@ functions via get_by_symbol()."""
         for node in self.itervalues():
             node.walk(callback, [])
 
+
 class Include(object):
 
     def __init__(self, name, version):
@@ -504,6 +507,7 @@ class Include(object):
     def __str__(self):
         return '%s-%s' % (self.name, self.version)
 
+
 class Annotated(object):
     """An object which has a few generic metadata
 properties."""
@@ -511,11 +515,12 @@ properties."""
         self.version = None
         self.skip = False
         self.introspectable = True
-        self.attributes = [] # (key, value)*
+        self.attributes = []    # (key, value)*
         self.stability = None
         self.deprecated = None
         self.deprecated_version = None
         self.doc = None
+
 
 class Node(Annotated):
     """A node is a type of object which is uniquely identified by its
@@ -527,7 +532,7 @@ GIName.  It's possible for nodes to contain or point to other nodes."""
 
     def __init__(self, name=None):
         Annotated.__init__(self)
-        self.namespace = None # Should be set later by Namespace.append()
+        self.namespace = None   # Should be set later by Namespace.append()
         self.name = name
         self.foreign = False
         self.file_positions = set()
@@ -596,8 +601,8 @@ class Callable(Node):
         self.retval = retval
         self.parameters = parameters
         self.throws = not not throws
-        self.instance_parameter = None # Parameter
-        self.parent = None # A Class or Interface
+        self.instance_parameter = None  # Parameter
+        self.parent = None  # A Class or Interface
 
     # Returns all parameters, including the instance parameter
     @property
@@ -627,10 +632,10 @@ class Function(Callable):
         self.symbol = symbol
         self.is_method = False
         self.is_constructor = False
-        self.shadowed_by = None # C symbol string
-        self.shadows = None # C symbol string
-        self.moved_to = None # namespaced function name string
-        self.internal_skipped = False # if True, this func will not be written to GIR
+        self.shadowed_by = None         # C symbol string
+        self.shadows = None             # C symbol string
+        self.moved_to = None            # namespaced function name string
+        self.internal_skipped = False   # if True, this func will not be written to GIR
 
     def clone(self):
         clone = copy.copy(self)
@@ -641,8 +646,7 @@ class Function(Callable):
 
     def is_type_meta_function(self):
         # Named correctly
-        if not (self.name.endswith('_get_type') or
-                self.name.endswith('_get_gtype')):
+        if not (self.name.endswith('_get_type') or self.name.endswith('_get_gtype')):
             return False
 
         # Doesn't have any parameters
@@ -651,13 +655,12 @@ class Function(Callable):
 
         # Returns GType
         rettype = self.retval.type
-        if (not rettype.is_equiv(TYPE_GTYPE) and
-           rettype.target_giname != 'Gtk.Type'):
-            message.warn("function '%s' returns '%r', not a GType" %
-                         (self.name, rettype))
+        if (not rettype.is_equiv(TYPE_GTYPE) and rettype.target_giname != 'Gtk.Type'):
+            message.warn("function '%s' returns '%r', not a GType" % (self.name, rettype))
             return False
 
         return True
+
 
 class ErrorQuarkFunction(Function):
 
@@ -677,7 +680,6 @@ class VFunction(Callable):
         obj = cls(cb.name, cb.retval, cb.parameters[1:],
                   cb.throws)
         return obj
-
 
 
 class Varargs(Type):
@@ -715,6 +717,7 @@ class Array(Type):
         arr.size = self.size
         return arr
 
+
 class List(Type):
 
     def __init__(self, name, element_type, **kwargs):
@@ -727,6 +730,7 @@ class List(Type):
     def clone(self):
         return List(self.name, self.element_type)
 
+
 class Map(Type):
 
     def __init__(self, key_type, value_type, **kwargs):
@@ -738,6 +742,7 @@ class Map(Type):
 
     def clone(self):
         return Map(self.key_type, self.value_type)
+
 
 class Alias(Node):
 
@@ -881,6 +886,7 @@ class Compound(Node, Registered):
             if field.anonymous_node is not None:
                 field.anonymous_node.walk(callback, chain)
 
+
 class Field(Annotated):
 
     def __init__(self, name, typenode, readable, writable, bits=None,
@@ -894,7 +900,7 @@ class Field(Annotated):
         self.bits = bits
         self.anonymous_node = anonymous_node
         self.private = False
-        self.parent = None # a compound
+        self.parent = None  # a compound
 
     def __cmp__(self, other):
         return cmp(self.name, other.name)
@@ -1090,7 +1096,7 @@ class Property(Node):
             self.transfer = PARAM_TRANSFER_NONE
         else:
             self.transfer = transfer
-        self.parent = None # A Class or Interface
+        self.parent = None  # A Class or Interface
 
 
 class Callback(Callable):

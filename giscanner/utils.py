@@ -22,7 +22,10 @@ import re
 import os
 import subprocess
 
+
 _debugflags = None
+
+
 def have_debug_flag(flag):
     """Check for whether a specific debugging feature is enabled.
 Well-known flags:
@@ -37,6 +40,7 @@ Well-known flags:
         if '' in _debugflags:
             _debugflags.remove('')
     return flag in _debugflags
+
 
 def break_on_debug_flag(flag):
     if have_debug_flag(flag):
@@ -69,7 +73,9 @@ def to_underscores_noprefix(name):
     name = _upperstr_pat2.sub(r'\1_\2', name)
     return name
 
+
 _libtool_pat = re.compile("dlname='([A-z0-9\.\-\+]+)'\n")
+
 
 def _extract_dlname_field(la_file):
     f = open(la_file)
@@ -80,6 +86,7 @@ def _extract_dlname_field(la_file):
         return m.groups()[0]
     else:
         return None
+
 
 # Returns the name that we would pass to dlopen() the library
 # corresponding to this .la file
@@ -92,6 +99,7 @@ def extract_libtool_shlib(la_file):
     # a path rather than the raw dlname
     return os.path.basename(dlname)
 
+
 def extract_libtool(la_file):
     dlname = _extract_dlname_field(la_file)
     if dlname is None:
@@ -103,6 +111,7 @@ def extract_libtool(la_file):
     #        and pre-2.2. Johan 2008-10-21
     libname = libname.replace('.libs/.libs', '.libs')
     return libname
+
 
 # Returns arguments for invoking libtool, if applicable, otherwise None
 def get_libtool_command(options):

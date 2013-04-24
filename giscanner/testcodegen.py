@@ -27,11 +27,13 @@ DEFAULT_C_VALUES = {ast.TYPE_ANY: 'NULL',
                     ast.TYPE_FILENAME: '""',
                     ast.TYPE_GTYPE: 'g_object_get_type ()'}
 
+
 def get_default_for_typeval(typeval):
     default = DEFAULT_C_VALUES.get(typeval)
     if default:
         return default
     return "0"
+
 
 def uscore_from_type(typeval):
     if typeval.target_fundamental:
@@ -40,6 +42,7 @@ def uscore_from_type(typeval):
         return typeval.target_giname.replace('.', '').lower()
     else:
         assert False, typeval
+
 
 class EverythingCodeGenerator(object):
 

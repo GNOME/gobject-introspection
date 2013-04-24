@@ -24,6 +24,7 @@ import optparse
 from .docwriter import DocWriter
 from .transformer import Transformer
 
+
 def doc_main(args):
     parser = optparse.OptionParser('%prog [options] GIR-file')
 

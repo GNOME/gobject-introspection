@@ -93,8 +93,7 @@ def symbol_type_name(symbol_type):
         CSYMBOL_TYPE_UNION: 'union',
         CSYMBOL_TYPE_ENUM: 'enum',
         CSYMBOL_TYPE_TYPEDEF: 'typedef',
-        CSYMBOL_TYPE_MEMBER: 'member',
-        }.get(symbol_type)
+        CSYMBOL_TYPE_MEMBER: 'member'}.get(symbol_type)
 
 
 def ctype_name(ctype):
@@ -108,8 +107,7 @@ def ctype_name(ctype):
         CTYPE_ENUM: 'enum',
         CTYPE_POINTER: 'pointer',
         CTYPE_ARRAY: 'array',
-        CTYPE_FUNCTION: 'function',
-        }.get(ctype)
+        CTYPE_FUNCTION: 'function'}.get(ctype)
 
 
 class SourceType(object):
@@ -266,7 +264,7 @@ class SourceScanner(object):
         return self._scanner.get_comments()
 
     def dump(self):
-        print '-'*30
+        print '-' * 30
         for symbol in self._scanner.get_symbols():
             print symbol.ident, symbol.base_type.name, symbol.type
 

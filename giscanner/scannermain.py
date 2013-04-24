@@ -42,13 +42,16 @@ from giscanner.sourcescanner import SourceScanner, ALL_EXTS
 from giscanner.transformer import Transformer
 from . import utils
 
+
 def process_cflags_begin(option, opt, value, parser):
     cflags = getattr(parser.values, option.dest)
     while len(parser.rargs) > 0 and parser.rargs[0] != '--cflags-end':
         cflags.append(parser.rargs.pop(0))
 
+
 def process_cflags_end(option, opt, value, parser):
     pass
+
 
 def get_preprocessor_option_group(parser):
     group = optparse.OptionGroup(parser, "Preprocessor options")
@@ -71,6 +74,7 @@ def get_preprocessor_option_group(parser):
     group.add_option("-p", dest="", help="Ignored")
     return group
 
+
 def get_windows_option_group(parser):
     group = optparse.OptionGroup(parser, "Machine Dependent Options")
     group.add_option("-m", help="some machine dependent option",
@@ -79,13 +83,13 @@ def get_windows_option_group(parser):
 
     return group
 
+
 def _get_option_parser():
     parser = optparse.OptionParser('%prog [options] sources')
     parser.add_option('', "--quiet",
                       action="store_true", dest="quiet",
                       default=False,
-                      help="If passed, do not print details of normal" \
-                          + " operation")
+                      help="If passed, do not print details of normal operation")
     parser.add_option("", "--format",
                       action="store", dest="format",
                       default="gir",
@@ -204,12 +208,14 @@ match the namespace prefix.""")
 def _error(msg):
     raise SystemExit('ERROR: %s' % (msg, ))
 
+
 def passthrough_gir(path, f):
     parser = GIRParser()
     parser.parse(path)
 
     writer = GIRWriter(parser.get_namespace())
     f.write(writer.get_xml())
+
 
 def test_codegen(optstring):
     (namespace, out_h_filename, out_c_filename) = optstring.split(',')
@@ -221,6 +227,7 @@ def test_codegen(optstring):
         _error("Invaild namespace %r" % (namespace, ))
     return 0
 
+
 def process_options(output, allowed_flags):
     for option in output.split():
         for flag in allowed_flags:
@@ -228,6 +235,7 @@ def process_options(output, allowed_flags):
                 continue
             yield option
             break
+
 
 def process_packages(options, packages):
     args = ['pkg-config', '--cflags']
@@ -248,6 +256,7 @@ def process_packages(options, packages):
     options.cpp_defines.extend(pkg_options.cpp_defines)
     options.cpp_undefines.extend(pkg_options.cpp_undefines)
 
+
 def extract_filenames(args):
     filenames = []
     for arg in args:
@@ -261,6 +270,7 @@ def extract_filenames(args):
             filenames.append(os.path.abspath(arg))
     return filenames
 
+
 def extract_filelist(options):
     filenames = []
     if not os.path.exists(options.filelist):
@@ -271,16 +281,17 @@ def extract_filelist(options):
         # We don't support real C++ parsing yet, but we should be able
         # to understand C API implemented in C++ files.
         filename = line.strip()
-        if (filename.endswith('.c') or filename.endswith('.cpp') or
-            filename.endswith('.cc') or filename.endswith('.cxx') or
-            filename.endswith('.h') or filename.endswith('.hpp') or
-            filename.endswith('.hxx')):
+        if (filename.endswith('.c') or filename.endswith('.cpp')
+        or filename.endswith('.cc') or filename.endswith('.cxx')
+        or filename.endswith('.h') or filename.endswith('.hpp')
+        or filename.endswith('.hxx')):
             if not os.path.exists(filename):
                 _error('%s: Invalid filelist entry-no such file or directory' % (line, ))
             # Make absolute, because we do comparisons inside scannerparser.c
             # against the absolute path that cpp will give us
             filenames.append(os.path.abspath(filename))
     return filenames
+
 
 def create_namespace(options):
     if options.strip_prefix:
@@ -310,6 +321,7 @@ see --identifier-prefix and --symbol-prefix."""
                      identifier_prefixes=identifier_prefixes,
                      symbol_prefixes=symbol_prefixes)
 
+
 def create_transformer(namespace, options):
     transformer = Transformer(namespace,
                               accept_unprefixed=options.accept_unprefixed)
@@ -331,6 +343,7 @@ def create_transformer(namespace, options):
 
     return transformer
 
+
 def create_binary(transformer, options, args):
     # Transform the C AST nodes into higher level
     # GLib/GObject nodes
@@ -341,7 +354,7 @@ def create_binary(transformer, options, args):
     gdump_parser.init_parse()
 
     if options.program:
-        args=[options.program]
+        args = [options.program]
         args.extend(options.program_args)
         binary = IntrospectionBinary(args)
     else:
@@ -353,6 +366,7 @@ def create_binary(transformer, options, args):
     gdump_parser.set_introspection_binary(binary)
     gdump_parser.parse()
     return shlibs
+
 
 def create_source_scanner(options, args):
     if hasattr(options, 'filelist') and options.filelist:
@@ -370,6 +384,7 @@ def create_source_scanner(options, args):
     ss.parse_files(filenames)
     ss.parse_macros(filenames)
     return ss
+
 
 def write_output(data, options):
     if options.output == "-":
@@ -406,6 +421,7 @@ def write_output(data, options):
         output.write(data)
     except IOError as e:
         _error("while writing output: %s" % (e.strerror, ))
+
 
 def scanner_main(args):
     parser = _get_option_parser()

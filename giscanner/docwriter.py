@@ -31,6 +31,7 @@ from mako.lookup import TemplateLookup
 from . import ast, xmlwriter
 from .utils import to_underscores
 
+
 def make_page_id(node, recursive=False):
     if isinstance(node, ast.Namespace):
         if recursive:
@@ -50,6 +51,7 @@ def make_page_id(node, recursive=False):
         return '%s-%s' % (make_page_id(parent, recursive=True), node.name)
     else:
         return '%s.%s' % (make_page_id(parent, recursive=True), node.name)
+
 
 def get_node_kind(node):
     if isinstance(node, ast.Namespace):
@@ -77,6 +79,7 @@ def get_node_kind(node):
         node_kind = 'default'
 
     return node_kind
+
 
 class TemplatedScanner(object):
     def __init__(self, specs):
@@ -141,6 +144,7 @@ class TemplatedScanner(object):
         if pos < len(text):
             yield ('other', text[pos:], None)
 
+
 class DocstringScanner(TemplatedScanner):
     def __init__(self):
         specs = [
@@ -155,6 +159,7 @@ class DocstringScanner(TemplatedScanner):
         ]
 
         super(DocstringScanner, self).__init__(specs)
+
 
 class DocFormatter(object):
     def __init__(self, transformer):
@@ -358,6 +363,7 @@ class DocFormatter(object):
         parent_chain.reverse()
         return parent_chain
 
+
 class DocFormatterC(DocFormatter):
     language = "C"
     mime_type = "text/x-csrc"
@@ -380,13 +386,14 @@ class DocFormatterC(DocFormatter):
             return getattr(node, 'ctype')
 
     def format_function_name(self, func):
-        if isinstance(func, (ast.Function)):
+        if isinstance(func, ast.Function):
             return func.symbol
         else:
             return func.name
 
     def get_parameters(self, node):
         return node.all_parameters
+
 
 class DocFormatterIntrospectableBase(DocFormatter):
     def should_render_node(self, node):
@@ -397,6 +404,7 @@ class DocFormatterIntrospectableBase(DocFormatter):
             return False
 
         return super(DocFormatterIntrospectableBase, self).should_render_node(node)
+
 
 class DocFormatterPython(DocFormatterIntrospectableBase):
     language = "Python"
@@ -418,7 +426,7 @@ class DocFormatterPython(DocFormatterIntrospectableBase):
         if getattr(node, "is_method", False):
             return True
 
-        if isinstance(node, (ast.VFunction)):
+        if isinstance(node, ast.VFunction):
             return True
 
         return False
@@ -451,8 +459,7 @@ class DocFormatterPython(DocFormatterIntrospectableBase):
             "GParam": "GLib.Param",
             "PyObject": "object",
             "GStrv": "[str]",
-            "GVariant": "GLib.Variant",
-            }
+            "GVariant": "GLib.Variant"}
 
         return fundamental_types.get(name, name)
 
@@ -476,6 +483,7 @@ class DocFormatterPython(DocFormatterIntrospectableBase):
     def get_parameters(self, node):
         return node.all_parameters
 
+
 class DocFormatterGjs(DocFormatterIntrospectableBase):
     language = "Gjs"
     mime_type = "text/x-gjs"
@@ -490,7 +498,7 @@ class DocFormatterGjs(DocFormatterIntrospectableBase):
         if getattr(node, "is_method", False):
             return True
 
-        if isinstance(node, (ast.VFunction)):
+        if isinstance(node, ast.VFunction):
             return True
 
         return False
@@ -514,8 +522,7 @@ class DocFormatterGjs(DocFormatterIntrospectableBase):
             "GParam": "GLib.Param",
             "PyObject": "Object",
             "GStrv": "[String]",
-            "GVariant": "GLib.Variant",
-            }
+            "GVariant": "GLib.Variant"}
 
         return fundamental_types.get(name, name)
 
@@ -558,11 +565,13 @@ class DocFormatterGjs(DocFormatterIntrospectableBase):
                 params.append(param)
         return params
 
+
 LANGUAGES = {
     "c": DocFormatterC,
     "python": DocFormatterPython,
     "gjs": DocFormatterGjs,
 }
+
 
 class DocWriter(object):
     def __init__(self, transformer, language):

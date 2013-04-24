@@ -26,6 +26,7 @@ from giscanner.scannermain import (get_preprocessor_option_group,
                                    create_source_scanner,
                                    process_packages)
 
+
 def annotation_main(args):
     parser = optparse.OptionParser('%prog [options] sources')
 

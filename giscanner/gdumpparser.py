@@ -203,8 +203,7 @@ blob containing data gleaned from GObject's primitive introspection."""
 
     def _initparse_gobject_record(self, record):
         if (record.name.startswith('ParamSpec')
-              and not record.name in ('ParamSpecPool', 'ParamSpecClass',
-                                      'ParamSpecTypeInfo')):
+        and not record.name in ('ParamSpecPool', 'ParamSpecClass', 'ParamSpecTypeInfo')):
             parent = None
             if record.name != 'ParamSpec':
                 parent = ast.Type(target_giname='GObject.ParamSpec')
@@ -279,7 +278,6 @@ blob containing data gleaned from GObject's primitive introspection."""
                                       value,
                                       member.attrib['name'],
                                       member.attrib['nick']))
-
 
         if xmlnode.tag == 'flags':
             klass = ast.Bitfield
@@ -437,7 +435,7 @@ different --identifier-prefix.""" % (xmlnode.attrib['name'], self._namespace.ide
                 if i == 0:
                     argname = 'object'
                 else:
-                    argname = 'p%s' % (i-1, )
+                    argname = 'p%s' % (i - 1, )
                 pctype = parameter.attrib['type']
                 ptype = ast.Type.create_from_gtype_name(pctype)
                 param = ast.Parameter(argname, ptype)
@@ -526,8 +524,7 @@ different --identifier-prefix.""" % (xmlnode.attrib['name'], self._namespace.ide
             return False
 
     def _strip_class_suffix(self, name):
-        if (name.endswith('Class') or
-            name.endswith('Iface')):
+        if (name.endswith('Class') or name.endswith('Iface')):
             return name[:-5]
         elif name.endswith('Interface'):
             return name[:-9]

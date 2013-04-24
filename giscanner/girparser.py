@@ -101,9 +101,8 @@ class GIRParser(object):
         assert root.tag == _corens('repository')
         version = root.attrib['version']
         if version != COMPATIBLE_GIR_VERSION:
-            raise SystemExit("%s: Incompatible version %s (supported: %s)" \
-                             % (self._get_current_file(),
-                                version, COMPATIBLE_GIR_VERSION))
+            raise SystemExit("%s: Incompatible version %s (supported: %s)" %
+                             (self._get_current_file(), version, COMPATIBLE_GIR_VERSION))
 
         for node in root.getchildren():
             if node.tag == _corens('include'):
@@ -122,9 +121,9 @@ class GIRParser(object):
         if symbol_prefixes:
             symbol_prefixes = symbol_prefixes.split(',')
         self._namespace = ast.Namespace(ns.attrib['name'],
-                                    ns.attrib['version'],
-                                    identifier_prefixes=identifier_prefixes,
-                                    symbol_prefixes=symbol_prefixes)
+                                        ns.attrib['version'],
+                                        identifier_prefixes=identifier_prefixes,
+                                        symbol_prefixes=symbol_prefixes)
         if 'shared-library' in ns.attrib:
             self._namespace.shared_libraries = ns.attrib['shared-library'].split(',')
         self._namespace.includes = self._includes
@@ -140,8 +139,7 @@ class GIRParser(object):
             _corens('interface'): self._parse_object_interface,
             _corens('record'): self._parse_record,
             _corens('union'): self._parse_union,
-            _glibns('boxed'): self._parse_boxed,
-            }
+            _glibns('boxed'): self._parse_boxed}
 
         if not self._types_only:
             parser_methods[_corens('constant')] = self._parse_constant
@@ -153,8 +151,7 @@ class GIRParser(object):
                 method(node)
 
     def _parse_include(self, node):
-        include = ast.Include(node.attrib['name'],
-                          node.attrib['version'])
+        include = ast.Include(node.attrib['name'], node.attrib['version'])
         self._includes.add(include)
 
     def _parse_pkgconfig_package(self, node):
@@ -165,9 +162,7 @@ class GIRParser(object):
 
     def _parse_alias(self, node):
         typeval = self._parse_type(node)
-        alias = ast.Alias(node.attrib['name'],
-                      typeval,
-                      node.attrib.get(_cns('type')))
+        alias = ast.Alias(node.attrib['name'], typeval, node.attrib.get(_cns('type')))
         self._parse_generic_attribs(node, alias)
         self._namespace.append(alias)
 
@@ -427,7 +422,8 @@ class GIRParser(object):
                 return ast.Type(ctype=ctype)
             elif name in ['GLib.List', 'GLib.SList']:
                 subchild = self._find_first_child(typenode,
-                               map(_corens, ('callback', 'array', 'varargs', 'type')))
+                                                  map(_corens, ('callback', 'array',
+                                                                'varargs', 'type')))
                 if subchild is not None:
                     element_type = self._parse_type(typenode)
                 else:
@@ -438,9 +434,7 @@ class GIRParser(object):
                 subchildren_types = map(self._parse_type_simple, subchildren)
                 while len(subchildren_types) < 2:
                     subchildren_types.append(ast.TYPE_ANY)
-                return ast.Map(subchildren_types[0],
-                           subchildren_types[1],
-                           ctype=ctype)
+                return ast.Map(subchildren_types[0], subchildren_types[1], ctype=ctype)
             else:
                 return self._namespace.type_from_name(name, ctype)
         else:
@@ -462,8 +456,8 @@ class GIRParser(object):
         lenidx = typenode.attrib.get('length')
         if lenidx is not None:
             idx = int(lenidx)
-            assert idx < len(parent.parameters), "%r %d >= %d" \
-                      % (parent, idx, len(parent.parameters))
+            assert idx < len(parent.parameters), "%r %d >= %d" % (parent, idx,
+                                                                  len(parent.parameters))
             typeval.length_param_name = parent.parameters[idx].argname
 
     def _parse_boxed(self, node):
@@ -509,11 +503,11 @@ class GIRParser(object):
             assert node.tag == _corens('field'), node.tag
             type_node = self._parse_type(node)
         field = ast.Field(node.attrib.get('name'),
-                      type_node,
-                      node.attrib.get('readable') != '0',
-                      node.attrib.get('writable') == '1',
-                      node.attrib.get('bits'),
-                      anonymous_node=anonymous_node)
+                          type_node,
+                          node.attrib.get('readable') != '0',
+                          node.attrib.get('writable') == '1',
+                          node.attrib.get('bits'),
+                          anonymous_node=anonymous_node)
         field.private = node.attrib.get('private') == '1'
         field.parent = parent
         self._parse_generic_attribs(node, field)
@@ -521,12 +515,12 @@ class GIRParser(object):
 
     def _parse_property(self, node, parent):
         prop = ast.Property(node.attrib['name'],
-                        self._parse_type(node),
-                        node.attrib.get('readable') != '0',
-                        node.attrib.get('writable') == '1',
-                        node.attrib.get('construct') == '1',
-                        node.attrib.get('construct-only') == '1',
-                        node.attrib.get('transfer-ownership'))
+                            self._parse_type(node),
+                            node.attrib.get('readable') != '0',
+                            node.attrib.get('writable') == '1',
+                            node.attrib.get('construct') == '1',
+                            node.attrib.get('construct-only') == '1',
+                            node.attrib.get('transfer-ownership'))
         self._parse_generic_attribs(node, prop)
         prop.parent = parent
         return prop

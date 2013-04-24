@@ -44,8 +44,7 @@ def _calc_attrs_length(attributes, indent, self_indent):
     return attr_length + indent + self_indent
 
 
-def collect_attributes(tag_name, attributes, self_indent,
-                       self_indent_char, indent=-1):
+def collect_attributes(tag_name, attributes, self_indent, self_indent_char, indent=-1):
     if not attributes:
         return ''
     if _calc_attrs_length(attributes, indent, self_indent) > 79:
@@ -68,6 +67,7 @@ def collect_attributes(tag_name, attributes, self_indent,
             first = False
     return attr_value
 
+
 def build_xml_tag(tag_name, attributes=None, data=None, self_indent=0,
                   self_indent_char=' '):
     if attributes is None:
@@ -85,6 +85,7 @@ def build_xml_tag(tag_name, attributes=None, data=None, self_indent=0,
         self_indent_char,
         len(prefix) + len(suffix))
     return prefix + attrs + suffix
+
 
 with LibtoolImporter(None, None):
     if 'UNINSTALLED_INTROSPECTION_SRCDIR' in os.environ:
@@ -108,10 +109,8 @@ class XMLWriter(object):
     def _open_tag(self, tag_name, attributes=None):
         if attributes is None:
             attributes = []
-        attrs = collect_attributes(
-            tag_name, attributes, self._indent,
-            self._indent_char,
-            len(tag_name) + 2)
+        attrs = collect_attributes(tag_name, attributes,
+                                   self._indent, self._indent_char, len(tag_name) + 2)
         self.write_line(u'<%s%s>' % (tag_name, attrs))
 
     def _close_tag(self, tag_name):
@@ -137,10 +136,9 @@ class XMLWriter(object):
         if do_escape:
             line = escape(line)
         if indent:
-            self._data.write('%s%s%s' % (
-                    self._indent_char * self._indent,
-                    line.encode('utf-8'),
-                    self._newline_char))
+            self._data.write('%s%s%s' % (self._indent_char * self._indent,
+                                         line.encode('utf-8'),
+                                         self._newline_char))
         else:
             self._data.write('%s%s' % (line.encode('utf-8'), self._newline_char))
 

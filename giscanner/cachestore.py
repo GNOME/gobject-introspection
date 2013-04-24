@@ -31,6 +31,7 @@ import giscanner
 
 _CACHE_VERSION_FILENAME = '.cache-version'
 
+
 def _get_versionhash():
     toplevel = os.path.dirname(giscanner.__file__)
     # Use pyc instead of py to avoid extra IO
@@ -39,6 +40,7 @@ def _get_versionhash():
     # Using mtimes is a bit (5x) faster than hashing the file contents
     mtimes = (str(os.stat(source).st_mtime) for source in sources)
     return hashlib.sha1(''.join(mtimes)).hexdigest()
+
 
 def _get_cachedir():
     if 'GI_SCANNER_DISABLE_CACHE' in os.environ:
@@ -150,8 +152,7 @@ class CacheStore(object):
         if store_filename is None:
             return
 
-        if (os.path.exists(store_filename) and
-            self._cache_is_valid(store_filename, filename)):
+        if (os.path.exists(store_filename) and self._cache_is_valid(store_filename, filename)):
             return None
 
         tmp_fd, tmp_filename = tempfile.mkstemp(prefix='g-ir-scanner-cache-')

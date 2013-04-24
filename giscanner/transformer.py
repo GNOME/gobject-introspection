@@ -34,6 +34,7 @@ from .sourcescanner import (
     CSYMBOL_TYPE_MEMBER, CSYMBOL_TYPE_ELLIPSIS, CSYMBOL_TYPE_CONST,
     TYPE_QUALIFIER_CONST, TYPE_QUALIFIER_VOLATILE)
 
+
 class TransformerException(Exception):
     pass
 
@@ -54,7 +55,7 @@ class Transformer(object):
         self._namespace = namespace
         self._pkg_config_packages = set()
         self._typedefs_ns = {}
-        self._parsed_includes = {} # <string namespace -> Namespace>
+        self._parsed_includes = {}  # <string namespace -> Namespace>
         self._includepaths = []
         self._passthrough_mode = False
 
@@ -104,7 +105,7 @@ class Transformer(object):
             if not ns_compound:
                 ns_compound = self._namespace.get('_' + compound.name)
             if (not ns_compound and isinstance(compound, (ast.Record, ast.Union))
-                and len(compound.fields) == 0):
+            and len(compound.fields) == 0):
                 disguised = ast.Record(compound.name, typedef, disguised=True)
                 self._namespace.append(disguised)
             elif not ns_compound:
@@ -126,8 +127,8 @@ class Transformer(object):
     def register_include_uninstalled(self, include_path):
         basename = os.path.basename(include_path)
         if not basename.endswith('.gir'):
-            raise SystemExit(
-"Include path %r must be a filename path ending in .gir" % (include_path, ))
+            raise SystemExit("Include path %r must be a filename path "
+                             "ending in .gir" % (include_path, ))
         girname = basename[:-4]
         include = ast.Include.from_string(girname)
         if include in self._namespace.includes:
@@ -175,8 +176,7 @@ None."""
             path = os.path.join(d, girname)
             if os.path.exists(path):
                 return path
-        sys.stderr.write("Couldn't find include %r (search path: %r)\n"\
-                         % (girname, searchdirs))
+        sys.stderr.write("Couldn't find include %r (search path: %r)\n" % (girname, searchdirs))
         sys.exit(1)
 
     @classmethod
@@ -228,7 +228,7 @@ currently-scanned namespace is first."""
 
     def _split_c_string_for_namespace_matches(self, name, is_identifier=False):
         matches = []  # Namespaces which might contain this name
-        unprefixed_namespaces = [] # Namespaces with no prefix, last resort
+        unprefixed_namespaces = []  # Namespaces with no prefix, last resort
         for ns in self._iter_namespaces():
             if is_identifier:
                 prefixes = ns.identifier_prefixes
@@ -502,8 +502,8 @@ raise ValueError."""
 
     def _create_member(self, symbol, parent_symbol=None):
         source_type = symbol.base_type
-        if (source_type.type == CTYPE_POINTER and
-            symbol.base_type.base_type.type == CTYPE_FUNCTION):
+        if (source_type.type == CTYPE_POINTER
+        and symbol.base_type.base_type.type == CTYPE_FUNCTION):
             node = self._create_callback(symbol, member=True)
         elif source_type.type == CTYPE_STRUCT and source_type.name is None:
             node = self._create_struct(symbol, anonymous=True)
@@ -519,8 +519,8 @@ raise ValueError."""
                 # to be able to properly calculate the size of the compound
                 # type (e.g. GValue) that contains this array, see
                 # <https://bugzilla.gnome.org/show_bug.cgi?id=657040>.
-                if (source_type.base_type.type == CTYPE_UNION and
-                    source_type.base_type.name is None):
+                if (source_type.base_type.type == CTYPE_UNION
+                and source_type.base_type.name is None):
                     synthesized_type = self._synthesize_union_type(symbol, parent_symbol)
                     ftype = ast.Array(None, synthesized_type, complete_ctype=complete_ctype)
                 else:
@@ -558,11 +558,9 @@ raise ValueError."""
 
     def _create_typedef(self, symbol):
         ctype = symbol.base_type.type
-        if (ctype == CTYPE_POINTER and
-            symbol.base_type.base_type.type == CTYPE_FUNCTION):
+        if (ctype == CTYPE_POINTER and symbol.base_type.base_type.type == CTYPE_FUNCTION):
             node = self._create_typedef_callback(symbol)
-        elif (ctype == CTYPE_POINTER and
-            symbol.base_type.base_type.type == CTYPE_STRUCT):
+        elif (ctype == CTYPE_POINTER and symbol.base_type.base_type.type == CTYPE_STRUCT):
             node = self._create_typedef_struct(symbol, disguised=True)
         elif ctype == CTYPE_STRUCT:
             node = self._create_typedef_struct(symbol)
@@ -627,8 +625,7 @@ raise ValueError."""
         derefed_typename = canonical.replace('*', '')
 
         # Preserve "pointerness" of struct/union members
-        if (is_member and canonical.endswith('*') and
-            derefed_typename in ast.basic_type_names):
+        if (is_member and canonical.endswith('*') and derefed_typename in ast.basic_type_names):
             return 'gpointer'
         else:
             return derefed_typename
@@ -714,8 +711,7 @@ raise ValueError."""
 
         # Don't create constants for non-public things
         # http://bugzilla.gnome.org/show_bug.cgi?id=572790
-        if (symbol.source_filename is None or
-            not symbol.source_filename.endswith('.h')):
+        if (symbol.source_filename is None or not symbol.source_filename.endswith('.h')):
             return None
         try:
             name = self._strip_symbol(symbol)
@@ -738,13 +734,13 @@ raise ValueError."""
                 if isinstance(target, ast.Type):
                     unaliased = target
             if unaliased == ast.TYPE_UINT64:
-                value = str(symbol.const_int % 2**64)
+                value = str(symbol.const_int % 2 ** 64)
             elif unaliased == ast.TYPE_UINT32:
-                value = str(symbol.const_int % 2**32)
+                value = str(symbol.const_int % 2 ** 32)
             elif unaliased == ast.TYPE_UINT16:
-                value = str(symbol.const_int % 2**16)
+                value = str(symbol.const_int % 2 ** 16)
             elif unaliased == ast.TYPE_UINT8:
-                value = str(symbol.const_int % 2**16)
+                value = str(symbol.const_int % 2 ** 16)
             else:
                 value = str(symbol.const_int)
         elif symbol.const_double is not None:
@@ -842,8 +838,7 @@ raise ValueError."""
 
         # Mark the 'user_data' arguments
         for i, param in enumerate(parameters):
-            if (param.type.target_fundamental == 'gpointer' and
-                param.argname == 'user_data'):
+            if (param.type.target_fundamental == 'gpointer' and param.argname == 'user_data'):
                 param.closure_name = param.argname
 
         if member:

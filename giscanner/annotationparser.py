@@ -141,7 +141,8 @@ OPT_TRANSFER_FLOATING = 'floating'
 # Program matching the start of a comment block.
 #
 # Results in 0 symbolic groups.
-COMMENT_START_RE = re.compile(r'''
+COMMENT_START_RE = re.compile(
+    r'''
     ^                                        # start
     [^\S\n\r]*                               # 0 or more whitespace characters
     /                                        # 1 forward slash character
@@ -157,7 +158,8 @@ COMMENT_START_RE = re.compile(r'''
 #
 # Results in 1 symbolic group:
 #    - group 1 = description
-COMMENT_END_RE = re.compile(r'''
+COMMENT_END_RE = re.compile(
+    r'''
     ^                                        # start
     [^\S\n\r]*                               # 0 or more whitespace characters
     (?P<description>.*?)                     # description text
@@ -173,7 +175,8 @@ COMMENT_END_RE = re.compile(r'''
 # line inside a comment block.
 #
 # Results in 0 symbolic groups.
-COMMENT_ASTERISK_RE = re.compile(r'''
+COMMENT_ASTERISK_RE = re.compile(
+    r'''
     ^                                        # start
     [^\S\n\r]*                               # 0 or more whitespace characters
     \*                                       # 1 asterisk character
@@ -189,7 +192,8 @@ COMMENT_ASTERISK_RE = re.compile(r'''
 #
 # Results in 1 symbolic group:
 #   - group 1 = indentation
-COMMENT_INDENTATION_RE = re.compile(r'''
+COMMENT_INDENTATION_RE = re.compile(
+    r'''
     ^
     (?P<indentation>[^\S\n\r]*)              # 0 or more whitespace characters
     .*
@@ -200,7 +204,8 @@ COMMENT_INDENTATION_RE = re.compile(r'''
 # Program matching an empty line.
 #
 # Results in 0 symbolic groups.
-EMPTY_LINE_RE = re.compile(r'''
+EMPTY_LINE_RE = re.compile(
+    r'''
     ^                                        # start
     [^\S\n\r]*                               # 0 or more whitespace characters
     $                                        # end
@@ -212,7 +217,8 @@ EMPTY_LINE_RE = re.compile(r'''
 # Results in 2 symbolic groups:
 #   - group 1 = colon
 #   - group 2 = section_name
-SECTION_RE = re.compile(r'''
+SECTION_RE = re.compile(
+    r'''
     ^                                        # start
     [^\S\n\r]*                               # 0 or more whitespace characters
     SECTION                                  # SECTION
@@ -231,7 +237,8 @@ SECTION_RE = re.compile(r'''
 #   - group 1 = symbol_name
 #   - group 2 = colon
 #   - group 3 = annotations
-SYMBOL_RE = re.compile(r'''
+SYMBOL_RE = re.compile(
+    r'''
     ^                                        # start
     [^\S\n\r]*                               # 0 or more whitespace characters
     (?P<symbol_name>[\w-]*\w)                # symbol name
@@ -251,7 +258,8 @@ SYMBOL_RE = re.compile(r'''
 #   - group 2 = property_name
 #   - group 3 = colon
 #   - group 4 = annotations
-PROPERTY_RE = re.compile(r'''
+PROPERTY_RE = re.compile(
+    r'''
     ^                                        # start
     [^\S\n\r]*                               # 0 or more whitespace characters
     (?P<class_name>[\w]+)                    # class name
@@ -275,7 +283,8 @@ PROPERTY_RE = re.compile(r'''
 #   - group 2 = signal_name
 #   - group 3 = colon
 #   - group 4 = annotations
-SIGNAL_RE = re.compile(r'''
+SIGNAL_RE = re.compile(
+    r'''
     ^                                        # start
     [^\S\n\r]*                               # 0 or more whitespace characters
     (?P<class_name>[\w]+)                    # class name
@@ -299,7 +308,8 @@ SIGNAL_RE = re.compile(r'''
 #   - group 2 = annotations
 #   - group 3 = colon
 #   - group 4 = description
-PARAMETER_RE = re.compile(r'''
+PARAMETER_RE = re.compile(
+    r'''
     ^                                        # start
     [^\S\n\r]*                               # 0 or more whitespace characters
     @                                        # @ character
@@ -324,7 +334,8 @@ PARAMETER_RE = re.compile(r'''
 #   - group 3 = colon
 #   - group 4 = description
 _all_tags = '|'.join(_ALL_TAGS).replace(' ', '\\ ')
-TAG_RE = re.compile(r'''
+TAG_RE = re.compile(
+    r'''
     ^                                        # start
     [^\S\n\r]*                               # 0 or more whitespace characters
     (?P<tag_name>''' + _all_tags + r''')     # tag name
@@ -348,7 +359,8 @@ TAG_RE = re.compile(r'''
 #   - group 2 = annotations
 #   - group 3 = colon
 #   - group 4 = description
-MULTILINE_ANNOTATION_CONTINUATION_RE = re.compile(r'''
+MULTILINE_ANNOTATION_CONTINUATION_RE = re.compile(
+    r'''
     ^                                        # start
     [^\S\n\r]*                               # 0 or more whitespace characters
     (?P<annotations>(?:\(.*?\)[^\S\n\r]*)*)  # annotations
@@ -444,8 +456,8 @@ class DocTag(object):
                 s = 'one value'
             else:
                 s = '%d values' % (n_params, )
-            if ((n_params > 0 and (value is None or value.length() != n_params)) or
-                n_params == 0 and value is not None):
+            if ((n_params > 0 and (value is None or value.length() != n_params))
+            or n_params == 0 and value is not None):
                 if value is None:
                     length = 0
                 else:
@@ -814,7 +826,7 @@ class AnnotationParser(object):
             if description:
                 comment_lines[-1] = (line_offset, description)
                 position = message.Position(filename, lineno + line_offset)
-                marker = ' '*result.end('description') + '^'
+                marker = ' ' * result.end('description') + '^'
                 message.warn("Comments should end with */ on a new line:\n%s\n%s" %
                              (line, marker),
                              position)
@@ -922,7 +934,7 @@ class AnnotationParser(object):
                     if 'colon' in result.groupdict() and result.group('colon') != ':':
                         colon_start = result.start('colon')
                         colon_column = column_offset + colon_start
-                        marker = ' '*colon_column + '^'
+                        marker = ' ' * colon_column + '^'
                         message.warn("missing ':' at column %s:\n%s\n%s" %
                                      (colon_column + 1, original_line, marker),
                                      position)
@@ -942,7 +954,7 @@ class AnnotationParser(object):
                     # right thing to do because sooner or later some long
                     # descriptions will contain something matching an identifier
                     # pattern by accident.
-                    marker = ' '*column_offset + '^'
+                    marker = ' ' * column_offset + '^'
                     message.warn('ignoring unrecognized GTK-Doc comment block, identifier not '
                                  'found:\n%s\n%s' % (original_line, marker),
                                  position)
@@ -965,7 +977,7 @@ class AnnotationParser(object):
 
                 if in_part != PART_PARAMETERS:
                     column = result.start('parameter_name') + column_offset
-                    marker = ' '*column + '^'
+                    marker = ' ' * column + '^'
                     message.warn("'@%s' parameter unexpected at this location:\n%s\n%s" %
                                  (param_name, original_line, marker),
                                  position)
@@ -983,7 +995,7 @@ class AnnotationParser(object):
                                      position)
                 elif param_name in comment_block.params.keys():
                     column = result.start('parameter_name') + column_offset
-                    marker = ' '*column + '^'
+                    marker = ' ' * column + '^'
                     message.warn("multiple '@%s' parameters for identifier '%s':\n%s\n%s" %
                                  (param_name, comment_block.name, original_line, marker),
                                  position)
@@ -1007,8 +1019,7 @@ class AnnotationParser(object):
             # identifier (when there are no parameters) and encounter an empty
             # line, we must be parsing the comment block description.
             ####################################################################
-            if (EMPTY_LINE_RE.match(line)
-            and in_part in [PART_IDENTIFIER, PART_PARAMETERS]):
+            if (EMPTY_LINE_RE.match(line) and in_part in [PART_IDENTIFIER, PART_PARAMETERS]):
                 in_part = PART_DESCRIPTION
                 part_indent = line_indent
                 continue
@@ -1022,7 +1033,7 @@ class AnnotationParser(object):
                 tag_annotations = result.group('annotations')
                 tag_description = result.group('description')
 
-                marker = ' '*(result.start('tag_name') + column_offset) + '^'
+                marker = ' ' * (result.start('tag_name') + column_offset) + '^'
 
                 # Deprecated GTK-Doc Description: tag
                 if tag_name.lower() == TAG_DESCRIPTION:
@@ -1047,7 +1058,7 @@ class AnnotationParser(object):
 
                 if in_part != PART_TAGS:
                     column = result.start('tag_name') + column_offset
-                    marker = ' '*column + '^'
+                    marker = ' ' * column + '^'
                     message.warn("'%s:' tag unexpected at this location:\n%s\n%s" %
                                  (tag_name, original_line, marker),
                                  position)
@@ -1071,7 +1082,7 @@ class AnnotationParser(object):
                 else:
                     if tag_name.lower() in comment_block.tags.keys():
                         column = result.start('tag_name') + column_offset
-                        marker = ' '*column + '^'
+                        marker = ' ' * column + '^'
                         message.warn("multiple '%s:' tags for identifier '%s':\n%s\n%s" %
                                      (tag_name, comment_block.name, original_line, marker),
                                      position)
@@ -1149,7 +1160,7 @@ class AnnotationParser(object):
             part.value = ''
 
     def _validate_multiline_annotation_continuation(self, line, original_line,
-                                                          column_offset, position):
+                                                    column_offset, position):
         '''
         Validate parameters and tags (except the first line) and generate
         warnings about invalid annotations spanning multiple lines.
@@ -1163,7 +1174,7 @@ class AnnotationParser(object):
         result = MULTILINE_ANNOTATION_CONTINUATION_RE.match(line)
         if result:
             column = result.start('annotations') + column_offset
-            marker = ' '*column + '^'
+            marker = ' ' * column + '^'
             message.warn('ignoring invalid multiline annotation continuation:\n'
                          '%s\n%s' % (original_line, marker),
                          position)
@@ -1179,7 +1190,7 @@ class AnnotationParser(object):
 
         for i, c in enumerate(value):
             if c == '(' and opened == -1:
-                opened = i+1
+                opened = i + 1
             if c == ')' and opened != -1:
                 segment = value[opened:i]
                 parts = segment.split(' ', 1)

@@ -26,6 +26,7 @@ import subprocess
 
 from .utils import get_libtool_command, extract_libtool_shlib
 
+
 # For .la files, the situation is easy.
 def _resolve_libtool(options, binary, libraries):
     shlibs = []
@@ -35,6 +36,7 @@ def _resolve_libtool(options, binary, libraries):
             shlibs.append(shlib)
 
     return shlibs
+
 
 # Assume ldd output is something vaguely like
 #
@@ -50,6 +52,7 @@ def _resolve_libtool(options, binary, libraries):
 def _ldd_library_pattern(library_name):
     return re.compile("(?<![A-Za-z0-9_-])(lib*%s[^A-Za-z0-9_-][^\s\(\)]*)"
                       % re.escape(library_name))
+
 
 # This is a what we do for non-la files. We assume that we are on an
 # ELF-like system where ldd exists and the soname extracted with ldd is
@@ -117,6 +120,7 @@ def _resolve_non_libtool(options, binary, libraries):
                 ", ".join(patterns.keys()))
 
     return shlibs
+
 
 # We want to resolve a set of library names (the <foo> of -l<foo>)
 # against a library to find the shared library name. The shared

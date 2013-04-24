@@ -19,9 +19,11 @@
 
 import re
 
+
 class SectionsFile(object):
     def __init__(self, sections):
         self.sections = sections
+
 
 class Section(object):
     def __init__(self):
@@ -30,10 +32,12 @@ class Section(object):
         self.includes = None
         self.subsections = []
 
+
 class Subsection(object):
     def __init__(self, name):
         self.name = name
         self.symbols = []
+
 
 def parse_sections_file(lines):
     sections = []

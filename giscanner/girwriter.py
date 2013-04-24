@@ -28,14 +28,15 @@ from .xmlwriter import XMLWriter
 # Compatible changes we just make inline
 COMPATIBLE_GIR_VERSION = '1.2'
 
+
 class GIRWriter(XMLWriter):
 
     def __init__(self, namespace):
         super(GIRWriter, self).__init__()
         self.write_comment(
-'''This file was automatically generated from C sources - DO NOT EDIT!
-To affect the contents of this file, edit the original C definitions,
-and/or use gtk-doc annotations. ''')
+            'This file was automatically generated from C sources - DO NOT EDIT!\n'
+            'To affect the contents of this file, edit the original C definitions,\n'
+            'and/or use gtk-doc annotations. ')
         self._write_repository(namespace)
 
     def _write_repository(self, namespace):
@@ -43,8 +44,7 @@ and/or use gtk-doc annotations. ''')
             ('version', COMPATIBLE_GIR_VERSION),
             ('xmlns', 'http://www.gtk.org/introspection/core/1.0'),
             ('xmlns:c', 'http://www.gtk.org/introspection/c/1.0'),
-            ('xmlns:glib', 'http://www.gtk.org/introspection/glib/1.0'),
-            ]
+            ('xmlns:glib', 'http://www.gtk.org/introspection/glib/1.0')]
         with self.tagcontext('repository', attrs):
             for include in sorted(namespace.includes):
                 self._write_include(include)
@@ -292,8 +292,8 @@ and/or use gtk-doc annotations. ''')
                 attrs.append(('fixed-size', '%d' % (ntype.size, )))
             if ntype.length_param_name is not None:
                 assert function
-                attrs.insert(0, ('length', '%d'
-                            % (function.get_parameter_index(ntype.length_param_name, ))))
+                length = function.get_parameter_index(ntype.length_param_name)
+                attrs.insert(0, ('length', '%d' % (length, )))
 
             with self.tagcontext('array', attrs):
                 self._write_type(ntype.element_type)
@@ -482,7 +482,7 @@ and/or use gtk-doc annotations. ''')
         attrs = list(extra_attrs)
         if record.name is not None:
             attrs.append(('name', record.name))
-        if record.ctype is not None: # the record might be anonymous
+        if record.ctype is not None:  # the record might be anonymous
             attrs.append(('c:type', record.ctype))
         if record.disguised:
             attrs.append(('disguised', '1'))
@@ -513,7 +513,7 @@ and/or use gtk-doc annotations. ''')
         attrs = []
         if union.name is not None:
             attrs.append(('name', union.name))
-        if union.ctype is not None: # the union might be anonymous
+        if union.ctype is not None:  # the union might be anonymous
             attrs.append(('c:type', union.ctype))
         self._append_version(union, attrs)
         self._append_node_generic(union, attrs)
@@ -544,8 +544,7 @@ and/or use gtk-doc annotations. ''')
             elif isinstance(field.anonymous_node, ast.Union):
                 self._write_union(field.anonymous_node)
             else:
-                raise AssertionError("Unknown field anonymous: %r" \
-                                         % (field.anonymous_node, ))
+                raise AssertionError("Unknown field anonymous: %r" % (field.anonymous_node, ))
         else:
             attrs = [('name', field.name)]
             self._append_node_generic(field, attrs)

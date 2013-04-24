@@ -24,6 +24,7 @@ from contextlib import contextmanager
 
 from . import ast
 
+
 class CCodeGenerator(object):
     def __init__(self, namespace, out_h_filename, out_c_filename):
         self.out_h_filename = out_h_filename
@@ -36,15 +37,16 @@ class CCodeGenerator(object):
         return '%s_%s' % (self.namespace.symbol_prefixes[0], name)
 
     def _typecontainer_to_ctype(self, param):
-        if (isinstance(param, ast.Parameter) and
-            param.direction in (ast.PARAM_DIRECTION_OUT,
-                                ast.PARAM_DIRECTION_INOUT)):
+        if (isinstance(param, ast.Parameter)
+        and param.direction in (ast.PARAM_DIRECTION_OUT, ast.PARAM_DIRECTION_INOUT)):
             suffix = '*'
         else:
             suffix = ''
-        if (param.type.is_equiv((ast.TYPE_STRING, ast.TYPE_FILENAME)) and
-            param.transfer == ast.PARAM_TRANSFER_NONE):
+
+        if (param.type.is_equiv((ast.TYPE_STRING, ast.TYPE_FILENAME))
+        and param.transfer == ast.PARAM_TRANSFER_NONE):
             return "const gchar*" + suffix
+
         return param.type.ctype + suffix
 
     def _write_prelude(self, out, func):

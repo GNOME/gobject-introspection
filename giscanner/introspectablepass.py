@@ -21,6 +21,7 @@ from . import ast
 from . import message
 from .annotationparser import TAG_RETURNS
 
+
 class IntrospectablePass(object):
 
     def __init__(self, transformer, blocks):
@@ -79,7 +80,7 @@ class IntrospectablePass(object):
 
         if not node.type.resolved:
             self._parameter_warning(parent, node,
-"Unresolved type: %r" % (node.type.unresolved_string, ))
+                                    "Unresolved type: %r" % (node.type.unresolved_string, ))
             parent.introspectable = False
             return
 
@@ -88,22 +89,23 @@ class IntrospectablePass(object):
             return
 
         if (isinstance(node.type, (ast.List, ast.Array))
-            and node.type.element_type == ast.TYPE_ANY):
+        and node.type.element_type == ast.TYPE_ANY):
             self._parameter_warning(parent, node, "Missing (element-type) annotation")
             parent.introspectable = False
             return
 
         if (is_parameter
-            and isinstance(target, ast.Callback)
-            and not node.type.target_giname in ('GLib.DestroyNotify',
-                                                'Gio.AsyncReadyCallback')
-            and node.scope is None):
-                self._parameter_warning(parent, node,
-                    ("Missing (scope) annotation for callback" +
-                     " without GDestroyNotify (valid: %s, %s)")
-                     % (ast.PARAM_SCOPE_CALL, ast.PARAM_SCOPE_ASYNC))
-                parent.introspectable = False
-                return
+        and isinstance(target, ast.Callback)
+        and not node.type.target_giname in ('GLib.DestroyNotify', 'Gio.AsyncReadyCallback')
+        and node.scope is None):
+            self._parameter_warning(
+                parent,
+                node,
+                "Missing (scope) annotation for callback without "
+                "GDestroyNotify (valid: %s, %s)" % (ast.PARAM_SCOPE_CALL, ast.PARAM_SCOPE_ASYNC))
+
+            parent.introspectable = False
+            return
 
         if is_return and isinstance(target, ast.Callback):
             self._parameter_warning(parent, node, "Callbacks cannot be return values; use (skip)")
@@ -111,12 +113,14 @@ class IntrospectablePass(object):
             return
 
         if (is_return
-            and isinstance(target, (ast.Record, ast.Union))
-            and target.get_type is None
-            and not target.foreign):
+        and isinstance(target, (ast.Record, ast.Union))
+        and target.get_type is None
+        and not target.foreign):
             if node.transfer != ast.PARAM_TRANSFER_NONE:
-                self._parameter_warning(parent, node,
-"Invalid non-constant return of bare structure or union; register as boxed type or (skip)")
+                self._parameter_warning(
+                    parent, node,
+                    "Invalid non-constant return of bare structure or union; "
+                    "register as boxed type or (skip)")
                 parent.introspectable = False
             return
 
@@ -143,10 +147,10 @@ class IntrospectablePass(object):
             # These are not introspectable pending us adding
             # larger type tags to the typelib (in theory these could
             # be 128 bit or larger)
-            if typeval.is_equiv((ast.TYPE_LONG_LONG, ast.TYPE_LONG_ULONG,
-                                 ast.TYPE_LONG_DOUBLE)):
+            elif typeval.is_equiv((ast.TYPE_LONG_LONG, ast.TYPE_LONG_ULONG, ast.TYPE_LONG_DOUBLE)):
                 return False
-            return True
+            else:
+                return True
         target = self._transformer.lookup_typenode(typeval)
         if not target:
             return False
