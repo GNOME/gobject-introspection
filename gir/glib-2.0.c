@@ -1898,7 +1898,7 @@
 /**
  * GTimeZone:
  *
- * #GDateTime is an opaque structure whose members cannot be accessed
+ * #GTimeZone is an opaque structure whose members cannot be accessed
  * directly.
  *
  * Since: 2.26
@@ -9827,9 +9827,9 @@
  * @bookmark: a #GBookmarkFile
  * @uri: a valid URI
  * @name: an application's name
- * @exec: (allow-none): location for the command line of the application, or %NULL
- * @count: (allow-none): return location for the registration count, or %NULL
- * @stamp: (allow-none): return location for the last registration time, or %NULL
+ * @exec: (allow-none) (out): return location for the command line of the application, or %NULL
+ * @count: (allow-none) (out): return location for the registration count, or %NULL
+ * @stamp: (allow-none) (out): return location for the last registration time, or %NULL
  * @error: return location for a #GError, or %NULL
  *
  * Gets the registration informations of @app_name for the bookmark for
@@ -9855,7 +9855,7 @@
  * g_bookmark_file_get_applications:
  * @bookmark: a #GBookmarkFile
  * @uri: a valid URI
- * @length: (allow-none): return location of the length of the returned list, or %NULL
+ * @length: (allow-none) (out): return location of the length of the returned list, or %NULL
  * @error: return location for a #GError, or %NULL
  *
  * Retrieves the names of the applications that have registered the
@@ -9864,7 +9864,7 @@
  * In the event the URI cannot be found, %NULL is returned and
  * @error is set to #G_BOOKMARK_FILE_ERROR_URI_NOT_FOUND.
  *
- * Returns: a newly allocated %NULL-terminated array of strings. Use g_strfreev() to free it.
+ * Returns: (array length=length) (transfer full): a newly allocated %NULL-terminated array of strings. Use g_strfreev() to free it.
  * Since: 2.12
  */
 
@@ -9889,7 +9889,7 @@
  * g_bookmark_file_get_groups:
  * @bookmark: a #GBookmarkFile
  * @uri: a valid URI
- * @length: (allow-none): return location for the length of the returned string, or %NULL
+ * @length: (allow-none) (out): return location for the length of the returned string, or %NULL
  * @error: return location for a #GError, or %NULL
  *
  * Retrieves the list of group names of the bookmark for @uri.
@@ -9900,7 +9900,7 @@
  * The returned array is %NULL terminated, so @length may optionally
  * be %NULL.
  *
- * Returns: a newly allocated %NULL-terminated array of group names. Use g_strfreev() to free it.
+ * Returns: (array length=length) (transfer full): a newly allocated %NULL-terminated array of group names. Use g_strfreev() to free it.
  * Since: 2.12
  */
 
@@ -9909,8 +9909,8 @@
  * g_bookmark_file_get_icon:
  * @bookmark: a #GBookmarkFile
  * @uri: a valid URI
- * @href: (allow-none): return location for the icon's location or %NULL
- * @mime_type: (allow-none): return location for the icon's MIME type or %NULL
+ * @href: (allow-none) (out): return location for the icon's location or %NULL
+ * @mime_type: (allow-none) (out): return location for the icon's MIME type or %NULL
  * @error: return location for a #GError or %NULL
  *
  * Gets the icon of the bookmark for @uri.
@@ -10007,13 +10007,13 @@
 /**
  * g_bookmark_file_get_uris:
  * @bookmark: a #GBookmarkFile
- * @length: (allow-none): return location for the number of returned URIs, or %NULL
+ * @length: (allow-none) (out): return location for the number of returned URIs, or %NULL
  *
  * Returns all URIs of the bookmarks in the bookmark file @bookmark.
  * The array of returned URIs will be %NULL-terminated, so @length may
  * optionally be %NULL.
  *
- * Returns: a newly allocated %NULL-terminated array of strings. Use g_strfreev() to free it.
+ * Returns: (array length=length) (transfer full): a newly allocated %NULL-terminated array of strings. Use g_strfreev() to free it.
  * Since: 2.12
  */
 
@@ -10412,7 +10412,7 @@
 /**
  * g_bookmark_file_to_data:
  * @bookmark: a #GBookmarkFile
- * @length: (allow-none): return location for the length of the returned string, or %NULL
+ * @length: (allow-none) (out): return location for the length of the returned string, or %NULL
  * @error: return location for a #GError, or %NULL
  *
  * This function outputs @bookmark as a string.
@@ -32283,7 +32283,7 @@
  *
  * A reference is taken on @bytes.
  *
- * Returns: a new #GVariant with a floating reference
+ * Returns: (transfer none): a new #GVariant with a floating reference
  * Since: 2.36
  */
 
@@ -32528,6 +32528,26 @@
  *
  * Returns: (transfer none): a new floating #GVariant instance
  * Since: 2.24
+ */
+
+
+/**
+ * g_variant_new_take_string: (skip)
+ * @string: a normal utf8 nul-terminated string
+ *
+ * Creates a string #GVariant with the contents of @string.
+ *
+ * @string must be valid utf8.
+ *
+ * This function consumes @string.  g_free() will be called on @string
+ * when it is no longer required.
+ *
+ * You must not modify or access @string in any other way after passing
+ * it to this function.  It is even possible that @string is immediately
+ * freed.
+ *
+ * Returns: (transfer none): a floating reference to a new string #GVariant instance
+ * Since: 2.38
  */
 
 

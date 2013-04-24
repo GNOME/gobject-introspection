@@ -261,6 +261,13 @@
 
 
 /**
+ * GBytesIcon:bytes:
+ *
+ * The bytes containing the icon.
+ */
+
+
+/**
  * GCancellable::cancelled:
  * @cancellable: a #GCancellable.
  *
@@ -4018,6 +4025,19 @@
 
 
 /**
+ * SECTION:gbytesicon
+ * @short_description: An icon stored in memory as a #GBytes
+ * @include: gio/gio.h
+ * @see_also: #GIcon, #GLoadableIcon, #GBytes
+ *
+ * #GBytesIcon specifies an image held in memory in a common format (usually
+ * png) to be used as icon.
+ *
+ * Since: 2.38
+ */
+
+
+/**
  * SECTION:gcancellable
  * @short_description: Thread-safe Operation Cancellation Stack
  * @include: gio/gio.h
@@ -5247,12 +5267,22 @@
  *
  * To check if two #GIcons are equal, see g_icon_equal().
  *
- * For serializing a #GIcon, use g_icon_to_string() and
- * g_icon_new_for_string().
+ * For serializing a #GIcon, use g_icon_serialize() and
+ * g_icon_deserialize().
+ *
+ * If you want to consume #GIcon (for example, in a toolkit) you must
+ * be prepared to handle at least the three following cases:
+ * #GLoadableIcon, #GThemedIcon and #GEmblemedIcon.  It may also make
+ * sense to have fast-paths for other cases (like handling #GdkPixbuf
+ * directly, for example) but all compliant #GIcon implementations
+ * outside of GIO must implement #GLoadableIcon.
  *
  * If your application or library provides one or more #GIcon
- * implementations you need to ensure that each #GType is registered
- * with the type system prior to calling g_icon_new_for_string().
+ * implementations you need to ensure that your new implementation also
+ * implements #GLoadableIcon.  Additionally, you must provide an
+ * implementation of g_icon_serialize() that gives a result that is
+ * understood by g_icon_deserialize(), yielding one of the built-in icon
+ * types.
  */
 
 
@@ -7641,7 +7671,7 @@
  * @include: gio/gio.h
  *
  * #GTlsFileDatabase is implemented by #GTlsDatabase objects which load
- * their certificate information from a file. It is in interface which
+ * their certificate information from a file. It is an interface which
  * TLS library specific subtypes implement.
  *
  * Since: 2.30
@@ -8544,6 +8574,38 @@
  * If no action of this name is in the map then nothing happens.
  *
  * Since: 2.32
+ */
+
+
+/**
+ * g_action_parse_detailed_name:
+ * @detailed_name: a detailed action name
+ * @action_name: (out): the action name
+ * @target_value: (out): the target value, or %NULL for no target
+ * @error: a pointer to a %NULL #GError, or %NULL
+ *
+ * Parses a detailed action name into its separate name and target
+ * components.
+ *
+ * Detailed action names can have three formats.
+ *
+ * The first format is used to represent an action name with no target
+ * value and consists of just an action name containing no whitespace
+ * nor the characters ':', '(' or ')'.  For example: "app.action".
+ *
+ * The second format is used to represent an action with a string-typed
+ * target value.  The action name and target value are separated by a
+ * double colon ("::").  For example: "app.action::target".
+ *
+ * The third format is used to represent an action with an
+ * arbitrarily-typed target value.  The target value follows the action
+ * name, surrounded in parens.  For example: "app.action(42)".  The
+ * target value is parsed using g_variant_parse().  If a tuple-typed
+ * value is desired, it must be specified in the same way, resulting in
+ * two sets of parens, for example: "app.action((1,2,3))".
+ *
+ * Returns: %TRUE if successful, else %FALSE with @error set
+ * Since: 2.38
  */
 
 
@@ -9494,6 +9556,25 @@
 
 
 /**
+ * g_application_mark_busy:
+ * @application: a #GApplication
+ *
+ * Increases the busy count of @application.
+ *
+ * Use this function to indicate that the application is busy, for instance
+ * while a long running operation is pending.
+ *
+ * The busy state will be exposed to other processes, so a session shell will
+ * use that information to indicate the state to the user (e.g. with a
+ * spinner).
+ *
+ * To cancel the busy indication, use g_application_unmark_busy().
+ *
+ * Since: 2.38
+ */
+
+
+/**
  * g_application_new:
  * @application_id: (allow-none): the application id
  * @flags: the application flags
@@ -9766,6 +9847,22 @@
  * zero.  Any timeouts currently in progress are not impacted.
  *
  * Since: 2.28
+ */
+
+
+/**
+ * g_application_unmark_busy:
+ * @application: a #GApplication
+ *
+ * Decreases the busy count of @application.
+ *
+ * When the busy count reaches zero, the new state will be propagated
+ * to other processes.
+ *
+ * This function must only be called to cancel the effect of a previous
+ * call to g_application_mark_busy().
+ *
+ * Since: 2.38
  */
 
 
@@ -10497,6 +10594,28 @@
  * Returns: An identifier (never 0) that an be used with g_bus_unwatch_name() to stop watching the name.
  * Rename to: g_bus_watch_name
  * Since: 2.26
+ */
+
+
+/**
+ * g_bytes_icon_get_bytes:
+ * @icon: a #GIcon.
+ *
+ * Gets the #GBytes associated with the given @icon.
+ *
+ * Returns: (transfer none): a #GBytes, or %NULL.
+ * Since: 2.38
+ */
+
+
+/**
+ * g_bytes_icon_new:
+ * @bytes: a #GBytes.
+ *
+ * Creates a new icon for a bytes.
+ *
+ * Returns: (transfer full) (type GBytesIcon): a #GIcon for the given @bytes, or %NULL on error.
+ * Since: 2.38
  */
 
 
@@ -12962,6 +13081,11 @@
  * name. As such, to avoid certain race conditions, users should be
  * tracking the name owner of the well-known name and use that when
  * processing the received signal.
+ *
+ * If one of %G_DBUS_SIGNAL_FLAGS_MATCH_ARG0_NAMESPACE or
+ * %G_DBUS_SIGNAL_FLAGS_MATCH_ARG0_PATH are given, @arg0 is
+ * interpreted as part of a namespace or path.  The first argument
+ * of a signal is matched against that part as specified by D-Bus.
  *
  * Returns: A subscription identifier that can be used with g_dbus_connection_signal_unsubscribe().
  * Since: 2.26
@@ -17097,6 +17221,7 @@
  * Finishes deleting a file started with g_file_delete_async().
  *
  * Virtual: delete_file_finish
+ * Returns: %TRUE if the file was deleted. %FALSE otherwise.
  * Since: 2.34
  */
 
@@ -18717,6 +18842,36 @@
 
 
 /**
+ * g_file_make_directory_async:
+ * @file: input #GFile
+ * @io_priority: the <link linkend="io-priority">I/O priority</link> of the request
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore
+ * @callback: a #GAsyncReadyCallback to call when the request is satisfied
+ * @user_data: the data to pass to callback function
+ *
+ * Asynchronously creates a directory.
+ *
+ * Virtual: make_directory_async
+ * Since: 2.38
+ */
+
+
+/**
+ * g_file_make_directory_finish:
+ * @file: input #GFile
+ * @result: a #GAsyncResult
+ * @error: a #GError, or %NULL
+ *
+ * Finishes an asynchronous directory creation, started with
+ * g_file_make_directory_async().
+ *
+ * Virtual: make_directory_finish
+ * Returns: %TRUE on successful directory creation, %FALSE otherwise.
+ * Since: 2.38
+ */
+
+
+/**
  * g_file_make_directory_with_parents:
  * @file: input #GFile
  * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore
@@ -20196,7 +20351,38 @@
  * triggering the cancellable object from another thread. If the operation
  * was cancelled, the error %G_IO_ERROR_CANCELLED will be returned.
  *
+ * Virtual: trash
  * Returns: %TRUE on successful trash, %FALSE otherwise.
+ */
+
+
+/**
+ * g_file_trash_async:
+ * @file: input #GFile
+ * @io_priority: the <link linkend="io-priority">I/O priority</link> of the request
+ * @cancellable: (allow-none): optional #GCancellable object, %NULL to ignore
+ * @callback: a #GAsyncReadyCallback to call when the request is satisfied
+ * @user_data: the data to pass to callback function
+ *
+ * Asynchronously sends @file to the Trash location, if possible.
+ *
+ * Virtual: trash_async
+ * Since: 2.38
+ */
+
+
+/**
+ * g_file_trash_finish:
+ * @file: input #GFile
+ * @result: a #GAsyncResult
+ * @error: a #GError, or %NULL
+ *
+ * Finishes an asynchronous file trashing operation, started with
+ * g_file_trash_async().
+ *
+ * Virtual: trash_finish
+ * Returns: %TRUE on successful trash, %FALSE otherwise.
+ * Since: 2.38
  */
 
 
@@ -22632,14 +22818,8 @@
  *
  * Sets the "action" and possibly the "target" attribute of @menu_item.
  *
- * If @detailed_action contains a double colon ("::") then it is used as
- * a separator between an action name and a target string.  In this
- * case, this call is equivalent to calling
- * g_menu_item_set_action_and_target() with the part before the "::" and
- * with a string-type #GVariant containing the part following the "::".
- *
- * If @detailed_action doesn't contain "::" then the action is set to
- * the given string (verbatim) and the target value is unset.
+ * The format of @detailed_action is the same format parsed by
+ * g_action_parse_detailed_name().
  *
  * See g_menu_item_set_action_and_target() or
  * g_menu_item_set_action_and_target_value() for more flexible (but
@@ -22649,6 +22829,28 @@
  * the semantics of the action and target attributes.
  *
  * Since: 2.32
+ */
+
+
+/**
+ * g_menu_item_set_icon:
+ * @menu_item: a #GMenuItem
+ * @icon: a #GIcon, or %NULL
+ *
+ * Sets (or unsets) the icon on @menu_item.
+ *
+ * This call is the same as calling g_icon_serialize() and using the
+ * result as the value to g_menu_item_set_attribute_value() for
+ * %G_MENU_ATTRIBUTE_ICON.
+ *
+ * This API is only intended for use with "noun" menu items; things like
+ * bookmarks or applications in an "Open With" menu.  Don't use it on
+ * menu items corresponding to verbs (eg: stock icons for 'Save' or
+ * 'Quit').
+ *
+ * If @icon is %NULL then the icon is unset.
+ *
+ * Since: 2.38
  */
 
 
@@ -23028,6 +23230,16 @@
  * identity of the item itself is not preserved).
  *
  * Since: 2.32
+ */
+
+
+/**
+ * g_menu_remove_all:
+ * @menu: a #GMenu
+ *
+ * Removes all items in the menu.
+ *
+ * Since: 2.38
  */
 
 

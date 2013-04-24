@@ -2698,6 +2698,19 @@
 
 
 /**
+ * g_param_get_default_value:
+ * @param: a #GParamSpec
+ *
+ * Gets the default value of @param as a pointer to a #GValue.
+ *
+ * The #GValue will remain value for the life of @param.
+ *
+ * Returns: a pointer to a #GValue which must not be modified
+ * Since: 2.38
+ */
+
+
+/**
  * g_param_spec_boolean:
  * @name: canonical name of the property specified
  * @nick: nick name for the property specified
@@ -4316,6 +4329,24 @@
  * ]|
  *
  * Since: 2.4
+ */
+
+
+/**
+ * g_type_class_get_instance_private_offset: (skip)
+ * @g_class: a #GTypeClass
+ *
+ * Gets the offset of the private data for instances of @g_class.
+ *
+ * This is how many bytes you should add to the instance pointer of a
+ * class in order to get the private data for the type represented by
+ * @g_class.
+ *
+ * You can only call this function after you have registered a private
+ * data area for @g_class using g_type_class_add_private().
+ *
+ * Returns: the offset, in bytes
+ * Since: 2.38
  */
 
 
