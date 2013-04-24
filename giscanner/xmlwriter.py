@@ -135,7 +135,7 @@ class XMLWriter(object):
             line = line.decode('utf-8')
         assert isinstance(line, unicode)
         if do_escape:
-            line = escape(line.encode('utf-8')).decode('utf-8')
+            line = escape(line)
         if indent:
             self._data.write('%s%s%s' % (
                     self._indent_char * self._indent,
