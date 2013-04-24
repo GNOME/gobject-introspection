@@ -38,7 +38,7 @@ from giscanner.girparser import GIRParser
 from giscanner.girwriter import GIRWriter
 from giscanner.maintransformer import MainTransformer
 from giscanner.shlibs import resolve_shlibs
-from giscanner.sourcescanner import SourceScanner
+from giscanner.sourcescanner import SourceScanner, ALL_EXTS
 from giscanner.transformer import Transformer
 from . import utils
 
@@ -253,10 +253,7 @@ def extract_filenames(args):
     for arg in args:
         # We don't support real C++ parsing yet, but we should be able
         # to understand C API implemented in C++ files.
-        if (arg.endswith('.c') or arg.endswith('.cpp') or
-            arg.endswith('.cc') or arg.endswith('.cxx') or
-            arg.endswith('.h') or arg.endswith('.hpp') or
-            arg.endswith('.hxx')):
+        if os.path.splitext(arg)[1] in ALL_EXTS:
             if not os.path.exists(arg):
                 _error('%s: no such a file or directory' % (arg, ))
             # Make absolute, because we do comparisons inside scannerparser.c

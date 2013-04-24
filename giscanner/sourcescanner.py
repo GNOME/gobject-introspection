@@ -32,6 +32,10 @@ with LibtoolImporter(None, None):
     else:
         from giscanner._giscanner import SourceScanner as CSourceScanner
 
+HEADER_EXTS = ['.h', '.hpp', '.hxx']
+SOURCE_EXTS = ['.c', '.cpp', '.cc', '.cxx']
+ALL_EXTS = SOURCE_EXTS + HEADER_EXTS
+
 (CSYMBOL_TYPE_INVALID,
  CSYMBOL_TYPE_ELLIPSIS,
  CSYMBOL_TYPE_CONST,
@@ -241,8 +245,7 @@ class SourceScanner(object):
 
         headers = []
         for filename in filenames:
-            if (filename.endswith('.c') or filename.endswith('.cpp') or
-                filename.endswith('.cc') or filename.endswith('.cxx')):
+            if os.path.splitext(filename)[1] in SOURCE_EXTS:
                 filename = os.path.abspath(filename)
                 self._scanner.lex_filename(filename)
             else:
