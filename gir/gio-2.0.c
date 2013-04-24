@@ -20566,6 +20566,17 @@
 
 
 /**
+ * g_icon_deserialize:
+ * @value: a #GVariant created with g_icon_serialize()
+ *
+ * Deserializes a #GIcon previously serialized using g_icon_serialize().
+ *
+ * Returns: (transfer full): a #GIcon, or %NULL when deserialization fails.
+ * Since: 2.38
+ */
+
+
+/**
  * g_icon_equal:
  * @icon1: (allow-none): pointer to the first #GIcon.
  * @icon2: (allow-none): pointer to the second #GIcon.
@@ -20601,6 +20612,21 @@
  *
  * Returns: (transfer full): An object implementing the #GIcon interface or %NULL if @error is set.
  * Since: 2.20
+ */
+
+
+/**
+ * g_icon_serialize:
+ * @icon: a #GIcon
+ *
+ * Serializes a #GIcon into a #GVariant. An equivalent #GIcon can be retrieved
+ * back by calling g_icon_deserialize() on the returned value.
+ * As serialization will avoid using raw icon data when possible, it only
+ * makes sense to transfer the #GVariant between processes on the same machine,
+ * (as opposed to over the network), and within the same file system namespace.
+ *
+ * Returns: (transfer full): a #GVariant, or %NULL when serialization fails.
+ * Since: 2.38
  */
 
 
