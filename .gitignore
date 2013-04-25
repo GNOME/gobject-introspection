@@ -89,6 +89,19 @@ tests/*/*.log
 tests/*/*.trs
 .make-check-passed
 
+# Generated Visual Studio project files
+build/win32/vs10/cmph.vcxproj
+build/win32/vs10/cmph.vcxproj.filters
+build/win32/vs10/gir.props
+build/win32/vs10/g-ir-compiler.vcxproj
+build/win32/vs10/g-ir-compiler.vcxproj.filters
+build/win32/vs10/girepository.vcxproj
+build/win32/vs10/girepository.vcxproj.filters
+build/win32/vs9/cmph.vcproj
+build/win32/vs9/gir.vsprops
+build/win32/vs9/g-ir-compiler.vcproj
+build/win32/vs9/girepository.vcproj
+
 #yelp-build
 *.html
 C.css
