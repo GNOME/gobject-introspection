@@ -89,6 +89,9 @@ tests/*/*.log
 tests/*/*.trs
 .make-check-passed
 
+# tarballs
+*.tar.xz
+
 # Generated Visual Studio project files
 build/win32/vs10/cmph.vcxproj
 build/win32/vs10/cmph.vcxproj.filters
