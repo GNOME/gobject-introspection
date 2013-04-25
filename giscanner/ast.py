@@ -24,8 +24,8 @@ from itertools import chain
 
 from . import message
 
+from .collections import OrderedDict
 from .message import Position
-from .odict import OrderedDict
 from .utils import to_underscores
 
 class Type(object):

@@ -26,14 +26,14 @@ libgiscanner_la_CFLAGS = $(GOBJECT_CFLAGS) $(GIO_CFLAGS)
 # Python module
 pkgpyexecdir = $(pkglibdir)/giscanner
 pkgpyexec_LTLIBRARIES = _giscanner.la
-pkgpyexec_PYTHON =		\
+pkgpyexec_PYTHON = 			\
 	giscanner/__init__.py		\
 	giscanner/annotationmain.py	\
 	giscanner/annotationparser.py	\
 	giscanner/ast.py		\
 	giscanner/cachestore.py		\
 	giscanner/codegen.py		\
-	giscanner/docmain.py	\
+	giscanner/docmain.py		\
 	giscanner/docwriter.py		\
 	giscanner/dumper.py		\
 	giscanner/introspectablepass.py	\
@@ -41,7 +41,6 @@ pkgpyexec_PYTHON =		\
 	giscanner/girwriter.py		\
 	giscanner/gdumpparser.py 	\
 	giscanner/libtoolimporter.py	\
-	giscanner/odict.py		\
 	giscanner/maintransformer.py	\
 	giscanner/message.py		\
 	giscanner/shlibs.py		\
@@ -52,6 +51,11 @@ pkgpyexec_PYTHON =		\
 	giscanner/transformer.py	\
 	giscanner/utils.py		\
 	giscanner/xmlwriter.py
+
+collectionsdir = $(pkgpyexecdir)/collections
+collections_PYTHON =		\
+	giscanner/collections/__init__.py	\
+	giscanner/collections/ordereddict.py
 
 templatedir = $(pkglibdir)
 nobase_dist_template_DATA =		\

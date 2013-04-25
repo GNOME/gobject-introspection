@@ -26,7 +26,7 @@
 import re
 
 from . import message
-from .odict import OrderedDict
+from .collections import OrderedDict
 
 
 # GTK-Doc comment block parts

@@ -1,6 +1,7 @@
 # -*- Mode: Python -*-
 # GObject-Introspection - a framework for introspecting GObject libraries
 # Copyright (C) 2008  Johan Dahlin
+# Copyright (C) 2013 Dieter Verfaillie <dieterv@optionexplicit.be>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -27,6 +28,8 @@
 #
 # This module is part of SQLAlchemy and is released under
 # the MIT License: http://www.opensource.org/licenses/mit-license.php
+
+
 class OrderedDict(dict):
     """A dict that returns keys/values/items in the order they were added."""
 
