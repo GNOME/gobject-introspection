@@ -1,6 +1,6 @@
 GObject Introspection
 =====================
-The goal of the project is to describe the APIs and  collect them in
+The goal of the project is to describe the APIs and collect them in
 a uniform, machine readable format.
 
 GIR XML format
@@ -28,16 +28,17 @@ use the information.
 Tools
 =====
 
-Three tools are shipped with GObject Introspection:
-- g-ir-compile, a typelib compiler. It converts one or more GIR files
+The following tools are shipped with GObject Introspection:
+- g-ir-scanner, a tool which generates GIR XML files by parsing headers,
+  GTK-Doc comment blocks including annotations and introspecting GObject
+  based libraries.
+- g-ir-compiler, a typelib compiler. It converts one or more GIR files
   into one or more typelib blobs.
 - g-ir-generate, an GIR generator, using the repository API. It generates
   GIR files from binary typelib which can be in a shared object, or a raw
   typelib blob.
-- g-ir-scanner, a tool which generates GIR XML files by parsing headers
-  and introspecting GObject based libraries.
-- g-ir-doc-tool, generates Mallard files that can be viewed with yelp or
-  rendered to HTML with yelp-build from yelp-tools.
+- g-ir-annotation-tool, extracts annotations from source code files
+- g-ir-doc-tool, generates API reference documentation from a GIR XML file.
 
 API library
 ===========
