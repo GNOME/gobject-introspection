@@ -319,6 +319,10 @@ class DumpCompiler(object):
             else:
                 args.append('-Wl,-rpath=.')
 
+        # Ensure libraries are always linked as we are going to use ldd to work out their names later
+        if not libtool and self._pkgconfig_msvc_flags == '':
+            args.append('-Wl,--no-as-needed')
+
         for library in self._options.libraries:
             # Visual C++: We have the needed .lib files now, and we need to link
             # to .lib files, not the .dll as the --library option specifies the
