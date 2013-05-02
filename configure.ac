@@ -167,7 +167,7 @@ AC_SUBST(CAIRO_GIR_PACKAGE)
 PKG_CHECK_MODULES(SCANNER, [gobject-2.0 gio-2.0])
 
 dnl libffi
-PKG_CHECK_MODULES(FFI, libffi, have_ffi_pkgconfig=yes, have_ffi_pkgconfig=no)
+PKG_CHECK_MODULES(FFI, [libffi >= 3.0.0 ], have_ffi_pkgconfig=yes, have_ffi_pkgconfig=no)
 FFI_PC_CFLAGS=""
 FFI_PC_LIBS=""
 FFI_PC_PACKAGES=""
