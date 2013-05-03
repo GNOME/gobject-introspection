@@ -319,7 +319,8 @@ class DumpCompiler(object):
             else:
                 args.append('-Wl,-rpath=.')
 
-        # Ensure libraries are always linked as we are going to use ldd to work out their names later
+        # Ensure libraries are always linked as we are going to use ldd to work
+        # out their names later
         if not libtool and self._pkgconfig_msvc_flags == '':
             args.append('-Wl,--no-as-needed')
 
