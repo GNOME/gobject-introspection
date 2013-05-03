@@ -1,9 +1,44 @@
 Notes to developers hacking on GObjectIntrospection
+===================================================
+
+
+debugging
+---------
 
 * You can use the GI_SCANNER_DEBUG environment variable; see utils.py
   for a list of debug flags.
 
-* If you add a new warning, you should add a new test for it
-  in test/warn
 
-* Before pushing code to the repository, make sure to run make check
+giscanner
+---------
+
+* If you add a new warning to annotationparser.py, you should add new
+  tests for it in tests/scanner/annotationparser/gi/
+
+* If you add a new warning elsewhere (maintransformer.py, etc), you
+  should add a new test for it in tests/warn/
+
+* Before pushing code to the repository, make sure to run 'make check' or
+  even 'make distcheck'
+
+* While hacking on annotationparser.py it is a good idea to:
+    1) Update your GLib build to git master.
+    2) Run the following command from your gobject-introspection source directory before making
+       changes to annotationparser.py (adapt GLib source and/or build directory as required):
+       (cd misc && ./update-glib-annotations.py /path/to/gnome.org/checkout/glib/)
+    3) Ensure changes to the following files are as expected, meaning they are caused by
+       updated GLib annotations and not by stray modifications to annotationparser.py:
+         - gir/gio-2.0.c
+         - gir/glib-2.0.c
+         - gir/gobject-2.0.c
+       When satisfied, commit these files adding "Update GLib annotations to master" as the
+       commit message.
+    4) Only now start editing annotationparser.py.
+    5) run make check.
+    6) Run update-glib-annotations.py again and carefully study the changes (if any) to:
+         - gir/gio-2.0.c
+         - gir/glib-2.0.c
+         - gir/gobject-2.0.c
+       Ensure changes in these files are as intended and caused by the modifications done to
+       annotationparser.py. Commit the changes to annotationparser.py and the above
+       files as a single patch.
