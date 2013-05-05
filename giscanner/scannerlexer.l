@@ -177,6 +177,10 @@ stringtext				([^\\\"])|(\\.)
 "if"					{ return IF; }
 "inline"				{ return INLINE; }
 "int"					{ return INT; }
+"__uint128_t"				{ return INT; }
+"__int128_t"				{ return INT; }
+"__uint128"				{ return INT; }
+"__int128"				{ return INT; }
 "long"					{ return LONG; }
 "register"				{ return REGISTER; }
 "restrict"				{ return RESTRICT; }
