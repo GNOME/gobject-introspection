@@ -210,6 +210,11 @@
  * either one of the #GObject instances it refers to are finalized, or when
  * the #GBinding instance loses its last reference.
  *
+ * <note><para>Bindings for languages with garbage collection can use
+ * g_binding_unbind() to explicitly release a binding between the source
+ * and target properties, instead of relying on the last reference on the
+ * binding, source, and target instances to drop.</para></note>
+ *
  * #GBinding is available since GObject 2.26
  */
 
@@ -760,6 +765,19 @@
  *
  * Returns: the name of the target property
  * Since: 2.26
+ */
+
+
+/**
+ * g_binding_unbind:
+ * @binding: a #GBinding
+ *
+ * Explicitly releases the binding between the source and the target
+ * property expressed by @binding.
+ *
+ * This function does not change the reference count of @binding.
+ *
+ * Since: 2.38
  */
 
 
