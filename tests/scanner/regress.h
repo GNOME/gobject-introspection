@@ -950,9 +950,4 @@ typedef struct {
 #define REGRESS_MININT64 ((gint64) G_GINT64_CONSTANT(0x8000000000000000))
 #define REGRESS_MAXUINT64 (G_GINT64_CONSTANT(0xffffffffffffffffU))
 
-/* https://mail.gnome.org/archives/gtk-devel-list/2013-May/msg00008.html */
-typedef struct {
-  __uint128_t vregs[32];
-} RegressLikeLinuxArmUAPI;
-
 #endif /* __GITESTTYPES_H__ */

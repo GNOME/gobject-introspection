@@ -1946,13 +1946,6 @@ exposed to language bindings.</doc>
         <type name="gdouble" c:type="double"/>
       </field>
     </record>
-    <record name="LikeLinuxArmUAPI" c:type="RegressLikeLinuxArmUAPI">
-      <field name="vregs" writable="1">
-        <array zero-terminated="0" c:type="int" fixed-size="32">
-          <type name="gint" c:type="int"/>
-        </array>
-      </field>
-    </record>
     <record name="LikeXklConfigItem" c:type="RegressLikeXklConfigItem">
       <field name="name" writable="1">
         <array zero-terminated="0" c:type="gchar" fixed-size="32">
