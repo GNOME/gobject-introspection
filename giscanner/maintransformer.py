@@ -797,7 +797,9 @@ class MainTransformer(object):
                 # phase we can refer to them while resolving annotations.
                 for i, param in enumerate(signal.parameters):
                     param.argname, tag = names[i + 1]
-            else:
+            elif len(signal.parameters) != 0:
+                # Only warn about missing params if there are actually parameters
+                # besides implicit self.
                 message.warn("incorrect number of parameters in comment block, "
                              "parameter annotations will be ignored.", block.position)
 
