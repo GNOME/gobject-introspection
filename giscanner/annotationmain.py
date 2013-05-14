@@ -21,7 +21,7 @@
 import optparse
 
 from giscanner import message
-from giscanner.annotationparser import AnnotationParser
+from giscanner.annotationparser import GtkDocCommentBlockParser
 from giscanner.scannermain import (get_preprocessor_option_group,
                                    create_source_scanner,
                                    process_packages)
@@ -58,8 +58,8 @@ def annotation_main(args):
     ss = create_source_scanner(options, args)
 
     if options.extract:
-        ap = AnnotationParser()
-        blocks = ap.parse(ss.get_comments())
+        parser = GtkDocCommentBlockParser()
+        blocks = parser.parse(ss.get_comments())
         print '/' + ('*' * 60) + '/'
         print '/* THIS FILE IS GENERATED DO NOT EDIT */'
         print '/' + ('*' * 60) + '/'

@@ -29,7 +29,7 @@ import sys
 import tempfile
 
 from giscanner import message
-from giscanner.annotationparser import AnnotationParser
+from giscanner.annotationparser import GtkDocCommentBlockParser
 from giscanner.ast import Include, Namespace
 from giscanner.dumper import compile_introspection_binary
 from giscanner.gdumpparser import GDumpParser, IntrospectionBinary
@@ -464,8 +464,8 @@ def scanner_main(args):
 
     ss = create_source_scanner(options, args)
 
-    ap = AnnotationParser()
-    blocks = ap.parse(ss.get_comments())
+    cbp = GtkDocCommentBlockParser()
+    blocks = cbp.parse(ss.get_comments())
 
     # Transform the C symbols into AST nodes
     transformer.parse(ss.get_symbols())

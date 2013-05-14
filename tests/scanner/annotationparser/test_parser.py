@@ -33,7 +33,7 @@ import subprocess
 import unittest
 import xml.etree.ElementTree as etree
 
-from giscanner.annotationparser import AnnotationParser
+from giscanner.annotationparser import GtkDocCommentBlockParser
 from giscanner.ast import Namespace
 from giscanner.message import MessageLogger
 
@@ -83,7 +83,7 @@ class TestCommentBlock(unittest.TestCase):
 
             # Parse GTK-Doc comment block
             commentblock = testcase.find(ns('{}input')).text
-            parsed_docblock = AnnotationParser().parse_comment_block((commentblock, 'test.c', 1))
+            parsed_docblock = GtkDocCommentBlockParser().parse_comment_block((commentblock, 'test.c', 1))
             parsed_tree = self.parsed2tree(parsed_docblock).split('\n')
             emitted_messages = [w[w.find(':') + 1:].strip() for w in output.getvalue()]
 

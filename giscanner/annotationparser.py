@@ -762,7 +762,7 @@ class DocOption(object):
         return self._dict
 
 
-class AnnotationParser(object):
+class GtkDocCommentBlockParser(object):
     """
     GTK-Doc comment block parser.
 
@@ -820,7 +820,7 @@ class AnnotationParser(object):
         - `tag descriptions` and `comment block description` fields can
           span multiple paragraphs.
 
-    .. NOTE:: :class:`AnnotationParser` functionality is heavily based on gtkdoc-mkdb's
+    .. NOTE:: :class:`GtkDocCommentBlockParser` functionality is heavily based on gtkdoc-mkdb's
         `ScanSourceFile()`_ function and is currently in sync with GTK-Doc
         commit `47abcd5`_.
 

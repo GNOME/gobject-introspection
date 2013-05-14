@@ -10,7 +10,7 @@ sys.path.insert(0, path)
 # Not correct, but enough to get the tests going uninstalled
 __builtin__.__dict__['DATADIR'] = path
 
-from giscanner.annotationparser import AnnotationParser
+from giscanner.annotationparser import GtkDocCommentBlockParser
 from giscanner.ast import Include, Namespace
 from giscanner.introspectablepass import IntrospectablePass
 from giscanner.maintransformer import MainTransformer
@@ -114,8 +114,8 @@ def check(args):
     ss.parse_macros([filename])
     transformer.parse(ss.get_symbols())
 
-    ap = AnnotationParser()
-    blocks = ap.parse(ss.get_comments())
+    cbp = GtkDocCommentBlockParser()
+    blocks = cbp.parse(ss.get_comments())
 
     main = MainTransformer(transformer, blocks)
     main.transform()
