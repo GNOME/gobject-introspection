@@ -449,6 +449,8 @@ MULTILINE_ANNOTATION_CONTINUATION_RE = re.compile(
 
 class DocBlock(object):
 
+    __slots__ = ('name', 'annotations', 'value', 'tags', 'description', 'params', 'position')
+
     def __init__(self, name):
         self.name = name
         self.annotations = DocAnnotations()
@@ -507,6 +509,8 @@ class DocBlock(object):
 
 
 class DocTag(object):
+
+    __slots__ = ('block', 'name', 'annotations', 'description', 'value', 'position')
 
     def __init__(self, block, name):
         self.block = block
@@ -685,6 +689,9 @@ class DocTag(object):
 
 
 class DocAnnotations(object):
+
+    __slots__ = ('values', 'position')
+
     def __init__(self):
         self.values = []
         self.position = None
@@ -723,6 +730,8 @@ class DocAnnotations(object):
 
 
 class DocOption(object):
+
+    __slots__ = ('tag', '_array', '_dict')
 
     def __init__(self, tag, option):
         self.tag = tag

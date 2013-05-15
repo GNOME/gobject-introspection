@@ -34,6 +34,9 @@ class Position(object):
     """Represents a position in the source file which we
     want to inform about.
     """
+
+    __slots__ = ('filename', 'line', 'column')
+
     def __init__(self, filename=None, line=None, column=None):
         self.filename = filename
         self.line = line
