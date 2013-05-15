@@ -59,7 +59,7 @@ def annotation_main(args):
 
     if options.extract:
         parser = GtkDocCommentBlockParser()
-        blocks = parser.parse(ss.get_comments())
+        blocks = parser.parse_comment_blocks(ss.get_comments())
         print '/' + ('*' * 60) + '/'
         print '/* THIS FILE IS GENERATED DO NOT EDIT */'
         print '/' + ('*' * 60) + '/'

@@ -831,7 +831,7 @@ class GtkDocCommentBlockParser(object):
     .. _47abcd5: 47abcd53b8489ebceec9e394676512a181c1f1f6
     """
 
-    def parse(self, comments):
+    def parse_comment_blocks(self, comments):
         '''
         Parse multiple GTK-Doc comment blocks.
 

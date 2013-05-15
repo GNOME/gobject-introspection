@@ -115,7 +115,7 @@ def check(args):
     transformer.parse(ss.get_symbols())
 
     cbp = GtkDocCommentBlockParser()
-    blocks = cbp.parse(ss.get_comments())
+    blocks = cbp.parse_comment_blocks(ss.get_comments())
 
     main = MainTransformer(transformer, blocks)
     main.transform()

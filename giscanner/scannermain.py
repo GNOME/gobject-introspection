@@ -465,7 +465,7 @@ def scanner_main(args):
     ss = create_source_scanner(options, args)
 
     cbp = GtkDocCommentBlockParser()
-    blocks = cbp.parse(ss.get_comments())
+    blocks = cbp.parse_comment_blocks(ss.get_comments())
 
     # Transform the C symbols into AST nodes
     transformer.parse(ss.get_symbols())
