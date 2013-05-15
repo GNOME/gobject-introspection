@@ -5,7 +5,7 @@
  */
 void test_func(int param);
 
-// EXPECT:4: Warning: Test: invalid annotation option: invalid-annotation-option
+// EXPECT:4: Warning: Test: unknown annotation: invalid-annotation-option
 
 /**
  * func_weird_gtk_doc:

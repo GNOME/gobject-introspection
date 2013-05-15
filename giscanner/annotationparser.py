@@ -157,45 +157,45 @@ _ALL_TAGS = [TAG_VFUNC,
              TAG_TRANSFER,
              TAG_VALUE]
 
-# Options - annotations for parameters and return values
-OPT_ALLOW_NONE = 'allow-none'
-OPT_ARRAY = 'array'
-OPT_ATTRIBUTE = 'attribute'
-OPT_CLOSURE = 'closure'
-OPT_DESTROY = 'destroy'
-OPT_ELEMENT_TYPE = 'element-type'
-OPT_FOREIGN = 'foreign'
-OPT_IN = 'in'
-OPT_INOUT = 'inout'
-OPT_INOUT_ALT = 'in-out'
-OPT_OUT = 'out'
-OPT_SCOPE = 'scope'
-OPT_TRANSFER = 'transfer'
-OPT_TYPE = 'type'
-OPT_SKIP = 'skip'
-OPT_CONSTRUCTOR = 'constructor'
-OPT_METHOD = 'method'
+# Annotations - applied to parameters and return values
+ANN_ALLOW_NONE = 'allow-none'
+ANN_ARRAY = 'array'
+ANN_ATTRIBUTE = 'attribute'
+ANN_CLOSURE = 'closure'
+ANN_DESTROY = 'destroy'
+ANN_ELEMENT_TYPE = 'element-type'
+ANN_FOREIGN = 'foreign'
+ANN_IN = 'in'
+ANN_INOUT = 'inout'
+ANN_INOUT_ALT = 'in-out'
+ANN_OUT = 'out'
+ANN_SCOPE = 'scope'
+ANN_TRANSFER = 'transfer'
+ANN_TYPE = 'type'
+ANN_SKIP = 'skip'
+ANN_CONSTRUCTOR = 'constructor'
+ANN_METHOD = 'method'
 
-ALL_OPTIONS = [
-    OPT_ALLOW_NONE,
-    OPT_ARRAY,
-    OPT_ATTRIBUTE,
-    OPT_CLOSURE,
-    OPT_DESTROY,
-    OPT_ELEMENT_TYPE,
-    OPT_FOREIGN,
-    OPT_IN,
-    OPT_INOUT,
-    OPT_INOUT_ALT,
-    OPT_OUT,
-    OPT_SCOPE,
-    OPT_TRANSFER,
-    OPT_TYPE,
-    OPT_SKIP,
-    OPT_CONSTRUCTOR,
-    OPT_METHOD]
+ALL_ANNOTATIONS = [
+    ANN_ALLOW_NONE,
+    ANN_ARRAY,
+    ANN_ATTRIBUTE,
+    ANN_CLOSURE,
+    ANN_DESTROY,
+    ANN_ELEMENT_TYPE,
+    ANN_FOREIGN,
+    ANN_IN,
+    ANN_INOUT,
+    ANN_INOUT_ALT,
+    ANN_OUT,
+    ANN_SCOPE,
+    ANN_TRANSFER,
+    ANN_TYPE,
+    ANN_SKIP,
+    ANN_CONSTRUCTOR,
+    ANN_METHOD]
 
-# Array options - array specific annotations
+# Array options - array specific annotation options
 OPT_ARRAY_FIXED_SIZE = 'fixed-size'
 OPT_ARRAY_LENGTH = 'length'
 OPT_ARRAY_ZERO_TERMINATED = 'zero-terminated'
@@ -455,7 +455,7 @@ class DocBlock(object):
 
     def __init__(self, name):
         self.name = name
-        self.options = DocOptions()
+        self.annotations = DocAnnotations()
         self.value = None
         self.tags = OrderedDict()
         self.comment = None
@@ -469,17 +469,17 @@ class DocBlock(object):
         return cmp(self.name, other.name)
 
     def __repr__(self):
-        return '<DocBlock %r %r>' % (self.name, self.options)
+        return '<DocBlock %r %r>' % (self.name, self.annotations)
 
     def to_gtk_doc(self):
-        options = ''
-        if self.options:
-            options += ' '
-            options += ' '.join('(%s)' % o for o in self.options)
+        annotations = ''
+        if self.annotations:
+            annotations += ' '
+            annotations += ' '.join('(%s)' % o for o in self.annotations)
         lines = [self.name]
         if 'SECTION' not in self.name:
             lines[0] += ':'
-        lines[0] += options
+        lines[0] += annotations
         for param in self.params.values():
             lines.append(param.to_gtk_doc_param())
         if self.comment:
@@ -515,19 +515,18 @@ class DocTag(object):
     def __init__(self, block, name):
         self.block = block
         self.name = name
-        self.options = DocOptions()
+        self.annotations = DocAnnotations()
         self.comment = None
         self.value = ''
         self.position = None
 
     def __repr__(self):
-        return '<DocTag %r %r>' % (self.name, self.options)
+        return '<DocTag %r %r>' % (self.name, self.annotations)
 
-    def _validate_option(self, name, value, required=False,
-                         n_params=None, choices=None):
-        if required and value is None:
-            message.warn('%s annotation needs a value' % (
-                name, ), self.position)
+    def _validate_annotation(self, ann_name, options, required=False,
+                             n_params=None, choices=None):
+        if required and options is None:
+            message.warn('%s annotation needs a value' % (ann_name, ), self.position)
             return
 
         if n_params is not None:
@@ -537,74 +536,74 @@ class DocTag(object):
                 s = 'one value'
             else:
                 s = '%d values' % (n_params, )
-            if ((n_params > 0 and (value is None or value.length() != n_params))
-            or n_params == 0 and value is not None):
-                if value is None:
+            if ((n_params > 0 and (options is None or options.length() != n_params))
+            or n_params == 0 and options is not None):
+                if options is None:
                     length = 0
                 else:
-                    length = value.length()
-                message.warn('%s annotation needs %s, not %d' % (
-                    name, s, length), self.position)
+                    length = options.length()
+                message.warn('%s annotation needs %s, not %d' % (ann_name, s, length),
+                             self.position)
                 return
 
         if choices is not None:
-            valuestr = value.one()
-            if valuestr not in choices:
-                message.warn('invalid %s annotation value: %r' % (
-                    name, valuestr, ), self.position)
+            option = options.one()
+            if option not in choices:
+                message.warn('invalid %s annotation value: %r' % (ann_name, option, ),
+                             self.position)
                 return
 
-    def _validate_array(self, option, value):
-        if value is None:
+    def _validate_array(self, ann_name, options):
+        if options is None:
             return
 
-        for name, v in value.all().items():
-            if name in [OPT_ARRAY_ZERO_TERMINATED, OPT_ARRAY_FIXED_SIZE]:
+        for option, value in options.all().items():
+            if option in [OPT_ARRAY_ZERO_TERMINATED, OPT_ARRAY_FIXED_SIZE]:
                 try:
-                    int(v)
+                    int(value)
                 except (TypeError, ValueError):
-                    if v is None:
-                        message.warn('array option %s needs a value' % (name, ),
+                    if value is None:
+                        message.warn('array option %s needs a value' % (option, ),
                                      positions=self.position)
                     else:
                         message.warn('invalid array %s option value %r, '
-                                     'must be an integer' % (name, v, ),
+                                     'must be an integer' % (option, value, ),
                                      positions=self.position)
-            elif name == OPT_ARRAY_LENGTH:
-                if v is None:
+            elif option == OPT_ARRAY_LENGTH:
+                if value is None:
                     message.warn('array option length needs a value',
                                  positions=self.position)
             else:
-                message.warn('invalid array annotation value: %r' % (name, ),
+                message.warn('invalid array annotation value: %r' % (option, ),
                              self.position)
 
-    def _validate_closure(self, option, value):
-        if value is not None and value.length() > 1:
-            message.warn('closure takes at most 1 value, %d given' % (value.length(), ),
+    def _validate_closure(self, ann_name, options):
+        if options is not None and options.length() > 1:
+            message.warn('closure takes at most 1 value, %d given' % (options.length(), ),
                          self.position)
 
-    def _validate_element_type(self, option, value):
-        self._validate_option(option, value, required=True)
-        if value is None:
+    def _validate_element_type(self, ann_name, options):
+        self._validate_annotation(ann_name, options, required=True)
+        if options is None:
             message.warn('element-type takes at least one value, none given',
                          self.position)
             return
-        if value.length() > 2:
-            message.warn('element-type takes at most 2 values, %d given' % (value.length(), ),
+        if options.length() > 2:
+            message.warn('element-type takes at most 2 values, %d given' % (options.length(), ),
                          self.position)
             return
 
-    def _validate_out(self, option, value):
-        if value is None:
+    def _validate_out(self, ann_name, options):
+        if options is None:
             return
-        if value.length() > 1:
-            message.warn('out annotation takes at most 1 value, %d given' % (value.length(), ),
+        if options.length() > 1:
+            message.warn('out annotation takes at most 1 value, %d given' % (options.length(), ),
                          self.position)
             return
-        value_str = value.one()
-        if value_str not in [OPT_OUT_CALLEE_ALLOCATES,
-                             OPT_OUT_CALLER_ALLOCATES]:
-            message.warn("out annotation value is invalid: %r" % (value_str, ),
+        option = options.one()
+        if option not in [OPT_OUT_CALLEE_ALLOCATES,
+                          OPT_OUT_CALLER_ALLOCATES]:
+            message.warn("out annotation value is invalid: %r" % (option, ),
                          self.position)
             return
 
@@ -618,9 +617,8 @@ class DocTag(object):
             else:
                 return fmt2 % (option, )
         annotations = []
-        for option, value in self.options.items():
-            annotations.append(
-                serialize_one(option, value, '(%s %s)', '(%s)'))
+        for ann_name, options in self.annotations.items():
+            annotations.append(serialize_one(ann_name, options, '(%s %s)', '(%s)'))
         if annotations:
             return ' '.join(annotations) + ': '
         else:
@@ -640,63 +638,63 @@ class DocTag(object):
             # validation below is most certainly going to fail.
             return
 
-        for option, value in self.options.items():
-            if option == OPT_ALLOW_NONE:
-                self._validate_option(option, value, n_params=0)
-            elif option == OPT_ARRAY:
-                self._validate_array(option, value)
-            elif option == OPT_ATTRIBUTE:
-                self._validate_option(option, value, n_params=2)
-            elif option == OPT_CLOSURE:
-                self._validate_closure(option, value)
-            elif option == OPT_DESTROY:
-                self._validate_option(option, value, n_params=1)
-            elif option == OPT_ELEMENT_TYPE:
-                self._validate_element_type(option, value)
-            elif option == OPT_FOREIGN:
-                self._validate_option(option, value, n_params=0)
-            elif option == OPT_IN:
-                self._validate_option(option, value, n_params=0)
-            elif option in [OPT_INOUT, OPT_INOUT_ALT]:
-                self._validate_option(option, value, n_params=0)
-            elif option == OPT_OUT:
-                self._validate_out(option, value)
-            elif option == OPT_SCOPE:
-                self._validate_option(
-                    option, value, required=True,
+        for ann_name, value in self.annotations.items():
+            if ann_name == ANN_ALLOW_NONE:
+                self._validate_annotation(ann_name, value, n_params=0)
+            elif ann_name == ANN_ARRAY:
+                self._validate_array(ann_name, value)
+            elif ann_name == ANN_ATTRIBUTE:
+                self._validate_annotation(ann_name, value, n_params=2)
+            elif ann_name == ANN_CLOSURE:
+                self._validate_closure(ann_name, value)
+            elif ann_name == ANN_DESTROY:
+                self._validate_annotation(ann_name, value, n_params=1)
+            elif ann_name == ANN_ELEMENT_TYPE:
+                self._validate_element_type(ann_name, value)
+            elif ann_name == ANN_FOREIGN:
+                self._validate_annotation(ann_name, value, n_params=0)
+            elif ann_name == ANN_IN:
+                self._validate_annotation(ann_name, value, n_params=0)
+            elif ann_name in [ANN_INOUT, ANN_INOUT_ALT]:
+                self._validate_annotation(ann_name, value, n_params=0)
+            elif ann_name == ANN_OUT:
+                self._validate_out(ann_name, value)
+            elif ann_name == ANN_SCOPE:
+                self._validate_annotation(
+                    ann_name, value, required=True,
                     n_params=1,
                     choices=[OPT_SCOPE_ASYNC,
                              OPT_SCOPE_CALL,
                              OPT_SCOPE_NOTIFIED])
-            elif option == OPT_SKIP:
-                self._validate_option(option, value, n_params=0)
-            elif option == OPT_TRANSFER:
-                self._validate_option(
-                    option, value, required=True,
+            elif ann_name == ANN_SKIP:
+                self._validate_annotation(ann_name, value, n_params=0)
+            elif ann_name == ANN_TRANSFER:
+                self._validate_annotation(
+                    ann_name, value, required=True,
                     n_params=1,
                     choices=[OPT_TRANSFER_FULL,
                              OPT_TRANSFER_CONTAINER,
                              OPT_TRANSFER_NONE,
                              OPT_TRANSFER_FLOATING])
-            elif option == OPT_TYPE:
-                self._validate_option(option, value, required=True,
-                                      n_params=1)
-            elif option == OPT_CONSTRUCTOR:
-                self._validate_option(option, value, n_params=0)
-            elif option == OPT_METHOD:
-                self._validate_option(option, value, n_params=0)
+            elif ann_name == ANN_TYPE:
+                self._validate_annotation(ann_name, value, required=True,
+                                          n_params=1)
+            elif ann_name == ANN_CONSTRUCTOR:
+                self._validate_annotation(ann_name, value, n_params=0)
+            elif ann_name == ANN_METHOD:
+                self._validate_annotation(ann_name, value, n_params=0)
             else:
-                message.warn('invalid annotation option: %s' % (option, ),
+                message.warn('unknown annotation: %s' % (ann_name, ),
                              self.position)
 
 
-class DocOptions(object):
+class DocAnnotations(object):
     def __init__(self):
         self.values = []
         self.position = None
 
     def __repr__(self):
-        return '<DocOptions %r>' % (self.values, )
+        return '<DocAnnotations %r>' % (self.values, )
 
     def __getitem__(self, item):
         for key, value in self.values:
@@ -769,7 +767,7 @@ class AnnotationParser(object):
     GTK-Doc comment block parser.
 
     Parses GTK-Doc comment blocks into a parse tree built out of :class:`DockBlock`,
-    :class:`DocTag`, :class:`DocOptions` and :class:`DocOption` objects. This
+    :class:`DocTag`, :class:`DocAnnotations` and :class:`DocOption` objects. This
     parser tries to accept malformed input whenever possible and does not emit
     syntax errors. However, it does emit warnings at the slightest indication
     of malformed input when possible. It is usually a good idea to heed these
@@ -1014,8 +1012,8 @@ class AnnotationParser(object):
                                      position)
 
                     if 'annotations' in result.groupdict():
-                        comment_block.options = self.parse_options(comment_block,
-                                                                   result.group('annotations'))
+                        comment_block.annotations = self.parse_annotations(comment_block,
+                                                                       result.group('annotations'))
 
                     continue
                 else:
@@ -1078,7 +1076,7 @@ class AnnotationParser(object):
                 tag.position = position
                 tag.comment = param_description
                 if param_annotations:
-                    tag.options = self.parse_options(tag, param_annotations)
+                    tag.annotations = self.parse_annotations(tag, param_annotations)
                 if param_name == TAG_RETURNS:
                     comment_block.tags[param_name] = tag
                 else:
@@ -1149,7 +1147,7 @@ class AnnotationParser(object):
                     tag.position = position
                     tag.comment = tag_description
                     if tag_annotations:
-                        tag.options = self.parse_options(tag, tag_annotations)
+                        tag.annotations = self.parse_annotations(tag, tag_annotations)
                     comment_block.tags[TAG_RETURNS] = tag
                     current_tag = tag
                     continue
@@ -1166,7 +1164,7 @@ class AnnotationParser(object):
                     tag.value = tag_description
                     if tag_annotations:
                         if tag_name.lower() == TAG_ATTRIBUTES:
-                            tag.options = self.parse_options(tag, tag_annotations)
+                            tag.annotations = self.parse_annotations(tag, tag_annotations)
                         else:
                             message.warn("annotations not supported for tag '%s:'." %
                                          (tag_name, ),
@@ -1254,13 +1252,13 @@ class AnnotationParser(object):
                          position)
 
     @classmethod
-    def parse_options(cls, tag, value):
+    def parse_annotations(cls, tag, value):
         # (annotation)
         # (annotation opt1 opt2 ...)
         # (annotation opt1=value1 opt2=value2 ...)
         opened = -1
-        options = DocOptions()
-        options.position = tag.position
+        annotations = DocAnnotations()
+        annotations.position = tag.position
 
         for i, c in enumerate(value):
             if c == '(' and opened == -1:
@@ -1277,7 +1275,7 @@ class AnnotationParser(object):
                     raise AssertionError
                 if option is not None:
                     option = DocOption(tag, option)
-                options.add(name, option)
+                annotations.add(name, option)
                 opened = -1
 
-        return options
+        return annotations

@@ -130,9 +130,9 @@ class TestCommentBlock(unittest.TestCase):
 
             parsed += '  <identifier>\n'
             parsed += '    <name>%s</name>\n' % (docblock.name, )
-            if docblock.options.values:
+            if docblock.annotations.values:
                 parsed += '    <annotations>\n'
-                for key, value in docblock.options.values:
+                for key, value in docblock.annotations.values:
                     parsed += '      <annotation>\n'
                     parsed += '        <name>%s</name>\n' % (key, )
                     if value is not None:
@@ -155,9 +155,9 @@ class TestCommentBlock(unittest.TestCase):
                     param = docblock.params.get(param_name)
                     parsed += '    <parameter>\n'
                     parsed += '      <name>%s</name>\n' % (param_name, )
-                    if param.options.values:
+                    if param.annotations.values:
                         parsed += '      <annotations>\n'
-                        for key, value in param.options.values:
+                        for key, value in param.annotations.values:
                             parsed += '        <annotation>\n'
                             parsed += '          <name>%s</name>\n' % (key, )
                             if value is not None:
@@ -186,9 +186,9 @@ class TestCommentBlock(unittest.TestCase):
                     tag = docblock.tags.get(tag_name)
                     parsed += '    <tag>\n'
                     parsed += '      <name>%s</name>\n' % (tag_name, )
-                    if tag.options.values:
+                    if tag.annotations.values:
                         parsed += '      <annotations>\n'
-                        for key, value in tag.options.values:
+                        for key, value in tag.annotations.values:
                             parsed += '        <annotation>\n'
                             parsed += '          <name>%s</name>\n' % (key, )
                             if value is not None:
