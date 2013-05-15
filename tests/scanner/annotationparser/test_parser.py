@@ -37,26 +37,6 @@ from giscanner.ast import Namespace
 from giscanner.message import MessageLogger
 
 
-def create_tests(tests_dir, tests_file):
-    tests_name = os.path.relpath(tests_file[:-4], tests_dir)
-    tests_name = tests_name.replace('/', '.').replace('\\', '.')
-
-    tests_tree = etree.parse(tests_file).getroot()
-
-    fix_cdata_elements = tests_tree.findall('test/commentblock')
-    fix_cdata_elements += tests_tree.findall('.//description')
-
-    for element in fix_cdata_elements:
-        if element.text:
-            element.text = element.text.replace('{{?', '<!')
-            element.text = element.text.replace('}}', '>')
-
-    for counter, test in enumerate(tests_tree.findall('test')):
-        test_name = 'test_%s.%03d' % (tests_name, counter + 1)
-        test_method = TestCommentBlock.__create_test__(test)
-        setattr(TestCommentBlock, test_name, test_method)
-
-
 class TestCommentBlock(unittest.TestCase):
     @classmethod
     def __create_test__(cls, testcase):
@@ -273,6 +253,26 @@ class TestCommentBlock(unittest.TestCase):
             expected += '</docblock>'
 
         return expected
+
+
+def create_tests(tests_dir, tests_file):
+    tests_name = os.path.relpath(tests_file[:-4], tests_dir)
+    tests_name = tests_name.replace('/', '.').replace('\\', '.')
+
+    tests_tree = etree.parse(tests_file).getroot()
+
+    fix_cdata_elements = tests_tree.findall('test/commentblock')
+    fix_cdata_elements += tests_tree.findall('.//description')
+
+    for element in fix_cdata_elements:
+        if element.text:
+            element.text = element.text.replace('{{?', '<!')
+            element.text = element.text.replace('}}', '>')
+
+    for counter, test in enumerate(tests_tree.findall('test')):
+        test_name = 'test_%s.%03d' % (tests_name, counter + 1)
+        test_method = TestCommentBlock.__create_test__(test)
+        setattr(TestCommentBlock, test_name, test_method)
 
 
 if __name__ == '__main__':
