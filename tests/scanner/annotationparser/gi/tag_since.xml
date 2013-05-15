@@ -8,17 +8,19 @@
  *
  * Since: 0.6
  **/</input>
-  <docblock>
-    <identifier>
-      <name>annotation_versioned</name>
-    </identifier>
-    <tags>
-      <tag>
-        <name>since</name>
-        <description>0.6</description>
-      </tag>
-    </tags>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>annotation_versioned</name>
+      </identifier>
+      <tags>
+        <tag>
+          <name>since</name>
+          <description>0.6</description>
+        </tag>
+      </tags>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -27,17 +29,19 @@
  *
  * Since: this function is available since version 0.6
  **/</input>
-  <docblock>
-    <identifier>
-      <name>annotation_versioned</name>
-    </identifier>
-    <tags>
-      <tag>
-        <name>since</name>
-        <description>this function is available since version 0.6</description>
-      </tag>
-    </tags>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>annotation_versioned</name>
+      </identifier>
+      <tags>
+        <tag>
+          <name>since</name>
+          <description>this function is available since version 0.6</description>
+        </tag>
+      </tags>
+    </docblock>
+  </parser>
 </test>
 
 </tests>

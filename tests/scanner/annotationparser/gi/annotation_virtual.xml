@@ -16,32 +16,34 @@
  *
  * Virtual: read_fn
  */</input>
-  <docblock>
-    <identifier>
-      <name>foo_object_read</name>
-    </identifier>
-    <parameters>
-      <parameter>
-        <name>object</name>
-        <description>obj</description>
-      </parameter>
-      <parameter>
-        <name>offset</name>
-        <description>offset</description>
-      </parameter>
-      <parameter>
-        <name>length</name>
-        <description>length</description>
-      </parameter>
-    </parameters>
-    <description>Read some stuff.</description>
-    <tags>
-      <tag>
-        <name>virtual</name>
-        <description>read_fn</description>
-      </tag>
-    </tags>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>foo_object_read</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>object</name>
+          <description>obj</description>
+        </parameter>
+        <parameter>
+          <name>offset</name>
+          <description>offset</description>
+        </parameter>
+        <parameter>
+          <name>length</name>
+          <description>length</description>
+        </parameter>
+      </parameters>
+      <description>Read some stuff.</description>
+      <tags>
+        <tag>
+          <name>virtual</name>
+          <description>read_fn</description>
+        </tag>
+      </tags>
+    </docblock>
+  </parser>
 </test>
 
 </tests>

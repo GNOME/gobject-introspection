@@ -47,7 +47,7 @@ class TestCommentBlock(unittest.TestCase):
             parsed_tree = self.parsed2tree(parsed_docblock).split('\n')
 
             # Get expected output
-            expected_docblock = testcase.find('docblock')
+            expected_docblock = testcase.find('parser/docblock')
             expected_tree = self.expected2tree(expected_docblock).split('\n')
 
             # Construct a meaningful message

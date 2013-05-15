@@ -23,25 +23,26 @@
  * Just incase you wonder, special caracters can be escaped with a \ like in \%
  * or \# or even \@.
  */]]></input>
-  <docblock>
-    <identifier>
-      <name>SECTION:iface</name>
-    </identifier>
-    <parameters>
-      <parameter>
-        <name>title</name>
-        <description>GtkdocIface</description>
-      </parameter>
-      <parameter>
-        <name>short_description</name>
-        <description>interface for gtk-doc unit test</description>
-      </parameter>
-      <parameter>
-        <name>see_also</name>
-        <description>#GtkdocObject</description>
-      </parameter>
-    </parameters>
-    <description><![CDATA[This file contains non-sense code for the sole purpose of testing the docs.
+  <parser>
+    <docblock>
+      <identifier>
+        <name>SECTION:iface</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>title</name>
+          <description>GtkdocIface</description>
+        </parameter>
+        <parameter>
+          <name>short_description</name>
+          <description>interface for gtk-doc unit test</description>
+        </parameter>
+        <parameter>
+          <name>see_also</name>
+          <description>#GtkdocObject</description>
+        </parameter>
+      </parameters>
+      <description><![CDATA[This file contains non-sense code for the sole purpose of testing the docs.
 We can link to the #GtkdocIface:itest property and the #GtkdocIface::itest
 signal.
 An instance can be configured using the gtkdoc_iface_configure() function.
@@ -54,7 +55,8 @@ I can haz pictures too!
 
 Just incase you wonder, special caracters can be escaped with a \ like in \%
 or \# or even \@.]]></description>
-  </docblock>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -66,26 +68,28 @@ or \# or even \@.]]></description>
  *
  * This file contains non-sense code for the sole purpose of testing the docs.
  */</input>
-  <docblock>
-    <identifier>
-      <name>SECTION:iface2</name>
-    </identifier>
-    <parameters>
-      <parameter>
-        <name>title</name>
-        <description>GtkdocIface2</description>
-      </parameter>
-      <parameter>
-        <name>short_description</name>
-        <description>interface with a prerequisite for gtk-doc unit test</description>
-      </parameter>
-      <parameter>
-        <name>see_also</name>
-        <description>#GtkdocObject, #GtkdocIface</description>
-      </parameter>
-    </parameters>
-    <description>This file contains non-sense code for the sole purpose of testing the docs.</description>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>SECTION:iface2</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>title</name>
+          <description>GtkdocIface2</description>
+        </parameter>
+        <parameter>
+          <name>short_description</name>
+          <description>interface with a prerequisite for gtk-doc unit test</description>
+        </parameter>
+        <parameter>
+          <name>see_also</name>
+          <description>#GtkdocObject, #GtkdocIface</description>
+        </parameter>
+      </parameters>
+      <description>This file contains non-sense code for the sole purpose of testing the docs.</description>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -99,28 +103,30 @@ or \# or even \@.]]></description>
  *
  * Since: 0.1
  */</input>
-  <docblock>
-    <identifier>
-      <name>gtkdoc_iface_configure</name>
-    </identifier>
-    <parameters>
-      <parameter>
-        <name>config</name>
-        <description>settings</description>
-      </parameter>
-    </parameters>
-    <description>Configure a new instance</description>
-    <tags>
-      <tag>
-        <name>returns</name>
-        <description>%TRUE for sucess or %FALSE in case of an error</description>
-      </tag>
-      <tag>
-        <name>since</name>
-        <description>0.1</description>
-      </tag>
-    </tags>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>gtkdoc_iface_configure</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>config</name>
+          <description>settings</description>
+        </parameter>
+      </parameters>
+      <description>Configure a new instance</description>
+      <tags>
+        <tag>
+          <name>returns</name>
+          <description>%TRUE for sucess or %FALSE in case of an error</description>
+        </tag>
+        <tag>
+          <name>since</name>
+          <description>0.1</description>
+        </tag>
+      </tags>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -130,18 +136,20 @@ or \# or even \@.]]></description>
      *
      * The event has been triggered.
      */</input>
-  <docblock>
-    <identifier>
-      <name>GtkdocIface::itest</name>
-    </identifier>
-    <parameters>
-      <parameter>
-        <name>self</name>
-        <description>myself</description>
-      </parameter>
-    </parameters>
-    <description>The event has been triggered.</description>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>GtkdocIface::itest</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>self</name>
+          <description>myself</description>
+        </parameter>
+      </parameters>
+      <description>The event has been triggered.</description>
+    </docblock>
+  </parser>
 </test>
 
 </tests>

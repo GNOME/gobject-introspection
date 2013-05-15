@@ -20,24 +20,26 @@
  *
  * Since: 2.28
  **/</input>
-  <docblock>
-    <identifier>
-      <name>GApplicationFlags</name>
-    </identifier>
-    <parameters>
-      <parameter>
-        <name>G_APPLICATION_NON_UNIQUE</name>
-        <description>Make no attempts to do any of the typical single-instance application negotiation, even if the application ID is given.  The application neither attempts to become the owner of the application ID nor does it check if an existing owner already exists.  Everything occurs in the local process. Since: 2.30.</description>
-      </parameter>
-    </parameters>
-    <description>Flags used to define the behaviour of a #GApplication.</description>
-    <tags>
-      <tag>
-        <name>since</name>
-        <description>2.28</description>
-      </tag>
-    </tags>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>GApplicationFlags</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>G_APPLICATION_NON_UNIQUE</name>
+          <description>Make no attempts to do any of the typical single-instance application negotiation, even if the application ID is given.  The application neither attempts to become the owner of the application ID nor does it check if an existing owner already exists.  Everything occurs in the local process. Since: 2.30.</description>
+        </parameter>
+      </parameters>
+      <description>Flags used to define the behaviour of a #GApplication.</description>
+      <tags>
+        <tag>
+          <name>since</name>
+          <description>2.28</description>
+        </tag>
+      </tags>
+    </docblock>
+  </parser>
 </test>
 
 </tests>

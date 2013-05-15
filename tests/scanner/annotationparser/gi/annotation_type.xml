@@ -11,49 +11,51 @@
  * This is a signal which takes a list of strings, but it's not
  * known by GObject as it's only marked as G_TYPE_POINTER
  */</input>
-  <docblock>
-    <identifier>
-      <name>AnnotationObject::list-signal</name>
-    </identifier>
-    <parameters>
-      <parameter>
-        <name>annotation</name>
-        <description>the annotation object</description>
-      </parameter>
-      <parameter>
-        <name>list</name>
-        <annotations>
-          <annotation>
-            <name>type</name>
-            <options>
-              <option>
-                <name>GLib.List</name>
-              </option>
-            </options>
-          </annotation>
-          <annotation>
-            <name>element-type</name>
-            <options>
-              <option>
-                <name>utf8</name>
-              </option>
-            </options>
-          </annotation>
-          <annotation>
-            <name>transfer</name>
-            <options>
-              <option>
-                <name>container</name>
-              </option>
-            </options>
-          </annotation>
-        </annotations>
-        <description>a list of strings</description>
-      </parameter>
-    </parameters>
-    <description>This is a signal which takes a list of strings, but it's not
+  <parser>
+    <docblock>
+      <identifier>
+        <name>AnnotationObject::list-signal</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>annotation</name>
+          <description>the annotation object</description>
+        </parameter>
+        <parameter>
+          <name>list</name>
+          <annotations>
+            <annotation>
+              <name>type</name>
+              <options>
+                <option>
+                  <name>GLib.List</name>
+                </option>
+              </options>
+            </annotation>
+            <annotation>
+              <name>element-type</name>
+              <options>
+                <option>
+                  <name>utf8</name>
+                </option>
+              </options>
+            </annotation>
+            <annotation>
+              <name>transfer</name>
+              <options>
+                <option>
+                  <name>container</name>
+                </option>
+              </options>
+            </annotation>
+          </annotations>
+          <description>a list of strings</description>
+        </parameter>
+      </parameters>
+      <description>This is a signal which takes a list of strings, but it's not
 known by GObject as it's only marked as G_TYPE_POINTER</description>
-  </docblock>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -67,18 +69,20 @@ known by GObject as it's only marked as G_TYPE_POINTER</description>
    *
    * Type: GLib.HashTable(utf8,gint8)
    */</input>
-  <docblock>
-    <identifier>
-      <name>RegressTestObj:hash-table</name>
-    </identifier>
-    <description>Test.</description>
-    <tags>
-      <tag>
-        <name>type</name>
-        <description>GLib.HashTable(utf8,gint8)</description>
-      </tag>
-    </tags>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>RegressTestObj:hash-table</name>
+      </identifier>
+      <description>Test.</description>
+      <tags>
+        <tag>
+          <name>type</name>
+          <description>GLib.HashTable(utf8,gint8)</description>
+        </tag>
+      </tags>
+    </docblock>
+  </parser>
 </test>
 
 </tests>

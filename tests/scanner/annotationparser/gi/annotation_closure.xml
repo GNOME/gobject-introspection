@@ -10,24 +10,26 @@
  * This is a callback with a 'closure' argument that is not named
  * 'user_data' and hence has to be annotated.
  */</input>
-  <docblock>
-    <identifier>
-      <name>AnnotationNotifyFunc</name>
-    </identifier>
-    <parameters>
-      <parameter>
-        <name>data</name>
-        <annotations>
-          <annotation>
-            <name>closure</name>
-          </annotation>
-        </annotations>
-        <description>The user data</description>
-      </parameter>
-    </parameters>
-    <description>This is a callback with a 'closure' argument that is not named
+  <parser>
+    <docblock>
+      <identifier>
+        <name>AnnotationNotifyFunc</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>data</name>
+          <annotations>
+            <annotation>
+              <name>closure</name>
+            </annotation>
+          </annotations>
+          <description>The user data</description>
+        </parameter>
+      </parameters>
+      <description>This is a callback with a 'closure' argument that is not named
 'user_data' and hence has to be annotated.</description>
-  </docblock>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -38,37 +40,39 @@
  * Test messing up the heuristic of closure/destroy-notification
  * detection, and fixing it via annotations.
  */</input>
-  <docblock>
-    <identifier>
-      <name>annotation_custom_destroy</name>
-    </identifier>
-    <parameters>
-      <parameter>
-        <name>callback</name>
-        <annotations>
-          <annotation>
-            <name>destroy</name>
-            <options>
-              <option>
-                <name>destroy</name>
-              </option>
-            </options>
-          </annotation>
-          <annotation>
-            <name>closure</name>
-            <options>
-              <option>
-                <name>data</name>
-              </option>
-            </options>
-          </annotation>
-        </annotations>
-        <description>Destroy notification</description>
-      </parameter>
-    </parameters>
-    <description>Test messing up the heuristic of closure/destroy-notification
+  <parser>
+    <docblock>
+      <identifier>
+        <name>annotation_custom_destroy</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>callback</name>
+          <annotations>
+            <annotation>
+              <name>destroy</name>
+              <options>
+                <option>
+                  <name>destroy</name>
+                </option>
+              </options>
+            </annotation>
+            <annotation>
+              <name>closure</name>
+              <options>
+                <option>
+                  <name>data</name>
+                </option>
+              </options>
+            </annotation>
+          </annotations>
+          <description>Destroy notification</description>
+        </parameter>
+      </parameters>
+      <description>Test messing up the heuristic of closure/destroy-notification
 detection, and fixing it via annotations.</description>
-  </docblock>
+    </docblock>
+  </parser>
 </test>
 
 </tests>

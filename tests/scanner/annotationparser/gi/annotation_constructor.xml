@@ -6,16 +6,18 @@
   <input>/**
  * regress_constructor: (constructor)
  */</input>
-  <docblock>
-    <identifier>
-      <name>regress_constructor</name>
-      <annotations>
-        <annotation>
-          <name>constructor</name>
-        </annotation>
-      </annotations>
-    </identifier>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>regress_constructor</name>
+        <annotations>
+          <annotation>
+            <name>constructor</name>
+          </annotation>
+        </annotations>
+      </identifier>
+    </docblock>
+  </parser>
 </test>
 
 </tests>

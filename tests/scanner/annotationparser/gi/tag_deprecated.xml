@@ -8,17 +8,19 @@
  *
  * Deprecated: 0.6: Use something else instead
  **/</input>
-  <docblock>
-    <identifier>
-      <name>annotation_versioned</name>
-    </identifier>
-    <tags>
-      <tag>
-        <name>deprecated</name>
-        <description>0.6: Use something else instead</description>
-      </tag>
-    </tags>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>annotation_versioned</name>
+      </identifier>
+      <tags>
+        <tag>
+          <name>deprecated</name>
+          <description>0.6: Use something else instead</description>
+        </tag>
+      </tags>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -27,17 +29,19 @@
  *
  * Deprecated: 0.6
  **/</input>
-  <docblock>
-    <identifier>
-      <name>annotation_versioned</name>
-    </identifier>
-    <tags>
-      <tag>
-        <name>deprecated</name>
-        <description>0.6</description>
-      </tag>
-    </tags>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>annotation_versioned</name>
+      </identifier>
+      <tags>
+        <tag>
+          <name>deprecated</name>
+          <description>0.6</description>
+        </tag>
+      </tags>
+    </docblock>
+  </parser>
 </test>
 
 </tests>

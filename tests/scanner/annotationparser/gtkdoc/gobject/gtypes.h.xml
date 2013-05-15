@@ -11,22 +11,24 @@
  *
  * Enum values for the #GtkdocEnum type.
  */</input>
-  <docblock>
-    <identifier>
-      <name>GtkdocEnum</name>
-    </identifier>
-    <parameters>
-      <parameter>
-        <name>GTKDOC_ENUM_V1</name>
-        <description>first</description>
-      </parameter>
-      <parameter>
-        <name>GTKDOC_ENUM_V2</name>
-        <description>second Since: 0.10</description>
-      </parameter>
-    </parameters>
-    <description>Enum values for the #GtkdocEnum type.</description>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>GtkdocEnum</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>GTKDOC_ENUM_V1</name>
+          <description>first</description>
+        </parameter>
+        <parameter>
+          <name>GTKDOC_ENUM_V2</name>
+          <description>second Since: 0.10</description>
+        </parameter>
+      </parameters>
+      <description>Enum values for the #GtkdocEnum type.</description>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -37,22 +39,24 @@
  *
  * Unboxed plain old data that should default to public members.
  **/</input>
-  <docblock>
-    <identifier>
-      <name>GtkdocPlainOldData</name>
-    </identifier>
-    <parameters>
-      <parameter>
-        <name>n</name>
-        <description>Some integer member.</description>
-      </parameter>
-      <parameter>
-        <name>x</name>
-        <description>Some floating point member.</description>
-      </parameter>
-    </parameters>
-    <description>Unboxed plain old data that should default to public members.</description>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>GtkdocPlainOldData</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>n</name>
+          <description>Some integer member.</description>
+        </parameter>
+        <parameter>
+          <name>x</name>
+          <description>Some floating point member.</description>
+        </parameter>
+      </parameters>
+      <description>Unboxed plain old data that should default to public members.</description>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -63,22 +67,24 @@
  *
  * Boxed plain old data that should default to public members.
  **/</input>
-  <docblock>
-    <identifier>
-      <name>GtkdocBoxedPlainOldData</name>
-    </identifier>
-    <parameters>
-      <parameter>
-        <name>n</name>
-        <description>Some integer member.</description>
-      </parameter>
-      <parameter>
-        <name>x</name>
-        <description>Some floating point member.</description>
-      </parameter>
-    </parameters>
-    <description>Boxed plain old data that should default to public members.</description>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>GtkdocBoxedPlainOldData</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>n</name>
+          <description>Some integer member.</description>
+        </parameter>
+        <parameter>
+          <name>x</name>
+          <description>Some floating point member.</description>
+        </parameter>
+      </parameters>
+      <description>Boxed plain old data that should default to public members.</description>
+    </docblock>
+  </parser>
 </test>
 
 </tests>

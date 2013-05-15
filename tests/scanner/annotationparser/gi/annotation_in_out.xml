@@ -13,42 +13,44 @@
  *
  * Return value: an int
  */</input>
-  <docblock>
-    <identifier>
-      <name>annotation_object_inout</name>
-    </identifier>
-    <parameters>
-      <parameter>
-        <name>object</name>
-        <description>a #GObject</description>
-      </parameter>
-      <parameter>
-        <name>inoutarg</name>
-        <annotations>
-          <annotation>
-            <name>inout</name>
-          </annotation>
-        </annotations>
-        <description>This is an argument test</description>
-      </parameter>
-      <parameter>
-        <name>inoutarg2</name>
-        <annotations>
-          <annotation>
-            <name>in-out</name>
-          </annotation>
-        </annotations>
-        <description>This is an argument test</description>
-      </parameter>
-    </parameters>
-    <description>This is a test for inout arguments</description>
-    <tags>
-      <tag>
-        <name>returns</name>
-        <description>an int</description>
-      </tag>
-    </tags>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>annotation_object_inout</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>object</name>
+          <description>a #GObject</description>
+        </parameter>
+        <parameter>
+          <name>inoutarg</name>
+          <annotations>
+            <annotation>
+              <name>inout</name>
+            </annotation>
+          </annotations>
+          <description>This is an argument test</description>
+        </parameter>
+        <parameter>
+          <name>inoutarg2</name>
+          <annotations>
+            <annotation>
+              <name>in-out</name>
+            </annotation>
+          </annotations>
+          <description>This is an argument test</description>
+        </parameter>
+      </parameters>
+      <description>This is a test for inout arguments</description>
+      <tags>
+        <tag>
+          <name>returns</name>
+          <description>an int</description>
+        </tag>
+      </tags>
+    </docblock>
+  </parser>
 </test>
 
 </tests>

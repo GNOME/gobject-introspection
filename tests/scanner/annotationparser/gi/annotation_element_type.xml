@@ -8,35 +8,37 @@
  *
  * Returns: (element-type utf8) (transfer container): returns %NULL.
  */</input>
-  <docblock>
-    <identifier>
-      <name>foo_test_array</name>
-    </identifier>
-    <tags>
-      <tag>
-        <name>returns</name>
-        <annotations>
-          <annotation>
-            <name>element-type</name>
-            <options>
-              <option>
-                <name>utf8</name>
-              </option>
-            </options>
-          </annotation>
-          <annotation>
-            <name>transfer</name>
-            <options>
-              <option>
-                <name>container</name>
-              </option>
-            </options>
-          </annotation>
-        </annotations>
-        <description>returns %NULL.</description>
-      </tag>
-    </tags>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>foo_test_array</name>
+      </identifier>
+      <tags>
+        <tag>
+          <name>returns</name>
+          <annotations>
+            <annotation>
+              <name>element-type</name>
+              <options>
+                <option>
+                  <name>utf8</name>
+                </option>
+              </options>
+            </annotation>
+            <annotation>
+              <name>transfer</name>
+              <options>
+                <option>
+                  <name>container</name>
+                </option>
+              </options>
+            </annotation>
+          </annotations>
+          <description>returns %NULL.</description>
+        </tag>
+      </tags>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -48,35 +50,37 @@
  * This test signal is like TelepathyGlib's
  *  TpAccount::status-changed
  */</input>
-  <docblock>
-    <identifier>
-      <name>RegressTestObj::sig-with-hash-prop</name>
-    </identifier>
-    <parameters>
-      <parameter>
-        <name>self</name>
-        <description>an object</description>
-      </parameter>
-      <parameter>
-        <name>hash</name>
-        <annotations>
-          <annotation>
-            <name>element-type</name>
-            <options>
-              <option>
-                <name>utf8</name>
-              </option>
-              <option>
-                <name>GObject.Value</name>
-              </option>
-            </options>
-          </annotation>
-        </annotations>
-      </parameter>
-    </parameters>
-    <description>This test signal is like TelepathyGlib's
+  <parser>
+    <docblock>
+      <identifier>
+        <name>RegressTestObj::sig-with-hash-prop</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>self</name>
+          <description>an object</description>
+        </parameter>
+        <parameter>
+          <name>hash</name>
+          <annotations>
+            <annotation>
+              <name>element-type</name>
+              <options>
+                <option>
+                  <name>utf8</name>
+                </option>
+                <option>
+                  <name>GObject.Value</name>
+                </option>
+              </options>
+            </annotation>
+          </annotations>
+        </parameter>
+      </parameters>
+      <description>This test signal is like TelepathyGlib's
  TpAccount::status-changed</description>
-  </docblock>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -88,39 +92,41 @@
  *
  * Return value: (element-type utf8 GLib.HashTable<utf8,utf8>) (transfer full):
  */]]></input>
-  <docblock>
-    <identifier>
-      <name>regress_test_ghash_nested_everything_return2</name>
-    </identifier>
-    <description>Another way of specifying nested parameterized types: using the
+  <parser>
+    <docblock>
+      <identifier>
+        <name>regress_test_ghash_nested_everything_return2</name>
+      </identifier>
+      <description>Another way of specifying nested parameterized types: using the
 element-type annotation.</description>
-    <tags>
-      <tag>
-        <name>returns</name>
-        <annotations>
-          <annotation>
-            <name>element-type</name>
-            <options>
-              <option>
-                <name>utf8</name>
-              </option>
-              <option>
-                <name><![CDATA[GLib.HashTable<utf8,utf8>]]></name>
-              </option>
-            </options>
-          </annotation>
-          <annotation>
-            <name>transfer</name>
-            <options>
-              <option>
-                <name>full</name>
-              </option>
-            </options>
-          </annotation>
-        </annotations>
-      </tag>
-    </tags>
-  </docblock>
+      <tags>
+        <tag>
+          <name>returns</name>
+          <annotations>
+            <annotation>
+              <name>element-type</name>
+              <options>
+                <option>
+                  <name>utf8</name>
+                </option>
+                <option>
+                  <name><![CDATA[GLib.HashTable<utf8,utf8>]]></name>
+                </option>
+              </options>
+            </annotation>
+            <annotation>
+              <name>transfer</name>
+              <options>
+                <option>
+                  <name>full</name>
+                </option>
+              </options>
+            </annotation>
+          </annotations>
+        </tag>
+      </tags>
+    </docblock>
+  </parser>
 </test>
 
 </tests>

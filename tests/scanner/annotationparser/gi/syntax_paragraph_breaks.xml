@@ -14,14 +14,16 @@
  *
  * So this is considered a new paragraph.
  */</input>
-  <docblock>
-    <identifier>
-      <name>SECTION:test</name>
-    </identifier>
-    <description>The following line is ' *' (blank-asterisk).
+  <parser>
+    <docblock>
+      <identifier>
+        <name>SECTION:test</name>
+      </identifier>
+      <description>The following line is ' *' (blank-asterisk).
 
 So this is considered a new paragraph.</description>
-  </docblock>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -36,14 +38,16 @@ So this is considered a new paragraph.</description>
  *
  * So this is considered a new paragraph.
  */</input>
-  <docblock>
-    <identifier>
-      <name>SECTION:test</name>
-    </identifier>
-    <description>The following line is ' *' (blank-asterisk).
+  <parser>
+    <docblock>
+      <identifier>
+        <name>SECTION:test</name>
+      </identifier>
+      <description>The following line is ' *' (blank-asterisk).
 
 So this is considered a new paragraph.</description>
-  </docblock>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -57,14 +61,16 @@ So this is considered a new paragraph.</description>
  * 
  * So this is considered a new paragraph.
  */</input>
-  <docblock>
-    <identifier>
-      <name>SECTION:test</name>
-    </identifier>
-    <description>The following line is ' * ' (blank-asterisk-blank).
+  <parser>
+    <docblock>
+      <identifier>
+        <name>SECTION:test</name>
+      </identifier>
+      <description>The following line is ' * ' (blank-asterisk-blank).
 
 So this is considered a new paragraph.</description>
-  </docblock>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -78,14 +84,16 @@ So this is considered a new paragraph.</description>
  * 
  * So this is considered a new paragraph.
  */</input>
-  <docblock>
-    <identifier>
-      <name>SECTION:test</name>
-    </identifier>
-    <description>The following line is ' * ' (blank-asterisk-blank).
+  <parser>
+    <docblock>
+      <identifier>
+        <name>SECTION:test</name>
+      </identifier>
+      <description>The following line is ' * ' (blank-asterisk-blank).
 
 So this is considered a new paragraph.</description>
-  </docblock>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -101,14 +109,16 @@ So this is considered a new paragraph.</description>
  *  
  * So this is preceded by an empty line and is not considered a new paragraph.
  */</input>
-  <docblock>
-    <identifier>
-      <name>SECTION:test</name>
-    </identifier>
-    <description>The following line is (blank-asterisk-blank-blank).
+  <parser>
+    <docblock>
+      <identifier>
+        <name>SECTION:test</name>
+      </identifier>
+      <description>The following line is (blank-asterisk-blank-blank).
  
 So this is preceded by an empty line and is not considered a new paragraph.</description>
-  </docblock>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -124,14 +134,16 @@ So this is preceded by an empty line and is not considered a new paragraph.</des
  *  
  * So this is preceded by an empty line and is not considered a new paragraph.
  */</input>
-  <docblock>
-    <identifier>
-      <name>SECTION:test</name>
-    </identifier>
-    <description>The following line is (blank-asterisk-blank-blank).
+  <parser>
+    <docblock>
+      <identifier>
+        <name>SECTION:test</name>
+      </identifier>
+      <description>The following line is (blank-asterisk-blank-blank).
  
 So this is preceded by an empty line and is not considered a new paragraph.</description>
-  </docblock>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -161,11 +173,12 @@ So this is preceded by an empty line and is not considered a new paragraph.</des
  * </programlisting>
  * </example>
  */]]></input>
-  <docblock>
-    <identifier>
-      <name>SECTION:test</name>
-    </identifier>
-    <description><![CDATA[<example>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>SECTION:test</name>
+      </identifier>
+      <description><![CDATA[<example>
 <title>Iterating over attributes</title>
 <programlisting>
 void
@@ -182,7 +195,8 @@ print_attributes (GIBaseInfo *info)
 }
 </programlisting>
 </example>]]></description>
-  </docblock>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -212,11 +226,12 @@ print_attributes (GIBaseInfo *info)
  * </programlisting>
  * </example>
  */]]></input>
-  <docblock>
-    <identifier>
-      <name>SECTION:test</name>
-    </identifier>
-    <description><![CDATA[<example>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>SECTION:test</name>
+      </identifier>
+      <description><![CDATA[<example>
 <title>Iterating over attributes</title>
 <programlisting>
 void
@@ -233,7 +248,8 @@ print_attributes (GIBaseInfo *info)
 }
 </programlisting>
 </example>]]></description>
-  </docblock>
+    </docblock>
+  </parser>
 </test>
 
 </tests>

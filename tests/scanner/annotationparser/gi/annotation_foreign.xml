@@ -7,16 +7,18 @@
  * FooForeignStruct: (foreign)
  *
  */</input>
-  <docblock>
-    <identifier>
-      <name>FooForeignStruct</name>
-      <annotations>
-        <annotation>
-          <name>foreign</name>
-        </annotation>
-      </annotations>
-    </identifier>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>FooForeignStruct</name>
+        <annotations>
+          <annotation>
+            <name>foreign</name>
+          </annotation>
+        </annotations>
+      </identifier>
+    </docblock>
+  </parser>
 </test>
 
 </tests>

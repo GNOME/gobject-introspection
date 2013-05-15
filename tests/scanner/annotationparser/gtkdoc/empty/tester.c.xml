@@ -12,21 +12,23 @@
  * As described in http://bugzilla.gnome.org/show_bug.cgi?id=457077 it
  * returns nothing.
  */]]></input>
-  <docblock>
-    <identifier>
-      <name>SECTION:tester</name>
-    </identifier>
-    <parameters>
-      <parameter>
-        <name>short_description</name>
-        <description>module for gtk-doc unit test</description>
-      </parameter>
-    </parameters>
-    <description><![CDATA[This file contains non-sense code for the sole purpose of testing the docs.
+  <parser>
+    <docblock>
+      <identifier>
+        <name>SECTION:tester</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>short_description</name>
+          <description>module for gtk-doc unit test</description>
+        </parameter>
+      </parameters>
+      <description><![CDATA[This file contains non-sense code for the sole purpose of testing the docs.
 
 As described in http://bugzilla.gnome.org/show_bug.cgi?id=457077 it
 returns nothing.]]></description>
-  </docblock>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -36,18 +38,20 @@ returns nothing.]]></description>
  *
  * lonely function
  */</input>
-  <docblock>
-    <identifier>
-      <name>test</name>
-    </identifier>
-    <parameters>
-      <parameter>
-        <name>a</name>
-        <description>arg</description>
-      </parameter>
-    </parameters>
-    <description>lonely function</description>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>test</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>a</name>
+          <description>arg</description>
+        </parameter>
+      </parameters>
+      <description>lonely function</description>
+    </docblock>
+  </parser>
  </test>
 
 </tests>

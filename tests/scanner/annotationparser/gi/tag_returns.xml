@@ -10,18 +10,20 @@
  *
  * Returns: some boolean
  **/</input>
-  <docblock>
-    <identifier>
-      <name>annotation_object_string_out</name>
-    </identifier>
-    <tags>
-      <tag>
-        <name>returns</name>
-        <description>some boolean</description>
-      </tag>
-    </tags>
-    <description>Test returning a string as an out parameter</description>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>annotation_object_string_out</name>
+      </identifier>
+      <tags>
+        <tag>
+          <name>returns</name>
+          <description>some boolean</description>
+        </tag>
+      </tags>
+      <description>Test returning a string as an out parameter</description>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -35,18 +37,20 @@
  *
  * Return value: some boolean
  **/</input>
-  <docblock>
-    <identifier>
-      <name>annotation_object_string_out</name>
-    </identifier>
-    <tags>
-      <tag>
-        <name>returns</name>
-        <description>some boolean</description>
-      </tag>
-    </tags>
-    <description>Test returning a string as an out parameter</description>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>annotation_object_string_out</name>
+      </identifier>
+      <tags>
+        <tag>
+          <name>returns</name>
+          <description>some boolean</description>
+        </tag>
+      </tags>
+      <description>Test returning a string as an out parameter</description>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -59,18 +63,20 @@
  *
  * Test returning a string as an out parameter
  **/</input>
-  <docblock>
-    <identifier>
-      <name>annotation_object_string_out</name>
-    </identifier>
-    <tags>
-      <tag>
-        <name>returns</name>
-        <description>some boolean</description>
-      </tag>
-    </tags>
-    <description>Test returning a string as an out parameter</description>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>annotation_object_string_out</name>
+      </identifier>
+      <tags>
+        <tag>
+          <name>returns</name>
+          <description>some boolean</description>
+        </tag>
+      </tags>
+      <description>Test returning a string as an out parameter</description>
+    </docblock>
+  </parser>
 </test>
 
 </tests>

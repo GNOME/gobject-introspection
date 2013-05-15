@@ -9,23 +9,25 @@
  *
  * small struct
  */</input>
-  <docblock>
-    <identifier>
-      <name>GtkdocAnnotation</name>
-    </identifier>
-    <parameters>
-      <parameter>
-        <name>that</name>
-        <annotations>
-          <annotation>
-            <name>allow-none</name>
-          </annotation>
-        </annotations>
-        <description>eventualy points to something</description>
-      </parameter>
-    </parameters>
-    <description>small struct</description>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>GtkdocAnnotation</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>that</name>
+          <annotations>
+            <annotation>
+              <name>allow-none</name>
+            </annotation>
+          </annotations>
+          <description>eventualy points to something</description>
+        </parameter>
+      </parameters>
+      <description>small struct</description>
+    </docblock>
+  </parser>
 </test>
 
 </tests>

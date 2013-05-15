@@ -10,37 +10,39 @@
  * Test messing up the heuristic of closure/destroy-notification
  * detection, and fixing it via annotations.
  */</input>
-  <docblock>
-    <identifier>
-      <name>annotation_custom_destroy</name>
-    </identifier>
-    <parameters>
-      <parameter>
-        <name>callback</name>
-        <annotations>
-          <annotation>
-            <name>destroy</name>
-            <options>
-              <option>
-                <name>destroy</name>
-              </option>
-            </options>
-          </annotation>
-          <annotation>
-            <name>closure</name>
-            <options>
-              <option>
-                <name>data</name>
-              </option>
-            </options>
-          </annotation>
-        </annotations>
-        <description>Destroy notification</description>
-      </parameter>
-    </parameters>
-    <description>Test messing up the heuristic of closure/destroy-notification
+  <parser>
+    <docblock>
+      <identifier>
+        <name>annotation_custom_destroy</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>callback</name>
+          <annotations>
+            <annotation>
+              <name>destroy</name>
+              <options>
+                <option>
+                  <name>destroy</name>
+                </option>
+              </options>
+            </annotation>
+            <annotation>
+              <name>closure</name>
+              <options>
+                <option>
+                  <name>data</name>
+                </option>
+              </options>
+            </annotation>
+          </annotations>
+          <description>Destroy notification</description>
+        </parameter>
+      </parameters>
+      <description>Test messing up the heuristic of closure/destroy-notification
 detection, and fixing it via annotations.</description>
-  </docblock>
+    </docblock>
+  </parser>
 </test>
 
 </tests>

@@ -11,26 +11,28 @@
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=324535
  */</input>
-  <docblock>
-    <identifier>
-      <name>Bug324535</name>
-    </identifier>
-    <parameters>
-      <parameter>
-        <name>BUG_324535_A</name>
-        <description>enum 1</description>
-      </parameter>
-      <parameter>
-        <name>BUG_324535_B</name>
-        <description>enum 2</description>
-      </parameter>
-      <parameter>
-        <name>BUG_324535_C</name>
-        <description>enum 3</description>
-      </parameter>
-    </parameters>
-    <description>http://bugzilla.gnome.org/show_bug.cgi?id=324535</description>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>Bug324535</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>BUG_324535_A</name>
+          <description>enum 1</description>
+        </parameter>
+        <parameter>
+          <name>BUG_324535_B</name>
+          <description>enum 2</description>
+        </parameter>
+        <parameter>
+          <name>BUG_324535_C</name>
+          <description>enum 3</description>
+        </parameter>
+      </parameters>
+      <description>http://bugzilla.gnome.org/show_bug.cgi?id=324535</description>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -40,18 +42,20 @@
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=481811
  **/</input>
-  <docblock>
-    <identifier>
-      <name>bug_481811</name>
-    </identifier>
-    <parameters>
-      <parameter>
-        <name>x</name>
-        <description>argument</description>
-      </parameter>
-    </parameters>
-    <description>http://bugzilla.gnome.org/show_bug.cgi?id=481811</description>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>bug_481811</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>x</name>
+          <description>argument</description>
+        </parameter>
+      </parameters>
+      <description>http://bugzilla.gnome.org/show_bug.cgi?id=481811</description>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -63,26 +67,28 @@
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=501038
  */</input>
-  <docblock>
-    <identifier>
-      <name>bug_501038</name>
-    </identifier>
-    <parameters>
-      <parameter>
-        <name>a</name>
-        <description>value</description>
-      </parameter>
-      <parameter>
-        <name>b</name>
-        <description>deprecated value</description>
-      </parameter>
-      <parameter>
-        <name>_b</name>
-        <description>scrambled deprecated value</description>
-      </parameter>
-    </parameters>
-    <description>http://bugzilla.gnome.org/show_bug.cgi?id=501038</description>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>bug_501038</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>a</name>
+          <description>value</description>
+        </parameter>
+        <parameter>
+          <name>b</name>
+          <description>deprecated value</description>
+        </parameter>
+        <parameter>
+          <name>_b</name>
+          <description>scrambled deprecated value</description>
+        </parameter>
+      </parameters>
+      <description>http://bugzilla.gnome.org/show_bug.cgi?id=501038</description>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -92,18 +98,20 @@
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=460127
  */</input>
-  <docblock>
-    <identifier>
-      <name>bug_460127</name>
-    </identifier>
-    <parameters>
-      <parameter>
-        <name>a</name>
-        <description>field</description>
-      </parameter>
-    </parameters>
-    <description>http://bugzilla.gnome.org/show_bug.cgi?id=460127</description>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>bug_460127</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>a</name>
+          <description>field</description>
+        </parameter>
+      </parameters>
+      <description>http://bugzilla.gnome.org/show_bug.cgi?id=460127</description>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -112,12 +120,14 @@
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=477532
  */</input>
-  <docblock>
-    <identifier>
-      <name>bug_477532</name>
-    </identifier>
-    <description>http://bugzilla.gnome.org/show_bug.cgi?id=477532</description>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>bug_477532</name>
+      </identifier>
+      <description>http://bugzilla.gnome.org/show_bug.cgi?id=477532</description>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -127,18 +137,20 @@
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=446648
  */</input>
-  <docblock>
-    <identifier>
-      <name>Bug446648</name>
-    </identifier>
-    <parameters>
-      <parameter>
-        <name>BUG_446648_FOO</name>
-        <description>field</description>
-      </parameter>
-    </parameters>
-    <description>http://bugzilla.gnome.org/show_bug.cgi?id=446648</description>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>Bug446648</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>BUG_446648_FOO</name>
+          <description>field</description>
+        </parameter>
+      </parameters>
+      <description>http://bugzilla.gnome.org/show_bug.cgi?id=446648</description>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -148,18 +160,20 @@
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=512154
  */</input>
-  <docblock>
-    <identifier>
-      <name>Bug512154</name>
-    </identifier>
-    <parameters>
-      <parameter>
-        <name>index</name>
-        <description>field</description>
-      </parameter>
-    </parameters>
-    <description>http://bugzilla.gnome.org/show_bug.cgi?id=512154</description>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>Bug512154</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>index</name>
+          <description>field</description>
+        </parameter>
+      </parameters>
+      <description>http://bugzilla.gnome.org/show_bug.cgi?id=512154</description>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -171,26 +185,28 @@
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=512155
  */</input>
-  <docblock>
-    <identifier>
-      <name>bug_512155a_function_pointer_t</name>
-    </identifier>
-    <parameters>
-      <parameter>
-        <name>arg1</name>
-        <description>param 1</description>
-      </parameter>
-      <parameter>
-        <name>arg2</name>
-        <description>param 1</description>
-      </parameter>
-      <parameter>
-        <name>arg3</name>
-        <description>param 1</description>
-      </parameter>
-    </parameters>
-    <description>http://bugzilla.gnome.org/show_bug.cgi?id=512155</description>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>bug_512155a_function_pointer_t</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>arg1</name>
+          <description>param 1</description>
+        </parameter>
+        <parameter>
+          <name>arg2</name>
+          <description>param 1</description>
+        </parameter>
+        <parameter>
+          <name>arg3</name>
+          <description>param 1</description>
+        </parameter>
+      </parameters>
+      <description>http://bugzilla.gnome.org/show_bug.cgi?id=512155</description>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -202,26 +218,28 @@
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=512155
  */</input>
-  <docblock>
-    <identifier>
-      <name>bug_512155b_function_pointer_t</name>
-    </identifier>
-    <parameters>
-      <parameter>
-        <name>arg1</name>
-        <description>param 1</description>
-      </parameter>
-      <parameter>
-        <name>arg2</name>
-        <description>param 1</description>
-      </parameter>
-      <parameter>
-        <name>arg3</name>
-        <description>param 1</description>
-      </parameter>
-    </parameters>
-    <description>http://bugzilla.gnome.org/show_bug.cgi?id=512155</description>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>bug_512155b_function_pointer_t</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>arg1</name>
+          <description>param 1</description>
+        </parameter>
+        <parameter>
+          <name>arg2</name>
+          <description>param 1</description>
+        </parameter>
+        <parameter>
+          <name>arg3</name>
+          <description>param 1</description>
+        </parameter>
+      </parameters>
+      <description>http://bugzilla.gnome.org/show_bug.cgi?id=512155</description>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -233,26 +251,28 @@
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=512155
  */</input>
-  <docblock>
-    <identifier>
-      <name>bug_512155c_function_pointer_t</name>
-    </identifier>
-    <parameters>
-      <parameter>
-        <name>arg1</name>
-        <description>param 1</description>
-      </parameter>
-      <parameter>
-        <name>arg2</name>
-        <description>param 1</description>
-      </parameter>
-      <parameter>
-        <name>arg3</name>
-        <description>param 1</description>
-      </parameter>
-    </parameters>
-    <description>http://bugzilla.gnome.org/show_bug.cgi?id=512155</description>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>bug_512155c_function_pointer_t</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>arg1</name>
+          <description>param 1</description>
+        </parameter>
+        <parameter>
+          <name>arg2</name>
+          <description>param 1</description>
+        </parameter>
+        <parameter>
+          <name>arg3</name>
+          <description>param 1</description>
+        </parameter>
+      </parameters>
+      <description>http://bugzilla.gnome.org/show_bug.cgi?id=512155</description>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -263,14 +283,16 @@
  *
  * <ulink url="http://bugzilla.gnome.org/show_bug.cgi?id=530758#c1">Test</ulink>
  */]]></input>
-  <docblock>
-    <identifier>
-      <name>BUG_530758</name>
-    </identifier>
-    <description><![CDATA[{{![CDATA[http://bugzilla.gnome.org/show_bug.cgi?id=530758#c1]]!}}
+  <parser>
+    <docblock>
+      <identifier>
+        <name>BUG_530758</name>
+      </identifier>
+      <description><![CDATA[{{![CDATA[http://bugzilla.gnome.org/show_bug.cgi?id=530758#c1]]!}}
 
 <ulink url="http://bugzilla.gnome.org/show_bug.cgi?id=530758#c1">Test</ulink>]]></description>
-  </docblock>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -282,24 +304,26 @@
  *
  * Returns: number
  */</input>
-  <docblock>
-    <identifier>
-      <name>bug_532395a</name>
-    </identifier>
-    <parameters>
-      <parameter>
-        <name>number</name>
-        <description>a number</description>
-      </parameter>
-    </parameters>
-    <description>http://bugzilla.gnome.org/show_bug.cgi?id=532395</description>
-    <tags>
-      <tag>
-        <name>returns</name>
-        <description>number</description>
-      </tag>
-    </tags>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>bug_532395a</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>number</name>
+          <description>a number</description>
+        </parameter>
+      </parameters>
+      <description>http://bugzilla.gnome.org/show_bug.cgi?id=532395</description>
+      <tags>
+        <tag>
+          <name>returns</name>
+          <description>number</description>
+        </tag>
+      </tags>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -308,12 +332,14 @@
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=532395
  */</input>
-  <docblock>
-    <identifier>
-      <name>bug_532395b</name>
-    </identifier>
-    <description>http://bugzilla.gnome.org/show_bug.cgi?id=532395</description>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>bug_532395b</name>
+      </identifier>
+      <description>http://bugzilla.gnome.org/show_bug.cgi?id=532395</description>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -325,24 +351,26 @@
  *
  * Returns: result or %NULL.
  */</input>
-  <docblock>
-    <identifier>
-      <name>bug_544172</name>
-    </identifier>
-    <parameters>
-      <parameter>
-        <name>self</name>
-        <description>object pointer.</description>
-      </parameter>
-    </parameters>
-    <description>http://bugzilla.gnome.org/show_bug.cgi?id=544172</description>
-    <tags>
-      <tag>
-        <name>returns</name>
-        <description>result or %NULL.</description>
-      </tag>
-    </tags>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>bug_544172</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>self</name>
+          <description>object pointer.</description>
+        </parameter>
+      </parameters>
+      <description>http://bugzilla.gnome.org/show_bug.cgi?id=544172</description>
+      <tags>
+        <tag>
+          <name>returns</name>
+          <description>result or %NULL.</description>
+        </tag>
+      </tags>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -352,18 +380,20 @@
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=554833
  */</input>
-  <docblock>
-    <identifier>
-      <name>bug_554833</name>
-    </identifier>
-    <parameters>
-      <parameter>
-        <name>i</name>
-        <description>value;</description>
-      </parameter>
-    </parameters>
-    <description>http://bugzilla.gnome.org/show_bug.cgi?id=554833</description>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>bug_554833</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>i</name>
+          <description>value;</description>
+        </parameter>
+      </parameters>
+      <description>http://bugzilla.gnome.org/show_bug.cgi?id=554833</description>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -374,18 +404,20 @@
  *
  * Returns: result
  */</input>
-  <docblock>
-    <identifier>
-      <name>bug_554833_new</name>
-    </identifier>
-    <description>http://bugzilla.gnome.org/show_bug.cgi?id=554833</description>
-    <tags>
-      <tag>
-        <name>returns</name>
-        <description>result</description>
-      </tag>
-    </tags>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>bug_554833_new</name>
+      </identifier>
+      <description>http://bugzilla.gnome.org/show_bug.cgi?id=554833</description>
+      <tags>
+        <tag>
+          <name>returns</name>
+          <description>result</description>
+        </tag>
+      </tags>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -396,22 +428,24 @@
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=165425
  */</input>
-  <docblock>
-    <identifier>
-      <name>Bug165425a</name>
-    </identifier>
-    <parameters>
-      <parameter>
-        <name>i</name>
-        <description>data as int</description>
-      </parameter>
-      <parameter>
-        <name>f</name>
-        <description>data as float</description>
-      </parameter>
-    </parameters>
-    <description>http://bugzilla.gnome.org/show_bug.cgi?id=165425</description>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>Bug165425a</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>i</name>
+          <description>data as int</description>
+        </parameter>
+        <parameter>
+          <name>f</name>
+          <description>data as float</description>
+        </parameter>
+      </parameters>
+      <description>http://bugzilla.gnome.org/show_bug.cgi?id=165425</description>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -422,22 +456,24 @@
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=165425
  */</input>
-  <docblock>
-    <identifier>
-      <name>Bug165425b</name>
-    </identifier>
-    <parameters>
-      <parameter>
-        <name>i</name>
-        <description>data as int</description>
-      </parameter>
-      <parameter>
-        <name>f</name>
-        <description>data as float</description>
-      </parameter>
-    </parameters>
-    <description>http://bugzilla.gnome.org/show_bug.cgi?id=165425</description>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>Bug165425b</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>i</name>
+          <description>data as int</description>
+        </parameter>
+        <parameter>
+          <name>f</name>
+          <description>data as float</description>
+        </parameter>
+      </parameters>
+      <description>http://bugzilla.gnome.org/show_bug.cgi?id=165425</description>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -449,26 +485,28 @@
  *
  * https://bugzilla.gnome.org/show_bug.cgi?id=642998
  */</input>
-  <docblock>
-    <identifier>
-      <name>Bug642998</name>
-    </identifier>
-    <parameters>
-      <parameter>
-        <name>red</name>
-        <description>red color intensity, from 0–255</description>
-      </parameter>
-      <parameter>
-        <name>green</name>
-        <description>green color intensity, from 0–255</description>
-      </parameter>
-      <parameter>
-        <name>blue</name>
-        <description>blue color intensity, from 0–255</description>
-      </parameter>
-    </parameters>
-    <description>https://bugzilla.gnome.org/show_bug.cgi?id=642998</description>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>Bug642998</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>red</name>
+          <description>red color intensity, from 0–255</description>
+        </parameter>
+        <parameter>
+          <name>green</name>
+          <description>green color intensity, from 0–255</description>
+        </parameter>
+        <parameter>
+          <name>blue</name>
+          <description>blue color intensity, from 0–255</description>
+        </parameter>
+      </parameters>
+      <description>https://bugzilla.gnome.org/show_bug.cgi?id=642998</description>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -483,38 +521,40 @@
  *
  * https://bugzilla.gnome.org/show_bug.cgi?id=644291
  */</input>
-  <docblock>
-    <identifier>
-      <name>Bug644291</name>
-    </identifier>
-    <parameters>
-      <parameter>
-        <name>BUG_644291_START</name>
-        <description>foo</description>
-      </parameter>
-      <parameter>
-        <name>BUG_644291_TEXT</name>
-        <description>bar</description>
-      </parameter>
-      <parameter>
-        <name>BUG_644291_END</name>
-        <description>milk</description>
-      </parameter>
-      <parameter>
-        <name>BUG_644291_ATTRIBUTE</name>
-        <description>comes</description>
-      </parameter>
-      <parameter>
-        <name>BUG_644291_XMLNS</name>
-        <description>from</description>
-      </parameter>
-      <parameter>
-        <name>BUG_644291_ASSIGN_TO</name>
-        <description>cows</description>
-      </parameter>
-    </parameters>
-    <description>https://bugzilla.gnome.org/show_bug.cgi?id=644291</description>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>Bug644291</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>BUG_644291_START</name>
+          <description>foo</description>
+        </parameter>
+        <parameter>
+          <name>BUG_644291_TEXT</name>
+          <description>bar</description>
+        </parameter>
+        <parameter>
+          <name>BUG_644291_END</name>
+          <description>milk</description>
+        </parameter>
+        <parameter>
+          <name>BUG_644291_ATTRIBUTE</name>
+          <description>comes</description>
+        </parameter>
+        <parameter>
+          <name>BUG_644291_XMLNS</name>
+          <description>from</description>
+        </parameter>
+        <parameter>
+          <name>BUG_644291_ASSIGN_TO</name>
+          <description>cows</description>
+        </parameter>
+      </parameters>
+      <description>https://bugzilla.gnome.org/show_bug.cgi?id=644291</description>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -525,22 +565,24 @@
  *
  * Outputs a message.
  */</input>
-  <docblock>
-    <identifier>
-      <name>BUG_000000_VA2</name>
-    </identifier>
-    <parameters>
-      <parameter>
-        <name>name</name>
-        <description>a name</description>
-      </parameter>
-      <parameter>
-        <name>...</name>
-        <description>A printf-style message to output</description>
-      </parameter>
-    </parameters>
-    <description>Outputs a message.</description>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>BUG_000000_VA2</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>name</name>
+          <description>a name</description>
+        </parameter>
+        <parameter>
+          <name>...</name>
+          <description>A printf-style message to output</description>
+        </parameter>
+      </parameters>
+      <description>Outputs a message.</description>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -551,22 +593,24 @@
  *
  * Outputs a message.
  */</input>
-  <docblock>
-    <identifier>
-      <name>BUG_000000_VA3</name>
-    </identifier>
-    <parameters>
-      <parameter>
-        <name>name</name>
-        <description>a name</description>
-      </parameter>
-      <parameter>
-        <name>...</name>
-        <description>A printf-style message to output</description>
-      </parameter>
-    </parameters>
-    <description>Outputs a message.</description>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>BUG_000000_VA3</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>name</name>
+          <description>a name</description>
+        </parameter>
+        <parameter>
+          <name>...</name>
+          <description>A printf-style message to output</description>
+        </parameter>
+      </parameters>
+      <description>Outputs a message.</description>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -577,14 +621,16 @@
  * "warning: Field descriptions for Bug000000Scope are missing in source code comment block."
  * but not if we remove the blank line before "int b";
  */</input>
-  <docblock>
-    <identifier>
-      <name>Bug000000Scope</name>
-    </identifier>
-    <description>Opaque structure.
+  <parser>
+    <docblock>
+      <identifier>
+        <name>Bug000000Scope</name>
+      </identifier>
+      <description>Opaque structure.
 "warning: Field descriptions for Bug000000Scope are missing in source code comment block."
 but not if we remove the blank line before "int b";</description>
-  </docblock>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -596,26 +642,28 @@ but not if we remove the blank line before "int b";</description>
  *
  * test.
  */</input>
-  <docblock>
-    <identifier>
-      <name>gst_play_marshal_BUFFER__BOXED</name>
-    </identifier>
-    <parameters>
-      <parameter>
-        <name>closure</name>
-        <description>test</description>
-      </parameter>
-      <parameter>
-        <name>return_value</name>
-        <description>test</description>
-      </parameter>
-      <parameter>
-        <name>marshal_data</name>
-        <description>test</description>
-      </parameter>
-    </parameters>
-    <description>test.</description>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>gst_play_marshal_BUFFER__BOXED</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>closure</name>
+          <description>test</description>
+        </parameter>
+        <parameter>
+          <name>return_value</name>
+          <description>test</description>
+        </parameter>
+        <parameter>
+          <name>marshal_data</name>
+          <description>test</description>
+        </parameter>
+      </parameters>
+      <description>test.</description>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -624,12 +672,14 @@ but not if we remove the blank line before "int b";</description>
  *
  * https://bugzilla.gnome.org/show_bug.cgi?id=656773
  */</input>
-  <docblock>
-    <identifier>
-      <name>BUG_656773a</name>
-    </identifier>
-    <description>https://bugzilla.gnome.org/show_bug.cgi?id=656773</description>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>BUG_656773a</name>
+      </identifier>
+      <description>https://bugzilla.gnome.org/show_bug.cgi?id=656773</description>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -638,12 +688,14 @@ but not if we remove the blank line before "int b";</description>
  *
  * https://bugzilla.gnome.org/show_bug.cgi?id=656773
  */</input>
-  <docblock>
-    <identifier>
-      <name>BUG_656773b</name>
-    </identifier>
-    <description>https://bugzilla.gnome.org/show_bug.cgi?id=656773</description>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>BUG_656773b</name>
+      </identifier>
+      <description>https://bugzilla.gnome.org/show_bug.cgi?id=656773</description>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -652,12 +704,14 @@ but not if we remove the blank line before "int b";</description>
  *
  * https://bugzilla.gnome.org/show_bug.cgi?id=656773
  */</input>
-  <docblock>
-    <identifier>
-      <name>BUG_656773c</name>
-    </identifier>
-    <description>https://bugzilla.gnome.org/show_bug.cgi?id=656773</description>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>BUG_656773c</name>
+      </identifier>
+      <description>https://bugzilla.gnome.org/show_bug.cgi?id=656773</description>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -666,12 +720,14 @@ but not if we remove the blank line before "int b";</description>
  *
  * https://bugzilla.gnome.org/show_bug.cgi?id=656946
  */</input>
-  <docblock>
-    <identifier>
-      <name>BUG_656946</name>
-    </identifier>
-    <description>https://bugzilla.gnome.org/show_bug.cgi?id=656946</description>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>BUG_656946</name>
+      </identifier>
+      <description>https://bugzilla.gnome.org/show_bug.cgi?id=656946</description>
+    </docblock>
+  </parser>
 </test>
 
 </tests>

@@ -11,36 +11,38 @@
  *
  * Test taking a call-scoped callback
  **/</input>
-  <docblock>
-    <identifier>
-      <name>annotation_object_foreach</name>
-    </identifier>
-    <parameters>
-      <parameter>
-        <name>object</name>
-        <description>a #AnnotationObject</description>
-      </parameter>
-      <parameter>
-        <name>func</name>
-        <annotations>
-          <annotation>
-            <name>scope</name>
-            <options>
-              <option>
-                <name>call</name>
-              </option>
-            </options>
-          </annotation>
-        </annotations>
-        <description>Callback to invoke</description>
-      </parameter>
-      <parameter>
-        <name>user_data</name>
-        <description>Callback user data</description>
-      </parameter>
-    </parameters>
-    <description>Test taking a call-scoped callback</description>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>annotation_object_foreach</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>object</name>
+          <description>a #AnnotationObject</description>
+        </parameter>
+        <parameter>
+          <name>func</name>
+          <annotations>
+            <annotation>
+              <name>scope</name>
+              <options>
+                <option>
+                  <name>call</name>
+                </option>
+              </options>
+            </annotation>
+          </annotations>
+          <description>Callback to invoke</description>
+        </parameter>
+        <parameter>
+          <name>user_data</name>
+          <description>Callback user data</description>
+        </parameter>
+      </parameters>
+      <description>Test taking a call-scoped callback</description>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -51,28 +53,30 @@
  * Notified - callback persists until a DestroyNotify delegate
  * is invoked.
  **/</input>
-  <docblock>
-    <identifier>
-      <name>regress_test_callback_destroy_notify</name>
-    </identifier>
-    <parameters>
-      <parameter>
-        <name>callback</name>
-        <annotations>
-          <annotation>
-            <name>scope</name>
-            <options>
-              <option>
-                <name>notified</name>
-              </option>
-            </options>
-          </annotation>
-        </annotations>
-      </parameter>
-    </parameters>
-    <description>Notified - callback persists until a DestroyNotify delegate
+  <parser>
+    <docblock>
+      <identifier>
+        <name>regress_test_callback_destroy_notify</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>callback</name>
+          <annotations>
+            <annotation>
+              <name>scope</name>
+              <options>
+                <option>
+                  <name>notified</name>
+                </option>
+              </options>
+            </annotation>
+          </annotations>
+        </parameter>
+      </parameters>
+      <description>Notified - callback persists until a DestroyNotify delegate
 is invoked.</description>
-  </docblock>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -81,26 +85,28 @@ is invoked.</description>
  * @callback: (scope async):
  *
  **/</input>
-  <docblock>
-    <identifier>
-      <name>regress_test_callback_async</name>
-    </identifier>
-    <parameters>
-      <parameter>
-        <name>callback</name>
-        <annotations>
-          <annotation>
-            <name>scope</name>
-            <options>
-              <option>
-                <name>async</name>
-              </option>
-            </options>
-          </annotation>
-        </annotations>
-      </parameter>
-    </parameters>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>regress_test_callback_async</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>callback</name>
+          <annotations>
+            <annotation>
+              <name>scope</name>
+              <options>
+                <option>
+                  <name>async</name>
+                </option>
+              </options>
+            </annotation>
+          </annotations>
+        </parameter>
+      </parameters>
+    </docblock>
+  </parser>
 </test>
 
 </tests>

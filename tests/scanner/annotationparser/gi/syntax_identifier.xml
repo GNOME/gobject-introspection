@@ -23,19 +23,21 @@
  *
  * The application class handles ...
  */</input>
-  <docblock>
-    <identifier>
-      <name>SECTION:meepapp</name>
-    </identifier>
-    <parameters>
-      <parameter>
-        <name>short_description</name>
-        <description>the application class</description>
-      </parameter>
-    </parameters>
-    <description>SECTION:meepapp2
+  <parser>
+    <docblock>
+      <identifier>
+        <name>SECTION:meepapp</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>short_description</name>
+          <description>the application class</description>
+        </parameter>
+      </parameters>
+      <description>SECTION:meepapp2
 The application class handles ...</description>
-  </docblock>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -54,41 +56,43 @@ The application class handles ...</description>
  *
  * The application class handles ...
  */</input>
-  <docblock>
-    <identifier>
-      <name>SECTION:meepapp</name>
-    </identifier>
-    <parameters>
-      <parameter>
-        <name>short_description</name>
-        <description>the application class</description>
-      </parameter>
-      <parameter>
-        <name>title</name>
-        <description>Meep application</description>
-      </parameter>
-      <parameter>
-        <name>section_id</name>
-      </parameter>
-      <parameter>
-        <name>see_also</name>
-        <description>#MeepSettings</description>
-      </parameter>
-      <parameter>
-        <name>stability</name>
-        <description>Stable</description>
-      </parameter>
-      <parameter>
-        <name>include</name>
-        <description>meep/app.h</description>
-      </parameter>
-      <parameter>
-        <name>image</name>
-        <description>application.png</description>
-      </parameter>
-    </parameters>
-    <description>The application class handles ...</description>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>SECTION:meepapp</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>short_description</name>
+          <description>the application class</description>
+        </parameter>
+        <parameter>
+          <name>title</name>
+          <description>Meep application</description>
+        </parameter>
+        <parameter>
+          <name>section_id</name>
+        </parameter>
+        <parameter>
+          <name>see_also</name>
+          <description>#MeepSettings</description>
+        </parameter>
+        <parameter>
+          <name>stability</name>
+          <description>Stable</description>
+        </parameter>
+        <parameter>
+          <name>include</name>
+          <description>meep/app.h</description>
+        </parameter>
+        <parameter>
+          <name>image</name>
+          <description>application.png</description>
+        </parameter>
+      </parameters>
+      <description>The application class handles ...</description>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -108,41 +112,43 @@ The application class handles ...</description>
  *
  * The application class handles ...
  */</input>
-  <docblock>
-    <identifier>
-      <name>SECTION:meepapp</name>
-    </identifier>
-    <parameters>
-      <parameter>
-        <name>short_description</name>
-        <description>the application class</description>
-      </parameter>
-      <parameter>
-        <name>title</name>
-        <description>Meep application</description>
-      </parameter>
-      <parameter>
-        <name>section_id</name>
-      </parameter>
-      <parameter>
-        <name>see_also</name>
-        <description>#MeepSettings</description>
-      </parameter>
-      <parameter>
-        <name>stability</name>
-        <description>Stable</description>
-      </parameter>
-      <parameter>
-        <name>include</name>
-        <description>meep/app.h</description>
-      </parameter>
-      <parameter>
-        <name>image</name>
-        <description>application.png</description>
-      </parameter>
-    </parameters>
-    <description>The application class handles ...</description>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>SECTION:meepapp</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>short_description</name>
+          <description>the application class</description>
+        </parameter>
+        <parameter>
+          <name>title</name>
+          <description>Meep application</description>
+        </parameter>
+        <parameter>
+          <name>section_id</name>
+        </parameter>
+        <parameter>
+          <name>see_also</name>
+          <description>#MeepSettings</description>
+        </parameter>
+        <parameter>
+          <name>stability</name>
+          <description>Stable</description>
+        </parameter>
+        <parameter>
+          <name>include</name>
+          <description>meep/app.h</description>
+        </parameter>
+        <parameter>
+          <name>image</name>
+          <description>application.png</description>
+        </parameter>
+      </parameters>
+      <description>The application class handles ...</description>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -161,41 +167,43 @@ The application class handles ...</description>
  * @include: meep/app.h
  * @image: application.png
  */</input>
-  <docblock>
-    <identifier>
-      <name>SECTION:meepapp</name>
-    </identifier>
-    <parameters>
-      <parameter>
-        <name>short_description</name>
-        <description>the application class</description>
-      </parameter>
-      <parameter>
-        <name>title</name>
-        <description>Meep application</description>
-      </parameter>
-      <parameter>
-        <name>section_id</name>
-      </parameter>
-      <parameter>
-        <name>see_also</name>
-        <description>#MeepSettings</description>
-      </parameter>
-      <parameter>
-        <name>stability</name>
-        <description>Stable</description>
-      </parameter>
-      <parameter>
-        <name>include</name>
-        <description>meep/app.h</description>
-      </parameter>
-      <parameter>
-        <name>image</name>
-        <description>application.png</description>
-      </parameter>
-    </parameters>
-    <description>The application class handles ...</description>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>SECTION:meepapp</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>short_description</name>
+          <description>the application class</description>
+        </parameter>
+        <parameter>
+          <name>title</name>
+          <description>Meep application</description>
+        </parameter>
+        <parameter>
+          <name>section_id</name>
+        </parameter>
+        <parameter>
+          <name>see_also</name>
+          <description>#MeepSettings</description>
+        </parameter>
+        <parameter>
+          <name>stability</name>
+          <description>Stable</description>
+        </parameter>
+        <parameter>
+          <name>include</name>
+          <description>meep/app.h</description>
+        </parameter>
+        <parameter>
+          <name>image</name>
+          <description>application.png</description>
+        </parameter>
+      </parameters>
+      <description>The application class handles ...</description>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -215,41 +223,43 @@ The application class handles ...</description>
  * @include: meep/app.h
  * @image: application.png
  */</input>
-  <docblock>
-    <identifier>
-      <name>SECTION:meepapp</name>
-    </identifier>
-    <parameters>
-      <parameter>
-        <name>short_description</name>
-        <description>the application class</description>
-      </parameter>
-      <parameter>
-        <name>title</name>
-        <description>Meep application</description>
-      </parameter>
-      <parameter>
-        <name>section_id</name>
-      </parameter>
-      <parameter>
-        <name>see_also</name>
-        <description>#MeepSettings</description>
-      </parameter>
-      <parameter>
-        <name>stability</name>
-        <description>Stable</description>
-      </parameter>
-      <parameter>
-        <name>include</name>
-        <description>meep/app.h</description>
-      </parameter>
-      <parameter>
-        <name>image</name>
-        <description>application.png</description>
-      </parameter>
-    </parameters>
-    <description>The application class handles ...</description>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>SECTION:meepapp</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>short_description</name>
+          <description>the application class</description>
+        </parameter>
+        <parameter>
+          <name>title</name>
+          <description>Meep application</description>
+        </parameter>
+        <parameter>
+          <name>section_id</name>
+        </parameter>
+        <parameter>
+          <name>see_also</name>
+          <description>#MeepSettings</description>
+        </parameter>
+        <parameter>
+          <name>stability</name>
+          <description>Stable</description>
+        </parameter>
+        <parameter>
+          <name>include</name>
+          <description>meep/app.h</description>
+        </parameter>
+        <parameter>
+          <name>image</name>
+          <description>application.png</description>
+        </parameter>
+      </parameters>
+      <description>The application class handles ...</description>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -266,21 +276,23 @@ The application class handles ...</description>
  * As described in http://bugzilla.gnome.org/show_bug.cgi?id=457077 it
  * returns nothing.
  */</input>
-  <docblock>
-    <identifier>
-      <name>SECTION:tester</name>
-    </identifier>
-    <parameters>
-      <parameter>
-        <name>short_description</name>
-        <description>module for gtk-doc unit test</description>
-      </parameter>
-    </parameters>
-    <description>This file contains non-sense code for the sole purpose of testing the docs.
+  <parser>
+    <docblock>
+      <identifier>
+        <name>SECTION:tester</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>short_description</name>
+          <description>module for gtk-doc unit test</description>
+        </parameter>
+      </parameters>
+      <description>This file contains non-sense code for the sole purpose of testing the docs.
 
 As described in http://bugzilla.gnome.org/show_bug.cgi?id=457077 it
 returns nothing.</description>
-  </docblock>
+    </docblock>
+  </parser>
 </test>
 
 <test>

@@ -7,22 +7,24 @@
  * regress_forced_method: (method)
  * @obj: A #RegressTestObj
  */</input>
-  <docblock>
-    <identifier>
-      <name>regress_forced_method</name>
-      <annotations>
-        <annotation>
-          <name>method</name>
-        </annotation>
-      </annotations>
-    </identifier>
-    <parameters>
-      <parameter>
-        <name>obj</name>
-        <description>A #RegressTestObj</description>
-      </parameter>
-    </parameters>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>regress_forced_method</name>
+        <annotations>
+          <annotation>
+            <name>method</name>
+          </annotation>
+        </annotations>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>obj</name>
+          <description>A #RegressTestObj</description>
+        </parameter>
+      </parameters>
+    </docblock>
+  </parser>
 </test>
 
 </tests>

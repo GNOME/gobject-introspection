@@ -9,13 +9,15 @@
  * Description: This is a callback with a 'closure' argument that is not named
  * 'user_data' and hence has to be annotated.
  **/</input>
-  <docblock>
-    <identifier>
-      <name>shiny_function</name>
-    </identifier>
-    <description>This is a callback with a 'closure' argument that is not named
+  <parser>
+    <docblock>
+      <identifier>
+        <name>shiny_function</name>
+      </identifier>
+      <description>This is a callback with a 'closure' argument that is not named
 'user_data' and hence has to be annotated.</description>
-  </docblock>
+    </docblock>
+  </parser>
 </test>
 
 </tests>

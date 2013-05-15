@@ -43,29 +43,30 @@
  *
  * Nothing more to say.
  */]]></input>
-  <docblock>
-    <identifier>
-      <name>SECTION:object</name>
-    </identifier>
-    <parameters>
-      <parameter>
-        <name>title</name>
-        <description>GtkdocObject</description>
-      </parameter>
-      <parameter>
-        <name>short_description</name>
-        <description>class for gtk-doc unit test</description>
-      </parameter>
-      <parameter>
-        <name>see_also</name>
-        <description>#GtkdocIface</description>
-      </parameter>
-      <parameter>
-        <name>Image</name>
-        <description>object.png</description>
-      </parameter>
-    </parameters>
-    <description><![CDATA[This file contains non-sense code for the sole purpose of testing the docs.
+  <parser>
+    <docblock>
+      <identifier>
+        <name>SECTION:object</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>title</name>
+          <description>GtkdocObject</description>
+        </parameter>
+        <parameter>
+          <name>short_description</name>
+          <description>class for gtk-doc unit test</description>
+        </parameter>
+        <parameter>
+          <name>see_also</name>
+          <description>#GtkdocIface</description>
+        </parameter>
+        <parameter>
+          <name>Image</name>
+          <description>object.png</description>
+        </parameter>
+      </parameters>
+      <description><![CDATA[This file contains non-sense code for the sole purpose of testing the docs.
 We can link to the #GtkdocObject:otest property and the #GtkdocObject::otest
 signal.
 
@@ -97,7 +98,8 @@ This example serves two main purposes:
 - having an example
 
 Nothing more to say.]]></description>
-  </docblock>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -115,32 +117,34 @@ Nothing more to say.]]></description>
  * All the internal details go here or not:
  * - single item list
  */</input>
-  <docblock>
-    <identifier>
-      <name>SECTION:object2</name>
-    </identifier>
-    <parameters>
-      <parameter>
-        <name>title</name>
-        <description>GtkdocObject2</description>
-      </parameter>
-      <parameter>
-        <name>short_description</name>
-        <description>class with interface for gtk-doc unit test</description>
-      </parameter>
-      <parameter>
-        <name>see_also</name>
-        <description>#GtkdocIface</description>
-      </parameter>
-    </parameters>
-    <description>This file contains non-sense code for the sole purpose of testing the docs.
+  <parser>
+    <docblock>
+      <identifier>
+        <name>SECTION:object2</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>title</name>
+          <description>GtkdocObject2</description>
+        </parameter>
+        <parameter>
+          <name>short_description</name>
+          <description>class with interface for gtk-doc unit test</description>
+        </parameter>
+        <parameter>
+          <name>see_also</name>
+          <description>#GtkdocIface</description>
+        </parameter>
+      </parameters>
+      <description>This file contains non-sense code for the sole purpose of testing the docs.
 
 Internals
 =========
 
 All the internal details go here or not:
 - single item list</description>
-  </docblock>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -155,25 +159,27 @@ All the internal details go here or not:
  *
  * Since: 0.1
  */]]></input>
-  <docblock>
-    <identifier>
-      <name>gtkdoc_object_new</name>
-    </identifier>
-    <description><![CDATA[Create a new instance
+  <parser>
+    <docblock>
+      <identifier>
+        <name>gtkdoc_object_new</name>
+      </identifier>
+      <description><![CDATA[Create a new instance
 <note><para>
   This will only work if you have called g_type_init() before.
 </para></note>]]></description>
-    <tags>
-      <tag>
-        <name>returns</name>
-        <description>the instance or %NULL in case of an error</description>
-      </tag>
-      <tag>
-        <name>since</name>
-        <description>0.1</description>
-      </tag>
-    </tags>
-  </docblock>
+      <tags>
+        <tag>
+          <name>returns</name>
+          <description>the instance or %NULL in case of an error</description>
+        </tag>
+        <tag>
+          <name>since</name>
+          <description>0.1</description>
+        </tag>
+      </tags>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -189,32 +195,34 @@ All the internal details go here or not:
  *
  * Since: 0.5
  */]]></input>
-  <docblock>
-    <identifier>
-      <name>gtkdoc_object_set_otest</name>
-    </identifier>
-    <parameters>
-      <parameter>
-        <name>self</name>
-        <description>the object</description>
-      </parameter>
-      <parameter>
-        <name>value</name>
-        <description>the new otest value, whose description extends further than one line will allow</description>
-      </parameter>
-    </parameters>
-    <description>Set the #GtkdocObject:otest property.</description>
-    <tags>
-      <tag>
-        <name>deprecated</name>
-        <description><![CDATA[Use g_object_set(obj,&quot;otest&quot;,value,NULL); instead.]]></description>
-      </tag>
-      <tag>
-        <name>since</name>
-        <description>0.5</description>
-      </tag>
-    </tags>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>gtkdoc_object_set_otest</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>self</name>
+          <description>the object</description>
+        </parameter>
+        <parameter>
+          <name>value</name>
+          <description>the new otest value, whose description extends further than one line will allow</description>
+        </parameter>
+      </parameters>
+      <description>Set the #GtkdocObject:otest property.</description>
+      <tags>
+        <tag>
+          <name>deprecated</name>
+          <description><![CDATA[Use g_object_set(obj,&quot;otest&quot;,value,NULL); instead.]]></description>
+        </tag>
+        <tag>
+          <name>since</name>
+          <description>0.5</description>
+        </tag>
+      </tags>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -233,34 +241,36 @@ All the internal details go here or not:
  *
  * Since: 0.5
  */]]></input>
-  <docblock>
-    <identifier>
-      <name>gtkdoc_object_frobnicate</name>
-    </identifier>
-    <parameters>
-      <parameter>
-        <name>self</name>
-        <description>the object</description>
-      </parameter>
-      <parameter>
-        <name>n</name>
-        <description>number of iterations</description>
-      </parameter>
-    </parameters>
-    <description><![CDATA[Frobnicate the content of @self @n times. This implements a
+  <parser>
+    <docblock>
+      <identifier>
+        <name>gtkdoc_object_frobnicate</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>self</name>
+          <description>the object</description>
+        </parameter>
+        <parameter>
+          <name>n</name>
+          <description>number of iterations</description>
+        </parameter>
+      </parameters>
+      <description><![CDATA[Frobnicate the content of @self @n times. This implements a
 complex algorithm (http://en.wikipedia.org/wiki/Algorithm).
 <footnote>
  <para>
    Negative frobnication can lead to unexpected behaviour.
  </para>
 </footnote>]]></description>
-    <tags>
-      <tag>
-        <name>since</name>
-        <description>0.5</description>
-      </tag>
-    </tags>
-  </docblock>
+      <tags>
+        <tag>
+          <name>since</name>
+          <description>0.5</description>
+        </tag>
+      </tags>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -273,28 +283,30 @@ complex algorithm (http://en.wikipedia.org/wiki/Algorithm).
  *
  * Returns: %TRUE for success
  */</input>
-  <docblock>
-    <identifier>
-      <name>gtkdoc_object_fooify</name>
-    </identifier>
-    <parameters>
-      <parameter>
-        <name>self</name>
-        <description>the object</description>
-      </parameter>
-      <parameter>
-        <name>...</name>
-        <description>a NULL terminated list of arguments</description>
-      </parameter>
-    </parameters>
-    <description>Fooify the content of @self.</description>
-    <tags>
-      <tag>
-        <name>returns</name>
-        <description>%TRUE for success</description>
-      </tag>
-    </tags>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>gtkdoc_object_fooify</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>self</name>
+          <description>the object</description>
+        </parameter>
+        <parameter>
+          <name>...</name>
+          <description>a NULL terminated list of arguments</description>
+        </parameter>
+      </parameters>
+      <description>Fooify the content of @self.</description>
+      <tags>
+        <tag>
+          <name>returns</name>
+          <description>%TRUE for success</description>
+        </tag>
+      </tags>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -304,18 +316,20 @@ complex algorithm (http://en.wikipedia.org/wiki/Algorithm).
    *
    * The event has been triggered.
    */</input>
-  <docblock>
-    <identifier>
-      <name>GtkdocObject::otest</name>
-    </identifier>
-    <parameters>
-      <parameter>
-        <name>self</name>
-        <description>myself</description>
-      </parameter>
-    </parameters>
-    <description>The event has been triggered.</description>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>GtkdocObject::otest</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>self</name>
+          <description>myself</description>
+        </parameter>
+      </parameters>
+      <description>The event has been triggered.</description>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -327,24 +341,26 @@ complex algorithm (http://en.wikipedia.org/wiki/Algorithm).
    *
    * Deprecated: Use the #GtkdocObject::otest signal instead.
    */</input>
-  <docblock>
-    <identifier>
-      <name>GtkdocObject::dep-otest</name>
-    </identifier>
-    <parameters>
-      <parameter>
-        <name>self</name>
-        <description>myself</description>
-      </parameter>
-    </parameters>
-    <description>The event has been triggered.</description>
-    <tags>
-      <tag>
-        <name>deprecated</name>
-        <description>Use the #GtkdocObject::otest signal instead.</description>
-      </tag>
-    </tags>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>GtkdocObject::dep-otest</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>self</name>
+          <description>myself</description>
+        </parameter>
+      </parameters>
+      <description>The event has been triggered.</description>
+      <tags>
+        <tag>
+          <name>deprecated</name>
+          <description>Use the #GtkdocObject::otest signal instead.</description>
+        </tag>
+      </tags>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -353,12 +369,14 @@ complex algorithm (http://en.wikipedia.org/wiki/Algorithm).
    *
    * Something has happened.
    */</input>
-  <docblock>
-    <identifier>
-      <name>GtkdocObject::strings-changed</name>
-    </identifier>
-    <description>Something has happened.</description>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>GtkdocObject::strings-changed</name>
+      </identifier>
+      <description>Something has happened.</description>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -367,12 +385,14 @@ complex algorithm (http://en.wikipedia.org/wiki/Algorithm).
    *
    * Something has happened.
    */</input>
-  <docblock>
-    <identifier>
-      <name>GtkdocObject::variant-changed</name>
-    </identifier>
-    <description>Something has happened.</description>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>GtkdocObject::variant-changed</name>
+      </identifier>
+      <description>Something has happened.</description>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -381,17 +401,19 @@ complex algorithm (http://en.wikipedia.org/wiki/Algorithm).
    *
    * Since: 0.1
    */</input>
-  <docblock>
-    <identifier>
-      <name>GtkdocObject:otest</name>
-    </identifier>
-    <tags>
-      <tag>
-        <name>since</name>
-        <description>0.1</description>
-      </tag>
-    </tags>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>GtkdocObject:otest</name>
+      </identifier>
+      <tags>
+        <tag>
+          <name>since</name>
+          <description>0.1</description>
+        </tag>
+      </tags>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -400,17 +422,19 @@ complex algorithm (http://en.wikipedia.org/wiki/Algorithm).
    *
    * Deprecated: use #GtkdocObject:otest property
    */</input>
-  <docblock>
-    <identifier>
-      <name>GtkdocObject:dep-otest</name>
-    </identifier>
-    <tags>
-      <tag>
-        <name>deprecated</name>
-        <description>use #GtkdocObject:otest property</description>
-      </tag>
-    </tags>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>GtkdocObject:dep-otest</name>
+      </identifier>
+      <tags>
+        <tag>
+          <name>deprecated</name>
+          <description>use #GtkdocObject:otest property</description>
+        </tag>
+      </tags>
+    </docblock>
+  </parser>
 </test>
 
 </tests>

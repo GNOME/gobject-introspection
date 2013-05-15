@@ -84,12 +84,14 @@ something */</input>
   <input>/**
 Test
 something */</input>
-  <docblock>
-    <identifier>
-      <name>Test</name>
-    </identifier>
-    <description>something</description>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>Test</name>
+      </identifier>
+      <description>something</description>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -99,12 +101,14 @@ something */</input>
   <input>/**
 Test
 something **/</input>
-  <docblock>
-    <identifier>
-      <name>Test</name>
-    </identifier>
-    <description>something</description>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>Test</name>
+      </identifier>
+      <description>something</description>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -119,18 +123,20 @@ something **/</input>
  *
  * The application class handles ...
  */</input>
-  <docblock>
-    <identifier>
-      <name>SECTION:meepapp</name>
-    </identifier>
-    <parameters>
-      <parameter>
-        <name>short_description</name>
-        <description>the application class</description>
-      </parameter>
-    </parameters>
-    <description>The application class handles ...</description>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>SECTION:meepapp</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>short_description</name>
+          <description>the application class</description>
+        </parameter>
+      </parameters>
+      <description>The application class handles ...</description>
+    </docblock>
+  </parser>
 </test>
 
 </tests>

@@ -12,32 +12,34 @@
  * This is here just for the sake of being overriden by its
  * annotation_object_watch_full().
  */</input>
-  <docblock>
-    <identifier>
-      <name>annotation_object_watch</name>
-      <annotations>
-        <annotation>
-          <name>skip</name>
-        </annotation>
-      </annotations>
-    </identifier>
-    <parameters>
-      <parameter>
-        <name>object</name>
-        <description>A #AnnotationObject</description>
-      </parameter>
-      <parameter>
-        <name>func</name>
-        <description>The callback</description>
-      </parameter>
-      <parameter>
-        <name>user_data</name>
-        <description>The callback data</description>
-      </parameter>
-    </parameters>
-    <description>This is here just for the sake of being overriden by its
+  <parser>
+    <docblock>
+      <identifier>
+        <name>annotation_object_watch</name>
+        <annotations>
+          <annotation>
+            <name>skip</name>
+          </annotation>
+        </annotations>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>object</name>
+          <description>A #AnnotationObject</description>
+        </parameter>
+        <parameter>
+          <name>func</name>
+          <description>The callback</description>
+        </parameter>
+        <parameter>
+          <name>user_data</name>
+          <description>The callback data</description>
+        </parameter>
+      </parameters>
+      <description>This is here just for the sake of being overriden by its
 annotation_object_watch_full().</description>
-  </docblock>
+    </docblock>
+  </parser>
 </test>
 
 </tests>

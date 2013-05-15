@@ -13,18 +13,20 @@
  *
  * Value: 10000000000UL
  */</input>
-  <docblock>
-    <identifier>
-      <name>ANNOTATION_CALCULATED_LARGE</name>
-    </identifier>
-    <description>Constant to define a calculated large value</description>
-    <tags>
-      <tag>
-       <name>value</name>
-       <description>10000000000UL</description>
-      </tag>
-    </tags>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>ANNOTATION_CALCULATED_LARGE</name>
+      </identifier>
+      <description>Constant to define a calculated large value</description>
+      <tags>
+        <tag>
+         <name>value</name>
+         <description>10000000000UL</description>
+        </tag>
+      </tags>
+    </docblock>
+  </parser>
 </test>
 
 </tests>

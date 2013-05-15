@@ -13,18 +13,20 @@
  *
  * Ref func: regress_test_fundamental_object_ref
  */</input>
-  <docblock>
-    <identifier>
-      <name>RegressTestFundamentalObject</name>
-    </identifier>
-    <description>This object tests regressions...</description>
-    <tags>
-      <tag>
-        <name>ref func</name>
-        <description>regress_test_fundamental_object_ref</description>
-      </tag>
-    </tags>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>RegressTestFundamentalObject</name>
+      </identifier>
+      <description>This object tests regressions...</description>
+      <tags>
+        <tag>
+          <name>ref func</name>
+          <description>regress_test_fundamental_object_ref</description>
+        </tag>
+      </tags>
+    </docblock>
+  </parser>
 </test>
 
 </tests>

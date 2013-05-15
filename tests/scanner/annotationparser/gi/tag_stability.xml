@@ -8,17 +8,19 @@
  *
  * Stability: Stable
  **/</input>
-  <docblock>
-    <identifier>
-      <name>annotation_versioned</name>
-    </identifier>
-    <tags>
-      <tag>
-        <name>stability</name>
-        <description>Stable</description>
-      </tag>
-    </tags>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>annotation_versioned</name>
+      </identifier>
+      <tags>
+        <tag>
+          <name>stability</name>
+          <description>Stable</description>
+        </tag>
+      </tags>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -27,17 +29,19 @@
  *
  * Stability: Unstable
  **/</input>
-  <docblock>
-    <identifier>
-      <name>annotation_versioned</name>
-    </identifier>
-    <tags>
-      <tag>
-        <name>stability</name>
-        <description>Unstable</description>
-      </tag>
-    </tags>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>annotation_versioned</name>
+      </identifier>
+      <tags>
+        <tag>
+          <name>stability</name>
+          <description>Unstable</description>
+        </tag>
+      </tags>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -46,17 +50,19 @@
  *
  * Stability: Private
  **/</input>
-  <docblock>
-    <identifier>
-      <name>annotation_versioned</name>
-    </identifier>
-    <tags>
-      <tag>
-        <name>stability</name>
-        <description>Private</description>
-      </tag>
-    </tags>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>annotation_versioned</name>
+      </identifier>
+      <tags>
+        <tag>
+          <name>stability</name>
+          <description>Private</description>
+        </tag>
+      </tags>
+    </docblock>
+  </parser>
 </test>
 
 <test>
@@ -65,17 +71,19 @@
  *
  * Stability: behavior tends to vary depending on the phase of the moon.
  **/</input>
-  <docblock>
-    <identifier>
-      <name>annotation_versioned</name>
-    </identifier>
-    <tags>
-      <tag>
-        <name>stability</name>
-        <description>behavior tends to vary depending on the phase of the moon.</description>
-      </tag>
-    </tags>
-  </docblock>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>annotation_versioned</name>
+      </identifier>
+      <tags>
+        <tag>
+          <name>stability</name>
+          <description>behavior tends to vary depending on the phase of the moon.</description>
+        </tag>
+      </tags>
+    </docblock>
+  </parser>
 </test>
 
 </tests>

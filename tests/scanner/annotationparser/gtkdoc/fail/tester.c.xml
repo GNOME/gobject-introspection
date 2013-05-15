@@ -18,21 +18,23 @@
  * @short_description: module for gtk-doc unit test
  * @title: GtkdocTesterNoLongDesc
  */</input>
- <docblock>
-   <identifier>
-     <name>SECTION:tester_nolongdesc</name>
-   </identifier>
-   <parameters>
-     <parameter>
-       <name>short_description</name>
-       <description>module for gtk-doc unit test</description>
-     </parameter>
-     <parameter>
-       <name>title</name>
-       <description>GtkdocTesterNoLongDesc</description>
-     </parameter>
-   </parameters>
- </docblock>
+  <parser>
+   <docblock>
+     <identifier>
+       <name>SECTION:tester_nolongdesc</name>
+     </identifier>
+     <parameters>
+       <parameter>
+         <name>short_description</name>
+         <description>module for gtk-doc unit test</description>
+       </parameter>
+       <parameter>
+         <name>title</name>
+         <description>GtkdocTesterNoLongDesc</description>
+       </parameter>
+     </parameters>
+   </docblock>
+  </parser>
 </test>
 
 <test>
@@ -42,18 +44,20 @@
  *
  * This file contains non-sense code for the sole purpose of testing the docs.
  */</input>
- <docblock>
-   <identifier>
-     <name>SECTION:tester_noshortdesc</name>
-   </identifier>
-   <parameters>
-     <parameter>
-       <name>title</name>
-       <description>GtkdocTesterNoShortDesc</description>
-     </parameter>
-   </parameters>
-   <description>This file contains non-sense code for the sole purpose of testing the docs.</description>
- </docblock>
+  <parser>
+   <docblock>
+     <identifier>
+       <name>SECTION:tester_noshortdesc</name>
+     </identifier>
+     <parameters>
+       <parameter>
+         <name>title</name>
+         <description>GtkdocTesterNoShortDesc</description>
+       </parameter>
+     </parameters>
+     <description>This file contains non-sense code for the sole purpose of testing the docs.</description>
+   </docblock>
+  </parser>
 </test>
 
 <test>
@@ -64,33 +68,37 @@
  *
  * This file contains non-sense code for the sole purpose of testing the docs.
  */</input>
- <docblock>
-   <identifier>
-     <name>SECTION:tester_brokendocs</name>
-   </identifier>
-   <parameters>
-     <parameter>
-       <name>short_description</name>
-       <description>module for gtk-doc unit test</description>
-     </parameter>
-     <parameter>
-       <name>title</name>
-       <description>GtkdocTesterBrokenDocs</description>
-     </parameter>
-   </parameters>
-   <description>This file contains non-sense code for the sole purpose of testing the docs.</description>
- </docblock>
+  <parser>
+   <docblock>
+     <identifier>
+       <name>SECTION:tester_brokendocs</name>
+     </identifier>
+     <parameters>
+       <parameter>
+         <name>short_description</name>
+         <description>module for gtk-doc unit test</description>
+       </parameter>
+       <parameter>
+         <name>title</name>
+         <description>GtkdocTesterBrokenDocs</description>
+       </parameter>
+     </parameters>
+     <description>This file contains non-sense code for the sole purpose of testing the docs.</description>
+   </docblock>
+  </parser>
 </test>
 
 <test>
   <input>/**
  * func_no_docs:
  */</input>
- <docblock>
-   <identifier>
-     <name>func_no_docs</name>
-   </identifier>
- </docblock>
+  <parser>
+   <docblock>
+     <identifier>
+       <name>func_no_docs</name>
+     </identifier>
+   </docblock>
+  </parser>
 </test>
 
 <test>
@@ -99,12 +107,14 @@
  *
  * Here we document the function but not the parameters.
  */</input>
- <docblock>
-   <identifier>
-     <name>func_no_item_docs</name>
-   </identifier>
-   <description>Here we document the function but not the parameters.</description>
- </docblock>
+  <parser>
+   <docblock>
+     <identifier>
+       <name>func_no_item_docs</name>
+     </identifier>
+     <description>Here we document the function but not the parameters.</description>
+   </docblock>
+  </parser>
 </test>
 
 <test>
@@ -114,18 +124,20 @@
  *
  * Here we document the function but not all the parameters.
  */</input>
- <docblock>
-   <identifier>
-     <name>func_incomplete_docs</name>
-   </identifier>
-   <parameters>
-     <parameter>
-       <name>a</name>
-       <description>a value</description>
-     </parameter>
-   </parameters>
-   <description>Here we document the function but not all the parameters.</description>
- </docblock>
+  <parser>
+   <docblock>
+     <identifier>
+       <name>func_incomplete_docs</name>
+     </identifier>
+     <parameters>
+       <parameter>
+         <name>a</name>
+         <description>a value</description>
+       </parameter>
+     </parameters>
+     <description>Here we document the function but not all the parameters.</description>
+   </docblock>
+  </parser>
 </test>
 
 <test>
@@ -137,26 +149,28 @@
  *
  * Here we document the function and more than the actual parameters.
  */</input>
- <docblock>
-   <identifier>
-     <name>func_unused_docs</name>
-   </identifier>
-   <parameters>
-     <parameter>
-       <name>a</name>
-       <description>a value</description>
-     </parameter>
-     <parameter>
-       <name>b</name>
-       <description>a value</description>
-     </parameter>
-     <parameter>
-       <name>c</name>
-       <description>an unexisting value</description>
-     </parameter>
-   </parameters>
-   <description>Here we document the function and more than the actual parameters.</description>
- </docblock>
+  <parser>
+   <docblock>
+     <identifier>
+       <name>func_unused_docs</name>
+     </identifier>
+     <parameters>
+       <parameter>
+         <name>a</name>
+         <description>a value</description>
+       </parameter>
+       <parameter>
+         <name>b</name>
+         <description>a value</description>
+       </parameter>
+       <parameter>
+         <name>c</name>
+         <description>an unexisting value</description>
+       </parameter>
+     </parameters>
+     <description>Here we document the function and more than the actual parameters.</description>
+   </docblock>
+  </parser>
 </test>
 
 </tests>
