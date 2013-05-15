@@ -841,13 +841,13 @@ class GtkDocCommentBlockParser(object):
 
         comment_blocks = {}
 
-        for comment in comments:
+        for (comment, filename, lineno) in comments:
             try:
-                comment_block = self.parse_comment_block(comment)
+                comment_block = self.parse_comment_block(comment, filename, lineno)
             except Exception:
                 message.warn('unrecoverable parse error, please file a GObject-Introspection '
                              'bug report including the complete comment block at the '
-                             'indicated location.', message.Position(comment[1], comment[2]))
+                             'indicated location.', message.Position(filename, lineno))
                 continue
 
             if comment_block is not None:
@@ -866,16 +866,16 @@ class GtkDocCommentBlockParser(object):
 
         return comment_blocks
 
-    def parse_comment_block(self, comment):
+    def parse_comment_block(self, comment, filename, lineno):
         '''
         Parse a single GTK-Doc comment block.
 
         :param comment: string representing the GTK-Doc comment block including it's
                         start ("``/**``") and end ("``*/``") tokens.
-        :returns: a :class:`DocBlock` object or ``None``
+        :param filename: source file name where the comment block originated from
+        :param lineno: line number in the source file where the comment block starts
+        :returns: a :class:`GtkDocCommentBlock` object or ``None``
         '''
-
-        comment, filename, lineno = comment
 
         # Assign line numbers to each line of the comment block,
         # which will later be used as the offset to calculate the
