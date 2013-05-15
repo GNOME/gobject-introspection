@@ -3,14 +3,14 @@
 <tests>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * SECTION:types
  * @title: GtkdocTypes
  * @short_description: other gobject types for gtk-doc unit test
  * @see_also: #GtkdocObject, #GtkdocIface
  *
  * This file contains non-sense code for the sole purpose of testing the docs.
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>SECTION:types</name>

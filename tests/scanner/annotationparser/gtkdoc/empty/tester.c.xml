@@ -3,7 +3,7 @@
 <tests>
 
 <test>
-  <commentblock><![CDATA[/**
+  <input><![CDATA[/**
  * SECTION:tester
  * @short_description: module for gtk-doc unit test
  *
@@ -11,7 +11,7 @@
  *
  * As described in http://bugzilla.gnome.org/show_bug.cgi?id=457077 it
  * returns nothing.
- */]]></commentblock>
+ */]]></input>
   <docblock>
     <identifier>
       <name>SECTION:tester</name>
@@ -30,12 +30,12 @@ returns nothing.]]></description>
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * test:
  * @a: arg
  *
  * lonely function
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>test</name>

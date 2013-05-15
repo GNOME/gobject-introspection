@@ -3,14 +3,14 @@
 <tests>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * annotation_object_foreach:
  * @object: a #AnnotationObject
  * @func: (scope call): Callback to invoke
  * @user_data: Callback user data
  *
  * Test taking a call-scoped callback
- **/</commentblock>
+ **/</input>
   <docblock>
     <identifier>
       <name>annotation_object_foreach</name>
@@ -44,13 +44,13 @@
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * regress_test_callback_destroy_notify:
  * @callback: (scope notified):
  *
  * Notified - callback persists until a DestroyNotify delegate
  * is invoked.
- **/</commentblock>
+ **/</input>
   <docblock>
     <identifier>
       <name>regress_test_callback_destroy_notify</name>
@@ -76,11 +76,11 @@ is invoked.</description>
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * regress_test_callback_async:
  * @callback: (scope async):
  *
- **/</commentblock>
+ **/</input>
   <docblock>
     <identifier>
       <name>regress_test_callback_async</name>

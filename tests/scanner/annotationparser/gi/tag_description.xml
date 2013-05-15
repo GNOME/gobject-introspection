@@ -3,12 +3,12 @@
 <tests>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * shiny_function:
  *
  * Description: This is a callback with a 'closure' argument that is not named
  * 'user_data' and hence has to be annotated.
- **/</commentblock>
+ **/</input>
   <docblock>
     <identifier>
       <name>shiny_function</name>

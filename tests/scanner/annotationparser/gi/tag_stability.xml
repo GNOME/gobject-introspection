@@ -3,11 +3,11 @@
 <tests>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * annotation_versioned:
  *
  * Stability: Stable
- **/</commentblock>
+ **/</input>
   <docblock>
     <identifier>
       <name>annotation_versioned</name>
@@ -22,11 +22,11 @@
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * annotation_versioned:
  *
  * Stability: Unstable
- **/</commentblock>
+ **/</input>
   <docblock>
     <identifier>
       <name>annotation_versioned</name>
@@ -41,11 +41,11 @@
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * annotation_versioned:
  *
  * Stability: Private
- **/</commentblock>
+ **/</input>
   <docblock>
     <identifier>
       <name>annotation_versioned</name>
@@ -60,11 +60,11 @@
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * annotation_versioned:
  *
  * Stability: behavior tends to vary depending on the phase of the moon.
- **/</commentblock>
+ **/</input>
   <docblock>
     <identifier>
       <name>annotation_versioned</name>

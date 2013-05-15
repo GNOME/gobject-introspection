@@ -6,13 +6,13 @@
   <!--
   "Get value func:" tag syntax
   -->
-  <commentblock>/**
+  <input>/**
  * RegressTestFundamentalObject:
  *
  * This object tests regressions...
  *
  * Get value func: regress_test_value_get_fundamental_object
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>RegressTestFundamentalObject</name>

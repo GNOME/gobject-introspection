@@ -3,12 +3,12 @@
 <tests>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * GtkdocAnnotation:
  * @that: (allow-none): eventualy points to something
  *
  * small struct
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>GtkdocAnnotation</name>

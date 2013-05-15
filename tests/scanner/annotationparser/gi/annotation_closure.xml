@@ -3,13 +3,13 @@
 <tests>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * AnnotationNotifyFunc:
  * @data: (closure): The user data
  *
  * This is a callback with a 'closure' argument that is not named
  * 'user_data' and hence has to be annotated.
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>AnnotationNotifyFunc</name>
@@ -31,13 +31,13 @@
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * annotation_custom_destroy:
  * @callback: (destroy destroy) (closure data): Destroy notification
  *
  * Test messing up the heuristic of closure/destroy-notification
  * detection, and fixing it via annotations.
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>annotation_custom_destroy</name>

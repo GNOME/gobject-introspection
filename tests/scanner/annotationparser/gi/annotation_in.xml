@@ -3,7 +3,7 @@
 <tests>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * annotation_object_in:
  * @object: a #GObject
  * @inarg: (in) (transfer none): This is an argument test
@@ -11,7 +11,7 @@
  * This is a test for in arguments
  *
  * Return value: an int
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>annotation_object_in</name>

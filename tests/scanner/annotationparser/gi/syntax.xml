@@ -6,84 +6,84 @@
   <!--
   Not GTK-Doc
   -->
-  <commentblock>//Test</commentblock>
+  <input>//Test</input>
 </test>
 
 <test>
   <!--
   Not GTK-Doc
   -->
-  <commentblock>// Test</commentblock>
+  <input>// Test</input>
 </test>
 
 <test>
   <!--
   Not GTK-Doc
   -->
-  <commentblock>/*Test*/</commentblock>
+  <input>/*Test*/</input>
 </test>
 
 <test>
   <!--
   Not GTK-Doc
   -->
-  <commentblock>/* Test */</commentblock>
+  <input>/* Test */</input>
 </test>
 
 <test>
   <!--
   Not GTK-Doc
   -->
-  <commentblock>/* Test
-something */</commentblock>
+  <input>/* Test
+something */</input>
 </test>
 
 <test>
   <!--
   Not GTK-Doc
   -->
-  <commentblock>/*
+  <input>/*
 Test
-something */</commentblock>
+something */</input>
 </test>
 
 <test>
   <!--
   Not GTK-Doc
   -->
-  <commentblock>/**Test*/</commentblock>
+  <input>/**Test*/</input>
 </test>
 
 <test>
   <!--
   Not GTK-Doc
   -->
-  <commentblock>/** Test */</commentblock>
+  <input>/** Test */</input>
 </test>
 
 <test>
   <!--
   Not GTK-Doc
   -->
-  <commentblock>/** Test
-something */</commentblock>
+  <input>/** Test
+something */</input>
 </test>
 
 <test>
   <!--
   Not GTK-Doc
   -->
-  <commentblock>/**
-*/</commentblock>
+  <input>/**
+*/</input>
 </test>
 
 <test>
   <!--
   Technically not GTK-Doc, but we need to support this for backwards compatibility
   -->
-  <commentblock>/**
+  <input>/**
 Test
-something */</commentblock>
+something */</input>
   <docblock>
     <identifier>
       <name>Test</name>
@@ -96,9 +96,9 @@ something */</commentblock>
   <!--
   Technically not GTK-Doc, but we need to support this for backwards compatibility
   -->
-  <commentblock>/**
+  <input>/**
 Test
-something **/</commentblock>
+something **/</input>
   <docblock>
     <identifier>
       <name>Test</name>
@@ -112,13 +112,13 @@ something **/</commentblock>
   Broken comment block, signal the start of the comment block description followed
   by a parameter instead.
   -->
-  <commentblock>/**
+  <input>/**
  * SECTION:meepapp
  *
  * @short_description: the application class
  *
  * The application class handles ...
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>SECTION:meepapp</name>

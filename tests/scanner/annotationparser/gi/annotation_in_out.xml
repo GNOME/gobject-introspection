@@ -3,7 +3,7 @@
 <tests>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * annotation_object_inout:
  * @object: a #GObject
  * @inoutarg: (inout): This is an argument test
@@ -12,7 +12,7 @@
  * This is a test for inout arguments
  *
  * Return value: an int
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>annotation_object_inout</name>

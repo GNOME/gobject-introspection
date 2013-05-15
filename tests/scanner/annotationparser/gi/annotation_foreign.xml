@@ -3,10 +3,10 @@
 <tests>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * FooForeignStruct: (foreign)
  *
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>FooForeignStruct</name>

@@ -3,7 +3,7 @@
 <tests>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * annotation_object_watch: (skip)
  * @object: A #AnnotationObject
  * @func: The callback
@@ -11,7 +11,7 @@
  *
  * This is here just for the sake of being overriden by its
  * annotation_object_watch_full().
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>annotation_object_watch</name>

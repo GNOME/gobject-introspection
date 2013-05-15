@@ -3,14 +3,14 @@
 <tests>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * Bug324535:
  * @BUG_324535_A: enum 1
  * @BUG_324535_B: enum 2
  * @BUG_324535_C: enum 3
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=324535
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>Bug324535</name>
@@ -34,12 +34,12 @@
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * bug_481811:
  * @x: argument
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=481811
- **/</commentblock>
+ **/</input>
   <docblock>
     <identifier>
       <name>bug_481811</name>
@@ -55,14 +55,14 @@
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * bug_501038:
  * @a: value
  * @b: deprecated value
  * @_b: scrambled deprecated value
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=501038
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>bug_501038</name>
@@ -86,12 +86,12 @@
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * bug_460127:
  * @a: field
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=460127
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>bug_460127</name>
@@ -107,11 +107,11 @@
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * bug_477532:
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=477532
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>bug_477532</name>
@@ -121,12 +121,12 @@
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * Bug446648:
  * @BUG_446648_FOO: field
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=446648
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>Bug446648</name>
@@ -142,12 +142,12 @@
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * Bug512154:
  * @index: field
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=512154
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>Bug512154</name>
@@ -163,14 +163,14 @@
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * bug_512155a_function_pointer_t:
  * @arg1: param 1
  * @arg2: param 1
  * @arg3: param 1
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=512155
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>bug_512155a_function_pointer_t</name>
@@ -194,14 +194,14 @@
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * bug_512155b_function_pointer_t:
  * @arg1: param 1
  * @arg2: param 1
  * @arg3: param 1
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=512155
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>bug_512155b_function_pointer_t</name>
@@ -225,14 +225,14 @@
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * bug_512155c_function_pointer_t:
  * @arg1: param 1
  * @arg2: param 1
  * @arg3: param 1
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=512155
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>bug_512155c_function_pointer_t</name>
@@ -256,13 +256,13 @@
 </test>
 
 <test>
-  <commentblock><![CDATA[/**
+  <input><![CDATA[/**
  * BUG_530758:
  *
  * {{![CDATA[http://bugzilla.gnome.org/show_bug.cgi?id=530758#c1]]!}}
  *
  * <ulink url="http://bugzilla.gnome.org/show_bug.cgi?id=530758#c1">Test</ulink>
- */]]></commentblock>
+ */]]></input>
   <docblock>
     <identifier>
       <name>BUG_530758</name>
@@ -274,14 +274,14 @@
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * bug_532395a:
  * @number: a number
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=532395
  *
  * Returns: number
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>bug_532395a</name>
@@ -303,11 +303,11 @@
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * bug_532395b:
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=532395
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>bug_532395b</name>
@@ -317,14 +317,14 @@
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * bug_544172:
  * @self: object pointer.
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=544172
  *
  * Returns: result or %NULL.
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>bug_544172</name>
@@ -346,12 +346,12 @@
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * bug_554833:
  * @i: value;
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=554833
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>bug_554833</name>
@@ -367,13 +367,13 @@
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * bug_554833_new:
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=554833
  *
  * Returns: result
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>bug_554833_new</name>
@@ -389,13 +389,13 @@
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * Bug165425a:
  * @i: data as int
  * @f: data as float
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=165425
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>Bug165425a</name>
@@ -415,13 +415,13 @@
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * Bug165425b:
  * @i: data as int
  * @f: data as float
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=165425
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>Bug165425b</name>
@@ -441,14 +441,14 @@
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * Bug642998:
  * @red: red color intensity, from 0–255
  * @green: green color intensity, from 0–255
  * @blue: blue color intensity, from 0–255
  *
  * https://bugzilla.gnome.org/show_bug.cgi?id=642998
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>Bug642998</name>
@@ -472,7 +472,7 @@
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * Bug644291:
  * @BUG_644291_START: foo
  * @BUG_644291_TEXT: bar
@@ -482,7 +482,7 @@
  * @BUG_644291_ASSIGN_TO: cows
  *
  * https://bugzilla.gnome.org/show_bug.cgi?id=644291
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>Bug644291</name>
@@ -518,13 +518,13 @@
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * BUG_000000_VA2:
  * @name: a name
  * @...: A printf-style message to output
  *
  * Outputs a message.
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>BUG_000000_VA2</name>
@@ -544,13 +544,13 @@
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * BUG_000000_VA3:
  * @name: a name
  * @...: A printf-style message to output
  *
  * Outputs a message.
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>BUG_000000_VA3</name>
@@ -570,13 +570,13 @@
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * Bug000000Scope:
  *
  * Opaque structure.
  * "warning: Field descriptions for Bug000000Scope are missing in source code comment block."
  * but not if we remove the blank line before "int b";
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>Bug000000Scope</name>
@@ -588,14 +588,14 @@ but not if we remove the blank line before "int b";</description>
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * gst_play_marshal_BUFFER__BOXED:
  * @closure: test
  * @return_value: test
  * @marshal_data: test
  *
  * test.
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>gst_play_marshal_BUFFER__BOXED</name>
@@ -619,11 +619,11 @@ but not if we remove the blank line before "int b";</description>
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * BUG_656773a:
  *
  * https://bugzilla.gnome.org/show_bug.cgi?id=656773
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>BUG_656773a</name>
@@ -633,11 +633,11 @@ but not if we remove the blank line before "int b";</description>
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * BUG_656773b:
  *
  * https://bugzilla.gnome.org/show_bug.cgi?id=656773
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>BUG_656773b</name>
@@ -647,11 +647,11 @@ but not if we remove the blank line before "int b";</description>
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * BUG_656773c:
  *
  * https://bugzilla.gnome.org/show_bug.cgi?id=656773
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>BUG_656773c</name>
@@ -661,11 +661,11 @@ but not if we remove the blank line before "int b";</description>
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * BUG_656946:
  *
  * https://bugzilla.gnome.org/show_bug.cgi?id=656946
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>BUG_656946</name>

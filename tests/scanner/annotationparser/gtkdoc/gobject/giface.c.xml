@@ -3,7 +3,7 @@
 <tests>
 
 <test>
-  <commentblock><![CDATA[/**
+  <input><![CDATA[/**
  * SECTION:iface
  * @title: GtkdocIface
  * @short_description: interface for gtk-doc unit test
@@ -22,7 +22,7 @@
  *
  * Just incase you wonder, special caracters can be escaped with a \ like in \%
  * or \# or even \@.
- */]]></commentblock>
+ */]]></input>
   <docblock>
     <identifier>
       <name>SECTION:iface</name>
@@ -58,14 +58,14 @@ or \# or even \@.]]></description>
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * SECTION:iface2
  * @title: GtkdocIface2
  * @short_description: interface with a prerequisite for gtk-doc unit test
  * @see_also: #GtkdocObject, #GtkdocIface
  *
  * This file contains non-sense code for the sole purpose of testing the docs.
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>SECTION:iface2</name>
@@ -89,7 +89,7 @@ or \# or even \@.]]></description>
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * gtkdoc_iface_configure:
  * @config: settings
  *
@@ -98,7 +98,7 @@ or \# or even \@.]]></description>
  * Returns: %TRUE for sucess or %FALSE in case of an error
  *
  * Since: 0.1
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>gtkdoc_iface_configure</name>
@@ -124,12 +124,12 @@ or \# or even \@.]]></description>
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
      * GtkdocIface::itest:
      * @self: myself
      *
      * The event has been triggered.
-     */</commentblock>
+     */</input>
   <docblock>
     <identifier>
       <name>GtkdocIface::itest</name>

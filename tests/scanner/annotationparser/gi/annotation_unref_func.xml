@@ -6,13 +6,13 @@
   <!--
   "Unref func:" tag syntax
   -->
-  <commentblock>/**
+  <input>/**
  * RegressTestFundamentalObject:
  *
  * This object tests regressions...
  *
  * Unref func: regress_test_fundamental_object_unref
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>RegressTestFundamentalObject</name>

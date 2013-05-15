@@ -3,11 +3,11 @@
 <tests>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * foo_test_array:
  *
  * Returns: (element-type utf8) (transfer container): returns %NULL.
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>foo_test_array</name>
@@ -40,14 +40,14 @@
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * RegressTestObj::sig-with-hash-prop:
  * @self: an object
  * @hash: (element-type utf8 GObject.Value):
  *
  * This test signal is like TelepathyGlib's
  *  TpAccount::status-changed
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>RegressTestObj::sig-with-hash-prop</name>
@@ -80,14 +80,14 @@
 </test>
 
 <test>
-  <commentblock><![CDATA[/**
+  <input><![CDATA[/**
  * regress_test_ghash_nested_everything_return2:
  *
  * Another way of specifying nested parameterized types: using the
  * element-type annotation.
  *
  * Return value: (element-type utf8 GLib.HashTable<utf8,utf8>) (transfer full):
- */]]></commentblock>
+ */]]></input>
   <docblock>
     <identifier>
       <name>regress_test_ghash_nested_everything_return2</name>

@@ -3,7 +3,7 @@
 <tests>
 
 <test>
-  <commentblock><![CDATA[/**
+  <input><![CDATA[/**
  * SECTION:object
  * @title: GtkdocObject
  * @short_description: class for gtk-doc unit test
@@ -42,7 +42,7 @@
  * - having an example
  *
  * Nothing more to say.
- */]]></commentblock>
+ */]]></input>
   <docblock>
     <identifier>
       <name>SECTION:object</name>
@@ -101,7 +101,7 @@ Nothing more to say.]]></description>
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * SECTION:object2
  * @title: GtkdocObject2
  * @short_description: class with interface for gtk-doc unit test
@@ -114,7 +114,7 @@ Nothing more to say.]]></description>
  *
  * All the internal details go here or not:
  * - single item list
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>SECTION:object2</name>
@@ -144,7 +144,7 @@ All the internal details go here or not:
 </test>
 
 <test>
-  <commentblock><![CDATA[/**
+  <input><![CDATA[/**
  * gtkdoc_object_new:
  *
  * Create a new instance
@@ -154,7 +154,7 @@ All the internal details go here or not:
  * Returns: the instance or %NULL in case of an error
  *
  * Since: 0.1
- */]]></commentblock>
+ */]]></input>
   <docblock>
     <identifier>
       <name>gtkdoc_object_new</name>
@@ -177,7 +177,7 @@ All the internal details go here or not:
 </test>
 
 <test>
-  <commentblock><![CDATA[/**
+  <input><![CDATA[/**
  * gtkdoc_object_set_otest:
  * @self: the object
  * @value: the new otest value, whose description extends further than one
@@ -188,7 +188,7 @@ All the internal details go here or not:
  * Deprecated: Use g_object_set(obj,&quot;otest&quot;,value,NULL); instead.
  *
  * Since: 0.5
- */]]></commentblock>
+ */]]></input>
   <docblock>
     <identifier>
       <name>gtkdoc_object_set_otest</name>
@@ -218,7 +218,7 @@ All the internal details go here or not:
 </test>
 
 <test>
-  <commentblock><![CDATA[/**
+  <input><![CDATA[/**
  * gtkdoc_object_frobnicate:
  * @self: the object
  * @n: number of iterations
@@ -232,7 +232,7 @@ All the internal details go here or not:
  * </footnote>
  *
  * Since: 0.5
- */]]></commentblock>
+ */]]></input>
   <docblock>
     <identifier>
       <name>gtkdoc_object_frobnicate</name>
@@ -264,7 +264,7 @@ complex algorithm (http://en.wikipedia.org/wiki/Algorithm).
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * gtkdoc_object_fooify:
  * @self: the object
  * @...: a NULL terminated list of arguments
@@ -272,7 +272,7 @@ complex algorithm (http://en.wikipedia.org/wiki/Algorithm).
  * Fooify the content of @self.
  *
  * Returns: %TRUE for success
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>gtkdoc_object_fooify</name>
@@ -298,12 +298,12 @@ complex algorithm (http://en.wikipedia.org/wiki/Algorithm).
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
    * GtkdocObject::otest:
    * @self: myself
    *
    * The event has been triggered.
-   */</commentblock>
+   */</input>
   <docblock>
     <identifier>
       <name>GtkdocObject::otest</name>
@@ -319,14 +319,14 @@ complex algorithm (http://en.wikipedia.org/wiki/Algorithm).
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
    * GtkdocObject::dep-otest:
    * @self: myself
    *
    * The event has been triggered.
    *
    * Deprecated: Use the #GtkdocObject::otest signal instead.
-   */</commentblock>
+   */</input>
   <docblock>
     <identifier>
       <name>GtkdocObject::dep-otest</name>
@@ -348,11 +348,11 @@ complex algorithm (http://en.wikipedia.org/wiki/Algorithm).
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
    * GtkdocObject::strings-changed:
    *
    * Something has happened.
-   */</commentblock>
+   */</input>
   <docblock>
     <identifier>
       <name>GtkdocObject::strings-changed</name>
@@ -362,11 +362,11 @@ complex algorithm (http://en.wikipedia.org/wiki/Algorithm).
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
    * GtkdocObject::variant-changed:
    *
    * Something has happened.
-   */</commentblock>
+   */</input>
   <docblock>
     <identifier>
       <name>GtkdocObject::variant-changed</name>
@@ -376,11 +376,11 @@ complex algorithm (http://en.wikipedia.org/wiki/Algorithm).
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
    * GtkdocObject:otest:
    *
    * Since: 0.1
-   */</commentblock>
+   */</input>
   <docblock>
     <identifier>
       <name>GtkdocObject:otest</name>
@@ -395,11 +395,11 @@ complex algorithm (http://en.wikipedia.org/wiki/Algorithm).
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
    * GtkdocObject:dep-otest:
    *
    * Deprecated: use #GtkdocObject:otest property
-   */</commentblock>
+   */</input>
   <docblock>
     <identifier>
       <name>GtkdocObject:dep-otest</name>

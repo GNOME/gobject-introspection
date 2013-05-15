@@ -7,13 +7,13 @@
   All lines (outside program- listings and CDATA sections) just containing
   a ' *' (blank-asterisk) are converted to paragraph breaks.
   -->
-  <commentblock>/**
+  <input>/**
  * SECTION:test
  *
  * The following line is ' *' (blank-asterisk).
  *
  * So this is considered a new paragraph.
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>SECTION:test</name>
@@ -29,13 +29,13 @@ So this is considered a new paragraph.</description>
   Description: tag, all lines (outside program- listings and CDATA sections) just containing
   a ' *' (blank-asterisk) are converted to paragraph breaks.
   -->
-  <commentblock>/**
+  <input>/**
  * SECTION:test
  *
  * Description: The following line is ' *' (blank-asterisk).
  *
  * So this is considered a new paragraph.
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>SECTION:test</name>
@@ -50,13 +50,13 @@ So this is considered a new paragraph.</description>
   <!--
   ' * ' (blank-asterisk-blank) are also converted to paragraph breaks.
   -->
-  <commentblock>/**
+  <input>/**
  * SECTION:test
  *
  * The following line is ' * ' (blank-asterisk-blank).
  * 
  * So this is considered a new paragraph.
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>SECTION:test</name>
@@ -71,13 +71,13 @@ So this is considered a new paragraph.</description>
   <!--
   Description: tag, ' * ' (blank-asterisk-blank) are also converted to paragraph breaks.
   -->
-  <commentblock>/**
+  <input>/**
  * SECTION:test
  *
  * Description: The following line is ' * ' (blank-asterisk-blank).
  * 
  * So this is considered a new paragraph.
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>SECTION:test</name>
@@ -94,13 +94,13 @@ So this is considered a new paragraph.</description>
   (blank-asterisk-blank-blank). The "empty line" can be easily recognized in the
   output as it contains a single space character.
   -->
-  <commentblock>/**
+  <input>/**
  * SECTION:test
  *
  * The following line is (blank-asterisk-blank-blank).
  *  
  * So this is preceded by an empty line and is not considered a new paragraph.
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>SECTION:test</name>
@@ -117,13 +117,13 @@ So this is preceded by an empty line and is not considered a new paragraph.</des
   (blank-asterisk-blank-blank). The "empty line" can be easily recognized in the
   output as it contains a single space character.
   -->
-  <commentblock>/**
+  <input>/**
  * SECTION:test
  *
  * Description: The following line is (blank-asterisk-blank-blank).
  *  
  * So this is preceded by an empty line and is not considered a new paragraph.
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>SECTION:test</name>
@@ -140,7 +140,7 @@ So this is preceded by an empty line and is not considered a new paragraph.</des
   (blank-asterisk-blank-blank). The "empty line" can be easily recognized in the
   output as it contains a single space character.
   -->
-  <commentblock><![CDATA[/**
+  <input><![CDATA[/**
  * SECTION:test
  *
  * <example>
@@ -160,7 +160,7 @@ So this is preceded by an empty line and is not considered a new paragraph.</des
  * }
  * </programlisting>
  * </example>
- */]]></commentblock>
+ */]]></input>
   <docblock>
     <identifier>
       <name>SECTION:test</name>
@@ -191,7 +191,7 @@ print_attributes (GIBaseInfo *info)
   (blank-asterisk-blank-blank). The "empty line" can be easily recognized in the
   output as it contains a single space character.
   -->
-  <commentblock><![CDATA[/**
+  <input><![CDATA[/**
  * SECTION:test
  *
  * Description: <example>
@@ -211,7 +211,7 @@ print_attributes (GIBaseInfo *info)
  * }
  * </programlisting>
  * </example>
- */]]></commentblock>
+ */]]></input>
   <docblock>
     <identifier>
       <name>SECTION:test</name>

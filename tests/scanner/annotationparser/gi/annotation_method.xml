@@ -3,10 +3,10 @@
 <tests>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * regress_forced_method: (method)
  * @obj: A #RegressTestObj
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>regress_forced_method</name>

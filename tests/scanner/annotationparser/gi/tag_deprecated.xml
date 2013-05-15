@@ -3,11 +3,11 @@
 <tests>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * annotation_versioned:
  *
  * Deprecated: 0.6: Use something else instead
- **/</commentblock>
+ **/</input>
   <docblock>
     <identifier>
       <name>annotation_versioned</name>
@@ -22,11 +22,11 @@
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * annotation_versioned:
  *
  * Deprecated: 0.6
- **/</commentblock>
+ **/</input>
   <docblock>
     <identifier>
       <name>annotation_versioned</name>

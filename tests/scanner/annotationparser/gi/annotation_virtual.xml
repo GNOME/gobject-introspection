@@ -6,7 +6,7 @@
   <!--
   "Virtual:" tag syntax
   -->
-  <commentblock>/**
+  <input>/**
  * foo_object_read:
  * @object: obj
  * @offset: offset
@@ -15,7 +15,7 @@
  * Read some stuff.
  *
  * Virtual: read_fn
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>foo_object_read</name>

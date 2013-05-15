@@ -42,7 +42,7 @@ class TestCommentBlock(unittest.TestCase):
     def __create_test__(cls, testcase):
         def do_test(self):
             # Parse GTK-Doc comment block
-            commentblock = testcase.find('commentblock').text
+            commentblock = testcase.find('input').text
             parsed_docblock = AnnotationParser().parse_comment_block((commentblock, 'test.c', 1))
             parsed_tree = self.parsed2tree(parsed_docblock).split('\n')
 
@@ -261,7 +261,7 @@ def create_tests(tests_dir, tests_file):
 
     tests_tree = etree.parse(tests_file).getroot()
 
-    fix_cdata_elements = tests_tree.findall('test/commentblock')
+    fix_cdata_elements = tests_tree.findall('test/input')
     fix_cdata_elements += tests_tree.findall('.//description')
 
     for element in fix_cdata_elements:

@@ -6,13 +6,13 @@
   <!--
   "Set value func:" tag syntax
   -->
-  <commentblock>/**
+  <input>/**
  * RegressTestFundamentalObject:
  *
  * This object tests regressions...
  *
  * Set value func: regress_test_value_set_fundamental_object
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>RegressTestFundamentalObject</name>

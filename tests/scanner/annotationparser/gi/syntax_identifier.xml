@@ -6,23 +6,23 @@
   <!--
   Identifier part not on the first line.
   -->
-  <commentblock>/**
+  <input>/**
 *
 * SECTION:meepapp
-*/</commentblock>
+*/</input>
 </test>
 
 <test>
   <!--
   Multiple identifier parts
   -->
-  <commentblock>/**
+  <input>/**
  * SECTION:meepapp
  * SECTION:meepapp2
  * @short_description: the application class
  *
  * The application class handles ...
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>SECTION:meepapp</name>
@@ -42,7 +42,7 @@ The application class handles ...</description>
   <!--
   Section documentation including all optional metadata.
   -->
-  <commentblock>/**
+  <input>/**
  * SECTION:meepapp
  * @short_description: the application class
  * @title: Meep application
@@ -53,7 +53,7 @@ The application class handles ...</description>
  * @image: application.png
  *
  * The application class handles ...
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>SECTION:meepapp</name>
@@ -95,7 +95,7 @@ The application class handles ...</description>
   <!--
   Broken comment block with empty line between identifier and parameters parts.
   -->
-  <commentblock>/**
+  <input>/**
  * SECTION:meepapp
  *
  * @short_description: the application class
@@ -107,7 +107,7 @@ The application class handles ...</description>
  * @image: application.png
  *
  * The application class handles ...
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>SECTION:meepapp</name>
@@ -149,7 +149,7 @@ The application class handles ...</description>
   <!--
   Broken comment block with description part before parameters part, without empty line.
   -->
-  <commentblock>/**
+  <input>/**
  * SECTION:meepapp
  *
  * The application class handles ...
@@ -160,7 +160,7 @@ The application class handles ...</description>
  * @stability: Stable
  * @include: meep/app.h
  * @image: application.png
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>SECTION:meepapp</name>
@@ -202,7 +202,7 @@ The application class handles ...</description>
   <!--
   Broken comment block with description part before parameters part, with empty line.
   -->
-  <commentblock>/**
+  <input>/**
  * SECTION:meepapp
  *
  * The application class handles ...
@@ -214,7 +214,7 @@ The application class handles ...</description>
  * @stability: Stable
  * @include: meep/app.h
  * @image: application.png
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>SECTION:meepapp</name>
@@ -257,7 +257,7 @@ The application class handles ...</description>
   Old style implicit returns.
   https://bugzilla.gnome.org/show_bug.cgi?id=457077
   -->
-  <commentblock>/**
+  <input>/**
  * SECTION:tester
  * @short_description: module for gtk-doc unit test
  *
@@ -265,7 +265,7 @@ The application class handles ...</description>
  *
  * As described in http://bugzilla.gnome.org/show_bug.cgi?id=457077 it
  * returns nothing.
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>SECTION:tester</name>
@@ -287,7 +287,7 @@ returns nothing.</description>
   <!--
   Invalid identifier
   -->
-  <commentblock>/**
+  <input>/**
  * gnm_cell_set_expr_and_value: Stores (WITHOUT COPYING) the supplied value, and
  *        references the supplied expression and links it into the expression
  *        list.  It marks the sheet as dirty. It is intended for use by import
@@ -298,7 +298,7 @@ returns nothing.</description>
  *           not render the value.
  *
  * NOTE : This DOES check for array partitioning.
- */</commentblock>
+ */</input>
 </test>
 
 </tests>

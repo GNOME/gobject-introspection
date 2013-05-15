@@ -3,11 +3,11 @@
 <tests>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * GtkdocIface:
  *
  * opaque instance of gtk-doc unit test interface
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>GtkdocIface</name>
@@ -17,11 +17,11 @@
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * GtkdocIface2:
  *
  * opaque instance of gtk-doc unit test interface
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>GtkdocIface2</name>
@@ -31,13 +31,13 @@
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * GtkdocIfaceInterface:
  * @parent: this is a bug :/
  * @test: overideable method
  *
  * class data of gtk-doc unit test interface
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>GtkdocIfaceInterface</name>
@@ -57,13 +57,13 @@
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * GTKDOC_IFACE_MACRO_DUMMY:
  * @parameter_1: first arg
  * @parameter_2: second arg
  *
  * This macro does nothing.
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>GTKDOC_IFACE_MACRO_DUMMY</name>
@@ -83,7 +83,7 @@
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * GTKDOC_IFACE_MACRO_SUM:
  * @parameter_1: first arg
  * @parameter_2: second arg
@@ -91,7 +91,7 @@
  * This macro adds its args.
  *
  * Returns: the sum of @parameter_1 and @parameter_2
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>GTKDOC_IFACE_MACRO_SUM</name>

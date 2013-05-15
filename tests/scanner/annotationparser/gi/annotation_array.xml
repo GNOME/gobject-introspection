@@ -3,12 +3,12 @@
 <tests>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * annotation_object_compute_sum:
  * @nums: (array): Sequence of numbers
  *
  * Test taking a zero-terminated array
- **/</commentblock>
+ **/</input>
   <docblock>
     <identifier>
       <name>annotation_object_compute_sum</name>
@@ -29,7 +29,7 @@
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * annotation_object_compute_sum_n:
  * @object: a #AnnotationObject
  * @nums: (array length=n_nums zero-terminated=0): Sequence of
@@ -37,7 +37,7 @@
  * @n_nums: Length of number array
  *
  * Test taking an array with length parameter
- **/</commentblock>
+ **/</input>
   <docblock>
     <identifier>
       <name>annotation_object_compute_sum_n</name>
@@ -76,7 +76,7 @@
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * annotation_object_compute_sum_nz:
  * @object: a #AnnotationObject
  * @nums: (array length=n_nums zero-terminated=1): Sequence of numbers that
@@ -84,7 +84,7 @@
  * @n_nums: Length of number array
  *
  * Test taking a zero-terminated array with length parameter
- **/</commentblock>
+ **/</input>
   <docblock>
     <identifier>
       <name>annotation_object_compute_sum_nz</name>
@@ -123,14 +123,14 @@
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * annotation_object_parse_args:
  * @object: a #AnnotationObject
  * @argc: (inout): Length of the argument vector
  * @argv: (inout) (array length=argc zero-terminated=1): Argument vector
  *
  * Test taking a zero-terminated array with length parameter
- **/</commentblock>
+ **/</input>
   <docblock>
     <identifier>
       <name>annotation_object_parse_args</name>
@@ -177,14 +177,14 @@
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * annotation_object_set_data:
  * @object: a #AnnotationObject
  * @data: (array length=length): The data
  * @length: Length of the data
  *
  * Test taking a guchar * with a length.
- **/</commentblock>
+ **/</input>
   <docblock>
     <identifier>
       <name>annotation_object_set_data</name>
@@ -219,12 +219,12 @@
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * annotation_string_zero_terminated:
  * @data: (array fixed-size=2): a third value
  *
  * Return value: (transfer full) (array zero-terminated=1): The return value
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>annotation_string_zero_terminated</name>

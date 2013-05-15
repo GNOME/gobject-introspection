@@ -3,9 +3,9 @@
 <tests>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * regress_constructor: (constructor)
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>regress_constructor</name>

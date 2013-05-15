@@ -6,13 +6,13 @@
   <!--
   "Value:" tag syntax
   -->
-  <commentblock>/**
+  <input>/**
  * ANNOTATION_CALCULATED_LARGE:
  *
  * Constant to define a calculated large value
  *
  * Value: 10000000000UL
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>ANNOTATION_CALCULATED_LARGE</name>

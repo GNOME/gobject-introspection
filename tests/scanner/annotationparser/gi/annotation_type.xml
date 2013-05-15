@@ -3,14 +3,14 @@
 <tests>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * AnnotationObject::list-signal:
  * @annotation: the annotation object
  * @list: (type GLib.List) (element-type utf8) (transfer container): a list of strings
  *
  * This is a signal which takes a list of strings, but it's not
  * known by GObject as it's only marked as G_TYPE_POINTER
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>AnnotationObject::list-signal</name>
@@ -60,13 +60,13 @@ known by GObject as it's only marked as G_TYPE_POINTER</description>
   <!--
   "Type:" tag syntax
   -->
-  <commentblock>/**
+  <input>/**
    * RegressTestObj:hash-table:
    *
    * Test.
    *
    * Type: GLib.HashTable(utf8,gint8)
-   */</commentblock>
+   */</input>
   <docblock>
     <identifier>
       <name>RegressTestObj:hash-table</name>

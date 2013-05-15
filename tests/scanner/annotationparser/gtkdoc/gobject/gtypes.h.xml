@@ -3,14 +3,14 @@
 <tests>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * GtkdocEnum:
  * @GTKDOC_ENUM_V1: first
  * @GTKDOC_ENUM_V2: second
  *    Since: 0.10
  *
  * Enum values for the #GtkdocEnum type.
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>GtkdocEnum</name>
@@ -30,13 +30,13 @@
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * GtkdocPlainOldData:
  * @n: Some integer member.
  * @x: Some floating point member.
  *
  * Unboxed plain old data that should default to public members.
- **/</commentblock>
+ **/</input>
   <docblock>
     <identifier>
       <name>GtkdocPlainOldData</name>
@@ -56,13 +56,13 @@
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * GtkdocBoxedPlainOldData:
  * @n: Some integer member.
  * @x: Some floating point member.
  *
  * Boxed plain old data that should default to public members.
- **/</commentblock>
+ **/</input>
   <docblock>
     <identifier>
       <name>GtkdocBoxedPlainOldData</name>

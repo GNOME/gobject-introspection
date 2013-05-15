@@ -3,21 +3,21 @@
 <tests>
 
 <test>
-  <commentblock>/*
+  <input>/*
  * SECTION:tester_nodocs
  * @short_description: module for gtk-doc unit test
  * @title: GtkdocTesterNoDocs
  *
  * This file contains non-sense code for the sole purpose of testing the docs.
- */</commentblock>
+ */</input>
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * SECTION:tester_nolongdesc
  * @short_description: module for gtk-doc unit test
  * @title: GtkdocTesterNoLongDesc
- */</commentblock>
+ */</input>
  <docblock>
    <identifier>
      <name>SECTION:tester_nolongdesc</name>
@@ -36,12 +36,12 @@
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * SECTION:tester_noshortdesc
  * @title: GtkdocTesterNoShortDesc
  *
  * This file contains non-sense code for the sole purpose of testing the docs.
- */</commentblock>
+ */</input>
  <docblock>
    <identifier>
      <name>SECTION:tester_noshortdesc</name>
@@ -57,13 +57,13 @@
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * SECTION:tester_brokendocs
  * @short_description: module for gtk-doc unit test
  * @title: GtkdocTesterBrokenDocs
  *
  * This file contains non-sense code for the sole purpose of testing the docs.
- */</commentblock>
+ */</input>
  <docblock>
    <identifier>
      <name>SECTION:tester_brokendocs</name>
@@ -83,9 +83,9 @@
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * func_no_docs:
- */</commentblock>
+ */</input>
  <docblock>
    <identifier>
      <name>func_no_docs</name>
@@ -94,11 +94,11 @@
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * func_no_item_docs:
  *
  * Here we document the function but not the parameters.
- */</commentblock>
+ */</input>
  <docblock>
    <identifier>
      <name>func_no_item_docs</name>
@@ -108,12 +108,12 @@
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * func_incomplete_docs:
  * @a: a value
  *
  * Here we document the function but not all the parameters.
- */</commentblock>
+ */</input>
  <docblock>
    <identifier>
      <name>func_incomplete_docs</name>
@@ -129,14 +129,14 @@
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * func_unused_docs:
  * @a: a value
  * @b: a value
  * @c: an unexisting value
  *
  * Here we document the function and more than the actual parameters.
- */</commentblock>
+ */</input>
  <docblock>
    <identifier>
      <name>func_unused_docs</name>

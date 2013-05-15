@@ -3,13 +3,13 @@
 <tests>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * annotation_object_string_out:
  *
  * Test returning a string as an out parameter
  *
  * Returns: some boolean
- **/</commentblock>
+ **/</input>
   <docblock>
     <identifier>
       <name>annotation_object_string_out</name>
@@ -28,13 +28,13 @@
   <!--
   Deprecated "Return value:" tag
   -->
-  <commentblock>/**
+  <input>/**
  * annotation_object_string_out:
  *
  * Test returning a string as an out parameter
  *
  * Return value: some boolean
- **/</commentblock>
+ **/</input>
   <docblock>
     <identifier>
       <name>annotation_object_string_out</name>
@@ -53,12 +53,12 @@
   <!--
   Deprecated "@returns" as a parameter
   -->
-  <commentblock>/**
+  <input>/**
  * annotation_object_string_out:
  * @returns: some boolean
  *
  * Test returning a string as an out parameter
- **/</commentblock>
+ **/</input>
   <docblock>
     <identifier>
       <name>annotation_object_string_out</name>

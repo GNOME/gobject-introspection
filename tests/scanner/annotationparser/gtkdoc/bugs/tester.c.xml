@@ -3,7 +3,7 @@
 <tests>
 
 <test>
-  <commentblock><![CDATA[/**
+  <input><![CDATA[/**
  * SECTION:tester
  * @short_description: module for gtk-doc unit test
  *
@@ -21,7 +21,7 @@
  * Second paragraph inside subsection.
  * </para>
  * </refsect2>
- */]]></commentblock>
+ */]]></input>
   <docblock>
     <identifier>
       <name>SECTION:tester</name>
@@ -50,12 +50,12 @@ Second paragraph inside subsection.
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * bug_141869_a:
  * @pid: arg
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=141869
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>bug_141869_a</name>
@@ -71,12 +71,12 @@ Second paragraph inside subsection.
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * bug_141869_b:
  * @pid: arg
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=141869
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>bug_141869_b</name>
@@ -92,12 +92,12 @@ Second paragraph inside subsection.
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * bug_379466:
  * @pid: arg
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=379466
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>bug_379466</name>
@@ -113,7 +113,7 @@ Second paragraph inside subsection.
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * bug_380824:
  * @arg: arg
  *
@@ -123,7 +123,7 @@ Second paragraph inside subsection.
  * Since: 0.1
  *
  * Returns: result
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>bug_380824</name>
@@ -150,13 +150,13 @@ http://bugzilla.gnome.org/show_bug.cgi?id=380824</description>
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * bug_411739:
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=411739
  *
  * Returns: result
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>bug_411739</name>
@@ -172,12 +172,12 @@ http://bugzilla.gnome.org/show_bug.cgi?id=380824</description>
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * bug_419997:
  * @const_values: arg
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=419997
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>bug_419997</name>
@@ -193,12 +193,12 @@ http://bugzilla.gnome.org/show_bug.cgi?id=380824</description>
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * bug_445693:
  * @pid: arg
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=445693
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>bug_445693</name>
@@ -214,13 +214,13 @@ http://bugzilla.gnome.org/show_bug.cgi?id=380824</description>
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * bug_471014:
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=471014
  *
  * Returns: result
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>bug_471014</name>
@@ -236,12 +236,12 @@ http://bugzilla.gnome.org/show_bug.cgi?id=380824</description>
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * Bug446648:
  * @BUG_446648_FOO: foo
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=446648
- **/</commentblock>
+ **/</input>
   <docblock>
     <identifier>
       <name>Bug446648</name>
@@ -257,13 +257,13 @@ http://bugzilla.gnome.org/show_bug.cgi?id=380824</description>
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * bug_552602:
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=552602
  *
  * Returns: result
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>bug_552602</name>
@@ -279,13 +279,13 @@ http://bugzilla.gnome.org/show_bug.cgi?id=380824</description>
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * bug_574654a:
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=574654
  *
  * Returns: result
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>bug_574654a</name>
@@ -301,12 +301,12 @@ http://bugzilla.gnome.org/show_bug.cgi?id=380824</description>
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * bug_574654b:
  * @offset: skip this many items
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=574654
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>bug_574654b</name>
@@ -322,11 +322,11 @@ http://bugzilla.gnome.org/show_bug.cgi?id=380824</description>
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * bug_580300a_get_type:
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=580300
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>bug_580300a_get_type</name>
@@ -336,12 +336,12 @@ http://bugzilla.gnome.org/show_bug.cgi?id=380824</description>
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * bug_580300b_get_type:
  * @a: value
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=580300
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>bug_580300b_get_type</name>
@@ -357,11 +357,11 @@ http://bugzilla.gnome.org/show_bug.cgi?id=380824</description>
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * bug_580300c_get_type:
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=580300
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>bug_580300c_get_type</name>
@@ -371,13 +371,13 @@ http://bugzilla.gnome.org/show_bug.cgi?id=380824</description>
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * bug_580300d_get_type:
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=580300
  *
  * Returns: result
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>bug_580300d_get_type</name>
@@ -393,12 +393,12 @@ http://bugzilla.gnome.org/show_bug.cgi?id=380824</description>
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * bug_597937:
  * @function_arg: value
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=597937
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>bug_597937</name>
@@ -414,13 +414,13 @@ http://bugzilla.gnome.org/show_bug.cgi?id=380824</description>
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * bug_602518a:
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=602518
  *
  * Returns: result
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>bug_602518a</name>
@@ -436,13 +436,13 @@ http://bugzilla.gnome.org/show_bug.cgi?id=380824</description>
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * bug_602518b:
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=602518
  *
  * Returns: result
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>bug_602518b</name>
@@ -458,13 +458,13 @@ http://bugzilla.gnome.org/show_bug.cgi?id=380824</description>
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * bug_602518c:
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=602518
  *
  * Returns: result
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>bug_602518c</name>
@@ -480,13 +480,13 @@ http://bugzilla.gnome.org/show_bug.cgi?id=380824</description>
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * bug_607445:
  * @a: parameter
  * @n: parameter
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=607445
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>bug_607445</name>
@@ -506,13 +506,13 @@ http://bugzilla.gnome.org/show_bug.cgi?id=380824</description>
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * bug_610257:
  * @der: parameter
  * @len: parameter
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=610257
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>bug_610257</name>
@@ -532,7 +532,7 @@ http://bugzilla.gnome.org/show_bug.cgi?id=380824</description>
 </test>
 
 <test>
-  <commentblock><![CDATA[/**
+  <input><![CDATA[/**
  * bug_623968a:
  *
  * <para>test</para>
@@ -540,7 +540,7 @@ http://bugzilla.gnome.org/show_bug.cgi?id=380824</description>
  *   <title>subsect</title>
  *   <para>test</para>
  * </refsect3>
- **/]]></commentblock>
+ **/]]></input>
   <docblock>
     <identifier>
       <name>bug_623968a</name>
@@ -554,7 +554,7 @@ http://bugzilla.gnome.org/show_bug.cgi?id=380824</description>
 </test>
 
 <test>
-  <commentblock><![CDATA[/**
+  <input><![CDATA[/**
  * bug_623968b:
  *
  * test
@@ -563,7 +563,7 @@ http://bugzilla.gnome.org/show_bug.cgi?id=380824</description>
  *   <title>subsect</title>
  *   <para>test</para>
  * </refsect3>
- **/]]></commentblock>
+ **/]]></input>
   <docblock>
     <identifier>
       <name>bug_623968b</name>
@@ -578,11 +578,11 @@ http://bugzilla.gnome.org/show_bug.cgi?id=380824</description>
 </test>
 
 <test>
-  <commentblock><![CDATA[/**
+  <input><![CDATA[/**
  * bug_623968c:
  *
  * <para>test</para>
- **/]]></commentblock>
+ **/]]></input>
   <docblock>
     <identifier>
       <name>bug_623968c</name>
@@ -592,13 +592,13 @@ http://bugzilla.gnome.org/show_bug.cgi?id=380824</description>
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * bug_624200a:
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=624200
  *
  * Returns: result
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>bug_624200a</name>
@@ -614,13 +614,13 @@ http://bugzilla.gnome.org/show_bug.cgi?id=380824</description>
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * bug_624200b:
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=624200
  *
  * Returns: result
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>bug_624200b</name>
@@ -636,14 +636,14 @@ http://bugzilla.gnome.org/show_bug.cgi?id=380824</description>
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * bug_638330:
  * @arg1: arg1
  * @data: data
  * @length: length
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=638330
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>bug_638330</name>
@@ -667,13 +667,13 @@ http://bugzilla.gnome.org/show_bug.cgi?id=380824</description>
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * bug_000000_va1:
  * @name: a name
  * @...: A printf-style message to output
  *
  * Outputs a message.
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>bug_000000_va1</name>
@@ -693,11 +693,11 @@ http://bugzilla.gnome.org/show_bug.cgi?id=380824</description>
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * bug_624001a:
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=624001
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>bug_624001a</name>
@@ -707,11 +707,11 @@ http://bugzilla.gnome.org/show_bug.cgi?id=380824</description>
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * bug_624001b:
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=624001
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>bug_624001b</name>
@@ -721,11 +721,11 @@ http://bugzilla.gnome.org/show_bug.cgi?id=380824</description>
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * bug_624001c:
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=624001
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>bug_624001c</name>
@@ -735,11 +735,11 @@ http://bugzilla.gnome.org/show_bug.cgi?id=380824</description>
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * bug_624001d:
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=624001
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>bug_624001d</name>
@@ -749,11 +749,11 @@ http://bugzilla.gnome.org/show_bug.cgi?id=380824</description>
 </test>
 
 <test>
-  <commentblock>/**
+  <input>/**
  * bug_624001e:
  *
  * http://bugzilla.gnome.org/show_bug.cgi?id=624001
- */</commentblock>
+ */</input>
   <docblock>
     <identifier>
       <name>bug_624001e</name>
