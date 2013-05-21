@@ -513,12 +513,14 @@ class Annotated(object):
 properties."""
     def __init__(self):
         self.version = None
+        self.version_doc = None
         self.skip = False
         self.introspectable = True
         self.attributes = []    # (key, value)*
         self.stability = None
+        self.stability_doc = None
         self.deprecated = None
-        self.deprecated_version = None
+        self.deprecated_doc = None
         self.doc = None
 
 

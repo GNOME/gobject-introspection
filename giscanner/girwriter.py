@@ -125,18 +125,37 @@ class GIRWriter(XMLWriter):
     def _write_generic(self, node):
         for key, value in node.attributes:
             self.write_tag('attribute', [('name', key), ('value', value)])
+
         if hasattr(node, 'doc') and node.doc:
             self.write_tag('doc', [('xml:space', 'preserve')],
                            node.doc)
 
+        if hasattr(node, 'version_doc') and node.version_doc:
+            self.write_tag('doc-version', [('xml:space', 'preserve')],
+                           node.version_doc)
+
+        if hasattr(node, 'deprecated_doc') and node.deprecated_doc:
+            self.write_tag('doc-deprecated', [('xml:space', 'preserve')],
+                           node.deprecated_doc)
+
+        if hasattr(node, 'stability_doc') and node.stability_doc:
+            self.write_tag('doc-stability', [('xml:space', 'preserve')],
+                           node.stability_doc)
+
     def _append_node_generic(self, node, attrs):
         if node.skip or not node.introspectable:
             attrs.append(('introspectable', '0'))
+
+        if node.deprecated or node.deprecated_doc:
+            # The deprecated attribute used to contain node.deprecated_doc as an attribute. As
+            # an xml attribute cannot preserve whitespace, deprecated_doc has been moved into
+            # it's own tag, written in _write_generic() above. We continue to write the deprecated
+            # attribute for backwards compatibility
+            attrs.append(('deprecated', '1'))
+
         if node.deprecated:
-            attrs.append(('deprecated', node.deprecated))
-            if node.deprecated_version:
-                attrs.append(('deprecated-version',
-                              node.deprecated_version))
+            attrs.append(('deprecated-version', node.deprecated))
+
         if node.stability:
             attrs.append(('stability', node.stability))
 

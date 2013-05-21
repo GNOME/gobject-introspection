@@ -588,18 +588,22 @@ class MainTransformer(object):
         if since_tag is not None:
             if since_tag.value:
                 node.version = since_tag.value
+            if since_tag.description:
+                node.version_doc = since_tag.description
 
         deprecated_tag = block.tags.get(TAG_DEPRECATED)
         if deprecated_tag is not None:
             if deprecated_tag.value:
-                node.deprecated_version = deprecated_tag.value
+                node.deprecated = deprecated_tag.value
             if deprecated_tag.description:
-                node.deprecated = deprecated_tag.description
+                node.deprecated_doc = deprecated_tag.description
 
         stability_tag = block.tags.get(TAG_STABILITY)
         if stability_tag is not None:
             if stability_tag.value:
                 node.stability = stability_tag.value
+            if stability_tag.description:
+                node.stability_doc = stability_tag.description
 
         attributes_annotation = block.annotations.get(ANN_ATTRIBUTES)
         if attributes_annotation is not None:

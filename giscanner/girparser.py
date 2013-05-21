@@ -177,12 +177,24 @@ class GIRParser(object):
         version = node.attrib.get('version')
         if version:
             obj.version = version
-        deprecated = node.attrib.get('deprecated')
+        version_doc = node.find(_corens('doc-version'))
+        if version_doc is not None:
+            if version_doc.text:
+                obj.version_doc = version_doc.text
+        deprecated = node.attrib.get('deprecated-version')
         if deprecated:
             obj.deprecated = deprecated
-        deprecated_version = node.attrib.get('deprecated-version')
-        if deprecated_version:
-            obj.deprecated_version = deprecated_version
+        deprecated_doc = node.find(_corens('doc-deprecated'))
+        if deprecated_doc is not None:
+            if deprecated_doc.text:
+                obj.deprecated_doc = deprecated_doc.text
+        stability = node.attrib.get('stability')
+        if stability:
+            obj.stability = stability
+        stability_doc = node.find(_corens('doc-stability'))
+        if stability_doc is not None:
+            if stability_doc.text:
+                obj.stability_doc = stability_doc.text
 
     def _parse_object_interface(self, node):
         parent = node.attrib.get('parent')

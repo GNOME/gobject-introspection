@@ -3980,9 +3980,12 @@ regress_has_parameter_named_attrs (int        foo,
 /**
  * regress_test_versioning:
  *
- * Since: 1.32.1
- * Deprecated: 1.33.3: Use foobar instead
- * Stability: Unstable
+ * Since: 1.32.1: Actually, this function was introduced earlier
+ *   than this, but it didn't do anything before this version.
+ * Deprecated: 1.33.3: This function has been deprecated,
+ *   because it sucks. Use foobar instead.
+ * Stability: Unstable: Maybe someday we will find the time
+ *   to stabilize this function. Who knows?
  */
 void
 regress_test_versioning (void)
