@@ -29,12 +29,38 @@ continues to function correctly.
 
 import difflib
 import os
-import xml.etree.ElementTree as etree
+import subprocess
 import unittest
+import xml.etree.ElementTree as etree
 
 from giscanner.annotationparser import AnnotationParser
 from giscanner.ast import Namespace
 from giscanner.message import MessageLogger
+
+
+XML_NS = 'http://schemas.gnome.org/gobject-introspection/2013/test'
+XML_SCHEMA = os.path.abspath(os.path.join(os.path.dirname(__file__), 'tests.xsd'))
+XML_LINT = None
+
+
+def ns(x):
+    return x.replace('{}', '{%s}' % (XML_NS, ))
+
+
+def validate(tests_file):
+    global XML_LINT
+
+    try:
+        cmd = ['xmllint', '--noout', '--nonet', '--schema', XML_SCHEMA, tests_file]
+        p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        stdout, stderr = p.communicate()
+    except OSError:
+        if XML_LINT is None:
+            XML_LINT = False
+            print('warning: xmllint not found, validation of test definition files will be skipped')
+    else:
+        if p.returncode != 0:
+            raise SystemExit(stdout)
 
 
 class TestCommentBlock(unittest.TestCase):
@@ -42,12 +68,12 @@ class TestCommentBlock(unittest.TestCase):
     def __create_test__(cls, testcase):
         def do_test(self):
             # Parse GTK-Doc comment block
-            commentblock = testcase.find('input').text
+            commentblock = testcase.find(ns('{}input')).text
             parsed_docblock = AnnotationParser().parse_comment_block((commentblock, 'test.c', 1))
             parsed_tree = self.parsed2tree(parsed_docblock).split('\n')
 
-            # Get expected output
-            expected_docblock = testcase.find('parser/docblock')
+            # Get expected parser output
+            expected_docblock = testcase.find(ns('{}parser/{}docblock'))
             expected_tree = self.expected2tree(expected_docblock).split('\n')
 
             # Construct a meaningful message
@@ -167,86 +193,86 @@ class TestCommentBlock(unittest.TestCase):
         if docblock is not None:
             expected += '<docblock>\n'
 
-            if docblock.find('identifier') is not None:
+            if docblock.find(ns('{}identifier')) is not None:
                 expected += '  <identifier>\n'
                 # Expecting an identifier name is required, don't bother checking if it's there or not
-                expected += '    <name>%s</name>\n' % (docblock.find('identifier/name').text, )
-                annotations = docblock.find('identifier/annotations')
+                expected += '    <name>%s</name>\n' % (docblock.find(ns('{}identifier/{}name')).text, )
+                annotations = docblock.find(ns('{}identifier/{}annotations'))
                 if annotations is not None:
                     expected += '    <annotations>\n'
-                    for annotation in annotations.findall('annotation'):
+                    for annotation in annotations.findall(ns('{}annotation')):
                         expected += '      <annotation>\n'
-                        expected += '        <name>%s</name>\n' % (annotation.find('name').text, )
-                        if annotation.find('options') is not None:
+                        expected += '        <name>%s</name>\n' % (annotation.find(ns('{}name')).text, )
+                        if annotation.find(ns('{}options')) is not None:
                             expected += '        <options>\n'
-                            for option in annotation.findall('options/option'):
+                            for option in annotation.findall(ns('{}options/{}option')):
                                 expected += '          <option>\n'
-                                expected += '            <name>%s</name>\n' % (option.find('name').text, )
+                                expected += '            <name>%s</name>\n' % (option.find(ns('{}name')).text, )
                                 if option.find('value') is not None:
-                                    expected += '            <value>%s</value>\n' % (option.find('value').text, )
+                                    expected += '            <value>%s</value>\n' % (option.find(ns('{}value')).text, )
                                 expected += '          </option>\n'
                             expected += '        </options>\n'
                         expected += '      </annotation>\n'
                     expected += '    </annotations>\n'
                 expected += '  </identifier>\n'
 
-            parameters = docblock.find('parameters')
+            parameters = docblock.find(ns('{}parameters'))
             if parameters is not None:
                 expected += '  <parameters>\n'
-                for parameter in parameters.findall('parameter'):
+                for parameter in parameters.findall(ns('{}parameter')):
                     expected += '    <parameter>\n'
-                    expected += '      <name>%s</name>\n' % (parameter.find('name').text, )
-                    annotations = parameter.find('annotations')
+                    expected += '      <name>%s</name>\n' % (parameter.find(ns('{}name')).text, )
+                    annotations = parameter.find(ns('{}annotations'))
                     if annotations is not None:
                         expected += '      <annotations>\n'
-                        for annotation in parameter.findall('annotations/annotation'):
+                        for annotation in parameter.findall(ns('{}annotations/{}annotation')):
                             expected += '        <annotation>\n'
-                            expected += '          <name>%s</name>\n' % (annotation.find('name').text, )
-                            if annotation.find('options') is not None:
+                            expected += '          <name>%s</name>\n' % (annotation.find(ns('{}name')).text, )
+                            if annotation.find(ns('{}options')) is not None:
                                 expected += '          <options>\n'
-                                for option in annotation.findall('options/option'):
+                                for option in annotation.findall(ns('{}options/{}option')):
                                     expected += '            <option>\n'
-                                    expected += '              <name>%s</name>\n' % (option.find('name').text, )
-                                    if option.find('value') is not None:
-                                        expected += '              <value>%s</value>\n' % (option.find('value').text, )
+                                    expected += '              <name>%s</name>\n' % (option.find(ns('{}name')).text, )
+                                    if option.find(ns('{}value')) is not None:
+                                        expected += '              <value>%s</value>\n' % (option.find(ns('{}value')).text, )
                                     expected += '            </option>\n'
                                 expected += '          </options>\n'
                             expected += '        </annotation>\n'
                         expected += '      </annotations>\n'
-                    if parameter.find('description') is not None:
-                        expected += '      <description>%s</description>\n' % (parameter.find('description').text, )
+                    if parameter.find(ns('{}description')) is not None:
+                        expected += '      <description>%s</description>\n' % (parameter.find(ns('{}description')).text, )
                     expected += '    </parameter>\n'
                 expected += '  </parameters>\n'
 
-            description = docblock.find('description')
+            description = docblock.find(ns('{}description'))
             if description is not None:
                 expected += '  <description>%s</description>\n' % (description.text, )
 
-            tags = docblock.find('tags')
+            tags = docblock.find(ns('{}tags'))
             if tags is not None:
                 expected += '  <tags>\n'
-                for tag in tags.findall('tag'):
+                for tag in tags.findall(ns('{}tag')):
                     expected += '    <tag>\n'
-                    expected += '      <name>%s</name>\n' % (tag.find('name').text, )
-                    annotations = tag.find('annotations')
+                    expected += '      <name>%s</name>\n' % (tag.find(ns('{}name')).text, )
+                    annotations = tag.find(ns('{}annotations'))
                     if annotations is not None:
                         expected += '      <annotations>\n'
-                        for annotation in tag.findall('annotations/annotation'):
+                        for annotation in tag.findall(ns('{}annotations/{}annotation')):
                             expected += '        <annotation>\n'
-                            expected += '          <name>%s</name>\n' % (annotation.find('name').text, )
-                            if annotation.find('options') is not None:
+                            expected += '          <name>%s</name>\n' % (annotation.find(ns('{}name')).text, )
+                            if annotation.find(ns('{}options')) is not None:
                                 expected += '          <options>\n'
-                                for option in annotation.findall('options/option'):
+                                for option in annotation.findall(ns('{}options/{}option')):
                                     expected += '            <option>\n'
-                                    expected += '              <name>%s</name>\n' % (option.find('name').text, )
-                                    if option.find('value') is not None:
-                                        expected += '              <value>%s</value>\n' % (option.find('value').text, )
+                                    expected += '              <name>%s</name>\n' % (option.find(ns('{}name')).text, )
+                                    if option.find(ns('{}value')) is not None:
+                                        expected += '              <value>%s</value>\n' % (option.find(ns('{}value')).text, )
                                     expected += '            </option>\n'
                                 expected += '          </options>\n'
                             expected += '        </annotation>\n'
                         expected += '      </annotations>\n'
-                    if tag.find('description') is not None:
-                        expected += '      <description>%s</description>\n' % (tag.find('description').text, )
+                    if tag.find(ns('{}description')) is not None:
+                        expected += '      <description>%s</description>\n' % (tag.find(ns('{}description')).text, )
                     expected += '    </tag>\n'
                 expected += '  </tags>\n'
 
@@ -261,15 +287,15 @@ def create_tests(tests_dir, tests_file):
 
     tests_tree = etree.parse(tests_file).getroot()
 
-    fix_cdata_elements = tests_tree.findall('test/input')
-    fix_cdata_elements += tests_tree.findall('.//description')
+    fix_cdata_elements = tests_tree.findall(ns('{}test/{}input'))
+    fix_cdata_elements += tests_tree.findall(ns('.//{}description'))
 
     for element in fix_cdata_elements:
         if element.text:
             element.text = element.text.replace('{{?', '<!')
             element.text = element.text.replace('}}', '>')
 
-    for counter, test in enumerate(tests_tree.findall('test')):
+    for counter, test in enumerate(tests_tree.findall(ns('{}test'))):
         test_name = 'test_%s.%03d' % (tests_name, counter + 1)
         test_method = TestCommentBlock.__create_test__(test)
         setattr(TestCommentBlock, test_name, test_method)
@@ -290,6 +316,7 @@ if __name__ == '__main__':
         for filename in filenames:
             tests_file = os.path.join(dirpath, filename)
             if os.path.basename(tests_file).endswith('.xml'):
+                validate(tests_file)
                 create_tests(tests_dir, tests_file)
 
     # Run test suite

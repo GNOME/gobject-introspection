@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<tests>
+<tests xmlns="http://schemas.gnome.org/gobject-introspection/2013/test">
 
 <test>
   <input>/**

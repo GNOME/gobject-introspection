@@ -199,6 +199,7 @@ EXTRA_DIST += \
 	annotationparser/README					\
 	annotationparser/test_parser.py				\
 	annotationparser/test_patterns.py			\
+	annotationparser/tests.xsd				\
 	annotationparser/gi/annotation_allow_none.xml		\
 	annotationparser/gi/annotation_array.xml		\
 	annotationparser/gi/annotation_closure.xml		\
