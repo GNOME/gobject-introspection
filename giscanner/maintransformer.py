@@ -215,7 +215,7 @@ class MainTransformer(object):
             for field in node.fields:
                 self._apply_annotations_field(node, block, field)
             name = self._get_annotation_name(node)
-            section_name = 'SECTION:' + name.lower()
+            section_name = 'SECTION:%s' % (name.lower(), )
             block = self._blocks.get(section_name)
             if block:
                 node.doc = block.comment if block.comment else ''
@@ -240,12 +240,9 @@ class MainTransformer(object):
         return True
 
     def _adjust_container_type(self, parent, node, options):
-        has_element_type = OPT_ELEMENT_TYPE in options
-        has_array = OPT_ARRAY in options
-
-        if has_array:
+        if OPT_ARRAY in options:
             self._apply_annotations_array(parent, node, options)
-        elif has_element_type:
+        elif OPT_ELEMENT_TYPE in options:
             self._apply_annotations_element_type(parent, node, options)
 
         if isinstance(node.type, ast.Array):
