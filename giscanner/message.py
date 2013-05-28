@@ -66,9 +66,6 @@ class Position(object):
         else:
             return '%s:' % (filename, )
 
-    def offset(self, offset):
-        return Position(self.filename, self.line + offset, self.column)
-
 
 class MessageLogger(object):
     _instance = None
