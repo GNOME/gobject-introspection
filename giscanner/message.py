@@ -53,9 +53,12 @@ class Position(object):
             self.column or -1)
 
     def format(self, cwd):
-        filename = self.filename
-        if filename.startswith(cwd):
-            filename = filename[len(cwd):]
+        filename = os.path.realpath(self.filename)
+        cwd = os.path.realpath(cwd)
+        common_prefix = os.path.commonprefix((filename, cwd))
+        if common_prefix:
+            filename = os.path.relpath(filename, common_prefix)
+
         if self.column is not None:
             return '%s:%d:%d' % (filename, self.line, self.column)
         elif self.line is not None:
@@ -73,7 +76,7 @@ class MessageLogger(object):
     def __init__(self, namespace, output=None):
         if output is None:
             output = sys.stderr
-        self._cwd = os.getcwd() + os.sep
+        self._cwd = os.getcwd()
         self._output = output
         self._namespace = namespace
         self._enable_warnings = False

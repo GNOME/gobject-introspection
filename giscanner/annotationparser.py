@@ -105,6 +105,7 @@ Refer to the `GTK-Doc manual`_ for more detailed usage information.
 '''
 
 
+import os
 import re
 
 from . import message
@@ -856,15 +857,16 @@ class GtkDocCommentBlockParser(object):
                 continue
 
             if comment_block is not None:
-                # Note: previous versions of this parser did not check
-                # if an identifier was already stored in comment_blocks,
-                # so when multiple comment blocks where encountered documenting
-                # the same identifier the last one seen "wins".
-                # Keep this behavior for backwards compatibility, but
-                # emit a warning.
+                # Note: previous versions of this parser did not check if an identifier was
+                #       already stored in comment_blocks, so when different comment blocks where
+                #       encountered documenting the same identifier the last comment block seen
+                #       "wins". Keep this behavior for backwards compatibility, but emit a warning.
                 if comment_block.name in comment_blocks:
-                    message.warn("multiple comment blocks documenting '%s:' identifier." %
-                                 (comment_block.name, ),
+                    firstseen = comment_blocks[comment_block.name]
+                    path = os.path.dirname(firstseen.position.filename)
+                    message.warn('multiple comment blocks documenting \'%s:\' identifier '
+                                 '(already seen at %s).' %
+                                 (comment_block.name, firstseen.position.format(path)),
                                  comment_block.position)
 
                 comment_blocks[comment_block.name] = comment_block
