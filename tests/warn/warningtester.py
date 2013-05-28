@@ -130,8 +130,9 @@ def check(args):
 
     expected_warnings = _extract_expected(filename)
 
-    expected_warnings.sort()
-    emitted_warnings.sort()
+    sortkey = lambda x: int(x.split(':')[0])
+    expected_warnings.sort(key=sortkey)
+    emitted_warnings.sort(key=sortkey)
 
     if len(expected_warnings) != len(emitted_warnings):
         raise SystemExit('ERROR in %r: %d warnings were emitted, '
