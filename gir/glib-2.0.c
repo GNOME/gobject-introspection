@@ -429,7 +429,7 @@
  * @G_FILE_ERROR_NFILE: There are too many distinct file openings in the entire system.
  * @G_FILE_ERROR_BADF: Bad file descriptor; for example, I/O on a descriptor that has been closed or reading from a descriptor open only for writing (or vice versa).
  * @G_FILE_ERROR_INVAL: Invalid argument. This is used to indicate various kinds of problems with passing the wrong argument to a library function.
- * @G_FILE_ERROR_PIPE: Broken pipe; there is no process reading from the other end of a pipe. Every library function that returns this error code also generates a `SIGPIPE' signal; this signal terminates the program if not handled or blocked. Thus, your program will never actually see this code unless it has handled or blocked `SIGPIPE'.
+ * @G_FILE_ERROR_PIPE: Broken pipe; there is no process reading from the other end of a pipe. Every library function that returns this error code also generates a 'SIGPIPE' signal; this signal terminates the program if not handled or blocked. Thus, your program will never actually see this code unless it has handled or blocked 'SIGPIPE'.
  * @G_FILE_ERROR_AGAIN: Resource temporarily unavailable; the call might work if you try again later.
  * @G_FILE_ERROR_INTR: Interrupted function call; an asynchronous signal occurred and prevented completion of the call. When this happens, you should try the call again.
  * @G_FILE_ERROR_IO: Input/output error; usually used for physical read or write errors. i.e. the disk or other physical device hardware is returning errors.
@@ -1790,6 +1790,19 @@
 
 
 /**
+ * GTestSubprocessFlags:
+ * @G_TEST_SUBPROCESS_INHERIT_STDIN: If this flag is given, the child process will inherit the parent's stdin. Otherwise, the child's stdin is redirected to <filename>/dev/null</filename>.
+ * @G_TEST_SUBPROCESS_INHERIT_STDOUT: If this flag is given, the child process will inherit the parent's stdout. Otherwise, the child's stdout will not be visible, but it will be captured to allow later tests with g_test_trap_assert_stdout().
+ * @G_TEST_SUBPROCESS_INHERIT_STDERR: If this flag is given, the child process will inherit the parent's stderr. Otherwise, the child's stderr will not be visible, but it will be captured to allow later tests with g_test_trap_assert_stderr().
+ *
+ * Flags to pass to g_test_trap_subprocess() to control input and output.
+ *
+ * Note that in contrast with g_test_trap_fork(), the default is to
+ * not show stdout and stderr.
+ */
+
+
+/**
  * GTestSuite:
  *
  * An opaque structure representing a test suite.
@@ -1800,10 +1813,12 @@
  * GTestTrapFlags:
  * @G_TEST_TRAP_SILENCE_STDOUT: Redirect stdout of the test child to <filename>/dev/null</filename> so it cannot be observed on the console during test runs. The actual output is still captured though to allow later tests with g_test_trap_assert_stdout().
  * @G_TEST_TRAP_SILENCE_STDERR: Redirect stderr of the test child to <filename>/dev/null</filename> so it cannot be observed on the console during test runs. The actual output is still captured though to allow later tests with g_test_trap_assert_stderr().
- * @G_TEST_TRAP_INHERIT_STDIN: If this flag is given, stdin of the forked child process is shared with stdin of its parent process. It is redirected to <filename>/dev/null</filename> otherwise.
+ * @G_TEST_TRAP_INHERIT_STDIN: If this flag is given, stdin of the child process is shared with stdin of its parent process. It is redirected to <filename>/dev/null</filename> otherwise.
  *
  * Test traps are guards around forked tests.
  * These flags determine what traps to set.
+ *
+ * Deprecated: #GTestTrapFlags is used only with g_test_trap_fork(), which is deprecated. g_test_trap_subprocess() uses #GTestTrapSubprocessFlags.
  */
 
 
@@ -2877,7 +2892,7 @@
  * format function the same as they would have been for the unmodified
  * string).
  *
- * Place the attribute after the function declaration, just after the
+ * Place the attribute after the function declaration, just before the
  * semicolon.
  *
  * See the GNU C documentation for more details.
@@ -27201,6 +27216,11 @@
  * slash-separated portions of @testpath. The @test_data argument
  * will be passed as first argument to @test_func.
  *
+ * If @testpath includes the component "subprocess" anywhere in it,
+ * the test will be skipped by default, and only run if explicitly
+ * required via the <option>-p</option> command-line option or
+ * g_test_trap_subprocess().
+ *
  * Since: 2.16
  */
 
@@ -27228,6 +27248,11 @@
  * the test is assumed to use no fixture, and test suites are automatically
  * created on the fly and added to the root fixture, based on the
  * slash-separated portions of @testpath.
+ *
+ * If @testpath includes the component "subprocess" anywhere in it,
+ * the test will be skipped by default, and only run if explicitly
+ * required via the <option>-p</option> command-line option or
+ * g_test_trap_subprocess().
  *
  * Since: 2.16
  */
@@ -27349,7 +27374,7 @@
  *
  * Note that you cannot use this to test g_error() messages, since
  * g_error() intentionally never returns even if the program doesn't
- * abort; use g_test_trap_fork() in this case.
+ * abort; use g_test_trap_subprocess() in this case.
  *
  * Since: 2.34
  */
@@ -27421,6 +27446,8 @@
  *       <term><option>-p <replaceable>TESTPATH</replaceable></option></term>
  *       <listitem><para>
  *         Execute all tests matching <replaceable>TESTPATH</replaceable>.
+ *         This can also be used to force a test to run that would otherwise
+ *         be skipped (ie, a test whose name contains "/subprocess").
  *       </para></listitem>
  *     </varlistentry>
  *     <varlistentry>
@@ -27451,8 +27478,8 @@
  *             <term>undefined</term>
  *             <listitem><para>
  *               Tests for undefined behaviour, may provoke programming errors
- *               under g_test_trap_fork() to check that appropriate assertions
- *               or warnings are given
+ *               under g_test_trap_subprocess() or g_test_expect_messages() to check
+ *               that appropriate assertions or warnings are given
  *             </para></listitem>
  *           </varlistentry>
  *           <varlistentry>
@@ -27766,6 +27793,17 @@
 
 
 /**
+ * g_test_subprocess:
+ *
+ * Returns %TRUE (after g_test_init() has been called) if the test
+ * program is running under g_test_trap_subprocess().
+ *
+ * Returns: %TRUE if the test program is running under g_test_trap_subprocess().
+ * Since: 2.38
+ */
+
+
+/**
  * g_test_suite_add:
  * @suite: a #GTestSuite
  * @test_case: a #GTestCase
@@ -27830,13 +27868,13 @@
 /**
  * g_test_trap_assert_failed:
  *
- * Assert that the last forked test failed.
- * See g_test_trap_fork().
+ * Assert that the last test subprocess failed.
+ * See g_test_trap_subprocess().
  *
  * This is sometimes used to test situations that are formally considered to
  * be undefined behaviour, like inputs that fail a g_return_if_fail()
  * check. In these situations you should skip the entire test, including the
- * call to g_test_trap_fork(), unless g_test_undefined() returns %TRUE
+ * call to g_test_trap_subprocess(), unless g_test_undefined() returns %TRUE
  * to indicate that undefined behaviour may be tested.
  *
  * Since: 2.16
@@ -27846,8 +27884,8 @@
 /**
  * g_test_trap_assert_passed:
  *
- * Assert that the last forked test passed.
- * See g_test_trap_fork().
+ * Assert that the last test subprocess passed.
+ * See g_test_trap_subprocess().
  *
  * Since: 2.16
  */
@@ -27857,14 +27895,15 @@
  * g_test_trap_assert_stderr:
  * @serrpattern: a glob-style <link linkend="glib-Glob-style-pattern-matching">pattern</link>
  *
- * Assert that the stderr output of the last forked test
- * matches @serrpattern. See  g_test_trap_fork().
+ * Assert that the stderr output of the last test subprocess
+ * matches @serrpattern. See  g_test_trap_subprocess().
  *
- * This is sometimes used to test situations that are formally considered to
- * be undefined behaviour, like inputs that fail a g_return_if_fail()
- * check. In these situations you should skip the entire test, including the
- * call to g_test_trap_fork(), unless g_test_undefined() returns %TRUE
- * to indicate that undefined behaviour may be tested.
+ * This is sometimes used to test situations that are formally
+ * considered to be undefined behaviour, like code that hits a
+ * g_assert() or g_error(). In these situations you should skip the
+ * entire test, including the call to g_test_trap_subprocess(), unless
+ * g_test_undefined() returns %TRUE to indicate that undefined
+ * behaviour may be tested.
  *
  * Since: 2.16
  */
@@ -27874,8 +27913,8 @@
  * g_test_trap_assert_stderr_unmatched:
  * @serrpattern: a glob-style <link linkend="glib-Glob-style-pattern-matching">pattern</link>
  *
- * Assert that the stderr output of the last forked test
- * does not match @serrpattern. See g_test_trap_fork().
+ * Assert that the stderr output of the last test subprocess
+ * does not match @serrpattern. See g_test_trap_subprocess().
  *
  * Since: 2.16
  */
@@ -27885,8 +27924,8 @@
  * g_test_trap_assert_stdout:
  * @soutpattern: a glob-style <link linkend="glib-Glob-style-pattern-matching">pattern</link>
  *
- * Assert that the stdout output of the last forked test matches
- * @soutpattern. See g_test_trap_fork().
+ * Assert that the stdout output of the last test subprocess matches
+ * @soutpattern. See g_test_trap_subprocess().
  *
  * Since: 2.16
  */
@@ -27896,8 +27935,8 @@
  * g_test_trap_assert_stdout_unmatched:
  * @soutpattern: a glob-style <link linkend="glib-Glob-style-pattern-matching">pattern</link>
  *
- * Assert that the stdout output of the last forked test
- * does not match @soutpattern. See g_test_trap_fork().
+ * Assert that the stdout output of the last test subprocess
+ * does not match @soutpattern. See g_test_trap_subprocess().
  *
  * Since: 2.16
  */
@@ -27909,8 +27948,10 @@
  * @test_trap_flags: Flags to modify forking behaviour.
  *
  * Fork the current test program to execute a test case that might
- * not return or that might abort. The forked test case is aborted
- * and considered failing if its run time exceeds @usec_timeout.
+ * not return or that might abort.
+ *
+ * If @usec_timeout is non-0, the forked test case is aborted and
+ * considered failing if its run time exceeds it.
  *
  * The forking behavior can be configured with the #GTestTrapFlags flags.
  *
@@ -27929,25 +27970,24 @@
  *         g_printerr ("some stderr text: semagic43\n");
  *         exit (0); /&ast; successful test run &ast;/
  *       }
- *     g_test_trap_assert_passed();
+ *     g_test_trap_assert_passed ();
  *     g_test_trap_assert_stdout ("*somagic17*");
  *     g_test_trap_assert_stderr ("*semagic43*");
  *   }
  * ]|
  *
- * This function is implemented only on Unix platforms.
- *
  * Returns: %TRUE for the forked child and %FALSE for the executing parent process.
  * Since: 2.16
+ * Deprecated: This function is implemented only on Unix platforms, and is not always reliable due to problems inherent in fork-without-exec. Use g_test_trap_subprocess() instead.
  */
 
 
 /**
  * g_test_trap_has_passed:
  *
- * Check the result of the last g_test_trap_fork() call.
+ * Check the result of the last g_test_trap_subprocess() call.
  *
- * Returns: %TRUE if the last forked child terminated successfully.
+ * Returns: %TRUE if the last test subprocess terminated successfully.
  * Since: 2.16
  */
 
@@ -27955,10 +27995,82 @@
 /**
  * g_test_trap_reached_timeout:
  *
- * Check the result of the last g_test_trap_fork() call.
+ * Check the result of the last g_test_trap_subprocess() call.
  *
- * Returns: %TRUE if the last forked child got killed due to a fork timeout.
+ * Returns: %TRUE if the last test subprocess got killed due to a timeout.
  * Since: 2.16
+ */
+
+
+/**
+ * g_test_trap_subprocess:
+ * @test_name: Test to run in a subprocess
+ * @usec_timeout: Timeout for the subprocess test in micro seconds.
+ * @test_flags: Flags to modify subprocess behaviour.
+ *
+ * Respawns the test program to run only @test_name in a subprocess.
+ * This can be used for a test case that might not return, or that
+ * might abort. @test_name will normally be the name of the parent
+ * test, followed by "<literal>/subprocess/</literal>" and then a name
+ * for the specific subtest (or just ending with
+ * "<literal>/subprocess</literal>" if the test only has one child
+ * test); tests with names of this form will automatically be skipped
+ * in the parent process.
+ *
+ * If @usec_timeout is non-0, the test subprocess is aborted and
+ * considered failing if its run time exceeds it.
+ *
+ * The subprocess behavior can be configured with the
+ * #GTestSubprocessFlags flags.
+ *
+ * You can use methods such as g_test_trap_assert_passed(),
+ * g_test_trap_assert_failed(), and g_test_trap_assert_stderr() to
+ * check the results of the subprocess. (But note that
+ * g_test_trap_assert_stdout() and g_test_trap_assert_stderr()
+ * cannot be used if @test_flags specifies that the child should
+ * inherit the parent stdout/stderr.)
+ *
+ * If your <literal>main ()</literal> needs to behave differently in
+ * the subprocess, you can call g_test_subprocess() (after calling
+ * g_test_init()) to see whether you are in a subprocess.
+ *
+ * The following example tests that calling
+ * <literal>my_object_new(1000000)</literal> will abort with an error
+ * message.
+ *
+ * |[
+ *   static void
+ *   test_create_large_object_subprocess (void)
+ *   {
+ *     my_object_new (1000000);
+ *   }
+ *
+ *   static void
+ *   test_create_large_object (void)
+ *   {
+ *     g_test_trap_subprocess ("/myobject/create_large_object/subprocess", 0, 0);
+ *     g_test_trap_assert_failed ();
+ *     g_test_trap_assert_stderr ("*ERROR*too large*");
+ *   }
+ *
+ *   int
+ *   main (int argc, char **argv)
+ *   {
+ *     g_test_init (&argc, &argv, NULL);
+ *
+ *     g_test_add_func ("/myobject/create_large_object",
+ *                      test_create_large_object);
+ *     /&ast; Because of the '/subprocess' in the name, this test will
+ *      &ast; not be run by the g_test_run () call below.
+ *      &ast;/
+ *     g_test_add_func ("/myobject/create_large_object/subprocess",
+ *                      test_create_large_object_subprocess);
+ *
+ *     return g_test_run ();
+ *   }
+ * ]|
+ *
+ * Since: 2.38
  */
 
 
@@ -27966,9 +28078,8 @@
  * g_test_undefined:
  *
  * Returns %TRUE if tests may provoke assertions and other formally-undefined
- * behaviour under g_test_trap_fork(), to verify that appropriate warnings
- * are given. It can be useful to turn this off if running tests under
- * valgrind.
+ * behaviour, to verify that appropriate warnings are given. It might, in some
+ * cases, be useful to turn this off if running tests under valgrind.
  *
  * Returns: %TRUE if tests may provoke programming errors
  */
