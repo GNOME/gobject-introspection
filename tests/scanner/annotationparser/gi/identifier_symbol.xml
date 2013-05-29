@@ -15,11 +15,6 @@
       </identifier>
       <description>test_symbol does something nifty.</description>
     </docblock>
-    <messages>
-      <message>2: Warning: Test: missing ':' at column 15:
- * test_symbol
-              ^</message>
-    </messages>
   </parser>
 </test>
 
@@ -99,11 +94,6 @@
       </identifier>
       <description>Some property.</description>
     </docblock>
-    <messages>
-      <message>2: Warning: Test: missing ':' at column 27:
- * GtkWidget:test_property
-                          ^</message>
-    </messages>
   </parser>
 </test>
 
@@ -183,11 +173,6 @@
       </identifier>
       <description>Some signal.</description>
     </docblock>
-    <messages>
-      <message>2: Warning: Test: missing ':' at column 26:
- * GtkWidget::test_signal
-                         ^</message>
-    </messages>
   </parser>
 </test>
 

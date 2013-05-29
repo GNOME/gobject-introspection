@@ -1010,17 +1010,17 @@ class GtkDocCommentBlockParser(object):
                     comment_block = DocBlock(identifier_name)
                     comment_block.position = position
 
-                    if 'delimiter' in result.groupdict() and result.group('delimiter') != ':':
-                        delimiter_start = result.start('delimiter')
-                        delimiter_column = column_offset + delimiter_start
-                        marker = ' ' * delimiter_column + '^'
-                        message.warn("missing ':' at column %s:\n%s\n%s" %
-                                     (delimiter_column + 1, original_line, marker),
-                                     position)
-
-                    if 'annotations' in result.groupdict():
+                    if 'annotations' in result.groupdict() and result.group('annotations') != '':
                         comment_block.annotations = self.parse_annotations(comment_block,
                                                                        result.group('annotations'))
+
+                        if 'delimiter' in result.groupdict() and result.group('delimiter') != ':':
+                            delimiter_start = result.start('delimiter')
+                            delimiter_column = column_offset + delimiter_start
+                            marker = ' ' * delimiter_column + '^'
+                            message.warn("missing ':' at column %s:\n%s\n%s" %
+                                         (delimiter_column + 1, original_line, marker),
+                                         position)
 
                     continue
                 else:

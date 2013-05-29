@@ -96,9 +96,6 @@ something */</input>
       <message>3: Warning: Test: Comments should end with */ on a new line:
 something */
          ^</message>
-      <message>2: Warning: Test: missing ':' at column 5:
-Test
-    ^</message>
     </messages>
   </parser>
 </test>
@@ -122,9 +119,6 @@ something **/</input>
       <message>3: Warning: Test: Comments should end with */ on a new line:
 something **/
          ^</message>
-      <message>2: Warning: Test: missing ':' at column 5:
-Test
-    ^</message>
     </messages>
   </parser>
 </test>
