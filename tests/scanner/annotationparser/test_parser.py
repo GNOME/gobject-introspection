@@ -96,11 +96,11 @@ class TestCommentBlock(unittest.TestCase):
                 expected_messages.append(w.text.strip())
 
             # Compare parsed with expected GtkDocCommentBlock
-            msg = 'Parsed DocBlock object tree does not match expected output:\n\n'
+            msg = 'Parsed GtkDocCommentBlock object tree does not match expected output:\n\n'
             msg += '%s\n\n' % (commentblock, )
 
             diff = difflib.unified_diff(expected_tree, parsed_tree,
-                                        'Expected DocBlock', 'Parsed DocBlock',
+                                        'Expected GtkDocCommentBlock', 'Parsed GtkDocCommentBlock',
                                         n=max(len(expected_tree), len(parsed_tree)),
                                         lineterm='')
             for line in diff:

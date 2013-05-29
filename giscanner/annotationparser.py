@@ -455,67 +455,6 @@ MULTILINE_ANNOTATION_CONTINUATION_RE = re.compile(
     re.UNICODE | re.VERBOSE)
 
 
-class DocBlock(object):
-
-    __slots__ = ('name', 'annotations', 'value', 'tags', 'description', 'params', 'position')
-
-    def __init__(self, name):
-        self.name = name
-        self.annotations = DocAnnotations()
-        self.value = None
-        self.tags = OrderedDict()
-        self.description = None
-        self.params = OrderedDict()
-        self.position = None
-
-    def __cmp__(self, other):
-        # Note: This is used by g-ir-annotation-tool, which does a ``sorted(blocks.values())``,
-        #       meaning that keeping this around makes update-glib-annotations.py patches
-        #       easier to review.
-        return cmp(self.name, other.name)
-
-    def __repr__(self):
-        return '<DocBlock %r %r>' % (self.name, self.annotations)
-
-    def to_gtk_doc(self):
-        annotations = ''
-        if self.annotations:
-            annotations += ' '
-            annotations += ' '.join('(%s)' % o for o in self.annotations)
-        lines = [self.name]
-        if 'SECTION' not in self.name:
-            lines[0] += ':'
-        lines[0] += annotations
-        for param in self.params.values():
-            lines.append(param.to_gtk_doc_param())
-        if self.description:
-            lines.append('')
-            for l in self.description.split('\n'):
-                lines.append(l)
-        if self.tags:
-            lines.append('')
-            for tag in self.tags.values():
-                lines.append(tag.to_gtk_doc_tag())
-
-        comment = ''
-        comment += '/**\n'
-        for line in lines:
-            line = line.rstrip()
-            if line:
-                comment += ' * %s\n' % (line, )
-            else:
-                comment += ' *\n'
-        comment += ' */\n'
-        return comment
-
-    def validate(self):
-        for param in self.params.values():
-            param.validate()
-
-        for tag in self.tags.values():
-            tag.validate()
-
-
 class DocTag(object):
 
     __slots__ = ('block', 'name', 'annotations', 'description', 'value', 'position')
@@ -775,11 +714,85 @@ class DocOption(object):
         return self._dict
 
 
+class GtkDocCommentBlock(object):
+    '''
+    Represents a GTK-Doc comment block.
+    '''
+
+    __slots__ = ('name', 'annotations', 'value', 'tags', 'description', 'params', 'position')
+
+    def __init__(self, name):
+        #: Identifier name.
+        self.name = name
+
+        #: Ordered dictionary mapping parameter names to :class:`GtkDocParameter` instances
+        #: applied to this :class:`GtkDocCommentBlock`.
+        self.params = OrderedDict()
+
+        #: The GTK-Doc comment block description part.
+        self.description = None
+
+        #: Ordered dictionary mapping tag names to :class:`GtkDocTag` instances
+        #: applied to this :class:`GtkDocCommentBlock`.
+        self.tags = OrderedDict()
+
+        self.annotations = DocAnnotations()
+        self.value = None
+        self.position = None
+
+    def __cmp__(self, other):
+        # Note: This is used by g-ir-annotation-tool, which does a ``sorted(blocks.values())``,
+        #       meaning that keeping this around makes update-glib-annotations.py patches
+        #       easier to review.
+        return cmp(self.name, other.name)
+
+    def __repr__(self):
+        return '<GtkDocCommentBlock %r %r>' % (self.name, self.annotations)
+
+    def to_gtk_doc(self):
+        annotations = ''
+        if self.annotations:
+            annotations += ' '
+            annotations += ' '.join('(%s)' % o for o in self.annotations)
+        lines = [self.name]
+        if 'SECTION' not in self.name:
+            lines[0] += ':'
+        lines[0] += annotations
+        for param in self.params.values():
+            lines.append(param.to_gtk_doc_param())
+        if self.description:
+            lines.append('')
+            for l in self.description.split('\n'):
+                lines.append(l)
+        if self.tags:
+            lines.append('')
+            for tag in self.tags.values():
+                lines.append(tag.to_gtk_doc_tag())
+
+        comment = ''
+        comment += '/**\n'
+        for line in lines:
+            line = line.rstrip()
+            if line:
+                comment += ' * %s\n' % (line, )
+            else:
+                comment += ' *\n'
+        comment += ' */\n'
+        return comment
+
+    def validate(self):
+        for param in self.params.values():
+            param.validate()
+
+        for tag in self.tags.values():
+            tag.validate()
+
+
 class GtkDocCommentBlockParser(object):
     """
     GTK-Doc comment block parser.
 
-    Parses GTK-Doc comment blocks into a parse tree built out of :class:`DockBlock`,
+    Parse GTK-Doc comment blocks into a parse tree built out of :class:`GtkDocCommentBlock`,
     :class:`DocTag`, :class:`DocAnnotations` and :class:`DocOption` objects. This
     parser tries to accept malformed input whenever possible and does not emit
     syntax errors. However, it does emit warnings at the slightest indication
@@ -935,7 +948,7 @@ class GtkDocCommentBlockParser(object):
                               start (/**) and end (*/) marker lines
         :param filename: source file name where the comment block originated from
         :param lineno:  line in the source file where the comment block starts
-        :returns: a :class:`DocBlock` object or ``None``
+        :returns: a :class:`GtkDocCommentBlock` object or ``None``
 
         .. NOTE:: If you are tempted to refactor this method and split it
             further up (for example into _parse_identifier(), _parse_parameters(),
@@ -1014,7 +1027,7 @@ class GtkDocCommentBlockParser(object):
                     in_part = PART_IDENTIFIER
                     part_indent = line_indent
 
-                    comment_block = DocBlock(identifier_name)
+                    comment_block = GtkDocCommentBlock(identifier_name)
                     comment_block.position = position
 
                     if 'annotations' in result.groupdict() and result.group('annotations') != '':
