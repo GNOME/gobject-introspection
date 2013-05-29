@@ -130,7 +130,7 @@ TAG_SINCE = 'since'
 TAG_STABILITY = 'stability'
 TAG_DEPRECATED = 'deprecated'
 TAG_RETURNS = 'returns'
-TAG_RETURNVALUE = 'return value'
+TAG_RETURN_VALUE = 'return value'
 TAG_DESCRIPTION = 'description'
 TAG_ATTRIBUTES = 'attributes'
 TAG_RENAME_TO = 'rename to'
@@ -141,12 +141,17 @@ TAG_SET_VALUE_FUNC = 'set value func'
 TAG_GET_VALUE_FUNC = 'get value func'
 TAG_TRANSFER = 'transfer'
 TAG_VALUE = 'value'
+
+# Deprecated tags - Unfortunately, these where accepted by old versions of this module.
+TAG_RETURN = 'return'
+TAG_RETURNS_VALUE = 'returns value'
+
 _ALL_TAGS = [TAG_VFUNC,
              TAG_SINCE,
              TAG_STABILITY,
              TAG_DEPRECATED,
              TAG_RETURNS,
-             TAG_RETURNVALUE,
+             TAG_RETURN_VALUE,
              TAG_DESCRIPTION,
              TAG_ATTRIBUTES,
              TAG_RENAME_TO,
@@ -156,7 +161,9 @@ _ALL_TAGS = [TAG_VFUNC,
              TAG_SET_VALUE_FUNC,
              TAG_GET_VALUE_FUNC,
              TAG_TRANSFER,
-             TAG_VALUE]
+             TAG_VALUE,
+             TAG_RETURN,
+             TAG_RETURNS_VALUE]
 
 # Annotations - applied to parameters and return values
 ANN_ALLOW_NONE = 'allow-none'
@@ -1148,7 +1155,8 @@ class GtkDocCommentBlockParser(object):
                                  (tag_name, original_line, marker),
                                  position)
 
-                if tag_name.lower() in [TAG_RETURNS, TAG_RETURNVALUE]:
+                if tag_name.lower() in [TAG_RETURN, TAG_RETURNS,
+                                        TAG_RETURN_VALUE, TAG_RETURNS_VALUE]:
                     if not returns_seen:
                         returns_seen = True
                     else:
@@ -1206,7 +1214,7 @@ class GtkDocCommentBlockParser(object):
                 self._validate_multiline_annotation_continuation(line, original_line,
                                                                  column_offset, position)
                 # Append to tag description.
-                if current_tag.name.lower() in [TAG_RETURNS, TAG_RETURNVALUE]:
+                if current_tag.name.lower() in [TAG_RETURNS, TAG_RETURN_VALUE]:
                     current_tag.description += ' ' + line.strip()
                 else:
                     current_tag.value += ' ' + line.strip()

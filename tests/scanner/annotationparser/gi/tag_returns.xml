@@ -231,4 +231,106 @@ parameter is encountered.</description>
   </parser>
 </test>
 
+<test>
+  <!--
+  Technically not a valid Returns: tag, but we need to support this for backwards compatibility
+  with the old annotationparser.
+  -->
+  <input>/**
+ * clutter_text_coords_to_position:
+ * @self: a #ClutterText
+ * @x: the X coordinate, relative to the actor
+ * @y: the Y coordinate, relative to the actor
+ *
+ * Retrieves the position of the character at the given coordinates.
+ *
+ * Return: the position of the character
+ *
+ * Since: 1.10
+ */</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>clutter_text_coords_to_position</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>self</name>
+          <description>a #ClutterText</description>
+        </parameter>
+        <parameter>
+          <name>x</name>
+          <description>the X coordinate, relative to the actor</description>
+        </parameter>
+        <parameter>
+          <name>y</name>
+          <description>the Y coordinate, relative to the actor</description>
+        </parameter>
+      </parameters>
+      <description>Retrieves the position of the character at the given coordinates.</description>
+      <tags>
+        <tag>
+          <name>returns</name>
+          <description>the position of the character</description>
+        </tag>
+        <tag>
+          <name>since</name>
+          <description>1.10</description>
+        </tag>
+      </tags>
+    </docblock>
+  </parser>
+</test>
+
+<test>
+  <!--
+  Technically not a valid Returns: tag, but we need to support this for backwards compatibility
+  with the old annotationparser.
+  -->
+  <input>/**
+ * clutter_text_coords_to_position:
+ * @self: a #ClutterText
+ * @x: the X coordinate, relative to the actor
+ * @y: the Y coordinate, relative to the actor
+ *
+ * Retrieves the position of the character at the given coordinates.
+ *
+ * Returns value: the position of the character
+ *
+ * Since: 1.10
+ */</input>
+  <parser>
+    <docblock>
+      <identifier>
+        <name>clutter_text_coords_to_position</name>
+      </identifier>
+      <parameters>
+        <parameter>
+          <name>self</name>
+          <description>a #ClutterText</description>
+        </parameter>
+        <parameter>
+          <name>x</name>
+          <description>the X coordinate, relative to the actor</description>
+        </parameter>
+        <parameter>
+          <name>y</name>
+          <description>the Y coordinate, relative to the actor</description>
+        </parameter>
+      </parameters>
+      <description>Retrieves the position of the character at the given coordinates.</description>
+      <tags>
+        <tag>
+          <name>returns</name>
+          <description>the position of the character</description>
+        </tag>
+        <tag>
+          <name>since</name>
+          <description>1.10</description>
+        </tag>
+      </tags>
+    </docblock>
+  </parser>
+</test>
+
 </tests>
