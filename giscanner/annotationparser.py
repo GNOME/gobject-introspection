@@ -118,104 +118,117 @@ PART_PARAMETERS = 1
 PART_DESCRIPTION = 2
 PART_TAGS = 3
 
-# Tags - annotations applied to comment blocks
-TAG_VFUNC = 'virtual'
-TAG_SINCE = 'since'
-TAG_STABILITY = 'stability'
+# GTK-Doc comment block tags
+#   1) Basic GTK-Doc tags.
+#      Note: This list cannot be extended unless the GTK-Doc project defines new tags.
 TAG_DEPRECATED = 'deprecated'
 TAG_RETURNS = 'returns'
-TAG_RETURN_VALUE = 'return value'
-TAG_DESCRIPTION = 'description'
-TAG_ATTRIBUTES = 'attributes'
-TAG_RENAME_TO = 'rename to'
-TAG_TYPE = 'type'
-TAG_UNREF_FUNC = 'unref func'
-TAG_REF_FUNC = 'ref func'
-TAG_SET_VALUE_FUNC = 'set value func'
-TAG_GET_VALUE_FUNC = 'get value func'
-TAG_TRANSFER = 'transfer'
-TAG_VALUE = 'value'
+TAG_SINCE = 'since'
+TAG_STABILITY = 'stability'
 
-# Deprecated tags - Unfortunately, these where accepted by old versions of this module.
+GTKDOC_TAGS = [TAG_DEPRECATED,
+               TAG_RETURNS,
+               TAG_SINCE,
+               TAG_STABILITY]
+
+#   2) Deprecated basic GTK-Doc tags.
+#      Note: This list cannot be extended unless the GTK-Doc project defines new deprecated tags.
+TAG_DESCRIPTION = 'description'
+TAG_RETURN_VALUE = 'return value'
+
+DEPRECATED_GTKDOC_TAGS = [TAG_DESCRIPTION,
+                          TAG_RETURN_VALUE]
+
+#   3) Deprecated GObject-Introspection tags.
+#      Unfortunately, these where accepted by old versions of this module.
 TAG_RETURN = 'return'
 TAG_RETURNS_VALUE = 'returns value'
 
-_ALL_TAGS = [TAG_VFUNC,
-             TAG_SINCE,
-             TAG_STABILITY,
-             TAG_DEPRECATED,
-             TAG_RETURNS,
-             TAG_RETURN_VALUE,
-             TAG_DESCRIPTION,
-             TAG_ATTRIBUTES,
-             TAG_RENAME_TO,
-             TAG_TYPE,
-             TAG_UNREF_FUNC,
-             TAG_REF_FUNC,
-             TAG_SET_VALUE_FUNC,
-             TAG_GET_VALUE_FUNC,
-             TAG_TRANSFER,
-             TAG_VALUE,
-             TAG_RETURN,
-             TAG_RETURNS_VALUE]
+DEPRECATED_GI_TAGS = [TAG_RETURN,
+                      TAG_RETURNS_VALUE]
 
-# Annotations - applied to parameters and return values
+#   4) GObject-Introspection annotation tags.
+TAG_ATTRIBUTES = 'attributes'
+TAG_GET_VALUE_FUNC = 'get value func'
+TAG_REF_FUNC = 'ref func'
+TAG_RENAME_TO = 'rename to'
+TAG_SET_VALUE_FUNC = 'set value func'
+TAG_TRANSFER = 'transfer'
+TAG_TYPE = 'type'
+TAG_UNREF_FUNC = 'unref func'
+TAG_VALUE = 'value'
+TAG_VFUNC = 'virtual'
+
+GI_ANN_TAGS = [TAG_ATTRIBUTES,
+               TAG_GET_VALUE_FUNC,
+               TAG_REF_FUNC,
+               TAG_RENAME_TO,
+               TAG_SET_VALUE_FUNC,
+               TAG_TRANSFER,
+               TAG_TYPE,
+               TAG_UNREF_FUNC,
+               TAG_VALUE,
+               TAG_VFUNC]
+
+ALL_TAGS = GTKDOC_TAGS + DEPRECATED_GTKDOC_TAGS + DEPRECATED_GI_TAGS + GI_ANN_TAGS
+
+# GObject-Introspection annotations
 ANN_ALLOW_NONE = 'allow-none'
 ANN_ARRAY = 'array'
 ANN_ATTRIBUTE = 'attribute'
 ANN_CLOSURE = 'closure'
+ANN_CONSTRUCTOR = 'constructor'
 ANN_DESTROY = 'destroy'
 ANN_ELEMENT_TYPE = 'element-type'
 ANN_FOREIGN = 'foreign'
 ANN_IN = 'in'
 ANN_INOUT = 'inout'
 ANN_INOUT_ALT = 'in-out'
+ANN_METHOD = 'method'
 ANN_OUT = 'out'
 ANN_SCOPE = 'scope'
+ANN_SKIP = 'skip'
 ANN_TRANSFER = 'transfer'
 ANN_TYPE = 'type'
-ANN_SKIP = 'skip'
-ANN_CONSTRUCTOR = 'constructor'
-ANN_METHOD = 'method'
 
 ALL_ANNOTATIONS = [
     ANN_ALLOW_NONE,
     ANN_ARRAY,
     ANN_ATTRIBUTE,
     ANN_CLOSURE,
+    ANN_CONSTRUCTOR,
     ANN_DESTROY,
     ANN_ELEMENT_TYPE,
     ANN_FOREIGN,
     ANN_IN,
     ANN_INOUT,
     ANN_INOUT_ALT,
+    ANN_METHOD,
     ANN_OUT,
     ANN_SCOPE,
-    ANN_TRANSFER,
-    ANN_TYPE,
     ANN_SKIP,
-    ANN_CONSTRUCTOR,
-    ANN_METHOD]
+    ANN_TRANSFER,
+    ANN_TYPE]
 
-# Array options - array specific annotation options
+# (array) annotation options
 OPT_ARRAY_FIXED_SIZE = 'fixed-size'
 OPT_ARRAY_LENGTH = 'length'
 OPT_ARRAY_ZERO_TERMINATED = 'zero-terminated'
 
-# Out options
-OPT_OUT_CALLER_ALLOCATES = 'caller-allocates'
+# (out) annotation options
 OPT_OUT_CALLEE_ALLOCATES = 'callee-allocates'
+OPT_OUT_CALLER_ALLOCATES = 'caller-allocates'
 
-# Scope options
+# (scope) annotation options
 OPT_SCOPE_ASYNC = 'async'
 OPT_SCOPE_CALL = 'call'
 OPT_SCOPE_NOTIFIED = 'notified'
 
-# Transfer options
-OPT_TRANSFER_NONE = 'none'
+# (transfer) annotation options
 OPT_TRANSFER_CONTAINER = 'container'
-OPT_TRANSFER_FULL = 'full'
 OPT_TRANSFER_FLOATING = 'floating'
+OPT_TRANSFER_FULL = 'full'
+OPT_TRANSFER_NONE = 'none'
 
 
 # Program matching the start of a comment block.
@@ -407,7 +420,7 @@ PARAMETER_RE = re.compile(
 #   - group 2 = annotations
 #   - group 3 = delimiter
 #   - group 4 = description
-_all_tags = '|'.join(_ALL_TAGS).replace(' ', '\\ ')
+_all_tags = '|'.join(ALL_TAGS).replace(' ', '\\ ')
 TAG_RE = re.compile(
     r'''
     ^                                                    # start
