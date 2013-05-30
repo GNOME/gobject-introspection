@@ -113,16 +113,10 @@ from .collections import OrderedDict
 
 
 # GTK-Doc comment block parts
-PART_IDENTIFIER = 'identifier'
-PART_PARAMETERS = 'parameters'
-PART_DESCRIPTION = 'description'
-PART_TAGS = 'tags'
-
-# Identifiers
-IDENTIFIER_SECTION = 'section'
-IDENTIFIER_SYMBOL = 'symbol'
-IDENTIFIER_PROPERTY = 'property'
-IDENTIFIER_SIGNAL = 'signal'
+PART_IDENTIFIER = 0
+PART_PARAMETERS = 1
+PART_DESCRIPTION = 2
+PART_TAGS = 3
 
 # Tags - annotations applied to comment blocks
 TAG_VFUNC = 'virtual'
@@ -963,10 +957,10 @@ class GtkDocCommentBlockParser(object):
                 http://git.gnome.org/browse/gtk-doc/tree/gtkdoc-mkdb.in#n3722
         """
         comment_block = None
+        identifier_warned = False
         part_indent = None
         line_indent = None
         in_part = None
-        identifier = None
         current_param = None
         current_tag = None
         returns_seen = False
@@ -993,37 +987,33 @@ class GtkDocCommentBlockParser(object):
             # Check for GTK-Doc comment block identifier.
             ####################################################################
             if not comment_block:
-                if not identifier:
-                    result = SECTION_RE.match(line)
-                    if result:
-                        identifier = IDENTIFIER_SECTION
-                        identifier_name = 'SECTION:%s' % (result.group('section_name'), )
-                        column = result.start('section_name') + column_offset
+                result = SECTION_RE.match(line)
 
-                if not identifier:
-                    result = SYMBOL_RE.match(line)
-                    if result:
-                        identifier = IDENTIFIER_SYMBOL
-                        identifier_name = '%s' % (result.group('symbol_name'), )
-                        column = result.start('symbol_name') + column_offset
-
-                if not identifier:
+                if result:
+                    identifier_name = 'SECTION:%s' % (result.group('section_name'), )
+                    column = result.start('section_name') + column_offset
+                else:
                     result = PROPERTY_RE.match(line)
+
                     if result:
-                        identifier = IDENTIFIER_PROPERTY
                         identifier_name = '%s:%s' % (result.group('class_name'),
                                                      result.group('property_name'))
                         column = result.start('property_name') + column_offset
+                    else:
+                        result = SIGNAL_RE.match(line)
 
-                if not identifier:
-                    result = SIGNAL_RE.match(line)
-                    if result:
-                        identifier = IDENTIFIER_SIGNAL
-                        identifier_name = '%s::%s' % (result.group('class_name'),
-                                                      result.group('signal_name'))
-                        column = result.start('signal_name') + column_offset
+                        if result:
+                            identifier_name = '%s::%s' % (result.group('class_name'),
+                                                          result.group('signal_name'))
+                            column = result.start('signal_name') + column_offset
+                        else:
+                            result = SYMBOL_RE.match(line)
 
-                if identifier:
+                            if result:
+                                identifier_name = '%s' % (result.group('symbol_name'), )
+                                column = result.start('symbol_name') + column_offset
+
+                if result:
                     in_part = PART_IDENTIFIER
                     part_indent = line_indent
 
@@ -1042,23 +1032,15 @@ class GtkDocCommentBlockParser(object):
                                          (delimiter_column + 1, original_line, marker),
                                          position)
 
-                    continue
-                else:
-                    # If we get here, the identifier was not recognized, so
-                    # ignore the rest of the block just like the old annotation
-                    # parser did. Doing this is a bit more strict than
-                    # gtkdoc-mkdb (which continues to search for the identifier
-                    # until either it is found or the end of the block is
-                    # reached). In practice, however, ignoring the block is the
-                    # right thing to do because sooner or later some long
-                    # descriptions will contain something matching an identifier
-                    # pattern by accident.
-                    marker = ' ' * column_offset + '^'
-                    message.warn('ignoring unrecognized GTK-Doc comment block, identifier not '
-                                 'found:\n%s\n%s' % (original_line, marker),
-                                 position)
-
-                    return None
+                if not result:
+                    # Emit a single warning when the identifier is not found on the first line
+                    if not identifier_warned:
+                        identifier_warned = True
+                        marker = ' ' * column_offset + '^'
+                        message.warn('identifier not found on the first line:\n%s\n%s' %
+                                     (original_line, marker),
+                                     position)
+                continue
 
             ####################################################################
             # Check for comment block parameters.
