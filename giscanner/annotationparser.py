@@ -455,47 +455,6 @@ MULTILINE_ANNOTATION_CONTINUATION_RE = re.compile(
     re.UNICODE | re.VERBOSE)
 
 
-class DocAnnotations(object):
-
-    __slots__ = ('values', 'position')
-
-    def __init__(self):
-        self.values = []
-        self.position = None
-
-    def __repr__(self):
-        return '<DocAnnotations %r>' % (self.values, )
-
-    def __getitem__(self, item):
-        for key, value in self.values:
-            if key == item:
-                return value
-        raise KeyError
-
-    def __nonzero__(self):
-        return bool(self.values)
-
-    def __iter__(self):
-        return (k for k, v in self.values)
-
-    def add(self, name, value):
-        self.values.append((name, value))
-
-    def get(self, item, default=None):
-        for key, value in self.values:
-            if key == item:
-                return value
-        return default
-
-    def getall(self, item):
-        for key, value in self.values:
-            if key == item:
-                yield value
-
-    def items(self):
-        return iter(self.values)
-
-
 class DocOption(object):
 
     __slots__ = ('tag', '_array', '_dict')
@@ -534,6 +493,47 @@ class DocOption(object):
         return self._dict
 
 
+class GtkDocAnnotations(object):
+
+    __slots__ = ('values', 'position')
+
+    def __init__(self):
+        self.values = []
+        self.position = None
+
+    def __repr__(self):
+        return '<GtkDocAnnotations %r>' % (self.values, )
+
+    def __getitem__(self, item):
+        for key, value in self.values:
+            if key == item:
+                return value
+        raise KeyError
+
+    def __nonzero__(self):
+        return bool(self.values)
+
+    def __iter__(self):
+        return (k for k, v in self.values)
+
+    def add(self, name, value):
+        self.values.append((name, value))
+
+    def get(self, item, default=None):
+        for key, value in self.values:
+            if key == item:
+                return value
+        return default
+
+    def getall(self, item):
+        for key, value in self.values:
+            if key == item:
+                yield value
+
+    def items(self):
+        return iter(self.values)
+
+
 class GtkDocTag(object):
 
     __slots__ = ('block', 'name', 'annotations', 'description', 'value', 'position')
@@ -541,7 +541,7 @@ class GtkDocTag(object):
     def __init__(self, block, name):
         self.block = block
         self.name = name
-        self.annotations = DocAnnotations()
+        self.annotations = GtkDocAnnotations()
         self.description = None
         self.value = ''
         self.position = None
@@ -736,7 +736,7 @@ class GtkDocCommentBlock(object):
         #: applied to this :class:`GtkDocCommentBlock`.
         self.tags = OrderedDict()
 
-        self.annotations = DocAnnotations()
+        self.annotations = GtkDocAnnotations()
         self.value = None
         self.position = None
 
@@ -793,7 +793,7 @@ class GtkDocCommentBlockParser(object):
     GTK-Doc comment block parser.
 
     Parse GTK-Doc comment blocks into a parse tree built out of :class:`GtkDocCommentBlock`,
-    :class:`GtkDocTag`, :class:`DocAnnotations` and :class:`DocOption` objects. This
+    :class:`GtkDocTag`, :class:`GtkDocAnnotations` and :class:`DocOption` objects. This
     parser tries to accept malformed input whenever possible and does not emit
     syntax errors. However, it does emit warnings at the slightest indication
     of malformed input when possible. It is usually a good idea to heed these
@@ -1291,7 +1291,7 @@ class GtkDocCommentBlockParser(object):
         # (annotation opt1 opt2 ...)
         # (annotation opt1=value1 opt2=value2 ...)
         opened = -1
-        annotations = DocAnnotations()
+        annotations = GtkDocAnnotations()
         annotations.position = tag.position
 
         for i, c in enumerate(value):
