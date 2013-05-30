@@ -455,7 +455,86 @@ MULTILINE_ANNOTATION_CONTINUATION_RE = re.compile(
     re.UNICODE | re.VERBOSE)
 
 
-class DocTag(object):
+class DocAnnotations(object):
+
+    __slots__ = ('values', 'position')
+
+    def __init__(self):
+        self.values = []
+        self.position = None
+
+    def __repr__(self):
+        return '<DocAnnotations %r>' % (self.values, )
+
+    def __getitem__(self, item):
+        for key, value in self.values:
+            if key == item:
+                return value
+        raise KeyError
+
+    def __nonzero__(self):
+        return bool(self.values)
+
+    def __iter__(self):
+        return (k for k, v in self.values)
+
+    def add(self, name, value):
+        self.values.append((name, value))
+
+    def get(self, item, default=None):
+        for key, value in self.values:
+            if key == item:
+                return value
+        return default
+
+    def getall(self, item):
+        for key, value in self.values:
+            if key == item:
+                yield value
+
+    def items(self):
+        return iter(self.values)
+
+
+class DocOption(object):
+
+    __slots__ = ('tag', '_array', '_dict')
+
+    def __init__(self, tag, option):
+        self.tag = tag
+        self._array = []
+        self._dict = OrderedDict()
+        # (annotation option1=value1 option2=value2) etc
+        for p in option.split(' '):
+            if '=' in p:
+                name, value = p.split('=', 1)
+            else:
+                name = p
+                value = None
+            self._dict[name] = value
+            if value is None:
+                self._array.append(name)
+            else:
+                self._array.append((name, value))
+
+    def __repr__(self):
+        return '<DocOption %r>' % (self._array, )
+
+    def length(self):
+        return len(self._array)
+
+    def one(self):
+        assert len(self._array) == 1
+        return self._array[0]
+
+    def flat(self):
+        return self._array
+
+    def all(self):
+        return self._dict
+
+
+class GtkDocTag(object):
 
     __slots__ = ('block', 'name', 'annotations', 'description', 'value', 'position')
 
@@ -468,7 +547,7 @@ class DocTag(object):
         self.position = None
 
     def __repr__(self):
-        return '<DocTag %r %r>' % (self.name, self.annotations)
+        return '<GtkDocTag %r %r>' % (self.name, self.annotations)
 
     def _validate_annotation(self, ann_name, options, required=False,
                              n_params=None, choices=None):
@@ -635,85 +714,6 @@ class DocTag(object):
                              self.position)
 
 
-class DocAnnotations(object):
-
-    __slots__ = ('values', 'position')
-
-    def __init__(self):
-        self.values = []
-        self.position = None
-
-    def __repr__(self):
-        return '<DocAnnotations %r>' % (self.values, )
-
-    def __getitem__(self, item):
-        for key, value in self.values:
-            if key == item:
-                return value
-        raise KeyError
-
-    def __nonzero__(self):
-        return bool(self.values)
-
-    def __iter__(self):
-        return (k for k, v in self.values)
-
-    def add(self, name, value):
-        self.values.append((name, value))
-
-    def get(self, item, default=None):
-        for key, value in self.values:
-            if key == item:
-                return value
-        return default
-
-    def getall(self, item):
-        for key, value in self.values:
-            if key == item:
-                yield value
-
-    def items(self):
-        return iter(self.values)
-
-
-class DocOption(object):
-
-    __slots__ = ('tag', '_array', '_dict')
-
-    def __init__(self, tag, option):
-        self.tag = tag
-        self._array = []
-        self._dict = OrderedDict()
-        # (annotation option1=value1 option2=value2) etc
-        for p in option.split(' '):
-            if '=' in p:
-                name, value = p.split('=', 1)
-            else:
-                name = p
-                value = None
-            self._dict[name] = value
-            if value is None:
-                self._array.append(name)
-            else:
-                self._array.append((name, value))
-
-    def __repr__(self):
-        return '<DocOption %r>' % (self._array, )
-
-    def length(self):
-        return len(self._array)
-
-    def one(self):
-        assert len(self._array) == 1
-        return self._array[0]
-
-    def flat(self):
-        return self._array
-
-    def all(self):
-        return self._dict
-
-
 class GtkDocCommentBlock(object):
     '''
     Represents a GTK-Doc comment block.
@@ -793,7 +793,7 @@ class GtkDocCommentBlockParser(object):
     GTK-Doc comment block parser.
 
     Parse GTK-Doc comment blocks into a parse tree built out of :class:`GtkDocCommentBlock`,
-    :class:`DocTag`, :class:`DocAnnotations` and :class:`DocOption` objects. This
+    :class:`GtkDocTag`, :class:`DocAnnotations` and :class:`DocOption` objects. This
     parser tries to accept malformed input whenever possible and does not emit
     syntax errors. However, it does emit warnings at the slightest indication
     of malformed input when possible. It is usually a good idea to heed these
@@ -1105,7 +1105,7 @@ class GtkDocCommentBlockParser(object):
                                  (param_name, comment_block.name, original_line, marker),
                                  position)
 
-                tag = DocTag(comment_block, param_name)
+                tag = GtkDocTag(comment_block, param_name)
                 tag.position = position
                 tag.description = param_description
                 if param_annotations:
@@ -1177,7 +1177,7 @@ class GtkDocCommentBlockParser(object):
                                      "'%s'." % (comment_block.name, ),
                                      position)
 
-                    tag = DocTag(comment_block, TAG_RETURNS)
+                    tag = GtkDocTag(comment_block, TAG_RETURNS)
                     tag.position = position
                     tag.description = tag_description
                     if tag_annotations:
@@ -1193,7 +1193,7 @@ class GtkDocCommentBlockParser(object):
                                      (tag_name, comment_block.name, original_line, marker),
                                      position)
 
-                    tag = DocTag(comment_block, tag_name.lower())
+                    tag = GtkDocTag(comment_block, tag_name.lower())
                     tag.position = position
                     tag.value = tag_description
                     if tag_annotations:
