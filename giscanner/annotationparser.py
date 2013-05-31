@@ -216,10 +216,6 @@ OPT_TRANSFER_FULL = 'full'
 OPT_TRANSFER_FLOATING = 'floating'
 
 
-#The following regular expression programs are built to:
-# - match (or substitute) a single comment block line at a time;
-# - support (but remains untested) LOCALE and UNICODE modes.
-
 # Program matching the start of a comment block.
 #
 # Results in 0 symbolic groups.
@@ -232,7 +228,7 @@ COMMENT_START_RE = re.compile(
     \s*                                                  # 0 or more whitespace characters
     $                                                    # end
     ''',
-    re.VERBOSE)
+    re.UNICODE | re.VERBOSE)
 
 # Program matching the end of a comment block. We need to take care
 # of comment ends that aren't on their own line for legacy support
@@ -251,7 +247,7 @@ COMMENT_END_RE = re.compile(
     \s*                                                  # 0 or more whitespace characters
     $                                                    # end
     ''',
-    re.VERBOSE)
+    re.UNICODE | re.VERBOSE)
 
 # Pattern matching the ' * ' at the beginning of every
 # line inside a comment block.
@@ -265,7 +261,7 @@ COMMENT_ASTERISK_RE = re.compile(
                                                          #   whitespace character breaks
                                                          #   embedded example program indentation
     ''',
-    re.VERBOSE)
+    re.UNICODE | re.VERBOSE)
 
 # Program matching the indentation at the beginning of every
 # line (stripped from the ' * ') inside a comment block.
@@ -279,7 +275,7 @@ COMMENT_INDENTATION_RE = re.compile(
     .*
     $
     ''',
-    re.VERBOSE)
+    re.UNICODE | re.VERBOSE)
 
 # Pattern matching an empty line.
 EMPTY_LINE_RE = re.compile(
@@ -288,7 +284,7 @@ EMPTY_LINE_RE = re.compile(
     \s*                                                  # 0 or more whitespace characters
     $                                                    # end
     ''',
-    re.VERBOSE)
+    re.UNICODE | re.VERBOSE)
 
 # Program matching SECTION identifiers.
 #
@@ -307,7 +303,7 @@ SECTION_RE = re.compile(
     \s*                                                  # 0 or more whitespace characters
     $
     ''',
-    re.VERBOSE)
+    re.UNICODE | re.VERBOSE)
 
 # Program matching symbol (function, constant, struct and enum) identifiers.
 #
@@ -327,7 +323,7 @@ SYMBOL_RE = re.compile(
     \s*                                                  # 0 or more whitespace characters
     $                                                    # end
     ''',
-    re.VERBOSE)
+    re.UNICODE | re.VERBOSE)
 
 # Program matching property identifiers.
 #
@@ -352,7 +348,7 @@ PROPERTY_RE = re.compile(
     \s*                                                  # 0 or more whitespace characters
     $                                                    # end
     ''',
-    re.VERBOSE)
+    re.UNICODE | re.VERBOSE)
 
 # Program matching signal identifiers.
 #
@@ -377,7 +373,7 @@ SIGNAL_RE = re.compile(
     \s*                                                  # 0 or more whitespace characters
     $                                                    # end
     ''',
-    re.VERBOSE)
+    re.UNICODE | re.VERBOSE)
 
 # Program matching parameters.
 #
@@ -402,7 +398,7 @@ PARAMETER_RE = re.compile(
     \s*                                                  # 0 or more whitespace characters
     $                                                    # end
     ''',
-    re.VERBOSE)
+    re.UNICODE | re.VERBOSE)
 
 # Program matching tags.
 #
@@ -427,7 +423,7 @@ TAG_RE = re.compile(
     \s*                                                  # 0 or more whitespace characters
     $                                                    # end
     ''',
-    re.VERBOSE | re.IGNORECASE)
+    re.UNICODE | re.VERBOSE | re.IGNORECASE)
 
 # Program matching multiline annotation continuations.
 # This is used on multiline parameters and tags (but not on the first line) to
@@ -448,7 +444,7 @@ MULTILINE_ANNOTATION_CONTINUATION_RE = re.compile(
     \s*                                                  # 0 or more whitespace characters
     $                                                    # end
     ''',
-    re.VERBOSE)
+    re.UNICODE | re.VERBOSE)
 
 
 class DocBlock(object):
