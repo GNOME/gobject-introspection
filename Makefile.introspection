@@ -75,14 +75,14 @@ _gir_verbosity = $(if $(AM_DEFAULT_VERBOSITY),$(AM_DEFAULT_VERBOSITY),1)
 
 _gir_silent_scanner_prefix = $(_gir_silent_scanner_prefix_$(V))
 _gir_silent_scanner_prefix_ = $(_gir_silent_scanner_prefix_$(_gir_verbosity))
-_gir_silent_scanner_prefix_0 = @echo "  GISCAN $(1)";
+_gir_silent_scanner_prefix_0 = @echo "  GISCAN   $(1)";
 _gir_silent_scanner_opts = $(_gir_silent_scanner_opts_$(V))
 _gir_silent_scanner_opts_ = $(_gir_silent_scanner_opts_$(_gir_verbosity))
 _gir_silent_scanner_opts_0 = --quiet
 
 _gir_silent_compiler = $(_gir_silent_compiler_$(V))
 _gir_silent_compiler_ = $(_gir_silent_compiler_$(_gir_verbosity))
-_gir_silent_compiler_0 = @echo "  GICOMP $(1)";
+_gir_silent_compiler_0 = @echo "  GICOMP   $(1)";
 
 #
 # Creates a GIR by scanning C headers/sources
