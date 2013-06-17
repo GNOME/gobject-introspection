@@ -722,7 +722,7 @@ class GtkDocCommentBlock(object):
     Represents a GTK-Doc comment block.
     '''
 
-    __slots__ = ('name', 'annotations', 'value', 'tags', 'description', 'params', 'position')
+    __slots__ = ('name', 'annotations', 'tags', 'description', 'params', 'position')
 
     def __init__(self, name):
         #: Identifier name.
@@ -740,7 +740,6 @@ class GtkDocCommentBlock(object):
         self.tags = OrderedDict()
 
         self.annotations = GtkDocAnnotations()
-        self.value = None
         self.position = None
 
     def __cmp__(self, other):

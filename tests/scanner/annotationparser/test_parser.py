@@ -177,8 +177,8 @@ class TestCommentBlock(unittest.TestCase):
                     parsed += '    </parameter>\n'
                 parsed += '  </parameters>\n'
 
-            if docblock.description or docblock.value:
-                parsed += '  <description>%s</description>\n' % (docblock.description or docblock.value, )
+            if docblock.description:
+                parsed += '  <description>%s</description>\n' % (docblock.description, )
 
             if docblock.tags:
                 parsed += '  <tags>\n'
