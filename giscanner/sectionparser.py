@@ -92,6 +92,7 @@ def parse_sections_file(lines):
 
     return SectionsFile(sections)
 
+
 def write_sections_file(f, sections_file):
     for section in sections_file.sections:
         f.write("\n<SECTION>\n")
@@ -113,6 +114,7 @@ def write_sections_file(f, sections_file):
 
             for symbol in subsection.symbols:
                 f.write(symbol + "\n")
+
 
 def generate_sections_file(transformer):
     ns = transformer.namespace
