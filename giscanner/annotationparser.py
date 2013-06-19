@@ -108,8 +108,8 @@ Refer to the `GTK-Doc manual`_ for more detailed usage information.
 import os
 import re
 
-from . import message
 from .collections import OrderedDict
+from .message import Position, warn
 
 
 # GTK-Doc comment block parts
@@ -555,7 +555,7 @@ class GtkDocTag(object):
     def _validate_annotation(self, ann_name, options, required=False,
                              n_params=None, choices=None):
         if required and options is None:
-            message.warn('%s annotation needs a value' % (ann_name, ), self.position)
+            warn('%s annotation needs a value' % (ann_name, ), self.position)
             return
 
         if n_params is not None:
@@ -571,15 +571,15 @@ class GtkDocTag(object):
                     length = 0
                 else:
                     length = options.length()
-                message.warn('%s annotation needs %s, not %d' % (ann_name, s, length),
-                             self.position)
+                warn('%s annotation needs %s, not %d' % (ann_name, s, length),
+                     self.position)
                 return
 
         if choices is not None:
             option = options.one()
             if option not in choices:
-                message.warn('invalid %s annotation value: %r' % (ann_name, option, ),
-                             self.position)
+                warn('invalid %s annotation value: %r' % (ann_name, option, ),
+                     self.position)
                 return
 
     def _validate_array(self, ann_name, options):
@@ -592,48 +592,48 @@ class GtkDocTag(object):
                     int(value)
                 except (TypeError, ValueError):
                     if value is None:
-                        message.warn('array option %s needs a value' % (option, ),
-                                     positions=self.position)
+                        warn('array option %s needs a value' % (option, ),
+                             positions=self.position)
                     else:
-                        message.warn('invalid array %s option value %r, '
-                                     'must be an integer' % (option, value, ),
-                                     positions=self.position)
+                        warn('invalid array %s option value %r, '
+                             'must be an integer' % (option, value, ),
+                             positions=self.position)
             elif option == OPT_ARRAY_LENGTH:
                 if value is None:
-                    message.warn('array option length needs a value',
-                                 positions=self.position)
+                    warn('array option length needs a value',
+                         positions=self.position)
             else:
-                message.warn('invalid array annotation value: %r' % (option, ),
-                             self.position)
+                warn('invalid array annotation value: %r' % (option, ),
+                     self.position)
 
     def _validate_closure(self, ann_name, options):
         if options is not None and options.length() > 1:
-            message.warn('closure takes at most 1 value, %d given' % (options.length(), ),
-                         self.position)
+            warn('closure takes at most 1 value, %d given' % (options.length(), ),
+                 self.position)
 
     def _validate_element_type(self, ann_name, options):
         self._validate_annotation(ann_name, options, required=True)
         if options is None:
-            message.warn('element-type takes at least one value, none given',
-                         self.position)
+            warn('element-type takes at least one value, none given',
+                 self.position)
             return
         if options.length() > 2:
-            message.warn('element-type takes at most 2 values, %d given' % (options.length(), ),
-                         self.position)
+            warn('element-type takes at most 2 values, %d given' % (options.length(), ),
+                 self.position)
             return
 
     def _validate_out(self, ann_name, options):
         if options is None:
             return
         if options.length() > 1:
-            message.warn('out annotation takes at most 1 value, %d given' % (options.length(), ),
-                         self.position)
+            warn('out annotation takes at most 1 value, %d given' % (options.length(), ),
+                 self.position)
             return
         option = options.one()
         if option not in [OPT_OUT_CALLEE_ALLOCATES,
                           OPT_OUT_CALLER_ALLOCATES]:
-            message.warn("out annotation value is invalid: %r" % (option, ),
-                         self.position)
+            warn("out annotation value is invalid: %r" % (option, ),
+                 self.position)
             return
 
     def _get_gtk_doc_value(self):
@@ -713,8 +713,8 @@ class GtkDocTag(object):
             elif ann_name == ANN_METHOD:
                 self._validate_annotation(ann_name, value, n_params=0)
             else:
-                message.warn('unknown annotation: %s' % (ann_name, ),
-                             self.position)
+                warn('unknown annotation: %s' % (ann_name, ),
+                     self.position)
 
 
 class GtkDocCommentBlock(object):
@@ -873,9 +873,9 @@ class GtkDocCommentBlockParser(object):
             try:
                 comment_block = self.parse_comment_block(comment, filename, lineno)
             except Exception:
-                message.warn('unrecoverable parse error, please file a GObject-Introspection '
-                             'bug report including the complete comment block at the '
-                             'indicated location.', message.Position(filename, lineno))
+                warn('unrecoverable parse error, please file a GObject-Introspection '
+                     'bug report including the complete comment block at the '
+                     'indicated location.', Position(filename, lineno))
                 continue
 
             if comment_block is not None:
@@ -886,10 +886,10 @@ class GtkDocCommentBlockParser(object):
                 if comment_block.name in comment_blocks:
                     firstseen = comment_blocks[comment_block.name]
                     path = os.path.dirname(firstseen.position.filename)
-                    message.warn('multiple comment blocks documenting \'%s:\' identifier '
-                                 '(already seen at %s).' %
-                                 (comment_block.name, firstseen.position.format(path)),
-                                 comment_block.position)
+                    warn('multiple comment blocks documenting \'%s:\' identifier '
+                         '(already seen at %s).' %
+                         (comment_block.name, firstseen.position.format(path)),
+                         comment_block.position)
 
                 comment_blocks[comment_block.name] = comment_block
 
@@ -925,11 +925,11 @@ class GtkDocCommentBlockParser(object):
             description = result.group('description')
             if description:
                 comment_lines[-1] = (line_offset, description)
-                position = message.Position(filename, lineno + line_offset)
+                position = Position(filename, lineno + line_offset)
                 marker = ' ' * result.end('description') + '^'
-                message.warn("Comments should end with */ on a new line:\n%s\n%s" %
-                             (line, marker),
-                             position)
+                warn("Comments should end with */ on a new line:\n%s\n%s" %
+                     (line, marker),
+                     position)
             else:
                 del comment_lines[-1]
         else:
@@ -974,7 +974,7 @@ class GtkDocCommentBlockParser(object):
         returns_seen = False
 
         for line_offset, line in comment_lines:
-            position = message.Position(filename, line_offset + lineno)
+            position = Position(filename, line_offset + lineno)
 
             # Store the original line (without \n) and column offset
             # so we can generate meaningful warnings later on.
@@ -1036,18 +1036,18 @@ class GtkDocCommentBlockParser(object):
                             delimiter_start = result.start('delimiter')
                             delimiter_column = column_offset + delimiter_start
                             marker = ' ' * delimiter_column + '^'
-                            message.warn("missing ':' at column %s:\n%s\n%s" %
-                                         (delimiter_column + 1, original_line, marker),
-                                         position)
+                            warn("missing ':' at column %s:\n%s\n%s" %
+                                 (delimiter_column + 1, original_line, marker),
+                                 position)
 
                 if not result:
                     # Emit a single warning when the identifier is not found on the first line
                     if not identifier_warned:
                         identifier_warned = True
                         marker = ' ' * column_offset + '^'
-                        message.warn('identifier not found on the first line:\n%s\n%s' %
-                                     (original_line, marker),
-                                     position)
+                        warn('identifier not found on the first line:\n%s\n%s' %
+                             (original_line, marker),
+                             position)
                 continue
 
             ####################################################################
@@ -1067,9 +1067,9 @@ class GtkDocCommentBlockParser(object):
 
                 if in_part != PART_PARAMETERS:
                     column = result.start('parameter_name') + column_offset
-                    message.warn("'@%s' parameter unexpected at this location:\n%s\n%s" %
-                                 (param_name, original_line, marker),
-                                 position)
+                    warn("'@%s' parameter unexpected at this location:\n%s\n%s" %
+                         (param_name, original_line, marker),
+                         position)
 
                 # Old style GTK-Doc allowed return values to be specified as
                 # parameters instead of tags.
@@ -1079,21 +1079,21 @@ class GtkDocCommentBlockParser(object):
                     if not returns_seen:
                         returns_seen = True
                     else:
-                        message.warn("encountered multiple 'Returns' parameters or tags for "
-                                     "'%s'." % (comment_block.name, ),
-                                     position)
+                        warn("encountered multiple 'Returns' parameters or tags for "
+                             "'%s'." % (comment_block.name, ),
+                             position)
                 elif (param_name == 'Varargs'
                 or (param_name.endswith('...') and param_name != '...')):
                     # Deprecated @Varargs notation or named __VA_ARGS__ instead of @...
-                    message.warn('"@%s" parameter is deprecated, please use "@..." instead:\n'
-                                 '%s\n%s' % (param_name, original_line, marker),
-                                 position)
+                    warn('"@%s" parameter is deprecated, please use "@..." instead:\n%s\n%s' %
+                         (param_name, original_line, marker),
+                         position)
                     param_name = '...'
                 elif param_name in comment_block.params.keys():
                     column = result.start('parameter_name') + column_offset
-                    message.warn("multiple '@%s' parameters for identifier '%s':\n%s\n%s" %
-                                 (param_name, comment_block.name, original_line, marker),
-                                 position)
+                    warn("multiple '@%s' parameters for identifier '%s':\n%s\n%s" %
+                         (param_name, comment_block.name, original_line, marker),
+                         position)
 
                 tag = GtkDocTag(param_name)
                 tag.position = position
@@ -1132,9 +1132,9 @@ class GtkDocCommentBlockParser(object):
 
                 # Deprecated GTK-Doc Description: tag
                 if tag_name.lower() == TAG_DESCRIPTION:
-                    message.warn("GTK-Doc tag \"Description:\" has been deprecated:\n%s\n%s" %
-                                 (original_line, marker),
-                                 position)
+                    warn("GTK-Doc tag \"Description:\" has been deprecated:\n%s\n%s" %
+                         (original_line, marker),
+                         position)
 
                     in_part = PART_DESCRIPTION
                     part_indent = line_indent
@@ -1154,18 +1154,18 @@ class GtkDocCommentBlockParser(object):
                 if in_part != PART_TAGS:
                     column = result.start('tag_name') + column_offset
                     marker = ' ' * column + '^'
-                    message.warn("'%s:' tag unexpected at this location:\n%s\n%s" %
-                                 (tag_name, original_line, marker),
-                                 position)
+                    warn("'%s:' tag unexpected at this location:\n%s\n%s" %
+                         (tag_name, original_line, marker),
+                         position)
 
                 if tag_name.lower() in [TAG_RETURN, TAG_RETURNS,
                                         TAG_RETURN_VALUE, TAG_RETURNS_VALUE]:
                     if not returns_seen:
                         returns_seen = True
                     else:
-                        message.warn("encountered multiple 'Returns' parameters or tags for "
-                                     "'%s'." % (comment_block.name, ),
-                                     position)
+                        warn("encountered multiple 'Returns' parameters or tags for "
+                             "'%s'." % (comment_block.name, ),
+                             position)
 
                     tag = GtkDocTag(TAG_RETURNS)
                     tag.position = position
@@ -1179,9 +1179,9 @@ class GtkDocCommentBlockParser(object):
                     if tag_name.lower() in comment_block.tags.keys():
                         column = result.start('tag_name') + column_offset
                         marker = ' ' * column + '^'
-                        message.warn("multiple '%s:' tags for identifier '%s':\n%s\n%s" %
-                                     (tag_name, comment_block.name, original_line, marker),
-                                     position)
+                        warn("multiple '%s:' tags for identifier '%s':\n%s\n%s" %
+                             (tag_name, comment_block.name, original_line, marker),
+                             position)
 
                     tag = GtkDocTag(tag_name.lower())
                     tag.position = position
@@ -1190,9 +1190,9 @@ class GtkDocCommentBlockParser(object):
                         if tag_name.lower() == TAG_ATTRIBUTES:
                             tag.annotations = self.parse_annotations(tag, tag_annotations)
                         else:
-                            message.warn("annotations not supported for tag '%s:'." %
-                                         (tag_name, ),
-                                         position)
+                            warn("annotations not supported for tag '%s:'." %
+                                 (tag_name, ),
+                                 position)
                     comment_block.tags[tag_name.lower()] = tag
                     current_tag = tag
                     continue
@@ -1271,9 +1271,9 @@ class GtkDocCommentBlockParser(object):
         if result:
             column = result.start('annotations') + column_offset
             marker = ' ' * column + '^'
-            message.warn('ignoring invalid multiline annotation continuation:\n'
-                         '%s\n%s' % (original_line, marker),
-                         position)
+            warn('ignoring invalid multiline annotation continuation:\n'
+                 '%s\n%s' % (original_line, marker),
+                 position)
 
     @classmethod
     def parse_annotations(cls, tag, value):
