@@ -172,13 +172,13 @@ class TestCommentBlock(unittest.TestCase):
                                 parsed += '          </options>\n'
                             parsed += '        </annotation>\n'
                         parsed += '      </annotations>\n'
-                    if param.comment or param.value:
-                        parsed += '      <description>%s</description>\n' % (param.comment or param.value, )
+                    if param.description or param.value:
+                        parsed += '      <description>%s</description>\n' % (param.description or param.value, )
                     parsed += '    </parameter>\n'
                 parsed += '  </parameters>\n'
 
-            if docblock.comment or docblock.value:
-                parsed += '  <description>%s</description>\n' % (docblock.comment or docblock.value, )
+            if docblock.description or docblock.value:
+                parsed += '  <description>%s</description>\n' % (docblock.description or docblock.value, )
 
             if docblock.tags:
                 parsed += '  <tags>\n'
@@ -203,8 +203,8 @@ class TestCommentBlock(unittest.TestCase):
                                 parsed += '          </options>\n'
                             parsed += '        </annotation>\n'
                         parsed += '      </annotations>\n'
-                    if tag.comment or tag.value:
-                        parsed += '      <description>%s</description>\n' % (tag.comment or tag.value, )
+                    if tag.description or tag.value:
+                        parsed += '      <description>%s</description>\n' % (tag.description or tag.value, )
                     parsed += '    </tag>\n'
                 parsed += '  </tags>\n'
 

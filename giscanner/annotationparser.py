@@ -458,7 +458,7 @@ class DocBlock(object):
         self.annotations = DocAnnotations()
         self.value = None
         self.tags = OrderedDict()
-        self.comment = None
+        self.description = None
         self.params = OrderedDict()
         self.position = None
 
@@ -482,9 +482,9 @@ class DocBlock(object):
         lines[0] += annotations
         for param in self.params.values():
             lines.append(param.to_gtk_doc_param())
-        if self.comment:
+        if self.description:
             lines.append('')
-            for l in self.comment.split('\n'):
+            for l in self.description.split('\n'):
                 lines.append(l)
         if self.tags:
             lines.append('')
@@ -516,7 +516,7 @@ class DocTag(object):
         self.block = block
         self.name = name
         self.annotations = DocAnnotations()
-        self.comment = None
+        self.description = None
         self.value = ''
         self.position = None
 
@@ -625,12 +625,12 @@ class DocTag(object):
             return self.value
 
     def to_gtk_doc_param(self):
-        return '@%s: %s%s' % (self.name, self._get_gtk_doc_value(), self.comment)
+        return '@%s: %s%s' % (self.name, self._get_gtk_doc_value(), self.description)
 
     def to_gtk_doc_tag(self):
         return '%s: %s%s' % (self.name.capitalize(),
                              self._get_gtk_doc_value(),
-                             self.comment or '')
+                             self.description or '')
 
     def validate(self):
         if self.name == TAG_ATTRIBUTES:
@@ -1074,7 +1074,7 @@ class AnnotationParser(object):
 
                 tag = DocTag(comment_block, param_name)
                 tag.position = position
-                tag.comment = param_description
+                tag.description = param_description
                 if param_annotations:
                     tag.annotations = self.parse_annotations(tag, param_annotations)
                 if param_name == TAG_RETURNS:
@@ -1116,10 +1116,10 @@ class AnnotationParser(object):
                     in_part = PART_DESCRIPTION
                     part_indent = line_indent
 
-                    if not comment_block.comment:
-                        comment_block.comment = tag_description
+                    if not comment_block.description:
+                        comment_block.description = tag_description
                     else:
-                        comment_block.comment += '\n' + tag_description
+                        comment_block.description += '\n' + tag_description
                     continue
 
                 # Now that the deprecated stuff is out of the way, continue parsing real tags
@@ -1145,7 +1145,7 @@ class AnnotationParser(object):
 
                     tag = DocTag(comment_block, TAG_RETURNS)
                     tag.position = position
-                    tag.comment = tag_description
+                    tag.description = tag_description
                     if tag_annotations:
                         tag.annotations = self.parse_annotations(tag, tag_annotations)
                     comment_block.tags[TAG_RETURNS] = tag
@@ -1178,23 +1178,23 @@ class AnnotationParser(object):
             # comment block, parameter or tag description.
             ####################################################################
             if in_part in [PART_IDENTIFIER, PART_DESCRIPTION]:
-                if not comment_block.comment:
-                    comment_block.comment = line
+                if not comment_block.description:
+                    comment_block.description = line
                 else:
-                    comment_block.comment += '\n' + line
+                    comment_block.description += '\n' + line
                 continue
             elif in_part == PART_PARAMETERS:
                 self._validate_multiline_annotation_continuation(line, original_line,
                                                                  column_offset, position)
                 # Append to parameter description.
-                current_param.comment += ' ' + line.strip()
+                current_param.description += ' ' + line.strip()
                 continue
             elif in_part == PART_TAGS:
                 self._validate_multiline_annotation_continuation(line, original_line,
                                                                  column_offset, position)
                 # Append to tag description.
                 if current_tag.name.lower() in [TAG_RETURNS, TAG_RETURNVALUE]:
-                    current_tag.comment += ' ' + line.strip()
+                    current_tag.description += ' ' + line.strip()
                 else:
                     current_tag.value += ' ' + line.strip()
                 continue
@@ -1205,8 +1205,8 @@ class AnnotationParser(object):
         if comment_block:
             # We have picked up a couple of \n characters that where not
             # intended. Strip those.
-            if comment_block.comment:
-                comment_block.comment = comment_block.comment.strip()
+            if comment_block.description:
+                comment_block.description = comment_block.description.strip()
 
             for tag in comment_block.tags.values():
                 self._clean_comment_block_part(tag)
@@ -1221,10 +1221,10 @@ class AnnotationParser(object):
             return None
 
     def _clean_comment_block_part(self, part):
-        if part.comment:
-            part.comment = part.comment.strip()
+        if part.description:
+            part.description = part.description.strip()
         else:
-            part.comment = None
+            part.description = None
 
         if part.value:
             part.value = part.value.strip()
