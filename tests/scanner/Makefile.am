@@ -245,4 +245,6 @@ EXTRA_DIST += \
 	annotationparser/gtkdoc/gobject/gobject.c.xml		\
 	Regress-1.0-C-expected					\
 	Regress-1.0-Gjs-expected				\
-	Regress-1.0-Python-expected
+	Regress-1.0-Python-expected				\
+	Regress-1.0-sections-expected.txt			\
+	$(NULL)
