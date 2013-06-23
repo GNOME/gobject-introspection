@@ -775,7 +775,10 @@
  * Explicitly releases the binding between the source and the target
  * property expressed by @binding.
  *
- * This function does not change the reference count of @binding.
+ * <note>This function will release the reference that is being held on
+ * the @binding instance; if you want to hold on to the #GBinding instance
+ * after calling g_binding_unbind(), you will need to hold a reference
+ * to it.</note>
  *
  * Since: 2.38
  */
@@ -2444,7 +2447,7 @@
  *
  * If the previous value was replaced then ownership of the
  * old value (@oldval) is passed to the caller, including
- * the registred destroy notify for it (passed out in @old_destroy).
+ * the registered destroy notify for it (passed out in @old_destroy).
  * Its up to the caller to free this as he wishes, which may
  * or may not include using @old_destroy as sometimes replacement
  * should not destroy the object in the normal way.
@@ -2474,7 +2477,7 @@
  *
  * If the previous value was replaced then ownership of the
  * old value (@oldval) is passed to the caller, including
- * the registred destroy notify for it (passed out in @old_destroy).
+ * the registered destroy notify for it (passed out in @old_destroy).
  * Its up to the caller to free this as he wishes, which may
  * or may not include using @old_destroy as sometimes replacement
  * should not destroy the object in the normal way.
@@ -4626,11 +4629,11 @@
 /**
  * g_type_get_type_registration_serial:
  *
- * Returns an opaque serial number that represents the state of the set of registered
- * types. Any time a type is registred this serial changes, which means you can
- * cache information based on type lookups (such as g_type_from_name) and know if
- * the cache is still valid at a later time by comparing the current serial with
- * the one at the type lookup.
+ * Returns an opaque serial number that represents the state of the set of
+ * registered types. Any time a type is registered this serial changes,
+ * which means you can cache information based on type lookups (such as
+ * g_type_from_name()) and know if the cache is still valid at a later
+ * time by comparing the current serial with the one at the type lookup.
  *
  * Since: 2.36
  * Returns: An unsigned int, representing the state of type registrations.

@@ -1761,6 +1761,32 @@
 
 
 /**
+ * GTestFileType:
+ * @G_TEST_DIST: a file that was included in the distribution tarball
+ * @G_TEST_BUILT: a file that was built on the compiling machine
+ *
+ * The type of file to return the filename for, when used with
+ * g_test_build_filename().
+ *
+ * These two options correspond rather directly to the 'dist' and
+ * 'built' terminology that automake uses and are explicitly used to
+ * distinguish between the 'srcdir' and 'builddir' being separate.  All
+ * files in your project should either be dist (in the
+ * <literal>DIST_EXTRA</literal> or <literal>dist_schema_DATA</literal>
+ * sense, in which case they will always be in the srcdir) or built (in
+ * the <literal>BUILT_SOURCES</literal> sense, in which case they will
+ * always be in the builddir).
+ *
+ * Note: as a general rule of automake, files that are generated only as
+ * part of the build-from-git process (but then are distributed with the
+ * tarball) always go in srcdir (even if doing a srcdir != builddir
+ * build from git) and are considered as distributed files.
+ *
+ * Since: 2.38
+ */
+
+
+/**
  * GTestFixtureFunc:
  * @fixture: the test fixture
  * @user_data: the data provided when registering the test
@@ -18570,8 +18596,34 @@
  * g_main_context_wakeup:
  * @context: a #GMainContext
  *
- * If @context is currently waiting in a poll(), interrupt
- * the poll(), and continue the iteration process.
+ * If @context is currently blocking in g_main_context_iteration()
+ * waiting for a source to become ready, cause it to stop blocking
+ * and return.  Otherwise, cause the next invocation of
+ * g_main_context_iteration() to return without blocking.
+ *
+ * This API is useful for low-level control over #GMainContext; for
+ * example, integrating it with main loop implementations such as
+ * #GMainLoop.
+ *
+ * Another related use for this function is when implementing a main
+ * loop with a termination condition, computed from multiple threads:
+ *
+ * |[
+ *   #define NUM_TASKS 10
+ *   static volatile gint tasks_remaining = NUM_TASKS;
+ *   ...
+ *
+ *   while (g_atomic_int_get (&tasks_remaining) != 0)
+ *     g_main_context_iteration (NULL, TRUE);
+ * ]|
+ *
+ * Then in a thread:
+ * |[
+ *   perform_work();
+ *
+ *   if (g_atomic_int_dec_and_test (&tasks_remaining))
+ *     g_main_context_wakeup (NULL);
+ * ]|
  */
 
 
@@ -27302,6 +27354,39 @@
 
 
 /**
+ * g_test_build_filename:
+ * @file_type: the type of file (built vs. distributed)
+ * @first_path: the first segment of the pathname ...: NULL terminated additional path segments
+ *
+ * Creates the pathname to a data file that is required for a test.
+ *
+ * This function is conceptually similar to g_build_filename() except
+ * that the first argument has been replaced with a #GTestFileType
+ * argument.
+ *
+ * The data file should either have been distributed with the module
+ * containing the test (%G_TEST_DIST) or built as part of the build
+ * system of that module (%G_TEST_BUILT).
+ *
+ * In order for this function to work in srcdir != builddir situations,
+ * the G_TEST_SRCDIR and G_TEST_BUILDDIR environment variables need to
+ * have been defined.  As of 2.38, this is done by the Makefile.decl
+ * included in GLib.  Please ensure that your copy is up to date before
+ * using this function.
+ *
+ * In case neither variable is set, this function will fall back to
+ * using the dirname portion of argv[0], possibly removing ".libs".
+ * This allows for casual running of tests directly from the commandline
+ * in the srcdir == builddir case and should also support running of
+ * installed tests, assuming the data files have been installed in the
+ * same relative path as the test binary.
+ *
+ * Returns: the path of the file, to be freed using g_free()
+ * Since: 2.38
+ */
+
+
+/**
  * g_test_create_case:
  * @test_name: the name for the test case
  * @data_size: the size of the fixture data structure
@@ -27398,6 +27483,44 @@
  * If not called from inside a test, this function does nothing.
  *
  * Since: 2.30
+ */
+
+
+/**
+ * g_test_get_dir:
+ * @file_type: the type of file (built vs. distributed)
+ *
+ * Gets the pathname of the directory containing test files of the type
+ * specified by @file_type.
+ *
+ * This is approximately the same as calling g_test_build_filename("."),
+ * but you don't need to free the return value.
+ *
+ * Returns: the path of the directory, owned by GLib
+ * Since: 2.38
+ */
+
+
+/**
+ * g_test_get_filename:
+ * @file_type: the type of file (built vs. distributed)
+ * @first_path: the first segment of the pathname ...: NULL terminated additional path segments
+ *
+ * Gets the pathname to a data file that is required for a test.
+ *
+ * This is the same as g_test_build_filename() with two differences.
+ * The first difference is that must only use this function from within
+ * a testcase function.  The second difference is that you need not free
+ * the return value -- it will be automatically freed when the testcase
+ * finishes running.
+ *
+ * It is safe to use this function from a thread inside of a testcase
+ * but you must ensure that all such uses occur before the main testcase
+ * function returns (ie: it is best to ensure that all threads have been
+ * joined).
+ *
+ * Returns: the path, automatically freed at the end of the testcase
+ * Since: 2.38
  */
 
 
@@ -30179,7 +30302,7 @@
 /**
  * g_uri_escape_string:
  * @unescaped: the unescaped input string.
- * @reserved_chars_allowed: a string of reserved characters that are allowed to be used, or %NULL.
+ * @reserved_chars_allowed: (allow-none): a string of reserved characters that are allowed to be used, or %NULL.
  * @allow_utf8: %TRUE if the result can include UTF-8 characters.
  *
  * Escapes a string for use in a URI.
@@ -30246,7 +30369,7 @@
 /**
  * g_uri_unescape_string:
  * @escaped_string: an escaped string to be unescaped.
- * @illegal_characters: an optional string of illegal characters not to be allowed.
+ * @illegal_characters: (allow-none): a string of illegal characters not to be allowed, or %NULL.
  *
  * Unescapes a whole escaped string.
  *
