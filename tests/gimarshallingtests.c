@@ -3138,6 +3138,20 @@ gi_marshalling_tests_gvalue_in_with_type (GValue *value, GType type)
 }
 
 /**
+ * gi_marshalling_tests_gvalue_in_with_modification:
+ * @value: (transfer none):
+ *
+ * Expects a GValue passed by reference which is then modified by
+ * this function.
+ */
+void
+gi_marshalling_tests_gvalue_in_with_modification (GValue *value)
+{
+  g_assert_cmpint (g_value_get_int (value), ==, 42);
+  g_value_set_int (value, 24);
+}
+
+/**
  * gi_marshalling_tests_gvalue_in_enum:
  * @value: (transfer none):
  */
