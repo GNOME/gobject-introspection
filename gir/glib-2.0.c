@@ -25964,7 +25964,7 @@
  * passing %NULL for @standard_output and @standard_error.
  *
  * If @exit_status is non-%NULL, the platform-specific exit status of
- * the child is stored there; see the doucumentation of
+ * the child is stored there; see the documentation of
  * g_spawn_check_exit_status() for how to use and interpret this.
  * Note that it is invalid to pass %G_SPAWN_DO_NOT_REAP_CHILD in
  * @flags.
@@ -27356,7 +27356,8 @@
 /**
  * g_test_build_filename:
  * @file_type: the type of file (built vs. distributed)
- * @first_path: the first segment of the pathname ...: NULL terminated additional path segments
+ * @first_path: the first segment of the pathname
+ * @...: %NULL-terminated additional path segments
  *
  * Creates the pathname to a data file that is required for a test.
  *
@@ -27504,7 +27505,8 @@
 /**
  * g_test_get_filename:
  * @file_type: the type of file (built vs. distributed)
- * @first_path: the first segment of the pathname ...: NULL terminated additional path segments
+ * @first_path: the first segment of the pathname
+ * @...: %NULL-terminated additional path segments
  *
  * Gets the pathname to a data file that is required for a test.
  *
@@ -28127,13 +28129,13 @@
 
 /**
  * g_test_trap_subprocess:
- * @test_name: Test to run in a subprocess
+ * @test_path: Test to run in a subprocess
  * @usec_timeout: Timeout for the subprocess test in micro seconds.
  * @test_flags: Flags to modify subprocess behaviour.
  *
- * Respawns the test program to run only @test_name in a subprocess.
+ * Respawns the test program to run only @test_path in a subprocess.
  * This can be used for a test case that might not return, or that
- * might abort. @test_name will normally be the name of the parent
+ * might abort. @test_path will normally be the name of the parent
  * test, followed by "<literal>/subprocess/</literal>" and then a name
  * for the specific subtest (or just ending with
  * "<literal>/subprocess</literal>" if the test only has one child

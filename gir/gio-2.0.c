@@ -3943,7 +3943,7 @@
  * |[
  * void _theoretical_frobnitz_async (Theoretical         *t,
  *                                   GCancellable        *c,
- *                                   GAsyncReadyCallback *cb,
+ *                                   GAsyncReadyCallback  cb,
  *                                   gpointer             u);
  *
  * gboolean _theoretical_frobnitz_finish (Theoretical   *t,
@@ -4045,7 +4045,7 @@
 
 /**
  * SECTION:gbytesicon
- * @short_description: An icon stored in memory as a #GBytes
+ * @short_description: An icon stored in memory as a GBytes
  * @include: gio/gio.h
  * @see_also: #GIcon, #GLoadableIcon, #GBytes
  *
@@ -4702,7 +4702,7 @@
 /**
  * SECTION:gdbusutils
  * @title: D-Bus Utilities
- * @short_description: Various utilities related to D-Bus.
+ * @short_description: Various utilities related to D-Bus
  * @include: gio/gio.h
  *
  * Various utility routines related to D-Bus.
@@ -5873,7 +5873,7 @@
 
 /**
  * SECTION:gpollableutils
- * @short_description: #GPollableInputStream / #GPollableOutputStream utilities
+ * @short_description: Utilities for pollable streams
  * @include: gio/gio.h
  *
  * Utility functions for #GPollableInputStream and
@@ -5918,7 +5918,7 @@
 /**
  * SECTION:gremoteactiongroup
  * @title: GRemoteActionGroup
- * @short_description: a #GActionGroup that interacts with other processes
+ * @short_description: A GActionGroup that interacts with other processes
  *
  * The GRemoteActionGroup interface is implemented by #GActionGroup
  * instances that either transmit action invocations to other processes
@@ -6296,7 +6296,7 @@
 
 /**
  * SECTION:gsettingsschema
- * @short_description: introspecting and controlling the loading of GSettings schemas
+ * @short_description: Introspecting and controlling the loading of GSettings schemas
  *
  * The #GSettingsSchemaSource and #GSettingsSchema APIs provide a
  * mechanism for advanced control over the loading of schemas and a
@@ -6938,7 +6938,7 @@
  *     Eventually, you will call a method such as
  *     g_task_return_pointer() or g_task_return_error(), which will
  *     save the value you give it and then invoke the task's callback
- *     function (waiting until the next next iteration of the main
+ *     function (waiting until the next iteration of the main
  *     loop first, if necessary). The caller will pass the #GTask back
  *     to the operation's finish function (as a #GAsyncResult), and
  *     you can use g_task_propagate_pointer() or the like to extract
@@ -7461,7 +7461,7 @@
 /**
  * SECTION:gtcpwrapperconnection
  * @title: GTcpWrapperConnection
- * @short_description: wrapper for non-GSocketConnection-based, GSocket-based GIOStreams
+ * @short_description: Wrapper for non-GSocketConnection-based, GSocket-based GIOStreams
  * @see_also: #GSocketConnection.
  *
  * A #GTcpWrapperConnection can be used to wrap a #GIOStream that is
@@ -29229,6 +29229,20 @@
  * #GSimpleProxyResolver will treat it as referring to all three of
  * the <literal>socks5</literal>, <literal>socks4a</literal>, and
  * <literal>socks4</literal> proxy types.
+ *
+ * Since: 2.36
+ */
+
+
+/**
+ * g_simple_proxy_resolver_set_ignore_hosts:
+ * @resolver: a #GSimpleProxyResolver
+ * @ignore_hosts: %NULL-terminated list of hosts/IP addresses to not use a proxy for
+ *
+ * Sets the list of ignored hosts.
+ *
+ * See #GSimpleProxyResolver:ignore-hosts for more details on how the
+ * @ignore_hosts argument is interpreted.
  *
  * Since: 2.36
  */
