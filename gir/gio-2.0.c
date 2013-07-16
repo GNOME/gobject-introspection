@@ -1875,6 +1875,89 @@
 
 
 /**
+ * GPropertyAction:
+ *
+ * This type is opaque.
+ *
+ * Since: 2.38
+ */
+
+
+/**
+ * GPropertyAction:enabled:
+ *
+ * If @action is currently enabled.
+ *
+ * If the action is disabled then calls to g_action_activate() and
+ * g_action_change_state() have no effect.
+ *
+ * Since: 2.38
+ */
+
+
+/**
+ * GPropertyAction:name:
+ *
+ * The name of the action.  This is mostly meaningful for identifying
+ * the action once it has been added to a #GActionMap.
+ *
+ * Since: 2.38
+ */
+
+
+/**
+ * GPropertyAction:object:
+ *
+ * The object to wrap a property on.
+ *
+ * The object must be a non-%NULL #GObject with properties.
+ *
+ * Since: 2.38
+ */
+
+
+/**
+ * GPropertyAction:parameter-type:
+ *
+ * The type of the parameter that must be given when activating the
+ * action.
+ *
+ * Since: 2.38
+ */
+
+
+/**
+ * GPropertyAction:property-name:
+ *
+ * The name of the property to wrap on the object.
+ *
+ * The property must exist on the passed-in object and it must be
+ * readable and writable (and not construct-only).
+ *
+ * Since: 2.38
+ */
+
+
+/**
+ * GPropertyAction:state:
+ *
+ * The state of the action, or %NULL if the action is stateless.
+ *
+ * Since: 2.38
+ */
+
+
+/**
+ * GPropertyAction:state-type:
+ *
+ * The #GVariantType of the state that the action has, or %NULL if the
+ * action is stateless.
+ *
+ * Since: 2.38
+ */
+
+
+/**
  * GProxyAddress:
  *
  * A #GInetSocketAddress representing a connection via a proxy server
@@ -5878,6 +5961,68 @@
  *
  * Utility functions for #GPollableInputStream and
  * #GPollableOutputStream implementations.
+ */
+
+
+/**
+ * SECTION:gpropertyaction
+ * @title: GPropertyAction
+ * @short_description: A GAction reflecting a GObject property
+ *
+ * A #GPropertyAction is a way to get a #GAction with a state value
+ * reflecting and controlling the value of a #GObject property.
+ *
+ * The state of the action will correspond to the value of the property.
+ * Changing it will change the property (assuming the requested value
+ * matches the requirements as specified in the #GParamSpec).
+ *
+ * Only the most common types are presently supported.  Booleans are
+ * mapped to booleans, strings to strings, signed/unsigned integers to
+ * int32/uint32 and floats and doubles to doubles.
+ *
+ * If the property is an enum then the state will be string-typed and
+ * conversion will automatically be performed between the enum value and
+ * "nick" string as per the #GEnumValue table.
+ *
+ * Flags types are not currently supported.
+ *
+ * Properties of object types, boxed types and pointer types are not
+ * supported and probably never will be.
+ *
+ * Properties of #GVariant types are not currently supported.
+ *
+ * If the property is boolean-valued then the action will have a NULL
+ * parameter type, and activating the action (with no parameter) will
+ * toggle the value of the property.
+ *
+ * In all other cases, the parameter type will correspond to the type of
+ * the property.
+ *
+ * The general idea here is to reduce the number of locations where a
+ * particular piece of state is kept (and therefore has to be
+ * synchronised between).  #GPropertyAction does not have a separate
+ * state that is kept in sync with the property value -- its state
+ * <em>is</em> the property value.
+ *
+ * For example, it might be useful to create a #GAction corresponding to
+ * the "visible-child-name" property of a #GtkStack so that the current
+ * page can be switched from a menu.  The active radio indication in the
+ * menu is then directly determined from the active page of the
+ * #GtkStack.
+ *
+ * An anti-example would be binding the "active-id" property on a
+ * #GtkComboBox.  This is because the state of the combobox itself is
+ * probably uninteresting and is actually being used to control
+ * something else.
+ *
+ * Another anti-example would be to bind to the "visible-child-name"
+ * property of a #GtkStack if this value is actually stored in
+ * #GSettings.  In that case, the real source of the value is
+ * #GSettings.  If you want a #GAction to control a setting stored in
+ * #GSettings, see g_settings_create_action() instead, and possibly
+ * combine its use with g_settings_bind().
+ *
+ * Since: 2.38
  */
 
 
@@ -10053,6 +10198,23 @@
 
 
 /**
+ * g_action_name_is_valid:
+ * @action_name: an potential action name
+ *
+ * Checks if @action_name is valid.
+ *
+ * @action_name is valid if it consists only of alphanumeric characters,
+ * plus '-' and '.'.  The empty string is not a valid action name.
+ *
+ * It is an error to call this function with a non-utf8 @action_name.
+ * @action_name must not be %NULL.
+ *
+ * Returns: %TRUE if @action_name is valid
+ * Since: 2.38
+ */
+
+
+/**
  * g_action_parse_detailed_name:
  * @detailed_name: a detailed action name
  * @action_name: (out): the action name
@@ -10068,18 +10230,45 @@
  * value and consists of just an action name containing no whitespace
  * nor the characters ':', '(' or ')'.  For example: "app.action".
  *
- * The second format is used to represent an action with a string-typed
- * target value.  The action name and target value are separated by a
- * double colon ("::").  For example: "app.action::target".
+ * The second format is used to represent an action with a target value
+ * that is a non-empty string consisting only of alphanumerics, plus '-'
+ * and '.'.  In that case, the action name and target value are
+ * separated by a double colon ("::").  For example:
+ * "app.action::target".
  *
- * The third format is used to represent an action with an
- * arbitrarily-typed target value.  The target value follows the action
+ * The third format is used to represent an action with any type of
+ * target value, including strings.  The target value follows the action
  * name, surrounded in parens.  For example: "app.action(42)".  The
  * target value is parsed using g_variant_parse().  If a tuple-typed
  * value is desired, it must be specified in the same way, resulting in
- * two sets of parens, for example: "app.action((1,2,3))".
+ * two sets of parens, for example: "app.action((1,2,3))".  A string
+ * target can be specified this way as well: "app.action('target')".
+ * For strings, this third format must be used if * target value is
+ * empty or contains characters other than alphanumerics, '-' and '.'.
  *
  * Returns: %TRUE if successful, else %FALSE with @error set
+ * Since: 2.38
+ */
+
+
+/**
+ * g_action_print_detailed_name:
+ * @action_name: a valid action name
+ * @target_value: (allow-none): a #GVariant target value, or %NULL
+ *
+ * Formats a detailed action name from @action_name and @target_value.
+ *
+ * It is an error to call this function with an invalid action name.
+ *
+ * This function is the opposite of
+ * g_action_parse_detailed_action_name().  It will produce a string that
+ * can be parsed back to the @action_name and @target_value by that
+ * function.
+ *
+ * See that function for the types of strings that will be printed by
+ * this function.
+ *
+ * Returns: a detailed format string
  * Since: 2.38
  */
 
@@ -17491,6 +17680,22 @@
 
 
 /**
+ * g_desktop_app_info_get_action_name:
+ * @info: a #GDesktopAppInfo
+ * @action_name: the name of the action as from g_desktop_app_info_list_actions()
+ *
+ * Gets the user-visible display name of the "additional application
+ * action" specified by @action_name.
+ *
+ * This corresponds to the "Name" key within the keyfile group for the
+ * action.
+ *
+ * Returns: (transfer full): the locale-specific action name
+ * Since: 2.38
+ */
+
+
+/**
  * g_desktop_app_info_get_boolean:
  * @info: a #GDesktopAppInfo
  * @key: the key to look up
@@ -17633,6 +17838,32 @@
 
 
 /**
+ * g_desktop_app_info_launch_action:
+ * @info: a #GDesktopAppInfo
+ * @action_name: the name of the action as from g_desktop_app_info_list_actions()
+ * @launch_context: (allow-none): a #GAppLaunchContext
+ *
+ * Activates the named application action.
+ *
+ * You may only call this function on action names that were
+ * returned from g_desktop_app_info_list_actions().
+ *
+ * Note that if the main entry of the desktop file indicates that the
+ * application supports startup notification, and @launch_context is
+ * non-%NULL, then startup notification will be used when activating the
+ * action (and as such, invocation of the action on the receiving side
+ * must signal the end of startup notification when it is completed).
+ * This is the expected behaviour of applications declaring additional
+ * actions, as per the desktop file specification.
+ *
+ * As with g_app_info_launch() there is no way to detect failures that
+ * occur while using this function.
+ *
+ * Since: 2.38
+ */
+
+
+/**
  * g_desktop_app_info_launch_uris_as_manager:
  * @appinfo: a #GDesktopAppInfo
  * @uris: (element-type utf8): List of URIs
@@ -17660,6 +17891,21 @@
  * @pid_callback and @pid_callback_data are ignored.
  *
  * Returns: %TRUE on successful launch, %FALSE otherwise.
+ */
+
+
+/**
+ * g_desktop_app_info_list_actions:
+ * @info: a #GDesktopAppInfo
+ *
+ * Returns the list of "additional application actions" supported on the
+ * desktop file, as per the desktop file specification.
+ *
+ * As per the specification, this is the list of actions that are
+ * explicitly listed in the "Actions" key of the [Desktop Entry] group.
+ *
+ * Returns: (array zero-terminated=1) (element-type utf8) (transfer none): a list of strings, always non-%NULL
+ * Since: 2.38
  */
 
 
@@ -26509,6 +26755,26 @@
  *
  * Returns: %TRUE on success, %FALSE if there was an error
  * Since: 2.34
+ */
+
+
+/**
+ * g_property_action_new:
+ * @name: the name of the action to create
+ * @object: the object that has the property to wrap
+ * @property_name: the name of the property
+ *
+ * Creates a #GAction corresponding to the value of property
+ * @property_name on @object.
+ *
+ * The property must be existent and readable and writable (and not
+ * construct-only).
+ *
+ * This function takes a reference on @object and doesn't release it
+ * until the action is destroyed.
+ *
+ * Returns: a new #GPropertyAction
+ * Since: 2.38
  */
 
 

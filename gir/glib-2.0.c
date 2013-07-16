@@ -32727,6 +32727,22 @@
 
 
 /**
+ * g_variant_new_printf: (skip)
+ * @format_string: a printf-style format string
+ * @...: arguments for @format_string
+ *
+ * Creates a string-type GVariant using printf formatting.
+ *
+ * This is similar to calling g_strdup_printf() and then
+ * g_variant_new_string() but it saves a temporary variable and an
+ * unnecessary copy.
+ *
+ * Returns: (transfer none): a floating reference to a new string #GVariant instance
+ * Since: 2.38
+ */
+
+
+/**
  * g_variant_new_signature:
  * @signature: a normal C nul-terminated string
  *
