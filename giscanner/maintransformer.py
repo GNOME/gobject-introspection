@@ -601,9 +601,9 @@ class MainTransformer(object):
         if deprecated_tag is not None:
             value = deprecated_tag.value
             if ': ' in value:
-                colon = value.find(': ')
-                version = value[:colon]
-                desc = value[colon + 2:]
+                delimiter = value.find(': ')
+                version = value[:delimiter]
+                desc = value[delimiter + 2:]
             else:
                 desc = value
                 version = None

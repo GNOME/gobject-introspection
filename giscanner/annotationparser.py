@@ -293,7 +293,7 @@ EMPTY_LINE_RE = re.compile(
 # Program matching SECTION identifiers.
 #
 # Results in 2 symbolic groups:
-#   - group 1 = colon
+#   - group 1 = delimiter
 #   - group 2 = section_name
 SECTION_RE = re.compile(
     r'''
@@ -301,7 +301,7 @@ SECTION_RE = re.compile(
     [^\S\n\r]*                                           # 0 or more whitespace characters
     SECTION                                              # SECTION
     [^\S\n\r]*                                           # 0 or more whitespace characters
-    (?P<colon>:?)                                        # colon
+    (?P<delimiter>:?)                                    # delimiter
     [^\S\n\r]*                                           # 0 or more whitespace characters
     (?P<section_name>\w\S+)?                             # section name
     [^\S\n\r]*                                           # 0 or more whitespace characters
@@ -313,7 +313,7 @@ SECTION_RE = re.compile(
 #
 # Results in 3 symbolic groups:
 #   - group 1 = symbol_name
-#   - group 2 = colon
+#   - group 2 = delimiter
 #   - group 3 = annotations
 SYMBOL_RE = re.compile(
     r'''
@@ -321,7 +321,7 @@ SYMBOL_RE = re.compile(
     [^\S\n\r]*                                           # 0 or more whitespace characters
     (?P<symbol_name>[\w-]*\w)                            # symbol name
     [^\S\n\r]*                                           # 0 or more whitespace characters
-    (?P<colon>:?)                                        # colon
+    (?P<delimiter>:?)                                    # delimiter
     [^\S\n\r]*                                           # 0 or more whitespace characters
     (?P<annotations>(?:\(.*?\)[^\S\n\r]*)*)              # annotations
     [^\S\n\r]*                                           # 0 or more whitespace characters
@@ -334,7 +334,7 @@ SYMBOL_RE = re.compile(
 # Results in 4 symbolic groups:
 #   - group 1 = class_name
 #   - group 2 = property_name
-#   - group 3 = colon
+#   - group 3 = delimiter
 #   - group 4 = annotations
 PROPERTY_RE = re.compile(
     r'''
@@ -346,7 +346,7 @@ PROPERTY_RE = re.compile(
     [^\S\n\r]*                                           # 0 or more whitespace characters
     (?P<property_name>[\w-]*\w)                          # property name
     [^\S\n\r]*                                           # 0 or more whitespace characters
-    (?P<colon>:?)                                        # colon
+    (?P<delimiter>:?)                                    # delimiter
     [^\S\n\r]*                                           # 0 or more whitespace characters
     (?P<annotations>(?:\(.*?\)[^\S\n\r]*)*)              # annotations
     [^\S\n\r]*                                           # 0 or more whitespace characters
@@ -359,7 +359,7 @@ PROPERTY_RE = re.compile(
 # Results in 4 symbolic groups:
 #   - group 1 = class_name
 #   - group 2 = signal_name
-#   - group 3 = colon
+#   - group 3 = delimiter
 #   - group 4 = annotations
 SIGNAL_RE = re.compile(
     r'''
@@ -371,7 +371,7 @@ SIGNAL_RE = re.compile(
     [^\S\n\r]*                                           # 0 or more whitespace characters
     (?P<signal_name>[\w-]*\w)                            # signal name
     [^\S\n\r]*                                           # 0 or more whitespace characters
-    (?P<colon>:?)                                        # colon
+    (?P<delimiter>:?)                                    # delimiter
     [^\S\n\r]*                                           # 0 or more whitespace characters
     (?P<annotations>(?:\(.*?\)[^\S\n\r]*)*)              # annotations
     [^\S\n\r]*                                           # 0 or more whitespace characters
@@ -384,7 +384,7 @@ SIGNAL_RE = re.compile(
 # Results in 4 symbolic groups:
 #   - group 1 = parameter_name
 #   - group 2 = annotations
-#   - group 3 = colon
+#   - group 3 = delimiter
 #   - group 4 = description
 PARAMETER_RE = re.compile(
     r'''
@@ -396,7 +396,7 @@ PARAMETER_RE = re.compile(
     :{1}                                                 # required colon
     [^\S\n\r]*                                           # 0 or more whitespace characters
     (?P<annotations>(?:\(.*?\)[^\S\n\r]*)*)              # annotations
-    (?P<colon>:?)                                        # colon
+    (?P<delimiter>:?)                                    # delimiter
     [^\S\n\r]*                                           # 0 or more whitespace characters
     (?P<description>.*?)                                 # description
     [^\S\n\r]*                                           # 0 or more whitespace characters
@@ -409,7 +409,7 @@ PARAMETER_RE = re.compile(
 # Results in 4 symbolic groups:
 #   - group 1 = tag_name
 #   - group 2 = annotations
-#   - group 3 = colon
+#   - group 3 = delimiter
 #   - group 4 = description
 _all_tags = '|'.join(_ALL_TAGS).replace(' ', '\\ ')
 TAG_RE = re.compile(
@@ -421,7 +421,7 @@ TAG_RE = re.compile(
     :{1}                                                 # required colon
     [^\S\n\r]*                                           # 0 or more whitespace characters
     (?P<annotations>(?:\(.*?\)[^\S\n\r]*)*)              # annotations
-    (?P<colon>:?)                                        # colon
+    (?P<delimiter>:?)                                    # delimiter
     [^\S\n\r]*                                           # 0 or more whitespace characters
     (?P<description>.*?)                                 # description
     [^\S\n\r]*                                           # 0 or more whitespace characters
@@ -435,14 +435,14 @@ TAG_RE = re.compile(
 #
 # Results in 3 symbolic groups:
 #   - group 2 = annotations
-#   - group 3 = colon
+#   - group 3 = delimiter
 #   - group 4 = description
 MULTILINE_ANNOTATION_CONTINUATION_RE = re.compile(
     r'''
     ^                                                    # start
     [^\S\n\r]*                                           # 0 or more whitespace characters
     (?P<annotations>(?:\(.*?\)[^\S\n\r]*)*)              # annotations
-    (?P<colon>:)                                         # colon
+    (?P<delimiter>:)                                     # delimiter
     [^\S\n\r]*                                           # 0 or more whitespace characters
     (?P<description>.*?)                                 # description
     [^\S\n\r]*                                           # 0 or more whitespace characters
@@ -1003,12 +1003,12 @@ class AnnotationParser(object):
                     comment_block = DocBlock(identifier_name)
                     comment_block.position = position
 
-                    if 'colon' in result.groupdict() and result.group('colon') != ':':
-                        colon_start = result.start('colon')
-                        colon_column = column_offset + colon_start
-                        marker = ' ' * colon_column + '^'
+                    if 'delimiter' in result.groupdict() and result.group('delimiter') != ':':
+                        delimiter_start = result.start('delimiter')
+                        delimiter_column = column_offset + delimiter_start
+                        marker = ' ' * delimiter_column + '^'
                         message.warn("missing ':' at column %s:\n%s\n%s" %
-                                     (colon_column + 1, original_line, marker),
+                                     (delimiter_column + 1, original_line, marker),
                                      position)
 
                     if 'annotations' in result.groupdict():
